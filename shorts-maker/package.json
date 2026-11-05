@@ -1,0 +1,9 @@
+{
+  "name": "shorts-maker",
+  "private": true,
+  "description": "Animated vertical story shorts",
+  "dependencies": {
+    "three": "0.170.0",
+    "playwright": "^1.40.0"
+  }
+}

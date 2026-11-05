@@ -3,3 +3,4 @@ out.mp4
 timings.json
 */timings.json
 __pycache__/
+node_modules/

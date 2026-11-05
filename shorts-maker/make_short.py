@@ -375,6 +375,25 @@ def render_shot(src, frames, out, move, label):
              "-vf", vf, *enc, str(out)])
 
 
+def render_animation(episode, todo, tmp):
+    """Render shots with the three.js animator (animator/render.js) via headless Chromium."""
+    if not shutil.which("node"):
+        sys.exit("Animated shots need Node.js - install it from https://nodejs.org (see README.md)")
+    if not (HERE / "node_modules" / "three").exists():
+        sys.exit(f"Animated shots need three.js. Run once:\n  cd {HERE} && npm install && npx playwright install chromium")
+    jobs = [{"id": s["id"], "frames": s["frames"], "out": str(tmp / f"anim_{i:03d}.mp4")} for i, s in todo]
+    jf = tmp / "anim_jobs.json"
+    jf.write_text(json.dumps(jobs))
+    r = subprocess.run(["node", str(HERE / "animator" / "render.js"), str(Path(episode).resolve()), str(jf)])
+    if r.returncode != 0:
+        print("  (some animated shots failed - they fall back to placeholders)")
+    out = {}
+    for (i, _), j in zip(todo, jobs):
+        if Path(j["out"]).exists():
+            out[i] = Path(j["out"])
+    return out
+
+
 # --------------------------------------------------------------------------- #
 # main
 # --------------------------------------------------------------------------- #
@@ -390,6 +409,8 @@ def main():
     ap.add_argument("--voice-file", type=Path,
                     help="use your own voiceover instead of TTS (default: <project>/voice.mp3 if present)")
     ap.add_argument("--whisper-model", default="small")
+    ap.add_argument("--animation", type=Path,
+                    help="episode file with animated 3D shots (default: <project>/animation.js if present)")
     ap.add_argument("--music", type=Path, help="background music (default: <project>/music.mp3 if present)")
     ap.add_argument("--music-volume", type=float, default=0.18)
     ap.add_argument("--font", default="Montserrat ExtraBold")
@@ -453,16 +474,29 @@ def main():
 
         # -- shots ---------------------------------------------------------------
         shots = plan_shots(words, total, scenes_dir, args.max_shot)
-        print(f"3/5 rendering {len(shots)} shots")
-        clips, frame_pos, last_move = [], 0, None
+        frame_pos = 0
+        for s in shots:
+            s["frames"] = max(round(s["end"] * FPS) - frame_pos, 1)
+            frame_pos += s["frames"]
+
+        # animated shots: render any shot without a scene file from animation.js
+        anim = args.animation or (proj / "animation.js" if (proj / "animation.js").exists() else None)
+        animated = {}
+        if anim:
+            todo = [(i, s) for i, s in enumerate(shots) if not find_scene(scenes_dir, s["id"])]
+            if todo:
+                print(f"3/5 animating {len(todo)} shots from {anim.name} (3D render, takes a few minutes)")
+                animated = render_animation(anim, todo, tmp)
+        print(f"{'3b' if anim else '3'}/5 preparing {len(shots)} shots")
+        clips, last_move = [], None
         for i, s in enumerate(shots):
-            end_frame = round(s["end"] * FPS)
-            frames = max(end_frame - frame_pos, 1)
-            frame_pos += frames
-            src = find_scene(scenes_dir, s["id"])
+            frames = s["frames"]
+            src = find_scene(scenes_dir, s["id"]) or animated.get(i)
             move = random.choice([m for m in MOVES if m != last_move])
             last_move = move
             tag = src.name if src else "(placeholder)"
+            if i in animated:
+                tag = "(animated)"
             print(f"  shot {i + 1:02d}  [{s['id']}] {tag:<28} {frames / FPS:4.2f}s  {move if src and src.suffix.lower() in IMAGE_EXT else ''}")
             clip = tmp / f"shot_{i:03d}.mp4"
             render_shot(src, frames, clip, move, s["id"])

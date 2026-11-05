@@ -12,7 +12,35 @@ Builds vertical **story shorts** (TikTok / Reels / YouTube Shorts) in the
 | big white 1–3 word captions with a black outline, lower middle, synced to each word | word timestamps from the TTS or from Whisper, burned in with libass |
 | quiet music under the voice | `music.mp3`, auto-ducked when someone speaks |
 
-You bring the **story** and the **pictures**. The tool does the voice, timing, captions, motion, cuts, mix and export.
+Two ways to get the visuals:
+
+* **Animated (built in):** write the shots as code in `animation.js`, and the tool renders real
+  3D animation: moving cameras through 3D sets, plus 2D cartoon characters that walk, talk, get
+  angry and hold props. `example/` is a complete animated episode. No AI services or assets are
+  needed; everything is drawn in code.
+* **Your own pictures or clips:** drop images or clips into `scenes/`. Images get a zoom/pan.
+
+The tool does the voice, timing, captions, cuts, mix and export either way.
+
+### Animated mode setup (once)
+
+Needs [Node.js](https://nodejs.org) as well as ffmpeg and Python:
+
+```bash
+cd shorts-maker
+npm install
+npx playwright install chromium
+```
+
+`python3 make_short.py example` then renders the animated example. That takes a few minutes, since every frame is a 3D render.
+
+How `animation.js` works: each `[NN]` in the script has a matching shot function. It builds a set
+(`hangar`, `office`, `terminal`, `cabin`, `airfield`, sky...), places characters (`new Char(S, 'hero')`)
+and props (`makeJet`, `newspaper`, `confetti`...), and returns `update(t, u)`. That function runs
+every frame, with `u` going from 0 to 1 across the shot, so the action always fits however long
+the narrator takes. A file in `scenes/` with the same number overrides the animated shot.
+The engine lives in `animator/` (`engine.js` for the world and camera, `cast.js` for characters,
+`props.js` for sets and props).
 
 ---
 
