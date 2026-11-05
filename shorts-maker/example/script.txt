@@ -1,0 +1,22 @@
+# Example short - "The Round Windows" (part 1)
+#
+# [NN]   = cut to scenes/NN.png (or .jpg / .mp4 ...) at this exact word
+# <voice> = read this one line in a different voice (a character talking)
+# lines starting with # are ignored
+#
+# Formula: weird hook -> "You see," setup -> the stakes -> the hero ->
+#          the boss hates it (character line) -> the rival "wins" ->
+#          everyone laughs at the hero -> "Then ... something weird happens."
+
+[01] He put tiny round windows on his airplane [02] when everyone wanted big square ones.
+[03] You see, two companies are racing [04] to build the world's first jet airliner,
+[05] and whoever flies first [06] gets every passenger in the country.
+[07] He's the youngest designer [08] on the team.
+[09] And when his boss sees [10] those little round windows on the blueprint, [11] he slams the table.
+<en-US-ChristopherNeural> [12] Passengers want a view!
+[13] But he won't change [14] a single one.
+[15] The other company builds big, [16] beautiful square windows, [17] and launches first.
+[18] Their passengers love it.
+[19] While his plane gets a nickname [20] in the papers: [21] the porthole plane.
+[22] And everyone books the other airline.
+[23] Then, one day at thirty thousand feet, [24] something weird happens.
