@@ -492,6 +492,8 @@ def main():
                     help="render a few stills per animated shot into preview_N.jpg contact sheets, and stop")
     ap.add_argument("--preview-at", default="0.1,0.5,0.9", help="moments (0-1) of each shot to preview")
     ap.add_argument("--shots", help="with --preview: only these shot ids, e.g. 03,07,12")
+    ap.add_argument("--rerender", help="full render re-animating only these shot ids (e.g. 06,11); "
+                    "all other shots reuse their last render. Use '' to reuse everything cached")
     args = ap.parse_args()
 
     for tool in ("ffmpeg", "ffprobe"):
@@ -577,9 +579,22 @@ def main():
         animated = {}
         if anim:
             todo = [(i, s) for i, s in enumerate(shots) if not find_scene(scenes_dir, s["id"])]
+            # shot cache: with --rerender, reuse every other shot's last render (same length)
+            acache = cache / "anim"; acache.mkdir(exist_ok=True)
+            cpath = lambda s: acache / f"{s['id']}_{s['frames']}.mp4"
+            if args.rerender is not None:
+                redo = set(x.strip() for x in args.rerender.split(",") if x.strip())
+                for i, s in todo:
+                    if s["id"] not in redo and cpath(s).exists():
+                        animated[i] = cpath(s)
+                todo = [(i, s) for i, s in todo if i not in animated]
+                print(f"  reusing {len(animated)} cached shots")
             if todo:
                 print(f"3/5 animating {len(todo)} shots from {anim.name} (3D render, takes a few minutes)")
-                animated = render_animation(anim, todo, tmp)
+                fresh = render_animation(anim, todo, tmp)
+                for i, f in fresh.items():
+                    shutil.copy(f, cpath(shots[i]))
+                animated.update(fresh)
         print(f"{'3b' if anim else '3'}/5 preparing {len(shots)} shots")
         clips, last_move = [], None
         for i, s in enumerate(shots):

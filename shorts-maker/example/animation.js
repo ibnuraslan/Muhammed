@@ -130,12 +130,12 @@ export const shots = {
   // gets every passenger in the country.
   '06': (S) => {
     S.sky({ hemi: 1.6, fog: [40, 200], sun: [10, 60, 40] }); terminal(S);
-    const ppl = crowd(S, 16, [-5, 5], [-4, 9], { seed: 6 });
+    const ppl = crowd(S, 14, [-3.5, 3.5], [-6, 3], { seed: 6 });
     ppl.forEach(c => c.set({ hold: c.r < 0.6 ? 'suitcase' : 'ticket', armR: 0.15 }));
     S.shadowFocus(0, 0, 4);
     return (t, u) => {
       ppl.forEach(c => { c.group.position.z += 0.05; c.set({ walking: 1, walk: t * 9 + c.r * 7, mouth: 'smile', facing: c.r < .5 ? 1 : -1 }); });
-      S.camMove(u, [[0, 2.4, 15], [0, 1.6, 4]], [[0, 3.2, 19], [0, 1.4, 3]], ease.out, [52, 56]);
+      S.camMove(u, [[0, 1.9, 8.5], [0, 1.4, 1]], [[0, 2.5, 12.5], [0, 1.4, 1]], ease.out, [54, 56]);
     };
   },
   // He's the youngest designer
@@ -155,16 +155,16 @@ export const shots = {
   '08': (S) => {
     S.sky({ hemi: 1.5, fog: null, sun: [-20, 30, 40], shadow: 20 }); office(S);
     [-5, -1.5, 2].forEach(x => draftTable(S, x, -4.5, { tilt: -0.5 }));
-    const elders = [[-4.2, 0.2], [-2.6, 0.5], [-1.0, 0.2], [0.6, 0.5]].map(([x, z], i) => {
+    const elders = [[-2.7, 0.2], [-1.5, 0.5], [-0.3, 0.2], [0.9, 0.5]].map(([x, z], i) => {
       const c = new Char(S, 'extra', { seed: 80 + i, pos: [x, 0, z] });
       Object.assign(c.d, { hairColor: '#a8a8a8', hat: i % 2 ? 'hair' : 'none', bald: i === 0, mustache: i === 0 ? 'walrus' : i === 2 ? 'pencil' : null, glasses: i % 2 ? 'round' : null });
       c.set({ armsCrossed: true, eyes: 'half', mouth: 'frown', brow: 0.3 }); return c;
     });
-    const hero = new Char(S, 'hero', { pos: [2.5, 0, 1.2] });
+    const hero = new Char(S, 'hero', { pos: [2.2, 0, 1.2] });
     return (t, u) => {
       elders.forEach(c => c.set({ look: u > 0.3 ? 0.7 : 0 }));
       hero.set({ eyes: 'happy', mouth: 'grin', armR: 2.4 + Math.sin(t * 10) * 0.25 });
-      S.camMove(u, [[2.0, 1.8, 5.2], [2.2, 1.5, 1]], [[-0.8, 2.8, 13.5], [-0.8, 1.3, 0.5]], ease.out, [48, 52]);
+      S.camMove(u, [[2.0, 1.8, 5.2], [2.2, 1.5, 1]], [[0, 2.4, 10.5], [0, 1.3, 0.5]], ease.out, [48, 54]);
     };
   },
   // And when his boss sees
@@ -210,7 +210,7 @@ export const shots = {
       dk.userData.jolt(k);
       bam.show(k);
       S.shake = k > 0 && k < 0.35 ? 0.09 * (1 - k / 0.35) : 0;
-      S.camMove(u, [[0.3, 1.55, 4.2], [0, 1.3, -0.9]], [[0.15, 1.5, 3.4], [0, 1.3, -0.9]], ease.out, [48, 48]);
+      S.camMove(u, [[0.25, 1.45, 3.1], [0, 1.3, -0.9]], [[0.1, 1.4, 2.5], [0, 1.3, -0.9]], ease.out, [50, 50]);
     };
   },
   // Passengers want a view!
@@ -280,7 +280,7 @@ export const shots = {
   },
   // Their passengers love it.
   '18': (S) => {
-    S.sky({ hemi: 1.1, fog: null, sun: [0, 40, 20], shadow: 15 });
+    S.sky({ hemi: 0.85, fog: null, sun: [0, 40, 20], shadow: 15 });
     cabin(S, { windows: 'square' });
     const pax = [];
     for (let i = 0; i < 9; i++) {
@@ -290,7 +290,7 @@ export const shots = {
     }
     return (t, u) => {
       pax.forEach(c => c.set({ eyes: 'happy', mouth: 'grin', armL: c.r % 3 === 0 ? 2.4 + Math.sin(t * 9 + c.r) * 0.3 : 0.3, armR: c.r % 3 === 1 ? 1.9 : 0.3 }));
-      S.camMove(u, [[7, 2.7, 0.25], [-1, 1.45, -1.7]], [[2.5, 2.6, 0.25], [-6, 1.45, -1.7]], ease.io, [60, 60]);
+      S.camMove(u, [[4.6, 2.3, -0.2], [-2.0, 1.4, -1.8]], [[1.6, 2.2, -0.2], [-5.0, 1.4, -1.8]], ease.io, [58, 58]);
     };
   },
   // While his plane gets a nickname
@@ -339,8 +339,8 @@ export const shots = {
     S.shadowFocus(0, 0, -2);
     return (t, u) => {
       line.forEach((c, i) => c.set({ walking: Math.sin(t * 3 + i) > 0.6 ? 0.5 : 0, walk: t * 8 }));
-      tw.position.set(lerp(1, -9, u), 1.0 + Math.abs(Math.sin(t * 6)) * 0.5, -4.6); tw.rotation.z = t * 5;
-      S.camMove(u, [[7.5, 4.0, 13], [4.5, 1.8, -2]], [[-3.2, 2.3, 2.0], [-4.5, 1.4, -6.0]], ease.io, [54, 54]);
+      tw.position.set(lerp(1.5, -6.2, u), 1.0 + Math.abs(Math.sin(t * 6)) * 0.5, -4.6); tw.rotation.z = t * 5;
+      S.camMove(u, [[7.5, 4.0, 13], [4.5, 1.8, -2]], [[-3.6, 1.9, -0.5], [-4.5, 1.4, -6.0]], ease.io, [54, 54]);
     };
   },
   // Then, one day at thirty thousand feet,

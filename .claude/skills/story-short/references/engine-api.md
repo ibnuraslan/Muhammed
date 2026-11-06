@@ -6,7 +6,8 @@ Keep this file current: when you add a set, prop, pose or item, add a line here.
 ```bash
 python3 make_short.py projects/<slug> --timings-only          # time the voice, write timings.txt
 python3 make_short.py projects/<slug> --preview [--shots 03,07] [--preview-at 0.1,0.5,0.9]
-python3 make_short.py projects/<slug>                          # full render → out.mp4
+python3 make_short.py projects/<slug>                          # full render → out.mp4 (fills the shot cache)
+python3 make_short.py projects/<slug> --rerender 06,11         # re-animate only these shots, reuse the rest (~1-2 min)
 python3 make_short.py projects/<slug> --music music.mp3        # with ducked background music
 ```
 Whisper timings and TTS are cached in `projects/<slug>/.cache/`, so re-runs are quick.

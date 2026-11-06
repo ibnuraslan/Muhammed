@@ -352,7 +352,7 @@ export function counter(S, x, z, { name = 'SKYWARD', color = '#169e8f' } = {}) {
 
 // ------------------------------------------------------------------ cabin interior (aisle along x)
 export function cabin(S, { windows = 'square' } = {}) {
-  const tube = mesh(new THREE.CylinderGeometry(2.6, 2.6, 40, 40, 1, true), toon(0xd9cfbd, { side: THREE.BackSide }), [0, 1.4, 0], { rot: [0, 0, Math.PI / 2], cast: false });
+  const tube = mesh(new THREE.CylinderGeometry(2.6, 2.6, 40, 40, 1, true), toon(0xc4b8a2, { side: THREE.BackSide }), [0, 1.4, 0], { rot: [0, 0, Math.PI / 2], cast: false });
   S.add(tube);
   const carpet = noiseTex('#8c2f39', ['#7a2731', '#a33a45'], 3000, 256, [20, 2], 2);
   S.add(mesh(new THREE.PlaneGeometry(40, 3.8), toon(0xffffff, { map: carpet }), [0, 0, 0], { rot: [-Math.PI / 2, 0, 0], cast: false }));
