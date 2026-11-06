@@ -83,7 +83,8 @@ ffmpeg -v error -i projects/<slug>/out.mp4 -vf "fps=4,scale=180:320" $d/f_%03d.j
 for i in 0 1 2 3; do ffmpeg -v error -start_number $((i*40+1)) -i $d/f_%03d.jpg -frames:v 40 -vf tile=10x4 -frames:v 1 $d/sheet_$i.jpg -y; done
 ```
 Read every sheet and write a shot-by-shot table (problem → general rule → fix) like
-`example/03-review.md`. Fix and re-render before you deliver if anything fails.
+`example/03-review.md`. Fix and re-render before you deliver if anything fails. Use
+`--rerender 06,11` so only the fixed shots are animated again (the others come from the shot cache).
 
 ## 5. Deliver
 - SendUserFile the mp4 with a one-line caption.

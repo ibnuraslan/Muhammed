@@ -40,6 +40,9 @@ into rules.
     in 4 shots. The u=0.9 preview frame must still show the subject.
 19. **Wide shots of tiny things don't work in 9:16.** For "two sides" beats, use the split
     screen (`S.splitScreen()`) instead of an aerial.
+21. **The key action shot must be close.** The slam only worked once the boss filled about 60% of
+    the frame (camera about 2.5-3 units away). Crowd shots need people at least 1/5 of the frame height.
+    If an action is the point of the line, get close enough to feel it.
 20. **Review the delivered video at 4 fps** (dense contact sheets), not 1 fps. Motion problems
     (sliding backgrounds, missing contact) only show up in sequences.
 

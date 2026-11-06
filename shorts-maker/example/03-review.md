@@ -19,4 +19,11 @@ on readability, motion, cause → effect, framing and background.
 | 22 | The hero hidden behind his counter; faces cropped | Characters behind geometry | The hero in front of the empty counter, a bigger tumbleweed. |
 | 23 | Muddy peach haze, blank white bottom | A warm fog colour on white clouds | A clean blue sky preset, white clouds. |
 
+## Round 2 (v2 reviewed at 4 fps)
+- 11: the slam was correct but the boss was too small (about 1/6 of the frame), so it had no punch. Camera moved to 2.5–3.1 units → now about 60% of the frame.
+- 06 / 08: crowds and the team too small → camera closer, the team row tightened so the hero stays in frame.
+- 18: cabin passengers tiny, ceiling glare → closer diagonal, darker tube, less light.
+- 22: the lonely hero tiny at the end → the push ends close on him; the tumbleweed rolls past him.
+- New tool: `--rerender ids` reuses cached shots, so fixing a few shots takes minutes, not a full 10-minute render.
+
 Shots judged good in v1: 06, 09, 10, 12, 13, 14, 16, 19, 20, 21, 24.
