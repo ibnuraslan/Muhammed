@@ -170,12 +170,38 @@ export class Stage {
     const a = lerp(a0, a1, e(clamp(u)));
     this.camAt([center[0] + Math.sin(a) * radius, center[1] + height, center[2] + Math.cos(a) * radius], center, fov);
   }
+  // move any camera (used for split-screen second cameras)
+  camMoveOn(cam, u, from, to, e = ease.io, fov) {
+    const k = e(clamp(u));
+    cam.position.set(...lerp3(from[0], to[0], k)); cam.lookAt(...lerp3(from[1], to[1], k));
+    if (fov) { cam.fov = lerp(fov[0], fov[1], k); cam.updateProjectionMatrix(); }
+  }
+  // split screen: top half from camA, bottom half from camB, white divider
+  splitScreen() {
+    this.camA = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+    this.camB = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
+    this.split = true; return [this.camA, this.camB];
+  }
   frame(t, u) {
     this._t = t;
     if (this.update) this.update(t, u);
     for (const f of this.updaters) f(t, u);
+    const r = this.renderer;
+    if (this.split) {
+      const gap = 14, half = (H - gap) / 2;
+      r.setScissorTest(true); r.setScissor(0, 0, W, H); r.setViewport(0, 0, W, H);
+      r.setClearColor(0xffffff, 1); r.clear();
+      for (const [cam, y] of [[this.camA, H - half], [this.camB, 0]]) {
+        cam.aspect = W / half; cam.updateProjectionMatrix();
+        for (const c of this.chars) c.update(cam, t);
+        r.setViewport(0, y, W, half); r.setScissor(0, y, W, half);
+        r.render(this.scene, cam);
+      }
+      r.setScissorTest(false); r.setViewport(0, 0, W, H);
+      return;
+    }
     for (const c of this.chars) c.update(this.camera, t);
-    this.renderer.render(this.scene, this.camera);
+    r.render(this.scene, this.camera);
   }
   dispose() {
     this.scene.traverse(o => {

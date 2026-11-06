@@ -34,6 +34,9 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
   - `S.sky({top,horizon,bottom,fog:[near,far]|null,sun:[x,y,z],sunColor,sunI,hemi,shadow,ground})`
   - `S.shadowFocus(x,y,z)`: centre the shadow box on the action.
   - `S.cloud([x,y,z], scale, seed)` → group.
+  - Split screen: `const [A, B] = S.splitScreen()` gives a top half (A) and a bottom half (B), each a
+    landscape camera. Move them with `S.camMoveOn(cam, u, [pos0, look0], [pos1, look1], easing, [fov0, fov1])`.
+    Great for "two sides" beats.
   - Camera: `S.camAt(pos, look, fov)`,
     `S.camMove(u, [pos0, look0], [pos1, look1], easing, [fov0, fov1])`,
     `S.camOrbit(u, center, radius, angle0, angle1, height, easing, fov)`.
@@ -61,7 +64,11 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
   apron at z≈-70; hangars at z=-112; tower (150,-95). Clouds included.
 - `hangar(S)`: floor ±60, **open front toward +z**, back wall z=-54, arch radius 30. Park
   the jet at `(0, groundY, -10)`. Point light inside.
-- `scaffold(S, x, z, h)`: steel scaffold tower (use h ≥ 4).
+- `scaffold(S, x, z, h, {w, d})`: blue steel tower, deck at `h` (stand chars at y = h + 0.06),
+  yellow guard rails on 3 sides (open front), X braces and a ladder. Keep it clear of wings (x > 4 on a jet).
+- `hangarFront(S, x, z, {name, color})`: hangar facade facing +z, with a big company sign in the team colour.
+- `desk(S, x, z, {w, d, top})`: wooden desk (top height `top`, default 1.06; use 0.8 for a
+  character standing behind it). `userData.jolt(k)` makes the items jump, k = seconds since the slam.
 - `office(S,{windows})`: room x ±12, back wall z=-8 with 3 sky windows, wood floor, lamps,
   a blueprint poster on the left wall.
 - `draftTable(S, x, z, {rot, tilt, windows})`: `.userData.board` (tilting board group).
@@ -77,6 +84,9 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
 - `confetti(S, n, [ax,ay,az], center, seed)`: falling, self-animating.
 - `tumbleweed(S)`: roll it by setting its position/rotation.
 - `crackOverlay(w,h,seed)`: plane; `.userData.setProgress(0..1)`.
+- `impactBurst(S, {text:'BAM!'|null, size, color})`: a comic star that faces the camera, drawn on top.
+  Call `.show(k)` every frame (k = seconds since impact; negative hides it). Use `text:null` for sparks/pops.
+- Jet window slot: `jet.userData.windows[i].children[1]` is the glass (hide it for an empty frame).
 - `glassTex()`, `blueprintTex(windows, title)`.
 
 ## Wishlist (build when a story needs it)

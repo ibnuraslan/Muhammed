@@ -57,6 +57,11 @@ Read **every** `projects/<slug>/preview_N.jpg` and run this checklist for each s
 - [ ] Colours and cast match the style bible; team colours are correct
 - [ ] It matches the storyboard's intent; the sound-off story still reads
 - [ ] Continuity with the neighbouring shots (screen direction, who's where, props in hand)
+- [ ] Every action has **contact + reaction** (what it hits reacts: jump, burst, shake, flinch)
+- [ ] No big ambiguous background shape slides behind the camera move (it reads as a moving object)
+- [ ] No foreground slab (wing, wall, table edge) covering more than ~1/5 of the frame
+- [ ] Every prop reads as what it is (a scaffold has rails, a desk has things on it)
+- [ ] The u=0.9 frame still shows the subject (pull-backs and pans love to drift off)
 
 Fix, re-preview those shots, and repeat until every box is ticked. Note what you fixed. If the
 same class of problem keeps appearing, add a lesson.
@@ -70,6 +75,15 @@ Then check it:
 ffmpeg -v error -i projects/<slug>/out.mp4 -vf "fps=1,scale=216:384,tile=10x5" -frames:v 1 projects/<slug>/final_sheet.jpg -y
 ```
 Read the sheet. Check that the captions match the speech, that no shot is broken, and that the end holds.
+Then the **dense motion review** (mandatory before delivery). 4 fps sheets show sliding
+backgrounds, missing contact and drifting cameras that stills hide:
+```bash
+d=projects/<slug>/review; mkdir -p $d
+ffmpeg -v error -i projects/<slug>/out.mp4 -vf "fps=4,scale=180:320" $d/f_%03d.jpg -y
+for i in 0 1 2 3; do ffmpeg -v error -start_number $((i*40+1)) -i $d/f_%03d.jpg -frames:v 40 -vf tile=10x4 -frames:v 1 $d/sheet_$i.jpg -y; done
+```
+Read every sheet and write a shot-by-shot table (problem → general rule → fix) like
+`example/03-review.md`. Fix and re-render before you deliver if anything fails.
 
 ## 5. Deliver
 - SendUserFile the mp4 with a one-line caption.

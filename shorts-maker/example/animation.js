@@ -3,7 +3,7 @@
 // returns update(t, u): t = seconds into the shot, u = 0..1 progress through it.
 import { THREE, ease, seg, lerp, clamp, lerp3, rng, toon, basic, box, mesh } from '/animator/engine.js';
 import { Char } from '/animator/cast.js';
-import { makeJet, airfield, hangar, scaffold, office, draftTable, terminal, counter, cabin, newspaper, confetti, tumbleweed, crackOverlay } from '/animator/props.js';
+import { makeJet, airfield, hangar, scaffold, hangarFront, desk, impactBurst, office, draftTable, terminal, counter, cabin, newspaper, confetti, tumbleweed, crackOverlay } from '/animator/props.js';
 
 const HERO = { windows: 'round', stripe: '#169e8f', name: 'SKYWARD' };
 const RIVAL = { windows: 'square', stripe: '#c8302e', name: 'JETLUX' };
@@ -15,7 +15,6 @@ function hangarSet(S, team = HERO, o = {}) {
   const jet = makeJet(team);
   jet.position.set(0, jet.userData.groundY, -10);
   S.add(jet);
-  if (o.scaffold !== false) { scaffold(S, 3, -6.4, 2); scaffold(S, -6, -6.4, 4); }
   S.shadowFocus(0, 0, -10);
   return jet;
 }
@@ -40,66 +39,92 @@ function cheer(c, t) {
 // ---------------------------------------------------------------- the shots
 export const shots = {
   // He put tiny round windows on his airplane
+  // FIX: real scaffold (no "table"), hero big, window visibly pressed into an empty frame + pop
   '01': (S) => {
-    const jet = hangarSet(S);
-    const slot = jet.userData.windows[10]; slot.scale.setScalar(0.001);
-    const hero = new Char(S, 'hero', { pos: [3.0, 2.08, -6.9] });
-    hero.set({ hold: 'window', armR: 0.4, armL: 0.3, facing: -1 });
+    const jet = hangarSet(S, HERO);
+    const slot = jet.userData.windows[13];                 // x ≈ 7.66, empty until he fits it
+    const glass = slot.children[1]; glass.visible = false;
+    scaffold(S, 7.0, -7.0, 2.2, { w: 2.8, d: 1.6 });
+    const hero = new Char(S, 'hero', { pos: [7.15, 2.26, -7.25] });
+    hero.set({ hold: 'window', facing: 1 });
+    const pop = impactBurst(S, { text: null, size: 0.9, color: '#bfefff' }); pop.position.set(7.66, 3.65, -8.2);
     return (t, u) => {
-      const lift = ease.out(seg(u, 0.05, 0.4));
-      const placed = u > 0.55;
-      hero.set({ armR: placed ? lerp(2.4, 0.5, ease.out(seg(u, 0.55, 0.8))) : lerp(0.4, 2.4, lift), hold: placed ? null : 'window',
-                 eyes: placed ? 'happy' : 'half', mouth: placed ? 'grin' : 'smile' });
-      slot.scale.setScalar(placed ? ease.back(seg(u, 0.55, 0.7)) || 0.001 : 0.001);
-      S.camMove(u, [[5.6, 3.3, -2.6], [3.2, 3.2, -8]], [[10.5, 4.6, 5.5], [1.0, 3.3, -8.5]], ease.io, [42, 48]);
+      const placed = u > 0.4;
+      hero.set({ armR: placed ? lerp(1.9, 0.5, ease.out(seg(u, 0.45, 0.7))) : lerp(0.5, 1.9, ease.out(seg(u, 0.0, 0.35))),
+                 hold: placed ? null : 'window', eyes: placed ? 'happy' : 'half', mouth: placed ? 'grin' : 'smile',
+                 hop: placed && u < 0.55 ? 0.2 : 0 });
+      glass.visible = placed;
+      slot.scale.setScalar(placed ? 1 + 0.35 * Math.sin(seg(u, 0.4, 0.55) * Math.PI) : 1);
+      pop.show(placed ? (u - 0.4) * S.duration : -1);
+      S.camMove(u, [[6.5, 3.5, -3.8], [7.2, 3.4, -8.2]], [[5.0, 3.8, 0.0], [6.3, 3.3, -8.4]], ease.io, [44, 50]);
     };
   },
   // when everyone wanted big square ones.
+  // FIX: jet out in the open with sky behind (no sliding orange building), shoot the nose section (no wing slab), crowd framed from frame 1
   '02': (S) => {
-    outdoorSky(S); airfield(S);
-    const jet = makeJet(RIVAL); jet.position.set(0, jet.userData.groundY, -62); S.add(jet);
-    const fans = crowd(S, 7, [-9, 7], [-55.5, -54], { seed: 2 });
-    S.shadowFocus(0, 0, -58);
+    outdoorSky(S); airfield(S, { runway: false });
+    const jet = makeJet(RIVAL); jet.position.set(0, jet.userData.groundY, 14); S.add(jet);
+    const fans = crowd(S, 7, [4, 10], [4.5, 6.5], { seed: 2 });
+    S.shadowFocus(6, 0, 10);
     return (t, u) => {
-      fans.forEach(c => { c.set({ eyes: 'happy', mouth: 'grin', armR: 2.2 + Math.sin(t * 8 + c.r * 9) * 0.4, armL: 0.3, look: -0.4 }); });
-      S.camMove(u, [[-10, 2.6, -47], [-4, 3.6, -60.5]], [[6, 3.4, -46], [8, 3.6, -60.5]], ease.io, [40, 40]);
+      fans.forEach(c => c.set({ eyes: 'happy', mouth: 'grin', armR: 2.3 + Math.sin(t * 8 + c.r * 9) * 0.3, armL: c.r < 0.5 ? 0.3 : 2.0,
+                                hop: Math.max(0, Math.sin(t * 9 + c.r * 7)) * 0.2, look: 0.4 }));
+      S.camMove(u, [[4.5, 1.3, -1], [7, 3.3, 14]], [[9, 1.6, 0], [10, 3.5, 14]], ease.io, [56, 54]);
     };
   },
   // You see, two companies are racing
+  // FIX: split screen - SKYWARD yard on top, JETLUX yard below, cameras racing in opposite directions
   '03': (S) => {
-    outdoorSky(S); airfield(S);
-    const a = makeJet({ ...HERO }); a.position.set(-24, a.userData.groundY, -62); S.add(a);
-    const b = makeJet({ ...RIVAL }); b.position.set(24, b.userData.groundY, -62); S.add(b);
-    scaffold(S, -24, -57, 4); scaffold(S, 24, -57, 4); scaffold(S, -14, -66, 6); scaffold(S, 34, -66, 6);
-    crowd(S, 10, [-34, 34], [-52, -48], { seed: 3, hat: 'hardhat' });
-    S.shadowFocus(0, 0, -60);
-    return (t, u) => S.camMove(u, [[0, 46, 6], [0, 0, -62]], [[0, 12, -24], [0, 3, -62]], ease.io, [50, 54]);
+    outdoorSky(S, { shadow: 110 }); airfield(S, { runway: false });
+    const [A, B] = S.splitScreen();
+    const crews = [];
+    for (const [cx, team, seed] of [[-80, HERO, 32], [80, RIVAL, 31]]) {
+      hangarFront(S, cx, -22, { name: team.name, color: team.stripe });
+      const jet = makeJet(team); jet.position.set(cx, jet.userData.groundY, -3); S.add(jet);
+      const crew = crowd(S, 4, [cx - 6, cx + 8], [6, 8], { seed, hat: 'hardhat' });
+      crew.forEach(c => { c.set({ hold: 'hammer' }); crews.push(c); });
+    }
+    S.shadowFocus(0, 0, 0);
+    return (t, u) => {
+      crews.forEach(c => c.set({ armR: 1.5 + Math.cos(t * 13 + c.r * 6) * 0.9, walking: 0.6, walk: t * 10 + c.r * 5 }));
+      S.camMoveOn(A, u, [[-92, 8, 22], [-80, 3.5, -4]], [[-72, 7.5, 20], [-76, 3.5, -4]], ease.io, [42, 42]);
+      S.camMoveOn(B, u, [[92, 8, 22], [80, 3.5, -4]], [[72, 7.5, 20], [76, 3.5, -4]], ease.io, [42, 42]);
+    };
   },
   // to build the world's first jet airliner,
+  // FIX: workers big on scaffolds, hammers actually hit the fuselage with sparks, closer orbit
   '04': (S) => {
     const jet = hangarSet(S, HERO);
-    const workers = [];
-    [[9, -6.9], [12.5, -7.2], [-2, -6.9], [-9, -7]].forEach(([x, z], i) => {
-      const w = new Char(S, 'extra', { seed: 40 + i, hat: 'hardhat', pos: [x, 0, z] });
-      w.set({ hold: 'hammer', facing: i % 2 ? 1 : -1 }); w.r = i; workers.push(w);
-    });
+    scaffold(S, 7.2, -7.0, 2.2, { w: 2.6, d: 1.6 }); scaffold(S, 10.3, -7.0, 2.2, { w: 2.6, d: 1.6 });
+    const w1 = new Char(S, 'extra', { seed: 41, hat: 'hardhat', pos: [7.2, 2.26, -7.25] });
+    const w2 = new Char(S, 'extra', { seed: 42, hat: 'hardhat', pos: [10.3, 2.26, -7.25] });
+    const boss = new Char(S, 'extra', { seed: 43, hat: 'cap', pos: [8.8, 0, -4.6] });
+    w1.set({ hold: 'hammer', facing: 1 }); w2.set({ hold: 'hammer', facing: -1 }); boss.set({ hold: 'blueprint', armR: 1.2 });
+    const sp = [impactBurst(S, { text: null, size: 0.6, color: '#ffe066' }), impactBurst(S, { text: null, size: 0.6, color: '#ffe066' })];
+    sp[0].position.set(7.75, 3.45, -8.25); sp[1].position.set(9.75, 3.45, -8.25);
     return (t, u) => {
-      workers.forEach(w => { const k = Math.sin(t * 11 + w.r * 2); w.set({ armR: 1.6 + k * 0.9, eyes: 'half', mouth: k > 0.6 ? 'open' : 'flat' }); });
-      S.camOrbit(u, [10, 3, -10], 17, 0.9, 0.15, 3.5, ease.io, 48);
+      [[w1, 0], [w2, 1.7]].forEach(([w, off], i) => {
+        const ph = t * 8 + off;
+        w.set({ armR: 1.5 + Math.cos(ph) * 0.95, eyes: 'half', mouth: Math.cos(ph) < -0.8 ? 'grin' : 'flat' });
+        const since = (((ph - Math.PI) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI) / 8;   // s since the hammer hit
+        sp[i].show(since < 0.18 ? since : -1);
+      });
+      boss.set({ armL: 2.2 + Math.sin(t * 6) * 0.2, talk: 0.8, look: 0.5 });
+      S.camOrbit(u, [8.7, 2.6, -7.4], 7.2, 0.7, 0.1, 0.5, ease.io, 54);
     };
   },
   // and whoever flies first
+  // FIX: the jet actually lifts off and roars over the camera
   '05': (S) => {
     outdoorSky(S); airfield(S);
     const jet = makeJet({ windows: 'round', stripe: '#d9a21b', name: '' }); S.add(jet);
-    S.shadowFocus(0, 0, 0);
     return (t, u) => {
-      const k = ease.in(u) * 0.6 + u * 0.4;
-      const x = lerp(-60, 45, k), climb = Math.max(0, x + 5) * 0.12;
-      jet.position.set(x, jet.userData.groundY + climb, 0); jet.rotation.z = Math.min(0.18, climb * 0.02);
-      jet.userData.gear.visible = true;
+      const x = lerp(-55, 30, ease.in(u) * 0.4 + u * 0.6);
+      const climb = Math.max(0, x + 35) * 0.22;
+      jet.position.set(x, jet.userData.groundY + climb, 0); jet.rotation.z = Math.min(0.2, climb * 0.03);
+      jet.userData.gear.visible = climb < 9;
       S.shadowFocus(x, 0, 0);
-      S.camAt([lerp(-6, 8, u), 1.0, 26], [x * 0.85, 3 + climb * 0.8, 0], 50);
+      S.camAt([22, 0.8, 6], [x, 3 + climb * 0.9, 0], 58);
     };
   },
   // gets every passenger in the country.
@@ -114,31 +139,32 @@ export const shots = {
     };
   },
   // He's the youngest designer
+  // FIX: board faces the camera, hero visibly drawing on it
   '07': (S) => {
     S.sky({ hemi: 1.5, fog: null, sun: [-20, 30, 40], shadow: 15 }); office(S);
-    const tb = draftTable(S, 0, -1.5, { tilt: 0.55 });
-    const hero = new Char(S, 'hero', { pos: [-1.9, 0, -0.6] });
-    hero.set({ hold: 'pencil', facing: 1, look: 0.2 });
+    draftTable(S, 0.3, -1.2, { tilt: -1.0 });
+    const hero = new Char(S, 'hero', { pos: [-1.0, 0, -0.5] });
+    hero.set({ hold: 'pencil', facing: 1 });
     return (t, u) => {
-      hero.set({ armR: 1.25 + Math.sin(t * 14) * 0.15, eyes: 'half', mouth: 'smile' });
-      S.camMove(u, [[-3.6, 2.5, 5.2], [-1.0, 1.9, -0.8]], [[-3.0, 2.2, 3.4], [-1.4, 1.9, -0.8]], ease.io, [46, 42]);
+      hero.set({ armR: 1.45 + Math.sin(t * 16) * 0.12, eyes: u < 0.6 ? 'half' : 'happy', mouth: 'smile', look: 0.5 });
+      S.camMove(u, [[-0.2, 2.1, 4.6], [-0.3, 1.9, -0.9]], [[-0.6, 2.0, 3.2], [-0.5, 1.9, -0.9]], ease.io, [46, 44]);
     };
   },
   // on the team.
+  // FIX: the older team stands in a visible row, arms crossed, turning to look at the young hero who waves
   '08': (S) => {
     S.sky({ hemi: 1.5, fog: null, sun: [-20, 30, 40], shadow: 20 }); office(S);
-    const elders = [];
-    [[-6, -4], [0, -4], [6, -4], [-6, 2], [6, 2]].forEach(([x, z], i) => {
-      draftTable(S, x, z, { tilt: 0.5 });
-      const c = new Char(S, 'extra', { seed: 80 + i, hat: i % 2 ? 'hair' : 'none', pos: [x - 1.2, 0, z + 1.3] });
-      c.d.hairColor = '#9a9a9a'; c.d.glasses = i % 2 ? 'round' : null; c.set({ hold: 'pencil', armR: 1.2, eyes: 'half', mouth: 'frown' }); elders.push(c);
+    [-5, -1.5, 2].forEach(x => draftTable(S, x, -4.5, { tilt: -0.5 }));
+    const elders = [[-4.2, 0.2], [-2.6, 0.5], [-1.0, 0.2], [0.6, 0.5]].map(([x, z], i) => {
+      const c = new Char(S, 'extra', { seed: 80 + i, pos: [x, 0, z] });
+      Object.assign(c.d, { hairColor: '#a8a8a8', hat: i % 2 ? 'hair' : 'none', bald: i === 0, mustache: i === 0 ? 'walrus' : i === 2 ? 'pencil' : null, glasses: i % 2 ? 'round' : null });
+      c.set({ armsCrossed: true, eyes: 'half', mouth: 'frown', brow: 0.3 }); return c;
     });
-    draftTable(S, 0, 2, { tilt: 0.5 });
-    const hero = new Char(S, 'hero', { pos: [-1.2, 0, 3.3] }); hero.set({ hold: 'pencil', armR: 1.2 });
+    const hero = new Char(S, 'hero', { pos: [2.5, 0, 1.2] });
     return (t, u) => {
-      elders.forEach((c, i) => c.set({ armR: 1.2 + Math.sin(t * 10 + i) * 0.12 }));
-      hero.set({ eyes: u > 0.5 ? 'happy' : 'half', mouth: 'grin', look: 0.3 });
-      S.camMove(u, [[-0.8, 2.4, 7], [-1, 1.6, 3]], [[0, 5.5, 12.5], [0, 0.8, -1]], ease.out, [46, 52]);
+      elders.forEach(c => c.set({ look: u > 0.3 ? 0.7 : 0 }));
+      hero.set({ eyes: 'happy', mouth: 'grin', armR: 2.4 + Math.sin(t * 10) * 0.25 });
+      S.camMove(u, [[2.0, 1.8, 5.2], [2.2, 1.5, 1]], [[-0.8, 2.8, 13.5], [-0.8, 1.3, 0.5]], ease.out, [48, 52]);
     };
   },
   // And when his boss sees
@@ -164,20 +190,27 @@ export const shots = {
     };
   },
   // he slams the table.
+  // FIX: boss BEHIND a real desk facing camera; wind-up, fists come down ON the desk top,
+  // everything on the desk jumps, BAM burst, camera shake, hero flinches in the background
   '11': (S) => {
     S.sky({ hemi: 1.5, fog: null, sun: [-20, 30, 40], shadow: 15 }); office(S);
-    const tb = draftTable(S, 0, -0.4, { tilt: 0.25 });
-    const boss = new Char(S, 'boss', { pos: [0.2, 0, 0.9], h: 2.15 });
-    const hero = new Char(S, 'hero', { pos: [-2.6, 0, -1.6] });
+    const dk = desk(S, 0, 0, { top: 0.8 });
+    const boss = new Char(S, 'boss', { pos: [0, 0, -0.95], h: 2.15 });
+    const hero = new Char(S, 'hero', { pos: [2.4, 0, -3.5] });
+    const bam = impactBurst(S, { text: 'BAM!', size: 1.2 }); bam.position.set(0.55, 0.95, -0.6);
+    const HIT = 0.42;
     return (t, u) => {
-      const anger = ease.io(seg(u, 0, 0.45));
-      const slam = seg(u, 0.42, 0.5);
-      const arms = u < 0.42 ? lerp(0.3, 2.9, ease.out(seg(u, 0.1, 0.42))) : lerp(2.9, 1.25, ease.in(slam));
-      boss.set({ anger: anger * 0.8, brow: 1, eyes: 'angry', mouth: u > 0.45 ? 'shout' : 'frown', armL: arms, armR: arms, facing: -1, look: -0.2, squash: u > 0.5 ? Math.max(0, 0.08 - (u - 0.5)) : 0 });
-      hero.set({ eyes: u > 0.5 ? 'wide' : 'half', sweat: u > 0.5 ? 1 : 0, mouth: u > 0.5 ? 'o' : 'smile', hop: u > 0.5 && u < 0.6 ? 0.4 : 0 });
-      tb.userData.board.position.y = 2.25 + (u > 0.5 && u < 0.62 ? Math.sin((u - 0.5) * 50) * 0.08 : 0);
-      S.shake = u > 0.5 && u < 0.72 ? 0.12 * (1 - seg(u, 0.5, 0.72)) : 0;
-      S.camAt([lerp(-1.6, -1.2, u), 2.2, 5.6], [-0.3, 2.0, 0], 46);
+      const k = (u - HIT) * S.duration;                     // seconds since the fists land
+      const arms = u < 0.3 ? lerp(0.3, 2.9, ease.out(seg(u, 0.02, 0.3)))
+                 : u < HIT ? lerp(2.9, 0.75, ease.in(seg(u, 0.3, HIT))) : 0.75;
+      boss.set({ anger: lerp(0.15, 0.85, ease.io(seg(u, 0, HIT))), brow: 1, eyes: 'angry', mouth: k > 0 ? 'shout' : 'frown',
+                 armL: arms, armR: arms, squash: k > 0 && k < 0.12 ? 0.08 : 0 });
+      hero.set({ eyes: k > 0 ? 'wide' : 'half', mouth: k > 0 ? 'o' : 'smile', sweat: k > 0 ? 1 : 0,
+                 hop: k > 0 && k < 0.3 ? Math.sin(k / 0.3 * Math.PI) * 0.5 : 0, facing: -1 });
+      dk.userData.jolt(k);
+      bam.show(k);
+      S.shake = k > 0 && k < 0.35 ? 0.09 * (1 - k / 0.35) : 0;
+      S.camMove(u, [[0.3, 1.55, 4.2], [0, 1.3, -0.9]], [[0.15, 1.5, 3.4], [0, 1.3, -0.9]], ease.out, [48, 48]);
     };
   },
   // Passengers want a view!
@@ -203,15 +236,17 @@ export const shots = {
     return (t, u) => S.camMove(u, [[-8, 3.8, -6.2], [-4, 3.6, -8.6]], [[4, 3.7, -6.0], [8, 3.6, -8.6]], ease.lin, [38, 38]);
   },
   // The other company builds big,
+  // FIX: low "power" angle on the rival, arms spreading, the giant jet towering behind (no tables)
   '15': (S) => {
     const jet = hangarSet(S, RIVAL);
-    const rival = new Char(S, 'rival', { pos: [4, 0, -3.5], h: 2.2 });
-    const crew = crowd(S, 4, [-8, 12], [-6.8, -6.4], { seed: 15, hat: 'hardhat' });
-    crew.forEach(c => c.set({ hold: 'hammer' }));
+    scaffold(S, 7.2, -7.0, 2.2, { w: 2.6, d: 1.6 }); scaffold(S, 10.4, -7.0, 2.2, { w: 2.6, d: 1.6 });
+    const rival = new Char(S, 'rival', { pos: [6, 0, -3.2], h: 2.2 });
+    const crew = [41, 42].map((sd, i) => { const c = new Char(S, 'extra', { seed: 150 + i, hat: 'hardhat', pos: [i ? 10.4 : 7.2, 2.26, -7.25] }); c.set({ hold: 'hammer', facing: i ? -1 : 1 }); c.r = i; return c; });
     return (t, u) => {
-      rival.set({ armL: lerp(0.3, 2.3, ease.back(seg(u, 0.1, 0.5))), armR: lerp(0.3, 2.3, ease.back(seg(u, 0.1, 0.5))), mouth: 'smirk', facing: 1 });
-      crew.forEach(c => c.set({ armR: 1.6 + Math.sin(t * 11 + c.r * 5) * 0.9 }));
-      S.camMove(u, [[5, 1.0, 4], [4, 2.0, -3.5]], [[6.5, 4.5, 8], [2, 3.4, -8]], ease.io, [46, 52]);
+      const spread = ease.back(seg(u, 0.1, 0.45));
+      rival.set({ armL: lerp(0.3, 2.2, spread), armR: lerp(0.3, 2.2, spread), mouth: 'smirk', look: 0.2 });
+      crew.forEach(c => c.set({ armR: 1.5 + Math.cos(t * 7 + c.r * 1.6) * 0.9 }));
+      S.camMove(u, [[6.6, 0.45, 0.6], [6, 2.4, -3.2]], [[7.4, 0.6, 2.2], [7, 3.4, -8]], ease.io, [56, 62]);
     };
   },
   // beautiful square windows,
@@ -232,20 +267,20 @@ export const shots = {
   '17': (S) => {
     outdoorSky(S); airfield(S);
     const jet = makeJet(RIVAL); S.add(jet);
-    const fans = crowd(S, 12, [-8, 8], [26, 30], { seed: 17 });
-    confetti(S, 350, [24, 14, 10], [0, 0, 28]);
+    const fans = crowd(S, 10, [-4, 4], [33, 35], { seed: 17 });
+    confetti(S, 350, [16, 12, 6], [0, 0, 31]);
     return (t, u) => {
-      const x = lerp(-50, 60, ease.in(u) * 0.5 + u * 0.5), climb = Math.max(0, x + 10) * 0.18;
+      const x = lerp(-30, 55, ease.in(u) * 0.4 + u * 0.6), climb = Math.max(0, x + 5) * 0.2;
       jet.position.set(x, jet.userData.groundY + climb, 0); jet.rotation.z = Math.min(0.22, climb * 0.025);
       jet.userData.gear.visible = climb < 6;
       S.shadowFocus(x, 0, 0);
       fans.forEach(c => cheer(c, t));
-      S.camAt([lerp(-3, 3, u), 3.2, 38], [x * 0.6, 4 + climb * 0.5, 0], 52);
+      S.camAt([lerp(-1.5, 1.5, u), 2.2, 41], [x * 0.18, lerp(2.4, 3.6, ease.io(u)), 0], 56);
     };
   },
   // Their passengers love it.
   '18': (S) => {
-    S.sky({ hemi: 1.7, fog: null, sun: [0, 40, 20], shadow: 15 });
+    S.sky({ hemi: 1.1, fog: null, sun: [0, 40, 20], shadow: 15 });
     cabin(S, { windows: 'square' });
     const pax = [];
     for (let i = 0; i < 9; i++) {
@@ -254,8 +289,8 @@ export const shots = {
       c.set({ sit: true, facing: -1, look: -0.6 }); c.r = i; pax.push(c);
     }
     return (t, u) => {
-      pax.forEach(c => c.set({ eyes: 'happy', mouth: 'grin', armL: c.r % 3 === 0 ? 2.4 + Math.sin(t * 9 + c.r) * 0.3 : 0.3 }));
-      S.camMove(u, [[4, 1.9, 1.6], [1, 1.5, -2.2]], [[-6, 1.9, 1.6], [-8, 1.5, -2.2]], ease.io, [58, 58]);
+      pax.forEach(c => c.set({ eyes: 'happy', mouth: 'grin', armL: c.r % 3 === 0 ? 2.4 + Math.sin(t * 9 + c.r) * 0.3 : 0.3, armR: c.r % 3 === 1 ? 1.9 : 0.3 }));
+      S.camMove(u, [[7, 2.7, 0.25], [-1, 1.45, -1.7]], [[2.5, 2.6, 0.25], [-6, 1.45, -1.7]], ease.io, [60, 60]);
     };
   },
   // While his plane gets a nickname
@@ -299,18 +334,18 @@ export const shots = {
     counter(S, -4.5, -8, { name: 'SKYWARD', color: '#169e8f' });
     const line = [];
     for (let i = 0; i < 9; i++) { const c = new Char(S, 'extra', { seed: 220 + i, pos: [4.5 + Math.sin(i) * 0.4, 0, -5.8 + i * 1.4] }); c.set({ hold: 'suitcase', facing: -1, mouth: 'smile', look: -0.3 }); line.push(c); }
-    const hero = new Char(S, 'hero', { pos: [-4.5, 0, -9.6] }); hero.set({ eyes: 'dot', mouth: 'flat', brow: -0.6, armL: 0.6, armR: 0.6 });
-    const tw = tumbleweed(S);
+    const hero = new Char(S, 'hero', { pos: [-4.5, 0, -5.9] }); hero.set({ eyes: 'dot', mouth: 'flat', brow: -0.6, armL: 0.6, armR: 0.6 });
+    const tw = tumbleweed(S); tw.scale.setScalar(1.6);
     S.shadowFocus(0, 0, -2);
     return (t, u) => {
       line.forEach((c, i) => c.set({ walking: Math.sin(t * 3 + i) > 0.6 ? 0.5 : 0, walk: t * 8 }));
-      tw.position.set(lerp(2, -8, u), 0.7 + Math.abs(Math.sin(t * 6)) * 0.4, -5.5); tw.rotation.z = t * 5;
-      S.camMove(u, [[5.5, 3.4, 9], [4.5, 2.4, -3]], [[-3.5, 3.0, 6], [-4.5, 2.6, -8]], ease.io, [56, 56]);
+      tw.position.set(lerp(1, -9, u), 1.0 + Math.abs(Math.sin(t * 6)) * 0.5, -4.6); tw.rotation.z = t * 5;
+      S.camMove(u, [[7.5, 4.0, 13], [4.5, 1.8, -2]], [[-3.2, 2.3, 2.0], [-4.5, 1.4, -6.0]], ease.io, [54, 54]);
     };
   },
   // Then, one day at thirty thousand feet,
   '23': (S) => {
-    S.sky({ top: '#1f4fa8', horizon: '#ffd2a8', bottom: '#f5e6d6', sun: [-80, 40, 20], sunColor: 0xffd9a8, fog: [150, 700], hemi: 1.3, shadow: 40 });
+    S.sky({ top: '#1f5fd6', horizon: '#cfe6ff', bottom: '#8fbbe8', sun: [-60, 60, 30], sunColor: 0xffffff, fog: [300, 1200], hemi: 1.2, shadow: 40, ground: 0xbcd4ee });
     const jet = makeJet({ ...RIVAL, gear: false }); S.add(jet);
     const R = rng(23), clouds = [];
     for (let i = 0; i < 40; i++) clouds.push([S.cloud([(R() - .5) * 600, -30 - R() * 25, (R() - .5) * 500], 2 + R() * 3, 230 + i), R()]);
@@ -319,7 +354,7 @@ export const shots = {
       clouds.forEach(([c, r]) => { c.position.x -= 1.4 + r * 0.6; if (c.position.x < -320) c.position.x += 640; });
       jet.position.y = Math.sin(t * 1.3) * 0.3; jet.rotation.x = Math.sin(t * 0.9) * 0.03;
       S.shadowFocus(0, 0, 0);
-      S.camOrbit(u, [3, 0, 0], 19, 0.5, -0.1, 2.5, ease.io, 50);
+      S.camOrbit(u, [3, -1, 0], 19, 0.5, -0.1, 2.0, ease.io, 50);
     };
   },
   // something weird happens.

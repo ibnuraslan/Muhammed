@@ -1,5 +1,5 @@
 // props.js - procedural sets and props (all built from primitives, no assets)
-import { THREE, toon, basic, mesh, box, cyl, sphere, canvasTex, noiseTex, textPlane, roundRect, rng, lerp, clamp } from './engine.js';
+import { THREE, toon, basic, mesh, box, cyl, sphere, canvasTex, noiseTex, textPlane, roundRect, rng, lerp, clamp, ease } from './engine.js';
 
 // ------------------------------------------------------------------ textures
 export function glassTex() {
@@ -189,13 +189,91 @@ export function hangar(S, { seed = 5 } = {}) {
   const R = rng(seed + 3), wood = toon(0xb98a52);
   for (let i = 0; i < 10; i++) { const s = 1 + R() * 1.4; S.add(box(s, s, s, wood, [(R() < .5 ? -1 : 1) * (22 + R() * 14), s / 2, -30 + R() * 40], { rot: [0, R(), 0] })); }
 }
-// scaffold tower beside a plane
-export function scaffold(S, x, z, h = 6) {
-  const m = toon(0x5d6b7a), plank = toon(0xb98a52);
+// scaffold tower beside a plane: deck at height h with guard rails, braces and a ladder
+export function scaffold(S, x, z, h = 2.4, { w = 3.0, d = 2.0 } = {}) {
+  const steel = toon(0x3f6fa8), yellow = toon(0xf2c230), plank = toon(0xb98a52);
   const g = new THREE.Group();
-  for (const dx of [-1.5, 1.5]) for (const dz of [-1, 1]) g.add(cyl(0.08, 0.08, h, m, [dx, h / 2, dz], { seg: 8 }));
-  for (let y = 2; y <= h; y += 2) { g.add(box(3.4, 0.15, 2.4, plank, [0, y, 0])); g.add(box(3.2, 0.06, 0.06, m, [0, y + 1, 1])); }
+  const top = h + 1.15;
+  for (const dx of [-w / 2, w / 2]) for (const dz of [-d / 2, d / 2]) g.add(cyl(0.06, 0.06, top, steel, [dx, top / 2, dz], { seg: 8 }));
+  g.add(box(w + 0.1, 0.12, d + 0.1, plank, [0, h, 0]));                       // deck
+  g.add(box(w + 0.1, 0.25, 0.05, yellow, [0, h + 0.18, d / 2]));             // toe board
+  for (const ry of [h + 0.55, h + 1.1]) {                                     // guard rails (3 sides, open front)
+    g.add(box(w, 0.06, 0.06, yellow, [0, ry, -d / 2]));
+    for (const dx of [-w / 2, w / 2]) g.add(box(0.06, 0.06, d, yellow, [dx, ry, 0]));
+  }
+  for (const dx of [-w / 2, w / 2]) {                                          // X braces on the sides
+    const len = Math.hypot(h, d);
+    for (const sgn of [-1, 1]) { const b = box(0.05, len, 0.05, steel, [dx, h / 2, 0]); b.rotation.x = sgn * Math.atan2(d, h); g.add(b); }
+  }
+  for (let y = 0.35; y < h; y += 0.35) g.add(box(0.5, 0.05, 0.05, steel, [w / 2 + 0.05, y, d / 2 - 0.3], { rot: [0, Math.PI / 2, 0] })); // ladder rungs
+  g.add(box(0.05, h, 0.05, steel, [w / 2 + 0.05, h / 2, d / 2 - 0.05])); g.add(box(0.05, h, 0.05, steel, [w / 2 + 0.05, h / 2, d / 2 - 0.55]));
+  g.position.set(x, 0, z); S.add(g); g.userData.deck = h + 0.06; return g;
+}
+
+// hangar front with the company sign (team colour) - building faces +z
+export function hangarFront(S, x, z, { name = 'SKYWARD', color = '#169e8f', w = 34, h = 13 } = {}) {
+  const g = new THREE.Group();
+  g.add(box(w, h, 16, toon(0xe9c48a), [0, h / 2, -8]));
+  g.add(mesh(new THREE.CylinderGeometry(w / 2, w / 2, 16, 24, 1, false, -Math.PI / 2, Math.PI), toon(0x3b5d8c), [0, h, -8], { rot: [Math.PI / 2, 0, 0], scale: [1, 1, 0.3] }));
+  g.add(box(w * 0.72, h * 0.78, 0.4, toon(0x2a2f38), [0, h * 0.39, 0.05]));   // dark open door
+  for (let i = -3; i <= 3; i++) g.add(box(0.25, h * 0.78, 0.5, toon(0x4a4f57), [i * w * 0.1, h * 0.39, 0.1]));
+  const sign = textPlane(name, { w: w * 0.6, h: 3, bg: color, fg: '#ffffff', font: 'Display, Arial Black, sans-serif', size: 0.66, radius: 30 });
+  sign.position.set(0, h + 2.4, 0.4); g.add(sign);
   g.position.set(x, 0, z); S.add(g); return g;
+}
+
+// big wooden desk with things on it that jump when it's slammed. Top at y = 1.05, front faces +z.
+export function desk(S, x, z, { w = 3.2, d = 1.5, top = 1.06 } = {}) {
+  const off = top - 1.06;  // lower desks sink into the floor (front panel hides it)
+  const g = new THREE.Group(), wood = toon(0x7a4a2a), dark = toon(0x55321b);
+  g.add(box(w, 0.12, d, wood, [0, 1.0, 0]));
+  g.add(box(w - 0.1, 0.95, 0.08, dark, [0, 0.48, d / 2 - 0.06]));            // modesty panel (front)
+  for (const dx of [-w / 2 + 0.35, w / 2 - 0.35]) g.add(box(0.6, 0.95, d - 0.1, wood, [dx, 0.48, 0]));
+  const items = [];
+  const add = (o, y) => { o.position.y = y; o.userData.baseY = y; g.add(o); items.push(o); return o; };
+  const papers = add(new THREE.Group(), 1.06); papers.position.x = 0.75; papers.position.z = 0.2;
+  for (let i = 0; i < 5; i++) papers.add(box(0.75, 0.03, 0.55, toon(i % 2 ? 0xffffff : 0xf1ead8), [0, i * 0.035, 0], { rot: [0, (i - 2) * 0.06, 0] }));
+  const cup = add(new THREE.Group(), 1.06); cup.position.x = -1.3; cup.position.z = -0.25;
+  cup.add(cyl(0.13, 0.11, 0.3, toon(0x2e6b4f), [0, 0.15, 0]));
+  for (const [dx, c] of [[-0.04, 0xf4c430], [0.03, 0xd4352b], [0.0, 0x3c6fd8]]) cup.add(cyl(0.02, 0.02, 0.45, toon(c), [dx, 0.4, 0], { rot: [0, 0, dx * 4], seg: 6 }));
+  const mug = add(new THREE.Group(), 1.06); mug.position.set(-0.75, 0, 0.35);
+  mug.add(cyl(0.11, 0.1, 0.22, toon(0xffffff), [0, 0.11, 0]));
+  const lamp = add(new THREE.Group(), 1.06); lamp.position.set(1.25, 0, -0.35);
+  lamp.add(cyl(0.18, 0.2, 0.05, toon(0x2e6b4f), [0, 0.03, 0])); lamp.add(cyl(0.03, 0.03, 0.6, toon(0x333333), [0, 0.33, 0], { seg: 6 }));
+  lamp.add(mesh(new THREE.ConeGeometry(0.22, 0.25, 16, 1, true), toon(0x2e6b4f, { side: THREE.DoubleSide }), [-0.08, 0.66, 0], { rot: [0, 0, 0.6] }));
+  const plate = add(textPlane('BOSS', { w: 0.5, h: 0.14, bg: '#2a2f38', fg: '#f2c230', font: 'Display, sans-serif', size: 0.7 }), 1.13);
+  plate.position.set(1.0, 1.13, 0.6);
+  g.position.set(x, off, z); S.add(g); g.userData.items = items;
+  // bounce everything: k = seconds since the slam (negative = not yet)
+  g.userData.jolt = (k) => {
+    items.forEach((o, i) => {
+      const s = k < 0 ? 0 : Math.max(0, Math.sin(k * 14 + i) * Math.exp(-k * 5)) * (0.35 + (i % 3) * 0.12);
+      o.position.y = o.userData.baseY + s; o.rotation.z = k < 0 ? 0 : Math.sin(k * 20 + i * 2) * 0.25 * Math.exp(-k * 6);
+    });
+    g.position.y = off + (k < 0 ? 0 : Math.sin(k * 40) * 0.04 * Math.exp(-k * 9));
+  };
+  return g;
+}
+
+// comic impact burst (jagged star + optional word) that always faces the camera.
+// call burst.show(k) every frame: k = seconds since impact (negative = hidden)
+export function impactBurst(S, { text = 'BAM!', size = 1.6, color = '#ffd23f', ink = '#d4352b' } = {}) {
+  const tex = canvasTex(512, 512, (g, w, h) => {
+    const R = rng(5);
+    const star = (r0, r1, fill) => { g.beginPath(); for (let i = 0; i < 28; i++) { const a = i / 28 * Math.PI * 2, r = (i % 2 ? r0 : r1) * (0.85 + R() * 0.3); g.lineTo(w / 2 + Math.cos(a) * r, h / 2 + Math.sin(a) * r); } g.closePath(); g.fillStyle = fill; g.fill(); g.lineWidth = 10; g.strokeStyle = '#151515'; g.stroke(); };
+    star(150, 245, '#ffffff'); star(110, 185, color);
+    if (text) { g.font = '900 120px Display, Arial Black, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineWidth = 14; g.strokeStyle = '#151515'; g.strokeText(text, w / 2, h / 2 + 6); g.fillStyle = ink; g.fillText(text, w / 2, h / 2 + 6); }
+  });
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, toneMapped: false }));
+  m.renderOrder = 999; m.visible = false; S.add(m);
+  m.show = (k) => {
+    m.visible = k >= 0 && k < 0.45;
+    if (!m.visible) return;
+    m.quaternion.copy(S.camera.quaternion);
+    const sc = k < 0.08 ? ease.back(k / 0.08) : 1 + (k - 0.08) * 0.4; m.scale.setScalar(sc);
+    m.material.opacity = k < 0.3 ? 1 : 1 - (k - 0.3) / 0.15; m.rotation.z += 0;
+  };
+  return m;
 }
 
 // ------------------------------------------------------------------ design office (room centred at origin, back wall at z=-8)
@@ -274,7 +352,7 @@ export function counter(S, x, z, { name = 'SKYWARD', color = '#169e8f' } = {}) {
 
 // ------------------------------------------------------------------ cabin interior (aisle along x)
 export function cabin(S, { windows = 'square' } = {}) {
-  const tube = mesh(new THREE.CylinderGeometry(2.6, 2.6, 40, 40, 1, true), toon(0xf2ece0, { side: THREE.BackSide }), [0, 1.4, 0], { rot: [0, 0, Math.PI / 2], cast: false });
+  const tube = mesh(new THREE.CylinderGeometry(2.6, 2.6, 40, 40, 1, true), toon(0xd9cfbd, { side: THREE.BackSide }), [0, 1.4, 0], { rot: [0, 0, Math.PI / 2], cast: false });
   S.add(tube);
   const carpet = noiseTex('#8c2f39', ['#7a2731', '#a33a45'], 3000, 256, [20, 2], 2);
   S.add(mesh(new THREE.PlaneGeometry(40, 3.8), toon(0xffffff, { map: carpet }), [0, 0, 0], { rot: [-Math.PI / 2, 0, 0], cast: false }));
@@ -292,11 +370,11 @@ export function cabin(S, { windows = 'square' } = {}) {
       S.add(holder); if (s < 0) S.scene.userData.windows.push(holder);
       // seat (back faces -x)
       const seat = new THREE.Group();
-      seat.add(box(0.9, 0.5, 1.6, seatM, [0, 0.6, 0])); seat.add(box(0.25, 1.1, 1.6, seatM, [-0.45, 1.1, 0])); seat.add(box(0.27, 0.3, 1.6, headM, [-0.45, 1.75, 0]));
+      seat.add(box(0.9, 0.5, 1.6, seatM, [0, 0.6, 0])); seat.add(box(0.25, 0.85, 1.6, seatM, [-0.45, 0.95, 0])); seat.add(box(0.27, 0.28, 1.6, headM, [-0.45, 1.5, 0]));
       seat.position.set(x - 0.4, 0, s * 1.35); S.add(seat);
     }
   }
-  const pl = new THREE.PointLight(0xfff0d0, 40, 30, 1.5); pl.position.set(0, 3.2, 0); S.add(pl);
+  const pl = new THREE.PointLight(0xfff0d0, 14, 30, 1.5); pl.position.set(0, 3.2, 0); S.add(pl);
 }
 
 // ------------------------------------------------------------------ newspaper
