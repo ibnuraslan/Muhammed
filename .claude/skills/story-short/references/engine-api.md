@@ -1,0 +1,84 @@
+# Engine API (shorts-maker/animator)
+
+Keep this file current: when you add a set, prop, pose or item, add a line here.
+
+## Commands
+```bash
+python3 make_short.py projects/<slug> --timings-only          # time the voice, write timings.txt
+python3 make_short.py projects/<slug> --preview [--shots 03,07] [--preview-at 0.1,0.5,0.9]
+python3 make_short.py projects/<slug>                          # full render → out.mp4
+python3 make_short.py projects/<slug> --music music.mp3        # with ducked background music
+```
+Whisper timings and TTS are cached in `projects/<slug>/.cache/`, so re-runs are quick.
+A file `scenes/NN.mp4|png` overrides animated shot NN.
+
+## Episode file shape (`projects/<slug>/animation.js`)
+```js
+import { THREE, ease, seg, lerp, clamp, lerp3, rng, toon, basic, box, cyl, sphere, mesh, textPlane, canvasTex, noiseTex } from '/animator/engine.js';
+import { Char } from '/animator/cast.js';
+import { /* sets & props */ } from '/animator/props.js';
+export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate */ }; }, ... };
+```
+
+## engine.js
+- Maths: `clamp(x,a,b)`, `lerp(a,b,t)`, `seg(u,a,b)` → 0..1 local progress, `lerp3`,
+  `rng(seed)` → deterministic random 0..1, and `ease.{lin,in,out,io,back}`.
+- Materials: `toon(color, opts)` (shaded), `basic(color, opts)` (flat/emissive look).
+- Meshes: `box(w,h,d,mat,pos,{rot,scale,cast})`, `cyl(rTop,rBot,h,mat,pos,{seg,rot})`,
+  `sphere(r,mat,pos,{scale,seg})`, `mesh(geometry,mat,pos,opts)`.
+- Textures: `canvasTex(w,h,(g,w,h)=>draw, [repeatX,repeatY])`,
+  `noiseTex(base, [specks], n, size, repeat, seed)` for grass/gravel/rock.
+- Signs: `textPlane('TEXT' | [lines], {w,h,bg,fg,font:'Display, sans-serif',size,radius,border})`.
+- **Stage `S`:** `S.add(obj)`, `S.scene`, `S.camera`, `S.duration` (s), `S.shake` (units),
+  `S.onUpdate(fn(t,u))`.
+  - `S.sky({top,horizon,bottom,fog:[near,far]|null,sun:[x,y,z],sunColor,sunI,hemi,shadow,ground})`
+  - `S.shadowFocus(x,y,z)`: centre the shadow box on the action.
+  - `S.cloud([x,y,z], scale, seed)` → group.
+  - Camera: `S.camAt(pos, look, fov)`,
+    `S.camMove(u, [pos0, look0], [pos1, look1], easing, [fov0, fov1])`,
+    `S.camOrbit(u, center, radius, angle0, angle1, height, easing, fov)`.
+
+## cast.js: characters
+`new Char(S, 'hero'|'boss'|'rival'|'extra'|designObject, { pos:[x,y,z], h:2, seed, hat, color, shadow:true })`
+- `.set({...pose})`, `.pos(x,y,z)`, `.group` (THREE.Group), `.d` (design, can be edited).
+- Pose keys:
+  - `walking` 0..1 + `walk` (phase, e.g. `t*9`)
+  - `armL`, `armR`: angle from hanging down (0) → out (1.57) → up (2.6–3.0)
+  - `eyes`: dot | half | happy | wide | closed | angry
+  - `mouth`: smile | flat | frown | smirk | grin | o | open | shout
+  - `brow` -1 (sad) .. 1 (angry)
+  - `anger` 0..1 (white→red→purple) · `steam` 0..1 · `sweat` 0/1 · `blush` 0/1
+  - `talk` 0..1 (lip flap) · `hop` 0..1 (jump height) · `squash` (head squash)
+  - `facing` ±1 · `look` -1..1 (face direction) · `lean` · `sit` (hides legs)
+  - `armsCrossed` · `blink` (default on)
+  - `hold` / `holdL`: pencil | hammer | suitcase | window | blueprint | newspaper | ticket
+- Design fields (for new characters): `body` vest|suit|plain, `color`, `shirt`, `tie`,
+  `bodyW`, `headR`, `hair` tuft|slick, `hairColor`, `hat` pilot|beret|bun|hair|cap|hardhat|none,
+  `glasses` round|shades, `mustache` walrus|pencil, `brows` 'bushy', `bald`, `pencil`, `eyes`, `mouth`.
+
+## props.js: sets (coordinate notes)
+- `airfield(S,{runway,mountains,seed})`: grass to ±1200; runway along **x** at z=0 (36 wide);
+  apron at z≈-70; hangars at z=-112; tower (150,-95). Clouds included.
+- `hangar(S)`: floor ±60, **open front toward +z**, back wall z=-54, arch radius 30. Park
+  the jet at `(0, groundY, -10)`. Point light inside.
+- `scaffold(S, x, z, h)`: steel scaffold tower (use h ≥ 4).
+- `office(S,{windows})`: room x ±12, back wall z=-8 with 3 sky windows, wood floor, lamps,
+  a blueprint poster on the left wall.
+- `draftTable(S, x, z, {rot, tilt, windows})`: `.userData.board` (tilting board group).
+- `terminal(S)`: checker floor, back wall z=-12 with a DEPARTURES sign, side walls x=±24.
+- `counter(S, x, z, {name, color})`: airline counter with a hanging sign.
+- `cabin(S,{windows:'square'|'round'})`: tube interior, aisle along x, seats at z=±1.35
+  (facing +x), wall windows at z=±2.42. Shoot **across** the rows (camera z≈1.6 looking -z).
+
+## props.js: props
+- `makeJet({windows:'round'|'square', stripe, name, gear, scale})`: nose +x, length ≈36,
+  span ≈30. `userData.windows` (+z side holders), `userData.gear`, `userData.groundY`.
+- `newspaper({masthead, headline, sub, windows})`: a 3×4.1 plane.
+- `confetti(S, n, [ax,ay,az], center, seed)`: falling, self-animating.
+- `tumbleweed(S)`: roll it by setting its position/rotation.
+- `crackOverlay(w,h,seed)`: plane; `.userData.setProgress(0..1)`.
+- `glassTex()`, `blueprintTex(windows, title)`.
+
+## Wishlist (build when a story needs it)
+railroad + train, canyon walls, city street, factory, kitchen, castle, ship deck, night
+lighting, rain, dust/smoke particles, heat shimmer, x-ray cutaway shader, map/chart metaphor set.

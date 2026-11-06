@@ -21,6 +21,7 @@ See README.md for the script format and the full workflow.
 import argparse
 import asyncio
 import difflib
+import hashlib
 import json
 import os
 import random
@@ -375,6 +376,65 @@ def render_shot(src, frames, out, move, label):
              "-vf", vf, *enc, str(out)])
 
 
+def write_timings_report(proj, lines, words, total):
+    """timings.json (every word) + timings.txt (every line and shot marker) for planning."""
+    (proj / "timings.json").write_text(json.dumps(
+        [{"word": w["text"], "start": round(w["start"], 3), "end": round(w["end"], 3)} for w in words], indent=1))
+    out = [f"TOTAL {total:.2f}s  ({len(words)} words, {len(words) / max(total, 1):.2f} words/s)", ""]
+    for ln in lines:
+        ws = ln["words"]
+        out.append(f"[{ws[0]['start']:6.2f} - {ws[-1]['end']:6.2f}]  {' '.join(w['text'] for w in ws)}")
+        for w in ws:
+            if w["shot"]:
+                out.append(f"      shot [{w['shot']}] starts {w['start']:6.2f}  on '{w['text']}'")
+    (proj / "timings.txt").write_text("\n".join(out) + "\n")
+    print("\n".join(out))
+    print(f"\nwrote {proj / 'timings.txt'} and timings.json")
+
+
+def make_preview(proj, anim, shots, words, tmp, only, at):
+    """Render a few stills of every animated shot into contact sheets (fast review)."""
+    todo = [(i, s) for i, s in enumerate(shots) if not only or s["id"] in only]
+    jobs = []
+    for i, s in todo:
+        for k, u in enumerate(at):
+            jobs.append({"id": s["id"], "frames": s["frames"], "still": u, "out": str(tmp / f"still_{i:03d}_{k}.jpg")})
+    jf = tmp / "preview_jobs.json"
+    jf.write_text(json.dumps(jobs))
+    print(f"3/3 rendering {len(jobs)} preview stills")
+    subprocess.run(["node", str(HERE / "animator" / "render.js"), str(Path(anim).resolve()), str(jf)])
+    font = FONTS_DIR / "Montserrat-ExtraBold.ttf"
+    labeled = []
+    for n, j in enumerate(jobs):
+        if not Path(j["out"]).exists():
+            continue
+        s = next(s for s in shots if s["id"] == j["id"])
+        said = " ".join(w["text"] for w in words if s["start"] <= w["start"] < s["end"])[:38]
+        lab = tmp / f"label_{n}.txt"
+        lab.write_text(f"[{s['id']}] u={j['still']:.1f}  {s['end'] - s['start']:.1f}s\n{said}")
+        dst = tmp / f"lab_{len(labeled):03d}.jpg"
+        run(["ffmpeg", "-y", "-i", j["out"], "-vf",
+             f"scale=360:640,drawbox=y=0:w=iw:h=74:color=black@0.65:t=fill,"
+             f"drawtext=fontfile={font}:textfile={lab}:fontcolor=white:fontsize=19:x=8:y=8:line_spacing=6",
+             "-q:v", "3", str(dst)])
+        labeled.append(dst)
+    per = len(at) * 4  # 4 shots per sheet
+    for old in proj.glob("preview_*.jpg"):
+        old.unlink()
+    sheets = []
+    for sidx in range(0, len(labeled), per):
+        chunk = labeled[sidx:sidx + per]
+        lst = tmp / f"sheet_{sidx}.txt"
+        for k, f in enumerate(chunk):
+            shutil.copy(f, tmp / f"sh_{sidx}_{k:03d}.jpg")
+        out = proj / f"preview_{sidx // per + 1}.jpg"
+        cols = len(at) * 2
+        run(["ffmpeg", "-y", "-framerate", "1", "-i", str(tmp / f"sh_{sidx}_%03d.jpg"), "-vf",
+             f"tile={cols}x{-(-len(chunk) // cols)}:padding=6:color=white", "-frames:v", "1", "-q:v", "3", str(out)])
+        sheets.append(out)
+    print("\npreview sheets:\n  " + "\n  ".join(map(str, sheets)))
+
+
 def render_animation(episode, todo, tmp):
     """Render shots with the three.js animator (animator/render.js) via headless Chromium."""
     if not shutil.which("node"):
@@ -426,6 +486,12 @@ def main():
     ap.add_argument("--tail", type=float, default=0.6, help="seconds to hold after the last word")
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--keep-temp", action="store_true")
+    ap.add_argument("--timings-only", action="store_true",
+                    help="just time the voiceover against the script, write timings.txt, and stop")
+    ap.add_argument("--preview", action="store_true",
+                    help="render a few stills per animated shot into preview_N.jpg contact sheets, and stop")
+    ap.add_argument("--preview-at", default="0.1,0.5,0.9", help="moments (0-1) of each shot to preview")
+    ap.add_argument("--shots", help="with --preview: only these shot ids, e.g. 03,07,12")
     args = ap.parse_args()
 
     for tool in ("ffmpeg", "ffprobe"):
@@ -455,14 +521,35 @@ def main():
                     voice_file = proj / name
                     break
         print("1/5 voiceover")
+        cache = proj / ".cache"
+        cache.mkdir(exist_ok=True)
         if voice_file:
-            timed = transcribe_words(voice_file, args.whisper_model)
+            # whisper is slow: cache the word timings per voice file
+            key = hashlib.sha1(voice_file.read_bytes()).hexdigest()[:16] + "_" + args.whisper_model
+            cf = cache / f"whisper_{key}.json"
+            if cf.exists():
+                timed = json.loads(cf.read_text())
+                print(f"  using cached word timings for {voice_file.name}")
+            else:
+                timed = transcribe_words(voice_file, args.whisper_model)
+                cf.write_text(json.dumps(timed))
             voice_path = voice_file
         else:
-            voice_path, timed = tts_voiceover(lines, tmp, args.voice, args.rate, args.pitch, args.gap)
+            spoken = json.dumps([[ln["voice"], [w["text"] for w in ln["words"]]] for ln in lines])
+            key = hashlib.sha1((spoken + args.voice + args.rate + args.pitch + str(args.gap)).encode()).hexdigest()[:16]
+            cw, cf = cache / f"tts_{key}.wav", cache / f"tts_{key}.json"
+            if cw.exists() and cf.exists():
+                voice_path, timed = cw, json.loads(cf.read_text())
+                print("  using cached narration")
+            else:
+                voice_path, timed = tts_voiceover(lines, tmp, args.voice, args.rate, args.pitch, args.gap)
+                shutil.copy(voice_path, cw); cf.write_text(json.dumps(timed)); voice_path = cw
         align(words, timed)
         speech_end = duration_of(voice_path)
         total = speech_end + args.tail
+        if args.timings_only:
+            write_timings_report(proj, lines, words, total)
+            return
 
         # -- captions ------------------------------------------------------------
         print("2/5 captions")
@@ -481,6 +568,12 @@ def main():
 
         # animated shots: render any shot without a scene file from animation.js
         anim = args.animation or (proj / "animation.js" if (proj / "animation.js").exists() else None)
+        if args.preview:
+            if not anim:
+                sys.exit("--preview needs an animation.js in the project")
+            only = set(x.strip() for x in args.shots.split(",")) if args.shots else None
+            make_preview(proj, anim, shots, words, tmp, only, [float(x) for x in args.preview_at.split(",")])
+            return
         animated = {}
         if anim:
             todo = [(i, s) for i, s in enumerate(shots) if not find_scene(scenes_dir, s["id"])]

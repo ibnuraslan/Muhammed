@@ -1,0 +1,13 @@
+# <Title> · Phase 2 storyboard
+
+| id | time | words | set | size | camera | subject action | emotion / pose | props / FX | why it's interesting |
+|---|---|---|---|---|---|---|---|---|---|
+| 01 | 0.0–2.2 | "He sawed gaps" | railroad | MS | push in, low | hero saws the rail, sparks fly | hero half/smile | sparks | the strange action, big, on frame 1 |
+
+## Variety check
+- Sizes: ECU _ · CU _ · MCU _ · MS _ · WS _ · aerial _
+- Sets: ...
+- Wow shots: ...
+- Close-ups every ≤ 4 shots: ...
+- Voice lines → talking CU: ...
+- Sound-off test: pass / fail (why)

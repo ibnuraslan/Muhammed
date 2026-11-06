@@ -44,6 +44,13 @@ The engine lives in `animator/` (`engine.js` for the world and camera, `cast.js`
 
 ---
 
+## Working with Claude (script + voiceover → video)
+
+Send Claude a script and a voiceover. The `story-short` skill (`.claude/skills/story-short/`)
+runs three phases (analysis → storyboard → production with preview loops) and keeps a
+style bible (cast, colour codes) and a lessons log that grows with your feedback. Episodes
+live in `projects/<slug>/`.
+
 ## 1. Install (once)
 
 ```bash

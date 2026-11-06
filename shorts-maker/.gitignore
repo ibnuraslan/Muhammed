@@ -4,3 +4,7 @@ timings.json
 */timings.json
 __pycache__/
 node_modules/
+.cache/
+*/.cache/
+preview_*.jpg
+timings.txt
