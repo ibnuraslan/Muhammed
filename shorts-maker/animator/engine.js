@@ -79,6 +79,16 @@ export const cyl = (rt, rb, h, mat, pos, o = {}) => mesh(new THREE.CylinderGeome
 export const sphere = (r, mat, pos, o = {}) => mesh(new THREE.SphereGeometry(r, o.seg || 24, o.seg ? o.seg / 2 : 16), mat, pos, o);
 
 // text on a transparent (or coloured) plane
+// stretch a Y-up object (cylinder/box) so it spans from point a to point b (sticks, paddles, ropes)
+const _up = new THREE.Vector3(0, 1, 0);
+export function alignBetween(obj, a, b) {
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), d = B.clone().sub(A), len = d.length() || 1e-4;
+  obj.position.copy(A).add(B).multiplyScalar(0.5);
+  obj.quaternion.setFromUnitVectors(_up, d.normalize());
+  obj.scale.set(1, len, 1);
+  return obj;
+}
+
 export function textPlane(lines, o = {}) {
   const w = o.px || 1024, h = Math.round(w * (o.h || 1) / (o.w || 4));
   const tex = canvasTex(w, h, (g) => {

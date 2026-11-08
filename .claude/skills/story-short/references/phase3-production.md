@@ -57,6 +57,8 @@ Read **every** `projects/<slug>/preview_N.jpg` and run this checklist for each s
 - [ ] Colours and cast match the style bible; team colours are correct
 - [ ] It matches the storyboard's intent; the sound-off story still reads
 - [ ] Continuity with the neighbouring shots (screen direction, who's where, props in hand)
+- [ ] **Anatomy:** every character has all limbs; crouch = `kneel`, sitting = `seat`; check zoomed crops of hands and feet
+- [ ] Hands touch the thing they act on (`aimR`/`aimL`); props crossing 3D geometry are 3D meshes
 - [ ] Every action has **contact + reaction** (what it hits reacts: jump, burst, shake, flinch)
 - [ ] No big ambiguous background shape slides behind the camera move (it reads as a moving object)
 - [ ] No foreground slab (wing, wall, table edge) covering more than ~1/5 of the frame

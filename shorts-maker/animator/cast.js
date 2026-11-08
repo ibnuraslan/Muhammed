@@ -63,13 +63,28 @@ export class Char {
     const wp = this.group.position;
     this.mesh.rotation.y = Math.atan2(cam.position.x - wp.x, cam.position.z - wp.z) - (this.group.rotation.y || 0);
     const p = this.p;
+    this._aim = { 1: p.aimR ? this.toCanvas(p.aimR, cam) : null, '-1': p.aimL ? this.toCanvas(p.aimL, cam) : null };
     const blinkOn = p.blink && ((t + this.seed * 0.73) % 3.1) < 0.11;
     const talkOpen = p.talk ? (0.5 + 0.5 * Math.sin(t * 23 + this.seed)) * p.talk : 0;
-    const key = JSON.stringify(p) + blinkOn + talkOpen.toFixed(2) + (p.steam ? t.toFixed(2) : '') + (p.walking ? p.walk.toFixed(2) : '');
+    const key = JSON.stringify(p) + blinkOn + talkOpen.toFixed(2) + (p.steam ? t.toFixed(2) : '') + (p.walking ? p.walk.toFixed(2) : '') + JSON.stringify(this._aim);
     if (key === this._key) return;
     this._key = key;
     this.draw(t, blinkOn, talkOpen);
     this.tex.needsUpdate = true;
+  }
+
+  // where a world point lands on this character's canvas (for hands that touch things)
+  toCanvas(world, cam) {
+    this.group.updateMatrixWorld();
+    const o = new THREE.Vector3().setFromMatrixPosition(this.group.matrixWorld);
+    const yaw = this.mesh.rotation.y + (this.group.rotation.y || 0);
+    const n = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw)), right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
+    const c = cam.position, w = new THREE.Vector3(...world), dir = w.clone().sub(c);
+    const den = dir.dot(n); const k = Math.abs(den) < 1e-6 ? 1 : o.clone().sub(c).dot(n) / den;
+    const P = c.clone().add(dir.multiplyScalar(k)).sub(o);
+    let x = 256 + P.dot(right) / (this.h / 2) * 512; const y = 1024 - P.y / this.h * 1024;
+    if (this.p.facing < 0) x = 512 - x;
+    return [Math.round(x), Math.round(y)];
   }
 
   draw(t, blinkOn, talkOpen) {
@@ -84,19 +99,33 @@ export class Char {
     g.lineCap = 'round'; g.lineJoin = 'round';
 
     const bodyTop = 395, bodyBot = 700, bw = d.bodyW;
-    // ---- legs
+    // ---- legs (hip -> knee -> foot), blending standing / kneeling / sitting
+    const kneel = clamp(p.kneel || 0), seat = clamp(p.seat || 0);
+    const drop = 158 * kneel + 175 * seat;          // how far the hips (and everything above) come down
     if (!p.sit) {
+      const H0 = bodyBot - 20;
       for (const side of [-1, 1]) {
         const ph = p.walk + (side > 0 ? Math.PI : 0);
-        const swing = Math.sin(ph) * 70 * p.walking;
-        const lift = Math.max(0, Math.cos(ph)) * 34 * p.walking;
-        const hx = cx + side * 34, hy = bodyBot - 20;
-        const fx = cx + side * 40 + swing, fy = 995 - lift + bob + hop;
-        g.strokeStyle = INK; g.lineWidth = 15;
-        g.beginPath(); g.moveTo(hx, hy); g.quadraticCurveTo(lerp(hx, fx, .5) + 18, (hy + fy) / 2, fx, fy); g.stroke();
-        g.fillStyle = INK; g.beginPath(); g.ellipse(fx + 14, fy, 30, 14, 0, 0, 7); g.fill();
+        const swing = Math.sin(ph) * 70 * p.walking * (1 - kneel) * (1 - seat);
+        const lift = Math.max(0, Math.cos(ph)) * 34 * p.walking * (1 - kneel) * (1 - seat);
+        // standing
+        let hip = [cx + side * 34, H0], knee = [cx + side * 37 + 18 + swing / 2, (H0 + 995) / 2 - lift / 2], foot = [cx + side * 40 + swing, 995 - lift + bob + hop];
+        // kneeling on one knee: front leg (+x) foot planted, back leg knee on the floor
+        const kHip = [cx + side * 30, H0 + 158];
+        const kKnee = side > 0 ? [cx + 170, H0 + 150] : [cx - 22, 985];
+        const kFoot = side > 0 ? [cx + 176, 995] : [cx - 165, 992];
+        // sitting on a low seat: knees up and forward, feet on the floor
+        const sHip = [cx + side * 28, H0 + 175], sKnee = [cx + 150 + side * 14, H0 + 140], sFoot = [cx + 165 + side * 14, 995];
+        const mix = (A, K, Sx) => [A[0] + (K[0] - A[0]) * kneel + (Sx[0] - A[0]) * seat, A[1] + (K[1] - A[1]) * kneel + (Sx[1] - A[1]) * seat];
+        hip = mix(hip, kHip, sHip); knee = mix(knee, kKnee, sKnee); foot = mix(foot, kFoot, sFoot);
+        g.strokeStyle = INK; g.lineWidth = 15; g.lineJoin = 'round';
+        g.beginPath(); g.moveTo(...hip); g.lineTo(...knee); g.lineTo(...foot); g.stroke();
+        g.fillStyle = INK; g.beginPath();
+        const toesBack = side < 0 && kneel > 0.5;
+        g.ellipse(foot[0] + (toesBack ? -8 : 14), foot[1], toesBack ? 22 : 30, 14, 0, 0, 7); g.fill();
       }
     }
+    g.translate(0, drop);
     // ---- body
     const lean = p.lean * 30;
     g.save(); g.translate(lean, 0);
@@ -136,19 +165,36 @@ export class Char {
       g.beginPath(); g.moveTo(cx - bw / 2 + 6, shoulderY); g.quadraticCurveTo(cx - 40, bodyTop + 190, cx + 55, bodyTop + 150); g.stroke();
       g.beginPath(); g.moveTo(cx + bw / 2 - 6, shoulderY); g.quadraticCurveTo(cx + 40, bodyTop + 200, cx - 55, bodyTop + 160); g.stroke();
     } else {
+      const ITEM_REACH = { spoon: 120, flashlight: 95, pencil: 80, hammer: 0 };
       for (const side of [-1, 1]) {
         const a = side < 0 ? p.armL : p.armR;
         const sx = cx + side * (bw / 2 - 6), sy = shoulderY;
         const L = 205;
-        const hx = sx + side * Math.sin(a) * L, hy = sy + Math.cos(a) * L;
-        const ex = (sx + hx) / 2 + side * 22 * Math.cos(a), ey = (sy + hy) / 2 - 10 * Math.sin(a);
+        let hx = sx + side * Math.sin(a) * L, hy = sy + Math.cos(a) * L;
+        let ex = (sx + hx) / 2 + side * 22 * Math.cos(a), ey = (sy + hy) / 2 - 10 * Math.sin(a);
+        let rot;
+        const tgt = this._aim && this._aim[side];
+        if (tgt) {
+          // target in drawing space (undo hop/bob/drop and lean); the held item's tip goes on the target
+          let tx = tgt[0] - lean, ty = tgt[1] + hop + bob - drop;
+          const item = side > 0 ? p.hold : p.holdL, reach = ITEM_REACH[item] || 0;
+          let dx = tx - sx, dy = ty - sy, dd = Math.hypot(dx, dy) || 1;
+          rot = Math.atan2(dx, -dy);                          // item points along the reach direction
+          tx -= dx / dd * reach; ty -= dy / dd * reach;
+          dx = tx - sx; dy = ty - sy; dd = Math.hypot(dx, dy) || 1;
+          const LMAX = 265;                                   // cartoon arms can stretch a little
+          if (dd > LMAX) { tx = sx + dx / dd * LMAX; ty = sy + dy / dd * LMAX; dd = LMAX; }
+          const bend = Math.sqrt(Math.max(0, L * L - dd * dd)) * 0.5;
+          let nx = -dy / dd, ny = dx / dd; if (ny < 0) { nx = -nx; ny = -ny; }   // elbow bends downward
+          hx = tx; hy = ty; ex = (sx + tx) / 2 + nx * bend; ey = (sy + ty) / 2 + ny * bend;
+        }
         g.strokeStyle = INK; g.lineWidth = 14;
         g.beginPath(); g.moveTo(sx, sy); g.quadraticCurveTo(ex, ey, hx, hy); g.stroke();
         g.fillStyle = INK; g.beginPath(); g.arc(hx, hy, 17, 0, 7); g.fill();
-        hands[side] = [hx, hy, a];
+        hands[side] = [hx, hy, a, rot];
       }
-      if (p.hold) drawItem(g, p.hold, ...hands[1], t);
-      if (p.holdL) drawItem(g, p.holdL, ...hands[-1], t);
+      if (p.hold) { const [x, y, a, r] = hands[1]; drawItem(g, p.hold, x, y, a, t, r); }
+      if (p.holdL) { const [x, y, a, r] = hands[-1]; drawItem(g, p.holdL, x, y, a, t, r); }
     }
     g.restore();
 
@@ -304,18 +350,20 @@ function drawHair(g, d, r) {
     g.beginPath(); g.moveTo(0, -r * 1.3); g.lineTo(0, -r * 0.45); g.stroke();
   }
 }
-function drawItem(g, item, x, y, a, t) {
+function drawItem(g, item, x, y, a, t, rot) {
   g.save(); g.translate(x, y); g.strokeStyle = INK; g.lineWidth = 6;
+  const turn = (r) => g.rotate(rot ?? r);
   switch (item) {
-    case 'pencil': g.rotate(-0.6); g.fillStyle = '#f4c430'; g.fillRect(-8, -90, 16, 100); g.strokeRect(-8, -90, 16, 100); break;
-    case 'hammer': g.rotate(a > 1.5 ? Math.PI - a : -0.3); g.fillStyle = '#9b6a3c'; g.fillRect(-8, -130, 16, 150); g.strokeRect(-8, -130, 16, 150); g.fillStyle = '#7c8794'; g.fillRect(-45, -160, 90, 40); g.strokeRect(-45, -160, 90, 40); break;
+    case 'pencil': turn(-0.6); g.fillStyle = '#f4c430'; g.fillRect(-8, -90, 16, 100); g.strokeRect(-8, -90, 16, 100); break;
+    case 'hammer': turn(a > 1.5 ? Math.PI - a : -0.3); g.fillStyle = '#9b6a3c'; g.fillRect(-8, -130, 16, 150); g.strokeRect(-8, -130, 16, 150); g.fillStyle = '#7c8794'; g.fillRect(-45, -160, 90, 40); g.strokeRect(-45, -160, 90, 40); break;
     case 'suitcase': g.fillStyle = '#8a5a2b'; roundRect(g, -60, 10, 120, 90, 12); g.fill(); g.stroke(); g.beginPath(); g.moveTo(-20, 12); g.lineTo(-20, -4); g.lineTo(20, -4); g.lineTo(20, 12); g.stroke(); break;
     case 'window': g.fillStyle = '#cfd6de'; g.beginPath(); g.arc(0, -70, 70, 0, 7); g.fill(); g.stroke(); g.fillStyle = '#5aa8e8'; g.beginPath(); g.arc(0, -70, 48, 0, 7); g.fill(); g.stroke(); g.fillStyle = 'rgba(255,255,255,.7)'; g.beginPath(); g.ellipse(-15, -85, 14, 7, -0.6, 0, 7); g.fill(); break;
-    case 'blueprint': g.rotate(-0.1); g.fillStyle = '#2b5ea8'; g.fillRect(-90, -150, 180, 130); g.strokeRect(-90, -150, 180, 130); g.strokeStyle = '#e6f0ff'; g.lineWidth = 3; g.beginPath(); g.ellipse(0, -85, 70, 18, 0, 0, 7); g.stroke(); for (let i = 0; i < 5; i++) { g.beginPath(); g.arc(-48 + i * 24, -88, 6, 0, 7); g.stroke(); } break;
+    case 'blueprint': turn(-0.1); g.fillStyle = '#2b5ea8'; g.fillRect(-90, -150, 180, 130); g.strokeRect(-90, -150, 180, 130); g.strokeStyle = '#e6f0ff'; g.lineWidth = 3; g.beginPath(); g.ellipse(0, -85, 70, 18, 0, 0, 7); g.stroke(); for (let i = 0; i < 5; i++) { g.beginPath(); g.arc(-48 + i * 24, -88, 6, 0, 7); g.stroke(); } break;
     case 'newspaper': g.fillStyle = '#efe9da'; g.fillRect(-80, -140, 160, 130); g.strokeRect(-80, -140, 160, 130); g.fillStyle = '#333'; for (let i = 0; i < 6; i++) g.fillRect(-65, -125 + i * 20, 130, 7); break;
-    case 'spoon': g.rotate(-0.4); g.fillStyle = '#d6dde5'; g.fillRect(-6, -110, 12, 100); g.strokeRect(-6, -110, 12, 100); g.beginPath(); g.ellipse(0, -130, 20, 28, 0, 0, 7); g.fill(); g.stroke(); break;
-    case 'flashlight': g.rotate(-1.2); g.fillStyle = '#2b2b2b'; g.fillRect(-14, -100, 28, 110); g.strokeRect(-14, -100, 28, 110); g.fillStyle = '#ffe680'; g.beginPath(); g.ellipse(0, -104, 20, 9, 0, 0, 7); g.fill(); g.stroke(); break;
+    case 'spoon': turn(-0.4); g.fillStyle = '#d6dde5'; g.fillRect(-6, -110, 12, 100); g.strokeRect(-6, -110, 12, 100); g.beginPath(); g.ellipse(0, -130, 20, 28, 0, 0, 7); g.fill(); g.stroke(); break;
+    case 'flashlight': turn(-1.2); g.fillStyle = '#2b2b2b'; g.fillRect(-14, -100, 28, 110); g.strokeRect(-14, -100, 28, 110); g.fillStyle = '#ffe680'; g.beginPath(); g.ellipse(0, -104, 20, 9, 0, 0, 7); g.fill(); g.stroke(); break;
     case 'folder': g.fillStyle = '#d8b878'; g.fillRect(-80, -150, 160, 120); g.strokeRect(-80, -150, 160, 120); g.fillStyle = '#c0392b'; g.font = '900 26px Display, sans-serif'; g.fillText('FBI', -25, -85); break;
+    case 'paddle': turn(-0.3); g.fillStyle = '#b08a5a'; g.fillRect(-7, -150, 14, 260); g.strokeRect(-7, -150, 14, 260); g.beginPath(); g.ellipse(0, 140, 26, 60, 0, 0, 7); g.fill(); g.stroke(); break;
     case 'ticket': g.fillStyle = '#ffe48a'; g.fillRect(-40, -60, 80, 50); g.strokeRect(-40, -60, 80, 50); break;
   }
   g.restore();

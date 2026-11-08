@@ -22,6 +22,7 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
 ```
 
 ## engine.js
+- `alignBetween(mesh, [x,y,z], [x,y,z])`: stretch a Y-up cylinder/box between two points (paddles, poles, ropes).
 - Maths: `clamp(x,a,b)`, `lerp(a,b,t)`, `seg(u,a,b)` → 0..1 local progress, `lerp3`,
   `rng(seed)` → deterministic random 0..1, and `ease.{lin,in,out,io,back}`.
 - Materials: `toon(color, opts)` (shaded), `basic(color, opts)` (flat/emissive look).
@@ -55,7 +56,10 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
   - `talk` 0..1 (lip flap) · `hop` 0..1 (jump height) · `squash` (head squash)
   - `facing` ±1 · `look` -1..1 (face direction) · `lean` · `sit` (hides legs)
   - `armsCrossed` · `blink` (default on)
-  - `hold` / `holdL`: pencil | hammer | suitcase | window | blueprint | newspaper | ticket
+  - `kneel` 0..1 (one knee on the floor, front foot planted, toward `facing`) · `seat` 0..1 (sitting, knees forward)
+  - `aimR` / `aimL`: `[x, y, z]` world point the hand (or the held item's tip) reaches. The elbow bends
+    naturally and the item points along the reach. `null` goes back to the arm angles.
+  - `hold` / `holdL`: pencil | hammer | suitcase | window | blueprint | newspaper | ticket | spoon | flashlight | folder | paddle
 - Design fields (for new characters): `body` vest|suit|plain, `color`, `shirt`, `tie`,
   `bodyW`, `headR`, `hair` tuft|slick, `hairColor`, `hat` pilot|beret|bun|hair|cap|hardhat|none,
   `glasses` round|shades, `mustache` walrus|pencil, `brows` 'bushy', `bald`, `pencil`, `eyes`, `mouth`.

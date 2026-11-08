@@ -43,6 +43,17 @@ into rules.
 21. **The key action shot must be close.** The slam only worked once the boss filled about 60% of
     the frame (camera about 2.5-3 units away). Crowd shots need people at least 1/5 of the frame height.
     If an action is the point of the line, get close enough to feel it.
+22. **Anatomy must be complete and correct (YouTube quality bar).** Never fake a crouch by sinking
+    a character into the floor or hide legs with `sit` unless something really covers them. Use
+    `kneel: 1` (one knee down) and `seat: 1` (sitting, knees bent). Every limb must exist and connect.
+23. **Hands touch what they act on.** Use `aimR` / `aimL` with the world point (the vent, the paddle
+    grip, the board). A held item's tip lands on the target. Arms swinging at fixed angles near an
+    object read as fake.
+24. **Props that cross 3D geometry are 3D, not drawn.** A paddle reaching past the raft tube into the
+    water must be a 3D mesh (`alignBetween`), and the hands aim at its grip. Things drawn on the character
+    canvas can't leave the character's plane.
+25. **Zoom in during review.** Check every character at full resolution with crops (hands, feet, props):
+    a 4 fps sheet hides missing legs and floating hands.
 20. **Review the delivered video at 4 fps** (dense contact sheets), not 1 fps. Motion problems
     (sliding backgrounds, missing contact) only show up in sequences.
 
@@ -53,6 +64,7 @@ into rules.
 | 2026-11-06 | example v2 | (pending) | – | 02, 11 (v1) | full self-review, 13 shots fixed, see example/03-review.md |
 
 ## Feedback log
+- 2026-11-08 · alcatraz test · "we get everything correct… the hand and digging the prison, the leg is not there" → rules 22–25. Kneel/seat poses, aimed hands and 3D paddles added to the engine; the test was rebuilt.
 - 2026-11-06 · example · "analyze it properly first… a lot of mistakes… hitting the table… the orange dark brown thing continuously moving, supposed to be a building" → rules 13–20, a full shot-by-shot review (example/03-review.md), v2 render.
 - 2026-11-05 · example · "this video is like image or presentation rather than the video I
   shared" → rule 1. "no i want claude to do!" → rule 2. Then "lovely" on the animated version.

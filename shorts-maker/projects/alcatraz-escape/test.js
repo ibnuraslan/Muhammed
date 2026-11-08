@@ -1,5 +1,5 @@
 // test.js - 16:9 look test for the Alcatraz long-form: night kit + investigation kit.
-import { THREE, ease, seg, lerp, clamp, rng, toon, basic, box, cyl, mesh } from '/animator/engine.js';
+import { THREE, ease, seg, lerp, clamp, rng, toon, basic, box, cyl, mesh, alignBetween } from '/animator/engine.js';
 import { Char, portraitCanvas } from '/animator/cast.js';
 import { office, desk, impactBurst } from '/animator/props.js';
 import { nightSky, ocean, lightBeam, flicker, cityLights, prisonIsland, prisonCell } from '/animator/kits/night.js';
@@ -46,29 +46,42 @@ export const shots = {
     cityLights(S, { z: -340 });
     const raft = new THREE.Group();
     const rubber = toon(0x3e3a2c);
-    raft.add(cyl(0.35, 0.35, 4.2, rubber, [-0.85, 0.25, 0], { rot: [Math.PI / 2, 0, 0] }));
-    raft.add(cyl(0.35, 0.35, 4.2, rubber, [0.85, 0.25, 0], { rot: [Math.PI / 2, 0, 0] }));
-    raft.add(box(1.7, 0.12, 4.0, rubber, [0, 0.1, 0]));
+    raft.add(cyl(0.24, 0.24, 4.2, rubber, [-0.95, 0.22, 0], { rot: [Math.PI / 2, 0, 0] }));
+    raft.add(cyl(0.24, 0.24, 4.2, rubber, [0.95, 0.22, 0], { rot: [Math.PI / 2, 0, 0] }));
+    raft.add(box(1.9, 0.08, 4.0, rubber, [0, 0.06, 0]));
     raft.position.set(62, 0, 112); raft.rotation.y = 0.9; S.add(raft);
-    const men = [MORRIS, JOHN, CLARENCE].map((d, i) => { const c = new Char(S, d, { seed: 10 + i, h: 1.7, shadow: false }); c.set({ sit: true, look: -0.4, eyes: 'wide', mouth: 'flat' }); c.dz = -1.2 + i * 1.2; return c; });
-    const title = titleCard(S, 'THE ALCATRAZ ESCAPE', { sub: 'JUNE 11, 1962', y: 0.27 });
+    const men = [MORRIS, JOHN, CLARENCE].map((d, i) => { const c = new Char(S, d, { seed: 10 + i, h: 1.7, shadow: false }); c.set({ seat: 1, facing: -1, look: -0.4, eyes: 'wide', mouth: 'flat' }); c.dz = -1.2 + i * 1.2; c.side = i === 1 ? -1 : 1; return c; });
+    // real 3D plywood paddles: shaft + blade; each man's hands grip the shaft
+    const wood = toon(0xa07a4a);
+    const paddles = men.map(() => { const shaft = cyl(0.035, 0.035, 1, wood, [0, 0, 0], { seg: 6 }); const blade = box(0.22, 0.42, 0.04, wood, [0, 0, 0]); S.add(shaft, blade); return { shaft, blade }; });
+    const title = titleCard(S, 'THE ALCATRAZ ESCAPE', { sub: 'JUNE 11, 1962', y: 0.04 });
     S.grade({ vignette: 0.7, grain: 0.07 });
     return (t, u) => {
       const bob = Math.sin(t * 1.6) * 0.18, roll = Math.sin(t * 1.1) * 0.06;
       raft.position.set(62 - t * 0.4, bob, 112 - t * 0.5); raft.rotation.z = roll;
-      men.forEach((c, i) => { const p = new THREE.Vector3(0, 0.15, c.dz).applyAxisAngle(new THREE.Vector3(0, 1, 0), raft.rotation.y).add(raft.position);
-        c.pos(p.x, p.y - 0.25, p.z); c.set({ armR: 1.2 + Math.sin(t * 5 + i) * 0.5 }); });
+      const yAxis = new THREE.Vector3(0, 1, 0), toWorld = (x, y, z) => new THREE.Vector3(x, y, z).applyAxisAngle(yAxis, raft.rotation.y).add(raft.position);
+      men.forEach((c, i) => {
+        const p = toWorld(c.side * 0.3, 0.1, c.dz); c.pos(p.x, p.y, p.z);
+        // stroke cycle: blade goes in at the front, pulls back, lifts out
+        const ph = t * 3.0 + i * 0.8, sw = Math.sin(ph), lift = Math.max(0, Math.cos(ph)) * 0.25;
+        const grip = toWorld(c.side * 0.5, 0.68 - lift * 0.15, c.dz - 0.1 + sw * 0.3);
+        const tip = toWorld(c.side * 1.5, -0.25 + lift, c.dz + sw * 0.55);
+        const g2 = grip.clone().lerp(tip, 0.3);
+        alignBetween(paddles[i].shaft, grip.toArray(), tip.toArray());
+        paddles[i].blade.position.copy(tip); paddles[i].blade.quaternion.copy(paddles[i].shaft.quaternion);
+        c.set({ aimR: grip.toArray(), aimL: g2.toArray() });
+      });
       title.userData.fade(ease.io(seg(u, 0.45, 0.65)));
-      S.camMove(u, [[68, 1.6, 121], [30, 5, 50]], [[66, 2.0, 118], [20, 9, 30]], ease.io, [40, 38]);
+      S.camMove(u, [[67.5, 3.2, 120], [38, -2.5, 60]], [[66, 3.4, 117.5], [34, -1.5, 52]], ease.io, [46, 44]);
     };
   },
   // 2. A cell at night: digging at the vent with a spoon; a guard's flashlight sweeps the bars - he freezes.
   '02': (S) => {
     nightSky(S, { moon: null, stars: false, fog: null, hemi: 0.18, moonLight: 0.15 });
     const cell = prisonCell(S, { toilet: false });
-    const man = new Char(S, MORRIS, { seed: 21, pos: [0.15, -0.72, -1.15], shadow: false });
-    man.set({ sit: true, hold: 'spoon', facing: 1 });
-    const dust = [0, 1, 2].map(() => { const b = impactBurst(S, { text: null, size: 0.28, color: '#b8b2a6' }); b.position.set(0.55, 0.42, -1.5); return b; });
+    const man = new Char(S, MORRIS, { seed: 21, pos: [0.05, 0, -1.2] });
+    man.set({ kneel: 1, hold: 'spoon', facing: 1 });
+    const dust = [0, 1, 2].map(() => { const b = impactBurst(S, { text: null, size: 0.22, color: '#b8b2a6' }); b.position.set(0.55, 0.4, -1.52); return b; });
     const torch = new THREE.SpotLight(0xfff0c8, 0, 18, 0.32, 0.5, 1.2); torch.position.set(-2.6, 1.8, 3.6); S.add(torch, torch.target);
     const beam = lightBeam(S, [-2.6, 1.8, 3.6], { length: 9, radius: 1.3, spin: 0, opacity: 0.18 });
     S.grade({ vignette: 0.75, grain: 0.08 });
@@ -79,9 +92,10 @@ export const shots = {
       beam.visible = lit; beam.lookAt(aim);
       beam.rotateY(Math.PI);
       const frozen = u > 0.55;
-      man.set({ armR: frozen ? 1.45 : 1.5 + Math.sin(t * 14) * 0.13, eyes: frozen ? 'wide' : 'half', sweat: frozen ? 1 : 0, look: frozen ? -0.6 : 0.4, mouth: frozen ? 'o' : 'flat' });
+      const scrape = frozen ? 0 : Math.sin(t * 13) * 0.07;
+      man.set({ aimR: [0.55 + scrape, 0.4, -1.58], eyes: frozen ? 'wide' : 'half', sweat: frozen ? 1 : 0, look: frozen ? -0.7 : 0.6, mouth: frozen ? 'o' : 'flat' });
       dust.forEach((b, i) => { const k = ((t * 2.2 + i / 3) % 1) * 0.45; b.show(frozen ? -1 : k); });
-      S.camMove(u, [[0.85, 1.05, 1.3], [0.3, 0.6, -1.3]], [[0.7, 0.95, 0.65], [0.32, 0.55, -1.3]], ease.io, [52, 48]);
+      S.camMove(u, [[0.9, 1.15, 1.35], [0.3, 0.68, -1.3]], [[0.78, 1.1, 0.85], [0.32, 0.7, -1.3]], ease.io, [52, 50]);
     };
   },
   // 3. The evidence board: the detective works the case, red strings connecting the men.
@@ -102,13 +116,14 @@ export const shots = {
       { type: 'note', text: 'LEFT\nBEHIND', at: [2.45, -0.85], color: '#ff9f9f' },
     ];
     const board = evidenceBoard(S, { pos: [0, 3.6, -7.55], items, links: [[0, 5], [1, 5], [2, 5], [0, 1], [1, 2], [4, 5], [6, 5], [3, 7]] });
-    const det = new Char(S, 'detective', { pos: [1.9, 0, -4.6] });
+    const det = new Char(S, 'detective', { pos: [1.5, 0, -3.9] });
     const fill = new THREE.PointLight(0xffd59a, 10, 6, 1.5); fill.position.set(1.2, 2.6, -3.2); S.add(fill);
     S.grade({ vignette: 0.7, grain: 0.06 });
     return (t, u) => {
       board.userData.setStrings(seg(u, 0.1, 0.85));
-      det.set({ facing: -1, armR: lerp(0.3, 2.2, ease.back(seg(u, 0.15, 0.4))), eyes: 'half', mouth: 'flat', look: -0.5, brow: 0.3 });
-      S.camMove(u, [[-1.4, 2.9, 1.6], [0.2, 3.0, -7.6]], [[0.4, 2.7, -0.6], [0.6, 2.8, -7.6]], ease.io, [44, 42]);
+      const point = seg(u, 0.15, 0.4);
+      det.set({ facing: -1, armR: 0.25, aimR: point > 0 ? [lerp(1.2, -0.1, ease.out(point)), lerp(1.4, 2.6, ease.out(point)), -7.5] : null, eyes: 'half', mouth: 'flat', look: -0.5, brow: 0.3 });
+      S.camMove(u, [[-1.2, 2.1, 1.8], [0.3, 2.7, -7.6]], [[0.4, 1.9, 0.6], [0.5, 2.6, -7.6]], ease.io, [48, 46]);
     };
   },
   // 4. The map on the desk: the route into the bay, the paddle, the question mark, then UNSOLVED.
