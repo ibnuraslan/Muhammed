@@ -3,7 +3,10 @@
 import * as THREE from 'three';
 export { THREE };
 
-export const W = 1080, H = 1920, FPS = 30;
+// output size: 1080x1920 (shorts) by default; 1920x1080 for long-form (set from the page URL)
+export let W = 1080, H = 1920;
+export const FPS = 30;
+export function setSize(w, h) { W = w; H = h; }
 
 // ------------------------------------------------------------------ math
 export const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -181,6 +184,30 @@ export class Stage {
     this.camA = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
     this.camB = new THREE.PerspectiveCamera(45, 1, 0.1, 2000);
     this.split = true; return [this.camA, this.camB];
+  }
+  // film look: vignette + grain + colour tint, drawn over the whole frame
+  grade({ vignette = 0.55, grain = 0.07, tint = '#000814' } = {}) {
+    const mat = new THREE.ShaderMaterial({
+      transparent: true, depthTest: false, depthWrite: false,
+      uniforms: { vig: { value: vignette }, grain: { value: grain }, tint: { value: new THREE.Color(tint) }, time: { value: 0 }, aspect: { value: W / H } },
+      vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+      fragmentShader: `uniform float vig; uniform float grain; uniform vec3 tint; uniform float time; uniform float aspect; varying vec2 vUv;
+        float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898,78.233))) * 43758.5453); }
+        void main(){ vec2 d = vUv - 0.5; d.x *= aspect; float v = smoothstep(0.25, 0.95, length(d) * 1.25) * vig;
+          float n = h(floor(vUv * vec2(${W / 2}.0, ${H / 2}.0)) + fract(time * 7.13)) * grain;
+          gl_FragColor = vec4(tint, clamp(v + n, 0.0, 1.0)); }`,
+    });
+    const q = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
+    q.frustumCulled = false; q.renderOrder = 10000; this.scene.add(q);
+    this.onUpdate((t) => { mat.uniforms.time.value = t; });
+    return q;
+  }
+  // put an object in front of the camera (titles, overlays). Returns the visible size at that distance.
+  hud(obj, d = 2) {
+    if (!this.camera.parent) this.scene.add(this.camera);
+    obj.position.set(0, 0, -d); this.camera.add(obj);
+    const h = 2 * d * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
+    return { w: h * W / H, h };
   }
   frame(t, u) {
     this._t = t;

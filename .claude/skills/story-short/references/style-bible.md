@@ -40,6 +40,9 @@ face, a rounded body, and thin black stick arms and legs.
 - ⚙️ Open question for the user: should the Hero have a permanent cap/hat as part of his
   signature? (default: no hat)
 
+- **Detective variant** (`'detective'`, investigation/horror channel): the same signature plus a beige
+  trench coat (open, so the mustard vest still shows) and a brown fedora.
+
 ### Boss (`'boss'`)
 - Bald with a three-strand comb-over · huge white walrus moustache · bushy grey brows ·
   wide navy suit · red tie. About 7% taller than the Hero (`h: 2.15`).

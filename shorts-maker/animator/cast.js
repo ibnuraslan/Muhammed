@@ -14,6 +14,9 @@ export const DESIGNS = {
   // boss: bald comb-over, huge moustache, navy suit, red tie
   boss: { body: 'suit', color: '#27345a', shirt: '#ffffff', tie: '#d4352b', bodyW: 250, headR: 156, bald: true,
           mustache: 'walrus', brows: 'bushy', eyes: 'dot', mouth: 'flat' },
+  // hero, investigation episodes: same signature (glasses, tuft, pencil, mustard vest) under a trench coat + fedora
+  detective: { body: 'coat', color: '#b89a6a', vest: '#e8a630', shirt: '#d9ecfb', bodyW: 160, headR: 148, hair: 'tuft', hairColor: '#6b3f1f',
+               glasses: 'round', pencil: true, hat: 'fedora', eyes: 'half', mouth: 'smile' },
   // rival: slick hair, square sunglasses, maroon suit, pencil moustache
   rival: { body: 'suit', color: '#7b1e2e', shirt: '#f4e9d8', tie: '#e0b33a', bodyW: 140, headR: 140, hair: 'slick', hairColor: '#1b1b1b',
            glasses: 'shades', mustache: 'pencil', eyes: 'dot', mouth: 'smirk' },
@@ -107,6 +110,16 @@ export class Char {
       // shirt sleeves at shoulders
       g.fillStyle = d.shirt;
       for (const s of [-1, 1]) { g.beginPath(); g.ellipse(cx + s * (bw / 2 - 6), bodyTop + 46, 28, 40, 0, 0, 7); g.fill(); g.stroke(); }
+    } else if (d.body === 'coat') {
+      // open trench coat: mustard vest + shirt showing in the V, belt, big collar
+      g.fillStyle = d.vest || '#e8a630'; g.beginPath(); g.moveTo(cx - 46, bodyTop + 2); g.lineTo(cx, bodyTop + 230); g.lineTo(cx + 46, bodyTop + 2); g.closePath(); g.fill();
+      g.fillStyle = d.shirt; g.beginPath(); g.moveTo(cx - 26, bodyTop + 2); g.lineTo(cx, bodyTop + 60); g.lineTo(cx + 26, bodyTop + 2); g.closePath(); g.fill();
+      g.fillStyle = INK; for (let i = 0; i < 2; i++) { g.beginPath(); g.arc(cx, bodyTop + 110 + i * 45, 6, 0, 7); g.fill(); }
+      g.strokeStyle = INK; g.lineWidth = 6; g.beginPath(); g.moveTo(cx - 46, bodyTop + 2); g.lineTo(cx, bodyTop + 230); g.lineTo(cx + 46, bodyTop + 2); g.stroke();
+      g.fillStyle = shade(d.color, -0.25);
+      for (const s of [-1, 1]) { g.beginPath(); g.moveTo(cx + s * 46, bodyTop + 2); g.lineTo(cx + s * 95, bodyTop + 30); g.lineTo(cx + s * 30, bodyTop + 150); g.closePath(); g.fill(); g.stroke(); }
+      g.fillStyle = shade(d.color, -0.35); g.fillRect(cx - bw / 2 + 4, bodyTop + 235, bw - 8, 22); g.strokeRect(cx - bw / 2 + 4, bodyTop + 235, bw - 8, 22);
+      g.fillStyle = '#c9b27a'; g.fillRect(cx - 14, bodyTop + 232, 28, 28); g.strokeRect(cx - 14, bodyTop + 232, 28, 28);
     } else if (d.body === 'suit') {
       g.fillStyle = d.shirt; g.beginPath(); g.moveTo(cx - 34, bodyTop + 2); g.lineTo(cx, bodyTop + 120); g.lineTo(cx + 34, bodyTop + 2); g.closePath(); g.fill();
       g.fillStyle = d.tie; g.beginPath(); g.moveTo(cx - 11, bodyTop + 14); g.lineTo(cx + 11, bodyTop + 14); g.lineTo(cx + 16, bodyTop + 100); g.lineTo(cx, bodyTop + 122); g.lineTo(cx - 16, bodyTop + 100); g.closePath(); g.fill(); g.lineWidth = 4; g.stroke();
@@ -214,6 +227,7 @@ function mixColor(a, b, k, c) {
   return rgbs(pa.map((v, i) => lerp(v, pb[i], clamp(k))));
 }
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const shade = (h, k) => rgbs(hex(h).map(v => k < 0 ? v * (1 + k) : v + (255 - v) * k));
 const rgbs = a => `rgb(${a.map(Math.round).join(',')})`;
 
 function drawEye(g, x, y, type, skin) {
@@ -264,6 +278,13 @@ function drawHair(g, d, r) {
     g.quadraticCurveTo(r * 0.5, -r * 0.62, -r * 0.1, -r * 0.55); g.quadraticCurveTo(-r * 0.6, -r * 0.5, -r, -r * 0.05); g.closePath(); g.fill(); g.stroke();
     if (d.hair === 'slick') { g.strokeStyle = 'rgba(255,255,255,0.55)'; g.lineWidth = 8; g.beginPath(); g.arc(0, -r * 0.1, r * 0.75, Math.PI * 1.3, Math.PI * 1.6); g.stroke(); }
   }
+  if (hat === 'fedora') {
+    g.fillStyle = '#4a3a2c';
+    g.beginPath(); g.ellipse(0, -r * 0.7, r * 1.25, r * 0.2, 0, 0, 7); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(-r * 0.62, -r * 0.72); g.lineTo(-r * 0.55, -r * 1.25); g.quadraticCurveTo(0, -r * 1.12, r * 0.55, -r * 1.25); g.lineTo(r * 0.62, -r * 0.72); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#1f1712'; g.fillRect(-r * 0.6, -r * 0.92, r * 1.2, r * 0.14);
+    return;
+  }
   if (hat === 'pilot') {
     g.fillStyle = '#1f2d55'; g.beginPath(); g.ellipse(0, -r * 0.82, r * 1.0, r * 0.38, 0, Math.PI, 0); g.lineTo(r * 0.85, -r * 0.62); g.lineTo(-r * 0.85, -r * 0.62); g.closePath(); g.fill(); g.stroke();
     g.fillStyle = INK; g.beginPath(); g.ellipse(0, -r * 0.6, r * 0.95, r * 0.12, 0, 0, 7); g.fill();
@@ -292,7 +313,32 @@ function drawItem(g, item, x, y, a, t) {
     case 'window': g.fillStyle = '#cfd6de'; g.beginPath(); g.arc(0, -70, 70, 0, 7); g.fill(); g.stroke(); g.fillStyle = '#5aa8e8'; g.beginPath(); g.arc(0, -70, 48, 0, 7); g.fill(); g.stroke(); g.fillStyle = 'rgba(255,255,255,.7)'; g.beginPath(); g.ellipse(-15, -85, 14, 7, -0.6, 0, 7); g.fill(); break;
     case 'blueprint': g.rotate(-0.1); g.fillStyle = '#2b5ea8'; g.fillRect(-90, -150, 180, 130); g.strokeRect(-90, -150, 180, 130); g.strokeStyle = '#e6f0ff'; g.lineWidth = 3; g.beginPath(); g.ellipse(0, -85, 70, 18, 0, 0, 7); g.stroke(); for (let i = 0; i < 5; i++) { g.beginPath(); g.arc(-48 + i * 24, -88, 6, 0, 7); g.stroke(); } break;
     case 'newspaper': g.fillStyle = '#efe9da'; g.fillRect(-80, -140, 160, 130); g.strokeRect(-80, -140, 160, 130); g.fillStyle = '#333'; for (let i = 0; i < 6; i++) g.fillRect(-65, -125 + i * 20, 130, 7); break;
+    case 'spoon': g.rotate(-0.4); g.fillStyle = '#d6dde5'; g.fillRect(-6, -110, 12, 100); g.strokeRect(-6, -110, 12, 100); g.beginPath(); g.ellipse(0, -130, 20, 28, 0, 0, 7); g.fill(); g.stroke(); break;
+    case 'flashlight': g.rotate(-1.2); g.fillStyle = '#2b2b2b'; g.fillRect(-14, -100, 28, 110); g.strokeRect(-14, -100, 28, 110); g.fillStyle = '#ffe680'; g.beginPath(); g.ellipse(0, -104, 20, 9, 0, 0, 7); g.fill(); g.stroke(); break;
+    case 'folder': g.fillStyle = '#d8b878'; g.fillRect(-80, -150, 160, 120); g.strokeRect(-80, -150, 160, 120); g.fillStyle = '#c0392b'; g.font = '900 26px Display, sans-serif'; g.fillText('FBI', -25, -85); break;
     case 'ticket': g.fillStyle = '#ffe48a'; g.fillRect(-40, -60, 80, 50); g.strokeRect(-40, -60, 80, 50); break;
   }
   g.restore();
+}
+
+// Draw a character into a stand-alone canvas (mugshots and photos for evidence boards).
+// mugshot: grey height-chart background plus a name placard.
+export function portraitCanvas(design, { pose = {}, label = '', mugshot = true, bg = '#e9e4d8', w = 400, h = 480 } = {}) {
+  const fake = { add() {}, chars: [] };
+  const c = new Char(fake, design, { shadow: false, pose: { blink: false, ...pose } });
+  c.draw(0, false, 0);
+  const out = document.createElement('canvas'); out.width = w; out.height = h;
+  const g = out.getContext('2d');
+  if (mugshot) {
+    g.fillStyle = '#c9ccd1'; g.fillRect(0, 0, w, h);
+    g.strokeStyle = 'rgba(40,40,40,0.35)'; g.lineWidth = 2; g.font = '700 14px Display, sans-serif'; g.fillStyle = 'rgba(40,40,40,0.55)';
+    for (let y = 20; y < h; y += 40) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); g.fillText(String(7 - Math.floor(y / 80)), 6, y - 4); }
+  } else if (bg) { g.fillStyle = bg; g.fillRect(0, 0, w, h); }
+  g.drawImage(c.canvas, 26, 40, 460, 640, 0, 0, w, h * 1.15);
+  if (label) {
+    g.fillStyle = '#151515'; g.fillRect(w * 0.18, h * 0.8, w * 0.64, h * 0.15);
+    g.fillStyle = '#f2f2f2'; g.font = `900 ${Math.round(h * 0.075)}px Display, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(label, w / 2, h * 0.875, w * 0.6);
+  }
+  return out;
 }

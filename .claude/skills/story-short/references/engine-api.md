@@ -90,6 +90,22 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
 - Jet window slot: `jet.userData.windows[i].children[1]` is the glass (hide it for an empty frame).
 - `glassTex()`, `blueprintTex(windows, title)`.
 
+## Long-form / horror / investigation (16:9)
+- Landscape: `node animator/render.js --size 1920x1080 <episode.js> <jobs.json>` (the page gets `?w=&h=`; `W`/`H` are live in engine.js).
+  About 0.55 s per frame at 1080p → roughly 1 min of render per 3.5 s of video.
+- `S.grade({vignette, grain, tint})`: film vignette + grain over the whole frame (horror look).
+- `S.hud(obj, d)`: attach to the camera (titles); returns the visible {w, h} at distance d.
+- `kits/night.js`: `nightSky(S, {fog, moon, stars, moonLight, hemi})`, `ocean(S, {amp, color})` (animated waves),
+  `lightBeam(S, pos, {length, radius, spin, yaw, tilt, opacity})` (lighthouse/searchlight/flashlight cone),
+  `flicker(S, light, {amount})`, `rain(S, {...})`, `cityLights(S, {z})`,
+  `prisonIsland(S)` → {lampPos}, `prisonCell(S, {toilet})` (floor y=0, back wall z=-1.6 with a vent at x 0.55, bars at z=+1.6).
+- `kits/investigation.js`: `evidenceBoard(S, {pos, items, links})` (photos = mugshots of any design, sticky notes;
+  `.userData.setStrings(k)` grows the red strings), `mapPlane({w, h, draw, route, markers})` (`.userData.setProgress(k)`;
+  helpers `land()`, `label()` for drawing coastlines), `caseFile({title, lines, stamp})` (`.userData.stamp(k)`),
+  `titleCard(S, title, {sub, y})` (`.userData.fade(a)`).
+- cast: `'detective'` (the Hero in a trench coat + fedora), `portraitCanvas(design, {label, mugshot, bg})`, items `spoon`, `flashlight`, `folder`.
+- Example: `projects/alcatraz-escape/test.js` (the 4-shot look test).
+
 ## Wishlist (build when a story needs it)
 railroad + train, canyon walls, city street, factory, kitchen, castle, ship deck, night
 lighting, rain, dust/smoke particles, heat shimmer, x-ray cutaway shader, map/chart metaphor set.

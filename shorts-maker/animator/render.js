@@ -8,7 +8,10 @@ const { spawn } = require('child_process');
 const { chromium } = require('playwright');
 
 const ROOT = path.resolve(__dirname, '..');
-const [episode, jobsFile] = process.argv.slice(2);
+const argv = process.argv.slice(2);
+const sizeArg = argv.indexOf('--size');
+const [VW, VH] = sizeArg >= 0 ? argv.splice(sizeArg, 2)[1].split('x').map(Number) : [1080, 1920];
+const [episode, jobsFile] = argv;
 if (!episode || !jobsFile) { console.error('usage: node render.js <episode.js> <jobs.json>'); process.exit(2); }
 const jobs = JSON.parse(fs.readFileSync(jobsFile, 'utf8'));
 const TYPES = { '.js': 'text/javascript', '.html': 'text/html', '.ttf': 'font/ttf', '.json': 'application/json' };
@@ -37,10 +40,10 @@ const write = (s, buf) => new Promise(ok => s.write(buf) ? ok() : s.once('drain'
   await new Promise(ok => server.listen(0, '127.0.0.1', ok));
   const port = server.address().port;
   const browser = await chromium.launch({ args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--use-angle=swiftshader'] });
-  const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
+  const page = await browser.newPage({ viewport: { width: VW, height: VH } });
   page.on('console', m => { if (m.type() === 'error') console.error('  [page]', m.text()); });
   page.on('pageerror', e => console.error('  [page]', e.message));
-  await page.goto(`http://127.0.0.1:${port}/`);
+  await page.goto(`http://127.0.0.1:${port}/?w=${VW}&h=${VH}`);
   await page.waitForFunction('window.ready === true', null, { timeout: 60000 });
   let failed = 0;
   for (const job of jobs) {

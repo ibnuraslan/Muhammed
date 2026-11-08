@@ -7,7 +7,9 @@
 <script type="importmap">{ "imports": { "three": "/node_modules/three/build/three.module.js" } }</script>
 </head><body>
 <script type="module">
-import { makeRenderer, Stage, FPS } from '/animator/engine.js';
+import { makeRenderer, Stage, FPS, setSize } from '/animator/engine.js';
+const q = new URLSearchParams(location.search);
+if (q.get('w')) setSize(+q.get('w'), +q.get('h'));
 window.onerror = (m) => console.error('page error: ' + m);
 await document.fonts.load('900 40px Display');
 const ep = await import('/episode.js');
