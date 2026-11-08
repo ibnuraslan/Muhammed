@@ -40,8 +40,12 @@ face, a rounded body, and thin black stick arms and legs.
 - ⚙️ Open question for the user: should the Hero have a permanent cap/hat as part of his
   signature? (default: no hat)
 
-- **Detective variant** (`'detective'`, investigation/horror channel): the same signature plus a beige
-  trench coat (open, so the mustard vest still shows) and a brown fedora.
+- **THE INVESTIGATOR (`'detective'`): the MAIN CHARACTER of every investigation / horror / crime video**
+  (approved by the user 2026-11-08). He presents the case, works the evidence board, visits the places.
+  Look: brown fedora with a dark band · round wire glasses · small ears on both sides · a yellow pencil
+  with a pink eraser tucked **behind** his ear (only the eraser end shows, never stuck into the head) ·
+  beige trench coat, open, over the mustard vest and light-blue shirt · coat belt with a brass buckle.
+  **No beard, no moustache.** Default expression: calm, half-lidded, slightly frowning (`eyes:'half', brow:0.3`).
 
 ### Boss (`'boss'`)
 - Bald with a three-strand comb-over · huge white walrus moustache · bushy grey brows ·
@@ -83,4 +87,5 @@ face, a rounded body, and thin black stick arms and legs.
 - Fov 40–56. Wider is for interiors and crowds.
 
 ## Change log
+- 2026-11-08: the Investigator (detective) is the main character for investigation videos; ears added, pencil moved behind the ear.
 - 2026-11-06: bible created from "The Round Windows" (example episode).

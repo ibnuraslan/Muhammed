@@ -10,13 +10,13 @@ const INK = '#151515';
 export const DESIGNS = {
   // young designer: round glasses, messy hair, pencil behind the ear, mustard vest
   hero: { body: 'vest', color: '#e8a630', shirt: '#d9ecfb', bodyW: 150, headR: 148, hair: 'tuft', hairColor: '#6b3f1f',
-          glasses: 'round', pencil: true, eyes: 'half', mouth: 'smile' },
+          glasses: 'round', pencil: true, ears: true, eyes: 'half', mouth: 'smile' },
   // boss: bald comb-over, huge moustache, navy suit, red tie
   boss: { body: 'suit', color: '#27345a', shirt: '#ffffff', tie: '#d4352b', bodyW: 250, headR: 156, bald: true,
           mustache: 'walrus', brows: 'bushy', eyes: 'dot', mouth: 'flat' },
   // hero, investigation episodes: same signature (glasses, tuft, pencil, mustard vest) under a trench coat + fedora
   detective: { body: 'coat', color: '#b89a6a', vest: '#e8a630', shirt: '#d9ecfb', bodyW: 160, headR: 148, hair: 'tuft', hairColor: '#6b3f1f',
-               glasses: 'round', pencil: true, hat: 'fedora', eyes: 'half', mouth: 'smile' },
+               glasses: 'round', pencil: true, ears: true, hat: 'fedora', eyes: 'half', mouth: 'smile' },
   // rival: slick hair, square sunglasses, maroon suit, pencil moustache
   rival: { body: 'suit', color: '#7b1e2e', shirt: '#f4e9d8', tie: '#e0b33a', bodyW: 140, headR: 140, hair: 'slick', hairColor: '#1b1b1b',
            glasses: 'shades', mustache: 'pencil', eyes: 'dot', mouth: 'smirk' },
@@ -203,6 +203,15 @@ export class Char {
     const sq = 1 + p.squash;
     g.save(); g.translate(hx, hy); g.scale(1 / sq, sq);
     const skin = mixColor('#ffffff', p.anger > 0.6 ? '#9a3fb8' : '#e2483c', p.anger > 0.6 ? (p.anger - 0.6) / 0.4 : p.anger / 0.6 * 0.85, p.anger > 0.6 ? '#e2483c' : null);
+    if (d.ears) {
+      // pencil tucked behind the right ear: drawn first so the ear and head cover all but the eraser end
+      if (d.pencil) drawPencil(g, hr * 0.97, -10, 0.55);
+      for (const sd of [-1, 1]) {
+        g.fillStyle = skin; g.strokeStyle = INK; g.lineWidth = 7;
+        g.beginPath(); g.ellipse(sd * (hr - 2), 6, 22, 30, 0, 0, 7); g.fill(); g.stroke();
+        g.lineWidth = 4; g.beginPath(); g.arc(sd * (hr + 4), 6, 10, sd > 0 ? -1.3 : Math.PI - 1.3, sd > 0 ? 1.3 : Math.PI + 1.3); g.stroke();
+      }
+    }
     g.fillStyle = skin; g.strokeStyle = INK; g.lineWidth = 8;
     g.beginPath(); g.arc(0, 0, hr, 0, Math.PI * 2); g.fill(); g.stroke();
     if (d.bald) {
@@ -251,7 +260,7 @@ export class Char {
     if (p.sweat) { g.fillStyle = '#8fd0ff'; g.strokeStyle = INK; g.lineWidth = 4; g.beginPath(); g.moveTo(hr * .62, -hr * .55); g.quadraticCurveTo(hr * .78, -hr * .3, hr * .66, -hr * .25); g.quadraticCurveTo(hr * .52, -hr * .3, hr * .62, -hr * .55); g.fill(); g.stroke(); }
     // hair / hats
     drawHair(g, d, hr);
-    if (d.pencil) { g.save(); g.translate(hr * 0.86, -hr * 0.35); g.rotate(-0.9); g.fillStyle = '#f4c430'; g.strokeStyle = INK; g.lineWidth = 4; g.fillRect(-10, -60, 20, 110); g.strokeRect(-10, -60, 20, 110); g.fillStyle = '#f2b8a0'; g.beginPath(); g.moveTo(-10, 50); g.lineTo(10, 50); g.lineTo(0, 78); g.closePath(); g.fill(); g.stroke(); g.restore(); }
+    if (d.pencil && !d.ears) { g.save(); g.translate(hr * 0.86, -hr * 0.35); g.rotate(-0.9); g.fillStyle = '#f4c430'; g.strokeStyle = INK; g.lineWidth = 4; g.fillRect(-10, -60, 20, 110); g.strokeRect(-10, -60, 20, 110); g.fillStyle = '#f2b8a0'; g.beginPath(); g.moveTo(-10, 50); g.lineTo(10, 50); g.lineTo(0, 78); g.closePath(); g.fill(); g.stroke(); g.restore(); }
     g.restore();
     // steam puffs
     if (p.steam > 0) {
@@ -275,6 +284,16 @@ function mixColor(a, b, k, c) {
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const shade = (h, k) => rgbs(hex(h).map(v => k < 0 ? v * (1 + k) : v + (255 - v) * k));
 const rgbs = a => `rgb(${a.map(Math.round).join(',')})`;
+
+// a pencil (eraser end up) centred at x,y, leaning `ang` radians outward
+function drawPencil(g, x, y, ang) {
+  g.save(); g.translate(x, y); g.rotate(ang); g.strokeStyle = INK; g.lineWidth = 4;
+  g.fillStyle = '#f4c430'; g.fillRect(-9, -70, 18, 120); g.strokeRect(-9, -70, 18, 120);
+  g.fillStyle = '#b9bec6'; g.fillRect(-9, -84, 18, 14); g.strokeRect(-9, -84, 18, 14);
+  g.fillStyle = '#f08fa0'; g.beginPath(); g.moveTo(-9, -84); g.lineTo(-9, -96); g.quadraticCurveTo(0, -104, 9, -96); g.lineTo(9, -84); g.closePath(); g.fill(); g.stroke();
+  g.fillStyle = '#f2c9a0'; g.beginPath(); g.moveTo(-9, 50); g.lineTo(9, 50); g.lineTo(0, 76); g.closePath(); g.fill(); g.stroke();
+  g.restore();
+}
 
 function drawEye(g, x, y, type, skin) {
   g.fillStyle = INK; g.strokeStyle = INK; g.lineWidth = 8;
