@@ -1,0 +1,1203 @@
+{
+  "title": "The Cellar Murder (Dr. Crippen, 1910)",
+  "handle": "@CASE_FILES",
+  "hook": "THE FIRST KILLER CAUGHT BY RADIO",
+  "endcard": [
+    "FOLLOW FOR",
+    "MORE CASES"
+  ],
+  "voices": {
+    "narrator": {
+      "model": "en_US-ryan-high",
+      "speed": 1.1
+    },
+    "crippen": {
+      "model": "en_US-joe-medium",
+      "speed": 1.06
+    },
+    "crippen2": {
+      "model": "en_US-joe-medium",
+      "speed": 1.1
+    },
+    "dew": {
+      "model": "en_GB-northern_english_male-medium",
+      "speed": 1.06
+    },
+    "dew2": {
+      "model": "en_GB-northern_english_male-medium",
+      "speed": 1.06
+    },
+    "kendall": {
+      "model": "en_GB-alan-medium",
+      "speed": 1.06
+    },
+    "pearl": {
+      "model": "en_GB-jenny_dioco-medium",
+      "speed": 1.06
+    },
+    "auntie": {
+      "model": "en_GB-jenny_dioco-medium",
+      "speed": 1.15
+    }
+  },
+  "cast": {
+    "crippen": {
+      "skin": "#e6c6ae",
+      "hair": "#b08a55",
+      "hairStyle": "balding",
+      "jacket": "#4a3326",
+      "shirt": "#efe9da",
+      "tie": "#1d1d1d",
+      "pants": "#3a2a20",
+      "glasses": "#c9a24a",
+      "moustache": "#a07a45",
+      "height": 0.93,
+      "eyes": 1.25,
+      "age": 0.5,
+      "eyeColor": "#6a5a3a"
+    },
+    "crippen2": {
+      "skin": "#e6c6ae",
+      "hair": "#b08a55",
+      "hairStyle": "balding",
+      "jacket": "#6f6a62",
+      "shirt": "#efe9da",
+      "tie": "#2a2a3a",
+      "pants": "#55524c",
+      "stubble": "#9a7a50",
+      "hat": "bowler",
+      "hatColor": "#2b2b2b",
+      "height": 0.93,
+      "eyes": 1.25
+    },
+    "pearl": {
+      "female": true,
+      "skin": "#efd2bf",
+      "hair": "#c9a35c",
+      "hairStyle": "bob",
+      "dress": "#e4b9bd",
+      "pearls": true,
+      "height": 0.96,
+      "lips": "#c0606a",
+      "eyeColor": "#4a6a8a"
+    },
+    "auntie": {
+      "female": true,
+      "skin": "#e8c4ac",
+      "hair": "#3b3433",
+      "hairStyle": "bun",
+      "dress": "#7a1c22",
+      "glasses": "#c9a24a",
+      "brooch": "#2c6fb0",
+      "height": 0.94,
+      "width": 1.25,
+      "lips": "#9a3040",
+      "age": 0.7,
+      "smile": 3
+    },
+    "ethel": {
+      "female": true,
+      "skin": "#f0d6c4",
+      "hair": "#4a2f22",
+      "hairStyle": "updo",
+      "dress": "#2f5a43",
+      "brooch": "#ff4fd2",
+      "broochGlow": true,
+      "height": 0.95,
+      "fur": "#7a5638",
+      "lips": "#b03a4a"
+    },
+    "ethel2": {
+      "skin": "#f0d6c4",
+      "hair": "#4a2f22",
+      "hairStyle": "tucked",
+      "jacket": "#6a4e33",
+      "shirt": "#efe9da",
+      "tie": "#7a2a2a",
+      "pants": "#5a4430",
+      "hat": "cap",
+      "hatColor": "#5a4a3a",
+      "height": 0.9,
+      "width": 0.88
+    },
+    "dew": {
+      "skin": "#dfbca2",
+      "hair": "#2a211c",
+      "hairStyle": "short",
+      "coat": "#22252b",
+      "jacket": "#22252b",
+      "shirt": "#efe9da",
+      "tie": "#5a1a1a",
+      "pants": "#22252b",
+      "moustache": "#2a211c",
+      "hat": "bowler",
+      "hatColor": "#15161a",
+      "height": 1.06,
+      "age": 0.4,
+      "eyeColor": "#3a5a7a"
+    },
+    "dew2": {
+      "skin": "#dfbca2",
+      "hair": "#2a211c",
+      "hairStyle": "short",
+      "jacket": "#1c2740",
+      "shirt": "#efe9da",
+      "tie": "#111111",
+      "pants": "#1c2740",
+      "moustache": "#2a211c",
+      "buttons": "#d9b84a",
+      "hat": "captain",
+      "hatColor": "#1c2740",
+      "height": 1.06
+    },
+    "kendall": {
+      "skin": "#e0bba0",
+      "hair": "#4a3a2c",
+      "hairStyle": "short",
+      "jacket": "#1a2438",
+      "shirt": "#efe9da",
+      "tie": "#111111",
+      "pants": "#1a2438",
+      "beard": "#4a3a2c",
+      "buttons": "#d9b84a",
+      "hat": "captain",
+      "hatColor": "#f2f2f2",
+      "height": 1.02,
+      "age": 0.4
+    },
+    "operator": {
+      "skin": "#e8c6ac",
+      "hair": "#6a4a2a",
+      "hairStyle": "short",
+      "jacket": "#3a3f48",
+      "shirt": "#efe9da",
+      "tie": "#1d1d1d",
+      "pants": "#2a2d33",
+      "headphones": true,
+      "height": 0.98
+    }
+  },
+  "shots": [
+    {
+      "set": "street",
+      "fx": [
+        "fadein"
+      ],
+      "stamp": "39 HILLDROP CRESCENT\nLONDON  -  JAN 1910",
+      "sub": "hook",
+      "cam": {
+        "from": [
+          0.6,
+          1.4,
+          9.5
+        ],
+        "to": [
+          0.2,
+          1.7,
+          6.2
+        ],
+        "look": [
+          0.4,
+          2.4,
+          -4
+        ]
+      },
+      "actors": [
+        {
+          "id": "crippen",
+          "pos": [
+            1.5,
+            -2.7
+          ],
+          "face": 0,
+          "anim": "nervous"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "London, 1910.",
+          "say": "London. Nineteen-ten.",
+          "pre": 0.7
+        },
+        {
+          "who": "narrator",
+          "text": "A music hall singer named Belle Elmore vanishes without a trace."
+        }
+      ],
+      "sfx": [
+        "wind",
+        "rain"
+      ]
+    },
+    {
+      "set": "parlour",
+      "sub": "hook",
+      "cam": {
+        "from": [
+          0.35,
+          1.6,
+          4.3
+        ],
+        "to": [
+          0.25,
+          1.55,
+          3.7
+        ],
+        "look": [
+          0.05,
+          1.0,
+          -0.1
+        ]
+      },
+      "actors": [
+        {
+          "id": "auntie",
+          "pos": [
+            -0.65,
+            0.05
+          ],
+          "face": 70,
+          "anim": "sit",
+          "look": "crippen"
+        },
+        {
+          "id": "pearl",
+          "pos": [
+            -0.2,
+            -0.65
+          ],
+          "face": 20,
+          "anim": "sit",
+          "look": "crippen"
+        },
+        {
+          "id": "crippen",
+          "pos": [
+            0.95,
+            0.55
+          ],
+          "face": -120,
+          "anim": "idle",
+          "look": "pearl"
+        }
+      ],
+      "lines": [
+        {
+          "who": "pearl",
+          "text": "Doctor Crippen... where is Belle?"
+        }
+      ],
+      "sfx": [
+        "clock",
+        {
+          "name": "teacup",
+          "at": 0.15
+        }
+      ]
+    },
+    {
+      "set": "parlour",
+      "cam": {
+        "focus": "crippen",
+        "dist": [
+          1.55,
+          1.3
+        ],
+        "yaw": -15,
+        "dy": 0.02
+      },
+      "actors": [
+        {
+          "id": "auntie",
+          "pos": [
+            -0.65,
+            0.05
+          ],
+          "face": 70,
+          "anim": "sit",
+          "look": "crippen"
+        },
+        {
+          "id": "pearl",
+          "pos": [
+            -0.2,
+            -0.65
+          ],
+          "face": 20,
+          "anim": "sit",
+          "look": "crippen"
+        },
+        {
+          "id": "crippen",
+          "pos": [
+            0.95,
+            0.55
+          ],
+          "face": -120,
+          "anim": "idle",
+          "look": "pearl"
+        }
+      ],
+      "lines": [
+        {
+          "who": "crippen",
+          "text": "She went to America. And... she died there.",
+          "say": "She went to America. And. She died there."
+        }
+      ],
+      "sfx": [
+        "clock"
+      ]
+    },
+    {
+      "set": "parlour",
+      "cam": {
+        "from": [
+          1.05,
+          1.45,
+          1.15
+        ],
+        "to": [
+          0.95,
+          1.42,
+          1.0
+        ],
+        "look": [
+          -0.42,
+          1.08,
+          -0.3
+        ]
+      },
+      "actors": [
+        {
+          "id": "auntie",
+          "pos": [
+            -0.65,
+            0.05
+          ],
+          "face": 70,
+          "anim": [
+            {
+              "at": 0,
+              "anim": "sit"
+            },
+            {
+              "at": 0.45,
+              "anim": "sit_shocked"
+            }
+          ],
+          "look": "cam"
+        },
+        {
+          "id": "pearl",
+          "pos": [
+            -0.2,
+            -0.65
+          ],
+          "face": 20,
+          "anim": "sit",
+          "look": "cam"
+        }
+      ],
+      "lines": [
+        {
+          "who": "pearl",
+          "text": "Died? Then why is your secretary wearing her jewels?"
+        }
+      ],
+      "sfx": [
+        {
+          "name": "whoosh",
+          "at": 0
+        }
+      ]
+    },
+    {
+      "set": "parlour",
+      "cam": {
+        "focus": "ethel",
+        "dist": [
+          1.6,
+          1.3
+        ],
+        "yaw": 8,
+        "dy": 0.0
+      },
+      "actors": [
+        {
+          "id": "ethel",
+          "pos": [
+            -1.6,
+            -2.0
+          ],
+          "face": 25,
+          "anim": "admire",
+          "look": "cam"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "His young typist, Ethel Le Neve, had moved in...",
+          "say": "His young typist, Ethel Le Neeve, had moved in."
+        },
+        {
+          "who": "narrator",
+          "text": "wearing Belle's furs and diamonds."
+        }
+      ],
+      "sfx": [
+        {
+          "name": "sparkle",
+          "at": 0.4
+        }
+      ]
+    },
+    {
+      "set": "parlour",
+      "cam": {
+        "focus": "auntie",
+        "dist": [
+          1.45,
+          1.2
+        ],
+        "yaw": 10,
+        "dy": 0.05
+      },
+      "actors": [
+        {
+          "id": "auntie",
+          "pos": [
+            -0.65,
+            0.05
+          ],
+          "face": 70,
+          "anim": "sit_shocked",
+          "look": "cam"
+        },
+        {
+          "id": "pearl",
+          "pos": [
+            -0.2,
+            -0.65
+          ],
+          "face": 20,
+          "anim": "sit",
+          "look": "auntie"
+        }
+      ],
+      "lines": [
+        {
+          "who": "auntie",
+          "text": "Something is wrong. We're going to Scotland Yard."
+        }
+      ],
+      "sfx": []
+    },
+    {
+      "set": "parlour",
+      "stamp": "8 JULY 1910",
+      "cam": {
+        "from": [
+          0.05,
+          1.6,
+          4.6
+        ],
+        "to": [
+          0.05,
+          1.55,
+          4.1
+        ],
+        "look": [
+          0.05,
+          1.3,
+          1.3
+        ]
+      },
+      "actors": [
+        {
+          "id": "dew",
+          "pos": [
+            -0.25,
+            1.4
+          ],
+          "face": 100,
+          "anim": "idle",
+          "look": "crippen"
+        },
+        {
+          "id": "crippen",
+          "pos": [
+            0.35,
+            1.55
+          ],
+          "face": -100,
+          "anim": "idle",
+          "look": "dew"
+        }
+      ],
+      "lines": [
+        {
+          "who": "dew",
+          "text": "Where is your wife, Doctor?"
+        },
+        {
+          "who": "crippen",
+          "text": "Alright. I lied. She ran off... with another man.",
+          "say": "Alright. I lied. She ran off. With another man."
+        }
+      ],
+      "sfx": [
+        "clock"
+      ]
+    },
+    {
+      "set": "parlour",
+      "cam": {
+        "focus": "dew",
+        "dist": [
+          1.5,
+          1.25
+        ],
+        "yaw": 22,
+        "dy": 0.02
+      },
+      "actors": [
+        {
+          "id": "dew",
+          "pos": [
+            -0.25,
+            1.4
+          ],
+          "face": 100,
+          "anim": "nod",
+          "look": "crippen"
+        },
+        {
+          "id": "crippen",
+          "pos": [
+            0.35,
+            1.55
+          ],
+          "face": -100,
+          "anim": "idle",
+          "look": "dew"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "Chief Inspector Walter Dew believed him."
+        },
+        {
+          "who": "narrator",
+          "text": "The next day, Crippen and Ethel vanished."
+        }
+      ],
+      "sfx": [
+        {
+          "name": "whoosh",
+          "at": 0
+        }
+      ]
+    },
+    {
+      "set": "cellar",
+      "stamp": "THE CELLAR  -  13 JULY 1910",
+      "cam": {
+        "from": [
+          1.6,
+          1.5,
+          2.6
+        ],
+        "to": [
+          1.2,
+          1.3,
+          2.0
+        ],
+        "look": [
+          0,
+          0.5,
+          -0.2
+        ]
+      },
+      "actors": [
+        {
+          "id": "dew",
+          "pos": [
+            -0.15,
+            0.55
+          ],
+          "face": 160,
+          "anim": "kneel_dig"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "Dew searched the house again. In the cellar, a brick was loose...",
+          "say": "Dew searched the house again. In the cellar. A brick was loose."
+        }
+      ],
+      "sfx": [
+        "drip",
+        "brick"
+      ],
+      "music": "tense"
+    },
+    {
+      "set": "cellar",
+      "fx": [
+        "flash"
+      ],
+      "cam": {
+        "focus": "dew",
+        "dist": [
+          1.35,
+          1.1
+        ],
+        "yaw": 28,
+        "dy": 0.0
+      },
+      "actors": [
+        {
+          "id": "dew",
+          "pos": [
+            -0.15,
+            0.55
+          ],
+          "face": 160,
+          "anim": "kneel_shocked"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "Beneath the floor, he found human remains.",
+          "pre": 0.35
+        }
+      ],
+      "sfx": [
+        {
+          "name": "sting",
+          "at": 0
+        },
+        "drip"
+      ],
+      "music": "tense"
+    },
+    {
+      "set": "cellar",
+      "cam": {
+        "from": [
+          -0.75,
+          1.15,
+          0.35
+        ],
+        "to": [
+          -0.95,
+          1.08,
+          -0.15
+        ],
+        "look": [
+          -1.55,
+          0.98,
+          -1.15
+        ]
+      },
+      "actors": [],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "Laced with hyoscine...",
+          "say": "Laced with high-oh-seen."
+        },
+        {
+          "who": "narrator",
+          "text": "a poison Crippen bought that January."
+        }
+      ],
+      "sfx": [
+        "drip"
+      ],
+      "music": "tense"
+    },
+    {
+      "set": "deck",
+      "stamp": "SS MONTROSE\nATLANTIC OCEAN",
+      "fx": [
+        "flash"
+      ],
+      "cam": {
+        "from": [
+          -1.6,
+          1.6,
+          3.0
+        ],
+        "to": [
+          1.2,
+          1.55,
+          2.8
+        ],
+        "look": [
+          -1.2,
+          1.2,
+          -1.2
+        ],
+        "lookTo": [
+          1.2,
+          1.2,
+          -1.3
+        ]
+      },
+      "actors": [
+        {
+          "id": "crippen2",
+          "walk": {
+            "from": [
+              -2.8,
+              -1.2
+            ],
+            "to": [
+              1.6,
+              -1.35
+            ]
+          },
+          "look": "ethel2"
+        },
+        {
+          "id": "ethel2",
+          "walk": {
+            "from": [
+              -2.3,
+              -0.7
+            ],
+            "to": [
+              2.1,
+              -0.85
+            ]
+          },
+          "look": "crippen2"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "But Crippen was already at sea. Shaved. Disguised.",
+          "say": "But Crippen was already at sea. Shaved. Disguised."
+        },
+        {
+          "who": "narrator",
+          "text": "Travelling as 'Mr. Robinson and son'.",
+          "say": "Travelling as Mister Robinson. And son."
+        }
+      ],
+      "sfx": [
+        "waves",
+        {
+          "name": "horn",
+          "at": 0.3
+        }
+      ],
+      "music": "calm"
+    },
+    {
+      "set": "deck",
+      "cam": {
+        "focus": "kendall",
+        "dist": [
+          1.5,
+          1.25
+        ],
+        "yaw": -15,
+        "dy": 0.0
+      },
+      "actors": [
+        {
+          "id": "kendall",
+          "pos": [
+            1.0,
+            2.2
+          ],
+          "face": 195,
+          "anim": [
+            {
+              "at": 0,
+              "anim": "binoculars"
+            },
+            {
+              "at": 0.45,
+              "anim": "idle"
+            }
+          ],
+          "look": "cam"
+        }
+      ],
+      "lines": [
+        {
+          "who": "kendall",
+          "text": "That boy squeezes his father's hand... like a woman.",
+          "say": "That boy squeezes his father's hand. Like a woman.",
+          "pre": 0.6
+        }
+      ],
+      "sfx": [
+        "waves"
+      ]
+    },
+    {
+      "set": "radio",
+      "telegram": "HAVE STRONG SUSPICIONS THAT CRIPPEN LONDON CELLAR MURDERER AND ACCOMPLICE ARE AMONGST SALOON PASSENGERS. ACCOMPLICE DRESSED AS BOY. - KENDALL",
+      "cam": {
+        "from": [
+          1.05,
+          1.5,
+          1.9
+        ],
+        "to": [
+          0.75,
+          1.45,
+          1.5
+        ],
+        "look": [
+          -0.1,
+          1.4,
+          -0.6
+        ]
+      },
+      "actors": [
+        {
+          "id": "operator",
+          "pos": [
+            0.0,
+            -0.25
+          ],
+          "face": 180,
+          "anim": "type"
+        },
+        {
+          "id": "kendall",
+          "pos": [
+            -0.75,
+            0.3
+          ],
+          "face": 160,
+          "anim": "hold_paper",
+          "look": "operator"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "So the captain did something no one had done before."
+        },
+        {
+          "who": "narrator",
+          "text": "He sent a wireless telegram."
+        }
+      ],
+      "sfx": [
+        "morse",
+        "hum"
+      ],
+      "music": "tense"
+    },
+    {
+      "set": "deck_dawn",
+      "stamp": "31 JULY 1910\nQUEBEC, CANADA",
+      "cam": {
+        "from": [
+          0.9,
+          1.6,
+          3.0
+        ],
+        "to": [
+          0.6,
+          1.55,
+          2.7
+        ],
+        "look": [
+          0.6,
+          1.2,
+          -1.1
+        ],
+        "lookTo": [
+          0.0,
+          1.25,
+          -1.2
+        ]
+      },
+      "actors": [
+        {
+          "id": "dew2",
+          "walk": {
+            "from": [
+              3.2,
+              -0.6
+            ],
+            "to": [
+              0.45,
+              -1.05
+            ],
+            "t1": 0.85
+          },
+          "look": "crippen2"
+        },
+        {
+          "id": "crippen2",
+          "pos": [
+            -0.5,
+            -1.3
+          ],
+          "face": 75,
+          "anim": "idle",
+          "look": "dew2"
+        }
+      ],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "Dew raced ahead on a faster ship...",
+          "say": "Dew raced ahead, on a faster ship."
+        },
+        {
+          "who": "narrator",
+          "text": "and came aboard dressed as a river pilot."
+        }
+      ],
+      "sfx": [
+        "waves",
+        "steps"
+      ],
+      "music": "tense"
+    },
+    {
+      "set": "deck_dawn",
+      "cam": {
+        "focus": "dew2",
+        "dist": [
+          1.4,
+          1.15
+        ],
+        "yaw": 22,
+        "dy": 0.0
+      },
+      "actors": [
+        {
+          "id": "dew2",
+          "pos": [
+            0.45,
+            -1.05
+          ],
+          "face": -105,
+          "anim": "idle",
+          "look": "crippen2"
+        },
+        {
+          "id": "crippen2",
+          "pos": [
+            -0.5,
+            -1.3
+          ],
+          "face": 75,
+          "anim": "idle",
+          "look": "dew2"
+        }
+      ],
+      "lines": [
+        {
+          "who": "dew2",
+          "text": "Good morning, Doctor Crippen. Do you know me?",
+          "say": "Good morning, Doctor Crippen. Do you know me?"
+        }
+      ],
+      "sfx": [
+        "waves"
+      ],
+      "music": "drop"
+    },
+    {
+      "set": "deck_dawn",
+      "cam": {
+        "focus": "crippen2",
+        "dist": [
+          1.4,
+          1.1
+        ],
+        "yaw": -50,
+        "dy": 0.0
+      },
+      "actors": [
+        {
+          "id": "dew2",
+          "pos": [
+            0.45,
+            -1.05
+          ],
+          "face": -105,
+          "anim": "idle",
+          "look": "crippen2"
+        },
+        {
+          "id": "crippen2",
+          "pos": [
+            -0.5,
+            -1.3
+          ],
+          "face": 75,
+          "anim": [
+            {
+              "at": 0,
+              "anim": "shocked"
+            },
+            {
+              "at": 0.3,
+              "anim": "sad"
+            }
+          ],
+          "look": "dew2"
+        }
+      ],
+      "lines": [
+        {
+          "who": "crippen2",
+          "text": "Thank God it's over. The suspense has been too great.",
+          "say": "Thank God it's over. The suspense. Has been too great.",
+          "pre": 0.5
+        }
+      ],
+      "sfx": [
+        "waves",
+        {
+          "name": "sting",
+          "at": 0.1,
+          "gain": 0.6
+        }
+      ],
+      "music": "drop"
+    },
+    {
+      "set": "street",
+      "variant": "dark",
+      "stamp": "PENTONVILLE PRISON\n23 NOV 1910",
+      "cam": {
+        "from": [
+          0.4,
+          1.7,
+          7.0
+        ],
+        "to": [
+          0.4,
+          2.1,
+          5.2
+        ],
+        "look": [
+          0.6,
+          2.6,
+          -4
+        ]
+      },
+      "actors": [],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "Crippen was hanged in November 1910.",
+          "say": "Crippen was hanged in November, nineteen-ten.",
+          "pre": 0.45
+        }
+      ],
+      "sfx": [
+        "wind",
+        "rain",
+        {
+          "name": "bell",
+          "at": 0.2
+        }
+      ],
+      "music": "drop"
+    },
+    {
+      "set": "cellar",
+      "variant": "dark",
+      "stamp": "2007",
+      "cam": {
+        "from": [
+          1.0,
+          1.8,
+          2.0
+        ],
+        "to": [
+          0.65,
+          1.35,
+          1.35
+        ],
+        "look": [
+          0.0,
+          0.1,
+          0.0
+        ]
+      },
+      "actors": [],
+      "lines": [
+        {
+          "who": "narrator",
+          "text": "But in 2007, DNA tests suggested the body in the cellar...",
+          "say": "But in two thousand seven, D N A tests suggested the body in the cellar."
+        },
+        {
+          "who": "narrator",
+          "text": "may not have been Belle at all."
+        },
+        {
+          "who": "narrator",
+          "text": "So... who was in the cellar?",
+          "say": "So. Who was in the cellar?",
+          "big": true,
+          "pre": 0.35
+        }
+      ],
+      "sfx": [
+        "drip",
+        {
+          "name": "sting",
+          "atLine": 2
+        }
+      ],
+      "music": "tense",
+      "post": 1.0
+    },
+    {
+      "set": "cellar",
+      "variant": "dark",
+      "overlay": "endcard",
+      "dur": 3.2,
+      "cam": {
+        "from": [
+          0.65,
+          1.35,
+          1.35
+        ],
+        "to": [
+          0.55,
+          1.25,
+          1.2
+        ],
+        "look": [
+          0.0,
+          0.1,
+          0.0
+        ]
+      },
+      "actors": [],
+      "lines": [],
+      "sfx": [
+        "drip"
+      ],
+      "fx": [
+        "fadeout"
+      ],
+      "music": "end"
+    }
+  ]
+}
