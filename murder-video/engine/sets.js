@@ -83,9 +83,11 @@ const SETS = {
   // ------------------------------------------------------------ Victorian parlour (tea table)
   parlour() {
     const scene = baseScene('#2a1d12', 12, 30);
-    scene.add(new THREE.AmbientLight('#ffe2b8', 0.62));
-    const sun = new THREE.DirectionalLight('#fff1d6', 0.55); sun.position.set(-2, 4, 2); scene.add(sun);
-    const warm = new THREE.PointLight('#ffb36b', 0.9, 9, 1.4); warm.position.set(1.8, 2.2, 1.6); scene.add(warm);
+    scene.add(new THREE.AmbientLight('#ffe2b8', 0.22));
+    scene.add(new THREE.HemisphereLight('#f4f0ea', '#4a3a30', 0.6));
+    const sun = new THREE.DirectionalLight('#fff7ee', 1.45); sun.position.set(-2.2, 3.4, 3.2); scene.add(sun);
+    const win = new THREE.DirectionalLight('#dfe9ff', 0.45); win.position.set(-1.2, 2.5, -3); scene.add(win);
+    const warm = new THREE.PointLight('#ffc890', 0.45, 9, 1.4); warm.position.set(1.8, 2.2, 1.6); scene.add(warm);
     const floor = plane(scene, 8, 8, M('#7a4e2c', { map: Tex.wood([5, 3], '#6e4426') })); floor.rotation.x = -Math.PI / 2;
     const wp = M('#ffffff', { map: Tex.wallpaper([7, 3.4]) });
     const back = plane(scene, 8, 3.4, wp, 0, 1.7, -3);
@@ -121,8 +123,8 @@ const SETS = {
     box(pend, 0.015, 0.55, 0.01, M('#c9a24a'), 0, -0.27, 0); cyl(pend, 0.06, 0.06, 0.015, 8, M('#d9b84a', { shininess: 60 }), 0, -0.55, 0).rotation.x = Math.PI / 2;
     // table with floral cloth + tea set
     const table = new THREE.Group(); scene.add(table);
-    cyl(table, 0.85, 0.85, 0.04, 10, M('#fff', { map: Tex.floral([3, 1]) }), 0, 0.77, 0);
-    cyl(table, 0.88, 0.95, 0.5, 10, M('#fff', { map: Tex.floral([4, 1]), side: THREE.DoubleSide }), 0, 0.52, 0, true);
+    cyl(table, 0.85, 0.85, 0.04, 10, M('#fff', { map: Tex.floral([7, 7]) }), 0, 0.77, 0);
+    cyl(table, 0.88, 0.95, 0.5, 10, M('#fff', { map: Tex.floral([10, 2]), side: THREE.DoubleSide }), 0, 0.52, 0, true);
     const china = M('#e8eef2', { shininess: 40, specular: 0x444444 });
     const pot = ball(table, 0.13, china, 0.1, 0.9, -0.1, 8, 6); pot.scale.y = 0.85;
     cyl(table, 0.03, 0.02, 0.16, 5, china, 0.24, 0.92, -0.1).rotation.z = -0.9;

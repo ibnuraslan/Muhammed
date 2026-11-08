@@ -42,7 +42,7 @@
   },
   "cast": {
     "crippen": {
-      "skin": "#e8c2a0",
+      "skin": "#e6c6ae",
       "hair": "#b08a55",
       "hairStyle": "balding",
       "jacket": "#4a3326",
@@ -52,10 +52,12 @@
       "glasses": "#c9a24a",
       "moustache": "#a07a45",
       "height": 0.93,
-      "eyes": 1.25
+      "eyes": 1.25,
+      "age": 0.5,
+      "eyeColor": "#6a5a3a"
     },
     "crippen2": {
-      "skin": "#e8c2a0",
+      "skin": "#e6c6ae",
       "hair": "#b08a55",
       "hairStyle": "balding",
       "jacket": "#6f6a62",
@@ -70,37 +72,43 @@
     },
     "pearl": {
       "female": true,
-      "skin": "#efc9a8",
+      "skin": "#efd2bf",
       "hair": "#c9a35c",
       "hairStyle": "bob",
       "dress": "#e4b9bd",
       "pearls": true,
-      "height": 0.96
+      "height": 0.96,
+      "lips": "#c0606a",
+      "eyeColor": "#4a6a8a"
     },
     "auntie": {
       "female": true,
-      "skin": "#e9b896",
+      "skin": "#e8c4ac",
       "hair": "#3b3433",
       "hairStyle": "bun",
       "dress": "#7a1c22",
       "glasses": "#c9a24a",
       "brooch": "#2c6fb0",
       "height": 0.94,
-      "width": 1.25
+      "width": 1.25,
+      "lips": "#9a3040",
+      "age": 0.7,
+      "smile": 3
     },
     "ethel": {
       "female": true,
-      "skin": "#f1d1b5",
+      "skin": "#f0d6c4",
       "hair": "#4a2f22",
       "hairStyle": "updo",
       "dress": "#2f5a43",
-      "fur": "#6b4a32",
       "brooch": "#ff4fd2",
       "broochGlow": true,
-      "height": 0.95
+      "height": 0.95,
+      "fur": "#7a5638",
+      "lips": "#b03a4a"
     },
     "ethel2": {
-      "skin": "#f1d1b5",
+      "skin": "#f0d6c4",
       "hair": "#4a2f22",
       "hairStyle": "tucked",
       "jacket": "#6a4e33",
@@ -113,7 +121,7 @@
       "width": 0.88
     },
     "dew": {
-      "skin": "#e2b590",
+      "skin": "#dfbca2",
       "hair": "#2a211c",
       "hairStyle": "short",
       "coat": "#22252b",
@@ -124,10 +132,12 @@
       "moustache": "#2a211c",
       "hat": "bowler",
       "hatColor": "#15161a",
-      "height": 1.06
+      "height": 1.06,
+      "age": 0.4,
+      "eyeColor": "#3a5a7a"
     },
     "dew2": {
-      "skin": "#e2b590",
+      "skin": "#dfbca2",
       "hair": "#2a211c",
       "hairStyle": "short",
       "jacket": "#1c2740",
@@ -141,7 +151,7 @@
       "height": 1.06
     },
     "kendall": {
-      "skin": "#e6b892",
+      "skin": "#e0bba0",
       "hair": "#4a3a2c",
       "hairStyle": "short",
       "jacket": "#1a2438",
@@ -152,10 +162,11 @@
       "buttons": "#d9b84a",
       "hat": "captain",
       "hatColor": "#f2f2f2",
-      "height": 1.02
+      "height": 1.02,
+      "age": 0.4
     },
     "operator": {
-      "skin": "#ecc19c",
+      "skin": "#e8c6ac",
       "hair": "#6a4a2a",
       "hairStyle": "short",
       "jacket": "#3a3f48",

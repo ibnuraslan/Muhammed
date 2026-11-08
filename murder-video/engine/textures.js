@@ -1,5 +1,6 @@
 // Procedural low-res textures + small geometry helpers (PS2 look: tiny textures, nearest filtering, flat shading)
 'use strict';
+THREE.ColorManagement.legacyMode = false; // hex colours are sRGB, lighting is linear
 
 function makeRng(seed) {
   let s = (seed * 2654435761) >>> 0 || 1;
@@ -7,19 +8,29 @@ function makeRng(seed) {
 }
 
 const TEX = {};
-function canvasTex(name, w, h, draw, repeat = [1, 1], smooth = false) {
+const SS = 4; // textures are drawn at 4x and smoothed (no more pixelated look)
+function canvasTex(name, w, h, draw, repeat = [1, 1], smooth = true) {
   const key = name + repeat.join('x');
   if (TEX[key]) return TEX[key];
   const c = document.createElement('canvas');
-  c.width = w; c.height = h;
+  c.width = w * SS; c.height = h * SS;
   const g = c.getContext('2d');
+  g.scale(SS, SS);
   draw(g, w, h);
   const t = new THREE.CanvasTexture(c);
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
   t.repeat.set(repeat[0], repeat[1]);
-  t.magFilter = smooth ? THREE.LinearFilter : THREE.NearestFilter;
+  t.magFilter = THREE.LinearFilter;
   t.minFilter = THREE.LinearMipmapLinearFilter;
+  t.anisotropy = 4;
+  t.encoding = THREE.sRGBEncoding;
   TEX[key] = t;
+  return t;
+}
+function rawTex(c, repeat = [1, 1]) {
+  const t = new THREE.CanvasTexture(c);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeat[0], repeat[1]);
+  t.anisotropy = 4; t.encoding = THREE.sRGBEncoding;
   return t;
 }
 
@@ -31,21 +42,36 @@ function shade(hex, f) {
 
 const Tex = {
   wallpaper: (r = [6, 3]) => canvasTex('wallpaper', 32, 32, (g, w, h) => {
-    g.fillStyle = '#c4a23e'; g.fillRect(0, 0, w, h);
-    g.strokeStyle = '#94741f'; g.lineWidth = 2;
+    g.fillStyle = '#c9a646'; g.fillRect(0, 0, w, h);
+    const R = makeRng(2); for (let i = 0; i < 120; i++) { g.fillStyle = `rgba(90,60,10,${R() * 0.07})`; g.fillRect(R() * w, R() * h, 1, 1); }
+    g.strokeStyle = '#9a7a26'; g.lineWidth = 1.4;
     g.beginPath(); g.moveTo(0, 16); g.lineTo(16, 0); g.lineTo(32, 16); g.lineTo(16, 32); g.closePath(); g.stroke();
     g.fillStyle = '#a8862c'; g.fillRect(15, 15, 3, 3);
     g.fillStyle = '#d6b552'; g.fillRect(0, 0, 2, 2);
   }, r),
   floral: (r = [2, 2]) => canvasTex('floral', 64, 64, (g, w, h) => {
     const R = makeRng(3);
-    g.fillStyle = '#efe3cc'; g.fillRect(0, 0, w, h);
-    for (let i = 0; i < 26; i++) {
-      const x = R() * w, y = R() * h;
-      g.fillStyle = '#86a463'; g.fillRect(x + 2, y + 3, 4, 2);
-      g.fillStyle = R() > 0.5 ? '#d88a8e' : '#c46a78';
-      g.fillRect(x - 2, y - 2, 4, 4); g.fillRect(x - 1, y - 3, 2, 6); g.fillRect(x - 3, y - 1, 6, 2);
+    g.fillStyle = '#efe5d2'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 300; i++) { g.fillStyle = `rgba(150,120,90,${R() * 0.06})`; g.fillRect(R() * w, R() * h, 1, 1); }
+    for (let i = 0; i < 22; i++) {
+      const x = R() * w, y = R() * h, s = 1.6 + R() * 1.4;
+      g.fillStyle = '#93a56e'; g.beginPath(); g.ellipse(x + s * 1.6, y + s, s * 1.3, s * 0.6, 0.6, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(x - s * 1.5, y + s * 1.1, s * 1.2, s * 0.55, -0.6, 0, 7); g.fill();
+      const pink = R() > 0.5 ? ['#e3a0a2', '#c9737e'] : ['#efb9b3', '#d98f8f'];
+      g.fillStyle = pink[0]; g.beginPath(); g.arc(x, y, s * 1.4, 0, 7); g.fill();
+      g.strokeStyle = pink[1]; g.lineWidth = 0.4; g.beginPath(); g.arc(x, y, s * 0.9, 0, 5); g.stroke(); g.beginPath(); g.arc(x + 0.2, y - 0.1, s * 0.45, 1, 6); g.stroke();
     }
+  }, r),
+  fabric: (r = [2, 2]) => canvasTex('fabric', 64, 64, (g, w, h) => {
+    const R = makeRng(17);
+    g.fillStyle = '#fff'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 1500; i++) { const v = 205 + R() * 50; g.fillStyle = `rgb(${v},${v},${v})`; g.fillRect(R() * w, R() * h, 1, 0.5); }
+    for (let i = 0; i < 9; i++) { const gr = g.createLinearGradient(0, 0, w, 0); const x = R() * w; g.fillStyle = `rgba(0,0,0,${0.03 + R() * 0.05})`; g.beginPath(); g.ellipse(x, R() * h, 3 + R() * 6, 14 + R() * 20, R() * 0.6, 0, 7); g.fill(); }
+  }, r),
+  hair: (r = [2, 2]) => canvasTex('hairstrands', 64, 64, (g, w, h) => {
+    const R = makeRng(23);
+    g.fillStyle = '#c8c8c8'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 220; i++) { const v = 120 + R() * 135; g.strokeStyle = `rgb(${v},${v},${v})`; g.lineWidth = 0.3 + R() * 0.8; const x = R() * w; g.beginPath(); g.moveTo(x, 0); g.bezierCurveTo(x + (R() - 0.5) * 8, h * 0.3, x + (R() - 0.5) * 8, h * 0.7, x + (R() - 0.5) * 6, h); g.stroke(); }
   }, r),
   wood: (r = [4, 4], base = '#6b4426') => canvasTex('wood' + base, 32, 64, (g, w, h) => {
     const R = makeRng(5);
@@ -144,10 +170,15 @@ const Tex = {
 // ---------- material + geometry helpers
 const MATS = {};
 function M(color, opts = {}) {
-  const key = color + JSON.stringify(Object.keys(opts).length ? Object.assign({}, opts, { map: opts.map ? opts.map.uuid : 0 }) : '');
-  if (MATS[key] && !opts.unique) return MATS[key];
-  const m = new THREE.MeshPhongMaterial(Object.assign({ color, flatShading: true, shininess: 6, specular: 0x111111 }, opts));
-  delete m.unique;
+  const o = Object.assign({}, opts);
+  let rough = 0.78;
+  if (o.shininess !== undefined) rough = Math.max(0.22, Math.min(0.9, 1 - o.shininess / 110));
+  if (o.rough !== undefined) rough = o.rough;
+  const flat = !!o.flat;
+  delete o.shininess; delete o.specular; delete o.rough; delete o.flat;
+  const key = color + '|' + rough + '|' + flat + '|' + JSON.stringify(Object.assign({}, o, { map: o.map ? o.map.uuid : 0 }));
+  if (MATS[key]) return MATS[key];
+  const m = new THREE.MeshStandardMaterial(Object.assign({ color, roughness: rough, metalness: 0, flatShading: flat }, o));
   MATS[key] = m;
   return m;
 }
@@ -158,11 +189,11 @@ function box(parent, w, h, d, mat, x = 0, y = 0, z = 0) {
   m.position.set(x, y, z); parent.add(m); return m;
 }
 function cyl(parent, rt, rb, h, seg, mat, x = 0, y = 0, z = 0, open = false) {
-  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg, 1, open), mat);
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg <= 4 ? seg : seg * 2, 1, open), mat);
   m.position.set(x, y, z); parent.add(m); return m;
 }
 function ball(parent, r, mat, x = 0, y = 0, z = 0, w = 7, h = 5) {
-  const m = new THREE.Mesh(new THREE.SphereGeometry(r, w, h), mat);
+  const m = new THREE.Mesh(new THREE.SphereGeometry(r, Math.max(w * 2, 12), Math.max(h * 2, 8)), mat);
   m.position.set(x, y, z); parent.add(m); return m;
 }
 function plane(parent, w, h, mat, x = 0, y = 0, z = 0) {

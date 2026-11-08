@@ -1,9 +1,14 @@
 // Frame-accurate renderer: given a timeline, renders frame N (3D at low res + 2D caption layer at 1080x1920)
 'use strict';
 
-const OW = 1080, OH = 1920, RW = 540, RH = 960;
+const OW = 1080, OH = 1920, RW = 720, RH = 1280;
 let TL = null;
-const gl = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true });
+const gl = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+gl.shadowMap.enabled = true;
+gl.shadowMap.type = THREE.PCFSoftShadowMap;
+gl.outputEncoding = THREE.sRGBEncoding;
+gl.toneMapping = THREE.ACESFilmicToneMapping;
+gl.toneMappingExposure = 1.05;
 gl.setPixelRatio(1);
 gl.setSize(RW, RH);
 const out = document.createElement('canvas'); out.width = OW; out.height = OH;
@@ -12,9 +17,24 @@ const ctx = out.getContext('2d');
 const camera = new THREE.PerspectiveCamera(50, RW / RH, 0.05, 300);
 
 const setCache = {}, chars = {};
+const bloom = document.createElement('canvas'); bloom.width = 90; bloom.height = 160; const bctx = bloom.getContext('2d');
 function getSet(name, variant) {
   const k = name + ':' + (variant || '');
-  if (!setCache[k]) setCache[k] = SETS[name](variant);
+  if (!setCache[k]) {
+    const set = SETS[name](variant);
+    let sun = null;
+    set.scene.traverse(o => {
+      if (o.isDirectionalLight && !sun) sun = o;
+      if (o.isMesh) { const m = o.material; const basic = m && (m.isMeshBasicMaterial || m.transparent); o.castShadow = !basic; o.receiveShadow = !(m && m.isMeshBasicMaterial); }
+    });
+    if (sun) {
+      sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+      const c = sun.shadow.camera; c.left = c.bottom = -5; c.right = c.top = 5; c.near = 0.5; c.far = 40;
+      sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 4;
+      sun.target.position.set(0, 0, 0); set.scene.add(sun.target);
+    }
+    setCache[k] = set;
+  }
   return setCache[k];
 }
 function getChar(id) {
@@ -105,7 +125,7 @@ function poseActors(shot, t) {
     if (!busy) { pose.aRx -= 0.35 * lvl + 0.12 * lvl * Math.sin(t * 2.3); pose.fR -= 0.55 * lvl; pose.aRz += 0.1 * lvl; }
     pose.headX += 0.05 * amp * Math.sin(t * 9);
     // look-at
-    let headYaw = 0, headPitch = 0, torsoYaw = 0;
+    let headYaw = 0, headPitch = 0, torsoYaw = 0, eyeYaw = 0, eyePitch = 0;
     if (a.look && pose.lookAmt > 0) {
       let target;
       if (a.look === 'cam') target = camera.position.clone();
@@ -118,13 +138,14 @@ function poseActors(shot, t) {
         torsoYaw = cl * 0.3 * pose.lookAmt; headYaw = cl * 0.65 * pose.lookAmt;
         const dy = target.y - hp.y, dh = Math.hypot(target.x - hp.x, target.z - hp.z);
         headPitch = -Math.atan2(dy, dh) * 0.5 * pose.lookAmt;
+        eyeYaw = Math.max(-0.35, Math.min(0.35, yaw * 0.3)); eyePitch = headPitch * 0.6;
       }
     }
     // blink
     const per = 3.1 + (ch.seed % 7) * 0.31, ph = (t + ch.seed * 0.37) % per;
     const blink = ph < 0.12;
     const sit = /sit|type/.test(anim.a) || (Array.isArray(a.anim) && a.anim.some(k => /sit/.test(k.anim)));
-    applyPose(ch, pose, { talk: amp, blink, headYaw, headPitch, torsoYaw, chair: sit });
+    applyPose(ch, pose, { talk: amp, blink, headYaw, headPitch, torsoYaw, eyeYaw, eyePitch, chair: sit });
     // props
     const PR = ch.P.props;
     PR.crowbar.visible = anim.a === 'kneel_dig';
@@ -190,7 +211,7 @@ function magnifier(x, y, s, color) {
 }
 
 const grain = (() => { const c = document.createElement('canvas'); c.width = 270; c.height = 480; const g = c.getContext('2d'); const d = g.createImageData(270, 480); const R = makeRng(5); for (let i = 0; i < d.data.length; i += 4) { const v = R() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); return c; })();
-const vignette = (() => { const c = document.createElement('canvas'); c.width = OW; c.height = OH; const g = c.getContext('2d'); const gr = g.createRadialGradient(OW / 2, OH * 0.45, OH * 0.25, OW / 2, OH * 0.5, OH * 0.75); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,0.6)'); g.fillStyle = gr; g.fillRect(0, 0, OW, OH); return c; })();
+const vignette = (() => { const c = document.createElement('canvas'); c.width = OW; c.height = OH; const g = c.getContext('2d'); const gr = g.createRadialGradient(OW / 2, OH * 0.45, OH * 0.25, OW / 2, OH * 0.5, OH * 0.75); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,0.42)'); g.fillStyle = gr; g.fillRect(0, 0, OW, OH); return c; })();
 
 function overlay(shot, t, frame) {
   const lt = t - shot.start, dur = shot.end - shot.start;
@@ -301,8 +322,15 @@ window.renderFrame = (frame, quality = 0.9) => {
   poseActors(shot, t); // second pass so "look: cam" uses this frame's camera
   curSet.update(t, { keyDown: keyDown(shot, t), shot });
   gl.render(curSet.scene, camera);
-  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'low';
+  ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+  ctx.filter = 'saturate(0.88) contrast(1.04)';
   ctx.drawImage(gl.domElement, 0, 0, OW, OH);
+  ctx.filter = 'none';
+  // soft glow (the hazy cutscene look)
+  bctx.filter = 'brightness(0.85) contrast(1.8) saturate(1.2)';
+  bctx.drawImage(gl.domElement, 0, 0, bloom.width, bloom.height);
+  ctx.save(); ctx.globalCompositeOperation = 'screen'; ctx.globalAlpha = 0.22;
+  ctx.drawImage(bloom, 0, 0, OW, OH); ctx.restore();
   overlay(shot, t, frame);
   return out.toDataURL('image/jpeg', quality);
 };
