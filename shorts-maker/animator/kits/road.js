@@ -79,18 +79,19 @@ export function makeBus({ name = 'INTERCITY', dest = 'WINNIPEG', lit = 0.6 } = {
 
 // ---------------------------------------------------------------- bus interior (aisle along x, seats face +x / the front)
 // floor y=0, ceiling 2.45, walls z=±1.3. Seat rows at x = -5.4 + i*0.95. Window seats z=±0.95, aisle seats z=±0.5.
-export function busInterior(S, { night = false, seed = 2 } = {}) {
+export function busInterior(S, { night = false, dark, seed = 2 } = {}) {
   const g = new THREE.Group();
+  const D = dark ?? night;           // dark palette (night look) - independent of the view out of the windows
   g.add(box(13, 0.06, 2.6, toon(0x3a3d45), [0, -0.03, 0]));
-  g.add(box(13, 0.06, 0.7, toon(0x55402f), [0, 0.005, 0]));                 // aisle runner
-  const wallM = toon(0xbfc3c8);
+  g.add(box(13, 0.06, 0.7, toon(D ? 0x2e2a2a : 0x55402f), [0, 0.005, 0]));                 // aisle runner
+  const wallM = toon(D ? 0x4f545e : 0xbfc3c8);
   for (const sd of [-1, 1]) {
     g.add(box(13, 0.9, 0.08, wallM, [0, 0.45, sd * 1.32]));                  // below windows
     g.add(box(13, 0.5, 0.08, wallM, [0, 2.2, sd * 1.32]));                   // above windows
     for (let i = 0; i < 11; i++) g.add(box(0.16, 1.1, 0.1, wallM, [-5.95 + i * 1.19, 1.45, sd * 1.32]));
     g.add(box(13, 0.08, 0.55, toon(0x8d9299), [0, 2.05, sd * 1.05]));        // luggage rack
   }
-  g.add(box(13, 0.08, 2.7, toon(0xd6d8dc), [0, 2.48, 0]));
+  g.add(box(13, 0.08, 2.7, toon(D ? 0x5c616b : 0xd6d8dc), [0, 2.48, 0]));
   g.add(box(0.1, 2.5, 2.6, wallM, [-6.5, 1.25, 0]));                         // back wall
   g.add(box(0.12, 2.0, 0.8, toon(0x8a8f96), [-6.42, 1.0, 0.9]));             // toilet door
   // view out of the windows: scrolling prairie (scroll it with S.onUpdate via userData.view)
@@ -107,7 +108,7 @@ export function busInterior(S, { night = false, seed = 2 } = {}) {
   const viewM = new THREE.MeshBasicMaterial({ map: view, toneMapped: false });
   for (const sd of [-1, 1]) g.add(mesh(new THREE.PlaneGeometry(13, 1.1), viewM, [0, 1.45, sd * 1.36], { rot: [0, sd > 0 ? Math.PI : 0, 0], cast: false }));
   // seats
-  const seatM = toon(0x283a63), headM = toon(0x9aa3b2);
+  const seatM = toon(D ? 0x1d2433 : 0x283a63), headM = toon(D ? 0x3a4150 : 0x9aa3b2);
   for (let i = 0; i < 12; i++) for (const sd of [-1, 1]) for (const z of [0.95, 0.5]) {
     const x = -5.4 + i * 0.95;
     g.add(box(0.5, 0.12, 0.44, seatM, [x + 0.05, 0.48, sd * z]));
@@ -115,9 +116,9 @@ export function busInterior(S, { night = false, seed = 2 } = {}) {
     g.add(box(0.12, 0.16, 0.38, headM, [x - 0.2, 1.22, sd * z]));
   }
   // ceiling light strip (flicker it with userData.light)
-  const stripM = new THREE.MeshBasicMaterial({ color: night ? 0x9a8f78 : 0xe8d2a8 });
+  const stripM = new THREE.MeshBasicMaterial({ color: D ? 0x9a8f78 : 0xe8d2a8 });
   g.add(box(12, 0.04, 0.18, stripM, [0, 2.44, 0], { cast: false }));
-  const light = new THREE.PointLight(night ? 0xffc890 : 0xffd9a8, night ? 9 : 9, 14, 1.4); light.position.set(-2, 2.3, 0); g.add(light);
+  const light = new THREE.PointLight(D ? 0xb8c8ff : 0xffd9a8, D ? 7 : 9, 14, 1.4); light.position.set(-2, 2.3, 0); g.add(light);
   S.add(g);
   S.onUpdate((t) => { view.offset.x = t * 0.25; });
   g.userData = { light, strip: stripM, view };

@@ -219,11 +219,81 @@ export class Stage {
     const h = 2 * d * Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2));
     return { w: h * W / H, h };
   }
+  // hand-drawn look: ink outlines on every edge (normal + depth edge detection in a second pass)
+  ink({ color = '#16130f', thickness = 1.6, normal = 1.0, depth = 14.0, alpha = 0.9 } = {}) {
+    this.inkOpts = { color: new THREE.Color(color), thickness, normal, depth, alpha };
+    return this;
+  }
+  _renderInk() {
+    const r = this.renderer, cam = this.camera, o = this.inkOpts;
+    if (!this._ink) {
+      const mk = (depth) => { const rt = new THREE.WebGLRenderTarget(W, H, { samples: 0 }); if (depth) rt.depthTexture = new THREE.DepthTexture(W, H); return rt; };
+      const normalMat = new THREE.MeshNormalMaterial();
+      const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+        uniforms: { tColor: { value: null }, tNormal: { value: null }, tDepth: { value: null }, res: { value: new THREE.Vector2(W, H) },
+                    ink: { value: o.color }, thick: { value: o.thickness }, nStr: { value: o.normal }, dStr: { value: o.depth }, a: { value: o.alpha },
+                    cn: { value: 0.1 }, cf: { value: 2000 } },
+        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+        fragmentShader: `uniform sampler2D tColor; uniform sampler2D tNormal; uniform sampler2D tDepth; uniform vec2 res; uniform vec3 ink;
+          uniform float thick; uniform float nStr; uniform float dStr; uniform float a; uniform float cn; uniform float cf; varying vec2 vUv;
+          float lin(float d){ float z = d * 2.0 - 1.0; return (2.0 * cn * cf) / (cf + cn - z * (cf - cn)); }
+          void main(){
+            vec2 px = thick / res; vec3 n0 = texture2D(tNormal, vUv).xyz; float d0 = lin(texture2D(tDepth, vUv).x);
+            float e = 0.0;
+            for (int i = 0; i < 4; i++) {
+              vec2 off = i == 0 ? vec2(px.x, 0.0) : i == 1 ? vec2(-px.x, 0.0) : i == 2 ? vec2(0.0, px.y) : vec2(0.0, -px.y);
+              vec3 n = texture2D(tNormal, vUv + off).xyz; float d = lin(texture2D(tDepth, vUv + off).x);
+              e = max(e, length(n - n0) * nStr);
+              e = max(e, abs(d - d0) / max(d0, 0.001) * dStr);
+            }
+            e = smoothstep(0.35, 0.8, e);
+            vec4 c = texture2D(tColor, vUv);
+            gl_FragColor = vec4(mix(c.rgb, ink, e * a), 1.0);
+            #include <colorspace_fragment>
+          }`,
+        depthTest: false, depthWrite: false,
+      }));
+      const qs = new THREE.Scene(), qc = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1); quad.frustumCulled = false; qs.add(quad);
+      this._ink = { color: mk(false), normal: mk(true), normalMat, quad, qs, qc, alphaMats: new Map() };
+    }
+    const I = this._ink;
+    // pass 1: the normal colour image
+    r.setRenderTarget(I.color); r.clear(); r.render(this.scene, cam);
+    // pass 2: normals + depth (billboard people keep their cut-out shape; transparent fx are skipped)
+    const swaps = [];
+    this.scene.traverse((m) => {
+      if (!m.visible) return;
+      if (m.isPoints || m.isLine || m.isLineSegments) { swaps.push([m, 'vis']); m.visible = false; return; }
+      if (!m.isMesh) return;
+      const mat = m.material;
+      if (mat && mat.map && mat.alphaTest > 0) {
+        let am = I.alphaMats.get(mat);
+        if (!am) { am = new THREE.ShaderMaterial({ uniforms: { map: { value: mat.map } }, side: THREE.DoubleSide,
+          vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+          fragmentShader: 'uniform sampler2D map; varying vec2 vUv; void main(){ if (texture2D(map, vUv).a < 0.5) discard; gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0); }' });
+          I.alphaMats.set(mat, am); }
+        swaps.push([m, mat]); m.material = am; return;
+      }
+      if (mat && (mat.transparent || mat.blending === THREE.AdditiveBlending || mat.depthTest === false) && !mat.alphaTest) { swaps.push([m, 'vis']); m.visible = false; return; }
+      if (m.isMesh && m.material && m.material.type === 'ShaderMaterial' && m.frustumCulled === false) { swaps.push([m, 'vis']); m.visible = false; return; }
+      swaps.push([m, mat]); m.material = I.normalMat;
+    });
+    const bg = this.scene.background; this.scene.background = null;
+    r.setRenderTarget(I.normal); r.setClearColor(0x000000, 1); r.clear(); r.render(this.scene, cam);
+    this.scene.background = bg;
+    for (const [m, v] of swaps) { if (v === 'vis') m.visible = true; else m.material = v; }
+    // pass 3: composite
+    const q = I.quad.material.uniforms;
+    q.tColor.value = I.color.texture; q.tNormal.value = I.normal.texture; q.tDepth.value = I.normal.depthTexture;
+    q.cn.value = cam.near; q.cf.value = cam.far;
+    r.setRenderTarget(null); r.render(I.qs, I.qc);
+  }
   frame(t, u) {
     this._t = t;
     if (this.update) this.update(t, u);
     for (const f of this.updaters) f(t, u);
     const r = this.renderer;
+    if (this.inkOpts && !this.split) { for (const c of this.chars) c.update(this.camera, t); this._renderInk(); return; }
     if (this.split) {
       const gap = 14, half = (H - gap) / 2;
       r.setScissorTest(true); r.setScissor(0, 0, W, H); r.setViewport(0, 0, W, H);
@@ -241,6 +311,7 @@ export class Stage {
     r.render(this.scene, this.camera);
   }
   dispose() {
+    if (this._ink) { this._ink.color.dispose(); this._ink.normal.dispose(); }
     this.scene.traverse(o => {
       if (o.geometry) o.geometry.dispose();
       if (o.material) [].concat(o.material).forEach(m => { if (m.map) m.map.dispose(); m.dispose(); });

@@ -628,10 +628,10 @@ def main():
         if music:
             cmd += ["-stream_loop", "-1", "-i", str(music)]
             # music sits under the narration and ducks when someone talks
-            af = (f"[1:a]aresample=44100,aformat=channel_layouts=stereo,apad,asplit=2[v][sc];"
+            af = (f"[1:a]aresample=44100,aformat=channel_layouts=stereo,apad,asplit=2[vo][sc];"
                   f"[2:a]aresample=44100,aformat=channel_layouts=stereo,volume={args.music_volume}[m];"
                   f"[m][sc]sidechaincompress=threshold=0.03:ratio=6:attack=20:release=300[md];"
-                  f"[v][md]amix=inputs=2:duration=first:normalize=0,"
+                  f"[vo][md]amix=inputs=2:duration=first:normalize=0,"
                   f"afade=t=out:st={total - 0.4:.2f}:d=0.4[a]")
         else:
             af = "[1:a]aresample=44100,aformat=channel_layouts=stereo,apad[a]"
