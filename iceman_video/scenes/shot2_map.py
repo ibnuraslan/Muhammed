@@ -112,7 +112,7 @@ L.new(c1.outputs[0], add.inputs[0]); L.new(c2.outputs[0], add.inputs[1])
 el = N.new("ShaderNodeMapRange"); el.inputs['From Min'].default_value = 300; el.inputs['From Max'].default_value = 2600
 L.new(sep.outputs['Z'], el.inputs['Value'])
 ramp = N.new("ShaderNodeValToRGB")
-ramp.color_ramp.elements[0].color = (0.42, 0.47, 0.55, 1); ramp.color_ramp.elements[1].color = (0.92, 0.93, 0.95, 1)
+ramp.color_ramp.elements[0].color = (0.66, 0.70, 0.76, 1); ramp.color_ramp.elements[1].color = (0.92, 0.93, 0.95, 1)
 L.new(el.outputs[0], ramp.inputs['Fac'])
 mix = N.new("ShaderNodeMix"); mix.data_type = 'RGBA'
 L.new(add.outputs[0], mix.inputs['Factor']); L.new(ramp.outputs['Color'], mix.inputs[6])
@@ -126,7 +126,7 @@ world_flat((0.6, 0.65, 0.75), 0.35)
 sun(28, 135, energy=3.2, color=(1.0, 0.98, 0.95), angle_deg=3)
 
 goal_w = to_world(goal[0] * D, goal[1] * D); start_w = to_world(start[0] * D, start[1] * D)
-cam = camera((0, 0, 0), (0, 0, 0), lens=40)
+cam = camera((0, 0, 0), (0, 0, 0), lens=50)
 cam.data.clip_end = 200000
 labels = {"discovery": tuple(goal_w), "start": tuple(start_w),
           "peak": tuple(to_world(int(0.56 * NN), int(0.50 * NN))),
@@ -136,8 +136,8 @@ proj = {}
 
 def frame(i, t):
     e = ease(t)
-    target = Vector(lerp(tuple(start_w * 0.55 + goal_w * 0.45), tuple(goal_w), e))
-    ang = math.radians(-115 + 20 * e)
+    target = Vector(lerp(tuple(start_w * 0.42 + goal_w * 0.58), tuple(goal_w), e))
+    ang = math.radians(-102 + 12 * e)
     distc = 15000 - 6000 * e
     cam.location = target + Vector((math.cos(ang) * distc * 0.65, math.sin(ang) * distc * 0.65, distc * 0.85))
     point_at(cam, target)

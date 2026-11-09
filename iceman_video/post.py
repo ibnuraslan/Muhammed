@@ -25,6 +25,7 @@ SHOTS = [  # (render dir, grade preset, particles preset)
     ("shot5_name", "deepnight", "topdown"),
 ]
 XFADE = 12  # frames of dissolve between shots
+ZOOM = {"shot2_map": 1.05}  # slight push-in crops the terrain tile's edge out of frame
 
 
 # ----------------------------------------------------------------------------- helpers
@@ -86,9 +87,11 @@ def stage1(shot, preset):
     for k, f in enumerate(files):
         save(grade(load(f), preset), os.path.join(g12, f"{k:04d}.png"))
     # motion-compensated interpolation 12 -> 24 fps, then lanczos upscale to delivery size
+    zoom = ZOOM.get(shot, 1.0)
+    zw, zh = int(W * zoom) // 2 * 2, int(H * zoom) // 2 * 2
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", "12", "-i", g12 + "/%04d.png",
                     "-vf", f"minterpolate=fps=24:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,"
-                           f"scale={W}:{H}:flags=lanczos,unsharp=5:5:0.35",
+                           f"scale={zw}:{zh}:flags=lanczos,crop={W}:{H},unsharp=5:5:0.35",
                     g24 + "/%04d.png"], check=True)
     return sorted(glob.glob(g24 + "/*.png"))
 
@@ -245,7 +248,10 @@ def captions(shot, t, dur, i, labels=None):
         k = i / 2.0; k0 = int(math.floor(k)); k1 = min(k0 + 1, len(labels) - 1); fr = k - k0
         def P(name):
             a_, b_ = labels[str(min(k0, len(labels) - 1))][name], labels[str(k1)][name]
-            return ((a_[0] * (1 - fr) + b_[0] * fr) * W, (a_[1] * (1 - fr) + b_[1] * fr) * H)
+            z = ZOOM.get(shot, 1.0)
+            u = (a_[0] * (1 - fr) + b_[0] * fr - 0.5) * z + 0.5
+            v = (a_[1] * (1 - fr) + b_[1] * fr - 0.5) * z + 0.5
+            return (u * W, v * H)
         def countries(d):
             for nm, txt in (("austria", "AUSTRIA"), ("italy", "ITALY")):
                 x, y = P(nm)
@@ -273,7 +279,7 @@ def captions(shot, t, dur, i, labels=None):
             lx, ly = x + 40, y - 70
             d.line([(x + 9, y - 9), (lx, ly), (lx + 150, ly)], fill=(214, 38, 30, 230), width=1)
             tracked(d, (lx + 4, ly - 24), "PLACE OF DISCOVERY", font(F_MED, 15), RED, 0.22)
-            tracked(d, (lx + 4, ly + 7), "3,210 M  ·  19 SEPT 1991", font(F_REG, 12), (60, 30, 30, 255), 0.22)
+            tracked(d, (lx + 4, ly + 7), "3,210 M  ·  19 SEPT 1991", font(F_MED, 13), (25, 22, 26, 255), 0.22)
         items.append((disc, reveal * window(t, 0, dur - 0.1, 0.3)))
     elif shot == "shot3_trail":
         al = window(t, 0.7, dur - 0.5, 0.9)
