@@ -28,9 +28,11 @@ const server = http.createServer((req, res) => {
   });
 });
 
+// flat (2D) episodes grade themselves: no extra saturation / vignette on top
+const FLAT = /export\s+const\s+flat\s*=\s*true/.test(fs.readFileSync(episode, 'utf8'));
 function encoder(out) {
   const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', '30', '-c:v', 'mjpeg', '-i', '-',
-    '-vf', 'eq=saturation=1.22:contrast=1.06,vignette=PI/6', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out], { stdio: ['pipe', 'inherit', 'inherit'] });
+    '-vf', FLAT ? 'null' : 'eq=saturation=1.22:contrast=1.06,vignette=PI/6', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', '-pix_fmt', 'yuv420p', out], { stdio: ['pipe', 'inherit', 'inherit'] });
   const done = new Promise((ok, bad) => ff.on('close', c => c === 0 ? ok() : bad(new Error('ffmpeg exited ' + c))));
   return { ff, done };
 }

@@ -13,6 +13,16 @@ if (q.get('w')) setSize(+q.get('w'), +q.get('h'));
 window.onerror = (m) => console.error('page error: ' + m);
 await document.fonts.load('900 40px Display');
 const ep = await import('/episode.js');
+if (ep.flat) {
+  // pure 2D episodes: each shot is draw(g, t, u) on a plain canvas (no WebGL)
+  const { W, H } = await import('/animator/engine.js');
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H; document.body.appendChild(cv);
+  const g = cv.getContext('2d'); let draw = null, frames = 1;
+  window.shotIds = () => Object.keys(ep.shots);
+  window.setupShot = (id, n) => { const make = ep.shots[id]; if (!make) return false; frames = n; draw = make({ W, H, dur: n / FPS, g }); return true; };
+  window.renderFrame = (i) => { const t = i / FPS, u = frames > 1 ? i / (frames - 1) : 0; g.setTransform(1, 0, 0, 1, 0, 0); draw(g, t, u); return cv.toDataURL('image/jpeg', 0.93); };
+  window.ready = true;
+} else {
 const renderer = makeRenderer();
 let stage = null, frames = 1;
 const hash = s => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
@@ -32,5 +42,6 @@ window.renderFrame = (i) => {
   return renderer.domElement.toDataURL('image/jpeg', 0.93);
 };
 window.ready = true;
+}
 </script>
 </body></html>

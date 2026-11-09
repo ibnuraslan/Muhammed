@@ -71,9 +71,25 @@ export class Person {
   }
 
   // ------------------------------------------------------------------------------------------ drawing
-  draw(t, blinkOn, talkOpen) {
-    const g = this.g, d = this.d, p = this.p;
-    g.clearRect(0, 0, CW, CH);
+  // draw straight into a 2D scene (flat episodes): x,y = feet position, s = pixels per canvas pixel
+  drawInto(g, x, y, s, t) {
+    const p = this.p;
+    this._aim = { R: p.aimRc || null, L: p.aimLc || null };
+    const blinkOn = p.blink && ((t + this.seed * 0.71) % 3.3) < 0.12;
+    const talkOpen = p.talk ? (0.5 + 0.5 * Math.sin(t * 22 + this.seed)) * p.talk : 0;
+    if (p.inShadow > 0) {     // the in-shadow tint must only touch the figure: draw it offscreen first
+      if (!this._off) { this._off = document.createElement('canvas'); }
+      const o = this._off; o.width = Math.ceil(CW * s); o.height = Math.ceil(CH * s);
+      const og = o.getContext('2d'); og.setTransform(s, 0, 0, s, 0, 0); this.draw(t, blinkOn, talkOpen, og);
+      g.drawImage(o, x - CW / 2 * s, y - 1255 * s);
+    } else {
+      g.save(); g.translate(x - CW / 2 * s, y - 1255 * s); g.scale(s, s); this.draw(t, blinkOn, talkOpen, g); g.restore();
+    }
+  }
+
+  draw(t, blinkOn, talkOpen, target) {
+    const g = target || this.g, d = this.d, p = this.p;
+    if (!target) g.clearRect(0, 0, CW, CH);
     g.lineJoin = 'round'; g.lineCap = 'round';
     const B = d.build, cx = CW / 2;
     const turn = p.view === 'back' ? 0 : clamp(p.turn, -1, 1);              // -1 left .. 1 right (three-quarter)
@@ -173,6 +189,7 @@ export class Person {
       g.save(); g.translate(...A.hand); g.rotate(A.dir - Math.PI / 2);
       g.beginPath(); g.ellipse(0, 16, 23, 29, 0, 0, 7); g.fill(); g.stroke();
       g.beginPath(); g.ellipse(side * 18, 4, 9, 15, side * 0.6, 0, 7); g.fill(); g.stroke();
+      g.strokeStyle = 'rgba(40,25,20,0.55)'; g.lineWidth = 2.5; for (const fxp of [-9, 0, 9]) { g.beginPath(); g.moveTo(fxp, 26); g.lineTo(fxp * 1.1, 44); g.stroke(); }
       g.restore();
       const item = side > 0 ? p.hold : p.holdL;
       if (item) drawItem(g, item, A.hand, A.dir, t);
@@ -298,6 +315,13 @@ function drawHead(g, d, p, [hx, hy], turn, back, blinkOn, talkOpen, t, seed) {
     // eyes
     const ex = 27, ey = -4;
     const expr = p.expr;
+    if (p.eyeShadow) {      // deep, shadowed eye sockets (the creepy look)
+      g.save(); g.clip(face);
+      for (const s of [-1, 1]) { const gr = g.createRadialGradient(fx + s * ex, ey, 2, fx + s * ex, ey, 34);
+        gr.addColorStop(0, `rgba(25,18,22,${0.85 * p.eyeShadow})`); gr.addColorStop(0.6, `rgba(30,22,26,${0.55 * p.eyeShadow})`); gr.addColorStop(1, 'rgba(30,22,26,0)');
+        g.fillStyle = gr; g.beginPath(); g.ellipse(fx + s * ex, ey - 2, 36, 26, 0, 0, 7); g.fill(); }
+      g.restore();
+    }
     for (const s of [-1, 1]) {
       const far = turn * s < -0.2, sc = far ? 0.8 : 1;
       const x = fx + s * ex * (1 - Math.abs(turn) * 0.15) * (far ? 0.85 : 1);
@@ -311,6 +335,12 @@ function drawHead(g, d, p, [hx, hy], turn, back, blinkOn, talkOpen, t, seed) {
     g.strokeStyle = INK; g.lineWidth = 3.5;
     g.beginPath(); g.moveTo(fx + turn * 6, ey + 4); g.quadraticCurveTo(fx + turn * 22 + 2, ey + 34, fx + turn * 14 - 6, ey + 40); g.stroke();
     g.beginPath(); g.moveTo(fx + turn * 14 - 8, ey + 42); g.quadraticCurveTo(fx + turn * 14, ey + 46, fx + turn * 14 + 9, ey + 41); g.stroke();
+    // nostrils + bridge shading, cheek / smile lines
+    g.fillStyle = 'rgba(90,50,40,0.25)'; g.beginPath(); g.ellipse(fx + turn * 18 + (turn >= 0 ? -6 : 6), ey + 26, 6, 15, 0, 0, 7); g.fill();
+    if (['smile', 'creepy', 'smug'].includes(expr) || d.age > 0.3) {
+      g.strokeStyle = 'rgba(60,30,25,0.45)'; g.lineWidth = 3;
+      for (const s of [-1, 1]) { g.beginPath(); g.moveTo(fx + s * 20, ey + 36); g.quadraticCurveTo(fx + s * (expr === 'creepy' ? 40 : 30), ey + 54, fx + s * (expr === 'creepy' ? 38 : 26), ey + 70); g.stroke(); }
+    }
     // age lines / bags
     if (d.age > 0.4) { g.strokeStyle = 'rgba(60,30,20,0.4)'; g.lineWidth = 2.5; for (let i = 0; i < 2; i++) { g.beginPath(); g.moveTo(fx - 24, -46 - i * 9); g.quadraticCurveTo(fx, -50 - i * 9, fx + 24, -46 - i * 9); g.stroke(); } }
     if (d.age > 0.2 || expr === 'tired') { g.strokeStyle = 'rgba(70,40,30,0.35)'; g.lineWidth = 2.5; for (const s of [-1, 1]) { g.beginPath(); g.arc(fx + s * ex, ey + 10, 11, 0.3, Math.PI - 0.3); g.stroke(); } }
@@ -334,8 +364,11 @@ function drawEye(g, x, y, sc, expr, iris, look) {
   g.save(); g.translate(x, y); g.scale(sc, sc);
   g.strokeStyle = INK; g.lineWidth = 3.5;
   if (expr === 'closed') { g.beginPath(); g.moveTo(-12, 2); g.quadraticCurveTo(0, 8, 12, 2); g.stroke(); g.restore(); return; }
+  if (expr === 'yawn') { g.lineWidth = 4; g.beginPath(); g.moveTo(-13, 0); g.quadraticCurveTo(0, 6, 13, -2); g.stroke(); g.beginPath(); g.moveTo(-10, 6); g.lineTo(10, 4); g.stroke(); g.restore(); return; }
   const wide = expr === 'scared' || expr === 'scream' || expr === 'shock';
-  const h = wide ? 11 : expr === 'angry' || expr === 'focused' || expr === 'smug' ? 6 : 8, w = 14;
+  const h = wide ? 11 : expr === 'angry' || expr === 'focused' || expr === 'smug' || expr === 'creepy' ? 6 : 8, w = 14;
+  // crease above the eye
+  g.save(); g.strokeStyle = 'rgba(60,35,30,0.45)'; g.lineWidth = 2.5; g.beginPath(); g.moveTo(-w + 2, -h * 1.1); g.quadraticCurveTo(0, -h * 2.1, w - 1, -h * 1.0); g.stroke(); g.restore();
   g.fillStyle = '#fbfaf6'; g.beginPath(); g.moveTo(-w, 0); g.quadraticCurveTo(0, -h * 1.6, w, 0); g.quadraticCurveTo(0, h * 1.2, -w, 0); g.fill(); g.stroke();
   const ir = wide ? 5.5 : 7;
   g.fillStyle = iris; g.beginPath(); g.arc(look * 5, 0, ir, 0, 7); g.fill();
@@ -356,6 +389,14 @@ function drawMouth(g, x, y, expr, open) {
     case 'scared': O(10, 12, false); break;
     case 'shock': O(11, 15, false); break;
     case 'scream': O(20, 26, true); break;
+    case 'yawn': O(14, 30, false); break;
+    case 'creepy': {   // a wide, too-happy grin with teeth
+      g.beginPath(); g.moveTo(x - 36, y - 8); g.quadraticCurveTo(x, y + 30, x + 36, y - 8); g.quadraticCurveTo(x, y + 4, x - 36, y - 8); g.closePath();
+      g.fillStyle = '#3a1414'; g.fill(); g.save(); g.clip();
+      g.fillStyle = '#efe6c8'; g.fillRect(x - 40, y - 12, 80, 16); g.strokeStyle = 'rgba(80,60,40,0.7)'; g.lineWidth = 2;
+      for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(x + i * 10, y - 10); g.lineTo(x + i * 10, y + 4); g.stroke(); }
+      g.restore(); g.strokeStyle = INK; g.lineWidth = 4; g.beginPath(); g.moveTo(x - 36, y - 8); g.quadraticCurveTo(x, y + 30, x + 36, y - 8); g.quadraticCurveTo(x, y + 4, x - 36, y - 8); g.stroke();
+      break; }
     case 'talk': O(12, 4 + open * 10, open > 0.5); break;
     case 'asleep': g.beginPath(); g.moveTo(x - 10, y + 2); g.lineTo(x + 10, y + 2); g.stroke(); break;
     default: g.beginPath(); g.moveTo(x - 15, y + 1); g.quadraticCurveTo(x, y + 4, x + 15, y); g.stroke();
