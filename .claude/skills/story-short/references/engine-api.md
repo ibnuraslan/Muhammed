@@ -110,6 +110,23 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
 - cast: `'detective'` (the Hero in a trench coat + fedora), `portraitCanvas(design, {label, mugshot, bg})`, items `spoon`, `flashlight`, `folder`.
 - Example: `projects/alcatraz-escape/test.js` (the 4-shot look test).
 
+## Road / true-crime kit
+- `kits/road.js`: `duskSky(S, o)`, `prairie(S, {night, poles})` (highway along x at z=0, lanes z=±1.8),
+  `makeBus({name, dest, lit})` (front +x, door on the +z side at x≈5.5; `userData.windows`, `door`, `tail`),
+  `busInterior(S, {night})` (aisle along x, rows x=-5.4+i*0.95, seats face +x, window seats z=±0.95,
+  aisle seats z=±0.5, cushion y=0.54; `userData.light` to flicker; the view scrolls),
+  `policeCar(S, x, z, {rotY})` (strobing red/blue), `semiTruck(S, x, z)`, `glassShards(S, pos)` (`.userData.burst(k)`).
+- `kits/investigation.js`: `censorBadge(S, {size, text})` (`.userData.show(k)`), `courtroom(S)` (bench at z=-4.8).
+- cast: `silhouette: true` (a dark figure, glowing eyes, no face/mouth), `headphones: true`, items `crowbar`, `gavel`.
+- Seated passenger in a bus seat: `pos: [row + 0.12, 0.22, z], seat: 1`.
+- Dark scenes: hide the sky dome (`S.dome.visible = false; S.scene.background = ...`), or a daylight sky leaks in.
+
+## Sound design (no audio files needed)
+- `projects/<slug>/sound.json` + `python3 tools/sound_design.py projects/<slug>` → `music.wav` (drone, ducked
+  under the voice) and `sfx.wav` (cues at full level). Cue types: sting, hit, glass, thud, zap, whoosh, shimmer;
+  `heartbeat: {from, to}` speeds up between two shots. Run `--timings-only` first.
+- `make_short.py` picks up `music.wav` and `sfx.wav` automatically (`--music-volume`, `--sfx`).
+
 ## Wishlist (build when a story needs it)
 railroad + train, canyon walls, city street, factory, kitchen, castle, ship deck, night
 lighting, rain, dust/smoke particles, heat shimmer, x-ray cutaway shader, map/chart metaphor set.

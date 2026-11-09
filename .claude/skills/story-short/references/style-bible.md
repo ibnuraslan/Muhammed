@@ -74,6 +74,18 @@ face, a rounded body, and thin black stick arms and legs.
 | sad / mocked | `eyes:'dot', brow:-0.6, mouth:'flat'`, arms down |
 | smug | `mouth:'smirk'`, arms spread `2.3` |
 
+## True crime / horror rules (real cases)
+- **Never show gore**: no wounds, blood, body parts or killing on screen. Horror comes from
+  dread: silhouettes, glowing eyes, flickering lights, reactions, sound, and what's *not* shown.
+- Wherever another channel would show gore, cut to **reactions** or cover the spot with the
+  **censor badge** (`censorBadge()`: our logo, the fedora and glasses, with "CENSORED").
+- **Perpetrators** of real crimes are shown only as a **silhouette** (`silhouette: true`: no face,
+  faint glowing eyes). No caricatures, and never mock mental illness.
+- **Victims** get a simple, respectful design and their correct name. End on the human side (family, justice question).
+- **Every fact is verified** (research.md with sources in the project). Get names right. Use a generic vehicle and
+  company livery on screen even when the narration names the company.
+- Titles and thumbnails: intriguing, not gory. Viewers and YouTube both punish "killed and eaten" style titles.
+
 ## Lighting presets
 - **Day exterior:** `S.sky({ top:'#2f6fd6', horizon:'#cfe6ff', sun:[-60,70,50] })`
 - **Interior (office):** `S.sky({ hemi:1.5, fog:null, sun:[-20,30,40], shadow:15 })`

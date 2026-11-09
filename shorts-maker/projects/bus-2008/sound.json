@@ -1,0 +1,17 @@
+{
+  "drone": 1.0,
+  "heartbeat": {"from": "06", "to": "09", "gain": 0.9},
+  "cues": [
+    {"shot": "01", "at": 0.0, "type": "whoosh", "gain": 0.6},
+    {"shot": "07", "at": 0.15, "type": "hit", "gain": 0.7},
+    {"shot": "08", "at": 0.5, "type": "shimmer"},
+    {"shot": "09", "at": 0.18, "type": "sting"},
+    {"shot": "13", "at": 0.15, "type": "hit"},
+    {"shot": "17", "at": 0.55, "type": "sting", "gain": 0.6},
+    {"shot": "19", "at": 0.45, "type": "glass"},
+    {"shot": "20", "at": 0.45, "type": "zap"},
+    {"shot": "20", "at": 0.6, "type": "zap"},
+    {"shot": "23", "at": 0.55, "type": "thud"},
+    {"shot": "25", "at": 0.0, "type": "whoosh", "gain": 0.5}
+  ]
+}

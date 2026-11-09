@@ -202,7 +202,7 @@ export class Char {
     const hr = d.headR, hx = cx + lean * 1.3, hy = 245;
     const sq = 1 + p.squash;
     g.save(); g.translate(hx, hy); g.scale(1 / sq, sq);
-    const skin = mixColor('#ffffff', p.anger > 0.6 ? '#9a3fb8' : '#e2483c', p.anger > 0.6 ? (p.anger - 0.6) / 0.4 : p.anger / 0.6 * 0.85, p.anger > 0.6 ? '#e2483c' : null);
+    const skin = d.silhouette ? '#141418' : mixColor('#ffffff', p.anger > 0.6 ? '#9a3fb8' : '#e2483c', p.anger > 0.6 ? (p.anger - 0.6) / 0.4 : p.anger / 0.6 * 0.85, p.anger > 0.6 ? '#e2483c' : null);
     if (d.ears) {
       // pencil tucked behind the right ear: drawn first so the ear and head cover all but the eraser end
       if (d.pencil) drawPencil(g, hr * 0.97, -10, 0.55);
@@ -214,6 +214,7 @@ export class Char {
     }
     g.fillStyle = skin; g.strokeStyle = INK; g.lineWidth = 8;
     g.beginPath(); g.arc(0, 0, hr, 0, Math.PI * 2); g.fill(); g.stroke();
+    if (d.silhouette) { g.strokeStyle = '#3c3c48'; g.lineWidth = 6; g.beginPath(); g.arc(0, 0, hr - 4, 0, Math.PI * 2); g.stroke(); }
     if (d.bald) {
       g.fillStyle = 'rgba(255,255,255,0.55)'; g.beginPath(); g.ellipse(-50, -90, 40, 18, -0.5, 0, 7); g.fill();
       g.strokeStyle = '#3a3a3a'; g.lineWidth = 5;
@@ -222,7 +223,15 @@ export class Char {
     // face
     const fx = (p.look || 0) * 45, ey = -12, sep = 54;
     const eyes = blinkOn ? 'closed' : p.eyes;
-    for (const s of [-1, 1]) drawEye(g, fx + s * sep, ey, eyes, skin);
+    if (d.silhouette) {
+      // a figure with no face: two faint glowing eyes only
+      for (const sd of [-1, 1]) {
+        const gl = g.createRadialGradient(fx + sd * sep, ey, 2, fx + sd * sep, ey, 34);
+        gl.addColorStop(0, 'rgba(255,245,200,0.95)'); gl.addColorStop(0.35, 'rgba(255,220,150,0.45)'); gl.addColorStop(1, 'rgba(255,200,120,0)');
+        g.fillStyle = gl; g.beginPath(); g.arc(fx + sd * sep, ey, 34, 0, 7); g.fill();
+        if (eyes !== 'closed') { g.fillStyle = '#fffbe8'; g.beginPath(); g.ellipse(fx + sd * sep, ey, 9, 5, 0, 0, 7); g.fill(); }
+      }
+    } else for (const s of [-1, 1]) drawEye(g, fx + s * sep, ey, eyes, skin);
     // brows
     const brow = p.brow + (d.brows === 'bushy' ? 0.0001 : 0);
     if (Math.abs(brow) > 0.05 || d.brows === 'bushy') {
@@ -249,7 +258,7 @@ export class Char {
     const my = 72;
     let mouth = p.mouth;
     if (talkOpen > 0.05) mouth = d.mustache === 'walrus' ? 'shout' : 'open';
-    drawMouth(g, fx, my, mouth, Math.max(talkOpen, mouth === 'shout' || mouth === 'open' ? 0.7 : 0));
+    if (!d.silhouette) drawMouth(g, fx, my, mouth, Math.max(talkOpen, mouth === 'shout' || mouth === 'open' ? 0.7 : 0));
     if (d.mustache === 'walrus') {
       g.fillStyle = '#e8e8e8'; g.strokeStyle = INK; g.lineWidth = 5;
       for (const s of [-1, 1]) { g.beginPath(); g.ellipse(fx + s * 36, my - 22, 46, 24, s * 0.25, 0, 7); g.fill(); g.stroke(); }
@@ -260,6 +269,10 @@ export class Char {
     if (p.sweat) { g.fillStyle = '#8fd0ff'; g.strokeStyle = INK; g.lineWidth = 4; g.beginPath(); g.moveTo(hr * .62, -hr * .55); g.quadraticCurveTo(hr * .78, -hr * .3, hr * .66, -hr * .25); g.quadraticCurveTo(hr * .52, -hr * .3, hr * .62, -hr * .55); g.fill(); g.stroke(); }
     // hair / hats
     drawHair(g, d, hr);
+    if (d.headphones) {
+      g.strokeStyle = '#2b2b30'; g.lineWidth = 16; g.beginPath(); g.arc(0, -6, hr * 1.04, Math.PI * 1.08, Math.PI * 1.92); g.stroke();
+      for (const sd of [-1, 1]) { g.fillStyle = '#2b2b30'; g.strokeStyle = INK; g.lineWidth = 5; roundRect(g, sd * hr - 22, -34, 44, 74, 16); g.fill(); g.stroke(); g.fillStyle = '#c0392b'; g.fillRect(sd * hr - 6, -10, 12, 26); }
+    }
     if (d.pencil && !d.ears) { g.save(); g.translate(hr * 0.86, -hr * 0.35); g.rotate(-0.9); g.fillStyle = '#f4c430'; g.strokeStyle = INK; g.lineWidth = 4; g.fillRect(-10, -60, 20, 110); g.strokeRect(-10, -60, 20, 110); g.fillStyle = '#f2b8a0'; g.beginPath(); g.moveTo(-10, 50); g.lineTo(10, 50); g.lineTo(0, 78); g.closePath(); g.fill(); g.stroke(); g.restore(); }
     g.restore();
     // steam puffs
@@ -382,6 +395,8 @@ function drawItem(g, item, x, y, a, t, rot) {
     case 'spoon': turn(-0.4); g.fillStyle = '#d6dde5'; g.fillRect(-6, -110, 12, 100); g.strokeRect(-6, -110, 12, 100); g.beginPath(); g.ellipse(0, -130, 20, 28, 0, 0, 7); g.fill(); g.stroke(); break;
     case 'flashlight': turn(-1.2); g.fillStyle = '#2b2b2b'; g.fillRect(-14, -100, 28, 110); g.strokeRect(-14, -100, 28, 110); g.fillStyle = '#ffe680'; g.beginPath(); g.ellipse(0, -104, 20, 9, 0, 0, 7); g.fill(); g.stroke(); break;
     case 'folder': g.fillStyle = '#d8b878'; g.fillRect(-80, -150, 160, 120); g.strokeRect(-80, -150, 160, 120); g.fillStyle = '#c0392b'; g.font = '900 26px Display, sans-serif'; g.fillText('FBI', -25, -85); break;
+    case 'crowbar': turn(-0.2); g.strokeStyle = '#b3261e'; g.lineWidth = 14; g.beginPath(); g.moveTo(0, 60); g.lineTo(0, -120); g.quadraticCurveTo(0, -150, 30, -150); g.stroke(); g.strokeStyle = INK; g.lineWidth = 4; break;
+    case 'gavel': turn(a > 1.5 ? Math.PI - a : -0.3); g.fillStyle = '#6b4226'; g.fillRect(-7, -110, 14, 120); g.strokeRect(-7, -110, 14, 120); g.fillRect(-40, -140, 80, 34); g.strokeRect(-40, -140, 80, 34); break;
     case 'paddle': turn(-0.3); g.fillStyle = '#b08a5a'; g.fillRect(-7, -150, 14, 260); g.strokeRect(-7, -150, 14, 260); g.beginPath(); g.ellipse(0, 140, 26, 60, 0, 0, 7); g.fill(); g.stroke(); break;
     case 'ticket': g.fillStyle = '#ffe48a'; g.fillRect(-40, -60, 80, 50); g.strokeRect(-40, -60, 80, 50); break;
   }

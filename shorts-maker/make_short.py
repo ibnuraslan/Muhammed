@@ -473,6 +473,7 @@ def main():
                     help="episode file with animated 3D shots (default: <project>/animation.js if present)")
     ap.add_argument("--music", type=Path, help="background music (default: <project>/music.mp3 if present)")
     ap.add_argument("--music-volume", type=float, default=0.18)
+    ap.add_argument("--sfx", type=Path, help="sound-effects track mixed at full level, not ducked (default: <project>/sfx.wav if present)")
     ap.add_argument("--font", default="Montserrat ExtraBold")
     ap.add_argument("--font-size", type=int, default=116)
     ap.add_argument("--outline", type=float, default=8)
@@ -622,6 +623,7 @@ def main():
                                     if (proj / n).exists()), None)
         ass_arg = str(ass).replace("\\", "/").replace(":", r"\:")
         vf = f"subtitles=filename='{ass_arg}':fontsdir='{FONTS_DIR}'"
+        sfx = args.sfx or (proj / "sfx.wav" if (proj / "sfx.wav").exists() else None)
         cmd = ["ffmpeg", "-y", "-i", str(joined), "-i", str(voice_path)]
         if music:
             cmd += ["-stream_loop", "-1", "-i", str(music)]
@@ -633,6 +635,11 @@ def main():
                   f"afade=t=out:st={total - 0.4:.2f}:d=0.4[a]")
         else:
             af = "[1:a]aresample=44100,aformat=channel_layouts=stereo,apad[a]"
+        if sfx:
+            # sound effects sit on top, never ducked
+            n = 3 if music else 2
+            cmd += ["-i", str(sfx)]
+            af = af.replace("[a]", "[pre]") + f";[{n}:a]aresample=44100,aformat=channel_layouts=stereo,apad[fx];[pre][fx]amix=inputs=2:duration=first:normalize=0[a]"
         cmd += ["-filter_complex", f"[0:v]{vf}[v];{af}", "-map", "[v]", "-map", "[a]",
                 "-t", f"{total:.3f}", "-c:v", "libx264", "-preset", "medium", "-crf", "18",
                 "-pix_fmt", "yuv420p", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k",

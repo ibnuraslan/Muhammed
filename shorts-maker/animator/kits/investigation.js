@@ -154,3 +154,48 @@ export function titleCard(S, title, { sub = '', y = 0.12, color = '#f3ead2', sub
   grp.userData.fade(0);
   return grp;
 }
+
+// ---------------------------------------------------------------- censor badge (channel logo) that hides what we never show
+// A round badge that always faces the camera and draws on top. badge.userData.show(k): k = seconds since it appears (<0 hides).
+export function censorBadge(S, { size = 1.2, text = 'CENSORED', sub = 'THE INVESTIGATOR' } = {}) {
+  const tex = canvasTex(512, 512, (g, w, h) => {
+    const cx = w / 2, cy = h / 2;
+    g.fillStyle = '#0d0d10'; g.beginPath(); g.arc(cx, cy, 240, 0, 7); g.fill();
+    g.lineWidth = 18; g.strokeStyle = '#c0262d'; g.beginPath(); g.arc(cx, cy, 228, 0, 7); g.stroke();
+    g.lineWidth = 4; g.strokeStyle = 'rgba(192,38,45,0.6)'; g.beginPath(); g.arc(cx, cy, 200, 0, 7); g.stroke();
+    // logo: fedora + round glasses
+    g.fillStyle = '#e9e1cf';
+    g.beginPath(); g.ellipse(cx, cy - 58, 120, 20, 0, 0, 7); g.fill();
+    g.beginPath(); g.moveTo(cx - 62, cy - 62); g.lineTo(cx - 54, cy - 140); g.quadraticCurveTo(cx, cy - 122, cx + 54, cy - 140); g.lineTo(cx + 62, cy - 62); g.closePath(); g.fill();
+    g.fillStyle = '#c0262d'; g.fillRect(cx - 60, cy - 86, 120, 14);
+    g.strokeStyle = '#e9e1cf'; g.lineWidth = 9;
+    for (const s of [-1, 1]) { g.beginPath(); g.arc(cx + s * 40, cy - 14, 28, 0, 7); g.stroke(); }
+    g.beginPath(); g.moveTo(cx - 12, cy - 16); g.lineTo(cx + 12, cy - 16); g.stroke();
+    g.fillStyle = '#ffffff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = '900 58px Display, sans-serif'; g.fillText(text, cx, cy + 62, 380);
+    g.fillStyle = '#c0262d'; g.font = '800 24px Display, sans-serif'; g.fillText(sub, cx, cy + 112, 330);
+  });
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(size, size), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, toneMapped: false }));
+  m.renderOrder = 15000; m.visible = false; S.add(m);
+  m.userData.show = (k) => {
+    m.visible = k >= 0; if (!m.visible) return;
+    m.quaternion.copy(S.camera.quaternion);
+    const pop = k < 0.12 ? ease.back(k / 0.12) : 1 + Math.sin(k * 6) * 0.015;
+    m.scale.setScalar(pop);
+  };
+  return m;
+}
+
+// ---------------------------------------------------------------- courtroom (judge's bench on the back wall z=-6, floor y=0)
+export function courtroom(S) {
+  const wood = toon(0x6b4226), dark = toon(0x3f2716), wall = toon(0xc9b89a);
+  S.add(box(20, 0.1, 16, toon(0x5a3a26), [0, -0.05, 0]));
+  S.add(box(20, 8, 0.3, wall, [0, 4, -6.2]));
+  for (let x = -8; x <= 8; x += 2) S.add(box(0.25, 8, 0.4, dark, [x, 4, -6.0]));
+  S.add(box(5, 1.8, 1.4, wood, [0, 0.9, -4.8])); S.add(box(5.2, 0.15, 1.6, dark, [0, 1.85, -4.8]));          // bench
+  S.add(box(1.4, 2.6, 0.2, dark, [0, 2.2, -5.9]));                                                          // judge chair back
+  const crest = textPlane('COURT', { w: 2.2, h: 0.5, fg: '#d9b45a', font: 'Display, sans-serif', size: 0.7 }); crest.position.set(0, 5.6, -6.0); S.add(crest);
+  S.add(box(3, 0.9, 1, wood, [-3, 0.45, -1.2])); S.add(box(3, 0.9, 1, wood, [3, 0.45, -1.2]));               // counsel tables
+  for (let i = 0; i < 4; i++) S.add(box(6, 0.9, 0.4, dark, [-4 + (i % 2) * 8, 0.45, 2 + Math.floor(i / 2) * 1.6]));   // public benches
+  const lamp = new THREE.PointLight(0xffe2b0, 30, 22, 1.4); lamp.position.set(0, 6.5, -1); S.add(lamp);
+}
