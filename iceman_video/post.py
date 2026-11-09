@@ -319,6 +319,7 @@ def scrim(a, cx, cy, rx, ry, strength):
 SCRIMS = {  # shot -> (cx, cy, rx, ry, strength, caption window start, end)
     "shot1_peaks": (200, H - 95, 420, 120, 0.55, 0.9, -0.6),
     "shot4_axe": (W - 200, 220, 360, 150, 0.35, 0.9, -0.4),
+    "shot3_trail": (W / 2, H / 2 - 12, 520, 120, 0.45, 0.7, -0.5),
 }
 
 
