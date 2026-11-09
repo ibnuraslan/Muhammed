@@ -301,6 +301,21 @@ def captions(shot, t, dur, i, labels=None):
     return items
 
 
+# ----------------------------------------------------------------------------- caption scrim
+def scrim(a, cx, cy, rx, ry, strength):
+    """Soft elliptical darkening behind captions so thin type stays legible over bright snow."""
+    if strength <= 0.002:
+        return a
+    m = np.exp(-(((XX - cx) / rx) ** 2 + ((YY - cy) / ry) ** 2) * 1.5)[..., None]
+    return a * (1 - m * strength)
+
+
+SCRIMS = {  # shot -> (cx, cy, rx, ry, strength, caption window start, end)
+    "shot1_peaks": (200, H - 95, 420, 120, 0.55, 0.9, -0.6),
+    "shot4_axe": (W - 200, 220, 360, 150, 0.35, 0.9, -0.4),
+}
+
+
 # ----------------------------------------------------------------------------- horizon haze (shot 3)
 def horizon_haze(a, t):
     band = np.exp(-((YY - H * 0.33) / (H * 0.07)) ** 2)[..., None]
@@ -335,6 +350,9 @@ def main():
                     tint = np.array(snow.cfg["tint"])
                     a = 1 - (1 - a) * (1 - np.clip(sl, 0, 1)[..., None] * tint)
                 a = film(a, i, bloom=0.3 if shot in ("shot1_peaks", "shot4_axe") else 0.15)
+                if shot in SCRIMS:
+                    cx, cy, rx, ry, st, ta, tb = SCRIMS[shot]
+                    a = scrim(a, cx, cy, rx, ry, st * window(t, ta, dur + tb, 0.8))
                 a = overlay(a, captions(shot, t, dur, i, labels))
                 save(a, os.path.join(outd, f"{i:04d}.png"))
                 if i % 24 == 0:
