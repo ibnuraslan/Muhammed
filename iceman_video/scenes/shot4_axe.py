@@ -237,14 +237,16 @@ fire_d = bpy.data.lights.new("Fire", 'POINT'); fire_d.energy = 5; fire_d.color =
 fire = bpy.data.objects.new("Fire", fire_d); bpy.context.collection.objects.link(fire)
 fire.location = (-0.9, -0.6, 0.15)
 
-cam = camera((0, 0, 0), (0, 0, 0), lens=55, dof_dist=0.4, fstop=2.4)
+cam = camera((0, 0, 0), (0, 0, 0), lens=55, dof_dist=0.4, fstop=3.2)
+# focus locked on the copper blade's centre (bmesh verts are in world space; object has identity transform)
+blade_c = sum((v.co for v in blade.data.vertices), Vector()) / len(blade.data.vertices)
 
 def frame(i, t):
     e = ease(t)
     cam.location = lerp((0.52, -0.26, 0.30), (0.46, -0.10, 0.24), e)
     look = lerp((0.16, 0.05, 0.0), (0.18, 0.06, 0.008), e)
     point_at(cam, look)
-    cam.data.dof.focus_distance = (Vector(cam.location) - Vector((0.24, 0.10, 0.012))).length
+    cam.data.dof.focus_distance = (Vector(cam.location) - blade_c).length
     fl = 1 + 0.18 * math.sin(i * 1.7) + 0.12 * math.sin(i * 4.3 + 1) + 0.08 * math.sin(i * 9.1)
     fire_d.energy = 5 * fl
 
