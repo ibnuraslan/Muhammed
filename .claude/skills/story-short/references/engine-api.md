@@ -110,6 +110,23 @@ export const shots = { '01': (S) => { /* build */ return (t, u) => { /* animate 
 - cast: `'detective'` (the Hero in a trench coat + fedora), `portraitCanvas(design, {label, mugshot, bg})`, items `spoon`, `flashlight`, `folder`.
 - Example: `projects/alcatraz-escape/test.js` (the 4-shot look test).
 
+## Illustrated style (default for horror / true crime / investigations)
+- `S.ink({thickness, normal, depth, alpha})`: ink outlines on every edge (normal + depth edge detection).
+  Turn it on in every shot, together with `S.grade(...)`.
+- `people.js`: `new Person(S, look, {pos, h, seed, shadow})` with realistic proportions and detailed faces.
+  - Look fields: `skin` (SKIN.light|fair|tan|brown|dark), `hair` (short|buzz|spiky|side|bob|long|bun|bald),
+    `hairColor`, `hat` (police|cap|fedora|beanie), `top` (tshirt|long|hoodie|jacket|uniform|suit|robe|trench),
+    `topColor`, `top2`, `tie`, `pants`, `shoes`, `build`, `height`, `age` 0..1, `stubble`, `beard`, `glasses`, `headphones`, `pencil`.
+    `'investigator'` is the main character (fedora, glasses, mustard vest, trench coat).
+  - Pose (`.set`): `view` front|back, `turn` -1..1 (three-quarter), `expr` neutral|smile|smug|sad|tired|angry|focused|scared|shock|scream|asleep,
+    `armL/armR: [shoulderAngle, elbowBend]` (FK) or `aimR/aimL: [x,y,z]` (IK hand target), `legL/legR`, `walking`+`walk`,
+    `run`+`walk`, `seat` 0..1, `kneel` 0..1, `lean`, `tilt` (head), `talk`, `sweat`, `tears`, `hold/holdL`
+    (flashlight|taser|phone|gavel|papers|hammer|crowbar|photo), `seatHideLegs`, `inShadow` 0..1.
+  - **Real perpetrators: `inShadow: 1`.** The whole figure sinks into blue-black (works for any skin tone),
+    with an eye glint. Never darken just the face (it reads as skin colour).
+  - Seated in a bus seat: `pos: [row + 0.15, -0.12, z], seat: 1`.
+- Example episode: `projects/bus-2008-v2/animation.js` (39 scenes).
+
 ## Road / true-crime kit
 - `kits/road.js`: `duskSky(S, o)`, `prairie(S, {night, poles})` (highway along x at z=0, lanes z=±1.8),
   `makeBus({name, dest, lit})` (front +x, door on the +z side at x≈5.5; `userData.windows`, `door`, `tail`),
