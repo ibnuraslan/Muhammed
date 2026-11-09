@@ -302,7 +302,7 @@ def captions(shot, t, dur, i, labels=None):
     elif shot == "shot5_name":
         al = window(t, 2.2, dur + 1, 0.9)
         def f(d):
-            tracked(d, (W / 2, H - 92), "THE MAN FROM THE ICE", font(F_LIGHT, 18), WHITE, 0.55, "c")
+            tracked(d, (W / 2, H - 58), "THE MAN FROM THE ICE", font(F_LIGHT, 18), WHITE, 0.55, "c")
         items.append((f, al))
     return items
 

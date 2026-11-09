@@ -11,8 +11,8 @@ arg = lambda k, d: type(d)(sys.argv[sys.argv.index(k) + 1]) if k in sys.argv els
 OUT = arg('--out', '/tmp/shot5'); FRAMES = arg('--frames', 1); STEP = arg('--step', 1)
 s = reset(samples=arg('--samples', 32), exposure=-0.4)
 
-W, Hh = 4.0, 2.4                      # metres
-NX, NY = 1500, 900
+W, Hh = 7.0, 4.2                      # metres (large enough that the rising camera never sees an edge)
+NX, NY = 2625, 1575                   # 375 samples per metre
 # --- letter mask
 img = Image.new("L", (NX, NY), 0); d = ImageDraw.Draw(img)
 font = ImageFont.truetype("/usr/share/fonts/opentype/inter/InterDisplay-Bold.otf", 470)
