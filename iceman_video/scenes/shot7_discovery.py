@@ -168,8 +168,8 @@ head_pt = Vector(_world_verts(m.body)[np.argmax(_world_verts(m.body)[:, 1])])
 
 def frame(i, t):
     e = ease(t)
-    cam.location = Vector(lerp((1.05, 3.4, 0.42), (0.8, 2.9, 0.5), e))
-    target = Vector(lerp((0.0, -0.4, 0.5), (-0.05, -0.8, 0.62), e))
+    cam.location = Vector(lerp((1.05, 3.45, 0.44), (0.88, 3.05, 0.47), e))
+    target = Vector(lerp((0.0, -0.4, 0.42), (-0.03, -0.55, 0.40), e))   # keep the body in frame
     point_at(cam, tuple(target))
     cam.data.dof.focus_distance = (cam.location - Vector((0.0, 0.9, 0.05))).length
 
