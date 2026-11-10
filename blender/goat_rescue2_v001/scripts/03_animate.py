@@ -491,9 +491,17 @@ for pb in G.pose.bones: pb.rotation_mode = 'QUATERNION'
 HEAD_W_POS = LIE_POS.to_2d() + HEAD_DIR * 0.85          # his head (world xy)
 RSIDE = Vector((-HEAD_DIR.y, HEAD_DIR.x))                 # his right side (+Y-ish)
 gz = lambda v: ground_z(v.x, v.y)
-G_RIDGE = Vector((1.9, 2.6)); G_TOP = Vector((1.35, 1.35)); G_HEAD = HEAD_W_POS + RSIDE * 0.62 + HEAD_DIR * 0.25
+G_RIDGE = Vector((2.5, 3.2)); G_TOP = Vector((1.35, 1.35)); G_HEAD = HEAD_W_POS + RSIDE * 0.62 + HEAD_DIR * 0.25
 quad_hold(GR, 1, G_RIDGE.to_3d(), R_(150))
 quad_hold(GR, 880, G_RIDGE.to_3d(), R_(150))
+# she is not in the story until "his goat found him": hidden until then (comes up over the far side of the heap)
+for ob in [G] + list(G.children):
+    for f_, h_ in ((1, True), (875, False)):
+        ob.hide_render = h_; ob.keyframe_insert("hide_render", frame=f_)
+# natural head carriage while walking (neck forward/down, not straight up)
+for f, nk in ((1, (30, 0)), (880, (34, 0)), (930, (44, 0)), (975, (40, 0)), (1040, (28, 0)), (1080, (14, 0))):
+    for n in ("neck1", "neck2"):
+        GR.key_rot(n, f, [("X", nk[0] * 0.5), ("Z", nk[1] * 0.5)])
 gp = catmull([(880, G_RIDGE.to_3d()), (960, G_TOP.to_3d()), (1040, G_HEAD.to_3d() + (G_TOP - G_HEAD).to_3d() * 0.35), (1080, G_HEAD.to_3d())])
 gh = quad_move(GR, gp, 881, 1080, stride=0.42, gait="walk", lift=0.06, body_bob=0.008)
 h_end = gh(1078)
@@ -582,6 +590,37 @@ def stepped(obj, frames):
                     for kp in fc.keyframe_points:
                         if int(round(kp.co.x)) in frames:
                             kp.interpolation = 'CONSTANT'
+# ------------------------------------------------------------------ udder for the goat (milking), attached to the hips bone
+GB = bpy.data.objects["goat_body"]
+_hy = G.data.bones["upper.HL"].head_local.y
+_cands = [v for v in GB.data.vertices if abs(v.co.x) < 0.035 and _hy - 0.16 < v.co.y < _hy + 0.02]
+UDDER_V = min(_cands, key=lambda v: v.co.z).index
+ev(1601)
+_dg = bpy.context.evaluated_depsgraph_get(); _me = GB.evaluated_get(_dg).to_mesh()
+_ub = GB.matrix_world @ _me.vertices[UDDER_V].co
+GB.evaluated_get(_dg).to_mesh_clear()
+bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=1.0)
+udder = bpy.context.active_object; udder.name = "Goat_Udder"
+udder.scale = (0.055, 0.068, 0.05); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+for sx_ in (-1, 1):
+    bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.016, radius2=0.010, depth=0.05, location=(sx_ * 0.028, -0.01, -0.07))
+    t_ = bpy.context.active_object
+    bpy.ops.object.select_all(action='DESELECT'); t_.select_set(True); udder.select_set(True)
+    bpy.context.view_layer.objects.active = udder; bpy.ops.object.join()
+bpy.ops.object.shade_smooth()
+um = bpy.data.materials.new("M_Goat_Udder"); um.use_nodes = True
+up_ = um.node_tree.nodes["Principled BSDF"]; up_.inputs['Base Color'].default_value = (0.46, 0.27, 0.19, 1)
+up_.inputs['Subsurface Weight'].default_value = 0.3; up_.inputs['Roughness'].default_value = 0.55
+udder.data.materials.append(um)
+_hdir = Matrix.Rotation(h_side, 3, 'Z')
+_fw = _hdir @ Vector((0, -1, 0))
+udder.matrix_world = Matrix.Translation(_ub + _fw * 0.09 + Vector((0, 0, -0.01))) @ _hdir.to_4x4()   # under the belly, ahead of the hind legs
+uc = udder.constraints.new('CHILD_OF'); uc.target = G; uc.subtarget = "hips"
+uc.inverse_matrix = (G.matrix_world @ G.pose.bones["hips"].matrix).inverted()
+for ob_, f_, h_ in ((udder, 1, True), (udder, 875, False), (udder, 2150, True)):
+    ob_.hide_render = h_; ob_.keyframe_insert("hide_render", frame=f_)
+UDDER_TEAT_LOCAL = Vector((-0.028, -0.01, -0.095))
+print("UDDER placed")
 exec(open(os.path.join(HERE, "03c_medics.py")).read())
 for o in (G, F, BOARD):
     stepped(o, {2149})

@@ -256,17 +256,10 @@ for s_ in "LR":
 for k_ in range(1, 6):
     for j_ in range(1, 4):
         clear_keys(F, "finger%d-%d.R" % (k_, j_), 1645, 1972)
-GB = bpy.data.objects["goat_body"]
-_hy = G.data.bones["upper.HL"].head_local.y
-_cands = [v for v in GB.data.vertices if abs(v.co.x) < 0.035 and _hy - 0.16 < v.co.y < _hy + 0.02]
-UDDER_V = min(_cands, key=lambda v: v.co.z).index
 def udder(f):
+    """tip of the near teat"""
     ev(f)
-    dg = bpy.context.evaluated_depsgraph_get()
-    me = GB.evaluated_get(dg).to_mesh()
-    p = GB.matrix_world @ me.vertices[UDDER_V].co
-    GB.evaluated_get(dg).to_mesh_clear()
-    return p
+    return bpy.data.objects["Goat_Udder"].matrix_world @ UDDER_TEAT_LOCAL
 def key_pt(s_, f, name):
     ev(f); M = FR.delta("spine01"); R3 = M.to_3x3(); sx = 1 if s_ == "L" else -1
     W, d, n = HAND_PT[name](sx)
@@ -301,7 +294,7 @@ for i, f in enumerate(range(1678, 1831, 10)):
     u = udder(f)
     UD.location = u + Vector((0, 0, -0.03)); UD.keyframe_insert("location", frame=f)
     sq = (i % 2)
-    W = u + TOWARD * 0.05 + Vector((0, 0, -0.035 - 0.03 * sq))
+    W = u + TOWARD * 0.045 + Vector((0, 0, 0.02 - 0.025 * sq))
     across = TOWARD.cross(Vector((0, 0, 1))).normalized()
     FR.key_world("IK_hand.R", f, hand_matrix("R", W, (across + Vector((0, 0, 0.35))).normalized(), -TOWARD))
     key_fingers("R", f, 72 if sq else 30, 50 if sq else 20)

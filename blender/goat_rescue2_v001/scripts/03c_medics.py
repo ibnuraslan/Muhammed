@@ -7,7 +7,11 @@ for m, nm in ((MA, "MedicA"), (MB, "MedicB")):
             ob.hide_render = h_; ob.keyframe_insert("hide_render", frame=f_)
 END_OFF = 0.925 + 0.42          # medic pelvis distance from the board centre along its axis
 def medic_pos(f, sign):
-    c = board_xy(f).to_2d(); return c + board_hd(f) * (END_OFF * sign)
+    c = board_xy(f).to_2d()
+    off = END_OFF
+    if sign < 0:   # the front carrier steps in close once she turns, so the handles are right behind her hips
+        off = 0.925 + 0.42 * (1 - smooth((f - 2016) / 18.0)) + 0.17 * smooth((f - 2016) / 18.0)
+    return c + board_hd(f) * (off * sign)
 def yaw_of(v):                   # facing direction -> yaw (character faces -Y at yaw 0)
     return math.degrees(math.atan2(v.x, -v.y))
 # A at the head end facing the feet (= travel direction); B at the feet end, faces the board, turns to travel at 2018-2034
@@ -57,7 +61,12 @@ for f in list(range(2020, 2150, 4)) + [2149]:
     hA = handles(f, +1); hB = handles(f, -1)
     MA.key_hand("L", f, hA[0], (-hd + Vector((0, 0, -0.3))).normalized(), Vector((0, 0, 1)))
     MA.key_hand("R", f, hA[1], (-hd + Vector((0, 0, -0.3))).normalized(), Vector((0, 0, 1)))
-    # B carries behind his back once turned
-    MB.key_hand("L", f, hB[0], (-hd + Vector((0, 0, -0.5))).normalized(), Vector((0, 0, 1)))
-    MB.key_hand("R", f, hB[1], (-hd + Vector((0, 0, -0.5))).normalized(), Vector((0, 0, 1)))
+    # B (front) carries with her arms hanging, hands gripping the handles just behind her hips
+    side = Vector((-hd.y, hd.x, 0))
+    shB = [bpy.data.objects["MedicB"].matrix_world @ MB.r.PB["upperarm01." + s_].head for s_ in "LR"]
+    for s_, W, shp in zip("LR", hB, shB):
+        inward = (Vector((W.x, W.y, 0)) - Vector((board_xy(f).x, board_xy(f).y, 0)))
+        inward = -(inward - hd * inward.dot(hd)).normalized() if inward.length > 1e-4 else side
+        MB.key_hand(s_, f, W, Vector((0, 0, -1)) + hd * 0.25, inward,
+                    pole=shp + hd * 0.45 - inward * 0.35 + Vector((0, 0, -0.2)))
 print("MEDICS_DONE")

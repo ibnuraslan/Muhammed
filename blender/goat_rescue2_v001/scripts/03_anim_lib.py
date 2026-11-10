@@ -192,7 +192,7 @@ def quad_move(rig, path, f0, f1, stride, gait="walk", lift=None, body_bob=0.01, 
         gz = {k: ground_z(*foot_world(k, f).to_2d()) for k in LEGS}
         zf, zh = (gz["FL"] + gz["FR"]) / 2, (gz["HL"] + gz["HR"]) / 2
         span = (off["FL"] - off["HL"]).length
-        pitch = math.atan2(zf - zh, span)          # nose up when the front is higher
+        pitch = max(-R_(12), min(R_(12), 0.6 * math.atan2(zf - zh, span)))   # nose up on slopes, limited (legs take the rest)
         M = Matrix.Translation(Vector((p.x, p.y, torso_rest.translation.z + bob + (zf + zh) / 2))) @ \
             Matrix.Rotation(h, 4, 'Z') @ Matrix.Rotation(-pitch, 4, 'X') @ \
             Matrix.Translation(-torso_rest.translation) @ torso_rest
@@ -209,7 +209,7 @@ def quad_hold(rig, f, pos, h, torso_dz=0.0, extra_rot=None):
     fw = Matrix.Rotation(h, 3, 'Z') @ Vector((0, -1, 0))
     span = (BN["IK_hoof.FL"].head_local - BN["IK_hoof.HL"].head_local).length
     zf = ground_z(pos.x + fw.x * span / 2, pos.y + fw.y * span / 2); zh = ground_z(pos.x - fw.x * span / 2, pos.y - fw.y * span / 2)
-    pitch = math.atan2(zf - zh, span)
+    pitch = max(-R_(12), min(R_(12), 0.6 * math.atan2(zf - zh, span)))
     R = Matrix.Rotation(h, 4, 'Z') @ Matrix.Rotation(-pitch, 4, 'X') @ (extra_rot.to_4x4() if extra_rot else Matrix.Identity(4))
     rig.key_world("torso", f, Matrix.Translation(Vector((pos.x, pos.y, tr.translation.z + torso_dz + (zf + zh) / 2))) @ R @
                   Matrix.Translation(-tr.translation) @ tr)
