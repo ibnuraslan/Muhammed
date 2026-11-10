@@ -179,12 +179,12 @@ mm, mn, ml = pbr("M_Manure_Heap", os.path.join(PH, "brown_mud_02"), "brown_mud_0
 hsv0 = [nd for nd in mn if nd.type == "HUE_SAT"][0]; hsv0.inputs["Hue"].default_value = 0.47
 # straw: hay-coloured fibres mixed through the top layer (procedural streak mask)
 p = mn["Principled BSDF"]
-wave = mn.new('ShaderNodeTexWave'); wave.wave_type = 'BANDS'; wave.inputs['Scale'].default_value = 38
-wave.inputs['Distortion'].default_value = 14; wave.inputs['Detail'].default_value = 3
-nz = mn.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 3.0
+wave = mn.new('ShaderNodeTexWave'); wave.wave_type = 'BANDS'; wave.inputs['Scale'].default_value = 140
+wave.inputs['Distortion'].default_value = 40; wave.inputs['Detail'].default_value = 6   # short scattered straw fibres, not bands
+nz = mn.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 7.0
 mul = mn.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'
-ramp = mn.new('ShaderNodeValToRGB'); ramp.color_ramp.elements[0].position = 0.50; ramp.color_ramp.elements[1].position = 0.66
-mixc = mn.new('ShaderNodeMix'); mixc.data_type = 'RGBA'; mixc.inputs['B'].default_value = (0.42, 0.33, 0.17, 1)
+ramp = mn.new('ShaderNodeValToRGB'); ramp.color_ramp.elements[0].position = 0.70; ramp.color_ramp.elements[1].position = 0.80
+mixc = mn.new('ShaderNodeMix'); mixc.data_type = 'RGBA'; mixc.inputs['B'].default_value = (0.30, 0.23, 0.12, 1)
 tco = mn.new('ShaderNodeTexCoord')
 for a, b in ((tco.outputs['Object'], wave.inputs['Vector']), (tco.outputs['Object'], nz.inputs['Vector']),
              (wave.outputs['Fac'], mul.inputs[0]), (nz.outputs['Fac'], mul.inputs[1]),

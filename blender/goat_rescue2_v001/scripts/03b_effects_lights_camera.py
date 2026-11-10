@@ -133,8 +133,8 @@ ev(300)                                  # crater + rim in place before resting 
 B_REST = LIE_POS.to_2d() + RSIDE * 0.42 - HEAD_DIR * 0.05
 _bd = Vector((math.cos(R_(25 + 90)), math.sin(R_(25 + 90))))
 _g1, _g2 = ground_z(*(B_REST + _bd * 0.11)), ground_z(*(B_REST - _bd * 0.11))
-_gm = max(ground_z(*(B_REST + _bd * t_)) for t_ in (-0.11, -0.05, 0.0, 0.05, 0.11))
-bottle.location = (B_REST.x, B_REST.y, _gm + 0.012); bottle.rotation_euler = (R_(90) + math.atan2(_g1 - _g2, 0.22), 0, R_(25))
+_gm = min(ground_z(*(B_REST + _bd * t_)) for t_ in (-0.11, -0.05, 0.0, 0.05, 0.11))
+bottle.location = (B_REST.x, B_REST.y, _gm + 0.008)   # nestled into the muck, never above it; bottle.rotation_euler = (R_(90) + math.atan2(_g1 - _g2, 0.22), 0, R_(25))
 bottle.keyframe_insert("location", frame=1); bottle.keyframe_insert("rotation_euler", frame=1)
 bottle.keyframe_insert("location", frame=1650); bottle.keyframe_insert("rotation_euler", frame=1650)
 BOTTLE_MOUTH = bpy.data.objects.new("Bottle_Mouth", None); sc.collection.objects.link(BOTTLE_MOUTH)
