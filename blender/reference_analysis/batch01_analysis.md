@@ -58,3 +58,41 @@ Method: every frame decoded; 2 fps contact sheets read shot by shot; frame-diffe
    - library of stock actions on our rig (walk, stop, kneel, fall, facepalm, point, laugh, strain, collapse, pick up, drink)
 4. **Camera always moving.** Every shot gets at least a slow push, drift or orbit, and transitions are motivated camera moves.
 5. **Previews:** at this shot density a CPU-only preview of 35 s at 60 fps is 2,100 frames. Previews need to drop to lower resolution or 30 fps (stepped) for blocking, then one continuous 60 fps pass before the farm.
+
+---
+
+# Batch 02 (5 more videos): what's new
+
+Videos: two-headed cows (44.3 s), sand at light speed (35.9 s), diver swallowed by shark (27.5 s), viral video gets man a job (30.5 s), dead cat strategy (30.0 s).
+
+| | Cows | Sand | Shark diver | Viral job | Dead cat |
+|---|---|---|---|---|---|
+| Words / speed | 125 / 2.88 w/s | 88 / 2.51 | 85 / 3.19 | 88 / 2.96 | 68 / 2.34 |
+| Narration starts | 0.00 s | 0.00 s | 0.00 s | 0.00 s | 0.00 s |
+| Near-static picture | 0.7 s | 0.1 s | 0.4 s | 0.0 s | 0.2 s |
+
+**Across all 10:** narration always starts at 0.00 s, 2.3–3.2 words/s, 27–48 s long, under ~1 s of still picture per video (one outlier at 2.6 s).
+
+## Hook types (first line)
+- **Hypothetical:** "If a cow is born with two heads…", "If you took one grain of sand…"
+- **True story mid-action:** "He was collecting shellfish when…", "He was leaving a job interview when…", "He slammed a dead cat onto the table…"
+- **You-POV** (batch 1): "A pretty girl waves at you."
+
+## New techniques
+- **Porthole cutaway:** a circular window opens in the animal's body to show the organs inside, while the animal stays in its environment (cows). Directly useful for animal stories.
+- **Abstract interior backdrop:** internal processes (egg splitting, embryo growing) play on a plain deep-red "womb" backdrop instead of a modelled interior. Cheap and clear.
+- **Literal punchline prop:** "never live past their second birthday" ends on a birthday cake with a "2" candle.
+- **Lighting carries meaning:** sunny farm while the calf struggles, dusk tones for "grows weaker".
+- **Animated numbers and HUD graphics:** a speed counter rolling up to "186,000 mi/s", speed lines, a battery-charge icon, a VHS-style "REWIND" overlay to reset a hypothetical.
+- **Human anchor before the abstract:** the sand video starts with a person holding a grain with tweezers before going cosmic.
+- **Continuous action chase:** the shark-diver story flows as almost one unbroken camera move. The glowing highlight hits the vest and the chisel exactly when named.
+- **Phone screens as story devices:** a viral video playing on a phone with a rising view counter, an incoming call card, stacked job-offer notifications.
+- **3D title card:** the concept name ("DEAD CAT STRATEGY") as big extruded text next to the object, once, mid-video.
+- **Visual metaphor ending:** "slips by unnoticed" is a newspaper headline blowing away down an empty street.
+- **Extreme close-up on the eyes** for "realize it".
+
+## Look
+The Viral-job and Dead-cat videos are **realistic and moody**: grey streets, brick, practical lights, real-world materials. The Cows video is a realistic farm with grass, fences and a barn. These are much closer to your textured, grounded direction than batch 1's glossy cyan style. The channel's *look* varies by topic; the *pacing* never does.
+
+## Caution
+They show real brand logos (a restaurant chain sign). We should use invented brands to avoid trademark trouble.
