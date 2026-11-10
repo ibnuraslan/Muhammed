@@ -6,7 +6,7 @@ export const BUS = { wall: '#34363c', wall2: '#2b2d32', ceil: '#26282d', floor: 
   seat: '#1d2131', seatRim: '#7f848e', cush: '#252a3a', win: '#2f4562', win2: '#25384f', tree: '#3a5470', tree2: '#2c4258', sign: '#d4ae3a' };
 
 // night sky + treeline seen through a window (screen-space, clipped by the caller)
-export function nightView(g, x0, y0, x1, y1, horizon, t, speed = 40, seed = 4) {
+export function nightView(g, x0, y0, x1, y1, horizon, t, speed = 40, seed = 4, big = 0) {
   const gr = g.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, '#2b3f5c'); gr.addColorStop(1, '#3d5677');
   g.fillStyle = gr; g.fillRect(x0, y0, x1 - x0, y1 - y0);
   const R = rng(seed), span = 1400, off = (t * speed) % span;
@@ -17,6 +17,16 @@ export function nightView(g, x0, y0, x1, y1, horizon, t, speed = 40, seed = 4) {
       g.lineTo(bx, horizon - bh * 0.6); g.quadraticCurveTo(bx + 45, horizon - bh - 30, bx + 95, horizon - bh * 0.5);
     }
     g.lineTo(x1 + 10, y1 + 10); g.closePath(); g.fill();
+  }
+  if (big) {     // close trees: tall pines and round bushy trees, slowly sliding by
+    const R2 = rng(seed + 5), o2 = (t * speed * 1.6) % 1800;
+    for (let i = -1; i < 6; i++) {
+      const bx = x0 + i * 360 - o2 + R2() * 80, base = y1 + 20, hgt = (420 + R2() * 260) * big / 2.5, pine = R2() > 0.45;
+      g.fillStyle = i % 2 ? '#2e4258' : '#34495f'; g.beginPath();
+      if (pine) { for (let k = 0; k < 5; k++) { const yy = base - hgt * (k / 5), wd = 150 * (1 - k / 6) * big / 2.5; g.moveTo(bx - wd, yy); g.lineTo(bx, yy - hgt * 0.32); g.lineTo(bx + wd, yy); } }
+      else { for (let k = 0; k < 5; k++) { g.moveTo(bx + 170, base - hgt * 0.5); g.arc(bx + (k - 2) * 60, base - hgt * (0.45 + 0.1 * Math.sin(k * 2)), 120 * big / 2.5, 0, 7); } }
+      g.fill();
+    }
   }
   g.fillStyle = '#1e2a3a'; g.fillRect(x0, horizon + 40, x1 - x0, y1 - horizon);
 }
@@ -53,7 +63,7 @@ export function silhouette(g, c, x, z, k = 1) {
 }
 
 // full aisle view. people: [{z, draw(g)}] drawn in depth order among the seat rows
-export function aisle(g, c, t, { W = 1080, H = 1920, rows = 11, z0 = 1.2, dz = 0.92, people = [], sil = [], lights = 1 } = {}) {
+export function aisle(g, c, t, { W = 1080, H = 1920, rows = 11, z0 = 1.2, dz = 0.92, people = [], sil = [], lights = 1, skip = () => false } = {}) {
   const X = 1.3, Y = 2.28, ZE = z0 + rows * dz + 0.6, zn = c.z + 0.25;
   g.fillStyle = BUS.wall2; g.fillRect(0, 0, W, H);
   // rear wall + rear window + sign
@@ -86,7 +96,7 @@ export function aisle(g, c, t, { W = 1080, H = 1920, rows = 11, z0 = 1.2, dz = 0
   }
   // rows of seats far -> near, people slotted by depth
   const items = [];
-  for (let i = 0; i < rows; i++) { const zb = z0 + i * dz; if (zb - 0.42 < c.z + 0.3) continue; items.push({ z: zb, f: () => { for (const xc of [-1.0, -0.56, 0.56, 1.0]) seat(g, c, xc, zb); } }); }
+  for (let i = 0; i < rows; i++) { const zb = z0 + i * dz; if (zb - 0.42 < c.z + 0.3) continue; items.push({ z: zb, f: () => { for (const xc of [-1.0, -0.56, 0.56, 1.0]) if (!skip(i, xc)) seat(g, c, xc, zb); } }); }
   for (const s of sil) items.push({ z: s.z, f: () => silhouette(g, c, s.x, s.z) });
   for (const p of people) items.push({ z: p.z, f: () => p.draw(g) });
   for (const zp of [2.6, 6.2, 9.8]) for (const xp of [-0.42, 0.42]) if (zp > c.z + 0.4) items.push({ z: zp - 0.01, f: () => pole(g, c, xp, zp) });
