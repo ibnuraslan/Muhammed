@@ -1,0 +1,119 @@
+{
+ "goat": {
+  "uid": "2624ac2ce2364930ba2d5f70eb7aa1ea",
+  "title": "Goat",
+  "author": "hendrikReyneke",
+  "author_profile": "https://sketchfab.com/hendrikReyneke",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2624ac2ce2364930ba2d5f70eb7aa1ea",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "cow": {
+  "uid": "99d333e3b4e4470a8d7d38436489c001",
+  "title": "Cow",
+  "author": "Josu\u00e9 Boisvert",
+  "author_profile": "https://sketchfab.com/JosueBoisvert",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/99d333e3b4e4470a8d7d38436489c001",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ambulance": {
+  "uid": "2856dd3c61f940909dced9a5c0379484",
+  "title": "Shvan '92 Ambulance - Low Poly model",
+  "author": "Daniel Zhabotinsky",
+  "author_profile": "https://sketchfab.com/DanielZhabotinsky",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2856dd3c61f940909dced9a5c0379484",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hospital_bed": {
+  "uid": "60651eac7e96454c8cf5c43a91412336",
+  "title": "Simple Hospital Bed",
+  "author": "Yvo Pors",
+  "author_profile": "https://sketchfab.com/yvopors14",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60651eac7e96454c8cf5c43a91412336",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "stretcher_table": {
+  "uid": "02ab679ff3f24018a8bcaf30b3b2cd47",
+  "title": "Hospital Bed",
+  "author": "CobbleGames",
+  "author_profile": "https://sketchfab.com/cobblegames",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/02ab679ff3f24018a8bcaf30b3b2cd47",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hay_bale": {
+  "uid": "16f3d0337ad54e92b186d8a6e8494699",
+  "title": "Hay Bale",
+  "author": "ThomasWhalley",
+  "author_profile": "https://sketchfab.com/ThomasWhalley",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/16f3d0337ad54e92b186d8a6e8494699",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hay_round": {
+  "uid": "6b775049e57e4d9da87977905493ebfb",
+  "title": "Hay Bales",
+  "author": "FrodoUndead",
+  "author_profile": "https://sketchfab.com/FrodoUndead",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6b775049e57e4d9da87977905493ebfb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "barn": {
+  "uid": "1d0b768a8e2449de990b3f69f94c5db6",
+  "title": "American Old Barn",
+  "author": "andrewriddle",
+  "author_profile": "https://sketchfab.com/andrewriddle",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1d0b768a8e2449de990b3f69f94c5db6",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pitchfork": {
+  "uid": "c8d37a31d890495aba98c435136b3301",
+  "title": "Pitchfork",
+  "author": "Lodgelus",
+  "author_profile": "https://sketchfab.com/lodgelus",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c8d37a31d890495aba98c435136b3301",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "femur": {
+  "uid": "0647ff9a00924f40a06e08361cea176c",
+  "title": "Human femur bone",
+  "author": "Tom O'Graphyx",
+  "author_profile": "https://sketchfab.com/thoracotomie",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0647ff9a00924f40a06e08361cea176c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pelvis": {
+  "uid": "03512e10de694412a1bb76982b9bffe3",
+  "title": "Lifesize Pelvis Clean",
+  "author": "sjpiper145",
+  "author_profile": "https://sketchfab.com/sjpiper145",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/03512e10de694412a1bb76982b9bffe3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "flowers_vase": {
+  "uid": "b1047276fc7f4421b5f695ad9ff59e72",
+  "title": "Flowers in Vase",
+  "author": "Michael Douglass",
+  "author_profile": "https://sketchfab.com/drmdouglass",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b1047276fc7f4421b5f695ad9ff59e72",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "8fa9a06380df4268b549e345cf103696",
+  "title": "woodfence",
+  "author": "pasquill",
+  "author_profile": "https://sketchfab.com/pasquill",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8fa9a06380df4268b549e345cf103696",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
