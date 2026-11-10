@@ -234,8 +234,10 @@ goat = append_rig(os.path.join(W, "goat_rig.blend"), "goat")
 cow = append_rig(os.path.join(W, "cow_rig.blend"), "cow")
 goat.location = (3.2, 2.6, 0); cow.location = (-7.0, -3.5, 0)
 
-# ------------------------------------------------------------------ ambulance + stretcher
-amb = import_glb(os.path.join(OB, "ambulance.glb"), "Ambulance", length=5.6, loc=(-6.5, -4.5, 0), rot_z=math.radians(70), coll=PROPS)
+# ------------------------------------------------------------------ ambulance (rear doors face the heap) + spine board + paramedics
+AMB_C = Vector((-3.6, -6.4, 0.0)); AMB_R = Vector((3.6, 6.4, 0)).normalized()        # rear (tall box end, local +X) points at the heap
+amb = import_glb(os.path.join(OB, "ambulance.glb"), "Ambulance", length=5.6, loc=AMB_C, rot_z=math.atan2(AMB_R.y, AMB_R.x), coll=PROPS)
+sc["amb_rear"] = tuple(AMB_C + AMB_R * 2.8); sc["amb_dir"] = tuple(AMB_R)
 for f_, h_ in ((1, True), (1960, False)):
     amb.hide_render = h_; amb.hide_viewport = False; amb.keyframe_insert("hide_render", frame=f_)
 def box(name, size, loc, mat, parent=None):
@@ -252,15 +254,18 @@ def flat(name, rgb, rough=0.5, metal=0.0):
     pp = m.node_tree.nodes["Principled BSDF"]; pp.inputs['Base Color'].default_value = (*rgb, 1)
     pp.inputs['Roughness'].default_value = rough; pp.inputs['Metallic'].default_value = metal
     return m
-st = bpy.data.objects.new("Stretcher", None); PROPS.objects.link(st); st.location = (-4.0, -3.0, 0)
-mat_frame, mat_pad = flat("M_Stretcher_Frame", (0.55, 0.56, 0.58), 0.35, 1.0), flat("M_Stretcher_Pad", (0.09, 0.22, 0.36), 0.6)
-box("Stretcher_Pad", (0.58, 1.95, 0.08), (0, 0, 0.62), mat_pad, st)
-box("Stretcher_Frame", (0.62, 2.0, 0.04), (0, 0, 0.56), mat_frame, st)
-for sx in (-0.27, 0.27):
-    for sy in (-0.85, 0.85):
-        box("Stretcher_Leg", (0.035, 0.035, 0.52), (sx, sy, 0.28), mat_frame, st)
-for o in st.children:
-    o.location = o.location - Vector((0, 0, 0))
+bpy.ops.mesh.primitive_cube_add(size=1)
+board = bpy.context.active_object; board.name = "SpineBoard"; board.scale = (0.46, 1.85, 0.045)
+bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+board.modifiers.new("Bevel", 'BEVEL').width = 0.015
+board.data.materials.append(flat("M_SpineBoard", (0.85, 0.28, 0.05), 0.45))
+for c_ in board.users_collection: c_.objects.unlink(board)
+PROPS.objects.link(board)
+MED = coll("Medics")
+with bpy.data.libraries.load(os.path.join(W, "medics.blend"), link=False) as (src, dst):
+    dst.objects = [n for n in src.objects if n.startswith("Medic")]
+for o in dst.objects:
+    MED.objects.link(o)
 
 # ------------------------------------------------------------------ hospital (separate location at x=400, own grounds)
 HX = Vector((400.0, 0.0, 0.0))

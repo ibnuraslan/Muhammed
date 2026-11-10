@@ -213,3 +213,129 @@ def quad_hold(rig, f, pos, h, torso_dz=0.0, extra_rot=None):
     R = Matrix.Rotation(h, 4, 'Z') @ Matrix.Rotation(-pitch, 4, 'X') @ (extra_rot.to_4x4() if extra_rot else Matrix.Identity(4))
     rig.key_world("torso", f, Matrix.Translation(Vector((pos.x, pos.y, tr.translation.z + torso_dz + (zf + zh) / 2))) @ R @
                   Matrix.Translation(-tr.translation) @ tr)
+
+# ------------------------------------------------------------------ human (MPFB default rig) control + walking
+def make_human_ctrl(obj):
+    """adds IK_foot/IK_hand controls with knee/elbow poles to an MPFB 'default' rig; returns Rig"""
+    obj.location = (0, 0, 0); obj.rotation_euler = (0, 0, 0)
+    if bpy.context.mode != 'OBJECT':
+        bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.context.view_layer.objects.active = obj
+    for o in bpy.context.selected_objects: o.select_set(False)
+    obj.select_set(True)
+    bpy.ops.object.mode_set(mode='EDIT')
+    eb = obj.data.edit_bones
+    for s in "LR":
+        sx = 1 if s == "L" else -1
+        for src, nm in (("foot." + s, "IK_foot." + s), ("wrist." + s, "IK_hand." + s)):
+            b = eb.new(nm); b.head, b.tail, b.roll = eb[src].head.copy(), eb[src].tail.copy(), eb[src].roll
+            b.use_deform = False; b.parent = None
+        kn = eb["lowerleg01." + s].head.copy(); p = eb.new("Pole_knee." + s)
+        p.head = kn + Vector((0, -0.6, 0)); p.tail = p.head + Vector((0, 0, 0.08)); p.use_deform = False
+        el = eb["lowerarm01." + s].head.copy(); p = eb.new("Pole_elbow." + s)
+        p.head = el + Vector((0.25 * sx, 0.55, -0.1)); p.tail = p.head + Vector((0, 0, 0.08)); p.use_deform = False
+    bpy.ops.object.mode_set(mode='POSE')
+    R = Rig(obj)
+    for pb in obj.pose.bones: pb.rotation_mode = 'QUATERNION'
+    cons = {}
+    for s in "LR":
+        for chain_end, tgt, pole, twist_bones, key in (("lowerleg02." + s, "IK_foot." + s, "Pole_knee." + s, ("upperleg02.", "lowerleg02."), "leg"),
+                                                       ("lowerarm02." + s, "IK_hand." + s, "Pole_elbow." + s, ("upperarm02.", "lowerarm02."), "arm")):
+            c = R.PB[chain_end].constraints.new('IK'); c.target, c.subtarget = obj, tgt
+            c.pole_target, c.pole_subtarget = obj, pole; c.chain_count = 4; c.iterations = 300
+            for tb in twist_bones:
+                pb = R.PB[tb + s]; pb.lock_ik_x = pb.lock_ik_y = pb.lock_ik_z = True
+            cons[key + s] = c
+        R.PB["lowerleg01." + s].lock_ik_y = R.PB["lowerleg01." + s].lock_ik_z = True
+        for bone, tgt in (("foot." + s, "IK_foot." + s), ("wrist." + s, "IK_hand." + s)):
+            cr = R.PB[bone].constraints.new('COPY_ROTATION'); cr.target, cr.subtarget = obj, tgt
+    for key, c in cons.items():
+        mid = ("lowerleg01." if key.startswith("leg") else "lowerarm01.") + key[-1]
+        ref = R.BN[mid].head_local.copy(); best = (0, 9)
+        for d in range(-180, 180, 4):
+            c.pole_angle = R_(d); ev(); e = (R.PB[mid].head - ref).length
+            if e < best[1]: best = (d, e)
+        for d10 in range((best[0] - 4) * 10, (best[0] + 4) * 10):
+            c.pole_angle = R_(d10 / 10); ev(); e = (R.PB[mid].head - ref).length
+            if e < best[1]: best = (d10 / 10, e)
+        c.pole_angle = R_(best[0])
+    bpy.ops.object.mode_set(mode='OBJECT')
+    return R
+
+class Human:
+    SPINE_W = {"spine05": 0.12, "spine04": 0.18, "spine03": 0.22, "spine02": 0.26, "spine01": 0.22}
+    HEAD_W = {"neck01": 0.25, "neck02": 0.25, "neck03": 0.2, "head": 0.3}
+    def __init__(self, rig):
+        self.r = rig; B = rig.BN
+        self.root_head = B["root"].head_local.copy()
+        self.ankle = {s: B["foot." + s].head_local.copy() for s in "LR"}
+    def key_root(self, f, pos, yaw=0.0, flex=0.0, side=0.0):
+        Rw = Matrix.Rotation(R_(yaw), 3, 'Z') @ Matrix.Rotation(R_(flex), 3, 'X') @ Matrix.Rotation(R_(side), 3, 'Y')
+        M = Matrix.Translation(pos) @ Rw.to_4x4() @ Matrix.Translation(-self.root_head) @ self.r.rest("root")
+        self.r.key_world("root", f, M)
+    def key_spine(self, f, flex=0.0, twist=0.0, side=0.0, head=(0.0, 0.0)):
+        for n, w in self.SPINE_W.items():
+            self.r.key_rot(n, f, [("X", flex * w), ("Y", side * w), ("Z", twist * w)])
+        for n, w in self.HEAD_W.items():
+            self.r.key_rot(n, f, [("X", head[0] * w), ("Z", head[1] * w)])
+    def key_foot(self, s, f, xy, yaw, lift=0.0, pitch=0.0):
+        a = self.ankle[s]
+        z = ground_z(xy.x, xy.y) + a.z + lift
+        M = Matrix.Translation(Vector((xy.x, xy.y, z))) @ Matrix.Rotation(R_(yaw), 4, 'Z') @ Matrix.Rotation(R_(pitch), 4, 'X') @ \
+            Matrix.Translation(-a) @ self.r.rest("IK_foot." + s)
+        self.r.key_world("IK_foot." + s, f, M)
+        pole = Vector((xy.x, xy.y, z + 0.45)) + Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((0, -0.7, 0))
+        pb = self.r.PB["Pole_knee." + s]; n = "Pole_knee." + s
+        pb.location = self.r.rest(n).to_3x3().inverted() @ (pole - self.r.BN[n].head_local)
+        pb.keyframe_insert("location", frame=f, group=n)
+    def foot_xy(self, s, pos, yaw):
+        o = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((self.ankle[s].x * 0.75, self.ankle[s].y - self.root_head.y, 0))
+        return Vector((pos.x + o.x, pos.y + o.y))
+    def key_hand(self, s, f, W, d, n, pole=None):
+        sx = 1 if s == "L" else -1
+        wr = self.r.BN["wrist." + s].head_local
+        dd = self.r.BN["finger3-1." + s].head_local - wr
+        aa = self.r.BN["finger2-1." + s].head_local - self.r.BN["finger5-1." + s].head_local
+        nn = dd.cross(aa) if s == "L" else aa.cross(dd)
+        def basis(d_, n_):
+            d_ = d_.normalized(); n_ = (n_ - d_ * n_.dot(d_)).normalized()
+            a_ = d_.cross(n_) if s == "R" else n_.cross(d_)
+            return Matrix((d_, a_, n_)).transposed()
+        Rm = basis(d, n) @ basis(dd, nn).transposed()
+        self.r.key_world("IK_hand." + s, f, Matrix.Translation(W) @ Rm.to_4x4() @ Matrix.Translation(-wr) @ self.r.rest("IK_hand." + s))
+        if pole is not None:
+            pb = self.r.PB["Pole_elbow." + s]; nme = "Pole_elbow." + s
+            pb.location = self.r.rest(nme).to_3x3().inverted() @ (pole - self.r.BN[nme].head_local)
+            pb.keyframe_insert("location", frame=f, group=nme)
+    def walk(self, path, yaw_fn, f0, f1, stride=0.75, duty=0.62, lift=0.08, bob=0.022, crouch=0.03, lean=6.0, step=2):
+        frames = list(range(f0, f1 + 1)); dist = [0.0]
+        for a_, b_ in zip(frames, frames[1:]):
+            dist.append(dist[-1] + (path(b_) - path(a_)).to_2d().length)
+        for s, ph in (("L", 0.0), ("R", 0.5)):
+            cyc = [d / stride + ph for d in dist]; per = {}
+            for i, c in enumerate(cyc): per.setdefault(int(math.floor(c)), []).append(i)
+            plant = {}
+            for pid, idx in per.items():
+                st = [i for i in idx if (cyc[i] % 1.0) < duty]
+                if st:
+                    im = min(st, key=lambda i: abs((cyc[i] % 1.0) - duty / 2))
+                    plant[pid] = (self.foot_xy(s, path(frames[im]), yaw_fn(frames[im])), yaw_fn(frames[im]))
+            first = (self.foot_xy(s, path(f0), yaw_fn(f0)), yaw_fn(f0)); last = (self.foot_xy(s, path(f1), yaw_fn(f1)), yaw_fn(f1))
+            for i, f in enumerate(frames):
+                if (i % step) and i != len(frames) - 1: continue
+                pid = int(math.floor(cyc[i])); fr = cyc[i] % 1.0
+                if fr < duty:
+                    xy, yw = plant.get(pid, first if i < len(frames) / 2 else last); lf = 0.0; pt = 0.0
+                else:
+                    a_ = plant.get(pid, first); b_ = plant.get(pid + 1, last); u = (fr - duty) / (1 - duty)
+                    xy = a_[0].lerp(b_[0], smooth(u)); yw = a_[1] + (b_[1] - a_[1]) * smooth(u)
+                    lf = lift * math.sin(math.pi * u); pt = 25 * math.sin(math.pi * u) - 10
+                self.key_foot(s, f, xy, yw, lf, pt)
+        for i, f in enumerate(frames):
+            if (i % step) and i != len(frames) - 1: continue
+            p = path(f); cyc = (dist[i] / stride) % 1.0
+            gz_ = ground_z(p.x, p.y)
+            z = gz_ + self.root_head.z - crouch - bob * (0.5 + 0.5 * math.cos(4 * math.pi * cyc))
+            yw = yaw_fn(f)
+            self.key_root(f, Vector((p.x, p.y, z)), yaw=yw, flex=lean * 0.5, side=3 * math.sin(2 * math.pi * cyc))
+            self.key_spine(f, flex=lean, twist=-6 * math.sin(2 * math.pi * cyc))

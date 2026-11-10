@@ -25,7 +25,7 @@ for o in (femur, pelvis):
     for f, h in ((1, True), (206, False), (282, True)):
         o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
 xc = bpy.data.objects.new("XRay_Center", None); sc.collection.objects.link(xc)
-xc.location = th.head + (th.head - rt.head) * 0.15
+xc.location = th.head.lerp(th.tail, 0.35)
 cc = xc.constraints.new('CHILD_OF'); cc.target = F; cc.subtarget = "root"
 cc.inverse_matrix = (F.matrix_world @ rt.matrix).inverted()
 XRAY_KEYS = ((1, 0.0), (205, 0.0), (222, 1.0), (268, 1.0), (283, 0.0))
@@ -68,7 +68,7 @@ for ob in [o for o in bpy.data.objects if o.parent == F and o.type == 'MESH']:
             src = mmix.outputs['Shader']
         tc = n.new('ShaderNodeTexCoord'); tc.object = xc
         ln = n.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'
-        mr = n.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.12; mr.inputs['From Max'].default_value = 0.20
+        mr = n.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.17; mr.inputs['From Max'].default_value = 0.27
         mr.inputs['To Min'].default_value = 1.0; mr.inputs['To Max'].default_value = 0.0
         val = n.new('ShaderNodeValue'); val.name = "XRayFade"; val.outputs[0].default_value = 0.0
         mul = n.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'
@@ -133,7 +133,8 @@ ev(300)                                  # crater + rim in place before resting 
 B_REST = LIE_POS.to_2d() + RSIDE * 0.42 - HEAD_DIR * 0.05
 _bd = Vector((math.cos(R_(25 + 90)), math.sin(R_(25 + 90))))
 _g1, _g2 = ground_z(*(B_REST + _bd * 0.11)), ground_z(*(B_REST - _bd * 0.11))
-bottle.location = (B_REST.x, B_REST.y, min(_g1, _g2) + 0.022); bottle.rotation_euler = (R_(90) + math.atan2(_g1 - _g2, 0.22), 0, R_(25))
+_gm = max(ground_z(*(B_REST + _bd * t_)) for t_ in (-0.11, -0.05, 0.0, 0.05, 0.11))
+bottle.location = (B_REST.x, B_REST.y, _gm + 0.012); bottle.rotation_euler = (R_(90) + math.atan2(_g1 - _g2, 0.22), 0, R_(25))
 bottle.keyframe_insert("location", frame=1); bottle.keyframe_insert("rotation_euler", frame=1)
 bottle.keyframe_insert("location", frame=1650); bottle.keyframe_insert("rotation_euler", frame=1650)
 BOTTLE_MOUTH = bpy.data.objects.new("Bottle_Mouth", None); sc.collection.objects.link(BOTTLE_MOUTH)
@@ -161,7 +162,7 @@ def sun_dir(az, el):
     return d.to_track_quat('Z', 'Y').to_euler()
 LK = []   # frame, sun_energy, sun_rgb, az, el, sky_strength, tint_rgb, moon, exposure
 DAY = (4.2, (1.0, 0.96, 0.9), -33, 48, 1.0, (1, 1, 1), 0.0, 0.0)
-NIGHT = (0.0, (0.6, 0.7, 1.0), -33, 30, 0.10, (0.30, 0.42, 0.85), 2.2, -0.15)
+NIGHT = (0.0, (0.6, 0.7, 1.0), -33, 30, 0.22, (0.34, 0.46, 0.85), 3.6, 0.15)
 HEAT = (5.5, (1.0, 0.8, 0.55), -20, 66, 1.1, (1.0, 0.86, 0.66), 0.0, 0.3)
 DAWN = (2.6, (1.0, 0.72, 0.45), 30, 9, 0.6, (1.0, 0.82, 0.7), 0.0, 0.0)
 def L(f, s): LK.append((f,) + s)
@@ -210,17 +211,21 @@ SEG1 = [  # frame, camera, aim, lens
     (1010, V(0.9, -1.5, 1.15), V(1.35, 1.0, 0.85), 30), (1100, V(0.75, -0.9, 1.0), V(G_HEAD.x - 0.15, G_HEAD.y - 0.2, 0.78), 35),
     (1175, V(0.2, -1.35, 1.45), V(LP.x + 0.5, LP.y + 0.3, 0.62), 32), (1260, V(-0.7, -1.75, 1.6), V(LP.x + 0.3, LP.y + 0.3, 0.55), 30),
     (1388, V(LP.x + 0.35, LP.y - 0.05, 3.3), V(LP.x + 0.3, LP.y + 0.18, 0.5), 30), (1500, V(LP.x + 0.9, LP.y - 0.6, 2.5), V(LP.x + 0.4, LP.y + 0.1, 0.55), 30),
-    (1604, V(LP.x + 1.25, LP.y - 0.55, 0.98), V(HEAD_W_POS.x, HEAD_W_POS.y, 0.75), 40), (1700, V(LP.x - 0.75, LP.y + 0.45, 1.25), V(G_MILK.x + 0.05, G_MILK.y - 0.08, 0.66), 35),
-    (1830, V(LP.x - 0.55, LP.y + 0.2, 1.3), V(LP.x + 0.55, LP.y + 0.15, 0.72), 35), (1910, V(LP.x + 1.1, LP.y - 0.8, 1.0), V(HEAD_W_POS.x - 0.1, HEAD_W_POS.y, 0.82), 40),
-    (1973, V(-0.6, -3.7, 1.8), V(LP.x - 0.4, LP.y - 0.3, 0.8), 28), (2060, V(-1.4, -6.4, 1.6), V(-2.4, -2.6, 0.9), 28),
-    (2120, V(-2.0, -7.0, 1.5), V(-3.6, -4.0, 2.2), 28), (2149, V(-2.1, -7.1, 1.45), V(-3.4, -4.6, 6.5), 26)]
+    (1604, V(HEAD_W_POS.x - HEAD_DIR.x * 0.65 - RSIDE.x * 0.45, HEAD_W_POS.y - HEAD_DIR.y * 0.65 - RSIDE.y * 0.45, 1.12), V(HEAD_W_POS.x, HEAD_W_POS.y, 0.70), 42),
+    (1660, V(LP.x - 0.55 - RSIDE.x * 1.25, LP.y - RSIDE.y * 1.25, 1.55), V(LP.x + RSIDE.x * 0.38 + 0.2, LP.y + RSIDE.y * 0.38, 0.72), 30),
+    (1760, V(LP.x - 0.2 - RSIDE.x * 1.15, LP.y - RSIDE.y * 1.15 - 0.2, 1.45), V(LP.x + RSIDE.x * 0.45 + 0.25, LP.y + RSIDE.y * 0.45, 0.70), 32),
+    (1840, V(LP.x + 0.2 - RSIDE.x * 1.3, LP.y - RSIDE.y * 1.3, 1.45), V(LP.x + RSIDE.x * 0.3 + 0.45, LP.y + RSIDE.y * 0.3, 0.80), 30),
+    (1910, V(HEAD_W_POS.x + 0.35 - RSIDE.x * 1.15, HEAD_W_POS.y - RSIDE.y * 1.15, 1.3), V(HEAD_W_POS.x - 0.05, HEAD_W_POS.y + RSIDE.y * 0.15, 0.88), 32),
+    (1973, V(-3.0, -4.3, 1.7), V(0.0, -0.6, 0.85), 28), (2018, V(-3.2, -4.8, 1.55), V(-0.5, -1.2, 1.05), 28),
+    (2080, V(-4.3, -3.9, 1.5), V(-1.1, -2.0, 1.15), 28), (2122, V(-4.4, -2.5, 1.45), V(-1.7, -3.1, 1.4), 28),
+    (2149, V(-4.4, -2.4, 1.4), V(-2.0, -3.0, 6.5), 26)]
 # hospital: comes down out of the sky outside, sees the goat at the window, pushes in through it to him in bed
 SEG2 = [(2150, V(HX.x + 9.0, -5.5, 1.5), V(HX.x + 7.0, -3.5, 9.0), 26),
         (2190, V(HX.x + 7.6, -3.6, 1.35), V(HX.x + 3.4, 0.0, 1.05), 28),
         (2235, V(HX.x + 4.6, -0.55, 1.25), V(HX.x + 3.2, 0.0, 1.0), 30),
         (2275, V(HX.x + 2.8, -0.6, 1.35), V(HX.x + 1.2, 1.0, 0.85), 30),
-        (2300, V(HX.x + 1.6, -1.45, 1.45), V(HX.x + 1.6, 0.9, 0.9), 28),
-        (2340, V(HX.x + 0.25, -1.75, 1.55), V(HX.x + 2.1, 0.55, 1.0), 26)]
+        (2300, V(HX.x + 1.4, -1.9, 1.55), V(HX.x + 1.4, 0.9, 0.9), 26),
+        (2340, V(HX.x - 0.9, -2.5, 1.7), V(HX.x + 1.8, 0.6, 1.0), 24)]
 for seg in (SEG1, SEG2):
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl = catmull([(f, float(l)) for f, c, a, l in seg])
     f0, f1 = seg[0][0], seg[-1][0]
@@ -248,6 +253,9 @@ def clear_keys(obj, bone, f0, f1):
                             fcv.keyframe_points.remove(kp)
 for s_ in "LR":
     clear_keys(F, "IK_hand." + s_, 1645, 1972)
+for k_ in range(1, 6):
+    for j_ in range(1, 4):
+        clear_keys(F, "finger%d-%d.R" % (k_, j_), 1645, 1972)
 GB = bpy.data.objects["goat_body"]
 _hy = G.data.bones["upper.HL"].head_local.y
 _cands = [v for v in GB.data.vertices if abs(v.co.x) < 0.035 and _hy - 0.16 < v.co.y < _hy + 0.02]
@@ -268,6 +276,7 @@ def bkey(f, loc, R):
     bottle.keyframe_insert("location", frame=f); bottle.keyframe_insert("rotation_euler", frame=f)
 def grip_key(f, toward):
     """right hand wraps the bottle at mid height, on his side of it"""
+    key_fingers("R", f, 62, 45)
     ev(f)
     M = bottle.matrix_world; ax = (M.to_3x3() @ Vector((0, 0, 1))).normalized()
     side = (toward - ax * toward.dot(ax)).normalized()
@@ -292,8 +301,10 @@ for i, f in enumerate(range(1678, 1831, 10)):
     u = udder(f)
     UD.location = u + Vector((0, 0, -0.03)); UD.keyframe_insert("location", frame=f)
     sq = (i % 2)
-    W = u + TOWARD * 0.045 + Vector((0, 0, -0.045 - 0.025 * sq))
-    FR.key_world("IK_hand.R", f, hand_matrix("R", W, Vector((0, 0, 1)), -TOWARD))
+    W = u + TOWARD * 0.05 + Vector((0, 0, -0.035 - 0.03 * sq))
+    across = TOWARD.cross(Vector((0, 0, 1))).normalized()
+    FR.key_world("IK_hand.R", f, hand_matrix("R", W, (across + Vector((0, 0, 0.35))).normalized(), -TOWARD))
+    key_fingers("R", f, 72 if sq else 30, 50 if sq else 20)
 for f in (1650, 1760, 1972):
     key_pt("L", f, "chest")
 # pick it up again (1840->1852) and drink, bottle bottom up so the milk flows (1880-1945)

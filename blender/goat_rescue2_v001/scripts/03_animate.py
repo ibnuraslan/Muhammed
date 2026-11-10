@@ -98,6 +98,22 @@ def P(f, pos, yaw=0.0, pitch=0.0, roll=0.0, spine=(0, 0, 0), head=(0, 0, 0), leg
     POSES.append((f, dict(pos=Vector(pos), yaw=yaw, pitch=pitch, roll=roll, spine=spine, head=head,
                           legs=legs or {}, arms=arms or {}, jaw=jaw, curl=curl)))
 
+REST_AX = {}
+def finger_axes(s):
+    Rh = REST_HAND[s]
+    return Rh.col[0].copy(), Rh.col[1].copy(), Rh.col[2].copy()
+JW = (0.8, 1.1, 0.8)
+def key_fingers(s, f, curl, thumb=18, spread=0.0):
+    d, a, n = finger_axes(s); sign = 1 if s == "R" else -1
+    for k in range(2, 6):
+        c = curl[k - 2] if isinstance(curl, (list, tuple)) else curl
+        for j in range(1, 4):
+            b = "finger%d-%d.%s" % (k, j, s)
+            FR.key_q(b, f, FR.local_q(b, Matrix.Rotation(R_(c * JW[j - 1] * sign), 3, a)))
+    for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
+        b = "finger1-%d.%s" % (j, s)
+        FR.key_q(b, f, FR.local_q(b, Matrix.Rotation(R_(fl * sign), 3, a) @ Matrix.Rotation(R_(22 * sign), 3, d)))
+
 def key_body(f, p):
     Rw = (Matrix.Rotation(R_(p["yaw"]), 3, 'Z') @ Matrix.Rotation(R_(p["pitch"]), 3, 'X') @
           Matrix.Rotation(R_(p["roll"]), 3, 'Y'))
@@ -116,6 +132,10 @@ def key_body(f, p):
         FR.key_rot("lowerleg01." + s, f, [("X", knee)])
         FR.key_rot("foot." + s, f, [("X", -ank)])
     FR.key_rot("jaw", f, [("X", -p["jaw"])])
+    cu = p["curl"] or {}
+    for s in "LR":
+        c = cu.get(s, (24 if f >= 92 else 16, 20))
+        key_fingers(s, f, c[0], c[1])
 
 def key_hands(f, p):
     ev(f)
@@ -143,7 +163,7 @@ PILE_TOP = sc["pile_top"]
 LA = sc["lie_angle"]; LC = Vector(sc["lie_center"])
 HEAD_DIR = Vector((math.cos(LA), math.sin(LA)))
 LIE_PELVIS = LC - HEAD_DIR * 0.25
-LZ = ground_z(LIE_PELVIS.x, LIE_PELVIS.y) + 0.105 - 0.12      # sunk into the muck; the body cast is carved below
+LZ = ground_z(LIE_PELVIS.x, LIE_PELVIS.y) + 0.105 - 0.19      # sunk well into the muck; the body cast is carved below
 LIE_POS = Vector((LIE_PELVIS.x, LIE_PELVIS.y, LZ))
 LYAW = -90 + math.degrees(LA)            # body yaw so that, lying on the back, the head points along HEAD_DIR
 STAND = Vector((-3.05, -0.45, ROOT_HEAD.z - 0.02))
@@ -239,7 +259,7 @@ MILK = dict(legs={"L": (10, 8, 26, 8), "R": (8, 6, 20, 8)})
 P(1640, LIE_POS, yaw=LYAW, pitch=-90, roll=-22, spine=(18, 0, -10), head=(16, -40, 0), jaw=4, **MILK,
   arms={"L": ("rest", dict(fwd=70, out=-40, L=0.40)), "R": ("rest", dict(fwd=80, out=-10, L=0.42))})
 for i, f in enumerate(range(1670, 1831, 15)):
-    P(f, LIE_POS, yaw=LYAW, pitch=-90, roll=-24, spine=(20, 0, -12), head=(18, -42 + 2 * (i % 2), 0), jaw=4, **MILK,
+    P(f, LIE_POS + Vector((0, 0, 0.03)), yaw=LYAW, pitch=-90, roll=-36, spine=(16, 0, -16), head=(14, -44 + 2 * (i % 2), 0), jaw=4, **MILK,
       arms={"L": ("rest", dict(fwd=88, out=-48, L=0.40)), "R": ("rest", dict(fwd=95 + 6 * (i % 2), out=-18, L=0.40 - 0.02 * (i % 2)))})
 # B12 drinks: lifts head, bottle to lips (left hand)
 P(1870, LIE_POS, yaw=LYAW, pitch=-90, roll=-10, spine=(22, 0, -4), head=(26, -10, 0), jaw=8, **MILK,
@@ -248,26 +268,52 @@ P(1940, LIE_POS, yaw=LYAW, pitch=-90, roll=-8, spine=(24, 0, -4), head=(14, -8, 
   arms={"L": ("rest", dict(fwd=125, out=-66, L=0.25)), "R": ("rest", dict(fwd=-4, out=30, L=0.44))})
 P(1973, LIE_POS, yaw=LYAW, pitch=-90, roll=-4, spine=(8, 0, 0), head=(6, -10, 0), jaw=4, **MILK,
   arms={"L": ("rest", dict(fwd=60, out=-20, L=0.40)), "R": ("rest", dict(fwd=-4, out=35, L=0.44))})
-# B13 lifted onto the stretcher, wheeled to the ambulance
-ST = bpy.data.objects["Stretcher"]
-ST_A = Vector((-0.9, -1.55, 0)); ST_B = Vector((-4.6, -3.5, 0)); ST_YAW_A, ST_YAW_B = math.radians(102), math.radians(60)
-ST.rotation_mode = 'XYZ'
-for f, loc, yw in ((1, Vector((-9, -6, 0)), ST_YAW_A), (1974, Vector((-1.6, -2.0, 0)), ST_YAW_A), (2010, ST_A, ST_YAW_A),
-                   (2060, ST_A, ST_YAW_A), (2130, ST_B, ST_YAW_B), (2149, ST_B + Vector((-0.4, -0.25, 0)), ST_YAW_B)):
-    ST.location = loc; ST.rotation_euler = (0, 0, yw)
-    ST.keyframe_insert("location", frame=f); ST.keyframe_insert("rotation_euler", frame=f)
-P(2015, LIE_POS, yaw=LYAW, pitch=-90, spine=(4, 0, 0), head=(6, -16, 0), jaw=2, **SPREAD)
-def on_stretcher(f, loc, yw):
-    # stretcher local +Y is its long axis; head toward +Y
-    d = Matrix.Rotation(yw, 3, 'Z') @ Vector((0, 1, 0))
-    pel = loc + Vector((0, 0, 0.66 + 0.11)) - d * 0.15
-    yaw = math.degrees(math.atan2(d.y, d.x)) - 90
-    P(f, pel, yaw=yaw, pitch=-90, spine=(10, 0, 0), head=(12, 0, 0), jaw=2, legs={"L": (0, 4, 6, 6), "R": (0, 4, 6, 6)},
-      arms={"L": ("rest", dict(fwd=-2, out=12, L=0.46)), "R": ("rest", dict(fwd=-2, out=12, L=0.46))})
-P(2035, (LIE_POS + (ST_A + Vector((0, 0, 0.77)))) / 2 + Vector((0, 0, 0.35)), yaw=LYAW + 20, pitch=-86, spine=(10, 0, 0), head=(10, -6, 0), jaw=3,
-  legs={"L": (10, 6, 20, 6), "R": (10, 6, 20, 6)}, arms={"L": ("rest", dict(fwd=30, out=30, L=0.44)), "R": ("rest", dict(fwd=30, out=30, L=0.44))})
-for f in (2060, 2090, 2130, 2149):
-    ev(f); on_stretcher(f, ST.matrix_world.translation.copy(), ST.rotation_euler.z)
+# B13 found: two paramedics shift him onto a spine board, lift it and hurry it down to the ambulance
+HD2 = HEAD_DIR.copy(); LEFT = -Vector((-HEAD_DIR.y, HEAD_DIR.x))
+AMB_REAR = Vector(sc["amb_rear"]).to_2d(); AMB_DIR = Vector(sc["amb_dir"]).to_2d()
+BC0 = LIE_POS.to_2d() + LEFT * 0.58 + HD2 * 0.05
+BC1 = AMB_REAR + AMB_DIR * 1.7
+ang0, ang1 = math.atan2(HD2.y, HD2.x), math.atan2(AMB_DIR.y, AMB_DIR.x)
+board_xy = catmull([(1996, BC0.to_3d()), (2018, BC0.to_3d()), (2080, BC0.to_3d().lerp(BC1.to_3d(), 0.5) + Vector((-0.15, 0.1, 0))), (2140, BC1.to_3d()), (2149, BC1.to_3d())])
+board_ang = pchip([(1996, ang0), (2030, ang0), (2120, ang1), (2149, ang1)])
+def board_hd(f):
+    a_ = board_ang(f); return Vector((math.cos(a_), math.sin(a_)))
+def board_lift(f):
+    return smooth((f - 1998) / 22.0)
+CARRY_H = 0.82
+def board_matrix(f):
+    c = board_xy(f).to_2d(); hd = board_hd(f)
+    ga, gb = ground_z(*(c + hd * 1.35)), ground_z(*(c - hd * 1.35))
+    lie_z = ground_z(c.x, c.y) + 0.035
+    car_z = (ga + gb) / 2 + CARRY_H
+    z = lie_z + (car_z - lie_z) * board_lift(f)
+    raw = math.atan2((ga - gb) * board_lift(f), 2.7) if board_lift(f) > 0 else math.atan2(ground_z(*(c + hd * 0.8)) - ground_z(*(c - hd * 0.8)), 1.6)
+    pitch = max(-R_(8), min(R_(8), raw))       # carriers keep it nearly level; their arms take up the difference
+    R = Matrix.Rotation(math.atan2(hd.y, hd.x) - math.pi / 2, 3, 'Z') @ Matrix.Rotation(pitch, 3, 'X')
+    return Matrix.Translation(Vector((c.x, c.y, z))) @ R.to_4x4()
+BOARD = bpy.data.objects["SpineBoard"]
+BOARD.rotation_mode = 'XYZ'
+for f in [1] + list(range(1996, 2150, 4)) + [2149]:
+    ff = max(f, 1996)
+    M = board_matrix(ff)
+    BOARD.matrix_world = M
+    BOARD.keyframe_insert("location", frame=f); BOARD.keyframe_insert("rotation_euler", frame=f)
+for f_, h_ in ((1, True), (1972, False), (2150, True)):
+    BOARD.hide_render = h_; BOARD.keyframe_insert("hide_render", frame=f_)
+# farmer: shifted out of the crater onto the board, then carried lying on it, arms across his chest
+P(1980, LIE_POS, yaw=LYAW, pitch=-90, roll=6, spine=(6, 0, 0), head=(8, -6, 0), jaw=2, **SPREAD)
+def on_board(f, extra=None):
+    M = board_matrix(f); hd = board_hd(f).to_3d()
+    pel = M.translation + Vector((0, 0, 0.028 + 0.10)) - hd * 0.12
+    yaw = math.degrees(math.atan2(hd.y, hd.x)) - 90
+    tilt = math.degrees(math.asin(max(-1, min(1, (M.to_3x3() @ Vector((0, 1, 0))).z))))
+    P(f, pel, yaw=yaw, pitch=-90 + tilt, spine=(8, 0, 0), head=(10, 0, 0), jaw=2,
+      legs={"L": (0, 3, 4, 8), "R": (2, 3, 6, 8)}, arms={"L": ("pt", "chest_x"), "R": ("pt", "chest_x")})
+P(1988, (LIE_POS + Vector((BC0.x - HD2.x * 0.12, BC0.y - HD2.y * 0.12, LIE_POS.z + 0.12))) / 2 + Vector((0, 0, 0.06)),
+  yaw=math.degrees(ang0) - 90, pitch=-90, roll=10, spine=(8, 0, 0), head=(10, 0, 0), jaw=4,
+  legs={"L": (0, 6, 8, 8), "R": (2, 6, 10, 8)}, arms={"L": ("pt", "chest_x"), "R": ("rest", dict(fwd=-4, out=20, L=0.46))})
+for f in (1996, 2006, 2018, 2034, 2050, 2066, 2082, 2098, 2114, 2130, 2149):
+    on_board(f)
 # B14 hospital bed: lying flat on his back, head on the pillow (toward +Y), turning to the window (+X = his left)
 BED = bpy.data.objects["Hospital_Bed"]
 bpy.context.view_layer.update()
@@ -330,12 +376,13 @@ for i, v in enumerate(heap.data.vertices):
     newz = co.z; rim = 0.0
     for a_, b_, r in SEGS:
         d, q = seg_d(co, a_, b_)
-        floor_z = q.z - 0.45 * r
-        if d < 1.9 * r:
-            w = 1.0 if d < r else 1.0 - smooth((d - r) / (0.9 * r))
+        floor_z = q.z - 0.55 * r
+        if d < 1.35 * r:
+            w = 1.0 if d < r else 1.0 - smooth((d - r) / (0.35 * r))
             newz = min(newz, co.z + (floor_z - co.z) * w) if floor_z < co.z else newz
-        elif d < 3.0 * r and co.z > q.z - r * 1.5:
-            rim = max(rim, 0.075 * math.sin(math.pi * (d - 1.9 * r) / (1.1 * r)))
+        elif d < 3.2 * r and co.z > q.z - r * 2.0:
+            # displaced muck banked up against his sides
+            rim = max(rim, 0.13 * math.sin(math.pi * (d - 1.35 * r) / (1.85 * r)) ** 0.7)
     imp.data[i].co.z = newz + rim
 for f, v in ((1, 0.0), (91, 0.0), (95, 1.0)):
     imp.value = v; imp.keyframe_insert("value", frame=f)
@@ -371,6 +418,20 @@ for k in range(44):
         f += 2
     for cc_f, h in ((2149, False), (2150, True)):
         c.hide_render = h; c.keyframe_insert("hide_render", frame=cc_f)
+ev(116)
+for k, (bone, t, off) in enumerate((("lowerleg01.L", 0.4, 0.05), ("lowerleg01.R", 0.6, 0.05), ("upperleg02.L", 0.5, 0.07), ("upperleg02.R", 0.3, 0.07),
+                                    ("lowerarm01.L", 0.5, 0.04), ("upperarm02.R", 0.6, 0.05), ("spine03", 0.5, 0.11), ("lowerleg02.R", 0.3, 0.045),
+                                    ("upperarm02.L", 0.4, 0.05), ("spine04", 0.3, 0.12))):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=rnd.uniform(0.02, 0.04))
+    c = bpy.context.active_object; c.name = "Clod_On_%02d" % k; c.scale = (1.3, 1.0, 0.5); c.data.materials.append(muck)
+    for cc in c.users_collection: cc.objects.unlink(c)
+    clods.objects.link(c)
+    pb = FR.PB[bone]; pt = F.matrix_world @ pb.head.lerp(pb.tail, t)
+    c.location = pt + Vector((0, 0, off))
+    con = c.constraints.new('CHILD_OF'); con.target = F; con.subtarget = bone
+    con.inverse_matrix = (F.matrix_world @ pb.matrix).inverted()
+    for ff, h in ((1, True), (93, False), (2010, True)):
+        c.hide_render = h; c.keyframe_insert("hide_render", frame=ff)
 print("SPLASH clods", len(clods.objects))
 
 # ------------------------------------------------------------------ pitchfork: held, then knocked away
@@ -467,18 +528,29 @@ def goat_rigid(f, pos2, h, roll, drop, neck=(0, 0)):
 # roll so that her back faces him (he is on the -RSIDE side of her)
 _fwd = Matrix.Rotation(h_side, 3, 'Z') @ Vector((0, -1, 0))
 ROLL = R_(82) if (Matrix.Rotation(R_(82), 3, _fwd) @ Vector((0, 0, 1))).to_2d().dot(-RSIDE) > 0 else R_(-82)
-SIDE_DROP = Hg - 0.16           # torso centre ~16 cm above the muck when lying on her side
+BELLY_DROP = 0.25
+FOLD = {  # FK fold for sternal lying (deg about the world-aligned X axis of each bone, + = tip swings back)
+    "F": [("upper", 22, 0), ("lower", -100, 0), ("cannon", 168, 0), ("hoof", 25, 0)],
+    "H": [("upper", -58, 12), ("lower", 128, 0), ("cannon", -112, 0), ("hoof", -15, 0)]}
 def goat_lying(f, dz, fold):
-    goat_rigid(f, G_SIDE, h_side, ROLL * fold, dz)
+    """dz: torso drop, fold 0..1: IK legs (standing) -> FK folded legs"""
+    goat_rigid(f, G_SIDE, h_side, 0.0, dz)
+    for k in LEGS:
+        sx = 1 if k.endswith("L") else -1
+        for part, ang, splay in FOLD[k[0]]:
+            GR.key_rot("%s.%s" % (part, k), f, [("Y", sx * splay * fold), ("X", ang * fold)])
+        for cn, bone in (("IK", "cannon." + k), ("Copy Rotation", "hoof." + k)):
+            c = GR.PB[bone].constraints[cn]; c.influence = 1.0 - fold; c.keyframe_insert("influence", frame=f)
 goat_lying(1262, 0.0, 0.0)
-goat_lying(1280, 0.14, 0.35)
-goat_lying(1300, SIDE_DROP, 1.0)
-goat_lying(1500, SIDE_DROP, 1.0)
-for f, nk in ((1262, (14, 0)), (1305, (10, 38)), (1388, (12, 44)), (1500, (10, 40))):
+goat_lying(1276, 0.10, 0.45)
+goat_lying(1300, BELLY_DROP, 1.0)
+goat_lying(1500, BELLY_DROP, 1.0)
+for f, nk in ((1262, (14, 0)), (1305, (26, 34)), (1388, (30, 40)), (1500, (28, 36))):
     GR.key_rot("neck1", f, [("X", nk[0] * 0.5), ("Z", nk[1] * 0.5)]); GR.key_rot("neck2", f, [("X", nk[0] * 0.5), ("Z", nk[1] * 0.5)])
 # B10/B11 stand up and present the udder by his chest (facing his feet, hind end at his chest)
-goat_lying(1530, 0.14, 0.4)
-G_MILK = LIE_POS.to_2d() + RSIDE * 0.72 + HEAD_DIR * 0.30
+goat_lying(1530, 0.12, 0.45)
+goat_lying(1552, 0.0, 0.0)
+G_MILK = LIE_POS.to_2d() + RSIDE * 0.60 + HEAD_DIR * 0.30
 quad_hold(GR, 1560, G_SIDE.to_3d(), h_side)
 gp3 = catmull([(1561, G_SIDE.to_3d()), (1600, G_MILK.to_3d())])
 quad_move(GR, gp3, 1561, 1600, stride=0.35, gait="walk", lift=0.05, heading_fn=lambda f: h_side)
@@ -510,7 +582,8 @@ def stepped(obj, frames):
                     for kp in fc.keyframe_points:
                         if int(round(kp.co.x)) in frames:
                             kp.interpolation = 'CONSTANT'
-for o in (G, F, ST):
+exec(open(os.path.join(HERE, "03c_medics.py")).read())
+for o in (G, F, BOARD):
     stepped(o, {2149})
 
 print("ANIM_DONE")
