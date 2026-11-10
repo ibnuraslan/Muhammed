@@ -1,3 +1,21 @@
+## Two styles (decided 2026-11-10)
+- **Style 2, "flat cel" (DEFAULT for horror / true crime / investigations):** pure 2D canvas, thick ink
+  outlines, one shadow tone, dark desaturated palette, like the bus reference. Engine: `animator/flat/`
+  (`flat.js` projector + film finish, `bust.js` close-ups + `figure()` full bodies + hands + blood,
+  `bus.js` bus interior in perspective, `scenes.js` exteriors / rooms). Episode file: `export const flat = true`.
+- **Style 1, 3D toy / billboard characters (`cast.js`, `people.js` on three.js):** kept for other, lighter
+  content (the user will say which). Do not mix the two styles in one video.
+
+### Flat-style consistency rules
+- Every person is drawn by `bust()` (close-ups) or `figure()` (standing / walking / seated). Never use the
+  `Person` billboard inside a flat episode: its seated pose looked weird next to the cel close-ups.
+- A hand is never drawn alone: `grip()` / `palm()` / `fist()` always sit on the end of an arm (`arm()`) or a
+  forearm entering from the frame edge.
+- One location = one model. Every bus-interior shot is built with `aisle()` (same seats, windows, poles,
+  perspective) so the bus reads the same in every shot. No flat rows of seat shapes.
+- Plan first: the shot list (what each shot shows, camera, who sits where) is written in `plan.md` from the
+  reference at 2 fps and agreed before building.
+
 # Style bible
 
 The fixed look of the channel. Every episode follows it, so viewers recognise the show

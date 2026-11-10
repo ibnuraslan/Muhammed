@@ -11,8 +11,8 @@ export function shadeOf(hex, k = 0.74) {
   return '#' + f(r, -4) + f(g, 0) + f(b, 10);
 }
 export const LOOKS = {
-  li: { skin: '#cdb59b', hair: 'flat', hairColor: '#17171a', shirt: '#b7babd', collar: '#a6a9ad', eyes: '#3b2c22', lines: 1, stubble: 0.5, jaw: 1.08 },
-  tim: { skin: '#e0b88f', hair: 'crew', hairColor: '#e2c25c', shirt: '#4f9a45', collar: '#93b27c', eyes: '#4a6a8a', lines: 0.2, jaw: 1.0 },
+  li: { skin: '#cdb59b', hair: 'flat', hairColor: '#17171a', shirt: '#b7babd', collar: '#a6a9ad', eyes: '#3b2c22', lines: 1, stubble: 0.5, jaw: 1.08, pants: '#22252c', shoes: '#1a1a1c' },
+  tim: { skin: '#e0b88f', hair: 'crew', hairColor: '#e2c25c', shirt: '#4f9a45', collar: '#93b27c', eyes: '#4a6a8a', lines: 0.2, jaw: 1.0, pants: '#7a5a3a', shoes: '#b3261e' },
 };
 
 function strokeFill(g, fill, lw, ink = INK) { if (fill) { g.fillStyle = fill; g.fill(); } if (lw) { g.strokeStyle = ink; g.lineWidth = lw; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke(); } }
@@ -37,20 +37,20 @@ export function arm(g, a, look, lw, front) {
   const { sh, el, hd } = a, skin = look.skin, sk2 = shadeOf(skin);
   const seg = (p, q, w1, w2) => { const dx = q[0] - p[0], dy = q[1] - p[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
     return [[p[0] + nx * w1, p[1] + ny * w1], [q[0] + nx * w2, q[1] + ny * w2], [q[0] - nx * w2, q[1] - ny * w2], [p[0] - nx * w1, p[1] - ny * w1]]; };
-  const up = seg(sh, el, 60, 50), fo = seg(el, hd, 50, 38);
+  const up = seg(sh, el, 68, 58), fo = seg(el, hd, 58, 44);
   // outline pass then fill pass (hides the seams)
   for (const pass of [0, 1]) {
     for (const [pts, r] of [[up, 0], [fo, 0]]) { pathPts(g, pts); if (pass) { g.fillStyle = skin; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); } }
-    g.beginPath(); g.arc(el[0], el[1], 50, 0, 7); if (pass) { g.fillStyle = skin; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); }
+    g.beginPath(); g.arc(el[0], el[1], 58, 0, 7); if (pass) { g.fillStyle = skin; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); }
   }
   // forearm shadow strip
-  const fs = seg(el, hd, 50, 38); pathPts(g, [fs[2], fs[3], lerp2(fs[3], fs[0], 0.35), lerp2(fs[2], fs[1], 0.35)]); g.fillStyle = sk2; g.fill();
+  const fs = seg(el, hd, 58, 44); pathPts(g, [fs[2], fs[3], lerp2(fs[3], fs[0], 0.35), lerp2(fs[2], fs[1], 0.35)]); g.fillStyle = sk2; g.fill();
   // sleeve
   const m = [sh[0] + (el[0] - sh[0]) * 0.45, sh[1] + (el[1] - sh[1]) * 0.45];
-  const sl = seg(sh, m, 70, 76), sc = look.shirt;
+  const sl = seg(sh, m, 78, 84), sc = look.shirt;
   for (const pass of [0, 1]) {
     pathPts(g, sl); if (pass) { g.fillStyle = sc; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); }
-    if (!a.noCap) { g.beginPath(); g.arc(sh[0], sh[1], 72, 0, 7); if (pass) { g.fillStyle = sc; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); } }
+    if (!a.noCap) { g.beginPath(); g.arc(sh[0], sh[1], 80, 0, 7); if (pass) { g.fillStyle = sc; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); } }
   }
   pathPts(g, [sl[2], sl[3], lerp2(sl[3], sl[0], 0.3), lerp2(sl[2], sl[1], 0.3)]); g.fillStyle = shadeOf(sc); g.fill();
   curve(g, [sl[1], sl[2]], lw);                       // hem
@@ -447,3 +447,55 @@ export function backView(g, look, p = {}, lw = 5) {
   g.strokeStyle = '#3b3b42'; g.lineWidth = lw * 0.9; for (const [tx, ty] of [[-60, -150], [20, -170], [80, -110], [-20, -40]]) { g.beginPath(); g.moveTo(tx, ty); g.lineTo(tx + 10, ty + 14); g.lineTo(tx + 2, ty + 18); g.lineTo(tx + 12, ty + 32); g.stroke(); }
   g.restore();
 }
+
+// ------------------------------------------------------------------ full figure = legs + bust (same style)
+// pose: { legs: 'stand' | 'walk' | 'seat', walk: phase, ... any bust pose }. Local units as bust (head centre 0,0).
+// stand/walk: feet at y≈2600. seat: feet at y≈1950 (thighs come toward the camera).
+export function figure(g, look, p = {}, lw = 5) {
+  const legs = p.legs || 'stand', b = look.build || 1, pc = look.pants || '#2f3542', shoe = look.shoes || '#1d1d1f';
+  const limb = (pts, w1, w2, fill) => {   // tapered limb through points, outline then fill
+    const segs = []; for (let i = 0; i < pts.length - 1; i++) { const p0 = pts[i], p1 = pts[i + 1], dx = p1[0] - p0[0], dy = p1[1] - p0[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, wa = lerpW(w1, w2, i / (pts.length - 1)), wb = lerpW(w1, w2, (i + 1) / (pts.length - 1));
+      segs.push([[p0[0] + nx * wa, p0[1] + ny * wa], [p1[0] + nx * wb, p1[1] + ny * wb], [p1[0] - nx * wb, p1[1] - ny * wb], [p0[0] - nx * wa, p0[1] - ny * wa]]); }
+    for (const pass of [0, 1]) { for (const q of segs) { pathPts(g, q); if (pass) { g.fillStyle = fill; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); } }
+      for (const pt of pts.slice(1, -1)) { g.beginPath(); g.arc(pt[0], pt[1], (w1 + w2) / 2, 0, 7); if (pass) { g.fillStyle = fill; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); } } }
+  };
+  const shoeAt = (x, y, s = 1, side = 1) => { g.beginPath(); g.ellipse(x + side * 10, y, 70 * s, 34 * s, 0, 0, 7); strokeFill(g, shoe, lw); g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(x - 50 * s, y + 18 * s, 100 * s, 8 * s); };
+  if (legs === 'seat') {
+    bust(g, look, { ...p, armL: p.armsAfterLegs ? null : p.armL, armR: p.armsAfterLegs ? null : p.armR }, lw);
+    const kx = (190 + (p.knees || 0) * 40) * b, pc2 = shadeOf(pc, 0.78);
+    // the seat between the knees
+    pathPts(g, [[-kx + 60, 1330], [kx - 60, 1330], [kx - 40, 1500], [-kx + 40, 1500]]); g.fillStyle = '#15171f'; g.fill();
+    for (const s of [-1, 1]) {           // shins (calf bulge) and shoes first, the thighs overlap their tops
+      const knee = [s * kx, 1330], ankle = [s * (kx + 10), 1880];
+      limb([knee, [s * (kx + 14), 1560], ankle], 72, 50, pc); shoeAt(ankle[0], ankle[1] + 40, 1.2, s);
+      curve(g, [[s * (kx - 40), 1700], [s * (kx - 30), 1800], [s * (kx - 36), 1860]], lw * 0.7, pc2);
+    }
+    // pelvis + both thighs as one shape (outline pass, then fill pass), knees as rounded ends
+    const th = s2 => [[s2 * 40, 1060], [s2 * 165 * b, 1060], [s2 * (kx + 70), 1300], [s2 * (kx + 50), 1380], [s2 * (kx - 50), 1388], [s2 * (kx - 72), 1320], [s2 * 30, 1160]];
+    for (const pass of [0, 1]) for (const s2 of [-1, 1]) {
+      const q = th(s2); g.beginPath(); g.moveTo(q[0][0], q[0][1]); g.lineTo(q[1][0], q[1][1]); g.lineTo(q[2][0], q[2][1]); g.quadraticCurveTo(q[3][0] + s2 * 30, q[3][1] + 20, (q[3][0] + q[4][0]) / 2, q[4][1] + 6); g.quadraticCurveTo(q[4][0] - s2 * 30, q[4][1], q[5][0], q[5][1]); g.lineTo(q[6][0], q[6][1]); g.closePath();
+      if (pass) { g.fillStyle = pc; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); }
+    }
+    pathPts(g, [[-60, 1040], [60, 1040], [40, 1170], [-40, 1170]]); g.fillStyle = pc; g.fill();
+    for (const s2 of [-1, 1]) {        // folds, knee shading, inner-thigh line
+      curve(g, [[s2 * 40, 1170], [s2 * 70, 1260], [s2 * (kx - 70), 1322]], lw * 0.9);
+      g.fillStyle = pc2; g.beginPath(); g.ellipse(s2 * kx, 1350, 70, 26, 0, 0, 7); g.fill();
+      curve(g, [[s2 * 120, 1120], [s2 * 150, 1180], [s2 * 140, 1230]], lw * 0.6, pc2);
+    }
+    g.fillStyle = shadeOf(look.shirt, 0.7); g.fillRect(-160 * b, 1040, 320 * b, 14);     // shirt hem shadow on the lap
+    if (p.armsAfterLegs) for (const a of [p.armL, p.armR]) if (a) arm(g, a, look, lw, true);
+    return;
+  }
+  const ph = p.walk || 0, walking = legs === 'walk' ? 1 : 0, bob = walking ? Math.abs(Math.sin(ph)) * -18 : 0;
+  g.save(); g.translate(0, bob);
+  for (const s of [-1, 1]) {
+    const lift = walking ? Math.max(0, Math.sin(ph + (s > 0 ? 0 : Math.PI))) : 0;
+    const hip = [s * 100 * b, 1100], knee = [s * 108 * b, 1840 - lift * 60], ankle = [s * (100 - lift * 14) * b, 2540 - lift * 120];
+    limb([hip, knee, ankle], 120, 64, pc); shoeAt(ankle[0], ankle[1] + 40 - lift * 6, 1 + lift * 0.12, s);
+  }
+  pathPts(g, [[-170 * b, 1050], [170 * b, 1050], [130 * b, 1250], [0, 1290], [-130 * b, 1250]]); g.fillStyle = pc; g.fill();
+  const hang = (s) => ({ front: true, sh: [s * 255 * b, 400], el: [s * 320 * b, 760], hd: [s * (300 + (walking ? Math.sin(ph + (s > 0 ? Math.PI : 0)) * 30 : 0)) * b, 1090] });
+  bust(g, look, { ...p, armL: p.armL === undefined ? hang(-1) : p.armL, armR: p.armR === undefined ? hang(1) : p.armR }, lw);
+  g.restore();
+}
+const lerpW = (a, b, k) => a + (b - a) * k;

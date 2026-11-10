@@ -1,7 +1,7 @@
 // Bus 2008 v3: pure 2D, shot-by-shot copy of the reference (see plan.md): same framing, staging, action, blood.
 // Only the victim's body parts are never drawn (kept out of frame / covered).
 import { cam3, P, personScale, finish, censor2D, wash, blackout, INK } from '../../animator/flat/flat.js';
-import { bust, LOOKS, fist, knife, bloodyKnife, arm, grip, palm, backView, splat, smear, shadeOf } from '../../animator/flat/bust.js';
+import { bust, figure, LOOKS, fist, knife, bloodyKnife, arm, grip, palm, backView, splat, smear, shadeOf } from '../../animator/flat/bust.js';
 import { aisle, nightView, BUS } from '../../animator/flat/bus.js';
 import { busExterior, city, nightSky, interrogation, lightCone, table, evidenceBag } from '../../animator/flat/scenes.js';
 import { Person } from '../../animator/people.js';
@@ -54,6 +54,10 @@ function hook({ W, H, dur }) {
     // his hand comes up from the bottom gripping it, to his mouth (what he holds is covered)
     const rise = E(tt, 0.2, 1.3), hx = lerp(330, 430, rise) + 20 * bite, hy = lerp(2350, 1500, rise) - 50 * bite;
     smear(g, hx + 130, hy - 110, 120, 1, 21, 2.5);
+    { const a = -1.25, dx = Math.cos(a), dy = Math.sin(a), wx = hx - dx * 150 * 2.6, wy = hy - dy * 150 * 2.6, fx2 = wx - dx * 1200, fy2 = wy - dy * 1200, nx = -dy, ny = dx;
+      g.beginPath(); g.moveTo(wx + nx * 130, wy + ny * 130); g.lineTo(fx2 + nx * 175, fy2 + ny * 175); g.lineTo(fx2 - nx * 175, fy2 - ny * 175); g.lineTo(wx - nx * 130, wy - ny * 130); g.closePath();
+      g.fillStyle = LI.skin; g.fill(); g.strokeStyle = INK; g.lineWidth = 8; g.stroke();
+      g.beginPath(); g.moveTo(wx - nx * 130, wy - ny * 130); g.lineTo(fx2 - nx * 175, fy2 - ny * 175); g.lineTo(fx2 - nx * 90, fy2 - ny * 90); g.lineTo(wx - nx * 70, wy - ny * 70); g.closePath(); g.fillStyle = shadeOf(LI.skin); g.fill(); }
     grip(g, hx, hy, -1.25, LI.skin, 8 / 2.6, 2.6);
     smear(g, hx + 30, hy - 160, 140, 0.9, 17, 1.6);
     censor2D(g, hx + 120, hy - 300, 175, seg(tt, 0.75, 2.9) > 0 ? Math.max(0.16, seg(tt, 0.75, 0.9)) : 0);
@@ -62,25 +66,25 @@ function hook({ W, H, dur }) {
   };
 }
 
-function seatPan(g, W, H, t, ox, tt) {
-  g.save(); g.translate(-ox, 0);
-  const WW = W + 1100;
-  g.fillStyle = '#383a40'; g.fillRect(0, 0, WW, H);
-  paleWindow(g, WW, 360);
-  g.fillStyle = '#5d6168'; g.strokeStyle = INK; g.lineWidth = 3; for (let x = 60; x < WW; x += 300) { g.fillRect(x, 0, 30, 360); g.strokeRect(x, -5, 30, 365); }
-  g.fillRect(0, 352, WW, 24); g.strokeRect(-5, 352, WW + 10, 24);
-  for (let x = -40; x < WW; x += 210) seatBack(g, x, 420, 170, 400);
-  for (let x = 30; x < WW; x += 330) seatBack(g, x, 560, 280, 600, '#1a1e2c');
-  wash(g, WW, H, '#0b0c10', 0.15);
-  drawBust(g, TIM, { tn: -0.25, tilt: 0.42, hdx: -10, hdy: 20 + Math.sin(t * 1.6) * 3, eyeMode: 'closed', eye: 0, mouth: 'neutral', light: 1, headphones: true }, 290, 1330, 1.35);
+function seatPan(g, W, H, t, panK, tt) {
+  const c = cam3({ x: lerp(-1.0, -0.52, panK), y: 1.16, z: 1.1, f: 760, cx: 540, cy: 720 });
   const turn = E(tt, 0.9, 1.5), grin = E(tt, 1.2, 1.9), kn = E(tt, 1.5, 2.3);
-  const hd = [lerp(170, 110, kn), lerp(1150, 560, kn)], el = [330, lerp(1000, 900, kn)];
-  drawBust(g, LI, { tn: lerp(-0.7, -0.15, turn), tilt: lerp(0.05, -0.06, turn), look: lerp(-1, 0.2, turn), eye: 1.1, iris: 0.8, socket: 0.25, brow: 0.5,
-    mouth: grin > 0.05 ? 'grin' : 'neutral', mouthK: grin * 0.75, smirk: 0.6,
-    armR: kn > 0 ? { front: true, sh: [250, 400], el, hd } : null }, 1560, 760, 1.32);
-  if (kn > 0) inLocal((g2, lw) => { knife(g2, hd[0], hd[1] + 20, -1.68, 380, lw); fist(g2, hd, Math.atan2(hd[1] - el[1], hd[0] - el[0]), LI.skin, lw); }, 1560, 760, 1.32)(g);
-  g.restore();
-  finish(g, W, H, t, { vig: 0.75 });
+  const at = (X, Y, Z, Hl) => { const o = P(c, X, Y, Z); return [o[0], o[1], (c.f / (Z - c.z)) * (Y / Hl)]; };
+  const hd = [lerp(150, 110, kn), lerp(1150, 560, kn)], el = [lerp(320, 330, kn), lerp(820, 900, kn)];
+  aisle(g, c, t, { W, H, z0: 1.08, people: [
+    { z: 1.8, draw: g2 => { const [x, y, k] = at(-1.0, 1.2, 1.76, 1950); g2.save(); g2.translate(x, y); g2.scale(k, k);
+      figure(g2, TIM, { legs: 'seat', tn: 0.15, tilt: -0.34, hdx: -24, hdy: 26 + Math.sin(t * 1.6) * 3, eyeMode: 'closed', eye: 0, mouth: 'neutral', headphones: true, armsAfterLegs: true,
+        armL: { front: true, sh: [-255, 400], el: [-320, 830], hd: [-110, 1160] }, armR: { front: true, sh: [255, 400], el: [320, 830], hd: [110, 1180] } }, 6 / k);
+      g2.restore(); } },
+    { z: 1.79, draw: g2 => { const [x, y, k] = at(-0.5, 1.3, 1.76, 1950); g2.save(); g2.translate(x, y); g2.scale(k, k);
+      figure(g2, LI, { legs: 'seat', tn: lerp(-0.7, -0.12, turn), tilt: lerp(0.05, -0.05, turn), look: lerp(-1, 0.2, turn), eye: 1.1, iris: 0.8, socket: 0.25, brow: 0.5,
+        mouth: grin > 0.05 ? 'grin' : 'neutral', mouthK: grin * 0.75, smirk: 0.6, armsAfterLegs: true,
+        armL: { front: true, sh: [-285, 400], el: [-350, 830], hd: [-130, 1160] }, armR: { front: true, sh: [285, 400], el, hd } }, 6 / k);
+      if (kn > 0) { knife(g2, hd[0], hd[1] + 20, -1.68, 380, 6 / k); fist(g2, hd, Math.atan2(hd[1] - el[1], hd[0] - el[0]), LI.skin, 6 / k); }
+      g2.restore(); } },
+  ], sil: [{ x: 0.56, z: 3.8 }, { x: -1.0, z: 4.7 }, { x: 0.98, z: 6.5 }] });
+  wash(g, W, H, '#0b0c10', 0.18);
+  finish(g, W, H, t, { vig: 0.75, flick: 0.2, seed: 6 });
 }
 
 // passengers outside, city lights behind
@@ -113,29 +117,27 @@ export const shots = {
 
   // 2 (ref 3.5-9.8) Tim in the WINDOW seat, head on his fist; the aisle seat beside him empty. The man walks
   //   down the aisle and stops right behind that empty seat, hands on its back.
-  '02': ({ W, H, dur }) => {
-    const tim = new Person(STAGE, TIM_P, { seed: 2 }), li = new Person(STAGE, LI_P, { seed: 5 }), T = N(dur, 6.3);
-    return (g, t, u) => {
-      const tt = T(t);
-      const c = cam3({ x: -0.62, y: 1.72, z: lerp(0.0, 0.12, ease(u)), f: 1100, cx: 540, cy: 330 });
-      const walk = seg(tt, 0, 4.8), zl = lerp(7.6, 2.32, ease(walk) * 0.3 + walk * 0.7), stop = E(tt, 4.6, 5.3);
-      const fT = P(c, -1.0, 0, 1.72), sT = personScale(c, 1.72, 1.82);
-      tim.set({ seat: 1, view: 'front', turn: 0.35, tilt: -0.2, expr: 'tired', blink: true, aimLc: toPC(fT[0], fT[1], sT, ...P(c, -1.15, 1.25, 1.78).slice(0, 2)), armR: [0.3, -0.5] });
-      const fL = P(c, -0.14, 0, zl), sL = personScale(c, zl, 1.92);
-      const hands = stop > 0 ? { aimLc: toPC(fL[0], fL[1], sL, ...P(c, -0.62, lerp(0.95, 1.27, stop), 2.0).slice(0, 2)), aimRc: toPC(fL[0], fL[1], sL, ...P(c, -0.38, lerp(0.95, 1.27, stop), 2.0).slice(0, 2)) } : { aimLc: null, aimRc: null };
-      li.set({ view: 'front', walking: 1 - stop, walk: tt * 5.2, expr: 'neutral', eyeShadow: 0.85, turn: -0.3 * stop, tilt: 0.12 * stop, ...hands });
-      aisle(g, c, t, { W, H, z0: 1.08, skip: (i, xc) => i === 0 && xc === -1.0, people: [
-        { z: 1.86, draw: g2 => {
-          tim.drawInto(g2, fT[0], fT[1], sT, t);
-          const hp = P(c, -1.12, 1.24, 1.78);
-          g2.save(); g2.translate(hp[0], hp[1]); g2.scale(sT * 0.75, sT * 0.75); fist(g2, [0, 0], -1.9, TIM.skin, 4 / (sT * 0.75)); g2.restore();
-        } },
-        { z: zl, draw: g2 => li.drawInto(g2, fL[0], fL[1], sL, t) },
-      ], sil: [{ x: 0.98, z: 3.8 }, { x: -1.0, z: 4.8 }, { x: 0.56, z: 6.6 }, { x: -0.56, z: 8.4 }] });
-      wash(g, W, H, '#0b0c10', 0.25);
-      finish(g, W, H, t, { vig: 0.8, flick: 0.25, seed: 4 });
-    };
-  },
+  '02': ({ W, H, dur }) => { const T = N(dur, 6.3); return (g, t, u) => {
+    const tt = T(t);
+    const c = cam3({ x: -0.62, y: 1.72, z: lerp(0.0, 0.12, ease(u)), f: 1100, cx: 540, cy: 330 });
+    const walk = seg(tt, 0, 4.8), zl = lerp(7.6, 2.32, ease(walk) * 0.3 + walk * 0.7), stop = E(tt, 4.6, 5.3);
+    const oT = P(c, -1.0, 1.25, 1.72), kT = (c.f / (1.72 - c.z)) * (1.25 / 1950);
+    const oL = P(c, -0.12, 1.74, zl), kL = (c.f / (zl - c.z)) * (1.74 / 2600);
+    const toL = (X, Y, Z) => { const q = P(c, X, Y, Z); return [(q[0] - oL[0]) / kL, (q[1] - oL[1]) / kL]; };
+    const reach = (sd, target) => { const sh = [sd * 285, 400], hang = [sd * 336, 1090], hd = [lerp(hang[0], target[0], stop), lerp(hang[1], target[1], stop)];
+      return { front: true, sh, el: [(sh[0] + hd[0]) / 2 + sd * 70, (sh[1] + hd[1]) / 2 + 30 * (1 - stop)], hd }; };
+    const liPose = { legs: stop > 0.5 ? 'stand' : 'walk', walk: tt * 5.2, socket: 0.55, eye: 1, mouth: 'neutral', tn: -0.35 * stop, tilt: 0.1 * stop, look: -0.6 * stop, lookY: 0.6 * stop,
+      armL: stop > 0 ? reach(-1, toL(-0.5, 1.25, 2.0)) : undefined, armR: stop > 0 ? reach(1, toL(-0.3, 1.25, 2.0)) : undefined };
+    aisle(g, c, t, { W, H, z0: 1.08, skip: (i, xc) => i === 0 && xc === -1.0, people: [
+      { z: 1.86, draw: g2 => { g2.save(); g2.translate(oT[0], oT[1]); g2.scale(kT, kT);
+        figure(g2, TIM, { legs: 'seat', tn: 0.3, tilt: -0.16, eye: 0.45, mouth: 'neutral', light: 1, armsAfterLegs: true,
+          armL: { front: true, sh: [-255, 400], el: [-470, 760], hd: [-178, -6] }, armR: { front: true, sh: [255, 400], el: [345, 820], hd: [215, 1240] } }, 4.5 / kT);
+        g2.restore(); } },
+      { z: zl, draw: g2 => { g2.save(); g2.translate(oL[0], oL[1]); g2.scale(kL, kL); figure(g2, LI, liPose, 4.5 / kL); g2.restore(); } },
+    ], sil: [{ x: 0.98, z: 3.8 }, { x: -1.0, z: 4.8 }, { x: 0.56, z: 6.6 }, { x: -0.56, z: 8.4 }] });
+    wash(g, W, H, '#0b0c10', 0.25);
+    finish(g, W, H, t, { vig: 0.8, flick: 0.25, seed: 4 });
+  }; },
 
   // 3 (ref 10.0-12.3) Tim three-quarter, chin on his fist, elbow on the sill: half asleep -> yawn -> nods off
   '03': ({ W, H, dur }) => { const T = N(dur, 2.5); return (g, t, u) => {
@@ -155,9 +157,9 @@ export const shots = {
   }; },
 
   // 4 (ref 12.5-14.3) Tim asleep, slumped on the seat back; slow pan right...
-  '04': ({ W, H }) => (g, t, u) => seatPan(g, W, H, t, lerp(0, 380, ease(u) * 0.8 + u * 0.2), 0),
+  '04': ({ W, H }) => (g, t, u) => seatPan(g, W, H, t, lerp(0, 0.35, ease(u) * 0.8 + u * 0.2), 0),
   // 5 (ref 14.5-17.0) ...the man sitting next to him turns to us, grins, pulls out a big knife
-  '05': ({ W, H, dur }) => { const T = N(dur, 2.6); return (g, t, u) => { const tt = T(t); seatPan(g, W, H, t, lerp(380, 1060, E(tt, 0, 1.0)), tt); }; },
+  '05': ({ W, H, dur }) => { const T = N(dur, 2.6); return (g, t, u) => { const tt = T(t); seatPan(g, W, H, t, lerp(0.35, 1, E(tt, 0, 1.0)), tt); }; },
 
   // 6 (ref 17.0-19.8) by the pale window: his arm raises the knife over sleeping Tim, Tim's eyes snap open, the stab,
   //   blood sprays the window, Tim screams
@@ -210,9 +212,10 @@ export const shots = {
     const k = lerp(1.25, 1.36, ease(u)), sway = Math.sin(t * 2.4) * 10;
     drawBust(g, LI, { tn: 0.05, eye: 1.15, iris: 0.6, brow: 0.8, mouth: 'grin', mouthK: 0.55, socket: 0.35, shirtBlood: 0.9, hdx: sway * 0.3,
       armL: { sh: [-260, 400], el: [-470, 120 + sway], hd: [-400, -200 + sway], blood: 0.6 },
-      armR: { front: true, sh: [260, 400], el: [440, 720], hd: [380, 860], fist: false } }, 640, 860, k * 0.92);
+      armR: null }, 640, 860, k * 0.92);
     seatBack(g, 740, 1580, 520, 700);
-    inLocal((g2, lw) => { bloodyKnife(g2, -400, -200 + sway, -1.9, 330, lw, 1); fist(g2, [-400, -200 + sway], Math.atan2(-320, 70), LI.skin, lw); palm(g2, 400, 820, -0.1, LI.skin, lw, 1.15, 1); smear(g2, 420, 880, 110, 0.8, 4, 1.5); }, 640, 860, k * 0.92)(g);
+    inLocal((g2, lw) => { bloodyKnife(g2, -400, -200 + sway, -1.9, 330, lw, 1); fist(g2, [-400, -200 + sway], Math.atan2(-320, 70), LI.skin, lw); const el9 = [480, 470], hd9 = [390, 590], dl = Math.hypot(hd9[0] - el9[0], hd9[1] - el9[1]), dx9 = (hd9[0] - el9[0]) / dl, dy9 = (hd9[1] - el9[1]) / dl;
+      arm(g2, { front: true, sh: [270, 400], el: el9, hd: hd9, fist: false, noCap: false }, LI, lw); palm(g2, hd9[0] + dx9 * 120, hd9[1] + dy9 * 120, Math.atan2(dy9, dx9), LI.skin, lw, 1.0, 0.8); smear(g2, 420, 1000, 110, 0.8, 4, 1.5); }, 640, 860, k * 0.92)(g);
     finish(g, W, H, t, { vig: 0.75, flick: 0.35, seed: 9 });
   },
 

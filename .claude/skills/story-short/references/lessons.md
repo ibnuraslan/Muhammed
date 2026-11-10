@@ -71,6 +71,10 @@ into rules.
     mutilation; keep the same shot and put them out of frame or under the badge. Say so once, then build.
 32. **No captions when the reference has none** (`--no-captions`). Merge narration into few TTS lines
     (several `[NN]` markers per line): every TTS line adds ~0.9 s of silence.
+33. **Style 2 (flat cel) is the default for horror/true crime.** Style 1 (3D) is for other content.
+34. **Hands are always connected to an arm** (a lone palm reads as a floating hand). **Seated people** are drawn
+    with `figure({legs:'seat'})`, never the billboard Person. **Every interior shot uses the same bus model**
+    (`aisle()`); the flat rows of seat shapes in the pan shot "didn't look like a bus".
 20. **Review the delivered video at 4 fps** (dense contact sheets), not 1 fps. Motion problems
     (sliding backgrounds, missing contact) only show up in sequences.
 
@@ -81,6 +85,7 @@ into rules.
 | 2026-11-06 | example v2 | (pending) | – | 02, 11 (v1) | full self-review, 13 shots fixed, see example/03-review.md |
 
 ## Feedback log
+- 2026-11-10 · bus v3 full · "the hand… only the palm is coming… the person seated is very weird… the background chairs… not like a bus… get things consistently… do it in the second style" → rules 33–34, figure(), attached hands, shots 2/4/5 rebuilt in the bus perspective.
 - 2026-11-10 · bus v3 · "did I ask you to censor or 100% as the reference?" → rule 31: same shots + blood, only the real victim's body parts kept off-screen. Rule 32.
 - 2026-11-10 · bus v3 test · "your analysis is very poor… he's eating a heart… the person is sitting in the corner seat, not where the criminal sits" → rules 29–30, plan.md redone from a 2 fps timestamped pass.
 - 2026-11-09 · bus 2008 · "I like this [illustrated] style… the one rendering is lame, not a lot of scenes, even the arrest" → rules 26–28, people.js, ink outlines, v2 with 39 scenes.
