@@ -17,12 +17,16 @@ F_THIN = FONT_DIR + "InterDisplay-Thin.otf"
 F_REG = FONT_DIR + "Inter-Regular.otf"
 F_MED = FONT_DIR + "Inter-Medium.otf"
 
-SHOTS = [  # (render dir, grade preset, particles preset)
-    ("shot1_peaks", "dawn", "none"),
-    ("shot2_map", "map", "none"),
-    ("shot3_trail", "storm", "blizzard"),
-    ("shot4_axe", "night", "macro"),
-    ("shot5_name", "deepnight", "topdown"),
+SHOTS = [  # (render dir, grade preset, particles preset) in edit order
+    ("shot1_peaks", "dawn", "none"),           # the Ötztal Alps
+    ("shot2_map", "map", "none"),              # route to the place of discovery
+    ("shot7_discovery", "day", "flurry"),      # 19 Sept 1991: the body in the ice, the two hikers
+    ("shot6_lab", "lab", "dust"),              # the mummy on the steel table
+    ("shot3_trail", "storm", "blizzard"),      # 5,300 years earlier: footprints
+    ("shot9_walk", "storm", "blizzard"),       # Ötzi walking into the storm
+    ("shot8_fire", "fire", "embers"),          # by the fire at night
+    ("shot4_axe", "night", "macro"),           # the copper axe
+    ("shot5_name", "deepnight", "topdown"),    # title
 ]
 XFADE = 12  # frames of dissolve between shots
 ZOOM = {"shot2_map": 1.05}  # slight push-in crops the terrain tile's edge out of frame
@@ -61,6 +65,9 @@ GRADES = {
     "storm":  ((0.004, 0.012, 0.028), (0.97, 1.00, 1.05), 0.8, 0.32, 1.12),
     "night":  ((0.004, 0.014, 0.034), (1.04, 1.00, 0.96), 0.92, 0.20, 1.04),
     "deepnight": ((0.004, 0.012, 0.035), (0.96, 1.00, 1.05), 0.85, 0.22, 1.06),
+    "day":    ((0.008, 0.016, 0.028), (0.98, 1.00, 1.03), 0.82, 0.24, 1.10),
+    "lab":    ((0.004, 0.014, 0.030), (0.94, 1.00, 1.07), 0.78, 0.24, 1.06),
+    "fire":   ((0.003, 0.008, 0.026), (1.05, 0.99, 0.93), 1.00, 0.22, 1.04),
 }
 
 
@@ -107,6 +114,9 @@ class Snow:
             "blizzard": dict(n=1100, wind=(0.9, 0.12), fall=0.35, turb=0.5, size=0.8, bright=0.6, tint=(0.85, 0.9, 1.0), focus=0.5),
             "macro":    dict(n=380, wind=(0.12, 0.0), fall=0.22, turb=0.15, size=1.5, bright=0.75, tint=(0.8, 0.88, 1.0), focus=0.55),
             "topdown":  dict(n=650, wind=(0.35, 0.1), fall=0.0, turb=0.25, size=1.1, bright=0.8, tint=(0.75, 0.85, 1.0), focus=0.9),
+            "flurry":   dict(n=420, wind=(0.35, 0.05), fall=0.28, turb=0.3, size=0.8, bright=0.5, tint=(0.9, 0.93, 1.0), focus=0.6),
+            "dust":     dict(n=140, wind=(0.03, 0.0), fall=0.02, turb=0.08, size=0.45, bright=0.22, tint=(0.75, 0.88, 1.0), focus=0.5),
+            "embers":   dict(n=70, wind=(0.06, 0.0), fall=-0.42, turb=0.5, size=0.45, bright=1.0, tint=(1.0, 0.52, 0.16), focus=0.45),
         }.get(preset)
         self.cfg = cfg
         if cfg is None:
@@ -281,6 +291,25 @@ def captions(shot, t, dur, i, labels=None):
             tracked(d, (lx + 4, ly - 24), "PLACE OF DISCOVERY", font(F_MED, 15), RED, 0.22)
             tracked(d, (lx + 4, ly + 7), "3,210 M  ·  19 SEPT 1991", font(F_MED, 13), (25, 22, 26, 255), 0.22)
         items.append((disc, reveal * window(t, 0, dur - 0.1, 0.3)))
+    elif shot == "shot7_discovery":
+        al = window(t, 0.6, dur - 0.4, 0.7)
+        def f(d):
+            tracked(d, (64, H - 128), "TISENJOCH  ·  3,210 M", font(F_LIGHT, 30), WHITE, 0.3)
+            d.line([(66, H - 82), (66 + 46, H - 82)], fill=(236, 240, 245, 200), width=1)
+            tracked(d, (64, H - 70), "19 SEPTEMBER 1991  ·  FOUND BY ERIKA & HELMUT SIMON", font(F_REG, 13), DIM, 0.3)
+        items.append((f, al))
+    elif shot == "shot6_lab":
+        al = window(t, 0.8, dur - 0.4, 0.7)
+        def f(d):
+            x0 = 64; y0 = 64
+            tracked(d, (x0, y0), "THE ICEMAN", font(F_LIGHT, 30), WHITE, 0.3)
+            d.line([(x0 + 2, y0 + 48), (x0 + 40, y0 + 48)], fill=(236, 240, 245, 200), width=1)
+            rows = [("HEIGHT", "1.54 M  (5 FT)"), ("WEIGHT", "13 KG  (29 LB)"), ("AGE", "c. 46 YEARS")]
+            for k_, (a_, b_) in enumerate(rows):
+                yy = y0 + 64 + k_ * 26
+                tracked(d, (x0, yy), a_, font(F_MED, 12), (170, 182, 198, 255), 0.3)
+                tracked(d, (x0 + 84, yy), b_, font(F_REG, 13), WHITE, 0.18)
+        items.append((f, al))
     elif shot == "shot3_trail":
         al = window(t, 0.7, dur - 0.5, 0.9)
         def f(d):
@@ -320,6 +349,8 @@ SCRIMS = {  # shot -> (cx, cy, rx, ry, strength, caption window start, end)
     "shot1_peaks": (200, H - 95, 420, 120, 0.55, 0.9, -0.6),
     "shot4_axe": (W - 200, 220, 360, 150, 0.35, 0.9, -0.4),
     "shot3_trail": (W / 2, H / 2 - 12, 520, 120, 0.45, 0.7, -0.5),
+    "shot7_discovery": (240, H - 95, 460, 120, 0.5, 0.6, -0.4),
+    "shot6_lab": (200, 140, 360, 160, 0.35, 0.8, -0.4),
 }
 
 
@@ -409,7 +440,7 @@ def main():
         starts.append(acc / FPS)
         acc += len(c) - (XFADE if ci < len(clips) - 1 else 0)
     subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "sound.py"), wav,
-                    f"{n_frames / FPS:.3f}", ",".join(f"{s:.3f}" for s in starts)], check=True)
+                    f"{n_frames / FPS:.3f}", ",".join(f"{sh[0]}:{st:.3f}" for sh, st in zip(SHOTS, starts))], check=True)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", str(FPS), "-i", final + "/%05d.png", "-i", wav,
                     "-c:v", "libx264", "-preset", "slow", "-crf", "17", "-pix_fmt", "yuv420p", "-tune", "film",
                     "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", OUTMP4], check=True)
