@@ -67,7 +67,7 @@ function hook({ W, H, dur }) {
 }
 
 function seatPan(g, W, H, t, panK, tt) {
-  const c = cam3({ x: lerp(-1.0, -0.52, panK), y: 1.16, z: 1.1, f: 760, cx: 540, cy: 720 });
+  const c = cam3({ x: lerp(-1.0, -0.52, panK), y: 1.12, z: 1.12, f: 1150, cx: 540, cy: 980 });
   const turn = E(tt, 0.9, 1.5), grin = E(tt, 1.2, 1.9), kn = E(tt, 1.5, 2.3);
   const at = (X, Y, Z, Hl) => { const o = P(c, X, Y, Z); return [o[0], o[1], (c.f / (Z - c.z)) * (Y / Hl)]; };
   const hd = [lerp(150, 110, kn), lerp(1150, 560, kn)], el = [lerp(320, 330, kn), lerp(820, 900, kn)];
@@ -127,11 +127,14 @@ export const shots = {
     const reach = (sd, target) => { const sh = [sd * 285, 400], hang = [sd * 336, 1090], hd = [lerp(hang[0], target[0], stop), lerp(hang[1], target[1], stop)];
       return { front: true, sh, el: [(sh[0] + hd[0]) / 2 + sd * 70, (sh[1] + hd[1]) / 2 + 30 * (1 - stop)], hd }; };
     const liPose = { legs: stop > 0.5 ? 'stand' : 'walk', walk: tt * 5.2, socket: 0.55, eye: 1, mouth: 'neutral', tn: -0.35 * stop, tilt: 0.1 * stop, look: -0.6 * stop, lookY: 0.6 * stop,
-      armL: stop > 0 ? reach(-1, toL(-0.5, 1.25, 2.0)) : undefined, armR: stop > 0 ? reach(1, toL(-0.3, 1.25, 2.0)) : undefined };
-    aisle(g, c, t, { W, H, z0: 1.08, skip: (i, xc) => i === 0 && xc === -1.0, people: [
+      armL: stop > 0 ? { ...reach(-1, toL(-0.46, 1.31, 2.0)), hand: 'palm', handScale: 0.75, spread: 0.6 } : undefined };
+    aisle(g, c, t, { W, H, z0: 1.08, skip: (i, xc) => i === 0 && xc < 0, people: [
       { z: 1.86, draw: g2 => { g2.save(); g2.translate(oT[0], oT[1]); g2.scale(kT, kT);
-        figure(g2, TIM, { legs: 'seat', tn: 0.3, tilt: -0.16, eye: 0.45, mouth: 'neutral', light: 1, armsAfterLegs: true,
-          armL: { front: true, sh: [-255, 400], el: [-470, 760], hd: [-178, -6] }, armR: { front: true, sh: [255, 400], el: [345, 820], hd: [215, 1240] } }, 4.5 / kT);
+        // like the reference: leaning toward the window, elbow on the sill, cheek resting on his curled hand,
+        // the other hand open on his knee
+        figure(g2, TIM, { legs: 'seat', kneeShift: 170, lean: -0.16, tn: 0.25, tilt: -0.3, hdx: -40, hdy: 20, eye: 0.38, browUp: 0.35, mouth: 'neutral', light: 1, armsAfterLegs: true,
+          armL: { front: true, sh: [-255, 400], el: [-560, 560], hd: [-300, 210], hand: 'grip', handScale: 0.9 },
+          armR: { front: true, sh: [255, 400], el: [330, 830], hd: [300, 1170], hand: 'palm', handScale: 0.8, spread: 0.5, noLean: true } }, 4.5 / kT);
         g2.restore(); } },
       { z: zl, draw: g2 => { g2.save(); g2.translate(oL[0], oL[1]); g2.scale(kL, kL); figure(g2, LI, liPose, 4.5 / kL); g2.restore(); } },
     ], sil: [{ x: 0.98, z: 3.8 }, { x: -1.0, z: 4.8 }, { x: 0.56, z: 6.6 }, { x: -0.56, z: 8.4 }] });

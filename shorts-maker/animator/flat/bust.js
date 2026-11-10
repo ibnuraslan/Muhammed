@@ -37,14 +37,8 @@ export function arm(g, a, look, lw, front) {
   const { sh, el, hd } = a, skin = look.skin, sk2 = shadeOf(skin);
   const seg = (p, q, w1, w2) => { const dx = q[0] - p[0], dy = q[1] - p[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L;
     return [[p[0] + nx * w1, p[1] + ny * w1], [q[0] + nx * w2, q[1] + ny * w2], [q[0] - nx * w2, q[1] - ny * w2], [p[0] - nx * w1, p[1] - ny * w1]]; };
-  const up = seg(sh, el, 68, 58), fo = seg(el, hd, 58, 44);
-  // outline pass then fill pass (hides the seams)
-  for (const pass of [0, 1]) {
-    for (const [pts, r] of [[up, 0], [fo, 0]]) { pathPts(g, pts); if (pass) { g.fillStyle = skin; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); } }
-    g.beginPath(); g.arc(el[0], el[1], 58, 0, 7); if (pass) { g.fillStyle = skin; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); }
-  }
-  // forearm shadow strip
-  const fs = seg(el, hd, 58, 44); pathPts(g, [fs[2], fs[3], lerp2(fs[3], fs[0], 0.35), lerp2(fs[2], fs[1], 0.35)]); g.fillStyle = sk2; g.fill();
+  const bi = lerp2(sh, el, 0.5), fa = lerp2(el, hd, 0.3);
+  celFill(g, limbPath([sh, bi, el, fa, hd], [64, 64, 52, 54, 38], [64, 60, 50, 50, 38]), skin, lw, a.shade ?? 1, 16);
   // sleeve
   const m = [sh[0] + (el[0] - sh[0]) * 0.45, sh[1] + (el[1] - sh[1]) * 0.45];
   const sl = seg(sh, m, 78, 84), sc = look.shirt;
@@ -56,10 +50,42 @@ export function arm(g, a, look, lw, front) {
   curve(g, [sl[1], sl[2]], lw);                       // hem
   if (a.blood) splat(g, (sh[0] + m[0]) / 2, (sh[1] + m[1]) / 2, 60, a.blood, 3);
   // hand
-  if (a.fist !== false) fist(g, hd, Math.atan2(hd[1] - el[1], hd[0] - el[0]), skin, lw, a.flip);
+  const ang = Math.atan2(hd[1] - el[1], hd[0] - el[0]), hs = a.handScale || 0.62;
+  if (a.hand === 'grip') grip(g, hd[0] + Math.cos(ang) * 120 * hs, hd[1] + Math.sin(ang) * 120 * hs, ang, skin, lw / hs, hs);
+  else if (a.hand === 'palm') palm(g, hd[0] + Math.cos(ang) * 105 * hs * 1.3, hd[1] + Math.sin(ang) * 105 * hs * 1.3, ang, skin, lw / (hs * 1.3), hs * 1.3, a.spread ?? 0.7);
+  else if (a.fist !== false && a.hand !== 'none') fist(g, hd, ang, skin, lw, a.flip);
   return front;
 }
 const lerp2 = (a, b, k) => [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k];
+
+// one smooth silhouette through a centre line: wl/wr = half-widths on each side at each point
+export function limbPath(pts, wl, wr = wl) {
+  const n = pts.length, L = [], R = [];
+  for (let i = 0; i < n; i++) {
+    const a = pts[Math.max(0, i - 1)], b = pts[Math.min(n - 1, i + 1)];
+    let dx = b[0] - a[0], dy = b[1] - a[1]; const d = Math.hypot(dx, dy) || 1; dx /= d; dy /= d;
+    L.push([pts[i][0] - dy * wl[i], pts[i][1] + dx * wl[i]]); R.push([pts[i][0] + dy * wr[i], pts[i][1] - dx * wr[i]]);
+  }
+  let poly = [...L, ...R.reverse()];
+  for (let it = 0; it < 2; it++) { const q = []; for (let i = 0; i < poly.length; i++) { const p0 = poly[i], p1 = poly[(i + 1) % poly.length]; q.push([p0[0] * 0.75 + p1[0] * 0.25, p0[1] * 0.75 + p1[1] * 0.25], [p0[0] * 0.25 + p1[0] * 0.75, p0[1] * 0.25 + p1[1] * 0.75]); } poly = q; }
+  const path = new Path2D(); poly.forEach((p, i) => (i ? path.lineTo(p[0], p[1]) : path.moveTo(p[0], p[1]))); path.closePath();
+  return path;
+}
+// fill with a cel shadow on one side, then ink
+export function celFill(g, path, fill, lw, side = 1, off = 18) {
+  g.fillStyle = shadeOf(fill, 0.76); g.fill(path);
+  g.save(); g.clip(path); g.translate(side * off, -4); g.fillStyle = fill; g.fill(path); g.restore();
+  g.strokeStyle = INK; g.lineWidth = lw * 1.1; g.lineJoin = 'round'; g.stroke(path);
+}
+// sneaker; dx = where the toe points (-1 left .. 0 at the camera .. 1 right)
+export function sneaker(g, x, y, dx, s, color, lw) {
+  const rx = (52 + 26 * Math.abs(dx)) * s, ry = 30 * s, cx = x + dx * 22 * s;
+  g.beginPath(); g.ellipse(cx, y + 6 * s, rx, ry, 0, 0, 7); strokeFill(g, color, lw);
+  g.beginPath(); g.ellipse(cx + dx * rx * 0.55, y + 12 * s, rx * 0.42, ry * 0.7, 0, 0, 7); g.fillStyle = shadeOf(color, 1.18); g.fill();
+  g.beginPath(); g.moveTo(cx - rx * 0.92, y + 18 * s); g.quadraticCurveTo(cx, y + 44 * s, cx + rx * 0.92, y + 18 * s); g.lineTo(cx + rx * 0.8, y + 30 * s); g.quadraticCurveTo(cx, y + 52 * s, cx - rx * 0.8, y + 30 * s); g.closePath(); strokeFill(g, '#e9e6df', lw * 0.8);
+  for (let i = 0; i < 2; i++) curve(g, [[cx - dx * 18 * s - 12 * s, y - 12 * s + i * 10 * s], [cx - dx * 18 * s + 12 * s, y - 14 * s + i * 10 * s]], lw * 0.6);
+}
+
 
 export function fist(g, [x, y], ang, skin, lw, flip = false) {
   g.save(); g.translate(x, y); g.rotate(ang - Math.PI / 2); if (flip) g.scale(-1, 1);
@@ -273,7 +299,8 @@ export function bust(g, look, p = {}, lw = 5) {
     // torso (t-shirt)
     const b = look.build || 1;
     g.beginPath(); g.moveTo(-100, 285); g.bezierCurveTo(-190 * b, 296, -280 * b, 326, -312 * b, 430);
-    g.lineTo(-296 * b, 700); g.lineTo(-300 * b, 1200); g.lineTo(300 * b, 1200); g.lineTo(296 * b, 700); g.lineTo(312 * b, 430);
+    const hem = p.shirtLen || 1200;
+    g.lineTo(-296 * b, 700); g.lineTo(-290 * b, hem - 30); g.quadraticCurveTo(-280 * b, hem, -240 * b, hem); g.lineTo(240 * b, hem); g.quadraticCurveTo(280 * b, hem, 290 * b, hem - 30); g.lineTo(296 * b, 700); g.lineTo(312 * b, 430);
     g.bezierCurveTo(280 * b, 326, 190 * b, 296, 100, 285); g.closePath();
     strokeFill(g, look.shirt, 0);
     g.save(); g.clip(); g.fillStyle = shadeOf(look.shirt, 0.76);
@@ -453,48 +480,35 @@ export function backView(g, look, p = {}, lw = 5) {
 // stand/walk: feet at y≈2600. seat: feet at y≈1950 (thighs come toward the camera).
 export function figure(g, look, p = {}, lw = 5) {
   const legs = p.legs || 'stand', b = look.build || 1, pc = look.pants || '#2f3542', shoe = look.shoes || '#1d1d1f';
-  const limb = (pts, w1, w2, fill) => {   // tapered limb through points, outline then fill
-    const segs = []; for (let i = 0; i < pts.length - 1; i++) { const p0 = pts[i], p1 = pts[i + 1], dx = p1[0] - p0[0], dy = p1[1] - p0[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L, ny = dx / L, wa = lerpW(w1, w2, i / (pts.length - 1)), wb = lerpW(w1, w2, (i + 1) / (pts.length - 1));
-      segs.push([[p0[0] + nx * wa, p0[1] + ny * wa], [p1[0] + nx * wb, p1[1] + ny * wb], [p1[0] - nx * wb, p1[1] - ny * wb], [p0[0] - nx * wa, p0[1] - ny * wa]]); }
-    for (const pass of [0, 1]) { for (const q of segs) { pathPts(g, q); if (pass) { g.fillStyle = fill; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); } }
-      for (const pt of pts.slice(1, -1)) { g.beginPath(); g.arc(pt[0], pt[1], (w1 + w2) / 2, 0, 7); if (pass) { g.fillStyle = fill; g.fill(); } else { g.lineWidth = lw * 2; g.stroke(); } } }
-  };
-  const shoeAt = (x, y, s = 1, side = 1) => { g.beginPath(); g.ellipse(x + side * 10, y, 70 * s, 34 * s, 0, 0, 7); strokeFill(g, shoe, lw); g.fillStyle = 'rgba(255,255,255,0.25)'; g.fillRect(x - 50 * s, y + 18 * s, 100 * s, 8 * s); };
   if (legs === 'seat') {
-    bust(g, look, { ...p, armL: p.armsAfterLegs ? null : p.armL, armR: p.armsAfterLegs ? null : p.armR }, lw);
-    const kx = (190 + (p.knees || 0) * 40) * b, pc2 = shadeOf(pc, 0.78);
-    // the seat between the knees
-    pathPts(g, [[-kx + 60, 1330], [kx - 60, 1330], [kx - 40, 1500], [-kx + 40, 1500]]); g.fillStyle = '#15171f'; g.fill();
-    for (const s of [-1, 1]) {           // shins (calf bulge) and shoes first, the thighs overlap their tops
-      const knee = [s * kx, 1330], ankle = [s * (kx + 10), 1880];
-      limb([knee, [s * (kx + 14), 1560], ankle], 72, 50, pc); shoeAt(ankle[0], ankle[1] + 40, 1.2, s);
-      curve(g, [[s * (kx - 40), 1700], [s * (kx - 30), 1800], [s * (kx - 36), 1860]], lw * 0.7, pc2);
+    g.save(); g.translate(0, 1080); g.rotate(p.lean || 0); g.translate(0, -1080);
+    bust(g, look, { shirtLen: 1110, ...p, armL: p.armsAfterLegs ? null : p.armL, armR: p.armsAfterLegs ? null : p.armR }, lw);
+    g.restore();
+    const ks = p.kneeShift || 0, order = ks > 0 ? [1, -1] : [-1, 1];
+    for (const sd of order) {
+      const hip = [sd * 92 * b, 1080], knee = [sd * 150 * b + ks, 1330 - (ks && sd < 0 ? 12 : 0)], thm = [lerpW(hip[0], knee[0], 0.5), 1200];
+      const calf = [knee[0] + ks * 0.1, 1560], ankle = [knee[0] + ks * 0.18 - sd * 6, 1780];
+      celFill(g, limbPath([hip, thm, knee, calf, ankle], [122, 116, 98, 78, 46], [122, 116, 98, 80, 46]), pc, lw, 1, 22);
+      curve(g, [[knee[0] - 30, knee[1] + 10], [knee[0], knee[1] + 26], [knee[0] + 32, knee[1] + 8]], lw * 0.7, shadeOf(pc, 0.6));        // knee fold
+      curve(g, [[thm[0] - sd * 20, 1150], [thm[0], 1190], [thm[0] + sd * 30, 1210]], lw * 0.6, shadeOf(pc, 0.65));                       // thigh fold
+      sneaker(g, ankle[0], ankle[1] + 16, Math.max(-1, Math.min(1, ks / 300)), 1.05, shoe, lw);
     }
-    // pelvis + both thighs as one shape (outline pass, then fill pass), knees as rounded ends
-    const th = s2 => [[s2 * 40, 1060], [s2 * 165 * b, 1060], [s2 * (kx + 70), 1300], [s2 * (kx + 50), 1380], [s2 * (kx - 50), 1388], [s2 * (kx - 72), 1320], [s2 * 30, 1160]];
-    for (const pass of [0, 1]) for (const s2 of [-1, 1]) {
-      const q = th(s2); g.beginPath(); g.moveTo(q[0][0], q[0][1]); g.lineTo(q[1][0], q[1][1]); g.lineTo(q[2][0], q[2][1]); g.quadraticCurveTo(q[3][0] + s2 * 30, q[3][1] + 20, (q[3][0] + q[4][0]) / 2, q[4][1] + 6); g.quadraticCurveTo(q[4][0] - s2 * 30, q[4][1], q[5][0], q[5][1]); g.lineTo(q[6][0], q[6][1]); g.closePath();
-      if (pass) { g.fillStyle = pc; g.fill(); } else { g.strokeStyle = INK; g.lineWidth = lw * 2; g.stroke(); }
-    }
-    pathPts(g, [[-60, 1040], [60, 1040], [40, 1170], [-40, 1170]]); g.fillStyle = pc; g.fill();
-    for (const s2 of [-1, 1]) {        // folds, knee shading, inner-thigh line
-      curve(g, [[s2 * 40, 1170], [s2 * 70, 1260], [s2 * (kx - 70), 1322]], lw * 0.9);
-      g.fillStyle = pc2; g.beginPath(); g.ellipse(s2 * kx, 1350, 70, 26, 0, 0, 7); g.fill();
-      curve(g, [[s2 * 120, 1120], [s2 * 150, 1180], [s2 * 140, 1230]], lw * 0.6, pc2);
-    }
-    g.fillStyle = shadeOf(look.shirt, 0.7); g.fillRect(-160 * b, 1040, 320 * b, 14);     // shirt hem shadow on the lap
-    if (p.armsAfterLegs) for (const a of [p.armL, p.armR]) if (a) arm(g, a, look, lw, true);
+    g.beginPath(); g.ellipse(ks * 0.2, 1110, 150 * b, 60, 0, 0, 7); g.fillStyle = pc; g.fill();          // lap
+    g.fillStyle = shadeOf(look.shirt, 0.7); g.fillRect(-160 * b, 1040, 320 * b, 14);
+    if (p.armsAfterLegs) for (const a of [p.armL, p.armR]) if (a) { g.save(); if (!a.noLean) { g.translate(0, 1080); g.rotate(p.lean || 0); g.translate(0, -1080); } arm(g, a, look, lw, true); g.restore(); }
     return;
   }
   const ph = p.walk || 0, walking = legs === 'walk' ? 1 : 0, bob = walking ? Math.abs(Math.sin(ph)) * -18 : 0;
   g.save(); g.translate(0, bob);
-  for (const s of [-1, 1]) {
-    const lift = walking ? Math.max(0, Math.sin(ph + (s > 0 ? 0 : Math.PI))) : 0;
-    const hip = [s * 100 * b, 1100], knee = [s * 108 * b, 1840 - lift * 60], ankle = [s * (100 - lift * 14) * b, 2540 - lift * 120];
-    limb([hip, knee, ankle], 120, 64, pc); shoeAt(ankle[0], ankle[1] + 40 - lift * 6, 1 + lift * 0.12, s);
+  for (const sd of [-1, 1]) {
+    const lift = walking ? Math.max(0, Math.sin(ph + (sd > 0 ? 0 : Math.PI))) : 0;
+    const hip = [sd * 100 * b, 1100], knee = [sd * 106 * b, 1840 - lift * 60], calf = [sd * 112 * b, 2120 - lift * 90], ankle = [sd * (98 - lift * 12) * b, 2520 - lift * 120];
+    celFill(g, limbPath([hip, lerp2(hip, knee, 0.5), knee, calf, ankle], [126, 112, 90, 80, 46]), pc, lw, 1, 22);
+    curve(g, [[knee[0] - 30, knee[1] - 10], [knee[0], knee[1] + 6], [knee[0] + 30, knee[1] - 10]], lw * 0.6, shadeOf(pc, 0.6));
+    sneaker(g, ankle[0], ankle[1] + 20 - lift * 6, 0, 1 + lift * 0.1, shoe, lw);
   }
   pathPts(g, [[-170 * b, 1050], [170 * b, 1050], [130 * b, 1250], [0, 1290], [-130 * b, 1250]]); g.fillStyle = pc; g.fill();
-  const hang = (s) => ({ front: true, sh: [s * 255 * b, 400], el: [s * 320 * b, 760], hd: [s * (300 + (walking ? Math.sin(ph + (s > 0 ? Math.PI : 0)) * 30 : 0)) * b, 1090] });
+  const hang = (sd) => ({ front: true, sh: [sd * 255 * b, 400], el: [sd * 320 * b, 760], hd: [sd * (300 + (walking ? Math.sin(ph + (sd > 0 ? Math.PI : 0)) * 30 : 0)) * b, 1090] });
   bust(g, look, { ...p, armL: p.armL === undefined ? hang(-1) : p.armL, armR: p.armR === undefined ? hang(1) : p.armR }, lw);
   g.restore();
 }
