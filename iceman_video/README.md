@@ -1,6 +1,6 @@
 # The Iceman: a short film made entirely from code
 
-This is a short cinematic test in the style of the "How an Ancient Mummy Changed History"
+This is a 45-second cinematic test in the style of the "How an Ancient Mummy Changed History"
 documentary. Every frame is made procedurally in Python. There are no stock assets, no
 downloaded models or textures, and no hand-made art.
 
