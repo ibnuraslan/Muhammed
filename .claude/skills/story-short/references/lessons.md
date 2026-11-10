@@ -66,6 +66,11 @@ into rules.
     plainly what a gore shot shows, then pick its clean replacement. A 1 fps low-res scan got 4 shots wrong.
 30. **Story details carry the scene.** The empty seat next to the sleeping victim IS the setup; the hook shot
     is repeated at the end (loop). Missing these is a bad analysis, not a detail.
+31. **"Copy the reference" means 100%: same shots, framing, action and blood.** Don't swap scenes for
+    softer ones on your own. The only exception for real cases: never draw a real victim's body parts or
+    mutilation; keep the same shot and put them out of frame or under the badge. Say so once, then build.
+32. **No captions when the reference has none** (`--no-captions`). Merge narration into few TTS lines
+    (several `[NN]` markers per line): every TTS line adds ~0.9 s of silence.
 20. **Review the delivered video at 4 fps** (dense contact sheets), not 1 fps. Motion problems
     (sliding backgrounds, missing contact) only show up in sequences.
 
@@ -76,6 +81,7 @@ into rules.
 | 2026-11-06 | example v2 | (pending) | – | 02, 11 (v1) | full self-review, 13 shots fixed, see example/03-review.md |
 
 ## Feedback log
+- 2026-11-10 · bus v3 · "did I ask you to censor or 100% as the reference?" → rule 31: same shots + blood, only the real victim's body parts kept off-screen. Rule 32.
 - 2026-11-10 · bus v3 test · "your analysis is very poor… he's eating a heart… the person is sitting in the corner seat, not where the criminal sits" → rules 29–30, plan.md redone from a 2 fps timestamped pass.
 - 2026-11-09 · bus 2008 · "I like this [illustrated] style… the one rendering is lame, not a lot of scenes, even the arrest" → rules 26–28, people.js, ink outlines, v2 with 39 scenes.
 - 2026-11-08 · alcatraz test · "we get everything correct… the hand and digging the prison, the leg is not there" → rules 22–25. Kneel/seat poses, aimed hands and 3D paddles added to the engine; the test was rebuilt.

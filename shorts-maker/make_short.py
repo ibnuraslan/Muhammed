@@ -483,6 +483,7 @@ def main():
     ap.add_argument("--max-chars", type=int, default=12, help="max characters per caption")
     ap.add_argument("--uppercase", action="store_true")
     ap.add_argument("--pop", action="store_true", help="little scale-up pop on each caption")
+    ap.add_argument("--no-captions", action="store_true", help="no burned-in captions (like references without text)")
     ap.add_argument("--max-shot", type=float, default=2.2, help="auto-cut length when script has no [NN] markers")
     ap.add_argument("--tail", type=float, default=0.6, help="seconds to hold after the last word")
     ap.add_argument("--seed", type=int, default=7)
@@ -622,7 +623,7 @@ def main():
         music = args.music or next((proj / n for n in ("music.mp3", "music.wav", "music.m4a")
                                     if (proj / n).exists()), None)
         ass_arg = str(ass).replace("\\", "/").replace(":", r"\:")
-        vf = f"subtitles=filename='{ass_arg}':fontsdir='{FONTS_DIR}'"
+        vf = "null" if args.no_captions else f"subtitles=filename='{ass_arg}':fontsdir='{FONTS_DIR}'"
         sfx = args.sfx or (proj / "sfx.wav" if (proj / "sfx.wav").exists() else None)
         cmd = ["ffmpeg", "-y", "-i", str(joined), "-i", str(voice_path)]
         if music:

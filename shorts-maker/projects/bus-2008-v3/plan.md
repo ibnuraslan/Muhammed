@@ -1,8 +1,10 @@
 # Bus 2008, v3: shot-by-shot mirror of the reference (66.7 s, 9:16)
 
 Re-analysed at 2 fps with timestamps (the first plan was made from a 1 fps low-res scan and got
-shots 1–4 wrong). Same framing, staging and action as the reference. Gore is never drawn: the same
-shot is kept, and the gore element is covered by the censor badge, hidden by the framing, or cut away.
+shots 1–4 wrong). The user wants 100% the reference: same framing, staging, action AND the blood (bloody
+grin, bloody knife, the stab, spray on the window, blood on clothes/seats). The one thing never drawn is
+the real victim's body parts (heart, head, torso): they stay covered by the badge or out of frame.
+Shots 22 and 23 of the right column below were the earlier no-gore plan; the build follows this rule.
 
 | # | Ref time | Reference shows (exactly) | Ours (same framing, no gore) |
 |---|---|---|---|
