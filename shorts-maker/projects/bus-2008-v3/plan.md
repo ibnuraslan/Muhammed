@@ -1,30 +1,36 @@
-# Bus 2008, v3: scene-by-scene mirror of the reference (66 s, 9:16)
+# Bus 2008, v3: shot-by-shot mirror of the reference (66.7 s, 9:16)
 
-Reference structure (timestamps from the reference) → our version. Same pacing, staging and framing.
-Gore beats are replaced (reaction / silhouette / censor badge). The art is **pure 2D drawn compositions**
-(no 3D), like the reference: big detailed characters, dark desaturated palette, slow push-ins.
+Re-analysed at 2 fps with timestamps (the first plan was made from a 1 fps low-res scan and got
+shots 1–4 wrong). Same framing, staging and action as the reference. Gore is never drawn: the same
+shot is kept, and the gore element is covered by the censor badge, hidden by the framing, or cut away.
 
-| # | Ref time | Reference shows | Ours (same framing) | Narration (ours, factual) |
-|---|---|---|---|---|
-| 1 | 0:00–0:03 | ECU killer's grinning face (gore) | **HOOK.** ECU of his face in the dark bus, a slow creepy smile, eyes in shadow, lights flicker (no blood) | "In 2008, a man sat down next to a sleeping stranger on a bus… and what he did next shocked an entire country." |
-| 2 | 0:04–0:09 | Dark bus aisle, one-point perspective. Tim seated left, sleepy; the man walks down the aisle toward the camera | Same composition. Slow zoom, the man walks forward | "Twenty-two-year-old Tim McLean was riding home to Winnipeg when a man named Vince Li got on." |
-| 3 | 0:10–0:12 | MCU Tim yawning, hand to mouth, window behind | Same: yawn → eyes close, headphones | "Li sat down right next to him. Tim barely noticed, put his headphones on, and fell asleep." |
-| 4 | 0:13–0:17 | Over-the-shoulder: the man beside sleeping Tim turns with a creepy grin and draws a knife | Same staging, knife drawn (clean) | "Then, without any warning, Li pulled out a large knife…" |
-| 5 | 0:18–0:19 | Stabbing (gore) | Knife raised against the window → hard cut to black, censor badge, scream sting | "…and attacked him." |
-| 6 | 0:20–0:21 | Exterior bus at night, street lamps | Same, drawn | "The driver slammed on the brakes…" |
-| 7 | 0:22–0:24 | Terrified passenger faces CU | Same: 3 terrified faces, a woman's hand to her mouth | "…and the passengers ran off the bus." |
-| 8 | 0:25–0:28 | The man in the aisle, knife raised, grinning | Same pose, clean knife + censor badge on the blade | "A few men tried to go back and help, but Li chased them away." |
-| 9 | 0:29–0:31 | Decapitation (gore) | His silhouette at the door glass from outside, flicker (nothing in his hands) | "They trapped him inside…" |
-| 10 | 0:32–0:35 | Passengers outside, city lights, horrified | Same | "…and through the windows, the passengers watched." |
-| 11 | 0:34–0:37 | Mutilated body / mouth (gore) | ECU of his eyes in the bus window reflection + censor badge | "What they saw that night, they would never forget." |
-| 12 | 0:38–0:40 | Passengers outside, horrified (2nd beat) | Same, a closer push, the woman cries | (continues) |
-| 13 | 0:41–0:43 | The man walking with the head (gore) | Silhouette pacing past the windows (exterior) | "For hours, he stayed in there with Tim." |
-| 14 | 0:44–0:46 | Bus side window: the man inside, glass cracking | Same: the glass cracks and shatters | "When police arrived, Li tried to escape by smashing a window." |
-| 15 | 0:47–0:49 | The man sweating between seats; a cop with a taser in the aisle | Same | "Officers hit him with a taser and finally arrested him." |
-| 16 | 0:50–0:55 | Interrogation lamp + evidence table (body parts) | Same room, lamp, cop. The evidence is **sealed bags marked EVIDENCE** | "What police found on that bus haunted officers for years." |
-| 17 | 0:56–0:61 | Gore montage | Courtroom, then a door opening to light, his silhouette walking out | "In court, Li was found not criminally responsible because of schizophrenia… and in 2017, he was set completely free." |
-| 18 | 1:01–1:06 | Victim (gore) + "RIP" | **Respectful memorial**: Tim alive, smiling with his headphones, "Tim McLean 1985–2008" | "Tim McLean was only twenty-two. Should the man who did this ever have been released?" |
+| # | Ref time | Reference shows (exactly) | Ours (same framing, no gore) |
+|---|---|---|---|
+| 1 | 0:00–3.5 | Camera ABOVE him looking down: big skull, face foreshortened, dark eye sockets, huge grin with blood on mouth/chin. His hand lifts a bloody human heart from the bottom and he bites into it. Fade to black. | Same overhead ECU and grin (no blood). The hand rises to his mouth holding something completely covered by the CENSORED badge; he "bites". Fade to black. |
+| 2 | 3.5–9.8 | Static aisle shot (VP high, seat level). Tim sits in the WINDOW seat on the left, head resting on his fist, elbow on the sill, knees apart, other hand on knee. The AISLE seat next to him is EMPTY. The man (grey tee) walks from the back toward camera and stops at Tim's row, hands on the seat back, about to sit in that empty seat. Silhouette passenger behind. | Same. |
+| 3 | 10.0–12.3 | Tim three-quarter (facing screen-left), chin resting on his fist, elbow on the window sill, window + trees behind. Half-lidded → yawns (eyes squeezed) → mouth closes, eyes stay shut: he nods off, head still on his hand. | Same. |
+| 4 | 12.5–14.3 | Low side angle from the seat: Tim fully asleep, head slumped against the window/seat back. Slow pan right… | Same. |
+| 5 | 14.5–17.0 | …the pan reveals the man sitting in the seat next to him. He turns his head to camera with a creepy grin and pulls out a big knife, hand at his chest. | Same (clean knife). |
+| 6 | 17.0–19.8 | Tim's side, against the pale window: Tim asleep, hand at his face. The man's arm comes in from the left and raises the knife over him; stab; Tim's eyes snap open, wound. | Same up to the raised knife and Tim's eyes snapping open → hard cut to black + CENSORED badge + scream sting. No wound. |
+| 7 | 20.0–22.3 | Exterior night: the blue bus stopped on the road shoulder, street lamps, dark sky. Slow push. | Same. |
+| 8 | 22.5–25.2 | Passengers inside, crowded close-ups: terrified faces (man in denim, guy in hoodie, blonde woman), they turn and push to get off. Pan right. | Same. |
+| 9 | 25.3–28.2 | The man standing in the aisle facing camera, arm raised high with the bloody knife, other hand spread on a seat back, grinning, chasing them. | Same pose, clean knife. |
+| 10 | 28.3–31.6 | Pale window behind. He bends down over the seat, grinning, then lifts Tim's head by the hair (gore). | He bends down over the seat, looking down, grinning. The seat back hides everything below; cut before he straightens. |
+| 11 | 31.7–33.4 | Exterior: two passengers (hoodie guy, blonde woman in red) staring in horror, city buildings with lit windows behind. | Same. |
+| 12 | 33.5–36.5 | From behind him: his head and broad back, hunched over the body (gore above his head). | Same back view; what is in front of him is hidden by his own back, plus the badge. |
+| 13 | 37.0–38.0 | ECU of his bloody mouth grinning. | ECU of the grin, no blood. |
+| 14 | 38.0–41.0 | Exterior passengers again; the woman puts her hand over her mouth. | Same. |
+| 15 | 41.5–43.0 | Him walking by the window looking down, grinning, knife in one hand, carrying the head (gore). | Him walking by the window looking down, grinning, knife in hand; his other hand is out of frame. |
+| 16 | 43.0–47.0 | Exterior close on the bus side (blue body, lettering), the man inside behind the window; the glass starts to crack. | Same; the crack spreads and bursts. |
+| 17 | 47.0–49.0 | Inside: the man crouched between seats, sweating, eyes darting; drops down behind a seat. | Same. |
+| 18 | 49.0–50.5 | A cop in a dark uniform and cap in the aisle with a taser/gun aimed. | Same. |
+| 19 | 50.5–55.5 | Interrogation: dim yellow light cone, cop standing left, the man sitting behind a table, evidence spread on the table (body parts). | Same room; the table holds sealed bags marked EVIDENCE. |
+| 20 | 55.5–58.5 | Slow pan across the table of evidence. | Pan across the sealed evidence bags, case photos, the knife in a bag. |
+| 21 | 58.5–60.5 | Back view of him hunched over the body again. | Same as 12. |
+| 22 | 60.5–62.5 | LOOP: the opening heart-biting shot again. | The opening shot again (badge). The video loops. |
+| 23 | 62.5–66.7 | Tim's mutilated body, fade to black. | Tim's empty seat: his headphones on it, under the flickering light. Fade to black. |
 
-Viral rules taken from the reference: open on the most intense image; faces fill most frames; every
-scene is a person doing or feeling something; only 1–2 establishing shots; dark, desaturated, high contrast;
-slow push-ins on emotional beats; big single-word captions.
+Narration (ours, factual) runs over these 23 shots. The reference has NO court/release scenes. The
+"not criminally responsible… set free in 2017" fact goes over shots 19–20.
+Structural tricks taken from the reference: open on the most shocking image; the ending loops back
+to the opening shot; ~3 s per shot; dark, desaturated cel style.

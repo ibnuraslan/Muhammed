@@ -60,6 +60,12 @@ into rules.
     (the arrest: police arrive → take cover → smash → rush → taser → kneel under flashlights). "Lame" means too few
     angles and actions.
 28. **Hair that wraps the jaw reads as a beard** (bob haircut). Keep hair above the jawline.
+29. **Analyse a reference at 2 fps with timestamps, full resolution, the WHOLE video.** For every shot
+    write exactly what happens: who sits where (window vs aisle seat, the empty seat next to the victim),
+    what the hands hold, the camera angle (from above, low side, behind), the action from start to end. Say
+    plainly what a gore shot shows, then pick its clean replacement. A 1 fps low-res scan got 4 shots wrong.
+30. **Story details carry the scene.** The empty seat next to the sleeping victim IS the setup; the hook shot
+    is repeated at the end (loop). Missing these is a bad analysis, not a detail.
 20. **Review the delivered video at 4 fps** (dense contact sheets), not 1 fps. Motion problems
     (sliding backgrounds, missing contact) only show up in sequences.
 
@@ -70,6 +76,7 @@ into rules.
 | 2026-11-06 | example v2 | (pending) | – | 02, 11 (v1) | full self-review, 13 shots fixed, see example/03-review.md |
 
 ## Feedback log
+- 2026-11-10 · bus v3 test · "your analysis is very poor… he's eating a heart… the person is sitting in the corner seat, not where the criminal sits" → rules 29–30, plan.md redone from a 2 fps timestamped pass.
 - 2026-11-09 · bus 2008 · "I like this [illustrated] style… the one rendering is lame, not a lot of scenes, even the arrest" → rules 26–28, people.js, ink outlines, v2 with 39 scenes.
 - 2026-11-08 · alcatraz test · "we get everything correct… the hand and digging the prison, the leg is not there" → rules 22–25. Kneel/seat poses, aimed hands and 3D paddles added to the engine; the test was rebuilt.
 - 2026-11-06 · example · "analyze it properly first… a lot of mistakes… hitting the table… the orange dark brown thing continuously moving, supposed to be a building" → rules 13–20, a full shot-by-shot review (example/03-review.md), v2 render.
