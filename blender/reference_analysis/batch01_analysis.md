@@ -96,3 +96,50 @@ The Viral-job and Dead-cat videos are **realistic and moody**: grey streets, bri
 
 ## Caution
 They show real brand logos (a restaurant chain sign). We should use invented brands to avoid trademark trouble.
+
+---
+
+# Batch 03 (5 videos, 4 new; one repeat of Shark Finning)
+
+Videos: Roman sailors' desalination (24.8 s), DIY faucet sprayer hack (32.1 s), two kids & the bike, a parable (52.5 s), blind quarterback (34.8 s).
+**Delivery spec confirmed** from the native files: **1080×1920, 29.97 fps**. Earlier copies were 720p re-uploads.
+
+| | Roman water | Faucet hack | Bike parable | Blind QB |
+|---|---|---|---|---|
+| Words / speed | 68 / 2.82 w/s | 92 / 2.93 | 137 / 2.66 | 92 / 2.71 |
+| Near-static picture | 0.2 s | 0.4 s | 0.2 s | 1.4 s |
+
+## New formats
+- **Historical "how they did it":** warm, firelit realism (wooden ship, brass pot, open fire). This is the closest to your Goat Rescue look so far.
+- **DIY hack + twist:** a hands-only tutorial on a cyan backdrop, then a "but…" downside (bacteria macro → "germ fountain").
+- **Parable / moral (52 s):** two characters on parallel tracks, intercut, ending on a moral line. The longest video and still never static.
+- **Inspirational true story:** a disability overcome, ending in a triumphant wide shot with a crowd.
+
+## New techniques
+- **Time passing as a prop:** a jar labelled "Bike" filling with coins ("months passed"), and a "5 Year" circular-arrow icon for time jumps. The character also ages across shots (toddler → kid → teen → adult) for a life story.
+- **Thought bubbles:** cartoon cloud bubbles showing what a character wants (the bike, a pile of money).
+- **Mental image as a hologram:** "helping him picture where everyone was" is shown as blue neon wireframe players on black. The same trick as the "inner world" in batch 1.
+- **Invisible signals drawn as beams:** the walkie-talkie voice travels as a cyan beam into the helmet. A glowing brain inside the helmet stands for "from memory".
+- **Measurement props for physical states:** a digital thermometer insert for "once it cooled", and the sponge changing colour as it absorbs.
+- **Cross-section cutaways of objects,** not just bodies: a bottle cap with sponge inside, and an eyeball with tumours inside a porthole vignette.
+- **Repetition montage:** the same action with different partners (carrying backpacks, giving away lunch) to show "every day".
+- **Happy-ending reaction:** characters smiling with thumbs up, or a crowd cheering. Endings resolve emotionally, not just factually.
+
+---
+
+# Synthesis (15 videos): production template for one piece
+
+| Item | Target |
+|---|---|
+| Length | 25–50 s (most 30–35 s) |
+| Script | 70–140 words; ~85–95 for 30–35 s. Delivered at 2.6–2.9 words/s with no gaps over ~0.5 s. |
+| Line 1 | The hook, already mid-action, in one of four forms: true-story action ("He was…when…"), hypothetical ("If you…"), you-POV ("A pretty girl waves at you"), or instruction ("Poke the hot nail…"). |
+| Structure | Hook → mechanism / what happened → "You see" / "But" turn → payoff line with consequence, reveal, moral or twist |
+| Captions | 1–3 words, white bold, lower-middle, on word timing |
+| Camera setups | A new one every ~1.5–2.5 s (about 15–25 per 30–35 s) |
+| Transitions | Motion only: whip-pan, fly-through, push-in, zoom-blur, wipe, flash |
+| Still time | Under ~1 s for the whole video |
+| Each beat | Shows the exact noun being said, often with a highlight on it |
+| Shot mix | Acted character shots, prop/hand macros, explainer inserts on a plain backdrop, cutaways/x-ray, graphics (numbers, icons, phone/UI, time jumps), inner-world/hologram shots |
+| Ending | Last word ≈ last frame; loop or callback where possible |
+| Audio | Narration on top of the full length (music and SFX to be checked separately) |
