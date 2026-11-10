@@ -142,4 +142,4 @@ Videos: Roman sailors' desalination (24.8 s), DIY faucet sprayer hack (32.1 s), 
 | Each beat | Shows the exact noun being said, often with a highlight on it |
 | Shot mix | Acted character shots, prop/hand macros, explainer inserts on a plain backdrop, cutaways/x-ray, graphics (numbers, icons, phone/UI, time jumps), inner-world/hologram shots |
 | Ending | Last word ≈ last frame; loop or callback where possible |
-| Audio | Narration on top of the full length (music and SFX to be checked separately) |
+| Audio | Narration on top for the full length, over a continuous sound bed. Pauses between words sit only 5–12 dB below the voice (about −17 to −25 dBFS vs −12 to −15 for speech), so music and/or ambience runs underneath. The tail after the last word peaks at −8 to −13 dB, which suggests sound-effect hits. Measured, not listened to: whether it's music, SFX or both still needs a human ear. |
