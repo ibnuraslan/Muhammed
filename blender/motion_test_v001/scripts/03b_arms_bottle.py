@@ -265,10 +265,13 @@ def curl_q(s, bone, deg):
     sign = 1 if s == "R" else -1
     return local_q(bone, Matrix.Rotation(R_(deg * sign), 3, a))
 
-def thumb_q(s, bone, opp, flex):
+THUMB_ABD = 0.0
+THUMB_REF = None
+def thumb_q(s, bone, opp, flex, abd=0.0):
     d, a, n = finger_axes(s)
     sign = 1 if s == "R" else -1
-    return local_q(bone, Matrix.Rotation(R_(flex * sign), 3, a) @ Matrix.Rotation(R_(opp * sign), 3, d))
+    return local_q(bone, Matrix.Rotation(R_(flex * sign), 3, a) @ Matrix.Rotation(R_(opp * sign), 3, d)
+                   @ Matrix.Rotation(R_(abd * sign), 3, n))
 
 JW = (0.85, 1.1, 0.75)            # curl distribution over the 3 phalanges
 def set_hand(s, f, curl, thumb_opp, thumb_flex, spread=0.0, key=True):
@@ -286,7 +289,11 @@ def set_hand(s, f, curl, thumb_opp, thumb_flex, spread=0.0, key=True):
                 PB[b].rotation_quaternion = q
     for j, (o, fl) in enumerate([(thumb_opp, thumb_flex * 0.4), (0, thumb_flex * 0.8), (0, thumb_flex)], 1):
         b = "finger1-%d.%s" % (j, s)
-        q = thumb_q(s, b, o, fl)
+        abd = 0.0
+        if j == 1 and s == "R":
+            # full abduction during the search; afterwards scale with how far the thumb is opposed
+            abd = THUMB_ABD if THUMB_REF is None else THUMB_ABD * max(0.0, min(1.0, thumb_opp / THUMB_REF))
+        q = thumb_q(s, b, o, fl, abd)
         if key:
             key_q(b, f, q)
         else:
@@ -321,22 +328,30 @@ GRIP = [min(g, 70.0) for g in GRIP]
 evaluate(268)
 tips = [PB["finger%d-3.R" % k].tail.copy() for k in range(2, 6)]
 gz = B.z + GRIP_H
+# target: thumb wraps round the back of the bottle (toward the body), roughly level
+# with the grip, lying along the glass rather than pointing up the neck
 best = None
-for opp in range(-30, 91, 6):
-    for fl in range(-10, 71, 5):
-        set_hand("R", 268, GRIP, opp, fl, key=False)
-        bpy.context.view_layer.update()
-        js = [PB["finger1-2.R"].head, PB["finger1-3.R"].head, PB["finger1-3.R"].tail]
-        ds = [(Vector((p.x, p.y)) - axis_xy).length - BOTTLE_R for p in js]
-        if min(ds) < 0.006:
-            continue
-        tip = js[-1]
-        cost = abs(ds[-1] - 0.0075) * 10 + abs(tip.z - gz) * 2
-        cost -= min((tip - t).length for t in tips) * 0.5     # oppose the fingers
-        if best is None or cost < best[0]:
-            best = (cost, opp, fl)
-THUMB_OPP, THUMB = best[1], best[2]
-print("THUMB", THUMB_OPP, THUMB, round(best[0], 4))
+dh = Vector((dG.x, dG.y)).normalized(); nh = Vector((nG.x, nG.y)).normalized()
+wrap_dir = (-dh * 0.75 + nh * 0.35).normalized()
+for abd in range(-40, 41, 10):
+    THUMB_ABD = abd
+    for opp in range(-20, 121, 8):
+        for fl in range(-10, 91, 6):
+            set_hand("R", 268, GRIP, opp, fl, key=False)
+            bpy.context.view_layer.update()
+            js = [PB["finger1-2.R"].head, PB["finger1-3.R"].head, PB["finger1-3.R"].tail]
+            ds = [(Vector((p.x, p.y)) - axis_xy).length - BOTTLE_R for p in js]
+            if min(ds) < 0.0065:
+                continue
+            tip = js[-1]
+            tdir = (Vector((tip.x, tip.y)) - axis_xy).normalized()
+            cost = (abs(ds[-1] - 0.008) * 12 + max(0.0, ds[1] - 0.012) * 6
+                    + abs(tip.z - (gz + 0.01)) * 3 - tdir.dot(wrap_dir) * 0.06)
+            if best is None or cost < best[0]:
+                best = (cost, opp, fl, abd)
+THUMB_OPP, THUMB, THUMB_ABD = best[1], best[2], best[3]
+THUMB_REF = float(THUMB_OPP) if THUMB_OPP else None
+print("THUMB", THUMB_OPP, THUMB, THUMB_ABD, round(best[0], 4))
 
 RELAX = 14
 # right hand
@@ -356,4 +371,24 @@ set_hand("L", 330, 18, 12, 8)
 set_hand("L", 360, RELAX + 3, 8, 10)
 set_hand("L", 600, RELAX + 2, 8, 10)
 
+# thumb wrap: IK on the thumb chain toward a point on the far side of the bottle.
+# The target is parented to the bottle so it travels with it after the pickup.
+tt = bpy.data.objects.new("Thumb_Target", None)
+tt.empty_display_type = 'SPHERE'; tt.empty_display_size = 0.006
+sc.collection.objects.link(tt)
+tt.parent = bottle
+# angle/height chosen by a sweep (least penetration, thumb wraps the back of the bottle)
+_a = math.radians(160)
+tt.location = Vector((math.cos(_a) * (BOTTLE_R + 0.008), math.sin(_a) * (BOTTLE_R + 0.008), GRIP_H + 0.04))
+tik = PB["finger1-3.R"].constraints.new('IK')
+tik.name = "Thumb_Wrap"
+tik.target = tt
+tik.chain_count = 3
+tik.use_tail = True
+tik.iterations = 200
+for f, v in ((1, 0.0), (246, 0.0), (264, 1.0)):
+    tik.influence = v
+    tik.keyframe_insert("influence", frame=f)
+for k in (1, 2):
+    PB["finger1-%d.R" % k].ik_stretch = 0.0
 print("ARMS_DONE")
