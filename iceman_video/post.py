@@ -387,7 +387,7 @@ def main():
                 if sl is not None:
                     tint = np.array(snow.cfg["tint"])
                     a = 1 - (1 - a) * (1 - np.clip(sl, 0, 1)[..., None] * tint)
-                a = film(a, i, bloom=0.3 if shot in ("shot1_peaks", "shot4_axe") else 0.15)
+                a = film(a, i, bloom=0.3 if shot in ("shot1_peaks", "shot4_axe", "shot8_fire") else 0.15)
                 if shot in SCRIMS:
                     cx, cy, rx, ry, st, ta, tb = SCRIMS[shot]
                     a = scrim(a, cx, cy, rx, ry, st * window(t, ta, dur + tb, 0.8))
