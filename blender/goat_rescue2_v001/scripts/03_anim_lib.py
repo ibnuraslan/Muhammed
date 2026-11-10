@@ -104,8 +104,22 @@ def ground_z(x, y):
         _HEAP = bpy.data.objects.get("ManureHeap")
     if _HEAP is None:
         return 0.0
-    hit, loc, nrm, idx = _HEAP.ray_cast(Vector((x, y, 6.0)), Vector((0, 0, -1)))
+    dg = bpy.context.evaluated_depsgraph_get()
+    hit, loc, nrm, idx = _HEAP.evaluated_get(dg).ray_cast(Vector((x, y, 6.0)), Vector((0, 0, -1)))
     return max(0.0, loc.z) if hit else 0.0
+
+def hoof_matrix(rig, n, xy, h, lift=0.0, toe_up=0.0):
+    """IK_hoof target so that both the heel (fetlock xy) and the toe tip rest on the surface"""
+    H0 = rig.BN[n].head_local; T0 = rig.BN[n].tail_local
+    Rh = Matrix.Rotation(h, 3, 'Z')
+    v = Rh @ (T0 - H0)
+    tip_xy = Vector((xy.x + v.x, xy.y + v.y))
+    g_tip = ground_z(tip_xy.x, tip_xy.y); g_heel = ground_z(xy.x, xy.y)
+    a = math.atan2(g_tip - g_heel, max(1e-4, v.to_2d().length)) + toe_up
+    Rp = Matrix.Rotation(-a, 3, Rh @ Vector((1, 0, 0)))
+    v2 = Rp @ v
+    head = Vector((xy.x, xy.y, max(g_tip + T0.z - v2.z, g_heel + 0.6 * (H0.z - T0.z)) + lift))
+    return Matrix.Translation(head) @ (Rp @ Rh).to_4x4() @ Matrix.Translation(-H0) @ rig.rest(n)
 
 # ------------------------------------------------------------------ quadruped locomotion
 LEGS = ("FL", "FR", "HL", "HR")
@@ -166,8 +180,7 @@ def quad_move(rig, path, f0, f1, stride, gait="walk", lift=None, body_bob=0.01, 
                 s_ = (fr - duty) / (1 - duty)
                 pos = a[0].lerp(b[0], smooth(s_)); h = a[1] + (b[1] - a[1]) * smooth(s_)
                 z = lift * math.sin(math.pi * s_)
-            M = Matrix.Translation(pos + Vector((0, 0, z))) @ Matrix.Rotation(h, 4, 'Z') @ \
-                Matrix.Translation(-BN[n].head_local) @ rig.rest(n)
+            M = hoof_matrix(rig, n, pos.to_2d(), h, lift=z)
             rig.key_world(n, f, M)
     # body: follow path with bob
     for i, f in enumerate(frames):
@@ -192,8 +205,11 @@ def quad_hold(rig, f, pos, h, torso_dz=0.0, extra_rot=None):
     for k in LEGS:
         n = "IK_hoof." + k
         o = Matrix.Rotation(h, 3, 'Z') @ (BN[n].head_local - tr.translation)
-        p = Vector((pos.x + o.x, pos.y + o.y, BN[n].head_local.z))
-        rig.key_world(n, f, Matrix.Translation(p) @ Matrix.Rotation(h, 4, 'Z') @ Matrix.Translation(-BN[n].head_local) @ rig.rest(n))
-    R = Matrix.Rotation(h, 4, 'Z') @ (extra_rot.to_4x4() if extra_rot else Matrix.Identity(4))
-    rig.key_world("torso", f, Matrix.Translation(Vector((pos.x, pos.y, tr.translation.z + torso_dz))) @ R @
+        rig.key_world(n, f, hoof_matrix(rig, n, Vector((pos.x + o.x, pos.y + o.y)), h))
+    fw = Matrix.Rotation(h, 3, 'Z') @ Vector((0, -1, 0))
+    span = (BN["IK_hoof.FL"].head_local - BN["IK_hoof.HL"].head_local).length
+    zf = ground_z(pos.x + fw.x * span / 2, pos.y + fw.y * span / 2); zh = ground_z(pos.x - fw.x * span / 2, pos.y - fw.y * span / 2)
+    pitch = math.atan2(zf - zh, span)
+    R = Matrix.Rotation(h, 4, 'Z') @ Matrix.Rotation(-pitch, 4, 'X') @ (extra_rot.to_4x4() if extra_rot else Matrix.Identity(4))
+    rig.key_world("torso", f, Matrix.Translation(Vector((pos.x, pos.y, tr.translation.z + torso_dz + (zf + zh) / 2))) @ R @
                   Matrix.Translation(-tr.translation) @ tr)

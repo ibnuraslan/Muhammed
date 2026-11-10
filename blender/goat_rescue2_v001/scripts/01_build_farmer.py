@@ -29,7 +29,7 @@ info["eyelashes"] = "eyelashes01/eyelashes01.mhclo"
 info["teeth"] = "teeth_base/teeth_base.mhclo"
 info["tongue"] = "tongue01/tongue01.mhclo"
 info["hair"] = ""
-info["clothes"] = ["male_worksuit01/male_worksuit01.mhclo",
+info["clothes"] = ["male_worksuit01/male_worksuit01.mhclo", "male_casualsuit06/male_casualsuit06.mhclo",   # casualsuit06 = hospital gown (tinted, shown only in the hospital)
                    "shoes03/shoes03.mhclo"]
 info["skin_mhmat"] = "old_caucasian_male/old_caucasian_male.mhmat"
 info["skin_material_type"] = "ENHANCED_SSS"

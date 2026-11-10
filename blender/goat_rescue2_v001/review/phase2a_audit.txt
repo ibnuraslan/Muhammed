@@ -1,0 +1,21 @@
+AUDIT (step 10 frames, 60 fps)
+HAND_BURIED         3 samples | ranges (s): 5.2-5.3
+      e.g. f311 (5.17s): R hand 7.4 cm under the surface
+      e.g. f321 (5.33s): L hand 7.6 cm under the surface
+      e.g. f321 (5.33s): R hand 10.3 cm under the surface
+HOOF_FLOAT         98 samples | ranges (s): 16.8-17.0, 17.7-17.7, 21.7-25.0, 34.0-35.7
+      e.g. f1011 (16.83s): goat_rig HR 3.2 cm above the surface while planted
+      e.g. f1021 (17.00s): goat_rig HR 5.1 cm above the surface while planted
+      e.g. f1061 (17.67s): goat_rig HL 3.8 cm above the surface while planted
+HOOF_SINK          24 samples | ranges (s): 15.2-15.2, 15.7-15.7, 18.2-19.0, 21.2-21.3, 25.3-25.8
+      e.g. f911 (15.17s): goat_rig FR 2.6 cm into the surface
+      e.g. f941 (15.67s): goat_rig HR 3.1 cm into the surface
+      e.g. f1091 (18.17s): goat_rig HL 5.0 cm into the surface
+PROP_FLOAT        105 samples | ranges (s): 0.7-1.3, 1.7-2.2, 27.7-27.7, 30.8-33.3
+      e.g. f41 (0.67s): Pitchfork 74.4 cm above the surface
+      e.g. f51 (0.83s): Pitchfork 148.0 cm above the surface
+      e.g. f61 (1.00s): Pitchfork 137.0 cm above the surface
+PROP_SINK         156 samples | ranges (s): 1.7-27.5
+      e.g. f101 (1.67s): MilkBottle 7.9 cm into the surface
+      e.g. f111 (1.83s): MilkBottle 7.9 cm into the surface
+      e.g. f121 (2.00s): MilkBottle 7.9 cm into the surface
