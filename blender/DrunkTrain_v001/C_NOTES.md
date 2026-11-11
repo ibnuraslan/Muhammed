@@ -39,5 +39,7 @@
 - **Tee:** the stock print, which was also baked into the AO and normal maps, is fully removed; the tee is now split from the shorts by position.
 
 ## Known issues
+- The sheets show a thin white band at the tee hem: the hem hangs below the waist split. Fixed for the package build in D.
+- 30.6–31.0 s: the whip out of the studio passes 3 sparse cyan frames.
 - The trees use Poly Haven's geometry-nodes version: much lighter, slightly sparser leaves.
 - The grin is subtle at 270 px.
