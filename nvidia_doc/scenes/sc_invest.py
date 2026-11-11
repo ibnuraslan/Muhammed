@@ -353,10 +353,26 @@ def cam_reveal(c, t):
     return (loc, tgt0.lerp(tgt1, ease(min(1.0, t * 1.4))), 50 - 26 * e)
 
 
+def anim_filing(c, t):
+    """Her shot only: clear the document boxes between the camera and her (they stay in every other shot)."""
+    if not c.get("_cleared"):
+        hd = c["people"]["ReaderB"].bone_head("head")
+        for o in bpy.data.objects:
+            if (o.name.startswith("cardboard_box") or (o.parent and o.parent.name.startswith("cardboard_box"))) and o.type == 'MESH':
+                p = o.matrix_world.translation
+                if (Vector((p.x, p.y)) - Vector((hd.x, hd.y))).length < 1.6:
+                    o.hide_render = True; o.hide_viewport = True
+        c["_cleared"] = True
+    animate(c, t * DUR["filing"], {"lift": 0.0})
+
+
 def cam_filing(c, t):
     h = c["people"]["ReaderB"]; e = ease(t)
-    sh = h.bone_head("upperarm01.R")
-    return (sh + Vector((0.25, 0.35, 0.3)).lerp(Vector((0.2, 0.28, 0.25)), e), c["held"]["ReaderB"].location, 45)
+    fwd = _forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
+    hd = h.bone_head("head")
+    off0 = fwd * 1.2 - side * 0.85 + Vector((0, 0, 0.35)); off1 = fwd * 1.05 - side * 0.75 + Vector((0, 0, 0.32))
+    tgt = hd + fwd * 0.25 + Vector((0, 0, -0.08))
+    return (hd + off0.lerp(off1, e), tgt, 35)     # three-quarter front: her face over the filing she is reading
 
 
 def cam_chart(c, t):
@@ -370,8 +386,7 @@ def cam_pinning(c, t):
 
 
 MOVES = {
-    "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location,
-                   anim=lambda c, t: animate(c, t * DUR["filing"], {"lift": 0.0})),
+    "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location, anim=lambda c, t: anim_filing(c, t)),
     "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=lambda c, t: c["mon"],
                   anim=lambda c, t: animate(c, t * DUR["chart"], {"lift": 0.0})),
     "pinning": dict(kind="anim", dof=3.2, far=20.0, cam=cam_pinning, focus=lambda c, t: Vector((-5.8, 0.42, 1.6)), anim=anim_pinning),

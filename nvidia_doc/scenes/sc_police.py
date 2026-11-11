@@ -8,7 +8,7 @@ from kit import *
 from sc_home import facade
 from sc_street import car, wet_asphalt
 
-EXPOSURE = 0.3
+EXPOSURE = 0.1
 DUR = {"pull_up": 4.5}      # estimate until the chapter 1 voiceover arrives
 
 
@@ -32,7 +32,7 @@ def build(variant=None):
     box("Kerb", (0, 7, 0.08), (200, 0.25, 0.17), pbr("Kerb", (0.25, 0.25, 0.24), 0.3, 0.0, **{'Coat Weight': 0.5}))
     # the tower: a tall glass lobby (lit, warm) under a dark curtain wall rising out of frame
     box("LobbyBack", (0, 22, 4), (40, 0.2, 8), pbr("LobbyStone", (0.5, 0.47, 0.43), 0.5))
-    box("LobbyGlow", (0, 21.8, 4), (36, 0.05, 7.5), emissive("LobbyLight", (1.0, 0.88, 0.7), 1.2))
+    box("LobbyGlow", (0, 21.8, 4), (36, 0.05, 7.5), emissive("LobbyLight", (1.0, 0.85, 0.65), 0.3))
     box("LobbyGlass", (0, 15, 4), (40, 0.03, 8), glass("LobbyGlass", (0.9, 0.93, 0.95), 0.02))
     for k in range(11):
         box("Fin", (-20 + k * 4, 15, 4), (0.15, 0.4, 8), pbr("Fin", (0.12, 0.12, 0.13), 0.4, 0.8))
