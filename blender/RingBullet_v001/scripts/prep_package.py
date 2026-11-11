@@ -26,7 +26,8 @@ for im in list(bpy.data.images):
     is_png = im.filepath.lower().endswith(".png")
     if max(w, h) <= lim and not is_exr and not is_png: continue
     if max(w, h) > lim: im.scale(int(w * lim / max(w, h)), int(h * lim / max(w, h)))
-    has_alpha = im.channels == 4 and im.alpha_mode != 'NONE' and ("alpha" in base or "opacity" in base)
+    has_alpha = im.channels == 4 and im.alpha_mode != 'NONE' and (
+        "alpha" in base or "opacity" in base or any(px < 0.99 for px in list(im.pixels[3::4])[::97]))
     if has_alpha:
         ext, fmt = ".png", 'PNG'
     else:
@@ -34,7 +35,10 @@ for im in list(bpy.data.images):
     p = os.path.join(TMP, base.replace('.', '_') + '_%d' % n + ext)
     im.filepath_raw = p; im.file_format = fmt
     sc = bpy.context.scene; sc.render.image_settings.quality = 90
-    im.save(filepath=p, quality=90) if fmt == 'JPEG' else im.save(filepath=p)
+    if fmt == 'JPEG':
+        im.save(filepath=p, quality=90)
+    else:   # alpha maps stay PNG (plain save: no view transform baked in)
+        im.save(filepath=p)
     cs = im.colorspace_settings.name
     im.filepath = p; im.source = 'FILE'; im.reload(); im.colorspace_settings.name = cs
     n += 1
