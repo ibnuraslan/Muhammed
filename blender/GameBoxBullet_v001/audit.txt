@@ -3,13 +3,13 @@ AUDIT GameBoxBullet  frames 1-1500 step 5
 worst box_chest_gap          f1141  +0.1223
 worst fingertip_in_box_L     f   1  +0.0000
 worst fingertip_in_box_R     f   1  +0.0000
-worst penetration_verts      f1416  +107.0000
-worst sole_L                 f1086  -0.0001
+worst penetration_verts      f1416  +31.0000
+worst sole_L                 f1391  -0.0001
 worst sole_R                 f 461  +0.0473
 worst wrist_gap_L            f 396  +0.0360
 worst wrist_gap_R            f 396  +0.0360
 min   camera_clearance       f 116  +0.0267 m
-penetration: 356 sampled frames with any body/clothes vertex inside the box, 4367 vertex-hits total
+penetration: 356 sampled frames with any body/clothes vertex inside the box, 3451 vertex-hits total
 
 356 failures
 FAIL penetration_verts  f   1 14.0000
@@ -341,30 +341,30 @@ FAIL penetration_verts  f1346 6.0000
 FAIL penetration_verts  f1351 7.0000
 FAIL penetration_verts  f1356 7.0000
 FAIL penetration_verts  f1361 7.0000
-FAIL penetration_verts  f1366 10.0000
-FAIL penetration_verts  f1371 14.0000
-FAIL penetration_verts  f1376 18.0000
-FAIL penetration_verts  f1381 21.0000
-FAIL penetration_verts  f1386 26.0000
-FAIL penetration_verts  f1391 28.0000
-FAIL penetration_verts  f1396 32.0000
-FAIL penetration_verts  f1401 63.0000
-FAIL penetration_verts  f1406 84.0000
-FAIL penetration_verts  f1411 98.0000
-FAIL penetration_verts  f1416 107.0000
-FAIL penetration_verts  f1421 105.0000
-FAIL penetration_verts  f1426 104.0000
-FAIL penetration_verts  f1431 102.0000
-FAIL penetration_verts  f1436 98.0000
-FAIL penetration_verts  f1441 91.0000
-FAIL penetration_verts  f1446 81.0000
-FAIL penetration_verts  f1451 75.0000
-FAIL penetration_verts  f1456 57.0000
-FAIL penetration_verts  f1461 42.0000
-FAIL penetration_verts  f1466 34.0000
-FAIL penetration_verts  f1471 29.0000
-FAIL penetration_verts  f1476 30.0000
-FAIL penetration_verts  f1481 29.0000
-FAIL penetration_verts  f1486 29.0000
-FAIL penetration_verts  f1491 29.0000
-FAIL penetration_verts  f1496 29.0000
+FAIL penetration_verts  f1366 8.0000
+FAIL penetration_verts  f1371 10.0000
+FAIL penetration_verts  f1376 11.0000
+FAIL penetration_verts  f1381 14.0000
+FAIL penetration_verts  f1386 16.0000
+FAIL penetration_verts  f1391 18.0000
+FAIL penetration_verts  f1396 19.0000
+FAIL penetration_verts  f1401 20.0000
+FAIL penetration_verts  f1406 25.0000
+FAIL penetration_verts  f1411 28.0000
+FAIL penetration_verts  f1416 31.0000
+FAIL penetration_verts  f1421 31.0000
+FAIL penetration_verts  f1426 31.0000
+FAIL penetration_verts  f1431 30.0000
+FAIL penetration_verts  f1436 29.0000
+FAIL penetration_verts  f1441 28.0000
+FAIL penetration_verts  f1446 26.0000
+FAIL penetration_verts  f1451 22.0000
+FAIL penetration_verts  f1456 19.0000
+FAIL penetration_verts  f1461 18.0000
+FAIL penetration_verts  f1466 18.0000
+FAIL penetration_verts  f1471 17.0000
+FAIL penetration_verts  f1476 16.0000
+FAIL penetration_verts  f1481 16.0000
+FAIL penetration_verts  f1486 16.0000
+FAIL penetration_verts  f1491 16.0000
+FAIL penetration_verts  f1496 16.0000

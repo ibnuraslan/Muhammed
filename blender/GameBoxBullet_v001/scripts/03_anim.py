@@ -51,9 +51,9 @@ def box_pose(f):
     # beat 10: lowers the box and tilts the face up toward his eyes, then holds it out a little
     if f > 1355:
         u = smooth((f - 1355) / 70.0)
-        loc.z -= 0.12 * u; loc.y -= 0.06 * u; rx += R_(-16) * u
+        loc.z -= 0.04 * u; loc.y -= 0.02 * u; rx += R_(-10) * u
         w = smooth((f - 1430) / 50.0)
-        loc.z += 0.03 * w; rx += R_(8) * w
+        loc.z += 0.01 * w; rx += R_(4) * w
     return loc, Euler((rx, 0, rz))
 
 for f in range(1, F_END + 1, 2):
@@ -92,9 +92,9 @@ def man_state(f):
         dy += shove(f); dz -= 0.02 * k; flex -= 7 * k; hp -= 6 * k * math.exp(-v * 0.3); side += 2 * math.sin(v * 1.3) * math.exp(-v * 0.5)
         hp += 18 * smooth((f - 600) / 300.0)   # stares down at the box as it cracks
     # beat 10: looks down at the hole, breath, then up to the camera
-    w = smooth((f - 1360) / 60.0); hp += 12 * w; flex += 20 * w; dz -= 0.045 * w; dy -= 0.03 * w
+    w = smooth((f - 1360) / 60.0); hp += 12 * w; flex += 6 * w; dz -= 0.02 * w
     z = smooth((f - 1415) / 50.0)
-    hp -= 40 * z; hy += 34 * z; twist += 4 * z; flex -= 8 * z; dy -= 0.01 * z
+    hp -= 40 * z; hy += 34 * z; twist += 4 * z
     return dy, dz, flex, twist, side, hp, hy
 
 for f in list(range(1, F_END + 1, 4)) + [F_END]:
@@ -104,6 +104,20 @@ for f in list(range(1, F_END + 1, 4)) + [F_END]:
 
 for f, a in ((1, 0.0), (F_HIT + 10, 0.0), (F_HIT + 90, 14.0), (1300, 10.0), (1420, 16.0), (1470, 9.0), (F_END, 8.0)):
     pb = R.PB["jaw"]; pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * float(os.environ.get("JAW", "1")))); pb.keyframe_insert("rotation_quaternion", frame=f)
+# face: smile while unboxing (mouth corners up/back, cheeks up), eyes wide open after the hit
+SM = float(os.environ.get("SMILE_SIGN", "1")); LID = float(os.environ.get("LID_SIGN", "-1"))
+def key_face(f, smile, wide):
+    for sd, sx in (("L", 1), ("R", -1)):
+        for n, d in (("oris03.", V((sx * 0.003, 0.004, 0.006))), ("oris07.", V((sx * 0.003, 0.004, 0.004))),
+                     ("risorius03.", V((sx * 0.002, 0.003, 0.005))), ("levator05.", V((0, 0.001, 0.002))),
+                     ("orbicularis04.", V((0, 0, 0.002)))):
+            nm = n + sd; pb = R.PB[nm]
+            pb.location = R.rest(nm).to_3x3().inverted() @ (d * smile * SM); pb.keyframe_insert("location", frame=f)
+        for nm, a in (("orbicularis03." + sd, -16 * wide * LID), ("orbicularis04." + sd, 8 * wide * LID)):
+            pb = R.PB[nm]; pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a)); pb.keyframe_insert("rotation_quaternion", frame=f)
+for f, sm_, wd in ((1, 0.6, 0.0), (90, 1.0, 0.0), (200, 0.8, 0.0), (300, 1.0, 0.0), (F_HIT, 0.9, 0.1), (F_HIT + 30, 0.0, 0.9),
+                   (700, -0.2, 1.0), (1300, -0.2, 0.8), (1380, 0.0, 0.6), (1440, -0.1, 1.0), (F_END, -0.1, 0.95)):
+    key_face(f, sm_, wd)
 # hands grip the box sides (wrist targets ride with the box)
 GRIP_L = V((0.128, 0.050, -0.226)); GRIP_R = V((-0.128, 0.050, -0.226))
 HAND_SIGN = float(os.environ.get("HAND_SIGN", "1"))
@@ -177,6 +191,23 @@ crR = bpy.data.materials["M_box_cover"].node_tree.nodes["crack_radius"]
 for f, v in ((1, 0.0003), (F_HIT, 0.0003), (F_HIT + 15, 0.05), (661, 0.075), (720, 0.13), (760, 0.16), (900, 0.20)):
     crR.outputs[0].default_value = v; crR.outputs[0].keyframe_insert("default_value", frame=f)
 
+# deep teal-navy studio card behind the cross-section, faded in only while it is open
+mbd = bpy.data.materials.new("M_backdrop"); mbd.use_nodes = True; nt_ = mbd.node_tree; nt_.nodes.clear()
+tc_ = nt_.nodes.new("ShaderNodeTexCoord"); gr_ = nt_.nodes.new("ShaderNodeTexGradient"); gr_.gradient_type = "SPHERICAL"
+mp_ = nt_.nodes.new("ShaderNodeMapping"); mp_.inputs["Scale"].default_value = (1.2, 1.2, 1.2)
+cr_ = nt_.nodes.new("ShaderNodeValToRGB"); cr_.color_ramp.elements[0].color = (0.0015, 0.004, 0.010, 1); cr_.color_ramp.elements[1].color = (0.006, 0.030, 0.045, 1)
+df_ = nt_.nodes.new("ShaderNodeBsdfDiffuse"); tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); mx_ = nt_.nodes.new("ShaderNodeMixShader"); mx_.name = "fade"
+o_ = nt_.nodes.new("ShaderNodeOutputMaterial")
+nt_.links.new(tc_.outputs["Object"], mp_.inputs[0]); nt_.links.new(mp_.outputs[0], gr_.inputs[0]); nt_.links.new(gr_.outputs[1], cr_.inputs[0])
+nt_.links.new(cr_.outputs[0], df_.inputs[0]); nt_.links.new(df_.outputs[0], mx_.inputs[1]); nt_.links.new(tr_.outputs[0], mx_.inputs[2]); nt_.links.new(mx_.outputs[0], o_.inputs[0])
+bpy.ops.mesh.primitive_plane_add(size=1.0); bd_ = bpy.context.active_object; bd_.name = "Cutaway_backdrop"
+for c_ in list(bd_.users_collection): c_.objects.unlink(bd_)
+bpy.data.collections["FX"].objects.link(bd_); bd_.data.materials.append(mbd)
+bd_.parent = broot; bd_.location = (-0.42, 0.0, 0.02); bd_.rotation_euler = (0, R_(90), 0); bd_.scale = (1.4, 1.4, 1)
+for f, v in ((1, 1.0), (770, 1.0), (820, 0.0), (1340, 0.0), (1385, 1.0)):
+    mx_.inputs[0].default_value = v; mx_.inputs[0].keyframe_insert("default_value", frame=f)
+bd_.hide_render = True; kf(bd_, "hide_render", 1); bd_.hide_render = False; kf(bd_, "hide_render", 769); bd_.hide_render = True; kf(bd_, "hide_render", 1386)
+
 # ------------------------------------------------------------------ shards (discs split when the nose reaches them)
 DISC_HIT = {"Disc_1": 790, "Disc_2": 815, "Disc_3": 1030}
 for dn, fh in DISC_HIT.items():
@@ -218,7 +249,7 @@ kl = bpy.data.lights.new("L_cutaway_key", "AREA"); kl.size = 0.3; kl.color = (0.
 klo = bpy.data.objects.new("L_cutaway_key", kl); bpy.data.collections["FX"].objects.link(klo)
 klo.parent = broot; klo.location = (0.30, -0.12, 0.30); klo.rotation_euler = (0, R_(60), R_(30))
 klo.rotation_mode = "QUATERNION"; klo.rotation_quaternion = (V((0, 0, 0.0)) - V((0.30, -0.12, 0.30))).to_track_quat('-Z', 'Y')
-for f, e in ((1, 0.0), (750, 0.0), (800, 12.0), (1350, 12.0), (1395, 0.0)):
+for f, e in ((1, 0.0), (750, 0.0), (800, 5.0), (1350, 5.0), (1395, 0.0)):
     kl.energy = e; kl.keyframe_insert("energy", frame=f)
 
 # ------------------------------------------------------------------ energy rings (each layer contact)

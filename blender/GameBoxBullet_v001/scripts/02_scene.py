@@ -582,10 +582,10 @@ cutmat(mc)
 M_case = cutmat(P("M_box_shell", (0.035, 0.035, 0.045), 0.35, coat=0.4))
 M_tray = cutmat(P("M_disc_tray", (0.16, 0.17, 0.2), 0.3, coat=0.5))
 M_card = cutmat(P("M_cardboard", (0.62, 0.47, 0.30), 0.85))
-M_page = cutmat(P("M_manual_page", (0.72, 0.70, 0.64), 0.6))
-M_page2 = cutmat(P("M_manual_page_print", (0.55, 0.70, 0.85), 0.5))
+M_page = cutmat(P("M_manual_page", (0.50, 0.45, 0.37), 0.65))
+M_page2 = cutmat(P("M_manual_page_print", (0.30, 0.40, 0.48), 0.5))
 M_bookc = cutmat(P("M_artbook", (0.25, 0.05, 0.04), 0.5))
-M_bookp = cutmat(P("M_artbook_pages", (0.70, 0.68, 0.62), 0.7))
+M_bookp = cutmat(P("M_artbook_pages", (0.48, 0.43, 0.35), 0.7))
 # disc: iridescent data side via thin-film
 md = bpy.data.materials.new("M_disc"); md.use_nodes = True; bd = md.node_tree.nodes["Principled BSDF"]
 bd.inputs["Base Color"].default_value = (0.85, 0.85, 0.88, 1); bd.inputs["Metallic"].default_value = 1.0; bd.inputs["Roughness"].default_value = 0.08
