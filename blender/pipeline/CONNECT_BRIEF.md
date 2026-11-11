@@ -14,6 +14,10 @@ Read these first:
   - Our script is **our own wording**: the same facts and beats, rewritten.
   - Never transcribe or reuse the reference narration.
 - **Visuals:** our own staging, sets, characters and camera. Build each beat to illustrate its line as well as the reference does, or better. Do not trace the reference frame for frame.
+- **Old-style references:** the director may mark a reference as "old style", meaning an older video from before the competitor's current look.
+  - Take only the story, the idea and the beat order from it.
+  - Build the film in the **current style**: realistic textured 3D, one continuous camera, lots happening in every beat, and the pacing in `reference_analysis/batch01_analysis.md`.
+  - Ignore the old video's look, shots and pacing.
 - **No full renders, and no paid services.** The deliverable is a RenderStreet-ready package plus review stills.
 
 ## Setup
