@@ -1,6 +1,7 @@
 !vo/README.md
 __pycache__/
 assets/polyhaven/
+out/blend/
 out/frames/
 out/mix.wav
 out/plates/

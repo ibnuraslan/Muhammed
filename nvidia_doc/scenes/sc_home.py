@@ -542,12 +542,11 @@ def anim_front(c, t):
 
 
 def cam_behind(c, t):
-    """From behind him: opens level on the skyline over his shoulder, then creeps in over the shoulder to the phone."""
+    """Over his right shoulder, close on the phone as he types (the whole shot). Gentle creep in."""
     e = ease(t)
     sh = c["h"].bone_head("upperarm01.R"); phn = c["phone"].location
-    start = sh + Vector((-0.4, 0.85, 0.22)); end = sh + Vector((-0.17, 0.27, 0.32))
-    look = phn + Vector((0, -3.0, 0.6)) * (1 - e) ** 1.5
-    return (start.lerp(end, e), look, 35 + 15 * e)
+    start = sh + Vector((-0.21, 0.35, 0.34)); end = sh + Vector((-0.17, 0.27, 0.32))
+    return (start.lerp(end, e), phn, 48 + 2 * e)
 
 
 def cam_front(c, t):
