@@ -212,7 +212,7 @@ for k, x in (("1", -0.42), ("2", 0.42)):
         parts.append(box(f"T{k}_DrapeSide{sx}", (0.012, 0.88, 0.22), (x + sx * 0.262, 0.2, TZ - 0.11), M_drape))
     parts.append(box(f"T{k}_DrapeEnd", (0.52, 0.012, 0.22), (x, 0.2 + 0.442, TZ - 0.11), M_drape))
     parts.append(box(f"T{k}_Crank", (0.03, 0.08, 0.03), (x + 0.12, -0.1, 0.35), M_chrome))
-    parts.append(cyl(f"T{k}_Pump", 0.03, 0.12, (x, -0.05, 0.12), M_chrome, rot=(0, math.radians(70), 0)))
+    parts.append(cyl(f"T{k}_Pump", 0.03, 0.12, (x, -0.05, 0.12), M_enamel, rot=(0, math.radians(70), 0)))
     TABLES[k] = parts
     for p in parts: to_room(p)
 # rolled towel head-rests (one per table) - placed after the monkeys are posed
@@ -250,7 +250,7 @@ to_room(cyl("IV_Base", 0.2, 0.03, (1.05, 0.55, 0.02), M_chrome, 5))
 to_room(box("IV_Hook", (0.3, 0.012, 0.012), (1.05, 0.55, 1.8), M_chrome))
 ivb = to_room(box("IV_Bag", (0.1, 0.04, 0.16), (1.17, 0.55, 1.68), mat("M_IVBag", (0.9, 0.95, 0.95, 1), 0.1, trans=0.8), 0.015))
 to_room(cyl("IV_Tube", 0.003, 0.9, (1.17, 0.55, 1.15), mat("M_Tube", (0.9, 0.9, 0.85, 1), 0.2, trans=0.5), 8))
-for i, (x, y) in enumerate(((-1.6, 1.4), (1.6, -1.6))):
+for i, (x, y) in enumerate(((-1.6, 1.4), (-2.6, -1.9))):
     to_room(cyl(f"Stool_{i}", 0.17, 0.05, (x, y, 0.6), M_vinyl, 24))
     to_room(cyl(f"StoolLeg_{i}", 0.02, 0.58, (x, y, 0.3), M_chrome, 12))
     to_room(cyl(f"StoolBase_{i}", 0.2, 0.02, (x, y, 0.01), M_chrome, 5))
@@ -329,7 +329,7 @@ for k, R, bd in (("1", M_LIE1, bodyA), ("2", M_LIE2, bodyB)):
     bpy.context.view_layer.update()
     tx = -0.42 if k == "1" else 0.42
     Mw = R; bv = BVHTree.FromPolygons([Mw @ v.co for v in bd.data.vertices], [tuple(p_.vertices) for p_ in bd.data.polygons])
-    NX, NY = 36, 30; x0, x1, y0, y1 = tx - 0.33, tx + 0.33, 0.13, 0.68
+    NX, NY = 36, 30; x0, x1, y0, y1 = tx - 0.33, tx + 0.33, 0.24, 0.68
     H = [[0.0] * (NX + 1) for _ in range(NY + 1)]
     for j in range(NY + 1):
         for i in range(NX + 1):
@@ -338,7 +338,13 @@ for k, R, bd in (("1", M_LIE1, bodyA), ("2", M_LIE2, bodyB)):
             hit = bv.ray_cast(V(x, y, TZ + 1.0), V(0, 0, -1))
             if hit[0] is not None: hz = max(hz, hit[0].z)
             if abs(x - tx) > 0.262 or y > 0.642: hz = TZ - 0.03
-            H[j][i] = hz + 0.02
+            H[j][i] = hz + 0.028
+    for it in range(3):   # dilate: the sheet rests on the highest point nearby (no fingers poking through)
+        H2 = [row[:] for row in H]
+        for j in range(NY + 1):
+            for i in range(NX + 1):
+                H2[j][i] = max(H[jj][ii] for jj in range(max(0, j - 1), min(NY, j + 1) + 1) for ii in range(max(0, i - 1), min(NX, i + 1) + 1))
+        H = H2
     for it in range(7):
         H2 = [row[:] for row in H]
         for j in range(1, NY):
@@ -363,7 +369,7 @@ for k, R, bd in (("1", M_LIE1, bodyA), ("2", M_LIE2, bodyB)):
     TABLES[k].append(dr)
 # gauze collars at the cut: one on the head, one on each body (sits on the neck plane)
 def collar(name, parent, r_out, z_off):
-    bpy.ops.mesh.primitive_torus_add(major_radius=r_out, minor_radius=0.011, major_segments=48, minor_segments=12)
+    bpy.ops.mesh.primitive_torus_add(major_radius=r_out, minor_radius=0.0075, major_segments=48, minor_segments=12)
     t = bpy.context.active_object; t.name = name; t.data.materials.append(M_gauze); bpy.ops.object.shade_smooth()
     t.scale = (1.0, 0.85, 0.55)
     t.matrix_world = neckref.matrix_world @ Matrix.Translation(V(0, 0, z_off)) @ Matrix.Diagonal((1.0, 0.85, 0.55, 1))
@@ -377,8 +383,8 @@ neckref.location = nc
 cA = collar("Collar_BodyA", bodyA, NR * 0.98, -0.006); cB = collar("Collar_BodyB", bodyB, NR * 0.98, -0.006)
 cH = collar("Collar_Head", head, NR * 0.96, 0.008)
 # seam ring + stitches (comp, under body B) - revealed in 03
-bpy.ops.mesh.primitive_torus_add(major_radius=NR * 1.0, minor_radius=0.0016, major_segments=64, minor_segments=8)
-seam = bpy.context.active_object; seam.name = "Seam"; seam.data.materials.append(mat("M_Seam", (0.32, 0.12, 0.1, 1), 0.45))
+bpy.ops.mesh.primitive_torus_add(major_radius=NR * 1.0, minor_radius=0.0009, major_segments=64, minor_segments=8)
+seam = bpy.context.active_object; seam.name = "Seam"; seam.data.materials.append(mat("M_Seam", (0.22, 0.07, 0.06, 1), 0.45))
 seam.matrix_world = neckref.matrix_world @ Matrix.Diagonal((1.0, 0.85, 1.0, 1)); M = seam.matrix_world.copy(); seam.parent = bodyB; seam.matrix_parent_inverse = Matrix.Identity(4); seam.matrix_basis = M
 STITCH_N = 18
 for i in range(STITCH_N):
@@ -386,7 +392,7 @@ for i in range(STITCH_N):
     loc = neckref.matrix_world @ V(NR * 1.02 * math.cos(a), NR * 0.85 * 1.02 * math.sin(a), 0.0)
     nrm = (neckref.matrix_world.to_3x3() @ V(math.cos(a), math.sin(a) / 0.85, 0)).normalized()
     up = neckref.matrix_world.to_3x3().col[2].normalized()
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.0012, depth=0.016, vertices=8)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.0009, depth=0.014, vertices=8)
     s_ = bpy.context.active_object; s_.name = f"Stitch_{i:02d}"; s_.data.materials.append(M_thread)
     Rm = Matrix((nrm.cross(up), nrm, up)).transposed()
     s_.matrix_world = Matrix.Translation(loc + nrm * 0.001) @ Rm.to_4x4()
@@ -434,7 +440,7 @@ eyemid = V(-0.0844, -0.4668, 0.2635 + 0.181)
 brain.rotation_euler = (0, 0, math.atan2(FW.y, FW.x) + math.pi / 2 + math.pi)
 brain.location = eyemid - FW * 0.05 + V(0, 0, 0.018)
 brain.parent = head
-M_xbrain = mat("M_XR_Brain", (1.0, 0.45, 0.55, 1), 0.3, emit=(1.0, 0.35, 0.45, 1), estr=4.0)
+M_xbrain = mat("M_XR_Brain", (1.0, 0.35, 0.45, 1), 0.3, emit=(1.0, 0.22, 0.38, 1), estr=9.0)
 brain.data.materials.clear(); brain.data.materials.append(M_xbrain)
 M_xcord = mat("M_XR_Cord", (1.0, 0.85, 0.5, 1), 0.3, emit=(1.0, 0.8, 0.35, 1), estr=6.0)
 M_xbone = mat("M_XR_Vertebra", (0.85, 1.0, 0.9, 1), 0.4, emit=(0.6, 1.0, 0.8, 1), estr=1.2)
@@ -454,7 +460,12 @@ for i in range(14):
     p = back_pt(z)
     if p is not None and p.y > -0.4: pts.append(p + V(0, -0.028, 0))
 nb = neckref.location
-pts.append(nb + V(0, 0.0, -0.012))      # body side stub ends just under the cut
+pts = [p for p in pts if p.z < 0.31]
+p_end = nb + V(0, 0.0, -0.012); p_last = pts[-1]
+ctrl = p_last.lerp(p_end, 0.5) + V(0, 0.035, 0.03)       # cervical curve: rises and comes forward to the skull base
+for k in range(1, 6):
+    t = k / 5.0
+    pts.append(p_last * (1 - t) ** 2 + ctrl * 2 * t * (1 - t) + p_end * t * t)
 print("SPINE pts", len(pts), pts[0], pts[-1])
 def tube(name, P, r, m, parent):
     cu = bpy.data.curves.new(name, "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = r; cu.bevel_resolution = 4
@@ -502,7 +513,7 @@ for n_ in list(vn.nodes):
     if n_.type != "OUTPUT_MATERIAL": vn.nodes.remove(n_)
 vtc = vn.nodes.new("ShaderNodeTexCoord"); vsep = vn.nodes.new("ShaderNodeSeparateXYZ"); vmr = vn.nodes.new("ShaderNodeMapRange")
 vmr.inputs["From Min"].default_value = -0.75; vmr.inputs["From Max"].default_value = 0.6
-vcr = vn.nodes.new("ShaderNodeValToRGB"); vcr.color_ramp.elements[0].color = (0.10, 0.55, 0.78, 1); vcr.color_ramp.elements[1].color = (0.93, 0.98, 1.0, 1)
+vcr = vn.nodes.new("ShaderNodeValToRGB"); vcr.color_ramp.elements[0].color = (0.02, 0.42, 0.70, 1); vcr.color_ramp.elements[1].color = (0.62, 0.90, 1.0, 1)
 vem = vn.nodes.new("ShaderNodeEmission"); vem.inputs["Strength"].default_value = 1.0
 vtr = vn.nodes.new("ShaderNodeBsdfTransparent"); vmx = vn.nodes.new("ShaderNodeMixShader")
 vv = vn.nodes.new("ShaderNodeValue"); vv.name = vv.label = "VoidOn"; vv.outputs[0].default_value = 0.0
@@ -549,13 +560,13 @@ for nm in ("Surgeon", "Nurse"):
     cx = rig.matrix_world.translation.x; cy = sum(p.y for p in hv) / len(hv)
     nose = min((p for p in hv if abs(p.x - cx) < 0.015 and top - 0.17 < p.z < top - 0.09), key=lambda p: p.y)
     print("HEADTOP", nm, top, cx, cy, "nose", nose)
-    cap.location = V(cx, cy + 0.012, top - 0.075); cap.scale = (0.95, 1.08, 1.0)
+    cap.location = V(cx, nose.y + 0.122, top - 0.088); cap.scale = (1.02, 1.12, 1.05)
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.1, segments=32, ring_count=16)
     mask = bpy.context.active_object; mask.name = nm + "_Mask"
     bm = bmesh.new(); bm.from_mesh(mask.data)
     bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.045 or v.co.z > 0.03 or v.co.z < -0.07], context="VERTS"); bm.to_mesh(mask.data); bm.free()
     mask.data.materials.append(M_mask); mask.modifiers.new("s", "SOLIDIFY").thickness = 0.003; bpy.ops.object.shade_smooth()
-    mask.location = V(cx, nose.y + 0.083, nose.z - 0.012); mask.scale = (0.82, 1.0, 0.95)
+    mask.location = V(cx, nose.y + 0.079, nose.z + 0.006); mask.scale = (0.82, 1.0, 0.95)
     for o in (cap, mask):
         M = o.matrix_world.copy(); o.parent = rig; o.parent_type = "BONE"; o.parent_bone = "head"
         bpy.context.view_layer.update(); o.matrix_world = M

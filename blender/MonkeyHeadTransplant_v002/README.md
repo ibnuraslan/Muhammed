@@ -1,0 +1,34 @@
+# MonkeyHeadTransplant_v002: farm package
+
+This is the 29.5 s film (1770 frames at 60 fps, 1080×1920), built to our 80-word script at the brief's target beat times. No render has been submitted.
+
+- `MonkeyHeadTransplant_v002_60fps.blend`: the self-contained scene, with all textures packed. It opens in factory Blender 5.2.2.
+- `beats.json`: the start frame and first words of each beat, ready for `pipeline/retime_to_vo.py` when the VO arrives. There is no VO mp3 yet.
+- `SETTINGS.md`: render settings and test frames. `CREDITS.md`: the CC-BY block for the video description.
+- `package_check_f*_lowres.jpg`: 20 %, 4-sample frames from the packed file in factory Blender. They show the package works; they are not a quality reference.
+
+**Source:** `../MonkeyHeadTransplant_v001/scripts`. Build order:
+1. `01_build_monkey.py`
+2. `01b_build_people.py`
+3. `02_build_scene.py`
+4. `03_animate.py`
+5. `package_for_farm.py`
+
+**Review:** `../MonkeyHeadTransplant_v001/review/` holds the 0.2 s polish sheets, the 1 s blocking sheet and `audit.txt`.
+
+## How the one-camera rule is kept
+There is one camera on one Catmull-Rom spline.
+
+The move from the operating table to the recovery chair happens inside the x-ray "dive":
+- The camera goes top-down onto the neck seam.
+- A camera-centred cyan studio void fades in, and the table fades out.
+- The monkey is carried rigidly together with the camera to the chair. Camera keys during that window are in the monkey's own space, so nothing in the frame jumps.
+- The void then fades out around the chair.
+
+## Known issues
+- **Monkey has no rig.** In the chair its arms hang limp between its knees, which is the asset's own sitting pose. The "slump" is a whole-body tilt; only the eyes, lids, ears and breathing animate.
+- **Neck seam.** The head and body of the composite are separate meshes. A thin dark seam ring plus stitches hide the join; a faint line is visible in extreme macro.
+- **Surgeon and nurse are IK-posed blocking.** Hands and grips touch the head (the audit shows 0.6–3.6 cm from fingertip to surface) and fingers curl when gripping. The feet step during position changes, but there's some planted-foot creep of a few cm at step landings.
+- **Chair contact.** The monkey's feet press up to 3 cm into the chair cushion's raised front edge.
+- **Stitching close-ups.** These are dominated by the gloved hands. The needle holder is visible but the needle arc is small.
+- **Clothing.** The surgical outfit is a tinted MPFB shirt and trousers with a procedural cap and mask, not a true gown.

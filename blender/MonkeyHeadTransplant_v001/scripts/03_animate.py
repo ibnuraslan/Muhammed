@@ -50,7 +50,7 @@ EYEMID = V(-0.0844, -0.4668, 0.2635 + 0.181)
 FB = M_LIE2 @ EYEMID
 CH = D["Chair"].location.copy()
 SEAT = 0.409
-M_CHAIR = Matrix.Translation(CH + V(0.0, 0.26, SEAT + 0.004)) @ Matrix.Rotation(math.radians(-7), 4, "X") @ Matrix.Rotation(math.radians(5), 4, "Y")
+M_CHAIR = Matrix.Translation(CH + V(0.0, 0.26, SEAT + 0.022)) @ Matrix.Rotation(math.radians(-7), 4, "X") @ Matrix.Rotation(math.radians(5), 4, "Y")
 print("NA", NA, "NB", NB, "FB", FB)
 # monkey B root: table 2 -> chair while the x-ray void hides the world (camera rides along rigidly)
 W0, W1 = 1068, 1172
@@ -93,7 +93,8 @@ for i, s_ in enumerate(st):
     t_on = 1 if i < 6 else 395 + (i - 6) * 22
     hide_keys(s_, [(1, True), (max(2, t_on), False)])
 hide_keys(D["Seam"], [(1, True), (392, False)])
-hide_keys(D["Collar_Head"], [(1, False), (392, True)])
+hide_keys(D["Collar_Head"], [(1, True), (256, False), (392, True)])
+hide_keys(D["Collar_BodyA"], [(1, True), (256, False)])
 hide_keys(D["Collar_BodyB"], [(1, False), (392, True)])
 
 # ------------------------------------------------------------------ eyes: closed (sedated) until beat 4, flicker, open, blinks; gaze; ears
@@ -232,18 +233,35 @@ for f0 in (1050, 1110):
 KEEP = {"MK_Head", "MK_BodyB", "XR_Void", "CAM_Film", "MonkeyRootB"}
 for o in D:
     if o.name in KEEP or o.get("xray") or o.type in ("CAMERA",): continue
-    if o.parent and o.parent.name in ("MK_Head", "MK_BodyB") and o.type != "EMPTY": continue
-    if o.name.startswith(("EyePivot", "LidUp", "LidLo", "Seam", "Stitch_", "Collar_BodyB", "Collar_Head")): continue
+    if o.parent and o.parent.name in ("MK_Head", "MK_BodyB") and o.type != "EMPTY" and not o.name.startswith(("Stitch_", "Seam", "Collar_")): continue
+    if o.name.startswith(("EyePivot", "LidUp", "LidLo")): continue
     if o.type in ("MESH", "CURVE", "LIGHT"):
-        hide_keys(o, [(1, o.hide_render), (1036, True), (1187, False if not o.hide_render else True)])
+        fc_ = None
+        if o.animation_data and o.animation_data.action:
+            for layer in getattr(o.animation_data.action, "layers", []):
+                for strip in layer.strips:
+                    for cb in strip.channelbags:
+                        for fc in cb.fcurves:
+                            if fc.data_path == "hide_render": fc_ = fc
+        if fc_ is not None:
+            v1187 = bool(fc_.evaluate(1187) > 0.5)
+            hide_keys(o, [(1036, True), (1187, v1187)])
+        else:
+            hide_keys(o, [(1, o.hide_render), (1036, True), (1187, False if not o.hide_render else True)])
 
 # ------------------------------------------------------------------ people
 SURG = Human(make_human_ctrl(D["Surgeon"])); NURSE = Human(make_human_ctrl(D["Nurse"]))
 def yaw_to(p, q): v = q - p; return math.degrees(math.atan2(v.x, -v.y))
-def pose(H, f, pos, yaw, flex=0.0, twist=0.0, side=0.0, headr=(0.0, 0.0), crouch=0.0, feet=None):
+def pose(H, f, pos, yaw, flex=0.0, twist=0.0, side=0.0, headr=(0.0, 0.0), crouch=0.0, feet=None, step=None):
     H.key_root(f, V(pos.x, pos.y, H.root_head.z - crouch), yaw=yaw, flex=flex * 0.4, side=side)
     H.key_spine(f, flex=flex, twist=twist, side=side, head=headr)
-    if feet is None:
+    if step is not None:   # (p0, y0, p1, y1, u): left foot steps in the first half, right foot in the second
+        p0, y0, p1, y1, u = step
+        for s, k in (("L", max(0.0, min(1.0, 2 * u))), ("R", max(0.0, min(1.0, 2 * u - 1)))):
+            kk = smooth(k); yw = y0 + (y1 - y0) * kk
+            xy = H.foot_xy(s, V(p0.x, p0.y, 0).lerp(V(p1.x, p1.y, 0), kk), yw)
+            H.key_foot(s, f, xy, yw, lift=0.06 * math.sin(math.pi * k), pitch=12 * math.sin(math.pi * k))
+    elif feet is None:
         for s in "LR": H.key_foot(s, f, H.foot_xy(s, V(pos.x, pos.y, 0), yaw), yaw)
     else:
         for s, (xy, yw) in feet.items(): H.key_foot(s, f, xy, yw)
@@ -251,6 +269,16 @@ def hand(H, s, f, W, d, n, elbow_out=0.35, yaw=0.0):
     sx = 1 if s == "L" else -1
     side = Matrix.Rotation(math.radians(yaw), 3, "Z") @ V(sx, 0, 0)
     H.key_hand(s, f, W, d.normalized(), n.normalized(), pole=W + side * elbow_out + V(0, 0, -0.25))
+CURL_SIGN = float(os.environ.get("CURL_SIGN", "1"))
+def curl(H, s, f, k, base=8.0):
+    for fi in range(1, 6):
+        for seg, w in ((1, 0.6), (2, 1.0), (3, 0.8)):
+            n = f"finger{fi}-{seg}.{s}"
+            if n not in H.r.PB or (fi == 1 and seg == 1): continue
+            pb = H.r.PB[n]; pb.rotation_mode = "QUATERNION"
+            sg = 1.0 if s == "L" else -1.0
+            ang = math.radians(sg * (base + (38 if s == "L" else 55) * k) * w * (0.5 if fi == 1 else 1.0))
+            pb.rotation_quaternion = Quaternion((1, 0, 0), ang); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 def hang(H, s, f, pos, yaw, fwd=0.0):
     sx = 1 if s == "L" else -1
     Rz = Matrix.Rotation(math.radians(yaw), 3, "Z")
@@ -272,7 +300,7 @@ for f in range(1, 252, 6):
     tip = neck_ring(M_LIE1, a, 0.081) if f > 40 else neck_ring(M_LIE1, -1.0, 0.11) + V(0, -0.05, 0.08)
     if f > 205: tip = neck_ring(M_LIE1, 1.6, 0.11) + V(0.0, -0.08, 0.10 * smooth((f - 205) / 20))
     hand(SURG, "R", f, tip + V(0, -0.03, 0.10), V(0.1, 0.3, -1), V(1, 0, 0.2), 0.35, Y0)
-    hand(SURG, "L", f, head_pt(f, EYEMID + V(0.05, 0.03, 0.05)) + V(0, 0, 0.04), V(0.3, 1, -0.6), V(0, 0, -1), 0.4, Y0)
+    hand(SURG, "L", f, (M_LIE1 @ V(0.03, -0.30, 0.30)) + V(0, 0.0, 0.03), V(0.3, 1, -0.4), V(0, 0, -1), 0.4, Y0)
 # pen: in the right hand until put down on the drape at ~232
 def wrist_M(f, s):
     ev(f); pb = SURG.r.PB["wrist." + s]
@@ -285,8 +313,21 @@ for f in range(1, 240, 3):
 pen.location = V(-0.2, -0.16, 0.925); pen.keyframe_insert("location", frame=246)
 pen.rotation_quaternion = Quaternion((0, 1, 0), math.radians(90)) @ Quaternion((0, 0, 1), math.radians(20)); pen.keyframe_insert("rotation_quaternion", frame=246)
 # beat 2: both hands cup the head (under jaw / behind skull), lift, side-step, place on body B
-GRIP_L = EYEMID + V(0.04, 0.06, -0.075)    # model-space points on the head: under the jaw, behind the skull
-GRIP_R = EYEMID + V(-0.02, 0.10, 0.07)
+FM = V(-0.385, -0.923, 0).normalized()
+HC_M = EYEMID - FM * 0.045 + V(0, 0, 0.01)
+hverts = [(v.co.copy(), v.normal.copy()) for v in head.data.vertices]
+def surf(p):
+    c, n = min(hverts, key=lambda cn: (cn[0] - p).length); return c, n
+# left palm on the up-facing temple (model +X), fingers toward the crown; right hand cradles the back of the skull, fingers wrapping over
+SL, NL = surf(HC_M + V(0.07, 0, 0.0)); DL = V(0, 0, 1)
+SR, NR_ = surf(HC_M - FM * 0.075 + V(0, 0, -0.01)); DR = V(1, 0, 0.25).normalized()
+def grip(f, S_, N_, D_, s):
+    M = head_world(f) if f < 376 else M_root(f)
+    R3 = M.to_3x3()
+    Sw = M @ S_; Nw = (R3 @ N_).normalized(); Dw = R3 @ D_
+    Dw = (Dw - Nw * Dw.dot(Nw)).normalized()
+    W = Sw + Nw * 0.03 - Dw * 0.085
+    return W, Dw, (-Nw if s == "L" else Nw)
 for f in list(range(214, 400, 3)) + [400]:
     u = smooth((f - 290) / 60.0)
     pos = S0.lerp(S1, u); yw = Y0 + (Y1 - Y0) * u
@@ -297,13 +338,13 @@ for f in list(range(214, 400, 3)) + [400]:
         ph0 = 290 if s == "L" else 318
         lf = 0.07 * math.sin(math.pi * max(0.0, min(1.0, (f - ph0) / 30.0)))
         SURG.key_foot(s, f, xy, yw_, lift=lf)
-    if f <= 384:
-        hand(SURG, "L", f, head_pt(f, GRIP_L) + V(0, 0, -0.012), V(0.6, 0.4, -0.3), V(0, 0, 1), 0.4, yw)
-        hand(SURG, "R", f, head_pt(f, GRIP_R) + V(0, 0, 0.01), V(-0.6, 0.5, -0.4), V(0.3, 0, -1), 0.4, yw)
-    else:
-        k = smooth((f - 384) / 16.0)
-        hand(SURG, "L", f, head_pt(384, GRIP_L) + V(-0.05, -0.12, 0.08) * k, V(0.6, 0.4, -0.3), V(0, 0, 1), 0.4, yw)
-        hand(SURG, "R", f, head_pt(384, GRIP_R) + V(0.03, -0.10, 0.10) * k, V(-0.6, 0.5, -0.4), V(0.3, 0, -1), 0.4, yw)
+    ff = min(f, 384); app = 1 - smooth((f - 214) / 34.0); rel = smooth((f - 384) / 16.0)
+    for s, (S_, N_, D_) in (("L", (SL, NL, DL)), ("R", (SR, NR_, DR))):
+        W, d_, n_ = grip(ff, S_, N_, D_, s)
+        Nw = ((head_world(ff) if ff < 376 else M_root(ff)).to_3x3() @ N_).normalized()
+        W = W + Nw * 0.09 * max(app, rel) + V(0, -0.05, 0.04) * max(app, rel)
+        hand(SURG, s, f, W, d_, n_, 0.4, yw)
+        curl(SURG, s, f, 1.0 - max(app, rel))
 # beat 3: stitching 400-665 - right hand needle holder arcs in at each stitch, left hand forceps holds the edge
 stitch_ang = [2 * math.pi * i / len(st) for i in range(len(st))]
 for f in list(range(403, 672, 3)):
@@ -314,12 +355,13 @@ for f in list(range(403, 672, 3)):
     arc = V(0.0, -0.03 * math.cos(2 * math.pi * ph), 0.03 * math.sin(2 * math.pi * ph))
     hand(SURG, "R", f, seam_pt + V(0.03, -0.11, 0.09) + arc, V(0.2, 0.6, -0.6), V(1, 0, 0.4), 0.35, Y1)
     hand(SURG, "L", f, neck_ring(M_LIE2, a - 0.6, 0.08) + V(-0.06, -0.09, 0.09), V(-0.1, 0.6, -0.6), V(-1, 0, 0.3), 0.35, Y1)
+    curl(SURG, "R", f, 0.75); curl(SURG, "L", f, 0.6)
 # beats 4-5: steps back, watches; snaps fingers near the ear at 920 (the "hear" cue together with the bowl)
 S2 = V(0.25, -0.95, 0)
 for f in list(range(672, 1040, 6)):
-    u = smooth((f - 672) / 40.0)
+    ur = max(0.0, min(1.0, (f - 672) / 40.0)); u = smooth(ur)
     pos = S1.lerp(S2, u)
-    pose(SURG, f, pos, Y1 - 10 * u, flex=18 - 8 * u, twist=6 * u, headr=(18, -6 + 12 * math.sin(f / 50.0)))
+    pose(SURG, f, pos, Y1 - 10 * u, flex=18 - 8 * u, twist=6 * u, headr=(18, -6 + 12 * math.sin(f / 50.0)), step=(S1, Y1, S2, Y1 - 10, ur))
     if 890 < f < 960:
         k = smooth((f - 890) / 20.0) * (1 - smooth((f - 945) / 15.0))
         hang(SURG, "L", f, pos, Y1)
@@ -339,9 +381,9 @@ for f in list(range(1190, 1771, 6)):
         hand(SURG, "R", f, face_w + (S3 - face_w).normalized() * 0.16 + V(0, 0, 0.05) + Rz @ V(0.06 * wv, 0, 0), V(0, 0, 1), Rz @ V(0, 1, 0), 0.35, Y3)
         hang(SURG, "L", f, S3, Y3, 0.05)
     else:
-        u = smooth((f - 1380) / 40.0)
+        ur = max(0.0, min(1.0, (f - 1380) / 40.0)); u = smooth(ur)
         pos = S3.lerp(S4, u); yw = Y3 + (Y4 - Y3) * u
-        pose(SURG, f, pos, yw, flex=12 + 10 * smooth((f - 1600) / 80.0), headr=(18 + 14 * smooth((f - 1600) / 80.0), 0))
+        pose(SURG, f, pos, yw, flex=12 + 10 * smooth((f - 1600) / 80.0), headr=(18 + 14 * smooth((f - 1600) / 80.0), 0), step=(S3, Y3, S4, Y4, ur))
         Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
         cb = pos + Rz @ V(0.05, -0.32, 0) + V(0, 0, 1.08)
         hand(SURG, "L", f, cb + Rz @ V(0.1, 0.02, 0), Rz @ V(-1, 0, 0), V(0, 0, 1), 0.3, yw)
@@ -365,12 +407,13 @@ for f in range(1, 162, 4):
     for s in "LR":
         Rz = Matrix.Rotation(math.radians(ny), 3, "Z")
         hand(NURSE, s, f, p + Rz @ V((0.16 if s == "L" else -0.16), -0.38, 0) + V(0, 0, 0.88), Rz @ V(0, -1, -0.3), V(0, 0, 1), 0.3, ny)
+        curl(NURSE, s, f, 0.8)
 NP2 = V(-0.85, -0.62, 0); ny2 = yaw_to(NP2, V(0.0, 0.05, 0))
 bowl = D["Bowl"]
 for f in list(range(166, 1040, 6)):
-    u = smooth((f - 166) / 40.0)
+    ur = max(0.0, min(1.0, (f - 166) / 40.0)); u = smooth(ur)
     p = NP1.lerp(NP2, u); yw = ny + (ny2 - ny) * u
-    pose(NURSE, f, p, yw, flex=10, headr=(12, 10 * math.sin(f / 60.0)))
+    pose(NURSE, f, p, yw, flex=10, headr=(12, 10 * math.sin(f / 60.0)), step=(NP1, ny, NP2, ny2, ur))
     Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
     if 470 < f < 530:   # reaches up to nudge the lamp handle
         k = math.sin(math.pi * (f - 470) / 60.0)
@@ -413,7 +456,7 @@ for tool, s, off in ((nh, "R", V(0, 0.07, 0.0)), (fcp, "L", V(0, 0.07, 0.0))):
 
 # ------------------------------------------------------------------ camera: one spline (keys in world, or in monkey-B space during the void)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 28; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.01
-cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 2.8
+cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 void = D["XR_Void"]; void.parent = cam; void.matrix_parent_inverse = Matrix.Identity(4); void.location = (0, 0, 0)
 kl = bpy.data.lights.new("XR_Key", "AREA"); kl.energy = 0; kl.size = 0.4; kl.color = (0.85, 1.0, 0.95)
@@ -430,14 +473,14 @@ K = [
  (121,  V(0.18, -0.38, 1.32), NA, 38, UPW, "W"),
  (181,  NA + V(0.26, -0.04, 0.17), NA, 50, UPW, "W"),
  (241,  V(0.16, -0.42, 1.52), V(-0.12, -0.05, 1.02), 30, UPW, "W"),
- (290,  V(0.0, -0.78, 1.78), V(0.05, -0.05, 1.08), 26, UPW, "W"),
- (330,  V(0.2, -0.42, 1.82), V(0.2, -0.02, 1.04), 22, V(0, 1, 0.3), "W"),
- (365,  V(0.9, -0.55, 1.5), NBp, 30, UPW, "W"),
- (420,  NBp + V(0.24, -0.14, 0.2), NBp, 45, UPW, "W"),
- (480,  NBp + V(0.27, -0.08, 0.11), NBp, 55, UPW, "W"),
- (540,  NBp + V(0.22, 0.10, 0.20), NBp, 55, UPW, "W"),
- (600,  NBp + V(0.27, 0.03, 0.03), NBp + V(0, 0, 0.04), 45, UPW, "W"),
- (650,  NBp + V(0.24, -0.12, 0.06), NBp + V(0.02, -0.02, 0.0), 45, UPW, "W"),
+ (290,  V(0.55, 0.15, 1.8), V(-0.1, -0.1, 1.1), 26, UPW, "W"),
+ (330,  V(0.05, 0.85, 1.62), V(0.12, -0.12, 1.08), 24, UPW, "W"),
+ (365,  V(0.95, 0.15, 1.45), NBp, 30, UPW, "W"),
+ (420,  NBp + V(0.36, -0.2, 0.3), NBp, 65, UPW, "W"),
+ (480,  NBp + V(0.42, -0.06, 0.2), NBp, 75, UPW, "W"),
+ (540,  NBp + V(0.32, 0.18, 0.32), NBp, 75, UPW, "W"),
+ (600,  NBp + V(0.42, 0.06, 0.06), NBp + V(0, 0, 0.03), 70, UPW, "W"),
+ (650,  NBp + V(0.36, -0.16, 0.12), NBp + V(0.02, -0.02, 0.0), 60, UPW, "W"),
  (700,  FBp + FWW * 0.32 + V(0, -0.18, 0.08), FBp, 40, UPW, "W"),
  (760,  FBp + FWW * 0.24 + V(0, -0.08, 0.05), FBp, 52, UPW, "W"),
  (820,  FBp + FWW * 0.13 + V(0, -0.02, 0.02), FBp, 70, UPW, "W"),
@@ -484,7 +527,17 @@ for f in range(1, 1771):
     cam_d.dof.focus_distance = (a - p).length; cam_d.dof.keyframe_insert("focus_distance", frame=f)
     CAMLOG.append((f, tuple(round(x, 3) for x in p), tuple(round(x, 3) for x in a), round(fl(f), 1)))
 json.dump(CAMLOG[::30], open(os.path.join(HERE, "..", "camera_path.json"), "w"))
-for o in D: set_const(o)
+for o in D:
+    set_const(o)
+    if o.type == "LIGHT": o.visible_camera = False; o.visible_glossy = False
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)
+
+if os.environ.get("GRIPDBG"):
+    for f in (300,):
+        sc.frame_set(f); r = D["Surgeon"]
+        hv = [head.matrix_world @ v.co for v in head.data.vertices]
+        for s in "LR":
+            tip = r.matrix_world @ r.pose.bones["finger3-3." + s].tail
+            print("GRIPDBG", s, CURL_SIGN, round(min((v - tip).length for v in hv) * 100, 1), "cm")
