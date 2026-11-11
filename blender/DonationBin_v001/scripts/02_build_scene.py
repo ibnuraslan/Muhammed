@@ -103,6 +103,7 @@ M_SHUT = mat_from(f"{PH}/painted_metal_shutter/painted_metal_shutter_2k.blend", 
 M_CONC = mat_from(f"{PH}/concrete_floor_02/concrete_floor_02_2k.blend", "concrete_floor_02", 1.0)
 M_DENIM = mat_from(f"{PH}/denim_fabric/denim_fabric_2k.blend", "denim_fabric", 1.0)
 M_TERRY = mat_from(f"{PH}/terry_cloth/terry_cloth_2k.blend", "terry_cloth", 1.0)
+M_TERRY.use_fake_user = True; M_DENIM.use_fake_user = True
 M_GREEN = mat_from(f"{PH}/green_metal_rust/green_metal_rust_2k.blend", "green_metal_rust", 1.0)
 
 def xray_wrap(m, name):
@@ -111,11 +112,11 @@ def xray_wrap(m, name):
     outn = next(x for x in n if x.type == 'OUTPUT_MATERIAL')
     surf = outn.inputs['Surface'].links[0].from_socket
     val = n.new('ShaderNodeValue'); val.name = val.label = "XRAY"; val.outputs[0].default_value = 0.0
-    fr = n.new('ShaderNodeFresnel'); fr.inputs['IOR'].default_value = 1.25
-    em = n.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (0.35, 0.85, 1.0, 1)
-    mul = n.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; mul.inputs[1].default_value = 3.0
+    fr = n.new('ShaderNodeFresnel'); fr.inputs['IOR'].default_value = 1.45
+    em = n.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (0.05, 0.6, 0.95, 1)
+    mul = n.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; mul.inputs[1].default_value = 2.2
     l.new(fr.outputs[0], mul.inputs[0]); l.new(mul.outputs[0], em.inputs['Strength'])
-    tr = n.new('ShaderNodeBsdfTransparent'); tr.inputs['Color'].default_value = (0.85, 0.95, 1.0, 1)
+    tr = n.new('ShaderNodeBsdfTransparent'); tr.inputs['Color'].default_value = (0.82, 0.93, 1.0, 1)
     ad = n.new('ShaderNodeAddShader'); l.new(em.outputs[0], ad.inputs[0]); l.new(tr.outputs[0], ad.inputs[1])
     mx = n.new('ShaderNodeMixShader'); l.new(val.outputs[0], mx.inputs['Fac'])
     l.new(surf, mx.inputs[1]); l.new(ad.outputs[0], mx.inputs[2]); l.new(mx.outputs[0], outn.inputs['Surface'])
@@ -130,10 +131,20 @@ M_BIN_IN = xray_wrap(M_GREEN.copy(), "BinSteelInner")
 for nd in M_BIN_IN.node_tree.nodes:
     if nd.type == 'BSDF_PRINCIPLED':
         nd.inputs['Metallic'].default_value = 0.6
-M_MECH = xray_wrap(principled("MechSteel", (0.42, 0.42, 0.40), 0.35, 1.0), "MechSteel")
-for nd in M_MECH.node_tree.nodes:   # mechanism stays visible (solid-ish orange) in x-ray
-    if nd.type == 'EMISSION': nd.inputs['Color'].default_value = (1.0, 0.55, 0.15, 1)
-    if nd.type == 'BSDF_TRANSPARENT': nd.inputs['Color'].default_value = (0.2, 0.15, 0.1, 1)
+M_MECH = mat_from(f"{PH}/metal_plate/metal_plate_1k.blend", "metal_plate", 3.0)
+def mech_xray(m):
+    """mechanism stays opaque worn steel in the x-ray, with a warm fresnel rim added"""
+    nt = m.node_tree; n, l = nt.nodes, nt.links
+    outn = next(x for x in n if x.type == 'OUTPUT_MATERIAL'); surf = outn.inputs['Surface'].links[0].from_socket
+    val = n.new('ShaderNodeValue'); val.name = val.label = "XRAY"; val.outputs[0].default_value = 0.0
+    lw = n.new('ShaderNodeLayerWeight'); lw.inputs['Blend'].default_value = 0.35
+    em = n.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (1.0, 0.6, 0.25, 1)
+    m1 = n.new('ShaderNodeMath'); m1.operation = 'MULTIPLY'; l.new(lw.outputs['Fresnel'], m1.inputs[0]); l.new(val.outputs[0], m1.inputs[1])
+    m2 = n.new('ShaderNodeMath'); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = 4.0; l.new(m1.outputs[0], m2.inputs[0]); l.new(m2.outputs[0], em.inputs['Strength'])
+    ad = n.new('ShaderNodeAddShader'); l.new(surf, ad.inputs[0]); l.new(em.outputs[0], ad.inputs[1]); l.new(ad.outputs[0], outn.inputs['Surface'])
+    if outn.inputs['Displacement'].links: nt.links.remove(outn.inputs['Displacement'].links[0])
+    m.name = "MechSteel"; return m
+M_MECH = mech_xray(M_MECH)
 M_LINE = principled("BayLine", (0.85, 0.82, 0.7), 0.6)
 M_RUBBER = principled("Rubber", (0.03, 0.03, 0.03), 0.8)
 
@@ -252,39 +263,53 @@ l.new(ramp.outputs['Color'], mixc.inputs['A']); l.new(wave.outputs['Color'], mix
 l.new(mixc.outputs['Result'], p.inputs['Base Color'])
 bmp = n.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.4
 l.new(wave.outputs['Fac'], bmp.inputs['Height']); l.new(bmp.outputs['Normal'], p.inputs['Normal'])
-pile.data.materials.append(M_PILE)
+pile.data.materials.append(M_DENIM.copy())
 for poly in pile.data.polygons: poly.use_smooth = True
-# lumpy bags / bundles on the pile
-M_BAG_W = principled("BagWhite", (0.75, 0.75, 0.72), 0.25); M_BAG_B = principled("BagBlack", (0.02, 0.02, 0.025), 0.2)
-bag_mats = [M_BAG_W, M_BAG_B, M_DENIM, M_TERRY, M_BAG_W, M_DENIM]
+# real clothes on top of the pile: CC-BY scanned cloth heaps, plastic bags (white / black), all on the textured base heap
+OB = os.path.join(A, "objv")
+def glb(name, size, loc, rz=0.0, sink=0.0, axis_len=None):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=os.path.join(OB, name + ".glb"))
+    new = [o for o in bpy.data.objects if o not in before]
+    ms = [o for o in new if o.type == 'MESH']
+    for o in ms:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = ms[0]
+    if len(ms) > 1:
+        bpy.ops.object.join()
+    m = bpy.context.view_layer.objects.active
+    for o in new:
+        if o != m and o.name in bpy.data.objects and o.type != 'MESH': bpy.data.objects.remove(o)
+    m.parent = None
+    bpy.context.view_layer.update()
+    m.data.transform(m.matrix_world); m.matrix_world = Matrix.Identity(4)
+    bb = [Vector(c) for c in m.bound_box]
+    mn = Vector([min(v[i] for v in bb) for i in range(3)]); mx = Vector([max(v[i] for v in bb) for i in range(3)])
+    sz = mx - mn; k = size / max(sz.x, sz.y) if axis_len is None else size / sz[axis_len]
+    m.data.transform(Matrix.Translation(Vector((-(mn.x + mx.x) / 2, -(mn.y + mx.y) / 2, -mn.z))))
+    m.data.transform(Matrix.Diagonal((k, k, k, 1)))
+    for c_ in m.users_collection: c_.objects.unlink(m)
+    col_bin.objects.link(m)
+    m.location = Vector(loc) - Vector((0, 0, sink)); m.rotation_euler.z = rz
+    m.name = name.capitalize()
+    for poly in m.data.polygons: poly.use_smooth = True
+    return m
+heap = glb("pile", 1.05, (-0.12, 0.12, pile_h(-0.12, 0.12) - 0.18), rz=0.6); heap.name = "ClothHeap"
+heap.scale.z = 0.55
+heap2 = glb("pile2", 0.75, (0.42, 0.30, pile_h(0.42, 0.30) - 0.12), rz=2.2); heap2.name = "ClothHeap2"; heap2.scale.z = 0.6
+heap3 = heap.copy(); heap3.data = heap.data; heap3.name = "ClothHeap3"; col_bin.objects.link(heap3)
+heap3.location = (-0.45, -0.32, pile_h(-0.45, -0.32) - 0.12); heap3.rotation_euler.z = 2.9; heap3.scale = (0.6, 0.6, 0.35)
+sc["pile_colliders"] = "Pile,ClothHeap,ClothHeap2,ClothHeap3"
 BAGS = []
-for i in range(26):
-    for _ in range(40):
-        x = random.uniform(-BW / 2 + 0.2, BW / 2 - 0.2); y = random.uniform(-BD / 2 + 0.2, BD / 2 - 0.2)
-        if not (-0.35 < x < 0.45 and -0.45 < y < 0.15):   # leave her landing zone mostly clear of big bags
-            break
-    r = random.uniform(0.13, 0.22)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=r, location=(x, y, pile_h(x, y) + r * 0.35))
-    b = bpy.context.object; b.name = "Bag%02d" % i
-    for c_ in b.users_collection: c_.objects.unlink(b)
-    col_bin.objects.link(b)
-    b.scale = (random.uniform(1.0, 1.6), random.uniform(0.8, 1.2), random.uniform(0.55, 0.8)); b.rotation_euler.z = random.uniform(0, 6.3)
-    for v in b.data.vertices:
-        v.co += v.co.normalized() * 0.25 * r * noise.noise(v.co * 6 + Vector((i, 0, 0)))
-    for poly in b.data.polygons: poly.use_smooth = True
-    b.data.materials.append(bag_mats[i % len(bag_mats)]); BAGS.append(b.name)
+bw = glb("bagw", 0.42, (0, 0, 0)); bw.name = "BagW"; bd = glb("bagd", 0.38, (0, 0, 0)); bd.name = "BagD"
+spots = [(-0.55, 0.38, 0.4), (0.55, -0.3, 2.1), (0.5, 0.42, 4.0), (-0.6, -0.1, 1.2), (0.15, 0.45, 5.3), (-0.3, 0.45, 0.2), (0.62, 0.05, 3.3)]
+for i, (x, y, rz) in enumerate(spots):
+    src = bw if i % 2 == 0 else bd
+    o = src if i < 2 else src.copy()
+    if i >= 2: col_bin.objects.link(o)
+    o.location = (x, y, pile_h(x, y) - 0.06); o.rotation_euler = (random.uniform(-0.3, 0.3), random.uniform(-0.3, 0.3), rz)
+    o.scale = (1, 1, 0.75); o.name = "Bag%02d" % i; BAGS.append(o.name)
 sc["bags"] = ",".join(BAGS)
-# loose clothes draped near the landing zone: flattened lumpy discs
-for i in range(10):
-    x = random.uniform(-0.35, 0.45); y = random.uniform(-0.45, 0.15)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=20, radius=random.uniform(0.15, 0.25), depth=0.03, location=(x, y, pile_h(x, y) + 0.005))
-    cl = bpy.context.object; cl.name = "Cloth%02d" % i
-    for c_ in cl.users_collection: c_.objects.unlink(cl)
-    col_bin.objects.link(cl); cl.rotation_euler = (random.uniform(-0.2, 0.2), random.uniform(-0.2, 0.2), random.uniform(0, 6))
-    sd = cl.modifiers.new("sub", 'SUBSURF'); sd.levels = 1; sd.render_levels = 2
-    for v in cl.data.vertices:
-        v.co.z += 0.03 * noise.noise(v.co * 8 + Vector((0, i, 0)))
-    cl.data.materials.append([M_DENIM, M_TERRY][i % 2])
 # water bottle (empty) beside her
 bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.035, depth=0.22, location=(0.42, -0.25, pile_h(0.42, -0.25) + 0.035))
 bt = bpy.context.object; bt.name = "Bottle"; bt.rotation_euler = (math.radians(90), 0, math.radians(30))
@@ -295,6 +320,7 @@ pb_ = mb.node_tree.nodes["Principled BSDF"]; pb_.inputs['Transmission Weight'].d
 bt.data.materials.append(mb)
 
 # ------------------------------------------------------------------ more bins along the wall (beat 11 irony)
+ROWMATS = {}
 for i, x in enumerate((3.3, 5.0, 6.7)):
     for src in (BIN, INNER, cp, fl):
         d = src.copy(); d.data = src.data; d.name = "Row%d_%s" % (i, src.name)
@@ -304,6 +330,19 @@ for i, x in enumerate((3.3, 5.0, 6.7)):
         d.location = src.location + Vector((x, 0.0, 0.0))
         if d.name.endswith("CutPanel"):
             d.modifiers.clear()
+        if src in (BIN, cp):
+            if i not in ROWMATS:
+                mrow = M_BIN.copy(); mrow.name = "BinPaint%d" % i
+                for nd in mrow.node_tree.nodes:
+                    if nd.type == 'TEX_IMAGE' and nd.image and "diff" in nd.image.name:
+                        hs = mrow.node_tree.nodes.new('ShaderNodeHueSaturation')
+                        hs.inputs['Hue'].default_value = (0.13, 0.75, 0.5)[i]; hs.inputs['Saturation'].default_value = (1.1, 1.2, 0.15)[i]
+                        hs.inputs['Value'].default_value = (1.1, 0.9, 1.3)[i]
+                        for lk in list(nd.outputs['Color'].links):
+                            mrow.node_tree.links.new(nd.outputs['Color'], hs.inputs['Color']); mrow.node_tree.links.new(hs.outputs['Color'], lk.to_socket)
+                        break
+                ROWMATS[i] = mrow
+            d.data = src.data.copy(); d.data.materials[0] = ROWMATS[i]
     pl2 = pile.copy(); pl2.data = pile.data; pl2.name = "Row%d_Pile" % i; col_bin.objects.link(pl2); pl2.location.x = x
 sc["row_bins_x"] = [3.3, 5.0, 6.7]
 
@@ -381,7 +420,7 @@ bgh = n.new('ShaderNodeBackground'); bgh.name = "BG_HDRI"; l.new(envt.outputs['C
 # studio gradient for the x-ray explainer
 grad = n.new('ShaderNodeTexGradient'); grad.gradient_type = 'LINEAR'
 sepw = n.new('ShaderNodeSeparateXYZ'); l.new(tcw.outputs['Generated'], sepw.inputs['Vector'])
-gr = n.new('ShaderNodeValToRGB'); gr.color_ramp.elements[0].color = (0.75, 0.93, 1.0, 1); gr.color_ramp.elements[1].color = (1.0, 1.0, 1.0, 1)
+gr = n.new('ShaderNodeValToRGB'); gr.color_ramp.elements[0].color = (0.04, 0.2, 0.32, 1); gr.color_ramp.elements[1].color = (0.45, 0.72, 0.88, 1)
 gr.color_ramp.elements[0].position = 0.35; gr.color_ramp.elements[1].position = 0.75
 l.new(sepw.outputs['Z'], gr.inputs['Fac'])
 bgs = n.new('ShaderNodeBackground'); bgs.name = "BG_STUDIO"; l.new(gr.outputs['Color'], bgs.inputs['Color']); bgs.inputs['Strength'].default_value = 1.2

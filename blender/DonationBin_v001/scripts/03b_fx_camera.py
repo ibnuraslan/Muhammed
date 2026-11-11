@@ -1,11 +1,14 @@
 # Part of 03_animate.py (exec'd): x-ray explainer, time-lapse light, sparks/cutter, ambient life, the one continuous camera.
 import random
 random.seed(91)
+GRINDER_RZ = float(os.environ.get('GRINDER_RZ', '0'))
+E_ = os.environ.get
+SCBA_Z = float(E_('SCBA_Z', '-0.14')); HELM_Y = float(E_('HELM_Y', '-0.04')); HELM_Z = float(E_('HELM_Z', '0.0')); HELM_RX = float(E_('HELM_RX', '90')); HELM_RY = float(E_('HELM_RY', '180')); HELM_RZ = float(E_('HELM_RZ', '0'))
 W = sc.world; WN = W.node_tree.nodes
 def kv(sock, f, v):
     sock.default_value = v; sock.keyframe_insert("default_value", frame=f)
 # ---------------------------------------------------------------- x-ray (505-540 in, 905-955 out)
-XR = [(1, 0), (492, 0), (520, 1), (905, 1), (952, 0)]
+XR = [(1, 0), (492, 0), (520, 1), (940, 1), (975, 0)]
 for mn in ("BinSteel", "BinSteelInner", "MechSteel"):
     m = bpy.data.materials[mn]; v = m.node_tree.nodes["XRAY"].outputs[0]
     for f, x in XR: kv(v, f, x)
@@ -19,21 +22,26 @@ def kex(f, e): sc.view_settings.exposure = e; sc.view_settings.keyframe_insert("
 DAY = (1.0, 0.95, 0.88)
 for f, sun, fill, slot, stk, w_, ex, col, scol in (
         (1, 3.2, 3, 120, 0, 1.0, 0.0, DAY, (1, .93, .8)), (290, 3.2, 3, 120, 0, 1.0, 0.0, DAY, (1, .93, .8)),
-        (330, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)),                    # flap shut: only the slit leaks light; eyes adjust
-        (505, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (538, 1.0, 0, 0, 350, 0.3, 0.0, DAY, (1, .93, .8)),
-        (905, 1.0, 0, 0, 350, 0.3, 0.0, DAY, (1, .93, .8)), (952, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)),
-        (1395, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (1410, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
-        (1495, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)), (1530, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)),
+        (330, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)),                    # flap shut: only the slit leaks light; eyes adjust
+        (505, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)), (538, 1.0, 0, 0, 120, 0.3, -0.35, DAY, (1, .93, .8)),
+        (905, 1.0, 0, 0, 120, 0.3, -0.35, DAY, (1, .93, .8)), (952, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)),
+        (1395, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)), (1410, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
+        (1495, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)), (1530, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)),
         # time-lapse: day -> dusk -> night -> dawn -> day -> night -> day
-        (1580, 2.0, 6, 30, 0, 0.6, 0.3, (1.0, 0.55, 0.3), (1, .55, .3)), (1620, 0.05, 2.5, 10, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
-        (1670, 0.05, 2.5, 10, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)), (1705, 1.8, 6, 30, 0, 0.5, 0.3, (1.0, 0.7, 0.5), (1, .7, .5)),
-        (1740, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (1770, 0.05, 2.5, 10, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
-        (1810, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (1860, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
+        (1580, 2.0, 6, 30, 0, 0.6, 0.3, (1.0, 0.55, 0.3), (1, .55, .3)), (1620, 0.05, 4.0, 14, 0, 0.06, 0.75, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
+        (1670, 0.05, 4.0, 14, 0, 0.06, 0.75, (0.4, 0.5, 1.0), (0.45, 0.55, 1)), (1705, 1.8, 6, 30, 0, 0.5, 0.3, (1.0, 0.7, 0.5), (1, .7, .5)),
+        (1740, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)), (1770, 0.05, 4.0, 14, 0, 0.06, 0.75, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
+        (1810, 3.2, 22, 40, 0, 1.0, 0.6, DAY, (1, .93, .8)), (1860, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
         (2070, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)), (2095, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8))):
     kl(SUN, f, sun, col); kl(FILL, f, fill); kl(SLOT, f, slot, scol); kl(STK, f, stk); kw(f, w_); kex(f, ex)
 for c_ in (SUN, FILL, SLOT, STK):
     if c_.animation_data and c_.animation_data.action:
         pass
+rk_d = bpy.data.lights.new("RakeLight", 'SPOT'); rk_d.spot_size = R_(70); rk_d.spot_blend = 0.6; rk_d.shadow_soft_size = 0.03; rk_d.color = (1.0, 0.92, 0.78)
+rk = bpy.data.objects.new("RakeLight", rk_d); bpy.data.collections["BIN"].objects.link(rk); rk.location = (0.0, FY + 0.04, sc["chute_z"][0] + 0.02)
+rk.rotation_euler = (Vector((0.1, 0.45, 0.35)) - rk.location).to_track_quat('-Z', 'Y').to_euler()
+for f, e in ((1, 0), (295, 0), (330, 35), (505, 35), (520, 0), (975, 0), (990, 35), (1580, 30), (1620, 6), (1670, 6), (1705, 25), (1740, 35), (1770, 6), (1810, 35), (2090, 35), (2100, 10)):
+    rk_d.energy = e; rk_d.keyframe_insert("energy", frame=f)
 # the sun's shadows sweep during the time-lapse
 so = bpy.data.objects["Sun"]
 for f, rz in ((1530, -160), (1620, -100), (1700, -210), (1770, -130), (1820, -165)):
@@ -46,17 +54,32 @@ def emis(name, rgb, s):
     return m
 M_SPARK = emis("Spark", (1.0, 0.6, 0.18), 40.0); M_CUT = emis("CutGlow", (1.0, 0.45, 0.1), 25.0)
 col_fx = bpy.data.collections.new("FX"); sc.collection.children.link(col_fx)
-bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.115, depth=0.006, location=(0, 0, 0))
-disc = bpy.context.object; disc.name = "CutterDisc"
-bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -0.2, 0.02)); body = bpy.context.object; body.name = "CutterBody"; body.scale = (0.09, 0.32, 0.11)
-for o in (disc, body):
-    for c_ in o.users_collection: c_.objects.unlink(o)
-    col_fx.objects.link(o)
-disc.data.materials.append(bpy.data.materials["MechSteel"].copy()); disc.active_material.name = "CutterDiscMat"
-body.data.materials.append(bpy.data.materials.new("CutterOrange")); body.active_material.use_nodes = True
-body.active_material.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.8, 0.25, 0.03, 1)
-body.parent = disc; disc.rotation_euler = (0, R_(90), 0)
-body.location = (0, -0.2, 0.0); body.rotation_euler = (0, R_(-90), 0)
+OBJV = "/opt/assets/objv"
+def glb_obj(name, size, axis=None, keep=None):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=os.path.join(OBJV, name + ".glb"))
+    new = [o for o in bpy.data.objects if o not in before]; ms = [o for o in new if o.type == 'MESH' and (keep is None or o.name in keep)]; newn = [o.name for o in new]
+    for o in bpy.context.selected_objects: o.select_set(False)
+    for o in ms: o.select_set(True)
+    bpy.context.view_layer.objects.active = ms[0]
+    if len(ms) > 1: bpy.ops.object.join()
+    m = bpy.context.view_layer.objects.active
+    keep = m.name
+    for n_ in newn:
+        if n_ in bpy.data.objects and n_ != keep: bpy.data.objects.remove(bpy.data.objects[n_])
+    m.parent = None; bpy.context.view_layer.update()
+    m.data.transform(m.matrix_world); m.matrix_world = Matrix.Identity(4)
+    bb = [Vector(c) for c in m.bound_box]
+    mn = Vector([min(v[i] for v in bb) for i in range(3)]); mx = Vector([max(v[i] for v in bb) for i in range(3)])
+    sz = mx - mn; k = size / (max(sz) if axis is None else sz[axis])
+    m.data.transform(Matrix.Diagonal((k, k, k, 1)) @ Matrix.Translation(-(mn + mx) / 2))
+    for c_ in m.users_collection: c_.objects.unlink(m)
+    col_fx.objects.link(m); m.name = name.capitalize(); m.rotation_mode = 'XYZ'; m.rotation_euler = (0, 0, 0)
+    for poly in m.data.polygons: poly.use_smooth = True
+    return m
+disc = bpy.data.objects.new("CutterDisc", None); col_fx.objects.link(disc)       # pivot at the cutting wheel
+body = glb_obj("grinder", 0.34); body.name = "CutterBody"
+body.parent = disc; body.location = (0, -0.13, 0.03); body.rotation_euler = (0, 0, R_(GRINDER_RZ))
 for f in [1960] + list(range(1976, 2071, 3)) + [2100]:
     c = cutter_pos(f); disc.location = c + Vector((0, -0.01, 0)); disc.keyframe_insert("location", frame=f)
 for o in (disc, body):
@@ -185,13 +208,13 @@ CAMK = [  # frame, location, target, lens
     (990, (0.45, -0.05, 1.45), (-0.74, -0.05, 1.3), 20), (1030, (0.05, 0.45, 1.2), (-0.72, -0.05, 1.35), 20), (1070, (-0.25, 0.45, 1.05), (-0.72, -0.1, 1.4), 20), (1125, (0.45, 0.35, 1.25), (0.0, -0.58, 1.3), 20),
     (1180, (0.4, -0.35, 0.75), (0.0, 0.55, 1.4), 18), (1230, (0.35, -0.4, 1.1), (0.0, 0.5, 1.85), 16), (1275, (0.25, -0.35, 1.75), (0.0, 0.45, 1.6), 16),
     (1305, (0.35, -0.25, 1.95), (0.0, 0.15, 0.45), 16),
-    (1340, (0.12, -0.40, 1.75), (0.0, 0.0, 1.68), 28), (1380, (0.08, -0.5, 1.62), (0.0, 0.05, 1.68), 32), (1404, (0.0, -0.72, 1.45), (0.0, 0.0, 1.4), 26),
+    (1340, (0.35, -0.2, 1.8), (0.0, 0.05, 1.68), 28), (1360, (0.5, -0.3, 1.55), (0.0, -0.45, 1.45), 24), (1384, (0.3, -0.42, 1.68), (0.0, 0.0, 1.68), 30), (1404, (0.0, -0.72, 1.45), (0.0, 0.0, 1.4), 26),
     (1440, (0.5, -2.9, 1.6), (0.0, -0.5, 1.1), 20), (1490, (-1.5, -5.6, 2.3), (0.0, -1.0, 0.9), 18),
-    (1540, (0.0, -1.5, 2.6), (0.0, -0.4, 1.3), 24), (1572, (0.0, -0.78, 1.40), (0.0, 0.0, 0.6), 20), (1600, (0.0, -0.3, 1.38), (0.05, 0.1, 0.3), 18),
+    (1540, (0.0, -1.5, 2.6), (0.0, -0.4, 1.3), 24), (1566, (0.0, -0.95, 1.46), (0.0, 0.0, 0.6), 20), (1578, (0.0, -0.42, 1.40), (0.05, 0.1, 0.3), 18), (1600, (0.0, -0.3, 1.38), (0.05, 0.1, 0.3), 18),
     (1680, (0.3, 0.1, 1.95), (0.05, 0.05, 0.3), 22), (1760, (-0.3, 0.25, 1.95), (0.05, 0.05, 0.3), 26), (1830, (-0.2, -0.3, 1.9), (0.05, 0.05, 0.35), 30),
     (1862, (0.0, -0.3, 1.45), (0.05, 0.1, 0.4), 20), (1880, (0.0, -0.72, 1.45), (1.3, -1.7, 1.5), 22), (1905, (0.1, -0.98, 1.5), (1.1, -1.5, 1.5), 24), (1932, (0.0, -1.0, 1.65), (0.7, -1.18, 1.5), 26),
     (1965, (0.0, -2.2, 1.5), (0.6, -1.0, 1.2), 24),
-    (1995, (-1.6, -1.95, 0.8), (-0.2, -0.65, 0.9), 26), (2030, (-0.4, -2.05, 0.6), (0.2, -0.65, 0.85), 24), (2060, (-0.2, -2.0, 0.95), (0.1, -0.6, 0.7), 24),
+    (1995, (-1.6, -1.95, 0.8), (-0.2, -0.65, 0.9), 26), (2012, (-0.65, -0.72, 1.15), (-0.1, -1.0, 1.32), 30), (2030, (0.85, -0.74, 1.72), (0.3, -1.1, 1.3), 26), (2050, (1.3, -1.55, 2.2), (0.3, -0.8, 1.0), 24), (2068, (0.6, -2.3, 1.3), (0.0, -0.6, 0.7), 24),
     (2086, (-0.15, -1.7, 1.25), (0.0, 0.0, 0.6), 20),
     (2110, (-0.35, -1.45, 0.95), (0.0, -0.5, 0.8), 20), (2160, (0.3, -2.6, 1.35), (-0.2, -1.2, 1.1), 24), (2210, (0.2, -3.5, 1.6), (-0.5, -1.8, 1.1), 24),
     (2265, (1.6, -4.6, 2.4), (0.3, -1.4, 1.0), 22), (2345, (3.0, -6.6, 3.6), (2.4, 0.0, 1.0), 20), (2420, (3.9, -7.6, 4.2), (3.0, 0.3, 1.0), 21),
@@ -234,25 +257,67 @@ for nm in ("FireA", "FireB"):
                 d1 = nt.nodes.new('ShaderNodeMath'); d1.operation = 'PINGPONG'; d1.inputs[1].default_value = 0.55
                 sub = nt.nodes.new('ShaderNodeMath'); sub.operation = 'SUBTRACT'; sub.inputs[1].default_value = 0.0
                 nt.links.new(sepn.outputs['Z'], d1.inputs[0]); nt.links.new(d1.outputs[0], rmp.inputs['Fac'])
-                nt.links.new(rmp.outputs['Color'], pr.inputs['Base Color'])
+                dimg = next((x for x in nt.nodes if x.type == 'TEX_IMAGE' and x.image and "diffuse" in x.image.name.lower()), None)
+                if dimg:
+                    bw_ = nt.nodes.new('ShaderNodeRGBToBW'); nt.links.new(dimg.outputs['Color'], bw_.inputs['Color'])
+                    gm2 = nt.nodes.new('ShaderNodeMath'); gm2.operation = 'MULTIPLY'; gm2.inputs[1].default_value = 2.2; gm2.use_clamp = False
+                    nt.links.new(bw_.outputs[0], gm2.inputs[0])
+                    mxd = nt.nodes.new('ShaderNodeMix'); mxd.data_type = 'RGBA'; mxd.blend_type = 'MULTIPLY'; mxd.inputs['Factor'].default_value = 0.85
+                    nt.links.new(rmp.outputs['Color'], mxd.inputs['A']); nt.links.new(gm2.outputs[0], mxd.inputs['B'])
+                    nt.links.new(mxd.outputs['Result'], pr.inputs['Base Color'])
+                else:
+                    nt.links.new(rmp.outputs['Color'], pr.inputs['Base Color'])
                 pr.inputs['Roughness'].default_value = 0.75
         if ch.name.split(".")[-1].startswith("short"):
             ch.hide_render = True; ch.keyframe_insert("hide_render", frame=1975)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0)
-    hm = bpy.context.object; hm.name = nm + "_Helmet"
-    for c_ in hm.users_collection: c_.objects.unlink(hm)
-    col_fx.objects.link(hm)
-    bmh = _bm.new(); bmh.from_mesh(hm.data)
-    _bm.ops.delete(bmh, geom=[v for v in bmh.verts if v.co.z < -0.25], context='VERTS')
-    for v in bmh.verts:
-        if v.co.z < 0.0: v.co.x *= 1.25; v.co.y *= 1.35 if v.co.y > 0 else 1.15
-    bmh.to_mesh(hm.data); bmh.free()
-    hm.data.transform(Matrix.Diagonal((0.125, 0.14, 0.12, 1)))
-    hm.modifiers.new("t", 'SOLIDIFY').thickness = 0.01
-    hmat = bpy.data.materials.new(nm + "_HelmetMat"); hmat.use_nodes = True
-    hp = hmat.node_tree.nodes["Principled BSDF"]; hp.inputs['Base Color'].default_value = ((0.02, 0.02, 0.02, 1) if nm == "FireA" else (0.75, 0.6, 0.05, 1)); hp.inputs['Roughness'].default_value = 0.3
-    hm.data.materials.append(hmat)
+    # gloves: the MPFB hand faces get a black leather glove material (fingers stay articulated)
+    body_ = bpy.data.objects[nm + ".body"]
+    gm_ = bpy.data.materials.new(nm + "_Glove"); gm_.use_nodes = True
+    gp_ = gm_.node_tree.nodes["Principled BSDF"]; gp_.inputs['Base Color'].default_value = (0.03, 0.028, 0.025, 1); gp_.inputs['Roughness'].default_value = 0.55
+    body_.data.materials.append(gm_); gi = len(body_.data.materials) - 1
+    hg = {g.index for g in body_.vertex_groups if g.name.split(".")[0].startswith(("wrist", "finger", "metacarpal"))}
+    vin = set()
+    for v in body_.data.vertices:
+        if sum(g.weight for g in v.groups if g.group in hg) > 0.5: vin.add(v.index)
+    for poly in body_.data.polygons:
+        if all(i in vin for i in poly.vertices): poly.material_index = gi
+    # breathing apparatus cylinder on the back (CC-BY model)
+    tk = glb_obj("tank", 0.56); tk.name = nm + "_SCBA"
+    tk.parent = rig; tk.parent_type = 'BONE'; tk.parent_bone = "spine03"; tk.matrix_parent_inverse = Matrix.Identity(4)
+    tk.location = (0, -0.12, SCBA_Z); tk.rotation_euler = (0, 0, 0)
+    # helmet (CC-BY model), child of the head bone with a small offset
+    hm = glb_obj("helmet", 0.32, keep=("Mask.002", "Mask.003")); hm.name = nm + "_Helmet"
+    for m_ in hm.data.materials:            # the model's alpha channel renders it invisible: make it opaque
+        if m_ and m_.use_nodes:
+            m_.blend_method = 'OPAQUE' if hasattr(m_, "blend_method") else None
+            for nd in m_.node_tree.nodes:
+                if nd.type == 'BSDF_PRINCIPLED':
+                    for lk in list(nd.inputs['Alpha'].links): m_.node_tree.links.remove(lk)
+                    nd.inputs['Alpha'].default_value = 1.0
+    # turnout sleeves: arm faces of the MPFB body get the tan turnout fabric with a reflective cuff band
+    sl = bpy.data.materials.new(nm + "_Sleeve"); sl.use_nodes = True; snt = sl.node_tree
+    sp_ = snt.nodes["Principled BSDF"]; sp_.inputs['Roughness'].default_value = 0.8
+    den = bpy.data.materials["denim_fabric"]
+    dn = next((x for x in den.node_tree.nodes if x.type == 'TEX_IMAGE' and "nor" in x.image.name), None)
+    tci = snt.nodes.new('ShaderNodeTexCoord'); mpi = snt.nodes.new('ShaderNodeMapping'); mpi.inputs['Scale'].default_value = (6, 6, 6)
+    snt.links.new(tci.outputs['Object'], mpi.inputs['Vector'])
+    if dn:
+        ni = snt.nodes.new('ShaderNodeTexImage'); ni.image = dn.image; snt.links.new(mpi.outputs['Vector'], ni.inputs['Vector'])
+        nm_ = snt.nodes.new('ShaderNodeNormalMap'); nm_.inputs['Strength'].default_value = 1.5
+        snt.links.new(ni.outputs['Color'], nm_.inputs['Color']); snt.links.new(nm_.outputs['Normal'], sp_.inputs['Normal'])
+    sep_ = snt.nodes.new('ShaderNodeSeparateXYZ'); snt.links.new(tci.outputs['Object'], sep_.inputs['Vector'])
+    rp_ = snt.nodes.new('ShaderNodeValToRGB'); crp = rp_.color_ramp; crp.interpolation = 'CONSTANT'
+    crp.elements[0].position = 0.0; crp.elements[0].color = (0.42, 0.33, 0.16, 1); crp.elements[1].position = 0.06; crp.elements[1].color = (0.42, 0.33, 0.16, 1)
+    crp.elements.new(0.035).color = (0.85, 0.9, 0.6, 1); crp.elements.new(0.012).color = (0.42, 0.33, 0.16, 1)
+    pp_ = snt.nodes.new('ShaderNodeMath'); pp_.operation = 'PINGPONG'; pp_.inputs[1].default_value = 0.55
+    snt.links.new(sep_.outputs['Z'], pp_.inputs[0]); snt.links.new(pp_.outputs[0], rp_.inputs['Fac']); snt.links.new(rp_.outputs['Color'], sp_.inputs['Base Color'])
+    body_.data.materials.append(sl); si = len(body_.data.materials) - 1
+    ag = {g.index for g in body_.vertex_groups if g.name.split(".")[0] in ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02", "shoulder01", "clavicle")}
+    ain = {v.index for v in body_.data.vertices if sum(g.weight for g in v.groups if g.group in ag) > 0.5}
+    for poly in body_.data.polygons:
+        if poly.material_index != gi and all(i in ain for i in poly.vertices): poly.material_index = si
     hm.parent = rig; hm.parent_type = 'BONE'; hm.parent_bone = "head"; hm.matrix_parent_inverse = Matrix.Identity(4)
-    hm.location = (0, -0.11 if nm == 'FireB' else -0.14, 0.0); hm.rotation_euler = (R_(-90), 0, 0)
-    for f_, h_ in ((1, True), (1975, False)):
-        hm.hide_render = h_; hm.keyframe_insert("hide_render", frame=f_)
+    hm.location = (0, HELM_Y, HELM_Z); hm.rotation_euler = (R_(HELM_RX), R_(HELM_RY), R_(HELM_RZ))
+    for o_ in (hm, tk):
+        for f_, h_ in ((1, True), (1975, False)):
+            o_.hide_render = h_; o_.keyframe_insert("hide_render", frame=f_)

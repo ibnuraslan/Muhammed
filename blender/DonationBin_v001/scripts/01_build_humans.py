@@ -35,7 +35,15 @@ def human(name, gender, age, race, hair, clothes, skin, x, weight=0.5, height=0.
     return rig
 
 W = human("Woman", 0.0, 0.55, {"asian": 0.1, "caucasian": 0.8, "african": 0.1}, "bob02/bob02.mhclo",
-          ["female_sportsuit01/female_sportsuit01.mhclo", "shoes02/shoes02.mhclo"], "middleage_caucasian_female/middleage_caucasian_female.mhmat", 0, weight=0.5, height=0.45, brow="eyebrow002")
+          ["female_casualsuit01/female_casualsuit01.mhclo", "shoes02/shoes02.mhclo"], "middleage_caucasian_female/middleage_caucasian_female.mhmat", 0, weight=0.5, height=0.45, brow="eyebrow002")
+import os
+NOLOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "textures", "female_casualsuit01_diffuse_nologo.jpg")
+for ch in W.children:     # plain tee: the stock texture's logo and piping are painted out (see textures/)
+    if "casualsuit01" in ch.name:
+        for m in ch.data.materials:
+            for nd in m.node_tree.nodes:
+                if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
+                    nd.image = bpy.data.images.load(os.path.abspath(NOLOGO))
 S = human("Shover", 1.0, 0.4, {"asian": 0.2, "caucasian": 0.6, "african": 0.2}, "short02/short02.mhclo",
           ["male_casualsuit03/male_casualsuit03.mhclo", "shoes01/shoes01.mhclo"], "young_caucasian_male/young_caucasian_male.mhmat", 2, subdiv=0)
 tint(S, "casualsuit03", (0.18, 0.18, 0.2))
@@ -44,7 +52,7 @@ P = human("Passerby", 1.0, 0.6, {"asian": 0.1, "caucasian": 0.2, "african": 0.7}
 for nm, x, race, skin, hair in (("FireA", 6, {"asian": 0.05, "caucasian": 0.9, "african": 0.05}, "young_caucasian_male/young_caucasian_male.mhmat", "short04/short04.mhclo"),
                                 ("FireB", 8, {"asian": 0.7, "caucasian": 0.2, "african": 0.1}, "young_asian_male/young_asian_male.mhmat", "short03/short03.mhclo")):
     F = human(nm, 1.0, 0.45, race, skin=skin, hair=hair, clothes=["male_worksuit01/male_worksuit01.mhclo", "shoes06/shoes06.mhclo"], x=x, muscle=0.7, weight=0.6, height=0.6, subdiv=0)
-    tint(F, "worksuit01", (0.55, 0.42, 0.2))
+    tint(F, "worksuit01", (0.55, 0.42, 0.2)); tint(F, "shoes06", (0.06, 0.06, 0.06))
 for ob in bpy.data.objects:
     if ob.type == 'ARMATURE':
         print("HUMAN", ob.name, [c.name for c in ob.children], tuple(round(d, 2) for d in ob.dimensions))

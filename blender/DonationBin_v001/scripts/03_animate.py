@@ -12,10 +12,15 @@ sc = bpy.context.scene
 FY = sc["bin_front_y"]
 PILE = bpy.data.objects["Pile"]
 
-def ground_z(x, y):            # override: asphalt at 0, inside the bin the clothes pile surface
+COLL = [bpy.data.objects[n] for n in sc["pile_colliders"].split(",")]
+def ground_z(x, y):            # override: asphalt at 0, inside the bin the top of the clothes (base heap + scanned cloth heaps)
     if -0.73 < x < 0.73 and -0.58 < y < 0.58:
-        hit, loc, nrm, idx = PILE.ray_cast(Vector((x, y, 3.0)), Vector((0, 0, -1)))
-        if hit: return loc.z
+        z = 0.0
+        for o in COLL:
+            inv = o.matrix_world.inverted()
+            hit, loc, nrm, idx = o.ray_cast(inv @ Vector((x, y, 3.0)), (inv.to_3x3() @ Vector((0, 0, -1))).normalized())
+            if hit: z = max(z, (o.matrix_world @ loc).z)
+        return z
     return 0.0
 PZ = lambda x, y: ground_z(x, y)
 
@@ -194,7 +199,22 @@ def scream(f, jaw, bob=0.0, look=(-28, 0)):
     WO.pose(f, (p.x, p.y, z + RH - 0.04 + 0.02 * bob), yaw=0, flex=-4, sp=(-8 - 4 * bob, 0, 0), head=look,
             hands={"L": ("w", M @ Vector((0.075, -0.22, 1.30)), (-0.5, -0.5, 0.5), (-1, 0.2, 0)), "R": ("w", M @ Vector((-0.075, -0.22, 1.30)), (0.5, -0.5, 0.5), (1, 0.2, 0))},
             feet=stand_feet(p.x, p.y, 0), jaw=jaw, curl={"L": 0.35, "R": 0.35})
-scream(1322, 2); scream(1340, 22, 1.0); scream(1368, 10, 0.0, (-32, 8)); scream(1392, 24, 1.0, (-26, -6)); scream(1420, 8, 0.2); scream(1446, 22, 1.0, (-30, 0)); scream(1478, 4, 0.0, (-10, 0))
+def pound(f, hit):
+    p = Vector((0.0, -0.08, 0)); z = PZ(p.x, p.y)
+    WO.pose(f, (p.x, p.y - 0.05 * hit, z + RH - 0.05), yaw=0, flex=8 + 10 * hit, sp=(6 + 8 * hit, 0, 0), head=(-15, 0),
+            hands={"L": ("w", (0.14, FY + 0.05 + 0.18 * (1 - hit), 1.42 + 0.12 * (1 - hit)), (0, -1, 0.4), (0, 0, 1)),
+                   "R": ("w", (-0.14, FY + 0.05 + 0.18 * (1 - hit), 1.46 + 0.12 * (1 - hit)), (0, -1, 0.4), (0, 0, 1))},
+            feet=stand_feet(p.x, p.y + 0.05, 0), jaw=18 * hit, curl={"L": 1.0, "R": 1.0})
+scream(1322, 2); scream(1336, 22, 1.0); pound(1348, 0); pound(1356, 1); pound(1364, 0.2); pound(1372, 1); pound(1380, 0.1)
+scream(1394, 24, 1.0, (-26, -6)); scream(1420, 8, 0.2); scream(1446, 22, 1.0, (-30, 0)); scream(1478, 4, 0.0, (-10, 0))
+BS = [bpy.data.objects[n] for n in ("BinShell", "BinLiner", "CutPanel")]
+for o in BS:
+    l0 = o.location.copy()
+    for f, d in ((1355, 0), (1357, 0.004), (1359, -0.003), (1361, 0.002), (1364, 0), (1371, 0), (1373, 0.004), (1375, -0.003), (1377, 0.0015), (1380, 0)):
+        o.location = l0 + Vector((0, d, 0)); o.keyframe_insert("location", frame=f)
+FLp = bpy.data.objects["Flap"]
+for f, d in ((1355, 0), (1357, -1.2), (1360, 0.8), (1364, 0), (1371, 0), (1373, -1.2), (1376, 0.8), (1380, 0)):
+    FLp.rotation_euler.x = R_(d); FLp.keyframe_insert("rotation_euler", index=0, frame=f)
 # --- beat 8 (1501-1842): three days curled on the clothes, shifting, weaker
 CUR = Vector((0.05, 0.05, 0))
 def curled(f, yaw, side, k, weak, head=(25, 0)):
@@ -272,6 +292,7 @@ for f, hd in ((2066, (-5, 15)), (2200, (0, -20)), (2400, (0, -40))):
 # ============================================================== FIREFIGHTERS (beats 10-11)
 hide_keys("FireA", [(1, True), (1975, False)]); hide_keys("FireB", [(1, True), (1975, False)])
 CUT_Z = sc["chute_z"][0] - 0.12
+GRIP_L = float(os.environ.get('GRIP_L', '-0.14')); GRIP_R = float(os.environ.get('GRIP_R', '-0.30'))
 def cutter_pos(f):     # cutting along the top edge of the front panel, then down the right edge
     t = max(0.0, min(1.0, (f - 1985) / 70.0))
     if t < 0.7:
@@ -282,7 +303,7 @@ for f in list(range(1976, 2062, 6)) + [2060]:
     c = cutter_pos(f)
     kx = c.x - 0.25
     FA.pose(f, (kx, FY - 0.78, RH - 0.10), yaw=170, flex=14, sp=(14, 0, 0), head=(15, -10),
-            hands={"L": ("w", c + Vector((-0.12, -0.25, 0.10)), (0.3, 1, 0), (0, 0, 1)), "R": ("w", c + Vector((0.05, -0.30, -0.02)), (0, 1, 0), (-1, 0, 0))},
+            hands={"L": ("w", c + Vector((-0.10, GRIP_L, 0.09)), (0.3, 1, 0), (0, 0, 1)), "R": ("w", c + Vector((0.0, GRIP_R, 0.0)), (0, 1, 0), (-1, 0, 0))},
             feet={"L": ("g", (kx + 0.12, FY - 0.62), 170), "R": ("g", (kx - 0.18, FY - 1.02), 175)}, curl={"L": 0.85, "R": 0.85})
 PH = sc["chute_z"][0] - 0.15
 def panel_edge(th):
@@ -317,18 +338,18 @@ pw = bpy.data.objects["Pawl"]
 for f, d in ((1, 0), (330, 0), (338, -35), (345, -30), (800, -30), (806, -38), (812, -30)):
     pw.rotation_euler.x = R_(d); pw.keyframe_insert("rotation_euler", index=0, frame=f)
 # ghost bag for the x-ray demo (575-700): pushed through the flap, drops into the bin
-gb = bpy.data.objects["Bag03"].copy(); gb.data = bpy.data.objects["Bag03"].data.copy(); gb.name = "GhostBag"
+gsrc = bpy.data.objects[sc["bags"].split(",")[0]]; gb = gsrc.copy(); gb.data = gsrc.data.copy(); gb.name = "GhostBag"
 bpy.data.collections["BIN"].objects.link(gb); gb.data.materials.clear()
 gm = bpy.data.materials.new("GhostBagMat"); gm.use_nodes = True
 gp = gm.node_tree.nodes["Principled BSDF"]; gp.inputs['Base Color'].default_value = (1, 0.6, 0.2, 1)
 gp.inputs['Emission Color'].default_value = (1, 0.55, 0.15, 1); gp.inputs['Emission Strength'].default_value = 1.5
-gb.data.materials.append(gm); gb.scale = (0.9, 0.7, 0.5)
+gb.data.materials.append(gm); gb.scale = (0.8, 0.8, 0.6); gb.rotation_euler = (0, 0, 0)
 for f, loc, h in ((1, (0, FY - 0.6, 1.35), True), (560, (0, FY - 0.6, 1.35), False), (590, (0, FY - 0.25, 1.38), False), (615, (0, FY + 0.15, 1.28), False),
                   (640, (0, FY + 0.45, 0.85), False), (650, (0, FY + 0.5, 0.60), False), (720, (0, FY + 0.5, 0.60), False), (725, (0, FY + 0.5, 0.60), True)):
     gb.location = loc; gb.keyframe_insert("location", frame=f)
     gb.hide_render = h; gb.keyframe_insert("hide_render", frame=f)
 # bags squash under her landing
-for nm in sc["bags"].split(",")[:26]:
+for nm in sc["bags"].split(","):
     b = bpy.data.objects[nm]
     if (b.location.to_2d() - LAND.to_2d()).length < 0.65:
         s0 = b.scale.copy()
