@@ -44,3 +44,17 @@ After D, keep polishing. Repackage as `_v003` only if it is clearly better.
 Every beat shows its line with lots happening in the frame. The camera never cuts, and the framing changes about every second. Feet and hands are planted, with no hovering or clipping. A packed .blend opens in factory Blender. `beats.json` is ready for the voiceover retime. `SETTINGS.md`, `CREDITS.md` and `README.md` are written.
 
 Finish with a message to the director giving the package path, the size and the known issues.
+
+## Batch 2 rules: read these before you start, because director messages can arrive hours late
+These come from the first 25 films. Every one of them is a reject if missed:
+1. **Realism, not blocks.** Read the last section of `blender/PRODUCTION_RULES.md`. Nothing may read as a primitive: no rounded blocks, capsules, tubes, flat slabs or smooth blobs, whether anatomy, rock, soil, buildings, vehicles, props or clothes.
+   - Search `pipeline/find_models.py` for real CC-BY/CC0 models FIRST: anatomy, buildings, vehicles, furniture, animals, cockpits. Use Poly Haven scans for ground, rock and walls.
+   - Build procedurally only when nothing exists, then sculpt or displace it until it looks photographed.
+2. **Read every section of `pipeline/CONNECT_BRIEF.md`**, especially:
+   - "Clipping check": hands, feet, masks, helmets, caps and headsets on the head bone, with no gaps and no clipping.
+   - "Common rejects": clay look, overexposure, blank frames over 6 frames, glove blobs, stray objects, empty sets, cut-off body parts, pastel cutaways.
+   - "Package storage": under 95 MB as a normal git file, with **no LFS** and no split parts.
+3. **Look:** AgX Medium High Contrast with real textures everywhere. Cutaway backdrops use a deep teal-to-navy gradient, never pale sky blue.
+4. **Faces:** expressions must read at thumbnail size: brows, lids, jaw and lips via the MPFB face bones. No neutral faces in emotional beats.
+5. **Life:** background people and things move in every beat, and no framing holds longer than 1.5 s.
+6. **No text or logos** on anything, including MakeHuman shirt prints (patch them out), monitors, calendars and signs.
