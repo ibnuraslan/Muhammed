@@ -55,6 +55,19 @@ M_leather = mat("M_seat_leather", (0.03, 0.025, 0.022), rough=0.45, noise=0.4, n
 M_sheep = mat("M_sheepskin", (0.62, 0.57, 0.48), rough=1.0, noise=0.5, nscale=700, bump=1.0)
 M_strap = mat("M_harness", (0.06, 0.07, 0.09), rough=0.7, noise=0.3, nscale=600, bump=0.4)
 M_label = mat("M_label_bar", (0.55, 0.56, 0.56), rough=0.6)
+def rubber_mat(name):
+    m, nt = nodes_mat(name); N, L = nt.nodes, nt.links; p = N["Principled BSDF"]
+    p.inputs["Base Color"].default_value = (0.03, 0.033, 0.036, 1); p.inputs["Roughness"].default_value = 0.8
+    tc = N.new("ShaderNodeTexCoord"); wv = N.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 18; wv.inputs["Distortion"].default_value = 0.0
+    L.new(tc.outputs["Object"], wv.inputs["Vector"])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 60; L.new(tc.outputs["Object"], nz.inputs["Vector"])
+    mx = N.new("ShaderNodeMath"); mx.operation = 'ADD'; L.new(wv.outputs["Fac"], mx.inputs[0]); L.new(nz.outputs["Fac"], mx.inputs[1])
+    b = N.new("ShaderNodeBump"); b.inputs["Strength"].default_value = 0.7; b.inputs["Distance"].default_value = 0.004
+    L.new(mx.outputs[0], b.inputs["Height"]); L.new(b.outputs["Normal"], p.inputs["Normal"])
+    dm = N.new("ShaderNodeMapRange"); L.new(nz.outputs["Fac"], dm.inputs["Value"]); dm.inputs["To Min"].default_value = 0.6; dm.inputs["To Max"].default_value = 0.95
+    L.new(dm.outputs["Result"], p.inputs["Roughness"])
+    return m
+M_floor = rubber_mat("M_floor_rubber")
 M_white_e = emit_mat("M_light_strip", (1.0, 0.93, 0.82), 6.0)
 M_needle = emit_mat("M_needle", (1.0, 1.0, 0.95), 4.0)
 M_wing = mat("M_wing", (0.62, 0.64, 0.66), rough=0.35, metal=0.3, noise=0.15, nscale=2)
@@ -249,7 +262,7 @@ door = d.obj(cSet); door.location = (-0.36, -0.5, 0.0)
 
 # ------------------------------------------------------------------ cockpit
 ck = MB("COCKPIT_FIXED")
-ck.box((0, 1.15, -0.01), (2.6, 3.4, 0.02), M_dark)
+ck.box((0, 1.15, -0.01), (2.6, 3.4, 0.02), M_floor)
 # pilot seats
 for x in (-0.52, 0.52):
     ck.box((x, 1.45, 0.46), (0.5, 0.5, 0.13), M_leather, bevel=0.03)
@@ -596,6 +609,24 @@ for s_ in (-1, 1):
         cl.box((s_ * 1.099, 0.6, 1.207 + r_ * 0.05), (0.002, 0.66, 0.004), M_label)
 cl.cyl((-0.95, 1.85, 0.69), 0.045, 0.025, M_black, seg=20); cl.box((-0.95, 1.85, 0.71), (0.015, 0.06, 0.015), M_steel)   # nose-wheel tiller
 cl.obj(cSet)
+
+
+# lower main panel: standby instruments, clock, gear lever + lights, brake gauge, small knob modules (no text)
+lp = MB("LOWER_PANEL_MODULES")
+for x in (-0.52, 0.52):
+    for k, ox in enumerate((-0.2, -0.07, 0.07, 0.2)):
+        c = on_panel(x + ox, -0.17, 0.004)
+        lp.box(c, (0.11, 0.008, 0.075), M_black, rot=(-14, 0, 0), bevel=0.004)
+        for j in range(3): lp.cyl(on_panel(x + ox - 0.03 + j * 0.03, -0.17, 0.012), 0.009, 0.014, M_dark if j != 1 else M_steel, rot=(76, 0, 0), seg=12)
+        lp.box(on_panel(x + ox, -0.145, 0.009), (0.07, 0.003, 0.006), M_label, rot=(-14, 0, 0))
+        lp.box(on_panel(x + ox, -0.195, 0.009), (0.05, 0.003, 0.01), (M_btn[1], M_btn[2], M_btn[3], M_btn[0])[k], rot=(-14, 0, 0))
+    lp.cyl(on_panel(x - 0.33, -0.15, 0.006), 0.03, 0.01, M_gface, rot=(76, 0, 0), seg=24)          # clock / brake gauge
+lp.box(on_panel(0.20, -0.16, 0.01), (0.03, 0.03, 0.02), M_steel, rot=(-14, 0, 0))                     # gear lever base + handle
+lp.cyl(on_panel(0.20, -0.10, 0.045), 0.006, 0.12, M_steel, rot=(76, 0, 0), seg=8)
+lp.sphere(on_panel(0.20, -0.05, 0.08), 0.022, mat("M_gear_knob", (0.85, 0.85, 0.82), rough=0.4), seg=12)
+for k in range(3): lp.box(on_panel(0.12, -0.12 - k * 0.04, 0.008), (0.03, 0.004, 0.025), M_annun_g, rot=(-14, 0, 0))   # three greens
+for k in range(6): lp.cyl(on_panel(-0.18 + k * 0.03, -0.2, 0.01), 0.008, 0.012, M_black, rot=(76, 0, 0), seg=10)
+lp.obj(cSet)
 
 # yoke buttons
 for side in ("L", "R"):
