@@ -25,7 +25,7 @@ DUR = {"facade": 9.0, "painters": 9.0, "grille": 9.0, "floor": 9.0, "safe": 9.0,
        "night_door": 9.0, "night_wait": 9.0}
 VARIANT_FOR = {"facade": "dawn", "painters": "lane", "grille": "dawn", "floor": "salon", "safe": "safe",
                "corridor": "corridor", "chair": "corridor_empty", "night_door": "lane_night", "night_wait": "salon_night"}
-WARM = (1.0, 0.78, 0.5)
+WARM = (1.0, 0.74, 0.46)                # ~2700 K practicals
 
 
 # ============================================================================ materials
@@ -39,6 +39,7 @@ def mats():
         _M["stone_plain"] = ashlar("LimestoneP", course=10.0, block=10.0, mortar=0.0)
         _M["slate"] = dd.tex_mat("roof_slates_02", 0.5, tint=(0.55, 0.6, 0.66), name="Slate", sat=0.5)
         _M["glass"] = pbr("WinGlass", (0.02, 0.025, 0.03), 0.03, 0.2, **{'Coat Weight': 1.0})
+        _M["shopglass"] = glass("ShopGlass", (0.95, 0.97, 0.97), 0.0)
         _M["frame"] = pbr("WinFrame", (0.78, 0.76, 0.72), 0.5)
         _M["iron"] = pbr("Iron", (0.025, 0.027, 0.03), 0.45, 0.7)
         _M["bronze"] = pbr("Bronze", (0.5, 0.36, 0.16), 0.28, 1.0)
@@ -178,18 +179,19 @@ def shop_front(B, x0, x1, gf, info):
         B.box((x, -0.11, 3.94), (ww + 0.1, 0.02, 0.025), M["bronze"])
         B.box((x, -0.02, 0.1), (ww + 0.36, 0.16, 0.2), M["lacquer"])
         if isdoor:
-            B.box((x, 0.03, 1.6), (ww - 0.2, 0.04, 3.2), M["glass"])
+            B.box((x, 0.03, 1.6), (ww - 0.2, 0.04, 3.2), M["shopglass"])
             B.box((x, 0.0, 1.6), (0.08, 0.08, 3.2), M["lacquer"])
             for sx in (-1, 1):
                 B.box((x + sx * 0.12, -0.04, 1.2), (0.03, 0.03, 0.9), M["bronze"])       # brass pull handles
             B.box((x, -0.45, 0.06), (ww + 0.8, 0.9, 0.12), M["stone_plain"])
             doors.append(Vector((x, 0, 0)))
         else:
-            B.box((x, 0.03, 2.0), (ww - 0.15, 0.04, 3.8), M["glass"])
-            # the lit display behind the glass: a warm backdrop and three small plinths
-            B.box((x, 0.9, 2.0), (ww - 0.2, 0.05, 3.6), pbr("ShowBackM", (0.35, 0.3, 0.24), 0.6))
+            B.box((x, 0.03, 2.0), (ww - 0.15, 0.04, 3.8), M["shopglass"])
+            # the lit display behind the glass: a cream velvet backdrop and three plinths with jewels on stands
+            B.box((x, 1.0, 2.0), (ww - 0.2, 0.05, 3.6), fabric("ShowBackM", (0.55, 0.47, 0.38), 0.9, 0.6, 400))
+            B.box((x, 0.55, 0.3), (ww - 0.2, 0.9, 0.6), fabric("ShowFloorM", (0.45, 0.38, 0.3), 0.9, 0.6, 400))
             for k in range(3):
-                B.box((x - 1.0 + k * 1.0, 0.5, 0.75 + 0.15 * (k % 2)), (0.4, 0.4, 1.5 + 0.3 * (k % 2)), pbr("PlinthM", (0.06, 0.05, 0.045), 0.4))
+                B.box((x - 1.0 + k * 1.0, 0.55, 0.6 + 0.35 + 0.15 * (k % 2)), (0.36, 0.36, 0.7 + 0.3 * (k % 2)), fabric("PlinthM", (0.08, 0.09, 0.16), 0.9, 0.7, 300))
         # awning: a dark slanted fabric canopy over each opening
         B.box((x, -0.75, 4.3), (ww + 0.6, 1.6, 0.04), M["awning"], rot=(math.radians(-24), 0, 0))
         B.box((x, -1.48, 3.98), (ww + 0.6, 0.02, 0.28), M["awning"])
@@ -200,7 +202,16 @@ def shop_front(B, x0, x1, gf, info):
 
 
 def show_lights(info):
+    stand = pbr("ShowStand", (0.9, 0.88, 0.84), 0.45)
     for p in info["shows"]:
+        for k in range(3):                                   # a jewel on a small stand on each plinth
+            top = p + Vector((-1.0 + k * 1.0, 0.55, 0.6 + 0.7 + 0.3 * (k % 2)))
+            cyl("ShowStandO", top + Vector((0, 0, 0.06)), 0.035, 0.12, stand, verts=16)
+            dd.ring(f"ShowRing{k}", top + Vector((0, 0, 0.14)), stone_r=0.008, band="plat" if k % 2 else "gold",
+                    stone=("diamond", "sapphire", "diamond")[k])
+        spill = bpy.data.lights.new("ShowSpill", 'AREA'); spill.size = 3.0; spill.energy = 80; spill.color = WARM
+        so = bpy.data.objects.new("ShowSpill", spill); bpy.context.collection.objects.link(so)
+        so.location = p + Vector((0, -0.4, 2.6)); so.rotation_euler = (math.radians(35), 0, 0); so.visible_camera = False
         for k in range(3):
             l = bpy.data.lights.new("ShowL", 'SPOT'); l.energy = 60; l.color = WARM; l.spot_size = math.radians(50); l.shadow_soft_size = 0.2
             o = bpy.data.objects.new("ShowL", l); bpy.context.collection.objects.link(o)
@@ -374,7 +385,7 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
     floor = dd.tex_mat("marble_01", 0.35, tint=(0.92, 0.9, 0.86), name="Marble", sat=0.6)
     floor.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.6
     box("Floor", (0, d / 2, -0.05), (w, d, 0.1), floor)
-    rug = fabric("Rug", (0.42, 0.36, 0.28), 0.95, 0.5, 400)
+    rug = dd.tex_mat("quatrefoil_jacquard_fabric", 1.2, tint=(0.95, 0.86, 0.72), name="Rug", sat=0.6)
     box("Rug", (0, d / 2 + 0.3, 0.004), (8.0, 6.0, 0.008), rug)
     box("RugBorder", (0, d / 2 + 0.3, 0.003), (8.3, 6.3, 0.006), fabric("RugBorder", (0.12, 0.13, 0.2), 0.95, 0.5, 400))
     panel = pbr("Boiserie", (0.72, 0.68, 0.6), 0.55)
@@ -403,7 +414,7 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
     box("FrontHead", (0, 0.0, 4.3), (w, 0.3, 0.6), panel)
     if not night:
         for x in (-3.5, 3.5):
-            f_ = bpy.data.lights.new("CeilFill", 'AREA'); f_.size = 4.0; f_.energy = 380; f_.color = (1.0, 0.9, 0.78)
+            f_ = bpy.data.lights.new("CeilFill", 'AREA'); f_.size = 4.0; f_.energy = 140; f_.color = (1.0, 0.8, 0.6)
             fo = bpy.data.objects.new("CeilFill", f_); bpy.context.collection.objects.link(fo); fo.location = (x, d / 2, hgt - 0.05); fo.visible_camera = False
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = w; pt.size_y = 4.0; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, -0.1, 2.0); po.rotation_euler = (math.radians(-90), 0, 0)
@@ -419,7 +430,11 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
             box("Sconce", (x + (0.1 if x < 0 else -0.1), y, 2.6), (0.06, 0.18, 0.28), emissive("SconceE", WARM, 0 if night else 6))
     for x in (-3.5, 3.5):
         dd.model_h("Chandelier_03", (x, d / 2, hgt - 1.1), 1.0)
-        l = bpy.data.lights.new("Chand", 'POINT'); l.energy = 0 if night else 320; l.color = WARM; l.shadow_soft_size = 0.4
+        for j in range(6):                              # the chandelier's own bulbs: a warm glow around it
+            a_ = j * math.pi / 3
+            pl = bpy.data.lights.new("ChandBulb", 'POINT'); pl.energy = 0 if night else 35; pl.color = (1.0, 0.72, 0.45); pl.shadow_soft_size = 0.05
+            po = bpy.data.objects.new("ChandBulb", pl); bpy.context.collection.objects.link(po); po.location = (x + 0.35 * math.cos(a_), d / 2 + 0.35 * math.sin(a_), hgt - 0.85)
+        l = bpy.data.lights.new("Chand", 'POINT'); l.energy = 0 if night else 200; l.color = WARM; l.shadow_soft_size = 0.4
         o = bpy.data.objects.new("Chand", l); bpy.context.collection.objects.link(o); o.location = (x, d / 2, hgt - 0.6)
     return panel
 
@@ -438,6 +453,11 @@ def vitrine(name, loc, size=(1.4, 0.6), rot_z=0.0, rng=None, lit=True):
         st = box(name + "Strip", (0, D / 2 - 0.04, 1.32), (W - 0.1, 0.02, 0.01), emissive(name + "StripE", WARM, 25)); st.parent = case
         l = bpy.data.lights.new(name + "L", 'AREA'); l.size = W * 0.8; l.energy = 30; l.color = WARM
         lo = bpy.data.objects.new(name + "L", l); bpy.context.collection.objects.link(lo); lo.parent = case; lo.location = (0, 0, 1.3)
+    if lit:
+        glow = box(name + "BaseGlow", (0, -D / 2 - 0.004, 0.86), (W - 0.1, 0.01, 0.05), emissive(name + "BaseGlowE", WARM, 8)); glow.parent = case
+        fl = bpy.data.lights.new(name + "Floor", 'AREA'); fl.size = W; fl.energy = 18; fl.color = WARM
+        flo = bpy.data.objects.new(name + "Floor", fl); bpy.context.collection.objects.link(flo); flo.parent = case
+        flo.location = (0, -D / 2 - 0.15, 0.1); flo.rotation_euler = (math.radians(180), 0, 0); flo.visible_camera = False
     jew = []
     tray_m = dd.tex_mat("velour_velvet", 2.0, tint=(0.25, 0.32, 0.7), name=name + "Tray", sat=0.4)
     for k in range(2):

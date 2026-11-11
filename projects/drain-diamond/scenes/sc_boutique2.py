@@ -21,41 +21,49 @@ from sc_street import car
 import sc_boutique as B0
 from sc_boutique import haussmann, street, show_lights, salon_room, vitrine, mats, WARM, arms_relaxed_one
 
-EXPOSURE = 0.2
+EXPOSURE = 0.6
 DUR = {k: 9.0 for k in ("xmas", "door", "wig", "floor16", "suitcase", "panel", "grenade", "getaway", "after")}
 VARIANT_FOR = {"xmas": "xmas", "door": "xmas", "getaway": "xmas", "wig": "upstairs", "floor16": "upstairs",
                "suitcase": "upstairs", "panel": "upstairs", "grenade": "upstairs", "after": "after"}
 
 
-def tree_lights(base, height=6.5, turns=7, n=70, r0=0.22, seed=0):
-    """Warm bulbs wound in a loose spiral up a plane-tree trunk and into the first branches: soft and sparse."""
+def tree_lights(base, height=9.0, seed=0, n_branch=9):
+    """Warm-white fairy lights wound along a plane tree's branches overhead (Avenue Montaigne style): soft, sparse
+    points following branch lines that spread from the trunk top into the canopy."""
     rng = np.random.default_rng(seed)
-    bulb = emissive("XmasBulb", (1.0, 0.72, 0.38), 9.0)
+    bulb = emissive("FairyBulb", (1.0, 0.86, 0.66), 7.0)
     Bd = dd.Builder("TreeLights%d" % seed)
-    for k in range(n):
-        u = k / (n - 1)
-        a = 2 * math.pi * turns * u + rng.uniform(-0.1, 0.1)
-        r = r0 + 0.9 * max(0.0, u - 0.55) ** 1.2 * 2.0
-        z = 0.8 + u * height
-        Bd.cyl((base.x + r * math.cos(a), base.y + r * math.sin(a), z), 0.018, 0.03, bulb, verts=6)
+    fork = base + Vector((0, 0, 3.6))
+    for k in range(10):                                     # a few loose turns up the trunk
+        a = 2.4 * k; Bd.cyl((base.x + 0.2 * math.cos(a), base.y + 0.2 * math.sin(a), 1.2 + 0.24 * k), 0.012, 0.02, bulb, verts=6)
+    for bi in range(n_branch):
+        a = 2 * math.pi * bi / n_branch + rng.uniform(-0.3, 0.3)
+        reach_ = rng.uniform(2.0, 3.4); up = rng.uniform(2.0, height - 4.0)
+        end = fork + Vector((reach_ * math.cos(a), reach_ * math.sin(a), up))
+        mid = fork.lerp(end, 0.5) + Vector((0, 0, 0.4))
+        for j in range(int(18 + 6 * reach_)):
+            u = j / (18 + 6 * reach_)
+            p = (1 - u) ** 2 * fork + 2 * (1 - u) * u * mid + u * u * end
+            p += Vector((rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12), rng.uniform(-0.06, 0.06)))
+            Bd.cyl(p, 0.011, 0.018, bulb, verts=6)
     return Bd.done()
 
 
 def shopper(name, seed, rng):
     g = 1.0 if seed % 2 else 0.0
-    looks = [("male_casualsuit05", 1.1, (1, 1, 1)), ("male_elegantsuit01", 2.0, (0.6, 0.55, 0.5)), ("male_casualsuit01", 1.2, (1, 1, 1))]
+    looks = [("male_elegantsuit01", 2.6, (0.75, 0.6, 0.42)), ("male_elegantsuit01", 1.6, (0.55, 0.55, 0.58)), ("male_casualsuit05", 1.2, (1, 1, 1))]
     if g:
         cl, v, tn = looks[seed % 3]
         h = person(name, g, int(rng.integers(25, 65)), cl, ("short02", "short01", "short04")[seed % 3], cval=v, tint=tn, sat=0.6)
     else:
         h = person(name, g, int(rng.integers(25, 60)), "female_elegantsuit01", ("long01", "bob01", "ponytail01")[seed % 3],
-                   cval=1.6, tint=((0.7, 0.3, 0.25), (0.85, 0.8, 0.72), (0.35, 0.4, 0.6))[seed % 3], sat=0.3)
+                   cval=1.9, tint=((0.62, 0.22, 0.2), (0.82, 0.68, 0.5), (0.3, 0.32, 0.42))[seed % 3], sat=0.2)
     bag = box(name + "Bag", (0, 0, 0), (0.3, 0.1, 0.34), pbr(name + "BagM", ((0.75, 0.68, 0.55), (0.1, 0.1, 0.12), (0.55, 0.08, 0.08))[seed % 3], 0.6))
     return h, bag
 
 
 def build_xmas(c):
-    world_sky(sun_elev_deg=-4, sun_rot_deg=240, strength=1.4, tint=(0.55, 0.65, 1.0))
+    world_sky(sun_elev_deg=-2, sun_rot_deg=240, strength=3.5, tint=(0.6, 0.7, 1.0))
     blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.5)
     for a, b, sd in ((-34, -11, 2), (11, 33, 3), (33, 55, 4), (-56, -34, 5)):
         haussmann(a, b, seed=sd, lit_frac=0.45)
@@ -65,9 +73,10 @@ def build_xmas(c):
         l = bpy.data.lights.new("StreetL", 'POINT'); l.energy = 250; l.color = (1.0, 0.72, 0.42)
         o = bpy.data.objects.new("StreetL", l); bpy.context.collection.objects.link(o); o.location = (k * 11.0 + 3.0, -5.4, 4.4)
     rng = np.random.default_rng(12)
-    for k in range(-4, 5):
-        x = k * 9.0 - 1.5
-        tree_lights(Vector((x, -4.6, 0)), seed=k + 10)
+    for k in range(-5, 6):
+        x = k * 11.0 + 5.5
+        if abs(x) > 10.0:
+            tree_lights(Vector((x, -5.1, 0)), seed=k + 10)
     # a single garland of bulbs along the awnings
     bulb = emissive("Garland", (1.0, 0.78, 0.45), 7.0)
     G = dd.Builder("Garland")
@@ -152,20 +161,78 @@ def build_upstairs(c, after=False):
             box("FallenTray", (-2.0 + k * 1.4 + rng.uniform(-0.3, 0.3), 4.6 + rng.uniform(-0.5, 0.6), 0.015), (0.4, 0.3, 0.025),
                 dd.tex_mat("velour_velvet", 2.0, tint=(0.25, 0.32, 0.7), name="FallenVel", sat=0.4), rot=(0, 0, rng.uniform(0, 3)))
         c["panel"].location.y = 7.6
-        for o in bpy.data.objects:                   # after hours: the big lights off, only the cases and the window glow
-            if o.type == 'LIGHT' and (o.name.startswith("Chand") or o.name.startswith("CeilFill")):
+        # after hours: every light off but one cool security spot from a ceiling corner, dust hanging in its shaft
+        for o in bpy.data.objects:
+            if o.type == 'LIGHT' and not o.name.startswith("Portal"):
                 o.data.energy = 0.0
+        for m in bpy.data.materials:
+            if m.use_nodes and any(k in m.name for k in ("StripE", "BaseGlowE", "SconceE")):
+                for n in m.node_tree.nodes:
+                    if n.type == 'EMISSION':
+                        n.inputs['Strength'].default_value = 0.0
+                    if n.type == 'BSDF_PRINCIPLED':
+                        n.inputs['Emission Strength'].default_value = 0.0
+        sec_ = bpy.data.lights.new("Security", 'SPOT'); sec_.energy = 900; sec_.spot_size = math.radians(38); sec_.spot_blend = 0.3
+        sec_.color = (0.72, 0.84, 1.0); sec_.shadow_soft_size = 0.05
+        so = bpy.data.objects.new("Security", sec_); bpy.context.collection.objects.link(so); so.location = (5.6, 9.4, 3.85)
+        point_at(so, (-0.5, 4.2, 0.0))
+        box("SecurityLamp", (5.75, 9.55, 3.9), (0.18, 0.18, 0.12), emissive("SecLampE", (0.75, 0.85, 1.0), 20))
+        dust = box("Haze", (2.5, 6.8, 2.0), (6.5, 6.0, 4.0))
+        dm = bpy.data.materials.new("Dust"); dm.use_nodes = True
+        N = dm.node_tree.nodes; L = dm.node_tree.links; N.clear()
+        out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled"); vol.inputs['Anisotropy'].default_value = 0.5
+        tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 1.5
+        fv = dd.frame_value(N, "frame / 240.0", "Drift"); L.new(fv.outputs[0], nz.inputs['W']); L.new(tc.outputs['Object'], nz.inputs['Vector'])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['To Min'].default_value = 0.02; mr.inputs['To Max'].default_value = 0.09
+        L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], vol.inputs['Density']); L.new(vol.outputs[0], out.inputs['Volume'])
+        dust.data.materials.append(dm); dust.visible_shadow = False
+        ch = dd.model_h("ArmChair_01", (-1.6, 5.4, 0.0), 0.95, rot_z=0.6)
+        if ch is not None:
+            ch.rotation_euler = (math.radians(-80), 0, 0.6); ch.location.z += 0.35          # knocked over on its back
+        for cs, jew in c["cases"]:                    # a glass lid left lifted
+            for o in cs.children:
+                if o.name.endswith("Glass"):
+                    o.rotation_euler = (math.radians(-12), 0, 0); o.location.z += 0.06
         return
-    # sixteen people on the floor along the walls (staff, a customer), seen wide; robbers standing
+    # sixteen people on the floor, in three loose groups (mid-room, by the counter, near the left wall), varied poses:
+    # sitting knees-up with hands behind, kneeling, two lying face-down, one leaning on a case; staff in navy / grey,
+    # a customer in a camel coat
+    from dd import pose_kneel
+    from human import reset_pose
     c["floor"] = []
-    spots = [(-6.2, 1.2 + k * 0.62) for k in range(8)] + [(-4.6 + k * 0.62, 9.3) for k in range(8)]
-    for k, (x, y) in enumerate(spots):
-        g = 1.0 if k % 3 else 0.0
-        h = dd.staff(f"Up{k}", g, 25 + (k * 7) % 35, ("short02", "bob01", "short04", "ponytail01", "short01", "bob02")[k % 6], seed=k)
-        pose_floor_sit(h, hunch=14)
-        tgt = (x + 2.0, y) if x < -6 else (x, y - 2.0)
-        place(h, (x, y, 0), face_to((x, y), tgt))
-        c["floor"].append(h)
+    groups = [((-1.2, 5.6), [("sit", 0.3), ("sit", 2.0), ("kneel", 3.6), ("lie", 1.2), ("sit", 4.4), ("sit", 5.4)]),
+              ((0.9, 2.2), [("sit", 0.2), ("kneel", 1.5), ("lean", 2.2), ("sit", 4.0), ("lie", 5.0)]),
+              ((-4.6, 7.0), [("sit", 0.0), ("sit", 1.6), ("kneel", 3.0), ("sit", 4.2), ("sit", 5.6)])]
+    k = 0
+    for (gx, gy), members in groups:
+        for j, (pose, ang) in enumerate(members):
+            r_ = 0.55 + 0.25 * (j % 2)
+            x = gx + r_ * math.cos(ang); y = gy + r_ * math.sin(ang)
+            if k == 7:
+                h = person(f"Up{k}", 0.0, 52, "female_elegantsuit01", "bob02", cval=2.4, tint=(0.78, 0.58, 0.38), sat=0.2)   # customer, camel coat
+            else:
+                g = 1.0 if k % 3 else 0.0
+                h = dd.staff(f"Up{k}", g, 25 + (k * 7) % 35, ("short02", "bob01", "short04", "ponytail01", "short01", "bob02")[k % 6], seed=k)
+            facing = face_to((x, y), (gx, gy)) + math.pi if pose != "lean" else face_to((x, y), (gx, gy))
+            if pose == "sit":
+                pose_floor_sit(h, hunch=10 + 6 * (k % 3)); place(h, (x, y, 0), facing)
+            elif pose == "kneel":
+                pose_kneel(h, lean=8)
+                for sd, sg in (("L", 1), ("R", -1)):
+                    h.aim(f"upperarm01.{sd}", (0.25 * sg, 0.45, -1)); h.aim(f"upperarm02.{sd}", (0.25 * sg, 0.45, -1))
+                    h.aim(f"lowerarm01.{sd}", (-0.7 * sg, 0.5, -0.25)); h.aim(f"lowerarm02.{sd}", (-0.7 * sg, 0.5, -0.25))
+                place(h, (x, y, 0), facing)
+            elif pose == "lie":
+                zero(h); reset_pose(h)
+                for sd, sg in (("L", 1), ("R", -1)):
+                    h.aim(f"upperarm01.{sd}", (0.25 * sg, 0.45, -1)); h.aim(f"upperarm02.{sd}", (0.25 * sg, 0.45, -1))
+                    h.aim(f"lowerarm01.{sd}", (-0.7 * sg, 0.5, -0.25)); h.aim(f"lowerarm02.{sd}", (-0.7 * sg, 0.5, -0.25))
+                h.rot("head", (0, 0, 1), 70)
+                h.arm.rotation_euler = (math.radians(90), 0, facing); h.arm.location = (x, y, 0); ground(h)
+            else:                                   # leaning back against the display case
+                zero(h); pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
+                h.rot("spine01", (1, 0, 0), -6); place(h, (0.9, 2.75, 0), 0.0); arms_relaxed(h)
+            c["floor"].append(h); k += 1
     c["robbers"] = []
     for k in range(3):
         h = person(f"Rob{k}", 1.0, 30 + 7 * k, ("male_casualsuit05", "male_casualsuit01", "male_casualsuit03")[k], ("short02", "short04", "short01")[k],
@@ -288,8 +355,16 @@ def anim_suitcase(c, t):
 def anim_panel(c, t):
     sec = t * DUR["panel"]
     hide_floor(c)
+    for h in c["floor"]:
+        h.arm.location.z = -60
     u = ease(min(1.0, max(0.0, (sec - 1.0) / 3.5)))
     c["panel"].location = (-6.7, 6.0 + 1.65 * u, 1.5)
+    r = c["robbers"][1]; zero(r); pose_walk(r, 0.0, stride=0.0, arm_swing=0.0)
+    rp = Vector((-5.8, 5.2, 0)); place(r, rp, face_to(rp, (-6.9, 6.0)))
+    arms_relaxed(r)
+    if sec > 4.0:
+        v = ease(min(1.0, (sec - 4.0) / 2.0))
+        reach(r, "R", Vector((-6.3, 5.6, 1.45)).lerp(Vector((-6.75, 5.85, 1.5)), v), Vector((0.3, -1, -0.6)))
 
 
 def anim_grenade(c, t):
@@ -340,12 +415,12 @@ MOVES = {
                      cam=lambda c, t: (Vector((1.4, 3.4, 1.7)).lerp(Vector((1.1, 3.7, 1.65)), ease(t)), Vector((-1.0, 5.4, 0.4)), 30),
                      focus=lambda c, t: Vector((-1.0, 5.4, 0.4))),
     "panel": dict(kind="anim", dof=4.0, anim=anim_panel,
-                  cam=lambda c, t: (Vector((-3.4, 3.6, 1.65)).lerp(Vector((-3.8, 4.0, 1.6)), ease(t)), Vector((-6.9, 6.4, 1.45)), 30),
+                  cam=lambda c, t: (Vector((-4.9, 3.9, 1.75)).lerp(Vector((-5.0, 4.15, 1.72)), ease(t)), Vector((-6.9, 6.2, 1.45)), 32),
                   focus=lambda c, t: Vector((-7.0, 6.0, 1.4))),
     "grenade": dict(kind="anim", dof=5.6, anim=anim_grenade,
                     cam=lambda c, t: (Vector((-5.0, 1.0, 1.7)).lerp(Vector((-4.6, 1.3, 1.65)), ease(t)), Vector((4.0, 8.2, 1.3)), 32),
                     focus=lambda c, t: Vector((4.2, 8.2, 1.4))),
     "after": dict(kind="anim", dof=4.0, anim=anim_after,
-                  cam=lambda c, t: (Vector((0.5, 0.8, 1.6)).lerp(Vector((0.3, 3.0, 1.5)), ease(t)), Vector((-1.5, 8.0, 0.8)), 26),
+                  cam=lambda c, t: (Vector((-4.0, 1.0, 1.7)).lerp(Vector((-3.4, 2.4, 1.65)), ease(t)), Vector((1.5, 7.5, 0.8)), 24),
                   focus=lambda c, t: Vector((-0.5, 4.8, 0.8))),
 }

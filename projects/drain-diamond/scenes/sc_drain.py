@@ -95,7 +95,7 @@ def dust_volume(loc, r=0.28):
 
 
 
-def umbrella(name, radius=0.52):
+def umbrella(name, radius=0.47):
     """A black umbrella: a deep domed canopy in 8 gores (each sagging between its ribs), visible ribs ending in tips,
     a shaft, and a hooked J handle. Modelled with the canopy tip at the origin; the shaft runs down -Z."""
     fabric_m = pbr(name + "Canopy", (0.006, 0.006, 0.007), 0.55, 0.0, **{'Coat Weight': 0.15, 'Coat Roughness': 0.2})
@@ -110,8 +110,8 @@ def umbrella(name, radius=0.52):
         for j in range(na):
             a = 2 * math.pi * j / na
             sag = 0.5 - 0.5 * math.cos(8 * a)         # 0 on a rib, 1 mid-gore
-            r = radius * math.sin(u * math.pi / 2) * (1 - 0.04 * sag * u)
-            z = -0.52 * radius * (1 - math.cos(u * math.pi / 2)) - 0.035 * sag * u * u
+            r = radius * math.sin(u * math.pi / 2) * (1 - 0.1 * sag * u ** 3)
+            z = -0.52 * radius * (1 - math.cos(u * math.pi / 2)) + 0.05 * sag * u ** 4
             row.append(bm.verts.new((r * math.cos(a), r * math.sin(a), z)))
         rows.append(row)
     for i in range(nr):
@@ -379,8 +379,8 @@ def anim_gate(c, t):
         if u is not None:
             M = h.arm.matrix_world.to_3x3()
             hd = h.bone_head("head")
-            grip = hd + M @ Vector((-0.14, -0.2, -0.22))            # the hand at shoulder height, in front of the right shoulder
-            tipp = grip + Vector((0.03, 0.02, 0.86))                  # shaft runs up; the canopy rim sits just above the head
+            grip = hd + M @ Vector((-0.16, -0.22, -0.3))            # the hand at shoulder height, in front of the right shoulder
+            tipp = grip + Vector((0.02, 0.02, 0.9))                   # the shaft shows between hand and canopy; rim just above the head
             u.location = tipp
             d = (tipp - grip).normalized(); u.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
             reach(h, "R", grip + Vector((0, 0, -0.02)), M @ Vector((-1, 0.4, -0.8)))
@@ -391,7 +391,7 @@ def anim_torch(c, t):
     sec = t * DUR["torch"]
     rain_fall(c, sec)
     # the officer stands just below frame; only the beam pool slides across the wet concrete onto the patch
-    h = c["torcher"]; sp = PATCH + Vector((-1.15, -0.55, 0)); place(h, sp, face_to(sp, PATCH)); arms_relaxed(h)
+    h = c["torcher"]; sp = PATCH + Vector((-1.35, -0.45, 0)); place(h, sp, face_to(sp, PATCH)); arms_relaxed(h)
     hand = sp + Vector((0.3, 0.12, 1.05))
     u = ease(t)
     tgt = (PATCH + Vector((-1.0, -0.55, 0))).lerp(PATCH + Vector((0.02, 0.0, 0)), u)
@@ -450,8 +450,8 @@ def cam_gate(c, t):
 
 def cam_torch(c, t):
     e = ease(t)
-    loc = PATCH + Vector((0.55, -1.7, 3.1)).lerp(Vector((0.45, -1.5, 2.95)), e)
-    return loc, PATCH + Vector((-0.15, -0.15, 0.0)), 30
+    loc = PATCH + Vector((0.35, -1.05, 2.7)).lerp(Vector((0.3, -0.95, 2.6)), e)
+    return loc, PATCH + Vector((-0.35, -0.2, 0.0)), 34
 
 
 MOVES = {
