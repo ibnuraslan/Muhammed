@@ -1,7 +1,7 @@
 CAMBAD 363 0 0.054 Cell_WinBar2
 CAMBAD 1007 0 0.053 Prisoner.male_casualsuit01
-CAMBAD 1008 0 0.052 Prisoner.male_casualsuit01
-CAMBAD 1009 0 0.078 Prisoner.male_casualsuit01
+CAMBAD 1008 0 0.051 Prisoner.male_casualsuit01
+CAMBAD 1009 0 0.077 Prisoner.male_casualsuit01
 CAMBAD 1407 0 0.074 Prisoner.male_casualsuit01
 CAMBAD 1408 0 0.045 Prisoner.male_casualsuit01
 CAMBAD 1409 0 0.06 Prisoner.male_casualsuit01

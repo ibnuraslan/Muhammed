@@ -45,4 +45,4 @@
    - There is thin dust in the cell light.
    - Candle flicker, and the double gates swing with overshoot and settle.
 8. **Fixes:** the lock, bolt and grille parenting; feet sole offsets; the cake key path; the guard's hands on the box; the corridor double gates and the guard's position; a blank white frame at 905, now routed over his head.
-9. **Package:** 53 MB, a normal git file (no LFS). It now JPEG-encodes images, uses 1K textures (hero skin at 2K) and 1K HDRIs, bakes MPFB body shape keys, and purges orphans. Renders match the source film.
+9. **Package:** 67 MB, a normal git file (no LFS). It now JPEG-encodes images, uses 1K textures (hero skin at 2K) and 1K HDRIs, bakes MPFB body shape keys, and purges orphans. Renders match the source film.

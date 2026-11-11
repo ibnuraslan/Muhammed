@@ -190,8 +190,8 @@ def cutm(a_deg, r, h):
     a = R_(a_deg); rad = V(math.cos(a), math.sin(a), 0); perp = V(-math.sin(a), math.cos(a), 0)
     return mat_from(CAKE2_P + rad * r + V(0, 0, h), V(0, 0, -1), perp)
 def knife(f):
-    A1, D1, E1 = cutm(160, 0.07, 0.26), cutm(160, 0.07, 0.16), cutm(160, 0.02, 0.16)
-    A2, D2, E2 = cutm(200, 0.07, 0.26), cutm(200, 0.07, 0.16), cutm(200, 0.02, 0.16)
+    A1, D1, E1 = cutm(160, 0.07, 0.30), cutm(160, 0.07, 0.16), cutm(160, 0.02, 0.16)
+    A2, D2, E2 = cutm(200, 0.07, 0.30), cutm(200, 0.07, 0.16), cutm(200, 0.02, 0.16)
     if f <= 1306: return mlerp(KN0, A1, ss(f, 1294, 1306))
     if f <= 1313: return mlerp(A1, D1, ss(f, 1306, 1313))
     if f <= 1319: return mlerp(D1, E1, ss(f, 1313, 1319))
@@ -210,7 +210,7 @@ def slice_m(f):
     if f <= 1343: return mlerp(Matrix.Translation(CAKE2_P), up, ss(f, 1336, 1343))
     return mlerp(up, out, ss(f, 1343, 1352))
 bake_obj(SLICE, 1336, 1352, slice_m)
-P.hand_fn["L"].append((1334, 1352, lambda f: grip_hand(slice_m(f) @ V(-0.115, 0, 0.05), V(0.35, 0, -1), V(1, 0, 0))))
+P.hand_fn["L"].append((1334, 1352, lambda f: grip_hand(slice_m(f) @ V(-0.125, 0, 0.06), V(0.35, 0, -1), V(1, 0, 0))))
 for i in range(26):
     c = OB["Crumb%02d" % i]; t0 = 1314 if i < 9 else (1332 if i < 17 else 1346)
     c.scale = (0, 0, 0); c.keyframe_insert("scale", frame=1)

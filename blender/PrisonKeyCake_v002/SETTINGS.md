@@ -4,7 +4,7 @@ These values were read back from `PrisonKeyCake_v002_60fps.blend` opened in fact
 
 | Item | Value |
 |---|---|
-| File | `PrisonKeyCake_v002_60fps.blend`: 53 MB, compressed, committed as a normal git file (no LFS). All images are packed as JPEG: 1K textures, with the prisoner's skin at 2K. The HDRIs are packed at 1K. MPFB body shape keys are baked. |
+| File | `PrisonKeyCake_v002_60fps.blend`: 67 MB, compressed, committed as a normal git file (no LFS). All images are packed as JPEG: 1K textures, with the prisoner's skin at 2K. The HDRIs are packed at 1K. MPFB body shape keys are baked. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |

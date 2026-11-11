@@ -2,10 +2,10 @@
 
 This is the full 31.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `PrisonKeyCake_v002_60fps.blend`: the self-contained scene, 53 MB. Every texture is packed inside, and it is committed as a normal git file.
+- `PrisonKeyCake_v002_60fps.blend`: the self-contained scene, 67 MB. Every texture is packed inside, and it is committed as a normal git file.
 - `beats.json`: the start frame of each of the 10 beats, built to the brief's target times. When the VO arrives, the director retimes with `pipeline/retime_to_vo.py`.
-- `SETTINGS.md`: render settings and suggested test frames. `CREDITS.md`: provenance (everything is CC0, so no description credit block is needed).
-- `package_check_f560_lowres.jpg` and `package_check_f1350_lowres.jpg`: 270×480, 8-sample frames rendered from this packed file in factory-startup Blender. They show the package works; they are not a quality reference.
+- `SETTINGS.md`: render settings and suggested test frames. `CREDITS.md`: the CC-BY credit block for the video description (key, lock, cake, government building, crucible) plus CC0 provenance.
+- `package_check_f560_lowres.jpg`, `package_check_f1350_lowres.jpg` and `package_check_f1860_lowres.jpg`: 270×480, 8-sample frames rendered from this packed file in factory-startup Blender. They show the package works; they are not a quality reference.
 
 The source is `../PrisonKeyCake_v001/scripts`. Build order:
 1. 01_build_humans
@@ -40,5 +40,6 @@ The audits are in `../PrisonKeyCake_v001/audit/`, and the review sheets are in `
 - **Penetration count:** 248 hand/foot frame-hits, mostly fingertips 1–2 cm into held props. There are 0 character overlaps and 271 hat-brim vertices in crowd hair. See `../PrisonKeyCake_v001/audit/penetration_C.txt`.
 - **The crowd:** it is FK only. Arms wave and heads turn, but the crowd's feet stay planted. It is two base characters with varied clothing colours, scale and hats.
 - **The laundry:** it is stiff cloth planes with a Wave modifier.
+- **Remaining built-in shapes:** a few small items are still our own geometry: the knife, flags, hats, sand mould and the small distant birds. The key, lock, cake, crucible, barrels, bucket and government building are real models.
 - **The camera near the window bars:** it passes within 5 cm of the bars twice (frames 363 and 893). This is the intentional fly-through.
 - **No VO yet:** timing follows the brief's targets.

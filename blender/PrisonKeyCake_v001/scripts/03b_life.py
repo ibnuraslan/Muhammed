@@ -73,7 +73,7 @@ def make_bird(name):
     return b, wings
 random.seed(12)
 BIRDS = []
-for i in range(14):
+for i in range(5):
     b, wings = make_bird("Pigeon%02d" % i)
     if i < 5:   # circling the yard (day) 1-900
         cx, cy, r, h, sp = random.uniform(-3, 3), random.uniform(7, 11), random.uniform(3, 6), random.uniform(6, 10), random.choice((1, -1)) * random.uniform(0.25, 0.4)

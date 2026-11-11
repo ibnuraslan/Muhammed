@@ -598,5 +598,7 @@ nt.links.new(mix.outputs['Result'], bg.inputs['Color']); bg.inputs['Strength'].d
 sc["WIN"] = WIN; sc["DOOR"] = DOOR; sc["CEX"] = CEX; sc["YARD_GATE"] = YARD_GATE
 exec(open(os.path.join(HERE, "02b_costume.py")).read())
 exec(open(os.path.join(HERE, "02c_cake.py")).read())
+exec(open(os.path.join(HERE, "02d_realmodels.py")).read())
+exec(open(os.path.join(HERE, "02e_props.py")).read())
 print("SCENE objects", len(bpy.data.objects))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
