@@ -12,8 +12,18 @@ a = sys.argv[sys.argv.index("--") + 1:]; out = a[0]; STEP = int(a[1]) if len(a) 
 sc = bpy.context.scene; O = bpy.data.objects
 bpy.context.view_layer.layer_collection.children["PASSENGERS"].exclude = True
 body = O["YOU.body"]; shoes = [o for o in O["YOU"].children if "shoes" in o.name][0]
-gi = {g.index: g.name for g in body.vertex_groups}
-hand_idx = [v.index for v in body.data.vertices if any((gi[g.group].startswith("finger") or gi[g.group].startswith("wrist")) and g.weight > 0.5 for g in v.groups)]
+HB = [b.name for b in O["YOU"].pose.bones if b.name.startswith("finger") or b.name.startswith("wrist")]
+def hand_verts(dg):
+    """evaluated body vertices within 3 cm of a finger/wrist bone segment (vertex count changes under MPFB mask modifiers)"""
+    A = O["YOU"]; segs = [(A.matrix_world @ A.pose.bones[n].head, A.matrix_world @ A.pose.bones[n].tail) for n in HB]
+    lo = Vector([min(min(a[i], b[i]) for a, b in segs) - 0.04 for i in range(3)]); hi = Vector([max(max(a[i], b[i]) for a, b in segs) + 0.04 for i in range(3)])
+    out_ = []
+    for v in world_verts(body, dg):
+        if not all(lo[i] <= v[i] <= hi[i] for i in range(3)): continue
+        for a, b in segs:
+            ab = b - a; t = max(0.0, min(1.0, (v - a).dot(ab) / max(ab.length_squared, 1e-9)))
+            if (a + ab * t - v).length < 0.03: out_.append(v); break
+    return out_
 PROPS = ["YOKE_L", "YOKE_R", "HANDSET", "THROTTLE_0", "THROTTLE_1", "COCKPIT_FIXED", "PEDESTAL_ITEMS", "PEDESTAL_FWD", "DOOR", "FO.body", "FO.male_elegantsuit01",
          "CAPT.body", "CAPT.male_elegantsuit01", "CABIN_FIXED", "GLARESHIELD_AP"]
 PROPS = [p for p in PROPS if p in O]
@@ -36,7 +46,7 @@ frames = list(range(1, sc.frame_end + 1, STEP)); hits_frames = 0
 for f in frames:
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     T = {p: bvh(O[p], dg) for p in PROPS}
-    hv = world_verts(body, dg, hand_idx)
+    hv = hand_verts(dg)
     hit = 0
     for p, t in T.items():
         n = sum(1 for v in hv[::2] if inside(t, v))

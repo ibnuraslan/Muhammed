@@ -1,0 +1,15 @@
+CAMERA inside geometry (forward ray hits a back face): 9.3-9.3s, 13.6-13.6s, 33.1-33.3s
+   objects: COCKPIT_FIXED, DOOR, PC.afro01.001
+CAMERA closer than 3 cm to a surface: 32.6-33.5s
+   objects: COCKPIT_FIXED
+FEET planted hover >3 cm: 30 frames (38.1-38.3s, 38.5-38.7s, 38.9-39.1s); worst 0.162
+   (seated beats excluded below)
+FEET planted hover >3 cm while standing: 20 frames (38.1-38.3s, 38.5-38.7s)
+FEET sink >3 cm: 0 frames (none)
+FEET slow slide on the floor (5-25 cm/s): 0 frames (none)
+HAND handset (20.9-26.3 s)        R: ok
+HAND yoke grip (39.2-56.5 s)      L: 1 frames off (worst 0.18 m) 39.2-39.2s
+HAND yoke grip (39.2-56.5 s)      R: 1 frames off (worst 0.18 m) 39.2-39.2s
+HAND throttle touch (59.2-59.8 s) R: 3 frames off (worst 0.17 m) 59.5-59.5s, 59.6-59.6s, 59.7-59.7s
+HAND door push (12.9-13.7 s)      R: ok
+BODIES lowest point (floor = 0): CAPT.body 0.180, PC.body.002 0.193, PC.body 0.195, PC.body.005 0.199, PF.body.001 0.201, PF.body.006 0.202

@@ -7,7 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 WORK = os.path.join(HERE, "..", "work")
 exec(open(os.path.join(HERE, "lib.py")).read())
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
-def ground_z(x, y): return 0.206 if (1.86 < y < 2.08 and 0.31 < abs(x) < 0.73) else 0.0
+def ground_z(x, y): return (0.206 if (1.86 < y < 2.08 and 0.31 < abs(x) < 0.73) else 0.0) + 0.012   # soles sit on, not in, the floor
 ARGS = sys.argv[sys.argv.index("--") + 1:]
 OUT = ARGS[0]; NOBAKE = "nobake" in ARGS
 sc = bpy.context.scene
@@ -154,7 +154,7 @@ fo_pose(1, SEATED_FO)
 fo_pose(F(28.0), SEATED_FO)
 fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30), armR=(55, 0, 15))   # hauled up/back
 fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(30, 40, 20), armR=(60, -10, 15))
-fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(20, 85, 10), armR=(62, -10, 15))  # left arm swings onto yoke
+fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(30, 62, 15), armR=(62, -10, 15))  # left arm swings onto yoke
 fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(25, 70, 15), armR=(62, -10, 15))
 fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20), armR=(60, -20, 15))
 fo_pose(F(33.4), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20), armR=(58, 0, 15))
@@ -328,7 +328,7 @@ for nm, up, lands in (("MUG_L", 0.32, (-0.85, 1.25, 0.05)), ("MUG_R", 0.28, (0.9
     o.keyframe_insert("location", frame=F(34.8)); keyrot(o, F(34.8), (0, 0, 0))
     for i, t in enumerate((35.6, 36.6, 37.6, 38.6, 39.4)):
         u = (i + 1) / 5
-        tgt_ = Vector((0.15 + rnd.uniform(-0.25, 0.25), 1.95 + rnd.uniform(-0.1, 0.15), 1.05 + rnd.uniform(0, 0.25)))
+        tgt_ = Vector((0.06 + rnd.uniform(-0.15, 0.15), 2.06 + rnd.uniform(-0.03, 0.06), 1.12 + rnd.uniform(0, 0.2)))
         o.location = p0.lerp(tgt_, smooth(u) * 0.85) + Vector((0, 0, 0.05 * math.sin(u * 7)))
         o.keyframe_insert("location", frame=F(t)); keyrot(o, F(t), (rnd.uniform(-90, 90) * u, rnd.uniform(-90, 90) * u, rnd.uniform(-120, 120) * u))
     o.location = lands; o.keyframe_insert("location", frame=F(40.4)); keyrot(o, F(40.4), (90 if "MUG" in nm else 0, 0, rnd.uniform(0, 300)))
@@ -454,12 +454,12 @@ body(F(12.3), (0.0, -1.30, STAND_Z), flex=6, sflex=4, head=(0, 0)); feet(F(12.3)
 hand("R", F(12.4), (0.25, -0.70, 1.12), d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
 for f in (F(12.9), F(13.2), F(13.5), F(13.75)):
     W = door_pt(f, (0.45, -0.07, 1.12)); hand("R", f, W, d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
-hand("L", F(12.9), (-0.34, -0.60, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=40)                          # left hand on the frame
+hand("L", F(12.9), (-0.44, -0.62, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=40)                          # left hand on the frame
 body(F(13.5), (0.02, -0.80, STAND_Z - 0.02), flex=12, sflex=8, head=(10, 0)); feet(F(13.5), (-0.1, -0.92), (0.1, -0.66))
 H.key_foot("R", F(13.2), Vector((0.1, -0.77)), 180, 0.06)
 # beat 5: look down at the captain, step over him
 body(F(14.1), (0.02, -0.66, STAND_Z - 0.02), flex=14, sflex=20, head=(35, 0))
-hand("L", F(14.1), (-0.36, -0.48, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
+hand("L", F(14.1), (-0.44, -0.60, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
 hand("R", F(14.4), (0.36, -0.48, 1.25), d=(0, 0, 1), n=(-1, 0, 0), curl=50)
 feet(F(14.1), (-0.1, -0.92), (0.1, -0.62))
 H.key_foot("L", F(14.25), Vector((-0.07, -0.75)), 180, 0.08); H.key_foot("L", F(14.5), Vector((-0.05, -0.40)), 180, 0)
@@ -471,7 +471,7 @@ H.key_foot("L", F(15.15), Vector((-0.03, 0.45)), 180, 0.42); H.key_foot("L", F(1
 body(F(15.4), (0.05, 0.48, STAND_Z + 0.04), flex=10, sflex=18, head=(40, -5))
 H.key_foot("R", F(15.5), Vector((0.12, 0.02)), 180, 0)
 H.key_foot("R", F(15.8), Vector((0.14, 0.5)), 180, 0.40); H.key_foot("R", F(16.1), Vector((0.16, 0.92)), 180, 0)
-hand("L", F(15.0), (-0.36, -0.48, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
+hand("L", F(15.0), (-0.44, -0.60, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
 hand("L", F(15.6), (-0.30, 0.95, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=50)                         # grabs captain seat headrest
 hand("R", F(15.9), (0.30, 0.95, 1.30), d=(0, 1, 0), n=(0, 0, -1), curl=50)
 POSW = (0.04, 0.88, STAND_Z)
@@ -508,18 +508,18 @@ feet(F(27.8), (-0.08, 0.98), (0.14, 1.02))
 def fo_shoulders(f, s):
     sc.frame_set(f); nm = "upperarm01." + s
     return FO.matrix_world @ FO.pose.bones[nm].head
-hand("L", F(28.0), fo_shoulders(F(28.0), "R") + Vector((-0.02, -0.05, 0.03)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
-hand("R", F(28.0), fo_shoulders(F(28.0), "L") + Vector((0.0, -0.05, 0.03)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
+hand("L", F(28.0), fo_shoulders(F(28.0), "R") + Vector((-0.05, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
+hand("R", F(28.0), fo_shoulders(F(28.0), "L") + Vector((-0.03, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
 for t in (28.8, 29.8, 30.6, 31.4, 32.4, 33.2):
     f = F(t)
-    hand("L", f, fo_shoulders(f, "R") + Vector((-0.02, -0.05, 0.03)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
-    hand("R", f, fo_shoulders(f, "L") + Vector((0.0, -0.05, 0.03)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
+    hand("L", f, fo_shoulders(f, "R") + Vector((-0.05, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
+    hand("R", f, fo_shoulders(f, "L") + Vector((-0.03, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
 body(F(28.8), (0.04, 0.95, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.10, 0.80), (0.14, 0.90)); H.key_foot("L", F(29.0), Vector((0.05, 0.78)), 180, 0.05)
 body(F(29.8), (0.0, 0.74, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
-feet(F(30.4), (-0.12, 0.68), (0.12, 0.72)); H.key_foot("R", F(30.1), Vector((0.13, 0.80)), 180, 0.06)
-body(F(30.6), (0.0, 0.68, STAND_Z - 0.12), flex=12, sflex=8, twist=-5, head=(15, 0))
-body(F(31.4), (0.04, 0.68, STAND_Z - 0.16), flex=16, sflex=10, twist=-5, head=(20, 0))
+feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.13, 0.80)), 180, 0.06)
+body(F(30.6), (-0.12, 0.64, STAND_Z - 0.12), flex=8, sflex=8, twist=-5, head=(15, 0))
+body(F(31.4), (-0.10, 0.64, STAND_Z - 0.16), flex=10, sflex=10, twist=-5, head=(20, 0))
 body(F(32.4), (0.18, 0.76, STAND_Z - 0.24), flex=20, sflex=12, twist=-20, head=(25, -10))
 feet(F(32.4), (0.12, 0.72), (0.42, 0.78))
 body(F(33.2), (0.22, 0.72, STAND_Z - 0.26), flex=22, sflex=12, twist=-25, head=(30, -15))
@@ -531,7 +531,7 @@ feet(F(34.2), (0.08, 0.74), (0.30, 0.80))
 body(F(34.6), (0.16, 0.80, STAND_Z - 0.08), flex=14, sflex=0, side=6, head=(0, 5))
 feet(F(35.1), (0.02, 0.90), (0.26, 0.82)); H.key_foot("L", F(34.85), Vector((0.05, 0.82)), 180, 0.07)
 body(F(35.5), (0.12, 0.92, STAND_Z - 0.06), flex=18, sflex=6, side=-8, head=(-5, -5))
-hand("L", F(35.5), (-0.10, 1.30, 0.95), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # braces on the pedestal
+hand("L", F(35.5), (-0.10, 1.28, 1.0), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # braces on the pedestal
 hand("R", F(35.5), (0.30, 1.12, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(36.5), (0.14, 0.98, STAND_Z - 0.10), flex=26, sflex=14, side=6, head=(0, 0))
 body(F(37.6), (0.20, 0.98, STAND_Z - 0.12), flex=28, sflex=14, side=-6, head=(5, -8))
