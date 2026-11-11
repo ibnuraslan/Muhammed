@@ -106,6 +106,7 @@ def sedan_1940s_us(variant=None):
     parts.append(V.plate("PlateF", (2.56, 0, 0.36), size=(0.30, 0.15)))
     parts.append(V.plate("PlateR", (-2.30, 0, 0.72), facing=-1, size=(0.30, 0.15)))
     parts.append(V.underbody("Floor", -1.9, 1.9, 0.6, 0.30, 0.50))
+    V.cabin_interior(parts, [-0.05, -0.95], 0.36, 0.66, 0.62, 1.0, 0.70)
     body = V.join(parts, "Sedan1940s")
     me = V.wheel_mesh("us40", R, 0.17, RIM, "black" if police else "cream", whitewall=not police)
     wheels4(body, me, XF, XR, TR, R, RIM)
@@ -183,6 +184,7 @@ def sedan_modern(variant=None):
     parts.append(V.plate("PlateR", (-2.25, 0, 0.62), facing=-1))
     parts.append(V.rbox("Antenna", (-0.95, 0, 1.47), (0.12, 0.03, 0.05), 0.015, bp, sub=1))
     parts.append(V.underbody("Floor", -1.9, 1.9, 0.7, 0.16, 0.30))
+    V.cabin_interior(parts, [-0.12, -1.0], 0.38, 0.50, 0.60, 0.86, 0.78)
     body = V.join(parts, "SedanModern")
     me = V.wheel_mesh("modern", R, 0.205, RIM, "alloy5")
     wheels4(body, me, XF, XR, TR, R, RIM)
@@ -274,6 +276,16 @@ def bus_city(variant=None):
     parts.append(V.rbox("Wiper", (6.02, 0.5, 1.25), (0.02, 0.02, 0.9), 0.005, bp, rot=(math.radians(-30), 0, 0)))
     parts.append(V.rbox("EngineGrille", (-5.3, -1.271, 1.5), (0.9, 0.01, 0.6), 0.01, bp))
     parts.append(V.underbody("Floor", -5.5, 5.5, 1.1, 0.25, 0.40))
+    fab = V.simple("V_BusSeat", (0.05, 0.08, 0.14), 0.85)
+    for k in range(9):
+        x = 4.4 - k * 1.05
+        for s in (-1, 1):
+            if s < 0 and k in (0, 4, 8):
+                continue
+            parts.append(V.rbox("BusSeat", (x, s * 0.75, 0.88), (0.45, 0.85, 0.12), 0.04, fab))
+            parts.append(V.rbox("BusSeatB", (x - 0.24, s * 0.75, 1.2), (0.1, 0.85, 0.62), 0.04, fab))
+    parts.append(V.rbox("Grabrail", (0, 0, 2.3), (11.0, 0.04, 0.04), 0.015, V.alu()))
+    V.cabin_interior(parts, [5.0], 0.75, 0.85, 5.6, 1.15, 1.1, bench_rear=False, wheel_r=0.24)
     body = V.join(parts, "BusCity")
     mf = V.wheel_mesh("bus_f", R, 0.28, RIM, "alloy7")
     md = V.wheel_mesh("bus_d", R, 0.28, RIM, "alloy7", dual=True)
