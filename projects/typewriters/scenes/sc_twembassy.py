@@ -194,7 +194,16 @@ def build(variant=None):
     box("Kerb", (0, -6.4, 0.0), (200, 0.25, 0.22), st)
     box("Road", (0, ROAD_Y, -0.1), (200, 15, 0.1), ph.texture("asphalt_04", scale=0.25, name="Asphalt"))
     box("FarPavement", (0, ROAD_Y - 9.0, -0.05), (200, 3.0, 0.2), pave)
-    box("FarBlock", (0, ROAD_Y - 18.0, 12), (200, 14, 24), stone("FarPlaster", (0.48, 0.44, 0.38)))
+    # the far side of the boulevard: a long Stalinist frontage with recessed windows facing the embassy
+    fp = stone("FarPlaster", (0.62, 0.55, 0.44)); fy = ROAD_Y - 10.5
+    box("FarBlock", (0, fy - 7.0, 13.6), (200, 14, 27.2), fp)
+    for f in range(1, 8):
+        box("FarBand", (0, fy + 0.08, f * FH - 0.05), (200, 0.25, 0.14), fp)
+        for k in range(36):
+            x = -63 + k * 3.6
+            o = instance(unit, (x, fy, f * FH + FH / 2)); o.location = (x, fy, f * FH + FH / 2); o.rotation_euler = (0, 0, math.pi)
+    box("FarCornice", (0, fy + 0.3, 27.0), (200, 0.9, 0.6), fp, bevel=0.06)
+    box("FarBase", (0, fy + 0.12, FH / 2), (200, 0.3, FH), stone("FarBaseS", (0.45, 0.42, 0.36)))
     wire_m = pbr("Wire", (0.02, 0.02, 0.02), 0.4, 0.8)
     for dy in (-3.6, -3.0, 3.0, 3.6):
         cyl("TrolleyWire", (0, ROAD_Y + dy, WIRE_Z), 0.008, 200, wire_m, verts=6, rot=(0, math.radians(90), 0))

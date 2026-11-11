@@ -138,7 +138,11 @@ def build(variant=None):
         sp.color = (1.0, 0.74, 0.48); sp.shadow_soft_size = 0.04
         lo = bpy.data.objects.new("Lamp", sp); bpy.context.collection.objects.link(lo)
         lo.location = (DESK_A.x + 0.32, DESK_A.y + 0.05, DESK_Z + 0.5); point_at(lo, (DESK_A.x - 0.15, DESK_A.y + 0.05, DESK_Z + 0.05))
-        bl = bpy.data.lights.new("Bounce", 'AREA'); bl.energy = 1.2; bl.size = 1.0; bl.color = (1.0, 0.8, 0.6)
+        kl = bpy.data.lights.new("BallKey", 'AREA'); kl.energy = 1.6; kl.size = 0.12; kl.color = (1.0, 0.8, 0.6)
+        ko = bpy.data.objects.new("BallKey", kl); bpy.context.collection.objects.link(ko)
+        ko.location = T.world(c["tws"][0], (0.12, -0.25, 0.35)) if c["tws"] else (0, 0, 2); point_at(ko, T.world(c["tws"][0], (-0.05, 0.0, 0.13)))
+        ko.visible_camera = False
+                bl = bpy.data.lights.new("Bounce", 'AREA'); bl.energy = 1.2; bl.size = 1.0; bl.color = (1.0, 0.8, 0.6)
         bo = bpy.data.objects.new("Bounce", bl); bpy.context.collection.objects.link(bo); bo.location = (DESK_A.x - 0.2, DESK_A.y - 0.6, DESK_Z + 0.4)
         point_at(bo, (DESK_A.x - 0.15, DESK_A.y, DESK_Z)); bo.visible_camera = False
     # ---------------------------------------------------------------- back wall: filing cabinets, clock; left wall: notice board
@@ -371,7 +375,7 @@ def cam_night_type(c, t):
     x0 = T.PAGE_LEFT + T.MARGIN; x1 = x0 + 10 * T.PITCH
     cx = x0 + (x1 - x0) * t
     a = _tw(c, (cx + 0.07, -0.21, 0.27)); b = _tw(c, (cx + 0.05, -0.18, 0.25))
-    return (a.lerp(b, e), _tw(c, (cx - 0.004, T.BALL_Y + 0.006, T.BALL_Z + 0.002)), 70)
+    return (a.lerp(b, e), _tw(c, (cx - 0.004, T.BALL_Y + 0.008, T.BALL_Z + 0.008)), 55)
 
 
 def plans_image(path):
