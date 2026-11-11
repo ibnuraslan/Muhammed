@@ -1,0 +1,47 @@
+{
+ "ear": {
+  "uid": "e1f0f4b6fae54d59bdc3c6b2534eb411",
+  "title": "Human Ear Model",
+  "author": "ssavish274",
+  "author_profile": "https://sketchfab.com/ssavish274",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e1f0f4b6fae54d59bdc3c6b2534eb411",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "thorax": {
+  "uid": "83d435a04aa945898161eae1a2a9cf04",
+  "title": "Thorax",
+  "author": "Team Skeleton Wars",
+  "author_profile": "https://sketchfab.com/skeletonwars",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/83d435a04aa945898161eae1a2a9cf04",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "scalpel": {
+  "uid": "8e1d854692234e50b927e2383d0ae520",
+  "title": "Scalpel - Bisturi",
+  "author": "centronina3d",
+  "author_profile": "https://sketchfab.com/centronina3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8e1d854692234e50b927e2383d0ae520",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "or_lamps": {
+  "uid": "04a8ddf6e47141289ce0372e9e842167",
+  "title": "Operating room lamps",
+  "author": "House Doctor",
+  "author_profile": "https://sketchfab.com/chin4grci4",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/04a8ddf6e47141289ce0372e9e842167",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tray": {
+  "uid": "baf3242c524f4e4483d7f6df5f0d9848",
+  "title": "Metal Tray",
+  "author": "Silver Shield",
+  "author_profile": "https://sketchfab.com/silvershieldassets",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/baf3242c524f4e4483d7f6df5f0d9848",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
