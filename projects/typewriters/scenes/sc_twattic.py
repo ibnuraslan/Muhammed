@@ -31,12 +31,12 @@ def build(variant=None):
     slope = math.atan2(RIDGE - EAVE, LY)
     Ls = math.hypot(RIDGE - EAVE, LY)
     for sy in (-1, 1):
-        box("RoofBoards", (0, sy * LY / 2, (RIDGE + EAVE) / 2 + 0.06), (2 * LX, Ls, 0.04), timber, rot=(sy * slope, 0, 0))
-        box("KneeWall", (0, sy * LY, EAVE / 2), (2 * LX, 0.1, EAVE), plaster)
+        box("RoofBoards", (0, sy * LY / 2, (RIDGE + EAVE) / 2 + 0.06), (2 * LX, Ls, 0.04), timber, rot=(-sy * slope, 0, 0))
+        box("KneeWall", (0, sy * LY, EAVE / 2 + 0.2), (2 * LX, 0.1, EAVE + 0.4), plaster)
     for k in range(31):
         x = -LX + 0.3 + k * 0.6
         for sy in (-1, 1):
-            box("Rafter", (x, sy * LY / 2, (RIDGE + EAVE) / 2 - 0.02), (0.07, Ls, 0.14), timber, rot=(sy * slope, 0, 0))
+            box("Rafter", (x, sy * LY / 2, (RIDGE + EAVE) / 2 - 0.02), (0.07, Ls, 0.14), timber, rot=(-sy * slope, 0, 0))
         if k % 4 == 1:
             box("CollarTie", (x, 0, RIDGE - 0.55), (0.06, 2 * LY * 0.55 / (RIDGE - EAVE) * 1.0, 0.12), timber)
     box("Ridge", (0, 0, RIDGE - 0.04), (2 * LX, 0.12, 0.2), timber)
@@ -48,7 +48,7 @@ def build(variant=None):
         l = area_light((x, -LY * 0.7, 2.0), (math.radians(90), 0, 0), 1.0, 160, (0.85, 0.92, 1.0)); point_at(l, (x + 0.8, 0.8, 0.0))
         l.data.shape = 'RECTANGLE'; l.data.size = 1.0; l.data.size_y = 0.8; l.visible_camera = False
         l.data.spread = math.radians(40)
-    haze((0, 0, 1.5), (2 * LX, 2 * LY, 3.0), density=0.035, color=(0.75, 0.8, 0.88), anis=0.55)
+    haze((0, 0, 1.5), (2 * LX, 2 * LY, 3.0), density=0.012, color=(0.75, 0.8, 0.88), anis=0.55)
     # bare bulbs on pull-chain sockets along the ridge
     bulb = pbr("Bulb", (1, 0.9, 0.7), 0.1, 0.0, **{'Emission Color': (1.0, 0.75, 0.45, 1), 'Emission Strength': 25.0})
     for x in (-6.0, -2.0, 2.0, 6.0):
@@ -59,10 +59,9 @@ def build(variant=None):
         po = bpy.data.objects.new("BulbL", pl); bpy.context.collection.objects.link(po); po.location = (x, 0, RIDGE - 0.47)
     # ---------------------------------------------------------------- the equipment, in rows (front row y = -1.0, back row y = 1.1)
     MC.copier("CopierA", (-5.8, -1.0, 0), 0.0); MC.copier("CopierB", (-4.5, -1.0, 0), 0.05); MC.copier("CopierC", (2.8, 1.2, 0), math.pi)
-    for k, x in enumerate((-3.1, -2.2)):
-        ph.model("metal_office_desk", loc=(x - 0.45, -1.0, 0), rot_z=math.pi, scale=0.6) if k == 0 else None
-    for k, x in enumerate((-3.4, -2.75, -2.1)):
-        MC.terminal(f"Term{k}", (x, -0.95, 0.47 if k else 0.47), rng.uniform(-0.1, 0.1))
+    ph.model("metal_office_desk", loc=(-2.75, -1.0, 0), rot_z=math.pi, scale=0.8)
+    for k, x in enumerate((-3.35, -2.75, -2.15)):
+        MC.terminal(f"Term{k}", (x, -0.95, 0.632), rng.uniform(-0.1, 0.1))
     c["tty"] = []
     for k, x in enumerate((-1.2, -0.25)):
         r, p = MC.teletype(f"TTY{k}", (x, -1.0, 0), 0.0); c["tty"].append(p)
@@ -110,22 +109,23 @@ def animate(c, sec, shot):
         pass
     # stapler worker: stands at the crate's front face (-Y side), stapling along the top edge left to right
     L = c["last"]; w = c["worker"]
-    twp.stand(w, (L.x - 0.1, L.y - 0.95, 0.0), math.pi)          # faces +Y, the crate
+    twp.stand(w, (L.x - 0.1, L.y - 0.68, 0.0), math.pi)          # faces +Y, the crate
     k = sec / DUR["staple"]
     n = int(sec / 0.45)
     xs = L.x - 0.4 + min(n, 8) * 0.1
     ph_ = (sec % 0.45) / 0.45
     lift = 0.04 * max(0.0, math.sin(math.pi * ph_)) if ph_ < 0.6 else 0.0
-    sp = Vector((xs, L.y - 0.39, 0.83 + lift))
-    st = c["stapler"]; st.location = sp + Vector((0, -0.0, 0.0)); st.rotation_euler = (math.radians(90), 0, 0)
+    sp = Vector((xs, L.y - 0.3, 0.875 + lift))
+    st = c["stapler"]; st.location = sp; st.rotation_euler = (0, 0, math.pi / 2)
     for i, s in enumerate(c["staples"]):
-        s.location = (L.x - 0.4 + i * 0.1, L.y - 0.388, 0.82); s.hide_render = i >= min(n, 9)
-    reach(w, "R", sp + Vector((0.0, -0.06, 0.06)), Vector((-0.8, -0.3, -0.6)), Vector((0, 1, -0.3)))
+        s.location = (L.x - 0.4 + i * 0.1, L.y - 0.33, 0.876); s.hide_render = i >= min(n, 9)
+    reach(w, "R", sp + Vector((0.0, -0.02, 0.09)), Vector((-0.8, -0.3, -0.6)), Vector((0, 1, -0.6)))
     reach(w, "L", Vector((xs - 0.25, L.y - 0.42, 0.75)), Vector((0.8, -0.3, -0.6)), Vector((0, 1, 0)))
     fingers_curl(w, 45, thumb=20)
     w.rot("head", (1, 0, 0), -8)
     # the mover wheels a hand truck down the aisle behind the rows (x from +5 to -6)
     mv = c["mover"]; x = 5.5 - 0.9 * sec
+    twp.hide(twp.person_objs(mv) + [c["truck"]] + list(c["truck"].children_recursive), shot != "track")
     twp.walk(mv, (5.5, 0.15), (-7.0, 0.15), sec, speed=0.9)
     ht = c["truck"]; fwd = twp.forward(mv)
     ht.location = mv.arm.location + fwd * 0.75; ht.rotation_euler = (math.radians(-25), 0, math.atan2(fwd.x, -fwd.y) + math.pi)
@@ -143,14 +143,14 @@ def anim(shot):
 
 def cam_track(c, t):
     e = ease(t)
-    a = Vector((-5.5, -2.7, 1.25)); b = Vector((-1.5, -2.7, 1.3))
-    return (a.lerp(b, e), a.lerp(b, e) + Vector((0.9, 3.0, -0.35)), 30)
+    a = Vector((-5.8, -2.6, 1.6)); b = Vector((-2.0, -2.6, 1.65))
+    return (a.lerp(b, e), a.lerp(b, e) + Vector((1.6, 3.0, -0.65)), 28)
 
 
 def cam_staple(c, t):
     e = ease(t); L = c["last"]
-    a = L + Vector((-1.45, -1.7, 1.35)); b = L + Vector((-1.25, -1.45, 1.3))
-    return (a.lerp(b, e), L + Vector((-0.1, -0.4, 0.95)), 35)
+    a = L + Vector((2.0, -2.0, 1.5)); b = L + Vector((1.8, -1.75, 1.45))
+    return (a.lerp(b, e), L + Vector((-0.25, -0.5, 0.95)), 30)
 
 
 MOVES = {

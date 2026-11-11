@@ -13,7 +13,7 @@ _M = {}
 
 def mats():
     if not _M:
-        _M["beige"] = pbr("MachBeige", (0.56, 0.52, 0.44), 0.45, 0.0, **{'Coat Weight': 0.2})
+        _M["beige"] = pbr("MachBeige", (0.36, 0.33, 0.27), 0.45, 0.0, **{'Coat Weight': 0.2})
         _M["grey"] = pbr("MachGrey", (0.36, 0.37, 0.36), 0.45, 0.0, **{'Coat Weight': 0.2})
         _M["olive"] = pbr("MachOlive", (0.2, 0.22, 0.17), 0.55, 0.1)
         _M["dark"] = pbr("MachDark", (0.03, 0.03, 0.035), 0.45)

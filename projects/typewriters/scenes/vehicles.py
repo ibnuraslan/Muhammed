@@ -152,8 +152,11 @@ def truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58)):
         d = bpy.data.objects.new("DoorPivot", None); bpy.context.collection.objects.link(d)
         _kid(d, root); d.location = (-4.77, sy * 1.24, 2.3)
         leaf = box("Door", (0, -sy * 0.62, 0), (0.05, 1.22, 2.66), tr, bevel=0.01)
-        bar = cyl("LockBar", (-0.04, -sy * 0.9, 0), 0.02, 2.5, M["chrome"], verts=8)
-        for o in (leaf, bar):
+        bar = cyl("LockBar", (-0.045, -sy * 0.9, 0), 0.022, 2.55, M["chrome"], verts=8)
+        bar2 = cyl("LockBar", (-0.045, -sy * 0.35, 0), 0.022, 2.55, M["chrome"], verts=8)
+        hinges = [box("Hinge", (-0.03, -sy * 0.03, dz), (0.04, 0.1, 0.08), M["black"]) for dz in (-1.0, 0.0, 1.0)]
+        seam = box("Seam", (-0.03, -sy * 1.215, 0), (0.02, 0.012, 2.6), M["black"])
+        for o in [leaf, bar, bar2, seam] + hinges:
             o.parent = d; o.matrix_parent_inverse = Matrix.Identity(4)
         doors.append(d)
     _kid(box("Interior", (-0.2, 0, 2.3), (9.3, 2.38, 2.55), pbr("TrailerInside", (0.2, 0.2, 0.19), 0.8)), root)

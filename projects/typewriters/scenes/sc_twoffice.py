@@ -208,8 +208,8 @@ def _tw(c, p):
 def cam_typing(c, t):
     e = ease(t)
     hd = c["people"]["sec"].bone_head("head")
-    tgt = _tw(c, (0.0, 0.0, 0.14)).lerp(hd, 0.45)
-    a = _tw(c, (1.0, -0.12, 0.52)); b = _tw(c, (0.82, -0.1, 0.46))
+    tgt = _tw(c, (0.0, -0.05, 0.14)).lerp(hd, 0.4)
+    a = _tw(c, (0.95, 0.05, 0.3)); b = _tw(c, (0.8, 0.02, 0.28))
     return (a.lerp(b, e), tgt, 38)
 
 

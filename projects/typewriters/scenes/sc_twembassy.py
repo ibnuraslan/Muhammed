@@ -14,10 +14,12 @@ from kit import *
 import ph
 import twp
 import vehicles as V
+import machines as MC
 
 EXPOSURE = -0.3
 LEAD = 2.5
-DUR = {"street_push": LEAD + 3.0, "crane_up": 4.5, "hoist_rise": 4.5, "roof_swing": 5.0}
+DUR = {"street_push": LEAD + 3.0, "crane_up": 4.5, "hoist_rise": 4.5, "roof_swing": 5.0, "trailer_seal": 4.5, "truck_leave": 5.0}
+TRUCK = Vector((9.5, -8.3, 0.0))
 FLOORS, FH = 8, 3.4
 BW = 44.0                    # facade width (x), facade plane y = 0, building extends to +y
 ROOF = FLOORS * FH + 1.2     # top of the cornice / parapet base
@@ -209,6 +211,17 @@ def build(variant=None):
         w = twp.person(nm, 1.0, 35 + 10 * k, cl, "short03" if k else "short01", hv=0.3, cval=0.28 + 0.1 * k, hue=0.58, sat=0.12)
         workers.append(w)
     c["workers"] = workers
+    tr, twh, doors = V.truck("Truck")
+    tr.location = TRUCK
+    c["truck"] = tr; c["truck_w"] = twh; c["doors"] = doors
+    for k in range(6):                                    # burlap crates loaded inside, visible while the doors are open
+        o = MC.burlap_crate(f"Load{k}", tag=False); o.parent = tr
+        o.location = (-4.1 + (k // 2) * 1.0, -0.55 + (k % 2) * 1.1, 1.38); o.rotation_euler = (0, 0, 0.03 * k)
+    seal = join([cyl("SealWire", (0, 0, 0), 0.002, 0.12, pbr("SealWireM", (0.6, 0.6, 0.62), 0.3, 1.0), verts=6),
+                 cyl("SealLead", (0, 0, -0.07), 0.012, 0.012, pbr("Lead", (0.42, 0.43, 0.45), 0.5, 0.8), verts=16, rot=(math.radians(90), 0, 0))], "Seal")
+    c["seal"] = seal
+    sealer = twp.person("Sealer", 1.0, 47, "male_casualsuit02", "short04", hv=0.45, cval=0.25, hue=0.6, sat=0.1)
+    c["sealer"] = sealer
     animate(c, 0.0, "street_push")
     return c
 
@@ -260,7 +273,38 @@ def hoist(c, sec, lift):
     cab.rotation_mode = 'QUATERNION'; cab.rotation_quaternion = (-d).normalized().to_track_quat('-Z', 'Y') if False else d.normalized().to_track_quat('Z', 'Y')
 
 
+def truck_shot(c, sec, shot):
+    from human import reach, fingers_curl
+    tr = c["truck"]; sealer = c["sealer"]
+    on = shot in ("trailer_seal", "truck_leave")
+    twp.hide(twp.person_objs(sealer), shot != "trailer_seal")
+    rear = TRUCK + Vector((-4.8, 0, 0))
+    if shot == "trailer_seal":
+        close = ease(min(1.0, sec / 1.3))
+        for d, sy in zip(c["doors"], (-1, 1)):
+            d.rotation_euler = (0, 0, -sy * math.radians(105) * (1 - close))
+        tr.location = TRUCK
+        twp.stand(sealer, (rear.x - 0.75, rear.y + 0.35, 0.0), math.pi / 2 + 0.25)      # faces +X, the doors
+        sp = rear + Vector((-0.06, 0.1, 1.35))
+        c["seal"].location = sp if sec > 1.6 else Vector((0, 0, -50))
+        crimp = max(0.0, math.sin(math.pi * min(1.0, max(0.0, (sec - 2.4) / 0.6))))
+        reach(sealer, "R", sp + Vector((-0.08, -0.02, 0.03 - 0.02 * crimp)), Vector((-0.3, -0.8, -0.6)), Vector((1, 0, -0.2)))
+        reach(sealer, "L", sp + Vector((-0.06, 0.12, 0.0)), Vector((-0.3, 0.8, -0.6)), Vector((1, 0, 0)))
+        fingers_curl(sealer, 45 + 30 * crimp, thumb=25)
+    elif shot == "truck_leave":
+        for d in c["doors"]:
+            d.rotation_euler = (0, 0, 0)
+        go = max(0.0, sec - 0.8)
+        dist = 0.5 * 1.6 * go * go
+        tr.location = TRUCK + Vector((dist, 0, 0)); V.roll(c["truck_w"], dist, 0.5)
+        c["seal"].location = tr.location + Vector((-4.86, 0.1, 1.35))
+    else:
+        tr.location = Vector((0, 0, -60))
+    return on
+
+
 def animate(c, sec, shot):
+    truck_shot(c, sec, shot)
     move_traffic(c, sec)
     for w in c["workers"]:
         twp.hide(twp.person_objs(w), shot != "roof_swing")
@@ -320,7 +364,19 @@ def cam_roof(c, t):
     return (a.lerp(b, e), Vector((JIB.x, JIB.y - 0.8, ROOF + 1.4)), 30)
 
 
+def cam_seal(c, t):
+    e = ease(t); r = TRUCK + Vector((-4.8, 0, 0))
+    return (r + Vector((-4.2, -2.6, 1.35)).lerp(Vector((-3.8, -2.3, 1.35)), e), r + Vector((0.0, 0.0, 1.5)), 35)
+
+
+def cam_leave(c, t):
+    e = ease(t)
+    return (Vector((-1.5, -3.6, 1.5)).lerp(Vector((-1.2, -3.8, 1.55)), e), Vector((10.0, -8.3, 1.8)).lerp(Vector((16.0, -8.3, 1.8)), e), 28)
+
+
 MOVES = {
+    "trailer_seal": dict(kind="anim", dof=3.0, cam=cam_seal, focus=lambda c, t: TRUCK + Vector((-4.8, 0.1, 1.35)), anim=anim("trailer_seal")),
+    "truck_leave": dict(kind="anim", dof=None, cam=cam_leave, anim=anim("truck_leave")),
     "street_push": dict(kind="anim", dof=None, cam=cam_street, anim=anim("street_push")),
     "crane_up": dict(kind="anim", dof=None, cam=cam_crane, anim=anim("crane_up")),
     "hoist_rise": dict(kind="anim", dof=None, cam=cam_hoist, anim=anim("hoist_rise")),
