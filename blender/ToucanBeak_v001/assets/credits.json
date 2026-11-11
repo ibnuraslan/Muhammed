@@ -1,0 +1,101 @@
+{
+ "toucan_scan": {
+  "uid": "acc98113bd1d40c8a60c1f8101dd9082",
+  "title": "Keel-billed Toucan - Ramphastos sulfuratus",
+  "author": "MooreLab",
+  "author_profile": "https://sketchfab.com/MooreLab",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/acc98113bd1d40c8a60c1f8101dd9082",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "toucan_b": {
+  "uid": "1698f276633a4d12af3f9b40de02c29a",
+  "title": "Toucan",
+  "author": "Lary",
+  "author_profile": "https://sketchfab.com/larycim",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1698f276633a4d12af3f9b40de02c29a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fig": {
+  "uid": "1d4afb668a714188935966d3ee9b2e33",
+  "title": "Fig (Ficus carica)",
+  "author": "Digital Archive of Natural History (DiNArDa)",
+  "author_profile": "https://sketchfab.com/disc3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1d4afb668a714188935966d3ee9b2e33",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "monitor": {
+  "uid": "1d4ee42eda804b02b05b63721921c1d7",
+  "title": "Computer Monitor Lowpoly Model",
+  "author": "Marco Zakaria",
+  "author_profile": "https://sketchfab.com/marcoZakaria",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1d4ee42eda804b02b05b63721921c1d7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "printer": {
+  "uid": "0e825a8d48b14bee883a131fe029d4fc",
+  "title": "3D Printer",
+  "author": "Gregsterius",
+  "author_profile": "https://sketchfab.com/Gregsterius",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0e825a8d48b14bee883a131fe029d4fc",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tweezers": {
+  "uid": "23134c749d5241689a91caea8c464af3",
+  "title": "Tweezers / Pinzas",
+  "author": "3Dec.o",
+  "author_profile": "https://sketchfab.com/3Dec.o",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/23134c749d5241689a91caea8c464af3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "stick": {
+  "uid": "0ab534c493e14f67bac01ee94f20e43f",
+  "title": "Wood Stick 02",
+  "author": "3dhdscan",
+  "author_profile": "https://sketchfab.com/3dhdscan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0ab534c493e14f67bac01ee94f20e43f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "branch": {
+  "uid": "1c3f0b7635e342f2bf3789a6bae48b1d",
+  "title": "Wood Stick 03",
+  "author": "3dhdscan",
+  "author_profile": "https://sketchfab.com/3dhdscan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1c3f0b7635e342f2bf3789a6bae48b1d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "monstera": {
+  "uid": "3ee280726f1f496e9b2377d43b4cbb2d",
+  "title": "Tropical Plant",
+  "author": "alint",
+  "author_profile": "https://sketchfab.com/alint",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3ee280726f1f496e9b2377d43b4cbb2d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "plant2": {
+  "uid": "b708719dc8f6426ab14bb2228cf63e94",
+  "title": "Tropical Plant",
+  "author": "Peter Nox",
+  "author_profile": "https://sketchfab.com/Peter.Nox",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b708719dc8f6426ab14bb2228cf63e94",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "plant3": {
+  "uid": "2fa12ba0af5442c9af8f9bead1a7d020",
+  "title": "Tropical Plant monstera deliciosa",
+  "author": "evolveduk",
+  "author_profile": "https://sketchfab.com/evolveduk",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2fa12ba0af5442c9af8f9bead1a7d020",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
