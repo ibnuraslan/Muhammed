@@ -141,16 +141,21 @@ def shophouse_row(y0, side, n, mats):
             out["pillars"].append(box("Pillar", (px, face_y + side * 0.25, 1.8), (0.5, 0.5, 3.6), pillar_m, bevel=0.03))
         # neon / lightbox signs: vertical blade signs and horizontal boards
         c = NEON[int(rng.integers(0, len(NEON)))]
-        if rng.random() < 0.6:
-            s = box("Blade", (cx + rng.uniform(-1.5, 1.5), face_y - side * 0.6, rng.uniform(4.8, 6.5)), (0.12, 0.7, rng.uniform(1.6, 2.6)),
-                    sign_material("Neon", c, rng.uniform(8, 18)))
+        board_m = pbr("SignBoard", (0.025, 0.025, 0.03), 0.45, 0.3)
+        word = SIGN_WORDS[int(rng.integers(0, len(SIGN_WORDS)))]
+        if rng.random() < 0.6:                 # blade sign: dark panel, letters stacked down its face
+            bx = cx + rng.uniform(-1.5, 1.5); bz = rng.uniform(5.0, 6.4); n_l = min(len(word), 6)
+            s = box("Blade", (bx, face_y - side * 0.6, bz), (0.12, 0.7, 0.42 * n_l + 0.2), board_m, bevel=0.02)
             out["signs"].append(s)
-        if rng.random() < 0.7:
-            s = box("Board", (cx, face_y - side * 0.05, 3.95), (w * 0.7, 0.08, 0.55), sign_material("Board", c, rng.uniform(3, 7)))
-            out["signs"].append(s)
-        if rng.random() < 0.75:
-            word = SIGN_WORDS[int(rng.integers(0, len(SIGN_WORDS)))]
-            neon_word(word, (cx, face_y - side * 0.12, rng.uniform(4.3, 5.6)), rng.uniform(0.45, 0.7), NEON[int(rng.integers(0, len(NEON)))], side)
+            lm = emissive("BladeTxt", c, 9)
+            for q, ch in enumerate(word[:n_l]):
+                for sx in (-1, 1):
+                    text_obj("BladeL", ch, (bx + sx * 0.07, face_y - side * 0.6, bz + 0.42 * (n_l / 2 - q - 0.5) - 0.12), 0.34, lm,
+                             rot=(math.radians(90), 0, math.radians(90 * sx)), extrude=0.01, font_path="/usr/share/fonts/opentype/inter/Inter-Bold.otf")
+        if rng.random() < 0.75:                # shop board: dark fascia with the shop name lit on it
+            bz = 3.95
+            box("Board", (cx, face_y - side * 0.05, bz), (w * 0.75, 0.08, 0.6), board_m, bevel=0.01)
+            neon_word(word, (cx, face_y - side * 0.1, bz - 0.13), 0.34, c, side)
         # warm arcade downlight
         if rng.random() < 0.8:
             l = bpy.data.lights.new("ArcadeL", 'POINT'); l.energy = 60; l.color = (1.0, 0.75, 0.45); l.shadow_soft_size = 0.2
@@ -159,17 +164,52 @@ def shophouse_row(y0, side, n, mats):
     return out
 
 
-def umbrella(radius=0.55):
+def umbrella(radius=0.62):
     """Dark canopy (8 ribs) on a shaft, modelled at the origin, canopy top at z=0."""
     parts = []
-    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=radius, radius2=0.02, depth=0.28, location=(0, 0, -0.14))
+    bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=radius, radius2=0.02, depth=0.22, location=(0, 0, -0.11))
     can = bpy.context.active_object
-    can.data.materials.append(pbr("Canopy", (0.012, 0.012, 0.014), 0.3, 0.0, **{'Coat Weight': 0.8, 'Coat Roughness': 0.05}))
+    can.data.materials.append(pbr("Canopy", (0.01, 0.01, 0.012), 0.55, 0.0, **{'Coat Weight': 0.3, 'Coat Roughness': 0.15}))
     sol = can.modifiers.new("s", 'SOLIDIFY'); sol.thickness = 0.004
     parts.append(can)
     shaft = cyl("Shaft", (0, 0, -0.45), 0.008, 0.85, pbr("ShaftM", (0.6, 0.6, 0.62), 0.25, 1.0), verts=12)
     parts.append(shaft)
     return parts
+
+
+def car(name, col, length=4.5, width=1.85, kind="sedan"):
+    body = pbr(name + "Paint", col, 0.22, 0.6, **{'Coat Weight': 1.0, 'Coat Roughness': 0.05})
+    glass_m = pbr("CarGlass", (0.02, 0.025, 0.03), 0.05, 0.0, **{'Coat Weight': 1.0})
+    tyre = pbr("Tyre", (0.02, 0.02, 0.02), 0.8); rim = pbr("Rim", (0.5, 0.5, 0.52), 0.3, 1.0)
+    head = emissive("Headlamp", (1.0, 0.92, 0.8), 40); tail = emissive("Taillamp", (1.0, 0.04, 0.02), 18)
+    L_, W_ = length, width
+    if kind == "bus":
+        parts = [box("Body", (0, 0, 1.75), (L_, W_, 2.9), body, bevel=0.08),
+                 box("WinBand", (0, 0, 2.2), (L_ - 0.6, W_ + 0.01, 1.1), glass_m, bevel=0.02),
+                 box("Livery", (0, 0, 1.15), (L_ - 0.2, W_ + 0.012, 0.28), pbr("Livery", (0.6, 0.12, 0.08), 0.3, 0.3)),
+                 box("Skirt", (0, 0, 0.42), (L_ - 0.4, W_ + 0.01, 0.12), pbr("Skirt", (0.08, 0.08, 0.09), 0.6)),
+                 box("RouteSign", (L_ / 2 - 0.01, 0, 3.0), (0.03, W_ - 0.5, 0.25), emissive("Route", (1.0, 0.6, 0.15), 6)),
+                 box("Interior", (0, 0, 2.15), (L_ - 0.8, W_ - 0.3, 0.9), emissive("BusInside", (0.85, 0.9, 1.0), 1.2))]
+        for k in range(5):
+            parts.append(box("Seam", (-L_ / 2 + 1.5 + k * 2.3, 0, 1.6), (0.02, W_ + 0.014, 2.4), pbr("Seam", (0.1, 0.1, 0.11), 0.5)))
+        wz, wr = 0.5, 0.5
+    else:
+        parts = [box("Body", (0, 0, 0.55), (L_, W_, 0.62), body, bevel=0.12),
+                 box("Cabin", (-0.15, 0, 1.08), (L_ * 0.52, W_ - 0.16, 0.5), glass_m, bevel=0.14)]
+        wz, wr = 0.33, 0.33
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            wx = sx * (L_ / 2 - (0.75 if kind != "bus" else 1.6))
+            parts.append(cyl("Tyre", (wx, sy * (W_ / 2 - 0.12), wz), wr, 0.24, tyre, verts=24, rot=(math.radians(90), 0, 0)))
+            parts.append(cyl("Rim", (wx, sy * W_ / 2, wz), wr * 0.6, 0.02, rim, verts=16, rot=(math.radians(90), 0, 0)))
+    for sy in (-1, 1):
+        parts.append(box("Head", (L_ / 2 + 0.01, sy * (W_ / 2 - 0.3), 0.65), (0.04, 0.35, 0.1), head))
+        parts.append(box("Tail", (-L_ / 2 - 0.01, sy * (W_ / 2 - 0.25), 0.7), (0.04, 0.3, 0.1), tail))
+    return join(parts, name)
+
+
+DUR = {"bus_reveal": 3.25, "walk_track": 2.65}       # from the voiceover: 14.60-17.85 / 17.85-20.50
+SLOW = 0.45                                          # the whole street runs in slow motion
 
 
 def build(variant=None):
@@ -199,7 +239,7 @@ def build(variant=None):
     # parked / passing cars for foreground occlusion
     paints = [(0.02, 0.02, 0.025), (0.5, 0.52, 0.55), (0.25, 0.02, 0.02)]
     cars = []
-    for k, x in enumerate((-11.0, 6.5, 16.0)):
+    for k, x in enumerate((-34.0, 26.0, 38.0)):          # parked cars kept out of the shot-A sightline
         paint = pbr(f"Paint{k}", paints[k], 0.25, 0.6, **{'Coat Weight': 1.0, 'Coat Roughness': 0.03})
         body = box("CarBody", (x, -STREET_W / 2 + 1.3, 0.75), (4.4, 1.8, 0.75), paint, bevel=0.25)
         cabin = box("CarCabin", (x - 0.2, -STREET_W / 2 + 1.3, 1.35), (2.4, 1.6, 0.6), glass("CarGlass", (0.2, 0.22, 0.25), 0.05), bevel=0.2)
@@ -208,6 +248,15 @@ def build(variant=None):
                 cyl("Wheel", (x + dx, -STREET_W / 2 + 1.3 + dy, 0.35), 0.35, 0.25, pbr("Tyre", (0.01, 0.01, 0.01), 0.6), rot=(math.radians(90), 0, 0))
         box("Tail", (x + 2.2, -STREET_W / 2 + 1.3, 0.85), (0.04, 1.5, 0.12), emissive("Tail", (1.0, 0.05, 0.03), 12))
         cars.append(body)
+    # moving traffic in both lanes (slow motion), and the bus that wipes past in shot A
+    cols = [(0.6, 0.62, 0.64), (0.04, 0.04, 0.045), (0.75, 0.75, 0.74), (0.35, 0.06, 0.05), (0.12, 0.18, 0.28)]
+    traffic = []
+    for k in range(10):
+        lane = -2.2 if k % 2 == 0 else 2.2; d = 1 if lane < 0 else -1
+        o = car(f"Moving{k}", cols[k % len(cols)]); o.rotation_euler = (0, 0, 0 if d > 0 else math.pi)
+        traffic.append(dict(o=o, y=lane, d=d, x0=float(rng.uniform(-60, 60)), v=float(rng.uniform(9, 12))))
+    bus = car("Bus", (0.82, 0.82, 0.8), length=12.0, width=2.5, kind="bus")
+    traffic.append(dict(o=bus, y=-2.2, d=1, x0=3.0, v=14.0, bus=True))     # covers her at frame 1, clears ~1.2 s
     # lantern strings across the street, overhead cables, distant traffic lights
     lant = pbr("Lantern", (0.6, 0.05, 0.03), 0.5, 0.0, **{'Emission Color': (1.0, 0.2, 0.08, 1), 'Emission Strength': 6.0, 'Subsurface Weight': 0.5})
     cable_m = pbr("Cable", (0.01, 0.01, 0.01), 0.5)
@@ -229,8 +278,6 @@ def build(variant=None):
     # the street ends at a bright junction: a lit tower with big screens (generic colour fields, no brands), traffic signals
     tw2 = window_material("EndWin", lit=(0.95, 0.88, 0.75), density=0.3, floor=3.0, bay=1.2, strength=0.12)
     box("EndTower", (72, 0, 40), (20, 30, 80), tw2)
-    for k, (z, col) in enumerate(((14, (0.2, 0.6, 1.0)), (24, (1.0, 0.3, 0.5)), (8, (1.0, 0.75, 0.3)))):
-        box("Screen", (61.8, -4 + 6 * (k % 2), z), (0.2, 10, 5), emissive("Screen", col, 1.1))
     for y in (-STREET_W / 2 + 0.5, STREET_W / 2 - 0.5):
         cyl("SignalPole", (55, y, 2.5), 0.08, 5.0, pbr("Pole", (0.03, 0.03, 0.03), 0.4, 0.8))
         bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.16, location=(54.8, y, 4.6))
@@ -246,7 +293,7 @@ def build(variant=None):
     add_asset(h, "clothes", "shoes02", val=0.3, rough=0.3)
     add_asset(h, "hair", "long01", val=0.35, rough=0.4)
     um = umbrella()
-    ctx = dict(h=h, umbrella=um, asphalt=asphalt, cars=cars)
+    ctx = dict(h=h, umbrella=um, asphalt=asphalt, cars=cars, traffic=traffic)
     ctx["walk_y"] = STREET_W / 2 + 0.9                     # open pavement, in the rain and the sign light
     return ctx
 
@@ -262,8 +309,11 @@ def place_walker(c, t, x0=-3.0, seconds=6.0):
     # right arm up holding the umbrella shaft near the shoulder
     from human import aim_bone
     aim_bone(h.arm, "upperarm01.R", (-0.15, -0.55, -0.82)); aim_bone(h.arm, "upperarm02.R", (-0.15, -0.55, -0.82))
-    aim_bone(h.arm, "lowerarm01.R", (0.25, -0.75, 0.6)); aim_bone(h.arm, "lowerarm02.R", (0.25, -0.75, 0.6))
+    aim_bone(h.arm, "lowerarm01.R", (0.2, -0.4, 0.9)); aim_bone(h.arm, "lowerarm02.R", (0.2, -0.4, 0.9))      # hand close in, under her chin
     fingers_curl(h, 70, side=("R",), thumb=40)
+    aim_bone(h.arm, "upperarm01.L", (0.12, 0.1, -1.0)); aim_bone(h.arm, "upperarm02.L", (0.12, 0.1, -1.0))
+    swing = 0.18 * math.sin(2 * math.pi * ((dist / stride) % 1.0))
+    aim_bone(h.arm, "lowerarm01.L", (0.08, -0.2 - swing, -1.0)); aim_bone(h.arm, "lowerarm02.L", (0.08, -0.2 - swing, -1.0))
     rotate_bone(h.arm, "head", (1, 0, 0), 10)
     h.arm.rotation_euler = (0, 0, math.radians(90))     # rest pose faces -Y; turn to walk along +X
     h.arm.location = (x0 + dist, c["walk_y"], 0.16)
@@ -290,12 +340,45 @@ def place_walker_toward(c, t):
     # the shaft runs up from her closed hand; the canopy tilts forward into the rain (and over her face)
     grip = h.bone_head("finger3-1.R").lerp(h.bone_tail("wrist.R"), 0.5)
     can, shaft = c["umbrella"]
-    tilt = Matrix.Rotation(math.radians(-14), 3, 'Y') @ Matrix.Rotation(math.radians(-5), 3, 'X')
+    tilt = Matrix.Rotation(math.radians(10), 3, 'Y') @ Matrix.Rotation(math.radians(-3), 3, 'X')      # shaft leans back so the canopy covers her head
     up = tilt @ Vector((0, 0, 1))
-    top = grip + up * 0.85
+    top = grip + up * 0.72
     shaft.location = grip + up * 0.425; shaft.rotation_euler = tilt.to_euler()
     can.location = top - up * 0.14; can.rotation_euler = tilt.to_euler()
     return Vector((h.arm.location.x, h.arm.location.y, 1.2))
+
+
+def move_traffic(c, sec):
+    w = sec * SLOW
+    for v in c["traffic"]:
+        x = v["x0"] + v["d"] * v["v"] * w
+        if not v.get("bus"):
+            x = ((x + 70) % 140) - 70
+        v["o"].location = (x, v["y"], 0.0)
+
+
+SET_SECONDS = 6.0                      # her walk is parameterised over 6 s of screen time
+
+
+def anim_bus(c, t):
+    sec = t * DUR["bus_reveal"]; move_traffic(c, sec); c["p"] = place_walker_toward(c, sec / SET_SECONDS)
+
+
+def anim_track(c, t):
+    sec = DUR["bus_reveal"] + t * DUR["walk_track"]; move_traffic(c, sec); c["p"] = place_walker_toward(c, sec / SET_SECONDS)
+
+
+def _cam_bus(c, t):
+    """Across the street on the near pavement, long lens on her; the bus in the near lane wipes past first."""
+    p = c["p"]
+    cam = Vector((p.x - 7.0 - 0.8 * t, -STREET_W / 2 - 1.6, 1.5))
+    return (cam, p + Vector((0, 0, 0.3)), 85)
+
+
+def _cam_track(c, t):
+    p = c["p"]
+    cam = Vector((p.x - 9.5 - 0.3 * t, STREET_W / 2 - 1.2, 1.55))       # ahead of her down the street, long lens
+    return (cam, p + Vector((0, -0.4, 0.25)), 85)
 
 
 def _cam_long(c, t):
@@ -311,6 +394,8 @@ def _cam_puddle(c, t):
 
 
 MOVES = {
+    "bus_reveal": dict(kind="anim", dof=2.4, far=80.0, cam=_cam_bus, focus=lambda c, t: c["p"], anim=anim_bus),
+    "walk_track": dict(kind="anim", dof=2.8, far=80.0, cam=_cam_track, focus=lambda c, t: c["p"], anim=anim_track),
     "puddle": dict(kind="anim", dof=2.0, far=80.0, cam=_cam_puddle, focus=lambda c, t: place_walker_toward(c, 0.45 + 0.25 * t) + Vector((0, 0, -0.7))),
     "slowmo_walk": dict(kind="anim", dof=2.8, far=80.0, cam=_cam_long, focus=lambda c, t: place_walker_toward(c, t)),
 }
