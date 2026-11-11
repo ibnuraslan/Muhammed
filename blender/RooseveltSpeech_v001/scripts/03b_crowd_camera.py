@@ -119,7 +119,7 @@ cb = blob.constraints.new("CHILD_OF"); cb.target = sh; cb.subtarget = "wrist.R";
 for o in [sh, blob] + list(sh.children):
     o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
 # policeman silhouette restraining the shooter (background), arms on the shooter from just after the shot
-cop_pos = SHOOTER_POS + Vector((-0.45, -0.6, 0))
+cop_pos = SHOOTER_POS + Vector((0.6, -0.35, 0))
 cop = instance("CrowdD", "Policeman", cop_pos, math.atan2(-(SHOOTER_POS.x - cop_pos.x), -(SHOOTER_POS.y - cop_pos.y)), CR, black=True)
 fkc = FK(cop); to_sh = cop.matrix_world.to_3x3().inverted() @ (SHOOTER_POS + Vector((0, 0, 1.35)) - (cop_pos + Vector((0, 0, 1.35)))).normalized()
 for f in range(1, F_OUT, 4):
@@ -128,7 +128,7 @@ for f in range(1, F_OUT, 4):
         a0, b0 = pose_dirs("relaxed", sd, t, 0.3); tgt = (to_sh + Vector((0.25 if sd == "L" else -0.25, 0, 0.1 * (1 if sd == "L" else -1)))).normalized()
         fkc.arm(sd, f, a0.normalized().lerp(tgt, u), b0.normalized().lerp(tgt, u))
     fkc.body(f, flex=14 * u, twist=6 * u * math.sin(t / 9.0), head=(8 * u, 0))
-    cop.location = cop_pos.lerp(SHOOTER_POS + Vector((-0.25, -0.35, 0)), 0.6 * u); cop.keyframe_insert("location", frame=f)
+    cop.location = cop_pos.lerp(SHOOTER_POS + Vector((0.35, -0.2, 0)), 0.6 * u); cop.keyframe_insert("location", frame=f)
 for o in [cop] + list(cop.children):
     o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
 # breath vapour in the cold night air: small volume puffs at mouths, exhaled every ~2.5 s of world time
@@ -208,10 +208,10 @@ K = [  # frame, position, target, lens
  (540, P((0.15, -0.27, 0.09)), P((0, 0.03, -0.02)), 28),
  (600, P((0.204, -0.092, 0.13)), P((0, 0.03, -0.02)), 30),
  (660, P((0.041, -0.038, 0.208)), P((0, 0.03, -0.01)), 30),          # over the fold edge
- (B[4], P((-0.153, -0.11, 0.075)), P((0.01, 0.04, -0.02)), 30),
- (780, P((0.178, -0.044, -0.016)), P((0.035, 0.031, -0.03)), 32),     # lateral to the steel case
- (840, P((0.124, 0.01, -0.139)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
- (B[5], P((-0.177, -0.129, 0.014)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
+ (B[4], P((-0.234, -0.185, 0.123)), P((0.01, 0.04, -0.02)), 30),
+ (780, P((0.249, -0.081, -0.009)), P((0.035, 0.031, -0.03)), 32),     # lateral to the steel case
+ (840, P((0.169, -0.001, -0.194)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
+ (B[5], P((-0.27, -0.189, 0.031)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
  (940, P((-0.147, -0.035, 0.048)), P((0.015, 0.025, -0.02)), 35),
  (B[6], P((-0.133, 0.016, -0.037)), P((0.02, 0.05, -0.02)), 35),       # push to the dent
  (1060, P((-0.272, 0.046, -0.057)), P((0.0, 0.08, -0.04)), 30),        # past the ribs: bullet short of the lung
