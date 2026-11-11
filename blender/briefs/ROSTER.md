@@ -30,3 +30,12 @@
 | Connect18 | NukedWell | session_01XfwPSovABVGEbjKaubA2qQ | claude/connect18-nuked-well |
 | Connect19 | SpeakWithoutSight | session_01XfwPSkLmuwLAL9ayCcrSJz | claude/connect19-speak-without-sight |
 | Connect20 | HeadsetBullet | session_01XfwPSnzoxGweTjrnJAzPfJ | claude/connect20-headset-bullet |
+
+## Batch 4 (launched 2026-11-11 19:22 UTC)
+| Chat | Film | Session | Branch |
+|---|---|---|---|
+| Connect21 | RingBullet | session_01XfwPSnvq5dfzdEeyw4CDmw | claude/connect21-ring-bullet |
+| Connect22 | BelugaRescue | session_01XfwPSnmhukXrvRktm1mLRS | claude/connect22-beluga-rescue |
+| Connect23 | CaveRescue | session_01XfwPSnVQt4zPTKidPYZ4nU | claude/connect23-cave-rescue |
+| Connect24 | RooseveltSpeech | session_01XfwPSmDU9rog858gx2mfei | claude/connect24-roosevelt-speech |
+| Connect25 | Tsunami2004 | session_01XfwPSoTDCrShDRDvrevxrF | claude/connect25-tsunami-2004 |
