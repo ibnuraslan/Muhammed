@@ -76,6 +76,44 @@ bake(BIG, 1042, 1058, lambda f: lerpM(nostril_M(B, 0.004), twz_tip(f), smooth((f
 bake(BIG, 1060, 1145, twz_tip, step=3)
 key_vis(["Brick_Big"], [(1, 1146)])
 key_vis(["Prop_Tweezers"], [(960, 1146)])
+# --- beat 1 cutaway porthole: a round window opens in the side of his nose, showing the brick in the passage (clean cyan look)
+XC = bpy.data.objects.new("XRay_Center", None); PR.objects.link(XC)
+bake(XC, 140, 250, lambda f: nostril_M(B, 0.004), step=2)
+PORT = ((1, 0.0), (150, 0.0), (162, 0.016), (232, 0.016), (244, 0.0))
+skin = bpy.data.objects["Boy_Body"].material_slots[0].material; nt = skin.node_tree
+outn = [n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"][0]; lk = [l for l in nt.links if l.to_node == outn and l.to_socket.name == "Surface"][0]
+src = lk.from_socket
+tc = nt.nodes.new("ShaderNodeTexCoord"); tc.object = XC
+ln = nt.nodes.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; nt.links.new(tc.outputs["Object"], ln.inputs[0])
+rad = nt.nodes.new("ShaderNodeValue"); rad.name = "PortRadius"
+for f, r in PORT: rad.outputs[0].default_value = r; rad.outputs[0].keyframe_insert("default_value", frame=f)
+lt_ = nt.nodes.new("ShaderNodeMath"); lt_.operation = "LESS_THAN"; nt.links.new(ln.outputs["Value"], lt_.inputs[0]); nt.links.new(rad.outputs[0], lt_.inputs[1])
+rimr = nt.nodes.new("ShaderNodeMath"); rimr.operation = "MULTIPLY"; rimr.inputs[1].default_value = 1.15; nt.links.new(rad.outputs[0], rimr.inputs[0])
+rim = nt.nodes.new("ShaderNodeMath"); rim.operation = "LESS_THAN"; nt.links.new(ln.outputs["Value"], rim.inputs[0]); nt.links.new(rimr.outputs[0], rim.inputs[1])
+trn = nt.nodes.new("ShaderNodeBsdfTransparent")
+em = nt.nodes.new("ShaderNodeEmission"); em.inputs[0].default_value = (0.4, 0.9, 1.0, 1); em.inputs[1].default_value = 1.5
+m1 = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(rim.outputs[0], m1.inputs[0]); nt.links.new(src, m1.inputs[1]); nt.links.new(em.outputs[0], m1.inputs[2])
+m2 = nt.nodes.new("ShaderNodeMixShader"); nt.links.new(lt_.outputs[0], m2.inputs[0]); nt.links.new(m1.outputs[0], m2.inputs[1]); nt.links.new(trn.outputs[0], m2.inputs[2])
+nt.links.new(m2.outputs[0], outn.inputs["Surface"])
+# inside the porthole: mucosa passage + cyan backdrop, following the head
+port_root = bpy.data.objects.new("XRay_Inside", None); PR.objects.link(port_root)
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.014, segments=24, ring_count=12); bk_ = bpy.context.active_object; bk_.name = "XRay_Backdrop"; link(bk_, PR)
+bk_.data.materials.append(flat("M_XRayBack", (0.6, 0.9, 1.0), 0.5, emit=(0.55, 0.88, 1.0), es=1.2)); bk_.parent = port_root
+bpy.ops.mesh.primitive_cylinder_add(radius=0.0075, depth=0.03, vertices=24); pas = bpy.context.active_object; pas.name = "XRay_Passage"; link(pas, PR)
+pas.data.materials.append(flat("M_XRayMucosa", (0.75, 0.25, 0.28), 0.3, sss=0.2, coat=0.5)); pas.parent = port_root; pas.location = (0, 0, 0.008)
+def inside_only(m_):
+    t_ = m_.node_tree; o_ = t_.nodes["Material Output"]; src_ = o_.inputs["Surface"].links[0].from_socket
+    g_ = t_.nodes.new("ShaderNodeNewGeometry"); tr_ = t_.nodes.new("ShaderNodeBsdfTransparent"); mx_ = t_.nodes.new("ShaderNodeMixShader")
+    t_.links.new(g_.outputs["Backfacing"], mx_.inputs[0]); t_.links.new(tr_.outputs[0], mx_.inputs[1]); t_.links.new(src_, mx_.inputs[2])
+    t_.links.new(mx_.outputs[0], o_.inputs["Surface"])
+for o_ in (bk_, pas):
+    for p_ in o_.data.polygons: p_.use_smooth = True
+    inside_only(o_.data.materials[0])
+bk_.data.materials[0].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"].default_value = 0.35
+pl_ = bpy.data.objects.new("XRay_Light", bpy.data.lights.new("XRay_Light", "POINT")); PR.objects.link(pl_); pl_.parent = port_root
+pl_.location = (0, -0.006, 0.0); pl_.data.energy = 0.03; pl_.data.shadow_soft_size = 0.002; pl_.data.color = (0.9, 0.97, 1.0)
+bake(port_root, 140, 250, lambda f: nostril_M(B, 0.004), step=2)
+key_vis(["XRay_Inside"], [(150, 246)])
 # --- yellow (small) brick: in the tub -> hand -> dream -> nostril (disappears) ... shower: shoots out into the palm
 key_obj(SMALL, 1, TUB_TOP @ Matrix.Rotation(R_(20), 4, "Z")); key_obj(SMALL, 332, TUB_TOP @ Matrix.Rotation(R_(20), 4, "Z"))
 bake(SMALL, 336, 712, lambda f: pinch_M(B, "R", V(0, 0.003, -0.003)))
@@ -113,7 +151,7 @@ for f in range(457, 632, 2):
 key_vis(["Dream_Red", "Dream_Yellow"], [(457, 632)])
 flash = bpy.data.objects.new("FX_ClickFlash", bpy.data.lights.new("FX_ClickFlash", "POINT")); PR.objects.link(flash)
 flash.location = DREAM + V(0, -0.02, 0.03); flash.data.shadow_soft_size = 0.01; flash.data.color = (1.0, 0.95, 0.8)
-for f, e in ((1, 0), (SNAP - 1, 0), (SNAP + 1, 40), (SNAP + 5, 8), (SNAP + 14, 0)):
+for f, e in ((1, 0), (SNAP - 1, 0), (SNAP + 1, 5), (SNAP + 5, 1.5), (SNAP + 14, 0)):
     flash.data.energy = e; flash.data.keyframe_insert("energy", frame=f)
 spk_m = flat("M_Sparkle", (1, 1, 1), 0.3, emit=(1.0, 0.9, 0.6), es=30)
 for i in range(16):
@@ -127,7 +165,7 @@ for i in range(16):
 XSB, XSS = bpy.data.objects["XS_Brick_Big"], bpy.data.objects["XS_Brick_Small"]
 ny_, zc_, L__, Hh_, XC_ = sc["XS_P"]
 def Prest(u, v, dx=0.002): return V(XC_ + dx, ny_ + u * L__, zc_ + v * Hh_)
-def xsM(u, v, ang, dx=0.002):
+def xsM(u, v, ang, dx=-0.004):
     return XSM @ Matrix.Translation(Prest(u, v, dx)) @ Matrix.Rotation(R_(ang), 4, "X") @ Matrix.Rotation(R_(90), 4, "Y")
 for o, keys in ((XSB, ((740, 0.06, 0.34, -40), (800, 0.07, 0.355, -45), (840, 0.10, 0.38, -50), (860, 0.11, 0.385, -52))),
                 (XSS, ((740, 0.02, 0.32, -35), (770, 0.05, 0.34, -40), (800, 0.12, 0.39, -50), (840, 0.17, 0.43, -58), (870, 0.18, 0.44, -60),
@@ -152,9 +190,9 @@ for f in range(740, 1340, 30):
 # --- tissues + inhaler (beat 9)
 for i in range(14):
     key_vis(["LR_TissueBall%02d" % i], [(1470, 1746)])
-bpy.ops.mesh.primitive_plane_add(size=0.18); tis = bpy.context.active_object; tis.name = "Prop_Tissue"; link(tis, PR)
+bpy.ops.mesh.primitive_ico_sphere_add(radius=0.04, subdivisions=3); tis = bpy.context.active_object; tis.name = "Prop_Tissue"; link(tis, PR)
 tis.data.materials.append(bpy.data.materials["M_Tissue"]); sub = tis.modifiers.new("s", "SUBSURF"); sub.levels = 2
-dsp = tis.modifiers.new("d", "DISPLACE"); dsp.texture = bpy.data.textures["TissueNoise"]; dsp.strength = 0.03
+dsp = tis.modifiers.new("d", "DISPLACE"); dsp.texture = bpy.data.textures["TissueNoise"]; dsp.strength = 0.025; tis.scale = (1.0, 1.3, 0.8)
 bake(tis, 1515, 1582, lambda f: pinch_M(M, "R", V(0, 0.005, 0.0)))
 key_vis(["Prop_Tissue"], [(1515, 1583)])
 inh = bpy.data.objects.new("Prop_Inhaler", None); PR.objects.link(inh)
@@ -167,15 +205,19 @@ key_vis(["Prop_Inhaler"], [(1606, 1721)])
 # --- duvet over the man in bed (follows the hips)
 bpy.ops.mesh.primitive_plane_add(size=1); duv = bpy.context.active_object; duv.name = "BR_Duvet"; link(duv, bpy.data.collections["Set_Bedroom"])
 duv.scale = (0.95, 1.25, 1); bpy.ops.object.transform_apply(scale=True)
+for p_ in duv.data.polygons: p_.use_smooth = True
 duv.data.materials.append(bpy.data.materials.get("M_Duvet") or flat("M_Duvet", (0.25, 0.33, 0.5), 0.9, sss=0.05)); so_ = duv.modifiers.new("sol", "SOLIDIFY"); so_.thickness = 0.04
 ss_ = duv.modifiers.new("sub", "SUBSURF"); ss_.levels = 2; ss_.render_levels = 2
-dd_ = duv.modifiers.new("dsp", "DISPLACE"); dd_.texture = bpy.data.textures["TissueNoise"]; dd_.strength = 0.06
-for f in list(range(1745, 1881, 6)):
+dtx = bpy.data.textures.new("DuvetNoise", "CLOUDS"); dtx.noise_scale = 0.35
+dd_ = duv.modifiers.new("dsp", "DISPLACE"); dd_.texture = dtx; dd_.strength = 0.07
+ss_.levels = ss_.render_levels = 3
+for f in list(range(1724, 1869, 6)):
     ev(f); hp = M.bone_world("root"); kn = (M.bone_world("lowerleg01.L") + M.bone_world("lowerleg01.R")) / 2
     sit = 0.0
-    duv.location = V(5.1, (hp.y + 0.35 + 0.05) / 1.0 - 0.6, max(0.6, kn.z + 0.08)); duv.keyframe_insert("location", frame=f)
+    duv.location = V(5.1, hp.y - 0.5, 0.74 + 0.1 * max(0.0, min(1.0, (kn.z - 0.7) / 0.3))); duv.keyframe_insert("location", frame=f)
     duv.rotation_euler = (R_(-6 + 10 * math.sin(f * 0.2)), R_(4 * math.sin(f * 0.13)), 0); duv.keyframe_insert("rotation_euler", frame=f)
 
+key_vis(["BR_Duvet"], [(1722, 1870)])
 # --- shower water streaks + steam
 WM = flat("M_Water", (0.9, 0.95, 1.0), 0.02, transm=1.0)
 for i in range(46):
@@ -210,6 +252,24 @@ for i in range(40):
     for f in (1, 700, 1400):
         o.location = p0 + V(0.15 * math.sin(f * 0.003 + i), 0.1 * math.cos(f * 0.002 + i), 0.12 * math.sin(f * 0.0025 + i * 2)); o.keyframe_insert("location", frame=f)
     key_vis([o.name], [(1, 1470)])
+# --- the cat breathes (and startles at the panic)
+catr = bpy.data.objects.get("LR_Cat")
+if catr:
+    s0 = catr.scale.x; z0 = catr.location.z
+    for f in range(1, 2311, 40):
+        catr.scale = (s0, s0, s0 * (1.0 + 0.025 * (1 if (f // 40) % 2 else -1))); catr.keyframe_insert("scale", frame=f)
+    for f, dz in ((895, 0.0), (902, 0.05), (910, 0.0)):
+        catr.location.z = z0 + dz; catr.keyframe_insert("location", frame=f)
+# --- TV flicker (cartoon glow, no image) and curtains swaying
+tv = bpy.data.objects.new("FX_TVGlow", bpy.data.lights.new("FX_TVGlow", "AREA")); PR.objects.link(tv)
+tv.data.size = 0.5; tv.location = (-1.75, -0.4, 0.75); tv.rotation_euler = (0, R_(90), 0)
+for f in range(1, 1471, 9):
+    tv.data.energy = random.uniform(8, 30); tv.data.color = random.choice(((0.6, 0.8, 1.0), (1.0, 0.8, 0.5), (0.7, 1.0, 0.7)))
+    tv.data.keyframe_insert("energy", frame=f); tv.data.keyframe_insert("color", frame=f)
+for s_i in (-1, 1):
+    cu = bpy.data.objects["LR_Curtain%d" % s_i]
+    for f in range(1, 1750, 50):
+        cu.rotation_euler = (R_(3 * math.sin(f * 0.02 + s_i)), 0, R_(2 * math.sin(f * 0.013))); cu.keyframe_insert("rotation_euler", frame=f)
 # --- wall clock spins during the time-lapse
 for nm, turns in (("wall_clock_minute_hand", 14), ("wall_clock_hours_hand", 1.2)):
     o = bpy.data.objects.get(nm)
@@ -245,10 +305,10 @@ Lk_(1440, 1.5, (0.8, 0.85, 1.0), Euler((R_(80), 0, R_(240))), 0.7, 0.7, s1=1.0, 
 Lk_(1465, 4.0, DAY[0], DAY[1], 1.0, 0.6, s1=0.0, s2=0.0)
 Lk_(1720, 3.5, (1.0, 0.8, 0.6), Euler((R_(70), 0, R_(240))), 0.9, 0.6)
 # bedroom at night
-Lk_(1742, 0.0, (0.5, 0.6, 1.0), Euler((R_(70), 0, R_(240))), 0.03, 1.4, moon=140, lroom=0.0)
-Lk_(1878, 0.0, (0.5, 0.6, 1.0), Euler((R_(70), 0, R_(240))), 0.03, 1.4, moon=140, lroom=0.0)
+Lk_(1756, 0.0, (0.5, 0.6, 1.0), Euler((R_(70), 0, R_(240))), 0.03, 1.4, moon=140, lroom=0.0)
+Lk_(1864, 0.0, (0.5, 0.6, 1.0), Euler((R_(70), 0, R_(240))), 0.03, 1.4, moon=140, lroom=0.0)
 # morning bathroom
-Lk_(1892, 3.0, (1.0, 0.95, 0.88), Euler((R_(40), 0, R_(150))), 1.0, 0.5, lroom=0.0)
+Lk_(1882, 3.0, (1.0, 0.95, 0.88), Euler((R_(40), 0, R_(150))), 1.0, 0.5, lroom=0.0)
 # time-lapse flashes hide the character swaps (boy -> teen -> man) and the move to the bench
 for fc_ in (1395, 1440, 1470):
     for f, d in ((fc_ - 5, 0.0), (fc_, 2.6), (fc_ + 5, 0.0)):
@@ -266,7 +326,7 @@ def ex_step(f_mid, before, after):
         if int(round(kp.co.x)) == f_mid - 1: kp.interpolation = "CONSTANT"
 ex_step(741, 0.6, -0.7); ex_step(864, -0.7, 0.6); ex_step(1121, 0.6, -0.7); ex_step(1318, -0.7, 0.6)
 for kp in ex_fc.keyframe_points:
-    if kp.co.x >= 1890: kp.co.y = 0.0
+    if kp.co.x >= 1882: kp.co.y = 0.0
     elif 1470 <= kp.co.x <= 1720: kp.co.y = 0.15
 ex_fc.update()
 # studio light is self-contained (sphere emission + 3 area keys); dim them a little so whites do not clip
@@ -327,7 +387,7 @@ k(950, V(0.05, -1.4, 0.95), (face_of(B, 950) + V(0.8, 0.0, 0.3)), 26)
 ev(1010); dirm = (MOMK - BOYP).normalized()
 k(1005, BOYP + V(-0.3, -0.62, 0.78), (nose_of(B, 1005) + pinch_of(W, "R", 1005)) / 2, 38)
 k(1045, nose_of(B, 1045) + V(-0.1, -0.12, 0.02), nose_of(B, 1045), 55)
-k(1075, V(0.55, -0.6, 0.95), twz_tip(1075).translation, 38)
+k(1075, BOYP + V(-0.2, -0.75, 0.95), twz_tip(1075).translation, 36)
 # beat 7: dive two
 N2 = nose_of(B, 1104); fw2 = fw_of(B); up2 = up_of(B)
 k(1094, N2 + fw2 * 0.08 + V(0.03, 0, 0.0), N2, 48)
@@ -356,17 +416,19 @@ k(1530, V(-0.85, 1.15, 1.05), face_of(M, 1530), 45)
 k(1590, V(-1.55, 1.3, 0.95), face_of(M, 1590), 40)
 k(1640, V(-1.65, 1.38, 0.72), pinch_of(M, "R", 1640), 45)
 k(1688, V(-0.8, 1.15, 1.2), face_of(M, 1688), 40)
-k(1720, V(0.9, 1.35, 1.35), V(2.8, 1.65, 1.1), 28)
+k(1704, V(-0.45, 1.15, 1.25), face_of(M, 1704), 36)
+k(1722, V(0.9, 1.35, 1.35), V(2.8, 1.65, 1.1), 28)
 k(1745, V(3.25, 1.45, 1.45), V(5.1, 1.4, 0.6), 24)
 k(1790, V(4.75, 1.0, 2.15), face_of(M, 1790), 28)
-k(1830, V(4.75, 1.75, 0.95), face_of(M, 1830), 30)
+k(1830, V(4.5, 1.95, 1.0), face_of(M, 1830), 34)
 k(1862, V(5.75, 0.6, 1.25), face_of(M, 1862), 30)
 # beat 10: through the wall into the bathroom
-k(1880, V(6.1, 1.15, 1.5), V(7.5, 1.55, 1.5), 26)
+k(1878, V(6.2, 1.15, 1.5), V(7.5, 1.55, 1.5), 26)
+k(1888, V(6.62, 1.22, 1.55), V(8.0, 1.6, 1.55), 27)
 k(1897, V(6.85, 1.25, 1.6), face_of(M, 1897), 28)
 k(1935, V(7.2, 1.0, 1.65), face_of(M, 1935), 34)
-k(1990, V(7.5, 1.3, 1.62), face_of(M, 1990), 45)
-k(2040, V(7.6, 1.38, 1.62), nose_of(M, 2040, 0), 62)
+k(1990, V(7.5, 1.3, 1.45), face_of(M, 1990), 45)
+k(2040, V(7.6, 1.38, 1.5), nose_of(M, 2040, 0), 62)
 # beat 11: macro on the nostril, track the brick (slow-mo), land in the palm, pull back on the laugh
 k(2077, V(7.665, 1.42, 1.62), nose_of(M, 2077, 0), 85)
 k(2115, V(7.665, 1.41, 1.55), shoot(2115).translation, 85)
@@ -388,7 +450,7 @@ for f in list(range(1, 2311, 2)) + [2310]:
     aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
 # f-stop: deep in the studio/tunnel, shallow in macros
-for f, fs in ((1, 4.0), (460, 2.0), (630, 4.0), (720, 8.0), (2070, 3.2), (2310, 4.0)):
+for f, fs in ((1, 4.0), (460, 5.6), (630, 4.0), (720, 8.0), (2070, 8.0), (2200, 5.6), (2310, 4.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # ------------------------------------------------------------------ tunnels: organic tubes built along the camera path
@@ -397,18 +459,28 @@ bs = N["Principled BSDF"]; bs.inputs["Base Color"].default_value = (0.72, 0.22, 
 bs.inputs["Subsurface Weight"].default_value = 0.3; bs.inputs["Coat Weight"].default_value = 0.6
 bs.inputs["Emission Color"].default_value = (0.6, 0.15, 0.15, 1); bs.inputs["Emission Strength"].default_value = 0.4
 nzt = N.new("ShaderNodeTexNoise"); nzt.inputs["Scale"].default_value = 18; bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.5
-Lk.new(nzt.outputs[0], bp.inputs["Height"]); Lk.new(bp.outputs[0], bs.inputs["Normal"])
+wvt = N.new("ShaderNodeTexWave"); wvt.inputs["Scale"].default_value = 3.0; wvt.inputs["Distortion"].default_value = 6
+adh = N.new("ShaderNodeMath"); adh.operation = "ADD"
+Lk.new(nzt.outputs[0], adh.inputs[0]); Lk.new(wvt.outputs[1], adh.inputs[1])
+Lk.new(adh.outputs[0], bp.inputs["Height"]); Lk.new(bp.outputs[0], bs.inputs["Normal"])
+cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.35, 0.05, 0.07, 1); cr.color_ramp.elements[1].color = (0.85, 0.35, 0.35, 1)
+Lk.new(wvt.outputs[1], cr.inputs[0]); Lk.new(cr.outputs[0], bs.inputs["Base Color"])
 def tunnel(name, f0, f1, nostril_end):
     """tube around the camera path between frames f0..f1; small at the nostril end, flared at the studio end"""
     pts = [fc_(f0 + (f1 - f0) * i / 120.0) for i in range(121)]
     bm_ = bmesh.new(); rings = []
     seg = 20
+    a_prev = None
     for i, p in enumerate(pts):
         t = i / 120.0; tn = t if nostril_end == "start" else 1 - t       # 0 at the nostril
         r = 0.005 + 0.6 * smooth(tn / 0.5) + 0.5 * smooth((tn - 0.85) / 0.15)
         r *= 1.0 + 0.12 * math.sin(i * 0.9)
         d = (pts[min(120, i + 1)] - pts[max(0, i - 1)]).normalized()
-        a = d.cross(V(0, 0, 1)); a = a.normalized() if a.length > 1e-4 else V(1, 0, 0); b_ = d.cross(a)
+        if a_prev is None:
+            a = d.cross(V(0, 0, 1)); a = a.normalized() if a.length > 1e-3 else V(1, 0, 0)
+        else:
+            a = (a_prev - d * a_prev.dot(d)); a = a.normalized() if a.length > 1e-6 else d.orthogonal().normalized()
+        a_prev = a; b_ = d.cross(a).normalized()
         ring = [bm_.verts.new(p + (a * math.cos(2 * math.pi * j / seg) + b_ * math.sin(2 * math.pi * j / seg)) * r * (1 + 0.15 * math.sin(j * 1.7 + i * 0.5))) for j in range(seg)]
         rings.append(ring)
     for r0, r1 in zip(rings, rings[1:]):
@@ -425,8 +497,33 @@ def tunnel(name, f0, f1, nostril_end):
         lt.location = fc_(f + 1); lt.keyframe_insert("location", frame=f)
     key_vis([lt.name], [(f0 - 1, f1 + 2)])
 tunnel("Tunnel_Dive1", 719, 752, "start")
-tunnel("Tunnel_Return1", 850, 874, "end")
+tunnel("Tunnel_Return1", 845, 874, "end")
 tunnel("Tunnel_Dive2", 1099, 1134, "start")
-tunnel("Tunnel_Return2", 1308, 1334, "end")
+tunnel("Tunnel_Return2", 1303, 1334, "end")
+# while the camera is inside a tunnel, the room, props and people are invisible to the camera only (shadows/light unchanged):
+# otherwise the floor slab and the boy's own skin cut across the tube as membranes.
+INSIDE = [(726, 754), (845, 871), (1106, 1136), (1303, 1331)]
+hide_cols = [bpy.data.collections[n] for n in ("Set_LivingRoom", "Props")]
+obs = set(o for c_ in hide_cols for o in c_.all_objects)
+for nm in ("Boy", "Teen", "Man", "Mom"):
+    a_ = bpy.data.objects[nm]; obs.add(a_); obs.update(a_.children_recursive)
+obs = [o for o in obs if o.type in ("MESH", "CURVE", "EMPTY") and not o.name.startswith("BrickLib")]
+for o in obs:
+    o.visible_camera = True; o.keyframe_insert("visible_camera", frame=1)
+    for a, b_ in INSIDE:
+        o.visible_camera = False; o.keyframe_insert("visible_camera", frame=a)
+        o.visible_camera = True; o.keyframe_insert("visible_camera", frame=b_)
+# fly through the bedroom/bathroom wall: the wall opens for the camera only while it passes
+for o in bpy.data.objects:
+    if o.name.startswith(("BR_WallE", "BA_WallW", "BR_SkirtE", "BA_SkirtW")):
+        for f, v in ((1, True), (1871, False), (1892, True)):
+            o.visible_camera = v; o.keyframe_insert("visible_camera", frame=f)
+# eyes: the cornea casts no shadow, so lights reach the iris through it (refractive caustics are off)
+for o in bpy.data.objects:
+    if o.name.endswith("high-poly"): o.visible_shadow = False
+# dawn: the bedroom light comes on as we head for the bathroom wall
+brc = bpy.data.objects["BR_Ceil"].data
+for f, e in ((1, 0), (1862, 0), (1872, 160), (1900, 160)):
+    brc.energy = e; brc.keyframe_insert("energy", frame=f)
 sc.frame_set(1)
 print("CAMERA_DONE keys", len(K))

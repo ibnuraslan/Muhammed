@@ -303,11 +303,11 @@ def man_bench(f, lean=10, head=(0, 0), twist=0.0, side=0.0):
         pb.location = M.r.rest(n).to_3x3().inverted() @ (pole - M.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
 MB_KEYS = ((1470, dict(lean=12, head=(8, 0))), (1500, dict(lean=6, head=(-14, 0))), (1520, dict(lean=14, head=(10, 0))), (1545, dict(lean=4, head=(-12, 4))),
            (1570, dict(lean=22, head=(18, 0))), (1600, dict(lean=10, head=(6, 0))), (1630, dict(lean=14, head=(4, -6))), (1660, dict(lean=8, head=(-8, 0))),
-           (1690, dict(lean=-6, head=(-16, 0))), (1715, dict(lean=4, head=(0, 0))), (1740, dict(lean=4, head=(0, 0))))
+           (1690, dict(lean=-6, head=(-16, 0))), (1708, dict(lean=4, head=(0, 0))), (1720, dict(lean=4, head=(0, 0))))
 for f, kw in MB_KEYS: man_bench(f, **kw)
 # tissue / inhaler hands
 for f, what in ((1470, "lap"), (1495, "sniff"), (1515, "tissue_box"), (1535, "blow"), (1560, "blow2"), (1580, "toss"), (1605, "lap"),
-                (1625, "shake1"), (1635, "shake2"), (1645, "shake1"), (1655, "shake2"), (1672, "mouth"), (1715, "mouth"), (1740, "lap")):
+                (1625, "shake1"), (1635, "shake2"), (1645, "shake1"), (1655, "shake2"), (1672, "mouth"), (1706, "mouth"), (1720, "lap")):
     ev(f)
     nt = M.nose(0.0); hm = M.head_M(); fw = (hm.to_3x3() @ V(0, -1, 0)).normalized(); up = (hm.to_3x3() @ V(0, 0, 1)).normalized()
     shR = M.bone_world("upperarm01.R"); shL = M.bone_world("upperarm01.L")
@@ -341,13 +341,13 @@ def man_bed(f, side=0.0, flex=0.0, head=(0, 0), arm=("side", "side"), knee=0.0, 
         m.key_foot(s, f, ft.to_2d(), sx * 10, lift=BEDP.z - 0.02, pitch=-80)
         pole = ft + V(0, 0.3, 0.6 + knee); n = "Pole_knee." + s; pb = M.r.PB[n]
         pb.location = M.r.rest(n).to_3x3().inverted() @ (pole - M.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
-BED_KEYS = ((1745, dict(side=0, head=(0, 10))), (1775, dict(side=25, head=(0, 30), knee=0.3)), (1800, dict(side=-25, head=(-10, -30), knee=0.1)),
-            (1820, dict(side=10, head=(-25, 0))), (1835, dict(side=-5, head=(-10, -10), knee=0.2)), (1855, dict(sit=0.7, head=(10, 0))), (1880, dict(sit=0.75, head=(8, 6))))
+BED_KEYS = ((1724, dict(side=0, head=(0, 10))), (1745, dict(side=-8, head=(0, -10))), (1775, dict(side=25, head=(0, 30), knee=0.3)), (1800, dict(side=-25, head=(-10, -30), knee=0.1)),
+            (1820, dict(side=10, head=(-25, 0))), (1835, dict(side=-5, head=(-10, -10), knee=0.2)), (1852, dict(sit=0.7, head=(10, 0))), (1868, dict(sit=0.75, head=(8, 6))))
 for f, kw in BED_KEYS: man_bed(f, **kw)
-for f, kw in ((1745, dict(squint=1.0)), (1775, dict(squint=1.0, open=0.4, frown=0.5)), (1800, dict(squint=1.0, open=0.9, worry=0.6)), (1820, dict(squint=0.8, open=1.0, flare=1.0)),
-              (1840, dict(wide=0.6, open=0.6, worry=0.7)), (1860, dict(wide=0.4, frown=0.5, sad=0.3)), (1880, dict(worry=0.5, frown=0.4))):
+for f, kw in ((1724, dict(squint=1.0)), (1775, dict(squint=1.0, open=0.4, frown=0.5)), (1800, dict(squint=1.0, open=0.9, worry=0.6)), (1820, dict(squint=0.8, open=1.0, flare=1.0)),
+              (1840, dict(wide=0.6, open=0.6, worry=0.7)), (1855, dict(wide=0.4, frown=0.5, sad=0.3)), (1868, dict(worry=0.5, frown=0.4))):
     face(M.body, f, **kw)
-for f in (1745, 1800, 1855, 1880):
+for f in (1724, 1800, 1852, 1868):
     ev(f)
     for s in "LR":
         sh = M.bone_world("upperarm01." + s); sx = 1 if s == "R" else -1
@@ -363,13 +363,13 @@ def man_shower(f, lean=0.0, head=(0, 0), twist=0.0, side=0.0):
     for s in "LR":
         xy = m.foot_xy(s, V(SHW.x, SHW.y, 0), yaw_sh)
         m.key_foot(s, f, xy, yaw_sh + (8 if s == "L" else -8), lift=SHW.z)
-SH_KEYS = ((1885, dict(head=(-20, 0))), (1930, dict(head=(-10, 10), lean=4)), (1960, dict(head=(10, 0), lean=10)), (1990, dict(head=(16, 0), lean=18)),
+SH_KEYS = ((1870, dict(head=(-20, 0))), (1930, dict(head=(-10, 10), lean=4)), (1960, dict(head=(10, 0), lean=10)), (1990, dict(head=(16, 0), lean=18)),
            (2020, dict(head=(22, 0), lean=24)), (2060, dict(head=(16, 0), lean=20)), (2085, dict(head=(24, 0), lean=26)), (2100, dict(head=(10, 0), lean=12)),
            (2150, dict(head=(20, 0), lean=14)), (2200, dict(head=(18, 0), lean=12)), (2230, dict(head=(-20, 0), lean=-6)), (2250, dict(head=(-26, 4), lean=-10, side=4)),
            (2270, dict(head=(-18, -4), lean=-4, side=-4)), (2290, dict(head=(-24, 4), lean=-8, side=4)), (2310, dict(head=(-14, 0), lean=-2)))
 for f, kw in SH_KEYS: man_shower(f, **kw)
 M_PALM = {}
-for f, what in ((1885, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press"), (2077, "press"), (2090, "palm"), (2150, "palm"), (2200, "palm_up"), (2310, "palm_up")):
+for f, what in ((1870, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press"), (2077, "press"), (2090, "palm"), (2150, "palm"), (2200, "palm_up"), (2310, "palm_up")):
     ev(f)
     nt = M.nose(0.0); hm = M.head_M(); fw = (hm.to_3x3() @ V(0, -1, 0)).normalized(); up = (hm.to_3x3() @ V(0, 0, 1)).normalized()
     rt = (hm.to_3x3() @ V(-1, 0, 0)).normalized()
@@ -388,8 +388,8 @@ for f, what in ((1885, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press")
         M_PALM[f] = cup.copy()
     hand_at(M, "R", f, tR, dR, nR, shR - rt * 0.3 - up * 0.3)
     hand_at(M, "L", f, tL, dL, nL, shL + rt * 0.3 - up * 0.3)
-fingers(M.r, "R", 1885, 0.2, 0.1, 0.1); fingers(M.r, "L", 1885, 0.2, 0.1, 0.1); fingers(M.r, "L", 2077, 0.35, 0.3, 0.2)
-for f, kw in ((1885, dict(squint=0.6, sad=0.2)), (1960, dict(squint=0.7, purse=0.3)), (1990, dict(squint=1.0, purse=0.8, flare=1.0)), (2040, dict(squint=1.0, purse=1.0, flare=1.0)),
+fingers(M.r, "R", 1870, 0.2, 0.1, 0.1); fingers(M.r, "L", 1870, 0.2, 0.1, 0.1); fingers(M.r, "L", 2077, 0.35, 0.3, 0.2)
+for f, kw in ((1870, dict(squint=0.6, sad=0.2)), (1960, dict(squint=0.7, purse=0.3)), (1990, dict(squint=1.0, purse=0.8, flare=1.0)), (2040, dict(squint=1.0, purse=1.0, flare=1.0)),
               (2085, dict(squint=1.0, purse=1.0, flare=1.0)), (2095, dict(wide=1.0, open=0.5, brows=0.8)), (2150, dict(wide=1.0, open=0.6, brows=1.0)),
               (2200, dict(wide=0.6, brows=0.8, open=0.3, smile=0.3)), (2230, dict(smile=1.0, open=0.8, squint=0.4, brows=0.4)), (2310, dict(smile=1.0, open=0.6, squint=0.5))):
     face(M.body, f, **kw)
@@ -399,8 +399,15 @@ key_vis(["Man"], [(1440, 2400)])
 for o in bpy.data.objects["Man"].children:
     if "casualsuit" in o.name or "shoes" in o.name:
         o.hide_render = False; o.keyframe_insert("hide_render", frame=1440)
-        o.hide_render = True; o.keyframe_insert("hide_render", frame=1885)
-const_at(M.arm, {1468, 1740, 1880})
+        o.hide_render = True; o.keyframe_insert("hide_render", frame=1870)
+# MPFB hides the skin under clothes with mask modifiers: show the whole body in the shower
+for ob in [bpy.data.objects["Man_Body"]]:
+    for md in ob.modifiers:
+        if md.type == "MASK" and md.name.startswith("Delete"):
+            md.show_render = True; md.keyframe_insert("show_render", frame=1); md.show_viewport = True; md.keyframe_insert("show_viewport", frame=1)
+            md.show_render = False; md.keyframe_insert("show_render", frame=1870); md.show_viewport = False; md.keyframe_insert("show_viewport", frame=1870)
+            print("MASK_OFF", ob.name, md.name)
+const_at(M.arm, {1468, 1720, 1868})
 
 print("CHAR_DONE")
 exec(open(os.path.join(HERE, "03b_props_fx_camera.py")).read())

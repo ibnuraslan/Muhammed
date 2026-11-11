@@ -1,0 +1,15 @@
+CAMERA max speed 26.1 m/s at f1318 (tunnel frames allowed)
+CAMERA speed jumps >3 m/s per frame outside tunnels: [(756, 9.0)] count 1
+CAMERA inside wall/floor boxes (outside tunnels): [(1882, 1882, 'BA_WallW0'), (1882, 1882, 'BR_WallE0'), (1883, 1883, 'BA_WallW0'), (1883, 1883, 'BR_WallE0'), (1884, 1884, 'BA_WallW0'), (1884, 1884, 'BR_WallE0')]
+FRAMING held >1.5 s (view moved <4 deg and <3 cm): none
+FEET Boy issues 0 []
+FEET Teen issues 0 []
+FEET Man issues 0 []
+FEET Mom issues 14 [(876, 'R', 'hover', 0.092), (881, 'R', 'hover', 0.071), (891, 'L', 'hover', 0.097), (896, 'L', 'hover', 0.049), (901, 'R', 'hover', 0.048), (906, 'R', 'hover', 0.091), (916, 'L', 'hover', 0.09), (926, 'R', 'hover', 0.069), (931, 'L', 'hover', 0.069), (936, 'L', 'hover', 0.057), (941, 'R', 'hover', 0.058), (946, 'R', 'hover', 0.093)]
+GRIP Brick_Big      Boy.R f1-130  max 5.7 mm  mean 5.7 mm
+GRIP Brick_Small    Boy.R f340-710  max 4.2 mm  mean 4.2 mm
+GRIP Prop_Inhaler   Man.R f1610-1715  max 3.3 mm  mean 0.4 mm
+GRIP Prop_Tissue    Man.R f1520-1580  max 6.7 mm  mean 5.2 mm
+GRIP Prop_Tweezers  Mom.R f965-1140  max 1.1 mm  mean 0.1 mm
+PALM brick to palm centre max 24.2 mm
+CAMERAS ['CAM_Film'] markers bound to cameras: []

@@ -124,6 +124,14 @@ for ob in bpy.data.objects:
                 nt.links.new(mx.outputs[2], dst)
                 print("DELOGO", ob.name, m.name)
 
+# eyes: no refraction through the cornea (refractive caustics are off, which would leave the iris black)
+for m_ in bpy.data.materials:
+    if m_.use_nodes and m_.name.endswith("high-poly"):
+        for n_ in m_.node_tree.nodes:
+            if n_.type == "GROUP" and "OuterLayerTransmission" in n_.inputs:
+                pass
+                print("EYES", m_.name)
+
 # ------------------------------------------------------------------ living room  (x -2.8..2.8, y -2.6..2.4, h 2.7)
 M_FLOOR = pbr("M_Floor", "laminate_floor_02", 1.0)
 M_WALL = pbr("M_Wall_Living", "painted_plaster_wall", 0.7, tint=(0.95, 0.86, 0.72), bump=0.15)
@@ -190,6 +198,24 @@ append_model("potted_plant_01", ROOM, (2.45, -1.9, 0), 1.0, 1.1, name="LR_Plant2
 append_model("wall_clock", ROOM, (1.25, 2.33, 1.85), 0, 1.0, name="LR_WallClock")
 append_model("modern_ceiling_lamp_01", ROOM, (0.0, 0.0, H), 0, 1.0, name="LR_CeilingLamp")
 append_model("Television_01", ROOM, (-1.9, -0.4, 0.45), R_(90), name="LR_TV")
+# sleeping cat on the sofa (CC-BY scan, see CREDITS.md); breathing keyed in 03b
+cp = os.path.join(AS, "cat", "cat.glb")
+if os.path.exists(cp):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=cp)
+    new = [o for o in bpy.data.objects if o not in before]
+    catr = bpy.data.objects.new("LR_Cat", None); ROOM.objects.link(catr)
+    for o in new:
+        link(o, ROOM)
+        if o.parent is None: o.parent = catr
+    bpy.context.view_layer.update()
+    cs = [o.matrix_world @ Vector(c) for o in new if o.type == "MESH" for c in o.bound_box]
+    lo = Vector([min(c[i] for c in cs) for i in range(3)]); hi = Vector([max(c[i] for c in cs) for i in range(3)])
+    s_ = 0.62 / max(hi.x - lo.x, hi.y - lo.y)
+    for o in new:
+        if o.parent is catr: o.location -= Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z))
+    catr.scale = (s_,) * 3; catr.location = (1.62, 1.82, 0.43); catr.rotation_euler = (0, 0, R_(160))
+    print("CAT", [o.name for o in new], s_, hi - lo)
 # picture frames (abstract colour fields, no text)
 for i, (x, col) in enumerate(((-0.1, (0.3, 0.45, 0.6)), (0.25, (0.75, 0.55, 0.3)))):
     box("LR_Frame%d" % i, ROOM, (0.3, 0.03, 0.4), (x, 2.33, 1.75 + 0.05 * i), flat("M_Art%d" % i, col, 0.8), bevel=0.004)
@@ -218,16 +244,18 @@ for i in range(14):
 
 # ------------------------------------------------------------------ bathroom (x 6.4..9.0, y -0.2..2.4)
 room_shell("BA", BATH, 6.4, 9.0, -0.2, 2.4, M_TILE, [], M_TILE)
-M_GLASS = flat("M_FrostedGlass", (0.92, 0.96, 0.98), 0.18, transm=1.0)
+M_GLASS = flat("M_FrostedGlass", (0.5, 0.56, 0.6), 0.38, transm=1.0)
 M_CHROME = flat("M_Chrome", (0.9, 0.9, 0.9), 0.08, metal=1.0)
 M_GROUT = flat("M_ShowerTray", (0.95, 0.95, 0.95), 0.2, coat=0.5)
 box("BA_ShowerTray", BATH, (1.2, 1.1, 0.06), (8.35, 1.8, 0.03), M_GROUT, bevel=0.01)
 M_CLEAR = flat("M_ClearGlass", (0.95, 0.98, 1.0), 0.03, transm=1.0)
-box("BA_GlassPanel", BATH, (0.015, 1.05, 1.12), (7.73, 1.82, 0.62), M_GLASS)
-box("BA_GlassPanelTop", BATH, (0.015, 1.05, 0.8), (7.73, 1.82, 1.58), M_CLEAR)
-box("BA_GlassFront", BATH, (0.6, 0.015, 1.12), (8.05, 1.26, 0.62), M_GLASS)
-box("BA_GlassFrontTop", BATH, (0.6, 0.015, 0.8), (8.05, 1.26, 1.58), M_CLEAR)
-box("BA_GlassRail", BATH, (0.02, 1.05, 0.02), (7.73, 1.82, 1.18), M_CHROME)
+# frosted up to 1.42 m (modesty: everything below the chest is behind frosted glass from every camera angle), clear above
+box("BA_GlassPanel", BATH, (0.015, 1.05, 1.36), (7.73, 1.82, 0.74), M_GLASS)
+box("BA_GlassPanelTop", BATH, (0.015, 1.05, 0.56), (7.73, 1.82, 1.70), M_CLEAR)
+box("BA_GlassFront", BATH, (0.6, 0.015, 1.36), (8.05, 1.26, 0.74), M_GLASS)
+box("BA_GlassFrontTop", BATH, (0.6, 0.015, 0.56), (8.05, 1.26, 1.70), M_CLEAR)
+box("BA_GlassRail", BATH, (0.02, 1.05, 0.02), (7.73, 1.82, 1.42), M_CHROME)
+box("BA_GlassRailF", BATH, (0.6, 0.02, 0.02), (8.05, 1.26, 1.42), M_CHROME)
 cyl("BA_ShowerPipe", BATH, 0.012, 1.0, (8.85, 2.25, 1.6), M_CHROME)
 cyl("BA_ShowerArm", BATH, 0.012, 0.35, (8.75, 2.1, 2.1), M_CHROME, rot=(0, R_(90), R_(35)))
 head = cyl("BA_ShowerHead", BATH, 0.1, 0.03, (8.6, 1.95, 2.08), M_CHROME, verts=40)
@@ -258,8 +286,8 @@ def make_brick(name, nx, ny, mat, c, unit=0.0080, h=0.0096):
     for p in me.polygons: p.use_smooth = True
     return o
 MB_RED = brick_mat(BRICK_COLS[0], "M_Brick_Red"); MB_YEL = brick_mat(BRICK_COLS[1], "M_Brick_Yellow")
-big = make_brick("Brick_Big", 2, 2, MB_RED, PROPS)
-small = make_brick("Brick_Small", 2, 1, MB_YEL, PROPS)
+big = make_brick("Brick_Big", 2, 1, MB_RED, PROPS)
+small = make_brick("Brick_Small", 1, 1, MB_YEL, PROPS)
 # yellow glow (for the 'hidden' beat): emission keyed in 03
 nt = MB_YEL.node_tree; b = nt.nodes["Principled BSDF"]
 b.inputs["Emission Color"].default_value = (1.0, 0.8, 0.2, 1); b.inputs["Emission Strength"].default_value = 0.0
@@ -336,7 +364,7 @@ zcut = NB.z - 0.02
 bmesh.ops.delete(bm_, geom=[v for v in bm_.verts if v.co.z < zcut], context="VERTS")
 bm_.to_mesh(me); bm_.free()
 # nostril landmark: the lowest-frontmost vertex region of the nose
-vs = [v.co for v in me.vertices]
+vs = [v.co.copy() for v in me.vertices]
 nose_tip = min(vs, key=lambda v: v.y)
 print("NOSE_TIP", tuple(round(c, 4) for c in nose_tip), "HEAD", tuple(round(c, 3) for c in HB))
 for p in me.polygons: p.use_smooth = True
@@ -365,6 +393,15 @@ XCUT = nose_tip.x + 0.0085
 bm_ = bmesh.new(); bm_.from_mesh(me)
 bmesh.ops.bisect_plane(bm_, geom=bm_.verts[:] + bm_.edges[:] + bm_.faces[:], plane_co=(XCUT, 0, 0), plane_no=(-1, 0, 0), clear_outer=True)
 bm_.to_mesh(me); bm_.free()
+hair_src = [o for o in bpy.data.objects if o.name.startswith("Boy_") and "short02" in o.name]
+XS_HAIR = None
+if hair_src:
+    hm_ = bpy.data.meshes.new_from_object(hair_src[0].evaluated_get(dg))
+    bmh = bmesh.new(); bmh.from_mesh(hm_)
+    bmesh.ops.bisect_plane(bmh, geom=bmh.verts[:] + bmh.edges[:] + bmh.faces[:], plane_co=(XCUT, 0, 0), plane_no=(-1, 0, 0), clear_outer=True)
+    bmh.to_mesh(hm_); bmh.free()
+    XS_HAIR = bpy.data.objects.new("XS_Hair", hm_); STUDIO.objects.link(XS_HAIR)
+    for p in hm_.polygons: p.use_smooth = True
 # place: x6 in the studio, cut face toward -X (camera side), nose pointing -Y
 PIV = Vector((XCUT, nose_tip.y + 0.05, HB.z))
 head_o.matrix_world = Matrix.Translation(SC + Vector((0.0, 0.0, 0.25))) @ Matrix.Rotation(R_(-90), 4, "Z") @ Matrix.Scale(XS, 4) @ Matrix.Translation(-PIV)
@@ -372,6 +409,7 @@ head_o.matrix_world = Matrix.Translation(SC + Vector((0.0, 0.0, 0.25))) @ Matrix
 # we want the cut face (model -X normal) to face the camera, which sits at world -Y: model -X -> rot(-90) -> world +Y. Use +90 instead.
 head_o.matrix_world = Matrix.Translation(SC + Vector((0.0, 0.0, 0.25))) @ Matrix.Rotation(R_(90), 4, "Z") @ Matrix.Scale(XS, 4) @ Matrix.Translation(-PIV)
 XSM = head_o.matrix_world.copy()
+if XS_HAIR: XS_HAIR.matrix_world = XSM
 def xs(p):   # boy rest-space point -> studio world point
     return XSM @ Vector(p)
 # inlays drawn on the cut plane (model x = XCUT + tiny offset into the head), in model (y, z) coords of the boy's rest head
@@ -464,6 +502,8 @@ area("LR_CeilBounce", ROOM, (0.2, 0.0, 2.6), 220, 3.0, (1.0, 0.9, 0.78))
 area("LR_FrontFill", ROOM, (0.4, -2.4, 1.6), 120, 2.0, (1.0, 0.92, 0.84), rot=(R_(-90), 0, 0))
 area("BR_Moon", BED, (3.6, 2.6, 1.6), 0, 1.0, (0.55, 0.68, 1.0), rot=(R_(110), 0, R_(180)))
 area("BR_Ceil", BED, (4.6, 0.6, 2.6), 150, 2.0, (1.0, 0.9, 0.78))
+lamp = bpy.data.objects.new("BR_NightLamp", bpy.data.lights.new("BR_NightLamp", "POINT")); BED.objects.link(lamp)
+lamp.location = (6.0, 2.05, 0.95); lamp.data.energy = 12; lamp.data.color = (1.0, 0.62, 0.32); lamp.data.shadow_soft_size = 0.08
 area("BA_Ceil", BATH, (7.7, 1.1, 2.62), 90, 1.6, (1.0, 0.97, 0.92))
 area("BA_ShowerLight", BATH, (8.35, 1.8, 2.6), 45, 0.8, (1.0, 0.97, 0.92))
 print("SETS_DONE")
