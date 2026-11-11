@@ -5,6 +5,10 @@ import numpy as np
 import bpy
 from mathutils import Vector
 from kit import *
+from human import Human, add_asset, reset_pose, pose_sit, fingers_curl, _world_verts, reach
+from people import man, woman
+
+DUR = {"tv_handheld": 5.0}          # estimate until the chapter 2 voiceover arrives
 
 EXPOSURE = 0.3
 
@@ -44,7 +48,55 @@ def build(variant=None):
     o = bpy.data.objects.new("Pend", l); bpy.context.collection.objects.link(o); o.location = (0, 0, 2.2)
     fill = area_light((-2.5, -2.5, 2.4), (0, 0, 0), 1.5, 30, (1.0, 0.85, 0.7)); point_at(fill, (0, 0, 0.8))
     box("Ceiling", (0, 0, 3.2), (7, 7, 0.05), pbr("Ceil", (0.12, 0.1, 0.08), 0.8))
-    return dict(table=Vector((0, 0, 0.8)))
+    ctx = dict(table=Vector((0, 0, 0.8)), susan=bpy.data.objects["LazySusan"])
+    # the group dinner: eight diners (the CEO and the woman among them), one chair empty
+    diners = []
+    specs = [(1.0, 58, "male_elegantsuit01", "short04"), (1.0, 50, "male_casualsuit03", "short01"), ("CEO",), (0.0, 44, "female_elegantsuit01", "bob02"),
+             ("WOMAN",), (1.0, 61, "male_casualsuit01", "short02"), (1.0, 47, "male_elegantsuit01", "short03"), (0.0, 52, "female_casualsuit01", "ponytail01")]
+    for k, sp in enumerate(specs):
+        a = k / 9 * 2 * math.pi
+        if sp == ("CEO",):
+            h = man("CEO")
+        elif sp == ("WOMAN",):
+            h = woman("Woman")
+        else:
+            g, yrs, cl, hr = sp
+            h = Human(f"Diner{k}", gender=g, years=yrs, muscle=0.5, weight=0.5, height=0.48, eyelashes=None)
+            add_asset(h, "clothes", cl, val=0.2 + 0.08 * (k % 3), rough=0.6); add_asset(h, "hair", hr, val=0.25 + 0.15 * (k % 2))
+        reset_pose(h); pose_sit(h, lean=10)
+        h.arm.rotation_euler = (0, 0, a - math.pi / 2)            # facing the table centre
+        h.arm.location = (1.18 * math.cos(a), 1.18 * math.sin(a), 0); bpy.context.view_layer.update()
+        vv = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
+        h.arm.location.z -= vv[:, 2].min() - 0.02; bpy.context.view_layer.update()
+        diners.append((h, a, k * 1.37))
+    ctx["diners"] = diners
+    return ctx
 
 
-MOVES = {"tv_zoom": dict(kind="plate", dof=6.0, far=20.0, cam=lambda c, t: ((2.4, -2.5, 2.3), c["table"], 30), focus=lambda c, t: c["table"])}
+def anim_dinner(c, t):
+    sec = t * DUR["tv_handheld"]
+    c["susan"].rotation_euler = (0, 0, 0.12 * sec)              # the turntable drifts round
+    for h, a, ph in c["diners"]:
+        reset_pose(h); pose_sit(h, lean=10)
+        inward = Vector((-math.cos(a), -math.sin(a), 0))
+        chest = h.bone_head("spine03")
+        reach_k = max(0.0, math.sin(sec * 0.9 + ph)) ** 3           # now and then someone reaches toward the dishes
+        for sd, sg in (("L", 1), ("R", -1)):
+            side = inward.cross(Vector((0, 0, 1))) * (0.15 * sg)
+            rest = chest + inward * 0.35 + side + Vector((0, 0, -0.28))
+            tgt = rest.lerp(Vector((0, 0, 0.86)) + side * 0.5, 0.45 * reach_k if sd == "R" else 0.0)
+            reach(h, sd, tgt, Vector((0, 0, -1)) - inward * 0.5, inward + Vector((0, 0, -0.4)))
+        fingers_curl(h, 35, thumb=15)
+        h.rot("head", (0, 0, 1), 22 * math.sin(sec * 0.7 + ph))
+    bpy.context.view_layer.update()
+
+
+def cam_tv(c, t):
+    """News-camera feel: from the doorway, slightly high, a slow zoom in with a little handheld drift."""
+    e = ease(t)
+    shake = Vector((0.012 * math.sin(t * 23) + 0.008 * math.sin(t * 41), 0.01 * math.sin(t * 31), 0.01 * math.sin(t * 19 + 1)))
+    return (Vector((2.6, -2.7, 2.1)) + shake, c["table"] + Vector((0, 0, 0.2)) + shake * 3, 32 + 26 * e)
+
+
+MOVES = {"tv_handheld": dict(kind="anim", dof=5.6, far=20.0, cam=cam_tv, focus=lambda c, t: c["table"] + Vector((0, 0, 0.3)), anim=anim_dinner),
+         "tv_zoom": dict(kind="plate", dof=6.0, far=20.0, cam=lambda c, t: ((2.4, -2.5, 2.3), c["table"], 30), focus=lambda c, t: c["table"])}
