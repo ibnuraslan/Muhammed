@@ -4,7 +4,7 @@ These values were read back from `BellyFat_v002_60fps.blend` opened in factory-s
 
 | Item | Value |
 |---|---|
-| File | `BellyFat_v002_60fps.blend`: 76 MB, compressed. All images are packed; it has no linked libraries and no drivers. Stored with Git LFS. |
+| File | `BellyFat_v002_60fps.blend`: 76 MB, compressed. All images are packed; it has no linked libraries and no drivers. Stored as a regular git file, because the Git LFS upload was refused (verify: Forbidden). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU; GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
