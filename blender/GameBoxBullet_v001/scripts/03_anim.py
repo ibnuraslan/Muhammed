@@ -156,11 +156,8 @@ for f in range(1, F_END + 1):
 mk = bullet.data.shape_keys.key_blocks["mushroom"]
 for f, v in ((F_HIT, 0.0), (F_HIT + 70, 0.55), (790, 0.75), (900, 1.0)):
     mk.value = v; mk.keyframe_insert("value", frame=f)
-trail = bpy.data.objects["Bullet_trail"]
-for f, s_, v in ((1, 1.0, False), (140, 1.0, False), (F_WALL, 0.25, False), (F_WALL + 6, 0.05, True)):
-    trail.scale = (1, s_, 1); kf(trail, "scale", f)
-    trail.hide_render = v; kf(trail, "hide_render", f)
-trail.scale = (1, 0.6, 1); kf(trail, "scale", 60)
+trail = bpy.data.objects["Bullet_trail"]; trail.hide_render = True
+
 
 # ------------------------------------------------------------------ cutaway value (local x above which the box is see-through)
 cutnode = bpy.data.node_groups["CutAway"].nodes["cut"]
@@ -221,7 +218,7 @@ kl = bpy.data.lights.new("L_cutaway_key", "AREA"); kl.size = 0.3; kl.color = (0.
 klo = bpy.data.objects.new("L_cutaway_key", kl); bpy.data.collections["FX"].objects.link(klo)
 klo.parent = broot; klo.location = (0.30, -0.12, 0.30); klo.rotation_euler = (0, R_(60), R_(30))
 klo.rotation_mode = "QUATERNION"; klo.rotation_quaternion = (V((0, 0, 0.0)) - V((0.30, -0.12, 0.30))).to_track_quat('-Z', 'Y')
-for f, e in ((1, 0.0), (750, 0.0), (800, 30.0), (1350, 30.0), (1395, 0.0)):
+for f, e in ((1, 0.0), (750, 0.0), (800, 12.0), (1350, 12.0), (1395, 0.0)):
     kl.energy = e; kl.keyframe_insert("energy", frame=f)
 
 # ------------------------------------------------------------------ energy rings (each layer contact)
@@ -426,14 +423,19 @@ for f, a in ((1, 0), (205, 0), (260, -5), (320, -3.5), (F_END, -4)):
 puff("Dust_ceiling", V((-0.4, 0.5, 2.62)), V((0.0, 0.1, -0.5)), 215, 0.05, 0.35, M_drydust, 400)
 for n_, fh in (("Plug_siding", F_WALL), ("Plug_osb", F_WALL + 2), ("Plug_drywall", 178)):
     o = bpy.data.objects[n_]; o.hide_render = False; kf(o, "hide_render", fh - 1); o.hide_render = True; kf(o, "hide_render", fh)
+fk = bpy.data.lights.new("L_face_key", "AREA"); fk.size = 0.6; fk.color = (1.0, 0.93, 0.86)
+fko = bpy.data.objects.new("L_face_key", fk); bpy.data.collections["Bedroom"].objects.link(fko)
+fko.location = (0.9, 2.1, 1.95); fko.rotation_mode = "QUATERNION"; fko.rotation_quaternion = (V((0, 3.2, 1.75)) - V((0.9, 2.1, 1.95))).to_track_quat('-Z', 'Y')
+for f, e in ((1, 0.0), (1340, 0.0), (1400, 14.0), (F_END, 14.0)):
+    fk.energy = e; fk.keyframe_insert("energy", frame=f)
 # a little light inside the wall cavity so studs/insulation read as the camera passes
 cl = bpy.data.lights.new("L_cavity", "POINT"); cl.shadow_soft_size = 0.02; cl.color = (1.0, 0.9, 0.75)
 clo = bpy.data.objects.new("L_cavity", cl); bpy.data.collections["Wall"].objects.link(clo); clo.location = (0.0, 0.08, 1.59)
 for f, e in ((1, 0.0), (165, 0.0), (180, 3.0), (205, 3.0), (215, 0.0)):
     cl.energy = e; cl.keyframe_insert("energy", frame=f)
 # sharp bright streak behind the bullet outside
-bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=12, radius1=0.0022, radius2=0.0003, depth=0.6)
-bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X')); bmesh.ops.translate(bm, verts=bm.verts, vec=(0, -0.32, 0))
+bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=12, radius1=0.0012, radius2=0.0002, depth=0.35)
+bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X')); bmesh.ops.translate(bm, verts=bm.verts, vec=(0, -0.19, 0))
 me = bpy.data.meshes.new("Streak"); bm.to_mesh(me); bm.free()
 mst = bpy.data.materials.new("M_streak"); mst.use_nodes = True; nt_ = mst.node_tree; nt_.nodes.clear()
 e_ = nt_.nodes.new("ShaderNodeEmission"); e_.inputs["Color"].default_value = (1.0, 0.85, 0.6, 1); e_.inputs["Strength"].default_value = 6
@@ -485,7 +487,7 @@ for f, dx, dz, lens in ((850, 0.22, 0.07, 50), (900, 0.19, 0.09, 55), (960, 0.18
 for f, c, a, l in [(1140, V((0.50, 2.90, 1.690)), V((0.0, 2.975, 1.440)), 46), (1200, V((0.50, 2.86, 1.630)), V((0.0, 2.975, 1.440)), 50)]:
     CK.append((f, SH(f, c), SH(f, a), l))
 for f, a, h, r, lens in ((1245, -35, 0.06, 0.20, 55), (1290, 0, 0.09, 0.19, 55), (1335, 22, 0.12, 0.20, 50)):
-    c0 = B(f); c = c0 + V((r * math.cos(R_(a)), r * math.sin(R_(a)), h)); CK.append((f, c, c0 + V((0, -0.01, 0.170)), lens))
+    c0 = B(f); c = c0 + V((r * math.cos(R_(a)), r * math.sin(R_(a)), h)); CK.append((f, c, c0 + V((0, -0.01, 0.0)), lens))
 for f, c, a, l in [(1395, V((0.75, 2.25, 1.670)), V((0.0, 2.95, 1.470)), 35), (1445, V((0.55, 2.35, 1.750)), V((0.0, 3.0, 1.570)), 34),
                    (1500, V((0.45, 2.42, 1.770)), V((0.0, 3.05, 1.620)), 36)]:
     CK.append((f, SH(f, c), SH(f, a), l))

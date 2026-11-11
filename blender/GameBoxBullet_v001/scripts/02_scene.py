@@ -339,7 +339,7 @@ front_layer("Wall_siding", -0.025, 0.0, M_siding, 0.075, 0.6, 1)
 front_layer("Wall_osb", 0.0, 0.012, M_osb, 0.08, 0.5, 2)
 front_layer("Wall_drywall", 0.145, 0.16, M_drywall, 0.11, 0.7, 3)
 # intact plugs over the holes until the bullet arrives (hidden on impact in 03)
-box("Plug_siding", C_WALL, -0.12, 0.12, -0.025, 0.0, 1.35, 1.59, M_siding)
+box("Plug_siding", C_WALL, -0.12, 0.12, -0.0245, -0.0005, 1.35, 1.59, M_siding)
 box("Plug_osb", C_WALL, -0.12, 0.12, 0.0, 0.012, 1.35, 1.59, M_osb)
 box("Plug_drywall", C_WALL, -0.14, 0.14, 0.145, 0.16, 1.33, 1.61, M_drywall)
 # studs (bullet passes between the x = -0.2 and +0.2 studs), plates, insulation batts with a torn tunnel
@@ -582,10 +582,10 @@ cutmat(mc)
 M_case = cutmat(P("M_box_shell", (0.035, 0.035, 0.045), 0.35, coat=0.4))
 M_tray = cutmat(P("M_disc_tray", (0.16, 0.17, 0.2), 0.3, coat=0.5))
 M_card = cutmat(P("M_cardboard", (0.62, 0.47, 0.30), 0.85))
-M_page = cutmat(P("M_manual_page", (0.88, 0.86, 0.80), 0.6))
+M_page = cutmat(P("M_manual_page", (0.72, 0.70, 0.64), 0.6))
 M_page2 = cutmat(P("M_manual_page_print", (0.55, 0.70, 0.85), 0.5))
 M_bookc = cutmat(P("M_artbook", (0.25, 0.05, 0.04), 0.5))
-M_bookp = cutmat(P("M_artbook_pages", (0.9, 0.88, 0.84), 0.7))
+M_bookp = cutmat(P("M_artbook_pages", (0.70, 0.68, 0.62), 0.7))
 # disc: iridescent data side via thin-film
 md = bpy.data.materials.new("M_disc"); md.use_nodes = True; bd = md.node_tree.nodes["Principled BSDF"]
 bd.inputs["Base Color"].default_value = (0.85, 0.85, 0.88, 1); bd.inputs["Metallic"].default_value = 1.0; bd.inputs["Roughness"].default_value = 0.08
@@ -741,6 +741,15 @@ tl.new(inv.outputs[0], mix.inputs[0]); tl.new(emt.outputs[0], mix.inputs[1]); tl
 tl.new(mix.outputs[0], tn["Material Output"].inputs[0])
 trail = mesh_obj("Bullet_trail", bm, C_FX, mt); trail.parent = bullet
 
-bpy.data.collections.remove(gc) if False else None
+# eyes: textured wet eyeball (MakeHuman CC0 brown eye texture) instead of the procedural eye that renders black here
+EYE_TEX = os.path.expanduser("~/.config/blender/5.2/extensions/.user/user_default/mpfb/data/eyes/materials/brown_eye.png")
+me_ = bpy.data.materials.new("M_eye"); me_.use_nodes = True; be_ = me_.node_tree.nodes["Principled BSDF"]
+ti_ = me_.node_tree.nodes.new("ShaderNodeTexImage"); ti_.image = bpy.data.images.load(EYE_TEX); ti_.image.alpha_mode = "STRAIGHT"; me_.node_tree.links.new(ti_.outputs["Alpha"], be_.inputs["Alpha"])
+me_.node_tree.links.new(ti_.outputs[0], be_.inputs["Base Color"]); be_.inputs["Roughness"].default_value = 0.35
+me_.node_tree.links.new(ti_.outputs[0], be_.inputs["Emission Color"]); be_.inputs["Emission Strength"].default_value = 0.35   # eyes sit deep under the brow here; a touch of self-light keeps them readable
+be_.inputs["Coat Weight"].default_value = 1.0; be_.inputs["Coat Roughness"].default_value = 0.02
+for o in bpy.data.objects:
+    if o.type == "MESH" and o.name.endswith(".high-poly"):
+        for i in range(len(o.data.materials)): o.data.materials[i] = me_
 print("SCENE_DONE", len(bpy.data.objects))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
