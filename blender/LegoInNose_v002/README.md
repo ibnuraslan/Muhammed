@@ -2,10 +2,11 @@
 
 This is the full 38.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `LegoInNose_v002_60fps.blend`: the self-contained scene, with every texture packed inside. Stored with Git LFS.
+- `LegoInNose_v002_60fps.blend`: the self-contained scene, with every texture packed inside (47 MB). It's a normal git file, with no LFS.
 - `beats.json`: start frame and first words for each of the 11 beats (target timing). Use it with `blender/pipeline/retime_to_vo.py` once the voiceover exists.
 - `SETTINGS.md`: render settings and suggested test frames.
 - `CREDITS.md`: the CC-BY credit block for the video description (one model: the sleeping cat), plus provenance for the CC0 assets.
+- The textures were slimmed before packing by `../LegoInNose_v001/scripts/slim_textures.py`, then packed by `pipeline/package_for_farm.py`.
 - `package_check_lowres.jpg`: a low-res, low-sample frame rendered from the packed file opened with `--factory-startup`. It shows the package works; it is not a quality reference.
 
 **No voiceover yet.** The film is built to the target beat times in `../briefs/03_LegoInNose.md`. When the VO mp3 arrives:
