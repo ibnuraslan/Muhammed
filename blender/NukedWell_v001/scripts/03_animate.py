@@ -231,18 +231,38 @@ for mat in ("M_Fire", "M_FissureFire", "M_Smoke"):
     KS(nn["FireNoise"].inputs['W'], [(1, 0.0), (END, 36.0)]); KS(nn["FlowMap"].inputs['Location'], [(1, (0, 0, 0)), (END, (0, 0, -30.0 if mat != "M_Smoke" else -8.0))])
     for fc in fcurves_of(bpy.data.materials[mat].node_tree):
         for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
-KS(sock("M_Crack", "Principled BSDF", 0).node.inputs['Emission Strength'], [(1, 6.0), (RW1, 0.0), (1205, 0.0), (1235, 12.0), (b11, 8.0), (b11 + 90, 0.0)])
+KS(sock("M_Crack", "Principled BSDF", 0).node.inputs['Emission Strength'], [(1, 2.5), (RW1, 0.0), (1205, 0.0), (1235, 4.0), (b11, 3.0), (b11 + 90, 0.0)])
 # fire lights
 for i in range(3):
     L = O["L_Fire%d" % i]
     keys = []
     for f in range(1, END + 1, 4):
         h = fire_h(f); fl = 1 + 0.25 * math.sin(f * 0.9 + i) + 0.15 * math.sin(f * 2.3 + i * 2)
-        keys.append((f, (2.5e6, 4e6, 3e6)[i] * min(1.2, h) * fl))
+        keys.append((f, (1.5e5, 2.0e5, 1.2e5)[i] * min(1.2, h) * fl))
     K(L.data, "energy", keys)
+# embers: small hot sparks spiralling up out of the column (deterministic keys, no sim)
+import bmesh
+M_EMB = bpy.data.materials.new("M_Ember"); M_EMB.use_nodes = True
+pe = M_EMB.node_tree.nodes["Principled BSDF"]; pe.inputs['Base Color'].default_value = (1, 0.4, 0.1, 1)
+pe.inputs['Emission Color'].default_value = (1.0, 0.45, 0.12, 1); pe.inputs['Emission Strength'].default_value = 40.0
+bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=1, radius=0.12); me_e = bpy.data.meshes.new("Ember"); bm.to_mesh(me_e); bm.free()
+me_e.materials.append(M_EMB)
+rng = random.Random(7)
+for i in range(70):
+    e = bpy.data.objects.new("Ember%02d" % i, me_e); bpy.data.collections["FX"].objects.link(e); e.visible_shadow = False
+    per = rng.randint(110, 200); ph = rng.random() * per; a0 = rng.random() * 6.28; r0 = rng.uniform(3, 11); sp = rng.uniform(0.6, 1.4)
+    for f in range(1, END + 1, 6):
+        t = ((f + ph) % per) / per; h = fire_h(f)
+        if h < 0.25:
+            e.location = (0, 0, -300)
+        else:
+            a = a0 + t * 9 * sp; r = r0 + t * 25
+            e.location = (WELL.x + r * math.cos(a), WELL.y + r * math.sin(a), 6 + t * 150 * h)
+        e.keyframe_insert("location", frame=f)
+        e.scale = (max(0.05, 1 - t),) * 3; e.keyframe_insert("scale", frame=f)
 # gas flow in the casing: pulses race up during the eruption; cut off above the pinch after beat 10
 gm = bpy.data.materials["M_GasFlow"].node_tree.nodes
-KS(gm["GasAmt"].outputs[0], [(1, 0.6), (RW1 - 10, 0.6), (RW1, 0.0), (b4, 0.0), (b4 + 12, 1.0), (BEAT[9] + 120, 1.0), (BEAT[10] + 70, 0.9)])
+KS(gm["GasAmt"].outputs[0], [(1, 0.0), (b4, 0.0), (b4 + 12, 1.0), (b5 + 60, 1.0), (b5 + 120, 0.0), (BEAT[10] - 40, 0.0), (BEAT[10] - 10, 0.8), (END, 0.8)])
 KS(gm["GasTop"].outputs[0], [(1, 5.0), (BEAT[10] + 40, 5.0), (BEAT[10] + 75, BLAST_Z - 2), (END, BLAST_Z - 2)])
 KS(gm["GasMap"].inputs['Location'], [(1, (0, 0, 0)), (END, (0, 0, -260.0))])
 for fc in fcurves_of(bpy.data.materials["M_GasFlow"].node_tree):
@@ -277,17 +297,18 @@ for f in range(1, END + 1, 2):
     wn["SkyDusk"].inputs['Factor'].default_value = min(1.0, dusk * 1.3); wn["SkyDusk"].inputs['Factor'].keyframe_insert("default_value", frame=f)
     wn["SkyNight"].inputs['Factor'].default_value = 1 - day; wn["SkyNight"].inputs['Factor'].keyframe_insert("default_value", frame=f)
     wn["SkyBG"].inputs['Strength'].default_value = 0.7 * (0.35 + 0.65 * day); wn["SkyBG"].inputs['Strength'].keyframe_insert("default_value", frame=f)
-    sc.view_settings.exposure = 0.9 * (1 - day); sc.view_settings.keyframe_insert("exposure", frame=f)
+    flash = 1.4 * math.exp(-(f - BEAT[9]) / 5.0) if BEAT[9] <= f < BEAT[9] + 40 else 0.0
+    sc.view_settings.exposure = 0.3 * (1 - day) + flash; sc.view_settings.keyframe_insert("exposure", frame=f)
 
 # ================================================================== blast (beat 9) + glow + jolt + dust ring
 b9, b10 = BEAT[9], BEAT[10]
 BL = O["BlastSphere"]; BLE = bpy.data.materials["M_Blast"].node_tree.nodes["BlastEmit"]
-K(BL, "scale", [(1, (0.001,) * 3), (b9 - 1, (0.001,) * 3), (b9 + 8, (9.5,) * 3), (b9 + 20, (8.0,) * 3), (b10 + 60, (8.2,) * 3)])
-KS(BLE.inputs['Strength'], [(1, 0.0), (b9 - 1, 0.0), (b9 + 2, 120.0), (b9 + 20, 40.0), (b9 + 70, 6.0), (b10 + 100, 1.5)])
+K(BL, "scale", [(1, (0.001,) * 3), (b9 - 1, (0.001,) * 3), (b9 + 8, (10.5,) * 3), (b9 + 20, (8.5,) * 3), (b10 + 40, (7.5,) * 3)])
+KS(BLE.inputs['Strength'], [(1, 0.0), (b9 - 1, 0.0), (b9 + 2, 120.0), (b9 + 20, 30.0), (b9 + 70, 3.0), (b10 + 40, 0.6)])
 KS(BLE.inputs['Color'], [(b9, (1, 0.97, 0.9, 1)), (b9 + 40, (1.0, 0.6, 0.25, 1)), (b10 + 100, (0.9, 0.3, 0.08, 1))])
-K(O["L_Blast"].data, "energy", [(1, 0.0), (b9 - 1, 0.0), (b9 + 3, 8e6), (b9 + 25, 2e6), (b9 + 90, 2e5), (b10 + 120, 3e4)])
+K(O["L_Blast"].data, "energy", [(1, 0.0), (b9 - 1, 0.0), (b9 + 3, 6e6), (b9 + 25, 1e6), (b9 + 90, 6e4), (b10 + 120, 1e4)])
 st = bpy.data.materials["M_Strata"].node_tree.nodes
-KS(st["GlowAmt"].outputs[0], [(1, 0.0), (b9, 0.0), (b9 + 6, 30.0), (b9 + 40, 10.0), (b10 + 60, 3.0), (END, 1.5)])
+KS(st["GlowAmt"].outputs[0], [(1, 0.0), (b9, 0.0), (b9 + 6, 12.0), (b9 + 40, 3.0), (b10, 0.8), (b10 + 60, 0.25), (END, 0.15)])
 KS(st["GlowRad"].outputs[0], [(1, 4.0), (b9, 4.0), (b9 + 12, 24.0), (b10 + 60, 18.0)])
 # surface jolt: everything above ground rides a JoltRoot
 J = bpy.data.objects.new("JoltRoot", None); bpy.data.collections["Set"].objects.link(J)
@@ -297,7 +318,7 @@ jolted = []
 for o in list(O):
     if o.parent is None and o.name not in SKIP and not o.name.startswith(("L_Section", "L_ShaftLamp")) and o.type != 'ARMATURE':
         o.parent = J; jolted.append(o.name)
-jk = [(1, 0.0), (b9 + 4, 0.0), (b9 + 9, 0.9), (b9 + 14, -0.25), (b9 + 19, 0.3), (b9 + 25, -0.08), (b9 + 32, 0.0)]
+jk = [(1, 0.0), (b9 + 4, 0.0), (b9 + 10, 1.6), (b9 + 16, -0.3), (b9 + 21, 0.45), (b9 + 27, -0.1), (b9 + 34, 0.0)]
 K(J, "location", [(f, (0, 0, z)) for f, z in jk])
 DU = O["DustRing"]; dn = bpy.data.materials["M_Dust"].node_tree.nodes
 K(DU, "scale", [(1, (0.5, 0.5, 1)), (b9 + 8, (0.5, 0.5, 1)), (b9 + 30, (45, 45, 6)), (b9 + 80, (110, 110, 12)), (b10 + 120, (150, 150, 16))])
@@ -338,6 +359,34 @@ def yaw_to(src, dst):
 CREW = {}
 for nm in ("SolA", "SolB", "SolC", "SolD", "EngA", "EngB"):
     rig = make_human_ctrl(O[nm]); CREW[nm] = Human(rig)
+# ---------------- soldiers' field caps: rigid, bone-parented to 'head', sized to clear the hair
+import bmesh
+M_CAPC = bpy.data.materials.get("M_Canvas").copy(); M_CAPC.name = "M_FieldCap"
+for nd in M_CAPC.node_tree.nodes:
+    if nd.type == 'MIX' and nd.blend_type == 'MULTIPLY': nd.inputs['B'].default_value = (0.24, 0.27, 0.15, 1)
+def add_cap(nm):
+    rig = O[nm]; hair = next(c for c in rig.children if c.type == 'MESH' and c.name.split(".")[-1].startswith("short"))
+    body = next(c for c in rig.children if c.name.endswith(".body"))
+    vs = [hair.matrix_world @ v.co for v in hair.data.vertices] + [body.matrix_world @ v.co for v in body.data.vertices if v.co.z > 1.4]
+    top = max(v.z for v in vs); band = [v for v in vs if v.z > top - 0.11]
+    cx = sum(v.x for v in band) / len(band); cy = sum(v.y for v in band) / len(band)
+    rx = max(abs(v.x - cx) for v in band) * 1.06; ry = max(abs(v.y - cy) for v in band) * 1.06
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=24, v_segments=12, radius=1.0)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.05], context='VERTS')
+    for v in bm.verts: v.co = Vector((v.co.x * rx, v.co.y * ry, max(0.0, v.co.z) * 0.11 + 0.0))
+    # bill at the front (-Y)
+    bmesh.ops.create_cube(bm, size=1.0, matrix=Matrix.Translation((0, -ry - 0.03, 0.004)) @ Matrix.Diagonal((rx * 1.3, 0.09, 0.012, 1)))
+    me = bpy.data.meshes.new(nm + "_Cap"); bm.to_mesh(me); bm.free(); me.materials.append(M_CAPC)
+    for p_ in me.polygons: p_.use_smooth = True
+    cap = bpy.data.objects.new(nm + "_Cap", me); bpy.data.collections["Props"].objects.link(cap)
+    sol = cap.modifiers.new("solid", 'SOLIDIFY'); sol.thickness = 0.012
+    bpy.context.view_layer.update()
+    W = Matrix.Translation((cx, cy, top - 0.075))
+    cap.parent = rig; cap.parent_type = 'BONE'; cap.parent_bone = "head"
+    bpy.context.view_layer.update(); cap.matrix_world = W
+    return cap
+for nm in ("SolA", "SolB", "SolC", "SolD"):
+    add_cap(nm)
 def hand_local(h, s, pos, yaw, off, d_loc=(0, 0, -1), n_loc=None):
     fw, lf = body_frame(yaw); up = Vector((0, 0, 1))
     sx = 1 if s == "L" else -1
@@ -440,8 +489,8 @@ for nm, a, b in (("SolA", (6, 20), (16, 46)), ("SolB", (-5, 18), (-12, 45)), ("S
     yw = walk(nm, B[4] + 57, B[4] + 57 + 150, a, b, stride=1.1)
     idle(nm, B[4] + 208, B[6] - 40, b, yaw_to(Vector(b), WELL), "shield", "side")
 # ---------------- beat 6: hose crews (water at the fire), engineer commanding
-H1 = (Vector((9.5, 13.5)), Vector((12.5, 17.8)))   # front, back person positions
-H2 = (Vector((-10.5, 13.0)), Vector((-13.2, 17.2)))
+H1 = (Vector((15.5, 18.5)), Vector((18.0, 22.4)))   # front, back person positions
+H2 = (Vector((-16.5, 17.5)), Vector((-19.0, 21.6)))
 def hose_setup(name, front, back, nmF, nmB, f0, f1):
     tgt = WELL; yawF = yaw_to(front, tgt)
     fw, lf = body_frame(yawF)
@@ -485,19 +534,19 @@ for nm, p in (("SolA", H1[0]), ("SolB", H1[1]), ("SolC", H2[0]), ("SolD", H2[1])
     pose(nm, T6, p, yaw_to(p, WELL))
 HOSE["A"] = hose_setup("HoseA", H1[0], H1[1], "SolA", "SolB", T6 + 1, B[7] + 100)
 HOSE["B"] = hose_setup("HoseB", H2[0], H2[1], "SolC", "SolD", T6 + 1, B[7] + 100)
-pose("EngA", T6, (1.5, 24.0), yaw_to(Vector((1.5, 24)), WELL)); pose("EngB", T6, (18, 33), yaw_to(Vector((18, 33)), WELL))
-idle("EngA", T6 + 1, B[7] + 100, (1.5, 24.0), yaw_to(Vector((1.5, 24)), WELL), "wave_a", "point", every=14,
+pose("EngA", T6, (1.5, 30.0), yaw_to(Vector((1.5, 24)), WELL)); pose("EngB", T6, (18, 33), yaw_to(Vector((18, 33)), WELL))
+idle("EngA", T6 + 1, B[7] + 100, (1.5, 30.0), yaw_to(Vector((1.5, 30)), WELL), "wave_a", "point", every=14,
      gest=[(T6 + 1, "wave_a", "point"), (b6 + 20, "wave_b", "point"), (b6 + 34, "wave_a", "point"), (b6 + 48, "wave_b", "point"), (b6 + 62, "wave_a", "chest"), (b6 + 120, "side", "point"), (b6 + 170, "hip", "hip")])
 idle("EngB", T6 + 1, B[7] + 100, (18, 33), yaw_to(Vector((18, 33)), WELL), "radio", "side")
 steam = [O["Steam%d" % i] for i in range(3)]
 ssock = bpy.data.materials["M_Steam"].node_tree.nodes
-KS(ssock["SteamAmt"].outputs[0], [(1, 0.0), (b6 + 26, 0.0), (b6 + 45, 3.0), (b6 + 90, 1.6), (b6 + 120, 3.2), (b6 + 170, 1.4), (B[7] + 20, 0.0)])
+KS(ssock["SteamAmt"].outputs[0], [(1, 0.0), (b6 + 26, 0.0), (b6 + 45, 1.4), (b6 + 90, 0.8), (b6 + 120, 1.5), (b6 + 170, 0.7), (B[7] + 20, 0.0)])
 KS(ssock["SteamNoise"].inputs['W'], [(1, 0.0), (END, 14.0)])
 for i, o in enumerate(steam):
     K(o, "scale", [(b6 + 26, (0.3,) * 3), (b6 + 60 + i * 10, (1.3,) * 3), (b6 + 140, (1.0,) * 3), (B[7] + 20, (1.6,) * 3)])
 # ---------------- beat 7: crew backs away from the fissures (fire bursts out of the ground around them)
-for nm, a, b in (("SolA", H1[0], (14, 26)), ("SolB", H1[1], (16, 29)), ("SolC", H2[0], (-15, 25)), ("SolD", H2[1], (-17, 28)),
-                 ("EngA", (1.5, 24.0), (3, 35)), ("EngB", (18, 33), (22, 42))):
+for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", H2[0], (-20, 27)), ("SolD", H2[1], (-22, 30)),
+                 ("EngA", (1.5, 30.0), (3, 40)), ("EngB", (18, 33), (22, 42))):
     a = Vector(a); b = Vector(b)
     walk(nm, 1236, 1236 + 90, a, b, yaw=yaw_to(a, WELL), backwards=True)
     idle(nm, 1327, B[8] - 70, b, yaw_to(b, WELL), "shield", "side")
@@ -554,13 +603,13 @@ for nm in CREW:
 
 # ================================================================== camera: one continuous Catmull-Rom spline through ~1 s framings
 CAMK = [  # frame, camera, target, lens
-    (1,    (-9.8, -8.2, 4.4),  (-14.0, -2.7, 2.6), 32),
-    (55,   (-9.0, -10.5, 1.2), (-14.0, -2.7, -3.0), 30),
-    (105,  (-9.5, -15.0, -9.0), (-14.0, -2.7, -16.0), 28),
-    (155,  (-5.5, -24.0, -27.0), (-13.0, -2.7, -36.0), 28),
-    (193,  (-7.0, -27.0, -44.0), (-14.0, -2.7, -50.0), 28),
-    (240,  (-21.0, -23.0, -38.0), (-14.0, -2.7, -42.0), 28),
-    (290,  (-23.0, -25.0, -14.0), (-14.0, -2.7, -10.0), 26),
+    (1,    (-8.0, -11.5, 5.2),  (-14.0, -2.7, 3.6), 30),
+    (50,   (-8.5, -17.0, 1.6), (-14.0, -2.7, -1.0), 28),
+    (100,  (-10.0, -36.0, -10.0), (-10.0, -2.7, -16.0), 24),
+    (150,  (-4.0, -50.0, -26.0), (-8.0, -2.7, -32.0), 24),
+    (193,  (-12.0, -44.0, -40.0), (-11.0, -2.7, -44.0), 26),
+    (240,  (-26.0, -42.0, -32.0), (-13.0, -2.7, -34.0), 24),
+    (290,  (-24.0, -44.0, -10.0), (-13.0, -2.7, -10.0), 24),
     (335,  (-29.0, -15.0, 3.2), (-18.5, 2.5, 1.5), 28),
     (380,  (-52.0, -70.0, 40.0), (-8.0, 8.0, 8.0), 24),
     (430,  (-30.0, -170.0, 100.0), (-2.0, 10.0, 12.0), 24),
@@ -574,17 +623,17 @@ CAMK = [  # frame, camera, target, lens
     (770,  (46.0, -14.0, 3.5), (28.0, 24.0, 22.0), 24),
     (830,  (-8.0, -62.0, 2.6), (0.0, 10.0, 32.0), 22),
     (885,  (-30.0, -48.0, 20.0), (0.0, 20.0, 18.0), 24),
-    (935,  (14.2, 21.0, 1.8), (6.0, 8.0, 3.0), 28),
-    (990,  (10.0, 9.0, 4.2), (2.0, 1.0, 5.0), 26),
-    (1045, (3.5, 5.5, 5.5), (-2.0, -2.0, 6.0), 24),
-    (1095, (-19.0, 3.0, 8.0), (-2.0, 10.0, 5.0), 24),
-    (1140, (5.5, -10.0, 9.5), (0.0, -1.6, 7.5), 32),
-    (1180, (4.2, -8.5, 4.6), (0.0, -1.6, 3.2), 34),
+    (935,  (17.0, 33.0, 2.0), (10.0, 14.0, 3.0), 26),
+    (990,  (20.0, 15.0, 5.0), (3.0, 2.0, 8.0), 24),
+    (1045, (6.0, 26.0, 9.0), (-3.0, 4.0, 10.0), 24),
+    (1095, (-30.0, 12.0, 9.0), (-6.0, 14.0, 6.0), 24),
+    (1140, (15.0, -22.0, 11.0), (0.0, -1.6, 7.5), 50),
+    (1180, (12.0, -18.0, 5.5), (0.0, -1.6, 3.4), 50),
     (1240, (13.0, -24.0, 14.0), (2.0, 10.0, 1.0), 26),
     (1300, (32.0, -62.0, 46.0), (0.0, 14.0, 3.0), 24),
     (1350, (2.0, -40.0, 20.0), (-12.0, 0.0, 6.0), 26),
     (1400, (-6.0, -11.5, 5.5), (-14.0, -2.7, 4.5), 30),
-    (1450, (-18.5, -9.5, 2.6), (-14.0, -2.7, 2.8), 30),
+    (1450, (-19.5, -10.5, 2.4), (-14.0, -2.7, 2.6), 24),
     (1500, (-21.0, -6.0, 1.8), (-14.0, -2.7, 0.5), 28),
     (1545, (-17.0, -12.5, -7.0), (-14.0, -2.7, -18.0), 26),
     (1592, (-4.0, -52.0, -40.0), (-14.0, -2.7, -56.0), 24),
@@ -595,10 +644,11 @@ CAMK = [  # frame, camera, target, lens
     (1830, (4.0, -40.0, -55.0), (-5.0, 0.0, -55.0), 30),
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
     (1925, (2.0, -50.0, 0.5), (0.0, 0.0, 24.0), 24),
-    (1968, (-6.0, 20.0, 6.0), (0.0, 0.0, 10.0), 24),
+    (1968, (14.0, 16.0, 5.0), (0.0, -1.6, 5.0), 26),
     (2015, (-21.0, 50.5, 2.0), (-25.0, 62.0, 1.6), 30),
-    (2075, (-14.0, 32.0, 24.0), (-16.0, 46.0, 0.0), 26),
-    (2160, (-5.0, -12.0, 80.0), (-10.0, 60.0, 0.0), 24),
+    (2055, (-17.0, 64.0, 5.5), (-20.0, 40.0, 3.0), 28),
+    (2100, (-28.0, 76.0, 11.0), (-8.0, 0.0, 6.0), 26),
+    (2160, (-32.0, 98.0, 30.0), (-6.0, 0.0, 4.0), 26),
 ]
 CAM = O["CAM_Film"]; TG = O["CAM_Target"]
 cpos = catmull([(k[0], Vector(k[1])) for k in CAMK]); ctg = catmull([(k[0], Vector(k[2])) for k in CAMK]); clens = pchip([(k[0], float(k[3])) for k in CAMK])

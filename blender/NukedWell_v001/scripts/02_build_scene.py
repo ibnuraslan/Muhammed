@@ -103,7 +103,7 @@ def build_ground():
     me = bpy.data.meshes.new("Ground"); bm.to_mesh(me); bm.free()
     for p in me.polygons: p.use_smooth = True
     o = bpy.data.objects.new("Ground", me); link(o)
-    m = pbr("M_Ground", "aerial_sand", 14.0, tint=(0.78, 0.62, 0.46), bump=0.6)
+    m = pbr("M_Ground", "aerial_sand", 24.0, tint=(0.78, 0.62, 0.46), bump=0.6)
     # blend in cracked dry ground near the site
     n, l = m.node_tree.nodes, m.node_tree.links; p = n["Principled BSDF"]
     base = p.inputs['Base Color'].links[0].from_socket
@@ -118,6 +118,12 @@ def build_ground():
     tint2.inputs['Factor'].default_value = 1; tint2.inputs['B'].default_value = (0.8, 0.66, 0.54, 1)
     l.new(t2.outputs['Color'], tint2.inputs['A']); l.new(tint2.outputs['Result'], mx.inputs['B'])
     l.new(mx.outputs['Result'], p.inputs['Base Color'])
+    dimg = base.node if hasattr(base, 'node') else None
+    big = n.new('ShaderNodeMapping'); big.inputs['Scale'].default_value = (1 / 97.0,) * 3; l.new(tc.outputs['Object'], big.inputs['Vector'])
+    tb = n.new('ShaderNodeTexImage'); tb.image = img(tex_files("aerial_sand")[0]); l.new(big.outputs['Vector'], tb.inputs['Vector'])
+    mixb = n.new('ShaderNodeMix'); mixb.data_type = 'RGBA'; mixb.blend_type = 'OVERLAY'; mixb.inputs['Factor'].default_value = 0.6
+    l.new(mx.outputs['Result'], mixb.inputs['A']); l.new(tb.outputs['Color'], mixb.inputs['B'])
+    l.new(mixb.outputs['Result'], p.inputs['Base Color'])
     backface_hide(m)
     me.materials.append(m)
     return o
@@ -159,9 +165,9 @@ def build_face():
     dz = n.new('ShaderNodeMath'); dz.operation = 'ADD'; l.new(dep.outputs[0], dz.inputs[0]); l.new(wm.outputs[0], dz.inputs[1])
     nd = n.new('ShaderNodeMath'); nd.operation = 'MULTIPLY'; nd.inputs[1].default_value = 1 / FZ0; l.new(dz.outputs[0], nd.inputs[0])
     ramp = n.new('ShaderNodeValToRGB'); ramp.color_ramp.interpolation = 'CONSTANT'
-    bands = [(0.0, (0.62, 0.48, 0.32)), (6, (0.50, 0.30, 0.18)), (11, (0.66, 0.52, 0.36)), (18, (0.36, 0.35, 0.36)),
-             (30, (0.58, 0.56, 0.50)), (38, (0.44, 0.28, 0.20)), (47, (0.60, 0.50, 0.36)), (76, (0.17, 0.16, 0.16)),
-             (86, (0.46, 0.40, 0.30)), (104, (0.24, 0.22, 0.24)), (125, (0.30, 0.27, 0.26))]
+    bands = [(0.0, (0.55, 0.36, 0.20)), (6, (0.42, 0.18, 0.09)), (11, (0.58, 0.40, 0.22)), (18, (0.22, 0.21, 0.23)),
+             (30, (0.50, 0.45, 0.36)), (38, (0.36, 0.17, 0.10)), (47, (0.52, 0.38, 0.22)), (76, (0.09, 0.08, 0.08)),
+             (86, (0.34, 0.27, 0.18)), (104, (0.13, 0.11, 0.12)), (125, (0.16, 0.13, 0.12))]
     el = ramp.color_ramp.elements
     el[0].position = 0.0; el[0].color = (*bands[0][1], 1); el[1].position = bands[1][0] / -FZ0; el[1].color = (*bands[1][1], 1)
     for d_, col in bands[2:]:
@@ -171,7 +177,7 @@ def build_face():
     mp = n.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (40, 16, 1); l.new(tc.outputs['UV'], mp.inputs['Vector'])
     td = n.new('ShaderNodeTexImage'); td.image = img(dr); l.new(mp.outputs['Vector'], td.inputs['Vector'])
     bw = n.new('ShaderNodeRGBToBW'); l.new(td.outputs['Color'], bw.inputs['Color'])
-    det = n.new('ShaderNodeMath'); det.operation = 'MULTIPLY_ADD'; det.inputs[1].default_value = 1.3; det.inputs[2].default_value = 0.45
+    det = n.new('ShaderNodeMath'); det.operation = 'MULTIPLY_ADD'; det.inputs[1].default_value = 1.9; det.inputs[2].default_value = 0.1
     l.new(bw.outputs['Val'], det.inputs[0])
     mul = n.new('ShaderNodeMix'); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1
     l.new(ramp.outputs['Color'], mul.inputs['A']); l.new(det.outputs[0], mul.inputs['B'])
@@ -192,7 +198,12 @@ def build_face():
     c1.inputs['B'].default_value = (0.55, 0.54, 0.50, 1)
     c2 = n.new('ShaderNodeMix'); c2.data_type = 'RGBA'; l.new(ii.outputs[0], c2.inputs['Factor']); l.new(c1.outputs['Result'], c2.inputs['A'])
     c2.inputs['B'].default_value = (0.07, 0.07, 0.075, 1)
-    l.new(c2.outputs['Result'], p.inputs['Base Color'])
+    dk = n.new('ShaderNodeMapRange'); dk.inputs['From Min'].default_value = 0.0; dk.inputs['From Max'].default_value = FZ0
+    dk.inputs['To Min'].default_value = 0.55; dk.inputs['To Max'].default_value = 0.22; l.new(dep.outputs[0], dk.inputs['Value'])
+    dmul = n.new('ShaderNodeMix'); dmul.data_type = 'RGBA'; dmul.blend_type = 'MULTIPLY'; dmul.inputs['Factor'].default_value = 1
+    l.new(c2.outputs['Result'], dmul.inputs['A']); l.new(dk.outputs['Result'], dmul.inputs['B'])
+    hs = n.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 1.35; l.new(dmul.outputs['Result'], hs.inputs['Color'])
+    l.new(hs.outputs['Color'], p.inputs['Base Color'])
     # blast glow: orange emission around the blast point, keyed by the GlowAmt value; also gas glow in the reservoir band
     gv = n.new('ShaderNodeValue'); gv.name = "GlowAmt"; gv.outputs[0].default_value = 0.0
     gr = n.new('ShaderNodeValue'); gr.name = "GlowRad"; gr.outputs[0].default_value = 10.0
@@ -254,10 +265,9 @@ bmesh.ops.subdivide_edges(bm, edges=edges, cuts=60, use_grid_fill=True); bm.to_m
 mg = bpy.data.materials.new("M_GasFlow"); mg.use_nodes = True
 n, l = mg.node_tree.nodes, mg.node_tree.links; out = n["Material Output"]; n.remove(n["Principled BSDF"])
 tc = n.new('ShaderNodeTexCoord'); mpg = n.new('ShaderNodeMapping'); mpg.name = "GasMap"
-mpg.inputs['Scale'].default_value = (1, 1, 0.12); l.new(tc.outputs['Object'], mpg.inputs['Vector'])
-wv = n.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 1.0
-wv.inputs['Distortion'].default_value = 4.0; wv.inputs['Detail'].default_value = 3; l.new(mpg.outputs['Vector'], wv.inputs['Vector'])
-mr = n.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.35; mr.inputs['From Max'].default_value = 0.95
+mpg.inputs['Scale'].default_value = (1.5, 1.5, 0.08); l.new(tc.outputs['Object'], mpg.inputs['Vector'])
+wv = n.new('ShaderNodeTexNoise'); wv.inputs['Scale'].default_value = 2.0; wv.inputs['Detail'].default_value = 4; l.new(mpg.outputs['Vector'], wv.inputs['Vector'])
+mr = n.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.55; mr.inputs['From Max'].default_value = 0.95; mr.inputs['To Max'].default_value = 0.7
 l.new(wv.outputs['Fac'], mr.inputs['Value'])
 ga = n.new('ShaderNodeValue'); ga.name = "GasAmt"; ga.outputs[0].default_value = 0.0
 # z mask: gas only below GasTop (pinch cuts it off)
@@ -266,7 +276,7 @@ sz = n.new('ShaderNodeSeparateXYZ'); l.new(tc.outputs['Object'], sz.inputs['Vect
 lt = n.new('ShaderNodeMath'); lt.operation = 'LESS_THAN'; l.new(sz.outputs['Z'], lt.inputs[0]); l.new(gt.outputs[0], lt.inputs[1])
 m1 = n.new('ShaderNodeMath'); m1.operation = 'MULTIPLY'; l.new(mr.outputs['Result'], m1.inputs[0]); l.new(ga.outputs[0], m1.inputs[1])
 m2 = n.new('ShaderNodeMath'); m2.operation = 'MULTIPLY'; l.new(m1.outputs[0], m2.inputs[0]); l.new(lt.outputs[0], m2.inputs[1])
-em = n.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (0.55, 0.85, 1.0, 1); em.inputs['Strength'].default_value = 6.0
+em = n.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (0.25, 0.7, 1.0, 1); em.inputs['Strength'].default_value = 2.2
 trn = n.new('ShaderNodeBsdfTransparent'); mix = n.new('ShaderNodeMixShader')
 l.new(m2.outputs[0], mix.inputs['Fac']); l.new(trn.outputs['BSDF'], mix.inputs[1]); l.new(em.outputs['Emission'], mix.inputs[2])
 l.new(mix.outputs['Shader'], out.inputs['Surface'])
@@ -298,7 +308,7 @@ for p_ in parts: p_.parent = WH
 COLLAR = cyl("ShaftCollar", 3.4, -0.3, 0.5, x=SHAFT_X, y=SHAFT_Y, mat=M_CONC)
 bm = bmesh.new(); bm.from_mesh(COLLAR.data)
 bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES'); bm.to_mesh(COLLAR.data); bm.free()
-LINING = cyl("ShaftLining", 2.7, -67.0, 0.0, x=SHAFT_X, y=SHAFT_Y, verts=24, mat=pbr("M_LiningDark", "brushed_concrete", 2.0, tint=(0.32, 0.31, 0.3)), half=True)
+LINING = cyl("ShaftLining", 2.7, -67.0, 0.0, x=SHAFT_X, y=SHAFT_Y, verts=24, mat=flat("M_LiningDark", (0.09, 0.085, 0.08), 0.95), half=True)
 HOLE = cyl("ShaftHole", 2.4, -0.25, 0.52, x=SHAFT_X, y=SHAFT_Y, mat=flat("M_Hole", (0.01, 0.01, 0.01), 0.9))
 DEV_L, DEV_R = 9.0, 1.7
 def build_device():
@@ -465,38 +475,60 @@ for i in range(8):
 
 # ------------------------------------------------------------------ fire column, smoke, fissure fires (volumes)
 def fire_material(name, dens=6.0, smoke=False):
+    """ragged volumetric flame / smoke: field = noise + core bias - height bias; emission from blackbody of the field"""
     m = bpy.data.materials.new(name); m.use_nodes = True
-    n, l = m.node_tree.nodes, m.node_tree.links; out = n["Material Output"]; n.remove(n["Principled BSDF"])
+    nt = m.node_tree; n, l = nt.nodes, nt.links; out = n["Material Output"]; n.remove(n["Principled BSDF"])
+    def M(op, a, b=None, clamp=False):
+        x = n.new('ShaderNodeMath'); x.operation = op; x.use_clamp = clamp
+        for i, v in enumerate((a, b)):
+            if v is None: continue
+            if isinstance(v, (int, float)): x.inputs[i].default_value = v
+            else: l.new(v, x.inputs[i])
+        return x.outputs[0]
     tc = n.new('ShaderNodeTexCoord')
-    mp = n.new('ShaderNodeMapping'); mp.name = "FlowMap"; mp.inputs['Scale'].default_value = (1.0, 1.0, 1.6); l.new(tc.outputs['Generated'], mp.inputs['Vector'])
+    mp = n.new('ShaderNodeMapping'); mp.name = "FlowMap"; mp.inputs['Scale'].default_value = (1.3, 1.3, 0.7 if not smoke else 1.0)
+    l.new(tc.outputs['Generated'], mp.inputs['Vector'])
     nz = n.new('ShaderNodeTexNoise'); nz.noise_dimensions = '4D'; nz.name = "FireNoise"
-    nz.inputs['Scale'].default_value = 4.5; nz.inputs['Detail'].default_value = 8; nz.inputs['Roughness'].default_value = 0.62; nz.inputs['Distortion'].default_value = 1.2
+    nz.inputs['Scale'].default_value = 5.0 if not smoke else 3.0; nz.inputs['Detail'].default_value = 10; nz.inputs['Roughness'].default_value = 0.62
+    nz.inputs['Distortion'].default_value = 1.6 if not smoke else 0.8
     l.new(mp.outputs['Vector'], nz.inputs['Vector'])
-    # radial falloff in generated space (0..1 box)
     sep = n.new('ShaderNodeSeparateXYZ'); l.new(tc.outputs['Generated'], sep.inputs['Vector'])
     cx = n.new('ShaderNodeVectorMath'); cx.operation = 'SUBTRACT'; cx.inputs[1].default_value = (0.5, 0.5, 0); l.new(tc.outputs['Generated'], cx.inputs[0])
     cxy = n.new('ShaderNodeVectorMath'); cxy.operation = 'MULTIPLY'; cxy.inputs[1].default_value = (2, 2, 0); l.new(cx.outputs[0], cxy.inputs[0])
     rl = n.new('ShaderNodeVectorMath'); rl.operation = 'LENGTH'; l.new(cxy.outputs[0], rl.inputs[0])
-    rad = n.new('ShaderNodeMapRange'); rad.inputs['From Min'].default_value = 1.0; rad.inputs['From Max'].default_value = 0.25; l.new(rl.outputs['Value'], rad.inputs['Value'])
-    rad.interpolation_type = 'SMOOTHSTEP'
-    top = n.new('ShaderNodeMapRange'); top.inputs['From Min'].default_value = 1.0; top.inputs['From Max'].default_value = 0.55; l.new(sep.outputs['Z'], top.inputs['Value'])
-    sh = n.new('ShaderNodeMath'); sh.operation = 'MULTIPLY'; l.new(rad.outputs['Result'], sh.inputs[0]); l.new(top.outputs['Result'], sh.inputs[1])
-    d = n.new('ShaderNodeMath'); d.operation = 'MULTIPLY'; l.new(nz.outputs['Fac'], d.inputs[0]); l.new(sh.outputs[0], d.inputs[1])
-    th = n.new('ShaderNodeMapRange'); th.inputs['From Min'].default_value = 0.36; th.inputs['From Max'].default_value = 0.6; l.new(d.outputs[0], th.inputs['Value'])
+    z = sep.outputs['Z']; r = rl.outputs['Value']
+    edge = M('MULTIPLY_ADD', z, -0.5 if not smoke else -0.1); edge.node.inputs[2].default_value = 0.95
+    rn = M('DIVIDE', r, edge)
+    core = M('SUBTRACT', 1.0, rn)                                                           # 1 centre .. 0 edge .. <0 outside
     amt = n.new('ShaderNodeValue'); amt.name = "FireAmt"; amt.outputs[0].default_value = 1.0
-    da = n.new('ShaderNodeMath'); da.operation = 'MULTIPLY'; l.new(th.outputs['Result'], da.inputs[0]); l.new(amt.outputs[0], da.inputs[1])
-    vol = n.new('ShaderNodeVolumePrincipled')
-    dm = n.new('ShaderNodeMath'); dm.operation = 'MULTIPLY'; dm.inputs[1].default_value = dens; l.new(da.outputs[0], dm.inputs[0])
-    l.new(dm.outputs[0], vol.inputs['Density'])
-    if smoke:
-        vol.inputs['Color'].default_value = (0.05, 0.045, 0.04, 1)
+    if not smoke:
+        f1 = M('MULTIPLY_ADD', core, 0.5); f1.node.inputs[2].default_value = -0.68            # 0.45 core - 0.62
+        f2 = M('ADD', f1, nz.outputs['Fac'])
+        f3 = M('MULTIPLY_ADD', z, -0.4); f3.node.inputs[2].default_value = 0.0
+        field = M('ADD', f2, f3)
+        edge_out = M('GREATER_THAN', core, 0.0)
+        dens_ = M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', field, 7.0, clamp=True), edge_out), amt.outputs[0])
+        vol = n.new('ShaderNodeVolumePrincipled'); vol.inputs['Color'].default_value = (0.0, 0.0, 0.0, 1)
+        vol.inputs['Absorption Color'].default_value = (0.3, 0.15, 0.08, 1)
+        lift0 = M('MULTIPLY', M('SUBTRACT', z, 0.02), 25.0, clamp=True)
+        l.new(M('MULTIPLY', M('MULTIPLY', dens_, lift0), dens * 0.08), vol.inputs['Density'])
+        hot = M('MULTIPLY', field, 3.0, clamp=True)
+        zz = M('MULTIPLY_ADD', z, -0.6); zz.node.inputs[2].default_value = 1.0
+        ramp = n.new('ShaderNodeValToRGB'); el = ramp.color_ramp.elements
+        el[0].position = 0.0; el[0].color = (0.6, 0.05, 0.005, 1); el[1].position = 1.0; el[1].color = (1.0, 0.62, 0.18, 1)
+        e2 = el.new(0.5); e2.color = (1.0, 0.22, 0.01, 1)
+        l.new(M('MULTIPLY', hot, zz), ramp.inputs['Fac'])
+        l.new(ramp.outputs['Color'], vol.inputs['Emission Color'])
+        lift = M('MULTIPLY', M('SUBTRACT', z, 0.02), 25.0, clamp=True)
+        l.new(M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.5), vol.inputs['Emission Strength'])
     else:
-        vol.inputs['Color'].default_value = (0.2, 0.08, 0.02, 1)
-        tmp = n.new('ShaderNodeMapRange'); tmp.inputs['To Min'].default_value = 900; tmp.inputs['To Max'].default_value = 2300
-        hz = n.new('ShaderNodeMath'); hz.operation = 'MULTIPLY'; l.new(da.outputs[0], hz.inputs[0]); l.new(top.outputs['Result'], hz.inputs[1])
-        l.new(hz.outputs[0], tmp.inputs['Value']); l.new(tmp.outputs['Result'], vol.inputs['Blackbody Tint'] if False else vol.inputs['Temperature'])
-        bi = n.new('ShaderNodeMath'); bi.operation = 'MULTIPLY'; bi.inputs[1].default_value = 14.0; l.new(da.outputs[0], bi.inputs[0])
-        l.new(bi.outputs[0], vol.inputs['Blackbody Intensity'])
+        f1 = M('MULTIPLY_ADD', core, 0.3); f1.node.inputs[2].default_value = -0.6
+        field = M('ADD', f1, nz.outputs['Fac'])
+        zin = M('MULTIPLY', z, 6.0, clamp=True)
+        dens_ = M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', field, 2.5, clamp=True), M('GREATER_THAN', core, 0.0)), amt.outputs[0]), zin)
+        vol = n.new('ShaderNodeVolumePrincipled'); vol.inputs['Color'].default_value = (0.035, 0.032, 0.03, 1)
+        vol.inputs['Anisotropy'].default_value = 0.2
+        l.new(M('MULTIPLY', dens_, dens), vol.inputs['Density'])
     l.new(vol.outputs['Volume'], out.inputs['Volume'])
     return m
 def fire_obj(name, base, r0, r1, h, mat):
@@ -505,15 +537,15 @@ def fire_obj(name, base, r0, r1, h, mat):
     o = bpy.data.objects.new(name, me); o.location = base; link(o, C_FX); me.materials.append(mat)
     o.visible_shadow = True
     return o
-FIRE = fire_obj("FireColumn", (0, 0, 2.6), 9.0, 30.0, 125.0, fire_material("M_Fire", 5.0))
-SMOKE = fire_obj("SmokePlume", (4, 8, 100), 22.0, 75.0, 160.0, fire_material("M_Smoke", 0.22, smoke=True))
+FIRE = fire_obj("FireColumn", (0, -1.6, 3.4), 5.0, 30.0, 125.0, fire_material("M_Fire", 3.0))
+SMOKE = fire_obj("SmokePlume", (4, 8, 70), 20.0, 80.0, 190.0, fire_material("M_Smoke", 0.3, smoke=True))
 FISSURES = []
 FIS_PTS = [(13, 6), (-6, 14), (17, 26), (-24, 4), (6, 34), (-12, 30)]
 M_FIS = fire_material("M_FissureFire", 6.0)
 for i, (x, y) in enumerate(FIS_PTS):
     FISSURES.append(fire_obj("FissureFire%d" % i, (x, y, 0.2), 2.2, 5.0, 22.0, M_FIS))
 # ground cracks: dark glowing strips radiating from the well
-M_CRACK = flat("M_Crack", (0.02, 0.015, 0.01), 0.9, emit=(1.0, 0.35, 0.05), es=0.0)
+M_CRACK = flat("M_Crack", (0.02, 0.015, 0.01), 0.9, emit=(1.0, 0.22, 0.03), es=0.0)
 CRACKS = []
 for i, (x, y) in enumerate(FIS_PTS):
     d = Vector((x, y)); L = d.length
@@ -539,8 +571,9 @@ tc = n.new('ShaderNodeTexCoord'); nz = n.new('ShaderNodeTexNoise'); nz.inputs['S
 nz.noise_dimensions = '4D'; l.new(tc.outputs['Generated'], nz.inputs['Vector'])
 sv = n.new('ShaderNodeValue'); sv.name = "SteamAmt"; sv.outputs[0].default_value = 0.0
 rl = n.new('ShaderNodeVectorMath'); rl.operation = 'DISTANCE'; rl.inputs[1].default_value = (0.5, 0.5, 0.5); l.new(tc.outputs['Generated'], rl.inputs[0])
-fo = n.new('ShaderNodeMapRange'); fo.inputs['From Min'].default_value = 0.5; fo.inputs['From Max'].default_value = 0.15; l.new(rl.outputs['Value'], fo.inputs['Value'])
-mm = n.new('ShaderNodeMath'); mm.operation = 'MULTIPLY'; l.new(nz.outputs['Fac'], mm.inputs[0]); l.new(fo.outputs['Result'], mm.inputs[1])
+fo = n.new('ShaderNodeMapRange'); fo.inputs['From Min'].default_value = 0.5; fo.inputs['From Max'].default_value = 0.0; fo.interpolation_type = 'SMOOTHSTEP'; l.new(rl.outputs['Value'], fo.inputs['Value'])
+nzr = n.new('ShaderNodeMapRange'); nzr.inputs['From Min'].default_value = 0.45; nzr.inputs['From Max'].default_value = 0.75; l.new(nz.outputs['Fac'], nzr.inputs['Value'])
+mm = n.new('ShaderNodeMath'); mm.operation = 'MULTIPLY'; l.new(nzr.outputs['Result'], mm.inputs[0]); l.new(fo.outputs['Result'], mm.inputs[1])
 mm2 = n.new('ShaderNodeMath'); mm2.operation = 'MULTIPLY'; l.new(mm.outputs[0], mm2.inputs[0]); l.new(sv.outputs[0], mm2.inputs[1])
 vol = n.new('ShaderNodeVolumePrincipled'); vol.inputs['Color'].default_value = (0.95, 0.95, 0.95, 1)
 l.new(mm2.outputs[0], vol.inputs['Density']); l.new(vol.outputs['Volume'], n["Material Output"].inputs['Volume'])
@@ -548,7 +581,7 @@ def steam_ball(name, loc, r):
     bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=r)
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free(); o = bpy.data.objects.new(name, me); o.location = loc; link(o, C_FX)
     me.materials.append(M_STEAM); return o
-STEAM = [steam_ball("Steam%d" % i, (x, y, z), r) for i, (x, y, z, r) in enumerate(((3, 4, 4, 7), (-4, 6, 6, 6), (1, 8, 10, 8)))]
+STEAM = [steam_ball("Steam%d" % i, (x, y, z), r) for i, (x, y, z, r) in enumerate(((4, 3, 5, 5), (-4, 4, 7, 5), (1, 6, 11, 6)))]
 M_DUST = M_STEAM.copy(); M_DUST.name = "M_Dust"
 M_DUST.node_tree.nodes["Principled Volume"].inputs['Color'].default_value = (0.75, 0.6, 0.42, 1)
 M_DUST.node_tree.nodes["SteamAmt"].name = "DustAmt"
@@ -558,7 +591,7 @@ DUST = bpy.data.objects.new("DustRing", me); DUST.location = (SHAFT_X, 4, 0); li
 # blast: emission sphere + light
 bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=16, radius=1.0)
 me = bpy.data.meshes.new("BlastSphere"); bm.to_mesh(me); bm.free()
-BLAST = bpy.data.objects.new("BlastSphere", me); BLAST.location = (SHAFT_X, 0.0, BLAST_Z); link(BLAST, C_FX)
+BLAST = bpy.data.objects.new("BlastSphere", me); BLAST.location = (SHAFT_X, 3.0, BLAST_Z); link(BLAST, C_FX)
 for p_ in me.polygons: p_.use_smooth = True
 mb_ = bpy.data.materials.new("M_Blast"); mb_.use_nodes = True; n = mb_.node_tree.nodes; n.remove(n["Principled BSDF"])
 e = n.new('ShaderNodeEmission'); e.name = "BlastEmit"; e.inputs['Color'].default_value = (1.0, 0.95, 0.85, 1); e.inputs['Strength'].default_value = 0.0
@@ -570,17 +603,17 @@ lb = bpy.data.objects.new("L_Blast", L_BLAST); lb.location = (SHAFT_X, -6, BLAST
 # ------------------------------------------------------------------ lights + world
 sun = bpy.data.lights.new("Sun", 'SUN'); sun.energy = 3.0; sun.angle = R_(1.2); sun.color = (1.0, 0.95, 0.88)
 SUN = bpy.data.objects.new("Sun", sun); SUN.rotation_euler = (R_(40), 0, R_(200)); link(SUN)
-for i, (x, y, z) in enumerate(((0, -2, 15), (0, -2, 50), (0, 6, 90))):
+for i, (x, y, z) in enumerate(((0, -6, 10), (0, -6, 35), (0, -6, 60))):
     lf = bpy.data.lights.new("L_Fire%d" % i, 'POINT'); lf.energy = 0; lf.color = (1.0, 0.55, 0.2); lf.shadow_soft_size = 8
     o = bpy.data.objects.new("L_Fire%d" % i, lf); o.location = (x, y, z); link(o, C_FX)
 # underground fill for the section (camera-invisible area lights in front of the face)
-for i, (x, z, en) in enumerate(((-30, -25, 14000), (25, -70, 12000))):
+for i, (x, z, en) in enumerate(((-30, -25, 6000), (25, -70, 5000))):
     la = bpy.data.lights.new("L_Section%d" % i, 'AREA'); la.energy = en; la.size = 90; la.color = (0.95, 0.97, 1.0)
     o = bpy.data.objects.new("L_Section%d" % i, la); o.location = (x, -70, z); o.rotation_euler = (R_(90), 0, 0); link(o)
     o.visible_camera = False
 # shaft lamp rings (small warm point lights down the bore)
 for i, z in enumerate((-12, -28, -44)):
-    ll = bpy.data.lights.new("L_ShaftLamp%d" % i, 'POINT'); ll.energy = 800; ll.color = (1.0, 0.8, 0.5); ll.shadow_soft_size = 0.5
+    ll = bpy.data.lights.new("L_ShaftLamp%d" % i, 'POINT'); ll.energy = 120; ll.color = (1.0, 0.8, 0.5); ll.shadow_soft_size = 0.5
     o = bpy.data.objects.new("L_ShaftLamp%d" % i, ll); o.location = (SHAFT_X, -2.4, z); link(o)
 
 wd = bpy.data.worlds.new("World"); sc.world = wd; wd.use_nodes = True
