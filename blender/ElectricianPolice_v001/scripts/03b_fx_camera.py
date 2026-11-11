@@ -82,7 +82,7 @@ def head_frame(rig, f, up_off=0.085, fwd_off=0.012):
                 if top is None or d > top: top = d
         o.evaluated_get(dg).to_mesh_clear()
     print("HEADTOP", rig.name, f, round(top, 3))
-    return frame_from(hp + up * (top - 0.128 + up_off * 0.0) + fwd * fwd_off, fwd, up)
+    return frame_from(hp + up * (top - 0.138 + up_off * 0.0) + fwd * (fwd_off - 0.01), fwd, up)
 def hand_frame(rig, s, f, off=(0, 0, 0), fwd_axis="fingers"):
     Mw = bone_world(rig, "wrist." + s, f); R3 = Mw.to_3x3()
     return Mw @ Matrix.Translation(Vector(off))
@@ -94,7 +94,7 @@ seat_pose = Mb @ Matrix.Translation(Vector(HAT_SEAT) + Vector((0, 0, 0.005)))
 attach_seq(hatR, [(1, bike, None, seat_pose, 296), (302, CH["Man"], "wrist.L", seat_pose),
                   (318, CH["Man"], "head", head_frame(CH["Man"], 318))])
 desk_o = ob("Office_Desk")
-hat_desk = Matrix.Translation(Vector((DESK.x - 0.62, DESK.y - 0.05, 0.795))) @ Matrix.Rotation(R_(35), 4, "Z")
+hat_desk = Matrix.Translation(Vector((DESK.x - 0.82, DESK.y + 0.22, 0.795))) @ Matrix.Rotation(R_(35), 4, "Z")
 attach_seq(hatW, [(1, CH["ManW"], "head", head_frame(CH["ManW"], 320), 320), (508, desk_o, None, hat_desk, 508),
                   (1380, CH["ManW"], "head", head_frame(CH["ManW"], 1390), 1390)])
 for nm, cp in CAPS.items():
@@ -120,11 +120,19 @@ key_vis(slip, [(262, 345)])
 phone = ob("St_Phone")
 loc, f3, n = palm_pose(CH["OfficerC"], "R", 1200, 0.06, -0.03)
 attach_seq(phone, [(1, CH["OfficerC"], "wrist.R", frame_from(loc, -n, f3), 1200)])
-torch = bpy.data.lights.new("PhoneTorch", "SPOT"); torch.energy = 90; torch.spot_size = R_(70); torch.spot_blend = 0.6; torch.shadow_soft_size = 0.01
+torch = bpy.data.lights.new("PhoneTorch", "SPOT"); torch.energy = 160; torch.spot_size = R_(70); torch.spot_blend = 0.6; torch.shadow_soft_size = 0.01
 torch.color = (1.0, 0.97, 0.92)
 to = bpy.data.objects.new("PhoneTorch", torch); C("Station").objects.link(to)
 to.parent = phone; to.location = (0, 0.02, 0.13); to.rotation_euler = (R_(-90), 0, 0)
 key_vis(phone, [(1150, 1560)])
+BEAM = bpy.data.materials.new("TorchBeam"); BEAM.use_nodes = True; bn = BEAM.node_tree.nodes; bl = BEAM.node_tree.links
+for x in list(bn): bn.remove(x)
+bo_ = bn.new("ShaderNodeOutputMaterial"); em_ = bn.new("ShaderNodeEmission"); em_.inputs["Color"].default_value = (1.0, 0.97, 0.9, 1); em_.inputs["Strength"].default_value = 0.025
+tr_ = bn.new("ShaderNodeBsdfTransparent"); ad_ = bn.new("ShaderNodeAddShader")
+bl.new(em_.outputs[0], ad_.inputs[0]); bl.new(tr_.outputs[0], ad_.inputs[1]); bl.new(ad_.outputs[0], bo_.inputs[0])
+beam = cyl("PhoneBeam", (0, 0, 0), 0.55, 1.6, BEAM, c="Station", verts=16, r2=0.01)
+beam.parent = to; beam.location = (0, 0, -0.8); beam.rotation_euler = (0, 0, 0)
+key_vis(beam, [])   # beam read as an opaque disc at review res; the spot light alone carries the torch
 fp = ob("FanPaper_0")
 loc, f3, n = palm_pose(CH["OfficerB"], "R", 1200, 0.07, -0.02)
 attach_seq(fp, [(1, CH["OfficerB"], "wrist.R", frame_from(loc + f3 * 0.1, f3, -n), 1200)])
@@ -285,6 +293,17 @@ for f, e in ((1, 0), (1063, 0), (1065, 900), (1068, 250), (1072, 600), (1080, 60
 arc = sphere("ArcBall", SP0, 0.05, emit("Arc", (0.8, 0.9, 1.0), 60.0), c="Office"); key_vis(arc, [(1065, 1070)])
 # office lights die with the power cut? (no: he cuts the station, his office stays lit)
 
+# gate swings open on its hinge as he pushes it (f414 -> 440)
+gate_o = ob("Gate"); gl = gate_o.location.copy()
+hinge = bpy.data.objects.new("GateHinge", None); C("Substation").objects.link(hinge); hinge.location = gl + Vector((0, 0.475, 0))
+gate_o.parent = hinge; gate_o.location = gl - hinge.location
+for f, a in ((1, 0.0), (414, 0.0), (424, R_(25)), (442, R_(100)), (450, R_(96))):
+    hinge.rotation_euler = (0, 0, a); hinge.keyframe_insert("rotation_euler", frame=f)
+# records load: bars grow in one after another while he scrolls (f520 -> 615)
+for r, bar in enumerate(bars):
+    sx_ = bar.scale.copy()
+    for f, k in ((1, 0.02), (520 + r * 12, 0.02), (538 + r * 12, 1.0)):
+        bar.scale = (sx_.x * k, sx_.y, sx_.z); bar.keyframe_insert("scale", frame=f)
 # ------------------------------------------------------------------ fans, clock, indicators, flags
 def spin(o, f0, f1, rpm, axis=2, decel_from=None, decel_to=None):
     o.rotation_mode = "XYZ"; a = 0.0; w = rpm / 60.0 * 2 * math.pi / 60.0
@@ -308,6 +327,16 @@ croot.location = CLOCK_POS
 if thin == 1: croot.rotation_euler = (0, 0, R_(90))
 elif thin == 2: croot.rotation_euler = (0, R_(90), 0)
 for o in cparts.values(): o.parent = croot; o.scale = (1.6, 1.6, 1.6)
+# cover the small maker's mark printed under the 12 (no brand marks on props)
+dial_m = pbr("DialWhite", (0.86, 0.86, 0.84), 0.5)
+bpy.context.view_layer.update()
+cw = [croot.matrix_world @ (cb.matrix_basis @ Vector(c_)) for c_ in cb.bound_box]
+front_x = max(p.x for p in cw)
+for nm_, zoff in (("DialPatch", 0.085),):
+    dp = cyl(nm_, (0, 0, 0), 0.036, 0.002, dial_m, c="Station", verts=20, rot=(0, R_(90), 0))
+    dp.location = Vector((-18.81, CLOCK_POS.y, CLOCK_POS.z + zoff))
+    dp["front_x"] = front_x
+print("CLOCK front", round(front_x, 3))
 ax = thin
 for nm, turns in (("wall_clock_hours_hand", 5 / 12), ("wall_clock_minute_hand", 5.0), ("wall_clock_second_hand", 20.0)):
     o = cparts[nm]; o.rotation_mode = "XYZ"
@@ -337,7 +366,7 @@ def drive(root, f0, f1, p0, p1, heading_deg):
             w.rotation_euler = (dist * (f - f0) / (f1 - f0) / 0.25, R_(90), 0); w.keyframe_insert("rotation_euler", frame=f)
         for fc in fcurves(w):
             for k in fc.keyframe_points: k.interpolation = "LINEAR"
-drive(ob("Rick_0"), 1, 260, (-3.55, 4.0, 0), (-3.55, 14.5, 0), 180)
+drive(ob("Rick_0"), 1, 260, (-3.8, 4.0, 0), (-3.8, 14.5, 0), 180)
 drive(ob("Rick_1"), 1, 420, (1.9, 40.0, 0), (1.9, 40.0 - 5.0 * 7, 0), 0)
 drive(ob("Rick_2"), 1, 420, (1.9, 75.0, 0), (1.9, 75.0 - 6.0 * 7, 0), 0)
 drive(ob("Rick_3"), 1, 420, (-1.8, 32.0, 0), (-1.8, 32.0 + 3.5 * 7, 0), 180)
@@ -372,7 +401,7 @@ for lo_ in [o for o in bpy.data.objects if o.name.startswith(("Line_", "FeedLine
     for si, sp_ in enumerate(lo_.data.splines):
         pts_ = [lo_.matrix_world @ Vector(p.co[:3]) for p in sp_.points]
         for rep in range(2):
-            pu = sphere("Pulse_%d" % pcount, pts_[0], 0.18, PULSE_M, c="Grid", scale=(1, 1, 1)); pcount += 1
+            pu = sphere("Pulse_%d" % pcount, pts_[0], 0.3, PULSE_M, c="Grid", scale=(1, 1, 1)); pcount += 1
             f0 = 380 + rep * 45 + si * 6
             for f in range(f0, f0 + 61, 3):
                 u = (f - f0) / 60 * (len(pts_) - 1); i0 = min(int(u), len(pts_) - 2)
@@ -381,6 +410,18 @@ for lo_ in [o for o in bpy.data.objects if o.name.startswith(("Line_", "FeedLine
 
 # ------------------------------------------------------------------ lighting: day -> dusk, station power cut, town lights at dusk
 W_ = sc.world.node_tree
+wn, wl = W_.nodes, W_.links
+envs = [n for n in wn if n.type == "TEX_ENVIRONMENT"]; klopp = next(n for n in envs if "kloppenheim" in n.image.name)
+lp = wn.new("ShaderNodeLightPath"); tint = wn.new("ShaderNodeMix"); tint.data_type = "RGBA"; tint.blend_type = "MULTIPLY"
+wl.new(klopp.outputs["Color"], tint.inputs["A"]); tint.inputs["B"].default_value = (1.0, 0.55, 0.4, 1)
+wl.new(wn["DuskMix"].outputs["Result"], wn.new("ShaderNodeMath").inputs[0])
+camsel = wn.new("ShaderNodeMix"); camsel.data_type = "RGBA"
+tf = tint.inputs["Factor"]
+wl.new(wn["DuskMix"].outputs["Result"], camsel.inputs["A"]); wl.new(tint.outputs["Result"], camsel.inputs["B"])
+wl.new(lp.outputs["Is Camera Ray"], camsel.inputs["Factor"])
+wl.new(camsel.outputs["Result"], wn["WorldBG"].inputs["Color"])
+for f, v_ in ((1, 0.0), (1150, 0.0), (1235, 1.0)):
+    tf.default_value = v_; tf.keyframe_insert("default_value", frame=f)
 mixf = W_.nodes["DuskMix"].inputs["Factor"]; bgs = W_.nodes["WorldBG"].inputs["Strength"]
 sunO = ob("Sun")
 for f, mf, st, se, sel, col in ((1, 0.0, 1.0, 4.5, 40, (1.0, 0.95, 0.88)), (1150, 0.0, 1.0, 4.5, 40, (1.0, 0.95, 0.88)),
@@ -407,9 +448,9 @@ for i in range(2):
     L = ob("StFill_%d" % i).data
     for f, v_ in ((1, 300), (1214, 300), (1216, 0)):
         L.energy = v_; L.keyframe_insert("energy", frame=f)
-moon = bpy.data.lights.new("StDusk", "AREA"); moon.energy = 1500; moon.size = 4; moon.color = (0.45, 0.55, 0.85)
-mo = bpy.data.objects.new("StDusk", moon); mo.location = (-8.2, 57.0, 3.1); mo.rotation_euler = (0, R_(-60), 0); C("Station").objects.link(mo)
-for f, v_ in ((1, 0), (1214, 0), (1230, 1500)):
+moon = bpy.data.lights.new("StDusk", "AREA"); moon.energy = 260; moon.size = 4; moon.color = (0.35, 0.45, 0.85)
+mo = bpy.data.objects.new("StDusk", moon); mo.location = (-11.5, 57.0, 3.25); mo.rotation_euler = (0, 0, 0); moon.size = 7; C("Station").objects.link(mo)
+for f, v_ in ((1, 0), (1214, 0), (1230, 260)):
     moon.energy = v_; moon.keyframe_insert("energy", frame=f)
 # town windows: a share of them light up warm as dusk falls; street lamps on
 WL = bpy.data.materials.new("WinLitTown"); WL.use_nodes = True; wb = WL.node_tree.nodes["Principled BSDF"]
@@ -426,7 +467,7 @@ if bulb:
     bs_.inputs["Emission Color"].default_value = (1.0, 0.75, 0.4, 1)
     for f, v_ in ((1, 0.0), (1200, 0.0), (1240, 12.0)):
         bs_.inputs["Emission Strength"].default_value = v_; bs_.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
-for f, ex in ((1, 0.0), (1150, 0.0), (1235, 0.8), (1250, 1.8), (1381, 1.8), (1430, 0.9), (1560, 0.9)):
+for f, ex in ((1, 0.0), (1150, 0.0), (1235, 0.8), (1250, 1.2), (1388, 1.2), (1418, 0.9), (1560, 0.9)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 
 # ------------------------------------------------------------------ the one continuous camera
@@ -471,10 +512,10 @@ CAMK = [
     (619, V(22.1, 42.25, 1.42), SCRN, 30),
     (660, HW[660] + V(0.4, 0.22, 0.0), SCRN, 30),
     (710, V(21.84, 43.38, 1.12), scr(-0.1, pr_v), 36),
-    (760, V(22.3, 43.42, 1.02), HW[760] + V(0, 0.09, -0.05), 34),
+    (760, V(22.28, 43.44, 1.13), HW[760] + V(-0.06, 0.12, -0.07), 32),
     (810, V(21.78, 43.45, 1.08), scr(0.55, pr_v + 0.1), 40),
-    (860, V(22.22, 43.48, 1.0), HW[860] + V(0, 0.09, -0.05), 36),
-    (895, V(22.25, 43.4, 1.12), HW[895] + V(0, 0.09, -0.05), 34),
+    (860, V(22.2, 43.5, 1.12), HW[860] + V(-0.06, 0.12, -0.07), 34),
+    (895, V(22.22, 43.42, 1.15), HW[895] + V(-0.06, 0.12, -0.07), 32),
     (925, V(22.6, 43.05, 1.15), V(21.6, 43.3, 1.0), 24),
     (960, V(23.4, 43.0, 1.12), V(22.0, 43.4, 1.0), 24),
     (995, V(24.05, 42.85, 1.12), V(23.4, 43.45, 1.02), 28),
@@ -482,10 +523,11 @@ CAMK = [
     (1050, V(24.8, 42.68, 1.5), V(LEVER_PIVOT.x - 0.1, LEVER_PIVOT.y, 1.45), 34),
     (1075, V(24.85, 42.72, 1.32), V(LEVER_PIVOT.x - 0.05, LEVER_PIVOT.y, 1.28), 38),
     (1100, V(23.6, 41.4, 1.7), V(25.0, 43.2, 1.35), 26),
-    (1130, V(21.5, 39.0, 1.7), V(22.5, 42.5, 1.3), 24),
-    (1150, V(21.5, 37.0, 3.0), V(19.0, 43.0, 2.4), 24),
-    (1170, V(16.0, 36.0, 9.0), V(0.0, 52.0, 4.0), 24),
-    (1195, V(5.0, 46.0, 11.0), V(-7.0, 57.0, 4.0), 24),
+    (1128, V(21.5, 39.3, 1.6), V(22.5, 42.5, 1.3), 24),
+    (1142, V(21.5, 37.3, 1.62), V(21.6, 41.0, 1.5), 24),
+    (1156, V(21.3, 35.6, 5.8), V(20.5, 40.0, 3.0), 24),
+    (1174, V(15.5, 42.5, 16.5), V(-4.0, 57.0, 5.0), 24),
+    (1195, V(3.5, 51.0, 14.0), V(-7.0, 57.0, 4.0), 24),
     (1215, V(-1.0, 52.5, 5.5), V(-7.2, 55.0, 3.6), 26),
     (1232, V(-5.3, 53.9, 1.75), V(-9.0, 53.9, 1.6), 26),
     (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 24),
@@ -495,10 +537,10 @@ CAMK = [
     (1381, V(-17.4, 57.1, 2.3), CLOCK_POS, 40),
     (1395, V(-16.4, 57.2, 2.1), V(-15.0, 60.0, 1.8), 30),
     (1410, V(-13.5, 57.0, 1.8), V(-10.0, 58.0, 1.5), 26),
-    (1440, V(-8.0, 57.0, 1.6), V(-4.5, 56.0, 1.5), 26),
-    (1470, V(-4.0, 56.6, 1.5), V(-5.3, 56.2, 1.45), 28),
-    (1515, V(-3.6, 58.8, 1.6), V(-5.3, 57.4, 1.6), 32),
-    (1560, V(-4.1, 59.0, 1.66), V(-5.25, 57.7, 1.62), 40)]
+    (1440, V(-7.6, 57.0, 1.6), V(-3.6, 55.2, 1.4), 26),
+    (1470, V(-5.6, 57.8, 1.55), V(-3.6, 55.6, 1.5), 28),
+    (1515, V(-4.5, 58.9, 1.58), V(-3.6, 56.5, 1.6), 32),
+    (1560, V(-4.25, 58.25, 1.6), V(-3.63, 56.8, 1.63), 40)]
 fc_ = catmull([(f, c) for f, c, a, l in CAMK]); fa_ = catmull([(f, a) for f, c, a, l in CAMK]); fl_ = catmull([(f, float(l)) for f, c, a, l in CAMK])
 for f in list(range(1, FRAME_END + 1, 2)) + [FRAME_END]:
     cam.location = fc_(f); cam.keyframe_insert("location", frame=f)

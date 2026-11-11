@@ -1,0 +1,8 @@
+CAM_NEAR_HEAD f159 Man 0.23 m
+COUNTS {'hover': 37, 'cam_head': 1}
+WORST grip_L                 f3     0.122  wrist to bike grip
+WORST grip_R                 f3     0.122  wrist to bike grip
+WORST hover_PedA             f7     0.036  R
+WORST lever_R                f1059  0.116  wrist to lever grip
+WORST phone                  f1471  0.067  phone to wrist
+WORST slip                   f281   0.092  slip to holding wrist

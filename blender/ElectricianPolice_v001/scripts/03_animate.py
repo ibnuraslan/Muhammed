@@ -107,20 +107,30 @@ def recolor(mat, col, zmin=None, zmax=None, gain=1.8, name=None):
     return m
 shirt_m = cloth(CH["Man"], "casualsuit").data.materials[0]
 recolor(shirt_m, (0.8, 0.07, 0.05), zmin=0.63, gain=2.6)
+recolor(cloth(CH["ManW"], "casualsuit").data.materials[0], (0.8, 0.07, 0.05), zmin=0.63, gain=2.6)
 for nm, col in (("OfficerA", (0.50, 0.40, 0.22)), ("OfficerB", (0.53, 0.43, 0.25)), ("OfficerC", (0.48, 0.39, 0.22))):
     recolor(cloth(CH[nm], "casualsuit").data.materials[0], col, gain=1.9)
 
-def derived_mesh(src, name, keep, push, mat):
+def derived_mesh(src, name, keep, push, mat, faces=False):
     """copy a skinned mesh, keep only vertices passing keep(co, groups), push along normals"""
     o = src.copy(); o.data = src.data.copy(); o.name = name; o.data.name = name
     for c in src.users_collection: c.objects.link(o)
     me = o.data; vg = {g.index: g.name for g in o.vertex_groups}
     bm = bmesh.new(); bm.from_mesh(me); dl = bm.verts.layers.deform.active
-    kill = []
-    for v in bm.verts:
-        grp = {vg[k]: w for k, w in v[dl].items()} if dl else {}
-        if not keep(v.co, grp): kill.append(v)
-    bmesh.ops.delete(bm, geom=kill, context="VERTS")
+    if faces:
+        kill = [p for p in bm.faces if not keep(p.calc_center_median(), {})]
+        bmesh.ops.delete(bm, geom=kill, context="FACES")
+        loose = [v for v in bm.verts if not v.link_faces]; bmesh.ops.delete(bm, geom=loose, context="VERTS")
+        # relax the cut edge so it doesn't zig-zag
+        for _ in range(6):
+            bnd = [v for v in bm.verts if v.is_boundary]
+            bmesh.ops.smooth_vert(bm, verts=bnd, factor=0.5, use_axis_x=True, use_axis_y=True, use_axis_z=True)
+    else:
+        kill = []
+        for v in bm.verts:
+            grp = {vg[k]: w for k, w in v[dl].items()} if dl else {}
+            if not keep(v.co, grp): kill.append(v)
+        bmesh.ops.delete(bm, geom=kill, context="VERTS")
     bm.to_mesh(me); bm.free()
     me.materials.clear(); me.materials.append(mat)
     for md in list(o.modifiers):
@@ -141,16 +151,15 @@ nt.links.new(stripes.outputs["Color"], b.inputs["Base Color"]); b.inputs["Roughn
 b.inputs["Emission Color"].default_value = (0.6, 0.8, 0.0, 1); b.inputs["Emission Strength"].default_value = 0.15
 ARMS = ("upperarm", "lowerarm", "shoulder", "wrist", "finger", "clavicle")
 def vest_keep(co, g):
-    if not g: return False
     return (0.98 < co.z < 1.42) and abs(co.x) < (0.19 if co.z < 1.33 else 0.15)
-derived_mesh(cloth(CH["ManW"], "casualsuit"), "ManW.vest", vest_keep, 0.018, VEST)
+derived_mesh(cloth(CH["ManW"], "casualsuit"), "ManW.vest", vest_keep, 0.018, VEST, faces=True)
 GLOVE = bpy.data.materials.new("Gloves"); GLOVE.use_nodes = True
 gb = GLOVE.node_tree.nodes["Principled BSDF"]; gb.inputs["Base Color"].default_value = (0.03, 0.03, 0.035, 1); gb.inputs["Roughness"].default_value = 0.55
 def glove_keep(co, g):
     w = sum(v for k, v in g.items() if k.startswith(("wrist", "finger", "metacarpal")))
     return w > 0.5
 GLOVES = derived_mesh(ob("Man.body"), "Man.gloves", glove_keep, 0.004, GLOVE)
-MVEST = derived_mesh(cloth(CH["Man"], "casualsuit"), "Man.vest", vest_keep, 0.018, VEST)
+MVEST = derived_mesh(cloth(CH["Man"], "casualsuit"), "Man.vest", vest_keep, 0.018, VEST, faces=True)
 KHAKI_D = bpy.data.materials.new("CapKhaki"); KHAKI_D.use_nodes = True
 KHAKI_D.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.32, 0.25, 0.13, 1)
 VISOR = bpy.data.materials.new("CapVisor"); VISOR.use_nodes = True
@@ -244,16 +253,35 @@ class Char:
         for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
             bn = "finger1-%d.%s" % (j, s)
             self.R.key_q(bn, f, self.R.local_q(bn, Matrix.Rotation(R_(fl * sign), 3, a) @ Matrix.Rotation(R_(22 * sign), 3, d)))
-    def smile(self, f, amt):
-        """mouth corners up/out with the MPFB face bones"""
+    def smile(self, f, amt, smirk=0.0):
+        """mouth corners up/out with the MPFB face bones (oris03/04 = lip corners, risorius = cheeks); smirk>0 favours the left corner"""
         for s, sx in (("L", 1), ("R", -1)):
-            for bn, dz, dx in (("risorius03.", 0.006, 0.004), ("risorius02.", 0.004, 0.003), ("oris07.", 0.004, 0.002)):
+            k = amt * ((1 + smirk) if s == "L" else (1 - smirk))
+            for bn, dz, dx in (("oris03.", 0.0038 * k, 0.0025 * k), ("risorius03.", 0.003 * k, 0.0015 * k)):
                 n = bn + s
                 if n not in self.R.PB: continue
                 pb = self.R.PB[n]; Rr = self.R.rest(n).to_3x3()
-                pb.location = Rr.inverted() @ Vector((sx * dx * amt, 0, dz * amt))
+                pb.location = Rr.inverted() @ Vector((sx * dx, 0, dz))
                 pb.keyframe_insert("location", frame=f, group=n)
+def ground_z(x, y):
+    """walkable floor heights of our sets"""
+    if STATION["x0"] < x < STATION["x1"] and STATION["y0"] < y < STATION["y1"]: return 0.02
+    if OFFICE["x0"] < x < OFFICE["x1"] and OFFICE["y0"] < y < OFFICE["y1"]: return 0.02
+    if SUB["x0"] < x < SUB["x1"] and SUB["y0"] < y < SUB["y1"]: return 0.05
+    if 4.15 < abs(x) < 7.2: return 0.03
+    return 0.0
 RIG = {nm: Char(a) for nm, a in CH.items()}
+# shoe soles: measure how far the sole sits below the bare-foot reference in the rest pose and lift the IK ankles by that
+for nm, ch in RIG.items():
+    arm = ch.o; arm.data.pose_position = "REST"; bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    sh = next(o for o in meshes(arm) if ".shoes" in o.name)
+    me = sh.evaluated_get(dg).to_mesh(); zmin = min((sh.matrix_world @ v.co).z for v in me.vertices); sh.evaluated_get(dg).to_mesh_clear()
+    bd = next(o for o in meshes(arm) if ".body" in o.name)
+    me = bd.evaluated_get(dg).to_mesh(); bmin = min((bd.matrix_world @ v.co).z for v in me.vertices); bd.evaluated_get(dg).to_mesh_clear()
+    arm.data.pose_position = "POSE"
+    for s_ in "LR": ch.H.ankle[s_].z -= zmin
+    print("SOLE", nm, round(zmin, 3), "body", round(bmin, 3))
 json.dump(POLE_CACHE, open(_pc, "w"))
 for nm, ch in RIG.items():
     print("RIG", nm, "root", tuple(round(x, 3) for x in ch.ROOT))
@@ -316,12 +344,12 @@ def bike_pt(f, lx, ly, lz):
     lean = -head * 1.6 + R_(-7) * smooth((f - FS + 6) / 12)
     Mb = Matrix.Translation((x, y, 0)) @ Matrix.Rotation(head, 4, "Z") @ Matrix.Rotation(lean, 4, "Y")
     return Mb @ Vector((lx, ly, lz)), head
-SEAT = (0.0, -0.22, 0.80); GRIP = {"L": (0.29, 0.27, 0.99), "R": (-0.29, 0.27, 0.99)}; PEG = {"L": (0.2, 0.02, 0.30), "R": (-0.2, 0.02, 0.30)}
+SEAT = (0.0, -0.22, 0.80); GRIP = {"L": (-0.29, 0.27, 0.99), "R": (0.29, 0.27, 0.99)}; PEG = {"L": (-0.2, 0.02, 0.30), "R": (0.2, 0.02, 0.30)}   # bike faces +Y: rider's left = -X
 
 # ------------------------------------------------------------------ Man (road): ride, stop, ticket, hard hat
 def ride_pose(f, look=0.0, hair=0.0):
     p, h = bike_pt(f, *SEAT); yaw = 180 + math.degrees(h)
-    M.body(f, p + Vector((0, 0, 0.12)), yaw=yaw, flex=6, spine=(22 + 2 * math.sin(f * 0.21), look * 0.3, 0), head=(-14, look))
+    M.body(f, p + Vector((0, 0, 0.12)), yaw=yaw, flex=10, spine=(30 + 2 * math.sin(f * 0.21), look * 0.3, 0), head=(-22, look))
     for s in "LR":
         g, _ = bike_pt(f, *GRIP[s]); M.hand(s, f, g + Vector((0, 0, 0.03)), (bike_pt(f, GRIP[s][0] * 1.6, GRIP[s][1] + 0.05, GRIP[s][2])[0] - g).normalized() if False else M.dirv(f, (1 if s == "L" else -1) * 0.7, 0.4, -0.2), M.dirv(f, 0, 0.2, -1))
         M.fingers(s, f, 62, 40)
@@ -334,12 +362,22 @@ ride_pose(FS - 8, look=30); ride_pose(FS, look=35)
 pg, h0 = bike_pt(FS, *PEG["R"]); yaw0 = 180
 for f in (FS - 14, FS - 8):
     pg2, _ = bike_pt(f, *PEG["R"]); M.foot("R", f, pg2.to_2d(), yaw0, lift=pg2.z, pitch=-5)
-lfoot = bike_pt(FS, 0.42, 0.05, 0)[0]
+lfoot = bike_pt(FS, -0.42, 0.05, 0)[0]
 pgl, _ = bike_pt(FS - 14, *PEG["L"]); M.foot("L", FS - 14, pgl.to_2d(), yaw0, lift=pgl.z, pitch=-5)
 M.foot("L", FS - 7, ((pgl + lfoot) / 2).to_2d(), yaw0, lift=0.12, pitch=10)
 M.foot("L", FS, lfoot.to_2d(), yaw0)
 for f in (FS + 30, 400):
     pg2, _ = bike_pt(f, *PEG["R"]); M.foot("R", f, pg2.to_2d(), yaw0, lift=pg2.z, pitch=-5); M.foot("L", f, lfoot.to_2d(), yaw0)
+# wind while riding: hair and shirt ripple (noise displacement swept by a moving empty), dies away as he stops
+wind = bpy.data.objects.new("WindSweep", None); C("Props").objects.link(wind)
+for f, y in ((1, 0.0), (FS, -12.0), (FS + 40, -12.5)):
+    wind.location = (0, y, 0); wind.keyframe_insert("location", frame=f)
+wtex = bpy.data.textures.new("WindNoise", "CLOUDS"); wtex.noise_scale = 0.06
+for o, st in ((next(x for x in meshes(CH["Man"]) if ".short" in x.name), 0.018), (cloth(CH["Man"], "casualsuit"), 0.007)):
+    md = o.modifiers.new("wind", "DISPLACE"); md.texture = wtex; md.texture_coords = "OBJECT"; md.texture_coords_object = wind
+    md.mid_level = 0.5
+    for f, v in ((1, st), (FS - 10, st), (FS + 15, 0.0)):
+        md.strength = v; o.keyframe_insert('modifiers["wind"].strength', frame=f)
 SP, _ = bike_pt(FS, *SEAT); SP = SP + Vector((0, 0, 0.12))
 TICKET_F = 276
 # annoyed acting while the officer writes; takes the slip with the right hand, shakes head
@@ -362,9 +400,9 @@ M.hand("R", TICKET_F, SLIP_HAND + Vector((0.07, -0.05, -0.02)), (SLIP_HAND - M.p
 M.hand_b("R", 292, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1)); M.fingers("R", 292, 55, 45)      # holds the slip, looks at it
 # left hand grabs the hard hat off the rear seat, swings it onto his head
 HAT_SEAT = (0.0, -0.62, 0.86)
-M.hand("L", 296, bike_pt(296, 0.25, -0.5, 1.0)[0], M.dirv(296, -0.2, -0.6, -0.8), M.dirv(296, -0.8, 0, -0.3)); M.fingers("L", 296, 25, 20)
+M.hand("L", 296, bike_pt(296, -0.25, -0.5, 1.0)[0], M.dirv(296, -0.2, -0.6, -0.8), M.dirv(296, -0.8, 0, -0.3)); M.fingers("L", 296, 25, 20)
 hs, _ = bike_pt(302, *HAT_SEAT)
-M.hand("L", 302, hs + Vector((0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0)); M.fingers("L", 302, 55, 40)
+M.hand("L", 302, hs + Vector((-0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0)); M.fingers("L", 302, 55, 40)
 M.hand_b("L", 310, 0.25, 0.22, 1.55, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0)); M.fingers("L", 310, 55, 40)
 M.hand_b("L", 318, 0.13, -0.02, 1.83, d=(-0.6, 0.3, 0.5), n=(-1, 0, -0.4), pole=M.pt(318, 0.7, 0.2, 1.7)); M.fingers("L", 318, 50, 35)
 M.hand_b("L", 330, 0.12, 0.0, 1.84, d=(-0.6, 0.3, 0.5), n=(-1, 0, -0.4), pole=M.pt(330, 0.7, 0.2, 1.7))
@@ -420,7 +458,7 @@ for f in range(1, 401, 40):
     for s, ph in (("L", 0), ("R", math.pi)):
         PB_.hang(s, f, swing=0.16 * math.sin(f / 18 + ph))
 # dusk: both stroll past the dark station at the end
-PA_C, PA_D = Vector((-4.6, 64.0, PA.ROOT.z)), Vector((-4.6, 58.0, PA.ROOT.z))
+PA_C, PA_D = Vector((-1.6, 66.0, PA.ROOT.z)), Vector((-1.6, 59.5, PA.ROOT.z))
 PA.walk(lambda f: PA_C.lerp(PA_D, (f - 1385) / 175), lambda f: 0.0, 1385, 1560, stride=0.62, step=2)
 for f in range(1385, 1561, 40):
     for s, ph in (("L", 0), ("R", math.pi)):
@@ -432,7 +470,7 @@ for o in meshes(CH["PedA"]): key_vis(o, [(1, 400), (1385, 1560)])
 for o in meshes(CH["PedB"]): key_vis(o, [(1, 400)])
 
 # ------------------------------------------------------------------ ManW: substation gate, walk in; office; cabinet; final stroll
-WG = Vector((GATE.x - 0.7, GATE.y + 0.35, W.ROOT.z))
+WG = Vector((GATE.x - 0.7, ob("Gate").location.y, W.ROOT.z))
 W.body(320, WG, yaw=-70, spine=(-4, 0, 0), head=(-6, 8)); W.stand_feet(320)
 W.hang("L", 320); W.hand_b("R", 320, -0.12, 0.2, 1.08, d=(0.6, 0.5, -0.3), n=(0, 0, 1)); W.fingers("R", 320, 50, 30)   # holding the key
 W.body(360, WG, yaw=-66, spine=(-6, -4, 0), head=(-10, 0), jaw=2); W.stand_feet(360); W.hang("L", 360, swing=0.03)
@@ -440,17 +478,19 @@ W.hand_b("R", 360, -0.14, 0.22, 1.12, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
 W.body(392, WG, yaw=-74, spine=(-8, 2, 0), head=(-12, -6)); W.stand_feet(392); W.hang("L", 392)
 W.hand_b("R", 392, -0.16, 0.2, 1.1, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
 # turns to the gate, unlocks (right hand to the latch), pushes it open with the left, walks in
-LATCH = Vector((GATE.x - 0.05, GATE.y - 0.45, 1.05))
+GATE_O = ob("Gate"); GY = GATE_O.location.y
+LATCH = Vector((GATE.x - 0.06, GY - 0.40, 1.05))
 W.body(410, WG, yaw=90, spine=(8, 0, 0), head=(10, 0)); W.stand_feet(410)
 W.hand("R", 410, LATCH, Vector((1, 0, -0.2)), Vector((0, 1, 0))); W.fingers("R", 410, 55, 30)
-W.hand("L", 410, Vector((GATE.x - 0.08, GATE.y + 0.2, 1.15)), Vector((1, 0, 0.3)), Vector((1, 0, 0))); W.fingers("L", 410, 10, 10)
+W.hand("L", 410, Vector((GATE.x - 0.08, GY - 0.15, 1.15)), Vector((1, 0, 0.3)), Vector((1, 0, 0)))
+W.hand("L", 432, Vector((GATE.x + 0.15, GY - 0.25, 1.15)), Vector((1, 0, 0.2)), Vector((1, 0, 0))); W.fingers("L", 410, 10, 10)
 W.hand("R", 422, LATCH + Vector((0, 0, 0.03)), Vector((1, 0, -0.2)), Vector((0, 1, 0)))
 WIN_A = WG + Vector((0, 0, 0)); WIN_B = Vector((12.5, 26.5, W.ROOT.z))
 def wpath(f):
-    u = smooth((f - 428) / 78)
-    a = WIN_A.lerp(Vector((GATE.x + 1.0, GATE.y + 0.2, W.ROOT.z)), min(1, u * 2))
+    u = smooth((f - 436) / 70)
+    a = WIN_A.lerp(Vector((GATE.x + 1.0, GY, W.ROOT.z)), min(1, u * 2))
     return a.lerp(WIN_B, max(0, u * 2 - 1))
-W.walk(wpath, lambda f: 90 - 25 * smooth((f - 470) / 30), 428, 506, stride=0.72, step=2)
+W.walk(wpath, lambda f: 90 - 25 * smooth((f - 470) / 30), 436, 506, stride=0.72, step=2)
 for f in range(428, 507, 16):
     for s, ph in (("L", 0), ("R", math.pi)):
         W.hang(s, f, swing=0.2 * math.sin(f / 13 + ph))
@@ -499,12 +539,13 @@ for f in (900, 1010, 1030, 1044):
     M.hang("L", f, out=0.02)
 M.hand("R", 1010, lever_tip(0) + Vector((-0.12, -0.06, -0.12)), Vector((1, 0, 0.5)), Vector((0, 1, 0))); M.fingers("R", 1010, 20, 15)
 M.hand("R", 1030, lever_tip(0) + Vector((-0.07, -0.02, -0.05)), Vector((0.6, 0, 0.8)), Vector((0.2, 1, 0))); M.fingers("R", 1030, 30, 20)
-for f in (1044, 1048, 1056, 1062, 1066, 1070, 1076, 1090):
+for f in (1044, 1048, 1056, 1062, 1066, 1070, 1076, 1088):
     a = lever_a(f); tp = lever_tip(a)
     M.hand("R", f, tp + Vector((-0.055, 0.0, -0.02)), Vector((0.55, 0, 0.5)) if a < 0.5 else Vector((0.7, 0, -0.4)), Vector((0, 1, 0))); M.fingers("R", f, 72, 50)
 M.body(1056, CAB_STAND + Vector((0.02, 0, 0.01)), yaw=88, spine=(-4, 6, 0), head=(-8, 0)); M.stand_feet(1056, width=1.2, stagger=0.06)
 M.body(1068, CAB_STAND + Vector((0.06, 0, -0.06)), yaw=86, spine=(22, -8, 4), head=(16, 0), jaw=4); M.stand_feet(1068, width=1.2, stagger=0.06)
-M.body(1080, CAB_STAND + Vector((-0.04, 0, -0.03)), yaw=90, spine=(4, -10, 0), head=(-6, -10)); M.stand_feet(1080, width=1.2, stagger=0.06)
+M.body(1080, CAB_STAND + Vector((0.04, 0, -0.05)), yaw=88, spine=(18, -8, 2), head=(8, -6))
+M.body(1092, CAB_STAND + Vector((0.0, 0, -0.03)), yaw=90, spine=(12, -10, 0), head=(0, -10)); M.stand_feet(1080, width=1.2, stagger=0.06)
 M.hang("L", 1056, swing=-0.15, out=0.05); M.hang("L", 1068, swing=0.1, out=0.12); M.hang("L", 1080, out=0.04)
 M.body(1110, CAB_STAND + Vector((-0.08, 0, 0)), yaw=60, spine=(-4, -20, 0), head=(-6, -30)); M.stand_feet(1110, width=1.2)
 M.hand_b("R", 1110, -0.25, 0.25, 1.05, d=(0, 1, 0), n=(1, 0, 0)); M.hang("L", 1110)
@@ -512,13 +553,13 @@ M.smile(1010, 0.6); M.smile(1080, 1.3)
 for o in meshes(CH["ManW"]):
     if o is not GLOVES: key_vis(o, [(318, 506), (508, 1019), (1380, 1560)])
 # final stroll in front of the dark station at dusk, hands in pockets, smirk to camera
-SA, SB = Vector((-5.3, 54.2, W.ROOT.z)), Vector((-5.3, 57.6, W.ROOT.z))
-W.walk(lambda f: SA.lerp(SB, smooth((f - 1380) / 135) * 0.6 + 0.4 * (f - 1380) / 135), lambda f: 180 - 30 * smooth((f - 1490) / 30), 1380, 1515, stride=0.62, lift=0.06, step=2)
+SA, SB = Vector((-3.6, 52.6, W.ROOT.z)), Vector((-3.6, 56.8, W.ROOT.z))
+W.walk(lambda f: SA.lerp(SB, smooth((f - 1380) / 135) * 0.6 + 0.4 * (f - 1380) / 135), lambda f: 180 + 15 * smooth((f - 1490) / 25), 1380, 1515, stride=0.7, lift=0.07, step=2)
 for f in range(1380, 1561, 12):
     for s, sx in (("L", 1), ("R", -1)):
         W.hand_b(s, f, sx * 0.19, -0.02, W.ROOT.z - 0.07, d=(sx * 0.15, 0.15, -1), n=(-sx * 0.3, -1, 0)); W.fingers(s, f, 45, 30)
-for f, hd, sm in ((1515, (-4, -20), 0.8), (1535, (-6, -38), 1.6), (1560, (-6, -40), 1.8)):
-    W.body(f, SB, yaw=150, spine=(-4, -14, 0), head=hd); W.stand_feet(f); W.smile(f, sm)
+for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1560, (-9, 14), 1.6)):
+    W.body(f, SB, yaw=195, spine=(-4, 6, 0), head=hd); W.stand_feet(f); W.smile(f, sm, smirk=0.6)
 # teleports between segments are constant (keys exist at both ends)
 teleport_constant(W.o, [1379])
 teleport_constant(M.o, [340])
@@ -549,7 +590,7 @@ OC_POS = Vector((-14.3, 56.4, OC.ROOT.z))
 for i, f in enumerate(range(1160, 1561, 30)):
     yw = 70 + 25 * math.sin(f / 50)
     OC.body(f, OC_POS, yaw=yw, spine=(2, 8 * math.sin(f / 40), 0), head=(-4, -10 * math.sin(f / 50))); OC.stand_feet(f, width=1.1)
-    OC.hand_b("R", f, -0.18, 0.42, 1.35, d=(0.1, 1, 0.3), n=(0, 0.3, -1)); OC.fingers("R", f, 65, 40)
+    OC.hand_b("R", f, -0.18, 0.4, 1.38, d=(0.05, 0.3, 1), n=(0, -1, 0.4)); OC.fingers("R", f, 65, 40)
     OC.hand_b("L", f, 0.2, 0.05, 0.92, d=(0.1, 0.2, -1), n=(-1, 0, 0))
 for nm in ("OfficerB", "OfficerC"):
     for o in meshes(CH[nm]): key_vis(o, [(1150, 1560)])

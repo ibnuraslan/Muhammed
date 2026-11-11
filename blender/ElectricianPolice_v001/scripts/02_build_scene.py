@@ -411,10 +411,10 @@ def fence_line(a, b, gap=None):
     ang = math.atan2(d.y, d.x) - (0 if fx_is_len else R_(90))
     for i in range(n):
         p = a + d * (flen * (i + 0.5))
-        if gap and (p - Vector(gap)).length < flen * 0.9:
+        if gap and abs((p - Vector(gap)).dot(d)) < flen * 0.5:
             g = inst(GATE_M, "Gate", p, rotz=ang, c="Substation"); continue
         inst(FENCE, "Fence_%d_%d" % (int(a.x), int(a.y) + i * 100), p, rotz=ang, c="Substation")
-fence_line((8.0, 10.0, 0.05), (8.0, 46.0, 0.05), gap=GATE)
+fence_line((8.0, 10.03, 0.05), (8.0, 46.0, 0.05), gap=GATE)
 fence_line((8.0, 10.0, 0.05), (34.0, 10.0, 0.05)); fence_line((34.0, 10.0, 0.05), (34.0, 46.0, 0.05)); fence_line((8.0, 46.0, 0.05), (17.0, 46.0, 0.05))
 # warning plate on the gate: red triangle + lightning bolt, no text
 tri = bpy.data.meshes.new("warn"); bm = bmesh.new()
@@ -589,14 +589,13 @@ def hard_hat(name):
     me = bpy.data.meshes.new(name); bm = bmesh.new()
     bmesh.ops.create_uvsphere(bm, u_segments=24, v_segments=12, radius=0.135)
     for v in [v for v in bm.verts if v.co.z < -0.005]: bm.verts.remove(v)
-    for v in bm.verts: v.co.y *= 1.12; v.co.x *= 0.98; v.co.z *= 1.0
+    for v in bm.verts: v.co.y *= 1.12; v.co.x *= 0.98; v.co.z *= 1.12
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); me.materials.append(HAT_Y); link(o, "Props")
     for p in me.polygons: p.use_smooth = True
     so = o.modifiers.new("solid", "SOLIDIFY"); so.thickness = 0.006
     brim = cyl(name + "_brim", (0, 0, 0.0), 0.142, 0.008, HAT_Y, c="Props", verts=24); brim.scale = (1.0, 1.15, 1.0); brim.parent = o
     peak = box(name + "_peak", (-0.06, -0.2, -0.004), (0.06, -0.14, 0.004), HAT_Y, c="Props", bevel=0.01); peak.parent = o
-    ridge = box(name + "_ridge", (-0.01, -0.11, 0.115), (0.01, 0.11, 0.14), HAT_Y, c="Props", bevel=0.008); ridge.parent = o
     return o
 hard_hat("HardHat_Road"); hard_hat("HardHat_Work")
 inst(PHONE, "St_Phone", (0, 0, 0), c="Props")
