@@ -25,16 +25,17 @@ section { display: grid; gap: 16px; }
 .box { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; min-width: 0; }
 .box ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--muted); }
 .box li b { color: var(--fg); font-weight: 500; }
-.sets { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-.set .tag { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--red); }
-.set p { color: var(--muted); font-size: 14px; }
+.strip { display: grid; grid-template-columns: 9fr 7fr 8fr 8fr 5fr; gap: 4px; font-family: var(--mono); font-size: 11.5px; }
+.strip div { background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; padding: 8px 8px; min-width: 0; overflow: hidden; }
+.strip b { display: block; color: var(--fg); font-weight: 500; font-size: 12px; }
+.strip span { color: var(--muted); }
 .shot { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 0 26px; border-top: 1px solid var(--rule); padding-top: 22px; }
 .rail { display: grid; align-content: start; gap: 4px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .rail .n { font-family: var(--display); font-weight: 800; font-size: 30px; color: var(--fg); line-height: 1; }
 .rail .tc { color: var(--fg); }
 .rail .set { color: var(--red); letter-spacing: .08em; }
 .body { display: grid; gap: 14px; min-width: 0; }
-.line { font-family: var(--display); font-weight: 500; font-size: 19px; line-height: 1.35; padding-left: 14px; border-left: 2px solid var(--red); text-wrap: balance; }
+.line { font-family: var(--display); font-weight: 500; font-size: 19px; line-height: 1.4; padding-left: 14px; border-left: 2px solid var(--red); text-wrap: pretty; }
 .line.none { border-left-color: var(--rule); color: var(--muted); font-size: 15px; font-family: var(--body); }
 .see { color: var(--fg); }
 .beats { width: 100%; border-collapse: collapse; font-size: 14px; }
@@ -43,62 +44,33 @@ section { display: grid; gap: 16px; }
 .tw { overflow-x: auto; }
 .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 22px; font-size: 13.5px; color: var(--muted); }
 .how b { display: block; font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); margin-bottom: 2px; }
-.pill { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; color: var(--green); margin-top: 6px; width: max-content; }
-.cut { color: var(--muted); font-size: 13.5px; }
-.cut s { color: var(--faint); }
+.pill { display: inline-block; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; color: var(--green); width: max-content; }
 table.cost { border-collapse: collapse; font-size: 14px; width: 100%; font-variant-numeric: tabular-nums; }
-table.cost th, table.cost td { text-align: left; border-top: 1px solid var(--rule); padding: 7px 14px 7px 0; }
+table.cost th, table.cost td { text-align: left; border-top: 1px solid var(--rule); padding: 7px 14px 7px 0; vertical-align: top; }
 table.cost th { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); }
 @media (max-width: 720px) {
   .shot { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .rail { grid-auto-flow: column; justify-content: start; align-items: baseline; gap: 14px; }
   .line { font-size: 17px; }
+  .strip { grid-template-columns: 1fr; }
 }
 </style>
 <div class="wrap">
 <header>
-  <span class="eyebrow">The Spy Allegations Rocking Nvidia · Intro · Plan for approval</span>
-  <h1>Second-by-second shot plan</h1>
-  <p class="sub">Every second of the intro: what you see, what moves, where the camera goes and how each move is animated. Nothing is built or rendered until you approve this. After approval I render a rough moving preview of every shot, and the final render only starts once you've approved the preview.</p>
-  <div class="facts"><span><b>≈37s</b> runtime</span><span><b>14</b> shots</span><span><b>4</b> sets + the café</span><span><b>2.35:1</b> · 1920×816</span><span>Timings move to your voiceover when it arrives</span></div>
+  <span class="eyebrow">The Spy Allegations Rocking Nvidia · Intro · Plan v3 for approval</span>
+  <h1>Five shots, one per idea</h1>
+  <p class="sub">One continuous shot for each part of the narration, about 7 seconds each. The camera keeps moving and the action plays out inside the shot, so there are no quick inserts or cutaways. Nothing gets built until you approve this.</p>
+  <div class="facts"><span><b>≈37s</b> runtime</span><span><b>5</b> shots</span><span><b>≈7s</b> per shot</span><span><b>2.35:1</b> · 1920×816</span><span>Timings move to your voiceover when it arrives</span></div>
 </header>
 
 <section>
-  <h2>Look: same as the Iceman film</h2>
-  <div class="grid2">
-    <div class="box"><h3>Light and colour</h3><ul>
-      <li><b>Soft, natural light.</b> Blue-hour dawn, overcast daylight, clean interiors. No neon, no dark boxes.</li>
-      <li><b>Cool, desaturated steel palette</b> like the Iceman glacier and lab, with one warm source per scene (a lamp, phone glow).</li>
-      <li><b>One graphic accent colour:</b> the Iceman red, used only on the map.</li>
-    </ul></div>
-    <div class="box"><h3>Finish (same post chain as Iceman)</h3><ul>
-      <li>Rendered at 12 fps and interpolated to 24 fps with motion compensation</li>
-      <li>Bloom and halation, slight chromatic aberration, vignette, film grain</li>
-      <li>Floating dust in interiors, light drizzle in the street (3D-projected like the Iceman snow)</li>
-      <li>Straight cuts between shots. A short dissolve only where the set changes, and no wipes</li>
-    </ul></div>
-    <div class="box"><h3>Text (Iceman labels)</h3><ul>
-      <li>Thin, wide-tracked capitals with one small data line underneath, like “ÖTZTAL ALPS / Austrian–Italian border”</li>
-      <li>Used for names, the date and the map. Nothing else on screen.</li>
-      <li>“DRAMATIZATION” small in the corner on recreated scenes</li>
-    </ul></div>
-    <div class="box"><h3>Animation rules</h3><ul>
-      <li><b>No still frames.</b> In every shot the camera moves and something in frame moves.</li>
-      <li>People are posed every frame from their skeleton: walking, typing, turning heads, placing objects.</li>
-      <li>Vehicles, ships and cranes follow animated paths; trees, flags and water move with wind and noise.</li>
-      <li>Fast close-ups (1–2s) cut against wides, as in the reference.</li>
-    </ul></div>
-  </div>
-</section>
-
-<section>
-  <h2>The four sets</h2>
-  <p class="sub">Following the reference: a few complete environments, each used for several shots from different angles, instead of a new set for every line.</p>
-  <div class="sets">
-    <div class="box set"><span class="tag">SET 1 · HOME</span><h3>Living room, blue-hour dawn</h3><p>Floor-to-ceiling windows onto wooded hills and a road below. Low sofa, coffee table, rug, floor lamp, bookshelf, a plant. He sits on the sofa in the black leather jacket.</p></div>
-    <div class="box set"><span class="tag">SET 2 · BOARDROOM</span><h3>Glass boardroom, overcast day</h3><p>A long table, 7 people seated facing the table, the head chair empty. Through the glass: a realistic Santa Clara view of low-rise campus buildings, car parks, palm and oak trees, freeway traffic and the hills. Santa Clara has no skyscrapers, so no fake towers.</p></div>
-    <div class="box set"><span class="tag">SET 3 · STREET</span><h3>City street at dusk</h3><p>A real four-lane road with cars, a bus and scooters moving, traffic lights, a crossing, wet pavement, pedestrians. Shop signs are proper lit panels with readable text, no floating glowing boxes. Alice walks the sidewalk.</p></div>
-    <div class="box set"><span class="tag">SET 4 · PORT → MAP</span><h3>Container port, daylight</h3><p>A container ship at the quay, 3 gantry cranes, stacks, trucks, a tug with a wake, a second ship coming in. The camera rises out of the port into an Iceman-style relief map of East Asia, where China is highlighted.</p></div>
+  <h2>At a glance</h2>
+  <div class="strip">
+    <div><b>1 · Home</b><span>0:00–0:09</span></div>
+    <div><b>2 · Boardroom</b><span>0:09–0:16</span></div>
+    <div><b>3 · Street</b><span>0:16–0:24</span></div>
+    <div><b>4 · Port → map</b><span>0:24–0:32</span></div>
+    <div><b>5 · Title</b><span>0:32–0:37</span></div>
   </div>
 </section>
 
@@ -106,210 +78,94 @@ table.cost th { font-family: var(--mono); font-weight: 500; font-size: 11px; let
   <h2>Shot by shot</h2>
 
   <article class="shot">
-    <div class="rail"><span class="n">1</span><span class="tc">0:00.0–0:03.0</span><span>3.0s</span><span class="set">HOME</span></div>
+    <div class="rail"><span class="n">1</span><span class="tc">0:00–0:09</span><span>9s, one take</span><span class="set">HOME</span></div>
     <div class="body">
-      <p class="line">“I was unfaithful to my wife.”</p>
-      <p class="see">Wide. He sits on the sofa, small against the big window. Blue dawn outside, one warm lamp beside him, his face lit by the phone.</p>
+      <p class="line">“I was unfaithful to my wife.” That’s what Nvidia CEO Jensen Huang tells his employees on November eighth.</p>
+      <p class="see">Living room at dawn. He sits alone on the sofa in front of a big window, typing on his phone. The camera slowly drifts in from across the room the whole time.</p>
       <div class="tw"><table class="beats">
-        <tr><td>0.0–0.8</td><td>Fade up from black. Outside, trees sway and a car’s headlights slide along the road below.</td></tr>
-        <tr><td>0.8–2.0</td><td>He bends over the phone, both thumbs typing (6 taps a second). His shoulders rise and fall with breathing.</td></tr>
-        <tr><td>2.0–3.0</td><td>He stops typing and stays still, thumb hovering.</td></tr>
+        <tr><td>0–3s</td><td>Wide. Fade up from black. He is bent over the phone, typing, with the glow on his face. The real dawn sky outside slowly brightens.</td></tr>
+        <tr><td>3–6s</td><td>The camera is closer now. He stops typing, hesitates, then presses send.</td></tr>
+        <tr><td>6–9s</td><td>He puts the phone down on the coffee table and leans back into the sofa.</td></tr>
       </table></div>
-      <div class="how"><div><b>Camera</b>Slow dolly in from 4.5 m to 3.8 m, drifting slightly right, 35 mm lens.</div><div><b>Animated</b>Thumb bones keyframed per tap, a breathing loop on spine and shoulders, trees moved by wind noise, car on a path.</div><div><b>On screen</b>DRAMATIZATION</div></div>
+      <div class="how"><div><b>Camera</b>A single slow push-in from about 5 m to 2.5 m, ending at a medium shot.</div><div><b>Moves</b>Typing thumbs, breathing, the send press, the arm putting the phone down, the lean back, the sky.</div><div><b>On screen</b>JENSEN HUANG / CEO, Nvidia at 3s · NOVEMBER 8 at 6s · DRAMATIZATION</div></div>
     </div>
   </article>
 
   <article class="shot">
-    <div class="rail"><span class="n">2</span><span class="tc">0:03.0–0:05.4</span><span>2.4s</span><span class="set">HOME</span></div>
+    <div class="rail"><span class="n">2</span><span class="tc">0:09–0:16</span><span>7s, one take</span><span class="set">BOARDROOM</span></div>
     <div class="body">
-      <p class="line">That’s what Nvidia CEO Jensen Huang tells his employees</p>
-      <p class="see">Over his shoulder, close on the phone. The email to “All employees” is on screen with the last words being typed.</p>
+      <p class="line">The same day, Nvidia opens an independent investigation into whether a foreign intelligence service targeted him.</p>
+      <p class="see">A daylight boardroom. Seven people sit facing the table and the head chair is empty. A woman walks the length of the table and puts a folder down at the empty chair.</p>
       <div class="tw"><table class="beats">
-        <tr><td>0.0–1.4</td><td>The final letters type in and the cursor blinks. His hand rocks slightly.</td></tr>
-        <tr><td>1.4–2.4</td><td>His thumb moves up toward the send button.</td></tr>
+        <tr><td>0–3s</td><td>The camera tracks slowly along the table. The board members talk quietly and turn their heads. The real city view is outside the window.</td></tr>
+        <tr><td>3–5s</td><td>She walks in and down the table, and heads turn to follow her.</td></tr>
+        <tr><td>5–7s</td><td>She puts the folder down at the head chair. Nobody speaks.</td></tr>
       </table></div>
-      <div class="how"><div><b>Camera</b>Handheld over-the-shoulder, slow push-in, 50 mm lens, focus on the screen.</div><div><b>Animated</b>The email UI is tracked onto the screen corners every frame (as in the version you approved), with the hand moving in 3D.</div><div><b>On screen</b>JENSEN HUANG / Co-founder and CEO, Nvidia</div></div>
+      <div class="how"><div><b>Camera</b>A single slow track at seated eye height, ending on the empty chair and the folder.</div><div><b>Moves</b>Her walk, the head turns, small gestures, the folder being placed, clouds passing outside.</div><div><b>On screen</b>DRAMATIZATION</div></div>
     </div>
   </article>
 
   <article class="shot">
-    <div class="rail"><span class="n">3</span><span class="tc">0:05.4–0:06.6</span><span>1.2s</span><span class="set">HOME</span></div>
+    <div class="rail"><span class="n">3</span><span class="tc">0:16–0:24</span><span>8s, one take</span><span class="set">STREET</span></div>
     <div class="body">
-      <p class="line">…on November</p>
-      <p class="see">Close-up of the thumb pressing send.</p>
+      <p class="line">The woman at the center of the allegation is Alice Huang. She comes from the other side of Nvidia’s business.</p>
+      <p class="see">A city street at dusk, filmed with a long lens from across the road. Traffic moves through the foreground while she walks toward us on the far sidewalk, in slight slow motion.</p>
       <div class="tw"><table class="beats">
-        <tr><td>0.0–0.5</td><td>The thumb comes down and presses the button.</td></tr>
-        <tr><td>0.5–1.2</td><td>The message slides away and “Sent” appears.</td></tr>
+        <tr><td>0–2s</td><td>A bus passes in the foreground and reveals her as it clears.</td></tr>
+        <tr><td>2–6s</td><td>She walks steadily, cars and scooters crossing between her and the camera, and the streetlights come on.</td></tr>
+        <tr><td>6–8s</td><td>She glances once to the side and keeps walking.</td></tr>
       </table></div>
-      <div class="how"><div><b>Camera</b>Macro lens, very shallow focus, tiny push-in.</div><div><b>Animated</b>Thumb keyframes, UI slide animation.</div></div>
+      <div class="how"><div><b>Camera</b>A single slow track sideways and back, staying on her.</div><div><b>Moves</b>Her walk, about 12 vehicles in lanes, pedestrians, streetlights warming up.</div><div><b>On screen</b>ALICE HUANG at 2s</div></div>
     </div>
   </article>
 
   <article class="shot">
-    <div class="rail"><span class="n">4</span><span class="tc">0:06.6–0:08.8</span><span>2.2s</span><span class="set">HOME</span></div>
+    <div class="rail"><span class="n">4</span><span class="tc">0:24–0:32</span><span>8s, one take</span><span class="set">PORT → MAP</span></div>
     <div class="body">
-      <p class="line">…eighth.</p>
-      <p class="see">Side view of the sofa. He lowers the phone onto the coffee table, screen down, and leans back.</p>
+      <p class="line">The company she helps build buys the kinds of chips Washington is trying to keep out of China.</p>
+      <p class="see">A drone flies over a busy container port: ships, cranes, a tug. Then it climbs, in the same move, until the coast turns into the relief map and China is highlighted.</p>
       <div class="tw"><table class="beats">
-        <tr><td>0.0–1.0</td><td>The phone goes down onto the table; his hand stays on it a moment.</td></tr>
-        <tr><td>1.0–2.2</td><td>He sits back into the sofa and lifts a hand to his face. The window light grows slightly brighter.</td></tr>
+        <tr><td>0–3s</td><td>Low over the water toward the port. A crane lowers a container and a tug crosses with its wake.</td></tr>
+        <tr><td>3–6s</td><td>The drone rises steadily. The port shrinks and the ships become dots.</td></tr>
+        <tr><td>6–8s</td><td>Through the haze it becomes the relief map. China’s outline draws in red and the label settles. There is no barrier.</td></tr>
       </table></div>
-      <div class="how"><div><b>Camera</b>Slow lateral track left, 40 mm lens.</div><div><b>Animated</b>Arm reaches the table by inverse kinematics, spine and neck lean back, hand to face, sky brightening.</div><div><b>On screen</b>NOVEMBER 8 / Email to all employees</div></div>
+      <div class="how"><div><b>Camera</b>A single continuous climb from the water to map height.</div><div><b>Moves</b>Ships, crane, tug and wake, birds, then the outline drawing on.</div><div><b>On screen</b>CHINA</div></div>
     </div>
   </article>
 
   <article class="shot">
-    <div class="rail"><span class="n">5</span><span class="tc">0:08.8–0:11.6</span><span>2.8s</span><span class="set">BOARDROOM</span></div>
-    <div class="body">
-      <p class="line">The same day, Nvidia opens an independent investigation</p>
-      <p class="see">Wide of the boardroom in daylight. Seven people sit facing the table and talking quietly. A woman walks in from the left carrying a folder.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.2</td><td>The board members talk: heads turn, one gestures, one leans in. Cloud shadows cross the campus outside.</td></tr>
-        <tr><td>1.2–2.8</td><td>She walks in along the table and the nearest members turn their heads to follow her.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Slow track along the table at seated eye height, 35 mm lens.</div><div><b>Animated</b>Walk cycle, head and neck turns, gesture loops, moving cloud shadows, freeway cars outside.</div><div><b>On screen</b>DRAMATIZATION</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">6</span><span class="tc">0:11.6–0:13.0</span><span>1.4s</span><span class="set">BOARDROOM</span></div>
-    <div class="body">
-      <p class="line">…into whether</p>
-      <p class="see">Close-up at tabletop level: her hand puts the folder down and slides it toward the head chair. A plain folder with a small label, nothing elaborate.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–0.6</td><td>The folder touches down and catches the window light.</td></tr>
-        <tr><td>0.6–1.4</td><td>It slides forward and stops. Her hand lifts away.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Low on the table surface, shallow focus, slight push.</div><div><b>Animated</b>Hand and folder on one keyed path, with the reflection in the table.</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">7</span><span class="tc">0:13.0–0:16.2</span><span>3.2s</span><span class="set">BOARDROOM</span></div>
-    <div class="body">
-      <p class="line">…a foreign intelligence service targeted him.</p>
-      <p class="see">Reverse wide from behind the empty head chair, looking down the table with the window behind. The members look at the folder, then at each other.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.6</td><td>One member opens the folder; the others lean in.</td></tr>
-        <tr><td>1.6–3.2</td><td>Two exchange a look; one sits back and takes off his glasses. Clouds keep moving outside.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Slow push over the empty chair, 32 mm lens.</div><div><b>Animated</b>Arm reaches for the folder, folder cover opens on a hinge, head turns, glasses come off.</div></div>
-      <p class="cut">This replaces <s>the surveillance room</s>, as you asked.</p>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">8</span><span class="tc">0:16.2–0:19.6</span><span>3.4s</span><span class="set">STREET</span></div>
-    <div class="body">
-      <p class="line">The woman at the center of the allegation is Alice Huang.</p>
-      <p class="see">Long lens across the road at dusk. Traffic streams through the foreground with headlights and motion blur. Behind it Alice walks toward us on the sidewalk among a few pedestrians, the streetlights coming on.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.2</td><td>A bus crosses the foreground and reveals her as it clears.</td></tr>
-        <tr><td>1.2–3.4</td><td>She walks steadily in slight slow motion and glances once to the side. Cars keep passing between her and the camera.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>85 mm lens, slow track backward and left, focus on her.</div><div><b>Animated</b>Procedural walk cycle with coat, hair and arm swing. About 12 vehicles on lane paths with turning wheels and real headlights and taillights, pedestrians walking, streetlights warming up.</div><div><b>On screen</b>ALICE HUANG</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">9</span><span class="tc">0:19.6–0:21.0</span><span>1.4s</span><span class="set">STREET</span></div>
-    <div class="body">
-      <p class="line">She comes from</p>
-      <p class="see">Ground-level close-up. Her shoes step through a shallow puddle carrying the reflections of moving headlights.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.4</td><td>Two steps, a ripple, and a car passes in the background.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Ground level, slow slide sideways.</div><div><b>Animated</b>Walk cycle, an animated ripple displacement, car on a path.</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">10</span><span class="tc">0:21.0–0:23.8</span><span>2.8s</span><span class="set">STREET</span></div>
-    <div class="body">
-      <p class="line">…the other side of Nvidia’s business.</p>
-      <p class="see">Behind her, following. She reaches the crossing and stops at the kerb as the lights change and traffic moves off.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.6</td><td>She walks and slows to a stop.</td></tr>
-        <tr><td>1.6–2.8</td><td>She waits at the kerb while traffic moves off in front of her and the walk signal counts down across the road. Straight cut to the port.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Steadicam-style follow over her shoulder, 40 mm lens.</div><div><b>Animated</b>Walk slowing to a stand with weight settling onto one leg, traffic-light state changes, cars pulling away from the line.</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">11</span><span class="tc">0:23.8–0:27.0</span><span>3.2s</span><span class="set">PORT</span></div>
-    <div class="body">
-      <p class="line">The company she helps build buys the kinds of chips</p>
-      <p class="see">A drone shot flying low over the water toward a busy container port in daylight. A ship is at the quay, cranes are working, and a tug pushes through frame.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.5</td><td>The tug crosses with a white wake. The ship’s hull fills the left side.</td></tr>
-        <tr><td>1.5–3.2</td><td>A crane lowers a container onto a truck, which drives off. Gulls cross the frame.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Drone flying forward and slowly rising, 28 mm lens.</div><div><b>Animated</b>Ocean waves, a tug on a path with its wake, crane trolley and cable keyframed, a truck on a path, birds on paths.</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">12</span><span class="tc">0:27.0–0:28.4</span><span>1.4s</span><span class="set">PORT</span></div>
-    <div class="body">
-      <p class="line">…Washington</p>
-      <p class="see">Close-up of the crane spreader locking onto a container. Cables tighten and the container lifts.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.4</td><td>Lock, tension, lift. The ship deck drops away below.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Telephoto, tilting up with the lift.</div><div><b>Animated</b>Spreader locks, cable stretch, the container rising.</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">13</span><span class="tc">0:28.4–0:32.0</span><span>3.6s</span><span class="set">PORT → MAP</span></div>
-    <div class="body">
-      <p class="line">…is trying to keep out of China.</p>
-      <p class="see">In one continuous move the camera rises from the port, up through haze, until the coast becomes an Iceman-style relief map of East Asia. China’s outline draws on in red with a soft fill. No barrier, no blocking.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.4</td><td>Climbing out: the port shrinks and ships turn into dots trailing wakes.</td></tr>
-        <tr><td>1.4–2.4</td><td>Through haze the real port dissolves into the same coastline on the relief map.</td></tr>
-        <tr><td>2.4–3.6</td><td>China’s border draws on in red and a soft fill rises. The “CHINA” label tracks into place, and a small pulse marks the port we came from.</td></tr>
-      </table></div>
-      <div class="how"><div><b>Camera</b>Continuous rise and tilt down, from 200 m to orbit height.</div><div><b>Animated</b>One camera path through both scenes. The map is the Iceman terrain renderer fed with real elevation and borders; the border draws on and the label is tracked.</div><div><b>On screen</b>CHINA / People’s Republic of China</div></div>
-    </div>
-  </article>
-
-  <article class="shot">
-    <div class="rail"><span class="n">14</span><span class="tc">0:32.0–0:37.2</span><span>5.2s</span><span class="set">CAFÉ</span></div>
+    <div class="rail"><span class="n">5</span><span class="tc">0:32–0:37</span><span>5s</span><span class="set">CAFÉ</span></div>
     <div class="body">
       <p class="line none">No narration. Title.</p>
-      <p class="see">The café shot you approved. The two of them through the rain-covered window, focus shifting from the drops to them. The title rises over it.</p>
-      <div class="tw"><table class="beats">
-        <tr><td>0.0–1.6</td><td>Push toward the glass; raindrops run down it.</td></tr>
-        <tr><td>1.6–5.2</td><td>Focus moves to the couple and “THE SPY ALLEGATIONS ROCKING NVIDIA” fades up with a soft glow, with a low boom on the cut.</td></tr>
-      </table></div>
-      <span class="pill">Already rendering — no new work</span>
+      <p class="see">The café shot you approved: the two of them through the rain-covered window, with focus shifting from the drops to them. The title rises over it.</p>
+      <span class="pill">Already rendered</span>
     </div>
   </article>
 </section>
 
 <section>
-  <h2>What gets dropped</h2>
-  <div class="box"><ul>
-    <li><b>Bedroom</b>: replaced by the living room and sofa.</li>
-    <li><b>Office with screens waking</b>: cut. The set is kept for possible use later in the film.</li>
-    <li><b>Surveillance room</b>: cut. The boardroom covers that line.</li>
-    <li><b>Folder cover close-up</b>: replaced by a plain folder being placed down.</li>
-    <li><b>Neon street with box lights</b>: replaced by a real dusk street with traffic.</li>
-    <li><b>Globe with the red barrier</b>: replaced by the port rising into the map with China highlighted.</li>
-  </ul></div>
-</section>
-
-<section>
-  <h2>How it gets made, and when you see it</h2>
+  <h2>How it gets built</h2>
+  <div class="grid2">
+    <div class="box"><h3>Real assets, not shapes</h3><ul>
+      <li><b>Windows and skies:</b> real photographed 360° skies and views from Poly Haven, a free scanned-asset library</li>
+      <li><b>Furniture, plants, props:</b> photo-scanned 3D models</li>
+      <li><b>Surfaces:</b> scanned wood, fabric, concrete and asphalt</li>
+      <li><b>People:</b> kept at medium or wide distance, with no hand or skin close-ups</li>
+    </ul></div>
+    <div class="box"><h3>Look (as in the Iceman film)</h3><ul>
+      <li>Soft natural light and a cool palette</li>
+      <li>Red used only on the map</li>
+      <li>Thin, tracked capital labels</li>
+      <li>Grain, bloom and vignette</li>
+      <li>Straight cuts, no wipes</li>
+    </ul></div>
+  </div>
   <div class="tw"><table class="cost">
-    <tr><th>Step</th><th>What you get</th><th>Time</th></tr>
-    <tr><td>1 · Build the 4 sets</td><td>One still from each set, to approve the look</td><td>≈ 1 day of building</td></tr>
-    <tr><td>2 · Moving preview</td><td>All 13 new shots as a low-res moving preview at the real timing, so you can judge every camera move and action</td><td>≈ 1.5 h of rendering</td></tr>
-    <tr><td>3 · Final render</td><td>About 390 frames at full quality, rendered at 12 fps and interpolated to 24</td><td>≈ 8 h of rendering</td></tr>
-    <tr><td>4 · Finish</td><td>Grade, labels, dust and rain, sound, then the full 37-second intro video</td><td>≈ 20 min</td></tr>
+    <tr><th>Step</th><th>You get</th></tr>
+    <tr><td>1</td><td>One frame of the living room built with real assets. I stop here if it doesn’t look real.</td></tr>
+    <tr><td>2</td><td>One frame each of the boardroom, street and port</td></tr>
+    <tr><td>3</td><td>A rough moving preview of all 5 shots at real timing</td></tr>
+    <tr><td>4</td><td>The final render (about 6 hours) and the finished intro, only after you approve the preview</td></tr>
   </table></div>
-  <p class="sub">The final render only starts after you approve the moving preview, so there is no second final render.</p>
 </section>
 </div>
