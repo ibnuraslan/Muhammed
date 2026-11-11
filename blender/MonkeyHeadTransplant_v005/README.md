@@ -18,7 +18,7 @@ This is the 29.5 s film (1770 frames at 60 fps, 1080×1920), built to our 80-wor
 
 ## v005: hands pass (client, 23:00 UTC)
 This is v004 with only the hands changed (see the "Hands" section of `blender/STYLE_ANIMATED.md`).
-- **Limit Rotation constraints** (local space) on every finger and thumb bone of all three staff, 210 bones in total:
+- **Limit Rotation constraints** (local space) on every finger and thumb bone of all three staff, 90 bones in total:
   - fingers bend 0–90° forward only, with ±10° spread
   - the thumb moves in a natural cone
 - **Relaxed default hand:** every hand key carries a light curl.
