@@ -1,0 +1,21 @@
+# FrozenTearsGun: changes since checkpoint B
+
+- **Crying face.** Face-bone weights are boosted. Lids drop, mouth corners turn down and the inner brows lift. A wet streak now runs down her right cheek.
+- **Office breakdown (22.4–25.5 s).** Her hands now come up and cover her face: the head-relative targets were fixed. Camera framings for the beat are reframed to show her hands and head.
+- **Valve (5.8–7.3 s).** The left hand now pinches the valve wheel. The camera pulls back to 42–45 mm so the hand, the wheel and the chamber all read together.
+- **CO2 (7.3–10.1 s).** The camera orbits under the canister, then rises onto the gas entering the chamber. The gas and the frost puffs use a soft spherical falloff, so there are no hard white balls.
+- **Freeze macro (10.1–13.4 s).** f/32–40 for usable depth of field. The 12.2 s framing looks down into the chamber.
+- **Fire (15.0 s).** The camera starts wider on the muzzle (35 mm) and the pellet-follow sits further back so several pellets are in frame.
+  - The ice material is more glossy and less glowy.
+  - The front workshop wall is dressed: door, shelf, tool chest, blueprints.
+- **Brand and text cleanup.**
+  - The Poly Haven picture artwork carried placeholder text; it is replaced with our generated landscape (workshop and office frames).
+  - Removed props with labels or logos: spray cans, measuring tape, stapler, wall clock, binder and stationery.
+  - The office frame is turned to face the room.
+- **28.1 s.** The pelted mentor is framed wider at f/4.
+- **Mentor's jab.** Palm down, so the wrist is no longer bent back.
+- **Contacts.**
+  - Tears are snapped each frame to the deformed skin, with no sinking when the jaw moves.
+  - Chin drips fall forward and vanish.
+  - Time-lapse pose snaps now happen within one frame.
+- **Package size.** Duplicate images are de-duplicated, which brings the package from 166 MB to 141 MB.

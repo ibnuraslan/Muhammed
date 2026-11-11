@@ -45,7 +45,7 @@ M_STEEL = mat("M_Steel", (0.62, 0.63, 0.65), 0.3, 1.0)
 M_CANISTER = mat("M_Canister", (0.42, 0.44, 0.47), 0.36, 0.85)
 M_WOOD = mat("M_GripWood", (0.25, 0.12, 0.05), 0.45, 0.0, coat=0.4)
 M_WATER = mat("M_TearWater", (0.9, 0.96, 1.0), 0.02, 0.0, 1.0, 1.33)
-M_ICE = mat("M_Ice", (0.92, 0.97, 1.0), 0.3, 0.0, 0.2, 1.31, emit=(0.7, 0.85, 1.0), estr=0.6)
+M_ICE = mat("M_Ice", (0.92, 0.97, 1.0), 0.12, 0.0, 0.5, 1.31, emit=(0.7, 0.85, 1.0), estr=0.12, coat=1.0)
 M_ICE.node_tree.nodes["Principled BSDF"].inputs["Subsurface Weight"].default_value = 0.4
 M_ICE.node_tree.nodes["Principled BSDF"].inputs["Subsurface Radius"].default_value = (0.4, 0.6, 1.0)
 M_ICE.node_tree.nodes["Principled BSDF"].inputs["Subsurface Scale"].default_value = 0.003
@@ -158,14 +158,12 @@ sc["bench_top"] = bench_top
 ph_model("bench_vice_01", (-0.5, 0.05, bench_top), 90, C_WS, name="WS_Vice")
 ph_model("desk_lamp_arm_01", (0.52, 0.15, bench_top), -140, C_WS, name="WS_Lamp", scale=0.8)
 ph_model("hand_plane_no4", (-0.15, -0.22, bench_top), 20, C_WS)
-ph_model("measuring_tape_01", (0.3, -0.18, bench_top), 60, C_WS)
 ph_model("small_oil_can_01", (0.62, -0.15, bench_top), -30, C_WS)
 ph_model("magnifying_glass_01", (-0.3, -0.2, bench_top), 0, C_WS)
 ph_model("old_drill_press", (-1.7, 0.9, 0), 160, C_WS)
 ph_model("metal_tool_chest", (1.6, 1.1, 0), 180, C_WS)
 ph_model("wooden_bookshelf_worn", (-2.05, -0.9, 0), 90, C_WS)
 ph_model("cardboard_box_01", (1.65, -1.8, 0), 25, C_WS)
-ph_model("spray_paint_bottles", (-2.0, -0.75, 1.05), 0, C_WS)
 # lying tools for the bench (screwdriver, pliers, wrench, hammer) laid flat
 for n, l, r in (("screwdrivers_02", (0.12, -0.27, bench_top + 0.012), 75), ("pliers", (-0.35, 0.18, bench_top + 0.012), 40),
                 ("adjustable_wrench", (0.42, 0.25, bench_top + 0.012), -20), ("cross_pein_hammer", (-0.62, -0.2, bench_top + 0.022), 100)):
@@ -212,13 +210,9 @@ ph_model("modern_arm_chair_01", (OX + 0.3, -0.45, 0), 180, C_OF, name="OF_ChairH
 ph_model("wooden_bookshelf_worn", (OX + 1.6, 2.2, 0), 180, C_OF, name="OF_Shelf")
 ph_model("book_encyclopedia_set_01", (OX + 1.6, 2.15, 1.02), 180, C_OF, scale=1.0)
 ph_model("potted_plant_01", (OX + 2.1, 1.4, 0), 0, C_OF)
-ph_model("wall_clock", (OX + 2.48, 0.2, 2.15), 90, C_OF)
-ph_model("hanging_picture_frame_01", (OX - 0.9, 2.48, 1.55), 180, C_OF)
+ph_model("hanging_picture_frame_01", (OX - 0.9, 2.47, 1.55), 0, C_OF)
 dt = desk["size"][2]
 ph_model("office_notepads", (OX + 0.05, 0.45, dt), 15, C_OF)
-ph_model("binder_notebook", (OX - 0.2, 0.55, dt), -10, C_OF)
-ph_model("vintage_stapler", (OX - 0.25, 0.75, dt), 30, C_OF)
-ph_model("stationery_supplies", (OX + 0.85, 0.85, dt), 0, C_OF)
 for i in range(6):   # loose papers on the desk (blank)
     box("OF_Paper_%d" % i, (0.21, 0.297, 0.001), (OX + 0.1 + 0.11 * math.sin(i * 2.1), 0.5 + 0.08 * math.cos(i * 1.7), dt + 0.001 + 0.0012 * i),
         M_PAPER, C_OF, rot=(0, 0, 13 * i))
@@ -230,6 +224,13 @@ box("OF_MonitorScreen", (0.52, 0.002, 0.30), (OX - 0.55 + 0.002, 0.844, dt + 0.4
 
 # workshop front wall (y=-3.8) with a framed picture the pellets fly into
 plane_uv("WS_FrontWall", 5.0, 3.0, (0, -3.8, 1.5), (90, 0, 0), M_PLASTER, C_WS, 2.0)
+ph_model("wooden_bookshelf_worn", (-1.45, -3.5, 0), 180, C_WS, name="WS_FrontShelf")
+ph_model("cardboard_box_01", (-1.45, -3.5, 1.42), 170, C_WS, name="WS_FrontBox", scale=0.7)
+ph_model("metal_tool_chest", (1.5, -3.35, 0), 0, C_WS, name="WS_FrontChest")
+ph_model("small_oil_can_01", (1.4, -3.3, 0.8), 40, C_WS, name="WS_FrontCan")
+box("WS_Door", (0.9, 0.04, 2.05), (1.0, -3.78, 1.025), M_WOOD, C_WS)
+for i in range(3):
+    box("WS_Poster_%d" % i, (0.3, 0.004, 0.4), (-0.75 + 0.42 * i, -3.775, 1.75 + 0.05 * (i % 2)), mat("M_Blueprint_%d" % i, (0.12, 0.25, 0.5), 0.8), C_WS, rot=(0, 3 - 3 * i, 0))
 pf = ph_model("hanging_picture_frame_01", (0.05, -3.78, 0.85), 180, C_WS, name="WS_PhotoFrame")
 
 # ------------------------------------------------------------------ THE TEAR GUN (local: barrel along -Y, up +Z, origin at the grip top)
@@ -314,6 +315,14 @@ lidR, _ = skin_point(eyeR + Vector((0, 0, -0.016)))
 sc["lidR"] = list(lidR)
 for k, dz, dx in (("cheekR1", -0.035, -0.004), ("cheekR2", -0.055, -0.01), ("cheekR3", -0.075, -0.012), ("chinR", -0.095, -0.015)):
     p_, _ = skin_point(eyeR + Vector((dx, 0, dz))); sc[k] = list(p_)
+M_WET = mat("M_WetStreak", (0.9, 0.95, 1.0), 0.03, 0.0, 1.0, 1.33)
+for nm, pts_ in (("TearStreakR", [lidR] + [Vector(sc[k]) for k in ("cheekR1", "cheekR2", "cheekR3", "chinR")]),):
+    cu = bpy.data.curves.new(nm, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0011; cu.bevel_resolution = 2
+    spl = cu.splines.new('BEZIER'); spl.bezier_points.add(len(pts_) - 1)
+    for bp, p_ in zip(spl.bezier_points, pts_):
+        bp.co = p_ + Vector((0, -0.0016, 0)); bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    so = bpy.data.objects.new(nm, cu); C_GUN.objects.link(so); cu.materials.append(M_WET)
+    mw = so.matrix_world.copy(); so.parent = W; so.parent_type = 'BONE'; so.parent_bone = "head"; bpy.context.view_layer.update(); so.matrix_world = mw
 funnel_mouth = cheek + cheekn * 0.008 + Vector((0, 0, 0.004))
 fun = cyl("Funnel", 0.0035, 0.02, (0, 0, 0), M_BRASS, C_GUN, r2=0.013, segs=32)
 fun.data.transform(Matrix.Translation((0, 0, -0.01)))      # origin at the wide mouth
@@ -413,7 +422,13 @@ gmr.inputs["To Max"].default_value = 70.0
 gvl = gn.new('ShaderNodeValue'); gvl.name = "GasDensity"; gvl.outputs[0].default_value = 0.0
 gmul = gn.new('ShaderNodeMath'); gmul.operation = 'MULTIPLY'
 gm.node_tree.links.new(gnz.outputs["Fac"], gmr.inputs["Value"]); gm.node_tree.links.new(gmr.outputs["Result"], gmul.inputs[0])
-gm.node_tree.links.new(gvl.outputs[0], gmul.inputs[1]); gm.node_tree.links.new(gmul.outputs[0], pv.inputs["Density"])
+gtc = gn.new('ShaderNodeTexCoord'); glen = gn.new('ShaderNodeVectorMath'); glen.operation = 'LENGTH'
+gfo = gn.new('ShaderNodeMapRange'); gfo.inputs["From Min"].default_value = 0.012; gfo.inputs["From Max"].default_value = 0.0; gfo.inputs["To Max"].default_value = 1.0
+gm2 = gn.new('ShaderNodeMath'); gm2.operation = 'MULTIPLY'
+gm.node_tree.links.new(gtc.outputs["Object"], glen.inputs[0]); gm.node_tree.links.new(glen.outputs["Value"], gfo.inputs["Value"])
+gm.node_tree.links.new(gtc.outputs["Object"], gnz.inputs["Vector"])
+gm.node_tree.links.new(gvl.outputs[0], gm2.inputs[0]); gm.node_tree.links.new(gfo.outputs["Result"], gm2.inputs[1])
+gm.node_tree.links.new(gm2.outputs[0], gmul.inputs[1]); gm.node_tree.links.new(gmul.outputs[0], pv.inputs["Density"])
 gm.node_tree.links.new(pv.outputs[0], gn["Material Output"].inputs["Volume"])
 for i in range(6):
     p = sphere("Gas_%d" % i, 0.012, (0, 0, -50), gm, C_FX, segs=12)
@@ -433,10 +448,16 @@ pmr = pn.new('ShaderNodeMapRange'); pmr.inputs["From Min"].default_value = 0.5; 
 pvl = pn.new('ShaderNodeValue'); pvl.name = "PuffDensity"; pvl.outputs[0].default_value = 0.0
 pml = pn.new('ShaderNodeMath'); pml.operation = 'MULTIPLY'
 lk = M_PUFF.node_tree.links
-lk.new(pnz.outputs["Fac"], pmr.inputs["Value"]); lk.new(pmr.outputs["Result"], pml.inputs[0]); lk.new(pvl.outputs[0], pml.inputs[1])
+ptc = pn.new('ShaderNodeTexCoord'); plen = pn.new('ShaderNodeVectorMath'); plen.operation = 'LENGTH'
+pfo = pn.new('ShaderNodeMapRange'); pfo.name = "PuffFalloff"; pfo.inputs["From Min"].default_value = 0.12; pfo.inputs["From Max"].default_value = 0.03
+pm2 = pn.new('ShaderNodeMath'); pm2.operation = 'MULTIPLY'
+lk.new(ptc.outputs["Object"], plen.inputs[0]); lk.new(plen.outputs["Value"], pfo.inputs["Value"]); lk.new(ptc.outputs["Object"], pnz.inputs["Vector"])
+lk.new(pnz.outputs["Fac"], pmr.inputs["Value"]); lk.new(pmr.outputs["Result"], pml.inputs[0]); lk.new(pvl.outputs[0], pm2.inputs[0]); lk.new(pfo.outputs["Result"], pm2.inputs[1]); lk.new(pm2.outputs[0], pml.inputs[1])
 lk.new(pml.outputs[0], pv2.inputs["Density"]); lk.new(pv2.outputs[0], pn["Material Output"].inputs["Volume"])
 sphere("ImpactPuff", 0.12, (0, 0, -50), M_PUFF, C_FX, segs=16)
-sphere("MuzzlePuff", 0.03, (0, 0, -50), M_PUFF.copy(), C_FX, segs=16).data.materials[0].name = "M_MuzzlePuff"
+_mp = sphere("MuzzlePuff", 0.03, (0, 0, -50), M_PUFF.copy(), C_FX, segs=16); _mp.data.materials[0].name = "M_MuzzlePuff"
+_ff = _mp.data.materials[0].node_tree.nodes["PuffFalloff"]; _ff.inputs["From Min"].default_value = 0.03; _ff.inputs["From Max"].default_value = 0.008
+_mp.data.materials[0].node_tree.nodes["Noise Texture"].inputs["Scale"].default_value = 70
 # grinder sparks for the time-lapse (emissive streaks)
 M_SPARK = mat("M_GrindSpark", (1, 0.6, 0.2), 0.5, emit=(1.0, 0.55, 0.15), estr=60.0)
 for i in range(20):
@@ -533,6 +554,25 @@ for m in bpy.data.objects["Inventor.female_casualsuit01"].data.materials:
     for nd in m.node_tree.nodes:
         if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
             nd.image = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "inventor_top_clean.jpg"))
+art = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "frame_artwork.jpg"))
+for m in bpy.data.materials:
+    if m.name.startswith("hanging_picture_frame_01_artwork"):
+        for nd in m.node_tree.nodes:
+            if nd.type == 'TEX_IMAGE' and nd.image and "artwork_diff" in nd.image.name: nd.image = art
+    if m.name.startswith("hanging_picture_frame_01_glass"):
+        for nd in m.node_tree.nodes:   # the glass normal map carries the placeholder print; drop it
+            if nd.type == 'TEX_IMAGE' and nd.image and "artwork_nor" in nd.image.name:
+                for lk in list(nd.outputs[0].links): m.node_tree.links.remove(lk)
 bpy.ops.file.make_paths_absolute()
+# de-duplicate images loaded more than once (props appended twice)
+seen = {}
+for im in list(bpy.data.images):
+    if im.source != 'FILE' or not im.filepath: continue
+    k = bpy.path.abspath(im.filepath)
+    if k in seen and seen[k] is not im:
+        im.user_remap(seen[k]); bpy.data.images.remove(im)
+    else:
+        seen[k] = im
+print("IMAGES", len(bpy.data.images))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SCENE SAVED", OUT, "bench_top", bench_top, "desk_top", sc["desk_top"])

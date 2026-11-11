@@ -1,0 +1,5 @@
+FrozenTearsGun audit, every 3 frames
+tear centre inside skin                          count    1  worst 0.0002 m at frame 349
+    frames: 349:Tear_06
+camera inside closed geometry: none
+longest held framing (view <8 deg, move <15 cm, lens <8 mm): frames 149-216 (1.12 s); camera max speed 14 m/s, only inside the white flash at 28.3-28.5 s

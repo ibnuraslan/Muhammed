@@ -111,7 +111,7 @@ print("ROOT Z", ROOT_Z_W, ROOT_Z_M)
 
 # face: crying shape from the face bones (small rotations, keyed with the body)
 def key_face(B, f, sad=0.0, squint=0.0, smile=0.0):
-    R = B.R
+    R = B.R; sad *= 2.6; squint *= 1.35; smile *= 2.0
     for s in "LR":
         sx = 1 if s == "L" else -1
         if "orbicularis03." + s in R.PB:
@@ -134,8 +134,8 @@ GUN_AIM = Matrix.Translation((0.03, -0.40, 1.18)) @ Matrix.Rotation(R_(2), 4, 'X
 # hand grips in gun-local coordinates: (wrist, finger direction, palm normal)
 GRIP_R = (Vector((-0.016, 0.07, -0.035)), Vector((0.25, -1.0, -0.55)), Vector((1.0, 0.0, 0.0)))
 SUPPORT_L = (Vector((0.055, -0.05, -0.045)), Vector((-1.0, -0.5, 0.15)), Vector((0.0, 0.0, 1.0)))
-VALVE_L = (Vector((0.135, -0.05, 0.095)), Vector((-0.7, -0.55, 0.05)), Vector((-1.0, 0.0, -0.2)))
-inv_f = list(range(1, 2101, 4)) + [T_OFFICE_IN, T_OFFICE_IN + 1, T_OFFICE_OUT, T_OFFICE_OUT + 1]
+VALVE_L = (Vector((0.098, -0.025, 0.128)), Vector((-0.25, -0.6, -0.75)), Vector((-1.0, 0.0, 0.2)))
+inv_f = list(range(1, 2101, 4)) + [T_OFFICE_IN, T_OFFICE_IN + 1, T_OFFICE_OUT, T_OFFICE_OUT + 1, F(29.3) - 1, F(29.3), F(30.3) - 1, F(30.3)]
 inv_f = sorted(set(inv_f))
 SOB_W = track([(1, 1.0), (F(4), 0.8), (F(6), 0.35), (F(15), 0.3), (F(18.7), 0.2)])
 def sob(f, rate=3.6):
@@ -245,9 +245,10 @@ for f in inv_f:
             sx = 1 if s == "L" else -1
             lap_W = Vector((base.x + sx * 0.09, base.y - 0.22, SEAT_Z + 0.2))
             lap = (lap_W, Vector((-sx * 0.35, -1.0, -0.2)), Vector((0, 0, -1)))
-            face_W = hm @ (W.R.rest("head").inverted() @ Vector((sx * 0.045, -0.095, W.R.BN["head"].head_local.z + 0.035)))
-            # wrist sits below the face, fingers up over the eyes, palm towards the face
-            fc = (face_W + Vector((0, -0.03, -0.11)), hm3 @ Vector((-sx * 0.25, -0.05, 1.0)), hm3 @ Vector((0, 1.0, 0.2)))
+            Dh = hm @ W.R.rest("head").inverted(); Dh3 = Dh.to_3x3()
+            hz = W.R.BN["head"].head_local.z
+            # wrist below the cheek, fingers up over the eyes, palm towards the face (rest-body coords mapped by the head delta)
+            fc = (Dh @ Vector((sx * 0.05, -0.13, hz - 0.03)), Dh3 @ Vector((-sx * 0.2, 0.15, 1.0)), Dh3 @ Vector((0, 1.0, 0.0)))
             g = lerp_grip(lap, fc, fs)
             fist = smooth((t - 26.0) / 0.4)
             W.key_hand(s, f, g[0], g[1], g[2], pole=g[0] + Vector((sx * 0.4, 0.3, -0.3)))
@@ -293,12 +294,13 @@ for f in inv_f:
 # ------------------------------------------------------------------ MENTOR
 POS_MO = OF(0.3, 1.32, 0.0)        # behind the desk, facing world +Y (towards her)
 POS_MW = Vector((0.25, -2.1, 0.0))  # in the workshop for the finale
-men_f = sorted(set(list(range(1, 2101, 4)) + [T_OFFICE_OUT, T_OFFICE_OUT + 1]))
+T_MEN_OUT = F(30.9)
+men_f = sorted(set(list(range(1, 2101, 4)) + [T_MEN_OUT, T_MEN_OUT + 1]))
 JAB = track([(F(19.0), 0.0), (F(19.6), 1.0), (F(22.2), 1.0), (F(22.6), 0.3), (F(23.5), 0.0)])
 PELT = track([(F(26.2), 0.0), (F(26.5), 1.0), (F(28.2), 1.0), (F(28.6), 0.0)])
 for f in men_f:
     t = (f - 1) / FPS
-    if f <= T_OFFICE_OUT:
+    if f <= T_MEN_OUT:
         talk = math.sin(2 * math.pi * f / (FPS / 4.5)) * (1 if t < 22.4 else 0)
         jab = JAB(f); pelt = PELT(f)
         flinch = math.sin(f * 1.7) * pelt
@@ -324,7 +326,7 @@ for f in men_f:
 for f in men_f:
     ev(f); t = (f - 1) / FPS
     D = M.chest_delta()
-    if f <= T_OFFICE_OUT:
+    if f <= T_MEN_OUT:
         jab = JAB(f); pelt = PELT(f); awk = smooth((t - 22.6) / 0.6) * (1 - smooth((t - 26.0) / 0.4))
         talk = math.sin(2 * math.pi * f / (FPS / 4.5)) * (1 if t < 22.4 else 0)
         fw = Vector((0, 1, 0))       # he faces world +Y
@@ -336,7 +338,7 @@ for f in men_f:
         # right hand: rest on desk -> jabbing finger -> neck rub; pelting: both arms shield the face
         rest = (Vector((POS_MO.x + 0.25, desk_y, DT + 0.035)), Vector((-0.2, 1, -0.2)), Vector((0, 0, -1)))
         jabW = D @ Vector((-0.12, -0.55 - 0.06 * talk, 1.36 + 0.04 * talk))
-        jb = (jabW, Vector((0.1, 1, 0.1)), Vector((0.9, 0, -0.3)))
+        jb = (jabW, Vector((0.05, 1, -0.1)), Vector((-0.3, 0, -1)))
         hm = M.head_M()
         neck = (hm @ (M.R.rest("head").inverted() @ Vector((-0.07, 0.09, M.R.BN["head"].head_local.z - 0.06))), Vector((0.7, 0.2, 0.6)), Vector((0, -1, 0)))
         g = lerp_grip(rest, jb, jab)
@@ -396,7 +398,7 @@ def tube_at(f, u):
     f2 = f if f % 2 == 1 else f - 1
     f2 = max(1, min(f2, max(TUBE)))
     P, Hs = TUBE[f2]; return tube_point(P, Hs, u)
-for nm in ("TearTube", "Funnel", "Funnel_Arm", "Funnel_Rim"):
+for nm in ("TearTube", "Funnel", "Funnel_Arm", "Funnel_Rim", "TearStreakR"):
     key_hide(bpy.data.objects[nm], [(1, False), (T_OFFICE_IN + 1, True)])
 
 def chamber_world(f, local):
@@ -412,6 +414,13 @@ def head_pt(f, rest_pt, fwd=0.0):
     ev(f); hm = W.head_M()
     return hm @ (head_rest_inv @ (Vector(rest_pt) + Vector((0, -fwd, 0))))
 lidL, lidR = Vector(sc["lidL"]), Vector(sc["lidR"])
+lidL = Vector(sc["eyeL"]) + Vector((0.002, -0.014, -0.0115))   # lower lid margin (snapped to skin each frame)
+BODY_W = bpy.data.objects["Inventor.body"]
+def skin_snap(p, r):
+    dg = bpy.context.evaluated_depsgraph_get(); oe = BODY_W.evaluated_get(dg); mw = oe.matrix_world
+    ok, loc, nrm, idx = oe.closest_point_on_mesh(mw.inverted() @ p)
+    if not ok: return p
+    return mw @ loc + (mw.to_3x3() @ nrm).normalized() * r
 fun = bpy.data.objects["Funnel"]
 CH_BOTTOM_Z = 0.0715
 pool = [Vector((0.012 * math.cos(a), -0.095 + 0.012 * math.sin(a), CH_BOTTOM_Z + 0.001 * (i % 2))) for i, a in enumerate([k * 2.4 for k in range(9)])]
@@ -428,7 +437,7 @@ for f in range(1, F(5.2)):
     t = (f - 1) / FPS
     if t < T_ROLL:
         s = 0.25 + 0.95 * smooth((t - T_WELL) / 1.3)
-        p = head_pt(f, lidL, 0.0042 + 0.0012 * s); sc_ = (s * 1.15, s * 0.95, s * 0.85)
+        p = skin_snap(head_pt(f, lidL, 0.0042 + 0.0012 * s), 0.0028 * s * 1.2 + 0.0004); sc_ = (s * 1.15, s * 0.95, s * 0.85)
     elif t < T_TIP:
         u = smooth((t - T_ROLL) / (T_TIP - T_ROLL))
         a = head_pt(f, lidL, 0.0055); b = fun.matrix_world @ Vector((0, 0, -0.004))
@@ -468,17 +477,17 @@ for i in range(6):
         if u < 0 or u > 1.25: key_obj(o, f, Vector((0, 0, -50)), 0.0); continue
         if u <= 1:
             k = u * (len(cheekR) - 1); i0 = min(int(k), len(cheekR) - 2); w = k - i0
-            rp = cheekR[i0].lerp(cheekR[i0 + 1], w); p = head_pt(f, rp, 0.0034); s = 0.9 + 0.3 * (1 - u)
+            rp = cheekR[i0].lerp(cheekR[i0 + 1], w); s = 0.9 + 0.3 * (1 - u); p = skin_snap(head_pt(f, rp, 0.0034), 0.0024 * 1.5 * s + 0.0004)
         else:
-            p0 = head_pt(f, cheekR[-1], 0.002); dt = (u - 1) * 1.6; p = p0 + Vector((0, -0.05 * dt, -4.9 * dt * dt)); s = 0.8
-        key_obj(o, f, p, (s, s * 0.9, s * 1.3))
+            p0 = skin_snap(head_pt(f, cheekR[-1], 0.002), 0.004); dt = (u - 1) * 1.6; p = p0 + Vector((0, -0.35 * dt, -4.9 * dt * dt)); s = 0.8 if dt < 0.12 else 0.0
+        key_obj(o, f, p, (1.5 * s, 1.35 * s, 1.9 * s))
 
 # ------------------------------------------------------------------ freeze, frost, gas, spring, trigger, pellets
 for i, o in enumerate(tears[:10]):
     m = o.data.materials[0]; sock = m.node_tree.nodes["Freeze"].outputs[0]
     t0 = 10.25 + 0.17 * i
     key_node(sock, 1, 0.0); key_node(sock, F(t0), 0.0); key_node(sock, F(t0 + 0.8), 1.0)
-    key_node(sock, F(19.0), 1.0); key_node(sock, F(19.1), 0.0)
+    key_node(sock, F(19.0), 1.0); key_node(sock, F(19.1), 0.0); key_node(sock, F(25.9), 0.0); key_node(sock, F(26.1), 1.0)
     if i > 0:
         key_obj(o, F(t0), pool[i - 1], (1.2, 1.2, 0.75)); key_obj(o, F(t0 + 0.9), pool[i - 1] + Vector((0, 0, 0.0012)), (0.95, 0.95, 0.95))
 fm = bpy.data.materials["M_Frost"]; nt = fm.node_tree; n = nt.nodes
@@ -547,7 +556,7 @@ def fire(objs, t0, t1, f_src, target, spread, hide_after=True, gap=0.1, tag=0):
         paths.append((ts, te, muzzle, mid, tgt))
         key_obj(o, 1, Vector((0, 0, -50)), 0.0) if tag == 0 else None
     return paths
-pel_paths = fire(pellets, 15.0, 18.72, F(15.0), FRAME_PHOTO, 0.22, gap=0.09)
+pel_paths = fire(pellets, 15.0, 18.72, F(15.0), FRAME_PHOTO, 0.08, gap=0.07)
 for o in pellets: key_obj(o, F(19.6), Vector((0, 0, -50)), 0.0)
 fin_paths = None
 # sparks ride along the pellets and twinkle
@@ -557,12 +566,12 @@ for i, s_ in enumerate(sparks):
     for f in range(F(ts), F(te), 3):
         t = (f - 1) / FPS; u = (t - ts) / (te - ts)
         p = bez(m0, m0.lerp(mid, 0.66), mid.lerp(tgt, 0.33), tgt, u) + Vector((math.sin(f * 0.7 + i), math.cos(f * 0.5 + i), math.sin(f * 0.3 + 2 * i))) * 0.012
-        tw = max(0.0, math.sin(f * 0.45 + i * 1.7)) * 1.6
+        tw = max(0.0, math.sin(f * 0.45 + i * 1.7)) * 2.6
         key_obj(s_, f, p, tw)
     key_obj(s_, F(te) + 2, Vector((0, 0, -50)), 0.0)
 mp = bpy.data.objects["MuzzlePuff"]; mpm = mp.data.materials[0]
 mpd = mpm.node_tree.nodes["PuffDensity"].outputs[0]
-for f, v in ((1, 0.0), (F(15.0), 0.0), (F(15.1), 1.0), (F(16.0), 0.0), (F(32.4), 0.0), (F(32.5), 1.0), (F(33.4), 0.0)):
+for f, v in ((1, 0.0), (F(15.0), 0.0), (F(15.1), 7.0), (F(16.0), 0.0), (F(32.4), 0.0), (F(32.5), 7.0), (F(33.4), 0.0)):
     key_node(mpd, f, v)
 for t in (15.0, 32.4):
     G = gun_mat(F(t)); mz = G @ Vector((0, -0.29, 0.034))
@@ -573,6 +582,7 @@ key_obj(mp, 1, Vector((0, 0, -50)), 0.2)
 ev(F(27.0)); mhead = M.head_M().translation.copy(); mchest = (M.R.o.matrix_world @ M.R.PB["spine01"].matrix).translation.copy()
 ev(F(26.0)); ihead = W.head_M().translation.copy()
 pelt_drops = [tears[0]] + tears[10:14] + [bpy.data.objects["TearR_%02d" % k] for k in range(6)]
+for o in pelt_drops[1:]: o.data.materials[0] = tears[0].data.materials[0]
 for i, o in enumerate(pelt_drops):
     t0 = 26.3 + 0.13 * i; t1 = t0 + 0.42
     src = ihead + Vector((random.uniform(-0.12, 0.12), -0.15, 0.12 + random.uniform(0, 0.15)))
@@ -581,7 +591,7 @@ for i, o in enumerate(pelt_drops):
         t = (f - 1) / FPS
         if t < t0: key_obj(o, f, src, 0.0); continue
         u = min(1, (t - t0) / (t1 - t0)); p = src.lerp(tgt, u) + Vector((0, 0, 0.12 * math.sin(math.pi * u)))
-        s = 4.0 if u < 1 else max(0.0, 4.5 - (t - t1) * 40)
+        s = 6.0 if u < 1 else max(0.0, 6.5 - (t - t1) * 50)
         key_obj(o, f, p, (s, s, s * (1.3 if u < 1 else 0.4)))
     o.hide_render = False
     key_hide(o, [(F(t0) - 2, False)])
@@ -644,7 +654,7 @@ fin_paths = fire(pellets[:8], 32.42, 32.9, F(32.42), mchest, 0.06, gap=0.03, tag
 for o in pellets[:8]: key_obj(o, F(33.1), Vector((0, 0, -50)), 0.0)
 ip = bpy.data.objects["ImpactPuff"]; ipd = node_val("M_FrostPuff", "PuffDensity")
 key_obj(ip, 1, Vector((0, 0, -50)), 0.1); key_obj(ip, F(32.88), mchest + Vector((0, 0.03, 0)), 0.1)
-key_obj(ip, F(33.4), mchest + Vector((0, 0.12, 0.06)), 1.4); key_obj(ip, F(34.6), mchest + Vector((0.05, 0.25, 0.2)), 2.4)
+key_obj(ip, F(33.4), mchest + Vector((0, 0.08, 0.05)), 1.0); key_obj(ip, F(34.6), mchest + Vector((0.05, 0.12, 0.15)), 1.5)
 for f, v in ((1, 0.0), (F(32.88), 0.0), (F(32.95), 1.0), (F(33.8), 0.6), (F(34.8), 0.0)):
     key_node(ipd, f, v)
 for i, s_ in enumerate(sparks):
@@ -691,22 +701,23 @@ for t in (2.4, 2.9, 3.4, 3.9, 4.35):
     wp(t, h - Vector((0, 0.11, 0)) + side * 0.03 - d * 0.03, h + d * 0.01, 70, 8)
 wp(4.8, G(F(4.8), (0.06, -0.21, 0.13)), G(F(4.8), (0, -0.095, 0.085)), 70, 11)
 wp(5.4, G(F(5.4), (0.02, -0.16, 0.22)), G(F(5.4), CH), 60, 11)
-wp(6.2, G(F(6.2), (0.24, -0.20, 0.14)), G(F(6.2), (0.05, -0.09, 0.08)), 50, 11)
-wp(7.0, G(F(7.0), (0.26, -0.02, 0.10)), G(F(7.0), (0.04, -0.09, 0.07)), 55, 11)
-wp(7.8, G(F(7.8), (0.16, -0.24, -0.05)), G(F(7.8), (0.0, -0.14, 0.0)), 60, 11)
-wp(8.7, G(F(8.7), (0.08, -0.25, 0.04)), G(F(8.7), (0.02, -0.11, 0.05)), 60, 11)
+wp(6.2, G(F(6.2), (0.36, -0.30, 0.20)), G(F(6.2), (0.06, -0.09, 0.07)), 42, 11)
+wp(7.0, G(F(7.0), (0.38, -0.06, 0.18)), G(F(7.0), (0.05, -0.09, 0.06)), 45, 11)
+wp(7.8, G(F(7.8), (0.14, -0.30, -0.06)), G(F(7.8), (0.0, -0.13, -0.004)), 50, 16)
+wp(8.7, G(F(8.7), (0.13, -0.22, 0.12)), G(F(8.7), (0.01, -0.095, 0.085)), 55, 16)
 wp(9.5, G(F(9.5), (0.06, -0.16, 0.10)), G(F(9.5), CH), 70, 11)
-wp(10.3, G(F(10.3), (0.035, -0.15, 0.09)), G(F(10.3), (0, -0.095, 0.074)), 85, 16)
-wp(11.2, G(F(11.2), (-0.03, -0.15, 0.085)), G(F(11.2), (0, -0.095, 0.074)), 90, 16)
-wp(12.2, G(F(12.2), (-0.12, -0.08, 0.10)), G(F(12.2), (-0.02, -0.095, 0.085)), 85, 16)
+wp(10.3, G(F(10.3), (0.035, -0.15, 0.09)), G(F(10.3), (0, -0.095, 0.074)), 70, 40)
+wp(11.2, G(F(11.2), (-0.03, -0.15, 0.085)), G(F(11.2), (0, -0.095, 0.074)), 70, 40)
+wp(12.2, G(F(12.2), (-0.09, -0.15, 0.13)), G(F(12.2), (-0.02, -0.095, 0.085)), 65, 32)
 wp(13.0, G(F(13.0), (-0.16, -0.08, 0.22)), G(F(13.0), CH), 60, 11)
 wp(13.7, G(F(13.7), (-0.22, 0.06, 0.02)), G(F(13.7), (0, -0.01, 0.01)), 55, 11)
 wp(14.4, G(F(14.4), (-0.22, -0.06, 0.05)), G(F(14.4), (0, -0.08, 0.034)), 60, 11)
-wp(15.0, G(F(15.0), (-0.18, -0.2, 0.06)), G(F(15.0), (0, -0.2, 0.034)), 55, 8)
-for t in (15.8, 16.7, 17.6, 18.4):
+wp(15.0, G(F(15.0), (-0.20, -0.42, 0.10)), G(F(15.0), (0, -0.27, 0.04)), 30, 11)
+wp(15.55, G(F(15.55), (-0.17, -0.50, 0.12)), G(F(15.55), (0, -0.40, 0.05)), 32, 8)
+for t in (16.3, 17.1, 17.9, 18.5):
     ts, te, m0, mid, tgt = pel_paths[0]; u = (t - ts) / (te - ts)
     p = bez(m0, m0.lerp(mid, 0.66), mid.lerp(tgt, 0.33), tgt, u)
-    wp(t, p + Vector((-0.07 + 0.03 * (t - 16), 0.10 - 0.01 * (t - 16), 0.035 + 0.015 * math.sin(t))), p + Vector((0, -0.08, 0)), 45, 5.6)
+    wp(t, p + Vector((-0.16 + 0.05 * (t - 16), 0.20 - 0.02 * (t - 16), 0.06 + 0.03 * math.sin(t))), p + Vector((0, -0.1, 0)), 35, 8)
 wp(18.85, FRAME_PHOTO + Vector((0, 0.18, 0)), FRAME_PHOTO + Vector((0, -1, 0)), 35, 2.0)
 wp(19.05, OF(0.3, -2.4, 1.45), OF(0.3, 0.5, 1.3), 28, 2.0)
 wp(19.4, OF(0.62, -1.15, 1.28), HEAD(M, F(19.4)), 32, 4.0)
@@ -716,10 +727,10 @@ wp(22.3, OF(0.85, 0.75, 1.3), HEAD(W, F(22.3)) + Vector((0, 0, 0.05)), 32, 4.0)
 wp(23.2, OF(0.65, 0.45, 1.0), HEAD(W, F(23.2)) + Vector((0, 0, 0.02)), 35, 4.0)
 wp(24.2, OF(0.3, 0.42, 1.0), HEAD(W, F(24.2)) + Vector((0, 0, 0.02)), 38, 4.0)
 wp(25.1, OF(-0.15, 0.3, 1.15), HEAD(W, F(25.1)) + Vector((0, 0, 0.05)), 35, 4.0)
-wp(25.9, OF(0.2, -0.95, 1.7), HEAD(W, F(25.9)) + Vector((0, 0, 0.3)), 32, 4.0)
+wp(25.9, OF(0.35, -1.25, 1.85), HEAD(W, F(25.9)) + Vector((0, 0, 0.3)), 30, 4.0)
 wp(26.6, OF(0.3, -0.25, 1.85), HEAD(M, F(26.6)), 30, 4.0)
 wp(27.4, OF(0.35, 0.35, 1.7), HEAD(M, F(27.4)), 30, 4.0)
-wp(28.15, OF(0.35, 0.45, 1.72), HEAD(M, F(28.15)) + Vector((0, 0, 0.05)), 35, 2.0)
+wp(28.15, OF(0.5, 0.2, 1.7), HEAD(M, F(28.15)) + Vector((0, 0, 0.05)), 32, 4.0)
 wp(28.45, Vector((0.05, -3.4, 1.45)), Vector((0, 0.2, 1.0)), 28, 2.0)
 wp(28.8, Vector((0.9, -1.15, 1.45)), Vector((0.0, 0.1, BT + 0.1)), 30, 4.0)
 wp(29.7, Vector((0.15, -0.95, 1.75)), Vector((-0.2, 0.1, BT + 0.1)), 30, 4.0)
@@ -728,7 +739,8 @@ wp(31.3, Vector((-0.85, 0.15, 1.25)), Vector((0.0, 0.3, 1.05)), 30, 4.0)
 wp(32.1, Vector((-0.38, 1.25, 1.62)), HEAD(M, F(32.1)) + Vector((0, 0, -0.25)), 30, 4.0)
 wp(32.8, Vector((-0.12, 0.05, 1.32)), HEAD(M, F(32.8)) + Vector((0, 0, -0.35)), 35, 4.0)
 wp(33.5, Vector((0.05, -1.05, 1.42)), HEAD(M, F(33.5)) + Vector((0, 0, -0.25)), 40, 4.0)
-wp(34.3, Vector((0.85, -3.25, 1.75)), Vector((0.15, -1.0, 1.3)), 28, 4.0)
+wp(33.95, Vector((1.05, -1.55, 1.55)), HEAD(M, F(33.95)) + Vector((0, 0, -0.2)), 30, 4.0)
+wp(34.5, Vector((0.95, -3.25, 1.75)), Vector((0.15, -1.0, 1.3)), 28, 4.0)
 wp(35.0, Vector((1.05, -3.5, 1.95)), Vector((0.1, -0.8, 1.25)), 26, 4.0)
 cpos = catmull([(w[0], w[1]) for w in WP]); ctgt = catmull([(w[0], w[2]) for w in WP])
 clen = pchip([(w[0], w[3]) for w in WP]); cfs = pchip([(w[0], w[4]) for w in WP])
