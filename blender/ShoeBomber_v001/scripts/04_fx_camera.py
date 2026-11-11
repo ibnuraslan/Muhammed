@@ -153,7 +153,7 @@ def foot_mask(rig_name, s_, on_until):
     sel = [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in idx) > 0.5]
     vg.add(sel, 1.0, 'REPLACE')
     # socks: the masked foot faces get a knit sock material (seen once the sneaker is off)
-    sock = bpy.data.materials.get("Sock") or L.mat("Sock", (0.08, 0.08, 0.09) if rig_name == "Bomber" else (0.55, 0.55, 0.57), 0.9)
+    sock = bpy.data.materials.get("Sock") or L.mat("Sock", (0.06, 0.06, 0.07), 0.9)
     if sock.name not in [m.name for m in body.data.materials if m]: body.data.materials.append(sock)
     si = [m.name if m else "" for m in body.data.materials].index(sock.name); ss = set(sel)
     sock_faces = 0
@@ -168,6 +168,9 @@ def foot_mask(rig_name, s_, on_until):
 for s_ in "LR":
     foot_mask("Bomber", s_, 877)
 foot_mask("Traveller", "R", 1440)
+shirt = O["Bomber.male_casualsuit04"]
+cs_ = shirt.modifiers.new("CorrectiveSmooth", 'CORRECTIVE_SMOOTH'); cs_.factor = 0.9; cs_.iterations = 12; cs_.rest_source = 'ORCO'
+pants = O.get("Bomber.male_casualsuit04")
 # ------------------------------------------------------------------ match + matchbox (bomber's hands), drops in the tackle
 match = O["Match"]; mbox = O["Matchbox"]
 cm = Carry(match)
@@ -205,7 +208,7 @@ for f in range(1, END + 1, 3):
         if f < 34: s *= (f - 27) / 6 * 1.6
     fl.scale = (1.4 * max(s, 0.001), 1.4 * max(s, 0.001), 3.2 * max(s, 0.001)); fl.keyframe_insert("scale", frame=f)
     fl.delta_location = (0, 0, 0.022 * max(s, 0.001)); fl.keyframe_insert("delta_location", frame=f)
-    flight.data.energy = 8.0 * s; flight.data.keyframe_insert("energy", frame=f)
+    flight.data.energy = 22.0 * s; flight.data.keyframe_insert("energy", frame=f)
     fl.hide_render = not on; fl.keyframe_insert("hide_render", frame=f)
 
 # ------------------------------------------------------------------ syringe (steward's right hand, beat 5)
@@ -291,16 +294,24 @@ for k, s in enumerate(("L", "R")):
     for f, dz, rx in ((1069, 0.0, 0), (1105, 0.0, 0), (1140, 0.15, -25), (1160, 0.14, -22), (1250, 0.16, -26)):
         up.location = (0, 0.02 * (dz > 0), dz); up.rotation_euler = (math.radians(rx), 0, 0)
         up.keyframe_insert("location", frame=f); up.keyframe_insert("rotation_euler", frame=f)
-    sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.044)
-    ol = O["SlabOutline_Shoe_" + s]; ol.parent = base; ol.location = (0, 0.0, 0.044)
-    for ob_ in (sl, ol):
+    sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.062)
+    for ob_ in (sl,):
         for f, h in ((1, True), (1112, True), (1113, False)):
             ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
         constant_at(ob_, set(range(0, END + 1)))
-om = bpy.data.materials["SlabOutline"]; b = om.node_tree.nodes["Principled BSDF"]
-for f, e in ((1, 0.0), (1135, 0.0), (1150, 12.0), (1235, 12.0), (1250, 0.0)):
-    b.inputs["Emission Strength"].default_value = e; b.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
+rim = O["StudioCyanRim"].data
+for f, e in ((1, 200.0), (1130, 200.0), (1150, 550.0), (1240, 550.0)):
+    rim.energy = e; rim.keyframe_insert("energy", frame=f)
 
+for nm, on0, on1 in (("SkyCloudEntry", 1240, 1266), ("SkyCloudExit", 1366, 1400), ("StudioCloudBank", 1215, 1252)):
+    ob_ = bpy.data.objects[nm]
+    for f, h in ((1, True), (on0 - 1, True), (on0, False), (on1, False), (on1 + 1, True)):
+        ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
+    constant_at(ob_, set(range(0, END + 1)))
+for o in bpy.data.objects:
+    if o.name.startswith("EngineGlow_"): o.hide_render = True     # disc read as a stray white circle
+for o in bpy.data.objects:      # SSS puffs read as craters; the dusk deck + volume banks carry the sky
+    if o.name.startswith("Puff_"): o.hide_render = True
 # ------------------------------------------------------------------ sky: relative wind (clouds stream past the static aircraft), blinking nav/strobes
 for o in bpy.data.objects:
     if o.name.startswith("Puff_"):
@@ -317,7 +328,7 @@ sw = bpy.data.materials.get("StrobeWhite")
 if sw:
     bb = sw.node_tree.nodes["Principled BSDF"]
     for f in range(1240, 1400, 30):
-        for df, e in ((0, 0.5), (2, 80), (5, 0.5)):
+        for df, e in ((0, 0.5), (2, 12), (5, 0.5)):
             bb.inputs["Emission Strength"].default_value = e; bb.inputs["Emission Strength"].keyframe_insert("default_value", frame=f + df)
 # cabin windows: night clouds drift past
 wm = bpy.data.materials["WindowNight"]; cd = wm.node_tree.nodes["CloudDrift"]
@@ -332,12 +343,17 @@ def area(name, loc, aim, energy, size, col=(1, 1, 1), shape='RECTANGLE', sy_=Non
     lo.rotation_euler = (V(aim) - V(loc)).to_track_quat('-Z', 'Y').to_euler(); return lo
 # cabin night: soft blue fill down the aisle, warm reading-light pool on 3A, galley spill
 for i, y in enumerate((-2.5, 0.0, 2.5, 5.0, 7.5)):
-    area("CabinFill_%d" % i, (0, y, 2.15), (0, y, 0), 18, 1.0, (0.55, 0.65, 1.0), 'RECTANGLE', 2.0)
-spot = bpy.data.lights.new("ReadingSpot_3A", 'SPOT'); spot.energy = 25; spot.spot_size = math.radians(45); spot.spot_blend = 0.6; spot.color = (1.0, 0.85, 0.65); spot.shadow_soft_size = 0.03
+    area("CabinFill_%d" % i, (0, y, 2.15), (0, y, 0), 4, 1.0, (0.55, 0.65, 1.0), 'RECTANGLE', 2.0)
+spot = bpy.data.lights.new("ReadingSpot_3A", 'SPOT'); spot.energy = 3; spot.spot_size = math.radians(45); spot.spot_blend = 0.6; spot.color = (1.0, 0.85, 0.65); spot.shadow_soft_size = 0.03
 so = bpy.data.objects.new("ReadingSpot_3A", spot); sc.collection.objects.link(so); so.location = (-0.98 - 0.25 * 0 - 0.4, -0.05, 1.6)
 so.rotation_euler = (V((-1.35, 0.2, 0.6)) - so.location).to_track_quat('-Z', 'Y').to_euler()
-area("GalleyWarm", (0, 9.2, 1.6), (0, 4, 0.8), 60, 0.8, (1.0, 0.8, 0.6))
-area("KeyFaceAisle", (0.4, 1.5, 1.9), (-1.2, 0.0, 0.8), 15, 0.4, (0.85, 0.9, 1.0))
+area("GalleyWarm", (0, 9.2, 1.6), (0, 4, 0.8), 15, 0.8, (1.0, 0.8, 0.6))
+area("KeyFaceAisle", (0.4, 1.5, 1.9), (-1.2, 0.0, 0.8), 4, 0.4, (0.6, 0.7, 1.0))
+for i, (sx_, sy_) in enumerate(((0.94, 2.58), (-0.94, 3.44), (1.42, -1.72), (0.94, 6.88), (-1.42, 5.16))):
+    sp_ = bpy.data.lights.new("ReadingPool_%d" % i, 'SPOT'); sp_.energy = 18; sp_.spot_size = math.radians(40); sp_.spot_blend = 0.7
+    sp_.color = (1.0, 0.8, 0.55); sp_.shadow_soft_size = 0.03
+    so_ = bpy.data.objects.new("ReadingPool_%d" % i, sp_); sc.collection.objects.link(so_); so_.location = (sx_ * 0.8, sy_ - 0.05, 1.6)
+    so_.rotation_euler = (V((sx_, sy_ + 0.2, 0.55)) - so_.location).to_track_quat('-Z', 'Y').to_euler()
 # sky: warm low sun
 sun = bpy.data.lights.new("DuskSun", 'SUN'); sun.energy = 3.0; sun.color = (1.0, 0.72, 0.5); sun.angle = math.radians(2)
 su = bpy.data.objects.new("DuskSun", sun); sc.collection.objects.link(su); su.rotation_euler = (math.radians(80), 0, math.radians(-60))
@@ -346,13 +362,16 @@ for i, x in enumerate((-4, 0, 4)):
     area("TerminalSky_%d" % i, AX + V((x, 0, 6.8)), AX + V((x, 0, 0)), 250, 3.0, (0.95, 0.97, 1.0), 'RECTANGLE', 6.0)
 area("TerminalWindow", AX + V((0, 8.5, 2.5)), AX + V((0, 0, 1)), 300, 10.0, (0.9, 0.95, 1.0), 'RECTANGLE', 4.0)
 # the sun lamp affects the whole world; keep it off outside the sky beat
-for f, e in ((1, 0.0), (1248, 0.0), (1249, 3.0), (1392, 3.0), (1393, 0.0)):
+for f, e in ((1, 0.0), (1248, 0.0), (1249, 4.0), (1392, 4.0), (1393, 2.5)):
     sun.energy = e; sun.keyframe_insert("energy", frame=f)
+for f, r in ((1392, (80, 0, -60)), (1393, (78, 0, 175))):
+    su.rotation_euler = [math.radians(v) for v in r]; su.keyframe_insert("rotation_euler", frame=f)
+constant_at(su, {1392, 1393})
 constant_at(sun, {1248, 1249, 1392, 1393})
 
 # ------------------------------------------------------------------ grade
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
-for f, ex in ((1, -0.5), (1068, -0.5), (1069, -0.3), (1248, -0.3), (1249, 0.0), (1392, 0.0), (1393, -1.3), (END, -1.3)):
+for f, ex in ((1, 0.3), (1068, 0.3), (1069, -0.2), (1248, -0.2), (1249, 0.0), (1392, 0.0), (1393, -1.0), (END, -1.0)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 constant_at(sc, {1068, 1248, 1392})
 
@@ -375,11 +394,11 @@ def op(name, f, off=(0, 0, 0)):
 # framings: (frame, camera, aim, lens). Aims follow the action (evaluated bone / prop positions).
 SEG = [
     # beat 1: over the seatbacks in front, down into his lap -> push to his lit face -> macro on match + shoe -> rise out to the aisle
-    (1,   V((-0.75, 0.42, 1.40)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 24),
-    (45,  V((-0.85, 0.42, 1.15)), (op("Shoe_R", 45, (0, 0, 0.1)) + bp("Bomber", "head", 45)) / 2, 30),
-    (100, V((-0.95, 0.42, 0.92)), op("Match_Flame", 100), 40),
-    (150, V((-1.05, 0.40, 0.78)), op("Match_Flame", 150, (0, 0, -0.02)), 48),
-    (198, V((-0.30, 0.70, 1.55)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
+    (1,   V((-1.12, 0.50, 0.34)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 20),
+    (45,  V((-1.06, 0.49, 0.42)), (op("Match_Flame", 45) + bp("Bomber", "head", 45)) / 2, 22),
+    (100, V((-1.05, 0.48, 0.44)), op("Match_Flame", 100, (0, 0, 0.03)), 26),
+    (150, V((-1.00, 0.47, 0.66)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
+    (198, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
     # beat 2: swing round down the aisle toward the trolley, low dolly back, crane up, whip to her face, push on eyes
     (225, V((0.02, 1.05, 1.05)), V((0.0, 5.0, 1.1)), 26),
     (265, V((0.0, 1.35, 0.70)), bp("Attendant", "head", 265, (0, 0, -0.35)), 30),
@@ -392,13 +411,14 @@ SEG = [
     (480, V((0.10, 0.95, 1.55)), bp("Bomber", "head", 480), 40),
     # beat 4: wide from the aisle ahead -> crane to near top-down over the pile -> drop to carpet level for the pin
     (515, V((0.10, 3.10, 1.65)), bp("Bomber", "spine01", 515), 22),
-    (555, V((0.00, 1.80, 2.10)), bp("Bomber", "spine01", 555, (0, 0, -0.2)), 18),
-    (600, V((0.30, 2.60, 1.85)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 24),
+    (555, V((0.00, 1.60, 1.95)), bp("Bomber", "spine01", 555, (0, 0, -0.1)), 22),
+    (600, V((0.25, 2.30, 1.55)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
     (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
     (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
     (697, V((0.62, 0.55, 1.42)), bp("Bomber", "upperarm02.R", 697), 34),
     (712, V((0.45, 0.92, 0.80)), bp("Bomber", "upperarm02.R", 712), 36),
+    (728, V((0.62, 0.70, 1.30)), bp("Bomber", "upperarm02.R", 728, (0, 0.2, 0)), 32),
     (748, V((0.45, 0.85, 1.58)), bp("Bomber", "head", 748), 30),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.15, 1.35, 1.65)), bp("Bomber", "foot.L", 800), 26),
@@ -458,9 +478,9 @@ wmat.node_tree.links.new(cl.outputs[0], mx.inputs["Fac"]); wmat.node_tree.links.
 wmat.node_tree.links.new(mx.outputs[0], o_.inputs["Surface"])
 L.set_mat(card, wmat)
 amt = cr.inputs[1]
-for f, a_, col in ((1, -2, (0, 0, 0)), (1056, -2, (0, 0, 0)), (1066, 1.5, (0, 0, 0)), (1072, 1.5, (0, 0, 0)), (1080, -2, (0, 0, 0)),
-                   (1226, -2, (1, 1, 1)), (1240, 1.5, (1, 1, 1)), (1250, 1.5, (1, 1, 1)), (1258, -2, (1, 1, 1)),
-                   (1376, -2, (1, 0.95, 0.92)), (1388, 1.5, (1, 0.95, 0.92)), (1398, 1.5, (1, 1, 1)), (1412, -2, (1, 1, 1))):
+for f, a_, col in ((1, -2, (0, 0, 0)), (1061, -2, (0, 0, 0)), (1066, 1.5, (0, 0, 0)), (1069, 1.5, (0, 0, 0)), (1074, -2, (0, 0, 0)),
+                   (1243, -2, (1, 1, 1)), (1247, 1.5, (1, 1, 1)), (1250, 1.5, (1, 1, 1)), (1254, -2, (1, 1, 1)),
+                   (1386, -2, (1, 0.95, 0.92)), (1390, 1.5, (1, 0.95, 0.92)), (1394, 1.5, (1, 1, 1)), (1399, -2, (1, 1, 1))):
     amt.default_value = a_; amt.keyframe_insert("default_value", frame=f)
     em.inputs["Color"].default_value = (*col, 1); em.inputs["Color"].keyframe_insert("default_value", frame=f)
     em.inputs["Strength"].default_value = 1.0 if col[0] == 0 else 2.0; em.inputs["Strength"].keyframe_insert("default_value", frame=f)
@@ -472,6 +492,7 @@ sc.frame_start, sc.frame_end = 1, END
 cy.samples = 48; cy.adaptive_threshold = 0.05; cy.use_denoising = True; cy.denoiser = 'OPENIMAGEDENOISE'
 cy.max_bounces = 8; cy.diffuse_bounces = 3; cy.glossy_bounces = 3; cy.transmission_bounces = 8; cy.transparent_max_bounces = 8
 cy.caustics_reflective = cy.caustics_refractive = False
+cy.volume_step_rate = 4.0; cy.volume_max_steps = 256     # cloud banks only; keeps preview + farm cost sane
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5; r.use_persistent_data = True
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.compression = 15
 # hide the human rigs' rest-pose doubles: nothing to hide; remove the scratch temp cameras if any

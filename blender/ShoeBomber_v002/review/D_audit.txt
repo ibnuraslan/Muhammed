@@ -1,10 +1,99 @@
+
+## penetration (hand+foot verts, every 3rd vert, sampled every 30 f, cabin): 87 flagged samples, 4630 verts total
+  f451 Attendant into PaxA: 4 verts
+  f481 Bomber into PaxA: 16 verts
+  f481 Attendant into PaxA: 14 verts
+  f481 PaxA into Bomber: 188 verts
+  f481 PaxA into Attendant: 3 verts
+  f511 Bomber into Attendant: 5 verts
+  f511 Bomber into PaxA: 35 verts
+  f511 Attendant into Bomber: 27 verts
+  f511 PaxA into Bomber: 168 verts
+  f541 Bomber into Attendant: 22 verts
+  f541 Bomber into PaxA: 52 verts
+  f541 Attendant into PaxA: 72 verts
+  f541 PaxA into Bomber: 157 verts
+  f541 PaxA into Attendant: 21 verts
+  f571 Bomber into Attendant: 94 verts
+  f571 Bomber into Steward: 1 verts
+  f571 Attendant into Bomber: 78 verts
+  f571 Steward into Bomber: 76 verts
+  f571 Steward into Attendant: 47 verts
+  f571 PaxA into Bomber: 153 verts
+  f571 PaxB into Bomber: 155 verts
+  f571 PaxB into PaxA: 173 verts
+  f571 PaxB into PaxC: 12 verts
+  f601 Bomber into Attendant: 7 verts
+  f601 Attendant into Bomber: 49 verts
+  f601 Steward into Bomber: 68 verts
+  f601 PaxA into Bomber: 170 verts
+  f601 PaxB into Bomber: 215 verts
+  f601 PaxB into PaxA: 138 verts
+  f601 PaxB into PaxC: 16 verts
+  f601 PaxC into PaxB: 2 verts
+  f631 Bomber into Attendant: 7 verts
+  f631 Bomber into Steward: 1 verts
+  f631 Attendant into Bomber: 47 verts
+  f631 Steward into Bomber: 73 verts
+  f631 PaxA into Bomber: 196 verts
+  f631 PaxB into Bomber: 16 verts
+  f631 PaxB into PaxA: 138 verts
+  f631 PaxB into PaxC: 16 verts
+  f631 PaxC into PaxB: 2 verts
+  f661 Bomber into Attendant: 7 verts
+  f661 Bomber into Steward: 2 verts
+  f661 Attendant into Bomber: 61 verts
+  f661 Attendant into Steward: 2 verts
+  f661 Steward into Bomber: 187 verts
+  f661 PaxA into Bomber: 211 verts
+  f661 PaxB into Bomber: 59 verts
+  f661 PaxB into PaxA: 139 verts
+  f661 PaxB into PaxC: 16 verts
+  f661 PaxC into PaxB: 2 verts
+  f691 Bomber into Attendant: 1 verts
+  f691 Bomber into Steward: 1 verts
+  f691 Bomber into PaxB: 1 verts
+  f691 Attendant into Bomber: 52 verts
+  f691 Steward into Bomber: 76 verts
+  f691 Steward into Attendant: 2 verts
+  f691 PaxA into Bomber: 112 verts
+  f691 PaxB into Bomber: 27 verts
+  f691 PaxB into PaxA: 113 verts
+  f691 PaxB into PaxC: 21 verts
+  f691 PaxC into PaxB: 2 verts
+  f721 Bomber into Steward: 1 verts
+  f721 Bomber into PaxB: 3 verts
+  f721 Attendant into Bomber: 15 verts
+  f721 Steward into Bomber: 83 verts
+  f721 Steward into Attendant: 3 verts
+  f721 PaxA into Bomber: 35 verts
+  f721 PaxB into PaxA: 33 verts
+  f721 PaxB into PaxC: 2 verts
+  f721 PaxC into PaxB: 2 verts
+  f751 Bomber into PaxB: 3 verts
+  f751 Attendant into Bomber: 15 verts
+  f751 Attendant into Steward: 6 verts
+  f751 Steward into Bomber: 71 verts
+  f751 PaxA into Bomber: 31 verts
+  f751 PaxB into PaxA: 33 verts
+  f751 PaxB into PaxC: 2 verts
+  f751 PaxC into PaxB: 2 verts
+  f781 Steward into Bomber: 117 verts
+  f781 PaxA into Bomber: 7 verts
+  f811 Bomber into Steward: 2 verts
+  f811 Attendant into Bomber: 2 verts
+  f811 Attendant into Steward: 44 verts
+  f811 Steward into Bomber: 58 verts
+  f841 Bomber into Steward: 2 verts
+  f841 Steward into Bomber: 200 verts
+  f871 Steward into Bomber: 30 verts
 ShoeBomber audit (every 10 frames, 1-1620)
 
 ## sink: 3 flagged samples (every 10 f)
   Steward                                  f541-561 (max 0.104)
 
 ## hover: 51 flagged samples (every 10 f)
-  Bomber                                   f531-571 (max 0.178), f591-601 (max 0.038), f681-691 (max 0.040)
+  Bomber                                   f531-571 (max 0.187), f591-601 (max 0.044), f681-691 (max 0.044)
   Attendant                                f571-761 (max 0.045), f851-1061 (max 0.045)
 
 ## reach: 293 flagged samples (every 10 f)
@@ -24,6 +113,9 @@ ShoeBomber audit (every 10 frames, 1-1620)
   Traveller IK_hand.R                      f1411-1471 (max 0.381), f1511-1531 (max 0.152)
   Traveller IK_hand.L                      f1431-1451 (max 0.127), f1501-1541 (max 0.163)
 
-## camera: 0 flagged samples (every 10 f)
+## camera: 3 flagged samples (every 10 f)
+  touching Smoke_7                         f161-161 (max 0.015)
+  inside? Smoke_7                          f211-211 (max 0.001)
+  inside? SkyCloudEntry                    f1261-1261 (max 0.629)
 
 ## prop: 0 flagged samples (every 10 f)

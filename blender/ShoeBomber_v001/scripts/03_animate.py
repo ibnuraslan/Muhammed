@@ -25,7 +25,7 @@ def setup(name):
     R = make_human_ctrl(o)
     h = Human(R); h.name = name
     return h
-HN = ["Bomber", "Attendant", "Steward", "PaxA", "PaxB", "PaxC", "PaxD", "Traveller", "Officer"]
+HN = ["Bomber", "Attendant", "Steward", "PaxA", "PaxB", "PaxC", "PaxD", "Traveller", "Officer", "Sleeper1", "Sleeper2", "Sleeper3", "Sleeper4"]
 HS = {n: setup(n) for n in HN}
 print("RIGS_READY")
 
@@ -412,10 +412,41 @@ for f in range(1381, END + 1, 40):
     stand(pd, f, QP, FWD - 90 + 10 * math.sin(f * 0.02), spine=(3, 0, 0), head=(5, 20 * math.sin(f * 0.03)))
     hand(pd, "R", f, QP + V((0.0, -0.25, 0.82)), (0, 0, -1), (1, 0, 0), grip=0.3)
     hand(pd, "L", f, QP + V((0.0, 0.25, 0.82)), (0, 0, -1), (-1, 0, 0), grip=0.3)
+for h in (pa, pb, stw, att):
+    for b_ in ("root", "IK_foot.L", "IK_foot.R", "IK_hand.L", "IK_hand.R", "Pole_knee.L", "Pole_knee.R"):
+        pass
 for h in (pc, pd):
     teleport_keys(h, 1380)
 print("AIRPORT_DONE")
 
+
+# ================================================================== sleepers under blankets (cabin background life)
+SLEEP = (("Sleeper1", 6, "E", "Blanket_6F", 1), ("Sleeper2", 1, "F", "Blanket_1E", -1), ("Sleeper3", 7, "B", "Blanket_8D", 1), ("Sleeper4", 2, "A", "Blanket_5A", 1))
+for nm, ri, k, bl, lean in SLEEP:
+    h = HS[nm]; x, y = SX[k], ROW(ri)
+    ph = random.uniform(0, 6)
+    for f in range(1, END + 1, 30):
+        t = f / 60.0
+        sit(h, f, x, y, flex=-4, spine=(-4 + 1.2 * math.sin(t * 1.3 + ph), 0, 6 * lean), head=(25 + 3 * math.sin(t * 0.9 + ph), 25 * lean))
+    for f in (1, END):
+        for s_ in "LR": rest_arm(h, s_, f, V((x, y, 0.56)), out=0.12, fwd=0.32, z=0.08, grip=0.2)
+    b = bpy.data.objects[bl]; b.location = V((x, y + 0.22, 0.66)); b.rotation_euler = (math.radians(-6), 0, math.radians(random.uniform(-8, 8)))
+    b.scale = (1.0, 1.25, 1.0)
+bpy.data.objects["Blanket_2C"].location = V((SX["C"], ROW(9) + 0.05, 0.52))
+# tray table knocked loose in the tackle: flies into the aisle, tumbles, lands
+tt = bpy.data.objects["TrayTable"]; t0 = tt.location.copy()
+for f, p_, r in ((1, t0, (0, 0, 0)), (512, t0, (0, 0, 0)), (522, t0 + V((0.25, 0.25, 0.25)), (40, 30, 60)), (532, V((0.15, 0.95, 0.5)), (120, 70, 140)),
+                 (540, V((0.22, 1.25, 0.03)), (180, 85, 200)), (548, V((0.26, 1.32, 0.012)), (180, 90, 215))):
+    tt.location = p_; tt.rotation_euler = [math.radians(v) for v in r]; tt.keyframe_insert("location", frame=f); tt.keyframe_insert("rotation_euler", frame=f)
+# airport queue: four cabin cast members become travellers in line once the cabin is gone (switch hidden in the cloud dive)
+QUEUE = ((pa, AX + V((-3.6, -2.1, 0)), 90), (pb, AX + V((-4.4, -2.15, 0)), 95), (stw, AX + V((-5.4, -2.0, 0)), 85), (att, AX + V((-6.2, -2.1, 0)), 92))
+for h, qp, yaw in QUEUE:
+    ev(1380)
+    for f in range(1381, END + 1, 30):
+        stand(h, f, qp + V(((f - 1381) * 0.0012, 0, 0)), yaw + 6 * math.sin(f * 0.02), spine=(4, 0, 0), head=(5, 25 * math.sin(f * 0.015 + qp.x)))
+        for s_ in "LR":
+            sg = -1 if s_ == "L" else 1
+            hand(h, s_, f, qp + V((sg * 0.05, sg * -0.24, 0.84)), (0, 0, -1), (0, sg, 0), grip=0.35)
 # ================================================================== reach fix: slide bodies so keyed hand targets are actually reached
 def key_frames(h, bone):
     ad = h.r.o.animation_data; out = set()
@@ -454,6 +485,18 @@ for h, a_, b_ in ((att, 420, 1068), (pa, 440, 1068), (pb, 440, 1068)):
 reach_fix(stw, 540, 1068, maxd=0.15)
 reach_fix(off, 1393, END, feet=False, maxd=0.2)
 reach_fix(trav, 1393, END, feet=False, maxd=0.25)
+for h in (pa, pb, stw, att):
+    # hold the last cabin pose until 1380, then jump (constant)
+    ad = h.r.o.animation_data
+    for layer in ad.action.layers:
+        for strip in layer.strips:
+            for cb in strip.channelbags:
+                for fc in cb.fcurves:
+                    ks = [k for k in fc.keyframe_points if k.co.x <= 1068]
+                    if ks:
+                        last = max(ks, key=lambda k: k.co.x)
+                        fc.keyframe_points.insert(1380, last.co.y).interpolation = 'CONSTANT'
+                    fc.update()
 print("REACH_FIXED")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)

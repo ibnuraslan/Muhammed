@@ -52,6 +52,15 @@ human("Traveller", 1.0, 0.45, {"asian": 0.2, "caucasian": 0.4, "african": 0.4}, 
       "young_caucasian_male/young_caucasian_male.mhmat", 14, height=0.65, sub=1)
 human("Officer", 1.0, 0.5, {"asian": 0.1, "caucasian": 0.7, "african": 0.2}, C("short04"), [C("male_worksuit01"), C("shoes03")],
       "middleage_caucasian_male/middleage_caucasian_male.mhmat", 16, height=0.6, sub=0, tints={"male_worksuit01": (0.35, 0.4, 0.5)})
+# sleeping passengers (background, low subdiv)
+human("Sleeper1", 1.0, 0.55, {"asian": 0.6, "caucasian": 0.3, "african": 0.1}, C("short03"), [C("male_casualsuit06"), C("shoes01")],
+      "middleage_asian_male/middleage_asian_male.mhmat", 18, height=0.55, sub=0, tints={"male_casualsuit06": (0.35, 0.3, 0.28)})
+human("Sleeper2", 0.0, 0.35, {"asian": 0.1, "caucasian": 0.7, "african": 0.2}, C("long01"), [C("female_casualsuit01"), C("shoes05")],
+      "young_caucasian_female/young_caucasian_female.mhmat", 20, height=0.45, sub=0, tints={"female_casualsuit01": (0.45, 0.3, 0.3)})
+human("Sleeper3", 1.0, 0.75, {"asian": 0.05, "caucasian": 0.25, "african": 0.7}, C("short04"), [C("male_casualsuit01"), C("shoes03")],
+      "old_african_male/old_african_male.mhmat", 22, height=0.5, weight=0.65, sub=0)
+human("Sleeper4", 0.0, 0.6, {"asian": 0.7, "caucasian": 0.2, "african": 0.1}, C("bob02"), [C("female_elegantsuit01"), C("shoes02")],
+      "middleage_asian_female/middleage_asian_female.mhmat", 24, height=0.42, sub=0, tints={"female_elegantsuit01": (0.3, 0.4, 0.35)})
 for ob in bpy.data.objects:
     if ob.type == 'ARMATURE': print("HUMAN", ob.name, [c.name for c in ob.children], tuple(round(d, 2) for d in ob.dimensions))
 bpy.ops.wm.save_as_mainfile(filepath=out)

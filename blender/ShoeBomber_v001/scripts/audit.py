@@ -59,6 +59,44 @@ for f in range(1, 1621, 10):
         if f0 <= f <= f1:
             d = (O[ob].matrix_world.translation - wb(rig, bone)).length
             if d > 0.25: issues["prop"].append((f, ob, rig, round(d, 3)))
+
+# ---------------------------------------------------------------- penetration (BVH): hand/foot verts inside other bodies, seats or the floor
+from mathutils.bvhtree import BVHTree
+def mesh_world(ob, dg):
+    e = ob.evaluated_get(dg); me = e.to_mesh(); mw = e.matrix_world
+    vs = [mw @ v.co for v in me.vertices]; ps = [tuple(p.vertices) for p in me.polygons]; e.to_mesh_clear(); return vs, ps
+def bvh_of(obs, dg):
+    V_, P_ = [], []
+    for o in obs:
+        vs, ps = mesh_world(o, dg); off = len(V_); V_ += vs; P_ += [tuple(i + off for i in p) for p in ps]
+    return BVHTree.FromPolygons(V_, P_) if P_ else None
+def limb_idx(body, keys):
+    gi = {g.index for g in body.vertex_groups if any(g.name.startswith(k) for k in keys)}
+    return [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in gi) > 0.5]
+LIMB = {}
+pen = []
+CAB = ["Bomber", "Attendant", "Steward", "PaxA", "PaxB", "PaxC", "PaxD"]
+for f in range(1, 1069, 30):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+    trees = {n: bvh_of([c for c in O[n].children if c.type == 'MESH' and c.name.split(".")[-1] in ("body",) or (c.type == 'MESH' and "suit" in c.name)], dg) for n in CAB}
+    for n in CAB:
+        body = O[n + ".body"]
+        if n not in LIMB: LIMB[n] = limb_idx(body, ("finger", "wrist", "metacarpal", "toe", "foot"))
+        vs, _ = mesh_world(body, dg)
+        pts = [vs[i] for i in LIMB[n] if i < len(vs)]
+        hits = {}
+        for m, t in trees.items():
+            if m == n or t is None: continue
+            c = 0
+            for pnt in pts[::3]:
+                loc, nrm, idx, d = t.find_nearest(pnt, 0.05)
+                if loc is not None and (pnt - loc).dot(nrm) < -0.006: c += 1
+            if c: hits[m] = c
+        fl = sum(1 for pnt in pts if pnt.z < -0.01)
+        if fl: hits["floor"] = fl
+        for m, c in hits.items(): pen.append((f, n, m, c))
+log("\n## penetration (hand+foot verts, every 3rd vert, sampled every 30 f, cabin): %d flagged samples, %d verts total" % (len(pen), sum(p[3] for p in pen)))
+for x in pen: log("  f%d %s into %s: %d verts" % x)
 log("ShoeBomber audit (every 10 frames, 1-1620)")
 for k, v in issues.items():
     log("\n## %s: %d flagged samples (every 10 f)" % (k, len(v)))

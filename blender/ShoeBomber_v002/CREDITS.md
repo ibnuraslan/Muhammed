@@ -27,9 +27,9 @@ All of these were obtained through Objaverse (allenai/objaverse on Hugging Face)
 | Dirty Carpet (cabin floor) | Rohit Seervi | polyhaven.com |
 | Large Grey Tiles (terminal floor) | Rob Tuytel | polyhaven.com |
 | Denim Fabric (blankets) | Rob Tuytel | polyhaven.com |
-| Nine humans (bomber, attendant, steward, four passengers, traveller, officer): base mesh, rig, skins, hair, clothes, eyes, teeth | MakeHuman community | MakeHuman system assets (CC0), built with MPFB2. The chest emblem is painted out of two shirt textures. |
+| Thirteen humans (bomber, attendant, steward, four passengers, four sleeping passengers, traveller, officer): base mesh, rig, skins, hair, clothes, eyes, teeth | MakeHuman community | MakeHuman system assets (CC0), built with MPFB2. The chest emblem is painted out of two shirt textures. |
 
-Built procedurally in our scripts: the cabin shell, overhead bins, windows, lights, trolley, cups, matches and matchbox, fuse cords, putty slab, studio cyclorama, cloud deck and puffs, terminal, X-ray tunnel, trays and stanchions.
+Built procedurally in our scripts: the cabin shell, overhead bins, windows and shades, seat-back screens, lights, trolley, cups, matches and matchbox, fuse cords, putty slab (displaced), studio cyclorama, cloud deck, puffs and volumetric cloud banks, terminal, X-ray tunnel, trays, stanchions and the pictogram lane signs.
 
 ## Voiceover
 None yet. The film is timed to the target beat times in `beats.json`.

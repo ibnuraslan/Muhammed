@@ -19,11 +19,11 @@ TEX = "/opt/assets/sb_tex/"
 # ------------------------------------------------------------------ materials
 M = {}
 M["carpet"] = L.tex_mat("Carpet", "dirty_carpet", 3.0, tint=(0.42, 0.45, 0.62), bump=0.5)
-M["wall"] = L.mat("CabinWall", (0.78, 0.77, 0.74), 0.45)
+M["wall"] = L.mat("CabinWall", (0.55, 0.54, 0.52), 0.45)
 M["bin"] = L.mat("BinPlastic", (0.82, 0.81, 0.78), 0.35)
 M["trim"] = L.mat("TrimGrey", (0.32, 0.33, 0.35), 0.4)
 M["metal"] = L.mat("BrushedMetal", (0.7, 0.71, 0.72), 0.28, 1.0)
-M["glow_blue"] = L.mat("CoveGlow", (0.1, 0.1, 0.1), 0.5, emit=(0.35, 0.5, 1.0), estr=1.2)
+M["glow_blue"] = L.mat("CoveGlow", (0.1, 0.1, 0.1), 0.5, emit=(0.35, 0.5, 1.0), estr=0.5)
 M["glow_warm"] = L.mat("ReadingGlow", (0.9, 0.9, 0.9), 0.5, emit=(1.0, 0.82, 0.6), estr=30.0)
 M["glow_off"] = L.mat("ReadingOff", (0.6, 0.6, 0.6), 0.3)
 M["headrest"] = L.mat("HeadrestCloth", (0.86, 0.86, 0.84), 0.9)
@@ -72,7 +72,7 @@ bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); 
 L.add_box("BulkheadFwd", (3.8, 0.08, 2.4), (0, Y1, 1.1), M["wall"], C)
 L.add_box("BulkheadAft", (3.8, 0.08, 2.4), (0, Y0, 1.1), M["wall"], C)
 curtain = L.add_box("GalleyCurtain", (0.9, 0.03, 1.9), (0, Y1 - 0.1, 0.95), L.mat("CurtainBlue", (0.12, 0.16, 0.32), 0.9), C)
-L.add_box("GalleyGlow", (0.85, 0.01, 0.06), (0, Y1 - 0.13, 1.93), M["glow_warm"], C)
+L.add_box("GalleyGlow", (0.85, 0.01, 0.06), (0, Y1 - 0.13, 1.93), L.mat("GalleyGlowDim", (0.9, 0.9, 0.9), 0.5, emit=(1.0, 0.82, 0.6), estr=6.0), C)
 
 ROWS = [i * 0.86 for i in range(-3, 11)]          # row y positions (seat cushion centre), 14 rows
 SEAT_X = {"A": -1.42, "B": -0.94, "C": -0.46, "D": 0.46, "E": 0.94, "F": 1.42}
@@ -247,10 +247,11 @@ for p in me.polygons: p.use_smooth = True
 cm = bpy.data.materials.new("CycGradient"); cm.use_nodes = True; N = cm.node_tree.nodes; Ln = cm.node_tree.links
 b = N["Principled BSDF"]; tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); rp = N.new("ShaderNodeValToRGB")
 Ln.new(tc.outputs["Generated"], sep.inputs[0]); Ln.new(sep.outputs["Z"], rp.inputs["Fac"])
-rp.color_ramp.elements[0].position = 0.0; rp.color_ramp.elements[0].color = (0.85, 0.93, 0.95, 1)
-rp.color_ramp.elements[1].position = 0.45; rp.color_ramp.elements[1].color = (0.12, 0.62, 0.78, 1)
+rp.color_ramp.elements[0].position = 0.0; rp.color_ramp.elements[0].color = (0.25, 0.75, 0.85, 1)
+rp.color_ramp.elements[1].position = 0.55; rp.color_ramp.elements[1].color = (0.008, 0.03, 0.09, 1)
+e_ = rp.color_ramp.elements.new(0.22); e_.color = (0.03, 0.32, 0.48, 1)
 Ln.new(rp.outputs["Color"], b.inputs["Base Color"]); b.inputs["Roughness"].default_value = 0.8
-Ln.new(rp.outputs["Color"], b.inputs["Emission Color"]); b.inputs["Emission Strength"].default_value = 0.35
+Ln.new(rp.outputs["Color"], b.inputs["Emission Color"]); b.inputs["Emission Strength"].default_value = 0.2
 L.set_mat(cyc, cm)
 for nm, loc, en, sz in (("StudioKey", (SX.x - 2.0, -2.5, 3.2), 900, 2.5), ("StudioRim", (SX.x + 2.5, 1.8, 2.5), 600, 1.5), ("StudioFill", (SX.x + 2.5, -3.0, 1.2), 200, 3.0)):
     ld = bpy.data.lights.new(nm, 'AREA'); ld.energy = en; ld.size = sz
@@ -260,7 +261,7 @@ for nm, loc, en, sz in (("StudioKey", (SX.x - 2.0, -2.5, 3.2), 900, 2.5), ("Stud
 pm = bpy.data.materials.new("Putty"); pm.use_nodes = True; N = pm.node_tree.nodes; b = N["Principled BSDF"]
 nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 60; bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25
 pm.node_tree.links.new(nz.outputs["Fac"], bp.inputs["Height"]); pm.node_tree.links.new(bp.outputs["Normal"], b.inputs["Normal"])
-b.inputs["Base Color"].default_value = (0.62, 0.62, 0.6, 1); b.inputs["Roughness"].default_value = 0.8
+b.inputs["Base Color"].default_value = (0.11, 0.11, 0.105, 1); b.inputs["Roughness"].default_value = 0.85
 om = L.mat("SlabOutline", (0, 0, 0), 0.5, emit=(1.0, 0.75, 0.1), estr=0.0); om.use_backface_culling = True
 for s in shoes:
     st = bpy.data.objects[s.name + "_Studio"]
@@ -292,7 +293,8 @@ for s in pl.material_slots:
     if "strobe1" in n: s.material = navR
     elif "strobe3" in n: s.material = navG
     elif "wingbodylights" in n or "wiper" in n: s.material = glass
-    elif "light" in n or "strobe" in n: s.material = L.mat("StrobeWhite", (1, 1, 1), 0.3, emit=(1, 1, 1), estr=5)
+    elif "strobe" in n: s.material = L.mat("StrobeWhite", (1, 1, 1), 0.3, emit=(1, 1, 1), estr=5)
+    elif "light" in n: s.material = glass
     elif "engine" in n or "gear" in n or "blade" in n: s.material = belly
     else: s.material = paint
 pl.location = KX
@@ -338,7 +340,7 @@ ceil = L.add_box("TerminalCeiling", (40, 40, 0.1), AX + V((0, 0, 7.0)), L.mat("C
 for i in range(-3, 4):
     L.add_box("Skylight_%d" % i, (2.0, 6.0, 0.12), AX + V((i * 3.2, 0, 6.99)), L.mat("SkylightSky", (0.6, 0.75, 0.9), 0.3, emit=(0.75, 0.85, 1.0), estr=3.0), A)
 glassm = L.mat("TerminalGlass", (0.8, 0.9, 0.95), 0.02, trans=1.0)
-L.add_box("GlassWall", (40, 0.05, 7.0), AX + V((0, 9.0, 3.5)), L.mat("GlassWallMat", (0.65, 0.8, 0.9), 0.1, emit=(0.7, 0.82, 0.95), estr=1.0), A)
+L.add_box("GlassWall", (40, 0.05, 7.0), AX + V((0, 9.0, 3.5)), glassm, A)
 for i in range(-6, 7):
     L.add_box("Mullion_%d" % i, (0.12, 0.15, 7.0), AX + V((i * 3.0, 8.95, 3.5)), M["trim"], A)
     L.add_box("Column_%d" % i, (0.5, 0.5, 7.0), AX + V((i * 6.0, -6.0, 3.5)), L.mat("ColumnWhite", (0.88, 0.88, 0.86), 0.4), A)
@@ -383,12 +385,125 @@ for k in range(8):
 # bags in other trays
 for k, col in ((0, (0.05, 0.05, 0.06)), (2, (0.35, 0.15, 0.1)), (3, (0.15, 0.3, 0.2))):
     L.add_box("TrayBag_%d" % k, (0.35, 0.25, 0.15), TRAYS[k].location + V((0, 0, 0.08)), L.mat("Bag%d" % k, col, 0.6), A, bevel=0.03).parent = None
+
+# ------------------------------------------------------------------ v002 detail pass
+# cabin: window shades pulled down (moonlight sliver at the bottom), seat-back screens glowing (no text)
+shade_m = L.mat("WindowShade", (0.72, 0.7, 0.66), 0.6)
+for o in [o for o in bpy.data.objects if o.get("window")]:
+    sh = o.copy(); sh.data = o.data; sh.name = "Shade_" + o.name; L.coll(C).objects.link(sh)
+    side = 1 if o.location.x > 0 else -1
+    sh.location = o.location + V((-side * 0.012, 0, 0.045)); sh.scale = (o.scale.x * 1.02, o.scale.y * 1.02, o.scale.z * 0.92)
+    sh.data = o.data.copy(); sh.data.materials.clear(); sh.data.materials.append(shade_m)
+wmn = bpy.data.materials["WindowNight"]
+wmn.node_tree.nodes["Emission"].inputs["Strength"].default_value = 3.0
+scr_cols = [(0.15, 0.35, 0.8), (0.1, 0.5, 0.6), (0.4, 0.3, 0.7), (0.2, 0.25, 0.35)]
+for (ri, k), so in SEATS.items():
+    if random.random() < 0.55:
+        col = random.choice(scr_cols)
+        sm = L.mat("Screen_%d_%d_%d" % tuple(int(c * 10) for c in col), (0.01, 0.01, 0.01), 0.15, emit=col, estr=random.choice((1.5, 2.5, 3.5)))
+        L.add_box("SeatScreen_%02d%s" % (ri, k), (0.2, 0.006, 0.13), so.location + V((0, -0.358, 0.86)), sm, "Seats")
+    else:
+        L.add_box("SeatScreen_%02d%s" % (ri, k), (0.2, 0.006, 0.13), so.location + V((0, -0.358, 0.86)), M["dark"], "Seats")
+# fasten-seatbelt sign glow panels (pictogram only) under the bins
+belt_m = L.mat("BeltSignGlow", (0.02, 0.02, 0.02), 0.3, emit=(1.0, 0.75, 0.35), estr=4.0)
+for ry in ROWS[::2]:
+    for side in (-1, 1):
+        L.add_box("BeltSign_%d_%.1f" % (side, ry), (0.05, 0.03, 0.012), (side * 1.12, ry + 0.2, 1.618), belt_m, "Seats")
+# blankets read as cloth: subdivide + displace
+cloth_tx = bpy.data.textures.new("ClothNoise", 'CLOUDS'); cloth_tx.noise_scale = 0.08
+for o in [o for o in bpy.data.objects if o.name.startswith("Blanket_")]:
+    o.modifiers.clear(); sd = o.modifiers.new("sd", 'SUBSURF'); sd.levels = sd.render_levels = 3; sd.subdivision_type = 'SIMPLE'
+    dp = o.modifiers.new("dp", 'DISPLACE'); dp.texture = cloth_tx; dp.strength = 0.03
+    sm2 = o.modifiers.new("sm", 'SMOOTH'); sm2.iterations = 6
+    o.scale = (1.0, 1.0, 1.0)
+# studio: cyan rim light behind the shoes (also the slab edge light)
+ld = bpy.data.lights.new("StudioCyanRim", 'AREA'); ld.energy = 900; ld.size = 1.2; ld.color = (0.35, 0.9, 1.0)
+lo = bpy.data.objects.new("StudioCyanRim", ld); L.coll(S).objects.link(lo); lo.location = (SX.x, 1.4, 1.9)
+lo.rotation_euler = (V((SX.x, 0, 1.15)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
+# putty slab: kneaded, finger-pressed surface (displaced, not a clean block)
+putty_tx = bpy.data.textures.new("PuttyNoise", 'CLOUDS'); putty_tx.noise_scale = 0.01
+for o in [o for o in bpy.data.objects if o.name.startswith("Slab_")]:
+    o.modifiers.clear(); sd = o.modifiers.new("sd", 'SUBSURF'); sd.levels = sd.render_levels = 4
+    dp = o.modifiers.new("dp", 'DISPLACE'); dp.texture = putty_tx; dp.strength = 0.004
+for o in [o for o in bpy.data.objects if o.name.startswith("SlabOutline_")]:
+    bpy.data.objects.remove(o)
+# volumetric cloud banks for the two crossings and volumetric cumulus puffs
+def cloud_vol(name, dens=6.0, scale=3.0, col=(1.0, 0.92, 0.88)):
+    m = bpy.data.materials.new(name); m.use_nodes = True; N = m.node_tree.nodes; Ln = m.node_tree.links
+    for n in list(N): N.remove(n)
+    out = N.new("ShaderNodeOutputMaterial"); pv = N.new("ShaderNodeVolumePrincipled"); tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = scale; nz.inputs["Detail"].default_value = 8; nz.inputs["Roughness"].default_value = 0.6
+    cr = N.new("ShaderNodeMapRange"); cr.inputs["From Min"].default_value = 0.45; cr.inputs["From Max"].default_value = 0.7
+    cr.inputs["To Max"].default_value = dens
+    Ln.new(tc.outputs["Object"], nz.inputs["Vector"]); Ln.new(nz.outputs["Fac"], cr.inputs["Value"]); Ln.new(cr.outputs["Result"], pv.inputs["Density"])
+    pv.inputs["Color"].default_value = (*col, 1); pv.inputs["Anisotropy"].default_value = 0.4
+    pv.inputs["Emission Color"].default_value = (*col, 1)
+    Ln.new(cr.outputs["Result"], pv.inputs["Emission Strength"])      # self-lit wisps: bright where dense
+    Ln.new(pv.outputs[0], out.inputs["Volume"]); return m
+cm_near = cloud_vol("CloudBankNear", 3.0, 2.5)
+def bank(name, loc, size):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=loc)
+    o = bpy.context.active_object; o.name = name; o.scale = size; L.set_mat(o, cm_near); L.link(o, L.coll(K if name.startswith("Sky") else S)); return o
+bank("StudioCloudBank", SX + V((0.0, -4.4, 1.45)), (2.5, 1.6, 1.6))
+bank("SkyCloudEntry", KX + V((11.5, 6.8, 1.8)), (3.0, 2.0, 1.6))
+bank("SkyCloudExit", KX + V((-60.0, 84.0, -6.0)), (14.0, 14.0, 8.0))
+# puffs stay surface clouds (volume puffs cost ~140 s per preview still); soft translucent SSS with a noise-bumped surface
+pz = bpy.data.materials["CloudPuff"]; nt = pz.node_tree; bsdf = nt.nodes["Principled BSDF"]
+bsdf.inputs["Base Color"].default_value = (1.0, 0.88, 0.82, 1); bsdf.inputs["Roughness"].default_value = 1.0
+bsdf.inputs["Subsurface Weight"].default_value = 1.0; bsdf.inputs["Subsurface Radius"].default_value = (8, 8, 8); bsdf.inputs["Subsurface Scale"].default_value = 3.0
+nz_ = nt.nodes.new("ShaderNodeTexNoise"); nz_.inputs["Scale"].default_value = 0.15; nz_.inputs["Detail"].default_value = 10
+bp_ = nt.nodes.new("ShaderNodeBump"); bp_.inputs["Strength"].default_value = 0.6
+nt.links.new(nz_.outputs["Fac"], bp_.inputs["Height"]); nt.links.new(bp_.outputs["Normal"], bsdf.inputs["Normal"])
+# engine exhaust glow at the back of each engine nacelle
+pl = bpy.data.objects["Airliner"]
+ei = {i for i, m in enumerate(pl.data.materials) if m and "engine" in m.name.lower()}
+pts = {1: [], -1: []}
+for poly in pl.data.polygons:
+    if poly.material_index in ei:
+        c = poly.center; pts[1 if c.y > 0 else -1].append(c)
+glow = L.mat("EngineGlow", (0.0, 0.0, 0.0), 0.5, emit=(1.0, 0.45, 0.15), estr=25)
+for sd_, P in pts.items():
+    if not P: continue
+    xmin = min(p.x for p in P); ys = sum(p.y for p in P) / len(P); zs = sum(p.z for p in P) / len(P)
+    bpy.ops.mesh.primitive_circle_add(vertices=24, radius=0.45, fill_type='NGON', location=pl.matrix_world @ V((xmin - 0.05, ys, zs)))
+    g = bpy.context.active_object; g.name = "EngineGlow_%d" % sd_; g.rotation_euler = (0, math.radians(90), 0); L.set_mat(g, glow); L.link(g, L.coll(K))
+# airport: hanging lane signs with pictograms only (generated images: shoe + arrow, bag)
+def icon(path, kind):
+    if os.path.exists(path): return     # made by make_icons.py (system python + PIL)
+    from PIL import Image as _I, ImageDraw as _D
+    im = _I.new("RGB", (256, 128), (20, 40, 70)); d = _D.Draw(im)
+    if kind == "shoe":
+        d.polygon([(40, 90), (40, 50), (70, 45), (95, 70), (140, 75), (150, 90)], fill=(240, 240, 240))
+        d.line([(170, 70), (220, 70)], fill=(255, 200, 60), width=10); d.polygon([(220, 55), (245, 70), (220, 85)], fill=(255, 200, 60))
+    else:
+        d.rectangle((60, 50, 140, 100), fill=(240, 240, 240)); d.rectangle((85, 35, 115, 50), outline=(240, 240, 240), width=6)
+        d.line([(170, 70), (220, 70)], fill=(255, 200, 60), width=10); d.polygon([(220, 55), (245, 70), (220, 85)], fill=(255, 200, 60))
+    im.save(path)
+for k, (kind, x) in enumerate((("shoe", -1.0), ("bag", 3.0), ("shoe", 7.0))):
+    pth = "/opt/assets/sb_tex/sign_%s.png" % kind; icon(pth, kind)
+    sm = bpy.data.materials.new("Sign_%d" % k); sm.use_nodes = True; N = sm.node_tree.nodes
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(pth, check_existing=True)
+    b_ = N["Principled BSDF"]; sm.node_tree.links.new(t.outputs["Color"], b_.inputs["Base Color"]); sm.node_tree.links.new(t.outputs["Color"], b_.inputs["Emission Color"])
+    b_.inputs["Emission Strength"].default_value = 1.5
+    bpy.ops.mesh.primitive_plane_add(size=1, location=AX + V((x, -1.2, 3.2)))
+    sg = bpy.context.active_object; sg.name = "LaneSign_%d" % k; sg.scale = (1.2, 0.6, 1); sg.rotation_euler = (math.radians(90), 0, 0)
+    L.set_mat(sg, sm); L.link(sg, L.coll(A))
+    L.add_box("LaneSignFrame_%d" % k, (1.25, 0.06, 0.64), AX + V((x, -1.17, 3.2)), M["trim"], A)
+    for dx in (-0.5, 0.5):
+        L.add_box("LaneSignRod_%d_%d" % (k, dx * 10), (0.02, 0.02, 3.8), AX + V((x + dx, -1.17, 5.1)), M["metal"], A)
 # ------------------------------------------------------------------ world: dusk HDRI for the sky set (mix to a day sky for the airport)
 w = bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True; N = w.node_tree.nodes; Ln = w.node_tree.links
 for n in list(N): N.remove(n)
 out = N.new("ShaderNodeOutputWorld"); env = N.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(L.PH + "hdri/qwantani_dusk_2_puresky_2k.hdr")
 bg = N.new("ShaderNodeBackground"); bg.name = "WorldBG"; bg.inputs["Strength"].default_value = 1.0
-Ln.new(env.outputs["Color"], bg.inputs["Color"]); Ln.new(bg.outputs[0], out.inputs["Surface"])
+gtc = N.new("ShaderNodeTexCoord"); gsep = N.new("ShaderNodeSeparateXYZ"); gr = N.new("ShaderNodeValToRGB")
+Ln.new(gtc.outputs["Generated"], gsep.inputs[0]); Ln.new(gsep.outputs["Z"], gr.inputs["Fac"])
+gr.color_ramp.elements[0].position = 0.0; gr.color_ramp.elements[0].color = (1.0, 0.55, 0.3, 1)
+gr.color_ramp.elements[1].position = 0.45; gr.color_ramp.elements[1].color = (0.35, 0.25, 0.6, 1)
+gm = N.new("ShaderNodeMix"); gm.data_type = 'RGBA'; gm.blend_type = 'MULTIPLY'; gm.inputs["Factor"].default_value = 0.85
+Ln.new(env.outputs["Color"], gm.inputs["A"]); Ln.new(gr.outputs["Color"], gm.inputs["B"])
+Ln.new(gm.outputs["Result"], bg.inputs["Color"]); Ln.new(bg.outputs[0], out.inputs["Surface"])
+env.image.scale(1024, 512)
 
 # ------------------------------------------------------------------ humans
 with bpy.data.libraries.load(HUM, link=False) as (src, dst):
