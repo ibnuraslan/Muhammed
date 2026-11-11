@@ -28,6 +28,9 @@ make("Owner", {"gender": 1.0, "age": 0.62, "muscle": 0.45, "weight": 0.6, "propo
 make("Robber", {"gender": 1.0, "age": 0.45, "muscle": 0.6, "weight": 0.5, "proportions": 0.6, "height": 0.6,
                 "cupsize": 0.5, "firmness": 0.5, "race": {"asian": 0.3, "caucasian": 0.4, "african": 0.3}},
      ["male_casualsuit01/male_casualsuit01.mhclo", "shoes02/shoes02.mhclo"], "young_caucasian_male/young_caucasian_male.mhmat", hair="short02/short02.mhclo")
+make("Officer", {"gender": 1.0, "age": 0.5, "muscle": 0.6, "weight": 0.55, "proportions": 0.6, "height": 0.6,
+                 "cupsize": 0.5, "firmness": 0.5, "race": {"asian": 0.2, "caucasian": 0.4, "african": 0.4}},
+     ["male_worksuit01/male_worksuit01.mhclo", "shoes02/shoes02.mhclo"], "middleage_african_male/middleage_african_male.mhmat", hair="short01/short01.mhclo")
 for ob in bpy.data.objects:
     print("OBJ", ob.name, ob.type, ob.parent.name if ob.parent else None, [c.name for c in ob.users_collection],
           tuple(round(d, 3) for d in ob.dimensions))

@@ -146,8 +146,14 @@ def key_face(f, jaw=0.0, brow=0.0, wide=0.0, squint=0.0, grim=0.0):
 for f, jw, br, wd, sq, gr in ((1, 6, 14, 14, 0, 0), (FIRE, 8, 18, 18, 0, 0), (45, 13, 22, 22, 0, 6), (200, 12, 20, 6, 16, 12), (541, 12, 18, 2, 22, 14),
                               (560, 15, 10, 0, 30, 20), (700, 12, 14, 4, 22, 14), (890, 10, 14, 6, 18, 12), (905, 6, -8, 0, 34, 24),
                               (990, 5, -6, 0, 30, 20), (1004, 14, -4, 0, 32, 24), (1060, 8, 4, 4, 16, 12), (1100, 5, 18, 16, 0, 0),
-                              (1160, 7, 22, 20, 0, 0), (1230, 4, 12, 8, 0, 4), (1300, 2, 4, 2, 0, 6), (1410, 1, 2, 0, 0, 8)):
+                              (1160, 7, 22, 12, 0, 0), (1176, 7, 22, 4, 30, 0), (1186, 7, 22, 4, 30, 0), (1200, 7, 20, 10, 0, 0), (1230, 4, 12, 6, 0, 4), (1300, 2, 4, 2, 0, 6), (1410, 1, 2, 0, 0, 8)):
     key_face(f, jw, br, wd, sq, gr)
+
+# eyes: look down at the ring during the disbelief beat, back up as he leaves
+for f, pitch in ((1, 0), (1075, 0), (1100, -14), (1230, -12), (1265, 0)):
+    for sd in ".L", ".R":
+        pb = ROW.PB["eye" + sd]; pb.rotation_quaternion = Euler((math.radians(pitch), 0, 0), 'XYZ').to_quaternion()
+        pb.keyframe_insert("rotation_quaternion", frame=f, group="eye" + sd)
 
 # ---------------- walk out f1249 -> 1410 toward the door
 XR, DY0, DY1 = sc["door"]
@@ -191,6 +197,25 @@ for f, k in ((1, 0.0), (FIRE - 1, 0.0), (FIRE + 3, 0.35), (FIRE + 14, 0.12), (16
 HR.key_hand("L", 1, Vector((0.32 - 0.25, -2.47, 0.95)), Vector((0, 0.2, -1)), Vector((1, 0, 0)), pole=Vector((0.32 - 0.5, -2.2, 1.0)))
 key_fingers(RRB, "R", 1, curl=55, spread=0, thumb=25)
 key_fingers(RRB, "L", 1, curl=40, spread=2, thumb=10)
+
+# ---------------- officer outside the door: backlit silhouette, beckons him out
+OFF = O["Officer"]; ROF = make_human_ctrl(OFF); HF = Human(ROF)
+bpy.ops.object.mode_set(mode='OBJECT')
+OP = Vector((XR + 1.3, 1.45, 0)); OY = -115.0; Rz_ = Matrix.Rotation(math.radians(OY), 3, 'Z')
+for s_ in "LR": HF.key_foot(s_, 1, HF.foot_xy(s_, OP, OY), OY)
+for f, dz, sd in ((1, -0.01, 0), (1200, -0.012, 2), (1300, -0.01, -2), (1410, -0.012, 1)):
+    HF.key_root(f, OP + Vector((0, 0, HF.root_head.z + dz + SOLE)), yaw=OY, side=sd)
+for f, hd in ((1, (0, 0)), (1260, (4, -10)), (1330, (-2, 8)), (1410, (2, 4))):
+    HF.key_spine(f, flex=2, head=hd)
+def of_hand(s_, f, local, d, n, pole):
+    HF.key_hand(s_, f, OP + Rz_ @ Vector(local), Rz_ @ Vector(d), Rz_ @ Vector(n), pole=OP + Rz_ @ Vector(pole))
+for f in (1, 1300, 1410):     # left hand resting on the belt
+    of_hand("L", f, (0.2, -0.08, 1.0), (-0.3, -0.2, -0.9), (-0.9, 0, 0.2), (0.5, 0.3, 1.1))
+of_hand("R", 1, (-0.22, -0.02, 0.86), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3, 1.1))
+of_hand("R", 1300, (-0.22, -0.02, 0.86), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3, 1.1))
+for f, z in ((1325, 1.3), (1340, 1.42), (1355, 1.3), (1370, 1.42), (1385, 1.32)):   # beckoning wave
+    of_hand("R", f, (-0.28, -0.3, z), (0.0, -0.4, 1.0), (0.0, 1.0, 0.0), (-0.5, 0.1, 1.0))
+key_fingers(ROF, "L", 1, curl=40, spread=2, thumb=10); key_fingers(ROF, "R", 1, curl=20, spread=4, thumb=10)
 
 # =============================================================== attach props to bones
 def bone_world(R, n, f=None):

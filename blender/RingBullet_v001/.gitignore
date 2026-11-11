@@ -2,3 +2,5 @@ assets/
 *.blend
 *.blend1
 render/
+
+*_C.blend

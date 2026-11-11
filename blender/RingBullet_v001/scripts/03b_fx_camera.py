@@ -175,7 +175,7 @@ for o in O:
 lamp = O["L_DeskLamp"].data
 for f, e in ((1, 18), (IMPACT, 18), (IMPACT + 3, 6), (IMPACT + 10, 20), (IMPACT + 18, 12), (IMPACT + 30, 18)):
     lamp.energy = e; lamp.keyframe_insert("energy", frame=f)
-pol = [(O["L_PoliceRed_Win"], 0.0, 300), (O["L_PoliceBlue_Win"], 0.5, 380), (O["L_PoliceRed_Door"], 0.0, 900), (O["L_PoliceBlue_Door"], 0.5, 1100)]
+pol = [(O["L_PoliceRed_Win"], 0.0, 500), (O["L_PoliceBlue_Win"], 0.5, 700), (O["L_PoliceRed_Door"], 0.0, 1800), (O["L_PoliceBlue_Door"], 0.5, 2600)]
 bars = {"Red": bpy.data.materials["M_PoliceBarRed"], "Blue": bpy.data.materials["M_PoliceBarBlue"]}
 P_ON = 1090
 for lo, ph, emax in pol:
@@ -185,13 +185,13 @@ for lo, ph, emax in pol:
         ramp = min(1.0, (f - P_ON) / 60.0) * (2.2 if SWAP - 8 <= f <= SWAP + 6 else 1.0)
         on = ((k % 2) == (0 if ph == 0 else 1))
         lo.data.energy = emax * ramp if on else emax * 0.04 * ramp; lo.data.keyframe_insert("energy", frame=f)
-        f += 15; k += 1
+        f += 9; k += 1
 for nm, ph in (("Red", 0), ("Blue", 1)):
     inp = bars[nm].node_tree.nodes["Principled BSDF"].inputs['Emission Strength']
     inp.default_value = 0; inp.keyframe_insert("default_value", frame=1); inp.keyframe_insert("default_value", frame=P_ON)
     f = P_ON; k = 0
     while f < 1415:
-        inp.default_value = 60.0 if (k % 2) == ph else 2.0; inp.keyframe_insert("default_value", frame=f); f += 15; k += 1
+        inp.default_value = 60.0 if (k % 2) == ph else 2.0; inp.keyframe_insert("default_value", frame=f); f += 9; k += 1
 for o in O:
     if o.type == 'LIGHT': o.visible_camera = False
 
@@ -241,8 +241,17 @@ cf = catmull([(k[0], k[4]) for k in K])
 cd = bpy.data.cameras.new("Cam"); cam = bpy.data.objects.new("Cam", cd); sc.collection.objects.link(cam); sc.camera = cam
 cd.clip_start = 0.002; cd.clip_end = 60; cd.sensor_width = 36; cd.dof.use_dof = True; cd.dof.aperture_fstop = 4.0
 cam.rotation_mode = 'QUATERNION'; prev = None
+def ride(f):
+    """orbit around the flying bullet: behind-above -> side -> below-side, closing in; target swings from the face to the bullet's nose"""
+    u = smooth((f - F(1.25)) / (F(2.95) - F(1.25)))
+    sd = DIR.cross(Vector((0, 0, 1))).normalized(); up = sd.cross(DIR).normalized()
+    ang = math.radians(-20 + 110 * u)                      # around the flight axis
+    rad = 0.035 + 0.02 * u; back = 0.075 - 0.05 * u
+    b = bpos(f); off = (up * math.cos(ang) + sd * math.sin(ang)) * rad - DIR * back
+    tgt = b + (face(f) - b).normalized() * 0.012 + up * 0.006
+    return b + off, tgt, b
 LOCKS = [  # (f0, f1, ramp, offset fn(f)->(loc, target, focus))
-    (F(1.25), F(2.95), 14, lambda f: (bpos(f) - DIR * 0.075 + Vector((0, 0, 0.02)) - DIR.cross(Vector((0, 0, 1))).normalized() * 0.012, bpos(f).lerp(face(f), 0.35), bpos(f))),
+    (F(1.25), F(2.95), 14, lambda f: ride(f)),
     (F(6.6), F(7.4), 14, lambda f: (bpos(f) - DIR * 0.07 + Vector((0.006 + 0.03 * (f - F(6.6)) / 48, 0.0, 0.012)), bpos(f).lerp(ringp(f), 0.25 + 0.4 * smooth((f - F(6.6)) / 48)), bpos(f).lerp(ringp(f), smooth((f - F(6.8)) / 40)))),
 ]
 FACE_C = {}
@@ -280,6 +289,22 @@ for f, e in GL_KEYS:
 rim = O["L_RimCool"].data
 for f, e in ((1, 35), (F(8.0), 35), (F(8.7), 90), (IMPACT + 20, 90), (F(10.5), 35)):
     rim.energy = e; rim.keyframe_insert("energy", frame=f)
+
+# sweat sheen on the owner's skin through the terror beats
+for m in bpy.data.materials:
+    gn = m.node_tree.nodes.get("SkinGroup") if m.node_tree else None
+    if gn and m.name.startswith("Owner"):
+        cc = gn.inputs["Clearcoat"]
+        for f, v in ((1, 0.12), (FIRE, 0.15), (300, 0.4), (1000, 0.5), (1249, 0.4), (1410, 0.3)):
+            cc.default_value = v; cc.keyframe_insert("default_value", frame=f)
+# lift the shadows in the opening wide (0-1.2 s)
+fl_ = O["L_FillBounce"].data
+for f, e in ((1, 45), (60, 40), (90, 15)):
+    fl_.energy = e; fl_.keyframe_insert("energy", frame=f)
+# officer: hidden while the robber is in the room (keeps the opening uncluttered)
+for o in O:
+    if o.name.startswith("Officer"):
+        hide(o, 1, True); hide(o, 1100, False); const_hide(o)
 
 # ---------------------------------------------------------------- beats
 beats = [{"beat": 1, "frame": 1, "first_words": "The robber fired the gun"}, {"beat": 2, "frame": F(2.7), "first_words": "threw his hands up"},

@@ -200,7 +200,7 @@ bp = n.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.4; l.new(v
 l.new(bp.outputs['Normal'], n["Principled BSDF"].inputs['Normal'])
 # door: open, swung outward against the outside wall
 door = box("Door", (0.05, DY1 - DY0 - 0.02, DZ - 0.02), (XR + T + 0.03, DY1 + 0.5, DZ / 2), M_TRIM, bevel=0.006)
-door.rotation_euler = (0, 0, math.radians(-75)); door.location = (XR + T + 0.5, DY1 + 0.15, DZ / 2)
+door.rotation_euler = (0, 0, math.radians(75)); door.location = (XR + T + 0.5, DY0 - 0.15, DZ / 2)
 # rug
 rug = box("Rug", (2.6, 1.8, 0.012), (0.0, -1.2, 0.006), M_RUG, bevel=0.004)
 
@@ -513,9 +513,22 @@ for o in bpy.data.objects:
         for m in o.data.materials:
             for n in m.node_tree.nodes:
                 if n.bl_idname == 'ShaderNodeGroup' and "OuterLayerTransmission" in n.inputs:
-                    n.inputs["OuterLayerTransmission"].default_value = 0.0; n.inputs["OuterLayerAlpha"].default_value = 0.12
+                    n.inputs["OuterLayerTransmission"].default_value = 1.0; n.inputs["OuterLayerAlpha"].default_value = 1.0; n.inputs["OuterLayerRoughness"].default_value = 0.0   # MPFB default cornea; works once the eye mesh casts no shadow
                     n.inputs["IrisMajorColor"].default_value = (0.25, 0.14, 0.06, 1); n.inputs["IrisMinorColor"].default_value = (0.1, 0.05, 0.02, 1)
         o.visible_shadow = False
+# skin: more pore relief and SSS (less plastic); clearcoat (sweat) is keyed in 03b
+for o in bpy.data.objects:
+    if o.type == 'MESH' and o.name.endswith(".body") and not o.name.startswith("Robber"):
+        for m in o.data.materials:
+            for n in m.node_tree.nodes:
+                if n.bl_idname == 'ShaderNodeGroup' and "Pore strength" in n.inputs:
+                    n.inputs["Pore strength"].default_value = 0.4; n.inputs["SSS strength"].default_value = 0.35
+                    n.inputs["Roughness"].default_value = 0.5; n.inputs["Clearcoat Roughness"].default_value = 0.22
+                    n.name = "SkinGroup"
+# officer: navy work uniform, no markings, waits outside the door as a backlit silhouette
+for o in bpy.data.objects:
+    if o.name.startswith("Officer.") and "worksuit" in o.name:
+        o.data.materials.clear(); o.data.materials.append(noisy("M_OfficerUniform", (0.02, 0.03, 0.07), (0.035, 0.045, 0.09), 150, 0.75, bump=0.05))
 sc["desk_y"] = DESK_Y; sc["desk_top"] = DESK_TOP; sc["door"] = (XR, DY0, DY1)
 print("SCENE objects", len(bpy.data.objects))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
