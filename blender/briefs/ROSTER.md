@@ -12,3 +12,12 @@
 | Connect08 | BeethovenDeaf | session_01XfwPSmDaMcghtf2ABiEM5u | claude/connect08-beethoven-deaf |
 | Connect09 | DonationBin | session_01XfwPSovx4AHAqP4RXLhecu | claude/connect09-donation-bin |
 | Connect10 | BellyFat | session_01XfwPSmCWrCdSCoVLU4wxQM | claude/connect10-belly-fat |
+
+## Batch 2 (launched 2026-11-11 19:12 UTC)
+| Chat | Film | Session | Branch |
+|---|---|---|---|
+| Connect11 | WW1Assassination | session_01XfwPSn7BupLgbx73ZdnrsR | claude/connect11-ww1-assassination |
+| Connect12 | NoPilotPlane | session_01XfwPSpivYHsFsBiBxt8xeM | claude/connect12-no-pilot-plane |
+| Connect13 | FrozenTearsGun | session_01XfwPSnLSNxLDeEJKf7DqL6 | claude/connect13-frozen-tears-gun |
+| Connect14 | ElectricianPolice | session_01XfwPSojF79dPjqVRipTFo3 | claude/connect14-electrician-police |
+| Connect15 | GameBoxBullet | session_01XfwPSnptu51QmjSMaMmQKe | claude/connect15-game-box-bullet |
