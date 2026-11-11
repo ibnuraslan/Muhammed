@@ -104,24 +104,24 @@ def water_mat(name, foam_steep=True):
     b.inputs["Base Color"].default_value = (0.012, 0.045, 0.05, 1); b.inputs["Roughness"].default_value = 0.07
     b.inputs["IOR"].default_value = 1.33; b.inputs["Specular IOR Level"].default_value = 0.6
     tc = NN.new("ShaderNodeTexCoord")
-    nz = NN.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.35; nz.inputs["Detail"].default_value = 8; nz.noise_dimensions = '4D'
+    nz = NN.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.35 if foam_steep else 1.2; nz.inputs["Detail"].default_value = 12; nz.noise_dimensions = '4D'
     nz.name = "NZ"; LL.new(tc.outputs["Object"], nz.inputs["Vector"])
-    bp = NN.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.35; bp.inputs["Distance"].default_value = 0.3
+    bp = NN.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.35 if foam_steep else 0.6; bp.inputs["Distance"].default_value = 0.3
     LL.new(nz.outputs["Fac"], bp.inputs["Height"]); LL.new(bp.outputs["Normal"], b.inputs["Normal"])
     geo = NN.new("ShaderNodeNewGeometry"); sz = NN.new("ShaderNodeSeparateXYZ"); LL.new(geo.outputs["Normal"], sz.inputs["Vector"])
     # steep faces glow a lighter green-teal (light through the thin wall)
     stp = NN.new("ShaderNodeMapRange"); stp.inputs["From Min"].default_value = 0.8; stp.inputs["From Max"].default_value = 0.2; LL.new(sz.outputs["Z"], stp.inputs["Value"])
     emi = NN.new("ShaderNodeMath"); emi.operation = 'MULTIPLY'; emi.inputs[1].default_value = 0.35 if foam_steep else 0.0
     LL.new(stp.outputs["Result"], emi.inputs[0]); LL.new(emi.outputs[0], b.inputs["Emission Strength"])
-    b.inputs["Emission Color"].default_value = (0.05, 0.22, 0.2, 1)
+    b.inputs["Emission Color"].default_value = (0.03, 0.2, 0.16, 1)
     # foam: lip/overhang (normal pointing down/sideways) + soft streak noise + base patches (flood)
     lipm = NN.new("ShaderNodeMapRange"); lipm.inputs["From Min"].default_value = 0.15; lipm.inputs["From Max"].default_value = -0.25; LL.new(sz.outputs["Z"], lipm.inputs["Value"])
     fn = NN.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 0.22; fn.inputs["Detail"].default_value = 12; fn.inputs["Roughness"].default_value = 0.7
     fn.noise_dimensions = '4D'; fn.name = "FN"
     mp = NN.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1.0, 1.0, 0.5); LL.new(tc.outputs["Object"], mp.inputs["Vector"]); LL.new(mp.outputs["Vector"], fn.inputs["Vector"])
-    fr = NN.new("ShaderNodeMapRange"); fr.inputs["From Min"].default_value = 0.42; fr.inputs["From Max"].default_value = 0.72; LL.new(fn.outputs["Fac"], fr.inputs["Value"])
+    fr = NN.new("ShaderNodeMapRange"); fr.inputs["From Min"].default_value = 0.5; fr.inputs["From Max"].default_value = 0.72; LL.new(fn.outputs["Fac"], fr.inputs["Value"])
     fv = NN.new("ShaderNodeValue"); fv.name = "FOAM_BASE"; fv.outputs[0].default_value = 0.0
-    a1 = NN.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; a1.inputs[1].default_value = 0.55 if foam_steep else 0.0
+    a1 = NN.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; a1.inputs[1].default_value = 0.4 if foam_steep else 0.0
     LL.new(stp.outputs["Result"], a1.inputs[0])
     a2 = NN.new("ShaderNodeMath"); a2.operation = 'ADD'; LL.new(a1.outputs[0], a2.inputs[0]); LL.new(fv.outputs[0], a2.inputs[1])
     a3 = NN.new("ShaderNodeMath"); a3.operation = 'MULTIPLY'; LL.new(a2.outputs[0], a3.inputs[0]); LL.new(fr.outputs["Result"], a3.inputs[1])
@@ -538,7 +538,7 @@ NY = 160
 bpy.ops.mesh.primitive_grid_add(x_subdivisions=6, y_subdivisions=NY, size=1, location=(D.x, D.y, D.z + 2.6))
 wtop = bpy.context.active_object; wtop.name = "D_WaterTop"; link(wtop, C_D); wtop.scale = (6, 20, 1)
 bpy.ops.object.transform_apply(scale=True)
-wtop.data.materials.append(wtopm)
+wtop.data.materials.append(wcol)
 wbody = prism("D_WaterBody", [(10, 2.58), (-10, 2.58)] + [(dy, z + 0.02) for dy, z in seab[::-1]][::-1][::-1], wcol)
 wtop.shape_key_add(name="Basis")
 for nm, cen in (("Bulge", [0.0]), ("SplitA", [-6.0]), ("SplitB", [6.0])):
@@ -560,21 +560,19 @@ for nm_ in ("D_Mantle", "D_OceanPlate", "D_ContPlate", "D_Tip"):
     o_ = bpy.data.objects[nm_]
     sb = o_.modifiers.new("sub", 'SUBSURF'); sb.subdivision_type = 'SIMPLE'; sb.levels = sb.render_levels = 5
     tx_ = bpy.data.textures.get("RockDisp") or bpy.data.textures.new("RockDisp", 'CLOUDS'); tx_.noise_scale = 0.35; tx_.noise_depth = 4
-    dp = o_.modifiers.new("disp", 'DISPLACE'); dp.texture = tx_; dp.strength = 0.22; dp.mid_level = 0.5; dp.texture_coords = 'GLOBAL'
+    dp = o_.modifiers.new("disp", 'DISPLACE'); dp.texture = tx_; dp.strength = 0.08; dp.mid_level = 0.5; dp.texture_coords = 'GLOBAL'
     for p_ in o_.data.polygons: p_.use_smooth = True
 ring_m = simple_mat("M_Shock", (1.0, 0.5, 0.15), 0.5, emit=((1.0, 0.45, 0.1), 0.0))
 bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.025, major_segments=64, minor_segments=8, location=(D.x - 3.15, D.y + 0.3, D.z - 2.8), rotation=(0, math.radians(90), 0))
 ring = bpy.context.active_object; ring.name = "D_ShockRing"; link(ring, C_D); ring.data.materials.append(ring_m); ring.scale = (0.01,) * 3
-for i in range(30):
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=random.uniform(0.12, 0.35), location=(D.x - random.uniform(-2.8, 2.8), D.y + random.uniform(-2.5, 3.0), D.z + plate_top(0.5) + random.uniform(-0.4, 0.4)))
+for i in range(12):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=random.uniform(0.25, 0.45), location=(D.x - random.uniform(-2.8, 2.8), D.y + random.uniform(-2.5, 3.0), D.z + plate_top(0.5) + random.uniform(-0.4, 0.4)))
     o_ = bpy.context.active_object; o_.name = "D_Chunk_%d" % (100 + i); link(o_, C_D); o_.data.materials.append(oce)
     o_.scale = (random.uniform(0.7, 1.4), random.uniform(0.7, 1.4), random.uniform(0.5, 1.0))
-    dd = o_.modifiers.new("d", 'DISPLACE'); dd.texture = bpy.data.textures["RockDisp"]; dd.strength = 0.12
+    dd = o_.modifiers.new("d", 'DISPLACE'); dd.texture = bpy.data.textures["RockDisp"]; dd.strength = 0.25; dd.texture_coords = 'GLOBAL'
+    o_.data.materials[0] = con
 
 # little seabed props on the cross-section (rocks) and studio lights
-for i in range(10):
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.25, location=(D.x + random.uniform(-2.5, 2.5), D.y + random.uniform(-8, 8), D.z - 2.0 + random.uniform(-0.1, 0.4)))
-    o = bpy.context.active_object; o.name = "D_Chunk_%d" % i; link(o, C_D); o.data.materials.append(oce)
 for nm, loc, en, sz in (("D_Key", (-14, 460, -24), 9000, 8), ("D_Fill", (-10, 486, -32), 3000, 8), ("D_Top", (0, 470, -16), 4000, 10)):
     ld = bpy.data.lights.new(nm, 'AREA'); ld.energy = en; ld.size = sz; ld.color = (1, 0.98, 0.95)
     lo = bpy.data.objects.new(nm, ld); C_D.objects.link(lo); lo.location = loc

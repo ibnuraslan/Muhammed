@@ -308,12 +308,13 @@ for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (1
     for k in ("SplitA", "SplitB"):
         kbw[k].value = sa; kbw[k].keyframe_insert("value", frame=F(t))
 ring = bpy.data.objects["D_ShockRing"]; rme = bpy.data.materials["M_Shock"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
-for t, sc_, e in ((14.35, 0.01, 0.0), (14.42, 0.6, 25.0), (14.8, 6.0, 6.0), (15.2, 11.0, 0.0)):
+for t, sc_, e in ((14.35, 0.01, 0.0), (14.42, 0.5, 4.0), (14.7, 2.5, 2.0), (14.9, 3.5, 0.0)):
     ring.scale = (sc_,) * 3; ring.keyframe_insert("scale", frame=F(t)); rme.default_value = e; rme.keyframe_insert("default_value", frame=F(t))
+key_hide(ring, [(1, True), (F(14.36), False), (F(14.92), True)])
 for o in bpy.data.objects:
     if o.name.startswith("D_Chunk_1"):
         l = o.location.copy(); r0 = o.rotation_euler.copy()
-        key_tr(o, F(14.38), loc=tuple(l), rot=tuple(r0))
+        key_tr(o, F(14.38), loc=tuple(l), rot=tuple(r0)); key_hide(o, [(1, True), (F(14.36), False)])
         up = random.uniform(0.8, 2.2)
         key_tr(o, F(14.65), loc=(l.x, l.y + random.uniform(-1, 1), l.z + up), rot=(r0.x + random.uniform(-2, 2), r0.y + random.uniform(-2, 2), r0.z))
         key_tr(o, F(15.3), loc=(l.x, l.y + random.uniform(-1.5, 1.5), l.z + up * 0.4), rot=(r0.x + random.uniform(-3, 3), r0.y + random.uniform(-3, 3), r0.z))
@@ -321,7 +322,7 @@ fm = bpy.data.materials["M_FaultGlow"].node_tree.nodes["Principled BSDF"].inputs
 for t, e in ((13.0, 0.0), (14.3, 0.5), (14.4, 12.0), (15.0, 3.0), (15.6, 1.0)):
     fm.default_value = e; fm.keyframe_insert("default_value", frame=F(t))
 for o in bpy.data.objects:
-    if o.name.startswith("D_Chunk_"):
+    if o.name.startswith("D_Chunk_X"):
         l = o.location.copy()
         for t in np.arange(14.35, 15.2, 0.05):
             key_tr(o, F(t), loc=(l.x + random.uniform(-0.05, 0.05), l.y + random.uniform(-0.05, 0.05), l.z + random.uniform(0, 0.25) * (1 - (t - 14.35) / 0.9)))
@@ -366,6 +367,8 @@ for t, v in ((0, 0), (30.5, 0), (32.0, 0.0012), (40, 0.0009)):
 dust = bpy.data.objects["DustVolume"]; key_hide(dust, [(1, True), (F(30.4), False)])
 bowl_hide = [o for o in bpy.data.collections["Diorama"].objects]
 for o in bowl_hide:
+    if o.name.startswith(("D_Chunk_1", "D_ShockRing")):
+        key_hide(o, [(F(15.45), True)]); continue
     key_hide(o, [(1, True), (F(12.4), False), (F(15.45), True)])
 for o in bpy.data.objects:   # clear the camera's path through the beach furniture at 18-20 s
     if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 5) < 6:
