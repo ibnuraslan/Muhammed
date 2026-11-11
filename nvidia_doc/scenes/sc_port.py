@@ -78,6 +78,6 @@ def build(variant=None):
 
 
 MOVES = {
-    "crane_rise": dict(kind="plate", far=1200.0, cam=lambda c, t: ((95, -175, 5 + 6 * t), (-5, 10, 24), 32)),
+    "crane_rise": dict(kind="anim", far=1200.0, cam=lambda c, t: ((95, -175, 5 + 6 * t), (-5, 10, 24), 32)),
     "container_push": dict(kind="plate", dof=4.0, far=600.0, cam=lambda c, t: ((14, 4, 3.2), (-10, 28, 5), 40), focus=lambda c, t: (-2, 23, 4)),
 }

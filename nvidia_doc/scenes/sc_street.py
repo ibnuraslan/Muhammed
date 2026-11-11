@@ -305,12 +305,12 @@ def _cam_long(c, t):
 
 
 def _cam_puddle(c, t):
-    p = place_walker_toward(c, 0.55)
-    cam = Vector((p.x - 3.4, p.y - 0.35, 0.24))                 # just above the wet pavement, in her path
+    p = place_walker_toward(c, 0.45 + 0.25 * t)     # she keeps walking; the low camera holds, she passes through
+    cam = Vector((5.0 - 3.4 - 0.6 * t, p.y - 0.35, 0.24))       # just above the wet pavement, in her path, creeping back
     return (cam, Vector((p.x, p.y, 0.55)), 32)
 
 
 MOVES = {
-    "puddle": dict(kind="plate", dof=2.0, far=80.0, cam=_cam_puddle, focus=lambda c, t: place_walker_toward(c, 0.55) + Vector((0, 0, -0.7))),
+    "puddle": dict(kind="anim", dof=2.0, far=80.0, cam=_cam_puddle, focus=lambda c, t: place_walker_toward(c, 0.45 + 0.25 * t) + Vector((0, 0, -0.7))),
     "slowmo_walk": dict(kind="anim", dof=2.8, far=80.0, cam=_cam_long, focus=lambda c, t: place_walker_toward(c, t)),
 }

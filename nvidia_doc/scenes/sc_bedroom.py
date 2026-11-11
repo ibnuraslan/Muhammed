@@ -108,5 +108,5 @@ def _over_shoulder(c, t):
 
 
 MOVES = {
-    "over_shoulder": dict(kind="plate", dof=2.0, far=6.0, cam=_over_shoulder, focus=lambda c, t: c["c"]),
+    "over_shoulder": dict(kind="anim", dof=2.0, far=6.0, cam=_over_shoulder, focus=lambda c, t: c["c"]),
 }

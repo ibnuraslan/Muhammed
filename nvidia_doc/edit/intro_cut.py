@@ -35,17 +35,17 @@ SANS_SB = "/usr/share/fonts/opentype/inter/Inter-SemiBold.otf"
 MONO = "/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Medium.ttf"
 
 # ----------------------------------------------------------------------------- shot list
-SHOTS = [  # id, plate scene/move, seconds, extra
-    ("a", ("bedroom", "over_shoulder"), 3.4, {}),
-    ("b", ("bedroom", "over_shoulder"), 2.4, {"send": True}),
-    ("c", ("city_aerial", "aerial_dark"), 3.4, {"reveal": ("city_aerial", "aerial_lit")}),
-    ("d", ("hq", "night_dim"), 3.6, {"reveal": ("hq", "night_lit")}),
-    ("e", ("hq", "watch"), 3.6, {"rain": 0.5}),
-    ("f", ("street", "slowmo_walk"), 3.6, {"rain": 1.0, "anim": (0.0, 0.55)}),
-    ("g", ("street", "puddle"), 3.4, {"rain": 0.8}),
-    ("h", ("port", "crane_rise"), 3.4, {}),
-    ("i", None, 3.6, {"map": True}),
-    ("j", ("street", "slowmo_walk"), 5.2, {"rain": 1.0, "anim": (0.55, 1.0), "title": True}),
+SHOTS = [  # id, plate scene/move, seconds, extra   (every shot is a true 3D animation, 12 fps -> 24 fps)
+    ("a", ("bedroom", "over_shoulder"), 3.4, {"anim": (0.0, 0.58)}),     # "I was unfaithful to my wife."
+    ("b", ("bedroom", "over_shoulder"), 2.4, {"send": True, "anim": (0.58, 1.0)}),   # "...tells his employees"
+    ("c", ("office", "dolly"), 3.4, {}),                                # "...on November eighth." screens wake down the aisle
+    ("d", ("boardroom", "board_slide"), 3.6, {}),                       # "...opens an independent investigation"
+    ("e", ("surveil", "lens_push"), 3.6, {"rain": 0.25}),               # "...a foreign intelligence service targeted him."
+    ("f", ("street", "slowmo_walk"), 3.6, {"rain": 1.0, "anim": (0.0, 0.6)}),   # "...Alice Huang."
+    ("g", ("street", "puddle"), 3.4, {"rain": 0.8}),                    # "She comes from the other side..."
+    ("h", ("port", "crane_rise"), 3.4, {}),                             # "...buys the kinds of chips"
+    ("i", ("globe", "pacific_turn"), 3.6, {}),                          # "...keep out of China."
+    ("j", ("cafe", "title_push"), 5.2, {"rain": 0.5, "title": True}),   # title over the two of them
 ]
 
 
@@ -293,7 +293,9 @@ def shot_frame(sid, t):
         a0, a1 = ex.get("anim", (0.0, 1.0))
         f = (a0 + (a1 - a0) * u) * (len(frames) - 1); i0 = int(f); fr = f - i0
         img = load(frames[i0]) * (1 - fr) + load(frames[min(i0 + 1, len(frames) - 1)]) * fr
-        img = zoom_pan(img, 1.0 + 0.02 * u, shake=handheld(T, 1.0))
+        if sid in ("a", "b"):
+            img = phone_comp(img, sid, t, dur, frame_pos=(a0 + (a1 - a0) * u) * (len(frames) - 1))
+        img = zoom_pan(img, 1.0 + 0.02 * u, shake=handheld(T, 1.4 if sid in ("a", "b") else 0.8))
     else:
         img = load(os.path.join(d, "plate.png"))
         z = {"a": 1.0 + 0.05 * u, "b": 1.05 + 0.03 * u, "c": 1.0 + 0.06 * u, "d": 1.02 + 0.05 * u, "e": 1.0 + 0.04 * u,
@@ -305,19 +307,25 @@ def shot_frame(sid, t):
         if sid in ("a", "b"):
             img = phone_comp(img, sid, t, dur)
         img = zoom_pan(img, z, shake=handheld(T, 1.6 if sid in ("a", "b") else 0.6))
-    img = grade(img, con=0.32 if sid in ("f", "g", "j") else 0.18, sat=0.95)
+    img = grade(img, con=0.32 if sid in ("f", "g") else 0.2, sat=0.95)
     r = rain_layer(T, ex.get("rain", 0.0))
     if r is not None:
         img = img + r[..., None] * np.array([0.85, 0.9, 1.0])
     return img
 
 
-def phone_comp(img, sid, t, dur):
+def phone_comp(img, sid, t, dur, frame_pos=None):
     d = plate_dir("bedroom", "over_shoulder")
     sj = os.path.join(d, "screen.json")
     if not os.path.exists(sj):
         return img
-    cn = json.load(open(sj))["corners"]
+    data = json.load(open(sj))
+    if frame_pos is not None and "frames" in data:          # animated plate: interpolate this frame's corners
+        fr_ = data["frames"]; i0 = int(frame_pos); f = frame_pos - i0
+        A = np.array(fr_[min(i0, len(fr_) - 1)]); B = np.array(fr_[min(i0 + 1, len(fr_) - 1)])
+        cn = (A * (1 - f) + B * f).tolist()
+    else:
+        cn = data["corners"]
     px = [(x * W, y * H) for x, y in cn]
     if sid == "a":
         ui = phone_ui(t, typed=ease((t - 0.4) / 2.0))
@@ -366,12 +374,12 @@ def frame(T):
                 img = img * (1 - f) + shot_frame(nxt[0], 0.0) * f
             img = overlays(img, sid, lt, dur)
             fade = ease(T / 0.8) * ease((TOTAL - T) / 1.2)
-            return finish(img * fade, 0.25 if sid in ("f", "g", "j") else 0.45)
+            return finish(img * fade, 0.25 if sid in ("f", "g", "j") else 0.4)
         t += dur
 
 
 def overlays(img, sid, t, dur):
-    if sid in ("a", "b", "d", "e", "f", "g", "j"):
+    if sid in ("a", "b", "c", "d", "e", "f", "g", "j"):
         img = tag(img, t, dur, "DRAMATIZATION")
     if sid == "b":
         img = lower_third(img, t, dur, "JENSEN HUANG", "Chief executive, Nvidia")
@@ -388,6 +396,10 @@ def overlays(img, sid, t, dur):
         img = glow_text(img, surface_text(d), 0.35, 10)
     if sid == "i":
         img = lower_third(img, t, dur, "EXPORT CONTROLS", "Advanced AI chips restricted from China")
+        a = win(t, 2.7, dur + 1, 0.3)
+        def d_(c):
+            tracked(c, "RESTRICTED", W * 0.505, H * 0.17, font(SANS_SB, 26), a, 0.3, "c", (1.0, 0.32, 0.28))
+        img = glow_text(img, surface_text(d_), 0.3, 8)
     if sid == "j":
         a = win(t, 0.6, dur + 2, 0.9)
         def d(c):

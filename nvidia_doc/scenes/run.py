@@ -33,6 +33,12 @@ ctx["cam"] = cam
 
 if "--anim" in sys.argv:
     n = arg('--anim', 72)
+    if hasattr(mod, "screen_corners"):      # per-frame screen corners for pinning UI in post (cheap: no render)
+        import json
+        cs = []
+        for i in range(n):
+            kit.apply_cam(cam, ctx, spec, i / max(n - 1, 1)); cs.append(mod.screen_corners(ctx, s, cam))
+        json.dump(dict(corners=cs[0], frames=cs), open(os.path.join(OUT, "screen.json"), "w"))
     for i in range(n):
         p = os.path.join(OUT, f"f{i:04d}.png")
         if os.path.exists(p):
