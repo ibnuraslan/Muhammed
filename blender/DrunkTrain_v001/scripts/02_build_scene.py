@@ -324,9 +324,12 @@ box("LaundryLine", (0.02, 6.0, 0.02), (14.5, -30.0, 2.22), M_WIRE)
 tree_src = os.path.join(PH, "jacaranda_tree", "jacaranda_tree_1k.blend")
 with bpy.data.libraries.load(tree_src, link=False) as (src, dst):
     dst.objects = [n for n in src.objects]
-tree_objs = [o for o in dst.objects if o is not None and o.type == 'MESH']
+tree_objs = [o for o in dst.objects if o is not None and o.type == 'MESH' and o.name in ("jacaranda_tree_geometry_nodes", "jacaranda_tree_trunk_LOD1")]
 tc_ = bpy.data.collections.new("TreeSrc"); coll("Hidden").children.link(tc_)
 for o in tree_objs: tc_.objects.link(o)
+for o in dst.objects:      # drop the heavy realised LOD meshes; leaves stay as GN instance sources
+    if o is not None and o.name in ("jacaranda_tree_LOD0", "jacaranda_tree_LOD1", "jacaranda_tree_trunk_LOD0"):
+        bpy.data.objects.remove(o, do_unlink=True)
 for i, (tx, ty, s) in enumerate([(13, -70, 1.0), (15.5, -12, 1.2), (12.5, 25, 0.9), (16, 60, 1.1), (-13, -55, 1.0), (-14.5, -5, 1.25),
                                  (-12.5, 40, 1.05), (-16, 85, 1.2), (13.5, 110, 1.0), (14, -105, 1.1)]):
     e = bpy.data.objects.new("Tree%d" % i, None); e.instance_type = 'COLLECTION'; e.instance_collection = tc_
@@ -453,6 +456,22 @@ wag2 = wag1.copy(); wag2.data = wag1.data; wag2.name = "Wagon2"; coll("Train").o
 mn1, _ = bbox([wag1]); dz = RAIL_H + 0.0 - mn1.z
 wag1.location.z += dz; wag2.location.z += dz
 sc["wheel_r"] = max(w_.dimensions.z for w_ in lw) / 2
+# the model's "wheels" are solid drums across the track: rebuild each as a real wheelset (two flanged discs + thin axle)
+WR = sc["wheel_r"]
+M_WHEEL = pbr("WheelSteel", "rusty_metal_02", 0.4, sat=0.3, val=0.55, metal=0.8, rough_mul=0.8)
+def wheelset_mesh(name):
+    bmw = bmesh.new()
+    for sx in (-1, 1):
+        for rad, w0, w1 in ((WR, 0.0, 0.13), (WR + 0.03, -0.03, 0.0), (WR * 0.55, 0.13, 0.17)):
+            x0, x1 = sx * (GAUGE + (w0 - 0.035) * -sx * -1), sx * (GAUGE + (w1 - 0.035))
+            m_ = Matrix.Translation((sx * (GAUGE - 0.035 + (w0 + w1) / 2), 0, 0)) @ Matrix.Rotation(math.radians(90), 4, 'Y')
+            bmesh.ops.create_cone(bmw, cap_ends=True, segments=28, radius1=rad, radius2=rad, depth=(w1 - w0), matrix=m_)
+    bmesh.ops.create_cone(bmw, cap_ends=True, segments=16, radius1=0.085, radius2=0.085, depth=2 * GAUGE + 0.3, matrix=Matrix.Rotation(math.radians(90), 4, 'Y'))
+    me_ = bpy.data.meshes.new(name); bmw.to_mesh(me_); bmw.free(); me_.materials.append(M_WHEEL)
+    return me_
+WS_ME = wheelset_mesh("Wheelset")
+for w_ in lw:
+    w_.data = WS_ME
 print("WHEELS", len(WHEELS), "r", sc["wheel_r"])
 # headlights + undercarriage light catcher at the leading (-Y) end
 mnL, mxL = bbox([loco])
@@ -467,8 +486,8 @@ for hx_ in (-0.55, 0.55):
     so.location = (hx_, mnL.y - 0.2, 2.2); so.rotation_euler = (math.radians(95), 0, 0)
 # plough (pilot) at the front: a wedge just above the rails
 bm = bmesh.new()
-pv = [bm.verts.new(p_) for p_ in ((-1.45, 0.4, 0.95), (1.45, 0.4, 0.95), (1.4, 0.15, 0.28), (-1.4, 0.15, 0.28),
-                                  (0, -0.5, 0.28), (0, -0.35, 0.95))]
+pv = [bm.verts.new(p_) for p_ in ((-1.45, 0.4, 0.95), (1.45, 0.4, 0.95), (1.4, 0.15, 0.44), (-1.4, 0.15, 0.44),
+                                  (0, -0.5, 0.44), (0, -0.35, 0.95))]
 bm.faces.new((pv[3], pv[4], pv[5], pv[0])); bm.faces.new((pv[4], pv[2], pv[1], pv[5])); bm.faces.new((pv[0], pv[5], pv[1]))
 pl = mesh_obj("Plough", bm, M_TRAINPAINT.get("x") or grime(None, "PloughPaint"), "Train"); pl.location = (0, mnL.y, 0); pl.parent = TRAIN
 sc["plough_tip"] = mnL.y - 0.5

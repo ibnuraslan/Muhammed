@@ -27,9 +27,12 @@ def ground_z(x, y):
         return PLAT["h"]
     if RAMP["x0"] <= x <= RAMP["x1"] and RAMP["y0"] <= y <= RAMP["y1"]:
         return RAMP["h"] * (1 - (y - RAMP["y0"]) / (RAMP["y1"] - RAMP["y0"]))
-    if x > 3.4 or x < -8.6:
-        return -0.06
-    return 0.0
+    # matches the ballast mesh: sleeper tops 0, ballast -0.03, shoulders sloping to the grass at -0.08
+    if x > 3.4 or x < -8.6: return -0.08
+    if x > 2.6: return -0.03 - 0.05 * (x - 2.6) / 0.8
+    if x < -7.2: return -0.03 - 0.05 * (-7.2 - x) / 1.4
+    if abs(x) < 1.3 or abs(x + 4.3) < 1.3: return 0.0
+    return -0.03
 
 # ------------------------------------------------------------------ train motion (front = plough tip y)
 T_IMP = F(9.0)          # impact frame (beat 4)
@@ -148,6 +151,13 @@ LB = Body(LAD); RH = LB.RH
 print("LAD root", [round(v, 3) for v in RH], "arm", round(LB.L_arm["L"], 3), "leg", round(LB.L_leg["L"], 3))
 
 # ------------------------------------------------------------------ generic gait with drunk sway
+RAIL_XS = [tx + sx * GAUGE for tx in (0.0, -4.3) for sx in (-1, 1)]
+def off_rail(xy, clear=0.3):
+    """never plant a foot across a rail: shift the plant to the nearer side"""
+    for rx in RAIL_XS:
+        if abs(xy.x - rx) < clear:
+            xy = Vector((rx + math.copysign(clear, xy.x - rx if xy.x != rx else 1), xy.y))
+    return xy
 def gait(H, path, yaw_fn, f0, f1, stride=0.75, duty=0.62, lift=0.08, bob=0.022, crouch=0.03, lean=6.0, step=2,
          side_fn=None, spine_fn=None, arms_fn=None, body=None, foot_hold=None):
     frames = list(range(f0, f1 + 1)); dist = [0.0]
@@ -161,7 +171,7 @@ def gait(H, path, yaw_fn, f0, f1, stride=0.75, duty=0.62, lift=0.08, bob=0.022, 
             st = [i for i in idx if (cyc[i] % 1.0) < duty]
             if st:
                 im = min(st, key=lambda i: abs((cyc[i] % 1.0) - duty / 2))
-                plant[pid] = (H.foot_xy(s, path(frames[im]), yaw_fn(frames[im])), yaw_fn(frames[im]))
+                plant[pid] = (off_rail(H.foot_xy(s, path(frames[im]), yaw_fn(frames[im]))), yaw_fn(frames[im]))
         first = (H.foot_xy(s, path(f0), yaw_fn(f0)), yaw_fn(f0)); last = (H.foot_xy(s, path(f1), yaw_fn(f1)), yaw_fn(f1))
         for i, f in enumerate(frames):
             if (i % step) and i != len(frames) - 1: continue
@@ -300,8 +310,8 @@ for f in list(range(f_lie0, f_lie1 + 1, 3)) + [f_lie1]:
     br = math.sin(2 * math.pi * (f - f_lie0) / 150.0)            # 2.5 s snore cycle
     trem = 0.0 if f < F(7.0) else (f - F(7.0)) / (f_lie1 - F(7.0))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
-    LAD.key_spine(f, flex=6 - 3.5 * br, side=0, twist=0,
-                  head=(4.5 + 3.5 * br + 2.5 * trem * math.sin(f * 2.7), 25 + 2 * math.sin(f / 37.0) + 3 * trem * math.sin(f * 3.1)))
+    LAD.key_spine(f, flex=6 - 1.5 * br, side=0, twist=0,
+                  head=(5.5 + 0.8 * br + 1.0 * trem * math.sin(f * 2.7), 25 + 2 * math.sin(f / 37.0) + 3 * trem * math.sin(f * 3.1)))
     for s in "LR":
         sx = 1 if s == "L" else -1
         LB.foot(s, f, Bm, V(sx * 0.24, LB.an[s].y + 0.1, LB.an[s].z), Matrix.Rotation(R_(sx * 25), 3, 'Z'))
@@ -325,14 +335,14 @@ def drag_state(f):
         rel = -0.35 + 3.2 * smooth(u)                    # in front of the plough -> pulled under the front bogie side
         y = tf + rel
         x = LIE_X + (0.0 - LIE_X) * smooth(min(1.0, u / 0.35))
-        z = 0.14 + 0.3 * math.sin(math.pi * min(1, u * 1.6)) * math.exp(-u * 2.5) + 0.04 * abs(math.sin(u * 9))
+        z = 0.14 + (0.3 * math.sin(math.pi * u / 0.2) if u < 0.2 else 0.02 * abs(math.sin(u * 9)))     # thrown up at the hit, then low under the plough
         yaw = 90 + 450 * (1 - (1 - min(1.0, u / 0.6)) ** 2)   # spins around (ends heading -Y before the first wheelset)
         roll = 300 * u + 40 * math.sin(u * 7)
-        pitch = -90 + 35 * math.sin(u * 6.5) * (1 - u)
+        pitch = -90 + 18 * math.sin(u * 6.5) * (1 - u)
     else:
         u = (f - (T_IMP + 120)) / (f_rest - (T_IMP + 120))
         y0 = train_front(T_IMP + 120) + 2.85
-        y = y0 + (STOP_Y - y0) * (1 - (1 - min(1, u)) ** 2.2)
+        y = max(y0 + (STOP_Y - y0) * (1 - (1 - min(1, u)) ** 2.2), tf + 2.6)     # never ahead of the plough
         x = 0.0 + 0.04 * math.sin(u * 13)
         z = 0.15 + 0.08 * smooth(min(1, u)) + 0.07 * abs(math.sin(u * 22)) * (1 - u)
         yaw = 540 + 25 * math.sin(u * 8) * (1 - u)
@@ -348,17 +358,18 @@ def drag_full(f):
         u = (f - (T_IMP + 120)) / (f_rest - (T_IMP + 120)); rl += ROLL_FIX * smooth(u)
     return p, Rbody(yaw=yw, pitch=pi, roll=rl)
 def above_ground(origin, d_w, L, floor=0.07, ceil=None):
-    d_w = d_w.normalized(); e = origin + d_w * L
-    if ceil is not None:
-        if abs(e.x) > 0.48:                       # stay between the wheels
-            d_w = V(math.copysign(0.48, e.x) - origin.x, d_w.y * L, d_w.z * L) / L; d_w.normalize(); e = origin + d_w * L
-        if e.z > ceil:
-            d_w = V(d_w.x, d_w.y, (ceil - origin.z) / L); d_w.normalize(); e = origin + d_w * L
-    if e.z < floor:
-        dz = (floor - origin.z) / L
-        dz = max(-1.0, min(1.0, dz)); h = math.sqrt(max(0.0, 1 - dz * dz)); hv = V(d_w.x, d_w.y, 0)
-        hv = hv.normalized() if hv.length > 1e-4 else V(1, 0, 0)
-        d_w = V(hv.x * h, hv.y * h, dz)
+    """clamp a limb so its end (plus ~0.18 m of hand/foot) stays above the ballast, between the wheels and under the chassis"""
+    d_w = d_w.normalized()
+    for _ in range(6):
+        e = origin + d_w * L
+        if e.z < floor:
+            d_w.z += (floor - e.z) / L
+        if ceil is not None:
+            if abs(e.x) > 0.3:
+                d_w.x -= (e.x - math.copysign(0.3, e.x)) / L
+            if e.z > ceil - 0.12:
+                d_w.z -= (e.z - (ceil - 0.12)) / L
+        d_w.normalize()
     return d_w
 HIST = {}
 for f in range(T_IMP - 12, f_rest + 1):
@@ -392,14 +403,14 @@ for f in list(range(T_IMP, f_rest + 1, 2)) + [f_rest]:
         d_w = LBm.to_3x3() @ limb_dir(key, f)
         if f > T_IMP + 40 and d_w.x < -0.15:                  # keep the flung arms clear of the wheels (wheels are on his -X side)
             d_w.x = -0.15; d_w.z = max(d_w.z, -0.2); d_w.normalize()
-        d_w = above_ground(Bm @ LB.sh[s], d_w, LB.L_arm[s] * 0.92, ceil=0.6 if f > T_IMP + 25 else None)
+        d_w = above_ground(Bm @ LB.sh[s], d_w, LB.L_arm[s] * 0.98, ceil=(0.36 if p.y - train_front(f) < 1.3 else 0.4) if f > T_IMP + 10 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
-        LB.arm_dir(s, f, Bm, d_l, 0.92)
+        LB.arm_dir(s, f, Bm, d_l, 0.98 if f > T_IMP + 10 else 0.92)
     for s, key, LBm in (("L", "lL", lag_B2), ("R", "lR", lag_B2)):
         d_w = LBm.to_3x3() @ limb_dir(key, f)
         if f > T_IMP + 40 and d_w.x < -0.15:
             d_w.x = -0.15; d_w.normalize()
-        d_w = above_ground(Bm @ LB.hip[s], d_w, LB.L_leg[s] * 0.97, ceil=0.6 if f > T_IMP + 25 else None)
+        d_w = above_ground(Bm @ LB.hip[s], d_w, LB.L_leg[s] * 0.97, floor=0.17, ceil=(0.36 if p.y - train_front(f) < 1.3 else 0.4) if f > T_IMP + 10 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
         LB.leg_dir(s, f, Bm, d_l, 0.97)
 REST_P, REST_R = drag_full(f_rest)
@@ -420,7 +431,7 @@ STAND_XY = V(2.45, STOP_Y - 0.1, 0)
 f_crawl0, f_crawl1, f_up0, f_up1 = f_stir + 12, F(20.4), F(20.4) + 2, F(20.95)
 # stir: head lifts, hands push under shoulders (prone push-up)
 for f, push in ((f_stir + 4, 0.0), (f_stir + 10, 0.35), (f_crawl0, 1.0)):
-    p = REST_P + V(0, 0, 0.18 * push); Bm = LB.B(p, REST_R @ Matrix.Rotation(R_(-0 * push), 3, 'X'))
+    p = REST_P + V(0, 0, 0.06 * push); Bm = LB.B(p, REST_R @ Matrix.Rotation(R_(-0 * push), 3, 'X'))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=4 - 18 * push, head=(-25 * push, -40 * (1 - push)))
     for s in "LR":
@@ -436,7 +447,8 @@ def crawl_root(f):
 for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
     u = (f - f_crawl0) / (f_crawl1 - f_crawl0)
     c = crawl_root(f); yaw_c = 0 + 90 * smooth(min(1, u * 2.5))           # turns from heading -Y to facing +X
-    Bm = LB.B(V(c.x, c.y, 0.55 + 0.03 * math.sin(u * 12)), Rbody(yaw=yaw_c, pitch=80, side=6 * math.sin(u * 12)))
+    cz = 0.4 + 0.15 * smooth((c.x - 1.4) / 0.4)           # low commando crawl until he clears the loco side
+    Bm = LB.B(V(c.x, c.y, cz + 0.03 * math.sin(u * 12)), Rbody(yaw=yaw_c, pitch=84, side=6 * math.sin(u * 12)))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=-8, twist=8 * math.sin(u * 12), head=(-45, 10 * math.sin(u * 7)))
     ph = u * 4.0
@@ -448,9 +460,10 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
         Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.05 + lift)
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
-        Wk = Bm @ (LB.hip[s] + V(sx * 0.03, -0.1, -0.5))
-        LB.foot(s, f, Bm, LB.hip[s] + V(sx * 0.05, -0.40, -0.50), Matrix.Rotation(R_(-100), 3, 'X'),
-                pole_local=LB.kn[s] + V(0, -0.9, -0.4))
+        hw = Bm @ LB.hip[s]; fwd_ = V(math.sin(R_(yaw_c)), -math.cos(R_(yaw_c)), 0)
+        kq = (ph + 0.5 * k + 0.5) % 1.0; kf = 0.25 * (kq if kq <= 0.6 else 0.6 - (kq - 0.6) * 1.5); klift = 0.06 * math.sin(math.pi * kq) if kq > 0.6 else 0.0
+        Wa = hw - fwd_ * (0.44 - kf) ; Wa = V(Wa.x, Wa.y, ground_z(Wa.x, Wa.y) + 0.085 + klift)
+        LB.foot_world(s, f, Wa, yaw_c, pitch=165, pole_dir=V(0, -0.9, -0.6))
 # stand up: push back onto the feet, rise, wobble
 for f, z_k, pi, fl in ((f_up0, 0.55, 75, -8), (f_up0 + 10, 0.65, 45, 30), (f_up0 + 20, RH.z - 0.35, 25, 35), (f_up0 + 32, RH.z - 0.06, 6, 10), (f_up1, RH.z - 0.03, -4, 6)):
     Bm = LB.B(V(STAND_XY.x - 0.15 * (1 - (z_k - 0.55) / (RH.z - 0.58)), STAND_XY.y, z_k), Rbody(yaw=90, pitch=pi, side=8 * math.sin(f / 5.0)))

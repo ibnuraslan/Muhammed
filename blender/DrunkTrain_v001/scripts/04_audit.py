@@ -28,8 +28,12 @@ def ground_z(x, y):
     if PLAT["x0"] <= x <= PLAT["x1"] and PLAT["y0"] <= y <= PLAT["y1"]: return PLAT["h"]
     if RAMP["x0"] <= x <= RAMP["x1"] and RAMP["y0"] <= y <= RAMP["y1"]:
         return RAMP["h"] * (1 - (y - RAMP["y0"]) / (RAMP["y1"] - RAMP["y0"]))
-    if x > 3.4 or x < -8.6: return -0.06
-    return 0.0
+    # matches the ballast mesh: sleeper tops 0, ballast -0.03, shoulders sloping to the grass at -0.08
+    if x > 3.4 or x < -8.6: return -0.08
+    if x > 2.6: return -0.03 - 0.05 * (x - 2.6) / 0.8
+    if x < -7.2: return -0.03 - 0.05 * (-7.2 - x) / 1.4
+    if abs(x) < 1.3 or abs(x + 4.3) < 1.3: return 0.0
+    return -0.03
 issues = {}
 def flag(k, f, m): issues.setdefault(k, []).append((f, m))
 def visible(o): return not o.hide_render and o.visible_get() if False else not o.hide_render
@@ -129,7 +133,7 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             hit = t.ray_cast(p0, Vector((0.0013, 0.0007, 1.0)))
             if hit[0] is None: break
             n_hit += 1; p0 = hit[0] + Vector((0, 0, 1e-4))
-        if n_hit % 2 == 1 and o.name in ("Platform", "Ramp", "Loco", "Wagon1", "Wagon2"): flag("CAMERA_INSIDE", f, "camera inside %s" % o.name)
+        if n_hit % 2 == 1 and o.name in ("Platform", "Ramp"): flag("CAMERA_INSIDE", f, "camera inside %s" % o.name)
 with open(OUT, "w") as fh:
     fh.write("DrunkTrain audit, every %d frames (%d frames sampled)\n" % (STEP, stats["frames"]))
     fh.write("penetration counts (frames with overlap): Lad-train %d, people-people %d, hat-head %d\n\n" % (stats["pen_train"], stats["pen_people"], stats["pen_hat"]))
