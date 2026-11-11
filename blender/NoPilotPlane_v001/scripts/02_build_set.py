@@ -89,17 +89,28 @@ def win_shell_mat(name, base, cabin=True):
         sw = M("MULTIPLY", sw, M("GREATER_THAN", M("ABSOLUTE", M("SUBTRACT", Y, 1.42)), 0.025))
         hole = M("MINIMUM", M("ADD", ws, sw), 1.0)
         bez = hole
+    if not cabin:   # cockpit liner: quilted panels with seams, fine grain
+        br = N.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 1.6; br.inputs["Mortar Size"].default_value = 0.012
+        br.inputs["Color1"].default_value = (*base, 1); br.inputs["Color2"].default_value = tuple(c * 0.9 for c in base) + (1,)
+        br.inputs["Mortar"].default_value = (0.05, 0.05, 0.055, 1); br.offset = 0.0
+        L.new(tc.outputs["Object"], br.inputs["Vector"])
+        gn = N.new("ShaderNodeTexNoise"); gn.inputs["Scale"].default_value = 260; L.new(tc.outputs["Object"], gn.inputs["Vector"])
+        bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6; bp.inputs["Distance"].default_value = 0.003
+        hh = N.new("ShaderNodeMath"); hh.operation = 'ADD'; L.new(br.outputs["Fac"], hh.inputs[0]); L.new(gn.outputs["Fac"], hh.inputs[1])
+        L.new(hh.outputs[0], bp.inputs["Height"]); L.new(bp.outputs["Normal"], p.inputs["Normal"])
+        base_link = br.outputs["Color"]
     tr = N.new("ShaderNodeBsdfTransparent")
     mix = N.new("ShaderNodeMixShader"); L.new(hole, mix.inputs[0])
     L.new(p.outputs[0], mix.inputs[1]); L.new(tr.outputs[0], mix.inputs[2])
     # bezel darker
     mc = N.new("ShaderNodeMix"); mc.data_type = 'RGBA'; L.new(bez, mc.inputs["Factor"])
     mc.inputs["A"].default_value = (*base, 1); mc.inputs["B"].default_value = (0.42, 0.42, 0.43, 1)
+    if not cabin: L.new(base_link, mc.inputs["A"])
     L.new(mc.outputs["Result"], p.inputs["Base Color"])
     L.new(mix.outputs[0], N["Material Output"].inputs["Surface"])
     return m
 M_shell = win_shell_mat("M_cabin_shell", (0.78, 0.77, 0.73), True)
-M_cshell = win_shell_mat("M_cockpit_shell", (0.32, 0.33, 0.35), False)
+M_cshell = win_shell_mat("M_cockpit_shell", (0.22, 0.22, 0.23), False)
 
 # ------------------------------------------------------------------ shells
 import bmesh
@@ -257,7 +268,7 @@ ck.box((0, 2.32, 0.80), (1.9, 0.12, 0.5), M_panel, rot=(-14, 0, 0), bevel=0.01)
 ck.box((0, 2.33, 1.03), (1.9, 0.38, 0.05), M_glare, bevel=0.018)
 ck.box((0, 2.15, 1.005), (1.5, 0.05, 0.06), M_panel)
 # overhead panel
-ck.box((0, 1.25, 2.08), (0.9, 1.1, 0.08), M_panel, rot=(8, 0, 0), bevel=0.01)
+ck.box((0, 1.20, 2.06), (1.15, 1.6, 0.08), M_panel, rot=(8, 0, 0), bevel=0.01)
 # side consoles
 for s in (-1, 1):
     ck.box((s * 0.98, 1.5, 0.62), (0.18, 1.0, 0.08), M_ped, bevel=0.01)
@@ -266,9 +277,9 @@ ck.obj(cSet)
 # overhead buttons / panel lamps (blank symbols only)
 bt = MB("COCKPIT_BUTTONS"); M_btn = [mat("M_btn_%d" % i, c, rough=0.4, emit=c, estr=e) for i, (c, e) in
      enumerate((((0.6, 0.6, 0.6), 0.05), ((0.9, 0.55, 0.1), 0.8), ((0.2, 0.9, 0.3), 0.8), ((0.1, 0.4, 1.0), 0.6)))]
-for i in range(10):
-    for j in range(14):
-        x = -0.36 + j * 0.055; y = 0.78 + i * 0.1
+for i in range(14):
+    for j in range(19):
+        x = -0.50 + j * 0.055; y = 0.48 + i * 0.105
         z = 2.03 - (y - 1.25) * math.tan(R_(8))
         bt.box((x, y, z), (0.03, 0.03, 0.02), random.choice(M_btn[:1] * 6 + M_btn[1:]))
 bt.obj(cSet)
@@ -443,9 +454,9 @@ gp.obj(cSet)
 ov = MB("OVERHEAD_SWITCHES"); M_guard = mat("M_guard", (0.55, 0.06, 0.04), rough=0.4); M_amber = emit_mat("M_annun_amber", (1.0, 0.6, 0.1), 1.2)
 M_annun_g = emit_mat("M_annun_green", (0.2, 1.0, 0.4), 1.0)
 def ovz(y): return 2.03 - (y - 1.25) * math.tan(R_(8))
-for j in range(12):
-    x = -0.38 + j * 0.069
-    for y in (0.72, 1.82):
+for j in range(15):
+    x = -0.49 + j * 0.07
+    for y in (0.43, 1.94):
         ov.cyl((x, y, ovz(y) - 0.02), 0.004, 0.035, M_steel, rot=(30, 0, 0), seg=8)
         ov.sphere((x, y - 0.008, ovz(y) - 0.036), 0.007, M_steel, seg=8)
         if j % 3 == 0:
