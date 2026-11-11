@@ -23,7 +23,7 @@ CONTACT = [(530, 1062, "girl R middle tip -> teacher throat", G, "finger3-3.R", 
            (1490, 1600, "girl L middle tip -> own lips", G, "finger3-3.L", "Girl.body"),
            (1615, 1722, "girl L middle tip -> own throat", G, "finger3-3.L", "Girl.body"),
            (1843, 1900, "girl L middle tip -> own throat", G, "finger3-3.L", "Girl.body")]
-lines = []; stats = {"foot_hover": 0, "foot_sink": 0, "tip_gap": 0, "tip_pen": 0, "body_overlap_frames": 0, "hand_chair": 0, "cam_close": 0}
+lines = []; stats = {"foot_hover": 0, "foot_sink": 0, "tip_gap": 0, "tip_pen": 0, "body_overlap_frames": 0, "_note": "body = frames with >25 verts deeper than 6 mm", "hand_chair": 0, "cam_close": 0}
 cam = sc.camera
 chair = bpy.data.objects["ArmChair_01"]
 for f in range(sc.frame_start, sc.frame_end + 1, STEP):
@@ -51,9 +51,14 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             if sd > 0.02: stats["tip_gap"] += 1; lines.append("f%d %s gap %.3f" % (f, nm, sd))
             if sd < -0.006: stats["tip_pen"] += 1; lines.append("f%d %s penetration %.3f" % (f, nm, sd))
     # bodies through each other (girl vs teacher), hands vs chair
-    tg, _ = bvh(bpy.data.objects["Girl.body"]); tt, _ = bvh(bpy.data.objects["Teacher.body"]); tc, _ = bvh(chair)
-    ov = len(tg.overlap(tt))
-    if ov > 40: stats["body_overlap_frames"] += 1; lines.append("f%d girl/teacher body overlap pairs %d" % (f, ov))
+    tg, vg = bvh(bpy.data.objects["Girl.body"]); tt, vt = bvh(bpy.data.objects["Teacher.body"]); tc, _ = bvh(chair)
+    # real penetration: vertices of one body more than 6 mm inside the other (contact skin-to-skin is allowed)
+    deep = 0
+    for tree_a, verts_b in ((tt, vg), (tg, vt)):
+        for v in verts_b:
+            loc, nrm, idx, dist = tree_a.find_nearest(v, 0.03)
+            if loc is not None and (v - loc).dot(nrm) < 0 and dist > 0.006: deep += 1
+    if deep > 25: stats["body_overlap_frames"] += 1; lines.append("f%d girl/teacher vertices >6 mm inside the other body: %d" % (f, deep))
     oc = len(tg.overlap(tc))
     if oc > 200: stats["hand_chair"] += 1; lines.append("f%d girl body/armchair overlap pairs %d" % (f, oc))
     # camera: nearest surface over all visible meshes

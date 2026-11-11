@@ -95,12 +95,23 @@ class Person:
         self.shift("oris01", f, (0, -0.005 * oo, 0.003 * mm)); self.shift("oris02", f, (0, -0.003 * oo, 0.002 * mm))
         self.shift("oris05", f, (0, -0.005 * oo, -0.002 * mm)); self.shift("oris06", f, (0, -0.003 * oo, -0.001 * mm))
     def throat_point(self, f, F, up=0.0):
+        """front of the neck below the chin: horizontal rays at several neck heights, rejecting hits far from the neck axis (the chin)"""
         ev(f)
-        nk = self.bone_world("neck01").lerp(self.bone_world("neck02"), 0.5) + Vector((0, 0, up))
+        n1, n2 = self.bone_world("neck01"), self.bone_world("neck02")
         body = bpy.data.objects[self.name + ".body"]; dg = bpy.context.evaluated_depsgraph_get()
         eo = body.evaluated_get(dg); mi = eo.matrix_world.inverted()
-        o_ = nk + F * 0.25 - Vector((0, 0, 0.08)); hit, loc, nrm, idx = eo.ray_cast(mi @ o_, (mi.to_3x3() @ (nk - o_)).normalized())
-        return (eo.matrix_world @ loc) if hit else nk + F * 0.05
+        Fh = (F - Vector((0, 0, F.z))).normalized()
+        best = None
+        for t in (0.55, 0.45, 0.65, 0.35, 0.75, 0.25):
+            nk = n1.lerp(n2, t) + Vector((0, 0, up))
+            o_ = nk + Fh * 0.25
+            hit, loc, nrm, idx = eo.ray_cast(mi @ o_, (mi.to_3x3() @ (-Fh)).normalized())
+            if not hit: continue
+            w = eo.matrix_world @ loc
+            ax = (n2 - n1).normalized(); r = ((w - n1) - ax * (w - n1).dot(ax)).length
+            if r < 0.075: return w
+            if best is None or r < best[0]: best = (r, w)
+        return best[1] if best else n1.lerp(n2, 0.5) + Fh * 0.05
     def surface(self, f, origin, direction, part="body"):
         ev(f)
         body = bpy.data.objects[self.name + "." + part]; dg = bpy.context.evaluated_depsgraph_get()
@@ -132,7 +143,7 @@ def g_posture(f):
     """hunched and closed (beats 1-9) -> upright and open (beats 10-11)"""
     u = smooth((f - 1723) / 140.0)
     lean_to_teacher = smooth((f - 470) / 80.0) * (1 - 0.5 * smooth((f - 1723) / 120))
-    flex = 14 * (1 - u) + 3 * u + wave(f, 240, 1.2) + 6 * lean_to_teacher
+    flex = 14 * (1 - u) + 3 * u + wave(f, 240, 1.2) + 10 * lean_to_teacher
     twist = -16 * lean_to_teacher
     head_p = 12 * (1 - u) - 4 * u
     head_y = -18 * lean_to_teacher
@@ -158,7 +169,7 @@ for f in keys_every(1, 450, 20):
 # ================================================================== TEACHER
 T = TEACH
 T_YAW = 141.0; T_F, T_R = fdir(T_YAW), rdir(T_YAW)
-T_KNEEL = V(-0.24, 0.09, 0.50) - fdir(141.0) * 0.19
+T_KNEEL = V(-0.24, 0.09, 0.50) - fdir(141.0) * 0.15
 def t_kneel_keys(f, root, yaw, flex=12.0, twist=0.0, head=(0.0, 0.0), sit=0.0):
     F_, R__ = fdir(yaw), rdir(yaw)
     T.root(f, root - V(0, 0, sit), yaw, flex=flex * 0.3)
@@ -193,10 +204,10 @@ T.foot("L", 418, F0["L"], 115); T.foot("L", 428, ((F0["L"] + (rb - T_R * 0.12).t
 T.foot("L", 440, (rb - T_R * 0.12).to_2d(), T_YAW, lift=0.055, pitch=-72)
 t_kneel_feet(END, T_KNEEL, T_YAW)
 # kneeling body over the rest of the film (posture keyed sparsely; speech adds small head moves)
-T_BODY = [(442, 14, 0, (6, 0)), (600, 10, 0, (2, 0)), (895, 6, 0, (-4, 0)), (980, 12, 0, (4, 0)), (1063, 14, -6, (2, -6)),
+T_BODY = [(442, 14, 0, (6, 0)), (600, 17, 0, (2, 0)), (895, 15, 0, (-6, 0)), (980, 17, 0, (4, 0)), (1063, 16, -6, (2, -6)),
           (1261, 16, 0, (0, 0)), (1453, 12, 8, (6, 10)), (1600, 14, 8, (8, 12)), (1723, 10, 0, (0, 0)), (1843, 8, 0, (-2, 0))]
 for f, fl, tw, hd in T_BODY:
-    t_kneel_keys(f, T_KNEEL, T_YAW, fl, tw, hd)
+    t_kneel_keys(f, T_KNEEL, T_YAW, fl, tw, (hd[0] - 22, hd[1]))   # chin up: keeps the throat clear of the jaw
 # arms at walk: swing (walk() does not key arms)
 for f in keys_every(250, 392, 12):
     ph = math.sin((f - 250) / 15.0)
@@ -222,7 +233,12 @@ def t_mouth(f):
     hit, nrm = T.surface(f, p + face_fwd * 0.12, -face_fwd)
     return (hit if hit else p), face_fwd
 G_HL = G.hand_len("R")
-def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.009):
+def g_throat_along(f, tp):
+    """fingers lie on the throat pointing away from the girl's shoulder, so the wrist stays on her side (shortest reach)"""
+    ev(f); sh = G.bone_world("upperarm01.R"); F_ = fdir(T_YAW)
+    lat = (tp - sh); lat = lat - F_ * lat.dot(F_)
+    return (lat.normalized() + UP * 0.35).normalized()
+def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.005):
     """middle fingertip pad at 'tip' (world), palm towards -normal, fingers pointing 'along'; two correction passes"""
     along = (along - normal * along.dot(normal)).normalized()
     goal = tip + normal * (pad - press)
@@ -232,7 +248,12 @@ def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.009):
     for it in range(3):
         G.hand(s, f, W, along, normal, pole); G.fingers(s, f, curl, 10, spread=1)
         if it == 2: break
-        ev(f); err = goal - G.bone_world("finger3-3." + s, tail=True); W = W + err
+        ev(f); err = goal - G.bone_world("finger3-3." + s, tail=True)
+        if err.length < 1e-3: break
+        Wn = W + err
+        reach = (G.r.BN["wrist." + s].head_local - G.r.BN["upperarm01." + s].head_local).length * 0.985
+        if (Wn - sh).length > reach: Wn = sh + (Wn - sh).normalized() * reach   # never ask the IK for more than the arm
+        W = Wn
 # ---------------------------------------------- beat 3: teacher takes the girl's right wrist and places the hand on her throat
 def g_lap_R(f):
     W, d, n, pole = lap("R", f); return W, d, n, pole
@@ -242,8 +263,8 @@ ev(455)
 T_HL = T.hand_len("R")
 def t_grip_wrist(f, W, d, n):
     """teacher's right hand wraps the girl's right wrist from above"""
-    top = W + n * 0.035 + d * 0.02
-    T.hand("R", f, top + n * 0.02 - T_F * 0.02, (-n + d * 0.3), (T_F * -1 + UP * 0.5), T_KNEEL + T_R * 0.45 + UP * 0.45)
+    top = W + n * 0.045 + d * 0.02
+    T.hand("R", f, top + n * 0.03 - T_F * 0.02, (-n + d * 0.3), (T_F * -1 + UP * 0.5), T_KNEEL + T_R * 0.45 + UP * 0.45)
     T.fingers("R", f, 55, 35)
 # reach
 ev(442); sh = T.bone_world("upperarm01.R")
@@ -251,7 +272,7 @@ for f in (442,):
     T.hand("R", f, sh + T_R * 0.06 - UP * 0.42 + T_F * 0.1, -UP + T_F * 0.3, T_R, sh + T_R * 0.3 - T_F * 0.2); T.fingers("R", f, 20, 15)
 W, d, n, _ = g_lap_R(455); t_grip_wrist(455, W, d, n); t_grip_wrist(462, W, d, n)
 # travel: girl's hand rises to the throat (462-530)
-throat_keys = list(range(530, 1063, 30)) + [1062]
+throat_keys = list(range(530, 1063, 6)) + [1062]
 for f in (480, 500, 516):
     u = smooth((f - 462) / 68.0)
     tp = t_throat(f); W0, d0, n0, _ = g_lap_R(f)
@@ -264,13 +285,15 @@ for f in throat_keys:
     # beat 6: press harder when loud, relax when soft
     press = 0.004 if 895 <= f < 990 else (0.0 if f >= 990 else 0.002)
     tp = t_throat(f)
-    g_hand_on("R", f, tp, fdir(T_YAW), UP * 0.55 + rdir(T_YAW) * 0.85, press=press, curl=8 if press < 0.004 else 14)
+    g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), press=press, curl=8 if press < 0.004 else 14)
 # teacher's right hand lets go and rests on the girl's forearm, then gestures softly
-for f in (545, 600, 700, 820, 900, 1000, 1040):
-    ev(f); el = G.bone_world("lowerarm01.R"); wr = G.bone_world("wrist.R")
-    p = el.lerp(wr, 0.55) + V(0, 0, 0.045)
-    T.hand("R", f, p + T_F * -0.06 + UP * 0.02, (wr - el).normalized() * 0.3 + T_F * 0.6 - UP * 0.4, UP + T_F * -0.3, T_KNEEL + T_R * 0.45 + UP * 0.4)
-    T.fingers("R", f, 30, 20)
+def t_thigh_R(f, lift=0.0):
+    ev(f); kn = T.bone_world("lowerleg01.R"); hp = T.bone_world("upperleg01.R")
+    p = hp.lerp(kn, 0.55) + V(0, 0, 0.07 + lift) + T_F * 0.02
+    T.hand("R", f, p, T_F * 0.8 - UP * 0.3 - T_R * 0.2, UP + T_F * 0.1, p + T_R * 0.35 + UP * 0.25)
+    T.fingers("R", f, 28, 18)
+for f in (548, 600, 700, 820, 900, 1000, 1040):
+    t_thigh_R(f)
 # teacher's left hand: on her own thigh, then on the girl's knee
 for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee")):
     ev(f)
@@ -285,9 +308,12 @@ for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee")
 def lip_key(f, dx=0.0, dz=0.0, press=0.0):
     mp, ff = t_mouth(f)
     side = ff.cross(UP).normalized()
-    g_hand_on("R", f, mp + side * dx + UP * dz + ff * 0.002, ff, side * -1 + UP * 0.05, press=press, curl=8)
-for f, dx, dz in ((1063, None, None), (1085, None, None), (1110, 0.0, 0.0), (1140, 0.012, 0.0), (1170, -0.01, 0.006), (1200, 0.0, 0.03), (1230, 0.0, 0.028),
-                  (1261, 0.0, 0.0), (1300, 0.005, 0.0), (1340, -0.005, 0.0), (1380, 0.0, 0.0), (1420, 0.004, 0.0), (1460, 0.0, 0.0), (1550, 0.0, 0.0), (1650, 0.0, 0.0), (1722, 0.0, 0.0)):
+    g_hand_on("R", f, mp + side * dx + UP * dz + ff * 0.002, ff, side * -1 - UP * 0.35, press=press, curl=8)
+LIP_KEYS = [(1063, None, None), (1085, None, None)]
+for f in range(1110, 1723, 6):
+    nose = math.exp(-((f - 1215) / 18.0) ** 2)          # fingertips slide up to the nose and back
+    LIP_KEYS.append((f, 0.009 * math.sin((f - 1110) / 23.0) * (1 - nose), 0.026 * nose))
+for f, dx, dz in LIP_KEYS:
     if dx is None:
         u = smooth((f - 1063) / 47.0); tp = t_throat(f); mp, ff = t_mouth(f)
         tip = tp.lerp(mp + ff * 0.02, u) + ff * 0.04 * math.sin(math.pi * u)
@@ -296,11 +322,8 @@ for f, dx, dz in ((1063, None, None), (1085, None, None), (1110, 0.0, 0.0), (114
     else:
         lip_key(f, dx, dz)
 # teacher's right hand releases after guiding (1110) and rests on the girl's forearm again
-for f in (1125, 1300, 1453, 1600, 1722):
-    ev(f); el = G.bone_world("lowerarm01.R"); wr = G.bone_world("wrist.R")
-    p = el.lerp(wr, 0.4) + V(0, 0, 0.05)
-    T.hand("R", f, p - T_F * 0.06, (wr - el).normalized() * 0.3 + T_F * 0.6 - UP * 0.4, UP + T_F * -0.3, T_KNEEL + T_R * 0.45 + UP * 0.4)
-    T.fingers("R", f, 30, 20)
+for f in (1128, 1300, 1453, 1600, 1722, 1850):
+    t_thigh_R(f)
 # girl's left hand: lap (to 1470), own lips (1490-1600), own throat (1615-1722)
 def g_own_mouth(f):
     ev(f); hm = G.o.pose.bones["head"]
@@ -320,18 +343,18 @@ def g_left_on(f, what, dz=0.0):
     side = ff.cross(UP).normalized()   # points to her left
     along = (-side + UP * (0.2 if what == "lips" else 0.5)).normalized()
     g_hand_on("L", f, p + UP * dz, ff, along, curl=10)
-for f in (1490, 1530, 1570, 1600):
+for f in range(1490, 1601, 10):
     g_left_on(f, "lips")
-for f in (1615, 1650, 1690, 1722):
+for f in range(1615, 1723, 10):
     g_left_on(f, "throat")
 # ---------------------------------------------- beat 10: time-lapse practice bursts (hands alternate fast)
 for i, f in enumerate(range(1735, 1843, 18)):
     g_left_on(f, "lips" if i % 2 == 0 else "throat")
     if i % 2 == 0: lip_key(f)
     else:
-        tp = t_throat(f); g_hand_on("R", f, tp, fdir(T_YAW), UP * 0.55 + rdir(T_YAW) * 0.85, curl=8)
+        tp = t_throat(f); g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), curl=8)
 # ---------------------------------------------- beat 11: she speaks (left hand on her own throat), teacher gasps then hugs
-for f in (1843, 1870, 1900):
+for f in range(1843, END + 1, 8):
     g_left_on(f, "throat")
 for f in (1843, 1858):
     lip_key(f)
@@ -348,7 +371,7 @@ for f in (1866, 1885, 1905):
         T.hand(s, f, tip - along * T_HL * 0.95 + ff * 0.01, along, ff, T_KNEEL + T_R * -sx * 0.4 + UP * 0.2)
         T.fingers(s, f, 15, 15)
 # hug (1925-END): teacher rises to a high kneel and wraps both arms round the girl's shoulders
-T_HUG = T_KNEEL + T_F * 0.12 + V(0, 0, 0.1)
+T_HUG = T_KNEEL + T_F * 0.03 + V(0, 0, 0.1)
 t_kneel_keys(1905, T_KNEEL, T_YAW, 8, 0, (-6, 0)); t_kneel_keys(1930, T_HUG, T_YAW, 22, 0, (10, -12)); t_kneel_keys(END, T_HUG + V(0, 0, -0.01), T_YAW, 23, 0, (11, -12))
 for f in (1930, 1955, END):
     ev(f)
@@ -362,7 +385,7 @@ for f in (1930, 1955, END):
         T.fingers(s, f, 30, 20)
 # girl leans in to the hug
 for f in (1930, END):
-    fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl + 8, twist=-22, head=(hp + 6, -28))
+    fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl + 3, twist=-22, head=(hp + 4, -28))
 
 # ---------------------------------------------- speech (teacher), mouth shapes
 def mouth(P, f, shape, k=1.0):

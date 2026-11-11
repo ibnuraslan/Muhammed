@@ -8,7 +8,9 @@ def keyattr(obj, attr, seq):
         setattr(obj, attr, v); obj.keyframe_insert(attr, frame=f)
 LIGHTS = {n: bpy.data.objects[n].data for n in ("L_Sun", "L_Window", "L_Lamp", "L_Fill", "L_Ceil", "L_StudioKey", "L_StudioRim")}
 for o_ in bpy.data.objects:
-    if o_.type == 'LIGHT': o_.visible_camera = False
+    if o_.type == 'LIGHT':
+        o_.visible_camera = False
+        if o_.name in ('L_Fill', 'L_Ceil', 'L_StudioKey', 'L_StudioRim'): o_.visible_glossy = False
 BASE = {n: L.energy for n, L in LIGHTS.items()}
 BASE["L_StudioKey"], BASE["L_StudioRim"] = 160.0, 120.0
 bg = sc.world.node_tree.nodes["Background"].inputs["Strength"]
@@ -37,8 +39,12 @@ for mn in sc.get("leaf_mats", []):
     mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
     nt.links.new(src, mx.inputs['A']); nt.links.new(mx.outputs['Result'], bsdf.inputs['Base Color']); leaf_mix.append(mx.inputs['B'])
 snow_objs = [bpy.data.objects["SnowGround"], bpy.data.objects["SnowWallCap"]]
-lamp_on = lambda f: 0.0 if (TL0 < f < TL1 and int((f - TL0) / 15) % 2 == 1) else 1.0
-for f in keys_every(1, END, 3) if False else sorted(set(list(range(1, END, 6)) + list(range(TL0, TL1 + 1, 3)) + [END])):
+def daylight(f):
+    if not (TL0 < f < TL1): return 1.0
+    ph = ((f - TL0) / 30.0) % 1.0
+    return 0.06 + 0.94 * math.sin(math.pi * ph) ** 2
+lamp_on = lambda f: (1.0 if not (TL0 < f < TL1) else 0.3 + 2.2 * (1 - daylight(f)))
+for f in keys_every(1, END, 3) if False else sorted(set(list(range(1, END, 6)) + list(range(TL0, TL1 + 1, 2)) + [END])):
     rv, sv = room(f), stud(f)
     col, smul, leaf, snow = season(f)
     for n, L in LIGHTS.items():
@@ -47,13 +53,13 @@ for f in keys_every(1, END, 3) if False else sorted(set(list(range(1, END, 6)) +
         elif n == "L_Lamp":
             L.energy = BASE[n] * max(rv, 0.25) * lamp_on(f)
         elif n in ("L_Sun", "L_Window"):
-            L.energy = BASE[n] * rv * smul * (1 + 0.6 * math.sin(math.pi * (f - TL0) / 30.0) ** 2 if TL0 < f < TL1 else 1)
+            L.energy = BASE[n] * rv * smul * daylight(f) * (1.4 if TL0 < f < TL1 else 1.0)
             if n == "L_Sun": L.color = col
         else:
-            L.energy = BASE[n] * rv
+            L.energy = BASE[n] * rv * (0.35 + 0.65 * daylight(f))
         L.keyframe_insert("energy", frame=f)
         if n == "L_Sun": L.keyframe_insert("color", frame=f)
-    keyv(bg, f, 1.0 * rv * smul)
+    keyv(bg, f, 1.0 * rv * smul * daylight(f))
     for s_ in leaf_mix: keyv(s_, f, (*leaf, 1))
 for o in snow_objs:
     keyattr(o, "hide_render", [(1, True), (TL0 + 50, True), (TL0 + 54, False), (TL0 + 82, False), (TL0 + 86, True)])
@@ -81,7 +87,7 @@ keyseq(dome_mix, [(1, 0.0), (700, 0.0), (740, 1.0), (1058, 1.0), (1100, 0.0), (E
 dome = bpy.data.objects["ExplainerDome"]
 keyattr(dome, "hide_render", [(1, True), (698, False), (1102, True)])
 ev(800); mid = (G.bone_world("head") + T.bone_world("head")) / 2
-dome.location = V(mid.x, mid.y, 0.9)
+dome.location = V(mid.x, mid.y, 0.9); dome.scale = (0.56, 0.56, 0.56)   # 1.7 m: every wall stays outside, no visible edge
 # ---------------------------------------------- x-ray portholes: teacher's throat, girl's hand and forearm
 def attach(o, P, bone, f=600):
     ev(f); c_ = o.constraints.new('CHILD_OF'); c_.target = P.o; c_.subtarget = bone
@@ -254,33 +260,62 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (397, V(0.65, -2.1, 1.45), V(-0.35, 0.1, 0.85), 22), (460, lambda f: pair(f) + V(0.05, -1.15, 0.0), pair, 26),
     (530, lambda f: tthroat(f) + V(0.32, -0.38, -0.05), tthroat, 40),
     (595, lambda f: tthroat(f) + TRw * 0.32 - TFw * 0.05 + V(0, 0, -0.2), tmouth, 30),
-    (655, lambda f: tmouth(f) + TRw * 0.42 + TFw * 0.12 + V(0, 0, 0.03), tmouth, 40),
-    (697, lambda f: tthroat(f) + TRw * 0.30 + TFw * 0.10 + V(0, 0, 0.02), tthroat, 50),
-    (760, lambda f: gtip(f) + TRw * 0.26 + TFw * 0.16 + V(0, 0, 0.06), gtip, 50),
-    (830, lambda f: gelbow(f).lerp(gtip(f), 0.5) + V(0.12, -0.3, 0.12), lambda f: gelbow(f).lerp(gtip(f), 0.4), 40),
+    (655, lambda f: tmouth(f) + TRw * 0.45 + V(0, 0, 0.03), tmouth, 40),
+    (697, lambda f: tthroat(f) + TRw * 0.34 + V(0, 0, 0.02), tthroat, 50),
+    (760, lambda f: gtip(f) + TRw * 0.3 - TFw * 0.1 + V(0, 0, -0.12), gtip, 50),
+    (830, lambda f: gelbow(f).lerp(gtip(f), 0.5) + TRw * 0.36 + V(0, 0, -0.1), lambda f: gelbow(f).lerp(gtip(f), 0.4), 40),
     (895, lambda f: pair(f) + V(0.25, -0.95, 0.15), lambda f: tthroat(f).lerp(gtip(f), 0.5), 28),
-    (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.32 + V(0.0, 0, 0.03), tthroat, 45),
-    (1063, lambda f: tmouth(f) + TRw * 0.4 + V(0, 0, 0.18), tmouth, 35),
-    (1125, lambda f: tmouth(f) + TRw * 0.34 + TFw * 0.1 + V(0, 0, 0.03), tmouth, 55),
-    (1190, lambda f: tmouth(f) + TRw * 0.24 + TFw * 0.26 + V(0, 0, 0.07), tmouth, 55),
-    (1261, lambda f: tmouth(f) + TRw * 0.2 + TFw * 0.24 + V(0, 0, 0.02), tmouth, 60),
-    (1320, lambda f: tmouth(f) + TFw * 0.3 + TRw * 0.08 + V(0, 0, 0.03), tmouth, 60),
-    (1385, lambda f: tmouth(f) + TFw * 0.26 + TRw * 0.16 + V(0, 0, -0.1), tmouth, 55),
+    (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.42 - TFw * 0.12 + V(0.0, 0, -0.04), tthroat, 45),
+    (1063, lambda f: tmouth(f) + TRw * 0.42 + V(0, 0, 0.07), tmouth, 35),
+    (1125, lambda f: tmouth(f) + TRw * 0.36 - TFw * 0.04 + V(0, 0, 0.04), tmouth, 55),
+    (1190, lambda f: tmouth(f) + TRw * 0.32 + TFw * 0.06 + V(0, 0, 0.1), tmouth, 55),
+    (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
+    (1320, lambda f: tmouth(f) + TRw * 0.28 - TFw * 0.12 + V(0, 0, 0.0), tmouth, 60),
+    (1385, lambda f: tmouth(f) + TRw * 0.3 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 55),
     (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.55, -0.55, 0.0), gface, 32),
-    (1590, lambda f: gmouth(f) + V(0.18, -0.3, 0.02), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
+    (1590, lambda f: gmouth(f) + V(-0.14, -0.36, 0.02), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them
 for k, f in enumerate((1723, 1763, 1803)):
     a = R_(65 - 55 * k)
     SHOTS.append((f, (lambda a_: (lambda f_: pair(f_) + V(1.55 * math.sin(a_), -1.55 * math.cos(a_), 0.15)))(a), pair, 24))
-SHOTS += [(1843, lambda f: gmouth(f) + V(0.3, -0.38, 0.04), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
+SHOTS += [(1843, lambda f: gmouth(f) + V(0.1, -0.52, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
           (END, lambda f: pair(f) + V(0.35, -1.9, 1.1), pair, 22)]
 res = []
 for f, cp, ap, ln in SHOTS:
     c_ = cp(f) if callable(cp) else cp; a_ = ap(f) if callable(ap) else ap
     res.append((f, c_, a_, float(ln)))
 fc = catmull([(f, c_) for f, c_, a_, l_ in res]); fa = catmull([(f, a_) for f, c_, a_, l_ in res]); fl_ = catmull([(f, l_) for f, c_, a_, l_ in res])
-for f in keys_every(1, END, 3):
-    cam.location = fc(f); cam.keyframe_insert("location", frame=f)
+# clearance: keep the lens >= 15 cm from the two characters' skin, clothes and hair (smoothed so the move stays fluid)
+from mathutils.bvhtree import BVHTree
+CLR = ["Teacher.body", "Teacher.female_elegantsuit01", "Teacher.ponytail01", "Girl.body", "Girl.female_elegantsuit01", "Girl.braid01"]
+CAMF = keys_every(1, END, 3); push = {}
+for f in CAMF:
+    p = fc(f); ev(f); dg = bpy.context.evaluated_depsgraph_get(); off = Vector()
+    if (p - G.bone_world("head")).length < 1.0:
+        for it in range(3):
+            best = None
+            for nm in CLR:
+                o_ = bpy.data.objects.get(nm)
+                if not o_: continue
+                eo = o_.evaluated_get(dg); me_ = eo.to_mesh()
+                t_ = BVHTree.FromPolygons([eo.matrix_world @ v.co for v in me_.vertices], [tuple(q.vertices) for q in me_.polygons]); eo.to_mesh_clear()
+                loc, nrm, idx, dist = t_.find_nearest(p + off)
+                if loc is not None:
+                    inside = ((p + off) - loc).dot(nrm) < 0
+                    sd = -dist if inside else dist
+                    if best is None or sd < best[0]: best = (sd, loc, nrm)
+            if best is None or best[0] >= 0.18: break
+            off += best[2].normalized() * (0.18 - best[0] + 0.01)
+    push[f] = off
+sm = {}
+for i, f in enumerate(CAMF):
+    w = [push[CAMF[j]] for j in range(max(0, i - 4), min(len(CAMF), i + 5))]
+    m_ = max(w, key=lambda v: v.length)
+    sm[f] = m_
+nfix = sum(1 for v in push.values() if v.length > 0)
+print("CAM_CLEARANCE keys pushed", nfix)
+for f in CAMF:
+    cam.location = fc(f) + sm[f]; cam.keyframe_insert("location", frame=f)
     aim.location = fa(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
 import json
