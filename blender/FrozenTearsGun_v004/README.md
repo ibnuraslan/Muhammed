@@ -1,6 +1,6 @@
 # FrozenTearsGun_v004: farm package
 
-This supersedes v002. It is the full 35.0 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
+This is the animated-look version of the approved v003, made for the client's look change of Nov 11, 22:45. Animation, geometry and timing are identical to v003. It is the full 35.0 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
 - `FrozenTearsGun_v004_60fps.blend` (69 MB, compressed, normal git file, no LFS): the self-contained scene. Every texture is packed. It opens and renders in factory-startup Blender 5.2.2.
 - `SETTINGS.md`: render settings and test frames.
@@ -15,7 +15,7 @@ To rebuild, run `scripts/build_all.sh` from that folder. It runs:
 2. `02_build_scene.py`: sets, the procedural gun and props, lights, render settings
 3. `03_animate.py`: all animation and the camera
 
-Then run `scripts/shrink_for_farm.py` (textures to 1K, 2K for her face skin, a 1K HDRI, opaque maps re-encoded to JPEG, orphans purged), and package with `pipeline/package_for_farm.py`. The review tools are `scripts/stills_at.py`, `scripts/audit.py` and `scripts/camera_path_dump.py` / `camera_path_plot.py`.
+Then run `scripts/shrink_for_farm.py` after `pipeline/anim_look.py` and `scripts/05_anim_look_fix.py` (textures to 1K, 2K for her face skin, a 1K HDRI, opaque maps re-encoded to JPEG, orphans purged), and package with `pipeline/package_for_farm.py`. The review tools are `scripts/stills_at.py`, `scripts/audit.py` and `scripts/camera_path_dump.py` / `camera_path_plot.py`.
 
 ## Voiceover
 No VO was supplied. The film is built to the target beat times in `beats.json` (13 beats; frame = 1 + round(t × 60)). When the VO arrives:
@@ -23,7 +23,16 @@ No VO was supplied. The film is built to the target beat times in `beats.json` (
 2. Write the anchors (old frame from `beats.json` → second of each beat's first word).
 3. Run `pipeline/retime_to_vo.py`. It warps every keyframe, including the camera and the exposure flashes, and lays the VO strip at frame 1.
 
-## Changes since v002
+## Changes since v003 (look only)
+- `pipeline/anim_look.py`: AgX Punchy, sky-gradient world for camera rays, saturation ×1.25, bump/normal ×0.35, roughness at least 0.35 on non-metals, f-stop at least 5.6, motion blur off, volumes halved, lights ×1.25.
+- `FrozenTearsGun_v001/scripts/05_anim_look_fix.py`:
+  - The explainer backdrop is now a sky-blue gradient (cyan at the top to near-white at the bottom), replacing the deeper teal.
+  - The workshop window shows a daytime sky, and the workshop is high-key (brighter bulb, front wash, fill and rim, more world light).
+  - Keyed light energies are ×1.25 and the keyed f-stop is at least 5.6.
+  - The memory flashes are now short (+1.8 EV, 6-frame peaks), which fixes the blowout around frame 1700, and the office exposure is 0.
+- Review sheet: `../FrozenTearsGun_v001/review/look_v004_1persec.jpg` (270×480, 8 samples).
+
+## Changes in v003 (from v002)
 - **Mentor's finale arms.** A natural brace replaces the T-pose: elbows bent, palms open, chin tucked. On the hit he flinches, then laughs and pats his chest.
 - **Lecture.** He slaps the desk at 21 s and the papers jump. The camera drops into a low-angle push-in on him at 20.4 s.
 - **Office dressing.** A city view outside the window (a cropped Poly Haven HDRI), a desk lamp with warm light, a second bookshelf and more books.
