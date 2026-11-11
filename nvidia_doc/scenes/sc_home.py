@@ -510,7 +510,8 @@ def build(variant=None):
 # ============================================================================ moves
 # A (3.5 s) "I was unfaithful to my wife."  -- from behind him, creeping past his right shoulder to the phone
 # B (5.5 s) "That's what Nvidia CEO ... November eighth." -- from the front, low across the table; he presses send
-DUR = {"behind": 3.25, "front": 4.65}      # from the voiceover: 0.00-3.25 / 3.25-7.90
+LEAD = 2.5                                  # picture only before the first word (viewers settle in)
+DUR = {"behind": LEAD + 3.25, "front": 4.65}  # from the voiceover (shifted by LEAD): 0.00-5.75 / 5.75-10.40
 
 
 def _chest(c):
@@ -524,7 +525,8 @@ def _eyes(c):
 
 def anim_behind(c, t):
     s = t * DUR["behind"]
-    animate(c, s, {"typing": s < 2.3, "typed": min(1.0, 0.1 + 0.9 * s / 2.2)})
+    v = s - LEAD                              # voiceover time; he is already typing quietly during the lead-in
+    animate(c, s, {"typing": v < 2.3, "typed": min(1.0, 0.1 + 0.9 * max(0.0, v + 1.0) / 3.2)})
 
 
 def anim_front(c, t):
@@ -538,7 +540,7 @@ def anim_front(c, t):
         ph["send_reach"] = 1.0; ph["send_press"] = max(0.0, math.sin(math.pi * min((s - 2.4) / 0.45, 1.0))) if s < 2.85 else 0.0
         ph["sent"] = min(1.0, max(0.0, (s - 2.7) / 0.9))
     ph["back"] = 0.35 * ease(max(0.0, (s - 3.6) / 1.6))       # afterwards he straightens up a little, looks out
-    animate(c, 3.25 + s, ph)
+    animate(c, LEAD + 3.25 + s, ph)
 
 
 def cam_behind(c, t):

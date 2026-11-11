@@ -80,6 +80,10 @@ The person wants a solid plan before anything is built, presented exactly like t
 - `python scenes/make_master.py <chapter> out/blend/<chapter> vo/<chapter>.mp3` grades every shot and links them
   into one master `.blend`, with a timeline of scene strips in order and the voiceover underneath. The person
   renders that one file. Add the chapter's shot list to `CHAPTERS` in `make_master.py`.
+- **Lead-in.** Every film opens on about 2.5 seconds of picture before the first word, so viewers settle in and
+  don't miss the opening line. Extend the first shot by the lead and start the voiceover strip 60 frames in
+  (`make_master.py` takes the lead in seconds as its 4th argument; it defaults to 2.5 for the intro). Chapter
+  openings let the title card breathe about 2 seconds before narration resumes.
 - **Timing comes from the voiceover.** `edit/align.py: transcribe()` gives word times, and each shot's seconds are
   cut at the word where its line starts.
 - **Do not render the film yourself unless asked.** When asked for a preview, use `scenes/preview_render.py`
