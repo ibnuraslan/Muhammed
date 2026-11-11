@@ -154,14 +154,14 @@ def snap(f, p, prev_side):
         elif v <= lo: prev_side[(ax, lo)] = 'lo'
         elif v >= hi: prev_side[(ax, lo)] = 'hi'
     top = 0.95 + 0.012 + body_h(q.x, q.y) - 0.012       # just under the abdomen skin / drape
-    if abs(q.x) < 0.8 and abs(q.y) < 0.8 and MEMB_Z + 0.012 < q.z < top + 0.024:
+    if abs(q.x) < 0.8 and abs(q.y) < 0.8 and MEMB_Z - 0.012 < q.z < top + 0.024:
         mid = (MEMB_Z + top) / 2; key = 'dive'
         side = prev_side.get(key) or ('hi' if q.z > mid else 'lo')
         if (side == 'hi' and q.z < mid) or (side == 'lo' and q.z > mid):
             side = 'lo' if side == 'hi' else 'hi'
-        q.z = top + 0.024 if side == 'hi' else MEMB_Z + 0.012
+        q.z = top + 0.024 if side == 'hi' else MEMB_Z - 0.012      # just under the membrane: it fills the frame looking up
     elif q.z >= top + 0.024: prev_side['dive'] = 'hi'
-    elif q.z <= MEMB_Z + 0.012: prev_side['dive'] = 'lo'
+    elif q.z <= MEMB_Z - 0.012: prev_side['dive'] = 'lo'
     return q
 PS = {}
 for f in range(1, 1711):

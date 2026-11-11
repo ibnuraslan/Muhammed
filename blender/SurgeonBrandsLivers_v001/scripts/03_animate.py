@@ -1043,6 +1043,13 @@ memb.location = (0.0, -0.1, liver.location.z + 0.084 + 0.45)
 mm = mat("Membrane", (0.72, 0.42, 0.36), 0.35, sss=0.3, coat=0.4, emit=(0.75, 0.38, 0.32), estr=0.6); mb.materials.append(mm)
 mnt = mm.node_tree; nz = mnt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 60.0; nz.inputs['Detail'].default_value = 8.0
 bp = mnt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.35; mnt.links.new(nz.outputs['Fac'], bp.inputs['Height']); mnt.links.new(bp.outputs['Normal'], mnt.nodes["Principled BSDF"].inputs['Normal'])
+src_img = [nd.image for nd in liver.data.materials[0].node_tree.nodes if nd.type == 'TEX_IMAGE' and nd.image and nd.image.name.startswith("Image_0")]
+if src_img:
+    tci = mnt.nodes.new('ShaderNodeTexCoord'); mpi = mnt.nodes.new('ShaderNodeMapping'); mpi.inputs['Scale'].default_value = (2.5, 2.5, 2.5)
+    ti = mnt.nodes.new('ShaderNodeTexImage'); ti.image = src_img[0]
+    mnt.links.new(tci.outputs['Generated'], mpi.inputs['Vector']); mnt.links.new(mpi.outputs['Vector'], ti.inputs['Vector'])
+    prm = mnt.nodes["Principled BSDF"]
+    mnt.links.new(ti.outputs['Color'], prm.inputs['Base Color']); mnt.links.new(ti.outputs['Color'], prm.inputs['Emission Color'])
 key_vis([memb], [(126, 152), (262, 292), (1046, 1074), (1166, 1192)])
 print("ANIM_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
