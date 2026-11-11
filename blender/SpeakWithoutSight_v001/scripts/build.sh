@@ -11,7 +11,8 @@ python3 -I $P/find_models.py get $W/objv $W/assets/glb2 HandSkeleton=efd1df50e4a
 $B -b --factory-startup --python $H/01c_prep_models.py -- $W/assets/glb2 $W/models.blend
 $B -b --python $H/01_build_humans.py -- $W/humans.blend
 $B -b --factory-startup --python $H/02_build_scene.py -- $W $W/assets $W/scene.blend
-$B -b $W/scene.blend --python $H/03_animate.py -- $W/anim.blend      # also runs 03b_fx_camera.py
+$B -b $W/scene.blend --python $H/03_animate.py -- $W/anim_pre.blend      # also runs 03b_fx_camera.py
+$B -b $W/anim_pre.blend --python $P/anim_look.py -- $W/anim.blend         # animated-CG look (client, Nov 11 22:45)
 # farm package (<95 MB, plain git file):
 # $B -b $W/anim.blend --python $H/04_shrink_textures.py -- $W/jpgtex $W/anim_small.blend
 # $B -b $W/anim_small.blend --python $P/package_for_farm.py -- <repo>/blender/SpeakWithoutSight_v002/SpeakWithoutSight_v002_60fps.blend

@@ -14,8 +14,8 @@ These values are read back from `SpeakWithoutSight_v002_60fps.blend` opened in f
 | Samples | 48, adaptive, noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
-| Motion blur | On, shutter 0.5 |
-| Colour | AgX, look "AgX - Medium High Contrast". Light energies and the world strength are keyframed (the dim "trapped" beat, the explainer dome, the day/night time-lapse), so do not override them. |
+| Motion blur | Off (animated look) |
+| Colour | AgX, look "AgX - Punchy" (animated-CG look). The camera sees a sky-blue gradient world; lighting comes from the HDRI. Light energies and the world strength are keyframed (the dim "trapped" beat, the explainer dome, the day/night time-lapse), so do not override them. |
 | Output | PNG, RGB, 8-bit, compression 15, to `//render/SpeakWithoutSight_v002_####.png` |
 | Audio | None yet. The voiceover comes later: retime with `beats.json` and `pipeline/retime_to_vo.py`. |
 | Simulations | None: no particles, cloth, caches or linked libraries. One small geometry-nodes modifier (`FloorClamp`) on the skirts, built in. |

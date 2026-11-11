@@ -12,10 +12,12 @@ for o_ in bpy.data.objects:
         o_.visible_camera = False
         if o_.name in ('L_Fill', 'L_Ceil', 'L_StudioKey', 'L_StudioRim'): o_.visible_glossy = False
 BASE = {n: L.energy for n, L in LIGHTS.items()}
-BASE["L_StudioKey"], BASE["L_StudioRim"] = 160.0, 120.0
+BASE["L_StudioKey"], BASE["L_StudioRim"] = 220.0, 160.0
+# animated look (client, 22:45): high-key interior - more fill, brighter window, lifted shadows
+BASE["L_Fill"] *= 2.6; BASE["L_Ceil"] *= 3.0; BASE["L_Window"] *= 1.5; BASE["L_Sun"] *= 1.2; BASE["L_Lamp"] *= 1.5
 bg = sc.world.node_tree.nodes["Background"].inputs["Strength"]
 # room level: 1 = normal, ~0.12 = the dark of beat 2, ~0.25 under the explainer dome
-ROOM = [(1, 1.0), (175, 1.0), (250, 0.14), (395, 0.14), (450, 1.0), (700, 1.0), (735, 0.3), (1060, 0.3), (1100, 1.0), (END, 1.0)]
+ROOM = [(1, 1.0), (175, 1.0), (250, 0.32), (395, 0.32), (450, 1.0), (700, 1.0), (735, 0.5), (1060, 0.5), (1100, 1.0), (END, 1.0)]
 STUDIO = [(1, 0.0), (700, 0.0), (735, 1.0), (1060, 1.0), (1100, 0.0), (END, 0.0)]
 room = pchip(ROOM); stud = pchip(STUDIO)
 TL0, TL1 = 1723, 1843   # time-lapse window
@@ -42,7 +44,7 @@ snow_objs = [bpy.data.objects["SnowGround"], bpy.data.objects["SnowWallCap"]]
 def daylight(f):
     if not (TL0 < f < TL1): return 1.0
     ph = ((f - TL0) / 30.0) % 1.0
-    return 0.06 + 0.94 * math.sin(math.pi * ph) ** 2
+    return 0.3 + 0.7 * math.sin(math.pi * ph) ** 2
 lamp_on = lambda f: (1.0 if not (TL0 < f < TL1) else 0.3 + 2.2 * (1 - daylight(f)))
 for f in keys_every(1, END, 3) if False else sorted(set(list(range(1, END, 6)) + list(range(TL0, TL1 + 1, 2)) + [END])):
     rv, sv = room(f), stud(f)
@@ -82,17 +84,18 @@ keyseq(bub_mix, [(1, 0.0), (180, 0.0), (255, 0.78), (400, 0.78), (418, 0.5), (45
 bn = bpy.data.materials["M_Bubble"].node_tree.nodes
 bn["Layer Weight"].inputs['Blend'].default_value = 0.6      # soft vignette edge, clear centre
 ev(300); gface_p = G.bone_world("head") + V(0, -0.12, 0.03)
-fl_ = bpy.data.lights.new("L_BubbleFace", 'SPOT'); fl_.spot_size = R_(40); fl_.spot_blend = 0.8; fl_.shadow_soft_size = 0.15; fl_.color = (1.0, 0.86, 0.72)
+fl_ = bpy.data.lights.new("L_BubbleFace", 'SPOT'); fl_.spot_size = R_(40); fl_.spot_blend = 0.8; fl_.shadow_soft_size = 0.15; fl_.color = (0.85, 0.9, 1.0)
 flo = bpy.data.objects.new("L_BubbleFace", fl_); sc.collection.objects.link(flo); flo.visible_camera = False
 flo.location = gface_p + V(0.35, -0.55, 0.35); flo.rotation_euler = (gface_p - flo.location).to_track_quat('-Z', 'Y').to_euler()
-for f, e_ in ((1, 0.0), (175, 0.0), (240, 45.0), (400, 45.0), (450, 0.0), (END, 0.0)):
+for f, e_ in ((1, 0.0), (175, 0.0), (240, 60.0), (400, 60.0), (450, 0.0), (END, 0.0)):
     fl_.energy = e_; fl_.keyframe_insert("energy", frame=f)
 bub = bpy.data.objects["DarkBubble"]
 keyattr(bub, "scale", [(170, Vector((1.6, 1.6, 1.6))), (255, Vector((1.0, 1.0, 1.0))), (400, Vector((1.0, 1.0, 1.0))), (450, Vector((1.25, 1.25, 1.25)))])
 keyattr(bub, "hide_render", [(1, True)])   # no visible sphere: the "trapped" beat is a lighting vignette (room fades, her face keeps a soft key)
 dome_mix = bpy.data.materials["M_ExplainerDome"].node_tree.nodes["DomeMix"].inputs[0]
 _cr = next(n for n in bpy.data.materials["M_ExplainerDome"].node_tree.nodes if n.type == 'VALTORGB').color_ramp
-_cr.elements[0].position = 0.2; _cr.elements[0].color = (0.02, 0.16, 0.24, 1); _cr.elements[1].position = 0.9; _cr.elements[1].color = (0.55, 0.85, 0.95, 1)
+_cr.elements[0].position = 0.15; _cr.elements[0].color = (0.80, 0.93, 1.0, 1); _cr.elements[1].position = 0.6; _cr.elements[1].color = (0.08, 0.55, 0.93, 1)
+next(n for n in bpy.data.materials['M_ExplainerDome'].node_tree.nodes if n.type == 'EMISSION').inputs['Strength'].default_value = 1.5
 keyseq(dome_mix, [(1, 0.0), (700, 0.0), (740, 1.0), (1058, 1.0), (1100, 0.0), (END, 0.0)])
 dome = bpy.data.objects["ExplainerDome"]
 keyattr(dome, "hide_render", [(1, True), (698, False), (1102, True)])
@@ -128,7 +131,7 @@ def xray_material(m, empties):
         mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'; nt.links.new(acc, mx.inputs[0]); nt.links.new(mk_, mx.inputs[1]); acc = mx.outputs[0]
     val = nt.nodes.new('ShaderNodeValue'); val.name = "XRAY"; val.outputs[0].default_value = 0.0; XR_VAL.append(val.outputs[0])
     mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; nt.links.new(acc, mul.inputs[0]); nt.links.new(val.outputs[0], mul.inputs[1])
-    tr_ = nt.nodes.new('ShaderNodeBsdfTransparent'); em_ = nt.nodes.new('ShaderNodeEmission'); em_.inputs['Color'].default_value = (0.6, 0.9, 1.0, 1); em_.inputs['Strength'].default_value = 1.2
+    tr_ = nt.nodes.new('ShaderNodeBsdfTransparent'); em_ = nt.nodes.new('ShaderNodeEmission'); em_.inputs['Color'].default_value = (0.75, 0.95, 1.0, 1); em_.inputs['Strength'].default_value = 1.6
     lw_ = nt.nodes.new('ShaderNodeLayerWeight'); lw_.inputs['Blend'].default_value = 0.12
     gm = nt.nodes.new('ShaderNodeMixShader'); nt.links.new(lw_.outputs['Facing'], gm.inputs[0]); nt.links.new(tr_.outputs[0], gm.inputs[1]); nt.links.new(em_.outputs[0], gm.inputs[2])
     mixs = nt.nodes.new('ShaderNodeMixShader'); nt.links.new(mul.outputs[0], mixs.inputs[0]); nt.links.new(src, mixs.inputs[1]); nt.links.new(gm.outputs[0], mixs.inputs[2])
@@ -152,6 +155,17 @@ pf = m_fold.node_tree.nodes["Principled BSDF"]; pf.inputs["Base Color"].default_
 pf.inputs["Emission Color"].default_value = (1.0, 0.8, 0.6, 1); pf.inputs["Emission Strength"].default_value = 0.3
 ev(760); TF = fdir(T_YAW); TR = rdir(T_YAW); lc = T.bone_world("neck01").lerp(T.bone_world("neck02"), 0.5) + TF * 0.012
 LARYNX = []
+def clean_anat(name, rgb, rough=0.35):
+    m = bpy.data.materials.get(name)
+    if not m: return
+    nt = m.node_tree; p = nt.nodes["Principled BSDF"]
+    for n in list(nt.nodes):
+        if n.type in ('TEX_NOISE', 'TEX_VORONOI', 'BUMP', 'MIX', 'MATH'): nt.nodes.remove(n)
+    p.inputs["Base Color"].default_value = (*rgb, 1); p.inputs["Roughness"].default_value = rough
+    p.inputs["Coat Weight"].default_value = 0.35; p.inputs["Coat Roughness"].default_value = 0.2
+    p.inputs["Subsurface Weight"].default_value = 0.25; p.inputs["Emission Strength"].default_value = 0.0
+clean_anat("M_HandBone", (0.93, 0.87, 0.72)); clean_anat("M_HyoidBone", (0.93, 0.87, 0.72))
+clean_anat("M_Cartilage", (0.95, 0.78, 0.76)); clean_anat("M_Ligament", (0.92, 0.45, 0.5)); clean_anat("M_Mucosa", (0.95, 0.52, 0.58))
 # real larynx anatomy (CC-BY model): thyroid prominence just under the throat skin, trachea down the neck
 lxm = bpy.data.objects["Model_Larynx"]; lxm.hide_render = False
 n1_, n2_ = T.bone_world("neck01"), T.bone_world("neck02")
