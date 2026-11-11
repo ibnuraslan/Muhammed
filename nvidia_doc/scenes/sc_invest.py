@@ -17,7 +17,7 @@ import ph
 import paper_tex
 
 EXPOSURE = -0.6
-DUR = {"drawer": 3.22, "reveal": 3.48}
+DUR = {"drawer": 3.22, "reveal": 3.48, "filing": 4.0, "chart": 4.0, "pinning": 4.5}
 CAB_Y = 3.3                       # cabinet fronts (they stand against the back wall y = 4)
 
 
@@ -224,6 +224,26 @@ def build(variant=None):
     # the paper each reader holds (follows the hands every frame)
     c["held"] = {nm: sheet("Held" + nm, (0, 0, -5), (0.21, 0.28), page_m[k]) for k, nm in enumerate(("ReaderA", "ReaderB", "ReaderC"))}
     c["lift"] = None
+    # SET 8B: a bar chart on the analyst's right monitor - two bars, the second grows by a frame driver
+    mon = Vector((4.83, 0.92, 1.12))
+    bar_m = emissive("BarBlue", (0.25, 0.55, 1.0), 2.0); bar2_m = emissive("BarRed", (1.0, 0.35, 0.25), 2.5)
+    b1 = box("Bar2023", mon + Vector((-0.01, -0.12, -0.15)), (0.006, 0.08, 0.004), bar_m)
+    b2 = box("Bar2024", mon + Vector((-0.01, 0.06, -0.15)), (0.006, 0.08, 0.004), bar2_m)
+    for b, frac in ((b1, 0.012), (b2, 1.0)):
+        b.location.z = mon.z - 0.15
+        dd = b.driver_add("scale", 2).driver; dd.type = 'SCRIPTED'
+        dd.expression = (f"1 + {frac * 70} * min(1, max(0, (frame - 30) / 50))") if frac == 1.0 else "1 + 0.8"
+        dz = b.driver_add("location", 2).driver; dz.type = 'SCRIPTED'
+        dz.expression = (f"{mon.z - 0.15} + 0.002 * {frac * 70} * min(1, max(0, (frame - 30) / 50))") if frac == 1.0 else f"{mon.z - 0.15} + 0.0016"
+    for txt, off in (("$33M", -0.12), ("$3B", 0.06)):
+        text_obj("BarLabel", txt, mon + Vector((-0.012, off, -0.19)), 0.025, emissive("BarTxt", (0.9, 0.92, 0.95), 2.0),
+                 rot=(math.radians(90), 0, math.radians(-90)))
+    c["mon"] = mon
+    # SET 11A: an investigator standing at the evidence wall, pinning one more page
+    pinner = person("Pinner", 1.0, 39, "male_casualsuit01", "short02", hv=0.25)
+    stand(pinner, (-5.35, 0.4, 0), -math.pi / 2)                  # faces -X, the wall
+    c["people"]["pinner"] = pinner
+    c["pin_page"] = sheet("PinPage", (-5.6, 0.45, 1.5), (0.2, 0.26), page_m[2], rot=(math.radians(90), 0, math.radians(90)))
     animate(c, 0.0, {})
     return c
 
@@ -291,6 +311,20 @@ def animate(c, sec, phase):
     bpy.context.view_layer.update()
 
 
+def anim_pinning(c, t):
+    s_ = t * DUR["pinning"]
+    animate(c, s_, {"lift": 0.0})
+    h = c["people"]["pinner"]; pg = c["pin_page"]
+    k = ease(min(1.0, s_ / 2.2))
+    target = Vector((-5.955, 0.45, 1.72)); start = Vector((-5.55, 0.42, 1.35))
+    pg.location = start.lerp(target, k)
+    reach(h, "R", pg.location + Vector((0.08, -0.06, 0.05)), Vector((0.2, -0.8, -0.6)), Vector((-1, 0, 0.2)))
+    reach(h, "L", pg.location + Vector((0.08, 0.1, -0.05)) if s_ < 2.4 else h.bone_head("upperarm01.L") + Vector((0.05, 0.1, -0.55)),
+          Vector((0.2, 0.8, -0.6)), Vector((-1, 0, 0.0)))
+    fingers_curl(h, 30, thumb=15)
+    bpy.context.view_layer.update()
+
+
 def anim_drawer(c, t):
     s = t * DUR["drawer"]
     animate(c, s, {"lift": ease(max(0.0, (s - 2.2) / 1.0)) * 0.35})
@@ -319,7 +353,28 @@ def cam_reveal(c, t):
     return (loc, tgt0.lerp(tgt1, ease(min(1.0, t * 1.4))), 50 - 26 * e)
 
 
+def cam_filing(c, t):
+    h = c["people"]["ReaderB"]; e = ease(t)
+    sh = h.bone_head("upperarm01.R")
+    return (sh + Vector((0.25, 0.35, 0.3)).lerp(Vector((0.2, 0.28, 0.25)), e), c["held"]["ReaderB"].location, 45)
+
+
+def cam_chart(c, t):
+    e = ease(t); m = c["mon"]
+    return (m + Vector((-0.9, -0.35, 0.05)).lerp(Vector((-0.6, -0.22, 0.03)), e), m + Vector((0, 0, -0.05)), 40)
+
+
+def cam_pinning(c, t):
+    e = ease(t)
+    return (Vector((-3.6, -1.4, 1.6)).lerp(Vector((-3.9, -1.0, 1.6)), e), Vector((-5.9, 0.4, 1.55)), 32)
+
+
 MOVES = {
+    "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location,
+                   anim=lambda c, t: animate(c, t * DUR["filing"], {"lift": 0.0})),
+    "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=lambda c, t: c["mon"],
+                  anim=lambda c, t: animate(c, t * DUR["chart"], {"lift": 0.0})),
+    "pinning": dict(kind="anim", dof=3.2, far=20.0, cam=cam_pinning, focus=lambda c, t: Vector((-5.8, 0.42, 1.6)), anim=anim_pinning),
     "drawer": dict(kind="anim", dof=2.4, far=10.0, cam=cam_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0.02, 0.35, 0.1)), anim=anim_drawer),
     "reveal": dict(kind="anim", dof=4.0, far=20.0, cam=cam_reveal,
                    focus=lambda c, t: (c["drawer"].matrix_world @ Vector((0.0, 0.32, 0.05))).lerp(Vector((-0.2, 0.2, 0.8)), ease(t)), anim=anim_reveal),

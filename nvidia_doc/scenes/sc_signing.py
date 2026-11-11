@@ -11,7 +11,8 @@ import ph
 import skia
 
 EXPOSURE = 0.2
-DUR = {"sign": 6.0}            # estimate until the chapter 1 voiceover arrives
+DUR = {"sign": 6.0, "transfer": 5.0}            # estimates until the chapter 1 voiceover arrives
+VARIANT_FOR = {"transfer": "transfer"}
 GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated")
 
 
@@ -83,7 +84,7 @@ def build(variant=None):
     N["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.5; N["Principled BSDF"].inputs['Roughness'].default_value = 0.7
     cyl("FlagPole", (1.35, -2.25, 1.1), 0.02, 2.2, pbr("Brass", (0.6, 0.45, 0.22), 0.3, 1.0), verts=12)
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=40, y_subdivisions=30, size=1, location=(1.35, -2.25, 1.5), rotation=(math.radians(90), 0, math.radians(150)))
-    f = bpy.context.active_object; f.scale = (0.5, 0.95, 1); f.data.materials.append(fm)
+    f = bpy.context.active_object; f.name = "FlagCloth"; f.scale = (0.5, 0.95, 1); f.data.materials.append(fm)
     f.location.x += 0.25 * math.cos(math.radians(150)); f.location.y += 0.25 * math.sin(math.radians(150))
     wv = f.modifiers.new("wave", 'WAVE'); wv.height = 0.03; wv.width = 0.4; wv.speed = 0.02
     sub = f.modifiers.new("sub", 'SUBSURF'); sub.levels = 1
@@ -92,11 +93,28 @@ def build(variant=None):
     dl = bpy.data.lights.new("DeskLamp", 'SPOT'); dl.energy = 60; dl.spot_size = math.radians(70); dl.spot_blend = 0.6; dl.color = (1.0, 0.75, 0.48)
     dlo = bpy.data.objects.new("DeskLamp", dl); bpy.context.collection.objects.link(dlo); dlo.location = (0.55, 0.65, 1.45); point_at(dlo, (0.3, 0.45, 0.8))
     fill = area_light((1.5, -2.0, 2.4), (0, 0, 0), 2.0, 40, (1.0, 0.85, 0.7)); point_at(fill, (0.2, 0.0, 1.0)); fill.visible_camera = False
-    # the official
-    h = Human("Official", gender=1.0, years=58, muscle=0.5, weight=0.55, height=0.5, eyelashes="eyelashes01",
-              skin="old_lightskinned_male_diffuse.png")
-    add_asset(h, "clothes", "male_elegantsuit01", val=0.12, rough=0.55); add_asset(h, "clothes", "shoes02", val=0.15)
-    add_asset(h, "hair", "short04", sat=0.0, val=0.6)
+    # the official (or, in the transfer variant, Alice signing for the Singapore company)
+    if variant == "transfer":
+        from people import woman
+        h = woman("Alice")
+        for o in bpy.data.objects:                                       # no flag in a private company's room
+            if o.name.startswith(("Flag",)):
+                o.hide_render = True
+        seller = Human("Seller", gender=1.0, years=50, muscle=0.5, weight=0.55, height=0.5, eyelashes="eyelashes01",
+                       skin="middleage_asian_male_diffuse.png" if False else "middleage_lightskinned_male_diffuse.png")
+        add_asset(seller, "clothes", "male_casualsuit03", val=0.2, rough=0.6); add_asset(seller, "hair", "short01", val=0.2)
+        reset_pose(seller); pose_sit(seller, lean=10)
+        seller.arm.rotation_euler = (0, 0, 0); seller.arm.location = (0.3, 1.45, 0); bpy.context.view_layer.update()
+        w = np.concatenate([_world_verts(o) for o in seller.parts if o.type == 'MESH'])
+        seller.arm.location.z -= w[:, 2].min(); bpy.context.view_layer.update()
+        stamp = join([cyl("StampBase", (0, 0, 0.02), 0.03, 0.04, pbr("StampRed", (0.4, 0.04, 0.03), 0.4), verts=24),
+                      cyl("StampHandle", (0, 0, 0.09), 0.015, 0.1, pbr("StampWood", (0.3, 0.18, 0.08), 0.4), verts=16)], "Stamp")
+        c.update(seller=seller, stamp=stamp)
+    else:
+        h = Human("Official", gender=1.0, years=58, muscle=0.5, weight=0.55, height=0.5, eyelashes="eyelashes01",
+                  skin="old_lightskinned_male_diffuse.png")
+        add_asset(h, "clothes", "male_elegantsuit01", val=0.12, rough=0.55); add_asset(h, "clothes", "shoes02", val=0.15)
+        add_asset(h, "hair", "short04", sat=0.0, val=0.6)
     reset_pose(h); pose_sit(h, lean=18)
     h.arm.rotation_euler = (0, 0, math.pi); h.arm.location = (0.2, -0.05, 0); bpy.context.view_layer.update()   # faces +Y (the desk)
     w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
@@ -133,10 +151,24 @@ def anim_sign(c, t):
     animate(c, t * DUR["sign"])
 
 
+def anim_transfer(c, t):
+    sec = t * DUR["transfer"]
+    animate(c, sec)
+    st = c["stamp"]; sl = c["seller"]; M = c["page"].matrix_world
+    spot = M @ Vector((0.3, -0.25, 0.0))
+    down = max(0.0, math.sin(math.pi * min(1.0, max(0.0, (sec - 3.0) / 0.6))))     # the stamp comes down once, after she signs
+    st.location = spot + Vector((0, 0, 0.12 * (1 - down) + 0.001))
+    reach(sl, "R", st.location + Vector((0, 0, 0.16)), Vector((0.6, 0.4, -0.6)), Vector((0, 0, -1)))
+    fingers_curl(sl, 50, thumb=30)
+    bpy.context.view_layer.update()
+
+
 def cam_sign(c, t):
     e = ease(t)
     loc = Vector((-1.55, 2.25, 1.4)).lerp(Vector((-1.2, 1.85, 1.35)), e)      # three-quarter front, across the desk
     return (loc, Vector((0.2, 0.05, 1.0)), 40)
 
 
-MOVES = {"sign": dict(kind="anim", dof=2.8, far=12.0, cam=cam_sign, focus=lambda c, t: Vector((0.25, 0.25, 1.0)), anim=anim_sign)}
+MOVES = {"sign": dict(kind="anim", dof=2.8, far=12.0, cam=cam_sign, focus=lambda c, t: Vector((0.25, 0.25, 1.0)), anim=anim_sign),
+         "transfer": dict(kind="anim", dof=2.8, far=12.0, cam=lambda c, t: (Vector((2.3, 0.4, 1.45)).lerp(Vector((2.0, 0.5, 1.4)), ease(t)), Vector((0.25, 0.6, 0.9)), 32),
+                          focus=lambda c, t: Vector((0.25, 0.5, 0.9)), anim=anim_transfer)}
