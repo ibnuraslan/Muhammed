@@ -1,6 +1,6 @@
-CONTACT Prisoner 62 issues
-    IK_hand.L unreachable 1-73(0.06) 1099-1101(0.07) 1295-1303(0.07)
-    IK_hand.R unreachable 299-301(0.04) 1183-1183(0.05) 1197-1213(0.14) 1295-1297(0.17) 1443-1445(0.14)
+CONTACT Prisoner 56 issues
+    IK_hand.L unreachable 1-69(0.04) 1099-1099(0.06) 1297-1301(0.06)
+    IK_hand.R unreachable 299-301(0.04) 1183-1183(0.05) 1197-1213(0.14) 1295-1297(0.17) 1445-1445(0.08)
     IK_foot.R unreachable 1295-1297(0.06)
 CONTACT Visitor 33 issues
     IK_hand.R unreachable 397-409(0.07) 479-479(0.03) 503-505(0.04) 527-529(0.03) 553-553(0.03) 605-605(0.03) 629-629(0.03) 653-655(0.03) 679-679(0.04) 703-705(0.03)
@@ -12,5 +12,5 @@ CONTACT CrowdB 15 issues
     IK_hand.R unreachable 639-649(0.12) 729-731(0.05) 799-799(0.04) 827-831(0.06)
     IK_hand.L unreachable 827-831(0.06)
 CONTACT Guard2 20 issues
-    IK_hand.L unreachable 1541-1559(0.16) 1773-1791(0.14)
+    IK_hand.L unreachable 1541-1559(0.15) 1773-1791(0.14)
 CONTACT done

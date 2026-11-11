@@ -37,7 +37,7 @@ The audits are in `../PrisonKeyCake_v001/audit/`, and the review sheets are in `
   - prisoner pushing the tin onto the window sill, frames 1197–1213 (about 14 cm)
   - guard waving and taking the box, frames 545–589
   - Elsewhere the hands follow the props.
-- **Penetration count:** 248 hand/foot frame-hits, mostly fingertips 1–2 cm into held props. There are 0 character overlaps and 271 hat-brim vertices in crowd hair. See `../PrisonKeyCake_v001/audit/penetration_C.txt`.
+- **Penetration count:** 246 hand/foot frame-hits, mostly fingertips 1–2 cm into held props or soft wax. There are 0 character overlaps and 0 head-item vertices through. See `../PrisonKeyCake_v001/audit/penetration_C.txt`.
 - **The crowd:** it is FK only. Arms wave and heads turn, but the crowd's feet stay planted. It is two base characters with varied clothing colours, scale and hats.
 - **The laundry:** it is stiff cloth planes with a Wave modifier.
 - **Remaining built-in shapes:** a few small items are still our own geometry: the knife, flags, hats, sand mould and the small distant birds. The key, lock, cake, crucible, barrels, bucket and government building are real models.

@@ -36,7 +36,8 @@ def inside(t, p):
         if cnt % 2 == 0: return d.length
     return -d.length
 res = {}; frames = 0; overlaps = 0
-for f in range(1, 1891, STEP):
+import os
+for f in ([] if os.environ.get('HEADONLY') else range(1, 1891, STEP)):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); frames += 1
     vis = [n for n in ACT if not bpy.data.objects[n].hide_render]
     pts = {}
@@ -67,13 +68,14 @@ for f in range(1, 1891, STEP):
             if (pa - pb).to_2d().length < 0.35: overlaps += 1
 # head items: hat / glasses vertices inside the head (head poking through)
 hat_bad = 0
-for f in (1740, 1800, 1860, 1890):
+for f in (1740, 1770, 1800, 1830, 1860, 1890):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     for h in [o for o in bpy.data.objects if o.name.startswith(("CrowdHat", "President_Glasses"))]:
         arm = h.constraints[0].target; body = next(c for c in arm.children if c.name.endswith(".body") or "body" in c.name)
         if h.constraints[0].subtarget != "head": continue
         t = bvh(body, dg); e = h.evaluated_get(dg); me = e.to_mesh()
-        hat_bad += sum(1 for v in me.vertices if inside(t, e.matrix_world @ v.co) < -DEPTH); e.to_mesh_clear()
+        cnt = sum(1 for v in me.vertices if inside(t, e.matrix_world @ v.co) < -DEPTH); e.to_mesh_clear(); hat_bad += cnt
+        if cnt: print("PEN_HEAD", f, h.name, cnt)
 total = sum(r[0] for r in res.values())
 print("PEN frames_checked", frames, "step", STEP, "depth_threshold_m", DEPTH)
 for (n, part, on), (c, d, f0) in sorted(res.items(), key=lambda x: -x[1][0]):

@@ -1,8 +1,8 @@
 PEN frames_checked 315 step 6 depth_threshold_m 0.004
-PEN Prisoner  hand in WaxPool                      frames= 30 max_depth=0.050 first=139
-PEN Prisoner  hand in WaxTin                       frames= 30 max_depth=0.006 first=139
-PEN Prisoner  hand in WoodenTable_01               frames= 29 max_depth=0.018 first=139
+PEN Prisoner  hand in WaxTin                       frames= 29 max_depth=0.006 first=139
 PEN CrowdB    hand in Crucible_Shank               frames= 29 max_depth=0.011 first=475
+PEN Prisoner  hand in WaxPool                      frames= 28 max_depth=0.050 first=145
+PEN Prisoner  hand in WoodenTable_01               frames= 28 max_depth=0.018 first=145
 PEN Guard     hand in ParcelBox                    frames= 21 max_depth=0.008 first=847
 PEN Guard     foot in YardWallE_0                  frames= 18 max_depth=0.007 first=493
 PEN Guard     hand in YardWallE_0                  frames= 16 max_depth=0.050 first=433
@@ -28,4 +28,4 @@ PEN Visitor   hand in Shop_WallW_0                 frames=  1 max_depth=0.008 fi
 PEN Guard     hand in large_iron_gate_left_door    frames=  1 max_depth=0.006 first=961
 PEN Guard     foot in large_iron_gate_left_door    frames=  1 max_depth=0.005 first=967
 PEN Prisoner  hand in Cell_WallN_1                 frames=  1 max_depth=0.050 first=1213
-PEN_TOTAL hand/foot penetration frame-hits 250 | character overlaps 0 | head-item verts through 271
+PEN_TOTAL hand/foot penetration frame-hits 246 | character overlaps 0 | head-item verts through 0

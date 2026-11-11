@@ -51,7 +51,7 @@ bl.inputs['Transmission Weight'].default_value = 1.0; bl.inputs['Roughness'].def
 bm = bmesh.new()
 eyes = [PRo.data.bones["eye." + s_].head_local for s_ in "LR"]
 for e in eyes:
-    c = e + Vector((0, -0.036, 0.002))
+    c = e + Vector((0, -0.042, 0.002))
     r = bmesh.ops.create_circle(bm, cap_ends=False, segments=20, radius=0.021)
     for v in r['verts']: v.co = Vector((c.x + v.co.x, c.y, c.z + v.co.y * 0.8))
     for i in range(20):
@@ -61,12 +61,12 @@ for e in eyes:
         bmesh.ops.translate(bm, verts=t['verts'], vec=(a0 + a1) / 2)
     for v in r['verts']: bm.verts.remove(v)
     side = 1 if e.x > 0 else -1
-    t = bmesh.ops.create_cone(bm, cap_ends=True, segments=5, radius1=0.0015, radius2=0.0015, depth=0.11)
+    t = bmesh.ops.create_cone(bm, cap_ends=True, segments=5, radius1=0.0015, radius2=0.0015, depth=0.07)
     bmesh.ops.rotate(bm, verts=t['verts'], matrix=Matrix.Rotation(R_(90), 3, 'X'))
-    bmesh.ops.translate(bm, verts=t['verts'], vec=Vector((c.x + side * 0.022, c.y + 0.055, c.z + 0.004)))
+    bmesh.ops.translate(bm, verts=t['verts'], vec=Vector((c.x + side * 0.036, c.y + 0.036, c.z + 0.006)))
 t = bmesh.ops.create_cone(bm, cap_ends=True, segments=5, radius1=0.0015, radius2=0.0015, depth=abs(eyes[0].x - eyes[1].x) - 0.04)
 bmesh.ops.rotate(bm, verts=t['verts'], matrix=Matrix.Rotation(R_(90), 3, 'Y'))
-bmesh.ops.translate(bm, verts=t['verts'], vec=(eyes[0] + eyes[1]) / 2 + Vector((0, -0.03, 0.008)))
+bmesh.ops.translate(bm, verts=t['verts'], vec=(eyes[0] + eyes[1]) / 2 + Vector((0, -0.044, 0.008)))
 me = bpy.data.meshes.new("Glasses"); bm.to_mesh(me); bm.free(); me.materials.append(M_GL)
 gls = bpy.data.objects.new("President_Glasses", me); sc.collection.objects.link(gls); gls.matrix_world = PRo.matrix_world.copy()
 child_of_head(gls, PRo)
@@ -98,18 +98,30 @@ def head_top(arm):
     pts = [v.co for v in body[0].data.vertices if abs(v.co.x - hd.x) < 0.08 and abs(v.co.y - hd.y) < 0.08] if body else []
     return Vector((hd.x, hd.y - 0.005, (max(p.z for p in pts) if pts else hd.z + 0.18)))
 random.seed(31)
+sc.frame_set(1730); dg_ = bpy.context.evaluated_depsgraph_get()
 for i, a in enumerate(CROWD):
-    kind = "bowler" if i % 2 == 0 else "cap"
-    h = bpy.data.objects.new("CrowdHat%02d" % i, HATS[kind]); sc.collection.objects.link(h)
-    top = head_top(crowd_src[i % 2])
+    kind = "bowler" if i % 4 in (1,) else "cap"
+    if i % 2 == 0 and i % 3 != 0: continue      # bob-haired figures: no hat on the head (only waved in the hand)
+    h = bpy.data.objects.new("CrowdHat%02d" % i, HATS["bowler" if i % 3 == 0 else kind]); sc.collection.objects.link(h)
     if i % 3 == 0:     # waved in the raised hand
-        wr = crowd_src[i % 2].data.bones["wrist.R"]
-        loc = wr.head_local + Vector((-0.03, -0.06, -0.02))
-        h.matrix_world = a.matrix_world @ Matrix.Translation(loc) @ Matrix.Rotation(R_(80), 4, 'Y')
-        c = h.constraints.new('CHILD_OF'); c.target = a; c.subtarget = "wrist.R"; c.inverse_matrix = (a.matrix_world @ wr.matrix_local).inverted()
+        pbw = a.pose.bones["wrist.R"]; Mw = a.matrix_world @ pbw.matrix
+        h.matrix_world = Mw @ Matrix.Translation(Vector((0.0, 0.08, 0.03))) @ Matrix.Rotation(R_(80), 4, 'X')
+        c = h.constraints.new('CHILD_OF'); c.target = a; c.subtarget = "wrist.R"; c.inverse_matrix = Mw.inverted()
     else:
-        h.matrix_world = a.matrix_world @ Matrix.Translation(top - Vector((0, 0, 0.03 if kind == "bowler" else 0.015))) @ Matrix.Scale(1.22, 4)
-        child_of_head(h, a)
+        body = next(ch for ch in a.children if ch.name.split(".")[1] == "body") if any(len(ch.name.split(".")) > 1 and ch.name.split(".")[1] == "body" for ch in a.children) else next(ch for ch in a.children if "body" in ch.name)
+        hair = [ch for ch in a.children if any(k in ch.name for k in ("bob02", "short03"))]
+        pbh = a.pose.bones["head"]; Mh = a.matrix_world @ pbh.matrix; hp = Mh.translation
+        topz = -9.0
+        for ob_ in [body] + hair:
+            e = ob_.evaluated_get(dg_); me = e.to_mesh()
+            for v in me.vertices:
+                w = e.matrix_world @ v.co
+                if (w.xy - hp.xy).length < 0.11 and w.z > topz: topz = w.z
+            e.to_mesh_clear()
+        sink = 0.006 if kind == "bowler" else 0.012
+        up = (Mh.to_3x3() @ Vector((0, 1, 0))).normalized()
+        h.matrix_world = Matrix.Translation(Vector((hp.x, hp.y, topz - sink))) @ Matrix.Rotation(a.matrix_world.to_euler().z, 4, 'Z') @ Matrix.Scale(1.25 if kind == "bowler" else 1.32, 4)
+        c = h.constraints.new('CHILD_OF'); c.target = a; c.subtarget = "head"; c.inverse_matrix = Mh.inverted()
     key_hide(h, [(1, True), (1730, False)])
 for src in crowd_src:
     for ch in src.children:

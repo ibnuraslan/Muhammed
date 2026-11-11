@@ -8,15 +8,22 @@
 | Camera inside geometry | `audit_camera.py`, every frame | **0 frames inside.** 19 frames pass within 8 cm of a surface: the two window-bar fly-throughs, and macro moves skimming his sleeve or the door. |
 | Feet hover/sink | `audit_contacts.py`, every 2nd frame | **0 sinks, 0 hovers** across all 7 IK characters |
 | IK reach | `audit_contacts.py` | Gaps of 3–17 cm last only a few frames, during transitions: the window lift at 1197–1213 (14 cm), and the guard waving and hand-off at 545–589. The full list is in `contacts_C.txt`. |
-| Penetration (BVH) | `audit_penetration.py`, every 6th frame, 4 mm threshold | **248 hand/foot frame-hits, 0 character overlaps, 271 head-item vertices through.** See the breakdown below. |
+| Penetration (BVH) | `audit_penetration.py`, every 6th frame, 4 mm threshold | **246 hand/foot frame-hits, 0 character overlaps, 0 head-item vertices through** (hats and glasses). See the breakdown below. |
 
 ### What the penetration hits are
 - **Most are grips:** fingertips 1–2 cm into what they hold, such as the crucible shank, the parcel box, the knife handle and the tins.
-- **Fingertips on the table and wax:** while pressing the key, beats 1 and 7. Part of this count is a false positive, because the wax disc is an open mesh.
+- **Fingertips on the table and wax:** while pressing the key, beats 1 and 7.
+  - Close-ups show the fingertips resting on the wax around the key bow, sinking slightly into soft wax. That is intended contact.
+  - The 5 cm depth comes from the open wax-disc mesh.
+  - The door-push hand moved above the lock.
+  - The cake-steadying hand moved out to the bigger panettone surface.
 - **Wall contacts, at most 5 cm:**
   - the guard's waving hand by the gate wall
   - his left palm flat on the stone during the jam
-- **Head items:** the 271 vertices are mostly hat brims grazing hair on the far crowd.
+- **Head items: 0.**
+  - Hats are re-seated from each person's evaluated head and hair at frame 1730, then attached to the head bone with Child Of using the posed inverse. That fixed caps sinking 10 cm on the tall men and bowlers floating on the short women.
+  - Bob-haired figures wave their hat instead of wearing it.
+  - The glasses frames moved forward and the temple arms outward.
 
 ## Changed since B (director notes)
 1. **His face:**
