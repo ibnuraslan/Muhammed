@@ -120,8 +120,8 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.07, 0.05, 0.032), 0.07),
-                          (30.0, (0.075, 0.055, 0.035), 0.06), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.08, 0.12, 0.09), 0.3),
+                          (30.0, (0.09, 0.13, 0.1), 0.26), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
     for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.3), (31.0, 0.3), (32.0, 0.05)):
@@ -341,8 +341,8 @@ for o in bpy.data.objects:
 # ---------------------------------------------------------------- light: morning -> golden hour aftermath; mud; dust
 sun = bpy.data.objects["Sun"]
 mixn = sc.world.node_tree.nodes["HDRI_MIX"].inputs["Factor"]; bgs = sc.world.node_tree.nodes["Background"].inputs["Strength"]
-for t, rot, col, en, mx, bg in ((0, (55, 0, 200), (1.0, 0.95, 0.88), 4.0, 0.0, 0.9), (29.6, (55, 0, 200), (1.0, 0.95, 0.88), 4.0, 0.0, 0.9),
-                                (32.0, (79, 0, 15), (1.0, 0.62, 0.35), 3.2, 1.0, 0.8), (40, (82, 0, 12), (1.0, 0.55, 0.3), 2.8, 1.0, 0.75)):
+for t, rot, col, en, mx, bg in ((0, (50, 0, 200), (1.0, 0.97, 0.92), 5.0, 0.0, 1.45), (29.6, (50, 0, 200), (1.0, 0.97, 0.92), 5.0, 0.0, 1.45),
+                                (32.0, (68, 0, 15), (1.0, 0.82, 0.62), 4.8, 0.35, 1.45), (40, (70, 0, 12), (1.0, 0.8, 0.6), 4.6, 0.4, 1.45)):
     sun.rotation_euler = tuple(math.radians(v) for v in rot); sun.keyframe_insert("rotation_euler", frame=F(t))
     sun.data.color = col; sun.data.keyframe_insert("color", frame=F(t)); sun.data.energy = en; sun.data.keyframe_insert("energy", frame=F(t))
     mixn.default_value = mx; mixn.keyframe_insert("default_value", frame=F(t)); bgs.default_value = bg; bgs.keyframe_insert("default_value", frame=F(t))
@@ -373,7 +373,7 @@ mud = bpy.data.materials["M_Terrain"].node_tree.nodes["MUD"].outputs[0]
 for t, v in ((0, 0), (30.2, 0), (31.4, 1)):
     mud.default_value = v; mud.keyframe_insert("default_value", frame=F(t))
 dv = bpy.data.materials["M_Dust"].node_tree.nodes["DUSTVOL"].inputs["Density"]
-for t, v in ((0, 0), (30.5, 0), (32.0, 0.0012), (40, 0.0009)):
+for t, v in ((0, 0), (30.5, 0), (32.0, 0.0004), (40, 0.0003)):
     dv.default_value = v; dv.keyframe_insert("default_value", frame=F(t))
 dust = bpy.data.objects["DustVolume"]; key_hide(dust, [(1, True), (F(30.4), False)])
 bowl_hide = [o for o in bpy.data.collections["Diorama"].objects]

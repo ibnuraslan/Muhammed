@@ -76,14 +76,14 @@ wet = NN.new("ShaderNodeMapRange"); wet.inputs["From Min"].default_value = 0.35;
 LL.new(sx.outputs["Z"], wet.inputs["Value"])
 # aftermath mud over the land: MUD value is keyframed 0 -> 1
 mud_v = NN.new("ShaderNodeValue"); mud_v.name = "MUD"; mud_v.outputs[0].default_value = 0.0
-mud_c, mud_n, mud_r = pbr_nodes(nt, "brown_mud", 3.0, (0.7, 0.62, 0.5), coord=tc.outputs["Object"], x=-1400, y=-2000)
+mud_c, mud_n, mud_r = pbr_nodes(nt, "brown_mud", 3.0, (0.95, 0.82, 0.62), coord=tc.outputs["Object"], x=-1400, y=-2000)
 mud_mask = NN.new("ShaderNodeMath"); mud_mask.operation = 'MULTIPLY'; LL.new(mud_v.outputs[0], mud_mask.inputs[0])
 lm = NN.new("ShaderNodeMapRange"); lm.inputs["From Min"].default_value = 15; lm.inputs["From Max"].default_value = 0; LL.new(sx.outputs["Y"], lm.inputs["Value"])
 LL.new(lm.outputs["Result"], mud_mask.inputs[1])
 mc = NN.new("ShaderNodeMix"); mc.data_type = 'RGBA'; LL.new(mud_mask.outputs[0], mc.inputs["Factor"]); LL.new(col, mc.inputs["A"]); LL.new(mud_c, mc.inputs["B"]); col = mc.outputs["Result"]
 wetall = NN.new("ShaderNodeMath"); wetall.operation = 'MAXIMUM'; LL.new(wet.outputs["Result"], wetall.inputs[0]); LL.new(mud_mask.outputs[0], wetall.inputs[1])
 dk = NN.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; LL.new(wetall.outputs[0], dk.inputs["Factor"])
-dk.inputs["B"].default_value = (0.55, 0.55, 0.55, 1); LL.new(col, dk.inputs["A"])
+dk.inputs["B"].default_value = (0.78, 0.78, 0.78, 1); LL.new(col, dk.inputs["A"])
 LL.new(dk.outputs["Result"], bsdf.inputs["Base Color"]); LL.new(nor, bsdf.inputs["Normal"])
 rw = NN.new("ShaderNodeMix"); rw.data_type = 'FLOAT'; LL.new(wetall.outputs[0], rw.inputs["Factor"]); LL.new(rou, rw.inputs["A"]); rw.inputs["B"].default_value = 0.18
 LL.new(rw.outputs["Result"], bsdf.inputs["Roughness"])
@@ -101,7 +101,7 @@ def water_mat(name, foam_steep=True):
     m, nt = node_mat(name)
     if nt is None: return m
     NN, LL = nt.nodes, nt.links; b = NN["Principled BSDF"]
-    b.inputs["Base Color"].default_value = (0.012, 0.045, 0.05, 1); b.inputs["Roughness"].default_value = 0.07
+    b.inputs["Base Color"].default_value = (0.02, 0.2, 0.28, 1); b.inputs["Roughness"].default_value = 0.07
     b.inputs["IOR"].default_value = 1.33; b.inputs["Specular IOR Level"].default_value = 0.6
     tc = NN.new("ShaderNodeTexCoord")
     nz = NN.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.35 if foam_steep else 1.2; nz.inputs["Detail"].default_value = 12; nz.noise_dimensions = '4D'
@@ -113,7 +113,7 @@ def water_mat(name, foam_steep=True):
     stp = NN.new("ShaderNodeMapRange"); stp.inputs["From Min"].default_value = 0.8; stp.inputs["From Max"].default_value = 0.2; LL.new(sz.outputs["Z"], stp.inputs["Value"])
     emi = NN.new("ShaderNodeMath"); emi.operation = 'MULTIPLY'; emi.inputs[1].default_value = 0.35 if foam_steep else 0.0
     LL.new(stp.outputs["Result"], emi.inputs[0]); LL.new(emi.outputs[0], b.inputs["Emission Strength"])
-    b.inputs["Emission Color"].default_value = (0.03, 0.2, 0.16, 1)
+    b.inputs["Emission Color"].default_value = (0.05, 0.45, 0.45, 1)
     # foam: lip/overhang (normal pointing down/sideways) + soft streak noise + base patches (flood)
     lipm = NN.new("ShaderNodeMapRange"); lipm.inputs["From Min"].default_value = 0.15; lipm.inputs["From Max"].default_value = -0.25; LL.new(sz.outputs["Z"], lipm.inputs["Value"])
     fn = NN.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 0.22; fn.inputs["Detail"].default_value = 12; fn.inputs["Roughness"].default_value = 0.7
@@ -128,7 +128,7 @@ def water_mat(name, foam_steep=True):
     a4 = NN.new("ShaderNodeMath"); a4.operation = 'ADD'; a4.use_clamp = True; LL.new(a3.outputs[0], a4.inputs[0])
     lw = NN.new("ShaderNodeMath"); lw.operation = 'MULTIPLY'; lw.inputs[1].default_value = 1.0 if foam_steep else 0.0
     LL.new(lipm.outputs["Result"], lw.inputs[0]); LL.new(lw.outputs[0], a4.inputs[1])
-    foam = NN.new("ShaderNodeBsdfPrincipled"); foam.inputs["Base Color"].default_value = (0.82, 0.86, 0.86, 1); foam.inputs["Roughness"].default_value = 0.75
+    foam = NN.new("ShaderNodeBsdfPrincipled"); foam.inputs["Base Color"].default_value = (0.95, 0.97, 0.98, 1); foam.inputs["Roughness"].default_value = 0.75
     foam.inputs["Subsurface Weight"].default_value = 0.3; foam.inputs["Subsurface Radius"].default_value = (0.5, 0.5, 0.5)
     ms = NN.new("ShaderNodeMixShader"); LL.new(a4.outputs[0], ms.inputs["Fac"]); LL.new(b.outputs[0], ms.inputs[1]); LL.new(foam.outputs[0], ms.inputs[2])
     # seen from below (camera surfacing): soft teal underwater glow instead of a black underside
@@ -504,7 +504,7 @@ NN, LL = nt.nodes, nt.links
 NN.remove(NN["Principled BSDF"])
 geo = NN.new("ShaderNodeNewGeometry"); tc = NN.new("ShaderNodeTexCoord"); sp = NN.new("ShaderNodeSeparateXYZ"); LL.new(tc.outputs["Object"], sp.inputs["Vector"])
 mr = NN.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = -18; mr.inputs["From Max"].default_value = 20; LL.new(sp.outputs["Z"], mr.inputs["Value"])
-cr = NN.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.005, 0.03, 0.08, 1); cr.color_ramp.elements[1].color = (0.12, 0.5, 0.68, 1)
+cr = NN.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.8, 0.93, 1.0, 1); cr.color_ramp.elements[1].color = (0.08, 0.55, 0.93, 1)
 LL.new(mr.outputs["Result"], cr.inputs["Fac"])
 em = NN.new("ShaderNodeEmission"); LL.new(cr.outputs["Color"], em.inputs["Color"]); em.inputs["Strength"].default_value = 1.0
 tr = NN.new("ShaderNodeBsdfTransparent")
@@ -513,8 +513,8 @@ LL.new(ms.outputs[0], NN["Material Output"].inputs["Surface"])
 bowl.data.materials.append(m)
 bowl.visible_shadow = False
 # the cross-section block: camera looks +X at the section face (x = -3); screen right = shore (-Y)
-oce = pbr_mat("M_OceanCrust", "worn_rock_natural_01", 1.5, (0.32, 0.33, 0.36))
-con = pbr_mat("M_ContCrust", "sandstone_cracks", 2.0, (0.55, 0.38, 0.24))
+oce = pbr_mat("M_OceanCrust", "worn_rock_natural_01", 1.5, (0.45, 0.5, 0.62))
+con = pbr_mat("M_ContCrust", "sandstone_cracks", 2.0, (0.85, 0.55, 0.3))
 mant = pbr_mat("M_Mantle", "rock_wall_17", 2.0, (0.55, 0.22, 0.1))
 _mb = mant.node_tree.nodes["Principled BSDF"]; _mn = mant.node_tree.nodes.new("ShaderNodeTexNoise"); _mn.inputs["Scale"].default_value = 0.6; _mn.inputs["Detail"].default_value = 8
 _mr = mant.node_tree.nodes.new("ShaderNodeValToRGB"); _mr.color_ramp.elements[0].position = 0.45; _mr.color_ramp.elements[0].color = (0, 0, 0, 1); _mr.color_ramp.elements[1].position = 0.7; _mr.color_ramp.elements[1].color = (1.0, 0.35, 0.05, 1)
@@ -525,8 +525,8 @@ wcol, nt = node_mat("M_WaterColumn")
 nt.nodes.remove(nt.nodes["Principled BSDF"])
 gl = nt.nodes.new("ShaderNodeBsdfTransparent"); gl.inputs["Color"].default_value = (0.92, 0.97, 1.0, 1)
 nt.links.new(gl.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
-wv = nt.nodes.new("ShaderNodeVolumePrincipled"); wv.inputs["Color"].default_value = (0.1, 0.35, 0.6, 1); wv.inputs["Density"].default_value = 0.12
-wv.inputs["Absorption Color"].default_value = (0.05, 0.25, 0.5, 1)
+wv = nt.nodes.new("ShaderNodeVolumePrincipled"); wv.inputs["Color"].default_value = (0.2, 0.6, 0.95, 1); wv.inputs["Density"].default_value = 0.06
+wv.inputs["Absorption Color"].default_value = (0.3, 0.7, 0.95, 1)
 nt.links.new(wv.outputs[0], nt.nodes["Material Output"].inputs["Volume"])
 wtopm = simple_mat("M_WaterTopSurf", (0.03, 0.12, 0.2), 0.04)
 D = DC
