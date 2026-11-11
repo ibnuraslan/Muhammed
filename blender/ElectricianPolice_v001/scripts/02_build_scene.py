@@ -284,7 +284,8 @@ def building(name, s, y0, y1, floors, depth=10.0, tint=None, shop="shutter", c="
     if shop == "shutter":
         face_fit(SHUT, name + "_shutter", Vector((xf - s * 0.03, (y0 + y1) / 2, 0.0)), face, min(3.6, w - 1.0), 2.8, c=c, depth_scale=1.0)
     else:
-        box(name + "_shopdark", (min(xf, xf + s * 0.8), y0 + 0.6, 0.0), (max(xf, xf + s * 0.8), y1 - 0.6, 2.8), pbr("ShopInterior", (0.08, 0.06, 0.05), 0.9), c=c)
+        box(name + "_shopdark", (min(xf, xf + s * 0.8), y0 + 0.6, 0.0), (max(xf, xf + s * 0.8), y1 - 0.6, 2.8), pbr("ShopInterior", (0.22, 0.17, 0.12), 0.9), c=c)
+        box(name + "_shopbulb", (min(xf + s * 0.3, xf + s * 0.36), (y0 + y1) / 2 - 0.5, 2.55), (max(xf + s * 0.3, xf + s * 0.36), (y0 + y1) / 2 + 0.5, 2.6), pbr("ShopTube", (1, 1, 1), 0.3, emit=(1.0, 0.9, 0.75), estr=5.0), c=c)
         for k in range(int((w - 1.6) // 0.7)):
             yy = y0 + 0.9 + k * 0.7
             inst(CRATE if k % 2 else WCRATE, name + "_goods%d" % k, (xf - s * 0.35, yy + 0.3, 0.0), rotz=random.uniform(-0.2, 0.2), scale=0.9, c=c)

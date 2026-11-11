@@ -65,7 +65,7 @@ def attach_seq(o, seq):
             c.influence = 0.0; c.keyframe_insert("influence", frame=nxt)
     for fc in fcurves(o):
         for k in fc.keyframe_points: k.interpolation = "CONSTANT"
-def head_frame(rig, f, up_off=0.085, fwd_off=0.012):
+def head_frame(rig, f, up_off=0.085, fwd_off=0.012, sink=0.124):
     Mh = bone_world(rig, "head", f); hp = Mh.translation; up = (Mh.to_3x3() @ Vector((0, 1, 0))).normalized()
     zc = (Mh.to_3x3() @ Vector((0, 0, 1))).normalized()
     pos, yaw = RIG[rig.name].frame_of(f); front = Matrix.Rotation(R_(yaw), 3, "Z") @ Vector((0, -1, 0))
@@ -82,7 +82,7 @@ def head_frame(rig, f, up_off=0.085, fwd_off=0.012):
                 if top is None or d > top: top = d
         o.evaluated_get(dg).to_mesh_clear()
     print("HEADTOP", rig.name, f, round(top, 3))
-    return frame_from(hp + up * (top - 0.138 + up_off * 0.0) + fwd * (fwd_off - 0.01), fwd, up)
+    return frame_from(hp + up * (top - sink) + fwd * (fwd_off - 0.01), fwd, up)
 def hand_frame(rig, s, f, off=(0, 0, 0), fwd_axis="fingers"):
     Mw = bone_world(rig, "wrist." + s, f); R3 = Mw.to_3x3()
     return Mw @ Matrix.Translation(Vector(off))
@@ -99,7 +99,7 @@ attach_seq(hatW, [(1, CH["ManW"], "head", head_frame(CH["ManW"], 320), 320), (50
                   (1380, CH["ManW"], "head", head_frame(CH["ManW"], 1390), 1390)])
 for nm, cp in CAPS.items():
     fe_ = 1 if nm == "OfficerA" else 1200
-    attach_seq(cp, [(1, CH[nm], "head", head_frame(CH[nm], fe_, 0.07, 0.0), fe_)])
+    attach_seq(cp, [(1, CH[nm], "head", head_frame(CH[nm], fe_, 0.07, 0.0, sink=0.03), fe_)])
 # ticket pad (officer's left hand), slip (officer right -> man right), phone torch, fanning paper
 pad = ob("TicketPad"); slip = ob("TicketSlip")
 def palm_pose(rig, s, f, along=0.08, out=0.025, flip=False):
@@ -369,7 +369,7 @@ def drive(root, f0, f1, p0, p1, heading_deg):
 drive(ob("Rick_0"), 1, 260, (-3.8, 4.0, 0), (-3.8, 14.5, 0), 180)
 drive(ob("Rick_1"), 1, 420, (1.9, 40.0, 0), (1.9, 40.0 - 5.0 * 7, 0), 0)
 drive(ob("Rick_2"), 1, 420, (1.9, 75.0, 0), (1.9, 75.0 - 6.0 * 7, 0), 0)
-drive(ob("Rick_3"), 1, 420, (-1.8, 32.0, 0), (-1.8, 32.0 + 3.5 * 7, 0), 180)
+drive(ob("Rick_3"), 1, 1560, (-1.8, 32.0, 0), (-1.8, 118.0, 0), 180)
 drive(ob("Rick_4"), 1370, 1560, (1.9, 75.0, 0), (1.9, 75.0 - 5.0 * 3.2, 0), 0)
 for nm in ("Rick_0", "Rick_1", "Rick_2", "Rick_3"):
     for fc in fcurves(ob(nm)):
@@ -470,6 +470,12 @@ if bulb:
 for f, ex in ((1, 0.0), (1150, 0.0), (1235, 0.8), (1250, 1.2), (1388, 1.2), (1418, 0.9), (1560, 0.9)):
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
 
+# warm spill from the shop across the road lights his face for the final smirk
+ff = bpy.data.lights.new("FaceFill", "AREA"); ff.size = 1.2; ff.color = (1.0, 0.8, 0.55)
+ffo = bpy.data.objects.new("FaceFill", ff); C("Lights").objects.link(ffo) if "Lights" in bpy.data.collections else sc.collection.objects.link(ffo)
+ffo.location = (-2.4, 58.6, 2.4); ffo.rotation_euler = (Vector((-3.6, 56.8, 1.6)) - ffo.location).to_track_quat("-Z", "Y").to_euler()
+for f, e in ((1, 0), (1430, 0), (1470, 45), (1560, 45)):
+    ff.energy = e; ff.keyframe_insert("energy", frame=f)
 # ------------------------------------------------------------------ the one continuous camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 24; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.02
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 4.0
@@ -518,7 +524,7 @@ CAMK = [
     (895, V(22.22, 43.42, 1.15), HW[895] + V(-0.06, 0.12, -0.07), 32),
     (925, V(22.6, 43.05, 1.15), V(21.6, 43.3, 1.0), 24),
     (960, V(23.4, 43.0, 1.12), V(22.0, 43.4, 1.0), 24),
-    (995, V(24.05, 42.85, 1.12), V(23.4, 43.45, 1.02), 28),
+    (995, V(24.05, 42.85, 1.14), V(22.2, 43.3, 1.15), 26),
     (1025, V(23.95, 42.5, 1.35), V(24.7, 43.3, 1.3), 28),
     (1050, V(24.8, 42.68, 1.5), V(LEVER_PIVOT.x - 0.1, LEVER_PIVOT.y, 1.45), 34),
     (1075, V(24.85, 42.72, 1.32), V(LEVER_PIVOT.x - 0.05, LEVER_PIVOT.y, 1.28), 38),
@@ -533,10 +539,10 @@ CAMK = [
     (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 24),
     (1290, V(-9.2, 55.2, 1.5), V(-11.4, 53.6, 1.25), 28),
     (1330, V(-11.6, 57.6, 1.7), V(-14.3, 56.4, 1.5), 28),
-    (1360, V(-15.4, 57.6, 2.1), CLOCK_POS, 30),
-    (1381, V(-17.4, 57.1, 2.3), CLOCK_POS, 40),
-    (1395, V(-16.4, 57.2, 2.1), V(-15.0, 60.0, 1.8), 30),
-    (1410, V(-13.5, 57.0, 1.8), V(-10.0, 58.0, 1.5), 26),
+    (1358, V(-15.6, 57.5, 2.15), CLOCK_POS, 42),
+    (1381, V(-17.5, 57.1, 2.32), CLOCK_POS, 45),
+    (1406, V(-10.1, 59.1, 1.55), V(-11.35, 60.5, 1.12), 30),
+    (1424, V(-9.0, 57.4, 1.6), V(-4.0, 56.4, 1.45), 26),
     (1440, V(-7.6, 57.0, 1.6), V(-3.6, 55.2, 1.4), 26),
     (1470, V(-5.6, 57.8, 1.55), V(-3.6, 55.6, 1.5), 28),
     (1515, V(-4.5, 58.9, 1.58), V(-3.6, 56.5, 1.6), 32),

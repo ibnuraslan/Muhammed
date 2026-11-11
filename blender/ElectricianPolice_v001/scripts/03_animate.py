@@ -136,6 +136,8 @@ def derived_mesh(src, name, keep, push, mat, faces=False):
     for md in list(o.modifiers):
         if md.type not in ("ARMATURE",): o.modifiers.remove(md)
     so = o.modifiers.new("push", "DISPLACE"); so.strength = push; so.mid_level = 0.0
+    if faces:
+        sm = o.modifiers.new("smooth", "SMOOTH"); sm.factor = 0.6; sm.iterations = 6
     sol = o.modifiers.new("solid", "SOLIDIFY"); sol.thickness = 0.004
     return o
 VEST = bpy.data.materials.new("HiVis"); VEST.use_nodes = True
