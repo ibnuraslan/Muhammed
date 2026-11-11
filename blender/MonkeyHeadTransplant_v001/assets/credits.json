@@ -1,0 +1,65 @@
+{
+ "monkey": {
+  "uid": "50e4b1da03494429b1265fc095f2c530",
+  "title": "Realsitic Monkey",
+  "author": "TdoubleU8",
+  "author_profile": "https://sketchfab.com/TdoubleU8",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/50e4b1da03494429b1265fc095f2c530",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chimp_dance": {
+  "uid": "3ba199e0a78546598f868e86d78495a0",
+  "title": "Simio Monkey dancing",
+  "author": "pepetrincado",
+  "author_profile": "https://sketchfab.com/pepetrincado",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3ba199e0a78546598f868e86d78495a0",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "brain": {
+  "uid": "7a27c17fd6c0488bb31ab093236a47fb",
+  "title": "Human Brain",
+  "author": "3DRT STUDIOS",
+  "author_profile": "https://sketchfab.com/Hanako.com",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7a27c17fd6c0488bb31ab093236a47fb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tools": {
+  "uid": "2971a44d334b45ff926792e92a6bcee7",
+  "title": "SURGICAL INSTRUMENT",
+  "author": "ferofluid",
+  "author_profile": "https://sketchfab.com/ferofluid",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2971a44d334b45ff926792e92a6bcee7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "scope": {
+  "uid": "7c653d3fb2a941deafa2f556fb95487f",
+  "title": "Oscillscope310a",
+  "author": "hughzey3",
+  "author_profile": "https://sketchfab.com/hughzey3",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7c653d3fb2a941deafa2f556fb95487f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chair": {
+  "uid": "0751847250844924b9051f6b2e771690",
+  "title": "Karol Szymanowski's Armchair #1",
+  "author": "Virtual Museums of Ma\u0142opolska",
+  "author_profile": "https://sketchfab.com/WirtualneMuzeaMalopolski",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0751847250844924b9051f6b2e771690",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "cart": {
+  "uid": "2a0a574f9e374702af8c415fce296f45",
+  "title": "Medical Cart",
+  "author": "NicolasVB",
+  "author_profile": "https://sketchfab.com/NicolasVB",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2a0a574f9e374702af8c415fce296f45",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
