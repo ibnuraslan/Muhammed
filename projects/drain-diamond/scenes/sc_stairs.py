@@ -115,8 +115,8 @@ def extinguisher(name):
 def build(variant=None):
     c = {}
     world_flat((0.04, 0.04, 0.045), 1.0)
-    wall = dd.tex_mat("painted_plaster_wall", 0.8, tint=(0.75, 0.74, 0.7), name="StairWall", sat=0.4)
-    step = dd.tex_mat("concrete_floor_painted", 1.0, tint=(0.55, 0.55, 0.55), name="StairStep", sat=0.3)
+    wall = dd.tex_mat("painted_plaster_wall", 0.8, tint=(0.85, 0.85, 0.82), name="StairWall", sat=0.4)
+    step = dd.tex_mat("concrete_floor_painted", 1.0, tint=(0.6, 0.6, 0.6), name="StairStep", sat=0.3)
     settle = "min(1, max(0, (frame - 10) / 100.0))" if variant == "settle" else "min(0.5, frame / 240.0)"
     dusted(step, settle); dusted(wall, settle + " * 0.4")
     nose = pbr("Nosing", (0.2, 0.2, 0.21), 0.4, 0.8)
@@ -131,9 +131,9 @@ def build(variant=None):
     # light: one caged bulb per landing, warm; a green exit sign glow (no text)
     for f in range(-1, 2):
         for (y, dz) in ((-0.9, 2.6), (L + 1.0, 2.6 + FH / 2)):
-            l = bpy.data.lights.new("Bulb", 'POINT'); l.energy = 320; l.color = (1.0, 0.92, 0.8); l.shadow_soft_size = 0.05
+            l = bpy.data.lights.new("Bulb", 'POINT'); l.energy = 320; l.color = (0.92, 0.96, 1.0); l.shadow_soft_size = 0.05
             o = bpy.data.objects.new("Bulb", l); bpy.context.collection.objects.link(o); o.location = (0.9, y, f * FH + dz)
-            cyl("BulbGlass", (0.9, y, f * FH + dz), 0.04, 0.1, emissive("BulbE", (1.0, 0.85, 0.65), 20), verts=12)
+            cyl("BulbGlass", (0.9, y, f * FH + dz), 0.04, 0.1, emissive("BulbE", (0.92, 0.96, 1.0), 20), verts=12)
     box("ExitSign", (-1.29, -0.6, 2.4), (0.02, 0.35, 0.15), emissive("ExitGreen", (0.1, 1.0, 0.35), 3))
     box("ExitDoor", (-1.29, -0.5, 1.05), (0.04, 0.95, 2.1), pbr("ExitDoorM", (0.25, 0.27, 0.28), 0.4, 0.6))
     if variant == "settle":

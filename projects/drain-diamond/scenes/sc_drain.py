@@ -299,7 +299,7 @@ def anim_torch(c, t):
     sweep = -0.13 + 0.26 * ease(t)
     hand = DRAIN + Vector((0.32, -0.32, 0.45))
     reach(h, "R", hand, Vector((0.5, -0.6, -0.4)))
-    tgt = DRAIN + Vector((sweep, 0.03 - 0.05 * sweep, -PIT_D))
+    tgt = DRAIN + Vector((0.02 + 0.6 * sweep, -0.03, -PIT_D))
     tb = c["torch_body"]; tb.location = hand + Vector((-0.03, 0.03, -0.04)); point_at(tb, tgt); tb.rotation_euler.x += 0
     to = c["torch"]; to.location = hand + Vector((-0.06, 0.06, -0.08)); point_at(to, tgt)
     fingers_curl(h, 55, side=("R",), thumb=25)
@@ -339,8 +339,8 @@ def cam_circle(c, t):
 
 def cam_bag(c, t):
     e = ease(t)
-    loc = CONT_AT + Vector((-1.7, 0.35, 1.05)).lerp(Vector((-1.5, 0.25, 0.98)), e)
-    return loc, CONT_AT + Vector((0.3, -0.35, 0.5)), 30
+    loc = CONT_AT + Vector((-2.6, 0.9, 1.5)).lerp(Vector((-2.3, 0.7, 1.4)), e)
+    return loc, CONT_AT + Vector((0.3, -0.4, 0.7)), 28
 
 
 def cam_yard(c, t):
@@ -357,8 +357,8 @@ def cam_gate(c, t):
 
 def cam_torch(c, t):
     e = ease(t)
-    loc = Vector((DRAIN.x - 1.2, DRAIN.y + 0.6, 3.4)).lerp(Vector((DRAIN.x - 1.0, DRAIN.y + 0.5, 3.0)), e)
-    return loc, DRAIN + Vector((0.2, -0.2, 0.0)), 30
+    loc = Vector((DRAIN.x - 2.2, DRAIN.y + 0.4, 4.2)).lerp(Vector((DRAIN.x - 1.9, DRAIN.y + 0.3, 3.8)), e)
+    return loc, DRAIN + Vector((0.35, -0.3, 0.3)), 28
 
 
 MOVES = {
