@@ -89,7 +89,7 @@ def filing_cabinet(x, steel, handle_m, open_drawer=False):
         hnd = box("Handle", (0, -0.03, 0.06), (0.16, 0.02, 0.025), handle_m, bevel=0.005)
         lbl = box("Label", (0, -0.014, 0.1), (0.09, 0.004, 0.04), pbr("LabelCard", (0.85, 0.84, 0.8), 0.8))
         parts = [front, hnd, lbl]
-        if open_drawer and k == 3:                 # top drawer: chest height, browsed standing up
+        if open_drawer and k == 2:                 # waist-height drawer: browsed standing upright
             parts += [box("DrawerSideL", (-0.2, 0.3, -0.02), (0.012, 0.6, 0.24), steel),
                       box("DrawerSideR", (0.2, 0.3, -0.02), (0.012, 0.6, 0.24), steel),
                       box("DrawerBack", (0, 0.6, -0.02), (0.41, 0.012, 0.24), steel),
@@ -166,8 +166,8 @@ def build(variant=None):
     for k, x in enumerate((-2.2, -1.72, -1.24, -0.48, 0.0, 0.48, 1.24, 1.72)):
         ds = filing_cabinet(x, steel, handle_m, open_drawer=(x == 0.0))
         if x == 0.0:
-            c["drawer"] = ds[3]; c["drawer_closed_y"] = ds[3].location.y
-            c["folders"] = hanging_folders(ds[3], rng)
+            c["drawer"] = ds[2]; c["drawer_closed_y"] = ds[2].location.y
+            c["folders"] = hanging_folders(ds[2], rng)
     # ---------------------------------------------------------------- work tables, boxes, paper
     top = pbr("Laminate", (0.72, 0.72, 0.7), 0.35)
     legm = pbr("TableLeg", (0.15, 0.15, 0.16), 0.4, 0.8)
@@ -367,8 +367,8 @@ def pose_woman(c, sec, lift):
     yk = 0.04 + (6 + walk * (k_target - 6)) * 0.016           # along the drawer (local +Y = into the cabinet)
     hand = M @ Vector((0.02, yk, 0.16 + 0.015 * abs(math.sin(sec * 9)) * (1 - lift)))
     hand += Vector((0, 0, 0.35 * ease(lift)))
-    reach(h, "R", hand + Vector((0, -0.04, 0.05)), Vector((0.8, -0.3, -0.4)), Vector((0, 0.35, -1)))
-    reach(h, "L", M @ Vector((-0.16, -0.03, 0.15)), Vector((-0.8, -0.3, -0.5)), Vector((0, 0.6, -0.8)))
+    reach(h, "R", hand + Vector((0, -0.04, 0.05)), Vector((0.8, -0.2, -0.8)), Vector((0, 0.35, -1)))
+    reach(h, "L", M @ Vector((-0.17, -0.04, 0.13)), Vector((-0.8, -0.2, -0.8)), Vector((0.1, 0.5, -0.85)))      # resting on the drawer front
     fingers_curl(h, 20 + 30 * min(1.0, lift * 3), thumb=20)
     h.rot("neck01", (-1, 0, 0), 6); h.rot("head", (-1, 0, 0), 14)      # upright, eyes down into the drawer (she faces +Y)
     f = c["folders"][k_target]
@@ -438,21 +438,21 @@ def anim_reveal(c, t):
 
 
 # ============================================================================ cameras
-DRAWER_CAM = (Vector((0.95, 2.05, 1.55)), Vector((0.8, 2.2, 1.5)))    # fixed, beside the cabinet: never tied to her body
+DRAWER_CAM = (Vector((0.95, 2.05, 1.4)), Vector((0.8, 2.2, 1.36)))    # fixed, beside the cabinet: never tied to her body
 
 
 def cam_drawer(c, t):
     e = ease(t)
-    tgt = (c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))).lerp(c["people"]["woman"].bone_head("head"), 0.35)
-    return (DRAWER_CAM[0].lerp(DRAWER_CAM[1], e) + Vector((0.1, -0.15, 0.1)), tgt, 40)
+    tgt = (c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))).lerp(c["people"]["woman"].bone_head("head"), 0.55)
+    return (DRAWER_CAM[0].lerp(DRAWER_CAM[1], e) + Vector((0.25, -0.35, 0.25)), tgt, 35)
 
 
 def cam_reveal(c, t):
     e = ease(t)
-    start = DRAWER_CAM[1]; end = Vector((0.5, -3.75, 2.45))
-    tgt0 = c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02)); tgt1 = Vector((0.4, 0.5, 0.75))
+    start = DRAWER_CAM[1] + Vector((0.25, -0.35, 0.25)); end = Vector((0.5, -3.75, 2.45))
+    tgt0 = (c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))).lerp(c["people"]["woman"].bone_head("head"), 0.55); tgt1 = Vector((0.4, 0.5, 0.75))
     loc = start.lerp(end, e)
-    return (loc, tgt0.lerp(tgt1, ease(min(1.0, t * 1.4))), 45 - 21 * e)
+    return (loc, tgt0.lerp(tgt1, ease(min(1.0, t * 1.4))), 35 - 11 * e)
 
 
 def anim_filing(c, t):
@@ -511,7 +511,7 @@ MOVES = {
                        cam=lambda c, t: (Vector((0.5, -3.75, 2.45)).lerp(Vector((0.4, -3.55, 2.35)), ease(t)), Vector((0.4, 0.5, 0.75)), 24),
                        focus=lambda c, t: Vector((0.0, 0.5, 0.8))),
     "drawer_close": dict(kind="anim", dof=2.4, far=10.0, anim=anim_drawer_close,
-                         cam=lambda c, t: (DRAWER_CAM[1] + Vector((0.1, -0.15, 0.1)), c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02)), 40),
+                         cam=lambda c, t: (DRAWER_CAM[1] + Vector((0.25, -0.35, 0.25)), c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02)), 35),
                          focus=lambda c, t: c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))),
     "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location, anim=lambda c, t: anim_filing(c, t)),
     "compare": dict(kind="anim", dof=2.8, far=10.0, cam=cam_compare, focus=lambda c, t: c["mon"] + Vector((0, -0.32, 0)), anim=anim_compare),
