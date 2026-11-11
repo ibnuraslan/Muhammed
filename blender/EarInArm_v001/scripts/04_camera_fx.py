@@ -51,32 +51,54 @@ Mw = earB.matrix_world
 verts = [Mw @ v.co for v in earB.data.vertices]; polys = [tuple(p.vertices) for p in earB.data.polygons]
 bvh = BVHTree.FromPolygons(verts, polys)
 ctr = sum(verts, Vector()) / len(verts)
-M_VES = newmat("SB_Vessel", (0.6, 0.03, 0.04), 0.3, sss=0.3, emit=((1.0, 0.08, 0.08), 0.6))
+M_VES = newmat("SB_Vessel", (0.3, 0.006, 0.014), 0.18, sss=0.3, emit=((0.9, 0.05, 0.05), 0.3), coat=1.0)
+M_VES.node_tree.nodes["Principled BSDF"].inputs["Coat Roughness"].default_value = 0.05
 ves_em = M_VES.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f in range(775, 1063, 30):
-    ves_em.default_value = 1.5 if (f // 30) % 2 else 0.4; ves_em.keyframe_insert("default_value", frame=f)
-for i in range(22):
-    start = ctr + V(random.uniform(-0.09, 0.09), random.uniform(-0.12, 0.12), 0.03)
-    p, n, _, _ = bvh.find_nearest(start)
-    if p is None: continue
-    pts = [p]; d = V(random.uniform(-1, 1), random.uniform(-1, 1), 0).normalized()
-    for k in range(14):
-        q = pts[-1] + d * 0.012; q, n2, _, _ = bvh.find_nearest(q)
-        if q is None: break
-        pts.append(q + n2 * 0.003); d = (d + V(random.uniform(-0.5, 0.5), random.uniform(-0.5, 0.5), 0)).normalized()
-    cu = bpy.data.curves.new("SB_Vessel%d" % i, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = random.uniform(0.0015, 0.003); cu.bevel_resolution = 2
+    ves_em.default_value = 0.9 if (f // 30) % 2 else 0.2; ves_em.keyframe_insert("default_value", frame=f)
+def grow(pts, r0, f0, dur, name):
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = r0; cu.bevel_resolution = 3
     sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
-    for k, q in enumerate(pts): sp.points[k].co = (*q, 1)
-    cu.materials.append(M_VES); o = bpy.data.objects.new(cu.name, cu); bpy.data.collections["Studio_Tissue"].objects.link(o)
-    f0 = 830 + i * 6
-    cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=f0); cu.bevel_factor_end = 1.0; cu.keyframe_insert("bevel_factor_end", frame=f0 + 90)
+    for k, q in enumerate(pts): sp.points[k].co = (*q, 1); sp.points[k].radius = 1.0 - 0.75 * k / max(1, len(pts) - 1)
+    cu.materials.append(M_VES); o = bpy.data.objects.new(name, cu); bpy.data.collections["Studio_Tissue"].objects.link(o)
+    cu.bevel_factor_mapping_end = 'SPLINE'
+    cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=f0); cu.bevel_factor_end = 1.0; cu.keyframe_insert("bevel_factor_end", frame=f0 + dur)
+    return o
+def walk_surf(start, d, n, step, wob):
+    p, nrm, _, _ = bvh.find_nearest(start)
+    if p is None: return []
+    pts = [p + nrm * 0.004]
+    for k in range(n):
+        q = pts[-1] + d * step; q, n2, _, _ = bvh.find_nearest(q)
+        if q is None: break
+        pts.append(q + n2 * 0.004); d = (d + V(random.uniform(-wob, wob), random.uniform(-wob, wob), 0)).normalized()
+    return pts
+# trunks enter from the ear's rim (where the pocket's blood supply comes in) and branch twice
+nv = 0
+for i in range(9):
+    a = i / 9 * 2 * math.pi
+    start = ctr + V(0.11 * math.cos(a), 0.15 * math.sin(a), 0.03)
+    d0 = (ctr - start); d0.z = 0; d0.normalize()
+    trunk = walk_surf(start, d0, 16, 0.011, 0.35)
+    if len(trunk) < 4: continue
+    f0 = 828 + i * 7; grow(trunk, 0.0042, f0, 80, "SB_Vessel%d" % nv); nv += 1
+    for b in range(3):
+        k = random.randint(3, len(trunk) - 2); dd = (trunk[k] - trunk[k - 1]).normalized()
+        side = V(-dd.y, dd.x, 0) * random.choice((-1, 1))
+        br = walk_surf(trunk[k], (dd + side).normalized(), 8, 0.009, 0.5)
+        if len(br) > 3:
+            fb = f0 + int(80 * k / len(trunk)); grow(br, 0.0024, fb, 60, "SB_Vessel%d" % nv); nv += 1
+            k2 = random.randint(2, len(br) - 2); d2 = (br[k2] - br[k2 - 1]).normalized()
+            tw = walk_surf(br[k2], (d2 + V(-d2.y, d2.x, 0) * random.choice((-1, 1))).normalized(), 5, 0.007, 0.6)
+            if len(tw) > 2: grow(tw, 0.0013, fb + int(60 * k2 / len(br)), 40, "SB_Vessel%d" % nv); nv += 1
+print("SB_VESSELS", nv)
 
 # ================================================================== world + OR lights + render settings
 w = bpy.data.worlds.get("World") or bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
 env = w.node_tree.nodes.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(os.path.join(HERE, "..", "assets", "hdri", "surgery_2k.hdr"))
-bg = w.node_tree.nodes["Background"]; w.node_tree.links.new(env.outputs["Color"], bg.inputs["Color"]); bg.inputs["Strength"].default_value = 0.6
+bg = w.node_tree.nodes["Background"]; w.node_tree.links.new(env.outputs["Color"], bg.inputs["Color"]); bg.inputs["Strength"].default_value = 0.3
 for i, (loc, en, sz, col) in enumerate(((V(0.3, 0.2, 2.3), 260, 0.7, (1, 0.98, 0.95)), (V(1.6, -1.8, 2.4), 300, 1.5, (1, 0.96, 0.9)),
-                                       (V(-1.5, 1.2, 2.2), 150, 1.2, (0.85, 0.92, 1.0)))):
+                                       (V(-1.5, 1.2, 2.2), 60, 1.2, (0.85, 0.92, 1.0)), (V(-0.8, 2.2, 1.9), 180, 0.5, (0.8, 0.9, 1.0)))):
     ld = bpy.data.lights.new("OR_Key%d" % i, 'AREA'); ld.energy = en; ld.size = sz; ld.color = col
     lo = bpy.data.objects.new(ld.name, ld); bpy.data.collections["OR_Set"].objects.link(lo); lo.location = loc
     lo.rotation_euler = (V(0.3, 0, 1.0) - loc).to_track_quat('-Z', 'Y').to_euler()
@@ -89,7 +111,7 @@ sc.cycles.denoiser = 'OPENIMAGEDENOISE'; sc.cycles.device = 'CPU'
 sc.cycles.max_bounces = 8; sc.cycles.diffuse_bounces = 3; sc.cycles.glossy_bounces = 3; sc.cycles.transmission_bounces = 8; sc.cycles.transparent_max_bounces = 8
 sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False; r.use_persistent_data = True
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5
-sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - High Contrast'; sc.view_settings.exposure = -1.9
+sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'; sc.view_settings.exposure = -2.5
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '8'; r.image_settings.compression = 15
 r.filepath = "//render/EarInArm_"
 
@@ -122,21 +144,21 @@ SEGS = [
   [  # studio A: out of the membrane, orbit the rib cage, push to the block being lifted
     (172, V(40.03, -0.6, 1.17), P0 + V(-0.04, 0.2, 0.05), 32), (186, V(40.07, -0.52, 1.2), V(40.02, 0, 1.15), 30), (212, V(40.33, -0.47, 1.32), V(40.02, 0, 1.18), 28),
     (240, V(40.12, -0.44, 1.2), P0 + V(0, 0, 0.03), 34), (265, V(39.93, -0.33, 1.06), P0, 45), (300, V(40.0, -0.31, 1.15), P0 + V(0, -0.03, 0.01), 52),
-    (328, BLK_SA + V(0.012, -0.1, 0.025), BLK_SA + V(0, 0.01, 0), 55), (342, BLK_SA + V(-0.002, -0.045, 0.01), BLK_SA, 70)],
+    (328, BLK_SA + V(0.02, -0.16, 0.035), BLK_SA + V(0, 0.01, 0), 45), (337, BLK_SA + V(0.006, -0.085, 0.015), BLK_SA, 40), (342, BLK_SA + V(-0.002, -0.042, 0.008), BLK_SA, 40)],
   [  # OR: out of the block on the tray, orbit the carving hands, follow the ear to the arm, macro on the bump, into the skin
     (343, BLK + V(0.0, -0.012, 0.1), BLK, 70), (362, BLK + V(-0.08, -0.2, 0.16), BLK + V(0, 0, 0.01), 40),
     (400, BLK + V(-0.3, -0.28, 0.28), BLK + V(0, 0.03, 0.03), 34), (440, BLK + V(-0.06, -0.42, 0.34), BLK + V(0, 0.04, 0.04), 34),
     (480, BLK + V(0.28, -0.32, 0.3), BLK + V(0, 0.03, 0.03), 36), (525, BLK + V(0.1, -0.22, 0.26), BLK + V(0, 0.0, 0.0), 42),
     (565, BLK + V(0.25, 0.12, 0.36), BLK + V(-0.08, 0.2, 0.1), 30), (605, V(1.15, -0.25, 1.38), V(0.85, -0.1, 1.08), 32),
     (645, INC + V(0.3, -0.36, 0.26), INC, 34), (685, INC + V(0.17, -0.22, 0.07), INC, 42), (725, INC + V(0.07, -0.14, 0.05), INC, 52),
-    (760, INC + V(0.05, -0.12, 0.08), INC, 50), (788, INC + V(0.01, -0.05, 0.065), INC, 58), (803, INC + V(0.0, -0.012, 0.022), INC + V(0, 0, -0.01), 60)],
+    (760, INC + V(0.05, -0.12, 0.08), INC, 50), (795, INC + V(0.02, -0.09, 0.1), INC, 58), (803, INC + V(0.0, -0.025, 0.04), INC + V(0, 0, -0.01), 60)],
   [  # studio B: under the skin, orbit the growing ear, back up through the membrane
-    (804, SB + V(0.0, -0.01, 0.445), SB + V(0, 0.01, 0.0), 40), (830, SB + V(0.03, -0.08, 0.3), SB + V(0, 0, 0.03), 36),
+    (804, SB + V(0.0, -0.01, 0.43), SB + V(0, 0.01, 0.0), 40), (830, SB + V(0.03, -0.08, 0.3), SB + V(0, 0, 0.03), 36),
     (875, SB + V(0.22, -0.24, 0.24), SB + V(0, 0, 0.035), 34), (925, SB + V(0.3, 0.12, 0.2), SB + V(0, 0, 0.035), 36),
     (975, SB + V(0.0, 0.32, 0.22), SB + V(0, 0, 0.035), 36), (1015, SB + V(-0.24, 0.08, 0.16), SB + V(0, 0, 0.035), 40),
-    (1050, SB + V(-0.05, -0.05, 0.33), SB + V(0, 0, 0.03), 38), (1062, SB + V(0.0, -0.01, 0.445), SB, 40)],
+    (1045, SB + V(-0.08, -0.06, 0.3), SB + V(0, 0, 0.03), 38), (1055, SB + V(-0.02, -0.03, 0.38), SB + V(0, 0, 0.03), 40), (1062, SB + V(0.0, -0.01, 0.44), SB, 40)],
   [  # OR: out of the arm, over the surgeon's shoulder as the ear is lifted out, fly to the head, macro join, stitches, pull out and orbit to the front
-    (1063, INC + V(0.0, -0.012, 0.024), INC + V(0, 0, -0.01), 60), (1078, INC + V(0.04, -0.1, 0.09), INC, 50), (1130, INC + V(0.14, -0.24, 0.13), INC, 40),
+    (1063, INC + V(0.0, -0.025, 0.04), INC + V(0, 0, -0.01), 60), (1071, INC + V(0.04, -0.1, 0.09), INC, 50), (1130, INC + V(0.14, -0.24, 0.13), INC, 40),
     (1180, V(0.98, 0.12, 1.42), INC + V(0, 0, 0.06), 36), (1240, V(0.92, 0.3, 1.5), INC + V(0, 0, 0.18), 36), (1300, V(0.88, 0.22, 1.6), FT, 34),
     (1345, EO(0.6, -0.2, 0.3), EO(0.1, 0, 0.05), 32), (1385, EO(0.4, -0.15, 0.17), EAR_W, 38), (1425, EO(0.26, -0.09, 0.08), EAR_W, 45),
     (1465, EO(0.12, -0.03, 0.03), EAR_W + V(0, 0, -0.005), 55), (1505, EO(0.11, 0.03, 0.04), EAR_W, 55), (1545, EO(0.1, -0.035, 0.0), EAR_W, 55),
@@ -177,6 +199,18 @@ for f, tgt in ((1, V(0.05, -0.1, 1.3)), (330, BLK), (600, INC), (1300, INC), (14
     spot.location = tgt + V(0.25, 0.1, 1.0); spot.rotation_euler = (tgt - spot.location).to_track_quat('-Z', 'Y').to_euler()
     spot.keyframe_insert("location", frame=f); spot.keyframe_insert("rotation_euler", frame=f)
 print("JUMPS", JUMPS)
+cuT = bpy.data.curves.new("Suture_Thread", 'CURVE'); cuT.dimensions = '3D'; cuT.bevel_depth = 0.00025; cuT.bevel_resolution = 2
+spT = cuT.splines.new('POLY'); spT.points.add(3); cuT.materials.append(bpy.data.materials["Suture"])
+thr_o = bpy.data.objects.new("Suture_Thread", cuT); bpy.data.collections["Props"].objects.link(thr_o)
+thr_o.hide_render = True; thr_o.keyframe_insert("hide_render", frame=1); thr_o.hide_render = False; thr_o.keyframe_insert("hide_render", frame=1506)
+thr_o.hide_render = True; thr_o.keyframe_insert("hide_render", frame=1650)
+for f in range(1506, 1651, 2):
+    ev_at(f); nd_ = OB["Needle"].matrix_world.translation.copy()
+    i_ = max(0, min(8, (f - 1510) // 15)); st_ = OB["Stitch%d" % i_].matrix_world.translation.copy()
+    tug = 1.0 - min(1.0, ((f - 1510) % 15) / 8.0)   # slack right after a stitch, then pulled taut
+    mid = nd_.lerp(st_, 0.5) - V(0, 0, 0.006 * tug)
+    for k_, q in enumerate((st_, st_.lerp(mid, 0.6), mid, nd_)):
+        spT.points[k_].co = (*q, 1); spT.points[k_].keyframe_insert("co", frame=f)
 beats = [(1, 1, "Lose an ear in an accident"), (2, 127, "A surgeon takes some cartilage"), (3, 343, "and carves it into the shape"),
          (4, 565, "Then it's slipped into a pocket"), (5, 775, "Inside your arm, it grows"), (6, 1063, "Once it's fully developed"),
          (7, 1309, "The blood vessels are connected"), (8, 1501, "and the skin is carefully stitched"), (9, 1645, "giving you a brand new ear")]

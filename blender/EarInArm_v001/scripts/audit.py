@@ -67,4 +67,29 @@ tz = OB["Tray"].matrix_world.translation.z
 sc.frame_set(sc.frame_end)
 bad = [(o.name, round(o.matrix_world.translation.z - tz, 3)) for o in OB if o.name.startswith("Shaving") and abs(o.matrix_world.translation.z - tz) > 0.03]
 log("SHAVINGS off the tray at end:", bad or "none")
+# penetration count: fingertips of every person inside a body or prop surface (BVH nearest point + normal side), feet below the floor
+from mathutils.bvhtree import BVHTree
+TIPS = ["finger%d-3.%s" % (k, s_) for k in range(1, 6) for s_ in "LR"]
+TARGETS = ["Patient.body", "Cart_Block", "Tray", "Trolley_Top", "ArmBoard", "Chair_Seat", "Chair_Back", "Chair_Arm0", "Chair_Arm1", "SA_CartBlock", "SA_Thorax", "Ear_New", "Ear_InArm"]
+pen = []; feet = []
+for f in range(1, sc.frame_end + 1, 15):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+    trees = {}
+    for n in TARGETS:
+        o = OB.get(n)
+        if o and not o.hide_render: trees[n] = (BVHTree.FromObject(o.evaluated_get(dg), dg), o.matrix_world.copy())
+    for rn in ("Surgeon", "SurgeonSA", "Nurse", "Patient"):
+        rig = OB.get(rn)
+        if not rig: continue
+        for t in TIPS:
+            pw = rig.matrix_world @ rig.pose.bones[t].tail
+            for n, (tr, M) in trees.items():
+                if n == "Patient.body" and rn == "Patient": continue
+                pl = M.inverted() @ pw; loc, nrm, idx, dist = tr.find_nearest(pl)
+                if loc is not None and dist < 0.03 and (pl - loc).dot(nrm) < -0.004: pen.append((f, rn, t, n, round(dist, 3)))
+        for s_ in "LR":
+            z = (rig.matrix_world @ rig.pose.bones["toe1-1." + s_].head).z
+            if rn != "Patient" and z < -0.01 and rig.matrix_world.translation.x < 20 and abs((rig.matrix_world @ rig.pose.bones["root"].head).x) < 20: feet.append((f, rn, s_, round(z, 3)))
+log("PENETRATION fingertip-inside-surface count (every 15 f):", len(pen), pen[:25])
+log("FEET below floor count:", len(feet), feet[:10])
 open(out, "w").write("\n".join(L) + "\n"); print("\n".join(L))

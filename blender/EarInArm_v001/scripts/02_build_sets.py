@@ -32,15 +32,17 @@ def mat(name, col, rough=0.5, metal=0.0, sss=0.0, emit=None, alpha=1.0, trans=0.
     if coat: b.inputs["Coat Weight"].default_value = coat
     return m
 
-def tex_mat(name, folder, scale=1.0, tint=None):
+def tex_mat(name, folder, scale=1.0, tint=None, box=False):
     m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
     tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (scale,) * 3
-    nt.links.new(tc.outputs["UV"], mp.inputs["Vector"])
-    fs = os.listdir(os.path.join(AS, folder))
+    nt.links.new(tc.outputs["Object" if box else "UV"], mp.inputs["Vector"])
+    d_ = os.path.join(AS, folder, "textures") if os.path.isdir(os.path.join(AS, folder, "textures")) else os.path.join(AS, folder)
+    fs = os.listdir(d_)
     def img(key, cs):
         f = [x for x in fs if key in x.lower()]
         if not f: return None
-        t = nt.nodes.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(os.path.join(AS, folder, f[0])); t.image.colorspace_settings.name = cs
+        t = nt.nodes.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(os.path.join(d_, f[0])); t.image.colorspace_settings.name = cs
+        if box: t.projection = 'BOX'; t.projection_blend = 0.2
         nt.links.new(mp.outputs["Vector"], t.inputs["Vector"]); return t
     d = img("diff", "sRGB")
     if d:
@@ -98,16 +100,33 @@ def import_glb(name, path, c, size, axis=None):
     print("IMPORT", name, [round(d * s, 3) for d in dims])
     return link(o, c)
 
-M_TILE = tex_mat("Floor_Tiles", "floor_tiles_02", 2.0, tint=(0.75, 0.8, 0.82))
-M_WALL = tex_mat("Wall_Plaster", "grey_plaster", 1.0, tint=(0.72, 0.84, 0.86))
-M_STEEL = mat("Steel", (0.8, 0.8, 0.82), 0.25, 1.0)
-M_BSTEEL = mat("BrushedSteel", (0.6, 0.62, 0.64), 0.4, 1.0)
-M_UPH = mat("Upholstery", (0.08, 0.22, 0.3), 0.55, coat=0.3)
+M_TILE = tex_mat("Floor_Tiles", "floor_tiles_02", 0.5, tint=(0.75, 0.8, 0.82), box=True)
+M_WALL = tex_mat("Wall_Plaster", "grey_plaster", 0.6, tint=(0.62, 0.74, 0.76), box=True)
+def rough_var(m, lo, hi, scale=60.0, bump=0.0, bscale=400.0, bdist=0.0005):
+    """roughness variation (and optional micro bump: pores, grain, brushing)"""
+    nt = m.node_tree; b = nt.nodes["Principled BSDF"]
+    n = nt.nodes.new("ShaderNodeTexNoise"); n.inputs["Scale"].default_value = scale; n.inputs["Detail"].default_value = 6
+    r = nt.nodes.new("ShaderNodeMapRange"); r.inputs["To Min"].default_value = lo; r.inputs["To Max"].default_value = hi
+    nt.links.new(n.outputs["Fac"], r.inputs["Value"]); nt.links.new(r.outputs["Result"], b.inputs["Roughness"])
+    if bump:
+        v = nt.nodes.new("ShaderNodeTexVoronoi"); v.inputs["Scale"].default_value = bscale
+        bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = bump; bp.inputs["Distance"].default_value = bdist
+        n2 = nt.nodes.new("ShaderNodeTexNoise"); n2.inputs["Scale"].default_value = bscale * 0.3; n2.inputs["Detail"].default_value = 8
+        mx = nt.nodes.new("ShaderNodeMath"); mx.operation = 'ADD'
+        nt.links.new(v.outputs["Distance"], mx.inputs[0]); nt.links.new(n2.outputs["Fac"], mx.inputs[1])
+        nt.links.new(mx.outputs[0], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], b.inputs["Normal"])
+    return m
+M_STEEL = rough_var(mat("Steel", (0.8, 0.8, 0.82), 0.25, 1.0), 0.12, 0.35, 40)
+M_BSTEEL = rough_var(mat("BrushedSteel", (0.6, 0.62, 0.64), 0.4, 1.0), 0.25, 0.5, 25, bump=0.15, bscale=800)
+M_UPH = tex_mat("Upholstery", "leather_white", 3.0, tint=(0.12, 0.32, 0.4), box=True)
+M_UPH.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 0.25
 M_WHITE = mat("WhitePaint", (0.85, 0.87, 0.88), 0.35)
 M_DARK = mat("DarkPlastic", (0.03, 0.035, 0.04), 0.4)
 M_GAUZE = mat("Gauze", (0.92, 0.92, 0.9), 0.9, sss=0.1)
-M_CART = mat("Cartilage", (0.86, 0.88, 0.9), 0.3, sss=0.35, coat=0.4)
-M_CART.node_tree.nodes["Principled BSDF"].inputs["Subsurface Radius"].default_value = (0.6, 0.65, 0.9)
+M_CART = mat("Cartilage", (0.88, 0.87, 0.82), 0.3, sss=0.75, coat=0.9)
+bC = M_CART.node_tree.nodes["Principled BSDF"]; bC.inputs["Subsurface Radius"].default_value = (0.9, 0.8, 0.75); bC.inputs["Subsurface Scale"].default_value = 0.004
+bC.inputs["Coat Roughness"].default_value = 0.08; bC.inputs["Sheen Weight"].default_value = 0.3; bC.inputs["Sheen Tint"].default_value = (0.85, 0.9, 1.0, 1)
+rough_var(M_CART, 0.2, 0.45, 80, bump=0.25, bscale=600, bdist=0.0003)
 M_DRAPE = mat("Drape", (0.15, 0.42, 0.5), 0.8)
 M_GLASS = mat("Glass", (0.9, 0.95, 1.0), 0.05, trans=1.0)
 M_SCREEN = mat("Screen", (0.0, 0.0, 0.0), 0.2, emit=((0.02, 0.05, 0.06), 1.0))
@@ -210,6 +229,15 @@ for row, (col, z) in enumerate((((0.2, 1.0, 0.45), 0.06), ((1.0, 0.85, 0.2), -0.
 # ceiling surgical lamps (CC-BY)
 lamps = import_glb("OR_Lamps", os.path.join(AS, "or_lamps.glb"), C_OR, 1.8)
 lamps.location = (0.3, 0.2, 2.45); lamps.rotation_euler = (R_(90), 0, 0)
+bpy.context.view_layer.update()
+lw = [lamps.matrix_world @ v.co for v in lamps.data.vertices]; zmin = min(p.z for p in lw)
+low = [p for p in lw if p.z < zmin + 0.06]; xm = sum(p.x for p in low) / len(low)
+M_GLINT = mat("LampGlint", (1, 1, 1), 0.2, emit=((1.0, 0.97, 0.9), 40.0))
+for k, grp in enumerate(([p for p in low if p.x < xm], [p for p in low if p.x >= xm])):
+    if not grp: continue
+    c_ = sum(grp, Vector()) / len(grp)
+    bpy.ops.mesh.primitive_circle_add(radius=0.11, vertices=32, fill_type='NGON', location=c_ + Vector((0, 0, -0.004))); g_ = bpy.context.object
+    g_.name = "OR_LampGlint%d" % k; g_.data.materials.append(M_GLINT); link(g_, C_OR)
 # floor kick plate, a wall clock-free poster-free wall. Door at the right wall
 box("OR_Door", (0.05, 1.2, 2.2), (2.95, -1.2, 1.1), mat("DoorPanel", (0.5, 0.62, 0.66), 0.4), C_OR, bevel=0.01)
 box("OR_DoorWindow", (0.06, 0.4, 0.5), (2.95, -1.2, 1.5), M_GLASS, C_OR)
@@ -231,8 +259,8 @@ def studio(name, ctr, c, R=2.6):
     tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sep.inputs[0])
     mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = -R * 0.8; mr.inputs["From Max"].default_value = R * 0.9
     nt.links.new(sep.outputs["Z"], mr.inputs["Value"])
-    cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.92, 0.97, 1.0, 1); cr.color_ramp.elements[1].color = (0.05, 0.42, 0.62, 1)
-    e = cr.color_ramp.elements.new(0.45); e.color = (0.35, 0.75, 0.88, 1)
+    cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.7, 0.88, 0.95, 1); cr.color_ramp.elements[1].color = (0.01, 0.12, 0.22, 1)
+    e = cr.color_ramp.elements.new(0.45); e.color = (0.06, 0.38, 0.52, 1)
     nt.links.new(mr.outputs["Result"], cr.inputs["Fac"])
     em = nt.nodes.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = 0.75; nt.links.new(cr.outputs["Color"], em.inputs["Color"])
     nt.links.new(em.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
@@ -252,7 +280,7 @@ bm = bmesh.new(); bm.from_mesh(thor.data); bmesh.ops.remove_doubles(bm, verts=bm
 bmesh.ops.recalc_face_normals(bm, faces=bm.faces); bm.to_mesh(thor.data); bm.free()
 for a in list(thor.data.color_attributes): thor.data.color_attributes.remove(a)
 thor.location = SA
-M_BONE = mat("Bone", (0.88, 0.82, 0.7), 0.45, sss=0.15)
+M_BONE = rough_var(mat("Bone", (0.82, 0.74, 0.6), 0.45, sss=0.2, coat=0.3), 0.3, 0.6, 40, bump=0.4, bscale=300, bdist=0.001)
 thor.data.materials.clear(); thor.data.materials.append(M_BONE)
 # soft-tissue cross-section slab (translucent pink) behind the ribs reads as "inside the chest"
 slab = box("SA_TissueSlab", (0.5, 0.06, 0.55), SA + Vector((0, 0.16, 0)), mat("TissueGlass", (0.95, 0.55, 0.55), 0.3, sss=0.3, alpha=0.35), C_SA, bevel=0.02)
@@ -269,7 +297,7 @@ cut = bpy.data.objects.new("SA_CutLine", cu); C_SA.objects.link(cut); cut.locati
 cu.materials.append(mat("CutGlow", (1, 0.9, 0.5), 0.5, emit=((1.0, 0.85, 0.4), 8.0)))
 cu.bevel_factor_end = 0.0
 # floating membrane the camera comes through (matches the white tee / skin)
-mem = box("SA_Membrane", (0.9, 0.004, 1.2), SA + Vector((0, -0.575, 0)), mat("MembraneSkin", (0.95, 0.93, 0.9), 0.6, sss=0.2, alpha=0.55), C_SA)
+mem = box("SA_Membrane", (0.9, 0.004, 1.2), SA + Vector((0, -0.575, 0)), rough_var(mat("MembraneSkin", (0.85, 0.62, 0.52), 0.5, sss=0.3, alpha=0.6), 0.35, 0.6, 50, bump=0.6, bscale=180, bdist=0.002), C_SA)
 # floating particles for depth (foreground/background life)
 for i in range(40):
     p = sph("SA_Mote%d" % i, random.uniform(0.003, 0.008), SA + Vector((random.uniform(-0.8, 0.8), random.uniform(-0.6, 0.9), random.uniform(-0.6, 0.7))),
@@ -280,8 +308,8 @@ for i in range(40):
 SB = Vector((60, 0, 1.2))
 studio("SB", SB, C_SB, R=1.4)
 M_SKIN_SL = mat("SliceSkin", (0.78, 0.55, 0.45), 0.45, sss=0.4)
-M_FAT = mat("SliceFat", (0.95, 0.82, 0.5), 0.4, sss=0.3)
-M_MUSC = mat("SliceMuscle", (0.6, 0.12, 0.12), 0.35, sss=0.3)
+M_FAT = rough_var(mat("SliceFat", (0.9, 0.72, 0.38), 0.3, sss=0.5, coat=0.6), 0.2, 0.4, 20, bump=0.5, bscale=60, bdist=0.004)
+M_MUSC = rough_var(mat("SliceMuscle", (0.45, 0.06, 0.06), 0.3, sss=0.4, coat=0.8), 0.15, 0.4, 30, bump=0.4, bscale=90, bdist=0.003)
 # layered tissue block 0.5 x 0.35, the ear sits in the fat layer just under the skin. The skin layer is glassy (x-ray) here.
 box("SB_Muscle", (0.5, 0.35, 0.12), SB + Vector((0, 0, -0.11)), M_MUSC, C_SB, bevel=0.01)
 box("SB_Fat", (0.5, 0.35, 0.06), SB + Vector((0, 0, -0.02)), M_FAT, C_SB, bevel=0.005)
@@ -293,7 +321,7 @@ for o in C_SB.objects:
 for i in range(14):
     cyl("SB_Fibre%d" % i, 0.008, 0.48, SB + Vector((0, -0.16 + i * 0.024, -0.12 + random.uniform(-0.03, 0.03))), M_MUSC, C_SB, rot=(0, R_(90), 0), verts=10)
 # membrane matching the forearm skin (camera dives through it)
-box("SB_Membrane", (0.9, 1.2, 0.004), SB + Vector((0, 0, 0.42)), mat("MembraneArm", (0.8, 0.62, 0.55), 0.6, emit=((0.9, 0.75, 0.68), 0.5)), C_SB)
+box("SB_Membrane", (0.9, 1.2, 0.004), SB + Vector((0, 0, 0.42)), rough_var(mat("MembraneArm", (0.72, 0.5, 0.4), 0.5, sss=0.2, emit=((0.6, 0.42, 0.34), 0.9)), 0.3, 0.6, 50, bump=0.8, bscale=160, bdist=0.002), C_SB)
 for i in range(30):
     p = sph("SB_Cell%d" % i, random.uniform(0.004, 0.012), SB + Vector((random.uniform(-0.5, 0.5), random.uniform(-0.4, 0.4), random.uniform(0.06, 0.4))),
             mat("Cell", (1.0, 0.5, 0.5), 0.3, emit=((1, 0.4, 0.4), 0.8), alpha=0.7), C_SB)

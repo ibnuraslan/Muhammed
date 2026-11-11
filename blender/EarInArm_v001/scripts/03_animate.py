@@ -59,7 +59,17 @@ for f, d in ((1, TILT_UP), (175, TILT_UP), (300, TILT_REC), (B["b9"] + 10, TILT_
     key_tilt(f, d)
 
 # ================================================================== people
-PAT = Person(OB["Patient"]); SUR = Person(OB["Surgeon"]); NUR = Person(OB["Nurse"])
+def clone_rig(src, name):
+    r = src.copy(); r.data = src.data.copy(); r.name = name
+    for c in src.users_collection: c.objects.link(r)
+    for ch in list(src.children):
+        cc = ch.copy(); cc.name = name + "." + ch.name.split(".", 1)[1]; cc.parent = r
+        for c in ch.users_collection: c.objects.link(cc)
+        for m in cc.modifiers:
+            if m.type == 'ARMATURE': m.object = r
+    return r
+SA_RIG = clone_rig(OB["Surgeon"], "SurgeonSA")
+PAT = Person(OB["Patient"]); SUR = Person(OB["Surgeon"]); NUR = Person(OB["Nurse"]); SAS = Person(SA_RIG)
 pr = PAT.o; M = pr.matrix_world.copy(); pr.parent = tilt; pr.matrix_parent_inverse = tilt.matrix_world.inverted()
 for s in "LR":
     PAT.R.PB["lowerleg02." + s].constraints[0].influence = 0.0   # FK seated legs
@@ -216,8 +226,8 @@ for f in range(343, 565, 40):
 stand(SUR, 566, ST, yT, spine=(18, 0, 0)); walk(SUR, ST, Vector((1.0, 0.75)), 567, 625, yT, 100, stride=0.45); walk(SUR, Vector((1.0, 0.75)), SB_, 626, 660, 100, yB, stride=0.4)
 for f in range(662, 1309, 60):
     stand(SUR, f, SB_, yB, spine=(22 + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(30, 0, 0), crouch=0.04)
-walk(SUR, SB_, SC_, 1312, 1385, yB, yC + 360 if False else yC - 0.0 if abs(yB - yC) < 180 else yC + 360, stride=0.5)
-for f in [1386] + list(range(1420, B["b9"], 50)):
+walk(SUR, SB_, SC_, 1312, 1370, yB, yC + 360 if False else yC - 0.0 if abs(yB - yC) < 180 else yC + 360, stride=0.3)
+for f in [1371] + list(range(1420, B["b9"], 50)):
     stand(SUR, f, SC_, yC + 360 if abs(yB - (yC + 360)) < abs(yB - yC) else yC, spine=(26, 0, 0), head=(32, 0, 0), crouch=0.05)
 yCC = yC + 360 if abs(yB - (yC + 360)) < abs(yB - yC) else yC
 stand(SUR, B["b9"] + 20, SC_, yCC, spine=(14, 0, 0), head=(18, 0, 0))
@@ -237,8 +247,8 @@ for f in (1, 60):
     sh(f, "L", c + fwd * 0.25 + Vector((0.05, 0, -0.12)), fwd + Vector((0, 0, -0.3)), Vector((0, 0, 1)).cross(fwd))
     sh(f, "R", c + fwd * 0.27 + Vector((-0.02, 0, -0.1)), fwd + Vector((0, 0, -0.3)), -Vector((0, 0, 1)).cross(fwd))
 sh(100, "R", CHEST + Vector((-0.1, -0.14, 0.05)), (0.6, 0.6, -0.4), (-0.4, -0.5, 0.6))
-sh(128, "R", CHEST + Vector((-0.02, -0.035, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6, 0.5))
-sh(199, "R", CHEST + Vector((-0.02, -0.04, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6, 0.5))
+sh(128, "R", CHEST + Vector((-0.02, -0.072, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6, 0.5))
+sh(199, "R", CHEST + Vector((-0.02, -0.075, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6, 0.5))
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(300, 565, 6):
     k = (f - 343) / 37.0
@@ -277,10 +287,10 @@ def at_ear(off_out, off_fwd, off_up):
     # surgeon reaches from behind the head (+Y); off_out pushes away from the skull, off_fwd along -Y
     back = Vector((0, 1, 0))
     return EAR_W + side * (off_out * 0.35) + back * (off_out * 0.9) - back * off_fwd + Vector((0, 0, 1)) * off_up
-sh(1390, "R", at_ear(0.22, -0.02, 0.12), (-0.3, -1, -0.4), (0, 0, 1))
-sh(1440, "R", at_ear(0.14, 0.0, 0.07), (-0.3, -1, -0.5), (0, 0, 1))
-sh(1470, "R", at_ear(0.12, 0.0, 0.06), (-0.3, -1, -0.5), (0, 0, 1))
-sh(1500, "R", at_ear(0.16, 0.0, 0.1), (-0.3, -1, -0.4), (0, 0, 1))
+sh(1390, "R", at_ear(0.22, -0.02, 0.12) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
+sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))
+sh(1470, "R", at_ear(0.12, 0.0, 0.06) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))
+sh(1500, "R", at_ear(0.16, 0.0, 0.1) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
 sh(1390, "L", at_ear(0.2, -0.15, 0.08), (0.2, -1, -0.4), (0, 0, 1))
 sh(1500, "L", at_ear(0.15, -0.12, 0.05), (0.2, -1, -0.5), (0, 0, 1))
 # stitching: R needle holder travels along the ear base in arcs
@@ -293,7 +303,7 @@ for i in range(STITCH_N):
     pw = HM @ STITCH_P(i)
     dd = (-Vector((0, 1, 0)) * 0.8 - Vector((0, 0, 1)) * 0.35 - side * 0.3).normalized()
     pt = pw - dd * 0.135
-    sh(f, "R", pt, dd, (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.006, 0.02, 0.03)), dd, (0, 0, 1))
+    sh(f, "R", pt + Vector((0, 0.004, 0.006)), dd, (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.006, 0.025, 0.035)), dd, (0, 0, 1))
 sh(B["b9"] + 5, "L", at_ear(0.18, -0.12, 0.05), (0.2, -1, -0.4), (0, 0, 1))
 for s in "LR":
     ev_at(B["b9"] + 70)
@@ -317,9 +327,9 @@ walk(NUR, Vector((1.0, 1.6)), N_B, 121, 300, -90, -100, stride=0.6)
 for f in range(121, 300, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 for f in range(310, 565, 50):
     stand(NUR, f, N_B, -100, spine=(10, 0, 0), head=(16, 0, 0)); nurse_arms(f, fwd=45 + 10 * math.sin(f * 0.05))
-walk(NUR, N_B, N_C, 570, 700, -100, -150, stride=0.5)
-for f in range(570, 700, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
-for f in [701] + list(range(730, 1309, 60)):
+walk(NUR, N_B, N_C, 570, 640, -100, -150, stride=0.3)
+for f in range(570, 640, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
+for f in [641] + list(range(700, 1309, 60)):
     stand(NUR, f, N_C, -150, spine=(8, 0, 0), head=(18, 0, 0)); nurse_arms(f, fwd=55)
 walk(NUR, N_C, Vector((1.3, -1.35)), 1312, 1380, -150, 0, stride=0.55); walk(NUR, Vector((1.3, -1.35)), N_D, 1381, 1460, 0, -90, stride=0.55)
 for f in range(1312, 1460, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
@@ -331,31 +341,55 @@ for f in range(B["b9"] + 60, B["end"], 12):   # little clap
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
 
 # ================================================================== surgeon look: gloves, cap, mask
-M_GLOVE = newmat("NitrileGlove", (0.18, 0.35, 0.75), 0.35, sss=0.05, coat=0.2)
+M_GLOVE = newmat("NitrileGlove", (0.07, 0.22, 0.62), 0.32, coat=0.45)
+bG = M_GLOVE.node_tree.nodes["Principled BSDF"]; bG.inputs["Sheen Weight"].default_value = 0.4; bG.inputs["Coat Roughness"].default_value = 0.25
+ntG = M_GLOVE.node_tree; nzG = ntG.nodes.new("ShaderNodeTexNoise"); nzG.inputs["Scale"].default_value = 260; nzG.inputs["Detail"].default_value = 4
+wvG = ntG.nodes.new("ShaderNodeTexWave"); wvG.inputs["Scale"].default_value = 90; wvG.inputs["Distortion"].default_value = 12
+adG = ntG.nodes.new("ShaderNodeMath"); adG.operation = 'ADD'; ntG.links.new(nzG.outputs["Fac"], adG.inputs[0]); ntG.links.new(wvG.outputs["Fac"], adG.inputs[1])
+bpG = ntG.nodes.new("ShaderNodeBump"); bpG.inputs["Strength"].default_value = 0.25; bpG.inputs["Distance"].default_value = 0.0004
+ntG.links.new(adG.outputs[0], bpG.inputs["Height"]); ntG.links.new(bpG.outputs["Normal"], bG.inputs["Normal"])
 sb = SUR.body; sb.data.materials.append(M_GLOVE); gi = len(sb.data.materials) - 1
 hand_groups = [g.index for g in sb.vertex_groups if g.name.startswith(("wrist.", "finger", "metacarpal"))]
-for p in sb.data.polygons:
-    w = 0.0
-    for vi in p.vertices:
-        for g in sb.data.vertices[vi].groups:
-            if g.group in hand_groups: w += g.weight
-    if w / len(p.vertices) > 0.5: p.material_index = gi
-HEADW = SUR.R.BN["head"].head_local
+vw = {}
+for v in sb.data.vertices:
+    vw[v.index] = min(1.0, sum(g.weight for g in v.groups if g.group in hand_groups))
+for p_ in sb.data.polygons:
+    if sum(vw[i] for i in p_.vertices) / len(p_.vertices) > 0.5: p_.material_index = gi
+for body_ in (SUR.body, SAS.body):
+    gv = body_.vertex_groups.get("GloveThin") or body_.vertex_groups.new(name="GloveThin")
+    for i, w in vw.items():
+        if w > 0.05: gv.add([i], w, 'REPLACE')
+    dm = body_.modifiers.new("GloveThin", 'DISPLACE'); dm.vertex_group = "GloveThin"; dm.strength = -0.0032; dm.mid_level = 0.0; dm.direction = 'NORMAL'
+    while body_.modifiers.find("GloveThin") > 1: bpy.ops.object.modifier_move_up({"object": body_}, modifier="GloveThin") if False else body_.modifiers.move(body_.modifiers.find("GloveThin"), 1)
 M_CAP = newmat("ScrubCap", (0.15, 0.45, 0.5), 0.8); M_MASK = newmat("SurgMask", (0.55, 0.75, 0.85), 0.8)
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.105, segments=32, ring_count=16); cap = bpy.context.object; cap.name = "Surgeon_Cap"
-for v in cap.data.vertices:
-    if v.co.z < -0.01: v.co.z = -0.01 + (v.co.z + 0.01) * 0.1
-cap.scale = (0.92, 1.02, 0.85); bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); cap.data.materials.append(M_CAP)
-attach_bone(cap, SUR, "head", Matrix.Translation(HEADW + Vector((0, 0.01, 0.12))))
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.1, segments=32, ring_count=16); mk = bpy.context.object; mk.name = "Surgeon_Mask"
-bm = bmesh.new(); bm.from_mesh(mk.data)
-bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.02 or v.co.z > 0.045 or v.co.z < -0.07], context='VERTS'); bm.to_mesh(mk.data); bm.free()
-mk.scale = (0.78, 1.05, 1.0); bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); mk.data.materials.append(M_MASK)
-mk.modifiers.new("solid", 'SOLIDIFY').thickness = 0.003
-attach_bone(mk, SUR, "head", Matrix.Translation(HEADW + Vector((0, 0.008, -0.025))))
-for o in (cap, mk):
-    for c in list(o.users_collection): c.objects.unlink(o)
-    C_PROP.objects.link(o)
+def dress(P, tag):
+    HEADW = P.R.BN["head"].head_local
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.105, segments=32, ring_count=16); cap = bpy.context.object; cap.name = tag + "_Cap"
+    for v in cap.data.vertices:
+        if v.co.z < -0.01: v.co.z = -0.01 + (v.co.z + 0.01) * 0.1
+    cap.scale = (0.92, 1.02, 0.85); bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); cap.data.materials.append(M_CAP)
+    attach_bone(cap, P, "head", Matrix.Translation(HEADW + Vector((0, 0.01, 0.12))))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.1, segments=32, ring_count=16); mk = bpy.context.object; mk.name = tag + "_Mask"
+    bm = bmesh.new(); bm.from_mesh(mk.data)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.02 or v.co.z > 0.045 or v.co.z < -0.07], context='VERTS'); bm.to_mesh(mk.data); bm.free()
+    mk.scale = (0.78, 1.05, 1.0); bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); mk.data.materials.append(M_MASK)
+    mk.modifiers.new("solid", 'SOLIDIFY').thickness = 0.003
+    attach_bone(mk, P, "head", Matrix.Translation(HEADW + Vector((0, 0.008, -0.025))))
+    for o in (cap, mk):
+        for c in list(o.users_collection): c.objects.unlink(o)
+        C_PROP.objects.link(o)
+dress(SUR, "Surgeon"); dress(SAS, "SurgeonSA")
+# woven scrubs: poplin normal map tiled over the clothes UVs
+POP = os.path.join(HERE, "..", "assets", "stretch_poplin", "textures")
+for ob_ in (OB["Surgeon.male_casualsuit06"], OB["Nurse.female_sportsuit01"]):
+    for m in ob_.data.materials:
+        nt_ = m.node_tree; bs = next(n for n in nt_.nodes if n.type == 'BSDF_PRINCIPLED')
+        tc_ = nt_.nodes.new("ShaderNodeTexCoord"); mp_ = nt_.nodes.new("ShaderNodeMapping"); mp_.inputs["Scale"].default_value = (28, 28, 28)
+        it = nt_.nodes.new("ShaderNodeTexImage"); it.image = bpy.data.images.load(os.path.join(POP, "stretch_poplin_nor_gl_1k.exr")); it.image.colorspace_settings.name = 'Non-Color'
+        nm_ = nt_.nodes.new("ShaderNodeNormalMap"); nm_.inputs["Strength"].default_value = 0.8
+        nt_.links.new(tc_.outputs["UV"], mp_.inputs["Vector"]); nt_.links.new(mp_.outputs["Vector"], it.inputs["Vector"])
+        nt_.links.new(it.outputs["Color"], nm_.inputs["Color"]); nt_.links.new(nm_.outputs["Normal"], bs.inputs["Normal"])
+        bs.inputs["Roughness"].default_value = 0.85
 
 # ================================================================== cartilage block -> ear, shavings (beat 3) on the tray
 M_CART = bpy.data.materials["Cartilage"]
@@ -394,6 +428,11 @@ for i in range(28):
 
 # ================================================================== forearm skin pocket (beats 4-6)
 M_SKINPATCH = newmat("ArmSkinPatch", (0.62, 0.42, 0.33), 0.5, sss=0.25)
+_ntp = M_SKINPATCH.node_tree; _bp = _ntp.nodes["Principled BSDF"]
+_vo = _ntp.nodes.new("ShaderNodeTexVoronoi"); _vo.inputs["Scale"].default_value = 900; _nz = _ntp.nodes.new("ShaderNodeTexNoise"); _nz.inputs["Scale"].default_value = 300; _nz.inputs["Detail"].default_value = 8
+_ad = _ntp.nodes.new("ShaderNodeMath"); _ad.operation = 'ADD'; _ntp.links.new(_vo.outputs["Distance"], _ad.inputs[0]); _ntp.links.new(_nz.outputs["Fac"], _ad.inputs[1])
+_bu = _ntp.nodes.new("ShaderNodeBump"); _bu.inputs["Strength"].default_value = 0.5; _bu.inputs["Distance"].default_value = 0.0004
+_ntp.links.new(_ad.outputs[0], _bu.inputs["Height"]); _ntp.links.new(_bu.outputs["Normal"], _bp.inputs["Normal"])
 # radial alpha so the patch blends into the arm skin
 nt = M_SKINPATCH.node_tree; bsdf = nt.nodes["Principled BSDF"]
 tc = nt.nodes.new("ShaderNodeTexCoord"); gr = nt.nodes.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'
@@ -467,6 +506,7 @@ def wrist_w(person, s):
 G_SCAL = Matrix.Translation((0.0, 0.07, -0.025)) @ Matrix.Rotation(R_(90), 4, 'Z')
 G_FORC = Matrix.Translation((0.0, 0.03, -0.02)) @ Matrix.Rotation(R_(0), 4, 'Z')
 G_NH = Matrix.Translation((0.0, 0.05, -0.025)) @ Matrix.Rotation(R_(180), 4, 'Z')
+nh.data.transform(Matrix.Rotation(R_(90), 4, 'X')); nh.rotation_euler = (0, 0, 0)
 def tip_of_forceps():
     return forc.matrix_world @ Vector((0, 0.13, 0))
 FAST = []
@@ -524,7 +564,7 @@ for m, v in FAST: m.show_viewport = v
 set_interp(ear_arm, 'LINEAR'); set_interp(ear_new, 'LINEAR')
 
 # ================================================================== vessels joining at the ear (beat 7) + glow
-M_VES = newmat("Vessel", (0.55, 0.02, 0.03), 0.3, sss=0.3, emit=((1.0, 0.1, 0.1), 0.0))
+M_VES = newmat("Vessel", (0.28, 0.005, 0.012), 0.2, sss=0.3, emit=((1.0, 0.1, 0.1), 0.0), coat=1.0)
 vb = M_VES.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f, v in ((1, 0.0), (1430, 0.0), (1460, 3.0), (1490, 0.8), (B["end"], 0.5)):
     vb.default_value = v; vb.keyframe_insert("default_value", frame=f)
@@ -532,14 +572,14 @@ VES = []
 JOIN = [EAR_C + Vector((0.004, -0.032, -0.012 + 0.009 * i)) for i in range(3)]
 for i in range(3):
     for side_ in (0, 1):
-        cu = bpy.data.curves.new("JoinVessel%d_%d" % (i, side_), 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0006; cu.bevel_resolution = 2
+        cu = bpy.data.curves.new("JoinVessel%d_%d" % (i, side_), 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0009; cu.bevel_resolution = 3
         sp = cu.splines.new('BEZIER'); sp.bezier_points.add(2)
         j = JOIN[i]
         if side_ == 0:   # from the scalp, in front of the ear
             a = j + Vector((-0.004, -0.016, -0.006 + 0.003 * i)); m_ = j + Vector((-0.002, -0.008, 0.002))
         else:            # from the new ear's base
             a = j + Vector((0.006, 0.014, 0.004 - 0.003 * i)); m_ = j + Vector((0.004, 0.007, -0.002))
-        for k, q in enumerate((a, m_, j)): sp.bezier_points[k].co = q
+        for k, q in enumerate((a, m_, j)): sp.bezier_points[k].co = q; sp.bezier_points[k].radius = (1.0, 0.75, 0.45)[k]
         for bp in sp.bezier_points: bp.handle_left_type = bp.handle_right_type = 'AUTO'
         cu.materials.append(M_VES); o = bpy.data.objects.new(cu.name, cu); C_PROP.objects.link(o)
         attach_bone(o, PAT, "head", Matrix.Identity(4))
@@ -583,28 +623,39 @@ cb.rotation_euler = (0, 0, 0); cb.keyframe_insert("rotation_euler", frame=290); 
 th = OB["SA_Thorax"]
 th.rotation_euler = (0, 0, R_(-8)); th.keyframe_insert("rotation_euler", frame=150); th.rotation_euler = (0, 0, R_(10)); th.keyframe_insert("rotation_euler", frame=340)
 cb.parent = None
-# gloved hand in studio A: a static copy of the surgeon's right hand (gripping the scalpel at f450), in its wrist frame
-sc.frame_set(450); dg = bpy.context.evaluated_depsgraph_get()
-ev_b = SUR.body.evaluated_get(dg)
-me = bpy.data.meshes.new_from_object(ev_b, preserve_all_data_layers=True, depsgraph=dg)
-WM = wrist_w(SUR, "R"); WMi = (WM).inverted()
-gb = bpy.data.objects.new("SA_GloveHand", me); bpy.data.collections["Studio_Ribs"].objects.link(gb)
-bm = bmesh.new(); bm.from_mesh(me); dl = bm.verts.layers.deform.active
-keep = [g.index for g in SUR.body.vertex_groups if g.name.startswith(("wrist.R", "finger", "metacarpal", "lowerarm02.R"))]
-kill = [v for v in bm.verts if (sum(v[dl].get(g, 0.0) for g in keep) < 0.5) or (SUR.body.matrix_world @ v.co - WM.translation).length > 0.17]
-bmesh.ops.delete(bm, geom=kill, context='VERTS')
-for v in bm.verts: v.co = WMi @ (SUR.body.matrix_world @ v.co)
-bm.to_mesh(me); bm.free()
-me.materials.clear(); me.materials.append(M_GLOVE)
-for p_ in me.polygons: p_.use_smooth = True; p_.material_index = 0
-cuff = bpy.data.objects.new("SA_Cuff", None)
+# studio A: the whole (cloned) surgeon stands at the floating rib cage and cuts the block out with the scalpel
+SA_POS = Vector((P0.x + 0.52, P0.y + 0.3)); ySA = yaw_to(P0.to_2d() - SA_POS)
+for s_ in "LR": SAS.R.PB["lowerleg02." + s_].constraints[0].influence = 1.0
+fl_ = bpy.data.objects.new("SA_Floor", bpy.data.meshes.new("SA_Floor")); bpy.data.collections["Studio_Ribs"].objects.link(fl_)
+bm = bmesh.new(); bmesh.ops.create_circle(bm, cap_ends=True, radius=2.4, segments=64); bm.to_mesh(fl_.data); bm.free()
+fl_.location = (P0.x - 0.07, 0, 0); fl_.data.materials.append(newmat("SA_FloorMat", (0.55, 0.75, 0.82), 0.6))
+for f in (1, 200, 270, 342):
+    stand(SAS, f, SA_POS, ySA, spine=(16 if f >= 200 else 8, 0, 0), head=(24, 0, 0), crouch=0.02)
+SAS.face(1, **N0)
+fwdSA = Matrix.Rotation(R_(ySA), 3, 'Z') @ Vector((0, -1, 0))
+dR_SA = (P0 - Vector((SA_POS.x, SA_POS.y, 1.35))).normalized()
+def blk_at(f):
+    if f <= 275: return P0.copy()
+    if f <= 300: return P0 + Vector((0, -0.02, 0.005)) * smooth((f - 275) / 25)
+    return P0 + Vector((0, -0.02, 0.005)).lerp(Vector((0, -0.09, 0.06)), smooth((f - 300) / 40))
+for f in range(127, 343, 4):
+    if f < 205:   # comes in holding the scalpel
+        tip = P0 + Vector((0.12, -0.12, 0.12)).lerp(Vector((0.0, -0.02, 0.045)), smooth((f - 127) / 78))
+    elif f < 268: # traces the cut outline around the block
+        a_ = (f - 205) / 63 * 2 * math.pi + math.pi / 2
+        tip = P0 + Vector((0.036 * math.cos(a_), -0.019, 0.042 * math.sin(a_)))
+    else:         # withdraws
+        tip = P0 + Vector((0.0, -0.02, 0.045)).lerp(Vector((0.1, -0.1, 0.12)), smooth((f - 268) / 50))
+    SAS.key_hand("R", f, tip - dR_SA * 0.145, dR_SA, (0, 0, 1))
+    b_ = blk_at(f); dL_SA = (b_ - Vector((SA_POS.x, SA_POS.y, 1.3)) + Vector((0.06, 0, 0))).normalized()
+    if f < 272:
+        SAS.key_hand("L", f, Vector((SA_POS.x, SA_POS.y, 1.0)) + fwdSA * 0.18 + Vector((0.1, 0, 0)), Vector((0, 0, -1)) + fwdSA * 0.3, fwdSA)
+    else:         # pinches the freed block and lifts it out
+        SAS.key_hand("L", f, b_ + Vector((0.045, 0.0, 0.005)) - dL_SA * 0.085, dL_SA, (0, 0, 1))
+SAS.key_fingers("R", 127, 38, 32); SAS.key_fingers("L", 127, 15, 10); SAS.key_fingers("L", 270, 15, 10); SAS.key_fingers("L", 285, 45, 40)
 scal_sa = scal.copy(); scal_sa.animation_data_clear(); scal_sa.name = "SA_Scalpel"; bpy.data.collections["Studio_Ribs"].objects.link(scal_sa)
-scal_sa.parent = gb; scal_sa.matrix_parent_inverse = Matrix.Identity(4); scal_sa.matrix_basis = G_SCAL
-gb.rotation_mode = 'XYZ'
-for f, off, rot in ((127, Vector((0.4, -0.1, 0.3)), (20, 0, 60)), (200, Vector((0.27, -0.1, 0.12)), (40, 0, 75)), (232, Vector((0.17, -0.1, 0.05)), (45, 5, 78)), (248, Vector((0.08, -0.1, 0.02)), (50, 10, 80)),
-                    (265, Vector((0.09, -0.1, -0.06)), (55, 15, 85)), (300, Vector((0.2, -0.12, -0.05)), (40, 10, 80)), (342, Vector((0.26, -0.15, 0.05)), (30, 0, 70))):
-    gb.location = P0 + off; gb.rotation_euler = [R_(x) for x in rot]
-    gb.keyframe_insert("location", frame=f); gb.keyframe_insert("rotation_euler", frame=f)
+scal_sa.parent = SA_RIG; scal_sa.parent_type = 'BONE'; scal_sa.parent_bone = "wrist.R"; scal_sa.matrix_parent_inverse = Matrix.Identity(4)
+scal_sa.matrix_basis = Matrix.Translation((0, -SAS.R.BN["wrist.R"].length, 0)) @ G_SCAL
 print("ANIM_DONE")
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)
