@@ -444,7 +444,7 @@ def cam_yard(c, t):
 
 def cam_gate(c, t):
     e = ease(t)
-    loc = Vector((3.4, 2.4, 1.6)).lerp(Vector((3.1, 2.1, 1.55)), e)
+    loc = Vector((3.4, 2.6, 2.4)).lerp(Vector((3.1, 2.3, 2.3)), e)
     return loc, Vector((1.4, -3.5, 1.45)), 30
 
 
