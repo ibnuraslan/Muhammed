@@ -5,14 +5,16 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 PREV = os.path.join(ROOT, "out", "preview", "intro")
 SHOTS = [("home_behind", 78), ("home_front", 112), ("invest_drawer", 77), ("invest_reveal", 84),
          ("street_bus_reveal", 78), ("street_walk_track", 64), ("cafe_title_push", 68), ("cafe_pull_back", 100)]
+FAST = {"invest_reveal", "cafe_pull_back"}
 clips = []
 for name, n in SHOTS:
     d = os.path.join(PREV, name); out = os.path.join(PREV, name + ".mp4")
     frames = sorted(glob.glob(os.path.join(d, "f*.png")))
     if not frames:
         print("missing frames for", name); continue
+    interp = "fps=24" if name in FAST else "minterpolate=fps=24:mi_mode=mci:mc_mode=aobmc:vsbmc=1"   # fast moves: no interpolation smear
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-framerate", "12", "-pattern_type", "glob", "-i", os.path.join(d, "f*.png"),
-                    "-vf", "minterpolate=fps=24:mi_mode=mci:mc_mode=aobmc:vsbmc=1,tpad=stop_mode=clone:stop=4",
+                    "-vf", interp + ",tpad=stop_mode=clone:stop=4",
                     "-frames:v", str(n), "-c:v", "libx264", "-crf", "14", "-pix_fmt", "yuv420p", out], check=True)
     clips.append(out)
 lst = os.path.join(PREV, "list.txt")
