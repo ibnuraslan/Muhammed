@@ -1,0 +1,83 @@
+{
+ "beanie": {
+  "uid": "3724de1e56ba4f4bb0be2ca3170e39f2",
+  "title": "Beanie",
+  "author": "oscarherry3d",
+  "author_profile": "https://sketchfab.com/oscarherry3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3724de1e56ba4f4bb0be2ca3170e39f2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "helmet": {
+  "uid": "d1023be1952b44e4b4f3268b5548317d",
+  "title": "Hockey helmet",
+  "author": "donhalcy",
+  "author_profile": "https://sketchfab.com/donhalcy",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d1023be1952b44e4b4f3268b5548317d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "stick": {
+  "uid": "3f6b365520474d6c8353b40afece41dd",
+  "title": "Hockey Stick",
+  "author": "Duznot",
+  "author_profile": "https://sketchfab.com/duz_vr",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3f6b365520474d6c8353b40afece41dd",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "seats": {
+  "uid": "6bbe4c85d2a4489dbe5918831be5d886",
+  "title": "Low poly stadium/sports arena seats",
+  "author": "anDDDres",
+  "author_profile": "https://sketchfab.com/anDDDres",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6bbe4c85d2a4489dbe5918831be5d886",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "cityblock": {
+  "uid": "55fee75f7efd4fac9d65c94c214d7971",
+  "title": "City Block",
+  "author": "3DDomino",
+  "author_profile": "https://sketchfab.com/3DDomino",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/55fee75f7efd4fac9d65c94c214d7971",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bus": {
+  "uid": "dd99ebfc07e54d4fa674fd07b4bbef92",
+  "title": "City Bus",
+  "author": "PolyLabs",
+  "author_profile": "https://sketchfab.com/polylabs1",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/dd99ebfc07e54d4fa674fd07b4bbef92",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "office": {
+  "uid": "3facd48dff0945f7b96f95ad31c4beb5",
+  "title": "Doctor's Office - Assets",
+  "author": "Evan Petrov",
+  "author_profile": "https://sketchfab.com/EvanPetrov",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3facd48dff0945f7b96f95ad31c4beb5",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "phone": {
+  "uid": "03c75adf5d9a426a9435d20cc76090be",
+  "title": "Smartphone",
+  "author": "Rafael Benites de Souza",
+  "author_profile": "https://sketchfab.com/rafaelbell",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/03c75adf5d9a426a9435d20cc76090be",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "scarf": {
+  "uid": "27c4f8f5b5dc4ab087ad4244ee09c9f1",
+  "title": "Scarf",
+  "author": "neutralize",
+  "author_profile": "https://sketchfab.com/neutralize",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/27c4f8f5b5dc4ab087ad4244ee09c9f1",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
