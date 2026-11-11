@@ -1,0 +1,106 @@
+SurgeonBrandsLivers contact audit, every 3 frames
+
+WORST PER CHECK
+  GRASP    PanelA R hand to Gavel                        worst 0.123 at frame 1483
+  GRASP    PanelB R hand to Stamp                        worst 0.126 at frame 1606
+  GRASP    Surgeon1 R hand to ArgonPen_OR                worst 0.075 at frame 292
+  GRASP    Surgeon1 R hand to NeedleDriver               worst 0.100 at frame 439
+  SLIDE    Surgeon2 foot.L                               worst 0.136 at frame 997
+
+COUNT 94 issues
+
+ALL
+  292 GRASP      Surgeon1 R hand to ArgonPen_OR: 0.075 m
+  295 GRASP      Surgeon1 R hand to ArgonPen_OR: 0.073 m
+  391 GRASP      Surgeon1 R hand to NeedleDriver: 0.071 m
+  439 GRASP      Surgeon1 R hand to NeedleDriver: 0.100 m
+  994 SLIDE      Surgeon2 foot.L: 0.10 m/s
+  997 SLIDE      Surgeon2 foot.L: 0.14 m/s
+ 1480 GRASP      PanelA R hand to Gavel: 0.122 m
+ 1483 GRASP      PanelA R hand to Gavel: 0.123 m
+ 1486 GRASP      PanelA R hand to Gavel: 0.120 m
+ 1489 GRASP      PanelA R hand to Gavel: 0.113 m
+ 1492 GRASP      PanelA R hand to Gavel: 0.105 m
+ 1495 GRASP      PanelA R hand to Gavel: 0.097 m
+ 1498 GRASP      PanelA R hand to Gavel: 0.090 m
+ 1501 GRASP      PanelA R hand to Gavel: 0.086 m
+ 1504 GRASP      PanelA R hand to Gavel: 0.085 m
+ 1507 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1510 GRASP      PanelA R hand to Gavel: 0.090 m
+ 1513 GRASP      PanelA R hand to Gavel: 0.094 m
+ 1516 GRASP      PanelA R hand to Gavel: 0.097 m
+ 1519 GRASP      PanelA R hand to Gavel: 0.101 m
+ 1522 GRASP      PanelA R hand to Gavel: 0.103 m
+ 1525 GRASP      PanelA R hand to Gavel: 0.106 m
+ 1528 GRASP      PanelA R hand to Gavel: 0.109 m
+ 1531 GRASP      PanelA R hand to Gavel: 0.120 m
+ 1534 GRASP      PanelA R hand to Gavel: 0.112 m
+ 1537 GRASP      PanelA R hand to Gavel: 0.099 m
+ 1540 GRASP      PanelA R hand to Gavel: 0.098 m
+ 1543 GRASP      PanelA R hand to Gavel: 0.095 m
+ 1546 GRASP      PanelA R hand to Gavel: 0.091 m
+ 1549 GRASP      PanelA R hand to Gavel: 0.085 m
+ 1552 GRASP      PanelA R hand to Gavel: 0.082 m
+ 1555 GRASP      PanelA R hand to Gavel: 0.081 m
+ 1558 GRASP      PanelA R hand to Gavel: 0.082 m
+ 1561 GRASP      PanelA R hand to Gavel: 0.083 m
+ 1564 GRASP      PanelA R hand to Gavel: 0.085 m
+ 1567 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1570 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1570 GRASP      PanelB R hand to Stamp: 0.074 m
+ 1573 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1573 GRASP      PanelB R hand to Stamp: 0.079 m
+ 1576 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1576 GRASP      PanelB R hand to Stamp: 0.073 m
+ 1579 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1582 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1585 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1588 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1591 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1591 GRASP      PanelB R hand to Stamp: 0.084 m
+ 1594 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1594 GRASP      PanelB R hand to Stamp: 0.083 m
+ 1597 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1597 GRASP      PanelB R hand to Stamp: 0.084 m
+ 1600 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1600 GRASP      PanelB R hand to Stamp: 0.096 m
+ 1603 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1603 GRASP      PanelB R hand to Stamp: 0.115 m
+ 1606 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1606 GRASP      PanelB R hand to Stamp: 0.126 m
+ 1609 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1609 GRASP      PanelB R hand to Stamp: 0.116 m
+ 1612 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1612 GRASP      PanelB R hand to Stamp: 0.092 m
+ 1615 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1618 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1621 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1624 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1627 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1630 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1633 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1636 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1639 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1642 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1645 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1648 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1651 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1654 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1657 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1660 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1663 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1666 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1669 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1672 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1675 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1678 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1681 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1684 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1687 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1690 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1693 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1696 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1699 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1702 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1705 GRASP      PanelA R hand to Gavel: 0.087 m
+ 1708 GRASP      PanelA R hand to Gavel: 0.087 m

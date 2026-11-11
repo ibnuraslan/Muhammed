@@ -59,7 +59,7 @@ M_PLASTIC_G = mat("PlasticGrey", (0.25, 0.27, 0.28), 0.45)
 M_SCREEN = mat("ScreenBlack", (0.01, 0.012, 0.015), 0.15)
 M_DRAPE = mat("Drape", (0.05, 0.20, 0.38), 0.85)
 M_DRAPE.node_tree.nodes["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.5
-M_SKIN = mat("Skin_Abdomen", (0.80, 0.58, 0.47), 0.42, sss=0.25)
+M_SKIN = mat("Skin_Abdomen", (0.70, 0.50, 0.40), 0.45, sss=0.25)
 M_INCISION = mat("Incision", (0.45, 0.08, 0.08), 0.35)
 M_SUTURE = mat("Suture", (0.06, 0.05, 0.25), 0.4)
 M_PAPER = mat("Paper", (0.92, 0.9, 0.84), 0.75)
@@ -140,7 +140,7 @@ for k, (hx, hy, hz) in enumerate(((-0.55, -0.55, 2.02), (0.35, 0.55, 2.08))):
     for bp, co in zip(sp.bezier_points, [(hx, hy, hz + 0.16), (hx * 0.4, hy * 0.4, hz + 0.55), (0.0, 0.0, 2.99)]):
         bp.co = co; bp.handle_left_type = bp.handle_right_type = 'AUTO'
     ao = bpy.data.objects.new("SurgLampArm_%d" % k, cu); ORC.objects.link(ao); cu.materials.append(M_LAMPSHELL)
-    sp_ = bpy.data.lights.new("SurgLampSpot_%d" % k, 'SPOT'); sp_.energy = 450; sp_.spot_size = math.radians(38); sp_.spot_blend = 0.6
+    sp_ = bpy.data.lights.new("SurgLampSpot_%d" % k, 'SPOT'); sp_.energy = 260; sp_.spot_size = math.radians(38); sp_.spot_blend = 0.6
     sp_.shadow_soft_size = 0.25; sp_.color = (1.0, 0.98, 0.95)
     so_ = bpy.data.objects.new("SurgLampSpot_%d" % k, sp_); ORC.objects.link(so_); so_.parent = root; so_.location = (0, 0, -0.03)
     LAMPS.append(root)
@@ -244,7 +244,7 @@ coffee = cyl("MugCoffee", 0.036, 0.004, (0, 0, 0.085), mat("Coffee", (0.12, 0.06
 
 # ------------------------------------------------------------------ HEARING ROOM  x[-12,-3.8] y[-3.5,3.5] h 3.2
 HR = room("HEAR", -12.0, -3.8, -3.5, 3.5, 3.2, M_HFLOOR, M_PANEL, M_CEIL, HEAR, holes=[("S", -8.0, 1.0, 1.4, 1.8), ("S", -5.6, 1.0, 1.0, 1.8)])
-box("HEAR_Outside", (8.0, 0.05, 4.0), (-7.0, -4.4, 1.8), emis("Outside2", (0.9, 0.93, 1.0), 2.5), HEAR)
+box("HEAR_Outside", (8.0, 0.05, 4.0), (-7.0, -4.4, 1.8), emis("Outside2", (0.9, 0.93, 1.0), 1.2), HEAR)
 hs = bpy.data.lights.new("HEAR_Sun", 'SUN'); hs.energy = 3.5; hs.angle = 0.03; hs.color = (1.0, 0.88, 0.7)
 ho = bpy.data.objects.new("HEAR_Sun", hs); HEAR.objects.link(ho); ho.rotation_euler = (math.radians(50), 0, math.radians(-25))
 for x in (-10.0, -7.0, -5.0):
@@ -260,7 +260,7 @@ box("HEAR_LecternTop", (0.6, 0.7, 0.04), (-7.1, 0, 1.12), M_DESK, HEAR, bevel=0.
 for y in (-1.2, 0.0, 1.2):
     box("HEAR_ChairSeat", (0.5, 0.5, 0.08), (-10.65, y, DAIS_H + 0.46), mat("Leather", (0.12, 0.07, 0.05), 0.4), HEAR, bevel=0.02)
     box("HEAR_ChairBack", (0.08, 0.5, 0.75), (-10.95, y, DAIS_H + 0.85), mat("Leather", (0.12, 0.07, 0.05), 0.4), HEAR, bevel=0.02)
-    box("HEAR_Folder", (0.3, 0.22, 0.012), (-9.85, y + 0.25, DAIS_H + 0.79), mat("Folder", (0.2, 0.25, 0.35), 0.6), HEAR)
+    box("HEAR_Folder", (0.3, 0.22, 0.012), (-9.85, y + 0.42, DAIS_H + 0.79), mat("Folder", (0.2, 0.25, 0.35), 0.6), HEAR)
     cyl("HEAR_Glass", 0.035, 0.11, (-9.75, y - 0.3, DAIS_H + 0.84), mat("Glass", (0.9, 0.95, 1.0), 0.02, trans=1.0), HEAR)
 # gavel + sound block, certificate, stamp
 gav = import_glb(os.path.join(OB, "gavel.glb"), "Gavel_src", c_=HEAR, join=False)
@@ -271,7 +271,9 @@ for i in range(6):
     box("CertLine", (0.012 if i else 0.02, 0.15 - 0.02 * (i % 2), 0.001), (-9.8 + 0.07 - i * 0.022, -0.75 + 0.01, DAIS_H + 0.7925), mat("Ink", (0.2, 0.2, 0.22), 0.6), HEAR)
 cyl("CertSeal", 0.025, 0.002, (-9.8 - 0.07, -0.75 - 0.07, DAIS_H + 0.7925), M_GOLD, HEAR)
 box("CertBorder", (0.29, 0.21, 0.0005), (-9.8, -0.75, DAIS_H + 0.7918), mat("Border", (0.3, 0.35, 0.5), 0.6), HEAR)
-stamp_mark = box("StampMark", (0.06, 0.2, 0.001), (-9.8, -0.75, DAIS_H + 0.7935), M_RED_INK, HEAR, rot=(0, 0, math.radians(35)))
+stamp_mark = bpy.data.objects.new("StampMark", None); HEAR.objects.link(stamp_mark); stamp_mark.location = (-9.8, -0.75, DAIS_H + 0.7935); stamp_mark.rotation_euler = (0, 0, math.radians(35))
+for nm, sz, lc in (("a", (0.13, 0.008, 0.001), (0, 0.03, 0)), ("b", (0.13, 0.008, 0.001), (0, -0.03, 0)), ("c", (0.008, 0.068, 0.001), (0.061, 0, 0)), ("d", (0.008, 0.068, 0.001), (-0.061, 0, 0)), ("e", (0.11, 0.014, 0.001), (0, 0, 0))):
+    box("StampMark_" + nm, sz, lc, M_RED_INK, HEAR).parent = stamp_mark
 stamp = bpy.data.objects.new("Stamp", None); HEAR.objects.link(stamp); stamp.location = (-9.85, -1.05, DAIS_H + 0.785)
 sb = box("StampBase", (0.07, 0.09, 0.025), (0, 0, 0.0125), mat("StampRubber", (0.4, 0.05, 0.05), 0.6), HEAR); sb.parent = stamp
 sh = cyl("StampHandle", 0.017, 0.08, (0, 0, 0.065), mat("StampWood", (0.25, 0.14, 0.08), 0.5), HEAR); sh.parent = stamp
@@ -395,11 +397,11 @@ me = bpy.data.meshes.new("EtherDrape"); bm.to_mesh(me); bm.free()
 ed = bpy.data.objects.new("EtherDrape", me); ORC.objects.link(ed); me.materials.append(M_DRAPE)
 ed.modifiers.new("t", 'SOLIDIFY').thickness = 0.004
 # Mayo instrument tray beside surgeon 1, with instruments
-cyl("Mayo_Post", 0.02, 1.0, (0.55, -0.95, 0.5), M_STEEL, ORC, verts=12)
-box("Mayo_Tray", (0.48, 0.34, 0.02), (0.55, -0.95, 1.01), M_STEEL, ORC, bevel=0.004)
-box("Mayo_Towel", (0.44, 0.3, 0.004), (0.55, -0.95, 1.022), M_DRAPE, ORC)
+cyl("Mayo_Post", 0.02, 1.0, (0.32, -0.98, 0.5), M_STEEL, ORC, verts=12)
+box("Mayo_Tray", (0.48, 0.34, 0.02), (0.32, -0.98, 1.01), M_STEEL, ORC, bevel=0.004)
+box("Mayo_Towel", (0.44, 0.3, 0.004), (0.32, -0.98, 1.022), M_DRAPE, ORC)
 for i in range(7):
-    box("Instrument", (0.16, 0.008, 0.004), (0.5 + 0.02 * (i % 2), -1.06 + i * 0.03, 1.027), M_STEEL, ORC, rot=(0, 0, random.uniform(-0.1, 0.1)))
+    box("Instrument", (0.16, 0.008, 0.004), (0.30 + 0.02 * (i % 2), -1.12 + i * 0.03, 1.027), M_STEEL, ORC, rot=(0, 0, random.uniform(-0.1, 0.1)))
 # argon pen (held by surgeon 1 / the studio glove hand), needle driver
 def pen(name, c_):
     root = bpy.data.objects.new(name, None); c_.objects.link(root)
@@ -476,7 +478,7 @@ for x in (-2.6, -1.4, 0.0):
     box("WallCabinetGlass", (1.0, 0.02, 1.7), (x, -3.07, 1.15), mat("CabGlass", (0.5, 0.6, 0.65), 0.05, trans=0.7), ORC)
 cyl("KickBucket", 0.18, 0.35, (1.0, 0.9, 0.18), M_STEEL, ORC)
 # wall calendar beside the door, on the east wall: 8 pages, blank grid, a red cross per day (no numbers/words)
-CAL = bpy.data.objects.new("Calendar", None); ORC.objects.link(CAL); CAL.location = (3.47, -0.9, 1.55); CAL.rotation_euler = (0, 0, math.radians(90))
+CAL = bpy.data.objects.new("Calendar", None); ORC.objects.link(CAL); CAL.location = (3.47, -0.9, 1.55); CAL.rotation_euler = (0, 0, math.radians(-90))
 box("CalBack", (0.42, 0.01, 0.58), (0, 0.005, 0), mat("CalBoard", (0.2, 0.22, 0.25), 0.5), ORC).parent = CAL
 box("CalHeader", (0.40, 0.004, 0.10), (0, -0.003, 0.22), mat("CalHeader", (0.15, 0.4, 0.55), 0.5), ORC).parent = CAL
 PAGES = []

@@ -40,7 +40,7 @@ def person(name, gender, age, race, hair, clothes, skin, muscle=0.5, weight=0.5,
     info["eyelashes"] = "eyelashes01/eyelashes01.mhclo"; info["teeth"] = "teeth_base/teeth_base.mhclo"
     info["tongue"] = "tongue01/tongue01.mhclo"; info["hair"] = hair
     info["clothes"] = clothes
-    info["skin_mhmat"] = skin; info["skin_material_type"] = "ENHANCED_SSS"; info["eyes_material_type"] = "PROCEDURAL_EYES"
+    info["skin_mhmat"] = skin; info["skin_material_type"] = "ENHANCED_SSS"; info["eyes_material_type"] = "MAKESKIN"
     st = HumanService.get_default_deserialization_settings(); st["subdiv_levels"] = 1
     HumanService.deserialize_from_dict(info, st)
     return bpy.data.objects[name]
