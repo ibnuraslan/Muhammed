@@ -111,7 +111,7 @@ def umbrella(name, radius=0.52):
             a = 2 * math.pi * j / na
             sag = 0.5 - 0.5 * math.cos(8 * a)         # 0 on a rib, 1 mid-gore
             r = radius * math.sin(u * math.pi / 2) * (1 - 0.04 * sag * u)
-            z = -0.36 * radius * (1 - math.cos(u * math.pi / 2)) - 0.035 * sag * u * u
+            z = -0.52 * radius * (1 - math.cos(u * math.pi / 2)) - 0.035 * sag * u * u
             row.append(bm.verts.new((r * math.cos(a), r * math.sin(a), z)))
         rows.append(row)
     for i in range(nr):
@@ -129,11 +129,11 @@ def umbrella(name, radius=0.52):
         a = k * math.pi / 4
         for i in range(nr):
             u0, u1 = i / nr, (i + 1) / nr
-            p0 = Vector((radius * math.sin(u0 * math.pi / 2) * math.cos(a), radius * math.sin(u0 * math.pi / 2) * math.sin(a), -0.36 * radius * (1 - math.cos(u0 * math.pi / 2)) - 0.004))
-            p1 = Vector((radius * math.sin(u1 * math.pi / 2) * math.cos(a), radius * math.sin(u1 * math.pi / 2) * math.sin(a), -0.36 * radius * (1 - math.cos(u1 * math.pi / 2)) - 0.004))
+            p0 = Vector((radius * math.sin(u0 * math.pi / 2) * math.cos(a), radius * math.sin(u0 * math.pi / 2) * math.sin(a), -0.52 * radius * (1 - math.cos(u0 * math.pi / 2)) - 0.004))
+            p1 = Vector((radius * math.sin(u1 * math.pi / 2) * math.cos(a), radius * math.sin(u1 * math.pi / 2) * math.sin(a), -0.52 * radius * (1 - math.cos(u1 * math.pi / 2)) - 0.004))
             d = p1 - p0; mid = (p0 + p1) / 2
             B.cyl(mid, 0.003, d.length, metal, verts=6, rot=d.to_track_quat('Z', 'Y').to_euler())
-        tip = Vector((radius * 1.01 * math.cos(a), radius * 1.01 * math.sin(a), -0.36 * radius - 0.01))
+        tip = Vector((radius * 1.01 * math.cos(a), radius * 1.01 * math.sin(a), -0.52 * radius - 0.01))
         B.cyl(tip, 0.005, 0.025, metal, verts=6)
     B.cyl((0, 0, 0.03), 0.004, 0.06, metal, verts=6)
     B.cyl((0, 0, -0.42), 0.006, 0.84, metal, verts=8)
