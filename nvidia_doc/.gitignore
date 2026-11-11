@@ -5,4 +5,5 @@ out/frames/
 out/mix.wav
 out/plates/
 out/plates_preview/
+out/ui_frames/
 vo/*.wav
