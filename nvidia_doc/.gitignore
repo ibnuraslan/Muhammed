@@ -3,6 +3,7 @@ __pycache__/
 assets/polyhaven/
 out/blend/
 out/frames/
+out/intro_preview*.mp4
 out/mix.wav
 out/plates/
 out/plates_preview/
