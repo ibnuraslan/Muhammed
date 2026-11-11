@@ -401,7 +401,7 @@ def plans_image(path):
 
 def cam_nsa_desk(c, t):
     e = ease(t)
-    return (Vector((DESK_A.x + 1.15, DESK_A.y - 0.9, 1.45)).lerp(Vector((DESK_A.x + 0.95, DESK_A.y - 0.75, 1.42)), e), Vector((DESK_A.x - 0.15, DESK_A.y + 0.45, 1.0)), 38)
+    return (Vector((DESK_A.x - 1.3, DESK_A.y - 0.6, 1.55)).lerp(Vector((DESK_A.x - 1.1, DESK_A.y - 0.45, 1.5)), e), Vector((DESK_A.x - 0.15, DESK_A.y + 0.45, 1.0)), 38)
 
 
 def cam_nsa_plans(c, t):

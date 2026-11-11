@@ -68,7 +68,8 @@ def oscilloscope(name, loc, rot_z=0.0):
     P(box("Case", (0, 0.05, 0.16), (0.36, 0.48, 0.3), pbr("ScopeCase", (0.42, 0.44, 0.42), 0.45, 0.2), bevel=0.01))
     P(box("Front", (0, -0.192, 0.16), (0.35, 0.02, 0.29), M["dark"]))
     P(box("Hood", (-0.07, -0.205, 0.19), (0.16, 0.03, 0.14), M["dark"]))
-    tube = P(box("Tube", (-0.07, -0.233, 0.19), (0.13, 0.004, 0.105), scope_material()))
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(-0.07, -0.236, 0.19), rotation=(math.radians(90), 0, 0))
+    tube = bpy.context.active_object; tube.name = "Tube"; tube.scale = (0.13, 0.105, 1); tube.data.materials.append(scope_material()); P(tube)
     P(box("HoodL", (-0.145, -0.25, 0.19), (0.012, 0.04, 0.13), M["dark"])); P(box("HoodR", (0.005, -0.25, 0.19), (0.012, 0.04, 0.13), M["dark"]))
     for k in range(9):
         P(cyl("Knob", (0.06 + (k % 3) * 0.04, -0.21, 0.08 + (k // 3) * 0.07), 0.011, 0.02, M["metal"] if k % 2 else M["dark"], verts=12, rot=(math.radians(90), 0, 0)))
@@ -262,12 +263,15 @@ def animate(c, sec, shot):
 
 
 def anim(shot):
-    return lambda c, t: animate(c, t * DUR[shot], shot)
+    def f(c, t):
+        animate(c, t * DUR[shot], shot)
+        bpy.context.scene.frame_set(int(t * DUR[shot] * 24) + 1)          # frame-driven screens follow in stills
+    return f
 
 
 def cam_cover(c, t):
     e = ease(t)
-    return (Vector((0.6, -2.9, 1.7)).lerp(Vector((0.3, -2.55, 1.62)), e), Vector((-1.4, -0.55, 1.08)), 32)
+    return (Vector((-3.2, -2.6, 1.7)).lerp(Vector((-2.9, -2.3, 1.62)), e), Vector((-1.2, -0.55, 1.08)), 32)
 
 
 def cam_scope(c, t):
