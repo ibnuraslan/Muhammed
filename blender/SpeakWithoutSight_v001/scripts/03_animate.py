@@ -42,6 +42,11 @@ class Person:
         self.h.key_foot(s, f, Vector(xy), yaw, lift, pitch)
     def hand(self, s, f, W, d, n, pole=None):
         """W wrist (world), d wrist->middle knuckle direction, n back-of-hand normal (world)"""
+        W = Vector(W)
+        if getattr(self, "clamp", True):
+            ev(f); sh = self.bone_world("upperarm01." + s)
+            L = (self.r.BN["wrist." + s].head_local - self.r.BN["upperarm01." + s].head_local).length * 0.92
+            if (W - sh).length > L: W = sh + (W - sh).normalized() * L
         Rm = self.basis(s, Vector(d), -Vector(n)) @ self.rest_hand[s].transposed()   # basis takes the palm normal
         wr = self.r.BN["wrist." + s].head_local
         self.r.key_world("IK_hand." + s, f, Matrix.Translation(Vector(W)) @ Rm.to_4x4() @ Matrix.Translation(-wr) @ self.r.rest("IK_hand." + s))
@@ -150,6 +155,7 @@ def g_posture(f):
     return flex, twist, head_p, head_y
 for f in keys_every(1, END, 10):
     fl, tw, hp, hy = g_posture(f)
+    hp -= 9 * smooth((f - 1440) / 40.0)   # lifts her face when she starts to practise
     G.root(f, G_HIP + V(0, -0.05 * smooth((f - 460) / 60.0) * (1 - smooth((f - 1900) / 60.0)), 0), G_YAW, flex=-8 + fl * 0.3)
     G.spine(f, flex=fl, twist=tw, head=(hp, hy))
 # eyes unfocused: slightly divergent, slow drift, never tracking (until the last beat where they still don't track but she smiles)
@@ -297,7 +303,7 @@ for f in (548, 600, 700, 820, 900, 1000, 1040):
 # teacher's left hand: on her own thigh, then on the girl's knee
 for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee")):
     ev(f)
-    if where == "thigh":
+    if True:
         p = T_KNEEL + T_F * 0.12 - T_R * 0.12 + V(0, 0, 0.06)
         T.hand("L", f, p, T_F + UP * -0.5, UP + T_F * 0.2, p - T_R * 0.35 + UP * 0.2)
     else:
@@ -369,6 +375,12 @@ for f in (1866, 1885, 1905):
         tip = mp + ff * 0.045 + side * sx * 0.03 + UP * 0.01
         along = (UP * 0.8 + side * -sx * 0.3).normalized()
         T.hand(s, f, tip - along * T_HL * 0.95 + ff * 0.01, along, ff, T_KNEEL + T_R * -sx * 0.4 + UP * 0.2)
+# the teacher's skirt only wraps her legs once she kneels (a straight column while she walks in)
+ts = bpy.data.objects["Teacher.long_skirt"]
+for mn in ("DrapeOnLegs", "DrapeIn", "Bridge"):
+    md = ts.modifiers[mn]
+    for f, v in ((1, False), (398, False), (399, True)):
+        md.show_render = v; md.show_viewport = v; md.keyframe_insert("show_render", frame=f); md.keyframe_insert("show_viewport", frame=f)
         T.fingers(s, f, 15, 15)
 # hug (1925-END): teacher rises to a high kneel and wraps both arms round the girl's shoulders
 T_HUG = T_KNEEL + T_F * 0.03 + V(0, 0, 0.1)
@@ -410,6 +422,7 @@ for i, f in enumerate(range(1453, 1723, 40)):
     mouth(T, f, ["O", "E", "M"][i % 3], 0.9); mouth(T, f + 25, "rest")
 for i, f in enumerate(range(1723, 1843, 12)):
     mouth(T, f, ["O", "E", "M", "AH"][i % 4], 0.8)
+T.face(540, smile=0.4, blink=0.5, brow=0.3); T.face(560, smile=0.2, jaw=1); T.face(1112, smile=0.5, blink=0.4); T.face(1130, smile=0.2)
 mouth(T, 1843, "rest"); mouth(T, 1860, "SMILE", 0.5); mouth(T, 1872, "GASP"); mouth(T, 1900, "GASP", 0.8); mouth(T, 1925, "SMILE", 1.0); mouth(T, END, "SMILE", 1.0)
 # girl mimics a little late and clumsy (beat 9), practice (10), first word (11)
 for i, f in enumerate(range(1475, 1723, 40)):
@@ -447,7 +460,7 @@ for s, sx in (("L", -1), ("R", 1)):
         Mo.foot(s, f, (a.x, a.y), MO_YAW)
 LAP = MO_HIP + MO_F * 0.3 + V(0, 0, 0.13)
 def mo_stand(f):
-    return smooth((f - 1885) / 50.0)
+    return 0.0
 for f in keys_every(1, END, 12):
     u = mo_stand(f)
     hip = MO_HIP.lerp(MO_HIP + MO_F * 0.38 + V(0, 0, Mo.root_head.z - 0.04 - MO_HIP.z), u)
@@ -533,6 +546,22 @@ for pb in clock.pose.bones: pb.rotation_mode = 'XYZ'
 for b, f, ang in (("ctrl_minutes", 1, 0), ("ctrl_minutes", 1723, 6), ("ctrl_minutes", 1843, 6 + 360 * 6), ("ctrl_minutes", END, 6 + 360 * 6 + 2),
                   ("ctrl_hour", 1, 0), ("ctrl_hour", 1723, 0.5), ("ctrl_hour", 1843, 180), ("ctrl_hour", END, 181)):
     pb = clock.pose.bones[b]; pb.rotation_euler = (0, R_(ang), 0); pb.keyframe_insert("rotation_euler", frame=f)
+# dog breathing (chest) and ear-like head twitches
+for f in keys_every(90, END, 20):
+    DR.key_rot("chest", f, [("X", 2.5 * math.sin(f / 9.0))]) if "chest" in DR.PB else None
+# ribbon bow at the back of the girl's head (child of the head bone)
+m_rib = matc("M_Ribbon", (0.45, 0.04, 0.05), 0.35)
+ev(1); hb = GIRL.o.pose.bones["head"]; hm = GIRL.o.matrix_world @ hb.matrix
+back = (hm.to_3x3() @ (GIRL.r.BN["head"].matrix_local.to_3x3().inverted() @ V(0, 1, 0))).normalized()
+hd0 = GIRL.bone_world("head")
+bow_c = hd0 + back * 0.085 + UP * 0.07
+for k, (sx, rz) in enumerate(((1, 25), (-1, -25), (0, 0))):
+    o = mk("HairRibbon_%d" % k, lambda bm: bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=8, radius=0.02), m_rib)
+    o.scale = (1.4, 0.45, 0.9) if sx else (0.6, 0.5, 0.6)
+    side_ = back.cross(UP).normalized()
+    o.matrix_world = Matrix.Translation(bow_c + side_ * sx * 0.024) @ Matrix.Rotation(R_(rz), 4, back) @ Vector((0, 1, 0)).rotation_difference(back).to_matrix().to_4x4() @ Matrix.Diagonal((*o.scale, 1))
+    c_ = o.constraints.new('CHILD_OF'); c_.target = GIRL.o; c_.subtarget = "head"
+    c_.inverse_matrix = (GIRL.o.matrix_world @ hb.matrix).inverted()
 print("FAMILY_DOG_DONE")
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())
 if OUT:

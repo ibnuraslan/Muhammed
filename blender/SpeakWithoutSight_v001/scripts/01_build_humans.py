@@ -40,7 +40,7 @@ def human(name, ph, hair, clothes, skin, x, tints):
     for c, rgb in tints.items(): tint(rig, c, rgb)
     return rig
 
-human("Girl", {"age": 0.215, "height": 0.5, "proportions": 0.5, "weight": 0.45}, "braid01/braid01.mhclo",
+human("Girl", {"age": 0.17, "height": 0.5, "proportions": 0.35, "weight": 0.45}, "braid01/braid01.mhclo",
       ["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes01/shoes01.mhclo"],
       "young_caucasian_female/young_caucasian_female.mhmat", 0.0, {"female_elegantsuit01": (0.05, 0.09, 0.2)})
 human("Teacher", {"age": 0.42, "height": 0.7, "weight": 0.45}, "ponytail01/ponytail01.mhclo",
@@ -54,60 +54,106 @@ human("Father", {"gender": 1.0, "age": 0.68, "height": 0.5, "weight": 0.6}, "sho
       "middleage_caucasian_male/middleage_caucasian_male.mhmat", 3.0, {"male_elegantsuit01": (0.05, 0.045, 0.04)})
 import math, bmesh
 from mathutils import Vector
-def long_skirt(rig, rgb, flare=0.14):
+def floor_clamp_group():
+    g = bpy.data.node_groups.get("FloorClamp")
+    if g: return g
+    g = bpy.data.node_groups.new("FloorClamp", 'GeometryNodeTree')
+    g.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
+    g.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    n, l = g.nodes, g.links
+    gi = n.new('NodeGroupInput'); go = n.new('NodeGroupOutput')
+    pos = n.new('GeometryNodeInputPosition'); sep = n.new('ShaderNodeSeparateXYZ'); mx = n.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'; mx.inputs[1].default_value = 0.006
+    com = n.new('ShaderNodeCombineXYZ'); sp = n.new('GeometryNodeSetPosition')
+    l.new(pos.outputs[0], sep.inputs[0]); l.new(sep.outputs['Z'], mx.inputs[0])
+    l.new(sep.outputs['X'], com.inputs['X']); l.new(sep.outputs['Y'], com.inputs['Y']); l.new(mx.outputs[0], com.inputs['Z'])
+    l.new(gi.outputs[0], sp.inputs['Geometry']); l.new(com.outputs[0], sp.inputs['Position']); l.new(sp.outputs[0], go.inputs[0])
+    return g
+
+def long_skirt(rig, rgb, flare=0.12, hem_z=0.03, shin=1.0, wrap_low=0.0):
+    SHIN = shin
+    """period skirt: a measured cone from the waist, weighted root -> thighs -> shins (no hem bone), floor-clamped by geometry nodes"""
     body = next(c for c in rig.children if c.name.endswith(".body"))
     B = rig.data.bones
     zw = B["spine04"].head_local.z + 0.02
-    cx, cy = B["root"].head_local.x, B["root"].head_local.y + 0.0
-    suit = next(c for c in rig.children if c.name.endswith("elegantsuit01"))
+    cx, cy = B["root"].head_local.x, B["root"].head_local.y
     dg = bpy.context.evaluated_depsgraph_get(); em = body.evaluated_get(dg).to_mesh()
     V = [v.co.copy() for v in em.vertices]
-    NS, NR = 48, 18
-    bm = bmesh.new(); rings = []
+    NS, NR = 48, 20
+    bm = bmesh.new(); rings = []; rr = []
     for r in range(NR):
-        t = r / (NR - 1); z = zw - t * (zw - 0.03)
+        t = r / (NR - 1); z = zw - t * (zw - hem_z)
         band = [v for v in V if abs(v.z - z) < 0.02 and abs(v.x - cx) < 0.21 and abs(v.y - cy) < 0.2]
-        rx = 1.15 * max([abs(v.x - cx) for v in band] or [0.15]); ry = 1.15 * max([abs(v.y - cy) for v in band] or [0.12])
-        if r > 0:
-            rx = max(rx, rings_r[-1][0]); ry = max(ry, rings_r[-1][1])
-        rings_r = (rings_r if r else []) + [(rx, ry)]
-        ex = 0.025 + flare * t ** 1.4
-        ring = [bm.verts.new((cx + (rx + ex) * math.sin(2 * math.pi * k / NS), cy + (ry + ex * 0.8) * -math.cos(2 * math.pi * k / NS), z)) for k in range(NS)]
-        rings.append(ring)
-    for a, b in zip(rings, rings[1:]):
+        rx = 1.12 * max([abs(v.x - cx) for v in band] or [0.12]); ry = 1.12 * max([abs(v.y - cy) for v in band] or [0.1])
+        if rr: rx = max(rx, rr[-1][0]); ry = max(ry, rr[-1][1])
+        rr.append((rx, ry))
+        ex = 0.02 + flare * t ** 1.3
+        rings.append([bm.verts.new((cx + (rx + ex) * math.sin(2 * math.pi * k / NS), cy - (ry + ex * 0.85) * math.cos(2 * math.pi * k / NS), z)) for k in range(NS)])
+    for a_, b_ in zip(rings, rings[1:]):
         for k in range(NS):
-            bm.faces.new((a[k], a[(k + 1) % NS], b[(k + 1) % NS], b[k]))
+            bm.faces.new((a_[k], a_[(k + 1) % NS], b_[(k + 1) % NS], b_[k]))
     me = bpy.data.meshes.new(rig.name + "_LongSkirt"); bm.to_mesh(me)
     for p in me.polygons: p.use_smooth = True
+    uv = me.uv_layers.new()
+    for i, lp in enumerate(me.loops):
+        co = me.vertices[lp.vertex_index].co; uv.data[i].uv = (math.atan2(co.x - cx, co.y - cy) / math.pi, co.z)
     ob = bpy.data.objects.new(rig.name + ".long_skirt", me); bpy.context.scene.collection.objects.link(ob)
     ob.parent = rig
-    # hem bone: keeps the hem on the floor (animated to follow the root in xy/yaw, scaled when she kneels or sits)
-    bpy.context.view_layer.objects.active = rig
-    for o_ in bpy.context.selected_objects: o_.select_set(False)
-    rig.select_set(True); bpy.ops.object.mode_set(mode='EDIT')
-    eb = rig.data.edit_bones; hb = eb.new("SkirtHem"); hb.head = (cx, cy, 0.0); hb.tail = (cx, cy, 0.15); hb.use_deform = True; hb.parent = None
-    bpy.ops.object.mode_set(mode='OBJECT')
-    G = {n: ob.vertex_groups.new(name=n) for n in ("root", "upperleg02.L", "upperleg02.R", "SkirtHem")}
+    names = ("root", "upperleg02.L", "upperleg02.R", "lowerleg01.L", "lowerleg01.R")
+    G = {n: ob.vertex_groups.new(name=n) for n in names}
+    zk = B["lowerleg01.L"].head_local.z
     for v in me.vertices:
-        t = (zw - v.co.z) / (zw - 0.03); side = max(-1, min(1, (v.co.x - cx) / 0.09)); wl = 0.5 + 0.5 * side
-        wr = max(0.0, 1 - t / 0.45); wh = max(0.0, (t - 0.45) / 0.55) ** 0.8; wleg = max(0.0, 1 - wr - wh)
-        G["root"].add([v.index], wr, 'REPLACE'); G["SkirtHem"].add([v.index], wh, 'REPLACE')
-        G["upperleg02.L"].add([v.index], wleg * wl, 'REPLACE'); G["upperleg02.R"].add([v.index], wleg * (1 - wl), 'REPLACE')
+        side = max(-1, min(1, (v.co.x - cx) / 0.1)); wl = 0.5 + 0.5 * side
+        wr = max(0.0, min(1.0, (v.co.z - (zw - 0.22)) / 0.2))          # waist band follows the pelvis
+        wk = SHIN * max(0.0, min(1.0, ((zk + 0.06) - v.co.z) / 0.18))   # below the knee drapes part-way after the shins
+        wt = max(0.0, 1 - wr - wk)
+        G["root"].add([v.index], wr, 'REPLACE')
+        G["upperleg02.L"].add([v.index], wt * wl, 'REPLACE'); G["upperleg02.R"].add([v.index], wt * (1 - wl), 'REPLACE')
+        G["lowerleg01.L"].add([v.index], wk * wl, 'REPLACE'); G["lowerleg01.R"].add([v.index], wk * (1 - wl), 'REPLACE')
+    WR = ob.vertex_groups.new(name="wrap")
+    for v in me.vertices:
+        above_knee = max(0.0, min(1.0, (v.co.z - (zk - 0.02)) / 0.1))
+        waist = max(0.0, min(1.0, (zw - 0.05 - v.co.z) / 0.1))
+        WR.add([v.index], waist * (above_knee + (1 - above_knee) * wrap_low), 'REPLACE')
+    # keep the legs under a long skirt (MPFB deletes body under the knee-length suit skirt)
+    dg_ = body.vertex_groups.get("Delete." + next(c for c in rig.children if c.name.endswith("elegantsuit01")).name.split(".")[-1])
+    if dg_:
+        dg_.remove([v.index for v in body.data.vertices if v.co.z < zw - 0.08])
     am = ob.modifiers.new("Armature", 'ARMATURE'); am.object = rig
+    sw = ob.modifiers.new("DrapeOnLegs", 'SHRINKWRAP'); sw.target = body; sw.wrap_method = 'NEAREST_SURFACEPOINT'
+    sw.wrap_mode = 'OUTSIDE_SURFACE'; sw.offset = 0.022; sw.vertex_group = "wrap"
+    sw2 = ob.modifiers.new("DrapeIn", 'SHRINKWRAP'); sw2.target = body; sw2.wrap_method = 'NEAREST_SURFACEPOINT'
+    sw2.wrap_mode = 'ON_SURFACE'; sw2.offset = 0.03; sw2.vertex_group = "wrap"
+    smo = ob.modifiers.new("Bridge", 'SMOOTH'); smo.factor = 0.7; smo.iterations = 8; smo.vertex_group = "wrap"
+    sw3 = ob.modifiers.new("KeepOut", 'SHRINKWRAP'); sw3.target = body; sw3.wrap_method = 'NEAREST_SURFACEPOINT'
+    sw3.wrap_mode = 'OUTSIDE_SURFACE'; sw3.offset = 0.012
+    gn = ob.modifiers.new("FloorClamp", 'NODES'); gn.node_group = floor_clamp_group()
+    ob.modifiers.new("Solid", 'SOLIDIFY').thickness = 0.006
+    ob.modifiers.new("Sub", 'SUBSURF').levels = 1
+    suit = next(c for c in rig.children if c.name.endswith("elegantsuit01"))
     vg = suit.vertex_groups.new(name="upper_only")
     vg.add([v.index for v in suit.data.vertices if v.co.z > zw - 0.06], 1.0, "REPLACE")
     mk = suit.modifiers.new("HideSkirt", 'MASK'); mk.vertex_group = "upper_only"
-    while suit.modifiers[0].name != "HideSkirt": bpy.ops.object.modifier_move_up({"object": suit}, modifier="HideSkirt") if False else suit.modifiers.move(len(suit.modifiers)-1, 0)
-    ob.modifiers.new("Solid", 'SOLIDIFY').thickness = 0.006
-    ob.modifiers.new("Sub", 'SUBSURF').levels = 1
+    suit.modifiers.move(len(suit.modifiers) - 1, 0)
     m = bpy.data.materials.new(rig.name + "_SkirtFabric"); m.use_nodes = True
-    p = m.node_tree.nodes["Principled BSDF"]; p.inputs["Base Color"].default_value = (*rgb, 1); p.inputs["Roughness"].default_value = 0.85
-    nz = m.node_tree.nodes.new("ShaderNodeTexWave"); nz.inputs["Scale"].default_value = 30; nz.wave_type = 'BANDS'; nz.bands_direction = 'X'
-    bp = m.node_tree.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.15
-    m.node_tree.links.new(nz.outputs["Fac"], bp.inputs["Height"]); m.node_tree.links.new(bp.outputs["Normal"], p.inputs["Normal"])
+    nt = m.node_tree; p = nt.nodes["Principled BSDF"]; p.inputs["Roughness"].default_value = 0.8
+    p.inputs["Sheen Weight"].default_value = 0.25; p.inputs["Sheen Tint"].default_value = (*rgb, 1)
+    # woven texture: fine twill bands + noise so it never reads as clay
+    tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (60, 60, 60)
+    nt.links.new(tc.outputs["Object"], mp.inputs["Vector"])
+    wv = nt.nodes.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'DIAGONAL'; wv.inputs["Scale"].default_value = 3.0
+    nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.4; nz.inputs["Detail"].default_value = 6
+    nt.links.new(mp.outputs["Vector"], wv.inputs["Vector"]); nt.links.new(mp.outputs["Vector"], nz.inputs["Vector"])
+    cr = nt.nodes.new("ShaderNodeMix"); cr.data_type = 'RGBA'; cr.inputs["A"].default_value = (*[c * 0.7 for c in rgb], 1); cr.inputs["B"].default_value = (*rgb, 1)
+    mixf = nt.nodes.new("ShaderNodeMath"); mixf.operation = 'MULTIPLY'
+    nt.links.new(wv.outputs["Fac"], mixf.inputs[0]); nt.links.new(nz.outputs["Fac"], mixf.inputs[1]); nt.links.new(mixf.outputs[0], cr.inputs["Factor"])
+    nt.links.new(cr.outputs["Result"], p.inputs["Base Color"])
+    bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25
+    nt.links.new(wv.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], p.inputs["Normal"])
     me.materials.append(m)
     return ob
-# long skirts dropped: they balloon when kneeling (kept the function for later)
+long_skirt(bpy.data.objects["Teacher"], (0.06, 0.07, 0.12), flare=0.08, shin=1.0, wrap_low=0.8)
+long_skirt(bpy.data.objects["Mother"], (0.17, 0.05, 0.06))
+long_skirt(bpy.data.objects["Girl"], (0.07, 0.13, 0.28), flare=0.07, hem_z=0.2)
 
 for ob in bpy.data.objects:
     if ob.type == 'ARMATURE':

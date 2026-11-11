@@ -15,7 +15,7 @@ BASE = {n: L.energy for n, L in LIGHTS.items()}
 BASE["L_StudioKey"], BASE["L_StudioRim"] = 160.0, 120.0
 bg = sc.world.node_tree.nodes["Background"].inputs["Strength"]
 # room level: 1 = normal, ~0.12 = the dark of beat 2, ~0.25 under the explainer dome
-ROOM = [(1, 1.0), (175, 1.0), (250, 0.12), (395, 0.12), (450, 1.0), (700, 1.0), (735, 0.3), (1060, 0.3), (1100, 1.0), (END, 1.0)]
+ROOM = [(1, 1.0), (175, 1.0), (250, 0.2), (395, 0.2), (450, 1.0), (700, 1.0), (735, 0.3), (1060, 0.3), (1100, 1.0), (END, 1.0)]
 STUDIO = [(1, 0.0), (700, 0.0), (735, 1.0), (1060, 1.0), (1100, 0.0), (END, 0.0)]
 room = pchip(ROOM); stud = pchip(STUDIO)
 TL0, TL1 = 1723, 1843   # time-lapse window
@@ -78,11 +78,21 @@ if fl and fl.data.materials:
             keyv(bs.inputs["Emission Strength"], f, 8.0 * lamp_on(f))
 # ---------------------------------------------- dark bubble (beat 2) and the explainer dome (beats 5-6)
 bub_mix = bpy.data.materials["M_Bubble"].node_tree.nodes["BubbleMix"].inputs[0]
-keyseq(bub_mix, [(1, 0.0), (180, 0.0), (255, 0.93), (400, 0.93), (418, 0.6), (450, 0.0), (END, 0.0)])
+keyseq(bub_mix, [(1, 0.0), (180, 0.0), (255, 0.78), (400, 0.78), (418, 0.5), (450, 0.0), (END, 0.0)])
+bn = bpy.data.materials["M_Bubble"].node_tree.nodes
+bn["Layer Weight"].inputs['Blend'].default_value = 0.6      # soft vignette edge, clear centre
+ev(300); gface_p = G.bone_world("head") + V(0, -0.12, 0.03)
+fl_ = bpy.data.lights.new("L_BubbleFace", 'SPOT'); fl_.spot_size = R_(40); fl_.spot_blend = 0.8; fl_.shadow_soft_size = 0.15; fl_.color = (1.0, 0.86, 0.72)
+flo = bpy.data.objects.new("L_BubbleFace", fl_); sc.collection.objects.link(flo); flo.visible_camera = False
+flo.location = gface_p + V(0.35, -0.55, 0.35); flo.rotation_euler = (gface_p - flo.location).to_track_quat('-Z', 'Y').to_euler()
+for f, e_ in ((1, 0.0), (175, 0.0), (240, 45.0), (400, 45.0), (450, 0.0), (END, 0.0)):
+    fl_.energy = e_; fl_.keyframe_insert("energy", frame=f)
 bub = bpy.data.objects["DarkBubble"]
 keyattr(bub, "scale", [(170, Vector((1.6, 1.6, 1.6))), (255, Vector((1.0, 1.0, 1.0))), (400, Vector((1.0, 1.0, 1.0))), (450, Vector((1.25, 1.25, 1.25)))])
 keyattr(bub, "hide_render", [(1, True), (178, False), (452, True)])
 dome_mix = bpy.data.materials["M_ExplainerDome"].node_tree.nodes["DomeMix"].inputs[0]
+_cr = next(n for n in bpy.data.materials["M_ExplainerDome"].node_tree.nodes if n.type == 'VALTORGB').color_ramp
+_cr.elements[0].position = 0.2; _cr.elements[0].color = (0.02, 0.16, 0.24, 1); _cr.elements[1].position = 0.9; _cr.elements[1].color = (0.55, 0.85, 0.95, 1)
 keyseq(dome_mix, [(1, 0.0), (700, 0.0), (740, 1.0), (1058, 1.0), (1100, 0.0), (END, 0.0)])
 dome = bpy.data.objects["ExplainerDome"]
 keyattr(dome, "hide_render", [(1, True), (698, False), (1102, True)])
@@ -111,15 +121,15 @@ def xray_material(m, empties):
     for e in empties:
         tc = nt.nodes.new('ShaderNodeTexCoord'); tc.object = e
         ln = nt.nodes.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'; nt.links.new(tc.outputs['Object'], ln.inputs[0])
-        mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 1.0; mr.inputs['From Max'].default_value = 0.7
+        mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 1.0; mr.inputs['From Max'].default_value = 0.85
         nt.links.new(ln.outputs['Value'], mr.inputs['Value']); masks.append(mr.outputs['Result'])
     acc = masks[0]
     for mk_ in masks[1:]:
         mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'; nt.links.new(acc, mx.inputs[0]); nt.links.new(mk_, mx.inputs[1]); acc = mx.outputs[0]
     val = nt.nodes.new('ShaderNodeValue'); val.name = "XRAY"; val.outputs[0].default_value = 0.0; XR_VAL.append(val.outputs[0])
     mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; nt.links.new(acc, mul.inputs[0]); nt.links.new(val.outputs[0], mul.inputs[1])
-    tr_ = nt.nodes.new('ShaderNodeBsdfTransparent'); em_ = nt.nodes.new('ShaderNodeEmission'); em_.inputs['Color'].default_value = (0.45, 0.85, 1.0, 1); em_.inputs['Strength'].default_value = 0.6
-    lw_ = nt.nodes.new('ShaderNodeLayerWeight'); lw_.inputs['Blend'].default_value = 0.4
+    tr_ = nt.nodes.new('ShaderNodeBsdfTransparent'); em_ = nt.nodes.new('ShaderNodeEmission'); em_.inputs['Color'].default_value = (0.6, 0.9, 1.0, 1); em_.inputs['Strength'].default_value = 1.2
+    lw_ = nt.nodes.new('ShaderNodeLayerWeight'); lw_.inputs['Blend'].default_value = 0.12
     gm = nt.nodes.new('ShaderNodeMixShader'); nt.links.new(lw_.outputs['Facing'], gm.inputs[0]); nt.links.new(tr_.outputs[0], gm.inputs[1]); nt.links.new(em_.outputs[0], gm.inputs[2])
     mixs = nt.nodes.new('ShaderNodeMixShader'); nt.links.new(mul.outputs[0], mixs.inputs[0]); nt.links.new(src, mixs.inputs[1]); nt.links.new(gm.outputs[0], mixs.inputs[2])
     nt.links.new(mixs.outputs[0], out.inputs['Surface'])
@@ -159,6 +169,26 @@ for f in range(697, 1063, 3):
     a = 0.5 if loud else (0.12 if soft else 0.28)
     for i, fo in enumerate(folds):
         fo.scale = (1.0 + a * (1 if (f // 3 + i) % 2 else -0.6), 3.0, 1.0); fo.keyframe_insert("scale", frame=f)
+m_bone = bpy.data.materials.new("M_HandBone"); m_bone.use_nodes = True
+pb_ = m_bone.node_tree.nodes["Principled BSDF"]; pb_.inputs["Base Color"].default_value = (0.9, 0.86, 0.76, 1); pb_.inputs["Roughness"].default_value = 0.45
+pb_.inputs["Subsurface Weight"].default_value = 0.4; pb_.inputs["Subsurface Radius"].default_value = (0.3, 0.2, 0.15)
+pb_.inputs["Emission Color"].default_value = (0.9, 0.95, 1.0, 1); pb_.inputs["Emission Strength"].default_value = 0.15
+nzb = m_bone.node_tree.nodes.new("ShaderNodeTexNoise"); nzb.inputs["Scale"].default_value = 400.0
+bpb = m_bone.node_tree.nodes.new("ShaderNodeBump"); bpb.inputs["Strength"].default_value = 0.2
+m_bone.node_tree.links.new(nzb.outputs["Fac"], bpb.inputs["Height"]); m_bone.node_tree.links.new(bpb.outputs["Normal"], pb_.inputs["Normal"])
+HAND_BONES = []
+BONE_LIST = ["metacarpal%d.R" % k for k in range(1, 5)] + ["finger%d-%d.R" % (k, j) for k in range(1, 6) for j in range(1, 4)] + ["lowerarm01.R", "lowerarm02.R"]
+ev(760)
+for bn_ in BONE_LIST:
+    if bn_ not in G.o.pose.bones: continue
+    pbn = G.o.pose.bones[bn_]; h_ = G.o.matrix_world @ pbn.head; t_ = G.o.matrix_world @ pbn.tail
+    L_ = (t_ - h_).length; rad = (0.0045 if "finger" in bn_ else 0.006) if "lowerarm" not in bn_ else 0.008
+    o = mk("XRayBone_" + bn_.replace(".", "_"), lambda bm: bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=rad, radius2=rad * 0.8, depth=L_ * 0.86), m_bone)
+    o.modifiers.new("Sub", 'SUBSURF').levels = 1
+    o.matrix_world = Matrix.Translation((h_ + t_) / 2) @ Vector((0, 0, 1)).rotation_difference(t_ - h_).to_matrix().to_4x4()
+    attach(o, G, bn_, 760); HAND_BONES.append(o)
+for o in HAND_BONES + []:
+    keyattr(o, "hide_render", [(1, True), (712, False), (1080, True)])
 # pulse dots: larynx -> fingertip -> knuckles -> wrist -> forearm -> elbow -> shoulder
 m_dot = bpy.data.materials.new("M_PulseDot"); m_dot.use_nodes = True
 nd = m_dot.node_tree.nodes; nd.remove(nd["Principled BSDF"])
@@ -176,9 +206,10 @@ def polyline_pt(pts, u):
     for i in range(len(pts) - 1):
         if L[i + 1] >= t: return pts[i].lerp(pts[i + 1], (t - L[i]) / max(1e-6, L[i + 1] - L[i]))
     return pts[-1]
-def path_teacher(f):
-    ev(f); tip = G.bone_world("finger3-3.R", tail=True)
-    return [lc_world(f), tip, G.bone_world("finger3-1.R"), G.bone_world("wrist.R"), G.bone_world("lowerarm01.R").lerp(G.bone_world("wrist.R"), 0.5),
+FINGER_OF = {}
+def path_teacher(f, k=3):
+    ev(f); tip = G.bone_world("finger%d-3.R" % k, tail=True)
+    return [lc_world(f), tip, G.bone_world("finger%d-3.R" % k), G.bone_world("finger%d-2.R" % k), G.bone_world("finger%d-1.R" % k), G.bone_world("wrist.R"), G.bone_world("lowerarm01.R").lerp(G.bone_world("wrist.R"), 0.5),
             G.bone_world("lowerarm01.R"), G.bone_world("upperarm01.R").lerp(G.bone_world("lowerarm01.R"), 0.5), G.bone_world("upperarm01.R"), G.bone_world("neck03"), G.bone_world("head") + V(0, 0, 0.06)]
 def lc_world(f):
     ev(f); return T.bone_world("neck01").lerp(T.bone_world("neck02"), 0.5) + fdir(T_YAW) * 0.012
@@ -188,13 +219,15 @@ def path_girl(f):
     return [lg, G.bone_world("finger3-3.L", tail=True), G.bone_world("wrist.L"), G.bone_world("lowerarm01.L"), G.bone_world("upperarm01.L"), G.bone_world("head") + V(0, 0, 0.06)]
 def dot_keys(f0, f1, pathfn, style):
     for f in range(f0, f1 + 1, 2):
-        pts = pathfn(f)
         sz, br, sp = style(f)
+        paths = {k: pathfn(f, k) for k in (2, 3, 4)} if pathfn is path_teacher else None
+        pts = None if paths else pathfn(f)
         for i, d_ in enumerate(dots):
+            if paths: pts = paths[2 + i % 3]
             u = ((f - f0) * sp + i / NDOT) % 1.0
             d_.location = polyline_pt(pts, u); fade = min(1.0, u * 8, (1 - u) * 6)
             s_ = sz * (0.6 + 0.4 * fade); d_.scale = (s_, s_, s_)
-            d_.color = (0.55, 0.92, 1.0, br * fade)
+            d_.color = (1.0, 0.62, 0.28, br * fade)
             d_.keyframe_insert("location", frame=f); d_.keyframe_insert("scale", frame=f); d_.keyframe_insert("color", frame=f)
 def style_teacher(f):
     if f < 895: return 1.0, 0.6 * smooth((f - 705) / 30.0), 0.006
@@ -234,6 +267,22 @@ for f, shp in OEM:
 g_rings = contour_ring("LipContour_G", G)
 for o in g_rings:
     keyattr(o, "hide_render", [(1, True), (1470, False), (1720, True)])
+def press_dent(surface, P, bone, name):
+    e = bpy.data.objects.new(name, None); bpy.data.collections["FX"].objects.link(e)
+    c_ = e.constraints.new('COPY_LOCATION'); c_.target = P.o; c_.subtarget = bone; c_.head_tail = 1.0
+    ob = bpy.data.objects[surface]
+    vg = ob.vertex_groups.get("press_" + name) or ob.vertex_groups.new(name="press_" + name)
+    vg.add(list(range(len(ob.data.vertices))), 0.0, 'REPLACE')
+    vp = ob.modifiers.new("PressW_" + name, 'VERTEX_WEIGHT_PROXIMITY'); vp.vertex_group = vg.name; vp.target = e
+    vp.proximity_mode = 'OBJECT'; vp.min_dist = 0.016; vp.max_dist = 0.0; vp.falloff_type = 'SMOOTH'
+    ds = ob.modifiers.new("PressD_" + name, 'DISPLACE'); ds.vertex_group = vg.name; ds.strength = -0.0025; ds.mid_level = 0.0
+    ds.direction = 'NORMAL'
+    # keep these right after the armature so they act on the posed skin
+    for m_ in (vp, ds):
+        idx = list(ob.modifiers).index(m_); arm_i = next(i for i, mm in enumerate(ob.modifiers) if mm.type == 'ARMATURE')
+        ob.modifiers.move(idx, arm_i + 1 + (1 if m_ is ds else 0))
+press_dent("Teacher.body", G, "finger3-3.R", "GirlTipR")
+press_dent("Girl.body", G, "finger3-3.L", "GirlTipL")
 print("FX_DONE")
 # ---------------------------------------------- one continuous camera (Catmull-Rom through ~1 s framings)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.02
@@ -249,6 +298,9 @@ def tthroat(f): return t_throat(f)
 def gtip(f): ev(f); return G.bone_world("finger3-3.R", tail=True)
 def gelbow(f): ev(f); return G.bone_world("lowerarm01.R")
 def gmouth(f): return g_own_mouth(f)[0]
+def gface_cam(f, d, side=0.0, up=0.0):
+    p, ff = g_own_mouth(f); ff = (ff - UP * ff.dot(UP)).normalized(); sd = ff.cross(UP).normalized()
+    return p + ff * d + sd * side + UP * up
 def pair(f): ev(f); return (G.bone_world("head") + T.bone_world("head")) / 2 - V(0, 0, 0.12)
 def dogh(f): ev(f); return dog.matrix_world @ dog.pose.bones["head"].head
 TFw, TRw = fdir(T_YAW), rdir(T_YAW)
@@ -260,25 +312,25 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (397, V(0.65, -2.1, 1.45), V(-0.35, 0.1, 0.85), 22), (460, lambda f: pair(f) + V(0.05, -1.15, 0.0), pair, 26),
     (530, lambda f: tthroat(f) + V(0.32, -0.38, -0.05), tthroat, 40),
     (595, lambda f: tthroat(f) + TRw * 0.32 - TFw * 0.05 + V(0, 0, -0.2), tmouth, 30),
-    (655, lambda f: tmouth(f) + TRw * 0.45 + V(0, 0, 0.03), tmouth, 40),
-    (697, lambda f: tthroat(f) + TRw * 0.34 + V(0, 0, 0.02), tthroat, 50),
-    (760, lambda f: gtip(f) + TRw * 0.3 - TFw * 0.1 + V(0, 0, -0.12), gtip, 50),
-    (830, lambda f: gelbow(f).lerp(gtip(f), 0.5) + TRw * 0.36 + V(0, 0, -0.1), lambda f: gelbow(f).lerp(gtip(f), 0.4), 40),
+    (655, lambda f: tmouth(f) + TRw * 0.48 - TFw * 0.06 + V(0, 0, -0.02), tmouth, 40),
+    (697, lambda f: tthroat(f) + TRw * 0.4 - TFw * 0.05 + V(0, 0, -0.03), tthroat, 45),
+    (760, lambda f: gtip(f) + TRw * 0.38 - TFw * 0.08 + V(0, 0, 0.02), gtip, 50),
+    (830, lambda f: gelbow(f).lerp(gtip(f), 0.5) + TRw * 0.42 - TFw * 0.12 + V(0, 0, -0.04), lambda f: gelbow(f).lerp(gtip(f), 0.45), 38),
     (895, lambda f: pair(f) + V(0.25, -0.95, 0.15), lambda f: tthroat(f).lerp(gtip(f), 0.5), 28),
-    (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.42 - TFw * 0.12 + V(0.0, 0, -0.04), tthroat, 45),
+    (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.5 - TFw * 0.15 + V(0.0, 0, 0.0), lambda f: tthroat(f).lerp(gtip(f), 0.5), 40),
     (1063, lambda f: tmouth(f) + TRw * 0.42 + V(0, 0, 0.07), tmouth, 35),
     (1125, lambda f: tmouth(f) + TRw * 0.36 - TFw * 0.04 + V(0, 0, 0.04), tmouth, 55),
     (1190, lambda f: tmouth(f) + TRw * 0.32 + TFw * 0.06 + V(0, 0, 0.1), tmouth, 55),
     (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
     (1320, lambda f: tmouth(f) + TRw * 0.28 - TFw * 0.12 + V(0, 0, 0.0), tmouth, 60),
     (1385, lambda f: tmouth(f) + TRw * 0.3 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 55),
-    (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.55, -0.55, 0.0), gface, 32),
-    (1590, lambda f: gmouth(f) + V(-0.14, -0.36, 0.02), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
+    (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
+    (1590, lambda f: gmouth(f) + V(0.22, -0.36, 0.03), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them
 for k, f in enumerate((1723, 1763, 1803)):
     a = R_(65 - 55 * k)
     SHOTS.append((f, (lambda a_: (lambda f_: pair(f_) + V(1.55 * math.sin(a_), -1.55 * math.cos(a_), 0.15)))(a), pair, 24))
-SHOTS += [(1843, lambda f: gmouth(f) + V(0.1, -0.52, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
+SHOTS += [(1843, lambda f: gmouth(f) + V(0.25, -0.5, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
           (END, lambda f: pair(f) + V(0.35, -1.9, 1.1), pair, 22)]
 res = []
 for f, cp, ap, ln in SHOTS:
