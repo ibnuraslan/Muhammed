@@ -247,7 +247,7 @@ def arm_pattern(ch):
 
 # ---------------------------------------------------------------- build
 def make(name="TW", loc=(0, 0, 0), rot_z=0.0, color=(0.20, 0.25, 0.30), bugged=False, text="", glyphs=True,
-         legends=True, mechanism=True, seed=3):
+         legends=True, mechanism=True, seed=3, dpi=220):
     M = materials(color)
     c = {"M": M, "bugged": bugged}
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
@@ -385,7 +385,7 @@ def make(name="TW", loc=(0, 0, 0), rot_z=0.0, color=(0.20, 0.25, 0.30), bugged=F
     _parent(feed, root); feed.location = (0, 0, TOP)                  # z = page distance of the print line from the page top
     c["feed"] = feed
     txt = text or " "
-    img = page_image(txt, os.path.join(GEN, "typewriter", f"{name}_page_{abs(hash(txt)) % 100000}.png"), seed=seed)
+    img = page_image(txt, os.path.join(GEN, "typewriter", f"{name}_page_{abs(hash(txt)) % 100000}_{dpi}.png"), dpi=dpi, seed=seed)
     pm = paper_material(name + "_Paper", img, car, feed)
     paper = paper_mesh(name + "_Sheet", pm); _parent(paper, root)
     c["paper"] = paper; c["text"] = text
@@ -553,3 +553,39 @@ def set_cover(c, open_deg=0.0, hide=False):
     c["lid"].rotation_euler = (math.radians(open_deg), 0, 0)
     for o in c["shell"]:
         o.hide_render = hide
+
+
+def xray_shell(c, expr="0", objs=None, tint=(0.55, 0.75, 1.0)):
+    """Fade the housing (shell, lid, keys, platen) toward an X-ray-clear look: mostly transparent, with a faint cool
+    glow on surfaces seen edge-on. `expr` is a driver expression in `frame` giving 0 (solid) .. 1 (clear), so the fade
+    plays in any render of the baked .blend. The mechanism inside keeps its own materials."""
+    objs = objs if objs is not None else (c["shell"] + [o for o in c["root"].children_recursive if "_Key_" in o.name or o.name.endswith("_Platen")
+                                                       or "_Knob" in o.name or "_Scale" in o.name or "_WellFloor" in o.name or "_Foot" in o.name])
+    done = {}
+    for o in objs:
+        if o.type not in ('MESH', 'CURVE', 'FONT'):
+            continue
+        new = []
+        for m in o.data.materials:
+            if m is None:
+                new.append(m); continue
+            if m.name not in done:
+                x = m.copy(); x.name = m.name + "_X"
+                N = x.node_tree.nodes; L = x.node_tree.links
+                out = next(n for n in N if n.type == 'OUTPUT_MATERIAL')
+                src = out.inputs['Surface'].links[0].from_socket
+                lw = N.new("ShaderNodeLayerWeight"); lw.inputs['Blend'].default_value = 0.35
+                em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*tint, 1)
+                ramp = N.new("ShaderNodeMath"); ramp.operation = 'MULTIPLY'; ramp.inputs[1].default_value = 1.2
+                L.new(lw.outputs['Facing'], ramp.inputs[0]); L.new(ramp.outputs[0], em.inputs['Strength'])
+                tr = N.new("ShaderNodeBsdfTransparent")
+                ad = N.new("ShaderNodeAddShader"); L.new(tr.outputs[0], ad.inputs[0]); L.new(em.outputs[0], ad.inputs[1])
+                fv = N.new("ShaderNodeValue"); d = fv.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = expr
+                mx = N.new("ShaderNodeMixShader"); L.new(fv.outputs[0], mx.inputs[0]); L.new(src, mx.inputs[1]); L.new(ad.outputs[0], mx.inputs[2])
+                L.new(mx.outputs[0], out.inputs['Surface'])
+                done[m.name] = x
+            new.append(done[m.name])
+        o.data = o.data.copy()
+        for i, m in enumerate(new):
+            o.data.materials[i] = m
+    return done

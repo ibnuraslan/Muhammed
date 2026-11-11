@@ -106,7 +106,7 @@ def build(variant=None):
             tw = T.make(f"TW{k}", loc=(p.x - 0.15 + (0.55 if nsa and k < 2 else 0), p.y + 0.21 - (0.15 if nsa and k < 2 else 0), DESK_Z),
                         rot_z=math.pi + (0.5 if nsa and k < 2 else 0),
                         text=TEXT_P if (night and k == 0) else (TEXT_G if (variant == "attache" and k == 0) else (TEXT_A if k == 0 else "Please clear all papers from the")),
-                        color=(0.11, 0.15, 0.2) if k != 1 else (0.32, 0.28, 0.22), mechanism=(k == 0), glyphs=(k == 0), legends=(k == 0), seed=k)
+                        color=(0.11, 0.15, 0.2) if k != 1 else (0.32, 0.28, 0.22), mechanism=(k == 0), glyphs=(k == 0), legends=(k == 0), seed=k, dpi=400 if k == 0 else 160)
             c["tws"].append(tw)
         ph.model("office_notepads", loc=(p.x + 0.55, p.y - 0.05, DESK_Z), rot_z=rng.uniform(-0.3, 0.3), scale=0.45)
         for j in range(3):
@@ -155,6 +155,26 @@ def build(variant=None):
                     f.hide_render = True                   # thinned out: many folders are simply gone
     ph.model("wall_clock", loc=(-0.4, 2.99, 2.25), rot_z=math.pi)
     ph.model("potted_plant_01", loc=(3.5, 2.5, 0))
+    # dressing on the left wall: a framed picture, a plant, a flag on a floor stand, a coat stand of shelving
+    for loc, aid in (((-3.98, 1.4, 1.75), "hanging_picture_frame_02"), ((-3.98, -2.2, 1.7), "hanging_picture_frame_01")):
+        try:
+            ph.model(aid, loc=loc, rot_z=-math.pi / 2)
+        except Exception:
+            pass
+    ph.model("potted_plant_02", loc=(-3.6, 0.9, 0))
+    ph.model("potted_plant_04", loc=(-3.55, -2.6, 0))
+    import sc_twembassy
+    cyl("FlagPoleO", (-3.6, -1.8, 1.15), 0.02, 2.3, pbr("BrassO", (0.75, 0.6, 0.35), 0.3, 1.0))
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=16, y_subdivisions=24, size=1)
+    fl_ = bpy.context.active_object; fl_.scale = (0.5, 0.85, 1); bpy.ops.object.transform_apply(scale=True)
+    fl_.rotation_euler = (math.radians(90), 0, math.radians(60)); fl_.location = (-3.48, -1.6, 1.85); fl_.data.materials.append(sc_twembassy.flag_material())
+    fdm = fl_.modifiers.new("drape", 'WAVE'); fdm.use_x = True; fdm.use_y = False; fdm.height = 0.03; fdm.width = 0.12; fdm.speed = 0.002
+    if not night:
+        for k, pos in enumerate(((-1.5 + 0.5, 0.65), (0.9 + 0.5, -1.65))):
+            r_, ms_ = ph.model("desk_lamp_arm_01", loc=(pos[0], pos[1], DESK_Z), rot_z=math.radians(200)); twp.tint_model(ms_, (0.16, 0.2, 0.17), keep=0.1)
+            ll = bpy.data.lights.new("DayLamp", 'SPOT'); ll.energy = 15; ll.spot_size = math.radians(80); ll.color = (1.0, 0.78, 0.5)
+            lo_ = bpy.data.objects.new("DayLamp", ll); bpy.context.collection.objects.link(lo_); lo_.location = (pos[0] - 0.15, pos[1] - 0.15, DESK_Z + 0.48)
+            point_at(lo_, (pos[0] - 0.4, pos[1] - 0.2, DESK_Z))
     cork = pbr("Cork", (0.4, 0.29, 0.18), 0.9)
     box("CorkBoard", (-3.985, -0.6, 1.55), (0.03, 1.6, 1.0), cork)
     box("CorkFrame", (-3.99, -0.6, 1.55), (0.02, 1.66, 1.06), pbr("CorkFrame", (0.15, 0.1, 0.06), 0.5))
@@ -201,10 +221,10 @@ def build(variant=None):
                                                           ("PlanC", 0.0, 41, "female_casualsuit02", "bob01", 0.55, 0.08))):
             c["people"][nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.2)
     if variant in (None, "day"):
-        sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "bob02", hv=0.22, cval=0.55, hue=0.58, sat=0.3)
+        sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "ponytail01", hv=0.22, cval=0.55, hue=0.58, sat=0.3)
         twp.seat(sec, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=12)
         c["people"]["sec"] = sec
-        sec2 = twp.person("Secretary2", 0.0, 45, "female_casualsuit01", "ponytail01", hv=0.4, cval=0.6, hue=0.1, sat=0.25)
+        sec2 = twp.person("Secretary2", 0.0, 45, "female_casualsuit01", "bob01", hv=0.4, cval=0.6, hue=0.1, sat=0.25)
         twp.seat(sec2, (-1.65, 1.06, 0), 0.0, lean=12)
         c["people"]["sec2"] = sec2
         clerk = twp.person("Clerk", 1.0, 40, "male_casualsuit03", "short02", hv=0.25, cval=0.5, hue=0.6, sat=0.2)
@@ -284,7 +304,7 @@ def animate(c, sec, shot=None):
         bpy.context.view_layer.update()
         return
     if night:
-        T.type_at(c["tw"], sec, text=TEXT_N, start=1.2 if shot == "night_type" else 99.0, cps=5.5)
+        T.type_at(c["tw"], sec, text=TEXT_N, start=0.6 if shot == "night_type" else 99.0, cps=2.6)
     else:
         for k, tw in enumerate(c["tws"]):
             T.type_at(tw, sec + k * 1.3, start=0.0, cps=7.0 if k == 0 else 6.0)
@@ -329,8 +349,8 @@ def cam_typing(c, t):
     e = ease(t)
     hd = c["people"]["sec"].bone_head("head")
     tgt = _tw(c, (0.0, -0.05, 0.14)).lerp(hd, 0.4)
-    a = _tw(c, (0.95, 0.05, 0.3)); b = _tw(c, (0.8, 0.02, 0.28))
-    return (a.lerp(b, e), tgt, 38)
+    a = _tw(c, (2.1, -0.32, 0.62)); b = _tw(c, (1.85, -0.3, 0.58))       # medium-wide, side-on: her, the desk, the machine
+    return (a.lerp(b, e), tgt, 32)
 
 
 def cam_notice(c, t):
@@ -346,11 +366,12 @@ def cam_night_push(c, t):
 
 
 def cam_night_type(c, t):
+    """The hero macro: low over the keyboard, the ball centred, a slow drift that keeps pace with the carrier."""
     e = ease(t)
-    car = c["tw"]["carrier"].location.x
-    tgt = _tw(c, (-0.02 + 0.04 * e, 0.02, 0.125))
-    a = _tw(c, (0.16, -0.38, 0.36)); b = _tw(c, (0.12, -0.33, 0.33))
-    return (a.lerp(b, e), tgt, 50)
+    x0 = T.PAGE_LEFT + T.MARGIN; x1 = x0 + 10 * T.PITCH
+    cx = x0 + (x1 - x0) * t
+    a = _tw(c, (cx + 0.07, -0.21, 0.27)); b = _tw(c, (cx + 0.05, -0.18, 0.25))
+    return (a.lerp(b, e), _tw(c, (cx - 0.004, T.BALL_Y + 0.006, T.BALL_Z + 0.002)), 70)
 
 
 def plans_image(path):
@@ -423,5 +444,5 @@ MOVES = {
     "typing": dict(kind="anim", dof=2.6, cam=cam_typing, focus=lambda c, t: _tw(c, (0.0, 0.03, 0.13)), anim=anim("typing")),
     "notice": dict(kind="anim", dof=3.2, cam=cam_notice, focus=lambda c, t: c["notice"].location, anim=anim("notice")),
     "night_push": dict(kind="anim", dof=2.0, cam=cam_night_push, focus=lambda c, t: _tw(c, (0, 0, 0.12)), anim=anim("night_push")),
-    "night_type": dict(kind="anim", dof=2.0, cam=cam_night_type, focus=lambda c, t: T.strike_point(c["tw"]), anim=anim("night_type")),
+    "night_type": dict(kind="anim", dof=6.3, cam=cam_night_type, focus=lambda c, t: T.world(c["tw"], (c["tw"]["carrier"].location.x, T.BALL_Y, T.BALL_Z)), anim=anim("night_type")),
 }

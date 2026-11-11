@@ -27,7 +27,7 @@ def recolor(o, hue, sat, val):
     """Muted solid period colour for a garment (the MakeHuman textures are mostly near-black): base = colour,
     with a little of the texture kept for weave and seams."""
     import colorsys
-    col = colorsys.hsv_to_rgb(hue % 1.0, min(sat * 1.3, 0.38), 0.05 + 0.26 * val)
+    col = colorsys.hsv_to_rgb(hue % 1.0, min(0.12 + sat * 1.4, 0.48), 0.05 + 0.26 * val)
     for m in o.data.materials:
         N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
         src = p.inputs['Base Color'].links[0].from_socket
@@ -152,3 +152,50 @@ def model_fit(aid, loc, rot_z=0.0, height=None, width=None):
     r.scale = (k, k, k); r.rotation_euler = (0, 0, rot_z); r.location = Vector(loc) - Vector((0, 0, lo.z * k))
     bpy.context.view_layer.update()
     return r, ms
+
+
+def cloud_sky(world, cover=0.55, color=(0.82, 0.84, 0.88), scale=2.2):
+    """Soft broken cloud over the existing sky texture: noise on the view direction, upper hemisphere only."""
+    N = world.node_tree.nodes; L = world.node_tree.links
+    bg = next(n for n in N if n.type == 'BACKGROUND')
+    src = bg.inputs['Color'].links[0].from_socket
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
+    z = N.new("ShaderNodeMath"); z.operation = 'MAXIMUM'; z.inputs[1].default_value = 0.04; L.new(sep.outputs[2], z.inputs[0])
+    dx = N.new("ShaderNodeMath"); dx.operation = 'DIVIDE'; L.new(sep.outputs[0], dx.inputs[0]); L.new(z.outputs[0], dx.inputs[1])
+    dy = N.new("ShaderNodeMath"); dy.operation = 'DIVIDE'; L.new(sep.outputs[1], dy.inputs[0]); L.new(z.outputs[0], dy.inputs[1])
+    cmb = N.new("ShaderNodeCombineXYZ"); L.new(dx.outputs[0], cmb.inputs[0]); L.new(dy.outputs[0], cmb.inputs[1])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = scale; nz.inputs['Detail'].default_value = 10; nz.inputs['Roughness'].default_value = 0.62
+    L.new(cmb.outputs[0], nz.inputs['Vector'])
+    rr = N.new("ShaderNodeMapRange"); rr.inputs['From Min'].default_value = 1.0 - cover * 0.9; rr.inputs['From Max'].default_value = 1.0 - cover * 0.9 + 0.25
+    L.new(nz.outputs['Fac'], rr.inputs['Value'])
+    hz = N.new("ShaderNodeMapRange"); hz.inputs['From Min'].default_value = 0.0; hz.inputs['From Max'].default_value = 0.12; L.new(sep.outputs[2], hz.inputs['Value'])
+    m = N.new("ShaderNodeMath"); m.operation = 'MULTIPLY'; L.new(rr.outputs[0], m.inputs[0]); L.new(hz.outputs[0], m.inputs[1])
+    shade = N.new("ShaderNodeMix"); shade.data_type = 'RGBA'; L.new(nz.outputs['Fac'], shade.inputs['Factor'])
+    shade.inputs[6].default_value = (color[0] * 0.75, color[1] * 0.77, color[2] * 0.82, 1); shade.inputs[7].default_value = (*color, 1)
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(m.outputs[0], mx.inputs['Factor']); L.new(src, mx.inputs[6]); L.new(shade.outputs[2], mx.inputs[7])
+    L.new(mx.outputs[2], bg.inputs['Color'])
+    return world
+
+
+def soviet_lamp(loc, rot_z=0.0, height=9.0, arm=2.2, lit=False):
+    """Concrete street-lamp mast with a curved steel arm and a cobra-head luminaire (Moscow, 1970s-80s)."""
+    from kit import cyl, box, pbr, join
+    conc = pbr("LampConcrete", (0.42, 0.41, 0.38), 0.85)
+    steel = pbr("LampArm", (0.3, 0.31, 0.3), 0.5, 0.7)
+    parts = []
+    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.16, radius2=0.09, depth=height, location=(0, 0, height / 2))
+    p = bpy.context.active_object; p.data.materials.append(conc); parts.append(p)
+    n = 8
+    for k in range(n):                                   # arm: a quarter-circle out from the top
+        a0 = k / n * math.pi / 2; a1 = (k + 1) / n * math.pi / 2
+        x0, z0 = arm * (1 - math.cos(a0)), height - 0.6 + 0.6 * math.sin(a0) + 0.0
+        x1, z1 = arm * (1 - math.cos(a1)), height - 0.6 + 0.6 * math.sin(a1)
+        mx_, mz = (x0 + x1) / 2, (z0 + z1) / 2
+        L_ = math.hypot(x1 - x0, z1 - z0); ang = math.atan2(z1 - z0, x1 - x0)
+        parts.append(cyl("Arm", (mx_, 0, mz + 0.4 * math.sin(math.pi * (k + 0.5) / n)), 0.035, L_ + 0.02, steel, verts=8, rot=(0, math.pi / 2 - ang, 0)))
+    head = box("LampHead", (arm + 0.25, 0, height - 0.05), (0.7, 0.32, 0.14), steel, bevel=0.05)
+    lens = box("LampLens", (arm + 0.25, 0, height - 0.13), (0.55, 0.24, 0.03), pbr("LampLensM", (0.85, 0.8, 0.7), 0.2, 0.0,
+               **{'Emission Color': (1.0, 0.6, 0.3, 1), 'Emission Strength': 6.0 if lit else 0.0}))
+    parts += [head, lens]
+    o = join(parts, "SovietLamp"); o.location = loc; o.rotation_euler = (0, 0, rot_z)
+    return o

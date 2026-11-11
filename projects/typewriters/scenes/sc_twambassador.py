@@ -90,7 +90,8 @@ def build(variant=None):
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=30, y_subdivisions=2, size=1, location=(xc + 0.35, WIN_Y - 0.12, 1.75))
         sh = bpy.context.active_object; sh.scale = (0.55, 2.0, 1); sh.rotation_euler = (math.radians(90), 0, 0)
         sh.data.materials.append(sheer)
-        wv = sh.modifiers.new("folds", 'WAVE'); wv.use_x = True; wv.use_y = False; wv.height = 0.025; wv.width = 0.08; wv.speed = 0.004; wv.narrowness = 0.6
+        wv = sh.modifiers.new("folds", 'WAVE'); wv.use_x = True; wv.use_y = False; wv.height = 0.03; wv.width = 0.09; wv.speed = 0.012; wv.narrowness = 0.6
+        sh.modifiers.new("sub", 'SUBSURF').levels = 1
         c["sheers"].append(sh)
         pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 1.0; pt.size_y = 1.8; pt.cycles.is_portal = True
         po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (xc, WIN_Y + 0.1, 1.8); po.rotation_euler = (math.radians(-90), 0, 0)
@@ -142,6 +143,27 @@ def build(variant=None):
     ph.model("potted_plant_02", loc=(-3.0, -2.6, 0.0))
     ph.model("hanging_picture_frame_02", loc=(0.0, -2.99, 1.9), rot_z=0.0)
     ph.model("Chandelier_01", loc=(0.3, 0.6, 3.2))
+    # heavy drapes either side of each window, framed pictures, a lit desk lamp, more plants
+    drape = fabric("Drape", (0.28, 0.2, 0.14), 0.85, 0.5, 400)
+    for xc in (-1.25, 1.85):
+        for dx in (-0.68, 0.68):
+            bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=2, size=1, location=(xc + dx, WIN_Y - 0.18, 1.6))
+            d_ = bpy.context.active_object; d_.scale = (0.35, 3.0, 1); d_.rotation_euler = (math.radians(90), 0, 0); d_.data.materials.append(drape)
+            fw = d_.modifiers.new("folds", 'WAVE'); fw.use_x = True; fw.use_y = False; fw.height = 0.05; fw.width = 0.1; fw.speed = 0.003
+        box("Pelmet", (xc, WIN_Y - 0.2, 3.05), (1.9, 0.12, 0.22), drape)
+    for loc, rz, aid in (((-3.47, -1.0 + 2.2, 1.8), -math.pi / 2, "hanging_picture_frame_01"), ((3.47, -1.4, 1.75), math.pi / 2, "hanging_picture_frame_03"),
+                         ((-0.9, -2.99, 1.8), 0.0, "fancy_picture_frame_02")):
+        try:
+            ph.model(aid, loc=loc, rot_z=rz)
+        except Exception:
+            pass
+    ph.model("potted_plant_04", loc=(-3.0, 2.5, 0.0))
+    if variant not in ("talks",):
+        lr, lm = ph.model("desk_lamp_arm_01", loc=(-0.35 if variant != "oval" else -1.9, 1.25 if variant != "oval" else 2.2, 0.74), rot_z=math.radians(30))
+        twp.tint_model(lm, (0.55, 0.42, 0.22), keep=0.2)
+        dl = bpy.data.lights.new("DeskLamp", 'SPOT'); dl.energy = 30; dl.spot_size = math.radians(90); dl.spot_blend = 0.7; dl.color = (1.0, 0.75, 0.48)
+        do = bpy.data.objects.new("DeskLamp", dl); bpy.context.collection.objects.link(do)
+        do.location = Vector(lr.location) + Vector((0.15, -0.1, 0.45)); point_at(do, Vector(lr.location) + Vector((0.3, -0.25, 0)))
     ph.model("potted_plant_01", loc=(3.05, 2.4, 0.0))
     ph.model("fancy_picture_frame_01", loc=(3.47, 0.2, 1.9), rot_z=math.pi / 2)
     ph.model("mantel_clock_01", loc=(-0.15, 0.95, 0.74), rot_z=0.2)
@@ -308,8 +330,8 @@ def cam_handover(c, t):
 def cam_note(c, t):
     e = ease(t); a = c["amb"]
     sh = a.bone_head("upperarm01.R")
-    n = c["note"].location; hd = a.bone_head("head")
-    return (hd + Vector((-0.34, -0.42, 0.2)).lerp(Vector((-0.3, -0.36, 0.17)), e), n, 42)
+    n = c["note"].location; base = Vector(a.arm.location)
+    return (base + Vector((-0.75, -2.4, 1.5)).lerp(Vector((-0.6, -2.05, 1.48)), e), n + Vector((0, 0.2, 0.15)), 35)
 
 
 def cam_sign(c, t):

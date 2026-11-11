@@ -55,16 +55,45 @@ def window_unit(name, w, h, frame_m, glass_m, curtain_m, sill_m, seed):
     return join(parts, name)
 
 
-def burlap_crate(name, size=(0.95, 0.75, 0.85)):
-    hes = ph.texture("hessian_230", scale=2.0, name="Burlap", tint=(0.78, 0.66, 0.5))
-    rope = pbr("Strap", (0.32, 0.27, 0.2), 0.8)
+def burlap_crate(name, size=(1.3, 1.0, 1.1)):
+    """Large crate sewn into burlap: coarse weave, rope lashing both ways, rows of staples along the seams, a tag."""
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.9, name="BurlapBig", tint=(0.8, 0.68, 0.5))
+    rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
+    stm = pbr("StapleE", (0.7, 0.7, 0.72), 0.25, 1.0)
     sx, sy, sz = size
-    parts = [box("Crate", (0, 0, 0), size, hes, bevel=0.03)]
+    parts = [box("Crate", (0, 0, 0), size, hes, bevel=0.05)]
     for dx in (-sx * 0.3, sx * 0.3):
-        parts.append(box("StrapV", (dx, 0, 0), (0.05, sy + 0.012, sz + 0.012), rope))
-    parts.append(box("StrapH", (0, 0, 0), (sx + 0.012, sy + 0.012, 0.05), rope))
-    parts.append(box("Tag", (sx * 0.15, -sy / 2 - 0.008, sz * 0.15), (0.16, 0.004, 0.1), pbr("Tag", (0.82, 0.8, 0.72), 0.8)))
+        parts.append(cyl("RopeV", (dx, -sy / 2 - 0.008, 0), 0.012, sz + 0.02, rope, verts=8))
+        parts.append(cyl("RopeV", (dx, sy / 2 + 0.008, 0), 0.012, sz + 0.02, rope, verts=8))
+        parts.append(cyl("RopeT", (dx, 0, sz / 2 + 0.008), 0.012, sy + 0.02, rope, verts=8, rot=(math.radians(90), 0, 0)))
+    for dy in (-sy * 0.25, sy * 0.25):
+        parts.append(cyl("RopeH", (0, dy, sz / 2 + 0.01), 0.012, sx + 0.02, rope, verts=8, rot=(0, math.radians(90), 0)))
+    for k in range(14):                              # staples along the top seam of the front face
+        parts.append(box("Staple", (-sx / 2 + 0.06 + k * (sx - 0.12) / 13, -sy / 2 - 0.004, sz / 2 - 0.04), (0.018, 0.003, 0.003), stm))
+    parts.append(box("Tag", (sx * 0.15, -sy / 2 - 0.01, sz * 0.12), (0.18, 0.004, 0.11), pbr("Tag", (0.82, 0.8, 0.72), 0.8)))
     return join(parts, name)
+
+
+def lattice(name, p0, p1, w, mat, n=None):
+    """Steel lattice member from p0 to p1: four corner chords and zig-zag bracing (a real crane boom/mast look)."""
+    p0 = Vector(p0); p1 = Vector(p1); d = p1 - p0; L = d.length
+    n = n or max(3, int(L / w))
+    q = d.normalized().to_track_quat('Z', 'Y')
+    parts = []
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            parts.append(cyl("Chord", (sx * w / 2, sy * w / 2, L / 2), 0.022, L, mat, verts=6))
+    for k in range(n):
+        z0 = k * L / n; z1 = (k + 1) * L / n
+        for (a, b) in (((-1, -1), (1, -1)), ((1, -1), (1, 1)), ((1, 1), (-1, 1)), ((-1, 1), (-1, -1))):
+            pa = Vector((a[0] * w / 2, a[1] * w / 2, z0)); pb = Vector((b[0] * w / 2, b[1] * w / 2, z1))
+            m = (pa + pb) / 2; dd = pb - pa
+            o = cyl("Brace", m.to_tuple(), 0.011, dd.length, mat, verts=5)
+            o.rotation_mode = 'QUATERNION'; o.rotation_quaternion = dd.normalized().to_track_quat('Z', 'Y')
+            parts.append(o)
+    o = join(parts, name)
+    o.rotation_mode = 'QUATERNION'; o.rotation_quaternion = q; o.location = p0
+    return o
 
 
 def build(variant=None):
@@ -72,6 +101,7 @@ def build(variant=None):
     rng = np.random.default_rng(84)
     w = world_sky(sun_elev_deg=26, sun_rot_deg=150, strength=0.55, tint=(0.86, 0.9, 1.0), air=1.2, aerosol=1.8)
     w.node_tree.nodes["Sky Texture"].sun_disc = False          # the sun lamp does the sunlight (the disc burns out the facade)
+    twp.cloud_sky(w, cover=0.55)
     sn = bpy.data.lights.new("Sun", 'SUN'); sn.energy = 3.0; sn.angle = math.radians(2.0); sn.color = (1.0, 0.93, 0.84)
     so = bpy.data.objects.new("Sun", sn); bpy.context.collection.objects.link(so)
     so.rotation_euler = (math.radians(64), 0, math.radians(-150))          # morning sun from the street side, raking
@@ -129,11 +159,26 @@ def build(variant=None):
     for x, y in ((-8, 3.5), (10, 4.0), (14, 9)):
         ph.model("exterior_aircon_unit", loc=(x, y, ROOF + 0.2), rot_z=math.pi)
     # neighbours: grey and ochre plaster blocks either side
-    for sx, col, h in ((-1, (0.52, 0.47, 0.38), 24), (1, (0.46, 0.46, 0.44), 30)):
-        box("Neighbour", (sx * (BW / 2 + 16.5), 8, h / 2), (32, 16, h), stone("Plaster", col))
-        for f in range(1, int(h / 3.2)):
+    # neighbours: Stalinist plaster blocks, rusticated base, heavy cornice, recessed windows (instanced units)
+    for sx, col, h in ((-1, (0.6, 0.52, 0.4), 27.2), (1, (0.55, 0.54, 0.5), 30.6)):
+        ph_ = stone(f"Plaster{sx}", col)
+        cx = sx * (BW / 2 + 16.5)
+        box("Neighbour", (cx, 8.4, h / 2), (32, 16, h), ph_)
+        floors = int(h / FH)
+        for f in range(1, floors):
+            box("NBand", (cx, -0.08, f * FH - 0.05), (32, 0.25, 0.14), ph_)
             for k in range(9):
-                box("NWin", (sx * (BW / 2 + 3.5 + k * 3.3), -0.03, f * 3.2 + 0.4), (1.3, 0.05, 1.7), glass_m)
+                o = instance(unit, (cx - 14.4 + k * 3.6, -0.02, f * FH + FH / 2)); o.location = (cx - 14.4 + k * 3.6, -0.02, f * FH + FH / 2)
+        box("NCornice", (cx, -0.3, h - 0.3), (32.4, 0.9, 0.6), ph_, bevel=0.06)
+        box("NBase", (cx, -0.12, FH / 2), (32, 0.3, FH), stone(f"NBase{sx}", (col[0] * 0.75, col[1] * 0.75, col[2] * 0.75)))
+        for k in range(5):
+            box("Shopfront", (cx - 12.8 + k * 6.4, -0.28, 1.5), (3.2, 0.05, 2.2), glass_m)
+    # Moscow rooftops behind the embassy, fading into haze
+    rng2 = np.random.default_rng(7)
+    for k in range(40):
+        x = rng2.uniform(-120, 120); y = rng2.uniform(30, 220); hh = rng2.uniform(14, 34)
+        box("BackBlock", (x, y, hh / 2), (rng2.uniform(18, 40), rng2.uniform(12, 20), hh), stone(f"BackPl{k % 4}", [(0.6, 0.55, 0.45), (0.52, 0.52, 0.5), (0.58, 0.48, 0.4), (0.5, 0.47, 0.44)][k % 4]))
+    haze((0, 120, 30), (300, 180, 60), density=0.0025, color=(0.78, 0.83, 0.92), anis=0.3)
     # flag on a short staff over the entrance (wave modifier: plays in any render)
     cyl("FlagStaff", (0, -1.4, 4.2), 0.04, 3.2, pbr("Staff", (0.7, 0.7, 0.7), 0.3, 1.0), rot=(math.radians(-35), 0, 0))
     bpy.ops.mesh.primitive_grid_add(x_subdivisions=40, y_subdivisions=20, size=1, location=(0, 0, 0))
@@ -157,8 +202,9 @@ def build(variant=None):
         x = -45 + k * 15
         cyl("WirePole", (x, -6.9, 4.5), 0.09, 9.0, pbr("PoleGrey", (0.3, 0.31, 0.3), 0.5, 0.6), verts=12)
         cyl("Span", (x, ROAD_Y + 0.5, WIRE_Z + 0.3), 0.012, 15, wire_m, verts=6, rot=(math.radians(90), 0, 0))
-    for k in range(6):
-        twp.model_fit("street_lamp_01", (-37 + k * 15, -6.0, 0.0), rot_z=math.pi / 2, height=8.0)
+    for k in range(7):                                   # Soviet concrete masts, arms reaching over the carriageway
+        twp.soviet_lamp((-45 + k * 15 + 7.5, -6.85, 0.0), rot_z=-math.pi / 2, height=9.0, arm=2.4)
+        twp.soviet_lamp((-45 + k * 15 + 7.5, ROAD_Y - 7.6, 0.0), rot_z=math.pi / 2, height=9.0, arm=2.4)
     # the militia booth at the gate, a fence of railings either side of the entrance
     booth = pbr("Booth", (0.4, 0.42, 0.38), 0.5)
     box("Booth", (-3.6, -4.8, 1.2), (1.2, 1.2, 2.4), booth, bevel=0.03)
@@ -170,6 +216,11 @@ def build(variant=None):
             x = sx * (2.5 + k * 0.22)
             cyl("Bar", (x, -1.6, 0.9), 0.012, 1.8, rail, verts=6)
         box("RailTop", (sx * 6.9, -1.6, 1.8), (8.8, 0.05, 0.05), rail)
+    peds = []
+    for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PedA", 0.0, 55, "female_casualsuit01", "bob01", 0.55, 0.08), ("PedB", 1.0, 40, "male_worksuit01", "short04", 0.45, 0.6),
+                                                      ("PedC", 1.0, 62, "male_casualsuit04", "short02", 0.5, 0.1), ("PedD", 0.0, 30, "female_casualsuit02", "long01", 0.6, 0.55))):
+        peds.append(dict(h=twp.person(nm, g, yrs, cl, hr, hv=0.35, cval=cv, hue=hu, sat=0.25), x0=-34 + k * 9.0, y=-2.6 - 3.2 * (k % 2), d=1 if k % 2 else -1, v=1.1 + 0.1 * k))
+    c["peds"] = peds
     militia = twp.person("Militia", 1.0, 30, "male_worksuit01", "short01", hv=0.25, cval=0.4, hue=0.3, sat=0.3)
     twp.stand(militia, (-4.6, -4.9, 0.0), math.radians(10))
     c["militia"] = militia
@@ -186,17 +237,30 @@ def build(variant=None):
     c["traffic"] = traffic
     # ---------------------------------------------------------------- the hoist on the roof, its cable, the crate, workers
     post_m = pbr("HoistSteel", (0.22, 0.24, 0.22), 0.45, 0.8)
-    yel = pbr("HoistPaint", (0.26, 0.3, 0.24), 0.55, 0.4)
-    cyl("HoistPost", (JIB.x, JIB.y, ROOF + 1.3), 0.12, 2.4, post_m, verts=16)
-    box("HoistBase", (JIB.x, JIB.y + 0.4, ROOF + 0.35), (1.6, 1.8, 0.5), post_m, bevel=0.03)
-    box("Counterweight", (JIB.x, JIB.y + 1.0, ROOF + 0.85), (0.9, 0.7, 0.5), pbr("Weights", (0.12, 0.12, 0.12), 0.6))
+    yel = pbr("HoistPaint", (0.3, 0.33, 0.27), 0.55, 0.5)
+    # a slewing roof derrick: lattice mast on a steel base frame with ballast, a lattice boom over the parapet,
+    # a sheave at the boom tip, guy cables, and an electric winch with its drum on the back of the base
+    box("DerrickBase", (JIB.x, JIB.y + 0.6, ROOF + 0.3), (2.2, 2.6, 0.2), post_m)
+    for dx in (-0.9, 0.9):
+        box("BaseRail", (JIB.x + dx, JIB.y + 0.6, ROOF + 0.45), (0.16, 2.6, 0.16), post_m)
+    for k in range(4):
+        box("Ballast", (JIB.x - 0.6 + (k % 2) * 1.2, JIB.y + 1.45 + (k // 2) * 0.0, ROOF + 0.62 + (k // 2) * 0.3), (0.55, 0.5, 0.28),
+            ph.texture("concrete_floor_02", scale=1.0, name="BallastConc"))
+    lattice("Mast", (JIB.x, JIB.y, ROOF + 0.4), (JIB.x, JIB.y, ROOF + 2.6), 0.35, yel)
     jib = bpy.data.objects.new("Jib", None); bpy.context.collection.objects.link(jib)
     jib.location = (JIB.x, JIB.y, ROOF + 2.5)
-    for o in (box("JibBeam", (0, -1.4, 0), (0.22, 3.6, 0.3), yel, bevel=0.01),
-              box("JibTie", (0, -0.4, 0.55), (0.06, 2.2, 0.06), post_m, rot=(math.radians(-22), 0, 0)),
-              cyl("Sheave", (0, -3.05, -0.22), 0.16, 0.08, post_m, verts=24, rot=(0, math.radians(90), 0)),
-              box("Winch", (0, 0.5, -0.35), (0.5, 0.6, 0.45), yel, bevel=0.02)):
+    boom = lattice("Boom", (0, 0.4, 0.0), (0, -3.15, -0.1), 0.28, yel)
+    tie = cyl("Tie", (0, -1.3, 0.6), 0.012, 3.4, post_m, verts=6, rot=(math.radians(-73), 0, 0))
+    for o in (boom, tie, cyl("Sheave", (0, -3.05, -0.22), 0.16, 0.06, post_m, verts=24, rot=(0, math.radians(90), 0)),
+              cyl("SheaveCheekL", (0.05, -3.05, -0.2), 0.2, 0.012, yel, verts=24, rot=(0, math.radians(90), 0)),
+              cyl("SheaveCheekR", (-0.05, -3.05, -0.2), 0.2, 0.012, yel, verts=24, rot=(0, math.radians(90), 0)),
+              cyl("Apex", (0, 0, 0.75), 0.06, 0.7, yel, verts=8)):
         o.parent = jib
+    box("WinchMotor", (JIB.x + 0.5, JIB.y + 1.0, ROOF + 0.75), (0.45, 0.5, 0.42), pbr("Motor", (0.2, 0.25, 0.32), 0.45, 0.4), bevel=0.04)
+    c["drum"] = cyl("WinchDrum", (JIB.x - 0.25, JIB.y + 1.0, ROOF + 0.75), 0.18, 0.6, post_m, verts=24, rot=(0, math.radians(90), 0))
+    for a in (0.7, 2.4):
+        cyl("Guy", (JIB.x + 1.6 * math.cos(a), JIB.y + 1.6 * math.sin(a), ROOF + 1.45), 0.01, 3.5, post_m, verts=6,
+            rot=(-math.sin(a) * 0.95, math.cos(a) * 0.95, 0))
     c["jib"] = jib
     cable = cyl("Cable", (0, 0, -0.5), 0.012, 1.0, pbr("CableSteel", (0.25, 0.25, 0.26), 0.35, 1.0), verts=8)
     cable.data.transform(Matrix.Translation((0, 0, 0.5)))           # origin at the top: scale z = length downward
@@ -263,9 +327,9 @@ def hoist(c, sec, lift):
     bpy.context.view_layer.update()
     sheave = jib.matrix_world @ Vector((0, -3.05, -0.38))
     crate = c["crate"]; hook = c["hook"]
-    top = Vector((sheave.x, sheave.y, lift + 0.95 + 0.5))
+    top = Vector((sheave.x, sheave.y, lift + 1.1 + 0.5))
     sway = 0.04 * math.sin(sec * 1.7)
-    hook.location = top + Vector((sway, 0, 0)); crate.location = top + Vector((sway, 0, -0.95))
+    hook.location = top + Vector((sway, 0, 0)); crate.location = top + Vector((sway, 0, -1.1))
     crate.rotation_euler = (0, 0, 0.05 * math.sin(sec * 0.9))
     cab = c["cable"]; cab.location = sheave; L = max(0.05, sheave.z - hook.location.z - 0.22)
     d = (hook.location + Vector((0, 0, 0.22))) - sheave
@@ -305,6 +369,14 @@ def truck_shot(c, sec, shot):
 
 def animate(c, sec, shot):
     truck_shot(c, sec, shot)
+    from human import pose_walk
+    for p in c["peds"]:
+        h = p["h"]; x = p["x0"] + p["d"] * p["v"] * sec
+        twp.upright(h); pose_walk(h, (abs(x) / 1.35) % 1.0, stride=24, arm_swing=18)
+        twp.face(h, math.atan2(p["d"], 0.0)); h.arm.location = (x, p["y"], 0); twp.ground(h, 0.0)
+        twp.hide(twp.person_objs(h), shot not in ("street_push", "truck_leave"))
+    if "drum" in c:
+        c["drum"].rotation_euler = (sec * 2.0, math.radians(90), 0)
     move_traffic(c, sec)
     for w in c["workers"]:
         twp.hide(twp.person_objs(w), shot != "roof_swing")
@@ -342,8 +414,8 @@ def anim(shot):
 
 def cam_street(c, t):
     e = ease(t)
-    a = Vector((-3.0, ROAD_Y - 8.5, 1.55)); b = Vector((-2.4, ROAD_Y - 5.5, 1.75))
-    return (a.lerp(b, e), Vector((0.5, 0, 5.5)).lerp(Vector((0.6, 0, 6.5)), e), 24)
+    a = Vector((-34.0, -5.0, 1.75)); b = Vector((-31.0, -5.6, 1.85))       # down the pavement, three-quarter on the facade
+    return (a.lerp(b, e), Vector((2.0, -1.0, 8.5)).lerp(Vector((3.0, -1.0, 9.0)), e), 30)
 
 
 def cam_crane(c, t):

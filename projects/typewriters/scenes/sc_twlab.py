@@ -67,8 +67,9 @@ def oscilloscope(name, loc, rot_z=0.0):
         o.parent = r; return o
     P(box("Case", (0, 0.05, 0.16), (0.36, 0.48, 0.3), pbr("ScopeCase", (0.42, 0.44, 0.42), 0.45, 0.2), bevel=0.01))
     P(box("Front", (0, -0.192, 0.16), (0.35, 0.02, 0.29), M["dark"]))
-    P(box("Hood", (-0.07, -0.21, 0.19), (0.16, 0.04, 0.14), M["dark"]))
-    tube = P(box("Tube", (-0.07, -0.221, 0.19), (0.13, 0.004, 0.105), scope_material()))
+    P(box("Hood", (-0.07, -0.205, 0.19), (0.16, 0.03, 0.14), M["dark"]))
+    tube = P(box("Tube", (-0.07, -0.233, 0.19), (0.13, 0.004, 0.105), scope_material()))
+    P(box("HoodL", (-0.145, -0.25, 0.19), (0.012, 0.04, 0.13), M["dark"])); P(box("HoodR", (0.005, -0.25, 0.19), (0.012, 0.04, 0.13), M["dark"]))
     for k in range(9):
         P(cyl("Knob", (0.06 + (k % 3) * 0.04, -0.21, 0.08 + (k // 3) * 0.07), 0.011, 0.02, M["metal"] if k % 2 else M["dark"], verts=12, rot=(math.radians(90), 0, 0)))
     for k in range(2):
@@ -139,7 +140,7 @@ def build(variant="french"):
     ph.model("industrial_microscope", loc=(2.4, BENCH_Y + 0.6, 0.905), rot_z=math.pi + 0.3)
     ph.model("retro_multimeter", loc=(1.4, BENCH_Y + 0.5, 0.905), rot_z=math.pi)
     ph.model("vintage_radio_transceiver", loc=(-2.6, BENCH_Y + 0.65, 0.905), rot_z=math.pi)
-    ph.model("magnifying_glass_01", loc=(-0.4, -0.75, 0.905), rot_z=0.5)
+    ph.model("magnifying_glass_01", loc=(-2.0, -0.35, 0.905), rot_z=0.5)
     ph.model("circuit_board", loc=(-0.3, -0.45, 0.905), rot_z=0.2)
     l_r, l_ms = ph.model("desk_lamp_arm_01", loc=(-2.4, -0.5, 0.905), rot_z=math.radians(-30))
     twp.tint_model(l_ms, (0.2, 0.22, 0.2), keep=0.1)
@@ -266,12 +267,12 @@ def anim(shot):
 
 def cam_cover(c, t):
     e = ease(t)
-    return (Vector((1.6, -3.2, 1.75)).lerp(Vector((1.1, -2.7, 1.65)), e), Vector((-1.35, -0.4, 1.05)), 30)
+    return (Vector((0.6, -2.9, 1.7)).lerp(Vector((0.3, -2.55, 1.62)), e), Vector((-1.4, -0.55, 1.08)), 32)
 
 
 def cam_scope(c, t):
     e = ease(t); s = c["scope"].matrix_world @ Vector((-0.07, -0.22, 0.19))
-    return (s + Vector((0.35, -0.75, 0.22)).lerp(Vector((0.22, -0.55, 0.15)), e), s, 45)
+    return (s + Vector((0.25, -0.7, 0.18)).lerp(Vector((0.16, -0.5, 0.12)), e), s, 50)
 
 
 def cam_sixteen(c, t):
