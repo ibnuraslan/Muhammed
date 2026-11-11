@@ -16,8 +16,8 @@ import twp
 import machines as MC
 
 EXPOSURE = 0.0
-DUR = {"cover": 6.0, "scope": 4.5}
-VARIANT_FOR = {"cover": "french", "scope": "french"}
+DUR = {"cover": 6.0, "scope": 4.5, "sixteen": 6.0, "tags": 4.5}
+VARIANT_FOR = {"cover": "french", "scope": "french", "sixteen": "evidence", "tags": "evidence"}
 BENCH_Y = 1.8                 # the main bench along the back wall (front edge faces -Y)
 
 
@@ -116,6 +116,11 @@ def build(variant="french"):
                 box("BenchLeg", (x + p.x, y + p.y, 0.43), (0.05, 0.05, 0.86), legm)
         box("BenchShelf", (x, y, 0.25), (L_ - 0.1, 0.7, 0.02), legm, rot=(0, 0, rot))
     bench(0.0, BENCH_Y + 0.6, 7.0)                        # back wall bench
+    if variant == "evidence":
+        evidence_row(c, bench)
+        c["P"] = {}
+        animate(c, 0.0, "sixteen")
+        return c
     bench(-1.2, -0.6, 3.4)                                # island bench where the teleprinter sits
     peg = pbr("Pegboard", (0.62, 0.55, 0.42) if french else (0.55, 0.58, 0.56), 0.8)
     box("Pegboard", (0.0, 2.97, 1.65), (5.0, 0.03, 1.0), peg)
@@ -165,7 +170,75 @@ def build(variant="french"):
     return c
 
 
+def tag_image(path, word, num):
+    import skia
+    sf = skia.Surface(400, 260); cv = sf.getCanvas(); cv.clear(skia.Color4f(0.86, 0.82, 0.68, 1))
+    p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(0.1, 0.1, 0.14, 1))
+    f = skia.Font(skia.Typeface.MakeFromFile("/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf"), 44)
+    f2 = skia.Font(skia.Typeface.MakeFromFile("/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf"), 34)
+    cv.drawString(word, 200 - f.measureText(word) / 2, 110, f, p)
+    cv.drawString(f"No. {num:02d}", 120, 180, f2, p)
+    pp = skia.Paint(AntiAlias=True, Style=skia.Paint.kStroke_Style, StrokeWidth=3); pp.setColor4f(skia.Color4f(0.1, 0.1, 0.14, 1))
+    cv.drawCircle(40, 130, 14, pp)
+    sf.makeImageSnapshot().save(path, skia.kPNG)
+    return path
+
+
+def evidence_row(c, bench):
+    """Sixteen altered typewriters in a row on two long benches, each with a paper tag on a string."""
+    import os, typewriter as T
+    bench(-2.3, -0.6, 4.6); bench(2.4, -0.6, 4.6)
+    cols = [(0.11, 0.15, 0.2), (0.32, 0.28, 0.22), (0.2, 0.25, 0.3), (0.42, 0.12, 0.1), (0.22, 0.24, 0.2)]
+    c["tws"] = []; c["tags"] = []
+    string_m = pbr("TagString", (0.7, 0.68, 0.6), 0.8)
+    for k in range(16):
+        x = -4.35 + k * 0.58
+        tw = T.make(f"EV{k}", loc=(x, -0.55, 0.905), rot_z=0.0, color=cols[k % 5], mechanism=False, glyphs=(k in (3, 4)), legends=False,
+                    text=" ", seed=k)
+        tw["paper"].hide_render = True
+        c["tws"].append(tw)
+        word = "LENINGRAD" if k in (2, 9, 14) else "MOSCOW"
+        tm = bpy.data.materials.new(f"Tag{k}"); tm.use_nodes = True
+        ti = tm.node_tree.nodes.new("ShaderNodeTexImage"); ti.image = bpy.data.images.load(tag_image(os.path.join(T.GEN, f"tag_{k}.png"), word, k + 1))
+        tm.node_tree.links.new(ti.outputs[0], tm.node_tree.nodes["Principled BSDF"].inputs['Base Color'])
+        bpy.ops.mesh.primitive_plane_add(size=1); tg = bpy.context.active_object; tg.name = f"TagCard{k}"
+        tg.scale = (0.075, 0.048, 1); bpy.ops.object.transform_apply(scale=True); tg.data.materials.append(tm)
+        piv = bpy.data.objects.new(f"TagPivot{k}", None); bpy.context.collection.objects.link(piv)
+        piv.location = (x + 0.2, -0.75, 0.905 + 0.104)               # tied to the platen knob end
+        tg.parent = piv; tg.location = (0, -0.01, -0.06); tg.rotation_euler = (math.radians(80), 0, 0)
+        st = cyl("String", (0, 0, -0.02), 0.0012, 0.04, string_m, verts=6); st.parent = piv
+        c["tags"].append(piv)
+    # evidence clutter: clipboards, a camera on a tripod-less stand, cartons, the X-ray films pinned on a lightbox at the end wall
+    ph.model("clipboard", loc=(-4.9, -0.4, 0.905), rot_z=0.4)
+    ph.model("Camera_01", loc=(5.0, -0.5, 0.905), rot_z=2.4)
+    ph.model("office_notepads", loc=(0.0, -0.8, 0.905), scale=0.4)
+    for k in range(6):
+        ph.model("cardboard_box_01", loc=(-5.3 + k * 0.5, 2.0 - 3.8, 0), rot_z=0.1 * k, scale=0.8)
+    lightbox_wall(c, Vector((5.98, -0.6, 1.6)), -math.pi / 2, 3)
+
+
+def lightbox_wall(c, at, rot_z, n, film=None):
+    """A row of wall X-ray viewers: steel frames, opal glass lit from behind (a real area light inside each), film clips."""
+    frame = pbr("LBFrame", (0.6, 0.62, 0.6), 0.35, 0.6)
+    opal = pbr("Opal", (0.9, 0.92, 0.95), 0.4, 0.0, **{'Emission Color': (0.85, 0.92, 1.0, 1), 'Emission Strength': 2.2})
+    c["lightboxes"] = []
+    for k in range(n):
+        off = Vector((-(k - (n - 1) / 2) * 0.62, 0, 0)); off.rotate(__import__('mathutils').Euler((0, 0, rot_z)))
+        p = at + off
+        r = bpy.data.objects.new("Lightbox", None); bpy.context.collection.objects.link(r); r.location = p; r.rotation_euler = (0, 0, rot_z)
+        for o in (box("LBCase", (0, 0.06, 0), (0.58, 0.1, 0.46), frame, bevel=0.01), box("LBOpal", (0, 0.0, 0), (0.52, 0.01, 0.4), opal),
+                  box("LBClip", (-0.12, -0.012, 0.19), (0.05, 0.01, 0.025), frame), box("LBClip", (0.12, -0.012, 0.19), (0.05, 0.01, 0.025), frame)):
+            o.parent = r
+        c["lightboxes"].append(r)
+    return c["lightboxes"]
+
+
 def animate(c, sec, shot):
+    if c["variant"] == "evidence":
+        for k, piv in enumerate(c["tags"]):
+            piv.rotation_euler = (0.06 * math.sin(sec * 1.3 + k), 0, 0.15 * math.sin(sec * 0.9 + k * 0.7))      # tags stir in the air from the vents
+        bpy.context.view_layer.update()
+        return
     from human import reach, fingers_curl
     P = c["P"]
     tty = c["tty"]
@@ -201,7 +274,20 @@ def cam_scope(c, t):
     return (s + Vector((0.35, -0.75, 0.22)).lerp(Vector((0.22, -0.55, 0.15)), e), s, 45)
 
 
+def cam_sixteen(c, t):
+    e = ease(t)
+    return (Vector((-5.4, -2.6, 1.45)).lerp(Vector((-4.6, -2.3, 1.4)), e), Vector((0.5, -0.5, 1.0)), 28)
+
+
+def cam_tags(c, t):
+    e = ease(t); x = -2.6 + 1.2 * e
+    return (Vector((x - 0.3, -1.45, 1.22)), Vector((x + 0.25, -0.75, 0.98)), 45)
+
+
 MOVES = {
+    "sixteen": dict(kind="anim", dof=4.0, cam=cam_sixteen, focus=lambda c, t: Vector((-2.0, -0.6, 1.0)), anim=anim("sixteen"),
+                    title=("CHAPTER 4", "WHAT MOSCOW READ", 10, 130)),
+    "tags": dict(kind="anim", dof=1.2, cam=cam_tags, focus=lambda c, t: Vector((-2.6 + 1.2 * ease(t) + 0.25, -0.76, 0.96)), anim=anim("tags")),
     "cover": dict(kind="anim", dof=3.0, cam=cam_cover, focus=lambda c, t: Vector((-1.4, -0.5, 1.1)), anim=anim("cover"),
                   title=("CHAPTER 1", "THE SWAP", 10, 130)),
     "scope": dict(kind="anim", dof=1.4, cam=cam_scope, focus=lambda c, t: c["scope"].matrix_world @ Vector((-0.07, -0.22, 0.19)), anim=anim("scope")),

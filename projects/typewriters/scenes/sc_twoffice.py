@@ -16,12 +16,16 @@ import typewriter as T
 import twp
 
 EXPOSURE = -0.1
-DUR = {"typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0}
-VARIANT_FOR = {"night_push": "night", "night_type": "night", "nsa_desk": "nsa", "nsa_plans": "nsa"}
+DUR = {"page_out": 5.0, "typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0, "records_drawer": 4.5, "records_burn": 4.5,
+       "attache": 5.0, "platen": 6.0}
+VARIANT_FOR = {"night_push": "night", "night_type": "night", "page_out": "night", "nsa_desk": "nsa", "nsa_plans": "nsa",
+               "records_drawer": "records", "records_burn": "records", "attache": "attache", "platen": "attache"}
 DESK_Z = 0.79
 DESK_A = Vector((0.9, 0.4, 0.0))
+TEXT_G = "AGRICULTURAL OFFICE\n\nWheat and feed grains: position for\nthe next session. Price range and\nvolumes as discussed with the\ndelegation. Not for distribution."
 TEXT_A = "The copier on the fourth floor will be replaced\nthis week. Please clear all papers from the"
 TEXT_N = "Moscow, May 1984."
+TEXT_P = "Moscow, May 1984.\n\nReference your cable of the 9th.\nThe meeting with the delegation is set\nfor Thursday. Our position on volumes\nand price remains as agreed.\n"
 
 
 def notice_image(path):
@@ -101,7 +105,7 @@ def build(variant=None):
         if has_tw:
             tw = T.make(f"TW{k}", loc=(p.x - 0.15 + (0.55 if nsa and k < 2 else 0), p.y + 0.21 - (0.15 if nsa and k < 2 else 0), DESK_Z),
                         rot_z=math.pi + (0.5 if nsa and k < 2 else 0),
-                        text=TEXT_N if (night and k == 0) else (TEXT_A if k == 0 else "Please clear all papers from the"),
+                        text=TEXT_P if (night and k == 0) else (TEXT_G if (variant == "attache" and k == 0) else (TEXT_A if k == 0 else "Please clear all papers from the")),
                         color=(0.11, 0.15, 0.2) if k != 1 else (0.32, 0.28, 0.22), mechanism=(k == 0), glyphs=(k == 0), legends=(k == 0), seed=k)
             c["tws"].append(tw)
         ph.model("office_notepads", loc=(p.x + 0.55, p.y - 0.05, DESK_Z), rot_z=rng.uniform(-0.3, 0.3), scale=0.45)
@@ -142,7 +146,13 @@ def build(variant=None):
     steel = pbr("CabSteel", (0.3, 0.32, 0.3), 0.42, 0.55, **{'Coat Weight': 0.15}); hm = pbr("Chrome", (0.8, 0.8, 0.8), 0.2, 1.0)
     sc_invest.CAB_Y = 2.3
     for x in (-3.4, -2.92, -2.44, 1.9, 2.38, 2.86):
-        sc_invest.filing_cabinet(x, steel, hm)
+        ds = sc_invest.filing_cabinet(x, steel, hm, open_drawer=(variant == "records" and x == 2.38))
+        if variant == "records" and x == 2.38:
+            c["drawer"] = ds[2]; c["drawer_y"] = ds[2].location.y
+            folders = sc_invest.hanging_folders(ds[2], np.random.default_rng(4))
+            for k_, f in enumerate(folders):
+                if k_ % 3 or k_ > 20:
+                    f.hide_render = True                   # thinned out: many folders are simply gone
     ph.model("wall_clock", loc=(-0.4, 2.99, 2.25), rot_z=math.pi)
     ph.model("potted_plant_01", loc=(3.5, 2.5, 0))
     cork = pbr("Cork", (0.4, 0.29, 0.18), 0.9)
@@ -161,6 +171,27 @@ def build(variant=None):
     c["notice"] = notice
     # ---------------------------------------------------------------- people (day only)
     c["people"] = {}
+    if variant == "records":
+        c["people"]["agent"] = twp.person("Agent", 1.0, 44, "male_elegantsuit01", "short03", hv=0.3, cval=0.5, hue=0.6, sat=0.15)
+        c["people"]["clerkR"] = twp.person("ClerkR", 0.0, 50, "female_casualsuit01", "bob01", hv=0.55, cval=0.6, hue=0.1, sat=0.2)
+        bag_m = pbr("BurnBag", (0.62, 0.52, 0.38), 0.85)
+        bag = join([cyl("Bag", (0, 0, 0.35), 0.24, 0.7, bag_m, verts=24)] +
+                   [box("BagStripe", (0, 0, 0.2 + k * 0.18), (0.49, 0.49, 0.03), pbr("BagRed", (0.45, 0.06, 0.05), 0.8)) for k in range(3)], "BurnBagObj")
+        bag.location = (-0.3, 1.8, 0); c["bag"] = bag
+        bx, _ = ph.model("cardboard_box_01"); c["rbox"] = bx
+        c["sheets"] = []
+        for k in range(8):
+            bpy.ops.mesh.primitive_plane_add(size=1); o = bpy.context.active_object; o.scale = (0.21, 0.28, 1); o.data.materials.append(pages[k % 3])
+            c["sheets"].append(o)
+    if variant == "attache":
+        at = twp.person("Attache", 1.0, 48, "male_casualsuit04", "short02", hv=0.45, cval=0.55, hue=0.1, sat=0.2)
+        twp.seat(at, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=12)
+        c["people"]["sec"] = at
+        jar = join([cyl("Jar", (0, 0, 0.09), 0.06, 0.18, glass("JarGlass", (0.9, 0.92, 0.9)), verts=24),
+                    cyl("Grain", (0, 0, 0.065), 0.055, 0.13, ph.texture("dry_ground_01", scale=8.0, name="GrainMat", tint=(1.1, 0.9, 0.55)), verts=24),
+                    cyl("Lid", (0, 0, 0.185), 0.062, 0.015, pbr("JarLid", (0.6, 0.55, 0.4), 0.3, 1.0), verts=24)], "GrainJar")
+        jar.location = (DESK_A.x - 0.65, DESK_A.y + 0.05, DESK_Z)
+        ph.model("wicker_basket_01", loc=(DESK_A.x + 0.6, DESK_A.y - 0.1, DESK_Z), scale=0.5)
     if nsa:
         off = twp.person("Official", 1.0, 58, "male_elegantsuit01", "short02", hv=0.7, cval=0.45, hue=0.6, sat=0.15, skin=twp.SKIN_OLD)
         twp.seat(off, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=16)
@@ -169,7 +200,7 @@ def build(variant=None):
                                                           ("PlanB", 1.0, 38, "male_casualsuit04", "short01", 0.5, 0.6),
                                                           ("PlanC", 0.0, 41, "female_casualsuit02", "bob01", 0.55, 0.08))):
             c["people"][nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.2)
-    if not night:
+    if variant in (None, "day"):
         sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "bob02", hv=0.22, cval=0.55, hue=0.58, sat=0.3)
         twp.seat(sec, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=12)
         c["people"]["sec"] = sec
@@ -187,6 +218,38 @@ def build(variant=None):
 # ============================================================================ animation
 def animate(c, sec, shot=None):
     night = c["variant"] == "night"
+    if c["variant"] == "records":
+        from human import reach, fingers_curl
+        P = c["people"]
+        ag = P["agent"]; d = c["drawer"]
+        op = ease(min(1.0, sec / 1.2)) if shot == "records_drawer" else 1.0
+        d.location.y = c["drawer_y"] - 0.5 * op
+        bpy.context.view_layer.update()
+        twp.stand(ag, (2.38 + 0.1, 1.45, 0), math.pi)
+        hp = d.matrix_world @ Vector((0.0, 0.1 + 0.25 * ease(min(1.0, max(0.0, (sec - 1.5) / 2.5))), 0.16))
+        reach(ag, "R", hp + Vector((0, -0.05, 0.05)), Vector((0.8, -0.2, -0.8)), Vector((0, 0.35, -1)))
+        reach(ag, "L", d.matrix_world @ Vector((-0.17, -0.04, 0.13)), Vector((-0.8, -0.2, -0.8)), Vector((0.1, 0.5, -0.85)))
+        fingers_curl(ag, 30, thumb=15); ag.rot("head", (1, 0, 0), 14)
+        cl = P["clerkR"]; bag = c["bag"]; bx = c["rbox"]
+        twp.stand(cl, (bag.location.x + 0.75, bag.location.y - 0.1, 0), math.radians(-95))
+        tip = ease(min(1.0, max(0.0, (sec - 0.8) / 1.8))) if shot == "records_burn" else 0.0
+        bx.location = bag.location + Vector((0.42, 0, 0.95)); bx.rotation_euler = (0, math.radians(-110) * tip, math.pi / 2)
+        for k, sh in enumerate(c["sheets"]):
+            f = min(1.0, max(0.0, tip * 1.4 - k * 0.06))
+            sh.location = bx.location.lerp(bag.location + Vector((0.0, 0.0, 0.6)), f) + Vector((0.02 * k, 0, 0.01 * k))
+            sh.rotation_euler = (0.3 * k, 0.9 * f + 0.2 * k, 0.1 * k)
+            sh.hide_render = shot != "records_burn"
+        twp.hide([bx] + list(bx.children_recursive) + [bag], shot != "records_burn")
+        for sd, dy in (("L", 0.2), ("R", -0.2)):
+            reach(cl, sd, bx.location + Vector((0.1, dy, -0.1)), Vector((0.3, dy * 3, -0.7)), Vector((-1, 0, 0)))
+        fingers_curl(cl, 40, thumb=20)
+        bpy.context.view_layer.update()
+        return
+    if c["variant"] == "attache":
+        T.type_at(c["tw"], sec, start=0.3 if shot == "attache" else -16.0, cps=4.5)
+        twp.type_pose(c["people"]["sec"], c["tw"], sec)
+        bpy.context.view_layer.update()
+        return
     if c["variant"] == "nsa":
         from human import reach, fingers_curl
         P = c["people"]; off = P["off"]
@@ -211,8 +274,17 @@ def animate(c, sec, shot=None):
                 reach(h, "L", pl - d * 0.35 + side * 0.25 + Vector((0, 0, 0.06)), Vector((0, 0, -1)), d + Vector((0, 0, -0.8)))
         bpy.context.view_layer.update()
         return
+    if night and shot == "page_out":
+        tw = c["tw"]
+        T.type_at(tw, sec, text=TEXT_P, start=-45.0, cps=5.5)              # a finished page
+        k = ease(min(1.0, max(0.0, (sec - 0.6) / 3.2)))
+        tw["feed"].location.z += 0.16 * k                                  # the knob turns, the page winds up and out
+        tw["platen"].rotation_euler.x += 0.16 * k / T.PLATEN_R
+        tw["paper"].location = (0, 0.03 * k, 0.12 * max(0.0, (k - 0.55) / 0.45))
+        bpy.context.view_layer.update()
+        return
     if night:
-        T.type_at(c["tw"], sec, start=1.2 if shot == "night_type" else 99.0, cps=5.5)
+        T.type_at(c["tw"], sec, text=TEXT_N, start=1.2 if shot == "night_type" else 99.0, cps=5.5)
     else:
         for k, tw in enumerate(c["tws"]):
             T.type_at(tw, sec + k * 1.3, start=0.0, cps=7.0 if k == 0 else 6.0)
@@ -312,7 +384,40 @@ def cam_nsa_plans(c, t):
     return (Vector((-1.5, -1.6, 2.45)).lerp(Vector((-1.45, -1.25, 2.35)), e), Vector((-1.5, 0.3, 0.85)), 30)
 
 
+def cam_records_drawer(c, t):
+    e = ease(t)
+    return (Vector((3.25, 1.05, 1.75)).lerp(Vector((3.05, 1.2, 1.7)), e), Vector((2.38, 2.05, 1.0)), 32)
+
+
+def cam_records_burn(c, t):
+    e = ease(t); b = c["bag"].location
+    return (b + Vector((-1.4, -1.6, 1.4)).lerp(Vector((-1.2, -1.35, 1.35)), e), b + Vector((0.3, 0, 0.6)), 32)
+
+
+def cam_attache(c, t):
+    e = ease(t)
+    a = _tw(c, (0.95, 0.05, 0.32)); b = _tw(c, (0.8, 0.02, 0.3))
+    return (a.lerp(b, e), _tw(c, (0.0, -0.05, 0.14)).lerp(c["people"]["sec"].bone_head("head"), 0.4), 36)
+
+
+def cam_platen(c, t):
+    e = ease(t); car = c["tw"]["carrier"].location.x
+    a = _tw(c, (-0.05, -0.32, 0.36)); b = _tw(c, (0.0, -0.28, 0.33))
+    return (a.lerp(b, e), _tw(c, (0.0, 0.03, 0.16)), 50)
+
+
+def cam_page_out(c, t):
+    e = ease(t)
+    a = _tw(c, (0.35, -0.55, 0.42)); b = _tw(c, (0.28, -0.45, 0.45))
+    return (a.lerp(b, e), _tw(c, (0.0, 0.05, 0.22)), 42)
+
+
 MOVES = {
+    "page_out": dict(kind="anim", dof=1.8, cam=cam_page_out, focus=lambda c, t: _tw(c, (0.0, 0.05, 0.22)), anim=anim("page_out")),
+    "records_drawer": dict(kind="anim", dof=2.2, cam=cam_records_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0, 0.3, 0.1)), anim=anim("records_drawer")),
+    "records_burn": dict(kind="anim", dof=2.6, cam=cam_records_burn, focus=lambda c, t: c["bag"].location + Vector((0.2, 0, 0.7)), anim=anim("records_burn")),
+    "attache": dict(kind="anim", dof=2.6, cam=cam_attache, focus=lambda c, t: _tw(c, (0.0, 0.0, 0.13)), anim=anim("attache")),
+    "platen": dict(kind="anim", dof=1.6, cam=cam_platen, focus=lambda c, t: T.strike_point(c["tw"]) + Vector((0, 0, 0.03)), anim=anim("platen")),
     "nsa_desk": dict(kind="anim", dof=2.4, cam=cam_nsa_desk, focus=lambda c, t: c["pad"].location, anim=anim("nsa_desk")),
     "nsa_plans": dict(kind="anim", dof=3.0, cam=cam_nsa_plans, focus=lambda c, t: c["plans"].location, anim=anim("nsa_plans")),
     "typing": dict(kind="anim", dof=2.6, cam=cam_typing, focus=lambda c, t: _tw(c, (0.0, 0.03, 0.13)), anim=anim("typing")),

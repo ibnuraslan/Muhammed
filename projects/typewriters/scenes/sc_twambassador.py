@@ -15,8 +15,9 @@ import twp
 import typewriter as T
 
 EXPOSURE = 0.0
-DUR = {"handover": 4.5, "note": 5.0, "pocket": 4.5, "sign": 5.0, "folder": 4.5}
-VARIANT_FOR = {"sign": "oval", "folder": "oval"}
+DUR = {"handover": 4.5, "note": 5.0, "pocket": 4.5, "sign": 5.0, "folder": 4.5, "talks_wide": 5.0, "talks_read": 4.5}
+VARIANT_FOR = {"sign": "oval", "folder": "oval", "talks_wide": "talks", "talks_read": "talks"}
+TALK = Vector((0.0, 0.3, 0.0))
 OVAL_DESK = Vector((-1.25, 2.05, 0.0))
 WIN_Y = 3.0
 
@@ -106,7 +107,24 @@ def build(variant=None):
     # ---------------------------------------------------------------- furniture (scanned)
     oval = variant == "oval"
     c["oval"] = oval
-    if oval:                                   # a Washington office: the desk in front of the window, the figure backlit
+    talks = variant == "talks"
+    c["talks"] = talks
+    if talks:                                  # a negotiating room: one long table, two delegations facing each other
+        for dx in (-1.15, 1.15):
+            ph.model("painted_wooden_table", loc=(TALK.x + dx, TALK.y, 0), rot_z=0.0)
+        c["seats"] = []
+        gl = glass("Tumbler", (0.9, 0.93, 0.95))
+        for side in (-1, 1):
+            for k in range(3):
+                x = TALK.x - 1.4 + k * 1.4
+                ph.model("dining_chair_02", loc=(x, TALK.y + side * 0.85, 0), rot_z=0 if side < 0 else math.pi)
+                c["seats"].append((x, side))
+                cyl("Glass", (x + 0.25, TALK.y + side * 0.35, 0.99), 0.035, 0.1, gl, verts=16)
+                bpy.ops.mesh.primitive_plane_add(size=1, location=(x, TALK.y + side * 0.32, 0.962), rotation=(0, 0, 0.05 * side))
+                o = bpy.context.active_object; o.scale = (0.24, 0.31, 1); o.data.materials.append(pbr("Folder", (0.55, 0.45, 0.3) if side < 0 else (0.35, 0.4, 0.45), 0.7))
+        for x in (-0.7, 0.7):
+            ph.model("jug_01", loc=(x, TALK.y, 0.96), scale=0.8)
+    elif oval:                                   # a Washington office: the desk in front of the window, the figure backlit
         fill.data.energy = 14
         ph.model("dining_table", loc=OVAL_DESK, rot_z=0.0, scale=0.85)
         ph.model("ArmChair_01", loc=(0.3, 0.6, 0.0), rot_z=0.4)
@@ -128,7 +146,7 @@ def build(variant=None):
     ph.model("fancy_picture_frame_01", loc=(3.47, 0.2, 1.9), rot_z=math.pi / 2)
     ph.model("mantel_clock_01", loc=(-0.15, 0.95, 0.74), rot_z=0.2)
     ph.model("office_notepads", loc=(0.55, 0.95, 0.74), scale=0.4, rot_z=0.1)
-    tw = None if oval else T.make("AmbTW", loc=(1.15, 1.15, 0.74), rot_z=math.pi + 0.3, color=(0.14, 0.16, 0.18), mechanism=False, glyphs=False, legends=False, text=" ")
+    tw = None if (oval or talks) else T.make("AmbTW", loc=(1.15, 1.15, 0.74), rot_z=math.pi + 0.3, color=(0.14, 0.16, 0.18), mechanism=False, glyphs=False, legends=False, text=" ")
     # flag on a floor stand (generic stripes) in the corner
     cyl("FlagPole", (-2.6, 2.5, 1.2), 0.02, 2.4, pbr("Brass", (0.75, 0.6, 0.35), 0.3, 1.0))
     import sc_twembassy
@@ -151,6 +169,19 @@ def build(variant=None):
     amb = twp.person("Ambassador", 1.0, 60, "male_elegantsuit01", "short02", hv=0.72, cval=0.34, hue=0.6, sat=0.18, skin=twp.SKIN_OLD)
     cou = twp.person("Courier", 1.0, 34, "male_casualsuit04", "short01", hv=0.22, cval=0.5, hue=0.08, sat=0.3)
     c["amb"] = amb; c["cou"] = cou
+    if talks:
+        import paper_tex
+        bpy.ops.mesh.primitive_plane_add(size=1); pg = bpy.context.active_object; pg.name = "ReadPage"; pg.scale = (0.21, 0.28, 1)
+        bpy.ops.object.transform_apply(scale=True)
+        pg.data.materials.append(tex_mat("ReadPageM", paper_tex.page(77), 0.8)); c["page"] = pg
+        specs = [("SovA", 1.0, 56, "male_elegantsuit01", "short04", 0.45, 0.6), ("SovB", 1.0, 47, "male_casualsuit02", "short02", 0.5, 0.08),
+                 ("SovC", 0.0, 44, "female_elegantsuit01", "bob01", 0.55, 0.6), ("UsA", 1.0, 52, "male_casualsuit04", "short03", 0.55, 0.1),
+                 ("UsB", 1.0, 39, "male_elegantsuit01", "short01", 0.5, 0.58), ("UsC", 0.0, 35, "female_casualsuit02", "long01", 0.6, 0.55)]
+        c["dele"] = [twp.person(nm, g, yrs, cl, hr, hv=0.35 if g < 0.5 else 0.5, cval=cv, hue=hu, sat=0.2) for nm, g, yrs, cl, hr, cv, hu in specs]
+        for o in [c["note"], c["env"]] + twp.person_objs(cou) + twp.person_objs(amb):
+            o.hide_render = True
+        animate(c, 0.0, "talks_wide")
+        return c
     if oval:
         import skia
         path = os.path.join(T.GEN, "folder_label.png")
@@ -183,6 +214,26 @@ def hand(h, side="R"):
 def animate(c, sec, shot):
     from human import reach, fingers_curl
     amb, cou, env, note = c["amb"], c["cou"], c["env"], c["note"]
+    if c.get("talks"):
+        dele = c["dele"]
+        for k, ((x, side), h) in enumerate(zip(c["seats"], dele)):
+            if k == 5 and shot == "talks_wide" and sec < 2.5:              # the last delegate walks in to her seat
+                twp.walk(h, (x + 2.2, TALK.y + side * 1.4), (x, TALK.y + side * 1.25), sec, speed=0.9)
+                continue
+            twp.seat(h, (x, TALK.y + side * 0.62, 0), 0.0 if side > 0 else math.pi, lean=12)
+            h.rot("head", (0, 0, 1), 8 * math.sin(sec * 0.6 + k))
+        sa = dele[0]; pg = c["page"]                                    # the lead Soviet negotiator reads a page, then looks up
+        look = ease(min(1.0, max(0.0, (sec - 2.6) / 0.8))) if shot == "talks_read" else 0.0
+        chest = sa.bone_head("spine03")
+        pg.location = chest + Vector((0, 0.3, -0.02)) if True else None
+        pg.rotation_euler = (math.radians(-60 + 25 * look), 0, 0)
+        pg.location.z -= 0.1 * look
+        for sd, sg in (("L", -1), ("R", 1)):
+            reach(sa, sd, pg.location + Vector((sg * 0.12, -0.06, -0.06)), Vector((sg, -0.2, -0.7)), Vector((0, 1, 0.3)))
+        fingers_curl(sa, 45, thumb=25)
+        sa.rot("head", (1, 0, 0), 18 * (1 - look))
+        bpy.context.view_layer.update()
+        return
     if c.get("oval"):
         d = OVAL_DESK
         twp.seat(amb, (d.x, d.y + 0.62, 0), 0.0, lean=18)                    # behind the desk, back to the window
@@ -271,7 +322,19 @@ def cam_folder(c, t):
     return (d + Vector((2.0, -1.7, 1.5)).lerp(Vector((1.75, -1.45, 1.45)), e), d + Vector((0.5, -0.2, 0.95)), 35)
 
 
+def cam_talks_wide(c, t):
+    e = ease(t)
+    return (TALK + Vector((-3.0, -2.2, 2.0)).lerp(Vector((-2.6, -1.9, 1.9)), e), TALK + Vector((0.2, 0.2, 0.9)), 26)
+
+
+def cam_talks_read(c, t):
+    e = ease(t); x = c["seats"][0][0]
+    return (Vector((x + 1.0, TALK.y + 0.25, 1.42)).lerp(Vector((x + 0.85, TALK.y + 0.15, 1.4)), e), Vector((x, TALK.y - 0.55, 1.12)), 40)
+
+
 MOVES = {
+    "talks_wide": dict(kind="anim", dof=None, cam=cam_talks_wide, anim=anim("talks_wide")),
+    "talks_read": dict(kind="anim", dof=2.0, cam=cam_talks_read, focus=lambda c, t: c["dele"][0].bone_head("head"), anim=anim("talks_read")),
     "sign": dict(kind="anim", dof=3.0, cam=cam_sign, focus=lambda c, t: OVAL_DESK + Vector((0, 0.5, 1.0)), anim=anim("sign")),
     "folder": dict(kind="anim", dof=2.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
     "handover": dict(kind="anim", dof=3.0, cam=cam_handover, focus=lambda c, t: c["env"].location, anim=anim("handover")),

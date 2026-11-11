@@ -14,7 +14,9 @@ import twp
 import machines as MC
 
 EXPOSURE = 0.0
-DUR = {"push": 4.5, "sweep": 5.0}
+DUR = {"push": 4.5, "sweep": 5.0, "tape": 4.5, "pouch": 5.0}
+TAPE_AT = Vector((-0.38, 0.52, 1.07))
+DESK2 = Vector((2.6, -1.8, 0.0))
 VARIANT_FOR = {"sweep": "dark"}
 
 
@@ -50,6 +52,39 @@ def build(variant=None):
     for k, x in enumerate((-1.0, 0.5, 2.0)):
         r, p = MC.teletype(f"VTTY{k}", (x, 0.6, 0), math.radians(5 * (k - 1))); c["tty"].append(p)
     MC.cipher("VCdesk", (-1.0 + 0.62, 0.62, 0.72), 0.0, height=0.3)       # beside the first teletype
+    # the punched tape running through the cipher machine's reader: a long strip with a moving hole pattern
+    tape_m = bpy.data.materials.new("PunchTape"); tape_m.use_nodes = True
+    N = tape_m.node_tree.nodes; L = tape_m.node_tree.links; p_ = N["Principled BSDF"]
+    uv = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); L.new(uv.outputs['UV'], mp.inputs['Vector'])
+    dv = mp.inputs['Location'].driver_add("default_value", 0).driver; dv.type = 'SCRIPTED'; dv.expression = "frame * 0.004"
+    br = N.new("ShaderNodeTexBrick"); br.inputs['Scale'].default_value = 1.0; L.new(mp.outputs[0], br.inputs['Vector'])
+    vn = N.new("ShaderNodeTexWhiteNoise"); vn.noise_dimensions = '2D'
+    sx = N.new("ShaderNodeVectorMath"); sx.operation = 'MULTIPLY'; sx.inputs[1].default_value = (180, 8, 1); L.new(mp.outputs[0], sx.inputs[0])
+    fl = N.new("ShaderNodeVectorMath"); fl.operation = 'FLOOR'; L.new(sx.outputs[0], fl.inputs[0]); L.new(fl.outputs[0], vn.inputs['Vector'])
+    fr = N.new("ShaderNodeVectorMath"); fr.operation = 'FRACTION'; L.new(sx.outputs[0], fr.inputs[0])
+    ds = N.new("ShaderNodeVectorMath"); ds.operation = 'DISTANCE'; ds.inputs[1].default_value = (0.5, 0.5, 0); L.new(fr.outputs[0], ds.inputs[0])
+    hole = N.new("ShaderNodeMath"); hole.operation = 'LESS_THAN'; hole.inputs[1].default_value = 0.3; L.new(ds.outputs['Value'], hole.inputs[0])
+    on = N.new("ShaderNodeMath"); on.operation = 'GREATER_THAN'; on.inputs[1].default_value = 0.45; L.new(vn.outputs['Value'], on.inputs[0])
+    hh = N.new("ShaderNodeMath"); hh.operation = 'MULTIPLY'; L.new(hole.outputs[0], hh.inputs[0]); L.new(on.outputs[0], hh.inputs[1])
+    inv = N.new("ShaderNodeMath"); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0; L.new(hh.outputs[0], inv.inputs[1])
+    L.new(inv.outputs[0], p_.inputs['Alpha']); p_.inputs['Base Color'].default_value = (0.82, 0.74, 0.52, 1); p_.inputs['Roughness'].default_value = 0.8
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0)); tp = bpy.context.active_object; tp.name = "Tape"
+    tp.scale = (0.9, 0.025, 1); bpy.ops.object.transform_apply(scale=True); tp.data.materials.append(tape_m)
+    tp.location = TAPE_AT + Vector((0.1, 0, 0.01)); tp.rotation_euler = (0, 0, 0)
+    bpy.ops.mesh.primitive_plane_add(size=1); tp2 = bpy.context.active_object; tp2.scale = (0.5, 0.025, 1); bpy.ops.object.transform_apply(scale=True)
+    tp2.data.materials.append(tape_m); tp2.location = TAPE_AT + Vector((-0.55, 0, -0.18)); tp2.rotation_euler = (0, math.radians(60), 0)
+    # diplomatic pouch on the desk by the terminal: a canvas bag, drawstring, a lead seal on the cord
+    canvas = ph.texture("hessian_380", scale=3.0, name="PouchCanvas", tint=(0.55, 0.55, 0.45))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.2, location=(0, 0, 0))
+    pouch = bpy.context.active_object; pouch.name = "Pouch"; pouch.scale = (1.3, 0.55, 1.0); bpy.ops.object.shade_smooth(); pouch.data.materials.append(canvas)
+    pouch.location = DESK2 + Vector((-0.45, -0.05, 0.8))
+    neck = cyl("PouchNeck", DESK2 + Vector((-0.45, -0.05, 1.02)), 0.06, 0.08, canvas, verts=16)
+    c["pouch"] = pouch
+    seal = join([cyl("PSealCord", (0, 0, 0), 0.003, 0.14, pbr("Cord", (0.5, 0.45, 0.35), 0.8), verts=6),
+                 cyl("PSealLead", (0, 0, -0.08), 0.016, 0.014, pbr("PLead", (0.42, 0.43, 0.45), 0.5, 0.8), verts=16, rot=(math.radians(90), 0, 0))], "PouchSeal")
+    c["pseal"] = seal
+    sealer = twp.person("Courier2", 1.0, 41, "male_casualsuit02", "short03", hv=0.3, cval=0.55, hue=0.6, sat=0.2)
+    c["courier"] = sealer
     ph.model("metal_office_desk", loc=(2.6, -1.8, 0), rot_z=0.0, scale=0.8)
     MC.terminal("VTerm", (2.6, -1.8, 0.632), 0.0)
     ph.model("SchoolChair_01", loc=(2.6, -2.4, 0), rot_z=0.0)
@@ -70,11 +105,24 @@ def build(variant=None):
     if dark:
         haze((0, 0, 1.4), (8, 6, 2.8), density=0.05, color=(0.8, 0.85, 0.9), anis=0.6)
     twp.hide(twp.person_objs(m) + [fl] + list(fl.children_recursive), not dark)
-    animate(c, 0.0)
+    animate(c, 0.0, "sweep" if dark else "push")
     return c
 
 
-def animate(c, sec):
+def animate(c, sec, shot="push"):
+    from human import reach, fingers_curl
+    cou = c["courier"]
+    twp.hide(twp.person_objs(cou), shot != "pouch")
+    if shot == "pouch":
+        twp.stand(cou, (DESK2.x - 0.4, DESK2.y - 0.75, 0), math.pi)
+        top = DESK2 + Vector((-0.45, -0.05, 1.08))
+        crimp = max(0.0, math.sin(math.pi * min(1.0, max(0.0, (sec - 2.6) / 0.6))))
+        draw = ease(min(1.0, sec / 2.0))
+        c["pseal"].location = top + Vector((0, -0.04, -0.02 - 0.06 * draw))
+        reach(cou, "R", top + Vector((0.08, -0.1, 0.05 - 0.05 * draw - 0.01 * crimp)), Vector((-0.6, -0.3, -0.7)), Vector((0, 1, -0.2)))
+        reach(cou, "L", top + Vector((-0.1, -0.1, 0.08 + 0.1 * (1 - draw))), Vector((0.6, -0.3, -0.7)), Vector((0, 1, 0.3)))
+        fingers_curl(cou, 50 + 20 * crimp, thumb=30)
+        cou.rot("head", (1, 0, 0), 15)
     from human import reach, fingers_curl
     for k, p in enumerate(c["tty"]):
         MC.run_teletype(p, sec + k * 0.7)
@@ -97,9 +145,15 @@ def animate(c, sec):
 
 
 MOVES = {
-    "push": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["push"]),
+    "tape": dict(kind="anim", dof=1.2, anim=lambda c, t: animate(c, t * DUR["tape"], "tape"),
+                 cam=lambda c, t: (TAPE_AT + Vector((0.35, -0.55, 0.2)).lerp(Vector((0.25, -0.42, 0.14)), ease(t)), TAPE_AT + Vector((0.05, 0, 0)), 50),
+                 focus=lambda c, t: TAPE_AT + Vector((0.05, 0, 0))),
+    "pouch": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["pouch"], "pouch"),
+                  cam=lambda c, t: (DESK2 + Vector((0.9, -1.6, 1.55)).lerp(Vector((0.7, -1.35, 1.5)), ease(t)), DESK2 + Vector((-0.4, -0.1, 0.95)), 35),
+                  focus=lambda c, t: DESK2 + Vector((-0.45, -0.05, 1.0))),
+    "push": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["push"], "push"),
                  cam=lambda c, t: (Vector((-2.0, -0.9, 1.25)).lerp(Vector((-1.45, -0.35, 1.18)), ease(t)), Vector((-0.6, 0.8, 1.0)), 35),
                  focus=lambda c, t: Vector((-1.0, 0.6, 1.1))),
-    "sweep": dict(kind="anim", dof=None, anim=lambda c, t: animate(c, t * DUR["sweep"]),
+    "sweep": dict(kind="anim", dof=None, anim=lambda c, t: animate(c, t * DUR["sweep"], "sweep"),
                   cam=lambda c, t: (Vector((2.2, -2.6, 1.6)).lerp(Vector((1.9, -2.45, 1.6)), ease(t)), Vector((-1.6, 0.4, 1.1)), 28)),
 }

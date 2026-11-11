@@ -20,8 +20,11 @@ import vehicles as V
 import typewriter as T
 
 EXPOSURE = 0.0
-DUR = {"wrap": 5.0, "seal": 4.5, "sensor": 4.5, "apron": 5.0, "load": 5.0, "slats": 5.0}
-VARIANT_FOR = {"load": "night", "slats": "night"}
+DUR = {"wrap": 5.0, "seal": 4.5, "sensor": 4.5, "apron": 5.0, "load": 5.0, "slats": 5.0,
+       "customs_torch": 5.0, "customs_clock": 4.5, "dock_xray": 5.0, "dock_seal": 4.5}
+VARIANT_FOR = {"load": "night", "slats": "night", "customs_torch": "customs", "customs_clock": "customs", "dock_xray": "dock", "dock_seal": "dock"}
+CUSTOMS = Vector((-6.0, 3.0, 0.0))
+DOCK = Vector((2.0, -4.0, 0.0))
 HX, HY, HZ = 18.0, 14.0, 11.0          # hangar half-length (x), half-depth (y), eave height; doors open on -Y
 PLANE = Vector((4.0, -48.0, 0.0))
 WORK = Vector((-4.0, 2.0, 0.0))         # the wrapping station
@@ -110,7 +113,8 @@ def slatted_crate(name, with_tw=True):
 
 def build(variant=None):
     c = {"variant": variant}
-    night = variant == "night"
+    night = variant in ("night", "customs")
+    customs = variant == "customs"
     rng = np.random.default_rng(12)
     if night:
         world_flat((0.012, 0.016, 0.026), 1.0)
@@ -148,7 +152,9 @@ def build(variant=None):
     for x in np.arange(-HX + 4, HX, 6.0):
         for y in (-6.0, 4.0):
             ph.model("hanging_industrial_lamp", loc=(x, y, HZ - 0.1))
-            pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = 1200 if night else 500; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
+            if customs and not (x < -6 and y > 0):
+                continue                                # a Soviet customs shed at night: one lamp left burning
+            pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = (250 if customs else 1200) if night else 500; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
             pl.color = (1.0, 0.85, 0.65)
             po = bpy.data.objects.new("HangLamp", pl); bpy.context.collection.objects.link(po); po.location = (x, y, HZ - 1.4)
     if not night:
@@ -226,14 +232,58 @@ def build(variant=None):
         c["slat"] = sc
         for k in range(5):
             o = MC.burlap_crate(f"Wait{k}", tag=False); o.location = (PLANE.x - 3.6 + (k % 3) * 1.05, PLANE.y + 25 + (k // 3) * 0.9, 0.43)
+    if customs:
+        sc, stw = slatted_crate("CustomsCrate"); sc.location = CUSTOMS; sc.rotation_euler = (0, 0, 0.3); c["ccrate"] = sc
+        lid = [o for o in sc.children if o.name.startswith("TopSlat")]
+        piv = bpy.data.objects.new("LidHinge", None); bpy.context.collection.objects.link(piv); piv.parent = sc; piv.location = (0, 0.31, 0.42)
+        for o in lid:
+            mw = o.matrix_world.copy(); o.parent = piv; o.matrix_world = mw
+        c["clid"] = piv
+        box("CustomsTable", (CUSTOMS.x - 1.6, CUSTOMS.y + 0.6, 0.4), (1.4, 0.7, 0.05), ph.texture("dark_wood", scale=1.0, name="CTable"))
+        ph.model("clipboard", loc=(CUSTOMS.x - 1.7, CUSTOMS.y + 0.6, 0.43))
+        # a wall clock on the back wall above the crate: the hands are separate objects that turn (frame-driven by bake)
+        ck, _ = ph.model("wall_clock", loc=(CUSTOMS.x + 0.5, HY - 0.12, 3.0), rot_z=math.pi, scale=2.2)
+        hm = pbr("ClockHand", (0.02, 0.02, 0.02), 0.4)
+        c["hands"] = []
+        for k, (L_, w_) in enumerate(((0.22, 0.016), (0.3, 0.01))):
+            hp = bpy.data.objects.new("HandPivot", None); bpy.context.collection.objects.link(hp); hp.location = (CUSTOMS.x + 0.5, HY - 0.25, 3.0)
+            hb = box("Hand", (0, 0, L_ / 2), (w_, 0.004, L_), hm); hb.parent = hp
+            c["hands"].append(hp)
+        for k in range(6):
+            o = MC.burlap_crate(f"CStock{k}", tag=False); o.location = (CUSTOMS.x + 2.0 + (k % 3) * 1.0, CUSTOMS.y + 1.5 + (k // 3) * 0.9, 0.43)
+        torch, _ = ph.model("vintage_flashlight"); c["torch"] = torch
+        sp = bpy.data.lights.new("TorchC", 'SPOT'); sp.energy = 600; sp.spot_size = math.radians(26); sp.spot_blend = 0.3; sp.color = (1.0, 0.9, 0.75)
+        so = bpy.data.objects.new("TorchC", sp); bpy.context.collection.objects.link(so); c["beam"] = so
+    if variant == "dock":
+        # an X-ray inspection tunnel: steel housing, lead-strip curtains, a roller bed, an operator console with a monitor
+        st_m = pbr("TunnelSteel", (0.55, 0.58, 0.56), 0.4, 0.5)
+        box("Tunnel", (DOCK.x, DOCK.y, 1.15), (2.2, 1.4, 1.5), st_m, bevel=0.03)
+        box("TunnelHole", (DOCK.x, DOCK.y, 0.95), (2.25, 1.0, 0.9), pbr("TunnelDark", (0.02, 0.02, 0.02), 0.6))
+        warn = pbr("XLamp", (0.4, 0.15, 0.02), 0.3, 0.0, **{'Emission Color': (1.0, 0.55, 0.1, 1), 'Emission Strength': 0.0})
+        d = warn.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].driver_add("default_value").driver
+        d.type = 'SCRIPTED'; d.expression = "15 * (1 if (frame % 30) < 15 else 0.1)"
+        cyl("XWarn", (DOCK.x + 0.8, DOCK.y, 1.95), 0.07, 0.12, warn, verts=16)
+        for sx in (-1, 1):
+            for k in range(8):
+                box("LeadStrip", (DOCK.x + sx * 1.12, DOCK.y - 0.44 + k * 0.125, 0.95), (0.01, 0.11, 0.88), pbr("Lead", (0.2, 0.2, 0.21), 0.6, 0.3))
+        for k in range(18):
+            cyl("BedRoller", (DOCK.x - 4.5 + k * 0.5, DOCK.y, 0.48), 0.04, 1.0, st_m, verts=12, rot=(math.radians(90), 0, 0))
+        for sy in (-1, 1):
+            box("BedRail", (DOCK.x, DOCK.y + sy * 0.52, 0.45), (9.0, 0.05, 0.12), st_m)
+        import machines as _MC
+        _MC.terminal("XrayConsole", (DOCK.x + 0.4, DOCK.y - 1.5, 0.75), math.pi)
+        box("ConsoleDesk", (DOCK.x + 0.4, DOCK.y - 1.55, 0.37), (1.0, 0.6, 0.74), st_m)
+        c["dock_crates"] = [MC.burlap_crate(f"DockCrate{k}", size=(0.8, 0.7, 0.6)) for k in range(4)]
     # people
     P = {}
     P["wA"] = twp.person("HWorkA", 1.0, 33, "male_worksuit01", "short01", hv=0.25, cval=0.5, hue=0.58, sat=0.2)
     P["wB"] = twp.person("HWorkB", 1.0, 50, "male_worksuit01", "short04", hv=0.45, cval=0.45, hue=0.1, sat=0.2)
     P["driver"] = twp.person("Driver", 1.0, 40, "male_worksuit01", "short02", hv=0.3, cval=0.42, hue=0.58, sat=0.15)
     P["load1"] = twp.person("Loader1", 1.0, 26, "male_worksuit01", "short03", hv=0.2, cval=0.5, hue=0.3, sat=0.15)
+    P["insp"] = twp.person("Inspector", 1.0, 46, "male_casualsuit03", "short02", hv=0.4, cval=0.55, hue=0.1, sat=0.2)
+    P["guard"] = twp.person("Guard", 1.0, 35, "male_worksuit01", "short01", hv=0.25, cval=0.45, hue=0.3, sat=0.25)
     c["P"] = P
-    animate(c, 0.0, "wrap")
+    animate(c, 0.0, {"customs": "customs_torch", "dock": "dock_xray"}.get(variant, "wrap"))
     return c
 
 
@@ -241,9 +291,45 @@ def build(variant=None):
 def animate(c, sec, shot):
     from human import reach, fingers_curl
     P = c["P"]
-    used = {"wrap": ["wA", "wB", "driver"], "seal": ["wA"], "sensor": ["wB"], "apron": ["driver"], "load": ["load1", "wA"], "slats": []}[shot]
+    used = {"wrap": ["wA", "wB", "driver"], "seal": ["wA"], "sensor": ["wB"], "apron": ["driver"], "load": ["load1", "wA"], "slats": [],
+            "customs_torch": ["guard"], "customs_clock": [], "dock_xray": ["insp", "wA"], "dock_seal": ["insp"]}[shot]
     for k, h in P.items():
         twp.hide(twp.person_objs(h), k not in used)
+    if shot.startswith("customs"):
+        for k, hp in enumerate(c["hands"]):                 # hour hand from 2:55, minute hand sweeping (time-lapse feel)
+            mins = 55 + sec * 6.0
+            hp.rotation_euler = (0, math.radians(-(mins * 6 if k else (2 + mins / 60) * 30)), 0)
+        c["clid"].rotation_euler = (math.radians(-8 * ease(min(1.0, sec / 3.0))) if shot == "customs_clock" else math.radians(-8), 0, 0)
+        g = P["guard"]
+        twp.walk(g, (CUSTOMS.x + 4.0, CUSTOMS.y - 4.0), (CUSTOMS.x + 1.0, CUSTOMS.y - 1.0), sec, speed=0.7)
+        aim = c["ccrate"].location + Vector((0, 0, 0.3))
+        sh = g.bone_head("upperarm01.R")
+        hand_p = sh + (aim - sh).normalized() * 0.5 + Vector((0, 0, -0.05))
+        reach(g, "R", hand_p, Vector((0.6, -0.4, -0.6)), aim - sh)
+        fingers_curl(g, 60, thumb=30)
+        dd = (aim - hand_p).normalized()
+        c["torch"].location = hand_p + dd * 0.05; c["torch"].rotation_mode = 'QUATERNION'; c["torch"].rotation_quaternion = dd.to_track_quat('Y', 'Z')
+        c["beam"].location = hand_p + dd * 0.18; c["beam"].rotation_mode = 'QUATERNION'; c["beam"].rotation_quaternion = (-dd).to_track_quat('Z', 'Y')
+        c["beam"].data.energy = 600 if shot == "customs_torch" else 0
+        twp.hide(twp.person_objs(g) + [c["torch"]] + list(c["torch"].children_recursive), shot != "customs_torch")
+    if shot.startswith("dock"):
+        for k, o in enumerate(c["dock_crates"]):
+            x = DOCK.x - 4.2 + ((sec * 0.35 + k * 2.2) % 8.4)
+            o.location = (x, DOCK.y, 0.82)
+        ins = P["insp"]
+        if shot == "dock_xray":
+            twp.stand(ins, (DOCK.x + 0.4, DOCK.y - 2.15, 0), math.pi)
+            ins.rot("head", (1, 0, 0), 12)
+            twp.stand(P["wA"], (DOCK.x - 3.2, DOCK.y - 0.95, 0), math.pi)
+            reach(P["wA"], "R", Vector((DOCK.x - 3.2, DOCK.y - 0.45, 1.05)), Vector((0.5, -0.4, -0.7)), Vector((0, 1, 0)))
+        else:
+            cr = c["dock_crates"][0]; cr.location = (DOCK.x + 3.0, DOCK.y, 0.82)
+            twp.stand(ins, (DOCK.x + 3.0, DOCK.y - 0.95, 0), math.pi)
+            tag = Vector((DOCK.x + 3.0, DOCK.y - 0.36, 0.95))
+            reach(ins, "R", tag + Vector((0.05, -0.08, 0.02)), Vector((-0.5, -0.4, -0.7)), Vector((0, 1, 0)))
+            reach(ins, "L", tag + Vector((-0.25, -0.2, -0.05 + 0.03 * math.sin(sec))), Vector((0.5, -0.4, -0.7)), Vector((0, 1, 0.3)))
+            ins.rot("head", (1, 0, 0), 16)
+        fingers_curl(ins, 40, thumb=20)
     for hub in c["props"]:
         hub.rotation_euler = (0, sec * (14.0 if shot in ("apron", "load") else 0.0), 0)
     wrap, sheet = c["wrap"], c["sheet"]
@@ -363,7 +449,31 @@ def cam_slats(c, t):
     return (s + Vector((1.3, -1.4, 1.0)).lerp(Vector((0.62, -0.68, 0.55)), e), s + Vector((0, 0, 0.18)), 40)
 
 
+def cam_customs_torch(c, t):
+    e = ease(t)
+    return (CUSTOMS + Vector((-3.5, -4.2, 1.6)).lerp(Vector((-3.0, -3.7, 1.55)), e), CUSTOMS + Vector((1.0, 0.0, 0.6)), 28)
+
+
+def cam_customs_clock(c, t):
+    e = ease(t)
+    return (CUSTOMS + Vector((-0.6, -2.8, 0.9)).lerp(Vector((-0.4, -2.3, 1.1)), e), CUSTOMS + Vector((0.3, 3.0, 2.1)), 26)
+
+
+def cam_dock_xray(c, t):
+    e = ease(t)
+    return (DOCK + Vector((-4.2, -4.0, 2.0)).lerp(Vector((-3.6, -3.4, 1.9)), e), DOCK + Vector((-0.5, 0.0, 0.9)), 30)
+
+
+def cam_dock_seal(c, t):
+    e = ease(t); p = DOCK + Vector((3.0, -0.4, 0.95))
+    return (p + Vector((1.4, -1.6, 0.6)).lerp(Vector((1.15, -1.3, 0.5)), e), p, 35)
+
+
 MOVES = {
+    "customs_torch": dict(kind="anim", dof=None, cam=cam_customs_torch, anim=anim("customs_torch")),
+    "customs_clock": dict(kind="anim", dof=3.0, cam=cam_customs_clock, focus=lambda c, t: CUSTOMS + Vector((0, 0, 0.4)), anim=anim("customs_clock")),
+    "dock_xray": dict(kind="anim", dof=None, cam=cam_dock_xray, anim=anim("dock_xray")),
+    "dock_seal": dict(kind="anim", dof=2.0, cam=cam_dock_seal, focus=lambda c, t: DOCK + Vector((3.0, -0.38, 0.95)), anim=anim("dock_seal")),
     "wrap": dict(kind="anim", dof=3.5, cam=cam_wrap, focus=lambda c, t: WORK + Vector((0, -0.4, 0.9)), anim=anim("wrap")),
     "seal": dict(kind="anim", dof=2.6, cam=cam_seal, focus=lambda c, t: WORK + Vector((0, -0.45, 0.8)), anim=anim("seal")),
     "sensor": dict(kind="anim", dof=None, cam=cam_sensor, anim=anim("sensor")),
