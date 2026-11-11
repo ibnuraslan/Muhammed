@@ -83,3 +83,12 @@ At each checkpoint:
 - Empty backgrounds.
 - A beat that does not show its narration line.
 - Exaggerated cartoon proportions. Keep the textured, grounded realism.
+
+## Clipping check (client, Nov 11). Run it at every checkpoint
+The client checks stills for these first. Before sending stills, render a close-up pass at 270×480 of every contact moment, and fix anything you find:
+- **Hands and fingers** through props, bodies, walls, steering wheels, controls or tools; and hands that float near an object they are meant to hold.
+- **Legs and feet** through floors, seats, beds, other legs or the ground; feet sliding while planted.
+- **Head-worn items** (masks, helmets, hard hats, caps, headsets, head torches, glasses): no head poking through, no gap floating off the head, and they move with the head bone. Parent them with Child Of to the head bone and give the item a slightly larger offset (shrinkwrap/offset), or hide the scalp under it.
+- **Clothes**: no body through clothing at bends (elbows, knees, armpits, waist). Use MPFB's delete-group/proxy-fitting or a small Displace on the body under the clothes.
+- **Characters through each other** (carrying, hugging, tackling) and **props through props**.
+Also add a numeric penetration check to your audit (BVH overlap between hand, foot and head-item meshes and the scene). Report the count at checkpoint C.
