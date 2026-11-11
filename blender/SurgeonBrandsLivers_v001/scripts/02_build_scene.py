@@ -77,6 +77,7 @@ def fabric_override(ob, rgb):
 fabric_override(bpy.data.objects["Surgeon1.male_casualsuit01"], (0.10, 0.36, 0.36))
 fabric_override(bpy.data.objects["Nurse.male_casualsuit01"], (0.16, 0.26, 0.42))
 fabric_override(bpy.data.objects["Surgeon2.female_casualsuit01"], (0.17, 0.27, 0.55))
+fabric_override(bpy.data.objects["Patient.female_casualsuit02"], (0.42, 0.24, 0.28))    # plain lounge set: the stock T-shirt print looked like a logo
 # purple nitrile gloves on the studio hands
 M_GLOVE = mat("Nitrile", (0.36, 0.32, 0.78), 0.32, sss=0.1, coat=0.3)
 gb = bpy.data.objects["GloveHands.body"]; gb.data.materials.clear(); gb.data.materials.append(M_GLOVE)
@@ -260,7 +261,8 @@ box("HEAR_LecternTop", (0.6, 0.7, 0.04), (-7.1, 0, 1.12), M_DESK, HEAR, bevel=0.
 for y in (-1.2, 0.0, 1.2):
     box("HEAR_ChairSeat", (0.5, 0.5, 0.08), (-10.65, y, DAIS_H + 0.46), mat("Leather", (0.12, 0.07, 0.05), 0.4), HEAR, bevel=0.02)
     box("HEAR_ChairBack", (0.08, 0.5, 0.75), (-10.95, y, DAIS_H + 0.85), mat("Leather", (0.12, 0.07, 0.05), 0.4), HEAR, bevel=0.02)
-    box("HEAR_Folder", (0.3, 0.22, 0.012), (-9.85, y + 0.42, DAIS_H + 0.79), mat("Folder", (0.2, 0.25, 0.35), 0.6), HEAR)
+    if y > -1.0:
+        box("HEAR_Folder", (0.3, 0.22, 0.012), (-9.85, y + 0.42, DAIS_H + 0.79), mat("Folder", (0.2, 0.25, 0.35), 0.6), HEAR)
     cyl("HEAR_Glass", 0.035, 0.11, (-9.75, y - 0.3, DAIS_H + 0.84), mat("Glass", (0.9, 0.95, 1.0), 0.02, trans=1.0), HEAR)
 # gavel + sound block, certificate, stamp
 gav = import_glb(os.path.join(OB, "gavel.glb"), "Gavel_src", c_=HEAR, join=False)
