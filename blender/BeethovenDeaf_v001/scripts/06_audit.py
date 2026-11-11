@@ -8,8 +8,14 @@ piano = bpy.data.objects["Piano"]; KEY_Z = sc["key_z"]; KX0, KX1 = sc["kx"]
 L = []
 def log(*a): s = " ".join(str(x) for x in a); print(s); L.append(s)
 def ray_down(o, x, y):
-    ok, loc, n, i = o.ray_cast(o.matrix_world.inverted() @ Vector((x, y, 3)), Vector((0, 0, -1)))
-    return (o.matrix_world @ loc).z if ok else None
+    """top of the (possibly pressed) key under x,y at the current frame"""
+    dg = bpy.context.evaluated_depsgraph_get(); start = Vector((x, y, 1.2))
+    for _ in range(12):
+        ok, loc, n, i, ob, mx = sc.ray_cast(dg, start, Vector((0, 0, -1)))
+        if not ok: return None
+        if ob.name.startswith("Key_"): return loc.z
+        start = loc + Vector((0, 0, -1e-4))
+    return None
 TIPS = ["finger%d-3.%s" % (k, s) for k in range(1, 6) for s in "LR"]
 # 1. fingertips at key strikes
 down = json.loads(sc["down"]); err = []

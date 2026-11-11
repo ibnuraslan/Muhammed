@@ -22,12 +22,13 @@ KEY_Y = 0.075
 xs = [i * 0.01 for i in range(-75, 76)]
 zk = {x: ray_down(piano, x, KEY_Y) for x in xs}
 keys = [x for x in xs if zk[x] is not None and 0.76 < zk[x] < 0.86]
-KX0, KX1 = min(keys) + 0.03, max(keys) - 0.03
-KEY_Z = sorted(zk[x] for x in keys)[len(keys) // 2]
+KX0, KX1 = -0.64, 0.64   # procedural keyboard spans +-0.672
+KEY_Z = 0.8057
 print("KEYBOARD", KX0, KX1, KEY_Z)
 sc["key_z"] = KEY_Z; sc["kx"] = (KX0, KX1)
-def key_z(x): 
-    z = ray_down(piano, x, KEY_Y + 0.02); return z if z and z < 0.9 else KEY_Z
+KEY_Z = 0.8057; sc["key_z"] = KEY_Z
+def key_z(x):
+    return KEY_Z
 
 # ---------------------------------------------------------------- bench + seat
 bench = bpy.data.objects["Bench"]; bench.location = (0, -0.60, 0); bench.rotation_euler = (0, 0, 0)
@@ -69,7 +70,7 @@ SH = {s: CR.BN["upperarm01." + s].head_local.copy() for s in "LR"}
 DOWN = []   # (side, frame, x) frames where fingertips touch the keys
 def hand_pose(s, f, x, lift, yaw=0.0, wrist_up=0.0):
     sx = 1 if s == "L" else -1
-    W = Vector((x, KEY_Y - 0.115, key_z(x) + 0.055 + lift))
+    W = Vector((x, KEY_Y - 0.172, key_z(x) + 0.055 + lift))   # fingertips on the front of the white keys, clear of the black keys
     d = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((-0.12 * sx * 0, 1.0, -0.42 + wrist_up)).normalized()
     nrm = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((0.18 * sx, 0.0, -1.0))
     pole = W + Vector((-sx * 0.45, -0.35, -0.15))   # his left is world -X (rig yawed 180)
@@ -157,12 +158,13 @@ for s in "LR":
         if fc.data_path == 'pose.bones["IK_hand.%s"].location' % s:
             for kp in fc.keyframe_points: KEYED.setdefault(s, set()).add(int(round(kp.co.x)))
 DOWNSET = {(s, f) for s, f, x in DOWN}
+PRESS = 0.009   # key travel at the front edge; fingertips ride the key down
 for it in range(3):
     err = []
     for s in "LR":
         for f in sorted(KEYED[s]):
             ev(f); d, t = low_tip(s)
-            if (s, f) in DOWNSET: dz = 0.004 - d
+            if (s, f) in DOWNSET: dz = 0.004 - PRESS - d
             elif d < 0.006: dz = 0.006 - d
             else: continue
             err.append(abs(dz)); pb = PB["IK_hand." + s]
@@ -178,6 +180,41 @@ for s in "LR":
             pb = PB["IK_hand." + s]; pb.location = pb.location + (CR.rest("IK_hand." + s).to_3x3().inverted() @ Vector((0, 0, 0.004 - d)))
             pb.keyframe_insert("location", frame=f, group="IK_hand." + s); fix += 1
 print("INBETWEEN_FIX", fix)
+for it in range(2):
+    mx_ = 0
+    for s in "LR":
+        for f in sorted(f for (s2, f) in DOWNSET if s2 == s):
+            ev(f); d, t = low_tip(s); dz = 0.004 - PRESS - d
+            if abs(dz) > 0.002:
+                pb = PB["IK_hand." + s]; pb.location = pb.location + (CR.rest("IK_hand." + s).to_3x3().inverted() @ Vector((0, 0, dz)))
+                pb.keyframe_insert("location", frame=f, group="IK_hand." + s); mx_ = max(mx_, abs(dz))
+    print("STRIKE_PASS", it, "max %.3f" % mx_)
+# ---------------------------------------------------------------- keys go down under the fingertips that strike them
+KEYOBJ = [bpy.data.objects[n] for n in sc["keys"]]
+def key_under(t):
+    best = None
+    for k in KEYOBJ:
+        black = k.name.startswith("Key_B"); hw = 0.0062 if black else 0.0124
+        if abs(t.x - k.location.x) < hw and (t.y > 0.055 or not black):
+            if best is None or black: best = k
+    return best
+PRESSED = {}
+for s, f, x in DOWN:
+    ev(f)
+    for n in TIPN:
+        t = C.matrix_world @ PB[n + s].tail
+        if t.z < KEY_Z + 0.006 and -0.002 < t.y < 0.152:
+            k = key_under(t)
+            if k: PRESSED.setdefault(k.name, []).append(f)
+ANG = math.atan2(PRESS, 0.152)
+nk = 0
+for kn, fs in PRESSED.items():
+    k = bpy.data.objects[kn]; fs = sorted(set(fs)); ang = ANG * (0.6 if kn.startswith("Key_B") else 1.0)
+    k.rotation_euler = (0, 0, 0); k.keyframe_insert("rotation_euler", frame=1)
+    for f in fs:
+        for ff, a_ in ((f - 3, 0.0), (f, ang), (f + 2, ang), (f + 7, 0.0)):
+            k.rotation_euler = (a_, 0, 0); k.keyframe_insert("rotation_euler", frame=ff); nk += 1
+print("KEYS_PRESSED", len(PRESSED), "keys", nk, "keyframes")
 # ---------------------------------------------------------------- the brass rod: pinned on the piano, its tip clamped between his teeth from f30
 head_pb = PB["head"]
 bite = bpy.data.objects.new("Bite", None); sc.collection.objects.link(bite)
@@ -264,7 +301,7 @@ for m in suit.data.materials:
 hair = bpy.data.objects["Composer.short02"]
 hm = bpy.data.materials.new("M_GreyHair"); hm.use_nodes = True; hn = hm.node_tree.nodes; hn.clear()
 ho = hn.new('ShaderNodeOutputMaterial'); hb_ = hn.new('ShaderNodeBsdfHairPrincipled'); hb_.parametrization = 'COLOR'
-hb_.inputs['Color'].default_value = (0.3, 0.29, 0.28, 1); hb_.inputs['Roughness'].default_value = 0.42
+hb_.inputs['Color'].default_value = (0.3, 0.29, 0.28, 1); hb_.inputs['Roughness'].default_value = 0.32
 hb_.inputs['Random Roughness'].default_value = 0.2
 hm.node_tree.links.new(hb_.outputs[0], ho.inputs['Surface'])
 for m in hair.data.materials:   # the cap itself: grey
@@ -275,15 +312,21 @@ for m in hair.data.materials:   # the cap itself: grey
                 m.node_tree.links.new(nd.outputs['Color'], hs.inputs['Color']); m.node_tree.links.new(hs.outputs['Color'], lk.to_socket)
 hair.data.materials.append(hm)
 psm = hair.modifiers.new("WildHair", 'PARTICLE_SYSTEM'); ps = psm.particle_system; pt = ps.settings
-pt.type = "HAIR"; pt.count = 2200; pt.hair_length = 0.045; pt.use_advanced_hair = False
-pt.emit_from = 'FACE'; pt.material = len(hair.data.materials)
-pass
-pt.child_type = 'INTERPOLATED'; pt.child_percent = 6; pt.rendered_child_count = 6; pt.child_length = 0.85; pt.child_length_threshold = 0.4
-pt.clump_factor = 0.25; pt.roughness_1 = 0.004; pt.roughness_endpoint = 0.012; pt.roughness_2 = 0.006; pt.roughness_2_size = 0.5
-pt.kink = 'WAVE'; pt.kink_amplitude = 0.006; pt.kink_frequency = 1.5
-pt.root_radius = 0.6; pt.tip_radius = 0.1; pt.radius_scale = 0.0012
-pt.display_step = 3; pt.render_step = 4
-pt.effector_weights.gravity = 0.0
+# wild, swept-back locks: few guide hairs, many clumped children, length from velocity (normal + backward/up drift)
+pt.type = 'HAIR'; pt.count = 420; pt.use_advanced_hair = True; pt.hair_length = 0.07
+pt.emit_from = 'FACE'; pt.use_emit_random = True; pt.material = len(hair.data.materials)
+pt.normal_factor = 0.014; pt.object_align_factor = (0.0, 0.008, 0.006); pt.factor_random = 0.005
+pt.child_type = 'INTERPOLATED'; pt.child_percent = 40; pt.rendered_child_count = 40; pt.virtual_parents = 0.0
+pt.child_length = 0.9; pt.child_length_threshold = 0.35
+pt.clump_factor = 0.82; pt.clump_shape = 0.35
+pt.roughness_1 = 0.002; pt.roughness_endpoint = 0.006; pt.roughness_end_shape = 1.5; pt.roughness_2 = 0.004; pt.roughness_2_size = 0.3; pt.roughness_2_threshold = 0.6
+pt.kink = 'WAVE'; pt.kink_amplitude = 0.008; pt.kink_frequency = 1.2; pt.kink_shape = 0.2
+pt.root_radius = 1.0; pt.tip_radius = 0.0; pt.radius_scale = 0.0011; pt.use_close_tip = True
+pt.display_step = 3; pt.render_step = 4; pt.effector_weights.gravity = 0.0
+# per-strand grey variation (dark iron to white) so the locks read as strands, not a puff
+hn2 = hm.node_tree.nodes; hi = hn2.new('ShaderNodeHairInfo'); cr = hn2.new('ShaderNodeValToRGB')
+e = cr.color_ramp.elements; e[0].color = (0.08, 0.075, 0.07, 1); e[1].color = (0.62, 0.6, 0.57, 1); e.new(0.55).color = (0.3, 0.29, 0.27, 1)
+hm.node_tree.links.new(hi.outputs['Random'], cr.inputs['Fac']); hm.node_tree.links.new(cr.outputs['Color'], hb_.inputs['Color'])
 # keep the eyebrows bushy grey
 for m in bpy.data.objects["Composer.eyebrow010"].data.materials:
     for nd in list(m.node_tree.nodes):

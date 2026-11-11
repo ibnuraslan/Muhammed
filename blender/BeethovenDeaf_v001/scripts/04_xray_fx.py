@@ -80,7 +80,13 @@ fillw = nt.nodes.new('ShaderNodeMath'); fillw.operation = 'MULTIPLY'; fillw.inpu
 add = nt.nodes.new('ShaderNodeMath'); add.operation = 'MULTIPLY_ADD'; add.inputs[1].default_value = 3.5   # bright travelling wavefront + soft fill behind it
 nt.links.new(edge.outputs[0], add.inputs[0]); nt.links.new(fillw.outputs[0], add.inputs[2])
 mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; nt.links.new(add.outputs[0], mul.inputs[0]); nt.links.new(gs.outputs[0], mul.inputs[1])
-Pk.inputs['Emission Color'].default_value = (0.0, 0.42, 1.0, 1); nt.links.new(mul.outputs[0], Pk.inputs['Emission Strength'])
+Pk.inputs['Emission Color'].default_value = (0.0, 0.42, 1.0, 1)
+rim = nt.nodes.new('ShaderNodeLayerWeight'); rim.inputs['Blend'].default_value = 0.25
+rimv = nt.nodes.new('ShaderNodeValue'); rimv.name = "SkullRim"
+rm_ = nt.nodes.new('ShaderNodeMath'); rm_.operation = 'MULTIPLY'; nt.links.new(rim.outputs['Fresnel'], rm_.inputs[0]); nt.links.new(rimv.outputs[0], rm_.inputs[1])
+tot = nt.nodes.new('ShaderNodeMath'); tot.operation = 'ADD'; nt.links.new(mul.outputs[0], tot.inputs[0]); nt.links.new(rm_.outputs[0], tot.inputs[1])
+nt.links.new(tot.outputs[0], Pk.inputs['Emission Strength'])
+key_val(rimv.outputs[0], [(1, 0.0), (BEAT[3] + 60, 0.0), (BEAT[3] + 110, 1.6), (BEAT[6] + 30, 1.6), (BEAT[6] + 55, 0.0)])
 key_val(rad.outputs[0], [(1, 0.0), (BEAT[4] - 30, 0.0), (BEAT[4] + 90, 0.13), (BEAT[4] + 200, 0.3)])
 key_val(gs.outputs[0], [(1, 0.0), (BEAT[3] + 20, 0.0), (BEAT[3] + 60, 0.6), (BEAT[4], 0.6), (BEAT[4] + 120, 0.8), (BEAT[5], 1.0), (BEAT[6] + 20, 0.4), (BEAT[6] + 90, 0.0)])
 # bone translucency so the inner ear reads through the side of the skull (keyed up for the cross-section)
@@ -89,7 +95,7 @@ tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMi
 outk = next(x for x in nt.nodes if x.type == 'OUTPUT_MATERIAL')
 src = outk.inputs['Surface'].links[0].from_socket
 nt.links.new(alpha.outputs[0], mix.inputs['Fac']); nt.links.new(src, mix.inputs[1]); nt.links.new(tr.outputs[0], mix.inputs[2]); nt.links.new(mix.outputs[0], outk.inputs['Surface'])
-key_val(alpha.outputs[0], [(1, 0.0), (BEAT[4] + 150, 0.0), (BEAT[4] + 210, 0.62), (BEAT[6] + 25, 0.62), (BEAT[6] + 52, 1.0)])
+key_val(alpha.outputs[0], [(1, 0.0), (BEAT[3] + 60, 0.0), (BEAT[3] + 110, 0.15), (BEAT[4] + 150, 0.15), (BEAT[4] + 210, 0.86), (BEAT[6] + 25, 0.86), (BEAT[6] + 52, 1.0)])
 
 # ---------------------------------------------------------------- inner ear (osuecampus, CC-BY): eardrum, ossicles, labyrinth+cochlea, nerves; ~2.5x life size
 new = imp("inner_ear2")
@@ -116,27 +122,27 @@ sc["coch"] = list(COCH); sc["drum"] = list(EARDRUM_REST); sc["lab_c"] = list(LAB
 def pbr(name, col, rough=0.4, ss=0.2):
     m = bpy.data.materials.new(name); m.use_nodes = True; P = m.node_tree.nodes["Principled BSDF"]
     P.inputs['Base Color'].default_value = (*col, 1); P.inputs['Roughness'].default_value = rough; P.inputs['Subsurface Weight'].default_value = ss; return m
-mb = pbr("M_Ossicle", (0.86, 0.78, 0.62), 0.35)
+mb = pbr("M_Ossicle", (0.92, 0.78, 0.5), 0.35)
 for k in ("Ear_Stapes", "Ear_Incus", "Ear_Malleus"): EAR[k].data.materials.clear(); EAR[k].data.materials.append(mb)
-mn_ = pbr("M_Nerve", (0.9, 0.75, 0.35), 0.4)
+mn_ = pbr("M_Nerve", (0.95, 0.72, 0.08), 0.4)
 for k in ("Ear_Nerve1", "Ear_Nerve2", "Ear_Nerve3"):
     if k in EAR: EAR[k].data.materials.clear(); EAR[k].data.materials.append(mn_)
 # labyrinth: pale bone-pink, lights up cyan -> warm white from the cochlea base along the coil
-lm = pbr("M_Cochlea", (0.85, 0.7, 0.66), 0.35, 0.3); lab.data.materials.clear(); lab.data.materials.append(lm)
+lm = pbr("M_Cochlea", (0.12, 0.32, 0.85), 0.3, 0.25); lab.data.materials.clear(); lab.data.materials.append(lm)
 nt = lm.node_tree; P = nt.nodes["Principled BSDF"]
 cE = bpy.data.objects.new("XRay_CochleaBase", None); cE.location = COCH; sc.collection.objects.link(cE); link(cE); to_head(cE)
 tc = nt.nodes.new('ShaderNodeTexCoord'); tc.object = cE
 ln = nt.nodes.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'; nt.links.new(tc.outputs['Object'], ln.inputs[0])
 cr = nt.nodes.new('ShaderNodeValue'); cr.name = "CochleaRadius"
 sb = nt.nodes.new('ShaderNodeMath'); sb.operation = 'SUBTRACT'; nt.links.new(cr.outputs[0], sb.inputs[0]); nt.links.new(ln.outputs['Value'], sb.inputs[1])
-mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = -0.004; mr.inputs['From Max'].default_value = 0.004; nt.links.new(sb.outputs[0], mr.inputs['Value'])
+mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = -0.004; mr.inputs['From Max'].default_value = 0.004; mr.inputs['To Min'].default_value = 0.25; nt.links.new(sb.outputs[0], mr.inputs['Value'])
 cs = nt.nodes.new('ShaderNodeValue'); cs.name = "CochleaStrength"
 mu = nt.nodes.new('ShaderNodeMath'); mu.operation = 'MULTIPLY'; nt.links.new(mr.outputs['Result'], mu.inputs[0]); nt.links.new(cs.outputs[0], mu.inputs[1])
 ccol = nt.nodes.new('ShaderNodeMix'); ccol.data_type = 'RGBA'; ccol.name = "CochleaColour"
-ccol.inputs['A'].default_value = (0.3, 0.85, 1.0, 1); ccol.inputs['B'].default_value = (1.0, 0.85, 0.6, 1)
+ccol.inputs['A'].default_value = (0.05, 0.6, 1.0, 1); ccol.inputs['B'].default_value = (1.0, 0.85, 0.6, 1)
 nt.links.new(ccol.outputs['Result'], P.inputs['Emission Color']); nt.links.new(mu.outputs[0], P.inputs['Emission Strength'])
 key_val(cr.outputs[0], [(1, 0.0), (BEAT[6] - 10, 0.0), (BEAT[6] + 45, 0.05)])
-key_val(cs.outputs[0], [(1, 0.0), (BEAT[4] + 60, 0.0), (BEAT[4] + 80, 0.6), (BEAT[6] - 10, 0.6), (BEAT[6] + 30, 3.0), (BEAT[6] + 75, 2.0), (BEAT[7] + 20, 0.0)])
+key_val(cs.outputs[0], [(1, 0.0), (BEAT[4] + 60, 0.0), (BEAT[4] + 80, 1.2), (BEAT[6] - 10, 1.2), (BEAT[6] + 30, 3.0), (BEAT[6] + 75, 2.0), (BEAT[7] + 20, 0.0)])
 key_val(ccol.inputs['Factor'], [(1, 0.0), (BEAT[6] + 20, 0.0), (BEAT[6] + 60, 0.85)])
 # the eardrum: dull, grey, scarred and torn (ragged hole), no glow
 dm = bpy.data.materials.new("M_EardrumTorn"); dm.use_nodes = True; nt = dm.node_tree; P = nt.nodes["Principled BSDF"]
@@ -157,7 +163,7 @@ tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mx_ = nt.nodes.new('ShaderNodeMi
 nt.links.new(hole.outputs[0], mx_.inputs['Fac']); nt.links.new(tr.outputs[0], mx_.inputs[1]); nt.links.new(P.outputs[0], mx_.inputs[2]); nt.links.new(mx_.outputs[0], o_.inputs['Surface'])
 dr.data.materials.clear(); dr.data.materials.append(dm)
 # ear canal cut-away (half pipe from the outer ear in to the drum), skin-pink, cut face toward the front
-can_m = pbr("M_EarCanal", (0.72, 0.42, 0.38), 0.5, 0.4)
+can_m = pbr("M_EarCanal", (0.78, 0.16, 0.18), 0.45, 0.5)
 segs, rings_ = 24, 14
 verts, faces = [], []
 for i in range(rings_ + 1):
@@ -207,13 +213,16 @@ for f, v in ((1, True), (BEAT[3] + 95, False), (BEAT[6] + 45, True)): hp.show_re
 print("GHOSTED", sorted(done))
 
 # ---------------------------------------------------------------- cyan-to-white studio backdrop around the head (inside it the room is gone)
-bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=0.5, location=(0, -0.05, 1.55)); bd = bpy.context.active_object; bd.name = "XRay_Backdrop"; link(bd)
+bpy.ops.mesh.primitive_uv_sphere_add(segments=96, ring_count=48, radius=0.5, location=(0, -0.05, 1.55)); bd = bpy.context.active_object; bd.name = "XRay_Backdrop"; link(bd); bpy.ops.object.shade_smooth()
 bd.visible_shadow = False
 bm = bpy.data.materials.new("M_StudioBackdrop"); bm.use_nodes = True; nt = bm.node_tree; n = nt.nodes; n.clear()
 o_ = n.new('ShaderNodeOutputMaterial'); tc = n.new('ShaderNodeTexCoord'); sp = n.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sp.inputs[0])
-cr = n.new('ShaderNodeValToRGB'); e = cr.color_ramp.elements; e[0].position = 0.2; e[0].color = (0.25, 0.62, 0.78, 1); e[1].position = 0.85; e[1].color = (0.92, 0.97, 1.0, 1)
+# vertical studio gradient: navy floor, deep cyan band at the anatomy, navy top (dark at the top and bottom of the tall frame)
+cr = n.new('ShaderNodeValToRGB'); e = cr.color_ramp.elements; cr.color_ramp.interpolation = 'B_SPLINE'
+e[0].position = 0.08; e[0].color = (0.003, 0.01, 0.035, 1); e[1].position = 0.97; e[1].color = (0.004, 0.014, 0.045, 1)
+e.new(0.42).color = (0.02, 0.3, 0.46, 1); e.new(0.58).color = (0.015, 0.22, 0.38, 1)
 nt.links.new(sp.outputs['Z'], cr.inputs['Fac'])
-em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 1.1; nt.links.new(cr.outputs['Color'], em.inputs['Color'])
+em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 1.0; nt.links.new(cr.outputs['Color'], em.inputs['Color'])
 tr = n.new('ShaderNodeBsdfTransparent'); mx = n.new('ShaderNodeMixShader'); fv = n.new('ShaderNodeValue'); fv.name = "BackdropFade"
 nt.links.new(fv.outputs[0], mx.inputs['Fac']); nt.links.new(tr.outputs[0], mx.inputs[1]); nt.links.new(em.outputs[0], mx.inputs[2]); nt.links.new(mx.outputs[0], o_.inputs['Surface'])
 key_val(fv.outputs[0], [(1, 0.0), (BEAT[3] + 60, 0.0), (BEAT[3] + 110, 1.0), (BEAT[6] + 30, 1.0), (BEAT[6] + 70, 0.0)])

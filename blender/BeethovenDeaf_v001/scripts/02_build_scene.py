@@ -122,6 +122,34 @@ fbp.modifiers.new("bev", 'BEVEL').width = 0.0015
 fbp.data.materials.append(piano.data.materials[mi]); uv_cube_project(fbp, 0.6)
 for c_ in fbp.users_collection: c_.objects.unlink(fbp)
 C_SET.objects.link(fbp)
+# ---- replace the model's fused keys with 88 separate hinged keys (so each can go down under a finger)
+import bmesh
+KEY_TOP, KEY_BACK, KXH = 0.8057, 0.152, 0.672
+bm = bmesh.new(); bm.from_mesh(piano.data)
+kill = [f for f in bm.faces if all(-0.006 <= v.co.y <= 0.166 and 0.755 <= v.co.z <= 0.832 and abs(v.co.x) < KXH + 0.001 for v in f.verts)]
+bmesh.ops.delete(bm, geom=kill, context='FACES'); bm.to_mesh(piano.data); bm.free(); piano.data.update()
+print("KEYFACES_REMOVED", len(kill))
+ivory = simple_mat("M_KeyIvory", (0.86, 0.82, 0.72), 0.28); ivory.node_tree.nodes["Principled BSDF"].inputs['Subsurface Weight'].default_value = 0.15
+ebony = simple_mat("M_KeyEbony", (0.025, 0.02, 0.018), 0.22)
+bedm = simple_mat("M_KeyBed", (0.05, 0.03, 0.02), 0.7)
+box("KeyBed", (2 * KXH + 0.01, 0.17, 0.03), (0, 0.083, KEY_TOP - 0.045), bedm, C_SET)
+NW = 52; WW = 2 * KXH / NW; KEYS = []
+def key_obj(name, x0, x1, y0, y1, z0, z1, mat):
+    bpy.ops.mesh.primitive_cube_add(size=1); o = bpy.context.active_object; o.name = name
+    o.data.transform(Matrix.Translation((0, -0.5, 0)) ); o.data.transform(Matrix.Diagonal((x1 - x0, y1 - y0, z1 - z0, 1)))
+    o.data.transform(Matrix.Translation((0, 0, (z0 + z1) / 2 - KEY_TOP + 0.0)))
+    o.location = ((x0 + x1) / 2, y1, KEY_TOP)      # origin = hinge at the back of the key, at key-top height
+    bv = o.modifiers.new("bev", 'BEVEL'); bv.width = 0.0012; bv.segments = 2
+    o.data.materials.append(mat)
+    for c_ in o.users_collection: c_.objects.unlink(o)
+    C_SET.objects.link(o); return o
+for i in range(NW):
+    x0 = -KXH + i * WW
+    KEYS.append(key_obj("Key_W%02d" % i, x0 + 0.0006, x0 + WW - 0.0006, 0.0, KEY_BACK, KEY_TOP - 0.022, KEY_TOP, ivory))
+    if i % 7 in (0, 1, 3, 4, 5) and i < NW - 1:
+        xc = x0 + WW
+        KEYS.append(key_obj("Key_B%02d" % i, xc - 0.0062, xc + 0.0062, 0.055, KEY_BACK, KEY_TOP - 0.004, KEY_TOP + 0.012, ebony))
+sc["keys"] = [k.name for k in KEYS]; print("KEYS", len(KEYS))
 sc["piano_len"] = mx.y; sc["piano_w"] = mx.x - mn.x
 for m in piano.data.materials:
     if not m or not m.use_nodes: continue
