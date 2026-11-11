@@ -384,8 +384,8 @@ def cam_patch(c, t):
 
 def cam_drill(c, t):
     e = ease(t)
-    loc = PATCH + Vector((-0.7, -3.3, 1.35)).lerp(Vector((-0.5, -2.9, 1.25)), e)
-    return loc, PATCH + Vector((0.0, 0.0, 0.5)), 32
+    loc = PATCH + Vector((-1.3, -4.2, 1.5)).lerp(Vector((-1.1, -3.8, 1.42)), e)
+    return loc, PATCH + Vector((-0.1, 0.0, 0.8)), 30
 
 
 def cam_container(c, t):
