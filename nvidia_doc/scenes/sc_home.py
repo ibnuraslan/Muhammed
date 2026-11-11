@@ -20,12 +20,10 @@ from human import reset_pose, fingers_curl, rotate_bone, aim_bone, _world_verts,
 from people import man
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "..", "iceman_video", "scenes"))
-from terrain import fbm
 
-EXPOSURE = 0.9
-WIN_Y = 3.2                       # window wall (behind the sofa); the man faces -Y, into the room
-DUR = {"wide": 3.0, "shoulder": 2.4, "thumb": 1.2, "side": 2.2}
+EXPOSURE = 0.0
+WIN_Y = -2.6                      # window wall in front of him; he faces -Y, out toward the city
+HDRI_ROT = 0.0
 UI_DIR = os.path.join(HERE, "..", "out", "ui_frames")
 LINE = "I was unfaithful to my wife."
 
@@ -131,22 +129,29 @@ def floor_lamp(loc):
     o = bpy.data.objects.new("LampBulb", l); bpy.context.collection.objects.link(o); o.location = (x, y, 1.6)
 
 
-def bookshelf(x0, y0, mat):
+def bookshelf(x0, y0, mat, axis="y"):
+    """Open shelving with books. axis = the direction the shelf runs along."""
     rng = np.random.default_rng(3)
+    made = []
     for k in range(6):
-        box("Shelf", (x0, y0, 0.3 + k * 0.38), (0.32, 2.2, 0.025), mat)
-    for s in (-1, 1):
-        box("ShelfSide", (x0, y0 + s * 1.1, 1.25), (0.32, 0.025, 2.5), mat)
+        made.append(box("Shelf", (0, 0, 0.3 + k * 0.38), (0.32, 2.2, 0.025), mat))
+    for sgn in (-1, 1):
+        made.append(box("ShelfSide", (0, sgn * 1.1, 1.25), (0.32, 0.025, 2.5), mat))
     cols = [(0.35, 0.33, 0.3), (0.12, 0.14, 0.18), (0.5, 0.45, 0.38), (0.22, 0.12, 0.1), (0.6, 0.6, 0.58), (0.16, 0.2, 0.17)]
     bm = [pbr(f"Book{i}", c_, 0.7) for i, c_ in enumerate(cols)]
     for k in range(5):
-        y = y0 - 1.05
-        while y < y0 + 1.0:
-            w = rng.uniform(0.025, 0.05); h = rng.uniform(0.2, 0.3)
+        y = -1.05
+        while y < 1.0:
+            w = rng.uniform(0.025, 0.05); hh = rng.uniform(0.2, 0.3)
             if rng.random() < 0.12:
                 y += 0.15; continue
-            box("Book", (x0 - 0.02, y + w / 2, 0.3 + k * 0.38 + 0.0125 + h / 2), (rng.uniform(0.17, 0.23), w * 0.95, h), bm[rng.integers(len(bm))])
+            made.append(box("Book", (-0.02, y + w / 2, 0.3 + k * 0.38 + 0.0125 + hh / 2), (rng.uniform(0.17, 0.23), w * 0.95, hh), bm[rng.integers(len(bm))]))
             y += w
+    rz = math.radians(90) if axis == "x" else 0.0
+    for o in made:
+        p_ = o.location.copy()
+        o.location = (x0 + p_.x * math.cos(rz) - p_.y * math.sin(rz), y0 + p_.x * math.sin(rz) + p_.y * math.cos(rz), p_.z)
+        o.rotation_euler = (o.rotation_euler.x, o.rotation_euler.y, o.rotation_euler.z + rz)
 
 
 def plant(loc, seed=5):
@@ -161,117 +166,6 @@ def plant(loc, seed=5):
         lf = bpy.context.active_object; lf.scale = (1.0, 0.55, 0.05); lf.rotation_euler = (rng.uniform(-0.7, 0.7), rng.uniform(-0.5, 0.5), a)
         lf.data.materials.append(leaf_m)
         cyl("Stem", (x + r * math.cos(a) * 0.5, y + r * math.sin(a) * 0.5, (0.44 + hgt) / 2), 0.006, hgt - 0.44, leaf_m, verts=6)
-
-
-# ============================================================================ outside: hills, trees, road, car
-def landscape(c):
-    n = 220
-    # rows = y (away from the house), cols = x. The house sits on a hillside; the valley floor is ~70 m below.
-    sx, sy = 5200.0, 3600.0; y0 = WIN_Y + 30 + sy / 2
-    H = fbm((n, n), seed=11, octaves=7, base_freq=2.4)
-    yy = np.linspace(-sy / 2, sy / 2, n)[:, None] + y0 - WIN_Y          # distance from the window
-    valley = -70.0 + 0.0 * yy
-    rise = np.clip((yy - 700) / 1600, 0, 1) ** 1.3 * 260                 # far hills climbing to ~190 m
-    near = np.clip((220 - yy) / 220, 0, 1) ** 1.5 * 62                    # our own slope just below the house
-    Z = valley + rise + near + H * (25 + 110 * np.clip((yy - 500) / 2000, 0, 1))
-    Z = np.broadcast_to(Z, (n, n)).copy()
-    g = grid_mesh("Hills", Z, sx, sy, 1.0, origin=(0, y0, 0))
-    gm = pbr("Ground", (0.05, 0.07, 0.045), 0.95)
-    N = gm.node_tree.nodes; L = gm.node_tree.links; tc = N.new("ShaderNodeTexCoord")
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.02; nz.inputs['Detail'].default_value = 6
-    L.new(tc.outputs['Object'], nz.inputs['Vector'])
-    ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (0.035, 0.05, 0.03, 1); ramp.color_ramp.elements[1].color = (0.09, 0.09, 0.06, 1)
-    L.new(nz.outputs['Fac'], ramp.inputs['Fac']); L.new(ramp.outputs['Color'], N["Principled BSDF"].inputs['Base Color'])
-    g.data.materials.append(haze_mix(gm)); bpy.ops.object.select_all(action='DESELECT')
-    c["Z"], c["grid"] = Z, (sx, sy, y0, n)
-    return g
-
-
-def ground_z(c, x, y):
-    sx, sy, y0, n = c["grid"]
-    i = (y - (y0 - sy / 2)) / sy * (n - 1); j = (x + sx / 2) / sx * (n - 1)
-    i = min(max(i, 0), n - 1.001); j = min(max(j, 0), n - 1.001)
-    i0, j0 = int(i), int(j); fi, fj = i - i0, j - j0
-    Z = c["Z"]
-    return (Z[i0, j0] * (1 - fi) * (1 - fj) + Z[i0, j0 + 1] * (1 - fi) * fj + Z[i0 + 1, j0] * fi * (1 - fj) + Z[i0 + 1, j0 + 1] * fi * fj)
-
-
-def trees(c):
-    rng = np.random.default_rng(21)
-    bark = pbr("Bark", (0.04, 0.03, 0.022), 0.9)
-    fol = [haze_mix(pbr(f"Foliage{k}", col, 0.8, 0.0, **{'Subsurface Weight': 0.1}), strength=0.8)
-           for k, col in enumerate(((0.012, 0.022, 0.014), (0.02, 0.032, 0.018), (0.012, 0.02, 0.016)))]
-    # templates: a layered conifer (stacked, noise-displaced tiers on a trunk) and a rounded broadleaf crown
-    tx = bpy.data.textures.new("TreeN", 'CLOUDS'); tx.noise_scale = 0.05; tx.noise_depth = 2
-    tiers = []
-    for k in range(12):
-        r = (1.0 - k * 0.075) * (0.85 + 0.15 * (k % 2)); z = 0.12 + k * 0.072
-        bpy.ops.mesh.primitive_cone_add(vertices=36, radius1=r * 0.2, radius2=0.0, depth=0.2, location=(0, 0, z))
-        o = bpy.context.active_object
-        sub = o.modifiers.new("sub", 'SUBSURF'); sub.levels = 1; sub.render_levels = 1; sub.subdivision_type = 'SIMPLE'
-        d = o.modifiers.new("d", 'DISPLACE'); d.texture = tx; d.strength = 0.035
-        bpy.context.view_layer.objects.active = o
-        for m in list(o.modifiers):
-            bpy.ops.object.modifier_apply(modifier=m.name)
-        tiers.append(o)
-    tiers.append(cyl("Trunk", (0, 0, 0.2), 0.025, 0.4, bark, verts=8))
-    for o in tiers[:-1]:
-        o.data.materials.append(fol[0])
-    con = join(tiers, "Conifer"); con.location = (0, 0, -500)
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(0, 0, 0))
-    leaf = bpy.context.active_object; leaf.data.materials.append(fol[1])
-    d = leaf.modifiers.new("d", 'DISPLACE'); d.texture = tx; d.strength = 0.3
-    bpy.ops.object.modifier_apply(modifier=d.name); leaf.location = (0, 0, -500)
-    near_trees = []
-    for k in range(2600):
-        x = rng.uniform(-2400, 2400); y = WIN_Y + rng.uniform(90, 3300)
-        dist = y - WIN_Y
-        if abs(x) > 300 + dist * 1.2:            # outside the window's view: skip
-            continue
-        if 520 < dist < 640 and rng.random() < 0.85:     # keep the valley floor (road) mostly clear
-            continue
-        z = ground_z(c, x, y); s = rng.uniform(14, 24)
-        if rng.random() < 0.65:
-            instance(con, (x, y + 500 * 0, z), scale=(s, s, s * 1.15))
-        else:
-            instance(leaf, (x, y, z + s * 0.3), scale=(s * 0.45, s * 0.45, s * 0.38))
-    # a few conifers on our own slope below the deck; their tops sway in the wind
-    for k in range(9):
-        x = rng.uniform(-45, 45); y = WIN_Y + rng.uniform(30, 75); z = ground_z(c, x, y); s = rng.uniform(18, 26)
-        o = instance(con, (x, y, z), scale=(s, s, s * 1.2))
-        near_trees.append((o, rng.uniform(0, 6.28), Vector(o.location)))
-    c["near_trees"] = near_trees
-
-
-def road_and_car(c):
-    pts = []
-    for k in range(80):
-        x = -2400 + k * 60.0; y = WIN_Y + 580 + 35 * math.sin(x / 400.0)
-        pts.append(Vector((x, y, ground_z(c, x, y) + 0.3)))
-    cu = bpy.data.curves.new("Road", 'CURVE'); cu.dimensions = '3D'
-    sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
-    for p_, q in zip(sp.points, pts):
-        p_.co = (*q, 1)
-    cu.extrude = 4.0
-    ro = bpy.data.objects.new("Road", cu); bpy.context.collection.objects.link(ro)
-    ro.data.materials.append(haze_mix(pbr("Asphalt", (0.03, 0.03, 0.032), 0.6), strength=0.75))
-    c["road"] = pts
-    head = emissive("Headlight", (1.0, 0.9, 0.75), 900); tail = emissive("Taillight", (1.0, 0.05, 0.02), 300)
-    cars = []
-    for k, (u0, speed, d) in enumerate(((0.38, 0.018, 1), (0.66, -0.014, -1))):
-        parts = []
-        for s in (-0.8, 0.8):
-            bpy.ops.mesh.primitive_uv_sphere_add(segments=8, ring_count=4, radius=0.35, location=(0, 0, -900))
-            hl = bpy.context.active_object; hl.data.materials.append(head if d > 0 else tail); parts.append((hl, s, 2.2 * d))
-            bpy.ops.mesh.primitive_uv_sphere_add(segments=8, ring_count=4, radius=0.3, location=(0, 0, -900))
-            tl = bpy.context.active_object; tl.data.materials.append(tail if d > 0 else head); parts.append((tl, s, -2.2 * d))
-        cars.append((u0, speed, parts))
-    c["cars"] = cars
-
-
-def road_point(c, u):
-    pts = c["road"]; f = min(max(u, 0), 0.9999) * (len(pts) - 1); i = int(f)
-    return pts[i].lerp(pts[i + 1], f - i), (pts[i + 1] - pts[i]).normalized()
 
 
 # ============================================================================ the man and his phone
@@ -314,7 +208,7 @@ def pose_man(c, sec, phase):
             up, lo, wr = mix(hold_up, rest_up, k), mix(hold_lo, rest_lo, k), mix(hold_wr, rest_wr, k)
         h.aim(f"upperarm01.{sd}", up); h.aim(f"upperarm02.{sd}", up)
         h.aim(f"lowerarm01.{sd}", lo); h.aim(f"lowerarm02.{sd}", lo); h.aim(f"wrist.{sd}", wr)
-    fingers_curl(h, 38, thumb=8)
+    fingers_curl(h, 20, thumb=8)          # fingers flat behind the phone
     head_pose(h, sec, back)
 
 
@@ -405,158 +299,131 @@ def animate(c, sec, phase):
         else:
             thumb_to(c, "R", screen_point(c, 0.4, -0.5), 0.0); thumb_to(c, "L", screen_point(c, -0.5, -0.45), 0.0)
     set_ui(c, sec, typed, sent)
-    # outside life
-    for o, ph_, base in c["near_trees"]:
-        o.rotation_euler = (0.015 * math.sin(sec * 1.7 + ph_), 0.012 * math.sin(sec * 1.3 + ph_ * 2), 0)
-    for u0, speed, parts in c["cars"]:
-        p, d = road_point(c, u0 + speed * sec)
-        side = Vector((-d.y, d.x, 0))
-        for o, s, fwd in parts:
-            o.location = p + side * s + d * fwd + Vector((0, 0, 0.6))
-    # the dawn brightens through the shot sequence
-    c["sky_bg"].inputs['Strength'].default_value = c["sky0"] * (1 + 0.04 * phase.get("clock", sec))
 
 
 # ============================================================================ build
+# Layout: he sits on the sofa facing -Y, toward the window wall (WIN_Y < 0) and the real dawn city beyond it.
 def build(variant=None):
+    import ph
     c = {}
-    w = world_sky(sun_elev_deg=1.2, sun_rot_deg=0, strength=0.35, tint=(0.55, 0.66, 0.95), air=1.6, aerosol=2.5)
-    bg = [n for n in w.node_tree.nodes if n.type == 'BACKGROUND'][0]; c["sky_bg"] = bg; c["sky0"] = bg.inputs['Strength'].default_value
-    # ---------------------------------------------------------------- room
-    oak = wood("Oak", (0.12, 0.08, 0.05), (0.26, 0.18, 0.11), scale=(0.35, 9, 9), rough=0.32, coat=0.25)
-    box("Floor", (0, -0.4, -0.01), (7.4, 7.4, 0.02), oak)
-    wall = plaster("Plaster", (0.52, 0.5, 0.47))
-    box("WallL", (-3.7, -0.4, 1.5), (0.12, 7.4, 3.0), wall)
-    box("WallR", (3.7, -0.4, 1.5), (0.12, 7.4, 3.0), wall)
-    box("WallBack", (0, -4.1, 1.5), (7.4, 0.12, 3.0), wall)
-    box("Ceiling", (0, -0.4, 3.02), (7.4, 7.4, 0.04), plaster("Ceil", (0.6, 0.59, 0.57)))
+    w, bg, mp = ph.world_hdri("northcliff", strength=1.0, rot_z=HDRI_ROT)
+    c["sky_bg"] = bg
+    # ---------------------------------------------------------------- room shell
+    floor = box("Floor", (0, 0, -0.01), (6.6, 6.0, 0.02), ph.texture("herringbone_parquet", scale=0.6))
+    wall = plaster("Plaster", (0.55, 0.53, 0.5))
+    box("WallBack", (0, 2.9, 1.5), (6.6, 0.12, 3.0), wall)
+    box("WallL", (-3.3, 0, 1.5), (0.12, 6.0, 3.0), wall)
+    box("WallR", (3.3, 0, 1.5), (0.12, 6.0, 3.0), wall)
+    box("Ceiling", (0, 0, 3.02), (6.6, 6.0, 0.04), plaster("Ceil", (0.62, 0.61, 0.59)))
     frame_m = pbr("BlackSteel", (0.015, 0.015, 0.016), 0.35, 0.8)
-    box("WinGlass", (0, WIN_Y, 1.5), (7.3, 0.012, 2.98), window_glass())
-    for k in range(5):
-        box("Mullion", (-3.65 + k * 1.825, WIN_Y, 1.5), (0.05, 0.06, 3.0), frame_m)
-    box("Transom", (0, WIN_Y, 2.98), (7.4, 0.07, 0.06), frame_m); box("Sill", (0, WIN_Y, 0.02), (7.4, 0.09, 0.04), frame_m)
-    pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 7.3; pt.size_y = 2.98; pt.cycles.is_portal = True
-    po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, WIN_Y + 0.05, 1.5); po.rotation_euler = (math.radians(-90), 0, 0)
-    # deck outside with a glass balustrade
-    box("Deck", (0, WIN_Y + 2.2, -0.08), (7.4, 4.3, 0.12), wood("Deck", (0.06, 0.045, 0.035), (0.12, 0.09, 0.07), scale=(0.5, 3, 3), rough=0.6, coat=0.0))
-    box("Balustrade", (0, WIN_Y + 4.3, 0.5), (7.4, 0.02, 1.0), glass("Bal", (0.9, 0.93, 0.95)))
-    box("Rail", (0, WIN_Y + 4.3, 1.0), (7.4, 0.06, 0.04), frame_m)
-    rug = fabric("Rug", (0.32, 0.31, 0.29), 0.95, 0.4, 700)
-    box("Rug", (0, 0.6, 0.005), (3.4, 2.6, 0.012), rug)
-    # ---------------------------------------------------------------- the man first (the sofa is fitted to him)
+    box("WinGlass", (0, WIN_Y, 1.5), (6.5, 0.012, 2.98), window_glass())
+    for k in range(4):
+        box("Mullion", (-3.25 + k * 2.1667, WIN_Y, 1.5), (0.05, 0.06, 3.0), frame_m)
+    box("Transom", (0, WIN_Y, 2.98), (6.6, 0.07, 0.06), frame_m); box("Sill", (0, WIN_Y, 0.02), (6.6, 0.09, 0.04), frame_m)
+    pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 6.5; pt.size_y = 2.98; pt.cycles.is_portal = True
+    po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, WIN_Y - 0.05, 1.5); po.rotation_euler = (math.radians(90), 0, 0)
+    # balcony outside (hides the photo's near ground; the city sits beyond the rail)
+    box("Deck", (0, WIN_Y - 1.6, -0.06), (6.6, 3.2, 0.1), ph.texture("wood_floor_deck", scale=0.8))
+    box("Balustrade", (0, WIN_Y - 3.2, 0.5), (6.6, 0.02, 1.0), glass("Bal", (0.9, 0.93, 0.95)))
+    box("Rail", (0, WIN_Y - 3.2, 1.0), (6.6, 0.06, 0.04), frame_m)
+    box("Rug", (0, -0.6, 0.004), (3.0, 2.4, 0.008), fabric("Rug", (0.36, 0.34, 0.31), 0.95, 0.4, 700))
+    # ---------------------------------------------------------------- the man, then the sofa fitted under him
     h = man("Man"); c["h"] = h
-    h.arm.location = (0.0, 1.45, 0.0); bpy.context.view_layer.update()
+    h.arm.location = (0.0, 0.05, 0.0); bpy.context.view_layer.update()
     pose_man(c, 0.0, {"typing": True})
     wv = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
     h.arm.location.z -= wv[:, 2].min(); bpy.context.view_layer.update()
     c["base_loc"] = Vector(h.arm.location)
     hips_z = (h.bone_head("upperleg02.L").z + h.bone_head("upperleg02.R").z) / 2
     hips_y = h.bone_head("upperleg01.L").y
-    seat_z = hips_z - 0.085
-    fab = fabric("SofaFab", (0.38, 0.36, 0.33), 0.92, 0.55, 520)
-    sofa(0.0, hips_y + 0.33, seat_z, fab, pbr("Walnut", (0.08, 0.05, 0.03), 0.4))
-    # cushions and a throw
-    for x, col in ((-0.95, (0.15, 0.2, 0.26)), (0.92, (0.5, 0.42, 0.32))):
-        cu = box("Throw", (x, hips_y + 0.12, seat_z + 0.2), (0.42, 0.16, 0.42), fabric("Cush", col, 0.9, 0.5, 400), bevel=0.06,
-                 rot=(math.radians(-12), 0, math.radians(8 * x)))
-        s = cu.modifiers.new("s", 'SUBSURF'); s.levels = 2; s.render_levels = 2
-    # coffee table, book, mug
-    walnut = wood("TableWalnut", (0.05, 0.03, 0.018), (0.13, 0.08, 0.045), scale=(0.3, 10, 10), rough=0.3, coat=0.5)
-    box("CoffeeTop", (0.0, 0.4, 0.4), (1.3, 0.7, 0.05), walnut, bevel=0.008)
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            box("CoffeeLeg", (sx * 0.58, 0.4 + sy * 0.28, 0.19), (0.04, 0.04, 0.38), walnut)
-    box("Book", (-0.35, 0.33, 0.44), (0.24, 0.32, 0.035), pbr("BookCover", (0.55, 0.5, 0.42), 0.7), rot=(0, 0, 0.2))
-    cyl("Mug", (0.42, 0.52, 0.47), 0.045, 0.1, pbr("MugCeramic", (0.85, 0.84, 0.8), 0.25, 0.0, **{'Coat Weight': 0.6}), verts=32)
-    c["table_spot"] = Vector((0.12, 0.3, 0.429))
-    floor_lamp((1.55, 1.75))
-    bookshelf(-3.45, -1.0, wood("ShelfOak", (0.12, 0.08, 0.05), (0.22, 0.15, 0.09), rough=0.4, coat=0.2))
-    plant((-1.7, 1.95))
-    # abstract framed print on the right wall
-    box("Frame", (3.62, -1.2, 1.6), (0.03, 1.1, 0.8), frame_m)
-    box("Print", (3.6, -1.2, 1.6), (0.01, 1.0, 0.7), pbr("Print", (0.62, 0.6, 0.56), 0.9))
+    root, ms = ph.model("sofa_02")
+    lo, hi = ph.bounds(ms)
+    seat_h = 0.44                                   # sofa_02 seat cushion height (measured from the model)
+    k = (hips_z - 0.07) / seat_h
+    root.scale = (1.15, k, k); bpy.context.view_layer.update()
+    lo, hi = ph.bounds(ms)
+    root.location = (0.25, hips_y + 0.16 - (lo.y + hi.y) / 2 + 0.0, 0.0); bpy.context.view_layer.update()
+    c["sofa"] = ms
+    t_root, t_ms = ph.model("modern_coffee_table_02", loc=(0.05, -0.95, 0.0))
+    tl, th = ph.bounds(t_ms)
+    c["table_spot"] = Vector((0.2, -0.7, th.z + 0.0045))
+    ph.model("side_table_01", loc=(-1.25, 0.15, 0.0))
+    ph.model("ceramic_vase_01", loc=(-1.3, 0.12, 0.55))
+    ph.model("potted_plant_02", loc=(1.75, 0.35, 0.0), scale=1.35)
+    bookshelf(0.0, 2.7, wood("ShelfOak", (0.12, 0.08, 0.05), (0.22, 0.15, 0.09), rough=0.4, coat=0.2), axis="x")
+    box("Frame", (-3.22, 1.0, 1.65), (0.03, 1.3, 0.9), frame_m)
+    box("Print", (-3.2, 1.0, 1.65), (0.01, 1.2, 0.8), pbr("Print", (0.6, 0.58, 0.54), 0.9))
+    floor_lamp((-1.5, 1.6))
     # ---------------------------------------------------------------- the phone
     phone = box("Phone", (0, 0, 0), (0.072, 0.152, 0.008), pbr("PhoneBody", (0.02, 0.02, 0.022), 0.25, 0.8), bevel=0.006)
     sm = screen_material(); c["screen_mat"] = sm
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0.0041)); scr = bpy.context.active_object; scr.name = "Screen"
     scr.scale = (0.066, 0.144, 1); bpy.ops.object.transform_apply(scale=True); scr.data.materials.append(sm)
     scr.parent = phone
-    sl = bpy.data.lights.new("ScreenLight", 'AREA'); sl.energy = 0.5; sl.size = 0.07; sl.color = (0.8, 0.88, 1.0)
+    sl = bpy.data.lights.new("ScreenLight", 'AREA'); sl.energy = 0.7; sl.size = 0.07; sl.color = (0.8, 0.88, 1.0)
     so = bpy.data.objects.new("ScreenLight", sl); bpy.context.collection.objects.link(so); so.parent = phone; so.location = (0, 0, 0.012)
     so.visible_camera = False; so.visible_glossy = False
     c.update(phone=phone, screen=scr, screen_light=sl)
-    # ---------------------------------------------------------------- outside
-    landscape(c); trees(c); road_and_car(c)
-    # soft cool fill from the window side for the jacket's rim, very low
-    f = area_light((0.0, WIN_Y - 0.4, 2.2), (0, 0, 0), 3.0, 18, (0.6, 0.72, 1.0)); point_at(f, (0, 1.4, 1.0)); f.visible_camera = False; f.visible_glossy = False
-    animate(c, 0.0, {"typing": True, "typed": 0.3})
+    animate(c, 0.0, {"typing": True, "typed": 0.2})
     return c
 
 
 # ============================================================================ moves
+# A (3.5 s) "I was unfaithful to my wife."  -- from behind him, creeping past his right shoulder to the phone
+# B (5.5 s) "That's what Nvidia CEO ... November eighth." -- from the front, low across the table; he presses send
+DUR = {"behind": 3.5, "front": 5.5}
+
+
 def _chest(c):
     return (c["h"].bone_head("spine03") + c["h"].bone_head("neck01")) / 2
 
 
-def anim_wide(c, t):
-    s = t * DUR["wide"]
-    typing = 0.8 < s < 2.0
-    animate(c, s, {"typing": typing, "typed": min(1.0, 0.45 + 0.55 * max(0, (s - 0.8) / 1.2)), "clock": s})
+def _eyes(c):
+    bpy.context.view_layer.update()
+    return c["h"].bone_head("head") + Vector((0, -0.09, 0.07))
 
 
-def anim_shoulder(c, t):
-    s = t * DUR["shoulder"]
-    if s < 1.4:
-        animate(c, 3.0 + s, {"typing": True, "typed": 0.82 + 0.18 * s / 1.4, "clock": 3 + s})
-    else:
-        r = ease(min(1.0, (s - 1.4) / 1.0))
-        animate(c, 3.0 + s, {"typing": False, "send_reach": r, "typed": 1.0, "clock": 3 + s})
+def anim_behind(c, t):
+    s = t * DUR["behind"]
+    animate(c, s, {"typing": s < 3.1, "typed": min(1.0, 0.15 + 0.85 * s / 3.0)})
 
 
-def anim_thumb(c, t):
-    s = t * DUR["thumb"]
-    pr = max(0.0, math.sin(math.pi * min(s / 0.5, 1.0))) if s < 0.5 else 0.0
-    animate(c, 5.4 + s, {"send_reach": 1.0, "send_press": pr, "typed": 1.0, "sent": max(0.0, (s - 0.35) / 0.85), "clock": 5.4 + s})
+def anim_front(c, t):
+    s = t * DUR["front"]
+    ph = {"typed": 1.0}
+    if s < 1.4:                                  # hesitates, thumb hovering
+        ph["send_reach"] = 0.0
+    elif s < 2.4:                                # thumb travels to Send
+        ph["send_reach"] = ease((s - 1.4) / 1.0)
+    else:                                        # presses, the message goes
+        ph["send_reach"] = 1.0; ph["send_press"] = max(0.0, math.sin(math.pi * min((s - 2.4) / 0.45, 1.0))) if s < 2.85 else 0.0
+        ph["sent"] = min(1.0, max(0.0, (s - 2.7) / 0.9))
+    ph["back"] = 0.35 * ease(max(0.0, (s - 3.6) / 1.6))       # afterwards he straightens up a little, looks out
+    animate(c, 3.5 + s, ph)
 
 
-def anim_side(c, t):
-    s = t * DUR["side"]
-    down = ease(min(1.0, s / 0.7)); placed = ease(min(1.0, max(0.0, (s - 0.35) / 0.6)))
-    back = ease(min(1.0, max(0.0, (s - 0.9) / 1.0))); face = ease(min(1.0, max(0.0, (s - 1.3) / 0.8)))
-    animate(c, 6.6 + s, {"down": down * (1 - face), "placed": placed, "back": back, "face": face,
-                         "left_rest": min(1.0, down * 1.4), "typed": 1.0, "sent": 1.0, "clock": 6.6 + s})
-
-
-def cam_wide(c, t):
+def cam_behind(c, t):
     e = ease(t)
-    loc = Vector((0.75, -3.4, 1.22)).lerp(Vector((0.45, -2.7, 1.18)), e)
-    return (loc, Vector((0.1, 1.3, 0.95)), 35)
+    sh = c["h"].bone_head("upperarm01.R"); phn = c["phone"].location
+    start = sh + Vector((-0.5, 0.95, 0.16)); end = sh + Vector((-0.17, 0.27, 0.32))
+    look = phn + Vector((0, -1.0, 0.32)) * (1 - e) + Vector((0, 0, 0.02)) * e      # horizon + phone, then the phone
+    return (start.lerp(end, e), look, 35 + 15 * e)
 
 
-def cam_shoulder(c, t):
-    sh = c["h"].bone_head("upperarm01.R")
-    ph = c["phone"].location
-    loc = sh + Vector((-0.18, 0.26, 0.34)) + Vector((0.015 * math.sin(t * 7), -0.05 * ease(t), -0.04 * ease(t)))
-    return (loc, ph, 50)
-
-
-def cam_thumb(c, t):
-    ph = c["phone"].location; n = c["phone"].matrix_world.to_3x3() @ Vector((0, 0, 1))
-    up = c["phone"].matrix_world.to_3x3() @ Vector((0, 1, 0)); side = c["phone"].matrix_world.to_3x3() @ Vector((1, 0, 0))
-    tgt = screen_point(c, *SEND)
-    loc = tgt + n * (0.2 - 0.02 * t) + up * 0.1 + side * 0.025
-    return (loc, tgt - up * 0.02, 60, up)
-
-
-def cam_side(c, t):
+def cam_front(c, t):
     e = ease(t)
-    loc = Vector((2.9, 0.15, 1.05)).lerp(Vector((2.7, 0.55, 1.05)), e)
-    return (loc, Vector((0.05, 1.05, 0.75)), 40)
+    hd = c["h"].bone_head("head")
+    loc = hd + Vector((-0.95, -2.1, -0.32)).lerp(Vector((-0.75, -1.75, -0.26)), e)    # his right-front, low: screen edge + face
+    tgt = hd.lerp(c["phone"].location, 0.55)
+    return (loc, tgt, 45)
+
+
+def focus_front(c, t):
+    k = ease(min(1.0, max(0.0, (t - 0.45) / 0.25)))          # rack from the phone to his face as he sends
+    return c["phone"].location.lerp(_eyes(c), k)
 
 
 MOVES = {
-    "wide": dict(kind="anim", dof=4.0, far=60.0, cam=cam_wide, focus=lambda c, t: _chest(c), anim=anim_wide),
-    "shoulder": dict(kind="anim", dof=2.0, far=8.0, cam=cam_shoulder, focus=lambda c, t: c["phone"].location, anim=anim_shoulder),
-    "thumb": dict(kind="anim", dof=2.0, far=2.0, cam=cam_thumb, focus=lambda c, t: screen_point(c, *SEND), anim=anim_thumb),
-    "side": dict(kind="anim", dof=2.8, far=20.0, cam=cam_side, focus=lambda c, t: _chest(c), anim=anim_side),
+    "behind": dict(kind="anim", dof=2.4, far=12.0, cam=cam_behind, focus=lambda c, t: c["phone"].location, anim=anim_behind),
+    "front": dict(kind="anim", dof=2.0, far=12.0, cam=cam_front, focus=focus_front, anim=anim_front),
 }
