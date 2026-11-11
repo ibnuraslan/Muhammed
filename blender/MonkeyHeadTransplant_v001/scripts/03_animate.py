@@ -427,7 +427,7 @@ for f in list(range(672, 1040, 6)):
         for s in "LR": hand(SURG, s, f, pos + Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((0.08 if s == "L" else -0.08), -0.28, 0) + V(0, 0, 1.0), V(0, 1, 0.2) if False else Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((-1 if s == "L" else 1), -0.3, 0), V(0, 0, 1), 0.3, Y1)
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
 S3 = V(1.62, 1.25, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
-S4 = V(3.2, 0.25, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
+S4 = V(2.6, 0.6, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
 board = D["Forceps"]
 for f in list(range(1190, 1771, 6)):
     if f < 1380:

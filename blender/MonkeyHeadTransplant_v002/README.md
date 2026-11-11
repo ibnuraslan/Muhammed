@@ -5,7 +5,7 @@ This is the 29.5 s film (1770 frames at 60 fps, 1080×1920), built to our 80-wor
 - `MonkeyHeadTransplant_v002_60fps.blend`: the self-contained scene, with all textures packed. It opens in factory Blender 5.2.2.
 - `beats.json`: the start frame and first words of each beat, ready for `pipeline/retime_to_vo.py` when the VO arrives. There is no VO mp3 yet.
 - `SETTINGS.md`: render settings and test frames. `CREDITS.md`: the CC-BY block for the video description.
-- `package_check_f*_lowres.jpg`: 20 %, 4-sample frames from the packed file in factory Blender. They show the package works; they are not a quality reference.
+- `package_check_f*_lowres.jpg` (frames 330, 1110, 1300): 20 %, 4-sample frames from the packed file in factory Blender. They show the package works; they are not a quality reference.
 
 **Source:** `../MonkeyHeadTransplant_v001/scripts`. Build order:
 1. `01_build_monkey.py`
