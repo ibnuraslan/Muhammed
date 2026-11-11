@@ -20,7 +20,7 @@ sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
 sc.cycles.max_bounces = 8; sc.cycles.transparent_max_bounces = 16
 
-SHAFT_R = 0.28
+SHAFT_R = 0.29
 DEPTH = 15.24          # 50 ft
 PIT_C = Vector((1.75, 0.35)); PIT_R = 1.05
 
@@ -104,7 +104,7 @@ def ground_mat():
         mx2 = nt.nodes.new("ShaderNodeMix"); mx2.data_type = "RGBA"; mx2.blend_type = "OVERLAY"; mx2.inputs["Factor"].default_value = 0.35
         nt.links.new(mx.outputs["Result"], mx2.inputs["A"]); nt.links.new(nz.outputs["Color"], mx2.inputs["B"])
         return mx2.outputs["Result"]
-    bs = pbr(nt, "dry_ground_01", 0.33, coord="UV", tint=(1.0, 0.93, 0.85), extra_col=depthmix)
+    bs = pbr(nt, "dry_ground_01", 0.33, coord="UV", tint=(0.66, 0.55, 0.42), extra_col=depthmix)
     cutaway(nt, bs.outputs[0], out); return m
 
 def soil_mat(name, tint):
@@ -113,9 +113,9 @@ def soil_mat(name, tint):
         tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sep.inputs[0])
         # strata bands: wave texture along Z, distorted
         wv = nt.nodes.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.bands_direction = "Z"
-        wv.inputs["Scale"].default_value = 0.22; wv.inputs["Distortion"].default_value = 6; wv.inputs["Detail"].default_value = 3
+        wv.inputs["Scale"].default_value = 0.11; wv.inputs["Distortion"].default_value = 3.5; wv.inputs["Detail"].default_value = 4; wv.inputs["Detail Scale"].default_value = 1.5
         nt.links.new(tc.outputs["Object"], wv.inputs[0])
-        cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.32, 0.22, 0.15, 1); cr.color_ramp.elements[1].color = (1.15, 1.0, 0.8, 1)
+        cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.5, 0.36, 0.25, 1); cr.color_ramp.elements[1].color = (1.1, 0.98, 0.8, 1)
         e = cr.color_ramp.elements.new(0.5); e.color = (0.75, 0.55, 0.38, 1)
         nt.links.new(wv.outputs["Fac"], cr.inputs[0])
         mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1
@@ -137,9 +137,67 @@ def simple_mat(name, rgb, rough=0.6, metal=0.0, emit=None, emit_s=0.0):
     nt.links.new(bs.outputs[0], out.inputs["Surface"]); return m
 
 M_GROUND = ground_mat()
-M_SOIL = soil_mat("M_Soil", (1.0, 0.95, 0.9))
-M_SHAFT = soil_mat("M_ShaftWall", (0.85, 0.78, 0.7))
-M_SAND = simple_mat("M_Sand", (0.3, 0.23, 0.16), 0.95)
+def strata_mat(name, ref_obj_name=None):
+    """real soil profile: topsoil, dry clay, gravel bands, red laterite clay, sandy layers; wavy boundaries, moisture low down"""
+    m, nt, out = new_mat(name)
+    tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Object"], sep.inputs[0])
+    nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.6; nz.inputs["Detail"].default_value = 6
+    nt.links.new(tc.outputs["Object"], nz.inputs[0])
+    mz = nt.nodes.new("ShaderNodeMath"); mz.operation = "MULTIPLY_ADD"; mz.inputs[1].default_value = 0.45; mz.inputs[2].default_value = -0.22
+    nt.links.new(nz.outputs["Fac"], mz.inputs[0])
+    zn = nt.nodes.new("ShaderNodeMath"); zn.operation = "ADD"; nt.links.new(sep.outputs["Z"], zn.inputs[0]); nt.links.new(mz.outputs[0], zn.inputs[1])
+    def texset(asset, scale, tint=(1, 1, 1)):
+        mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (scale,) * 3; nt.links.new(tc.outputs["Object"], mp.inputs[0])
+        out_ = {}
+        for kind, cs in (("diff", "sRGB"), ("rough", "nc"), ("disp", "nc")):
+            pth = ph(asset, kind)
+            if not pth: continue
+            n = nt.nodes.new("ShaderNodeTexImage"); n.image = tex(pth, cs); n.projection = "BOX"; n.projection_blend = 0.35
+            nt.links.new(mp.outputs[0], n.inputs[0]); out_[kind] = n.outputs["Color"]
+        if tint != (1, 1, 1):
+            mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1
+            nt.links.new(out_["diff"], mx.inputs["A"]); mx.inputs["B"].default_value = (*tint, 1); out_["diff"] = mx.outputs["Result"]
+        return out_
+    L = [  # (top of band z, asset, scale, tint)
+        (0.5, "forrest_ground_01", 0.9, (0.55, 0.45, 0.38)),      # dark topsoil with roots
+        (-0.4, "excavated_soil_wall", 0.6, (1.0, 0.9, 0.75)),     # dry clay
+        (-2.6, "gravelly_sand", 1.2, (0.85, 0.8, 0.72)),          # gravel band
+        (-3.3, "red_laterite_soil_stones", 0.7, (1.0, 0.85, 0.75)),  # reddish clay
+        (-7.2, "gravelly_sand", 0.9, (1.15, 1.05, 0.85)),         # sandy layer
+        (-8.4, "excavated_soil_wall", 0.6, (0.8, 0.68, 0.55)),    # clay, darker
+        (-11.6, "gravelly_sand", 1.3, (0.7, 0.65, 0.58)),         # gravel band
+        (-12.4, "red_laterite_soil_stones", 0.7, (0.75, 0.6, 0.5)),  # wet laterite
+    ]
+    sets = [texset(a, sc_, t) for _, a, sc_, t in L]
+    col = sets[0]["diff"]; rgh = sets[0].get("rough"); hgt = sets[0].get("disp")
+    for (ztop, *_), st in zip(L[1:], sets[1:]):
+        lt = nt.nodes.new("ShaderNodeMath"); lt.operation = "LESS_THAN"; lt.inputs[1].default_value = ztop; nt.links.new(zn.outputs[0], lt.inputs[0])
+        for key in ("diff", "rough", "disp"):
+            cur = {"diff": col, "rough": rgh, "disp": hgt}[key]
+            if cur is None or key not in st: continue
+            mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; nt.links.new(lt.outputs[0], mx.inputs["Factor"])
+            nt.links.new(cur, mx.inputs["A"]); nt.links.new(st[key], mx.inputs["B"])
+            if key == "diff": col = mx.outputs["Result"]
+            elif key == "rough": rgh = mx.outputs["Result"]
+            else: hgt = mx.outputs["Result"]
+    # moisture: darker and glossier deeper down
+    mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs[1].default_value = -5; mr.inputs[2].default_value = -15; nt.links.new(sep.outputs["Z"], mr.inputs[0])
+    dark = nt.nodes.new("ShaderNodeMix"); dark.data_type = "RGBA"; dark.blend_type = "MULTIPLY"; nt.links.new(mr.outputs[0], dark.inputs["Factor"])
+    nt.links.new(col, dark.inputs["A"]); dark.inputs["B"].default_value = (0.55, 0.5, 0.45, 1)
+    bs = nt.nodes.new("ShaderNodeBsdfPrincipled"); nt.links.new(dark.outputs["Result"], bs.inputs["Base Color"])
+    if rgh is not None:
+        rmul = nt.nodes.new("ShaderNodeMath"); rmul.operation = "MULTIPLY_ADD"; rmul.inputs[1].default_value = 1.0; rmul.inputs[2].default_value = 0.0
+        nt.links.new(rgh, rmul.inputs[0]); nt.links.new(rmul.outputs[0], bs.inputs["Roughness"])
+    bump = nt.nodes.new("ShaderNodeBump"); bump.inputs["Strength"].default_value = 0.9; bump.inputs["Distance"].default_value = 0.04
+    nt.links.new(hgt if hgt is not None else col, bump.inputs["Height"]); nt.links.new(bump.outputs[0], bs.inputs["Normal"])
+    if ref_obj_name: tc.object = bpy.data.objects.get(ref_obj_name)
+    cutaway(nt, bs.outputs[0], out); return m
+
+M_SOIL = strata_mat("M_Soil")
+M_SHAFT = strata_mat("M_ShaftWall")
+M_SAND = bpy.data.materials.new("M_Sand"); M_SAND.use_nodes = True
+_nt = M_SAND.node_tree; _nt.nodes.clear(); _o = _nt.nodes.new("ShaderNodeOutputMaterial")
+_nt.links.new(pbr(_nt, "gravelly_sand", 3.0, coord="UV", tint=(0.6, 0.52, 0.42)).outputs[0], _o.inputs["Surface"])
 
 # ------------------------------------------------------------------ earth blocks (cross-section ready)
 def axis(lo, hi, dense_lo, dense_hi, fine, coarse):
@@ -254,14 +312,16 @@ for l in FIELD.data.uv_layers[0].data: l.uv = (l.uv[0] * 900, l.uv[1] * 900)
 # shaft tube (inward normals), sandy bottom, casing ring + flange
 bpy.ops.mesh.primitive_cylinder_add(vertices=64, radius=SHAFT_R, depth=DEPTH, end_fill_type="NOTHING", location=(0, 0, -DEPTH / 2))
 TUBE = link(bpy.context.object, C_SET); TUBE.name = "ShaftTube"
-bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.subdivide(number_cuts=60)
+bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.mesh.subdivide(number_cuts=36)
 bpy.ops.mesh.flip_normals(); bpy.ops.object.mode_set(mode="OBJECT")
 for v in TUBE.data.vertices:      # irregular hand-bored wall
     a = math.atan2(v.co.y, v.co.x); z = v.co.z
-    rr = 1 + 0.04 * math.sin(3 * a + z * 1.3) + 0.03 * math.sin(7 * a - z * 2.1) + 0.02 * math.sin(z * 5.0)
+    rr = 1 + 0.025 * math.sin(3 * a + z * 1.3) + 0.015 * math.sin(7 * a - z * 2.1) + 0.012 * math.sin(z * 5.0)
     rr = min(rr, 1.0) if z > -0.9 else rr
     v.co.x *= rr; v.co.y *= rr
-TUBE.data.materials.append(M_SHAFT); TUBE.visible_shadow = False   # the shadow slab + sleeve do its shadowing
+TUBE.data.materials.append(M_SHAFT); TUBE.visible_shadow = False
+for nd in M_SHAFT.node_tree.nodes:
+    if nd.type == "TEX_COORD": nd.object = EB   # the shadow slab + sleeve do its shadowing
 uvl = TUBE.data.uv_layers[0]
 for p in TUBE.data.polygons:
     p.use_smooth = True
@@ -314,6 +374,53 @@ for i in range(22):
     sp.bezier_points[2].radius = 0.2
     ob = bpy.data.objects.new("Root%02d" % i, cu); C_SET.objects.link(ob); cu.materials.append(M_ROOT)
 
+# ---- scanned stones embedded in the cut face and the shaft wall, roots near the top of the cut face
+before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=os.path.join(A, "models/rocks.glb"))
+rk = [o for o in bpy.data.objects if o not in before and o.type == "MESH"]
+for o in [o for o in bpy.data.objects if o not in before]:
+    if o.type == "MESH": mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+for o in [o for o in bpy.data.objects if o not in before and o.type != "MESH"]: bpy.data.objects.remove(o)
+ROCKS = []
+for o in rk:
+    bpy.ops.object.select_all(action="DESELECT"); o.select_set(True); bpy.context.view_layer.objects.active = o
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    vs = [v.co for v in o.data.vertices]; c = sum(vs, Vector()) / len(vs); r = max((v - c).length for v in vs)
+    for v in o.data.vertices: v.co = (v.co - c) / r
+    o.name = "RockSrc"; link(o, C_SET); o.hide_render = True; o.hide_viewport = True; ROCKS.append(o)
+    for m_ in o.data.materials:       # scans are pale grey: tint to the local soil
+        if not m_ or m_.get("tinted"): continue
+        m_["tinted"] = 1; bsd = [n for n in m_.node_tree.nodes if n.type == "BSDF_PRINCIPLED"][0]
+        if bsd.inputs["Base Color"].is_linked:
+            src_ = bsd.inputs["Base Color"].links[0].from_socket
+            mx = m_.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1
+            mx.inputs["B"].default_value = (0.55, 0.45, 0.36, 1); m_.node_tree.links.new(src_, mx.inputs["A"]); m_.node_tree.links.new(mx.outputs["Result"], bsd.inputs["Base Color"])
+n = 0
+while n < 90 and ROCKS:
+    z = -random.uniform(0.15, 15.0) ** 1.0; x = random.uniform(-7, 7)
+    if abs(x) < SHAFT_R + 0.15: continue
+    s_ = random.uniform(0.04, 0.22) * (1.4 if z < -2.5 and random.random() < 0.3 else 1.0)
+    o = bpy.data.objects.new("CutStone%02d" % n, random.choice(ROCKS).data); C_SET.objects.link(o)
+    o.location = (x, -s_ * random.uniform(0.15, 0.45), z); o.scale = (s_, s_ * random.uniform(0.6, 1.0), s_ * random.uniform(0.5, 0.9))
+    o.rotation_euler = (random.uniform(0, 6.3), random.uniform(0, 6.3), random.uniform(0, 6.3)); n += 1
+for i in range(40):     # stones in the shaft wall, poking in
+    a_ = random.uniform(0, 2 * math.pi); z = -random.uniform(0.9, 15.0); s_ = random.uniform(0.02, 0.04)
+    o = bpy.data.objects.new("WallStone%02d" % i, random.choice(ROCKS).data); C_SET.objects.link(o)
+    o.location = ((SHAFT_R + s_ * 0.75) * math.cos(a_), (SHAFT_R + s_ * 0.75) * math.sin(a_), z); o.scale = (s_,) * 3; o.rotation_euler = (a_, a_ * 2, a_ * 3)
+for i in range(12):     # pebbles on the shaft floor
+    a_ = random.uniform(0, 2 * math.pi); r_ = random.uniform(0, SHAFT_R - 0.05); s_ = random.uniform(0.012, 0.03)
+    o = bpy.data.objects.new("FloorPebble%02d" % i, random.choice(ROCKS).data); C_SET.objects.link(o)
+    o.location = (r_ * math.cos(a_), r_ * math.sin(a_), -DEPTH + 0.03); o.scale = (s_,) * 3
+for i in range(34):     # roots on the cut face (top 1.4 m)
+    x0 = random.uniform(-6, 6)
+    if abs(x0) < SHAFT_R + 0.1: continue
+    cu = bpy.data.curves.new("croot", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = random.uniform(0.003, 0.012); cu.bevel_resolution = 2
+    sp = cu.splines.new("BEZIER"); k_ = random.randint(3, 5); sp.bezier_points.add(k_ - 1)
+    z0 = -random.uniform(0.02, 0.4); x_ = x0
+    for j in range(k_):
+        bp = sp.bezier_points[j]; x_ += random.uniform(-0.15, 0.15)
+        bp.co = (x_, -random.uniform(0.003, 0.02), z0 - j * random.uniform(0.15, 0.32)); bp.handle_left_type = bp.handle_right_type = "AUTO"; bp.radius = 1.0 - j / k_
+    ob = bpy.data.objects.new("CutRoot%02d" % i, cu); C_SET.objects.link(ob); cu.materials.append(M_ROOT)
+
 # sand trickle material: streaks moving down (mapping offset keyed in the animate step)
 m, nt, out = new_mat("M_SandTrickle")
 tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.name = "TrickleMap"
@@ -346,13 +453,22 @@ pv.inputs["Color"].default_value = (0.9, 0.8, 0.65, 1); nt.links.new(pv.outputs[
 DV.visible_shadow = False
 
 # ------------------------------------------------------------------ rescue tripod with pulley
-M_WOOD = simple_mat("M_TripodWood", (0.38, 0.27, 0.17), 0.7)
-M_STEEL = simple_mat("M_Steel", (0.55, 0.56, 0.58), 0.35, 1.0)
-M_ROPE = simple_mat("M_Rope", (0.78, 0.66, 0.42), 0.9)
-TOP = Vector((0, 0.05, 2.35))
+def pbr_mat(name, asset, scale, coord="UV", tint=None, metal=0.0):
+    m, nt, out = new_mat(name); b = pbr(nt, asset, scale, coord=coord, tint=tint); b.inputs["Metallic"].default_value = metal
+    nt.links.new(b.outputs[0], out.inputs["Surface"]); return m
+M_WOOD = pbr_mat("M_TripodWood", "bark_brown_02", 1.0, coord="Object", tint=(0.9, 0.8, 0.7))
+M_STEEL = pbr_mat("M_Steel", "rusty_metal_02", 3.0, coord="Object", metal=0.7)
+M_CONCRETE = pbr_mat("M_Concrete", "concrete_wall_008", 1.5, coord="Object", tint=(0.5, 0.47, 0.43))
+bpy.data.objects["DirtCollar"].data.materials[0] = M_CONCRETE
+M_ROPE = bpy.data.materials.new("M_Rope"); M_ROPE.use_nodes = True
+_nt = M_ROPE.node_tree; _bs = _nt.nodes["Principled BSDF"]; _bs.inputs["Base Color"].default_value = (0.74, 0.6, 0.36, 1); _bs.inputs["Roughness"].default_value = 0.85
+_w = _nt.nodes.new("ShaderNodeTexWave"); _w.wave_type = "BANDS"; _w.bands_direction = "DIAGONAL"; _w.inputs["Scale"].default_value = 60; _tc = _nt.nodes.new("ShaderNodeTexCoord")
+_nt.links.new(_tc.outputs["Object"], _w.inputs[0]); _bp = _nt.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.6
+_nt.links.new(_w.outputs["Fac"], _bp.inputs["Height"]); _nt.links.new(_bp.outputs[0], _bs.inputs["Normal"])
+TOP = Vector((0, 0.05, 3.4))
 TRI = bpy.data.objects.new("Tripod", None); C_PROPS.objects.link(TRI)
-for k, ang in enumerate((R_(90), R_(210), R_(330))):
-    foot = Vector((1.15 * math.cos(ang), 1.15 * math.sin(ang), 0.0))
+for k, ang in enumerate((R_(60), R_(180), R_(300))):
+    foot = Vector((1.6 * math.cos(ang), 1.6 * math.sin(ang), 0.0))
     v = TOP - foot; L = v.length
     bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.04, depth=L + 0.15)
     leg = link(bpy.context.object, C_PROPS); leg.name = "TripodLeg%d" % k
@@ -360,7 +476,20 @@ for k, ang in enumerate((R_(90), R_(210), R_(330))):
     leg.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(v.normalized()); leg.data.materials.append(M_WOOD); leg.parent = TRI
 bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.11, depth=0.05, location=TOP + Vector((0, 0, -0.18)), rotation=(0, R_(90), 0))
 PUL = link(bpy.context.object, C_PROPS); PUL.name = "Pulley"; PUL.data.materials.append(M_STEEL); PUL.parent = TRI
-bpy.ops.mesh.primitive_cube_add(size=1, location=TOP + Vector((0, 0, -0.06))); hd = link(bpy.context.object, C_PROPS); hd.scale = (0.12, 0.2, 0.1); hd.name = "TripodHead"; hd.data.materials.append(M_STEEL); hd.parent = TRI
+bpy.ops.mesh.primitive_cube_add(size=1, location=TOP + Vector((0, 0, -0.06))); hd = link(bpy.context.object, C_PROPS); hd.scale = (0.16, 0.24, 0.1); hd.name = "TripodHead"; hd.data.materials.append(M_STEEL); hd.parent = TRI
+bv = hd.modifiers.new("bevel", "BEVEL"); bv.width = 0.015; bv.segments = 2
+# hand winch on the +x+y leg: drum + crank + frame plates
+lf = Vector((1.6 * math.cos(R_(60)), 1.6 * math.sin(R_(60)), 0)); wpos = lf.lerp(TOP, 0.33)
+bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.075, depth=0.2, location=wpos + Vector((0.06, -0.05, 0)), rotation=(0, R_(90), R_(60)))
+dr = link(bpy.context.object, C_PROPS); dr.name = "TripodWinchDrum"; dr.data.materials.append(M_ROPE); dr.parent = TRI
+for k in (-1, 1):
+    bpy.ops.mesh.primitive_cube_add(size=1, location=wpos + Vector((0.06, -0.05, 0)) + Matrix.Rotation(R_(60), 3, "Z") @ Vector((0.11 * k, 0, 0)))
+    pl = link(bpy.context.object, C_PROPS); pl.name = "TripodWinchPlate%d" % k; pl.scale = (0.012, 0.2, 0.22); pl.rotation_euler = (0, 0, R_(60)); pl.data.materials.append(M_STEEL); pl.parent = TRI
+bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.012, depth=0.2, location=wpos + Vector((0.2, 0.08, 0.06)), rotation=(R_(90), 0, R_(60)))
+ck = link(bpy.context.object, C_PROPS); ck.name = "TripodWinchCrank"; ck.data.materials.append(M_STEEL); ck.parent = TRI
+for k_ in range(8):     # chain links hanging from the head
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.02, minor_radius=0.005, location=TOP + Vector((0.07, 0, -0.14 - 0.032 * k_)), rotation=(R_(90) * (k_ % 2), 0, 0))
+    cl_ = link(bpy.context.object, C_PROPS); cl_.name = "TripodChain%d" % k_; cl_.data.materials.append(M_STEEL); cl_.parent = TRI
 
 # ------------------------------------------------------------------ barrier tape on stakes
 m, nt, out = new_mat("M_Tape"); tc = nt.nodes.new("ShaderNodeTexCoord"); wv = nt.nodes.new("ShaderNodeTexWave")
@@ -386,17 +515,34 @@ pass
 TAPE = bpy.data.objects.new("Tape", cu); C_PROPS.objects.link(TAPE); cu.materials.append(M_TAPE)
 
 # ------------------------------------------------------------------ rope coil, buckets, shovels, water bottles, cones
-for i, p in enumerate(((-1.6, 1.3), (2.9, -1.4))):
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.22, minor_radius=0.05, location=(p[0], p[1], 0.05))
-    o = link(bpy.context.object, C_PROPS); o.name = "RopeCoil%d" % i; o.scale.z = 0.6; o.data.materials.append(M_ROPE)
-M_CONE = simple_mat("M_Cone", (0.95, 0.3, 0.05), 0.45)
-for i, p in enumerate(((-4.6, 1.6), (3.6, 2.8), (-3.4, 3.2), (4.2, -2.2))):
-    bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.16, radius2=0.025, depth=0.5, location=(p[0], p[1], 0.25))
-    o = link(bpy.context.object, C_PROPS); o.name = "Cone%d" % i; o.data.materials.append(M_CONE)
-M_BOTTLE = simple_mat("M_Bottle", (0.55, 0.75, 0.9), 0.05)
-for i, p in enumerate(((-1.9, 2.1), (-2.0, 2.2), (2.8, 3.4))):
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.035, depth=0.24, location=(p[0], p[1], 0.12))
-    o = link(bpy.context.object, C_PROPS); o.name = "Bottle%d" % i; o.data.materials.append(M_BOTTLE)
+def import_unit(path, name, size, axis="z"):
+    """import a GLB, join its meshes into one object with the base at z=0, scaled so its largest (or z) extent = size"""
+    before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=path)
+    new = [o for o in bpy.data.objects if o not in before]
+    for o in new: o.animation_data_clear()
+    meshes = [o for o in new if o.type == "MESH"]
+    for o in meshes:
+        mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+    for o in new:
+        if o.type != "MESH": bpy.data.objects.remove(o)
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in meshes: o.select_set(True)
+    bpy.context.view_layer.objects.active = meshes[0]
+    if len(meshes) > 1: bpy.ops.object.join()
+    ob = bpy.context.object; bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    vs = [v.co for v in ob.data.vertices]
+    mn = Vector((min(v.x for v in vs), min(v.y for v in vs), min(v.z for v in vs))); mx = Vector((max(v.x for v in vs), max(v.y for v in vs), max(v.z for v in vs)))
+    ext = (mx - mn).z if axis == "z" else max(mx - mn)
+    c = Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))
+    for v in ob.data.vertices: v.co = (v.co - c) * (size / ext)
+    ob.name = name; link(ob, LIB_SRC); return ob
+LIB_SRC = bpy.data.collections.new("PropSources"); sc.collection.children.link(LIB_SRC); LIB_SRC.hide_render = True; LIB_SRC.hide_viewport = True
+CONE_SRC = import_unit(os.path.join(A, "models/cone.glb"), "ConeSrc", 0.5)
+COIL_SRC = import_unit(os.path.join(A, "models/ropecoil.glb"), "RopeCoilSrc", 0.5, axis="max")
+for i, p in enumerate(((-4.6, 1.6), (3.6, 2.8), (-3.4, 3.2), (4.2, -2.2), (-5.5, -2.5), (6.8, -2.9))):
+    o = bpy.data.objects.new("Cone%d" % i, CONE_SRC.data); C_PROPS.objects.link(o); o.location = (p[0], p[1], 0); o.rotation_euler.z = random.uniform(0, 6.3)
+for i, p in enumerate(((-1.75, 1.25), (2.9, -1.4))):
+    o = bpy.data.objects.new("RopeCoil%d" % i, COIL_SRC.data); C_PROPS.objects.link(o); o.location = (p[0], p[1], 0); o.rotation_euler.z = random.uniform(0, 6.3)
 with bpy.data.libraries.load(os.path.join(A, "ph/wooden_bucket_01/wooden_bucket_01_1k.blend")) as (s, d): d.objects = s.objects
 for o in d.objects:
     C_PROPS.objects.link(o); o.location = (-2.4, 1.6, 0) if "handle" not in o.name else o.location + Vector((-2.4, 1.6, 0))
@@ -424,10 +570,10 @@ for o in root.children_recursive:
         for c in o.bound_box:
             w = o.matrix_world @ Vector(c); mn = Vector(map(min, mn, w)); mx_ = Vector(map(max, mx_, w))
 print("EXC bbox", mn, mx_)
-EXS = 1.6
+EXS = 2.1
 ctrl = bpy.data.objects.new("Excavator", None); C_PROPS.objects.link(ctrl)
 root.parent = ctrl; root.matrix_parent_inverse = Matrix.Translation(-Vector(((mn.x + mx_.x) / 2, (mn.y + mx_.y) / 2, mn.z)))
-ctrl.scale = (EXS,) * 3; ctrl.location = (6.3, 1.0, 0); ctrl.rotation_euler = (0, 0, R_(90))
+ctrl.scale = (EXS,) * 3; ctrl.location = (7.0, 1.0, 0); ctrl.rotation_euler = (0, 0, R_(90))
 for nm in ("Body_GEO", "arm_01_GEO1", "Arm_2_GEO", "shovel_GEO", "claw_GEO", "Tread_GEO"):
     o = bpy.data.objects[nm]; o.rotation_mode = "XYZ"; print("EXCPART", nm, tuple(o.rotation_euler), tuple(o.location))
 
@@ -457,13 +603,20 @@ def as_coll(name, objs):
     c = bpy.data.collections.new(name)
     for o in objs: c.objects.link(o)
     return c
-tree_a = as_coll("TreeA", lib_objs(os.path.join(A, "ph/tree_small_02/tree_small_02_1k.blend"), lambda n: n.endswith("LOD0") or n == "tree_small_02_trunk"))
-tree_b = as_coll("TreeB", lib_objs(os.path.join(A, "ph/island_tree_02/island_tree_02_1k.blend"), lambda n: n.endswith("LOD0")))
+tree_a = as_coll("TreeA", lib_objs(os.path.join(A, "ph/tree_small_02/tree_small_02_1k.blend"), lambda n: n.endswith("LOD1")))
+tree_b = as_coll("TreeB", lib_objs(os.path.join(A, "ph/island_tree_02/island_tree_02_1k.blend"), lambda n: n.endswith("LOD1") and "island_tree_02" in n))
 shrub = as_coll("Shrub", lib_objs(os.path.join(A, "ph/shrub_02/shrub_02_1k.blend"), lambda n: n.endswith("LOD1")))
 grass_objs = lib_objs(os.path.join(A, "ph/grass_medium_01/grass_medium_01_1k.blend"), lambda n: n.endswith("LOD1"))
 grass = [as_coll("Grass%d" % i, [o]) for i, o in enumerate(grass_objs[:8])]
 for c in [tree_a, tree_b, shrub] + grass:
     for o in c.objects: o.location = (0, 0, 0) if o.parent is None else o.location
+for c in (tree_a, tree_b):     # background trees (16-60 m away): decimate to keep the package small
+    for o in c.objects:
+        if o.type == "MESH" and len(o.data.vertices) > 20000:
+            o.data = o.data.copy(); dm = o.modifiers.new("dec", "DECIMATE"); dm.ratio = 0.12
+            sc.collection.objects.link(o); bpy.context.view_layer.update()
+            dg = bpy.context.evaluated_depsgraph_get(); me = bpy.data.meshes.new_from_object(o.evaluated_get(dg))
+            o.modifiers.clear(); o.data = me; sc.collection.objects.unlink(o)
 LIB = bpy.data.collections.new("LIB"); sc.collection.children.link(LIB); LIB.hide_render = True; LIB.hide_viewport = True
 for c in [tree_a, tree_b, shrub] + grass: LIB.children.link(c)
 def inst(c, loc, rot, s, parent_coll):
@@ -495,12 +648,12 @@ sky = nt.nodes.new("ShaderNodeTexSky"); sky.name = "Sky"; sky.sky_type = "MULTIP
 sky.sun_elevation = R_(55); sky.sun_rotation = R_(150); sky.altitude = 200; sky.air_density = 1.2
 bg = nt.nodes.new("ShaderNodeBackground"); bg.inputs["Strength"].default_value = 0.35
 wo = nt.nodes.new("ShaderNodeOutputWorld"); nt.links.new(sky.outputs[0], bg.inputs[0]); nt.links.new(bg.outputs[0], wo.inputs[0])
-sd = bpy.data.lights.new("Sun", "SUN"); sd.energy = 4.0; sd.angle = R_(1.5); sd.color = (1.0, 0.95, 0.88)
+sd = bpy.data.lights.new("Sun", "SUN"); sd.energy = 3.0; sd.angle = R_(1.5); sd.color = (1.0, 0.95, 0.88)
 SUN = bpy.data.objects.new("Sun", sd); C_SET.objects.link(SUN)
 SUN.rotation_euler = (R_(90 - 55), 0, R_(150 - 90))
 ld = bpy.data.lights.new("XsecFill", "AREA"); ld.shape = "RECTANGLE"; ld.size = 24; ld.size_y = 22; ld.energy = 0.0; ld.color = (1.0, 0.92, 0.82)
 XL = bpy.data.objects.new("XsecFill", ld); C_SET.objects.link(XL); XL.location = (0, -9, -8.5); XL.rotation_euler = (R_(90), 0, 0)
-XL.visible_camera = False
+XL.visible_camera = False; XL.visible_glossy = False
 ld = bpy.data.lights.new("ShaftFill", "POINT"); ld.energy = 0.0; ld.shadow_soft_size = 0.1; ld.color = (1.0, 0.85, 0.65)
 SF = bpy.data.objects.new("ShaftFill", ld); C_SET.objects.link(SF); SF.location = (0, 0, -DEPTH + 2.6); SF.visible_camera = False
 SF2 = bpy.data.objects.new("ShaftFillMid", ld); C_SET.objects.link(SF2); SF2.location = (0.05, 0.05, -6.0); SF2.visible_camera = False
@@ -573,10 +726,10 @@ M_VEST_OR.node_tree.nodes["Mix"].inputs["A"].default_value = (1.0, 0.35, 0.02, 1
 M_VEST_OR.node_tree.nodes["Principled BSDF"].inputs["Emission Color"].default_value = (1.0, 0.3, 0.0, 1)
 
 def make_vest(rig, mat):
-    cl = [c for c in rig.children if "worksuit" in c.name][0]
+    cl = [c for c in rig.children if c.name.endswith(".body")][0]     # smooth closed torso -> clean vest
     B = rig.data.bones; M = rig.matrix_world
     z_lo = (M @ B["spine04"].head_local).z - 0.04; z_hi = (M @ B["neck01"].head_local).z - 0.02
-    x_lim = abs((M @ B["upperarm01.L"].head_local).x - M.translation.x) * 0.92
+    x_lim = abs((M @ B["upperarm01.L"].head_local).x - M.translation.x) * 0.8
     v = cl.copy(); v.data = cl.data.copy(); v.name = rig.name + ".vest"; C_CAST.objects.link(v)
     for m_ in list(v.modifiers):
         if m_.type != "ARMATURE": v.modifiers.remove(m_)
@@ -586,6 +739,7 @@ def make_vest(rig, mat):
     for vv in v.data.vertices: vv.co = Mi @ co[vv.index]
     bm = bmesh.new(); bm.from_mesh(v.data); cx = M.translation.x
     kill = [vv for vv in bm.verts if not (z_lo < (v.matrix_world @ vv.co).z < z_hi and abs((v.matrix_world @ vv.co).x - cx) < x_lim)]
+    # (body mesh: also drop anything that is not torso - arms are outside x_lim, neck above z_hi)
     bmesh.ops.delete(bm, geom=kill, context="VERTS"); bm.to_mesh(v.data); bm.free()
     band = v.data.attributes.new("band", "FLOAT", "POINT")
     h = z_hi - z_lo
@@ -593,10 +747,14 @@ def make_vest(rig, mat):
         t = ((v.matrix_world @ vv.co).z - z_lo) / h
         band.data[vv.index].value = 1.0 if (0.18 < t < 0.27 or 0.45 < t < 0.54) else 0.0
     v.data.materials.clear(); v.data.materials.append(mat)
-    d = v.modifiers.new("vest_offset", "DISPLACE"); d.strength = 0.022; d.mid_level = 0.0
+    d = v.modifiers.new("vest_offset", "DISPLACE"); d.strength = 0.045; d.mid_level = 0.0
     bpy.context.view_layer.objects.active = v
     while v.modifiers[0].name != "vest_offset": bpy.ops.object.modifier_move_up(modifier="vest_offset")
+    sm = v.modifiers.new("vest_smooth", "SMOOTH"); sm.factor = 0.9; sm.iterations = 12
+    bpy.context.view_layer.objects.active = v
+    while v.modifiers[1].name != "vest_smooth": bpy.ops.object.modifier_move_up(modifier="vest_smooth")
     s = v.modifiers.new("vest_thick", "SOLIDIFY"); s.thickness = 0.006
+    ss = v.modifiers.new("vest_subd", "SUBSURF"); ss.levels = 1; ss.render_levels = 1
     return v
 
 def make_hat(rig, color):
@@ -625,7 +783,7 @@ strap = link(bpy.context.object, C_CAST); strap.location = (hc.x, hc.y, hz); str
 strap.scale = (rx, ry, 1.0); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 for v in strap.data.vertices: v.co.z = v.co.z * 1.0 + 0.0
 for v in strap.data.vertices:       # flatten into a band
-    v.co.z = (v.co.z) * 1.7
+    v.co.z = (v.co.z) * 1.0
 strap.data.materials.append(simple_mat("M_Strap", (0.05, 0.05, 0.06), 0.7))
 bpy.ops.mesh.primitive_cylinder_add(vertices=20, radius=0.016, depth=0.024, location=(hc.x, mn.y - 0.004, hz + 0.005), rotation=(R_(90), 0, 0))
 lamp = link(bpy.context.object, C_CAST); lamp.name = "Teen.torch_lamp"; lamp.data.materials.append(simple_mat("M_TorchBody", (0.1, 0.1, 0.11), 0.3, 0.5))

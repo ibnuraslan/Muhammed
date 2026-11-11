@@ -60,6 +60,8 @@ human("Crowd1", 0.0, 0.7, AFR, c("bob02"), [c("male_casualsuit03"), c("shoes05")
 human("Crowd2", 1.0, 0.8, CAU, c("short01"), [c("male_casualsuit03"), c("shoes03")], "old_caucasian_male/old_caucasian_male.mhmat", 7, sub=0, weight=0.7)
 human("Crowd3", 1.0, 0.35, ASI, c("short03"), [c("male_casualsuit05"), c("shoes04")], "young_asian_male/young_asian_male.mhmat", 8, sub=0)
 human("Crowd4", 0.0, 0.3, MIX, c("long01"), [c("female_sportsuit01"), c("shoes06")], "young_asian_female/young_asian_female.mhmat", 9, sub=0)
+human("Operator", 1.0, 0.5, MIX, c("short01"), [c("male_worksuit01"), c("shoes03")], "middleage_caucasian_male/middleage_caucasian_male.mhmat", 10, sub=0,
+      tints=(("male_worksuit01", HIVIS),))
 for ob in bpy.data.objects:
     if ob.type == 'ARMATURE':
         print("CAST", ob.name, round(max(ch.dimensions.z for ch in ob.children if ch.type == 'MESH'), 3), [ch.name for ch in ob.children])

@@ -30,6 +30,7 @@ class Char:
         for pb in self.r.PB:
             pb.rotation_mode = 'QUATERNION'
         self.state = {}
+        self.elbow_out = 0.35
     # body rotation (yaw about Z, then flex: positive = lean forward)
     def rot(self, yaw, flex, side=0.0):
         return Rz(yaw) @ Rx(flex) @ Matrix.Rotation(R_(side), 3, 'Y')
@@ -87,7 +88,7 @@ class Char:
                 d = (W - S).normalized() if (W - S).length > 1e-4 else tot @ V((0, 0, -1))
                 nrm = tot @ V((-sx, 0, 0))
                 if abs(d.dot(nrm)) > 0.95: nrm = tot @ V((0, 1, 0))
-            pole = S + tot @ V((0.35 * sx, 0.6, -0.25))
+            pole = S + tot @ V((self.elbow_out * sx, 0.6, -0.25))
             h.key_hand(s, f, W, d, nrm, pole=pole)
         self.state[f] = dict(rp=rp, yaw=yaw, flex=flex)
         return rp
@@ -138,6 +139,8 @@ class Char:
 
 def ease(t): t = max(0.0, min(1.0, t)); return t * t * (3 - 2 * t)
 
+def jaw(c, f, deg):
+    c.r.key_rot("jaw", f, [("X", deg)])
 CH = {n: Char(n) for n in ("Toddler", "Teen", "ResA", "ResB", "ResC", "Mother", "Crowd1", "Crowd2", "Crowd3", "Crowd4")}
 T, TE, RA, RB, RC, MO = (CH[n] for n in ("Toddler", "Teen", "ResA", "ResB", "ResC", "Mother"))
 HANG = lambda c: ("rel", (0.06, 0.04, -0.93 * c.arm))
@@ -145,7 +148,7 @@ UP = lambda c, o=0.08, fw=0.05: ("rel", (o, fw, 0.92 * c.arm))
 
 # ================================================================== TODDLER
 # beat 1: toddles toward the pipe, slips, falls 15 m, lands, cries with arms up
-t0 = V((-1.55, -1.05)); edge = V((-0.30, -0.22))
+t0 = V((-1.65, -1.15)); edge = V((-0.42, -0.31))
 T.walk([t0, t0.lerp(edge, 0.5) + V((0.05, -0.05)), edge], 1, 84, stride=0.26, lift=0.045, arm_swing=0.12, bob=0.012, lean=3)
 yaw_in = math.degrees(math.atan2(edge.x - t0.x, -(edge.y - t0.y)))
 # step onto the rim: right foot over the hole, wobble, arms flail
@@ -168,56 +171,65 @@ yb = yaw_in + 40
 FZ = FLOOR_Z + 0.03
 T.key(200, V((0, 0)), yb, z=FZ, crouch=0.13, flex=25, head=(10, 0), hands={"L": ("rel", (0.1, 0.12, -0.5 * T.arm)), "R": ("rel", (0.1, 0.12, -0.5 * T.arm))})
 T.key(206, V((0, 0)), yb, z=FZ, crouch=0.16, flex=30, head=(20, 0), hands={"L": ("rel", (0.12, 0.15, -0.6 * T.arm)), "R": ("rel", (0.12, 0.15, -0.6 * T.arm))})
-T.key(220, V((0, 0)), yb, z=FZ, crouch=0.04, flex=0, head=(-30, 0), hands={"L": UP(T, 0.1), "R": UP(T, 0.1)})
+LOOK = -62; JAW = 16
+jaw(T, 1, 0); jaw(T, 206, 0); jaw(T, 214, JAW)
+T.key(220, V((0, 0)), yb, z=FZ, crouch=0.04, flex=-8, head=(LOOK, 0), hands={"L": UP(T, 0.1), "R": UP(T, 0.1)})
 # bottom idle until the grab: crying, arms pumping, looking up, bouncing
-def toddler_idle(f0, f1, reach=1.0, look=-40):
+def toddler_idle(f0, f1, reach=1.0, look=LOOK):
     for i, f in enumerate(range(f0, f1, 12)):
         ph = i * 1.3
+        jaw(T, f, JAW * (0.75 + 0.25 * math.sin(ph * 2.3)))
         T.key(f, V((0.01 * math.sin(ph), 0.01 * math.cos(ph))), yb + 15 * math.sin(ph * 0.4), z=FZ, crouch=0.02 + 0.02 * math.sin(ph * 2),
-              flex=-5 + 4 * math.sin(ph), twist=8 * math.sin(ph * 0.7),
+              flex=-12 + 4 * math.sin(ph), twist=8 * math.sin(ph * 0.7),
               head=(look + 8 * math.sin(ph * 1.7), 12 * math.sin(ph * 0.9)),
               hands={"L": UP(T, 0.08 + 0.04 * math.sin(ph * 2.0), 0.05 * reach), "R": UP(T, 0.08 + 0.04 * math.cos(ph * 2.0), 0.05 * reach)})
 toddler_idle(232, 420)
 # beat 2: the loop swings past his arms (f 420-470): he grabs at it and misses
 for f, dx in ((424, 0.06), (436, -0.08), (448, 0.07), (460, -0.03)):
-    T.key(f, V((0, 0)), yb, z=FZ, crouch=0.0, flex=-8, head=(-45, 20 * dx / 0.08),
+    T.key(f, V((0, 0)), yb, z=FZ, crouch=0.0, flex=-10, head=(LOOK, 20 * dx / 0.08),
           hands={"L": ("rel", (0.08 + dx, 0.12, 0.95 * T.arm)), "R": ("rel", (0.08 - dx, 0.12, 0.95 * T.arm))})
 toddler_idle(472, 1520)
 
 # ================================================================== CROWD / MOTHER idles (behind the tape)
-CROWD_POS = {"Mother": (-1.3, 6.4), "Crowd1": (-3.4, 6.9), "Crowd2": (1.4, 6.7), "Crowd3": (3.3, 7.2), "Crowd4": (-0.2, 7.6)}
+CROWD_POS = {"Mother": (-1.3, 6.15), "Crowd1": (-1.85, 6.75), "Crowd2": (1.4, 6.7), "Crowd3": (3.3, 7.2), "Crowd4": (-0.2, 7.6)}
 def crowd_idle(c, f0, f1, xy, yaw, mood):
     for i, f in enumerate(range(f0, f1, 18)):
         ph = i * 0.9 + hash(c.name) % 10
         if mood == "worry":
             hands = {"L": ("rel", (0.02, 0.22, 0.12 * c.arm)), "R": ("rel", (0.02, 0.2, 0.1 * c.arm))} if (i // 3) % 2 == 0 else \
                     {"L": ("rel", (0.0, 0.2, -0.35 * c.arm)), "R": ("rel", (-0.02, 0.22, -0.3 * c.arm))}
+        elif mood == "plead":     # leaning on the tape, reaching toward the well, hands to face, sobbing
+            hands = ({"L": ("rel", (0.05, 0.22, 0.14 * c.arm)), "R": ("rel", (0.02, 0.22, 0.12 * c.arm))} if (i % 4) < 2 else
+                     {"L": ("rel", (0.12, 0.6 * c.arm, -0.15 * c.arm)), "R": ("rel", (0.1, 0.65 * c.arm, -0.05 * c.arm))})
+        elif mood == "restrain":   # hand on the mother's shoulder, other hand on her arm
+            hands = {"R": ("w", V((CROWD_POS["Mother"][0] + 0.17, CROWD_POS["Mother"][1] + 0.05, 1.22))),
+                     "L": ("w", V((CROWD_POS["Mother"][0] + 0.22, CROWD_POS["Mother"][1] - 0.02, 0.98)))}
         elif mood == "point":
             hands = {"R": ("rel", (0.05, 0.75 * c.arm, 0.1 * c.arm))} if (i % 4) < 2 else {}
         elif mood == "cheer":
             hands = {"L": UP(c, 0.18 + 0.08 * math.sin(ph * 3), 0.05), "R": UP(c, 0.18 + 0.08 * math.cos(ph * 3), 0.05)}
         else:
             hands = {"L": ("rel", (0.08, 0.08 + 0.05 * math.sin(ph), -0.85 * c.arm))}
-        c.key(f, V((xy[0] + 0.03 * math.sin(ph * 0.7), xy[1])), yaw + 6 * math.sin(ph * 0.5), flex=3 + 3 * math.sin(ph),
+        c.key(f, V((xy[0] + 0.03 * math.sin(ph * 0.7), xy[1])), yaw + 6 * math.sin(ph * 0.5), flex=(14 + 6 * math.sin(ph * 1.7)) if mood == "plead" else 3 + 3 * math.sin(ph),
               twist=8 * math.sin(ph * 0.6), head=(5 * math.sin(ph * 1.3) + (20 if mood == "worry" else 0), 15 * math.sin(ph * 0.8)),
               hands=hands, crouch=(0.05 * abs(math.sin(ph * 2)) if mood == "cheer" else 0.0))
 for n, xy in CROWD_POS.items():
     c = CH[n]; yaw = math.degrees(math.atan2(0 - xy[0], -(0 - xy[1])))
     if n != "Mother":
         crowd_idle(c, 1, 470, xy, yaw, "idle")
-        crowd_idle(c, 470, 1760, xy, yaw, "point" if n in ("Crowd2", "Crowd4") else "worry")
+        crowd_idle(c, 470, 1760, xy, yaw, "restrain" if n == "Crowd1" else ("point" if n in ("Crowd2", "Crowd4") else "worry"))
         crowd_idle(c, 1776, END + 20, xy, yaw, "cheer")
     else:
-        crowd_idle(c, 241, 1800, xy, yaw, "worry")
+        crowd_idle(c, 1, 241, xy, yaw, "idle"); crowd_idle(c, 241, 1800, xy, yaw, "plead")
 
 # ================================================================== RESCUERS
 # rope/hand helpers
-PULLEY_TOP = V((0, 0.05, 2.28)); PULLEY_OUT = V((0, 0.16, 2.17)); PULLEY_IN = V((0, 0.0, 2.06))
+PULLEY_TOP = V((0, 0.05, 3.33)); PULLEY_OUT = V((0, 0.16, 3.22)); PULLEY_IN = V((0, 0.0, 3.11))
 RA_P = V((-0.62, 0.52)); RB_P = V((0.62, 0.5)); RC_P = V((-2.2, 1.6))
 def yaw_to(p, q): return math.degrees(math.atan2(q[0] - p[0], -(q[1] - p[1])))
 # beat 1: rescuers not on scene yet (they are off to the side at the trucks) -> keep them away
 for c, p in ((RA, V((-14, 12))), (RB, V((-15, 13))), (RC, V((-13, 14)))):
-    c.key(1, p, 0)
+    c.key(1, p, 0); c.key(236, p, 0)     # off-stage until the camera is down the shaft
 # beat 2 (241-462): ResA feeds the loop rope hand over hand over the hole; ResB kneels at the rim; ResC behind, calling
 loop_depth = {}
 for f in range(241, 471, 2):
@@ -232,17 +244,17 @@ for i, f in enumerate(range(241, 470, 10)):
     RA.key(f, RA_P, yA, flex=30, spine=15, head=(30, 0), crouch=0.05, hands={"L": ("w", hl), "R": ("w", hr)})
     RB.key(f, RB_P, yaw_to(RB_P, (0, 0)), crouch=0.42, flex=35, spine=10, head=(40, 0),
            feet={"L": ("xy", RB_P + V((0.15, 0.05)), yaw_to(RB_P, (0, 0))), "R": ("xy", RB_P + V((-0.12, 0.25)), yaw_to(RB_P, (0, 0)))},
-           hands={"L": ("w", V((0.3, 0.12, 0.16))), "R": ("rel", (0.1, 0.3, -0.25 * RB.arm))})
+           hands={"L": ("w", V((0.35, 0.24, 0.17))), "R": ("rel", (0.1, 0.3, -0.25 * RB.arm))})
     RC.key(f, RC_P, yaw_to(RC_P, (0, 0)) + 20 * math.sin(ph), head=(0, 10 * math.sin(ph)),
            hands={"R": ("rel", (0.02, 0.12, 0.18 * RC.arm)), "L": ("rel", (0.2, 0.25, -0.3 * RC.arm)) if i % 4 < 2 else HANG(RC)})
 # beat 3 (463-672): step back as the excavator rolls in; ResC waves it in
 for i, f in enumerate(range(470, 680, 12)):
     ph = i * 0.8
-    RA.key(f, RA_P + V((-0.5, 0.4)) * ease((f - 470) / 60), yaw_to(RA_P, (4, 1)), head=(5, 0), hands={"L": ("rel", (0.05, 0.25, -0.2 * RA.arm)), "R": HANG(RA)})
-    RB.key(f, RB_P + V((0.1, 1.2)) * ease((f - 470) / 60), yaw_to(RB_P, (4, 1)), head=(5, 0), hands={"R": ("rel", (0.05, 0.3, 0.1 * RB.arm))})
-    RC.key(f, V((2.6, -1.6)), yaw_to((2.6, -1.6), (6, 1)), hands={"L": UP(RC, 0.35, 0.1 + 0.25 * math.sin(ph * 2.2)), "R": ("rel", (0.4, 0.2 + 0.2 * math.sin(ph * 2.2 + 1), 0.4 * RC.arm))})
+    RA.key(f, V((-1.12, 0.92)), yaw_to(RA_P, (4, 1)), head=(5, 0), hands={"L": ("rel", (0.05, 0.25, -0.2 * RA.arm)), "R": HANG(RA)})
+    RB.key(f, V((1.6, -2.2)), yaw_to((1.6, -2.2), (5, 1)), head=(5, 0), hands={"R": ("rel", (0.05, 0.3, 0.1 * RB.arm))})
+    if f >= 562: RC.key(f, V((1.9, -2.8)), yaw_to((1.9, -2.8), (6, 1)), hands={"L": UP(RC, 0.35, 0.1 + 0.25 * math.sin(ph * 2.2)), "R": ("rel", (0.4, 0.2 + 0.2 * math.sin(ph * 2.2 + 1), 0.4 * RC.arm))})
 # beat 4 (673-912): time-lapse exhaustion: fast pose changes
-TL = [("bent", "wipe", "drink"), ("sit", "bent", "point"), ("wipe", "sit", "bent"), ("drink", "wipe", "sit"), ("sit", "drink", "bent"), ("bent", "sit", "wipe")]
+TL = [("bent", "wipe", "sit"), ("sit", "bent", "point"), ("wipe", "sit", "bent"), ("bent", "wipe", "sit"), ("sit", "point", "bent"), ("bent", "sit", "wipe")]
 def tired(c, f, p, yaw, kind):
     if kind == "bent":
         c.key(f, p, yaw, flex=35, crouch=0.12, head=(10, 0), hands={"L": ("rel", (0.02, 0.42, -0.62 * c.arm)), "R": ("rel", (0.02, 0.42, -0.62 * c.arm))})
@@ -255,25 +267,24 @@ def tired(c, f, p, yaw, kind):
               hands={"L": ("rel", (0.02, 0.38, -0.32 * c.arm)), "R": ("rel", (0.02, 0.38, -0.32 * c.arm))})
     else:
         c.key(f, p, yaw, hands={"R": ("rel", (0.05, 0.75 * c.arm, 0.1))})
-TLP = {RA: V((-1.1, 1.5)), RB: V((0.4, 2.6)), RC: V((-2.0, 0.7))}
-for k, f in enumerate(range(684, 905, 44)):
+TLP = {RA: V((-1.1, 1.5)), RB: V((0.4, 2.6)), RC: V((-2.4, 1.2))}
+for k, f in enumerate(range(704, 905, 36)):
     for j, c in enumerate((RA, RB, RC)):
-        tired(c, f, TLP[c] + V((0.25 * math.sin(k + j), 0.2 * math.cos(k * 1.3 + j))), yaw_to(TLP[c], (1.5, 0.5)) + 25 * math.sin(k + j), TL[k][j])
-        tired(c, f + 30, TLP[c] + V((0.25 * math.sin(k + j), 0.2 * math.cos(k * 1.3 + j))), yaw_to(TLP[c], (1.5, 0.5)) + 25 * math.sin(k + j), TL[k][j])
+        tired(c, f, TLP[c], yaw_to(TLP[c], (1.5, 0.5)) + 25 * math.sin(k + j), TL[k][j])
+        tired(c, f + 24, TLP[c], yaw_to(TLP[c], (1.5, 0.5)) + 25 * math.sin(k + j), TL[k][j])
 # beat 5 (913-1134): they turn to the teen, listen, gesture at the hole
 for i, f in enumerate(range(920, 1140, 14)):
     ph = i * 0.9
     tgt = V((-1.0, 2.0)) if f > 1000 else V((-2.2, 4.8))
     RA.key(f, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), tgt), head=(0, 8 * math.sin(ph)), twist=6 * math.sin(ph),
            hands={"R": ("rel", (0.25, 0.35, -0.05 * RA.arm + 0.08 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.25, -0.35 * RA.arm))})
-    RB.key(f, V((0.55, 1.35)), yaw_to((0.55, 1.35), tgt), head=(5, 0),
+    RB.key(f, V((0.1, 1.9)), yaw_to((0.1, 1.9), tgt), head=(5, 0),
            hands={"L": ("rel", (0.3, 0.55 * RB.arm, -0.3 * RB.arm)) if (i % 4) < 2 else HANG(RB)})
     RC.key(f, V((-1.9, 0.2)), yaw_to((-1.9, 0.2), tgt), hands={"L": ("rel", (0.02, 0.15, -0.1 * RC.arm)), "R": ("rel", (0.02, 0.18, -0.1 * RC.arm))}, flex=-3)
 
 # ================================================================== TEEN
-TE.key(1, V((-16, 16)), 0)
 TEEN_START = V((-2.6, 7.4))
-TE.key(905, TEEN_START, 160)
+crowd_idle(TE, 1, 905, TEEN_START, 160, "idle")     # a passer-by watching at the back of the crowd
 # beat 5: pushes through the crowd, ducks under the tape, walks up with a raised hand, talks
 path, yfn = TE.walk([TEEN_START, V((-2.45, 6.2)), V((-2.1, 4.6)), V((-1.6, 3.1)), V((-1.15, 2.05))], 913, 1010, stride=0.72,
                     hands_fn=lambda f: {"R": UP(TE, 0.12, 0.12)} if 925 < f < 990 else {})
@@ -289,8 +300,8 @@ for i, f in enumerate(range(1028, 1130, 14)):
             {"R": ("rel", (0.2, 0.35, -0.2 * TE.arm + 0.1 * math.sin(ph * 2))), "L": ("rel", (0.15, 0.3, -0.35 * TE.arm))}
     TE.key(f, V((-1.12, 2.0)), yaw_to((-1.12, 2.0), (-0.9, 0.9)) + 6 * math.sin(ph), head=(-4 + 6 * math.sin(ph * 2), 6 * math.sin(ph)), twist=5 * math.sin(ph), hands=hands)
 # beat 6 (1135-1296): rope tied around his waist by ResB; arms lifted out of the way; ResA checks the line
-TPOS = V((-0.35, 0.95)); TYAW = yaw_to(TPOS, (0.55, 0.55))
-TE.walk([V((-1.12, 2.0)), V((-0.7, 1.4)), TPOS], 1130, 1160, stride=0.6)
+TPOS = V((-1.45, 1.25)); TYAW = yaw_to(TPOS, (-0.9, 0.42))
+TE.walk([V((-1.12, 2.0)), V((-1.3, 1.6)), TPOS], 1130, 1160, stride=0.5)
 WAIST = TPOS.to_3d() + V((0, 0, TE.root.z + 0.08))
 for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
@@ -298,10 +309,10 @@ for i, f in enumerate(range(1166, 1300, 8)):
            hands={"L": UP(TE, 0.2, 0.0), "R": UP(TE, 0.2, 0.0)} if f < 1250 else
                  {"L": ("rel", (0.1, 0.25, -0.5 * TE.arm)), "R": ("rel", (0.1, 0.25, -0.5 * TE.arm))})
 # ResB in front of the teen, knotting at the waist
-RBT = TPOS + (Rz(TYAW) @ V((0, -0.55, 0))).to_2d()
+RBT = TPOS + (Rz(TYAW) @ V((0, -0.74, 0))).to_2d()
 fwd_t = (Rz(TYAW) @ V((0, -1, 0)))
-knot = WAIST + fwd_t * 0.13
-for i, f in enumerate(range(1140, 1300, 6)):
+knot = WAIST + fwd_t * 0.16
+for i, f in enumerate(range(1164, 1300, 6)):
     ph = i * 1.2; u = (f - 1140) / 160
     circ = V((0.07 * math.cos(ph), 0, 0.05 * math.sin(ph)))
     if f < 1170:
@@ -310,122 +321,137 @@ for i, f in enumerate(range(1140, 1300, 6)):
         hl = knot + Rz(TYAW) @ (circ + V((0.05, -0.03, 0))); hr = knot + Rz(TYAW) @ (-circ + V((-0.05, -0.03, 0)))
     else:   # pull the knot tight: hands apart and back
         k = ease((f - 1250) / 25); hl = knot + Rz(TYAW) @ V((0.06 + 0.1 * k, -0.08 - 0.08 * k, 0)); hr = knot + Rz(TYAW) @ V((-0.06 - 0.1 * k, -0.08 - 0.08 * k, 0))
-    RB.key(f, RBT, yaw_to(RBT, TPOS), flex=25, crouch=0.18, head=(25, 0), hands={"L": ("w", hl), "R": ("w", hr)})
+    RB.key(f, RBT, yaw_to(RBT, TPOS), flex=22, crouch=0.28, head=(25, 0), hands={"L": ("w", hl), "R": ("w", hr)})
 for i, f in enumerate(range(1140, 1300, 10)):
-    RA.key(f, V((-0.55, -0.4)) if f > 1180 else V((-0.9, 0.9)), yaw_to((-0.55, -0.4), (0, 0.05)), head=(-30, 0),
-           hands={"L": ("w", V((-0.08, 0.02, 1.95 - 0.04 * math.sin(i)))), "R": ("w", V((-0.05, 0.0, 1.62)))} if f > 1190 else {})
+    RA.key(f, V((0.75, -0.3)) if f > 1180 else V((-0.9, 0.9)), yaw_to((0.75, -0.3), (0.42, -0.7)), head=(-25, 0),
+           hands={"L": ("w", V((0.47, -0.57, 1.82 - 0.04 * math.sin(i)))), "R": ("w", V((0.55, -0.68, 1.5)))} if f > 1190 else {})   # checks the tripod leg   # checks the tripod leg
     RC.key(f, V((-0.2, 2.6)), yaw_to((-0.2, 2.6), (0, 0)), hands={"L": ("w", V((-0.12, 2.25, 0.95))), "R": ("w", V((-0.1, 2.05, 1.0)))}, flex=10)
 
 # ================================================================== HEAD-FIRST LOWERING (1297-1500), GRAB (1501-1626), RISE (1627-1764)
 # teen stands at the rim on the +y side facing -y (yaw 0) then pitches forward into the pipe; ResA/ResB hold his legs.
-RIM = V((0.0, 0.48))
-TE.walk([TPOS, V((-0.15, 0.75)), RIM], 1296, 1312, stride=0.5)
+RIM = V((0.0, 0.55))
+TE.walk([TPOS, V((-0.7, 0.95)), RIM], 1290, 1312, stride=0.6)
 TOP_Y = 0.0
+def teen_ank(rp, Rb, s, flex=180.0):
+    """ankle target for the head-down teen: feet together, toes pointed up the pipe (narrow, like a dive)"""
+    k = max(0.0, min(1.0, (flex - 90.0) / 90.0))
+    l = TE.ankle[s] - TE.root; l = V((l.x * (1 - 0.65 * k), l.y, l.z))
+    return rp + Rb @ l
+def teen_foot(rp, Rb, s, flex=180.0):
+    k = max(0.0, min(1.0, (flex - 90.0) / 90.0))
+    fr = Rb.to_quaternion().slerp((Rx(-90)).to_quaternion(), k).to_matrix()
+    return ("w", teen_ank(rp, Rb, s, flex), fr)
 def teen_inverted(f, zr, flex, wob=0.0, arms="reach", grip=None):
     """zr = pelvis height; flex 180 = fully head-down. Body centred over/in the pipe."""
     u = flex / 180.0
     xy = RIM.lerp(V((0.0, 0.0)), min(1.0, u * 1.3))
     rp = V((xy.x, xy.y, zr))
     Rb = Rz(0) @ Rx(flex)
-    feet = {s: ("w", rp + Rb @ (TE.ankle[s] - TE.root) + Rb @ V((0, 0, 0.0)), Rb) for s in "LR"}
+    feet = {s: teen_foot(rp, Rb, s, flex) for s in "LR"}
     if grip:
         hands = {"L": ("w", grip["L"], grip.get("dn")), "R": ("w", grip["R"], grip.get("dn"))}
     elif arms == "reach":
-        hands = {"L": ("rel", (0.02, 0.1, 0.9 * TE.arm)), "R": ("rel", (0.02, 0.1, 0.9 * TE.arm))}
+        hands = {"L": ("rel", (-0.03, 0.0, 0.93 * TE.arm)), "R": ("rel", (-0.03, 0.0, 0.93 * TE.arm))}
     else:
         hands = {"L": ("rel", (0.05, 0.25, 0.75 * TE.arm)), "R": ("rel", (0.05, 0.25, 0.75 * TE.arm))}
     TE.key(f, xy, 0, root_world=rp, flex=flex, spine=0 if u > 0.9 else 20 * u, side=wob, head=(-25 * u, 0), feet=feet, hands=hands)
     return rp, Rb
+TE.elbow_out = 0.05     # elbows tucked inside the pipe
 LOWER = []   # (frame, pelvis z, flex)
 for f in range(1314, 1500, 4):
     u = (f - 1314) / (1500 - 1314)
     if f < 1340:
         k = ease((f - 1314) / 26); zr = lerp(TE.root.z, 1.25, k); flex = 180 * k
     else:
-        k = (f - 1340) / (1500 - 1340); zr = lerp(1.25, FLOOR_Z + 0.69 + 0.95 + 0.05, ease(k) * 0.6 + k * 0.4); flex = 180
+        k = (f - 1340) / (1500 - 1340); zr = lerp(1.25, FLOOR_Z + 2.0, ease(k) * 0.6 + k * 0.4); flex = 180
     LOWER.append((f, zr, flex))
 for f, zr, flex in LOWER:
-    teen_inverted(f, zr, flex, wob=4 * math.sin(f * 0.15))
+    teen_inverted(f, zr, flex, wob=1.5 * math.sin(f * 0.15))
 # beat 9: at the bottom: reach, grip the toddler's upper arms (toddler arms up)
 BOT = LOWER[-1][1]
 TD_ROOT = V((0, 0, FZ + T.root.z))
-grip_pts = {"L": TD_ROOT + V((0.09, 0.0, 0.2)), "R": TD_ROOT + V((-0.09, 0.0, 0.2))}
+grip_pts = {"L": TD_ROOT + V((0.07, 0.0, 0.42)), "R": TD_ROOT + V((-0.07, 0.0, 0.42))}
 for f, k in ((1504, 0.0), (1520, 0.5), (1536, 1.0), (1552, 1.0), (1580, 1.0), (1610, 1.0), (1626, 1.0)):
-    zr = BOT - 0.12 * ease(k)
+    zr = BOT - 0.1 * ease(k)
     rp = V((0, 0, zr)); Rb = Rx(180)
     hl = (rp + Rb @ V((0.12, 0.05, 0.75))).lerp(grip_pts["L"] + V((0, 0, 0.02)), ease(k))
     hr = (rp + Rb @ V((-0.12, 0.05, 0.75))).lerp(grip_pts["R"] + V((0, 0, 0.02)), ease(k))
     TE.key(f, V((0, 0)), 0, root_world=rp, flex=180, head=(-35, 0),
-           feet={s: ("w", rp + Rb @ (TE.ankle[s] - TE.root), Rb) for s in "LR"},
+           feet={s: teen_foot(rp, Rb, s) for s in "LR"},
            hands={"L": ("w", hl, (V((0, 0, -1)), V((-1, 0, 0)))), "R": ("w", hr, (V((0, 0, -1)), V((1, 0, 0))))})
 # toddler: looks up, reaches, then clings to the teen's wrists (1500-1626)
 for f in range(1500, 1628, 8):
     k = ease((f - 1500) / 40)
-    T.key(f, V((0, 0)), yb, z=FZ, flex=-10, head=(-50, 0),
-          hands={"L": ("w", (TD_ROOT + V((0.1, -0.02, 0.38))).lerp(grip_pts["L"] + V((0.0, 0.0, 0.17)), k)),
-                 "R": ("w", (TD_ROOT + V((-0.1, -0.02, 0.38))).lerp(grip_pts["R"] + V((0.0, 0.0, 0.17)), k))})
+    jaw(T, f, JAW)
+    T.key(f, V((0, 0)), yb, z=FZ, flex=-12, head=(LOOK, 0),
+          hands={"L": ("w", (TD_ROOT + V((0.1, -0.02, 0.38))).lerp(grip_pts["L"] + V((0.0, 0.0, 0.03)), k)),
+                 "R": ("w", (TD_ROOT + V((-0.1, -0.02, 0.38))).lerp(grip_pts["R"] + V((0.0, 0.0, 0.03)), k))})
 # beat 10 (1627-1764): rise together; the toddler hangs from the teen's grip
 RISE0, RISE1 = 1630, 1772
 rise_z = {}
 for f in range(RISE0, RISE1 + 1, 2):
     u = (f - RISE0) / (RISE1 - RISE0)
-    rise_z[f] = (BOT - 0.12) + ((0.5 + TE.root.z * 0.0 + 1.0) - (BOT - 0.12)) * (0.15 * u + 0.85 * ease(u))
+    rise_z[f] = (BOT - 0.1) + ((0.5 + TE.root.z * 0.0 + 1.0) - (BOT - 0.1)) * (0.15 * u + 0.85 * ease(u))
 for f in range(RISE0, RISE1 + 1, 4):
     zr = rise_z[f]; rp = V((0, 0, zr)); Rb = Rx(180)
-    dz = zr - (BOT - 0.12)
+    dz = zr - (BOT - 0.1)
     gl = grip_pts["L"] + V((0, 0, 0.02 + dz)); gr = grip_pts["R"] + V((0, 0, 0.02 + dz))
     TE.key(f, V((0, 0)), 0, root_world=rp, flex=180, head=(-35, 0), side=3 * math.sin(f * 0.2),
-           feet={s: ("w", rp + Rb @ (TE.ankle[s] - TE.root), Rb) for s in "LR"},
+           feet={s: teen_foot(rp, Rb, s) for s in "LR"},
            hands={"L": ("w", gl, (V((0, 0, -1)), V((-1, 0, 0)))), "R": ("w", gr, (V((0, 0, -1)), V((1, 0, 0))))})
     # toddler hangs: root under the grip, arms up, legs dangling and kicking slightly
     tr = TD_ROOT + V((0, 0, dz))
     T.key(f, V((0, 0)), yb, root_world=tr, flex=-4, head=(-35, 10 * math.sin(f * 0.1)),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, -0.02, -T.root.z + T.ankle[s].z + 0.03 * math.sin(f * 0.2 + (s == "L") * 3))), Rz(yb)) for s in "LR"},
-          hands={"L": ("w", gl + V((0, 0, 0.15))), "R": ("w", gr + V((0, 0, 0.15)))})
+          hands={"L": ("w", gl + V((0, 0, 0.01))), "R": ("w", gr + V((0, 0, 0.01)))})
 # rescuers: hold his legs while he goes in (1312-1400), then haul line; haul hand over hand in beat 10
-for f in range(1300, 1420, 4):
+for f in range(1314, 1420, 4):
     st = TE.state.get(f) or TE.state.get(f - 2) or TE.state.get(f + 2)
     if st is None:
         continue
     rp, flex = st["rp"], st["flex"]
     Rb = Rx(flex)
-    ank = {s: rp + Rb @ (TE.ankle[s] - TE.root) for s in "LR"}
+    ank = {s: teen_ank(rp, Rb, s, flex) for s in "LR"}
     if max(a.z for a in ank.values()) < 0.25:
         break
-    for c, s_, pos in ((RA, "L", V((-0.42, -0.42))), (RB, "R", V((0.42, -0.42)))):
+    for c, s_, pos in ((RB, "L", V((-0.6, -0.25))), (RA, "R", V((0.6, -0.25)))):
         a = ank[s_]
-        c.key(f, pos, yaw_to(pos, (0, 0)), flex=max(0, min(60, 50 - 25 * (a.z - 0.8))), crouch=max(0, min(0.35, 0.3 - 0.25 * (a.z - 0.6))), head=(35, 0),
+        c.key(f, pos, yaw_to(pos, (0, 0)), flex=max(0, min(60, 50 - 25 * (a.z - 0.8))), crouch=max(0, min(0.22, 0.3 - 0.25 * (a.z - 0.6))), head=(35, 0),
               hands={"L": ("w", a + V((0.05, -0.02, 0.06))), "R": ("w", a + V((-0.05, -0.02, -0.06)))})
 HAUL = {RA: V((0.0, 1.55)), RB: V((0.05, 2.35)), RC: V((0.1, 3.15))}
+HAUL_FROM = {RA: 1502, RB: 1492, RC: 1324}
 def rope_haul_line(f):
     """haul line from the pulley out to +y, through the three haulers' hands"""
-    return [PULLEY_OUT + V((0, 0.0, 0)), V((0.0, 1.2, 1.35)), V((0.03, 2.0, 1.2)), V((0.06, 2.8, 1.05)), V((0.1, 3.6, 0.9)), V((0.4, 4.2, 0.05))]
+    return [PULLEY_OUT + V((0, 0.0, 0)), V((0.0, 1.2, 1.5)), V((0.03, 2.0, 1.3)), V((0.06, 2.8, 1.1)), V((0.1, 3.6, 0.9)), V((0.4, 4.2, 0.05))]
 def on_line(y):
     pts = rope_haul_line(0)
     for a, b in zip(pts, pts[1:]):
         if a.y <= y <= b.y: return a.lerp(b, (y - a.y) / (b.y - a.y))
     return pts[-1]
 for c in (RA, RB, RC):
-    for f in range(1420, 1630, 10):     # paying out: hands slide along the rope
+    for f in range(HAUL_FROM[c], 1630, 10):     # paying out: hands slide along the rope
         p = HAUL[c]; ph = (f - 1420) / 10
         hy = p.y - 0.25
-        c.key(f, p, 180, flex=-8, head=(10, 0), feet={"L": ("xy", p + V((0.18, 0.15)), 170), "R": ("xy", p + V((-0.12, -0.25)), 190)},
+        c.key(f, p, 0, flex=-8, head=(10, 0), feet={"L": ("xy", p + V((0.15, -0.25)), -10), "R": ("xy", p + V((-0.15, 0.15)), 10)},
               hands={"L": ("w", on_line(hy - 0.12 + 0.05 * math.sin(ph))), "R": ("w", on_line(hy + 0.25 + 0.05 * math.sin(ph)))})
     for k, f in enumerate(range(1630, 1770, 8)):     # haul: lean back, hand over hand
         p = HAUL[c]; a = (k % 2)
         hl = on_line(p.y - 0.45 + 0.35 * a); hr = on_line(p.y - 0.1 - 0.35 * a)
-        c.key(f, p + V((0, 0.08 * math.sin(k * math.pi / 2))), 180, flex=-18 + 6 * a, crouch=0.12, head=(15, 0),
-              feet={"L": ("xy", p + V((0.18, 0.15)), 170), "R": ("xy", p + V((-0.12, -0.3)), 190)},
+        c.key(f, p + V((0, 0.08 * math.sin(k * math.pi / 2))), 0, flex=-18 + 6 * a, crouch=0.12, head=(15, 0),
+              feet={"L": ("xy", p + V((0.15, -0.25)), -10), "R": ("xy", p + V((-0.15, 0.15)), 10)},
               hands={"L": ("w", hl), "R": ("w", hr)})
+for f, sx in ((1, 1.0), (1330, 1.0), (1345, 0.9), (1770, 0.9), (1790, 1.0)):
+    TE.o.scale = (sx, sx, 1.0); TE.o.keyframe_insert("scale", frame=f)
 # ================================================================== BEAT 11: emerge, lift, mother, cheers
 # teen comes out (feet, body), swung upright onto the +y side, holding the toddler; lifts him up; mother takes him
-OUTP = V((0.15, 0.85))
+TE.elbow_out = 0.35
+OUTP = V((-0.3, 0.95))
 for f in range(1772, 1812, 4):
     k = ease((f - 1772) / 40)
     flex = 180 * (1 - k); zr = lerp(rise_z[RISE1], TE.root.z, k)
     xy = V((0, 0)).lerp(OUTP, k)
     rp = V((xy.x, xy.y, zr)); Rb = Rz(180 * k) @ Rx(flex)
-    feet = None if k > 0.85 else {s: ("w", rp + Rb @ (TE.ankle[s] - TE.root), Rb) for s in "LR"}
+    feet = None if k > 0.85 else {s: teen_foot(rp, Rb, s, flex) for s in "LR"}
     gl = rp + Rb @ V((0.12, -0.25, 0.55 - 0.35 * k)); gr = rp + Rb @ V((-0.12, -0.25, 0.55 - 0.35 * k))
     TE.key(f, xy, 180 * k, root_world=rp if k < 0.85 else None, flex=flex, head=(-20, 0), feet=feet,
            hands={"L": ("w", gl), "R": ("w", gr)})
@@ -445,26 +471,55 @@ for i, f in enumerate(range(1816, 1872, 8)):
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.02)), Rz(yawT)) for s in "LR"},
           hands={"L": UP(T, 0.3, 0.0), "R": UP(T, 0.3, 0.0)} if i > 2 else {"L": ("w", gl + V((0, 0, 0.1))), "R": ("w", gr + V((0, 0, 0.1)))})
 # mother: ducks the tape, runs in, takes him in a hug
-MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.6, 3.2)), V((-0.15, 1.75))], 1800, 1866, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
-MP = V((-0.15, 1.75)); myaw = yaw_to(MP, OUTP)
+MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.8, 3.2)), V((-0.6, 1.9))], 1800, 1866, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
+MP = V((-0.6, 1.9)); myaw = yaw_to(MP, OUTP)
 for i, f in enumerate(range(1872, END + 10, 8)):
     k = ease((f - 1872) / 30)
-    hug = MP.to_3d() + V((0, 0, MO.root.z + 0.32)) + Rz(myaw) @ V((0, -0.22, 0))
+    cr_ = 0.42 * MO.root.z * ease((f - 1896) / 34)
+    hug = MP.to_3d() + V((0, 0, MO.root.z + 0.32 - cr_)) + Rz(myaw) @ V((0, -0.24, 0))
     held = ((OUTP.to_3d() + V((0, 0, TE.root.z + 1.0))) + Rz(150) @ V((0, -0.25, 0))).lerp(hug, k)
-    MO.key(f, MP, myaw + 4 * math.sin(i * 0.7), flex=8, head=(10, 0), twist=10 * math.sin(i * 0.5),
+    jaw(T, f, JAW * max(0.0, 1 - ease((f - 1890) / 40)))
+    MO.key(f, MP, myaw + 4 * math.sin(i * 0.7), flex=8 + 10 * (cr_ > 0.05), crouch=cr_, head=(10, 0), twist=10 * math.sin(i * 0.5),
+           feet={"L": ("xy", MP + (Rz(myaw) @ V((0.12, 0.12, 0))).to_2d(), myaw), "R": ("xy", MP + (Rz(myaw) @ V((-0.12, -0.05, 0))).to_2d(), myaw, 0.0, 0.0)},
            hands={"L": ("w", held + Rz(myaw) @ V((0.12, 0.05, -0.05))), "R": ("w", held + Rz(myaw) @ V((-0.1, -0.02, 0.1)))})
-    T.key(f, V((0, 0)), myaw + 180, root_world=held + V((0, 0, -0.1)), flex=10, head=(0, 20),
+    T.key(f, V((0, 0)), myaw + 180, root_world=held + V((0, 0, -0.1)), flex=10, head=(5 + 10 * k, 25 * k),
           feet={s: ("w", held + V((0.05 if s == "L" else -0.05, 0, -0.1 - T.root.z + T.ankle[s].z + 0.05)), Rz(myaw + 180)) for s in "LR"},
           hands={"L": ("w", held + Rz(myaw) @ V((0.1, 0.1, 0.25))), "R": ("w", held + Rz(myaw) @ V((-0.1, 0.1, 0.25)))})
     TE.key(f, OUTP, 150 - 20 * k, flex=-5, head=(-15, 0),
            hands={"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.6 else {"L": ("w", held + V((0.15, 0, 0))), "R": ("w", held + V((-0.15, 0, 0)))})
-for c, p in ((RA, V((0.9, 1.6))), (RB, V((-0.7, 1.9))), (RC, V((1.0, 2.9)))):
-    for i, f in enumerate(range(1776, END + 10, 10)):
+for c, p in ((RA, V((1.5, 0.6))), (RB, V((-1.45, 1.55))), (RC, V((1.0, 2.9)))):
+    for i, f in enumerate(range(1806, END + 10, 10)):
         ph = i * 1.4
         c.key(f, p, yaw_to(p, OUTP), crouch=0.04 * abs(math.sin(ph)), head=(-10, 0),
               hands={"L": UP(c, 0.2 + 0.1 * math.sin(ph * 2), 0.05), "R": UP(c, 0.2 + 0.1 * math.cos(ph * 2), 0.05)} if i % 6 < 4 else
                     {"L": ("rel", (-0.12, 0.35, -0.05 + 0.08 * (i % 2))), "R": ("rel", (-0.12, 0.35, -0.05 + 0.08 * (i % 2)))})
 
+
+# ================================================================== WALKS between standing spots (no sliding feet)
+def clear_keys(c, f0, f1):
+    ad = c.o.animation_data
+    if not ad or not ad.action: return
+    for layer in ad.action.layers:
+        for strip in layer.strips:
+            for cb in strip.channelbags:
+                for fc in cb.fcurves:
+                    kill = [i for i, kp in enumerate(fc.keyframe_points) if f0 < kp.co.x < f1]
+                    for i in reversed(kill): fc.keyframe_points.remove(fc.keyframe_points[i])
+MOVES = [
+ (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
+ (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1296, 1310, [(0.75, -0.3), (0.6, -0.25)]),
+ (RA, 1430, 1500, [(0.6, -0.25), (0.3, -0.45), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (0.0, 1.55)]), (RA, 1770, 1804, [(0.0, 1.55), (0.6, 2.0), (1.6, 1.6), (1.5, 0.6)]),
+ (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
+ (RB, 905, 925, [(0.4, 2.6), (0.1, 1.9)]), (RB, 1130, 1162, [(0.1, 1.9), (-0.45, 0.9), tuple(RBT)]),
+ (RB, 1276, 1302, [tuple(RBT), (-0.5, 0.45), (-0.6, -0.25)]), (RB, 1430, 1490, [(-0.6, -0.25), (-0.75, 0.5), (-0.45, 1.6), (0.05, 2.35)]),
+ (RB, 1770, 1800, [(0.05, 2.35), (-0.8, 2.2), (-1.45, 1.55)]),
+ (RC, 463, 560, [RC_P, (-1.4, -0.9), (0.3, -2.4), (1.9, -2.8)]), (RC, 674, 702, [(1.9, -2.8), (0.5, -2.4), (-1.7, -1.2), (-2.4, 1.2)]),
+ (RC, 905, 920, [(-2.4, 1.2), (-1.9, 0.2)]), (RC, 1130, 1170, [(-1.9, 0.2), (-2.3, 1.4), (-1.6, 2.7), (-0.2, 2.6)]),
+ (RC, 1300, 1322, [(-0.2, 2.6), (0.1, 3.15)]), (RC, 1770, 1795, [(0.1, 3.15), (1.0, 2.9)]),
+]
+for c, f0, f1, pts in MOVES:
+    clear_keys(c, f0, f1)
+    c.walk([V(p) for p in pts], f0, f1, stride=0.75 if (f1 - f0) > 30 else 0.95, lift=0.09)
 # ================================================================== PROPS / FX
 def key_vis(o, frames_on):
     """frames_on: list of (start, end) where visible"""
@@ -506,8 +561,8 @@ for f in range(1150, END + 10, 2):
     kk = max([k for k in keys if k <= f] or [keys[0]]); st = TE.state[kk]
     rp, yaw, flex = st["rp"], st["yaw"], st["flex"]
     Rb = Rz(yaw) @ Rx(flex)
-    c_ = rp + Rb @ V((0, 0.0, 0.1))
-    rx, ry = 0.17, 0.13
+    c_ = rp + Rb @ V((0, -0.05, 0.12))
+    rx, ry = 0.175, 0.135
     ring = [c_ + Rb @ V((rx * math.cos(a), ry * math.sin(a), 0)) for a in [i * 2 * math.pi / 20 for i in range(21)]]
     if f < 1250:   # loose ends in ResB's hands before the knot is tight
         ring = ring[:14]
@@ -543,7 +598,7 @@ XL = bpy.data.lights["XsecFill"]; SFL = bpy.data.lights["ShaftFill"]; HT = bpy.d
 def key_light(l, pts):
     for f, e in pts: l.energy = e; l.keyframe_insert("energy", frame=f)
 key_light(XL, [(1, 0), (455, 0), (470, 11000), (545, 11000), (560, 0), (770, 0), (785, 11000), (860, 11000), (875, 0), (1610, 0), (1635, 11000), (1745, 11000), (1765, 0)])
-key_light(SFL, [(1, 0), (110, 0), (140, 260), (1300, 260), (1340, 90), (1770, 90)])
+key_light(SFL, [(1, 0), (110, 0), (140, 110), (1300, 110), (1340, 60), (1770, 60)])
 key_light(HT, [(1, 0), (1320, 0), (1335, 90), (1780, 90), (1800, 0)])
 for n_ in ("Teen.torch_strap", "Teen.torch_lamp", "Teen.torch_lens"): key_vis(bpy.data.objects[n_], [(1240, END + 10)])
 lens = bpy.data.materials["M_TorchLens"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
@@ -560,23 +615,39 @@ def key_ex(f, x, y, swing, b, s, sh):
     stick.rotation_euler = base["Arm_2_GEO"].copy(); stick.rotation_euler.x += R_(s); stick.keyframe_insert("rotation_euler", frame=f)
     shovel.rotation_euler = base["shovel_GEO"].copy(); shovel.rotation_euler.x += R_(sh); shovel.keyframe_insert("rotation_euler", frame=f)
 key_ex(1, 22, 1.0, 0, -20, 30, 20); key_ex(478, 22, 1.0, 0, -20, 30, 20)
-key_ex(582, 6.3, 1.0, 0, -20, 30, 20)
+key_ex(582, 7.0, 1.0, 0, -20, 30, 20)
 # dig cycle: reach (boom down, stick out), curl, lift, swing to the heap, dump, swing back
 def dig(f0, period, n):
     for i in range(n):
         f = f0 + i * period; p = period
-        key_ex(int(f), 6.3, 1.0, 0, -5, 55, -10)                  # reach out over the pit
-        key_ex(int(f + p * 0.25), 6.3, 1.0, 0, 15, 35, 30)          # bite down
-        key_ex(int(f + p * 0.45), 6.3, 1.0, 0, -15, 15, 70)         # curl + lift
-        key_ex(int(f + p * 0.7), 6.3, 1.0, -55, -25, 25, 60)         # swing to the heap
-        key_ex(int(f + p * 0.85), 6.3, 1.0, -55, -20, 45, -20)       # dump
+        key_ex(int(f), 7.0, 1.0, 0, -5, 55, -10)                  # reach out over the pit
+        key_ex(int(f + p * 0.25), 7.0, 1.0, 0, 15, 35, 30)          # bite down
+        key_ex(int(f + p * 0.45), 7.0, 1.0, 0, -15, 15, 70)         # curl + lift
+        key_ex(int(f + p * 0.7), 7.0, 1.0, -55, -25, 25, 60)         # swing to the heap
+        key_ex(int(f + p * 0.85), 7.0, 1.0, -55, -20, 45, -20)       # dump
 dig(588, 44, 2); dig(676, 26, 9)
-key_ex(913, 6.3, 1.0, -20, -30, 20, 30); key_ex(END, 6.3, 1.0, -25, -32, 18, 32)
+key_ex(913, 7.0, 1.0, -20, -30, 20, 30); key_ex(END, 7.0, 1.0, -25, -32, 18, 32)
+# operator seated in the cab (MPFB), parented to the swinging cab
+OP = Char("Operator")
+for i, f in enumerate(range(1, END + 10, 22)):
+    ph = i * 1.7
+    OP.key(f, V((0, 0)), 0, root_world=V((0, 0, 0.45)), flex=-4 + 6 * math.sin(ph), head=(8, 18 * math.sin(ph * 0.6)),
+           feet={"L": ("w", V((0.12, -0.42, 0.08)), Rz(0)), "R": ("w", V((-0.12, -0.38, 0.08)), Rz(0))},
+           hands={"L": ("w", V((0.22, -0.36, 0.66 + 0.05 * math.sin(ph)))), "R": ("w", V((-0.22, -0.36, 0.66 + 0.05 * math.cos(ph))))})
+bpy.context.scene.frame_set(600)
+chair = bpy.data.objects["Body_GEO_Chair_MAT_0"]; bb = [chair.matrix_world @ V(c_) for c_ in chair.bound_box]
+seat = V((sum(v.x for v in bb) / 8, sum(v.y for v in bb) / 8, min(v.z for v in bb) + 0.42 * (max(v.z for v in bb) - min(v.z for v in bb))))
+body_w = bpy.data.objects["Body_GEO"].matrix_world.copy()
+OP.o.matrix_world = Matrix.Translation(V((seat.x, seat.y, min(v.z for v in bb) + 0.02))) @ Matrix.Rotation(R_(-90), 4, "Z")
+mw = OP.o.matrix_world.copy(); OP.o.parent = bpy.data.objects["Body_GEO"]; OP.o.matrix_parent_inverse = body_w.inverted(); OP.o.matrix_world = mw
+print("OPERATOR seat", seat)
 pit = bpy.data.objects["EarthBack"].data.shape_keys.key_blocks["Pit"]
 for f, v in ((1, 0), (575, 0), (680, 0.25), (905, 0.95), (END, 0.95)):
     pit.value = v; pit.keyframe_insert("value", frame=f)
-bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=12, radius=1.0, location=(3.6, 2.6, -0.1))
-HEAP = bpy.context.object; HEAP.name = "SpoilHeap"; HEAP.data.materials.append(bpy.data.materials["M_Ground"])
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=5, radius=1.0, location=(3.6, 2.6, -0.1))
+HEAP = bpy.context.object; HEAP.name = "SpoilHeap"; HEAP.data.materials.append(bpy.data.materials["M_Soil"])
+_tx = bpy.data.textures.new("HeapLumps", "CLOUDS"); _tx.noise_scale = 0.18; _tx.noise_depth = 3
+_d = HEAP.modifiers.new("lumps", "DISPLACE"); _d.texture = _tx; _d.strength = 0.22; _d.texture_coords = "LOCAL"
 for v in HEAP.data.vertices:
     v.co.z = max(-0.05, v.co.z) * (0.7 + 0.15 * math.sin(v.co.x * 5) * math.cos(v.co.y * 4))
 for p in HEAP.data.polygons: p.use_smooth = True
@@ -586,9 +657,10 @@ for f, s in ((1, 0.01), (575, 0.01), (680, 0.35), (905, 0.85), (END, 0.85)):
 # dirt clods thrown from the bucket at each dump + into the pit at each bite
 M_CLOD = bpy.data.materials["M_Soil"]
 clods = []
-for i in range(14):
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=random.uniform(0.04, 0.1)); o = bpy.context.object; o.name = "Clod%02d" % i
+for i in range(30):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=random.uniform(0.04, 0.11)); o = bpy.context.object; o.name = "Clod%02d" % i
     o.data.materials.append(M_CLOD); clods.append(o)
+    _dc = o.modifiers.new("lumps", "DISPLACE"); _dc.texture = _tx; _dc.strength = 0.05; _dc.texture_coords = "LOCAL"
 def throw(o, f0, p0, v0, dur=30):
     o.location = p0; o.scale = (0.001,) * 3; o.keyframe_insert("location", frame=f0 - 1); o.keyframe_insert("scale", frame=f0 - 1)
     for k in range(0, dur + 1, 3):
@@ -600,9 +672,11 @@ def throw(o, f0, p0, v0, dur=30):
 cyc = [(588 + i * 44, 44) for i in range(2)] + [(676 + i * 26, 26) for i in range(9)]
 for ci, (f0, p) in enumerate(cyc):
     dump = int(f0 + p * 0.85)
-    for j in range(4):
-        o = clods[(ci * 4 + j) % len(clods)]
-        throw(o, dump, V((3.3 + random.uniform(-0.2, 0.2), 2.2 + random.uniform(-0.2, 0.2), 1.6)), V((random.uniform(-1, 1), random.uniform(-0.5, 1.2), random.uniform(0.5, 2))), dur=24)
+    bpy.context.scene.frame_set(dump)
+    sco = bpy.data.objects["shovel_GEO_Scoop_MAT_0"]; bb = [sco.matrix_world @ V(c_) for c_ in sco.bound_box]; bc = sum(bb, V()) / 8
+    for j in range(10):
+        o = clods[(ci * 10 + j) % len(clods)]
+        throw(o, dump + j % 4, bc + V((random.uniform(-0.25, 0.25), random.uniform(-0.25, 0.25), -0.1)), V((random.uniform(-0.6, 0.6), random.uniform(-0.6, 0.6), random.uniform(-1.0, 0.6))), dur=30)
 # dust puffs (soft volumetric balls) at each bite and around the landing in the shaft
 M_DUST = bpy.data.materials.new("M_DustPuff"); M_DUST.use_nodes = True; nt = M_DUST.node_tree; nt.nodes.clear()
 o_ = nt.nodes.new("ShaderNodeOutputMaterial"); pv = nt.nodes.new("ShaderNodeVolumePrincipled"); pv.inputs["Density"].default_value = 1.2; pv.inputs["Color"].default_value = (0.75, 0.62, 0.48, 1)
@@ -622,17 +696,47 @@ def puff(name, loc, f0, r0, r1, dur):
 puff("DustLand", (0, 0, FLOOR_Z + 0.1), 199, 0.08, 0.26, 50)
 for ci, (f0, p) in enumerate(cyc[::2]):
     puff("DustBite%02d" % ci, (2.0, 0.9, 0.1), int(f0 + p * 0.3), 0.2, 0.9, 40)
-puff("DustRoll", (9, 1.0, 0.3), 540, 0.5, 2.0, 90)
+puff("DustRoll", (10, 1.0, 0.3), 540, 0.5, 2.0, 90)
+# diesel exhaust from the engine deck (rear of the cab), dark puffs every ~0.4 s while it works
+M_EXH = M_DUST.copy(); M_EXH.name = "M_Exhaust"; M_EXH.node_tree.nodes["Principled Volume"].inputs["Color"].default_value = (0.18, 0.17, 0.16, 1)
+bpy.context.scene.frame_set(600)
+eb = [o for o in bpy.data.objects if o.name.startswith("Body_GEO_Body")][0]; bb = [eb.matrix_world @ V(c_) for c_ in eb.bound_box]
+EXH = V((max(v.x for v in bb) - 0.3, sum(v.y for v in bb) / 8 + 0.35, max(v.z for v in bb) + 0.1))
+for k_, f in enumerate(range(590, 912, 24)):
+    o = puff("Exhaust%02d" % k_, EXH, f, 0.08, 0.55, 40); o.data.materials[0] = M_EXH
+    o.location = EXH + V((0.3, 0.2, 0.9)); o.keyframe_insert("location", frame=f + 40)
 puff("DustToddler", (-0.6, -0.5, 0.05), 20, 0.1, 0.5, 70)
 
-# extra crowd: the four villagers instanced twice more along the tape (same motion, different place/turn)
-CG = bpy.data.collections.new("CrowdGroup")
-for n in ("Crowd1", "Crowd2", "Crowd3", "Crowd4"):
-    r = bpy.data.objects[n]; CG.objects.link(r)
-    for ch in r.children: CG.objects.link(ch)
-for k, (dx, dy, rz) in enumerate(((5.6, 0.9, -18), (-5.2, 0.6, 16), (1.2, 2.2, 4))):
-    e = bpy.data.objects.new("CrowdExtra%d" % k, None); e.instance_type = "COLLECTION"; e.instance_collection = CG
-    e.rotation_euler = (0, 0, R_(rz)); e.location = Rz(rz) @ V((0, 0, 0)) + V((dx, dy, 0)); bpy.context.scene.collection.objects.link(e)
+# extra crowd: duplicates of the four villagers with a 0-2 s time offset (NLA), scale and clothes-colour variety
+def tinted(mat, rgb):
+    m = mat.copy(); m.name = mat.name + "_v"
+    for nd in list(m.node_tree.nodes):
+        if nd.type == "TEX_IMAGE" and nd.image and "diffuse" in nd.image.name.lower():
+            for lk in list(nd.outputs["Color"].links):
+                mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 1
+                mx.inputs["B"].default_value = (*rgb, 1); m.node_tree.links.new(nd.outputs["Color"], mx.inputs["A"]); m.node_tree.links.new(mx.outputs["Result"], lk.to_socket)
+    return m
+SPOTS = [(5.4, 0.7, -14, 0.0), (-5.0, 0.5, 13, 1.0), (1.1, 1.9, 3, 1.6), (-3.2, 2.1, 9, 0.5), (3.6, 1.6, -9, 1.3)]
+COLS = [(0.6, 0.85, 1.1), (1.15, 0.8, 0.6), (0.75, 1.05, 0.7), (1.1, 1.05, 0.8), (0.85, 0.7, 1.05)]
+for k, (dx, dy, rz, toff) in enumerate(SPOTS):
+    for j, n in enumerate(("Crowd1", "Crowd2", "Crowd3", "Crowd4")):
+        src = bpy.data.objects[n]; nr = src.copy(); nr.name = "%s_dup%d" % (n, k); bpy.context.scene.collection.objects.link(nr)
+        nr.animation_data_clear(); ad = nr.animation_data_create()
+        act = src.animation_data.action; tr = ad.nla_tracks.new()
+        off = int(toff * 60 + j * 17)
+        st = tr.strips.new("off", 1 - off, act); st.extrapolation = "HOLD"
+        try: st.action_slot = src.animation_data.action_slot
+        except Exception: pass
+        sca = random.uniform(0.93, 1.06)
+        nr.matrix_world = Matrix.Translation(V((dx, dy, 0))) @ Matrix.Rotation(R_(rz), 4, "Z") @ Matrix.Scale(sca, 4)
+        for ch in src.children:
+            cc = ch.copy(); cc.name = ch.name + "_dup%d" % k; bpy.context.scene.collection.objects.link(cc); cc.parent = nr
+            for md in cc.modifiers:
+                if md.type == "ARMATURE": md.object = nr
+            if "suit" in ch.name:
+                for slot in cc.material_slots:
+                    base = slot.material
+                    if base: slot.link = "OBJECT"; slot.material = tinted(base, COLS[(k + j) % len(COLS)])
 # beats.json
 first = {1: "The toddler fell", 2: "Rescuers lowered ropes", 3: "They even brought in heavy machinery", 4: "But after 11 hours",
          5: "Finally, a teenager", 6: "A rope was tied", 7: "and he was lowered", 8: "With a flashlight", 9: "he reached out his arms",
