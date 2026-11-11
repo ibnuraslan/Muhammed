@@ -1,0 +1,26 @@
+AUDIT GoatOwner (step 20 frames, 60 fps)
+Penetration polygon pairs summed over samples: OffA-goat 0, OffB-goat 0, Rescuer-goat 4996, owner-goat 0, owner-porch 0
+BODY_OVERLAP     14 samples | ranges (s): 32.0-36.3
+      e.g. f1921 (32.00s): Rescuer/goat 400 polygon pairs
+      e.g. f1941 (32.33s): Rescuer/goat 224 polygon pairs
+      e.g. f1961 (32.67s): Rescuer/goat 246 polygon pairs
+FOOT_FLOAT       14 samples | ranges (s): 32.0-36.3
+      e.g. f1921 (32.00s): Rescuer R 6.0 cm above the surface while planted
+      e.g. f1941 (32.33s): Rescuer R 6.0 cm above the surface while planted
+      e.g. f1961 (32.67s): Rescuer R 6.0 cm above the surface while planted
+FOOT_SINK         1 samples | ranges (s): 31.3-31.3
+      e.g. f1881 (31.33s): OffB R ankle 43.5 cm low
+HOOF_FLOAT      110 samples | ranges (s): 1.3-1.3, 3.7-7.7, 9.0-9.0, 10.0-10.0, 11.0-14.0, 16.3-18.7, 19.7-19.7, 24.7-26.0, 32.3-36.3
+      e.g. f81 (1.33s): FR 3.9 cm above the surface while planted
+      e.g. f221 (3.67s): FL 3.3 cm above the surface while planted
+      e.g. f221 (3.67s): FR 3.3 cm above the surface while planted
+HOOF_SINK         1 samples | ranges (s): 22.7-22.7
+      e.g. f1361 (22.67s): FL 6.3 cm into the surface
+LIE_SINK         21 samples | ranges (s): 25.0-31.7
+      e.g. f1501 (25.00s): over 30% of the body below the ground
+      e.g. f1521 (25.33s): over 30% of the body below the ground
+      e.g. f1541 (25.67s): over 30% of the body below the ground
+STICK_GRIP       42 samples | ranges (s): 0.0-7.7, 10.0-15.7
+      e.g. f1 (0.00s): palm 6.1 cm from the stick axis
+      e.g. f21 (0.33s): palm 6.1 cm from the stick axis
+      e.g. f41 (0.67s): palm 6.1 cm from the stick axis
