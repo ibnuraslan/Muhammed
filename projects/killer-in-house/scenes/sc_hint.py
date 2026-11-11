@@ -71,18 +71,19 @@ def _():
         if "beams" not in c:
             c["beams"] = [H.flashlight("T1"), H.flashlight("T2")]
             for b in c["beams"]:
-                b.data.energy = 300
+                b.data.energy = 700
+            c["haze"].data.materials[0].node_tree.nodes["Principled Volume"].inputs['Density'].default_value = 0.025
             sh = fabric("DustSheet", (0.8, 0.78, 0.72), 0.9, 0.5, 400)
             for (x, y, sx, sy, sz) in ((3.2, -2.0, 0.55, 0.55, 1.05), (2.2, -3.6, 0.45, 0.5, 1.0), (4.0, -3.0, 0.3, 0.32, 1.15)):
-                bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(x, y, 0))
-                o = bpy.context.active_object; o.scale = (sx, sy, sz); o.data.materials.append(sh)
+                o = box("Sheet", (x, y, sz * 0.5), (sx * 1.8, sy * 1.8, sz), sh, bevel=0.12)
+                o.modifiers.new("drape", 'SUBSURF').levels = 2
             c["dust"] = H.leaf_cloud(40, (1.8, -2.6), (1.4, 1.4), 2.4, col=(0.85, 0.83, 0.78), seed=13)
             for o in c["dust"]:
                 o.scale = (0.01, 0.01, 1)
         H.fall_leaves(c["dust"], sec * 0.05, ground=0.0, drift=(0.02, 0.01))
         o1, o2 = P(c, "o1"), P(c, "o2")
-        H.walk_to(o1, (0.15, -4.4, 0), (0.15, -3.4, 0), t * 0.6, swing=6)
-        H.stand_at(o2, (-0.25, -4.3, 0), math.radians(165))
+        H.walk_to(o1, (0.3, -3.2, 0), (1.3, -2.6, 0), t * 0.7, swing=6)
+        H.stand_at(o2, (0.2, -1.9, 0), math.radians(-120))
         for k, (h, sw) in enumerate(((o1, 1.0), (o2, -1.0))):
             hd = h.bone_head("head")
             a = 0.9 * math.sin(0.9 * sec + k * 2.0) * sw
@@ -91,7 +92,7 @@ def _():
             reach(h, "R", hd + Vector((0.18 * sw, 0.25, -0.35)), Vector((0.3, -0.5, -1)), (tgt - hd).normalized())
     def cam(c, t):
         e = ease(t)
-        return (Vector((3.95, -0.5, 1.9)).lerp(Vector((3.7, -0.7, 1.85)), e), Vector((1.2, -3.2, 1.0)).lerp(Vector((0.9, -2.6, 1.3)), e), 24)
+        return (Vector((3.95, -0.45, 2.15)).lerp(Vector((3.75, -0.6, 2.1)), e), Vector((0.6, -3.4, 0.9)).lerp(Vector((0.5, -2.8, 1.2)), e), 22)
     return cam, anim
 
 
