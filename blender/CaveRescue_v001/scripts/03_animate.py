@@ -242,7 +242,7 @@ def head_torch(n, energy=60.0, f_on=1):
     TORCH[n] = sp
     return lamp, sp
 # diver gear: tank on the back (spine03), black full mask (head)
-m_tank = bpy.data.materials.get("M_Tank"); m_mask = bpy.data.materials.new("M_DiveMask"); m_mask.use_nodes = True
+m_tank = bpy.data.materials.get("M_Tank"); m_tank.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.55, 0.42, 0.08, 1); m_mask = bpy.data.materials.new("M_DiveMask"); m_mask.use_nodes = True
 _mp = m_mask.node_tree.nodes["Principled BSDF"]; _mp.inputs['Base Color'].default_value = (0.02, 0.02, 0.02, 1); _mp.inputs['Roughness'].default_value = 0.35
 m_visor = bpy.data.materials.new("M_Visor"); m_visor.use_nodes = True
 _vp = m_visor.node_tree.nodes["Principled BSDF"]; _vp.inputs['Base Color'].default_value = (0.6, 0.7, 0.75, 1); _vp.inputs['Roughness'].default_value = 0.02
@@ -486,7 +486,7 @@ P2 = V((CX + 0.8, 1.25, 0))
 DIVERS_IN = 1715
 for f in (DIVERS_IN, 2017, 2060, 2110, 2154):
     kneel("DiverB", f, P2.x - 0.05, P2.y - 0.75, 180 + 10, lean=25, head=(25, 0))
-    kneel(DA, f, P2.x + 0.75, P2.y + 0.05, 90 - 8, lean=28, head=(30, 0))
+    kneel(DA, f, P2.x + 0.58, P2.y + 0.1, 90 - 8, lean=30, head=(30, 0))
 TELE["DiverB"].add(DIVERS_IN - 1); TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue

@@ -638,8 +638,8 @@ bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=24, ring_count=12)
 surge = bpy.context.active_object; surge.name = "S2_SurgeFront"; surge.scale = (2.4, 1.6, 0.45); link(surge, S2)
 dsp = surge.modifiers.new("Froth", 'DISPLACE'); tx2 = bpy.data.textures.new("Froth", 'CLOUDS'); tx2.noise_scale = 0.25; dsp.texture = tx2; dsp.strength = 0.35
 surge.data.materials.append(m_flood)
-bpy.ops.mesh.primitive_plane_add(size=1, location=(0, -1.9, 3.2), rotation=(R_(80), 0, 0))
-torrent = bpy.context.active_object; torrent.name = "FX_MouthTorrent"; torrent.scale = (3.4, 3.6, 1); link(torrent, FX)
+bpy.ops.mesh.primitive_plane_add(size=1, location=(0, -2.6, 3.4), rotation=(R_(84), 0, 0))
+torrent = bpy.context.active_object; torrent.name = "FX_MouthTorrent"; torrent.scale = (2.6, 1.4, 1); link(torrent, FX)
 md = torrent.modifiers.new("Sub", 'SUBSURF'); md.subdivision_type = 'SIMPLE'; md.levels = md.render_levels = 4
 dsp = torrent.modifiers.new("Wave", 'DISPLACE'); dsp.texture = tx; dsp.strength = 0.18
 torrent.data.materials.append(m_flood); torrent.hide_render = True
