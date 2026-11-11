@@ -176,6 +176,15 @@ for s in "LR":
         w = max(0.0, 1.0 - d / 0.032) ** 1.5
         if w > 0 and v.co.z > base.z - 0.004:
             k.data[i].co = base + (Rm @ (v.co - base) - (v.co - base)) * w + (v.co - base)
+kr = head.shape_key_add(name="Ears_Round")
+for s_ in "LR":
+    tip = EAR_TIP[s_]
+    base = tip + (Vector((tip.x - (-0.085), tip.y - (-0.42), 0)).normalized() * -0.018) - Z * 0.024
+    for i, v in enumerate(head.data.vertices):
+        d = (v.co - tip).length
+        w = max(0.0, 1.0 - d / 0.03) ** 1.2
+        if w > 0 and v.co.z > base.z - 0.004:
+            kr.data[i].co = v.co + (base - v.co) * 0.42 * w
 for o in (head, bodyA, bodyB):
     for p in o.data.polygons: p.use_smooth = True
 # neck reference for later scripts

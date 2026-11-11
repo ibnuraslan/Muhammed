@@ -117,8 +117,8 @@ LIDS = {s: (D["LidUp_" + s], D["LidLo_" + s]) for s in "LR"}
 def lids(f, o):    # o: 0 closed .. 1 open
     for s in "LR":
         up, lo = LIDS[s]
-        up.rotation_euler.x = math.radians(-3 - 72 * o); up.keyframe_insert("rotation_euler", frame=f, index=0)
-        lo.rotation_euler.x = math.radians(3 + 60 * o); lo.keyframe_insert("rotation_euler", frame=f, index=0)
+        up.rotation_euler.x = math.radians(-0.5 - 74.5 * o); up.keyframe_insert("rotation_euler", frame=f, index=0)
+        lo.rotation_euler.x = math.radians(0.5 + 62.5 * o); lo.keyframe_insert("rotation_euler", frame=f, index=0)
 for f, o in ((1, 0.0), (700, 0.0), (706, 0.25), (712, 0.05), (724, 0.4), (730, 0.1), (745, 0.6), (765, 1.0), (812, 1.0), (816, 0.0), (822, 1.0),
              (858, 1.0), (862, 0.0), (868, 1.0), (960, 1.0), (964, 0.0), (970, 1.0),
              (1240, 1.0), (1244, 0.05), (1250, 1.0), (1330, 1.0), (1334, 0.05), (1340, 1.0),
@@ -131,6 +131,7 @@ for f, gx, gz in ((1, 0, 0), (765, 0.0, 0.0), (800, 0.0012, 0.0004), (850, -0.00
                   (1400, 0.0024, 0.0004), (1560, 0.0012, -0.0005), (1700, 0.0, -0.0008)):
     node_key(MH, "GazeX", f, gx); node_key(MH, "GazeZ", f, gz)
 hk = head.data.shape_keys.key_blocks
+hk["Ears_Round"].value = 0.75; hk["Ears_Round"].keyframe_insert("value", frame=1)
 for nm, keys in (("Ear_R", ((1, 0), (924, 0), (930, 1.0), (940, 0.7), (948, 1.0), (975, 0.2), (1000, 0))),
                  ("Ear_L", ((1, 0), (926, 0), (933, 0.8), (950, 0.4), (980, 0)))):
     for f, v in keys: hk[nm].value = v; hk[nm].keyframe_insert("value", frame=f)
@@ -145,7 +146,7 @@ lp = D["Lamp_Pivot"]; lp.rotation_mode = "XYZ"
 for f, a in ((1, 9.0), (30, -6.5), (60, 4.5), (92, -3.0), (125, 2.0), (160, -1.2), (200, 0.6), (240, 0.0), (470, 0.0), (490, 3.5), (520, -2.0), (560, 1.0), (600, 0.0)):
     lp.rotation_euler.y = math.radians(a); lp.keyframe_insert("rotation_euler", frame=f, index=1)
 spot = D["Lamp_Spot"].data
-for f, e in ((1, 0), (8, 900), (14, 300), (20, 950), (1560, 950), (1680, 120), (1770, 60)):
+for f, e in ((1, 0), (8, 650), (14, 220), (20, 650), (1560, 650), (1680, 90), (1770, 45)):
     spot.energy = e; spot.keyframe_insert("energy", frame=f)
 lens_m = bpy.data.materials["M_LampLens"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f, e in ((1, 0), (8, 30), (14, 8), (20, 30), (1560, 30), (1680, 3), (1770, 1.5)):
@@ -425,8 +426,8 @@ for f in list(range(672, 1040, 6)):
     else:
         for s in "LR": hand(SURG, s, f, pos + Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((0.08 if s == "L" else -0.08), -0.28, 0) + V(0, 0, 1.0), V(0, 1, 0.2) if False else Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((-1 if s == "L" else 1), -0.3, 0), V(0, 0, 1), 0.3, Y1)
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
-S3 = V(1.72, 0.72, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
-S4 = V(2.52, 0.38, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
+S3 = V(1.62, 1.25, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
+S4 = V(3.2, 0.25, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
 board = D["Forceps"]
 for f in list(range(1190, 1771, 6)):
     if f < 1380:
@@ -509,7 +510,7 @@ bowl.rotation_mode = "XYZ"
 for df, rx in ((0, 0), (22, 70), (28, 140), (34, 175), (42, 180)):
     bowl.rotation_euler.x = math.radians(rx); bowl.keyframe_insert("rotation_euler", frame=918 + df, index=0)
 # nurse at the monitor (beats 7-9)
-NP3 = V(3.45, 0.45, 0); ny3 = yaw_to(NP3, V(3.05, 0.95, 0))
+NP3 = V(3.5, 0.55, 0); ny3 = yaw_to(NP3, V(3.05, 0.95, 0))
 NDOOR = V(4.12, 2.75, 0)
 NURSE.walk(lambda f: NP3.lerp(NDOOR, smooth((f - 1610) / 150.0)).to_3d(), lambda f: yaw_to(NP3, NDOOR), 1610, 1770, stride=0.6, duty=0.6, lift=0.07, bob=0.018, crouch=0.03, lean=5)
 dpv = D["Door_Pivot"]; dpv.rotation_mode = "XYZ"
@@ -586,10 +587,10 @@ K = [
  (121,  V(0.18, -0.38, 1.32), NA, 38, UPW, "W"),
  (181,  NA + V(0.26, -0.04, 0.17), NA, 50, UPW, "W"),
  (241,  V(0.16, -0.42, 1.52), V(-0.12, -0.05, 1.02), 30, UPW, "W"),
- (290,  V(0.0, 1.05, 1.38), V(-0.05, -0.05, 1.1), 32, UPW, "W"),
- (330,  V(0.3, 1.0, 1.36), V(0.25, -0.05, 1.1), 32, UPW, "W"),
+ (290,  V(0.0, 1.05, 1.56), V(-0.05, -0.05, 1.12), 32, UPW, "W"),
+ (330,  V(0.3, 1.0, 1.54), V(0.25, -0.05, 1.12), 32, UPW, "W"),
  (365,  V(0.95, 0.15, 1.45), NBp, 30, UPW, "W"),
- (420,  NBp + V(0.36, -0.2, 0.3), NBp, 65, UPW, "W"),
+ (420,  NBp + V(0.42, -0.05, 0.38), NBp, 75, UPW, "W"),
  (480,  NBp + V(0.42, -0.06, 0.2), NBp, 75, UPW, "W"),
  (540,  NBp + V(0.32, 0.18, 0.32), NBp, 75, UPW, "W"),
  (600,  NBp + V(0.42, 0.06, 0.06), NBp + V(0, 0, 0.03), 70, UPW, "W"),

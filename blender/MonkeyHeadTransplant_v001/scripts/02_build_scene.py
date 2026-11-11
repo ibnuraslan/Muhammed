@@ -136,7 +136,7 @@ M_cyanglow = mat("M_CyanGlow", (0, 0, 0, 1), 1.0, emit=(0.45, 0.85, 1.0, 1), est
 M_lampin = mat("M_LampLens", (1, 1, 1, 1), 0.2, emit=(1.0, 0.95, 0.85, 1), estr=30.0)
 M_rubber = mat("M_Rubber", (0.03, 0.03, 0.03, 1), 0.7)
 M_wood = mat("M_WoodDark", (0.22, 0.12, 0.06, 1), 0.45)
-M_glove = mat("M_Glove", (0.80, 0.76, 0.62, 1), 0.28, coat=0.6)
+M_glove = mat("M_Glove", (0.40, 0.48, 0.52, 1), 0.32, coat=0.5)
 _g = M_glove.node_tree; _gp = _g.nodes["Principled BSDF"]
 _gp.inputs["Subsurface Weight"].default_value = 0.25; _gp.inputs["Subsurface Radius"].default_value = (0.004, 0.003, 0.002)
 _gp.inputs["Sheen Weight"].default_value = 0.4; _gp.inputs["Coat Roughness"].default_value = 0.15
