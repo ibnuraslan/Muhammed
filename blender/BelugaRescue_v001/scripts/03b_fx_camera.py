@@ -108,7 +108,7 @@ K(700, H_(700) + V(0.75, 0.6, 0.1), H_(700), 45)
 K(748, H_(748) + V(-0.6, 0.6, 0.45), H_(748), 42)
 # beat 6 — rack focus from her face to the whale, orbit the whale's head
 def behind_face(f, wf):
-    h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); d = Matrix.Rotation(R_(70), 3, 'Z') @ d; return h + d * 0.75 + V(0, 0, 0.15)
+    h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); d = Matrix.Rotation(R_(115), 3, 'Z') @ d; return h + d * 0.8 + V(0, 0, 0.2)
 K(792, behind_face(792, 792), H_(792), 40)
 K(835, behind_face(835, 835) + V(0.1, 0, 0.05), wh(835), 40)
 K(872, wh(872) + V(1.4, -1.1, 0.4), wh(872), 32)
@@ -119,10 +119,10 @@ K(1010, RG(1010) + V(2.8, 1.8, 0.7), RG(1010), 26)
 K(1065, wbody(1065) + V(2.6, 2.4, 0.9), wbody(1065), 24)
 K(1120, V(0.2, -1.4, 2.1), V(-2.6, -4.3, 1.6), 26)
 K(1170, V(-0.4, -2.2, 1.9), V(-2.6, -5.85, 1.55), 30)
-K(1200, eye(1200) + V(1.8, 0.4, 0.3), eye(1200), 40)
+K(1200, eye(1200) + V(2.6, 0.6, 0.4), eye(1200), 32)
 # beat 8 — eye macro, head turns, surge
-K(1230, eye(1230) + V(1.9, -1.2, 0.35), eye(1230) + V(0, -0.25, 0), 38)
-K(1268, eye(1268) + V(2.3, -0.4, 0.6), eye(1268).lerp(H_(1268), 0.4), 30)
+K(1230, eye(1230) + V(2.6, -1.6, 0.5), eye(1230) + V(0, -0.25, 0), 34)
+K(1268, eye(1268) + V(3.0, -0.6, 0.8), eye(1268).lerp(H_(1268), 0.5), 26)
 K(1305, wbody(1305) + V(2.2, 1.0, 0.7), wh(1305), 26)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up

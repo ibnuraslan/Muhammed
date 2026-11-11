@@ -383,9 +383,9 @@ for v in bel.data.vertices:
     if 0.175 < s_ < 0.29:
         cz_ = prof(s_)[3]; r = Vector((v.co.x, 0, v.co.z - cz_))
         if r.length < 1e-4: continue
-        k = math.sin((s_ - 0.175) / 0.115 * 3 * math.pi) ** 2 * math.sin((s_ - 0.175) / 0.115 * math.pi)
-        up = 0.65 + 0.35 * max(0.0, r.normalized().z)
-        v.co -= r.normalized() * 0.03 * k * up
+        k = math.sin((s_ - 0.175) / 0.115 * 2 * math.pi) ** 2 * math.sin((s_ - 0.175) / 0.115 * math.pi)
+        up = 0.4 + 0.6 * max(0.0, r.normalized().z)
+        v.co -= r.normalized() * 0.014 * k * up
 # dorsal ridge along the back (belugas have a ridge instead of a dorsal fin)
 for v in bel.data.vertices:
     s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
@@ -634,7 +634,7 @@ gn_, gl_ = NG.nodes, NG.links
 go_ = gn_.new('NodeGroupOutput')
 for nd in list(M_NEO.node_tree.nodes):
     pass
-gp = gn_.new('ShaderNodeBsdfPrincipled'); gp.inputs['Roughness'].default_value = 0.48; gp.inputs['Sheen Weight'].default_value = 0.3
+gp = gn_.new('ShaderNodeBsdfPrincipled'); gp.inputs['Roughness'].default_value = 0.48; gp.inputs['Sheen Weight'].default_value = 0.08
 gp.inputs['Sheen Tint'].default_value = (0.7, 0.75, 0.8, 1); gp.inputs['Base Color'].default_value = (0.045, 0.047, 0.05, 1)
 gtc = gn_.new('ShaderNodeTexCoord'); gnz = gn_.new('ShaderNodeTexNoise'); gnz.inputs['Scale'].default_value = 900.0
 gbm = gn_.new('ShaderNodeBump'); gbm.inputs['Strength'].default_value = 0.08

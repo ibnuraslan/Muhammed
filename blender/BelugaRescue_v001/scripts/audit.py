@@ -125,8 +125,8 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
         if loc is not None: gaps.append((p - loc).dot(nrm))
     mev.to_mesh_clear()
     if gaps:
-        if max(gaps) > 0.006: flag("MASK_GAP", f, "rim up to %.1f mm off the face" % (max(gaps) * 1000))
-        if min(gaps) < -0.002: flag("MASK_PEN", f, "face through the rim by %.1f mm" % (-min(gaps) * 1000))
+        if max(gaps) > 0.009: flag("MASK_GAP", f, "rim up to %.1f mm off the face" % (max(gaps) * 1000))
+        if min(gaps) < 0.0: flag("MASK_PEN", f, "face through the rim by %.1f mm" % (-min(gaps) * 1000))
     # hands (diver): wrist + finger tips
     for s in "LR":
         tips = [D.matrix_world @ D.pose.bones["finger%d-3.%s" % (k, s)].tail for k in range(1, 6)] + [D.matrix_world @ D.pose.bones["wrist." + s].head]

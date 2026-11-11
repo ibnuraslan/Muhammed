@@ -218,7 +218,7 @@ for k, f in enumerate(range(790, 1380, 30)):
 # --- beats 9–11: held by the ankle (right knee bent, shin across the mouth), pushed up, breaks the surface
 RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.55), (1950, 5.6), (1990, 5.3)]
 RZF = pchip([(f, z) for f, z in RISE])
-XY0 = Vector(FLOAT(0, 1.0)[:2]); XY1 = Vector((X0 + 0.25, EDGE_Y + 1.3))
+XY0 = Vector(FLOAT(0, 1.0)[:2]); XY1 = Vector((X0 + 0.25, EDGE_Y + 1.2))
 for k, f in enumerate(range(1380, 2000, 20)):
     t = smooth((f - 1380) / 560.0)
     xy = XY0.lerp(XY1, t)
@@ -231,12 +231,12 @@ for k, f in enumerate(range(1380, 2000, 20)):
 COP_Z = DECK_Z + 0.06; COP_Y = EDGE_Y + 0.0
 for k, f in enumerate(range(2000, 2191, 15)):
     t = min(1.0, (f - 2000) / 80.0)
-    y = XY1.y - 0.9 * smooth(t)
+    y = XY1.y - 0.86 * smooth(t)
     gasp = k % 2
-    DV.P(f, (XY1.x, y, 5.52 - 0.04 * gasp + 0.1 * (1 - t)), yaw=180, pitch=-4 + 8 * t, spine=(4 + 10 * t + 6 * gasp, 0, 0), head=(-18 + 12 * gasp, 6 * math.sin(k), 0),
+    DV.P(f, (XY1.x, y, 5.52 + 0.16 * smooth(t) - 0.03 * gasp + 0.1 * (1 - t)), yaw=180, pitch=-4 - 14 * t, spine=(4 + 10 * t + 6 * gasp, 0, 0), head=(-18 + 12 * gasp, 6 * math.sin(k), 0),
          legs=legs((25 + 15 * math.sin(k), 8, 40 + 20 * math.sin(k), -40), (30 - 15 * math.sin(k), 8, 45 - 20 * math.sin(k), -40)),
          arms=({"L": ("coping", dict(s="L")), "R": ("coping", dict(s="R"))} if t >= 1.0 else arms(fwd=110 - 40 * gasp, out=40)),
-         jaw=26 if gasp else 12, curl={"L": (70, 30), "R": (70, 30)} if t >= 1.0 else {})
+         jaw=26 if gasp else 12, curl={"L": (35, 25), "R": (35, 25)} if t >= 1.0 else {})
 # resolve special arm kinds after body keys exist
 _key_hands_base = DV.key_hands
 def diver_hands(f, p):
@@ -252,8 +252,8 @@ def diver_hands(f, p):
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.3 + Vector((0, 0, -1)) * 0.7, n=-out, pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1
-            W = Vector((XY1.x + sx * 0.26, COP_Y + 0.05, COP_Z + 0.028))
-            a[s] = ("world", dict(W=W, d=Vector((0, -1, -0.15)), n=Vector((0, 0, -1)), pole=W + Vector((sx * 0.5, 0.3, -0.4))))
+            W = Vector((XY1.x + sx * 0.24, COP_Y + 0.1, COP_Z + 0.045))
+            a[s] = ("world", dict(W=W, d=Vector((0, -1, -0.15)), n=Vector((0, 0, -1)), pole=W + Vector((sx * 0.6, 0.45, -0.3))))
     _key_hands_base(f, p)
 DV.key_hands = diver_hands
 DV.bake()
@@ -422,13 +422,29 @@ ANG = (0, 15, -15, 30, -30, 45, -45, 60, -60, 80, -80, 100, -100, 130, -130, 160
 def rot_about_sock(M, a, phi=0.0):
     return M @ Matrix.Translation(SOCK) @ Matrix.Rotation(R_(a), 4, 'X') @ Matrix.Rotation(R_(phi), 4, 'Z') @ Matrix.Translation(-SOCK)
 PHI = (0, 35, -35, 60, -60)
+_wl = [v.co.copy() for v in BEL.data.vertices][::25]          # rig-space sample of the body for the floor test
+def floor_bad(Mc):
+    ps_ = [Mc @ p for p in _wl]
+    return max(0.0, 0.5 - min(p.z for p in ps_)) + max(0.0, -4.55 - min(p.y for p in ps_))      # floor (fluke margin) and the window wall
 SOL = []; SOLP = []; prev = (0.0, 0.0)
+def _app_cost(dv):
+    c = 0
+    for f_ in (F_GRAB0 + 16, F_GRAB0 + 32, F_GRAB0 + 48):
+        t_ = (f_ - F_GRAB0) / (F_GRAB - F_GRAB0)
+        Mg = rot_about_sock(solve_whale(F_GRAB), 0, 0); Mt = Matrix.Translation(dv * 2.2 * (1 - smooth(t_))) @ Mg
+        pts_, _ = diver_pts(f_); c += pen(Mt, pts_[::3])
+        c += 50 * sum(1 for p in _wl if (Mt @ p).y < -4.85 or (Mt @ p).z < 0.1)
+    return c
+_cands = [Vector((math.cos(R_(a)), math.sin(R_(a)), 0)) for a in range(0, 360, 45)]
+APP_DIR = min(_cands, key=_app_cost)
+print("HOLD approach dir", tuple(round(x, 2) for x in APP_DIR))
 for f in range(F_GRAB, F_REL + 1, 8):
     M = solve_whale(f); pts, ank = diver_pts(f); pts = pts[::2]
     def cost(c):
         a, ph = c; Mc = rot_about_sock(M, a, ph)
         down = (Mc.to_3x3() @ Vector((0, 1, 0))).z
-        return (0 if down < -0.25 else 1, pen(Mc, pts), abs(((a - prev[0] + 180) % 360) - 180) + abs(ph - prev[1]))
+        fb = floor_bad(Mc)
+        return (round(fb, 2), 0 if down < -0.25 else 1, pen(Mc, pts), abs(((a - prev[0] + 180) % 360) - 180) + abs(ph - prev[1]))
     best = min([(a, ph) for a in ANG for ph in PHI], key=cost)
     prev = best; SOL.append((f, best[0])); SOLP.append((f, float(best[1])))
 # unwrap (no 340-degree spins), then smooth the chosen roll angle about the shin and key the hold
@@ -441,10 +457,16 @@ fa_ = pchip([(f, float(a)) for f, a in SOL]); fp_ = pchip(SOLP)
 M0 = None
 STATS = []
 for f in range(F_GRAB0, F_REL + 1, 2):
-    M = rot_about_sock(solve_whale(f), fa_(max(F_GRAB, f)), fp_(max(F_GRAB, f)))
+    a_i, p_i = fa_(max(F_GRAB, f)), fp_(max(F_GRAB, f)); Mb = solve_whale(f)
+    M = rot_about_sock(Mb, a_i, p_i)
+    if floor_bad(M) > 0:          # interpolation dipped the body into the tiles: nearest roll that clears the floor
+        for da in sorted(range(-90, 91, 10), key=abs):
+            Mt = rot_about_sock(Mb, a_i + da, p_i)
+            if floor_bad(Mt) == 0 and (Mt.to_3x3() @ Vector((0, 1, 0))).z < 0: M = Mt; break
     if f < F_GRAB:      # swims straight in along its own axis, blending off the free path over the first 20 frames
         t = (f - F_GRAB0) / (F_GRAB - F_GRAB0)
-        M = M @ Matrix.Translation(Vector((0, 2.2 * (1 - smooth(t)), 0)))
+        back = APP_DIR
+        M = Matrix.Translation(back * 2.2 * (1 - smooth(t))) @ M
         if M0 is None: M0 = BR.matrix_world.copy()
         u = smooth(min(1.0, (f - F_GRAB0) / 20.0))
         loc = M0.translation.lerp(M.translation, u); q = M0.to_quaternion().slerp(M.to_quaternion(), u)
