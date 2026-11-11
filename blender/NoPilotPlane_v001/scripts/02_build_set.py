@@ -24,8 +24,8 @@ M_plast_d = mat("M_plastic_grey", (0.22, 0.23, 0.24), rough=0.5, noise=0.2, nsca
 M_carpet = mat("M_carpet", (0.07, 0.075, 0.1), rough=0.95, noise=0.7, nscale=300, bump=0.4)
 M_carpet2 = mat("M_carpet_aisle", (0.16, 0.06, 0.06), rough=0.95, noise=0.6, nscale=300, bump=0.4)
 M_steel = mat("M_steel", (0.55, 0.56, 0.58), rough=0.38, metal=1.0, noise=0.5, nscale=35, bump=0.2)
-M_dark = mat("M_cockpit_dark", (0.035, 0.037, 0.04), rough=0.6, noise=0.45, nscale=90, bump=0.35)
-M_panel = mat("M_panel", (0.075, 0.08, 0.088), rough=0.55, noise=0.4, nscale=140, bump=0.3)
+M_dark = mat("M_cockpit_dark", (0.045, 0.055, 0.068), rough=0.6, noise=0.45, nscale=90, bump=0.35)
+M_panel = mat("M_panel", (0.10, 0.125, 0.155), rough=0.55, noise=0.4, nscale=140, bump=0.3)
 M_black = mat("M_black_gloss", (0.01, 0.01, 0.012), rough=0.15)
 def wear_mat(name, base, worn, rough=0.55, metal_worn=0.0, scale=60.0, edge=0.515, scuff=0.0):
     """base paint with edge wear (Cycles pointiness) and noise scuffs showing the worn colour/metal underneath"""
@@ -49,8 +49,12 @@ def wear_mat(name, base, worn, rough=0.55, metal_worn=0.0, scale=60.0, edge=0.51
     bm_ = N.new("ShaderNodeBump"); bm_.inputs["Strength"].default_value = 0.25; bm_.inputs["Distance"].default_value = 0.001; L.new(nz.outputs["Fac"], bm_.inputs["Height"])
     L.new(bm_.outputs["Normal"], p.inputs["Normal"])
     return m
-M_ped = wear_mat("M_pedestal_worn", (0.075, 0.08, 0.088), (0.26, 0.26, 0.27), rough=0.55, scale=90, scuff=0.6)
+M_ped = wear_mat("M_pedestal_worn", (0.10, 0.125, 0.155), (0.3, 0.32, 0.34), rough=0.55, scale=90, scuff=0.6)
 M_glare = mat("M_glareshield_fabric", (0.025, 0.025, 0.028), rough=0.95, noise=0.5, nscale=900, bump=0.8)
+M_leather = mat("M_seat_leather", (0.03, 0.025, 0.022), rough=0.45, noise=0.4, nscale=180, bump=0.35, coat=0.2)
+M_sheep = mat("M_sheepskin", (0.62, 0.57, 0.48), rough=1.0, noise=0.5, nscale=700, bump=1.0)
+M_strap = mat("M_harness", (0.06, 0.07, 0.09), rough=0.7, noise=0.3, nscale=600, bump=0.4)
+M_label = mat("M_label_bar", (0.55, 0.56, 0.56), rough=0.6)
 M_white_e = emit_mat("M_light_strip", (1.0, 0.93, 0.82), 6.0)
 M_needle = emit_mat("M_needle", (1.0, 1.0, 0.95), 4.0)
 M_wing = mat("M_wing", (0.62, 0.64, 0.66), rough=0.35, metal=0.3, noise=0.15, nscale=2)
@@ -110,7 +114,7 @@ def win_shell_mat(name, base, cabin=True):
     L.new(mix.outputs[0], N["Material Output"].inputs["Surface"])
     return m
 M_shell = win_shell_mat("M_cabin_shell", (0.78, 0.77, 0.73), True)
-M_cshell = win_shell_mat("M_cockpit_shell", (0.22, 0.22, 0.23), False)
+M_cshell = win_shell_mat("M_cockpit_shell", (0.17, 0.2, 0.235), False)
 
 # ------------------------------------------------------------------ shells
 import bmesh
@@ -248,9 +252,15 @@ ck = MB("COCKPIT_FIXED")
 ck.box((0, 1.15, -0.01), (2.6, 3.4, 0.02), M_dark)
 # pilot seats
 for x in (-0.52, 0.52):
-    ck.box((x, 1.45, 0.46), (0.5, 0.5, 0.13), M_dark, bevel=0.03)
-    ck.box((x, 1.16, 0.95), (0.5, 0.12, 0.85), M_dark, rot=(-12, 0, 0), bevel=0.03)
-    ck.box((x, 1.09, 1.47), (0.3, 0.1, 0.2), M_dark, rot=(-12, 0, 0), bevel=0.03)
+    ck.box((x, 1.45, 0.46), (0.5, 0.5, 0.13), M_leather, bevel=0.03)
+    ck.box((x, 1.16, 0.95), (0.5, 0.12, 0.85), M_leather, rot=(-12, 0, 0), bevel=0.03)
+    ck.box((x, 1.09, 1.47), (0.3, 0.1, 0.2), M_leather, rot=(-12, 0, 0), bevel=0.03)
+    ck.box((x, 1.47, 0.533), (0.44, 0.44, 0.02), M_sheep, bevel=0.009)                       # sheepskin seat cover
+    ck.box((x, 1.235, 0.98), (0.44, 0.02, 0.62), M_sheep, rot=(-12, 0, 0), bevel=0.009)       # sheepskin back cover
+    for sx_ in (-1, 1):                                                                       # harness straps draped at the sides
+        ck.box((x + sx_ * 0.235, 1.2, 1.0), (0.012, 0.05, 0.75), M_strap, rot=(-12, 0, 0))
+        ck.box((x + sx_ * 0.24, 1.42, 0.56), (0.012, 0.3, 0.05), M_strap)
+        ck.box((x + sx_ * 0.25, 1.52, 0.56), (0.03, 0.05, 0.035), M_steel, bevel=0.004)
     ck.cyl((x, 1.45, 0.2), 0.06, 0.4, M_steel)
     for ax in (-0.27, 0.27):
         ck.box((x + ax, 1.38, 0.72), (0.05, 0.35, 0.05), M_dark, bevel=0.01)
@@ -266,6 +276,9 @@ ck.box((0, 1.35, 0.775), (0.3, 0.16, 0.02), M_black)                            
 # main instrument panel and glareshield
 ck.box((0, 2.32, 0.80), (1.9, 0.12, 0.5), M_panel, rot=(-14, 0, 0), bevel=0.01)
 ck.box((0, 2.33, 1.03), (1.9, 0.38, 0.05), M_glare, bevel=0.018)
+ck.box((0, 2.33, 1.058), (1.86, 0.34, 0.012), M_glare, bevel=0.006)
+for k in range(46):
+    for yy in (2.165, 2.495): ck.box((-0.9 + k * 0.04, yy, 1.065), (0.018, 0.003, 0.002), M_label)
 ck.box((0, 2.15, 1.005), (1.5, 0.05, 0.06), M_panel)
 # overhead panel
 ck.box((0, 1.20, 2.06), (1.15, 1.6, 0.08), M_panel, rot=(8, 0, 0), bevel=0.01)
@@ -277,11 +290,34 @@ ck.obj(cSet)
 # overhead buttons / panel lamps (blank symbols only)
 bt = MB("COCKPIT_BUTTONS"); M_btn = [mat("M_btn_%d" % i, c, rough=0.4, emit=c, estr=e) for i, (c, e) in
      enumerate((((0.6, 0.6, 0.6), 0.05), ((0.9, 0.55, 0.1), 0.8), ((0.2, 0.9, 0.3), 0.8), ((0.1, 0.4, 1.0), 0.6)))]
-for i in range(14):
-    for j in range(19):
-        x = -0.50 + j * 0.055; y = 0.48 + i * 0.105
-        z = 2.03 - (y - 1.25) * math.tan(R_(8))
-        bt.box((x, y, z), (0.03, 0.03, 0.02), random.choice(M_btn[:1] * 6 + M_btn[1:]))
+def ovz2(y): return 2.03 - (y - 1.25) * math.tan(R_(8))
+MODS = [(-0.36, 0.62), (0.0, 0.62), (0.36, 0.62), (-0.36, 0.98), (0.0, 0.98), (0.36, 0.98), (-0.36, 1.34), (0.0, 1.34), (0.36, 1.34), (-0.18, 1.70), (0.18, 1.70)]
+nsw = 0
+for mi, (mx_, my_) in enumerate(MODS):
+    rr = random.Random(mi); w, h = 0.32, 0.3
+    z0 = ovz2(my_) - 0.001
+    bt.box((mx_, my_, z0 - 0.004), (w, h, 0.006), M_panel, bevel=0.003)                       # module face plate
+    for cx_, cy_ in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+        bt.cyl((mx_ + cx_ * (w / 2 - 0.012), my_ + cy_ * (h / 2 - 0.012), z0 - 0.008), 0.004, 0.003, M_steel, seg=8)
+    cols, rows = rr.choice((3, 4, 5)), rr.choice((2, 3))
+    for r_ in range(rows):
+        for c_ in range(cols):
+            x = mx_ - w / 2 + (c_ + 0.5) * w / cols; y = my_ - h / 2 + (r_ + 0.5) * h / rows; z = ovz2(y) - 0.008
+            kind = rr.choice(("btn", "btn", "tog", "guard", "knob"))
+            if kind == "btn":
+                bt.box((x, y, z - 0.008), (0.032, 0.032, 0.016), M_dark, bevel=0.003)
+                bt.box((x, y + 0.006, z - 0.017), (0.026, 0.01, 0.002), rr.choice(M_btn[1:] + [M_btn[0]]))
+                bt.box((x, y - 0.007, z - 0.017), (0.026, 0.01, 0.002), rr.choice(M_btn))
+            elif kind in ("tog", "guard"):
+                bt.cyl((x, y, z - 0.004), 0.008, 0.008, M_steel, seg=10)
+                bt.cyl((x, y + 0.006, z - 0.02), 0.0035, 0.03, M_steel, rot=(25, 0, 0), seg=8)
+                if kind == "guard":
+                    for gx in (-0.014, 0.014): bt.box((x + gx, y, z - 0.014), (0.003, 0.03, 0.022), bpy.data.materials.get("M_guard") or mat("M_guard", (0.55, 0.06, 0.04), rough=0.4))
+            else:
+                bt.cyl((x, y, z - 0.01), 0.013, 0.018, M_black, seg=16); bt.box((x, y + 0.008, z - 0.02), (0.003, 0.01, 0.003), M_label)
+            bt.box((x, y - h / rows * 0.38, z - 0.0005), (w / cols * 0.6, 0.006, 0.001), M_label)    # blank label bar
+            nsw += 1
+print("OVERHEAD switches", nsw)
 bt.obj(cSet)
 
 # gauges: face with ticks (procedural), each has a needle object
@@ -331,12 +367,14 @@ for side, x in (("L", -0.52), ("R", 0.52)):
     y = MB("YOKE_%s" % side)
     M_yk = wear_mat("M_yoke_worn", (0.035, 0.037, 0.04), (0.42, 0.42, 0.43), rough=0.5, metal_worn=0.9, scale=120, edge=0.505)
     y.cyl((0, 0, 0.38), 0.025, 0.76, M_yk, rot=(14, 0, 0))
+    M_boot = mat("M_column_boot", (0.02, 0.02, 0.022), rough=0.85, bump=0.4, nscale=200)
+    for k in range(6): y.cyl((0, 0.0, 0.03 + k * 0.03), 0.06 - k * 0.004, 0.022, M_boot, seg=20)
     top = Vector((0, -0.18, 0.74))
     y.box(top, (0.12, 0.05, 0.06), M_yk, bevel=0.01)
     y.box(top + Vector((0, -0.02, 0)), (0.30, 0.04, 0.035), M_yk, bevel=0.012)
     for s in (-1, 1):
         y.box(top + Vector((s * 0.16, -0.02, 0.06)), (0.035, 0.04, 0.16), M_yk, rot=(0, s * 12, 0), bevel=0.012)
-        y.box(top + Vector((s * 0.16, -0.022, 0.06)), (0.042, 0.032, 0.10), wear_mat("M_grip_worn", (0.025, 0.022, 0.02), (0.14, 0.12, 0.1), rough=0.75, scale=300, edge=0.505, scuff=0.8), rot=(0, s * 12, 0), bevel=0.008)
+        y.box(top + Vector((s * 0.16, -0.022, 0.06)), (0.052, 0.044, 0.12), wear_mat("M_grip_leather", (0.03, 0.022, 0.016), (0.12, 0.09, 0.06), rough=0.6, scale=500, edge=0.505, scuff=0.7), rot=(0, s * 12, 0), bevel=0.014)
     y.box(top + Vector((0, -0.045, 0.0)), (0.05, 0.004, 0.03), M_steel)
     yo = y.obj(cSet); yo.location = (x, 2.12, 0.0)
 
@@ -530,6 +568,34 @@ tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader"); L.ne
 L.new(mx.outputs[0], N["Material Output"].inputs["Surface"])
 for o in [o for o in cD.objects if o.name.startswith("DISP_") and o.name != "DISP_EICAS_LOW"]:
     h = quad("HALO_" + o.name, o.location + Vector((0, 0.0028, -0.0007)), WD * 1.5, WD * 1.5, m, (-14, 0, 0), cD); h.visible_shadow = False
+
+
+# sidewalls + ceiling clutter (director pass): tiller, O2 mask box, map pocket, side panels, vents, grab handles, dome lights, loom, CB panels
+cl = MB("COCKPIT_CLUTTER")
+M_cb = mat("M_cb_black", (0.01, 0.01, 0.01), rough=0.4); M_cbw = mat("M_cb_collar", (0.7, 0.7, 0.68), rough=0.4)
+for s_ in (-1, 1):
+    X = s_ * 0.98
+    cl.box((s_ * 1.0, 1.15, 0.70), (0.16, 0.2, 0.09), M_panel, bevel=0.006); cl.box((s_ * 0.995, 1.15, 0.747), (0.14, 0.18, 0.004), M_label)   # O2 mask box
+    cl.box((s_ * 1.1, 1.55, 0.45), (0.05, 0.42, 0.22), M_dark, bevel=0.01); cl.box((s_ * 1.075, 1.55, 0.55), (0.01, 0.42, 0.03), M_steel)       # map pocket
+    for k in range(3): cl.box((s_ * 1.09, 1.42 + k * 0.1, 0.48), (0.01, 0.08, 0.16), M_chk if 'M_chk' in dir() else M_label)                         # charts in the pocket
+    cl.box((s_ * 1.13, 1.45, 0.92), (0.04, 0.55, 0.2), M_panel, bevel=0.006)                                                                     # side panel
+    for k in range(5):
+        cl.cyl((s_ * 1.105, 1.24 + k * 0.1, 0.95), 0.012, 0.02, M_black, rot=(0, 90, 0), seg=14); cl.box((s_ * 1.108, 1.24 + k * 0.1, 0.9), (0.002, 0.05, 0.006), M_label)
+    for k in range(2):
+        cl.cyl((s_ * 1.1, 1.85 + k * 0.08, 1.02), 0.025, 0.02, M_steel, rot=(0, 90, 0), seg=16); cl.sphere((s_ * 1.088, 1.85 + k * 0.08, 1.02), 0.018, M_dark, seg=10)   # eyeball vents
+    cl.cyl((s_ * 0.65, 1.0, 2.12), 0.012, 0.5, M_steel, rot=(90, 0, 0), seg=10)                                                                  # grab handle
+    for e_ in (0.76, 1.24): cl.cyl((s_ * 0.65, e_, 2.15), 0.01, 0.06, M_steel, seg=8)
+    cl.cyl((s_ * 0.45, 0.55, 2.2), 0.05, 0.015, M_white_e, seg=20); cl.cyl((s_ * 0.45, 0.55, 2.21), 0.058, 0.01, M_steel, seg=20)              # dome lights
+    for k in range(5): cl.cyl((s_ * (0.78 + k * 0.018), 0.65, 2.1 + 0.01 * k), 0.007, 1.2, (M_cb, M_strap, M_label, M_cb, M_guard)[k] if 'M_guard' in dir() else M_cb, rot=(90, 0, 0), seg=6)   # wiring loom
+    # circuit-breaker panels on the rear sidewalls behind the seats
+    cl.box((s_ * 1.12, 0.6, 1.45), (0.04, 0.7, 0.55), M_panel, bevel=0.006)
+    for r_ in range(9):
+        for c_ in range(13):
+            cl.cyl((s_ * 1.097, 0.3 + c_ * 0.05, 1.23 + r_ * 0.05), 0.008, 0.012, M_cb, rot=(0, 90, 0), seg=8)
+            cl.cyl((s_ * 1.1, 0.3 + c_ * 0.05, 1.23 + r_ * 0.05), 0.011, 0.004, M_cbw, rot=(0, 90, 0), seg=8)
+        cl.box((s_ * 1.099, 0.6, 1.207 + r_ * 0.05), (0.002, 0.66, 0.004), M_label)
+cl.cyl((-0.95, 1.85, 0.69), 0.045, 0.025, M_black, seg=20); cl.box((-0.95, 1.85, 0.71), (0.015, 0.06, 0.015), M_steel)   # nose-wheel tiller
+cl.obj(cSet)
 
 # yoke buttons
 for side in ("L", "R"):
