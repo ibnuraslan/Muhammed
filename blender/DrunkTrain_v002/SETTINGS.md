@@ -32,7 +32,7 @@ Dust uses Principled Volume (impact dust, horn exhaust, the stop dust wave). It 
 - **2050**: the final close-up of his face
 
 ## Measured cost
-__COST__
+One full frame (frame 560, the impact with volume dust; 1080×1920, 48 samples, motion blur) took **325 s** wall-clock on this 4-core cloud CPU. About 25 s of that is loading the file and textures. That works out to roughly 170 h for 2070 frames locally, but it is a heavy frame and most frames have no volumes. On farm GPU nodes it should be far faster. Run the test frames below before approving the whole job.
 
 ## Do not
 - Do not render other cameras; `CAM_Film` is the only one.
