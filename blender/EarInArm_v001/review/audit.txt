@@ -1,8 +1,8 @@
 CAMERA inside geometry at frames: [(176, 'SA_Membrane')]
-LONGEST near-static camera hold: 0.25 s ending f1256
+LONGEST near-static camera hold: 0.17 s ending f431
 FOOT hover >2cm on a planted foot (rig, side, frame, gap): 0 []
 FOOT sink >1.5cm: 0 []
 GRIP prop far from palm (>9cm): 0 []
 SHAVINGS off the tray at end: none
-PENETRATION fingertip-inside-surface count (every 15 f): 4 [(226, 'Patient', 'finger1-3.L', 'Chair_Arm1', 0.004), (271, 'Patient', 'finger4-3.L', 'ArmBoard', 0.006), (1516, 'Surgeon', 'finger1-3.R', 'Patient.body', 0.01), (1531, 'Surgeon', 'finger1-3.R', 'Patient.body', 0.005)]
+PENETRATION fingertip-inside-surface count (every 15 f): 15 [(136, 'Surgeon', 'finger3-3.R', 'Patient.body', 0.014), (136, 'Surgeon', 'finger4-3.R', 'Patient.body', 0.01), (226, 'Patient', 'finger1-3.L', 'Chair_Arm1', 0.004), (271, 'Patient', 'finger4-3.L', 'ArmBoard', 0.006), (361, 'Surgeon', 'finger5-3.L', 'Cart_Block', 0.006), (376, 'Surgeon', 'finger5-3.L', 'Trolley_Top', 0.004), (391, 'Surgeon', 'finger4-3.L', 'Cart_Block', 0.027), (391, 'Surgeon', 'finger5-3.L', 'Trolley_Top', 0.004), (406, 'Surgeon', 'finger4-3.L', 'Cart_Block', 0.028), (406, 'Surgeon', 'finger5-3.L', 'Trolley_Top', 0.005), (421, 'Surgeon', 'finger4-3.L', 'Cart_Block', 0.028), (421, 'Surgeon', 'finger5-3.L', 'Trolley_Top', 0.006), (436, 'Surgeon', 'finger4-3.L', 'Cart_Block', 0.029), (436, 'Surgeon', 'finger5-3.L', 'Trolley_Top', 0.007), (451, 'Surgeon', 'finger5-3.L', 'Trolley_Top', 0.008)]
 FEET below floor count: 0 []
