@@ -46,6 +46,11 @@ This is v004 with only the hands changed (see the "Hands" section of `blender/ST
   - Sheet: `../MonkeyHeadTransplant_v001/review/v005_hands_sheet_1s.jpg`
   - Hand close-ups: `../MonkeyHeadTransplant_v001/review/v005_hand_moments.jpg`
 
+## v005 also: x-ray fix (director, 23:01)
+The x-ray at 18–19 s read as a pale mint blob. In `04_anim_look_fixes.py`:
+- The body is now clear and translucent, with a saturated cyan fresnel rim, on the sky gradient.
+- The spine glows cream, and its cervical (neck) end is slimmed.
+
 ## v004: animated look (client, 22:45 UTC)
 This is v003 with the look moved to a bright, clean 3D animation; see `blender/STYLE_ANIMATED.md`. Animation and geometry are unchanged.
 - **`pipeline/anim_look.py`:**
