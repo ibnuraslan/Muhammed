@@ -212,6 +212,10 @@ def build_yard(c, variant):
     dd.pavillon((-12.5, 6.5, 0), w=8.0, d=8.0, floors=2, name="NeighW", stone=False, shutters=(0.0, 1.0, 0.5))
     dd.pavillon((13.0, 7.0, 0), w=8.0, d=8.0, floors=2, name="NeighE", stone=True, shutters=(0.8, 0.0, 0.3))
     dd.pavillon((0.0, 24.0, 0), w=10.0, d=8.0, floors=2, name="Behind", stone=False)
+    for k, x in enumerate((-14.0, -3.0, 8.0, 19.0)):          # the houses across the street
+        dd.pavillon((x, -16.0, 0), w=8.5, d=8.0, floors=2, rot_z=math.pi, name=f"Opp{k}", stone=(k % 2 == 0), shutters=(0.6, 1.0, 0.2))
+        box(f"OppWall{k}", (x, -15.2, 0.5), (8.0, 0.25, 1.0), wallm)
+    dd.model_h("jacaranda_tree", (-8.5, -14.5, 0), 7.5, rot_z=1.0)
     dd.model_h("island_tree_02", (9.5, 14.0, 0), 8.0, rot_z=2.0)
     dd.model_h("island_tree_01", (-10.0, 16.0, 0), 7.0)
     road = dd.wet(dd.tex_mat("asphalt_02", 0.4, tint=(0.6, 0.6, 0.62), name="Road", sat=0.4), 0.8, 0.3)
@@ -221,7 +225,7 @@ def build_yard(c, variant):
         cr = dd.sedan(f"Parked{k}", col, lights=False); cr.location = (x, -7.6, 0)
     box("Ground", (0, 10, -0.65), (80, 40, 0.1), pbr("Earth", (0.06, 0.07, 0.05), 0.9))
     c["rain_ys"] = (-3.5, -1.0, 1.5, 3.6)
-    rain(c, 0, c["rain_ys"], width=30, height=8, strength=5.0, density=0.988)
+    rain(c, 0, c["rain_ys"], width=30, height=8, strength=4.0, density=0.975)
 
 
 def build(variant=None):
@@ -303,6 +307,8 @@ def anim_drill(c, t):
     reach(h, "R", top + Vector((0.0, -0.06, 0.0)), Vector((-0.6, -0.5, -0.4)))
     reach(h, "L", top + Vector((0.06, -0.02, -0.08)), Vector((0.6, -0.5, -0.4)))
     fingers_curl(h, 55, thumb=25)
+    mid = (h.bone_tail("wrist.L") + h.bone_tail("wrist.R")) / 2           # the drill sits in his hands, bit down to the patch
+    d.location = Vector((mid.x, mid.y, max(PATCH.z + 0.01, mid.z - 0.24 + jit)))
 
 
 def anim_open(c, t, dur):
