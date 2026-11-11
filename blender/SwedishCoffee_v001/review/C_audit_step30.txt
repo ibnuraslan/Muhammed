@@ -1,0 +1,135 @@
+SwedishCoffee audit, step 30 frames
+FOOT_HOVER       51
+    f0031 Walk_S1_1 R 6.4 cm
+    f0061 Walk_S1_1 L 6.0 cm
+    f0151 Walk_S1_0 L 4.6 cm
+    f0151 Walk_S1_1 L 7.0 cm
+    f0211 Guard_S2 R 12.2 cm
+    f0241 Guard_S2 R 6.1 cm
+    f0271 Guard_S2 R 10.0 cm
+    f0301 Guard_S2 L 10.1 cm
+    f0331 Guard_S2 L 10.1 cm
+    f0361 Guard_S2 L 10.1 cm
+    f0391 Guard_S2 L 10.1 cm
+    f0421 Guard_S2 L 10.1 cm
+    f0451 Guard_S2 L 10.1 cm
+    f0481 Guard_S2 L 10.1 cm
+    f0511 Guard_S2 L 10.1 cm
+    f0541 Guard_S2 L 10.1 cm
+    f0571 Guard_S2 L 10.1 cm
+    f0601 Walk_S3_0 R 8.7 cm
+    f0601 Walk_S3_1 R 4.7 cm
+    f0631 Walk_S3_0 R 7.2 cm
+    f0661 Walk_S3_0 R 5.1 cm
+    f0661 Walk_S3_1 L 6.5 cm
+    f1741 Bearer_S5_0_0 R 5.5 cm
+    f1741 Bearer_S5_0_1 R 5.6 cm
+    f1741 Bearer_S5_0_2 R 5.5 cm
+    f1741 Bearer_S5_0_3 R 5.6 cm
+    f1741 Bearer_S5_1_0 R 5.5 cm
+    f1741 Bearer_S5_1_1 R 5.6 cm
+    f1741 Bearer_S5_1_2 R 5.5 cm
+    f1741 Bearer_S5_1_3 R 5.6 cm
+    f1741 TwinA_old_S5 R 5.3 cm
+    f1741 TwinB_old_S5 R 5.3 cm
+    f1861 Bearer_S5_0_0 L 6.1 cm
+    f1861 Bearer_S5_0_1 L 6.2 cm
+    f1861 Bearer_S5_0_2 L 6.1 cm
+    f1861 Bearer_S5_0_3 L 6.2 cm
+    f1861 Bearer_S5_1_0 L 6.1 cm
+    f1861 Bearer_S5_1_1 L 6.2 cm
+    f1861 Bearer_S5_1_2 L 6.1 cm
+    f1861 Bearer_S5_1_3 L 6.2 cm
+FOOT_SINK         2
+    f2521 Walk_S8_0 R 17.9 cm
+    f2581 Walk_S8_0 L 33.9 cm
+HAND_PEN        203
+    f0601 Soldier_S3_a 35 verts
+    f0631 Soldier_S3_a 31 verts
+    f0751 Doctor1_S4 19 verts
+    f0751 Doctor2_S4 19 verts
+    f0751 TwinA_old_S4 6 verts
+    f0751 TwinA_S4 10 verts
+    f0751 TwinB_old_S4 6 verts
+    f0751 TwinB_S4 14 verts
+    f0781 Doctor1_S4 12 verts
+    f0781 Doctor2_S4 15 verts
+    f0781 TwinA_old_S4 6 verts
+    f0781 TwinA_S4 16 verts
+    f0781 TwinB_old_S4 6 verts
+    f0781 TwinB_S4 14 verts
+    f0811 Doctor1_S4 13 verts
+    f0811 Doctor2_S4 14 verts
+    f0811 TwinA_old_S4 6 verts
+    f0811 TwinA_S4 13 verts
+    f0811 TwinB_old_S4 6 verts
+    f0811 TwinB_S4 14 verts
+    f0841 Doctor1_S4 19 verts
+    f0841 Doctor2_S4 19 verts
+    f0841 TwinA_old_S4 6 verts
+    f0841 TwinA_S4 13 verts
+    f0841 TwinB_old_S4 6 verts
+    f0841 TwinB_S4 14 verts
+    f0871 Doctor1_S4 21 verts
+    f0871 Doctor2_S4 21 verts
+    f0871 TwinA_old_S4 6 verts
+    f0871 TwinA_S4 10 verts
+    f0871 TwinB_old_S4 6 verts
+    f0871 TwinB_S4 14 verts
+    f0901 Doctor1_S4 17 verts
+    f0901 Doctor2_S4 17 verts
+    f0901 TwinA_old_S4 6 verts
+    f0901 TwinA_S4 10 verts
+    f0901 TwinB_old_S4 6 verts
+    f0901 TwinB_S4 9 verts
+    f0931 Doctor1_S4 10 verts
+    f0931 Doctor2_S4 15 verts
+FOOT_PEN          6
+    f0601 Soldier_S3_b 5 verts
+    f0631 Soldier_S3_b 5 verts
+    f0661 Soldier_S3_b 5 verts
+    f0691 Soldier_S3_b 5 verts
+    f0721 Soldier_S3_b 5 verts
+    f2581 Walk_S8_0 7 verts
+HEADITEM_GAP    175
+    f0001 Guard_S1_0_tricorn 22.7 cm
+    f0001 Guard_S1_1_tricorn 22.7 cm
+    f0001 Crowd_S1_0_tricorn 21.8 cm
+    f0001 Crowd_S1_3_tricorn 23.2 cm
+    f0001 Crowd_S1_6_tricorn 22.9 cm
+    f0031 Guard_S1_0_tricorn 22.7 cm
+    f0031 Guard_S1_1_tricorn 22.7 cm
+    f0031 Crowd_S1_0_tricorn 21.8 cm
+    f0031 Crowd_S1_3_tricorn 23.2 cm
+    f0031 Crowd_S1_6_tricorn 22.9 cm
+    f0061 Guard_S1_0_tricorn 22.7 cm
+    f0061 Guard_S1_1_tricorn 22.7 cm
+    f0061 Crowd_S1_0_tricorn 21.8 cm
+    f0061 Crowd_S1_3_tricorn 23.2 cm
+    f0061 Crowd_S1_6_tricorn 22.9 cm
+    f0091 Guard_S1_0_tricorn 22.7 cm
+    f0091 Guard_S1_1_tricorn 22.7 cm
+    f0091 Crowd_S1_0_tricorn 21.8 cm
+    f0091 Crowd_S1_3_tricorn 23.2 cm
+    f0091 Crowd_S1_6_tricorn 22.9 cm
+    f0121 Guard_S1_0_tricorn 22.7 cm
+    f0121 Guard_S1_1_tricorn 22.7 cm
+    f0121 Crowd_S1_0_tricorn 21.8 cm
+    f0121 Crowd_S1_3_tricorn 23.2 cm
+    f0121 Crowd_S1_6_tricorn 22.9 cm
+    f0151 Guard_S1_0_tricorn 22.7 cm
+    f0151 Guard_S1_1_tricorn 22.7 cm
+    f0151 Crowd_S1_0_tricorn 21.8 cm
+    f0151 Crowd_S1_3_tricorn 23.2 cm
+    f0151 Crowd_S1_6_tricorn 22.9 cm
+    f0181 King_S2_wig 19.3 cm
+    f0181 Guard_S2_tricorn 24.6 cm
+    f0181 Guard_S2b_0_tricorn 24.6 cm
+    f0181 Guard_S2b_1_tricorn 24.6 cm
+    f0211 King_S2_wig 19.3 cm
+    f0211 Guard_S2_tricorn 24.6 cm
+    f0211 Guard_S2b_0_tricorn 24.6 cm
+    f0211 Guard_S2b_1_tricorn 24.6 cm
+    f0241 King_S2_wig 19.3 cm
+    f0241 Guard_S2_tricorn 24.6 cm
+CAMERA_INSIDE     0

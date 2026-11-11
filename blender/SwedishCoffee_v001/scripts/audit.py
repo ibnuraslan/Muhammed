@@ -1,9 +1,9 @@
 """SwedishCoffee contact / penetration audit.
 blender -b film.blend --python audit.py -- <report.txt> [step]
 Per sampled frame, for every rendered character in the visible set:
-  FOOT_HOVER / FOOT_SINK  shoe sole vs the surface below it (ray cast against set geometry, not people)
-  HAND_PEN / FOOT_PEN     hand- and foot-region skin vertices inside set props/furniture (BVH nearest + normal test)
-  HEADITEM_GAP            hat / wig / mask further than 6 cm from the head bone
+  FOOT_HOVER / FOOT_SINK  shoe sole vs the surface below it (ray cast against set geometry, not people); hover = the LOWER foot is off the surface (swing feet are normal)
+  HAND_PEN / FOOT_PEN     finger/wrist and toe/foot bone points (inside the skin by ~1 cm) more than 8 mm inside set props/furniture/floors (BVH nearest + normal); >2 points flags
+  HEADITEM_GAP            hat / wig / mask whose nearest vertex is more than 3 cm from the head surface (floating)
   CAMERA_INSIDE           camera within 3 cm of / inside set geometry
 """
 import sys, bpy
@@ -57,29 +57,36 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     for arm in vis:
         body = next((c for c in arm.children if c.name.endswith(".body")), None)
         if body is None: continue
-        walking = False
+        if body.hide_render: continue
+        gaps = {}
         for s in "LR":
             ft = arm.matrix_world @ arm.pose.bones["foot." + s].head
             g = ground_below(ft)
-            if g is None: continue
-            gap = ft.z - 0.072 - g
-            if gap > 0.04 and ft.z - g < 0.25: flag("FOOT_HOVER", f, "%s %s %.1f cm" % (arm.name, s, gap * 100))
-            if gap < -0.03: flag("FOOT_SINK", f, "%s %s %.1f cm" % (arm.name, s, -gap * 100))
-        key = body.name
-        if key not in cache: cache[key] = (region_verts(body, HANDVG), region_verts(body, FOOTVG))
-        hv, fv = cache[key]
-        ev = body.evaluated_get(dg); me = ev.to_mesh(); mw = body.matrix_world
-        nh = sum(1 for i in hv if inside(mw @ me.vertices[i].co))
-        nf = sum(1 for i in fv[::2] if inside(mw @ me.vertices[i].co))
-        ev.to_mesh_clear()
-        if nh > 3: flag("HAND_PEN", f, "%s %d verts" % (arm.name, nh))
-        if nf > 3: flag("FOOT_PEN", f, "%s %d verts" % (arm.name, nf))
+            if g is not None: gaps[s] = (ft.z - 0.072 - g, ft.z - g)
+        if gaps:
+            lo_s = min(gaps, key=lambda k: gaps[k][0]); gap, h = gaps[lo_s]
+            if gap > 0.04 and h < 0.25: flag("FOOT_HOVER", f, "%s lower foot %s %.1f cm (both feet off the surface)" % (arm.name, lo_s, gap * 100))
+            for s_, (gp, hh) in gaps.items():
+                if gp < -0.03: flag("FOOT_SINK", f, "%s %s %.1f cm" % (arm.name, s_, -gp * 100))
+        P = arm.pose.bones; mwa = arm.matrix_world
+        hpts = [mwa @ P[n].tail for n in P.keys() if n.startswith(("finger", "wrist"))] + [mwa @ P[n].head for n in P.keys() if n.startswith("finger")]
+        fpts = [mwa @ P[n].tail for n in P.keys() if n.startswith(("toe", "foot."))]
+        nh = sum(1 for p in hpts if inside(p, 0.008)); nf = sum(1 for p in fpts if inside(p, 0.008))
+        if nh > 2: flag("HAND_PEN", f, "%s %d verts" % (arm.name, nh))
+        if nf > 2: flag("FOOT_PEN", f, "%s %d verts" % (arm.name, nf))
     for o in bpy.data.collections[cn].all_objects:
         for c in o.constraints:
             if c.type == 'CHILD_OF' and c.subtarget == "head" and not o.hide_render:
-                hp = c.target.matrix_world @ c.target.pose.bones["head"].tail
-                dmin = min(((o.matrix_world @ Vector(b)) - hp).length for b in o.bound_box)
-                if dmin > 0.12: flag("HEADITEM_GAP", f, "%s %.1f cm" % (o.name, dmin * 100))
+                body = next((ch for ch in c.target.children if ch.name.endswith(".body")), None)
+                if body is None: continue
+                bt = BVHTree.FromObject(body, dg); inv = body.matrix_world.inverted()
+                ev = o.evaluated_get(dg); me = ev.to_mesh()
+                ds = []
+                for v in list(me.vertices)[::max(1, len(me.vertices) // 300)]:
+                    loc, nrm, i, d = bt.find_nearest(inv @ (o.matrix_world @ v.co))
+                    if loc is not None: ds.append(d)
+                ev.to_mesh_clear()
+                if ds and min(ds) > 0.03: flag("HEADITEM_GAP", f, "%s nearest %.1f cm from the head" % (o.name, min(ds) * 100))
 lines = ["SwedishCoffee audit, step %d frames" % STEP]
 for k in ("FOOT_HOVER", "FOOT_SINK", "HAND_PEN", "FOOT_PEN", "HEADITEM_GAP", "CAMERA_INSIDE"):
     v = issues.get(k, []); lines.append("%-14s %4d" % (k, len(v)))

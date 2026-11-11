@@ -52,6 +52,11 @@ def asset(name, size=None, axis="z", rot=(0, 0, 0), file=None):
     if size:
         d = (mx - mn)["xyz".index(axis)]; me.transform(Matrix.Scale(size / d, 4))
     for p in me.polygons: p.use_smooth = True
+    nf = len(me.polygons)
+    if nf > 25000:
+        bpy.context.view_layer.objects.active = ob
+        md = ob.modifiers.new("dec", 'DECIMATE'); md.ratio = 25000 / nf
+        bpy.ops.object.modifier_apply(modifier="dec")
     link(ob, LIBC)
     return ob
 
@@ -76,7 +81,7 @@ def pbr(name, tex, scale=1.0, tint=None, rough_mul=1.0, disp=0.0, coord="UV", bu
     tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (scale,) * 3
     L.new(tc.outputs[coord], mp.inputs["Vector"])
     fs = sorted(glob.glob(f"{PH}/{tex}/**/*.*", recursive=True))
-    def f(k): return next((x for x in fs if "_" + k + "_" in os.path.basename(x).lower()), None)
+    def f(k): return next((x for x in fs if "_" + k + "_" in os.path.basename(x).lower() or (k == "diff" and "_albedo_" in os.path.basename(x).lower())), None)
     proj = 'BOX' if coord != "UV" else 'FLAT'
     def T(path, nc):
         t = N.new("ShaderNodeTexImage"); t.image = _img(path, nc); t.projection = proj; t.projection_blend = 0.25
@@ -166,6 +171,12 @@ def base_human(name):
         hc.objects.link(o)
         if o.type == 'ARMATURE': arm = o
     restyle(arm)
+    for ch in arm.children:
+        if ch.type == 'MESH' and ch.data.shape_keys:
+            bpy.context.view_layer.objects.active = ch
+            ch.shape_key_add(name="mix", from_mix=True)
+            for kb in list(ch.data.shape_keys.key_blocks)[:-1]: ch.shape_key_remove(kb)
+            ch.shape_key_remove(ch.data.shape_keys.key_blocks[0])
     R = make_human_ctrl(arm)
     hc.hide_viewport = True
     BASE[name] = arm; return arm
@@ -201,7 +212,7 @@ def costume_mat(key, coat, breech, stock=(0.85, 0.83, 0.78), coat_tex="wool_bouc
         ti = N.new("ShaderNodeTexImage"); ti.image = _img(p, nc != "diff"); L.new(mp.outputs[0], ti.inputs[0]); return ti
     def zone(col, t, s_):
         d = tex(t, s_, "diff"); bw = N.new("ShaderNodeRGBToBW"); L.new(d.outputs[0], bw.inputs[0])
-        mr = N.new("ShaderNodeMapRange"); mr.inputs[3].default_value = 0.55; mr.inputs[4].default_value = 1.25; L.new(bw.outputs[0], mr.inputs[0])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs[3].default_value = 0.85; mr.inputs[4].default_value = 1.1; L.new(bw.outputs[0], mr.inputs[0])
         mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs[0].default_value = 1
         cc = N.new("ShaderNodeCombineColor"); L.new(mr.outputs[0], cc.inputs[0]); L.new(mr.outputs[0], cc.inputs[1]); L.new(mr.outputs[0], cc.inputs[2])
         mx.inputs["A"].default_value = (*col, 1); L.new(cc.outputs[0], mx.inputs["B"]); return mx.outputs["Result"]
@@ -353,7 +364,7 @@ def ph_model(name, size=None, axis="z", rot=(0, 0, 0)):
         d = (mx - mn)["xyz".index(axis)]; me.transform(Matrix.Scale(size / d, 4))
     link(ob, LIBC); return ob
 
-GRIP_AX = (1, 0, 0)
+GRIP_AX = (0, 0, -1)
 def grip(R, f, s, amt=1.0, thumb=0.6):
     """curl fingers (amt 0 open .. 1 fist) for holding a handle/cup"""
     for fi in (2, 3, 4, 5):
@@ -367,3 +378,108 @@ def grip(R, f, s, amt=1.0, thumb=0.6):
         if n in R.PB:
             pb = R.PB[n]; pb.rotation_mode = 'QUATERNION'
             pb.rotation_quaternion = Quaternion(V(GRIP_AX), R_(w * thumb)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+
+def wall_opening(c, axis, at, span, h, mat, oc, ow, oz0, oz1, frame_mat=None):
+    """wall plane at x=at (axis 'x', facing inward sign from at) spanning span=(lo,hi) along the other axis, with an opening centred oc, width ow, z oz0..oz1"""
+    lo, hi = span
+    parts = [((lo + oc - ow / 2) / 2, oc - ow / 2 - lo, 0, h), ((oc + ow / 2 + hi) / 2, hi - oc - ow / 2, 0, h),
+             (oc, ow, 0, oz0), (oc, ow, oz1, h)]
+    out = []
+    for cpos, w, z0, z1 in parts:
+        if w <= 0.01 or z1 - z0 <= 0.01: continue
+        if axis == "x":
+            o = plane("wallO", c, (w, z1 - z0), (at, cpos, (z0 + z1) / 2), mat, (90, 0, 90))
+        else:
+            o = plane("wallO", c, (w, z1 - z0), (cpos, at, (z0 + z1) / 2), mat, (90, 0, 0))
+        out.append(o)
+    if frame_mat:
+        t = 0.09
+        for cpos, w, z0, z1 in ((oc - ow / 2 - t / 2, t, oz0 - t, oz1 + t), (oc + ow / 2 + t / 2, t, oz0 - t, oz1 + t), (oc, ow, oz0 - t, oz0), (oc, ow, oz1, oz1 + t)):
+            if axis == "x": box("frame", c, (0.22, w, z1 - z0), (at, cpos, (z0 + z1) / 2), frame_mat)
+            else: box("frame", c, (w, 0.22, z1 - z0), (cpos, at, (z0 + z1) / 2), frame_mat)
+    return out
+
+def gn_fall(name, c, pts, inst_obj, mode, f0=0, f1=0, H=14.0, speed=0.025, ground=0.0, rot_rand=True):
+    """deterministic falling points via geometry nodes (no particle cache).
+    mode 'snow': z wraps down through H at <speed> m/frame with sideways drift.
+    mode 'pour': point i is released at f0 + i/N*(f1-f0) from its position, falls under gravity, lands on <ground>."""
+    me = bpy.data.meshes.new(name); me.from_pydata([tuple(p) for p in pts], [], []); o = bpy.data.objects.new(name, me); c.objects.link(o)
+    ng = bpy.data.node_groups.new(name + "_gn", 'GeometryNodeTree')
+    ng.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
+    ng.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    N, L = ng.nodes, ng.links
+    gi = N.new("NodeGroupInput"); go = N.new("NodeGroupOutput")
+    pos = N.new("GeometryNodeInputPosition"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(pos.outputs[0], sep.inputs[0])
+    idx = N.new("GeometryNodeInputIndex"); tm = N.new("GeometryNodeInputSceneTime")
+    def m(op, a, b=None, val=None):
+        n = N.new("ShaderNodeMath"); n.operation = op
+        for i_, x in enumerate((a, b)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n.inputs[i_].default_value = x
+            else: L.new(x, n.inputs[i_])
+        return n.outputs[0]
+    rnd = N.new("FunctionNodeRandomValue"); rnd.data_type = 'FLOAT_VECTOR'; L.new(idx.outputs[0], rnd.inputs["ID"])
+    rnd.inputs["Min"].default_value = (-1, -1, -1); rnd.inputs["Max"].default_value = (1, 1, 1)
+    rv = N.new("ShaderNodeSeparateXYZ"); L.new(rnd.outputs["Value"], rv.inputs[0])
+    fr = tm.outputs["Frame"]
+    comb = N.new("ShaderNodeCombineXYZ"); sel = None
+    if mode == "snow":
+        z = m('FLOORED_MODULO', m('SUBTRACT', sep.outputs[2], m('MULTIPLY', fr, speed)), H)
+        x = m('ADD', sep.outputs[0], m('MULTIPLY', m('SINE', m('ADD', m('MULTIPLY', fr, 0.02), m('MULTIPLY', idx.outputs[0], 0.37))), 0.25))
+        L.new(x, comb.inputs[0]); L.new(sep.outputs[1], comb.inputs[1]); L.new(z, comb.inputs[2])
+    else:
+        n = max(1, len(pts))
+        t0 = m('ADD', m('MULTIPLY', idx.outputs[0], (f1 - f0) / n), float(f0))
+        dt = m('DIVIDE', m('MAXIMUM', m('SUBTRACT', fr, t0), 0.0), 60.0)
+        dth = m('MINIMUM', dt, 0.42)
+        x = m('ADD', sep.outputs[0], m('MULTIPLY', m('MULTIPLY', rv.outputs[0], 0.9), dth))
+        y = m('ADD', sep.outputs[1], m('MULTIPLY', m('SUBTRACT', m('MULTIPLY', rv.outputs[1], 0.6), 0.9), dth))
+        zz = m('SUBTRACT', sep.outputs[2], m('MULTIPLY', m('MULTIPLY', dt, dt), 4.9))
+        gz = m('ADD', float(ground) + 0.006, m('MULTIPLY', m('ABSOLUTE', rv.outputs[2]), 0.02))
+        z = m('MAXIMUM', zz, gz)
+        L.new(x, comb.inputs[0]); L.new(y, comb.inputs[1]); L.new(z, comb.inputs[2])
+        sel = m('GREATER_THAN', fr, t0)
+    sp = N.new("GeometryNodeSetPosition"); L.new(gi.outputs[0], sp.inputs["Geometry"]); L.new(comb.outputs[0], sp.inputs["Position"])
+    oi = N.new("GeometryNodeObjectInfo"); oi.inputs["Object"].default_value = inst_obj; oi.inputs["As Instance"].default_value = True
+    iop = N.new("GeometryNodeInstanceOnPoints"); L.new(sp.outputs[0], iop.inputs["Points"]); L.new(oi.outputs["Geometry"], iop.inputs["Instance"])
+    if sel is not None: L.new(sel, iop.inputs["Selection"])
+    if rot_rand:
+        rr = N.new("ShaderNodeVectorMath"); rr.operation = 'SCALE'; L.new(rnd.outputs["Value"], rr.inputs[0]); rr.inputs["Scale"].default_value = 3.14
+        L.new(rr.outputs[0], iop.inputs["Rotation"])
+    L.new(iop.outputs[0], go.inputs[0])
+    md = o.modifiers.new("gn", 'NODES'); md.node_group = ng
+    return o
+
+def ermine_mat():
+    m = bpy.data.materials.get("m_ermine")
+    if m: return m
+    m = bpy.data.materials.new("m_ermine"); m.use_nodes = True; N, L = m.node_tree.nodes, m.node_tree.links; bs = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); vor = N.new("ShaderNodeTexVoronoi"); vor.inputs["Scale"].default_value = 9.0
+    L.new(tc.outputs["Object"], vor.inputs[0])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs[1].default_value = 0.06; mr.inputs[2].default_value = 0.09; L.new(vor.outputs["Distance"], mr.inputs[0])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(mr.outputs[0], mx.inputs[0])
+    mx.inputs["A"].default_value = (0.02, 0.02, 0.02, 1); mx.inputs["B"].default_value = (0.92, 0.9, 0.85, 1)
+    L.new(mx.outputs["Result"], bs.inputs["Base Color"]); bs.inputs["Roughness"].default_value = 0.9
+    bs.inputs["Sheen Weight"].default_value = 1.0; bs.inputs["Sheen Roughness"].default_value = 0.4
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 260; nz.inputs["Detail"].default_value = 4; L.new(tc.outputs["Object"], nz.inputs[0])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6; L.new(nz.outputs[0], bp.inputs["Height"]); L.new(bp.outputs[0], bs.inputs["Normal"])
+    return m
+
+def capelet(arm, c):
+    """ermine shoulder cape following the upper spine"""
+    sc.frame_set(1); bpy.context.view_layer.update()
+    pb = arm.pose.bones["spine01"]; nk = arm.pose.bones["neck01"]
+    top = arm.matrix_world @ nk.head
+    bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.34, radius2=0.12, depth=0.32, end_fill_type='NOTHING', location=(0, 0, 0))
+    o = bpy.context.active_object; o.name = arm.name + "_ermine"; link(o, c)
+    bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.uv.cylinder_project(); bpy.ops.object.mode_set(mode='OBJECT')
+    me = o.data
+    for v in me.vertices:   # flatten front/back to the torso, push the hem out
+        v.co.y *= 0.72
+    me.transform(Matrix.Translation(V((0, 0.0, -0.16))))
+    sol = o.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.025
+    sub = o.modifiers.new("sub", 'SUBSURF'); sub.levels = sub.render_levels = 2
+    setmat(o, ermine_mat())
+    o.matrix_world = Matrix.Translation(top + V((0, 0.01, 0.02)))
+    attach(o, arm, "spine01")
+    return o

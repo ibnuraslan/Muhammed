@@ -68,8 +68,8 @@ def steam_mat(name, dens=0.6, col=(0.92, 0.92, 0.95)):
 A_ = {}
 def T(name, size, axis="z", rot=(0, 0, 0)): A_[name] = asset(name, size, axis, rot); return A_[name]
 T("gallows", 4.6); T("htb1", 9.0); T("htb3", 12.0); T("htb5", 13.0); T("house0", 10.0); T("house3", 9.0); T("house7", 7.5)
-T("throne", 1.9); T("table", 0.78); T("chair", 1.0); T("chandelier", 1.6); T("candleholder", 0.28); T("candles", 0.35)
-T("silverpot", 0.26); T("coffeepot_cu", 0.28); T("coffeepot_porc", 0.30); T("teapot", 0.2); T("cup", 0.075); T("teacup", 0.08)
+T("throne", 1.9); T("table", 0.78); T("chair", 1.0); T("chandelier", 1.6); 
+T("silverpot", 0.26); T("coffeepot_cu", 0.28); T("teapot", 0.2); T("cup", 0.075)
 T("quill", 0.3, "y"); T("book", 0.06); T("skull", 0.3); T("cart", 3.6, "x"); T("sack", 0.75); T("bean", 0.012, "x")
 T("tricorn", 0.36, "x"); T("wig", 0.31); T("mask", 0.17, "x"); T("stall", 3.0, "x"); T("fountain", 5.0, "x"); T("church", 26.0); T("shackles", 0.42, "x")
 for nm in ("GothicBed_01", "Chandelier_01", "Barrel_01", "Lantern_01", "brass_candleholders", "brass_goblets", "WoodenTable_01", "WoodenChair_01", "ArmChair_01", "GothicCabinet_01"):
@@ -171,10 +171,18 @@ def crowd_idle(A, f0, f1, pos, yaw, mode="jeer", seed=0, phase=0.0):
             up = u > -0.3
             A.hand(f, "R", (-0.2, -0.32, 1.55 + 0.25 * u) if up else (-0.2, -0.3, 1.2), d=(0, -0.3, 1), n=(1, 0, 0), pole=(-0.5, 0.4, 1.2))
             A.hand(f, "L", (0.22, -0.02, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
-            A.face(f, brow=1.2, smile=1.5, jaw=8 * max(0, u))
+            A.face(f, brow=1.2, smile=1.5, jaw=8 * max(0, u)); grip(A.R, f, "R", 0.8)
         elif mode == "watch":
             A.arms_down(f, sway=0.02 * u); A.face(f, brow=0.5 * u, lids=0.1)
         f += int(per / 2)
+
+def walker(base, nm, c, p0, p1, f0, f1, stride=0.7):
+    A = human(base, nm, c); p0 = V(p0); p1 = V(p1)
+    yw = math.degrees(math.atan2(-(p1 - p0).x, (p1 - p0).y)) + 180
+    A.H.walk(lambda f: p0.lerp(p1, (f - f0) / (f1 - f0)), lambda f: yw, f0, f1, stride=stride, duty=0.62, lift=0.08, lean=5)
+    for f in range(f0, f1 + 1, 30):
+        A.pos = p0.lerp(p1, (f - f0) / (f1 - f0)).to_2d(); A.yaw = yw; A.arms_down(f, sway=0.04 * math.sin(f / 9)); A.face(f, brow=0.4)
+    return A
 
 # ================================================================== S1 Courtyard (b1)
 c = S(0)
@@ -217,6 +225,7 @@ for k, b in enumerate(CROWD):
     crowd_idle(A, 1, 175, (x, y), 180 + random.uniform(-25, 25), "jeer", seed=k, phase=random.random())
     if b == "Townsman": hat(A.a, A_["tricorn"], c)
 light(c, 'SUN', (0, 0, 20), 3.0, (1.0, 0.93, 0.82), rot=(50, 0, 30), name="sun")
+walker("Townsman", "Walk_S1_0", c, (-9, -2, 0), (-5, -9, 0), 1, 175); walker("Woman", "Walk_S1_1", c, (8, -10, 0), (6, -2, 0), 1, 175, 0.6)
 cam(1, (-2.0, -15.0, 5.5), (0, 0, 2.6), 28)
 cam(60, (-0.8, -9.5, 3.6), (0, 0.2, 2.8), 30)
 cam(110, (0.25, -2.1, 2.85), (0, 0.2, 2.72), 40)
@@ -235,7 +244,7 @@ for x in (-5.5, 5.5):
         box("pillar", c, (0.7, 0.7, 7), (x, y, 3.5), M["marble"])
 st = inst(A_["table"], c, (-1.15, 5.1, 0.4), rz=90); st.scale = (0.5, 0.3, 0.54)
 cupK = inst(A_["cup"], c, (-1.0, 5.0, 0.4 + 0.42), name="KingCup")
-bpy.ops.mesh.primitive_cylinder_add(radius=0.034, depth=0.002, location=(-1.0, 5.0, 0.4 + 0.42 + 0.055)); cf = bpy.context.active_object; link(cf, c); setmat(cf, M["coffee"])
+bpy.ops.mesh.primitive_cylinder_add(radius=0.038, depth=0.002, location=(-1.0, 5.0, 0.4 + 0.42 + 0.064)); cf = bpy.context.active_object; link(cf, c); setmat(cf, M["coffee"])
 # steam + skull (volume)
 bpy.ops.mesh.primitive_cylinder_add(radius=0.12, depth=0.6, location=(-1.0, 5.0, 1.15)); stm = bpy.context.active_object; stm.name = "steamK"; link(stm, c)
 setmat(stm, steam_mat("m_steamK", 1.5))
@@ -257,11 +266,12 @@ for f, hand_up, lean, br in ((175, 0, 0, -0.5), (185, 0.5, 4, -1.5), (200, 1, 8,
     K.face(f, brow=br, frown=1.2 if f >= 185 else 0.3, jaw=14 if 185 <= f <= 240 else 0, lids=-0.2)
 hat(K.a, A_["wig"], c, dz=-0.07, dy=0.03)
 GZ[0] = 0.0
+capelet(K.a, c)
 G = human("Guard", "Guard_S2", c); hat(G.a, A_["tricorn"], c)
 G.stand(175, pos=(1.8, 4.2), yaw=200); G.arms_down(175); G.face(175, brow=1.5)
 G.stand(200, pos=(1.8, 4.2), yaw=200, flex=10); G.arms_down(200)
 G.H.walk(lambda f: V((1.8, 4.2, 0)).lerp(V((-3.5, -7.5, 0)), smooth((f - 205) / 90)), lambda f: 160, 205, 295, stride=1.5, duty=0.42, lift=0.14, lean=14)
-G.arms_down(205); G.arms_down(295)
+G.arms_down(205); G.arms_down(295); G.stand(296, pos=(-3.5, -7.5), yaw=160); G.stand(590, pos=(-3.5, -7.5), yaw=160); G.arms_down(590)
 for x in (-3.5, 3.5):
     W_ = human("Guard", "Guard_S2b_%d" % (x > 0), c); hat(W_.a, A_["tricorn"], c)
     crowd_idle(W_, 175, 590, (x, 1.0), 90 if x > 0 else -90, "watch", seed=int(x))
@@ -276,7 +286,7 @@ cam(215, (0.4, -2.5, 2.4), (0, 6.3, 1.5), 32)
 cam(260, (1.2, 2.2, 1.7), (0, 6.4, 1.55), 35)
 cam(300, (0.6, 4.4, 1.55), (-0.05, 6.35, 1.55), 45)
 cam(360, (-0.6, 4.6, 1.5), (-0.2, 6.3, 1.5), 50)
-cam(420, (0.2, 5.6, 1.45), (-0.95, 5.0, 1.0), 40)
+cam(420, (-0.25, 4.3, 1.55), (-0.8, 5.35, 1.0), 40)
 cam(480, (-0.8, 4.35, 1.0), (-1.0, 5.0, 0.92), 55)
 cam(540, (-0.95, 4.35, 1.12), (-1.0, 5.0, 1.17), 50)
 cam(586, (-1.0, 4.58, 1.21), (-1.0, 5.4, 1.23), 40)
@@ -300,7 +310,7 @@ for f, up, fl in ((588, 0.0, 0), (612, 1.0, -8), (632, 1.0, -12), (645, -0.4, 35
     hz = 1.05 + 1.0 * up if up >= 0 else 0.75
     for s in "LR":
         sx = 1 if s == "L" else -1
-        S1_.hand(f, s, (0.1 * sx, -0.35, hz), d=(-0.3 * sx, -0.6, 0.6 if up > 0 else -0.3), n=(-sx, 0, 0), pole=(0.5 * sx, 0.3, 1.2))
+        grip(S1_.R, f, s, 0.9); S1_.hand(f, s, (0.1 * sx, -0.35, hz), d=(-0.3 * sx, -0.6, 0.6 if up > 0 else -0.3), n=(-sx, 0, 0), pole=(0.5 * sx, 0.3, 1.2))
     S1_.face(f, brow=-2.5, jaw=10 if up < 0 else 4, frown=1.2)
 # pot keyed in world: in hands until 645 then smash on cobbles with shards
 sc.frame_set(588); bpy.context.view_layer.update()
@@ -327,18 +337,14 @@ for f in (588, 620, 660, 700, 725):
 sk2 = inst(A_["sack"], c, S2_.W((0, -0.55, 0.65)), rz=0, name="PourSack"); sk2.rotation_euler = (R_(-110), 0, R_(110 + 180)); sk2.scale = (0.8,) * 3
 attach(sk2, S2_.a, "wrist.R", 588, local=True)
 # beans: particle emitter (falls under gravity, collides with street)
-bpy.ops.mesh.primitive_plane_add(size=0.12, location=tuple(S2_.W((0.0, -0.95, 0.75))))
-em = bpy.context.active_object; em.name = "BeanEmitter"; link(em, c)
-ps = em.modifiers.new("beans", 'PARTICLE_SYSTEM').particle_system.settings
-ps.count = 1500; ps.frame_start = 590; ps.frame_end = 720; ps.lifetime = 400; ps.normal_factor = -0.5; ps.factor_random = 0.4
-ps.render_type = 'OBJECT'; ps.instance_object = A_["bean"]; ps.particle_size = 1.0; ps.size_random = 0.3; ps.use_rotations = True; ps.rotation_factor_random = 1.0
-em.show_instancer_for_render = False
-gnd.modifiers.new("col", 'COLLISION'); gnd.collision.damping = 0.8
+mouth = S2_.W((0.0, -0.95, 0.72))
+em = gn_fall("BeanEmitter", c, [mouth + V((random.uniform(-0.05, 0.05), random.uniform(-0.05, 0.05), random.uniform(-0.03, 0.03))) for _ in range(1600)], A_["bean"], "pour", 592, 712)
 for k, (x, y) in enumerate(((-2.0, 2.0), (-2.8, 3.4), (-1.6, 4.4), (-3.2, 0.6), (-2.4, 5.6))):
     b = ("Townsman", "Townswoman", "Woman", "Townsman", "Townswoman")[k]
     A = human(b, "Protest_S3_%d" % k, c)
     crowd_idle(A, 588, 725, (x, y), -70 + random.uniform(-20, 20), "jeer", seed=10 + k, phase=random.random())
 light(c, 'SUN', (0, 0, 20), 3.0, (1.0, 0.92, 0.8), rot=(45, 0, -30), name="sun")
+walker("Townswoman", "Walk_S3_0", c, (-1, 16, 0), (0.5, 8, 0), 588, 725, 0.6); walker("Townsman", "Walk_S3_1", c, (4.5, 14, 0), (5.0, 5, 0), 588, 725)
 cam(588, (0, -8.7, 3.0), (1.2, 2.0, 1.2), 28)
 cam(625, (1.6, -3.0, 1.4), (1.2, 1.5, 0.8), 30)
 cam(655, (1.9, 0.6, 0.35), (2.0, 4.0, 0.4), 26)
@@ -348,16 +354,19 @@ finish_set(2)
 
 # ================================================================== S4 Chamber (b5-b8)
 c = S(3)
-room(c, -5, 5, -5, 5, 4.2, M["planks"], M["castle"], M["oak"], skip=())
+room(c, -5, 5, -5, 5, 4.2, M["planks"], M["castle"], M["oak"], skip=("wE",))
+wall_opening(c, "x", 5.0, (-5, 5), 4.2, M["castle"], -1.0, 1.5, 1.0, 2.8, M["oak"])
 tb = inst(A_["table"], c, (0, 0.9, 0), rz=90); tb.scale = (1.2, 1.2, 1.0)
 TZ = 0.78
 for x in (-0.6, 0.6): inst(A_["chair"], c, (x, 1.75, 0), rz=0)
-season = plane("season", c, (3.0, 2.6), (5.6, -1.0, 2.0), simple("m_season", (0.3, 0.5, 0.25), emit=(0.35, 0.55, 0.3), ew=1.5), (90, 0, -90))
+plane("outGround", c, (30, 40), (18, -1, -3.0), M["cobble"])
+for t, y in (("htb5", -9), ("house0", -1), ("htb3", 8)): inst(A_[t], c, (21, y, -3.0), rz=90)
+season = plane("season", c, (60.0, 30.0), (34.0, -1.0, 8.0), simple("m_season", (0.3, 0.5, 0.25), emit=(0.35, 0.55, 0.3), ew=1.5), (90, 0, -90))
 sm = season.data.materials[0].node_tree.nodes["Principled BSDF"]
 for f, col in ((725, (0.35, 0.55, 0.30)), (1360, (0.45, 0.62, 0.30)), (1420, (0.75, 0.45, 0.15)), (1480, (0.9, 0.92, 0.96)), (1540, (0.45, 0.62, 0.30)), (1600, (0.75, 0.45, 0.15))):
     sm.inputs["Emission Color"].default_value = (*col, 1); sm.inputs["Emission Color"].keyframe_insert("default_value", frame=f)
     sm.inputs["Base Color"].default_value = (*col, 1); sm.inputs["Base Color"].keyframe_insert("default_value", frame=f)
-sunwin = light(c, 'AREA', (6.5, -1.0, 2.6), 1600, (1, 0.9, 0.75), 2.0, rot=(0, -70, 0), name="windowSun")
+sunwin = light(c, 'AREA', (6.2, -1.0, 2.6), 1600, (1, 0.9, 0.75), 2.0, rot=(0, -70, 0), name="windowSun")
 for f, e in ((725, 1600), (1330, 1600), (1360, 200), (1390, 1700), (1420, 150), (1450, 1600), (1480, 250), (1510, 1500), (1540, 200), (1570, 1600), (1650, 1600)):
     sunwin.data.energy = e; sunwin.data.keyframe_insert("energy", frame=f)
 light(c, 'AREA', (-3, -3, 3.8), 900, (0.75, 0.82, 1.0), 3, rot=(50, 0, -140), name="fill")
@@ -374,10 +383,11 @@ for k, (b, x) in enumerate((("TwinA", -0.6), ("TwinB", 0.6))):
         TW[nm] = A
 # coffee side (A, left x<0) and tea side (B)
 cupA = inst(A_["cup"], c, (-0.62, 1.05, TZ), name="CupA")
-bpy.ops.mesh.primitive_cylinder_add(radius=0.034, depth=0.002, location=(0, 0, 0.055)); cfa = bpy.context.active_object; link(cfa, c); setmat(cfa, M["coffee"])
+bpy.ops.mesh.primitive_cylinder_add(radius=0.038, depth=0.002, location=(0, 0, 0.064)); cfa = bpy.context.active_object; link(cfa, c); setmat(cfa, M["coffee"])
 cfa.parent = cupA
 for k in range(3): inst(A_["silverpot"], c, (-1.25 + k * 0.22, 0.65, TZ), rz=200)
-cupB = inst(A_["teacup"], c, (0.62, 1.05, TZ), name="CupB")
+cupB = inst(A_["cup"], c, (0.62, 1.05, TZ), name="CupB"); cupB.scale = (0.85, 0.85, 0.8)
+bpy.ops.mesh.primitive_cylinder_add(radius=0.038, depth=0.002, location=(0, 0, 0.064)); cfb = bpy.context.active_object; link(cfb, c); setmat(cfb, M["tea"]); cfb.parent = cupB
 for k in range(3): inst(A_["teapot"] if "teapot" in A_ else A_["coffeepot_porc"], c, (0.95 + k * 0.2, 0.65, TZ), rz=160)
 for k in range(5): inst(A_["cup"], c, (-1.05 - (k % 3) * 0.09, 1.15 - (k // 3) * 0.1, TZ), name="emptyCup")
 def drink(A, s, cup, f0, f1, per=80, old=False):
@@ -386,18 +396,18 @@ def drink(A, s, cup, f0, f1, per=80, old=False):
     rest_cup = cup.location.copy()
     f = f0
     while f < f1:
-        A.sit(f, flex=12, head=(8, 0)); A.hand(f, s, (0.09 * sx + (rest_cup.x - A.pos.x) * 0, -0.6 + 0.0, TZ + 0.05), d=(0, -1, 0.1), n=(-sx, 0, 0))
+        A.sit(f, flex=12, head=(8, 0)); A.hand(f, s, (0.09 * sx, -0.6, TZ + 0.08), d=(0, -1, 0.1), n=(-sx, 0, 0))
         A.face(f, brow=0.3, smile=0.4 if not old else 0.0)
         A.sit(f + per * 0.35, flex=4, head=(-12, 0)); A.hand(f + per * 0.35, s, (0.04 * sx, -0.27, 1.04), d=(-0.25 * sx, -0.3, 1.0), n=(-sx, 0, 0), pole=(0.45 * sx, 0.1, 0.9))
         A.face(f + per * 0.35, lids=0.6, jaw=4)
         A.sit(f + per * 0.65, flex=4, head=(-14, 0)); A.hand(f + per * 0.65, s, (0.04 * sx, -0.26, 1.05), d=(-0.25 * sx, -0.3, 1.0), n=(-sx, 0, 0), pole=(0.45 * sx, 0.1, 0.9))
         A.face(f + per * 0.65, lids=0.7, smile=0.6)
         f += per
-    A.sit(f1, flex=12, head=(8, 0)); A.hand(f1, s, (0.09 * sx, -0.6, TZ + 0.05), d=(0, -1, 0.1), n=(-sx, 0, 0))
+    A.sit(f1, flex=12, head=(8, 0)); A.hand(f1, s, (0.09 * sx, -0.6, TZ + 0.08), d=(0, -1, 0.1), n=(-sx, 0, 0))
 def rest_hands(A, f):
     for s in "LR":
         sx = 1 if s == "L" else -1
-        A.hand(f, s, (0.2 * sx, -0.55, TZ + 0.02), d=(-0.3 * sx, -1, 0), n=(0, 0, -1), pole=(0.5 * sx, 0.3, 0.9))
+        A.hand(f, s, (0.2 * sx, -0.55, TZ + 0.065), d=(-0.3 * sx, -1, 0.15), n=(0, 0, -1), pole=(0.5 * sx, 0.3, 0.9))
 for nm, A in TW.items():
     old = "old" in nm
     if old:
@@ -432,7 +442,7 @@ for k, (b, x, yaw, tmpl, f0, f1) in enumerate((("Woman", -1.45, -60, "silverpot"
         sx = -1 if k == 0 else 1
         A.hand(f, "R" if k == 0 else "L", (-0.18 * sx * -1, -0.48, 1.12 if pour else 0.95), d=(0, -1, -0.5 if pour else 0), n=(0, 0, 1))
         A.hand(f, "L" if k == 0 else "R", (0.22 * -sx, -0.02, 0.88), d=(0, 0, -1))
-        A.face(f, brow=0.5, smile=0.3)
+        A.face(f, brow=0.5, smile=0.3); grip(A.R, f, "R" if k == 0 else "L", 0.9)
         f += 30
     sc.frame_set(726); bpy.context.view_layer.update()
     pot.matrix_world = Matrix.Translation(hand_world(A.a, "R" if k == 0 else "L") + V((0, 0, -0.12)))
@@ -448,8 +458,8 @@ for k, (b, x) in enumerate((("Doctor1", 2.6), ("Doctor2", 3.4))):
     f = 725; i = 0
     while f <= 1650:
         A.sit(f, flex=16 if i % 2 else 8, head=(10 if i % 2 else -4, 25 if i % 2 == 0 else 0))
-        A.hand(f, "R", (-0.12, -0.42, TZ + 0.03 + 0.02 * (i % 2)), d=(0.3, -1, -0.2), n=(0, 0, -1))
-        A.hand(f, "L", (0.22, -0.4, TZ + 0.02), d=(-0.3, -1, 0), n=(0, 0, -1))
+        A.hand(f, "R", (-0.12, -0.42, TZ + 0.07 + 0.02 * (i % 2)), d=(0.3, -1, 0.0), n=(0, 0, -1))
+        A.hand(f, "L", (0.22, -0.4, TZ + 0.065), d=(-0.3, -1, 0.15), n=(0, 0, -1))
         A.face(f, brow=-0.8 if i % 2 else 0.6, lids=0.3 if i % 2 else 0.0)
         f += 70; i += 1
     q = inst(A_["quill"], c, (x - 0.12, -2.7, TZ + 0.1), name="quill%d" % k); q.rotation_euler = (R_(60), 0, R_(20))
@@ -460,7 +470,7 @@ for nm, A in TW.items():
     old = "old" in nm
     objs = [A.a] + list(A.a.children)
     for o in objs:
-        for f, h in ((725, old), (1480, not old)):
+        for f, h in ((725, old), (1440, not old)):
             o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
 cam(725, (0, -4.9, 2.0), (0, 1.5, 1.2), 28)
 cam(790, (-1.2, -2.0, 1.5), (0, 1.6, 1.15), 30)
@@ -471,13 +481,15 @@ cam(1040, (-1.1, -0.3, 1.25), (-0.6, 1.7, 1.25), 42)
 cam(1099, (0.3, -1.0, 1.35), (0.6, 1.6, 1.2), 38)
 cam(1160, (0.85, 0.5, 1.0), (0.6, 1.05, 0.9), 50)
 cam(1230, (1.7, 0.2, 1.4), (0.6, 1.7, 1.25), 38)
-cam(1265, (1.9, 0.0, 1.6), (1.6, -1.4, 1.2), 32)
+cam(1250, (1.9, 0.1, 1.55), (1.45, -0.6, 1.3), 32)
+cam(1275, (1.8, -0.3, 1.6), (2.6, -2.6, 1.15), 32)
 cam(1297, (1.6, -0.9, 1.6), (3.0, -2.7, 1.2), 32)
 cam(1360, (1.6, -1.6, 1.9), (3.0, -2.8, 1.0), 32)
 cam(1420, (3.0, -0.7, 1.7), (3.0, -2.7, 1.25), 34)
+cam(1452, (3.8, -1.2, 1.7), (2.2, -1.8, 1.3), 30)
 cam(1480, (4.2, -1.8, 1.8), (2.5, 0.2, 1.2), 28)
 cam(1545, (2.6, 0.2, 1.5), (0.0, 1.6, 1.2), 30)
-cam(1605, (3.6, -0.2, 1.8), (2.8, -2.8, 1.2), 28)
+cam(1600, (3.4, -0.4, 1.8), (8.0, -1.0, 1.6), 28)
 cam(1648, (5.15, -1.0, 1.9), (8.0, -1.0, 1.9), 28)
 finish_set(3)
 
@@ -515,20 +527,16 @@ for ci, x in enumerate((-1.3, 1.3)):
             sx = 1 if s_in == "L" else -1
             A.hand(f, s_in, (0.12 * sx, -0.05, 1.42), d=(-sx, 0, 0.3), n=(0, 0, 1), pole=(0.5 * sx, 0.2, 1.0))
             A.hand(f, s_out, (-0.24 * sx, -0.02, 0.88), d=(0, 0, -1), n=(sx, 0, 0), pole=(-0.3 * sx, 0.6, 1.1))
-            A.face(f, brow=0.8, lids=0.35, frown=0.6)
+            A.face(f, brow=0.8, lids=0.35, frown=0.6); grip(A.R, f, s_in, 0.9)
 for k, b in enumerate(("TwinA_old", "TwinB_old")):
     A = human(b, b + "_S5", c)
     A.H.walk(lambda f, k=k: V((-0.5 + k * 1.0, 12.5 - 15.0 * (f - 1650) / 222, 0)), lambda f: 0, 1650, 1872, stride=0.6, duty=0.6, lift=0.06, lean=4)
     for f in range(1650, 1873, 24):
         A.arms_down(f, sway=0.01); A.face(f, brow=1.6, lids=0.4, frown=1.0)
 # falling snow
-bpy.ops.mesh.primitive_plane_add(size=30, location=(0, 0, 14)); sn = bpy.context.active_object; sn.name = "SnowEmit"; link(sn, c)
-ps = sn.modifiers.new("snow", 'PARTICLE_SYSTEM').particle_system.settings
-ps.count = 6000; ps.frame_start = 1400; ps.frame_end = 1872; ps.lifetime = 500; ps.normal_factor = 0; ps.effector_weights.gravity = 0.04
-ps.render_type = 'OBJECT'
 bpy.ops.mesh.primitive_ico_sphere_add(radius=0.012, subdivisions=1); flake = bpy.context.active_object; flake.name = "flake"; link(flake, LIBC); setmat(flake, simple("m_flake", (1, 1, 1), rough=0.6))
-ps.instance_object = flake; ps.size_random = 0.6; sn.show_instancer_for_render = False
-light(c, 'SUN', (0, 0, 20), 2.0, (0.85, 0.9, 1.0), rot=(55, 0, 160), name="sun")
+sn = gn_fall("SnowEmit", c, [(random.uniform(-12, 12), random.uniform(-18, 12), random.uniform(0, 14)) for _ in range(7000)], flake, "snow", H=14.0, speed=0.02)
+light(c, 'SUN', (0, 0, 20), 2.2, (0.85, 0.9, 1.0), rot=(55, 0, 20), name="sun")
 cam(1650, (0, -15.5, 2.5), (0, 4.0, 1.6), 26)
 cam(1700, (-3.0, -8.0, 2.2), (-0.5, 2.0, 1.4), 30)
 cam(1760, (-3.2, -2.5, 1.6), (0.0, 0.5, 1.4), 32)
@@ -539,7 +547,11 @@ finish_set(4)
 
 # ================================================================== S6 Masked ball (b10)
 c = S(5)
-room(c, -8, 8, -10.5, 10, 8, M["marble"], M["plaster"], M["plaster"])
+room(c, -8, 8, -10.5, 10, 8, M["marble"], M["plaster"], M["plaster"], skip=("wW",))
+wall_opening(c, "x", -8.0, (-10.5, 10), 8, M["plaster"], 0.0, 1.8, 0.0, 2.9, M["oak"])
+plane("corridor", c, (6, 4), (-12.0, 0, 2.0), M["oak"], (90, 0, 90))
+plane("corrFloor", c, (5, 3), (-10.5, 0, 0.0), M["planks"])
+light(c, 'POINT', (-10.5, 0.8, 2.2), 60, (1, 0.6, 0.3), 0.05, name="corrLamp")
 for y in (-5, 1, 7):
     ch = inst(A_["chandelier"], c, (0, y, 5.8), s=1.0)
     for a in range(6):
@@ -547,7 +559,7 @@ for y in (-5, 1, 7):
 for x in (-7.5, 7.5):
     for y in (-7, -2, 3, 8):
         box("pillar", c, (0.8, 0.8, 8), (x, y, 4), M["marble"])
-K = human("King", "King_S6", c); hat(K.a, A_["wig"], c, dz=-0.07, dy=0.03)
+K = human("King", "King_S6", c); hat(K.a, A_["wig"], c, dz=-0.07, dy=0.03); capelet(K.a, c)
 MF = human("Doctor1", "Masked_S6", c)
 mk = hat(MF.a, A_["mask"], c, dz=-0.05, dy=-0.1)
 K.pos = V((0.5, 2.5)); K.yaw = 10
@@ -572,11 +584,11 @@ for f, ph in ((1872, 0), (1895, 1), (1905, 1), (1925, 0), (2004, 0)):
     MF.hand(f, "L", (0.22, -0.02, 0.88), d=(0, 0, -1))
 # muzzle flash at 1907 (light + glow puff) from in front of the masked figure's hand; no weapon detail
 fl = light(c, 'POINT', MF.W((-0.15, -0.75, 1.36)), 0, (1, 0.75, 0.4), 0.05, name="flash")
-for f, e in ((1904, 0), (1907, 30000), (1910, 3000), (1916, 0)):
+for f, e in ((1904, 0), (1907, 6000), (1910, 800), (1916, 0)):
     fl.data.energy = e; fl.data.keyframe_insert("energy", frame=f)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.25, location=tuple(MF.W((-0.15, -0.8, 1.36)))); puff = bpy.context.active_object; puff.name = "smokePuff"; link(puff, c)
 pm = steam_mat("m_puff", 0.0, (0.6, 0.6, 0.62)); setmat(puff, pm); pdn = pm.node_tree.nodes["Dens"]
-for f, v, s in ((1905, 0, 0.3), (1908, 8, 0.6), (1940, 2, 2.0), (1990, 0, 3.0)):
+for f, v, s in ((1905, 0, 0.2), (1908, 3, 0.35), (1940, 0.8, 1.2), (1990, 0, 1.8)):
     pdn.outputs[0].default_value = v; pdn.outputs[0].keyframe_insert("default_value", frame=f); puff.scale = (s,) * 3; puff.keyframe_insert("scale", frame=f)
 # dancers: pairs turning, then scatter
 for k in range(6):
@@ -610,14 +622,18 @@ cam(1872, (0, -9.8, 5.2), (0, 2.0, 3.0), 28)
 cam(1890, (0.6, -2.0, 4.2), (0.8, 3.0, 1.6), 30)
 cam(1905, (2.2, 6.0, 1.75), (0.5, 2.4, 1.5), 32)
 cam(1930, (2.6, 4.8, 1.1), (0.5, 2.6, 0.7), 30)
-cam(1960, (-1.0, 4.0, 0.8), (0.5, 2.8, 0.3), 28)
+cam(1960, (-1.7, 4.4, 0.9), (0.5, 2.9, 0.3), 28)
 cam(1985, (-5.5, 1.5, 1.6), (-9.0, 0.0, 1.8), 28)
 cam(2002, (-8.0, 0.0, 1.8), (-11.0, 0.0, 1.8), 28)
 finish_set(5)
 
 # ================================================================== S7 Bedroom (b11, b12)
 c = S(6)
-room(c, -4.5, 4.5, -4.5, 4.5, 3.5, M["planks"], M["plaster"], M["oak"])
+room(c, -4.5, 4.5, -4.5, 4.5, 3.5, M["planks"], M["plaster"], M["oak"], skip=("wE",))
+wall_opening(c, "x", 4.5, (-4.5, 4.5), 3.5, M["plaster"], -1.0, 1.4, 0.9, 2.6, M["oak"])
+plane("outside", c, (60, 30), (34.0, -1.0, 8.0), simple("m_out", (0.75, 0.82, 0.9), emit=(0.85, 0.9, 1.0), ew=1.2), (90, 0, -90))
+plane("outGround", c, (30, 40), (18, -1, -3.0), M["cobble"])
+for t, y in (("house3", -8), ("htb1", 0), ("house7", 7)): inst(A_[t], c, (20, y, -3.0), rz=90)
 bed = inst(A_["GothicBed_01"], c, (0, 2.6, 0), rz=180) if "GothicBed_01" in A_ else None
 # mattress top: ray down
 bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
@@ -634,14 +650,14 @@ for f in (2004, 2120, 2240):
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
         B.H.key_hand(s_, f, V((0.2 * sx, 0.12, 0.95)), V((0, 0.05, -1)).normalized(), V((-sx, 0, 0)), pole=V((0.4 * sx, 0.6, 1.1)))
-blanket = box("blanket", c, (1.15, 1.45, 0.18), (0, 2.2, BZ + 0.2), pbr("m_blanket", "wool_boucle", 3.0, coord="Object", tint=(0.45, 0.12, 0.10), bump=0.8))
+blanket = box("blanket", c, (1.15, 1.45, 0.18), (0, 2.2, BZ + 0.2), pbr("m_blanket", "velour_velvet", 3.0, coord="Object", tint=(0.35, 0.05, 0.06), bump=0.8))
 bl = blanket.modifiers.new("sub", 'SUBSURF'); bl.levels = bl.render_levels = 2
 dsp = blanket.modifiers.new("dsp", 'DISPLACE'); tx = bpy.data.textures.new("folds", 'CLOUDS'); tx.noise_scale = 0.3; dsp.texture = tx; dsp.strength = 0.05
-OA = human("TwinA_old", "TwinA_bed_S7", c); OA.pos = V((-1.15, 1.9)); OA.yaw = -90 + 180
-inst(A_["chair"], c, (-1.25, 1.9, 0), rz=-90)
+OA = human("TwinA_old", "TwinA_bed_S7", c); OA.pos = V((-1.5, 1.9)); OA.yaw = -90 + 180
+inst(A_["chair"], c, (-1.6, 1.9, 0), rz=-90)
 for f in range(2004, 2240, 40):
-    OA.sit(f, flex=22, head=(18, 0)); OA.face(f, brow=1.8, lids=0.45, frown=1.0)
-    OA.hand(f, "R", (-0.1, -0.62, BZ + 0.22), d=(0, -1, -0.2), n=(0, 0, -1)); OA.hand(f, "L", (0.2, -0.45, 0.62), d=(0, -1, 0), n=(0, 0, -1))
+    OA.sit(f, flex=26, knee_fwd=0.38, head=(18, 0)); OA.face(f, brow=1.8, lids=0.45, frown=1.0)
+    OA.hand(f, "R", (-0.1, -0.75, BZ + 0.24), d=(0, -1, -0.2), n=(0, 0, -1)); OA.hand(f, "L", (0.2, -0.45, 0.62), d=(0, -1, 0), n=(0, 0, -1))
 for o in [OA.a] + list(OA.a.children):
     for f, h in ((2004, False), (2230, True)):
         o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
@@ -649,25 +665,26 @@ candle(c, (-1.6, 3.5, 0.75));
 nst = inst(A_["GothicCabinet_01"] if "GothicCabinet_01" in A_ else A_["table"], c, (-1.6, 3.6, 0), rz=180, s=0.5)
 # window seat + very old twin A with coffee
 VA = human("TwinA_vold", "TwinA_vold_S7", c); VA.pos = V((3.3, -1.6)); VA.yaw = -125
-inst(A_["ArmChair_01"] if "ArmChair_01" in A_ else A_["chair"], c, (3.38, -1.66, 0), rz=-125 + 180)
+inst(A_["ArmChair_01"] if "ArmChair_01" in A_ else A_["chair"], c, (3.38, -1.66, 0), rz=-125)
 cupV = inst(A_["cup"], c, (3.0, -1.2, 0.9), name="CupV")
+bpy.ops.mesh.primitive_cylinder_add(radius=0.038, depth=0.002, location=(0, 0, 0.064)); cfv = bpy.context.active_object; link(cfv, c); setmat(cfv, M["coffee"]); cfv.parent = cupV
 f = 2228
 while f < 2510:
     VA.sit(f, seat_z=0.42, flex=10, head=(8, 0)); VA.hand(f, "R", (-0.05, -0.38, 0.86), d=(0.4, -1, 0.3), n=(1, 0, 0)); VA.face(f, smile=1.6, lids=0.35, brow=0.6)
-    VA.hand(f, "L", (0.2, -0.3, 0.66), d=(0, -1, 0), n=(0, 0, -1))
+    VA.hand(f, "L", (0.2, -0.3, 0.66), d=(0, -1, 0), n=(0, 0, -1)); grip(VA.R, f, "R", 0.75)
     VA.sit(f + 40, seat_z=0.42, flex=4, head=(-12, 0)); VA.hand(f + 40, "R", (-0.02, -0.2, 1.06), d=(0.1, -0.4, 1), n=(1, 0, 0), pole=(-0.45, 0.1, 0.8)); VA.face(f + 40, lids=0.7, smile=1.0)
     f += 95
 inv = ROOT[6].matrix_world.inverted()
 for f in range(2228, 2510, 5):
     sc.frame_set(f); cupV.location = inv @ hand_world(VA.a, "R") + V((0, 0, -0.05)); cupV.keyframe_insert("location", frame=f)
 bpy.ops.mesh.primitive_cylinder_add(radius=0.04, depth=0.35, location=(0, 0, 0.2)); stv = bpy.context.active_object; link(stv, c); setmat(stv, steam_mat("m_steamV", 0.8)); stv.parent = cupV
-light(c, 'AREA', (3.6, -1.0, 2.6), 1300, (1, 0.9, 0.75), 2.0, rot=(0, -60, 0), name="winLight")
+light(c, 'AREA', (6.0, -1.0, 2.6), 2500, (1, 0.9, 0.75), 2.0, rot=(0, -75, 0), name="winLight")
 light(c, 'AREA', (0, 0.5, 3.3), 700, (1, 0.8, 0.6), 2.0, rot=(0, 0, 0), name="bedTop")
 light(c, 'AREA', (-2, -3, 3.3), 600, (0.7, 0.75, 1.0), 2.5, rot=(40, 0, -140), name="fill")
 cam(2004, (0, -4.3, 1.7), (0, 2.5, 0.9), 28)
 cam(2070, (-2.2, -0.8, 1.9), (0, 2.6, 0.9), 30)
 cam(2140, (-0.2, 0.6, 2.2), (-0.4, 2.0, 0.8), 34)
-cam(2200, (-0.55, 1.1, 1.15), (-0.6, 1.95, 0.75), 42)
+cam(2200, (-0.95, 0.5, 1.5), (-0.5, 1.9, 0.8), 40)
 cam(2250, (1.6, 0.6, 1.4), (3.3, -1.6, 1.1), 32)
 cam(2320, (2.3, -0.4, 1.35), (3.25, -1.55, 1.15), 45)
 cam(2400, (2.0, -2.4, 1.3), (3.2, -1.5, 1.15), 40)
@@ -694,6 +711,7 @@ for k in range(8):
     attach(cp, A.a, "wrist.R", 2509)
     if b == "Townsman": hat(A.a, A_["tricorn"], c)
 light(c, 'SUN', (0, 0, 20), 3.5, (1.0, 0.9, 0.75), rot=(40, 0, 40), name="sun")
+walker("Townsman", "Walk_S8_0", c, (-9, -2, 0), (-6.5, -8, 0), 2508, 2670); walker("Woman", "Walk_S8_1", c, (7, -5, 0), (3, 6, 0), 2508, 2670, 0.6)
 cam(2508, (0, -12.7, 3.0), (0, 2.0, 1.5), 28)
 cam(2545, (-1.2, -6.0, 1.3), (0, 0.0, 1.4), 30)
 cam(2590, (0.8, -4.5, 3.5), (0, 1.0, 1.2), 28)
@@ -711,6 +729,7 @@ for fc in (W.node_tree.animation_data.action.fcurves if W.node_tree.animation_da
 # ------------------------------------------------------------------ portal pass-throughs (textured surfaces the camera flies through, <= 6 frames)
 PC = coll("PORTALS")
 for i in range(len(SETDEF) - 1):
+    if i in (3, 5, 6): continue
     ex = SETDEF[i][4]; Mx = ROOT[i].matrix_world @ P(*ex)
     f = SETDEF[i][2]
     if i == 1:   # steam
@@ -754,6 +773,28 @@ json.dump([{"beat": b, "frame": round(t * 60) + 1, "first_words": w} for b, t, w
           open("/home/user/Muhammed/blender/SwedishCoffee_v001/beats.json", "w"), indent=1)
 for b, t, w in BEATS: sc.timeline_markers.new("b%02d" % b, frame=round(t * 60) + 1)
 
+# ---- shrink textures: everything to <=1024 (GLB props 512 unless hero), saved as JPEG next to the scratch build
+os.makedirs(SCR + "/tex", exist_ok=True)
+HERO = ("cup", "silverpot", "throne", "wig", "teapot", "mask", "coffeepot", "skull")
+bpy.data.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
+for im in list(bpy.data.images):
+    if im.source != 'FILE' or im.size[0] == 0: continue
+    users_mat = [m.name for m in bpy.data.materials if m.node_tree and any(n.type == 'TEX_IMAGE' and n.image == im for n in m.node_tree.nodes)]
+    glb = im.packed_file is not None and not any(k in im.name.lower() for k in ("_1k", "_2k"))
+    mx = 1024
+    if glb and not any(h in " ".join(users_mat).lower() + im.name.lower() for h in HERO): mx = 512
+    w, h = im.size
+    if im.filepath.lower().endswith((".hdr",)): continue
+    sc_ = min(1.0, mx / max(w, h))
+    nc = im.colorspace_settings.name
+    if sc_ < 1.0: im.scale(max(1, int(w * sc_)), max(1, int(h * sc_)))
+    path = SCR + "/tex/%s.jpg" % bpy.path.clean_name(im.name)
+    im.filepath_raw = path; im.file_format = 'JPEG'
+    try:
+        im.save(); 
+        if im.packed_file: im.unpack(method='REMOVE')
+        im.filepath = path; im.source = 'FILE'; im.reload(); im.colorspace_settings.name = nc
+    except Exception as e: print("IMGFAIL", im.name, e)
 sc.frame_set(1)
 if OUT: bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("BUILD_DONE")
