@@ -592,7 +592,7 @@ OC_POS = Vector((-14.3, 56.4, OC.ROOT.z))
 for i, f in enumerate(range(1160, 1561, 30)):
     yw = 70 + 25 * math.sin(f / 50)
     OC.body(f, OC_POS, yaw=yw, spine=(2, 8 * math.sin(f / 40), 0), head=(-4, -10 * math.sin(f / 50))); OC.stand_feet(f, width=1.1)
-    OC.hand_b("R", f, -0.18, 0.4, 1.38, d=(0.05, 0.3, 1), n=(0, -1, 0.4)); OC.fingers("R", f, 65, 40)
+    OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, 82, 55)
     OC.hand_b("L", f, 0.2, 0.05, 0.92, d=(0.1, 0.2, -1), n=(-1, 0, 0))
 for nm in ("OfficerB", "OfficerC"):
     for o in meshes(CH[nm]): key_vis(o, [(1150, 1560)])
