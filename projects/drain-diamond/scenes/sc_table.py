@@ -29,17 +29,24 @@ def stand_obj(name, loc, mat):
 def build(variant=None):
     c = {}
     v = variant or "count"
-    world_flat((0.015, 0.016, 0.02), 1.0)
+    world_flat((0.02, 0.022, 0.028), 1.0)
     rng = np.random.default_rng(41)
     B = dd.Builder("EvidenceRoom")
-    B.box((0, 0, -0.05), (16, 10, 0.1), dd.tex_mat("concrete_floor_painted", 0.6, tint=(0.4, 0.42, 0.43), name="ERFloor", sat=0.4))
+    B.box((0, 0, -0.05), (16, 10, 0.1), dd.tex_mat("concrete_floor_02", 0.6, tint=(0.5, 0.5, 0.5), name="ERFloor", sat=0.3))
     wall = pbr("ERWall", (0.42, 0.44, 0.44), 0.8)
     B.box((0, 4.0, 1.5), (16, 0.1, 3.0), wall).box((-7.5, 0, 1.5), (0.1, 10, 3.0), wall)
-    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), fabric("TableCloth", (0.2, 0.21, 0.22), 0.9, 0.3, 500))
+    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), fabric("TableCloth", (0.05, 0.055, 0.065), 0.9, 0.5, 500))
     for sx in (-1, 1):
         for sy in (-1, 1):
             B.box((sx * TL / 2, sy * TW / 2, TZ / 2), (0.05, 0.05, TZ), pbr("Leg", (0.3, 0.3, 0.32), 0.4, 0.8))
     B.done()
+    for k in range(5):                         # evidence shelving with boxes along the back wall
+        x = -6.0 + k * 2.6
+        dd.model_h("steel_frame_shelves_01", (x, 3.5, 0), 2.1)
+        for j in range(3):
+            dd.model_h("cardboard_box_01", (x - 0.3 + 0.3 * (j % 2), 3.5, 0.05 + j * 0.62), 0.32, rot_z=0.1 * j)
+    dd.model_h("metal_office_desk", (-6.5, -1.5, 0), 0.76, rot_z=math.pi / 2)
+    dd.model_h("desk_lamp_arm_01", (-6.5, -1.2, 0.76), 0.5)
     smat = pbr("StandWhite", (0.85, 0.84, 0.8), 0.45)
     tagm = pbr("Tag", (0.9, 0.88, 0.78), 0.7)
     grid = [Vector((-TL / 2 + 0.25 + i * (TL - 0.5) / (NX - 1), -TW / 2 + 0.25 + j * (TW - 0.5) / (NY - 1), TZ)) for i in range(NX) for j in range(NY)]
@@ -69,7 +76,7 @@ def build(variant=None):
         out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled"); vol.inputs['Density'].default_value = 0.02
         L.new(vol.outputs[0], out.inputs['Volume']); hz.data.materials.append(m); hz.visible_shadow = False
     # lighting: a long softbox over the table and two practical lamp pools
-    a = bpy.data.lights.new("Soft", 'AREA'); a.shape = 'RECTANGLE'; a.size = TL; a.size_y = 1.2; a.energy = 350; a.color = (0.92, 0.96, 1.0)
+    a = bpy.data.lights.new("Soft", 'AREA'); a.shape = 'RECTANGLE'; a.size = TL; a.size_y = 1.2; a.energy = 140; a.color = (0.92, 0.96, 1.0)
     ao = bpy.data.objects.new("Soft", a); bpy.context.collection.objects.link(ao); ao.location = (0, 0, 2.8)
     box("Tube", (0, 0, 2.9), (TL, 0.15, 0.04), emissive("TubeE", (0.9, 0.95, 1.0), 6))
     k = bpy.data.lights.new("Key", 'SPOT'); k.energy = 260; k.spot_size = math.radians(40); k.spot_blend = 0.6; k.color = (1.0, 0.9, 0.75)

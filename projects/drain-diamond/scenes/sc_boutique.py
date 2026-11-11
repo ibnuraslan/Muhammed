@@ -218,14 +218,15 @@ def street(c, y_kerb=-6.0, length=140, opposite=True):
         x = k * 11.0 + 3.0
         dd.model_h("street_lamp_02", (x, y_kerb + 0.6, 0.06), 4.6) if k % 2 == 0 else None
     rng = np.random.default_rng(77)
-    for k in range(-4, 5):                       # plane trees along the kerb (and on the far side)
-        x = k * 9.0 - 1.5 + float(rng.uniform(-1, 1))
-        dd.model_h(("island_tree_02", "island_tree_01")[k % 2], (x, y_kerb + 1.4, 0.06), float(rng.uniform(8.5, 10.5)), rot_z=float(rng.uniform(0, 6)))
+    for k in range(-4, 5):                       # plane trees along the kerb (none in front of the boutique door)
+        x = k * 11.0 + 5.5 + float(rng.uniform(-0.6, 0.6))
+        if abs(x) > 4.0:
+            dd.model_h("jacaranda_tree", (x, y_kerb + 0.9, 0.06), float(rng.uniform(10.0, 12.0)), rot_z=float(rng.uniform(0, 6)))
         if opposite:
-            dd.model_h(("island_tree_01", "island_tree_02")[k % 2], (x + 4.0, y_kerb - 17.2, 0.06), float(rng.uniform(8.5, 10.5)), rot_z=float(rng.uniform(0, 6)))
+            dd.model_h("jacaranda_tree", (x + 4.0, y_kerb - 16.8, 0.06), float(rng.uniform(10.0, 12.0)), rot_z=float(rng.uniform(0, 6)))
     cars = []
     for k, (x, col) in enumerate(((-14, (0.05, 0.05, 0.06)), (-8.5, (0.4, 0.41, 0.43)), (9, (0.12, 0.14, 0.18)), (15, (0.6, 0.6, 0.6)))):
-        cr = car(f"Parked{k}", col); cr.location = (x, y_kerb - 1.2, 0); cars.append(cr)
+        cr = dd.sedan(f"Parked{k}", col, lights=False); cr.location = (x, y_kerb - 1.2, 0); cars.append(cr)
     c["cars"] = cars
 
 
@@ -287,8 +288,8 @@ def paint_tin(name):
 
 # ============================================================================ variants
 def build_dawn(c):
-    world_sky(sun_elev_deg=4, sun_rot_deg=200, strength=0.6, tint=(0.88, 0.92, 1.0))
-    sun(4, 200, energy=0.9, color=(1.0, 0.72, 0.5), angle_deg=2.0)
+    world_sky(sun_elev_deg=5, sun_rot_deg=200, strength=1.6, tint=(0.88, 0.92, 1.0))
+    sun(5, 200, energy=1.2, color=(1.0, 0.72, 0.5), angle_deg=2.0)
     blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.3)
     haussmann(-34, -11, seed=2, lit_frac=0.28); haussmann(11, 33, seed=3, lit_frac=0.25)
     haussmann(33, 55, seed=4, lit_frac=0.25); haussmann(-56, -34, seed=5, lit_frac=0.25)
@@ -309,13 +310,13 @@ def build_dawn(c):
 
 def build_lane(c, night=False):
     if night:
-        world_flat((0.012, 0.016, 0.026), 1.0)
+        world_flat((0.03, 0.04, 0.065), 1.0)
         for y in (-6.0, 14.0):
-            sl = bpy.data.lights.new("StreetL", 'SPOT'); sl.energy = 500; sl.spot_size = math.radians(110); sl.color = (1.0, 0.7, 0.42)
+            sl = bpy.data.lights.new("StreetL", 'SPOT'); sl.energy = 1500; sl.spot_size = math.radians(120); sl.color = (1.0, 0.7, 0.42)
             so = bpy.data.objects.new("StreetL", sl); bpy.context.collection.objects.link(so); so.location = (-3.5, y, 6.0)
     else:
-        world_sky(sun_elev_deg=6, sun_rot_deg=180, strength=1.4, tint=(0.9, 0.93, 1.0))
-        sun(6, 180, energy=1.4, color=(1.0, 0.72, 0.5), angle_deg=3.0)
+        world_sky(sun_elev_deg=6, sun_rot_deg=150, strength=0.7, tint=(0.9, 0.93, 1.0))
+        sun(6, 150, energy=0.6, color=(1.0, 0.72, 0.5), angle_deg=3.0)
     # a narrow rue running along +Y: the boutique block's side on the right (x>0), another block on the left
     haussmann(-30, 30, seed=7, rot_z=math.radians(-90), origin=(4.0, 0, 0), lit_frac=0.06, gf=5.0)
     haussmann(-30, 30, seed=8, rot_z=math.radians(90), origin=(-4.0, 0, 0), lit_frac=0.06, gf=5.0)
@@ -443,7 +444,7 @@ def vitrine(name, loc, size=(1.4, 0.6), rot_z=0.0, rng=None, lit=True):
 
 def build_salon(c, night=False):
     if night:
-        world_sky(sun_elev_deg=-3, sun_rot_deg=95, strength=0.25, tint=(0.6, 0.7, 1.0))
+        world_sky(sun_elev_deg=-2, sun_rot_deg=95, strength=1.6, tint=(0.55, 0.68, 1.0))
     else:
         world_sky(sun_elev_deg=4, sun_rot_deg=95, strength=0.5, tint=(0.85, 0.9, 1.0))
         sun(4, 95, energy=1.0, color=(1.0, 0.75, 0.55), angle_deg=1.5)

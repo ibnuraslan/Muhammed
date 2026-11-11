@@ -218,10 +218,10 @@ def build_yard(c, variant):
     box("Road", (0, -10.5, -0.06), (60, 9, 0.1), road)
     box("Pave", (0, -5.8, 0.0), (60, 1.4, 0.1), wet_concrete("Pavement", (0.55, 0.55, 0.54), 0.6))
     for k, (x, col) in enumerate(((-6.0, (0.12, 0.13, 0.15)), (5.5, (0.35, 0.36, 0.38)), (11.0, (0.42, 0.1, 0.07)))):
-        cr = car(f"Parked{k}", col); cr.location = (x, -7.6, 0)
+        cr = dd.sedan(f"Parked{k}", col, lights=False); cr.location = (x, -7.6, 0)
     box("Ground", (0, 10, -0.65), (80, 40, 0.1), pbr("Earth", (0.06, 0.07, 0.05), 0.9))
     c["rain_ys"] = (-3.5, -1.0, 1.5, 3.6)
-    rain(c, 0, c["rain_ys"], width=30, height=8, strength=3.0, density=0.93)
+    rain(c, 0, c["rain_ys"], width=30, height=8, strength=5.0, density=0.988)
 
 
 def build(variant=None):
@@ -238,11 +238,11 @@ def build(variant=None):
             c["walkers"].append((h, starts[k], ends[k], 0.5 * k))
     if v == "drill":
         h = officer("Driller", 38, seed=1); c["driller"] = h
-        w = officer("Watcher", 50, seed=3); wp = PATCH + Vector((0.95, -0.75, 0)); place(w, wp, face_to(wp, PATCH)); arms_relaxed(w)
+        w = officer("Watcher", 50, seed=3); wp = PATCH + Vector((-0.95, 0.15, 0)); place(w, wp, face_to(wp, PATCH)); arms_relaxed(w)
         c["drill"] = drill_tool()
         c["dust"] = dust_volume(PATCH + Vector((0, 0, 0.1)), 0.32)
     if v in ("open", "bag"):
-        box_ = dd.container("Container", CONT_AT, CONT_SIZE, rot_z=0.35)
+        box_ = dd.container("Container", CONT_AT, CONT_SIZE, rot_z=0.35, lid_open=1.0)
         c["box"] = box_
         hero, items = dd.fill_container(box_, CONT_SIZE, rng)
         c["hero"] = hero
@@ -294,7 +294,7 @@ def anim_drill(c, t):
     rain_fall(c, sec)
     h = c["driller"]
     pose_kneel(h, lean=36)
-    pos = PATCH + Vector((0.0, -0.62, 0))
+    pos = PATCH + Vector((0.5, -0.1, 0))
     h.arm.rotation_euler = (0, 0, face_to(pos, PATCH)); h.arm.location = pos; dd.ground(h)
     jit = 0.003 * math.sin(sec * 55)
     tip = PATCH + Vector((0.04, 0.02, 0.006 + jit))
@@ -315,15 +315,13 @@ def anim_open(c, t, dur):
 def anim_bag(c, t):
     anim_open(c, t, DUR["bag"])
     h = c["photog"]
-    sp = CONT_AT + Vector((0.55, -0.85, 0)); zero(h); pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
-    place(h, sp, face_to(sp, CONT_AT))
-    h.rot("spine03", (1, 0, 0), 0)
+    sp = CONT_AT + Vector((0.5, -0.75, 0))
+    pose_crouch(h, lean=32)
+    h.arm.rotation_euler = (0, 0, face_to(sp, CONT_AT)); h.arm.location = sp; dd.ground(h)
     M = h.arm.matrix_world.to_3x3()
-    eye = h.bone_head("head") + M @ Vector((0, -0.1, 0.07))
-    camp = eye + M @ Vector((0, -0.14, -0.02))
+    camp = h.bone_head("head") + M @ Vector((0, -0.22, -0.1))
     reach(h, "R", camp + M @ Vector((-0.07, 0.02, -0.04)), M @ Vector((-1, 0.2, -0.5)))
     reach(h, "L", camp + M @ Vector((0.07, 0.02, -0.05)), M @ Vector((1, 0.2, -0.5)))
-    h.rot("head", (1, 0, 0), 14)
     if c.get("camera_prop") is not None:
         cp = c["camera_prop"]; cp.location = camp - Vector((0, 0, 0.05)); cp.rotation_euler = (0, 0, h.arm.rotation_euler.z + math.pi)
     c["flash"].location = camp + Vector((0, 0, 0.12)); point_at(c["flash"], CONT_AT)
@@ -380,13 +378,13 @@ def cam_patch(c, t):
 
 def cam_drill(c, t):
     e = ease(t)
-    loc = PATCH + Vector((-2.5, -2.6, 1.25)).lerp(Vector((-2.2, -2.3, 1.15)), e)
-    return loc, PATCH + Vector((-0.2, -0.35, 0.55)), 32
+    loc = PATCH + Vector((-0.7, -3.3, 1.35)).lerp(Vector((-0.5, -2.9, 1.25)), e)
+    return loc, PATCH + Vector((0.0, 0.0, 0.5)), 32
 
 
 def cam_container(c, t):
     e = ease(t)
-    loc = CONT_AT + Vector((-0.08, -0.36, 0.3)).lerp(Vector((-0.04, -0.22, 0.2)), e)
+    loc = CONT_AT + Vector((-0.12, -0.3, 0.42)).lerp(Vector((-0.07, -0.18, 0.3)), e)
     return loc, c["hero"].location + Vector((0, 0, 0.004)), 55
 
 
@@ -398,8 +396,8 @@ def cam_circle(c, t):
 
 def cam_bag(c, t):
     e = ease(t)
-    loc = CONT_AT + Vector((-3.0, -1.6, 1.45)).lerp(Vector((-2.7, -1.4, 1.38)), e)
-    return loc, CONT_AT + Vector((0.3, -0.4, 0.7)), 30
+    loc = CONT_AT + Vector((-1.9, -2.1, 1.25)).lerp(Vector((-1.7, -1.85, 1.18)), e)
+    return loc, CONT_AT + Vector((0.25, -0.35, 0.4)), 32
 
 
 def cam_yard(c, t):

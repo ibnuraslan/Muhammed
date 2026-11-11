@@ -403,7 +403,7 @@ def earring(name, loc, r=0.003, stone="diamond"):
 def tub_material(name, dirt=0.7):
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    p.inputs['Base Color'].default_value = (0.78, 0.8, 0.78, 1); p.inputs['Roughness'].default_value = 0.5
+    p.inputs['Base Color'].default_value = (0.62, 0.64, 0.62, 1); p.inputs['Roughness'].default_value = 0.55
     p.inputs['Transmission Weight'].default_value = 0.6
     tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 30; nz.inputs['Detail'].default_value = 8
     L.new(tc.outputs['Object'], nz.inputs['Vector'])
@@ -411,9 +411,9 @@ def tub_material(name, dirt=0.7):
     low = N.new("ShaderNodeMapRange"); low.inputs['From Min'].default_value = 0.6; low.inputs['From Max'].default_value = 0.0
     L.new(sep.outputs['Z'], low.inputs['Value'])                       # more mud toward the bottom
     add = N.new("ShaderNodeMath"); add.operation = 'MULTIPLY'; L.new(nz.outputs['Fac'], add.inputs[0]); L.new(low.outputs[0], add.inputs[1])
-    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.15; mr.inputs['From Max'].default_value = 0.45
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.05; mr.inputs['From Max'].default_value = 0.3
     mr.inputs['To Max'].default_value = dirt; L.new(add.outputs[0], mr.inputs['Value'])
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.78, 0.8, 0.78, 1); mx.inputs[7].default_value = (0.2, 0.16, 0.11, 1)
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.62, 0.64, 0.6, 1); mx.inputs[7].default_value = (0.2, 0.16, 0.11, 1)
     L.new(mr.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color'])
     tw = N.new("ShaderNodeMapRange"); tw.inputs['To Min'].default_value = 0.6; tw.inputs['To Max'].default_value = 0.0
     L.new(mr.outputs[0], tw.inputs['Value']); L.new(tw.outputs[0], p.inputs['Transmission Weight'])
@@ -434,15 +434,15 @@ def _open_box(name, size, bevel=0.01):
     return o
 
 
-def container(name, loc, size=(0.17, 0.12, 0.075), rot_z=0.0, dirt=0.7, lid_open=0.6):
+def container(name, loc, size=(0.17, 0.12, 0.075), rot_z=0.0, dirt=0.9, lid_open=0.6):
     """A small grimy translucent plastic food tub; its lid sits half off, tipped against the rim."""
     m = tub_material(name + "Plastic", dirt)
     o = _open_box(name, size, 0.012); o.data.materials.append(m)
     o.location = Vector(loc) + Vector((0, 0, size[2] / 2)); o.rotation_euler = (0, 0, rot_z)
     lid = box(name + "Lid", (0, 0, 0), (size[0] + 0.008, size[1] + 0.008, 0.008), m, bevel=0.004)
     lid.parent = o
-    lid.location = (size[0] * 0.42 * lid_open, 0.01, size[2] / 2 + 0.008 + 0.02 * lid_open)
-    lid.rotation_euler = (0, math.radians(-14 * lid_open), math.radians(6))
+    lid.location = (size[0] * 0.62 * lid_open, 0.02, size[2] / 2 + 0.002 - 0.03 * lid_open)
+    lid.rotation_euler = (0, math.radians(-22 * lid_open), math.radians(9))
     # a film of muddy water in the bottom
     w = box(name + "Mud", (0, 0, -size[2] / 2 + 0.006), (size[0] - 0.01, size[1] - 0.01, 0.008),
             pbr("MudWater", (0.09, 0.075, 0.055), 0.08, 0.0, **{'Coat Weight': 1.0}))
@@ -582,3 +582,62 @@ class Builder:
         o = bpy.data.objects.new(self.name, me); bpy.context.collection.objects.link(o)
         o.location = loc; o.rotation_euler = (0, 0, rot_z)
         return o
+
+
+# ============================================================================ a better car
+def sedan(name, col=(0.05, 0.055, 0.06), length=4.6, width=1.82, lights=True, window_open=0.0):
+    """A generic European saloon (no badges): the body is a side profile extruded across its width, bevelled and
+    subdivided so it reads as pressed metal; a dark glasshouse, tyres with alloy rims, head and tail lamps.
+    Origin on the ground at the car's centre; the nose points +X."""
+    L_, W_ = length, width
+    # side profile (x, z), nose at +x
+    prof = [(-L_ / 2, 0.32), (-L_ / 2 + 0.05, 0.72), (-L_ / 2 + 0.55, 0.8), (-L_ / 2 + 1.05, 0.86), (-0.45, 1.38), (0.75, 1.4),
+            (1.2, 0.9), (L_ / 2 - 0.15, 0.8), (L_ / 2, 0.62), (L_ / 2, 0.32), (L_ / 2 - 0.55, 0.2), (-L_ / 2 + 0.55, 0.2)]
+    bm = bmesh.new()
+    vs0 = [bm.verts.new((x, -W_ / 2, z)) for x, z in prof]
+    vs1 = [bm.verts.new((x, W_ / 2, z)) for x, z in prof]
+    bm.faces.new(vs0[::-1]); bm.faces.new(vs1)
+    n = len(prof)
+    for i in range(n):
+        j = (i + 1) % n
+        bm.faces.new((vs0[i], vs0[j], vs1[j], vs1[i]))
+    # tumblehome: pull the roof edges inward
+    for v in bm.verts:
+        if v.co.z > 0.95:
+            v.co.y *= 0.82
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    body = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(body)
+    bv = body.modifiers.new("bev", 'BEVEL'); bv.width = 0.08; bv.segments = 4; bv.limit_method = 'ANGLE'
+    ss = body.modifiers.new("sub", 'SUBSURF'); ss.levels = 1; ss.render_levels = 2
+    paint = pbr(name + "Paint", col, 0.25, 0.7, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
+    glass_m = pbr(name + "Glass", (0.015, 0.018, 0.022), 0.03, 0.0, **{'Coat Weight': 1.0})
+    body.data.materials.append(paint); body.data.materials.append(glass_m)
+    # glass: faces of the upper band (between the beltline and roof) get the glass material
+    bpy.context.view_layer.update()
+    for p in body.data.polygons:
+        c_ = p.center
+        if 0.9 < c_.z < 1.36 and abs(p.normal.z) < 0.9:
+            p.material_index = 1
+    for p in body.data.polygons:
+        p.use_smooth = True
+    parts = []
+    tyre = pbr(name + "Tyre", (0.02, 0.02, 0.02), 0.85); rim = pbr(name + "Rim", (0.55, 0.56, 0.58), 0.25, 1.0)
+    wheels = []
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            wx = sx * (L_ / 2 - 0.82)
+            t = cyl(name + "Tyre", (wx, sy * (W_ / 2 - 0.13), 0.32), 0.32, 0.22, tyre, verts=32, rot=(math.radians(90), 0, 0))
+            r = cyl(name + "Rim", (wx, sy * (W_ / 2 - 0.015), 0.32), 0.21, 0.02, rim, verts=24, rot=(math.radians(90), 0, 0))
+            t.parent = body; r.parent = body; wheels += [t, r]
+    for sy in (-1, 1):
+        hl = box(name + "Head", (L_ / 2 - 0.02, sy * (W_ / 2 - 0.32), 0.66), (0.06, 0.38, 0.1),
+                 emissive(name + "HeadE", (1.0, 0.95, 0.85), 25 if lights else 0.3))
+        tl = box(name + "Tail", (-L_ / 2 + 0.02, sy * (W_ / 2 - 0.28), 0.74), (0.06, 0.32, 0.1),
+                 emissive(name + "TailE", (1.0, 0.04, 0.02), 12 if lights else 0.6))
+        mir = box(name + "Mirror", (0.7, sy * (W_ / 2 + 0.06), 1.0), (0.12, 0.1, 0.08), paint)
+        hl.parent = body; tl.parent = body; mir.parent = body
+    grille = box(name + "Grille", (L_ / 2 - 0.01, 0, 0.5), (0.04, 0.8, 0.14), pbr(name + "GrilleM", (0.03, 0.03, 0.03), 0.4)); grille.parent = body
+    if window_open > 0:            # an open front window: a dark gap in the glass on the driver's side (+y)
+        g = box(name + "OpenWin", (0.3, W_ / 2 * 0.86, 1.12), (0.75, 0.04, 0.3 * window_open), pbr(name + "Interior", (0.01, 0.01, 0.012), 0.9))
+        g.parent = body
+    return body
