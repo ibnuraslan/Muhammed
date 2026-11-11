@@ -127,35 +127,37 @@ def driven_emission(m_or_light, expr, base, prop="energy"):
 
 
 # ============================================================================ geometry helpers
+def _wall_cells(u0, u1, z0, z1, holes):
+    """Solid (ua, ub, za, zb) cells of a wall from u0..u1, z0..z1 with rectangular holes (any arrangement)."""
+    cuts = sorted({u0, u1} | {h[0] for h in holes if u0 < h[0] < u1} | {h[1] for h in holes if u0 < h[1] < u1})
+    cells = []
+    for ua, ub in zip(cuts[:-1], cuts[1:]):
+        um = (ua + ub) / 2
+        hz = sorted((h[2], h[3]) for h in holes if h[0] <= um <= h[1])
+        cz = z0
+        for (za, zb) in hz:
+            if za > cz:
+                cells.append((ua, ub, cz, min(za, z1)))
+            cz = max(cz, zb)
+        if z1 > cz:
+            cells.append((ua, ub, cz, z1))
+    # merge vertically identical neighbours along u to keep the object count low
+    merged = []
+    for c in cells:
+        if merged and merged[-1][1] == c[0] and merged[-1][2:] == c[2:]:
+            merged[-1] = (merged[-1][0], c[1], c[2], c[3])
+        else:
+            merged.append(c)
+    return [c for c in merged if c[1] - c[0] > 1e-4 and c[3] - c[2] > 1e-4]
+
+
 def wall_x(name, x0, x1, y, z0, z1, t, m, holes=()):
     """Wall running along X at y (thickness t along Y). holes: (xa, xb, za, zb)."""
-    parts = []; hs = sorted(holes); cx = x0
-    for (xa, xb, za, zb) in hs:
-        if xa > cx:
-            parts.append(box(name, ((cx + xa) / 2, y, (z0 + z1) / 2), (xa - cx, t, z1 - z0), m))
-        if za > z0:
-            parts.append(box(name, ((xa + xb) / 2, y, (z0 + za) / 2), (xb - xa, t, za - z0), m))
-        if zb < z1:
-            parts.append(box(name, ((xa + xb) / 2, y, (zb + z1) / 2), (xb - xa, t, z1 - zb), m))
-        cx = xb
-    if x1 > cx:
-        parts.append(box(name, ((cx + x1) / 2, y, (z0 + z1) / 2), (x1 - cx, t, z1 - z0), m))
-    return parts
+    return [box(name, ((a + b) / 2, y, (za + zb) / 2), (b - a, t, zb - za), m) for (a, b, za, zb) in _wall_cells(x0, x1, z0, z1, holes)]
 
 
 def wall_y(name, y0, y1, x, z0, z1, t, m, holes=()):
-    parts = []; hs = sorted(holes); cy = y0
-    for (ya, yb, za, zb) in hs:
-        if ya > cy:
-            parts.append(box(name, (x, (cy + ya) / 2, (z0 + z1) / 2), (t, ya - cy, z1 - z0), m))
-        if za > z0:
-            parts.append(box(name, (x, (ya + yb) / 2, (z0 + za) / 2), (t, yb - ya, za - z0), m))
-        if zb < z1:
-            parts.append(box(name, (x, (ya + yb) / 2, (zb + z1) / 2), (t, yb - ya, z1 - zb), m))
-        cy = yb
-    if y1 > cy:
-        parts.append(box(name, (x, (cy + y1) / 2, (z0 + z1) / 2), (t, y1 - cy, z1 - z0), m))
-    return parts
+    return [box(name, (x, (a + b) / 2, (za + zb) / 2), (t, b - a, zb - za), m) for (a, b, za, zb) in _wall_cells(y0, y1, z0, z1, holes)]
 
 
 def window_unit(axis, u, w, pos, za, zb, depth=0.12, panes=True, lit_glass=None):
@@ -281,7 +283,7 @@ def shell(prefix="H", brick="brick", detail=False, lit=None):
         out += wall_y(prefix + "Side", -D2 + T, D2 - T, sx * (W2 - T / 2), G, EAVE, T, bm_, hs)
     out += gable_fill(prefix + "Gable", bm_)
     if detail:          # plaster lining on the inside faces (rooms are plaster, not brick)
-        pl = mat("plaster"); lz0, lz1 = F1 - 0.05, EAVE - 0.06
+        pl = mat("paper"); lz0, lz1 = F1 - 0.05, EAVE - 0.06
         clip = lambda hs: [(a, b, max(za, lz0), min(zb, lz1)) for (a, b, za, zb) in hs]
         wall_x("LineF", -W2 + T, W2 - T, -D2 + T + 0.011, lz0, lz1, 0.02, pl, clip(holes_f))
         wall_x("LineB", -W2 + T, W2 - T, D2 - T - 0.011, lz0, lz1, 0.02, pl, clip(holes_b))
@@ -333,7 +335,7 @@ def shell(prefix="H", brick="brick", detail=False, lit=None):
 # ============================================================================ interiors (hero house only)
 def interiors(c):
     """Floors, partitions, stairs, closet + hatch, attic, cellar. Doors are hinge empties in c."""
-    pl = mat("plaster"); fl = mat("floor"); tr = mat("trim")
+    pl = mat("paper"); fl = mat("floor"); tr = mat("trim"); cl = mat("plaster")
     IX, IY = W2 - T, D2 - T       # inner faces
     # floors / ceilings
     box("FloorFront", (0, (-IY - 0.2) / 2, -0.06), (2 * IX, IY - 0.2, 0.12), fl)
@@ -342,20 +344,20 @@ def interiors(c):
     c["cellar_hole"] = (-3.6, 3.0)
     # ceiling of ground floor / floor upstairs (with stair opening x[0,0.9] y[-3.6,-0.2])
     sl = []
-    sl.append(box("Slab", (-(IX + 0.0) / 2, 0, (C1 + F2) / 2), (IX, 2 * IY, F2 - C1), pl))
-    sl.append(box("Slab", ((0.9 + IX) / 2, 0, (C1 + F2) / 2), (IX - 0.9, 2 * IY, F2 - C1), pl))
-    sl.append(box("Slab", (0.45, (-0.2 + IY) / 2, (C1 + F2) / 2), (0.9, IY + 0.2, F2 - C1), pl))
-    sl.append(box("Slab", (0.45, (-IY - 3.6) / 2, (C1 + F2) / 2), (0.9, IY - 3.6, F2 - C1), pl))
+    sl.append(box("Slab", (-(IX + 0.0) / 2, 0, (C1 + F2) / 2), (IX, 2 * IY, F2 - C1), cl))
+    sl.append(box("Slab", ((0.9 + IX) / 2, 0, (C1 + F2) / 2), (IX - 0.9, 2 * IY, F2 - C1), cl))
+    sl.append(box("Slab", (0.45, (-0.2 + IY) / 2, (C1 + F2) / 2), (0.9, IY + 0.2, F2 - C1), cl))
+    sl.append(box("Slab", (0.45, (-IY - 3.6) / 2, (C1 + F2) / 2), (0.9, IY - 3.6, F2 - C1), cl))
     box("FloorUp", (0, 0, F2 + 0.005), (2 * IX, 2 * IY, 0.01), fl).hide_render = True     # (visual floor pieces below)
     for (cx, cy, sx, sy) in ((-(IX) / 2, 0, IX, 2 * IY), ((0.9 + IX) / 2, 0, IX - 0.9, 2 * IY), (0.45, (-0.2 + IY) / 2, 0.9, IY + 0.2), (0.45, (-IY - 3.6) / 2, 0.9, IY - 3.6)):
         box("FloorUp", (cx, cy, F2 + 0.006), (sx, sy, 0.012), fl)
     # upstairs ceiling with the closet hatch hole
     hx, hy = HATCH
     cz = (C2 + EAVE - 0.05) / 2; ct = EAVE - 0.05 - C2
-    box("CeilUp", ((-IX + hx - HATCH_W / 2) / 2, 0, cz), (hx - HATCH_W / 2 + IX, 2 * IY, ct), pl)
-    box("CeilUp", ((IX + hx + HATCH_W / 2) / 2, 0, cz), (IX - hx - HATCH_W / 2, 2 * IY, ct), pl)
-    box("CeilUp", (hx, (-IY + hy - HATCH_L / 2) / 2, cz), (HATCH_W, hy - HATCH_L / 2 + IY, ct), pl)
-    box("CeilUp", (hx, (IY + hy + HATCH_L / 2) / 2, cz), (HATCH_W, IY - hy - HATCH_L / 2, ct), pl)
+    box("CeilUp", ((-IX + hx - HATCH_W / 2) / 2, 0, cz), (hx - HATCH_W / 2 + IX, 2 * IY, ct), cl)
+    box("CeilUp", ((IX + hx + HATCH_W / 2) / 2, 0, cz), (IX - hx - HATCH_W / 2, 2 * IY, ct), cl)
+    box("CeilUp", (hx, (-IY + hy - HATCH_L / 2) / 2, cz), (HATCH_W, hy - HATCH_L / 2 + IY, ct), cl)
+    box("CeilUp", (hx, (IY + hy + HATCH_L / 2) / 2, cz), (HATCH_W, IY - hy - HATCH_L / 2, ct), cl)
     # hatch panel (slides aside over the boards in the crawl space)
     c["hatch"] = box("HatchPanel", (hx, hy, EAVE - 0.03), (HATCH_W + 0.06, HATCH_L + 0.06, 0.02), mat("raw"))
     c["hatch_home"] = Vector((hx, hy, EAVE - 0.03))
@@ -478,6 +480,9 @@ def kitchen_set(c):
     """Kitchen x[-1.5,4.2] y[-0.2,4.7]: stove on the right wall, icebox by the back door, table, sink under the window."""
     c["stove"] = stove((3.75, 1.6, 0), math.radians(90))
     ib, door = icebox((-0.85, 4.35, 0), 0.0); c["icebox"] = ib; c["ice_door"] = door
+    for (cx, cy, sx, sy) in ((1.35, 4.68, 5.6, 0.02), (4.18, 2.25, 0.02, 4.8), (1.35, -0.13, 5.6, 0.02)):
+        box("Wainscot", (cx, cy, 0.6), (sx, sy, 1.2), pbr("Beadboard", (0.72, 0.74, 0.62), 0.5))
+        box("WainCap", (cx, cy, 1.21), (sx + 0.01, sy + 0.03, 0.03), mat("trim"))
     box("Sink", (1.1, 4.4, 0.85), (1.1, 0.5, 0.2), mat("enamel"), bevel=0.03)
     box("SinkCab", (1.1, 4.4, 0.4), (1.2, 0.52, 0.75), mat("trim"), bevel=0.01)
     box("Counter", (2.4, 4.4, 0.9), (1.4, 0.55, 0.04), mat("oak"))
@@ -533,6 +538,10 @@ def upstairs_set(c):
     ph.model("painted_wooden_nightstand", loc=(-4.0, -3.9, F2), rot_z=math.radians(-90))
     sock, _ = ph.model("pull_chain_light_socket", loc=(-2.4, -2.4, C2)); c["up_bulb_obj"] = sock
     c["up_light"] = point((-2.4, -2.4, C2 - 0.25), 40, (1.0, 0.7, 0.42), 0.05)
+    ph.model("painted_wooden_cabinet", loc=(-2.6, -0.5, F2), rot_z=math.pi, scale=0.85)
+    ph.model("hanging_picture_frame_02", loc=(-3.4, -0.33, F2 + 1.7), rot_z=math.pi, scale=0.8)
+    ph.model("dining_chair_02", loc=(-0.95, -2.0, F2), rot_z=math.radians(-110))
+    rug = box("RugUp", (-2.6, -2.6, F2 + 0.015), (2.2, 1.6, 0.008), fabric("RugUp", (0.25, 0.12, 0.08), 0.95, 0.3, 300))
     c["closet_light"] = point((-1.2, -0.7, C2 - 0.3), 0.0, (1.0, 0.7, 0.42), 0.05)
 
 
@@ -749,7 +758,7 @@ def person(name, kind):
         "neighbour_w": dict(gender=0.0, years=45, weight=0.5, height=0.5, cloth="female_casualsuit02", cv=dict(hue=0.6, sat=0.45, val=0.4), hair="bob01", hv=0.25, hat=False),
         "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.08, sat=0.3, val=0.42), hair="short02", hv=0.2, hat=True),
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_worksuit01", cv=dict(hue=0.6, sat=0.2, val=0.4), hair="short01", hv=0.15, hat=True),
-        "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_worksuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
+        "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
         "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.32), hair="long01", hv=0.3, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
@@ -881,7 +890,7 @@ def build_house(season="autumn", tod="day", ext=True, rooms=("kitchen", "front",
     c["porch_light"] = point((0.15, -D2 - 0.4, 2.45), 25 if tod == "night" else 0, (1.0, 0.75, 0.45), 0.05)
     if haze_room:
         lo, hi = haze_room
-        hz = haze(((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2), (hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]), density=0.035, color=(0.9, 0.9, 0.95), anis=0.5)
+        hz = haze(((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2), (hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]), density=0.06, color=(0.9, 0.9, 0.95), anis=0.55)
         c["haze"] = hz
     return c
 

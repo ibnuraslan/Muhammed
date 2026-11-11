@@ -91,11 +91,11 @@ def _():
 def _():
     def anim(c, t):
         sec = tick(c, t, "van_away")
-        H.drive(c["van"], (-2.0, ROAD_Y + 1.8, G - 0.05), (-40.0, ROAD_Y + 1.8, G - 0.05), ease(t) * 0.7 + 0.05 * t, heading=math.pi)
+        H.drive(c["van"], (-1.0, ROAD_Y + 1.8, G - 0.05), (-30.0, ROAD_Y + 1.8, G - 0.05), ease(t) * 0.55 + 0.05 * t, heading=math.pi)
         H.porch_swing(c, math.radians(6) * math.sin(1.5 * sec))
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.2, -D2 - 0.7, 1.15)).lerp(Vector((0.9, -D2 - 1.0, 1.15)), e), Vector((-5.0, ROAD_Y + 1.0, 0.3)), 30)
+        return (Vector((3.1, -D2 - 0.6, 1.5)).lerp(Vector((2.9, -D2 - 0.9, 1.5)), e), Vector((-9.0, ROAD_Y + 1.5, 0.4)), 30)
     return cam, anim
 
 
@@ -107,7 +107,13 @@ def _():
             # a window in the neighbour's front room across the street (seen from inside, behind her)
             c["neighbours"][2].hide_render = True
             y = ROAD_Y - 8.0; pl = H.mat("plaster")
-            H.wall_x("NWin", -9.0, -4.0, y, G, G + 2.8, 0.2, pl, [(-7.2, -5.8, G + 0.9, G + 2.3)])
+            pl = H.mat("paper")
+            H.wall_x("NWin", -9.5, -3.5, y, G, G + 2.8, 0.2, pl, [(-7.2, -5.8, G + 0.9, G + 2.3)])
+            H.wall_y("NSide", y - 4.0, y, -9.5, G, G + 2.8, 0.2, pl); box("NCeil", (-6.5, y - 2.0, G + 2.85), (6, 4, 0.1), H.mat("plaster"))
+            import ph
+            ph.model("ArmChair_01", loc=(-8.6, y - 1.0, G), rot_z=math.radians(140))
+            ph.model("side_table_01", loc=(-8.9, y - 0.4, G)); ph.model("vintage_oil_lamp", loc=(-8.9, y - 0.4, G + 0.55), scale=0.8)
+            H.point((-8.9, y - 0.4, G + 1.1), 20, (1.0, 0.68, 0.38), 0.06)
             p, g = H.window_unit('x', -6.5, 1.4, y + 0.0, G + 0.9, G + 2.3, lit_glass=None); c["nwin"] = p
             cl = box("NCurtainL", (-6.95, y - 0.15, G + 1.6), (0.5, 0.02, 1.4), H.mat("lace")); c["ncur"] = cl
             box("NCurtainR", (-6.05, y - 0.15, G + 1.6), (0.5, 0.02, 1.4), H.mat("lace"))
@@ -121,7 +127,7 @@ def _():
         H.look(h, 6, -4)
     def cam(c, t):
         e = ease(t); y = ROAD_Y - 8.0
-        return (Vector((-7.6, y - 2.9, G + 1.75)).lerp(Vector((-7.3, y - 2.4, G + 1.7)), e), Vector((-4.0, -D2, 2.6)), 30)
+        return (Vector((-8.2, y - 3.6, G + 1.6)).lerp(Vector((-7.9, y - 3.2, G + 1.6)), e), Vector((-5.0, -D2, 2.0)), 28)
     return cam, anim
 
 
@@ -154,7 +160,7 @@ def _():
             reach(h, "R", hd + Vector((0.2, 0.3, -0.45)), Vector((0.3, -0.5, -1)), (tgt - hd).normalized())
     def cam(c, t):
         e = ease(t)
-        return (Vector((5.5, ROAD_Y - 2.0, 1.5)).lerp(Vector((4.6, ROAD_Y - 1.0, 1.6)), e), Vector((-0.5, -D2 - 4.0, 0.6)), 28)
+        return (Vector((6.5, ROAD_Y - 2.5, 1.5)).lerp(Vector((5.6, ROAD_Y - 1.5, 1.6)), e), Vector((-2.0, -D2 - 6.0, 0.4)), 26)
     return cam, anim
 
 
@@ -173,7 +179,7 @@ def _():
             reach(o2, "L", Vector((0.5, -D2 - 0.05, 0.95)), Vector((-0.5, 0, -1)), Vector((0, 1, 0)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((3.0, -D2 - 5.2, 1.0)).lerp(Vector((2.4, -D2 - 4.6, 1.1)), e), Vector((0.1, -D2, 1.3)), 32)
+        return (Vector((4.5, -D2 - 7.5, 1.2)).lerp(Vector((3.8, -D2 - 7.0, 1.25)), e), Vector((0.1, -D2 - 1.0, 1.3)), 30)
     return cam, anim
 
 

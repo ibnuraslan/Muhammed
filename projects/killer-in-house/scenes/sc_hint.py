@@ -64,7 +64,7 @@ def P(c, key):
 
 
 # =========================================================================== INTRO
-@move("hall_beams", "night", 4.0, cast=("o1:officer", "o2:officer"), haze=((-0.6, -4.7, 0.0), (0.9, -0.2, 2.7)))
+@move("hall_beams", "night", 4.0, cast=("o1:officer", "o2:officer"), haze=((-0.6, -4.7, 0.0), (4.2, -0.2, 2.7)))
 def _():
     def anim(c, t):
         sec = t * DUR["hall_beams"]
@@ -83,7 +83,7 @@ def _():
             reach(h, "R", hd + Vector((0.18 * sw, 0.25, -0.35)), Vector((0.3, -0.5, -1)), (tgt - hd).normalized())
     def cam(c, t):
         e = ease(t)
-        return (Vector((3.4, -0.9, 1.6)).lerp(Vector((2.6, -0.8, 1.7)), e), Vector((0.2, -3.9, 1.3)).lerp(Vector((0.3, -1.5, 2.0)), e), 26)
+        return (Vector((3.9, -4.4, 2.0)).lerp(Vector((3.5, -4.2, 2.0)), e), Vector((0.2, -2.6, 1.2)).lerp(Vector((0.4, -1.4, 1.8)), e), 24)
     return cam, anim
 
 
