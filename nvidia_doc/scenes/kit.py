@@ -329,12 +329,18 @@ def render_depth(path, near=0.1, far=60.0):
 
 
 def apply_cam(cam, ctx, spec, t):
-    loc, tgt, lens = spec["cam"](ctx, t)
+    if spec.get("anim"):                      # pose the scene first so the camera can follow what moved
+        spec["anim"](ctx, t)
+    r = spec["cam"](ctx, t)
+    loc, tgt, lens = r[:3]
     cam.location = Vector(loc); point_at(cam, tuple(tgt)); cam.data.lens = lens
+    if len(r) > 3 and r[3] is not None:       # explicit camera up vector (no random roll on steep views)
+        from mathutils import Matrix
+        z = (Vector(loc) - Vector(tgt)).normalized(); up = Vector(r[3])
+        x = up.cross(z).normalized(); y = z.cross(x)
+        cam.rotation_mode = 'XYZ'; cam.rotation_euler = Matrix((x, y, z)).transposed().to_euler()
     if cam.data.dof.use_dof:
         cam.data.dof.focus_distance = (Vector(loc) - Vector(spec.get("focus", lambda c, t: tgt)(ctx, t))).length
-    if spec.get("anim"):
-        spec["anim"](ctx, t)
 
 
 def rain_glass(name="RainGlass", scale=55, density=0.45):

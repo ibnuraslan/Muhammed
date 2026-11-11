@@ -660,3 +660,37 @@ def add_asset(h, kind, name, **matkw):
         bmesh.ops.delete(bm, geom=kill, context='FACES_ONLY')
         bm.to_mesh(h.body.data); bm.free(); h.body.data.update()
     return o
+
+
+ARM_CHAIN = ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02")
+
+
+def reach(h, side, wrist_target, pole, hand_dir=None):
+    """Two-bone IK for an arm: put the wrist at `wrist_target` (world), elbow bent toward `pole` (world direction)."""
+    from mathutils import Vector
+    b = h.arm.data.bones
+    a = b[f"upperarm01.{side}"].length + b[f"upperarm02.{side}"].length
+    c = b[f"lowerarm01.{side}"].length + b[f"lowerarm02.{side}"].length
+    S = h.bone_head(f"upperarm01.{side}"); T = Vector(wrist_target)
+    d_vec = T - S; d = min(max(d_vec.length, abs(a - c) + 1e-3), (a + c) * 0.999)
+    u = d_vec.normalized()
+    cosA = (a * a + d * d - c * c) / (2 * a * d); sinA = math.sqrt(max(0.0, 1 - cosA * cosA))
+    p = Vector(pole); p = (p - u * p.dot(u)).normalized()
+    E = S + u * (a * cosA) + p * (a * sinA)
+    h.aim(f"upperarm01.{side}", E - S); h.aim(f"upperarm02.{side}", E - S)
+    T2 = S + u * d
+    h.aim(f"lowerarm01.{side}", T2 - E); h.aim(f"lowerarm02.{side}", T2 - E)
+    if hand_dir is not None:
+        h.aim(f"wrist.{side}", hand_dir)
+
+
+def ik2(h, b1, b2, target, pole):
+    """Two-bone IK on any chain b1 -> b2 (tail of b2 lands on target)."""
+    from mathutils import Vector
+    a = h.arm.data.bones[b1].length; c = h.arm.data.bones[b2].length
+    S = h.bone_head(b1); T = Vector(target); dv = T - S
+    d = min(max(dv.length, abs(a - c) + 1e-4), (a + c) * 0.999); u = dv.normalized()
+    cosA = (a * a + d * d - c * c) / (2 * a * d); sinA = math.sqrt(max(0.0, 1 - cosA * cosA))
+    p = Vector(pole); p = (p - u * p.dot(u)).normalized()
+    E = S + u * (a * cosA) + p * (a * sinA)
+    h.aim(b1, E - S); h.aim(b2, S + u * d - E)
