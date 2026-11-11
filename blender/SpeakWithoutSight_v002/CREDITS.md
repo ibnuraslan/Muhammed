@@ -4,13 +4,18 @@
 Paste this block into the video description:
 
 ```
-3D models (CC BY 4.0, via Sketchfab): Dog by Yury Misiyuk
+3D models (CC BY 4.0, via Sketchfab): Dog by Yury Misiyuk · Hand by Team Skeleton Wars ·
+Larynx by Vikrama Raghuraman · Chesterfield Style Foot Stool by kiksart · Open Book by Inuciian
 Additional CC0 assets: Poly Haven, MakeHuman / MPFB2
 ```
 
 | Asset | Author | Licence | Source |
 |---|---|---|---|
 | Dog | Yury Misiyuk | CC BY 4.0 | https://sketchfab.com/3d-models/a89b49b3d9c647a8805d8d5287f47f48 (mirrored in Objaverse) |
+| Hand (hand skeleton, x-ray) | Team Skeleton Wars | CC BY 4.0 | https://sketchfab.com/3d-models/efd1df50e4a2457d91045a1727db7679 |
+| Larynx (x-ray) | Vikrama Raghuraman | CC BY 4.0 | https://sketchfab.com/3d-models/a0d7f8420e8140acbb75d2afc69e66fb |
+| Chesterfield Style Foot Stool | kiksart | CC BY 4.0 | https://sketchfab.com/3d-models/bbc26fe77dd24364bd48123f17d3a722 |
+| Open Book | Inuciian | CC BY 4.0 | https://sketchfab.com/3d-models/cd8df095f5db4fa38fe7d8799822cfc3 |
 
 ## CC0 (no attribution required, listed for the record)
 | Asset | Author(s) | Source |
@@ -35,4 +40,4 @@ Additional CC0 assets: Poly Haven, MakeHuman / MPFB2
 | Belfast Farmhouse (HDRI) | Dimitrios Savva, Jarod Guest | polyhaven.com |
 | Girl, Teacher, Mother, Father (bodies, hair, clothes, skins) | MakeHuman community, MPFB2 | CC0 system assets |
 
-Procedural and ours: room shell, window, footstool, book, embroidery hoop, larynx, pulse dots, lip contour rings, explainer dome, dark bubble.
+Procedural and ours: room shell, window, curtains, long skirts, embroidery hoop, turning page, pulse dots, lip contour rings, explainer dome.

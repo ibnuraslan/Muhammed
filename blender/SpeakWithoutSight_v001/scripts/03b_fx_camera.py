@@ -15,7 +15,7 @@ BASE = {n: L.energy for n, L in LIGHTS.items()}
 BASE["L_StudioKey"], BASE["L_StudioRim"] = 160.0, 120.0
 bg = sc.world.node_tree.nodes["Background"].inputs["Strength"]
 # room level: 1 = normal, ~0.12 = the dark of beat 2, ~0.25 under the explainer dome
-ROOM = [(1, 1.0), (175, 1.0), (250, 0.2), (395, 0.2), (450, 1.0), (700, 1.0), (735, 0.3), (1060, 0.3), (1100, 1.0), (END, 1.0)]
+ROOM = [(1, 1.0), (175, 1.0), (250, 0.14), (395, 0.14), (450, 1.0), (700, 1.0), (735, 0.3), (1060, 0.3), (1100, 1.0), (END, 1.0)]
 STUDIO = [(1, 0.0), (700, 0.0), (735, 1.0), (1060, 1.0), (1100, 0.0), (END, 0.0)]
 room = pchip(ROOM); stud = pchip(STUDIO)
 TL0, TL1 = 1723, 1843   # time-lapse window
@@ -89,7 +89,7 @@ for f, e_ in ((1, 0.0), (175, 0.0), (240, 45.0), (400, 45.0), (450, 0.0), (END, 
     fl_.energy = e_; fl_.keyframe_insert("energy", frame=f)
 bub = bpy.data.objects["DarkBubble"]
 keyattr(bub, "scale", [(170, Vector((1.6, 1.6, 1.6))), (255, Vector((1.0, 1.0, 1.0))), (400, Vector((1.0, 1.0, 1.0))), (450, Vector((1.25, 1.25, 1.25)))])
-keyattr(bub, "hide_render", [(1, True), (178, False), (452, True)])
+keyattr(bub, "hide_render", [(1, True)])   # no visible sphere: the "trapped" beat is a lighting vignette (room fades, her face keeps a soft key)
 dome_mix = bpy.data.materials["M_ExplainerDome"].node_tree.nodes["DomeMix"].inputs[0]
 _cr = next(n for n in bpy.data.materials["M_ExplainerDome"].node_tree.nodes if n.type == 'VALTORGB').color_ramp
 _cr.elements[0].position = 0.2; _cr.elements[0].color = (0.02, 0.16, 0.24, 1); _cr.elements[1].position = 0.9; _cr.elements[1].color = (0.55, 0.85, 0.95, 1)
@@ -152,42 +152,31 @@ pf = m_fold.node_tree.nodes["Principled BSDF"]; pf.inputs["Base Color"].default_
 pf.inputs["Emission Color"].default_value = (1.0, 0.8, 0.6, 1); pf.inputs["Emission Strength"].default_value = 0.3
 ev(760); TF = fdir(T_YAW); TR = rdir(T_YAW); lc = T.bone_world("neck01").lerp(T.bone_world("neck02"), 0.5) + TF * 0.012
 LARYNX = []
-def larynx_part(name, fn, mat, loc, rot_q):
-    o = mk(name, fn, mat); o.matrix_world = Matrix.Translation(loc) @ rot_q.to_matrix().to_4x4(); attach(o, T, "neck01", 760); LARYNX.append(o); return o
-qn = Vector((0, 0, 1)).rotation_difference(UP)
-ring1 = larynx_part("Larynx_Cricoid", lambda bm: bmesh.ops.create_cone(bm, cap_ends=False, segments=24, radius1=0.012, radius2=0.012, depth=0.008), m_cart, lc - UP * 0.018, qn)
-ring2 = larynx_part("Larynx_Thyroid", lambda bm: bmesh.ops.create_cone(bm, cap_ends=False, segments=24, radius1=0.016, radius2=0.013, depth=0.02), m_cart, lc + UP * 0.002, qn)
-for o in (ring1, ring2): o.modifiers.new("S", 'SOLIDIFY').thickness = 0.002
-folds = []
-for sx in (-1, 1):
-    fo = larynx_part("VocalFold_%d" % sx, lambda bm: bmesh.ops.create_uvsphere(bm, u_segments=12, v_segments=8, radius=0.004), m_fold, lc + TR * sx * 0.003, Vector((0, 1, 0)).rotation_difference(TF))
-    fo.scale = (1.0, 3.0, 1.0); folds.append(fo)
+# real larynx anatomy (CC-BY model): thyroid prominence just under the throat skin, trachea down the neck
+lxm = bpy.data.objects["Model_Larynx"]; lxm.hide_render = False
+n1_, n2_ = T.bone_world("neck01"), T.bone_world("neck02")
+Zw = (n2_ - n1_).normalized(); Yw = -(TF - Zw * TF.dot(Zw)).normalized(); Xw = Yw.cross(Zw)
+skin = t_throat(760)
+lxm.matrix_world = Matrix.Translation(skin - TF * 0.022 + Zw * 0.004) @ Matrix((Xw, Yw, Zw)).transposed().to_4x4()
+attach(lxm, T, "neck01", 760); LARYNX.append(lxm)
 for o in LARYNX:
     keyattr(o, "hide_render", [(1, True), (715, False), (1080, True)])
+# the larynx buzzes with the voice: tiny, fast scale tremor (bigger when loud)
 for f in range(697, 1063, 3):
     loud = 895 <= f < 985; soft = f >= 985
-    a = 0.5 if loud else (0.12 if soft else 0.28)
-    for i, fo in enumerate(folds):
-        fo.scale = (1.0 + a * (1 if (f // 3 + i) % 2 else -0.6), 3.0, 1.0); fo.keyframe_insert("scale", frame=f)
-m_bone = bpy.data.materials.new("M_HandBone"); m_bone.use_nodes = True
-pb_ = m_bone.node_tree.nodes["Principled BSDF"]; pb_.inputs["Base Color"].default_value = (0.9, 0.86, 0.76, 1); pb_.inputs["Roughness"].default_value = 0.45
-pb_.inputs["Subsurface Weight"].default_value = 0.4; pb_.inputs["Subsurface Radius"].default_value = (0.3, 0.2, 0.15)
-pb_.inputs["Emission Color"].default_value = (0.9, 0.95, 1.0, 1); pb_.inputs["Emission Strength"].default_value = 0.15
-nzb = m_bone.node_tree.nodes.new("ShaderNodeTexNoise"); nzb.inputs["Scale"].default_value = 400.0
-bpb = m_bone.node_tree.nodes.new("ShaderNodeBump"); bpb.inputs["Strength"].default_value = 0.2
-m_bone.node_tree.links.new(nzb.outputs["Fac"], bpb.inputs["Height"]); m_bone.node_tree.links.new(bpb.outputs["Normal"], pb_.inputs["Normal"])
-HAND_BONES = []
-BONE_LIST = ["metacarpal%d.R" % k for k in range(1, 5)] + ["finger%d-%d.R" % (k, j) for k in range(1, 6) for j in range(1, 4)] + ["lowerarm01.R", "lowerarm02.R"]
+    a = 0.02 if loud else (0.004 if soft else 0.01)
+    k = 1 + a * (1 if (f // 3) % 2 else -1)
+    lxm.scale = (k, k, 1.0); lxm.keyframe_insert("scale", frame=f)
+# real hand skeleton (CC-BY model) fitted to the girl's right hand: wrist, middle fingertip and thumb
+hsm = bpy.data.objects["Model_HandSkeleton"]; hsm.hide_render = False
 ev(760)
-for bn_ in BONE_LIST:
-    if bn_ not in G.o.pose.bones: continue
-    pbn = G.o.pose.bones[bn_]; h_ = G.o.matrix_world @ pbn.head; t_ = G.o.matrix_world @ pbn.tail
-    L_ = (t_ - h_).length; rad = (0.0045 if "finger" in bn_ else 0.006) if "lowerarm" not in bn_ else 0.008
-    o = mk("XRayBone_" + bn_.replace(".", "_"), lambda bm: bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=rad, radius2=rad * 0.8, depth=L_ * 0.86), m_bone)
-    o.modifiers.new("Sub", 'SUBSURF').levels = 1
-    o.matrix_world = Matrix.Translation((h_ + t_) / 2) @ Vector((0, 0, 1)).rotation_difference(t_ - h_).to_matrix().to_4x4()
-    attach(o, G, bn_, 760); HAND_BONES.append(o)
-for o in HAND_BONES + []:
+wr_ = G.bone_world("wrist.R"); tp_ = G.bone_world("finger3-3.R", tail=True); th_ = G.bone_world("finger1-3.R", tail=True)
+Yg = (tp_ - wr_).normalized(); Lg = (tp_ - wr_).length * 0.97
+lat_ = (th_ - wr_) - Yg * (th_ - wr_).dot(Yg); Xg = lat_.normalized(); Zg = Xg.cross(Yg)
+hsm.matrix_world = Matrix.Translation(wr_) @ Matrix((Xg, Yg, Zg)).transposed().to_4x4() @ Matrix.Scale(Lg, 4)
+attach(hsm, G, "wrist.R", 760)
+HAND_BONES = [hsm]
+for o in HAND_BONES:
     keyattr(o, "hide_render", [(1, True), (712, False), (1080, True)])
 # pulse dots: larynx -> fingertip -> knuckles -> wrist -> forearm -> elbow -> shoulder
 m_dot = bpy.data.materials.new("M_PulseDot"); m_dot.use_nodes = True

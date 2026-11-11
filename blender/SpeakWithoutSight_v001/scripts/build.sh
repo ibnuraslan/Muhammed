@@ -7,6 +7,11 @@ python3 -I $P/fetch_polyhaven.py $W/assets 1k ArmChair_01 vintage_grandfather_cl
 python3 -I $P/fetch_polyhaven.py $W/assets 2k belfast_farmhouse
 python3 -I $P/find_models.py get $W/objv $W/assets/glb Dog=a89b49b3d9c647a8805d8d5287f47f48
 $B -b --factory-startup --python $P/rig_quadruped.py -- $W/assets/glb/Dog.glb Dog 0.55 $W/dog.blend
+python3 -I $P/find_models.py get $W/objv $W/assets/glb2 HandSkeleton=efd1df50e4a2457d91045a1727db7679 Larynx=a0d7f8420e8140acbb75d2afc69e66fb Footstool=bbc26fe77dd24364bd48123f17d3a722 OpenBook=cd8df095f5db4fa38fe7d8799822cfc3
+$B -b --factory-startup --python $H/01c_prep_models.py -- $W/assets/glb2 $W/models.blend
 $B -b --python $H/01_build_humans.py -- $W/humans.blend
 $B -b --factory-startup --python $H/02_build_scene.py -- $W $W/assets $W/scene.blend
 $B -b $W/scene.blend --python $H/03_animate.py -- $W/anim.blend      # also runs 03b_fx_camera.py
+# farm package (<95 MB, plain git file):
+# $B -b $W/anim.blend --python $H/04_shrink_textures.py -- $W/jpgtex $W/anim_small.blend
+# $B -b $W/anim_small.blend --python $P/package_for_farm.py -- <repo>/blender/SpeakWithoutSight_v002/SpeakWithoutSight_v002_60fps.blend

@@ -184,8 +184,14 @@ mpw = wn.new('ShaderNodeMapping'); tcw = wn.new('ShaderNodeTexCoord'); mpw.input
 wl.new(tcw.outputs['Generated'], mpw.inputs['Vector']); wl.new(mpw.outputs['Vector'], env.inputs['Vector'])
 wl.new(env.outputs['Color'], wn["Background"].inputs['Color']); wn["Background"].inputs['Strength'].default_value = 1.0
 m_lawn = flat("M_Lawn", (0.12, 0.2, 0.06), 0.9)
+_n = m_lawn.node_tree.nodes; _p = _n["Principled BSDF"]
+_nz = _n.new("ShaderNodeTexNoise"); _nz.inputs["Scale"].default_value = 3.0; _nz.inputs["Detail"].default_value = 10
+_cm = _n.new("ShaderNodeMix"); _cm.data_type = 'RGBA'; _cm.inputs["A"].default_value = (0.06, 0.12, 0.03, 1); _cm.inputs["B"].default_value = (0.2, 0.28, 0.08, 1)
+m_lawn.node_tree.links.new(_nz.outputs["Fac"], _cm.inputs["Factor"]); m_lawn.node_tree.links.new(_cm.outputs["Result"], _p.inputs["Base Color"])
+_vz = _n.new("ShaderNodeTexNoise"); _vz.inputs["Scale"].default_value = 400; _bp = _n.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.6
+m_lawn.node_tree.links.new(_vz.outputs["Fac"], _bp.inputs["Height"]); m_lawn.node_tree.links.new(_bp.outputs["Normal"], _p.inputs["Normal"])
 lawn = plane("Lawn", 40, 30, (0, RY + 15.2, -0.3), m_lawn)
-box("GardenWall", (14, 0.4, 1.4), (0, RY + 9.0, 0.4), flat("M_Stone", (0.35, 0.32, 0.28), 0.9))
+box("GardenWall", (14, 0.4, 1.4), (0, RY + 9.0, 0.4), pbr("M_GardenStone", "painted_plaster_wall", 0.8, tint=(0.5, 0.47, 0.42), bump=1.5, coord='Object'))
 with bpy.data.libraries.load(os.path.join(AS, "island_tree_01", "island_tree_01_1k.blend"), link=False) as (s_, d_):
     d_.objects = [n for n in s_.objects if "LOD0" in n or "geometry_nodes" in n]
 for o in d_.objects:
@@ -217,11 +223,14 @@ def append_ph(folder, loc, rot_z=0.0, scale=1.0, name=None, only=None):
     piv.location = loc; piv.rotation_euler = (0, 0, R_(rot_z)); piv.scale = (scale,) * 3
     return piv, objs
 CHAIR_XY = Vector((0.25, 0.55))
-STOOL = (CHAIR_XY.x, CHAIR_XY.y - 0.52, 0.19)
-m_velvet = flat("M_StoolVelvet", (0.25, 0.06, 0.05), 0.7)
-box("Footstool_Top", (0.42, 0.3, 0.08), (STOOL[0], STOOL[1], STOOL[2] - 0.04), m_velvet, PROPS)
-for i, (dx, dy) in enumerate(((-0.17, -0.11), (0.17, -0.11), (-0.17, 0.11), (0.17, 0.11))):
-    box("Footstool_Leg%d" % i, (0.035, 0.035, STOOL[2] - 0.08), (STOOL[0] + dx, STOOL[1] + dy, (STOOL[2] - 0.08) / 2), m_wood, PROPS)
+with bpy.data.libraries.load(os.path.join(W, "models.blend"), link=False) as (s_, d_):
+    d_.objects = [n for n in s_.objects if n.startswith("Model_")]
+MODELS = {o.name: o for o in d_.objects if o}
+fst = MODELS["Model_Footstool"]; PROPS.objects.link(fst); fst.name = "Footstool"
+fst.scale = (0.78, 0.66, 0.6); fst.location = (CHAIR_XY.x, CHAIR_XY.y - 0.5, 0.0)
+STOOL = (CHAIR_XY.x, CHAIR_XY.y - 0.5, 0.35 * 0.6)
+for nm in ("Model_HandSkeleton", "Model_Larynx", "Model_OpenBook"):
+    o = MODELS[nm]; FX.objects.link(o) if nm != "Model_OpenBook" else PROPS.objects.link(o); o.hide_render = True; o.location = (0, 0, -5)
 sc["stool"] = STOOL
 append_ph("ArmChair_01", (CHAIR_XY.x, CHAIR_XY.y, 0), 0, name="ArmChair")
 append_ph("Sofa_01", (-2.35, 0.5, 0), 90, name="Sofa")

@@ -9,7 +9,7 @@ exec(open(os.path.join(HERE, "03_anim_lib.py")).read())
 sc = bpy.context.scene
 STOOL = Vector(sc["stool"]); CHAIR = Vector(sc["chair_xy"])
 def ground_z(x, y):
-    if abs(x - STOOL.x) < 0.2 and abs(y - STOOL.y) < 0.14: return STOOL.z
+    if abs(x - STOOL.x) < 0.13 and abs(y - STOOL.y) < 0.11: return STOOL.z
     return 0.0
 V = lambda *a: Vector(a)
 
@@ -480,6 +480,13 @@ for f in keys_every(1, END, 12):
         Mo.hand("L", f, ch + MO_R * 0.05, -MO_R + UP * 0.3, MO_F, ch + MO_R * 0.4 - MO_F * 0.2); Mo.fingers("L", f, 30, 20)
         Mo.hand("R", f, ch - MO_R * 0.07 - UP * 0.08, MO_R + UP * 0.2, MO_F, ch - MO_R * 0.4 - MO_F * 0.2); Mo.fingers("R", f, 30, 20)
 c = hoop.constraints.new('CHILD_OF'); c.target = Mo.o; c.subtarget = "wrist.L"
+pm = bpy.data.materials["M_Linen"]; pmn = pm.node_tree.nodes; pp = pmn["Principled BSDF"]
+wv_ = pmn.new("ShaderNodeTexWave"); wv_.inputs["Scale"].default_value = 900; bp_ = pmn.new("ShaderNodeBump"); bp_.inputs["Strength"].default_value = 0.3
+pm.node_tree.links.new(wv_.outputs["Fac"], bp_.inputs["Height"]); pm.node_tree.links.new(bp_.outputs["Normal"], pp.inputs["Normal"])
+hw = bpy.data.materials["M_HoopWood"]; hwn = hw.node_tree.nodes; hp_ = hwn["Principled BSDF"]
+wg = hwn.new("ShaderNodeTexWave"); wg.wave_type = 'RINGS'; wg.inputs["Scale"].default_value = 40; wg.inputs["Distortion"].default_value = 6
+cm = hwn.new("ShaderNodeMix"); cm.data_type = 'RGBA'; cm.inputs["A"].default_value = (0.3, 0.17, 0.08, 1); cm.inputs["B"].default_value = (0.5, 0.33, 0.17, 1)
+hw.node_tree.links.new(wg.outputs["Fac"], cm.inputs["Factor"]); hw.node_tree.links.new(cm.outputs["Result"], hp_.inputs["Base Color"])
 ev(1); hoop.matrix_world = Matrix.Translation(LAP + MO_F * 0.02 + MO_R * 0.02 + V(0, 0, 0.035))
 c.inverse_matrix = (Mo.o.matrix_world @ Mo.o.pose.bones["wrist.L"].matrix).inverted()
 Mo.face(60, smile=0.0); Mo.face(75, jaw=8, smile=1.0, brow=0.5); Mo.face(150, jaw=2, smile=0.6); Mo.face(200, smile=0.2)
@@ -490,12 +497,13 @@ FA_POS = V(1.95, 0.75, 0)
 for s in "LR":
     for f in (1, END):
         Fa.foot(s, f, Fa.h.foot_xy(s, FA_POS, FA_YAW + (8 if s == "L" else -8)), FA_YAW + (10 if s == "L" else -6))
-book = mk("Book", lambda bm: bmesh.ops.create_cube(bm, size=1.0), matc("M_BookCloth", (0.2, 0.08, 0.05), 0.7))
-for v in book.data.vertices: v.co = Vector((v.co.x * 0.30, v.co.y * 0.21, v.co.z * 0.025))
+book = bpy.data.objects["Model_OpenBook"]; book.name = "Book"; book.hide_render = False
 page = mk("BookPage", lambda bm: bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=0.5), matc("M_Paper", (0.85, 0.82, 0.72), 0.9))
-for v in page.data.vertices: v.co = Vector((v.co.x * 0.28 + 0.07, v.co.y * 0.4, 0.0))
+for v in page.data.vertices: v.co = Vector((v.co.x * 0.26 + 0.068, v.co.y * 0.3, 0.0))
+page.modifiers.new("Curl", 'SIMPLE_DEFORM').deform_method = 'BEND'
+page.modifiers["Curl"].angle = R_(25); page.modifiers["Curl"].deform_axis = 'Y'
 page_piv = bpy.data.objects.new("BookPagePivot", None); bpy.data.collections["PROPS"].objects.link(page_piv)
-page_piv.parent = book; page.parent = page_piv; page_piv.location = (0, 0, 0.014)
+page_piv.parent = book; page.parent = page_piv; page_piv.location = (0, 0, 0.024)
 for f, tf in ((1, 0), (30, 0), (48, 1), (330, 1), (348, 2), (760, 2), (778, 3), (1200, 3), (1218, 4), (1600, 4), (1618, 5)):
     ang = 0 if f in (1, 30, 330, 760, 1200, 1600) else 180
     page_piv.rotation_euler = (0, R_(-ang), 0); page_piv.keyframe_insert("rotation_euler", frame=f)
@@ -555,7 +563,7 @@ ev(1); hb = GIRL.o.pose.bones["head"]; hm = GIRL.o.matrix_world @ hb.matrix
 back = (hm.to_3x3() @ (GIRL.r.BN["head"].matrix_local.to_3x3().inverted() @ V(0, 1, 0))).normalized()
 hd0 = GIRL.bone_world("head")
 bow_c = hd0 + back * 0.085 + UP * 0.07
-for k, (sx, rz) in enumerate(((1, 25), (-1, -25), (0, 0))):
+for k, (sx, rz) in enumerate(()):   # ribbon removed: sphere-built bow read as a primitive; her braids carry the period look
     o = mk("HairRibbon_%d" % k, lambda bm: bmesh.ops.create_uvsphere(bm, u_segments=16, v_segments=8, radius=0.02), m_rib)
     o.scale = (1.4, 0.45, 0.9) if sx else (0.6, 0.5, 0.6)
     side_ = back.cross(UP).normalized()
