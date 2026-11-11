@@ -125,6 +125,31 @@ for o in (HS_BAND_PAD, HS_BAND_STEEL, HS_BAND_TOP):
             v.co = Matrix.Rotation(R_(-14 * u), 3, 'Y') @ v.co + Vector((0.012 * u, 0.006 * u * (v.co.z - 0.05) * 10, -0.004 * u))
 for side in "LR":   # cups follow the bent band end on the left
     pass
+# boom mic on the left cup (curves forward, ends ~2.5 cm off the mouth corner), leatherette + stitching on the band pad
+cu = bpy.data.curves.new("HS_Boom", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0024; cu.bevel_resolution = 3
+spl = cu.splines.new('BEZIER'); spl.bezier_points.add(2)
+for bp, co in zip(spl.bezier_points, [(XC1 - 0.006, -0.032, -0.026), (WX + 0.035, -0.080, -0.044), (0.058, -0.106, -0.050)]):
+    bp.co = co; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+boom = bpy.data.objects.new("HS_Boom", cu); link(boom, "Headset"); boom.parent = HS_ROOT; cu.materials.append(MM if False else MS)
+micm = mat("HS_MicFoam", (0.02, 0.02, 0.02), 0.95)
+mo = bpy.data.objects.new("HS_MicTip", bpy.data.meshes.new("HS_MicTip")); link(mo, "Headset")
+_b = bmesh.new(); bmesh.ops.create_uvsphere(_b, u_segments=16, v_segments=10, radius=0.0065); _b.to_mesh(mo.data); _b.free()
+mo.data.materials.append(micm); mo.parent = HS_ROOT; mo.location = (0.056, -0.108, -0.050); mo.scale = (1, 1.5, 1)
+for pp in mo.data.polygons: pp.use_smooth = True
+bmat = MB; bn = bmat.node_tree.nodes; bl = bmat.node_tree.links; bb = bn["Principled BSDF"]
+tcb = bn.new("ShaderNodeTexCoord"); sxyz = bn.new("ShaderNodeSeparateXYZ"); bl.new(tcb.outputs["Object"], sxyz.inputs[0])
+ab = bn.new("ShaderNodeMath"); ab.operation = 'ABSOLUTE'; bl.new(sxyz.outputs[1], ab.inputs[0])
+dd = bn.new("ShaderNodeMath"); dd.operation = 'SUBTRACT'; dd.inputs[1].default_value = 0.0155; bl.new(ab.outputs[0], dd.inputs[0])
+ad = bn.new("ShaderNodeMath"); ad.operation = 'ABSOLUTE'; bl.new(dd.outputs[0], ad.inputs[0])
+ln = bn.new("ShaderNodeMath"); ln.operation = 'LESS_THAN'; ln.inputs[1].default_value = 0.0005; bl.new(ad.outputs[0], ln.inputs[0])
+dsh = bn.new("ShaderNodeMath"); dsh.operation = 'SINE'; mul_ = bn.new("ShaderNodeMath"); mul_.operation = 'MULTIPLY'; mul_.inputs[1].default_value = 1500
+bl.new(sxyz.outputs[0], mul_.inputs[0]); bl.new(mul_.outputs[0], dsh.inputs[0])
+gt = bn.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.0; bl.new(dsh.outputs[0], gt.inputs[0])
+st = bn.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; bl.new(ln.outputs[0], st.inputs[0]); bl.new(gt.outputs[0], st.inputs[1])
+mx_ = bn.new("ShaderNodeMix"); mx_.data_type = 'RGBA'; bl.new(st.outputs[0], mx_.inputs[0])
+mx_.inputs[6].default_value = (0.05, 0.05, 0.055, 1); mx_.inputs[7].default_value = (0.14, 0.14, 0.15, 1); bl.new(mx_.outputs[2], bb.inputs["Base Color"])
+nzb = bn.new("ShaderNodeTexNoise"); nzb.inputs["Scale"].default_value = 1400; bmpb = bn.new("ShaderNodeBump"); bmpb.inputs["Strength"].default_value = 0.25
+bl.new(nzb.outputs[0], bmpb.inputs["Height"]); bl.new(bmpb.outputs[0], bb.inputs["Normal"])
 HEAD_C_REST = HEAD_C.copy()
 A.data.pose_position = 'POSE'; bpy.context.view_layer.update()
 

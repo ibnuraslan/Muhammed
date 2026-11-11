@@ -286,7 +286,9 @@ rp = hn.new("ShaderNodeValToRGB"); e0, e1 = rp.color_ramp.elements; e0.position 
 e1.position = 0.55; e1.color = (0.02, 0.02, 0.02, 1); rp.color_ramp.elements.new(0.35).color = (0.85, 0.83, 0.78, 1)
 holeM.node_tree.links.new(gr.outputs[0], rp.inputs[0]); holeM.node_tree.links.new(rp.outputs[0], hb.inputs["Base Color"])
 hb.inputs["Roughness"].default_value = 0.95
-hole = cyl("BulletHole", 0.034, 0.002, HOLE + Vector((0.0012, 0, 0)), holeM, c="FX", rot=(0, R_(90), 0), seg=24)
+PRF = bpy.data.objects["Print_Frame"]
+hole = cyl("BulletHole", 0.030, 0.002, Vector((PRF.location.x + 0.0195, HOLE.y, HOLE.z)), holeM, c="FX", rot=(0, R_(90), 0), seg=24)
+hole.parent = PRF; hole.matrix_parent_inverse = PRF.matrix_world.inverted()
 key_vis(hole, [(1, False), (F_WALL, True)]); constant_interp(hole)
 WALLN = Vector((1, 0, 0))
 PLM = mat("PlasterChip", (0.8, 0.8, 0.76), 0.9)
@@ -377,3 +379,38 @@ led = bpy.data.materials["LEDStrip"].node_tree.nodes["Principled BSDF"]
 for f in range(1, 1501, 20):
     led.inputs["Emission Color"].default_value = (*colorsys.hsv_to_rgb((0.75 + f / 1500.0 * 0.6) % 1.0, 0.85, 1.0), 1)
     led.inputs["Emission Color"].keyframe_insert("default_value", frame=f)
+
+# the framed print: glass shatters, the frame swings on its nail and settles
+pglass = bpy.data.objects["Print_Glass"]; key_vis(pglass, [(1, True), (F_WALL, False)]); constant_interp(pglass)
+debris("PrintShard", 40, lambda f: HOLE + WALLN * 0.03, F_WALL, lambda i: (WALLN * random.uniform(0.3, 1.4) + Vector((0, random.uniform(-1, 1), random.uniform(-0.6, 0.8)))),
+       0.012, GM, lambda p: FLOOR_Z)
+PRF.rotation_mode = 'XYZ'
+for k in range(0, 260, 3):
+    f = F_WALL + k; ang = 9.0 * math.exp(-k / 70.0) * math.sin(k / 9.0)
+    PRF.rotation_euler = (R_(ang), 0, 0); PRF.keyframe_insert("rotation_euler", frame=f)
+PRF.rotation_euler = (0, 0, 0); PRF.keyframe_insert("rotation_euler", frame=1); PRF.keyframe_insert("rotation_euler", frame=F_WALL - 1)
+# the can by his keyboard tips over when his knees jerk the desk at the impact, and rolls a little
+CAN = bpy.data.objects["Can_Tip"]; CAN.rotation_mode = 'QUATERNION'
+c0 = CAN.location.copy(); tipd = Vector((0.55, -0.83, 0)).normalized(); P0 = c0 + tipd * 0.033 - Vector((0, 0, 0.06))
+axis = Vector((0, 0, 1)).cross(tipd).normalized()
+for f in list(range(1, 1501, 2)):
+    if f < 712: th, roll = 0.0, 0.0
+    else:
+        u = min(1.0, (f - 712) / 20.0); th = R_(90) * u * u
+        roll = max(0, f - 732) * 0.012 * math.exp(-max(0, f - 732) / 60.0) * 60
+    if th < R_(90) - 1e-4 or roll == 0:
+        q = Quaternion(axis, th); loc = P0 + q @ (c0 - P0)
+    else:
+        q = Quaternion(axis, R_(90)); loc = P0 + q @ (c0 - P0)
+        dist = 0.033 * math.radians(roll * 57.3) / 57.3 * 57.3 * 0.0 + 0.033 * roll / 57.3
+        loc = loc + Vector((-tipd.y, tipd.x, 0)) * dist; q = Quaternion(Vector((-tipd.y, tipd.x, 0)) .cross(Vector((0, 0, 1))).normalized(), -roll / 57.3) @ q
+    CAN.location = loc; CAN.rotation_quaternion = q
+    CAN.keyframe_insert("location", frame=f); CAN.keyframe_insert("rotation_quaternion", frame=f)
+# chair: a startled swivel after the impact
+CH = bpy.data.objects["Chair"]
+for fc in fcurves(CH):
+    if fc.data_path == "rotation_euler" and fc.array_index == 2:
+        for kp in fc.keyframe_points:
+            f = kp.co.x
+            if f > 700: kp.co.y += R_(8) * math.exp(-(f - 700) / 90.0) * math.sin((f - 700) / 14.0); kp.handle_left.y = kp.handle_right.y = kp.co.y
+        fc.update()

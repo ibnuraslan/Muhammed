@@ -41,7 +41,7 @@ M["roof"] = pbr("RoofTiles", "clay_roof_tiles", scale=0.45, box=True)
 M["ext"] = pbr("ExtPlaster", "painted_plaster_wall", scale=0.35, box=True, tint=(0.95, 0.88, 0.74))
 M["int"] = pbr("IntPaint", "painted_plaster_wall", scale=0.5, box=True, tint=(0.30, 0.42, 0.50), normal=0.4)
 M["ceil"] = pbr("Ceiling", "white_plaster_02", scale=0.5, box=True)
-M["floor"] = pbr("Laminate", "laminate_floor_02", scale=0.45, box=True, tint=(0.78, 0.56, 0.38))
+M["floor"] = pbr("Laminate", "laminate_floor_02", scale=0.45, box=True, tint=(0.42, 0.28, 0.17))
 M["white"] = mat("WhitePVC", (0.85, 0.85, 0.83), 0.35)
 M["trim"] = mat("TrimWood", (0.32, 0.22, 0.14), 0.5)
 M["glass"] = mat("WindowGlass", (0.95, 0.98, 1.0), 0.02, trans=1.0, ior=1.5)
@@ -267,7 +267,7 @@ def poster(name, loc, rot, size, seed, wall_n):
     vo.voronoi_dimensions = '4D'; Ll.new(tcp.outputs["Generated"], vo.inputs[0]); vo.inputs["W"].default_value = seed
     ramp = Nn.new("ShaderNodeValToRGB"); el = ramp.color_ramp.elements
     random.seed(seed * 7)
-    el[0].color = (random.random() * 0.3, random.random() * 0.2, random.random() * 0.5, 1); el[1].color = (0.9, random.random() * 0.6 + 0.2, 0.2, 1)
+    el[0].color = (0.15 + random.random() * 0.4, 0.1 + random.random() * 0.3, 0.25 + random.random() * 0.5, 1); el[1].color = (0.9, random.random() * 0.6 + 0.2, 0.2, 1)
     Ll.new(vo.outputs["Distance"], ramp.inputs[0]); Ll.new(ramp.outputs[0], b.inputs["Base Color"])
     me.materials.append(m)
     o.location = Vector(loc) - wall_n * 0.004       # poster sits 4 mm proud of its frame
@@ -286,12 +286,84 @@ def area(name, size, loc, rot, energy, col, shape='RECTANGLE', sy=None):
     if sy: d.size_y = sy
     o = bpy.data.objects.new(name, d); link(o, "Lights"); o.location = loc; o.rotation_euler = rot
     o.visible_camera = False; o.visible_glossy = False; return o
-area("Win_Fill", 1.2, ((WIN[0] + WIN[1]) / 2, 0.35, 1.45), (R_(90), 0, 0), 90, (0.85, 0.92, 1.0), sy=1.1)
-area("Monitor_Glow", 0.7, (0, 3.68, 1.08), (R_(-90), 0, 0), 40, (0.65, 0.78, 1.0), sy=0.4)
+area("Win_Fill", 1.2, ((WIN[0] + WIN[1]) / 2, 0.35, 1.45), (R_(90), 0, 0), 70, (0.85, 0.92, 1.0), sy=1.1)
+# warm afternoon sunbeam through the window (a big soft source outside, aimed in and down) + RGB wall washes
+sb = area("Sun_Beam", 1.3, ((WIN[0] + WIN[1]) / 2 - 0.3, -1.6, 2.6), (0, 0, 0), 420, (1.0, 0.78, 0.52), sy=1.2)
+sb.rotation_euler = (Vector((0.3, 2.6, 0.4)) - sb.location).to_track_quat("-Z", "Y").to_euler()
+area("RGB_Wash_Back", 1.4, (0, RY1 - 0.35, 1.95), (R_(-120), 0, 0), 45, (0.55, 0.2, 1.0), sy=0.3)
+area("RGB_Wash_Right", 1.0, (RX1 - 0.45, 1.4, 2.3), (R_(-35), R_(70), 0), 35, (0.15, 0.7, 1.0))
+area("RGB_Wash_Left", 1.0, (RX0 + 0.5, 3.0, 2.3), (R_(-35), R_(-70), 0), 25, (1.0, 0.25, 0.5))
+area("Monitor_Glow", 0.7, (0, 3.68, 1.08), (R_(-90), 0, 0), 24, (0.65, 0.78, 1.0), sy=0.4)
 area("Room_Bounce", 2.5, (0.5, 2.0, RZ1 - 0.1), (0, 0, 0), 18, (1.0, 0.95, 0.9))
 pl = bpy.data.lights.new("DeskLamp_Light", 'POINT'); pl.energy = 15; pl.color = (1.0, 0.8, 0.55); pl.shadow_soft_size = 0.05
 plo = bpy.data.objects.new("DeskLamp_Light", pl); link(plo, "Lights"); plo.location = (-0.55, 3.62, 1.12)
 
+# ------------------------------------------------------------------ gamer-room dressing (no text or logos anywhere)
+random.seed(31)
+def figure(name, loc, h, col, c="Props"):
+    mb = mat("Fig_" + name, col, 0.35)
+    cyl(name + "_base", 0.022, 0.006, loc + Vector((0, 0, 0.003)), mat("FigBase", (0.05, 0.05, 0.06), 0.4), c=c)
+    cyl(name + "_body", h * 0.17, h * 0.55, loc + Vector((0, 0, 0.006 + h * 0.275)), mb, c=c, r2=h * 0.12)
+    o = bpy.data.objects.new(name + "_head", bpy.data.meshes.new(name + "_head")); link(o, c)
+    bm_ = bmesh.new(); bmesh.ops.create_uvsphere(bm_, u_segments=16, v_segments=10, radius=h * 0.16); bm_.to_mesh(o.data); bm_.free()
+    o.data.materials.append(mat("FigSkin%d" % (hash(name) % 3), random.choice([(0.85, 0.65, 0.5), (0.6, 0.42, 0.3), (0.3, 0.7, 0.4)]), 0.4))
+    o.location = loc + Vector((0, 0, 0.006 + h * 0.62)); [setattr(pp, "use_smooth", True) for pp in o.data.polygons]
+    for sx in (-1, 1):
+        a_ = cyl(name + "_arm", h * 0.045, h * 0.38, loc + Vector((sx * h * 0.17, 0, 0.006 + h * 0.36)), mb, c=c, rot=(0, R_(sx * 18), 0))
+# swap the plain shelf boxes for collectible figures
+for o in [o for o in bpy.data.objects if o.name.startswith("ShelfItem")]: bpy.data.objects.remove(o, do_unlink=True)
+for k in range(6):
+    figure("ShelfFig%d" % k, Vector((-0.55 + k * 0.22, RY1 - 0.11, 1.615)), random.uniform(0.11, 0.17),
+           (random.uniform(0.1, 0.9), random.uniform(0.1, 0.6), random.uniform(0.1, 0.9)))
+box("WallShelf2", (0.9, 0.2, 0.03), (RX1 - 0.11, 2.85, 1.85), M["trim"], rot=(0, 0, R_(90)))
+for k in range(4):
+    figure("ShelfFigR%d" % k, Vector((RX1 - 0.11, 2.55 + k * 0.2, 1.865)), random.uniform(0.12, 0.18),
+           (random.uniform(0.1, 0.9), random.uniform(0.1, 0.6), random.uniform(0.1, 0.9)))
+# messy duvet (rumpled grid draped over the bed) and a hoodie on the bed
+for n_ in ("Bed_Blanket",):
+    if bpy.data.objects.get(n_): bpy.data.objects.remove(bpy.data.objects[n_], do_unlink=True)
+me = bpy.data.meshes.new("Duvet"); bm_ = bmesh.new(); bmesh.ops.create_grid(bm_, x_segments=40, y_segments=50, size=0.5); bm_.to_mesh(me); bm_.free()
+for v in me.vertices:
+    x, y = v.co.x * 1.15, v.co.y * 1.45
+    edge = max(0.0, abs(x) - 0.47)
+    z = 0.06 + 0.035 * math.sin(x * 11 + y * 4) * math.cos(y * 7) + 0.02 * math.sin(x * 23 - y * 17) - edge * 1.6
+    if y < -0.35: z += 0.08 * max(0, math.sin((y + 0.7) * 6)) * (1 - abs(x))      # thrown-back fold
+    v.co = Vector((x, y, z))
+duv = bpy.data.objects.new("Bed_Duvet", me); link(duv); duv.location = (RX1 - 0.52, 1.0, 0.52)
+duv.data.materials.append(mat("Duvet", (0.13, 0.22, 0.40), 0.95)); duv.modifiers.new("sub", 'SUBSURF').levels = 1
+duv.modifiers.new("thick", 'SOLIDIFY').thickness = 0.02
+for pp in me.polygons: pp.use_smooth = True
+box("Bed_Hoodie", (0.38, 0.30, 0.07), (RX1 - 0.40, 0.55, 0.62), mat("Hoodie", (0.35, 0.36, 0.38), 0.95), bevel=0.03, rot=(0.1, 0.05, 0.5))
+# energy-drink cans with colour bands only (no labels); one (Can_Tip) gets knocked over at the impact
+def can(name, loc, col):
+    b = cyl(name, 0.033, 0.12, loc + Vector((0, 0, 0.06)), mat("Can_" + name, col, 0.3, metal=0.8))
+    t = cyl(name + "_Top", 0.03, 0.004, loc + Vector((0, 0, 0.122)), mat("CanTop", (0.7, 0.7, 0.72), 0.2, metal=1.0)); t.parent = b
+    t.location = (0, 0, 0.062)
+    band = cyl(name + "_Band", 0.0335, 0.03, loc, mat("CanBand_" + name, (0.9, 0.9, 0.9), 0.3, metal=0.5)); band.parent = b; band.location = (0, 0, 0.01)
+    return b
+can("Can_Tip", Vector((0.27, 3.62, DESK_Z)), (0.05, 0.75, 0.55))
+can("Can_B", Vector((0.80, 3.75, DESK_Z)), (0.55, 0.85, 0.05))
+can("Can_C", Vector((-0.45, 3.85, DESK_Z)), (0.05, 0.05, 0.06))
+for k in range(3):
+    can("Can_Floor%d" % k, Vector((0.65 + k * 0.09, 3.15 + k * 0.05, 0.0)), (0.05, 0.6 + 0.1 * k, 0.5))
+for o in [bpy.data.objects.get("SodaCan"), bpy.data.objects.get("SodaCanTop")]:
+    if o: bpy.data.objects.remove(o, do_unlink=True)
+# framed print on the left wall around where the bullet lands (glass gets shattered)
+PR_C = Vector((RX0 + 0.012, 3.07, 1.50))
+pr = bpy.data.objects.new("Print_Frame", None); link(pr); pr.location = PR_C + Vector((0, 0, 0.30))   # pivot at the nail
+fr_ = box("Print_FrameBox", (0.025, 0.46, 0.60), (0, 0, -0.30), mat("PrintFrame", (0.08, 0.06, 0.05), 0.5)); fr_.parent = pr
+pm = bpy.data.materials.new("PrintArt"); pnt = pm.node_tree; pN, pL = pnt.nodes, pnt.links; pb = pN["Principled BSDF"]
+wv = pN.new("ShaderNodeTexWave"); wv.inputs["Scale"].default_value = 2.2; wv.inputs["Distortion"].default_value = 6.0
+rp_ = pN.new("ShaderNodeValToRGB"); rp_.color_ramp.elements[0].color = (0.9, 0.45, 0.12, 1); rp_.color_ramp.elements[1].color = (0.08, 0.15, 0.35, 1)
+pL.new(wv.outputs[1], rp_.inputs[0]); pL.new(rp_.outputs[0], pb.inputs["Base Color"]); pb.inputs["Roughness"].default_value = 0.7
+art = box("Print_Art", (0.004, 0.40, 0.54), (0.014, 0, -0.30), pm); art.parent = pr
+pg = box("Print_Glass", (0.003, 0.40, 0.54), (0.0175, 0, -0.30), mat("PrintGlass", (0.95, 0.97, 1.0), 0.02, alpha=0.12)); pg.parent = pr
+if bpy.data.objects.get("Poster_B"):
+    for n_ in ("Poster_B", "Poster_B_Frame"):
+        o = bpy.data.objects.get(n_)
+        if o: o.location.y = 2.25
+# gaming poster extra (abstract) above the bed
+poster("Poster_D", (RX1 - 0.01, 0.75, 1.75), (0, 0, R_(90)), (0.45, 0.6), 11, (1, 0, 0))
 # ------------------------------------------------------------------ the teen
 with bpy.data.libraries.load(TEEN, link=False) as (src, dst):
     dst.objects = list(src.objects)
@@ -304,12 +376,34 @@ for m in shirt.data.materials:
     for n in m.node_tree.nodes:
         if n.type == 'TEX_IMAGE' and n.image and "diffuse" in n.image.name.lower():
             n.image = tee                                    # print/logo and trims removed by 00_plain_shirt.py
-# eyes: the refractive outer layer renders black without caustics -> thin non-refractive coat
-for m in bpy.data.objects["Teen.high-poly"].data.materials:
-    for n in m.node_tree.nodes:
-        if n.type == 'GROUP' and "OuterLayerTransmission" in n.inputs:
-            n.inputs["OuterLayerTransmission"].default_value = 0.0
-            n.inputs["OuterLayerAlpha"].default_value = 0.08
+# eyes: MPFB's layered eye renders dark/pale without caustics -> simple opaque procedural eye (sclera, brown iris, pupil, wet coat)
+def eye_material():
+    m = bpy.data.materials.new("EyeSimple"); nt = m.node_tree; N, L = nt.nodes, nt.links; b = N["Principled BSDF"]
+    # Cycles' Object coords follow the armature deformation; Generated (undeformed, bbox-normalised) mapped back to rest space
+    tc = N.new("ShaderNodeTexCoord"); mpg = N.new("ShaderNodeMapping"); mpg.inputs["Location"].default_value = EYE_BB[0]
+    mpg.inputs["Scale"].default_value = EYE_BB[1] - EYE_BB[0]; L.new(tc.outputs["Generated"], mpg.inputs[0])
+    sp = N.new("ShaderNodeSeparateXYZ"); L.new(mpg.outputs[0], sp.inputs[0])
+    ax = N.new("ShaderNodeMath"); ax.operation = 'ABSOLUTE'; L.new(sp.outputs[0], ax.inputs[0])
+    cx = N.new("ShaderNodeMath"); cx.operation = 'SUBTRACT'; L.new(ax.outputs[0], cx.inputs[0]); cx.inputs[1].default_value = EYE_C.x
+    cy = N.new("ShaderNodeMath"); cy.operation = 'SUBTRACT'; L.new(sp.outputs[1], cy.inputs[0]); cy.inputs[1].default_value = EYE_C.y - 0.004
+    cz = N.new("ShaderNodeMath"); cz.operation = 'SUBTRACT'; L.new(sp.outputs[2], cz.inputs[0]); cz.inputs[1].default_value = EYE_C.z
+    cv = N.new("ShaderNodeCombineXYZ"); L.new(cx.outputs[0], cv.inputs[0]); L.new(cy.outputs[0], cv.inputs[1]); L.new(cz.outputs[0], cv.inputs[2])
+    nv = N.new("ShaderNodeVectorMath"); nv.operation = 'NORMALIZE'; L.new(cv.outputs[0], nv.inputs[0])
+    dt = N.new("ShaderNodeVectorMath"); dt.operation = 'DOT_PRODUCT'; L.new(nv.outputs[0], dt.inputs[0]); dt.inputs[1].default_value = (0, -1, 0)
+    ramp = N.new("ShaderNodeValToRGB"); el = ramp.color_ramp.elements
+    el[0].position = 0.0; el[0].color = (0.80, 0.77, 0.72, 1); el[1].position = 1.0; el[1].color = (0.005, 0.005, 0.005, 1)
+    for pos, col in ((0.845, (0.78, 0.74, 0.70, 1)), (0.865, (0.07, 0.035, 0.015, 1)), (0.90, (0.22, 0.11, 0.04, 1)), (0.968, (0.12, 0.06, 0.02, 1)), (0.976, (0.01, 0.01, 0.01, 1))):
+        e = el.new(pos); e.color = col
+    ramp.color_ramp.interpolation = 'EASE'
+    L.new(dt.outputs["Value"], ramp.inputs[0]); L.new(ramp.outputs[0], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.25; b.inputs["Coat Weight"].default_value = 1.0; b.inputs["Coat Roughness"].default_value = 0.03
+    return m
+TA = bpy.data.objects["Teen"]; EYE_C = TA.data.bones["eye.L"].head_local.copy()
+eyes = bpy.data.objects["Teen.high-poly"]
+_ev = [v.co for v in eyes.data.vertices]
+EYE_BB = (Vector([min(v[i] for v in _ev) for i in range(3)]), Vector([max(v[i] for v in _ev) for i in range(3)]))
+em = eye_material()
+for i in range(len(eyes.data.materials)): eyes.data.materials[i] = em
 # books on the (empty) bookshelf
 bs = bpy.data.objects["Bookshelf"]; mn_, mx_ = bounds([o for o in bpy.data.objects if o.parent == bs or (o.parent and o.parent.parent == bs)])
 print("SHELF", tuple(mn_), tuple(mx_))

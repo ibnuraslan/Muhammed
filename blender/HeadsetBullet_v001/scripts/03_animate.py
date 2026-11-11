@@ -73,7 +73,7 @@ def key_body(f, pos, yaw=0.0, pitch=0.0, roll=0.0, spine=(0, 0, 0), head=(0, 0, 
     hp, ht, hr = head
     for n_, w in HEAD_W.items():
         FR.key_rot(n_, f, [("X", hp * w), ("Y", hr * w), ("Z", ht * w)])
-    FR.key_rot("jaw", f, [("X", -jaw)])
+    FR.key_rot("jaw", f, [("X", jaw)])
 def key_feet(f, dy=0.0, lift=(0.0, 0.0), heel=(0.0, 0.0)):
     for i, s in enumerate("LR"):
         sx = -1 if s == "L" else 1          # facing +Y: his left is -X
@@ -122,7 +122,7 @@ T_HEAD = track([(1, (-8, 0, 0)), (120, (-6, 4, 0)), (240, (-10, -2, 0)), (300, (
                 (770, (-4, 18, 3)), (840, (0, 25, 0)), (950, (2, 30, 4)), (1060, (0, 33, 0)), (1085, (0, 48, 2)), (1165, (-4, 18, 0)),
                 (1205, (2, 2, 0)), (1222, (6, 0, 0)), (1245, (12, 0, 0)), (1272, (24, 0, 0)), (1315, (18, -6, 3)), (1360, (6, 0, 0)),
                 (1400, (2, 18, 0)), (1450, (0, 50, 2)), (1500, (0, 52, 0))])
-T_JAW = track([(1, 0), (700, 0), (760, 5), (900, 3), (1085, 7), (1165, 3), (1290, 6), (1330, 11), (1450, 8), (1500, 7)])
+T_JAW = track([(1, 0), (700, 0), (708, 8), (760, 6), (900, 4), (1085, 10), (1165, 5), (1290, 9), (1330, 15), (1388, 14), (1394, 3), (1402, 3), (1412, 12), (1450, 12), (1500, 11)])
 def breathe(f, amp=1.0, per=150):
     return amp * math.sin(2 * math.pi * f / per)
 FRAMES = list(range(1, 1501, 3)) + [1500]
@@ -131,6 +131,29 @@ for f in FRAMES:
     sp = T_SPINE(f); hd = T_HEAD(f)
     br = breathe(f, 1.2 if f > 760 else 0.6, 110 if f > 760 else 160)
     key_body(f, BASE + Vector((dx, dy, dz)), pitch=pt, roll=rl, spine=(sp[0] + br, sp[1], sp[2]), head=hd, jaw=T_JAW(f))
+# ------------------------------------------------------------------ face: shock (lids wide, brows up, jaw), blinks, eye darts, swallow
+def key_loc_local(n, f, d_world_rest):
+    pb = FR.PB[n]; pb.location = FR.rest(n).to_3x3().inverted() @ d_world_rest
+    pb.keyframe_insert("location", frame=f, group=n)
+T_SHOCK = track([(1, 0.0), (700, 0.0), (708, 0.8), (760, 0.85), (1000, 0.6), (1080, 0.6), (1088, 1.0), (1165, 0.75),
+                 (1240, 0.8), (1300, 0.85), (1330, 1.0), (1440, 1.0), (1500, 0.9)])
+BLINKS = [(400, 8), (590, 8), (1120, 7), (1362, 14), (1470, 9)]
+def blink(f):
+    v = 0.0
+    for b0, ln in BLINKS:
+        if b0 <= f <= b0 + ln: v = max(v, math.sin(math.pi * (f - b0) / ln))
+    return v
+T_EYE = track([(1, (0, 0)), (300, (4, -2)), (420, (-5, -3)), (571, (3, -2)), (700, (0, -2)), (712, (-8, 4)), (780, (14, 0)),
+               (1085, (24, 2)), (1140, (8, 0)), (1240, (0, -14)), (1320, (0, -10)), (1400, (22, 2)), (1450, (12, 2)), (1500, (6, 2))])
+for f in FRAMES:
+    sh = T_SHOCK(f); bl = blink(f); ey, ep = T_EYE(f)
+    for s in "LR":
+        FR.key_rot("orbicularis03." + s, f, [("X", -16 * sh * (1 - bl) + 34 * bl)])
+        FR.key_rot("orbicularis04." + s, f, [("X", 8 * sh * (1 - bl) - 6 * bl)])
+        FR.key_rot("eye." + s, f, [("X", -ep), ("Z", ey)])
+        key_loc_local("oculi01." + s, f, Vector((0, 0, 0.007 * sh)))
+        key_loc_local("oculi02." + s, f, Vector((0, 0, 0.005 * sh)))
+        FR.key_rot("risorius02." + s, f, [("X", 6 * sh)])      # mouth corners pulled down a touch
 # chair follows the root (rolls back when he rips the headset off), swivels a touch
 for f in FRAMES:
     dx, dy, dz, pt, rl = T_ROOT(f)
