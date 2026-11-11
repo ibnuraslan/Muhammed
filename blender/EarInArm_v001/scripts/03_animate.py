@@ -252,7 +252,7 @@ sh(199, "R", CHEST + Vector((-0.02, -0.075, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(300, 565, 6):
     k = (f - 343) / 37.0
-    away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(530, 556, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
+    away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(462, 488, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
     dL = Vector((-0.85, -0.45, -0.3)).normalized()
     sh(f, "L", BLK + Vector((0.025, -0.005, 0.012)) - dL * 0.085 + away, dL, (0.0, 0.2, 1.0))
     ph = (k % 1.0)
@@ -288,8 +288,8 @@ def at_ear(off_out, off_fwd, off_up):
     back = Vector((0, 1, 0))
     return EAR_W + side * (off_out * 0.35) + back * (off_out * 0.9) - back * off_fwd + Vector((0, 0, 1)) * off_up
 sh(1390, "R", at_ear(0.22, -0.02, 0.12) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
-sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))
-sh(1470, "R", at_ear(0.12, 0.0, 0.06) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))
+sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)) + side * 0.012, (-0.3, -1, -0.5), (0, 0, 1))
+sh(1470, "R", at_ear(0.12, 0.0, 0.06) + Vector((0, 0, 0.02)) + side * 0.012, (-0.3, -1, -0.5), (0, 0, 1))
 sh(1500, "R", at_ear(0.16, 0.0, 0.1) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))
 sh(1390, "L", at_ear(0.2, -0.15, 0.08), (0.2, -1, -0.4), (0, 0, 1))
 sh(1500, "L", at_ear(0.15, -0.12, 0.05), (0.2, -1, -0.5), (0, 0, 1))
@@ -303,13 +303,13 @@ for i in range(STITCH_N):
     pw = HM @ STITCH_P(i)
     dd = (-Vector((0, 1, 0)) * 0.8 - Vector((0, 0, 1)) * 0.35 - side * 0.3).normalized()
     pt = pw - dd * 0.135
-    sh(f, "R", pt + Vector((0, 0.004, 0.006)), dd, (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.006, 0.025, 0.035)), dd, (0, 0, 1))
+    sh(f, "R", pt + Vector((0, 0.004, 0.006)) + side * 0.012, dd, (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.006, 0.025, 0.035)) + side * 0.012, dd, (0, 0, 1))
 sh(B["b9"] + 5, "L", at_ear(0.18, -0.12, 0.05), (0.2, -1, -0.4), (0, 0, 1))
 for s in "LR":
     ev_at(B["b9"] + 70)
     sh(B["b9"] + 70, s, SUR.wpos("spine04") + Vector((0.0, 0, -0.05)) + (Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector(((0.12 if s == "R" else -0.12), -0.22, -0.12))),
        Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector((0, -1, -0.5)), (0, 0, 1))
-SUR.key_fingers("R", B["b9"] + 70, 20); SUR.key_fingers("L", B["b9"] + 70, 20)
+SUR.key_fingers("R", 1386, 40, 45); SUR.key_fingers("R", B["b9"] + 40, 40, 45); SUR.key_fingers("R", B["b9"] + 70, 20); SUR.key_fingers("L", B["b9"] + 70, 20)
 SUR.face(1, **N0); SUR.face(B["b9"] + 60, **N0); SUR.face(B["b9"] + 90, **dict(N0, eye_left_slit=0.5, eye_right_slit=0.5, mouth_corner_puller=0.7))
 
 # ================================================================== nurse
@@ -400,17 +400,18 @@ def ear_copy(name, mat_):
 EAR_FLAT = Matrix.Rotation(R_(-90), 4, 'X')   # ear lies flat (front face up) on the tray
 ear_real = ear_copy("Ear_Cartilage", M_CART)
 ear_real.matrix_world = Matrix.Translation(BLK + Vector((0, 0, -0.025))) @ EAR_FLAT
-blk = bpy.data.objects.new("Cart_Block", bpy.data.meshes.new("Cart_Block")); C_PROP.objects.link(blk)
-bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(blk.data); bm.free()
-blk.data.materials.append(M_CART); blk.modifiers.new("bev", 'BEVEL').width = 0.006
-blk.location = BLK + Vector((0, 0, -0.01)); blk.scale = (0.05, 0.072, 0.03)
-blk.keyframe_insert("scale", frame=343)
-for f, s_ in ((420, (0.047, 0.068, 0.022)), (480, (0.043, 0.064, 0.014)), (540, (0.04, 0.06, 0.006))):
+# the harvested rib cartilage (same mesh as the piece cut out in the rib studio) lies on the tray and is carved down
+pme = OB["SA_CartBlock"].data.copy(); pme.transform(Matrix.Rotation(R_(90), 4, 'X'))
+zmin_ = min(v.co.z for v in pme.vertices); pme.transform(Matrix.Translation((0, 0, -zmin_)))
+blk = bpy.data.objects.new("Cart_Block", pme); C_PROP.objects.link(blk)
+TRAY_TOP = TRAY.z + 0.006
+blk.location = Vector((BLK.x, BLK.y, TRAY_TOP)); blk.rotation_euler = (0, 0, R_(90))
+for f, s_ in ((343, (1, 1, 1)), (390, (0.95, 0.95, 0.7)), (430, (0.9, 0.9, 0.42)), (468, (0.85, 0.85, 0.15))):
     blk.scale = s_; blk.keyframe_insert("scale", frame=f)
-key_vis(blk, 1, True); key_vis(blk, 545, False)
-key_vis(ear_real, 1, False); key_vis(ear_real, 400, True)
-ear_real.scale = (0.85, 0.85, 0.3); ear_real.keyframe_insert("scale", frame=400)
-ear_real.scale = (1, 1, 1); ear_real.keyframe_insert("scale", frame=540)
+key_vis(blk, 1, True); key_vis(blk, 472, False)
+key_vis(ear_real, 1, False); key_vis(ear_real, 370, True)
+ear_real.scale = (0.85, 0.85, 0.3); ear_real.keyframe_insert("scale", frame=370)
+ear_real.scale = (1, 1, 1); ear_real.keyframe_insert("scale", frame=468)
 M_SHAV = M_CART
 for i in range(28):
     bpy.ops.mesh.primitive_torus_add(major_radius=random.uniform(0.003, 0.006), minor_radius=0.0012, major_segments=10, minor_segments=4)
@@ -481,10 +482,10 @@ for f, w in ((1, 0.0), (620, 0.0), (640, 0.001), (660, 0.006), (720, 0.007), (76
 # "x-ray": patch turns glassy at the start of beat 5 and shows the ear under the skin
 mixA = nt.nodes.new("ShaderNodeMath"); mixA.operation = 'MULTIPLY'; mixA.inputs[1].default_value = 1.0
 nt.links.new(cr.outputs["Result"], mixA.inputs[0]); nt.links.new(mixA.outputs[0], bsdf.inputs["Alpha"])
-for f, v in ((1, 1.0), (780, 1.0), (815, 0.35), (1063, 0.35), (1080, 1.0)):
+for f, v in ((1, 1.0), (780, 1.0), (815, 0.12), (1040, 0.12), (1066, 1.0)):
     mixA.inputs[1].default_value = v; mixA.inputs[1].keyframe_insert("default_value", frame=f)
 xray_emit = bsdf.inputs["Emission Strength"]; bsdf.inputs["Emission Color"].default_value = (0.4, 0.8, 1.0, 1)
-for f, v in ((1, 0.0), (780, 0.0), (815, 0.6), (1063, 0.6), (1080, 0.0)):
+for f, v in ((1, 0.0), (780, 0.0), (815, 0.25), (1040, 0.25), (1066, 0.0)):
     xray_emit.default_value = v; xray_emit.keyframe_insert("default_value", frame=f)
 # ear inside the arm (scaled into the pocket); turns from cartilage to pink skin in beat 6
 M_EARPINK = newmat("EarSkin", (0.56, 0.34, 0.26), 0.45, sss=0.25)

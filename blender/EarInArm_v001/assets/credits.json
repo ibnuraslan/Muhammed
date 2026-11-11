@@ -43,5 +43,23 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/baf3242c524f4e4483d7f6df5f0d9848",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "iv_stand": {
+  "uid": "a93a8e70ecd2459c99e7812c6e09b88c",
+  "title": "IV Stand and Bag",
+  "author": "Somar52",
+  "author_profile": "https://sketchfab.com/Somar52",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a93a8e70ecd2459c99e7812c6e09b88c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "stool": {
+  "uid": "6b8335348bc74cd3b560047940048572",
+  "title": "Doctors Chair",
+  "author": "Giimann",
+  "author_profile": "https://sketchfab.com/giimann",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6b8335348bc74cd3b560047940048572",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }
