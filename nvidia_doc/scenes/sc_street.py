@@ -375,6 +375,15 @@ def _cam_bus(c, t):
     return (cam, p + Vector((0, 0, 0.3)), 85)
 
 
+def anim_away(c, t):
+    sec = t * 4.0; move_traffic(c, sec); c["p"] = place_walker(c, sec / SET_SECONDS, x0=-6.0)     # walking toward +X, away from camera
+
+
+def _cam_away(c, t):
+    p = c["p"]
+    return (Vector((p.x - 6.0 - 0.6 * t, STREET_W / 2 - 0.6, 1.5)), p + Vector((3.0, 0.3, 0.4)), 50)
+
+
 def _cam_track(c, t):
     p = c["p"]
     cam = Vector((p.x - 9.5 - 0.3 * t, STREET_W / 2 - 1.2, 1.55))       # ahead of her down the street, long lens
@@ -394,6 +403,7 @@ def _cam_puddle(c, t):
 
 
 MOVES = {
+    "walk_away": dict(kind="anim", dof=2.8, far=80.0, cam=_cam_away, focus=lambda c, t: c["p"], anim=anim_away),
     "bus_reveal": dict(kind="anim", dof=2.4, far=80.0, cam=_cam_bus, focus=lambda c, t: c["p"], anim=anim_bus),
     "walk_track": dict(kind="anim", dof=2.8, far=80.0, cam=_cam_track, focus=lambda c, t: c["p"], anim=anim_track),
     "puddle": dict(kind="anim", dof=2.0, far=80.0, cam=_cam_puddle, focus=lambda c, t: place_walker_toward(c, 0.45 + 0.25 * t) + Vector((0, 0, -0.7))),

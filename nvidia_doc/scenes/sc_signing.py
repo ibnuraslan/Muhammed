@@ -12,8 +12,8 @@ import skia
 
 EXPOSURE = 0.2
 DUR = {"sign": 6.0, "transfer": 5.0}            # estimates until the chapter 1 voiceover arrives
-VARIANT_FOR = {"transfer": "transfer", "memo_pass": "memo", "memo_read": "memo"}
-DUR.update({"memo_pass": 4.5, "memo_read": 4.5})
+VARIANT_FOR = {"transfer": "transfer", "memo_pass": "memo", "memo_read": "memo", "letter_seal": "letter"}
+DUR.update({"memo_pass": 4.5, "memo_read": 4.5, "letter_seal": 4.5})
 GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated")
 
 
@@ -97,6 +97,17 @@ def build(variant=None):
     dl = bpy.data.lights.new("DeskLamp", 'SPOT'); dl.energy = 60; dl.spot_size = math.radians(70); dl.spot_blend = 0.6; dl.color = (1.0, 0.75, 0.48)
     dlo = bpy.data.objects.new("DeskLamp", dl); bpy.context.collection.objects.link(dlo); dlo.location = (0.55, 0.65, 1.45); point_at(dlo, (0.3, 0.45, 0.8))
     fill = area_light((1.5, -2.0, 2.4), (0, 0, 0), 2.0, 40, (1.0, 0.85, 0.7)); point_at(fill, (0.2, 0.0, 1.0)); fill.visible_camera = False
+    if variant == "letter":                   # day: an aide across the desk will seal the signed letter
+        aide = Human("Aide", gender=0.0, years=31, muscle=0.45, weight=0.45, height=0.5, eyelashes="eyelashes01")
+        add_asset(aide, "clothes", "female_elegantsuit01", val=0.3, rough=0.55); add_asset(aide, "hair", "ponytail01", val=0.25)
+        reset_pose(aide); pose_sit(aide, lean=12)
+        aide.arm.rotation_euler = (0, 0, 0); aide.arm.location = (0.3, 1.45, 0); bpy.context.view_layer.update()
+        w_ = np.concatenate([_world_verts(o) for o in aide.parts if o.type == 'MESH'])
+        aide.arm.location.z -= w_[:, 2].min(); bpy.context.view_layer.update()
+        env_m = pbr("Envelope", (0.86, 0.84, 0.78), 0.8)
+        env = box("Envelope", (0.32, 1.0, 0.8), (0.24, 0.12, 0.006), env_m)
+        flap = box("Flap", (0, 0.06, 0.0), (0.24, 0.08, 0.002), env_m); flap.parent = env
+        c.update(aide=aide, envelope=env, flap=flap)
     if variant == "memo":                     # night: the room lit only by the desk lamp; a second official across the desk
         for o in bpy.data.objects:
             if o.name.startswith(("Fill", "Area")) and o.type == 'LIGHT':
@@ -190,6 +201,20 @@ def anim_memo(c, t, read=False, seconds=4.5):
     bpy.context.view_layer.update()
 
 
+def anim_letter(c, t):
+    sec = t * DUR["letter_seal"]
+    pg = c["page"]; env = c["envelope"]
+    k = ease(min(1.0, max(0.0, (sec - 0.5) / 1.8)))         # the signed page slides across and into the envelope
+    start = Vector((0.25, 0.42, 0.795)); dst = env.location + Vector((0, 0, 0.004))
+    pg.location = start.lerp(dst, k); pg.scale = (0.21, 0.28 * (1 - 0.6 * k), 1)
+    fl = ease(min(1.0, max(0.0, (sec - 2.6) / 0.8)))       # the flap folds down
+    c["flap"].rotation_euler = (math.radians(180 * (1 - fl)), 0, 0)
+    reach(c["aide"], "R", (env.location if k > 0.9 else pg.location) + Vector((0.06, 0.1, 0.07)), Vector((-0.6, 0.4, -0.6)), Vector((0, -1, -0.4)))
+    reach(c["aide"], "L", env.location + Vector((-0.1, 0.1, 0.07)), Vector((0.6, 0.4, -0.6)), Vector((0, -1, -0.4)))
+    fingers_curl(c["aide"], 30, thumb=15)
+    bpy.context.view_layer.update()
+
+
 def anim_transfer(c, t):
     sec = t * DUR["transfer"]
     animate(c, sec)
@@ -208,7 +233,10 @@ def cam_sign(c, t):
     return (loc, Vector((0.2, 0.05, 1.0)), 40)
 
 
-MOVES = {"memo_pass": dict(kind="anim", dof=2.8, far=12.0, anim=lambda c, t: anim_memo(c, t, False, DUR["memo_pass"]),
+MOVES = {"letter_seal": dict(kind="anim", dof=2.8, far=12.0, anim=anim_letter,
+                       cam=lambda c, t: (Vector((1.9, 0.0, 1.45)).lerp(Vector((1.65, 0.15, 1.4)), ease(t)), Vector((0.3, 0.8, 0.85)), 38),
+                       focus=lambda c, t: c["envelope"].location),
+         "memo_pass": dict(kind="anim", dof=2.8, far=12.0, anim=lambda c, t: anim_memo(c, t, False, DUR["memo_pass"]),
                        cam=lambda c, t: (Vector((-1.6, 0.75, 1.45)).lerp(Vector((-1.35, 0.7, 1.4)), ease(t)), Vector((0.25, 0.7, 0.85)), 35),
                        focus=lambda c, t: c["memo"].location),
          "memo_read": dict(kind="anim", dof=2.4, far=12.0, anim=lambda c, t: anim_memo(c, t, True, DUR["memo_read"]),

@@ -46,7 +46,7 @@ def build(variant=None):
             mw = o.matrix_world.copy(); o.parent = hinge; o.matrix_world = mw
         leaves.append((hinge, sx))
     box("Frame", (0, END - 0.02, 4.0), (2.3, 0.15, 0.25), brass)
-    haze((0, END / 2, 2.5), (4.0, END + 4, 5.0), density=0.006, color=(1.0, 0.92, 0.82), anis=0.6)
+    haze((0, END / 2, 2.5), (4.0, END + 4, 5.0), density=0.0015, color=(1.0, 0.92, 0.82), anis=0.6)
     return dict(leaves=leaves, door=Vector((0, END, 1.9)))
 
 

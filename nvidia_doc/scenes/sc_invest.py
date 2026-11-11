@@ -17,7 +17,8 @@ import ph
 import paper_tex
 
 EXPOSURE = -0.6
-DUR = {"drawer": 3.22, "reveal": 3.48, "filing": 4.0, "chart": 4.0, "pinning": 4.5}
+DUR = {"drawer": 3.22, "reveal": 3.48, "filing": 4.0, "chart": 4.0, "pinning": 4.5, "shelving": 4.5, "lights_out": 5.0, "drawer_close": 3.5}
+VARIANT_FOR = {"lights_out": "night"}
 CAB_Y = 3.3                       # cabinet fronts (they stand against the back wall y = 4)
 
 
@@ -122,7 +123,10 @@ def build(variant=None):
     c = {}
     rng = np.random.default_rng(12)
     paper = paper_tex.make_all()
-    world_sky(sun_elev_deg=28, sun_rot_deg=95, strength=0.5, tint=(0.85, 0.9, 1.0))
+    if variant == "night":
+        world_flat((0.006, 0.008, 0.014), 1.0)
+    else:
+        world_sky(sun_elev_deg=28, sun_rot_deg=95, strength=0.5, tint=(0.85, 0.9, 1.0))
     # ---------------------------------------------------------------- room
     fl = pbr("PolishedConcrete", (0.42, 0.43, 0.44), 0.32, 0.0, **{'Coat Weight': 0.3, 'Coat Roughness': 0.2})
     N = fl.node_tree.nodes; L = fl.node_tree.links; tc = N.new("ShaderNodeTexCoord")
@@ -142,7 +146,7 @@ def build(variant=None):
     slat = pbr("Blind", (0.75, 0.75, 0.74), 0.5)
     for k in range(32):
         box("Slat", (5.95, 0, 0.92 + k * 0.05), (0.05, 7.6, 0.006), slat, rot=(0, math.radians(-50), 0))
-    sun = bpy.data.lights.new("Sun", 'SUN'); sun.energy = 3.2; sun.angle = math.radians(1.2); sun.color = (1.0, 0.95, 0.88)
+    sun = bpy.data.lights.new("Sun", 'SUN'); sun.energy = 3.2 if variant != "night" else 0.0; sun.angle = math.radians(1.2); sun.color = (1.0, 0.95, 0.88)
     so = bpy.data.objects.new("Sun", sun); bpy.context.collection.objects.link(so); so.rotation_euler = (math.radians(55), math.radians(-38), math.radians(-90))
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 7.6; pt.size_y = 1.6; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (6.0, 0, 1.65); po.rotation_euler = (0, math.radians(-90), 0)
@@ -151,6 +155,9 @@ def build(variant=None):
         for y in (-2, 1):
             ph.model("mounted_fluorescent_lights", loc=(x, y, 3.0), rot_z=math.radians(90))
             l = area_light((x, y, 2.9), (0, 0, 0), 0.9, 55, (0.9, 0.96, 1.0)); l.rotation_euler = (0, 0, 0); l.visible_camera = False
+            if variant == "night":                 # the panels go off one after another, front to back
+                off_at = 30 + int((x + 3) / 3) * 18 + (0 if y > 0 else 9)
+                dl = l.data.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = f"55 * (1 if frame < {off_at} else 0.0)"
     # ---------------------------------------------------------------- filing cabinets along the back wall
     steel = pbr("SteelGrey", (0.42, 0.43, 0.44), 0.42, 0.55, **{'Coat Weight': 0.15})
     handle_m = pbr("Chrome", (0.8, 0.8, 0.8), 0.2, 1.0)
@@ -284,6 +291,22 @@ def build(variant=None):
         L2.new(t2.outputs['UV'], i2.inputs['Vector']); e2 = N2.new("ShaderNodeEmission"); e2.inputs['Strength'].default_value = 1.4
         L2.new(i2.outputs['Color'], e2.inputs['Color']); L2.new(e2.outputs[0], o2.inputs['Surface'])
         c["photo_mat"] = pm_
+    # CH3 3A: steel shelving along the left of the back wall; an investigator slides a sealed evidence box onto it
+    shelf_m = pbr("ShelfSteel", (0.55, 0.56, 0.58), 0.35, 0.9)
+    for z in (0.3, 0.75, 1.2, 1.65):
+        box("Shelf", (-4.3, 3.65, z), (2.4, 0.5, 0.03), shelf_m)
+    for x in (-5.45, -3.15):
+        for y in (3.42, 3.88):
+            box("ShelfPost", (x, y, 0.95), (0.03, 0.03, 1.9), shelf_m)
+    ev_m = pbr("EvidenceBox", (0.72, 0.68, 0.6), 0.85); tape = pbr("RedTape", (0.7, 0.05, 0.04), 0.5)
+    for k in range(7):
+        x = -5.2 + (k % 4) * 0.58; z = 0.3 + 0.45 * (k // 4) + 0.17
+        box("EvBox", (x, 3.65, z), (0.5, 0.38, 0.32), ev_m, bevel=0.005); box("EvTape", (x, 3.455, z), (0.5, 0.005, 0.05), tape)
+    ev = join([box("EvNew", (0, 0, 0), (0.5, 0.38, 0.32), ev_m, bevel=0.005), box("EvNewTape", (0, -0.195, 0), (0.5, 0.005, 0.05), tape)], "EvidenceNew")
+    c["ev"] = ev
+    shelver = person("Shelver", 0.0, 36, "female_casualsuit01", "bob01", hv=0.2)
+    stand(shelver, (-3.6, 2.8, 0), math.pi)                       # faces +Y, the shelving
+    c["people"]["shelver"] = shelver
     # SET 11A: an investigator standing at the evidence wall, pinning one more page
     pinner = person("Pinner", 1.0, 39, "male_casualsuit01", "short02", hv=0.25)
     stand(pinner, (-5.35, 0.4, 0), -math.pi / 2)                  # faces -X, the wall
@@ -370,6 +393,28 @@ def anim_pinning(c, t):
     bpy.context.view_layer.update()
 
 
+def anim_shelving(c, t):
+    s_ = t * DUR["shelving"]
+    animate(c, s_, {"lift": 0.0})
+    h = c["people"]["shelver"]; ev = c["ev"]
+    k = ease(min(1.0, s_ / 2.6))
+    ev.location = Vector((-3.65, 3.05, 1.05)).lerp(Vector((-3.52, 3.65, 1.37)), k)     # top-shelf gap, slid in
+    for sd, dx in (("L", -0.27), ("R", 0.27)):
+        reach(h, sd, ev.location + Vector((dx, -0.05, 0.0)), Vector((0.6 * (1 if sd == "L" else -1), -0.4, -0.6)), Vector((0, 1, 0)))
+    fingers_curl(h, 40, thumb=20)
+    bpy.context.view_layer.update()
+
+
+def anim_drawer_close(c, t):
+    """The callback: the top drawer slides shut (no one at the cabinet)."""
+    w = c["people"]["woman"]
+    for o in [w.arm] + list(w.parts):
+        o.hide_render = True
+    d = c["drawer"]; e = ease(min(1.0, max(0.0, (t - 0.15) / 0.6)))
+    d.location.y = c["drawer_closed_y"] - 0.54 * (1 - e)
+    bpy.context.view_layer.update()
+
+
 def anim_drawer(c, t):
     s = t * DUR["drawer"]
     animate(c, s, {"lift": ease(max(0.0, (s - 2.2) / 1.0)) * 0.35})
@@ -447,6 +492,15 @@ def cam_pinning(c, t):
 
 
 MOVES = {
+    "shelving": dict(kind="anim", dof=3.2, far=20.0, anim=anim_shelving,
+                     cam=lambda c, t: (Vector((-2.2, 1.4, 1.6)).lerp(Vector((-2.4, 1.7, 1.6)), ease(t)), Vector((-4.0, 3.6, 1.2)), 35),
+                     focus=lambda c, t: c["ev"].location),
+    "lights_out": dict(kind="anim", dof=4.0, far=20.0, anim=lambda c, t: animate(c, t * DUR["lights_out"], {"lift": 0.0}),
+                       cam=lambda c, t: (Vector((0.5, -3.75, 2.45)).lerp(Vector((0.4, -3.55, 2.35)), ease(t)), Vector((0.4, 0.5, 0.75)), 24),
+                       focus=lambda c, t: Vector((0.0, 0.5, 0.8))),
+    "drawer_close": dict(kind="anim", dof=2.4, far=10.0, anim=anim_drawer_close,
+                         cam=lambda c, t: (DRAWER_CAM[1] + Vector((0.1, -0.15, 0.1)), c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02)), 40),
+                         focus=lambda c, t: c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))),
     "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location, anim=lambda c, t: anim_filing(c, t)),
     "compare": dict(kind="anim", dof=2.8, far=10.0, cam=cam_compare, focus=lambda c, t: c["mon"] + Vector((0, -0.32, 0)), anim=anim_compare),
     "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=lambda c, t: c["mon"],

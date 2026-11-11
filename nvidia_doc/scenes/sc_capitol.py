@@ -5,7 +5,7 @@ import bpy
 from mathutils import Vector
 from kit import *
 
-VARIANT_FOR = {"night_rise": "night", "dawn_push": "dawn", "night_push": "night"}
+VARIANT_FOR = {"night_rise": "night", "dawn_push": "dawn", "night_push": "night", "ch3_push": "dawn"}
 DUR = {"dawn_push": 7.5}            # estimate until the chapter 1 voiceover arrives
 EXPOSURE = -1.0
 
@@ -150,6 +150,8 @@ def _cam_dawn(c, t):
 
 
 MOVES = {
+    "ch3_push": dict(kind="anim", far=900.0, title=("CHAPTER 3", "BEHIND CLOSED DOORS", 18, 120),
+                     cam=lambda c, t: (Vector((20, -250, 3.0)).lerp(Vector((14, -190, 4.0)), ease(t)), Vector((0, 0, 42)), 45)),
     "night_push": dict(kind="anim", far=900.0, cam=lambda c, t: (Vector((-40, -220, 4)).lerp(Vector((-30, -185, 6)), ease(t)), Vector((0, 0, 44)), 40)),
     "dawn_push": dict(kind="anim", far=900.0, cam=_cam_dawn, title=("CHAPTER 1", "FOLLOW THE CHIPS", 18, 120)),
     "slow_push": dict(kind="plate", far=900.0, cam=lambda c, t: ((-70, -230, 8), (0, 0, 38), 50)),

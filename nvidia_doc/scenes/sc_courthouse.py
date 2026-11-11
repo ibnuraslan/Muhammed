@@ -34,10 +34,37 @@ def build(variant=None):
     box("Plaza", (0, -40, -0.1), (200, 70, 0.2), pbr("Plaza", (0.3, 0.29, 0.28), 0.7))
     for k in range(8):
         cyl("Lamp", (-14 + k * 4, -18, 2.2), 0.06, 4.4, pbr("Iron", (0.02, 0.02, 0.02), 0.5, 0.8), verts=12)
-    return dict(door=Vector((0, 2.0, 6)))
+    ctx = dict(door=Vector((0, 2.0, 6)))
+    from human import Human, add_asset, pose_walk
+    h = Human("Lawyer", gender=1.0, years=50, muscle=0.5, weight=0.5, height=0.52, eyelashes=None)
+    add_asset(h, "clothes", "male_elegantsuit01", val=0.12, rough=0.55); add_asset(h, "clothes", "shoes02", val=0.1); add_asset(h, "hair", "short04", val=0.25)
+    bc = box("Briefcase", (0, 0, -30), (0.42, 0.1, 0.32), pbr("Briefcase", (0.06, 0.035, 0.02), 0.4, 0.0, **{'Coat Weight': 0.5}), bevel=0.01)
+    ctx.update(lawyer=h, briefcase=bc)
+    return ctx
+
+
+def step_z(y):
+    if y < -7.75:
+        return 0.0
+    k = max(0.0, (-3.5 - y) / 0.45)
+    return max(0.0, 1.76 - 0.16 * k) if y < -3.5 else 1.76
+
+
+def anim_climb(c, t):
+    from sc_corp import arms_down
+    from human import pose_walk
+    h = c["lawyer"]; sec = t * 5.0
+    y = -12.0 + 1.25 * sec
+    bob = pose_walk(h, (1.25 * sec / 1.3) % 1.0, stride=22, arm_swing=10)
+    h.arm.rotation_euler = (0, 0, math.pi); h.arm.location = (-1.0, y, step_z(y) + bob); bpy.context.view_layer.update()
+    arms_down(h, (1.25 * sec / 1.3) % 1.0, 10)
+    c["briefcase"].location = h.bone_tail("wrist.R") + Vector((0, 0, -0.2))
+    c["p"] = Vector((-1.0, y, step_z(y) + 1.2))
 
 
 MOVES = {
+    "lawyer_climb": dict(kind="anim", far=400.0, dof=4.0, anim=anim_climb,
+                         cam=lambda c, t: (Vector((-0.2, -21.0 + 5.0 * ease(t), 1.6)), c["p"] + Vector((0.2, 6.0, 1.0)), 40), focus=lambda c, t: c["p"]),
     "steps_rise": dict(kind="plate", far=400.0, cam=lambda c, t: ((-6, -34, 1.2 + 4 * t), (0, 0, 9), 28)),
     "slow_push": dict(kind="plate", far=400.0, cam=lambda c, t: ((10, -42, 6), (-6, 0, 12), 35)),
     "columns_drift": dict(kind="plate", dof=3.2, far=400.0, cam=lambda c, t: ((-14, -9, 4), (2, 0, 12), 40), focus=lambda c, t: (-11.25, 0, 10)),
