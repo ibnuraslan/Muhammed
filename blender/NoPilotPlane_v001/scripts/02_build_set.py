@@ -27,6 +27,30 @@ M_steel = mat("M_steel", (0.55, 0.56, 0.58), rough=0.38, metal=1.0, noise=0.5, n
 M_dark = mat("M_cockpit_dark", (0.035, 0.037, 0.04), rough=0.6, noise=0.45, nscale=90, bump=0.35)
 M_panel = mat("M_panel", (0.075, 0.08, 0.088), rough=0.55, noise=0.4, nscale=140, bump=0.3)
 M_black = mat("M_black_gloss", (0.01, 0.01, 0.012), rough=0.15)
+def wear_mat(name, base, worn, rough=0.55, metal_worn=0.0, scale=60.0, edge=0.515, scuff=0.0):
+    """base paint with edge wear (Cycles pointiness) and noise scuffs showing the worn colour/metal underneath"""
+    m, nt = nodes_mat(name)
+    if nt is None: return m
+    N, L = nt.nodes, nt.links; p = N["Principled BSDF"]
+    geo = N.new("ShaderNodeNewGeometry"); tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise")
+    nz.inputs["Scale"].default_value = scale; nz.inputs["Detail"].default_value = 10; L.new(tc.outputs["Object"], nz.inputs["Vector"])
+    e1 = N.new("ShaderNodeMapRange"); L.new(geo.outputs["Pointiness"], e1.inputs["Value"]); e1.inputs["From Min"].default_value = edge; e1.inputs["From Max"].default_value = edge + 0.04
+    e2 = N.new("ShaderNodeMath"); e2.operation = 'MULTIPLY'; L.new(e1.outputs["Result"], e2.inputs[0]); L.new(nz.outputs["Fac"], e2.inputs[1])
+    sc_ = N.new("ShaderNodeTexNoise"); sc_.inputs["Scale"].default_value = scale * 0.25; sc_.inputs["Detail"].default_value = 4; L.new(tc.outputs["Object"], sc_.inputs["Vector"])
+    s2 = N.new("ShaderNodeMapRange"); L.new(sc_.outputs["Fac"], s2.inputs["Value"]); s2.inputs["From Min"].default_value = 0.62; s2.inputs["From Max"].default_value = 0.72
+    s3 = N.new("ShaderNodeMath"); s3.operation = 'MULTIPLY'; L.new(s2.outputs["Result"], s3.inputs[0]); s3.inputs[1].default_value = scuff
+    mk = N.new("ShaderNodeMath"); mk.operation = 'MAXIMUM'; L.new(e2.outputs[0], mk.inputs[0]); L.new(s3.outputs[0], mk.inputs[1])
+    mc = N.new("ShaderNodeMix"); mc.data_type = 'RGBA'; L.new(mk.outputs[0], mc.inputs["Factor"]); mc.inputs["A"].default_value = (*base, 1); mc.inputs["B"].default_value = (*worn, 1)
+    L.new(mc.outputs["Result"], p.inputs["Base Color"])
+    mr = N.new("ShaderNodeMapRange"); L.new(mk.outputs[0], mr.inputs["Value"]); mr.inputs["To Min"].default_value = 0.0; mr.inputs["To Max"].default_value = metal_worn
+    L.new(mr.outputs["Result"], p.inputs["Metallic"])
+    rr = N.new("ShaderNodeMapRange"); L.new(nz.outputs["Fac"], rr.inputs["Value"]); rr.inputs["To Min"].default_value = rough - 0.15; rr.inputs["To Max"].default_value = rough + 0.15
+    L.new(rr.outputs["Result"], p.inputs["Roughness"])
+    bm_ = N.new("ShaderNodeBump"); bm_.inputs["Strength"].default_value = 0.25; bm_.inputs["Distance"].default_value = 0.001; L.new(nz.outputs["Fac"], bm_.inputs["Height"])
+    L.new(bm_.outputs["Normal"], p.inputs["Normal"])
+    return m
+M_ped = wear_mat("M_pedestal_worn", (0.075, 0.08, 0.088), (0.26, 0.26, 0.27), rough=0.55, scale=90, scuff=0.6)
+M_glare = mat("M_glareshield_fabric", (0.025, 0.025, 0.028), rough=0.95, noise=0.5, nscale=900, bump=0.8)
 M_white_e = emit_mat("M_light_strip", (1.0, 0.93, 0.82), 6.0)
 M_needle = emit_mat("M_needle", (1.0, 1.0, 0.95), 4.0)
 M_wing = mat("M_wing", (0.62, 0.64, 0.66), rough=0.35, metal=0.3, noise=0.15, nscale=2)
@@ -225,18 +249,18 @@ for x in (-0.52, 0.52):
     for px in (-0.1, 0.1):
         ck.box((x + px, 2.3, 0.12), (0.08, 0.03, 0.18), M_steel, rot=(-30, 0, 0))
 # pedestal + throttle quadrant
-ck.box((0, 1.72, 0.37), (0.36, 0.95, 0.74), M_panel, bevel=0.01)
+ck.box((0, 1.72, 0.37), (0.36, 0.95, 0.74), M_ped, bevel=0.012)
 ck.box((0, 1.72, 0.755), (0.34, 0.93, 0.03), M_dark)
 ck.box((0, 1.35, 0.775), (0.3, 0.16, 0.02), M_black)                             # radio panel face
 # main instrument panel and glareshield
-ck.box((0, 2.32, 0.80), (1.9, 0.12, 0.5), M_panel, rot=(-14, 0, 0))
-ck.box((0, 2.33, 1.03), (1.9, 0.38, 0.05), M_dark, bevel=0.01)
+ck.box((0, 2.32, 0.80), (1.9, 0.12, 0.5), M_panel, rot=(-14, 0, 0), bevel=0.01)
+ck.box((0, 2.33, 1.03), (1.9, 0.38, 0.05), M_glare, bevel=0.018)
 ck.box((0, 2.15, 1.005), (1.5, 0.05, 0.06), M_panel)
 # overhead panel
-ck.box((0, 1.25, 2.08), (0.9, 1.1, 0.08), M_panel, rot=(8, 0, 0))
+ck.box((0, 1.25, 2.08), (0.9, 1.1, 0.08), M_panel, rot=(8, 0, 0), bevel=0.01)
 # side consoles
 for s in (-1, 1):
-    ck.box((s * 0.98, 1.5, 0.62), (0.18, 1.0, 0.08), M_panel)
+    ck.box((s * 0.98, 1.5, 0.62), (0.18, 1.0, 0.08), M_ped, bevel=0.01)
 ck.obj(cSet)
 
 # overhead buttons / panel lamps (blank symbols only)
@@ -294,20 +318,21 @@ for side, cx in (("L", -0.52), ("R", 0.52)):
 # yokes (origin at column base, rotate about local X)
 for side, x in (("L", -0.52), ("R", 0.52)):
     y = MB("YOKE_%s" % side)
-    y.cyl((0, 0, 0.38), 0.025, 0.76, M_dark, rot=(14, 0, 0))
+    M_yk = wear_mat("M_yoke_worn", (0.035, 0.037, 0.04), (0.42, 0.42, 0.43), rough=0.5, metal_worn=0.9, scale=120, edge=0.505)
+    y.cyl((0, 0, 0.38), 0.025, 0.76, M_yk, rot=(14, 0, 0))
     top = Vector((0, -0.18, 0.74))
-    y.box(top, (0.12, 0.05, 0.06), M_dark, bevel=0.01)
-    y.box(top + Vector((0, -0.02, 0)), (0.30, 0.04, 0.035), M_dark, bevel=0.012)
+    y.box(top, (0.12, 0.05, 0.06), M_yk, bevel=0.01)
+    y.box(top + Vector((0, -0.02, 0)), (0.30, 0.04, 0.035), M_yk, bevel=0.012)
     for s in (-1, 1):
-        y.box(top + Vector((s * 0.16, -0.02, 0.06)), (0.035, 0.04, 0.16), M_dark, rot=(0, s * 12, 0), bevel=0.012)
-        y.box(top + Vector((s * 0.16, -0.022, 0.06)), (0.04, 0.03, 0.10), mat("M_grip", (0.02, 0.02, 0.02), rough=0.8, bump=0.6, nscale=400), rot=(0, s * 12, 0))
+        y.box(top + Vector((s * 0.16, -0.02, 0.06)), (0.035, 0.04, 0.16), M_yk, rot=(0, s * 12, 0), bevel=0.012)
+        y.box(top + Vector((s * 0.16, -0.022, 0.06)), (0.042, 0.032, 0.10), wear_mat("M_grip_worn", (0.025, 0.022, 0.02), (0.14, 0.12, 0.1), rough=0.75, scale=300, edge=0.505, scuff=0.8), rot=(0, s * 12, 0), bevel=0.008)
     y.box(top + Vector((0, -0.045, 0.0)), (0.05, 0.004, 0.03), M_steel)
     yo = y.obj(cSet); yo.location = (x, 2.12, 0.0)
 
 # throttle levers (origin at pivot inside pedestal)
 for k, x in enumerate((-0.05, 0.05)):
-    t = MB("THROTTLE_%d" % k); t.box((0, 0, 0.09), (0.018, 0.02, 0.18), M_steel)
-    t.cyl((0, 0, 0.19), 0.03, 0.05, M_black, rot=(0, 90, 0))
+    t = MB("THROTTLE_%d" % k); t.box((0, 0, 0.09), (0.018, 0.02, 0.18), M_steel, bevel=0.003)
+    t.cyl((0, 0, 0.19), 0.03, 0.05, wear_mat("M_throttle_knob", (0.03, 0.03, 0.032), (0.5, 0.5, 0.5), rough=0.4, metal_worn=1.0, scale=200, edge=0.505, scuff=0.5), rot=(0, 90, 0), seg=20)
     to = t.obj(cSet); to.location = (x, 1.82, 0.74); to.rotation_euler = (R_(-15), 0, 0)
 # radio panel LEDs (keyed later) and handset
 cR = coll("RADIO", cSet)
@@ -343,7 +368,11 @@ def img_mat(name, fn, strength=1.6, emit=True, scroll=False):
         L.new(tc.outputs["UV"], mp.inputs["Vector"]); L.new(mp.outputs[0], t.inputs["Vector"]); t.extension = 'REPEAT'
     p = N["Principled BSDF"]
     if emit:
-        p.inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1); p.inputs["Roughness"].default_value = 0.08
+        p.inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1)
+        tcs = N.new("ShaderNodeTexCoord"); smg = N.new("ShaderNodeTexNoise"); smg.inputs["Scale"].default_value = 9; smg.inputs["Detail"].default_value = 6
+        L.new(tcs.outputs["UV"], smg.inputs["Vector"]); smr = N.new("ShaderNodeMapRange"); L.new(smg.outputs["Fac"], smr.inputs["Value"])
+        smr.inputs["From Min"].default_value = 0.45; smr.inputs["From Max"].default_value = 0.7; smr.inputs["To Min"].default_value = 0.04; smr.inputs["To Max"].default_value = 0.4
+        L.new(smr.outputs["Result"], p.inputs["Roughness"]); p.inputs["Coat Weight"].default_value = 0.3
         L.new(t.outputs["Color"], p.inputs["Emission Color"]); p.inputs["Emission Strength"].default_value = strength
     else:
         L.new(t.outputs["Color"], p.inputs["Base Color"]); p.inputs["Roughness"].default_value = 0.7
@@ -461,6 +490,36 @@ for s_ in (-1, 1):
     u = MB("MUG_%s" % ("L" if s_ < 0 else "R")); u.cyl((0, 0, 0.045), 0.035, 0.09, M_mug, seg=18); u.cyl((0, 0, 0.087), 0.031, 0.004, M_cof, seg=18)
     u.box((0.04, 0, 0.05), (0.012, 0.008, 0.045), M_mug); uo = u.obj(cL); uo.location = (s_ * 1.0, 1.78, 0.665)
     ch = MB("CUPHOLDER_%s" % ("L" if s_ < 0 else "R")); ch.cyl((s_ * 1.0, 1.78, 0.66), 0.045, 0.012, M_steel, seg=18); ch.obj(cSet)
+
+# realism details: screws, seams, rubber seals, display glow halos
+dt = MB("PANEL_DETAILS"); M_screw = wear_mat("M_screw", (0.3, 0.3, 0.31), (0.6, 0.6, 0.6), rough=0.35, metal_worn=1.0, scale=400, edge=0.505)
+M_seam = mat("M_seam", (0.005, 0.005, 0.006), rough=0.9); M_rubber = mat("M_rubber_seal", (0.012, 0.012, 0.012), rough=0.85, bump=0.3, nscale=300)
+for x in (-0.52 - 0.19, -0.52, -0.52 + 0.19, -0.11, 0.11, 0.52 - 0.19, 0.52, 0.52 + 0.19):          # module seams + screws on the main panel
+    for zo in (-0.2, 0.2):
+        dt.cyl(on_panel(x, zo, 0.002), 0.004, 0.004, M_screw, rot=(76, 0, 0), seg=10)
+    dt.box(on_panel(x + 0.095 if x < 0 else x - 0.095, 0.0, -0.001), (0.003, 0.004, 0.46), M_seam, rot=(-14, 0, 0))
+for j in range(7):                                                                          # overhead module screws
+    for i in range(5):
+        x = -0.42 + j * 0.14; y = 0.72 + i * 0.25
+        dt.cyl((x, y, ovz(y) - 0.002), 0.003, 0.003, M_screw, seg=8)
+for k in range(10):                                                                         # pedestal screws
+    dt.cyl((-0.165 + 0.33 * (k % 2), 1.3 + 0.09 * (k // 2), 0.773), 0.004, 0.004, M_screw, seg=8)
+for s_ in (-1, 1):                                                                          # rubber seals around side windows and windscreen posts
+    dt.box((s_ * 1.13, 1.42, 1.60), (0.012, 0.95, 0.012), M_rubber); dt.box((s_ * 1.17, 1.42, 1.13), (0.012, 0.95, 0.012), M_rubber)
+    for yy in (0.96, 1.87): dt.box((s_ * 1.15, yy, 1.37), (0.012, 0.012, 0.5), M_rubber)
+dt.obj(cSet)
+# soft glow halo around each display (cheap bloom)
+m, nt = nodes_mat("M_disp_halo"); N, L = nt.nodes, nt.links; N.remove(N["Principled BSDF"])
+tc = N.new("ShaderNodeTexCoord"); gr = N.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'
+mp = N.new("ShaderNodeMapping"); mp.inputs["Location"].default_value = (-1, -1, 0); mp.inputs["Scale"].default_value = (2, 2, 1)
+L.new(tc.outputs["UV"], mp.inputs["Vector"]); L.new(mp.outputs[0], gr.inputs["Vector"])
+pw = N.new("ShaderNodeMath"); pw.operation = 'POWER'; L.new(gr.outputs["Fac"], pw.inputs[0]); pw.inputs[1].default_value = 2.0
+em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.35, 0.6, 1.0, 1); em.inputs["Strength"].default_value = 0.5
+tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader"); L.new(pw.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
+L.new(mx.outputs[0], N["Material Output"].inputs["Surface"])
+for o in [o for o in cD.objects if o.name.startswith("DISP_") and o.name != "DISP_EICAS_LOW"]:
+    h = quad("HALO_" + o.name, o.location + Vector((0, 0.0028, -0.0007)), WD * 1.5, WD * 1.5, m, (-14, 0, 0), cD); h.visible_shadow = False
+
 # yoke buttons
 for side in ("L", "R"):
     y = bpy.data.objects["YOKE_%s" % side]; b = MB("YOKE_BTN_%s" % side)
