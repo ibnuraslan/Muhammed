@@ -122,9 +122,9 @@ def add_fade(m, group):
 
 # ------------------------------------------------------------------ materials
 M_wall = pbr("M_WallTiles", "interior_tiles", 0.9, tint=(0.70, 0.86, 0.78, 1), sat=0.3, val=1.0, bump=0.5)
-M_floor = pbr("M_Floor", "granite_tile", 1.6, tint=(0.92, 0.9, 0.84, 1), sat=0.6, val=0.85, bump=0.4)
+M_floor = pbr("M_Floor", "granite_tile", 1.6, tint=(0.92, 0.9, 0.84, 1), sat=0.6, val=0.85, bump=0.4, rough_add=0.3)
 M_ceil = mat("M_Ceiling", (0.82, 0.83, 0.8, 1), 0.8)
-M_chrome = mat("M_Chrome", (0.85, 0.86, 0.88, 1), 0.12, 1.0)
+M_chrome = mat("M_Chrome", (0.85, 0.86, 0.88, 1), 0.3, 1.0)
 M_steel = mat("M_SteelBrushed", (0.7, 0.71, 0.72, 1), 0.28, 1.0)
 M_enamel = mat("M_EnamelCream", (0.80, 0.78, 0.68, 1), 0.35, coat=0.4)
 M_vinyl = mat("M_VinylGreen", (0.10, 0.25, 0.20, 1), 0.38, coat=0.3)
@@ -136,9 +136,9 @@ M_cyanglow = mat("M_CyanGlow", (0, 0, 0, 1), 1.0, emit=(0.45, 0.85, 1.0, 1), est
 M_lampin = mat("M_LampLens", (1, 1, 1, 1), 0.2, emit=(1.0, 0.95, 0.85, 1), estr=30.0)
 M_rubber = mat("M_Rubber", (0.03, 0.03, 0.03, 1), 0.7)
 M_wood = mat("M_WoodDark", (0.22, 0.12, 0.06, 1), 0.45)
-M_glove = mat("M_Glove", (0.40, 0.48, 0.52, 1), 0.32, coat=0.5)
+M_glove = mat("M_Glove", (0.17, 0.23, 0.27, 1), 0.3, coat=0.35)
 _g = M_glove.node_tree; _gp = _g.nodes["Principled BSDF"]
-_gp.inputs["Subsurface Weight"].default_value = 0.25; _gp.inputs["Subsurface Radius"].default_value = (0.004, 0.003, 0.002)
+_gp.inputs["Subsurface Weight"].default_value = 0.1; _gp.inputs["Subsurface Radius"].default_value = (0.004, 0.003, 0.002)
 _gp.inputs["Sheen Weight"].default_value = 0.4; _gp.inputs["Coat Roughness"].default_value = 0.15
 _gn = _g.nodes.new("ShaderNodeTexNoise"); _gn.inputs["Scale"].default_value = 900.0
 _gb = _g.nodes.new("ShaderNodeBump"); _gb.inputs["Strength"].default_value = 0.08
@@ -201,7 +201,8 @@ for i in range(14): to_room(box(f"RadFin_{i}", (0.1, 0.03, 0.56), (-3.53, -0.05 
 to_room(cyl("Pipe_A", 0.025, 7.0, (-3.56, -0.25, 2.6), M_enamel, 16, rot=(math.radians(90), 0, 0)))
 to_room(cyl("Pipe_B", 0.018, 7.0, (-3.56, -0.25, 2.5), M_steel, 16, rot=(math.radians(90), 0, 0)))
 for i, (x, y) in enumerate(((-1.8, -1.5), (1.0, -1.5), (3.2, 0.8), (-1.8, 1.5))):
-    to_room(box(f"CeilPanel_{i}", (1.0, 0.5, 0.04), (x, y, 2.99), mat(f"M_CeilPanel_{i}", (1, 1, 1, 1), 0.4, emit=(1.0, 0.97, 0.9, 1), estr=3.0)))
+    cp_ = to_room(box(f"CeilPanel_{i}", (1.0, 0.5, 0.04), (x, y, 2.99), mat(f"M_CeilPanel_{i}", (1, 1, 1, 1), 0.4, emit=(1.0, 0.97, 0.9, 1), estr=3.0)))
+    cp_.visible_glossy = False
 
 # ------------------------------------------------------------------ operating tables (top surface z = 0.92), centres x = -0.42 / +0.42
 TZ = 0.92
@@ -240,8 +241,9 @@ for i in range(6):
 spot_d = bpy.data.lights.new("Lamp_Spot", "SPOT"); spot_d.energy = 900; spot_d.spot_size = math.radians(55); spot_d.spot_blend = 0.6
 spot_d.shadow_soft_size = 0.25; spot_d.color = (1.0, 0.96, 0.9)
 spot = link(bpy.data.objects.new("Lamp_Spot", spot_d)); spot.location = (0, 0.15, 1.88)
+bpy.context.view_layer.update()
 for o in [dome, lens, ring, handle, yoke, spot] + [o for o in bpy.data.objects if o.name.startswith("Lamp_Bulb_")]:
-    M = o.matrix_world.copy(); o.parent = lamp_piv; o.matrix_world = M
+    M = o.matrix_world.copy(); o.parent = lamp_piv; o.matrix_parent_inverse = Matrix.Identity(4); o.matrix_world = M
 for o in [arm1, lamp_piv, dome, lens, ring, handle, yoke, spot] + [o for o in bpy.data.objects if o.name.startswith("Lamp_Bulb_")]:
     pass
 # satellite lamp (second, smaller dome) and dust motes drifting in the main lamp's cone
@@ -257,6 +259,12 @@ s2o = link(bpy.data.objects.new("LampSat_Spot", sp2)); s2o.location = (0.95, 0.7
 s2o.rotation_euler = (V(0.5, 0.1, 0.95) - V(0.95, 0.75, 2.0)).to_track_quat("-Z", "Y").to_euler()
 dust_root = link(bpy.data.objects.new("Dust_Root", None)); dust_root.location = (0.1, 0.12, 1.4)
 dm = mat("M_Dust", (1, 1, 1, 1), 0.5, emit=(1.0, 0.96, 0.88, 1), estr=0.5)
+_dn = dm.node_tree; _do = _dn.nodes["Material Output"]; _dsrc = _do.inputs["Surface"].links[0].from_socket
+_cd = _dn.nodes.new("ShaderNodeCameraData"); _mr = _dn.nodes.new("ShaderNodeMapRange")
+_mr.inputs["From Min"].default_value = 0.4; _mr.inputs["From Max"].default_value = 0.8
+_tr = _dn.nodes.new("ShaderNodeBsdfTransparent"); _mx = _dn.nodes.new("ShaderNodeMixShader")
+_dn.links.new(_cd.outputs["View Distance"], _mr.inputs["Value"]); _dn.links.new(_mr.outputs["Result"], _mx.inputs["Fac"])
+_dn.links.new(_tr.outputs[0], _mx.inputs[1]); _dn.links.new(_dsrc, _mx.inputs[2]); _dn.links.new(_mx.outputs[0], _do.inputs["Surface"])
 bpy.ops.mesh.primitive_ico_sphere_add(radius=0.0007, subdivisions=1); dust_src = bpy.context.active_object; dust_src.name = "Dust_Src"; dust_src.data.materials.append(dm)
 for i in range(60):
     zz = random.uniform(-0.4, 0.4); rr = random.uniform(0, 0.08 + (0.4 - zz) * 0.35); aa = random.uniform(0, 2 * math.pi)
@@ -297,6 +305,7 @@ dp = to_room(link(bpy.data.objects.new("Door_Pivot", None))); dp.location = (3.7
 door = to_room(box("Door_Panel", (0.84, 0.045, 2.08), (4.12, 2.93, 1.05), mat("M_DoorPanel", (0.55, 0.68, 0.62, 1), 0.45), 0.004))
 dw = to_room(box("Door_Window", (0.3, 0.05, 0.4), (4.12, 2.93, 1.55), M_glass))
 dh = to_room(cyl("Door_Handle", 0.012, 0.12, (4.45, 2.89, 1.0), M_chrome, 12, rot=(0, math.radians(90), 0)))
+bpy.context.view_layer.update()
 for o in (door, dw, dh):
     M = o.matrix_world.copy(); o.parent = dp; o.matrix_parent_inverse = dp.matrix_world.inverted()
 # old anaesthesia machine silhouette behind table 1 (boxes, gauges, hose) for depth

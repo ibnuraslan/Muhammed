@@ -160,6 +160,7 @@ for s in "LR":
         for p in mel.polygons: p.use_smooth = True
         lo.rotation_mode = "XYZ"
         lo.rotation_euler = (math.radians(-75 if up > 0 else 70), 0, 0)
+        lo.scale = (1.0, 0.9, 1.0)
         so = lo.modifiers.new("solid", "SOLIDIFY"); so.thickness = 0.0008; so.offset = 1.0
     piv.parent = head; piv.matrix_parent_inverse = head.matrix_world.inverted()
 

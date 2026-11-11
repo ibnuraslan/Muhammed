@@ -117,8 +117,8 @@ LIDS = {s: (D["LidUp_" + s], D["LidLo_" + s]) for s in "LR"}
 def lids(f, o):    # o: 0 closed .. 1 open
     for s in "LR":
         up, lo = LIDS[s]
-        up.rotation_euler.x = math.radians(-0.5 - 74.5 * o); up.keyframe_insert("rotation_euler", frame=f, index=0)
-        lo.rotation_euler.x = math.radians(0.5 + 62.5 * o); lo.keyframe_insert("rotation_euler", frame=f, index=0)
+        up.rotation_euler.x = math.radians(4.0 - 79 * o); up.keyframe_insert("rotation_euler", frame=f, index=0)
+        lo.rotation_euler.x = math.radians(1.0 + 40 * o); lo.keyframe_insert("rotation_euler", frame=f, index=0)
 for f, o in ((1, 0.0), (700, 0.0), (706, 0.25), (712, 0.05), (724, 0.4), (730, 0.1), (745, 0.6), (765, 1.0), (812, 1.0), (816, 0.0), (822, 1.0),
              (858, 1.0), (862, 0.0), (868, 1.0), (960, 1.0), (964, 0.0), (970, 1.0),
              (1240, 1.0), (1244, 0.05), (1250, 1.0), (1330, 1.0), (1334, 0.05), (1340, 1.0),
@@ -595,11 +595,11 @@ K = [
  (540,  NBp + V(0.32, 0.18, 0.32), NBp, 75, UPW, "W"),
  (600,  NBp + V(0.42, 0.06, 0.06), NBp + V(0, 0, 0.03), 70, UPW, "W"),
  (650,  NBp + V(0.36, -0.16, 0.12), NBp + V(0.02, -0.02, 0.0), 60, UPW, "W"),
- (700,  FBp + FWW * 0.32 + V(0, -0.18, 0.08), FBp, 40, UPW, "W"),
- (760,  FBp + FWW * 0.24 + V(0, -0.08, 0.05), FBp, 52, UPW, "W"),
- (820,  FBp + FWW * 0.13 + V(0, -0.02, 0.02), FBp, 70, UPW, "W"),
- (880,  FBp + FWW * 0.18 + V(0, 0.06, 0.06), FBp, 55, UPW, "W"),
- (930,  FBp + FWW * 0.16 + V(0, 0.16, 0.12), FBp, 45, UPW, "W"),
+ (700,  FBp + FWW * 0.32 + V(0, -0.18, 0.08), FBp, 40, V(0, -0.6, 0.8), "W"),
+ (760,  FBp + FWW * 0.24 + V(0, -0.08, 0.05), FBp, 52, V(0, -1, 0.05), "W"),
+ (820,  FBp + FWW * 0.13 + V(0, -0.02, 0.02), FBp, 70, V(0, -1, 0.05), "W"),
+ (880,  FBp + FWW * 0.18 + V(0, 0.06, 0.06), FBp, 55, V(0, -1, 0.05), "W"),
+ (930,  FBp + FWW * 0.16 + V(0, 0.16, 0.12), FBp, 45, V(0, -1, 0.05), "W"),
  (975,  FBp + V(0.06, 0.14, 0.25), FBp + V(-0.02, 0.05, 0), 38, V(0, -1, 0.4), "W"),
  (1005, NBp + V(0.0, 0.02, 0.33), NBp + V(0, 0.03, 0), 34, V(0, -1, 0), "W"),
  (1030, NBp + V(0.0, 0.03, 0.22), NBp + V(0, 0.03, 0), 34, V(0, -1, 0), "W"),
