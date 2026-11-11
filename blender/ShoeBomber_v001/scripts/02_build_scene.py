@@ -146,7 +146,7 @@ for (ri, k) in [(4, "C"), (2, "D"), (7, "B")]:
     L.add_box("Bag_%d%s" % (ri, k), (0.32, 0.18, 0.24), (SEAT_X[k] + 0.0, ROWS[ri] - 0.55, 0.12), L.mat("BagBlack", (0.03, 0.03, 0.035), 0.6), "Props", bevel=0.03)
 
 # drink trolley
-TR = L.add_box("Trolley", (0.3, 0.75, 1.0), (0, 6.5, 0.52), M["metal"], "Props", bevel=0.02)
+TR = L.add_box("Trolley", (0.3, 0.75, 1.0), (0, 6.5, 0.52), L.mat("TrolleyMetal", (0.55, 0.56, 0.58), 0.35, 0.4), "Props", bevel=0.02)
 for k in range(4):
     L.add_box("TrolleyDrawerLine_%d" % k, (0.305, 0.72, 0.006), (0, 0, -0.35 + k * 0.22), M["trim"], "Props").parent = TR
 top = L.add_box("TrolleyTop", (0.32, 0.77, 0.03), (0, 0, 0.515), M["dark"], "Props"); top.parent = TR
@@ -225,7 +225,7 @@ MATCH = match("Match")
 for s in shoes:
     cu = bpy.data.curves.new("Fuse_" + s.name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004; cu.bevel_resolution = 3
     sp = cu.splines.new('BEZIER'); sp.bezier_points.add(2)
-    for i, p in enumerate([V((0, 0.05, 0.03)), V((0.004, 0.065, 0.15)), V((0.02, 0.085, 0.225))]):
+    for i, p in enumerate([V((0, -0.07, 0.03)), V((0.004, -0.075, -0.025)), V((0.018, -0.09, -0.075))]):   # out through the heel sole
         sp.bezier_points[i].co = p; sp.bezier_points[i].handle_left_type = sp.bezier_points[i].handle_right_type = 'AUTO'
     fo = bpy.data.objects.new("Fuse_" + s.name, cu); L.coll("Props").objects.link(fo); fo.parent = s
     fo.data.materials.append(L.mat("FuseCord", (0.75, 0.62, 0.42), 0.85))
@@ -260,13 +260,14 @@ for nm, loc, en, sz in (("StudioKey", (SX.x - 2.0, -2.5, 3.2), 900, 2.5), ("Stud
 pm = bpy.data.materials.new("Putty"); pm.use_nodes = True; N = pm.node_tree.nodes; b = N["Principled BSDF"]
 nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 60; bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25
 pm.node_tree.links.new(nz.outputs["Fac"], bp.inputs["Height"]); pm.node_tree.links.new(bp.outputs["Normal"], b.inputs["Normal"])
-b.inputs["Base Color"].default_value = (0.42, 0.42, 0.4, 1); b.inputs["Roughness"].default_value = 0.75
+b.inputs["Base Color"].default_value = (0.62, 0.62, 0.6, 1); b.inputs["Roughness"].default_value = 0.8
 om = L.mat("SlabOutline", (0, 0, 0), 0.5, emit=(1.0, 0.75, 0.1), estr=0.0); om.use_backface_culling = True
 for s in shoes:
     st = bpy.data.objects[s.name + "_Studio"]
     sl = L.add_box("Slab_" + s.name, (0.075, 0.2, 0.022), (0, 0, 0), pm, S, bevel=0.008)
     ol = L.add_box("SlabOutline_" + s.name, (0.075, 0.2, 0.022), (0, 0, 0), om, S, bevel=0.008)
-    so = ol.modifiers.new("shell", 'SOLIDIFY'); so.thickness = 0.004; so.use_flip_normals = True; so.offset = 1
+    ol.modifiers.clear(); ol.scale = (1.04, 1.03, 1.12)
+    wf = ol.modifiers.new("wire", 'WIREFRAME'); wf.thickness = 0.0025
     sl.parent = st; ol.parent = st; sl.location = ol.location = (0, 0.0, 0.03)
 
 # ------------------------------------------------------------------ SKY (x=-2000, z=600)
@@ -318,7 +319,7 @@ puff.node_tree.nodes["Principled BSDF"].inputs["Subsurface Radius"].default_valu
 tx = bpy.data.textures.new("PuffNoise", 'CLOUDS'); tx.noise_scale = 0.6
 for i in range(40):
     r = random.uniform(20, 55)
-    an = random.uniform(0, 2 * math.pi); dist = random.uniform(120, 900)
+    an = random.uniform(0, 2 * math.pi); dist = random.uniform(220, 900)
     p = KX + V((math.cos(an) * dist, math.sin(an) * dist + 300, random.uniform(-75, -40)))
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=4, radius=r, location=p)
     c = bpy.context.active_object; c.name = "Puff_%02d" % i; c.scale = (1.4, 1.2, 0.55)
@@ -329,10 +330,10 @@ for i in range(40):
 # ------------------------------------------------------------------ AIRPORT (x=400)
 AX = V((400, 0, 0))
 A = "Airport"
-fl = L.add_box("TerminalFloor", (40, 40, 0.05), AX + V((0, 0, -0.025)), L.tex_mat("TerminalTiles", "large_grey_tiles", 8.0, tint=(0.95, 0.95, 0.97), rough_mul=0.6), A)
+fl = L.add_box("TerminalFloor", (40, 40, 0.05), AX + V((0, 0, -0.025)), L.tex_mat("TerminalTiles", "large_grey_tiles", 8.0, tint=(0.55, 0.55, 0.57), rough_mul=0.6), A)
 bpy.context.view_layer.objects.active = fl
 bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.uv.cube_project(cube_size=1.0); bpy.ops.object.mode_set(mode='OBJECT')
-ceil = L.add_box("TerminalCeiling", (40, 40, 0.1), AX + V((0, 0, 7.0)), L.mat("CeilingWhite", (0.85, 0.85, 0.85), 0.6), A)
+ceil = L.add_box("TerminalCeiling", (40, 40, 0.1), AX + V((0, 0, 7.0)), L.mat("CeilingWhite", (0.55, 0.55, 0.56), 0.6), A)
 # skylight opening: emissive day-sky panels in the ceiling (the camera descends through the middle one)
 for i in range(-3, 4):
     L.add_box("Skylight_%d" % i, (2.0, 6.0, 0.12), AX + V((i * 3.2, 0, 6.99)), L.mat("SkylightSky", (0.6, 0.75, 0.9), 0.3, emit=(0.75, 0.85, 1.0), estr=3.0), A)

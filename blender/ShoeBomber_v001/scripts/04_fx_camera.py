@@ -166,9 +166,9 @@ cm = Carry(match)
 sc.frame_set(12)
 fw = bone_w(bom, "finger2-3.R", 12); tip = fw.translation
 sh = bone_w(bom, "foot.R", 12).translation
-d = (sh + V((0, 0, 0.12)) - tip).normalized()
+d = (sh + V((0, 0, 0.05)) - tip).normalized()
 Rm = d.to_track_quat('Z', 'Y').to_matrix().to_4x4()
-cm.hold(bom, "finger2-3.R", 1, Matrix.Translation(tip - d * 0.015) @ Rm)
+cm.hold(bom, "finger2-3.R", 1, Matrix.Translation(tip + d * 0.012) @ Rm)
 cm.free(486)                                  # knocked out of his fingers: falls to the floor
 cm.done()
 # fall: park target animated down to the carpet
@@ -183,6 +183,11 @@ cb_.hold(bom, "wrist.L", 1, lw @ Matrix.Translation(V((0.0, -0.06, -0.03))))
 cb_.done()
 # flame: lights on the strike (f28), flickers, a second wobble, out when knocked away (486)
 fl = O["Match_Flame"]; flight = O["Match_Light"]
+# flame burns upward from the match head in world space (not along the stick)
+fl.parent = None; fl.matrix_world = Matrix.Identity(4)
+cl = fl.constraints.new('COPY_LOCATION'); cl.target = O["Match_Head"]
+fl.delta_location = (0, 0, 0.0)
+flight.parent = None; cl2 = flight.constraints.new('COPY_LOCATION'); cl2.target = O["Match_Head"]; flight.delta_location = (0, 0, 0.03)
 for f in range(1, END + 1, 3):
     on = 28 <= f < 486
     if f < 28 or f >= 486:
@@ -190,8 +195,9 @@ for f in range(1, END + 1, 3):
     else:
         s = 1.0 + 0.25 * math.sin(f * 1.7) + 0.15 * random.uniform(-1, 1)
         if f < 34: s *= (f - 27) / 6 * 1.6
-    fl.scale = (0.8 * max(s, 0.001), 0.8 * max(s, 0.001), 2.2 * max(s, 0.001)); fl.keyframe_insert("scale", frame=f)
-    flight.data.energy = 3.0 * s; flight.data.keyframe_insert("energy", frame=f)
+    fl.scale = (1.4 * max(s, 0.001), 1.4 * max(s, 0.001), 3.2 * max(s, 0.001)); fl.keyframe_insert("scale", frame=f)
+    fl.delta_location = (0, 0, 0.022 * max(s, 0.001)); fl.keyframe_insert("delta_location", frame=f)
+    flight.data.energy = 8.0 * s; flight.data.keyframe_insert("energy", frame=f)
     fl.hide_render = not on; fl.keyframe_insert("hide_render", frame=f)
 
 # ------------------------------------------------------------------ syringe (steward's right hand, beat 5)
@@ -207,9 +213,9 @@ long_axis = [V((1, 0, 0)), V((0, 1, 0)), V((0, 0, 1))][ax]
 Rq = long_axis.rotation_difference(V((-0.5, 0, -0.85)).normalized()).to_matrix().to_4x4()
 pos = (bone_w(stw, "finger3-1.R", 575).translation + wr.translation) / 2
 hide_before = 560
-cs.hold(stw, "wrist.R", 560, Matrix.Translation(pos) @ Rq @ Matrix.Translation(-V((0, 0, 0)) ))
+cs.hold(stw, "wrist.R", 575, Matrix.Translation(pos) @ Rq)
 cs.done()
-for f, h in ((1, True), (559, True), (560, False), (900, False), (901, True)):
+for f, h in ((1, True), (574, True), (575, False), (900, False), (901, True)):
     sy.hide_render = h; sy.keyframe_insert("hide_render", frame=f)
 constant_at(sy, set(range(0, END + 1)), "hide_render")
 
@@ -238,7 +244,7 @@ for k in range(5):
 # ------------------------------------------------------------------ smoke wisp from the shoe (beat 1-3): rising translucent blobs
 sm = bpy.data.materials.new("Smoke"); sm.use_nodes = True; N = sm.node_tree.nodes
 for n in list(N): N.remove(n)
-out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled"); vol.inputs["Density"].default_value = 3.0
+out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled"); vol.inputs["Density"].default_value = 0.35
 vol.inputs["Color"].default_value = (0.6, 0.6, 0.62, 1); sm.node_tree.links.new(vol.outputs[0], out.inputs["Volume"])
 for k in range(8):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.03, location=(0, 0, 0))
@@ -277,8 +283,8 @@ for k, s in enumerate(("L", "R")):
     for f, dz, rx in ((1069, 0.0, 0), (1105, 0.0, 0), (1140, 0.15, -25), (1160, 0.14, -22), (1250, 0.16, -26)):
         up.location = (0, 0.02 * (dz > 0), dz); up.rotation_euler = (math.radians(rx), 0, 0)
         up.keyframe_insert("location", frame=f); up.keyframe_insert("rotation_euler", frame=f)
-    sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.035)
-    ol = O["SlabOutline_Shoe_" + s]; ol.parent = base; ol.location = (0, 0.0, 0.035)
+    sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.044)
+    ol = O["SlabOutline_Shoe_" + s]; ol.parent = base; ol.location = (0, 0.0, 0.044)
 om = bpy.data.materials["SlabOutline"]; b = om.node_tree.nodes["Principled BSDF"]
 for f, e in ((1, 0.0), (1135, 0.0), (1150, 12.0), (1235, 12.0), (1250, 0.0)):
     b.inputs["Emission Strength"].default_value = e; b.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
@@ -287,8 +293,8 @@ for f, e in ((1, 0.0), (1135, 0.0), (1150, 12.0), (1235, 12.0), (1250, 0.0)):
 for o in bpy.data.objects:
     if o.name.startswith("Puff_"):
         x0 = o.location.x
-        o.location.x = x0 + 120; o.keyframe_insert("location", frame=1240)
-        o.location.x = x0 - 120; o.keyframe_insert("location", frame=1400)
+        o.location.x = x0 + 40; o.keyframe_insert("location", frame=1240)
+        o.location.x = x0 - 40; o.keyframe_insert("location", frame=1400)
 cdm = bpy.data.materials["CloudDeck"]
 tc = [n for n in cdm.node_tree.nodes if n.type == 'TEX_NOISE'][0]
 mp = cdm.node_tree.nodes.new("ShaderNodeMapping"); cdm.node_tree.links.new([n for n in cdm.node_tree.nodes if n.type == 'TEX_COORD'][0].outputs["Object"], mp.inputs["Vector"])
@@ -357,10 +363,10 @@ def op(name, f, off=(0, 0, 0)):
 # framings: (frame, camera, aim, lens). Aims follow the action (evaluated bone / prop positions).
 SEG = [
     # beat 1: over the seatbacks in front, down into his lap -> push to his lit face -> macro on match + shoe -> rise out to the aisle
-    (1,   V((-0.62, 0.45, 1.45)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 24),
-    (45,  V((-0.82, 0.40, 1.22)), (op("Shoe_R", 45, (0, 0, 0.1)) + bp("Bomber", "head", 45)) / 2, 30),
-    (100, V((-0.98, 0.42, 0.92)), op("Match_Flame", 100), 38),
-    (150, V((-1.02, 0.30, 0.80)), op("Match_Flame", 150, (0, 0, -0.03)), 45),
+    (1,   V((-0.75, 0.42, 1.40)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 24),
+    (45,  V((-0.85, 0.42, 1.15)), (op("Shoe_R", 45, (0, 0, 0.1)) + bp("Bomber", "head", 45)) / 2, 30),
+    (100, V((-0.95, 0.42, 0.92)), op("Match_Flame", 100), 40),
+    (150, V((-1.05, 0.40, 0.78)), op("Match_Flame", 150, (0, 0, -0.02)), 48),
     (198, V((-0.30, 0.70, 1.55)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
     # beat 2: swing round down the aisle toward the trolley, low dolly back, crane up, whip to her face, push on eyes
     (225, V((0.02, 1.05, 1.05)), V((0.0, 5.0, 1.1)), 26),
@@ -369,24 +375,24 @@ SEG = [
     (330, V((0.16, 1.80, 1.50)), bp("Attendant", "head", 330, (0, 0, -0.05)), 42),
     (372, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 372, (0, -0.02, -0.02)), 52),
     # beat 3: over her shoulder, pushing over the seatback to the flame and his startled face
-    (400, V((0.42, 1.10, 1.60)), op("Match_Flame", 400), 35),
+    (400, V((0.22, 1.15, 1.62)), op("Match_Flame", 400), 35),
     (440, V((0.20, 0.82, 1.48)), (op("Match_Flame", 440) + bp("Bomber", "head", 440)) / 2, 45),
     (480, V((0.10, 0.95, 1.55)), bp("Bomber", "head", 480), 40),
     # beat 4: wide from the aisle ahead -> crane to near top-down over the pile -> drop to carpet level for the pin
     (515, V((0.10, 3.10, 1.65)), bp("Bomber", "spine01", 515), 22),
     (555, V((0.00, 1.80, 2.10)), bp("Bomber", "spine01", 555, (0, 0, -0.2)), 18),
-    (600, V((0.10, 4.30, 1.25)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 26),
-    (640, V((0.35, 3.40, 1.05)), bp("Bomber", "head", 640), 30),
+    (600, V((0.30, 2.60, 1.85)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 24),
+    (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
-    (680, V((0.60, 0.85, 1.50)), bp("Bomber", "upperarm02.R", 680), 35),
-    (712, V((0.42, 1.00, 1.25)), bp("Bomber", "upperarm02.R", 712), 50),
-    (745, V((0.45, 1.95, 0.95)), bp("Bomber", "head", 745), 35),
+    (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
+    (712, V((0.45, 0.92, 0.80)), bp("Bomber", "upperarm02.R", 712), 36),
+    (748, V((0.45, 0.85, 1.58)), bp("Bomber", "head", 748), 30),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
-    (800, V((0.55, -1.00, 1.10)), bp("Bomber", "foot.L", 800), 28),
-    (860, V((0.55, -0.40, 1.00)), op("Shoe_L", 860, (0, 0, 0.08)), 30),
-    (920, V((0.25, 0.75, 1.40)), (op("Shoe_L", 920) + op("Shoe_R", 920)) / 2, 30),
-    (965, V((-0.05, 0.50, 1.42)), fuse_tip("L", 965), 42),
-    (1015, V((0.15, 0.48, 1.45)), fuse_tip("R", 1015), 45),
+    (800, V((0.15, 1.35, 1.65)), bp("Bomber", "foot.L", 800), 26),
+    (860, V((0.10, 0.45, 1.10)), op("Shoe_L", 860, (0, 0, 0.08)), 30),
+    (920, V((0.12, 0.55, 1.35)), (op("Shoe_L", 920) + op("Shoe_R", 920)) / 2, 30),
+    (965, V((-0.02, 0.42, 1.38)), fuse_tip("L", 965), 42),
+    (1015, V((0.10, 0.42, 1.40)), fuse_tip("R", 1015), 45),
     (1062, fuse_tip("L", 1062) + V((0, 0.03, 0.03)), op("Shoe_L", 1062, (0, 0, 0.05)), 40),
 ]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
@@ -400,8 +406,8 @@ SEG2 = [
 ]
 # sky: from the cloud next to a cabin window, back along the wing, huge pull-out, tilt down into the deck
 SEG3 = [
-    (1249, KX + V((6.0, 3.2, 1.4)), KX + V((6.0, 0.0, 1.0)), 30),
-    (1290, KX + V((-2.0, 10.0, 3.0)), KX + V((2.0, 0.0, 0.8)), 26),
+    (1249, KX + V((11.0, 5.2, 1.6)), KX + V((10.5, 0.0, 1.0)), 32),
+    (1290, KX + V((4.0, 12.0, 4.5)), KX + V((3.0, 0.0, 0.8)), 26),
     (1335, KX + V((-22.0, 34.0, 12.0)), KX + V((0.0, 0.0, 0.0)), 24),
     (1372, KX + V((-55.0, 75.0, 22.0)), KX + V((0.0, 0.0, -5.0)), 22),
     (1392, KX + V((-60.0, 82.0, 5.0)), KX + V((-58.0, 85.0, -80.0)), 22),
@@ -412,7 +418,8 @@ SEG4 = [
     (1440, AX + V((-2.2, -2.6, 2.4)), bp("Traveller", "spine01", 1440, (0, 0, -0.3)), 26),
     (1490, AX + V((-1.6, -2.3, 1.15)), op("Tray_1", 1490, (0, 0, 0.1)), 30),
     (1540, AX + V((-0.2, -1.9, 1.05)), op("Tray_1", 1540, (0, 0, 0.1)), 32),
-    (1580, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
+    (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
+    (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
     (END, AX + V((-1.35, 0.05, 1.50)), bp("Traveller", "head", END, (0, 0, -0.15)), 40),
 ]
 for seg in (SEG, SEG2, SEG3, SEG4):
