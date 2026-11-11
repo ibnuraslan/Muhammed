@@ -1,0 +1,35 @@
+Tsunami2004 audit, step 6 frames
+FOOT_HOVER              4
+    f 559 (9.30s) Fisher R 6.9 cm
+    f1249 (20.80s) TouristM L 5.9 cm
+    f1255 (20.90s) TouristM R 3.9 cm
+    f1267 (21.10s) LocalM R 4.9 cm
+FOOT_SINK               0
+FOOT_SLIDE              0
+HAND_BODY               0
+HAND_PROP              19
+    f 433 (7.20s) Fisher x Fish_00 146
+    f 439 (7.30s) Fisher x Fish_00 92
+    f 445 (7.40s) Fisher x Fish_00 94
+    f 451 (7.50s) Fisher x Fish_00 99
+    f 457 (7.60s) Fisher x Fish_00 99
+    f 463 (7.70s) Fisher x Fish_00 98
+    f 469 (7.80s) Fisher x Fish_00 98
+    f 475 (7.90s) Fisher x Fish_00 99
+    f 481 (8.00s) Fisher x Fish_00 98
+    f 487 (8.10s) Fisher x Fish_00 106
+    f 493 (8.20s) Fisher x Fish_00 105
+    f 499 (8.30s) Fisher x Fish_00 105
+    f 505 (8.40s) Fisher x Fish_00 98
+    f 511 (8.50s) Fisher x Fish_00 101
+    f 517 (8.60s) Fisher x Fish_00 100
+    f 523 (8.70s) Fisher x Fish_00 103
+    f 529 (8.80s) Fisher x Fish_00 99
+    f 535 (8.90s) Fisher x Fish_00 102
+    f 541 (9.00s) Fisher x Fish_00 110
+PERSON_PERSON           0
+HAND_FLOAT              0
+CAMERA_UNDER_GROUND     0
+CAMERA_UNDER_WATER      0
+CAMERA_INSIDE           0
+TOTAL 23

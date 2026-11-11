@@ -20,6 +20,7 @@ class Person:
         self.sh = {s: B["upperarm01." + s].head_local.copy() for s in "LR"}
         self.L = (B["wrist.L"].head_local - B["upperarm01.L"].head_local).length
         self.st = {}      # frame -> (pos3 root ground point, yaw, mode, phase)
+        self.hand_limits()
         self.arm = {}     # frame -> dict(side -> mode)
     # ---------------------------------------------------------------- body
     def stand(self, f0, f1, pos, yaw, step=6, crouch=0.0, flex=4.0, head=(0, 0), sway=1.0):
@@ -100,13 +101,13 @@ class Person:
                 sw = math.sin(2 * math.pi * ph + (0 if s == "L" else math.pi))
                 if md == "stand" and nm in ("swing", "run"): nm = "hang"
                 if nm == "hang":
-                    W = shw + side * 0.07 + fw * 0.03 + up * (-0.9 * L); d = (-up + fw * 0.1).normalized(); n = -side
+                    W = shw + side * 0.26 + fw * 0.05 + up * (-0.83 * L); d = (-up + fw * 0.1).normalized(); n = (-side - fw * 0.8).normalized()
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "swing":
-                    W = shw + side * 0.08 + fw * (0.28 * L * sw) + up * (-0.88 * L); d = (-up + fw * 0.2).normalized(); n = -side
+                    W = shw + side * 0.26 + fw * (0.28 * L * sw) + up * (-0.82 * L); d = (-up + fw * 0.2).normalized(); n = (-side - fw * 0.8).normalized()
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "run":
-                    W = shw + side * 0.16 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
+                    W = shw + side * 0.23 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
                     pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
                 elif nm == "point":
                     W = shw + fw * 0.93 * L + up * 0.2 * L + side * 0.05; d = (fw + up * 0.2).normalized(); n = -up
@@ -123,10 +124,30 @@ class Person:
                     W = tgt + up * 0.06; d = (fw * 0.3 - up).normalized(); n = -fw
                     pole = shw + side * 0.4 + up * 0.1
                 elif nm == "hold":
-                    W = shw + fw * 0.45 * L + up * (-0.45 * L) - side * 0.05; d = (fw - side * 0.6).normalized(); n = up
+                    W = shw + fw * 0.72 * L + up * (-0.32 * L) - side * 0.02; d = (fw - side * 0.6).normalized(); n = up
                     pole = shw + side * 0.4 - fw * 0.1 - up * 0.4
                 H.key_hand(s, f, W, d, n, pole=pole)
 
+    def hand_limits(self):
+        """client hands rule: no backward bends; relaxed curled default"""
+        R_ = math.radians
+        for pb in self.o.pose.bones:
+            n = pb.name
+            if n.startswith("finger"):
+                pb.rotation_mode = 'XYZ'
+                thumb = n.startswith("finger1")
+                c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+                if thumb:
+                    c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(-15), R_(60), R_(-25), R_(25), R_(-30), R_(30)
+                else:
+                    c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = 0.0, R_(90), 0.0, 0.0, R_(-10), R_(10)
+                pb.rotation_euler = (R_(10 if thumb else 18), 0, 0)
+                pb.keyframe_insert("rotation_euler", frame=1)
+            elif n.startswith("wrist."):
+                c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+                c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(-60), R_(60), R_(-40), R_(40), R_(-25), R_(25)
     def hide_after(self, f):
         for ob in [self.o] + list(self.o.children):
             key_hide(ob, [(1, False), (f, True)])
@@ -143,11 +164,13 @@ k.go([(3.5, 10), (4.5, 30), (5.0, 48)], T(0), T(3.4), run=True, kid=True)
 k.go([(5.0, 48), (8, 56), (4, 64), (-1, 57), (2, 50)], T(3.4), T(7.6), run=True, kid=True)
 k.stand(T(7.6), T(10.0), (2, 50), 180, head=(-8, 0))
 k.go([(2, 50), (2, 30), (1, 0)], T(10.0), T(12.8), run=True, kid=True)
+P["KidA"].key_arms(T(0), T(12.8), lambda f: "run")
 k = P["KidB"]
 k.go([(6.0, 8), (6.5, 28), (7.5, 44)], T(0.1), T(3.6), run=True, kid=True)
 k.go([(7.5, 44), (11, 52), (8, 60), (4, 54)], T(3.6), T(7.4), run=True, kid=True)
 k.stand(T(7.4), T(10.0), (4, 54), 190, head=(-10, 0))
 k.go([(4, 54), (4, 30), (3, 0)], T(10.0), T(12.8), run=True, kid=True)
+k.key_arms(T(0), T(12.8), lambda f: "run")
 # adults walk out onto the wet sand, point, pick up a fish, look; one man shouts
 q = P["TouristW"]
 q.stand(T(0), T(4.6), (-4, 3), 175, head=lambda f: (-5, 15 * math.sin(f / 50)))
@@ -224,9 +247,10 @@ for f in range(T(6.9), T(9.05), 2):
     sc.frame_set(f)
     pbw = q.H.r.PB["finger3-1.R"]; Mw = q.o.matrix_world @ pbw.matrix
     palm = Mw.translation; nrm = (q.o.matrix_world.to_3x3() @ q.H.r.PB["wrist.R"].matrix.to_3x3()) @ Vector((0, 0, 1))
-    fish_pick.location = palm + Vector((0, 0, -0.06)); fish_pick.keyframe_insert("location", frame=f)
+    # held by the tail: fish hangs below the fist, tail fin inside the curled fingers
     yawp = math.radians(q.st[min(q.st, key=lambda k: abs(k - f))][1])
-    fish_pick.rotation_euler = (0, math.radians(90), yawp + math.radians(90)); fish_pick.keyframe_insert("rotation_euler", frame=f)
+    fish_pick.rotation_euler = (math.radians(90), 0, yawp); fish_pick.keyframe_insert("rotation_euler", frame=f)
+    fish_pick.location = palm + Vector((0, 0, -0.27)); fish_pick.keyframe_insert("location", frame=f)
 for f, z in ((T(6.88), 0.06), (T(9.25), 0.05)):
     fish_pick.location = (FISHPICK.x if f < T(7) else fish_pick.location.x, FISHPICK.y if f < T(7) else fish_pick.location.y, ground_z(FISHPICK.x, FISHPICK.y) + z)
     fish_pick.rotation_euler = (0, math.radians(90), math.radians(80)); fish_pick.keyframe_insert("location", frame=f); fish_pick.keyframe_insert("rotation_euler", frame=f)

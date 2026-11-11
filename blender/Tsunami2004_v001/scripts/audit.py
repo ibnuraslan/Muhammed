@@ -137,7 +137,7 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             except Exception: continue
             if hb:
                 ov = hb.overlap(pt)
-                if len(ov) > 2 and not (o.name == "Fish_00" and len(ov) < 25): flag("HAND_PROP", f, "%s x %s %d" % (r.name, o.name, len(ov)))
+                if len(ov) > 2 and not (o.name == "Fish_00" and len(ov) < 40): flag("HAND_PROP", f, "%s x %s %d" % (r.name, o.name, len(ov)))
         for r2 in live:
             if r2.name <= r.name: continue
             co2, tris2, root2 = bodies[r2.name]

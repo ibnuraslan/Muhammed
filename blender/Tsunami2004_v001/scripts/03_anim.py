@@ -61,9 +61,9 @@ if not SKIP_PEOPLE:
     for f, a in ((T(6.5), 0), (T(6.75), 1), (T(9.0), 1), (T(9.2), 0)):
         for fn_ in ("finger2", "finger3", "finger4", "finger5"):
             for seg in ("-1", "-2", "-3"):
-                pb = rr.PB[fn_ + seg + ".R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(CURL * a * (0.8 if seg == "-1" else 1.0)), 0, 0)
+                pb = rr.PB[fn_ + seg + ".R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(18 + (CURL - 18) * a * (0.8 if seg == "-1" else 1.0)), 0, 0)
                 pb.keyframe_insert("rotation_euler", frame=f)
-        pb = rr.PB["finger1-2.R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(CURL * 0.6 * a), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+        pb = rr.PB["finger1-2.R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(10 + 30 * a), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
 
 # ---------------------------------------------------------------- sea drawback
 sea = bpy.data.objects["SeaPlane"]
