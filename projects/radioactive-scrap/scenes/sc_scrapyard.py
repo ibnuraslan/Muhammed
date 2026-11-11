@@ -97,20 +97,32 @@ def scatter(protos, hfun, cx, cy, R, n, rng, embed=0.12, scl=(1.1, 2.0), small=F
 
 # ============================================================================ vehicles / props
 def van(name="Van", col=(0.78, 0.78, 0.76)):
-    paint = painted_steel(name + "Paint", col, 0.35, 0.25)
-    glass_m = pbr(name + "Glass", (0.03, 0.035, 0.04), 0.08, 0.0, **{'Coat Weight': 1.0})
-    black = pbr(name + "Black", (0.02, 0.02, 0.02), 0.6)
-    parts = [box("Body", (0, 0, 1.25), (4.8, 1.9, 1.8), paint, bevel=0.12),
-             box("Nose", (2.65, 0, 0.85), (0.6, 1.88, 0.9), paint, bevel=0.15),
-             box("Screen", (2.36, 0, 1.75), (0.02, 1.7, 0.6), glass_m, rot=(0, math.radians(-25), 0)),
-             box("WinL", (1.6, 0.955, 1.65), (1.0, 0.02, 0.55), glass_m), box("WinR", (1.6, -0.955, 1.65), (1.0, 0.02, 0.55), glass_m),
-             box("Bumper", (2.97, 0, 0.45), (0.1, 1.92, 0.2), black), box("SlideDoor", (0.2, -0.957, 1.2), (1.3, 0.01, 1.5), paint)]
+    """1990s white panel van (generic): sloped bonnet, raked windscreen, sliding door. Front toward +X."""
+    paint = painted_steel(name + "Paint", col, 0.35, 0.3)
+    glass_m = pbr(name + "Glass", (0.02, 0.025, 0.03), 0.06, 0.0, **{'Coat Weight': 1.0})
+    black = pbr(name + "Black", (0.015, 0.015, 0.015), 0.6)
+    lamp = pbr(name + "Lamp", (0.85, 0.85, 0.8), 0.08, 0.0, **{'Coat Weight': 1.0})
+    parts = [box("Body", (-0.3, 0, 1.3), (4.0, 1.9, 1.9), paint, bevel=0.2),
+             box("Bonnet", (2.15, 0, 0.92), (0.95, 1.86, 0.75), paint, bevel=0.18),
+             box("BonnetTop", (2.0, 0, 1.3), (0.9, 1.84, 0.2), paint, bevel=0.08, rot=(0, math.radians(14), 0)),
+             box("Screen", (1.72, 0, 1.75), (0.03, 1.7, 0.7), glass_m, rot=(0, math.radians(-32), 0)),
+             box("WinL", (1.2, 0.952, 1.7), (0.85, 0.02, 0.55), glass_m), box("WinR", (1.2, -0.952, 1.7), (0.85, 0.02, 0.55), glass_m),
+             box("Bumper", (2.66, 0, 0.5), (0.1, 1.95, 0.2), black, bevel=0.03), box("RearBumper", (-2.33, 0, 0.5), (0.1, 1.95, 0.2), black),
+             box("Grille", (2.63, 0, 0.88), (0.02, 0.9, 0.22), black),
+             box("SlideSeam", (0.75, -0.953, 1.2), (0.012, 0.004, 1.55), black), box("SlideSeam", (-0.55, -0.953, 1.2), (0.012, 0.004, 1.55), black),
+             box("Rail", (0.1, -0.953, 1.95), (1.6, 0.01, 0.025), black),
+             box("RearWin", (-2.31, 0, 1.75), (0.02, 1.3, 0.45), glass_m)]
+    for sy in (-1, 1):
+        parts.append(box("Headlamp", (2.635, sy * 0.68, 0.9), (0.02, 0.32, 0.16), lamp))
+        parts.append(box("Mirror", (1.55, sy * 1.1, 1.75), (0.05, 0.14, 0.26), black, bevel=0.01))
+        parts.append(box("Arch", (1.75, sy * 0.95, 0.42), (0.85, 0.02, 0.18), black))
+        parts.append(box("Arch", (-1.45, sy * 0.95, 0.42), (0.85, 0.02, 0.18), black))
     body = join(parts, name)
-    tyre = pbr(name + "Tyre", (0.025, 0.025, 0.025), 0.85)
+    tyre = pbr(name + "Tyre", (0.022, 0.022, 0.022), 0.85); hub = painted_steel(name + "Hub", (0.4, 0.4, 0.4), 0.5, 0.4)
     wheels = []
-    for wx in (-1.5, 1.9):
+    for wx in (-1.45, 1.75):
         for sy in (-1, 1):
-            w = cyl("VanWheel", (0, 0, 0), 0.33, 0.22, tyre, verts=24, rot=(math.radians(90), 0, 0)); w.parent = body; w.location = (wx, sy * 0.85, 0.33)
+            w = wheel("VanWheel", 0.33, 0.21, tyre, hub, sy); w.parent = body; w.location = (wx, sy * 0.84, 0.33)
             wheels.append(w)
     return body, wheels
 
@@ -283,14 +295,14 @@ def build(variant=None):
     for k, (x, y, w, d, h) in enumerate(((-80, 90, 40, 20, 8), (-15, 110, 50, 25, 10), (65, 95, 35, 20, 7), (110, 30, 25, 40, 7), (-110, 20, 25, 40, 7))):
         box("Shed", (x, y, h / 2), (w, d, h), shed)
         box("ShedRoof", (x, y, h + 0.6), (w + 1, d + 1, 1.2), shed, rot=(math.radians(4), 0, 0))
-    chim = pbr("Chimney", (0.35, 0.33, 0.31), 0.85)
+    chim = pbr("Chimney", (0.14, 0.13, 0.12), 0.85)
     for x, y, hgt in ((-30, 110, 40), (40, 120, 32)):
         cyl("Stack", (x, y, hgt / 2), 1.4, hgt, chim, verts=16)
-    far = noisy("FarCity", (0.2, 0.19, 0.18), 0.9, dirt=0.7, scale=0.05)
+    far = noisy("FarCity", (0.13, 0.125, 0.12), 0.9, dirt=0.7, scale=0.05)
     for k in range(120):
         x = rng.uniform(-260, 260); y = rng.uniform(140, 260); z = (y - 140) * 0.2
         box("Far", (x, y, z + 3), (rng.uniform(8, 16), 10, rng.uniform(4, 12)), far)
-    box("Hill", (0, 220, 0), (700, 160, 30), noisy("Hill", (0.14, 0.13, 0.12), 0.95, dirt=0.7, scale=0.02), rot=(math.radians(-12), 0, 0))
+    box("Hill", (0, 220, 0), (700, 160, 30), noisy("Hill", (0.05, 0.05, 0.045), 0.95, dirt=0.7, scale=0.02), rot=(math.radians(-12), 0, 0))
     haze((0, 120, 30), (700, 220, 80), density=0.0013, color=(0.85, 0.88, 0.92), anis=0.2)
     # the grab crane (material handler) beside the capsule heap
     gc = excavator("Grab", (0.72, 0.48, 0.07), tool="grab")
@@ -316,10 +328,10 @@ def build(variant=None):
     # specialists / police / responders
     P = {}
     P["spec1"] = person("Spec1", 1.0, 42, "suit", "short03", cval=0.6, hue=0.5, sat=0.3)
-    P["spec2"] = person("Spec2", 1.0, 36, "coat", "short02", cval=0.4, hue=0.5, sat=0.4, cap=True)
+    P["spec2"] = person("Spec2", 1.0, 36, "coat", "short02", cval=0.4, hue=0.5, sat=0.4)
     P["cop"] = person("Cop", 1.0, 30, "suit", "short04", cval=0.35, hue=0.62, sat=1.2)
-    P["r1"] = person("Resp1", 1.0, 34, "work", "short02", cval=1.2, hue=0.5, sat=0.0)
-    P["r2"] = person("Resp2", 1.0, 40, "work", "short04", cval=1.2, hue=0.5, sat=0.0, cap=True)
+    P["r1"] = person("Resp1", 1.0, 34, "jacket", "short02", cval=0.55, hue=0.6, sat=1.4)
+    P["r2"] = person("Resp2", 1.0, 40, "jacket", "short04", cval=0.55, hue=0.6, sat=1.4)
     P["op"] = person("Operator", 1.0, 45, "coat", "short03", cval=0.5, hue=0.48, sat=0.5)
     c["people"] = P
     for h in P.values():
@@ -408,7 +420,7 @@ def anim_wide(c, t):
 
 def cam_wide(c, t):
     e = ease(t)
-    return (Vector((-31, -43, 12.5)).lerp(Vector((-28, -41, 14.0)), e), Vector((2, 14, 3.0)), 30)
+    return (Vector((-26, -32, 6.5)).lerp(Vector((-24, -30, 8.0)), e), Vector((4, 16, 4.5)), 26)
 
 
 def _heap_pt(i, r, z, surface=False, ang=-1.1):
@@ -573,7 +585,7 @@ def anim_drop(c, t):
             cap.location = (0, -150, 0)
     cap.rotation_euler = (sec * 3.0, sec * 1.3, 0)
     # partner with the long pole stands back
-    h1 = c["people"]["r1"]; st1 = HC + Vector((2.6, -7.2, 0))
+    h1 = c["people"]["r1"]; st1 = HC + Vector((3.6, -2.4, 0))
     reset_pose(h1); stand_pose(h1); place(h1, st1, face_angle(st1, HC)); attach_cap(h1)
     pl = c["pole"]; f1 = forward(h1); s1 = f1.cross(Vector((0, 0, 1)))
     grip = h1.bone_head("upperarm01.R") + f1 * 0.35 + Vector((0, 0, -0.35))

@@ -159,44 +159,72 @@ def crate(name, size=(1.15, 1.15, 1.2), loc=(0, 0, 0)):
     return o
 
 
-def truck(name="Truck", col=(0.2, 0.32, 0.42), bed_len=4.2):
-    """1990s light truck (cab-over), drop-side bed. Front toward +X. Origin on the ground under the rear axle.
-    Returns (body, wheels[list], bed_top_z, bed_x_range)."""
-    paint = painted_steel(name + "Paint", col, 0.4, 0.4)
-    black = pbr(name + "Black", (0.02, 0.02, 0.02), 0.6)
-    chrome = pbr(name + "Bumper", (0.55, 0.55, 0.55), 0.35, 0.8)
-    glass_m = pbr(name + "Glass", (0.03, 0.035, 0.04), 0.05, 0.0, **{'Coat Weight': 1.0})
-    wood = noisy(name + "BedWood", (0.33, 0.24, 0.15), 0.85, dirt=0.6, scale=4)
-    lamp = pbr(name + "Lamp", (0.8, 0.8, 0.75), 0.1, 0.0, **{'Coat Weight': 1.0})
+def wheel(name, r, w, tyre, hub, sy):
+    """Tyre with sidewall, steel rim, hub and lug nuts; axle along Y (sy = +1 left side / -1 right side)."""
+    parts = [cyl("Tyre", (0, 0, 0), r, w, tyre, verts=32, rot=(math.radians(90), 0, 0)),
+             cyl("Rim", (0, sy * (w / 2 + 0.002), 0), r * 0.58, 0.02, hub, verts=24, rot=(math.radians(90), 0, 0)),
+             cyl("Hub", (0, sy * (w / 2 + 0.02), 0), r * 0.22, 0.05, hub, verts=16, rot=(math.radians(90), 0, 0))]
+    for k in range(6):
+        a = k / 6 * 2 * math.pi
+        parts.append(cyl("Nut", (r * 0.32 * math.cos(a), sy * (w / 2 + 0.02), r * 0.32 * math.sin(a)), 0.018, 0.03, hub, verts=6, rot=(math.radians(90), 0, 0)))
+    return join(parts, name)
+
+
+def truck(name="Truck", col=(0.12, 0.2, 0.3), bed_len=4.2):
+    """1990s cab-over light truck (generic, no badges), drop-side bed. Front toward +X. Origin on the ground under
+    the rear axle. Returns (body, wheels[list], bed_top_z, bed_x_range)."""
+    paint = painted_steel(name + "Paint", col, 0.45, 0.55)
+    black = pbr(name + "Black", (0.015, 0.015, 0.015), 0.65)
+    rubber = pbr(name + "Rubber", (0.01, 0.01, 0.01), 0.8)
+    chrome = pbr(name + "Bumper", (0.12, 0.12, 0.12), 0.5, 0.6)
+    glass_m = pbr(name + "Glass", (0.02, 0.025, 0.03), 0.06, 0.0, **{'Coat Weight': 1.0})
+    wood = noisy(name + "BedWood", (0.3, 0.22, 0.14), 0.85, dirt=0.7, scale=4)
+    lamp = pbr(name + "Lamp", (0.85, 0.85, 0.8), 0.08, 0.0, **{'Coat Weight': 1.0})
+    amber = pbr(name + "Amber", (0.8, 0.35, 0.02), 0.2)
     W = 2.1
-    cab_x = bed_len / 2 + 0.2 + 0.9
-    parts = [box("Chassis", (cab_x / 2 - 0.4, 0, 0.62), (bed_len + 2.6, 0.9, 0.22), black),
-             box("Cab", (cab_x, 0, 1.55), (1.7, W, 1.7), paint, bevel=0.12),
-             box("CabLow", (cab_x + 0.12, 0, 0.95), (1.5, W - 0.02, 0.5), paint, bevel=0.05),
-             box("Windscreen", (cab_x + 0.86, 0, 1.85), (0.02, W - 0.25, 0.75), glass_m),
-             box("SideWinL", (cab_x + 0.2, W / 2 + 0.005, 1.85), (0.9, 0.02, 0.6), glass_m),
-             box("SideWinR", (cab_x + 0.2, -W / 2 - 0.005, 1.85), (0.9, 0.02, 0.6), glass_m),
-             box("Grille", (cab_x + 0.87, 0, 1.08), (0.02, 1.2, 0.35), black),
-             box("Bumper", (cab_x + 0.92, 0, 0.62), (0.12, W + 0.05, 0.2), chrome)]
+    cab_x = bed_len / 2 + 0.25 + 0.9
+    fx = cab_x + 0.88                                  # cab front face
+    parts = [box("Chassis", (cab_x / 2 - 0.4, 0, 0.62), (bed_len + 2.7, 0.9, 0.22), black),
+             box("Cab", (cab_x, 0, 1.62), (1.76, W, 1.5), paint, bevel=0.16),
+             box("CabLow", (cab_x + 0.06, 0, 0.98), (1.64, W - 0.04, 0.55), paint, bevel=0.06),
+             box("CabRoof", (cab_x - 0.05, 0, 2.38), (1.6, W - 0.12, 0.12), paint, bevel=0.05),
+             box("ScreenFrame", (fx + 0.005, 0, 1.92), (0.03, W - 0.2, 0.86), rubber, rot=(0, math.radians(-8), 0)),
+             box("Windscreen", (fx + 0.02, 0, 1.92), (0.02, W - 0.3, 0.76), glass_m, rot=(0, math.radians(-8), 0)),
+             box("Wiper", (fx + 0.04, -0.35, 1.58), (0.015, 0.6, 0.02), black, rot=(math.radians(12), 0, 0)),
+             box("Wiper", (fx + 0.04, 0.35, 1.58), (0.015, 0.6, 0.02), black, rot=(math.radians(12), 0, 0)),
+             box("Bumper", (fx + 0.06, 0, 0.6), (0.14, W + 0.06, 0.24), chrome, bevel=0.03),
+             box("Step", (cab_x + 0.25, W / 2 + 0.03, 0.55), (0.6, 0.12, 0.05), black),
+             box("Step", (cab_x + 0.25, -W / 2 - 0.03, 0.55), (0.6, 0.12, 0.05), black)]
+    for k in range(5):                                  # grille slats
+        parts.append(box("Grille", (fx + 0.012, 0, 1.0 + k * 0.07), (0.02, 1.1, 0.035), black))
     for sy in (-1, 1):
-        parts.append(box("Headlamp", (cab_x + 0.88, sy * 0.78, 1.05), (0.02, 0.26, 0.18), lamp))
-        parts.append(box("Mirror", (cab_x + 0.7, sy * (W / 2 + 0.22), 1.9), (0.04, 0.04, 0.3), black))
-    # bed: floor + low drop sides
+        parts.append(cyl("Headlamp", (fx + 0.07, sy * 0.78, 0.78), 0.09, 0.04, lamp, verts=20, rot=(0, math.radians(90), 0)))
+        parts.append(box("Indicator", (fx + 0.05, sy * 0.98, 1.05), (0.03, 0.1, 0.08), amber))
+        parts.append(box("DoorSeam", (cab_x - 0.5, sy * (W / 2 + 0.003), 1.4), (0.012, 0.004, 1.3), black))
+        parts.append(box("DoorSeam", (cab_x + 0.55, sy * (W / 2 + 0.003), 1.4), (0.012, 0.004, 1.3), black))
+        parts.append(box("SideWin", (cab_x + 0.05, sy * (W / 2 + 0.006), 1.95), (0.95, 0.01, 0.62), glass_m))
+        parts.append(box("Handle", (cab_x - 0.38, sy * (W / 2 + 0.015), 1.45), (0.16, 0.02, 0.03), black))
+        parts.append(box("MirrorArm", (cab_x + 0.75, sy * (W / 2 + 0.12), 2.05), (0.03, 0.25, 0.03), black))
+        parts.append(box("Mirror", (cab_x + 0.75, sy * (W / 2 + 0.25), 1.95), (0.05, 0.15, 0.32), black, bevel=0.01))
+        parts.append(box("Fender", (cab_x + 0.05, sy * (W / 2 - 0.12), 0.95), (0.95, 0.3, 0.06), black))
+        parts.append(box("RearFender", (-bed_len / 2 + 1.1, sy * (W / 2 - 0.15), 0.93), (1.0, 0.36, 0.04), black))
+        parts.append(box("Tail", (-bed_len / 2 - 0.02, sy * 0.85, 0.72), (0.04, 0.22, 0.1), pbr(name + "TailM", (0.5, 0.03, 0.02), 0.2)))
+    # bed: floor + low drop sides on a steel rim
     parts += [box("BedFloor", (0, 0, 0.86), (bed_len, W, 0.08), wood),
               box("SideL", (0, W / 2 - 0.02, 1.12), (bed_len, 0.04, 0.45), wood),
               box("SideR", (0, -W / 2 + 0.02, 1.12), (bed_len, 0.04, 0.45), wood),
-              box("Tail", (-bed_len / 2 + 0.02, 0, 1.12), (0.04, W, 0.45), wood),
-              box("Head", (bed_len / 2 - 0.02, 0, 1.4), (0.06, W, 1.0), paint)]
+              box("TailGate", (-bed_len / 2 + 0.02, 0, 1.12), (0.04, W, 0.45), wood),
+              box("HeadBoard", (bed_len / 2 - 0.02, 0, 1.35), (0.06, W, 0.9), paint),
+              box("RimL", (0, W / 2 - 0.02, 1.35), (bed_len, 0.05, 0.04), paint), box("RimR", (0, -W / 2 + 0.02, 1.35), (bed_len, 0.05, 0.04), paint)]
     for x in np.linspace(-bed_len / 2, bed_len / 2, 5):
         for sy in (-1, 1):
             parts.append(box("Stake", (x, sy * (W / 2 - 0.01), 1.12), (0.06, 0.05, 0.47), paint))
     body = join(parts, name)
     wheels = []
-    tyre = pbr(name + "Tyre", (0.025, 0.025, 0.025), 0.85); hub = pbr(name + "Hub", (0.35, 0.36, 0.36), 0.5, 0.6)
+    tyre = pbr(name + "Tyre", (0.022, 0.022, 0.022), 0.85); hub = painted_steel(name + "Hub", (0.25, 0.26, 0.26), 0.5, 0.5)
     for wx in (-bed_len / 2 + 1.1, cab_x + 0.05):
         for sy in (-1, 1):
-            w = join([cyl("Tyre", (0, 0, 0), 0.45, 0.3, tyre, verts=28, rot=(math.radians(90), 0, 0)),
-                      cyl("Hub", (0, sy * 0.155, 0), 0.24, 0.02, hub, verts=16, rot=(math.radians(90), 0, 0))], name + "Wheel")
+            w = wheel(name + "Wheel", 0.45, 0.3, tyre, hub, sy)
             w.parent = body; w.location = (wx, sy * (W / 2 - 0.2), 0.45)
             wheels.append(w)
     return body, wheels, 0.9, (-bed_len / 2, bed_len / 2)

@@ -155,12 +155,12 @@ def build(variant=None):
     for k in range(10):
         cyl("Rebar", (-7.2 + k * 0.7, -7.2, 6.6), 0.012, 1.0, rebar, verts=6)
     # distant hillside of more houses and one minaret (generic, CG)
-    far = pbr("FarHouses", (0.42, 0.4, 0.38), 0.9)
+    far = noisy("FarHouses", (0.2, 0.19, 0.18), 0.9, dirt=0.6, scale=0.08)
     for k in range(80):
         x = rng.uniform(-140, 140); y = rng.uniform(55, 120)
         z = (y - 55) * 0.25
         box("FarHouse", (x, y, z + 2), (rng.uniform(6, 11), 7, rng.uniform(3, 8)), far)
-    box("Hill", (0, 100, 0), (320, 100, 18), pbr("HillMud", (0.3, 0.29, 0.26), 0.95), rot=(math.radians(-14), 0, 0))
+    box("Hill", (0, 100, 0), (320, 100, 18), noisy("HillMud", (0.07, 0.065, 0.06), 0.95, dirt=0.7, scale=0.03), rot=(math.radians(-14), 0, 0))
     cyl("Minaret", (-62, 92, 24), 1.1, 34, far, verts=16)
     bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=1.3, depth=5, location=(-62, 92, 43.5)); bpy.context.active_object.data.materials.append(far)
     if not dusk:
@@ -187,7 +187,7 @@ def build(variant=None):
     pile = []
     for k in range(110):
         ang = rng.uniform(0, math.pi); rad = rng.uniform(0, 2.4)
-        loc = Vector((-4.2 + rad * math.cos(ang), 13.9 + 0.8 * rad * math.sin(ang), rng.uniform(0.05, 1.3) * (2.4 - rad) / 2.4 + 0.05))
+        loc = Vector((3.8 + rad * math.cos(ang), 13.9 + 0.8 * rad * math.sin(ang), rng.uniform(0.05, 1.3) * (2.4 - rad) / 2.4 + 0.05))
         kind = rng.integers(3)
         if kind == 0:
             o = box("ScrapPlate", loc, (rng.uniform(0.4, 1.2), rng.uniform(0.3, 0.8), 0.02), rust, rot=tuple(rng.uniform(-0.6, 0.6, 3)))
@@ -238,14 +238,20 @@ def build(variant=None):
     pose_arm(ex, 0.0, math.radians(20), math.radians(80), math.radians(40))
     c["ex"] = ex
     # the pit (for the burial) by the back wall, with the lead block and a fill surface that rises
-    pit_c = Vector((3.4, 14.2, 0))
-    dirt = pbr("PitDirt", (0.17, 0.13, 0.1), 0.95)
-    for dx, dy, sx, sy in ((0, -0.55, 1.7, 0.35), (0, 0.55, 1.7, 0.35), (-0.85, 0, 0.35, 1.4), (0.85, 0, 0.35, 1.4)):
-        box("Berm", pit_c + Vector((dx, dy, 0.0)), (sx, sy, 0.12), dirt, bevel=0.05)
+    pit_c = Vector((-3.6, 14.4, 0))
+    dirt = pbr("PitDirt", (0.15, 0.11, 0.08), 0.95)
+    for k in range(14):                                 # loose spoil around the rim (lumps, not a frame)
+        a = k / 14 * 2 * math.pi
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=6, radius=1.0, location=pit_c + Vector((0.85 * math.cos(a), 0.55 * math.sin(a), -0.02)))
+        lump = bpy.context.active_object; lump.scale = (rng.uniform(0.2, 0.35), rng.uniform(0.15, 0.3), rng.uniform(0.06, 0.12)); lump.data.materials.append(dirt)
     box("PitHole", pit_c + Vector((0, 0, 0.002)), (1.4, 0.8, 0.004), pbr("PitDark", (0.04, 0.03, 0.025), 0.95))
     c["leadblock"] = box("LeadBlock", pit_c + Vector((0, 0, 0.06)), (0.5, 0.35, 0.12), k1["lead"], bevel=0.02)
-    c["fill"] = box("Fill", pit_c + Vector((0, 0, -0.1)), (1.36, 0.76, 0.2), pbr("FillDirt", (0.2, 0.15, 0.1), 0.95), bevel=0.04)
-    c["mound"] = box("Mound", pit_c + Vector((1.2, 0.2, 0.15)), (0.8, 0.7, 0.3), pbr("MoundDirt", (0.22, 0.17, 0.12), 0.95), bevel=0.12)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=10, radius=1.0, location=pit_c)
+    c["fill"] = bpy.context.active_object; c["fill"].name = "Fill"; c["fill"].scale = (0.68, 0.4, 0.16)
+    c["fill"].data.materials.append(dirt); bpy.ops.object.shade_smooth()
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1.0, location=pit_c + Vector((1.25, 0.25, 0.0)))
+    c["mound"] = bpy.context.active_object; c["mound"].name = "Mound"; c["mound"].scale = (0.6, 0.5, 0.32)
+    c["mound"].data.materials.append(pbr("MoundDirt", (0.17, 0.13, 0.09), 0.95)); bpy.ops.object.shade_smooth()
     c["pit"] = pit_c
     spade_root, spade_ms = ph_model("rusted_spade_01")
     c["spade"] = spade_root
@@ -259,9 +265,9 @@ def build(variant=None):
     # people: brothers, relatives, workers (unnamed figures; no likeness)
     P = {}
     P["bro1"] = person("Bro1", 1.0, 38, "coat", "short02", cval=0.55, hue=0.47, sat=0.8)
-    P["bro2"] = person("Bro2", 1.0, 33, "coat", "short04", cval=0.45, hue=0.52, sat=0.6, cap=True)
+    P["bro2"] = person("Bro2", 1.0, 33, "coat", "short04", cval=0.45, hue=0.52, sat=0.6)
     P["worker"] = person("Worker", 1.0, 45, "coat", "short03", cval=0.35, hue=0.5, sat=0.5, weight=0.6)
-    P["rel1"] = person("Rel1", 1.0, 60, "coat", "short02", cval=0.4, hue=0.46, sat=0.7, hv=0.7, cap=True)
+    P["rel1"] = person("Rel1", 1.0, 60, "coat", "short02", cval=0.4, hue=0.46, sat=0.7, hv=0.7)
     P["rel2"] = person("Rel2", 0.0, 50, "coat", "bob02", cval=0.6, hue=0.55, sat=0.8, hv=0.1)
     c["people"] = P
     for h in P.values():
@@ -498,8 +504,8 @@ def anim_bury(c, t):
         sp.location = blade + (handle - blade).normalized() * 0.5; sp.rotation_mode = 'QUATERNION'
         sp.rotation_quaternion = (handle - blade).to_track_quat('Z', 'Y')
     fill = ease(min(1.0, sec / DUR["bury"])) * 0.6 + 0.3
-    c["fill"].location = pit + Vector((0, 0, -0.1 + 0.2 * fill))
-    c["mound"].scale = (1, 1, 1 - 0.4 * fill)
+    c["fill"].location = pit + Vector((0, 0, -0.14 + 0.18 * fill))
+    c["mound"].scale = (0.6, 0.5, 0.32 * (1 - 0.4 * fill))
     attach_cap(h)
     c["focus"] = pit + Vector((0.4, 0, 0.5))
 
@@ -516,16 +522,16 @@ def anim_dusk(c, t):
     set_truck(c, -40.0, 40.0, 0.0)
     c["ex"]["base"].location = (-40, 50, 0)
     c["hinge"].rotation_euler = (math.radians(70), 0, 0)
-    c["fill"].location = c["pit"] + Vector((0, 0, 0.09)); c["mound"].scale = (1, 1, 0.5)
+    c["fill"].location = c["pit"] + Vector((0, 0, 0.03)); c["mound"].scale = (0.6, 0.5, 0.18)
     for k, e in enumerate(c["laundry"]):
         e.rotation_euler = (math.radians(9 * math.sin(sec * 1.3 + k * 0.9) + 4), 0, math.radians(-60))
     walk_to(c["people"]["rel1"], (12, -1.8, 0), (-14, -1.8, 0), sec, speed=1.0)
-    c["focus"] = Vector((-4.6, 13.6, 0.6))
+    c["focus"] = Vector((3.8, 13.6, 0.8))
 
 
 def cam_dusk(c, t):
     e = ease(t)
-    return (Vector((1.8, -0.8, 1.65)).lerp(Vector((0.6, 3.2, 1.55)), e), Vector((-2.2, 12.8, 0.9)), 28)
+    return (Vector((-5.0, -1.2, 1.6)).lerp(Vector((-3.8, 2.2, 1.5)), e), Vector((4.0, 12.0, 1.3)), 28)
 
 
 def _focus(c, t):
