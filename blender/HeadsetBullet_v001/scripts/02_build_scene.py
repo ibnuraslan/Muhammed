@@ -138,6 +138,7 @@ for nx, tint in ((-17.0, (0.78, 0.82, 0.86)), (15.5, (0.9, 0.8, 0.7))):
     for wx in (-2.5, 0.5, 2.8):
         box("NWin", (1.0, 0.05, 1.0), (nx + wx, -0.52, 1.6), M["dark_glass"])
 tree = append_objects(os.path.join(ASSETS, "tree_small_02", "tree_small_02_1k.blend"), "Plants")
+tree = keep_lod(tree, (2, 1, 0))
 tg = place_group(tree, "Tree_A", 6.5, 2, Vector((-7.5, -6.0, 0)))
 tg2 = bpy.data.objects.new("Tree_B", None); link(tg2, "Plants"); tg2.instance_type = 'COLLECTION'
 tcoll = bpy.data.collections.new("TreeInst");
@@ -148,6 +149,7 @@ tcoll.instance_offset = (-7.5, -6.0, 0)
 shr = []
 for nm, f in (("shrub_01", "shrub_01_1k.blend"), ("shrub_02", "shrub_02_1k.blend")):
     obs = append_objects(os.path.join(ASSETS, nm, f), "Plants")
+    obs = keep_lod(obs, (1, 0))
     g = place_group(obs, "Shrub_" + nm, 1.0, 2, Vector((0, 0, 0)))
     c = bpy.data.collections.new("Inst_" + nm)
     for o in [g] + obs: c.objects.link(o)
@@ -296,6 +298,8 @@ with bpy.data.libraries.load(TEEN, link=False) as (src, dst):
 for o in dst.objects: link(o, "Teen")
 shirt = bpy.data.objects["Teen.male_casualsuit04"]
 tee = img(os.path.join(ASSETS, "tex", "tee_plain_diffuse.png"))
+for i in bpy.data.images:                         # keep the package small: 1K for body/cloth maps above 2K
+    if i.size[0] > 2048: i.scale(1024, 1024)
 for m in shirt.data.materials:
     for n in m.node_tree.nodes:
         if n.type == 'TEX_IMAGE' and n.image and "diffuse" in n.image.name.lower():

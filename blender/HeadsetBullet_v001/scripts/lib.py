@@ -210,3 +210,18 @@ def pchip(keys):
         return ((1 + 2*t) * (1 - t)**2 * ys[i] + t * (1 - t)**2 * h[i] * m[i]
                 + t*t * (3 - 2*t) * ys[i + 1] + t*t * (t - 1) * h[i] * m[i + 1])
     return f
+
+def keep_lod(objs, prefer=(2, 1, 0)):
+    """Poly Haven assets ship several LODs stacked in place: keep one per part, delete the rest"""
+    import re
+    groups = {}
+    for o in objs:
+        m = re.match(r"(.*)_LOD(\d+)$", o.name)
+        if m: groups.setdefault(m.group(1), []).append((int(m.group(2)), o))
+    out = [o for o in objs if not re.match(r".*_LOD\d+$", o.name)]
+    for base, lst in groups.items():
+        have = dict(lst); keep = next((have[p] for p in prefer if p in have), min(lst)[1])
+        for k, o in lst:
+            if o is keep: out.append(o)
+            else: bpy.data.objects.remove(o, do_unlink=True)
+    return out
