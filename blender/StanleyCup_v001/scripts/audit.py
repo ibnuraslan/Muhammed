@@ -21,7 +21,7 @@ def inside(p):
             n[ob.name] = n.get(ob.name, 0) + 1; o = loc + d * 1e-4
         for k, v in n.items():
             if v % 2: hits[k] = hits.get(k, 0) + 1
-    return [k for k, v in hits.items() if v == 2 and not k.startswith(("Drop", "Spark", "DustPuff", "DustMote", "FlyDrop", "Tumbler_Water", "Lawn", "BulletWake"))]
+    return [k for k, v in hits.items() if v == 2 and not k.startswith(("Drop", "Spark", "DustPuff", "DustMote", "FlyDrop", "Tumbler_Water", "Lawn", "BulletWake", "HoleCutter"))]
 rep = {"feet": [], "seat": [], "fingers": [], "camera": [], "bullet": []}
 cam = sc.camera
 for f in range(sc.frame_start, sc.frame_end + 1, STEP):
@@ -40,8 +40,15 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
         seat_xy = bpy.data.objects["Chair_Woman" if who == "Woman" else "Chair_Fiance"].location
         sv2 = [v for v in bv if (Vector((v.x, v.y)) - seat_xy.to_2d()).length < 0.17 and v.z < SEAT + 0.25]
         if sv2:
-            zb = min(v.z for v in sv2)
-            if zb < SEAT - 0.03 or zb > SEAT + 0.03: rep["seat"].append((f, who, round(zb - SEAT, 3)))
+            # penetration: body vertex inside the chair (ray up exits through an up-facing chair face); hover: gap from lowest vertex down to the seat
+            pen = 0.0
+            for v in sv2[::7]:
+                ok, loc, nr, idx, ob, M = sc.ray_cast(dg, v, Vector((0, 0, 1)), distance=0.12)
+                if ok and ob.name.startswith("dining_chair") and nr.z > 0.3: pen = max(pen, loc.z - v.z)
+            lo = min(sv2, key=lambda v: v.z)
+            ok, loc, nr, idx, ob, M = sc.ray_cast(dg, lo - Vector((0, 0, 0.001)), Vector((0, 0, -1)), distance=0.3)
+            gap = (lo.z - loc.z) if ok and ob.name.startswith("dining_chair") else None
+            if pen > 0.02 or (gap is not None and gap > 0.03): rep["seat"].append((f, who, "pen", round(pen, 3), "gap", gap and round(gap, 3)))
     b = bpy.data.objects["Bullet"]; bz = min((b.matrix_world @ Vector(c)).z for c in b.bound_box)
     if f > 1300 and (bz < -0.003): rep["bullet"].append((f, round(bz, 4)))
     ins = inside(cam.matrix_world.translation)

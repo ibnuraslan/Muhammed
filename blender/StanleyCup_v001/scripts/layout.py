@@ -11,7 +11,7 @@ WALL_OUT, WALL_IN = -0.17, 0.0      # shot wall (house side wall) occupies x in 
 ROOM = dict(x0=0.0, x1=6.6, y0=-3.4, y1=3.2, h=2.7)
 GROUND_Z = -0.55                    # exterior lawn level
 TABLE_C = V(3.4, 0.0, 0.0)          # dining table centre (long axis along X)
-CUP_C = V(4.28, -0.30, 0.0)         # tumbler base centre (z filled at build = table top)
+CUP_C = V(4.42, -0.234, 0.0)         # tumbler base centre (z filled at build = table top)
 CUP_R_IMPACT = 0.047
 SHOT_SLOPE = 0.474                   # dy/dx of the shot line (comes in diagonally from the street)
 SHOT_Z0 = 1.30                      # bullet height at x=-14

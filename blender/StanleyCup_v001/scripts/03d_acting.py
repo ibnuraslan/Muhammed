@@ -15,8 +15,8 @@ W_BODY = [  # frame, lean, twist, side, head(pitch, yaw), dz, back
     (1200, -6, -16, -3, (2, -18), 0.03, 0.08), (1284, -6, -14, -3, (0, -15), 0.03, 0.08), (1296, -9, -10, -2, (-6, -8), 0.045, 0.1),
     (1330, 14, 8, 4, (28, 18), 0.0, 0.02), (1380, 18, 10, 5, (32, 22), -0.005, 0.0), (1420, 10, 4, 2, (16, 10), 0.0, 0.02),
     (1460, 14, 2, 0, (18, 4), 0.0, 0.0), (1500, 8, 0, -1, (10, 0), 0.005, 0.02), (1530, 6, -2, -1, (6, -4), 0.005, 0.025)]
-for f, lean, tw, sd, hd, dz, bk in W_BODY:
-    ws.body(f, lean=lean, twist=tw, sidebend=sd, head=hd, dz=dz, back=bk)
+for f, lean, tw, sd, hd, dz, bk in W_BODY:      # hips stay on the seat: the recoil is in the spine/head (dz -> shoulders via lean)
+    ws.body(f, lean=lean, twist=tw, sidebend=sd, head=hd, dz=0.0, back=min(bk, 0.02) * 0.5)
 for f in (1, 1290, 1300, 1530):
     ws.feet(f, l_fwd=0.0 if f < 1290 else -0.06, r_fwd=0.02 if f < 1290 else -0.03)
 W_FACE = [  # frame, lids, brows, jaw, smile, look(yaw, pitch)
@@ -29,8 +29,8 @@ W_FACE = [  # frame, lids, brows, jaw, smile, look(yaw, pitch)
 for f, lids, brows, jaw, smile, look in W_FACE:
     ws.face(f, lids, brows, jaw, smile, look)
 # her hands: right (+Y side) and left (-Y side)
-cupW = Vector(CUP_C) + Vector((0, 0, TOP))
-handle_w = cupW + Matrix.Rotation(R_(70), 3, 'Z') @ Vector((0.082, 0, 0.14))
+cupW = Vector(CUP_C) + Vector((0, 0, sc["cup_top"]))
+handle_w = cupW + Matrix.Rotation(R_(35), 3, 'Z') @ Vector((0.082, 0, 0.14))
 W_HANDS = {  # frame: (R wrist, R fingers dir, R back-of-hand normal), (L ...)
     1: ((wpt(-0.18, 0.42, 0.02), WF, UP), (wpt(0.2, 0.4, 0.02), WF, UP)),
     40: ((wpt(-0.18, 0.43, 0.02), WF, UP), (wpt(0.22, 0.30, 0.22), WF + UP, -WL)),
@@ -43,9 +43,9 @@ W_HANDS = {  # frame: (R wrist, R fingers dir, R back-of-hand normal), (L ...)
     1060: ((wpt(-0.13, 0.2, 0.33), UP + WF * 0.4, -WF), (wpt(0.12, 0.2, 0.33), UP + WF * 0.4, -WF)),
     1284: ((wpt(-0.13, 0.21, 0.32), UP + WF * 0.4, -WF), (wpt(0.12, 0.21, 0.32), UP + WF * 0.4, -WF)),
     1300: ((wpt(-0.15, 0.17, 0.36), UP + WF * 0.2, -WF), (wpt(0.14, 0.17, 0.36), UP + WF * 0.2, -WF)),
-    1360: ((wpt(-0.18, 0.34, 0.10), WF, -WL), (wpt(0.08, 0.15, 0.42), -WL + UP * 0.3, -WF)),
-    1420: ((wpt(-0.17, 0.40, 0.06), WF, UP), (wpt(0.06, 0.13, 0.42), -WL + UP * 0.3, -WF)),
-    1447: ((handle_w + Vector((0.035, 0.035, 0.0)), (handle_w - Vector((0.01, 0.01, 0))) - wpt(-0.17, 0.30, 0.15), UP), (wpt(0.05, 0.13, 0.42), -WL + UP * 0.3, -WF)),
+    1360: ((wpt(-0.18, 0.34, 0.10), WF, -WL), (wpt(0.03, 0.13, 0.31), -WL + UP * 0.2, -WF)),
+    1420: ((wpt(-0.17, 0.40, 0.06), WF, UP), (wpt(0.03, 0.12, 0.30), -WL + UP * 0.2, -WF)),
+    1447: ((handle_w + Vector((0.035, 0.035, 0.0)), (handle_w - Vector((0.01, 0.01, 0))) - wpt(-0.17, 0.30, 0.15), UP), (wpt(0.03, 0.12, 0.30), -WL + UP * 0.2, -WF)),
 }
 for f, (r, l) in W_HANDS.items():
     ws.hand("R", f, r[0], r[1], r[2]); ws.hand("L", f, l[0], l[1], l[2])

@@ -49,13 +49,13 @@ for o in layers:
     yc = HOLE.y + (x0 - HOLE.x) * D.y / D.x; zc = HOLE.z + (x0 - HOLE.x) * D.z / D.x
     if not (y0 - 0.03 < yc < y1 + 0.03 and z0 - 0.03 < zc < z1 + 0.03): continue
     kind = o.name.split(".")[0]
-    rad = {"Siding": 0.016, "Sheathing": 0.011, "Insulation": 0.03, "Drywall": 0.022}[kind]
+    rad = {"Siding": 0.016, "Sheathing": 0.011, "Insulation": 0.03, "Drywall": 0.03}[kind]
     c = jag_sphere("HoleCutter_" + kind, 1.0, 0.3, seed=cut_n); cut_n += 1
     c.location = on_line((x0 + x1) / 2); c.display_type = "WIRE"; c.hide_render = True
-    c.rotation_euler = (random.uniform(0, 3), random.uniform(0, 3), random.uniform(0, 3))
+    c.rotation_euler = D.to_track_quat('X', 'Z').to_euler()     # long axis along the flight line: a clean tunnel through each layer
     fhit = x_at_frame(x0 if kind != "Drywall" else x0)
     for f, s in ((1, 0.0), (fhit - 1, 0.0), (fhit + 6, rad * 0.8), (fhit + 30, rad)):
-        c.scale = (max(s, 1e-4), max(s, 1e-4) * 1.0, max(s, 1e-4)); c.keyframe_insert("scale", frame=f)
+        c.scale = (max(s, 1e-4) * 2.5, max(s, 1e-4), max(s, 1e-4)); c.keyframe_insert("scale", frame=f)
     set_interp(c, "LINEAR")
     bm_ = o.modifiers.new("hole", "BOOLEAN"); bm_.object = c; bm_.solver = "EXACT"
     if kind == "Insulation":   # boolean before the fluff displacement
@@ -121,7 +121,7 @@ for f, dp, tilt in ((1, 0, 0), (F_IMPACT, 0, 0), (F_IMPACT + 60, 0.008, 3.0), (F
     ax = Vector((-DXY.y, DXY.x, 0))
     CUP.rotation_euler = (Matrix.Rotation(R_(tilt), 3, ax) @ r0.to_matrix()).to_euler(); CUP.keyframe_insert("rotation_euler", frame=f)
 # sparks: emissive streaks thrown off the contact point in a cone back toward the shooter side, slow-mo ballistic
-M_SPARK = mat("M_Spark", (1.0, 0.6, 0.2), 0.5, emit=(1.0, 0.5, 0.12), estr=25)
+M_SPARK = mat("M_Spark", (1.0, 0.6, 0.2), 0.5, emit=(1.0, 0.5, 0.12), estr=9)
 nrm = -DXY
 for k in range(70):
     me = bpy.data.meshes.new("Spark"); bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=6, radius1=0.00035, radius2=0.00005, depth=random.uniform(0.006, 0.02))
@@ -140,7 +140,7 @@ for k in range(70):
     o.scale = (0, 0, 0); o.keyframe_insert("scale", frame=f0 + life + 1)
 fl = bpy.data.lights.new("SparkFlash", "POINT"); fl.color = (1.0, 0.6, 0.25); fl.shadow_soft_size = 0.005
 flo = bpy.data.objects.new("SparkFlash", fl); C_FX.objects.link(flo); flo.location = IMP - DXY * 0.02
-for f, e in ((1, 0), (F_IMPACT - 1, 0), (F_IMPACT + 2, 3.5), (F_IMPACT + 30, 1.5), (F_IMPACT + 120, 0.4), (F_IMPACT + 200, 0.0)):
+for f, e in ((1, 0), (F_IMPACT - 1, 0), (F_IMPACT + 2, 1.2), (F_IMPACT + 30, 0.6), (F_IMPACT + 120, 0.4), (F_IMPACT + 200, 0.0)):
     fl.energy = e; fl.keyframe_insert("energy", frame=f)
 # condensation droplets shaken off the steel at impact
 M_DROP = bpy.data.materials["M_Drop"]
@@ -152,7 +152,7 @@ for k in range(24):
               dirn * random.uniform(0.0002, 0.0007), Vector((0, 0, -0.000003)), Vector((0, 0, 0)), scale0=s, step=4, settle_z=TOP + s)
 # ripples on the water surface (Wave modifier, radial from the impact side), ice bobbing, straw tremble
 ws = bpy.data.objects["Tumbler_WaterSurf"]
-wv = ws.modifiers.new("ripple", "WAVE"); wv.use_x = wv.use_y = True; wv.use_normal = False; wv.height = 0.0022; wv.width = 0.008; wv.narrowness = 1.2
+wv = ws.modifiers.new("ripple", "WAVE"); wv.use_x = wv.use_y = True; wv.use_normal = False; wv.height = 0.0035; wv.width = 0.008; wv.narrowness = 1.2
 wv.speed = 0.0004; wv.time_offset = F_IMPACT; wv.lifetime = 0; wv.damping_time = 300
 loc_imp = (CUP.matrix_world.inverted() @ IMP); wv.start_position_x, wv.start_position_y = loc_imp.x * 0.9, loc_imp.y * 0.9
 wv.falloff_radius = 0.0
@@ -221,3 +221,28 @@ for k in range(26):
     p0 = Vector((random.uniform(-9, -2), random.uniform(-6, 2), GROUND_Z + random.uniform(0.05, 1.2)))
     ballistic(o, 1, 160, p0, Vector((random.uniform(0.005, 0.015), random.uniform(0.01, 0.03), 0.0)), Vector((0, 0, -0.000004)),
               Vector((0.05, 0.08, 0.03)), step=4, settle_z=GROUND_Z + 0.01, hide_before=False)
+
+# birds startle off the neighbour's roof ridge at the shot (beat 1): simple flapping V shapes
+M_BIRD = mat("M_Bird", (0.05, 0.05, 0.06), 0.6)
+for k in range(9):
+    me = bpy.data.meshes.new("Bird"); me.from_pydata([(0, 0, 0), (-0.18, 0.05, 0.0), (0.18, 0.05, 0.0), (0, -0.08, 0)], [], [(0, 1, 3), (0, 3, 2)])
+    o = bpy.data.objects.new("Bird", me); bpy.data.collections["Exterior"].objects.link(o); me.materials.append(M_BIRD)
+    sk = o.shape_key_add(name="Basis"); up = o.shape_key_add(name="WingsUp")
+    up.data[1].co = (-0.13, 0.05, 0.12); up.data[2].co = (0.13, 0.05, 0.12)
+    p0 = Vector((random.uniform(3.5, 5.5), random.uniform(-3.5, 1.5), 5.18 + random.uniform(0, 0.05)))
+    v = Vector((random.uniform(-0.05, 0.02), random.uniform(0.02, 0.06), random.uniform(0.02, 0.04)))
+    for f in range(1, 200, 4):
+        t = max(0, f - 25 - k * 2)
+        o.location = p0 + v * t; o.keyframe_insert("location", frame=f)
+        o.rotation_euler = (0, 0, math.atan2(v.y, v.x) - math.pi / 2); o.keyframe_insert("rotation_euler", frame=f)
+        up.value = 0.5 + 0.5 * math.sin(t * 0.9 + k) if t > 0 else 0.0; up.keyframe_insert("value", frame=f)
+# street lamps flicker on at dusk during beat 1 (light change outside)
+for o in bpy.data.objects:
+    if o.name.startswith("StreetLamp") and o.type == "LIGHT":
+        for f, e in ((1, 0), (14, 600), (18, 80), (24, 900), (30, 300), (40, 900)):
+            o.data.energy = e; o.data.keyframe_insert("energy", frame=f)
+m = bpy.data.materials.get("M_StreetGlow")
+if m:
+    es = m.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+    for f, e in ((1, 0.5), (14, 9), (18, 1.5), (24, 12), (30, 4), (40, 12)):
+        es.default_value = e; es.keyframe_insert("default_value", frame=f)

@@ -13,8 +13,8 @@ def to_w(base, yaw, lx, ly, lz):
     return base + side(yaw) * lx + fwd(yaw) * ly + Vector((0, 0, lz))
 
 class Sitter:
-    def __init__(self, H, R, seat, yaw, hip_h, knee_fwd):
-        self.H, self.R, self.seat, self.yaw = H, R, seat, yaw
+    def __init__(self, H, R, seat, yaw, hip_h, knee_fwd, sole=0.0):
+        self.H, self.R, self.seat, self.yaw, self.sole = H, R, seat, yaw, sole
         self.hip = Vector((seat.x, seat.y, SEAT + hip_h)) + fwd(yaw) * 0.02
         self.kf = knee_fwd
     def body(self, f, lean=0.0, twist=0.0, sidebend=0.0, head=(0.0, 0.0), dz=0.0, back=0.0):
@@ -25,7 +25,7 @@ class Sitter:
         for s, sg, fw, lf in (("L", 1, l_fwd, 0.0), ("R", -1, r_fwd, lift_r)):
             ax = self.H.ankle[s].x * 0.85 + sg * spread
             xy = to_w(Vector((self.seat.x, self.seat.y, 0)), self.yaw, ax, self.kf + fw, 0)
-            self.H.key_foot(s, f, Vector((xy.x, xy.y)), self.yaw + sg * 6, lf, 0)
+            self.H.key_foot(s, f, Vector((xy.x, xy.y)), self.yaw + sg * 6, lf + self.sole, 0)
     def hand(self, s, f, W, d, n, elbow_out=0.35, elbow_down=0.25):
         sg = 1 if s == "L" else -1
         sh = to_w(self.hip, self.yaw, sg * 0.2, 0.0, 0.45)
@@ -45,4 +45,4 @@ class Sitter:
         R.key_rot("jaw", f, [("X", jaw)])
 
 ws = Sitter(HW, RW, WOMAN_SEAT, -90.0, 0.085, 0.44)
-fs = Sitter(HF, RF, FIANCE_SEAT, 180.0, 0.095, 0.5)
+fs = Sitter(HF, RF, FIANCE_SEAT, 180.0, 0.095, 0.5, sole=0.027)

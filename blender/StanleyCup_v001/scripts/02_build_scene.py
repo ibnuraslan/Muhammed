@@ -21,7 +21,7 @@ sc.cycles.transmission_bounces = 8; sc.cycles.transparent_max_bounces = 8
 sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False
 sc.render.use_persistent_data = True
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
-sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
+sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"; sc.view_settings.exposure = -0.45
 sc.render.image_settings.file_format = "PNG"
 
 def col(name, parent=None):
@@ -387,9 +387,9 @@ neighbour(-30.0, -12.0, 10, 9, 3.4, 1, M_SID3)
 neighbour(-30.0, 2.0, 11, 9, 3.4, 1, M_SID2)
 neighbour(-30.0, 17.0, 10, 9, 3.4, 1, M_SID2)
 # shrubs along the façade and yard
-sh_root, _ = append_asset("shrub_02", C_EXT, (WALL_OUT - 0.7, -3.0, GROUND_Z), 0, 0.9, keep=lambda n: n.endswith("LOD1"))
+sh_root, _ = append_asset("shrub_02", C_EXT, (WALL_OUT - 0.7, -0.3, GROUND_Z), 0, 0.9, keep=lambda n: n.endswith("LOD1"))
 sh_root.name = "Shrub_src"
-for (xx, yy, rz, s) in [(WALL_OUT - 0.7, -0.9, 1.2, 0.8), (WALL_OUT - 0.7, 0.9, 2.0, 0.85), (WALL_OUT - 0.7, 3.0, 0.4, 0.95),
+for (xx, yy, rz, s) in [(WALL_OUT - 0.6, -5.4, 1.2, 0.9), (WALL_OUT - 0.7, 0.9, 2.0, 0.85), (WALL_OUT - 0.7, 3.0, 0.4, 0.95),
                         (WALL_OUT - 0.8, 6.2, 2.6, 0.9), (-8.2, -12, 0.7, 1.2), (-8.3, 9.0, 1.8, 1.1), (-6.0, -14.0, 0.2, 1.4)]:
     instance(sh_root, C_EXT, (xx, yy, GROUND_Z), rz, s)
 
@@ -402,13 +402,13 @@ for (asset, loc, rz, s) in [("Sofa_01", (5.6, 2.2, 0), R_(90), 1.15), ("coffee_t
                             ("ceramic_vase_02", (6.45, -2.5, 1.14), 0, 0.6), ("potted_plant_04", (4.5, 2.2, 0.37), 0, 1.0)]:
     append_asset(asset, C_ROOM if "plant" in asset or "Sofa" in asset or "Shelf" in asset else C_PROP, loc, rz, s)
 bk_root, bk_obs = append_asset("book_encyclopedia_set_01", C_PROP, (6.45, -2.0, 0.73), R_(-90), 0.9, keep=lambda n: "book" in n)
-ch_root, _ = append_asset("dining_chair_02", C_ROOM, WOMAN_SEAT, R_(90))          # chair faces -X (towards the wall)
+ch_root, _ = append_asset("dining_chair_02", C_ROOM, WOMAN_SEAT, R_(-90))          # chair faces -X (towards the wall)
 ch_root.name = "Chair_Woman"
-ch2 = instance(ch_root, C_ROOM, FIANCE_SEAT, 0.0, name="Chair_Fiance")
-instance(ch_root, C_ROOM, (2.3, 0.75, 0), R_(180), name="Chair_Empty1")
-instance(ch_root, C_ROOM, (3.1, 0.75, 0), R_(182), name="Chair_Empty2")
-instance(ch_root, C_ROOM, (3.9, 0.76, 0), R_(178), name="Chair_Empty3")
-instance(ch_root, C_ROOM, (1.75, 0.0, 0), R_(-90), name="Chair_Empty4")
+ch2 = instance(ch_root, C_ROOM, FIANCE_SEAT, R_(180), name="Chair_Fiance")
+instance(ch_root, C_ROOM, (2.3, 0.75, 0), 0.0, name="Chair_Empty1")
+instance(ch_root, C_ROOM, (3.1, 0.75, 0), R_(2), name="Chair_Empty2")
+instance(ch_root, C_ROOM, (3.9, 0.76, 0), R_(-2), name="Chair_Empty3")
+instance(ch_root, C_ROOM, (1.75, 0.0, 0), R_(90), name="Chair_Empty4")
 # rug under the sofa area
 box("Rug", (3.8, 1.0, 0.0), (6.3, 3.0, 0.008), flat("M_Rug", (0.45, 0.34, 0.27), 0.95), C_ROOM)
 # TV on the back wall area (dark, with a soft blue glow)
@@ -436,7 +436,7 @@ print("SEAT_TOP", round(seat, 4)); sc["seat_top"] = seat
 # table setting: plates, cutlery, candle, her glass, bread board
 M_PLATE = flat("M_Plate", (0.93, 0.92, 0.9), 0.15, coat=0.6)
 M_STEELF = flat("M_Cutlery", (0.8, 0.8, 0.8), 0.2, 1.0)
-for (px, py) in ((4.36, 0.12), (4.0, -0.2)):
+for (px, py) in ((4.3, 0.14), (4.0, -0.2)):
     p = lathe("Plate", [(0.0, 0), (0.09, 0), (0.105, 0.012), (0.13, 0.02), (0.128, 0.022), (0.1, 0.014), (0.0, 0.01)], 48, M_PLATE, C_PROP, False)
     p.location = (px, py, TOP)
     food = lathe("Food", [(0.0, 0.0), (0.06, 0.0), (0.055, 0.025), (0.02, 0.035), (0.0, 0.036)], 32, flat("M_Pasta", (0.75, 0.45, 0.2), 0.6), C_PROP, False)
@@ -466,7 +466,7 @@ nap = box("Napkin", (4.4, -0.05, TOP), (4.55, 0.08, TOP + 0.006), flat("M_Napkin
 # ------------------------------------------------------------------ tumbler (generic insulated steel tumbler, no logo)
 M_POWDER = bpy.data.materials.new("M_Powdercoat"); M_POWDER.use_nodes = True
 N = M_POWDER.node_tree.nodes; L = M_POWDER.node_tree.links; b = N["Principled BSDF"]
-b.inputs["Base Color"].default_value = (0.42, 0.55, 0.58, 1); b.inputs["Roughness"].default_value = 0.42; b.inputs["Metallic"].default_value = 0.15
+b.inputs["Base Color"].default_value = (0.16, 0.34, 0.36, 1); b.inputs["Roughness"].default_value = 0.42; b.inputs["Metallic"].default_value = 0.15
 b.inputs["Coat Weight"].default_value = 0.25; b.inputs["Coat Roughness"].default_value = 0.2
 nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 900; bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.08
 L.new(nz.outputs[0], bp.inputs["Height"]); L.new(bp.outputs[0], b.inputs["Normal"])
@@ -478,10 +478,14 @@ mixx = N.new("ShaderNodeMixShader"); mixx.name = "XRAY"; mixx.inputs[0].default_
 L.new(b.outputs[0], mixx.inputs[1]); L.new(mixg.outputs[0], mixx.inputs[2]); L.new(mixx.outputs[0], N["Material Output"].inputs[0])
 M_STEEL = flat("M_Steel", (0.78, 0.78, 0.78), 0.18, 1.0)
 M_LID = flat("M_LidPlastic", (0.82, 0.86, 0.85), 0.35)
-M_STRAW = flat("M_Straw", (0.42, 0.55, 0.58), 0.3, alpha=1.0)
-M_WATER = flat("M_Water", (0.9, 0.97, 1.0), 0.0, trans=1.0, ior=1.33)
+M_STRAW = flat("M_Straw", (0.16, 0.34, 0.36), 0.3, alpha=1.0)
+M_WATER = flat("M_Water", (0.55, 0.8, 0.95), 0.0, trans=1.0, ior=1.33)
 M_ICE = flat("M_Ice", (0.88, 0.95, 1.0), 0.12, trans=1.0, ior=1.31)
-M_DROP = flat("M_Drop", (1, 1, 1), 0.0, trans=1.0, ior=1.12, coat=1.0)
+M_DROP = bpy.data.materials.new("M_Drop"); M_DROP.use_nodes = True
+_n = M_DROP.node_tree.nodes; _l = M_DROP.node_tree.links; _n.remove(_n["Principled BSDF"])
+_t = _n.new("ShaderNodeBsdfTransparent"); _g = _n.new("ShaderNodeBsdfGlossy"); _g.inputs["Roughness"].default_value = 0.03
+_fr = _n.new("ShaderNodeFresnel"); _fr.inputs[0].default_value = 1.6; _mx = _n.new("ShaderNodeMixShader")
+_l.new(_fr.outputs[0], _mx.inputs[0]); _l.new(_t.outputs[0], _mx.inputs[1]); _l.new(_g.outputs[0], _mx.inputs[2]); _l.new(_mx.outputs[0], _n["Material Output"].inputs[0])
 def r_out(z):
     """outer radius profile of the body (narrow base that flares to the top)"""
     pts = [(0.0, 0.039), (0.008, 0.0405), (0.06, 0.0405), (0.075, 0.0425), (0.235, 0.0505), (0.25, 0.051)]
@@ -540,12 +544,14 @@ for k in range(170):
 cup_root = bpy.data.objects.new("Tumbler", None); C_CUP.objects.link(cup_root)
 for o in C_CUP.objects:
     if o is not cup_root and o.parent is None: o.parent = cup_root
-cup_root.location = (CUP_C.x, CUP_C.y, TOP)
-cup_root.rotation_euler = (0, 0, R_(70))     # handle toward her right hand (+X,+Y)
+_ok, _loc, _n, _i, _ob, _M = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((CUP_C.x, CUP_C.y, 2.0)), Vector((0, 0, -1)))
+CUP_TOP = _loc.z if _ok else TOP; sc["cup_top"] = CUP_TOP; print("CUP_TOP", CUP_TOP, _ob.name if _ok else None)
+cup_root.location = (CUP_C.x, CUP_C.y, CUP_TOP)
+cup_root.rotation_euler = (0, 0, R_(35))     # handle toward her right hand (+X,+Y)
 # dent shape key on the body: pushed in around the impact direction (bullet comes from -X)
 bpy.context.view_layer.update()
 body.shape_key_add(name="Basis"); dk = body.shape_key_add(name="Dent"); dk.interpolation = "KEY_LINEAR"
-imp_z = IMPACT_Z - TOP
+imp_z = IMPACT_Z - CUP_TOP
 sc["impact_local_z"] = imp_z
 inv = cup_root.matrix_world.inverted().to_3x3()
 dirl = inv @ Vector((-1, -SHOT_SLOPE, 0)).normalized()          # local direction the bullet comes from
@@ -584,6 +590,8 @@ wake.data.update(); wake.parent = bul
 # ------------------------------------------------------------------ the couple
 with bpy.data.libraries.load(HUM) as (src, dst): dst.collections = [c for c in src.collections if c in ("Woman", "Fiance")]
 for c in dst.collections: sc.collection.children.link(c)
+for o in bpy.data.objects:
+    if o.name.endswith(".high-poly"): o.visible_shadow = False
 
 # ------------------------------------------------------------------ lights (room)
 def area(name, loc, rot, size, energy, color, coll=C_ROOM, shape="RECTANGLE", sy=None):

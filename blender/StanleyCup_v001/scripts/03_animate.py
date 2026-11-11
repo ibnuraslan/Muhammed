@@ -30,7 +30,7 @@ def r_out(z):
         if z <= z1: return r0 + (r1 - r0) * (z - z0) / (z1 - z0)
     return pts[-1][1]
 DXY = Vector((1.0, SHOT_SLOPE, 0)).normalized()
-IMP = C3 - DXY * r_out(IMPACT_Z - TOP)               # the point on the steel that gets hit
+IMP = C3 - DXY * r_out(IMPACT_Z - sc["cup_top"])               # the point on the steel that gets hit
 S0 = Vector((-14.0, IMP.y + (-14.0 - IMP.x) * SHOT_SLOPE, SHOT_Z0))
 D = (IMP - S0).normalized()                           # flight direction
 SV = Vector((-D.y, D.x, 0)).normalized()              # left of travel
@@ -52,9 +52,9 @@ def P(f):
 TABLE_EDGE_Y = TABLE_C.y - 0.705 * TABLE_SY
 p_imp = on_line(X_IMPACT)
 REB = p_imp - DXY * 0.085 + Vector((0, -0.04, 0))
-LAND = Vector((REB.x - 0.30, REB.y - 0.10, 0.0046))
-BOUNCES = [(1285, REB + Vector((0, 0, -0.06))), (1306, LAND + Vector((0.03, 0.03, 0))), (1322, LAND + Vector((-0.02, -0.03, 0.0))),
-           (1333, LAND + Vector((-0.07, -0.03, 0))), (1341, LAND + Vector((-0.09, -0.04, 0))), (1395, LAND + Vector((-0.15, -0.06, 0)))]
+LAND = Vector((REB.x - 0.42, REB.y - 0.06, 0.0046))
+BOUNCES = [(1285, REB + Vector((0, 0, -0.06))), (1306, LAND + Vector((0.03, 0.01, 0))), (1322, LAND + Vector((-0.03, -0.01, 0.0))),
+           (1333, LAND + Vector((-0.08, -0.01, 0))), (1341, LAND + Vector((-0.1, -0.01, 0))), (1395, LAND + Vector((-0.16, 0.0, 0)))]
 def BPOST(f):
     if f <= 1120:                       # pop back, slow-mo
         u = smooth((f - F_IMPACT) / (1120 - F_IMPACT)); return p_imp.lerp(REB, u) + Vector((0, 0, 0.012 * math.sin(math.pi * u)))
