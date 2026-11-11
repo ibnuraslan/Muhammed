@@ -52,5 +52,32 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/2a0a574f9e374702af8c415fce296f45",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "spine": {
+  "uid": "306f37556b3e40ed9fb4bbfa819f35e2",
+  "title": "Human Spine",
+  "author": "EdwinCaBe",
+  "author_profile": "https://sketchfab.com/Edwin.Ca.be",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/306f37556b3e40ed9fb4bbfa819f35e2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ortable": {
+  "uid": "02ab679ff3f24018a8bcaf30b3b2cd47",
+  "title": "Hospital Bed",
+  "author": "CobbleGames",
+  "author_profile": "https://sketchfab.com/cobblegames",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/02ab679ff3f24018a8bcaf30b3b2cd47",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "orset": {
+  "uid": "e3a4512227d34b098e2ef0d11c8a80fd",
+  "title": "Operating Table",
+  "author": "shashkinv1ad",
+  "author_profile": "https://sketchfab.com/shashkinv1ad",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e3a4512227d34b098e2ef0d11c8a80fd",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }

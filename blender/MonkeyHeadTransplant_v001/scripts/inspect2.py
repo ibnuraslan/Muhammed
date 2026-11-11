@@ -1,6 +1,6 @@
 import bpy, sys
 from mathutils import Vector
-for f in ["tools","scope","chair","cart","brain"]:
+for f in ["spine","ortable","orset"]:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.import_scene.gltf(filepath=f"assets/{f}.glb")
     ms = [o for o in bpy.data.objects if o.type == "MESH"]

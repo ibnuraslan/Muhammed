@@ -4,7 +4,7 @@ These values were read back from `MonkeyHeadTransplant_v003_60fps.blend`, opened
 
 | Item | Value |
 |---|---|
-| File | `MonkeyHeadTransplant_v003_60fps.blend`: 64 MB, compressed. All 35 images are packed; there are no linked libraries. Stored as a normal git file (no LFS, per studio policy). |
+| File | `MonkeyHeadTransplant_v003_60fps.blend`: 72 MB, compressed. All images are packed; there are no linked libraries. Stored as a normal git file (no LFS, per studio policy). |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. |
 | Resolution | 1080 × 1920 at 100 % |

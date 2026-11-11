@@ -209,16 +209,30 @@ TZ = 0.92
 TABLES = {}
 for k, x in (("1", -0.42), ("2", 0.42)):
     parts = []
-    parts.append(cyl(f"T{k}_Pedestal", 0.07, 0.72, (x, 0.2, 0.42), M_chrome))
-    parts.append(box(f"T{k}_Foot", (0.42, 0.62, 0.06), (x, 0.2, 0.03), M_enamel, 0.02))
-    parts.append(box(f"T{k}_Frame", (0.5, 0.86, 0.05), (x, 0.2, TZ - 0.085), M_chrome, 0.01))
-    parts.append(box(f"T{k}_Pad", (0.48, 0.84, 0.05), (x, 0.2, TZ - 0.035), M_vinyl, 0.015))
-    parts.append(box(f"T{k}_Drape", (0.52, 0.88, 0.012), (x, 0.2, TZ - 0.004), M_drape, 0.004))
-    for sx in (-1, 1):
-        parts.append(box(f"T{k}_DrapeSide{sx}", (0.012, 0.88, 0.22), (x + sx * 0.262, 0.2, TZ - 0.11), M_drape))
-    parts.append(box(f"T{k}_DrapeEnd", (0.52, 0.012, 0.22), (x, 0.2 + 0.442, TZ - 0.11), M_drape))
-    parts.append(box(f"T{k}_Crank", (0.03, 0.08, 0.03), (x + 0.12, -0.1, 0.35), M_chrome))
-    parts.append(cyl(f"T{k}_Pump", 0.03, 0.12, (x, -0.05, 0.12), M_enamel, rot=(0, math.radians(70), 0)))
+    tb_ = glb(f"T{k}_Pad", os.path.join(AS, "ortable.glb"), 1.0, (x, 0.2, 0.0), rot=(0, 0, math.radians(90)))
+    tb_.scale = (0.86 / 2.043, 0.52 / 0.767, (TZ - 0.006) / 0.74); parts.append(tb_)
+    # draped sheet: a fine grid laid on the table top that falls over the edges, with folds on the hanging part
+    bm = bmesh.new(); NXd, NYd = 40, 56; vv_ = {}
+    for j in range(NYd + 1):
+        for i in range(NXd + 1):
+            u_ = -0.36 + 0.72 * i / NXd; w_ = -0.5 + 1.0 * j / NYd
+            ox = max(0.0, abs(u_) - 0.25); oy = max(0.0, w_ - 0.42)    # head end (-Y) stays tucked at the edge
+            o_ = math.hypot(ox, oy)
+            z_ = TZ + 0.003 - (o_ * 3.2 if o_ > 0 else 0.0)
+            px = x + math.copysign(min(abs(u_), 0.258 + o_ * 0.08), u_); py = 0.2 + min(w_, 0.445 + oy * 0.08)
+            fold = 0.012 * math.sin(u_ * 42 + w_ * 9) * min(1.0, o_ * 12) + 0.006 * math.sin(w_ * 63 + 1.7) * min(1.0, o_ * 12)
+            if ox > 0: px += math.copysign(fold, u_)
+            if oy > 0: py += fold
+            z_ = max(z_, TZ - 0.34 + 0.02 * math.sin(u_ * 30 + w_ * 23))
+            vv_[i, j] = bm.verts.new((px, py, z_ + 0.0015 * math.sin(u_ * 90) * math.sin(w_ * 70)))
+    for j in range(NYd):
+        for i in range(NXd):
+            bm.faces.new((vv_[i, j], vv_[i + 1, j], vv_[i + 1, j + 1], vv_[i, j + 1]))
+    dme = bpy.data.meshes.new(f"T{k}_Drape"); bm.to_mesh(dme); bm.free()
+    dro = link(bpy.data.objects.new(f"T{k}_Drape", dme)); dro.data.materials.append(M_drape)
+    for p_ in dme.polygons: p_.use_smooth = True
+    dro.modifiers.new("s", "SOLIDIFY").thickness = 0.003; dro.modifiers.new("sub", "SUBSURF").levels = 1
+    parts.append(dro)
     TABLES[k] = parts
     for p in parts: to_room(p)
 # rolled towel head-rests (one per table) - placed after the monkeys are posed
@@ -283,7 +297,7 @@ to_room(cyl("IV_Base", 0.2, 0.03, (1.05, 0.55, 0.02), M_chrome, 5))
 to_room(box("IV_Hook", (0.3, 0.012, 0.012), (1.05, 0.55, 1.8), M_chrome))
 ivb = to_room(box("IV_Bag", (0.1, 0.04, 0.16), (1.17, 0.55, 1.68), mat("M_IVBag", (0.9, 0.95, 0.95, 1), 0.1, trans=0.8), 0.015))
 to_room(cyl("IV_Tube", 0.003, 0.9, (1.17, 0.55, 1.15), mat("M_Tube", (0.9, 0.9, 0.85, 1), 0.2, trans=0.5), 8))
-for i, (x, y) in enumerate(((-1.45, 0.62), (-2.6, -1.9))):
+for i, (x, y) in enumerate(((-1.62, 0.6), (-2.6, -1.9))):
     to_room(cyl(f"Stool_{i}", 0.17, 0.05, (x, y, 0.6), M_vinyl, 24))
     to_room(cyl(f"StoolLeg_{i}", 0.02, 0.58, (x, y, 0.3), M_chrome, 12))
     to_room(cyl(f"StoolBase_{i}", 0.2, 0.02, (x, y, 0.01), M_chrome, 5))
@@ -374,7 +388,10 @@ bpy.context.view_layer.update()
 for k, R in (("1", M_LIE1), ("2", M_LIE2)):
     hw = [R @ v.co for v in head.data.vertices]
     hz = min(p.z for p in hw); hx = sum(p.x for p in hw) / len(hw); hy = sum(p.y for p in hw) / len(hw)
-    t = cyl(f"T{k}_HeadRest", 0.04, 0.16, (hx, hy, TZ + 0.04), M_towel, 24, rot=(math.radians(90), 0, 0))
+    t = cyl(f"T{k}_HeadRest", 0.04, 0.16, (hx, hy, TZ + 0.04), M_towel, 48, rot=(math.radians(90), 0, 0))
+    tw_ = bpy.data.textures.get("TX_Towel") or bpy.data.textures.new("TX_Towel", "CLOUDS"); tw_.noise_scale = 0.012
+    ts_ = t.modifiers.new("sub", "SUBSURF"); ts_.levels = 3; ts_.render_levels = 3
+    td_ = t.modifiers.new("folds", "DISPLACE"); td_.texture = tw_; td_.strength = 0.006
     t.scale = (1.0, max(0.3, (hz - TZ) / 0.08 + 0.05), 1.0); t.location.z = TZ + (hz - TZ) / 2 + 0.002
     TABLES[k].append(to_room(t))
     print("HEADREST", k, "gap", hz - TZ)
@@ -419,12 +436,19 @@ for k, R, bd in (("1", M_LIE1, bodyA), ("2", M_LIE2, bodyB)):
     me = bpy.data.meshes.new(f"T{k}_BodyDrape"); bm.to_mesh(me); bm.free()
     dr = to_room(link(bpy.data.objects.new(f"T{k}_BodyDrape", me))); dr.data.materials.append(M_drape)
     for p_ in me.polygons: p_.use_smooth = True
+    wt_ = bpy.data.textures.get("TX_Wrinkle") or bpy.data.textures.new("TX_Wrinkle", "CLOUDS")
+    wt_.noise_scale = 0.035; wt_.noise_depth = 3
+    sd_ = dr.modifiers.new("sub", "SUBSURF"); sd_.levels = 2
+    dd_ = dr.modifiers.new("wr", "DISPLACE"); dd_.texture = wt_; dd_.strength = 0.012; dd_.texture_coords = "GLOBAL"
     dr.modifiers.new("s", "SOLIDIFY").thickness = 0.004
     TABLES[k].append(dr)
 # gauze collars at the cut: one on the head, one on each body (sits on the neck plane)
 def collar(name, parent, r_out, z_off):
     bpy.ops.mesh.primitive_torus_add(major_radius=r_out, minor_radius=0.0075, major_segments=48, minor_segments=12)
     t = bpy.context.active_object; t.name = name; t.data.materials.append(M_gauze); bpy.ops.object.shade_smooth()
+    gx_ = bpy.data.textures.get("TX_Gauze") or bpy.data.textures.new("TX_Gauze", "CLOUDS"); gx_.noise_scale = 0.004
+    t.modifiers.new("sub", "SUBSURF").levels = 1
+    gd_ = t.modifiers.new("wrap", "DISPLACE"); gd_.texture = gx_; gd_.strength = 0.0025; gd_.texture_coords = "LOCAL"
     t.scale = (1.0, 0.85, 0.55)
     t.matrix_world = neckref.matrix_world @ Matrix.Translation(V(0, 0, z_off)) @ Matrix.Diagonal((1.0, 0.85, 0.55, 1))
     M = t.matrix_world.copy(); t.parent = parent; t.matrix_parent_inverse = Matrix.Identity(4); t.matrix_basis = M
@@ -501,6 +525,9 @@ brain.parent = head
 M_xbrain = mat("M_XR_Brain", (1.0, 0.35, 0.45, 1), 0.3, emit=(1.0, 0.22, 0.38, 1), estr=9.0)
 brain.data.materials.clear(); brain.data.materials.append(M_xbrain)
 M_xcord = mat("M_XR_Cord", (1.0, 0.85, 0.5, 1), 0.3, emit=(1.0, 0.8, 0.35, 1), estr=6.0)
+_cn = M_xcord.node_tree; _cw = _cn.nodes.new("ShaderNodeTexWave"); _cw.inputs["Scale"].default_value = 60; _cw.inputs["Distortion"].default_value = 6
+_cb = _cn.nodes.new("ShaderNodeBump"); _cb.inputs["Strength"].default_value = 0.4
+_cn.links.new(_cw.outputs["Fac"], _cb.inputs["Height"]); _cn.links.new(_cb.outputs["Normal"], _cn.nodes["Principled BSDF"].inputs["Normal"])
 M_xbone = mat("M_XR_Vertebra", (0.85, 1.0, 0.9, 1), 0.4, emit=(0.6, 1.0, 0.8, 1), estr=1.2)
 # spine line: ray cast the back surface from behind (+Y) along the body centre line
 bodyA.hide_set(False)
@@ -535,9 +562,21 @@ cord_b = tube("XR_CordBody", pts, 0.0045, M_xcord, bodyB)
 brain_base = brain.location + V(0, 0, -0.022) - FW * 0.005
 cord_h = tube("XR_CordHead", [brain_base, nb + V(0, 0, 0.022)], 0.0045, M_xcord, head)
 verts_ = []
-for i, p in enumerate(pts[:-1]):
-    t = cyl(f"XR_Vert_{i:02d}", 0.011, 0.012, p, M_xbone, 16)
-    d = (pts[i + 1] - p).normalized(); t.rotation_euler = d.to_track_quat("Z", "Y").to_euler(); t.parent = bodyB; verts_.append(t)
+cord_len = sum((pts[i + 1] - pts[i]).length for i in range(len(pts) - 1))
+sp_ = glb("XR_Spine", os.path.join(AS, "spine.glb"), 1.0, (0, 0, 0))
+bpy.context.view_layer.objects.active = sp_; sp_.select_set(True)
+zmin_ = min(v.co.z for v in sp_.data.vertices); zmax_ = max(v.co.z for v in sp_.data.vertices)
+sc_sp = cord_len * 0.98 / (zmax_ - zmin_)
+for v in sp_.data.vertices: v.co = V(v.co.x * sc_sp * 1.05, v.co.y * sc_sp * 1.05, (v.co.z - zmin_) * sc_sp)
+sp_.scale = (1, 1, 1); sp_.location = (0, 0, 0)
+sp_.parent = bodyB; sp_.matrix_parent_inverse = Matrix.Identity(4)
+cmod = sp_.modifiers.new("along", "CURVE"); cmod.object = cord_b; cmod.deform_axis = "POS_Z"
+for m in sp_.data.materials:
+    if m and m.use_nodes:
+        pb_ = next((n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if pb_: pb_.inputs["Emission Color"].default_value = (0.75, 1.0, 0.85, 1); pb_.inputs["Emission Strength"].default_value = 0.6
+verts_.append(sp_)
+print("SPINE model scale", sc_sp, "cord len", cord_len)
 for nm, p in (("XR_GapGlowBody", nb + V(0, 0, -0.012)), ("XR_GapGlowHead", nb + V(0, 0, 0.022))):
     bpy.ops.mesh.primitive_uv_sphere_add(radius=0.006, location=p); g = bpy.context.active_object; g.name = nm
     g.data.materials.append(mat("M_" + nm, (1, 0.3, 0.2, 1), 0.3, emit=(1.0, 0.25, 0.1, 1), estr=12.0))
@@ -655,8 +694,8 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
     hv_ids = {g.index for g in body.vertex_groups if g.name in ("body",)}
     tb = BVHTree.FromPolygons(wv, polys)
     Hh = top
-    zs = [Hh * f_ for f_ in (0.30, 0.36, 0.42, 0.48, 0.54, 0.60, 0.66, 0.72, 0.77, 0.81)]
-    NSEG = 32; rings = []
+    zs = [Hh * (0.29 + 0.52 * t_ / 19.0) for t_ in range(20)]
+    NSEG = 72; rings = []
     for k, z in enumerate(zs):
         ring = []
         for j in range(NSEG):
@@ -664,9 +703,12 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
             o_ = V(cx, cy - 0.0, z) + d_ * 0.45
             hit = tb.ray_cast(o_, -d_)
             r_ = (0.45 - hit[3]) if hit[0] is not None else 0.15
-            if k < 4: r_ = max(r_, 0.2 - 0.02 * k)       # skirt: one tube round both legs
-            flare = max(0.0, (4 - k)) * 0.018
-            ring.append(V(cx, cy, z) + d_ * (r_ + 0.045 + flare))
+            hk_ = k / 19.0
+            if hk_ < 0.4: r_ = max(r_, 0.2 - 0.1 * hk_)       # skirt: one gown round both legs
+            flare = max(0.0, 0.4 - hk_) * 0.10
+            pleat = (0.010 * math.sin(a_ * 9 + z * 4.0) + 0.006 * math.sin(a_ * 17 + 1.3 + z * 9) + 0.004 * math.sin(a_ * 31 + z * 21)) * (1.25 - hk_)
+            zz = z + (0.012 * math.sin(a_ * 5 + 0.7) if k == 0 else 0.0)     # uneven hem
+            ring.append(V(cx, cy, zz) + d_ * (r_ + 0.045 + flare + pleat))
         rings.append(ring)
     bm = bmesh.new(); vv = [[bm.verts.new(p_) for p_ in ring] for ring in rings]
     for k in range(len(rings) - 1):
@@ -696,6 +738,8 @@ for nm in ("Surgeon", "Nurse", "Anaes"):
     gown.parent = rig; gown.matrix_parent_inverse = rig.matrix_world.inverted()
     am_ = gown.modifiers.new("arm", "ARMATURE"); am_.object = rig
     gown.modifiers.new("sol", "SOLIDIFY").thickness = 0.004
+    gtx = bpy.data.textures.get("TX_GownCrease") or bpy.data.textures.new("TX_GownCrease", "CLOUDS")
+    gtx.noise_scale = 0.06; gtx.noise_depth = 2
     gown.modifiers.new("sub", "SUBSURF").levels = 1
     print("GOWN", nm, len(gme.vertices))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

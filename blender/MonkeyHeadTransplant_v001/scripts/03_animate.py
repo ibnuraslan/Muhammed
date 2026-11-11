@@ -426,7 +426,7 @@ for f in list(range(672, 1040, 6)):
     else:
         for s in "LR": hand(SURG, s, f, pos + Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((0.08 if s == "L" else -0.08), -0.28, 0) + V(0, 0, 1.0), V(0, 1, 0.2) if False else Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((-1 if s == "L" else 1), -0.3, 0), V(0, 0, 1), 0.3, Y1)
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
-S3 = V(1.62, 1.25, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
+S3 = V(1.44, 1.16, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
 S4 = V(2.6, 0.6, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
 board = D["Forceps"]
 for f in list(range(1190, 1771, 6)):
@@ -465,8 +465,8 @@ for f in range(1, 162, 4):
         Rz = Matrix.Rotation(math.radians(ny), 3, "Z")
         hand(NURSE, s, f, p + Rz @ V((0.16 if s == "L" else -0.16), -0.38, 0) + V(0, 0, 0.88), Rz @ V(0, -1, -0.3), V(0, 0, 1), 0.3, ny)
         curl(NURSE, s, f, 0.8)
-NP2 = V(-0.85, -0.62, 0); ny2 = yaw_to(NP2, V(0.0, 0.05, 0))
-NP2b = V(-0.80, 1.05, 0); ny2b = yaw_to(NP2b, V(-1.35, 1.25, 0))
+NP2 = V(-1.05, -0.62, 0); ny2 = yaw_to(NP2, V(0.0, 0.05, 0))
+NP2b = V(-0.82, 1.15, 0); ny2b = yaw_to(NP2b, V(-1.35, 1.25, 0))
 WALKS = [(300, 400, NP2, NP2b), (560, 680, NP2b, NP2)]
 def nurse_at(f):
     if f <= 300: return NP2, ny2
@@ -531,7 +531,7 @@ for f in list(range(1190, 1771, 6)):
 for ob in [D["Nurse"]] + [c for c in D["Nurse"].children]:
     hide_keys(ob, [(1, False), (1036, True), (1187, False)])
 ANA = Human(make_human_ctrl(D["Anaes"]))
-AP = V(-1.45, 0.62, 0); AY = yaw_to(AP, V(-1.3, 1.25, 0)); RzA = Matrix.Rotation(math.radians(AY), 3, "Z")
+AP = V(-1.62, 0.6, 0); AY = yaw_to(AP, V(-1.3, 1.25, 0)); RzA = Matrix.Rotation(math.radians(AY), 3, "Z")
 bag = D["Anaes_Bag"]; bag_c = bag.location.copy()
 for f in list(range(1, 1771, 6)):
     br = 0.5 + 0.5 * math.sin(2 * math.pi * f / 150.0)

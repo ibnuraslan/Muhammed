@@ -23,6 +23,15 @@ This is the 29.5 s film (1770 frames at 60 fps, 1080×1920), built to our 80-wor
   - Dust motes fade out near the lens, so they can't become bokeh balls.
   - The ceiling panels are hidden from glossy rays, and the chrome and floor are rougher.
 
+## Realism pass ("no blocks", client note at 21:00)
+- **Operating tables:** the box tables are replaced with a real CC-BY cushioned pedestal table (Hospital Bed by CobbleGames).
+- **Table drapes:** the flat slab drapes are now one cloth sheet per table that hangs over the edges, with folds and an uneven hem.
+- **Body drapes:** they now have wrinkle displacement.
+- **Gowns:** the tube gowns are now pleated (72 segments, 20 rings) with an uneven hem and a smaller flare. They are still procedural; no gown model could be rigged in time.
+- **X-ray spine:** the cylinder vertebrae are replaced with a real textured spine model (Human Spine by EdwinCaBe), bent along the back. The x-ray brain was already a real model (3DRT STUDIOS). The spinal cord has a fibrous bump.
+- **Gauze collars and head-rest towels:** subdivided and displaced so they read as wrapped fabric.
+- **The surgical lamp domes are still procedural.** The only real lamp found is a modern LED ring, wrong for 1970.
+
 ## How the one-camera rule is kept
 There is one camera on one Catmull-Rom spline.
 
@@ -37,7 +46,7 @@ The move from the operating table to the recovery chair happens inside the x-ray
 - **Neck seam.** The head and body of the composite are separate meshes. A thin dark seam ring plus stitches hide the join; a faint line is visible in extreme macro.
 - **Surgeon, nurse and anaesthetist are IK-posed.**
   - The head grips come from a numeric search: the gloves rest on the fur and the fingers curl.
-  - `audit.txt` reports 85 penetrating sampled vertices over 13 audited frames. These are mostly slight glove contact and gowns brushing.
+  - `audit.txt` reports 131 penetrating sampled vertices over 13 audited frames. These are mostly slight glove contact and gowns brushing.
   - The feet step during position changes, but they creep up to about 3 cm at step landings.
 - **Chair contact.** The monkey's feet press up to 3 cm into the chair cushion's raised front edge.
 - **Stitching close-ups.** These are dominated by the gloved hands. The needle holder is visible but the needle arc is small.
