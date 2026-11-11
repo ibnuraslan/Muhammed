@@ -2,7 +2,7 @@
 blender -b scene.blend --python 03_animate.py -- <out.blend>
 """
 import sys, os, math, random
-import bpy
+import bpy, bmesh
 from mathutils import Vector, Matrix, Quaternion
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
@@ -55,7 +55,7 @@ def Ry(d): return Matrix.Rotation(R_(d), 3, 'Y')
 def Rz(d): return Matrix.Rotation(R_(d), 3, 'Z')
 
 # =============================================================== characters
-BASE = ["Boy1", "Boy2", "Boy3", "Boy4", "Boy5", "Coach", "DiverA", "DiverB", "DiverC"]
+BASE = ["Boy1", "Boy2", "Boy3", "Boy4", "Boy5", "Coach", "DiverA", "DiverB", "DiverC", "Crowd1", "Crowd2", "Crowd3", "Crowd4"]
 RIG, HUM = {}, {}
 for n in BASE:
     RIG[n] = make_human_ctrl(bpy.data.objects[n]); HUM[n] = Human(RIG[n])
@@ -75,8 +75,7 @@ HB = ["HB%d" % i for i in range(1, 8)]
 for i, n in enumerate(HB):
     clone(["Boy1", "Boy3", "Boy4", "Boy5", "Boy1", "Boy4", "Boy3"][i], n)
 CROWD = ["Crowd%d" % i for i in range(1, 5)]
-for n in CROWD: clone("Coach", n)
-ALL = BASE + HB + CROWD
+ALL = BASE + HB
 PARK = {n: V((250.0, 300.0 + 6 * i, -80.0)) for i, n in enumerate(ALL)}
 
 def body_R(yaw=0.0, flex=0.0, side=0.0):
@@ -121,7 +120,15 @@ def park(n, f):
         key_foot_free(n, s, f, bw(n, P, Rb, H.ankle[s]), Rb)
     key_hands(n, f, P, Rb, {})
 
-TELE = {n: set() for n in ALL}     # frames after which the next key is a jump (CONSTANT)
+TELE = {n: set() for n in ALL}
+def key_fingers(n, s, f, curl):
+    """curl all fingers (local X is the flexion axis on the MPFB default rig; thumb at 40 %)"""
+    for k in range(1, 6):
+        for j, w in ((1, 0.8), (2, 1.0), (3, 0.7)):
+            nm = "finger%d-%d.%s" % (k, j, s); pb = RIG[n].PB.get(nm)
+            if pb is None: continue
+            pb.rotation_quaternion = Quaternion((1, 0, 0), R_(curl * w * (0.4 if k == 1 else 1.0)))
+            pb.keyframe_insert("rotation_quaternion", frame=f, group=nm)     # frames after which the next key is a jump (CONSTANT)
 
 # ---------------------------------------------------------------- seated huddle / kneel / swim poses
 def seated(n, f, x, y, yaw, lean=22.0, head=(-10.0, 0.0), hug=True, hand_over=None, knee=0.0):
@@ -139,6 +146,7 @@ def seated(n, f, x, y, yaw, lean=22.0, head=(-10.0, 0.0), hug=True, hand_over=No
         pole = V((xy.x, xy.y, g + 1.2)) + fw * 0.3
         pb.location = H.r.rest(nm).to_3x3().inverted() @ (pole - H.r.BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
     hands = {}
+    for s in "LR": key_fingers(n, s, f, 40 if hug else 15)
     if hug:
         for s in "LR":
             sx = 1 if s == "L" else -1
@@ -221,9 +229,9 @@ def head_torch(n, energy=60.0, f_on=1):
     o_ = base.lerp(top, 0.55) + fwd * 0.5
     hit, loc, nrm, idx = body.ray_cast(o_, -fwd, depsgraph=bpy.context.evaluated_depsgraph_get())
     fh = loc if hit else base.lerp(top, 0.55) + fwd * 0.1
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.022, depth=0.03, location=fh + fwd * 0.016, rotation=(R_(90), 0, 0))
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.022, depth=0.03, location=fh + fwd * 0.024, rotation=(R_(90), 0, 0))
     lamp = bpy.context.active_object; lamp.name = n + "_HeadTorch"; lamp.data.materials.append(m_lamp)
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.016, depth=0.004, location=fh + fwd * 0.033, rotation=(R_(90), 0, 0))
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.016, depth=0.004, location=fh + fwd * 0.04, rotation=(R_(90), 0, 0))
     lens = bpy.context.active_object; lens.name = n + "_TorchLens"; lens.data.materials.append(m_lens); lens.parent = lamp
     lens.matrix_parent_inverse = lamp.matrix_world.inverted()
     # band: a thin torus around the head at forehead height
@@ -234,7 +242,7 @@ def head_torch(n, energy=60.0, f_on=1):
     sp = bpy.data.objects.new(n + "_TorchLight", bpy.data.lights.new(n + "_TorchLight", 'SPOT'))
     sp.data.energy = energy; sp.data.spot_size = R_(55); sp.data.spot_blend = 0.6; sp.data.shadow_soft_size = 0.02
     sp.data.color = (1.0, 0.93, 0.8); sc.collection.objects.link(sp)
-    sp.location = fh + fwd * 0.04; sp.rotation_euler = (R_(90), 0, 0)    # spot points -Z local -> rotate to -Y
+    sp.location = fh + fwd * 0.05; sp.rotation_euler = (R_(-90), 0, 0)    # spot points -Z local -> rotate to -Y
     sp.parent = lamp; sp.matrix_parent_inverse = lamp.matrix_world.inverted()
     # Child Of head at rest pose: evaluate the rig at rest (pose cleared) by computing from rest matrices
     c_ = lamp.constraints.new('CHILD_OF'); c_.target = rig; c_.subtarget = "head"
@@ -242,7 +250,7 @@ def head_torch(n, energy=60.0, f_on=1):
     TORCH[n] = sp
     return lamp, sp
 # diver gear: tank on the back (spine03), black full mask (head)
-m_tank = bpy.data.materials.get("M_Tank"); m_tank.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.55, 0.42, 0.08, 1); m_mask = bpy.data.materials.new("M_DiveMask"); m_mask.use_nodes = True
+m_tank = bpy.data.materials.get("M_Tank"); m_tank.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.32, 0.3, 0.22, 1); m_mask = bpy.data.materials.new("M_DiveMask"); m_mask.use_nodes = True
 _mp = m_mask.node_tree.nodes["Principled BSDF"]; _mp.inputs['Base Color'].default_value = (0.02, 0.02, 0.02, 1); _mp.inputs['Roughness'].default_value = 0.35
 m_visor = bpy.data.materials.new("M_Visor"); m_visor.use_nodes = True
 _vp = m_visor.node_tree.nodes["Principled BSDF"]; _vp.inputs['Base Color'].default_value = (0.6, 0.7, 0.75, 1); _vp.inputs['Roughness'].default_value = 0.02
@@ -263,8 +271,8 @@ def diver_gear(n):
     hb = RIG[n].BN["head"]; hc = hb.head_local.lerp(hb.tail_local, 0.35)
     hit, loc, nrm, idx = body.ray_cast(hc + V((0, -0.5, 0)), V((0, 1, 0)), depsgraph=bpy.context.evaluated_depsgraph_get())
     face = loc if hit else hc + V((0, -0.1, 0))
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=24, ring_count=12, location=face + V((0, -0.008, 0.005)))
-    mk = bpy.context.active_object; mk.name = n + "_Mask"; mk.scale = (0.075, 0.03, 0.06); mk.data.materials.append(m_mask)
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=24, ring_count=12, location=face + V((0, -0.032, 0.005)))
+    mk = bpy.context.active_object; mk.name = n + "_Mask"; mk.scale = (0.075, 0.018, 0.06); mk.data.materials.append(m_mask)
     rest_attach(mk, n, "head")
     return mk
 for n in ("DiverA", "DiverB", "DiverC"):
@@ -272,7 +280,7 @@ for n in ("DiverA", "DiverB", "DiverC"):
 for n in ["Boy1", "Boy2", "Boy3", "Boy4", "Boy5", "Coach"] + HB:
     head_torch(n, 70.0)
 for n in ("DiverA", "DiverB", "DiverC"):
-    head_torch(n, 300.0)
+    head_torch(n, 70.0)
 # head torches off for the crowd clones (they are not cloned with lamps)
 
 # =============================================================== BEAT 1-2: walk in, flood, run deeper (frames 1-590)
@@ -315,7 +323,6 @@ for n, lane, s0 in WALK:
     TELE[n].add(F_END_RUN)
 
 # flood strip along the tunnel floor with a moving front (transparent beyond FrontY), surge froth at the front
-import bmesh
 bm = bmesh.new(); rows = []
 for i in range(0, len(TC), 2):
     p, fw, sd = tun_at(TS[i]); r_ = []
@@ -355,8 +362,7 @@ rain_v = bpy.data.materials["M_Rain"].node_tree.nodes["RainAmount"].outputs[0]
 for f, v in ((1, 0.0), (285, 0.0), (300, 1.0), (600, 1.0), (610, 0.0)):
     rain_v.default_value = v; rain_v.keyframe_insert("default_value", frame=f)
 tor = bpy.data.objects["FX_MouthTorrent"]
-for f, h in ((1, True), (300, False), (600, True)):
-    tor.hide_render = h; tor.keyframe_insert("hide_render", frame=f)
+tor.hide_render = True
 sun = bpy.data.objects["Key_Sun"]; wsky = sc.world.node_tree.nodes["SkyStrength"].inputs['Strength']; wt = sc.world.node_tree.nodes["SkyTint"].inputs['B']
 for f, se, ss, tn, rot in ((1, 1.6, 0.8, (0.85, 0.95, 0.9), (50, 10, -30)), (280, 1.6, 0.8, (0.85, 0.95, 0.9), (50, 10, -30)),
                            (310, 0.15, 0.28, (0.55, 0.62, 0.7), (50, 10, -30)), (600, 0.15, 0.28, (0.55, 0.62, 0.7), (50, 10, -30)),
@@ -399,7 +405,7 @@ for i in range(13):
 
 # =============================================================== BEAT 5-11: chamber
 HUDDLE = [("Coach", -1.0, 2.6, 15), ("Boy1", -0.3, 2.9, 0), ("Boy3", 0.4, 3.1, -10), ("Boy4", 1.6, 2.7, -25), ("Boy5", 2.3, 2.1, -40),
-          ("HB1", -1.6, 1.9, 30), ("HB2", -0.9, 1.6, 20), ("HB3", -0.2, 1.4, 5), ("HB4", 1.5, 1.5, -30), ("HB5", -2.2, 2.6, 40),
+          ("HB1", -1.6, 1.9, 30), ("HB2", -0.9, 1.6, 20), ("HB3", -0.2, 1.4, 5), ("HB4", 2.0, 0.55, -25), ("HB5", -2.2, 2.6, 40),
           ("HB6", 0.6, 2.2, -5), ("HB7", 2.6, 3.1, -35), ("Boy2", 0.8, 1.25, -10)]
 F_CH0 = 1003           # chamber first seen
 F_SURF = 1085          # diver head breaks the surface
@@ -417,13 +423,13 @@ for n, x, y, yaw in HUDDLE:
             ev(f - 1)
             hd = RIG[n].o.matrix_world @ RIG[n].PB["head"].head
             fw = Rz(yaw + look_pool) @ V((0, -1, 0))
-            hov = {"R": (hd + fw * 0.17 + V((0, 0, 0.11)) + Rz(yaw) @ V((-0.03, 0, 0)), (Rz(yaw) @ V((1, 0, 0.25))).normalized(), -fw)}
+            hov = {"R": (hd + fw * 0.3 + V((0, 0, 0.2)) + Rz(yaw) @ V((-0.03, 0, 0)), (Rz(yaw) @ V((1, 0, 0.25))).normalized(), -fw)}
         seated(n, f, X, y, yaw, lean=10 if f > F_SURF else 22, head=(-12 if f > F_SURF else 22, look_pool if f > F_SURF else 0), hand_over=hov)
     TELE[n].add(F_CH0 - 13)
 # diver A surfaces in the pool, holds the ledge edge (head torch blazing), then hauls out
 DA = "DiverA"
 pool = V((CX + 0.2, -1.9, 0))
-for f, z, pit in ((F_CH0 - 12, -1.6, 60), (F_SURF - 20, -1.25, 40), (F_SURF, -0.95, 10), (F_SURF + 25, -0.82, 0), (1160, -0.85, 0), (1212, -0.86, 0)):
+for f, z, pit in ((F_CH0 - 12, -1.6, 60), (F_SURF - 20, -1.25, 40), (F_SURF, -0.95, 10), (F_SURF + 25, -0.82, 0), (1160, -0.85, 0), (1212, -0.86, 0), (1700, -0.86, 0)):
     H = HUM[DA]; P = V((pool.x, pool.y, WZ + z + 0.0)); yw = 0.0 + 180     # facing +Y (toward the boys)
     Rb = body_R(yw, pit)
     H.key_root(f, P, yaw=yw, flex=pit); H.key_spine(f, flex=-5, head=(5, 0))
@@ -453,6 +459,9 @@ for n, y0, y1, f0, f1, up in (("DiverB", -6.0, -18.0, 1213, 1480, 0.7), ("DiverC
         if n == "DiverB" and -13.5 < y < -8.5:     # hand over hand on the guide rope
             rp = pas_mid(y - 0.35, 0.35, -0.55 * (1 - 0.6 * math.exp(-((y + 13) ** 2) / 6)))
             hands = {"R": (rp, V((0, -1, 0)), V((1, 0, 0.3)).normalized())}
+            key_fingers(n, "R", f, 70)
+        elif n == "DiverB":
+            key_fingers(n, "R", f, 20)
         swim(n, f, P, 0.0, pitch=-6 * sq, roll=10 * sq * (1 if n == "DiverB" else -1), phase=f * 0.25, kick=1.0 - 0.6 * sq, hands=hands)
     TELE[n].add(f0 - 1)
 DC = "DiverC"
@@ -461,7 +470,7 @@ for f in range(1490, 1712, 12):
     swim(DC, f, pas_mid(y, 0.7), 0.0, pitch=4, phase=f * 0.2, kick=0.9)
 TELE[DC].add(1711)
 tc_ = TORCH[DC]
-for f, e in ((1, 300), (1500, 300), (1600, 100), (1660, 15), (1700, 0)):
+for f, e in ((1, 70), (1500, 70), (1600, 25), (1660, 4), (1700, 0)):
     tc_.data.energy = e; tc_.data.keyframe_insert("energy", frame=f)
 lensC = bpy.data.objects[DC + "_TorchLens"]
 mlc = m_lens.copy(); lensC.data.materials[0] = mlc; es = mlc.node_tree.nodes["Principled BSDF"].inputs['Emission Strength']
@@ -485,13 +494,13 @@ TELE[B3].add(1704)
 P2 = V((CX + 0.8, 1.25, 0))
 DIVERS_IN = 1715
 for f in (DIVERS_IN, 2017, 2060, 2110, 2154):
-    kneel("DiverB", f, P2.x - 0.05, P2.y - 0.75, 180 + 10, lean=25, head=(25, 0))
-    kneel(DA, f, P2.x + 0.58, P2.y + 0.1, 90 - 8, lean=30, head=(30, 0))
+    kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=25, head=(25, 0))
+    kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=30, head=(30, 0))
 TELE["DiverB"].add(DIVERS_IN - 1); TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue
     X = CX + x
-    for f in (DIVERS_IN, 2017, 2120, 2240, 2406):
+    for f in (1245, DIVERS_IN, 2017, 2120, 2240, 2406):
         seated(n, f, X, y, yaw, lean=22, head=(15, 0) if n != "Boy2" else (5, 10))
 # beat 10: sedation (2155-2328): medic's right hand with the syringe at Boy2's left upper arm, left hand steadies; boy's eyes close
 ev(2155)
@@ -510,6 +519,7 @@ for f in (2155, 2190, 2230, 2270, 2300, 2328):
     tip = inj + outw * (0.03 if 2190 <= f <= 2270 else 0.12)
     W = tip + outw * 0.09 + V((0, 0, 0.02))
     HUM[DA].key_hand("R", f, W, -outw, V((0, 0, 1)), W + V((0.3, 0.3, -0.4)))
+    key_fingers(DA, "R", f, 60); key_fingers(DA, "L", f, 35)
     HUM[DA].key_hand("L", f, arm + V((0, 0, 0.09)) + outw * 0.02, V((0, -1, -0.4)).normalized(), V((0, 0, -1)), arm + V((0.4, 0.4, 0.0)))
     # syringe follows the right hand (palm side) along -outw
     syr.location = tip + outw * 0.055; syr.rotation_euler = (-outw).to_track_quat('-Z', 'Y').to_euler()
@@ -522,10 +532,12 @@ for f, a in ((2155, 0), (2280, 0), (2320, 1)):
 for f, hd in ((2155, (5, 10)), (2290, (5, 10)), (2328, (25, 18)), (2406, (28, 20))):
     seated("Boy2", f, P2.x, P2.y, -10, lean=14, head=hd, hug=False)
 # beat 11: full-face mask fitted (2329-2406) by DiverB, then lift (2380+)
+bpy.ops.mesh.primitive_torus_add(major_radius=0.068, minor_radius=0.012, major_segments=40, minor_segments=10, rotation=(R_(90), 0, 0))
+fm_ = bpy.context.active_object; fm_.name = "Prop_FullFaceMask"; fm_.data.transform(Matrix.Diagonal((1.0, 1.0, 1.32, 1))); fm_.data.materials.append(m_mask)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=32, ring_count=16)
-fm_ = bpy.context.active_object; fm_.name = "Prop_FullFaceMask"; fm_.scale = (0.095, 0.06, 0.12); fm_.data.materials.append(m_mask)
-bpy.ops.mesh.primitive_uv_sphere_add(radius=1, segments=24, ring_count=12, location=(0, -0.02, 0.02))
-vz = bpy.context.active_object; vz.name = "Prop_MaskVisor"; vz.scale = (0.08, 0.04, 0.075); vz.data.materials.append(m_visor); vz.parent = fm_
+vz = bpy.context.active_object; vz.name = "Prop_MaskVisor"; vz.data.transform(Matrix.Diagonal((0.068, 0.04, 0.09, 1)))
+_bv = bmesh.new(); _bv.from_mesh(vz.data); bmesh.ops.delete(_bv, geom=[v_ for v_ in _bv.verts if v_.co.y > 0.002], context='VERTS'); _bv.to_mesh(vz.data); _bv.free()
+vz.data.materials.append(m_visor); vz.parent = fm_
 bpy.ops.mesh.primitive_cylinder_add(radius=0.025, depth=0.05, location=(0, -0.065, -0.07), rotation=(R_(90), 0, 0))
 rg = bpy.context.active_object; rg.name = "Prop_MaskRegulator"; rg.data.materials.append(m_mask); rg.parent = fm_
 ev(2365)
@@ -539,11 +551,11 @@ hit, loc, nrm, idx = body2.evaluated_get(bpy.context.evaluated_depsgraph_get()).
 face_w = (RIG["Boy2"].o.matrix_world @ loc) if hit else hc + fwd2 * 0.1
 upv = (HM.to_3x3() @ _ul).normalized()
 _x = fwd2.cross(upv).normalized() * -1; _up = _x.cross(-fwd2) * -1
-Mface = Matrix.Translation(face_w + fwd2 * 0.035) @ Matrix((_x, -fwd2, upv)).transposed().to_4x4()
+Mface = Matrix.Translation(face_w + fwd2 * 0.012 + upv * 0.01) @ Matrix((_x, -fwd2, upv)).transposed().to_4x4()
 for f, u in ((1, 0.0), (2329, 0.0), (2365, 1.0)):
     start = Matrix.Translation(face_w + fwd2 * 0.32 + V((0, 0, -0.05))) @ Mface.to_3x3().to_4x4()
     M = start.lerp(Mface, u) if hasattr(start, "lerp") else (Mface if u > 0.5 else start)
-    fm_.matrix_world = M; fm_.scale = (0.095, 0.06, 0.12)
+    fm_.matrix_world = M
     fm_.keyframe_insert("location", frame=f); fm_.keyframe_insert("rotation_euler", frame=f)
 for f, h in ((1, True), (2325, False), (2600, True)):
     for o in (fm_, vz, rg):
@@ -553,6 +565,7 @@ for f in (2329, 2345, 2365, 2385, 2406):
     c_ = fm_.matrix_world.translation; side = (HM.to_3x3() @ _sl).normalized()
     for s in "LR":
         sx = 1 if s == "L" else -1
+        key_fingers("DiverB", s, f, 50)
         if f < 2380:
             W = c_ + side * (0.11 * -sx) + fwd2 * 0.02 + V((0, 0, -0.02))
             HUM["DiverB"].key_hand(s, f, W, (-side * -sx + fwd2 * 0.2).normalized(), -fwd2, W + fwd2 * 0.5 + side * 0.4 * -sx + V((0, 0, -0.3)))
@@ -575,6 +588,7 @@ for f in range(TOW0, TOW1 + 1, 10):
     key_hands("Boy2", f, Pb, Rb, {s: relaxed_hand("Boy2", Pb, Rb, s, out=0.02) for s in "LR"})
     # diver's left hand on the harness at the boy's chest
     ch_ = bw("Boy2", Pb, Rb, rest_head("Boy2", "spine02")) + V((0, 0, 0.12))
+    key_fingers("DiverB", "L", f, 75)
     HUM["DiverB"].key_hand("L", f, ch_ + V((0.08, 0, 0.05)), V((-1, 0, -0.3)).normalized(), V((0, 0, -1)), ch_ + V((0.5, 0.3, 0.4)))
 for n in ("DiverB", "Boy2"): TELE[n].add(TOW0 - 1)
 # mask: Child Of Boy2's head from the fitting onward
@@ -617,27 +631,35 @@ OUT0, OUT1 = 2725, 2928
 def carry_path(f, off):
     u = (f - OUT0) / (OUT1 - OUT0); y = 3.0 - 13.0 * u + off; x = 0.2 * math.sin(u * 3)
     return V((x, y, 0))
-for n, off in (("DiverA", -1.25), ("DiverB", 1.25)):
+for n, off in (("DiverA", -1.55), ("DiverB", 1.55)):
     H = HUM[n]
     H.walk(lambda f, off=off: carry_path(f, off), lambda f: 0.0, OUT0, OUT1, stride=0.7, lift=0.07, lean=4, step=2)
     TELE[n].add(OUT0 - 1)
 for f in range(OUT0, OUT1 + 1, 6):
-    a = carry_path(f, -1.25); b = carry_path(f, 1.25)
+    a = carry_path(f, -1.55); b = carry_path(f, 1.55)
     ga, gb = ground_z(a.x, a.y), ground_z(b.x, b.y)
     pa = V((a.x, a.y, ga + 0.78)); pb_ = V((b.x, b.y, gb + 0.78)); mid = (pa + pb_) / 2
     d_ = (pa - pb_).normalized()
     stre.location = mid; stre.rotation_euler = V((0, -1, 0)).rotation_difference(d_).to_euler()
     stre.keyframe_insert("location", frame=f); stre.keyframe_insert("rotation_euler", frame=f)
-    for n, end in (("DiverA", pa), ("DiverB", pb_)):
+    sdv = d_.cross(V((0, 0, 1))).normalized()
+    for n, end, inward in (("DiverA", mid + d_ * 1.2, -d_), ("DiverB", mid - d_ * 1.2, d_)):
         for s in "LR":
             sx = 1 if s == "L" else -1
-            W = end + V((0.3 * sx, 0, 0.3 - 0.02)) + (d_ * 0.04 if n == "DiverB" else -d_ * 0.04)
-            HUM[n].key_hand(s, f, W, (d_ if n == "DiverA" else -d_) * -1 + V((0, 0, -0.2)), V((0, 0, -1)), W + V((0.4 * sx, 0.0, -0.4)))
+            grip = end + sdv * (0.29 * (1 if (s == "L") == (n == "DiverB") else -1)) + V((0, 0, 0.025))   # on the pole, palm over it
+            W = grip - inward * 0.0 + V((0, 0, 0.03))
+            HUM[n].key_hand(s, f, W, inward, V((0, 0, -1)), W + V((0.0, 0.0, 0.5)) - inward * 0.3)
+            key_fingers(n, s, f, 80)
     # Boy4 lies on the stretcher (face up, head toward the front carrier)
-    H = HUM["Boy4"]; Rb = body_R(0, -88) ; Pboy = mid + V((0, 0.15, 0.13))
+    H = HUM["Boy4"]; Rb = body_R(0, -88) ; Pboy = mid + V((0, 0.15, 0.0))
     H.key_root(f, Pboy, yaw=0, flex=-88); H.key_spine(f, head=(-5, 0))
     for s in "LR": key_foot_free("Boy4", s, f, bw("Boy4", Pboy, Rb, H.ankle[s]), Rb)
-    key_hands("Boy4", f, Pboy, Rb, {})
+    hb4 = {}
+    for s in "LR":
+        sx = 1 if s == "L" else -1
+        W = bw("Boy4", Pboy, Rb, rest_head("Boy4", "spine04") + V((0.09 * sx, -0.17, 0.02)))
+        hb4[s] = (W, Rb @ V((-sx, 0, 0.2)).normalized(), Rb @ V((0, 1, 0)), W + Rb @ V((0.4 * sx, 0.2, 0)))
+    key_hands("Boy4", f, Pboy, Rb, hb4)
 TELE["Boy4"].add(OUT0 - 1)
 for o in [stre]:
     for f, h in ((1, True), (OUT0 - 1, True), (OUT0, False)):
@@ -710,10 +732,22 @@ def stepped(obj, frames):
 for n in ALL:
     stepped(RIG[n].o, TELE[n])
 sc["TELE"] = {n: sorted(v) for n, v in TELE.items()}
+# water surface seen from below: no bright total-internal-reflection sheet, just a dim green transmissive skin
+_mw = bpy.data.materials["M_WaterSurface"]; _n, _l = _mw.node_tree.nodes, _mw.node_tree.links
+_o = next(x for x in _n if x.type == 'OUTPUT_MATERIAL'); _src = _o.inputs['Surface'].links[0].from_socket
+_g = _n.new('ShaderNodeNewGeometry'); _t = _n.new('ShaderNodeBsdfTransparent'); _t.inputs['Color'].default_value = (0.3, 0.36, 0.3, 1)
+_mx = _n.new('ShaderNodeMixShader'); _l.new(_g.outputs['Backfacing'], _mx.inputs['Fac']); _l.new(_src, _mx.inputs[1]); _l.new(_t.outputs[0], _mx.inputs[2])
+_l.new(_mx.outputs[0], _o.inputs['Surface'])
+# dim ambient glow along the flooded passage (murk scatters it: silhouettes without a white-out)
+for i, y in enumerate((-4.0, -11.0, -18.0, -26.0)):
+    p_ = pas_mid(y, 1.4); L_ = bpy.data.objects.new("S5_Ambient_%d" % i, bpy.data.lights.new("S5_Ambient_%d" % i, 'POINT'))
+    L_.data.energy = 12; L_.data.color = (0.55, 0.7, 0.75); L_.data.shadow_soft_size = 1.0; L_.location = p_; sc.collection.objects.link(L_)
 # chamber fill
-f4 = bpy.data.objects["S4_Fill"]; f4.data.energy = 260; f4.data.color = (0.85, 0.9, 1.0)
-EXPO = [(1, 0.0), (290, 0.0), (330, 0.8), (580, 0.8), (583, 0.0), (1008, 0.0), (1009, 1.0), (1212, 1.0), (1240, 1.4), (1700, 1.4), (1840, 1.0),
-        (2430, 1.0), (2470, 1.4), (2565, 1.4), (2566, 0.0), (2726, 0.0), (2727, 0.6), (2800, 0.0), (3090, 0.0)]
+f4 = bpy.data.objects["S4_Fill"]; f4.data.energy = 90; f4.visible_volume_scatter = False; f4.data.color = (0.85, 0.9, 1.0)
+EXPO = [(1, 0.0), (290, 0.0), (330, 0.8), (580, 0.8), (583, 0.0), (1008, 0.0), (1009, 1.0), (1212, 1.0), (1240, 1.0), (1700, 1.0), (1840, 1.0),
+        (2430, 1.0), (2470, 1.0), (2565, 1.0), (2566, 0.0), (2726, 0.0), (2727, 0.6), (2800, 0.0), (3090, 0.0)]
+for f, e in ((1, 90), (1212, 90), (1218, 0), (1878, 0), (1886, 90), (2430, 90), (2438, 0), (2565, 0)):
+    f4.data.energy = e; f4.data.keyframe_insert("energy", frame=f)
 for f, v in EXPO:
     sc.view_settings.exposure = v; sc.view_settings.keyframe_insert("exposure", frame=f)
 

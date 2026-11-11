@@ -473,9 +473,9 @@ for (y0, y1, zb, zf) in ((4.6, 9.8, -1.4, 0.75), (14.8, 17.6, -1.1, 0.75), (24.8
 sc["SUMPS"] = [list(s[1:]) for s in SUMPS]
 sc["SUMP_NAMES"] = [s[0] for s in SUMPS]
 # tiny people dots in the chamber + the 13 travelling lights (beat 12b, follow the route line)
-m_dot = emis("M_PeopleDot", (1.0, 0.85, 0.55), 6.0)
+m_dot = emis("M_PeopleDot", (1.0, 0.6, 0.2), 30.0)
 for i in range(13):
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.07, segments=12, ring_count=6, location=(DX + 0.2, 36.4 + 0.12 * (i % 7), 1.75 + 0.12 * (i // 7)))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.13, segments=12, ring_count=6, location=(DX - 0.05, 36.2 + 0.22 * (i % 7), 1.75 + 0.2 * (i // 7)))
     d = bpy.context.active_object; d.name = "S3_Dot_%02d" % i; d.data.materials.append(m_dot); link(d, S3)
 m_diverdot = emis("M_DiverDot", (0.6, 0.85, 1.0), 8.0)
 for i, y in enumerate((5.0, 8.6, 15.2, 17.4, 25.5, 28.8, 33.0)):
@@ -554,7 +554,7 @@ vol = bpy.context.active_object; vol.name = "S5_Murk"; vol.scale = (18, 58, 9 + 
 m_murk = bpy.data.materials.new("M_Murk"); m_murk.use_nodes = True
 mn_, ml_ = m_murk.node_tree.nodes, m_murk.node_tree.links; mn_.clear()
 mo_ = mn_.new('ShaderNodeOutputMaterial'); pv = mn_.new('ShaderNodeVolumePrincipled'); pv.name = "MurkVol"
-pv.inputs['Color'].default_value = (0.16, 0.15, 0.1, 1); pv.inputs['Density'].default_value = 0.07
+pv.inputs['Color'].default_value = (0.09, 0.09, 0.06, 1); pv.inputs['Density'].default_value = 0.07
 pv.inputs['Absorption Color'].default_value = (0.5, 0.55, 0.35, 1)
 ml_.new(pv.outputs[0], mo_.inputs['Volume']); vol.data.materials.append(m_murk)
 # silt cloud in the squeeze (noise density)
@@ -597,19 +597,19 @@ fill4.data.color = (0.7, 0.8, 1.0); fill4.location = (CX - 1, 1.5, 3.2); S4.obje
 m_rain = bpy.data.materials.new("M_Rain"); m_rain.use_nodes = True
 rn, rl_ = m_rain.node_tree.nodes, m_rain.node_tree.links; rn.clear()
 ro = rn.new('ShaderNodeOutputMaterial'); rtc = rn.new('ShaderNodeTexCoord'); rmp = rn.new('ShaderNodeMapping')
-rmp.inputs['Scale'].default_value = (60, 3, 1)
+rmp.inputs['Scale'].default_value = (520, 2.0, 1)
 rdrv = rmp.inputs['Location'].driver_add("default_value", 1); rdrv.driver.expression = "frame*0.35"
 rnz = rn.new('ShaderNodeTexNoise'); rnz.inputs['Scale'].default_value = 1.0; rnz.inputs['Detail'].default_value = 0
-rmr = rn.new('ShaderNodeMapRange'); rmr.inputs['From Min'].default_value = 0.66; rmr.inputs['From Max'].default_value = 0.74
+rmr = rn.new('ShaderNodeMapRange'); rmr.inputs['From Min'].default_value = 0.72; rmr.inputs['From Max'].default_value = 0.76
 rval = rn.new('ShaderNodeValue'); rval.name = "RainAmount"; rval.outputs[0].default_value = 0.0
 rmul = rn.new('ShaderNodeMath'); rmul.operation = 'MULTIPLY'
-rtr = rn.new('ShaderNodeBsdfTransparent'); rgl = rn.new('ShaderNodeEmission'); rgl.inputs['Color'].default_value = (0.8, 0.85, 0.9, 1); rgl.inputs['Strength'].default_value = 0.9
+rtr = rn.new('ShaderNodeBsdfTransparent'); rgl = rn.new('ShaderNodeEmission'); rgl.inputs['Color'].default_value = (0.8, 0.85, 0.9, 1); rgl.inputs['Strength'].default_value = 0.45
 rmx = rn.new('ShaderNodeMixShader')
 for a_, b_ in ((rtc.outputs['UV'], rmp.inputs['Vector']), (rmp.outputs['Vector'], rnz.inputs['Vector']), (rnz.outputs['Fac'], rmr.inputs['Value']),
                (rmr.outputs['Result'], rmul.inputs[0]), (rval.outputs[0], rmul.inputs[1]), (rmul.outputs[0], rmx.inputs['Fac']),
                (rtr.outputs[0], rmx.inputs[1]), (rgl.outputs[0], rmx.inputs[2]), (rmx.outputs[0], ro.inputs['Surface'])):
     rl_.new(a_, b_)
-for i, (y, w_) in enumerate(((-3.0, 14), (-6.5, 20), (-11, 30), (-17, 40), (-26, 60))):
+for i, (y, w_) in enumerate(((-6.5, 20), (-11, 30), (-17, 40), (-26, 60))):
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, y, 7), rotation=(R_(90), 0, 0))
     rs = bpy.context.active_object; rs.name = "FX_RainSheet_%d" % i; rs.scale = (w_, 16, 1); rs.data.materials.append(m_rain); link(rs, FX)
     rs.visible_shadow = False
@@ -686,8 +686,14 @@ for k in range(4):
 # tents + tarps + floodlights in the clearing
 m_tarp = flat("M_Tarp", (0.12, 0.22, 0.45), 0.7)
 for i, (x, y, rz) in enumerate(((-6, -12, 0.2), (6.5, -13, -0.3), (-10, -18, 0.6))):
-    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=2.6, depth=2.2, location=(x, y, H1(x, y) + 1.1), rotation=(0, 0, R_(45) + rz))
+    g_ = H1(x, y)
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=2.4, depth=0.6, location=(x, y, g_ + 2.5), rotation=(0, 0, R_(45) + rz))
     t = bpy.context.active_object; t.name = "S1_Tent_%d" % i; t.data.materials.append(m_tarp); link(t, S1)
+    for k in range(4):
+        a_ = R_(45) + rz + k * math.pi / 2 + math.pi / 4
+        px, py = x + 1.6 * math.cos(a_ - math.pi / 4 + R_(45)), y + 1.6 * math.sin(a_ - math.pi / 4 + R_(45))
+        bpy.ops.mesh.primitive_cylinder_add(radius=0.03, depth=2.3, location=(px, py, H1(px, py) + 1.1))
+        pl = bpy.context.active_object; pl.name = "S1_TentPole_%d_%d" % (i, k); pl.data.materials.append(m_frame[2]); link(pl, S1)
 sc["H1_note"] = "terrain is S1_Terrain"
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SCENE_OK objects", len(bpy.data.objects))

@@ -1,0 +1,10 @@
+CaveRescue audit, 258 frames sampled every 12
+FEET hover/sink > 3 cm on planted feet: 0
+PENETRATION overlapping triangle pairs (hand/foot/head-item vs set/prop/character): 18 events, 1491 pairs
+     413 pairs  DiverB hand -> Prop_MaskVisor (first f2353)
+     406 pairs  DiverB hand -> Prop_FullFaceMask (first f2329)
+     344 pairs  DiverA hand -> Prop_Syringe (first f2185)
+     191 pairs  DiverB hand -> Boy2 (first f2365)
+     135 pairs  DiverB hand -> Prop_MaskRegulator (first f2353)
+       2 pairs  Boy2 hand -> S5_Passage (first f2569)
+CAMERA inside geometry (outside rock wipes): 0
