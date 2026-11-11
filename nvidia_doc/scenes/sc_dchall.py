@@ -13,8 +13,8 @@ from mathutils import Vector
 from kit import *
 
 EXPOSURE = -0.2
-VARIANT_FOR = {"tray": "on"}            # in the tray shot every rack is already busy
-DUR = {"tray": 5.0, "aisle": 6.0}       # estimates until the chapter 1 voiceover arrives
+VARIANT_FOR = {"tray": "on", "install": "on", "wake": "one", "ripple": "one"}
+DUR = {"tray": 5.0, "aisle": 6.0, "install": 5.0, "wake": 4.0, "ripple": 4.0}   # estimates until the chapter 1 voiceover arrives
 ROWS_X = (-1.5, 1.5)                    # rack fronts face the centre aisle (x = 0)
 N_RACKS = 14
 RACK_W, RACK_D, RACK_H = 0.62, 1.1, 2.15
@@ -112,7 +112,7 @@ def build(variant=None):
     door_t = box("DoorT", (0, 0, -60), (0.02, RACK_W - 0.02, RACK_H - 0.1), door_m)
     body_t = box("RackBodyT", (0, 0, -70), (RACK_D, RACK_W, RACK_H), frame_m, bevel=0.005)
     for side, x in ((-1, ROWS_X[0]), (1, ROWS_X[1])):
-        rz = math.radians(90) * side
+        rz = -math.radians(90) * side           # server fronts face the centre aisle
         for k in range(N_RACKS):
             y = k * (RACK_W + 0.02)
             instance(body_t, (x + side * RACK_D / 2, y, RACK_H / 2))
@@ -144,6 +144,7 @@ def build(variant=None):
     alu = pbr("FinAlu", (0.8, 0.81, 0.83), 0.28, 1.0)
     gold = pbr("Gold", (1.0, 0.75, 0.35), 0.2, 1.0)
     tx, ty, tz = ROWS_X[1] - 0.35, 1.3, 1.12
+    tray_objs_start = set(bpy.data.objects)
     box("TrayPan", (tx, ty, tz), (0.75, 0.48, 0.01), pbr("TrayPan", (0.6, 0.61, 0.63), 0.35, 0.9))
     for k in range(8):
         bx = tx - 0.3 + (k % 4) * 0.2; by = ty - 0.11 + (k // 4) * 0.22
@@ -155,10 +156,69 @@ def build(variant=None):
     for k in range(6):
         cyl("Fan", (tx + 0.36, ty - 0.2 + k * 0.08, tz + 0.04), 0.035, 0.04, pbr("FanBlack", (0.02, 0.02, 0.02), 0.5), verts=24, rot=(0, math.radians(90), 0))
     c["tray"] = Vector((tx, ty, tz + 0.04))
+    if variant == "one":                         # the open tray only exists in the busy-hall shots
+        for o in set(bpy.data.objects) - tray_objs_start:
+            o.hide_render = True; o.hide_viewport = True
     # wave timing: racks light up from the far end toward the camera in shot B (frame numbers within the shot)
     for ld, side, k in racks:
-        ld["wave"] = -100.0 if variant == "on" else 10 + (N_RACKS - 1 - k) * 6 + (3 if side > 0 else 0)
+        if variant == "on":
+            ld["wave"] = -100.0
+        elif variant == "one":                 # every rack dark except one, which wakes at frame 30 (+ a ripple up the units)
+            ld["wave"] = 30.0 + (ld.location.z - 0.18) * 14 if (side > 0 and k == 6) else 1e6
+        else:
+            ld["wave"] = 10 + (N_RACKS - 1 - k) * 6 + (3 if side > 0 else 0)
+    # two technicians and a server chassis being slid into the open rack (shot 3A)
+    if variant == "on":
+        from human import Human, add_asset, pose_walk, _world_verts, reach, fingers_curl
+        techs = []
+        for k, (g, cl, hr) in enumerate(((1.0, "male_worksuit01", "short02"), (0.0, "female_casualsuit01", "ponytail01"))):
+            h = Human(f"Tech{k}", gender=g, years=30 + 8 * k, muscle=0.5, weight=0.45, height=0.5, eyelashes=None)
+            add_asset(h, "clothes", cl, val=0.3, rough=0.7); add_asset(h, "clothes", "shoes02", val=0.2); add_asset(h, "hair", hr, val=0.25)
+            pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
+            h.arm.rotation_euler = (0, 0, math.radians(-90)); h.arm.location = (ROWS_X[0] + 0.9, 2.3 + k * 0.6, 0); bpy.context.view_layer.update()   # face -X, the rack
+            w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
+            h.arm.location.z -= w[:, 2].min(); bpy.context.view_layer.update()
+            techs.append(h)
+        chassis = box("Chassis", (0, 0, 0), (0.75, 0.48, 0.088), face_m, bevel=0.004)
+        c["techs"] = techs; c["chassis"] = chassis
     return c
+
+
+def anim_install(c, t):
+    """The chassis slides from the technicians' hands into the empty slot (rack k=4, unit 9, left row)."""
+    from human import reach, fingers_curl
+    s_ = ease(min(1.0, max(0.0, (t - 0.15) / 0.7)))
+    y = 4 * (RACK_W + 0.02); slot = Vector((ROWS_X[0] - 0.35, y, 0.18 + 9 * 0.1))
+    out = slot + Vector((0.75, 0, 0.0))
+    p = out.lerp(slot, s_)
+    ch = c["chassis"]; ch.location = p; ch.rotation_euler = (0, 0, math.radians(90))
+    for k, h in enumerate(c["techs"]):
+        side = -0.2 if k == 0 else 0.2
+        grip = p + Vector((0.38, side, 0.0))
+        for sd, dz in (("L", 0.0), ("R", 0.0)):
+            reach(h, sd, grip + Vector((0.05, 0.05 if sd == "L" else -0.05, 0.02)), Vector((0.5, 0, -1)), Vector((-1, 0, -0.2)))
+        fingers_curl(h, 45, thumb=20)
+        h.arm.location.x = ROWS_X[0] + 1.0 + 0.55 * (1 - s_) - 0.25 * s_
+        h.arm.location.y = 4 * (RACK_W + 0.02) + (-0.3 if k == 0 else 0.3)
+    bpy.context.view_layer.update()
+
+
+def cam_install(c, t):
+    e = ease(t)
+    y = 4 * (RACK_W + 0.02)
+    return (Vector((1.2, y - 2.6, 1.55)).lerp(Vector((1.0, y - 2.2, 1.5)), e), Vector((ROWS_X[0] + 0.3, y + 0.2, 1.1)), 30)
+
+
+def cam_wake(c, t):
+    e = ease(t)
+    y = 6 * (RACK_W + 0.02)
+    return (Vector((-0.6, y - 5.0, 1.5)).lerp(Vector((-0.4, y - 3.8, 1.45)), e), Vector((ROWS_X[1], y, 1.1)), 32)
+
+
+def cam_ripple(c, t):
+    e = ease(t)
+    y = 6 * (RACK_W + 0.02)
+    return (Vector((0.35, y - 1.3, 1.1)).lerp(Vector((0.45, y - 1.0, 1.25)), e), Vector((ROWS_X[1], y + 0.05, 1.15)), 45)
 
 
 def cam_tray(c, t):
@@ -175,6 +235,9 @@ def cam_aisle(c, t):
 
 
 MOVES = {
+    "install": dict(kind="anim", dof=4.0, far=20.0, cam=cam_install, focus=lambda c, t: c["chassis"].location, anim=anim_install),
+    "wake": dict(kind="anim", dof=4.0, far=20.0, cam=cam_wake, focus=lambda c, t: Vector((ROWS_X[1], 6 * (RACK_W + 0.02), 1.1))),
+    "ripple": dict(kind="anim", dof=2.8, far=10.0, cam=cam_ripple, focus=lambda c, t: Vector((ROWS_X[1], 6 * (RACK_W + 0.02), 1.15))),
     "tray": dict(kind="anim", dof=5.6, far=4.0, cam=cam_tray, focus=lambda c, t: c["tray"] + Vector((0.05, -0.05 + 0.45 * ease(t), 0.0))),
     "aisle": dict(kind="anim", dof=4.0, far=30.0, cam=cam_aisle, focus=lambda c, t: Vector((0.0, 9.0, 1.3))),
 }
