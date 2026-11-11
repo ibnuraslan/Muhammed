@@ -97,5 +97,68 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/2fa12ba0af5442c9af8f9bead1a7d020",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "cabinet": {
+  "uid": "3c200586e8604d8e974915b19f5f0b02",
+  "title": "Dm6-001-13",
+  "author": "foxart3d",
+  "author_profile": "https://sketchfab.com/foxart3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3c200586e8604d8e974915b19f5f0b02",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "cabinet2": {
+  "uid": "a640c09386df411e8669ddb19e3fd40f",
+  "title": "Dm3-004-08",
+  "author": "foxart3d",
+  "author_profile": "https://sketchfab.com/foxart3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a640c09386df411e8669ddb19e3fd40f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "desk": {
+  "uid": "e96769051078452bba7057473eceb587",
+  "title": "Office Desk With Drawers",
+  "author": "Bla\u017e Mraz",
+  "author_profile": "https://sketchfab.com/Mraz3D",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e96769051078452bba7057473eceb587",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chair": {
+  "uid": "b228a29fa84544c2be501c295653ffe7",
+  "title": "Office Chair",
+  "author": "Red Fox / nokillnando",
+  "author_profile": "https://sketchfab.com/nokillnando",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b228a29fa84544c2be501c295653ffe7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "syringe": {
+  "uid": "324b3ed0026940808db353c8c6d7450e",
+  "title": "Syringe",
+  "author": "stfuaahil",
+  "author_profile": "https://sketchfab.com/stfuaahil",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/324b3ed0026940808db353c8c6d7450e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "trolley": {
+  "uid": "de8d2c51ec854ac5ac2fb75eda09f247",
+  "title": "Trolley for hospital machine",
+  "author": "lukeshep",
+  "author_profile": "https://sketchfab.com/lukeshep",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/de8d2c51ec854ac5ac2fb75eda09f247",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "bd85a8005ff0403cab2f1e9845016b8f",
+  "title": "Modular Chain Link Fence Set",
+  "author": "FrodoUndead",
+  "author_profile": "https://sketchfab.com/FrodoUndead",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bd85a8005ff0403cab2f1e9845016b8f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }
