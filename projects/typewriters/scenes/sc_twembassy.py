@@ -18,7 +18,7 @@ import machines as MC
 
 EXPOSURE = -0.3
 LEAD = 2.5
-DUR = {"street_push": LEAD + 3.0, "crane_up": 4.5, "hoist_rise": 4.5, "roof_swing": 5.0, "trailer_seal": 4.5, "truck_leave": 5.0}
+DUR = {"street_push": LEAD + 3.0, "crane_up": 4.5, "hoist_rise": 4.5, "roof_swing": 5.0, "trailer_seal": 4.5, "hoist_street": 5.0, "truck_leave": 5.0}
 TRUCK = Vector((9.5, -8.3, 0.0))
 FLOORS, FH = 8, 3.4
 BW = 44.0                    # facade width (x), facade plane y = 0, building extends to +y
@@ -170,7 +170,7 @@ def build(variant=None):
             x = sx * (2.5 + k * 0.22)
             cyl("Bar", (x, -1.6, 0.9), 0.012, 1.8, rail, verts=6)
         box("RailTop", (sx * 6.9, -1.6, 1.8), (8.8, 0.05, 0.05), rail)
-    militia = twp.person("Militia", 1.0, 30, "male_worksuit01", "short01", hv=0.25, cval=0.22, hue=0.33, sat=0.25)
+    militia = twp.person("Militia", 1.0, 30, "male_worksuit01", "short01", hv=0.25, cval=0.4, hue=0.3, sat=0.3)
     twp.stand(militia, (-4.6, -4.9, 0.0), math.radians(10))
     c["militia"] = militia
     # ---------------------------------------------------------------- traffic
@@ -220,7 +220,7 @@ def build(variant=None):
     seal = join([cyl("SealWire", (0, 0, 0), 0.002, 0.12, pbr("SealWireM", (0.6, 0.6, 0.62), 0.3, 1.0), verts=6),
                  cyl("SealLead", (0, 0, -0.07), 0.012, 0.012, pbr("Lead", (0.42, 0.43, 0.45), 0.5, 0.8), verts=16, rot=(math.radians(90), 0, 0))], "Seal")
     c["seal"] = seal
-    sealer = twp.person("Sealer", 1.0, 47, "male_casualsuit02", "short04", hv=0.45, cval=0.25, hue=0.6, sat=0.1)
+    sealer = twp.person("Sealer", 1.0, 47, "male_casualsuit02", "short04", hv=0.45, cval=0.5, hue=0.6, sat=0.1)
     c["sealer"] = sealer
     animate(c, 0.0, "street_push")
     return c
@@ -312,6 +312,8 @@ def animate(c, sec, shot):
         c["swing"] = 0.0; hoist(c, sec, ROOF + 0.4)
     elif shot == "crane_up":
         c["swing"] = math.radians(-35) * ease(min(1.0, max(0.0, (sec - 0.8) / 3.0))); hoist(c, sec, ROOF + 0.6)
+    elif shot == "hoist_street":
+        c["swing"] = 0.0; hoist(c, sec, 17.0 + 1.0 * sec)
     elif shot == "hoist_rise":
         c["swing"] = 0.0; hoist(c, sec, 9.0 + 1.1 * sec)
     elif shot == "roof_swing":
@@ -374,7 +376,13 @@ def cam_leave(c, t):
     return (Vector((-1.5, -3.6, 1.5)).lerp(Vector((-1.2, -3.8, 1.55)), e), Vector((10.0, -8.3, 1.8)).lerp(Vector((16.0, -8.3, 1.8)), e), 28)
 
 
+def cam_hoist_street(c, t):
+    e = ease(t)
+    return (Vector((JIB.x + 2.2, -5.2, 1.7)).lerp(Vector((JIB.x + 1.9, -4.9, 1.7)), e), Vector((JIB.x - 0.4, -1.6, 22.0)), 22, (0, 1, 0))
+
+
 MOVES = {
+    "hoist_street": dict(kind="anim", dof=None, cam=cam_hoist_street, anim=anim("hoist_street")),
     "trailer_seal": dict(kind="anim", dof=3.0, cam=cam_seal, focus=lambda c, t: TRUCK + Vector((-4.8, 0.1, 1.35)), anim=anim("trailer_seal")),
     "truck_leave": dict(kind="anim", dof=None, cam=cam_leave, anim=anim("truck_leave")),
     "street_push": dict(kind="anim", dof=None, cam=cam_street, anim=anim("street_push")),

@@ -14,8 +14,10 @@ import ph
 import twp
 import typewriter as T
 
-EXPOSURE = -0.5
-DUR = {"handover": 4.5, "note": 5.0, "pocket": 4.5}
+EXPOSURE = 0.0
+DUR = {"handover": 4.5, "note": 5.0, "pocket": 4.5, "sign": 5.0, "folder": 4.5}
+VARIANT_FOR = {"sign": "oval", "folder": "oval"}
+OVAL_DESK = Vector((-1.25, 2.05, 0.0))
 WIN_Y = 3.0
 
 
@@ -60,7 +62,7 @@ def build(variant=None):
     box("Floor", (0, 0, -0.01), (7, 6, 0.02), ph.texture("herringbone_parquet", scale=0.6, tint=(0.75, 0.72, 0.7)))
     box("Rug", (0, 0.3, 0.004), (3.6, 2.8, 0.008), fabric("Rug", (0.2, 0.12, 0.1), 0.95, 0.4, 600))
     panel = ph.texture("dark_paneled_wood", scale=0.8, name="Panel", tint=(0.7, 0.62, 0.55))
-    plaster = pbr("OfficePlaster", (0.6, 0.58, 0.53), 0.85)
+    plaster = ph.texture("beige_wall_001", scale=0.5, name="OfficePlaster", tint=(0.85, 0.83, 0.78))
     for (x, y, sx, sy) in ((0, -3.05, 7, 0.1), (-3.55, 0, 0.1, 6), (3.55, 0, 0.1, 6)):
         box("Wainscot", (x, y, 0.6), (sx, sy, 1.2), panel)
         box("Wall", (x, y, 2.2), (sx, sy, 2.0), plaster)
@@ -102,17 +104,31 @@ def build(variant=None):
     box("Door", (-3.49, -1.6, 1.1), (0.05, 1.0, 2.2), ph.texture("dark_wood", scale=1.0, name="DoorWood"))
     box("DoorFrame", (-3.48, -1.6, 1.15), (0.04, 1.15, 2.3), frame)
     # ---------------------------------------------------------------- furniture (scanned)
-    ph.model("dining_table", loc=(0.3, 1.0, 0.0), rot_z=0.0, scale=0.85)          # partner desk
-    ph.model("ArmChair_01", loc=(0.3, 1.75, 0.0), rot_z=math.pi)
+    oval = variant == "oval"
+    c["oval"] = oval
+    if oval:                                   # a Washington office: the desk in front of the window, the figure backlit
+        fill.data.energy = 14
+        ph.model("dining_table", loc=OVAL_DESK, rot_z=0.0, scale=0.85)
+        ph.model("ArmChair_01", loc=(0.3, 0.6, 0.0), rot_z=0.4)
+        ph.model("Sofa_01", loc=(1.6, -1.6, 0.0), rot_z=math.pi / 2) if False else None
+        ph.model("vintage_suitcase", loc=(OVAL_DESK.x + 0.45, OVAL_DESK.y - 0.15, 0.74), rot_z=0.1, scale=0.32)
+    else:
+        ph.model("dining_table", loc=(0.3, 1.0, 0.0), rot_z=0.0, scale=0.85)          # partner desk
+        ph.model("ArmChair_01", loc=(0.3, 1.75, 0.0), rot_z=math.pi)
     for x in (-0.4, 1.0):
         ph.model("GreenChair_01", loc=(x, -0.2, 0.0), rot_z=math.radians(10 if x > 0 else -10))
     ph.model("wooden_bookshelf_worn", loc=(-3.2, 1.2, 0.0), rot_z=-math.pi / 2)
-    ph.model("book_encyclopedia_set_01", loc=(-3.25, 0.95, 1.05), rot_z=-math.pi / 2)
+    for k, z in enumerate((0.42, 0.82, 1.22, 1.62)):
+        for j in range(2):
+            ph.model("book_encyclopedia_set_01", loc=(-3.3, 0.72 + j * 0.55, z), rot_z=-math.pi / 2)
+    ph.model("potted_plant_02", loc=(-3.0, -2.6, 0.0))
+    ph.model("hanging_picture_frame_02", loc=(0.0, -2.99, 1.9), rot_z=0.0)
+    ph.model("Chandelier_01", loc=(0.3, 0.6, 3.2))
     ph.model("potted_plant_01", loc=(3.05, 2.4, 0.0))
     ph.model("fancy_picture_frame_01", loc=(3.47, 0.2, 1.9), rot_z=math.pi / 2)
     ph.model("mantel_clock_01", loc=(-0.15, 0.95, 0.74), rot_z=0.2)
     ph.model("office_notepads", loc=(0.55, 0.95, 0.74), scale=0.4, rot_z=0.1)
-    tw = T.make("AmbTW", loc=(1.15, 1.15, 0.74), rot_z=math.pi + 0.3, color=(0.14, 0.16, 0.18), mechanism=False, glyphs=False, legends=False, text=" ")
+    tw = None if oval else T.make("AmbTW", loc=(1.15, 1.15, 0.74), rot_z=math.pi + 0.3, color=(0.14, 0.16, 0.18), mechanism=False, glyphs=False, legends=False, text=" ")
     # flag on a floor stand (generic stripes) in the corner
     cyl("FlagPole", (-2.6, 2.5, 1.2), 0.02, 2.4, pbr("Brass", (0.75, 0.6, 0.35), 0.3, 1.0))
     import sc_twembassy
@@ -132,9 +148,29 @@ def build(variant=None):
     env = box("Envelope", (0, 0, 0), (0.23, 0.115, 0.004), pbr("EnvelopePaper", (0.78, 0.74, 0.64), 0.8))
     c["env"] = env
     # ---------------------------------------------------------------- people: the ambassador (unnamed), a courier
-    amb = twp.person("Ambassador", 1.0, 60, "male_elegantsuit01", "short02", hv=0.72, cval=0.16, hue=0.6, sat=0.15, skin=twp.SKIN_OLD)
-    cou = twp.person("Courier", 1.0, 34, "male_casualsuit04", "short01", hv=0.22, cval=0.22, hue=0.6, sat=0.1)
+    amb = twp.person("Ambassador", 1.0, 60, "male_elegantsuit01", "short02", hv=0.72, cval=0.34, hue=0.6, sat=0.18, skin=twp.SKIN_OLD)
+    cou = twp.person("Courier", 1.0, 34, "male_casualsuit04", "short01", hv=0.22, cval=0.5, hue=0.08, sat=0.3)
     c["amb"] = amb; c["cou"] = cou
+    if oval:
+        import skia
+        path = os.path.join(T.GEN, "folder_label.png")
+        sf = skia.Surface(900, 640); cv = sf.getCanvas(); cv.clear(skia.Color4f(0.72, 0.6, 0.38, 1))
+        pp = skia.Paint(AntiAlias=True); pp.setColor4f(skia.Color4f(0.9, 0.88, 0.82, 1))
+        cv.drawRect(skia.Rect.MakeXYWH(250, 230, 400, 120), pp)
+        pp.setColor4f(skia.Color4f(0.1, 0.1, 0.12, 1)); f = skia.Font(skia.Typeface.MakeFromFile(T.MONO_B), 40)
+        cv.drawString("PROJECT GUNMAN", 280, 305, f, pp)
+        sf.makeImageSnapshot().save(path, skia.kPNG)
+        fm = tex_mat("FolderLabel", path, 0.7)
+        bpy.ops.mesh.primitive_plane_add(size=1); fo = bpy.context.active_object; fo.name = "Folder"
+        fo.scale = (0.24, 0.31, 1); bpy.ops.object.transform_apply(scale=True); fo.data.materials.append(fm)
+        fo.modifiers.new("thick", 'SOLIDIFY').thickness = 0.006
+        c["folder"] = fo
+        aide = twp.person("Aide", 1.0, 37, "male_elegantsuit01", "short03", hv=0.25, cval=0.45, hue=0.6, sat=0.15)
+        c["aide"] = aide
+        for o in [c["note"], c["env"]] + twp.person_objs(c["cou"]):
+            o.hide_render = True
+        animate(c, 0.0, "sign")
+        return c
     animate(c, 0.0, "handover")
     return c
 
@@ -147,6 +183,30 @@ def hand(h, side="R"):
 def animate(c, sec, shot):
     from human import reach, fingers_curl
     amb, cou, env, note = c["amb"], c["cou"], c["env"], c["note"]
+    if c.get("oval"):
+        d = OVAL_DESK
+        twp.seat(amb, (d.x, d.y + 0.62, 0), 0.0, lean=18)                    # behind the desk, back to the window
+        paper = d + Vector((0.0, 0.2, 0.765))
+        sw = Vector((0.06 * math.sin(sec * 2.8) + 0.04 * sec / 5, 0.0, 0.03 + 0.006 * abs(math.sin(sec * 9))))
+        reach(amb, "R", paper + sw + Vector((0.03, 0.12, 0.03)), Vector((-0.5, 0.3, -0.8)), Vector((0, -1, -0.5)))
+        reach(amb, "L", paper + Vector((-0.22, 0.1, 0.04)), Vector((0.5, 0.3, -0.8)), Vector((0, -1, -0.3)))
+        fingers_curl(amb, 45, thumb=20)
+        amb.rot("head", (1, 0, 0), 16)
+        aide = c["aide"]; fo = c["folder"]
+        twp.stand(aide, (d.x + 0.95, d.y - 0.35, 0), math.radians(135) if shot == "folder" else math.radians(120))
+        if shot == "folder":
+            k = ease(min(1.0, max(0.0, (sec - 0.8) / 2.2)))
+            case = d + Vector((0.45, -0.15, 0.95))
+            start = d + Vector((0.6, -0.55, 1.1))
+            fo.location = start.lerp(case, k); fo.rotation_euler = (math.radians(80 - 10 * k), 0, math.radians(15))
+            reach(aide, "R", fo.location + Vector((0.08, -0.08, 0.1)), Vector((0.5, -0.4, -0.7)), Vector((-0.6, 0.6, -0.4)))
+            reach(aide, "L", fo.location + Vector((-0.1, -0.12, 0.05)), Vector((-0.5, -0.4, -0.7)), Vector((0.6, 0.6, -0.4)))
+        else:
+            fo.location = aide.bone_head("spine03") + Vector((-0.1, -0.2, -0.15)); fo.rotation_euler = (math.radians(85), 0, math.radians(135))
+            reach(aide, "L", fo.location + Vector((0.05, 0.1, 0.12)), Vector((-0.5, 0.4, -0.7)))
+        fingers_curl(aide, 45, thumb=20)
+        bpy.context.view_layer.update()
+        return
     if shot == "handover":
         twp.hide(twp.person_objs(cou), False)
         twp.stand(amb, (0.55, 0.15, 0.0), -math.pi / 2 + 0.35)              # beside the desk, turned toward the door
@@ -201,7 +261,19 @@ def cam_note(c, t):
     return (hd + Vector((-0.34, -0.42, 0.2)).lerp(Vector((-0.3, -0.36, 0.17)), e), n, 42)
 
 
+def cam_sign(c, t):
+    e = ease(t); d = OVAL_DESK
+    return (d + Vector((0.9, -3.2, 1.05)).lerp(Vector((0.7, -2.7, 1.08)), e), d + Vector((0.0, 0.6, 1.05)), 35)
+
+
+def cam_folder(c, t):
+    e = ease(t); d = OVAL_DESK
+    return (d + Vector((2.0, -1.7, 1.5)).lerp(Vector((1.75, -1.45, 1.45)), e), d + Vector((0.5, -0.2, 0.95)), 35)
+
+
 MOVES = {
+    "sign": dict(kind="anim", dof=3.0, cam=cam_sign, focus=lambda c, t: OVAL_DESK + Vector((0, 0.5, 1.0)), anim=anim("sign")),
+    "folder": dict(kind="anim", dof=2.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
     "handover": dict(kind="anim", dof=3.0, cam=cam_handover, focus=lambda c, t: c["env"].location, anim=anim("handover")),
     "note": dict(kind="anim", dof=2.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
     "pocket": dict(kind="anim", dof=2.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("pocket")),

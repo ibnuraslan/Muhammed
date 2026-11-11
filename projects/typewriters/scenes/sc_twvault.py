@@ -13,7 +13,7 @@ import ph
 import twp
 import machines as MC
 
-EXPOSURE = -0.4
+EXPOSURE = 0.0
 DUR = {"push": 4.5, "sweep": 5.0}
 VARIANT_FOR = {"sweep": "dark"}
 

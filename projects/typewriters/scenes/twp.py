@@ -15,11 +15,24 @@ SKIN_OLD = "old_lightskinned_male_diffuse.png"
 def person(name, gender, years, cloth, hair, hv=0.35, cval=0.3, hue=0.5, sat=0.2, skin=None, height=0.5, weight=0.45):
     h = Human(name, gender=gender, years=years, muscle=0.5, weight=weight, height=height, eyelashes="eyelashes01",
               skin=skin or (SKIN_F if gender < 0.5 else SKIN_M))
-    add_asset(h, "clothes", cloth, val=cval, rough=0.7, hue=hue, sat=sat)
+    o = add_asset(h, "clothes", cloth, val=1.0, rough=0.7, hue=0.5, sat=1.0)
+    recolor(o, hue, sat, cval)
     add_asset(h, "clothes", "shoes02", val=0.2, rough=0.4)
     if hair:
         add_asset(h, "hair", hair, val=hv, rough=0.45)
     return h
+
+
+def recolor(o, hue, sat, val):
+    """Muted solid period colour for a garment (the MakeHuman textures are mostly near-black): base = colour,
+    with a little of the texture kept for weave and seams."""
+    import colorsys
+    col = colorsys.hsv_to_rgb(hue % 1.0, min(sat * 1.3, 0.38), 0.05 + 0.26 * val)
+    for m in o.data.materials:
+        N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+        src = p.inputs['Base Color'].links[0].from_socket
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MIX'; mx.inputs['Factor'].default_value = 0.15
+        mx.inputs[6].default_value = (*col, 1); L.new(src, mx.inputs[7]); L.new(mx.outputs[2], p.inputs['Base Color'])
 
 
 def ground(h, z=None):

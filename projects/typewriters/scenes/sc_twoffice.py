@@ -15,9 +15,9 @@ import ph, paper_tex
 import typewriter as T
 import twp
 
-EXPOSURE = -0.4
-DUR = {"typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0}
-VARIANT_FOR = {"night_push": "night", "night_type": "night"}
+EXPOSURE = -0.1
+DUR = {"typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0}
+VARIANT_FOR = {"night_push": "night", "night_type": "night", "nsa_desk": "nsa", "nsa_plans": "nsa"}
 DESK_Z = 0.79
 DESK_A = Vector((0.9, 0.4, 0.0))
 TEXT_A = "The copier on the fourth floor will be replaced\nthis week. Please clear all papers from the"
@@ -44,7 +44,8 @@ def notice_image(path):
 
 def build(variant=None):
     c = {"variant": variant}
-    night = variant == "night"
+    nsa = variant == "nsa"
+    night = variant in ("night", "nsa")
     rng = np.random.default_rng(5)
     if night:
         world_flat((0.004, 0.006, 0.011), 1.0)
@@ -52,10 +53,10 @@ def build(variant=None):
         world_sky(sun_elev_deg=34, sun_rot_deg=70, strength=0.45, tint=(0.88, 0.92, 1.0))
     # ---------------------------------------------------------------- room shell: x -4..4, y -3..3, h 3.0
     box("Floor", (0, 0, -0.01), (8, 6, 0.02), ph.texture("old_linoleum_flooring_01", scale=0.5, tint=(0.55, 0.6, 0.62)))
-    wall = pbr("WallPaint", (0.52, 0.53, 0.5), 0.85)
+    wall = ph.texture("painted_plaster_wall", scale=0.5, name="WallPaint", tint=(0.78, 0.8, 0.76))
     box("WallBack", (0, 3.05, 1.5), (8, 0.1, 3.0), wall); box("WallFront", (0, -3.05, 1.5), (8, 0.1, 3.0), wall)
     box("WallL", (-4.05, 0, 1.5), (0.1, 6, 3.0), wall)
-    box("Ceiling", (0, 0, 3.02), (8, 6, 0.04), pbr("CeilTile", (0.66, 0.66, 0.64), 0.9))
+    box("Ceiling", (0, 0, 3.02), (8, 6, 0.04), ph.texture("ceiling_interior", scale=0.5, name="CeilTile"))
     box("Skirting", (0, 2.995, 0.05), (8, 0.01, 0.1), pbr("Skirt", (0.12, 0.1, 0.08), 0.5))
     # +X wall: three tall windows with blinds, a brick building across the street
     for z, h in ((0.45, 0.9), (2.8, 0.4)):
@@ -98,7 +99,8 @@ def build(variant=None):
     for k, (p, has_tw) in enumerate(desks):
         ph.model("metal_office_desk", loc=(p.x, p.y, 0), rot_z=math.pi)
         if has_tw:
-            tw = T.make(f"TW{k}", loc=(p.x - 0.15, p.y + 0.21, DESK_Z), rot_z=math.pi,
+            tw = T.make(f"TW{k}", loc=(p.x - 0.15 + (0.55 if nsa and k < 2 else 0), p.y + 0.21 - (0.15 if nsa and k < 2 else 0), DESK_Z),
+                        rot_z=math.pi + (0.5 if nsa and k < 2 else 0),
                         text=TEXT_N if (night and k == 0) else (TEXT_A if k == 0 else "Please clear all papers from the"),
                         color=(0.11, 0.15, 0.2) if k != 1 else (0.32, 0.28, 0.22), mechanism=(k == 0), glyphs=(k == 0), legends=(k == 0), seed=k)
             c["tws"].append(tw)
@@ -113,8 +115,22 @@ def build(variant=None):
     # desk lamp (on at night)
     lamp_r, lamp_ms = ph.model("desk_lamp_arm_01", loc=(DESK_A.x + 0.5, DESK_A.y + 0.25, DESK_Z), rot_z=math.radians(200))
     twp.tint_model(lamp_ms, (0.16, 0.2, 0.17), keep=0.1)
+    if nsa:                                   # plans spread on desk B, a legal pad on desk A, lamps on
+        import os
+        pm = bpy.data.materials.new("Plans"); pm.use_nodes = True
+        t = pm.node_tree.nodes.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(plans_image(os.path.join(T.GEN, "plans.png")))
+        pm.node_tree.links.new(t.outputs[0], pm.node_tree.nodes["Principled BSDF"].inputs['Base Color'])
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(-1.5, 0.35, DESK_Z + 0.015), rotation=(0, 0, 0.08))
+        o = bpy.context.active_object; o.scale = (0.9, 0.62, 1); o.data.materials.append(pm); c["plans"] = o
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(DESK_A.x - 0.15, DESK_A.y + 0.2, DESK_Z + 0.014), rotation=(0, 0, math.pi + 0.15))
+        o = bpy.context.active_object; o.scale = (0.22, 0.3, 1); o.data.materials.append(pbr("LegalPad", (0.85, 0.8, 0.45), 0.8)); c["pad"] = o
+        pen = cyl("Pen", (0, 0, 0), 0.004, 0.14, pbr("PenBlack", (0.02, 0.02, 0.02), 0.3), verts=8); c["pen"] = pen
+        r2, ms2 = ph.model("desk_lamp_arm_01", loc=(-0.9, 0.55, DESK_Z), rot_z=math.radians(150)); twp.tint_model(ms2, (0.16, 0.2, 0.17), keep=0.1)
+        sp2 = bpy.data.lights.new("Lamp2", 'SPOT'); sp2.energy = 40; sp2.spot_size = math.radians(95); sp2.spot_blend = 0.7; sp2.color = (1.0, 0.76, 0.5)
+        l2 = bpy.data.objects.new("Lamp2", sp2); bpy.context.collection.objects.link(l2); l2.location = (-1.3, 0.4, DESK_Z + 0.75); point_at(l2, (-1.5, 0.35, DESK_Z))
+        ceil = area_light((-0.3, 0.0, 2.9), (0, 0, 0), 2.0, 25, (0.9, 0.85, 0.75)); ceil.visible_camera = False
     if night:
-        sp = bpy.data.lights.new("Lamp", 'SPOT'); sp.energy = 22; sp.spot_size = math.radians(85); sp.spot_blend = 0.6
+        sp = bpy.data.lights.new("Lamp", 'SPOT'); sp.energy = 22 if not nsa else 35; sp.spot_size = math.radians(85); sp.spot_blend = 0.6
         sp.color = (1.0, 0.74, 0.48); sp.shadow_soft_size = 0.04
         lo = bpy.data.objects.new("Lamp", sp); bpy.context.collection.objects.link(lo)
         lo.location = (DESK_A.x + 0.32, DESK_A.y + 0.05, DESK_Z + 0.5); point_at(lo, (DESK_A.x - 0.15, DESK_A.y + 0.05, DESK_Z + 0.05))
@@ -145,16 +161,24 @@ def build(variant=None):
     c["notice"] = notice
     # ---------------------------------------------------------------- people (day only)
     c["people"] = {}
+    if nsa:
+        off = twp.person("Official", 1.0, 58, "male_elegantsuit01", "short02", hv=0.7, cval=0.45, hue=0.6, sat=0.15, skin=twp.SKIN_OLD)
+        twp.seat(off, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=16)
+        c["people"]["off"] = off
+        for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PlanA", 1.0, 45, "male_casualsuit02", "short03", 0.55, 0.1),
+                                                          ("PlanB", 1.0, 38, "male_casualsuit04", "short01", 0.5, 0.6),
+                                                          ("PlanC", 0.0, 41, "female_casualsuit02", "bob01", 0.55, 0.08))):
+            c["people"][nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.2)
     if not night:
-        sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "bob02", hv=0.22, cval=0.35, hue=0.55, sat=0.25)
+        sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "bob02", hv=0.22, cval=0.55, hue=0.58, sat=0.3)
         twp.seat(sec, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=12)
         c["people"]["sec"] = sec
-        sec2 = twp.person("Secretary2", 0.0, 45, "female_casualsuit01", "ponytail01", hv=0.4, cval=0.4)
+        sec2 = twp.person("Secretary2", 0.0, 45, "female_casualsuit01", "ponytail01", hv=0.4, cval=0.6, hue=0.1, sat=0.25)
         twp.seat(sec2, (-1.65, 1.06, 0), 0.0, lean=12)
         c["people"]["sec2"] = sec2
-        clerk = twp.person("Clerk", 1.0, 40, "male_casualsuit03", "short02", hv=0.25, cval=0.25, hue=0.6, sat=0.15)
+        clerk = twp.person("Clerk", 1.0, 40, "male_casualsuit03", "short02", hv=0.25, cval=0.5, hue=0.6, sat=0.2)
         c["people"]["clerk"] = clerk
-        reader = twp.person("Reader", 1.0, 52, "male_elegantsuit01", "short04", hv=0.6, cval=0.2)
+        reader = twp.person("Reader", 1.0, 52, "male_elegantsuit01", "short04", hv=0.6, cval=0.42, hue=0.08, sat=0.3)
         c["people"]["reader"] = reader
     animate(c, 0.0)
     return c
@@ -163,6 +187,30 @@ def build(variant=None):
 # ============================================================================ animation
 def animate(c, sec, shot=None):
     night = c["variant"] == "night"
+    if c["variant"] == "nsa":
+        from human import reach, fingers_curl
+        P = c["people"]; off = P["off"]
+        pad = c["pad"].location
+        wr = pad + Vector((0.05 * math.sin(sec * 2.3), 0.04 * math.sin(sec * 0.9), 0.03 + 0.008 * abs(math.sin(sec * 7))))
+        reach(off, "R", wr + Vector((0.02, 0.1, 0.03)), Vector((-0.5, 0.3, -0.8)), Vector((0, -1, -0.5)))
+        reach(off, "L", pad + Vector((0.2, 0.08, 0.05)), Vector((0.5, 0.3, -0.8)), Vector((0, -1, -0.3)))
+        fingers_curl(off, 50, thumb=25)
+        off.rot("neck01", (1, 0, 0), 10); off.rot("head", (1, 0, 0), 14)
+        pen = c["pen"]; pen.location = wr + Vector((0, 0, 0.05)); pen.rotation_euler = (math.radians(25), math.radians(-15), 0)
+        pl = c["plans"].location
+        for k, (nm, ang) in enumerate((("PlanA", 0.0), ("PlanB", math.pi), ("PlanC", -math.pi / 2))):
+            h = P[nm]
+            d = Vector((math.sin(ang), -math.cos(ang), 0))
+            pos = pl - d * (0.85 if k < 2 else 1.25)
+            twp.stand(h, (pos.x, pos.y, 0), ang)
+            h.rot("spine03", Vector((-d.y, d.x, 0)) * -1, 18); h.rot("head", Vector((-d.y, d.x, 0)) * -1, 18)
+            side = d.cross(Vector((0, 0, 1)))
+            if k == 0:
+                reach(h, "R", pl + Vector((0.1 * math.sin(sec * 0.8), -0.12, 0.06)), Vector((0.4, -0.4, -0.7)), d + Vector((0, 0, -0.6)))
+            else:
+                reach(h, "L", pl - d * 0.35 + side * 0.25 + Vector((0, 0, 0.06)), Vector((0, 0, -1)), d + Vector((0, 0, -0.8)))
+        bpy.context.view_layer.update()
+        return
     if night:
         T.type_at(c["tw"], sec, start=1.2 if shot == "night_type" else 99.0, cps=5.5)
     else:
@@ -233,7 +281,40 @@ def cam_night_type(c, t):
     return (a.lerp(b, e), tgt, 50)
 
 
+def plans_image(path):
+    """A building floor plan drawing (generic): walls as heavy lines, doors as arcs, a title block."""
+    import skia
+    W_, H_ = 1800, 1240
+    s = skia.Surface(W_, H_); cv = s.getCanvas(); cv.clear(skia.Color4f(0.84, 0.86, 0.88, 1))
+    p = skia.Paint(AntiAlias=True, Style=skia.Paint.kStroke_Style, StrokeWidth=7); p.setColor4f(skia.Color4f(0.14, 0.2, 0.35, 1))
+    thin = skia.Paint(AntiAlias=True, Style=skia.Paint.kStroke_Style, StrokeWidth=2); thin.setColor4f(skia.Color4f(0.2, 0.26, 0.4, 1))
+    cv.drawRect(skia.Rect.MakeXYWH(100, 100, 1600, 900), p)
+    cv.drawLine(100, 520, 1700, 520, p); cv.drawLine(100, 620, 1700, 620, p)
+    for k in range(1, 8):
+        x = 100 + k * 200
+        cv.drawLine(x, 100, x, 520, p); cv.drawLine(x, 620, x, 1000, p)
+        cv.drawArc(skia.Rect.MakeXYWH(x - 160, 440, 80, 80), 0, -90, False, thin)
+        cv.drawArc(skia.Rect.MakeXYWH(x - 160, 620, 80, 80), 0, 90, False, thin)
+    for k in range(12):
+        cv.drawLine(1500, 640 + k * 30, 1700, 640 + k * 30, thin)
+    cv.drawRect(skia.Rect.MakeXYWH(1300, 1060, 400, 120), thin)
+    s.makeImageSnapshot().save(path, skia.kPNG)
+    return path
+
+
+def cam_nsa_desk(c, t):
+    e = ease(t)
+    return (Vector((DESK_A.x + 1.15, DESK_A.y - 0.9, 1.45)).lerp(Vector((DESK_A.x + 0.95, DESK_A.y - 0.75, 1.42)), e), Vector((DESK_A.x - 0.15, DESK_A.y + 0.45, 1.0)), 38)
+
+
+def cam_nsa_plans(c, t):
+    e = ease(t)
+    return (Vector((-1.5, -1.6, 2.45)).lerp(Vector((-1.45, -1.25, 2.35)), e), Vector((-1.5, 0.3, 0.85)), 30)
+
+
 MOVES = {
+    "nsa_desk": dict(kind="anim", dof=2.4, cam=cam_nsa_desk, focus=lambda c, t: c["pad"].location, anim=anim("nsa_desk")),
+    "nsa_plans": dict(kind="anim", dof=3.0, cam=cam_nsa_plans, focus=lambda c, t: c["plans"].location, anim=anim("nsa_plans")),
     "typing": dict(kind="anim", dof=2.6, cam=cam_typing, focus=lambda c, t: _tw(c, (0.0, 0.03, 0.13)), anim=anim("typing")),
     "notice": dict(kind="anim", dof=3.2, cam=cam_notice, focus=lambda c, t: c["notice"].location, anim=anim("notice")),
     "night_push": dict(kind="anim", dof=2.0, cam=cam_night_push, focus=lambda c, t: _tw(c, (0, 0, 0.12)), anim=anim("night_push")),

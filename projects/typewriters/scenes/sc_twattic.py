@@ -96,6 +96,16 @@ def build(variant=None):
     c["worker"] = w
     w2 = twp.person("Mover", 1.0, 29, "male_worksuit01", "short02", hv=0.2, cval=0.25, hue=0.58, sat=0.12)
     c["mover"] = w2
+    tech = twp.person("CableTech", 1.0, 34, "male_casualsuit02", "short03", hv=0.25, cval=0.55, hue=0.1, sat=0.2)
+    c["tech"] = tech
+    wire_m = pbr("AlarmCable", (0.15, 0.15, 0.14), 0.5)
+    cab = cyl("AlarmCableRun", (0, 0, 0), 0.008, 1.0, wire_m, verts=8, rot=(0, math.radians(90), 0))
+    cab.data.transform(__import__('mathutils').Matrix.Translation((0, 0, -0.5)))          # grows from its +x end toward -x
+    c["cable"] = cab
+    reel = cyl("CableReel", (0, 0, 0), 0.14, 0.08, pbr("Reel", (0.35, 0.3, 0.2), 0.6), verts=24, rot=(math.radians(90), 0, 0))
+    c["reel"] = reel
+    for k in range(12):
+        cyl("Clip", (6.5 - k * 0.6, 1.35, 2.2), 0.012, 0.02, pbr("ClipM", (0.6, 0.6, 0.6), 0.3, 1.0), verts=8)
     ht, _ = ph.model("hand_truck")
     c["truck"] = ht
     animate(c, 0.0, "track")
@@ -105,10 +115,24 @@ def build(variant=None):
 # ============================================================================ animation
 def animate(c, sec, shot):
     from human import reach, fingers_curl
+    tech = c["tech"]; cab = c["cable"]; reel = c["reel"]
+    on = shot == "cable"
+    twp.hide(twp.person_objs(tech) + [cab, reel], not on)
+    if on:
+        x = 6.5 - 0.55 * sec                                                  # walks along the rafters toward -x, paying out cable
+        twp.walk(tech, (6.9, 0.85), (-4.0, 0.85), sec, speed=0.55)
+        hand = Vector((x - 0.15, 1.3, 2.18))
+        cab.location = Vector((6.6, 1.35, 2.2)); cab.scale = (1, 1, max(0.05, 6.6 - hand.x))
+        reach(tech, "R", hand + Vector((0.05, -0.05, -0.05)), Vector((0.3, -0.5, -0.8)), Vector((0, 1, 0.4)))
+        reel.location = tech.bone_head("upperarm01.L") + Vector((0.1, -0.15, -0.45)); reel.rotation_euler = (math.radians(90), sec * 3, 0)
+        reach(tech, "L", reel.location + Vector((0, -0.05, 0.05)), Vector((-0.3, -0.5, -0.8)))
+        tech.rot("head", (1, 0, 0), 14)
+        fingers_curl(tech, 45, thumb=20)
     for p in c["tty"]:
         pass
     # stapler worker: stands at the crate's front face (-Y side), stapling along the top edge left to right
     L = c["last"]; w = c["worker"]
+    twp.hide(twp.person_objs(w), shot == "cable")
     twp.stand(w, (L.x - 0.1, L.y - 0.68, 0.0), math.pi)          # faces +Y, the crate
     k = sec / DUR["staple"]
     n = int(sec / 0.45)
@@ -153,7 +177,13 @@ def cam_staple(c, t):
     return (a.lerp(b, e), L + Vector((-0.25, -0.5, 0.95)), 30)
 
 
+def cam_cable(c, t):
+    e = ease(t)
+    return (Vector((2.0, -1.6, 1.5)).lerp(Vector((1.4, -1.5, 1.5)), e), Vector((4.2, 1.2, 1.9)).lerp(Vector((3.6, 1.2, 1.9)), e), 30)
+
+
 MOVES = {
+    "cable": dict(kind="anim", dof=3.5, cam=cam_cable, focus=lambda c, t: c["tech"].bone_head("head"), anim=anim("cable")),
     "track": dict(kind="anim", dof=3.5, cam=cam_track, focus=lambda c, t: Vector((-3.0 + 3.5 * ease(t), -1.0, 0.9)), anim=anim("track")),
     "staple": dict(kind="anim", dof=2.4, cam=cam_staple, focus=lambda c, t: c["stapler"].location, anim=anim("staple")),
 }
