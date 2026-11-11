@@ -235,10 +235,10 @@ for o in LOB:
         push = clear * (0.95 * passed + 0.55 * ahead)
         tip = Vector((d, 0, 0)); dv = c - tip; dist = dv.length
         e = min(1.0, max(0.0, vel(t) / 1.2)) if t > 3.15 else 0.0
-        wave = e * 0.09 * math.sin(2 * math.pi * (dist / 0.9 - t * 1.6) + ph * 0.1) * math.exp(-dist / 2.2)
+        wave = e * 0.14 * math.sin(2 * math.pi * (dist / 0.9 - t * 1.6) + ph * 0.1) * math.exp(-dist / 2.2)
         breathe = 0.01 * math.sin(2 * math.pi * t / 3.5 + ph)
         p = c + rdir * push + (dv.normalized() if dist > 1e-3 else rdir) * wave
-        sq = 0.3 * ahead + 0.12 * passed * math.exp(-rho / 0.8)
+        sq = 0.42 * ahead + 0.16 * passed * math.exp(-rho / 0.8)
         keys_loc.append(p); keys_scl.append(Vector((base.x * (1 - sq + wave), base.y * (1 + 0.5 * sq + breathe), base.z * (1 + 0.5 * sq + breathe))))
     o.keyframe_insert("location", frame=frames[0]); o.keyframe_insert("scale", frame=frames[0])
     act = o.animation_data.action
@@ -353,8 +353,10 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (7.0, "tip", (0.0, 0, 0), 112, 40, 3.6, 40),
       (8.0, "tip", (0.2, 0, 0), 88, 12, 2.8, 40),
       (9.0, "tip", (-0.6, 0, 0), 145, 10, 3.2, 40),
+      (9.5, "tip", (-0.2, 0, 0), 105, 62, 3.4, 35),
       (10.0, "tip", (0.0, 0, 0), 62, 15, 3.4, 38),
       (11.0, "tip", (-0.3, -0.2, 0.5), 95, -5, 1.8, 45),
+      (11.5, "tip", (0.2, 0, -0.3), 75, -40, 2.6, 38),
       (12.0, "tip", (0.3, 0, 0), 100, 18, 7.0, 30),
       (13.0, "tip", (0.1, 0, 0), 78, 5, 2.4, 45),
       (14.0, "tip", (0.1, 0, 0), 95, -35, 2.3, 45),
