@@ -102,3 +102,13 @@ Also add a numeric penetration check to your audit (BVH overlap between hand, fo
 6. **Empty sets.** Every set needs background life: people moving, a monitor trace, a lamp, dust, wind.
 7. **Cut-off or floating body parts.** Never delete body geometry for modesty or framing. Busts, disembodied hands and missing limbs are a reject. Use camera framing, clothes, steam or props instead.
 8. **Pastel, cartoon-flat cutaways.** Anatomy and mechanism cutaways must be realistic: wet SSS tissue, bone texture, metal with wear, saturated contrast against a deeper gradient.
+
+## Package storage: no Git LFS from Connect chats (changed 19:56 UTC)
+Git LFS uploads are refused from Connect sessions (403 on lfs verify). So:
+- Keep the packed `.blend` **under 95 MB** and commit it as a normal git file (GitHub's hard limit is 100 MB). Do not add an LFS rule for your folder; if you already did, remove the line from `.gitattributes`, then run `git rm --cached` on the file and re-add it.
+- To get under 95 MB:
+  - resize packed textures to 1K (2K only for hero close-up surfaces)
+  - use a 1K–2K HDRI
+  - decimate background meshes
+  - save with `compress=True`
+  - remove unused data blocks (`bpy.data.orphans_purge(do_recursive=True)`)
