@@ -145,7 +145,7 @@ P.hand_fn["L"].append((1122, 1156, lambda f: (lambda M: grip_hand(M @ V(0.12, -0
 P.k(1122, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, cR=10, cL=8)
 P.k(1156, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, hL=LH_TABLE)
 # hands the mould up through the window bars (1182-1215)
-WIN_C = V(0.80, 2.0, 1.83)
+WIN_C = V(0.80, 1.99, 1.665)
 def mold_up(f):
     A = Matrix.Translation(WAX.location + V(0, 0, 0.004))
     Bm = Matrix.Translation(WIN_C + V(0, -0.12, 0.0)) @ Matrix.Rotation(R_(70), 4, 'X')
@@ -161,8 +161,8 @@ key_hide(OB["WaxTin"], [(1, False), (1182, True)])
 P.hand_fn["R"].append((1182, 1214, lambda f: grip_hand(mold_up(f) @ V(0, 0.075, 0), V(0, 0.3, 1), V(0, 1, 0))))
 P.k(1182, root=STA + V(0, 0.06, -0.06), flex=18, sp_flex=26, h_pitch=30, cR=45)
 P.k(1192, root=V(0.88, 1.1, 0.97), flex=26, sp_flex=18, h_pitch=-10)
-P.k(1205, root=V(0.86, 1.17, 1.0), flex=40, sp_flex=16, h_pitch=-35, sp_side=-4, hL=grip_hand(V(0.7, 1.45, TABLE_Z + 0.02), V(0, 1, -0.2), V(0, 0, -1)))   # leans over the table to the sill
-P.k(1214, root=V(0.86, 1.18, 1.0), flex=42, sp_flex=18, h_pitch=-40)
+P.k(1205, root=V(0.84, 1.2, 1.0), flex=42, sp_flex=16, h_pitch=-35, sp_side=-4, hL=grip_hand(V(0.7, 1.45, TABLE_Z + 0.02), V(0, 1, -0.2), V(0, 0, -1)))   # leans over the table to the sill
+P.k(1214, root=V(0.84, 1.21, 1.0), flex=44, sp_flex=20, h_pitch=-40)
 P.k(1228, root=STA + V(0, 0.03, 0), flex=6, sp_flex=6, h_pitch=-20, hR=HANG["R"], cR=15, hL=HANG["L"])
 for i, s in enumerate("LR"):
     P.plant(s, 1186 + i * 6, 1198 + i * 6, P.h.foot_xy(s, V(0.86, 1.1, 0), 180), 180, 0.05)

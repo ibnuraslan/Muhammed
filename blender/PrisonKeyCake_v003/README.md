@@ -1,13 +1,16 @@
 # PrisonKeyCake_v003: farm package
 
-**Changes from v002:** the camera moves at 16.6–17.0 s and 23.2–23.6 s are re-routed over and around the prisoner, so no frame is filled by his shirt any more. Everything else is identical to v002.
+**Changes from v002:**
+- The camera moves at 16.6–17.0 s and 23.2–23.6 s are re-routed over and around the prisoner, so no frame is filled by his shirt any more.
+- The window hand-off reach is closed. The cell window sill is lower (1.62 m), so his hand stays on the tin as he sets it on the sill. The window fly-throughs and bars were adjusted to match.
+- Everything else is identical to v002.
 
 This is the full 31.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
 - `PrisonKeyCake_v003_60fps.blend`: the self-contained scene, 67 MB. Every texture is packed inside, and it is committed as a normal git file.
 - `beats.json`: the start frame of each of the 10 beats, built to the brief's target times. When the VO arrives, the director retimes with `pipeline/retime_to_vo.py`.
 - `SETTINGS.md`: render settings and suggested test frames. `CREDITS.md`: the CC-BY credit block for the video description (key, lock, cake, government building, crucible) plus CC0 provenance.
-- `package_check_f1009_lowres.jpg`, `package_check_f1405_lowres.jpg` and `package_check_f1860_lowres.jpg`: 270×480, 8-sample frames rendered from this packed file in factory-startup Blender. They show the package works; they are not a quality reference.
+- `package_check_f1009_lowres.jpg`, `package_check_f1210_lowres.jpg`, `package_check_f1405_lowres.jpg` and `package_check_f1860_lowres.jpg`: 270×480, 8-sample frames rendered from this packed file in factory-startup Blender. They show the package works; they are not a quality reference.
 
 The source is `../PrisonKeyCake_v001/scripts`. Build order:
 1. 01_build_humans
@@ -35,11 +38,8 @@ The audits are in `../PrisonKeyCake_v001/audit/`, and the review sheets are in `
 ## Known open items
 - **Costume:** the clothes are MakeHuman's CC0 shirts and trousers, re-shaded so the denim reads as wool. There are no braces or waistcoat, and the shirt keeps its collar.
 - **Whip-pan from the foundry to the cell window (14.0–14.8 s):** it is very fast (about 20 m/s) and is meant to read as motion blur. The day→night change is hidden inside it.
-- **Short hand-reach gaps:** some grasps fall 3–17 cm short for a few frames during transitions:
-  - prisoner pushing the tin onto the window sill, frames 1197–1213 (about 14 cm)
-  - guard waving and taking the box, frames 545–589
-  - Elsewhere the hands follow the props.
-- **Penetration count:** 246 hand/foot frame-hits, mostly fingertips 1–2 cm into held props or soft wax. There are 0 character overlaps and 0 head-item vertices through. See `../PrisonKeyCake_v001/audit/penetration_C.txt`.
+- **Short hand-reach gaps:** some grasps fall 3–17 cm short for a few frames during transitions, such as the guard waving and taking the box (frames 545–589). The window hand-off is fixed in v003. Elsewhere the hands follow the props.
+- **Penetration count:** 244 hand/foot frame-hits, mostly fingertips 1–2 cm into held props or soft wax. There are 0 character overlaps and 0 head-item vertices through. See `../PrisonKeyCake_v001/audit/penetration_C.txt`.
 - **The crowd:** it is FK only. Arms wave and heads turn, but the crowd's feet stay planted. It is two base characters with varied clothing colours, scale and hats.
 - **The laundry:** it is stiff cloth planes with a Wave modifier.
 - **Remaining built-in shapes:** a few small items are still our own geometry: the knife, flags, hats, sand mould and the small distant birds. The key, lock, cake, crucible, barrels, bucket and government building are real models.

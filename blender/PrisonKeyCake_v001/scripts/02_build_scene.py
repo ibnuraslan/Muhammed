@@ -170,7 +170,7 @@ def dup(o, name, loc=None, rot=None, scale=None, c="Props"):
     return n
 
 # ================================================================== CELL  (interior x[-2,2] y[-2,2] z[0,3])
-WIN = (0.45, 1.15, 1.75, 2.35)     # x0,x1,z0,z1 in the north wall
+WIN = (0.45, 1.15, 1.62, 2.24)     # x0,x1,z0,z1 in the north wall
 DOOR = (-0.15, 0.85, 0.0, 2.15)    # y0,y1,z0,z1 in the east wall
 box("Cell_Floor", (-2.4, -2.4, -0.1), (2.4, 2.4, 0.004), M_FLOOR)
 wall_with_holes("Cell_WallW", 'Y', -2.35, 2.35, -2.35, -2.0, 0, 3.0, [], M_BRICK)
@@ -180,7 +180,7 @@ wall_with_holes("Cell_WallE", 'Y', -2.35, 2.35, 2.0, 2.35, 0, 3.0, [(DOOR[0], DO
 box("Cell_Ceiling", (-2.4, -2.4, 3.0), (2.4, 2.4, 3.3), M_BRICK)
 for i, x in enumerate((0.59, 0.73, 0.87, 1.01)):
     cyl(f"Cell_WinBar{i}", (x, 2.2, (WIN[2] + WIN[3]) / 2), 0.016, WIN[3] - WIN[2], M_IRON, verts=12)
-box("Cell_WinBarH", (WIN[0], 2.18, 2.04), (WIN[1], 2.22, 2.06), M_IRON)
+box("Cell_WinBarH", (WIN[0], 2.18, 1.88), (WIN[1], 2.22, 1.90), M_IRON)
 # straw on the floor, bucket, tin cup
 for i in range(60):
     x, y = random.uniform(-1.9, -0.6), random.uniform(-1.9, 0.6)
