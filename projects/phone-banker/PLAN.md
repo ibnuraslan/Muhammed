@@ -4,12 +4,13 @@ Hero set: **OFFICE**, the banker's 1995 office (wood panels, CRT, beige filing c
 in every chapter: daylight, sealed and empty, investigators in protective suits, dust sheets years later.
 Real people appear only as unnamed figures in mood light, no likeness; reconstructed moments carry **DRAMATIZATION**.
 No gore and no procedure: the handset stain, sealed glass ampoules, suits and evidence bags carry the tension.
+Timing: 2.5 s of picture before the first word; each chapter title card holds about 2 s before narration resumes.
 
 ## Intro
 
 | Set | Script line | Shot A | Shot B |
 |---|---|---|---|
-| 1 OFFICE | "Look at the plastic… both dead." | Slow push to the white handset; a faint stain on the plastic. | Wide empty office, chair pushed back, curtain stirring. |
+| 1 OFFICE | "Look at the plastic… both dead." | Stained white handset holds in silence (2.5 s lead-in), then a slow push as the first line begins. | Wide empty office, chair pushed back, curtain stirring. |
 | 2 BANK EXTERIOR | "The substance… eight police officers." | Militia Ladas pull up outside the bank at dusk. | An officer sits on the bank steps; a colleague hands him water. |
 | 3 OFFICE (search) | "When investigators search… His telephone." | Investigators in coats open drawers and files by torchlight. | Torch beam settles on the phone; camera pushes in. |
 
