@@ -16,8 +16,8 @@ import ph
 import twp
 
 EXPOSURE = 0.0
-DUR = {"silent": 5.0, "wide": 4.5, "talk": 5.0, "reels": 4.5}
-VARIANT_FOR = {"silent": "home", "wide": "home", "talk": "safe", "reels": "safe"}
+DUR = {"silent": 5.0, "wide": 4.5, "talk": 5.0, "reels": 4.5, "family": 5.0, "post": 5.0}
+VARIANT_FOR = {"silent": "home", "wide": "home", "talk": "safe", "reels": "safe", "family": "moscow", "post": "post"}
 TABLE = Vector((0.0, 0.2, 0.0))
 
 
@@ -42,7 +42,8 @@ def reel_deck(name):
 
 def build(variant="home"):
     c = {"variant": variant}
-    home = variant == "home"
+    home = variant in ("home", "moscow", "post")
+    moscow = variant == "moscow"
     if home:
         world_flat((0.004, 0.006, 0.012), 1.0)
     else:
@@ -71,7 +72,10 @@ def build(variant="home"):
     ph.model("vintage_electric_kettle", loc=(1.3, 2.15, 0.94), rot_z=math.pi)
     ph.model("jug_01", loc=(-1.4, 2.1, 0.94), rot_z=0.3)
     ph.model("wooden_cutting_board", loc=(-2.2, 1.2, 0.94), rot_z=1.6)
-    ph.model("vintage_microwave", loc=(-2.2, 0.2, 0.94), rot_z=-math.pi / 2) if home else ph.model("Television_01", loc=(-2.2, 0.3, 0.94), rot_z=math.pi / 2, scale=0.7)
+    if variant == "home":
+        ph.model("vintage_microwave", loc=(-2.2, 1.2, 0.94), rot_z=-math.pi / 2)
+    elif variant == "safe":
+        ph.model("Television_01", loc=(-2.2, 0.3, 0.94), rot_z=math.pi / 2, scale=0.7)
     ph.model("vintage_telephone_wall_clock", loc=(2.49, 0.9, 1.4), rot_z=math.pi / 2)
     ph.model("potted_plant_04", loc=(0.8, 2.25, 0.94), scale=0.5)
     # the table and chairs
@@ -109,6 +113,32 @@ def build(variant="home"):
         box("Outside", (0, 14, 4), (30, 1, 10), ph.texture("brick_wall_02", scale=0.3, name="KitOut"))
     # people
     P = {}
+    if variant == "post":                         # a Soviet listening post in a flat: blinds shut, receivers on the table
+        for k in range(3):
+            ph.model("vintage_radio_transceiver", loc=(TABLE.x - 0.3 + 0.0 * k, TABLE.y + 0.25, 0.48 + k * 0.0) if k == 0 else (TABLE.x + 0.35, TABLE.y + 0.3, 0.48 + (k - 1) * 0.43), rot_z=math.pi)
+        deck, reels = reel_deck("PostDeck"); deck.location = TABLE + Vector((0.0, -0.15, 0.475)); c["reels"] = reels
+        dial = pbr("DialGlow", (0.5, 0.35, 0.1), 0.3, 0.0, **{'Emission Color': (1.0, 0.7, 0.3, 1), 'Emission Strength': 1.5})
+        for k in range(3):
+            box("Dial", (TABLE.x - 0.3 + 0.12 * k, TABLE.y + 0.1, 0.62), (0.06, 0.005, 0.03), dial)
+        c["switch"] = box("Switch", (TABLE.x + 0.2, TABLE.y - 0.3, 0.52), (0.02, 0.04, 0.015), pbr("SwitchM", (0.6, 0.6, 0.62), 0.3, 1.0))
+        P["op"] = twp.person("Operator", 1.0, 38, "male_casualsuit05", "short01", hv=0.3, cval=0.5, hue=0.3, sat=0.2)
+        c["P"] = P
+        animate(c, 0.0, "post")
+        return c
+    if moscow:                                    # a Moscow flat: the family watches the television on the counter
+        tv, _ = ph.model("Television_01", loc=(-2.2, 0.3, 0.94), rot_z=math.pi / 2, scale=0.75)
+        scr = pbr("TVScreen", (0.02, 0.02, 0.02), 0.2, 0.0, **{'Emission Color': (0.55, 0.65, 0.8, 1), 'Emission Strength': 2.0})
+        d = scr.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].driver_add("default_value").driver
+        d.type = 'SCRIPTED'; d.expression = "2.0 + 0.4 * sin(frame * 0.7) - (1.6 if 60 < frame < 66 else 0)"      # the picture ripples once
+        box("TVFace", (-1.98, 0.3, 1.13), (0.01, 0.34, 0.26), scr)
+        tvl = area_light((-1.8, 0.3, 1.15), (0, math.radians(90), 0), 0.35, 8, (0.6, 0.7, 0.9)); tvl.visible_camera = False
+        d2 = tvl.data.driver_add("energy").driver; d2.type = 'SCRIPTED'; d2.expression = "8 + 2 * sin(frame * 0.7) - (6 if 60 < frame < 66 else 0)"
+        P["dad"] = twp.person("Dad", 1.0, 45, "male_casualsuit05", "short04", hv=0.4, cval=0.5, hue=0.1, sat=0.2)
+        P["mum"] = twp.person("Mum", 0.0, 42, "female_casualsuit01", "bob02", hv=0.35, cval=0.6, hue=0.0, sat=0.3)
+        P["kid"] = twp.person("Kid", 1.0, 13, "male_casualsuit02", "short01", hv=0.3, cval=0.55, hue=0.6, sat=0.3, height=0.2)
+        c["P"] = P
+        animate(c, 0.0, "family")
+        return c
     if home:
         P["man"] = twp.person("Husband", 1.0, 40, "male_casualsuit02", "short02", hv=0.3, cval=0.55, hue=0.55, sat=0.2)
         P["wife"] = twp.person("Wife", 0.0, 38, "female_casualsuit02", "long01", hv=0.3, cval=0.6, hue=0.08, sat=0.3)
@@ -124,6 +154,27 @@ def build(variant="home"):
 def animate(c, sec, shot):
     from human import reach, fingers_curl
     P = c["P"]
+    if c["variant"] == "post":
+        op = P["op"]
+        twp.seat(op, (TABLE.x, TABLE.y - 0.66, 0), math.pi, lean=14)
+        flick = ease(min(1.0, max(0.0, (sec - 2.0) / 0.5)))
+        sw = c["switch"]; sw.rotation_euler = (0, math.radians(30) * (1 if flick > 0.5 else -1), 0)
+        reach(op, "R", sw.location + Vector((0.04, -0.06, 0.05 - 0.02 * flick)), Vector((0.6, -0.3, -0.7)), Vector((0, 1, -0.3)))
+        reach(op, "L", TABLE + Vector((-0.2, -0.25, 0.52)), Vector((-0.6, -0.3, -0.7)), Vector((0, 1, -0.2)))
+        fingers_curl(op, 40, thumb=20); op.rot("head", (1, 0, 0), 12)
+        spin = 3.0 * (1 - flick) + 0.0
+        ang = 3.0 * min(sec, 2.0) + 3.0 * max(0.0, sec - 2.0) * (1 - 0.5 * min(1.0, (sec - 2.0) / 1.5)) if sec > 2.0 else 3.0 * sec
+        for k, r in enumerate(c["reels"]):
+            r.rotation_euler = (0, 0, -ang * (0.8 if k else 1.0))
+        bpy.context.view_layer.update()
+        return
+    if c["variant"] == "moscow":
+        for nm, (x, y), lean in (("dad", (TABLE.x + 0.35, TABLE.y - 0.66), 8), ("mum", (TABLE.x - 0.35, TABLE.y - 0.62), 10), ("kid", (TABLE.x + 0.62, TABLE.y + 0.0), 14)):
+            h = P[nm]; d = Vector((-1.98, 0.3, 0)) - Vector((x, y, 0))
+            twp.seat(h, (x, y, 0), math.atan2(d.x, -d.y), lean=lean)
+            h.rot("head", (0, 0, 1), 2 * math.sin(sec * 0.5 + x))
+        bpy.context.view_layer.update()
+        return
     if c["variant"] == "home":
         m, w = P["man"], P["wife"]
         twp.seat(m, (TABLE.x, TABLE.y - 0.66, 0), math.pi, lean=22)            # faces +Y over the table, head low
@@ -183,6 +234,10 @@ def cam_reels(c, t):
 
 
 MOVES = {
+    "post": dict(kind="anim", dof=2.6, cam=lambda c, t: (TABLE + Vector((1.3, -1.5, 1.35)).lerp(Vector((1.1, -1.25, 1.3)), ease(t)), TABLE + Vector((0.0, -0.2, 0.75)), 32),
+                 focus=lambda c, t: TABLE + Vector((0.2, -0.3, 0.6)), anim=anim("post")),
+    "family": dict(kind="anim", dof=None, cam=lambda c, t: (Vector((1.6, -1.9, 1.5)).lerp(Vector((1.35, -1.65, 1.45)), ease(t)), Vector((-1.2, 0.3, 0.95)), 28),
+                   anim=lambda c, t: (animate(c, t * DUR["family"], "family"), bpy.context.scene.frame_set(int(t * DUR["family"] * 24) + 1))),
     "silent": dict(kind="anim", dof=2.4, cam=cam_silent, focus=lambda c, t: c["P"]["man"].bone_head("head"), anim=anim("silent")),
     "wide": dict(kind="anim", dof=None, cam=cam_wide, anim=anim("wide")),
     "talk": dict(kind="anim", dof=2.8, cam=cam_talk, focus=lambda c, t: c["P"]["defector"].bone_head("head"), anim=anim("talk")),

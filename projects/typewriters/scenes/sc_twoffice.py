@@ -16,9 +16,9 @@ import typewriter as T
 import twp
 
 EXPOSURE = -0.1
-DUR = {"page_out": 5.0, "typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0, "records_drawer": 4.5, "records_burn": 4.5,
+DUR = {"analyst": 5.0, "page_out": 5.0, "typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0, "records_drawer": 4.5, "records_burn": 4.5,
        "attache": 5.0, "platen": 6.0}
-VARIANT_FOR = {"night_push": "night", "night_type": "night", "page_out": "night", "nsa_desk": "nsa", "nsa_plans": "nsa",
+VARIANT_FOR = {"analyst": "analyst", "night_push": "night", "night_type": "night", "page_out": "night", "nsa_desk": "nsa", "nsa_plans": "nsa",
                "records_drawer": "records", "records_burn": "records", "attache": "attache", "platen": "attache"}
 DESK_Z = 0.79
 DESK_A = Vector((0.9, 0.4, 0.0))
@@ -49,7 +49,7 @@ def notice_image(path):
 def build(variant=None):
     c = {"variant": variant}
     nsa = variant == "nsa"
-    night = variant in ("night", "nsa")
+    night = variant in ("night", "nsa", "analyst")
     rng = np.random.default_rng(5)
     if night:
         world_flat((0.004, 0.006, 0.011), 1.0)
@@ -142,7 +142,7 @@ def build(variant=None):
         ko = bpy.data.objects.new("BallKey", kl); bpy.context.collection.objects.link(ko)
         ko.location = T.world(c["tws"][0], (0.12, -0.25, 0.35)) if c["tws"] else (0, 0, 2); point_at(ko, T.world(c["tws"][0], (-0.05, 0.0, 0.13)))
         ko.visible_camera = False
-                bl = bpy.data.lights.new("Bounce", 'AREA'); bl.energy = 1.2; bl.size = 1.0; bl.color = (1.0, 0.8, 0.6)
+        bl = bpy.data.lights.new("Bounce", 'AREA'); bl.energy = 1.2; bl.size = 1.0; bl.color = (1.0, 0.8, 0.6)
         bo = bpy.data.objects.new("Bounce", bl); bpy.context.collection.objects.link(bo); bo.location = (DESK_A.x - 0.2, DESK_A.y - 0.6, DESK_Z + 0.4)
         point_at(bo, (DESK_A.x - 0.15, DESK_A.y, DESK_Z)); bo.visible_camera = False
     # ---------------------------------------------------------------- back wall: filing cabinets, clock; left wall: notice board
@@ -195,6 +195,26 @@ def build(variant=None):
     c["notice"] = notice
     # ---------------------------------------------------------------- people (day only)
     c["people"] = {}
+    if variant == "analyst":                       # a Soviet analyst, late: a printout of run-together letters, a pencil
+        import os
+        a_img, b_img = analyst_images(os.path.join(T.GEN, "runon_a.png"), os.path.join(T.GEN, "runon_b.png"))
+        pen = cyl("Pencil", (0, 0, 0), 0.0035, 0.17, pbr("PencilYellow", (0.6, 0.45, 0.1), 0.5), verts=6); c["pencil"] = pen
+        m = bpy.data.materials.new("Printout"); m.use_nodes = True
+        N = m.node_tree.nodes; L = m.node_tree.links; p_ = N["Principled BSDF"]
+        uv = N.new("ShaderNodeTexCoord"); sp = N.new("ShaderNodeSeparateXYZ"); L.new(uv.outputs['UV'], sp.inputs[0])
+        ia = N.new("ShaderNodeTexImage"); ia.image = bpy.data.images.load(a_img); ib = N.new("ShaderNodeTexImage"); ib.image = bpy.data.images.load(b_img)
+        L.new(uv.outputs['UV'], ia.inputs['Vector']); L.new(uv.outputs['UV'], ib.inputs['Vector'])
+        pv = N.new("ShaderNodeValue"); d = pv.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'
+        var = d.variables.new(); var.name = "x"; var.type = 'TRANSFORMS'; var.targets[0].id = pen; var.targets[0].transform_type = 'LOC_X'
+        d.expression = f"(x - ({DESK_A.x - 0.15 - 0.15})) / 0.3"
+        lt = N.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; L.new(sp.outputs[0], lt.inputs[0]); L.new(pv.outputs[0], lt.inputs[1])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(lt.outputs[0], mx.inputs['Factor']); L.new(ia.outputs[0], mx.inputs[6]); L.new(ib.outputs[0], mx.inputs[7])
+        L.new(mx.outputs[2], p_.inputs['Base Color']); p_.inputs['Roughness'].default_value = 0.85
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(DESK_A.x - 0.15, DESK_A.y + 0.2, DESK_Z + 0.014), rotation=(0, 0, math.pi))
+        o = bpy.context.active_object; o.scale = (0.3, 0.38, 1); o.data.materials.append(m); c["printout"] = o
+        an = twp.person("Analyst", 1.0, 52, "male_casualsuit04", "short04", hv=0.55, cval=0.5, hue=0.12, sat=0.25)
+        twp.seat(an, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=20)
+        c["people"]["an"] = an
     if variant == "records":
         c["people"]["agent"] = twp.person("Agent", 1.0, 44, "male_elegantsuit01", "short03", hv=0.3, cval=0.5, hue=0.6, sat=0.15)
         c["people"]["clerkR"] = twp.person("ClerkR", 0.0, 50, "female_casualsuit01", "bob01", hv=0.55, cval=0.6, hue=0.1, sat=0.2)
@@ -242,6 +262,20 @@ def build(variant=None):
 # ============================================================================ animation
 def animate(c, sec, shot=None):
     night = c["variant"] == "night"
+    if c["variant"] == "analyst":
+        from human import reach, fingers_curl
+        an = c["people"]["an"]; pen = c["pencil"]
+        x0 = DESK_A.x - 0.15 - 0.15                          # page left edge (page is rotated: its +u runs toward -x... keep simple)
+        prog = min(1.0, sec / DUR["analyst"])
+        line_y = DESK_A.y + 0.2 + 0.1 - 0.03 * int(prog * 4)
+        px = x0 + 0.3 * ((prog * 4) % 1.0)
+        tap = 0.004 * abs(math.sin(sec * 12))
+        pen.location = (px, line_y, DESK_Z + 0.03 + tap + 0.06); pen.rotation_euler = (math.radians(30), 0, math.radians(10))
+        reach(an, "R", Vector((px + 0.02, line_y + 0.06, DESK_Z + 0.06)), Vector((-0.5, 0.3, -0.8)), Vector((0, -1, -0.5)))
+        reach(an, "L", Vector((x0 + 0.05, DESK_A.y + 0.2, DESK_Z + 0.04)), Vector((0.5, 0.3, -0.8)), Vector((0, -1, -0.3)))
+        fingers_curl(an, 50, thumb=25); an.rot("head", (1, 0, 0), 20)
+        bpy.context.view_layer.update()
+        return
     if c["variant"] == "records":
         from human import reach, fingers_curl
         P = c["people"]
@@ -378,6 +412,30 @@ def cam_night_type(c, t):
     return (a.lerp(b, e), _tw(c, (cx - 0.004, T.BALL_Y + 0.008, T.BALL_Z + 0.008)), 55)
 
 
+def analyst_images(pa, pb):
+    """A printout of letters run together (no spaces), and the same with pencil slashes between the words."""
+    import skia
+    words = "theembassywillsendthecableonthursdaythedelegationholdsitspositiononvolumesandpricethemeeting".upper()
+    W_, H_ = 900, 1140
+    out = []
+    for slash, path in ((False, pa), (True, pb)):
+        sf = skia.Surface(W_, H_); cv = sf.getCanvas(); cv.clear(skia.Color4f(0.9, 0.88, 0.8, 1))
+        p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(0.12, 0.12, 0.16, 1))
+        f = skia.Font(skia.Typeface.MakeFromFile(T.MONO_B), 30)
+        pen = skia.Paint(AntiAlias=True, Style=skia.Paint.kStroke_Style, StrokeWidth=3); pen.setColor4f(skia.Color4f(0.25, 0.25, 0.3, 0.9))
+        y = 120
+        for ln in range(8):
+            row = words[(ln * 37) % 60:(ln * 37) % 60 + 40]
+            cv.drawString(row, 60, y, f, p)
+            if slash:
+                for k in range(3, 40, 5):
+                    x = 60 + k * 18.0
+                    cv.drawLine(x, y + 8, x + 6, y - 26, pen)
+            y += 70
+        sf.makeImageSnapshot().save(path, skia.kPNG); out.append(path)
+    return out
+
+
 def plans_image(path):
     """A building floor plan drawing (generic): walls as heavy lines, doors as arcs, a title block."""
     import skia
@@ -438,6 +496,9 @@ def cam_page_out(c, t):
 
 
 MOVES = {
+    "analyst": dict(kind="anim", dof=2.2, cam=lambda c, t: (Vector((DESK_A.x - 1.0, DESK_A.y - 0.6, 1.55)).lerp(Vector((DESK_A.x - 0.85, DESK_A.y - 0.45, 1.5)), ease(t)),
+                                                         Vector((DESK_A.x - 0.15, DESK_A.y + 0.35, 0.95)), 35),
+                    focus=lambda c, t: c["printout"].location, anim=anim("analyst")),
     "page_out": dict(kind="anim", dof=1.8, cam=cam_page_out, focus=lambda c, t: _tw(c, (0.0, 0.05, 0.22)), anim=anim("page_out")),
     "records_drawer": dict(kind="anim", dof=2.2, cam=cam_records_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0, 0.3, 0.1)), anim=anim("records_drawer")),
     "records_burn": dict(kind="anim", dof=2.6, cam=cam_records_burn, focus=lambda c, t: c["bag"].location + Vector((0.2, 0, 0.7)), anim=anim("records_burn")),

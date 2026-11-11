@@ -145,7 +145,13 @@ def cam_pull(c, t):
     return (N + Vector((0.0, -3.0, 2.2)).lerp(Vector((-4.0, -14.0, 9.0)), e), TOWER + Vector((0, 0, 200)), 28)
 
 
+def cam_antenna(c, t):
+    e = ease(t); a = c["near_aerials"][3].location
+    return (a + Vector((2.4, -4.0, 1.2)).lerp(Vector((1.9, -3.4, 1.1)), e), a + Vector((0, 0, 1.6)), 35)
+
+
 MOVES = {
+    "antenna": dict(kind="anim", dof=None, cam=cam_antenna, anim=lambda c, t: animate(c, t * DUR["antenna"])),
     "tower": dict(kind="anim", dof=None, cam=cam_tower, anim=lambda c, t: animate(c, t * DUR["tower"])),
     "pullback": dict(kind="anim", dof=None, cam=cam_pull, anim=lambda c, t: animate(c, t * DUR["pullback"])),
 }

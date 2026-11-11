@@ -111,7 +111,7 @@ def page_image(text, path, dpi=220, seed=3):
     s = skia.Surface(pw, phh); cv = s.getCanvas(); cv.clear(skia.Color4f(0, 0, 0, 0))
     f = skia.Font(skia.Typeface.MakeFromFile(MONO_B), dpi * 0.165)
     p = skia.Paint(AntiAlias=True)
-    rng = np.random.default_rng(seed)
+    rng = np.random.default_rng(abs(int(seed)))
     px_m = dpi / 0.0254
     for li, line in enumerate(text.split("\n")):
         yb = (TOP + li * LINE) * px_m + dpi * 0.05
