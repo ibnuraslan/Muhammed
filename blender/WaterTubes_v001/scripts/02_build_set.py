@@ -443,7 +443,8 @@ def profile(t, full, u, length, seed):
     if e < 0.45:
         k = math.sqrt(max(0.0, 1 - ((0.45 - e) / 0.45) ** 2)); k = 0.12 + 0.88 * k
         x *= k
-        if full: z = z * (0.25 + 0.75 * k) if z > 0.05 else z
+        zc = 0.34 if full else 0.0
+        z = max(0.0, zc + (z - zc) * k) if full else z
     return x, z
 
 def build_tube(name, pts, seed, nv=28):
@@ -508,12 +509,16 @@ for k, seg in enumerate(SEG):
     bmesh.ops.translate(bm, vec=(0, 0, 0.06), verts=bm.verts)
     r2 = bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=0.075, radius2=0.075, depth=0.03)
     bmesh.ops.translate(bm, vec=(0, 0, 0.015), verts=r2["verts"])
-    bmesh.ops.bevel(bm, geom=bm.edges[:], offset=0.004, segments=2, affect="EDGES")
+    for rr in range(5):
+        rg = bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=0.058, radius2=0.058, depth=0.008)
+        bmesh.ops.translate(bm, vec=(0, 0, 0.05 + rr * 0.014), verts=rg["verts"])
+    lug = bmesh.ops.create_cube(bm, size=1.0); bmesh.ops.scale(bm, vec=(0.13, 0.018, 0.03), verts=lug["verts"]); bmesh.ops.translate(bm, vec=(0, 0, 0.135), verts=lug["verts"])
+    bmesh.ops.bevel(bm, geom=bm.edges[:], offset=0.002, segments=2, affect="EDGES")
     bm.to_mesh(me); bm.free()
     vo = bpy.data.objects.new(f"Valve_{k}", me); link(vo, C_TUBE)
     mv = bpy.data.materials.get("ValvePlastic") or bpy.data.materials.new("ValvePlastic")
-    mv.use_nodes = True; mv.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.25, 0.22, 0.06, 1)
-    mv.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.35
+    mv.use_nodes = True; mv.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.03, 0.032, 0.03, 1)
+    mv.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.45
     me.materials.append(mv)
     # ride on the tube's top surface: shrinkwrap to the evaluated tube along -Z via Shrinkwrap constraint
     vo.location = (p.x, p.y, 1.5)
@@ -664,8 +669,9 @@ al2.location = (CUT_X - 1.5, -7.6, 1.4); al2.rotation_euler = (Vector((CUT_X, -9
 core = link(straight_tube("CutWater", x_start + 0.6, CUT_X - 0.002, -9.0, 10, shrink=0.016, cap_cut=True), C_FX)
 mwt = bpy.data.materials.new("TubeWater"); mwt.use_nodes = True; nt = mwt.node_tree
 b = nt.nodes["Principled BSDF"]; b.inputs["Base Color"].default_value = (0.03, 0.2, 0.3, 1); b.inputs["Transmission Weight"].default_value = 0.0
-b.inputs["Subsurface Weight"].default_value = 1.0; b.inputs["Subsurface Radius"].default_value = (0.2, 0.6, 0.9); b.inputs["Subsurface Scale"].default_value = 0.4
-b.inputs["Emission Color"].default_value = (0.05, 0.3, 0.42, 1); b.inputs["Emission Strength"].default_value = 0.12
+b.inputs["Subsurface Weight"].default_value = 0.45; b.inputs["Subsurface Radius"].default_value = (0.15, 0.5, 0.8); b.inputs["Subsurface Scale"].default_value = 0.12
+b.inputs["Emission Color"].default_value = (0.03, 0.22, 0.3, 1); b.inputs["Emission Strength"].default_value = 0.04
+b.inputs["Specular IOR Level"].default_value = 0.8
 b.inputs["Roughness"].default_value = 0.03; b.inputs["IOR"].default_value = 1.33
 va = nt.nodes.new("ShaderNodeVolumeAbsorption"); va.inputs["Color"].default_value = (0.35, 0.72, 0.78, 1); va.inputs["Density"].default_value = 0.5
 nt.links.new(va.outputs[0], nt.nodes["Material Output"].inputs["Volume"])
@@ -756,7 +762,7 @@ bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=0.018, radius2=0.0
 mn = bpy.data.materials.new("Brass"); mn.use_nodes = True; nb = mn.node_tree.nodes["Principled BSDF"]
 nb.inputs["Base Color"].default_value = (0.75, 0.55, 0.25, 1); nb.inputs["Metallic"].default_value = 1; nb.inputs["Roughness"].default_value = 0.3
 me.materials.append(mn); noz = bpy.data.objects.new("Nozzle", me); link(noz, C_SET)
-cn2 = noz.constraints.new("COPY_LOCATION"); cn2.target = bpy.data.objects["Valve_0"]; noz.rotation_euler = (R_(-35), 0, 0)
+cn2 = noz.constraints.new("COPY_LOCATION"); cn2.target = bpy.data.objects["Valve_0"]; cn2.use_offset = True; noz.location = (0.0, 0.03, 0.17); noz.rotation_euler = (R_(-30), 0, R_(-33))
 print("RING_SEGMENTS", [round(o["length"], 1) for o in TUBES if "length" in o])
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)

@@ -69,7 +69,7 @@ flood("FrontX", FRONT)
 flood("SpreadY", [(1, 4.4), (F(10.0), 4.6), (F(12.0), 5.0), (F(20.8), 5.2), (F(21.3), 6.6), (F(21.6), 7.9), (F(22.4), 12), (F(23.4), 40)])
 flood("Boost", [(1, 0), (F(10.6), 0), (F(12.4), 16), (F(23.4), 0)])
 flood("Level", [(1, 0.3), (F(9.5), 0.4), (F(12.5), 0.5), (F(21.0), 0.55), (F(21.6), 0.66), (F(24.5), 0.62), (F(26.4), 0.36), (F(28.0), 0.3), (F(33.5), 0.28)])
-flood("Lip", [(1, 0.8), (F(11.0), 0.75), (F(12.4), 0.4), (F(20.8), 0.3), (F(21.5), 0.75), (F(22.8), 0.35), (F(24.5), 0.05)])
+flood("Lip", [(1, 1.0), (F(11.0), 0.9), (F(12.4), 0.4), (F(20.8), 0.3), (F(21.5), 1.0), (F(22.8), 0.35), (F(24.5), 0.05)])
 flood("Chop", [(1, 0.07), (F(21.4), 0.1), (F(24.5), 0.05), (F(27.0), 0.02)])
 fl = bpy.data.objects["Flood"]
 khide(fl, [(1, F(15.0)), (F(20.85), 2011)])          # hidden while inside the cutaway shell
@@ -182,6 +182,18 @@ def face(rig, f, brow=0.0, jaw=0.0, lids=0.0, smile=0.0):
         pb = P["risorius03." + s]; pb.location = (0, smile * 0.004, 0); pb.keyframe_insert("location", frame=f)
     pb = P["jaw"]; pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(jaw * 16), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
 
+def grip(rig, s, f, amt):
+    """curl fingers (local X) for a grasp; amt 0 open .. 1 fist"""
+    P = rig.pose.bones
+    for fi in range(2, 6):
+        for j in range(1, 4):
+            pb = P.get(f"finger{fi}-{j}.{s}")
+            if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * (48 if j == 1 else 62)), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+    for j in (2, 3):
+        pb = P.get(f"finger1-{j}.{s}")
+        if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * 28), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+for n in RIG:
+    for s in "LR": grip(RIG[n], s, 1, 0.25)
 H = HU["Hero"]; HR = RIG["Hero"]
 VALVE = bpy.data.objects["Valve_0"]
 def valve_pos(f):
@@ -193,20 +205,24 @@ for f in range(1, F(2.5) + 1, 4):
     cr = 0.5 - 0.22 * smooth(u) + 0.015 * math.sin(f * 0.11)
     stand(H, f, K, 0, flex=34 - 10 * smooth(u), crouch=cr, head=(18 - 6 * smooth(u), 12 * math.sin(f * 0.02)),
           feet={"L": Vector((K.x + 0.16, K.y + 0.02)), "R": Vector((K.x - 0.17, K.y + 0.12))})
-    noz = v + Vector((0.0, 0.05, 0.1))
-    H.key_hand("L", f, noz + Vector((0.035, 0.03, 0.03)), Vector((-0.2, -0.5, -0.8)), Vector((-1, 0, 0)), pole=K + Vector((0.6, 0.3, 0.6)))
-    H.key_hand("R", f, noz + Vector((-0.04, 0.2, 0.12)), Vector((0.1, -0.7, -0.6)), Vector((1, 0, 0)), pole=K + Vector((-0.6, 0.3, 0.6)))
-    # hose end tracks the valve
-    hose_pts[-1].co = noz + Vector((0, 0.02, 0.05)); hose_pts[-1].keyframe_insert("co", frame=f)
-    hose_pts[-2].co = noz + Vector((0, 0.5, -0.05)); hose_pts[-2].keyframe_insert("co", frame=f)
+    noz = v + Vector((0.0, 0.03, 0.17))
+    dR = Vector((0.0, -0.75, -0.65)).normalized()
+    H.key_hand("R", f, noz - dR * 0.085 + Vector((0, 0, 0.035)), dR, Vector((0, -0.4, -1)), pole=K + Vector((-0.7, 0.2, 0.5)))
+    hose_mid = noz + Vector((0.16, 0.24, -0.04))
+    dL = Vector((-0.7, -0.4, -0.6)).normalized()
+    H.key_hand("L", f, hose_mid - dL * 0.085 + Vector((0, 0, 0.04)), dL, Vector((0.2, 0, -1)), pole=K + Vector((0.7, 0.2, 0.5)))
+    # hose end tracks the valve and passes through the left hand
+    hose_pts[-1].co = noz; hose_pts[-1].keyframe_insert("co", frame=f)
+    hose_pts[-2].co = noz + Vector((0.32, 0.48, -0.1)); hose_pts[-2].keyframe_insert("co", frame=f)
     face(HR, f, brow=0.3, jaw=0.08, lids=0.2)
 for f in range(F(2.5) + 4, F(3.7), 4):
-    v = valve_pos(f); hose_pts[-1].co = v + Vector((0, 0.07, 0.15)); hose_pts[-1].keyframe_insert("co", frame=f)
-    hose_pts[-2].co = v + Vector((0, 0.57, 0.05)); hose_pts[-2].keyframe_insert("co", frame=f)
+    v = valve_pos(f); hose_pts[-1].co = v + Vector((0.0, 0.03, 0.17)); hose_pts[-1].keyframe_insert("co", frame=f)
+    hose_pts[-2].co = v + Vector((0.32, 0.51, 0.07)); hose_pts[-2].keyframe_insert("co", frame=f)
 f0 = F(2.5)
 for f, cr, fl_, mode in ((f0 + 14, 0.2, 20, "hang"), (f0 + 30, 0.02, 4, "hang"), (f0 + 48, 0.0, 0, "brow"), (F(3.7), 0.0, 2, "brow")):
     stand(H, f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, flex=fl_, crouch=cr, head=(-5, -35))
     arms(H, "Hero", f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, mode)
+for s_ in "LR": grip(HR, s_, 1, 0.85); grip(HR, s_, F(2.5), 0.85); grip(HR, s_, F(2.5) + 12, 0.2)
 face(HR, f0 + 40, brow=0.6, jaw=0.15, lids=0.4); face(HR, F(3.6), brow=0.2, jaw=0.0, lids=0.1, smile=0.6)
 # beat 2: walks inside the ring along the front, checks each tube as it swells, hands on hips
 p0 = K + Vector((0, 0.12, 0)); p1 = Vector((7.2, -7.4, 0))
@@ -234,7 +250,7 @@ for f, dy, mode, fl_ in ((F(21.4), 0, "chest", 2), (F(21.6), 0.12, "up", -12), (
     stand(H, f, PORCH + Vector((0, dy, 0)), 0, flex=fl_, head=(-6 if fl_ < 0 else 6, 0)); arms(H, "Hero", f, PORCH + Vector((0, dy, 0)), 0, mode)
 face(HR, F(21.4), brow=0.2); face(HR, F(21.6), brow=1.0, lids=1.0, jaw=0.5); face(HR, F(22.8), brow=0.7, lids=0.6, jaw=0.25)
 # beat 10: amazed: steps to the porch edge, hands to head, brows up, jaw open
-EDGE = PORCH + Vector((0.1, -0.35, 0))
+EDGE = PORCH + Vector((0.1, -0.2, 0))
 for f, pos, mode, fl_, hd in ((F(28.2), PORCH, "hips", 6, (8, 0)), (F(28.7), EDGE, "hang", 2, (10, -20)), (F(29.2), EDGE, "head", -6, (-8, 0)),
                               (F(29.9), EDGE, "head", -8, (-10, 15)), (F(30.3), EDGE, "out", 2, (5, -10))):
     stand(H, f, pos, 0, flex=fl_, head=hd); arms(H, "Hero", f, pos, 0, mode)
@@ -266,6 +282,7 @@ for f in range(F(0.3), F(7.5) + 1, 4):
     W = b0.matrix_world @ Vector((0, 0.38, 1.0)) if False else Vector((p.x, p.y - 0.42, 0.98))
     for s, dx in (("L", 0.17), ("R", -0.17)):
         NA.key_hand(s, f, W + Vector((-dx, 0, 0)), Vector((0, 1, -0.6)), Vector((0, 0, -1)), pole=p + Vector((dx * 3, 0.4, 1.0)))
+for s_ in "LR": grip(RIG["NeighbourA"], s_, F(0.3), 0.8); grip(RIG["NeighbourA"], s_, F(7.5), 0.8); grip(RIG["NeighbourA"], s_, F(7.8), 0.25)
 pa2 = Vector((3.2, -31.6, 0))
 NA.walk(lambda f: pa1.lerp(pa2, smooth((f - F(8.4)) / (F(10.2) - F(8.4)))), lambda f: 200, F(8.4), F(10.2), stride=1.1, lift=0.14, lean=14)
 for f in range(F(8.4), F(10.2) + 1, 4): arms(NA, "NeighbourA", f, pa1.lerp(pa2, smooth((f - F(8.4)) / (F(10.2) - F(8.4)))), 200, "hang", phase=f / 25, amp=1.0)
@@ -361,7 +378,7 @@ CAM = [  # (t seconds, position, look-at, lens)
     (10.5, V((6.5, -15.2, 0.95)), V((18.0, -16.0, 0.45)), 20),
     (11.5, V((-3.0, -18.2, 1.6)), V((5.0, -16.0, 0.4)), 22),
     (12.3, V((-13.5, -12.0, 1.5)), V((-21.5, -3.6, 0.9)), 24),
-    (13.3, V((-17.0, -9.2, 1.1)), V((-12.0, -6.0, 0.7)), 26),
+    (13.3, V((-15.0, -10.6, 1.3)), V((-11.0, -6.0, 0.6)), 26),
     (14.0, V((-6.5, -14.0, 2.2)), V((1.5, -9.0, 0.4)), 24),
     (14.6, V((3.4, -10.9, 0.75)), V((2.0, -9.0, 0.45)), 30),
     (15.0, V((3.0, -9.95, 0.55)), V((2.0, -9.0, 0.45)), 30),
@@ -377,8 +394,8 @@ CAM = [  # (t seconds, position, look-at, lens)
     (23.5, V((14.0, -18.5, 9.0)), V((0.0, 0.0, 0.0)), 20),
     (24.5, V((-4.0, -24.0, 6.0)), V((-3.0, -16.0, 0.0)), 22),
     (25.6, V((-12.5, -15.5, 1.0)), V((-18.0, -12.5, 0.2)), 24),
-    (26.4, V((-15.5, -7.8, 1.4)), V((-22.0, -3.7, 1.2)), 24),
-    (27.5, V((-25.5, -10.0, 1.5)), V((-21.5, -7.2, 0.5)), 26),
+    (26.4, V((-15.0, -10.5, 1.7)), V((-21.0, -3.6, 0.9)), 24),
+    (27.5, V((-27.0, -12.5, 2.0)), V((-21.5, -5.5, 0.7)), 24),
     (28.2, V((-10.0, -11.5, 1.6)), V((-2.0, -6.0, 1.2)), 24),
     (29.2, V((0.4, -7.6, 1.9)), V((2.4, -4.4, 2.0)), 32),
     (30.3, V((1.8, -6.2, 2.3)), V((2.4, -4.4, 2.15)), 35),
@@ -400,6 +417,17 @@ for f in range(1, 2011, 2):
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
     cam.data.lens = cl(f); cam.data.keyframe_insert("lens", frame=f)
     cam.data.dof.focus_distance = max(0.3, (q - p).length); cam.data.dof.keyframe_insert("focus_distance", frame=f)
+# bubbles drift up through the section, silt swirls (life inside the cutaway)
+for o in [o for o in bpy.data.objects if o.name.startswith("Bubble_")]:
+    z0 = o.location.z; ph = random.uniform(0, 6)
+    for f in range(CUT_IN, CUT_OUT + 1, 30):
+        u = (f - CUT_IN) / 60.0
+        o.location.z = min(0.76, z0 + 0.025 * u); o.location.y += 0.0; o.keyframe_insert("location", index=2, frame=f)
+for o in [o for o in bpy.data.objects if o.name.startswith("Silt_")]:
+    p0 = o.location.copy(); ph = random.uniform(0, 6)
+    for f in range(F(17.0), CUT_OUT + 1, 30):
+        o.location = p0 + Vector((0.08 * math.sin(f * 0.02 + ph), 0.05 * math.sin(f * 0.03 + ph), 0.03 * math.sin(f * 0.025 + ph)))
+        o.keyframe_insert("location", frame=f)
 sc["beats"] = str([F(t) for t in (0.0, 3.7, 8.3, 11.8, 13.6, 17.2, 21.4, 24.5, 26.4, 28.2, 30.3)])
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

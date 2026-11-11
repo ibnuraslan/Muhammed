@@ -141,7 +141,7 @@ for sgn in (1, -1):
         P2.append(c + d * (CR + 0.6)); D2.append(d)
     for i in range(50):
         y = RC.y - HY + CR + (2 * HY - 2 * CR) * i / 49; P2.append(Vector((sgn * (HX + 0.6), y))); D2.append(Vector((sgn, 0)))
-slam = spray("SlamSpray", strip("SlamStrip", P2, D2, 0.45), 21.3, 24.2, 45, 5.0, 2.0, 0.9, 0.028, 33, MS)
+slam = spray("SlamSpray", strip("SlamStrip", P2, D2, 0.45), 21.3, 24.2, 60, 6.5, 2.4, 1.0, 0.03, 33, MS)
 # surge-front spray along the street, x driven by the flood FrontX value
 SP, SD = [Vector((0, -20 + 9 * i / 59)) for i in range(60)], [Vector((-1, 0)) for i in range(60)]
 surge = spray("SurgeSpray", strip("SurgeStrip", SP, SD, 0.5), 8.3, 15.0, 45, 3.5, 2.6, 0.8, 0.028, 44, MS)
