@@ -256,9 +256,9 @@ sp2 = bpy.data.lights.new("LampSat_Spot", "SPOT"); sp2.energy = 350; sp2.spot_si
 s2o = link(bpy.data.objects.new("LampSat_Spot", sp2)); s2o.location = (0.95, 0.75, 2.0)
 s2o.rotation_euler = (V(0.5, 0.1, 0.95) - V(0.95, 0.75, 2.0)).to_track_quat("-Z", "Y").to_euler()
 dust_root = link(bpy.data.objects.new("Dust_Root", None)); dust_root.location = (0.1, 0.12, 1.4)
-dm = mat("M_Dust", (1, 1, 1, 1), 0.5, emit=(1.0, 0.96, 0.88, 1), estr=1.5)
-bpy.ops.mesh.primitive_ico_sphere_add(radius=0.0012, subdivisions=1); dust_src = bpy.context.active_object; dust_src.name = "Dust_Src"; dust_src.data.materials.append(dm)
-for i in range(140):
+dm = mat("M_Dust", (1, 1, 1, 1), 0.5, emit=(1.0, 0.96, 0.88, 1), estr=0.5)
+bpy.ops.mesh.primitive_ico_sphere_add(radius=0.0007, subdivisions=1); dust_src = bpy.context.active_object; dust_src.name = "Dust_Src"; dust_src.data.materials.append(dm)
+for i in range(60):
     zz = random.uniform(-0.4, 0.4); rr = random.uniform(0, 0.08 + (0.4 - zz) * 0.35); aa = random.uniform(0, 2 * math.pi)
     d_ = bpy.data.objects.new(f"Dust_{i:03d}", dust_src.data); link(d_); d_.parent = dust_root
     d_.location = (rr * math.cos(aa), rr * math.sin(aa), zz)
