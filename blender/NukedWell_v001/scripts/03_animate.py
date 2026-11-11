@@ -15,7 +15,7 @@ random.seed(18)
 
 def ground_z(x, y):   # flat site; the shaft collar top is at 0.5
     r = (Vector((x, y)) - SHAFT).length
-    return 0.5 if 2.35 < r < 3.45 else 0.0
+    return 0.4 if 0.72 < r < 1.68 else 0.0
 
 def F(t): return 1 + round(t * 60)          # seconds -> frame
 BEAT = {1: F(0.0), 2: F(3.2), 3: F(5.7), 4: F(9.0), 5: F(10.3), 6: F(14.9), 7: F(18.5), 8: F(23.0), 9: F(26.4), 10: F(28.0), 11: F(31.6)}
@@ -77,10 +77,10 @@ YAW_SHAFT, R_SHAFT = slew_for(SHAFT); YAW_WELL, R_WELL = slew_for(WELL); YAW_PAR
 TOPZ = 32.5
 def dev_z_story(s):
     """device origin (top) height vs story frame in the opening (1966, beats 1-2)"""
-    if s >= 193: return -57.0
+    if s >= 193: return -58.0
     if s >= 1:
         t = (s - 1) / 192.0; e = smooth(t) ** 1.15
-        return 3.0 + (-57.0 - 3.0) * e
+        return 3.0 + (-58.0 - 3.0) * e
     # before frame 1 (rewind): device rises up to the jib, then the crane parks it
     return min(TOPZ - 3.0, 3.0 + (1 - s) * 0.55)
 def dev_state(f):
@@ -93,10 +93,10 @@ def dev_state(f):
     b8 = BEAT[8]
     if f < 1250: return YAW_PARK, R_SHAFT, TOPZ - 3, False
     if f < b8:   # crane swings the device over the shaft (after the cap job)
-        t = smooth((f - 1255) / 110.0); return YAW_PARK + (YAW_SHAFT - YAW_PARK) * t, R_SHAFT, TOPZ - 3 - (TOPZ - 3 - 9.7) * smooth((f - 1290) / 90.0), True
-    if f < 1460: return YAW_SHAFT, R_SHAFT, 9.7 - 0.5 * smooth((f - b8) / 79.0), True
+        t = smooth((f - 1255) / 110.0); return YAW_PARK + (YAW_SHAFT - YAW_PARK) * t, R_SHAFT, TOPZ - 3 - (TOPZ - 3 - 5.3) * smooth((f - 1290) / 90.0), True
+    if f < 1460: return YAW_SHAFT, R_SHAFT, 5.3 - 0.35 * smooth((f - b8) / 79.0), True
     t = (f - 1460) / (BEAT[9] - 6 - 1460)
-    return YAW_SHAFT, R_SHAFT, 9.2 + (-57.0 - 9.2) * smooth(min(1, t)) ** 1.6, True
+    return YAW_SHAFT, R_SHAFT, 4.95 + (-58.0 - 4.95) * smooth(min(1, t)) ** 1.6, True
 
 def cap_state(f):
     """cap: hangs from the hook 1040-1170 over the well, sits on the wellhead after"""
@@ -114,7 +114,7 @@ for f in range(1, END + 1, 2):
         yaw = yaw_c; r = r_c; hook_z = z_c + 0.8 if z_c is not None else TOPZ - 3
         if f >= 1172: hook_z = 3.75 + 0.8 + (TOPZ - 3 - 4.55) * smooth((f - 1180) / 60.0)   # hook released, rises
     else:
-        yaw, r, hook_z = yaw_d, r_d, z_d + 0.7
+        yaw, r, hook_z = yaw_d, r_d, z_d + 0.62
     CR.rotation_euler = (0, 0, yaw); CR.keyframe_insert("rotation_euler", index=2, frame=f)
     TROL.location = (0, -r, 32.9); TROL.keyframe_insert("location", frame=f)
     tip = CB + Matrix.Rotation(yaw, 3, 'Z') @ Vector((0, -r, 0))
@@ -156,7 +156,7 @@ def pour_state(s):
     """story frame -> (stream end fraction 0..1 along the arc, plug height)"""
     if s < 200: return 0.0, 0.0
     plug = 22.0 * smooth((s - 215) / 125.0)
-    top = -56.3 + plug
+    top = -57.4 + plug
     # fraction of the arc down to the plug top
     L_arc = (mouth - tipw).length; L_down = 0.6 - top
     end = min(1.0, (s - 200) / 14.0)
@@ -166,7 +166,7 @@ def pour_state(s):
 for f in range(1, RW1 + 2, 2):
     s = story(f); frac, plug = pour_state(s)
     cu.bevel_factor_end = max(0.0, frac); cu.keyframe_insert("bevel_factor_end", frame=f)
-    PLUG.scale = (1, 1, max(0.001, plug)); PLUG.location = (SHAFT.x, SHAFT.y + 1.3, -56.3); PLUG.keyframe_insert("scale", frame=f); PLUG.keyframe_insert("location", frame=f)
+    PLUG.scale = (1, 1, max(0.001, plug)); PLUG.location = (SHAFT.x, SHAFT.y + 0.45, -57.4); PLUG.keyframe_insert("scale", frame=f); PLUG.keyframe_insert("location", frame=f)
     DRUM.rotation_euler = (0, R_(-76), -s * 0.09); DRUM.keyframe_insert("rotation_euler", frame=f)
 for f, h in ((1, False), (RW1, True), (BEAT[9] - 30, False)):
     ARC.hide_render = h; ARC.keyframe_insert("hide_render", frame=f)
@@ -217,7 +217,7 @@ def crack_s(f):
 for f in range(1, END + 1, 2):
     h = fire_h(f); w = 1.0 + 0.04 * math.sin(f * 0.21) + 0.03 * math.sin(f * 0.53)
     FIRE.scale = (max(0.02, (0.35 + 0.65 * min(1, h)) * w), max(0.02, (0.35 + 0.65 * min(1, h)) * w), max(0.001, h)); FIRE.keyframe_insert("scale", frame=f)
-    SMOKE.scale = (max(0.05, min(1, h)), max(0.05, min(1, h)), max(0.05, min(1, h))); SMOKE.location = (4, 8, 2.6 + 97 * max(0.05, min(1, h)))
+    SMOKE.scale = (max(0.05, min(1, h)), max(0.05, min(1, h)), max(0.05, min(1, h))); SMOKE.location = (4, 8, 2.6 + 62 * max(0.05, min(1, h)))
     SMOKE.keyframe_insert("scale", frame=f); SMOKE.keyframe_insert("location", frame=f)
     for i, o in enumerate(FIS):
         hh = fis_h(f - i * 3); ww = 1.0 + 0.08 * math.sin(f * 0.3 + i)
@@ -311,9 +311,9 @@ for f in range(1, END + 1, 2):
 # ================================================================== blast (beat 9) + glow + jolt + dust ring
 b9, b10 = BEAT[9], BEAT[10]
 BL = O["BlastSphere"]; BLE = bpy.data.materials["M_Blast"].node_tree.nodes["BlastEmit"]
-K(BL, "scale", [(1, (0.001,) * 3), (b9 - 1, (0.001,) * 3), (b9 + 8, (10.5,) * 3), (b9 + 20, (8.5,) * 3), (b10 + 40, (7.5,) * 3)])
-KS(BLE.inputs['Strength'], [(1, 0.0), (b9 - 1, 0.0), (b9 + 2, 120.0), (b9 + 20, 30.0), (b9 + 70, 3.0), (b10 + 40, 0.6)])
-KS(BLE.inputs['Color'], [(b9, (1, 0.97, 0.9, 1)), (b9 + 40, (1.0, 0.6, 0.25, 1)), (b10 + 100, (0.9, 0.3, 0.08, 1))])
+K(BL, "scale", [(1, (0.001,) * 3), (b9 - 1, (0.001,) * 3), (b9 + 8, (10.5,) * 3), (b9 + 20, (8.5,) * 3), (b10 + 40, (5.5,) * 3)])
+KS(BLE.inputs['Strength'], [(1, 0.0), (b9 - 1, 0.0), (b9 + 2, 120.0), (b9 + 20, 30.0), (b9 + 60, 2.0), (b10, 0.15), (b10 + 60, 0.04)])
+KS(BLE.inputs['Color'], [(b9, (1, 0.97, 0.9, 1)), (b9 + 40, (1.0, 0.6, 0.25, 1)), (b10, (0.8, 0.22, 0.05, 1))])
 K(O["L_Blast"].data, "energy", [(1, 0.0), (b9 - 1, 0.0), (b9 + 3, 6e6), (b9 + 25, 1e6), (b9 + 90, 6e4), (b10 + 120, 1e4)])
 st = bpy.data.materials["M_Strata"].node_tree.nodes
 KS(st["GlowAmt"].outputs[0], [(1, 0.0), (b9, 0.0), (b9 + 6, 12.0), (b9 + 40, 3.0), (b10, 0.8), (b10 + 60, 0.25), (END, 0.15)])
@@ -506,9 +506,9 @@ idle("SolC", 1, B[3] + 60, (-4.5, 9.5), yaw_to(Vector((-4.5, 9.5)), Vector((0, 0
 idle("SolD", 1, B[3] + 60, (-27.5, 9.0), yaw_to(Vector((-27.5, 9.0)), Vector((-23, 3))), "side", "side", gest=[(200, "point", "side")])
 # ---------------- beats 4-5 (1963): two engineers far out watching the eruption, soldiers run back
 T0 = B[3] + 61
-pose("EngA", T0, (34, 52), yaw_to(Vector((34, 52)), WELL)); pose("EngB", T0, (37.5, 55), yaw_to(Vector((37.5, 55)), WELL))
-idle("EngA", T0 + 1, B[6] - 40, (34, 52), yaw_to(Vector((34, 52)), WELL), "side", "side", gest=[(B[4] + 55, "shield", "side"), (B[5] + 90, "shield", "point"), (B[5] + 160, "side", "chest")])
-idle("EngB", T0 + 1, B[6] - 40, (37.5, 55), yaw_to(Vector((37.5, 55)), WELL), "side", "side", gest=[(B[4] + 58, "shield", "shield"), (B[5] + 120, "hip", "hip")])
+pose("EngA", T0, (41, -8.5), yaw_to(Vector((41, -8.5)), WELL)); pose("EngB", T0, (39.3, -5.8), yaw_to(Vector((39.3, -5.8)), WELL))
+idle("EngA", T0 + 1, B[6] - 40, (41, -8.5), yaw_to(Vector((41, -8.5)), WELL), "side", "side", gest=[(B[4] + 55, "shield", "side"), (B[5] + 90, "shield", "point"), (B[5] + 160, "side", "chest")])
+idle("EngB", T0 + 1, B[6] - 40, (39.3, -5.8), yaw_to(Vector((39.3, -5.8)), WELL), "side", "side", gest=[(B[4] + 58, "shield", "shield"), (B[5] + 120, "hip", "hip")])
 for nm, a, b in (("SolA", (6, 20), (16, 46)), ("SolB", (-5, 18), (-12, 45)), ("SolC", (12, 14), (24, 38)), ("SolD", (-14, 12), (-20, 40))):
     pose(nm, T0, a, yaw_to(Vector(a), WELL)); idle(nm, T0 + 1, B[4] + 56, a, yaw_to(Vector(a), WELL), "side", "side")
     yw = walk(nm, B[4] + 57, B[4] + 57 + 150, a, b, stride=1.1)
@@ -575,26 +575,26 @@ for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", 
 T8 = B[8] - 69
 DZ0 = 10.6 - 9.0   # device bottom at the start of beat 8
 def dev_guide(nm, sgn, f0, f1):
-    pos = SHAFT + Vector((sgn * 2.52, 0.3)); yw = yaw_to(pos, SHAFT + Vector((0, 0.3)))
+    pos = SHAFT + Vector((sgn * 1.2, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
     pose(nm, f0 - 1, pos, yw)
     f = f0
     while f <= f1:
-        _, _, zd, _ = dev_state(f); zb = zd - 9.0
+        _, _, zd, _ = dev_state(f); zb = zd - 4.6
         hz = max(zb + 0.6, 1.15); hz = min(hz, zb + 2.5)
-        cx = SHAFT.x + sgn * 1.72 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
+        cx = SHAFT.x + sgn * 0.47 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
         release = smooth((f - 1452) / 14.0)
         hw = {}
-        for s, dy in (("L", -0.25 * sgn), ("R", 0.25 * sgn)):
-            W = Vector((cx + sgn * 0.03 + sgn * 0.35 * release, SHAFT.y + dy + 0.3, hz + 0.0 - 0.3 * release))
+        for s, dy in (("L", -0.17 * sgn), ("R", 0.17 * sgn)):
+            W = Vector((cx + sgn * 0.03 + sgn * 0.3 * release, SHAFT.y + dy, hz + 0.0 - 0.3 * release))
             hw[s] = (W, Vector((0, 0, 1)), Vector((-sgn, 0, 0)))
-        pose(nm, f, pos, yw, crouch=0.12, flex=46 - 26 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1), grip=(0.15, 0.15))
+        pose(nm, f, pos, yw, crouch=0.08, flex=30 - 14 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1), grip=(0.15, 0.15))
         f += 6
 for nm, sg in (("SolA", -1), ("SolB", 1)):
-    pp = SHAFT + Vector((sg * 2.52, 0.3)); idle(nm, T8, 1360, pp, yaw_to(pp, SHAFT + Vector((0, 0.3)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
+    pp = SHAFT + Vector((sg * 1.2, 0.15)); idle(nm, T8, 1360, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
 dev_guide("SolA", -1, 1372, 1500)
 dev_guide("SolB", 1, 1372, 1500)
-idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-2.52, 0.3)), yaw_to(SHAFT + Vector((-2.52, 0.3)), SHAFT), "side", "point_down", flex=16)
-idle("SolB", 1501, B[9] - 6, SHAFT + Vector((2.52, 0.3)), yaw_to(SHAFT + Vector((2.52, 0.3)), SHAFT), "side", "side", flex=16)
+idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-1.2, 0.15)), yaw_to(SHAFT + Vector((-1.2, 0.15)), SHAFT), "side", "point_down", flex=16)
+idle("SolB", 1501, B[9] - 6, SHAFT + Vector((1.2, 0.15)), yaw_to(SHAFT + Vector((1.2, 0.15)), SHAFT), "side", "side", flex=16)
 pE = Vector((-8.5, 4.5)); pose("EngA", T8, pE, yaw_to(pE, CB.to_2d()))
 idle("EngA", T8 + 1, B[9] - 6, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
      gest=[(T8 + 1, "wave_a", "side"), (T8 + 13, "wave_b", "side"), (T8 + 25, "wave_a", "side"), (T8 + 37, "wave_b", "side"), (1440, "up", "point"), (1480, "side", "point_down")], head=(18, 0))
@@ -626,13 +626,13 @@ for nm in CREW:
 
 # ================================================================== camera: one continuous Catmull-Rom spline through ~1 s framings
 CAMK = [  # frame, camera, target, lens
-    (1,    (-8.0, -11.5, 5.2),  (-14.0, -2.7, 3.6), 30),
+    (1,    (-11.0, -7.8, 3.4),  (-14.0, -2.7, 2.0), 30),
     (50,   (-8.5, -17.0, 1.6), (-14.0, -2.7, -1.0), 28),
-    (100,  (-10.0, -36.0, -10.0), (-10.0, -2.7, -16.0), 24),
-    (150,  (-4.0, -50.0, -26.0), (-8.0, -2.7, -32.0), 24),
-    (193,  (-12.0, -44.0, -40.0), (-11.0, -2.7, -44.0), 26),
-    (240,  (-26.0, -42.0, -32.0), (-13.0, -2.7, -34.0), 24),
-    (290,  (-24.0, -44.0, -10.0), (-13.0, -2.7, -10.0), 24),
+    (100,  (-9.5, -17.0, -22.0), (-14.0, -2.7, -28.0), 28),
+    (150,  (-8.5, -16.0, -45.0), (-14.0, -2.7, -51.0), 28),
+    (193,  (-11.0, -14.0, -57.0), (-14.0, -2.7, -60.0), 30),
+    (240,  (-20.0, -16.0, -50.0), (-14.0, -2.7, -52.0), 28),
+    (290,  (-21.0, -26.0, -22.0), (-14.0, -2.7, -16.0), 26),
     (335,  (-29.0, -15.0, 3.2), (-18.5, 2.5, 1.5), 28),
     (380,  (-52.0, -70.0, 40.0), (-8.0, 8.0, 8.0), 24),
     (430,  (-30.0, -170.0, 100.0), (-2.0, 10.0, 12.0), 24),
@@ -643,10 +643,10 @@ CAMK = [  # frame, camera, target, lens
     (605,  (6.0, -42.0, 7.0), (0.0, 0.0, 14.0), 24),
     (650,  (12.0, -70.0, 18.0), (0.0, 0.0, 55.0), 22),
     (710,  (70.0, -120.0, 30.0), (5.0, 10.0, 60.0), 22),
-    (770,  (46.0, -14.0, 3.5), (28.0, 24.0, 22.0), 24),
+    (770,  (46.0, -14.0, 2.0), (12.0, 0.0, 22.0), 24),
     (830,  (-8.0, -62.0, 2.6), (0.0, 10.0, 32.0), 22),
     (885,  (-30.0, -48.0, 20.0), (0.0, 20.0, 18.0), 24),
-    (935,  (17.0, 33.0, 2.0), (10.0, 14.0, 3.0), 26),
+    (935,  (19.6, 24.8, 1.75), (10.0, 10.0, 3.0), 28),
     (990,  (20.0, 15.0, 5.0), (3.0, 2.0, 8.0), 24),
     (1045, (6.0, 26.0, 9.0), (-3.0, 4.0, 10.0), 24),
     (1095, (-30.0, 12.0, 9.0), (-6.0, 14.0, 6.0), 24),
@@ -655,9 +655,9 @@ CAMK = [  # frame, camera, target, lens
     (1240, (13.0, -24.0, 14.0), (2.0, 10.0, 1.0), 26),
     (1300, (32.0, -62.0, 46.0), (0.0, 14.0, 3.0), 24),
     (1350, (2.0, -40.0, 20.0), (-12.0, 0.0, 6.0), 26),
-    (1400, (-6.0, -11.5, 5.5), (-14.0, -2.7, 4.5), 30),
-    (1450, (-19.5, -10.5, 2.4), (-14.0, -2.7, 2.6), 24),
-    (1500, (-21.0, -6.0, 1.8), (-14.0, -2.7, 0.5), 28),
+    (1400, (-10.5, -6.8, 3.0), (-14.0, -2.7, 2.6), 30),
+    (1450, (-17.5, -6.8, 1.9), (-14.0, -2.7, 2.0), 28),
+    (1500, (-18.8, -3.8, 1.5), (-14.0, -2.7, 0.9), 28),
     (1545, (-17.0, -12.5, -7.0), (-14.0, -2.7, -18.0), 26),
     (1592, (-4.0, -52.0, -40.0), (-14.0, -2.7, -56.0), 24),
     (1632, (-8.0, -72.0, -6.0), (-14.0, 0.0, -20.0), 22),

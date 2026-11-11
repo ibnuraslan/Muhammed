@@ -44,7 +44,7 @@ def tex_files(aid):
     fs = glob.glob(os.path.join(A, aid, "textures", "*")) + glob.glob(os.path.join(A, aid, "*.jpg"))
     pick = lambda k: next((f for f in fs if k in os.path.basename(f)), None)
     return pick("_diff_"), pick("_rough_"), pick("_nor_gl_")
-def pbr(name, aid, scale, tint=None, val=1.0, bump=1.0, rough=None, coord='Object', metal=0.0):
+def pbr(name, aid, scale, tint=None, val=1.0, bump=1.0, rough=None, coord='Object', metal=0.0, sat=1.0):
     m = bpy.data.materials.new(name); m.use_nodes = True
     n, l = m.node_tree.nodes, m.node_tree.links; p = n["Principled BSDF"]
     p.inputs['Metallic'].default_value = metal
@@ -53,6 +53,8 @@ def pbr(name, aid, scale, tint=None, val=1.0, bump=1.0, rough=None, coord='Objec
     l.new(tc.outputs[coord], mp.inputs['Vector'])
     d = n.new('ShaderNodeTexImage'); d.image = img(d_); l.new(mp.outputs['Vector'], d.inputs['Vector'])
     col = d.outputs['Color']
+    if sat != 1.0:
+        hs_ = n.new('ShaderNodeHueSaturation'); hs_.inputs['Saturation'].default_value = sat; l.new(col, hs_.inputs['Color']); col = hs_.outputs['Color']
     if tint or val != 1.0:
         mx = n.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
         t = tint or (1, 1, 1); mx.inputs['B'].default_value = (t[0] * val, t[1] * val, t[2] * val, 1)
@@ -158,51 +160,57 @@ def build_face():
     tc = n.new('ShaderNodeTexCoord'); sep = n.new('ShaderNodeSeparateXYZ'); l.new(tc.outputs['UV'], sep.inputs['Vector'])
     dep = n.new('ShaderNodeMath'); dep.operation = 'MULTIPLY_ADD'; dep.inputs[1].default_value = -FZ0; dep.inputs[2].default_value = FZ0
     l.new(sep.outputs['Y'], dep.inputs[0])  # depth z (m, negative) at rest
-    wob = n.new('ShaderNodeTexNoise'); wob.inputs['Scale'].default_value = 6.0; wob.inputs['Detail'].default_value = 3
+    wob = n.new('ShaderNodeTexNoise'); wob.inputs['Scale'].default_value = 9.0; wob.inputs['Detail'].default_value = 6
     l.new(tc.outputs['UV'], wob.inputs['Vector'])
     wm = n.new('ShaderNodeMath'); wm.operation = 'MULTIPLY_ADD'; wm.inputs[1].default_value = 5.0; wm.inputs[2].default_value = -2.5
     l.new(wob.outputs['Fac'], wm.inputs[0])
     dz = n.new('ShaderNodeMath'); dz.operation = 'ADD'; l.new(dep.outputs[0], dz.inputs[0]); l.new(wm.outputs[0], dz.inputs[1])
     nd = n.new('ShaderNodeMath'); nd.operation = 'MULTIPLY'; nd.inputs[1].default_value = 1 / FZ0; l.new(dz.outputs[0], nd.inputs[0])
-    ramp = n.new('ShaderNodeValToRGB'); ramp.color_ramp.interpolation = 'CONSTANT'
-    bands = [(0.0, (0.55, 0.36, 0.20)), (6, (0.42, 0.18, 0.09)), (11, (0.58, 0.40, 0.22)), (18, (0.22, 0.21, 0.23)),
-             (30, (0.50, 0.45, 0.36)), (38, (0.36, 0.17, 0.10)), (47, (0.52, 0.38, 0.22)), (76, (0.09, 0.08, 0.08)),
-             (86, (0.34, 0.27, 0.18)), (104, (0.13, 0.11, 0.12)), (125, (0.16, 0.13, 0.12))]
-    el = ramp.color_ramp.elements
-    el[0].position = 0.0; el[0].color = (*bands[0][1], 1); el[1].position = bands[1][0] / -FZ0; el[1].color = (*bands[1][1], 1)
-    for d_, col in bands[2:]:
-        e = el.new(d_ / -FZ0); e.color = (*col, 1)
-    l.new(nd.outputs[0], ramp.inputs['Fac'])
-    dr, rr, nr = tex_files("rock_face")
-    mp = n.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (40, 16, 1); l.new(tc.outputs['UV'], mp.inputs['Vector'])
-    td = n.new('ShaderNodeTexImage'); td.image = img(dr); l.new(mp.outputs['Vector'], td.inputs['Vector'])
-    bw = n.new('ShaderNodeRGBToBW'); l.new(td.outputs['Color'], bw.inputs['Color'])
-    det = n.new('ShaderNodeMath'); det.operation = 'MULTIPLY_ADD'; det.inputs[1].default_value = 1.9; det.inputs[2].default_value = 0.1
-    l.new(bw.outputs['Val'], det.inputs[0])
+    # per-layer rock / soil scans, stacked top->bottom on the noisy depth (boundaries wander +-2.5 m)
+    LAYERS = [(0, "aerial_sand", (0.95, 0.8, 0.62), 0.25), (6, "cracked_red_ground", (0.85, 0.55, 0.42), 0.35), (11, "sandstone_cracks", (1.0, 0.85, 0.66), 0.3),
+              (18, "rock_face", (0.55, 0.55, 0.58), 0.25), (30, "rock_face", (0.95, 0.92, 0.84), 0.3), (38, "red_sand", (0.7, 0.42, 0.3), 0.3),
+              (47, "sandstone_cracks", (0.9, 0.7, 0.5), 0.3), (76, "rock_face", (0.3, 0.28, 0.27), 0.3), (86, "dry_ground_rocks", (0.62, 0.52, 0.4), 0.3),
+              (104, "rock_face", (0.36, 0.33, 0.33), 0.25)]
+    mp = n.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (34, 13.6, 1); l.new(tc.outputs['UV'], mp.inputs['Vector'])
+    mp2 = n.new('ShaderNodeMapping'); mp2.inputs['Scale'].default_value = (21, 8.4, 1); mp2.inputs['Rotation'].default_value = (0, 0, 0.6); l.new(tc.outputs['UV'], mp2.inputs['Vector'])
+    dz_m = n.new('ShaderNodeMath'); dz_m.operation = 'MULTIPLY'; dz_m.inputs[1].default_value = -1.0; l.new(dz.outputs[0], dz_m.inputs[0])   # positive depth (m)
+    col = None
+    for i, (top, aid, tint, _) in enumerate(LAYERS):
+        dpath = tex_files(aid)[0]
+        t = n.new('ShaderNodeTexImage'); t.image = img(dpath); l.new((mp if i % 2 == 0 else mp2).outputs['Vector'], t.inputs['Vector'])
+        tm = n.new('ShaderNodeMix'); tm.data_type = 'RGBA'; tm.blend_type = 'MULTIPLY'; tm.inputs['Factor'].default_value = 1
+        tm.inputs['B'].default_value = (*tint, 1); l.new(t.outputs['Color'], tm.inputs['A'])
+        if col is None: col = tm.outputs['Result']; continue
+        gt = n.new('ShaderNodeMath'); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = float(top); l.new(dz_m.outputs[0], gt.inputs[0])
+        mx_ = n.new('ShaderNodeMix'); mx_.data_type = 'RGBA'; l.new(gt.outputs[0], mx_.inputs['Factor']); l.new(col, mx_.inputs['A']); l.new(tm.outputs['Result'], mx_.inputs['B'])
+        col = mx_.outputs['Result']
+    # thin dark seams (bedding cracks) along each boundary
+    seam = None
+    for top, *_ in LAYERS[1:]:
+        dd = n.new('ShaderNodeMath'); dd.operation = 'SUBTRACT'; dd.inputs[1].default_value = float(top); l.new(dz_m.outputs[0], dd.inputs[0])
+        ab = n.new('ShaderNodeMath'); ab.operation = 'ABSOLUTE'; l.new(dd.outputs[0], ab.inputs[0])
+        seam = ab.outputs[0] if seam is None else (lambda a_, b_: (lambda mm: (l.new(a_, mm.inputs[0]), l.new(b_, mm.inputs[1]), mm.outputs[0])[-1])(n.new('ShaderNodeMath')))(seam, ab.outputs[0])
+        if seam.node.operation != 'MINIMUM' and seam.node is not ab: seam.node.operation = 'MINIMUM'
+    sm = n.new('ShaderNodeMapRange'); sm.inputs['From Min'].default_value = 0.0; sm.inputs['From Max'].default_value = 0.35; sm.inputs['To Min'].default_value = 0.35; sm.inputs['To Max'].default_value = 1.0
+    l.new(seam, sm.inputs['Value'])
     mul = n.new('ShaderNodeMix'); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1
-    l.new(ramp.outputs['Color'], mul.inputs['A']); l.new(det.outputs[0], mul.inputs['B'])
+    l.new(col, mul.inputs['A']); l.new(sm.outputs['Result'], mul.inputs['B'])
+    dr, rr, nr = tex_files("rock_face")
     tn = n.new('ShaderNodeTexImage'); tn.image = img(nr, True); l.new(mp.outputs['Vector'], tn.inputs['Vector'])
-    nmap = n.new('ShaderNodeNormalMap'); nmap.inputs['Strength'].default_value = 1.2; l.new(tn.outputs['Color'], nmap.inputs['Color'])
-    l.new(nmap.outputs['Normal'], p.inputs['Normal'])
-    # shaft strip (concrete-lined bore, dark interior) at SHAFT_X, top 0 to -66
-    ux = n.new('ShaderNodeMath'); ux.operation = 'MULTIPLY_ADD'; ux.inputs[1].default_value = FX1 - FX0; ux.inputs[2].default_value = FX0
-    l.new(sep.outputs['X'], ux.inputs[0])
-    ax = n.new('ShaderNodeMath'); ax.operation = 'SUBTRACT'; ax.inputs[1].default_value = SHAFT_X; l.new(ux.outputs[0], ax.inputs[0])
-    aab = n.new('ShaderNodeMath'); aab.operation = 'ABSOLUTE'; l.new(ax.outputs[0], aab.inputs[0])
-    inner = n.new('ShaderNodeMath'); inner.operation = 'LESS_THAN'; inner.inputs[1].default_value = 2.3; l.new(aab.outputs[0], inner.inputs[0])
-    lining = n.new('ShaderNodeMath'); lining.operation = 'LESS_THAN'; lining.inputs[1].default_value = 2.9; l.new(aab.outputs[0], lining.inputs[0])
-    top = n.new('ShaderNodeMath'); top.operation = 'GREATER_THAN'; top.inputs[1].default_value = 999.0; l.new(dep.outputs[0], top.inputs[0])
-    li = n.new('ShaderNodeMath'); li.operation = 'MULTIPLY'; l.new(lining.outputs[0], li.inputs[0]); l.new(top.outputs[0], li.inputs[1])
-    ii = n.new('ShaderNodeMath'); ii.operation = 'MULTIPLY'; l.new(inner.outputs[0], ii.inputs[0]); l.new(top.outputs[0], ii.inputs[1])
-    c1 = n.new('ShaderNodeMix'); c1.data_type = 'RGBA'; l.new(li.outputs[0], c1.inputs['Factor']); l.new(mul.outputs['Result'], c1.inputs['A'])
-    c1.inputs['B'].default_value = (0.55, 0.54, 0.50, 1)
-    c2 = n.new('ShaderNodeMix'); c2.data_type = 'RGBA'; l.new(ii.outputs[0], c2.inputs['Factor']); l.new(c1.outputs['Result'], c2.inputs['A'])
-    c2.inputs['B'].default_value = (0.07, 0.07, 0.075, 1)
+    nmap = n.new('ShaderNodeNormalMap'); nmap.inputs['Strength'].default_value = 1.6; l.new(tn.outputs['Color'], nmap.inputs['Color'])
+    crk = n.new('ShaderNodeTexVoronoi'); crk.feature = 'DISTANCE_TO_EDGE'; crk.inputs['Scale'].default_value = 3.0; l.new(tc.outputs['Object'], crk.inputs['Vector'])
+    bmp = n.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.5; bmp.inputs['Distance'].default_value = 0.05
+    l.new(crk.outputs['Distance'], bmp.inputs['Height']); l.new(nmap.outputs['Normal'], bmp.inputs['Normal'])
+    l.new(bmp.outputs['Normal'], p.inputs['Normal'])
+    # damp: lower roughness and darker near/below the cap rock
+    dmp = n.new('ShaderNodeMapRange'); dmp.inputs['From Min'].default_value = 70; dmp.inputs['From Max'].default_value = 95
+    dmp.inputs['To Min'].default_value = 0.85; dmp.inputs['To Max'].default_value = 0.45; l.new(dz_m.outputs[0], dmp.inputs['Value']); l.new(dmp.outputs['Result'], p.inputs['Roughness'])
+    c2 = mul
     dk = n.new('ShaderNodeMapRange'); dk.inputs['From Min'].default_value = 0.0; dk.inputs['From Max'].default_value = FZ0
-    dk.inputs['To Min'].default_value = 0.55; dk.inputs['To Max'].default_value = 0.22; l.new(dep.outputs[0], dk.inputs['Value'])
+    dk.inputs['To Min'].default_value = 0.8; dk.inputs['To Max'].default_value = 0.35; l.new(dep.outputs[0], dk.inputs['Value'])
     dmul = n.new('ShaderNodeMix'); dmul.data_type = 'RGBA'; dmul.blend_type = 'MULTIPLY'; dmul.inputs['Factor'].default_value = 1
     l.new(c2.outputs['Result'], dmul.inputs['A']); l.new(dk.outputs['Result'], dmul.inputs['B'])
-    hs = n.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 1.35; l.new(dmul.outputs['Result'], hs.inputs['Color'])
+    hs = n.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 1.15; l.new(dmul.outputs['Result'], hs.inputs['Color'])
     l.new(hs.outputs['Color'], p.inputs['Base Color'])
     # blast glow: orange emission around the blast point, keyed by the GlowAmt value; also gas glow in the reservoir band
     gv = n.new('ShaderNodeValue'); gv.name = "GlowAmt"; gv.outputs[0].default_value = 0.0
@@ -219,6 +227,8 @@ def build_face():
     me.materials.append(m)
     return o
 FACE = build_face()
+_tx = bpy.data.textures.new("StrataRelief", 'CLOUDS'); _tx.noise_scale = 3.5; _tx.noise_depth = 4
+_dm = FACE.modifiers.new("relief", 'DISPLACE'); _dm.texture = _tx; _dm.texture_coords = 'GLOBAL'; _dm.strength = -0.9; _dm.mid_level = 0.5; _dm.direction = 'NORMAL'
 
 def cyl(name, r, z0, z1, x=0.0, y=0.0, verts=32, mat=None, c_=None, half=False, ry=None):
     bm = bmesh.new()
@@ -245,7 +255,7 @@ def box(name, size, loc, mat=None, c_=None, rot=(0, 0, 0)):
     if mat: me.materials.append(mat)
     return o
 
-M_STEEL = pbr("M_Steel", "rusty_metal_02", 2.0, tint=(0.55, 0.55, 0.58), metal=0.8, bump=0.5)
+M_STEEL = pbr("M_Steel", "rusty_metal_02", 2.0, tint=(0.5, 0.5, 0.52), metal=0.8, bump=0.5, sat=0.25)
 M_CONC = pbr("M_Concrete", "brushed_concrete", 3.0, tint=(0.85, 0.84, 0.8))
 M_DEVICE = pbr("M_Device", "green_metal_rust", 1.5, tint=(0.35, 0.5, 0.3), val=0.7, metal=0.5, bump=0.4)
 M_DARK = flat("M_DarkSteel", (0.05, 0.05, 0.05), 0.4, 0.9)
@@ -297,43 +307,70 @@ l.new(mix.outputs['Shader'], out.inputs['Surface']); RESV.data.materials.append(
 
 # wellhead ("christmas tree") at the surface, full round, sits on the cut line
 WH = bpy.data.objects.new("Wellhead", None); link(WH)
-parts = [cyl("WH_base", 2.2, 0.0, 0.6, mat=M_CONC), cyl("WH_spool", 1.0, 0.6, 2.8, mat=M_STEEL), cyl("WH_flange1", 1.4, 1.2, 1.5, mat=M_STEEL),
-         cyl("WH_flange2", 1.4, 2.3, 2.6, mat=M_STEEL), cyl("WH_top", 0.7, 2.8, 3.6, mat=M_STEEL)]
+M_SOOTSTEEL = pbr("M_SootSteel", "rusty_metal_02", 0.6, tint=(0.34, 0.34, 0.35), metal=0.6, bump=0.8, sat=0.3)
+parts = [cyl("WH_base", 2.2, 0.0, 0.5, mat=M_CONC), cyl("WH_spool", 0.32, 0.5, 4.2, mat=M_SOOTSTEEL), cyl("WH_flange1", 0.62, 0.5, 0.75, mat=M_SOOTSTEEL),
+         cyl("WH_flange2", 0.55, 2.15, 2.35, mat=M_SOOTSTEEL), cyl("WH_cross", 0.42, 2.35, 2.95, mat=M_SOOTSTEEL), cyl("WH_flange3", 0.55, 2.95, 3.15, mat=M_SOOTSTEEL)]
 for side in (-1, 1):
-    a = cyl("WH_wing%d" % side, 0.35, -1.2, 1.2, mat=M_STEEL); a.rotation_euler = (0, R_(90), 0); a.location = (side * 1.6, 0, 1.9); parts.append(a)
-    w = cyl("WH_wheel%d" % side, 0.6, -0.08, 0.08, mat=M_RED); w.rotation_euler = (0, R_(90), 0); w.location = (side * 2.85, 0, 1.9); parts.append(w)
-for p_ in parts: p_.parent = WH
-
+    a_ = cyl("WH_wing%d" % side, 0.2, -0.9, 0.9, mat=M_SOOTSTEEL); a_.rotation_euler = (0, R_(90), 0); a_.location = (side * 1.0, 0, 2.65); parts.append(a_)
+    fl = cyl("WH_wingflange%d" % side, 0.4, -0.08, 0.08, mat=M_SOOTSTEEL); fl.rotation_euler = (0, R_(90), 0); fl.location = (side * 1.9, 0, 2.65); parts.append(fl)
+for p_ in parts:
+    p_.parent = WH
+    for k in range(12 if p_.name.startswith("WH_flange") else 0):   # flange bolts
+        a_ = 2 * math.pi * k / 12; z0 = min(v.co.z for v in p_.data.vertices); z1 = max(v.co.z for v in p_.data.vertices)
+        r_ = max(v.co.x for v in p_.data.vertices) - 0.08
+        bt = cyl("WH_bolt", 0.035, z0 - 0.05, z1 + 0.05, x=r_ * math.cos(a_), y=r_ * math.sin(a_), mat=M_DARK, verts=6); bt.parent = WH
+WH.location = (0, -1.6, 0)
 # ------------------------------------------------------------------ device shaft: lining collar at the surface, concrete plug, device, cable
-COLLAR = cyl("ShaftCollar", 3.4, -0.3, 0.5, x=SHAFT_X, y=SHAFT_Y, mat=M_CONC)
+BORE_R = 0.75
+COLLAR = cyl("ShaftCollar", 1.65, -0.3, 0.4, x=SHAFT_X, y=SHAFT_Y, mat=M_CONC)
 bm = bmesh.new(); bm.from_mesh(COLLAR.data)
 bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.z > 0.9], context='FACES'); bm.to_mesh(COLLAR.data); bm.free()
-LINING = cyl("ShaftLining", 2.7, -67.0, 0.0, x=SHAFT_X, y=SHAFT_Y, verts=24, mat=flat("M_LiningDark", (0.09, 0.085, 0.08), 0.95), half=True)
-HOLE = cyl("ShaftHole", 2.4, -0.25, 0.52, x=SHAFT_X, y=SHAFT_Y, mat=flat("M_Hole", (0.01, 0.01, 0.01), 0.9))
-DEV_L, DEV_R = 9.0, 1.7
+LINING = cyl("ShaftLining", BORE_R + 0.05, -67.0, 0.0, x=SHAFT_X, y=SHAFT_Y, verts=24, mat=pbr("M_LiningDark", "brushed_concrete", 1.5, tint=(0.3, 0.29, 0.27), rough=0.9), half=True)
+HOLE = cyl("ShaftHole", BORE_R, 0.0, 0.42, x=SHAFT_X, y=SHAFT_Y, mat=flat("M_Hole", (0.01, 0.01, 0.01), 0.9))
+DEV_L, DEV_R = 4.6, 0.45
+M_DEVICE = pbr("M_Device", "green_metal_rust", 0.9, tint=(0.33, 0.36, 0.2), val=0.75, metal=0.25, bump=0.6)
+M_STEELD = pbr("M_SteelDark", "brushed_concrete", 0.5, tint=(0.16, 0.16, 0.17), metal=0.85, bump=0.4)
 def build_device():
+    """long heavy steel casing: true cylinder, dished end plates, bolted flanges, weld seams, lifting lugs, shackle"""
     bm = bmesh.new()
-    bmesh.ops.create_cone(bm, cap_ends=True, segments=40, radius1=DEV_R, radius2=DEV_R, depth=DEV_L, matrix=Matrix.Translation((0, 0, -DEV_L / 2)))
+    bmesh.ops.create_cone(bm, cap_ends=True, segments=48, radius1=DEV_R, radius2=DEV_R, depth=DEV_L, matrix=Matrix.Translation((0, 0, -DEV_L / 2)))
     vert_edges = [e for e in bm.edges if abs(e.verts[0].co.z - e.verts[1].co.z) > 1.0]
-    bmesh.ops.subdivide_edges(bm, edges=vert_edges, cuts=17, use_grid_fill=False)
-    for v in bm.verts:   # rounded ends over the last 0.5 m only; the body stays a true R cylinder
-        d_end = min(-v.co.z, v.co.z + DEV_L)
-        if d_end < 0.5 and v.co.xy.length > 0.01:
-            k = 0.82 + 0.18 * math.sqrt(max(0.0, d_end / 0.5)); v.co.x *= k; v.co.y *= k
+    bmesh.ops.subdivide_edges(bm, edges=vert_edges, cuts=23, use_grid_fill=False)
     me = bpy.data.meshes.new("Device"); bm.to_mesh(me); bm.free()
-    mod_o = bpy.data.objects.new("Device", me); link(mod_o, C_PROP); me.materials.append(M_DEVICE)
-    for p_ in me.polygons: p_.use_smooth = True
-    bv = mod_o.modifiers.new("bevel", 'BEVEL'); bv.width = 0.25; bv.segments = 3; bv.limit_method = 'ANGLE'
-    for z_ in (-1.5, -DEV_L + 1.5):
-        b = cyl("Device_band", DEV_R + 0.025, z_ - 0.15, z_ + 0.15, mat=M_DARK, c_=C_PROP); b.parent = mod_o
-    eye = cyl("Device_eye", 0.35, 0.0, 0.7, mat=M_DARK, c_=C_PROP); eye.parent = mod_o
-    ring = bpy.data.objects.new("Device_ring", bpy.data.meshes.new("ring")); link(ring, C_PROP)
-    bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=16, radius1=0.12, radius2=0.12, depth=0.1)
-    bm.free()
-    return mod_o
+    dev = bpy.data.objects.new("Device", me); link(dev, C_PROP); me.materials.append(M_DEVICE)
+    for p_ in me.polygons: p_.use_smooth = abs(p_.normal.z) < 0.5
+    bv = dev.modifiers.new("bevel", 'BEVEL'); bv.width = 0.02; bv.segments = 2; bv.limit_method = 'ANGLE'
+    parts = []
+    for z_ in (-0.05, -DEV_L + 0.05):   # end flanges (thick rings) with bolts
+        parts.append(cyl("Device_endflange", DEV_R + 0.06, z_ - 0.07, z_ + 0.07, mat=M_STEELD, c_=C_PROP, verts=48))
+    for z_ in (-DEV_L * 0.36, -DEV_L * 0.68):   # mid joint flanges
+        parts.append(cyl("Device_flange", DEV_R + 0.05, z_ - 0.06, z_ + 0.06, mat=M_STEELD, c_=C_PROP, verts=48))
+        for k in range(20):
+            a_ = 2 * math.pi * k / 20
+            bt = cyl("Device_bolt", 0.022, z_ - 0.075, z_ + 0.075, x=(DEV_R + 0.065) * math.cos(a_), y=(DEV_R + 0.065) * math.sin(a_), mat=M_DARK, c_=C_PROP, verts=6)
+            parts.append(bt)
+    for z_ in (-DEV_L * 0.18, -DEV_L * 0.52, -DEV_L * 0.85):   # weld seams
+        bmw = bmesh.new(); bmesh.ops.create_cone(bmw, cap_ends=False, segments=48, radius1=DEV_R + 0.008, radius2=DEV_R + 0.008, depth=0.025, matrix=Matrix.Translation((0, 0, z_)))
+        mw = bpy.data.meshes.new("Weld"); bmw.to_mesh(mw); bmw.free(); wo = bpy.data.objects.new("Device_weld", mw); link(wo, C_PROP); mw.materials.append(M_STEELD); parts.append(wo)
+    for sx in (-1, 1):   # lifting lugs on the top plate
+        lug = box("Device_lug", (0.04, 0.22, 0.26), (sx * 0.14, 0, 0.13), mat=M_STEELD, c_=C_PROP); parts.append(lug)
+    bms = bmesh.new(); bmesh.ops.create_cone(bms, cap_ends=True, segments=12, radius1=0.03, radius2=0.03, depth=0.36, matrix=Matrix.Translation((0, 0, 0.2)) @ Matrix.Rotation(R_(90), 4, 'Y'))
+    ms_ = bpy.data.meshes.new("Pin"); bms.to_mesh(ms_); bms.free(); pin = bpy.data.objects.new("Device_pin", ms_); link(pin, C_PROP); ms_.materials.append(M_STEELD); parts.append(pin)
+    sh_ = bpy.data.meshes.new("Shackle"); bmt = bmesh.new()
+    bmesh.ops.create_circle(bmt, segments=24, radius=0.13)
+    bmt.to_mesh(sh_); bmt.free(); sho = bpy.data.objects.new("Device_shackle", sh_); link(sho, C_PROP)
+    sk = sho.modifiers.new("skin", 'SKIN'); sho.location = (0, 0, 0.36); sho.rotation_euler = (R_(90), 0, 0)
+    sk = None; sho.modifiers.clear()
+    cu = bpy.data.curves.new("ShackleC", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.025; sp = cu.splines.new('POLY')
+    pts = [(0.15 * math.cos(math.pi * k / 10), 0, 0.2 + 0.22 * math.sin(math.pi * k / 10)) for k in range(11)]
+    sp.points.add(len(pts) - 1)
+    for p_, v in zip(sp.points, pts): p_.co = (*v, 1)
+    bpy.data.objects.remove(sho); sho = bpy.data.objects.new("Device_shackle", cu); link(sho, C_PROP); cu.materials.append(M_STEELD); parts.append(sho)
+    for p_ in parts: p_.parent = dev
+    return dev
 DEVICE = build_device()
-CABLE = cyl("Cable", 0.06, 0.0, 1.0, mat=M_DARK, verts=8, c_=C_PROP)   # unit length, scaled in z by animation
-PLUG = box("ConcretePlug", (4.6, 2.6, 1.0), (SHAFT_X, SHAFT_Y + 1.3, 0), mat=M_CONC, c_=C_PROP)   # origin at bottom via mesh shift
+CABLE = cyl("Cable", 0.035, 0.0, 1.0, mat=M_DARK, verts=8, c_=C_PROP)   # unit length, scaled in z by animation
+PLUG = box("ConcretePlug", (1.5, 0.9, 1.0), (SHAFT_X, SHAFT_Y + 0.45, 0), mat=M_CONC, c_=C_PROP)   # origin at bottom via mesh shift
 for v in PLUG.data.vertices: v.co.z += 0.5
 POUR = cyl("PourStream", 0.45, 0.0, 1.0, x=0, mat=pbr("M_WetConcrete", "brushed_concrete", 1.0, tint=(0.6, 0.6, 0.58), rough=0.25), c_=C_FX, verts=12)
 CHUTE_STREAM = None
@@ -361,11 +398,9 @@ def lattice_tower(name, base, top, h, levels, loc, mat):
     o = bpy.data.objects.new(name, me); o.location = loc; link(o); me.materials.append(mat); return o
 M_DERRICK = pbr("M_Derrick", "rusty_metal_02", 1.5, tint=(0.75, 0.68, 0.6), metal=0.7)
 DERRICK = lattice_tower("Derrick", 9.0, 2.2, 38.0, 12, (28, 24, 0), M_DERRICK)
-box("Derrick_floor", (11, 11, 0.6), (28, 24, 3.2), mat=pbr("M_Planks", "rusty_metal_02", 2.0, tint=(0.5, 0.42, 0.35)))
-box("Derrick_crown", (3.5, 3.5, 1.2), (28, 24, 38.4), mat=M_DERRICK)
 for k in range(4):
     sx, sy = (1, -1, -1, 1)[k], (1, 1, -1, -1)[k]
-    box("Derrick_foot%d" % k, (1.6, 1.6, 0.8), (28 + sx * 4.5, 24 + sy * 4.5, 0.4), mat=M_CONC)
+    pass
 
 # ------------------------------------------------------------------ crane: lattice mast + slewing boom; base (-7, 22); hook reaches shaft (-14,0) and well (0,0)
 CRANE_BASE = Vector((-7.0, 22.0, 0.0))
@@ -380,14 +415,22 @@ boom.rotation_euler = (R_(90), 0, 0); boom.location = (0, 9.0, 34.0); boom.paren
 box("Crane_Footing", (7, 7, 1.0), CRANE_BASE + Vector((0, 0, 0.5)), mat=M_CONC)
 TROLLEY = box("Crane_Trolley", (1.6, 1.6, 0.8), (0, -BOOM_LEN, 32.9), mat=M_DARK); TROLLEY.parent = CR
 HOOK = bpy.data.objects.new("Hook", None); link(HOOK, C_PROP)
-hk = cyl("Hook_block", 0.6, -0.6, 0.6, mat=M_RED, c_=C_PROP); hk.parent = HOOK
+hk = cyl("Hook_block", 0.32, -0.35, 0.35, mat=M_STEELD, c_=C_PROP); hk.parent = HOOK
+for nm_, a_, b_ in (("Crane_Pendant1", (0, -BOOM_LEN - 6, 34.6), (0, 4.5, 42.0)), ("Crane_Pendant2", (0, 9.0, 34.8), (0, 4.5, 42.0)),
+                    ("Crane_Hoist", (0, -BOOM_LEN, 34.0), (0, 8.0, 34.6))):
+    cu_ = bpy.data.curves.new(nm_, 'CURVE'); cu_.dimensions = '3D'; cu_.bevel_depth = 0.03; sp_ = cu_.splines.new('POLY'); sp_.points.add(1)
+    sp_.points[0].co = (*a_, 1); sp_.points[1].co = (*b_, 1)
+    co_ = bpy.data.objects.new(nm_, cu_); link(co_); cu_.materials.append(M_DARK); co_.parent = CR
+apex = lattice_tower("Crane_Apex", 1.6, 0.4, 8.0, 3, (0, 4.5, 34.0), M_CRANE); apex.parent = CR
 CRANE_TOP_Z = 32.5
 
 # ------------------------------------------------------------------ steel cap for beat 7
 CAP = bpy.data.objects.new("Cap", None); link(CAP, C_PROP)
-for p_ in (cyl("Cap_body", 2.4, -2.0, 0.0, mat=M_STEEL, c_=C_PROP), cyl("Cap_flange", 3.0, -2.0, -1.6, mat=M_STEEL, c_=C_PROP),
+for p_ in (cyl("Cap_body", 2.4, -2.0, 0.0, mat=M_SOOTSTEEL, c_=C_PROP), cyl("Cap_flange", 3.0, -2.0, -1.6, mat=M_SOOTSTEEL, c_=C_PROP),
            cyl("Cap_lug", 0.4, 0.0, 0.8, mat=M_DARK, c_=C_PROP)):
     p_.parent = CAP
+for k in range(24):
+    a_ = 2 * math.pi * k / 24; bt = cyl("Cap_bolt", 0.06, -2.05, -1.45, x=2.75 * math.cos(a_), y=2.75 * math.sin(a_), mat=M_DARK, c_=C_PROP, verts=6); bt.parent = CAP
 
 # ------------------------------------------------------------------ vehicles (CC-BY GLBs), normalised: long axis X, wheels on z=0
 def import_glb(name, path, length, loc, yaw, tint=None):
@@ -420,6 +463,41 @@ FT1 = import_glb("FireTruck1", os.path.join(G, "firetruck.glb"), 7.4, (22, 40, 0
 FT2 = import_glb("FireTruck2", os.path.join(G, "firetruck.glb"), 7.4, (-26, 44, 0), 60)
 MIXER = import_glb("MixerTruck", os.path.join(G, "maz500.glb"), 7.6, (-23.5, 2.2, 0), 0)
 TRUCK = import_glb("CargoTruck", os.path.join(G, "zil130.glb"), 7.0, (-40, 30, 0), 35)
+def place_glb(name, file, height=None, length=None, loc=(0, 0, 0), rot=(0, 0, 0), drop_flat=False):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=os.path.join(G, file))
+    new = [o for o in bpy.data.objects if o not in before]
+    if drop_flat:   # remove baked ground planes (flat in world z)
+        bpy.context.view_layer.update()
+        for o in [o for o in new if o.type == 'MESH']:
+            bb = [o.matrix_world @ Vector(cn) for cn in o.bound_box]
+            dz_ = max(p[2] for p in bb) - min(p[2] for p in bb); dxy = max(max(p[0] for p in bb) - min(p[0] for p in bb), max(p[1] for p in bb) - min(p[1] for p in bb))
+            if dz_ < 0.02 * dxy:
+                new.remove(o); bpy.data.objects.remove(o)
+    root = bpy.data.objects.new(name, None); link(root, C_PROP)
+    for o in new:
+        link(o, C_PROP)
+        if o.parent is None: o.parent = root
+    bpy.context.view_layer.update()
+    ms = [o for o in new if o.type == 'MESH']
+    pts = [o.matrix_world @ Vector(cn) for o in ms for cn in o.bound_box]
+    mn = Vector([min(p[i] for p in pts) for i in range(3)]); mx = Vector([max(p[i] for p in pts) for i in range(3)])
+    d = mx - mn; sc_ = (height / d.z) if height else (length / max(d.x, d.y))
+    for o in new:
+        if o.parent == root:
+            o.matrix_world = Matrix.Scale(sc_, 4) @ Matrix.Translation(-Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, (mn.z + mx.z) / 2))) @ o.matrix_world
+    root.location = loc; root.rotation_euler = rot
+    return root
+# christmas-tree valves: two master gate valves on the vertical spool, wheels to the side; two wing valves
+V1 = place_glb("WH_MasterValve1", "oldvalve.glb", length=1.1, loc=(0, -1.6, 1.45), rot=(0, R_(90), 0)); V1.parent = WH; V1.matrix_parent_inverse = WH.matrix_world.inverted()
+V2 = place_glb("WH_MasterValve2", "oldvalve.glb", length=1.0, loc=(0, -1.6, 3.7), rot=(0, R_(90), R_(90))); V2.parent = WH; V2.matrix_parent_inverse = WH.matrix_world.inverted()
+for side in (-1, 1):
+    Vw = place_glb("WH_WingValve%d" % side, "oldvalve.glb", length=0.9, loc=(side * 1.3, -1.6, 2.65), rot=(0, 0, 0)); Vw.parent = WH; Vw.matrix_parent_inverse = WH.matrix_world.inverted()
+# derrick: real lattice tower scan replaces the procedural one
+bpy.data.objects.remove(DERRICK)
+DERRICK = place_glb("Derrick", "tower.glb", height=38.0, loc=(28, 24, 19.0), drop_flat=True)
+for i, (x, y, yw) in enumerate(((70, 60, 30), (-80, 90, 110), (110, 20, 200))):
+    place_glb("PumpJack%d" % i, "pumpjack.glb", length=7.5, loc=(x, y, 2.4), rot=(0, 0, R_(yw)))
 # mixer drum (procedural) on the MAZ bed: rear of the truck faces the shaft (+X)
 DRUM = bpy.data.objects.new("MixerDrum", None); link(DRUM, C_PROP)
 DRUM.parent = MIXER; DRUM.location = (-1.6, 0, 2.6); DRUM.rotation_euler = (0, R_(-76), 0)
@@ -461,7 +539,7 @@ for aid, pts in (("old_military_crate", [(-20, 12, 0, 20), (-21.2, 13.4, 0, 70),
 # crate on top of the crate for stacking
 # tents and a sandbag bunker far back (the crew watches the test from here)
 M_CANVAS = pbr("M_Canvas", "aerial_sand", 1.0, tint=(0.55, 0.52, 0.35), val=0.9, rough=0.9)
-for i, (x, y, yw) in enumerate(((-55, 40, 20), (-62, 52, 35), (48, 55, -25))):
+for i, (x, y, yw) in enumerate(()):
     bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=4, radius1=4.0, radius2=0.2, depth=3.4, matrix=Matrix.Translation((0, 0, 1.7)) @ Matrix.Rotation(R_(45), 4, 'Z'))
     me = bpy.data.meshes.new("Tent%d" % i); bm.to_mesh(me); bm.free(); t = bpy.data.objects.new("Tent%d" % i, me); link(t, C_PROP)
     t.location = (x, y, 0); t.rotation_euler = (0, 0, R_(yw)); t.scale = (1.4, 1.0, 1.0); me.materials.append(M_CANVAS)
@@ -518,18 +596,19 @@ def fire_material(name, dens=6.0, smoke=False):
         hot = M('MULTIPLY', field, 3.0, clamp=True)
         zz = M('MULTIPLY_ADD', z, -0.6); zz.node.inputs[2].default_value = 1.0
         ramp = n.new('ShaderNodeValToRGB'); el = ramp.color_ramp.elements
-        el[0].position = 0.0; el[0].color = (0.6, 0.05, 0.005, 1); el[1].position = 1.0; el[1].color = (1.0, 0.62, 0.18, 1)
-        e2 = el.new(0.5); e2.color = (1.0, 0.22, 0.01, 1)
+        el[0].position = 0.0; el[0].color = (0.55, 0.04, 0.004, 1); el[1].position = 1.0; el[1].color = (1.0, 0.95, 0.75, 1)
+        e2 = el.new(0.35); e2.color = (1.0, 0.2, 0.01, 1); e3 = el.new(0.7); e3.color = (1.0, 0.6, 0.12, 1)
         l.new(M('MULTIPLY', hot, zz), ramp.inputs['Fac'])
         l.new(ramp.outputs['Color'], vol.inputs['Emission Color'])
         lift = M('MULTIPLY', M('SUBTRACT', z, 0.02), 25.0, clamp=True)
-        l.new(M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.22), vol.inputs['Emission Strength'])
+        core_boost = M('MULTIPLY_ADD', M('MULTIPLY', hot, hot), 2.5); core_boost.node.inputs[2].default_value = 1.0
+        l.new(M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.2), core_boost), vol.inputs['Emission Strength'])
     else:
         f1 = M('MULTIPLY_ADD', core, 0.3); f1.node.inputs[2].default_value = -0.6
         field = M('ADD', f1, nz.outputs['Fac'])
         zin = M('MULTIPLY', z, 6.0, clamp=True)
         dens_ = M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', field, 2.5, clamp=True), M('GREATER_THAN', core, 0.0)), amt.outputs[0]), zin)
-        vol = n.new('ShaderNodeVolumePrincipled'); vol.inputs['Color'].default_value = (0.035, 0.032, 0.03, 1)
+        vol = n.new('ShaderNodeVolumePrincipled'); vol.inputs['Color'].default_value = (0.02, 0.018, 0.016, 1)
         vol.inputs['Anisotropy'].default_value = 0.2
         l.new(M('MULTIPLY', dens_, dens), vol.inputs['Density'])
     l.new(vol.outputs['Volume'], out.inputs['Volume'])
@@ -541,7 +620,7 @@ def fire_obj(name, base, r0, r1, h, mat):
     o.visible_shadow = True
     return o
 FIRE = fire_obj("FireColumn", (0, -1.6, 3.4), 5.0, 30.0, 125.0, fire_material("M_Fire", 3.0))
-SMOKE = fire_obj("SmokePlume", (4, 8, 70), 20.0, 80.0, 190.0, fire_material("M_Smoke", 0.2, smoke=True))
+SMOKE = fire_obj("SmokePlume", (4, 8, 70), 20.0, 80.0, 190.0, fire_material("M_Smoke", 0.45, smoke=True))
 # heat shimmer: a camera-only refractive sleeve around the column (IOR barely above 1, animated noise normal)
 bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=48, radius1=13.0, radius2=34.0, depth=95.0, matrix=Matrix.Translation((0, 0, 47.5)))
 me = bpy.data.meshes.new("HeatShimmer"); bm.to_mesh(me); bm.free()
@@ -633,8 +712,8 @@ for i, (x, z, en) in enumerate(((-30, -25, 6000), (25, -70, 5000))):
     o.visible_camera = False
 # shaft lamp rings (small warm point lights down the bore)
 for i, z in enumerate((-12, -28, -44)):
-    ll = bpy.data.lights.new("L_ShaftLamp%d" % i, 'POINT'); ll.energy = 120; ll.color = (1.0, 0.8, 0.5); ll.shadow_soft_size = 0.5
-    o = bpy.data.objects.new("L_ShaftLamp%d" % i, ll); o.location = (SHAFT_X, -2.4, z); link(o)
+    ll = bpy.data.lights.new("L_ShaftLamp%d" % i, 'POINT'); ll.energy = 60; ll.color = (1.0, 0.8, 0.5); ll.shadow_soft_size = 0.2
+    o = bpy.data.objects.new("L_ShaftLamp%d" % i, ll); o.location = (SHAFT_X, SHAFT_Y - 0.4, z); link(o)
 
 wd = bpy.data.worlds.new("World"); sc.world = wd; wd.use_nodes = True
 n, l = wd.node_tree.nodes, wd.node_tree.links; bg = n["Background"]
@@ -659,6 +738,8 @@ tt = CAM.constraints.new('TRACK_TO'); tt.target = TGT; tt.track_axis = 'TRACK_NE
 for i, nm in enumerate(("SolA", "SolB", "SolC", "SolD", "EngA", "EngB")):
     o = bpy.data.objects.get(nm)
     if o: o.location = (i * 2.0 - 5, 12, 0)
+for o in bpy.data.objects:
+    if o.type == 'LIGHT': o.visible_camera = False; o.visible_glossy = False; o.visible_transmission = False
 for m in bpy.data.materials:
     if m.name.startswith("M_"): m.use_fake_user = True
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
