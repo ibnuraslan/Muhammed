@@ -717,7 +717,7 @@ def anim_safe(c, t):
     reach(mg, "L", Vector((2.8 - press, 2.62, 1.42)), M @ Vector((0.6, 0.2, -0.8)))
     arms_relaxed_one(mg, "R")
     mg.rot("head", (0, 1, 0), -6)
-    p = c["safe_painter"]; place(p, (-1.4, 3.0, 0), face_to((-1.4, 3.0), (2.3, 2.6))); arms_relaxed(p)
+    p = c["safe_painter"]; place(p, (0.9, 3.2, 0), face_to((0.9, 3.2), (2.3, 2.6))); arms_relaxed(p)
     u = ease(min(1.0, max(0.0, (sec - 2.2) / 2.6)))
     c["vault"].rotation_euler = (0, 0, math.radians(-95 * u))
 
