@@ -1,0 +1,4 @@
+FrozenTearsGun audit, every 3 frames
+fingertip inside gun part >3mm                   count    3  worst 0.0091 m at frame 910
+    frames: 340:Gun_Spring 466:Gun_Spring 910:Gun_RingB
+camera inside closed geometry: none

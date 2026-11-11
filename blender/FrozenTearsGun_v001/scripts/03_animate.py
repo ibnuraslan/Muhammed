@@ -132,9 +132,9 @@ gun = bpy.data.objects["Gun"]
 GUN_REST = Matrix.Translation((0.035, -0.33, 1.08)) @ Matrix.Rotation(R_(-4), 4, 'X')   # rest-body coords (gun points -Y)
 GUN_AIM = Matrix.Translation((0.03, -0.40, 1.18)) @ Matrix.Rotation(R_(2), 4, 'X')
 # hand grips in gun-local coordinates: (wrist, finger direction, palm normal)
-GRIP_R = (Vector((-0.016, 0.07, -0.035)), Vector((0.25, -1.0, -0.55)), Vector((1.0, 0.0, 0.0)))
+GRIP_R = (Vector((-0.021, 0.07, -0.035)), Vector((0.25, -1.0, -0.55)), Vector((1.0, 0.0, 0.0)))
 SUPPORT_L = (Vector((0.055, -0.05, -0.045)), Vector((-1.0, -0.5, 0.15)), Vector((0.0, 0.0, 1.0)))
-VALVE_L = (Vector((0.098, -0.025, 0.128)), Vector((-0.25, -0.6, -0.75)), Vector((-1.0, 0.0, 0.2)))
+VALVE_L = (Vector((0.104, -0.025, 0.13)), Vector((-0.25, -0.6, -0.75)), Vector((-1.0, 0.0, 0.2)))
 inv_f = list(range(1, 2101, 4)) + [T_OFFICE_IN, T_OFFICE_IN + 1, T_OFFICE_OUT, T_OFFICE_OUT + 1, F(29.3) - 1, F(29.3), F(30.3) - 1, F(30.3)]
 inv_f = sorted(set(inv_f))
 SOB_W = track([(1, 1.0), (F(4), 0.8), (F(6), 0.35), (F(15), 0.3), (F(18.7), 0.2)])
@@ -230,14 +230,15 @@ for f in inv_f:
         Wg, dg, ng = GRIP_R
         W.key_hand("R", f, G @ Wg, G3 @ dg, G3 @ ng, pole=G @ Vector((-0.35, 0.25, -0.25)))
         trig = 26 + 30 * smooth((t - 13.5) / 0.4) * (1 - smooth((t - 15.15) / 0.2))
-        W.key_fingers("R", f, [trig, 78, 82, 86], thumb=34)
+        W.key_fingers("R", f, [trig, 62, 64, 66], thumb=34)
         v = smooth((t - 5.6) / 0.35) * (1 - smooth((t - 7.4) / 0.4))
         g = lerp_grip(SUPPORT_L, VALVE_L, v)
+        g = (g[0] + Vector((0.085 * math.sin(math.pi * v) ** 0.5, 0.0, -0.02 * math.sin(math.pi * v))), g[1], g[2])   # swing out around the gun body
         turn = VALVE_TURN(f) * v
         Rt = Matrix.Rotation(R_(-35 * turn), 3, 'X')
         W.key_hand("L", f, G @ (Vector((0.05, -0.095, 0.085)) + Rt @ (g[0] - Vector((0.05, -0.095, 0.085)))), G3 @ (Rt @ g[1]), G3 @ (Rt @ g[2]),
                    pole=G @ Vector((0.4, 0.25, -0.3)))
-        W.key_fingers("L", f, [40 + 10 * v, 50 + 15 * v, 55 + 20 * v, 60 + 20 * v], thumb=20 + 25 * v)
+        W.key_fingers("L", f, [25 + 20 * v, 32 + 25 * v, 36 + 28 * v, 40 + 28 * v], thumb=15 + 25 * v)
     elif p["set"] == "of":
         hm = W.head_M(); hm3 = hm.to_3x3()
         fs = OF_FACE(f)
@@ -279,7 +280,7 @@ for f in inv_f:
             g = (G @ Wg, G3 @ dg, G3 @ ng)
         W.key_hand("R", f, g[0], g[1], g[2], pole=g[0] + Vector((-0.4, 0.3, -0.3)))
         trig = 26 + 30 * smooth((t - 32.25) / 0.15) * (1 - smooth((t - 32.7) / 0.2))
-        W.key_fingers("R", f, [trig, 78, 82, 86] if t >= 31.4 else 30, thumb=34 if t >= 31.4 else 15)
+        W.key_fingers("R", f, [trig, 62, 64, 66] if t >= 31.4 else 30, thumb=34 if t >= 31.4 else 15)
         restL = (Vector((0.22, 0.1, BT + 0.05)), Vector((-0.2, -1, -0.6)), Vector((0, 0, -1)))
         if t < 31.8:
             gl = restL
@@ -297,6 +298,7 @@ POS_MW = Vector((0.25, -2.1, 0.0))  # in the workshop for the finale
 T_MEN_OUT = F(30.9)
 men_f = sorted(set(list(range(1, 2101, 4)) + [T_MEN_OUT, T_MEN_OUT + 1]))
 JAB = track([(F(19.0), 0.0), (F(19.6), 1.0), (F(22.2), 1.0), (F(22.6), 0.3), (F(23.5), 0.0)])
+SLAP = track([(F(20.55), 0.0), (F(20.85), 1.0), (F(21.05), 1.0), (F(21.4), 0.0)])
 PELT = track([(F(26.2), 0.0), (F(26.5), 1.0), (F(28.2), 1.0), (F(28.6), 0.0)])
 for f in men_f:
     t = (f - 1) / FPS
@@ -306,7 +308,7 @@ for f in men_f:
         flinch = math.sin(f * 1.7) * pelt
         awk = smooth((t - 22.6) / 0.6) * (1 - smooth((t - 26.0) / 0.4))
         pos = POS_MO + Vector((0.0, -0.08 * pelt, ROOT_Z_M - 0.005 - 0.03 * pelt))
-        M.key_body(f, pos, 180, flex=10 * jab + 6 + 2 * talk - 14 * pelt, head=(-4 + 3 * talk + 8 * awk + 12 * pelt, 18 * pelt * flinch, 4 * awk),
+        M.key_body(f, pos, 180, flex=10 * jab + 6 + 2 * talk - 14 * pelt + 14 * SLAP(f), head=(-4 + 3 * talk + 8 * awk + 12 * pelt, 18 * pelt * flinch, 4 * awk),
                    side=6 * flinch, twist=-10 * jab + 25 * pelt, clav=2, jaw=3 + 5 * max(0, talk) + 10 * pelt)
         key_face(M, f, sad=0.3 * awk, squint=0.3 + 0.7 * pelt, smile=0.0)
         for s in "LR":
@@ -317,7 +319,7 @@ for f in men_f:
         hit = math.sin(math.pi * min(1, max(0, (t - 32.9) / 0.45))) if t >= 32.9 else 0.0
         laugh = smooth((t - 33.3) / 0.5); lw = math.sin(2 * math.pi * f / (FPS / 4.6)) * laugh
         pos = POS_MW + Vector((0, -0.07 * hit, ROOT_Z_M - 0.035 * arms + 0.008 * lw))
-        M.key_body(f, pos, 180, flex=-4 * arms - 12 * hit + 8 * laugh + 3 * lw, head=(-6 * arms + 10 * hit + 6 * lw * laugh, 10 * arms * (1 - laugh), 0),
+        M.key_body(f, pos, 180, flex=-4 * arms - 12 * hit + 8 * laugh + 3 * lw, head=(9 * arms + 12 * hit + 6 * lw * laugh, 14 * arms * (1 - laugh), 0),
                    clav=4 * arms + 3 * lw, jaw=2 + 4 * arms * (1 - laugh) + 12 * laugh * (0.5 + 0.5 * lw))
         key_face(M, f, sad=0.0, squint=0.8 * arms * (1 - laugh) + 0.5 * laugh, smile=0.5 * arms + 0.5 * laugh)
         for s in "LR":
@@ -345,6 +347,8 @@ for f in men_f:
         g = lerp_grip(g, neck, awk)
         shieldR = (D @ Vector((-0.02, -0.33, 1.55)), Vector((0.8, 0.1, 0.6)), Vector((0, -1, 0)))
         shieldL = (D @ Vector((0.05, -0.36, 1.48)), Vector((-0.8, 0.1, 0.6)), Vector((0, -1, 0)))
+        slap = (Vector((POS_MO.x + 0.12, desk_y - 0.02, DT + 0.03 + 0.12 * (1 - min(1, SLAP(f) * 1.6)))), Vector((-0.1, 1, -0.1)), Vector((0, 0, -1)))
+        g = lerp_grip(g, slap, SLAP(f))
         g = lerp_grip(g, shieldR, pelt)
         M.key_hand("R", f, g[0], g[1], g[2], pole=g[0] + Vector((-0.45, -0.25, -0.2)))
         if pelt > 0.01:
@@ -354,17 +358,20 @@ for f in men_f:
         M.R.key_q("finger2-1.R", f, Quaternion()); M.key_fingers("R", f, [8 * (1 - pointing) + 4, 20 + 60 * pointing, 20 + 65 * pointing, 20 + 70 * pointing], thumb=20 + 20 * pointing)
     else:
         arms = smooth((t - 31.3) / 0.6); hit = math.sin(math.pi * min(1, max(0, (t - 32.9) / 0.45))) if t >= 32.9 else 0.0
-        laugh = smooth((t - 33.3) / 0.5)
+        laugh = smooth((t - 33.25) / 0.45); pat = math.sin(2 * math.pi * f / (FPS / 3.2)) * laugh
+        D3 = D.to_3x3()
         for s in "LR":
             sx = 1 if s == "L" else -1
-            hang = D @ Vector((sx * 0.24, -0.02, 0.86))
-            outW = D @ Vector((sx * 0.72, -0.12 - 0.06 * hit, 1.42 + 0.1 * hit))
-            belly = D @ Vector((sx * 0.07, -0.2, 1.05))
-            Wp = hang.lerp(outW, arms * (1 - laugh)).lerp(belly, laugh * (1 if s == "R" else 0.5))
-            d_ = Vector((sx * 1, -0.2, 0.0)).lerp(Vector((0, 0, -1)), 1 - arms) if laugh < 0.5 else Vector((-sx, -0.2, -0.3))
-            n_ = Vector((0, -1, 0)) if laugh < 0.5 else Vector((0, 1, 0))
-            M.key_hand(s, f, Wp, d_, n_, pole=Wp + Vector((sx * 0.2, 0.4, -0.3)))
-            M.key_fingers(s, f, 20, thumb=15)
+            # rest-body coordinates (he faces rest -Y); mapped to the posed chest
+            hang = (Vector((sx * 0.24, -0.02, 0.86)), Vector((0, -0.1, -1)), Vector((-sx, 0, 0)))
+            brace = (Vector((sx * 0.50, -0.30, 1.28 + 0.05 * hit)), Vector((sx * 0.75, -0.55, 0.25)), Vector((0, -1, 0.15)))   # elbows bent, palms open towards her
+            chest = (Vector((sx * 0.07, -0.21 - 0.03 * max(0, pat), 1.27)), Vector((-sx * 0.6, 0, 0.8)), Vector((0, 1, 0)))
+            belly = (Vector((-0.02, -0.19, 1.08)), Vector((-sx * 0.8, 0, 0.3)), Vector((0, 1, 0)))
+            g = lerp_grip(hang, brace, arms)
+            g = lerp_grip(g, chest if s == "R" else belly, laugh)
+            Wp = D @ g[0]
+            M.key_hand(s, f, Wp, D3 @ g[1], D3 @ g[2], pole=D @ (g[0] + Vector((sx * 0.35, 0.35, -0.25))))
+            M.key_fingers(s, f, [12, 15, 18, 22] if laugh < 0.5 else 30, thumb=12)
 
 # ------------------------------------------------------------------ tube points + hero tear path
 anchors = [bpy.data.objects["TubeH%d" % i] for i in range(5)]
@@ -598,6 +605,12 @@ for i, o in enumerate(pelt_drops):
     key_obj(o, F(28.4), Vector((0, 0, -50)), 0.0)
 # un-parent the chamber drops for the office use: Tear_01..09 are parented to the gun; give them world keys after the office starts
 # (their location keys are in gun space; in the office they are used in gun space too, so instead convert: keep simple, hide them there)
+# papers jump when he slaps the desk
+for i in range(6):
+    o = bpy.data.objects["OF_Paper_%d" % i]; z0 = o.location.z; r0 = o.rotation_euler.copy()
+    for t, dz, rz in ((20.9, 0, 0), (21.0, 0.03 + 0.01 * i, 4 * (i - 2.5)), (21.15, 0.0, 6 * (i - 2.5)), (21.25, 0.004, 6 * (i - 2.5)), (21.35, 0, 6 * (i - 2.5))):
+        o.location.z = z0 + dz; o.keyframe_insert("location", frame=F(t))
+        o.rotation_euler = (r0.x, r0.y, r0.z + R_(rz)); o.keyframe_insert("rotation_euler", frame=F(t))
 # ------------------------------------------------------------------ thought bubble
 bub = bpy.data.objects["ThoughtBubble"]; bon = node_val("M_Bubble", "BubbleOn")
 for f, v in ((1, 0.0), (F(25.55), 0.0), (F(25.7), 1.0), (F(28.15), 1.0), (F(28.3), 0.0)):
@@ -727,6 +740,7 @@ wp(22.3, OF(0.85, 0.75, 1.3), HEAD(W, F(22.3)) + Vector((0, 0, 0.05)), 32, 4.0)
 wp(23.2, OF(0.65, 0.45, 1.0), HEAD(W, F(23.2)) + Vector((0, 0, 0.02)), 35, 4.0)
 wp(24.2, OF(0.3, 0.42, 1.0), HEAD(W, F(24.2)) + Vector((0, 0, 0.02)), 38, 4.0)
 wp(25.1, OF(-0.15, 0.3, 1.15), HEAD(W, F(25.1)) + Vector((0, 0, 0.05)), 35, 4.0)
+wp(25.5, OF(0.75, -0.55, 1.45), HEAD(W, F(25.5)) + Vector((0, 0, 0.1)), 32, 4.0)
 wp(25.9, OF(0.35, -1.25, 1.85), HEAD(W, F(25.9)) + Vector((0, 0, 0.3)), 30, 4.0)
 wp(26.6, OF(0.3, -0.25, 1.85), HEAD(M, F(26.6)), 30, 4.0)
 wp(27.4, OF(0.35, 0.35, 1.7), HEAD(M, F(27.4)), 30, 4.0)

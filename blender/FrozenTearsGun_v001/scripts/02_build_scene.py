@@ -43,6 +43,18 @@ M_GLASS = mat("M_Glass", (0.95, 0.98, 1.0), 0.02, 0.0, 1.0, 1.5)
 M_TUBE = mat("M_SiliconeTube", (0.92, 0.97, 1.0), 0.08, 0.0, 1.0, 1.41)
 M_STEEL = mat("M_Steel", (0.62, 0.63, 0.65), 0.3, 1.0)
 M_CANISTER = mat("M_Canister", (0.42, 0.44, 0.47), 0.36, 0.85)
+def wear(m, scale=900.0, strength=0.25, rough=(0.25, 0.55)):
+    nt_ = m.node_tree; n_ = nt_.nodes; p_ = n_["Principled BSDF"]
+    tc_ = n_.new('ShaderNodeTexCoord'); nz_ = n_.new('ShaderNodeTexNoise'); nz_.inputs["Scale"].default_value = scale; nz_.inputs["Detail"].default_value = 10
+    mp_ = n_.new('ShaderNodeMapping'); mp_.inputs["Scale"].default_value = (1, 1, 40)     # brushed streaks along one axis
+    nz2 = n_.new('ShaderNodeTexNoise'); nz2.inputs["Scale"].default_value = scale * 0.08; nz2.inputs["Detail"].default_value = 6
+    bp2 = n_.new('ShaderNodeBump'); bp2.inputs["Strength"].default_value = strength; bp2.inputs["Distance"].default_value = 0.0002
+    mr_ = n_.new('ShaderNodeMapRange'); mr_.inputs["To Min"].default_value = rough[0]; mr_.inputs["To Max"].default_value = rough[1]
+    L_ = nt_.links
+    L_.new(tc_.outputs["Object"], mp_.inputs["Vector"]); L_.new(mp_.outputs["Vector"], nz_.inputs["Vector"]); L_.new(nz_.outputs["Fac"], bp2.inputs["Height"])
+    L_.new(bp2.outputs["Normal"], p_.inputs["Normal"]); L_.new(tc_.outputs["Object"], nz2.inputs["Vector"]); L_.new(nz2.outputs["Fac"], mr_.inputs["Value"])
+    L_.new(mr_.outputs["Result"], p_.inputs["Roughness"])
+wear(M_CANISTER)
 M_WOOD = mat("M_GripWood", (0.25, 0.12, 0.05), 0.45, 0.0, coat=0.4)
 M_WATER = mat("M_TearWater", (0.9, 0.96, 1.0), 0.02, 0.0, 1.0, 1.33)
 M_ICE = mat("M_Ice", (0.92, 0.97, 1.0), 0.12, 0.0, 0.5, 1.31, emit=(0.7, 0.85, 1.0), estr=0.12, coat=1.0)
@@ -56,10 +68,41 @@ M_GRAPHITE = mat("M_Graphite", (0.08, 0.08, 0.09), 0.5)
 M_DARK = mat("M_NightOutside", (0.02, 0.03, 0.06), 1.0, emit=(0.05, 0.09, 0.2), estr=0.6)
 M_DAY = mat("M_DayOutside", (0.8, 0.85, 0.9), 1.0, emit=(0.85, 0.92, 1.0), estr=3.0)
 M_PEG = mat("M_Pegboard", (0.42, 0.3, 0.19), 0.7)
+def peg_holes(m, pitch=0.025, hole=0.0045):
+    nt_ = m.node_tree; n_ = nt_.nodes; p_ = n_["Principled BSDF"]; L_ = nt_.links
+    tc_ = n_.new('ShaderNodeTexCoord'); sc_ = n_.new('ShaderNodeVectorMath'); sc_.operation = 'SCALE'; sc_.inputs["Scale"].default_value = 1 / pitch
+    fr_ = n_.new('ShaderNodeVectorMath'); fr_.operation = 'FRACTION'
+    sb_ = n_.new('ShaderNodeVectorMath'); sb_.operation = 'SUBTRACT'; sb_.inputs[1].default_value = (0.5, 0.5, 0.5)
+    mk = n_.new('ShaderNodeVectorMath'); mk.operation = 'MULTIPLY'; mk.inputs[1].default_value = (1, 0, 1)     # board is in the XZ plane
+    ln_ = n_.new('ShaderNodeVectorMath'); ln_.operation = 'LENGTH'
+    st_ = n_.new('ShaderNodeMath'); st_.operation = 'LESS_THAN'; st_.inputs[1].default_value = hole / pitch
+    mx_ = n_.new('ShaderNodeMix'); mx_.data_type = 'RGBA'; mx_.inputs["A"].default_value = (0.42, 0.3, 0.19, 1); mx_.inputs["B"].default_value = (0.03, 0.025, 0.02, 1)
+    nzw = n_.new('ShaderNodeTexNoise'); nzw.inputs["Scale"].default_value = 30
+    bp_ = n_.new('ShaderNodeBump'); bp_.inputs["Strength"].default_value = 0.6; bp_.invert = True
+    for a_, b_ in ((tc_.outputs["Object"], sc_.inputs[0]), (sc_.outputs[0], fr_.inputs[0]), (fr_.outputs[0], sb_.inputs[0]), (sb_.outputs[0], mk.inputs[0]),
+                   (mk.outputs[0], ln_.inputs[0]), (ln_.outputs["Value"], st_.inputs[0]), (st_.outputs[0], mx_.inputs["Factor"]), (mx_.outputs["Result"], p_.inputs["Base Color"]),
+                   (st_.outputs[0], bp_.inputs["Height"]), (bp_.outputs["Normal"], p_.inputs["Normal"])):
+        L_.new(a_, b_)
+peg_holes(M_PEG)
 M_BLIND = mat("M_Blinds", (0.85, 0.84, 0.8), 0.5)
 M_FRAME = mat("M_WindowFrame", (0.75, 0.74, 0.7), 0.5)
 M_CONCRETE, M_PLASTER, M_WOODFLOOR, M_BRICK, M_LAMINATE = (ph_mat(n) for n in
     ("concrete_floor_02", "plastered_wall_04", "wood_table_001", "red_brick_03", "laminate_floor_02"))
+
+def blueprint(i):
+    m = mat("M_Blueprint_%d" % i, (0.12, 0.25, 0.5), 0.8)
+    nt_ = m.node_tree; n_ = nt_.nodes; p_ = n_["Principled BSDF"]; L_ = nt_.links
+    tc_ = n_.new('ShaderNodeTexCoord'); br = n_.new('ShaderNodeTexBrick'); br.inputs["Scale"].default_value = 18 + 6 * i
+    br.inputs["Color1"].default_value = (0.1, 0.22, 0.45, 1); br.inputs["Color2"].default_value = (0.12, 0.25, 0.5, 1); br.inputs["Mortar"].default_value = (0.75, 0.85, 0.95, 1)
+    br.inputs["Mortar Size"].default_value = 0.006; br.offset = 0.0
+    wv = n_.new('ShaderNodeTexWave'); wv.wave_type = 'RINGS'; wv.inputs["Scale"].default_value = 2.5 + i; wv.inputs["Distortion"].default_value = 0
+    rp = n_.new('ShaderNodeValToRGB'); rp.color_ramp.elements[0].position = 0.97; rp.color_ramp.elements[0].color = (0, 0, 0, 1); rp.color_ramp.elements[1].color = (1, 1, 1, 1)
+    mx_ = n_.new('ShaderNodeMix'); mx_.data_type = 'RGBA'; mx_.blend_type = 'SCREEN'
+    for a_, b_ in ((tc_.outputs["Object"], br.inputs["Vector"]), (tc_.outputs["Object"], wv.inputs["Vector"]), (wv.outputs["Fac"], rp.inputs[0]),
+                   (br.outputs["Color"], mx_.inputs["A"]), (rp.outputs[0], mx_.inputs["B"]), (mx_.outputs["Result"], p_.inputs["Base Color"])):
+        L_.new(a_, b_)
+    mx_.inputs["Factor"].default_value = 0.6
+    return m
 
 def obj_from_bm(name, bm_, material, c, smooth=True):
     me = bpy.data.meshes.new(name); bm_.to_mesh(me); bm_.free()
@@ -200,7 +243,14 @@ plane_uv("OF_Ceiling", 5.0, 5.0, (OX, 0, 3.0), (180, 0, 0), M_PLASTER, C_OF, 2.0
 for nm, w, h, y, z in (("OF_WinWall_a", 1.9, 3.0, 1.55, 1.5), ("OF_WinWall_b", 1.3, 3.0, -1.85, 1.5),
                        ("OF_WinWall_lo", 1.8, 0.9, -0.3, 0.45), ("OF_WinWall_hi", 1.8, 0.8, -0.3, 2.6)):
     plane_uv(nm, w, h, (OX - 2.5, y, z), (90, 0, 90), M_PLASTER, C_OF, 2.0)
-plane_uv("OF_DayOutside", 4.0, 3.0, (OX - 3.6, -0.3, 1.5), (90, 0, 90), M_DAY, C_OF, 2.0)
+_city = plane_uv("OF_DayOutside", 4.0, 2.9, (OX - 3.6, -0.3, 1.6), (90, 0, 90), None, C_OF, 2.0)
+M_CITY = bpy.data.materials.new("M_CityView"); M_CITY.use_nodes = True
+cn_ = M_CITY.node_tree.nodes; cn_.remove(cn_["Principled BSDF"])
+ci = cn_.new('ShaderNodeTexImage'); ci.image = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "office_city_view.jpg"))
+ctc = cn_.new('ShaderNodeTexCoord'); cem = cn_.new('ShaderNodeEmission'); cem.inputs["Strength"].default_value = 2.2
+M_CITY.node_tree.links.new(ctc.outputs["Generated"], ci.inputs["Vector"]); M_CITY.node_tree.links.new(ci.outputs["Color"], cem.inputs["Color"])
+M_CITY.node_tree.links.new(cem.outputs[0], cn_["Material Output"].inputs["Surface"])
+_city.data.materials.append(M_CITY)
 for i in range(11):   # blinds, half-open slats
     box("OF_Blind_%d" % i, (0.01, 1.8, 0.05), (OX - 2.45, -0.3, 2.15 - i * 0.12), M_BLIND, C_OF, rot=(50, 0, 0))
 desk = ph_model("metal_office_desk", (OX + 0.3, 0.6, 0), 180, C_OF, name="OF_Desk")
@@ -210,9 +260,17 @@ ph_model("modern_arm_chair_01", (OX + 0.3, -0.45, 0), 180, C_OF, name="OF_ChairH
 ph_model("wooden_bookshelf_worn", (OX + 1.6, 2.2, 0), 180, C_OF, name="OF_Shelf")
 ph_model("book_encyclopedia_set_01", (OX + 1.6, 2.15, 1.02), 180, C_OF, scale=1.0)
 ph_model("potted_plant_01", (OX + 2.1, 1.4, 0), 0, C_OF)
+ph_model("wooden_bookshelf_worn", (OX + 0.2, 2.2, 0), 180, C_OF, name="OF_Shelf2")
+ph_model("book_encyclopedia_set_01", (OX + 0.2, 2.15, 1.42), 180, C_OF, name="OF_Books2")
+for k_, z_ in enumerate((0.03, 0.43, 0.83, 1.22, 1.62)):
+    ph_model("book_encyclopedia_set_01", (OX + 0.2 + 0.25 * ((k_ % 2) - 0.5), 2.15, z_), 180 + 4 * k_, C_OF, name="OF_BooksS_%d" % k_)
+    ph_model("book_encyclopedia_set_01", (OX + 1.6 - 0.25 * ((k_ % 2) - 0.5), 2.15, z_), 176 - 4 * k_, C_OF, name="OF_BooksT_%d" % k_)
+ph_model("book_encyclopedia_set_01", (OX + 1.6, 2.15, 0.62), 180, C_OF, name="OF_Books3")
+ph_model("cardboard_box_01", (OX + 2.0, -1.8, 0), 30, C_OF, name="OF_Box", scale=0.9)
 ph_model("hanging_picture_frame_01", (OX - 0.9, 2.47, 1.55), 0, C_OF)
 dt = desk["size"][2]
 ph_model("office_notepads", (OX + 0.05, 0.45, dt), 15, C_OF)
+ph_model("desk_lamp_arm_01", (OX - 0.9, 0.75, dt), 30, C_OF, name="OF_DeskLamp", scale=0.8)
 for i in range(6):   # loose papers on the desk (blank)
     box("OF_Paper_%d" % i, (0.21, 0.297, 0.001), (OX + 0.1 + 0.11 * math.sin(i * 2.1), 0.5 + 0.08 * math.cos(i * 1.7), dt + 0.001 + 0.0012 * i),
         M_PAPER, C_OF, rot=(0, 0, 13 * i))
@@ -228,9 +286,14 @@ ph_model("wooden_bookshelf_worn", (-1.45, -3.5, 0), 180, C_WS, name="WS_FrontShe
 ph_model("cardboard_box_01", (-1.45, -3.5, 1.42), 170, C_WS, name="WS_FrontBox", scale=0.7)
 ph_model("metal_tool_chest", (1.5, -3.35, 0), 0, C_WS, name="WS_FrontChest")
 ph_model("small_oil_can_01", (1.4, -3.3, 0.8), 40, C_WS, name="WS_FrontCan")
-box("WS_Door", (0.9, 0.04, 2.05), (1.0, -3.78, 1.025), M_WOOD, C_WS)
+box("WS_Door", (0.9, 0.04, 2.05), (1.0, -3.78, 1.025), M_WOODFLOOR, C_WS, uvscale=1.5)
+for k_, (pz, ph_) in enumerate(((1.55, 0.75), (0.6, 0.85))):
+    box("WS_DoorPanel_%d" % k_, (0.62, 0.012, ph_), (1.0, -3.757, pz), M_WOODFLOOR, C_WS, uvscale=1.5)
+box("WS_DoorFrame", (1.02, 0.06, 0.06), (1.0, -3.77, 2.08), M_FRAME, C_WS)
+cyl("WS_DoorKnob", 0.028, 0.05, (0.62, -3.735, 1.02), M_BRASS_DK, C_WS, axis="Y")
+sphere("WS_DoorKnobBall", 0.03, (0.62, -3.705, 1.02), M_BRASS_DK, C_WS)
 for i in range(3):
-    box("WS_Poster_%d" % i, (0.3, 0.004, 0.4), (-0.75 + 0.42 * i, -3.775, 1.75 + 0.05 * (i % 2)), mat("M_Blueprint_%d" % i, (0.12, 0.25, 0.5), 0.8), C_WS, rot=(0, 3 - 3 * i, 0))
+    box("WS_Poster_%d" % i, (0.3, 0.004, 0.4), (-0.75 + 0.42 * i, -3.775, 1.75 + 0.05 * (i % 2)), blueprint(i), C_WS, rot=(0, 3 - 3 * i, 0))
 pf = ph_model("hanging_picture_frame_01", (0.05, -3.78, 0.85), 180, C_WS, name="WS_PhotoFrame")
 
 # ------------------------------------------------------------------ THE TEAR GUN (local: barrel along -Y, up +Z, origin at the grip top)
@@ -254,8 +317,17 @@ gpart(cyl("Gun_ChamberCap", 0.029, 0.01, (0, -0.095, 0.126), M_BRASS, C_GUN))
 gpart(cyl("Gun_Inlet", 0.0045, 0.018, (0, -0.095, 0.14), M_BRASS, C_GUN))
 gpart(cyl("Gun_FeedNeck", 0.008, 0.012, (0, -0.095, 0.054), M_BRASS, C_GUN))
 # CO2 canister under the barrel (plain, unbranded) + valve on the +X side of the chamber
-can = cyl("Gun_Canister", 0.0135, 0.085, (0, -0.105, -0.004), M_CANISTER, C_GUN, axis="Y"); gpart(can)
-gpart(sphere("Gun_CanisterCapF", 0.0135, (0, -0.1475, -0.004), M_CANISTER, C_GUN))
+prof_c = [(0.0, 0.0), (0.006, 0.0008), (0.0105, 0.003), (0.0128, 0.0065), (0.0135, 0.011), (0.0135, 0.066), (0.0131, 0.071),
+          (0.0115, 0.0765), (0.0085, 0.0805), (0.0062, 0.0825), (0.0058, 0.084)]
+for k in range(7):
+    prof_c += [(0.0062, 0.0845 + k * 0.0012), (0.0056, 0.0851 + k * 0.0012)]
+prof_c += [(0.0045, 0.0935), (0.0, 0.0935)]
+mc = bpy.data.meshes.new("Gun_Canister"); mc.from_pydata([(r_, 0, z_) for r_, z_ in prof_c], [(i, i + 1) for i in range(len(prof_c) - 1)], [])
+can = bpy.data.objects.new("Gun_Canister", mc); C_GUN.objects.link(can); mc.materials.append(M_CANISTER)
+scw = can.modifiers.new("lathe", 'SCREW'); scw.axis = 'Z'; scw.steps = 48; scw.render_steps = 48; scw.use_merge_vertices = True; scw.use_normal_calculate = True
+can.modifiers.new("sm", 'WEIGHTED_NORMAL') if False else None
+for pl in mc.polygons: pl.use_smooth = True
+can.location = (0, -0.06, -0.004); can.rotation_euler = (R_(90), 0, 0); gpart(can)
 gpart(cyl("Gun_CanisterNozzle", 0.006, 0.012, (0, -0.155, -0.004), M_BRASS_DK, C_GUN, axis="Y"))
 gpart(cyl("Gun_CanisterBand", 0.0145, 0.006, (0, -0.075, -0.004), M_BRASS_DK, C_GUN, axis="Y"))
 pipe_c = bpy.data.curves.new("Gun_GasPipe", 'CURVE'); pipe_c.dimensions = '3D'; pipe_c.bevel_depth = 0.0022; pipe_c.bevel_resolution = 3
@@ -323,7 +395,7 @@ for nm, pts_ in (("TearStreakR", [lidR] + [Vector(sc[k]) for k in ("cheekR1", "c
         bp.co = p_ + Vector((0, -0.0016, 0)); bp.handle_left_type = bp.handle_right_type = 'AUTO'
     so = bpy.data.objects.new(nm, cu); C_GUN.objects.link(so); cu.materials.append(M_WET)
     mw = so.matrix_world.copy(); so.parent = W; so.parent_type = 'BONE'; so.parent_bone = "head"; bpy.context.view_layer.update(); so.matrix_world = mw
-funnel_mouth = cheek + cheekn * 0.008 + Vector((0, 0, 0.004))
+funnel_mouth = cheek + cheekn * 0.0165 + Vector((0, 0, 0.004))
 fun = cyl("Funnel", 0.0035, 0.02, (0, 0, 0), M_BRASS, C_GUN, r2=0.013, segs=32)
 fun.data.transform(Matrix.Translation((0, 0, -0.01)))      # origin at the wide mouth
 sol = fun.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.0008
@@ -523,6 +595,7 @@ light("L_StudioKey", 'AREA', (-0.4, -0.5, 1.6), (60, 0, -40), 0.0, (1.0, 1.0, 1.
 light("L_StudioRim", 'AREA', (0.5, 0.6, 1.5), (-60, 0, 140), 0.0, (0.7, 0.9, 1.0), 0.5, c=C_FX)
 light("L_OfficeSun", 'AREA', (OX - 2.3, -0.3, 1.6), (0, -90, 0), 900, (1.0, 0.97, 0.92), 1.6, c=C_OF)
 light("L_OfficeCeil", 'AREA', (OX + 0.3, 0.3, 2.95), (0, 0, 0), 250, (0.95, 0.97, 1.0), 1.5, c=C_OF)
+light("L_OfficeLampWarm", 'POINT', (OX - 0.8, 0.6, dt + 0.45), (0, 0, 0), 25, (1.0, 0.75, 0.45), 0.05, c=C_OF)
 light("L_OfficeBounce", 'AREA', (OX + 1.5, -1.5, 1.6), (70, 0, 45), 60, (1.0, 0.95, 0.9), 1.0, c=C_OF)
 light("L_FrontWash", 'AREA', (0.0, -2.6, 2.8), (40, 0, 0), 90, (1.0, 0.8, 0.6), 1.5)
 light("L_ImpactWarm", 'AREA', (0.0, -1.0, 2.2), (30, 0, 0), 0.0, (1.0, 0.85, 0.7), 1.0)
@@ -549,6 +622,10 @@ cy.caustics_reflective = cy.caustics_refractive = False
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5; r.use_persistent_data = True
 sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
 r.image_settings.file_format = 'PNG'; r.image_settings.color_depth = '8'; r.image_settings.compression = 15
+# clothes clipping: push garments 3 mm out along their normals after the armature deform
+for nm in ("Inventor.female_casualsuit01", "Mentor.male_elegantsuit01"):
+    o = bpy.data.objects[nm]
+    d_ = o.modifiers.new("ClipPush", 'DISPLACE'); d_.strength = 0.003; d_.mid_level = 0.0; d_.direction = 'NORMAL'
 # clean texture for her top (logo painted out)
 for m in bpy.data.objects["Inventor.female_casualsuit01"].data.materials:
     for nd in m.node_tree.nodes:
@@ -563,6 +640,12 @@ for m in bpy.data.materials:
         for nd in m.node_tree.nodes:   # the glass normal map carries the placeholder print; drop it
             if nd.type == 'TEX_IMAGE' and nd.image and "artwork_nor" in nd.image.name:
                 for lk in list(nd.outputs[0].links): m.node_tree.links.remove(lk)
+for o in bpy.data.objects:
+    if o.type == 'MESH' and o.name.startswith(("WS_Door", "WS_Pegboard", "WS_Poster", "WS_ShelfBoard", "OF_Monitor", "WS_WinFrame", "OF_Blind", "WS_DoorPanel")):
+        if not any(m_.type == 'BEVEL' for m_ in o.modifiers):
+            b_ = o.modifiers.new("bev", 'BEVEL'); b_.width = 0.004 if not o.name.startswith("OF_Blind") else 0.002; b_.segments = 2; b_.limit_method = 'ANGLE'
+            for pl in o.data.polygons: pl.use_smooth = True
+            o.data.shade_auto_smooth(angle=R_(35)) if hasattr(o.data, "shade_auto_smooth") else None
 bpy.ops.file.make_paths_absolute()
 # de-duplicate images loaded more than once (props appended twice)
 seen = {}

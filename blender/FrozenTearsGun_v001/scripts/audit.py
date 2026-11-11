@@ -63,6 +63,28 @@ for f in range(1, 2101, STEP):
                 tip = rig.matrix_world @ rig.pose.bones["finger%d-3.%s" % (k_, side)].tail
                 r = inside(tb, tip, 0.03)
                 if r and r[0] and r[1] > 0.006: bump(hn + " fingertip inside body >6mm", r[1], f)
+    # funnel vs face, fingertips vs gun (penetration counts)
+    if f <= 1150:
+        tb, _ = bvh(bpy.data.objects["Inventor.body"], dg)
+        fu = bpy.data.objects["Funnel"]; fe = fu.evaluated_get(dg); fm = fe.to_mesh(); fw = fe.matrix_world
+        nin = 0; gap = 9.0
+        for v in fm.vertices:
+            p_ = fw @ v.co; r = inside(tb, p_, 0.03)
+            if r is None: continue
+            if r[0]: nin += 1
+            else: gap = min(gap, r[1])
+        fe.to_mesh_clear()
+        if nin: bump("funnel vertices inside face", nin, f)
+        if gap > 0.012: bump("funnel floating >12mm off face", gap, f)
+        gun_parts = [o for o in bpy.data.objects if o.type == 'MESH' and o.name.startswith("Gun_") and not o.hide_render and "Glass" not in o.name and "Window" not in o.name]
+        rig = bpy.data.objects["Inventor"]
+        for o in gun_parts:
+            gt, _ = bvh(o, dg)
+            for side in "LR":
+                for k_ in range(1, 6):
+                    tip = rig.matrix_world @ rig.pose.bones["finger%d-3.%s" % (k_, side)].tail
+                    r = inside(gt, tip, 0.01)
+                    if r and r[0] and r[1] > 0.003: bump("fingertip inside gun part >3mm", r[1], f, o.name)
     # tears vs skin
     if f <= 1150:
         tb, _ = bvh(bpy.data.objects["Inventor.body"], dg)
