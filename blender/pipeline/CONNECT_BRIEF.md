@@ -100,3 +100,5 @@ Also add a numeric penetration check to your audit (BVH overlap between hand, fo
 4. **Glove or hand blobs.** Gloves must be the MPFB hand mesh with a glove material, with articulated fingers around the tool. No inflated sausage shapes.
 5. **Stray objects.** Look for floating spheres, helper empties left renderable, and default cubes. Hide every helper with `hide_render`.
 6. **Empty sets.** Every set needs background life: people moving, a monitor trace, a lamp, dust, wind.
+7. **Cut-off or floating body parts.** Never delete body geometry for modesty or framing. Busts, disembodied hands and missing limbs are a reject. Use camera framing, clothes, steam or props instead.
+8. **Pastel, cartoon-flat cutaways.** Anatomy and mechanism cutaways must be realistic: wet SSS tissue, bone texture, metal with wear, saturated contrast against a deeper gradient.
