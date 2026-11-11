@@ -39,7 +39,7 @@ def led_material(name, col, wave=False):
     L.new(r100.outputs[0], ph.inputs[2])
     sn = N.new("ShaderNodeMath"); sn.operation = 'SINE'; L.new(ph.outputs[0], sn.inputs[0])
     on = N.new("ShaderNodeMath"); on.operation = 'GREATER_THAN'; on.inputs[1].default_value = -0.2; L.new(sn.outputs[0], on.inputs[0])
-    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 6.0; L.new(on.outputs[0], st.inputs[0])
+    st = N.new("ShaderNodeMath"); st.operation = 'MULTIPLY'; st.inputs[1].default_value = 14.0; L.new(on.outputs[0], st.inputs[0])
     if wave:   # rack activity: 0 until frame passes this rack's 'wave' attribute, then ramps up over 8 frames
         at = N.new("ShaderNodeAttribute"); at.attribute_type = 'OBJECT'; at.attribute_name = "wave"
         sub = N.new("ShaderNodeMath"); sub.operation = 'SUBTRACT'; L.new(t.outputs[0], sub.inputs[0]); L.new(at.outputs['Fac'], sub.inputs[1])
@@ -73,7 +73,7 @@ def server_unit(name, frame_m, face_m, handle_m, led_a, led_b):
     for k in range(8):
         parts.append(box("Bay", (-0.17 + k * 0.043, -0.011, 0.0), (0.038, 0.004, 0.06), frame_m))
     o = join(parts, name)
-    leds = [box("LedA", (0.19, -0.012, 0.028), (0.006, 0.004, 0.006), led_a), box("LedB", (0.205, -0.012, 0.028), (0.006, 0.004, 0.006), led_b)]
+    leds = [box("LedA", (0.19, -0.012, 0.028), (0.012, 0.004, 0.008), led_a), box("LedB", (0.205, -0.012, 0.028), (0.012, 0.004, 0.008), led_b)]
     return o, leds
 
 
@@ -104,24 +104,28 @@ def build(variant=None):
     handle_m = pbr("Handle", (0.55, 0.56, 0.58), 0.25, 1.0)
     led_g = led_material("LedGreen", (0.25, 1.0, 0.45), wave=True); led_b = led_material("LedBlue", (0.3, 0.6, 1.0), wave=True)
     racks = []
+    # one server front + two LEDs as templates, then linked copies (fast to build, light file)
+    srv_t, (la_t, lb_t) = server_unit("SrvT", frame_m, face_m, handle_m, led_g, led_b)
+    for o in (srv_t, la_t, lb_t):
+        o.location = (0, 0, -50)
+    la_off, lb_off = Vector((0.19, -0.012, 0.028)), Vector((0.205, -0.012, 0.028))
+    door_t = box("DoorT", (0, 0, -60), (0.02, RACK_W - 0.02, RACK_H - 0.1), door_m)
+    body_t = box("RackBodyT", (0, 0, -70), (RACK_D, RACK_W, RACK_H), frame_m, bevel=0.005)
     for side, x in ((-1, ROWS_X[0]), (1, ROWS_X[1])):
+        rz = math.radians(90) * side
         for k in range(N_RACKS):
             y = k * (RACK_W + 0.02)
-            box("RackBody", (x + side * RACK_D / 2, y, RACK_H / 2), (RACK_D, RACK_W, RACK_H), frame_m, bevel=0.005)
-            box("RackTop", (x + side * RACK_D / 2, y, RACK_H + 0.02), (RACK_D, RACK_W, 0.04), frame_m)
-            # doors on alternate racks are open (glass) so the servers read; others perforated
-            holder = bpy.data.objects.new(f"Rack{side}_{k}", None); bpy.context.collection.objects.link(holder)
-            holder.location = (x, y, 0)
+            instance(body_t, (x + side * RACK_D / 2, y, RACK_H / 2))
             for u in range(19):
-                srv, leds = server_unit(f"Srv{side}_{k}_{u}", frame_m, face_m, handle_m, led_g, led_b)
                 z = 0.18 + u * 0.1
-                srv.location = (x - side * 0.0, y, z); srv.rotation_euler = (0, 0, math.radians(90) * side)
-                for ld in leds:
-                    ld.parent = srv
-                    ld["wave"] = 0.0
+                instance(srv_t, (x, y, z), rot=(0, 0, rz))
+                for tmpl, off in ((la_t, la_off), (lb_t, lb_off)):
+                    # LED offset rotated into the rack's facing
+                    ox = off.x * math.cos(rz) - off.y * math.sin(rz); oy = off.x * math.sin(rz) + off.y * math.cos(rz)
+                    ld = instance(tmpl, (x + ox, y + oy, z + off.z), rot=(0, 0, rz))
                     racks.append((ld, side, k))
             if k % 3 != 1:
-                dr = box("Door", (x - side * 0.03, y, RACK_H / 2), (0.02, RACK_W - 0.02, RACK_H - 0.1), door_m)
+                instance(door_t, (x - side * 0.03, y, RACK_H / 2))
     c["leds"] = racks
     # overhead cable trays with bundled cables, over each row
     tray_m = pbr("Tray", (0.45, 0.46, 0.48), 0.4, 0.9)
