@@ -13,15 +13,15 @@ from dd import person, place, face_to, zero, ground, rain, rain_fall
 from human import reach, pose_sit, reset_pose, fingers_curl
 from sc_boutique import haussmann
 
-EXPOSURE = 1.0
+EXPOSURE = 0.6
 DUR = {"mic": 9.0, "envelope": 9.0, "reels": 9.0}
 VARIANT_FOR = {"mic": "interior", "envelope": "street", "reels": "interior_day"}
 
 
 def interior(c, day=False):
     """Car cabin around the origin: driver seat at (+0.37, 0), dashboard ahead (+X), back seat behind."""
-    seat_m = dd.tex_mat("fabric_pattern_05", 2.0, tint=(0.25, 0.25, 0.27), name="SeatFab", sat=0.3)
-    plastic = pbr("DashPlastic", (0.03, 0.03, 0.033), 0.6)
+    seat_m = dd.tex_mat("fabric_pattern_05", 2.0, tint=(0.42, 0.4, 0.38), name="SeatFab", sat=0.2)
+    plastic = pbr("DashPlastic", (0.07, 0.07, 0.075), 0.55)
     B = dd.Builder("Cabin")
     B.box((0, 0, 0.05), (3.0, 1.6, 0.1), pbr("CarCarpet", (0.04, 0.04, 0.045), 0.9))
     B.box((1.25, 0, 0.75), (0.5, 1.5, 0.4), plastic)                          # dashboard
@@ -29,8 +29,7 @@ def interior(c, day=False):
     B.box((0.15, 0, 0.35), (1.4, 0.2, 0.25), plastic)                         # tunnel
     for sy in (-1, 1):
         B.box((0.35, sy * 0.38, 0.38), (0.55, 0.52, 0.16), seat_m).box((0.1, sy * 0.38, 0.75), (0.14, 0.5, 0.65), seat_m, rot=(0, math.radians(-12), 0))
-        B.box((0.06, sy * 0.38, 1.13), (0.1, 0.24, 0.18), seat_m)
-        B.box((0.0, sy * 0.78, 0.7), (2.4, 0.06, 0.8), pbr("DoorCard", (0.06, 0.06, 0.065), 0.6))
+        B.box((0.0, sy * 0.78, 0.6), (2.4, 0.06, 0.62), pbr("DoorCard", (0.12, 0.12, 0.125), 0.6))
     B.box((-0.75, 0, 0.42), (0.6, 1.4, 0.2), seat_m).box((-1.05, 0, 0.8), (0.15, 1.4, 0.6), seat_m, rot=(0, math.radians(-15), 0))
     B.box((0.2, 0, 1.35), (2.2, 1.5, 0.05), fabric("Headliner", (0.35, 0.34, 0.32), 0.95, 0.3, 300))
     for sy in (-1, 1):
@@ -59,7 +58,7 @@ def interior(c, day=False):
             l = bpy.data.lights.new("StreetLamp", 'POINT'); l.energy = 600; l.color = (1.0, 0.68, 0.38); l.shadow_soft_size = 0.2
             o = bpy.data.objects.new("StreetLamp", l); bpy.context.collection.objects.link(o); o.location = (-12 + k * 9.0, 5.0, 5.0)
             cyl("LampGlow", (-12 + k * 9.0, 5.0, 5.0), 0.15, 0.3, emissive("LampGlowE", (1.0, 0.7, 0.4), 30), verts=12)
-        il = bpy.data.lights.new("Interior", 'POINT'); il.energy = 18; il.color = (1.0, 0.8, 0.6)
+        il = bpy.data.lights.new("Interior", 'POINT'); il.energy = 40; il.color = (1.0, 0.8, 0.6)
         io = bpy.data.objects.new("Interior", il); bpy.context.collection.objects.link(io); io.location = (0.2, 0, 1.3)
 
 
@@ -75,10 +74,10 @@ def build(variant=None):
             to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
             c["mic"] = cyl("Mic", (0, 0, -10), 0.008, 0.03, pbr("MicM", (0.02, 0.02, 0.02), 0.5), verts=10)
         else:
-            rec = dd.model_h("portable_cassette_player", (-0.1, -0.3, 0.46), 0.08, rot_z=0.4)
+            rec = dd.model_h("portable_cassette_player", (0.35, -0.38, 0.46), 0.1, rot_z=1.2)
             c["reels"] = []
-            for k in range(2):
-                r = cyl(f"Reel{k}", (-0.13 + 0.06 * k, -0.33, 0.55), 0.018, 0.004, pbr("ReelM", (0.75, 0.75, 0.77), 0.3, 1.0), verts=6)
+            for k in range(2):          # the turning spools behind the player's window
+                r = cyl(f"Reel{k}", (0.33, -0.42 + 0.05 * k, 0.575), 0.015, 0.004, pbr("ReelM", (0.75, 0.75, 0.77), 0.3, 1.0), verts=6)
                 c["reels"].append(r)
             c["rec"] = rec
     else:
@@ -102,7 +101,7 @@ def build(variant=None):
             hip = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) / 2; h.arm.location.z += 0.5 - hip.z
             c[name] = h
         c["rain_ys"] = (-6.0, -3.0, -1.6)
-        rain(c, 0, c["rain_ys"], width=30, height=8, strength=3.0, density=0.985)
+        rain(c, 0, c["rain_ys"], width=30, height=8, strength=1.6, density=0.985)
     return c
 
 
@@ -140,12 +139,12 @@ def anim_reels(c, t):
 
 MOVES = {
     "mic": dict(kind="anim", dof=2.8, anim=anim_mic,
-                cam=lambda c, t: (Vector((-0.75, -0.35, 1.08)).lerp(Vector((-0.65, -0.3, 1.05)), ease(t)), Vector((0.9, 0.3, 0.7)), 24),
+                cam=lambda c, t: (Vector((-0.85, -0.1, 1.28)).lerp(Vector((-0.75, -0.05, 1.26)), ease(t)), Vector((0.95, 0.35, 0.62)), 20),
                 focus=lambda c, t: Vector((0.8, 0.35, 0.8))),
     "envelope": dict(kind="anim", dof=5.6, anim=anim_envelope,
                      cam=lambda c, t: (Vector((6.5, -6.5, 2.4)).lerp(Vector((5.8, -6.0, 2.2)), ease(t)), Vector((0.2, 0.0, 1.0)), 32),
                      focus=lambda c, t: Vector((0.2, 0.0, 1.0))),
     "reels": dict(kind="anim", dof=1.8, anim=anim_reels,
-                  cam=lambda c, t: (Vector((-0.75, 0.35, 1.05)).lerp(Vector((-0.65, 0.3, 1.02)), ease(t)), Vector((0.6, -1.0, 0.75)), 30),
+                  cam=lambda c, t: (Vector((0.1, 0.45, 1.18)).lerp(Vector((0.15, 0.42, 1.16)), ease(t)), Vector((0.2, -0.8, 0.82)), 24),
                   focus=lambda c, t: Vector((-0.1, -0.33, 0.52))),
 }

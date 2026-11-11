@@ -56,7 +56,7 @@ def build(variant=None):
     for k, (x, y, rz) in enumerate(((-2.5, 2.2, 0), (0.5, 2.2, 0), (-2.5, 5.0, math.pi), (0.5, 5.0, math.pi), (3.3, 3.6, -math.pi / 2))):
         dd.model_h("metal_office_desk", (x, y, 0), 0.76, rot_z=rz)
         office_chair((x, y - 0.75 if rz == 0 else y + 0.75, 0), rz, fab, met)
-        dd.model_h("binder_notebook", (x - 0.4, y, 0.76), 0.25, rot_z=0.3 * k)
+        dd.model_h("binder_notebook", (x - 0.4, y, 0.76), 0.05, rot_z=0.3 * k)
         if k % 2 == 0:
             dd.model_h("desk_lamp_arm_01", (x + 0.5, y + 0.1, 0.76), 0.45, rot_z=2.5)
         for j in range(3):
@@ -121,6 +121,6 @@ MOVES = {
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
     "read": dict(kind="anim", dof=2.8, anim=anim_read,
-                 cam=lambda c, t: (Vector((1.6, 5.6, 1.6)).lerp(Vector((1.9, 5.3, 1.55)), ease(t)), Vector((4.0, 3.6, 1.05)), 32),
+                 cam=lambda c, t: (Vector((1.3, 6.0, 1.75)).lerp(Vector((1.6, 5.7, 1.7)), ease(t)), Vector((4.0, 3.6, 1.0)), 30),
                  focus=lambda c, t: Vector((4.0, 3.6, 1.2))),
 }
