@@ -32,22 +32,10 @@ TRAILER = Vector((9.0, 4.0, 0.0))
 
 
 def forklift(name):
-    M = {"y": pbr("ForkYellow", (0.5, 0.38, 0.1), 0.45, 0.2), "k": pbr("ForkBlack", (0.03, 0.03, 0.03), 0.5), "s": pbr("ForkSteel", (0.3, 0.3, 0.31), 0.4, 0.8)}
-    r = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(r)
-    parts = [box("Body", (0, 0, 0.75), (1.6, 1.1, 0.8), M["y"], bevel=0.08), box("Counter", (-0.75, 0, 0.75), (0.3, 1.1, 0.9), M["k"], bevel=0.05),
-             box("Seat", (-0.25, 0, 1.3), (0.45, 0.45, 0.35), M["k"], bevel=0.04)]
-    for sy in (-1, 1):
-        parts.append(cyl("CagePost", (0.35, sy * 0.5, 1.75), 0.03, 1.4, M["k"], verts=8))
-        parts.append(cyl("CagePostB", (-0.6, sy * 0.5, 1.75), 0.03, 1.4, M["k"], verts=8))
-        parts.append(box("Mast", (0.92, sy * 0.3, 1.2), (0.08, 0.08, 2.3), M["s"]))
-        parts.append(box("Fork", (1.4, sy * 0.3, 0.12), (0.9, 0.1, 0.04), M["s"]))
-    parts.append(box("CageTop", (-0.12, 0, 2.45), (1.05, 1.05, 0.05), M["k"]))
-    parts.append(box("Carriage", (0.98, 0, 0.45), (0.06, 0.9, 0.6), M["s"]))
-    for o in parts:
-        o.parent = r
-    wheels = []
-    V._wheels(r, (0.55, -0.55), 0.48, 0.3, V._mats(), wheels)
-    return r, wheels
+    """The kit's forklift (mast tilts, forks lift via vehicles.part)."""
+    import vehicles as _K
+    r = _K.make("forklift", color=(0.55, 0.42, 0.12), dirt=0.3); r.name = name
+    return r, [r]
 
 
 def transport(name):
@@ -198,7 +186,7 @@ def build(variant=None):
     pal = box("ForkLoad", (0, 0, 0), (1.0, 0.8, 0.9), hes, bevel=0.03); c["fork_load"] = pal
     c["trailers"] = []
     for k, (p, rz) in enumerate(((TRAILER, math.pi / 2), (Vector((-10, -HY - 10, 0)), 0.2), (Vector((-2, -HY - 13, 0)), 0.1), (Vector((6, -HY - 11, 0)), -0.05))):
-        tr, wh, doors = V.truck(f"Trailer{k}", cab_color=(0.25, 0.3, 0.26), trailer_color=(0.62, 0.62, 0.6))
+        tr, wh, doors = V.truck(f"Trailer{k}", cab_color=(0.25, 0.3, 0.26), trailer_color=(0.62, 0.62, 0.6), boxy=(k == 0))
         tr.location = p; tr.rotation_euler = (0, 0, rz)
         c["trailers"].append((tr, doors))
     c["sensor_tr"] = c["trailers"][0]

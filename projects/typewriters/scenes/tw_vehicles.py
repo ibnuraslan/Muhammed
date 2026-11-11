@@ -61,7 +61,7 @@ def _wheels(root, xs, half_w, r, M, out):
             out.append(w)
 
 
-def saloon(name, color, length=4.15, width=1.62, big=False):
+def _box_saloon(name, color, length=4.15, width=1.62, big=False):
     """Boxy 1970s saloon. big=True: the longer, rounder-shouldered car with chrome trim."""
     M = _mats()
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
@@ -101,7 +101,7 @@ def saloon(name, color, length=4.15, width=1.62, big=False):
     return root, wheels
 
 
-def trolleybus(name, color=(0.62, 0.6, 0.52), stripe=(0.42, 0.12, 0.08)):
+def _box_trolleybus(name, color=(0.62, 0.6, 0.52), stripe=(0.42, 0.12, 0.08)):
     """Boxy 1970s trolleybus with roof poles reaching up to the overhead wires (z ~ 5.6)."""
     M = _mats()
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
@@ -133,7 +133,7 @@ def trolleybus(name, color=(0.62, 0.6, 0.52), stripe=(0.42, 0.12, 0.08)):
     return root, wheels
 
 
-def truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58)):
+def _box_truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58)):
     """Tractor unit and a box trailer with twin rear doors (doors are separate pivots: c['doors'])."""
     M = _mats()
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
@@ -166,6 +166,60 @@ def truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58)):
     return root, wheels, doors
 
 
-def roll(wheels, dist, r):
+def _box_roll(wheels, dist, r):
     for w in wheels:
         w.rotation_euler = (0, dist / r, 0)
+
+
+
+# ============================================================================ the shared vehicle kit (nvidia_doc/scenes/vehicles.py)
+import vehicles as _K
+
+
+def saloon(name, color, length=4.15, width=1.62, big=False):
+    root = _K.make("sedan_1990s_soviet", color=color, dirt=0.25 if big else 0.15)
+    root.name = name
+    return root, [root]
+
+
+def trolleybus(name, color=(0.62, 0.6, 0.52), stripe=None):
+    """City bus body from the kit, with two trolley poles on the roof reaching up to the overhead wires."""
+    root = _K.make("bus_city", color=color, dirt=0.2); root.name = name
+    M = _mats()
+    for dy in (-0.3, 0.3):
+        p = bpy.data.objects.new("PoleBase", None); bpy.context.collection.objects.link(p)
+        _kid(p, root); p.location = (-1.0, dy, 3.3)
+        pole = cyl("Pole", (0, 0, 0), 0.025, 5.6, M["black"], verts=8, rot=(0, math.radians(90 - 23), 0))
+        pole.location = (-5.6 / 2 * math.cos(math.radians(23)), 0, 5.6 / 2 * math.sin(math.radians(23)))
+        pole.parent = p; pole.matrix_parent_inverse = Matrix.Identity(4)
+    _kid(box("PoleBase", (-0.5, 0, 3.32), (1.4, 0.9, 0.12), M["black"]), root)
+    return root, [root]
+
+
+def truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58), boxy=False):
+    """Box truck from the kit, with hinged twin rear doors added (pivots returned) for the sealing shots.
+    boxy=True keeps the old placeholder with a hollow cargo box (only for the shot filmed from inside it)."""
+    if boxy:
+        return _box_truck(name, cab_color, trailer_color)
+    root = _K.make("delivery_truck", color=trailer_color, dirt=0.2); root.name = name
+    M = _mats()
+    door_m = pbr(name + "DoorPaint", trailer_color, 0.5, 0.3)
+    doors = []
+    for sy in (-1, 1):
+        d = bpy.data.objects.new("DoorPivot", None); bpy.context.collection.objects.link(d)
+        _kid(d, root); d.location = (-3.79, sy * 1.2, 2.25)
+        leaf = box("Door", (0, -sy * 0.6, 0), (0.04, 1.18, 2.3), door_m, bevel=0.01)
+        bars = [cyl("LockBar", (-0.04, -sy * k, 0), 0.02, 2.35, M["chrome"], verts=8) for k in (0.3, 0.9)]
+        hinges = [box("Hinge", (-0.03, -sy * 0.03, dz), (0.04, 0.1, 0.08), M["black"]) for dz in (-0.9, 0.0, 0.9)]
+        for o in [leaf] + bars + hinges:
+            o.parent = d; o.matrix_parent_inverse = Matrix.Identity(4)
+        doors.append(d)
+    return root, [root], doors
+
+
+def roll(wheels, dist, r):
+    for w in wheels:
+        if w.get("vehicle_kind"):
+            _K.spin_wheels(w, dist)
+        else:
+            w.rotation_euler = (0, dist / r, 0)

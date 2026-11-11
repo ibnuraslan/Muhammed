@@ -307,9 +307,6 @@ def build(variant=None):
     tr, twh, doors = V.truck("Truck")
     tr.location = TRUCK
     c["truck"] = tr; c["truck_w"] = twh; c["doors"] = doors
-    for k in range(6):                                    # burlap crates loaded inside, visible while the doors are open
-        o = MC.burlap_crate(f"Load{k}", tag=False); o.parent = tr
-        o.location = (-4.1 + (k // 2) * 1.0, -0.55 + (k % 2) * 1.1, 1.38); o.rotation_euler = (0, 0, 0.03 * k)
     seal = join([cyl("SealWire", (0, 0, 0), 0.002, 0.12, pbr("SealWireM", (0.6, 0.6, 0.62), 0.3, 1.0), verts=6),
                  cyl("SealLead", (0, 0, -0.07), 0.012, 0.012, pbr("Lead", (0.42, 0.43, 0.45), 0.5, 0.8), verts=16, rot=(math.radians(90), 0, 0))], "Seal")
     c["seal"] = seal
@@ -371,7 +368,7 @@ def truck_shot(c, sec, shot):
     tr = c["truck"]; sealer = c["sealer"]
     on = shot in ("trailer_seal", "truck_leave")
     twp.hide(twp.person_objs(sealer), shot != "trailer_seal")
-    rear = TRUCK + Vector((-4.8, 0, 0))
+    rear = TRUCK + Vector((-3.85, 0, 0))
     if shot == "trailer_seal":
         close = ease(min(1.0, sec / 1.3))
         for d, sy in zip(c["doors"], (-1, 1)):
@@ -390,7 +387,7 @@ def truck_shot(c, sec, shot):
         go = max(0.0, sec - 0.8)
         dist = 0.5 * 1.6 * go * go
         tr.location = TRUCK + Vector((dist, 0, 0)); V.roll(c["truck_w"], dist, 0.5)
-        c["seal"].location = tr.location + Vector((-4.86, 0.1, 1.35))
+        c["seal"].location = tr.location + Vector((-3.86, 0.1, 1.35))
     else:
         tr.location = Vector((0, 0, -60))
     return on
@@ -468,7 +465,7 @@ def cam_roof(c, t):
 
 
 def cam_seal(c, t):
-    e = ease(t); r = TRUCK + Vector((-4.8, 0, 0))
+    e = ease(t); r = TRUCK + Vector((-3.85, 0, 0))
     return (r + Vector((-4.2, -2.6, 1.35)).lerp(Vector((-3.8, -2.3, 1.35)), e), r + Vector((0.0, 0.0, 1.5)), 35)
 
 
@@ -491,7 +488,7 @@ def cam_window_night(c, t):
 MOVES = {
     "window_night": dict(kind="anim", dof=None, cam=cam_window_night, anim=anim("window_night")),
     "hoist_street": dict(kind="anim", dof=None, cam=cam_hoist_street, anim=anim("hoist_street")),
-    "trailer_seal": dict(kind="anim", dof=3.0, cam=cam_seal, focus=lambda c, t: TRUCK + Vector((-4.8, 0.1, 1.35)), anim=anim("trailer_seal")),
+    "trailer_seal": dict(kind="anim", dof=3.0, cam=cam_seal, focus=lambda c, t: TRUCK + Vector((-3.85, 0.1, 1.35)), anim=anim("trailer_seal")),
     "truck_leave": dict(kind="anim", dof=None, cam=cam_leave, anim=anim("truck_leave")),
     "street_push": dict(kind="anim", dof=None, cam=cam_street, anim=anim("street_push")),
     "crane_up": dict(kind="anim", dof=None, cam=cam_crane, anim=anim("crane_up")),
