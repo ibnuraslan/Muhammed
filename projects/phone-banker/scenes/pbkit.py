@@ -246,3 +246,47 @@ def image_plane(name, path, loc, size, rot, rough=0.6, emit=0.0):
         L.new(t.outputs['Color'], p.inputs['Emission Color']); p.inputs['Emission Strength'].default_value = emit
     o.data.materials.append(m)
     return o
+
+
+def precip_curtains(kind, x_range=(-30, 30), ys=(-14, -9, -5, -1.5), top=12.0, fall=None):
+    """Falling rain or snow: textured vertical planes that drop and wrap by frame drivers (bake-safe, no particles)."""
+    snow = kind == "snow"
+    m = bpy.data.materials.new("Precip" + kind); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (900, 180, 1) if snow else (2000, 30, 1)
+    wn = N.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = '2D'
+    L.new(tc.outputs['Object'], mp.inputs['Vector']); L.new(mp.outputs[0], wn.inputs['Vector'])
+    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.993 if snow else 0.97; L.new(wn.outputs['Value'], gt.inputs[0])
+    sc = N.new("ShaderNodeMath"); sc.operation = 'MULTIPLY'; sc.inputs[1].default_value = 0.9 if snow else 0.45; L.new(gt.outputs[0], sc.inputs[0])
+    tr = N.new("ShaderNodeBsdfTransparent"); gl = N.new("ShaderNodeEmission"); gl.inputs['Color'].default_value = (0.95, 0.96, 1.0, 1) if snow else (0.75, 0.8, 0.88, 1)
+    gl.inputs['Strength'].default_value = 1.2 if snow else 0.5
+    mx = N.new("ShaderNodeMixShader"); L.new(sc.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs['Surface'])
+    speed = fall or (1.2 if snow else 8.0)            # metres per second
+    objs = []
+    for y in ys:
+        for j in range(2):
+            bpy.ops.mesh.primitive_plane_add(size=1, location=(0, y, top / 2 + j * top), rotation=(math.radians(90), 0, 0))
+            o = bpy.context.active_object; o.name = "Precip" + kind; o.scale = (x_range[1] - x_range[0], top, 1)
+            o.location.x = (x_range[0] + x_range[1]) / 2
+            o.data.materials.append(m); o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False
+            d = o.driver_add("location", 2).driver; d.type = 'SCRIPTED'
+            d.expression = f"{top / 2 + j * top} - ((frame / 24 * {speed}) % {top})"
+            if snow:
+                d2 = o.driver_add("location", 0).driver; d2.type = 'SCRIPTED'
+                d2.expression = f"{(x_range[0] + x_range[1]) / 2} + 0.4 * sin(frame * 0.03 + {j + y})"
+            objs.append(o)
+    return objs
+
+
+def leaves(n, area, seed=5, cols=((0.55, 0.3, 0.06), (0.62, 0.42, 0.1), (0.4, 0.18, 0.05))):
+    """Fallen leaves: small curled planes scattered over an area (x0, x1, y0, y1). Returns the objects."""
+    rng = np.random.default_rng(seed)
+    mats = [pbr(f"Leaf{k}", c_, 0.7, 0.0, **{'Subsurface Weight': 0.2}) for k, c_ in enumerate(cols)]
+    out = []
+    for k in range(n):
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(rng.uniform(area[0], area[1]), rng.uniform(area[2], area[3]), 0.012))
+        o = bpy.context.active_object; o.name = "Leaf"; o.scale = (0.06, 0.04, 1); o.rotation_euler = (rng.uniform(-0.3, 0.3), rng.uniform(-0.3, 0.3), rng.uniform(0, 6.28))
+        o.data.materials.append(mats[k % len(mats)]); out.append(o)
+    return out

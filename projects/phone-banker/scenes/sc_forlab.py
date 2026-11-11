@@ -264,7 +264,7 @@ def build(variant=None):
         dl = bpy.data.lights.new("ReporterLamp", 'SPOT'); dl.energy = 35; dl.spot_size = math.radians(60); dl.color = (1.0, 0.85, 0.65)
         do = bpy.data.objects.new("ReporterLamp", dl); bpy.context.collection.objects.link(do); do.location = (LT.x, LT.y + 0.2, 1.8); point_at(do, (LT.x, LT.y, LT.z))
         c["fileA"].hide_render = True; c["fileB"].hide_render = True
-        c["sheetB"] = photocopy("PushPage", 2); c["sheetB"].location = (1.9, 1.75, 0.79); c["sheetB"].rotation_euler = (0, 0, 0.1)
+        c["sheetB"] = photocopy("PushPage", 2); c["sheetB"].location = (1.9, 1.75, 0.868); c["sheetB"].rotation_euler = (0, 0, 0.1)
     c["people"] = P
     animate(c, 0.0, None)
     return c
@@ -384,7 +384,7 @@ def a_specialists(c, sec):
     seat(s2, (1.9, 2.55, 0), 0.0, lean=14)                                          # faces -Y (other side of the bench)
     hide(s2, False)
     k = ease(min(1.0, max(0.0, (sec - 1.0) / 2.0)))
-    pg = c["sheetB"]; pg.location = Vector((1.9, 1.95, 0.79)).lerp(Vector((1.9, 1.55, 0.79)), k)
+    pg = c["sheetB"]; pg.location = Vector((1.9, 1.95, 0.868)).lerp(Vector((1.9, 1.55, 0.868)), k)
     hand_to(s2, "R", pg.location + Vector((0.04, 0.12, 0.04)), hand_dir=Vector((0, -0.7, -0.6)), curl=20)
     nod(s2, "head", 12); nod(s1, "head", 14); look(s1, pg.location, 0.5)
     hand_to(s1, "L", Vector((1.75, 1.45, 0.82)), hand_dir=Vector((0, 0.7, -0.6)), curl=20)

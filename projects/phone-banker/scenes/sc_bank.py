@@ -9,7 +9,8 @@ from mathutils import Vector, Matrix
 from kit import *
 from human import Human, add_asset, reset_pose, fingers_curl, pose_walk, pose_sit, _world_verts, reach
 import ph
-from pbkit import soviet_car, masonry_facade, joinm
+from pbkit import soviet_car, masonry_facade, joinm, precip_curtains, leaves
+import pbpeople as PP
 from sc_bankoffice import person, stand, nod, look, _fwd, retint
 
 EXPOSURE = 0.9
@@ -23,7 +24,7 @@ rng = np.random.default_rng(8)
 
 
 # ============================================================================ facade from the modular kit
-def kit_facade(x0, bays, top_bay="centered_large", door_bays=(), tint=(0.78, 0.8, 0.82)):
+def kit_facade(x0, bays, top_bay="centered_large", door_bays=(), tint=(0.66, 0.68, 0.7)):
     """Assemble ground floor + two floors + top floor + crown, `bays` x 3 m, starting at x0, facing -Y."""
     root, ms = ph.model("modular_urban_apartments_facade")
     by = {}
@@ -67,8 +68,16 @@ def kit_facade(x0, bays, top_bay="centered_large", door_bays=(), tint=(0.78, 0.8
 
 # ============================================================================ build
 def build(variant=None):
-    c = {}
-    world_sky(sun_elev_deg=-4.0, sun_rot_deg=250, strength=2.6, tint=(0.62, 0.74, 1.0))      # blue hour, just after sunset
+    variant = variant or "dusk"
+    c = {"variant": variant}
+    if variant == "dusk":
+        world_sky(sun_elev_deg=-4.0, sun_rot_deg=250, strength=2.6, tint=(0.62, 0.74, 1.0))      # blue hour, just after sunset
+    elif variant == "summer":
+        world_sky(sun_elev_deg=38, sun_rot_deg=150, strength=0.28, tint=(0.85, 0.9, 1.0)); sun(38, 150, 1.5, (1.0, 0.94, 0.85), 1.5)
+    elif variant == "autumn":
+        world_flat((0.42, 0.45, 0.5), 0.95)
+    else:                                                                                       # winter / seasons: soft overcast
+        world_flat((0.6, 0.63, 0.68), 0.85)
     # ground: pavement, kerb, road
     pave = ph.texture("concrete_pavers", scale=0.8)
     road = ph.texture("asphalt_02", scale=0.25)
@@ -97,33 +106,132 @@ def build(variant=None):
     # street lamps (scanned) along the kerb, lit; linden-like small trees
     for x in (-16.0, -4.0, 8.0, 20.0):
         r, lm = ph.model("street_lamp_01", loc=(x, KERB_Y + 0.5, 0), rot_z=math.radians(180))
-        l = bpy.data.lights.new("StreetLamp", 'POINT'); l.energy = 160; l.color = (1.0, 0.8, 0.6); l.shadow_soft_size = 0.15
-        lo = bpy.data.objects.new("StreetLamp", l); bpy.context.collection.objects.link(lo); lo.location = (x, KERB_Y + 0.5, 3.75)
-    for x in (-12.5, 12.0, 24.0):
-        ph.model("tree_small_02", loc=(x, KERB_Y + 1.1, 0), rot_z=rng.uniform(0, 6.28), scale=1.25)
+        if variant == "dusk":
+            l = bpy.data.lights.new("StreetLamp", 'POINT'); l.energy = 160; l.color = (1.0, 0.8, 0.6); l.shadow_soft_size = 0.15
+            lo = bpy.data.objects.new("StreetLamp", l); bpy.context.collection.objects.link(lo); lo.location = (x, KERB_Y + 0.5, 3.75)
+    if variant in ("dusk", "summer", "autumn"):
+        for x in (-12.5, 12.0, 24.0):
+            r, tm = ph.model("tree_small_02", loc=(x, KERB_Y + 1.1, 0), rot_z=rng.uniform(0, 6.28), scale=1.25)
+            if variant == "autumn":
+                retint(tm, (1.4, 0.75, 0.3))
     # warm light inside the banking hall
     for x in (-7.5, -1.5, 4.5):
-        l = area_light((x, 1.5, 2.8), (0, 0, 0), 3.0, 140, (1.0, 0.82, 0.6)); l.visible_camera = False
-    # ---------------------------------------------------------------- militia cars
-    blue = (0.05, 0.12, 0.42)
-    cars = []
-    for k in range(2):
-        car = soviet_car(f"Militia{k}", (0.7, 0.7, 0.72) if k == 0 else (0.72, 0.6, 0.22), kind="lada", stripe=blue, beacon=True, label="МИЛИЦИЯ")
-        cars.append(car)
-    c["cars"] = cars
-    parked = soviet_car("ParkedVolga", (0.16, 0.18, 0.2), kind="volga")
-    parked.location = (14.0, KERB_Y - 1.1, 0.0)
-    c["parked"] = parked
-    # ---------------------------------------------------------------- officers (2B on the steps; 2A one walks to the door)
-    def officer(name, years, hv):
-        h = person(name, 1.0, years, "male_casualsuit01", "short02", cval=0.75, hv=hv, hue=0.58, sat=0.3)   # grey-blue uniform shirt
-        return h
-    a = officer("OffSit", 44, 0.25)
-    b = officer("OffHelp", 31, 0.2)
-    w = officer("OffWalk", 38, 0.3)
-    c["people"] = {"sit": a, "help": b, "walk": w}
-    animate(c, 0.0, "pullup")
+        l = area_light((x, 1.5, 2.8), (0, 0, 0), 3.0, 140 if variant == "dusk" else 40, (1.0, 0.82, 0.6)); l.visible_camera = False
+    # the entrance doors, hinged so they can open (the kit's own door in the centre bay is removed)
+    for o in list(bpy.data.objects):
+        if o.name.startswith("door_centered_large_01") and o.type == 'MESH':
+            lo_, hi_ = ph.bounds([o])
+            if abs((lo_.x + hi_.x) / 2) < 0.5 and lo_.z < 1.0:
+                bpy.data.objects.remove(o, do_unlink=True)
+    dm = pbr("BankDoorWood", (0.12, 0.07, 0.04), 0.4, 0.0, **{'Coat Weight': 0.4})
+    c["doors"] = []
+    for sx in (-1, 1):
+        lf = joinm([box("BDLeaf", (-sx * 0.42, 0, 1.3), (0.84, 0.06, 2.6), dm, bevel=0.01),
+                    box("BDGlass", (-sx * 0.42, -0.035, 1.75), (0.55, 0.01, 1.0), glass("BDGlassM", (0.75, 0.7, 0.6), 0.1)),
+                    cyl("BDHandle", (-sx * 0.75, -0.08, 1.15), 0.015, 0.4, pbr("BDBrass", (0.6, 0.45, 0.2), 0.3, 1.0), verts=12)], "BankDoor")
+        lf.location = (sx * 0.86, -0.12, STEP_H * STEP_N - 0.64 + 0.64); c["doors"].append(lf)
+    box("BankLobbyGlow", (0, 0.4, 1.9), (1.8, 0.05, 2.6), emissive("BankLobby", (1.0, 0.86, 0.66), 0.9))
+    # weather and season dressing
+    if variant == "autumn":
+        c["rain"] = precip_curtains("rain")
+        c["leaves"] = leaves(160, (-14, 14, KERB_Y - 1.0, -0.2))
+        for nm in ("Road", "Pavement", "FarPave"):
+            o = bpy.data.objects.get(nm)
+            if o:
+                o.data.materials[0].node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.8
+    if variant in ("winter", "seasons"):
+        snow_m = pbr("SnowCover", (0.85, 0.87, 0.9), 0.6, 0.0, **{'Subsurface Weight': 0.3})
+        cover = [box("SnowPave", (0, KERB_Y / 2, 0.075), (90, -KERB_Y, 0.03), snow_m), box("SnowFar", (0, KERB_Y - ROAD_W - 3, 0.075), (90, 6, 0.03), snow_m),
+                 box("SnowRoadEdge", (0, KERB_Y - 0.8, -0.05), (90, 1.4, 0.03), snow_m)]
+        for k in range(STEP_N):
+            d = STEP_D * (STEP_N - k)
+            cover.append(box("SnowStep", (0, -d / 2 - 0.05, STEP_H * (k + 1) + 0.012), (4.0, d - 0.04, 0.025), snow_m))
+        c["snow_cover"] = cover
+        c["snow"] = precip_curtains("snow")
+    if variant == "seasons":
+        c["leaves"] = leaves(160, (-14, 14, KERB_Y - 1.0, -0.2))
+        c["rain"] = precip_curtains("rain")
+        # one shot, three seasons: snow (frames < 50), autumn leaves (50-100), rain (> 100)
+        for o in c["snow_cover"] + c["snow"]:
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame >= 50"
+        for o in c["leaves"]:
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 50 or frame >= 100"
+        for o in c["rain"]:
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 100"
+        bg = bpy.context.scene.world.node_tree.nodes["Background"]
+        d = bg.inputs['Color'].driver_add("default_value", 0).driver; d.type = 'SCRIPTED'; d.expression = "0.6 if frame < 50 else (0.55 if frame < 100 else 0.4)"
+        d = bg.inputs['Color'].driver_add("default_value", 1).driver; d.type = 'SCRIPTED'; d.expression = "0.63 if frame < 50 else (0.5 if frame < 100 else 0.44)"
+        d = bg.inputs['Color'].driver_add("default_value", 2).driver; d.type = 'SCRIPTED'; d.expression = "0.68 if frame < 50 else (0.42 if frame < 100 else 0.5)"
+    CAST[variant](c)
+    animate(c, 0.0, {"dusk": "pullup", "summer": "traffic", "autumn": "detain", "winter": "doorbell", "seasons": "seasons"}[variant])
     return c
+
+
+def cast_dusk(c):
+    blue = (0.05, 0.12, 0.42)
+    c["cars"] = [soviet_car(f"Militia{k}", (0.7, 0.7, 0.72) if k == 0 else (0.72, 0.6, 0.22), kind="lada", stripe=blue, beacon=True, label="МИЛИЦИЯ")
+                 for k in range(2)]
+    parked = soviet_car("ParkedVolga", (0.16, 0.18, 0.2), kind="volga"); parked.location = (14.0, KERB_Y - 1.1, 0.0)
+    off = lambda n, y, hv: person(n, 1.0, y, "male_casualsuit01", "short02", cval=0.75, hv=hv, hue=0.58, sat=0.3)
+    c["people"] = {"sit": off("OffSit", 44, 0.25), "help": off("OffHelp", 31, 0.2), "walk": off("OffWalk", 38, 0.3)}
+
+
+def cast_summer(c):
+    cols = [(0.15, 0.17, 0.2), (0.62, 0.6, 0.55), (0.35, 0.08, 0.06), (0.22, 0.3, 0.24), (0.7, 0.66, 0.5)]
+    c["traffic"] = [soviet_car(f"Traffic{k}", cols[k], kind="volga" if k % 2 == 0 else "lada") for k in range(5)]
+    c["trolley"] = trolleybus()
+    c["banker"] = person("Banker", 1.0, 52, "male_elegantsuit01", "short04", cval=0.1, hv=0.45, sat=0.2)
+    c["doorman"] = person("Doorman", 1.0, 58, "male_elegantsuit01", "short04", cval=0.25, hv=0.6, hue=0.6, sat=0.6)
+    c["walkers"] = [person("Passer1", 0.0, 40, "female_elegantsuit01", "bob01", cval=0.4, hv=0.3), person("Passer2", 1.0, 30, "male_casualsuit02", "short01", cval=0.5)]
+    c["briefcase"] = joinm([box("BCase", (0, 0, 0), (0.42, 0.1, 0.3), pbr("BCaseL", (0.08, 0.045, 0.025), 0.45), bevel=0.02)], "BankerCase")
+    # overhead trolleybus wires along the street
+    for y in (KERB_Y - 2.5, KERB_Y - 3.3):
+        cyl("Wire", (0, y, 6.2), 0.008, 90, pbr("WireM", (0.05, 0.05, 0.05), 0.5), verts=6, rot=(0, math.radians(90), 0))
+
+
+def cast_autumn(c):
+    c["car"] = soviet_car("MilitiaVolga", (0.42, 0.48, 0.55), kind="volga", stripe=(0.05, 0.12, 0.42), beacon=True)
+    off = lambda n, y, hv: person(n, 1.0, y, "male_casualsuit05", "short02", cval=0.2, hv=hv, sat=0.3)
+    c["offA"] = off("DetA", 40, 0.3); c["offB"] = off("DetB", 33, 0.2)
+    c["man"] = person("Detained", 1.0, 42, "male_elegantsuit01", "short01", cval=0.2, hv=0.15, hue=0.62, sat=0.5)
+    c["umbrella"] = None
+
+
+def cast_winter(c):
+    c["inv"] = person("InvWinter", 1.0, 46, "male_casualsuit05", "short02", cval=0.14, hv=0.3, sat=0.2)
+    # an apartment entrance in the neighbouring building, with a buzzer panel
+    dm = pbr("FlatDoor", (0.2, 0.17, 0.14), 0.5)
+    box("FlatDoor", (13.5, -0.05, 1.05), (1.0, 0.08, 2.1), dm, bevel=0.01)
+    box("FlatDoorFrame", (13.5, -0.02, 1.1), (1.2, 0.04, 2.25), pbr("FlatFrame", (0.4, 0.38, 0.34), 0.6))
+    box("Buzzer", (14.25, -0.1, 1.35), (0.1, 0.03, 0.16), pbr("BuzzerM", (0.3, 0.3, 0.3), 0.4, 0.8))
+    box("FlatCanopy", (13.5, -0.45, 2.45), (1.6, 0.9, 0.1), pbr("CanopyC", (0.5, 0.5, 0.48), 0.8))
+    l = area_light((13.5, -0.5, 2.35), (0, 0, 0), 0.5, 15, (1.0, 0.85, 0.6)); l.visible_camera = False
+
+
+def cast_seasons(c):
+    c["traffic"] = [soviet_car(f"Season{k}", ((0.15, 0.17, 0.2), (0.6, 0.58, 0.52), (0.3, 0.08, 0.06))[k], kind="lada" if k else "volga") for k in range(3)]
+
+
+CAST = {"dusk": cast_dusk, "summer": cast_summer, "autumn": cast_autumn, "winter": cast_winter, "seasons": cast_seasons}
+
+
+def trolleybus():
+    body = pbr("TrolleyCream", (0.72, 0.66, 0.48), 0.4, 0.1, **{'Coat Weight': 0.5})
+    band = pbr("TrolleyRed", (0.5, 0.1, 0.06), 0.4)
+    glass_m = pbr("TrolleyGlass", (0.03, 0.035, 0.04), 0.05, 0.0, **{'Coat Weight': 1.0})
+    tyre = pbr("TrolleyTyre", (0.02, 0.02, 0.02), 0.85)
+    parts = [box("TBody", (0, 0, 1.65), (11.5, 2.5, 2.6), body, bevel=0.35),
+             box("TBand", (0, 0, 0.75), (11.52, 2.52, 0.3), band),
+             box("TWin", (0.2, 0, 2.0), (10.0, 2.52, 1.0), glass_m),
+             box("TWind", (5.76, 0, 1.9), (0.04, 2.2, 1.3), glass_m)]
+    for k in range(6):
+        parts.append(box("TPillar", (-4.5 + k * 1.8, 0, 2.0), (0.12, 2.54, 1.02), body))
+    for sx in (-3.6, 3.8):
+        for sy in (-1, 1):
+            parts.append(cyl("TTyre", (sx, sy * 1.05, 0.5), 0.5, 0.3, tyre, verts=24, rot=(math.radians(90), 0, 0)))
+    for sy in (-0.25, 0.25):
+        parts.append(box("TPole", (-1.2, sy, 4.6), (6.2, 0.05, 0.05), pbr("PoleBlack", (0.05, 0.05, 0.05), 0.5), rot=(0, math.radians(-14), 0)))
+    return joinm(parts, "Trolleybus")
 
 
 def seat_on_steps(h, x, k_seat):
@@ -151,6 +259,15 @@ def car_x(sec, x_stop, arrive=2.8, v0=11.0, start=-26.0):
 
 
 def animate(c, sec, shot):
+    if shot in ("pullup", "steps"):
+        return animate_dusk(c, sec, shot)
+    fn = ANIM.get(shot)
+    if fn:
+        fn(c, sec)
+    bpy.context.view_layer.update()
+
+
+def animate_dusk(c, sec, shot):
     y_lane = KERB_Y - 1.2
     for k, car in enumerate(c["cars"]):
         if shot == "pullup":
@@ -234,3 +351,134 @@ MOVES = {
     "pullup": dict(kind="anim", dof=5.6, far=60.0, cam=cam_pullup, anim=anim_pullup, focus=lambda c, t: c["cars"][0].location + Vector((0, 0, 1.0))),
     "steps": dict(kind="anim", dof=2.8, far=30.0, cam=cam_steps, anim=anim_steps, focus=lambda c, t: Vector((-0.55, -1.0, 0.85))),
 }
+
+
+# ============================================================================ chapter shots on the street
+DUR.update({"traffic": 6.5, "arrive_bank": 6.0, "detain": 5.5, "release": 5.5, "doorbell": 6.0, "seasons": 7.0})
+VARIANT_FOR = {"pullup": "dusk", "steps": "dusk", "traffic": "summer", "arrive_bank": "summer", "detain": "autumn", "release": "autumn",
+               "doorbell": "winter", "seasons": "seasons"}
+LANE_NEAR, LANE_FAR = KERB_Y - 1.8, KERB_Y - ROAD_W + 2.2
+
+
+def drive(car, x0, v, sec, y, d=1):
+    car.location = (x0 + d * v * sec, y, 0.0); car.rotation_euler = (0, 0, 0 if d > 0 else math.pi)
+
+
+def open_doors(c, k):
+    for sx, lf in zip((-1, 1), c["doors"]):
+        lf.rotation_euler = (0, 0, math.radians(sx * 75 * k))
+
+
+def a_traffic(c, sec):
+    """Summer 1995: Volgas, a Lada and a trolleybus pass the bank; two people walk the far pavement."""
+    tr = c["traffic"]
+    specs = [(-40, 11, LANE_NEAR, 1), (-60, 12, LANE_NEAR, 1), (40, 10, LANE_FAR, -1), (70, 12, LANE_FAR, -1), (-80, 13, LANE_NEAR, 1)]
+    for car, (x0, v, y, d) in zip(tr, specs):
+        drive(car, x0, v, sec, y, d)
+    drive(c["trolley"], 30, 6.5, sec, KERB_Y - 2.9, -1)
+    for k, w in enumerate(c["walkers"]):
+        PP.walk_at(w, sec * 0.9 + k * 0.4, (-6 + k * 9 + (1.3 if k == 0 else -1.3) * sec, KERB_Y - ROAD_W - 1.5, 0), math.radians(90 if k == 0 else -90), stride=22, swing=14)
+    for h in (c["banker"], c["doorman"]):
+        PP.hide(h, True)
+    c["briefcase"].hide_render = True
+    open_doors(c, 0.0)
+
+
+def a_arrive_bank(c, sec):
+    """The banker (from behind) walks up the steps; the doorman opens the door for him."""
+    for car in c["traffic"]:
+        car.location = (60, 0, -10)
+    drive(c["traffic"][0], -30, 10, sec, LANE_FAR + 2, 1)
+    c["trolley"].location = (60, 0, -10)
+    for w in c["walkers"]:
+        PP.hide(w, True)
+    b = c["banker"]; PP.hide(b, False); PP.hide(c["doorman"], False); c["briefcase"].hide_render = False
+    y = KERB_Y + 1.0 + 0.85 * sec
+    y = min(y, -0.35)
+    pose_walk_at(b, (sec * 0.9) % 1.0, Vector((-0.3, y, 0.0)), math.pi)          # walks +Y, toward the door
+    c["briefcase"].location = b.bone_tail("wrist.R") + Vector((0, 0, -0.2)); c["briefcase"].rotation_euler = (0, 0, math.radians(90))
+    dm = c["doorman"]
+    k = ease(min(1.0, max(0.0, (sec - 2.2) / 1.5)))
+    PP.stand(dm, (0.95, -0.42, STEP_H * STEP_N), math.radians(-90 + 40 * 0))      # by the right leaf, facing -X... then the door
+    PP.nod(dm, "head", 6)
+    open_doors(c, 0.0)
+    c["doors"][1].rotation_euler = (0, 0, math.radians(75 * k))
+    PP.hand_to(dm, "R", c["doors"][1].matrix_world @ Vector((-0.75, -0.08, 1.15)), curl=50)
+    PP.look(dm, b.bone_head("head"), 1.0)
+
+
+def a_detain(c, sec):
+    """Autumn rain: two plain-clothes officers walk a man from the building to the militia Volga at the kerb."""
+    car = c["car"]; car.location = (2.5, KERB_Y - 1.1, 0); car.rotation_euler = (0, 0, 0)
+    y = -1.6 - 0.75 * sec
+    face = 0.0                                                                       # walking toward -Y (the street)
+    PP.walk_at(c["man"], sec * 0.8, (0.3, y, 0), face, stride=18, swing=4)
+    PP.nod(c["man"], "head", 16)
+    PP.walk_at(c["offA"], sec * 0.8 + 0.5, (-0.25, y + 0.1, 0), face, stride=18, swing=6)
+    PP.walk_at(c["offB"], sec * 0.8 + 0.25, (0.85, y + 0.1, 0), face, stride=18, swing=6)
+    PP.hand_to(c["offA"], "L", c["man"].bone_head("upperarm01.R") + Vector((0, 0, -0.2)), curl=50)
+    PP.hand_to(c["offB"], "R", c["man"].bone_head("upperarm01.L") + Vector((0, 0, -0.2)), curl=50)
+    for h in (c["offA"], c["offB"], c["man"]):
+        PP.hide(h, False)
+    for lf in c.get("leaves", []):
+        pass
+
+
+def a_release(c, sec):
+    """Thirty days later: he walks out alone along the wet pavement, collar up, leaves blowing past."""
+    PP.hide(c["offA"], True); PP.hide(c["offB"], True)
+    c["car"].location = (60, 0, -10)
+    for o in c.get("rain", []):
+        o.hide_render = True
+    m = c["man"]
+    PP.walk_at(m, sec * 0.85, (-6.0 + 1.1 * sec, KERB_Y + 1.6, 0), math.radians(90), stride=22, swing=8)
+    PP.nod(m, "neck01", 6); PP.nod(m, "head", 10)
+    r = np.random.default_rng(3)
+    for k, lf in enumerate(c["leaves"][:60]):                                       # gusts carry some leaves along the pavement
+        x0 = r.uniform(-14, 6); y0 = r.uniform(KERB_Y + 0.3, -0.5); v = r.uniform(0.6, 1.6)
+        lf.location = (x0 + v * sec, y0 + 0.2 * math.sin(sec * 1.3 + k), 0.012 + max(0.0, 0.25 * math.sin(sec * 2.0 + k)))
+        lf.rotation_euler = (sec * 2.0 + k, sec * 1.3, k)
+
+
+def a_doorbell(c, sec):
+    """Winter, snow falling: an investigator rings at an apartment entrance; no answer. He steps back and looks up."""
+    inv = c["inv"]
+    back = ease(min(1.0, max(0.0, (sec - 3.5) / 1.5)))
+    PP.stand(inv, (13.9, -0.8 - 0.6 * back, 0.08), 0.0 + math.pi)                   # faces +Y (the door)
+    if sec < 3.0:
+        PP.hand_to(inv, "R", Vector((14.25, -0.14, 1.35)) + Vector((0, -0.03 * (1 if (sec % 1.2) < 0.4 else 0), 0)), curl=60)
+    PP.nod(inv, "head", -14 * back)
+
+
+def a_seasons(c, sec):
+    """Same street, same move: snow, then autumn leaves, then rain; cars pass in each season."""
+    for k, car in enumerate(c["traffic"]):
+        drive(car, -40 + k * 25, 11, (sec + k * 2.0) % 7.0, LANE_NEAR if k % 2 == 0 else LANE_FAR, 1 if k % 2 == 0 else -1)
+
+
+ANIM = {"traffic": a_traffic, "arrive_bank": a_arrive_bank, "detain": a_detain, "release": a_release, "doorbell": a_doorbell, "seasons": a_seasons}
+
+
+def _anim(move):
+    return lambda c, t: animate(c, t * DUR[move], move)
+
+
+def _push(a, b, ta, tb, lens):
+    return lambda c, t: (Vector(a).lerp(Vector(b), ease(t)), Vector(ta).lerp(Vector(tb), ease(t)), lens)
+
+
+FAR = KERB_Y - ROAD_W
+MOVES.update({
+    "traffic": dict(kind="anim", dof=8.0, far=80.0, anim=_anim("traffic"), cam=_push((-9.0, FAR - 1.5, 1.7), (-6.0, FAR - 1.6, 1.75), (-3.0, 0.0, 5.0), (0.0, 0.0, 4.6), 26),
+                    focus=lambda c, t: Vector((0, -0.2, 3.0)), title=("CHAPTER 1", "TWO HOSPITALS", 12, 120)),
+    "arrive_bank": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("arrive_bank"), cam=_push((-4.5, KERB_Y - 2.4, 1.6), (-4.0, KERB_Y - 2.0, 1.62), (0.0, -1.2, 1.6), (0.1, -0.8, 1.7), 30),
+                        focus=lambda c, t: c["banker"].bone_head("spine03")),
+    "detain": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("detain"), cam=_push((-5.5, KERB_Y - 2.5, 1.5), (-5.0, KERB_Y - 2.2, 1.52), (1.0, -3.0, 1.3), (1.5, -4.2, 1.2), 30),
+                   focus=lambda c, t: c["man"].bone_head("spine03")),
+    "release": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("release"), cam=_push((-1.0, KERB_Y - 3.0, 1.5), (0.0, KERB_Y - 3.0, 1.5), (-4.0, KERB_Y + 1.6, 1.2), (-0.5, KERB_Y + 1.6, 1.2), 30),
+                    focus=lambda c, t: c["man"].bone_head("spine03")),
+    "doorbell": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("doorbell"), cam=_push((10.5, KERB_Y + 0.2, 1.6), (11.0, KERB_Y + 0.4, 1.6), (13.7, -0.5, 1.5), (13.8, -0.4, 1.7), 32),
+                     focus=lambda c, t: c["inv"].bone_head("head")),
+    "seasons": dict(kind="anim", dof=8.0, far=80.0, anim=_anim("seasons"), cam=_push((-9.0, FAR - 1.5, 1.7), (-6.0, FAR - 1.6, 1.75), (-3.0, 0.0, 4.0), (0.0, 0.0, 3.8), 26),
+                    focus=lambda c, t: Vector((0, -0.2, 3.0))),
+})
