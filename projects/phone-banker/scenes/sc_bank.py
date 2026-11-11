@@ -73,7 +73,8 @@ def build(variant=None):
     if variant == "dusk":
         world_sky(sun_elev_deg=-4.0, sun_rot_deg=250, strength=2.6, tint=(0.62, 0.74, 1.0))      # blue hour, just after sunset
     elif variant == "summer":
-        world_sky(sun_elev_deg=38, sun_rot_deg=150, strength=0.28, tint=(0.85, 0.9, 1.0)); sun(38, 150, 1.5, (1.0, 0.94, 0.85), 1.5)
+        world_sky(sun_elev_deg=38, sun_rot_deg=150, strength=0.5, tint=(0.85, 0.9, 1.0)); sun(38, 150, 2.2, (1.0, 0.94, 0.85), 1.5)
+        bpy.context.scene.view_settings.exposure = -1.0
     elif variant == "autumn":
         world_flat((0.42, 0.45, 0.5), 0.95)
     else:                                                                                       # winter / seasons: soft overcast
