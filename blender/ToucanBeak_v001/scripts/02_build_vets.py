@@ -27,7 +27,7 @@ def fabric_mat(name, rgb):
     L.new(mx.outputs[2], b.inputs["Base Color"])
     r = tex("rough", True); L.new(r.outputs[0], b.inputs["Roughness"])
     n = tex("nor_gl", True); nm = N.new("ShaderNodeNormalMap"); L.new(n.outputs[0], nm.inputs["Color"]); L.new(nm.outputs[0], b.inputs["Normal"])
-    b.inputs["Sheen Weight"].default_value = 0.4
+    b.inputs["Sheen Weight"].default_value = 0.05
     return m
 
 def make_glove():

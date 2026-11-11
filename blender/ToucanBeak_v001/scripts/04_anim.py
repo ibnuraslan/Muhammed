@@ -248,7 +248,7 @@ for f in (530, 700, 1500, 1960):
 # VetA cradles the bird the whole clinic stay
 for f in (530, 1000, 1500, 1960):
     VA.key_hand("R", f, bw((-0.075, -0.03, 0.10)), Vector((0.15, 0.1, 1)), Vector((1, 0, 0)), pole=Vector((A_POS[0] - 0.4, A_POS[1] - 0.2, 1.0)))
-    VA.key_hand("L", f, bw((0.06, -0.06, 0.2)), Vector((-1, 0.0, -0.4)), Vector((0, 0, -1)), pole=Vector((A_POS[0] + 0.4, A_POS[1] - 0.2, 1.2)))
+    VA.key_hand("L", f, bw((-0.035, -0.075, 0.235)), Vector((0, 1, -0.45)), Vector((0, 0, -1)), pole=Vector((A_POS[0] + 0.45, A_POS[1] - 0.1, 1.2)))
 # scanner sweeping (VetB right hand), beat 4
 SCN = OB["Scanner"]; SCN.rotation_mode = 'QUATERNION'
 stub_mid = bw(LB_base + (LB_tip - LB_base) * 0.25)
@@ -289,16 +289,25 @@ for f, d_ in ((1810, 0.08), (1850, 0.02), (1880, 0.008), (1910, 0.0), (1945, 0.0
     VB.key_hand("R", f, p_ + Vector((0, 0.13, 0.03)), Vector((0, -1, -0.1)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)))
 key_vis(PIN, [(1, False), (1800, True), (1976, False)]); key_vis(TWZ, [(1, False), (1800, True), (1950, False)])
 # glue bead along the seam (grows)
-bpy.ops.mesh.primitive_torus_add(major_radius=0.016, minor_radius=0.0016, location=seam - Vector((0, 0.012, 0.02)))
+st_a = (LB_tip - LB_base).length * 0.42
+VV = [v.co for o_ in (UPB, LOW) for v in o_.data.vertices]
+sec = [v for v in VV if abs((v - LB_base).dot(axis_r) - st_a) < 0.003]
+cy = sum((v.y for v in sec)) / len(sec); cz = (max(v.z for v in sec) + min(v.z for v in sec)) / 2
+hz = (max(v.z for v in sec) - min(v.z for v in sec)) / 2 + 0.0012; hx = (max(v.x for v in sec) - min(v.x for v in sec)) / 2 + 0.0012
+bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.06, major_segments=48, minor_segments=8, location=(0, 0, -30))
 glue = bpy.context.active_object; glue.name = "Glue_bead"
 for c in glue.users_collection: c.objects.unlink(glue)
 C_ANIM.objects.link(glue)
-glue.rotation_euler = (0, R_(90), 0)
+# ring in bird rest space: axis along the beak axis, radii hx (sideways) and hz (vertical), then into clinic world
+Mr = Matrix.Translation(Vector((0, cy, cz))) @ Vector((0, 0, 1)).rotation_difference(axis_r).to_matrix().to_4x4() @ Matrix.Diagonal((hx, hz, 0.02, 1))
+glue.data.transform(Mr)
+for v in glue.data.vertices: v.co.z += 0.0          # keep
+glue.matrix_world = Matrix.Translation(BIRD_C) @ Euler(ROT_C).to_matrix().to_4x4()
+glue.data.transform(Matrix.Diagonal((1, 1, 1, 1)))
 gm = bpy.data.materials.new("Glue"); gm.use_nodes = True; gb = gm.node_tree.nodes["Principled BSDF"]
 gb.inputs["Base Color"].default_value = (0.9, 0.88, 0.8, 1); gb.inputs["Roughness"].default_value = 0.05; gb.inputs["Transmission Weight"].default_value = 0.7
 glue.data.materials.append(gm)
-for f, s_ in ((1, 0.0), (1725, 0.0), (1770, 1.0)):
-    glue.scale = (s_, 1, 1) if s_ else (0.001, 0.001, 0.001); glue.keyframe_insert("scale", frame=f)
+gm.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = 1.0
 key_vis(glue, [(1, False), (1725, True), (1976, False)])
 # assistant: background walk (life)
 AS.walk(lambda f: Vector((5.0 + 3.6 * smooth((f - 560) / 240), 2.15, 0)) if f < 820 else Vector((8.6 - 3.4 * smooth((f - 1520) / 300), 2.15, 0)),
@@ -308,6 +317,55 @@ stand(AS, 1840, (5.2, 2.15), 180, head=(20, 0)); stand(AS, 1960, (5.2, 2.15), 18
 for nm in ("VetA", "VetB", "Assist"):
     o = OB[nm]
     for ch in [o] + list(o.children): key_vis(ch, [(1, False), (525, True), (1980, False)])
+
+# finger articulation: grips (fingers curl around bird body / tools), thumbs oppose
+def curl(H, side, f, amt, thumb=0.5, spread=0.0):
+    for fi in range(1, 6):
+        for seg in (1, 2, 3):
+            n = "finger%d-%d.%s" % (fi, seg, side)
+            if n not in H.r.PB: continue
+            a = amt * (0.6 if seg == 1 else 1.0) * (thumb if fi == 1 else 1.0)
+            q = Quaternion(Vector((1, 0, 0)), R_(a)) @ Quaternion(Vector((0, 0, 1)), R_(spread * (fi - 3) if seg == 1 else 0))
+            H.r.PB[n].rotation_quaternion = q; H.r.PB[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
+for f in (530, 1960):
+    curl(VA, "L", f, 10, 0.4); curl(VA, "R", f, 14, 0.5)
+for f in (530, 760, 1500, 1960):
+    curl(VB, "L", f, 30 if f < 1690 else 38, 0.6); curl(VB, "R", f, 52 if f < 700 else 40, 0.8)
+for f in (1700, 1800): curl(VB, "L", f, 55, 0.9)
+for f in (1810, 1945): curl(VB, "R", f, 30, 1.0, spread=-4)
+for f in (560, 1960): curl(AS, "L", f, 20); curl(AS, "R", f, 20)
+
+# ---- settle VetA's cradling hands: push each wrist target away from the bird until the glove only touches (few overlaps)
+from mathutils.bvhtree import BVHTree
+def side_polys(o, side):
+    vg = {g.index: g.name for g in o.vertex_groups}
+    gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
+    vs = set(v.index for v in o.data.vertices if any(vg.get(g.group, "").endswith("." + side) and g.weight > 0.3 for g in v.groups))
+    return [p.index for p in o.data.polygons if p.material_index in gi and all(x in vs for x in p.vertices)]
+def tri_tree(o, side=None):
+    dg_ = bpy.context.evaluated_depsgraph_get(); ev_ = o.evaluated_get(dg_); me_ = ev_.to_mesh(); mw_ = o.matrix_world
+    vs_ = [mw_ @ v.co for v in me_.vertices]
+    if side is not None:
+        gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
+        wr = OB["VetA"].matrix_world @ OB["VetA"].pose.bones["wrist." + side].head
+        ps_ = [tuple(p.vertices) for p in me_.polygons if p.material_index in gi and (mw_ @ p.center - wr).length < 0.16]
+    else: ps_ = [tuple(p.vertices) for p in me_.polygons]
+    ev_.to_mesh_clear(); return BVHTree.FromPolygons(vs_, ps_)
+GA = OB["VetA.body"]
+BODY_C = bw((0, -0.03, 0.14))
+HANDA = {"R": (lambda: bw((-0.075, -0.03, 0.10)), Vector((0.15, 0.1, 1)), Vector((1, 0, 0)), Vector((A_POS[0] - 0.4, A_POS[1] - 0.2, 1.0))),
+         "L": (lambda: bw((-0.035, -0.075, 0.235)), Vector((0, 1, -0.45)), Vector((0, 0, -1)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.1, 1.2)))}
+for f in (530, 1000, 1500, 1960):
+    for s_ in "LR":
+        Wf, d_, n_, pole_ = HANDA[s_]; W = Wf()
+        away = (W - BODY_C); away.normalize()
+        for it in range(26):
+            ev(f); bt_ = tri_tree(OB["Toucan_body"]); ht_ = tri_tree(GA, s_)
+            n = len(ht_.overlap(bt_))
+            if n <= 6: break
+            W = W + away * 0.004
+            VA.key_hand(s_, f, W, d_, n_, pole=pole_)
+        print("SETTLE VetA", s_, f, "iters", it, "overlaps", n)
 
 # ================================================================== VOID (beats 5-8)
 V1 = Vector((11.7, 1.25, 1.05)); V2 = Vector((14.2, 3.0, -0.2)); V3 = Vector((13.6, -1.0, 0.95)); P3 = Vector((15.4, -2.4, -0.7))
@@ -325,7 +383,7 @@ def emis(name, rgb, strength=2.0, alpha=1.0):
     b.inputs["Alpha"].default_value = alpha; b.inputs["Roughness"].default_value = 0.3
     return m
 M_pts = emis("Scan_points", (0.1, 0.9, 1.0), 4.0)
-M_ref = emis("Ref_holo", (1.0, 0.55, 0.1), 0.8, 0.55)
+M_ref = emis("Ref_holo", (1.0, 0.5, 0.08), 1.2, 0.4)
 M_new = bpy.data.materials.new("CAD_new"); M_new.use_nodes = True; nb = M_new.node_tree.nodes["Principled BSDF"]
 nb.inputs["Base Color"].default_value = (0.42, 0.5, 0.56, 1); nb.inputs["Roughness"].default_value = 0.35; nb.inputs["Coat Weight"].default_value = 0.5
 nb.inputs["Emission Color"].default_value = (0.2, 0.8, 1.0, 1); nb.inputs["Emission Strength"].default_value = 0.15
@@ -343,6 +401,7 @@ for o in stump:
     o.modifiers.new("pts", 'NODES').node_group = gnp
 ref = [void_copy(UP, "Ref_beak_up", V1, S5, M_ref), void_copy(LOW, "Ref_beak_low", V1, S5, M_ref)]
 refpar = bpy.data.objects.new("Ref_beak", None); C_ANIM.objects.link(refpar); refpar.location = V1
+bpy.context.view_layer.update()
 for o in ref:
     mw = o.matrix_world.copy(); o.parent = refpar; o.matrix_parent_inverse = refpar.matrix_world.inverted()
 refpar.rotation_mode = 'XYZ'
@@ -365,10 +424,18 @@ cut.scale = (1.0, 0.0, 1.0)
 for f, L_ in ((1, 0.001), (860, 0.001), (1000, 0.9)):
     st = V1 + (LB_base + (LB_tip - LB_base) * 0.40 - BEAK_MID) * S5
     cut.scale = (1.5, L_ * 2, 1.5); cut.location = st + ax_w * L_; cut.keyframe_insert("scale", frame=f); cut.keyframe_insert("location", frame=f)
-bo = newhalf.modifiers.new("reveal", 'BOOLEAN'); bo.object = cut; bo.operation = 'INTERSECT'; bo.solver = 'EXACT'
+# reveal: the new half grows out of the stump cut (scale about the cut point), no boolean (scan mesh is not manifold)
+grow = bpy.data.objects.new("New_half_grow", None); C_ANIM.objects.link(grow)
+grow.location = V1 + (LB_base + (LB_tip - LB_base) * 0.42 - BEAK_MID) * S5
+bpy.context.view_layer.update()
+mwn = newhalf.matrix_world.copy(); newhalf.parent = grow; newhalf.matrix_parent_inverse = grow.matrix_world.inverted(); newhalf.matrix_world = mwn
+grow.rotation_mode = 'QUATERNION'; grow.rotation_quaternion = Vector((0, 1, 0)).rotation_difference(ax_w)
+bpy.context.view_layer.update(); mwn = newhalf.matrix_world.copy(); newhalf.matrix_parent_inverse = grow.matrix_world.inverted(); newhalf.matrix_world = mwn
+for f, k_ in ((1, 0.02), (860, 0.02), (1000, 1.0)):
+    grow.scale = (1.0, k_, 1.0); grow.keyframe_insert("scale", frame=f)
 key_vis(newhalf, [(1, False), (860, True), (1140, False)])
 for o in stump: key_vis(o, [(1, False), (690, True), (1140, False)])
-for o in ref: key_vis(o, [(1, False), (690, True), (930, False)])
+for o in ref: key_vis(o, [(1, False), (690, True), (858, False)])
 # ---- ghost demo bird (beat 7): copy rig + meshes, translucent; heavy beak tips the head
 M_ghost = bpy.data.materials.new("Ghost"); M_ghost.use_nodes = True; gt = M_ghost.node_tree
 for n in list(gt.nodes):
@@ -416,50 +483,62 @@ key_vis(gheavy, [(1, False), (1050, True), (1250, False)]); key_vis(glight, [(1,
 key_vis(gr, [(1, False), (1050, True), (1350, False)])
 # ---- hollow printed beak cutaway (beat 8): gyroid lattice inside a thin shell, half cut away
 M_pla = bpy.data.materials.new("PLA_print"); M_pla.use_nodes = True; pl = M_pla.node_tree.nodes["Principled BSDF"]
-pl.inputs["Base Color"].default_value = (0.55, 0.5, 0.42, 1); pl.inputs["Roughness"].default_value = 0.45; pl.inputs["Subsurface Weight"].default_value = 0.2
+pl.inputs["Base Color"].default_value = (0.7, 0.66, 0.56, 1); pl.inputs["Roughness"].default_value = 0.45; pl.inputs["Subsurface Weight"].default_value = 0.0
 wv = M_pla.node_tree.nodes.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'Z'; wv.inputs["Scale"].default_value = 60
 tcp = M_pla.node_tree.nodes.new("ShaderNodeTexCoord"); M_pla.node_tree.links.new(tcp.outputs["Object"], wv.inputs["Vector"])
 bpl = M_pla.node_tree.nodes.new("ShaderNodeBump"); bpl.inputs["Strength"].default_value = 0.3
 M_pla.node_tree.links.new(wv.outputs["Fac"], bpl.inputs["Height"]); M_pla.node_tree.links.new(bpl.outputs["Normal"], pl.inputs["Normal"])
 hollow = void_copy(UP, "Hollow_beak", V3, S5, M_pla)
-gy = bpy.data.node_groups.new("Gyroid", 'GeometryNodeTree')
+_bm = bmesh.new(); _bm.from_mesh(UP.data); _bm.from_mesh(LOW.data); _bm.to_mesh(hollow.data); _bm.free()
+hollow.data.materials.clear(); hollow.data.materials.append(M_pla)
+# gyroid infill points: per (x,y) column, ray intervals inside the closed beak (upper+lower), gyroid band in numpy
+from mathutils.bvhtree import BVHTree
+bvh = BVHTree.FromObject(hollow, bpy.context.evaluated_depsgraph_get(), deform=False) if False else None
+_bm = bmesh.new(); _bm.from_mesh(hollow.data); bvh = BVHTree.FromBMesh(_bm)
+Vh = np.array([v.co[:] for v in hollow.data.vertices]); mn_, mx_ = Vh.min(0), Vh.max(0)
+VOX = 0.0007; per = 0.011; kk = 2 * math.pi / per
+pts = []
+for x in np.arange(mn_[0] + VOX, mx_[0], VOX):
+    for y in np.arange(mn_[1] + VOX, mx_[1], VOX):
+        o = Vector((x, y, mx_[2] + 0.01)); hits = []
+        while True:
+            h = bvh.ray_cast(o, Vector((0, 0, -1)))
+            if h[0] is None: break
+            hits.append(h[0].z); o = h[0] + Vector((0, 0, -1e-5))
+            if len(hits) > 12: break
+        for a, b in ([(hits[0], hits[-1])] if len(hits) >= 2 else []):
+            zs = np.arange(b + 0.0018, a - 0.0018, VOX)
+            if len(zs) == 0: continue
+            g = np.sin(kk * x) * np.cos(kk * y) + np.sin(kk * y) * np.cos(kk * zs) + np.sin(kk * zs) * np.cos(kk * x)
+            for z in zs[np.abs(g) < 0.32]: pts.append((x, y, z))
+_bm.free()
+print("GYROID points", len(pts))
+lat = bpy.data.objects.new("Hollow_lattice", bpy.data.meshes.new("Hollow_lattice")); C_ANIM.objects.link(lat)
+lat.data.from_pydata(pts, [], []); lat.matrix_world = hollow.matrix_world.copy()
+gy = bpy.data.node_groups.new("LatticeSkin", 'GeometryNodeTree')
 gy.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry'); gy.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
 N_ = gy.nodes; L_ = gy.links
 gi = N_.new("NodeGroupInput"); go = N_.new("NodeGroupOutput")
-bb = N_.new("GeometryNodeBoundBox"); L_.new(gi.outputs[0], bb.inputs[0])
-vc = N_.new("GeometryNodeVolumeCube")
-for k, v in (("Resolution X", 110), ("Resolution Y", 110), ("Resolution Z", 110)): vc.inputs[k].default_value = v
-L_.new(bb.outputs["Min"], vc.inputs["Min"]); L_.new(bb.outputs["Max"], vc.inputs["Max"])
-pos = N_.new("GeometryNodeInputPosition"); scl = N_.new("ShaderNodeVectorMath"); scl.operation = 'SCALE'; scl.inputs["Scale"].default_value = 2 * math.pi / 0.011
-L_.new(pos.outputs[0], scl.inputs[0]); sxyz = N_.new("ShaderNodeSeparateXYZ"); L_.new(scl.outputs[0], sxyz.inputs[0])
-def M(op, a, b=None):
-    n = N_.new("ShaderNodeMath"); n.operation = op
-    for i, x in enumerate((a, b)):
-        if x is None: continue
-        if isinstance(x, (int, float)): n.inputs[i].default_value = x
-        else: L_.new(x, n.inputs[i])
-    return n.outputs[0]
-X_, Y_, Z_ = sxyz.outputs[0], sxyz.outputs[1], sxyz.outputs[2]
-g_ = M('ADD', M('ADD', M('MULTIPLY', M('SINE', X_), M('COSINE', Y_)), M('MULTIPLY', M('SINE', Y_), M('COSINE', Z_))), M('MULTIPLY', M('SINE', Z_), M('COSINE', X_)))
-dens = M('SUBTRACT', 0.28, M('ABSOLUTE', g_))
-L_.new(dens, vc.inputs["Density"])
-v2m = N_.new("GeometryNodeVolumeToMesh"); L_.new(vc.outputs[0], v2m.inputs[0])
-if "Threshold" in v2m.inputs: v2m.inputs["Threshold"].default_value = 0.0
-mb = N_.new("GeometryNodeMeshBoolean"); mb.operation = 'INTERSECT'
-L_.new(v2m.outputs[0], mb.inputs["Mesh"]); L_.new(gi.outputs[0], mb.inputs["Mesh"])
-# shell (thin wall)
-ext = N_.new("GeometryNodeJoinGeometry")
-L_.new(mb.outputs[0], ext.inputs[0]); L_.new(gi.outputs[0], ext.inputs[0])
-# cut away half (x > 0 removed): difference with a box
-cbx = N_.new("GeometryNodeMeshCube"); cbx.inputs["Size"].default_value = (0.2, 0.5, 0.5)
-tr_ = N_.new("GeometryNodeTransform"); tr_.inputs["Translation"].default_value = (0.1, 0.1, 0.2)
-L_.new(cbx.outputs[0], tr_.inputs[0])
-mb2 = N_.new("GeometryNodeMeshBoolean"); mb2.operation = 'DIFFERENCE'
-L_.new(ext.outputs[0], mb2.inputs[0]); L_.new(tr_.outputs[0], mb2.inputs[1])
+m2p = N_.new("GeometryNodeMeshToPoints"); p2v = N_.new("GeometryNodePointsToVolume"); v2m = N_.new("GeometryNodeVolumeToMesh")
+p2v.inputs["Radius"].default_value = VOX * 0.9
+try: p2v.resolution_mode = 'VOXEL_SIZE'
+except Exception: pass
+if "Voxel Size" in p2v.inputs: p2v.inputs["Voxel Size"].default_value = VOX * 0.4
+L_.new(gi.outputs[0], m2p.inputs[0]); L_.new(m2p.outputs[0], p2v.inputs[0]); L_.new(p2v.outputs[0], v2m.inputs[0])
+pos = N_.new("GeometryNodeInputPosition"); sx_ = N_.new("ShaderNodeSeparateXYZ"); L_.new(pos.outputs[0], sx_.inputs[0])
+gt_ = N_.new("ShaderNodeMath"); gt_.operation = 'GREATER_THAN'; gt_.inputs[1].default_value = 0.0; L_.new(sx_.outputs[0], gt_.inputs[0])
+dg_ = N_.new("GeometryNodeDeleteGeometry"); L_.new(v2m.outputs[0], dg_.inputs[0]); L_.new(gt_.outputs[0], dg_.inputs["Selection"])
 smt = N_.new("GeometryNodeSetMaterial"); smt.inputs["Material"].default_value = M_pla
-L_.new(mb2.outputs[0], smt.inputs[0]); L_.new(smt.outputs[0], go.inputs[0])
-hollow.modifiers.new("gyroid", 'NODES').node_group = gy
-hollow.data.transform(Matrix())  # data stays in bird rest coords (metres), object scaled x6
+ssm = N_.new("GeometryNodeSetShadeSmooth")
+L_.new(dg_.outputs[0], ssm.inputs[0]); L_.new(ssm.outputs[0], smt.inputs[0]); L_.new(smt.outputs[0], go.inputs[0])
+lat.modifiers.new("skin", 'NODES').node_group = gy
+# outer shell: half cut away (x>0 deleted) + 1.2 mm wall
+bm = bmesh.new(); bm.from_mesh(hollow.data)
+bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.x > 0.0], context='VERTS'); bm.to_mesh(hollow.data); bm.free()
+so_ = hollow.modifiers.new("wall", 'SOLIDIFY'); so_.thickness = 0.0012; so_.offset = -1
+M_shell = UP.data.materials[0].copy(); M_shell.name = "Printed_shell_paint"
+hollow.data.materials.clear(); hollow.data.materials.append(M_pla)
+key_vis(lat, [(1, False), (1330, True), (1530, False)])
 key_vis(hollow, [(1, False), (1330, True), (1530, False)])
 # printer + printing beak + nozzle (beat 8 end)
 prn = OB["printer"]; prn_v = bpy.data.objects.new("Printer_void", prn.data); C_ANIM.objects.link(prn_v)
@@ -511,8 +590,8 @@ BC = BIRD_C; HEADC = bw((0, 0.03, 0.25)); BEAKC = bw((LB_base + LB_tip) / 2); SE
 SCREEN = Vector(sc["SCREEN"]) + Vector((0.0, 0, 0.06))
 ENC = BIRD_E; HEADE = BIRD_E + Vector((0, 0.03, 0.25))
 K = [  # frame, position, target, lens, focus target(None = target)
- (1, Vector((1.3, 2.0, 0.75)), HEADJ + Vector((0, 0, -0.05)), 22),
- (34, Vector((0.95, 1.35, 1.45)), HEADJ, 26),
+ (1, BIRD_J + Vector((0.85, 1.25, -0.55)), HEADJ + Vector((0, 0, -0.08)), 24),
+ (34, BIRD_J + Vector((0.75, 0.85, 0.05)), HEADJ, 28),
  (64, STK(-48) + Vector((0.42, 0.12, 0.05)), STK(-48) * 0.4 + BEAKJ * 0.6, 28),
  (90, STK(-14) + Vector((0.36, 0.14, 0.02)), BEAKJ, 32),
  (104, BEAKJ + Vector((0.34, 0.12, 0.06)), BEAKJ, 38),
@@ -543,10 +622,10 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (1185, V2 + Vector((-1.9, 0.9, 0.35)), V2 + Vector((0, 0.6, 0.6)), 28),
  (1245, V2 + Vector((-1.9, 0.5, 1.9)), V2 + Vector((0, 0.5, 0.8)), 30),
  (1300, V2 + Vector((-2.3, -0.6, 1.3)), V2 + Vector((0, 0.4, 0.9)), 30),
- (1360, V3 + Vector((-1.0, 0.65, 0.45)), V3, 30),
- (1410, V3 + Vector((-0.9, -0.2, 0.25)), V3 + Vector((0.05, 0.1, -0.05)), 34),
+ (1360, V3 + Vector((1.05, 0.75, 0.4)), V3, 30),
+ (1410, V3 + Vector((0.62, -0.05, 0.12)), V3 + Vector((0.0, 0.1, -0.03)), 36),
  (1460, P3 + Vector((-1.2, 1.0, 1.75)), P3 + Vector((0, 0, 1.0)), 32),
- (1500, P3 + Vector((-1.6, 1.8, 1.7)), SCREEN, 28),
+ (1495, P3 + Vector((-1.3, 1.5, 1.5)), P3 + Vector((0, 0, 0.9)), 28),
  (1530, SCREEN + Vector((0.45, 0, 0.0)), SCREEN + Vector((-1, 0, 0)), 30),
  (1552, SCREEN + Vector((-0.5, -0.1, 0.05)), BEAKC, 30),
  (1600, BEAKC + Vector((-0.2, -0.16, 0.1)), SEAM, 48),

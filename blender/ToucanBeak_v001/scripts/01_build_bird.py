@@ -297,6 +297,25 @@ for o, bn in [(scan, "head"), (up_broken, "head"), (lower, "jaw")] + [(e_, "head
     mw = o.matrix_world.copy(); o.parent = rig; o.parent_type = 'BONE'; o.parent_bone = bn
     o.matrix_parent_inverse = Matrix(); bpy.context.view_layer.update(); o.matrix_world = mw
 up_broken.hide_render = True; up_broken.hide_viewport = True
+
+# feather layer: short, dense, clumped hair-strand feathers (same procedural plumage material), lying back along the body
+ps = body.modifiers.new("feathers", 'PARTICLE_SYSTEM').particle_system
+st_ = ps.settings; st_.type = 'HAIR'; st_.count = 14000; st_.use_advanced_hair = True
+st_.normal_factor = 0.0035; st_.object_align_factor = (0, -0.0065, -0.0035); st_.factor_random = 0.0008
+st_.hair_step = 4; st_.display_step = 3; st_.render_step = 3
+st_.child_type = 'INTERPOLATED'; st_.child_percent = 4; st_.rendered_child_count = 6; st_.clump_factor = 0.75; st_.clump_shape = -0.3
+st_.child_length = 0.9; st_.child_length_threshold = 0.3; st_.roughness_1 = 0.0006; st_.roughness_endpoint = 0.0004
+st_.root_radius = 0.6; st_.tip_radius = 0.15; st_.radius_scale = 0.0012; st_.shape = -0.4
+st_.material_slot = body.data.materials[0].name
+st_.kink = 'NO'
+fd = body.vertex_groups.new(name="feather_density")
+VB2 = verts(body)
+for vi in range(len(VB2)):
+    if not (VB2[vi, 2] < 0.035 and VB2[vi, 1] > -0.075): fd.add([vi], 1.0, 'REPLACE')
+ps.vertex_group_density = "feather_density"
+# comb: hairs lie back (toward -y / down the body)  -> use hair dynamics-free combing via particle edit is not scriptable; use
+# 'Object align'-free approach: tangent phase via Grow direction is normal; bend with child 'Bend'/'Clump' + parting below
+st_.child_parting_factor = 0.0
 for o in [body, scan, lower, up_broken, tip_piece] + shards:
     o["toucan"] = True
 bpy.ops.wm.save_as_mainfile(filepath=out)
