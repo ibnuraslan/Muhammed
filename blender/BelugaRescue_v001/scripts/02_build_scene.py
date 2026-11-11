@@ -100,15 +100,15 @@ PH = A
 # ------------------------------------------------------------------ world: hall HDRI above water
 w = bpy.data.worlds.new("World_Hall"); sc.world = w; w.use_nodes = True
 wn, wl = w.node_tree.nodes, w.node_tree.links
-env = wn.new('ShaderNodeTexEnvironment'); env.image = img(os.path.join(PH, "hdri", "events_hall_interior_2k.hdr"))
-bg = wn["Background"]; bg.inputs['Strength'].default_value = 0.55; bg.name = "SkyStrength"
+env = wn.new('ShaderNodeTexEnvironment'); env.image = img(os.path.join(PH, "hdri", "kloofendal_48d_partly_cloudy_puresky_2k.hdr"))   # sunny sky (animated look)
+bg = wn["Background"]; bg.inputs['Strength'].default_value = 0.9; bg.name = "SkyStrength"
 tintw = wn.new('ShaderNodeMix'); tintw.data_type = 'RGBA'; tintw.blend_type = 'MULTIPLY'; tintw.inputs['Factor'].default_value = 1.0
-tintw.inputs['B'].default_value = (0.85, 0.95, 1.05, 1); tintw.name = "SkyTint"
+tintw.inputs['B'].default_value = (1.0, 1.0, 1.0, 1); tintw.name = "SkyTint"
 wl.new(env.outputs['Color'], tintw.inputs['A']); wl.new(tintw.outputs['Result'], bg.inputs['Color'])
 
 # ------------------------------------------------------------------ materials
-M_TILE = pbr("M_PoolTiles", os.path.join(PH, "long_white_tiles"), "long_white_tiles", 1.2, tint=(0.78, 0.92, 0.95), bump=0.8)
-M_ICE = pbr("M_IceRock", os.path.join(PH, "rock_face_03"), "rock_face_03", 2.6, tint=(0.82, 0.92, 1.0), sat=0.15, val=1.35, bump=1.4, rough_mul=0.7)
+M_TILE = pbr("M_PoolTiles", os.path.join(PH, "long_white_tiles"), "long_white_tiles", 1.2, tint=(0.55, 0.88, 1.0), bump=0.8)
+M_ICE = pbr("M_IceRock", os.path.join(PH, "rock_face_03"), "rock_face_03", 2.6, tint=(0.62, 0.88, 1.0), sat=0.1, val=1.9, bump=0.6, rough_mul=0.9)
 # snow/frost on upward faces of the ice rock
 nt = M_ICE.node_tree; n, l = nt.nodes, nt.links
 p = n["Principled BSDF"]
@@ -215,6 +215,7 @@ for k in range(9):
     o = mv(bpy.context.active_object); o.name = "Ladder_Rung_%d" % k; o.data.materials.append(M_STEEL)
 # hall structure above (walls of the building beyond the rock, roof trusses) — the HDRI does the rest
 for i, x in enumerate(range(-8, 9, 4)):
+    if True: continue
     mv(box("Truss_%d" % i, x - 0.1, x + 0.1, -10, 7, 12.0, 12.4, simple_mat("M_Truss_%d" % i, (0.3, 0.32, 0.35), rough=0.5, metal=0.6)))
 
 # ------------------------------------------------------------------ water: volume + surface + floes
@@ -224,8 +225,8 @@ vm = bpy.data.materials.new("M_WaterVolume"); vm.use_nodes = True
 vn, vl = vm.node_tree.nodes, vm.node_tree.links
 vn.remove(vn["Principled BSDF"])
 pv = vn.new('ShaderNodeVolumePrincipled'); pv.name = "WaterVol"
-pv.inputs['Color'].default_value = (0.45, 0.85, 1.0, 1); pv.inputs['Density'].default_value = 0.03
-pv.inputs['Anisotropy'].default_value = 0.65; pv.inputs['Absorption Color'].default_value = (0.08, 0.45, 0.62, 1)
+pv.inputs['Color'].default_value = (0.1, 0.7, 1.0, 1); pv.inputs['Density'].default_value = 0.012
+pv.inputs['Anisotropy'].default_value = 0.65; pv.inputs['Absorption Color'].default_value = (0.05, 0.55, 0.95, 1)
 vl.new(pv.outputs['Volume'], vn["Material Output"].inputs['Volume'])
 vol.data.materials.append(vm)
 vol.visible_shadow = True
@@ -260,7 +261,7 @@ def light(name, typ, loc, rot, energy, color=(1, 1, 1), **kw):
     ld = bpy.data.lights.new(name, typ); ld.energy = energy; ld.color = color
     for k, v in kw.items(): setattr(ld, k, v)
     o = bpy.data.objects.new(name, ld); o.location = loc; o.rotation_euler = rot; LIG.objects.link(o); return o
-key = light("Key_Sun", 'SUN', (0, 0, 15), (R_(18), R_(-10), 0), 3.2, (0.92, 0.97, 1.0), angle=R_(2))
+key = light("Key_Sun", 'SUN', (0, 0, 15), (R_(25), R_(-15), 0), 4.5, (1.0, 0.97, 0.9), angle=R_(3))
 # caustic gobo spot (voronoi on the light's normal) — W animated in 03
 cau = light("Caustic_Spot", 'SPOT', (0.5, -1.0, 13.5), (0, 0, 0), 9000, (0.85, 0.97, 1.0), spot_size=R_(75), spot_blend=0.4, shadow_soft_size=0.05)
 cau.data.use_nodes = True
@@ -275,8 +276,9 @@ cl_.new(cmul.outputs[0], cn["Emission"].inputs['Strength'])
 # light shafts through the volume
 SHAFTS = []
 for i, (x, y, rx, ry) in enumerate([(-2.2, 0.5, 8, -10), (1.6, -1.8, -6, 8), (3.4, 2.2, 10, 6), (-0.4, 3.0, -8, -4), (-4.0, -2.4, 4, 12)]):
-    SHAFTS.append(light("Shaft_%d" % i, 'SPOT', (x, y, 14.0), (R_(rx), R_(ry), 0), 5200, (0.88, 0.97, 1.0), spot_size=R_(7), spot_blend=0.5, shadow_soft_size=0.15))
-fill = light("Underwater_Fill", 'AREA', (0, -2.0, 2.5), (R_(80), 0, 0), 400, (0.45, 0.8, 0.95), size=8.0)
+    SHAFTS.append(light("Shaft_%d" % i, 'SPOT', (x, y, 14.0), (R_(rx), R_(ry), 0), 2600, (0.88, 0.97, 1.0), spot_size=R_(7), spot_blend=0.5, shadow_soft_size=0.15))
+fill = light("Underwater_Fill", 'AREA', (0, -2.0, 2.5), (R_(80), 0, 0), 1600, (0.6, 0.9, 1.0), size=10.0)
+fill2 = light("Underwater_Fill2", 'AREA', (0, 3.5, 3.0), (R_(-80), 0, 0), 1000, (0.8, 0.95, 1.0), size=10.0)
 fill.data.cycles.is_caustics_light = False
 deckfill = light("Deck_Fill", 'AREA', (0, -8.0, 10.0), (R_(30), 0, 0), 900, (1.0, 0.92, 0.82), size=6.0)
 
@@ -439,7 +441,7 @@ bp.inputs['Subsurface Radius'].default_value = (0.4, 0.3, 0.25); bp.inputs['Subs
 bp.inputs['Coat Weight'].default_value = 0.25; bp.inputs['Coat Roughness'].default_value = 0.08
 btc = bn.new('ShaderNodeTexCoord')
 bnz = bn.new('ShaderNodeTexNoise'); bnz.inputs['Scale'].default_value = 1.6; bnz.inputs['Detail'].default_value = 6
-bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.66, 0.68, 0.69, 1); bramp.color_ramp.elements[1].color = (0.92, 0.91, 0.87, 1)
+bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.86, 0.88, 0.9, 1); bramp.color_ramp.elements[1].color = (0.97, 0.97, 0.95, 1)
 bramp.color_ramp.elements[0].position = 0.35; bramp.color_ramp.elements[1].position = 0.65
 bl.new(btc.outputs['Object'], bnz.inputs['Vector']); bl.new(bnz.outputs['Fac'], bramp.inputs['Fac'])
 # mouth crease: dark line at the mouth height in the front of the head
@@ -480,7 +482,7 @@ bl.new(hgt, bbump.inputs['Height']); bl.new(bbump.outputs['Normal'], bp.inputs['
 svo = bn.new('ShaderNodeTexVoronoi'); svo.feature = 'DISTANCE_TO_EDGE'; svo.inputs['Scale'].default_value = 9.0
 smap = bn.new('ShaderNodeMapping'); smap.inputs['Scale'].default_value = (1.0, 0.25, 1.0); bl.new(btc.outputs['Object'], smap.inputs['Vector']); bl.new(smap.outputs['Vector'], svo.inputs['Vector'])
 snz = bn.new('ShaderNodeTexNoise'); snz.inputs['Scale'].default_value = 2.5; bl.new(btc.outputs['Object'], snz.inputs['Vector'])
-scar = mnode('MULTIPLY', mnode('LESS_THAN', svo.outputs['Distance'], 0.007), mnode('GREATER_THAN', snz.outputs['Fac'], 0.68))
+scar = mnode('MULTIPLY', mnode('LESS_THAN', svo.outputs['Distance'], 0.007), mnode('GREATER_THAN', snz.outputs['Fac'], 2.0))   # no scars (clean look)
 rnz = bn.new('ShaderNodeTexNoise'); rnz.inputs['Scale'].default_value = 9.0; bl.new(btc.outputs['Object'], rnz.inputs['Vector'])
 rmr = bn.new('ShaderNodeMapRange'); rmr.inputs['To Min'].default_value = 0.14; rmr.inputs['To Max'].default_value = 0.48
 rmr.inputs['From Min'].default_value = 0.35; rmr.inputs['From Max'].default_value = 0.65

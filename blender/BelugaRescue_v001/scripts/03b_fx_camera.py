@@ -50,15 +50,15 @@ for i, o in enumerate(o for o in bpy.data.objects if o.name.startswith("Shaft_")
 # ------------------------------------------------------------------ grade: light dims at depth, brightens on the ascent, blur on "out of breath"
 vs = sc.view_settings
 vol = bpy.data.materials["M_WaterVolume"].node_tree.nodes["WaterVol"]
-GK = [(1, 0.15, 0.022), (80, 0.1, 0.022), (170, 0.0, 0.026), (264, -0.35, 0.032), (520, -0.4, 0.032), (900, -0.3, 0.03), (1213, -0.35, 0.032),
-      (1600, -0.2, 0.028), (1800, 0.0, 0.025), (1884, 0.15, 0.022), (1930, 0.1, 0.022), (END, 0.1, 0.022)]
+GK = [(1, 0.1, 0.008), (80, 0.1, 0.008), (170, 0.15, 0.009), (264, 0.05, 0.011), (520, 0.05, 0.011), (900, 0.1, 0.01), (1213, 0.05, 0.011),
+      (1600, 0.1, 0.01), (1800, 0.2, 0.009), (1884, 0.25, 0.008), (1930, 0.1, 0.008), (END, 0.1, 0.008)]      # bright, clear water (animated look)
 for f, ex, dens in GK:
     vs.exposure = ex; vs.keyframe_insert("exposure", frame=f)
     vol.inputs['Density'].default_value = dens; vol.inputs['Density'].keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ camera rig
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 26; cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.02; cam_d.clip_end = 200
-cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 2.8
+cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt = cam.constraints.new('TRACK_TO'); tt.target = aim; tt.track_axis = 'TRACK_NEGATIVE_Z'; tt.up_axis = 'UP_Y'
@@ -199,7 +199,7 @@ for f in list(range(1, END + 1, 2)) + [END]:
     cam.location = fc(f) + acc / max(wsum, 1e-6); cam.keyframe_insert("location", frame=f)
 print("CAMERA clearance corrected frames:", sum(1 for v in corr.values() if v.length > 1e-4))
 # out-of-breath blur: open the aperture wide
-for f, st in ((1, 2.8), (1700, 2.8), (1740, 0.9), (1800, 0.8), (1870, 2.8), (1930, 4.0), (END, 4.0)):
+for f, st in ((1, 6.0), (330, 6.0), (360, 4.0), (480, 4.0), (510, 6.0), (1700, 6.0), (1740, 2.0), (1800, 2.0), (1870, 6.0), (END, 6.0)):   # shallow only on the calf macro and her blurring vision
     cam_d.dof.aperture_fstop = st; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 json.dump([(f, list(c), list(a), l) for f, c, a, l in FR], open(os.path.join(HERE, "..", "camera_path.json"), "w"), indent=0)
 
@@ -210,9 +210,9 @@ card.parent = cam; card.location = (0, 0, -1.6); card.scale = (2.2, 2.2, 1)
 cm = bpy.data.materials.new("M_ExplainerGradient"); cm.use_nodes = True
 cn, cl = cm.node_tree.nodes, cm.node_tree.links; cn.clear()
 co = cn.new('ShaderNodeOutputMaterial'); em = cn.new('ShaderNodeEmission'); tr = cn.new('ShaderNodeBsdfTransparent'); mx = cn.new('ShaderNodeMixShader')
-tc = cn.new('ShaderNodeTexCoord'); gr = cn.new('ShaderNodeTexGradient'); gr.gradient_type = 'SPHERICAL'
-mp = cn.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1.4, 1.4, 1.4)
-rp = cn.new('ShaderNodeValToRGB'); rp.color_ramp.elements[0].color = (0.04, 0.32, 0.45, 1); rp.color_ramp.elements[1].color = (0.75, 0.93, 1.0, 1)
+tc = cn.new('ShaderNodeTexCoord'); gr = cn.new('ShaderNodeTexGradient'); gr.gradient_type = 'LINEAR'
+mp = cn.new('ShaderNodeMapping'); mp.inputs['Rotation'].default_value = (0, 0, -1.5708); mp.inputs['Location'].default_value = (0.5, 0, 0)
+rp = cn.new('ShaderNodeValToRGB'); rp.color_ramp.elements[0].color = (0.8, 0.94, 1.0, 1); rp.color_ramp.elements[1].color = (0.077, 0.54, 0.93, 1)
 val = cn.new('ShaderNodeValue'); val.name = "CardFade"
 cl.new(tc.outputs['Object'], mp.inputs['Vector']); cl.new(mp.outputs['Vector'], gr.inputs['Vector']); cl.new(gr.outputs['Fac'], rp.inputs['Fac'])
 cl.new(rp.outputs['Color'], em.inputs['Color']); em.inputs['Strength'].default_value = 1.6
@@ -316,13 +316,13 @@ mm = bpy.data.materials.new("M_CalfMuscle"); mm.use_nodes = True
 mn, ml = mm.node_tree.nodes, mm.node_tree.links
 mp_ = mn["Principled BSDF"]; mp_.inputs['Roughness'].default_value = 0.28
 mp_.inputs['Subsurface Weight'].default_value = 0.45; mp_.inputs['Subsurface Radius'].default_value = (0.9, 0.25, 0.15)
-mp_.inputs['Coat Weight'].default_value = 0.6; mp_.inputs['Coat Roughness'].default_value = 0.12
+mp_.inputs['Coat Weight'].default_value = 0.35; mp_.inputs['Coat Roughness'].default_value = 0.2
 mtc = mn.new('ShaderNodeTexCoord')
 wv = mn.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = 'X'; wv.inputs['Scale'].default_value = 140; wv.inputs['Distortion'].default_value = 6
 wv.inputs['Detail'].default_value = 4
 nzm = mn.new('ShaderNodeTexNoise'); nzm.inputs['Scale'].default_value = 60
 ml.new(mtc.outputs['Object'], wv.inputs['Vector']); ml.new(mtc.outputs['Object'], nzm.inputs['Vector'])
-ramp = mn.new('ShaderNodeValToRGB'); ramp.color_ramp.elements[0].color = (0.12, 0.01, 0.012, 1); ramp.color_ramp.elements[1].color = (0.45, 0.05, 0.04, 1)
+ramp = mn.new('ShaderNodeValToRGB'); ramp.color_ramp.elements[0].color = (0.62, 0.1, 0.12, 1); ramp.color_ramp.elements[1].color = (0.95, 0.38, 0.4, 1)
 ml.new(wv.outputs['Fac'], ramp.inputs['Fac'])
 # tendon (Achilles) toward the ankle: pale, glossy
 geo = mn.new('ShaderNodeNewGeometry'); dz = mn.new('ShaderNodeVectorMath'); dz.operation = 'DOT_PRODUCT'
@@ -330,7 +330,7 @@ dz.inputs[1].default_value = tuple(axis)
 ml.new(geo.outputs['Position'], dz.inputs[0])
 tmr = mn.new('ShaderNodeMapRange'); tmr.inputs['From Min'].default_value = K_.dot(axis) + 0.27; tmr.inputs['From Max'].default_value = K_.dot(axis) + 0.33
 ml.new(dz.outputs['Value'], tmr.inputs['Value'])
-tmix = mn.new('ShaderNodeMix'); tmix.data_type = 'RGBA'; tmix.inputs['B'].default_value = (0.85, 0.78, 0.68, 1)
+tmix = mn.new('ShaderNodeMix'); tmix.data_type = 'RGBA'; tmix.inputs['B'].default_value = (0.97, 0.92, 0.8, 1)
 ml.new(tmr.outputs['Result'], tmix.inputs['Factor']); ml.new(ramp.outputs['Color'], tmix.inputs['A']); ml.new(tmix.outputs['Result'], mp_.inputs['Base Color'])
 bmp = mn.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.6
 add_ = mn.new('ShaderNodeMath'); add_.operation = 'ADD'; ml.new(wv.outputs['Fac'], add_.inputs[0]); ml.new(nzm.outputs['Fac'], add_.inputs[1])
