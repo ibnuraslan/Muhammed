@@ -73,11 +73,11 @@ import bmesh as _bm2
 bm = _bm2.new(); bm.from_mesh(bn.data)
 _bm2.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.05], context='VERTS')
 bm.to_mesh(bn.data); bm.free()
-hz = htop + 0.03 - bot
+hz = htop + 0.05 - bot
 for v in bn.data.vertices:
     v.co = Vector((cx + v.co.x * rx, cy + v.co.y * ry * 1.04, bot + (v.co.z + 0.05) / 1.05 * hz))
     if v.co.z < bot + 0.035:      # folded cuff, a little thicker
-        d = Vector((v.co.x - cx, v.co.y - cy, 0)); v.co += d.normalized() * 0.006
+        d = Vector((v.co.x - cx, v.co.y - cy, 0)); v.co += d.normalized() * 0.003
 for u in list(bn.users_collection): u.objects.unlink(bn)
 C_CHAR.objects.link(bn)
 bpy.ops.object.shade_smooth()
@@ -87,9 +87,25 @@ bn.data.materials.append(bpy.data.materials["BeanieKnit"])
 uvbox(bn, 0.08)
 FR.data.pose_position = 'POSE'
 bone_parent(bn, FR, "head", FR.matrix_world @ Matrix.Identity(4))
-if anim_old:
-    bn.animation_data_create(); bn.animation_data.action = anim_old
 bpy.data.objects.remove(old)
+for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(37.9), 0.001), (F(37.9) + 1, 1)):
+    bn.scale = (_v,) * 3; bn.keyframe_insert("scale", frame=_f)
+# knit material: red wool, vertical ribs + stitch noise
+km = bpy.data.materials.new("BeanieWool"); km.use_nodes = True
+kn, kl = km.node_tree.nodes, km.node_tree.links; kp = kn["Principled BSDF"]
+ktc = kn.new('ShaderNodeTexCoord')
+kw = kn.new('ShaderNodeTexWave'); kw.wave_type = 'BANDS'; kw.bands_direction = 'X'; kw.inputs['Scale'].default_value = 60; kw.inputs['Distortion'].default_value = 1.5
+kl.new(ktc.outputs['Generated'], kw.inputs['Vector'])
+kv = kn.new('ShaderNodeTexVoronoi'); kv.inputs['Scale'].default_value = 400; kl.new(ktc.outputs['Object'], kv.inputs['Vector'])
+kcr = kn.new('ShaderNodeValToRGB'); kcr.color_ramp.elements[0].color = (0.22, 0.02, 0.03, 1); kcr.color_ramp.elements[1].color = (0.62, 0.08, 0.07, 1)
+kl.new(kw.outputs['Fac'], kcr.inputs['Fac']); kl.new(kcr.outputs['Color'], kp.inputs['Base Color'])
+kp.inputs['Roughness'].default_value = 0.9; kp.inputs['Sheen Weight'].default_value = 0.8; kp.inputs['Sheen Tint'].default_value = (1, 0.6, 0.6, 1)
+kad = kn.new('ShaderNodeMath'); kad.operation = 'MULTIPLY_ADD'; kad.inputs[1].default_value = 0.4
+kl.new(kv.outputs['Distance'], kad.inputs[0]); kl.new(kw.outputs['Fac'], kad.inputs[2])
+kbp = kn.new('ShaderNodeBump'); kbp.inputs['Strength'].default_value = 0.8; kbp.inputs['Distance'].default_value = 0.002
+kl.new(kad.outputs[0], kbp.inputs['Height']); kl.new(kbp.outputs['Normal'], kp.inputs['Normal'])
+bn.data.materials.clear(); bn.data.materials.append(km)
+rib.noise_scale = 0.0035
 sw = bpy.data.objects["Scarf"].modifiers["fit"]; sw.offset = 0.03
 # ---- melanoma cells grow during beat 3
 for o in CELLS:
@@ -118,3 +134,15 @@ for _m in ("BeanieKnit",):
 # bigger, darker moles on the neck decals
 for _o in ("NeckMoleA", "NeckMoleB"):
     _mt = bpy.data.objects[_o].data.materials[0]; _mt.node_tree.nodes["SkinMap"].inputs['Scale'].default_value = (650,) * 3
+
+for g in {sl.material for o in BUILDINGS for sl in o.material_slots if sl.material and "Glass" in sl.material.name}:
+    nt_ = g.node_tree; pp = nt_.nodes.get("Principled BSDF")
+    if not pp: continue
+    tc_ = nt_.nodes.new('ShaderNodeTexCoord'); vo = nt_.nodes.new('ShaderNodeTexVoronoi'); vo.inputs['Scale'].default_value = 0.6
+    nt_.links.new(tc_.outputs['Object'], vo.inputs['Vector'])
+    cr_ = nt_.nodes.new('ShaderNodeValToRGB'); e_ = cr_.color_ramp.elements; cr_.color_ramp.interpolation = 'CONSTANT'
+    e_[0].color = (0.0, 0.0, 0.0, 1); e_[1].position = 0.55; e_[1].color = (1.0, 0.62, 0.32, 1); e_.new(0.85).color = (0.35, 0.6, 1.0, 1)
+    nt_.links.new(vo.outputs['Color'], cr_.inputs['Fac'])
+    nt_.links.new(cr_.outputs['Color'], pp.inputs['Emission Color']); pp.inputs['Emission Strength'].default_value = 1.2
+    pp.inputs['Base Color'].default_value = (0.02, 0.02, 0.03, 1); pp.inputs['Roughness'].default_value = 0.1
+m2.inputs['B'].default_value = (0.008, 0.012, 0.035, 1)

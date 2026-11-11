@@ -57,21 +57,21 @@ K = [
     (8.2, SK + V((-0.8, -8.6, 0.8)), SK + V((0, -6, -0.6)), 50, False),
     (8.6, SK + V((0, -1.0, 15)), SK, 50, False),
     (8.6, fill(mole86, moleN86, 0.015), mole86, 50, True),           # back out through the skin
-    (9.2, V((0.80, -0.30, 1.55)), fanH4, 40, False),
-    (10.2, V((0.40, -0.28, 1.30)), fanH4, 38, False),
-    (11.2, V((-0.55, -0.25, 1.62)), fanH4, 45, False),
-    (12.2, V((-0.25, -0.25, 1.45)), fanH4, 48, False),
-    (13.0, V((-0.05, -0.18, 1.40)), fanH4 + V((0, 0, -0.05)), 45, False),
+    (9.2, V((0.80, -0.30, 1.40)), fanH4, 42, False),
+    (10.2, V((0.40, -0.25, 1.22)), fanH4, 45, False),
+    (11.2, V((-0.50, -0.22, 1.32)), fanH4, 45, False),
+    (12.2, V((-0.22, -0.22, 1.30)), fanH4, 50, False),
+    (13.0, V((-0.05, -0.18, 1.30)), fanH4 + V((0, 0, -0.05)), 48, False),
     (13.6, V((-0.50, 0.30, 1.45)), fphone, 40, False),                # through the glass to her right side
-    (14.3, V((-0.15, 0.78, 1.66)), fphone, 50, False),               # top-down on the thumbs
-    (15.2, V((0.12, 0.72, 1.56)), fphone + V((0, -0.05, 0)), 60, False),
+    (14.3, V((-0.34, 0.68, 1.50)), fphone, 40, False),               # top-down on the thumbs
+    (15.2, V((0.16, 0.60, 1.38)), fphone + V((0, -0.03, 0)), 50, False),
     (15.8, V((0.50, 0.70, 1.55)), V((0.0, 0.35, 1.3)), 40, False),
     (16.4, V((0.95, 0.75, 1.65)), V((0.0, 0.05, 1.45)), 32, False),   # the slap, wide
-    (17.0, V((0.70, 0.15, 2.90)), V((0.0, 0.0, 1.5)), 32, False),     # over the glass to his side
+    (17.0, V((0.30, 0.15, 2.90)), V((0.0, -0.3, 1.5)), 32, False),     # over the glass to his side
     (17.8, V((0.55, -0.55, 1.75)), V((-0.05, 0.0, 1.5)), 38, False),
     (18.6, V((0.55, -1.15, 1.80)), V((-0.05, 0.0, 1.5)), 40, False),  # over his shoulder, the phone on the glass
     (19.4, V((-0.40, -0.18, 1.62)), manH, 42, False),                 # his puzzled face
-    (20.2, V((1.00, -0.45, 1.45)), manH + V((0, 0, -0.2)), 32, False),
+    (20.2, V((1.10, -1.00, 1.50)), manH + V((0, 0, -0.2)), 30, False),
     (21.0, V((1.20, -1.35, 1.70)), V((-1.0, -0.8, 1.2)), 32, False),
     (21.6, V((-0.6, -1.55, 1.95)), V((-4.0, -1.0, 1.2)), 30, False),
     (22.2, V((-7.0, -1.05, 2.10)), V((-25.0, -0.6, 1.2)), 30, False),
@@ -80,8 +80,8 @@ K = [
     (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
     (24.3, V((-27.4, -0.95, 1.95)), moleB, 38, False),
     (25.0, fill(moleB, moleBN, 0.14), moleB, 55, False),               # the dermatoscope on the mole
-    (25.8, V((-28.35, -1.75, 1.62)), docH, 50, False),                 # doctor's serious face
-    (26.6, V((-27.95, -2.85, 2.0)), moleB, 45, False),               # overhead on the hands
+    (25.8, V((-28.3, -1.6, 1.75)), docH, 55, False),                 # doctor's serious face
+    (26.6, V((-27.9, -2.7, 2.1)), moleB, 45, False),               # overhead on the hands
     (27.4, V((-29.30, -2.85, 1.75)), moleB, 50, False),
     (28.3, V((-28.95, -2.88, 1.50)), moleB, 50, False),               # side: bandage
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
@@ -90,13 +90,13 @@ K = [
     (31.4, fill(ph_p, ph_n, 0.16) + V((0, -0.05, 0)), ph_p, 45, False),
     (31.8, fill(ph_p, ph_n, 0.006), ph_p, 45, False),
     (31.8, CT + V((-6, -9, 2.2)), CT + V((-6, 13, 8)), 40, True),     # out of the screen glow into the night city
-    (32.8, CT + V((-4, -16, 14)), CT + V((0, 10, 8)), 30, False),
+    (32.8, CT + V((-4, -10, 13)), CT + V((0, 12, 9)), 26, False),
     (33.8, CT + V((-12, -10, 3.0)), CT + V((-17, -4, 1.8)), 32, False),
     (34.8, CT + V((-4.5, -8.5, 2.6)), CT + V((-6, -4, 1.8)), 35, False),  # alongside the bus, riders on phones
     (35.4, WIN + V((0, -2.0, 0.2)), WIN, 40, False),
     (35.9, WIN + V((0, -0.05, 0)), WIN, 40, False),
     (35.9, HMv + V((0, -3.0, 1.45)), HMv + V((0, 1.0, 1.0)), 40, True),  # through the curtain into her room
-    (36.5, HMv + V((0.65, -0.6, 1.20)), fanH12, 35, False),
+    (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
     (37.6, LAPSCR + ls_n * 0.25 + V((0, 0, 0.05)), LAPSCR, 45, False),
     (37.9, LAPSCR + ls_n * 0.008, LAPSCR, 45, False),
