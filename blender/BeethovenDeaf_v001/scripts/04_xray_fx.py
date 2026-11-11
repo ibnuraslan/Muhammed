@@ -179,7 +179,8 @@ can.modifiers.new("sol", 'SOLIDIFY').thickness = 0.0025; can.modifiers.new("sub"
 can.data.materials.append(can_m); to_head(can)
 EAR["Ear_Canal"] = can
 ANAT_SPAN = [(BEAT[3] + 30, BEAT[6] + 55)]
-for o in list(EAR.values()) + [sk]: key_vis(o, ANAT_SPAN)
+for o in [o for o in EAR.values() if o.name != "Ear_Canal"] + [sk]: key_vis(o, ANAT_SPAN)
+can.hide_render = True; can.hide_viewport = True   # stylised canal half-pipe retired (client: no illustrated shapes); the red pulse runs through the ghosted skin
 # ---------------------------------------------------------------- ghost the composer: spherical porthole around the head, then the whole body
 xc = bpy.data.objects.new("XRay_Center", None); xc.location = Vector((0, -0.05, 1.55)); sc.collection.objects.link(xc); link(xc); to_head(xc)
 XR_R = [(1, 0.0), (BEAT[3] - 5, 0.0), (BEAT[3] + 40, 0.16), (BEAT[3] + 75, 0.22), (BEAT[3] + 115, 2.5), (BEAT[6] + 25, 2.5), (BEAT[6] + 55, 0.2), (BEAT[6] + 75, 0.0)]
