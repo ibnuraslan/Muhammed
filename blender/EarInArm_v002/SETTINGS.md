@@ -4,7 +4,7 @@ These values were read back from `EarInArm_v002_60fps.blend`, opened in factory-
 
 | Item | Value |
 |---|---|
-| File | `EarInArm_v002_60fps.blend`: __SIZE__ MB, compressed. All images are packed. Stored with Git LFS. |
+| File | `EarInArm_v002_60fps.blend`: 55 MB, compressed. All images are packed. Stored with Git LFS. |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |

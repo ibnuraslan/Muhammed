@@ -213,16 +213,17 @@ stand(SUR, 199, SA_, yA, spine=(8, 0, 0)); stand(SUR, 200, ST, yT, spine=(18, 0,
 stand(SUR, 330, ST, yT, spine=(18, 0, 0), head=(28, 0, 0), crouch=0.02)
 for f in range(343, 565, 40):
     stand(SUR, f, ST, yT, spine=(20 + 3 * math.sin(f), 2 * math.sin(f * 0.3), 3 * math.sin(f * 0.2)), head=(30, 4 * math.sin(f * 0.1), 0), crouch=0.03)
-stand(SUR, 566, ST, yT, spine=(18, 0, 0)); stand(SUR, 590, ST + Vector((-0.1, 0.25)), 60, spine=(6, 0, 0)); walk(SUR, ST + Vector((-0.1, 0.25)), Vector((1.0, 0.75)), 591, 625, 60, 100, stride=0.45); walk(SUR, Vector((1.0, 0.75)), SB_, 626, 660, 100, yB, stride=0.4)
+stand(SUR, 566, ST, yT, spine=(18, 0, 0)); walk(SUR, ST, Vector((1.0, 0.75)), 567, 625, yT, 100, stride=0.45); walk(SUR, Vector((1.0, 0.75)), SB_, 626, 660, 100, yB, stride=0.4)
 for f in range(662, 1309, 60):
     stand(SUR, f, SB_, yB, spine=(22 + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(30, 0, 0), crouch=0.04)
 walk(SUR, SB_, SC_, 1312, 1385, yB, yC + 360 if False else yC - 0.0 if abs(yB - yC) < 180 else yC + 360, stride=0.5)
-for f in range(1395, B["b9"], 50):
+for f in [1386] + list(range(1420, B["b9"], 50)):
     stand(SUR, f, SC_, yC + 360 if abs(yB - (yC + 360)) < abs(yB - yC) else yC, spine=(26, 0, 0), head=(32, 0, 0), crouch=0.05)
 yCC = yC + 360 if abs(yB - (yC + 360)) < abs(yB - yC) else yC
 stand(SUR, B["b9"] + 20, SC_, yCC, spine=(14, 0, 0), head=(18, 0, 0))
-stand(SUR, B["b9"] + 70, SC_ + Vector((0.35, 0.15)), yCC, spine=(4, 0, 0), head=(6, 0, 0))
-stand(SUR, B["end"], SC_ + Vector((0.37, 0.15)), yCC, spine=(2, 0, -6), head=(4, 8, 0))
+walk(SUR, SC_, SC_ + Vector((0.35, 0.15)), B["b9"] + 21, B["b9"] + 70, yCC, yCC, stride=0.4)
+stand(SUR, B["b9"] + 71, SC_ + Vector((0.35, 0.15)), yCC, spine=(4, 0, 0), head=(6, 0, 0))
+stand(SUR, B["end"], SC_ + Vector((0.35, 0.15)), yCC, spine=(2, 0, -6), head=(4, 8, 0))
 
 # surgeon hands. Block/ear positions on the tray
 TRAY = OB["Tray"].matrix_world.translation.copy()
@@ -242,10 +243,12 @@ sh(199, "R", CHEST + Vector((-0.02, -0.04, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6,
 for f in range(300, 565, 6):
     k = (f - 343) / 37.0
     away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(530, 556, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
-    sh(f, "L", BLK + Vector((-0.055, 0.075, 0.012)) + away, (0.35, -1.0, -0.35), (0.0, 0.2, 1.0))
+    dL = Vector((-0.85, -0.45, -0.3)).normalized()
+    sh(f, "L", BLK + Vector((0.025, -0.005, 0.012)) - dL * 0.085 + away, dL, (0.0, 0.2, 1.0))
     ph = (k % 1.0)
-    sweep = Vector((0.03 - 0.06 * ph, -0.02 + 0.01 * math.sin(k * 2.3), 0.045 - 0.025 * math.sin(math.pi * ph)))
-    sh(f, "R", BLK + Vector((0.06, 0.06, 0.035)) + sweep * (1 if f > 343 else 0.2) + away, (-0.45, -1.0, -0.55), (-0.2, -0.3, 1.0))
+    tgt = BLK + Vector((-0.02 + 0.04 * ph, 0.012 * math.sin(k * 2.3), 0.018 + 0.006 * math.sin(math.pi * ph)))
+    dR = Vector((0.55, -0.65, -0.55)).normalized()
+    sh(f, "R", tgt - dR * (0.135 + 0.03 * (1 if f < 350 else 0)) + away, dR, (-0.2, -0.3, 1.0))
 SUR.key_fingers("L", 300, 28, 30); SUR.key_fingers("R", 300, 38, 32)
 # beat 4: R forceps carries the ear to the forearm, slides it in; L forceps lifts the skin edge
 ev_at(640)
@@ -313,15 +316,16 @@ for f in range(1, 121, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 walk(NUR, Vector((1.0, 1.6)), N_B, 121, 300, -90, -100, stride=0.6)
 for f in range(121, 300, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 for f in range(310, 565, 50):
-    stand(NUR, f, N_B, -100 + 8 * math.sin(f * 0.02), spine=(10, 0, 0), head=(16, 0, 0)); nurse_arms(f, fwd=45 + 10 * math.sin(f * 0.05))
+    stand(NUR, f, N_B, -100, spine=(10, 0, 0), head=(16, 0, 0)); nurse_arms(f, fwd=45 + 10 * math.sin(f * 0.05))
 walk(NUR, N_B, N_C, 570, 700, -100, -150, stride=0.5)
 for f in range(570, 700, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
-for f in range(710, 1309, 60):
+for f in [701] + list(range(730, 1309, 60)):
     stand(NUR, f, N_C, -150, spine=(8, 0, 0), head=(18, 0, 0)); nurse_arms(f, fwd=55)
 walk(NUR, N_C, Vector((1.3, -1.35)), 1312, 1380, -150, 0, stride=0.55); walk(NUR, Vector((1.3, -1.35)), N_D, 1381, 1460, 0, -90, stride=0.55)
 for f in range(1312, 1460, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
-for f in range(1462, B["end"] + 1, 60):
-    stand(NUR, f, N_D, -90 - 123 * smooth((f - 1462) / 60.0), spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
+stand(NUR, 1461, N_D, -90); walk(NUR, N_D, N_D + Vector((0.06, 0.08)), 1462, 1505, -90, -213, stride=0.3)
+for f in [1506] + list(range(1530, B["end"] + 1, 60)):
+    stand(NUR, f, N_D + Vector((0.06, 0.08)), -213, spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
 for f in range(B["b9"] + 60, B["end"], 12):   # little clap
     nurse_arms(f, fwd=70 + (6 if (f // 12) % 2 else -2))
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
