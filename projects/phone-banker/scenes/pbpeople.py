@@ -159,3 +159,22 @@ def protective_gear(h, suit=(0.86, 0.87, 0.85)):
     resp = joinm(parts, h.name + "Respirator")
     parent_keep(resp, h, "head")
     return hood, resp
+
+
+def recolor(h, cloth, col, rough=0.7):
+    """Replace a clothes texture with a flat colour (white coats, coveralls, uniforms)."""
+    for o in h.parts:
+        for ms in getattr(o, "material_slots", []):
+            if ms.material and cloth in ms.material.name:
+                pb = ms.material.node_tree.nodes.get("Principled BSDF")
+                for l_ in list(pb.inputs['Base Color'].links):
+                    ms.material.node_tree.links.remove(l_)
+                pb.inputs['Base Color'].default_value = (*col, 1); pb.inputs['Roughness'].default_value = rough
+
+
+def medic(name, gender, years, hair, coat=(0.86, 0.87, 0.85)):
+    """Doctor or nurse in a white coat (long-sleeved top and trousers in white)."""
+    cloth = "female_elegantsuit01" if gender < 0.5 else "male_casualsuit01"
+    h = person(name, gender, years, cloth, hair, hv=0.25)
+    recolor(h, cloth, coat)
+    return h
