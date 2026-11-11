@@ -1,0 +1,146 @@
+{
+ "palm_a": {
+  "uid": "b9922dd105ee4536b9ca983c26f58e66",
+  "title": "Palm Tree",
+  "author": "Surya",
+  "author_profile": "https://sketchfab.com/Swanoff",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b9922dd105ee4536b9ca983c26f58e66",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "palm_b": {
+  "uid": "e8c0ea53410947b0b7f20d33702f4098",
+  "title": "Plant Series \u2013 Palm Tree",
+  "author": "UPWARD",
+  "author_profile": "https://sketchfab.com/spazio_silvestre",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e8c0ea53410947b0b7f20d33702f4098",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "longtail": {
+  "uid": "35038e5b626b4609984f75e4cb978f7d",
+  "title": "Longtail boat",
+  "author": "jorandp",
+  "author_profile": "https://sketchfab.com/jorandp",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/35038e5b626b4609984f75e4cb978f7d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "rowboat": {
+  "uid": "f4b38ccf5ffb46018aa7931c0e106654",
+  "title": "Fishing boat",
+  "author": "Pabooklas",
+  "author_profile": "https://sketchfab.com/Pabooklas",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f4b38ccf5ffb46018aa7931c0e106654",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "umbrella": {
+  "uid": "e0c0ad33836d488da98ba8c4f807b1fe",
+  "title": "Beach Umbrella",
+  "author": "yacin_cheffai",
+  "author_profile": "https://sketchfab.com/yacin_cheffai",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e0c0ad33836d488da98ba8c4f807b1fe",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "umbrella2": {
+  "uid": "bac8486298ab41ab884fccb867f1527b",
+  "title": "Parasol lowpoly - beach umbrella",
+  "author": "Harold.Llanos",
+  "author_profile": "https://sketchfab.com/Harold.Llanos",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bac8486298ab41ab884fccb867f1527b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "car": {
+  "uid": "67c84e4d30ae42fda22c0a0c7526df26",
+  "title": "Small price car",
+  "author": "Oliv1e",
+  "author_profile": "https://sketchfab.com/Oliv1e",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/67c84e4d30ae42fda22c0a0c7526df26",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "car2": {
+  "uid": "aeb2699532b4402e8b75ec8888b800b9",
+  "title": "Low-Poly Sedan car",
+  "author": "scailman",
+  "author_profile": "https://sketchfab.com/scailman",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/aeb2699532b4402e8b75ec8888b800b9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fish": {
+  "uid": "aa31604aa3d446b59775dd9e5a08a9ce",
+  "title": "Fishes",
+  "author": "VivernaNeva",
+  "author_profile": "https://sketchfab.com/VivernaNeva",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/aa31604aa3d446b59775dd9e5a08a9ce",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "coral": {
+  "uid": "bd879158d2c9496fa40eb9a8fd8e75f8",
+  "title": "Coral Piece",
+  "author": "Sharon Kunne",
+  "author_profile": "https://sketchfab.com/sharonkunne",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bd879158d2c9496fa40eb9a8fd8e75f8",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house": {
+  "uid": "6e46d5e6787243518eb14d5c9db4fa82",
+  "title": "Wooden House Building",
+  "author": "Rescue3D Assets",
+  "author_profile": "https://sketchfab.com/rescue3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6e46d5e6787243518eb14d5c9db4fa82",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house2": {
+  "uid": "b1e04fd34a6d4f21a5928b9a6ecfe899",
+  "title": "Wooden house",
+  "author": "Johan Pindeville",
+  "author_profile": "https://sketchfab.com/johanpindeville",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b1e04fd34a6d4f21a5928b9a6ecfe899",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "rubble_roof": {
+  "uid": "c7544d9183c24ed3a716f8255536afa8",
+  "title": "Roof Rubble Pile Debris Tiles Scan",
+  "author": "Pers Scans",
+  "author_profile": "https://sketchfab.com/perz_scans",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c7544d9183c24ed3a716f8255536afa8",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "rubble_brick": {
+  "uid": "a61ea99ff8da40c8998741afb8a57a84",
+  "title": "Red Brick Pile Rubble Debris",
+  "author": "3DWALKABOUT",
+  "author_profile": "https://sketchfab.com/3dwalkabout",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a61ea99ff8da40c8998741afb8a57a84",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "rubble_wood": {
+  "uid": "659a7206daec4a968c35a71bbb4768aa",
+  "title": "PBR Debris trash wood planks  Pile Factory Scan",
+  "author": "Pers Scans",
+  "author_profile": "https://sketchfab.com/perz_scans",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/659a7206daec4a968c35a71bbb4768aa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "mosque": {
+  "uid": "91a3f0479b0e414485f65ce246af3574",
+  "title": "Mosque Cami",
+  "author": "askardes",
+  "author_profile": "https://sketchfab.com/askardes",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/91a3f0479b0e414485f65ce246af3574",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
