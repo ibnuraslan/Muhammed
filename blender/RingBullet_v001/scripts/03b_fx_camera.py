@@ -59,6 +59,17 @@ pend = O["PendulumPivot"]; pend.rotation_mode = 'XYZ'
 for f in range(1, 1411, 3):
     key(pend, "rotation_euler", f, math.radians(7) * math.sin(2 * math.pi * WT(f) / 2.0), idx=0)
 
+# wall clock second hand ticks once per world-second (snaps in 3 frames)
+sh_ = O.get("WallClock_second_hand")
+if sh_:
+    sh_.rotation_mode = 'XYZ'; base = sh_.rotation_euler.copy()
+    t0 = WT(1); t1 = WT(1410); k = 0
+    for f in range(1, 1411):
+        if int(WT(f) - t0) != k or f == 1:
+            k = int(WT(f) - t0)
+            for ff, kk in ((f - 1, k - 1), (f + 2, k)):
+                if ff < 1: continue
+                e = base.copy(); e.y = base.y + math.radians(6.0) * (kk + 23); sh_.rotation_euler = e; sh_.keyframe_insert("rotation_euler", frame=ff)
 # ---------------------------------------------------------------- muzzle, impact point, bullet path
 G = O["Gun"]; at(FIRE)
 MZ = G.matrix_world @ Vector((0.19, 0, 0)); GUNX = (G.matrix_world.to_3x3() @ Vector((1, 0, 0))).normalized()

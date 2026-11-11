@@ -89,7 +89,7 @@ def noisy(name, rgb, rgb2, scale=40.0, rough=0.6, metal=0.0, bump=0.1, rough2=No
 
 M_WALL = pbr_tex("M_WallPanel", "dark_paneled_wood", "dark_paneled_wood", 1.6, val=1.1, bump=0.6)
 M_FLOOR = pbr_tex("M_Parquet", "herringbone_parquet", "herringbone_parquet", 1.2, val=0.75, bump=0.5, rough_mul=0.8)
-M_CEIL = noisy("M_Ceiling", (0.55, 0.5, 0.42), (0.48, 0.43, 0.36), 6, 0.9)
+M_CEIL = noisy("M_Ceiling", (0.36, 0.31, 0.25), (0.28, 0.24, 0.19), 6, 0.9, bump=0.2)
 M_DESK = pbr_tex("M_DeskWood", "dark_paneled_wood", "dark_paneled_wood", 3.0, val=0.8, bump=0.3, rough_mul=0.55)
 M_LEATHER = noisy("M_DeskLeather", (0.08, 0.16, 0.09), (0.05, 0.1, 0.06), 90, 0.45, bump=0.05)
 M_GOLD = noisy("M_Gold", (1.0, 0.72, 0.32), (0.92, 0.62, 0.25), 300, 0.16, 1.0, 0.02, 0.28)
@@ -98,7 +98,7 @@ M_COPPER = noisy("M_BulletCopper", (0.95, 0.55, 0.36), (0.8, 0.45, 0.28), 400, 0
 M_LEAD = noisy("M_Fragment", (0.75, 0.5, 0.36), (0.45, 0.42, 0.4), 500, 0.35, 1.0, 0.3, 0.6)
 M_GUN = noisy("M_GunDark", (0.025, 0.025, 0.028), (0.05, 0.05, 0.055), 120, 0.4, 0.6, 0.02, 0.55)
 M_GLASS = flat("M_Glass", (0.9, 0.95, 0.95), 0.02, trans=1.0, ior=1.5)
-M_GREENGLASS = flat("M_LampShade", (0.05, 0.35, 0.12), 0.08, trans=0.6, ior=1.5, emit=(0.15, 0.6, 0.25), estr=0.3)
+M_GREENGLASS = flat("M_LampShade", (0.02, 0.22, 0.07), 0.12, coat=1.0, emit=(0.1, 0.5, 0.2), estr=0.15)
 M_BULB = flat("M_Bulb", (1, 0.85, 0.6), 0.3, emit=(1.0, 0.78, 0.5), estr=40)
 M_PAPER = noisy("M_Paper", (0.85, 0.82, 0.74), (0.78, 0.74, 0.66), 30, 0.85)
 M_RUG = noisy("M_Rug", (0.32, 0.07, 0.05), (0.18, 0.05, 0.04), 18, 0.95, bump=0.3)
@@ -172,6 +172,9 @@ box("WallRight_B", (T, YB - DY1, H), (rx, (DY1 + YB) / 2, H / 2), M_WALL)
 box("WallRight_T", (T, DY1 - DY0, H - DZ), (rx, (DY0 + DY1) / 2, (DZ + H) / 2), M_WALL)
 box("WallLeft", (T, YB - YF, H), (XL - T / 2, (YB + YF) / 2, H / 2), M_WALL)
 box("WallFront", (XR - XL, T, H), (0, YF - T / 2, H / 2), M_WALL)
+# ceiling beams
+for yy in (-3.3, -2.1, -0.9, 0.3, 1.3):
+    box("CeilBeam%+.1f" % yy, (XR - XL, 0.16, 0.14), (0, yy, H - 0.07), M_DESK, bevel=0.006)
 # trims: skirting + picture rail, window frame, door frame
 M_TRIM = flat("M_Trim", (0.12, 0.06, 0.03), 0.35, coat=0.3)
 for nm, sz, lc in (("SkirtBack", (XR - XL, 0.03, 0.14), (0, YB - 0.015, 0.07)), ("SkirtLeft", (0.03, YB - YF, 0.14), (XL + 0.015, (YB + YF) / 2, 0.07)),
@@ -284,10 +287,15 @@ box("DeskModesty", (0.7, 0.02, 0.6), (0, DESK_Y - 0.3, 0.45), M_DESK, cl=C_PROPS
 LAMP = Vector((-0.5, DESK_Y + 0.12, DESK_TOP))
 lathe("LampBase", [(0.0, 0.0), (0.075, 0.0), (0.075, 0.012), (0.05, 0.025), (0.012, 0.035), (0.0, 0.035)], M_BRASS).location = LAMP
 cyl("LampStem", 0.008, 0.33, LAMP + Vector((0, 0, 0.18)), M_BRASS)
-sh = cyl("LampShade", 0.07, 0.32, LAMP + Vector((0, 0, 0.36)), M_GREENGLASS, verts=40, rot=(0, math.pi / 2, 0))
-sh.scale = (1, 1, 1); bm = bmesh.new(); bm.from_mesh(sh.data)
-bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], plane_co=(0, 0, 0), plane_no=(1, 0, 0), clear_inner=True)
-bm.to_mesh(sh.data); bm.free(); sh.modifiers.new("sol", 'SOLIDIFY').thickness = 0.003
+me = bpy.data.meshes.new("LampShade"); bm = bmesh.new(); N_ = 24; rows = []
+for xx in (-0.16, 0.16):
+    rows.append([bm.verts.new((xx, 0.075 * math.cos(math.pi * i / N_), 0.06 * math.sin(math.pi * i / N_))) for i in range(N_ + 1)])
+for i in range(N_): bm.faces.new((rows[0][i], rows[0][i + 1], rows[1][i + 1], rows[1][i]))
+for row in rows: bm.faces.new(row)          # end caps (half discs)
+bm.to_mesh(me); bm.free()
+for p_ in me.polygons: p_.use_smooth = True
+sh = bpy.data.objects.new("LampShade", me); C_PROPS.objects.link(sh); me.materials.append(M_GREENGLASS)
+sh.location = LAMP + Vector((0, 0, 0.33)); sh.modifiers.new("sol", 'SOLIDIFY').thickness = 0.003
 cyl("LampBulb", 0.018, 0.22, LAMP + Vector((0, 0, 0.345)), M_BULB, rot=(0, math.pi / 2, 0))
 # papers on desk (will flutter)
 for i in range(5):
@@ -332,7 +340,7 @@ pend = bpy.data.objects.new("PendulumPivot", None); C_PROPS.objects.link(pend); 
 rod = cyl("PendulumRod", 0.003, 0.6, (0, 0, -0.3), M_BRASS); rod.parent = pend
 bob = cyl("PendulumBob", 0.07, 0.01, (0, 0, -0.62), M_BRASS, rot=(math.pi / 2, 0, 0)); bob.parent = pend
 # glass-front antiques cabinet on the left wall, filled with brass and porcelain
-cab = append_blend(os.path.join(AS, "vintage_cabinet_01/vintage_cabinet_01_1k.blend")); place(cab, Vector((XL + 0.34, -0.95, 0)), -90)
+cab = append_blend(os.path.join(AS, "vintage_cabinet_01/vintage_cabinet_01_1k.blend"), ["vintage_cabinet_01_body"]); place(cab, Vector((XL + 0.36, -0.95, 0)), 90)
 for i, (y, z) in enumerate([(y_, z_) for z_ in (1.02, 1.42, 1.8) for y_ in (-1.7, -1.35, -0.95, -0.55, -0.2)]):
     kind = i % 4
     if kind == 0:
@@ -344,12 +352,14 @@ for i, (y, z) in enumerate([(y_, z_) for z_ in (1.02, 1.42, 1.8) for y_ in (-1.7
     else:
         v = lathe("CabBowl%d" % i, [(0, 0), (0.03, 0), (0.07, 0.04), (0.068, 0.045), (0, 0.045)], flat("M_CabBlue%d" % i, (0.1, 0.2, 0.45), 0.1, coat=1.0))
     v.location = (XL + 0.3, y, z)
-wc = append_blend(os.path.join(AS, "wall_clock/wall_clock_1k.blend")); place(wc, Vector((0.12, YB - 0.03, 2.08)), 180)
+for yy in (-1.45, -0.45):
+    box("CabGlass%+.2f" % yy, (0.004, 0.98, 1.0), (-1.866, yy, 1.5), M_GLASS, cl=C_PROPS)
+wc = append_blend(os.path.join(AS, "wall_clock/wall_clock_1k.blend")); place(wc, Vector((0.12, YB - 0.002, 2.08)), 0)
 for o in wc: o.name = o.name.replace("wall_clock", "WallClock")
-mir = append_blend(os.path.join(AS, "ornate_mirror_01/ornate_mirror_01_1k.blend")); place(mir, Vector((XR - 0.02, -1.0, 1.55)), 90)
+mir = append_blend(os.path.join(AS, "ornate_mirror_01/ornate_mirror_01_1k.blend")); place(mir, Vector((XR - 0.002, -1.0, 1.55)), -90)
 for y in (-2.3,):
-    pf = append_blend(os.path.join(AS, "fancy_picture_frame_01/fancy_picture_frame_01_1k.blend")); place(pf, Vector((XR - 0.03, y, 1.6)), 90)
-pf = append_blend(os.path.join(AS, "fancy_picture_frame_01/fancy_picture_frame_01_1k.blend")); place(pf, Vector((-1.1, YF + 0.03, 1.6)), 0)
+    pf = append_blend(os.path.join(AS, "fancy_picture_frame_01/fancy_picture_frame_01_1k.blend")); place(pf, Vector((XR - 0.002, y, 1.6)), -90)
+pf = append_blend(os.path.join(AS, "fancy_picture_frame_01/fancy_picture_frame_01_1k.blend")); place(pf, Vector((-1.1, YF + 0.002, 1.6)), 180)
 pp = append_blend(os.path.join(AS, "potted_plant_01/potted_plant_01_1k.blend")); place(pp, Vector((2.15, YB - 0.4, 0)), 30, 0.9)
 pp2 = append_blend(os.path.join(AS, "potted_plant_01/potted_plant_01_1k.blend")); place(pp2, Vector((2.0, -3.6, 0)), 120, 0.75)
 pw = append_blend(os.path.join(AS, "pocket_watch/pocket_watch_1k.blend"))
@@ -471,10 +481,11 @@ env = wn.new('ShaderNodeTexEnvironment'); env.image = img(os.path.join(AS, "hdri
 wl.new(env.outputs['Color'], wn["Background"].inputs['Color']); wn["Background"].inputs['Strength'].default_value = 0.15
 lamp = light("L_DeskLamp", 'POINT', 18.0, (1.0, 0.72, 0.42), LAMP + Vector((0, 0, 0.34)), 0.03)
 light("L_LampPool", 'SPOT', 60.0, (1.0, 0.72, 0.42), LAMP + Vector((0.0, 0.0, 0.33)), 0.05).rotation_euler = (math.radians(0), 0, 0)
-key = light("L_KeyWarm", 'AREA', 40.0, (1.0, 0.75, 0.5), (-1.2, -1.6, 2.3), 0.8); key.rotation_euler = (math.radians(50), 0, math.radians(-35))
+key = light("L_KeyWarm", 'AREA', 30.0, (1.0, 0.75, 0.5), (-1.2, -1.6, 2.3), 0.8); key.rotation_euler = (math.radians(50), 0, math.radians(-35))
 rim = light("L_RimCool", 'AREA', 35.0, (0.55, 0.7, 1.0), (0.9, 1.3, 2.2), 0.6); rim.rotation_euler = (math.radians(-55), 0, math.radians(150))
 fill = light("L_FillBounce", 'AREA', 15.0, (1.0, 0.8, 0.6), (0.0, -3.5, 1.2), 2.0); fill.rotation_euler = (math.radians(90), 0, 0)
 light("L_OilLamp", 'POINT', 6.0, (1.0, 0.6, 0.3), (XL + 0.5, -2.4, 1.25), 0.02)
+cl_ = light("L_CabinetDisplay", 'AREA', 18.0, (1.0, 0.75, 0.45), (-2.15, -0.95, 2.02), 0.3); cl_.data.shape = 'RECTANGLE'; cl_.data.size = 0.3; cl_.data.size_y = 1.8
 sconce = light("L_Sconce", 'POINT', 25.0, (1.0, 0.68, 0.38), (XL + 0.2, -1.0, 2.0), 0.08)
 moon = light("L_Moon", 'AREA', 30.0, (0.5, 0.62, 1.0), ((WX0 + WX1) / 2, YB + 0.8, 2.0), 1.0); moon.rotation_euler = (math.radians(-60), 0, 0)
 light("L_StreetDoor", 'AREA', 60.0, (0.5, 0.6, 0.9), (XR + 1.2, 0.55, 2.4), 1.5).rotation_euler = (0, math.radians(-55), 0)
