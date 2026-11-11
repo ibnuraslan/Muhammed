@@ -1,0 +1,47 @@
+{
+ "car": {
+  "uid": "8cb1c1243c394144837a15f4722a2867",
+  "title": "Ford Model T Downloadable",
+  "author": "Libau Media",
+  "author_profile": "https://sketchfab.com/robinmikart",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8cb1c1243c394144837a15f4722a2867",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "lungs": {
+  "uid": "9b8ea5299b92403eadf662bfa53642c9",
+  "title": "Lungs",
+  "author": "alejandro8976",
+  "author_profile": "https://sketchfab.com/alejandro8976",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9b8ea5299b92403eadf662bfa53642c9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "clock": {
+  "uid": "174a3fc826414bfc9693d9b00f43fe57",
+  "title": "Antique Wall Clock",
+  "author": "3DGunsmith",
+  "author_profile": "https://sketchfab.com/3DGunsmith",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/174a3fc826414bfc9693d9b00f43fe57",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "lantern": {
+  "uid": "d4006d2762ab434cb262d46d69433f1f",
+  "title": "Victorian Street Lamp",
+  "author": "Luca Giardina",
+  "author_profile": "https://sketchfab.com/Blulike1969",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d4006d2762ab434cb262d46d69433f1f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "skeleton": {
+  "uid": "4866bd05df2d4febba463295cd24b564",
+  "title": "Low Poly Skeleton",
+  "author": "Samy Belaloui",
+  "author_profile": "https://sketchfab.com/Purzy",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/4866bd05df2d4febba463295cd24b564",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
