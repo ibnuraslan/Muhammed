@@ -620,8 +620,10 @@ def gkey(f, loc, rz, rx=0.0):
 gkey(1, GAV_REST, R_(10)); gkey(1480, GAV_REST, R_(10))
 GH_LOC = lambda f: gav.matrix_world @ V(0.0, -0.15, 0.03)
 def gavel_hand(f):
-    ev(f); M = gav.matrix_world
-    return M @ V(0.0, -0.16, 0.0), (M.to_3x3() @ V(0, 1, 0.2)).normalized(), (M.to_3x3() @ V(1, 0, 0)).normalized()
+    """hammer grip: palm over the handle, fingers wrap across it, thumb on the far side"""
+    ev(f); M = gav.matrix_world; R3 = M.to_3x3()
+    grip = M @ V(0.0, -0.20, 0.0)
+    return grip + R3 @ V(-0.045, 0.0, 0.035), (R3 @ V(1, 0, -0.35)).normalized(), (R3 @ V(0, 0, -1)).normalized()
 gkey(1500, GAV_REST + V(0.02, -0.05, 0.12), R_(5), R_(-20))
 gkey(1525, V(-10.14, 0.30, DAIS_H + 1.04), R_(0), R_(-55))
 gkey(1538, V(-10.03, 0.28, DAIS_H + 0.86), R_(0), R_(8))
@@ -631,10 +633,10 @@ gkey(1710, V(-10.08, 0.32, DAIS_H + 0.90), R_(0), R_(-5))
 pos, YW, feet = seated(PA, 0.0)
 for f in (1200, 1300, 1420):
     PA.P(f, pos + V(0.02 * (f % 3), 0, 0), YW, spine=(14, 0, 0), head=(6, 0, 0), feet=feet, hands={"L": desk(PA, "L", 0.0), "R": desk(PA, "R", 0.0)}, face={"brow": 0.4})
-PA.P(1480, pos, YW, spine=(14, 0, -6), head=(10, -10, 0), feet=feet, hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": (65, 50)}, face={"brow": 0.6})
+PA.P(1480, pos, YW, spine=(14, 0, -6), head=(10, -10, 0), feet=feet, hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": (78, 45)}, face={"brow": 0.6})
 for f in (1500, 1525, 1538, 1546, 1570, 1710):
     PA.P(f, pos + V(0.03 if f == 1538 else 0, 0, 0), YW, spine=(10 if f != 1538 else 20, 0, -8), head=(4 if f != 1538 else 12, -6, 0), feet=feet,
-         hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": (65, 50)}, face={"brow": 0.8})
+         hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": (78, 45)}, face={"brow": 0.8})
 PA.bake()
 pos, YW, feet = seated(PBn, -1.2)
 stamp = bpy.data.objects["Stamp"]
@@ -649,14 +651,15 @@ ST_REST = V(-10.2, -1.38, DAIS_H + 0.785)
 skey(1, ST_REST); skey(1560, ST_REST); skey(1578, ST_REST + V(0.06, 0.1, 0.16), R_(-10)); skey(1592, CERT + V(0, 0, 0.004 + 0.02), R_(0))
 skey(1596, CERT + V(0, 0, 0.004)); skey(1606, CERT + V(0, 0, 0.004)); skey(1625, CERT + V(-0.1, -0.15, 0.10)); skey(1710, CERT + V(-0.12, -0.2, 0.08))
 def stamp_hand(f):
-    ev(f); M = stamp.matrix_world
-    return M @ V(0, 0, 0.15), V(0.3, 0, -1), V(1, 0, 0.2)
+    """palm on the knob, fingers wrapped over it"""
+    ev(f); M = stamp.matrix_world; R3 = M.to_3x3()
+    return M @ V(-0.05, 0.0, 0.15), (R3 @ V(1, 0, -0.45)).normalized(), (R3 @ V(0, 0, -1)).normalized()
 key_vis([bpy.data.objects["StampMark"]] + list(bpy.data.objects["StampMark"].children), [(1596, 1710)])
 for f in (1200, 1300, 1400, 1500):
     PBn.P(f, pos, YW, spine=(16, 0, 4), head=(18 if f % 200 else 4, 8, 0), feet=feet, hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": desk(PBn, "R", -1.2, dx=0.05 * (f % 300 == 0))}, face={"brow": 0.3})
 for f in (1560, 1578, 1592, 1596, 1606, 1625):
     PBn.P(f, pos + V(0.04 if f in (1592, 1596) else 0, 0, 0), YW, spine=(18 if f in (1592, 1596) else 10, 0, 4), head=(16, 8, 0), feet=feet,
-          hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": ("fn", stamp_hand)}, curl={"R": (60, 45)}, face={"brow": 0.6})
+          hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": ("fn", stamp_hand)}, curl={"R": (72, 42)}, face={"brow": 0.6})
 PBn.P(1710, pos, YW, spine=(10, 0, 2), head=(6, 12, 0), feet=feet, hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": desk(PBn, "R", -1.2)})
 PBn.bake()
 pos, YW, feet = seated(PC, 1.2)
