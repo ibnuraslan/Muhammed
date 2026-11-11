@@ -55,17 +55,50 @@ hand("L", 2.55, (0.14, 0.30, 1.0), (0.4, -0.4, -0.5), (0, 1, 0), (-0.2, 0.7, 1.0
 hand("L", 4.0, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
 hand("L", 20.4, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
 hand("L", 20.75, (0.07, 0.26, 0.98), (0.6, -0.4, -0.5), (0, -1, 0), (-0.25, 0.7, 1.0))
-hand("L", 21.05, (0.31, 0.11, 0.93), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
-hand("L", 21.5, (0.31, 0.115, 0.935), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
+hand("L", 20.92, (0.36, 0.26, 0.97), (0.3, -0.8, 0.2), (-1, 0, 0), (0.1, 0.75, 1.0))
+hand("L", 21.05, (0.40, 0.11, 0.93), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
+hand("L", 21.5, (0.40, 0.115, 0.935), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
 hand("R", 0.0, (0.06, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 1.95, (0.07, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 2.2, (0.16, -0.22, 0.92), (0.4, 0, -0.8), (0, -1, 0), (-0.3, -0.6, 1.0))
-hand("R", 2.55, (0.20, -0.16, 1.05), (0.5, 0.3, -0.5), (0, -1, 0), (-0.3, -0.6, 1.0))
+hand("R", 2.55, (0.40, -0.2, 1.1), (0.5, 0.3, -0.3), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 4.0, (0.36, -0.07, 1.06), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
 hand("R", 20.4, (0.36, -0.07, 1.06), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
 hand("R", 21.0, (0.35, -0.06, 1.10), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
 hand("R", 21.5, (0.35, -0.06, 1.09), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
 
+from mathutils.bvhtree import BVHTree as _BVH
+_body = bpy.data.objects["Woman.body"]; _tee = bpy.data.objects["Woman.female_casualsuit01"]
+_gi = {g.index: g.name for g in _body.vertex_groups if g.name in W.data.bones}
+_handL = set(); _armv = set()
+for v in _body.data.vertices:
+    bg = max([g for g in v.groups if g.group in _gi], key=lambda g: g.weight, default=None)
+    if bg is None: continue
+    nm_ = _gi[bg.group]
+    if nm_.startswith(("upperarm", "lowerarm", "wrist", "finger", "metacarpal", "shoulder", "clavicle")): _armv.add(v.index)
+    if bg.weight > 0.5 and nm_.endswith(".L") and nm_.startswith(("finger", "metacarpal")): _handL.add(v.index)
+def _hits(f):
+    saved = [(m, m.show_viewport) for o in (_body, _tee) for m in o.modifiers if m.type != 'ARMATURE']
+    for m, _ in saved: m.show_viewport = False
+    sc.frame_set(f); dg_ = bpy.context.evaluated_depsgraph_get()
+    def ev(o):
+        e = o.evaluated_get(dg_); me = e.to_mesh(); V = [o.matrix_world @ v.co for v in me.vertices]; P = [tuple(p.vertices) for p in me.polygons]; e.to_mesh_clear(); return V, P
+    V, P = ev(_body); TV, TP = ev(_tee)
+    for m, sv in saved: m.show_viewport = sv
+    trees = [_BVH.FromPolygons(V, [p for p in P if not any(i in _armv for i in p)]), _BVH.FromPolygons(TV, TP)]
+    n = 0
+    for i in _handL:
+        for tr in trees:
+            loc, nrm, idx, d = tr.find_nearest(V[i])
+            if loc is not None and 0.002 < d < 0.05 and (V[i] - loc).dot(nrm) < 0: n += 1; break
+    return n
+def settle_palm(t_, base, d, n, pole, out=(0.01, 0, 0)):
+    """push the left hand out (default +X) until no palm/finger vertex is inside her body or tee"""
+    for step in range(15):
+        h = _hits(F(t_))
+        if h == 0: break
+        base = (base[0] + out[0], base[1] + out[1], base[2] + out[2]); hand("L", t_, base, d, n, pole)
+    print("PALM", t_, h, base)
 # basket: rides on the right wrist until the hit (baked), then drops to the floor
 bk = bpy.data.objects["Basket"]
 sc.frame_set(1); bpy.context.view_layer.update()
@@ -154,8 +187,8 @@ for s_ in "LR":
 for t, tw, hy, hp in ((0.0, 0, -10, 12), (1.2, 4, -4, 18), (2.3, 6, 0, 14), (2.9, 25, 50, 0), (20.4, 30, 58, -2), (21.5, 32, 60, -2)):
     f = F(t); CH.key_root(f, Vector((cpos.x, cpos.y, CH.root_head.z - 0.01)), yaw=cyaw)
     CH.key_spine(f, flex=4, twist=tw, head=(hp, hy))
-for t, p in ((0.0, (-2.15, -0.86, 1.18)), (1.2, (-2.2, -0.9, 1.22)), (2.3, (-2.2, -0.9, 1.22)), (2.9, (-2.1, -0.68, 1.28)), (21.5, (-2.08, -0.67, 1.29))):
-    CH.key_hand("R", F(t), Vector(p), Vector((0, -1, 0.4)) if t < 2.5 else Vector((0.3, 0.2, 1.0)), Vector((1, 0, 0)), Vector((cpos.x - 0.45, cpos.y + 0.2, 1.0)))
+for t, p in ((0.0, (-2.15, -0.86, 1.18)), (1.2, (-2.2, -0.9, 1.22)), (2.3, (-2.2, -0.9, 1.22)), (2.9, (-2.36, -0.52, 0.84)), (21.5, (-2.36, -0.51, 0.84))):
+    CH.key_hand("R", F(t), Vector(p), Vector((0, -1, 0.4)) if t < 2.5 else Vector((0, -0.15, -1)), Vector((1, 0, 0)) if t < 2.5 else Vector((-1, 0, 0)), Vector((cpos.x - 0.45, cpos.y + 0.2, 1.0)))
 for t in (0.0, 21.5):
     CH.key_hand("L", F(t), Vector((cpos.x + 0.22, cpos.y - 0.02, 0.8)), Vector((0, 0, -1)), Vector((1, 0, 0)), Vector((cpos.x + 0.5, cpos.y + 0.3, 1.0)))
 B_ = bpy.data.objects["ShopperB"]; BR_ = make_human_ctrl(B_); BH = Human(BR_)
@@ -168,10 +201,55 @@ for s in "LR":
 for t, hy, tw in ((2.3, 0, 0), (2.9, 55, 30), (21.5, 60, 35)):
     BH.key_root(F(t), Vector((bpos.x, bpos.y, BH.root_head.z - 0.02)), yaw=180.0)
     BH.key_spine(F(t), twist=tw, head=(0, hy))
-for s, sx in (("L", 1), ("R", -1)):
+for s, sx in (("L", -1), ("R", 1)):     # facing +Y: her left is -X. Arms relaxed at her sides (also while walking in)
+    BH.key_hand(s, 1, Vector((pathB(1).x + 0.27 * sx, pathB(1).y + 0.03, 0.84)), Vector((0, 0.15, -1)), Vector((-sx, 0, 0)), Vector((pathB(1).x + 0.5 * sx, pathB(1).y - 0.4, 1.1)))
     for t in (2.9, 21.5):
-        BH.key_hand(s, F(t), Vector((bpos.x - 0.15 * sx * -1, bpos.y + 0.1, 1.05)), Vector((0, 1, 0.5)), Vector((sx, 0, 0)), Vector((bpos.x + 0.5 * sx, bpos.y - 0.4, 1.0)))
+        BH.key_hand(s, F(t), Vector((bpos.x + 0.27 * sx, bpos.y + 0.03, 0.84)), Vector((0, 0.15, -1)), Vector((-sx, 0, 0)), Vector((bpos.x + 0.5 * sx, bpos.y - 0.4, 1.1)))
 
+# ================================================================== hands: relaxed curl by default, real grips, flat presses
+# Fingers are posed ONLY by forward-curl rotations about each joint's own bend axis (0..80 deg), so they can never bend backwards.
+CURL = {"relax": ((12, 22, 15), (6, 10, 8)), "grip": ((58, 72, 45), (28, 32, 22)), "flat": ((8, 10, 6), (5, 6, 5)),
+        "touch": ((20, 26, 16), (10, 12, 8)), "press": ((14, 16, 10), (8, 10, 8)), "open": ((4, 6, 4), (4, 4, 4))}
+def curl_axes(rig, s):
+    B = rig.data.bones; ax = {}
+    for k in range(1, 6):
+        h = B["finger%d-1.%s" % (k, s)]; tip = B["finger%d-3.%s" % (k, s)].tail_local
+        d1 = (h.tail_local - h.head_local).normalized(); bend = (tip - h.head_local); bend = bend - d1 * bend.dot(d1)
+        if bend.length < 1e-4:   # fall back to the palm side given by the thumb
+            bend = B["finger1-3.%s" % s].tail_local - h.head_local; bend = bend - d1 * bend.dot(d1)
+        for j in range(1, 4):
+            bn = "finger%d-%d.%s" % (k, j, s); b = B[bn]
+            dj = (b.tail_local - b.head_local).normalized(); a = dj.cross(bend.normalized())
+            if a.length < 1e-4: a = d1.cross(bend.normalized())
+            ax[bn] = (b.matrix_local.to_3x3().inverted() @ a.normalized()).normalized()
+    return ax
+def key_hand_pose(rig, s, f, kind, axes):
+    fing, th = CURL[kind]
+    for k in range(1, 6):
+        angs = th if k == 1 else fing
+        spread = (k - 3) * 0.0
+        for j in range(1, 4):
+            bn = "finger%d-%d.%s" % (k, j, s); pb = rig.pose.bones[bn]; pb.rotation_mode = 'QUATERNION'
+            pb.rotation_quaternion = Quaternion(axes[bn], math.radians(angs[j - 1] * (1.0 + 0.06 * (k - 3) if k > 1 else 1.0)))
+            pb.keyframe_insert("rotation_quaternion", frame=f, group=bn)
+HANDS = {"Woman": {"L": [(0.0, "touch"), (1.95, "touch"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (21.05, "flat"), (21.5, "flat")],
+                   "R": [(0.0, "grip"), (2.22, "grip"), (2.4, "relax"), (3.0, "open"), (21.5, "open")]},
+         "ShopperA": {"L": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")],
+                      "R": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")]},
+         "ShopperB": {"L": [(0.0, "relax"), (21.5, "relax")], "R": [(0.0, "relax"), (21.5, "relax")]},
+         "Stocker": {"L": [(0.0, "press"), (21.5, "press")], "R": [(0.0, "press"), (21.5, "press")]},
+         "ShopperC": {"L": [(0.0, "relax"), (21.5, "relax")], "R": [(0.0, "touch"), (2.3, "touch"), (2.9, "flat"), (21.5, "flat")]}}
+for who, sides in HANDS.items():
+    rig = bpy.data.objects[who]
+    for s_, sched in sides.items():
+        axes = curl_axes(rig, s_)
+        for t_, kind in sched: key_hand_pose(rig, s_, F(t_), kind, axes)
+# settle the wound-press hand only now that the finger curls are keyed
+for t_ in (4.0, 20.4, 20.75):
+    settle_palm(t_, (0.05, 0.28, 0.98) if t_ < 20.7 else (0.07, 0.26, 0.98), (0.6, -0.3 if t_ < 20.7 else -0.4, -0.6 if t_ < 20.7 else -0.5), (0, -1, 0), (-0.25, 0.7, 1.0), out=(0, 0.01, 0))
+for t_ in (20.92, 21.05, 21.5):
+    if t_ == 20.92: settle_palm(t_, (0.36, 0.26, 0.97), (0.3, -0.8, 0.2), (-1, 0, 0), (0.1, 0.75, 1.0))
+    else: settle_palm(t_, (0.30, 0.11 if t_ < 21.2 else 0.115, 0.93 if t_ < 21.2 else 0.935), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
 # ================================================================== impact point + macro root (child of her spine03)
 sc.frame_set(F(2.0)); bpy.context.view_layer.update()
 dg = bpy.context.evaluated_depsgraph_get()

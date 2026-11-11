@@ -1,0 +1,16 @@
+BellyFat hand audit: step 2, 110 frames, 1100 hand-checks
+
+HAND_IN_HAND        0
+HAND_IN_BODY        0
+HAND_IN_CLOTHES     0
+HAND_IN_OTHER       0
+WRIST_BEND          0
+
+by character:
+  Woman     {}
+  ShopperA  {}
+  ShopperB  {}
+  Stocker   {}
+  ShopperC  {}
+
+TOTAL 0
