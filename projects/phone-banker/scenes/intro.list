@@ -1,0 +1,6 @@
+1A Stained handset (2.5 s hold, then push)|bankoffice|handset|0.15
+1B The empty office|bankoffice|empty|0.5
+2A Militia Ladas pull up at the bank|bank|pullup|0.75
+2B Officer on the steps, handed water|bank|steps|0.8
+3A Investigators search drawers and files|bankoffice|search|0.6
+3B He looks at the phone; push in|bankoffice|find|0.9

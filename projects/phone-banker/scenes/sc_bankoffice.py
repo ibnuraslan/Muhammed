@@ -1094,7 +1094,7 @@ MOVES = {
     "door_push": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("empty"), cam=_push((A + 0.6, DOOR_Y, 1.6), (1.4, -0.4, 1.35), PHONE + Vector((0, 0.3, 0.2)), PHONE + Vector((0, 0.2, 0.05)), 30),
                       focus=lambda c, t: PHONE),
     # chapter 2
-    "visitor_in": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("visitor_in"), cam=_push((-1.4, 2.6, 1.6), (-1.25, 2.45, 1.58), (1.8, -0.8, 1.3), (1.2, -0.3, 1.3), 28),
+    "visitor_in": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("visitor_in"), title=("CHAPTER 2", "THE MAN IN THE OFFICE", 12, 120), cam=_push((-1.4, 2.6, 1.6), (-1.25, 2.45, 1.58), (1.8, -0.8, 1.3), (1.2, -0.3, 1.3), 28),
                        focus=lambda c, t: Vector((2.6, -1.4, 1.3)).lerp(Vector((1.1, -0.1, 1.3)), ease(t))),
     "across": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("across"), cam=_push((-2.5, 1.1, 1.4), (-2.3, 1.0, 1.38), (0.0, 1.0, 1.0), (0.0, 1.05, 1.0), 30),
                    focus=lambda c, t: Vector((-0.2, 1.0, 1.0))),

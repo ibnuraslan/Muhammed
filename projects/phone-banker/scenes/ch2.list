@@ -1,0 +1,20 @@
+1A Board member walks in + CHAPTER 2 / THE MAN IN THE OFFICE|bankoffice|visitor_in|0.5
+1B Two men across the desk|bankoffice|across|0.6
+2A Visitor alone, chair empty|bankoffice|alone|0.6
+2B He reads the share papers|bankoffice|reads|0.6
+3A Autumn rain: detained|bank|detain|0.6
+3B Thirty days later, alone|bank|release|0.6
+4A Analyser prints a trace|forlab|gc_print|0.6
+4B File marked SARATOV|forlab|saratov|0.7
+5A Closed-town checkpoint, bus|closedtown|checkpoint|0.45
+5B Institute corridor, a tube flickers|closedtown|institute|0.6
+6A Night rain: the parcel handover|station|handover|0.55
+6B Alone on the platform, train leaves|station|platform|0.6
+7A Sealed glass ampoules in the case|forlab|ampoules|0.6
+7B Prosecutor slides the file across|forlab|slide_file|0.7
+8A Banker steps out; visitor stays|bankoffice|steps_out|0.5
+8B He glances at the door; push to the phone|bankoffice|glance|0.6
+9A Snow: nobody answers the door|bank|doorbell|0.4
+9B Same street: snow, leaves, rain|bank|seasons|0.2
+10A Plain-clothes officers wait|apartment|wait|0.6
+10B He comes out; they walk him to a car|apartment|arrest|0.7

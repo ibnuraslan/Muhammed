@@ -1,0 +1,24 @@
+1A Summer street, bank + CHAPTER 1 / TWO HOSPITALS|bank|traffic|0.5
+1B Banker up the steps, doorman|bank|arrive_bank|0.6
+2A He dials the white phone|bankoffice|dial|0.7
+2B On the phone, a note|bankoffice|note|0.6
+3A Brother at the door; he's slumped|bankoffice|brother_in|0.6
+3B Brother walks him out|bankoffice|brother_help|0.5
+4A Bed wheeled down the corridor|hospital|gurney|0.6
+4B Ward: monitor, nurse at the drip|hospital|ward|0.6
+5A Ambulance at the second hospital|hospital|arrive|0.75
+5B Dawn, clock at six, curtain drawn|hospital|dawn|0.6
+6A Pathologist reads the file|hospital|path_read|0.6
+6B Closes it, switches off the lamp|hospital|path_light|0.95
+7A Two experts compare the files|forlab|compare|0.6
+7B Chart recorder sinks toward zero|forlab|recorder|0.7
+8A Night ward, ventilator bellows|hospital|nightward|0.5
+8B Doctor at the monitor|hospital|doctor|0.6
+9A Investigators in suits at the desk|bankoffice|sealed|0.6
+9B Handset lowered into the bag|bankoffice|bag|0.7
+10A Secretary's desk, door ajar|bankoffice|ante_desk|0.5
+10B Sealed door, bucket, officer unwell|bankoffice|ante_trolley|0.6
+11A Mourners lay carnations|memorial|mourners|0.6
+11B Two dignitaries, heads bowed|memorial|dignitaries|0.6
+12A Visitor ledger, pages turned|bankoffice|ledger|0.45
+12B Push from the door to the phone|bankoffice|door_push|0.6

@@ -1,0 +1,20 @@
+1A Doors closed on the press + CHAPTER 3 / THE POISON WITHOUT A NAME|court|doors|0.6
+1B Prosecutor before the bench|court|prosecutor|0.6
+2A Defendant in the dock|court|dock|0.6
+2B Defence and the door photograph|court|defence|0.7
+3A The verdict, all standing|court|verdict|0.6
+3B Led out through the side door|court|led_out|0.5
+4A Clerk ties the case volumes|court|volumes|0.6
+4B Archive lights go out|court|archive_dark|0.5
+5A English street, spire, police tape|salisbury|street|0.6
+5B Suits at the front door|salisbury|suits|0.6
+6A Push to the door handle|salisbury|handle|0.7
+6B Pull back down the path|salisbury|path|0.6
+7A Match push to the white handset|bankoffice|match|0.6
+7B Years later: dust sheets|bankoffice|dust|0.6
+8A Reporter photographs the copies|forlab|photocopies|0.6
+8B Two specialists; a page pushed back|forlab|specialists|0.7
+9A On the phone at the kitchen window|closedtown|kitchen|0.6
+9B Snow over the blocks, one lit window|closedtown|blocks|0.6
+10A The evidence photograph|forlab|photo|0.7
+10B The case closes; lights go out|forlab|case_close|0.7
