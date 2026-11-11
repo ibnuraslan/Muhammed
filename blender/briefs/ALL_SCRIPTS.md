@@ -151,3 +151,28 @@ The bullet hit him in what should have been a deadly spot, but somehow, he staye
 *Target about 40.0 s, 88 words*
 
 The sea began pulling back fast, exposing the ocean floor. People on the beach were confused, and then they noticed a wave coming toward the shore. This was a massive tsunami, triggered by an undersea earthquake. As the wave got closer, it grew taller, reaching up to 100 feet in some places. It slammed into the coast with unimaginable force, destroying everything in its path. The wave swept entire neighbourhoods away, leaving nothing behind but rubble. And in this region alone, more than 167,000 people lost their lives.
+
+## Connect26: DwarfGiant
+*Target about 39.0 s, 113 words*
+
+He was far too short to join the army, but a tumor was quietly growing in his brain. It flooded his body with growth hormone, and suddenly, the four-foot-six man started to grow. His hands, feet and even his tongue got bigger, and he shot up more than two feet in just a few years. But as he grew, his spine began to curve. His vision blurred, and eventually, he struggled to hear. Doctors finally removed the tumor, which slowed his growth, but didn't stop it completely. By the time he died, he was seven foot eight, making him the only man in history to live as both a dwarf and a giant.
+
+## Connect27: SwedishCoffee
+*Target about 44.5 s, 109 words*
+
+The twins were about to be executed, but the king suddenly stopped it. You see, the king hated coffee and was convinced it was poison. He'd even banned it across his kingdom. So instead of killing them, he ordered one twin to drink three pots of coffee every day, while the other drank three pots of tea. Two doctors watched them for years, expecting the coffee drinker to die early. But as time passed, both doctors died first, and then the king was assassinated. Finally, the tea-drinking twin died, leaving the coffee drinker as the last survivor of the experiment. And years later, the ban on coffee was lifted.
+
+## Connect28: ToucanBeak
+*Target about 37.5 s, 111 words*
+
+A stick swung down and smashed right into the toucan's upper beak. Now, every time it tried to eat, the fruit just slipped away. So rescuers scanned the broken stump, then compared it to another toucan's beak, using its shape to rebuild the missing half on a computer. But the new beak couldn't be too heavy, or it would pull the bird's head forward. So they made it full-size, but almost hollow. Once it was ready, rescuers lined it up with the broken stump, glued the base into place, and fixed the rest with a pin. And for the first time since the attack, the toucan could pick up fruit again.
+
+## Connect29: AIAsleep
+*Target about 43.5 s, 107 words*
+
+As he drove, the car's AI scanned his face and flashed red, warning him to wake up. He was confused, because he wasn't sleeping, so he sat up straighter to look more alert. But nothing worked until he forced his eyes wide open. The moment they relaxed, the alarm went off again, twenty times on a single trip. You see, the AI was designed to beep whenever it couldn't see the iris. But the man naturally had epicanthic folds, where the skin of the upper eyelid overlaps near the nose, forming a smooth flap that covers part of the iris, making the AI think he was asleep.
+
+## Connect30: FanCancer
+*Target about 44.0 s, 131 words*
+
+At a hockey game, she spotted a strange mole on the back of a man's neck. It was an odd color, and she thought it could be cancer. She was nervous about upsetting a stranger, but someone had to warn him. So she typed a note in big letters on her phone and pressed it against the glass. The team's equipment manager read the message, but walked away without saying a word. Still, he went to a doctor just in case, and when they checked the mole, they found cancer, which they quickly removed. He asked people to help him find the woman. Strangers shared the story, and when she was finally identified, both teams surprised her with a ten thousand dollar scholarship as a thank you for saving his life.
