@@ -44,7 +44,7 @@ Recurring sets: **DRAIN** (yard of the suburban house), **BOUTIQUE** (nameless A
 | RAID | "In June 2009, police move in … some still on their original Harry Winston stands." | Dawn: unmarked cars stop on a suburban street and officers walk fast to a front door. | Under a staircase, a panel lifts away to show jewels on small stands lit by a torch beam. |
 | DRAIN | "It's Yahiaoui's house … the big stone that keeps coming up on the recordings." | The house in grey morning, an officer walking slowly round the yard looking down. | Inside the car, a recorder's reels turn on the seat while the house sits blurred outside. |
 | DRAIN | "They keep coming back to the house … the lighter patch in the drain." | A second, fifth visit: officers return through the gate in drizzle, umbrellas up. | An officer crouches and runs a torch across the drain, the pale patch glowing faintly. |
-| DRAIN | "The container holds nineteen rings … twenty-five million dollars." | The open container in rain, the camera circling slowly over the rings and the big diamond. | An evidence bag is lowered over the container as rain spots the plastic. |
+| DRAIN | "The container holds nineteen rings … twenty-five million dollars." | The open container in rain, the camera circling slowly over the rings and the big diamond. | A police photographer's flash pops over the open container, a yellow evidence marker beside it. |
 | TABLE | "The drain gives the police a haul they can lay out and count … supposed to protect the shop." | Overhead push down a long table as rings are laid out in rows. | An officer moves along the table writing numbers on evidence tags. |
 
 ## Chapter Four · The Night Before
