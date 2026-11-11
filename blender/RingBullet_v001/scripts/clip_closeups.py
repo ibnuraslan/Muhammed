@@ -7,6 +7,9 @@ sc = bpy.context.scene; O = bpy.data.objects
 def bone(arm, n, f): sc.frame_set(f); return O[arm].matrix_world @ O[arm].pose.bones[n].head
 def obj(n, f): sc.frame_set(f); return O[n].matrix_world.translation.copy()
 SHOTS = [("gun_grip", 1, lambda: bone("Robber", "wrist.R", 1), Vector((0.25, 0.1, 0.1)), 45),
+         ("hands_up_front", 400, lambda: bone("Owner", "head", 400), Vector((0.0, -0.75, 0.0)), 45),
+         ("impact_hands", 560, lambda: bone("Owner", "head", 560), Vector((0.2, -0.7, 0.05)), 45),
+         ("wince_hand", 920, lambda: bone("Owner", "wrist.L", 920), Vector((0.15, -0.4, 0.1)), 45),
          ("ring_up", 400, lambda: obj("WeddingRing", 400), Vector((0.05, -0.1, 0.03)), 60),
          ("hands_face_side", 541, lambda: bone("Owner", "head", 541), Vector((0.45, -0.1, 0.0)), 50),
          ("hand_neck", 1040, lambda: bone("Owner", "wrist.R", 1040), Vector((-0.2, -0.15, 0.06)), 50),

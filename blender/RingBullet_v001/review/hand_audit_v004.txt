@@ -1,0 +1,48 @@
+Hand audit, step 4, frames 1-1410
+HAND_COUNTS {'Owner fingersL_vs_clothes': 27, 'Owner fingersR_vs_clothes': 67, 'Owner handR_vs_torso': 43}
+FLAGGED_FRAMES 90 [153, 157, 161, 997, 1001, 1005, 1009, 1013, 1017, 1021, 1025, 1029, 1033, 1037, 1041, 1045, 1049, 1053, 1057, 1061, 1065, 1069, 1073, 1077, 1081, 1085, 1089, 1125, 1129, 1133, 1137, 1141, 1145, 1149, 1153, 1157, 1161, 1165, 1169, 1173, 1177, 1181, 1185, 1189, 1193, 1197, 1201, 1205, 1209, 1213, 1217, 1221, 1225, 1249, 1253, 1269, 1277, 1281, 1285, 1289, 1293, 1297, 1301, 1305, 1309, 1313, 1317, 1321, 1325, 1329, 1333, 1337, 1341, 1345, 1349, 1353, 1357, 1361, 1365, 1369]
+F 153 Owner fingersL_vs_clothes 4 tri pairs
+F 157 Owner fingersL_vs_clothes 5 tri pairs
+F 161 Owner fingersL_vs_clothes 3 tri pairs
+F 997 Owner fingersR_vs_clothes 65 tri pairs
+F1001 Owner handR_vs_torso   24 tri pairs
+F1001 Owner fingersR_vs_clothes 145 tri pairs
+F1005 Owner handR_vs_torso   26 tri pairs
+F1005 Owner fingersR_vs_clothes 119 tri pairs
+F1009 Owner handR_vs_torso   18 tri pairs
+F1009 Owner fingersR_vs_clothes 97 tri pairs
+F1013 Owner handR_vs_torso   13 tri pairs
+F1013 Owner fingersR_vs_clothes 113 tri pairs
+F1017 Owner handR_vs_torso   4 tri pairs
+F1017 Owner fingersR_vs_clothes 124 tri pairs
+F1021 Owner fingersR_vs_clothes 128 tri pairs
+F1025 Owner handR_vs_torso   5 tri pairs
+F1025 Owner fingersR_vs_clothes 126 tri pairs
+F1029 Owner handR_vs_torso   10 tri pairs
+F1029 Owner fingersR_vs_clothes 134 tri pairs
+F1033 Owner handR_vs_torso   6 tri pairs
+F1033 Owner fingersR_vs_clothes 180 tri pairs
+F1037 Owner fingersR_vs_clothes 192 tri pairs
+F1041 Owner handR_vs_torso   21 tri pairs
+F1041 Owner fingersR_vs_clothes 221 tri pairs
+F1045 Owner handR_vs_torso   48 tri pairs
+F1045 Owner fingersR_vs_clothes 216 tri pairs
+F1049 Owner handR_vs_torso   88 tri pairs
+F1049 Owner fingersR_vs_clothes 208 tri pairs
+F1053 Owner handR_vs_torso   65 tri pairs
+F1053 Owner fingersR_vs_clothes 239 tri pairs
+F1057 Owner handR_vs_torso   37 tri pairs
+F1061 Owner handR_vs_torso   51 tri pairs
+F1065 Owner handR_vs_torso   83 tri pairs
+F1269 Owner fingersL_vs_clothes 62 tri pairs
+F1277 Owner fingersL_vs_clothes 89 tri pairs
+F1281 Owner fingersL_vs_clothes 55 tri pairs
+F1297 Owner fingersL_vs_clothes 38 tri pairs
+F1301 Owner fingersL_vs_clothes 111 tri pairs
+F1305 Owner fingersL_vs_clothes 80 tri pairs
+F1309 Owner fingersL_vs_clothes 108 tri pairs
+F1313 Owner fingersL_vs_clothes 88 tri pairs
+F1329 Owner fingersL_vs_clothes 35 tri pairs
+F1333 Owner fingersL_vs_clothes 100 tri pairs
+F1337 Owner fingersL_vs_clothes 84 tri pairs
+F1341 Owner fingersL_vs_clothes 82 tri pairs

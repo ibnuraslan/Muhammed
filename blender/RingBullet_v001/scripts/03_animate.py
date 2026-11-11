@@ -49,7 +49,7 @@ RING_SPLAY = {3: 9.0, 5: -10.0}   # keep middle finger and pinky off the wedding
 def key_fingers(R, s, f, curl=0.0, spread=0.0, thumb=0.0, per=None):
     """curl in degrees (+ bends toward palm), spread in degrees (fan out)"""
     for i in range(1, 6):
-        c = per[i - 1] if per else curl
+        c = max(4.0, per[i - 1] if per else curl)   # relaxed curl, never bent backwards
         for j in (1, 2, 3):
             n = "finger%d-%d.%s" % (i, j, s)
             if n not in R.PB: continue
@@ -57,6 +57,7 @@ def key_fingers(R, s, f, curl=0.0, spread=0.0, thumb=0.0, per=None):
             ang = c * (1.0 if j == 1 else 1.1) if i > 1 else thumb * (0.6 if j == 1 else 1.0)
             sp = (spread * (i - 3) / 2.0) if (j == 1 and i > 1) else 0.0
             if s == "L" and j == 1 and R is ROW: sp += RING_SPLAY.get(i, 0.0)
+            sp = max(-10.0, min(10.0, sp)); ang = ang if i > 1 else max(-15.0, min(45.0, ang))
             q = Euler((math.radians(ang), 0, math.radians(sp * (1 if s == "L" else -1))), 'XYZ').to_quaternion()
             pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 
@@ -98,30 +99,31 @@ def hands_low(f, jitter=0.0):
 hands_low(1); hands_low(FIRE, 0.01)
 # the snap up (slow motion): f163 -> f390
 def hands_up(f, k=1.0, jl=(0, 0, 0), rl=(0, 0, 0), right=True):
-    o_hand("L", f, Vector((0.07, -0.30, 1.50)) + Vector(jl), (-0.15, -0.1, 1.0), palm("L", (-0.15, 1.0, 0.0)), (0.45, -0.1, 1.1))
-    if right: o_hand("R", f, Vector((-0.10, -0.27, 1.47)) + Vector(rl), (0.2, -0.1, 1.0), palm("R", (0.15, 1.0, 0.0)), (-0.45, -0.1, 1.1))
-o_hand("L", 70, (0.25, -0.3, 1.12), (0.0, -0.7, 0.7), palm("L", (0.2, -1.0, 0.0)), (0.5, 0.2, 0.95))
+    o_hand("L", f, Vector((0.07, -0.30, 1.50)) + Vector(jl), (0.04, -0.1, 1.0), palm("L", (-0.15, 1.0, 0.0)), (0.45, -0.1, 1.1))
+    if right: o_hand("R", f, Vector((-0.16, -0.27, 1.45)) + Vector(rl), (0.0, -0.1, 1.0), palm("R", (0.15, 1.0, 0.0)), (-0.45, -0.1, 1.1))
+o_hand("L", 70, (0.27, -0.32, 1.12), (0.0, -0.7, 0.7), palm("L", (0.2, -1.0, 0.0)), (0.5, 0.2, 0.95))
 o_hand("R", 70, (-0.25, -0.3, 1.12), (0.0, -0.7, 0.7), palm("R", (-0.2, -1.0, 0.0)), (-0.5, 0.2, 0.95))
-o_hand("L", 200, (0.16, -0.34, 1.33), (-0.1, -0.3, 1.0), palm("L", (-0.3, 0.9, -0.2)), (0.5, 0.0, 1.0))
+o_hand("L", 200, (0.25, -0.44, 1.33), (-0.1, -0.3, 1.0), palm("L", (-0.3, 0.9, -0.2)), (0.5, 0.0, 1.0))
 o_hand("R", 200, (-0.18, -0.32, 1.3), (0.1, -0.3, 1.0), palm("R", (0.3, 0.9, -0.2)), (-0.5, 0.0, 1.0))
-hands_up(262); hands_up(400, jl=(0.0, 0.004, 0.003)); hands_up(541, jl=(0.0, 0.006, 0.004), rl=(0, 0.004, 0))
+hands_up(262); hands_up(400, jl=(0.0, 0.004, 0.003)); hands_up(541, jl=(0.0, 0.006, 0.004), rl=(-0.05, 0.0, 0))
 # impact jolt (hand knocked back toward his face, then eases forward again in slow motion)
-hands_up(550, jl=(0.015, 0.045, 0.02), rl=(0, 0.01, 0)); hands_up(620, jl=(0.02, 0.05, 0.015), rl=(0, 0.012, 0))
-hands_up(760, jl=(0.015, 0.035, 0.01), rl=(0, 0.01, 0)); hands_up(880, jl=(0.01, 0.03, 0.0), rl=(0, 0.01, 0))
+hands_up(550, jl=(0.015, 0.045, 0.02), rl=(-0.05, 0.0, 0)); hands_up(620, jl=(0.02, 0.05, 0.015), rl=(-0.05, 0.0, 0))
+hands_up(760, jl=(0.015, 0.035, 0.01), rl=(-0.04, 0.0, 0)); hands_up(880, jl=(0.01, 0.03, 0.0), rl=(0, 0.01, 0))
 # wince: left hand flinches away (finger hit) f890-930
 hands_up(900, jl=(0.05, 0.06, -0.04), rl=(-0.01, 0.02, -0.03)); hands_up(970, jl=(0.04, 0.05, -0.06), rl=(-0.01, 0.02, -0.04))
 # right hand flies to the right side of his neck f990-1010, left hand stays up and drops a bit
-o_hand("R", 990, (-0.18, -0.2, 1.38), (0.25, 0.6, 0.6), palm("R", (0.9, 0.1, 0.0)), (-0.5, -0.2, 1.0))
-o_hand("R", 1004, (-0.145, -0.08, 1.40), (0.22, 0.75, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1060, (-0.145, -0.075, 1.395), (0.22, 0.75, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 990, (-0.27, -0.18, 1.42), (0.25, 0.6, 0.6), palm("R", (0.9, 0.1, 0.0)), (-0.5, -0.2, 1.0))
+o_hand("R", 1004, (-0.2, -0.075, 1.465), (0.22, 0.75, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1060, (-0.2, -0.07, 1.46), (0.22, 0.75, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
 hands_up(1004, jl=(0.04, 0.03, -0.1), right=False)
 # look at the ring: left hand lowered to chest in front, palm toward him, back of hand up so the ring faces camera
 o_hand("L", 1075, (0.12, -0.32, 1.28), (-0.6, -0.4, 0.5), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
 o_hand("L", 1150, (0.10, -0.34, 1.27), (-0.6, -0.45, 0.45), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
 o_hand("L", 1235, (0.13, -0.33, 1.25), (-0.55, -0.45, 0.5), palm("L", (0.05, 0.6, 0.6)), (0.5, 0.0, 0.9))
-o_hand("L", 1262, (0.2, -0.26, 1.12), (-0.4, -0.6, 0.4), palm("L", (0.1, 0.6, 0.7)), (0.5, 0.1, 0.9))
-o_hand("R", 1120, (-0.15, -0.14, 1.22), (0.3, 0.5, 0.6), palm("R", (0.9, 0.2, 0.0)), (-0.5, -0.3, 1.0))
-o_hand("R", 1240, (-0.24, -0.08, 1.0), (0.0, -0.3, -1.0), palm("R", (-0.9, 0.0, 0.0)), (-0.5, 0.3, 1.0))
+o_hand("L", 1262, (0.33, -0.32, 1.1), (-0.4, -0.6, 0.4), palm("L", (0.1, 0.6, 0.7)), (0.5, 0.1, 0.9))
+o_hand("R", 1085, (-0.27, -0.22, 1.36), (0.2, 0.2, 0.9), palm("R", (0.9, 0.0, 0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1120, (-0.28, -0.3, 1.12), (0.3, 0.5, 0.6), palm("R", (0.9, 0.2, 0.0)), (-0.5, -0.3, 1.0))
+o_hand("R", 1240, (-0.3, -0.14, 0.98), (0.0, -0.3, -1.0), palm("R", (-0.9, 0.0, 0.0)), (-0.5, 0.3, 1.0))
 # fingers
 for s in "LR":
     key_fingers(ROW, s, 1, curl=25, spread=4, thumb=10); key_fingers(ROW, s, FIRE, curl=18, spread=8, thumb=5)
@@ -129,7 +131,7 @@ for s in "LR":
     key_fingers(ROW, s, 541, curl=-4, spread=26, thumb=-10)
 key_fingers(ROW, "L", 550, curl=-12, spread=32, thumb=-14); key_fingers(ROW, "L", 700, curl=-2, spread=26, thumb=-10)
 key_fingers(ROW, "L", 890, curl=-2, spread=26, thumb=-10); key_fingers(ROW, "L", 905, curl=35, spread=10, thumb=20)
-key_fingers(ROW, "L", 1000, curl=25, spread=8, thumb=15); key_fingers(ROW, "R", 1000, curl=20, spread=4, thumb=10)
+key_fingers(ROW, "L", 1000, curl=25, spread=8, thumb=15); key_fingers(ROW, "R", 1000, curl=10, spread=4, thumb=10)
 key_fingers(ROW, "L", 1075, curl=4, spread=10, thumb=0); key_fingers(ROW, "L", 1150, curl=2, spread=12, thumb=0)
 key_fingers(ROW, "L", 1235, curl=20, spread=4, thumb=10); key_fingers(ROW, "R", 1240, curl=25, spread=2, thumb=10)
 
@@ -171,11 +173,12 @@ for f in range(1252, 1411, 6):
     p = wpath(f); yw = math.radians(wyaw(f)); Rz = Matrix.Rotation(yw, 3, 'Z')
     dist = (p - WP[0][1]).length; ph = math.sin(2 * math.pi * dist / 0.62 / 2 * 2)
     for s, sx in (("L", 1), ("R", -1)):
-        if s == "L" and f < 1272: continue
+        if s == "L" and f < 1263: continue
         sw = ph * 0.12 * (1 if s == "L" else -1)
-        loc = p + Rz @ Vector((0.2 * sx, -sw, 0.86))
+        loc = p + Rz @ Vector((0.31 * sx, -sw - 0.07, 0.95))
+        if s == "L" and f < 1270: loc = p + Rz @ Vector((0.4 * sx, -0.24, 1.04))   # swing out around the hip while turning into the walk
         HO.key_hand(s, f, loc, Rz @ Vector((0.0, -0.1, -1.0)), Rz @ Vector((-0.9 * sx, 0.0, 0.0)), pole=p + Rz @ Vector((0.4 * sx, 0.4, 1.1)))
-for s in "LR": key_fingers(ROW, s, 1260, curl=22, spread=2, thumb=10)
+for s in "LR": key_fingers(ROW, s, 1260, curl=38, spread=0, thumb=20)
 
 # ---------------- robber: behind the camera side, at (0.32,-2.45), facing +Y, right arm extended with the gun
 RP = Vector((0.32, -2.45, 0))
@@ -216,6 +219,22 @@ of_hand("R", 1300, (-0.22, -0.02, 0.86), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3,
 for f, z in ((1325, 1.3), (1340, 1.42), (1355, 1.3), (1370, 1.42), (1385, 1.32)):   # beckoning wave
     of_hand("R", f, (-0.28, -0.3, z), (0.0, -0.4, 1.0), (0.0, 1.0, 0.0), (-0.5, 0.1, 1.0))
 key_fingers(ROF, "L", 1, curl=40, spread=2, thumb=10); key_fingers(ROF, "R", 1, curl=20, spread=4, thumb=10)
+
+# ---------------- hand rule: Limit Rotation (local) on fingers, thumbs, wrists of every character
+def add_hand_limits(R):
+    for pb in R.PB:
+        n = pb.name
+        if n.startswith("finger") and n[-2:] in (".L", ".R"):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HandLimit"
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            if n.startswith("finger1"):           # thumb: natural cone
+                c.min_x, c.max_x = math.radians(-20), math.radians(50); c.min_y, c.max_y = math.radians(-30), math.radians(30); c.min_z, c.max_z = math.radians(-35), math.radians(35)
+            else:                                 # fingers: 0..90 forward, no backward bend, +-10 spread
+                c.min_x, c.max_x = 0.0, math.radians(90); c.min_y, c.max_y = math.radians(-5), math.radians(5); c.min_z, c.max_z = math.radians(-10), math.radians(10)
+        elif n.startswith("wrist."):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HandLimit"
+            c.use_limit_x = c.use_limit_z = True; c.min_x, c.max_x = math.radians(-70), math.radians(70); c.min_z, c.max_z = math.radians(-45), math.radians(45)
+for R_ in (ROW, RRB, ROF): add_hand_limits(R_)
 
 # =============================================================== attach props to bones
 def bone_world(R, n, f=None):
