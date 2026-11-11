@@ -98,11 +98,11 @@ for fc in _fcurves(bpy.data.objects["WaveSpray"].data.shape_keys.animation_data.
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 spd = bpy.data.materials["M_CrestSpray"].node_tree.nodes["SPRAY_DENS"].inputs["To Max"]
 nq = bpy.data.materials["M_CrestSpray"].node_tree.nodes["NQ"].inputs["W"]
-for t, d in ((0, 0.0), (7, 0.12), (10, 0.15), (15.6, 0.3), (18.3, 0.45), (21.3, 0.6), (22.0, 0.15), (22.6, 0.05), (29.6, 0.04), (30.6, 0.0)):
+for t, d in ((0, 0.0), (7, 0.12), (10, 0.15), (15.6, 0.3), (18.3, 0.45), (21.3, 0.6), (22.0, 0.15), (22.5, 0.0)):
     spd.default_value = d; spd.keyframe_insert("default_value", frame=F(t))
 for t, wv in ((0, 0), (40, 12)):
     nq.default_value = wv; nq.keyframe_insert("default_value", frame=F(t))
-key_hide(bpy.data.objects["WaveSpray"], [(1, False), (F(30.7), True)])
+key_hide(bpy.data.objects["WaveSpray"], [(1, False), (F(22.55), True)])
 fnw = bpy.data.materials["M_Wave"].node_tree.nodes["FN"].inputs["W"]
 for t, wv in ((0, 0), (40, 8)):
     fnw.default_value = wv; fnw.keyframe_insert("default_value", frame=F(t))
@@ -120,8 +120,8 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.07, 0.05, 0.032), 0.2),
-                          (30.0, (0.075, 0.055, 0.035), 0.15), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
+    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.07, 0.05, 0.032), 0.07),
+                          (30.0, (0.075, 0.055, 0.035), 0.06), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
     for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.3), (31.0, 0.3), (32.0, 0.05)):
@@ -246,6 +246,14 @@ for p in (o for o in bpy.data.objects if o.name.startswith("Hotel_Sofa_")):
     key_tr(p, F(t0 + 1.0), loc=(p.location.x + random.uniform(-2, 2), -42.5, p.location.z + 1.2), rot=(random.uniform(-1, 1), random.uniform(-1.5, 1.5), random.uniform(-1, 1)))
     p.location.z = 0.9; key_tr(p, F(t0 + 2.2), loc=tuple(p.location))
 
+for o in bpy.data.objects:
+    if o.name.startswith("HotelSpray_"):
+        i = int(o.name.split("_")[1]); t0 = T_front(-28) - 0.05 + 0.03 * i
+        key_hide(o, [(1, True), (F(t0), False), (F(t0 + 1.6), True)])
+        l = o.location.copy()
+        key_tr(o, F(t0), loc=tuple(l), scale=0.3)
+        key_tr(o, F(t0 + 0.5), loc=(l.x, l.y + 2, l.z + 5), scale=(4, 3, 6))
+        key_tr(o, F(t0 + 1.5), loc=(l.x, l.y - 4, l.z + 7), scale=(6, 5, 7))
 # ---------------------------------------------------------------- town: houses come apart, tilt and slide into the flood; rubble remains
 houses = [o for o in bpy.data.objects if o.name.startswith("House_") and "_" not in o.name[6:]]
 survivors = set(random.sample(range(len(houses)), 8))
@@ -310,7 +318,10 @@ for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (1
 ring = bpy.data.objects["D_ShockRing"]; rme = bpy.data.materials["M_Shock"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for t, sc_, e in ((14.35, 0.01, 0.0), (14.42, 0.5, 4.0), (14.7, 2.5, 2.0), (14.9, 3.5, 0.0)):
     ring.scale = (sc_,) * 3; ring.keyframe_insert("scale", frame=F(t)); rme.default_value = e; rme.keyframe_insert("default_value", frame=F(t))
-key_hide(ring, [(1, True), (F(14.36), False), (F(14.92), True)])
+key_hide(ring, [(1, True)])
+fl_ = bpy.data.lights["D_Flash"]
+for t, e in ((14.35, 0.0), (14.42, 3000.0), (14.7, 800.0), (15.1, 0.0)):
+    fl_.energy = e; fl_.keyframe_insert("energy", frame=F(t))
 for o in bpy.data.objects:
     if o.name.startswith("D_Chunk_1"):
         l = o.location.copy(); r0 = o.rotation_euler.copy()
@@ -368,7 +379,8 @@ dust = bpy.data.objects["DustVolume"]; key_hide(dust, [(1, True), (F(30.4), Fals
 bowl_hide = [o for o in bpy.data.collections["Diorama"].objects]
 for o in bowl_hide:
     if o.name.startswith(("D_Chunk_1", "D_ShockRing")):
-        key_hide(o, [(F(15.45), True)]); continue
+        if o.name.startswith("D_Chunk_1"): key_hide(o, [(F(15.45), True)])
+        continue
     key_hide(o, [(1, True), (F(12.4), False), (F(15.45), True)])
 for o in bpy.data.objects:   # clear the camera's path through the beach furniture at 18-20 s
     if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 5) < 6:

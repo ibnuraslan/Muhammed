@@ -56,7 +56,7 @@ m, nt = node_mat("M_Terrain")
 NN, LL = nt.nodes, nt.links
 bsdf = NN["Principled BSDF"]
 tc = NN.new("ShaderNodeTexCoord"); sx = NN.new("ShaderNodeSeparateXYZ"); LL.new(tc.outputs["Object"], sx.inputs["Vector"])
-zones = [("red_laterite_soil_stones", 3.0, (0.62, 0.55, 0.48)), ("coast_sand_01", 2.5, (1.0, 0.95, 0.85)),
+zones = [("red_laterite_soil_stones", 3.0, (0.5, 0.46, 0.42)), ("coast_sand_01", 2.5, (1.0, 0.95, 0.85)),
          ("damp_beach_sand", 2.5, (0.85, 0.8, 0.72)), ("coral_mud_01", 4.0, (0.55, 0.55, 0.48))]
 socks = [pbr_nodes(nt, tid, s, tint, coord=tc.outputs["Object"], x=-1400, y=900 - 700 * i) for i, (tid, s, tint) in enumerate(zones)]
 edges = [(-50, -40), (-2, 6), (24, 40)]
@@ -236,8 +236,22 @@ rub_roof = import_glb("rubble_roof", 7.0, "max", C_LIB); rub_brick = import_glb(
 rub_wood = import_glb("rubble_wood", 4.5, "max", C_LIB); mosque = import_glb("mosque", 26.0, "max", C_LIB)
 for m_ in mosque.data.materials:
     b_ = m_.node_tree.nodes.get("Principled BSDF") if m_ and m_.use_nodes else None
-    if b_ and not b_.inputs["Base Color"].links and max(b_.inputs["Base Color"].default_value[:3]) < 0.06:
+    if b_ and not b_.inputs["Base Color"].links and max(b_.inputs["Base Color"].default_value[:3]) < 0.3:
         b_.inputs["Base Color"].default_value = (0.72, 0.68, 0.6, 1)
+# one minaret imports with inverted custom normals (renders black): clear them and recalc outward
+sc.collection.objects.link(mosque); bpy.context.view_layer.update()
+bpy.ops.object.select_all(action='DESELECT'); mosque.select_set(True); bpy.context.view_layer.objects.active = mosque
+try: bpy.ops.mesh.customdata_custom_splitnormals_clear()
+except Exception as e_: print("normals clear failed", e_)
+sc.collection.objects.unlink(mosque)
+bm_ = bmesh.new(); bm_.from_mesh(mosque.data); bmesh.ops.recalc_face_normals(bm_, faces=bm_.faces); bm_.to_mesh(mosque.data); bm_.free()
+for m_ in mosque.data.materials:   # calligraphy panels count as on-screen text: replace with plain plaster
+    if not (m_ and m_.use_nodes): continue
+    for n_ in list(m_.node_tree.nodes):
+        if n_.type == 'TEX_IMAGE' and n_.image and tuple(n_.image.size) in ((512, 256), (256, 256)):
+            for l_ in list(n_.outputs["Color"].links): m_.node_tree.links.remove(l_)
+            bb = m_.node_tree.nodes.get("Principled BSDF")
+            if bb: bb.inputs["Base Color"].default_value = (0.7, 0.66, 0.58, 1)
 mosque = link(mosque, C_TOWN); mosque.name = "Mosque"; mosque.location = (-44, -162, terrain_h(-44, -162) - 0.32)
 mosque.rotation_euler = (0, 0, math.radians(90))
 
@@ -370,7 +384,7 @@ win_m = simple_mat("M_Window", (0.03, 0.035, 0.04), 0.15)
 door_m = simple_mat("M_Door", (0.3, 0.17, 0.08), 0.6)
 BLD = {  # name: (target size, axis, footprint radius, weight)
     "b_old1": (11.0, "y", 6.0, 0.10), "b_shack": (24.0, "max", 7.0, 0.14),
-    "b_slum1": (7.5, "z", 3.8, 0.13), "b_slum5": (9.0, "x", 5.0, 0.15), "b_pariaman": (14.0, "x", 8.0, 0.10),
+    "b_slum1": (7.5, "z", 3.8, 0.06), "b_slum5": (9.0, "x", 5.0, 0.15), "b_pariaman": (14.0, "x", 8.0, 0.10),
     "b_rumah": (28.0, "max", 14.0, 0.04), "b_apt": (18.0, "z", 6.3, 0.04), "house": (10.0, "x", 6.0, 0.08), "house2": (8.5, "x", 6.0, 0.07)}
 BL = {}
 for n, (sz, ax, rad, wt) in BLD.items():
@@ -425,7 +439,7 @@ def pole_line(pts, tag):
         prev = tops
 for rx in (34, -24):
     for side in (-1, 1):
-        pole_line([(rx + side * 4.8, y, 0.0) for y in np.arange(-50, -340, -28)], "S%d%d" % (rx, side))
+        pole_line([(rx + side * 4.8, y, 0.0) for y in np.arange(-50, -340, -28) if not (rx == -24 and -200 < y < -110)], "S%d%d" % (rx, side))
 pole_line([(x, -29.0, math.radians(90)) for x in np.arange(-150, 160, 30) if abs(x) > 20], "beach")
 for i in range(90):
     x = random.uniform(-220, 220); y = random.uniform(-340, -50)
@@ -500,7 +514,7 @@ bowl.data.materials.append(m)
 bowl.visible_shadow = False
 # the cross-section block: camera looks +X at the section face (x = -3); screen right = shore (-Y)
 oce = pbr_mat("M_OceanCrust", "worn_rock_natural_01", 1.5, (0.32, 0.33, 0.36))
-con = pbr_mat("M_ContCrust", "excavated_soil_wall", 2.5, (0.95, 0.82, 0.65))
+con = pbr_mat("M_ContCrust", "sandstone_cracks", 2.0, (0.55, 0.38, 0.24))
 mant = pbr_mat("M_Mantle", "rock_wall_17", 2.0, (0.55, 0.22, 0.1))
 _mb = mant.node_tree.nodes["Principled BSDF"]; _mn = mant.node_tree.nodes.new("ShaderNodeTexNoise"); _mn.inputs["Scale"].default_value = 0.6; _mn.inputs["Detail"].default_value = 8
 _mr = mant.node_tree.nodes.new("ShaderNodeValToRGB"); _mr.color_ramp.elements[0].position = 0.45; _mr.color_ramp.elements[0].color = (0, 0, 0, 1); _mr.color_ramp.elements[1].position = 0.7; _mr.color_ramp.elements[1].color = (1.0, 0.35, 0.05, 1)
@@ -509,7 +523,7 @@ fault_m = simple_mat("M_FaultGlow", (1, 0.5, 0.1), 0.5, emit=((1.0, 0.55, 0.1), 
 arrow_m = simple_mat("M_Arrow", (1.0, 0.75, 0.2), 0.4, emit=((1.0, 0.7, 0.15), 2.0))
 wcol, nt = node_mat("M_WaterColumn")
 nt.nodes.remove(nt.nodes["Principled BSDF"])
-gl = nt.nodes.new("ShaderNodeBsdfGlass"); gl.inputs["IOR"].default_value = 1.33; gl.inputs["Roughness"].default_value = 0.05; gl.inputs["Color"].default_value = (0.85, 0.95, 1.0, 1)
+gl = nt.nodes.new("ShaderNodeBsdfTransparent"); gl.inputs["Color"].default_value = (0.92, 0.97, 1.0, 1)
 nt.links.new(gl.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
 wv = nt.nodes.new("ShaderNodeVolumePrincipled"); wv.inputs["Color"].default_value = (0.1, 0.35, 0.6, 1); wv.inputs["Density"].default_value = 0.12
 wv.inputs["Absorption Color"].default_value = (0.05, 0.25, 0.5, 1)
@@ -538,8 +552,8 @@ NY = 160
 bpy.ops.mesh.primitive_grid_add(x_subdivisions=6, y_subdivisions=NY, size=1, location=(D.x, D.y, D.z + 2.6))
 wtop = bpy.context.active_object; wtop.name = "D_WaterTop"; link(wtop, C_D); wtop.scale = (6, 20, 1)
 bpy.ops.object.transform_apply(scale=True)
-wtop.data.materials.append(wcol)
-wbody = prism("D_WaterBody", [(10, 2.58), (-10, 2.58)] + [(dy, z + 0.02) for dy, z in seab[::-1]][::-1][::-1], wcol)
+wtop.data.materials.append(simple_mat("M_WaterTopSurf2", (0.04, 0.14, 0.22), 0.03, trans=0.9))
+wbody = prism("D_WaterBody", [(10, 2.58), (-10, 2.58)] + [(dy, z + 0.3) for dy, z in seab[::-1]][::-1][::-1], wcol)
 wtop.shape_key_add(name="Basis")
 for nm, cen in (("Bulge", [0.0]), ("SplitA", [-6.0]), ("SplitB", [6.0])):
     k = wtop.shape_key_add(name=nm, from_mix=False)
@@ -564,7 +578,9 @@ for nm_ in ("D_Mantle", "D_OceanPlate", "D_ContPlate", "D_Tip"):
     for p_ in o_.data.polygons: p_.use_smooth = True
 ring_m = simple_mat("M_Shock", (1.0, 0.5, 0.15), 0.5, emit=((1.0, 0.45, 0.1), 0.0))
 bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.025, major_segments=64, minor_segments=8, location=(D.x - 3.15, D.y + 0.3, D.z - 2.8), rotation=(0, math.radians(90), 0))
-ring = bpy.context.active_object; ring.name = "D_ShockRing"; link(ring, C_D); ring.data.materials.append(ring_m); ring.scale = (0.01,) * 3
+ring = bpy.context.active_object; ring.name = "D_ShockRing"
+fl_ = bpy.data.lights.new("D_Flash", "POINT"); fl_.energy = 0.0; fl_.color = (1.0, 0.6, 0.25); fl_.shadow_soft_size = 1.0
+flo = bpy.data.objects.new("D_Flash", fl_); C_D.objects.link(flo); flo.location = (D.x - 4.0, D.y + 0.3, D.z - 2.6); link(ring, C_D); ring.data.materials.append(ring_m); ring.scale = (0.01,) * 3
 for i in range(12):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=random.uniform(0.25, 0.45), location=(D.x - random.uniform(-2.8, 2.8), D.y + random.uniform(-2.5, 3.0), D.z + plate_top(0.5) + random.uniform(-0.4, 0.4)))
     o_ = bpy.context.active_object; o_.name = "D_Chunk_%d" % (100 + i); link(o_, C_D); o_.data.materials.append(oce)
@@ -592,6 +608,9 @@ vol = NN.new("ShaderNodeVolumePrincipled"); vol.inputs["Color"].default_value = 
 vol.name = "DUSTVOL"; vol.inputs["Anisotropy"].default_value = 0.6
 LL.new(vol.outputs[0], NN["Material Output"].inputs["Volume"])
 dust = box("DustVolume", C_FX, (500, 420, 40), (0, -160, 20), dust_m)
+for i in range(9):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(-14 + i * 3.5, -27.5, 2.0 + (i % 3) * 2.5))
+    o_ = bpy.context.active_object; o_.name = "HotelSpray_%d" % i; link(o_, C_FX); o_.data.materials.append(spray_m); o_.scale = (0.01,) * 3
 
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("SCENE_DONE", len(HOUSES), "houses", len(PALMS), "palms")
