@@ -11,7 +11,7 @@ sc.render.fps = 60; sc.render.fps_base = 1.0
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 1080, 1920, 100
 sc.frame_start, sc.frame_end = 1, 1290
 sc.render.engine = 'CYCLES'; sc.cycles.device = 'CPU'
-sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
+sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5; sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 sc.view_settings.exposure = -0.6; sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
 
 def coll(name):
@@ -97,17 +97,32 @@ pmats = []
 for i, c in enumerate(PAL):
     m = bpy.data.materials.new("M_pack%02d" % i); m.use_nodes = True
     nt = m.node_tree; N = nt.nodes; L = nt.links; b = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Generated"], sep.inputs["Vector"])
-    # band label: a lighter stripe across the middle plus a darker cap; reads as printed packaging without any text
-    band = N.new("ShaderNodeMapRange"); band.interpolation_type = 'STEPPED'; band.inputs["Steps"].default_value = 1
-    L.new(sep.outputs["Z"], band.inputs["Value"])
-    m1 = N.new("ShaderNodeMath"); m1.operation = 'PINGPONG'; m1.inputs[1].default_value = 0.5; L.new(sep.outputs["Z"], m1.inputs[0])
-    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.32; L.new(m1.outputs[0], gt.inputs[0])
-    c2 = PAL[(i + 3) % len(PAL)]
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(gt.outputs[0], mx.inputs["Factor"])
-    mx.inputs["A"].default_value = (*c, 1); mx.inputs["B"].default_value = (*[0.5 * a + 0.5 * b_ for a, b_ in zip(c2, (0.95, 0.93, 0.88))], 1)
-    L.new(mx.outputs["Result"], b.inputs["Base Color"])
-    b.inputs["Roughness"].default_value = 0.35 + 0.3 * random.random()
+    # printed-packaging look without text: per-face UV label = coloured band + round badge + fine stripes + print grain,
+    # varied per product by the face attribute "rnd"
+    uv = N.new("ShaderNodeUVMap"); uv.uv_map = "UVMap"; sep = N.new("ShaderNodeSeparateXYZ"); L.new(uv.outputs["UV"], sep.inputs["Vector"])
+    at = N.new("ShaderNodeAttribute"); at.attribute_name = "rnd"; at.attribute_type = 'GEOMETRY'
+    c2 = PAL[(i + 3) % len(PAL)]; c3 = PAL[(i + 7) % len(PAL)]
+    def mth(op, a_, b_=None, v=None):
+        n_ = N.new("ShaderNodeMath"); n_.operation = op
+        L.new(a_, n_.inputs[0]) if not isinstance(a_, float) else n_.inputs[0].__setattr__("default_value", a_)
+        if b_ is not None: L.new(b_, n_.inputs[1])
+        if v is not None: n_.inputs[1].default_value = v
+        return n_.outputs[0]
+    lo = mth('MULTIPLY_ADD', at.outputs["Fac"], None, 0.25); lo.node.inputs[2].default_value = 0.2   # band start 0.2..0.45
+    inband = mth('MULTIPLY', mth('GREATER_THAN', sep.outputs["Y"], lo), mth('LESS_THAN', sep.outputs["Y"], mth('ADD', lo, None, 0.32)))
+    cx = mth('SUBTRACT', sep.outputs["X"], None, 0.5); cy = mth('SUBTRACT', sep.outputs["Y"], mth('ADD', lo, None, 0.16))
+    rr = mth('SQRT', mth('ADD', mth('MULTIPLY', cx, cx), mth('MULTIPLY', cy, cy)))
+    badge = mth('LESS_THAN', rr, None, 0.13)
+    stripes = mth('MULTIPLY', mth('GREATER_THAN', sep.outputs["Y"], None, 0.82), mth('GREATER_THAN', mth('SINE', mth('MULTIPLY', sep.outputs["Y"], None, 90.0)), None, 0.3))
+    hs = N.new("ShaderNodeHueSaturation"); hs.inputs["Color"].default_value = (*[0.45 * a_ + 0.55 * b_ for a_, b_ in zip(c2, (0.95, 0.93, 0.88))], 1)
+    L.new(mth('SUBTRACT', at.outputs["Fac"], None, 0.0), hs.inputs["Hue"])
+    m1 = N.new("ShaderNodeMix"); m1.data_type = 'RGBA'; L.new(inband, m1.inputs["Factor"]); m1.inputs["A"].default_value = (*c, 1); L.new(hs.outputs[0], m1.inputs["B"])
+    m2 = N.new("ShaderNodeMix"); m2.data_type = 'RGBA'; L.new(badge, m2.inputs["Factor"]); L.new(m1.outputs["Result"], m2.inputs["A"]); m2.inputs["B"].default_value = (*c3, 1)
+    m3 = N.new("ShaderNodeMix"); m3.data_type = 'RGBA'; L.new(stripes, m3.inputs["Factor"]); L.new(m2.outputs["Result"], m3.inputs["A"]); m3.inputs["B"].default_value = (0.05, 0.05, 0.05, 1)
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 300; L.new(uv.outputs["UV"], nz.inputs["Vector"])
+    gr = N.new("ShaderNodeMix"); gr.data_type = 'RGBA'; gr.blend_type = 'MULTIPLY'; gr.inputs["Factor"].default_value = 0.12
+    L.new(m3.outputs["Result"], gr.inputs["A"]); L.new(nz.outputs["Color"], gr.inputs["B"]); L.new(gr.outputs["Result"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.3 + 0.3 * random.random()
     pmats.append(m)
 canm = [mat("M_can%d" % i, c, 0.25, metal=0.6) for i, c in enumerate([(0.7, 0.1, 0.1), (0.2, 0.4, 0.7), (0.8, 0.75, 0.6), (0.2, 0.5, 0.25)])]
 bottm = [mat("M_bottle%d" % i, c, 0.05, transm=0.9) for i, c in enumerate([(0.9, 0.95, 0.9), (0.3, 0.6, 0.3), (0.8, 0.5, 0.2)])]
@@ -119,11 +134,23 @@ def gondola(name, side):
     """one long shelf run at y = side*SHELF_Y, products facing the aisle; one mesh, many material slots"""
     bm = bmesh.new()
     mats = [shelfm, uprm] + stripm + pmats + canm + bottm
+    uvl = bm.loops.layers.uv.new("UVMap"); rl = bm.faces.layers.float.new("rnd")
+    def face_uvs(faces, val):
+        for f in faces:
+            n_ = f.normal
+            ax = Vector((0, 0, 1)) if abs(n_.z) < 0.9 else Vector((0, 1, 0))
+            u_ = ax.cross(n_).normalized(); v_ = n_.cross(u_).normalized() if abs(n_.z) < 0.9 else ax
+            us = [l.vert.co.dot(u_) for l in f.loops]; vs = [l.vert.co.dot(v_) for l in f.loops]
+            for l in f.loops:
+                l[uvl].uv = ((l.vert.co.dot(u_) - min(us)) / max(1e-6, max(us) - min(us)), (l.vert.co.dot(v_) - min(vs)) / max(1e-6, max(vs) - min(vs)))
+            f[rl] = val
     def add_box(cx, cy, cz, sx, sy, sz, mi):
         r = bmesh.ops.create_cube(bm, size=1.0)
         for v in r["verts"]:
             v.co = Vector((cx + v.co.x * sx, cy + v.co.y * sy, cz + v.co.z * sz))
-        for f in {f for v in r["verts"] for f in v.link_faces}: f.material_index = mi
+        fs = {f for v in r["verts"] for f in v.link_faces}
+        for f in fs: f.material_index = mi
+        [f.normal_update() for f in fs]; face_uvs(fs, random.random())
     def add_cyl(cx, cy, cz, rad, h, mi, seg=12):
         r = bmesh.ops.create_cone(bm, cap_ends=True, segments=seg, radius1=rad, radius2=rad, depth=h)
         for v in r["verts"]: v.co += Vector((cx, cy, cz))
@@ -176,14 +203,14 @@ for x in (-6.0, 0.0, 6.0):
     for dy in (-0.45, 0.45):
         obj("SignWire", box_mesh("SignWire", 0.004, 0.004, 0.68), REAL, (x, dy, 3.25), [uprm])
 # ceiling light troffers (emissive) + area lights
-tubem = mat("M_tube", (1, 1, 1), 0.2, emit=(1.0, 0.97, 0.9), estr=4.0)
+tubem = mat("M_tube", (1, 1, 1), 0.2, emit=(1.0, 0.97, 0.9), estr=3.0)
 LIGHTS = []
 for x in [-8 + 2.0 * i for i in range(9)]:
     for y in (-0.5, 0.5):
         obj("Tube", box_mesh("Tube", 1.4, 0.18, 0.03), REAL, (x, y, 3.56), [tubem])
 for x in [-8 + 4.0 * i for i in range(5)]:
     ld = bpy.data.lights.new("StoreArea", 'AREA'); ld.shape = 'RECTANGLE'; ld.size = 3.0; ld.size_y = 1.4
-    ld.energy = 320; ld.color = (1.0, 0.96, 0.9)
+    ld.energy = 220; ld.color = (1.0, 0.96, 0.9)
     lo = bpy.data.objects.new("StoreArea", ld); link(lo, REAL); lo.location = (x, 0, 3.45); LIGHTS.append(lo)
 # store world: soft warm grey (enclosed set; only seen in reflections)
 w = bpy.data.worlds.new("W_store"); sc.world = w; w.use_nodes = True
@@ -315,7 +342,7 @@ epi = grid_slab("M_Epidermis", 0.0, 0.06, skin_epi)
 der = grid_slab("M_Dermis", 0.06, 0.32, skin_der)
 sept = slab("M_FatBed", 0.32, 4.3, sept_m)
 sept.location.y = -YB / 2 - 0.25                # recessed so lobules bulge from the face
-fas = slab("M_Fascia", 4.3, 4.42, fascia_m)
+fas = slab("M_Fascia", 4.3, 4.42, fascia_m); fas.location.y = -YB / 2 - 0.27
 # muscle: fibre bundles (long rounded boxes along Z, stacked), striated look via bump noise
 fib_me = []
 for k in range(3):
@@ -333,7 +360,7 @@ def fibre(name, x, y, k):
 for i in range(8):
     for j in range(4):
         fibre("M_MuscleFib_%d_%d" % (i, j), 4.5 + i * 0.118 + (0.059 if j % 2 else 0), -0.07 - j * 0.11, i * 4 + j)
-musc_back = slab("M_MuscleBed", 4.42, 5.5, musc_m); musc_back.location.y = -YB / 2 - 0.1
+musc_back = slab("M_MuscleBed", 4.42, 5.5, musc_m); musc_back.location.y = -YB / 2 - 0.3
 perit = grid_slab("M_Peritoneum", 5.5, 5.56, perit_m, 24, 24)
 # intestines: tubes coiling behind the peritoneum (curves with bevel)
 gut_objs = []
@@ -390,8 +417,8 @@ for i, (c, r) in enumerate(pts):
 # energy rings (emissive tori around the channel, keyed later)
 ring_m = bpy.data.materials.new("M_ring"); ring_m.use_nodes = True; nt = ring_m.node_tree; N = nt.nodes; L = nt.links
 N.remove(N["Principled BSDF"]); mo = N["Material Output"]; oi = N.new("ShaderNodeObjectInfo")
-em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.92, 0.7, 1)
-ms = N.new("ShaderNodeMath"); ms.operation = 'MULTIPLY'; ms.inputs[1].default_value = 12.0; L.new(oi.outputs["Alpha"], ms.inputs[0]); L.new(ms.outputs[0], em.inputs["Strength"])
+em = N.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (1.0, 0.72, 0.38, 1)
+ms = N.new("ShaderNodeMath"); ms.operation = 'MULTIPLY'; ms.inputs[1].default_value = 6.0; L.new(oi.outputs["Alpha"], ms.inputs[0]); L.new(ms.outputs[0], em.inputs["Strength"])
 tr = N.new("ShaderNodeBsdfTransparent"); mxs = N.new("ShaderNodeMixShader")
 L.new(oi.outputs["Alpha"], mxs.inputs[0]); L.new(tr.outputs[0], mxs.inputs[1]); L.new(em.outputs[0], mxs.inputs[2]); L.new(mxs.outputs[0], mo.inputs["Surface"])
 bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=64, radius1=1.0, radius2=1.0, depth=0.06)

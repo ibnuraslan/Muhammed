@@ -54,8 +54,9 @@ hand("L", 2.15, (0.22, 0.42, 1.18), (0.3, 0.6, -0.4), (0, 0, 1), (-0.2, 0.8, 1.0
 hand("L", 2.55, (0.14, 0.30, 1.0), (0.4, -0.4, -0.5), (0, 1, 0), (-0.2, 0.7, 1.0))
 hand("L", 4.0, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
 hand("L", 20.4, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
-hand("L", 21.0, (0.06, 0.27, 0.99), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
-hand("L", 21.5, (0.05, 0.28, 0.985), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
+hand("L", 20.75, (0.07, 0.26, 0.98), (0.6, -0.4, -0.5), (0, -1, 0), (-0.25, 0.7, 1.0))
+hand("L", 21.05, (0.31, 0.11, 0.93), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
+hand("L", 21.5, (0.31, 0.115, 0.935), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
 hand("R", 0.0, (0.06, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 1.95, (0.07, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 2.2, (0.16, -0.22, 0.92), (0.4, 0, -0.8), (0, -1, 0), (-0.3, -0.6, 1.0))
@@ -74,7 +75,7 @@ OFF = wristM(1).inverted() @ (Matrix.Translation(wpt(0.07, -0.26, 0.66)) @ Matri
 for f in list(range(1, F(2.25) + 1, 2)) + [F(2.25)]:
     M = wristM(f) @ OFF; bk.location = M.translation; bk.rotation_euler = M.to_euler()
     bk.keyframe_insert("location", frame=f); bk.keyframe_insert("rotation_euler", frame=f)
-for t, p, r in ((2.6, (0.25, -0.35, 0.10), (0.4, 0.2, 1.8)), (2.75, (0.28, -0.38, 0.10), (0.3, 0.1, 1.85)), (21.5, (0.28, -0.38, 0.10), (0.3, 0.1, 1.85))):
+for t, p, r in ((2.6, (0.25, -0.35, 0.16), (0.4, 0.2, 1.8)), (2.68, (0.27, -0.37, 0.101), (0.0, 0.0, 1.82)), (2.78, (0.28, -0.38, 0.115), (0.06, 0.0, 1.85)), (2.88, (0.28, -0.38, 0.101), (0.0, 0.0, 1.85)), (21.5, (0.28, -0.38, 0.101), (0.0, 0.0, 1.85))):
     bk.location = wpt(*p); bk.rotation_euler = r
     bk.keyframe_insert("location", frame=F(t)); bk.keyframe_insert("rotation_euler", frame=F(t))
 # falling cans knocked from the shelf by her flailing left hand at the hit
@@ -88,7 +89,7 @@ for i in range(3):
         c.location = p; c.rotation_euler = r; c.keyframe_insert("location", frame=F(t)); c.keyframe_insert("rotation_euler", frame=F(t))
 
 # ================================================================== background shoppers
-A = bpy.data.objects["ShopperA"]; AR = make_human_ctrl(A); AH = Human(AR)
+A = bpy.data.objects["ShopperA"]; AR = make_human_ctrl(A); AH = Human(AR); A.location.z = 0.015
 cart = bpy.data.objects["Cart"]
 def pathA(f):
     t = min(T(f), 2.6); u = t / 2.6
@@ -190,7 +191,18 @@ for nm, gain in (("M_Fabric", 1.0), ("M_Epidermis", 1.0), ("M_Dermis", 0.85)):
         r2 = v.co.y ** 2 + v.co.z ** 2
         k.data[i].co = v.co + Vector((gain * math.exp(-r2 / 0.6), 0, 0))
     for f in range(F(1.95), F(4.5), 2):
-        k.value = max(-0.5, min(1.0, dimple_val(T(f)) / 1.0)); k.slider_min = -1; k.keyframe_insert("value", frame=f)
+        dv = dimple_val(T(f)) + (0.07 if nm == "M_Fabric" and 2.0 <= T(f) < 3.2 else 0.0)   # the fabric sits 0.06 u above the skin the tip touches
+        k.value = max(-0.5, min(1.0, dv)); k.slider_min = -1; k.keyframe_insert("value", frame=f)
+    # after the pierce the layer stays parted round the bullet: open a clean round hole (radial push to r >= 0.23)
+    h = o.shape_key_add(name="hole", from_mix=False)
+    for i, v in enumerate(o.data.vertices):
+        rr = math.hypot(v.co.y, v.co.z)
+        if rr < 0.5:
+            d_ = Vector((0, v.co.y, v.co.z)).normalized() if rr > 1e-4 else Vector((0, 0, 1))
+            nr = 0.23 + (rr / 0.5) * 0.27
+            h.data[i].co = v.co + d_ * (nr - rr) + Vector((0.06 * (1 - rr / 0.5), 0, 0))
+    for t_, hv in ((3.1, 0.0), (3.22, 1.0), (21.5, 1.0)):
+        h.value = hv; h.keyframe_insert("value", frame=F(t_))
 # real tee dimple: Warp from the impact point toward the inside
 we_from = bpy.data.objects.new("WarpFrom", None); sc.collection.objects.link(we_from); we_from.parent = root; we_from.location = (0, 0, 0)
 we_to = bpy.data.objects.new("WarpTo", None); sc.collection.objects.link(we_to); we_to.parent = root
@@ -250,7 +262,7 @@ RINGS = sorted([o for o in bpy.data.objects if o.name.startswith("M_Ring")], key
 EMIT = [3.35, 4.0, 4.8, 5.7, 6.7, 7.85, 8.6, 9.4, 10.3, 11.2, 12.3, 13.6]
 for o, te_ in zip(RINGS, EMIT):
     x = D(te_) - 0.05; e = max(0.2, min(1.0, vel(te_) / 1.0))
-    for t, rr, a in ((te_ - 0.02, 0.2, 0.0), (te_, 0.25, 0.9 * e), (te_ + 0.5, 1.2 + 0.8 * e, 0.55 * e), (te_ + 1.4, 2.4 + 1.0 * e, 0.0)):
+    for t, rr, a in ((te_ - 0.02, 0.2, 0.0), (te_, 0.25, 0.9 * e), (te_ + 0.5, 1.2 + 0.8 * e, 0.45 * e), (te_ + 1.4, 2.4 + 1.0 * e, 0.0)):
         o.location = (x, 0, 0); o.scale = (1, rr, rr); o.color = (1, 1, 1, a)
         for p in ("location", "scale", "color"): o.keyframe_insert(p, frame=F(t))
 # muscle fibres: the front rows bow back out of the bullet's way (shape key), all shiver when it arrives
@@ -274,6 +286,27 @@ for t in (0, 21.5):
 for o in [o for o in bpy.data.objects if o.name.startswith("M_Gut") and o.type == 'MESH' and "Bed" not in o.name]:
     dm = o.modifiers.new("peristalsis", 'DISPLACE'); dm.texture = tex; dm.texture_coords = 'OBJECT'; dm.texture_coords_object = gn; dm.strength = 0.25
 
+# fat droplets shed from the channel wall as the bullet ploughs through (secondary motion), drifting out and settling
+import bmesh as _bm
+_b = _bm.new(); _bm.ops.create_icosphere(_b, subdivisions=2, radius=1.0); dme = bpy.data.meshes.new("Droplet"); _b.to_mesh(dme); _b.free()
+for p_ in dme.polygons: p_.use_smooth = True
+dme.materials.append(bpy.data.materials["M_fat_lobule"])
+MC = bpy.data.collections["MACRO"]
+for i in range(48):
+    te_ = 3.3 + i * 0.22
+    if te_ > 15.0: break
+    o = bpy.data.objects.new("M_Drop%02d" % i, dme); MC.objects.link(o); o.parent = root
+    x0 = D(te_) - 0.15; ang = random.uniform(0.2, 2.9); r0 = 0.2
+    dirv = Vector((random.uniform(-0.3, 0.1), math.cos(ang), math.sin(ang) * random.choice((-1, 1))))
+    sz = random.uniform(0.035, 0.07) * max(0.4, min(1.0, vel(te_) / 0.8))
+    for t_, k_, s_ in ((te_ - 0.02, 0.0, 0.0), (te_, 0.0, 1.0), (te_ + 0.6, 0.5, 1.0), (te_ + 2.0, 0.8, 0.8), (te_ + 3.5, 0.85, 0.0)):
+        o.location = Vector((x0, 0, 0)) + dirv.normalized() * (r0 + k_ * random.uniform(0.6, 1.0)); o.scale = (sz * s_,) * 3
+        o.keyframe_insert("location", frame=F(t_)); o.keyframe_insert("scale", frame=F(t_))
+# vessels pulse with the heartbeat (~80 bpm)
+for o in [o for o in bpy.data.objects if o.name.startswith("M_Vessel")]:
+    for f in range(SWAP_IN - 2, SWAP_OUT + 4, 6):
+        t_ = T(f); b_ = max(0.0, math.sin(2 * math.pi * t_ * 1.33)) ** 3
+        o.scale = (1.0, 1.0 + 0.03 * b_, 1.0 + 0.03 * b_); o.keyframe_insert("scale", frame=f)
 # ================================================================== visibility swap (one camera; the store and the macro set trade places while fabric fills the frame)
 MACO = [o for o in bpy.data.collections["MACRO"].all_objects]
 _ms = set(MACO)
@@ -304,12 +337,11 @@ def anchor(name, f):
     raise KeyError(name)
 # (t, anchor, offset(local units), az, el, dist(units), lens)
 CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
-      (0.45, "torso", (0, 0, -4), 175, -3, 142, 28),
       (0.75, "tip", (0.3, 0, 0), 165, 5, 6.0, 30),
       (1.05, "tip", (0.3, 0, 0.1), 148, 4, 4.0, 30),
       (1.35, "tip", (0.2, 0, 0.1), 105, 6, 3.4, 30),
       (1.65, "tip", (0.3, 0, 0.1), 152, 6, 4.0, 30),
-      (1.9, "tip", (0.3, 0, 0), 110, 3, 3.5, 40),
+      (1.9, "hole", (-1.2, 0, 0), 110, 3, 3.5, 40),
       (2.05, "hole", (0.0, 0, 0), 95, 2, 2.4, 50),
       (2.3, "hole", (0, -0.2, 0.05), 135, 8, 1.5, 50),
       (2.55, "hole", (0, -0.55, 0.1), 160, 5, 0.72, 50),
@@ -334,26 +366,46 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (19.8, "tip", (-0.8, 0, 0), 98, 8, 6.0, 32),
       (20.1, "hole", (1.2, -0.2, 0), 105, 15, 4.2, 40),
       (20.4, "hole", (0, -0.55, 0.1), 160, 5, 0.72, 50),
+      (20.6, "hole", (-3.0, 0, 2.0), 158, 6, 6.0, 45),
       (20.8, "face", (-2, 0, -6), 152, 6, 28, 40),
       (21.5, "face", (-2, 0, -8), 138, 9, 48, 35)]
 kt = [k[0] for k in CK]
-azf = catmull([(k[0], k[3]) for k in CK]); elf = catmull([(k[0], k[4]) for k in CK])
-ldf = catmull([(k[0], math.log(k[5])) for k in CK]); lnf = pchip([(k[0], k[6]) for k in CK])
-STAT = [anchor(k[1], min(FEND, F(k[0]))) + Vector(k[2]) for k in CK]
-STX = catmull([(k[0], v.x) for k, v in zip(CK, STAT)]); STY = catmull([(k[0], v.y) for k, v in zip(CK, STAT)]); STZ = catmull([(k[0], v.z) for k, v in zip(CK, STAT)])
-OFX = catmull([(k[0], k[2][0]) for k in CK]); OFY = catmull([(k[0], k[2][1]) for k in CK]); OFZ = catmull([(k[0], k[2][2]) for k in CK])
+def DS(t, w=0.1):
+    """bullet tip smoothed over +-w s (C1 through the impact kink): the camera's moving reference"""
+    n = 9; acc = 0.0; ws = 0.0
+    for j in range(n):
+        u = -w + 2 * w * j / (n - 1); g = math.exp(-(u / (0.5 * w)) ** 2); acc += g * D(t + u); ws += g
+    return acc / ws
+class CamSolve:
+    """target = ref(t) + catmull offsets (anchor values at key time, relative to ref); camera = target + spherical (az, el, log dist)"""
+    def __init__(self, keys, ref):
+        self.ref = ref
+        rel = [anchor(k[1], max(1, min(FEND, F(k[0])))) + Vector(k[2]) - Vector((ref(k[0]), 0, 0)) for k in keys]
+        self.rx = catmull([(k[0], v.x) for k, v in zip(keys, rel)]); self.ry = catmull([(k[0], v.y) for k, v in zip(keys, rel)])
+        self.rz = catmull([(k[0], v.z) for k, v in zip(keys, rel)])
+        self.az = catmull([(k[0], k[3]) for k in keys]); self.el = catmull([(k[0], k[4]) for k in keys])
+        self.ld = catmull([(k[0], math.log(k[5])) for k in keys]); self.ln = pchip([(k[0], k[6]) for k in keys])
+    def __call__(self, t):
+        tgt = Vector((self.ref(t), 0, 0)) + Vector((self.rx(t), self.ry(t), self.rz(t)))
+        az = math.radians(self.az(t)); el = math.radians(self.el(t)); dist = math.exp(self.ld(t))
+        return tgt, tgt + dist * Vector((math.cos(el) * math.cos(az), math.cos(el) * math.sin(az), math.sin(el))), self.ln(t), dist
+# opening dolly on her (static reference) and the bullet-locked solution for everything after; cross-blended 0.3 -> 0.75 s = the whip
+CA = [(-1.0, "torso", (0, 0, -6), 176, -6, 185, 26), (0.0, "torso", (0, 0, -6), 176, -6, 172, 26), (0.75, "torso", (0, 0, -3), 175, -4, 150, 27),
+      (1.5, "torso", (0, 0, -2), 175, -3, 130, 28)]
+CB = CK[1:]
+solA = CamSolve(CA, lambda t: 0.0); solB = CamSolve(CB, DS)
+def cam_at(t):
+    if t >= 0.75: return solB(t)
+    ta, ca, la, da = solA(t)
+    if t <= 0.3: return ta, ca, la, da
+    tb, cb, lb, db = solB(t); w = smooth((t - 0.3) / 0.45)
+    return ta.lerp(tb, w), ca.lerp(cb, w), la + (lb - la) * w, math.exp(math.log(da) + (math.log(db) - math.log(da)) * w)
 cam = bpy.data.objects["CAM_Film"]; cd = cam.data; cam.rotation_mode = 'QUATERNION'
 CAMLOG = []
 prevq = None
 for f in range(1, FEND + 1):
     t = T(f)
-    i = max(j for j in range(len(CK) - 1) if CK[j][0] <= t) if t < CK[-1][0] else len(CK) - 2
-    if CK[i][1] == CK[i + 1][1]:
-        tgt = anchor(CK[i][1], f) + Vector((OFX(t), OFY(t), OFZ(t)))
-    else:
-        tgt = Vector((STX(t), STY(t), STZ(t)))
-    az = math.radians(azf(t)); el = math.radians(elf(t)); dist = math.exp(ldf(t))
-    cp = tgt + dist * Vector((math.cos(el) * math.cos(az), math.cos(el) * math.sin(az), math.sin(el)))
+    tgt, cp, lens_, dist = cam_at(t)
     M = RM[f]
     cw = M @ cp; tw_ = M @ tgt
     up = (M.to_3x3() @ Vector((0, 0, 1))).normalized()
@@ -364,9 +416,11 @@ for f in range(1, FEND + 1):
     prevq = q
     cam.location = cw; cam.rotation_quaternion = q
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
-    cd.lens = lnf(t); cd.keyframe_insert("lens", frame=f)
+    cd.lens = lens_; cd.keyframe_insert("lens", frame=f)
     dw = dist * S
     cd.clip_start = max(0.0002, min(0.05, 0.04 * dw)); cd.keyframe_insert("clip_start", frame=f)
+    cd.dof.use_dof = True; cd.dof.focus_distance = (tw_ - cw).length; cd.dof.keyframe_insert("focus_distance", frame=f)
+    cd.dof.aperture_fstop = 2.8 + 8.2 * smooth((0.4 - dw) / 0.3); cd.dof.keyframe_insert("aperture_fstop", frame=f)
     CAMLOG.append((f, tuple(cw), tuple(cp), dw))
 import json
 json.dump(CAMLOG, open(os.path.join(HERE, "..", "camlog.json"), "w"))

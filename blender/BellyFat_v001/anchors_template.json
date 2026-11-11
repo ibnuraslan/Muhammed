@@ -1,0 +1,3 @@
+{"fps": 60, "end": 1290,
+ "note": "Fill the null seconds with the time each beat's first word is spoken (pipeline/transcribe.py), set end to VO length*60+30, then run pipeline/retime_to_vo.py.",
+ "anchors": [[1, 1, null], [121, null, null], [181, null, null], [469, null, null], [757, null, null], [889, null, null], [1207, null, null], [1290, null, null]]}
