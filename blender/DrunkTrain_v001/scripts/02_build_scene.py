@@ -633,7 +633,7 @@ def tee_recolour(mat, color):
                 sb = N_.new('ShaderNodeMath'); sb.operation = 'GREATER_THAN'; sb.inputs[1].default_value = 0.16; L_.new(sh.outputs[1], sb.inputs[0])
                 bl = N_.new('ShaderNodeMath'); bl.operation = 'MULTIPLY'; L_.new(hb.outputs[0], bl.inputs[0]); L_.new(sb.outputs[0], bl.inputs[1])
                 fac = N_.new('ShaderNodeMath'); fac.operation = 'SUBTRACT'; fac.inputs[0].default_value = 1.0; L_.new(bl.outputs[0], fac.inputs[1])
-                vv = N_.new('ShaderNodeMapRange'); vv.inputs['To Min'].default_value = 0.93; vv.inputs['To Max'].default_value = 1.0
+                vv = N_.new('ShaderNodeMapRange'); vv.inputs['To Min'].default_value = 1.0; vv.inputs['To Max'].default_value = 1.0
                 vv.inputs['From Min'].default_value = 0.3; vv.inputs['From Max'].default_value = 0.9; L_.new(sh.outputs[2], vv.inputs['Value'])
                 cm = N_.new('ShaderNodeMix'); cm.data_type = 'RGBA'; cm.blend_type = 'MULTIPLY'; cm.inputs['Factor'].default_value = 1.0
                 cm.inputs['A'].default_value = color + (1,); L_.new(vv.outputs['Result'], cm.inputs['B'])
@@ -646,6 +646,11 @@ for o in bpy.data.objects:
     if o.type != 'MESH' or not o.data.materials: continue
     if o.name == "Lad.male_casualsuit06":
         tee_recolour(o.data.materials[0], (0.02, 0.62, 0.72))              # bright plain teal tee (logo removed), denim kept
+        for nd in o.data.materials[0].node_tree.nodes:      # the print is also baked into the AO and normal maps
+            if nd.type == 'MIX_RGB' and any(l.from_node.type == 'TEX_IMAGE' and 'ao' in l.from_node.image.name.lower() for l in nd.inputs['Color2'].links):
+                nd.inputs['Fac'].default_value = 0.0
+                for l in list(nd.inputs['Fac'].links): o.data.materials[0].node_tree.links.remove(l)
+            if nd.type == 'NORMAL_MAP': nd.inputs['Strength'].default_value = 0.0
     if o.name == "Worker.male_worksuit01":
         # blue overall -> fluorescent orange hi-vis, white tee kept
         m_ = o.data.materials[0]
@@ -665,6 +670,16 @@ if vg:
     idx = [v_.index for v_ in lad_body.data.vertices if v_.co.z < KNEE_Z - 0.02]
     vg.remove(idx)
 # the jeans' shoe-hiding group stays (shoes05 covers feet)
+# tee vs shorts by position (the print is dark blue, so a colour test treats it as denim): above the waist = flat tee colour
+zs_ = [v_.co.z for v_ in lad_clo.data.vertices]; zmin_, zmax_ = min(zs_), max(zs_)
+WAIST_Z = lad_rig.data.bones["root"].head_local.z + 0.07
+mt_ = lad_clo.data.materials[0].node_tree
+mixn = [n for n in mt_.nodes if n.type == 'MIX' and n.data_type == 'RGBA' and n.inputs['Factor'].links and n.inputs['Factor'].links[0].from_node.type == 'MATH' and n.inputs['Factor'].links[0].from_node.operation == 'SUBTRACT']
+if mixn:
+    tcg = mt_.nodes.new('ShaderNodeTexCoord'); sxz = mt_.nodes.new('ShaderNodeSeparateXYZ'); mt_.links.new(tcg.outputs['Generated'], sxz.inputs[0])
+    gtz = mt_.nodes.new('ShaderNodeMath'); gtz.operation = 'GREATER_THAN'; gtz.inputs[1].default_value = (WAIST_Z - zmin_) / (zmax_ - zmin_)
+    mt_.links.new(sxz.outputs['Z'], gtz.inputs[0]); mt_.links.new(gtz.outputs[0], mixn[0].inputs['Factor'])
+    print("TEE split at generated z", round(gtz.inputs[1].default_value, 3))
 for o in bpy.data.objects:
     if o.type == 'ARMATURE': link(o, "People")
     elif o.parent and o.parent.type == 'ARMATURE': link(o, "People")

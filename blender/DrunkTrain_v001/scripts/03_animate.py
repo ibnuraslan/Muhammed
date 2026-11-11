@@ -498,7 +498,7 @@ for f in list(range(f_up1 + 2, f_fb1 + 1, 3)) + [f_fb1]:
         # right hand brings the bottle to the mouth
         mouth = LB.head + V(0, -0.11, 0.02)
         rest_p = LB.sh["R"] + V(-0.12, -0.12, -0.5)
-        up_p = mouth + V(-0.04, 0.06, -0.15)
+        up_p = mouth + V(-0.03, -0.02, -0.04)
         W = rest_p.lerp(up_p, tilt)
         d = V(0.1, -0.35, 1.0).lerp(V(0.3, -0.2, 1.0), tilt).normalized()
         LB.hand("R", f, Bm, W, d, V(1, 0, 0))

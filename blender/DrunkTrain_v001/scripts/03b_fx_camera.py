@@ -333,8 +333,8 @@ _rm = gn.new('ShaderNodeMath'); _rm.operation = 'MULTIPLY'; _rm.inputs[1].defaul
 _ad = gn.new('ShaderNodeMath'); _ad.operation = 'ADD'; _ad.inputs[1].default_value = 0.04; gl.new(_rm.outputs[0], _ad.inputs[0]); gl.new(_ad.outputs[0], gp.inputs['Emission Strength'])
 _al = gn.new('ShaderNodeMath'); _al.operation = 'ADD'; _al.inputs[1].default_value = 0.08; gl.new(_lw.outputs['Facing'], _al.inputs[0]); gl.new(_al.outputs[0], gp.inputs['Alpha'])
 M_ARROW = bpy.data.materials.new("ForceArrow"); M_ARROW.use_nodes = True
-ap = M_ARROW.node_tree.nodes["Principled BSDF"]; ap.inputs['Base Color'].default_value = (0.1, 0.8, 1.0, 1)
-ap.inputs['Emission Color'].default_value = (0.1, 0.8, 1.0, 1); ap.inputs['Emission Strength'].default_value = 3.0
+ap = M_ARROW.node_tree.nodes["Principled BSDF"]; ap.inputs['Base Color'].default_value = (0.0, 0.45, 0.9, 1)
+ap.inputs['Emission Color'].default_value = (0.0, 0.55, 1.0, 1); ap.inputs['Emission Strength'].default_value = 1.6
 ghost_coll = bpy.data.collections.new("Ghost"); sc.collection.children.link(ghost_coll)
 for sx in (-1, 1):
     src = bpy.data.objects["Rail_AR"]
@@ -360,7 +360,7 @@ for f in list(range(f_r0, f_r1 + 1, 2)) + [f_r1]:
         g.matrix_world = Matrix.Translation((GX, y, 0)) @ ml
         g.keyframe_insert("location", frame=f)
 for g, ml in GHOSTS:
-    vis(g, [(f_r0, f_r1)])
+    vis(g, [(f_r0, f_r1 - 28)])         # gone before the whip out, so the exit is not a white-out
 # force arrows flowing along -Y around the body
 def arrow(name, L_):
     bmg = bmesh.new()
@@ -386,7 +386,7 @@ for f in list(range(R_IMP - 10, f_r1 + 1, 3)) + [f_r1]:
         a.keyframe_insert("location", frame=f); a.keyframe_insert("rotation_euler", frame=f); a.keyframe_insert("scale", frame=f)
     if f == R_IMP - 10:
         for a, off, ph in ARROWS:
-            vis(a, [(R_IMP - 10, f_r1)])
+            vis(a, [(R_IMP - 10, f_r1 - 28)])
 
 # ------------------------------------------------------------------ FX: gravel jitter, impact debris + dust, sparks, stop dust
 fx = bpy.data.collections.new("FX"); sc.collection.children.link(fx)
@@ -539,10 +539,10 @@ CAM = [  # frame, camera, aim, lens
     (45, V(-0.65, -2.35, 1.15), WP(45) + V(0, 0, 1.15), 30),
     (85, V(0.35, -2.1, 0.95), WP(85) + V(0.1, 0, 1.0), 30),
     (115, V(1.55, -1.75, 0.6), V(0.45, 1.0, 0.85), 28),
-    (160, V(3.0, -0.9, 0.75), V(1.55, 0.7, 0.75), 28),
-    (215, V(3.2, 1.6, 1.0), V(1.6, 0.1, 0.45), 30),
-    (240, V(2.7, -1.7, 0.95), V(1.5, 0.0, 0.5), 28),
-    (268, V(0.4, -1.7, 0.5), V(1.0, 0.0, 0.25), 28),
+    (160, V(3.4, -1.3, 1.05), V(1.55, 0.7, 0.9), 26),
+    (215, V(3.4, 1.9, 1.15), V(1.6, 0.1, 0.5), 28),
+    (240, V(3.0, -1.9, 0.95), V(1.45, 0.0, 0.4), 26),
+    (268, V(2.2, -2.3, 0.7), V(1.55, 0.0, 0.35), 24),
     (325, V(1.55, -1.7, 0.55), V(1.0, 0.1, 0.25), 26),
     (390, V(1.35, -2.0, 0.42), V(0.85, 6.0, 0.35), 26),
     (450, V(1.6, -2.6, 0.5), V(0.7, 16.0, 1.3), 24),
@@ -555,15 +555,16 @@ CAM = [  # frame, camera, aim, lens
     (700, V(0.3, y(700) - 1.25, 0.34), lad_p(700), 18),
     (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
     (815, V(0.3, y(815) - 1.4, 0.36), lad_p(815), 18),
-    (862, V(2.6, -43.0, 0.5), V(0.2, -40.0, 0.25), 24),
+    (842, V(1.9, y(842) - 1.2, 0.36), lad_p(842), 20),
+    (866, V(2.7, -42.8, 0.45), V(0.2, -40.0, 0.25), 24),
     (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
     (935, V(2.7, -45.0, 1.7), V(0.9, -50.0, 0.8), 23),
     (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
     (1060, V(6.3, -36.4, 2.4), V(3.8, -39.0, 1.35), 26),
     (1110, V(4.7, -34.7, 1.6), V(3.6, -38.4, 1.45), 32),
-    (1160, V(3.65, -37.0, 0.55), V(1.35, -40.0, 0.25), 28),
-    (1200, V(3.35, -39.0, 0.42), V(1.7, -40.0, 0.35), 26),
+    (1160, V(2.7, -38.3, 0.42), V(0.3, -40.0, 0.2), 26),
+    (1200, V(2.9, -39.1, 0.45), V(1.0, -40.0, 0.35), 26),
     (1250, V(3.95, -40.7, 1.3), V(2.4, -40.1, 1.4), 28),
     (1275, V(3.1, -41.7, 1.75), V(2.45, -40.1, 1.62), 30),
     (1322, V(3.25, -40.85, 1.66), V(2.5, -40.25, 1.62), 40),
@@ -576,7 +577,7 @@ CAM = [  # frame, camera, aim, lens
     (1680, V(3.2, rp(1680).y - 1.9, 0.9), rp(1680), 26),
     (1750, V(rp(1750).x - 1.7, rp(1750).y - 1.6, 1.0), rp(1750), 28),
     (1812, V(rp(1812).x + 1.6, rp(1812).y - 1.8, 1.0), rp(1812), 28),
-    (1850, V(3.1, -40.0, 1.6), V(2.4, -44.0, 1.2), 26),
+    (1846, V(rp(1846).x + 1.4, rp(1846).y + 1.2, 1.1), rp(1846), 28),
     (1866, V(2.65, -38.3, 1.65), V(2.4, -41.0, 1.3), 28),
     (1920, V(3.4, -40.0, 1.5), V(2.45, -41.8, 1.2), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
