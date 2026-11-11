@@ -19,12 +19,14 @@ hidden = [o for o in O if o.name.startswith(("Steward", "bcamera", "Rail_", "Dec
 for o in hidden: o.hide_render = True
 rx, ry = sc.render.resolution_x, sc.render.resolution_y
 sc.render.resolution_x, sc.render.resolution_y = 720, 540
+SMP, MB = sc.cycles.samples, sc.render.use_motion_blur
 sc.cycles.samples = 24; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = 'PNG'
 raw = os.path.join(WD, "photo_raw.png"); sc.render.filepath = raw
 bpy.ops.render.render(write_still=True)
 for o in hidden: o.hide_render = False
 sc.camera = main; sc.render.resolution_x, sc.render.resolution_y = rx, ry
+sc.cycles.samples, sc.render.use_motion_blur = SMP, MB
 bpy.data.objects.remove(pc, do_unlink=True)
 
 im = bpy.data.images.load(raw); w, h = im.size

@@ -234,8 +234,9 @@ d1 = berg.modifiers.new("subd", 'SUBSURF'); d1.levels = d1.render_levels = 1
 d2 = berg.modifiers.new("fine", 'DISPLACE'); d2.texture = t1; d2.strength = 0.35; d2.mid_level = 0.5
 t2 = bpy.data.textures.new("IceStriae", 'DISTORTED_NOISE'); t2.noise_scale = 0.35; t2.distortion = 1.5
 d3 = berg.modifiers.new("striae", 'DISPLACE'); d3.texture = t2; d3.strength = 0.12
-t3 = bpy.data.textures.new("IceFacets", 'VORONOI'); t3.noise_scale = 4.0; t3.distance_metric = 'MINKOVSKY_HALF'; t3.color_mode = 'INTENSITY'
-d4 = berg.modifiers.new("facets", 'DISPLACE'); d4.texture = t3; d4.strength = 1.6; d4.mid_level = 0.5; d4.vertex_group = "facet_mask"
+t3 = bpy.data.textures.new("IceFacets", 'VORONOI'); t3.noise_scale = 3.0; t3.distance_metric = 'DISTANCE'; t3.color_mode = 'INTENSITY'
+t3.weight_1 = -1.0; t3.weight_2 = 1.0; t3.noise_intensity = 1.6
+d4 = berg.modifiers.new("facets", 'DISPLACE'); d4.texture = t3; d4.strength = 1.4; d4.mid_level = 0.3; d4.vertex_group = "facet_mask"
 berg.modifiers.move(berg.modifiers.find("facets"), 1)
 # ice material: SSS + snow texture, blue crevasses by pointiness, wet band, red paint mask (keyable)
 icem = bpy.data.materials.new("M_Ice"); icem.use_nodes = True; n, l = icem.node_tree.nodes, icem.node_tree.links
@@ -398,8 +399,8 @@ smoke.location = Vector((top.x - 8, top.y, top.z + 12)); smoke.rotation_euler = 
 # ---------------------------------------------------------------- debris field (beat 4): chairs, planks, crates, lifebuoys
 deckw = pbr("M_DebrisWood", "old_wood_floor", 1.2, tint=(0.8, 0.72, 0.6))
 DEBRIS = []
-for i in range(26):
-    x = random.uniform(-45, 40); y = random.uniform(-92, -38)
+for i in range(60):
+    x = random.uniform(-30, 25); y = random.uniform(-80, -24)
     k = i % 5
     if k == 0:
         o = chair.copy(); o.data = chair.data; o.parent = None; o.scale = (1, 1, 1)
@@ -416,7 +417,8 @@ for i in range(26):
 # ---------------------------------------------------------------- ghost liner (four funnels, no name/text)
 liner = import_glb("liner", length=269, col=C_GHOST)
 liner.data.transform(Matrix.Rotation(R_(0), 4, 'Z'))
-dec = liner.modifiers.new("dec", 'DECIMATE'); dec.ratio = 0.5
+dec = liner.modifiers.new("dec", 'DECIMATE'); dec.ratio = 0.4
+bpy.context.view_layer.objects.active = liner; bpy.ops.object.modifier_apply(modifier="dec")
 gm = bpy.data.materials.new("M_Ghost"); gm.use_nodes = True; gn, gl_ = gm.node_tree.nodes, gm.node_tree.links; gn.clear()
 lw = gn.new('ShaderNodeLayerWeight'); lw.inputs['Blend'].default_value = 0.5
 em = gn.new('ShaderNodeEmission'); em.inputs['Color'].default_value = (0.3, 0.62, 1.0, 1)
@@ -428,8 +430,9 @@ gl_.new(sepz.outputs['Z'], band.inputs['Value'])
 ghostAlpha = gn.new('ShaderNodeValue'); ghostAlpha.name = "GhostAlpha"; ghostAlpha.outputs[0].default_value = 0.0
 redGlow = gn.new('ShaderNodeValue'); redGlow.name = "RedBand"; redGlow.outputs[0].default_value = 0.0
 fpow = gn.new('ShaderNodeMath'); fpow.operation = 'POWER'; fpow.inputs[1].default_value = 5.0
-gl_.new(lw.outputs['Facing'], fpow.inputs[0]); gl_.new(fpow.outputs[0], fr_.inputs[0])
-fbase = gn.new('ShaderNodeMath'); fbase.operation = 'ADD'; fbase.inputs[1].default_value = 0.0
+gl_.new(lw.outputs['Facing'], fpow.inputs[0])
+fbase = gn.new('ShaderNodeMath'); fbase.operation = 'ADD'; fbase.inputs[1].default_value = 0.06
+gl_.new(fpow.outputs[0], fbase.inputs[0]); gl_.new(fbase.outputs[0], fr_.inputs[0])
 emr = gn.new('ShaderNodeEmission'); emr.inputs['Color'].default_value = (1.0, 0.08, 0.04, 1)
 emr_s = gn.new('ShaderNodeMath'); emr_s.operation = 'MULTIPLY'; gl_.new(redGlow.outputs[0], emr_s.inputs[0]); emr_s.inputs[1].default_value = 8.0
 gl_.new(emr_s.outputs[0], emr.inputs['Strength'])
@@ -464,10 +467,14 @@ print("LINER", LINER_LEN, LINER_BEAM, max(p.z for p in pts))
 # hull waterline offset: sink the model so ~11 m of hull is under water
 liner.data.transform(Matrix.Translation(Vector((0, 0, -10.5))))
 band.inputs['From Min'].default_value = 0.6; band.inputs['From Max'].default_value = 1.4   # red band: object z < ~1 m (waterline zone)
+band2 = gn.new('ShaderNodeMapRange'); band2.inputs['From Min'].default_value = -2.6; band2.inputs['From Max'].default_value = -1.8
+gl_.new(sepz.outputs['Z'], band2.inputs['Value'])
+bandm = gn.new('ShaderNodeMath'); bandm.operation = 'MULTIPLY'; gl_.new(bandr.outputs[0], bandm.inputs[0]); gl_.new(band2.outputs['Result'], bandm.inputs[1])
+gl_.new(bandm.outputs[0], emr_b.inputs[0])
 # second copy for the explainer (static, side-on)
 liner.location = (0, -60, 0)
 liner_x = liner.copy(); liner_x.name = "Liner_Explainer"; C_CYC.objects.link(liner_x)
-gmx = gm.copy(); gmx.name = "M_Ghost_Explainer"; liner_x.data = liner.data.copy(); liner_x.data.materials[0] = gmx
+gmx = gm.copy(); gmx.name = "M_Ghost_Explainer"; liner_x.material_slots[0].link = 'OBJECT'; liner_x.material_slots[0].material = gmx
 
 # sparks emitter (beat 5): particle system on a small plane that follows the contact point
 bpy.ops.mesh.primitive_plane_add(size=1.0); spk = bpy.context.object; spk.name = "Spark_Emitter"; link(spk, C_FX)
@@ -479,7 +486,7 @@ sdot.data.materials.append(mat_simple("M_Spark", (1, 0.4, 0.05), 0.5, 0, (1.0, 0
 pst.instance_object = sdot; sdot.hide_render = False
 spk.show_instancer_for_render = False
 glow = bpy.data.objects.new("Scrape_Glow", bpy.data.lights.new("Scrape_Glow", 'POINT')); glow.data.energy = 0; glow.data.color = (1.0, 0.55, 0.25)
-glow.data.shadow_soft_size = 1.5; C_FX.objects.link(glow); glow.parent = spk; glow.location = (0, 0, 1.5)
+glow.data.shadow_soft_size = 0.2; C_FX.objects.link(glow); glow.parent = spk; glow.location = (0, 0, 1.5)
 
 # ---------------------------------------------------------------- rooms inside the berg (enclosed, red darkroom -> office), explainer cyc
 plaster = pbr("M_Plaster", "painted_plaster_wall", 1.5, tint=(0.75, 0.68, 0.58))
@@ -501,8 +508,9 @@ def room(name, x0, x1, y0, y1, z0, z1, wallm, door=None):
         bo.object = cutter; bo.operation = 'DIFFERENCE'
     return parts
 RZ0, RZ1 = 0.9, 4.1
-DR = room("Darkroom", -2.0, 4.5, Y0 + 0.6, Y0 + 6.6, RZ0, RZ1, plaster_dark, door=(Y0 + 4.6, 1.1, 2.3))
+DR = room("Darkroom", -2.0, 4.5, Y0 + 0.6, Y0 + 6.6, RZ0, RZ1, plaster_dark, door=(Y0 + 4.4, 1.6, 2.5))
 OF = room("Office", 4.5, 12.0, Y0 + 0.6, Y0 + 7.6, RZ0, RZ1, plaster)
+_bo = OF["left"].modifiers.new("door", 'BOOLEAN'); _bo.object = bpy.data.objects["Darkroom_DoorCut"]; _bo.operation = 'DIFFERENCE'
 # explainer cyc: big curved gradient sweep inside the berg (deep teal -> navy)
 CYC_C = Vector((8.0, Y0 + 15.5, RZ0))
 bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, radius=7.0, location=CYC_C + Vector((0, 0, 3.0)))
@@ -549,20 +557,25 @@ lampglass = box("Safelight_Glass", (0.36, 0.02, 0.2), (1.2, Y0 + 4.97, RZ1 - 0.1
 bench = import_glb("desk", length=2.2, col=C_ROOMS); bench.rotation_euler.z = R_(90); bench.location = (1.2, Y0 + 5.6, RZ0)
 dims_b = bench.dimensions.copy(); BENCH_TOP = RZ0 + dims_b.z
 enamel = mat_simple("M_Enamel", (0.85, 0.84, 0.8), 0.15)
-liquid = mat_simple("M_Developer", (0.03, 0.02, 0.01), 0.02)
-liquid.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 0.85
+liquid = mat_simple("M_Developer", (0.7, 0.62, 0.5), 0.02)
+liquid.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 1.0
 TRAYS = []
 for i, tx in enumerate((0.45, 1.2, 1.95)):
-    tray = box(f"Tray_{i}", (0.6, 0.45, 0.07), (tx, Y0 + 5.45, BENCH_TOP + 0.035), enamel, C_ROOMS, bevel=0.015)
-    sol = box(f"Tray_Liquid_{i}", (0.55, 0.4, 0.01), (tx, Y0 + 5.45, BENCH_TOP + 0.055), liquid, C_ROOMS)
+    tray = box(f"Tray_{i}", (0.6, 0.45, 0.07), (tx, Y0 + 5.45, BENCH_TOP + 0.035), enamel, C_ROOMS)
+    bm_ = bmesh.new(); bm_.from_mesh(tray.data); top_ = [f_ for f_ in bm_.faces if f_.normal.z > 0.9]
+    bmesh.ops.delete(bm_, geom=top_, context='FACES_ONLY'); bm_.to_mesh(tray.data); bm_.free()
+    so_ = tray.modifiers.new("wall", 'SOLIDIFY'); so_.thickness = 0.008; so_.offset = -1
+    bv_ = tray.modifiers.new("bev", 'BEVEL'); bv_.width = 0.006; bv_.segments = 2
+    sol = box(f"Tray_Liquid_{i}", (0.57, 0.42, 0.002), (tx, Y0 + 5.45, BENCH_TOP + 0.05), liquid, C_ROOMS)
+    sol.visible_shadow = False
     TRAYS.append((tray, sol))
-print_dev = box("Print_Developing", (0.36, 0.27, 0.003), (1.2, Y0 + 5.45, BENCH_TOP + 0.045), photo_mat("M_Print_Dev", flat=True), C_ROOMS)
+print_dev = box("Print_Developing", (0.36, 0.27, 0.003), (1.2, Y0 + 5.45, BENCH_TOP + 0.03), photo_mat("M_Print_Dev", flat=True), C_ROOMS)
 line = box("Drying_Line", (6.2, 0.008, 0.008), (1.25, Y0 + 3.6, RZ1 - 0.6), mat_simple("M_Line", (0.5, 0.45, 0.4), 0.8), C_ROOMS)
 HANG = []
 for i in range(5):
     hp = box(f"Hanging_Print_{i}", (0.3, 0.004, 0.38), (-1.2 + i * 1.2, Y0 + 3.6, RZ1 - 0.8), photo_mat(f"M_Print_Hang_{i}"), C_ROOMS)
     HANG.append(hp)
-tongs = box("Tongs", (0.22, 0.02, 0.015), (1.2, Y0 + 5.3, BENCH_TOP + 0.1), mat_simple("M_Bamboo", (0.55, 0.42, 0.25), 0.5), C_ROOMS, bevel=0.004)
+tongs = box("Tongs", (0.22, 0.012, 0.01), (1.2, Y0 + 5.3, BENCH_TOP + 0.1), mat_simple("M_Bamboo", (0.55, 0.42, 0.25), 0.5), C_ROOMS, bevel=0.004)
 # ---------------------------------------------------------------- office dressing
 desk = import_glb("desk", length=1.9, col=C_ROOMS); desk.rotation_euler.z = R_(90); desk.location = (8.2, Y0 + 4.6, RZ0)
 DESK_TOP = RZ0 + desk.dimensions.z
@@ -573,8 +586,10 @@ winL = bpy.data.objects.new("Office_Window_Light", bpy.data.lights.new("Office_W
 winL.data.color = (0.75, 0.85, 1.0); winL.location = (11.8, Y0 + 3.5, 3.0); winL.rotation_euler = (0, R_(-90), 0); C_ROOMS.objects.link(winL)
 fillO = bpy.data.objects.new("Office_Fill", bpy.data.lights.new("Office_Fill", 'AREA')); fillO.data.energy = 160; fillO.data.size = 3
 fillO.location = (6.0, Y0 + 1.5, 3.8); fillO.rotation_euler = (R_(30), 0, 0); C_ROOMS.objects.link(fillO)
+backO = bpy.data.objects.new("Office_Back_Light", bpy.data.lights.new("Office_Back_Light", 'AREA')); backO.data.energy = 120; backO.data.size = 2
+backO.data.color = (1.0, 0.85, 0.65); backO.location = (9.5, Y0 + 3.0, 3.9); backO.rotation_euler = (R_(-35), R_(25), 0); C_ROOMS.objects.link(backO)
 clock = import_glb("clock", height=0.55, col=C_ROOMS); clock.location = (10.5, Y0 + 7.5, 2.4); clock.rotation_euler.z = R_(180)
-mag = import_glb("magnifier", length=0.3, col=C_ROOMS)
+mag = import_glb("magnifier", height=0.28, col=C_ROOMS)
 office_print = box("Print_Office", (0.36, 0.003, 0.27), (8.2, Y0 + 4.0, DESK_TOP + 0.4), photo_mat("M_Print_Office"), C_ROOMS)
 office_print.rotation_euler = (R_(-6), 0, 0)
 # a stack of papers / books on the desk for life
