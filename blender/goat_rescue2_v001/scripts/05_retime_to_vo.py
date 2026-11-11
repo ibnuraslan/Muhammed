@@ -55,7 +55,7 @@ for act in bpy.data.actions:
 sc.frame_start, sc.frame_end = 1, 2100
 # narration: the delivered voiceover replaces the scratch track
 se = sc.sequence_editor
-strips = getattr(se, "strips", None) or se.sequences
+strips = se.strips if hasattr(se, "strips") else se.sequences
 for s in list(strips):
     strips.remove(s)
 snd = strips.new_sound("VO_Marcus", VO, channel=1, frame_start=1)
