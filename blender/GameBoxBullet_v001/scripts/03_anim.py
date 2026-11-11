@@ -22,7 +22,7 @@ F_WALL = 158      # nose meets the siding
 F_HIT = 396       # nose meets the box cover
 F_STOP = 1230
 
-BOX_C = V((0.0, 2.97, 1.25))
+BOX_C = V((0.0, 2.97, 1.42))
 broot = bpy.data.objects["BoxRoot"]
 bullet = bpy.data.objects["Bullet"]
 
@@ -30,20 +30,28 @@ def kf(o, path, f, idx=-1):
     o.keyframe_insert(path, frame=f, index=idx)
 
 # ------------------------------------------------------------------ box motion (world), driven by hands
+def shove(f):
+    if f <= F_HIT: return 0.0
+    u = (f - F_HIT) / 60.0
+    return 0.085 * (1 - math.exp(-u * 2.2)) * (1 + 0.12 * math.exp(-u) * math.sin(u * 4))
 def box_pose(f):
     """returns (location, euler) of BoxRoot"""
     loc = BOX_C.copy(); rx = 0.0; rz = 0.0
     # breathing before the hit
     loc.z += 0.004 * math.sin(f / 60 * 2 * math.pi * 0.25)
-    # impact shove (slow-motion): pushed into his chest, then he braces
+    # unboxing: he turns the new box in his hands near his chest, admiring it; squares it up just before the hit
+    fade = 1 - smooth((f - 250) / 110.0)
+    rz += R_(10) * math.sin(2 * math.pi * f / 180.0) * fade; rx += R_(-6) * fade
+    loc.z -= 0.0 * fade; loc.y -= 0.0 * fade; loc.x += 0.02 * math.sin(2 * math.pi * f / 180.0 + 0.7) * fade
+    # impact shove (slow motion): driven back into his chest, he staggers half a step
+    loc.y += shove(f) + 0.003 * (1 - math.exp(-max(0, f - F_HIT) / 30.0)) * (f > F_HIT)
     if f > F_HIT:
         u = (f - F_HIT) / 50.0
-        loc.y += 0.018 * (1 - math.exp(-u * 2.5)) * (1 + 0.25 * math.exp(-u) * math.sin(u * 5))
-        rx += R_(-3.0) * (1 - math.exp(-u * 2.0))
+        rx += R_(-4.0) * (1 - math.exp(-u * 2.0)) * (1 + 0.3 * math.exp(-u) * math.sin(u * 5))
     # beat 10: lowers the box and tilts the face up toward his eyes, then holds it out a little
     if f > 1355:
         u = smooth((f - 1355) / 70.0)
-        loc.z -= 0.15 * u; loc.y -= 0.10 * u; rx += R_(-30) * u
+        loc.z -= 0.12 * u; loc.y -= 0.06 * u; rx += R_(-16) * u
         w = smooth((f - 1430) / 50.0)
         loc.z += 0.03 * w; rx += R_(8) * w
     return loc, Euler((rx, 0, rz))
@@ -57,14 +65,15 @@ def box_M(f):
 # ------------------------------------------------------------------ man
 man = bpy.data.objects["Gamer"]
 R = make_human_ctrl(man); H = Human(R)
-MAN = V((0.0, 3.21, 0.0))
+MAN = V((0.0, 3.255, 0.0))
 FZ = 0.25   # bedroom floor
 bpy.context.view_layer.objects.active = man; bpy.ops.object.mode_set(mode='POSE')
-# feet planted, never move
-for f in (1, F_END):
-    for s, dx in (("L", 0.13), ("R", -0.13)):
-        xy = V((MAN.x + dx, MAN.y + 0.02 + (0.03 if s == "R" else -0.02)))
-        a = H.ankle[s]; z = FZ + a.z + 0.0165
+# feet planted; after the hit the right foot steps back ~14 cm (stagger), the left stays put
+STEP = [(1, 0.0, 0.0), (F_HIT + 20, 0.0, 0.0), (F_HIT + 60, 0.07, 0.045), (F_HIT + 100, 0.14, 0.0), (F_END, 0.14, 0.0)]
+for s, dx, keys in (("L", 0.13, [(1, 0, 0), (F_END, 0, 0)]), ("R", -0.13, STEP)):
+    for f, sy, lift in keys:
+        xy = V((MAN.x + dx, MAN.y + 0.02 + (0.03 if s == "R" else -0.02) + sy))
+        a = H.ankle[s]; z = FZ + a.z + 0.0165 + lift
         M = Matrix.Translation(V((xy.x, xy.y, z))) @ Matrix.Rotation(R_(8 if s == "L" else -8), 4, 'Z') @ Matrix.Translation(-a) @ R.rest("IK_foot." + s)
         R.key_world("IK_foot." + s, f, M)
         pole = V((xy.x + dx, xy.y - 0.7, z + 0.45)); n = "Pole_knee." + s; pb = R.PB[n]
@@ -80,12 +89,12 @@ def man_state(f):
     # impact: torso pushed back, knees give a little, head jerks
     if f > F_HIT:
         v = (f - F_HIT) / 60.0; k = 1 - math.exp(-v * 2.2)
-        dy += 0.03 * k; dz -= 0.02 * k; flex -= 7 * k; hp -= 6 * k * math.exp(-v * 0.3); side += 2 * math.sin(v * 1.3) * math.exp(-v * 0.5)
+        dy += shove(f); dz -= 0.02 * k; flex -= 7 * k; hp -= 6 * k * math.exp(-v * 0.3); side += 2 * math.sin(v * 1.3) * math.exp(-v * 0.5)
         hp += 18 * smooth((f - 600) / 300.0)   # stares down at the box as it cracks
     # beat 10: looks down at the hole, breath, then up to the camera
-    w = smooth((f - 1360) / 60.0); hp += 12 * w; flex += 10 * w
+    w = smooth((f - 1360) / 60.0); hp += 12 * w; flex += 20 * w; dz -= 0.045 * w; dy -= 0.03 * w
     z = smooth((f - 1415) / 50.0)
-    hp -= 40 * z; hy += 26 * z; twist += 14 * z; flex -= 8 * z; dy -= 0.01 * z
+    hp -= 40 * z; hy += 34 * z; twist += 4 * z; flex -= 8 * z; dy -= 0.01 * z
     return dy, dz, flex, twist, side, hp, hy
 
 for f in list(range(1, F_END + 1, 4)) + [F_END]:
@@ -93,15 +102,17 @@ for f in list(range(1, F_END + 1, 4)) + [F_END]:
     H.key_root(f, V((MAN.x, MAN.y + H.root_head.y + dy, FZ + H.root_head.z - 0.01 + dz)), yaw=0.0, flex=flex * 0.3, side=side)
     H.key_spine(f, flex=flex, twist=twist, side=side, head=(hp, hy))
 
+for f, a in ((1, 0.0), (F_HIT + 10, 0.0), (F_HIT + 90, 14.0), (1300, 10.0), (1420, 16.0), (1470, 9.0), (F_END, 8.0)):
+    pb = R.PB["jaw"]; pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * float(os.environ.get("JAW", "1")))); pb.keyframe_insert("rotation_quaternion", frame=f)
 # hands grip the box sides (wrist targets ride with the box)
-GRIP_L = V((0.178, 0.050, -0.135)); GRIP_R = V((-0.178, 0.050, -0.135))
+GRIP_L = V((0.128, 0.050, -0.226)); GRIP_R = V((-0.128, 0.050, -0.226))
 HAND_SIGN = float(os.environ.get("HAND_SIGN", "1"))
 def key_hands(f):
     M = box_M(f); Rb = M.to_3x3()
     for s, g, sx in (("L", GRIP_L, 1), ("R", GRIP_R, -1)):
         W = M @ g
-        d = Rb @ V((0.0, -1.0, 0.45)).normalized()         # fingers forward along the box side
-        n = Rb @ V((sx * HAND_SIGN, 0.0, 0.0))             # back of the hand faces out
+        d = Rb @ V((-sx * 0.12, -1.0, 0.0)).normalized()  # fingers forward along the box bottom
+        n = Rb @ V((0.0, 0.0, HAND_SIGN))                  # palm up against the bottom
         pole = M @ V((sx * 0.55, 0.45, -0.35))
         H.key_hand(s, f, W, d, n, pole)
 for f in list(range(1, F_END + 1, 2)) + [F_END]:
@@ -111,10 +122,10 @@ CURL = float(os.environ.get("CURL", "1"))
 for f in (1, F_END):
     for s in "LR":
         for k in range(2, 6):
-            for j, a in ((1, 25), (2, 45), (3, 35)):
+            for j, a in {2: ((1, 10), (2, 55), (3, 8)), 3: ((1, 10), (2, 50), (3, 5)), 4: ((1, -6), (2, -4), (3, -4)), 5: ((1, -8), (2, -4), (3, -4))}[k]:
                 n = "finger%d-%d.%s" % (k, j, s); pb = R.PB[n]
                 pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * CURL)); pb.keyframe_insert("rotation_quaternion", frame=f)
-        for j, a in ((2, 15), (3, 20)):
+        for j, a in ((2, 0), (3, 0)):
             n = "finger1-%d.%s" % (j, s); pb = R.PB[n]
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * CURL)); pb.keyframe_insert("rotation_quaternion", frame=f)
 bpy.ops.object.mode_set(mode='OBJECT')
@@ -128,7 +139,7 @@ depth = pchip([(F_HIT, -0.070), (430, -0.0675), (560, -0.0655), (661, -0.0640), 
                (1150, -0.0012), (F_STOP, 0.0)])
 def nose_world(f):
     if f <= F_HIT:
-        return V((0.0, pre(f), 1.30))
+        return V((0.0, pre(f), 1.47))
     M = box_M(f)
     return M @ V((0.0, depth(f), 0.05))
 def bullet_dir(f):
@@ -166,7 +177,7 @@ hon = bpy.data.materials["M_box_cover"].node_tree.nodes["hole_on"]
 for f, v in ((1, 0.0), (F_HIT + 8, 0.0), (F_HIT + 30, 1.0)):
     hon.outputs[0].default_value = v; hon.outputs[0].keyframe_insert("default_value", frame=f)
 crR = bpy.data.materials["M_box_cover"].node_tree.nodes["crack_radius"]
-for f, v in ((1, 0.001), (F_HIT, 0.001), (F_HIT + 20, 0.012), (600, 0.03), (661, 0.045), (720, 0.11), (760, 0.16), (900, 0.20)):
+for f, v in ((1, 0.0003), (F_HIT, 0.0003), (F_HIT + 15, 0.05), (661, 0.075), (720, 0.13), (760, 0.16), (900, 0.20)):
     crR.outputs[0].default_value = v; crR.outputs[0].keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ shards (discs split when the nose reaches them)
@@ -260,7 +271,7 @@ def piece(name, dims, mat):
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free(); me.materials.append(mat)
     o = bpy.data.objects.new(name, me); C_FX.objects.link(o); return o
 
-def ballistic(o, p0, v0, f0, f1, grav=0.4, drag=0.8, spin=6.0, floor=None, step=2):
+def ballistic(o, p0, v0, f0, f1, grav=0.4, drag=0.8, spin=6.0, floor=None, step=4):
     """v0 in m/s of slow-motion film time; keys every step frames; hides before f0"""
     ax = V((random.uniform(-1, 1), random.uniform(-1, 1), random.uniform(-1, 1))).normalized(); o.rotation_mode = "QUATERNION"
     o.hide_render = True; kf(o, "hide_render", f0 - 1); o.hide_render = False; kf(o, "hide_render", f0)
@@ -273,8 +284,9 @@ def ballistic(o, p0, v0, f0, f1, grav=0.4, drag=0.8, spin=6.0, floor=None, step=
             if floor is not None and p.z < floor: p.z = floor; landed = True
         o.location = p; o.rotation_quaternion = Quaternion(ax, spin * (1 - math.exp(-(f - f0) / 90.0)) * (0.3 if landed else 1))
         kf(o, "location", f); kf(o, "rotation_quaternion", f)
+        if landed or f - f0 > 520: break
 
-HOLE = V((0, 0, 1.30))
+HOLE = V((0, 0, 1.47))
 # outside face: siding splinters and paint chips blown back toward the lawn
 for i in range(36):
     o = piece("Splinter_out_%02d" % i, (random.uniform(0.004, 0.012), random.uniform(0.002, 0.004), random.uniform(0.01, 0.05)), random.choice([M_chip, M_splinter]))
@@ -314,7 +326,7 @@ for i in range(24):
     o = piece("Cover_flake_%02d" % i, [random.uniform(0.002, 0.006)] * 2 + [0.0008], bpy.data.materials["M_box_shell"])
     a = random.uniform(0, 6.28); p0 = nose_world(F_HIT) + V((0.004 * math.cos(a), -0.003, 0.004 * math.sin(a)))
     v0 = V((math.cos(a) * random.uniform(0.02, 0.08), -random.uniform(0.02, 0.1), math.sin(a) * random.uniform(0.02, 0.08)))
-    ballistic(o, p0, v0, F_HIT + random.randint(0, 6), 1300, grav=0.05, drag=3.0, step=3)
+    ballistic(o, p0, v0, F_HIT + random.randint(0, 6), 1300, grav=0.05, drag=3.0, step=6)
 puff("Dust_box", nose_world(F_HIT) + V((0, -0.02, 0)), V((0, -0.08, 0.04)), F_HIT + 1, 0.01, 0.10, M_drydust, 260)
 
 # ------------------------------------------------------------------ the world in slow motion: grass, fan, motes
@@ -336,17 +348,98 @@ for o in fan:
         o.rotation_euler.z = z0 + ang; kf(o, "rotation_euler", f, 2); ang += spd * 10 / 6
 # dust motes in the window light
 bm = bmesh.new()
-for i in range(260):
-    c = V((random.uniform(-2.2, 1.0), random.uniform(0.3, 3.8), random.uniform(0.5, 2.5)))
-    r = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=random.uniform(0.0015, 0.004))
+for i in range(60):
+    t_ = random.random(); c = V((random.uniform(-2.3, -1.1), 0.3 + 2.0 * t_, 2.0 - 1.2 * t_ + random.uniform(-0.2, 0.2)))
+    r = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=random.uniform(0.0008, 0.0016))
     bmesh.ops.translate(bm, verts=r["verts"], vec=c)
 me = bpy.data.meshes.new("Motes"); bm.to_mesh(me); bm.free()
 motes = bpy.data.objects.new("Dust_motes", me); bpy.data.collections["Bedroom"].objects.link(motes)
 mm_ = bpy.data.materials.new("M_mote"); mm_.use_nodes = True; bb_ = mm_.node_tree.nodes["Principled BSDF"]
-bb_.inputs["Emission Color"].default_value = (1.0, 0.95, 0.85, 1); bb_.inputs["Emission Strength"].default_value = 3.0
+bb_.inputs["Emission Color"].default_value = (1.0, 0.95, 0.85, 1); bb_.inputs["Emission Strength"].default_value = 0.6
 me.materials.append(mm_)
 for f, z, y in ((1, 0.0, 0.0), (750, -0.03, 0.03), (F_END, -0.08, 0.05)):
     motes.location = (0, y, z); kf(motes, "location", f)
+
+
+# ------------------------------------------------------------------ street life (all in the same slow motion)
+def ground_z(x, y):
+    return 0.06 if -23.8 < y < -22.2 else 0.0
+walker = bpy.data.objects["Walker"]
+RW = make_human_ctrl(walker); HW = Human(RW)
+bpy.context.view_layer.objects.active = walker; bpy.ops.object.mode_set(mode='POSE')
+wpath = lambda f: V((-1.9 + 0.40 * (f - 1) / 300.0, -22.9, 0.0))
+HW.walk(wpath, lambda f: -90.0, 1, 301, stride=0.7, step=3)
+for sd in "LR":   # arms swing loosely
+    for f, a in ((1, 12 if sd == "L" else -12), (150, -4 if sd == "L" else 4), (301, -12 if sd == "L" else 12)):
+        RW.key_rot("upperarm01." + sd, f, [("X", a)])
+bpy.ops.object.mode_set(mode='OBJECT')
+# sprinkler: spinner turns, water jets frozen into slow-motion arcs of droplets
+spin = bpy.data.objects.get("garden_sprinkler_01_spinner")
+M_water = bpy.data.materials.new("M_water"); M_water.use_nodes = True
+bw = M_water.node_tree.nodes["Principled BSDF"]; bw.inputs["Transmission Weight"].default_value = 1.0; bw.inputs["Roughness"].default_value = 0.0; bw.inputs["IOR"].default_value = 1.33
+if spin:
+    spin.rotation_mode = "XYZ"
+    for f, a in ((1, 0.0), (F_END, 2.5)):
+        spin.rotation_euler.z = a; kf(spin, "rotation_euler", f, 2)
+    bm = bmesh.new()
+    for side in (-1, 1):
+        for k in range(70):
+            t = k / 70.0; d = 2.2 * t
+            p = V((side * d * 0.5, d * 0.85, 0.12 + 1.4 * t - 1.6 * t * t)) + V([random.gauss(0, 0.02) for _ in range(3)])
+            if p.z < 0.02: continue
+            r = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=random.uniform(0.004, 0.009)); bmesh.ops.translate(bm, verts=r["verts"], vec=p)
+    me = bpy.data.meshes.new("Water_jets"); bm.to_mesh(me); bm.free(); me.materials.append(M_water)
+    wj = bpy.data.objects.new("Water_jets", me); bpy.data.collections["Exterior"].objects.link(wj)
+    wj.location = spin.matrix_world.translation; wj.rotation_mode = "XYZ"
+    for f, a in ((1, 0.0), (F_END, 2.5)):
+        wj.rotation_euler.z = a; kf(wj, "rotation_euler", f, 2)
+# birds lifting off the small tree as the bullet passes
+M_bird = bpy.data.materials.new("M_bird"); M_bird.use_nodes = True; M_bird.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.06, 0.05, 0.05, 1)
+for i in range(5):
+    bm = bmesh.new()
+    body = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=1.0)["verts"]
+    for v in body: v.co = V((v.co.x * 0.025, v.co.y * 0.08, v.co.z * 0.025))
+    me = bpy.data.meshes.new("Bird%d" % i); bm.to_mesh(me); bm.free(); me.materials.append(M_bird)
+    bd = bpy.data.objects.new("Bird_%d" % i, me); bpy.data.collections["Exterior"].objects.link(bd)
+    for sd in (-1, 1):
+        bm = bmesh.new(); vs = [bm.verts.new(c) for c in ((0, -0.03, 0), (0, 0.03, 0), (sd * 0.14, -0.01, 0))]; bm.faces.new(vs)
+        mw = bpy.data.meshes.new("Wing"); bm.to_mesh(mw); bm.free(); mw.materials.append(M_bird)
+        wg = bpy.data.objects.new("Bird_%d_wing" % i, mw); bpy.data.collections["Exterior"].objects.link(wg); wg.parent = bd
+        for f in range(1, 241, 6):
+            wg.rotation_euler.y = sd * R_(45) * math.sin(f / 10.0 + i); kf(wg, "rotation_euler", f, 1)
+    p0 = V((-4.5 + random.uniform(-0.8, 0.8), -9.0 + random.uniform(-0.8, 0.8), 2.2 + random.uniform(0, 0.8)))
+    dirb = V((random.uniform(-1, -0.2), random.uniform(-0.3, 0.5), 0.6)).normalized()
+    bd.rotation_euler.z = math.atan2(-dirb.x, dirb.y)
+    for f in range(1, 241, 6):
+        t = max(0, f - 40) / 60.0; bd.location = p0 + dirb * (0.6 * t * t / (1 + t)); kf(bd, "location", f)
+# room life: RGB strip and monitor flicker, a poster knocked crooked, dust shaken from the ceiling
+led = bpy.data.materials["M_led"].node_tree.nodes["Principled BSDF"]
+for f in range(1, F_END + 1, 12):
+    hue = (f / 600.0) % 1.0
+    import colorsys
+    led.inputs["Emission Color"].default_value = (*colorsys.hsv_to_rgb(hue, 0.8, 1.0), 1)
+    led.inputs["Emission Strength"].default_value = 6 + 3 * random.random()
+    led.inputs["Emission Color"].keyframe_insert("default_value", frame=f); led.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
+pst = bpy.data.objects["Poster3"]; pst.rotation_mode = "XYZ"; y0_ = pst.rotation_euler.y
+for f, a in ((1, 0), (205, 0), (260, -5), (320, -3.5), (F_END, -4)):
+    pst.rotation_euler.y = y0_ + R_(a); kf(pst, "rotation_euler", f, 1)
+puff("Dust_ceiling", V((-0.4, 0.5, 2.62)), V((0.0, 0.1, -0.5)), 215, 0.05, 0.35, M_drydust, 400)
+# a little light inside the wall cavity so studs/insulation read as the camera passes
+cl = bpy.data.lights.new("L_cavity", "POINT"); cl.shadow_soft_size = 0.02; cl.color = (1.0, 0.9, 0.75)
+clo = bpy.data.objects.new("L_cavity", cl); bpy.data.collections["Wall"].objects.link(clo); clo.location = (0.0, 0.08, 1.59)
+for f, e in ((1, 0.0), (165, 0.0), (180, 3.0), (205, 3.0), (215, 0.0)):
+    cl.energy = e; cl.keyframe_insert("energy", frame=f)
+# sharp bright streak behind the bullet outside
+bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=12, radius1=0.0035, radius2=0.0006, depth=1.6)
+bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X')); bmesh.ops.translate(bm, verts=bm.verts, vec=(0, -0.83, 0))
+me = bpy.data.meshes.new("Streak"); bm.to_mesh(me); bm.free()
+mst = bpy.data.materials.new("M_streak"); mst.use_nodes = True; nt_ = mst.node_tree; nt_.nodes.clear()
+e_ = nt_.nodes.new("ShaderNodeEmission"); e_.inputs["Color"].default_value = (1.0, 0.85, 0.6, 1); e_.inputs["Strength"].default_value = 6
+t_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); m_ = nt_.nodes.new("ShaderNodeMixShader"); m_.inputs[0].default_value = 0.45
+o_ = nt_.nodes.new("ShaderNodeOutputMaterial"); nt_.links.new(e_.outputs[0], m_.inputs[1]); nt_.links.new(t_.outputs[0], m_.inputs[2]); nt_.links.new(m_.outputs[0], o_.inputs[0])
+me.materials.append(mst); stk = bpy.data.objects.new("Bullet_streak", me); bpy.data.collections["FX"].objects.link(stk); stk.parent = bullet
+for f, v in ((1, False), (F_WALL, False), (F_WALL + 2, True)):
+    stk.hide_render = v; kf(stk, "hide_render", f)
 
 # ------------------------------------------------------------------ camera: one continuous Catmull-Rom move
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.004; cam_d.clip_end = 300
@@ -354,45 +447,46 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 B = bpos
 def behind(f, back, up=0.0, side=0.0):
     return B(f) + V((side, -back, up))
+def SH(f, v): return v + V((0, shove(f) + 0.003, 0)) if f > F_HIT else v
 CK = [  # frame, camera position, aim point, lens
-    (1,    behind(1, 0.9, 0.18, 0.14),     V((0.0, -20.0, 1.32)), 30),
-    (45,   behind(45, 0.55, 0.08, 0.10),   V((0.0, -12.0, 1.30)), 32),
-    (95,   V((0.9, -14.0, 0.45)),       V((0.0, -2.0, 1.55)), 26),
-    (130,  V((0.25, -6.5, 1.20)),       V((0.0, 0.0, 1.30)), 32),
-    (150,  behind(150, 0.55, 0.04, 0.06), V((0.0, 0.3, 1.30)), 36),
-    (F_WALL, behind(F_WALL, 0.40, 0.02, 0.03), V((0.0, 0.5, 1.30)), 38),
-    (175,  behind(175, 0.30, 0.0, 0.0),  V((0.0, 0.8, 1.30)), 38),
-    (200,  behind(200, 0.26, 0.0, 0.0),  V((0.0, 1.5, 1.32)), 36),
-    (228,  V((0.06, 0.42, 1.36)),       V((0.0, 2.0, 1.35)), 30),
-    (270,  V((0.62, 0.62, 1.62)),       V((0.0, 2.2, 1.38)), 26),
-    (330,  V((1.25, 1.55, 1.48)),       V((0.0, 2.55, 1.36)), 28),
-    (378,  V((0.55, 2.52, 1.36)),       V((0.0, 2.90, 1.31)), 40),
-    (420,  V((0.30, 2.50, 1.40)),       V((0.0, 2.90, 1.33)), 38),
-    (480,  V((-0.05, 2.18, 1.56)),      V((0.0, 2.97, 1.45)), 34),
-    (540,  V((-0.62, 2.32, 1.36)),      V((0.0, 2.95, 1.38)), 34),
-    (600,  V((-0.42, 2.52, 1.12)),      V((0.0, 2.92, 1.36)), 32),
-    (650,  V((-0.13, 2.70, 1.29)),      V((0.0, 2.90, 1.31)), 40),
-    (695,  V((-0.045, 2.795, 1.335)),   V((0.0, 2.92, 1.30)), 50),
-    (735,  V((0.06, 2.805, 1.27)),      V((0.0, 2.92, 1.31)), 55),
-    (772,  V((0.20, 2.81, 1.33)),       V((0.0, 2.93, 1.30)), 50),
-    (805,  V((0.235, 2.90, 1.325)),     V((0.0, 2.925, 1.30)), 50),
+    (1,    behind(1, 0.45, 0.07, 0.08),    V((0.0, -20.0, 1.490)), 36),
+    (45,   behind(45, 0.32, 0.04, 0.06),   V((0.0, -12.0, 1.470)), 40),
+    (95,   behind(95, 0.36, -0.10, 0.16),  V((0.0, -6.0, 1.570)), 34),
+    (130,  behind(130, 0.42, 0.10, -0.12), V((0.0, 0.0, 1.470)), 36),
+    (150,  behind(150, 0.45, 0.03, 0.05),  V((0.0, 0.3, 1.470)), 36),
+    (F_WALL, behind(F_WALL, 0.32, 0.01, 0.02), V((0.0, 0.5, 1.470)), 36),
+    (166,  behind(166, 0.25, 0.0, 0.01),   V((0.0, 0.8, 1.470)), 35),
+    (178,  behind(178, 0.24, 0.0, 0.0),    V((0.0, 0.9, 1.470)), 34),
+    (186,  V((0.0, -0.045, 1.470)),         V((0.0, 1.0, 1.470)), 34),
+    (192,  V((0.0, 0.20, 1.470)),           V((0.0, 1.2, 1.480)), 32),
+    (206,  V((0.01, 0.31, 1.480)),          V((0.0, 1.5, 1.490)), 30),
+    (228,  V((0.06, 0.45, 1.530)),       V((0.0, 2.0, 1.520)), 30),
+    (270,  V((0.62, 0.62, 1.790)),       V((0.0, 2.2, 1.550)), 26),
+    (330,  V((1.25, 1.55, 1.650)),       V((0.0, 2.55, 1.530)), 28),
+    (378,  V((0.55, 2.52, 1.530)),       V((0.0, 2.90, 1.480)), 40),
 ]
+for f, c, a, l in [
+    (420,  V((0.30, 2.50, 1.570)),       V((0.0, 2.90, 1.500)), 38),
+    (480,  V((-0.05, 2.18, 1.730)),      V((0.0, 2.97, 1.620)), 34),
+    (540,  V((-0.62, 2.32, 1.530)),      V((0.0, 2.95, 1.550)), 34),
+    (600,  V((-0.42, 2.52, 1.290)),      V((0.0, 2.92, 1.530)), 32),
+    (650,  V((-0.13, 2.70, 1.460)),      V((0.0, 2.90, 1.480)), 40),
+    (695,  V((-0.045, 2.795, 1.505)),   V((0.0, 2.92, 1.470)), 50),
+    (735,  V((0.06, 2.805, 1.440)),      V((0.0, 2.92, 1.480)), 55),
+    (772,  V((0.11, 2.80, 1.530)),       V((0.0, 2.92, 1.480)), 50),
+    (805,  V((0.17, 2.835, 1.515)),     V((0.0, 2.925, 1.470)), 50)]:
+    CK.append((f, SH(f, c), SH(f, a), l))
 def nose_cam(f, dx, dz, dy=-0.016, ady=-0.012):
     p = B(f); return (p + V((dx, dy, dz)), p + V((0, ady, 0)))
-for f, dx, dz, lens in ((845, 0.22, 0.07, 50), (900, 0.19, 0.09, 55), (960, 0.18, 0.05, 60), (1020, 0.19, 0.09, 62), (1075, 0.20, 0.07, 62)):
+for f, dx, dz, lens in ((850, 0.22, 0.07, 50), (900, 0.19, 0.09, 55), (960, 0.18, 0.05, 60), (1020, 0.19, 0.09, 62), (1075, 0.20, 0.07, 62)):
     c, a = nose_cam(f, dx, dz); CK.append((f, c, a, lens))
-CK += [
-    (1140, V((0.50, 2.90, 1.52)),       V((0.0, 2.975, 1.27)), 46),
-    (1200, V((0.50, 2.86, 1.46)),       V((0.0, 2.975, 1.27)), 50),
-]
-cB = lambda: B(1240)
+for f, c, a, l in [(1140, V((0.50, 2.90, 1.690)), V((0.0, 2.975, 1.440)), 46), (1200, V((0.50, 2.86, 1.630)), V((0.0, 2.975, 1.440)), 50)]:
+    CK.append((f, SH(f, c), SH(f, a), l))
 for f, a, h, r, lens in ((1245, -35, 0.06, 0.20, 55), (1290, 0, 0.09, 0.19, 55), (1335, 22, 0.12, 0.20, 50)):
-    c0 = B(f); c = c0 + V((r * math.cos(R_(a)), r * math.sin(R_(a)), h)); CK.append((f, c, c0 + V((0, -0.01, 0)), lens))
-CK += [
-    (1395, V((0.80, 2.20, 1.55)),       V((0.0, 2.95, 1.30)), 35),
-    (1445, V((1.05, 1.95, 1.62)),       V((0.0, 2.95, 1.40)), 30),
-    (1500, V((1.20, 1.90, 1.66)),       V((0.0, 3.0, 1.45)), 30),
-]
+    c0 = B(f); c = c0 + V((r * math.cos(R_(a)), r * math.sin(R_(a)), h)); CK.append((f, c, c0 + V((0, -0.01, 0.170)), lens))
+for f, c, a, l in [(1395, V((0.75, 2.25, 1.670)), V((0.0, 2.95, 1.470)), 35), (1445, V((0.55, 2.35, 1.750)), V((0.0, 3.0, 1.570)), 34),
+                   (1500, V((0.45, 2.42, 1.770)), V((0.0, 3.05, 1.620)), 36)]:
+    CK.append((f, SH(f, c), SH(f, a), l))
 fc = catmull([(f, c) for f, c, a, l in CK]); fa = catmull([(f, a) for f, c, a, l in CK]); fl = catmull([(f, float(l)) for f, c, a, l in CK])
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0
 CAMLOG = []

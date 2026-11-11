@@ -1,12 +1,370 @@
 AUDIT GameBoxBullet  frames 1-1500 step 5
 
-worst box_chest_gap          f1431  -0.0237
+worst box_chest_gap          f1141  +0.1223
 worst fingertip_in_box_L     f   1  +0.0000
 worst fingertip_in_box_R     f   1  +0.0000
-worst sole_L                 f 781  -0.0001
-worst sole_R                 f 426  -0.0001
-worst wrist_gap_L            f1451  +0.0310
-worst wrist_gap_R            f1416  +0.0291
-min   camera_clearance       f 189  +0.0242 m
+worst penetration_verts      f1416  +107.0000
+worst sole_L                 f1086  -0.0001
+worst sole_R                 f 461  +0.0473
+worst wrist_gap_L            f 396  +0.0360
+worst wrist_gap_R            f 396  +0.0360
+min   camera_clearance       f 116  +0.0241 m
+penetration: 356 sampled frames with any body/clothes vertex inside the box, 4367 vertex-hits total
 
-0 failures
+356 failures
+FAIL penetration_verts  f   1 14.0000
+FAIL penetration_verts  f   6 14.0000
+FAIL penetration_verts  f  11 13.0000
+FAIL penetration_verts  f  16 12.0000
+FAIL penetration_verts  f  21 12.0000
+FAIL penetration_verts  f  26 12.0000
+FAIL penetration_verts  f  31 11.0000
+FAIL penetration_verts  f  36 11.0000
+FAIL penetration_verts  f  41 11.0000
+FAIL penetration_verts  f  46 11.0000
+FAIL penetration_verts  f  51 11.0000
+FAIL penetration_verts  f  56 11.0000
+FAIL penetration_verts  f  61 10.0000
+FAIL penetration_verts  f  66 11.0000
+FAIL penetration_verts  f  71 11.0000
+FAIL penetration_verts  f  76 11.0000
+FAIL penetration_verts  f  81 11.0000
+FAIL penetration_verts  f  86 11.0000
+FAIL penetration_verts  f  91 12.0000
+FAIL penetration_verts  f  96 13.0000
+FAIL penetration_verts  f 101 14.0000
+FAIL penetration_verts  f 106 14.0000
+FAIL penetration_verts  f 111 15.0000
+FAIL penetration_verts  f 116 15.0000
+FAIL penetration_verts  f 121 14.0000
+FAIL penetration_verts  f 126 16.0000
+FAIL penetration_verts  f 131 16.0000
+FAIL penetration_verts  f 136 16.0000
+FAIL penetration_verts  f 141 16.0000
+FAIL penetration_verts  f 146 16.0000
+FAIL penetration_verts  f 151 16.0000
+FAIL penetration_verts  f 156 16.0000
+FAIL penetration_verts  f 160 16.0000
+FAIL penetration_verts  f 161 16.0000
+FAIL penetration_verts  f 162 16.0000
+FAIL penetration_verts  f 163 15.0000
+FAIL penetration_verts  f 164 15.0000
+FAIL penetration_verts  f 165 15.0000
+FAIL penetration_verts  f 166 14.0000
+FAIL penetration_verts  f 167 14.0000
+FAIL penetration_verts  f 168 14.0000
+FAIL penetration_verts  f 169 15.0000
+FAIL penetration_verts  f 170 15.0000
+FAIL penetration_verts  f 171 15.0000
+FAIL penetration_verts  f 172 15.0000
+FAIL penetration_verts  f 173 15.0000
+FAIL penetration_verts  f 174 15.0000
+FAIL penetration_verts  f 175 15.0000
+FAIL penetration_verts  f 176 15.0000
+FAIL penetration_verts  f 177 15.0000
+FAIL penetration_verts  f 178 15.0000
+FAIL penetration_verts  f 179 15.0000
+FAIL penetration_verts  f 180 15.0000
+FAIL penetration_verts  f 181 14.0000
+FAIL penetration_verts  f 182 14.0000
+FAIL penetration_verts  f 183 14.0000
+FAIL penetration_verts  f 184 14.0000
+FAIL penetration_verts  f 185 14.0000
+FAIL penetration_verts  f 186 14.0000
+FAIL penetration_verts  f 187 14.0000
+FAIL penetration_verts  f 188 14.0000
+FAIL penetration_verts  f 189 14.0000
+FAIL penetration_verts  f 190 13.0000
+FAIL penetration_verts  f 191 14.0000
+FAIL penetration_verts  f 192 14.0000
+FAIL penetration_verts  f 193 14.0000
+FAIL penetration_verts  f 194 13.0000
+FAIL penetration_verts  f 195 13.0000
+FAIL penetration_verts  f 196 13.0000
+FAIL penetration_verts  f 197 13.0000
+FAIL penetration_verts  f 198 13.0000
+FAIL penetration_verts  f 199 14.0000
+FAIL penetration_verts  f 200 14.0000
+FAIL penetration_verts  f 201 14.0000
+FAIL penetration_verts  f 202 14.0000
+FAIL penetration_verts  f 203 14.0000
+FAIL penetration_verts  f 204 14.0000
+FAIL penetration_verts  f 205 14.0000
+FAIL penetration_verts  f 206 14.0000
+FAIL penetration_verts  f 207 14.0000
+FAIL penetration_verts  f 208 14.0000
+FAIL penetration_verts  f 209 14.0000
+FAIL penetration_verts  f 210 13.0000
+FAIL penetration_verts  f 211 13.0000
+FAIL penetration_verts  f 212 13.0000
+FAIL penetration_verts  f 213 13.0000
+FAIL penetration_verts  f 214 13.0000
+FAIL penetration_verts  f 215 13.0000
+FAIL penetration_verts  f 216 13.0000
+FAIL penetration_verts  f 217 13.0000
+FAIL penetration_verts  f 218 13.0000
+FAIL penetration_verts  f 219 13.0000
+FAIL penetration_verts  f 220 13.0000
+FAIL penetration_verts  f 221 12.0000
+FAIL penetration_verts  f 222 12.0000
+FAIL penetration_verts  f 223 12.0000
+FAIL penetration_verts  f 224 12.0000
+FAIL penetration_verts  f 225 12.0000
+FAIL penetration_verts  f 226 12.0000
+FAIL penetration_verts  f 227 12.0000
+FAIL penetration_verts  f 228 12.0000
+FAIL penetration_verts  f 229 11.0000
+FAIL penetration_verts  f 231 11.0000
+FAIL penetration_verts  f 236 11.0000
+FAIL penetration_verts  f 241 11.0000
+FAIL penetration_verts  f 246 11.0000
+FAIL penetration_verts  f 251 11.0000
+FAIL penetration_verts  f 256 12.0000
+FAIL penetration_verts  f 261 11.0000
+FAIL penetration_verts  f 266 11.0000
+FAIL penetration_verts  f 271 11.0000
+FAIL penetration_verts  f 276 12.0000
+FAIL penetration_verts  f 281 11.0000
+FAIL penetration_verts  f 286 11.0000
+FAIL penetration_verts  f 291 10.0000
+FAIL penetration_verts  f 296 10.0000
+FAIL penetration_verts  f 301 10.0000
+FAIL penetration_verts  f 306 10.0000
+FAIL penetration_verts  f 311 10.0000
+FAIL penetration_verts  f 316 10.0000
+FAIL penetration_verts  f 321 8.0000
+FAIL penetration_verts  f 326 8.0000
+FAIL penetration_verts  f 331 8.0000
+FAIL penetration_verts  f 336 8.0000
+FAIL penetration_verts  f 341 7.0000
+FAIL penetration_verts  f 346 7.0000
+FAIL penetration_verts  f 351 7.0000
+FAIL penetration_verts  f 356 7.0000
+FAIL penetration_verts  f 361 7.0000
+FAIL penetration_verts  f 366 7.0000
+FAIL penetration_verts  f 371 7.0000
+FAIL penetration_verts  f 376 7.0000
+FAIL penetration_verts  f 381 7.0000
+FAIL penetration_verts  f 386 7.0000
+FAIL penetration_verts  f 391 7.0000
+FAIL penetration_verts  f 396 6.0000
+FAIL penetration_verts  f 401 6.0000
+FAIL penetration_verts  f 406 6.0000
+FAIL penetration_verts  f 411 6.0000
+FAIL penetration_verts  f 416 6.0000
+FAIL penetration_verts  f 421 6.0000
+FAIL penetration_verts  f 426 7.0000
+FAIL penetration_verts  f 431 6.0000
+FAIL penetration_verts  f 436 6.0000
+FAIL penetration_verts  f 441 6.0000
+FAIL penetration_verts  f 446 6.0000
+FAIL penetration_verts  f 451 6.0000
+FAIL penetration_verts  f 456 6.0000
+FAIL penetration_verts  f 461 8.0000
+FAIL penetration_verts  f 466 8.0000
+FAIL penetration_verts  f 471 8.0000
+FAIL penetration_verts  f 476 8.0000
+FAIL penetration_verts  f 481 7.0000
+FAIL penetration_verts  f 486 7.0000
+FAIL penetration_verts  f 491 6.0000
+FAIL penetration_verts  f 496 6.0000
+FAIL penetration_verts  f 501 6.0000
+FAIL penetration_verts  f 506 6.0000
+FAIL penetration_verts  f 511 6.0000
+FAIL penetration_verts  f 516 6.0000
+FAIL penetration_verts  f 521 6.0000
+FAIL penetration_verts  f 526 6.0000
+FAIL penetration_verts  f 531 6.0000
+FAIL penetration_verts  f 536 6.0000
+FAIL penetration_verts  f 541 6.0000
+FAIL penetration_verts  f 546 6.0000
+FAIL penetration_verts  f 551 6.0000
+FAIL penetration_verts  f 556 7.0000
+FAIL penetration_verts  f 561 7.0000
+FAIL penetration_verts  f 566 7.0000
+FAIL penetration_verts  f 571 7.0000
+FAIL penetration_verts  f 576 7.0000
+FAIL penetration_verts  f 581 7.0000
+FAIL penetration_verts  f 586 7.0000
+FAIL penetration_verts  f 591 7.0000
+FAIL penetration_verts  f 596 6.0000
+FAIL penetration_verts  f 601 6.0000
+FAIL penetration_verts  f 606 6.0000
+FAIL penetration_verts  f 611 6.0000
+FAIL penetration_verts  f 616 6.0000
+FAIL penetration_verts  f 621 6.0000
+FAIL penetration_verts  f 626 6.0000
+FAIL penetration_verts  f 631 6.0000
+FAIL penetration_verts  f 636 6.0000
+FAIL penetration_verts  f 641 6.0000
+FAIL penetration_verts  f 646 6.0000
+FAIL penetration_verts  f 651 6.0000
+FAIL penetration_verts  f 656 6.0000
+FAIL penetration_verts  f 661 6.0000
+FAIL penetration_verts  f 666 6.0000
+FAIL penetration_verts  f 671 7.0000
+FAIL penetration_verts  f 676 7.0000
+FAIL penetration_verts  f 681 7.0000
+FAIL penetration_verts  f 686 7.0000
+FAIL penetration_verts  f 691 7.0000
+FAIL penetration_verts  f 696 7.0000
+FAIL penetration_verts  f 701 7.0000
+FAIL penetration_verts  f 706 6.0000
+FAIL penetration_verts  f 711 6.0000
+FAIL penetration_verts  f 716 6.0000
+FAIL penetration_verts  f 721 6.0000
+FAIL penetration_verts  f 726 6.0000
+FAIL penetration_verts  f 731 6.0000
+FAIL penetration_verts  f 736 6.0000
+FAIL penetration_verts  f 741 6.0000
+FAIL penetration_verts  f 746 6.0000
+FAIL penetration_verts  f 751 6.0000
+FAIL penetration_verts  f 756 6.0000
+FAIL penetration_verts  f 761 6.0000
+FAIL penetration_verts  f 766 6.0000
+FAIL penetration_verts  f 771 6.0000
+FAIL penetration_verts  f 776 6.0000
+FAIL penetration_verts  f 781 6.0000
+FAIL penetration_verts  f 786 6.0000
+FAIL penetration_verts  f 791 6.0000
+FAIL penetration_verts  f 796 6.0000
+FAIL penetration_verts  f 801 6.0000
+FAIL penetration_verts  f 806 6.0000
+FAIL penetration_verts  f 811 6.0000
+FAIL penetration_verts  f 816 6.0000
+FAIL penetration_verts  f 821 6.0000
+FAIL penetration_verts  f 826 6.0000
+FAIL penetration_verts  f 831 6.0000
+FAIL penetration_verts  f 836 6.0000
+FAIL penetration_verts  f 841 6.0000
+FAIL penetration_verts  f 846 6.0000
+FAIL penetration_verts  f 851 6.0000
+FAIL penetration_verts  f 856 6.0000
+FAIL penetration_verts  f 861 6.0000
+FAIL penetration_verts  f 866 6.0000
+FAIL penetration_verts  f 871 6.0000
+FAIL penetration_verts  f 876 7.0000
+FAIL penetration_verts  f 881 7.0000
+FAIL penetration_verts  f 886 7.0000
+FAIL penetration_verts  f 891 7.0000
+FAIL penetration_verts  f 896 7.0000
+FAIL penetration_verts  f 901 7.0000
+FAIL penetration_verts  f 906 7.0000
+FAIL penetration_verts  f 911 7.0000
+FAIL penetration_verts  f 916 7.0000
+FAIL penetration_verts  f 921 7.0000
+FAIL penetration_verts  f 926 7.0000
+FAIL penetration_verts  f 931 6.0000
+FAIL penetration_verts  f 936 6.0000
+FAIL penetration_verts  f 941 6.0000
+FAIL penetration_verts  f 946 6.0000
+FAIL penetration_verts  f 951 6.0000
+FAIL penetration_verts  f 956 6.0000
+FAIL penetration_verts  f 961 6.0000
+FAIL penetration_verts  f 966 6.0000
+FAIL penetration_verts  f 971 6.0000
+FAIL penetration_verts  f 976 6.0000
+FAIL penetration_verts  f 981 6.0000
+FAIL penetration_verts  f 986 6.0000
+FAIL penetration_verts  f 991 6.0000
+FAIL penetration_verts  f 996 6.0000
+FAIL penetration_verts  f1001 6.0000
+FAIL penetration_verts  f1006 6.0000
+FAIL penetration_verts  f1011 6.0000
+FAIL penetration_verts  f1016 6.0000
+FAIL penetration_verts  f1021 6.0000
+FAIL penetration_verts  f1026 6.0000
+FAIL penetration_verts  f1031 6.0000
+FAIL penetration_verts  f1036 6.0000
+FAIL penetration_verts  f1041 6.0000
+FAIL penetration_verts  f1046 6.0000
+FAIL penetration_verts  f1051 6.0000
+FAIL penetration_verts  f1056 6.0000
+FAIL penetration_verts  f1061 6.0000
+FAIL penetration_verts  f1066 6.0000
+FAIL penetration_verts  f1071 6.0000
+FAIL penetration_verts  f1076 6.0000
+FAIL penetration_verts  f1081 6.0000
+FAIL penetration_verts  f1086 6.0000
+FAIL penetration_verts  f1091 6.0000
+FAIL penetration_verts  f1096 6.0000
+FAIL penetration_verts  f1101 6.0000
+FAIL penetration_verts  f1106 6.0000
+FAIL penetration_verts  f1111 7.0000
+FAIL penetration_verts  f1116 7.0000
+FAIL penetration_verts  f1121 7.0000
+FAIL penetration_verts  f1126 7.0000
+FAIL penetration_verts  f1131 7.0000
+FAIL penetration_verts  f1136 7.0000
+FAIL penetration_verts  f1141 7.0000
+FAIL penetration_verts  f1146 7.0000
+FAIL penetration_verts  f1151 7.0000
+FAIL penetration_verts  f1156 7.0000
+FAIL penetration_verts  f1161 7.0000
+FAIL penetration_verts  f1166 7.0000
+FAIL penetration_verts  f1171 7.0000
+FAIL penetration_verts  f1176 6.0000
+FAIL penetration_verts  f1181 6.0000
+FAIL penetration_verts  f1186 6.0000
+FAIL penetration_verts  f1191 6.0000
+FAIL penetration_verts  f1196 6.0000
+FAIL penetration_verts  f1201 6.0000
+FAIL penetration_verts  f1206 6.0000
+FAIL penetration_verts  f1211 6.0000
+FAIL penetration_verts  f1216 6.0000
+FAIL penetration_verts  f1221 6.0000
+FAIL penetration_verts  f1226 6.0000
+FAIL penetration_verts  f1231 6.0000
+FAIL penetration_verts  f1236 6.0000
+FAIL penetration_verts  f1241 6.0000
+FAIL penetration_verts  f1246 6.0000
+FAIL penetration_verts  f1251 6.0000
+FAIL penetration_verts  f1256 6.0000
+FAIL penetration_verts  f1261 6.0000
+FAIL penetration_verts  f1266 6.0000
+FAIL penetration_verts  f1271 6.0000
+FAIL penetration_verts  f1276 6.0000
+FAIL penetration_verts  f1281 6.0000
+FAIL penetration_verts  f1286 6.0000
+FAIL penetration_verts  f1291 6.0000
+FAIL penetration_verts  f1296 6.0000
+FAIL penetration_verts  f1301 6.0000
+FAIL penetration_verts  f1306 6.0000
+FAIL penetration_verts  f1311 6.0000
+FAIL penetration_verts  f1316 6.0000
+FAIL penetration_verts  f1321 6.0000
+FAIL penetration_verts  f1326 6.0000
+FAIL penetration_verts  f1331 6.0000
+FAIL penetration_verts  f1336 6.0000
+FAIL penetration_verts  f1341 6.0000
+FAIL penetration_verts  f1346 6.0000
+FAIL penetration_verts  f1351 7.0000
+FAIL penetration_verts  f1356 7.0000
+FAIL penetration_verts  f1361 7.0000
+FAIL penetration_verts  f1366 10.0000
+FAIL penetration_verts  f1371 14.0000
+FAIL penetration_verts  f1376 18.0000
+FAIL penetration_verts  f1381 21.0000
+FAIL penetration_verts  f1386 26.0000
+FAIL penetration_verts  f1391 28.0000
+FAIL penetration_verts  f1396 32.0000
+FAIL penetration_verts  f1401 63.0000
+FAIL penetration_verts  f1406 84.0000
+FAIL penetration_verts  f1411 98.0000
+FAIL penetration_verts  f1416 107.0000
+FAIL penetration_verts  f1421 105.0000
+FAIL penetration_verts  f1426 104.0000
+FAIL penetration_verts  f1431 102.0000
+FAIL penetration_verts  f1436 98.0000
+FAIL penetration_verts  f1441 91.0000
+FAIL penetration_verts  f1446 81.0000
+FAIL penetration_verts  f1451 75.0000
+FAIL penetration_verts  f1456 57.0000
+FAIL penetration_verts  f1461 42.0000
+FAIL penetration_verts  f1466 34.0000
+FAIL penetration_verts  f1471 29.0000
+FAIL penetration_verts  f1476 30.0000
+FAIL penetration_verts  f1481 29.0000
+FAIL penetration_verts  f1486 29.0000
+FAIL penetration_verts  f1491 29.0000
+FAIL penetration_verts  f1496 29.0000

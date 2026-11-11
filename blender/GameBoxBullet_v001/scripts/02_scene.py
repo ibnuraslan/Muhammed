@@ -55,7 +55,7 @@ def box(name, c, x0, x1, y0, y1, z0, z1, mat=None, bevel=0.0):
         m = o.modifiers.new("bev", "BEVEL"); m.width = bevel; m.segments = 2
     return o
 
-def cut_hole(o, r, axis_y=True, y0=-1, y1=1, x=0.0, z=1.30, jag=0.0, seed=0):
+def cut_hole(o, r, axis_y=True, y0=-1, y1=1, x=0.0, z=1.47, jag=0.0, seed=0):
     """boolean-difference a ragged hole along Y through o"""
     bm = bmesh.new()
     bmesh.ops.create_cone(bm, cap_ends=True, segments=14, radius1=r, radius2=r, depth=(y1 - y0))
@@ -186,26 +186,51 @@ for i in range(520):
     o.location = (x, y, 0); o.rotation_euler.z = random.uniform(0, 6.28); s_ = random.uniform(0.7, 1.4); o.scale = (s_, s_, s_)
     GRASS.append(o)
 
-def import_model(asset, c, loc, rot=0.0, scale=1.0, skip=("LOD1", "LOD2", "LOD3", "wdg_", "hlp_", "rig_")):
-    p = os.path.join(A, asset, asset + "_1k.blend")
-    with bpy.data.libraries.load(p, link=False) as (s, d):
-        d.objects = [n for n in s.objects if not any(k in n for k in skip)]
+_MODELS = {}
+def decimate(o, ratio):
+    bpy.context.view_layer.objects.active = o
+    for s_ in bpy.context.selected_objects: s_.select_set(False)
+    o.select_set(True)
+    m = o.modifiers.new("dec", "DECIMATE"); m.ratio = ratio
+    bpy.ops.object.modifier_apply(modifier="dec")
+def import_model(asset, c, loc, rot=0.0, scale=1.0, skip=("LOD1", "LOD2", "LOD3", "wdg_", "hlp_", "rig_"), dec=None):
     root = bpy.data.objects.new(asset + "_root", None); c.objects.link(root)
-    for o in d.objects:
-        if o is None or o.type not in ("MESH", "EMPTY", "CURVE"): continue
-        c.objects.link(o)
-        if o.parent is None: o.parent = root
+    if asset in _MODELS:   # repeated asset: linked duplicates share the mesh data
+        src = _MODELS[asset]; mp = {}
+        for o in src:
+            n = o.copy(); c.objects.link(n); mp[o] = n
+        for o in src:
+            mp[o].parent = mp[o.parent] if o.parent in mp else root
+    else:
+        p = os.path.join(A, asset, asset + "_1k.blend")
+        with bpy.data.libraries.load(p, link=False) as (s, d):
+            d.objects = [n for n in s.objects if not any(k in n for k in skip)]
+        objs = [o for o in d.objects if o is not None and o.type in ("MESH", "EMPTY", "CURVE")]
+        for o in objs:
+            c.objects.link(o)
+            if o.parent is None or o.parent not in objs: o.parent = root
+        if dec:
+            for o in objs:
+                if o.type == "MESH" and len(o.data.vertices) > 60000: decimate(o, dec)
+        _MODELS[asset] = objs
     root.location = loc; root.rotation_euler.z = rot; root.scale = (scale,) * 3
     return root
 
-import_model("tree_small_02", C_EXT, (-4.5, -9.0, 0), 0.7, 1.0)
-import_model("tree_small_02", C_EXT, (7.5, -14.0, 0), 2.1, 1.15)
+TREE_SKIP = ("LOD0", "LOD2", "LOD3", "wdg_", "hlp_", "rig_")
+import_model("tree_small_02", C_EXT, (-4.5, -9.0, 0), 0.7, 1.0, skip=TREE_SKIP, dec=0.3)
+import_model("tree_small_02", C_EXT, (7.5, -14.0, 0), 2.1, 1.15, skip=TREE_SKIP)
 import_model("street_lamp_01", C_EXT, (-3.0, -23.2, 0.06), 0.0)
 import_model("fire_hydrant", C_EXT, (5.0, -23.0, 0.06), 0.8)
 import_model("covered_car", C_EXT, (-6.5, -27.2, 0), R_(90))
 import_model("covered_car", C_EXT, (11.0, -27.6, 0), R_(-90))
 for x in (-5.4, -4.2, -3.0, 4.3, 5.5):
-    import_model("shrub_01", C_EXT, (x, -1.0, 0), random.uniform(0, 6), random.uniform(0.8, 1.1))
+    import_model("shrub_01", C_EXT, (x, -1.0, 0), random.uniform(0, 6), random.uniform(0.8, 1.1), dec=0.4)
+import_model("garden_sprinkler_01", C_EXT, (-2.6, -11.0, 0.0), 0.0, 1.0)
+# neighbour out for a walk on the sidewalk (MPFB, CC0)
+with bpy.data.libraries.load(os.path.join(ROOT, "work", "walker.blend"), link=False) as (s_, d_):
+    d_.objects = [n for n in s_.objects]
+for o in d_.objects:
+    if o: C_EXT.objects.link(o)
 # mailbox
 box("Mailbox_post", C_EXT, 3.45, 3.55, -21.6, -21.5, 0, 1.0, M_wood_light)
 box("Mailbox", C_EXT, 3.35, 3.65, -21.8, -21.3, 1.0, 1.2, M_blackplastic, 0.02)
@@ -400,7 +425,7 @@ area("L_window_bounce", (-1.7, 0.6, 1.5), (R_(-90), 0, 0), 1.0, 150, (0.9, 0.95,
 area("L_rim_purple", (1.8, 4.2, 2.3), (R_(-60), 0, R_(150)), 1.0, 80, (0.6, 0.3, 1.0))
 
 # ------------------------------------------------------------------ the collector's box (local frame: centre at origin, front = -Y)
-BOX_C = Vector((0.0, 2.97, 1.25))
+BOX_C = Vector((0.0, 2.97, 1.42))
 broot = bpy.data.objects.new("BoxRoot", None); C_BOX.objects.link(broot); broot.location = BOX_C
 broot.empty_display_size = 0.2
 CUT = bpy.data.node_groups.new("CutAway", "ShaderNodeTree")   # alpha = 0 where local x > cut (cross-section reveal)
@@ -426,17 +451,37 @@ def cutmat_real(m):
 
 # front cover: dark embossed abstract relief + animated crack mask around the impact point
 mc = bpy.data.materials.new("M_box_cover"); mc.use_nodes = True; nt_ = mc.node_tree; N = nt_.nodes; L = nt_.links
-bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.32; bsdf.inputs["Coat Weight"].default_value = 0.6
+bsdf = N["Principled BSDF"]; bsdf.inputs["Roughness"].default_value = 0.5; bsdf.inputs["Coat Weight"].default_value = 0.25; bsdf.inputs["Coat Roughness"].default_value = 0.25
 tco = N.new("ShaderNodeTexCoord"); tco.object = broot
 vor = N.new("ShaderNodeTexVoronoi"); vor.inputs["Scale"].default_value = 22; vor.feature = "DISTANCE_TO_EDGE"
 wave = N.new("ShaderNodeTexWave"); wave.inputs["Scale"].default_value = 3; wave.wave_type = "RINGS"
 mxf = N.new("ShaderNodeMath"); mxf.operation = "MINIMUM"
 emb = N.new("ShaderNodeMapRange"); emb.inputs[1].default_value = 0.0; emb.inputs[2].default_value = 0.012
 L.new(tco.outputs["Object"], vor.inputs["Vector"]); L.new(tco.outputs["Object"], wave.inputs["Vector"])
-L.new(vor.outputs["Distance"], emb.inputs[0])
+# abstract embossed emblem (rings + diamond + chevrons), no text: generated image mapped on local x/z
+def emblem_img():
+    import numpy as np
+    W_, H_ = 600, 760; yy_, xx_ = np.mgrid[0:H_, 0:W_].astype(float)
+    x = (xx_ / W_ - 0.5) * 0.30; z = (0.5 - yy_ / H_) * 0.38 - 0.03
+    r = np.hypot(x, z); E = np.zeros_like(r)
+    E = np.maximum(E, (np.abs(r - 0.075) < 0.004) * 1.0); E = np.maximum(E, (np.abs(r - 0.062) < 0.0015) * 1.0)
+    d = np.abs(x) + np.abs(z); E = np.maximum(E, ((d < 0.04) & (d > 0.03)) * 1.0); E = np.maximum(E, (d < 0.018) * 1.0)
+    for k in range(3):
+        zz = z + 0.11 + 0.018 * k; E = np.maximum(E, ((np.abs(zz + 0.6 * np.abs(x)) < 0.0035) & (np.abs(x) < 0.07)) * 1.0)
+    fr = (np.abs(np.abs(x) - 0.135) < 0.002) & (np.abs(z + 0.03) < 0.175) | (np.abs(np.abs(z + 0.03) - 0.175) < 0.002) & (np.abs(x) < 0.135)
+    E = np.maximum(E, fr * 1.0)
+    im = bpy.data.images.new("box_emblem", W_, H_); px = np.ones((H_, W_, 4)); px[..., 0] = px[..., 1] = px[..., 2] = E[::-1]
+    im.pixels = px.ravel(); im.pack(); im.colorspace_settings.name = "Non-Color"; return im
+eimg = N.new("ShaderNodeTexImage"); eimg.image = emblem_img(); eimg.extension = "CLIP"
+esep = N.new("ShaderNodeSeparateXYZ"); L.new(tco.outputs["Object"], esep.inputs[0])
+eu = N.new("ShaderNodeMath"); eu.operation = "MULTIPLY_ADD"; eu.inputs[1].default_value = 1 / 0.30; eu.inputs[2].default_value = 0.5; L.new(esep.outputs[0], eu.inputs[0])
+ev = N.new("ShaderNodeMath"); ev.operation = "MULTIPLY_ADD"; ev.inputs[1].default_value = 1 / 0.38; ev.inputs[2].default_value = 0.5; L.new(esep.outputs[2], ev.inputs[0])
+ecb = N.new("ShaderNodeCombineXYZ"); L.new(eu.outputs[0], ecb.inputs[0]); L.new(ev.outputs[0], ecb.inputs[1]); L.new(ecb.outputs[0], eimg.inputs[0])
+emb.inputs[1].default_value = 0.0; emb.inputs[2].default_value = 1.0; emb.inputs[3].default_value = 1.0; emb.inputs[4].default_value = 0.6
+L.new(eimg.outputs[0], emb.inputs[0])
 colr = N.new("ShaderNodeMix"); colr.data_type = "RGBA"
-colr.inputs[6].default_value = (0.55, 0.42, 0.18, 1)   # embossed gold-bronze lines
-colr.inputs[7].default_value = (0.03, 0.03, 0.04, 1)   # dark case
+colr.inputs[6].default_value = (0.20, 0.17, 0.12, 1)   # emblem: dark bronze
+colr.inputs[7].default_value = (0.018, 0.018, 0.02, 1)   # matte black case
 L.new(emb.outputs[0], colr.inputs[0])
 mtl = N.new("ShaderNodeMath"); mtl.operation = "SUBTRACT"; mtl.inputs[0].default_value = 1.0; L.new(emb.outputs[0], mtl.inputs[1])
 # crack mask: thin voronoi edges, only inside radius R of the impact (local x 0, z +0.05)
@@ -463,22 +508,28 @@ hm = N.new("ShaderNodeMath"); hm.operation = "MULTIPLY"; L.new(hlt.outputs[0], h
 colh = N.new("ShaderNodeMix"); colh.data_type = "RGBA"; colh.inputs[7].default_value = (0.01, 0.008, 0.006, 1)
 L.new(hm.outputs[0], colh.inputs[0])
 L.new(crk.outputs[0], colc.inputs[0]); L.new(colr.outputs[2], colc.inputs[6]); L.new(colc.outputs[2], colh.inputs[6]); L.new(colh.outputs[2], bsdf.inputs["Base Color"])
-bmp = N.new("ShaderNodeBump"); bmp.inputs["Strength"].default_value = 0.6; bmp.inputs["Distance"].default_value = 0.002
+bmp = N.new("ShaderNodeBump"); bmp.inputs["Strength"].default_value = 0.8; bmp.inputs["Distance"].default_value = 0.0015; bmp.invert = True
 hsum = N.new("ShaderNodeMath"); hsum.operation = "SUBTRACT"; L.new(emb.outputs[0], hsum.inputs[0]); L.new(crk.outputs[0], hsum.inputs[1])
 L.new(hsum.outputs[0], bmp.inputs["Height"]); L.new(bmp.outputs[0], bsdf.inputs["Normal"])
-mm_ = N.new("ShaderNodeMath"); mm_.operation = "MULTIPLY"; mm_.inputs[1].default_value = 0.8; L.new(mtl.outputs[0], mm_.inputs[0]); L.new(mm_.outputs[0], bsdf.inputs["Metallic"])
+mm_ = N.new("ShaderNodeMath"); mm_.operation = "MULTIPLY"; mm_.inputs[1].default_value = 1.4; L.new(mtl.outputs[0], mm_.inputs[0]); L.new(mm_.outputs[0], bsdf.inputs["Metallic"])
 cutmat(mc)
 
 M_case = cutmat(P("M_box_shell", (0.035, 0.035, 0.045), 0.35, coat=0.4))
 M_tray = cutmat(P("M_disc_tray", (0.16, 0.17, 0.2), 0.3, coat=0.5))
 M_card = cutmat(P("M_cardboard", (0.62, 0.47, 0.30), 0.85))
 M_page = cutmat(P("M_manual_page", (0.88, 0.86, 0.80), 0.6))
+M_page2 = cutmat(P("M_manual_page_print", (0.55, 0.70, 0.85), 0.5))
 M_bookc = cutmat(P("M_artbook", (0.25, 0.05, 0.04), 0.5))
 M_bookp = cutmat(P("M_artbook_pages", (0.9, 0.88, 0.84), 0.7))
 # disc: iridescent data side via thin-film
 md = bpy.data.materials.new("M_disc"); md.use_nodes = True; bd = md.node_tree.nodes["Principled BSDF"]
 bd.inputs["Base Color"].default_value = (0.85, 0.85, 0.88, 1); bd.inputs["Metallic"].default_value = 1.0; bd.inputs["Roughness"].default_value = 0.08
-bd.inputs["Thin Film Thickness"].default_value = 520; bd.inputs["Thin Film IOR"].default_value = 1.6
+bd.inputs["Thin Film IOR"].default_value = 1.5
+dtc = md.node_tree.nodes.new("ShaderNodeTexCoord"); dwv = md.node_tree.nodes.new("ShaderNodeTexWave"); dwv.wave_type = "RINGS"
+dwv.inputs["Scale"].default_value = 18; dwv.inputs["Distortion"].default_value = 0.5
+dmr = md.node_tree.nodes.new("ShaderNodeMapRange"); dmr.inputs[3].default_value = 250; dmr.inputs[4].default_value = 900
+md.node_tree.links.new(dtc.outputs["Object"], dwv.inputs["Vector"]); md.node_tree.links.new(dwv.outputs["Fac"], dmr.inputs[0])
+md.node_tree.links.new(dmr.outputs[0], bd.inputs["Thin Film Thickness"])
 cutmat(md)
 md_sh = md.copy(); md_sh.name = "M_disc_shard"   # shards are not cut away, they glitter in the cross-section
 
@@ -492,11 +543,21 @@ lbox("Box_back", 0.062, 0.070, M_case, inset=0.0, bevel=0.002)
 for nm, (x0, x1, z0, z1) in {"Box_wallL": (-W2, -W2 + 0.006, -H2, H2), "Box_wallR": (W2 - 0.006, W2, -H2, H2),
                              "Box_wallT": (-W2, W2, H2 - 0.006, H2), "Box_wallB": (-W2, W2, -H2, -H2 + 0.006)}.items():
     o = box(nm, C_BOX, x0, x1, -0.062, 0.062, z0, z1, M_case); o.parent = broot
-lbox("Box_tray", -0.062, -0.046, M_tray)
+lbox("Box_tray", -0.048, -0.046, M_tray)
+for nm, (x0, x1, z0, z1) in {"Tray_frameL": (-W2 + 0.006, -W2 + 0.016, -H2 + 0.006, H2 - 0.006), "Tray_frameR": (W2 - 0.016, W2 - 0.006, -H2 + 0.006, H2 - 0.006),
+                             "Tray_frameT": (-W2 + 0.006, W2 - 0.006, H2 - 0.016, H2 - 0.006), "Tray_frameB": (-W2 + 0.006, W2 - 0.006, -H2 + 0.006, -H2 + 0.016)}.items():
+    o = box(nm, C_BOX, x0, x1, -0.062, -0.048, z0, z1, M_tray); o.parent = broot
+M_clear = cutmat(P("M_jewel_clear", (0.95, 0.97, 1.0), 0.04, trans=1.0, ior=1.49))
 # discs (2 in the tray, 1 in a sleeve) as thin cylinders lying in the XZ plane, centres offset so the bullet hits off-centre
 DISCS = []
 def disc(name, y, cx, cz, mat=md):
-    bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=64, radius1=0.06, radius2=0.06, depth=0.0012)
+    bm = bmesh.new()
+    ro = bmesh.ops.create_circle(bm, cap_ends=False, segments=64, radius=0.06)["verts"]
+    ri = bmesh.ops.create_circle(bm, cap_ends=False, segments=64, radius=0.0075)["verts"]
+    bmesh.ops.bridge_loops(bm, edges=bm.edges[:])
+    ex = bmesh.ops.extrude_face_region(bm, geom=bm.faces[:])
+    bmesh.ops.translate(bm, verts=[e for e in ex["geom"] if isinstance(e, bmesh.types.BMVert)], vec=(0, 0, 0.0012))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
     bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X'))
     o = mesh_obj(name, bm, C_BOX, mat); o.parent = broot; o.location = (cx, y, cz); DISCS.append(o); return o
 disc("Disc_1", -0.0565, 0.022, 0.03); disc("Disc_2", -0.0505, -0.015, 0.068)
@@ -506,7 +567,7 @@ for i in range(18):
     y0 = -0.040 + i * 0.00105
     bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=24, y_segments=30, size=1)
     for v in bm.verts: v.co = Vector((v.co.x * (W2 - 0.012), y0, v.co.y * (H2 - 0.012)))
-    o = mesh_obj("Page_%02d" % i, bm, C_BOX, M_page); o.parent = broot
+    o = mesh_obj("Page_%02d" % i, bm, C_BOX, M_page if i % 3 else M_page2); o.parent = broot
     o.modifiers.new("sol", "SOLIDIFY").thickness = 0.0006
     # bow-wave shape key: gaussian bulge toward +Y around the bullet line (x 0, z +0.05)
     o.shape_key_add(name="Basis"); k = o.shape_key_add(name="bulge")
@@ -514,9 +575,9 @@ for i in range(18):
         d2 = (v.co.x) ** 2 + (v.co.z - 0.05) ** 2
         k.data[j].co.y = v.co.y + 0.006 * math.exp(-d2 / (2 * 0.025 ** 2))
     PAGES.append(o)
-lbox("Box_sleeve", -0.0205, -0.0195, M_card)
+lbox("Box_sleeve", -0.0205, -0.0195, M_clear)
 disc("Disc_3", -0.0165, 0.01, 0.055)
-lbox("Box_sleeve2", -0.0135, -0.0125, M_card)
+lbox("Box_sleeve2", -0.0135, -0.0125, M_tray)
 lbox("Box_insert", -0.012, 0.004, M_card)
 lbox("Artbook_front", 0.004, 0.008, M_bookc); lbox("Artbook_pages", 0.008, 0.056, M_bookp, inset=0.009); lbox("Artbook_back", 0.056, 0.060, M_bookc)
 for o in C_BOX.objects:

@@ -26,7 +26,9 @@ None. Every third-party asset in this film is CC0, so the video description need
 | Model: Gamepad | Josh Dean | polyhaven.com |
 | Model: Ceiling Fan | Ulan Cabanilla | polyhaven.com |
 | Model: Potted Plant 01 | Rico Cilliers | polyhaven.com |
+| Model: Garden Sprinkler 01 | Amal Kumar | polyhaven.com |
+| Character: neighbour on the sidewalk (base mesh, skin middleage_african_female, hair ponytail01, clothes female_casualsuit01, shoes02) | MakeHuman community, built with MPFB2 | makehumancommunity.org (CC0 system assets) |
 | Character: young man (base mesh, skin young_caucasian_male, hair short02, clothes male_casualsuit03, shoes02) | MakeHuman community, built with MPFB2 | makehumancommunity.org (CC0 system assets) |
 
 ## Made for this film
-House walls and their layers (siding, sheathing, studs, insulation, drywall), neighbour houses, bedroom furniture, monitor glow (abstract animated gradient, no UI or text), posters (procedurally generated abstract art, no text), the collector's box and all its layers (cover with an abstract embossed pattern, no title or logo), discs and shards, manual pages, the bullet (plain projectile shape), debris, dust, energy rings.
+House walls and their layers (siding, sheathing, studs, insulation, drywall), neighbour houses, bedroom furniture, monitor glow (abstract animated gradient, no UI or text), posters (procedurally generated abstract art, no text), the collector's box and all its layers (cover with an abstract embossed pattern, no title or logo), discs and shards, manual pages, the bullet (plain projectile shape), debris, dust, energy rings, sprinkler water droplets, birds.

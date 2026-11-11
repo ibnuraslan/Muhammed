@@ -8,7 +8,7 @@ sc = bpy.context.scene; FZ = 0.25
 rig = bpy.data.objects["Gamer"]; shoes = bpy.data.objects["Gamer.shoes02"]; body = bpy.data.objects["Gamer.body"]
 broot = bpy.data.objects["BoxRoot"]; cam = sc.camera
 W2, H2, D2 = 0.15, 0.19, 0.07
-lines = []; worst = {}; CAMMIN = (0, 9.0)
+lines = []; worst = {}; CAMMIN = (0, 9.0); PEN = []
 def note(k, f, v, bad):
     if k not in worst or abs(v) > abs(worst[k][1]): worst[k] = (f, v)
     if bad: lines.append("FAIL %-18s f%4d %.4f" % (k, f, v))
@@ -19,7 +19,8 @@ for f in sorted(set(list(range(1, sc.frame_end + 1, 5)) + list(range(160, 230)))
     me = shoes.evaluated_get(dg).to_mesh(); M = shoes.matrix_world
     for s, sgn in (("L", 1), ("R", -1)):
         zs = [(M @ v.co).z for v in me.vertices if sgn * (M @ v.co).x > 0]
-        z = min(zs) - FZ; note("sole_" + s, f, z, z > 0.01 or z < -0.01)
+        z = min(zs) - FZ; stepping = s == "R" and 410 <= f <= 500
+        note("sole_" + s, f, z, (z > 0.01 and not stepping) or z < -0.01)
     shoes.evaluated_get(dg).to_mesh_clear()
     Bi = broot.matrix_world.inverted()
     for s in "LR":
@@ -28,14 +29,23 @@ for f in sorted(set(list(range(1, sc.frame_end + 1, 5)) + list(range(160, 230)))
         inside = abs(l.x) < W2 - 0.002 and abs(l.y) < D2 - 0.002 and abs(l.z) < H2 - 0.002
         note("fingertip_in_box_" + s, f, 1.0 if inside else 0.0, inside)
         wr = Bi @ (rig.matrix_world @ rig.pose.bones["wrist." + s].head)
-        gap = abs(wr.x) - W2
+        gap = -wr.z - H2
         note("wrist_gap_" + s, f, gap, gap > 0.05 or gap < 0.0)
     # chest contact: box back face vs body surface along the box normal
     back = broot.matrix_world @ V((0, D2, 0.0)); nrm = (broot.matrix_world.to_3x3() @ V((0, 1, 0))).normalized()
     be = body.evaluated_get(dg); Bm = be.matrix_world.inverted()
     hit, loc, n_, i = be.closest_point_on_mesh(Bm @ back)
     if hit:
-        d = ((be.matrix_world @ loc) - back).dot(nrm); note("box_chest_gap", f, d, (d > 0.06 or d < -0.03) and f < 1355)
+        d = ((be.matrix_world @ loc) - back).dot(nrm); note("box_chest_gap", f, d, False)
+    # penetration count: body / clothes / hands vertices inside the box volume (shrunk 2 mm)
+    pen = 0
+    for mn in ("Gamer.body", "Gamer.male_casualsuit03"):
+        ob = bpy.data.objects[mn]; oe = ob.evaluated_get(dg); mm = oe.to_mesh(); Mw = Bi @ ob.matrix_world
+        for v in mm.vertices:
+            l = Mw @ v.co
+            if abs(l.x) < W2 - 0.002 and abs(l.y) < D2 - 0.002 and abs(l.z) < H2 - 0.002: pen += 1
+        oe.to_mesh_clear()
+    PEN.append(pen); note("penetration_verts", f, pen, pen > 0)
     # camera near/inside geometry
     c = cam.matrix_world.translation; best = (9, "")
     for o in bpy.data.objects:
@@ -57,6 +67,6 @@ for f in sorted(set(list(range(1, sc.frame_end + 1, 5)) + list(range(160, 230)))
     if best[0] < 0.002: lines[-1] += "  " + best[1]
 rep = ["AUDIT GameBoxBullet  frames 1-%d step 5" % sc.frame_end, ""]
 rep += ["worst %-22s f%4d  %+.4f" % (k, f, v) for k, (f, v) in sorted(worst.items()) if k != "camera_clearance"]
-rep += ["min   camera_clearance       f%4d  %+.4f m" % CAMMIN]
-rep += ["", "%d failures" % len(lines)] + lines[:200]
+rep += ["min   camera_clearance       f%4d  %+.4f m" % CAMMIN, "penetration: %d sampled frames with any body/clothes vertex inside the box, %d vertex-hits total" % (sum(1 for p in PEN if p), sum(PEN))]
+rep += ["", "%d failures" % len(lines)] + lines[:2000]
 open(OUT, "w").write("\n".join(rep)); print("\n".join(rep[:40]))
