@@ -62,7 +62,7 @@ def powder_volume(name, loc, size, expr_density, drift=(0.0, 0.0, -0.06), scale=
     tw = N.new("ShaderNodeMath"); tw.operation = 'MULTIPLY'; tw.inputs[1].default_value = 0.25; L.new(t.outputs[0], tw.inputs[0])
     L.new(add.outputs[0], nz.inputs['Vector']); L.new(tw.outputs[0], nz.inputs['W'])
     mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.42; mr.inputs['From Max'].default_value = 0.72
-    mr.inputs['To Max'].default_value = 3.0; L.new(nz.outputs['Fac'], mr.inputs['Value'])
+    mr.inputs['To Max'].default_value = 0.6; L.new(nz.outputs['Fac'], mr.inputs['Value'])
     # soft edges toward the box faces (generated coords 0..1)
     edge = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], edge.inputs[0])
     fall = None
@@ -130,6 +130,8 @@ def extinguisher(name):
 
 def build(variant=None):
     c = {}
+    bpy.context.scene.cycles.volume_bounces = 3
+    bpy.context.scene.cycles.volume_step_rate = 2.0
     world_flat((0.04, 0.04, 0.045), 1.0)
     wall = dd.tex_mat("painted_concrete", 0.6, tint=(0.88, 0.88, 0.85), name="StairWall", sat=0.4)
     step = dd.tex_mat("concrete_floor_02", 1.0, tint=(0.75, 0.75, 0.74), name="StairStep", sat=0.2)
@@ -147,19 +149,22 @@ def build(variant=None):
     # light: one caged bulb per landing, warm; a green exit sign glow (no text)
     for f in range(-1, 2):
         for (y, dz) in ((-0.9, 2.6), (L + 1.0, 2.6 + FH / 2)):
-            l = bpy.data.lights.new("Fluo", 'AREA'); l.shape = 'RECTANGLE'; l.size = 1.2; l.size_y = 0.12; l.energy = 260; l.color = (0.9, 0.96, 1.0)
+            l = bpy.data.lights.new("Fluo", 'AREA'); l.shape = 'RECTANGLE'; l.size = 1.2; l.size_y = 0.12; l.energy = 700; l.color = (0.9, 0.96, 1.0)
             o = bpy.data.objects.new("Fluo", l); bpy.context.collection.objects.link(o); o.location = (0.0, y, f * FH + dz + 0.25)
             box("FluoHousing", (0.0, y, f * FH + dz + 0.33), (1.25, 0.14, 0.05), pbr("FluoH", (0.85, 0.85, 0.83), 0.5))
             box("FluoTube", (0.0, y, f * FH + dz + 0.29), (1.2, 0.05, 0.03), emissive("FluoE", (0.9, 0.96, 1.0), 12))
+    for p_, e_ in (((0.0, -0.4, 1.2), 160), ((0.0, L * 0.6, 1.6), 120)):      # light bouncing up off the white powder
+        pl = bpy.data.lights.new("PowderFill", 'POINT'); pl.energy = e_; pl.color = (0.92, 0.96, 1.0); pl.shadow_soft_size = 0.6
+        po = bpy.data.objects.new("PowderFill", pl); bpy.context.collection.objects.link(po); po.location = p_
     box("ExitSign", (-1.29, -0.6, 2.4), (0.02, 0.35, 0.15), emissive("ExitGreen", (0.1, 1.0, 0.35), 3))
     box("ExitDoor", (-1.29, -0.5, 1.05), (0.04, 0.95, 2.1), pbr("ExitDoorM", (0.25, 0.27, 0.28), 0.4, 0.6))
     if variant == "settle":
         c["ext"] = extinguisher("Ext1")
         e2 = extinguisher("Ext2"); e2.location = (-0.3, -0.75, 0.09); e2.rotation_euler = (0, 0, 0.7)
-        powder_volume("Powder", (0, -0.3, 0.6), (2.6, 2.0, 1.2), "max(0.08, 1.1 - frame / 110.0)", drift=(0.0, 0.03, -0.12), scale=2.2)
+        powder_volume("Powder", (0, -0.3, 0.6), (2.6, 2.0, 1.2), "max(0.15, 1.6 - frame / 90.0)", drift=(0.0, 0.03, -0.12), scale=2.2)
     else:
-        powder_volume("Powder", (0, 0.8, 1.0), (2.6, 4.0, 3.0), "min(3.0, 0.8 + frame / 30.0)", drift=(0.05, -0.15, -0.05), scale=2.6)
-        powder_volume("Billow", (0.4, 0.2, 0.9), (1.6, 1.8, 1.8), "min(4.0, frame / 15.0)", drift=(0.25, 0.4, 0.3), scale=3.5)
+        powder_volume("Powder", (0, 0.8, 1.0), (2.6, 4.0, 3.0), "min(2.0, 0.6 + frame / 40.0)", drift=(0.05, -0.15, -0.05), scale=2.6)
+        powder_volume("Billow", (0.4, 0.2, 0.9), (1.6, 1.8, 1.8), "min(2.5, frame / 20.0)", drift=(0.25, 0.4, 0.3), scale=3.5)
         c["men"] = []
         for k in range(2):
             h = painter(f"Run{k}", 30 + 8 * k, k + 1)
@@ -187,7 +192,7 @@ def anim_settle(c, t):
 
 MOVES = {
     "powder": dict(kind="anim", dof=4.0, anim=anim_powder,
-                   cam=lambda c, t: (Vector((0.75, L + 0.95, 3.1)).lerp(Vector((0.6, L + 0.8, 2.95)), ease(t)), Vector((0.1, 1.0, 0.4)), 22),
+                   cam=lambda c, t: (Vector((1.1, L + 1.1, 3.2)).lerp(Vector((1.0, L + 0.95, 3.05)), ease(t)), Vector((0.0, -0.3, 0.6)), 18),
                    focus=lambda c, t: Vector((-0.6, 1.8, 0.8))),
     "settle": dict(kind="anim", dof=4.0, anim=anim_settle,
                    cam=lambda c, t: (Vector((0.7, 1.7, 1.55)).lerp(Vector((0.55, 1.4, 1.4)), ease(t)), Vector((0.0, -0.6, 0.15)), 26),

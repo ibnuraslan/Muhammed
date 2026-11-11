@@ -12,8 +12,8 @@ Recurring sets: **DRAIN** (yard of the suburban house), **BOUTIQUE** (nameless A
 
 | Set | Script line | Shot A | Shot B |
 |---|---|---|---|
-| DRAIN | "In March 2011, French police search a house outside Paris … a little lighter than the rest." | Wide crane-down over the wet yard as three officers in rain jackets walk to the drain. | Slow push along the ground to the pale concrete patch while drizzle rings spread in a puddle. |
-| DRAIN | "They drill through it. Underneath is a plastic container. Inside is a ring set with a thirty-one-carat diamond." | Medium: an officer kneels and drills the patch, grey dust puffing into the rain. | The container sits open on the concrete; the camera eases in as the big diamond catches soft light. |
+| DRAIN | "In March 2011, French police search a house outside Paris … a little lighter than the rest." | Wide crane-down over the wet yard as three officers in rain jackets walk to the drain. | Low, close push along the wet concrete to the pale patch beside the cast-iron grate, rain rings in a puddle. |
+| DRAIN | "They drill through it. Underneath is a plastic container. Inside is a ring set with a thirty-one-carat diamond." | Medium-wide: an officer kneels and drills the patch, grey dust puffing into the rain. | The grimy tub, lid half off, rings bundled inside; the camera eases in as the big diamond catches soft light. |
 | BOUTIQUE | "The stone came from Harry Winston … they came dressed as painters." | Dawn crane-up the nameless limestone facade, dark awnings, a doorman sweeping the step. | Four men in white overalls carry paint tins down a side lane toward a service door, seen wide. |
 
 ## Chapter One · The Service Door
@@ -21,7 +21,7 @@ Recurring sets: **DRAIN** (yard of the suburban house), **BOUTIQUE** (nameless A
 | Set | Script line | Shot A | Shot B |
 |---|---|---|---|
 | BOUTIQUE | "On the morning of October sixth, 2007 … And they're armed." | Title over a dawn track along the avenue as a staff member unlocks the front grille. | Inside the service corridor, the four painters wait in shadow as a door opens and light spills in. |
-| BOUTIQUE | "The men threaten and tie up staff … three hundred and sixty pieces of jewelry." | Wide from the doorway: staff sit on the salon floor while a painter stands over them. | In the safe room a manager types at the alarm panel, its LEDs going green, and the vault door swings open. |
+| BOUTIQUE | "The men threaten and tie up staff … three hundred and sixty pieces of jewelry." | Wide from the doorway: staff sit on the salon floor while a painter stands over them. | Wide in the steel safe room: the manager at the alarm panel (hand small in frame), its LED turns green, the round vault door swings open. |
 | STAIRS | "On the service stairs, the robbers empty fire extinguishers … how the men got inside." | Looking down the stairwell, white powder clouds billow and drift as figures hurry out of frame. | After they're gone, the powder settles slowly over the steps and a dropped extinguisher rolls to a stop. |
 
 ## Chapter Two · The Front Door
@@ -30,22 +30,22 @@ Recurring sets: **DRAIN** (yard of the suburban house), **BOUTIQUE** (nameless A
 |---|---|---|---|
 | BOUTIQUE | "Fourteen months later … A guard lets them in." | Title over a dusk track down the avenue: sparse soft Christmas lights, shoppers with bags. | At the front door, four figures in long coats and wigs step past a guard who holds the door. |
 | BOUTIQUE | "Upstairs, the disguises come off … Some of the employees are called by name." | A wig drops onto the upstairs carpet as the camera rises to a man walking away. | Wide from the landing: sixteen people sit on the floor of the salon, one man standing by the stairs. |
-| BOUTIQUE | "The robbers have brought a suitcase … The men know where to look." | An open suitcase on the carpet fills with velvet trays as the camera slides past. | A wooden wall panel slides open to reveal a concealed compartment of lit stands. |
+| BOUTIQUE | "The robbers have brought a suitcase … The men know where to look." | Medium-wide: a robber crouches and loads velvet trays into an open suitcase on the carpet. | A wooden wall panel slides open to reveal a concealed compartment of lit stands. |
 | BOUTIQUE | "Before they leave, they show … seventy-one million euros." | Far down the salon, a man raises a small dark shape, then turns for the door. | Outside on the avenue, a dark car pulls away from the kerb into the evening traffic. |
-| BOUTIQUE | "The insurer offers a million-dollar reward … whose name to call?" | The empty salon after hours: open cases, fallen trays, a slow push through the quiet. | A guard's chair and lanyard by the service door, the camera drifting as a fluorescent light flickers. |
+| BOUTIQUE | "The insurer offers a million-dollar reward … whose name to call?" | The empty salon after hours: open cases, fallen trays, a slow push through the quiet. | The guard's post by the service door: office chair with a lanyard, a CCTV monitor, a coat hook; the tube light buzzes gently. |
 
 ## Chapter Three · A Little Cement
 
 | Set | Script line | Shot A | Shot B |
 |---|---|---|---|
-| UNIT | "The case lands with the Paris police unit … Mouloud Djennad." | Title over a push into the robbery unit office as a detective pins a photo to a corkboard. | A second detective reads a file at her desk under a lamp, rain streaking the window behind. |
+| UNIT | "The case lands with the Paris police unit … Mouloud Djennad." | Title over a push into the robbery unit office as a detective pins a blurred print (no faces, no names) to the corkboard. | A second detective reads a file at her desk under a lamp, rain streaking the window behind. |
 | GYM | "A link between the two men runs through a gym … puts them in touch." | Track past punching bags as a man works a heavy bag in a quiet suburban gym. | Two men talk by the lockers while a third walks over to join them, seen wide. |
-| CAR | "Detectives put microphones in Yahiaoui's car … disappear into the trade." | A technician fits a small microphone under a dashboard at night, seen from the back seat. | Two parked cars side by side in rain; an envelope passes between open windows, seen medium. |
+| CAR | "Detectives put microphones in Yahiaoui's car … disappear into the trade." | Night, from the back seat, medium-wide: a technician leans in under the dashboard, a small torch glowing. | Wide through the rain: two cars parked side by side, an envelope passes between the open windows. |
 | RAID | "In June 2009, police move in … some still on their original Harry Winston stands." | Dawn: unmarked cars stop on a suburban street and officers walk fast to a front door. | Under a staircase, a panel lifts away to show jewels on small stands lit by a torch beam. |
 | DRAIN | "It's Yahiaoui's house … the big stone that keeps coming up on the recordings." | The house in grey morning, an officer walking slowly round the yard looking down. | Inside the car, a recorder's reels turn on the seat while the house sits blurred outside. |
-| DRAIN | "They keep coming back to the house … the lighter patch in the drain." | A second, fifth visit: officers return through the gate in drizzle, umbrellas up. | An officer crouches and runs a torch across the drain, the pale patch glowing faintly. |
+| DRAIN | "They keep coming back to the house … the lighter patch in the drain." | A second, fifth visit: officers return through the gate in drizzle, umbrellas up. | High angle, officer out of frame: a torch beam pool slides across the wet concrete onto the pale patch. |
 | DRAIN | "The container holds nineteen rings … twenty-five million dollars." | The open container in rain, the camera circling slowly over the rings and the big diamond. | A police photographer's flash pops over the open container, a yellow evidence marker beside it. |
-| TABLE | "The drain gives the police a haul they can lay out and count … supposed to protect the shop." | Overhead push down a long table as rings are laid out in rows. | An officer moves along the table writing numbers on evidence tags. |
+| TABLE | "The drain gives the police a haul they can lay out and count … supposed to protect the shop." | Overhead push down a long table as rings are laid out in rows. | Seen wide from above: an officer walks the table and numbered tags appear on the cloth behind him. |
 
 ## Chapter Four · The Night Before
 
@@ -55,5 +55,5 @@ Recurring sets: **DRAIN** (yard of the suburban house), **BOUTIQUE** (nameless A
 | BOUTIQUE | "Trial reporting says that in 2007 … the men were already there." | Night: a guard opens the service door and four shapes slip in under a single bulb. | Dawn inside the dark salon, men sitting still on the floor as the first staff light comes on downstairs. |
 | COURT | "Yahiaoui acknowledges a role … traces of their DNA in the boutique." | The prosecutor stands and speaks, gesturing to the bench, seen across the room. | A lawyer passes a file along the defence bench while the defendants watch. |
 | COURT | "Before the court deliberates … 'I'm ashamed every day,' he says." | Slow push on a man standing alone in the dock, head bowed. | Reverse from behind the dock: the public benches, faces turned toward him. |
-| COURT | "On February twenty-seventh … three of them suspended." | The judges file in and sit as the room rises. | Outside the Palais de Justice, grey sky, reporters walking down the wide steps. |
+| COURT | "On February twenty-seventh … three of them suspended." | The judges file in and sit as the room rises. | Generic Paris law-court steps under a grey sky, reporters walking down. |
 | TABLE | "Police can account for the thirty-one-carat diamond … still missing." | The big diamond alone on its stand, the camera pulling back. | Pull back wider: the table full of empty stands for the missing pieces. |

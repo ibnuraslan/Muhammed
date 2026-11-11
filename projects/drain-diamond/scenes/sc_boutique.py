@@ -695,8 +695,8 @@ def anim_floor(c, t):
 
 def cam_floor(c, t):
     e = ease(t)
-    loc = Vector((-0.6, 9.3, 1.75)).lerp(Vector((-1.3, 9.1, 1.7)), e)
-    return loc, Vector((-5.6, 5.6, 0.7)), 26
+    loc = Vector((2.2, 9.3, 2.5)).lerp(Vector((1.4, 9.2, 2.4)), e)
+    return loc, Vector((-4.6, 4.8, 1.0)), 22
 
 
 def anim_safe(c, t):
@@ -709,7 +709,7 @@ def anim_safe(c, t):
     reach(mg, "L", Vector((2.8 - press, 2.62, 1.42)), M @ Vector((0.6, 0.2, -0.8)))
     arms_relaxed_one(mg, "R")
     mg.rot("head", (0, 1, 0), -6)
-    p = c["safe_painter"]; place(p, (0.2, 1.4, 0), face_to((0.2, 1.4), (2.3, 2.6))); arms_relaxed(p)
+    p = c["safe_painter"]; place(p, (-1.4, 3.0, 0), face_to((-1.4, 3.0), (2.3, 2.6))); arms_relaxed(p)
     u = ease(min(1.0, max(0.0, (sec - 2.2) / 2.6)))
     c["vault"].rotation_euler = (0, 0, math.radians(-95 * u))
 
@@ -735,7 +735,7 @@ def cam_corridor(c, t):
 
 def cam_chair(c, t):
     e = ease(t)
-    return Vector((-0.45, 6.2, 1.5)).lerp(Vector((-0.35, 6.9, 1.4)), e), Vector((0.5, 8.8, 0.5)), 30
+    return Vector((0.35, 4.6, 1.65)).lerp(Vector((0.3, 5.3, 1.6)), e), Vector((-0.1, 8.5, 0.75)), 28
 
 
 def anim_night_door(c, t):
