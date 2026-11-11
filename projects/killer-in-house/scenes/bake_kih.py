@@ -33,6 +33,18 @@ spec = mod.MOVES[move]
 cam = camera((0, 0, 0), (0, 1, 0), lens=35, dof_dist=3.0, fstop=spec.get("dof", 2.8) or 2.8)
 cam.data.dof.use_dof = bool(spec.get("dof"))
 ctx["cam"] = cam
+# restore the build pose before every frame (shared fix 1047b31): relative bone turns must not accumulate
+_rest = {(a.name, pb.name): (pb.location.copy(), pb.rotation_quaternion.copy(), pb.rotation_euler.copy(), pb.scale.copy())
+         for a in bpy.data.objects if a.type == 'ARMATURE' for pb in a.pose.bones}
+def restore_pose():
+    for a in bpy.data.objects:
+        if a.type != 'ARMATURE':
+            continue
+        for pb in a.pose.bones:
+            r = _rest.get((a.name, pb.name))
+            if r:
+                pb.location, pb.rotation_quaternion, pb.rotation_euler, pb.scale = r
+    bpy.context.view_layer.update()
 if spec.get("title"):                          # chapter title card inside the shot (fades by frame-driven driver)
     import title_card
     small, big, f_in, f_out = spec["title"]
@@ -49,7 +61,7 @@ s.render.filepath = f"//render/{name}_"
 s.render.image_settings.file_format = 'PNG'
 
 # objects whose transforms we key every frame (warm up first: moves create some props lazily on their first frame)
-kit.apply_cam(cam, ctx, spec, 0.0); bpy.context.view_layer.update()
+restore_pose(); kit.apply_cam(cam, ctx, spec, 0.0); bpy.context.view_layer.update()
 movers = [o for o in bpy.data.objects if o.type in ('MESH', 'EMPTY', 'LIGHT', 'CURVE') and o.name != cam.name]
 arms = [o for o in bpy.data.objects if o.type == 'ARMATURE']
 ui_dir = os.path.join(OUTDIR, name + "_ui")
@@ -72,13 +84,13 @@ def emis_nodes():
 # find what moves: compare three sample times, then key only those objects every frame
 snap = []
 for t in (0.0, 0.5, 1.0):
-    kit.apply_cam(cam, ctx, spec, t); bpy.context.view_layer.update()
+    restore_pose(); kit.apply_cam(cam, ctx, spec, t); bpy.context.view_layer.update()
     snap.append({o.name: state(o) for o in movers})
 movers = [o for o in movers if len({sn[o.name] for sn in snap}) > 1]
 # lights whose energy changes, emission strengths that change (sampled densely: flashes are short)
 lsnap, esnap = {}, {}
 for k in range(25):
-    kit.apply_cam(cam, ctx, spec, k / 24); bpy.context.view_layer.update()
+    restore_pose(); kit.apply_cam(cam, ctx, spec, k / 24); bpy.context.view_layer.update()
     for o in bpy.data.objects:
         if o.type == 'LIGHT':
             lsnap.setdefault(o.name, set()).add(round(o.data.energy, 4))
@@ -93,7 +105,7 @@ print("[bake] moving objects:", [o.name for o in movers][:20], len(movers), flus
 prev_q, prev_e = {}, {}
 for f in range(1, n + 1):
     t = (f - 1) / max(n - 1, 1)
-    kit.apply_cam(cam, ctx, spec, t)
+    restore_pose(); kit.apply_cam(cam, ctx, spec, t)
     bpy.context.view_layer.update()
     if "__cam__" in prev_e:          # sign/branch-continuous rotations (shared fix 0037a25: no ghost limbs under blur)
         e = cam.rotation_euler.copy(); e.make_compatible(prev_e["__cam__"]); cam.rotation_euler = e
