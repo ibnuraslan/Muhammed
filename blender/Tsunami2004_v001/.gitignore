@@ -4,3 +4,5 @@ assets/models/*
 !assets/models/credits.json
 *.blend1
 stills/raw*/
+*.blend
+*.log
