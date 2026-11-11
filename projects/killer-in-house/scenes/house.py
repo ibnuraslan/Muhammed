@@ -47,7 +47,7 @@ def mat(key):
         "floor": lambda: T_("old_wood_floor", 0.5),
         "lino": lambda: T_("old_linoleum_flooring_01", 0.5),
         "plaster": lambda: T_("painted_plaster_wall", 0.4, (0.95, 0.88, 0.74)),
-        "paper": lambda: T_("decrepit_wallpaper", 0.6, (1.0, 0.92, 0.8)),
+        "paper": lambda: T_("decrepit_wallpaper", 1.3, (0.92, 0.86, 0.76)),
         "conc": lambda: T_("rough_concrete", 0.4),
         "stone": lambda: T_("stone_wall", 0.5, (0.8, 0.78, 0.74)),
         "planks": lambda: T_("roof_planks", 0.5, (0.85, 0.75, 0.62)),
@@ -67,7 +67,7 @@ def mat(key):
         "glass": lambda: window_glass(),
         "black": lambda: pbr("Black", (0.01, 0.01, 0.01), 0.7),
         "shade": lambda: shade_mat(),
-        "lace": lambda: fabric("Lace", (0.85, 0.83, 0.78), 0.9, 0.5, 900),
+        "lace": lambda: lace_mat(),
     }
     _MAT[key] = table[key]()
     return _MAT[key]
@@ -94,6 +94,17 @@ def shade_mat():
     tl = N.new("ShaderNodeBsdfTranslucent"); tl.inputs['Color'].default_value = (0.95, 0.8, 0.55, 1)
     mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.45
     L.new(d.outputs[0], mx.inputs[1]); L.new(tl.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs['Surface'])
+    return m
+
+
+def lace_mat():
+    m = bpy.data.materials.new("Lace"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); d = N.new("ShaderNodeBsdfDiffuse"); d.inputs['Color'].default_value = (0.82, 0.8, 0.74, 1)
+    tr = N.new("ShaderNodeBsdfTransparent"); tl = N.new("ShaderNodeBsdfTranslucent"); tl.inputs['Color'].default_value = (0.9, 0.88, 0.8, 1)
+    m1 = N.new("ShaderNodeMixShader"); m1.inputs[0].default_value = 0.4; L.new(d.outputs[0], m1.inputs[1]); L.new(tl.outputs[0], m1.inputs[2])
+    m2 = N.new("ShaderNodeMixShader"); m2.inputs[0].default_value = 0.55; L.new(m1.outputs[0], m2.inputs[1]); L.new(tr.outputs[0], m2.inputs[2])
+    L.new(m2.outputs[0], out.inputs['Surface'])
     return m
 
 
@@ -957,12 +968,24 @@ def car1940(name, col=(0.02, 0.02, 0.022), kind="sedan", length=5.0, width=1.85)
     return root
 
 
+def vehicle(name, col, kind="sedan"):
+    """The shared realistic 1940s US sedan (nvidia_doc/scenes/vehicles.py); kind 'police' = black and white patrol car."""
+    import vehicles
+    r = vehicles.make("sedan_1940s_us", color=col, variant="police" if kind == "police" else None, lamps=True)
+    r.name = name + "Root"; r["kit"] = 1
+    return r
+
+
 def drive(root, p0, p1, u, heading=None):
     """Place the car along p0->p1 (u in 0..1), wheels rolling."""
     p0 = Vector(p0); p1 = Vector(p1); pos = p0.lerp(p1, u)
     hz = heading if heading is not None else math.atan2((p1 - p0).y, (p1 - p0).x)
-    root.location = pos; root.rotation_euler = (0, 0, hz)
+    root.location = (pos.x, pos.y, pos.z + (0.05 if root.get("kit") else 0.0)); root.rotation_euler = (0, 0, hz)
     dist = (pos - p0).length
+    if root.get("kit"):
+        import vehicles
+        vehicles.spin_wheels(root, dist)
+        return
     for n in root["wheels"]:
         w = bpy.data.objects[n]; w.rotation_euler = (0, -dist / 0.36, 0)
 

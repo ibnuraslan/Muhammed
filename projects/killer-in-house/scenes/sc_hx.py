@@ -39,9 +39,9 @@ def build(variant=None):
         c["snowfall"] = H.leaf_cloud(160, (0.0, -10.0), (14, 8), 9.0, col=(0.9, 0.92, 0.96), seed=4)
         for o in c["snowfall"]:
             o.scale = (0.12, 0.2, 1)
-    if tod == "night":
-        c["up_light"].data.energy = 0.0
-        c["k_light"].data.energy = 0.0
+    if tod == "night":            # the house is dark (empty, or Philip is dead inside)
+        for k in ("up_light", "k_light", "lamp", "bed_lamp"):
+            c[k].data.energy = 0.0
     H.porch_lamp(c)
     c["cast"] = {}
     for k in cast:
@@ -50,8 +50,8 @@ def build(variant=None):
     for e in extra:
         if ":car:" in e:
             nm, _, colr, kind = e.split(":")
-            col = {"black": (0.015, 0.015, 0.017), "green": (0.03, 0.06, 0.04), "maroon": (0.12, 0.02, 0.02), "grey": (0.12, 0.12, 0.12)}[colr]
-            c[nm] = H.car1940(nm, col, kind, length=5.6 if kind == "van" else 5.0)
+            col = {"black": (0.03, 0.03, 0.033), "green": (0.03, 0.06, 0.04), "maroon": (0.12, 0.02, 0.02), "grey": (0.12, 0.12, 0.12)}[colr]
+            c[nm] = H.vehicle(nm, col, kind)
     c["variant"] = vv
     return c
 
@@ -87,7 +87,7 @@ def _():
     return cam, anim
 
 
-@move("van_away", "summer_night", 4.0, extra=("van:car:grey:van",))
+@move("van_away", "summer_night", 4.0, extra=("van:car:maroon:sedan",))
 def _():
     def anim(c, t):
         sec = tick(c, t, "van_away")
@@ -143,7 +143,7 @@ def _():
     return cam, anim
 
 
-@move("patrol", "summer_night", 4.0, cast=("o1:officer", "o2:officer"), extra=("pcar:car:black:sedan",))
+@move("patrol", "summer_night", 4.0, cast=("o1:officer", "o2:officer"), extra=("pcar:car:black:police",))
 def _():
     def anim(c, t):
         sec = tick(c, t, "patrol")

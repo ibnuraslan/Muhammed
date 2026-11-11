@@ -72,18 +72,26 @@ def _():
             c["beams"] = [H.flashlight("T1"), H.flashlight("T2")]
             for b in c["beams"]:
                 b.data.energy = 300
+            sh = fabric("DustSheet", (0.8, 0.78, 0.72), 0.9, 0.5, 400)
+            for (x, y, sx, sy, sz) in ((3.2, -2.0, 0.55, 0.55, 1.05), (2.2, -3.6, 0.45, 0.5, 1.0), (4.0, -3.0, 0.3, 0.32, 1.15)):
+                bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(x, y, 0))
+                o = bpy.context.active_object; o.scale = (sx, sy, sz); o.data.materials.append(sh)
+            c["dust"] = H.leaf_cloud(40, (1.8, -2.6), (1.4, 1.4), 2.4, col=(0.85, 0.83, 0.78), seed=13)
+            for o in c["dust"]:
+                o.scale = (0.01, 0.01, 1)
+        H.fall_leaves(c["dust"], sec * 0.05, ground=0.0, drift=(0.02, 0.01))
         o1, o2 = P(c, "o1"), P(c, "o2")
         H.walk_to(o1, (0.15, -4.4, 0), (0.15, -3.4, 0), t * 0.6, swing=6)
         H.stand_at(o2, (-0.25, -4.3, 0), math.radians(165))
         for k, (h, sw) in enumerate(((o1, 1.0), (o2, -1.0))):
             hd = h.bone_head("head")
             a = 0.9 * math.sin(0.9 * sec + k * 2.0) * sw
-            tgt = Vector((hd.x + 1.8 + 1.4 * math.sin(a), hd.y + 1.5 + 1.0 * math.cos(a), 0.6 + 0.5 * math.sin(1.3 * sec + k)))
+            tgt = Vector((2.8 + 0.9 * math.sin(a), -2.6 + 0.8 * math.cos(a), 0.6 + 0.3 * math.sin(1.3 * sec + k)))
             H.aim_obj(c["beams"][k], hd + Vector((0.2 * sw, -0.15, -0.35)), tgt)
             reach(h, "R", hd + Vector((0.18 * sw, 0.25, -0.35)), Vector((0.3, -0.5, -1)), (tgt - hd).normalized())
     def cam(c, t):
         e = ease(t)
-        return (Vector((3.9, -4.4, 2.0)).lerp(Vector((3.5, -4.2, 2.0)), e), Vector((0.2, -2.6, 1.2)).lerp(Vector((0.4, -1.4, 1.8)), e), 24)
+        return (Vector((3.95, -0.5, 1.9)).lerp(Vector((3.7, -0.7, 1.85)), e), Vector((1.2, -3.2, 1.0)).lerp(Vector((0.9, -2.6, 1.3)), e), 24)
     return cam, anim
 
 
@@ -94,7 +102,7 @@ def _():
             c["moonwin"] = H.day_fill((-2.4, -D2 + 0.35, F2 + 1.6), 1.0, 40, (0.55, 0.68, 1.0), rot=(math.radians(70), 0, 0))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-3.6, -4.2, F2 + 1.6)).lerp(Vector((-2.7, -2.8, F2 + 1.75)), e), Vector((-1.25, -1.2, F2 + 1.3)).lerp(Vector((-1.25, -1.2, F2 + 1.8)), e), 30)
+        return (Vector((-4.0, -4.5, F2 + 1.9)).lerp(Vector((-3.6, -4.0, F2 + 1.8)), e), Vector((-1.6, -1.4, F2 + 0.9)).lerp(Vector((-1.25, -1.2, F2 + 1.2)), e), 22)
     return cam, anim
 
 

@@ -81,7 +81,7 @@ def build(variant=None):
     for k in range(3):
         box("CellBlock", (-20 + k * 20, 35, 7), (14, 10, 14), st)
     if variant == "gate":
-        c["van"] = H.car1940("PVan", (0.08, 0.09, 0.08), "van", length=5.6)
+        c["van"] = H.vehicle("PVan", (0.1, 0.11, 0.1))
     else:
         c["guards"] = [H.person("Guard%d" % k, "officer") for k in range(2)]
     return c
