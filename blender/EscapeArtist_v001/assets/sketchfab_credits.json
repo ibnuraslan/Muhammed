@@ -1,0 +1,110 @@
+{
+ "celldoor": {
+  "uid": "f8148fab4dc44903b9644170edf0e58c",
+  "title": "Prison cell door",
+  "author": "Rivaldragon",
+  "author_profile": "https://sketchfab.com/Rivaldragon",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f8148fab4dc44903b9644170edf0e58c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "bd85a8005ff0403cab2f1e9845016b8f",
+  "title": "Modular Chain Link Fence Set",
+  "author": "FrodoUndead",
+  "author_profile": "https://sketchfab.com/FrodoUndead",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/bd85a8005ff0403cab2f1e9845016b8f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "workbench": {
+  "uid": "9634d6a81a494925a909512c8048f446",
+  "title": "Workbench",
+  "author": "JJ Chalupnik",
+  "author_profile": "https://sketchfab.com/jjchalupnik",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9634d6a81a494925a909512c8048f446",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "toolbox": {
+  "uid": "37b56969cd1d4ddaa9b152a58f6ed8fa",
+  "title": "Toolbox",
+  "author": "beyondmatter",
+  "author_profile": "https://sketchfab.com/beyondmatter",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/37b56969cd1d4ddaa9b152a58f6ed8fa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "gavel": {
+  "uid": "8d95b6f773474828ac1ee80de45b2e3d",
+  "title": "Judge's Gavel",
+  "author": "_",
+  "author_profile": "https://sketchfab.com/rynnytry",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8d95b6f773474828ac1ee80de45b2e3d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "phone": {
+  "uid": "e57825be6b8741899bdcea7c98d47eb9",
+  "title": "Old Telephone",
+  "author": "FordVFX",
+  "author_profile": "https://sketchfab.com/FordVFX",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e57825be6b8741899bdcea7c98d47eb9",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bunk": {
+  "uid": "082408294b92454d8f653acc0a9f07e7",
+  "title": "Metal Bunk Bed with Desk",
+  "author": "jaycork93",
+  "author_profile": "https://sketchfab.com/jaycork93",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/082408294b92454d8f653acc0a9f07e7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "watch": {
+  "uid": "6fa91631177741b1949a4823b21c75bf",
+  "title": "Pocket Watch",
+  "author": "Kagelok",
+  "author_profile": "https://sketchfab.com/Kagelok",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6fa91631177741b1949a4823b21c75bf",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "armchair": {
+  "uid": "aa996d92464a4d2bb5d84377944f6227",
+  "title": "Armchair",
+  "author": "Qwert Models",
+  "author_profile": "https://sketchfab.com/QwertModels",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/aa996d92464a4d2bb5d84377944f6227",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hacksaw": {
+  "uid": "f82265833be44943b6f2d7bbbc1e3b26",
+  "title": "Hacksaw",
+  "author": "bogdanzloy20280",
+  "author_profile": "https://sketchfab.com/bogdanzloy20280",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f82265833be44943b6f2d7bbbc1e3b26",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "candles": {
+  "uid": "92bb9f59fd9046b1beb9dca6b21489e2",
+  "title": "Candles",
+  "author": "thegraphicsgeek",
+  "author_profile": "https://sketchfab.com/thegraphicsgeek",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/92bb9f59fd9046b1beb9dca6b21489e2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tube": {
+  "uid": "211759e2697f47a289be2a1f9c5bef41",
+  "title": "Tube model",
+  "author": "AleoPix",
+  "author_profile": "https://sketchfab.com/AleoPix",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/211759e2697f47a289be2a1f9c5bef41",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
