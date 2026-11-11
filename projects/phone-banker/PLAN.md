@@ -12,7 +12,7 @@ Timing: 2.5 s of picture before the first word; each chapter title card holds ab
 |---|---|---|---|
 | 1 OFFICE | "Look at the plastic… both dead." | Stained white handset holds in silence (2.5 s lead-in), then a slow push as the first line begins. | Wide empty office, chair pushed back, curtain stirring. |
 | 2 BANK EXTERIOR | "The substance… eight police officers." | Militia Ladas pull up outside the bank at dusk. | An officer sits on the bank steps; a colleague hands him water. |
-| 3 OFFICE (search) | "When investigators search… His telephone." | Investigators in coats open drawers and files by torchlight. | Torch beam settles on the phone; camera pushes in. |
+| 3 OFFICE (search) | "When investigators search… His telephone." | Investigators in coats search the desk drawers and the files. | One lowers his folder and looks at the phone; camera pushes in. |
 
 ## Chapter 1 · Two Hospitals
 
