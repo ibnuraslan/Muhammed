@@ -319,7 +319,7 @@ for nm_ in ("StationFan_ceiling_fan_blades", "StationFan_ceiling_fan"): ob(nm_).
 ob("StationFan_ceiling_fan").location = ob("StationFan_ceiling_fan_blades").location
 fp2 = ob("FanPaper_1"); loc, f3, n = palm_pose(CH["OfficerE"], "R", 1200, 0.07, -0.02)
 attach_seq(fp2, [(1, CH["OfficerE"], "wrist.R", frame_from(loc + f3 * 0.1, f3, -n), 1200)])
-fp3 = inst(bpy.data.objects["SRC_clipboard"], "TapFile", (0, 0, 0), c="Station"); loc, f3, n = palm_pose(CH["OfficerD"], "R", 1200, 0.06, -0.02)
+fp3 = inst(bpy.data.objects["SRC_a4"], "TapFile", (0, 0, 0), c="Station")   # plain paper: the clipboard clip carries printed text; loc, f3, n = palm_pose(CH["OfficerD"], "R", 1200, 0.06, -0.02)
 attach_seq(fp3, [(1, CH["OfficerD"], "wrist.R", frame_from(loc + f3 * 0.12, f3, -n), 1200)])
 ob("OfficeFan_ceiling_fan").location = ob("OfficeFan_ceiling_fan_blades").location
 # wall clock: find its thin axis and face it +X on the back wall; hands spin 5 hours (f1290 -> 1381)
@@ -488,6 +488,7 @@ ffo = bpy.data.objects.new("FaceFill", ff); C("Lights").objects.link(ffo) if "Li
 ffo.location = (-2.4, 58.6, 2.4); ffo.rotation_euler = (Vector((-3.6, 56.8, 1.6)) - ffo.location).to_track_quat("-Z", "Y").to_euler()
 for f, e in ((1, 0), (1430, 0), (1470, 45), (1560, 45)):
     ff.energy = e; ff.keyframe_insert("energy", frame=f)
+ob("Office_Clip").hide_render = True   # clipboard clip has printed text
 # ------------------------------------------------------------------ the one continuous camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 24; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.02
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 4.0

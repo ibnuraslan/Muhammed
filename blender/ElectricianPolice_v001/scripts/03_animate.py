@@ -474,7 +474,7 @@ OA.walk(lambda f: OA_POS.lerp(OA_W, smooth((f - 222) / 24)), lambda f: oa_yaw + 
 for f in (250, 258, 266):
     OA.body(f, OA_W - Vector((0, 0, 0.01)), yaw=oa_yaw + 10, spine=(16, 0, 0), head=(20, 0))
     OA.hand_b("L", f, 0.05, 0.33, 1.12, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 30, 25)
-    OA.hand_b("R", f, -0.04 + 0.03 * ((f // 8) % 2), 0.36, 1.17, d=(0.5, 0.8, -0.3), n=(0, 0, -1)); OA.fingers("R", f, [60, 75, 80, 80], 40)
+    OA.hand_b("R", f, -0.06 + 0.03 * ((f // 8) % 2), 0.38, 1.21, d=(0.5, 0.8, -0.3), n=(0, 0, -1)); OA.fingers("R", f, [60, 75, 80, 80], 40)
 OA.stand_feet(250)
 # tears the slip and holds it out to the man
 OA.body(270, OA_W, yaw=oa_yaw + 14, spine=(10, 8, 0), head=(10, 10))
@@ -518,7 +518,7 @@ W.hang("L", 320); W.hand_b("R", 320, -0.12, 0.2, 1.08, d=(0.6, 0.5, -0.3), n=(0,
 W.body(360, WG, yaw=-66, spine=(-6, -4, 0), head=(-10, 0), jaw=2); W.stand_feet(360); W.hang("L", 360, swing=0.03)
 W.hand_b("R", 360, -0.14, 0.22, 1.12, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
 W.body(392, WG, yaw=-74, spine=(-8, 2, 0), head=(-12, -6)); W.stand_feet(392); W.hang("L", 392)
-W.hand_b("R", 392, -0.16, 0.2, 1.1, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
+W.hand_b("R", 392, -0.17, 0.3, 1.1, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
 # turns to the gate, unlocks (right hand to the latch), pushes it open with the left, walks in
 GATE_O = ob("Gate"); GY = GATE_O.location.y
 LATCH = Vector((GATE.x - 0.06, GY - 0.40, 1.05))
@@ -627,7 +627,7 @@ def idle(ch, pos, yaw, f0, f1, talk=False):
         ch.hand_b("R", f, -0.2, 0.3 + 0.1 * (i % 2), 1.1 + 0.15 * (i % 2), d=(0.2, 1, 0.3), n=(0, 0, 1)) if talk else ch.hang("R", f)
         ch.hang("L", f, swing=0.05)
 EX = {k: RIG[k] for k in ("ExA", "ExB", "Vendor", "ExC", "ExD", "ExE")}
-stroll(EX["ExA"], (-6.0, 4.0, 0), (-6.0, 22.0, 0), 1, 420, 0.6)
+stroll(EX["ExA"], (-6.6, 4.0, 0), (-6.6, 22.0, 0), 1, 420, 0.6)
 stroll(EX["ExB"], (6.0, 34.0, 0), (6.0, 14.0, 0), 1, 420, 0.62)
 idle(EX["Vendor"], (-4.75, 14.2), 90, 1, 420, talk=True)
 stroll(EX["ExC"], (6.1, -2.0, 0), (6.1, 16.0, 0), 1, 420, 0.6)
@@ -682,12 +682,41 @@ for i, f in enumerate(range(1160, 1561, 9)):
     OE.body(f, OE_POS, yaw=60, spine=(8, 6 * up, 0), head=(-10, 8), jaw=4)
     OE.stand_feet(f)
     OE.hand_b("R", f, -0.1 - 0.12 * up, 0.36, 1.48 + 0.05 * up, d=(0.3, 0.1 * up, 1), n=(0, 1, 0)); OE.fingers("R", f, 60, 45)
-    if wipe: OE.hand_b("L", f, 0.0, 0.16, 1.66, d=(-1, 0.1, 0.3), n=(0, 1, 0.4))
+    if wipe: OE.hand_b("L", f, 0.02, 0.24, 1.66, d=(-1, 0.1, 0.3), n=(0, 1, 0.4), pole=OE.pt(f, 0.6, 0.1, 1.5))
     else: OE.hang("L", f, swing=0.05)
 for nm in ("OfficerB", "OfficerC", "OfficerD", "OfficerE"):
     for o in meshes(CH[nm]): key_vis(o, [(1150, 1560)])
 for o in meshes(CH["OfficerA"]): key_vis(o, [(1, 420), (1171, 1560)])
 
+# ------------------------------------------------------------------ hands pass (client 23:00 UTC): joint limits + relaxed default
+def hand_limits(ch):
+    B = ch.R.PB
+    for s_ in "LR":
+        Rh = ch.REST_HAND[s_]; d, a = Rh.col[0].copy(), Rh.col[1].copy(); sign = 1 if s_ == "R" else -1
+        for k in range(1, 6):
+            for j in range(1, 4):
+                bn = "finger%d-%d.%s" % (k, j, s_)
+                if bn not in B: continue
+                e = ch.R.local_q(bn, Matrix.Rotation(R_(60 * sign), 3, a)).to_euler()
+                ax = max(range(3), key=lambda i: abs(e[i])); sg = 1 if e[ax] > 0 else -1
+                c = B[bn].constraints.new("LIMIT_ROTATION"); c.name = "hand_limit"; c.owner_space = "LOCAL"
+                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+                lim = [(-R_(12), R_(12))] * 3 if k > 1 else [(-R_(45), R_(45))] * 3
+                lim = list(lim)
+                bend = (R_(-5), R_(95)) if sg > 0 else (R_(-95), R_(5))
+                if k == 1: bend = (R_(-25), R_(70)) if sg > 0 else (R_(-70), R_(25))
+                lim[ax] = bend
+                (c.min_x, c.max_x), (c.min_y, c.max_y), (c.min_z, c.max_z) = lim
+        w = B["wrist." + s_].constraints.new("LIMIT_ROTATION"); w.name = "hand_limit"; w.owner_space = "LOCAL"
+        w.use_limit_x = w.use_limit_y = w.use_limit_z = True
+        w.min_x, w.max_x = -R_(60), R_(60); w.min_z, w.max_z = -R_(35), R_(35); w.min_y, w.max_y = -R_(50), R_(50)
+for nm, ch in RIG.items():
+    hand_limits(ch)
+    fk = [fc for fc in fcurves(ch.o) if '"finger' in fc.data_path]
+    first = min((k.co.x for fc in fk for k in fc.keyframe_points), default=10 ** 6)
+    if first > 1:
+        for s_ in "LR": ch.fingers(s_, 1, 20, 15)        # relaxed, slightly curled until the first acted key
+print("HAND_LIMITS_DONE")
 print("ANIM_CHARS_DONE")
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
