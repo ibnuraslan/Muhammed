@@ -1,0 +1,56 @@
+{
+ "liver": {
+  "uid": "cf66ae46c0e148139bbb360b70343b5a",
+  "title": "Liver",
+  "author": "Thata",
+  "author_profile": "https://sketchfab.com/Thata",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/cf66ae46c0e148139bbb360b70343b5a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ortable": {
+  "uid": "e3a4512227d34b098e2ef0d11c8a80fd",
+  "title": "Operating Table",
+  "author": "shashkinv1ad",
+  "author_profile": "https://sketchfab.com/shashkinv1ad",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e3a4512227d34b098e2ef0d11c8a80fd",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bed": {
+  "uid": "60651eac7e96454c8cf5c43a91412336",
+  "title": "Simple Hospital Bed",
+  "author": "Yvo Pors",
+  "author_profile": "https://sketchfab.com/yvopors14",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60651eac7e96454c8cf5c43a91412336",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "gavel": {
+  "uid": "44581bee0a5749989dc474fe35b9dc1e",
+  "title": "gavel",
+  "author": "rutesh sakpal",
+  "author_profile": "https://sketchfab.com/ruteshsakpal",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/44581bee0a5749989dc474fe35b9dc1e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "mask": {
+  "uid": "f54ed08e35ba40d4a67fb0fce1cbf27e",
+  "title": "Medical/Surgical Mask",
+  "author": "BrightMoon",
+  "author_profile": "https://sketchfab.com/bright_moon",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f54ed08e35ba40d4a67fb0fce1cbf27e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sofa": {
+  "uid": "03550a3529c24611a12aa158747374e0",
+  "title": "Sofa",
+  "author": "katjagricishina",
+  "author_profile": "https://sketchfab.com/katjagricishina",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/03550a3529c24611a12aa158747374e0",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
