@@ -9,6 +9,7 @@ exec(open(os.path.join(ROOT, "..", "pipeline", "anim_lib.py")).read())
 OUT = sys.argv[sys.argv.index("--") + 1]
 sc = bpy.context.scene; O = bpy.data.objects
 rnd = random.Random(21)
+ANIM = os.environ.get("RB_LOOK") == "anim"   # v004+: animated-CG look (no handheld shake, deeper focus, no sweat)
 FIRE, IMPACT, SPLIT, LODGE, GRAZE, SWAP = 30, 541, 700, 896, 1003, 1244
 def F(t): return 1 + round(t * 60)
 def key(o, path, f, v=None, idx=-1):
@@ -299,7 +300,7 @@ for f in range(1, 1411):
     if f in range(IMPACT, IMPACT + 18):   # impact shake
         a_ = (IMPACT + 18 - f) / 18.0; p = p + Vector((math.sin(f * 2.1), math.cos(f * 2.9), math.sin(f * 3.7))) * 0.0025 * a_
     q = (t - p).to_track_quat('-Z', 'Y')
-    amp = 0.10
+    amp = 0.0 if ANIM else 0.10
     for f0_, a0_, d0_ in ((FIRE, 0.9, 22), (IMPACT, 0.6, 30), (SPLIT, 0.25, 20), (GRAZE + 9, 0.35, 18), (SWAP - 4, 0.2, 16)):
         if f0_ <= f < f0_ + d0_: amp += a0_ * (1 - (f - f0_) / d0_) ** 2
     jx = math.sin(f * 0.21) * 0.6 + math.sin(f * 0.53 + 1.3) * 0.3 + math.sin(f * 1.37 + 0.4) * 0.1
@@ -312,7 +313,7 @@ for f in range(1, 1411):
     cd.lens = cn(f); cd.keyframe_insert("lens", frame=f)
     fp = cf(f) if lk is None else cf(f).lerp(lk[2], w)
     cd.dof.focus_distance = max(0.01, (fp - p).length); cd.dof.keyframe_insert("focus_distance", frame=f)
-    dd_ = (fp - p).length; st = 11.0 if dd_ < 0.12 else (8.0 if dd_ < 0.35 else 4.0)
+    dd_ = (fp - p).length; st = 11.0 if dd_ < 0.12 else (8.0 if dd_ < 0.35 else (8.0 if ANIM else 4.0))
     cd.dof.aperture_fstop = st; cd.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # ---------------------------------------------------------------- ring glints (rim kick placed near the camera->ring reflection)
@@ -332,7 +333,7 @@ for m in bpy.data.materials:
     gn = m.node_tree.nodes.get("SkinGroup") if m.node_tree else None
     if gn and m.name.startswith("Owner"):
         cc = gn.inputs["Clearcoat"]
-        for f, v in ((1, 0.08), (FIRE, 0.1), (300, 0.18), (1000, 0.22), (1249, 0.18), (1410, 0.12)):
+        for f, v in (((1, 0.05), (1410, 0.05)) if ANIM else ((1, 0.08), (FIRE, 0.1), (300, 0.18), (1000, 0.22), (1249, 0.18), (1410, 0.12))):
             cc.default_value = v; cc.keyframe_insert("default_value", frame=f)
 # lift the shadows in the opening wide (0-1.2 s)
 fl_ = O["L_FillBounce"].data
