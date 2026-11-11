@@ -1,0 +1,5 @@
+AUDIT feet 0 []
+AUDIT seat 0 []
+AUDIT fingers 0 []
+AUDIT camera 1 [(257, ['Drywall'])]
+AUDIT bullet 0 []

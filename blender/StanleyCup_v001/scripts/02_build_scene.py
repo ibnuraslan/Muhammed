@@ -22,7 +22,7 @@ sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False
 sc.render.use_persistent_data = True
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"; sc.view_settings.exposure = -0.45
-sc.render.image_settings.file_format = "PNG"
+sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"; sc.render.image_settings.color_depth = "8"
 
 def col(name, parent=None):
     c = bpy.data.collections.new(name); (parent or sc.collection).children.link(c); return c
@@ -480,7 +480,7 @@ M_STEEL = flat("M_Steel", (0.78, 0.78, 0.78), 0.18, 1.0)
 M_LID = flat("M_LidPlastic", (0.82, 0.86, 0.85), 0.35)
 M_STRAW = flat("M_Straw", (0.16, 0.34, 0.36), 0.3, alpha=1.0)
 M_WATER = flat("M_Water", (0.55, 0.8, 0.95), 0.0, trans=1.0, ior=1.33)
-M_ICE = flat("M_Ice", (0.88, 0.95, 1.0), 0.12, trans=1.0, ior=1.31)
+M_ICE = flat("M_Ice", (0.92, 0.97, 1.0), 0.28, trans=0.75, ior=1.31)
 M_DROP = bpy.data.materials.new("M_Drop"); M_DROP.use_nodes = True
 _n = M_DROP.node_tree.nodes; _l = M_DROP.node_tree.links; _n.remove(_n["Principled BSDF"])
 _t = _n.new("ShaderNodeBsdfTransparent"); _g = _n.new("ShaderNodeBsdfGlossy"); _g.inputs["Roughness"].default_value = 0.03

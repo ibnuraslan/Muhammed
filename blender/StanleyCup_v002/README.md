@@ -2,13 +2,14 @@
 
 The full 25.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `StanleyCup_v002_60fps.blend`: the self-contained scene (Git LFS). Every texture is packed; it opens in factory-startup Blender 5.2.2 with no add-ons.
+- `StanleyCup_v002_60fps.blend`: the self-contained scene (58 MB, normal Git file; LFS upload was refused tonight). Every texture is packed; it opens in factory-startup Blender 5.2.2 with no add-ons.
 - `beats.json`: beat start frames + first words, for `pipeline/retime_to_vo.py` when the VO arrives.
 - `SETTINGS.md`: render settings, measured cost, suggested test frames. `CREDITS.md`: all assets are CC0 (no CC-BY block needed).
+- `audit.txt`: contact audit on the final file.
 - `package_check_f1500_lowres.png`, `package_check_f985_lowres.png`: 20 %, 4-sample frames rendered from the packed file in factory Blender. They show the package works; they are not quality references.
 
 Source: `../StanleyCup_v001/scripts`. Build order (assets fetched with `pipeline/fetch_polyhaven.py`, see CREDITS):
-`01_build_humans.py` → `02_build_scene.py` → `03_animate.py` (runs 03b_fx, 03a_humans, 03d_acting, 03c_camera) → `04_slim_textures.py` → `pipeline/package_for_farm.py`.
+`01_build_humans.py` → `02_build_scene.py` → `03_animate.py` (runs 03b_fx, 03a_humans, 03d_acting, 03c_camera) → `04_slim_textures.py -- <tex_dir> <out.blend> 2048 1024` → `python3 04b_png8.py <tex_dir>` → `pipeline/package_for_farm.py`.
 Review sheets and the audit are in `../StanleyCup_v001/review/`.
 
 ## Story / camera

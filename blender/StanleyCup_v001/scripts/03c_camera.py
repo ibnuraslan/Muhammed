@@ -13,7 +13,7 @@ sc.frame_set(1452); HANDLE_POS = CUP.matrix_world @ Vector((0.0, 0.0, 0.14))
 FL = P(1395)
 CAM = [  # frame, camera, aim, lens, fstop
     # beat 1: street at dusk, bullet streaks in past the lens, camera whips in behind it and chases it to the siding
-    (1, P(1) - D * 0.22 - SV * 0.07 + Z(0.03), P(1) + D * 4.0, 22, 8),
+    (1, P(1) - D * 0.13 - SV * 0.035 + Z(0.02), P(1) + D * 4.0, 24, 8),
     (34, P(34) - SV * 0.035 + Z(0.03) - D * 0.2, P(34) + D * 2.5, 22, 8),
     (70, P(70) - D * 0.14 + SV * 0.04 + Z(0.025), P(70) + D * 1.5, 26, 8),
     (110, P(110) - D * 0.07 + SV * 0.025 + Z(0.012), P(110) + D * 0.3, 28, 5.6),
@@ -75,3 +75,7 @@ for f in range(1, END + 1):
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
     cam_d.dof.aperture_fstop = fs_(f); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 sc["cam_framings"] = [c[0] for c in CAM]
+
+# exposure: dusk exterior at 0, the lamp-lit room at -0.45 (ramped while the camera is inside the wall)
+for f, e in ((1, 0.0), (150, 0.0), (240, -0.45)):
+    sc.view_settings.exposure = e; sc.view_settings.keyframe_insert("exposure", frame=f)
