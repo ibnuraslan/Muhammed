@@ -47,7 +47,8 @@ def mat(key):
         "floor": lambda: T_("old_wood_floor", 0.5),
         "lino": lambda: T_("old_linoleum_flooring_01", 0.5),
         "plaster": lambda: T_("painted_plaster_wall", 0.4, (0.95, 0.88, 0.74)),
-        "paper": lambda: T_("decrepit_wallpaper", 1.3, (0.92, 0.86, 0.76)),
+        "paper": lambda: wallpaper("paper", (0.80, 0.74, 0.60), (0.55, 0.30, 0.26), (0.38, 0.45, 0.32)),
+        "paper2": lambda: wallpaper("paper2", (0.70, 0.74, 0.66), (0.62, 0.52, 0.34), (0.42, 0.36, 0.30), seed=5),
         "conc": lambda: T_("rough_concrete", 0.4),
         "stone": lambda: T_("stone_wall", 0.5, (0.8, 0.78, 0.74)),
         "planks": lambda: T_("roof_planks", 0.5, (0.85, 0.75, 0.62)),
@@ -84,6 +85,87 @@ def window_glass():
     mx = N.new("ShaderNodeMixShader"); L.new(lp.outputs['Is Shadow Ray'], mx.inputs[0])
     L.new(refl.outputs[0], mx.inputs[1]); L.new(tr.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs['Surface'])
     return m
+
+
+def wallpaper_image(path, ground, flower, leaf, seed=1, W=512):
+    """A small 1940s floral wallpaper tile (seamless): five-petal sprigs with leaves on a soft ground."""
+    import skia
+    srf = skia.Surface(W, W); cv = srf.getCanvas()
+    cv.clear(skia.Color(*[int(255 * v) for v in ground]))
+    p = skia.Paint(AntiAlias=True)
+    p.setColor(skia.Color(*[int(255 * v * 0.94) for v in ground]))
+    for k in range(0, W, 16):
+        cv.drawRect(skia.Rect.MakeXYWH(k, 0, 1, W), p)
+    def sprig(cx, cy):
+        p.setColor(skia.Color(*[int(255 * v) for v in leaf]))
+        for a in (0.6, 2.4, 4.0):
+            cv.save(); cv.translate(cx + 15 * math.cos(a), cy + 15 * math.sin(a)); cv.rotate(math.degrees(a))
+            cv.drawOval(skia.Rect.MakeXYWH(-7, -3, 14, 6), p); cv.restore()
+        p.setColor(skia.Color(*[int(255 * v) for v in flower]))
+        for k in range(5):
+            aa = k * 2 * math.pi / 5
+            cv.drawCircle(cx + 5 * math.cos(aa), cy + 5 * math.sin(aa), 4.3, p)
+        p.setColor(skia.Color(232, 212, 150)); cv.drawCircle(cx, cy, 2.3, p)
+    for i in range(4):
+        for j in range(4):
+            cx = (i + 0.5 * (j % 2)) * W / 4 + W / 8; cy = j * W / 4 + W / 8
+            for dx in (-W, 0, W):
+                for dy in (-W, 0, W):
+                    sprig(cx + dx, cy + dy)
+    srf.makeImageSnapshot().save(path, skia.kPNG)
+    return path
+
+
+def wallpaper(name, ground, flower, leaf, seed=1, scale=3.2):
+    """Patterned paper (tiles every 1/scale m) with a faint paper bump."""
+    d = os.path.join(HERE, "..", "out", "generated"); os.makedirs(d, exist_ok=True)
+    path = os.path.join(d, name + "_tile.png")
+    if not os.path.exists(path):
+        wallpaper_image(path, ground, flower, leaf, seed)
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (scale,) * 3
+    L.new(tc.outputs['Object'], mp.inputs['Vector'])
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(path); t.projection = 'BOX'; t.projection_blend = 0.1
+    L.new(mp.outputs[0], t.inputs['Vector']); L.new(t.outputs['Color'], p.inputs['Base Color'])
+    p.inputs['Roughness'].default_value = 0.8
+    n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 60; L.new(tc.outputs['Object'], n.inputs['Vector'])
+    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.05; L.new(n.outputs['Fac'], b.inputs['Height']); L.new(b.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def drape(name, targets, margin=0.25, res=0.03, floor=0.0, lift=0.015, seed=0):
+    """A dust sheet draped over furniture: a height-field cloth from ray casts onto `targets`, softened, with
+    folds that spill onto the floor (no simulation needed)."""
+    from scipy.ndimage import gaussian_filter, distance_transform_edt
+    lo, hi = ph.bounds([o for t in targets for o in ([t] + list(t.children_recursive)) if o.type == 'MESH'])
+    x0, y0, x1, y1 = lo.x - margin, lo.y - margin, hi.x + margin, hi.y + margin
+    nx, ny = int((x1 - x0) / res) + 1, int((y1 - y0) / res) + 1
+    dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene
+    tset = {o.name for t in targets for o in ([t] + list(t.children_recursive))}
+    Hh = np.full((ny, nx), floor)
+    hitm = np.zeros((ny, nx), bool)
+    for j in range(ny):
+        for i in range(nx):
+            o = Vector((x0 + i * res, y0 + j * res, hi.z + 1.0))
+            ok, loc, nrm, idx, ob, M = sc.ray_cast(dg, o, Vector((0, 0, -1)))
+            if ok and ob.name in tset:
+                Hh[j, i] = loc.z; hitm[j, i] = True
+    dist = distance_transform_edt(~hitm) * res
+    top = gaussian_filter(np.where(hitm, Hh, 0), 2) / np.maximum(gaussian_filter(hitm.astype(float), 2), 1e-3)
+    edge = np.where(hitm, Hh, np.maximum(floor, top - dist * 6.0))           # cloth falls steeply off the edges
+    Hs = gaussian_filter(edge, 1.6) + lift
+    rng = np.random.default_rng(seed)
+    yy, xx = np.mgrid[0:ny, 0:nx]
+    folds = 0.012 * np.sin(xx * 0.9 + rng.uniform(0, 6)) * np.sin(yy * 0.35) + 0.008 * gaussian_filter(rng.standard_normal((ny, nx)), 2)
+    Hs = np.maximum(Hs + folds * (Hs > floor + 0.05), floor + 0.004)
+    from common import grid_mesh
+    o = grid_mesh(name, Hs.astype(np.float32), x1 - x0, y1 - y0, 1.0, origin=((x0 + x1) / 2, (y0 + y1) / 2, 0))
+    o.data.materials.append(fabric("DustSheet", (0.78, 0.76, 0.7), 0.95, 0.5, 350))
+    for t in targets:
+        for ob in [t] + list(t.children_recursive):
+            ob.hide_render = True if False else ob.hide_render
+    return o
 
 
 def shade_mat():
@@ -545,13 +627,23 @@ def front_bedroom_set(c):
 
 def upstairs_set(c):
     """Upstairs bedroom x[-4.2,-0.6] y[-4.7,-0.2]: a bed, a dresser and the closet; a ceiling bulb."""
-    b, _ = ph.model("GothicBed_01", loc=(-3.2, -2.6, F2), rot_z=math.radians(90), scale=0.9); c["bed2"] = b
+    b, _ = ph.model("old_bed_frame", loc=(-3.4, -2.7, F2), rot_z=0.0, scale=1.0); c["bed2"] = b
+    box("Mattress2", (-3.4, -2.7, F2 + 0.48), (0.86, 1.9, 0.18), fabric("Ticking2", (0.75, 0.72, 0.65), 0.9, 0.3, 500), bevel=0.04)
+    box("Quilt2", (-3.4, -2.5, F2 + 0.59), (0.98, 1.45, 0.05), fabric("Quilt2", (0.42, 0.5, 0.58), 0.9, 0.5, 300), bevel=0.02)
+    box("Pillow2", (-3.4, -1.95, F2 + 0.66), (0.6, 0.3, 0.1), fabric("Pillow2", (0.88, 0.87, 0.84), 0.9, 0.3, 600), bevel=0.04)
+    ph.model("hanging_picture_frame_01", loc=(-4.17, -3.0, F2 + 1.7), rot_z=math.radians(-90), scale=0.8)
+    ph.model("hanging_picture_frame_03", loc=(-2.0, -0.33, F2 + 1.65), rot_z=math.pi, scale=0.7)
+    # moonlight through the front window: a spot outside, so the sash bars cast their shape on the floor
+    ml = bpy.data.lights.new("MoonSpot", 'SPOT'); ml.energy = 0.0; ml.spot_size = math.radians(30); ml.spot_blend = 0.15
+    ml.color = (0.6, 0.72, 1.0); ml.shadow_soft_size = 0.02
+    mo = bpy.data.objects.new("MoonSpot", ml); bpy.context.collection.objects.link(mo); aim_obj(mo, (-2.4, -D2 - 3.0, F2 + 4.0), (-2.6, -3.2, F2))
+    c["moonspot"] = mo
     ph.model("painted_wooden_nightstand", loc=(-4.0, -3.9, F2), rot_z=math.radians(-90))
     sock, _ = ph.model("pull_chain_light_socket", loc=(-2.4, -2.4, C2)); c["up_bulb_obj"] = sock
     c["up_light"] = point((-2.4, -2.4, C2 - 0.25), 40, (1.0, 0.7, 0.42), 0.05)
-    ph.model("painted_wooden_cabinet", loc=(-2.6, -0.5, F2), rot_z=math.pi, scale=0.85)
+    cab, _ = ph.model("painted_wooden_cabinet", loc=(-2.6, -0.5, F2), rot_z=math.pi, scale=0.85); c["up_cab"] = cab
     ph.model("hanging_picture_frame_02", loc=(-3.4, -0.33, F2 + 1.7), rot_z=math.pi, scale=0.8)
-    ph.model("dining_chair_02", loc=(-0.95, -2.0, F2), rot_z=math.radians(-110))
+    uc, _ = ph.model("dining_chair_02", loc=(-0.95, -2.0, F2), rot_z=math.radians(-110)); c["up_chair"] = uc
     rug = box("RugUp", (-2.6, -2.6, F2 + 0.015), (2.2, 1.6, 0.008), fabric("RugUp", (0.25, 0.12, 0.08), 0.95, 0.3, 300))
     c["closet_light"] = point((-1.2, -0.7, C2 - 0.3), 0.0, (1.0, 0.7, 0.42), 0.05)
 
@@ -617,6 +709,7 @@ def cellar_set(c):
 def point(loc, energy, col, radius=0.05):
     l = bpy.data.lights.new("Point", 'POINT'); l.energy = energy; l.color = col; l.shadow_soft_size = radius
     o = bpy.data.objects.new("Point", l); bpy.context.collection.objects.link(o); o.location = loc
+    o.visible_glossy = False
     return o
 
 

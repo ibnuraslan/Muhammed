@@ -107,22 +107,32 @@ def _():
             # a window in the neighbour's front room across the street (seen from inside, behind her)
             c["neighbours"][2].hide_render = True
             y = ROAD_Y - 8.0; pl = H.mat("plaster")
-            pl = H.mat("paper")
+            pl = H.mat("paper2")
             H.wall_x("NWin", -9.5, -3.5, y, G, G + 2.8, 0.2, pl, [(-7.2, -5.8, G + 0.9, G + 2.3)])
             H.wall_y("NSide", y - 4.0, y, -9.5, G, G + 2.8, 0.2, pl); box("NCeil", (-6.5, y - 2.0, G + 2.85), (6, 4, 0.1), H.mat("plaster"))
             import ph
-            ph.model("ArmChair_01", loc=(-8.6, y - 1.0, G), rot_z=math.radians(140))
-            ph.model("side_table_01", loc=(-8.9, y - 0.4, G)); ph.model("vintage_oil_lamp", loc=(-8.9, y - 0.4, G + 0.55), scale=0.8)
-            H.point((-8.9, y - 0.4, G + 1.1), 20, (1.0, 0.68, 0.38), 0.06)
-            p, g = H.window_unit('x', -6.5, 1.4, y + 0.0, G + 0.9, G + 2.3, lit_glass=None); c["nwin"] = p
-            cl = box("NCurtainL", (-6.95, y - 0.15, G + 1.6), (0.5, 0.02, 1.4), H.mat("lace")); c["ncur"] = cl
-            box("NCurtainR", (-6.05, y - 0.15, G + 1.6), (0.5, 0.02, 1.4), H.mat("lace"))
-            box("NFloor", (-6.5, y - 2.0, G - 0.01), (5, 4, 0.02), H.mat("floor"))
-            l = H.point((-6.0, y - 3.0, G + 2.4), 6, (1.0, 0.7, 0.42), 0.2)
+            ph.model("ArmChair_01", loc=(-8.6, y - 1.2, G), rot_z=math.radians(140))
+            ph.model("side_table_01", loc=(-8.9, y - 0.45, G))
+            shade = cyl("LampShade", (-8.9, y - 0.45, G + 1.0), 0.17, 0.24, H.mat("shade"), 32)
+            cyl("LampBase", (-8.9, y - 0.45, G + 0.72), 0.05, 0.32, H.mat("chrome"), 16)
+            H.point((-8.9, y - 0.45, G + 0.98), 25, (1.0, 0.68, 0.38), 0.05)
+            radio = join([box("RadioCab", (0, 0, 0.5), (0.7, 0.4, 1.0), H.mat("oak"), bevel=0.03),
+                          box("RadioGrille", (0, -0.201, 0.62), (0.5, 0.005, 0.4), fabric("RGrille", (0.55, 0.45, 0.32), 0.9, 0.2, 800)),
+                          box("RadioDial", (0, -0.201, 0.9), (0.3, 0.005, 0.07), pbr("RDial", (0.8, 0.7, 0.45), 0.3))], "RadioCabinet")
+            radio.location = (-4.4, y - 0.5, G); radio.rotation_euler = (0, 0, math.radians(-15))
+            ph.model("hanging_picture_frame_01", loc=(-8.0, y - 0.12, G + 1.9), rot_z=math.pi, scale=0.7)
+            ph.model("wall_clock", loc=(-4.6, y - 0.12, G + 2.0), rot_z=math.pi)
+            # lace curtains: subdivided cloth with soft folds; the left one gathers as she parts it
+            def lace(nm, x):
+                bpy.ops.mesh.primitive_grid_add(x_subdivisions=40, y_subdivisions=30, size=1, location=(x, y - 0.16, G + 1.6), rotation=(math.radians(90), 0, 0))
+                o = bpy.context.active_object; o.name = nm; o.scale = (0.62, 1.42, 1); o.data.materials.append(H.mat("lace"))
+                w = o.modifiers.new("folds", 'WAVE'); w.use_normal = True; w.use_x = True; w.use_y = False; w.height = 0.025; w.width = 0.09; w.narrowness = 1.2; w.speed = 0.0
+                return o
+            c["ncur"] = lace("NCurtainL", -6.95); lace("NCurtainR", -6.05)
         h = P(c, "w"); y = ROAD_Y - 8.0
         H.stand_at(h, (-6.6, y - 0.75, G), math.pi)
         u = ease(min(1.0, sec / 1.6))
-        c["ncur"].location.x = -6.95 - 0.35 * u; c["ncur"].scale.x = 1.0 - 0.4 * u
+        c["ncur"].location.x = -6.95 - 0.2 * u; c["ncur"].scale.x = 0.62 * (1.0 - 0.45 * u)
         reach(h, "R", Vector((-6.95 - 0.3 * u + 0.2, y - 0.25, G + 1.45)), Vector((0.3, 0.4, -1)), Vector((0, 1, 0)))
         H.look(h, 6, -4)
     def cam(c, t):

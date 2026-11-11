@@ -51,6 +51,8 @@ def build(variant=None):
         for (x, z) in ((-2.4, 1.6), (2.6, 1.6), (-2.4, F2 + 1.5), (2.6, F2 + 1.5)):
             H.day_fill((x, -D2 + 0.45, z), 1.2, 30, (0.55, 0.68, 1.0), rot=(math.radians(65), 0, 0))
         H.day_fill((1.1, D2 - 0.45, 1.7), 1.0, 15, (0.55, 0.68, 1.0), rot=(math.radians(-65), 0, 0))
+        if "moonspot" in c:
+            c["moonspot"].data.energy = 900
     c["tod"] = tod
     c["cast"] = {}
     for k in cast:
@@ -73,14 +75,14 @@ def _():
             for b in c["beams"]:
                 b.data.energy = 700
             c["haze"].data.materials[0].node_tree.nodes["Principled Volume"].inputs['Density'].default_value = 0.025
-            sh = fabric("DustSheet", (0.8, 0.78, 0.72), 0.9, 0.5, 400)
-            for (x, y, sx, sy, sz) in ((3.2, -2.0, 0.55, 0.55, 1.05), (2.2, -3.6, 0.45, 0.5, 1.0), (4.0, -3.0, 0.3, 0.32, 1.15)):
-                o = box("Sheet", (x, y, sz * 0.5), (sx * 1.8, sy * 1.8, sz), sh, bevel=0.12)
-                o.modifiers.new("drape", 'SUBSURF').levels = 2
-            c["dust"] = H.leaf_cloud(40, (1.8, -2.6), (1.4, 1.4), 2.4, col=(0.85, 0.83, 0.78), seed=13)
+            for k, key in enumerate(("armchair", "chair2")):
+                H.drape("Sheet%d" % k, [c[key]], seed=k); c[key].hide_render = True
+                for ch in c[key].children_recursive:
+                    ch.hide_render = True
+            c["dust"] = H.leaf_cloud(160, (1.9, -2.6), (1.2, 1.0), 2.4, col=(0.95, 0.93, 0.88), seed=13)
             for o in c["dust"]:
-                o.scale = (0.01, 0.01, 1)
-        H.fall_leaves(c["dust"], sec * 0.05, ground=0.0, drift=(0.02, 0.01))
+                o.scale = (0.006, 0.006, 1)
+        H.fall_leaves(c["dust"], sec * 0.04, ground=0.2, drift=(0.03, 0.01))
         o1, o2 = P(c, "o1"), P(c, "o2")
         H.walk_to(o1, (0.3, -3.2, 0), (1.3, -2.6, 0), t * 0.7, swing=6)
         H.stand_at(o2, (0.2, -1.9, 0), math.radians(-120))
@@ -101,6 +103,14 @@ def _():
     def anim(c, t):
         if "moonwin" not in c:
             c["moonwin"] = H.day_fill((-2.4, -D2 + 0.35, F2 + 1.6), 1.0, 40, (0.55, 0.68, 1.0), rot=(math.radians(70), 0, 0))
+            for k, key in enumerate(("up_cab", "up_chair")):
+                H.drape("USheet%d" % k, [c[key]], seed=3 + k, floor=F2)
+                for ob in [c[key]] + list(c[key].children_recursive):
+                    ob.hide_render = True
+            c["dust"] = H.leaf_cloud(80, (-2.6, -3.2), (0.8, 0.8), F2 + 2.0, col=(0.9, 0.9, 0.95), seed=21)
+            for o in c["dust"]:
+                o.scale = (0.006, 0.006, 1)
+        H.fall_leaves(c["dust"], t * 0.3, ground=F2 + 0.2, drift=(0.02, 0.01))
     def cam(c, t):
         e = ease(t)
         return (Vector((-4.0, -4.5, F2 + 1.9)).lerp(Vector((-3.6, -4.0, F2 + 1.8)), e), Vector((-1.6, -1.4, F2 + 0.9)).lerp(Vector((-1.25, -1.2, F2 + 1.2)), e), 22)
