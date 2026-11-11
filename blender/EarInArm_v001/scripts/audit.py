@@ -24,6 +24,7 @@ def foot_low(rig_name, side):
     return (rig.matrix_world @ pb.head).z, (rig.matrix_world @ pb.tail).z
 prev = None; hold = 0; worst_hold = (0, 0)
 issues = {"inside": [], "hover": [], "sink": [], "grip": []}
+last_foot = {}
 for f in range(1, sc.frame_end + 1, 5):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     cp = cam.matrix_world.translation.copy(); fw = cam.matrix_world.to_3x3() @ Vector((0, 0, -1))
@@ -45,7 +46,10 @@ for f in range(1, sc.frame_end + 1, 5):
             hz, tz = foot_low(rn, s)
             ankle_rest = OB[rn].data.bones["foot." + s].head_local.z
             gap = hz - ankle_rest
-            if gap > 0.02 and abs(OB[rn].pose.bones["foot." + s].matrix.translation.z - hz) < 9: issues["hover"].append((rn, s, f, round(gap, 3)))
+            key = (rn, s); p_now = OB[rn].matrix_world @ OB[rn].pose.bones["foot." + s].head
+            planted = key in last_foot and (p_now - last_foot[key]).length < 0.004 * 5   # moved < 4 mm/frame: a planted foot
+            last_foot[key] = p_now.copy()
+            if gap > 0.02 and planted: issues["hover"].append((rn, s, f, round(gap, 3)))
             if gap < -0.015: issues["sink"].append((rn, s, f, round(gap, 3)))
     # held props vs palm
     for prop, rig, s, f0, f1 in (("Scalpel", "Surgeon", "R", 340, 560), ("Forceps", "Surgeon", "R", 570, 1500), ("NeedleHolder", "Surgeon", "R", 1505, 1680)):
@@ -55,7 +59,7 @@ for f in range(1, sc.frame_end + 1, 5):
             if d > 0.09: issues["grip"].append((prop, f, round(d, 3)))
 log("CAMERA inside geometry at frames:", issues["inside"] or "none")
 log("LONGEST near-static camera hold: %.2f s ending f%d" % (worst_hold[0] / 60, worst_hold[1]))
-log("FOOT hover >2cm (rig, side, frame, gap; walking lifts included):", len(issues["hover"]), issues["hover"][:30])
+log("FOOT hover >2cm on a planted foot (rig, side, frame, gap):", len(issues["hover"]), issues["hover"][:30])
 log("FOOT sink >1.5cm:", len(issues["sink"]), issues["sink"][:30])
 log("GRIP prop far from palm (>9cm):", len(issues["grip"]), issues["grip"][:30])
 # props on the tray: shavings must land on the tray surface

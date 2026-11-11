@@ -269,7 +269,7 @@ cut = bpy.data.objects.new("SA_CutLine", cu); C_SA.objects.link(cut); cut.locati
 cu.materials.append(mat("CutGlow", (1, 0.9, 0.5), 0.5, emit=((1.0, 0.85, 0.4), 8.0)))
 cu.bevel_factor_end = 0.0
 # floating membrane the camera comes through (matches the white tee / skin)
-mem = box("SA_Membrane", (0.9, 0.004, 1.2), SA + Vector((0, -0.55, 0)), mat("MembraneSkin", (0.95, 0.93, 0.9), 0.6, sss=0.2, alpha=0.9), C_SA)
+mem = box("SA_Membrane", (0.9, 0.004, 1.2), SA + Vector((0, -0.575, 0)), mat("MembraneSkin", (0.95, 0.93, 0.9), 0.6, sss=0.2, alpha=0.55), C_SA)
 # floating particles for depth (foreground/background life)
 for i in range(40):
     p = sph("SA_Mote%d" % i, random.uniform(0.003, 0.008), SA + Vector((random.uniform(-0.8, 0.8), random.uniform(-0.6, 0.9), random.uniform(-0.6, 0.7))),
@@ -293,7 +293,7 @@ for o in C_SB.objects:
 for i in range(14):
     cyl("SB_Fibre%d" % i, 0.008, 0.48, SB + Vector((0, -0.16 + i * 0.024, -0.12 + random.uniform(-0.03, 0.03))), M_MUSC, C_SB, rot=(0, R_(90), 0), verts=10)
 # membrane matching the forearm skin (camera dives through it)
-box("SB_Membrane", (0.9, 1.2, 0.004), SB + Vector((0, 0, 0.42)), mat("MembraneArm", (0.75, 0.55, 0.45), 0.6, sss=0.3, alpha=0.95), C_SB)
+box("SB_Membrane", (0.9, 1.2, 0.004), SB + Vector((0, 0, 0.42)), mat("MembraneArm", (0.8, 0.62, 0.55), 0.6, emit=((0.9, 0.75, 0.68), 0.5)), C_SB)
 for i in range(30):
     p = sph("SB_Cell%d" % i, random.uniform(0.004, 0.012), SB + Vector((random.uniform(-0.5, 0.5), random.uniform(-0.4, 0.4), random.uniform(0.06, 0.4))),
             mat("Cell", (1.0, 0.5, 0.5), 0.3, emit=((1, 0.4, 0.4), 0.8), alpha=0.7), C_SB)

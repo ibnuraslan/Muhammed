@@ -1,0 +1,6 @@
+CAMERA inside geometry at frames: [(176, 'SA_Membrane')]
+LONGEST near-static camera hold: 0.25 s ending f1256
+FOOT hover >2cm on a planted foot (rig, side, frame, gap): 6 [('Nurse', 'L', 686, 0.068), ('Nurse', 'L', 691, 0.069), ('Nurse', 'L', 696, 0.07), ('Nurse', 'L', 701, 0.068), ('Surgeon', 'L', 1381, 0.037), ('Surgeon', 'L', 1386, 0.039)]
+FOOT sink >1.5cm: 7 [('Nurse', 'L', 1471, -0.023), ('Nurse', 'L', 1476, -0.024), ('Nurse', 'L', 1481, -0.023), ('Nurse', 'L', 1486, -0.022), ('Nurse', 'L', 1491, -0.022), ('Nurse', 'L', 1496, -0.022), ('Nurse', 'L', 1501, -0.017)]
+GRIP prop far from palm (>9cm): 0 []
+SHAVINGS off the tray at end: none

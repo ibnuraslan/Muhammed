@@ -45,6 +45,7 @@ def smoothstep(a, b, x):
 # ================================================================== chair tilt rig
 tilt = OB.new("ChairTilt", None) if False else bpy.data.objects.new("ChairTilt", None)
 bpy.data.collections["OR_Set"].objects.link(tilt); tilt.location = (0, 0.0, 0.55)
+bpy.context.view_layer.update()
 for n in ("Chair_Seat", "Chair_LegRest", "Chair_BackPivot", "Chair_Arm0", "Chair_Arm1", "Chair_ArmPost0", "Chair_ArmPost1",
           "ArmBoard", "ArmBoard_Drape"):
     o = OB[n]; M = o.matrix_world.copy(); o.parent = tilt; o.matrix_parent_inverse = tilt.matrix_world.inverted()
@@ -72,12 +73,16 @@ for k in kb[1:]:
     if k.value > 0 and not k.name.startswith("X_"):
         for i, (a, c) in enumerate(zip(k.data, kb[0].data)): mix[i] += (a.co - c.co) * k.value
 eg = body.shape_key_add(name="EarGone", from_mix=False)
-EAR_IDS = [i for i, m in enumerate(mix) if m.x > 0.074 and 1.58 < m.z < 1.765 and -0.085 < m.y < 0.06]
+gi_h = body.vertex_groups["HelperGeometry"].index
+HELP = set(v.index for v in body.data.vertices if any(g.group == gi_h and g.weight > 0.5 for g in v.groups))
+EAR_IDS = [i for i, m in enumerate(mix) if i not in HELP and m.x > 0.068 and 1.585 < m.z < 1.77 and -0.09 < m.y < 0.06]
 for i in EAR_IDS:
-    m = mix[i]; t = Vector((0.074 + (m.x - 0.074) * 0.08, m.y, m.z))
+    m = mix[i]; k_ = min(1.0, max(0.0, (m.x - 0.068) / 0.008))   # 0 at the scalp, 1 on the ear proper
+    c_ = Vector((0.0797, -0.03, 1.665))
+    t = Vector((0.068 + (m.x - 0.068) * 0.1, c_.y + (m.y - c_.y) * (1 - 0.75 * k_), c_.z + (m.z - c_.z) * (1 - 0.75 * k_)))
     eg.data[i].co = kb[0].data[i].co + (t - m)
 eg.value = 1.0
-EAR_C = sum((mix[i] for i in EAR_IDS), Vector()) / len(EAR_IDS)   # rest armature space centre of the old ear
+EAR_C = Vector((0.0797, -0.0457, 1.6741))   # rest armature space centre of the old ear
 print("EAR_C", EAR_C, len(EAR_IDS))
 HEAD_REST = PAT.R.BN["head"].matrix_local.copy()
 def attach_bone(o, person, bone, M_rest_world):
@@ -90,10 +95,18 @@ M_GAUZE = bpy.data.materials["Gauze"]
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.045, segments=24, ring_count=12); pad = bpy.context.object; pad.name = "Bandage_Pad"
 pad.scale = (0.35, 0.8, 1.0); bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); pad.data.materials.append(M_GAUZE)
 attach_bone(pad, PAT, "head", Matrix.Translation(EAR_C + Vector((0.004, 0, 0))))
-bpy.ops.mesh.primitive_torus_add(major_radius=0.098, minor_radius=0.012, major_segments=48, minor_segments=8); band = bpy.context.object; band.name = "Bandage_Wrap"
-band.scale = (0.97, 1.16, 1.0); bpy.ops.object.transform_apply(scale=True); band.data.materials.append(M_GAUZE); bpy.ops.object.shade_smooth()
-attach_bone(band, PAT, "head", Matrix.Translation(Vector((0, -0.005, EAR_C.z + 0.035))) @ Matrix.Rotation(R_(-25), 4, 'Y') @ Matrix.Rotation(R_(10), 4, 'X'))
-for o in (pad, band):
+pad.scale = (1.25, 1.2, 1.15)
+# two strips of surgical tape holding the dressing
+M_TAPE = newmat("Tape", (0.85, 0.84, 0.8), 0.7)
+tapes = []
+for k, ang in enumerate((25, -25)):
+    bpy.ops.mesh.primitive_cube_add(size=1); t_ = bpy.context.object; t_.name = "Bandage_Tape%d" % k
+    t_.scale = (0.003, 0.075, 0.016); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    t_.data.materials.append(M_TAPE)
+    attach_bone(t_, PAT, "head", Matrix.Translation(EAR_C + Vector((0.021, 0, 0))) @ Matrix.Rotation(R_(ang), 4, 'X'))
+    tapes.append(t_)
+band = tapes[0]
+for o in [pad] + tapes:
     for c in list(o.users_collection): c.objects.unlink(o)
     C_PROP.objects.link(o); key_vis(o, 1, True); key_vis(o, 900, False)
 
@@ -103,21 +116,25 @@ def pat_rec(f, head=(4, -28, 6), breath=0.0):
     PAT.key_body(f, SEAT, pitch=-10, spine=(2 + breath, 0, 0), head=head, legs=LEGS)
 ARM_R = ((-0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
 ARM_L_REST = ((0.32, -0.12, 0.77), (0, -1, -0.15), (0, 0, -1))
-EARHAND_W = EAR_C + Vector((0.02, -0.075, -0.33))   # seated: head is 0.304 lower than rest
+EARHAND_W = EAR_C + Vector((0.055, 0.035, -0.304 - 0.115))   # seated: head is 0.304 lower than rest
 ARM_L_BOARD = ((0.74, -0.04, 1.03), (1, -0.15, 0.0), (0, 0, 1))   # palm up on the arm board (tilt frame)
 # beat 1: shock. Head jolts back, hand flies up toward the dressing, then settles
 pat_up(1, head=(0, -8, 0)); pat_up(18, head=(-6, -12, 3), spine=(2, 0, 0)); pat_up(40, head=(-10, -18, 4), spine=(-2, 2, 0))
 pat_up(80, head=(-4, -22, 6), spine=(4, 3, 4)); pat_up(126, head=(-2, -16, 4), spine=(6, 2, 2)); pat_up(165, head=(0, -4, 0))
 for f, a in ((1, ARM_L_REST), (22, ARM_L_REST)): PAT.key_hand("L", f, *a)
-PAT.key_hand("L", 44, EARHAND_W + Vector((0.08, -0.08, -0.05)), (-0.2, 0.3, 1.0), (-1, 0, 0.2))
-PAT.key_hand("L", 70, EARHAND_W, (-0.25, 0.35, 1.0), (-1, 0, 0.1))
-PAT.key_hand("L", 110, EARHAND_W + Vector((0.005, 0.005, -0.004)), (-0.25, 0.35, 1.0), (-1, 0, 0.1))
+PAT.key_hand("L", 44, EARHAND_W + Vector((0.07, -0.02, -0.08)), (-0.25, -0.1, 1.0), (-1, 0, 0.1))
+PAT.key_hand("L", 70, EARHAND_W, (-0.3, -0.1, 1.0), (-1, 0, 0.1))
+PAT.key_hand("L", 110, EARHAND_W + Vector((0.008, 0.004, -0.01)), (-0.3, -0.1, 1.0), (-1, 0, 0.1))
 PAT.key_hand("L", 150, EARHAND_W + Vector((0.12, -0.06, -0.2)), (0.2, -0.6, -0.5), (0, 0, -1))
 PAT.key_hand("L", 200, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])
 PAT.key_hand("L", 300, *ARM_L_BOARD); PAT.key_hand("L", B["b9"] + 15, *ARM_L_BOARD)
-for f in (1, 300, B["b9"]): PAT.key_hand("R", f, *ARM_R)
+for f in (1, 16, 175, 300, B["b9"]): PAT.key_hand("R", f, *ARM_R)
+MOUTH = Vector((0.0, -0.125, 1.30))
+for f, dz in ((38, 0.0), (70, -0.01), (112, 0.005)):
+    PAT.key_hand("R", f, MOUTH + Vector((-0.02, -0.07, -0.085 + dz)), (0.15, 0.35, 1.0), (0.1, 1, -0.2))
+PAT.key_hand("R", 140, MOUTH + Vector((-0.12, -0.1, -0.3)), (0.1, -0.5, -0.4), (0, 0, -1))
 PAT.key_fingers("L", 1, 18); PAT.key_fingers("L", 50, 8, 10); PAT.key_fingers("L", 150, 15); PAT.key_fingers("L", 300, 25, 15)
-PAT.key_fingers("R", 1, 22); PAT.key_fingers("R", 30, 45, 30); PAT.key_fingers("R", 150, 22)
+PAT.key_fingers("R", 1, 22); PAT.key_fingers("R", 38, 12, 10); PAT.key_fingers("R", 112, 18, 12); PAT.key_fingers("R", 150, 22)
 N0 = FACE_NEUTRAL()
 PAT.face(1, **dict(N0, eye_left_opened_up=0.4, eye_right_opened_up=0.4))
 SHOCK = dict(N0, eye_left_opened_up=1, eye_right_opened_up=1, eyebrows_left_up=1, eyebrows_right_up=1, eyebrows_left_inner_up=0.8,
@@ -133,11 +150,11 @@ for f in range(300, B["b9"], 120):
 pat_rec(B["b9"] + 10)
 # beat 9: sits up, turns to camera, left hand comes up and touches the new ear, big smile
 pat_up(B["b9"] + 75, head=(-2, -8, 0)); pat_up(B["b9"] + 100, head=(-4, -14, 3), spine=(4, 2, 3)); pat_up(B["end"], head=(-5, -10, 2), spine=(5, 1, 2))
-EAR_TOUCH = EAR_C + Vector((0.035, -0.07, -0.36))
+EAR_TOUCH = EAR_C + Vector((0.045, 0.02, -0.304 - 0.075))
 PAT.key_hand("L", B["b9"] + 60, *ARM_L_REST)
-PAT.key_hand("L", B["b9"] + 92, EAR_TOUCH + Vector((0.05, -0.05, -0.08)), (-0.2, 0.35, 1.0), (-1, 0.1, 0.1))
-PAT.key_hand("L", B["b9"] + 108, EAR_TOUCH, (-0.25, 0.4, 1.0), (-1, 0.1, 0.1))
-PAT.key_hand("L", B["end"], EAR_TOUCH + Vector((0.003, 0.004, 0.006)), (-0.25, 0.4, 1.0), (-1, 0.1, 0.1))
+PAT.key_hand("L", B["b9"] + 92, EAR_TOUCH + Vector((0.05, -0.05, -0.08)), (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
+PAT.key_hand("L", B["b9"] + 108, EAR_TOUCH, (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
+PAT.key_hand("L", B["end"], EAR_TOUCH + Vector((0.003, 0.004, 0.006)), (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
 PAT.key_fingers("L", B["b9"] + 60, 20); PAT.key_fingers("L", B["b9"] + 100, 6, 10)
 
 def ev_at(f):
@@ -157,6 +174,7 @@ ab_local = tilt_inv @ (mid + Vector((0, 0, -0.05)))
 ab.matrix_parent_inverse = Matrix.Identity(4); ab.location = ab_local; ab.rotation_euler = (0, 0, math.atan2((wr - el).y, (wr - el).x))
 ad_ = OB["ArmBoard_Drape"]; ad_.matrix_parent_inverse = Matrix.Identity(4); ad_.location = ab_local + Vector((0, 0, 0.023)); ad_.rotation_euler = ab.rotation_euler
 print("FOREARM", el, wr)
+for o_ in (ab, ad_): key_vis(o_, 1, False); key_vis(o_, 200, True); key_vis(o_, B['b9'] + 30, False)
 
 # --- key points on the patient (world, reclined) used by the surgeon
 FA_LOCAL = lambda u: None
@@ -164,7 +182,7 @@ ev_at(600)
 EL = pr.matrix_world @ PAT.R.PB["lowerarm01.L"].head; WR = pr.matrix_world @ PAT.R.PB["wrist.L"].head
 INC = EL.lerp(WR, 0.45) + Vector((0, 0, 0.032))   # incision point on the volar forearm (palm-up -> top)
 FA_DIR = (WR - EL).normalized()
-HM = pr.matrix_world @ PAT.R.PB["head"].matrix @ Matrix.Translation((0, -PAT.R.BN["head"].length, 0)) @ HEAD_REST.inverted()  # rest arm. -> world (head)
+HM = pr.matrix_world @ PAT.R.PB["head"].matrix @ HEAD_REST.inverted()  # rest arm. -> world (head)
 EAR_W = HM @ EAR_C
 EAR_OUT = (HM.to_3x3() @ Vector((1, 0, 0))).normalized()
 print("INC", INC, "EAR_W", EAR_W, "EAR_OUT", EAR_OUT)
@@ -223,11 +241,12 @@ sh(199, "R", CHEST + Vector((-0.02, -0.04, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6,
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(300, 565, 6):
     k = (f - 343) / 37.0
-    sh(f, "L", BLK + Vector((-0.075, 0.03, 0.02)), (0.9, -0.1, -0.3), (0.0, 0.3, 1.0))
+    away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(530, 556, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
+    sh(f, "L", BLK + Vector((-0.055, 0.075, 0.012)) + away, (0.35, -1.0, -0.35), (0.0, 0.2, 1.0))
     ph = (k % 1.0)
     sweep = Vector((0.03 - 0.06 * ph, -0.02 + 0.01 * math.sin(k * 2.3), 0.045 - 0.025 * math.sin(math.pi * ph)))
-    sh(f, "R", BLK + Vector((0.09, -0.05, 0.03)) + sweep * (1 if f > 343 else 0.2), (-0.7, 0.35, -0.5), (-0.2, -0.4, 1.0))
-SUR.key_fingers("L", 300, 40, 35); SUR.key_fingers("R", 300, 55, 40)
+    sh(f, "R", BLK + Vector((0.06, 0.06, 0.035)) + sweep * (1 if f > 343 else 0.2) + away, (-0.45, -1.0, -0.55), (-0.2, -0.3, 1.0))
+SUR.key_fingers("L", 300, 28, 30); SUR.key_fingers("R", 300, 38, 32)
 # beat 4: R forceps carries the ear to the forearm, slides it in; L forceps lifts the skin edge
 ev_at(640)
 sh(570, "R", BLK + Vector((0.05, -0.04, 0.08)), (-0.6, 0.4, -0.5), (-0.2, -0.4, 1.0))
@@ -263,10 +282,15 @@ sh(1390, "L", at_ear(0.2, -0.15, 0.08), (0.2, -1, -0.4), (0, 0, 1))
 sh(1500, "L", at_ear(0.15, -0.12, 0.05), (0.2, -1, -0.5), (0, 0, 1))
 # stitching: R needle holder travels along the ear base in arcs
 STITCH_N = 9
+def STITCH_P(i):
+    u = i / (STITCH_N - 1)
+    return EAR_C + Vector((0.005, -0.021 + 0.004 * math.sin(math.pi * u), -0.028 + 0.056 * u))
 for i in range(STITCH_N):
     f = 1505 + i * 15; u = i / (STITCH_N - 1)
-    pt = at_ear(0.13, -0.03 + 0.06 * u, -0.025 + 0.07 * math.sin(math.pi * u))
-    sh(f, "R", pt, (-0.3, -1, -0.5), (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.01, 0.03, 0.04)), (-0.3, -1, -0.3), (0, 0, 1))
+    pw = HM @ STITCH_P(i)
+    dd = (-Vector((0, 1, 0)) * 0.8 - Vector((0, 0, 1)) * 0.35 - side * 0.3).normalized()
+    pt = pw - dd * 0.135
+    sh(f, "R", pt, dd, (0, 0, 1)); sh(f + 8, "R", pt + Vector((0.006, 0.02, 0.03)), dd, (0, 0, 1))
 sh(B["b9"] + 5, "L", at_ear(0.18, -0.12, 0.05), (0.2, -1, -0.4), (0, 0, 1))
 for s in "LR":
     ev_at(B["b9"] + 70)
@@ -283,7 +307,7 @@ def nurse_arms(f, swing=0.0, fwd=0.0):
         sx = 1 if s == "L" else -1
         NUR.R.key_rot("upperarm01." + s, f, [("Y", sx * 62), ("X", -(fwd + swing * sx))])
         NUR.R.key_rot("lowerarm01." + s, f, [("X", -(20 + fwd * 0.6))])
-N_A, N_B, N_C, N_D = Vector((-1.9, 1.75)), Vector((1.6, -0.15)), Vector((1.25, -0.35)), Vector((-0.75, 0.85))
+N_A, N_B, N_C, N_D = Vector((-1.9, 1.75)), Vector((1.6, -0.15)), Vector((1.25, -0.35)), Vector((-0.75, -1.15))
 walk(NUR, N_A, Vector((1.0, 1.6)), 1, 120, -90, -90, stride=0.6)
 for f in range(1, 121, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 walk(NUR, Vector((1.0, 1.6)), N_B, 121, 300, -90, -100, stride=0.6)
@@ -294,10 +318,10 @@ walk(NUR, N_B, N_C, 570, 700, -100, -150, stride=0.5)
 for f in range(570, 700, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
 for f in range(710, 1309, 60):
     stand(NUR, f, N_C, -150, spine=(8, 0, 0), head=(18, 0, 0)); nurse_arms(f, fwd=55)
-walk(NUR, N_C, N_D, 1312, 1440, -150, -150, stride=0.55)
-for f in range(1312, 1440, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
-for f in range(1450, B["end"] + 1, 60):
-    stand(NUR, f, N_D, -150, spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
+walk(NUR, N_C, Vector((1.3, -1.35)), 1312, 1380, -150, 0, stride=0.55); walk(NUR, Vector((1.3, -1.35)), N_D, 1381, 1460, 0, -90, stride=0.55)
+for f in range(1312, 1460, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
+for f in range(1462, B["end"] + 1, 60):
+    stand(NUR, f, N_D, -90 - 123 * smooth((f - 1462) / 60.0), spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
 for f in range(B["b9"] + 60, B["end"], 12):   # little clap
     nurse_arms(f, fwd=70 + (6 if (f // 12) % 2 else -2))
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
@@ -324,7 +348,7 @@ bm = bmesh.new(); bm.from_mesh(mk.data)
 bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y > -0.02 or v.co.z > 0.045 or v.co.z < -0.07], context='VERTS'); bm.to_mesh(mk.data); bm.free()
 mk.scale = (0.78, 1.05, 1.0); bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); mk.data.materials.append(M_MASK)
 mk.modifiers.new("solid", 'SOLIDIFY').thickness = 0.003
-attach_bone(mk, SUR, "head", Matrix.Translation(HEADW + Vector((0, 0.005, 0.03))))
+attach_bone(mk, SUR, "head", Matrix.Translation(HEADW + Vector((0, 0.008, -0.025))))
 for o in (cap, mk):
     for c in list(o.users_collection): c.objects.unlink(o)
     C_PROP.objects.link(o)
@@ -335,7 +359,7 @@ ear_src = OB["Ear_Src"]
 def ear_copy(name, mat_):
     o = ear_src.copy(); o.data = ear_src.data.copy(); o.name = name; C_PROP.objects.link(o)
     o.data.materials.clear(); o.data.materials.append(mat_); return o
-EAR_FLAT = Matrix.Rotation(R_(90), 4, 'X')   # ear lies flat (front face up) on the tray
+EAR_FLAT = Matrix.Rotation(R_(-90), 4, 'X')   # ear lies flat (front face up) on the tray
 ear_real = ear_copy("Ear_Cartilage", M_CART)
 ear_real.matrix_world = Matrix.Translation(BLK + Vector((0, 0, -0.025))) @ EAR_FLAT
 blk = bpy.data.objects.new("Cart_Block", bpy.data.meshes.new("Cart_Block")); C_PROP.objects.link(blk)
@@ -420,7 +444,7 @@ xray_emit = bsdf.inputs["Emission Strength"]; bsdf.inputs["Emission Color"].defa
 for f, v in ((1, 0.0), (780, 0.0), (815, 0.6), (1063, 0.6), (1080, 0.0)):
     xray_emit.default_value = v; xray_emit.keyframe_insert("default_value", frame=f)
 # ear inside the arm (scaled into the pocket); turns from cartilage to pink skin in beat 6
-M_EARPINK = newmat("EarSkin", (0.72, 0.45, 0.38), 0.45, sss=0.3)
+M_EARPINK = newmat("EarSkin", (0.56, 0.34, 0.26), 0.45, sss=0.25)
 ear_arm = ear_copy("Ear_InArm", M_CART)
 M_EARPINK_N = M_EARPINK
 
@@ -438,7 +462,7 @@ def wrist_w(person, s):
     return person.o.matrix_world @ person.R.PB["wrist." + s].matrix
 G_SCAL = Matrix.Translation((0.0, 0.07, -0.025)) @ Matrix.Rotation(R_(90), 4, 'Z')
 G_FORC = Matrix.Translation((0.0, 0.03, -0.02)) @ Matrix.Rotation(R_(0), 4, 'Z')
-G_NH = Matrix.Translation((0.0, 0.05, -0.025))
+G_NH = Matrix.Translation((0.0, 0.05, -0.025)) @ Matrix.Rotation(R_(180), 4, 'Z')
 def tip_of_forceps():
     return forc.matrix_world @ Vector((0, 0.13, 0))
 FAST = []
@@ -464,18 +488,18 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     keymat(nh, f, wrist_w(SUR, "R") @ G_NH if 1502 <= f <= B["b9"] + 40 else nh_rest)
     tip = forc.matrix_world @ Vector((0, 0.13, 0))
     # the carved ear: on the tray until 566, in forceps 566..700, in the pocket 700..1120, forceps 1120..1440, head after
-    pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.004)) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(0.85, 4)
+    pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.004)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4)
     Rf = forc.matrix_world.to_quaternion().to_matrix().to_4x4()
     if f < 566:
         Me = ear_real.matrix_world.copy() if f >= 540 else None
     if 566 <= f < 712:
-        keymat(ear_arm, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(0.85, 4))
+        keymat(ear_arm, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4))
     elif 712 <= f < 1150:
         u = smoothstep(712, 760, f); keymat(ear_arm, f, pocket)
     else:
         keymat(ear_arm, f, pocket)
     if 1150 <= f < 1440:
-        keymat(ear_new, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(1.0, 4))
+        keymat(ear_new, f, Matrix.Translation(tip) @ Rf @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(1.0, 4))
     elif f >= 1440:
         Hm = pr.matrix_world @ PAT.R.PB["head"].matrix @ HEAD_REST.inverted()
         keymat(ear_new, f, Hm @ EAR_ON_HEAD_REST)
@@ -501,24 +525,28 @@ vb = M_VES.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f, v in ((1, 0.0), (1430, 0.0), (1460, 3.0), (1490, 0.8), (B["end"], 0.5)):
     vb.default_value = v; vb.keyframe_insert("default_value", frame=f)
 VES = []
+JOIN = [EAR_C + Vector((0.004, -0.032, -0.012 + 0.009 * i)) for i in range(3)]
 for i in range(3):
     for side_ in (0, 1):
-        cu = bpy.data.curves.new("JoinVessel%d_%d" % (i, side_), 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0011; cu.bevel_resolution = 2
-        sp = cu.splines.new('BEZIER'); sp.bezier_points.add(1)
-        base_ = EAR_C + Vector((0.012, -0.012 + i * 0.008, -0.012 + 0.012 * i))
-        a = base_ + (Vector((0.006, -0.01, -0.006)) if side_ == 0 else Vector((-0.004, 0.006, 0.004)))
-        sp.bezier_points[0].co = a; sp.bezier_points[1].co = base_
+        cu = bpy.data.curves.new("JoinVessel%d_%d" % (i, side_), 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0006; cu.bevel_resolution = 2
+        sp = cu.splines.new('BEZIER'); sp.bezier_points.add(2)
+        j = JOIN[i]
+        if side_ == 0:   # from the scalp, in front of the ear
+            a = j + Vector((-0.004, -0.016, -0.006 + 0.003 * i)); m_ = j + Vector((-0.002, -0.008, 0.002))
+        else:            # from the new ear's base
+            a = j + Vector((0.006, 0.014, 0.004 - 0.003 * i)); m_ = j + Vector((0.004, 0.007, -0.002))
+        for k, q in enumerate((a, m_, j)): sp.bezier_points[k].co = q
         for bp in sp.bezier_points: bp.handle_left_type = bp.handle_right_type = 'AUTO'
         cu.materials.append(M_VES); o = bpy.data.objects.new(cu.name, cu); C_PROP.objects.link(o)
         attach_bone(o, PAT, "head", Matrix.Identity(4))
-        cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=1400 + i * 8)
-        cu.bevel_factor_end = 1.0; cu.keyframe_insert("bevel_factor_end", frame=1445 + i * 8)
-        key_vis(o, 1, False); key_vis(o, 1395, True)
+        cu.bevel_factor_end = 0.0; cu.keyframe_insert("bevel_factor_end", frame=1405 + i * 8)
+        cu.bevel_factor_end = 1.0; cu.keyframe_insert("bevel_factor_end", frame=1450 + i * 8)
+        key_vis(o, 1, False); key_vis(o, 1395, True); key_vis(o, 1530, False)
 glow = bpy.data.objects.new("JoinGlow", None)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=0.006); gl = bpy.context.object; gl.name = "JoinGlow"
-gl.data.materials.append(newmat("Glow", (1, 0.5, 0.4), 0.5, emit=((1.0, 0.45, 0.3), 25.0), alpha=0.5))
+gl.data.materials.append(newmat("Glow", (1, 0.5, 0.4), 0.5, emit=((1.0, 0.45, 0.3), 25.0), alpha=0.5)); gl.scale = (0.5,) * 3
 for c in list(gl.users_collection): c.objects.unlink(gl)
-C_PROP.objects.link(gl); attach_bone(gl, PAT, "head", Matrix.Translation(EAR_C + Vector((0.012, -0.004, -0.002))))
+C_PROP.objects.link(gl); attach_bone(gl, PAT, "head", Matrix.Translation(JOIN[1]))
 for f, s_ in ((1, 0.0), (1440, 0.0), (1458, 1.6), (1490, 0.5), (1510, 0.0)):
     gl.scale = (s_,) * 3; gl.keyframe_insert("scale", frame=f)
 
@@ -526,12 +554,12 @@ for f, s_ in ((1, 0.0), (1440, 0.0), (1458, 1.6), (1490, 0.5), (1510, 0.0)):
 M_SUT = newmat("Suture", (0.1, 0.12, 0.35), 0.5)
 for i in range(STITCH_N):
     u = i / (STITCH_N - 1)
-    p = EAR_C + Vector((0.006, -0.03 + 0.06 * u - 0.0, -0.025 + 0.06 * math.sin(math.pi * u) - 0.005))
+    p = STITCH_P(i)
     bpy.ops.mesh.primitive_torus_add(major_radius=0.0035, minor_radius=0.0005, major_segments=12, minor_segments=4); st = bpy.context.object
     st.name = "Stitch%d" % i; st.data.materials.append(M_SUT)
     for c in list(st.users_collection): c.objects.unlink(st)
     C_PROP.objects.link(st)
-    attach_bone(st, PAT, "head", Matrix.Translation(p) @ Matrix.Rotation(R_(90), 4, 'Y') @ Matrix.Rotation(R_(30), 4, 'X'))
+    attach_bone(st, PAT, "head", Matrix.Translation(p) @ Matrix.Rotation(R_(90), 4, 'X'))
     f0 = 1510 + i * 15
     st.scale = (0.01,) * 3; st.keyframe_insert("scale", frame=f0); st.scale = (1.2,) * 3; st.keyframe_insert("scale", frame=f0 + 5)
     st.scale = (1.0,) * 3; st.keyframe_insert("scale", frame=f0 + 9)
@@ -559,7 +587,7 @@ WM = wrist_w(SUR, "R"); WMi = (WM).inverted()
 gb = bpy.data.objects.new("SA_GloveHand", me); bpy.data.collections["Studio_Ribs"].objects.link(gb)
 bm = bmesh.new(); bm.from_mesh(me); dl = bm.verts.layers.deform.active
 keep = [g.index for g in SUR.body.vertex_groups if g.name.startswith(("wrist.R", "finger", "metacarpal", "lowerarm02.R"))]
-kill = [v for v in bm.verts if (sum(v[dl].get(g, 0.0) for g in keep) < 0.5) or (SUR.body.matrix_world @ v.co - WM.translation).length > 0.3]
+kill = [v for v in bm.verts if (sum(v[dl].get(g, 0.0) for g in keep) < 0.5) or (SUR.body.matrix_world @ v.co - WM.translation).length > 0.17]
 bmesh.ops.delete(bm, geom=kill, context='VERTS')
 for v in bm.verts: v.co = WMi @ (SUR.body.matrix_world @ v.co)
 bm.to_mesh(me); bm.free()
@@ -569,8 +597,8 @@ cuff = bpy.data.objects.new("SA_Cuff", None)
 scal_sa = scal.copy(); scal_sa.animation_data_clear(); scal_sa.name = "SA_Scalpel"; bpy.data.collections["Studio_Ribs"].objects.link(scal_sa)
 scal_sa.parent = gb; scal_sa.matrix_parent_inverse = Matrix.Identity(4); scal_sa.matrix_basis = G_SCAL
 gb.rotation_mode = 'XYZ'
-for f, off, rot in ((127, Vector((0.32, -0.4, 0.2)), (20, 0, 60)), (200, Vector((0.14, -0.22, 0.04)), (40, 0, 75)), (240, Vector((0.09, -0.16, -0.0)), (50, 10, 80)),
-                    (265, Vector((0.1, -0.16, -0.07)), (55, 15, 85)), (300, Vector((0.2, -0.12, -0.05)), (40, 10, 80)), (342, Vector((0.26, -0.15, 0.05)), (30, 0, 70))):
+for f, off, rot in ((127, Vector((0.4, -0.1, 0.3)), (20, 0, 60)), (200, Vector((0.27, -0.1, 0.12)), (40, 0, 75)), (232, Vector((0.17, -0.1, 0.05)), (45, 5, 78)), (248, Vector((0.08, -0.1, 0.02)), (50, 10, 80)),
+                    (265, Vector((0.09, -0.1, -0.06)), (55, 15, 85)), (300, Vector((0.2, -0.12, -0.05)), (40, 10, 80)), (342, Vector((0.26, -0.15, 0.05)), (30, 0, 70))):
     gb.location = P0 + off; gb.rotation_euler = [R_(x) for x in rot]
     gb.keyframe_insert("location", frame=f); gb.keyframe_insert("rotation_euler", frame=f)
 print("ANIM_DONE")

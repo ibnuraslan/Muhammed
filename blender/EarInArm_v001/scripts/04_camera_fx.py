@@ -25,7 +25,7 @@ def newmat(name, col, rough=0.5, sss=0.0, emit=None, alpha=1.0, coat=0.0):
 SB = V(60, 0, 1.2)
 OB["SB_SkinXray"].location.z += 0.03
 earB = OB["Ear_Src"].copy(); earB.data = OB["Ear_Src"].data.copy(); earB.name = "SB_Ear"; bpy.data.collections["Studio_Tissue"].objects.link(earB)
-earB.matrix_world = Matrix.Translation(SB + V(0, 0, 0.034)) @ Matrix.Rotation(R_(90), 4, 'X') @ Matrix.Scale(4.0, 4)
+earB.matrix_world = Matrix.Translation(SB + V(0, 0, 0.034)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(4.0, 4)
 # material: cartilage -> pink skin, a wipe across the ear (object Z) keyed 860..1040
 m = bpy.data.materials.new("SB_EarGrow"); m.use_nodes = True; nt = m.node_tree; nt.nodes.remove(nt.nodes["Principled BSDF"])
 cart = nt.nodes.new("ShaderNodeBsdfPrincipled"); cart.inputs["Base Color"].default_value = (0.86, 0.88, 0.9, 1); cart.inputs["Roughness"].default_value = 0.3
@@ -89,7 +89,7 @@ sc.cycles.denoiser = 'OPENIMAGEDENOISE'; sc.cycles.device = 'CPU'
 sc.cycles.max_bounces = 8; sc.cycles.diffuse_bounces = 3; sc.cycles.glossy_bounces = 3; sc.cycles.transmission_bounces = 8; sc.cycles.transparent_max_bounces = 8
 sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False; r.use_persistent_data = True
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5
-sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'; sc.view_settings.exposure = -1.2
+sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - High Contrast'; sc.view_settings.exposure = -1.9
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '8'; r.image_settings.compression = 15
 r.filepath = "//render/EarInArm_"
 
@@ -118,25 +118,25 @@ SEGS = [
   [  # OR: beat 1 -> into the chest
     (1, V(1.9, -1.7, 1.2), FACE1 + V(0, 0, -0.1), 26), (30, V(1.35, -1.1, 1.35), FACE1, 32), (60, V(0.8, -0.72, 1.42), FACE1, 42),
     (90, V(0.8, -0.18, 1.45), EAR1, 45), (118, V(0.5, 0.02, 1.42), EAR1, 52), (140, V(0.45, -0.5, 1.2), CHEST + V(0, 0, 0.02), 40),
-    (157, V(0.18, -0.45, 1.06), CHEST, 40), (168, V(0.1, -0.24, 1.03), CHEST + V(0, 0.05, 0), 40), (171, V(0.09, -0.2, 1.025), CHEST + V(0, 0.1, 0), 40)],
+    (157, V(0.24, -0.48, 1.08), CHEST + V(0.06, 0, 0.03), 40), (166, V(0.17, -0.33, 1.06), CHEST + V(0.07, 0.05, 0.03), 40), (171, V(0.155, -0.275, 1.06), CHEST + V(0.07, 0.1, 0.03), 40)],
   [  # studio A: out of the membrane, orbit the rib cage, push to the block being lifted
-    (172, V(40.03, -0.6, 1.17), P0 + V(-0.04, 0.2, 0.05), 32), (200, V(40.3, -0.7, 1.32), V(40.02, 0, 1.18), 28),
-    (232, V(40.42, -0.36, 1.2), P0 + V(0, 0, 0.03), 34), (265, V(40.25, -0.33, 1.03), P0, 45), (300, V(40.12, -0.33, 1.14), P0 + V(0, -0.03, 0.01), 52),
-    (328, V(40.085, -0.29, 1.18), BLK_SA + V(0, 0.01, 0), 55), (342, BLK_SA + V(0.004, -0.025, 0.012), BLK_SA, 55)],
+    (172, V(40.03, -0.6, 1.17), P0 + V(-0.04, 0.2, 0.05), 32), (186, V(40.07, -0.52, 1.2), V(40.02, 0, 1.15), 30), (212, V(40.33, -0.47, 1.32), V(40.02, 0, 1.18), 28),
+    (240, V(40.12, -0.44, 1.2), P0 + V(0, 0, 0.03), 34), (265, V(39.93, -0.33, 1.06), P0, 45), (300, V(40.0, -0.31, 1.15), P0 + V(0, -0.03, 0.01), 52),
+    (328, BLK_SA + V(0.012, -0.1, 0.025), BLK_SA + V(0, 0.01, 0), 55), (342, BLK_SA + V(-0.002, -0.045, 0.01), BLK_SA, 70)],
   [  # OR: out of the block on the tray, orbit the carving hands, follow the ear to the arm, macro on the bump, into the skin
-    (343, BLK + V(0.004, -0.012, 0.04), BLK, 50), (365, BLK + V(-0.08, -0.12, 0.13), BLK + V(0, 0, 0.01), 42),
+    (343, BLK + V(0.0, -0.012, 0.1), BLK, 70), (362, BLK + V(-0.06, -0.15, 0.12), BLK + V(0, 0, 0.01), 42),
     (400, BLK + V(-0.24, -0.2, 0.17), BLK + V(0, 0, 0.02), 36), (440, BLK + V(-0.02, -0.3, 0.2), BLK + V(0, 0, 0.03), 36),
-    (480, BLK + V(0.22, -0.22, 0.16), BLK + V(0, 0.02, 0.03), 38), (525, BLK + V(0.33, 0.02, 0.28), BLK + V(-0.03, 0.1, 0.08), 32),
+    (480, BLK + V(0.22, -0.22, 0.16), BLK + V(0, 0.02, 0.03), 38), (525, BLK + V(0.06, -0.2, 0.22), BLK + V(0, 0.0, -0.01), 42),
     (565, BLK + V(0.25, 0.12, 0.36), BLK + V(-0.08, 0.2, 0.1), 30), (605, V(1.15, -0.25, 1.38), V(0.85, -0.1, 1.08), 32),
     (645, INC + V(0.3, -0.36, 0.26), INC, 34), (685, INC + V(0.17, -0.22, 0.07), INC, 42), (725, INC + V(0.07, -0.14, 0.05), INC, 52),
-    (760, INC + V(0.025, -0.065, 0.055), INC, 58), (790, INC + V(0.005, -0.03, 0.045), INC, 60), (810, INC + V(0.0, -0.008, 0.016), INC + V(0, 0, -0.01), 60)],
+    (760, INC + V(0.05, -0.12, 0.08), INC, 50), (785, INC + V(0.005, -0.03, 0.05), INC, 60), (803, INC + V(0.0, -0.012, 0.022), INC + V(0, 0, -0.01), 60)],
   [  # studio B: under the skin, orbit the growing ear, back up through the membrane
-    (811, SB + V(0.0, -0.01, 0.46), SB + V(0, 0.01, 0.0), 40), (835, SB + V(0.02, -0.06, 0.33), SB + V(0, 0, 0.03), 36),
+    (804, SB + V(0.0, -0.01, 0.445), SB + V(0, 0.01, 0.0), 40), (830, SB + V(0.03, -0.08, 0.3), SB + V(0, 0, 0.03), 36),
     (875, SB + V(0.22, -0.24, 0.24), SB + V(0, 0, 0.035), 34), (925, SB + V(0.3, 0.12, 0.2), SB + V(0, 0, 0.035), 36),
     (975, SB + V(0.0, 0.32, 0.22), SB + V(0, 0, 0.035), 36), (1015, SB + V(-0.24, 0.08, 0.16), SB + V(0, 0, 0.035), 40),
-    (1045, SB + V(-0.06, -0.06, 0.32), SB + V(0, 0, 0.03), 38), (1062, SB + V(0.0, -0.01, 0.45), SB, 40)],
+    (1050, SB + V(-0.05, -0.05, 0.33), SB + V(0, 0, 0.03), 38), (1062, SB + V(0.0, -0.01, 0.445), SB, 40)],
   [  # OR: out of the arm, over the surgeon's shoulder as the ear is lifted out, fly to the head, macro join, stitches, pull out and orbit to the front
-    (1063, INC + V(0.0, -0.008, 0.016), INC + V(0, 0, -0.01), 60), (1090, INC + V(0.03, -0.08, 0.07), INC, 50), (1130, INC + V(0.14, -0.24, 0.13), INC, 40),
+    (1063, INC + V(0.0, -0.012, 0.024), INC + V(0, 0, -0.01), 60), (1078, INC + V(0.04, -0.1, 0.09), INC, 50), (1130, INC + V(0.14, -0.24, 0.13), INC, 40),
     (1180, V(0.98, 0.12, 1.42), INC + V(0, 0, 0.06), 36), (1240, V(0.92, 0.3, 1.5), INC + V(0, 0, 0.18), 36), (1300, V(0.88, 0.22, 1.6), FT, 34),
     (1345, EO(0.6, -0.2, 0.3), EO(0.1, 0, 0.05), 32), (1385, EO(0.4, -0.15, 0.17), EAR_W, 38), (1425, EO(0.26, -0.09, 0.08), EAR_W, 45),
     (1465, EO(0.12, -0.03, 0.03), EAR_W + V(0, 0, -0.005), 55), (1505, EO(0.11, 0.03, 0.04), EAR_W, 55), (1545, EO(0.1, -0.035, 0.0), EAR_W, 55),
@@ -168,6 +168,9 @@ def stepped(idb, frames):
                 for fcv in cb.fcurves:
                     for kp in fcv.keyframe_points:
                         if int(round(kp.co.x)) in frames: kp.interpolation = 'CONSTANT'
+for f in range(1, sc.frame_end + 1, 4):
+    ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
+    cam_d.dof.aperture_fstop = max(2.8, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 for idb in (cam, aim, cam_d): stepped(idb, set(JUMPS))
 # surgical spot follows the working area
 for f, tgt in ((1, V(0.05, -0.1, 1.3)), (330, BLK), (600, INC), (1300, INC), (1400, EAR_W), (1640, EAR_W), (1720, FACE9)):
