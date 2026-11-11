@@ -1,0 +1,164 @@
+{
+ "pistol": {
+  "uid": "5f6ec54257de449cacc8c872660b40d3",
+  "title": "Pistol",
+  "author": "DJMaesen",
+  "author_profile": "https://sketchfab.com/bumstrum",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5f6ec54257de449cacc8c872660b40d3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pigeon": {
+  "uid": "4383b3f88d9646c7b2f336266eaad947",
+  "title": "Pigeon 3",
+  "author": "tomkranis",
+  "author_profile": "https://sketchfab.com/tomkranis",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/4383b3f88d9646c7b2f336266eaad947",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "mary": {
+  "uid": "a864230e91964df193a8007582cd82c5",
+  "title": "Mary_Evora",
+  "author": "Ye Myat Lwin",
+  "author_profile": "https://sketchfab.com/m47325_uevora",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a864230e91964df193a8007582cd82c5",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "crown": {
+  "uid": "5689a9525a2c425d93f7d483b93d8cfa",
+  "title": "Golden crown",
+  "author": "Pieter Ferreira",
+  "author_profile": "https://sketchfab.com/Badboy17Aiden",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5689a9525a2c425d93f7d483b93d8cfa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "candles": {
+  "uid": "56a68205dae649a388c6e3ba04145a9e",
+  "title": "Candles Asset Pack",
+  "author": "Em Marshall",
+  "author_profile": "https://sketchfab.com/emarshall",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/56a68205dae649a388c6e3ba04145a9e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "aorta": {
+  "uid": "d924ee35a72c4a4f87b4953a3a3f7dbb",
+  "title": "Abdominal Aorta",
+  "author": "CaitlynnH",
+  "author_profile": "https://sketchfab.com/CaitlynnH",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d924ee35a72c4a4f87b4953a3a3f7dbb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "spine": {
+  "uid": "66fa2c3b2c324a04bf5dcc1661505d71",
+  "title": "Full-sized patient-specific spine from CT",
+  "author": "APIL",
+  "author_profile": "https://sketchfab.com/apil_tgh",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/66fa2c3b2c324a04bf5dcc1661505d71",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "handbones": {
+  "uid": "efd1df50e4a2457d91045a1727db7679",
+  "title": "Hand",
+  "author": "Team Skeleton Wars",
+  "author_profile": "https://sketchfab.com/skeletonwars",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/efd1df50e4a2457d91045a1727db7679",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "monitor": {
+  "uid": "295ed50eeaa249e8bbeed7b305d3da71",
+  "title": "Bed Curtain and Vital Signs Monitor",
+  "author": "Ethan Cragun",
+  "author_profile": "https://sketchfab.com/EDIIIC",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/295ed50eeaa249e8bbeed7b305d3da71",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "orlamp": {
+  "uid": "04a8ddf6e47141289ce0372e9e842167",
+  "title": "Operating room lamps",
+  "author": "House Doctor",
+  "author_profile": "https://sketchfab.com/chin4grci4",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/04a8ddf6e47141289ce0372e9e842167",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chair": {
+  "uid": "b07d263a7ab942e6935e77cd75bf1194",
+  "title": "CHAIR",
+  "author": "vUv",
+  "author_profile": "https://sketchfab.com/vovaustimuk",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b07d263a7ab942e6935e77cd75bf1194",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "celldoor": {
+  "uid": "f8148fab4dc44903b9644170edf0e58c",
+  "title": "Prison cell door",
+  "author": "Rivaldragon",
+  "author_profile": "https://sketchfab.com/Rivaldragon",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f8148fab4dc44903b9644170edf0e58c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "jeep": {
+  "uid": "ae6528c1735848a99de368936413fb9b",
+  "title": "Jeep",
+  "author": "rajibkc",
+  "author_profile": "https://sketchfab.com/rajibkc",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/ae6528c1735848a99de368936413fb9b",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "skeleton": {
+  "uid": "db58afc2dca14693ae3cf0fff8060e9e",
+  "title": "Human Skeleton",
+  "author": "Joseph Branderhorst",
+  "author_profile": "https://sketchfab.com/MrMufins",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/db58afc2dca14693ae3cf0fff8060e9e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "guts": {
+  "uid": "d0fb772e66fb48dab7ab97749390d073",
+  "title": "Intestine",
+  "author": "vikas3dfreelancer",
+  "author_profile": "https://sketchfab.com/vikas3dfreelancer",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d0fb772e66fb48dab7ab97749390d073",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "optable": {
+  "uid": "e3a4512227d34b098e2ef0d11c8a80fd",
+  "title": "Operating Table",
+  "author": "shashkinv1ad",
+  "author_profile": "https://sketchfab.com/shashkinv1ad",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e3a4512227d34b098e2ef0d11c8a80fd",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "altar": {
+  "uid": "d488e4e4966340219fbd62d7ad022e5a",
+  "title": "Old Church Altar",
+  "author": "Sam Constance",
+  "author_profile": "https://sketchfab.com/ConstanceBespoke",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d488e4e4966340219fbd62d7ad022e5a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bars": {
+  "uid": "d2e7d9f6c323479d8e64620feb007628",
+  "title": "Iron Bar Window-11",
+  "author": "4000z",
+  "author_profile": "https://sketchfab.com/4000z",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d2e7d9f6c323479d8e64620feb007628",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
