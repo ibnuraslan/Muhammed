@@ -1,0 +1,33 @@
+# ElectricianPolice_v002: farm render sheet
+
+These values were read back from `ElectricianPolice_v002_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
+
+| Item | Value |
+|---|---|
+| File | `ElectricianPolice_v002_60fps.blend`: about 134 MB, compressed. Every image is packed (190 images, ≤1K except the hero's skin and shirt at 2K; two 2K HDRIs). Stored with Git LFS. |
+| Blender | 5.2.2 LTS |
+| Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
+| Resolution | 1080 × 1920 at 100 % |
+| Frame rate | 60 fps (fps_base 1.0) |
+| Frame range | **1–1560**, step 1 (26.0 s) |
+| Camera | One camera, `CAM_Film`, in one continuous move, with a Track To on the `CAM_Film_Aim` empty. There are no camera cuts or camera markers. The lens is animated (22–50 mm). Sensor fit is Auto (36 mm). DOF is on at f/4, focused on the aim empty. |
+| Samples | 48 with adaptive sampling; noise threshold 0.05 |
+| Denoising | On (OpenImageDenoise) |
+| Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
+| Motion blur | On, shutter 0.5 (180° at 60 fps). The whip-pan at 5.3–5.6 s relies on it. |
+| Colour | Display sRGB. View AgX with the look "AgX - Medium High Contrast". Several things are keyframed: the scene exposure (day 0.0 → dusk interior 1.2 → street 0.9), the world (the day HDRI mixes to the dusk HDRI at 19.2–20.6 s) and the sun. Do not override them. |
+| Output | PNG, RGB, 8-bit, compression 15, written to `//render/ElectricianPolice_v002_####.png` |
+| Audio | None yet. The voiceover has not arrived. `beats.json` lists each beat's start frame for `pipeline/retime_to_vo.py`. |
+| Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. Sparks, dust and grid pulses are keyframed meshes. Flags and washing use F-curve noise modifiers. |
+| Add-ons | None needed. MPFB2 was only used to build the humans. |
+
+## Test frames before approving the whole job
+- **60**: bike chase. Motion blur on the wheels, the rickshaw and the stalls.
+- **760**: laptop close-up. The emissive screen UI and the red glow on his face.
+- **1065**: the lever arc flash and sparks. This is the brightest frame, so check for clipping.
+- **1300**: station interior at dusk. This is the darkest frame; if it is noisy, raise samples to 96 for frames 1231–1381 only.
+- **1550**: the final smirk at dusk, with the street lamps on.
+
+## Do not
+- Do not render any camera other than `CAM_Film`; it is the only one.
+- Do not change the exposure, the world or the sun settings; all three are animated.
