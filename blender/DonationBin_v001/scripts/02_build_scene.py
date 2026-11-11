@@ -199,7 +199,7 @@ cp.location = (-BW / 2 + 0.02, FY + T / 2, 0.06)
 cpm = cp.data
 bm = bmesh.new(); bm.from_mesh(cpm); bmesh.ops.subdivide_edges(bm, edges=bm.edges[:], cuts=12, use_grid_fill=True); bm.to_mesh(cpm); bm.free()
 uv_box(cp, 0.55)
-bend = cp.modifiers.new("Peel", 'SIMPLE_DEFORM'); bend.deform_method = 'BEND'; bend.deform_axis = 'Z'; bend.angle = 0.0
+# (folds down on its bottom edge in 03_animate)
 # flap: hinged at the top edge, swings inward (+rot X); plate just inside the opening
 fl = box("Flap", (0, 0, 0), (2 * CH_X - 0.03, 0.01, CH_Z1 - CH_Z0 - 0.025), M_MECH, col_bin)
 fl.data.transform(Matrix.Translation(Vector((0, 0, -(CH_Z1 - CH_Z0 - 0.025) / 2))))

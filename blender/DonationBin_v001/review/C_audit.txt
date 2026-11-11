@@ -1,0 +1,38 @@
+AUDIT DonationBin (step 2)
+WORST: {'hands/Woman': 0.004, 'feet/Woman': 0.031}
+COUNT 35
+hands   f  37 Woman R tip4 in Flap 0.003
+hands   f 275 Woman R tip3 in CutPanel 0.000
+hands   f 275 Woman R tip4 in CutPanel 0.002
+hands   f 277 Woman R tip2 in CutPanel 0.000
+hands   f 279 Woman R tip2 in CutPanel 0.003
+hands   f 671 Woman L tip2 in CutPanel 0.001
+hands   f 673 Woman L tip2 in CutPanel 0.002
+hands   f 675 Woman L tip2 in CutPanel 0.000
+feet    f1167 Woman sink R -0.031
+hands   f1177 Woman R tip2 in BinShell 0.001
+hands   f1181 Woman L tip4 in BinLiner 0.001
+hands   f1183 Woman R tip4 in BinShell 0.002
+hands   f1185 Woman L tip4 in BinShell 0.001
+hands   f1185 Woman R tip4 in BinShell 0.004
+hands   f1189 Woman L tip4 in BinShell 0.002
+hands   f1189 Woman R tip4 in BinShell 0.002
+hands   f1191 Woman L tip4 in BinShell 0.003
+hands   f1191 Woman R tip4 in BinShell 0.003
+hands   f1207 Woman R tip3 in BinShell 0.004
+hands   f1209 Woman R tip2 in BinShell 0.002
+hands   f1211 Woman R tip4 in BinShell 0.002
+hands   f1213 Woman L tip3 in BinShell 0.000
+hands   f1215 Woman L tip3 in BinShell 0.001
+hands   f1217 Woman R tip4 in BinShell 0.000
+hands   f1219 Woman R tip2 in BinShell 0.003
+hands   f1221 Woman R tip4 in BinShell 0.002
+hands   f1289 Woman R tip2 in BinShell 0.000
+hands   f1291 Woman L tip3 in BinLiner 0.000
+hands   f1293 Woman R tip3 in BinShell 0.003
+hands   f1297 Woman L tip4 in BinShell 0.003
+hands   f1297 Woman R tip4 in BinShell 0.000
+hands   f1299 Woman L tip4 in BinShell 0.002
+hands   f1299 Woman R tip4 in BinShell 0.001
+hands   f1303 Woman L tip2 in BinShell 0.003
+hands   f1503 Woman L tip3 in CutPanel 0.002

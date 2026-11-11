@@ -80,6 +80,18 @@ def hide_keys(rig_name, ranges):
             ob.hide_render = h_; ob.keyframe_insert("hide_render", frame=f_)
             ob.hide_viewport = h_; ob.keyframe_insert("hide_viewport", frame=f_)
 
+def walk_arms(B, path, yaw_fn, f0, f1, stride=0.75, sides="LR", swing=0.14, step=4):
+    d = 0.0; prev = path(f0)
+    for f in list(range(f0, f1 + 1, step)) + [f1]:
+        p = path(f); d += (p - prev).to_2d().length; prev = p
+        ph = math.sin(2 * math.pi * d / stride)
+        M = B.Mb(Vector((p.x, p.y, ground_z(p.x, p.y) + B.root_head.z - 0.04)), yaw_fn(f), 3, 0)
+        for s in sides:
+            sx = 1 if s == "L" else -1
+            dl = Vector((-0.24 * sx, 0.10 + swing * ph * sx, -0.20))
+            T = M @ Matrix.Translation(dl) @ B.r.rest("IK_hand." + s)
+            B.r.key_world("IK_hand." + s, f, T)
+            B.key_pole("Pole_elbow." + s, f, M @ (B.elbow[s] + Vector((0.25 * sx, 0.55, -0.1))))
 WO = Body(make_human_ctrl(bpy.data.objects["Woman"]), bpy.data.objects["Woman"])
 SH = Body(make_human_ctrl(bpy.data.objects["Shover"]), bpy.data.objects["Shover"])
 PB_ = Body(make_human_ctrl(bpy.data.objects["Passerby"]), bpy.data.objects["Passerby"])
@@ -94,13 +106,14 @@ def stand_feet(x, y, yaw, lift=0.0, pitch=0.0, spread=1.0):
     fx = {s: WO.foot_xy(s, Vector((x, y, 0)), yaw) for s in "LR"}
     return {s: ("g", (fx[s].x, fx[s].y), yaw, lift, pitch) for s in "LR"}
 # --- beat 1 (1-150): on tiptoe reaching into the chute, the other hand on the sill
+TIP_PITCH = float(os.environ.get("TIP_PITCH", "40"))
 SILL = Vector((-0.27, FY - 0.03, sc["chute_z"][0] + 0.02))
 def reach(f, depth, tip, wob=0.0):
     y = -1.02 + 0.06 * depth
     WO.pose(f, (0.0, y, RH - 0.02 + 0.07 * tip), yaw=180, flex=18 + 14 * depth, sp=(10 + 10 * depth, 6 * wob, 0), head=(-8, 10 * wob),
             hands={"L": ("w", SILL + Vector((0, 0, 0.0)), (0, 1, -0.2), (0, 0, 1)),
                    "R": ("w", Vector((0.12 + 0.06 * wob, FY + 0.15 + 0.2 * depth, 1.24 + 0.05 * wob)), (0, 1, -0.5), (0, 0, 1))},
-            feet=stand_feet(0.0, -1.05, 180, lift=0.075 * tip, pitch=-28 * tip), curl={"L": 0.7, "R": 0.3 + 0.4 * depth})
+            feet=stand_feet(0.0, -1.05, 180, lift=0.075 * tip, pitch=TIP_PITCH * tip), curl={"L": 0.7, "R": 0.3 + 0.4 * depth})
 reach(1, 0.0, 0.3, 0.0); reach(35, 0.4, 0.8, 0.5); reach(70, 0.8, 1.0, -0.6); reach(105, 1.0, 1.0, 0.8); reach(135, 0.9, 1.0, -0.4); reach(155, 1.0, 1.0, 0.0)
 # --- beat 2 (151-294): shoved, pitches forward head-first through the chute, somersault inside
 FALL = [  # f, pos, yaw, flex, side, spine, feet-delta, hand-delta L, R
@@ -140,7 +153,7 @@ STAND = Vector((0.02, -0.18, 0))
 def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
     z = PZ(STAND.x, STAND.y)
     ph = 1.30 + 0.03 * wob
-    WO.pose(f, (STAND.x, STAND.y - 0.05 * push, z + RH - 0.04), yaw=0, flex=10 + 12 * push, sp=(5 + 8 * push, 0, 0), head=look,
+    WO.pose(f, (STAND.x, STAND.y - 0.05 * push, z + RH - 0.04), yaw=0, flex=5 + 5 * push, sp=(3 + 4 * push, 0, 0), head=look,
             hands={"L": ("w", (0.16, FY + 0.048 - 0.006 * push, ph), (0, 0, 1), (0, 1, 0)), "R": ("w", (-0.16, FY + 0.048 - 0.006 * push, ph + 0.04), (0, 0, 1), (0, 1, 0))},
             feet=stand_feet(STAND.x, STAND.y + 0.08, 0, 0, 0), jaw=jaw, curl={"L": 0.1, "R": 0.1})
 WO.pose(660, (0.04, 0.02, PZ(0.04, 0.02) + 0.45), yaw=0, flex=20, sp=(35, 0, 0), head=(-20, 0),
@@ -165,7 +178,7 @@ search(1110, -0.15, (10, -20)); search(1135, 0.18, (15, 20)); search(1160, 0.0, 
 # jump at the back wall (facing +y = yaw 180)
 JW = Vector((0.0, 0.18, 0)); jz = PZ(JW.x, JW.y)
 def jump(f, dz, flex, hz, hands_on=True, crouch=0.0, airborne=False, look=(-30, 0)):
-    hy = 0.578
+    hy = 0.570
     hands = {"L": ("w", (-0.16, hy, hz), (0, 0, 1), (0, -1, 0)), "R": ("w", (0.16, hy, hz + 0.03), (0, 0, 1), (0, -1, 0))} if hands_on else \
             {"L": ("r", (0.05, -0.1, 0.1)), "R": ("r", (-0.05, -0.1, 0.1))}
     feet = {"L": ("r", (0, 0.05, 0.15), 30), "R": ("r", (0, -0.05, 0.25), 20)} if airborne else stand_feet(JW.x, JW.y - 0.05, 180)
@@ -179,7 +192,7 @@ def scream(f, jaw, bob=0.0, look=(-28, 0)):
     p = Vector((0.0, 0.05, 0)); z = PZ(p.x, p.y)
     M = WO.Mb(Vector((p.x, p.y, z + RH - 0.04 + 0.02 * bob)), 0, -4, 0)
     WO.pose(f, (p.x, p.y, z + RH - 0.04 + 0.02 * bob), yaw=0, flex=-4, sp=(-8 - 4 * bob, 0, 0), head=look,
-            hands={"L": ("w", M @ Vector((0.075, -0.20, 1.36)), (0.2, -0.3, 1), (-1, -0.4, 0)), "R": ("w", M @ Vector((-0.075, -0.20, 1.36)), (-0.2, -0.3, 1), (1, -0.4, 0))},
+            hands={"L": ("w", M @ Vector((0.075, -0.22, 1.30)), (-0.5, -0.5, 0.5), (-1, 0.2, 0)), "R": ("w", M @ Vector((-0.075, -0.22, 1.30)), (0.5, -0.5, 0.5), (1, 0.2, 0))},
             feet=stand_feet(p.x, p.y, 0), jaw=jaw, curl={"L": 0.35, "R": 0.35})
 scream(1322, 2); scream(1340, 22, 1.0); scream(1368, 10, 0.0, (-32, 8)); scream(1392, 24, 1.0, (-26, -6)); scream(1420, 8, 0.2); scream(1446, 22, 1.0, (-30, 0)); scream(1478, 4, 0.0, (-10, 0))
 # --- beat 8 (1501-1842): three days curled on the clothes, shifting, weaker
@@ -187,8 +200,8 @@ CUR = Vector((0.05, 0.05, 0))
 def curled(f, yaw, side, k, weak, head=(25, 0)):
     z = PZ(CUR.x, CUR.y) + 0.16 - 0.03 * weak
     WO.pose(f, (CUR.x, CUR.y, z), yaw=yaw, flex=5, side=side, sp=(35 + 10 * k, 0, 0), head=head,
-            hands={"L": ("r", (-0.22, -0.30, 0.45)), "R": ("r", (0.22, -0.30, 0.42))},
-            feet={"L": ("r", (0.0, -0.40 * k, 0.38 * k), 10), "R": ("r", (0.0, -0.36 * k, 0.30 * k), 10)}, curl={"L": 0.6, "R": 0.6})
+            hands={"L": ("r", (-0.30, -0.12, 0.22)), "R": ("r", (0.30, -0.14, 0.20))},
+            feet={"L": ("r", (-0.05, -0.18 * k, 0.42 * k), 10), "R": ("r", (0.05, -0.12 * k, 0.36 * k), 10)}, curl={"L": 0.6, "R": 0.6})
 WO.pose(1500, (0.05, 0.05, PZ(0.05, 0.05) + 0.4), yaw=-30, flex=30, sp=(40, 0, 0), head=(20, 0), hands={"L": ("r", (0, -0.2, 0.2)), "R": ("r", (0, -0.2, 0.2))},
         feet=stand_feet(0.05, 0.0, -30))
 for f, yaw, side, k, weak, hd in ((1530, 60, 88, 0.9, 0.0, (25, 10)), (1600, 75, 86, 1.0, 0.2, (30, -5)), (1650, 60, 92, 0.8, 0.4, (20, 0)),
@@ -214,17 +227,18 @@ for f in range(2170, 2490, 20):
     M = WO.Mb(path_w(min(f, 2340)) + Vector((0, 0, RH - 0.06)), 25, 5, 0)
     for s in "LR":
         sx = 1 if s == "L" else -1
-        T = M @ Matrix.Translation(WO.wrist[s] + Vector((-sx * 0.25, -0.06, 0.22))) @ Matrix.Translation(-WO.wrist[s]) @ WO.r.rest("IK_hand." + s)
+        T = M @ Matrix.Translation(WO.wrist[s] + Vector((-sx * 0.34, -0.12, 0.26))) @ Matrix.Translation(-WO.wrist[s]) @ WO.r.rest("IK_hand." + s)
         WO.r.key_world("IK_hand." + s, f, T)
 WO.pose(2380, (-0.95, -2.35, RH - 0.06), yaw=-20, flex=8, sp=(10, -20, 0), head=(5, -35),
-        hands={"L": ("r", (-0.25, -0.06, 0.22)), "R": ("r", (0.25, -0.06, 0.22))}, feet=stand_feet(-0.95, -2.35, 25))
+        hands={"L": ("r", (-0.34, -0.12, 0.26)), "R": ("r", (0.34, -0.12, 0.26))}, feet=stand_feet(-0.95, -2.35, 25))
 WO.pose(2460, (-0.95, -2.35, RH - 0.07), yaw=-25, flex=10, sp=(14, -25, 0), head=(15, -40),
-        hands={"L": ("r", (-0.24, -0.06, 0.24)), "R": ("r", (0.24, -0.06, 0.24))}, feet=stand_feet(-0.95, -2.35, 25))
+        hands={"L": ("r", (-0.33, -0.12, 0.28)), "R": ("r", (0.33, -0.12, 0.28))}, feet=stand_feet(-0.95, -2.35, 25))
 
 # ============================================================== SHOVER (hood up, face away)
 hide_keys("Shover", [(1, False), (320, True)])
 pS = catmull([(40, Vector((-2.6, -2.4, 0))), (100, Vector((-1.1, -2.0, 0))), (148, Vector((-0.02, -1.62, 0)))])
 SH.walk(pS, lambda f: 180 - 30 * max(0, (148 - f)) / 108.0, 40, 148, stride=0.7, lift=0.08, bob=0.02, crouch=0.04, lean=8)
+walk_arms(SH, pS, lambda f: 180 - 30 * max(0, (148 - f)) / 108.0, 40, 144, 0.7)
 for f, dz, fl, hy, ext in ((154, 0.0, 8, -1.30, 0.0), (163, -0.03, 20, -1.12, 0.6), (172, -0.04, 28, -0.98, 1.0), (196, -0.02, 18, -1.05, 0.8), (226, 0.0, 5, -1.25, 0.0)):
     p = Vector((-0.02, -1.62 + 0.12 * ext, RH + dz))
     hands = {"L": ("w", (-0.12, hy, 1.08), (0, 0, 1), (0, -1, 0)), "R": ("w", (0.12, hy, 1.10), (0, 0, 1), (0, -1, 0))}
@@ -232,20 +246,28 @@ for f, dz, fl, hy, ext in ((154, 0.0, 8, -1.30, 0.0), (163, -0.03, 20, -1.12, 0.
             feet={"L": ("g", (-0.14, -1.42 + 0.06 * ext), 180), "R": ("g", (0.12, -1.80 + 0.1 * ext), 175)}, curl={"L": 0.1, "R": 0.1})
 pS2 = catmull([(232, Vector((-0.02, -1.62, 0))), (280, Vector((-1.5, -2.9, 0))), (320, Vector((-2.6, -4.3, 0)))])
 SH.walk(pS2, lambda f: 35.0 if f > 240 else 180 - (f - 226) * 10, 232, 320, stride=1.1, lift=0.12, bob=0.03, crouch=0.08, lean=14)
+walk_arms(SH, pS2, lambda f: 35.0 if f > 240 else 180 - (f - 226) * 10, 236, 320, 1.1, swing=0.22)
 
 # ============================================================== PASSER-BY (beat 9)
 hide_keys("Passerby", [(1, True), (1780, False)])
-pP = catmull([(1780, Vector((3.2, -2.9, 0))), (1860, Vector((1.6, -1.8, 0))), (1905, Vector((0.62, -1.15, 0)))])
-PB_.walk(pP, lambda f: 125.0 + 30 * min(1, max(0, (f - 1860) / 45)), 1780, 1905, stride=0.72, lift=0.08, bob=0.02, crouch=0.04, lean=5)
-P0 = Vector((0.62, -1.15, 0))
-for f, fl, sd, hd, knock in ((1915, 10, -10, (0, 20), 0), (1932, 22, -18, (5, 30), 1), (1940, 22, -18, (5, 30), 0), (1948, 22, -18, (5, 30), 1),
-                              (1960, 12, -8, (0, 10), 0), (1990, 6, 0, (-5, -10), 0), (2060, 4, 0, (-5, 15), 0), (2200, 4, 0, (0, -20), 0), (2400, 4, 0, (0, -40), 0)):
-    PB_.pose(f, (P0.x, P0.y, RH + 0.12 - 0.03 * (fl / 22)), yaw=155, flex=fl * 0.4, side=sd * 0.3, sp=(fl, 0, sd), head=hd,
-             hands={"L": ("w", (0.32, FY - 0.03 - 0.04 * (1 - knock), 1.25), (0, 0, 1), (0, 1, 0)) if f < 1960 else ("r", (0, 0, 0)), "R": ("r", (0, -0.05, 0.05))},
-             feet=stand_feet(P0.x, P0.y, 155), curl={"L": 0.9, "R": 0.3})
-# move him aside for the firefighters (2000-2060)
+pP = catmull([(1780, Vector((3.2, -2.9, 0))), (1860, Vector((1.6, -1.8, 0))), (1905, Vector((0.78, -1.32, 0)))])
+yawP = lambda f: 237.0 + 33.0 * smooth((f - 1860) / 45.0)
+PB_.walk(pP, yawP, 1780, 1905, stride=0.72, lift=0.08, bob=0.02, crouch=0.04, lean=5)
+walk_arms(PB_, pP, yawP, 1780, 1905, 0.72)
+P0 = Vector((0.78, -1.32, 0))
+# stops facing along the wall (-x), right ear turned to the bin; knocks with the right hand
+for f, sd, hd, knock in ((1915, 4, (0, -20), 0), (1932, 12, (5, -35), 1), (1940, 12, (5, -35), 0), (1948, 12, (5, -35), 1), (1960, 6, (0, -15), 0), (1985, 0, (-5, -5), 0)):
+    PB_.pose(f, (P0.x, P0.y, RH + 0.1), yaw=270, flex=3, side=0, sp=(6, 0, sd), head=hd,
+             hands={"R": ("w", (0.55, FY - 0.03 - 0.04 * (1 - knock), 1.28), (0, 0, 1), (1, 0, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
+             feet=stand_feet(P0.x, P0.y, 270), curl={"L": 0.3, "R": 0.9})
+# moves aside for the firefighters (1992-2058), then watches
 pP2 = catmull([(1992, P0), (2030, Vector((1.4, -1.6, 0))), (2060, Vector((1.75, -1.9, 0)))])
-PB_.walk(pP2, lambda f: 125.0, 1992, 2058, stride=0.55, lift=0.06, bob=0.015)
+yawP2 = lambda f: 270.0 + 156.0 * smooth((f - 1992) / 30.0) if f < 2040 else 426.0 - 66.0 * smooth((f - 2040) / 20.0)
+PB_.walk(pP2, yawP2, 1992, 2058, stride=0.55, lift=0.06, bob=0.015)
+walk_arms(PB_, pP2, yawP2, 1996, 2058, 0.55, swing=0.06)
+for f, hd in ((2066, (-5, 15)), (2200, (0, -20)), (2400, (0, -40))):
+    PB_.pose(f, (1.75, -1.9, RH - 0.02), yaw=360, flex=3, sp=(4, 0, 0), head=hd, hands={"L": ("r", (-0.24, 0.08, -0.18)), "R": ("r", (0.24, 0.08, -0.18))},
+             feet=stand_feet(1.75, -1.9, 360))
 
 # ============================================================== FIREFIGHTERS (beats 10-11)
 hide_keys("FireA", [(1, True), (1975, False)]); hide_keys("FireB", [(1, True), (1975, False)])
@@ -256,25 +278,31 @@ def cutter_pos(f):     # cutting along the top edge of the front panel, then dow
         return Vector((-0.66 + 1.32 * (t / 0.7), FY - 0.06, CUT_Z))
     return Vector((0.66, FY - 0.06, CUT_Z - 0.9 * (t - 0.7) / 0.3))
 sc["cut_z"] = CUT_Z
-for f in list(range(1976, 2070, 6)) + [2070, 2100]:
+for f in list(range(1976, 2062, 6)) + [2060]:
     c = cutter_pos(f)
     kx = c.x - 0.25
-    FA.pose(f, (kx, FY - 0.62, 0.62), yaw=170, flex=30, sp=(25, 0, 0), head=(15, -10),
+    FA.pose(f, (kx, FY - 0.78, RH - 0.10), yaw=170, flex=14, sp=(14, 0, 0), head=(15, -10),
             hands={"L": ("w", c + Vector((-0.12, -0.25, 0.10)), (0.3, 1, 0), (0, 0, 1)), "R": ("w", c + Vector((0.05, -0.30, -0.02)), (0, 1, 0), (-1, 0, 0))},
-            feet={"L": ("g", (kx + 0.15, FY - 0.40), 170, 0.0, 30), "R": ("g", (kx - 0.20, FY - 0.95), 175, 0.0, 0)}, curl={"L": 0.85, "R": 0.85})
-for f, pull in ((1976, 0), (2040, 0), (2060, 0.2), (2080, 1.0), (2100, 1.0)):
-    hx = 0.70 - 0.6 * pull; hy = FY - 0.05 - 0.75 * pull
-    FB.pose(f, (0.95 - 0.3 * pull, FY - 0.55 - 0.45 * pull, RH - 0.05), yaw=150 - 40 * pull, flex=20, sp=(15, 0, 0), head=(10, 15),
-            hands={"L": ("w", (hx, hy, 0.75), (0, 0, 1), (0, 1, 0)), "R": ("w", (hx + 0.02, hy, 0.45), (0, 0, 1), (0, 1, 0))},
-            feet=stand_feet(0.95 - 0.3 * pull, FY - 0.6 - 0.45 * pull, 150 - 40 * pull), curl={"L": 0.8, "R": 0.8})
+            feet={"L": ("g", (kx + 0.12, FY - 0.62), 170), "R": ("g", (kx - 0.18, FY - 1.02), 175)}, curl={"L": 0.85, "R": 0.85})
+PH = sc["chute_z"][0] - 0.15
+def panel_edge(th):
+    return Vector((0.5, FY + 0.006 - PH * math.sin(R_(th)), 0.06 + PH * math.cos(R_(th))))
+for f, th, fy, fl in ((1976, 0, -1.0, 10), (2040, 0, -1.0, 12), (2060, 0, -1.0, 18), (2072, 15, -1.08, 25), (2085, 60, -1.3, 45)):
+    e = panel_edge(th)
+    FB.pose(f, (0.98, fy, RH - 0.05 - 0.2 * (fl > 30)), yaw=140, flex=fl * 0.6, sp=(fl, 0, 0), head=(15, 10),
+            hands={"L": ("w", e + Vector((0.12, 0, 0.0)), (-0.3, 1, -0.6), (0, 0, 1)), "R": ("w", e + Vector((-0.12, 0, 0.0)), (-0.3, 1, -0.6), (0, 0, 1))},
+            feet=stand_feet(0.98, fy, 140), curl={"L": 0.8, "R": 0.8})
+FB.pose(2100, (0.95, -1.35, RH - 0.05), yaw=150, flex=8, sp=(8, 0, 0), head=(10, 20), hands={"L": ("r", (-0.2, 0.05, -0.15)), "R": ("r", (0.2, 0.05, -0.15))}, feet=stand_feet(0.95, -1.35, 150))
 # FireB helps her out: hand on her arm, walks beside her
 pFB = catmull([(2120, Vector((0.65, -1.45, 0))), (2200, Vector((0.05, -1.6, 0))), (2340, Vector((-0.45, -2.55, 0)))])
 FB.walk(pFB, lambda f: 25.0, 2120, 2340, stride=0.6, lift=0.06, bob=0.015)
+walk_arms(FB, pFB, lambda f: 25.0, 2120, 2340, 0.6, sides="L", swing=0.08)
 for f in range(2140, 2341, 10):
     wp = path_w(min(max(f, 2166), 2340)) + Vector((0.18, 0.05, 1.10))
     FB.key_hand("R", f, wp, Vector((-1, 0.3, 0)), Vector((0, 0, 1)))
-FA.pose(2140, (-0.4, FY - 0.8, RH - 0.05), yaw=200, flex=10, sp=(10, 0, 0), head=(0, -10), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-0.4, FY - 0.8, 200))
-FA.pose(2300, (-0.55, FY - 0.9, RH - 0.05), yaw=170, flex=8, sp=(8, 20, 0), head=(5, 25), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-0.55, FY - 0.9, 170))
+FA.pose(2078, (-1.0, FY - 0.75, RH - 0.05), yaw=160, flex=10, sp=(10, 0, 0), head=(5, 15), hands={"L": ("r", (-0.18, 0.0, -0.15)), "R": ("r", (0.18, -0.05, -0.12))}, feet=stand_feet(-1.0, FY - 0.75, 160))
+FA.pose(2140, (-1.1, FY - 0.7, RH - 0.05), yaw=200, flex=10, sp=(10, 0, 0), head=(0, -10), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.1, FY - 0.7, 200))
+FA.pose(2300, (-1.2, FY - 0.8, RH - 0.05), yaw=170, flex=8, sp=(8, 20, 0), head=(5, 25), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.2, FY - 0.8, 170))
 
 # ============================================================== FLAP mechanism
 FL = bpy.data.objects["Flap"]; FL.rotation_mode = 'XYZ'
@@ -306,12 +334,10 @@ for nm in sc["bags"].split(",")[:26]:
         s0 = b.scale.copy()
         for f, k in ((292, 1.0), (300, 0.8), (310, 1.06), (322, 1.0)):
             b.scale = (s0.x * (2 - k) ** 0.5, s0.y * (2 - k) ** 0.5, s0.z * k); b.keyframe_insert("scale", frame=f)
-# cut panel peel (2060-2095): swings open on its left edge and bends outward
+# cut panel (2060-2097): cut free, the firefighter pulls the top edge and it folds down onto the asphalt like a ramp
 cp = bpy.data.objects["CutPanel"]
-for f, rz, ang in ((2060, 0, 0), (2072, -12, 10), (2085, -60, 35), (2095, -95, 40), (2110, -102, 40)):
-    cp.rotation_euler.z = R_(rz); cp.keyframe_insert("rotation_euler", index=2, frame=f)
-    cp.modifiers["Peel"].angle = R_(ang); cp.modifiers["Peel"].keyframe_insert("angle", frame=f) if False else cp.keyframe_insert('modifiers["Peel"].angle', frame=f)
-
+for f, th in ((2060, 0), (2072, 15), (2085, 60), (2094, 86), (2098, 84.5), (2102, 86)):
+    cp.rotation_euler.x = R_(th); cp.keyframe_insert("rotation_euler", index=0, frame=f)
 json.dump([{"beat": i + 1, "frame": 1 + round(t * 60), "first_words": w} for i, (t, w) in enumerate((
     (0.0, "She was reaching into"), (2.5, "when someone shoved her"), (4.9, "The heavy door slammed"), (8.4, "These bins are built"),
     (12.8, "Once you drop through"), (16.0, "There's no handle"), (22.0, "She screamed for help"), (25.0, "For three days"),

@@ -5,7 +5,7 @@ W = sc.world; WN = W.node_tree.nodes
 def kv(sock, f, v):
     sock.default_value = v; sock.keyframe_insert("default_value", frame=f)
 # ---------------------------------------------------------------- x-ray (505-540 in, 905-955 out)
-XR = [(1, 0), (505, 0), (538, 1), (905, 1), (952, 0)]
+XR = [(1, 0), (492, 0), (520, 1), (905, 1), (952, 0)]
 for mn in ("BinSteel", "BinSteelInner", "MechSteel"):
     m = bpy.data.materials[mn]; v = m.node_tree.nodes["XRAY"].outputs[0]
     for f, x in XR: kv(v, f, x)
@@ -19,16 +19,16 @@ def kex(f, e): sc.view_settings.exposure = e; sc.view_settings.keyframe_insert("
 DAY = (1.0, 0.95, 0.88)
 for f, sun, fill, slot, stk, w_, ex, col, scol in (
         (1, 3.2, 3, 120, 0, 1.0, 0.0, DAY, (1, .93, .8)), (290, 3.2, 3, 120, 0, 1.0, 0.0, DAY, (1, .93, .8)),
-        (330, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)),                    # flap shut: only the slit leaks light; eyes adjust
-        (505, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)), (538, 1.0, 0, 0, 350, 0.3, 0.0, DAY, (1, .93, .8)),
-        (905, 1.0, 0, 0, 350, 0.3, 0.0, DAY, (1, .93, .8)), (952, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)),
-        (1395, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)), (1410, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
-        (1495, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)), (1530, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)),
+        (330, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)),                    # flap shut: only the slit leaks light; eyes adjust
+        (505, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (538, 1.0, 0, 0, 350, 0.3, 0.0, DAY, (1, .93, .8)),
+        (905, 1.0, 0, 0, 350, 0.3, 0.0, DAY, (1, .93, .8)), (952, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)),
+        (1395, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (1410, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
+        (1495, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)), (1530, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)),
         # time-lapse: day -> dusk -> night -> dawn -> day -> night -> day
-        (1580, 2.0, 6, 30, 0, 0.6, 0.3, (1.0, 0.55, 0.3), (1, .55, .3)), (1620, 0.05, 2.5, 6, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
-        (1670, 0.05, 2.5, 6, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)), (1705, 1.8, 6, 30, 0, 0.5, 0.3, (1.0, 0.7, 0.5), (1, .7, .5)),
-        (1740, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)), (1770, 0.05, 2.5, 6, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
-        (1810, 3.2, 8, 22, 0, 1.0, 0.3, DAY, (1, .93, .8)), (1860, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
+        (1580, 2.0, 6, 30, 0, 0.6, 0.3, (1.0, 0.55, 0.3), (1, .55, .3)), (1620, 0.05, 2.5, 10, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
+        (1670, 0.05, 2.5, 10, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)), (1705, 1.8, 6, 30, 0, 0.5, 0.3, (1.0, 0.7, 0.5), (1, .7, .5)),
+        (1740, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (1770, 0.05, 2.5, 10, 0, 0.06, 0.6, (0.4, 0.5, 1.0), (0.45, 0.55, 1)),
+        (1810, 3.2, 14, 22, 0, 1.0, 0.55, DAY, (1, .93, .8)), (1860, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)),
         (2070, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8)), (2095, 3.2, 3, 22, 0, 1.0, 0.0, DAY, (1, .93, .8))):
     kl(SUN, f, sun, col); kl(FILL, f, fill); kl(SLOT, f, slot, scol); kl(STK, f, stk); kw(f, w_); kex(f, ex)
 for c_ in (SUN, FILL, SLOT, STK):
@@ -60,7 +60,7 @@ body.location = (0, -0.2, 0.0); body.rotation_euler = (0, R_(-90), 0)
 for f in [1960] + list(range(1976, 2071, 3)) + [2100]:
     c = cutter_pos(f); disc.location = c + Vector((0, -0.01, 0)); disc.keyframe_insert("location", frame=f)
 for o in (disc, body):
-    for f_, h_ in ((1, True), (1975, False), (2105, True)):
+    for f_, h_ in ((1, True), (1975, False), (2062, True)):
         o.hide_render = h_; o.keyframe_insert("hide_render", frame=f_)
 cutl = bpy.data.objects.new("CutLine", bpy.data.meshes.new("CutLine")); col_fx.objects.link(cutl)
 import bmesh as _bm
@@ -138,31 +138,34 @@ for i in range(60):
         mo.location = base + Vector((0.08 * math.sin(f / 70.0 + i), 0.08 * math.cos(f / 53.0 + i * 2), 0.05 * math.sin(f / 41.0 + i))); mo.keyframe_insert("location", frame=f)
     for f_, h_ in ((1, True), (280, False), (1850, True)):
         mo.hide_render = h_; mo.keyframe_insert("hide_render", frame=f_)
-# blanket around her (beat 11): a draped cape parented to her upper spine
-bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.27, depth=0.8, end_fill_type='NOTHING', location=(0, 0, 0))
-bl = bpy.context.object; bl.name = "Blanket"
-for c_ in bl.users_collection: c_.objects.unlink(bl)
-col_fx.objects.link(bl)
+# blanket around her (beat 11): a copy of her torso + arms skin, masked by bone weights and inflated, in grey wool
+WB = bpy.data.objects["Woman.body"]
+bl = WB.copy(); bl.data = WB.data.copy(); bl.name = "Blanket"; col_fx.objects.link(bl)
+keep = [g.index for g in bl.vertex_groups if g.name.split(".")[0] in ("spine01", "spine02", "spine03", "spine04", "clavicle", "shoulder01",
+                                                                  "upperarm01", "upperarm02", "lowerarm01", "lowerarm02", "breast", "neck01")]
+vg = bl.vertex_groups.new(name="BlanketMask")
 for v in bl.data.vertices:
-    t = (v.co.z + 0.4) / 0.8
-    a_ = math.atan2(v.co.y, v.co.x)
-    v.co.x = math.cos(a_) * (0.23 + 0.07 * (1 - t)); v.co.y = math.sin(a_) * (0.17 + 0.07 * (1 - t))
-    v.co += Vector((0, 0, 0)) + v.co.normalized() * 0.015 * math.sin(v.co.z * 30 + math.atan2(v.co.y, v.co.x) * 5)
-bs = bl.modifiers.new("sub", 'SUBSURF'); bs.levels = 1; bs.render_levels = 2
-sw_ = bl.modifiers.new("drape", 'SHRINKWRAP'); sw_.target = bpy.data.objects["Woman.body"]; sw_.wrap_method = 'NEAREST_SURFACEPOINT'; sw_.wrap_mode = 'OUTSIDE_SURFACE'; sw_.offset = 0.045
-sm_ = bl.modifiers.new("smooth", 'SMOOTH'); sm_.factor = 0.8; sm_.iterations = 6
-bl.modifiers.new("thick", 'SOLIDIFY').thickness = 0.012
-bl.data.materials.append(bpy.data.materials["terry_cloth"].copy()); bl.active_material.name = "BlanketMat"
-for nd in bl.active_material.node_tree.nodes:
+    w = sum(g.weight for g in v.groups if g.group in keep)
+    if w > 0.5: vg.add([v.index], 1.0, 'REPLACE')
+for m in list(bl.modifiers):
+    if m.type not in ('ARMATURE',): bl.modifiers.remove(m)
+mk = bl.modifiers.new("mask", 'MASK'); mk.vertex_group = "BlanketMask"
+dp = bl.modifiers.new("puff", 'DISPLACE'); dp.strength = 0.035; dp.mid_level = 0.0
+tx = bpy.data.textures.new("folds", 'CLOUDS'); tx.noise_scale = 0.12; dp.texture = tx; dp.texture_coords = 'OBJECT'
+dp2 = bl.modifiers.new("inflate", 'DISPLACE'); dp2.strength = 0.03; dp2.mid_level = 0.0
+smo = bl.modifiers.new("smooth", 'SMOOTH'); smo.factor = 1.0; smo.iterations = 8
+sol = bl.modifiers.new("thick", 'SOLIDIFY'); sol.thickness = 0.008
+sub = bl.modifiers.new("sub", 'SUBSURF'); sub.levels = 0; sub.render_levels = 1
+bl.data.materials.clear()
+bm_ = bpy.data.materials["terry_cloth"].copy(); bm_.name = "BlanketMat"; bl.data.materials.append(bm_)
+for poly in bl.data.polygons: poly.material_index = 0
+for nd in bm_.node_tree.nodes:
     if nd.type == 'BSDF_PRINCIPLED':
-        for lk in list(nd.inputs['Base Color'].links): bl.active_material.node_tree.links.remove(lk)
-        nd.inputs['Base Color'].default_value = (0.32, 0.31, 0.29, 1)
-WR = bpy.data.objects["Woman"]
-bl.parent = WR; bl.parent_type = 'BONE'; bl.parent_bone = "spine01"
-bl.matrix_parent_inverse = Matrix.Identity(4)
-bl.location = (0, -0.29, 0.02); bl.rotation_euler = (R_(90), 0, 0)
+        for lk in list(nd.inputs['Base Color'].links): bm_.node_tree.links.remove(lk)
+        nd.inputs['Base Color'].default_value = (0.34, 0.33, 0.31, 1)
 for f_, h_ in ((1, True), (2150, False)):
     bl.hide_render = h_; bl.keyframe_insert("hide_render", frame=f_)
+    bl.hide_viewport = h_; bl.keyframe_insert("hide_viewport", frame=f_)
 
 # ---------------------------------------------------------------- the one continuous camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.02; cam_d.clip_end = 200
@@ -170,27 +173,27 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
 CAMK = [  # frame, location, target, lens
     (1, (-3.2, -5.6, 0.35), (0.0, -0.8, 1.0), 18), (60, (-1.7, -3.5, 0.75), (0.0, -0.85, 1.1), 22), (110, (-0.95, -2.1, 1.45), (0.05, -0.65, 1.25), 26),
-    (150, (-0.55, -1.75, 1.5), (0.0, -0.75, 1.2), 28),
-    (168, (0.75, -1.95, 1.2), (-0.05, -1.2, 1.1), 24), (200, (0.35, -1.55, 1.6), (0.0, -0.6, 1.35), 22), (240, (0.06, -1.0, 1.5), (0.0, -0.3, 1.2), 20),
+    (150, (-0.55, -1.85, 1.9), (0.0, -0.8, 1.15), 28),
+    (168, (0.9, -2.0, 1.85), (-0.05, -1.15, 1.1), 24), (200, (0.45, -1.25, 1.8), (0.0, -0.55, 1.3), 22), (240, (0.06, -1.0, 1.5), (0.0, -0.3, 1.2), 20),
     (268, (0.0, -0.74, 1.40), (0.0, 0.0, 0.85), 18), (288, (0.02, -0.42, 1.36), (0.05, 0.1, 0.4), 18),
-    (302, (0.15, -0.1, 1.2), (0.05, 0.1, 0.35), 18), (330, (0.35, 0.10, 1.05), (0.0, -0.58, 1.35), 20), (380, (0.45, 0.25, 0.95), (-0.05, -0.05, 0.45), 20),
-    (440, (0.5, -0.3, 0.80), (-0.05, 0.12, 0.55), 22), (495, (0.62, -0.15, 0.95), (0.0, -0.2, 0.85), 22),
+    (302, (0.15, -0.1, 1.2), (0.05, 0.1, 0.35), 18), (330, (0.35, 0.10, 1.05), (0.0, -0.58, 1.35), 20), (380, (-0.4, -0.35, 1.25), (0.1, 0.1, 0.45), 20),
+    (440, (-0.5, 0.2, 0.95), (0.1, 0.05, 0.5), 22), (470, (-0.05, 0.48, 1.6), (0.05, -0.1, 0.75), 22), (495, (0.62, -0.15, 0.95), (0.0, -0.2, 0.85), 22),
     (540, (1.25, -0.2, 1.05), (0.0, -0.3, 1.1), 24), (600, (2.1, -0.9, 1.5), (0.0, -0.5, 1.3), 30), (680, (2.3, 0.3, 1.75), (0.0, -0.45, 1.3), 30),
     (760, (1.6, -1.6, 1.6), (0.0, -0.55, 1.28), 35),
-    (805, (0.9, -1.05, 1.28), (0.0, -0.62, 1.16), 45), (860, (0.5, -0.98, 1.2), (0.1, -0.63, 1.13), 60), (905, (0.75, -1.25, 1.4), (0.0, -0.6, 1.25), 45),
+    (805, (0.9, -1.05, 1.28), (0.0, -0.62, 1.16), 45), (835, (0.35, -0.92, 1.02), (0.0, -0.63, 1.14), 55), (870, (-0.35, -1.0, 1.25), (0.1, -0.62, 1.15), 55), (905, (0.75, -1.25, 1.4), (0.0, -0.6, 1.25), 45),
     (952, (0.95, -0.35, 1.3), (0.0, -0.1, 1.0), 26), (962, (0.62, -0.25, 1.35), (-0.4, -0.1, 1.2), 22),
-    (990, (0.45, -0.05, 1.45), (-0.74, -0.05, 1.3), 20), (1060, (0.4, 0.35, 1.25), (-0.72, -0.05, 1.3), 20), (1125, (0.45, 0.35, 1.25), (0.0, -0.58, 1.3), 20),
+    (990, (0.45, -0.05, 1.45), (-0.74, -0.05, 1.3), 20), (1030, (0.05, 0.45, 1.2), (-0.72, -0.05, 1.35), 20), (1070, (-0.25, 0.45, 1.05), (-0.72, -0.1, 1.4), 20), (1125, (0.45, 0.35, 1.25), (0.0, -0.58, 1.3), 20),
     (1180, (0.4, -0.35, 0.75), (0.0, 0.55, 1.4), 18), (1230, (0.35, -0.4, 1.1), (0.0, 0.5, 1.85), 16), (1275, (0.25, -0.35, 1.75), (0.0, 0.45, 1.6), 16),
     (1305, (0.35, -0.25, 1.95), (0.0, 0.15, 0.45), 16),
-    (1340, (0.12, -0.40, 1.75), (0.0, 0.0, 1.68), 28), (1380, (0.05, -0.5, 1.7), (0.0, 0.05, 1.68), 35), (1404, (0.0, -0.72, 1.45), (0.0, 0.0, 1.4), 26),
+    (1340, (0.12, -0.40, 1.75), (0.0, 0.0, 1.68), 28), (1380, (0.08, -0.5, 1.62), (0.0, 0.05, 1.68), 32), (1404, (0.0, -0.72, 1.45), (0.0, 0.0, 1.4), 26),
     (1440, (0.5, -2.9, 1.6), (0.0, -0.5, 1.1), 20), (1490, (-1.5, -5.6, 2.3), (0.0, -1.0, 0.9), 18),
     (1540, (0.0, -1.5, 2.6), (0.0, -0.4, 1.3), 24), (1572, (0.0, -0.78, 1.40), (0.0, 0.0, 0.6), 20), (1600, (0.0, -0.3, 1.38), (0.05, 0.1, 0.3), 18),
     (1680, (0.3, 0.1, 1.95), (0.05, 0.05, 0.3), 22), (1760, (-0.3, 0.25, 1.95), (0.05, 0.05, 0.3), 26), (1830, (-0.2, -0.3, 1.9), (0.05, 0.05, 0.35), 30),
-    (1862, (0.0, -0.3, 1.45), (0.05, 0.1, 0.4), 20), (1880, (0.0, -0.75, 1.40), (0.6, -1.4, 1.5), 22), (1932, (-0.15, -1.65, 1.6), (0.55, -1.1, 1.55), 30),
-    (1965, (-0.65, -2.05, 1.4), (0.3, -1.0, 1.2), 24),
-    (1995, (-1.6, -1.95, 0.8), (-0.2, -0.65, 0.9), 26), (2030, (-0.4, -2.05, 0.6), (0.2, -0.65, 0.85), 24), (2060, (1.2, -1.85, 0.9), (0.0, -0.6, 0.7), 24),
-    (2086, (0.4, -1.35, 0.8), (0.0, 0.0, 0.6), 20),
-    (2110, (0.35, -1.25, 0.85), (0.0, -0.5, 0.8), 20), (2160, (0.6, -2.5, 1.3), (-0.2, -1.2, 1.1), 24), (2210, (0.2, -3.5, 1.6), (-0.5, -1.8, 1.1), 24),
+    (1862, (0.0, -0.3, 1.45), (0.05, 0.1, 0.4), 20), (1880, (0.0, -0.72, 1.45), (1.3, -1.7, 1.5), 22), (1905, (0.1, -0.98, 1.5), (1.1, -1.5, 1.5), 24), (1932, (0.0, -1.0, 1.65), (0.7, -1.18, 1.5), 26),
+    (1965, (0.0, -2.2, 1.5), (0.6, -1.0, 1.2), 24),
+    (1995, (-1.6, -1.95, 0.8), (-0.2, -0.65, 0.9), 26), (2030, (-0.4, -2.05, 0.6), (0.2, -0.65, 0.85), 24), (2060, (-0.2, -2.0, 0.95), (0.1, -0.6, 0.7), 24),
+    (2086, (-0.15, -1.7, 1.25), (0.0, 0.0, 0.6), 20),
+    (2110, (-0.35, -1.45, 0.95), (0.0, -0.5, 0.8), 20), (2160, (0.3, -2.6, 1.35), (-0.2, -1.2, 1.1), 24), (2210, (0.2, -3.5, 1.6), (-0.5, -1.8, 1.1), 24),
     (2265, (1.6, -4.6, 2.4), (0.3, -1.4, 1.0), 22), (2345, (3.0, -6.6, 3.6), (2.4, 0.0, 1.0), 20), (2420, (3.9, -7.6, 4.2), (3.0, 0.3, 1.0), 21),
     (2490, (5.0, -8.4, 4.6), (3.6, 0.3, 0.9), 23)]
 sc["cam_keys"] = json.dumps(CAMK)
@@ -250,6 +253,6 @@ for nm in ("FireA", "FireB"):
     hp = hmat.node_tree.nodes["Principled BSDF"]; hp.inputs['Base Color'].default_value = ((0.02, 0.02, 0.02, 1) if nm == "FireA" else (0.75, 0.6, 0.05, 1)); hp.inputs['Roughness'].default_value = 0.3
     hm.data.materials.append(hmat)
     hm.parent = rig; hm.parent_type = 'BONE'; hm.parent_bone = "head"; hm.matrix_parent_inverse = Matrix.Identity(4)
-    hm.location = (0, -0.11, 0.0); hm.rotation_euler = (R_(-90), 0, 0)
+    hm.location = (0, -0.11 if nm == 'FireB' else -0.14, 0.0); hm.rotation_euler = (R_(-90), 0, 0)
     for f_, h_ in ((1, True), (1975, False)):
         hm.hide_render = h_; hm.keyframe_insert("hide_render", frame=f_)

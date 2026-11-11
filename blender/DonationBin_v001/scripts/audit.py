@@ -18,8 +18,8 @@ def gz(x, y):
         if hit: return loc.z
     return 0.0
 # windows where a character is meant to be off the ground (airborne, lying, crouched on the pile with body-relative feet)
-FREE = {"Woman": [(156, 300), (290, 470), (640, 670), (1200, 1250), (1495, 2100), (2095, 2150)], "Shover": [], "Passerby": [], "FireA": [], "FireB": []}
-PASS = [(268, 290), (520, 545), (955, 975), (1395, 1412), (1560, 1590), (1862, 1885), (2080, 2100)]   # planned camera pass-throughs
+FREE = {"Woman": [(156, 300), (290, 470), (640, 670), (1188, 1250), (1495, 2100), (2095, 2150)], "Shover": [], "Passerby": [], "FireA": [], "FireB": []}
+PASS = [(268, 290), (500, 545), (955, 975), (1395, 1412), (1560, 1590), (1862, 1885), (2080, 2100)]   # planned camera pass-throughs
 steel = [bpy.data.objects[n] for n in ("BinShell", "Flap", "CutPanel", "BinLiner")]
 lines = []; worst = {}
 def note(kind, f, msg, v):
@@ -35,11 +35,13 @@ for f in range(1, sc.frame_end + 1, STEP):
         if hidden(nm): continue
         R = bpy.data.objects[nm]; P = R.pose.bones; M = R.matrix_world; B = R.data.bones
         if not inside(nm, f, None):
-            for s in "LR":
-                ank = M @ P["foot." + s].head; rest = B["foot." + s].head_local.z
-                d = ank.z - gz(ank.x, ank.y) - rest
-                if d > 0.03 and nm != "FireA": note("feet", f, "%s hover %s" % (nm, s), d)
+            ds = []
+            for s in "LR":   # contact = lower of heel (ankle) and toe ball; a foot on tiptoe or in swing is fine if the other supports
+                ank = M @ P["foot." + s].head; toe = M @ P["toe3-1." + s].head
+                d = min(ank.z - gz(ank.x, ank.y) - B["foot." + s].head_local.z, toe.z - gz(toe.x, toe.y) - B["toe3-1." + s].head_local.z)
+                ds.append(d)
                 if d < -0.03: note("feet", f, "%s sink %s" % (nm, s), d)
+            if min(ds) > 0.03: note("feet", f, "%s hover both" % nm, min(ds))
         for s in "LR":
             for i in (2, 3, 4):
                 tip = M @ P["finger%d-3.%s" % (i, s)].tail
