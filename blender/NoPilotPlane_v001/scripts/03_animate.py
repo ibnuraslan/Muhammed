@@ -727,6 +727,10 @@ r = sc.render; r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1
 sc.frame_start, sc.frame_end = 1, 4410
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5
+c_ = sc.cycles; c_.max_bounces = 8; c_.diffuse_bounces = 3; c_.glossy_bounces = 3; c_.transmission_bounces = 8; c_.transparent_max_bounces = 16
+c_.caustics_reflective = False; c_.caustics_refractive = False; r.use_persistent_data = True
+r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '8'; r.image_settings.compression = 15
+sc.frame_set(1)
 camd.dof.use_dof = False
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)
