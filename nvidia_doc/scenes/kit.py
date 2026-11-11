@@ -335,3 +335,21 @@ def apply_cam(cam, ctx, spec, t):
         cam.data.dof.focus_distance = (Vector(loc) - Vector(spec.get("focus", lambda c, t: tgt)(ctx, t))).length
     if spec.get("anim"):
         spec["anim"](ctx, t)
+
+
+def rain_glass(name="RainGlass", scale=55, density=0.45):
+    """Clear glass with discrete raindrops (domed bumps on random voronoi cells)."""
+    m = glass(name, (0.92, 0.94, 0.96), 0.0)
+    N = m.node_tree.nodes; L = m.node_tree.links; tc = N.new("ShaderNodeTexCoord")
+    vor = N.new("ShaderNodeTexVoronoi"); vor.inputs['Scale'].default_value = scale; vor.feature = 'F1'
+    L.new(tc.outputs['Object'], vor.inputs['Vector'])
+    cap = N.new("ShaderNodeMapRange"); cap.inputs['From Min'].default_value = 0.0; cap.inputs['From Max'].default_value = 0.32
+    cap.inputs['To Min'].default_value = 1.0; cap.inputs['To Max'].default_value = 0.0
+    L.new(vor.outputs['Distance'], cap.inputs['Value'])
+    sel = N.new("ShaderNodeMath"); sel.operation = 'GREATER_THAN'; sel.inputs[1].default_value = density
+    sep = N.new("ShaderNodeSeparateColor"); L.new(vor.outputs['Color'], sep.inputs[0]); L.new(sep.outputs[0], sel.inputs[0])
+    dome = N.new("ShaderNodeMath"); dome.operation = 'SQRT'; L.new(cap.outputs[0], dome.inputs[0])
+    hm = N.new("ShaderNodeMath"); hm.operation = 'MULTIPLY'; L.new(dome.outputs[0], hm.inputs[0]); L.new(sel.outputs[0], hm.inputs[1])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.9; bp.inputs['Distance'].default_value = 0.0015
+    L.new(hm.outputs[0], bp.inputs['Height']); L.new(bp.outputs['Normal'], N["Principled BSDF"].inputs['Normal'])
+    return m
