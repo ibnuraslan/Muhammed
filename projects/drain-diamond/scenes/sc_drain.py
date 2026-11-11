@@ -98,7 +98,7 @@ def dust_volume(loc, r=0.28):
 def umbrella(name, radius=0.52):
     """A black umbrella: a deep domed canopy in 8 gores (each sagging between its ribs), visible ribs ending in tips,
     a shaft, and a hooked J handle. Modelled with the canopy tip at the origin; the shaft runs down -Z."""
-    fabric_m = pbr(name + "Canopy", (0.01, 0.01, 0.012), 0.5, 0.0, **{'Coat Weight': 0.6, 'Coat Roughness': 0.15})
+    fabric_m = pbr(name + "Canopy", (0.006, 0.006, 0.007), 0.55, 0.0, **{'Coat Weight': 0.15, 'Coat Roughness': 0.2})
     metal = pbr(name + "Metal", (0.35, 0.35, 0.37), 0.3, 0.9)
     grip = pbr(name + "Grip", (0.07, 0.04, 0.02), 0.35)
     bm = bmesh.new()
@@ -302,7 +302,7 @@ def build(variant=None):
             u = umbrella(f"Umb{k}") if k != 1 else None
             c["walkers"].append((h, GATE + Vector((0.15 * k, -2.0 - 1.3 * k, 0)), Vector((0.4 + 1.0 * k, 1.2 - 0.6 * k, 0)), 0.6 * k, u))
     if v == "torch":
-        tl = bpy.data.lights.new("TorchBeam", 'SPOT'); tl.energy = 220; tl.spot_size = math.radians(13); tl.spot_blend = 0.3
+        tl = bpy.data.lights.new("TorchBeam", 'SPOT'); tl.energy = 320; tl.spot_size = math.radians(18); tl.spot_blend = 0.3
         tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.01
         to = bpy.data.objects.new("TorchBeam", tl); bpy.context.collection.objects.link(to); c["torch"] = to
         h = officer("Torch", 41, seed=2); c["torcher"] = h
@@ -351,7 +351,10 @@ def anim_bag(c, t):
         h.rot(b_, (1, 0, 0), a_)                                          # leaning a little to look down at the tub
     place(h, sp, face_to(sp, CONT_AT))
     M = h.arm.matrix_world.to_3x3(); fwd = M @ Vector((0, -1, 0)); side = M @ Vector((1, 0, 0))
-    eye = h.bone_head("head") + Vector((0, 0, 0.09)) + fwd * 0.1
+    import numpy as _np
+    from human import _world_verts
+    top = float(_np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])[:, 2].max())
+    eye = Vector((h.bone_head("head").x, h.bone_head("head").y, top - 0.12)) + fwd * 0.1
     camp = eye + fwd * 0.07 - Vector((0, 0, 0.02))
     reach(h, "R", camp - side * 0.075 - Vector((0, 0, 0.03)), -side + Vector((0, 0, -1.2)))
     reach(h, "L", camp + side * 0.06 - Vector((0, 0, 0.045)) + fwd * 0.03, side + Vector((0, 0, -1.2)))
@@ -388,8 +391,8 @@ def anim_torch(c, t):
     sec = t * DUR["torch"]
     rain_fall(c, sec)
     # the officer stands just below frame; only the beam pool slides across the wet concrete onto the patch
-    h = c["torcher"]; sp = PATCH + Vector((-0.55, -1.05, 0)); place(h, sp, face_to(sp, PATCH)); arms_relaxed(h)
-    hand = sp + Vector((0.12, 0.3, 1.05))
+    h = c["torcher"]; sp = PATCH + Vector((-1.15, -0.55, 0)); place(h, sp, face_to(sp, PATCH)); arms_relaxed(h)
+    hand = sp + Vector((0.3, 0.12, 1.05))
     u = ease(t)
     tgt = (PATCH + Vector((-1.0, -0.55, 0))).lerp(PATCH + Vector((0.02, 0.0, 0)), u)
     to = c["torch"]; to.location = hand; point_at(to, tgt)
@@ -447,8 +450,8 @@ def cam_gate(c, t):
 
 def cam_torch(c, t):
     e = ease(t)
-    loc = PATCH + Vector((0.9, -2.3, 3.4)).lerp(Vector((0.8, -2.0, 3.2)), e)
-    return loc, PATCH + Vector((-0.2, -0.2, 0.0)), 26
+    loc = PATCH + Vector((0.55, -1.7, 3.1)).lerp(Vector((0.45, -1.5, 2.95)), e)
+    return loc, PATCH + Vector((-0.15, -0.15, 0.0)), 30
 
 
 MOVES = {

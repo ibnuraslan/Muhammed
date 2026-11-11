@@ -299,8 +299,8 @@ def build_dawn(c):
     w = world_sky(sun_elev_deg=6, sun_rot_deg=300, strength=2.6, tint=(0.95, 0.94, 0.95))
     [n for n in w.node_tree.nodes if n.type == 'TEX_SKY'][0].sun_disc = False
     # warm dawn sun grazing along the facade from the east (low, raking across the limestone)
-    sn = sun(4, 0, energy=2.6, color=(1.0, 0.68, 0.42), angle_deg=1.5)
-    sn.rotation_euler = (math.radians(86), 0, math.radians(-78))   # travels +X and slightly into the facade (+Y)
+    sn = sun(12, 0, energy=3.2, color=(1.0, 0.66, 0.4), angle_deg=1.5)
+    sn.rotation_euler = (math.radians(78), 0, math.radians(-78))   # travels +X and slightly into the facade (+Y)
     blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.18)
     haussmann(-34, -11, seed=2, lit_frac=0.28); haussmann(11, 33, seed=3, lit_frac=0.25)
     haussmann(33, 55, seed=4, lit_frac=0.25); haussmann(-56, -34, seed=5, lit_frac=0.25)
