@@ -4,7 +4,7 @@ These values were read back from `PrisonKeyCake_v002_60fps.blend` opened in fact
 
 | Item | Value |
 |---|---|
-| File | `PrisonKeyCake_v002_60fps.blend`: 139 MB, compressed. All images are packed (characters' 4K maps reduced to 1K, hero skins 2K). Stored with Git LFS. |
+| File | `PrisonKeyCake_v002_60fps.blend`: 53 MB, compressed, committed as a normal git file (no LFS). All images are packed as JPEG: 1K textures, with the prisoner's skin at 2K. The HDRIs are packed at 1K. MPFB body shape keys are baked. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -19,7 +19,7 @@ These values were read back from `PrisonKeyCake_v002_60fps.blend` opened in fact
 | Output | PNG, RGB, 8-bit, written to `//render/PrisonKeyCake_v002_####.png` |
 | Audio | None yet. When the VO arrives, the director retimes with `pipeline/retime_to_vo.py` using `beats.json`. |
 | Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. Sparks, pour, smoke density, flags (Wave modifier) and birds are keyframed or time-based. |
-| Volumes | One small volume (foundry smoke, `Smoke`), visible frames 515–830 only. |
+| Volumes | There are two thin volumes. Foundry smoke (`Smoke`) is visible for frames 515–830. Cell dust (`CellDust`) is visible for frames 1–1459 and does not cast shadows. |
 | Add-ons | None needed. MPFB2 only built the characters. |
 
 ## Suggested test frames

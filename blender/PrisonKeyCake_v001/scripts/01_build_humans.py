@@ -42,7 +42,7 @@ human("Prisoner", 0, 1.0, 0.5, W, C("short02"), [C("male_casualsuit01"), C("shoe
       tints=(("male_casualsuit01", (0.78, 0.74, 0.62)),))
 human("President", 2, 1.0, 0.9, W, C("short04"), [C("male_elegantsuit01"), C("shoes02")],
       "old_caucasian_male/old_caucasian_male.mhmat", muscle=0.45, weight=0.5, height=0.62, brow="eyebrow003",
-      tints=(("male_elegantsuit01", (0.35, 0.35, 0.38)), ("short04", (1.0, 1.0, 1.0))))
+      tints=(("male_elegantsuit01", (0.16, 0.16, 0.19)), ("short04", (1.0, 1.0, 1.0))))
 for nd in bpy.data.objects["President.short04"].data.materials[0].node_tree.nodes:
     if nd.type == 'MIX' and nd.data_type == 'RGBA':
         nd.blend_type = 'MIX'; nd.inputs['Factor'].default_value = 0.72; nd.inputs['B'].default_value = (0.42, 0.41, 0.4, 1)

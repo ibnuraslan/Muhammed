@@ -94,7 +94,7 @@ M_WAX.node_tree.nodes["Principled BSDF"].inputs['Subsurface Radius'].default_val
 M_CANDLE = flat_mat("M_Candle", (0.86, 0.8, 0.66), 0.35); M_CANDLE.node_tree.nodes["Principled BSDF"].inputs['Subsurface Weight'].default_value = 0.6
 M_FLAME = flat_mat("M_Flame", (1, 0.6, 0.2), 1.0, emit=(1.0, 0.55, 0.15), estr=40)
 M_TIN = flat_mat("M_Tin", (0.55, 0.55, 0.52), 0.35, 1.0)
-M_KEY = noise_mat("M_KeyIron", (0.04, 0.035, 0.03), (0.16, 0.12, 0.09), scale=300, rough=0.45, metal=0.9, bump=0.15)
+M_KEY = noise_mat("M_KeyIron", (0.16, 0.14, 0.12), (0.42, 0.38, 0.33), scale=300, rough=0.32, metal=1.0, bump=0.15)
 M_MOLTEN = flat_mat("M_Molten", (1.0, 0.4, 0.05), 0.3, emit=(1.0, 0.45, 0.08), estr=30)
 M_CRUC = noise_mat("M_Crucible", (0.08, 0.07, 0.07), (0.25, 0.22, 0.2), scale=40, rough=0.8)
 M_CRUMB = noise_mat("M_Crumb", (0.18, 0.08, 0.035), (0.42, 0.24, 0.12), scale=180, rough=0.85, bump=0.6)
@@ -194,13 +194,14 @@ me = dl.data
 xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]; zs = [v.co.z for v in me.vertices]
 w, t, hgt = max(xs) - min(xs), max(ys) - min(ys), max(zs) - min(zs)
 me.transform(Matrix.Translation((-min(xs), -(min(ys) + max(ys)) / 2, -min(zs))))
-me.transform(DIAG(1.0 / w * (DOOR[1] - DOOR[0] - 0.02), 0.09 / t, (DOOR[3] - 0.02) / hgt))
+me.transform(DIAG(1.0 / w * (DOOR[1] - DOOR[0] - 0.02), 0.09 / t, (DOOR[3] - 0.04) / hgt))
+me.transform(Matrix.Translation((0, 0, 0.035)))
 door_piv = bpy.data.objects.new("CellDoor_Pivot", None); coll("Cell").objects.link(door_piv)
 door_piv.location = (2.1, DOOR[0] + 0.01, 0.0); door_piv.rotation_euler = (0, 0, R_(90))
 dl.parent = door_piv; dl.location = (0, 0, 0); dl.rotation_euler = (0, 0, 0); dl.name = "CellDoor"
 bpy.context.view_layer.update()
 LOCK_C = Vector((2.03, 0.62, 1.08))   # lock box centre, inside face
-lk = box("CellLock", (-0.025, -0.11, -0.08), (0.025, 0.11, 0.08), world_mat("rusty_metal", 14.0, tint=(0.45, 0.42, 0.4), name="M_LockIron"), c="Cell", bevel=0.004)
+lk = box("CellLock", (-0.025, -0.11, -0.08), (0.025, 0.11, 0.08), noise_mat("M_LockIron", (0.03, 0.03, 0.03), (0.14, 0.1, 0.08), 90, 0.5, 0.9, 0.3), c="Cell", bevel=0.004)
 kh = box("CellLock_Keyhole", (-0.028, -0.006, -0.02), (-0.024, 0.006, 0.012), M_DARK, c="Cell")
 for o in (lk, kh):
     o.parent = door_piv; o.matrix_parent_inverse = door_piv.matrix_world.inverted()
@@ -283,7 +284,7 @@ KEY_M = key_mesh("Key_Master")              # the prison master key (beats 1, 7)
 KEY_C1 = key_mesh("Key_Copy1", notch=True)  # first cast: wrong bit, jams (beats 4-6)
 KEY_C2 = key_mesh("Key_Copy2")              # second cast: works (beat 8)
 for k in (KEY_C1, KEY_C2):
-    k.data.materials[0] = noise_mat("M_KeyCast_" + k.name, (0.07, 0.065, 0.06), (0.2, 0.19, 0.17), 400, 0.55, 0.8, 0.2) if k is KEY_C1 else bpy.data.materials["M_KeyCast_Key_Copy1"]
+    k.data.materials[0] = noise_mat("M_KeyCast_" + k.name, (0.22, 0.21, 0.19), (0.5, 0.47, 0.42), 400, 0.3, 1.0, 0.2) if k is KEY_C1 else bpy.data.materials["M_KeyCast_Key_Copy1"]
 
 def key_sdf(px, py):
     """>0 inside the key's silhouette (key-local, origin at shaft middle +0.005)"""
@@ -312,7 +313,7 @@ def wax_pool(name, center, angle):
             sk.data[i].co.z = v.co.z - 0.0042 * s
     for p in me.polygons: p.use_smooth = True
     return o
-WAX = wax_pool("WaxPool", TIN_P + Vector((0, 0, 0.012)), R_(25))
+WAX = wax_pool("WaxPool", TIN_P + Vector((0, 0, 0.012)), R_(205))
 WAX_MOLD = wax_pool("WaxMold_Pocket", Vector((0, 0, 0)), 0)   # the copy that goes into the visitor's pocket
 WAX_MOLD.data.shape_keys.key_blocks["Imprint"].value = 1.0
 tin2 = cyl("WaxTin_Pocket", (0, 0, -0.007), 0.075, 0.012, M_TIN, c="Cell", verts=40); tin2.parent = WAX_MOLD
@@ -560,13 +561,13 @@ for i, (x, y, z) in enumerate(((-3.2, GY + 1.7, TOPZ * 0.55), (3.2, GY + 1.7, TO
     cyl(f"FlagPole{i}_Ball", (x, y, z + 7.05), 0.08, 0.1, M_BRASS, c="Gov")
     me = bpy.data.meshes.new(f"Flag{i}"); bm = bmesh.new()
     bmesh.ops.create_grid(bm, x_segments=36, y_segments=18, size=0.5)
-    for v in bm.verts: v.co.x = (v.co.x + 0.5) * 1.8; v.co.y = (v.co.y + 0.5) * 0.9
+    for v in bm.verts: v.co.x = (v.co.x + 0.5) * 2.7; v.co.y = (v.co.y + 0.5) * 1.35
     bm.to_mesh(me); bm.free()
     for m_ in (M_GREEN, M_WHITE, M_ORANGE): me.materials.append(m_)
-    for p in me.polygons: p.material_index = min(2, int(p.center.x / 0.6))
+    for p in me.polygons: p.material_index = min(2, int(p.center.x / 0.9))
     o = bpy.data.objects.new(f"Flag{i}", me); coll("Gov").objects.link(o)
-    o.location = (x + 0.05, y, z + 6.1); o.rotation_euler = (R_(90), 0, 0)
-    wv = o.modifiers.new("wave", 'WAVE'); wv.use_normal = True; wv.height = 0.09; wv.width = 0.55; wv.narrowness = 1.2; wv.speed = 0.04
+    o.location = (x + 0.05, y, z + 5.6); o.rotation_euler = (R_(90), 0, 0)
+    wv = o.modifiers.new("wave", 'WAVE'); wv.use_normal = True; wv.height = 0.16; wv.width = 0.7; wv.narrowness = 1.0; wv.speed = 0.07
     wv.start_position_x = 0.0; wv.use_y = False; wv.falloff_radius = 0; wv.time_offset = -i * 13
     o.modifiers.new("sub", 'SUBSURF').levels = 1
     for p in me.polygons: p.use_smooth = True
@@ -577,7 +578,7 @@ for side in (-1, 1):
         box(f"Town{side}_{j}", (min(side * 11.5, side * 17), 16.6 + j * 3.6, 0), (max(side * 11.5, side * 17), 19.8 + j * 3.6, 8 + 3 * j), M_SANDST if j % 2 else M_STONE, c="Gov")
 
 # ================================================================== LIGHT + WORLD
-sun = bpy.data.lights.new("L_Sun", 'SUN'); sun.energy = 2.5; sun.angle = R_(8); sun.color = (1.0, 0.95, 0.88)
+sun = bpy.data.lights.new("L_Sun", 'SUN'); sun.energy = 2.5; sun.angle = R_(8); sun.color = (1.0, 0.86, 0.68)
 so = bpy.data.objects.new("L_Sun", sun); sc.collection.objects.link(so); so.rotation_euler = (R_(50), R_(10), R_(-25))
 moon = bpy.data.lights.new("L_Moon", 'SUN'); moon.energy = 0.0; moon.angle = R_(2); moon.color = (0.55, 0.68, 1.0)
 mo = bpy.data.objects.new("L_Moon", moon); sc.collection.objects.link(mo); mo.rotation_euler = (R_(55), 0, R_(200))
@@ -595,5 +596,7 @@ mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.name = "DayNigh
 nt.links.new(eday.outputs['Color'], mix.inputs['A']); nt.links.new(enight.outputs['Color'], mix.inputs['B'])
 nt.links.new(mix.outputs['Result'], bg.inputs['Color']); bg.inputs['Strength'].default_value = 1.0
 sc["WIN"] = WIN; sc["DOOR"] = DOOR; sc["CEX"] = CEX; sc["YARD_GATE"] = YARD_GATE
+exec(open(os.path.join(HERE, "02b_costume.py")).read())
+exec(open(os.path.join(HERE, "02c_cake.py")).read())
 print("SCENE objects", len(bpy.data.objects))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

@@ -6,6 +6,8 @@ a = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 STEP = int(a[0]) if a else 4
 sc = bpy.context.scene; cam = sc.camera
 dirs = [Vector(d).normalized() for d in ((1,0,0),(-1,0,0),(0,1,0),(0,-1,0),(0,0,1),(0,0,-1),(1,1,1),(-1,-1,1),(1,-1,-1),(-1,1,-1),(1,1,-1),(-1,-1,-1),(1,-1,1),(-1,1,1))]
+for vo in [o for o in bpy.data.objects if o.name in ("CellDust", "Smoke")]:
+    vo.animation_data_clear(); vo.hide_viewport = True
 bad = []
 for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
