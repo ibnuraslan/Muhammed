@@ -28,7 +28,10 @@ The move from the operating table to the recovery chair happens inside the x-ray
 ## Known issues
 - **Monkey has no rig.** In the chair its arms hang limp between its knees, which is the asset's own sitting pose. The "slump" is a whole-body tilt; only the eyes, lids, ears and breathing animate.
 - **Neck seam.** The head and body of the composite are separate meshes. A thin dark seam ring plus stitches hide the join; a faint line is visible in extreme macro.
-- **Surgeon and nurse are IK-posed blocking.** Hands and grips touch the head (the audit shows 0.6–3.6 cm from fingertip to surface) and fingers curl when gripping. The feet step during position changes, but there's some planted-foot creep of a few cm at step landings.
+- **Surgeon, nurse and anaesthetist are IK-posed.**
+  - The head grips come from a numeric search: the gloves rest on the fur and the fingers curl.
+  - `audit.txt` reports 85 penetrating sampled vertices over 13 audited frames. These are mostly slight glove contact and gowns brushing.
+  - The feet step during position changes, but they creep up to about 3 cm at step landings.
 - **Chair contact.** The monkey's feet press up to 3 cm into the chair cushion's raised front edge.
 - **Stitching close-ups.** These are dominated by the gloved hands. The needle holder is visible but the needle arc is small.
-- **Clothing.** The surgical outfit is a tinted MPFB shirt and trousers with a procedural cap and mask, not a true gown.
+- **Clothing.** The gowns are procedural tubes skinned to the body, worn over a tinted MPFB shirt and trousers. Some sleeves show at the shoulders.
