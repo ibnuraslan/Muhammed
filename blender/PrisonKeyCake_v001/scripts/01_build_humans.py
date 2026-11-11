@@ -42,7 +42,10 @@ human("Prisoner", 0, 1.0, 0.5, W, C("short02"), [C("male_casualsuit01"), C("shoe
       tints=(("male_casualsuit01", (0.78, 0.74, 0.62)),))
 human("President", 2, 1.0, 0.9, W, C("short04"), [C("male_elegantsuit01"), C("shoes02")],
       "old_caucasian_male/old_caucasian_male.mhmat", muscle=0.45, weight=0.5, height=0.62, brow="eyebrow003",
-      tints=(("male_elegantsuit01", (0.35, 0.35, 0.38)),))
+      tints=(("male_elegantsuit01", (0.35, 0.35, 0.38)), ("short04", (1.0, 1.0, 1.0))))
+for nd in bpy.data.objects["President.short04"].data.materials[0].node_tree.nodes:
+    if nd.type == 'MIX' and nd.data_type == 'RGBA':
+        nd.blend_type = 'MIX'; nd.inputs['Factor'].default_value = 0.72; nd.inputs['B'].default_value = (0.42, 0.41, 0.4, 1)
 human("Visitor", 4, 1.0, 0.62, {"asian": 0.02, "caucasian": 0.9, "african": 0.08}, "", [C("male_casualsuit05"), C("fedora01"), C("shoes03")],
       "middleage_caucasian_male/middleage_caucasian_male.mhmat", muscle=0.5, weight=0.6, height=0.5, brow="eyebrow002",
       tints=(("male_casualsuit05", (0.75, 0.62, 0.5)),))
@@ -56,6 +59,13 @@ human("CrowdB", 10, 1.0, 0.5, {"asian": 0.05, "caucasian": 0.85, "african": 0.1}
 human("CrowdC", 12, 1.0, 0.7, W, C("short03"), [C("male_elegantsuit01"), C("shoes02")],
       "old_caucasian_male/old_caucasian_male.mhmat", subdiv=0, height=0.55, weight=0.6,
       tints=(("male_elegantsuit01", (0.4, 0.33, 0.28)),))
+human("YardP1", 14, 1.0, 0.45, W, C("short03"), [C("male_casualsuit01"), C("shoes01")],
+      "young_caucasian_male/young_caucasian_male.mhmat", subdiv=0, height=0.55, tints=(("male_casualsuit01", (0.7, 0.68, 0.6)),))
+human("YardP2", 16, 1.0, 0.6, {"asian": 0.03, "caucasian": 0.87, "african": 0.1}, C("short01"), [C("male_casualsuit03"), C("shoes03")],
+      "middleage_caucasian_male/middleage_caucasian_male.mhmat", subdiv=0, height=0.5, tints=(("male_casualsuit03", (0.55, 0.55, 0.55)),))
+human("Guard2", 18, 1.0, 0.5, W, C("short02"), [C("male_elegantsuit01"), C("fedora_cocked"), C("shoes05")],
+      "middleage_caucasian_male/middleage_caucasian_male.mhmat", subdiv=0, muscle=0.6, weight=0.6, height=0.58,
+      tints=(("male_elegantsuit01", (0.35, 0.42, 0.7)), ("fedora_cocked", (0.25, 0.28, 0.36))))
 for ob in bpy.data.objects:
     if ob.type == 'ARMATURE':
         print("HUMAN", ob.name, [c.name for c in ob.children], tuple(round(d, 2) for d in ob.dimensions))

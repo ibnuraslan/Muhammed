@@ -33,7 +33,7 @@ POOL_M = Matrix.Translation(WAX.location) @ Matrix.Rotation(WAX.rotation_euler.z
 def key_on_wax(dz):
     M = POOL_M.copy(); M.translation = WAX.location + V(0, 0, 0.0035 + 0.003 + dz); return M
 K_HOLD = mat_from(V(1.0, 1.2, 1.17), V(0.25, 0.55, 0.8), V(-1, 0.2, 0.0))
-K_LOOK = mat_from(V(0.96, 1.3, 1.08), V(0.6, 0.2, 0.35), V(0, -0.3, 1))
+K_LOOK = mat_from(V(0.96, 1.22, 1.16), V(0.6, 0.2, 0.35), V(0, -0.3, 1))
 K_POCKET = mat_from(V(0.82, 1.08, 1.28), V(0, 0, -1), V(0, -1, 0))
 def km_path(f, base=0):
     f = f - base
@@ -58,7 +58,7 @@ def lhand_press(f):
     M = km_path(f); z = (M.to_3x3() @ V(0, 0, 1)).normalized(); x = (M.to_3x3() @ V(1, 0, 0)).normalized()
     return grip_hand(shaft(M) + z * 0.012 + x * 0.015, V(0.3, 1, -0.4), -z)
 P.hand_fn["L"].append((150, 252, lhand_press))
-TABLE_EDGE_L = V(0.62, 1.36, TABLE_Z + 0.03)
+TABLE_EDGE_L = V(0.66, 1.31, TABLE_Z + 0.03)
 LH_TABLE = grip_hand(TABLE_EDGE_L + V(0, 0.05, 0), V(0.1, 1, -0.1), V(0, 0, -1))
 P.k(1, root=STA, yaw=180, flex=8, sp_flex=14, h_pitch=18, h_yaw=0, sp_twist=0, cL=20, cR=55, hL=LH_TABLE)
 P.k(30, sp_twist=-10, h_yaw=-45, h_pitch=5, flex=6)                       # glance at the door
@@ -69,8 +69,9 @@ P.k(150, cL=30, cR=35)
 P.k(190, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, side=2)     # bear down
 P.k(232, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, side=-2)
 P.k(252, hL=LH_TABLE, cL=20)
-P.k(262, root=STA + V(0, 0.05, -0.04), flex=14, sp_flex=26, h_pitch=50, cR=55)
-P.k(300, root=STA + V(0, 0.0, 0.0), flex=6, sp_flex=12, h_pitch=20, h_yaw=10)
+P.k(262, root=STA + V(0, 0.06, -0.06), flex=18, sp_flex=30, h_pitch=50, cR=55)
+P.k(294, root=STA + V(0, 0.05, -0.04), flex=16, sp_flex=26, h_pitch=40)
+P.k(300, root=STA + V(0, 0.0, 0.0), flex=6, sp_flex=12, h_pitch=20, h_yaw=10, hL=HANG["L"], cL=15)
 P.k(345, h_yaw=-35, sp_twist=-8, h_pitch=8)                               # checks the door again
 P.k(380, h_yaw=-5, sp_twist=0, h_pitch=15, hR=B((-0.12, -0.2, 0.25), (0, 0, -1), (0, 1, 0)), cR=40)
 P.k(400, hR=HANG["R"], hL=HANG["L"], cL=15, cR=15, flex=4, sp_flex=8)
@@ -128,34 +129,40 @@ def km2(f):
     return km_path(g)
 # condensed second press: 1060-1195
 def km_b7(f):
-    if f <= 1075: return mlerp(K_POCKET, key_on_wax(0.05), ss(f, 1048, 1075))
-    if f <= 1090: return mlerp(key_on_wax(0.05), key_on_wax(0.0), ss(f, 1075, 1090))
-    if f <= 1130: return mlerp(key_on_wax(0.0), key_on_wax(-0.0042), ss(f, 1090, 1130))
-    if f <= 1142: return key_on_wax(-0.0042)
-    if f <= 1160: return mlerp(key_on_wax(-0.0042), K_LOOK, ss(f, 1142, 1160))
-    return mlerp(K_LOOK, K_POCKET, ss(f, 1160, 1180))
-bake_obj(KM, 1048, 1180, km_b7)
-key_hide(KM, [(1, False), (382, True), (1046, False), (1182, True)])
-P.hand_fn["R"].append((1048, 1180, lambda f: hand_on_key(km_b7(f), press=1075 <= f <= 1142)))
-P.hand_fn["L"].append((1090, 1138, lambda f: (lambda M: grip_hand(shaft(M) + (M.to_3x3() @ V(0, 0, 0.012)), V(0.3, 1, -0.4), -(M.to_3x3() @ V(0, 0, 1))))(km_b7(f))))
-P.k(1090, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, cR=35, cL=30)
-P.k(1138, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, hL=LH_TABLE)
+    if f <= 1112: return mlerp(K_POCKET, key_on_wax(0.05), ss(f, 1098, 1112))
+    if f <= 1122: return mlerp(key_on_wax(0.05), key_on_wax(0.0), ss(f, 1112, 1122))
+    if f <= 1150: return mlerp(key_on_wax(0.0), key_on_wax(-0.0042), ss(f, 1122, 1150))
+    if f <= 1158: return key_on_wax(-0.0042)
+    if f <= 1170: return mlerp(key_on_wax(-0.0042), K_LOOK, ss(f, 1158, 1170))
+    return mlerp(K_LOOK, K_POCKET, ss(f, 1170, 1180))
+bake_obj(KM, 1098, 1180, km_b7)
+key_hide(KM, [(1, False), (382, True), (1098, False), (1182, True)])
+P.hand_fn["R"].append((1098, 1180, lambda f: hand_on_key(km_b7(f), press=1112 <= f <= 1158)))
+P.hand_fn["L"].append((1122, 1156, lambda f: (lambda M: grip_hand(shaft(M) + (M.to_3x3() @ V(0, 0, 0.012)), V(0.3, 1, -0.4), -(M.to_3x3() @ V(0, 0, 1))))(km_b7(f))))
+P.k(1122, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, cR=35, cL=30)
+P.k(1156, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, hL=LH_TABLE)
 # hands the mould up through the window bars (1182-1215)
-WIN_C = V(0.80, 2.12, 2.05)
+WIN_C = V(0.80, 2.0, 1.83)
 def mold_up(f):
     A = Matrix.Translation(WAX.location + V(0, 0, 0.004))
-    Bm = Matrix.Translation(WIN_C + V(0, -0.1, -0.05)) @ Matrix.Rotation(R_(90), 4, 'X')
-    Cm = Matrix.Translation(WIN_C + V(0, 0.32, 0.0)) @ Matrix.Rotation(R_(90), 4, 'X')
+    Bm = Matrix.Translation(WIN_C + V(0, -0.12, 0.0)) @ Matrix.Rotation(R_(70), 4, 'X')
+    Cm = Matrix.Translation(WIN_C + V(0, 0.05, -0.08)) @ Matrix.Rotation(R_(10), 4, 'X')
+    Dm = Matrix.Translation(WIN_C + V(0, 0.45, -0.08)) @ Matrix.Rotation(R_(10), 4, 'X')
     if f <= 1200: return mlerp(A, Bm, ss(f, 1182, 1200))
-    return mlerp(Bm, Cm, ss(f, 1200, 1214))
-bake_obj(WAXM, 1182, 1214, mold_up)
-key_hide(WAXM, [(1, True), (330, False), (414, True), (1182, False), (1216, True)])
+    if f <= 1214: return mlerp(Bm, Cm, ss(f, 1200, 1214))
+    return mlerp(Cm, Dm, ss(f, 1236, 1250))     # taken from outside
+bake_obj(WAXM, 1182, 1252, mold_up)
+key_hide(WAXM, [(1, True), (330, False), (414, True), (1182, False), (1252, True)])
 key_hide(WAX, [(1, False), (1182, True)])
 key_hide(OB["WaxTin"], [(1, False), (1182, True)])
 P.hand_fn["R"].append((1182, 1214, lambda f: grip_hand(mold_up(f) @ V(0, 0.075, 0), V(0, 0.3, 1), V(0, 1, 0))))
-P.k(1182, root=STA + V(0, 0.02, 0), flex=6, sp_flex=8, h_pitch=-10, cR=45)
-P.k(1205, root=STA + V(-0.1, 0.12, 0.03), flex=2, sp_flex=-4, h_pitch=-38, sp_side=-4)   # stretching up to the window
-P.k(1222, root=STA + V(0, 0.03, 0), flex=4, sp_flex=6, h_pitch=-20, hR=HANG["R"], cR=15)
+P.k(1182, root=STA + V(0, 0.06, -0.06), flex=18, sp_flex=26, h_pitch=30, cR=45)
+P.k(1192, root=V(0.88, 1.1, 0.97), flex=26, sp_flex=18, h_pitch=-10)
+P.k(1205, root=V(0.86, 1.17, 1.0), flex=40, sp_flex=16, h_pitch=-35, sp_side=-4, hL=grip_hand(V(0.7, 1.45, TABLE_Z + 0.02), V(0, 1, -0.2), V(0, 0, -1)))   # leans over the table to the sill
+P.k(1214, root=V(0.86, 1.18, 1.0), flex=42, sp_flex=18, h_pitch=-40)
+P.k(1228, root=STA + V(0, 0.03, 0), flex=6, sp_flex=6, h_pitch=-20, hR=HANG["R"], cR=15, hL=HANG["L"])
+for i, s in enumerate("LR"):
+    P.plant(s, 1186 + i * 6, 1198 + i * 6, P.h.foot_xy(s, V(0.86, 1.1, 0), 180), 180, 0.05)
 # sits on the stool to wait (1235-1290), gets up (1290-1305)
 STOOL = OB["painted_wooden_stool"]
 SIT = V(0.3, 1.0, 0.70)
@@ -165,10 +172,10 @@ STOOL.location = (SIT.x - _c.x - 0.04, SIT.y - _c.y, 0)
 SIT.z = max(c.z for c in _bb) + 0.11
 P.k(1240, root=STA + V(-0.25, -0.05, -0.05), yaw=150, flex=10, sp_flex=14, h_pitch=15)
 P.k(1258, root=SIT, yaw=110, flex=-2, sp_flex=38, h_pitch=35, h_yaw=10,
-    hL=B((0.1, -0.42, -0.25), (-0.4, -0.3, -1), (-1, 0, 0)), hR=B((-0.1, -0.42, -0.25), (0.4, -0.3, -1), (1, 0, 0)), cL=35, cR=35)
+    hL=B((0.12, -0.36, -0.12), (-0.4, -0.3, -1), (-1, 0, 0)), hR=B((-0.12, -0.36, -0.12), (0.4, -0.3, -1), (1, 0, 0)), cL=35, cR=35)
 P.k(1285, root=SIT + V(0, 0, 0.0), sp_flex=42, h_pitch=45, h_yaw=-8)
 for s, o_ in (("L", 0.13), ("R", -0.13)):
-    P.plant(s, 1228 + (s == "R") * 8, 1244 + (s == "R") * 8, P.h.foot_xy(s, V(0.42, 0.72, 0), 110) , 110)
+    P.plant(s, 1232 + (s == "R") * 8, 1248 + (s == "R") * 8, P.h.foot_xy(s, V(0.42, 0.72, 0), 110) , 110)
 P.k(1300, root=STA + V(0.2, 0.01, -0.02), yaw=180, flex=12, sp_flex=18, h_pitch=35, hL=LH_TABLE, cL=20, hR=HANG["R"])
 STB = STA + V(0.24, 0.0, 0.0)   # in front of the cake
 for i, s in enumerate("LR"):
@@ -193,7 +200,7 @@ for o_, sg in ((C2L, 1), (C2R, -1)):
     o_.rotation_euler = (0, 0, 0); o_.keyframe_insert("rotation_euler", frame=1332)
 key_hide(C2L, [(1, True), (1250, False)]); key_hide(C2R, [(1, True), (1250, False)])
 K2_IN = mat_from(CAKE2_P + V(0, 0, 0.05), V(0, 0.05, -1), V(1, 0, 0))
-K2_UP = mat_from(CAKE2_P + V(0.0, -0.1, 0.25), V(0.5, 0.3, 0.8), V(0, -1, 0.3))
+K2_UP = mat_from(V(1.18, 1.2, 1.15), V(0.5, 0.3, 0.8), V(0, -1, 0.3))
 def k2_path(f):
     if f <= 1346: return K2_IN
     if f <= 1370: return mlerp(K2_IN, K2_UP, ss(f, 1346, 1370))
@@ -208,6 +215,7 @@ P.hand_fn["R"].append((1371, 1432, lambda f: hand_lock(k2_path(f)) if f > 1398 e
 P.k(1312, root=STB + V(0, 0.05, -0.04), flex=16, sp_flex=26, h_pitch=45, cR=60, hL=grip_hand(CAKE2_P + V(-0.13, 0, 0.07), V(1, 0.3, -0.5), V(1, 0, 0)), cL=30)
 P.k(1330, root=STB + V(0, 0.07, -0.07), flex=20, sp_flex=32)
 P.k(1346, hL=grip_hand(CAKE2_P + V(-0.16, 0, 0.07), V(1, 0.3, -0.5), V(1, 0, 0)), h_pitch=48)
+P.k(1354, root=STB + V(0, 0.08, -0.08), flex=22, sp_flex=32)
 P.k(1360, root=STB + V(0, 0.02, 0), flex=8, sp_flex=12, h_pitch=20, hL=HANG["L"], cR=55)
 # steps to the door (1370-1400)
 for i, s in enumerate("RL"):
@@ -224,9 +232,9 @@ for f in list(range(1, 1433, 400)) + list(range(1432, 1891, 2)):
 for f, dy in ((1, 0.0), (1418, 0.0), (1428, -0.15)):
     BOLT.location = (0, dy, 0); BOLT.keyframe_insert("location", frame=f)
 P.k(1436, flex=10, cR=15, hR=HANG["R"])
-P.k(1452, flex=12)
+P.k(1452, flex=8, hL=HANG["L"], cL=15)
 def door_M(f): return Matrix.Translation(DP.location) @ Matrix.Rotation(R_(DANG(f)), 4, 'Z')
-P.hand_fn["L"].append((1430, 1458, lambda f: grip_hand(door_M(f) @ V(0.62, 0.05, 1.28), door_M(f).to_3x3() @ V(0, 0, 1), door_M(f).to_3x3() @ V(0, -1, 0))))
+P.hand_fn["L"].append((1430, 1442, lambda f: grip_hand(door_M(f) @ V(0.62, 0.05, 1.28), door_M(f).to_3x3() @ V(0, 0, 1), door_M(f).to_3x3() @ V(0, -1, 0))))
 # ---- beat 9: walks out through the corridor gates and the yard (1456-1890)
 WALK9 = [(1.55, 0.55), (2.25, 0.3), (3.0, 0.12), (5.0, 0.1), (7.2, 0.1), (7.45, 0.6), (7.6, 1.8), (8.6, 3.8), (9.7, 5.5), (10.6, 6.0), (12.6, 6.05)]
 pth9, yfn9 = P.walk(1456, 1890, WALK9, stride=0.9, lean=7)
@@ -271,9 +279,11 @@ for f, a in ((1, 90), (440, 90), (500, 5), (900, 5), (960, 90), (1760, 90), (180
     YGL.rotation_euler = (0, 0, R_(180 - a)); YGL.keyframe_insert("rotation_euler", frame=f)
 def gate_bar(f):
     return YGR.matrix_world @ V(0.85, 0, 1.15)
-G.k(420, yaw=150, h_yaw=-20, hR=grip_hand(V(10.12, 5.85, 1.15), V(0.2, 0, 1), V(1, 0, 0)), cR=55, sp_twist=-8)
+G.k(400, hR=HANG["R"])
+G.k(430, yaw=150, h_yaw=-20, hR=B((-0.32, -0.42, 0.28), (-0.2, -1, 0.1), (0, 0, -1)), cR=5, sp_twist=-8)   # waves him through
 G.k(440, root=GST + V(0.15, 0.15, 0), yaw=140)
 G.k(500, root=GST + V(0.55, 0.35, -0.02), yaw=120, flex=6, sp_twist=-10, h_yaw=-30)
+G.k(470, hR=B((-0.36, -0.35, 0.2), (-0.6, -1, 0.1), (0, 0, -1)))
 G.k(530, hR=HANG["R"], cR=15, sp_twist=0, h_yaw=-15)
 for i, s in enumerate("RL"):
     G.plant(s, 440 + i * 14, 458 + i * 14, G.h.foot_xy(s, GST + V(0.3, 0.25, 0), 140), 140)
@@ -296,8 +306,9 @@ for i, s in enumerate("LR"):
 G.k(1560, h_pitch=34, h_yaw=-5)     # stirs as the gate clangs
 G.k(1600, h_pitch=42, h_yaw=10)
 G.breath = 2.5
-G.hand_fn["L"].append((842, 1000, lambda f: grip_hand(box_m(f) @ V(-0.16, 0, 0.06), box_m(f).to_3x3() @ V(0.2, 1, -0.3), box_m(f).to_3x3() @ V(1, 0, 0))))
-G.hand_fn["R"].append((842, 1000, lambda f: grip_hand(box_m(f) @ V(0.16, 0, 0.06), box_m(f).to_3x3() @ V(-0.2, 1, -0.3), box_m(f).to_3x3() @ V(-1, 0, 0))))
+exec(open(os.path.join(HERE, "03b_life.py")).read())
+G.hand_fn["L"].append((842, 1000, lambda f: grip_hand(box_m(f) @ V(0.16, 0, 0.06), box_m(f).to_3x3() @ V(-0.2, -1, -0.3), box_m(f).to_3x3() @ V(-1, 0, 0))))
+G.hand_fn["R"].append((842, 1000, lambda f: grip_hand(box_m(f) @ V(-0.16, 0, 0.06), box_m(f).to_3x3() @ V(0.2, -1, -0.3), box_m(f).to_3x3() @ V(1, 0, 0))))
 pg2, yg2 = G.walk(858, 1000, [(13.9, 6.15), (12.6, 6.0), (11.0, 6.0), (9.4, 5.6)], stride=0.75)
 end_walk(G, 1000, pg2, yg2)
 G.k(852, yaw=90, root=V(13.9, 6.15, 0.99), cL=50, cR=50)
@@ -309,11 +320,11 @@ G.compile()
 A = Actor("CrowdB")
 AST = V(14.3, 6.4, 0.99)
 A.stand(1, AST, 180)
-CRU = OB["Crucible"]
+CRU = OB["Crucible"]; CAKE1_P = OB["Cake1"].location.copy()
 def cru(f):
     up = Matrix.Translation(V(14.65, 7.08, 1.22))
     tilt = Matrix.Translation(V(14.65, 7.08, 1.14)) @ Matrix.Rotation(R_(75), 4, 'X')
-    rest = Matrix.Translation(V(14.25, 7.2, BENCH_Z + 0.08))
+    rest = Matrix.Translation(V(14.62, 7.25, BENCH_Z + 0.08))
     if f <= 515: return mlerp(up, tilt, ss(f, 480, 515))
     if f <= 598: return tilt @ Matrix.Rotation(R_(3 * math.sin(f / 5.0)), 4, 'X')
     if f <= 625: return mlerp(tilt, up, ss(f, 598, 625))
@@ -327,7 +338,8 @@ A.hand_fn["R"].append((470, 650, lambda f: shank_grip(f, -0.5)))
 A.k(1, root=AST, yaw=180, flex=8, sp_flex=16, h_pitch=35, cL=60, cR=60, hL=HANG["L"], hR=HANG["R"])
 A.k(500, root=AST + V(0, 0.03, -0.03), flex=12, sp_flex=22, h_pitch=40, side=-3)
 A.k(598, root=AST + V(0, 0.04, -0.04), flex=14, sp_flex=24)
-A.k(650, root=AST + V(-0.05, 0.02, -0.03), flex=12)
+A.k(640, root=AST + V(0.05, 0.08, -0.05), flex=18, sp_flex=26)
+A.k(650, root=AST + V(-0.0, 0.05, -0.04), flex=14)
 # pour stream: bezier from the crucible lip to the sprue, keyed by hide + bevel
 pour = OB["PourStream"]; sp = pour.data.splines[0]
 SPRUE = MOULD_P + V(0, 0, 0.123)
@@ -390,15 +402,15 @@ for i, s in enumerate("RL"):
     A.plant(s, 698 + i * 10, 714 + i * 10, A.h.foot_xy(s, AST2 - V(0.25, 0, 0), 180), 180)
 K_CAST = CAST.matrix_world.copy()
 def k1_cake(f):
-    above = mat_from(OB["Cake1"].location + V(0.0, 0.0, 0.2), V(0, 0.1, -1), V(1, 0, 0))
-    inside = mat_from(OB["Cake1"].location + V(0.0, 0.0, 0.04), V(0, 0.1, -1), V(1, 0, 0))
+    above = mat_from(CAKE1_P + V(0.0, 0.0, 0.2), V(0, 0.1, -1), V(1, 0, 0))
+    inside = mat_from(CAKE1_P + V(0.0, 0.0, 0.04), V(0, 0.1, -1), V(1, 0, 0))
     if f <= 730: return K_CAST
     if f <= 750: return mlerp(K_CAST, above, ss(f, 730, 750))
     return mlerp(above, inside, ss(f, 750, 772))
 bake_obj(K1, 728, 772, k1_cake)
 key_hide(K1, [(1, True), (730, False), (775, True), (845, False), (1044, True)])
 A.hand_fn["R"].append((728, 772, lambda f: grip_hand(k1_cake(f) @ V(-0.05, 0, 0), k1_cake(f).to_3x3() @ V(1, 0, 0), k1_cake(f).to_3x3() @ V(0, 1, 0))))
-A.k(726, root=AST2 - V(0.25, 0.0, 0.02), flex=12, sp_flex=22, h_pitch=40, hL=grip_hand(OB["Cake1"].location + V(-0.12, 0, 0.06), V(1, 0.3, -0.4), V(1, 0, 0)), cL=30, cR=55)
+A.k(726, root=AST2 - V(0.25, -0.06, 0.05), flex=18, sp_flex=28, h_pitch=40, hL=grip_hand(CAKE1_P + V(-0.12, 0, 0.06), V(1, 0.3, -0.4), V(1, 0, 0)), cL=30, cR=55)
 A.k(772, root=AST2 - V(0.2, -0.03, 0.05), flex=16, sp_flex=26)
 # cake into the box (776-798), lid (800-812), lift (814-828), turn to the guard and hand over (828-852)
 CK = OB["Cake1"]; CK0 = CK.matrix_world.copy(); PB = OB["ParcelBox"]; PB0 = PB.matrix_world.copy(); LID = OB["ParcelBox_Lid"]; LID0 = LID.matrix_world.copy()
@@ -433,9 +445,13 @@ A.hand_fn["R"].append((776, 798, lambda f: grip_hand(cake_m(f) @ V(0.12, 0, 0.05
 A.hand_fn["R"].append((798, 813, lambda f: grip_hand(lid_m(f) @ V(0.0, 0.0, 0.03), V(0, 1, -0.3), V(0, 0, -1))))
 A.hand_fn["L"].append((814, 852, lambda f: grip_hand(box_m(f) @ V(-0.16, 0, 0.06), box_m(f).to_3x3() @ V(0.2, 1, -0.3), box_m(f).to_3x3() @ V(1, 0, 0))))
 A.hand_fn["R"].append((814, 852, lambda f: grip_hand(box_m(f) @ V(0.16, 0, 0.06), box_m(f).to_3x3() @ V(-0.2, 1, -0.3), box_m(f).to_3x3() @ V(-1, 0, 0))))
-A.k(798, root=AST2 - V(0.0, 0.0, 0.04), flex=14, sp_flex=24, hL=HANG["L"], cL=20)
+AST3 = V(15.42, 6.42, 0.99)
+for i, s in enumerate("RL"):
+    A.plant(s, 780 + i * 8, 794 + i * 8, A.h.foot_xy(s, AST3, 180), 180, 0.05)
+A.k(790, root=(AST2 + AST3) / 2 - V(0, 0, 0.03), flex=12, sp_flex=20)
+A.k(798, root=AST3 - V(0.0, 0.0, 0.04), flex=14, sp_flex=24, hL=HANG["L"], cL=20)
 A.k(812, cL=50, cR=50)
-A.k(828, root=AST2 - V(0.05, 0.05, 0.0), yaw=200, flex=6, sp_flex=10, h_pitch=20)
+A.k(828, root=AST3 - V(0.15, 0.05, 0.0), yaw=200, flex=6, sp_flex=10, h_pitch=20)
 A.k(852, root=V(14.85, 6.3, 0.99), yaw=260, flex=8, sp_flex=10, h_pitch=10, h_yaw=0)
 A.k(870, hL=HANG["L"], hR=HANG["R"], cL=15, cR=15, flex=2, sp_flex=4, h_pitch=0, h_yaw=-15)
 for i, s in enumerate("LR"):
@@ -492,6 +508,7 @@ for a in CROWD: key_hide(a, [(1, True), (1730, False)])
 for o_ in bpy.data.collections["Gov"].objects:
     if o_.parent is None: key_hide(o_, [(1, True), (1730, False)])
 key_hide(OB["Visitor"], [(1, False), (900, True)])
+key_hide(OB["Guard"], [(1, False), (1012, True), (1299, False)])
 key_hide(OB["CrowdB"], [(1, True), (420, False), (900, True)])
 
 # ================================================================== candle burn-down, flicker; lights + world time of day
@@ -508,7 +525,7 @@ for f in range(1, 1891, 3):
     FL.scale = (1.0, 1.0, 0.85 + 0.25 * n); FL.rotation_euler = (random.uniform(-0.08, 0.08), random.uniform(-0.08, 0.08), 0)
     FL.keyframe_insert("scale", frame=f); FL.keyframe_insert("rotation_euler", frame=f)
 wax_sk = WAX.data.shape_keys.key_blocks["Imprint"]
-for f, v in ((1, 0.0), (150, 0.0), (230, 1.0), (1000, 1.0), (1001, 0.0), (1090, 0.0), (1130, 1.0)):
+for f, v in ((1, 0.0), (150, 0.0), (230, 1.0), (1000, 1.0), (1001, 0.0), (1122, 0.0), (1150, 1.0)):
     wax_sk.value = v; wax_sk.keyframe_insert("value", frame=f)
 bs_w = bpy.data.materials["M_Wax"].node_tree.nodes["Principled BSDF"]
 for f, r in ((1, 0.08), (250, 0.1), (330, 0.45), (1000, 0.45), (1001, 0.08), (1180, 0.4)):

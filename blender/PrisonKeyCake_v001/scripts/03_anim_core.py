@@ -80,6 +80,15 @@ class Actor:
         self.o = bpy.data.objects[name]; self.r = make_human_ctrl(self.o); self.h = Human(self.r)
         self.keys = []; self.walks = []; self.feet = {"L": [], "R": []}; self.hand_fn = {"L": [], "R": []}
         self.breath = 1.0; self.name = name
+        self.dz = (self.h.root_head.z - 0.035) - 0.99      # root z 0.99 in the keys means 'standing' for every actor
+        sh = [c for c in self.o.children if "shoes" in c.name]
+        if sh:
+            for s_ in "LR":
+                a = self.h.ankle[s_]
+                lo = min((v.co.z for v in sh[0].data.vertices if (v.co.xy - a.xy).length < 0.15), default=0.0)
+                self.sole = max(getattr(self, "sole", 0.0), max(0.0, -lo) + 0.003)
+            _kf = self.h.key_foot
+            self.h.key_foot = lambda s_, f_, xy_, yaw_, lift_=0.0, pitch_=0.0: _kf(s_, f_, xy_, yaw_, lift_ + self.sole, pitch_)
     def k(self, f, **kw):
         self.keys.append((f, kw)); return self
     def walk(self, f0, f1, pts, stride=0.8, speed_curve=None, lean=6.0, yaw_override=None):
@@ -130,7 +139,7 @@ class Actor:
         self.full = full
         self.T = {}
         for ch in ("root",) + CH_S:
-            ks = [(f, d[ch]) for f, d in full]
+            ks = [(f, (d[ch] + Vector((0, 0, self.dz))) if ch == "root" else d[ch]) for f, d in full]
             self.T[ch] = track(ks)
         # hands: (W, d, n) in world or ('B', W, d, n) body-relative; convert at key frames
         for s in "LR":
@@ -202,7 +211,7 @@ def grip_hand(G, d, n):
 def B(W, d, n):
     return ('B', Vector(W), Vector(d), Vector(n))
 
-HANG = {"L": B((0.21, 0.02, -0.17), (0.0, -0.05, -1), (-1, 0, 0)), "R": B((-0.21, 0.02, -0.17), (0.0, -0.05, -1), (1, 0, 0))}
+HANG = {"L": B((0.24, 0.0, -0.04), (0.05, -0.1, -1), (-1, 0, 0)), "R": B((-0.24, 0.0, -0.04), (-0.05, -0.1, -1), (1, 0, 0))}
 
 def arm_swing(actor, f0, f1, path, amp=0.11):
     """body-relative hand keys every 6 frames, opposite to the legs"""
@@ -211,5 +220,5 @@ def arm_swing(actor, f0, f1, path, amp=0.11):
         p = path(f); dist += (p - prev).to_2d().length; prev = p
         c = math.sin(2 * math.pi * dist / (2 * stride) * 2)
         for s, sg in (("L", 1), ("R", -1)):
-            x = 0.21 if s == "L" else -0.21
-            actor.k(f, **{"h" + s: B((x, 0.02 - amp * sg * c, -0.17 + 0.03 * abs(c)), (0, -0.25 * sg * c, -1), (-1 if s == "L" else 1, 0, 0))})
+            x = 0.24 if s == "L" else -0.24
+            actor.k(f, **{"h" + s: B((x, 0.0 - amp * sg * c, -0.05 + 0.03 * abs(c)), (0, -0.25 * sg * c, -1), (-1 if s == "L" else 1, 0, 0))})

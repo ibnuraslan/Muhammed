@@ -1,0 +1,15 @@
+CONTACT Prisoner 73 issues
+    IK_hand.L unreachable 1-73(0.06) 1099-1101(0.06) 1295-1303(0.07) 1399-1403(0.03) 1423-1429(0.04)
+    IK_hand.R unreachable 297-309(0.10) 1183-1183(0.05) 1197-1213(0.14) 1297-1301(0.16)
+    IK_foot.R unreachable 1295-1297(0.06)
+CONTACT Visitor 34 issues
+    IK_hand.R unreachable 397-409(0.07) 479-479(0.03) 503-505(0.04) 527-529(0.03) 553-553(0.03) 577-577(0.03) 603-603(0.03) 629-629(0.03) 653-653(0.03) 677-679(0.03) 703-703(0.03) 727-727(0.03)
+    IK_hand.L unreachable 491-491(0.03) 515-517(0.03) 539-541(0.03) 565-565(0.04) 589-591(0.03) 641-641(0.03) 665-667(0.03) 691-691(0.04) 715-715(0.03)
+CONTACT CrowdB 12 issues
+    IK_hand.R unreachable 639-649(0.12) 729-731(0.05) 799-799(0.04)
+    IK_hand.L unreachable 827-831(0.08)
+CONTACT Guard 297 issues
+    IK_hand.L unreachable 843-843(0.14) 1299-1889(0.04)
+CONTACT Guard2 21 issues
+    IK_hand.L unreachable 1539-1559(0.16) 1773-1791(0.14)
+CONTACT done

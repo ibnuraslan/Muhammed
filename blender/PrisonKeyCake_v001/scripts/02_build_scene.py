@@ -85,7 +85,7 @@ M_FLOOR = world_mat("stone_floor", 0.55, tint=(0.75, 0.72, 0.68), name="M_CellFl
 M_RUST = world_mat("rusty_metal", 4.0, name="M_Rust")
 M_WOOD = world_mat("wood_planks", 0.7, name="M_Planks")
 M_SAND = world_mat("sand_01", 3.0, tint=(0.45, 0.33, 0.24), name="M_MouldSand")
-M_SANDST = world_mat("large_sandstone_blocks", 0.35, tint=(0.92, 0.9, 0.86), name="M_Sandstone")
+M_SANDST = world_mat("large_sandstone_blocks", 0.35, tint=(1.35, 1.28, 1.15), name="M_Sandstone")
 M_WBRICK = world_mat("castle_brick_01", 0.6, tint=(0.75, 0.55, 0.42), name="M_ShopBrick")
 M_IRON = flat_mat("M_Iron", (0.05, 0.05, 0.05), 0.45, 1.0)
 M_WAX = flat_mat("M_Wax", (0.82, 0.74, 0.55), 0.12)
@@ -104,7 +104,7 @@ M_WHITE = flat_mat("M_FlagW", (0.85, 0.85, 0.82), 0.75)
 M_ORANGE = flat_mat("M_FlagO", (0.85, 0.36, 0.06), 0.75)
 M_DARK = flat_mat("M_Dark", (0.01, 0.01, 0.01), 0.9)
 M_FURN = flat_mat("M_FurnaceMouth", (1, 0.4, 0.1), 0.5, emit=(1.0, 0.38, 0.08), estr=25)
-M_GLASS = flat_mat("M_Window", (0.6, 0.7, 0.8), 0.05, emit=(0.6, 0.7, 0.85), estr=0.6)
+M_GLASS = flat_mat("M_Window", (0.05, 0.06, 0.07), 0.08, 0.3)
 M_BRASS = flat_mat("M_Brass", (0.6, 0.42, 0.18), 0.3, 1.0)
 M_POLE = flat_mat("M_Pole", (0.75, 0.72, 0.65), 0.4, 0.6)
 
@@ -200,7 +200,7 @@ door_piv.location = (2.1, DOOR[0] + 0.01, 0.0); door_piv.rotation_euler = (0, 0,
 dl.parent = door_piv; dl.location = (0, 0, 0); dl.rotation_euler = (0, 0, 0); dl.name = "CellDoor"
 bpy.context.view_layer.update()
 LOCK_C = Vector((2.03, 0.62, 1.08))   # lock box centre, inside face
-lk = box("CellLock", (-0.025, -0.11, -0.08), (0.025, 0.11, 0.08), M_RUST, c="Cell", bevel=0.004)
+lk = box("CellLock", (-0.025, -0.11, -0.08), (0.025, 0.11, 0.08), world_mat("rusty_metal", 14.0, tint=(0.45, 0.42, 0.4), name="M_LockIron"), c="Cell", bevel=0.004)
 kh = box("CellLock_Keyhole", (-0.028, -0.006, -0.02), (-0.024, 0.006, 0.012), M_DARK, c="Cell")
 for o in (lk, kh):
     o.parent = door_piv; o.matrix_parent_inverse = door_piv.matrix_world.inverted()
@@ -392,6 +392,7 @@ for i, (x, y) in enumerate(((-8.8, 4.2), (-8.2, 4.6), (-8.9, 5.2), (8.9, 14.5), 
 for i, (x, y, s) in enumerate(((-9.2, 12.0, 0.6), (-8.5, 12.1, 0.5), (-9.1, 12.2, 0.45))):
     box(f"Yard_Crate{i}", (x - s / 2, y - s / 2, (i == 2) * 0.6), (x + s / 2, y + s / 2, (i == 2) * 0.6 + s), M_WOOD, c="Yard", bevel=0.01)
 cyl("Line_PoleA", (-7.5, 6.0, 1.2), 0.04, 2.4, M_WOOD, c="Yard"); cyl("Line_PoleB", (-3.5, 9.5, 1.2), 0.04, 2.4, M_WOOD, c="Yard")
+_ln = cyl("Line_Rope", (-5.5, 7.75, 2.27), 0.006, 5.32, flat_mat("M_Rope", (0.5, 0.45, 0.35), 0.9), c="Yard", verts=6, axis='Y'); _ln.rotation_euler = (0, 0, -math.atan2(4.0, 3.5))
 LAUNDRY = []
 for i in range(5):
     t = (i + 0.5) / 5; p = Vector((-7.5, 6.0, 2.25)).lerp(Vector((-3.5, 9.5, 2.25)), t)
@@ -399,7 +400,7 @@ for i in range(5):
     bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(f"Laundry{i}", me); coll("Yard").objects.link(o)
     o.location = p - Vector((0, 0, 0.3)); o.rotation_euler = (R_(90), 0, math.atan2(3.5, 4.0)); o.scale = (1.0, 1.2 + 0.2 * (i % 2), 1)
-    me.materials.append(M_CLOTH if i % 2 else bpy.data.materials["M_Blanket"])
+    me.materials.append([M_CLOTH, bpy.data.materials["M_Blanket"], flat_mat("M_Shirt%d" % i, (0.55, 0.5, 0.42), 0.85)][i % 3])
     wv = o.modifiers.new("wave", 'WAVE'); wv.height = 0.03; wv.width = 0.25; wv.speed = 0.012 + 0.003 * i; wv.use_normal = True; wv.use_x = True; wv.use_y = False
     LAUNDRY.append(o)
 for i, (x, y) in enumerate(((-4.0, 15.0), (4.0, 15.0), (8.8, 8.8))):
@@ -577,7 +578,7 @@ for side in (-1, 1):
 
 # ================================================================== LIGHT + WORLD
 sun = bpy.data.lights.new("L_Sun", 'SUN'); sun.energy = 2.5; sun.angle = R_(8); sun.color = (1.0, 0.95, 0.88)
-so = bpy.data.objects.new("L_Sun", sun); sc.collection.objects.link(so); so.rotation_euler = (R_(50), R_(10), R_(150))
+so = bpy.data.objects.new("L_Sun", sun); sc.collection.objects.link(so); so.rotation_euler = (R_(50), R_(10), R_(-25))
 moon = bpy.data.lights.new("L_Moon", 'SUN'); moon.energy = 0.0; moon.angle = R_(2); moon.color = (0.55, 0.68, 1.0)
 mo = bpy.data.objects.new("L_Moon", moon); sc.collection.objects.link(mo); mo.rotation_euler = (R_(55), 0, R_(200))
 wl = bpy.data.lights.new("L_Window", 'AREA'); wl.energy = 30; wl.size = 0.7; wl.size_y = 0.6; wl.shape = 'RECTANGLE'; wl.color = (0.75, 0.82, 1.0)
