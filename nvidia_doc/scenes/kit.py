@@ -13,7 +13,7 @@ import bpy, bmesh
 from mathutils import Vector, Matrix
 from common import reset, nodes_of, world_flat, world_sky, sun, area_light, camera, point_at, ease, lerp
 
-RES = (1920, 1080)
+RES = (1920, 816)          # 2.35:1 scope, matching the reference
 
 
 # ============================================================================ materials
@@ -267,6 +267,11 @@ def window_material(name, lit=(1.0, 0.82, 0.55), density=0.45, floor=3.6, bay=2.
     fon = N.new("ShaderNodeMath"); fon.operation = 'GREATER_THAN'; fon.inputs[1].default_value = 0.55; L.new(fwn.outputs['Value'], fon.inputs[0])
     keep = N.new("ShaderNodeMath"); keep.operation = 'SUBTRACT'; keep.inputs[0].default_value = 1.0; L.new(m2.outputs[0], keep.inputs[1])
     lit0 = N.new("ShaderNodeMath"); lit0.operation = 'MULTIPLY'; L.new(on.outputs[0], lit0.inputs[0]); L.new(fon.outputs[0], lit0.inputs[1])
+    # no windows on roofs / floors (faces whose normal points up or down)
+    nza = N.new("ShaderNodeMath"); nza.operation = 'ABSOLUTE'; L.new(nsep.outputs[2], nza.inputs[0])
+    wall = N.new("ShaderNodeMath"); wall.operation = 'LESS_THAN'; wall.inputs[1].default_value = 0.5; L.new(nza.outputs[0], wall.inputs[0])
+    lit0b = N.new("ShaderNodeMath"); lit0b.operation = 'MULTIPLY'; L.new(lit0.outputs[0], lit0b.inputs[0]); L.new(wall.outputs[0], lit0b.inputs[1])
+    lit0 = lit0b
     lit_on = N.new("ShaderNodeMath"); lit_on.operation = 'MULTIPLY'; L.new(lit0.outputs[0], lit_on.inputs[0]); L.new(keep.outputs[0], lit_on.inputs[1])
     var = N.new("ShaderNodeMath"); var.operation = 'MULTIPLY_ADD'; var.inputs[1].default_value = 0.8; var.inputs[2].default_value = 0.4
     wn2 = N.new("ShaderNodeTexWhiteNoise"); wn2.noise_dimensions = '3D'; L.new(fl.outputs[0], wn2.inputs['Vector'])

@@ -20,6 +20,8 @@ mod = importlib.import_module("sc_" + scene_name)
 s = reset(res=kit.RES, samples=SAMPLES, exposure=getattr(mod, "EXPOSURE", 0.0))
 if "--lowres" in sys.argv:
     s.render.resolution_percentage = 33
+if "--pct" in sys.argv:
+    s.render.resolution_percentage = arg('--pct', 100)
 s.cycles.max_bounces = getattr(mod, "BOUNCES", 8)
 variant = getattr(mod, "VARIANT_FOR", {}).get(move, None)
 ctx = mod.build(variant)
@@ -45,4 +47,7 @@ else:
     s.render.filepath = os.path.join(OUT, "plate.png"); bpy.ops.render.render(write_still=True)
     if "--plate" in sys.argv:
         kit.render_depth(os.path.join(OUT, "depth.png"), far=spec.get("far", 60.0))
+    if hasattr(mod, "screen_corners"):
+        import json
+        json.dump(dict(corners=mod.screen_corners(ctx, s, cam)), open(os.path.join(OUT, "screen.json"), "w"))
     print("[plate]", OUT, flush=True)
