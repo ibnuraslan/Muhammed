@@ -151,7 +151,7 @@ def long_skirt(rig, rgb, flare=0.12, hem_z=0.03, shin=1.0, wrap_low=0.0):
     nt.links.new(wv.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], p.inputs["Normal"])
     me.materials.append(m)
     return ob
-long_skirt(bpy.data.objects["Teacher"], (0.06, 0.07, 0.12), flare=0.08, shin=1.0, wrap_low=0.8)
+long_skirt(bpy.data.objects["Teacher"], (0.06, 0.07, 0.12), flare=0.04, shin=1.0, wrap_low=1.0)
 long_skirt(bpy.data.objects["Mother"], (0.17, 0.05, 0.06))
 long_skirt(bpy.data.objects["Girl"], (0.07, 0.13, 0.28), flare=0.07, hem_z=0.2)
 

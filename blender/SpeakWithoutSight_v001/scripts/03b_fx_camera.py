@@ -297,29 +297,29 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (1, V(-2.65, -2.3, 2.55), V(0.2, 0.7, 0.75), 16), (60, V(-1.9, -2.25, 1.7), V(0.2, 0.5, 0.75), 18),
     (120, V(1.55, -1.55, 0.32), lambda f: dogh(f).lerp(gface(f), 0.4), 20),
     (163, V(0.95, -1.25, 0.95), gface, 24), (225, lambda f: gface(f) + V(0.32, -0.62, 0.02), gface, 35),
-    (290, lambda f: geye(f) + V(0.1, -0.3, 0.01), geye, 50), (350, V(0.95, -1.6, 1.3), V(0.2, 0.4, 0.9), 24),
+    (290, lambda f: gface(f) + V(0.16, -0.34, 0.0), gface, 45), (350, V(0.95, -1.6, 1.3), V(0.2, 0.4, 0.9), 24),
     (397, V(0.65, -2.1, 1.45), V(-0.35, 0.1, 0.85), 22), (460, lambda f: pair(f) + V(0.05, -1.15, 0.0), pair, 26),
     (530, lambda f: tthroat(f) + V(0.32, -0.38, -0.05), tthroat, 40),
-    (595, lambda f: tthroat(f) + TRw * 0.32 - TFw * 0.05 + V(0, 0, -0.2), tmouth, 30),
+    (595, lambda f: tthroat(f) + TRw * 0.46 - TFw * 0.12 + V(0, 0, -0.12), tmouth, 30),
     (655, lambda f: tmouth(f) + TRw * 0.48 - TFw * 0.06 + V(0, 0, -0.02), tmouth, 40),
     (697, lambda f: tthroat(f) + TRw * 0.4 - TFw * 0.05 + V(0, 0, -0.03), tthroat, 45),
     (760, lambda f: gtip(f) + TRw * 0.38 - TFw * 0.08 + V(0, 0, 0.02), gtip, 50),
     (830, lambda f: gelbow(f).lerp(gtip(f), 0.5) + TRw * 0.42 - TFw * 0.12 + V(0, 0, -0.04), lambda f: gelbow(f).lerp(gtip(f), 0.45), 38),
     (895, lambda f: pair(f) + V(0.25, -0.95, 0.15), lambda f: tthroat(f).lerp(gtip(f), 0.5), 28),
     (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.5 - TFw * 0.15 + V(0.0, 0, 0.0), lambda f: tthroat(f).lerp(gtip(f), 0.5), 40),
-    (1063, lambda f: tmouth(f) + TRw * 0.42 + V(0, 0, 0.07), tmouth, 35),
+    (1063, lambda f: tmouth(f) + TRw * 0.46 - TFw * 0.1 + V(0, 0, 0.02), tmouth, 35),
     (1125, lambda f: tmouth(f) + TRw * 0.36 - TFw * 0.04 + V(0, 0, 0.04), tmouth, 55),
     (1190, lambda f: tmouth(f) + TRw * 0.32 + TFw * 0.06 + V(0, 0, 0.1), tmouth, 55),
     (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
     (1320, lambda f: tmouth(f) + TRw * 0.28 - TFw * 0.12 + V(0, 0, 0.0), tmouth, 60),
     (1385, lambda f: tmouth(f) + TRw * 0.3 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 55),
-    (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
+    (1420, lambda f: tmouth(f) + TRw * 0.6 - TFw * 0.3 + V(0, 0, 0.08), tmouth, 32), (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
     (1590, lambda f: gmouth(f) + V(0.22, -0.36, 0.03), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them
 for k, f in enumerate((1723, 1763, 1803)):
     a = R_(65 - 55 * k)
     SHOTS.append((f, (lambda a_: (lambda f_: pair(f_) + V(1.55 * math.sin(a_), -1.55 * math.cos(a_), 0.15)))(a), pair, 24))
-SHOTS += [(1843, lambda f: gmouth(f) + V(0.25, -0.5, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
+SHOTS += [(1825, lambda f: pair(f) + V(-0.15, -1.15, 0.1), pair, 26), (1843, lambda f: gmouth(f) + V(0.15, -0.55, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
           (END, lambda f: pair(f) + V(0.35, -1.9, 1.1), pair, 22)]
 res = []
 for f, cp, ap, ln in SHOTS:
@@ -342,11 +342,14 @@ for f in CAMF:
                 t_ = BVHTree.FromPolygons([eo.matrix_world @ v.co for v in me_.vertices], [tuple(q.vertices) for q in me_.polygons]); eo.to_mesh_clear()
                 loc, nrm, idx, dist = t_.find_nearest(p + off)
                 if loc is not None:
-                    inside = ((p + off) - loc).dot(nrm) < 0
+                    closed = nm.endswith(".body")                 # hair/cloth normals are unreliable: unsigned distance
+                    inside = closed and ((p + off) - loc).dot(nrm) < 0
                     sd = -dist if inside else dist
-                    if best is None or sd < best[0]: best = (sd, loc, nrm)
+                    away = (nrm if inside or ((p + off) - loc).length < 1e-6 else ((p + off) - loc)).normalized()
+                    if best is None or sd < best[0]: best = (sd, loc, away)
             if best is None or best[0] >= 0.18: break
             off += best[2].normalized() * (0.18 - best[0] + 0.01)
+            if off.length > 0.3: off = off.normalized() * 0.3
     push[f] = off
 sm = {}
 for i, f in enumerate(CAMF):

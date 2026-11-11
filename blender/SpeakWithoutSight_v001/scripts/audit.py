@@ -66,5 +66,12 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     hit, loc, nrm, idx, ob, _ = sc.ray_cast(dg, cp, (bpy.data.objects["CAM_Film_Aim"].location - cp).normalized(), distance=0.04)
     if hit and ob.visible_camera and not ob.name.startswith(("ExplainerDome", "DarkBubble")):
         stats["cam_close"] += 1; lines.append("f%d camera within 4 cm of %s" % (f, ob.name))
+# camera continuity: largest per-frame move (a cut or teleport would show as a big jump)
+prev = None; jump = (0.0, 0)
+for f in range(sc.frame_start, sc.frame_end + 1):
+    sc.frame_set(f); p = cam.matrix_world.translation.copy()
+    if prev is not None and (p - prev).length > jump[0]: jump = ((p - prev).length, f)
+    prev = p
+stats["cam_max_step_m"] = round(jump[0], 3); stats["cam_max_step_frame"] = jump[1]
 open(OUT, "w").write("AUDIT step %d\n%s\n\n%s\n" % (STEP, stats, "\n".join(lines)))
 print("AUDIT", stats)
