@@ -26,3 +26,9 @@
 - The main chat is the director. Connect1…Connect15 are production chats, one film each, on branch `claude/connectNN-<slug>`, in folder `blender/<slug>_v001/`.
 - Checkpoints where a Connect chat stops and waits for director approval: **A** beat sheet + camera plan, **B** blocking stills (1 per s), **C** polish stills (0.2 s sheets) + audit, **D** farm package.
 - See `pipeline/CONNECT_BRIEF.md` for the full brief every Connect chat follows.
+
+## Realism, not blocks (client, 21:00 UTC). This overrides any earlier "explainer" leniency
+- **Nothing may read as primitive geometry:** no rounded blocks, capsules, tubes, flat slabs or smooth blobs standing in for real things. That covers anatomy, organs, tissue, rock, soil, buildings, vehicles, props, clothes and water.
+- **Use real assets first.** Search CC-BY or CC0 models (`pipeline/find_models.py`: skull, head sagittal section, nasal cavity, ear anatomy, liver, intestines, lungs, ribcage, muscles, cochlea, buildings, vehicles…) and Poly Haven scans. Build procedurally only when no real asset exists, and then sculpt or displace it until it looks like a photograph of the real thing.
+- **Cutaways and cross-sections** show realistic anatomy with textured materials, not illustrated shapes: wet SSS tissue, porous bone, fibrous muscle, vessels.
+- **Test:** pause any still. If a viewer could mistake it for a clay model, a toy or a diagram, it's a reject.
