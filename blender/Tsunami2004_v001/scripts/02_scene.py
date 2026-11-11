@@ -56,7 +56,7 @@ m, nt = node_mat("M_Terrain")
 NN, LL = nt.nodes, nt.links
 bsdf = NN["Principled BSDF"]
 tc = NN.new("ShaderNodeTexCoord"); sx = NN.new("ShaderNodeSeparateXYZ"); LL.new(tc.outputs["Object"], sx.inputs["Vector"])
-zones = [("red_laterite_soil_stones", 3.0, (0.85, 0.75, 0.65)), ("coast_sand_01", 2.5, (1.0, 0.95, 0.85)),
+zones = [("red_laterite_soil_stones", 3.0, (0.62, 0.55, 0.48)), ("coast_sand_01", 2.5, (1.0, 0.95, 0.85)),
          ("damp_beach_sand", 2.5, (0.85, 0.8, 0.72)), ("coral_mud_01", 4.0, (0.55, 0.55, 0.48))]
 socks = [pbr_nodes(nt, tid, s, tint, coord=tc.outputs["Object"], x=-1400, y=900 - 700 * i) for i, (tid, s, tint) in enumerate(zones)]
 edges = [(-50, -40), (-2, 6), (24, 40)]
@@ -94,7 +94,7 @@ asph = pbr_mat("M_Asphalt", "worn_asphalt", 4.0, (0.8, 0.8, 0.8))
 for i, x in enumerate(ROADS_X):
     box("RoadNS_%d" % i, C_T, (7, 330, 0.12), (x, -215, 0.58), asph)
 for i, y in enumerate(ROADS_Y):
-    box("RoadEW_%d" % i, C_T, (420, 7, 0.12), (0, y, 0.585), asph)
+    box("RoadEW_%d" % i, C_T, (420, 7, 0.12), (0, y, 0.551), asph)
 
 # ================================================================== water materials
 def water_mat(name, foam_steep=True):
@@ -152,7 +152,7 @@ TOE = -7.0
 STAGES = {  # crest z, front width, power, lip, back decay, back level
     "S0": (-2.6, 160, 1.5, 0.0, 160, -4.3),
     "S1": (7.0, 75, 2.3, 2.5, 110, -2.6),
-    "S2": (32.0, 42, 3.0, 11.0, 90, -0.6),
+    "S2": (32.0, 42, 3.0, 14.0, 90, -0.6),
     "S2b": (17.0, 34, 2.2, 18.0, 70, 2.0),
     "S3": (5.0, 10, 1.6, 2.5, 30, 2.5),
 }
@@ -234,6 +234,10 @@ for ms_ in coral.data.materials:
 house = import_glb("house", 10.0, "x", C_LIB); house2 = import_glb("house2", 8.5, "x", C_LIB)
 rub_roof = import_glb("rubble_roof", 7.0, "max", C_LIB); rub_brick = import_glb("rubble_brick", 3.5, "max", C_LIB)
 rub_wood = import_glb("rubble_wood", 4.5, "max", C_LIB); mosque = import_glb("mosque", 26.0, "max", C_LIB)
+for m_ in mosque.data.materials:
+    b_ = m_.node_tree.nodes.get("Principled BSDF") if m_ and m_.use_nodes else None
+    if b_ and not b_.inputs["Base Color"].links and max(b_.inputs["Base Color"].default_value[:3]) < 0.06:
+        b_.inputs["Base Color"].default_value = (0.72, 0.68, 0.6, 1)
 mosque = link(mosque, C_TOWN); mosque.name = "Mosque"; mosque.location = (-44, -162, terrain_h(-44, -162) - 0.32)
 mosque.rotation_euler = (0, 0, math.radians(90))
 
@@ -250,14 +254,20 @@ for i in range(30):   # palms in town
     if any(abs(x - rx) < 6 for rx in ROADS_X) or any(abs(y - ry) < 6 for ry in ROADS_Y): continue
     p = inst(palmA if i % 2 else palmB, "TPalm_%02d" % i, C_TOWN, (x, y, ground(x, y) - 0.2), (0, 0, random.uniform(0, 6.28)), random.uniform(0.8, 1.1))
 UMB = []
-for i in range(14):
-    x = -70 + i * 10 + random.uniform(-2, 2); y = random.uniform(-15, -4)
+for i in range(24):
+    x = -120 + i * 10 + random.uniform(-2, 2); y = random.uniform(-15, -4)
     u = inst(umb if i % 3 else umb2, "Umbrella_%02d" % i, C_B, (x, y, ground(x, y) - 0.25), (math.radians(random.uniform(-4, 4)), 0, random.uniform(0, 6.28)))
     UMB.append(u)
 lounger_m = simple_mat("M_Lounger", (0.75, 0.68, 0.55), 0.6)
 for i in range(12):
     x = -66 + i * 11 + random.uniform(-1, 1); y = random.uniform(-14, -6)
     box("Lounger_%02d" % i, C_B, (0.7, 1.9, 0.08), (x + 1.2, y, ground(x, y) + 0.35), lounger_m, rot=(math.radians(8), 0, math.radians(random.uniform(-10, 10))), bevel=0.02)
+stallL = import_glb("stall", 2.6, "z", C_LIB); vnetL = import_glb("vnet", 9.5, "x", C_LIB); fnetL = import_glb("fnet", 6.0, "y", C_LIB)
+for i, (x, y, yaw) in enumerate([(-34, -15, 0), (-28, -16, 0.1), (24, -16, 3.1), (30, -15.5, 3.0), (60, -15, 0), (-62, -16, 0.2)]):
+    inst(stallL, "Stall_%d" % i, C_B, (x, y, ground(x, y) - 0.05), (0, 0, yaw))
+inst(vnetL, "VolleyNet", C_B, (-18, -8, ground(-18, -8) - 0.1), (0, 0, 0.0))
+for i, (x, y, yaw) in enumerate([(42, -4, 1.4), (55, -6, 1.6), (-54, -5, 1.5)]):
+    inst(fnetL, "FishNet_%d" % i, C_B, (x, y, ground(x, y) - 0.05), (0, 0, yaw))
 # longtail boats: drawn up on the beach, and moored in the shallows (they settle on the sand as the sea drains)
 BOATS = []
 for i, (x, y, yaw) in enumerate([(36, 3, 80), (48, 1, 95), (62, 4, 70), (-48, 2, 100), (-60, 5, 85),
@@ -355,67 +365,98 @@ HFURN = [box("Hotel_Sofa_%d" % i, C_H, (2.0, 0.9, 0.8), (-10 + i * 5, -31.5, z0 
 sign_m = simple_mat("M_Awning", (0.75, 0.25, 0.18), 0.7)
 box("Hotel_Awning", C_H, (12, 2.6, 0.12), (0, HY1 + 1.2, z0 + 3.2), sign_m, rot=(math.radians(-12), 0, 0))
 
-# ================================================================== town
-wall_tints = [(0.95, 0.92, 0.82), (0.98, 0.88, 0.62), (0.78, 0.86, 0.92), (0.96, 0.8, 0.72), (0.9, 0.9, 0.9), (0.82, 0.9, 0.78)]
-WALLM = [pbr_mat("M_Wall_%d" % i, "yellow_plaster" if i % 2 else "white_plaster_rough_01", 2.5, t) for i, t in enumerate(wall_tints)]
-ROOFM = [pbr_mat("M_RoofTile", "clay_roof_tiles", 2.0, (0.9, 0.75, 0.7)), pbr_mat("M_RoofIron", "corrugated_iron", 2.0, (0.75, 0.8, 0.82)),
-         pbr_mat("M_RoofIronRust", "corrugated_iron", 2.0, (0.8, 0.55, 0.4))]
+# ================================================================== town (real building models)
 win_m = simple_mat("M_Window", (0.03, 0.035, 0.04), 0.15)
 door_m = simple_mat("M_Door", (0.3, 0.17, 0.08), 0.6)
-def proc_house(name, cx, cy, w, d, h, yaw, wm, rm, c):
-    """walls+openings object and a roof object (parented), origin at ground centre"""
-    gz = ground(cx, cy) - 0.3
-    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
-    for v_ in bm.verts: v_.co = Vector((v_.co.x * w, v_.co.y * d, (v_.co.z + 0.5) * (h + 0.3)))
-    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
-    me.materials.append(wm); me.materials.append(win_m); me.materials.append(door_m)
-    walls = bpy.data.objects.new(name, me); c.objects.link(walls)
-    walls.location = (cx, cy, gz); walls.rotation_euler.z = yaw
-    nwin = max(1, int(w / 2.6))
-    for side in (1, -1):
-        for i in range(nwin):
-            x = -w / 2 + (i + 0.5) * w / nwin
-            if side == 1 and i == nwin // 2:
-                o = box(name + "_door", c, (0.95, 0.08, 2.1), (x, side * d / 2, 1.35), door_m)
-            else:
-                o = box(name + "_win%d%d" % (side, i), c, (1.0, 0.08, 1.2), (x, side * d / 2, min(h - 0.6, 2.0)), win_m)
-            o.parent = walls
-    # roof
-    oh = 0.5; rh = 0.25 * min(w, d) + 0.4
-    vs = [(-w / 2 - oh, -d / 2 - oh, 0), (w / 2 + oh, -d / 2 - oh, 0), (w / 2 + oh, d / 2 + oh, 0), (-w / 2 - oh, d / 2 + oh, 0),
-          (-w / 2 - oh, 0, rh), (w / 2 + oh, 0, rh)]
-    fs = [(0, 1, 5, 4), (3, 4, 5, 2), (0, 4, 3), (1, 2, 5), (0, 3, 2, 1)]
-    roof = mesh_obj(name + "_roof", vs, fs, c, [rm]); roof.parent = walls; roof.location = (0, 0, h + 0.3)
-    sol = roof.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.12
-    return walls, roof
+BLD = {  # name: (target size, axis, footprint radius, weight)
+    "b_old1": (11.0, "y", 6.0, 0.10), "b_shack": (24.0, "max", 7.0, 0.14),
+    "b_slum1": (7.5, "z", 3.8, 0.13), "b_slum5": (9.0, "x", 5.0, 0.15), "b_pariaman": (14.0, "x", 8.0, 0.10),
+    "b_rumah": (28.0, "max", 14.0, 0.04), "b_apt": (18.0, "z", 6.3, 0.04), "house": (10.0, "x", 6.0, 0.08), "house2": (8.5, "x", 6.0, 0.07)}
+BL = {}
+for n, (sz, ax, rad, wt) in BLD.items():
+    BL[n] = house if n == "house" else house2 if n == "house2" else import_glb(n, sz, ax, C_LIB)
 HOUSES = []
 occupied = []
 def free(x, y, rad):
-    if -25 < x < 25 and y > -52: return False
+    if -25 < x < 25 and y > -54: return False
     if abs(x + 44) < 22 and abs(y + 162) < 22: return False
-    if any(abs(x - rx) < 3.5 + rad for rx in ROADS_X) or any(abs(y - ry) < 3.5 + rad for ry in ROADS_Y): return False
-    return all((x - ox) ** 2 + (y - oy) ** 2 > (rad + orad + 1.5) ** 2 for ox, oy, orad in occupied)
+    if any(abs(x - rx) < 4.0 + rad for rx in ROADS_X) or any(abs(y - ry) < 4.0 + rad for ry in ROADS_Y): return False
+    return all((x - ox) ** 2 + (y - oy) ** 2 > (rad + orad + 0.3) ** 2 for ox, oy, orad in occupied)
+names_w = [(n, v[3]) for n, v in BLD.items()]
+def pick():
+    r_ = random.random() * sum(w for _, w in names_w)
+    for n, w in names_w:
+        r_ -= w
+        if r_ <= 0: return n
+    return names_w[-1][0]
 attempts = 0
-while len(HOUSES) < 150 and attempts < 6000:
+while len(HOUSES) < 420 and attempts < 20000:
     attempts += 1
-    x = random.uniform(-230, 230); y = random.uniform(-340, -50)
-    kind = random.random()
-    rad = 5.5 if kind < 0.12 else (4.8 if kind < 0.2 else random.uniform(3.6, 5.0))
+    x = random.uniform(-210, 210); y = random.uniform(-345, -52)
+    n = pick(); rad = BLD[n][2]
     if not free(x, y, rad): continue
     occupied.append((x, y, rad))
-    near_road = min(ROADS_X, key=lambda rx: abs(rx - x))
-    yaw = math.radians(90 if x > near_road else -90) if random.random() < 0.5 else math.radians(random.choice([0, 180]))
-    yaw += math.radians(random.uniform(-4, 4))
-    n = "House_%03d" % len(HOUSES)
-    if kind < 0.12:
-        o = inst(house, n, C_TOWN, (x, y, ground(x, y) - 0.15), (0, 0, yaw), 0.9); roof = None
-    elif kind < 0.2:
-        o = inst(house2, n, C_TOWN, (x, y, ground(x, y) - 0.15), (0, 0, yaw), 0.95); roof = None
-    else:
-        w_ = rad * 1.4; d_ = rad * random.uniform(1.1, 1.4); h_ = random.choice([3.0, 3.2, 3.4, 6.2])
-        o, roof = proc_house(n, x, y, w_, d_, h_, yaw, random.choice(WALLM), random.choice(ROOFM), C_TOWN)
+    # face the nearest street
+    dx = min(ROADS_X, key=lambda rx: abs(rx - x)); dy = min(ROADS_Y, key=lambda ry: abs(ry - y))
+    if abs(dx - x) < abs(dy - y): yaw = math.radians(-90 if dx > x else 90)
+    else: yaw = math.radians(0 if dy > y else 180)
+    yaw += math.radians(random.uniform(-3, 3))
+    o = inst(BL[n], "House_%03d" % len(HOUSES), C_TOWN, (x, y, ground(x, y) - 0.12), (0, 0, yaw), random.uniform(0.92, 1.08))
     o["hx"], o["hy"], o["rad"] = x, y, rad
     HOUSES.append(o)
+# street furniture: concrete power poles with sagging wires, banana trees, parked motorbikes, food stalls
+poleL = import_glb("pole", 9.0, "z", C_LIB); banL = import_glb("banana", 5.5, "z", C_LIB); motoL = import_glb("moto", 2.0, "max", C_LIB)
+wire_m = simple_mat("M_Wire", (0.02, 0.02, 0.02), 0.5)
+POLES = []
+def pole_line(pts, tag):
+    prev = None
+    for i, (x, y, yaw) in enumerate(pts):
+        p = inst(poleL, "Pole_%s_%02d" % (tag, i), C_TOWN, (x, y, ground(x, y) - 0.3), (0, 0, yaw)); POLES.append(p)
+        tops = [Vector((x, y, ground(x, y) + 8.3)) + Matrix.Rotation(yaw, 3, 'Z') @ Vector((ox, 0, 0)) for ox in (-0.42, 0.0, 0.42)]
+        if prev:
+            for k, (a, b) in enumerate(zip(prev, tops)):
+                cu = bpy.data.curves.new("Wire_%s_%02d_%d" % (tag, i, k), 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.012
+                sp = cu.splines.new('POLY'); sp.points.add(8)
+                for j in range(9):
+                    u = j / 8; q = a.lerp(b, u); q.z -= 0.9 * 4 * u * (1 - u)
+                    sp.points[j].co = (q.x, q.y, q.z, 1)
+                w = bpy.data.objects.new(cu.name, cu); C_TOWN.objects.link(w); cu.materials.append(wire_m)
+                w["pole_a"] = "Pole_%s_%02d" % (tag, i - 1); w["pole_b"] = p.name
+        prev = tops
+for rx in (34, -24):
+    for side in (-1, 1):
+        pole_line([(rx + side * 4.8, y, 0.0) for y in np.arange(-50, -340, -28)], "S%d%d" % (rx, side))
+pole_line([(x, -29.0, math.radians(90)) for x in np.arange(-150, 160, 30) if abs(x) > 20], "beach")
+for i in range(90):
+    x = random.uniform(-220, 220); y = random.uniform(-340, -50)
+    if any(abs(x - rx) < 4.5 for rx in ROADS_X) or any(abs(y - ry) < 4.5 for ry in ROADS_Y): continue
+    inst(banL, "Banana_%02d" % i, C_TOWN, (x, y, ground(x, y) - 0.1), (0, 0, random.uniform(0, 6.28)), random.uniform(0.75, 1.15))
+for i in range(50):
+    rx = random.choice(ROADS_X); side = random.choice((-1, 1)); y = random.uniform(-330, -55)
+    x = rx + side * 3.0
+    inst(motoL, "Moto_%02d" % i, C_TOWN, (x, y, ground(x, y) + 0.02), (0, math.radians(random.uniform(-6, 6)), math.radians(random.choice((0, 180)) + random.uniform(-10, 10))))
+
+pbr_mat("M_RoofIronRust", "corrugated_iron", 2.0, (0.8, 0.55, 0.4))
+# waterline: after the flood, walls are stained brown below ~2.4 m (MUD value keyed in 03)
+def add_waterline(m):
+    if not m or not m.use_nodes: return
+    nt = m.node_tree; b = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
+    if b is None or "WL_MUD" in nt.nodes: return
+    sock = b.inputs["Base Color"]
+    v = nt.nodes.new("ShaderNodeValue"); v.name = "WL_MUD"; v.outputs[0].default_value = 0.0
+    tc = nt.nodes.new("ShaderNodeNewGeometry"); sp = nt.nodes.new("ShaderNodeSeparateXYZ"); nt.links.new(tc.outputs["Position"], sp.inputs["Vector"])
+    nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1.5; nt.links.new(tc.outputs["Position"], nz.inputs["Vector"])
+    hz = nt.nodes.new("ShaderNodeMath"); hz.operation = 'MULTIPLY_ADD'; nt.links.new(nz.outputs["Fac"], hz.inputs[0]); hz.inputs[1].default_value = 0.4; hz.inputs[2].default_value = 2.3
+    mr = nt.nodes.new("ShaderNodeMath"); mr.operation = 'LESS_THAN'; nt.links.new(sp.outputs["Z"], mr.inputs[0]); nt.links.new(hz.outputs[0], mr.inputs[1])
+    fa = nt.nodes.new("ShaderNodeMath"); fa.operation = 'MULTIPLY'; nt.links.new(mr.outputs[0], fa.inputs[0]); nt.links.new(v.outputs[0], fa.inputs[1])
+    mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; nt.links.new(fa.outputs[0], mx.inputs["Factor"])
+    mx.inputs["B"].default_value = (0.42, 0.33, 0.22, 1)
+    if sock.links: nt.links.new(sock.links[0].from_socket, mx.inputs["A"])
+    else: mx.inputs["A"].default_value = sock.default_value
+    nt.links.new(mx.outputs["Result"], sock)
+for lib_ in list(BL.values()) + [mosque]:
+    for m_ in lib_.data.materials: add_waterline(m_)
+add_waterline(bpy.data.materials["M_HotelPlaster"])
 # parked cars along the beach road and town streets
 CARS = []
 for i, (x, y, yaw) in enumerate([(-92, -22.5, 90), (-30, -25.5, -90), (52, -22.6, 92), (-52, -22.4, 88), (34, -60, 0), (80, -100, 180),
@@ -449,7 +490,7 @@ NN, LL = nt.nodes, nt.links
 NN.remove(NN["Principled BSDF"])
 geo = NN.new("ShaderNodeNewGeometry"); tc = NN.new("ShaderNodeTexCoord"); sp = NN.new("ShaderNodeSeparateXYZ"); LL.new(tc.outputs["Object"], sp.inputs["Vector"])
 mr = NN.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = -18; mr.inputs["From Max"].default_value = 20; LL.new(sp.outputs["Z"], mr.inputs["Value"])
-cr = NN.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.18, 0.62, 0.78, 1); cr.color_ramp.elements[1].color = (0.92, 0.97, 1.0, 1)
+cr = NN.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.005, 0.03, 0.08, 1); cr.color_ramp.elements[1].color = (0.12, 0.5, 0.68, 1)
 LL.new(mr.outputs["Result"], cr.inputs["Fac"])
 em = NN.new("ShaderNodeEmission"); LL.new(cr.outputs["Color"], em.inputs["Color"]); em.inputs["Strength"].default_value = 1.0
 tr = NN.new("ShaderNodeBsdfTransparent")
@@ -458,14 +499,22 @@ LL.new(ms.outputs[0], NN["Material Output"].inputs["Surface"])
 bowl.data.materials.append(m)
 bowl.visible_shadow = False
 # the cross-section block: camera looks +X at the section face (x = -3); screen right = shore (-Y)
-oce = pbr_mat("M_OceanCrust", "mud_cracked_dry_03", 1.2, (0.28, 0.3, 0.34))
-con = pbr_mat("M_ContCrust", "red_laterite_soil_stones", 1.2, (0.95, 0.75, 0.55))
-mant = simple_mat("M_Mantle", (0.6, 0.18, 0.05), 0.7, emit=((1.0, 0.32, 0.06), 1.2))
+oce = pbr_mat("M_OceanCrust", "worn_rock_natural_01", 1.5, (0.32, 0.33, 0.36))
+con = pbr_mat("M_ContCrust", "excavated_soil_wall", 2.5, (0.95, 0.82, 0.65))
+mant = pbr_mat("M_Mantle", "rock_wall_17", 2.0, (0.55, 0.22, 0.1))
+_mb = mant.node_tree.nodes["Principled BSDF"]; _mn = mant.node_tree.nodes.new("ShaderNodeTexNoise"); _mn.inputs["Scale"].default_value = 0.6; _mn.inputs["Detail"].default_value = 8
+_mr = mant.node_tree.nodes.new("ShaderNodeValToRGB"); _mr.color_ramp.elements[0].position = 0.45; _mr.color_ramp.elements[0].color = (0, 0, 0, 1); _mr.color_ramp.elements[1].position = 0.7; _mr.color_ramp.elements[1].color = (1.0, 0.35, 0.05, 1)
+mant.node_tree.links.new(_mn.outputs["Fac"], _mr.inputs["Fac"]); mant.node_tree.links.new(_mr.outputs["Color"], _mb.inputs["Emission Color"]); _mb.inputs["Emission Strength"].default_value = 3.0
 fault_m = simple_mat("M_FaultGlow", (1, 0.5, 0.1), 0.5, emit=((1.0, 0.55, 0.1), 0.0))
 arrow_m = simple_mat("M_Arrow", (1.0, 0.75, 0.2), 0.4, emit=((1.0, 0.7, 0.15), 2.0))
 wcol, nt = node_mat("M_WaterColumn")
-b_ = nt.nodes["Principled BSDF"]; b_.inputs["Base Color"].default_value = (0.2, 0.55, 0.8, 1); b_.inputs["Alpha"].default_value = 0.5
-b_.inputs["Roughness"].default_value = 0.15; b_.inputs["Emission Color"].default_value = (0.15, 0.45, 0.7, 1); b_.inputs["Emission Strength"].default_value = 0.25
+nt.nodes.remove(nt.nodes["Principled BSDF"])
+gl = nt.nodes.new("ShaderNodeBsdfGlass"); gl.inputs["IOR"].default_value = 1.33; gl.inputs["Roughness"].default_value = 0.05; gl.inputs["Color"].default_value = (0.85, 0.95, 1.0, 1)
+nt.links.new(gl.outputs[0], nt.nodes["Material Output"].inputs["Surface"])
+wv = nt.nodes.new("ShaderNodeVolumePrincipled"); wv.inputs["Color"].default_value = (0.1, 0.35, 0.6, 1); wv.inputs["Density"].default_value = 0.12
+wv.inputs["Absorption Color"].default_value = (0.05, 0.25, 0.5, 1)
+nt.links.new(wv.outputs[0], nt.nodes["Material Output"].inputs["Volume"])
+wtopm = simple_mat("M_WaterTopSurf", (0.03, 0.12, 0.2), 0.04)
 D = DC
 def prism(name, poly, mat, x0=-3.0, x1=3.0, c=C_D, ny=1):
     n = len(poly)
@@ -489,7 +538,7 @@ NY = 160
 bpy.ops.mesh.primitive_grid_add(x_subdivisions=6, y_subdivisions=NY, size=1, location=(D.x, D.y, D.z + 2.6))
 wtop = bpy.context.active_object; wtop.name = "D_WaterTop"; link(wtop, C_D); wtop.scale = (6, 20, 1)
 bpy.ops.object.transform_apply(scale=True)
-wtop.data.materials.append(wcol)
+wtop.data.materials.append(wtopm)
 wbody = prism("D_WaterBody", [(10, 2.58), (-10, 2.58)] + [(dy, z + 0.02) for dy, z in seab[::-1]][::-1][::-1], wcol)
 wtop.shape_key_add(name="Basis")
 for nm, cen in (("Bulge", [0.0]), ("SplitA", [-6.0]), ("SplitB", [6.0])):
@@ -507,6 +556,20 @@ def arrow(name, a, b_, w=0.35):
     vs = [(-3.08, D.y + p_.x, D.z + p_.y) for p_ in pts]
     return mesh_obj(name, vs, [tuple(range(len(vs)))], C_D, [arrow_m])
 arrow("D_ArrowOcean", (8.5, -3.8), (3.5, -4.9)); arrow("D_ArrowCont", (-8.5, -2.2), (-5.0, -2.2), 0.3)
+for nm_ in ("D_Mantle", "D_OceanPlate", "D_ContPlate", "D_Tip"):
+    o_ = bpy.data.objects[nm_]
+    sb = o_.modifiers.new("sub", 'SUBSURF'); sb.subdivision_type = 'SIMPLE'; sb.levels = sb.render_levels = 5
+    tx_ = bpy.data.textures.get("RockDisp") or bpy.data.textures.new("RockDisp", 'CLOUDS'); tx_.noise_scale = 0.35; tx_.noise_depth = 4
+    dp = o_.modifiers.new("disp", 'DISPLACE'); dp.texture = tx_; dp.strength = 0.22; dp.mid_level = 0.5; dp.texture_coords = 'GLOBAL'
+    for p_ in o_.data.polygons: p_.use_smooth = True
+ring_m = simple_mat("M_Shock", (1.0, 0.5, 0.15), 0.5, emit=((1.0, 0.45, 0.1), 0.0))
+bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.025, major_segments=64, minor_segments=8, location=(D.x - 3.15, D.y + 0.3, D.z - 2.8), rotation=(0, math.radians(90), 0))
+ring = bpy.context.active_object; ring.name = "D_ShockRing"; link(ring, C_D); ring.data.materials.append(ring_m); ring.scale = (0.01,) * 3
+for i in range(30):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=random.uniform(0.12, 0.35), location=(D.x - random.uniform(-2.8, 2.8), D.y + random.uniform(-2.5, 3.0), D.z + plate_top(0.5) + random.uniform(-0.4, 0.4)))
+    o_ = bpy.context.active_object; o_.name = "D_Chunk_%d" % (100 + i); link(o_, C_D); o_.data.materials.append(oce)
+    o_.scale = (random.uniform(0.7, 1.4), random.uniform(0.7, 1.4), random.uniform(0.5, 1.0))
+    dd = o_.modifiers.new("d", 'DISPLACE'); dd.texture = bpy.data.textures["RockDisp"]; dd.strength = 0.12
 
 # little seabed props on the cross-section (rocks) and studio lights
 for i in range(10):

@@ -73,8 +73,8 @@ for t in np.arange(0, 6.01, 0.25):
 # ---------------------------------------------------------------- the wave: position, stage blend, chop
 WK = [  # t, front y, (S1, S2, S2b, S3) weights, z offset
     (0.0, 2600, (0, 0, 0, 0), 0), (5.0, 2050, (0, 0, 0, 0), 0), (7.2, 1750, (0.5, 0, 0, 0), 0), (10.8, 1250, (0.7, 0, 0, 0), 0),
-    (13.1, 950, (0.8, 0, 0, 0), 0), (15.6, 560, (1.0, 0, 0, 0), 0), (16.6, 450, (0.55, 0.45, 0, 0), 0), (17.5, 330, (0.2, 0.8, 0, 0), 0),
-    (18.3, 160, (0, 1, 0, 0), 0), (19.3, 100, (0, 1, 0, 0), 0), (20.3, 52, (0, 0.6, 0.4, 0), 0), (21.0, 16, (0, 0, 1, 0), 0),
+    (13.1, 950, (0.8, 0, 0, 0), 0), (15.6, 500, (1.0, 0, 0, 0), 0), (16.6, 330, (0.5, 0.5, 0, 0), 0), (17.5, 180, (0.15, 0.85, 0, 0), 0),
+    (18.3, 80, (0, 1, 0, 0), 0), (19.3, 40, (0, 1, 0, 0), 0), (20.3, 12, (0, 0.6, 0.4, 0), 0), (21.0, -8, (0, 0, 1, 0), 0),
     (21.6, -30, (0, 0, 0.3, 0.7), 0), (22.3, -62, (0, 0, 0, 1), 0), (25.7, -160, (0, 0, 0, 1), 0), (28.0, -235, (0, 0, 0, 1), 0),
     (30.0, -310, (0, 0, 0, 1), 0), (31.6, -380, (0, 0, 0, 1), -2.0), (40.0, -480, (0, 0, 0, 1), -2.05)]
 def wave_y(t):
@@ -120,10 +120,12 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.05, 0.038, 0.026), 0.09),
-                          (30.0, (0.055, 0.042, 0.03), 0.07), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
+    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.07, 0.05, 0.032), 0.2),
+                          (30.0, (0.075, 0.055, 0.035), 0.15), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.3), (31.0, 0.3), (32.0, 0.05)):
+        b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
     for fc in _fcurves(nt.animation_data.action):
@@ -133,6 +135,29 @@ ntS = bpy.data.materials["M_Sea"].node_tree
 for t, wv in ((0, 0), (40, 6)):
     ntS.nodes["NZ"].inputs["W"].default_value = wv; ntS.nodes["NZ"].inputs["W"].keyframe_insert("default_value", frame=F(t))
 
+# ---------------------------------------------------------------- debris carried up the wave face (16.4 - 21.0 s)
+FACE = []
+lt = bpy.data.objects["LIB_longtail"]; pb_ = bpy.data.objects["LIB_palm_b"]; c2 = bpy.data.objects["LIB_car2"]
+for i, (lib, x, frac, rot) in enumerate([(lt, -9, 0.42, (0.4, 0.9, 1.2)), (pb_, 3, 0.58, (1.4, 0.3, 0.2)), (lt, 15, 0.66, (-0.5, 2.2, 0.4)),
+                                         (pb_, -20, 0.5, (1.2, -0.6, 2.0)), (c2, 24, 0.36, (0.6, 1.8, 0.3))]):
+    o = bpy.data.objects.new("FaceDebris_%d" % i, lib.data); bpy.data.collections["Water"].objects.link(o); o.scale = (0.9,) * 3
+    FACE.append((o, x, frac, rot))
+NXW_, NUW_ = 900, 170
+xs_ = np.linspace(-1500, 1500, NXW_)
+for o, x, frac, rot in FACE:
+    col = int(np.argmin(np.abs(xs_ - x)))
+    key_hide(o, [(1, True), (F(16.3), False)])
+    for f in range(F(16.3), F(21.05), 3):
+        sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); ev = wave.evaluated_get(dg); me = ev.to_mesh()
+        co = np.array([me.vertices[j * NXW_ + col].co[:] for j in range(NUW_)]); ev.to_mesh_clear()
+        jc = int(np.argmax(co[:, 2])); zc = co[jc, 2]; z0 = -1.0
+        tgt = z0 + frac * (zc - z0)
+        jj = min(range(0, jc + 1), key=lambda j: abs(co[j, 2] - tgt))
+        P_ = wave.matrix_world @ Vector(co[jj]) + Vector((0, -1.2, 0))
+        tt = (f - F(16.3)) / 60.0
+        key_tr(o, f, loc=tuple(P_), rot=(rot[0] * tt * 1.5, rot[1] * tt * 1.5, rot[2] * tt))
+    sweep(o, 21.05, random.uniform(60, 120), (2, 3, 1), (0, 2.6, 0), rise=4.0) if False else None
+    o["face"] = 1
 # ---------------------------------------------------------------- moored boats settle on the sand, rowboats/fish on the seabed
 def flood_z(t, y):
     """water surface height at y at time t once the wave has passed (for floating debris)"""
@@ -206,6 +231,8 @@ for o in bpy.data.objects:
     elif nm.startswith("Rowboat_"):
         sweep(o, T_front(o.location.y), random.uniform(150, 250), (2, 3, 2), (0, 2.8, 0), rise=6.0)
 
+for o, x, frac, rot in FACE:
+    sweep(o, 21.1, random.uniform(60, 120), (2, 3, 1), (0, 2.6, 0), rise=4.0)
 # ---------------------------------------------------------------- hotel ground floor blown in
 for i, p in enumerate(bpy.data.objects[n] for n in sorted(o.name for o in bpy.data.objects if o.name.startswith("Hotel_Pane_"))):
     t0 = T_front(-28) + 0.02 * i
@@ -280,6 +307,16 @@ for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (1
     kbw["Bulge"].value = bu; kbw["Bulge"].keyframe_insert("value", frame=F(t))
     for k in ("SplitA", "SplitB"):
         kbw[k].value = sa; kbw[k].keyframe_insert("value", frame=F(t))
+ring = bpy.data.objects["D_ShockRing"]; rme = bpy.data.materials["M_Shock"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+for t, sc_, e in ((14.35, 0.01, 0.0), (14.42, 0.6, 25.0), (14.8, 6.0, 6.0), (15.2, 11.0, 0.0)):
+    ring.scale = (sc_,) * 3; ring.keyframe_insert("scale", frame=F(t)); rme.default_value = e; rme.keyframe_insert("default_value", frame=F(t))
+for o in bpy.data.objects:
+    if o.name.startswith("D_Chunk_1"):
+        l = o.location.copy(); r0 = o.rotation_euler.copy()
+        key_tr(o, F(14.38), loc=tuple(l), rot=tuple(r0))
+        up = random.uniform(0.8, 2.2)
+        key_tr(o, F(14.65), loc=(l.x, l.y + random.uniform(-1, 1), l.z + up), rot=(r0.x + random.uniform(-2, 2), r0.y + random.uniform(-2, 2), r0.z))
+        key_tr(o, F(15.3), loc=(l.x, l.y + random.uniform(-1.5, 1.5), l.z + up * 0.4), rot=(r0.x + random.uniform(-3, 3), r0.y + random.uniform(-3, 3), r0.z))
 fm = bpy.data.materials["M_FaultGlow"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for t, e in ((13.0, 0.0), (14.3, 0.5), (14.4, 12.0), (15.0, 3.0), (15.6, 1.0)):
     fm.default_value = e; fm.keyframe_insert("default_value", frame=F(t))
@@ -297,6 +334,29 @@ for t, rot, col, en, mx, bg in ((0, (55, 0, 200), (1.0, 0.95, 0.88), 4.0, 0.0, 0
     sun.rotation_euler = tuple(math.radians(v) for v in rot); sun.keyframe_insert("rotation_euler", frame=F(t))
     sun.data.color = col; sun.data.keyframe_insert("color", frame=F(t)); sun.data.energy = en; sun.data.keyframe_insert("energy", frame=F(t))
     mixn.default_value = mx; mixn.keyframe_insert("default_value", frame=F(t)); bgs.default_value = bg; bgs.keyframe_insert("default_value", frame=F(t))
+for m_ in bpy.data.materials:
+    if m_.use_nodes and "WL_MUD" in m_.node_tree.nodes:
+        o_ = m_.node_tree.nodes["WL_MUD"].outputs[0]
+        for t, v in ((0, 0), (30.2, 0), (31.4, 1)):
+            o_.default_value = v; o_.keyframe_insert("default_value", frame=F(t))
+# poles topple in the flood and their wires snap
+for o in bpy.data.objects:
+    if o.name.startswith("Pole_"):
+        t0 = T_front(o.location.y) + random.uniform(0.1, 0.6)
+        if t0 > 38 or random.random() < 0.3: continue
+        key_tr(o, F(t0), rot=tuple(o.rotation_euler))
+        key_tr(o, F(t0 + 0.9), rot=(-random.uniform(0.6, 1.4), random.uniform(-0.4, 0.4), o.rotation_euler.z))
+        o["fell"] = t0
+for o in bpy.data.objects:
+    if o.name.startswith("Wire_"):
+        ts = [bpy.data.objects[o[k]].get("fell", 99) for k in ("pole_a", "pole_b")]
+        t0 = min(ts)
+        if t0 < 38: key_hide(o, [(1, False), (F(t0 + 0.15), True)])
+    elif o.name.startswith(("Banana_", "Moto_")):
+        t0 = T_front(o.location.y) + random.uniform(0.0, 0.4)
+        if t0 > 38: continue
+        sweep(o, t0, random.uniform(10, 40), (random.uniform(-2, 2), random.uniform(-2, 2), random.uniform(-2, 2)),
+              (random.uniform(-1.4, 1.4), random.uniform(-1.4, 1.4), 0), rise=2.0 if o.name.startswith("Moto_") else 1.5)
 mud = bpy.data.materials["M_Terrain"].node_tree.nodes["MUD"].outputs[0]
 for t, v in ((0, 0), (30.2, 0), (31.4, 1)):
     mud.default_value = v; mud.keyframe_insert("default_value", frame=F(t))

@@ -106,7 +106,7 @@ class Person:
                     W = shw + side * 0.08 + fw * (0.28 * L * sw) + up * (-0.88 * L); d = (-up + fw * 0.2).normalized(); n = -side
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "run":
-                    W = shw + side * 0.13 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
+                    W = shw + side * 0.16 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
                     pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
                 elif nm == "point":
                     W = shw + fw * 0.93 * L + up * 0.2 * L + side * 0.05; d = (fw + up * 0.2).normalized(); n = -up
@@ -185,7 +185,15 @@ q.go([(13, 18), (8, 36), (FP.x, FP.y)], T(4.0), T(6.0))
 q.stand(T(6.0), T(9.1), FP, 180, crouch=lambda f: 0.32 * sstep((f - T(6.1)) / 25) * (1 - sstep((f - T(6.9)) / 25)),
         flex=lambda f: 4 + 58 * sstep((f - T(6.1)) / 25) * (1 - sstep((f - T(6.9)) / 25)),
         head=lambda f: (25 * sstep((f - T(6.0)) / 20) * (1 - sstep((f - T(6.9)) / 20)) - 10 * sstep((f - T(7.6)) / 30), 0), step=3)
-q.go([(FP.x, FP.y), (FP.x + 0.1, FP.y - 0.7)], T(9.1), T(9.6))
+P1 = Vector((FP.x + 0.1, FP.y - 0.7, 0))
+H_ = q.H; p0 = Vector((FP.x, FP.y, 0))
+for s_, (fa, fm_, fb) in (("L", (T(9.1), T(9.22), T(9.34))), ("R", (T(9.3), T(9.42), T(9.55)))):
+    A_ = H_.foot_xy(s_, p0, 180); B_ = H_.foot_xy(s_, P1, 8)
+    H_.key_foot(s_, fa, A_, 180); H_.key_foot(s_, fm_, A_.lerp(B_, 0.5), 94, lift=0.12); H_.key_foot(s_, fb, B_, 8)
+for f_, u_ in ((T(9.1), 0.0), (T(9.33), 0.55), (T(9.55), 1.0)):
+    pp = p0.lerp(P1, u_); yw = 180 + (8 - 180) * u_
+    H_.key_root(f_, Vector((pp.x, pp.y, ground_z(pp.x, pp.y) + H_.root_head.z - 0.04)), yaw=yw, flex=3)
+    q.st[f_] = (pp.copy(), yw, "stand", 0.0)
 q.stand(T(9.6), T(10.3), (FP.x + 0.1, FP.y - 0.7), 8, head=(-12, 0), flex=8)
 q.go([(FP.x + 0.1, FP.y - 0.7), (5, 30), (5, 2)], T(10.3), T(12.8), run=True)
 fish_pick = bpy.data.objects["Fish_00"]
