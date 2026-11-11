@@ -92,3 +92,11 @@ The client checks stills for these first. Before sending stills, render a close-
 - **Clothes**: no body through clothing at bends (elbows, knees, armpits, waist). Use MPFB's delete-group/proxy-fitting or a small Displace on the body under the clothes.
 - **Characters through each other** (carrying, hugging, tackling) and **props through props**.
 Also add a numeric penetration check to your audit (BVH overlap between hand, foot and head-item meshes and the scene). Report the count at checkpoint C.
+
+## Common rejects from the first blocking reviews (fix them before you send B)
+1. **Untextured clay look.** Check that every material has its texture maps connected: MPFB skin diffuse plus SSS, clothes, walls and props. A grey or white default surface anywhere on screen is a reject.
+2. **Overexposed, flat image.** Use AgX Medium High Contrast and a real key/fill/rim with contrast. Compare against `goat_rescue2_v002/package_check_f700_lowres.png`.
+3. **Blank transition frames.** A pass through skin, fabric or a wall may fill the frame for at most about 6 frames, and the surface must show macro detail. A still that is mostly a blank colour is a reject.
+4. **Glove or hand blobs.** Gloves must be the MPFB hand mesh with a glove material, with articulated fingers around the tool. No inflated sausage shapes.
+5. **Stray objects.** Look for floating spheres, helper empties left renderable, and default cubes. Hide every helper with `hide_render`.
+6. **Empty sets.** Every set needs background life: people moving, a monitor trace, a lamp, dust, wind.
