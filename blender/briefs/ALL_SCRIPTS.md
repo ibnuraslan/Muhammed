@@ -176,3 +176,28 @@ As he drove, the car's AI scanned his face and flashed red, warning him to wake 
 *Target about 44.0 s, 131 words*
 
 At a hockey game, she spotted a strange mole on the back of a man's neck. It was an odd color, and she thought it could be cancer. She was nervous about upsetting a stranger, but someone had to warn him. So she typed a note in big letters on her phone and pressed it against the glass. The team's equipment manager read the message, but walked away without saying a word. Still, he went to a doctor just in case, and when they checked the mole, they found cancer, which they quickly removed. He asked people to help him find the woman. Strangers shared the story, and when she was finally identified, both teams surprised her with a ten thousand dollar scholarship as a thank you for saving his life.
+
+## Connect31: PopeShot
+*Target about 27.0 s, 81 words*
+
+He fired straight at the Pope in the middle of a crowded square. Two bullets tore through, hitting him in the stomach and hand. He collapsed, badly wounded, but survived after emergency surgery. And years later, the Pope publicly forgave the man who shot him, and even met him face to face in his prison cell. He later had one of the bullets placed in the crown of a statue, believing that God had guided it away from his vital organs.
+
+## Connect32: GoatOwner
+*Target about 36.5 s, 95 words*
+
+The owner would beat his goat with sticks, trying to make it aggressive toward people so it would guard his property. And this went on for a long time. But one day, the goat had enough. It charged forward and rammed its sharp horns straight into the man. Twice. As he stumbled away, the goat chased him onto the porch and knocked him off. He hit the ground hard and died within minutes. When his body was found, the goat was captured. But instead of being put down, it was taken in by animal rescuers.
+
+## Connect33: WaterTubes
+*Target about 33.5 s, 87 words*
+
+He filled a long tube with water in his front yard, then added more tubes until his entire house was surrounded. Then floodwater began rushing into the neighbourhood. Other homes were damaged, but at his house, the thousands of gallons of water inside the tubes made them incredibly heavy, too heavy for the flood to push through. The water hit the barrier and flowed around it instead. When it was finally over, nearby homes were wrecked, but his house stood dry, saved by water holding back water.
+
+## Connect34: EscapeArtist
+*Target about 62.5 s, 170 words*
+
+He would glance at a guard's key and instantly memorize its pattern. Then he'd file a piece of scrap metal into the exact same shape and let himself out of prison. You see, as an autistic child, he had a special talent for mechanics, and when his father died, he left his tools to him. But his stepmother called the police, since the will hadn't been read yet. He was sentenced to four years, but after just one month, he climbed over the razor wire fence and ran. That added more time to his sentence, plus solitary confinement. But once he was back in his cell, he used a makeshift saw to cut through the bars. Another time, he shaped a toothpaste tube to look like a gun and pointed it at the guards as he ran. And after 13 escape attempts, his sentence had stretched to 34 years, with 27 of those spent in solitary confinement. And even though people have protested, he's still in prison to this day.
+
+## Connect35: TitanicIceberg
+*Target about 30.5 s, 90 words*
+
+He took a photo of an iceberg, claiming it was the exact one that sank the Titanic. You see, it was streaked with red, with one big smear along the ice, and his ship was sailing near where the Titanic had gone down just the day before. So it was most likely the same iceberg. When the film was developed, experts studied the image carefully. The red streaks lined up with the height of the Titanic's hull paint, leading many to believe this was the iceberg that sank the Titanic.
