@@ -534,7 +534,7 @@ for f in (f_x0 + 3, f_x1):
     foot_w("L", f, (STAND_XY.x - 0.05, STAND_XY.y + 0.16), 98)
 
 # --- beat 11 (26.5-31.0): slow-motion x-ray replay. Lies with head on a ghost rail, ghost train pushes, body flows with it
-f_r0, f_r1 = f_x1, F(31.0)
+f_r0, f_r1 = f_x1, F(31.0) - 4          # beat 12 starts 4 frames early so the 31 s still is the real scene
 R_HEAD = V(STAND_XY.x - 1.25, STOP_Y + 1.5, RAIL_H + 0.095)    # ghost rail runs along Y at x = R_HEAD.x - 0.02
 sc["replay_head"] = str(tuple(R_HEAD))
 R_IMP = f_r0 + 40; SLOW = 5.0

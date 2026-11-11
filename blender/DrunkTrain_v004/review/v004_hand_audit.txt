@@ -1,0 +1,2 @@
+Hand audit every 2 frames: 1 hits
+WitB hand L x own clothes: 1 frames (1059-1059) [1059]

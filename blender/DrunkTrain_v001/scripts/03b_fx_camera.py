@@ -361,12 +361,12 @@ R_HEAD = V(*eval(sc["replay_head"]))
 GX = R_HEAD.x - 0.02 - GAUGE
 M_GHOST = bpy.data.materials.new("Ghost"); M_GHOST.use_nodes = True
 gn = M_GHOST.node_tree.nodes; gl = M_GHOST.node_tree.links
-gp = gn["Principled BSDF"]; gp.inputs['Base Color'].default_value = (0.04, 0.28, 0.48, 1); gp.inputs['Alpha'].default_value = 0.45
-gp.inputs['Emission Color'].default_value = (0.3, 0.75, 1.0, 1); gp.inputs['Emission Strength'].default_value = 1.0
-_lw = gn.new('ShaderNodeLayerWeight'); _lw.inputs['Blend'].default_value = 0.25
-_rm = gn.new('ShaderNodeMath'); _rm.operation = 'MULTIPLY'; _rm.inputs[1].default_value = 2.2; gl.new(_lw.outputs['Facing'], _rm.inputs[0])
+gp = gn["Principled BSDF"]; gp.inputs['Base Color'].default_value = (0.0, 0.25, 0.62, 1); gp.inputs['Alpha'].default_value = 0.45
+gp.inputs['Emission Color'].default_value = (0.0, 0.6, 1.0, 1); gp.inputs['Emission Strength'].default_value = 1.0
+_lw = gn.new('ShaderNodeLayerWeight'); _lw.inputs['Blend'].default_value = 0.12
+_rm = gn.new('ShaderNodeMath'); _rm.operation = 'MULTIPLY'; _rm.inputs[1].default_value = 7.0; gl.new(_lw.outputs['Facing'], _rm.inputs[0])
 _ad = gn.new('ShaderNodeMath'); _ad.operation = 'ADD'; _ad.inputs[1].default_value = 0.04; gl.new(_rm.outputs[0], _ad.inputs[0]); gl.new(_ad.outputs[0], gp.inputs['Emission Strength'])
-_al = gn.new('ShaderNodeMath'); _al.operation = 'ADD'; _al.inputs[1].default_value = 0.08; gl.new(_lw.outputs['Facing'], _al.inputs[0]); gl.new(_al.outputs[0], gp.inputs['Alpha'])
+_al = gn.new('ShaderNodeMath'); _al.operation = 'ADD'; _al.inputs[1].default_value = 0.38; gl.new(_lw.outputs['Facing'], _al.inputs[0]); gl.new(_al.outputs[0], gp.inputs['Alpha'])
 M_ARROW = bpy.data.materials.new("ForceArrow"); M_ARROW.use_nodes = True
 ap = M_ARROW.node_tree.nodes["Principled BSDF"]; ap.inputs['Base Color'].default_value = (0.0, 0.45, 0.9, 1)
 ap.inputs['Emission Color'].default_value = (0.0, 0.55, 1.0, 1); ap.inputs['Emission Strength'].default_value = 1.6
@@ -407,7 +407,7 @@ def arrow(name, L_):
     me.materials.append(M_ARROW); return o
 ARROWS = []
 for k in range(7):
-    a = arrow("ForceArrow%d" % k, random.uniform(1.0, 1.5)); ARROWS.append((a, V(random.uniform(-0.2, 1.6), random.uniform(0.3, 1.4), random.uniform(0.2, 0.9)), random.uniform(0, 1)))
+    a = arrow("ForceArrow%d" % k, random.uniform(0.6, 0.9)); ARROWS.append((a, V(random.uniform(-0.2, 1.6), random.uniform(0.3, 1.4), random.uniform(0.2, 0.9)), random.uniform(0, 1)))
 for f in list(range(R_IMP - 10, f_r1 + 1, 3)) + [f_r1]:
     fr = T_IMP + (f - R_IMP) / SLOW
     body_p, _ = drag_full(int(max(T_IMP, min(fr, f_rest))))
@@ -608,12 +608,16 @@ CAM = [  # frame, camera, aim, lens
     (1440, V(3.45, -40.1, 1.3), V(2.45, -40.1, 1.15), 26),
     (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
     (1560, V(2.95, -40.95, 1.15), V(2.45, -40.35, 1.05), 38),
-    (1605, V(3.6, -41.6, 1.6), V(1.9, -38.6, 0.3), 24),
-    (1680, V(3.2, rp(1680).y - 1.9, 0.9), rp(1680), 26),
-    (1750, V(rp(1750).x - 1.7, rp(1750).y - 1.6, 1.0), rp(1750), 28),
-    (1812, V(rp(1812).x + 1.6, rp(1812).y - 1.8, 1.0), rp(1812), 28),
-    (1846, V(rp(1846).x + 1.4, rp(1846).y + 1.2, 1.1), rp(1846), 28),
-    (1866, V(2.65, -38.3, 1.65), V(2.4, -41.0, 1.3), 28),
+    (1605, V(rp(1605).x + 1.4, rp(1605).y - 1.7, 1.0), rp(1605), 28),
+    (1625, V(rp(1625).x + 0.9, rp(1625).y - 1.0, 0.7), rp(1625), 30),
+    (1680, V(rp(1680).x + 1.3, rp(1680).y - 1.5, 0.85), rp(1680), 28),
+    (1750, V(rp(1750).x - 1.1, rp(1750).y - 1.0, 0.8), rp(1750), 30),
+    (1812, V(rp(1812).x + 1.0, rp(1812).y - 1.1, 0.75), rp(1812), 30),
+    (1834, V(rp(1834).x + 1.0, rp(1834).y - 1.0, 0.8), rp(1834), 30),
+    (1849, V(rp(1849).x + 0.6, rp(1849).y - 0.45, 0.6), rp(1849), 30),
+    (1855, rp(1855) + V(0.08, -0.06, 0.12), rp(1855) + V(-0.2, 0.2, 0.0), 30),
+    (1858, V(2.4, -40.12, 1.3), V(2.4, -41.5, 1.2), 30),
+    (1876, V(2.65, -38.3, 1.65), V(2.4, -41.0, 1.3), 28),
     (1920, V(3.4, -40.0, 1.5), V(2.45, -41.8, 1.2), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
     (2020, V(2.78, -43.6, 1.5), V(2.5, -43.1, 1.42), 40),

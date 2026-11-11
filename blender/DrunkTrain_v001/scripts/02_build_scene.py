@@ -564,8 +564,8 @@ M_CYC = bpy.data.materials.new("StudioCyc"); M_CYC.use_nodes = True
 nn, ll = M_CYC.node_tree.nodes, M_CYC.node_tree.links
 pc = nn["Principled BSDF"]; pc.inputs['Roughness'].default_value = 0.9
 gtc = nn.new('ShaderNodeTexCoord'); gsep = nn.new('ShaderNodeSeparateXYZ'); ll.new(gtc.outputs['Generated'], gsep.inputs[0])
-cr = nn.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); cr.color_ramp.elements[1].color = (0.08, 0.55, 0.93, 1)
-cr.color_ramp.elements[0].position = 0.08; cr.color_ramp.elements[1].position = 0.75
+cr = nn.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); cr.color_ramp.elements[1].color = (0.01, 0.38, 0.92, 1)
+cr.color_ramp.elements[0].position = 0.05; cr.color_ramp.elements[1].position = 0.5
 ll.new(gsep.outputs['Z'], cr.inputs['Fac']); ll.new(cr.outputs['Color'], pc.inputs['Base Color'])
 pc.inputs['Emission Strength'].default_value = 0.35; ll.new(cr.outputs['Color'], pc.inputs['Emission Color'])
 bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=48, v_segments=24, radius=1.0)
