@@ -34,6 +34,6 @@ The massive nuclear device was lowered down the shaft, and then concrete was pou
   - No logos, brand names or watermarks on anything: clothes, cups, monitors, props.
   - No likeness of any real person; use generic characters.
 - **Look:** textured, grounded realism, with anatomy believable and clean, never gory.
-  - Medical "inside the body" beats use the clean explainer look: a soft cyan-to-white studio gradient behind realistic anatomy and studio lighting.
+  - Medical "inside the body" beats use the clean explainer look: a deep teal-to-navy studio gradient behind realistic anatomy and studio lighting.
   - Real-world beats use real sets.
-- **Deliverable tonight:** checkpoint D package in `blender/NukedWell_v002/`, pushed with Git LFS. Keep the .blend under about 150 MB (1K–2K textures, 2K HDRI).
+- **Deliverable tonight:** checkpoint D package in `blender/NukedWell_v002/`, committed as a normal git file with no LFS. Keep the .blend under 95 MB (1K textures, 2K only for hero close-ups, 1K HDRI).
