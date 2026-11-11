@@ -368,8 +368,90 @@ CLOTHES = {"coat": "male_casualsuit05", "jacket": "male_casualsuit05", "work": "
            "sweater": "male_casualsuit04", "woman": "female_casualsuit01", "suit": "male_elegantsuit01"}
 
 
-def person(name, gender=1.0, years=40, clothes="coat", hair="short02", cval=0.25, hue=0.5, sat=0.4, hv=0.15, weight=0.5,
-           height=0.5, skin=None, cap=False):
+# 1998 Istanbul winter wear: (clothes asset, tint, value) -- muted, varied; never all-black
+OUTFITS = {
+    "wool_brown": ("male_casualsuit05", (0.62, 0.45, 0.32), 1.1),
+    "wool_grey":  ("male_casualsuit05", (0.62, 0.62, 0.6), 1.2),
+    "parka_green": ("male_casualsuit05", (0.4, 0.46, 0.3), 1.2),
+    "navy":       ("male_casualsuit05", (0.32, 0.38, 0.52), 1.1),
+    "camel":      ("male_casualsuit05", (0.8, 0.62, 0.42), 1.25),
+    "charcoal":   ("male_casualsuit05", (0.45, 0.45, 0.46), 1.1),
+    "suit_grey":  ("male_elegantsuit01", (0.6, 0.6, 0.62), 1.6),
+    "suit_brown": ("male_elegantsuit01", (0.6, 0.5, 0.4), 1.6),
+    "doctor":     ("male_elegantsuit01", (1.0, 1.0, 1.0), 5.0),      # white coat
+    "nurse":      ("female_elegantsuit01", (1.0, 1.0, 1.0), 4.5),
+    "woman_coat": ("male_casualsuit05", (0.55, 0.38, 0.36), 1.2),
+    "overall_white": ("male_casualsuit05", (1.0, 1.0, 0.98), 3.2),     # coverall look: whole suit tinted
+    "overall_orange": ("male_casualsuit05", (1.0, 0.38, 0.06), 3.4),
+    "police":     ("male_elegantsuit01", (0.35, 0.42, 0.55), 1.8),
+}
+
+
+def _hat(h, kind, col):
+    """Knit cap / flat cap, parented to the head bone (follows every pose, bakes with the rig)."""
+    from kit import fabric
+    from mathutils import Matrix
+    bpy.context.view_layer.update()
+    hd = h.bone_head("head"); tl = h.bone_tail("head")
+    up = (tl - hd).normalized()
+    crown = hd + (tl - hd) * 0.85
+    m = fabric(h.name + kind, col, 1.0, 0.8, 900)
+    if kind == "knit":
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=28, ring_count=14, radius=0.112, location=crown + up * 0.01)
+        c = bpy.context.active_object; c.scale = (1.02, 1.08, 0.95)
+        bpy.ops.object.shade_smooth()
+        bpy.ops.object.mode_set(mode='EDIT'); import bmesh
+        bm = bmesh.from_edit_mesh(c.data)
+        for v in [v for v in bm.verts if v.co.z < -0.02]:
+            bm.verts.remove(v)
+        bmesh.update_edit_mesh(c.data); bpy.ops.object.mode_set(mode='OBJECT')
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.108, minor_radius=0.018, major_segments=28, minor_segments=8, location=crown + up * 0.01 - Vector((0, 0, 0.022)))
+        band = bpy.context.active_object; band.scale = (1.0, 1.06, 1.0); bpy.ops.object.shade_smooth()
+        parts = [c, band]
+    else:   # flat cap: low crown + short brim toward the face (-Y in rest pose)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=28, ring_count=14, radius=0.115, location=crown + up * 0.005 + Vector((0, -0.012, 0)))
+        c = bpy.context.active_object; c.scale = (1.02, 1.12, 0.48); bpy.ops.object.shade_smooth()
+        bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=0.075, depth=0.012, location=crown + Vector((0, -0.11, -0.025)))
+        brim = bpy.context.active_object; brim.scale = (1.1, 0.75, 1.0); brim.rotation_euler = (math.radians(-12), 0, 0)
+        parts = [c, brim]
+    for p in parts:
+        p.data.materials.append(m)
+    hat = join(parts, h.name + "Hat")
+    _to_bone(h, hat, "head")
+    return hat
+
+
+def _to_bone(h, o, bone):
+    bpy.context.view_layer.update()
+    mw = o.matrix_world.copy()
+    o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = bone
+    bpy.context.view_layer.update()
+    o.matrix_world = mw
+    h.parts.append(o)
+
+
+def _moustache(h, col=(0.03, 0.022, 0.018)):
+    """Dark moustache: an eyebrow strip reused, flipped and moved to the upper lip."""
+    br = [o for o in h.parts if o.name.endswith("_brows")]
+    if not br:
+        return None
+    me = br[0].data.copy(); o = bpy.data.objects.new(h.name + "Moustache", me); bpy.context.collection.objects.link(o)
+    co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    zc = co[:, 2].mean()
+    nose = h.bone_head("head")
+    co[:, 0] *= 0.42                                    # narrower than the brows
+    co[:, 2] = zc - (co[:, 2] - zc) * 0.6 - 0.083      # flip the arch and drop to the upper lip
+    co[:, 1] += 0.012                                   # lip is set back a little from the brow ridge
+    me.vertices.foreach_set("co", co.ravel()); me.update()
+    o.data.materials.clear(); o.data.materials.append(pbr(h.name + "MoustM", col, 0.8))
+    for md in list(o.modifiers):
+        o.modifiers.remove(md)
+    _to_bone(h, o, "head")
+    return o
+
+
+def person(name, gender=1.0, years=40, outfit="wool_brown", hair="short02", hv=0.15, weight=0.5, height=0.5, skin=None,
+           hat=None, hat_col=(0.18, 0.06, 0.05), moustache=False, dosimeter=False, base_layer=False, **_):
     from human import Human, add_asset
     sk = skin or {True: "middleage_lightskinned_male_diffuse2.png", False: "middleage_lightskinned_female_diffuse2.png"}[gender > 0.5]
     if years > 55:
@@ -378,26 +460,30 @@ def person(name, gender=1.0, years=40, clothes="coat", hair="short02", cval=0.25
         sk = "young_lightskinned_male_diffuse.png" if gender > 0.5 else "young_lightskinned_female_diffuse.png"
     h = Human(name, gender=gender, years=years, muscle=0.5, weight=weight, height=height, skin=sk,
               eyebrows="eyebrow002" if gender > 0.5 else "eyebrow001", eyelashes="eyelashes01")
-    add_asset(h, "clothes", CLOTHES.get(clothes, clothes), hue=hue, sat=sat, val=cval, rough=0.8, sheen=0.3)
+    asset, tint, val = OUTFITS.get(outfit, OUTFITS["wool_brown"])
+    if asset == "male_worksuit01" or base_layer:        # long-sleeved shirt and trousers under overalls (winter)
+        add_asset(h, "clothes", "male_casualsuit01", tint=(0.55, 0.55, 0.58), val=0.8, rough=0.85)
+    add_asset(h, "clothes", asset, tint=tint, sat=0.0 if outfit.startswith(("overall", "doctor", "nurse")) else 0.35, val=val, rough=0.85, sheen=0.3)
     add_asset(h, "clothes", "shoes02", val=0.15, rough=0.5)
     if hair:
         add_asset(h, "hair", hair, val=hv, rough=0.5)
     sb = h.skin_mat.node_tree.nodes["Principled BSDF"]
     sb.inputs['Subsurface Weight'].default_value = 0.1
-    if cap:                                   # a dark knitted cap (simple dome over the skull)
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=0.105)
-        c = bpy.context.active_object; c.name = name + "Cap"; c.scale = (1.0, 1.08, 0.82)
-        from kit import fabric
-        c.data.materials.append(fabric(name + "CapM", (0.05, 0.05, 0.055), 0.95, 0.4, 400))
-        h.cap = c
-        bpy.ops.object.shade_smooth()
+    if hat:
+        _hat(h, hat, hat_col)
+    if moustache and gender > 0.5:
+        _moustache(h)
+    if dosimeter:                                       # film-badge dosimeter clipped on the chest pocket
+        bpy.context.view_layer.update()
+        ch = h.bone_head("spine02")
+        b = box(name + "Dosi", ch + Vector((0.09, -0.135, 0.12)), (0.035, 0.008, 0.045), pbr(name + "DosiM", (0.85, 0.82, 0.7), 0.4), bevel=0.003)
+        _to_bone(h, b, "spine02")
     return h
 
 
 def attach_cap(h):
-    if getattr(h, "cap", None) is not None:
-        hd = h.bone_head("head"); tl = h.bone_tail("head")
-        h.cap.location = hd + (tl - hd) * 0.62 + Vector((0, 0, 0.0))
+    """Hats and badges are parented to bones now; kept for older call sites."""
+    return None
 
 
 def place(h, loc, face_z):
@@ -414,19 +500,38 @@ def face_angle(src, dst):
     return math.atan2(d.x, -d.y)
 
 
-def arms_relaxed(h, swing=0.0):
-    from human import aim_bone
+def arms_relaxed(h, phase=0.0, swing=0.0):
+    """Arms hanging close to the body (relative to the rig's facing), optional walk swing in degrees."""
+    M = h.arm.matrix_world.to_3x3(); fwd = (M @ Vector((0, -1, 0))).normalized(); left = (M @ Vector((1, 0, 0))).normalized()
     for sd, sg in (("L", 1), ("R", -1)):
-        aim_bone(h.arm, f"upperarm01.{sd}", (sg * 0.12, 0.02 * swing, -1.0)); aim_bone(h.arm, f"upperarm02.{sd}", (sg * 0.12, 0.02, -1.0))
-        aim_bone(h.arm, f"lowerarm01.{sd}", (sg * 0.06, -0.18, -1.0)); aim_bone(h.arm, f"lowerarm02.{sd}", (sg * 0.06, -0.18, -1.0))
+        a = math.radians(swing) * math.sin(2 * math.pi * phase + (math.pi if sd == "L" else 0.0))
+        up = (Vector((0, 0, -1)) * math.cos(a) + fwd * math.sin(a) + left * (0.1 * sg)).normalized()
+        lo = (up + fwd * (0.22 + 0.15 * max(0.0, math.sin(a)))).normalized()
+        h.aim(f"upperarm01.{sd}", up); h.aim(f"upperarm02.{sd}", up)
+        h.aim(f"lowerarm01.{sd}", lo); h.aim(f"lowerarm02.{sd}", lo); h.aim(f"wrist.{sd}", lo + left * (0.1 * sg))
+
+
+def arms_crossed(h):
+    from human import reach
+    fwd = forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
+    chest = h.bone_head("spine02") + fwd * 0.2 + Vector((0, 0, -0.02))
+    reach(h, "R", chest + side * 0.1, Vector((side.x, side.y, -0.6)) + fwd * 0.2, -side)
+    reach(h, "L", chest - side * 0.1 + Vector((0, 0, 0.04)), Vector((-side.x, -side.y, -0.6)) + fwd * 0.2, side)
+
+
+def point_at_dir(h, target):
+    from human import reach
+    sh = h.bone_head("upperarm01.R"); d = (Vector(target) - sh).normalized()
+    reach(h, "R", sh + d * 0.62, Vector((0, 0, -1)), d)
 
 
 def forward(h):
     return (h.arm.matrix_world.to_3x3() @ Vector((0, -1, 0))).normalized()
 
 
-def stand_pose(h, sway=0.0, head_down=0.0, hands_pockets=False):
+def stand_pose(h, sway=0.0, head_down=0.0, hands_pockets=False, crossed=False):
     from human import reset_pose, fingers_curl
+    h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0)
     reset_pose(h)
     for sd, sg in (("L", 1), ("R", -1)):
         h.rot(f"upperleg01.{sd}", (0, 1, 0), sg * 2.0)
@@ -437,6 +542,8 @@ def stand_pose(h, sway=0.0, head_down=0.0, hands_pockets=False):
         for sd, sg in (("L", -1), ("R", 1)):
             hip = h.bone_head(f"upperleg01.{sd}")
             reach(h, sd, hip + side * (0.08 * sg) + fwd * 0.08 + Vector((0, 0, 0.1)), Vector((sg * side.x, sg * side.y, 0)) - fwd * 0.5, Vector((0, 0, -1)))
+    if crossed:
+        arms_crossed(h)
     fingers_curl(h, 30)
     h.rot("spine03", (0, 1, 0), sway)
     if head_down:
@@ -494,3 +601,297 @@ def overcast(strength=0.12, sun_energy=0.8, sun_elev=25, sun_az=150, tint=(0.92,
     L.new(sky.outputs['Color'], hs.inputs['Color']); L.new(hs.outputs['Color'], mix.inputs[6])
     s = sun(sun_elev, sun_az, energy=sun_energy, color=(1.0, 0.95, 0.9), angle_deg=25)
     return w
+
+
+# ============================================================================ scrap kit (instanced over heaps)
+def ph_proto(aid, name=None, target_size=None):
+    """Import a Poly Haven model as ONE mesh object (transforms applied, origin at its base centre), parked
+    below ground, ready for instance(). Returns None if the download fails."""
+    root, ms = ph_model(aid)
+    if not ms:
+        return None
+    bpy.context.view_layer.update()
+    objs = []
+    for o in ms:
+        mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+        objs.append(o)
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in objs:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = objs[0]
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    if len(objs) > 1:
+        bpy.ops.object.join()
+    o = bpy.context.active_object; o.name = name or aid
+    lo = Vector((min(v.co.x for v in o.data.vertices), min(v.co.y for v in o.data.vertices), min(v.co.z for v in o.data.vertices)))
+    hi = Vector((max(v.co.x for v in o.data.vertices), max(v.co.y for v in o.data.vertices), max(v.co.z for v in o.data.vertices)))
+    c = Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z))
+    o.data.transform(Matrix.Translation(-c))
+    if target_size:
+        s = target_size / max(hi - lo)
+        o.data.transform(Matrix.Scale(s, 4))
+    o.location = (0, 0, -500)
+    if root:
+        bpy.data.objects.remove(root)
+    return o
+
+
+def bent_panel(name, w, h, bend, mat, thick=0.015):
+    """A sheet bent along its width (bonnets, roofs, corrugated sheet): simple deform BEND, applied."""
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=16, y_subdivisions=4, size=1)
+    o = bpy.context.active_object; o.name = name; o.scale = (w, h, 1)
+    bpy.ops.object.transform_apply(scale=True)
+    sd = o.modifiers.new("Bend", 'SIMPLE_DEFORM'); sd.deform_method = 'BEND'; sd.angle = bend; sd.deform_axis = 'Y'
+    so = o.modifiers.new("Solid", 'SOLIDIFY'); so.thickness = thick
+    bpy.ops.object.modifier_apply(modifier="Bend"); bpy.ops.object.modifier_apply(modifier="Solid")
+    o.data.materials.append(mat)
+    return o
+
+
+def scrap_kit(rng):
+    """Returns a list of (proto, weight). Materials: Poly Haven rust textures + painted panels with rust."""
+    rust = [ph_mat("rusty_metal_02", 0.6, (0.25, 0.12, 0.06), name="ScrRust1"),
+            ph_mat("rust_coarse_01", 0.7, (0.3, 0.14, 0.06), name="ScrRust2"),
+            ph_mat("rusty_painted_metal", 0.6, (0.2, 0.25, 0.3), name="ScrPaintRust"),
+            ph_mat("green_metal_rust", 0.6, (0.15, 0.22, 0.15), name="ScrGreenRust"),
+            rust_mat("ScrRust3", (0.26, 0.11, 0.05), 5.0)]
+    corr = ph_mat("rusty_corrugated_iron", 0.8, (0.3, 0.2, 0.12), name="ScrCorr")
+    paints = [(0.3, 0.07, 0.05), (0.42, 0.42, 0.4), (0.08, 0.13, 0.22), (0.36, 0.3, 0.14), (0.09, 0.17, 0.1), (0.24, 0.25, 0.26)]
+    pmats = []
+    for k, col in enumerate(paints):
+        m = rust_mat(f"PaintedRust{k}", (0.22, 0.1, 0.05), 3.0)
+        N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+        tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 2.5; nz.inputs['Detail'].default_value = 12
+        L.new(tc.outputs['Object'], nz.inputs['Vector'])
+        th = N.new("ShaderNodeMath"); th.operation = 'GREATER_THAN'; th.inputs[1].default_value = 0.56; L.new(nz.outputs['Fac'], th.inputs[0])
+        cur = p.inputs['Base Color'].links[0].from_socket
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(th.outputs[0], mx.inputs['Factor'])
+        L.new(cur, mx.inputs[6]); mx.inputs[7].default_value = (*col, 1)
+        L.new(mx.outputs[2], p.inputs['Base Color'])
+        pmats.append(m)
+    K = []
+    def add(o, w):
+        o.location = (0, 0, -500); K.append((o, w))
+    for k in range(3):                                    # car doors: outer panel + window frame
+        m = pmats[k * 2 % len(pmats)]
+        d = join([box("DoorPanel", (0, 0, 0.3), (1.1, 0.06, 0.6), m, bevel=0.03),
+                  box("FrameT", (0.05, 0, 0.98), (0.95, 0.04, 0.04), m), box("FrameF", (-0.48, 0, 0.8), (0.04, 0.04, 0.4), m, rot=(0, math.radians(-15), 0)),
+                  box("FrameB", (0.53, 0, 0.8), (0.04, 0.04, 0.4), m)], "CarDoor")
+        add(d, 1.0)
+    for k in range(3):                                    # bonnets / roofs
+        add(bent_panel("Bonnet", 1.5, 1.2, rng.uniform(0.3, 0.8), pmats[(k * 2 + 1) % len(pmats)]), 1.0)
+    for k in range(2):
+        add(bent_panel("Corrugated", 2.4, 0.9, rng.uniform(0.1, 0.6), corr, 0.008), 1.0)
+    for k, m in enumerate(rust):
+        add(box("Plate", (0, 0, 0), (1.3, 0.9, 0.02), m), 1.2)
+        ib = join([box("W", (0, 0, 0), (2.4, 0.02, 0.3), m), box("F1", (0, 0, 0.15), (2.4, 0.16, 0.02), m), box("F2", (0, 0, -0.15), (2.4, 0.16, 0.02), m)], "IBeam")
+        add(ib, 0.8)
+        add(cyl("Pipe", (0, 0, 0), rng.uniform(0.05, 0.14), rng.uniform(1.5, 3.0), m, verts=14, rot=(0, math.radians(90), 0)), 0.8)
+        ang = join([box("A1", (0, 0, 0), (2.0, 0.08, 0.008), m), box("A2", (0, 0.04, 0.04), (2.0, 0.008, 0.08), m)], "Angle"); add(ang, 0.6)
+    rebar_m = rust[4]
+    for k in range(2):                                    # rebar bundles, bent
+        bars = []
+        for j in range(7):
+            b = cyl("Rebar", (0, rng.uniform(-0.05, 0.05), rng.uniform(-0.05, 0.05)), 0.008, 3.0, rebar_m, verts=6, rot=(0, math.radians(90), 0))
+            sd = b.modifiers.new("Bend", 'SIMPLE_DEFORM'); sd.deform_method = 'BEND'; sd.angle = rng.uniform(0.3, 1.4); sd.deform_axis = 'Y'
+            bpy.context.view_layer.objects.active = b; bpy.ops.object.modifier_apply(modifier="Bend")
+            bars.append(b)
+        add(join(bars, "RebarBundle"), 0.6)
+    for k in range(2):                                    # wire coils
+        rings = []
+        for j in range(9):
+            bpy.ops.mesh.primitive_torus_add(major_radius=0.32 + rng.uniform(-0.02, 0.02), minor_radius=0.006, major_segments=40, minor_segments=4,
+                                             location=(0, 0, j * 0.012), rotation=(rng.uniform(-0.06, 0.06), rng.uniform(-0.06, 0.06), 0))
+            rings.append(bpy.context.active_object)
+        c = join(rings, "WireCoil"); c.data.materials.append(rebar_m); add(c, 0.4)
+    for k in range(2):                                    # radiators
+        fins = [box("RadFin", (-0.45 + j * 0.075, 0, 0.3), (0.05, 0.1, 0.6), pmats[1 if k == 0 else 5], bevel=0.01) for j in range(13)]
+        fins.append(box("RadTop", (0, 0, 0.62), (1.0, 0.04, 0.04), pmats[1])); fins.append(box("RadBot", (0, 0, -0.02), (1.0, 0.04, 0.04), pmats[1]))
+        add(join(fins, "Radiator"), 0.4)
+    white = rust_mat("EnamelRust", (0.25, 0.12, 0.06), 6.0)
+    N = white.node_tree.nodes; L = white.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 4; nz.inputs['Detail'].default_value = 10
+    L.new(tc.outputs['Object'], nz.inputs['Vector']); th = N.new("ShaderNodeMath"); th.operation = 'GREATER_THAN'; th.inputs[1].default_value = 0.4
+    L.new(nz.outputs['Fac'], th.inputs[0]); cur = p.inputs['Base Color'].links[0].from_socket
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(th.outputs[0], mx.inputs['Factor']); L.new(cur, mx.inputs[6]); mx.inputs[7].default_value = (0.48, 0.47, 0.44, 1)
+    L.new(mx.outputs[2], p.inputs['Base Color'])
+    wm = join([box("WMBody", (0, 0, 0.42), (0.6, 0.6, 0.84), white, bevel=0.03),
+               cyl("WMDoor", (0, -0.305, 0.48), 0.2, 0.03, pbr("WMGlass", (0.05, 0.06, 0.07), 0.1), verts=24, rot=(math.radians(90), 0, 0)),
+               cyl("WMRing", (0, -0.31, 0.48), 0.23, 0.02, pmats[5], verts=24, rot=(math.radians(90), 0, 0))], "WashingMachine")
+    add(wm, 0.25)
+    fr = join([box("FridgeBody", (0, 0, 0.75), (0.6, 0.62, 1.5), white, bevel=0.04), box("FridgeSeam", (0, -0.312, 1.05), (0.58, 0.01, 0.01), pmats[5])], "Fridge")
+    add(fr, 0.15)
+    for k, col in enumerate(((0.12, 0.22, 0.4), (0.45, 0.08, 0.05), (0.25, 0.12, 0.05))):
+        dm = pmats[[2, 0, 4][k]]
+        dr = join([cyl("Drum", (0, 0, 0.44), 0.29, 0.88, dm, verts=24)] + [cyl("DrumRib", (0, 0, z), 0.296, 0.02, dm, verts=24) for z in (0.3, 0.58)], "OilDrum")
+        add(dr, 0.5)
+    for aid, sz, w in (("rusted_wheel_rim_01", 0.6, 0.6), ("rusted_wheel_rim_02", 0.6, 0.6), ("old_tyre", 0.75, 0.9), ("Barrel_01", None, 0.4),
+                       ("propane_tank", None, 0.2), ("can_rusted", None, 0.15), ("metal_jerrycan", None, 0.25)):
+        o = ph_proto(aid, target_size=sz)
+        if o is not None:
+            add(o, w)
+    car = join([box("CarShell", (0, 0, 0.55), (3.8, 1.6, 0.7), pmats[0], bevel=0.2), box("CarRoof", (-0.2, 0, 1.1), (1.9, 1.45, 0.5), pmats[0], bevel=0.15)], "CarShell")
+    add(car, 0.12)
+    return K
+
+
+def scatter_scrap(kit_, hfun, cx, cy, R, n, rng, embed=0.15, scl=(0.8, 1.5), exclude=(), lie=0.7):
+    """Pieces lying on the heap surface: random yaw, tilted toward lying flat, partly embedded."""
+    protos = [p for p, w in kit_ if not any(p.name.startswith(e) for e in exclude)]
+    weights = np.array([w for p, w in kit_ if not any(p.name.startswith(e) for e in exclude)]); weights /= weights.sum()
+    objs = []
+    for k in range(n):
+        r = R * math.sqrt(rng.uniform(0, 0.97)); a = rng.uniform(0, 2 * math.pi)
+        x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+        z = hfun(x, y) - embed * rng.uniform(0, 1)
+        p = protos[rng.choice(len(protos), p=weights)]
+        if p.name.startswith("CarShell") and r > 0.55 * R:
+            continue
+        tilt = lie * rng.uniform(-1, 1)
+        objs.append(instance(p, (x, y, z), rot=(tilt + rng.normal(0, 0.4), rng.normal(0, 0.5), rng.uniform(0, 6.28)), scale=(rng.uniform(*scl),) * 3))
+    return objs
+
+
+def gn_instances(name, protos, locs, rots, scls, idxs):
+    """One object that instances `protos` on points via geometry nodes (fast to build, renders in any Blender).
+    locs: (n,3), rots: (n,3) euler, scls: (n,) uniform, idxs: (n,) index into protos."""
+    col = bpy.data.collections.get(name + "Protos") or bpy.data.collections.new(name + "Protos")
+    for i, p in enumerate(protos):                      # children are picked in name order: prefix the index
+        p.name = f"{name}{i:03d}_{p.name}"
+    for p in protos:
+        if p.name not in col.objects:
+            col.objects.link(p)
+    me = bpy.data.meshes.new(name + "Pts"); me.from_pydata([tuple(map(float, l)) for l in locs], [], [])
+    a = me.attributes.new("rot", 'FLOAT_VECTOR', 'POINT'); a.data.foreach_set("vector", np.asarray(rots, np.float32).ravel())
+    a = me.attributes.new("scl", 'FLOAT', 'POINT'); a.data.foreach_set("value", np.asarray(scls, np.float32).ravel())
+    a = me.attributes.new("idx", 'INT', 'POINT'); a.data.foreach_set("value", np.asarray(idxs, np.int32).ravel())
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    ng = bpy.data.node_groups.new(name + "GN", 'GeometryNodeTree')
+    ng.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
+    ng.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    N = ng.nodes; L = ng.links
+    gi = N.new("NodeGroupInput"); go = N.new("NodeGroupOutput")
+    ci = N.new("GeometryNodeCollectionInfo"); ci.inputs['Collection'].default_value = col
+    ci.inputs['Separate Children'].default_value = True; ci.inputs['Reset Children'].default_value = True
+    ip = N.new("GeometryNodeInstanceOnPoints"); ip.inputs['Pick Instance'].default_value = True
+    def attr(nm, t):
+        n = N.new("GeometryNodeInputNamedAttribute"); n.data_type = t; n.inputs['Name'].default_value = nm; return n
+    ar, asc, ai = attr("rot", 'FLOAT_VECTOR'), attr("scl", 'FLOAT'), attr("idx", 'INT')
+    e2r = N.new("FunctionNodeEulerToRotation"); L.new(ar.outputs['Attribute'], e2r.inputs[0])
+    L.new(gi.outputs[0], ip.inputs['Points']); L.new(ci.outputs[0], ip.inputs['Instance'])
+    L.new(ai.outputs['Attribute'], ip.inputs['Instance Index']); L.new(e2r.outputs[0], ip.inputs['Rotation'])
+    L.new(asc.outputs['Attribute'], ip.inputs['Scale'])
+    L.new(ip.outputs[0], go.inputs[0])
+    md = o.modifiers.new("Scatter", 'NODES'); md.node_group = ng
+    return o
+
+
+def scrap_points(kit_, hfun, cx, cy, R, n, rng, embed=0.15, scl=(0.8, 1.5), exclude=(), lie=0.7):
+    """Like scatter_scrap, but returns point data for gn_instances (index refers to the full kit list)."""
+    names = [p.name.split("_", 1)[-1] if p.name[:1] == "S" and "_" in p.name else p.name for p, w in kit_]
+    ok = [i for i, (p, w) in enumerate(kit_) if not any(p.name.startswith(e) for e in exclude)]
+    wts = np.array([kit_[i][1] for i in ok]); wts /= wts.sum()
+    L_, R_, S_, I_ = [], [], [], []
+    for k in range(n):
+        r = R * math.sqrt(rng.uniform(0, 0.97)); a = rng.uniform(0, 2 * math.pi)
+        x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+        i = ok[rng.choice(len(ok), p=wts)]
+        if names[i].startswith("CarShell") and r > 0.55 * R:
+            continue
+        L_.append((x, y, hfun(x, y) - embed * rng.uniform(0, 1)))
+        R_.append((lie * rng.uniform(-1, 1) + rng.normal(0, 0.4), rng.normal(0, 0.5), rng.uniform(0, 6.28)))
+        S_.append(rng.uniform(*scl)); I_.append(i)
+    return L_, R_, S_, I_
+
+
+# ============================================================================ interiors
+def two_tone(name, low=(0.32, 0.42, 0.36), high=(0.78, 0.74, 0.64), split=1.2):
+    """Classic 1990s Turkish institutional wall: oil-painted dado below, distemper above (world Z split)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sep.inputs[0])
+    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = split; L.new(sep.outputs['Z'], gt.inputs[0])
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 1.5; nz.inputs['Detail'].default_value = 8
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(gt.outputs[0], mx.inputs['Factor'])
+    mx.inputs[6].default_value = (*low, 1); mx.inputs[7].default_value = (*high, 1)
+    st = N.new("ShaderNodeMix"); st.data_type = 'RGBA'; st.blend_type = 'MULTIPLY'; st.inputs['Factor'].default_value = 0.25
+    L.new(mx.outputs[2], st.inputs[6]); L.new(nz.outputs['Color'], st.inputs[7]); L.new(st.outputs[2], p.inputs['Base Color'])
+    rr = N.new("ShaderNodeMapRange"); L.new(gt.outputs[0], rr.inputs['Value']); rr.inputs['To Min'].default_value = 0.35; rr.inputs['To Max'].default_value = 0.85
+    L.new(rr.outputs[0], p.inputs['Roughness'])
+    return m
+
+
+def room(name, ctr, w, d, h, floor_m, wall_m, ceil_m=None, windows=(), doors=(), ceil=True):
+    """A room shell built from wall slabs (thickness 0.2) with real openings (boolean) for windows and doors.
+    windows/doors: list of (side, offset_along_wall, sill_z, width, height); side in 'N','S','E','W'.
+    Returns dict with wall objects and a list of window centres (for glass / daylight)."""
+    x, y, _ = ctr; t = 0.2
+    walls = {"N": box(name + "N", (x, y + d / 2 + t / 2, h / 2), (w + 2 * t, t, h), wall_m),
+             "S": box(name + "S", (x, y - d / 2 - t / 2, h / 2), (w + 2 * t, t, h), wall_m),
+             "E": box(name + "E", (x + w / 2 + t / 2, y, h / 2), (t, d, h), wall_m),
+             "W": box(name + "W", (x - w / 2 - t / 2, y, h / 2), (t, d, h), wall_m)}
+    box(name + "Floor", (x, y, -0.02), (w + 0.4, d + 0.4, 0.04), floor_m)
+    if ceil:
+        box(name + "Ceil", (x, y, h + 0.03), (w + 0.4, d + 0.4, 0.06), ceil_m or pbr(name + "CeilM", (0.8, 0.79, 0.75), 0.9))
+    centres = []
+    for kind, lst in (("win", windows), ("door", doors)):
+        for side, off, z0, ww, hh in lst:
+            if side in "NS":
+                cx, cy = x + off, y + (d / 2 + t / 2) * (1 if side == "N" else -1); size = (ww, t * 3, hh)
+            else:
+                cx, cy = x + (w / 2 + t / 2) * (1 if side == "E" else -1), y + off; size = (t * 3, ww, hh)
+            cut = box("Cut", (cx, cy, z0 + hh / 2), size)
+            wo = walls[side]; md = wo.modifiers.new("Cut", 'BOOLEAN'); md.object = cut; md.operation = 'DIFFERENCE'
+            bpy.context.view_layer.objects.active = wo; bpy.ops.object.modifier_apply(modifier="Cut"); bpy.data.objects.remove(cut)
+            if kind == "win":
+                fr = pbr(name + "WinFrame", (0.85, 0.84, 0.8), 0.5)
+                gsz = (ww, 0.01, hh) if side in "NS" else (0.01, ww, hh)
+                box(name + "Glass", (cx, cy, z0 + hh / 2), gsz, glass(name + "GlassM", (0.92, 0.94, 0.93), 0.02))
+                for k in range(3):
+                    if side in "NS":
+                        box("Mullion", (cx - ww / 2 + k * ww / 2, cy, z0 + hh / 2), (0.05, t * 1.05, hh), fr)
+                    else:
+                        box("Mullion", (cx, cy - ww / 2 + k * ww / 2, z0 + hh / 2), (t * 1.05, 0.05, hh), fr)
+                box("Transom", (cx, cy, z0 + hh * 0.7), (ww if side in "NS" else t * 1.05, t * 1.05 if side in "NS" else ww, 0.05), fr)
+                box("WinSill", (cx, cy, z0 - 0.03), (ww + 0.2 if side in "NS" else t * 1.6, t * 1.6 if side in "NS" else ww + 0.2, 0.05), fr)
+            centres.append((kind, Vector((cx, cy, z0 + hh / 2)), side))
+    return dict(walls=walls, openings=centres)
+
+
+def tube_light(loc, length=1.2, energy=60, color=(0.95, 0.97, 1.0), on_expr=None):
+    """Ceiling fluorescent fitting: Poly Haven fixture if available + an area light beneath it."""
+    root, ms = ph_model("mounted_fluorescent_lights", loc=loc)
+    if root is None:
+        box("TubeFix", loc, (length, 0.18, 0.08), pbr("TubeFixM", (0.85, 0.85, 0.82), 0.4))
+    l = bpy.data.lights.new("Tube", 'AREA'); l.shape = 'RECTANGLE'; l.size = length; l.size_y = 0.15; l.energy = energy; l.color = color
+    if on_expr:
+        d = l.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = on_expr
+    o = bpy.data.objects.new("Tube", l); bpy.context.collection.objects.link(o); o.location = (loc[0], loc[1], loc[2] - 0.12)
+    return o
+
+
+def daylight_window(centre, side, size=(1.6, 1.6), energy=250, color=(0.85, 0.9, 1.0)):
+    """Soft daylight pouring in through a window: an area light just outside the glass, facing in."""
+    l = bpy.data.lights.new("Daylight", 'AREA'); l.shape = 'RECTANGLE'; l.size = size[0]; l.size_y = size[1]; l.energy = energy; l.color = color
+    o = bpy.data.objects.new("Daylight", l); bpy.context.collection.objects.link(o)
+    n = {"N": Vector((0, 1, 0)), "S": Vector((0, -1, 0)), "E": Vector((1, 0, 0)), "W": Vector((-1, 0, 0))}[side]
+    o.location = Vector(centre) + n * 0.6
+    o.rotation_euler = (-n).to_track_quat('-Z', 'Y').to_euler()
+    return o
+
+
+def lie_in_bed(h, head_at, foot_dir, z):
+    """Patient lying face up; body runs from head_at toward foot_dir (unit XY)."""
+    from human import reset_pose, lay_down
+    h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h)
+    arms_relaxed(h)
+    lay_down(h, face_up=True, z=0)
+    ang = math.atan2(-foot_dir[0], foot_dir[1]) + math.pi     # lay_down puts the head toward +Y
+    h.arm.rotation_euler = Euler((math.radians(-90), 0, ang), 'XYZ')
+    bpy.context.view_layer.update()
+    from human import _world_verts
+    w = np.concatenate([_world_verts(o) for o in h.parts if o is h.body])
+    top = w[np.argmax((w[:, :2] @ np.array([-foot_dir[0], -foot_dir[1]])))]
+    h.arm.location = Vector((head_at[0] - top[0], head_at[1] - top[1], z - w[:, 2].min()))
+    bpy.context.view_layer.update()

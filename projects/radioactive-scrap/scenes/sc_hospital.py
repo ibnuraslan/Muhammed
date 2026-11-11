@@ -1,0 +1,625 @@
+"""The large Istanbul hospital (January 1999) and the small local clinic (December 1998).
+
+Areas (one set, separate rooms): hospital exterior with front steps and car park; a long corridor with benches,
+the nurses' station and the theatre doors; a ward of iron beds with daylight windows; a small lab; a doctor's
+office with a film lightbox; an operating theatre; and the local clinic with cots and drips (night).
+Real people appear as unnamed figures. No injuries, no hand close-ups: medium shots with the person in frame.
+"""
+import math
+import numpy as np
+import bpy
+from mathutils import Vector, Euler
+from kit import *
+from rs_kit import *
+from rs_env import sky, periphery, facade_material
+from human import reset_pose, pose_walk, reach, fingers_curl, pose_sit
+from durs import dur
+
+EXPOSURE = 0.0
+BOUNCES = 8
+EXT = Vector((0.0, 60.0, 0))          # hospital block centre (front face at y = 52)
+COR = Vector((-40.0, 0.0, 0))         # corridor centre (runs along X, 28 m)
+WARD = Vector((0.0, 0.0, 0))
+LAB = Vector((25.0, 0.0, 0))
+OFFICE = Vector((40.0, 0.0, 0))
+OR_ = Vector((55.0, 0.0, 0))
+CLINIC = Vector((-80.0, 0.0, 0))
+BEDS = [Vector((-5.2 + k * 2.6, 2.6, 0)) for k in range(5)]      # bed centres along the ward's north wall (heads north)
+
+
+def iron_bed(name, ctr, rot_z=0.0):
+    """1990s hospital bed: white-painted iron frame, mattress, sheet and a grey wool blanket."""
+    iron = painted_steel(name + "Iron", (0.75, 0.75, 0.72), 0.45, 0.35)
+    parts = [box("Mattress", (0, 0, 0.6), (0.9, 1.95, 0.16), fabric(name + "Sheet", (0.82, 0.82, 0.78), 0.9, 0.3, 500), bevel=0.04)]
+    for sy in (-1, 1):
+        parts.append(box("Rail", (0.0, sy * 1.0, 0.75 if sy > 0 else 0.62), (0.95, 0.04, 0.04), iron))
+        for sx in (-1, 1):
+            parts.append(cyl("Leg", (sx * 0.45, sy * 1.0, 0.45 if sy > 0 else 0.35), 0.02, 0.9 if sy > 0 else 0.7, iron, verts=8))
+        for k in range(5):
+            parts.append(cyl("Spindle", (-0.36 + k * 0.18, sy * 1.0, 0.75 if sy > 0 else 0.56), 0.008, 0.3 if sy > 0 else 0.16, iron, verts=6))
+    parts.append(box("Frame", (0, 0, 0.5), (0.9, 1.95, 0.05), iron))
+    o = join(parts, name); o.location = ctr; o.rotation_euler = (0, 0, rot_z)
+    return o
+
+
+def blanket(name, ctr, rot_z=0.0, col=(0.38, 0.38, 0.4), length=1.4, z=0.72):
+    b = box(name, (0, 0, 0), (0.98, length, 0.12), fabric(name + "W", col, 0.95, 0.5, 300), bevel=0.05)
+    b.location = Vector(ctr) + Vector((0, 0, z)); b.rotation_euler = (0, 0, rot_z)
+    return b
+
+
+def drip_stand(name, loc, bag_col=(0.9, 0.92, 0.9), fill=0.8):
+    steel = pbr(name + "Steel", (0.7, 0.7, 0.7), 0.3, 0.9)
+    parts = [cyl("DPole", (0, 0, 0.95), 0.012, 1.9, steel, verts=8), box("DHook", (0, 0, 1.9), (0.3, 0.012, 0.012), steel)]
+    for k in range(4):
+        a = k / 4 * 2 * math.pi; parts.append(box("DFoot", (0.14 * math.cos(a), 0.14 * math.sin(a), 0.02), (0.28, 0.03, 0.02), steel, rot=(0, 0, a)))
+    st = join(parts, name); st.location = loc
+    bag = box(name + "Bag", (0, 0, 0), (0.12, 0.03, 0.18), pbr(name + "BagM", bag_col, 0.15, 0.0, **{'Transmission Weight': 0.5}), bevel=0.02)
+    bag.location = Vector(loc) + Vector((0.12, 0, 1.72))
+    line = cyl(name + "Line", Vector(loc) + Vector((0.12, 0, 1.25)), 0.003, 0.8, pbr("Line", (0.9, 0.9, 0.9), 0.1, 0.0, **{'Transmission Weight': 0.8}), verts=6)
+    return st, bag
+
+
+def rotary_phone(loc, rot_z=0.0):
+    blk = pbr("Bakelite", (0.03, 0.03, 0.03), 0.25, 0.0, **{'Coat Weight': 0.6})
+    base = join([box("PhoneBase", (0, 0, 0.05), (0.2, 0.22, 0.1), blk, bevel=0.03),
+                 cyl("Dial", (0, -0.05, 0.105), 0.055, 0.01, pbr("DialFace", (0.8, 0.78, 0.7), 0.4), verts=24)], "Phone")
+    base.location = loc; base.rotation_euler = (0, 0, rot_z)
+    hs = join([box("HSGrip", (0, 0, 0), (0.2, 0.04, 0.035), blk, bevel=0.012), box("HSEar", (-0.1, 0, -0.02), (0.05, 0.06, 0.05), blk, bevel=0.015),
+               box("HSMouth", (0.1, 0, -0.02), (0.05, 0.06, 0.05), blk, bevel=0.015)], "Handset")
+    hs.location = Vector(loc) + Vector((0, 0, 0.14)); hs.rotation_euler = (0, 0, rot_z)
+    return base, hs
+
+
+def build(variant=None):
+    c = {}
+    v = variant or "day"
+    rng = np.random.default_rng(4)
+    w_, sun_ = sky({"day": "afternoon", "morning": "morning", "night": "dusk"}[v])
+    if v == "night":
+        w_.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.2; sun_.data.energy = 0.0
+        bpy.context.scene.view_settings.exposure = 0.8
+    box("Ground", (0, 0, -0.06), (600, 600, 0.1), ph_mat("asphalt_02", 0.15, (0.2, 0.2, 0.2), name="Asphalt"))
+    periphery(rng, center=(0, 20), r_min=150, r_max=520, n_blocks=360, hill_h=40, minarets=2, smokes=1)
+    haze((0, 120, 30), (1200, 500, 90), density=0.0012, color=(0.86, 0.88, 0.92), anis=0.3)
+    # ---------------- exterior: the hospital block, entrance canopy, steps, car park
+    fac = facade_material("HospFacade", (0.72, 0.7, 0.64), floor=3.4, bay=3.0)
+    box("HospBlock", EXT + Vector((0, 0, 10)), (60, 16, 20), fac)
+    box("HospWing", EXT + Vector((-38, -4, 7)), (16, 24, 14), fac)
+    box("Canopy", EXT + Vector((0, -10.0, 3.6)), (9, 4, 0.3), pbr("Canopy", (0.6, 0.6, 0.58), 0.6))
+    for sx in (-4.2, 4.2):
+        cyl("CanopyCol", EXT + Vector((sx, -11.6, 1.8)), 0.15, 3.6, pbr("Col", (0.65, 0.64, 0.6), 0.6), verts=12)
+    box("Doors", EXT + Vector((0, -8.02, 1.4)), (3.2, 0.06, 2.8), glass("DoorGlass", (0.6, 0.65, 0.65), 0.05))
+    step_m = ph_mat("concrete_floor_worn_001", 0.5, (0.5, 0.5, 0.48), name="Steps")
+    for k in range(6):
+        box("Step", EXT + Vector((0, -8.3 - 4.2 + k * 0.35 + 2.1, 0.08 + k * 0.15)), (8.0, 4.2 - k * 0.7, 0.16 + k * 0.3), step_m)
+    c["steps_top"] = EXT + Vector((0, -8.6, 0.9))
+    sign = text_obj("HospSign", "DEVLET HASTANESİ", EXT + Vector((0, -8.1, 4.4)), 0.55, pbr("SignLetters", (0.15, 0.25, 0.45), 0.5),
+                    font_path="/usr/share/fonts/opentype/inter/Inter-Bold.otf", extrude=0.03)
+    from sc_street import car
+    c["car"] = car("FamilyCar", (0.55, 0.12, 0.08)); c["car"].location = EXT + Vector((5.0, -19.0, 0)); c["car"].rotation_euler = (0, 0, 0)
+    car("ParkedA", (0.7, 0.7, 0.68)).location = EXT + Vector((-6.0, -19.5, 0))
+    car("ParkedB", (0.15, 0.2, 0.3)).location = EXT + Vector((12.0, -19.0, 0))
+    # ---------------- corridor
+    floor_m = ph_mat("large_grey_tiles", 0.5, (0.5, 0.5, 0.48), name="CorFloor")
+    wall_m = two_tone("CorWall")
+    cr = room("Cor", COR, 28, 3.0, 3.0, floor_m, wall_m, windows=[("S", -12 + 4 * k, 1.0, 1.6, 1.5) for k in range(7)],
+              doors=[("E", 0.0, 0.0, 1.8, 2.3)])
+    for kind, ctr, side in cr["openings"]:
+        if kind == "win":
+            daylight_window(ctr, side, (1.6, 1.5), energy=260 if v != "night" else 0)
+    for k in range(6):
+        tube_light(COR + Vector((-12 + 5 * k, 0, 2.95)), energy=55)
+    bench_m = noisy("BenchWood", (0.35, 0.24, 0.14), 0.7, dirt=0.4)
+    c["benches"] = []
+    for k, bx in enumerate((-8.0, -3.0, 4.0)):
+        b = join([box("BenchSeat", (0, 0, 0.45), (1.8, 0.42, 0.05), bench_m), box("BenchBack", (0, 0.2, 0.75), (1.8, 0.04, 0.4), bench_m),
+                  box("BenchLeg", (-0.8, 0, 0.22), (0.05, 0.4, 0.45), pbr("BenchIron", (0.1, 0.1, 0.1), 0.5, 0.6)),
+                  box("BenchLeg", (0.8, 0, 0.22), (0.05, 0.4, 0.45), pbr("BenchIron", (0.1, 0.1, 0.1), 0.5, 0.6))], "Bench")
+        b.location = COR + Vector((bx, 1.22, 0)); c["benches"].append(b.location.copy())
+    for k in range(5):
+        box("DoorPanel", COR + Vector((-11 + 5.5 * k, 1.49, 1.05)), (0.95, 0.04, 2.1), pbr("WardDoor", (0.55, 0.62, 0.58), 0.5))
+    # nurses' station (a counter on the corridor's south side near the middle)
+    ns = COR + Vector((1.0, -0.95, 0))
+    box("Counter", ns + Vector((0, 0, 0.55)), (2.2, 0.6, 1.1), noisy("CounterWood", (0.42, 0.3, 0.18), 0.6, dirt=0.4))
+    box("CounterTop", ns + Vector((0, 0, 1.12)), (2.3, 0.7, 0.04), pbr("Formica", (0.75, 0.72, 0.65), 0.4))
+    c["phone"], c["handset"] = rotary_phone(ns + Vector((0.4, 0.05, 1.14)), math.pi)
+    c["ns"] = ns
+    ph_model("binder_notebook", loc=ns + Vector((-0.5, 0.05, 1.14)), rot_z=0.3)
+    # theatre doors at the corridor's east end (two leaves on hinges)
+    c["leaves"] = []
+    for sy in (-1, 1):
+        hinge = bpy.data.objects.new("LeafHinge", None); bpy.context.collection.objects.link(hinge)
+        hinge.location = COR + Vector((14.0 + 0.05, sy * 0.9, 0))
+        lf = box("Leaf", (0, 0, 0), (0.05, 0.88, 2.25), pbr("LeafM", (0.62, 0.68, 0.66), 0.45), bevel=0.01); lf.parent = hinge; lf.location = (0, -sy * 0.45, 1.13)
+        port = cyl("Porthole", (0, 0, 0), 0.14, 0.06, glass("PortGlass", (0.8, 0.85, 0.85), 0.05), verts=20, rot=(0, math.radians(90), 0)); port.parent = hinge; port.location = (0, -sy * 0.45, 1.55)
+        c["leaves"].append((hinge, sy))
+    box("TheatreBeyond", COR + Vector((16.5, 0, 1.5)), (4.0, 3.0, 3.0), pbr("TheatreWall", (0.55, 0.65, 0.62), 0.6))
+    tube_light(COR + Vector((16.0, 0, 2.9)), energy=60)
+    # ---------------- ward
+    wf = ph_mat("large_grey_tiles", 0.6, (0.5, 0.5, 0.48), name="WardFloor")
+    wr = room("Ward", WARD, 14, 8, 3.2, wf, two_tone("WardWall", (0.45, 0.55, 0.5), (0.82, 0.8, 0.72)),
+              windows=[("S", -4.5, 0.9, 2.0, 1.8), ("S", 0.0, 0.9, 2.0, 1.8), ("S", 4.5, 0.9, 2.0, 1.8)], doors=[("W", 2.5, 0, 1.2, 2.2)])
+    c["ward_windows"] = []
+    for kind, ctr, side in wr["openings"]:
+        if kind == "win":
+            daylight_window(ctr, side, (2.0, 1.8), energy={"day": 420, "morning": 650, "night": 0}[v], color=(1.0, 0.9, 0.78) if v == "morning" else (0.86, 0.9, 1.0))
+            c["ward_windows"].append(ctr)
+    for k in range(3):
+        tube_light(WARD + Vector((-4.5 + 4.5 * k, 0.5, 3.15)), energy=40 if v != "night" else 80)
+    c["beds"] = []
+    for k, b in enumerate(BEDS):
+        iron_bed(f"Bed{k}", b)
+        cab = box(f"Cabinet{k}", b + Vector((0.75, 0.75, 0.4)), (0.42, 0.4, 0.8), painted_steel(f"Cab{k}", (0.78, 0.78, 0.74), 0.4, 0.3), bevel=0.01)
+        c["beds"].append(b)
+    for k in (0, 2, 3):
+        drip_stand(f"Drip{k}", BEDS[k] + Vector((-0.65, 0.6, 0)))
+    c["drip3"], c["platelet"] = drip_stand("DripP", BEDS[1] + Vector((-0.65, 0.6, 0)), bag_col=(0.95, 0.8, 0.35))
+    for k, b in enumerate(BEDS):
+        blanket(f"Blanket{k}", b + Vector((0, -0.25, 0)), col=[(0.38, 0.38, 0.4), (0.42, 0.36, 0.32), (0.36, 0.4, 0.42)][k % 3])
+    chart = box("Chart", BEDS[2] + Vector((0, -1.03, 0.68)), (0.24, 0.015, 0.32), pbr("ChartBoard", (0.45, 0.35, 0.2), 0.5))
+    c["chart"] = chart
+    c["visitor_chair"] = ph_model("WoodenChair_01", loc=BEDS[2] + Vector((-0.9, -0.3, 0)), rot_z=math.radians(-90))
+    # ---------------- lab
+    lr = room("Lab", LAB, 6, 5, 3.0, wf, two_tone("LabWall", (0.75, 0.75, 0.72), (0.88, 0.87, 0.83)), windows=[("S", 0.0, 1.0, 2.4, 1.5)])
+    for kind, ctr, side in lr["openings"]:
+        daylight_window(ctr, side, (2.4, 1.5), energy=380 if v != "night" else 0)
+    box("LabBench", LAB + Vector((0, -1.9, 0.45)), (4.0, 0.7, 0.9), painted_steel("LabBench", (0.8, 0.8, 0.78), 0.5, 0.3))
+    box("LabTop", LAB + Vector((0, -1.9, 0.92)), (4.1, 0.75, 0.04), pbr("LabTopM", (0.15, 0.15, 0.15), 0.4))
+    mic, _ = ph_model("vintage_microscope", loc=LAB + Vector((0.3, -2.0, 0.94)), rot_z=math.pi)
+    c["mic"] = LAB + Vector((0.3, -2.0, 1.25))
+    for k in range(6):
+        cyl("RackTube", LAB + Vector((-1.4 + k * 0.05, -1.95, 1.0)), 0.007, 0.1, pbr("Blood", (0.35, 0.02, 0.02), 0.2), verts=8)
+    tube_light(LAB + Vector((0, 0, 2.95)), energy=45)
+    c["tube"] = cyl("SampleTube", (0, -150, 0), 0.008, 0.1, glass("TubeGlass", (0.95, 0.95, 0.95), 0.02), verts=10)
+    c["tube_blood"] = cyl("TubeBlood", (0, -150, 0), 0.0072, 0.07, pbr("Blood2", (0.4, 0.02, 0.02), 0.2), verts=10)
+    ph_model("metal_stool_01", loc=LAB + Vector((0.3, -1.25, 0)))
+    # ---------------- office with lightbox
+    orr = room("Office", OFFICE, 5, 4, 2.9, ph_mat("herringbone_parquet", 0.8, (0.4, 0.28, 0.18), name="OfficeFloor"), two_tone("OffWall", (0.6, 0.55, 0.45), (0.82, 0.78, 0.68)),
+               windows=[("E", 0.0, 1.0, 1.4, 1.4)])
+    for kind, ctr, side in orr["openings"]:
+        daylight_window(ctr, side, (1.4, 1.4), energy=160 if v != "night" else 0)
+    lb_frame = box("LightboxFrame", OFFICE + Vector((0, 1.93, 1.6)), (1.0, 0.1, 0.62), painted_steel("LBFrame", (0.75, 0.75, 0.72), 0.4, 0.3), bevel=0.01)
+    lb = bpy.data.materials.new("LightboxPanel"); lb.use_nodes = True
+    lp = lb.node_tree.nodes["Principled BSDF"]; lp.inputs['Base Color'].default_value = (0.9, 0.92, 0.95, 1); lp.inputs['Emission Color'].default_value = (0.9, 0.95, 1.0, 1)
+    vnode = lb.node_tree.nodes.new("ShaderNodeValue"); d = vnode.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'
+    d.expression = "6.0 * (1 if frame < 60 else 0.0)" if v != "lightbox_off" else "6.0"
+    lb.node_tree.links.new(vnode.outputs[0], lp.inputs['Emission Strength'])
+    box("LightboxPanel", OFFICE + Vector((0, 1.875, 1.6)), (0.9, 0.01, 0.52), lb)
+    lbl = bpy.data.lights.new("LBGlow", 'AREA'); lbl.size = 0.9; lbl.size_y = 0.5
+    dl = lbl.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = "40 * (1 if frame < 60 else 0.0)"
+    lo = bpy.data.objects.new("LBGlow", lbl); bpy.context.collection.objects.link(lo); lo.location = OFFICE + Vector((0, 1.82, 1.6)); lo.rotation_euler = (math.radians(90), 0, 0)
+    film = bpy.data.materials.new("Film"); film.use_nodes = True
+    fn = film.node_tree.nodes; fp = fn["Principled BSDF"]; tcn = fn.new("ShaderNodeTexCoord"); nn = fn.new("ShaderNodeTexNoise"); nn.inputs['Scale'].default_value = 3
+    film.node_tree.links.new(tcn.outputs['Object'], nn.inputs['Vector']); cr_ = fn.new("ShaderNodeValToRGB")
+    cr_.color_ramp.elements[0].color = (0.02, 0.025, 0.03, 1); cr_.color_ramp.elements[1].color = (0.3, 0.32, 0.35, 1)
+    film.node_tree.links.new(nn.outputs['Fac'], cr_.inputs['Fac']); film.node_tree.links.new(cr_.outputs['Color'], fp.inputs['Base Color'])
+    fp.inputs['Transmission Weight'].default_value = 0.6; fp.inputs['Roughness'].default_value = 0.2
+    c["film"] = box("ScanFilm", (0, -150, 0), (0.35, 0.004, 0.43), film)
+    c["lightbox"] = OFFICE + Vector((0, 1.86, 1.6))
+    desk, _ = ph_model("metal_office_desk", loc=OFFICE + Vector((-0.8, -0.6, 0)), rot_z=0.0)
+    tube_light(OFFICE + Vector((0, 0, 2.85)), energy=30)
+    # ---------------- operating theatre
+    orm = room("Theatre", OR_, 6, 6, 3.2, ph_mat("large_grey_tiles", 0.8, (0.5, 0.55, 0.52), name="ORFloor"), two_tone("ORWall", (0.5, 0.62, 0.6), (0.62, 0.72, 0.7), split=2.0))
+    steel = pbr("ORSteel", (0.7, 0.7, 0.72), 0.25, 0.9)
+    box("ORTable", OR_ + Vector((0, 0, 0.85)), (0.6, 2.0, 0.08), pbr("ORPad", (0.12, 0.2, 0.2), 0.6), bevel=0.02)
+    cyl("ORPillar", OR_ + Vector((0, 0, 0.42)), 0.12, 0.84, steel, verts=16)
+    cyl("LampArm", OR_ + Vector((0, 0, 2.75)), 0.04, 0.9, steel, verts=10)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.45, location=OR_ + Vector((0, 0, 2.3)))
+    dome = bpy.context.active_object; dome.scale = (1, 1, 0.35); dome.data.materials.append(painted_steel("LampDome", (0.82, 0.83, 0.8), 0.35, 0.2))
+    bulbm = bpy.data.materials.new("ORBulb"); bulbm.use_nodes = True
+    bp = bulbm.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.8, 0.8, 0.8, 1); bp.inputs['Emission Color'].default_value = (1.0, 0.97, 0.9, 1)
+    vb = bulbm.node_tree.nodes.new("ShaderNodeValue"); db = vb.outputs[0].driver_add("default_value").driver; db.type = 'SCRIPTED'; db.expression = "12 * min(1, max(0, (frame - 36) / 3))"
+    bulbm.node_tree.links.new(vb.outputs[0], bp.inputs['Emission Strength'])
+    for k in range(6):
+        a = k / 6 * 2 * math.pi
+        cyl("ORBulbDisc", OR_ + Vector((0.22 * math.cos(a), 0.22 * math.sin(a), 2.15)), 0.07, 0.01, bulbm, verts=16)
+    sl = bpy.data.lights.new("ORLamp", 'SPOT'); sl.spot_size = math.radians(45); sl.spot_blend = 0.4; sl.shadow_soft_size = 0.3; sl.color = (1.0, 0.97, 0.92)
+    ds = sl.driver_add("energy").driver; ds.type = 'SCRIPTED'; ds.expression = "1500 * min(1, max(0, (frame - 36) / 3))"
+    so = bpy.data.objects.new("ORLamp", sl); bpy.context.collection.objects.link(so); so.location = OR_ + Vector((0, 0, 2.1))
+    tube_light(OR_ + Vector((1.8, 1.8, 3.15)), energy=12); tube_light(OR_ + Vector((-1.8, -1.8, 3.15)), energy=12)
+    ph_model("industrial_storage_cart", loc=OR_ + Vector((1.6, -1.2, 0)), rot_z=0.4)
+    # ---------------- local clinic (December, evening)
+    cf = ph_mat("worn_brick_floor", 0.6, (0.4, 0.3, 0.25), name="ClinicFloor")
+    cl = room("Clinic", CLINIC, 7, 5, 2.8, cf, two_tone("ClinicWall", (0.4, 0.5, 0.55), (0.8, 0.78, 0.7)), doors=[("S", 2.4, 0, 1.0, 2.1)],
+              windows=[("S", -1.5, 1.0, 1.4, 1.2)])
+    for k in range(2):
+        tube_light(CLINIC + Vector((-1.5 + 3 * k, 0, 2.75)), energy=55)
+    c["cots"] = []
+    for k in range(3):
+        cc = CLINIC + Vector((-2.4 + k * 2.0, 1.3, 0))
+        join([box("CotBed", (0, 0, 0.45), (0.75, 1.9, 0.12), fabric(f"CotSheet{k}", (0.8, 0.8, 0.76), 0.9, 0.3, 400), bevel=0.03),
+              box("CotFrame", (0, 0, 0.36), (0.78, 1.92, 0.04), painted_steel("CotFrame", (0.6, 0.62, 0.6), 0.5, 0.4))], f"Cot{k}").location = cc
+        drip_stand(f"CDrip{k}", cc + Vector((-0.55, 0.7, 0)))
+        blanket(f"CBlanket{k}", cc + Vector((0, -0.25, 0)), col=(0.45, 0.35, 0.3), z=0.55)
+        c["cots"].append(cc)
+    # night street outside the clinic door
+    box("ClinicFacade", CLINIC + Vector((0, -2.62, 1.4)), (12, 0.02, 2.8), ph_mat("plastered_wall_04", 0.4, (0.6, 0.55, 0.47), name="ClinicPlaster", tint=(0.9, 0.85, 0.75))).hide_render = True
+    lamp = bpy.data.lights.new("ClinicStreetLamp", 'SPOT'); lamp.energy = 700; lamp.color = (1.0, 0.68, 0.38); lamp.spot_size = math.radians(100)
+    lo = bpy.data.objects.new("ClinicStreetLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = CLINIC + Vector((5.5, -6.0, 5.5))
+    cyl("ClinicLampPole", CLINIC + Vector((5.5, -5.6, 2.8)), 0.07, 5.6, pbr("PoleIron", (0.05, 0.05, 0.05), 0.5, 0.6), verts=10)
+    # ---------------- people
+    P = {}
+    P["m1"] = person("ManA", 1.0, 38, "wool_brown", "short02", moustache=True)
+    P["m2"] = person("ManB", 1.0, 45, "charcoal", "short03", hat="flat", hat_col=(0.24, 0.2, 0.15), moustache=True)
+    P["doc"] = person("Doctor", 1.0, 46, "doctor", "short03", hv=0.4)
+    P["nurse"] = person("Nurse", 0.0, 32, "nurse", "bob02", hv=0.1)
+    P["son"] = person("Son", 1.0, 19, "navy", "short04")
+    P["pat1"] = person("Patient1", 1.0, 50, "wool_grey", "short02", moustache=True)
+    P["pat2"] = person("Patient2", 1.0, 34, "camel", "short03")
+    P["tech"] = person("Tech", 0.0, 40, "nurse", "long01", hv=0.15)
+    P["wife"] = person("Wife", 0.0, 44, "woman_coat", "bob02", hv=0.12)
+    c["people"] = P
+    for h in P.values():
+        place(h, (0, -150, 0), 0)
+    c["variant"] = v
+    return c
+
+
+# ============================================================================ helpers
+def hide(c, keep=()):
+    for k, h in c["people"].items():
+        if k not in keep:
+            h.arm.location = (0, -150, 0)
+
+
+def walk_to(h, a, b, sec, speed=1.1, stride=1.25, z=None):
+    a = Vector(a); b = Vector(b); d = b - a; L_ = d.length; s = min(L_, max(0.0, speed * sec))
+    h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h)
+    moving = 0 < s < L_
+    ph_ = (s / stride) % 1.0 if moving else 0.0
+    pose_walk(h, ph_, stride=24 if moving else 0, arm_swing=0); arms_relaxed(h, ph_, 14 if moving else 0)
+    p = a + d.normalized() * s
+    place(h, (p.x, p.y, a.z if z is None else z(p)), face_angle(a, b))
+    return p
+
+
+def stand_at(h, loc, look, **kw):
+    stand_pose(h, **kw); place(h, loc, face_angle(loc, look))
+
+
+def sit_at(h, loc, look, lean=10):
+    h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h); pose_sit(h, lean=lean)
+    place(h, loc, face_angle(loc, look))
+
+
+def sit_up_in_bed(h, bed, k=1.0):
+    """Patient sitting up against the pillows (k 0 lying back .. 1 upright)."""
+    h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h)
+    for sd in ("L", "R"):
+        h.aim(f"upperleg01.{sd}", (0, -1, 0.0)); h.aim(f"upperleg02.{sd}", (0, -1, 0.0))
+        h.aim(f"lowerleg01.{sd}", (0, -1, -0.05)); h.aim(f"lowerleg02.{sd}", (0, -1, -0.05))
+    arms_relaxed(h)
+    h.arm.rotation_euler = (math.radians(-(30 + 35 * (1 - k))), 0, 0)
+    bpy.context.view_layer.update()
+    place(h, bed + Vector((0, 0.55, 0.62)), 0.0)
+    h.arm.rotation_euler = (math.radians(-(30 + 35 * (1 - k))), 0, 0)
+    bpy.context.view_layer.update()
+    from human import _world_verts
+    w = np.concatenate([_world_verts(o) for o in h.parts if o is h.body])
+    h.arm.location.z += 0.66 - w[:, 2].min()
+    bpy.context.view_layer.update()
+
+
+def ward_patients(c, sec, upright=None):
+    lie_in_bed(c["people"]["pat2"], BEDS[3] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    if upright is None:
+        lie_in_bed(c["people"]["pat1"], BEDS[2] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    else:
+        sit_up_in_bed(c["people"]["pat1"], BEDS[2], upright)
+
+
+def S(name, t):
+    return t * dur(name)
+
+
+def C(p0, p1, tgt, lens, tgt1=None):
+    def f(c, t):
+        e = ease(t); tg = Vector(tgt) if tgt1 is None else Vector(tgt).lerp(Vector(tgt1), e)
+        return (Vector(p0).lerp(Vector(p1), e), tg, lens)
+    return f
+
+
+def leaves(c, k):
+    for hinge, sy in c["leaves"]:
+        hinge.rotation_euler = (0, 0, sy * math.radians(70) * (1 - k))
+
+
+# ============================================================================ shots
+def c2_1a(c, t):
+    sec = S("ch2_1a", t); hide(c, ("m1", "m2")); leaves(c, 1)
+    def zf(p):
+        y = p.y - (EXT.y - 12.5)
+        return max(0.0, min(0.9, y * 0.9 / 4.2))
+    walk_to(c["people"]["m1"], EXT + Vector((-1.0, -17.0, 0)), EXT + Vector((-0.6, -8.8, 0)), sec, speed=0.75, z=zf)
+    walk_to(c["people"]["m2"], EXT + Vector((0.4, -17.8, 0)), EXT + Vector((0.6, -8.8, 0)), sec - 0.5, speed=0.7, z=zf)
+    c["focus"] = c["people"]["m1"].arm.location + Vector((0, 0, 1.3))
+
+
+def c2_1b(c, t):
+    sec = S("ch2_1b", t); hide(c, ("m1", "m2", "nurse")); leaves(c, 1)
+    b = c["benches"][0]
+    sit_at(c["people"]["m1"], b + Vector((-0.4, -0.08, 0.43)), b + Vector((-0.4, -2, 0)), lean=8)
+    sit_at(c["people"]["m2"], b + Vector((0.45, -0.08, 0.43)), b + Vector((0.45, -2, 0)), lean=18)
+    walk_to(c["people"]["nurse"], COR + Vector((6.0, -0.5, 0)), COR + Vector((-13.0, -0.5, 0)), sec, speed=1.2)
+    c["focus"] = b + Vector((0, 0, 1.1))
+
+
+def c2_2a(c, t):
+    sec = S("ch2_2a", t); hide(c, ("m1", "m2")); leaves(c, 1)
+    b = c["benches"][0]; h = c["people"]["m2"]
+    sit_at(h, b + Vector((0.45, -0.08, 0.43)), b + Vector((0.45, -2, 0)), lean=-6)
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    h.rot("neck01", sd, 12); h.rot("head", sd, 16 + 2 * math.sin(sec * 0.8))       # head back against the wall
+    sit_at(c["people"]["m1"], b + Vector((-0.4, -0.08, 0.43)), b + Vector((-0.4, -2, 0)), lean=14)
+    c["focus"] = h.bone_head("head")
+
+
+def c2_2b(c, t):          # a passing nurse stops, looks at him, hurries off to fetch a doctor
+    sec = S("ch2_2b", t); hide(c, ("m1", "m2", "nurse")); leaves(c, 1)
+    b = c["benches"][0]; h = c["people"]["m2"]
+    sit_at(h, b + Vector((0.45, -0.08, 0.43)), b + Vector((0.45, -2, 0)), lean=-6)
+    sd = forward(h).cross(Vector((0, 0, 1))); h.rot("neck01", sd, 12); h.rot("head", sd, 16)
+    sit_at(c["people"]["m1"], b + Vector((-0.4, -0.08, 0.43)), b + Vector((-0.4, -2, 0)), lean=14)
+    n = c["people"]["nurse"]; stop = b + Vector((1.0, -1.2, 0))
+    if sec < 1.3:
+        walk_to(n, b + Vector((-3.5, -1.2, 0)), stop, sec, speed=(stop - (b + Vector((-3.5, -1.2, 0)))).length / 1.3)
+    elif sec < 2.4:
+        stand_at(n, stop, b + Vector((0.45, 0, 0.9)))
+        n.rot("head", forward(n).cross(Vector((0, 0, 1))), -8)
+    else:
+        walk_to(n, stop, stop + Vector((8.0, 0.2, 0)), sec - 2.4, speed=1.9, stride=1.35)
+    c["focus"] = n.bone_head("head")
+
+
+def c2_3a(c, t):
+    sec = S("ch2_3a", t); hide(c, ("doc", "pat1", "pat2", "son"))
+    ward_patients(c, sec, upright=0.8)
+    h = c["people"]["doc"]; seat = BEDS[2] + Vector((-0.9, -0.3, 0.45))
+    sit_at(h, seat, BEDS[2] + Vector((0, 0.3, 0)), lean=16 + 6 * ease(min(1.0, sec / 2.0)))
+    c["focus"] = h.bone_head("head")
+
+
+def c2_3b(c, t):
+    sec = S("ch2_3b", t); hide(c, ("doc", "pat1", "pat2", "son"))
+    ward_patients(c, sec, upright=0.85)
+    p = c["people"]["pat1"]; p.rot("head", (0, 0, 1), 8 * math.sin(sec * 1.1))
+    sit_at(c["people"]["doc"], BEDS[2] + Vector((-0.9, -0.3, 0.45)), BEDS[2] + Vector((0, 0.3, 0)), lean=20)
+    stand_at(c["people"]["son"], BEDS[2] + Vector((0.95, -0.6, 0)), BEDS[2] + Vector((0, 0.4, 0.6)), hands_pockets=True)
+    c["focus"] = p.bone_head("head")
+
+
+def c2_4a(c, t):
+    sec = S("ch2_4a", t); hide(c, ("doc", "pat1", "pat2"))
+    ward_patients(c, sec)
+    win = c["ward_windows"][1]; h = c["people"]["doc"]
+    stand_at(h, Vector((win.x + 0.2, win.y + 0.75, 0)), Vector((win.x - 0.2, win.y - 3, 0)), crossed=True)
+    h.rot("head", (0, 0, 1), 3 * math.sin(sec * 0.4))
+    c["focus"] = h.bone_head("head")
+
+
+def c2_4b(c, t):
+    sec = S("ch2_4b", t); hide(c, ("doc", "pat1", "pat2"))
+    ward_patients(c, sec)
+    win = c["ward_windows"][1]; h = c["people"]["doc"]
+    k = ease(min(1.0, max(0.0, (sec - 0.8) / 1.6)))
+    loc = Vector((win.x + 0.2, win.y + 0.75, 0))
+    stand_pose(h, crossed=k < 0.5); place(h, loc, face_angle(loc, Vector((win.x - 0.2, win.y - 3, 0))) + math.pi * k)
+    c["focus"] = h.bone_head("head")
+
+
+def c2_5a(c, t):
+    sec = S("ch2_5a", t); hide(c, ("doc", "pat1", "pat2", "son"))
+    ward_patients(c, sec, upright=0.8)
+    h = c["people"]["son"]; loc = BEDS[2] + Vector((0.95, -0.7, 0))
+    stand_at(h, loc, BEDS[2] + Vector((-1.2, -0.6, 0)))
+    from human import reach as rch
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    rch(h, "R", h.bone_head("spine02") + forward(h) * 0.3 + Vector((0, 0, 0.05 + 0.04 * math.sin(sec * 3))), Vector((sd.x, sd.y, -0.8)), forward(h))
+    stand_at(c["people"]["doc"], BEDS[2] + Vector((-1.2, -0.7, 0)), loc, crossed=True)
+    c["focus"] = h.bone_head("head")
+
+
+def c2_6a(c, t):          # medium: the doctor at the counter dialling, whole upper body in frame
+    sec = S("ch2_6a", t); hide(c, ("doc",)); leaves(c, 1)
+    ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.4, 0.75, 0))
+    stand_at(h, loc, ns + Vector((0.4, 0, 0)))
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    dial = ns + Vector((0.4, 0.0, 1.22))
+    rch = reach
+    rch(h, "R", dial + Vector((0.03 * math.cos(sec * 4), 0.03 * math.sin(sec * 4), 0.02)), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, -1)))
+    hs = c["handset"]; ear = h.bone_head("head") + sd * 0.09 + Vector((0, 0, -0.04))
+    rch(h, "L", ear + Vector((0, 0, -0.08)), Vector((-sd.x, -sd.y, -0.7)), Vector((0, 0, 1)))
+    hs.location = ear + Vector((0, 0, -0.08)); hs.rotation_euler = (math.radians(80), 0, math.atan2(sd.y, sd.x))
+    h.rot("head", sd, -10)
+    c["focus"] = h.bone_head("head")
+
+
+def c2_6b(c, t):
+    sec = S("ch2_6b", t); hide(c, ("doc", "nurse")); leaves(c, 1)
+    ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.4, 0.75, 0))
+    stand_at(h, loc, ns + Vector((2.0, 0.6, 0)))
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    ear = h.bone_head("head") - sd * 0.09 + Vector((0, 0, -0.04))
+    reach(h, "R", ear + Vector((0, 0, -0.08)), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    c["handset"].location = ear + Vector((0, 0, -0.08)); c["handset"].rotation_euler = (math.radians(80), 0, math.atan2(sd.y, sd.x))
+    n = c["people"]["nurse"]
+    p0 = ns + Vector((-5.0, 0.6, 0)); p1 = ns + Vector((-0.9, 0.7, 0))
+    walk_to(n, p0, p1, sec, speed=(p1 - p0).length / max(1.0, dur("ch2_6b") * 0.7) * 0.75)
+    c["focus"] = h.bone_head("head")
+
+
+def c4_1a(c, t):
+    sec = S("ch4_1a", t); hide(c, ("pat1", "pat2", "m1", "m2"))
+    ward_patients(c, sec)
+    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    lie_in_bed(c["people"]["m2"], BEDS[4] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    c["focus"] = BEDS[2] + Vector((0, 0, 0.8))
+
+
+def c4_1b(c, t):
+    sec = S("ch4_1b", t); hide(c, ("pat1", "pat2", "doc", "m1"))
+    ward_patients(c, sec)
+    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    h = c["people"]["doc"]; loc = BEDS[2] + Vector((0.1, -1.6, 0))
+    stand_at(h, loc, BEDS[2])
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    board = h.bone_head("spine02") + forward(h) * 0.3 + Vector((0, 0, -0.1))
+    reach(h, "L", board - sd * 0.08, Vector((-sd.x, -sd.y, -0.7)), forward(h))
+    reach(h, "R", board + sd * (0.04 + 0.03 * math.sin(sec * 5)) + Vector((0, 0, 0.02)), Vector((sd.x, sd.y, -0.7)), forward(h))
+    c["chart"].location = board + forward(h) * 0.03; c["chart"].rotation_euler = (math.radians(-50), 0, math.atan2(-forward(h).x, forward(h).y))
+    h.rot("head", sd, -14)
+    c["focus"] = h.bone_head("head")
+
+
+def c4_2a(c, t):          # nurse holds a sample tube up to the window light (medium shot)
+    sec = S("ch4_2a", t); hide(c, ("tech",))
+    h = c["people"]["tech"]; win = LAB + Vector((0, -2.6, 1.75))
+    loc = LAB + Vector((-0.9, -1.3, 0)); stand_at(h, loc, win)
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    k = ease(min(1.0, sec / 1.5))
+    tube = h.bone_head("head") + forward(h) * 0.35 + Vector((0, 0, -0.35 + 0.35 * k))
+    reach(h, "R", tube, Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    c["tube"].location = tube + Vector((0, 0, 0.06)); c["tube_blood"].location = tube + Vector((0, 0, 0.045))
+    c["focus"] = h.bone_head("head")
+
+
+def c4_2b(c, t):          # the technician bends to the microscope (person in frame)
+    sec = S("ch4_2b", t); hide(c, ("tech",))
+    h = c["people"]["tech"]; mic = c["mic"]
+    sit_at(h, LAB + Vector((0.3, -1.25, 0.62)), mic, lean=22 + 3 * math.sin(sec * 0.6))
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    reach(h, "R", mic + sd * 0.14 + Vector((0, 0, -0.18)), Vector((sd.x, sd.y, -0.7)), forward(h))
+    reach(h, "L", mic - sd * 0.16 + Vector((0, 0, -0.25)), Vector((-sd.x, -sd.y, -0.7)), forward(h))
+    c["focus"] = h.bone_head("head")
+
+
+def c4_3a(c, t):          # a nurse hangs the pale yellow platelet bag (medium, person in frame)
+    sec = S("ch4_3a", t); hide(c, ("nurse", "pat1", "pat2"))
+    ward_patients(c, sec)
+    h = c["people"]["nurse"]; pole = BEDS[1] + Vector((-0.65, 0.6, 0)); loc = pole + Vector((-0.2, -0.75, 0))
+    stand_at(h, loc, pole + Vector((0.12, 0, 0)))
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    k = ease(min(1.0, sec / 1.8))
+    hook = pole + Vector((0.12, 0, 1.72))
+    bag = (h.bone_head("spine02") + forward(h) * 0.3).lerp(hook, k)
+    reach(h, "R", bag + Vector((0, 0, 0.1)), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    c["platelet"].location = bag
+    c["focus"] = h.bone_head("head")
+
+
+def c4_3b(c, t):
+    sec = S("ch4_3b", t); hide(c, ("pat1", "pat2"))
+    ward_patients(c, sec, upright=ease(min(1.0, sec / dur("ch4_3b"))))
+    c["focus"] = c["people"]["pat1"].bone_head("head")
+
+
+def c4_11a(c, t):
+    sec = S("ch4_11a", t); hide(c, ("m2",)); leaves(c, 1)
+    def zf(p):
+        y = p.y - (EXT.y - 12.5)
+        return max(0.0, min(0.9, y * 0.9 / 4.2))
+    walk_to(c["people"]["m2"], EXT + Vector((0.0, -8.4, 0)), EXT + Vector((0.4, -17.0, 0)), sec, speed=0.8, z=zf)
+    c["focus"] = c["people"]["m2"].arm.location + Vector((0, 0, 1.3))
+
+
+def c4_11b(c, t):
+    sec = S("ch4_11b", t); hide(c, ("m2", "wife", "son"))
+    car_ = c["car"]
+    stand_at(c["people"]["wife"], car_.location + Vector((-0.6, -1.4, 0)), car_.location + Vector((-2, -6, 0)))
+    son = c["people"]["son"]; loc = car_.location + Vector((0.3, -1.25, 0))
+    stand_at(son, loc, car_.location + Vector((0.3, 0, 0)))
+    walk_to(c["people"]["m2"], car_.location + Vector((-3.5, -6.5, 0)), car_.location + Vector((-1.0, -1.9, 0)), sec, speed=0.8)
+    c["focus"] = c["people"]["wife"].bone_head("head")
+
+
+def c4_12a(c, t):         # the doctor clips the film to the lightbox (medium, from the side)
+    sec = S("ch4_12a", t); hide(c, ("doc",))
+    h = c["people"]["doc"]; lb = c["lightbox"]; loc = lb + Vector((0.2, -0.75, -lb.z))
+    stand_at(h, loc, lb + Vector((0, 0, -lb.z)))
+    sd = forward(h).cross(Vector((0, 0, 1))); k = ease(min(1.0, sec / 1.6))
+    clip = lb + Vector((0.0, -0.02, 0.1))
+    f_ = (h.bone_head("spine02") + forward(h) * 0.35 + Vector((0, 0, 0.1))).lerp(clip, k)
+    reach(h, "R", f_ + sd * 0.12, Vector((sd.x, sd.y, -0.7)), forward(h)); reach(h, "L", f_ - sd * 0.12, Vector((-sd.x, -sd.y, -0.7)), forward(h))
+    c["film"].location = f_ + Vector((0, -0.0, -0.05)); c["film"].rotation_euler = (0, 0, 0)
+    c["focus"] = h.bone_head("head")
+
+
+def c4_12b(c, t):         # studies it, then switches the lightbox off (driver at frame 60)
+    sec = S("ch4_12b", t); hide(c, ("doc",))
+    h = c["people"]["doc"]; lb = c["lightbox"]; loc = lb + Vector((0.3, -0.85, -lb.z))
+    c["film"].location = lb + Vector((0, -0.02, 0.0))
+    stand_at(h, loc, lb + Vector((0, 0, -lb.z)), crossed=sec < 2.0)
+    if sec >= 2.0:
+        sd = forward(h).cross(Vector((0, 0, 1)))
+        reach(h, "R", lb + Vector((0.55, -0.05, -0.2)), Vector((sd.x, sd.y, -0.7)), forward(h))
+    c["focus"] = h.bone_head("head")
+
+
+def c4_13a(c, t):
+    hide(c, ())
+    c["focus"] = OR_ + Vector((0, 0, 0.9))
+
+
+def c4_13b(c, t):
+    sec = S("ch4_13b", t); hide(c, ())
+    leaves(c, ease(min(1.0, sec / dur("ch4_13b"))))
+    c["focus"] = COR + Vector((14.0, 0, 1.3))
+
+
+def c1_11a(c, t):         # local clinic, evening: a nurse adjusts a drip above the cots (medium)
+    sec = S("ch1_11a", t); hide(c, ("nurse", "m1", "m2", "pat2"))
+    for nm, cc in (("m1", c["cots"][0]), ("m2", c["cots"][1]), ("pat2", c["cots"][2])):
+        lie_in_bed(c["people"][nm], cc + Vector((0, 0.85, 0)), (0, -1), 0.51)
+    h = c["people"]["nurse"]; pole = c["cots"][1] + Vector((-0.55, 0.7, 0)); loc = pole + Vector((-0.3, -0.75, 0))
+    stand_at(h, loc, pole)
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    reach(h, "R", pole + Vector((0.1, 0, 1.55 + 0.03 * math.sin(sec * 2))), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    h.rot("head", sd, 10)
+    c["focus"] = h.bone_head("head")
+
+
+def c1_11b(c, t):         # the men walk out of the clinic door into the dark street
+    sec = S("ch1_11b", t); hide(c, ("m1", "m2"))
+    door = CLINIC + Vector((2.4, -2.5, 0))
+    walk_to(c["people"]["m1"], door + Vector((0, 1.2, 0)), door + Vector((3.5, -4.0, 0)), sec, speed=0.8)
+    walk_to(c["people"]["m2"], door + Vector((0, 2.0, 0)), door + Vector((2.5, -4.4, 0)), sec - 0.6, speed=0.75)
+    c["focus"] = c["people"]["m1"].arm.location + Vector((0, 0, 1.3))
+
+
+SHOTS = {
+    "ch1_11a": ("night", c1_11a, C(CLINIC + Vector((1.6, -1.8, 1.6)), CLINIC + Vector((1.3, -1.6, 1.55)), CLINIC + Vector((-0.5, 1.4, 1.1)), 28), 4.0),
+    "ch1_11b": ("night", c1_11b, C(CLINIC + Vector((7.5, -9.0, 1.5)), CLINIC + Vector((7.0, -8.6, 1.5)), CLINIC + Vector((3.0, -3.5, 1.2)), 32), 4.0),
+    "ch2_1a": ("day", c2_1a, C(EXT + Vector((7.0, -24.0, 1.0)), EXT + Vector((6.2, -23.0, 1.3)), EXT + Vector((0, -10.0, 2.5)), 28), None),
+    "ch2_1b": ("day", c2_1b, C(COR + Vector((-4.5, -1.1, 1.5)), COR + Vector((-4.8, -1.0, 1.45)), COR + Vector((-8.0, 1.2, 1.0)), 30), 4.0),
+    "ch2_2a": ("day", c2_2a, C(COR + Vector((-6.6, -1.1, 1.3)), COR + Vector((-6.8, -1.0, 1.3)), COR + Vector((-7.6, 1.2, 1.1)), 40), 2.8),
+    "ch2_2b": ("day", c2_2b, C(COR + Vector((-10.8, -1.2, 1.5)), COR + Vector((-10.5, -1.1, 1.5)), COR + Vector((-7.0, 0.2, 1.2)), 30), 4.0),
+    "ch2_3a": ("day", c2_3a, C(WARD + Vector((-2.6, -1.4, 1.4)), WARD + Vector((-2.3, -1.2, 1.35)), BEDS[2] + Vector((-0.4, 0.2, 0.9)), 35), 2.8),
+    "ch2_3b": ("day", c2_3b, C(BEDS[2] + Vector((-1.6, -1.5, 1.45)), BEDS[2] + Vector((-1.45, -1.3, 1.45)), BEDS[2] + Vector((0.3, 0.4, 1.0)), 38), 2.8),
+    "ch2_4a": ("day", c2_4a, C(WARD + Vector((2.2, 2.6, 1.6)), WARD + Vector((1.8, 2.3, 1.6)), WARD + Vector((0.2, -3.2, 1.5)), 35), 4.0),
+    "ch2_4b": ("day", c2_4b, C(WARD + Vector((-1.8, 1.8, 1.6)), WARD + Vector((-1.2, 0.8, 1.6)), WARD + Vector((0.2, -3.2, 1.55)), 40), 2.8),
+    "ch2_5a": ("day", c2_5a, C(BEDS[2] + Vector((-2.2, -2.4, 1.5)), BEDS[2] + Vector((-2.0, -2.2, 1.5)), BEDS[2] + Vector((0.9, -0.6, 1.5)), 38), 2.8),
+    "ch2_6a": ("day", c2_6a, C(COR + Vector((3.6, -0.6, 1.55)), COR + Vector((3.4, -0.5, 1.55)), COR + Vector((1.4, -0.25, 1.4)), 35), 2.8),
+    "ch2_6b": ("day", c2_6b, C(COR + Vector((-2.8, 0.9, 1.55)), COR + Vector((-2.6, 0.8, 1.55)), COR + Vector((1.4, -0.2, 1.4)), 35), 4.0),
+    "ch4_1a": ("day", c4_1a, C(WARD + Vector((-6.0, -2.6, 1.7)), WARD + Vector((5.0, -2.6, 1.7)), WARD + Vector((-4.0, 2.2, 0.8)), 28, WARD + Vector((5.0, 2.2, 0.8))), 4.0),
+    "ch4_1b": ("day", c4_1b, C(BEDS[2] + Vector((1.6, -3.4, 1.5)), BEDS[2] + Vector((1.4, -3.1, 1.5)), BEDS[2] + Vector((0.1, -1.5, 1.3)), 35), 2.8),
+    "ch4_2a": ("day", c4_2a, C(LAB + Vector((1.2, 0.6, 1.5)), LAB + Vector((1.0, 0.4, 1.5)), LAB + Vector((-0.9, -1.6, 1.55)), 35), 2.8),
+    "ch4_2b": ("day", c4_2b, C(LAB + Vector((1.9, 0.2, 1.4)), LAB + Vector((1.7, 0.0, 1.4)), LAB + Vector((0.3, -1.6, 1.1)), 35), 2.8),
+    "ch4_3a": ("day", c4_3a, C(BEDS[1] + Vector((1.2, -2.4, 1.5)), BEDS[1] + Vector((1.0, -2.2, 1.55)), BEDS[1] + Vector((-0.75, 0.0, 1.5)), 35), 2.8),
+    "ch4_3b": ("morning", c4_3b, C(WARD + Vector((-4.5, -2.8, 1.4)), WARD + Vector((-4.0, -2.6, 1.4)), BEDS[2] + Vector((0, 0.5, 1.0)), 32), 4.0),
+    "ch4_11a": ("morning", c4_11a, C(EXT + Vector((-6.0, -22.0, 1.4)), EXT + Vector((-5.5, -21.0, 1.4)), EXT + Vector((0, -9.0, 1.8)), 30), 5.6),
+    "ch4_11b": ("morning", c4_11b, C(EXT + Vector((0.0, -25.0, 1.5)), EXT + Vector((0.6, -24.5, 1.5)), EXT + Vector((4.6, -20.0, 1.2)), 32), 4.0),
+    "ch4_12a": ("day", c4_12a, C(OFFICE + Vector((-1.5, -0.4, 1.6)), OFFICE + Vector((-1.3, -0.2, 1.6)), OFFICE + Vector((0.1, 1.5, 1.5)), 32), 2.8),
+    "ch4_12b": ("day", c4_12b, C(OFFICE + Vector((1.6, -0.8, 1.6)), OFFICE + Vector((1.4, -0.6, 1.6)), OFFICE + Vector((0.1, 1.5, 1.5)), 32), 2.8),
+    "ch4_13a": ("day", c4_13a, C(OR_ + Vector((2.2, -2.4, 1.2)), OR_ + Vector((1.9, -2.1, 1.25)), OR_ + Vector((0, 0, 1.6)), 28), None),
+    "ch4_13b": ("day", c4_13b, C(COR + Vector((2.0, 0.0, 1.6)), COR + Vector((8.0, 0.0, 1.6)), COR + Vector((15.0, 0.0, 1.4)), 30), 5.6),
+}
+VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
+DUR = {k: dur(k) for k in SHOTS}
+
+
+def _focus(c, t):
+    return c.get("focus", WARD + Vector((0, 0, 1)))
+
+
+MOVES = {k: dict(kind="anim", far=200.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus) for k, v in SHOTS.items()}
