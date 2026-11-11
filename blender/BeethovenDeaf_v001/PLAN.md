@@ -51,3 +51,12 @@ Sheet music uses staff lines and note blobs only, with no titles or legible text
 - B (21:45): blocking sheet.
 - C (23:45): 0.2 s sheets and audit.
 - D (01:00): package in `blender/BeethovenDeaf_v002/`.
+
+## Checkpoint B (blocking)
+- **Sheet:** `review/B_blocking_1s.jpg`, 1 still per second.
+- **Camera path:** `review/B_camera_path.png`, a top view and a height curve coloured by beat. It is one `CAM_Film` on one Catmull-Rom spline with 33 framings.
+- **Build:** `scripts/01…05`, run in order. See the README in v002 once it is packaged.
+- **Known at B:**
+  - Hand contact is not audited yet.
+  - A red shape shows under the skull at about 14 s (still finding its source).
+  - Lighting is not graded yet.
