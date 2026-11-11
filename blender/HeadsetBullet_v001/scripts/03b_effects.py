@@ -81,7 +81,7 @@ for f in range(F_RIC + 1, F_WALL + 1):
 for f in (F_WALL + 1, 1500):
     BPOS[f] = HOLE - DR * 0.008; key_bul(f, HOLE - DR * 0.008, q_along(DR, F_WALL * 20.0))
 for f in range(F_WALL + 1, 1501): BPOS[f] = HOLE - DR * 0.008
-key_vis(trail, [(1, True), (F_IMPACT - 30, True), (F_IMPACT - 29, False), (F_RIC + 30, False), (F_RIC + 31, True), (F_WALL, True), (F_WALL + 1, False)])
+key_vis(trail, [(1, True), (F_IMPACT - 30, True), (F_IMPACT - 29, False)])
 constant_interp(trail)
 
 # ------------------------------------------------------------------ window shatter (polar shards around G)
@@ -196,6 +196,11 @@ bmp = Nn.new("ShaderNodeBump"); bmp.inputs["Strength"].default_value = 0.8; bmp.
 shellL.data.materials[0] = MSL; faceL.data.materials[0] = MSL
 for f, v in ((1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 3, 0.008), (F_IMPACT + 20, 0.018), (F_IMPACT + 60, 0.026)):
     rad.outputs[0].default_value = v; rad.outputs[0].keyframe_insert("default_value", frame=f)
+# the hit cup's RGB ring flickers and dies on impact
+rgbL = bpy.data.objects["HS_RGB_L"]; mL = rgbL.data.materials[0].copy(); mL.name = "HS_RGB_L_dying"; rgbL.data.materials[0] = mL
+eL = mL.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+for f, v in ((1, 8.0), (F_IMPACT, 8.0), (F_IMPACT + 2, 25.0), (F_IMPACT + 5, 0.5), (F_IMPACT + 9, 6.0), (F_IMPACT + 13, 0.0), (F_IMPACT + 40, 1.5), (F_IMPACT + 44, 0.0)):
+    eL.default_value = v; eL.keyframe_insert("default_value", frame=f)
 CHIPM = mat("ChipPlastic", (0.035, 0.037, 0.042), 0.35)
 DUSTM = mat("PlasticDust", (0.5, 0.5, 0.52), 0.9)
 def debris(name, n, origin_fn, f0, vel_fn, size, m, floor_fn, life=None, c="FX"):
@@ -231,7 +236,7 @@ CUT.parent = HS_ROOT
 CZ = lambda dz: Vector((XC1, 0.0, 0.0045 + 0.05 + dz))
 for f, dz in ((1, 0.08), (818, 0.07), (850, 0.0), (948, 0.0), (972, 0.07)):
     CUT.location = CZ(dz); CUT.keyframe_insert("location", frame=f)
-for nm in ("HS_Shell_L", "HS_Face_L", "HS_Foam_L", "HS_Steel_L", "HS_Driver_L", "HS_Cushion_L", "HS_Yoke_L0", "HS_Yoke_L1"):
+for nm in ("HS_Shell_L", "HS_Face_L", "HS_Foam_L", "HS_Steel_L", "HS_Driver_L", "HS_Cushion_L", "HS_Yoke_L0", "HS_Yoke_L1", "HS_RGB_L", "HS_Trim_L"):
     o = bpy.data.objects[nm]
     md = o.modifiers.new("Cutaway", 'BOOLEAN'); md.object = CUT; md.operation = 'DIFFERENCE'; md.solver = 'EXACT'
     for f, on in ((1, False), (815, True), (975, False)):
@@ -275,27 +280,27 @@ for f, e in ((1, 0), (F_RIC - 1, 0), (F_RIC + 2, 6.0), (F_RIC + 30, 1.5), (F_RIC
 # ------------------------------------------------------------------ wall hit: hole, plaster chips, dust puff
 holeM = bpy.data.materials.new("BulletHole"); holeM.use_nodes = True; hn = holeM.node_tree.nodes; hb = hn["Principled BSDF"]
 tcH = hn.new("ShaderNodeTexCoord"); gr = hn.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'
-mpH = hn.new("ShaderNodeMapping"); mpH.inputs["Scale"].default_value = (40, 40, 40)
+mpH = hn.new("ShaderNodeMapping"); mpH.inputs["Scale"].default_value = (29, 29, 29)
 holeM.node_tree.links.new(tcH.outputs["Object"], mpH.inputs[0]); holeM.node_tree.links.new(mpH.outputs[0], gr.inputs[0])
 rp = hn.new("ShaderNodeValToRGB"); e0, e1 = rp.color_ramp.elements; e0.position = 0.0; e0.color = (0.52, 0.55, 0.58, 1)
 e1.position = 0.55; e1.color = (0.02, 0.02, 0.02, 1); rp.color_ramp.elements.new(0.35).color = (0.85, 0.83, 0.78, 1)
 holeM.node_tree.links.new(gr.outputs[0], rp.inputs[0]); holeM.node_tree.links.new(rp.outputs[0], hb.inputs["Base Color"])
 hb.inputs["Roughness"].default_value = 0.95
-hole = cyl("BulletHole", 0.024, 0.002, HOLE + Vector((0.0012, 0, 0)), holeM, c="FX", rot=(0, R_(90), 0), seg=24)
+hole = cyl("BulletHole", 0.034, 0.002, HOLE + Vector((0.0012, 0, 0)), holeM, c="FX", rot=(0, R_(90), 0), seg=24)
 key_vis(hole, [(1, False), (F_WALL, True)]); constant_interp(hole)
 WALLN = Vector((1, 0, 0))
 PLM = mat("PlasterChip", (0.8, 0.8, 0.76), 0.9)
 debris("PlasterChip", 30, lambda f: HOLE + WALLN * 0.01, F_WALL, lambda i: (WALLN * random.uniform(0.8, 2.6) - DR * 0.3 + Vector([random.uniform(-1.2, 1.2) for _ in range(3)])),
        0.004, PLM, lambda p: FLOOR_Z)
-PUFF = mat("DustPuff", (0.85, 0.84, 0.8), 1.0, alpha=0.35)
+PUFF = mat("DustPuff", (0.85, 0.84, 0.8), 1.0, alpha=0.18)
 PUFF.blend_method = 'BLEND' if hasattr(PUFF, "blend_method") else None
-for i in range(16):
+for i in range(28):
     o = bpy.data.objects.new("Dust", bpy.data.meshes.new("Dust")); link(o, "FX")
     bm_ = bmesh.new(); bmesh.ops.create_icosphere(bm_, subdivisions=2, radius=1.0); bm_.to_mesh(o.data); bm_.free(); o.data.materials.append(PUFF)
     d = (WALLN * random.uniform(0.4, 1.0) + Vector([random.uniform(-0.6, 0.6) for _ in range(3)])).normalized()
     key_vis(o, [(1, False), (F_WALL, True), (F_WALL + 160, False)]); constant_interp(o)
     for k in range(0, 161, 8):
-        u = k / 160; o.location = HOLE + d * 0.25 * (1 - (1 - u) ** 3) + Vector((0, 0, -0.03 * u)); s_ = 0.01 + 0.07 * (u ** 0.5) * (1 - u * 0.6)
+        u = k / 160; o.location = HOLE + d * 0.16 * (1 - (1 - u) ** 3) + Vector((0, 0, -0.03 * u)); s_ = 0.004 + 0.022 * (u ** 0.5) * (1 - u * 0.5)
         o.scale = (s_, s_, s_); o.keyframe_insert("location", frame=F_WALL + k); o.keyframe_insert("scale", frame=F_WALL + k)
 
 # ------------------------------------------------------------------ ambient life outside: birds, sprinkler, leaves

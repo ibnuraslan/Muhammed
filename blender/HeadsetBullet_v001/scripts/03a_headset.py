@@ -22,7 +22,7 @@ print("HEADFIT WX", round(WX, 4), "Y_EAR", round(Y_EAR, 4), "Z_EAR", round(Z_EAR
 HS = {}  # parts
 MS = mat("HS_Shell", (0.035, 0.037, 0.042), 0.32, coat=0.4)
 MF = bpy.data.materials.new("HS_Foam"); MF.use_nodes = True
-fb = MF.node_tree.nodes["Principled BSDF"]; fb.inputs["Base Color"].default_value = (0.58, 0.55, 0.45, 1); fb.inputs["Roughness"].default_value = 0.95
+fb = MF.node_tree.nodes["Principled BSDF"]; fb.inputs["Base Color"].default_value = (0.80, 0.55, 0.18, 1); fb.inputs["Roughness"].default_value = 0.95
 _n = MF.node_tree.nodes.new("ShaderNodeTexNoise"); _n.inputs["Scale"].default_value = 900; _n.inputs["Detail"].default_value = 3
 _b = MF.node_tree.nodes.new("ShaderNodeBump"); _b.inputs["Strength"].default_value = 0.6
 MF.node_tree.links.new(_n.outputs[0], _b.inputs["Height"]); MF.node_tree.links.new(_b.outputs[0], fb.inputs["Normal"])
@@ -72,6 +72,8 @@ for side, sx in (("L", 1), ("R", -1)):
     parts["foam"] = ring("HS_Foam_" + side, R_FO, R_SH, X(XC0 + 0.006), X(XC1 - 0.004), m=MF)
     parts["steel"] = ring("HS_Steel_" + side, R_ME0, R_ME1, X(XC0 + 0.002), X(XC1 - 0.008), m=MM)
     parts["driver"] = disc("HS_Driver_" + side, R_ME0, X(XC0 + 0.004), X(XC0 + 0.008), m=MD)
+    parts["rgb"] = ring("HS_RGB_" + side, 0.033, 0.037, X(XC1), X(XC1 + 0.0012), m=mat("HS_RGB", (0.1, 0.1, 0.1), 0.4, emit=(0.2, 0.75, 1.0), estr=8.0))
+    parts["trim"] = ring("HS_Trim_" + side, R_OUT - 0.0015, R_OUT + 0.0006, X(XC1 - 0.010), X(XC1 - 0.006), m=MM)
     parts["cushion"] = ring("HS_Cushion_" + side, 0.026, 0.047, X(X0), X(XC0), m=MC)
     for nm, o in parts.items():
         if sx < 0:   # mirrored rings need flipped normals

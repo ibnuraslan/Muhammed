@@ -78,7 +78,7 @@ def key_feet(f, dy=0.0, lift=(0.0, 0.0), heel=(0.0, 0.0)):
     for i, s in enumerate("LR"):
         sx = -1 if s == "L" else 1          # facing +Y: his left is -X
         xy = Vector((sx * 0.13, CHAIR_Y + 0.42 + dy + (0.03 if s == "R" else -0.02)))
-        H.key_foot(s, f, xy, YAW0 + sx * 8, lift=lift[i], pitch=heel[i])
+        H.key_foot(s, f, xy, YAW0 + sx * 8, lift=lift[i] + 0.016, pitch=heel[i])
         # knee pole in front of the knee
         pole = Vector((xy.x + sx * 0.05, xy.y + 0.7, 0.6))
         pb = FR.PB["Pole_knee." + s]; n_ = "Pole_knee." + s
@@ -89,11 +89,11 @@ SEAT_Z = ROOT_HEAD.z * 0.0 + 0.62
 BASE = Vector((0.0, CHAIR_Y, SEAT_Z))
 KB = Vector((-0.08, 3.43, DESK_Z)); MOUSE0 = Vector((0.42, 3.42, DESK_Z))
 def kb_hand(f, dx=0.0, dy=0.0, lift=0.0):
-    W = Vector((-0.16 + dx, 3.30 + dy, DESK_Z + 0.055 + lift))
-    key_hand("L", f, W, Vector((0.25, 1.0, -0.25)), Vector((0.0, 0.0, -1.0)), W + Vector((-0.45, -0.25, -0.15)))
+    W = Vector((-0.16 + dx, 3.29 + dy, DESK_Z + 0.100 + lift))
+    key_hand("L", f, W, Vector((0.25, 1.0, -0.18)), Vector((0.0, 0.0, -1.0)), W + Vector((-0.45, -0.25, -0.15)))
 def mouse_hand(f, p, lift=0.0):
-    W = Vector((p.x - 0.01, p.y - 0.085, DESK_Z + 0.05 + lift))
-    key_hand("R", f, W, Vector((-0.05, 1.0, -0.30)), Vector((0.0, 0.0, -1.0)), W + Vector((0.45, -0.25, -0.15)))
+    W = Vector((p.x - 0.01, p.y - 0.09, DESK_Z + 0.086 + lift))
+    key_hand("R", f, W, Vector((-0.05, 1.0, -0.12)), Vector((0.0, 0.0, -1.0)), W + Vector((0.45, -0.25, -0.15)))
 
 if POSETEST:
     key_body(1, BASE, pitch=14, spine=(10, 0, 0), head=(-10, 0, 0))
@@ -112,8 +112,8 @@ def track(keys, interp=pchip):
 T_ROOT = track([(1, (0, 0, 0, 14, 0)), (240, (0, 0.01, 0, 16, 0)), (355, (0.01, 0.02, -0.005, 18, 1)), (460, (-0.01, 0.0, 0, 15, -1)),
                 (571, (0, 0.02, -0.005, 17, 0)), (700, (0, 0.02, -0.005, 17, 0)), (706, (0.025, 0.02, 0.0, 15, 4)), (722, (0.01, 0.0, 0.0, 11, 1)),
                 (760, (0.0, -0.03, 0.012, 5, 0)), (900, (-0.01, -0.035, 0.012, 4, 2)), (1060, (-0.015, -0.03, 0.01, 3, 2)), (1085, (-0.02, -0.04, 0.012, 1, 3)),
-                (1165, (-0.01, -0.03, 0.01, 4, 1)), (1222, (0, -0.02, 0.005, 6, 0)), (1262, (0, -0.13, 0.0, -2, 0)), (1315, (0, -0.12, 0.0, 9, 0)),
-                (1400, (0, -0.12, 0.0, 5, 0)), (1460, (-0.01, -0.12, 0.0, 4, 2)), (1500, (-0.01, -0.12, 0.0, 4, 2))])
+                (1165, (-0.01, -0.03, 0.01, 4, 1)), (1222, (0, -0.02, 0.005, 6, 0)), (1262, (0, -0.09, 0.0, -2, 0)), (1315, (0, -0.085, 0.0, 9, 0)),
+                (1400, (0, -0.085, 0.0, 5, 0)), (1460, (-0.01, -0.085, 0.0, 4, 2)), (1500, (-0.01, -0.085, 0.0, 4, 2))])
 T_SPINE = track([(1, (10, 0, 0)), (300, (12, 0, -3)), (420, (8, 2, 4)), (571, (12, 0, 0)), (700, (12, 0, 0)), (708, (6, -8, 6)), (730, (2, -3, 2)),
                  (760, (-4, 0, -6)), (900, (-2, 2, -10)), (1060, (-3, 0, -8)), (1090, (-2, 3, 12)), (1165, (-3, 0, 6)), (1222, (0, 0, 0)),
                  (1262, (-6, 0, 0)), (1315, (8, 0, 0)), (1400, (4, 0, 6)), (1460, (3, 2, 18)), (1500, (3, 2, 19))])
@@ -169,7 +169,7 @@ for f in range(1, F_STARTLE0 + 1, 2):
     cL = [28 + 16 * tap(f, 22, 0), 24 + 16 * tap(f, 17, 6), 22 + 14 * tap(f, 26, 11), 26 + 6 * tap(f, 40, 3)]
     key_fingers("L", f, cL, 14)
     clk = 12 * tap(f, 33, 9, 3)
-    key_fingers("R", f, [18 + clk, 20 + 4 * tap(f, 70, 20, 4), 34, 38], 10)
+    key_fingers("R", f, [12 + clk, 14 + 4 * tap(f, 70, 20, 4), 24, 28], 10)
 # startle: both hands jerk up and back off the desk, then hover, trembling, until he reaches for the headset
 def hover(s, f, k):
     tr = Vector((0.003 * math.sin(f * 0.9 + k), 0.002 * math.sin(f * 1.3 + 2 * k), 0.003 * math.sin(f * 1.1 + 3 * k)))
@@ -177,7 +177,7 @@ def hover(s, f, k):
 L_UP = Vector((-0.20, 3.20, DESK_Z + 0.13)); R_UP = Vector((0.30, 3.20, DESK_Z + 0.12))
 for f in range(F_STARTLE0 + 2, 1166, 3):
     u = smooth((f - F_STARTLE0) / (F_STARTLE1 - F_STARTLE0))
-    l0 = Vector((-0.16, 3.30, DESK_Z + 0.055)); r0 = MOUSE0 + M_PATH(700) + Vector((-0.01, -0.085, 0.05))
+    l0 = Vector((-0.16, 3.29, DESK_Z + 0.100)); r0 = MOUSE0 + M_PATH(700) + Vector((-0.01, -0.09, 0.086))
     WL = l0.lerp(L_UP, u) + hover("L", f, 0) * u + Vector((0, 0, 0.02 * math.sin(math.pi * u)))
     WR = r0.lerp(R_UP, u) + hover("R", f, 1) * u + Vector((0, 0, 0.02 * math.sin(math.pi * u)))
     if f > 1080:   # flinch at the wall thud
@@ -202,7 +202,7 @@ def grip_world(s, D, close=1.0):
     R3 = D.to_3x3().normalized()
     face = D @ CUP_FACE[s]; out = (R3 @ OUTV[s]).normalized()
     up = (R3 @ Vector((0, 0.25, 1))).normalized()
-    W = face + out * (0.020 + 0.012 * (1 - close)) - up * 0.062
+    W = face + out * (0.043 + 0.015 * (1 - close)) - up * 0.062
     return W, up, -out
 # his LEFT is rest +X: the L hand holds the left (hit) cup
 F_REACH0 = 1168
@@ -220,10 +220,10 @@ for f in range(F_REACH0, F_GRAB + 1, 2):
 # carrier: starts exactly on the head transform at F_GRAB, then lifts, comes down in front of him and turns in his hands
 D0 = head_delta(F_GRAB)
 C0 = D0 @ HEAD_C_REST
-CP = track([(F_GRAB, tuple(C0)), (F_GRAB + 22, tuple(C0 + Vector((0, 0.07, 0.10)))), (F_GRAB + 50, (0.0, 3.36, 1.02)),
-            (1315, (0.02, 3.33, 0.98)), (1380, (0.0, 3.31, 0.95)), (1440, (-0.02, 3.27, 0.90)), (1500, (-0.02, 3.26, 0.89))], catmull)
-CR = track([(F_GRAB, (0, 0, 0)), (F_GRAB + 22, (-18, 0, 0)), (F_GRAB + 50, (35, 0, 8)), (1300, (70, 0, 20)), (1340, (95, 0, -10)),
-            (1390, (60, 0, 15)), (1440, (40, 0, 10)), (1500, (38, 0, 10))], catmull)
+CP = track([(F_GRAB, tuple(C0)), (F_GRAB + 22, tuple(C0 + Vector((0, 0.07, 0.13)))), (F_GRAB + 50, (0.0, 3.36, 1.02)),
+            (1300, (0.02, 3.38, 0.93)), (1340, (0.01, 3.37, 0.90)), (1400, (0.0, 3.33, 0.90)), (1450, (-0.02, 3.29, 0.90)), (1500, (-0.02, 3.28, 0.90))], catmull)
+CR = track([(F_GRAB, (0, 0, 0)), (F_GRAB + 22, (-18, 0, 0)), (F_GRAB + 50, (30, 0, 8)), (1300, (45, 0, 20)), (1340, (58, 0, -12)),
+            (1400, (40, 0, 12)), (1450, (40, 0, 8)), (1500, (38, 0, 8))], catmull)
 def carrier_M(f):
     rx, ry, rz = CR(f); c = Vector(CP(f))
     Rw = Matrix.Rotation(R_(rz), 4, 'Z') @ Matrix.Rotation(R_(rx), 4, 'X') @ Matrix.Rotation(R_(ry), 4, 'Y')
@@ -240,10 +240,15 @@ for f in list(range(F_GRAB, 1501, 2)) + [1500]:
     key_carrier(f, carrier_M(f))
     # carrier world basis is (rest->world) for the headset: hands hold the cups
     D = carrier_M(f)
+    w = smooth((f - (F_GRAB + 34)) / 26)          # outer-face grip while ripping it off -> cradle under the cups
     for s, sx in (("L", -1), ("R", 1)):
         W, d, n = grip_world(s, D, 1.0)
-        key_hand(s, f, W, d, n, W + Vector((sx * 0.45, -0.15, -0.30)))
-        key_fingers(s, f, [48 + 3 * math.sin(f * 0.2)] * 4, 42)
+        cc = D @ (CUP_FACE[s] - OUTV[s] * 0.02)
+        Wc = cc - Vector((0, 0, 1)) * (R_OUT + 0.045) + Vector((sx * 0.012, -0.07, 0))
+        dc = Vector((-sx * 0.25, 1.0, 0.15)); nc = Vector((0, 0, 1))
+        W = W.lerp(Wc, w); d = d.lerp(dc, w); n = n.lerp(nc, w)
+        key_hand(s, f, W, d, n, W + Vector((sx * 0.45, -0.25 - 0.1 * w, -0.30)))
+        key_fingers(s, f, [48 - 34 * w + 3 * math.sin(f * 0.2)] * 4, 42 - 30 * w)
 # band bends visibly once off the head (shape key), and the cup crack stays
 for o in (HS_BAND_PAD, HS_BAND_STEEL, HS_BAND_TOP):
     kbent = o.data.shape_keys.key_blocks["bent"]

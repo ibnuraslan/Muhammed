@@ -254,7 +254,8 @@ box("Bed_Mattress", (0.95, 1.95, 0.2), (RX1 - 0.52, 1.35, 0.42), mat("Sheet", (0
 box("Bed_Blanket", (0.98, 1.3, 0.06), (RX1 - 0.52, 1.05, 0.54), mat("Blanket", (0.15, 0.25, 0.42), 0.95), bevel=0.03)
 box("Bed_Pillow", (0.6, 0.38, 0.12), (RX1 - 0.52, 2.08, 0.58), mat("Sheet", (0.75, 0.77, 0.8), 0.9), bevel=0.05)
 # posters (abstract art, no text) on the right and left walls
-def poster(name, loc, rot, size, seed):
+def poster(name, loc, rot, size, seed, wall_n):
+    wall_n = Vector(wall_n)
     me = bpy.data.meshes.new(name); bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=0.5)
     for v in bm.verts: v.co = Vector((v.co.x * size[0], 0, v.co.y * size[1]))
     bm.to_mesh(me); bm.free(); o = bpy.data.objects.new(name, me); link(o); o.location = loc; o.rotation_euler = rot
@@ -267,10 +268,11 @@ def poster(name, loc, rot, size, seed):
     el[0].color = (random.random() * 0.3, random.random() * 0.2, random.random() * 0.5, 1); el[1].color = (0.9, random.random() * 0.6 + 0.2, 0.2, 1)
     Ll.new(vo.outputs["Distance"], ramp.inputs[0]); Ll.new(ramp.outputs[0], b.inputs["Base Color"])
     me.materials.append(m)
-    box(name + "_Frame", (size[0] + 0.03, 0.01, size[1] + 0.03), loc, mat("PosterFrame", (0.02, 0.02, 0.02), 0.4), rot=rot).location = (Vector(loc) - Matrix.Rotation(rot[2], 3, 'Z') @ Vector((0, -0.006, 0)))
-poster("Poster_A", (RX1 - 0.01, 1.4, 1.6), (0, 0, R_(90)), (0.6, 0.85), 3)
-poster("Poster_B", (RX0 + 0.01, 2.6, 1.65), (0, 0, R_(-90)), (0.5, 0.7), 5)
-poster("Poster_C", (1.55, RY1 - 0.01, 1.35), (0, 0, 0), (0.45, 0.6), 8)
+    o.location = Vector(loc) - wall_n * 0.004       # poster sits 4 mm proud of its frame
+    box(name + "_Frame", (size[0] + 0.03, 0.006, size[1] + 0.03), Vector(loc) + wall_n * 0.003, mat("PosterFrame", (0.02, 0.02, 0.02), 0.4), rot=rot)
+poster("Poster_A", (RX1 - 0.01, 1.4, 1.6), (0, 0, R_(90)), (0.6, 0.85), 3, (1, 0, 0))
+poster("Poster_B", (RX0 + 0.01, 2.6, 1.65), (0, 0, R_(-90)), (0.5, 0.7), 5, (-1, 0, 0))
+poster("Poster_C", (1.55, RY1 - 0.01, 1.35), (0, 0, 0), (0.45, 0.6), 8, (0, 1, 0))
 # ceiling light fixture (off)
 cyl("CeilingLamp", 0.22, 0.06, (0, 2.1, RZ1 - 0.04), mat("LampShade", (0.9, 0.9, 0.88), 0.4))
 # rug
