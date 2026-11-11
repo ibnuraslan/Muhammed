@@ -605,7 +605,7 @@ class Builder:
 
 
 # ============================================================================ a better car
-def sedan(name, col=(0.05, 0.055, 0.06), length=4.6, width=1.82, lights=True, window_open=0.0, variant="unmarked", kind="sedan_modern"):
+def sedan(name, col=(0.05, 0.055, 0.06), length=4.6, width=1.82, lights=True, window_open=0.0, variant=None, kind="sedan_modern"):
     """Every car in this film goes through here: the shared realistic vehicle kit (nvidia_doc/scenes/vehicles.py,
     branch claude/vehicle-kit). Forward is local +X, origin on the ground under the middle of the car.
     `length`, `width` and `window_open` are kept for call compatibility (the kit sets its own proportions)."""

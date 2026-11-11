@@ -37,7 +37,7 @@ def build_street(c):
         dd.model_h("jacaranda_tree", (-30 + k * 18, 7.6, 0), 8.0, rot_z=k)
     c["cars"] = []
     for k, col in enumerate(((0.08, 0.09, 0.1), (0.4, 0.41, 0.43), (0.12, 0.14, 0.2))):
-        cr = dd.sedan(f"Unmarked{k}", col, lights=True); c["cars"].append(cr)
+        cr = dd.sedan(f"Unmarked{k}", col, lights=True, variant="unmarked"); c["cars"].append(cr)
     c["officers"] = [officer(f"Raid{k}", 32 + 5 * k, seed=k) for k in range(4)]
     for k in range(2):
         dd.sedan(f"Parked{k}", ((0.6, 0.6, 0.6), (0.3, 0.05, 0.05))[k], lights=False).location = (-18 + 30 * k, -2.6, 0)
