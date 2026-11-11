@@ -9,7 +9,7 @@ The full 25.0 s film (frames 1–1500) at 1080×1920, 60 fps, ready for RenderSt
 - `SETTINGS.md`: render settings and test frames. `CREDITS.md`: the CC-BY block for the video description.
 - `package_check_lowres.jpg`: frames 20, 960 and 1490 at 270×480, 8 spp, rendered from the packed file opened in factory Blender, to prove the package works.
 
-Source: `../GameBoxBullet_v001/scripts`. Build order: `01_build_man.py`, `01b_build_walker.py`, `02_scene.py`, `03_anim.py`, `04_audit.py`, `05_prepack.py`, then `pipeline/package_for_farm.py`.
+Source: `../GameBoxBullet_v001/scripts`. Build order: `01_build_man.py`, `01b_build_walker.py`, `02_scene.py`, `03_anim.py`, `04_audit.py`, then `pipeline/anim_look.py`, `06_anim_fix.py`, `05_prepack.py`, then `pipeline/package_for_farm.py`.
 Review sheets: `../GameBoxBullet_v001/polish_sheet_[abc].jpg`; audit `../GameBoxBullet_v001/audit.txt`.
 
 ## Changes from v003 (client look change, 22:45 UTC: bright, clean 3D animation, not live-action)
