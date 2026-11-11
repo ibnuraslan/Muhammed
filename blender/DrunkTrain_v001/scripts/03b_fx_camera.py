@@ -136,6 +136,26 @@ f_land_ = int(eval(sc["lad_rest"]) and 0) or 0
 f_shut = 262; f_open = sc["f_stir"] + 8
 ramp_keys(LADO, LIDS, [(1, 18), (60, 26), (64, 6), (68, 22), (f_shut - 30, 22), (f_shut, 46), (f_open, 46), (f_open + 10, 20),
                        (f_open + 30, 10), (f_open + 34, 40), (f_open + 38, 12), (sc.frame_end - 120, 14), (sc.frame_end - 116, 38), (sc.frame_end - 112, 18)])
+# faces: snore (jaw), horror (jaw drop), stunned/dazed lids, the final dopey grin
+def key_jaw(rig, f, deg): key_local_rot(rig, "jaw", f, deg)
+def key_grin(rig, f, k):
+    for s_, sx_ in (("L", 1), ("R", -1)):
+        for n in ("risorius03." + s_, "oris03." + s_, "oris04." + s_):
+            if n not in rig.pose.bones: continue
+            pb = rig.pose.bones[n]; Rl = pb.bone.matrix_local.to_3x3().inverted()
+            pb.location = Rl @ V(sx_ * 0.008 * k, 0.004 * k, 0.008 * k); pb.keyframe_insert("location", frame=f, group=n)
+key_jaw(LADO, 1, 3)
+for f in range(f_shut, T_IMP, 6):
+    key_jaw(LADO, f, 4 + 5 * max(0.0, math.sin(2 * math.pi * (f - f_shut) / 150.0)))      # snore: mouth drops on each breath
+key_jaw(LADO, T_IMP, 8); key_jaw(LADO, sc["f_stir"], 6); key_jaw(LADO, sc["f_stir"] + 40, 10); key_jaw(LADO, sc["f_stir"] + 80, 3)
+f_palm0_, f_palm1_ = eval(sc["palm"])
+key_grin(LADO, 1, 0.0); key_grin(LADO, f_palm0_ + 36, 0.0); key_grin(LADO, f_palm0_ + 60, 0.55); key_grin(LADO, sc.frame_end, 0.6)
+key_jaw(LADO, f_palm0_ + 50, 3); key_jaw(LADO, f_palm0_ + 75, 2)
+for nm in ("WitA", "WitB", "Worker"):
+    rg = bpy.data.objects[nm]
+    for pb in rg.pose.bones: pb.rotation_mode = 'QUATERNION'
+    key_jaw(rg, 1, 1); key_jaw(rg, T_IMP + 8, 1); key_jaw(rg, T_IMP + 20, 9); key_jaw(rg, T_IMP + 90, 3)
+    key_jaw(rg, F(17.0), 4); key_jaw(rg, F(17.4), 13); key_jaw(rg, F(19.4), 11); key_jaw(rg, F(20.4), 16); key_jaw(rg, F(21.0), 8); key_jaw(rg, sc.frame_end, 7)
 # birds on the fence lift off when he staggers by, and again at the horn
 M_BIRD = bpy.data.materials.new("Bird"); M_BIRD.use_nodes = True
 M_BIRD.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.08, 0.08, 0.09, 1)
@@ -196,7 +216,15 @@ def mat_muscle(name, col, stripe=0.6):
     p.inputs['Roughness'].default_value = 0.35; p.inputs['Subsurface Weight'].default_value = 0.4
     p.inputs['Subsurface Radius'].default_value = (0.6, 0.2, 0.1); p.inputs['Coat Weight'].default_value = 0.4
     return m
-M_MUS = mat_muscle("XrayMuscle", (0.85, 0.32, 0.33))
+M_MUS = mat_muscle("XrayMuscle", (0.62, 0.07, 0.06), stripe=0.45)
+_n = M_MUS.node_tree.nodes; _l = M_MUS.node_tree.links; _p = _n["Principled BSDF"]
+_tc = [x for x in _n if x.type == 'TEX_COORD'][0]; _wv = [x for x in _n if x.type == 'TEX_WAVE'][0]
+_mp = _n.new('ShaderNodeMapping'); _mp.inputs['Scale'].default_value = (3.0, 3.0, 0.25)
+_l.new(_tc.outputs['Object'], _mp.inputs['Vector']); _l.new(_mp.outputs['Vector'], _wv.inputs['Vector']); _wv.inputs['Scale'].default_value = 60
+_lw = _n.new('ShaderNodeLayerWeight'); _lw.inputs['Blend'].default_value = 0.4
+_em = _n.new('ShaderNodeMath'); _em.operation = 'MULTIPLY'; _em.inputs[1].default_value = 1.6; _l.new(_lw.outputs['Facing'], _em.inputs[0])
+_p.inputs['Emission Color'].default_value = (1.0, 0.16, 0.1, 1); _l.new(_em.outputs[0], _p.inputs['Emission Strength'])
+_p.inputs['Coat Weight'].default_value = 0.7; _p.inputs['Coat Roughness'].default_value = 0.15
 M_BONE = flat("XrayBone", (0.93, 0.9, 0.82), 0.45) if 'flat' in dir() else None
 if M_BONE is None:
     M_BONE = bpy.data.materials.new("XrayBone"); M_BONE.use_nodes = True
@@ -282,6 +310,13 @@ XR_OBJS.append(skinned_tube("Bone_Skull", [skull_c + V(0, 0, -0.1 + 0.2 * i / 6)
 pel = bpt("spine05", 0.0)
 XR_OBJS.append(skinned_tube("Bone_Pelvis", [pel + V(x, 0.01, -0.03 + 0.03 * abs(x) / 0.14) for x in (-0.14, -0.07, 0, 0.07, 0.14)], [0.03, 0.035, 0.03, 0.035, 0.03], M_BONE, ["spine05", "root"], ring=8))
 for o in XR_OBJS:
+    bpy.data.objects.remove(o, do_unlink=True)
+XR_OBJS = []
+MUS = bpy.data.objects["XrayMuscles"]
+for i in range(len(MUS.data.materials)): MUS.data.materials[i] = M_MUS
+if not MUS.data.materials: MUS.data.materials.append(M_MUS)
+XR_OBJS.append(MUS)
+for o in XR_OBJS:
     if o.name.startswith("Mus_"):
         wm = o.modifiers.new("Ripple", 'WAVE'); wm.use_normal = True; wm.height = 0.004; wm.width = 0.06; wm.speed = 0.05; wm.time_offset = random.uniform(0, 30)
     vis(o, [XRAY])
@@ -291,11 +326,15 @@ R_HEAD = V(*eval(sc["replay_head"]))
 GX = R_HEAD.x - 0.02 - GAUGE
 M_GHOST = bpy.data.materials.new("Ghost"); M_GHOST.use_nodes = True
 gn = M_GHOST.node_tree.nodes; gl = M_GHOST.node_tree.links
-gp = gn["Principled BSDF"]; gp.inputs['Base Color'].default_value = (0.5, 0.85, 1.0, 1); gp.inputs['Alpha'].default_value = 0.45
-gp.inputs['Emission Color'].default_value = (0.3, 0.75, 1.0, 1); gp.inputs['Emission Strength'].default_value = 1.5
+gp = gn["Principled BSDF"]; gp.inputs['Base Color'].default_value = (0.04, 0.28, 0.48, 1); gp.inputs['Alpha'].default_value = 0.45
+gp.inputs['Emission Color'].default_value = (0.3, 0.75, 1.0, 1); gp.inputs['Emission Strength'].default_value = 1.0
+_lw = gn.new('ShaderNodeLayerWeight'); _lw.inputs['Blend'].default_value = 0.25
+_rm = gn.new('ShaderNodeMath'); _rm.operation = 'MULTIPLY'; _rm.inputs[1].default_value = 2.2; gl.new(_lw.outputs['Facing'], _rm.inputs[0])
+_ad = gn.new('ShaderNodeMath'); _ad.operation = 'ADD'; _ad.inputs[1].default_value = 0.04; gl.new(_rm.outputs[0], _ad.inputs[0]); gl.new(_ad.outputs[0], gp.inputs['Emission Strength'])
+_al = gn.new('ShaderNodeMath'); _al.operation = 'ADD'; _al.inputs[1].default_value = 0.08; gl.new(_lw.outputs['Facing'], _al.inputs[0]); gl.new(_al.outputs[0], gp.inputs['Alpha'])
 M_ARROW = bpy.data.materials.new("ForceArrow"); M_ARROW.use_nodes = True
 ap = M_ARROW.node_tree.nodes["Principled BSDF"]; ap.inputs['Base Color'].default_value = (0.1, 0.8, 1.0, 1)
-ap.inputs['Emission Color'].default_value = (0.1, 0.8, 1.0, 1); ap.inputs['Emission Strength'].default_value = 6.0
+ap.inputs['Emission Color'].default_value = (0.1, 0.8, 1.0, 1); ap.inputs['Emission Strength'].default_value = 3.0
 ghost_coll = bpy.data.collections.new("Ghost"); sc.collection.children.link(ghost_coll)
 for sx in (-1, 1):
     src = bpy.data.objects["Rail_AR"]
@@ -325,15 +364,15 @@ for g, ml in GHOSTS:
 # force arrows flowing along -Y around the body
 def arrow(name, L_):
     bmg = bmesh.new()
-    bmesh.ops.create_cone(bmg, cap_ends=True, segments=12, radius1=0.035, radius2=0.035, depth=L_ * 0.7,
+    bmesh.ops.create_cone(bmg, cap_ends=True, segments=12, radius1=0.06, radius2=0.06, depth=L_ * 0.7,
                           matrix=Matrix.Translation((0, 0, L_ * 0.35)))
-    bmesh.ops.create_cone(bmg, cap_ends=True, segments=12, radius1=0.09, radius2=0.0, depth=L_ * 0.3,
+    bmesh.ops.create_cone(bmg, cap_ends=True, segments=12, radius1=0.16, radius2=0.0, depth=L_ * 0.3,
                           matrix=Matrix.Translation((0, 0, L_ * 0.85)))
     me = bpy.data.meshes.new(name); bmg.to_mesh(me); bmg.free(); o = bpy.data.objects.new(name, me); ghost_coll.objects.link(o)
     me.materials.append(M_ARROW); return o
 ARROWS = []
 for k in range(7):
-    a = arrow("ForceArrow%d" % k, random.uniform(0.6, 1.0)); ARROWS.append((a, V(random.uniform(-0.2, 1.6), random.uniform(0.3, 1.4), random.uniform(0.2, 0.9)), random.uniform(0, 1)))
+    a = arrow("ForceArrow%d" % k, random.uniform(1.0, 1.5)); ARROWS.append((a, V(random.uniform(-0.2, 1.6), random.uniform(0.3, 1.4), random.uniform(0.2, 0.9)), random.uniform(0, 1)))
 for f in list(range(R_IMP - 10, f_r1 + 1, 3)) + [f_r1]:
     fr = T_IMP + (f - R_IMP) / SLOW
     body_p, _ = drag_full(int(max(T_IMP, min(fr, f_rest))))
@@ -469,9 +508,9 @@ def key_light(f, col, en, wb, ex):
 day = ((1.0, 0.96, 0.9), 3.5, 1.0)
 key_light(1, *day, 0.0)
 key_light(F(11.3), *day, 0.0); key_light(F(11.7), *day, 0.9); key_light(F(14.0), *day, 0.9); key_light(F(14.6), *day, 0.0)  # under the train
-key_light(f_fb0 - 3, *day, 0.0); key_light(f_fb0 + 3, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25)       # flash-back: warm, low gold sun
+key_light(sc['f_stir'] - 20, *day, 0.0); key_light(sc['f_stir'] + 10, *day, 0.7); key_light(f_fb0 - 8, *day, 0.7); key_light(f_fb0 - 3, *day, 0.0); key_light(f_fb0 + 3, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25)       # flash-back: warm, low gold sun
 key_light(f_fb1 - 2, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25); key_light(f_fb1, *day, 0.0)
-key_light(f_r1, *day, 0.0)
+key_light(f_r1, *day, 0.0); key_light(F(33.0), *day, 0.0); key_light(F(33.6), *day, 0.55); key_light(sc.frame_end, *day, 0.55)
 for f, sat in ((f_fb0 - 3, 1.0), (f_fb0 + 3, 0.4), (f_fb1 - 2, 0.4), (f_fb1, 1.0)):
     pass
 
@@ -504,19 +543,19 @@ CAM = [  # frame, camera, aim, lens
     (215, V(3.2, 1.6, 1.0), V(1.6, 0.1, 0.45), 30),
     (240, V(2.7, -1.7, 0.95), V(1.5, 0.0, 0.5), 28),
     (268, V(0.4, -1.7, 0.5), V(1.0, 0.0, 0.25), 28),
-    (325, V(0.45, -1.15, 0.36), V(0.8, 0.05, 0.28), 34),
-    (390, V(0.5, -1.35, 0.25), V(0.73, 8.0, 0.42), 40),
-    (450, V(0.35, -2.1, 0.4), V(0.6, 20.0, 1.6), 32),
+    (325, V(1.55, -1.7, 0.55), V(1.0, 0.1, 0.25), 26),
+    (390, V(1.35, -2.0, 0.42), V(0.85, 6.0, 0.35), 26),
+    (450, V(1.6, -2.6, 0.5), V(0.7, 16.0, 1.3), 24),
     (505, V(2.3, -3.2, 0.5), V(0.9, 5.0, 1.2), 24),
     (535, V(2.7, -2.7, 0.75), V(1.2, 0.2, 0.35), 24),
     (548, V(2.85, -3.4, 0.85), lad_p(548), 24),
     (575, V(3.3, -9.5, 1.15), lad_p(575, 0.1), 24),
     (615, V(3.2, y(615) - 3.5, 0.95), lad_p(615), 24),
-    (660, V(2.7, y(660) - 2.6, 0.6), lad_p(660), 24),
-    (700, V(2.75, y(700) - 1.9, 0.38), lad_p(700), 24),
-    (755, V(2.75, y(755) + 1.6, 0.38), lad_p(755) + V(0, -0.4, 0), 26),
-    (815, V(2.9, y(815) - 2.2, 0.55), lad_p(815), 24),
-    (862, V(3.3, -43.2, 1.0), V(1.1, -40.0, 0.4), 24),
+    (660, V(1.75, y(660) - 1.3, 0.38), lad_p(660), 22),
+    (700, V(0.3, y(700) - 1.5, 0.34), lad_p(700), 20),
+    (755, V(-0.25, y(755) - 1.3, 0.32), lad_p(755), 20),
+    (815, V(0.3, y(815) - 1.5, 0.36), lad_p(815), 20),
+    (862, V(2.6, -43.0, 0.5), V(0.2, -40.0, 0.25), 24),
     (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
     (935, V(2.7, -45.0, 1.7), V(0.9, -50.0, 0.8), 23),
     (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),
@@ -528,15 +567,15 @@ CAM = [  # frame, camera, aim, lens
     (1250, V(3.95, -40.7, 1.3), V(2.4, -40.1, 1.4), 28),
     (1275, V(3.1, -41.7, 1.75), V(2.45, -40.1, 1.62), 30),
     (1322, V(3.25, -40.85, 1.66), V(2.5, -40.25, 1.62), 40),
-    (1392, V(3.0, -40.12, 1.31), V(2.42, -40.1, 1.3), 32),
-    (1411, V(2.6, -40.1, 1.31), V(2.2, -40.1, 1.3), 32),
-    (1440, V(3.65, -40.1, 1.35), V(2.45, -40.1, 1.12), 28),
-    (1500, V(2.9, -42.5, 1.4), V(2.45, -40.1, 1.0), 26),
+    (1385, V(3.35, -40.25, 1.5), V(2.45, -40.1, 1.42), 30),
+    (1408, V(2.62, -40.1, 1.32), V(2.2, -40.1, 1.3), 30),
+    (1440, V(3.45, -40.1, 1.3), V(2.45, -40.1, 1.15), 26),
+    (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
     (1560, V(2.95, -40.95, 1.15), V(2.45, -40.35, 1.05), 38),
-    (1605, V(5.0, -43.6, 2.6), V(2.0, -38.6, 0.3), 22),
-    (1680, V(4.0, rp(1680).y - 3.0, 1.1), rp(1680), 24),
-    (1750, V(rp(1750).x - 2.6, rp(1750).y - 2.4, 1.3), rp(1750), 26),
-    (1812, V(rp(1812).x + 2.2, rp(1812).y - 2.6, 1.2), rp(1812), 26),
+    (1605, V(3.6, -41.6, 1.6), V(1.9, -38.6, 0.3), 24),
+    (1680, V(3.2, rp(1680).y - 1.9, 0.9), rp(1680), 26),
+    (1750, V(rp(1750).x - 1.7, rp(1750).y - 1.6, 1.0), rp(1750), 28),
+    (1812, V(rp(1812).x + 1.6, rp(1812).y - 1.8, 1.0), rp(1812), 28),
     (1850, V(3.1, -40.0, 1.6), V(2.4, -44.0, 1.2), 26),
     (1866, V(2.65, -38.3, 1.65), V(2.4, -41.0, 1.3), 28),
     (1920, V(3.4, -40.0, 1.5), V(2.45, -41.8, 1.2), 28),
@@ -549,4 +588,41 @@ for f in list(range(1, sc.frame_end + 1, 2)) + [sc.frame_end]:
     aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
 sc["cam_keys"] = str([(f, tuple(round(v, 2) for v in c), tuple(round(v, 2) for v in a), l) for f, c, a, l in CAM])
+# headlight flare: soft emissive glow shells in front of each lamp (fake bloom, no compositor)
+M_FLARE = bpy.data.materials.new("Flare"); M_FLARE.use_nodes = True
+fn_ = M_FLARE.node_tree.nodes; fl_ = M_FLARE.node_tree.links; fn_.remove(fn_["Principled BSDF"])
+tr_ = fn_.new('ShaderNodeBsdfTransparent'); em2 = fn_.new('ShaderNodeEmission'); em2.inputs['Color'].default_value = (1.0, 0.92, 0.75, 1)
+lw2 = fn_.new('ShaderNodeLayerWeight'); lw2.inputs['Blend'].default_value = 0.5
+pw2 = fn_.new('ShaderNodeMath'); pw2.operation = 'POWER'; pw2.inputs[1].default_value = 5.0
+inv2 = fn_.new('ShaderNodeMath'); inv2.operation = 'SUBTRACT'; inv2.inputs[0].default_value = 1.0
+fl_.new(lw2.outputs['Facing'], inv2.inputs[1]); fl_.new(inv2.outputs[0], pw2.inputs[0])
+ms2 = fn_.new('ShaderNodeMixShader'); fl_.new(pw2.outputs[0], ms2.inputs['Fac']); fl_.new(tr_.outputs[0], ms2.inputs[1]); fl_.new(em2.outputs[0], ms2.inputs[2])
+em2.inputs['Strength'].default_value = 6
+fl_.new(ms2.outputs[0], fn_["Material Output"].inputs['Surface'])
+for nm_ in ("HeadlampL", "HeadlampR", "HeadlampTop"):
+    hl_ = bpy.data.objects[nm_]
+    bmg = bmesh.new(); bmesh.ops.create_uvsphere(bmg, u_segments=24, v_segments=12, radius=0.24)
+    me_ = bpy.data.meshes.new("Flare"); bmg.to_mesh(me_); bmg.free(); fo = bpy.data.objects.new("Flare_" + nm_, me_); fx.objects.link(fo)
+    me_.materials.append(M_FLARE); fo.parent = TRO; fo.location = hl_.location + V(0, -0.35, 0)
+    for poly in me_.polygons: poly.use_smooth = True
+    vis(fo, [(1, T_IMP - 6)])
+# horn blast: exhaust/dust kick off the roof and a ground dust kick ahead of the plough as the horn sounds
+f_horn = F(6.8)
+for k in range(6):
+    bmg = bmesh.new(); bmesh.ops.create_icosphere(bmg, subdivisions=2, radius=1.0)
+    me_ = bpy.data.meshes.new("HornDust%d" % k); bmg.to_mesh(me_); bmg.free(); o = bpy.data.objects.new("HornDust%d" % k, me_); fx.objects.link(o)
+    me_.materials.append(M_DUST)
+    roof = k < 2
+    for f, s_ in ((f_horn + k * 3, 0.1), (f_horn + k * 3 + 25, 0.8), (f_horn + k * 3 + 90, 1.6)):
+        o.scale = (s_, s_ * 1.5, s_ * (0.8 if roof else 0.4))
+        y_ = train_front(f) + (6.0 if roof else -1.0 - k * 0.4)
+        o.location = (random.uniform(-0.8, 0.8) if not roof else 0.0, y_ + (0.0 if roof else -0.5 * (f - f_horn) / 60), (sc["loco_top"] + 0.4 + 0.6 * s_) if roof else 0.15 + 0.3 * s_)
+        o.keyframe_insert("scale", frame=f); o.keyframe_insert("location", frame=f)
+    vis(o, [(f_horn + k * 3, f_horn + k * 3 + 90)])
+# rumble: camera shake grows as the train nears, a jolt at the impact, settles after
+import mathutils.noise as mn_
+for f in range(F(6.3), T_IMP + 60, 2):
+    amp = 0.004 + 0.02 * ((f - F(6.3)) / (T_IMP - F(6.3))) ** 2 if f < T_IMP else 0.03 * math.exp(-(f - T_IMP) / 15.0)
+    base = fc_(f); n_ = mn_.noise_vector(Vector((f * 0.35, 1.7, 3.1)))
+    cam.location = base + n_ * amp; cam.keyframe_insert("location", frame=f)
 print("FX_CAMERA_DONE")

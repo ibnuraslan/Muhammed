@@ -33,7 +33,7 @@ def ground_z(x, y):
 
 # ------------------------------------------------------------------ train motion (front = plough tip y)
 T_IMP = F(9.0)          # impact frame (beat 4)
-V0 = 16.0               # m/s at impact
+V0 = 14.0               # m/s at impact (stops with a wheelset gap over him)
 T_STOP = F(15.9)        # halts (beat 6 runs 14.5-17)
 DEC = V0 / ((T_STOP - T_IMP) / FPS)
 HEAD_Y = 0.0
@@ -309,9 +309,9 @@ for f in list(range(f_lie0, f_lie1 + 1, 3)) + [f_lie1]:
     if f < F(4.6):
         LB.hand("R", f, Bm, V(-0.02, -0.16 - 0.012 * br, RH.z + 0.18), V(0.9, -0.1, -0.2), V(0, 1, 0))     # hand resting on his belly
     elif f < F(4.75):
-        LB.arm_dir("R", f, Bm, V(-0.5, -0.6, -0.4), 0.95, palm=V(0, 0.4, -1))
+        LB.arm_dir("R", f, Bm, V(-0.55, -0.6, 0.3), 0.9, palm=V(0, 0.4, -1))
     else:
-        LB.arm_dir("R", f, Bm, V(-0.9, 0.1, -0.35), 0.95, palm=V(0, 0.3, -1))                        # flopped onto the ballast
+        LB.arm_dir("R", f, Bm, V(-0.42, -0.18, 0.75), 0.86, palm=V(0, -0.2, 1))                     # flopped over the rail beside his head
 
 # --- impact + rag-doll spin (beat 4) and drag beneath the train (beat 5), come to rest prone (by 14.3 s)
 f_rest = F(14.3)
@@ -324,16 +324,16 @@ def drag_state(f):
         u = (f - T_IMP) / 120.0
         rel = -0.35 + 3.2 * smooth(u)                    # in front of the plough -> pulled under the front bogie side
         y = tf + rel
-        x = LIE_X + (1.55 - LIE_X) * smooth(u)
-        z = 0.14 + 0.42 * math.sin(math.pi * min(1, u * 1.6)) * math.exp(-u * 2.2) + 0.04 * abs(math.sin(u * 9))
-        yaw = 90 + 450 * (1 - (1 - u) ** 2)              # spins around (ends heading -Y)
+        x = LIE_X + (0.0 - LIE_X) * smooth(min(1.0, u / 0.35))
+        z = 0.14 + 0.3 * math.sin(math.pi * min(1, u * 1.6)) * math.exp(-u * 2.5) + 0.04 * abs(math.sin(u * 9))
+        yaw = 90 + 450 * (1 - (1 - min(1.0, u / 0.6)) ** 2)   # spins around (ends heading -Y before the first wheelset)
         roll = 300 * u + 40 * math.sin(u * 7)
         pitch = -90 + 35 * math.sin(u * 6.5) * (1 - u)
     else:
         u = (f - (T_IMP + 120)) / (f_rest - (T_IMP + 120))
         y0 = train_front(T_IMP + 120) + 2.85
         y = y0 + (STOP_Y - y0) * (1 - (1 - min(1, u)) ** 2.2)
-        x = 1.55 + 0.04 * math.sin(u * 13)
+        x = 0.0 + 0.04 * math.sin(u * 13)
         z = 0.15 + 0.08 * smooth(min(1, u)) + 0.07 * abs(math.sin(u * 22)) * (1 - u)
         yaw = 540 + 25 * math.sin(u * 8) * (1 - u)
         roll = 300 + 40 * math.sin(7) + 900 * (1 - (1 - min(1, u)) ** 2)     # log-rolls 2.5 turns; ends prone (300+900 = 1200 = 3*360+120 -> fix below)
@@ -349,8 +349,11 @@ def drag_full(f):
     return p, Rbody(yaw=yw, pitch=pi, roll=rl)
 def above_ground(origin, d_w, L, floor=0.07, ceil=None):
     d_w = d_w.normalized(); e = origin + d_w * L
-    if ceil is not None and e.z > ceil and e.x < 1.55:
-        d_w = V(d_w.x, d_w.y, (ceil - origin.z) / L); d_w.normalize(); e = origin + d_w * L
+    if ceil is not None:
+        if abs(e.x) > 0.48:                       # stay between the wheels
+            d_w = V(math.copysign(0.48, e.x) - origin.x, d_w.y * L, d_w.z * L) / L; d_w.normalize(); e = origin + d_w * L
+        if e.z > ceil:
+            d_w = V(d_w.x, d_w.y, (ceil - origin.z) / L); d_w.normalize(); e = origin + d_w * L
     if e.z < floor:
         dz = (floor - origin.z) / L
         dz = max(-1.0, min(1.0, dz)); h = math.sqrt(max(0.0, 1 - dz * dz)); hv = V(d_w.x, d_w.y, 0)
@@ -389,20 +392,20 @@ for f in list(range(T_IMP, f_rest + 1, 2)) + [f_rest]:
         d_w = LBm.to_3x3() @ limb_dir(key, f)
         if f > T_IMP + 40 and d_w.x < -0.15:                  # keep the flung arms clear of the wheels (wheels are on his -X side)
             d_w.x = -0.15; d_w.z = max(d_w.z, -0.2); d_w.normalize()
-        d_w = above_ground(Bm @ LB.sh[s], d_w, LB.L_arm[s] * 0.92, ceil=0.48 if f > T_IMP + 45 else None)
+        d_w = above_ground(Bm @ LB.sh[s], d_w, LB.L_arm[s] * 0.92, ceil=0.6 if f > T_IMP + 25 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
         LB.arm_dir(s, f, Bm, d_l, 0.92)
     for s, key, LBm in (("L", "lL", lag_B2), ("R", "lR", lag_B2)):
         d_w = LBm.to_3x3() @ limb_dir(key, f)
         if f > T_IMP + 40 and d_w.x < -0.15:
             d_w.x = -0.15; d_w.normalize()
-        d_w = above_ground(Bm @ LB.hip[s], d_w, LB.L_leg[s] * 0.97, ceil=0.48 if f > T_IMP + 45 else None)
+        d_w = above_ground(Bm @ LB.hip[s], d_w, LB.L_leg[s] * 0.97, ceil=0.6 if f > T_IMP + 25 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
         LB.leg_dir(s, f, Bm, d_l, 0.97)
 REST_P, REST_R = drag_full(f_rest)
 sc["lad_rest"] = str(tuple(REST_P))
 # --- lies still (prone) while the train stops and witnesses arrive; faint breathing only
-f_stir = F(19.5)
+f_stir = F(19.2)
 REST_B = LB.B(REST_P, REST_R)
 for f in list(range(f_rest + 4, f_stir + 1, 10)) + [f_stir]:
     LAD.r.key_world("root", f, REST_B @ LAD.r.rest("root"))
@@ -414,7 +417,7 @@ for f in list(range(f_rest + 4, f_stir + 1, 10)) + [f_stir]:
 
 # --- stirs, crawls out sideways (+X) on hands and knees, stands up wobbling (beat 8)
 STAND_XY = V(2.45, STOP_Y - 0.1, 0)
-f_crawl0, f_crawl1, f_up0, f_up1 = f_stir + 14, f_stir + 50, f_stir + 52, F(20.9)
+f_crawl0, f_crawl1, f_up0, f_up1 = f_stir + 12, F(20.4), F(20.4) + 2, F(20.95)
 # stir: head lifts, hands push under shoulders (prone push-up)
 for f, push in ((f_stir + 4, 0.0), (f_stir + 10, 0.35), (f_crawl0, 1.0)):
     p = REST_P + V(0, 0, 0.18 * push); Bm = LB.B(p, REST_R @ Matrix.Rotation(R_(-0 * push), 3, 'X'))
@@ -443,7 +446,7 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         fwd = 0.35 * (q if q <= 0.6 else 0.6 - (q - 0.6) * 1.5)
         # hand under the shoulder (world: down), knee under the hip: hands planted with palms flat
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
-        Wh = V(Wh.x, Wh.y, 0.02 + lift + 0.03)
+        Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.05 + lift)
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
         Wk = Bm @ (LB.hip[s] + V(sx * 0.03, -0.1, -0.5))
         LB.foot(s, f, Bm, LB.hip[s] + V(sx * 0.05, -0.40, -0.50), Matrix.Rotation(R_(-100), 3, 'X'),
@@ -565,7 +568,7 @@ gait(LAD, WK_P, WK_Y, f_w0, f_w1, stride=0.55, duty=0.62, lift=0.09, bob=0.03, c
      spine_fn=lad_spine2, arms_fn=lad_arms2)
 END_P = WK_P(f_w1); END_YAW = 0.0
 for f in list(range(f_palm0, f_palm1 + 1, 3)) + [f_palm1]:
-    u = smooth((f - f_palm0) / 30.0); g = smooth((f - (f_palm0 + 55)) / 25.0)
+    u = smooth((f - f_palm0) / 25.0); g = smooth((f - (f_palm0 + 38)) / 22.0)
     Bm = LB.B(V(END_P.x, END_P.y, RH.z - 0.035), Rbody(yaw=END_YAW + 6 * math.sin(f / 15.0), pitch=3, side=4 * math.sin(f / 11.0)))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=10 - 4 * g, twist=-6 * u, head=(30 * u * (1 - g) - 6 * g, -12 * u * (1 - g) + 18 * g))

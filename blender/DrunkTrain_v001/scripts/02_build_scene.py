@@ -96,7 +96,7 @@ def flat(name, col, rough=0.5, metal=0.0, emit=None, estr=0.0, alpha=1.0):
     if alpha < 1: p.inputs['Alpha'].default_value = alpha
     return m
 
-M_GRAVEL = pbr("Ballast", "gravel_stones", 1.6, sat=0.45, val=1.9, bump=1.4)
+M_GRAVEL = pbr("Ballast", "gravel_stones", 1.2, sat=0.2, val=2.5, bump=1.4)
 M_GRASS = pbr("Grass", "grass_path_2", 3.0, sat=0.9, val=0.85)
 M_CONC = pbr("Concrete", "concrete_floor_02", 1.2, sat=0.3, val=1.05)
 M_RUST = pbr("RailRust", "rusty_metal_02", 0.6, sat=0.8, val=0.65, rough_mul=1.0, metal=0.3)
@@ -179,24 +179,26 @@ for tx in (0.0, TRACK_B):
 sc["rail_h"] = RAIL_H; sc["gauge"] = GAUGE
 # loose ballast stones scattered (geometry nodes, evaluated at render; no caches)
 def rock_mesh(name, r):
-    bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=1, radius=r)
-    for v in bm.verts: v.co = Vector((v.co.x * random.uniform(0.7, 1.3), v.co.y * random.uniform(0.7, 1.3), v.co.z * random.uniform(0.5, 0.9)))
+    # angular crushed stone: a jittered, randomly chamfered cube
+    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=2 * r)
+    bmesh.ops.bevel(bm, geom=list(bm.edges), offset=r * random.uniform(0.15, 0.35), segments=1, affect='EDGES')
+    for v in bm.verts: v.co = Vector((v.co.x * random.uniform(0.7, 1.3), v.co.y * random.uniform(0.7, 1.3), v.co.z * random.uniform(0.5, 0.85))) + Vector([random.uniform(-0.15, 0.15) * r for _ in range(3)])
     o = mesh_obj(name, bm, M_STONE, "Hidden"); return o
 M_STONE = bpy.data.materials.new("BallastStone"); M_STONE.use_nodes = True
 _n, _l = M_STONE.node_tree.nodes, M_STONE.node_tree.links
 _p = _n["Principled BSDF"]; _p.inputs['Roughness'].default_value = 0.85
 _nz = _n.new('ShaderNodeTexNoise'); _nz.inputs['Scale'].default_value = 60.0; _nz.inputs['Detail'].default_value = 6
-_cr = _n.new('ShaderNodeValToRGB'); _cr.color_ramp.elements[0].color = (0.1, 0.095, 0.09, 1); _cr.color_ramp.elements[1].color = (0.3, 0.28, 0.26, 1)
+_cr = _n.new('ShaderNodeValToRGB'); _cr.color_ramp.elements[0].color = (0.16, 0.155, 0.15, 1); _cr.color_ramp.elements[1].color = (0.48, 0.46, 0.43, 1)
 _oi = _n.new('ShaderNodeObjectInfo'); _ad = _n.new('ShaderNodeMath'); _ad.operation = 'ADD'
 _l.new(_nz.outputs['Fac'], _ad.inputs[0]); _l.new(_oi.outputs['Random'], _ad.inputs[1])
 _mm = _n.new('ShaderNodeMath'); _mm.operation = 'MULTIPLY'; _mm.inputs[1].default_value = 0.6; _l.new(_ad.outputs[0], _mm.inputs[0])
 _l.new(_mm.outputs[0], _cr.inputs['Fac']); _l.new(_cr.outputs['Color'], _p.inputs['Base Color'])
 _bp = _n.new('ShaderNodeBump'); _bp.inputs['Strength'].default_value = 0.4; _l.new(_nz.outputs['Fac'], _bp.inputs['Height']); _l.new(_bp.outputs['Normal'], _p.inputs['Normal'])
-rocks = [rock_mesh("Rock%d" % i, random.uniform(0.025, 0.045)) for i in range(5)]
+rocks = [rock_mesh("Rock%d" % i, random.uniform(0.015, 0.03)) for i in range(8)]
 coll("Hidden").hide_render = True; coll("Hidden").hide_viewport = True
 rc = bpy.data.collections.new("RockSet"); coll("Hidden").children.link(rc)
 for r in rocks: rc.objects.link(r)
-def scatter(target, coll_, density, seed, scale=(0.8, 1.4), name="Scatter"):
+def scatter(target, coll_, density, seed, scale=(0.8, 1.4), name="Scatter", keep_base=True):
     ng = bpy.data.node_groups.new(name, 'GeometryNodeTree')
     ng.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
     ng.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
@@ -213,14 +215,15 @@ def scatter(target, coll_, density, seed, scale=(0.8, 1.4), name="Scatter"):
     real = N.new('GeometryNodeRealizeInstances'); jn = N.new('GeometryNodeJoinGeometry')
     L.new(gi.outputs[0], dist.inputs['Mesh']); L.new(dist.outputs['Points'], inst.inputs['Points'])
     L.new(ci.outputs[0], inst.inputs['Instance']); L.new(rr.outputs[0], inst.inputs['Rotation']); L.new(fo, inst.inputs['Scale'])
-    L.new(gi.outputs[0], jn.inputs[0]); L.new(inst.outputs[0], jn.inputs[0]); L.new(jn.outputs[0], go.inputs[0])
+    if keep_base: L.new(gi.outputs[0], jn.inputs[0])
+    L.new(inst.outputs[0], jn.inputs[0]); L.new(jn.outputs[0], go.inputs[0])
     md = target.modifiers.new(name, 'NODES'); md.node_group = ng
     return md
 # a separate near-camera ballast patch gets the stones (keeps memory low)
 bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=1.0)
 for v in bm.verts: v.co = Vector((v.co.x * 4.6 - 1.6, v.co.y * 40 - 22, -0.03))
 patch = mesh_obj("BallastStones", bm, M_GRAVEL)
-scatter(patch, rc, 420.0, 3, scale=(0.5, 0.9), name="Stones")
+scatter(patch, rc, 900.0, 3, scale=(0.7, 1.2), name="Stones")
 
 # ------------------------------------------------------------------ platform, fence, houses, poles, trees, grass clumps
 PLAT = dict(x0=3.05, x1=7.5, y0=-80.0, y1=-46.0, h=0.92)
@@ -339,6 +342,10 @@ for nm, x0, x1 in (("GrassStripE", 3.4, 9.3), ("GrassStripW", -12.0, -8.6)):
     bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=1.0)
     for v_ in bm.verts: v_.co = Vector(((x0 + x1) / 2 + v_.co.x * (x1 - x0) / 2, -20 + v_.co.y * 70, -0.075))
     gs = mesh_obj(nm, bm, M_GRASS); scatter(gs, gc, 1.2, 7, scale=(0.6, 1.2), name="Clumps" + nm)
+bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=1.0)
+for v_ in bm.verts: v_.co = Vector((v_.co.x * 4.6 - 1.6, v_.co.y * 40 - 22, -0.02))
+weeds = mesh_obj("BallastWeeds", bm, M_GRAVEL); weeds.hide_render = False
+scatter(weeds, gc, 0.35, 11, scale=(0.18, 0.4), name="Weeds", keep_base=False)
 # signal post (lights only, no text)
 box("SignalPost", (0.15, 0.15, 4.5), (2.2, 35, 2.2), M_POLE)
 box("SignalHead", (0.4, 0.25, 0.9), (2.2, 34.88, 4.4), flat("SignalBlack", (0.02, 0.02, 0.02), 0.5))
@@ -380,6 +387,23 @@ def grime(src_mat, name):
     mx_.inputs['A'].default_value = tuple(min(1, c_ * 1.6 + 0.04) for c_ in col) + (1,)
     l.new(srcsock, mx_.inputs['B']); l.new(mx_.outputs['Result'], pr.inputs['Base Color'])
     pr.inputs['Metallic'].default_value = 0.25
+    tcw = n.new('ShaderNodeTexCoord'); sxyz = n.new('ShaderNodeSeparateXYZ'); l.new(tcw.outputs['Object'], sxyz.inputs[0])
+    mpw = n.new('ShaderNodeMapping'); mpw.inputs['Scale'].default_value = (9.0, 9.0, 0.35); l.new(tcw.outputs['Object'], mpw.inputs['Vector'])
+    nzs = n.new('ShaderNodeTexNoise'); nzs.inputs['Scale'].default_value = 3.0; nzs.inputs['Detail'].default_value = 8; l.new(mpw.outputs['Vector'], nzs.inputs['Vector'])
+    st_ = n.new('ShaderNodeMapRange'); st_.inputs['From Min'].default_value = 0.52; st_.inputs['From Max'].default_value = 0.68; l.new(nzs.outputs['Fac'], st_.inputs['Value'])
+    rs_ = n.new('ShaderNodeMix'); rs_.data_type = 'RGBA'; rs_.blend_type = 'MULTIPLY'; rs_.inputs['B'].default_value = (0.42, 0.22, 0.1, 1)
+    l.new(st_.outputs['Result'], rs_.inputs['Factor']); l.new(mx_.outputs['Result'], rs_.inputs['A'])
+    dz_ = n.new('ShaderNodeMapRange'); dz_.inputs['From Min'].default_value = 1.4; dz_.inputs['From Max'].default_value = 0.2; l.new(sxyz.outputs['Z'], dz_.inputs['Value'])
+    nzd = n.new('ShaderNodeTexNoise'); nzd.inputs['Scale'].default_value = 6.0; l.new(tcw.outputs['Object'], nzd.inputs['Vector'])
+    dm_ = n.new('ShaderNodeMath'); dm_.operation = 'MULTIPLY'; l.new(dz_.outputs['Result'], dm_.inputs[0]); l.new(nzd.outputs['Fac'], dm_.inputs[1])
+    du_ = n.new('ShaderNodeMix'); du_.data_type = 'RGBA'; du_.inputs['B'].default_value = (0.33, 0.27, 0.2, 1)
+    l.new(dm_.outputs[0], du_.inputs['Factor']); l.new(rs_.outputs['Result'], du_.inputs['A'])
+    nzo = n.new('ShaderNodeTexNoise'); nzo.inputs['Scale'].default_value = 1.6; l.new(tcw.outputs['Object'], nzo.inputs['Vector'])
+    oi_ = n.new('ShaderNodeMapRange'); oi_.inputs['From Min'].default_value = 0.6; oi_.inputs['From Max'].default_value = 0.7; oi_.inputs['To Max'].default_value = 0.7
+    l.new(nzo.outputs['Fac'], oi_.inputs['Value'])
+    ol_ = n.new('ShaderNodeMix'); ol_.data_type = 'RGBA'; ol_.inputs['B'].default_value = (0.02, 0.018, 0.015, 1)
+    l.new(oi_.outputs['Result'], ol_.inputs['Factor']); l.new(du_.outputs['Result'], ol_.inputs['A'])
+    l.new(ol_.outputs['Result'], pr.inputs['Base Color'])
     return m
 
 TRAIN = bpy.data.objects.new("TrainRig", None); coll("Train").objects.link(TRAIN)
@@ -455,10 +479,10 @@ M_CYC = bpy.data.materials.new("StudioCyc"); M_CYC.use_nodes = True
 nn, ll = M_CYC.node_tree.nodes, M_CYC.node_tree.links
 pc = nn["Principled BSDF"]; pc.inputs['Roughness'].default_value = 0.9
 gtc = nn.new('ShaderNodeTexCoord'); gsep = nn.new('ShaderNodeSeparateXYZ'); ll.new(gtc.outputs['Generated'], gsep.inputs[0])
-cr = nn.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.30, 0.78, 0.92, 1); cr.color_ramp.elements[1].color = (0.97, 0.99, 1.0, 1)
-cr.color_ramp.elements[0].position = 0.05; cr.color_ramp.elements[1].position = 0.6
+cr = nn.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.12, 0.55, 0.72, 1); cr.color_ramp.elements[1].color = (0.01, 0.035, 0.09, 1)
+cr.color_ramp.elements[0].position = 0.08; cr.color_ramp.elements[1].position = 0.75
 ll.new(gsep.outputs['Z'], cr.inputs['Fac']); ll.new(cr.outputs['Color'], pc.inputs['Base Color'])
-pc.inputs['Emission Strength'].default_value = 0.12; ll.new(cr.outputs['Color'], pc.inputs['Emission Color'])
+pc.inputs['Emission Strength'].default_value = 0.5; ll.new(cr.outputs['Color'], pc.inputs['Emission Color'])
 bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=48, v_segments=24, radius=1.0)
 for v_ in bm.verts:
     v_.co = Vector((v_.co.x * 12, v_.co.y * 12, max(v_.co.z, -0.0) * 9 - 0.03 if v_.co.z > 0 else -0.03))
@@ -566,5 +590,6 @@ for o in bpy.data.objects:
 M_CUT = flat("Cut", (0.42, 0.05, 0.05), 0.35)
 for k in range(3):
     c_ = box("PalmCut%d" % k, (0.028 - 0.005 * k, 0.0022, 0.0012), (0, 0, 0), M_CUT, "Props")
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "02b_fit_muscles.py")).read())
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SCENE_DONE", OUT)
