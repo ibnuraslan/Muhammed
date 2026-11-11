@@ -1,0 +1,14 @@
+CAMERA inside geometry (forward ray hits a back face): none
+CAMERA closer than 3 cm to a surface: 31.0-31.1s, 32.8-33.5s
+   objects: COCKPIT_FIXED, FO.male_elegantsuit01
+FEET planted hover >3 cm: 30 frames (38.1-38.3s, 38.5-38.7s, 38.9-39.1s); worst 0.15
+   (seated beats excluded below)
+FEET planted hover >3 cm while standing: 20 frames (38.1-38.3s, 38.5-38.7s)
+FEET sink >3 cm: 0 frames (none)
+FEET slow slide on the floor (5-25 cm/s): 75 frames (9.2-9.2s, 9.6-9.6s, 9.8-9.8s, 10.0-10.0s, 10.6-10.6s, 11.1-11.1s, 11.3-11.3s, 11.5-11.6s, 11.8-11.8s, 12.0-12.3s, 12.7-12.7s, 13.4-13.4s, 13.9-13.9s, 14.1-14.1s, 14.5-14.5s, 14.9-14.9s, 15.6-15.6s, 27.0-27.0s, 27.2-27.2s, 27.6-27.6s, 27.8-27.8s, 29.2-29.2s, 30.3-30.4s, 34.0-34.0s, 34.2-34.2s, 34.9-34.9s, 35.1-35.1s, 37.4-37.4s, 37.6-37.6s, 39.3-39.3s)
+HAND handset (20.9-26.3 s)        R: ok
+HAND yoke grip (39.2-56.5 s)      L: 1 frames off (worst 0.16 m) 39.2-39.2s
+HAND yoke grip (39.2-56.5 s)      R: 1 frames off (worst 0.16 m) 39.2-39.2s
+HAND throttle touch (59.2-59.8 s) R: 3 frames off (worst 0.17 m) 59.5-59.5s, 59.6-59.6s, 59.7-59.7s
+HAND door push (12.9-13.7 s)      R: ok
+BODIES lowest point (floor = 0): CAPT.body 0.180, PC.body.007 0.200, PF.body 0.204, PC.body.004 0.205, PF.body.006 0.206, PF.body.002 0.208

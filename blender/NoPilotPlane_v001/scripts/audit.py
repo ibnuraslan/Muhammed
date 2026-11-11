@@ -23,7 +23,7 @@ for f in range(1, 4351, 3):
     dmin = 9
     for d in dirs:
         h, lo, n, i, o, m = sc.ray_cast(dg, p, d, distance=0.2)
-        if h and (lo - p).length < dmin: dmin = (lo - p).length; on = o.name
+        if h and not o.name.startswith("YOU") and (lo - p).length < dmin: dmin = (lo - p).length; on = o.name
     if dmin < 0.03: close.append((f, on, round(dmin, 3)))
 def spans(lst):
     if not lst: return "none"
@@ -41,6 +41,7 @@ if close: log("   objects: " + ", ".join(sorted({o for f, o, d in close})))
 lc.exclude = True
 REST_ANK = {s: YOU.data.bones["foot." + s].head_local.z for s in "LR"}
 prev = {}; hov, sink, slide = [], [], []
+ground = lambda h: 0.206 if (1.86 < h.y < 2.08 and 0.31 < abs(h.x) < 0.73) else 0.0
 for f in range(1, 4351):
     sc.frame_set(f)
     for s in "LR":
@@ -49,9 +50,9 @@ for f in range(1, 4351):
             v = (h - prev[s]).length * 60
             if v < 0.05:   # planted
                 dz = h.z - REST_ANK[s]
-                if dz > 0.03: hov.append((f, s, round(dz, 3)))
-                if dz < -0.03: sink.append((f, s, round(dz, 3)))
-            if 0.05 <= v < 0.25 and h.z - REST_ANK[s] < 0.01: slide.append((f, s, round(v, 3)))
+                if dz - ground(h) > 0.03: hov.append((f, s, round(dz, 3)))
+                if dz - ground(h) < -0.03: sink.append((f, s, round(dz, 3)))
+            if 0.05 <= v < 0.25 and h.z - REST_ANK[s] - ground(h) < 0.01: slide.append((f, s, round(v, 3)))
         prev[s] = h.copy()
 seated = lambda f: f < 541 or f > 2329
 log("FEET planted hover >3 cm: %d frames (%s); worst %s" % (len(hov), spans(hov), max((x[2] for x in hov), default=0)))
@@ -82,7 +83,7 @@ for o in O:
     if o.type != 'MESH' or not o.name.endswith(".body") and ".body" not in o.name: continue
     if not o.parent or o.parent.name.startswith("YOU"): continue
     e = o.evaluated_get(dg); me = e.to_mesh(); M = o.matrix_world
-    zs = [(M @ v.co).z for v in me.vertices[::7]]
+    zs = [(M @ v.co).z for i, v in enumerate(me.vertices) if i % 7 == 0]
     e.to_mesh_clear()
     worst.append((min(zs), o.name))
 worst.sort()

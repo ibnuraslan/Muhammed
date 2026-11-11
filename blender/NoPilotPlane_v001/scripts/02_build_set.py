@@ -177,6 +177,8 @@ for x in (-0.52, 0.52):
     ck.cyl((x, 1.45, 0.2), 0.06, 0.4, M_steel)
     for ax in (-0.27, 0.27):
         ck.box((x + ax, 1.38, 0.72), (0.05, 0.35, 0.05), M_dark, bevel=0.01)
+    ck.box((x, 1.97, 0.10), (0.42, 0.22, 0.20), M_panel, bevel=0.01)          # footrest under the panel
+    ck.box((x, 1.97, 0.202), (0.40, 0.20, 0.006), mat("M_grip", (0.02, 0.02, 0.02), rough=0.8, bump=0.6, nscale=400))
     # rudder pedals
     for px in (-0.1, 0.1):
         ck.box((x + px, 2.3, 0.12), (0.08, 0.03, 0.18), M_steel, rot=(-30, 0, 0))
@@ -311,7 +313,7 @@ for i in range(5):
     ld = bpy.data.lights.new("L_cabin_%d" % i, 'AREA'); ld.shape = 'RECTANGLE'; ld.size, ld.size_y = 0.4, 2.4
     ld.energy = 140; ld.color = (1, 0.95, 0.88)
     lo = bpy.data.objects.new(ld.name, ld); lo.location = (0, -2.6 - 2.6 * i, 2.0); cSet.objects.link(lo)
-ld = bpy.data.lights.new("L_cockpit", 'AREA'); ld.size = 0.8; ld.energy = 25; ld.color = (1, 0.97, 0.92)
+ld = bpy.data.lights.new("L_cockpit", 'AREA'); ld.size = 0.8; ld.energy = 80; ld.color = (1, 0.97, 0.92)
 lo = bpy.data.objects.new("L_cockpit", ld); lo.location = (0, 1.0, 2.0); cSet.objects.link(lo)
 ld = bpy.data.lights.new("L_panel_glow", 'AREA'); ld.size = 1.6; ld.size_y = 0.2; ld.shape = 'RECTANGLE'; ld.energy = 8; ld.color = (0.7, 0.85, 1)
 lo = bpy.data.objects.new("L_panel_glow", ld); lo.location = (0, 2.0, 0.85); lo.rotation_euler = (R_(-90), 0, 0); cSet.objects.link(lo)
