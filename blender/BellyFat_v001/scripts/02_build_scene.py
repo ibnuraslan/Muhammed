@@ -309,7 +309,7 @@ def mobj(name, me, mats=(), loc=(0, 0, 0)):
     o = bpy.data.objects.new(name, me); link(o, MACRO); o.parent = root; o.location = loc
     for m_ in mats: o.data.materials.append(m_)
     return o
-ZH, YB = 3.6, 3.2           # half height, slab depth behind the cut face (cut face at y=0, slab at y in [-YB, 0])
+ZH, YB = 6.0, 3.2           # half height, slab depth behind the cut face (cut face at y=0, slab at y in [-YB, 0])
 def slab(name, x0, x1, m_, sub=0, zh=ZH):
     me = box_mesh(name, x1 - x0, YB, 2 * zh)
     o = mobj(name, me, [m_], ((x0 + x1) / 2, -YB / 2, 0))
@@ -329,10 +329,20 @@ def grid_slab(name, x0, x1, m_, nz=72, ny=64):
 fabric_m = mat("M_fabric_macro", (0.03, 0.10, 0.28), 0.85, noise_amt=0.5, nscale=60, bump=0.4)
 skin_epi = mat("M_skin_epi", (0.78, 0.55, 0.42), 0.45, sss=0.3, noise_amt=0.3, nscale=25, bump=0.2)
 skin_der = mat("M_dermis", (0.85, 0.45, 0.42), 0.5, sss=0.4, noise_amt=0.4, nscale=12, bump=0.3)
-fat_m = mat("M_fat_lobule", (1.0, 0.62, 0.08), 0.3, sss=0.25, coat=0.5, noise_amt=0.3, nscale=6, bump=0.15)
-sept_m = mat("M_septa", (0.7, 0.38, 0.25), 0.4, sss=0.3, noise_amt=0.4, nscale=8)
+fat_m = mat("M_fat_lobule", (1.0, 0.60, 0.10), 0.3, sss=0.3, coat=0.8, noise_amt=0.3, nscale=9, bump=0.12)
+_nt = fat_m.node_tree; _b = _nt.nodes["Principled BSDF"]; _lw = _nt.nodes.new("ShaderNodeLayerWeight"); _lw.inputs["Blend"].default_value = 0.12
+_src = _b.inputs["Base Color"].links[0].from_socket
+_mx = _nt.nodes.new("ShaderNodeMix"); _mx.data_type = 'RGBA'; _lpw = _nt.nodes.new("ShaderNodeMath"); _lpw.operation = "POWER"; _lpw.inputs[1].default_value = 3.0; _nt.links.new(_lw.outputs["Facing"], _lpw.inputs[0]); _nt.links.new(_lpw.outputs[0], _mx.inputs["Factor"])
+_nt.links.new(_src, _mx.inputs["A"]); _mx.inputs["B"].default_value = (0.95, 0.88, 0.72, 1); _nt.links.new(_mx.outputs["Result"], _b.inputs["Base Color"])
+_b.inputs["Subsurface Radius"].default_value = (1.0, 0.55, 0.15); _b.inputs["Coat Roughness"].default_value = 0.06
+sept_m = mat("M_septa", (0.9, 0.8, 0.62), 0.3, sss=0.4, coat=0.6, noise_amt=0.4, nscale=8)
 fascia_m = mat("M_fascia", (0.92, 0.88, 0.85), 0.3, sss=0.2, coat=0.5, noise_amt=0.3, nscale=20)
-musc_m = mat("M_muscle", (0.42, 0.03, 0.03), 0.4, sss=0.25, coat=0.35, noise_amt=0.45, nscale=14, bump=0.5)
+musc_m = mat("M_muscle", (0.42, 0.03, 0.03), 0.35, sss=0.3, coat=0.7, noise_amt=0.45, nscale=14, bump=0.3)
+_nt = musc_m.node_tree; _b = _nt.nodes["Principled BSDF"]
+_tc = _nt.nodes.new("ShaderNodeTexCoord"); _wv = _nt.nodes.new("ShaderNodeTexWave"); _wv.bands_direction = 'Z'; _wv.inputs["Scale"].default_value = 60
+_wv.inputs["Distortion"].default_value = 2.0; _nt.links.new(_tc.outputs["Object"], _wv.inputs["Vector"])
+_bp = _nt.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.35; _nt.links.new(_wv.outputs["Fac"], _bp.inputs["Height"]); _nt.links.new(_bp.outputs["Normal"], _b.inputs["Normal"])
+_b.inputs["Coat Roughness"].default_value = 0.08
 perit_m = mat("M_peritoneum", (0.95, 0.8, 0.78), 0.1, sss=0.2, coat=1.0, transm=0.5)
 gut_m = mat("M_intestine", (0.75, 0.32, 0.3), 0.18, sss=0.6, coat=1.0, noise_amt=0.3, nscale=5, bump=0.2)
 vessel_r = mat("M_vessel_red", (0.6, 0.04, 0.04), 0.3, sss=0.3, coat=0.5)
@@ -341,7 +351,7 @@ fabric = grid_slab("M_Fabric", -0.06, 0.0, fabric_m, 48, 40)
 epi = grid_slab("M_Epidermis", 0.0, 0.06, skin_epi)
 der = grid_slab("M_Dermis", 0.06, 0.32, skin_der)
 sept = slab("M_FatBed", 0.32, 4.3, sept_m)
-sept.location.y = -YB / 2 - 0.25                # recessed so lobules bulge from the face
+sept.location.y = -YB / 2 - 0.9                 # behind the packed lobule layer
 fas = slab("M_Fascia", 4.3, 4.42, fascia_m); fas.location.y = -YB / 2 - 0.27
 # muscle: fibre bundles (long rounded boxes along Z, stacked), striated look via bump noise
 fib_me = []
@@ -357,63 +367,177 @@ def fibre(name, x, y, k):
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     for p in me.polygons: p.use_smooth = True
     return mobj(name, me, [musc_m], (x, y, 0))
-for i in range(8):
+for i in range(9):
     for j in range(4):
-        fibre("M_MuscleFib_%d_%d" % (i, j), 4.5 + i * 0.118 + (0.059 if j % 2 else 0), -0.07 - j * 0.11, i * 4 + j)
+        fibre("M_MuscleFib_%d_%d" % (i, j), 4.49 + i * 0.112 + (0.056 if j % 2 else 0), -0.07 - j * 0.1, i * 4 + j)
 musc_back = slab("M_MuscleBed", 4.42, 5.5, musc_m); musc_back.location.y = -YB / 2 - 0.3
 perit = grid_slab("M_Peritoneum", 5.5, 5.56, perit_m, 24, 24)
-# intestines: tubes coiling behind the peritoneum (curves with bevel)
-gut_objs = []
-for g in range(5):
-    cu = bpy.data.curves.new("Gut%d" % g, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.42; cu.bevel_resolution = 4
-    sp = cu.splines.new('NURBS'); pts = []
-    z = -ZH + 0.5 + g * 1.45; y = -0.6 - 0.4 * (g % 2)
-    for k in range(14):
-        pts.append((6.1 + 0.6 * math.sin(k * 1.3 + g), y - 0.25 * math.cos(k * 0.9 + g) - k * 0.12, z + 0.5 * math.sin(k * 0.7 + g * 2)))
-    sp.points.add(len(pts) - 1)
+# ---- intestines: coiled small-bowel loops behind the peritoneum, touching folds, glossy pink-grey serosa with vessels
+def serosa_mat():
+    m = bpy.data.materials.new("M_serosa"); m.use_nodes = True; nt = m.node_tree; N = nt.nodes; L = nt.links; b = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 1.6; nz.inputs["Detail"].default_value = 3
+    L.new(tc.outputs["Object"], nz.inputs["Vector"])
+    vo = N.new("ShaderNodeTexVoronoi"); vo.feature = 'DISTANCE_TO_EDGE'; vo.inputs["Scale"].default_value = 2.2
+    mxv = N.new("ShaderNodeMix"); mxv.data_type = 'VECTOR'; mxv.inputs["Factor"].default_value = 0.35
+    L.new(tc.outputs["Object"], mxv.inputs["A"]); L.new(nz.outputs["Color"], mxv.inputs["B"]); L.new(mxv.outputs["Result"], vo.inputs["Vector"])
+    vr = N.new("ShaderNodeMapRange"); vr.inputs["From Min"].default_value = 0.0; vr.inputs["From Max"].default_value = 0.035
+    vr.inputs["To Min"].default_value = 1.0; vr.inputs["To Max"].default_value = 0.0; L.new(vo.outputs["Distance"], vr.inputs["Value"])
+    base = N.new("ShaderNodeMix"); base.data_type = 'RGBA'; L.new(nz.outputs["Fac"], base.inputs["Factor"])
+    base.inputs["A"].default_value = (0.30, 0.10, 0.11, 1); base.inputs["B"].default_value = (0.46, 0.22, 0.22, 1)
+    ves = N.new("ShaderNodeMix"); ves.data_type = 'RGBA'; L.new(vr.outputs["Result"], ves.inputs["Factor"])
+    L.new(base.outputs["Result"], ves.inputs["A"]); ves.inputs["B"].default_value = (0.45, 0.03, 0.05, 1)
+    L.new(ves.outputs["Result"], b.inputs["Base Color"])
+    b.inputs["Roughness"].default_value = 0.35; b.inputs["Coat Weight"].default_value = 0.8; b.inputs["Coat Roughness"].default_value = 0.1
+    b.inputs["Subsurface Weight"].default_value = 0.25; b.inputs["Subsurface Radius"].default_value = (0.6, 0.15, 0.12)
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25; L.new(vr.outputs["Result"], bp.inputs["Height"]); L.new(bp.outputs["Normal"], b.inputs["Normal"])
+    return m
+serosa = serosa_mat()
+R_G = 0.46
+def tube(name, pts, rad, m_, cyc=False):
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = rad; cu.bevel_resolution = 5; cu.resolution_u = 10
+    sp = cu.splines.new('NURBS'); sp.points.add(len(pts) - 1)
     for p, c in zip(sp.points, pts): p.co = (*c, 1)
     sp.use_endpoint_u = True; sp.order_u = 4
-    o = bpy.data.objects.new("M_Gut%d" % g, cu); link(o, MACRO); o.parent = root; cu.materials.append(gut_m)
-    gut_objs.append(o)
+    o = bpy.data.objects.new(name, cu); link(o, MACRO); o.parent = root; cu.materials.append(m_)
+    return o
+gut_objs = []
+# front layer: serpentine of vertical runs joined by tight U-bends (folds touch: spacing = 2R)
+xs = [5.56 + R_G + 0.02 + i * 2 * R_G * 0.98 for i in range(3)]
+for layer, (yy, zoff) in enumerate(((-0.08 - R_G, 0.0), (-0.08 - 3 * R_G * 0.95, 0.9))):
+    pts = []; zt = ZH + 0.8; zb = -ZH - 0.8
+    for i, x in enumerate(xs):
+        up = (i % 2 == 0)
+        zz = [zb + k * (zt - zb) / 10 for k in range(11)]
+        if not up: zz = zz[::-1]
+        for k, z in enumerate(zz):
+            pts.append((x + 0.06 * math.sin(z * 1.7 + i + layer), yy + 0.08 * math.cos(z * 1.3 + i), z + zoff * 0.3))
+    gut_objs.append(tube("M_Gut%d" % layer, pts, R_G * (0.97 if layer else 1.0), serosa))
+# extra small loops folding over the front for touching folds
+for g in range(4):
+    zc = -ZH + 1.6 + g * 2.9; xc = 6.4 + 0.4 * (g % 2)
+    pts = [(xc + 0.9 * math.cos(a), -0.08 - R_G * 0.9 + 0.25 * math.sin(a * 2), zc + 0.9 * math.sin(a)) for a in [k * 0.55 for k in range(13)]]
+    gut_objs.append(tube("M_Gut%d" % (g + 2), pts, R_G * 0.85, serosa))
 dg = bpy.context.evaluated_depsgraph_get()
 for i, o in enumerate(list(gut_objs)):
     me = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); nm = o.name
     bpy.data.objects.remove(o, do_unlink=True)
     for p in me.polygons: p.use_smooth = True
     gut_objs[i] = mobj(nm, me, ())
-gut_bed = slab("M_GutBed", 5.6, 8.4, mat("M_mesentery", (0.8, 0.5, 0.42), 0.3, sss=0.4, coat=0.5, noise_amt=0.4, nscale=5))
-gut_bed.location.y = -YB / 2 - 1.6
-# blood vessels threading through the fat (thin tubes, clean)
-for v in range(6):
-    cu = bpy.data.curves.new("Vessel%d" % v, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.05 if v % 2 == 0 else 0.035
-    sp = cu.splines.new('BEZIER'); n = 6; sp.bezier_points.add(n - 1)
-    z0 = random.uniform(-3, 3); y0 = random.uniform(-2.6, -0.5)
-    for k, bp_ in enumerate(sp.bezier_points):
-        bp_.co = (0.5 + k * 0.75, y0 + random.uniform(-0.3, 0.3), z0 + random.uniform(-0.6, 0.6)); bp_.handle_left_type = bp_.handle_right_type = 'AUTO'
-    o = bpy.data.objects.new("M_Vessel%d" % v, cu); link(o, MACRO); o.parent = root; cu.materials.append(vessel_r if v % 2 == 0 else vessel_b)
-# fat lobules: packed, slightly flattened blobs; some bulge out of the cut face
-lob_me = []
+# mesentery sheet with vessels behind the loops, and a dark body cavity behind that
+mes_m = mat("M_mesentery", (0.55, 0.22, 0.2), 0.3, sss=0.4, coat=0.6, noise_amt=0.5, nscale=3, bump=0.3)
+mes = slab("M_Mesentery", 5.6, 9.6, mes_m); mes.location.y = -0.08 - 4 * R_G - 0.1 - YB / 2
+cav = slab("M_GutBed", 5.6, 10.5, mat("M_cavity", (0.12, 0.03, 0.03), 0.5, sss=0.2, noise_amt=0.5, nscale=2), zh=ZH + 2)
+cav.location.y = -YB / 2 - 2.6
+for v in range(7):
+    z0 = random.uniform(-ZH + 0.5, ZH - 0.5)
+    pts = [(5.7 + k * 0.6, mes.location.y + YB / 2 + 0.03, z0 + 0.35 * math.sin(k * 1.4 + v)) for k in range(7)]
+    tube("M_MesVessel%d" % v, pts, 0.05, vessel_r)
+# ---- capillaries + small vessels over the cut face of the fat (kept off the bullet channel |z| > 0.7)
+for v in range(9):
+    side = random.choice((-1, 1)); z0 = side * random.uniform(0.8, ZH - 0.4)
+    pts = [(0.45 + k * 0.48, 0.04 + random.uniform(-0.04, 0.04), z0 + random.uniform(-0.35, 0.35)) for k in range(9)]
+    tube("M_Vessel%d" % v, pts, random.choice((0.012, 0.016, 0.022)), vessel_r if v % 4 else vessel_b)
+# ---- fat: ~8k packed, overlapping lobules (3-11 mm) instanced by geometry nodes, deformation driven live by TipCtl
+lob_c = bpy.data.collections.new("LobuleProtos")          # not linked to the scene: only instanced
 for k in range(6):
-    bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=3, radius=1.0)
+    bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.0)
     for v in bm.verts:
-        n_ = noise.noise(v.co * 1.7 + Vector((k * 3.1, k, 0)))
-        v.co *= 1.0 + 0.18 * n_
+        n_ = noise.noise(v.co * 1.4 + Vector((k * 3.1, k, 0)))
+        v.co *= 1.0 + 0.22 * n_
+        v.co.x *= 0.82
     me = bpy.data.meshes.new("Lobule%d" % k); bm.to_mesh(me); bm.free()
     for p in me.polygons: p.use_smooth = True
-    me.materials.append(fat_m); lob_me.append(me)
-LOB = []
-pts = []
+    me.materials.append(fat_m)
+    o = bpy.data.objects.new("LobProto%d" % k, me); lob_c.objects.link(o)
+pts = []; cell = 0.25; grid = {}
+def gkey(c): return (int(c.x // cell), int(c.y // cell), int(c.z // cell))
 tries = 0
-while len(pts) < 420 and tries < 40000:
+while len(pts) < 9000 and tries < 220000:
     tries += 1
-    r = random.uniform(0.26, 0.44)
-    c = Vector((random.uniform(0.32 + r * 0.8, 4.3 - r * 0.8), random.uniform(-YB + r, 0.12), random.uniform(-ZH + r * 0.7, ZH - r * 0.7)))
-    if all((c - p).length > (r + q) * 0.86 for p, q in pts):
-        pts.append((c, r))
-for i, (c, r) in enumerate(pts):
-    o = mobj("M_Lob%03d" % i, lob_me[i % 6], (), tuple(c))
-    o.scale = (r * 0.9, r, r * 1.05); o.rotation_euler = (random.uniform(0, 6), random.uniform(0, 6), random.uniform(0, 6))
-    o["rest"] = tuple(c); o["r"] = r; LOB.append(o)
+    r = random.uniform(0.07, 0.22) if random.random() < 0.8 else random.uniform(0.18, 0.26)
+    c = Vector((random.uniform(0.34, 4.28), random.uniform(-1.1, 0.06 - r * 0.3), random.uniform(-ZH - 0.2, ZH + 0.2)))
+    k0 = gkey(c); ok = True
+    for dx in (-1, 0, 1):
+        for dy in (-1, 0, 1):
+            for dz in (-1, 0, 1):
+                for (q, rq) in grid.get((k0[0] + dx, k0[1] + dy, k0[2] + dz), ()):
+                    if (c - q).length < (r + rq) * 0.72: ok = False; break
+                if not ok: break
+            if not ok: break
+        if not ok: break
+    if ok:
+        pts.append((c, r)); grid.setdefault(k0, []).append((c, r))
+me = bpy.data.meshes.new("FatPoints"); me.vertices.add(len(pts)); me.vertices.foreach_set("co", [a for c, r in pts for a in c])
+ar = me.attributes.new("r", 'FLOAT', 'POINT'); ar.data.foreach_set("value", [r for c, r in pts])
+ap = me.attributes.new("ph", 'FLOAT', 'POINT'); ap.data.foreach_set("value", [random.uniform(0, 6.283) for _ in pts])
+av = me.attributes.new("v", 'INT', 'POINT'); av.data.foreach_set("value", [random.randrange(6) for _ in pts])
+fatp = mobj("M_FatPoints", me, ())
+tipctl = bpy.data.objects.new("TipCtl", None); sc.collection.objects.link(tipctl); tipctl.parent = root   # x = tip depth, y = energy, z = settle wobble
+ng = bpy.data.node_groups.new("FatLobulesGN", 'GeometryNodeTree')
+ng.interface.new_socket(name="Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
+ng.interface.new_socket(name="Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
+GN = ng.nodes; GL = ng.links
+gi = GN.new("NodeGroupInput"); go = GN.new("NodeGroupOutput")
+def M(op, a, b=None, c=None):
+    n = GN.new("ShaderNodeMath"); n.operation = op
+    for i, x in enumerate((a, b, c)):
+        if x is None: continue
+        if isinstance(x, (int, float)): n.inputs[i].default_value = x
+        else: GL.new(x, n.inputs[i])
+    return n.outputs[0]
+def V(op, a, b=None, s=None):
+    n = GN.new("ShaderNodeVectorMath"); n.operation = op
+    GL.new(a, n.inputs[0])
+    if b is not None:
+        if isinstance(b, (tuple, list)): n.inputs[1].default_value = b
+        else: GL.new(b, n.inputs[1])
+    if s is not None:
+        if isinstance(s, (int, float)): n.inputs["Scale"].default_value = s
+        else: GL.new(s, n.inputs["Scale"])
+    return n.outputs["Value" if op in ('LENGTH', 'DOT_PRODUCT', 'DISTANCE') else "Vector"]
+def attr(name, typ='FLOAT'):
+    n = GN.new("GeometryNodeInputNamedAttribute"); n.data_type = typ; n.inputs["Name"].default_value = name
+    return n.outputs["Attribute"]
+oi = GN.new("GeometryNodeObjectInfo"); oi.inputs["Object"].default_value = tipctl; oi.transform_space = 'RELATIVE'
+tsep = GN.new("ShaderNodeSeparateXYZ"); GL.new(oi.outputs["Location"], tsep.inputs[0])
+d_, e_, wob = tsep.outputs[0], tsep.outputs[1], tsep.outputs[2]
+st = GN.new("GeometryNodeInputSceneTime"); t_ = st.outputs["Seconds"]
+pos = GN.new("GeometryNodeInputPosition").outputs[0]
+ps = GN.new("ShaderNodeSeparateXYZ"); GL.new(pos, ps.inputs[0]); cx, cy, cz = ps.outputs
+r_ = attr("r"); ph = attr("ph")
+radv = GN.new("ShaderNodeCombineXYZ"); GL.new(cy, radv.inputs[1]); GL.new(cz, radv.inputs[2]); radv = radv.outputs[0]
+rho = V('LENGTH', radv)
+rdir = V('NORMALIZE', V('ADD', radv, (0.0, 1e-4, 1e-4)))
+passed = M('DIVIDE', 1.0, M('ADD', 1.0, M('EXPONENT', M('DIVIDE', M('SUBTRACT', cx, M('ADD', d_, 0.25)), 0.18))))
+on = M('GREATER_THAN', t_, 3.15)
+ah = M('DIVIDE', M('SUBTRACT', cx, M('ADD', d_, 0.3)), 0.4)
+ahead = M('MULTIPLY', M('EXPONENT', M('MULTIPLY', M('MULTIPLY', ah, ah), -1.0)), on)
+clear = M('ADD', M('MAXIMUM', 0.0, M('SUBTRACT', M('MULTIPLY_ADD', r_, 0.4, 0.42), rho)), M('MULTIPLY', 0.08, M('EXPONENT', M('DIVIDE', M('MULTIPLY', rho, rho), -1.0))))
+push = M('MULTIPLY', clear, M('ADD', M('MULTIPLY', passed, 0.95), M('MULTIPLY', ahead, 0.55)))
+tipv = GN.new("ShaderNodeCombineXYZ"); GL.new(d_, tipv.inputs[0]); tipv = tipv.outputs[0]
+dv = V('SUBTRACT', pos, tipv); dist = V('LENGTH', dv); ddir = V('NORMALIZE', dv)
+ph1 = M('MULTIPLY', M('SUBTRACT', M('DIVIDE', dist, 0.7), M('MULTIPLY', t_, 1.6)), 6.2832)
+wave = M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', e_, 0.14), M('SINE', ph1)), M('EXPONENT', M('DIVIDE', dist, -2.0)))
+wob_t = M('MULTIPLY', M('MULTIPLY', wob, 0.07), M('MULTIPLY', M('SINE', M('ADD', M('MULTIPLY', t_, 13.8), ph)), M('EXPONENT', M('DIVIDE', dist, -2.5))))
+wave = M('ADD', wave, wob_t)
+hb = M('POWER', M('MAXIMUM', 0.0, M('SINE', M('MULTIPLY', t_, 8.357))), 3.0)
+pulse = M('MULTIPLY', hb, 0.02)
+newpos = V('ADD', V('ADD', pos, V('SCALE', rdir, s=push)), V('SCALE', ddir, s=wave))
+sq = M('ADD', M('MULTIPLY', ahead, 0.42), M('MULTIPLY', M('MULTIPLY', passed, 0.16), M('EXPONENT', M('DIVIDE', rho, -0.8))))
+sxv = M('MULTIPLY', r_, M('ADD', M('SUBTRACT', 1.0, sq), wave))
+syz = M('MULTIPLY', r_, M('ADD', M('ADD', 1.0, M('MULTIPLY', sq, 0.5)), pulse))
+scl = GN.new("ShaderNodeCombineXYZ"); GL.new(sxv, scl.inputs[0]); GL.new(syz, scl.inputs[1]); GL.new(syz, scl.inputs[2])
+rot = GN.new("ShaderNodeCombineXYZ"); GL.new(ph, rot.inputs[0])
+setp = GN.new("GeometryNodeSetPosition"); GL.new(gi.outputs[0], setp.inputs["Geometry"]); GL.new(newpos, setp.inputs["Position"])
+ci = GN.new("GeometryNodeCollectionInfo"); ci.inputs["Collection"].default_value = lob_c; ci.inputs["Separate Children"].default_value = True
+ci.inputs["Reset Children"].default_value = True; ci.transform_space = 'ORIGINAL'
+iop = GN.new("GeometryNodeInstanceOnPoints")
+GL.new(setp.outputs[0], iop.inputs["Points"]); GL.new(ci.outputs[0], iop.inputs["Instance"]); iop.inputs["Pick Instance"].default_value = True
+GL.new(attr("v", 'INT'), iop.inputs["Instance Index"]); GL.new(rot.outputs[0], iop.inputs["Rotation"]); GL.new(scl.outputs[0], iop.inputs["Scale"])
+GL.new(iop.outputs[0], go.inputs[0])
+gm = fatp.modifiers.new("Lobules", 'NODES'); gm.node_group = ng
+LOB = pts
 # energy rings (emissive tori around the channel, keyed later)
 ring_m = bpy.data.materials.new("M_ring"); ring_m.use_nodes = True; nt = ring_m.node_tree; N = nt.nodes; L = nt.links
 N.remove(N["Principled BSDF"]); mo = N["Material Output"]; oi = N.new("ShaderNodeObjectInfo")
@@ -443,7 +567,7 @@ N.remove(N["Principled BSDF"]); mo = N["Material Output"]
 tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Object"], sep.inputs["Vector"])
 mr = N.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = -20; mr.inputs["From Max"].default_value = 24
 L.new(sep.outputs["Z"], mr.inputs["Value"])
-cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.12, 0.55, 0.72, 1); cr.color_ramp.elements[1].color = (0.92, 0.97, 1.0, 1)
+cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.01, 0.16, 0.26, 1); cr.color_ramp.elements[1].color = (0.35, 0.72, 0.85, 1)
 cr.color_ramp.elements[0].position = 0.15; cr.color_ramp.elements[1].position = 0.85
 L.new(mr.outputs["Result"], cr.inputs["Fac"])
 em = N.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = 0.45; L.new(cr.outputs["Color"], em.inputs["Color"])

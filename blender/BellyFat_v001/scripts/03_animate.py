@@ -216,47 +216,15 @@ hole = bpy.data.objects["M_HoleDecal"]
 for t, s_ in ((0, 0.0), (3.15, 0.0), (3.3, 1.0), (21.5, 1.0)):
     hole.scale = (1, s_, s_); hole.keyframe_insert("scale", frame=F(t))
 
-# lobules: radial push from the channel + squash + outward travelling ripple whose strength follows the bullet's energy loss
-LOB = [o for o in bpy.data.objects if o.name.startswith("M_Lob")]
 def vel(t): return (D(t + 0.02) - D(t - 0.02)) / 0.04
-STEP = 3
-frames = list(range(SWAP_IN - 3, SWAP_OUT + 4, STEP))
-for o in LOB:
-    o.rotation_euler = (random.uniform(0, 6.28), 0, 0)
-    c = Vector(o["rest"]); r = o["r"]; base = Vector((r * 0.9, r, r * 1.05))
-    rad = Vector((0, c.y, c.z)); rho = rad.length; rdir = rad.normalized() if rho > 1e-3 else Vector((0, 0.6, 0.8))
-    ph = random.uniform(0, 6.28)
-    keys_loc = []; keys_scl = []
-    for f in frames:
-        t = T(f); d = D(t)
-        passed = 1.0 / (1.0 + math.exp(-(d - c.x + 0.25) / 0.18))
-        ahead = math.exp(-((c.x - d - 0.35) / 0.45) ** 2) if t > 3.15 else 0.0
-        clear = max(0.0, 0.62 + r * 0.35 - rho) + 0.12 * math.exp(-rho * rho / 1.4)
-        push = clear * (0.95 * passed + 0.55 * ahead)
-        tip = Vector((d, 0, 0)); dv = c - tip; dist = dv.length
-        e = min(1.0, max(0.0, vel(t) / 1.2)) if t > 3.15 else 0.0
-        wave = e * 0.14 * math.sin(2 * math.pi * (dist / 0.9 - t * 1.6) + ph * 0.1) * math.exp(-dist / 2.2)
-        breathe = 0.01 * math.sin(2 * math.pi * t / 3.5 + ph)
-        p = c + rdir * push + (dv.normalized() if dist > 1e-3 else rdir) * wave
-        sq = 0.42 * ahead + 0.16 * passed * math.exp(-rho / 0.8)
-        keys_loc.append(p); keys_scl.append(Vector((base.x * (1 - sq + wave), base.y * (1 + 0.5 * sq + breathe), base.z * (1 + 0.5 * sq + breathe))))
-    o.keyframe_insert("location", frame=frames[0]); o.keyframe_insert("scale", frame=frames[0])
-    act = o.animation_data.action
-    for p in ("location", "scale"):
-        vals = keys_loc if p == "location" else keys_scl
-        for ax in range(3):
-            fc = None
-            for lay in act.layers:
-                for st in lay.strips:
-                    for cb in st.channelbags:
-                        for fc_ in cb.fcurves:
-                            if fc_.data_path == p and fc_.array_index == ax: fc = fc_
-            kp = fc.keyframe_points; n0 = len(kp); kp.add(len(frames) - n0)
-            co = []
-            for f, v in zip(frames, vals): co += [f, v[ax]]
-            kp.foreach_set("co", co)
-            for k in kp: k.interpolation = 'BEZIER'; k.handle_left_type = k.handle_right_type = 'AUTO_CLAMPED'
-            fc.update()
+# fat lobules are geometry-node instances (02_build_scene); their push / squash / ripple / settle come from TipCtl:
+#   x = tip depth, y = energy being absorbed (ripple strength), z = settle-wobble amplitude after the stop
+tipctl = bpy.data.objects["TipCtl"]
+for f in range(SWAP_IN - 4, SWAP_OUT + 6, 2):
+    t = T(f)
+    e = min(1.0, max(0.0, vel(t) / 1.2)) if t > 3.15 else 0.0
+    wob = (math.exp(-(t - 17.2) / 1.6) if t > 17.2 else 0.0) + (0.35 * math.exp(-(t - 3.2) / 0.8) if t > 3.2 else 0.0)
+    tipctl.location = (D(t), e, wob); tipctl.keyframe_insert("location", frame=f)
 # energy rings bloom behind the bullet
 RINGS = sorted([o for o in bpy.data.objects if o.name.startswith("M_Ring")], key=lambda o: o.name)
 EMIT = [3.35, 4.0, 4.8, 5.7, 6.7, 7.85, 8.6, 9.4, 10.3, 11.2, 12.3, 13.6]
