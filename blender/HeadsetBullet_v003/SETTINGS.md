@@ -4,7 +4,7 @@ These values were read back from `HeadsetBullet_v003_60fps.blend`, opened in fac
 
 | Item | Value |
 |---|---|
-| File | `HeadsetBullet_v003_60fps.blend`: 57 MB, compressed. Every image is packed (no unpacked or dirty images). Textures are 1K (the face skin is 2K), the HDRI is 1K, opaque maps are JPEG q92, and alpha maps are 8-bit PNG. It is a normal git file (no LFS). |
+| File | `HeadsetBullet_v003_60fps.blend`: 75 MB, compressed. Every image is packed (no unpacked or dirty images). Textures are 1K (the face skin is 2K), the HDRI is 1K, opaque maps are JPEG q92, and alpha maps are 8-bit PNG. It is a normal git file (no LFS). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |

@@ -94,7 +94,7 @@ cuts = [box("c", (WIN[1] - WIN[0], 1, WIN[3] - WIN[2]), ((WIN[0] + WIN[1]) / 2, 
 apply_bool(front, cuts)
 wall("Wall_Back", HX0, HX1, HY1 - 0.2, HY1, 0, HZ, M["ext"])
 wall("Wall_L", HX0, HX0 + 0.2, HY0, HY1, 0, HZ, M["ext"]); wall("Wall_R", HX1 - 0.2, HX1, HY0, HY1, 0, HZ, M["ext"])
-box("Plinth", (HX1 - HX0 + 0.1, HY1 - HY0 + 0.1, 0.25), ((HX0 + HX1) / 2, (HY0 + HY1) / 2, 0.08), mat("PlinthGrey", (0.35, 0.34, 0.33), 0.8))
+box("Plinth", (HX1 - HX0 + 0.1, HY1 - HY0 + 0.1, 0.16), ((HX0 + HX1) / 2, (HY0 + HY1) / 2, -0.081), mat("PlinthGrey", (0.35, 0.34, 0.33), 0.8))   # top just under the room floor
 # gable roof (ridge along X)
 OV = 0.55; RZ = 5.0; RY = (HY0 + HY1) / 2
 def roof_plane(name, y_eave, z_eave):
@@ -278,7 +278,7 @@ poster("Poster_C", (1.55, RY1 - 0.01, 1.35), (0, 0, 0), (0.45, 0.6), 8, (0, 1, 0
 # ceiling light fixture (off)
 cyl("CeilingLamp", 0.22, 0.06, (0, 2.1, RZ1 - 0.04), mat("LampShade", (0.9, 0.9, 0.88), 0.4))
 # rug
-box("Rug", (1.6, 1.2, 0.01), (0, 2.6, 0.005), mat("Rug", (0.35, 0.12, 0.1), 0.95))
+box("Rug", (1.6, 1.2, 0.012), (0, 2.6, 0.006), pbr("Rug", "dirty_carpet", scale=1.2, box=True, tint=(0.55, 0.30, 0.28)), bevel=0.004)
 
 # interior lights: soft window fill, monitor glow, desk lamp warm, LED bounce
 def area(name, size, loc, rot, energy, col, shape='RECTANGLE', sy=None):
@@ -364,6 +364,66 @@ if bpy.data.objects.get("Poster_B"):
         if o: o.location.y = 2.25
 # gaming poster extra (abstract) above the bed
 poster("Poster_D", (RX1 - 0.01, 0.75, 1.75), (0, 0, R_(90)), (0.45, 0.6), 11, (1, 0, 0))
+# ------------------------------------------------------------------ realism pass (client 21:00): real models replace primitive stand-ins
+def kill(*names):
+    for o in [o for o in bpy.data.objects if any(o.name == n or o.name.startswith(n + ".") for n in names)]:
+        bpy.data.objects.remove(o, do_unlink=True)
+def killp(prefix):
+    for o in [o for o in bpy.data.objects if o.name.startswith(prefix)]: bpy.data.objects.remove(o, do_unlink=True)
+def glb(name, size, axis, loc, rot_z=0.0, align="bottom", c="Set"):
+    obs = import_glb(os.path.join(ASSETS, "glb", name + ".glb"), c)
+    for o in obs:
+        if o.type == 'MESH':
+            for pp in o.data.polygons: pp.use_smooth = True
+    return place_group(obs, name.capitalize(), size, axis, loc, rot_z=rot_z, c=c, align=align), obs
+# car under a cloth cover (3D scan) in the driveway
+killp("Car_"); glb("car", 4.5, 1, Vector((-8.5, -4.0, 0.0)))
+# neighbour houses (real models)
+killp("Neighbour"); killp("NWin")
+glb("house_n1", 6.4, 2, Vector((-19.5, 4.0, -0.05)), rot_z=R_(180))
+glb("house_n2", 6.0, 2, Vector((17.5, 4.5, -0.05)), rot_z=R_(180))
+# mailbox
+kill("Mailbox", "MailboxPost"); glb("mailbox", 1.25, 2, Vector((4.5, -17.0, 0.0)), rot_z=R_(180))
+# gaming PC
+kill("PC_Tower", "PC_Glass"); killp("PC_Fan"); glb("pc", 0.50, 2, Vector((1.05, 3.68, 0.0)), rot_z=R_(90))
+# bed with a draped sheet (real model) replaces the box bed and the rumpled grid
+kill("Bed_Frame", "Bed_Mattress", "Bed_Pillow", "Bed_Duvet", "Bed_Hoodie"); glb("bed", 2.0, 0, Vector((RX1 - 0.52, 1.35, 0.0)), rot_z=R_(90))
+# desk: Poly Haven metal office desk (scan-quality), top at DESK_Z, kneehole under the keyboard
+kill("Desk_Top", "Desk_Leg")
+dk = append_objects(os.path.join(ASSETS, "metal_office_desk", "metal_office_desk_1k.blend"))
+dg_ = place_group(dk, "Desk", 1.7, 0, Vector((0, 4.0 - 0.81 / 2 - 0.01, 0)))
+mn_, mx_ = bounds(dk); dg_.scale.z *= DESK_Z / (mx_.z - mn_.z); bpy.context.view_layer.update()
+top = max([o for o in dk if o.type == 'MESH'], key=lambda o: (o.matrix_world @ Vector(o.bound_box[6])).z * 10 + o.dimensions.x * o.dimensions.y)
+top.name = "Desk_Top"
+mn_, mx_ = bounds(dk); print("DESK", tuple(round(v, 3) for v in mn_), tuple(round(v, 3) for v in mx_))
+# energy cans: real can mesh, our paint (no labels)
+for nm, col in (("Can_Tip", (0.05, 0.75, 0.55)), ("Can_B", (0.55, 0.85, 0.05)), ("Can_C", (0.05, 0.05, 0.06)),
+                ("Can_Floor0", (0.05, 0.6, 0.5)), ("Can_Floor1", (0.05, 0.7, 0.5)), ("Can_Floor2", (0.05, 0.8, 0.5))):
+    old = bpy.data.objects.get(nm)
+    if not old: continue
+    loc = old.matrix_world.translation.copy()
+    for ch_ in list(old.children): bpy.data.objects.remove(ch_, do_unlink=True)
+    bpy.data.objects.remove(old, do_unlink=True)
+    obs = import_glb(os.path.join(ASSETS, "glb", "can.glb"))
+    g = place_group(obs, nm, 0.12, 2, loc, align="center")
+    pm_ = mat("CanPaint_" + nm, col, 0.28, metal=0.85)
+    for o in obs:
+        if o.type == 'MESH':
+            o.data.materials.clear(); o.data.materials.append(pm_ if o.dimensions.z > 0.5 * max(o.dimensions) else mat("CanLid", (0.75, 0.75, 0.77), 0.2, metal=1.0))
+# shelf decor: real scanned objects instead of capsule figures
+killp("ShelfFig")
+def deco(blend, size, loc, rz=0.0):
+    obs = append_objects(os.path.join(ASSETS, blend, blend + "_1k.blend"), "Props")
+    return place_group(obs, "Deco_" + blend, size, 2, loc, rot_z=rz, c="Props")
+deco("carved_wooden_elephant", 0.12, Vector((-0.45, RY1 - 0.11, 1.615)), R_(200))
+deco("wooden_candlestick", 0.18, Vector((-0.15, RY1 - 0.11, 1.615)))
+deco("brass_candleholders", 0.16, Vector((0.25, RY1 - 0.11, 1.615)))
+deco("carved_wooden_elephant", 0.10, Vector((RX1 - 0.11, 2.65, 1.865)), R_(-90))
+deco("wooden_candlestick", 0.16, Vector((RX1 - 0.11, 3.05, 1.865)))
+# ceiling light: real lamp model; snack bowl removed (was a primitive)
+kill("CeilingLamp"); killp("Chip"); kill("SnackBowl")
+lp = append_objects(os.path.join(ASSETS, "modern_ceiling_lamp_01", "modern_ceiling_lamp_01_1k.blend"))
+lpg = place_group(lp, "CeilingLamp", 0.42, 2, Vector((0, 2.1, RZ1)), align="bottom"); mn_, mx_ = bounds(lp); lpg.location.z -= (mx_.z - RZ1)
 # ------------------------------------------------------------------ the teen
 with bpy.data.libraries.load(TEEN, link=False) as (src, dst):
     dst.objects = list(src.objects)

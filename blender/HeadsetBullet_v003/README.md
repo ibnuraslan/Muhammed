@@ -47,6 +47,13 @@ The audit is `scripts/audit.py`. Review sheets and notes are in `../HeadsetBulle
 - **Headset:** a boom mic on the left cup (2.5 cm clear of the mouth; the audit shows 0 head or face overlap), plus leatherette bump and stitching on the band pad.
 - **Camera:** a key at 1019 keeps the ricochet bullet in frame for the whole flight, and the cup macros at 12.4–13.6 s now vary.
 
+- **Realism pass (client note, 21:00 UTC):** real models now replace primitive stand-ins.
+  - Exterior: the box car is now a 3D-scanned covered car, the two neighbour block houses are real house models, and the box mailbox is a real mailbox model.
+  - Room: the slab desk is the Poly Haven metal office desk, and the box PC is a gaming PC model. The box bed and grid duvet are now a real bed with a draped sheet.
+  - Props: the cylinder cans are a real can mesh (repainted, no labels). The capsule figures on the shelves are scanned wooden and brass decor, and the cylinder ceiling lamp is a real lamp. The bowl and chips were removed, and the rug has a carpet texture.
+  - Fixed: the house plinth sat 20 cm above the room floor and was covering it; the wood floor and rug now show.
+  - Kept procedural, with reasons: our house shell (Poly Haven plaster and clay roof tiles; it has to line up with the room window the camera flies through), the headset (it must crack, dent and be cut away), the bullet, glass and debris, the posters and the wall shelves.
+
 ## Known open items
 - **No VO:** timing is to the brief's target times until the retime.
 - **Face:** the stunned face uses the jaw, head, neck and breathing only. The MPFB rig here has no brow or eyelid expression controls.
