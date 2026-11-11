@@ -252,7 +252,7 @@ def diver_hands(f, p):
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.3 + Vector((0, 0, -1)) * 0.7, n=-out, pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1
-            W = Vector((XY1.x + sx * 0.24, COP_Y + 0.1, COP_Z + 0.045))
+            W = Vector((XY1.x + sx * 0.24, COP_Y + 0.1, COP_Z + 0.062))
             a[s] = ("world", dict(W=W, d=Vector((0, -1, -0.15)), n=Vector((0, 0, -1)), pole=W + Vector((sx * 0.6, 0.45, -0.3))))
     _key_hands_base(f, p)
 DV.key_hands = diver_hands
