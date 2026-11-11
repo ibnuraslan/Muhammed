@@ -55,7 +55,7 @@ for f in range(1, 1621, 10):
     # props held
     for ob, rig, bone, f0, f1 in (("Shoe_L", "Attendant", "wrist.L", 880, 1068), ("Shoe_R", "Attendant", "wrist.R", 880, 1068),
                                   ("Syringe", "Steward", "wrist.R", 580, 760), ("Match", "Bomber", "finger2-3.R", 1, 480),
-                                  ("Shoe_R_Trav", "Traveller", "wrist.R", 1450, 1515)):
+                                  ("Shoe_R_Trav", "Traveller", "wrist.R", 1480, 1518)):
         if f0 <= f <= f1:
             d = (O[ob].matrix_world.translation - wb(rig, bone)).length
             if d > 0.25: issues["prop"].append((f, ob, rig, round(d, 3)))

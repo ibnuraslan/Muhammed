@@ -145,14 +145,14 @@ bom.key_foot("L", 525, V((-1.0, BY + 0.38)), FWD - 60, 0.12, 0); bom.key_foot("R
 bom.key_root(555, V((-0.15, BY + 0.55, 0.55)), yaw=FWD - 10, flex=65, side=15); bom.key_spine(555, flex=20, twist=10, head=(-20, 10))
 bom.key_foot("L", 555, V((-0.30, BY + 0.10)), FWD, 0.15, -30); bom.key_foot("R", 555, V((-0.05, BY + 0.05)), FWD, 0.25, -40)
 # 580: hits the floor (impact, slight bounce at 590), pinned at 600+
-for f, z, fl in ((578, 0.29, 92), (586, 0.33, 90), (596, 0.295, 91), (654, 0.295, 91), (700, 0.29, 91), (768, 0.29, 91)):
+for f, z, fl in ((578, 0.27, 92), (586, 0.31, 90), (596, 0.27, 91), (654, 0.27, 91), (700, 0.265, 91), (768, 0.265, 91)):
     bom.key_root(f, V((0.0, BY + 0.75, z)), yaw=FWD, flex=fl, side=0)
     bom.key_spine(f, flex=-2, twist=-5, head=(-18, 32) if f < 700 else (-15, 38))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 # struggle wiggle while pinned (beat 4 end, beat 5 start), then limp (sedated ~ 720)
 for f in range(600, 721, 12):
     w = 1.0 if f < 690 else max(0.0, (720 - f) / 30)
-    bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.295 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
+    bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.27 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
     bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-18 + 3 * (1 - w), 32 + 6 * (1 - w)))
 # arms when pinned: left arm twisted behind his back (held by PaxB), right arm out forward on the floor (held by attendant / injected)
 for f in (582, 654, 720, 768, 830, 1068):
@@ -160,7 +160,7 @@ for f in (582, 654, 720, 768, 830, 1068):
     hand(bom, "R", f, V((0.16, BY + 1.50, 0.34 if f < 720 else 0.30)), (0.05, 0.8, 0.3), (0, 0, -1), pole=(0.6, BY + 1.0, 0.5), grip=0.6 if f < 720 else 0.15)
 # after sedation he lies still; tiny breathing
 for f in range(780, 1069, 30):
-    bom.key_root(f, V((0.0, BY + 0.75, 0.29 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
+    bom.key_root(f, V((0.0, BY + 0.75, 0.265 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
     bom.key_spine(f, flex=-2, twist=-5, head=(-15, 38))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 print("BOMBER_DONE")
@@ -205,8 +205,8 @@ stand(att, 492, V((0.15, 0.45, 0)), -90, spine=(25, 0, 0), head=(10, 0), crouch=
 stand(att, 525, V((0.12, 0.75, 0)), -60, spine=(30, 15, 0), head=(15, 0), crouch=0.15, stance=0.2)
 # kneel at his head (y ~ BY+2.0), facing -Y, holding his outstretched right forearm
 for f in (590, 654, 720, 760):
-    att.key_root(f, V((-0.18, BY + 2.0, 0.52)), yaw=-20, flex=12)
-    att.key_spine(f, flex=45, twist=10, head=(15, 10))
+    att.key_root(f, V((-0.18, BY + 2.0, 0.47)), yaw=-20, flex=15)
+    att.key_spine(f, flex=62, twist=10, head=(12, 10))
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
     hand(att, "R", f, V((0.15, BY + 1.56, 0.38)), (0, -1, -0.4), (0, 0, -1), grip=0.8)
     hand(att, "L", f, V((0.19, BY + 1.38, 0.37)), (0, -1, -0.4), (0, 0, -1), grip=0.8)
@@ -220,7 +220,7 @@ for f in (790, 815, 840):
     hand(att, "L", f, V((p_.x + 0.22, p_.y, 0.85)), (0, 0, -1), (-1, 0, 0), grip=0.3)
 KN = V((0.05, BY - 0.62, 0))          # kneeling spot behind his feet, facing +Y
 for f in (850, 880, 940, 1000, 1068):
-    att.key_root(f, V((KN.x, KN.y, 0.50 if f < 900 else 0.62)), yaw=FWD, flex=15 if f < 900 else 5)
+    att.key_root(f, V((KN.x, KN.y, 0.47 if f < 900 else 0.58)), yaw=FWD, flex=15 if f < 900 else 5)
     att.key_spine(f, flex=50 if f < 900 else 5, twist=0, head=(20, 0) if f < 900 else (5, 0))
     att.key_foot("L", f, V((KN.x - 0.12, KN.y - 0.35)), FWD, 0.02, -65); att.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.33)), FWD, 0.02, -65)
 # grasp the heels (870), pull off (880-900), lift up together (900-960), turn the soles to the light (960-1068)
@@ -345,23 +345,29 @@ print("PAX_DONE")
 TP = AX + V((-1.2, -0.75, 0))
 for f in range(1, 1380, 60):
     stand(trav, f, TP, FWD, spine=(5, 0, 0))
-for f, flex, sp, crouch in ((1393, 0, (10, 0, 0), 0.0), (1420, 0, (30, 0, 0), 0.08), (1450, 12, (70, 0, 0), 0.22), (1480, 12, (72, 0, 0), 0.24)):
-    trav.key_root(f, V((TP.x, TP.y, trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)
-    trav.key_spine(f, flex=sp[0], head=(15, 0))
+for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 20, 0.04, (35, 0)), (1455, 5, 30, 0.15, (30, 0)),
+                               (1468, 15, 62, 0.50, (10, 0)), (1480, 15, 66, 0.52, (10, 0)), (1500, 5, 20, 0.12, (20, 0))):
+    trav.key_root(f, V((TP.x, TP.y + (0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)
+    trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)
-    trav.key_foot("R", f, trav.foot_xy("R", TP, FWD) + V((0, -0.22 if f >= 1440 else 0.0)), FWD, 0.0 if f < 1440 else 0.32, 0 if f < 1440 else 35)
-# right foot lifts out of the shoe (heel pulled by the right hand), shoe goes into the tray
+# right foot: steps back out of the sneaker (1425-1445; the sneaker stays on the floor), then plants beside it
+RF0 = trav.foot_xy("R", TP, FWD)
+for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04, 20), (1445, -0.22, 0.0, 0), (1520, -0.22, 0.0, 0)):
+    trav.key_foot("R", f, RF0 + V((0.06 if f >= 1445 else 0, dy)), FWD, lift, pitch)
+# right hand: down to the sneaker heel on the floor (1478), lifts it over the tray (1500-1515), lets go (1520)
 TRAY = bpy.data.objects["Tray_1"]
-ev(1440); trf = wpos(trav, "foot.R", 1440)
+ev(1430); trf = wpos(trav, "foot.R", 1430)
+SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))
 hand(trav, "R", 1393, TP + V((0.25, 0.0, 0.95)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
 hand(trav, "L", 1393, TP + V((-0.25, 0.0, 0.95)), (0, 0.3, -1), (1, 0, 0), grip=0.3)
-hand(trav, "R", 1440, trf + V((0.03, 0.08, 0.10)), (0, -0.2, -1), (-1, 0, 0), grip=0.75)
-hand(trav, "L", 1440, TP + V((-0.12, 0.45, 0.8)), (0, 1, -0.5), (0, 0, -1), grip=0.3)          # steadies on the belt edge
-for f, z in ((1470, 0.45), (1500, 0.82), (1520, 0.86)):
-    tp = TRAY.matrix_world.translation if f < 1500 else TRAY.matrix_world.translation
-    hand(trav, "R", f, V((TP.x + 0.15, TP.y + 0.55, z + 0.1)), (0, 0.5, -0.8), (-1, 0, 0), grip=0.75 if f < 1520 else 0.2)
-trav.key_root(1520, V((TP.x, TP.y, trav.root_head.z - 0.1)), yaw=FWD, flex=0); trav.key_spine(1520, flex=35, head=(20, 0))
-trav.key_foot("R", 1520, trav.foot_xy("R", TP, FWD), FWD)
+hand(trav, "L", 1440, TP + V((-0.12, 0.42, 0.82)), (0, 1, -0.5), (0, 0, -1), grip=0.3)          # steadies on the belt edge
+hand(trav, "L", 1480, TP + V((-0.22, 0.30, 0.55)), (0, 1, -0.5), (0, 0, -1), grip=0.3)         # on his knee in the squat
+hand(trav, "R", 1455, SHOE_PICK + V((0, 0, 0.18)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
+hand(trav, "R", 1478, SHOE_PICK, (0, 0.3, -1), (-1, 0, 0), grip=0.8)
+hand(trav, "R", 1500, V((TP.x + 0.15, TP.y + 0.45, 0.95)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
+hand(trav, "R", 1515, V((TP.x + 0.35, TP.y + 0.70, 0.98)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.8)
+hand(trav, "R", 1520, V((TP.x + 0.36, TP.y + 0.72, 0.99)), (0, 0.6, -0.8), (-1, 0, 0), grip=0.2)
+print("SHOE_PICK", SHOE_PICK)
 # straightens in socks, watches the tray roll into the X-ray, small shrug (1560-1620)
 for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
     stand(trav, f, TP, FWD, spine=(sp, 0, 0), head=hd)

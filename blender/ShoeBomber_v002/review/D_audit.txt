@@ -1,0 +1,29 @@
+ShoeBomber audit (every 10 frames, 1-1620)
+
+## sink: 3 flagged samples (every 10 f)
+  Steward                                  f541-561 (max 0.104)
+
+## hover: 51 flagged samples (every 10 f)
+  Bomber                                   f531-571 (max 0.178), f591-601 (max 0.038), f681-691 (max 0.040)
+  Attendant                                f571-761 (max 0.045), f851-1061 (max 0.045)
+
+## reach: 293 flagged samples (every 10 f)
+  Steward IK_hand.L                        f451-521 (max 0.520), f661-741 (max 0.106)
+  Steward IK_hand.R                        f451-521 (max 0.504)
+  PaxB IK_hand.L                           f461-581 (max 0.508), f771-791 (max 0.193), f821-841 (max 0.099)
+  PaxB IK_hand.R                           f461-581 (max 0.421), f681-791 (max 0.120), f831-831 (max 0.033)
+  Bomber IK_hand.R                         f501-541 (max 0.371)
+  Attendant IK_hand.L                      f501-561 (max 0.405), f801-801 (max 0.064), f871-901 (max 0.079)
+  Attendant IK_hand.R                      f511-551 (max 0.199), f801-801 (max 0.072), f871-911 (max 0.078)
+  Bomber IK_hand.L                         f571-1061 (max 0.185)
+  PaxA IK_hand.L                           f581-771 (max 0.182), f811-1041 (max 0.078)
+  PaxA IK_hand.R                           f691-771 (max 0.064), f791-791 (max 0.044)
+  PaxC IK_hand.R                           f781-1061 (max 0.045)
+  Officer IK_hand.L                        f1401-1611 (max 0.174)
+  Officer IK_hand.R                        f1401-1611 (max 0.168)
+  Traveller IK_hand.R                      f1411-1471 (max 0.381), f1511-1531 (max 0.152)
+  Traveller IK_hand.L                      f1431-1451 (max 0.127), f1501-1541 (max 0.163)
+
+## camera: 0 flagged samples (every 10 f)
+
+## prop: 0 flagged samples (every 10 f)

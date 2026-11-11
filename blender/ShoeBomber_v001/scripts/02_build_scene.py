@@ -316,14 +316,14 @@ d = bpy.context.active_object; d.name = "CloudFloor"; L.set_mat(d, L.mat("CloudF
 puff = L.mat("CloudPuff", (1.0, 0.9, 0.84), 1.0)
 puff.node_tree.nodes["Principled BSDF"].inputs["Subsurface Weight"].default_value = 0.6
 puff.node_tree.nodes["Principled BSDF"].inputs["Subsurface Radius"].default_value = (5, 5, 5)
-tx = bpy.data.textures.new("PuffNoise", 'CLOUDS'); tx.noise_scale = 0.6
-for i in range(40):
-    r = random.uniform(20, 55)
+tx = bpy.data.textures.new("PuffNoise", 'CLOUDS'); tx.noise_scale = 0.35; tx.noise_depth = 4
+for i in range(70):
+    r = random.uniform(12, 38)
     an = random.uniform(0, 2 * math.pi); dist = random.uniform(220, 900)
-    p = KX + V((math.cos(an) * dist, math.sin(an) * dist + 300, random.uniform(-75, -40)))
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=4, radius=r, location=p)
-    c = bpy.context.active_object; c.name = "Puff_%02d" % i; c.scale = (1.4, 1.2, 0.55)
-    dm = c.modifiers.new("d", 'DISPLACE'); dm.texture = tx; dm.strength = r * 0.35
+    p = KX + V((math.cos(an) * dist, math.sin(an) * dist + 300, random.uniform(-82, -70)))
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=5, radius=r, location=p)
+    c = bpy.context.active_object; c.name = "Puff_%02d" % i; c.scale = (1.6, 1.3, 0.5)
+    dm = c.modifiers.new("d", 'DISPLACE'); dm.texture = tx; dm.strength = r * 0.22
     L.set_mat(c, puff); L.link(c, L.coll(K))
     for f_ in c.data.polygons: f_.use_smooth = True
 

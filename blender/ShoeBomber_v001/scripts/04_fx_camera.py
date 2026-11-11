@@ -114,7 +114,8 @@ for s, hs in (("L", "L"), ("R", "R")):
     offs_t = shoe_on_foot(trav, s)
     ct.hold(trav, "foot." + s, 1, attach_rest(ts, trav, "foot." + s, 1, offs_t))
     if s == "R":
-        ct.hold(trav, "wrist.R", 1445)
+        ct.free(1441)                          # he steps out of it: it stays on the floor
+        ct.hold(trav, "wrist.R", 1478)         # picked up by the heel
         tray = O["Tray_1"]
         ct.hold_tray = True
         # into the tray at 1520: then rides with the tray (tray is an object: use a park-at-tray Child Of)
@@ -151,6 +152,13 @@ def foot_mask(rig_name, s_, on_until):
     idx = {g.index for g in body.vertex_groups if g.name == "foot." + s_ or g.name.startswith("toe") and g.name.endswith("." + s_)}
     sel = [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in idx) > 0.5]
     vg.add(sel, 1.0, 'REPLACE')
+    # socks: the masked foot faces get a knit sock material (seen once the sneaker is off)
+    sock = bpy.data.materials.get("Sock") or L.mat("Sock", (0.08, 0.08, 0.09) if rig_name == "Bomber" else (0.55, 0.55, 0.57), 0.9)
+    if sock.name not in [m.name for m in body.data.materials if m]: body.data.materials.append(sock)
+    si = [m.name if m else "" for m in body.data.materials].index(sock.name); ss = set(sel)
+    sock_faces = 0
+    for poly in body.data.polygons:
+        if sum(1 for vi in poly.vertices if vi in ss) >= len(poly.vertices) - 1: poly.material_index = si; sock_faces += 1
     m = body.modifiers.new("ShoeHide_" + s_, 'MASK'); m.vertex_group = vg.name; m.invert_vertex_group = True
     while body.modifiers[0] != m and body.modifiers.find(m.name) > 0:
         bpy.ops.object.modifier_move_up({"object": body}, modifier=m.name) if False else None; break
@@ -159,7 +167,7 @@ def foot_mask(rig_name, s_, on_until):
     print("MASK", rig_name, s_, len(sel))
 for s_ in "LR":
     foot_mask("Bomber", s_, 877)
-foot_mask("Traveller", "R", 1444)
+foot_mask("Traveller", "R", 1440)
 # ------------------------------------------------------------------ match + matchbox (bomber's hands), drops in the tackle
 match = O["Match"]; mbox = O["Matchbox"]
 cm = Carry(match)
@@ -285,6 +293,10 @@ for k, s in enumerate(("L", "R")):
         up.keyframe_insert("location", frame=f); up.keyframe_insert("rotation_euler", frame=f)
     sl = O["Slab_Shoe_" + s]; sl.parent = base; sl.location = (0, 0.0, 0.044)
     ol = O["SlabOutline_Shoe_" + s]; ol.parent = base; ol.location = (0, 0.0, 0.044)
+    for ob_ in (sl, ol):
+        for f, h in ((1, True), (1112, True), (1113, False)):
+            ob_.hide_render = h; ob_.keyframe_insert("hide_render", frame=f)
+        constant_at(ob_, set(range(0, END + 1)))
 om = bpy.data.materials["SlabOutline"]; b = om.node_tree.nodes["Principled BSDF"]
 for f, e in ((1, 0.0), (1135, 0.0), (1150, 12.0), (1235, 12.0), (1250, 0.0)):
     b.inputs["Emission Strength"].default_value = e; b.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
@@ -385,6 +397,7 @@ SEG = [
     (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
     (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
+    (697, V((0.62, 0.55, 1.42)), bp("Bomber", "upperarm02.R", 697), 34),
     (712, V((0.45, 0.92, 0.80)), bp("Bomber", "upperarm02.R", 712), 36),
     (748, V((0.45, 0.85, 1.58)), bp("Bomber", "head", 748), 30),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
