@@ -45,9 +45,42 @@ def crane(x, y, mat, h=52, boom=70):
     return join(parts, "Crane")
 
 
+VARIANT_FOR = {"ship_lift": None, "tropical_dock": "tropical"}
+DUR = {"ship_lift": 5.0, "tropical_dock": 5.0}     # estimates until the chapter 1 voiceover arrives
+
+
+def container_ship(x0, y0, protos, rng, length=220, beam=32):
+    """Hull, deck stacks of containers, bridge block at the stern. Built around (x0, y0), bow toward +X."""
+    hull_m = pbr("Hull", (0.015, 0.022, 0.04), 0.7, 0.0)
+    red = pbr("Antifoul", (0.35, 0.05, 0.04), 0.6)
+    white = pbr("ShipWhite", (0.75, 0.75, 0.73), 0.5)
+    parts = [box("Hull", (0, 0, 4), (length, beam, 14), hull_m, bevel=1.5),
+             box("Boot", (0, 0, -3.2), (length - 2, beam - 0.5, 1.4), red, bevel=0.5)]
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=beam * 0.72, depth=34, location=(length / 2 + 14, 0, 4), rotation=(0, math.radians(90), 0))
+    bow = bpy.context.active_object; bow.scale = (0.42, 1.0, 1.0); bow.rotation_euler.x = math.radians(45); bow.data.materials.append(hull_m); parts.append(bow)
+    parts += [box("Bridge", (-length / 2 + 18, 0, 11 + 9), (14, beam - 4, 18), white, bevel=0.3),
+              box("BridgeWing", (-length / 2 + 18, 0, 11 + 18.5), (8, beam + 4, 1.2), white),
+              box("Funnel", (-length / 2 + 8, 0, 11 + 16), (6, 6, 14), pbr("Funnel", (0.6, 0.12, 0.08), 0.5))]
+    ship = join(parts, "Ship"); ship.location = (x0, y0, 0)
+    stacks = []
+    for bay in range(14):
+        for row in range(11):
+            hgt = int(rng.integers(3, 7))
+            for lvl in range(hgt):
+                o = instance(protos[int(rng.integers(0, len(protos)))], (x0 - length / 2 + 40 + bay * (L20 + 0.6), y0 - beam / 2 + 2.5 + row * (W8 + 0.12), 11 + H8 / 2 + lvl * H8))
+                stacks.append(o)
+    return ship, stacks
+
+
 def build(variant=None):
-    world_sky(sun_elev_deg=2.5, sun_rot_deg=70, strength=0.5, tint=(1.0, 0.85, 0.75), aerosol=3.0)
-    sun(2.5, 160, energy=2.5, color=(1.0, 0.55, 0.32), angle_deg=1.5)
+    tropical = variant == "tropical"
+    if tropical:
+        bpy.context.scene.view_settings.exposure = -2.0
+        world_sky(sun_elev_deg=40, sun_rot_deg=200, strength=0.3, tint=(1.0, 0.98, 0.95), aerosol=1.2)
+        sun(40, 200, energy=2.0, color=(1.0, 0.95, 0.88), angle_deg=1.0)
+    else:
+        world_sky(sun_elev_deg=2.5, sun_rot_deg=70, strength=0.5, tint=(1.0, 0.85, 0.75), aerosol=3.0)
+        sun(2.5, 160, energy=2.5, color=(1.0, 0.55, 0.32), angle_deg=1.5)
     r = np.random.default_rng(21)
     colors = [(0.45, 0.07, 0.05), (0.05, 0.16, 0.32), (0.08, 0.22, 0.12), (0.55, 0.35, 0.08), (0.35, 0.36, 0.38), (0.6, 0.6, 0.58)]
     mats = [container_material(f"Cont{k}", c) for k, c in enumerate(colors)]
@@ -73,11 +106,64 @@ def build(variant=None):
     for k in range(14):
         box("Pole", (-80 + k * 14, 8, 15), (0.4, 0.4, 30), steel)
         box("Lamp", (-80 + k * 14, 8, 30.2), (1.6, 1.0, 0.4), lamp)
-    haze((0, 160, 40), (900, 400, 80), density=0.00025, color=(1.0, 0.85, 0.75), anis=0.5)
-    return dict(stack=Vector((-4, 40, 6)))
+    if not tropical:
+      haze((0, 160, 40), (900, 400, 80), density=0.00025, color=(1.0, 0.85, 0.75) if not tropical else (0.85, 0.9, 1.0), anis=0.5)
+    ctx = dict(stack=Vector((-4, 40, 6)))
+    # the moored ship along the quay, and one crane's spreader lifting a container off it
+    ship, stacks = container_ship(-10.0, -40.0, protos, r)
+    ctx.update(ship=ship, stacks=stacks, ship_x0=ship.location.x)
+    cable = pbr("Cable", (0.03, 0.03, 0.03), 0.5)
+    spreader = box("Spreader", (0, 0, 0), (L20 + 0.4, W8 + 0.3, 0.8), pbr("Spreader", (0.6, 0.45, 0.05), 0.5, 0.3))
+    lifted = instance(protos[0], (0, 0, 0)); lifted.name = "Lifted"
+    cables = [cyl("HoistCable", (0, 0, 0), 0.05, 1.0, cable, verts=6) for _ in range(4)]
+    ctx.update(spreader=spreader, lifted=lifted, cables=cables, crane_x=-2.0)
+    if tropical:                                   # palms along the quay edge (scanned tree), ship arriving
+        import ph
+        root, ms = ph.model("island_tree_02", loc=(0, 0, -300))
+        for k in range(10):
+            instance(ms[0], (-160 + k * 34 + r.uniform(-4, 4), -14, 0.0), rot=(0, 0, r.uniform(0, 6.28)), scale=(2.6, 2.6, 2.6))
+    return ctx
+
+
+def anim_lift(c, t):
+    """Spreader comes down onto a deck container, locks, and lifts it toward the boom (the cables shorten)."""
+    x = c["crane_x"]; y_deck = -40.0; top = 58.0
+    z_deck = 11 + 5 * H8 + 0.4
+    if t < 0.3:
+        z = top - (top - z_deck - 2) * ease(t / 0.3); carry = False
+    else:
+        z = z_deck + (top - 8 - z_deck) * ease(min(1.0, (t - 0.35) / 0.65)) if t > 0.35 else z_deck; carry = t > 0.33
+    sp = c["spreader"]; sp.location = (x, y_deck, z + 0.6)
+    c["lifted"].location = (x, y_deck, z - H8 / 2 if carry else -60)
+    for k, cb in enumerate(c["cables"]):
+        dx = (k % 2 - 0.5) * (L20 - 1); dy = (k // 2 - 0.5) * 1.6
+        length = max(0.5, top - (z + 1.0)); cb.location = (x + dx, y_deck + dy, z + 1.0 + length / 2); cb.scale = (1, 1, length)
+
+
+def anim_dock(c, t):
+    e = 1 - (1 - t) ** 2
+    dx = 70 * (1 - e)                               # the ship glides the last 70 m into its berth
+    c["ship"].location.x = c["ship_x0"] + dx
+    for o in c["stacks"]:
+        if "x0" not in o:
+            o["x0"] = o.location.x
+        o.location.x = o["x0"] + dx
+    anim_lift(c, 0.0)
+
+
+def cam_lift(c, t):
+    e = ease(t)
+    return (Vector((-75, -135, 6)).lerp(Vector((-68, -128, 7)), e), Vector((-2, -40, 28 + 4 * e)), 45)       # from the water: ship, crane, the lift
+
+
+def cam_dock(c, t):
+    e = ease(t)
+    return (Vector((70, -175, 12)).lerp(Vector((62, -168, 13)), e), Vector((-10, -40, 14)), 35)                # across the water
 
 
 MOVES = {
+    "ship_lift": dict(kind="anim", far=1200.0, cam=cam_lift, anim=anim_lift),
+    "tropical_dock": dict(kind="anim", far=1200.0, cam=cam_dock, anim=anim_dock),
     "crane_rise": dict(kind="anim", far=1200.0, cam=lambda c, t: ((95, -175, 5 + 6 * t), (-5, 10, 24), 32)),
     "container_push": dict(kind="plate", dof=4.0, far=600.0, cam=lambda c, t: ((14, 4, 3.2), (-10, 28, 5), 40), focus=lambda c, t: (-2, 23, 4)),
 }
