@@ -95,17 +95,17 @@ K(218, V(X0 + 1.7, -0.5, 0.85), PEL(218), 22)
 K(255, V(X0 + 1.5, -0.1, 0.32), PEL(255) + V(0, 0, 0.2), 24)
 # beat 3 — skim to the legs, macro calf (X-ray), orbit, out
 K(292, V(X0 + 1.9, 1.05, 0.22), calf(292), 30)
-K(350, calf(350) + V(0.55, 0.12, 0.14), calf(350), 55)
-K(405, calf(405) + V(0.2, 0.5, 0.22), calf(405), 65)
-K(458, calf(458) + V(0.42, 0.28, 0.42), calf(458), 60)
+K(350, calf(350) + V(0.85, 0.2, 0.3), calf(350), 45)
+K(405, calf(405) + V(0.35, 0.8, 0.4), calf(405), 50)
+K(458, calf(458) + V(0.7, 0.45, 0.65), calf(458), 48)
 K(515, V(X0 + 1.7, 0.1, 0.9), CH(515), 32)
 # beat 4 — crane up looking down at her reaching, down with her
 K(562, V(X0 + 1.0, -0.65, 2.6), CH(562), 26)
 K(605, V(X0 + 0.7, -0.4, 3.0), H_(605), 26)
 K(650, V(X0 + 1.4, -0.4, 1.25), CH(650), 28)
 # beat 5 — face in the mask, arc
-K(700, H_(700) + V(0.45, 0.38, 0.05), H_(700), 50)
-K(748, H_(748) + V(-0.32, 0.48, 0.12), H_(748), 50)
+K(700, H_(700) + V(0.75, 0.6, 0.1), H_(700), 45)
+K(748, H_(748) + V(-0.6, 0.6, 0.45), H_(748), 42)
 # beat 6 — rack focus from her face to the whale, orbit the whale's head
 def behind_face(f, wf):
     h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); return h + d * 0.55 + V(0, 0, 0.1)
@@ -115,15 +115,15 @@ K(872, wh(872) + V(1.4, -1.1, 0.4), wh(872), 32)
 K(910, wh(910) + V(0.2, -1.6, 0.5), wh(910), 30)
 # beat 7 — beside the whale to the window, ring play, keeper nod, whip pan back
 K(962, wh(962) + V(1.2, 0.6, 0.35), wh(962), 28)
-K(1010, RG(1010) + V(1.3, 0.9, 0.35), RG(1010), 30)
-K(1065, RG(1065) + V(-0.1, 1.7, 0.5), wbody(1065), 28)
+K(1010, RG(1010) + V(2.1, 1.5, 0.5), RG(1010), 28)
+K(1065, RG(1065) + V(0.6, 2.6, 0.8), wbody(1065), 26)
 K(1120, V(-1.0, -1.9, 1.9), V(-2.6, -4.7, 1.6), 28)
 K(1170, V(-1.4, -2.6, 1.75), V(-2.6, -5.85, 1.55), 34)
 K(1200, V(-1.5, -2.7, 1.8), eye(1200), 36)
 # beat 8 — eye macro, head turns, surge
-K(1230, eye(1230) + V(0.32, 0.1, 0.06), eye(1230), 60)
-K(1268, eye(1268) + V(0.55, 0.35, 0.1), eye(1268), 45)
-K(1305, wbody(1305) + V(1.5, 0.7, 0.55), wh(1305), 28)
+K(1230, eye(1230) + V(1.1, 0.4, 0.15), eye(1230), 85)
+K(1268, eye(1268) + V(1.4, 0.8, 0.3), eye(1268), 50)
+K(1305, wbody(1305) + V(2.2, 1.0, 0.7), wh(1305), 26)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up
 K(1420, dv("foot.R", 1420) + V(0.75, 0.5, 0.25), dv("foot.R", 1420), 40)
@@ -132,7 +132,7 @@ K(1545, PEL(1545) + V(1.6, 0.9, -1.7), PEL(1545), 22)
 K(1605, PEL(1605) + V(-0.6, 1.9, -1.2), PEL(1605), 24)
 K(1660, PEL(1660) + V(-1.8, 0.3, -0.6), CH(1660), 26)
 # beat 10 — her face, racing alongside, up into the light
-K(1720, H_(1720) + V(-0.45, 0.35, 0.05), H_(1720), 45)
+K(1720, H_(1720) + V(-0.7, 0.55, 0.1), H_(1720), 42)
 K(1775, H_(1775) + V(0.9, 0.9, -0.4), H_(1775), 32)
 K(1840, H_(1840) + V(1.1, 0.4, -0.9), H_(1840) + V(0, 0, 0.3), 26)
 # beat 11 — below the surface looking up, burst out, circle the splash
@@ -141,7 +141,7 @@ K(1925, V(X0 + 1.4, -2.7, 6.45), H_(1925), 26)
 K(1965, V(X0 + 1.7, -2.0, 6.9), H_(1965), 28)
 K(2010, V(X0 + 0.6, -1.9, 7.0), H_(2010), 30)
 # beat 12 — face at the edge, rise and pull back to reveal everything
-K(2075, H_(2075) + V(0.55, 0.6, 0.2), H_(2075), 42)
+K(2075, H_(2075) + V(0.7, 0.85, 0.25), H_(2075), 40)
 K(2130, H_(2130) + V(1.4, 2.6, 1.6), H_(2130) + V(0, -0.5, 0.2), 30)
 K(END, H_(END) + V(2.0, 4.3, 2.8), H_(END) + V(-0.4, -1.0, 0.3), 26)
 FR.sort(key=lambda x: x[0])
@@ -150,6 +150,54 @@ for f in list(range(1, END + 1, 2)) + [END]:
     cam.location = fc(f); cam.keyframe_insert("location", frame=f)
     aim.location = fa(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl(f); cam_d.keyframe_insert("lens", frame=f)
+# clearance: keep the lens >= 0.35 m from the whale and the diver and out of static solids; smooth the corrections
+from mathutils.bvhtree import BVHTree
+
+class WB:
+    """world-space BVH wrapper (BVHTree.FromObject works in object-local space)"""
+    def __init__(self, o, dg):
+        self.t = BVHTree.FromObject(o, dg); self.M = o.matrix_world.copy(); self.Mi = self.M.inverted(); self.R = self.M.to_3x3()
+    def find_nearest(self, p, dmax=1e9):
+        loc, nrm, idx, dist = self.t.find_nearest(self.Mi @ p, dmax)
+        if loc is None: return None, None, None, None
+        loc = self.M @ loc; nrm = (self.R @ nrm).normalized()
+        return loc, nrm, idx, (p - loc).length
+BEL = bpy.data.objects["Beluga"]; DBODY = bpy.data.objects["Diver.body"]
+SOLID = [o for o in bpy.data.objects if o.type == 'MESH' and o.name.startswith(("IceBoulder", "FrontWall", "Coping", "Deck", "Acrylic", "IceWall"))]
+dg = bpy.context.evaluated_depsgraph_get()
+ST = [WB(o, dg) for o in SOLID]
+CLR = 0.35
+corr = {}
+for f in range(1, END + 1, 2):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+    p = fc(f); off = Vector((0, 0, 0))
+    for o, need in ((BEL, 0.7), (DBODY, 0.3)):
+        t = WB(o, dg)
+        for _ in range(6):
+            loc, nrm, idx, dist = t.find_nearest(p + off, 3.0)
+            if loc is None: break
+            inside = (p + off - loc).dot(nrm) < 0
+            if inside or dist < need:
+                push = (need + (dist if inside else -dist)) * 1.05
+                off += nrm.normalized() * push
+            else: break
+    for t in ST:
+        loc, nrm, idx, dist = t.find_nearest(p + off, 0.5)
+        if loc is not None and ((p + off - loc).dot(nrm) < 0 or dist < 0.12):
+            off += nrm.normalized() * (0.15 + (dist if (p + off - loc).dot(nrm) < 0 else -dist))
+    if (p + off).z < 0.15: off.z += 0.15 - (p + off).z
+    corr[f] = off
+fr_ = sorted(corr)
+for f in list(range(1, END + 1, 2)) + [END]:
+    acc = Vector((0, 0, 0)); wsum = 0
+    for g in fr_:
+        if abs(g - f) <= 24:
+            w_ = 1 - abs(g - f) / 25.0; acc += corr[g] * w_; wsum += w_
+    # keep the largest correction near the frame so smoothing never lets the lens back inside
+    near = max((corr[g] for g in fr_ if abs(g - f) <= 2), key=lambda v: v.length, default=Vector())
+    sm = acc / max(wsum, 1e-6)
+    cam.location = fc(f) + (sm if sm.length >= near.length else near); cam.keyframe_insert("location", frame=f)
+print("CAMERA clearance corrected frames:", sum(1 for v in corr.values() if v.length > 1e-4))
 # out-of-breath blur: open the aperture wide
 for f, st in ((1, 2.8), (1700, 2.8), (1740, 0.9), (1800, 0.8), (1870, 2.8), (1930, 4.0), (END, 4.0)):
     cam_d.dof.aperture_fstop = st; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
@@ -315,18 +363,106 @@ for i, (x, y) in enumerate(((-4.6, 3.3), (4.4, 3.0), (-4.9, -2.4), (5.0, -3.0)))
 splash = bubble_system("Bubbles_Ascent", None, None, [(1, 0.0), (1460, 0.0), (1480, 0.8), (1880, 0.8), (1900, 0.0)], spread=0.5, rise=1.2, life=2.5, size=(0.006, 0.03))
 splash.parent = BR; splash.location = (0, 1.2, 0)
 
-# ------------------------------------------------------------------ surface break splash (crown of droplets around her at 1905-1960)
-bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.5, depth=0.6, end_fill_type='NOTHING')
-crown = bpy.context.active_object; crown.name = "Splash_Crown"
-for v in crown.data.vertices:
-    if v.co.z > 0: v.co.x *= 1.6; v.co.y *= 1.6; v.co.z += 0.15 * math.sin(v.index * 1.7)
-crown.data.materials.append(bpy.data.materials["M_WaterSurface"])
-crown.modifiers.new("Sub", 'SUBSURF').levels = 1
+# ------------------------------------------------------------------ surface break: ballistic droplet burst (GN), keyed time
 ev(1910); hp = dv("head", 1910)
-crown.location = (hp.x, hp.y, WATER_Z + 0.05)
-for f, s, h in ((1900, 0.1, True), (1905, 0.3, False), (1925, 1.0, False), (1955, 1.25, False), (1975, 1.3, True)):
-    crown.scale = (s, s, s * (1.2 if f < 1950 else 0.4)); crown.keyframe_insert("scale", frame=f)
-    crown.hide_render = h; crown.keyframe_insert("hide_render", frame=f)
+def droplets(name, centre, f0, f1, n=600, speed=(1.2, 3.4), spread=0.35):
+    me = bpy.data.meshes.new(name); o = bpy.data.objects.new(name, me); sc.collection.objects.link(o)
+    me.from_pydata([(0, 0, 0)], [], []); o.location = centre
+    ng = bpy.data.node_groups.new(name + "_GN", 'GeometryNodeTree')
+    ng.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    ng.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
+    nn, nl = ng.nodes, ng.links
+    go = nn.new('NodeGroupOutput'); nn.new('NodeGroupInput')
+    line = nn.new('GeometryNodeMeshLine'); line.inputs['Count'].default_value = n
+    idx = nn.new('GeometryNodeInputIndex')
+    T = nn.new('ShaderNodeValue'); T.name = "T"
+    dirv = nn.new('FunctionNodeRandomValue'); dirv.data_type = 'FLOAT_VECTOR'; dirv.inputs['Min'].default_value = (-1, -1, 0.0); dirv.inputs['Max'].default_value = (1, 1, 0.0)
+    nl.new(idx.outputs[0], dirv.inputs['ID'])
+    up = nn.new('FunctionNodeRandomValue'); up.data_type = 'FLOAT'; up.inputs['Min'].default_value = speed[0]; up.inputs['Max'].default_value = speed[1]; up.inputs['Seed'].default_value = 3
+    nl.new(idx.outputs[0], up.inputs['ID'])
+    hs = nn.new('ShaderNodeVectorMath'); hs.operation = 'SCALE'; hs.inputs['Scale'].default_value = 1.4; nl.new(dirv.outputs[0], hs.inputs[0])
+    vz = nn.new('ShaderNodeCombineXYZ'); nl.new(up.outputs[0], vz.inputs['Z'])
+    vel = nn.new('ShaderNodeVectorMath'); vel.operation = 'ADD'; nl.new(hs.outputs[0], vel.inputs[0]); nl.new(vz.outputs[0], vel.inputs[1])
+    vt = nn.new('ShaderNodeVectorMath'); vt.operation = 'SCALE'; nl.new(vel.outputs[0], vt.inputs[0]); nl.new(T.outputs[0], vt.inputs['Scale'])
+    t2 = nn.new('ShaderNodeMath'); t2.operation = 'POWER'; nl.new(T.outputs[0], t2.inputs[0]); t2.inputs[1].default_value = 2
+    gz = nn.new('ShaderNodeMath'); gz.operation = 'MULTIPLY'; nl.new(t2.outputs[0], gz.inputs[0]); gz.inputs[1].default_value = -4.9
+    gv = nn.new('ShaderNodeCombineXYZ'); nl.new(gz.outputs[0], gv.inputs['Z'])
+    st = nn.new('ShaderNodeVectorMath'); st.operation = 'SCALE'; st.inputs['Scale'].default_value = spread; nl.new(dirv.outputs[0], st.inputs[0])
+    p1 = nn.new('ShaderNodeVectorMath'); p1.operation = 'ADD'; nl.new(vt.outputs[0], p1.inputs[0]); nl.new(gv.outputs[0], p1.inputs[1])
+    p2 = nn.new('ShaderNodeVectorMath'); p2.operation = 'ADD'; nl.new(p1.outputs[0], p2.inputs[0]); nl.new(st.outputs[0], p2.inputs[1])
+    sp = nn.new('GeometryNodeSetPosition'); nl.new(line.outputs[0], sp.inputs['Geometry']); nl.new(p2.outputs[0], sp.inputs['Position'])
+    sep = nn.new('ShaderNodeSeparateXYZ'); nl.new(p2.outputs[0], sep.inputs['Vector'])
+    below = nn.new('FunctionNodeCompare'); below.data_type = 'FLOAT'; below.operation = 'LESS_THAN'; nl.new(sep.outputs['Z'], below.inputs['A']); below.inputs['B'].default_value = -0.02
+    dl = nn.new('GeometryNodeDeleteGeometry'); nl.new(sp.outputs[0], dl.inputs['Geometry']); nl.new(below.outputs[0], dl.inputs['Selection'])
+    ico = nn.new('GeometryNodeMeshIcoSphere'); ico.inputs['Radius'].default_value = 1.0; ico.inputs['Subdivisions'].default_value = 1
+    inst = nn.new('GeometryNodeInstanceOnPoints'); nl.new(dl.outputs[0], inst.inputs['Points']); nl.new(ico.outputs['Mesh'], inst.inputs['Instance'])
+    rs = nn.new('FunctionNodeRandomValue'); rs.data_type = 'FLOAT'; rs.inputs['Min'].default_value = 0.006; rs.inputs['Max'].default_value = 0.022
+    nl.new(idx.outputs[0], rs.inputs['ID']); nl.new(rs.outputs[0], inst.inputs['Scale'])
+    sm = nn.new('GeometryNodeSetMaterial'); sm.inputs['Material'].default_value = DROPM; nl.new(inst.outputs[0], sm.inputs['Geometry'])
+    rl = nn.new('GeometryNodeRealizeInstances'); nl.new(sm.outputs[0], rl.inputs['Geometry']); nl.new(rl.outputs[0], go.inputs[0])
+    o.modifiers.new("Drops", 'NODES').node_group = ng
+    for f_, v_ in ((f0, 0.0), (f1, (f1 - f0) / 60.0)):
+        T.outputs[0].default_value = v_; T.outputs[0].keyframe_insert("default_value", frame=f_)
+    linear(ng)
+    for f_, h in ((1, True), (f0, False), (f1, True)):
+        o.hide_render = h; o.keyframe_insert("hide_render", frame=f_)
+    return o
+DROPM = bpy.data.materials.new("M_Droplet"); DROPM.use_nodes = True
+dp = DROPM.node_tree.nodes["Principled BSDF"]; dp.inputs['Base Color'].default_value = (0.95, 0.98, 1.0, 1); dp.inputs['Roughness'].default_value = 0.05
+dp.inputs['Transmission Weight'].default_value = 0.85; dp.inputs['IOR'].default_value = 1.33
+droplets("Splash_Break", Vector((hp.x, hp.y, WATER_Z)), 1903, 1985)
+droplets("Splash_Spout", Vector((hp.x - 1.4, hp.y + 1.9, WATER_Z)), 2120, 2190, n=300, speed=(2.5, 4.0), spread=0.08)
+# ------------------------------------------------------------------ suspended particles in the water (static random cloud drifting slowly)
+pme = bpy.data.meshes.new("Particulates"); pobj = bpy.data.objects.new("Particulates", pme); sc.collection.objects.link(pobj)
+pts = [(random.uniform(-5.8, 5.8), random.uniform(-4.9, 4.9), random.uniform(0.05, 5.9)) for _ in range(4000)]
+pme.from_pydata(pts, [], [])
+ng = bpy.data.node_groups.new("Particulates_GN", 'GeometryNodeTree')
+ng.interface.new_socket("Geometry", in_out='OUTPUT', socket_type='NodeSocketGeometry')
+ng.interface.new_socket("Geometry", in_out='INPUT', socket_type='NodeSocketGeometry')
+nn, nl = ng.nodes, ng.links
+gi = nn.new('NodeGroupInput'); go = nn.new('NodeGroupOutput')
+tm = nn.new('GeometryNodeInputSceneTime'); pos = nn.new('GeometryNodeInputPosition')
+nz = nn.new('ShaderNodeTexNoise'); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 0.4
+nl.new(pos.outputs[0], nz.inputs['Vector'])
+tmul = nn.new('ShaderNodeMath'); tmul.operation = 'MULTIPLY'; tmul.inputs[1].default_value = 0.05; nl.new(tm.outputs['Seconds'], tmul.inputs[0]); nl.new(tmul.outputs[0], nz.inputs['W'])
+sub = nn.new('ShaderNodeVectorMath'); sub.operation = 'SUBTRACT'; sub.inputs[1].default_value = (0.5, 0.5, 0.5); nl.new(nz.outputs['Color'], sub.inputs[0])
+scl = nn.new('ShaderNodeVectorMath'); scl.operation = 'SCALE'; scl.inputs['Scale'].default_value = 0.5; nl.new(sub.outputs[0], scl.inputs[0])
+sp = nn.new('GeometryNodeSetPosition'); nl.new(gi.outputs[0], sp.inputs['Geometry']); nl.new(scl.outputs[0], sp.inputs['Offset'])
+ico = nn.new('GeometryNodeMeshIcoSphere'); ico.inputs['Radius'].default_value = 1.0; ico.inputs['Subdivisions'].default_value = 1
+inst = nn.new('GeometryNodeInstanceOnPoints'); nl.new(sp.outputs[0], inst.inputs['Points']); nl.new(ico.outputs['Mesh'], inst.inputs['Instance'])
+rs = nn.new('FunctionNodeRandomValue'); rs.data_type = 'FLOAT'; rs.inputs['Min'].default_value = 0.0015; rs.inputs['Max'].default_value = 0.005
+nl.new(rs.outputs[0], inst.inputs['Scale'])
+PM = bpy.data.materials.new("M_Particulate"); PM.use_nodes = True
+ppb = PM.node_tree.nodes["Principled BSDF"]; ppb.inputs['Base Color'].default_value = (0.85, 0.95, 1.0, 1); ppb.inputs['Roughness'].default_value = 0.6
+ppb.inputs['Alpha'].default_value = 0.6; ppb.inputs['Emission Color'].default_value = (0.6, 0.85, 1.0, 1); ppb.inputs['Emission Strength'].default_value = 0.3
+smat = nn.new('GeometryNodeSetMaterial'); smat.inputs['Material'].default_value = PM; nl.new(inst.outputs[0], smat.inputs['Geometry'])
+rl = nn.new('GeometryNodeRealizeInstances'); nl.new(smat.outputs[0], rl.inputs['Geometry']); nl.new(rl.outputs[0], go.inputs[0])
+pobj.modifiers.new("Particles", 'NODES').node_group = ng
 
+# ------------------------------------------------------------------ hair drifts underwater (noise displace, weighted away from the scalp)
+hair = next(o for o in D.children if o.name.endswith("ponytail01"))
+ev(1)
+hc = D.matrix_world @ D.data.bones["head"].head_local + Vector((0, 0.02, 0.1))
+hg = hair.vertex_groups.new(name="drift")
+for v in hair.data.vertices:
+    w_ = max(0.0, min(1.0, ((hair.matrix_world @ v.co) - hc).length / 0.18 - 0.4))
+    if w_ > 0: hg.add([v.index], w_, 'REPLACE')
+tx = bpy.data.textures.new("HairDrift", 'CLOUDS'); tx.noise_scale = 0.12
+drv = bpy.data.objects.new("HairDrift_Flow", None); sc.collection.objects.link(drv)
+for f_, p_ in ((1, (0, 0, 0)), (END, (0.6, 0.9, 2.2))):
+    drv.location = p_; drv.keyframe_insert("location", frame=f_)
+linear(drv)
+for axis, st in (('X', 0.035), ('Y', 0.03), ('Z', 0.02)):
+    dm = hair.modifiers.new("Drift" + axis, 'DISPLACE'); dm.texture = tx; dm.direction = axis; dm.strength = st; dm.mid_level = 0.5
+    dm.texture_coords = 'OBJECT'; dm.texture_coords_object = drv; dm.vertex_group = "drift"
+# above water (deck, last beat) the hair hangs: fade the drift
+for o_md in [m for m in hair.modifiers if m.name.startswith("Drift")]:
+    st0 = o_md.strength
+    for f_, v_ in ((1, 0.0), (76, 0.0), (90, st0), (1900, st0), (1930, 0.004)):
+        o_md.strength = v_; o_md.keyframe_insert("strength", frame=f_)
+
+# helpers never render
+for o in bpy.data.objects:
+    if o.type == 'EMPTY': o.hide_render = True
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FX_CAM_DONE", OUT)

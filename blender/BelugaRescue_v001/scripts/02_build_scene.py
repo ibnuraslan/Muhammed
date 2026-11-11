@@ -231,10 +231,10 @@ vol.visible_shadow = True
 bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, WATER_Z))
 surf = mv(bpy.context.active_object, WAT); surf.name = "Water_Surface"
 om = surf.modifiers.new("Ocean", 'OCEAN'); om.geometry_mode = 'GENERATE'; om.size = 1.0; om.spatial_size = 16; om.resolution = 10
-om.repeat_x = om.repeat_y = 1; om.wave_scale = 0.05; om.choppiness = 0.6; om.wind_velocity = 4.0; om.random_seed = 3
+om.repeat_x = om.repeat_y = 1; om.wave_scale = 0.14; om.choppiness = 0.9; om.wind_velocity = 4.0; om.random_seed = 3
 sm_ = bpy.data.materials.new("M_WaterSurface"); sm_.use_nodes = True
 sp = sm_.node_tree.nodes["Principled BSDF"]; sp.inputs['Base Color'].default_value = (0.85, 0.97, 1.0, 1)
-sp.inputs['Roughness'].default_value = 0.03; sp.inputs['Transmission Weight'].default_value = 1.0; sp.inputs['IOR'].default_value = 1.333
+sp.inputs['Roughness'].default_value = 0.06; sp.inputs['Transmission Weight'].default_value = 1.0; sp.inputs['IOR'].default_value = 1.333
 surf.data.materials.append(sm_)
 surf.visible_shadow = False          # caustics off: let light through, the gobo spot paints caustics
 for i in range(9):
@@ -358,16 +358,18 @@ fme = bpy.data.meshes.new("Beluga_Flukes"); fl_bm.to_mesh(fme); fl_bm.free()
 fobj = bpy.data.objects.new("Beluga_Flukes", fme); link(fobj)
 fl_objs = [fobj]
 for side in (-1, 1):
-    outline = [(0.0, 0.06), (0.08, 0.09), (0.2, 0.1), (0.32, 0.085), (0.42, 0.05), (0.48, 0.015)]
+    outline = [(0.0, 0.055), (0.06, 0.085), (0.15, 0.09), (0.24, 0.075), (0.32, 0.045), (0.37, 0.012)]
     me = flat_part("Beluga_Flipper", outline, 0.03, Vector((side * 0.36, -L_W * 0.42 + 0.27 * L_W, -0.2)),
                    Matrix.Rotation(R_(side * 115), 3, 'Z') @ Matrix.Rotation(R_(side * -25), 3, 'Y'))
     fo = bpy.data.objects.new("Beluga_Flipper", me); link(fo); fl_objs.append(fo)
 for o in bpy.data.objects: o.select_set(False)
 for o in fl_objs + [bel]: o.select_set(True)
 bpy.context.view_layer.objects.active = bel; bpy.ops.object.join()
+bm_n = bmesh.new(); bm_n.from_mesh(bel.data); bmesh.ops.recalc_face_normals(bm_n, faces=bm_n.faces); bm_n.to_mesh(bel.data); bm_n.free()
 for f_ in bel.data.polygons: f_.use_smooth = True
 # mouth line + jaw open shape key (hinge at s ~ 0.12)
 S_HINGE = -L_W * 0.42 + 0.115 * L_W
+Y_N0, Y_N1 = -L_W * 0.42 + 0.17 * L_W * 0.94, -L_W * 0.42 + 0.30 * L_W * 0.94
 MOUTH_Z = lambda y: prof(max(0, (y + L_W * 0.42) / (L_W * 0.94)))[3] - 0.015
 bel.shape_key_add(name="Basis")
 jaw = bel.shape_key_add(name="JawOpen", from_mix=False)
@@ -384,12 +386,12 @@ ssm = bel.modifiers.new("Sub", 'SUBSURF'); ssm.levels = 1; ssm.render_levels = 2
 bm_ = bpy.data.materials.new("M_BelugaSkin"); bm_.use_nodes = True
 bn, bl = bm_.node_tree.nodes, bm_.node_tree.links
 bp = bn["Principled BSDF"]
-bp.inputs['Roughness'].default_value = 0.32; bp.inputs['Subsurface Weight'].default_value = 0.35
+bp.inputs['Roughness'].default_value = 0.42; bp.inputs['Subsurface Weight'].default_value = 0.5
 bp.inputs['Subsurface Radius'].default_value = (0.4, 0.3, 0.25); bp.inputs['Subsurface Scale'].default_value = 0.05
 bp.inputs['Coat Weight'].default_value = 0.25; bp.inputs['Coat Roughness'].default_value = 0.08
 btc = bn.new('ShaderNodeTexCoord')
-bnz = bn.new('ShaderNodeTexNoise'); bnz.inputs['Scale'].default_value = 3.0; bnz.inputs['Detail'].default_value = 6
-bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.72, 0.76, 0.78, 1); bramp.color_ramp.elements[1].color = (0.93, 0.94, 0.92, 1)
+bnz = bn.new('ShaderNodeTexNoise'); bnz.inputs['Scale'].default_value = 1.6; bnz.inputs['Detail'].default_value = 6
+bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.55, 0.58, 0.6, 1); bramp.color_ramp.elements[1].color = (0.9, 0.9, 0.86, 1)
 bl.new(btc.outputs['Object'], bnz.inputs['Vector']); bl.new(bnz.outputs['Fac'], bramp.inputs['Fac'])
 # mouth crease: dark line at the mouth height in the front of the head
 bsep = bn.new('ShaderNodeSeparateXYZ'); bl.new(btc.outputs['Object'], bsep.inputs['Vector'])
@@ -409,9 +411,24 @@ zline = mnode('LESS_THAN', mnode('ABSOLUTE', mnode('SUBTRACT', bsep.outputs['Z']
 mouth = mnode('MULTIPLY', yfront, zline)
 bmix = bn.new('ShaderNodeMix'); bmix.data_type = 'RGBA'; bmix.inputs['B'].default_value = (0.32, 0.33, 0.35, 1)
 bl.new(mouth, bmix.inputs['Factor']); bl.new(bramp.outputs['Color'], bmix.inputs['A']); bl.new(bmix.outputs['Result'], bp.inputs['Base Color'])
-bbump = bn.new('ShaderNodeBump'); bbump.inputs['Strength'].default_value = 0.12
+bbump = bn.new('ShaderNodeBump'); bbump.inputs['Strength'].default_value = 0.18; bbump.inputs['Distance'].default_value = 0.01
 bnz2 = bn.new('ShaderNodeTexNoise'); bnz2.inputs['Scale'].default_value = 40.0
-bl.new(btc.outputs['Object'], bnz2.inputs['Vector']); bl.new(bnz2.outputs['Fac'], bbump.inputs['Height']); bl.new(bbump.outputs['Normal'], bp.inputs['Normal'])
+bl.new(btc.outputs['Object'], bnz2.inputs['Vector'])
+# fine wrinkles (crackle voronoi) + neck creases (bands across the body between s 0.17 and 0.30)
+bvo = bn.new('ShaderNodeTexNoise'); bvo.inputs['Scale'].default_value = 14.0; bvo.inputs['Detail'].default_value = 3; bvo.inputs['Distortion'].default_value = 2.5
+bvo.noise_type = 'RIDGED_MULTIFRACTAL' if hasattr(bvo, 'noise_type') else bvo.noise_type
+bl.new(btc.outputs['Object'], bvo.inputs['Vector'])
+wr = mnode('MULTIPLY', bvo.outputs['Fac'], 0.25)
+bwv = bn.new('ShaderNodeTexWave'); bwv.wave_type = 'BANDS'; bwv.bands_direction = 'Y'; bwv.inputs['Scale'].default_value = 3.2
+bwv.inputs['Distortion'].default_value = 1.5; bwv.inputs['Detail'].default_value = 2
+bl.new(btc.outputs['Object'], bwv.inputs['Vector'])
+nk = mnode('MULTIPLY', mnode('GREATER_THAN', bsep.outputs['Y'], Y_N0), mnode('LESS_THAN', bsep.outputs['Y'], Y_N1))
+crease = mnode('MULTIPLY', mnode('MULTIPLY', bwv.outputs['Fac'], nk), 1.2)
+hgt = mnode('ADD', mnode('ADD', mnode('MULTIPLY', bnz2.outputs['Fac'], 0.3), wr), crease)
+bl.new(hgt, bbump.inputs['Height']); bl.new(bbump.outputs['Normal'], bp.inputs['Normal'])
+# darker grey in the creases
+cmx = bn.new('ShaderNodeMix'); cmx.data_type = 'RGBA'; cmx.inputs['B'].default_value = (0.62, 0.64, 0.66, 1)
+bl.new(mnode('MULTIPLY', crease, 0.35), cmx.inputs['Factor']); bl.new(bmix.outputs['Result'], cmx.inputs['A']); bl.new(cmx.outputs['Result'], bp.inputs['Base Color'])
 bel.data.materials.append(bm_)
 # eyes
 M_EYE = simple_mat("M_BelugaEye", (0.02, 0.02, 0.025), rough=0.05)
@@ -432,6 +449,7 @@ eb = arm.edit_bones
 t = eb.new("torso"); t.head = (0, Y(0.30), 0); t.tail = (0, Y(0.40), 0)
 h = eb.new("neck"); h.head = (0, Y(0.30), 0); h.tail = (0, Y(0.22), 0); h.parent = t
 hd = eb.new("head"); hd.head = (0, Y(0.22), 0); hd.tail = (0, Y(0.02), 0); hd.parent = h
+ml_ = eb.new("melon"); ml_.head = (0, Y(0.17), 0.05); ml_.tail = (0, Y(0.07), 0.16); ml_.parent = hd
 CH = [0.40, 0.52, 0.64, 0.75, 0.85, 0.93, 1.0]
 prev = t
 for k in range(len(CH) - 1):
@@ -450,6 +468,16 @@ for v in bel.data.vertices:
         if s0 <= s <= s1:
             t_ = (s - s0) / (s1 - s0); t_ = t_ * t_ * (3 - 2 * t_)
             vg[n0].add([v.index], 1 - t_, 'REPLACE'); vg[n1].add([v.index], t_, 'REPLACE'); break
+vg["melon"] = bel.vertex_groups.new(name="melon")
+MC = Vector((0, Y(0.10), 0.14))
+for v in bel.data.vertices:
+    s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
+    if s_ < 0.22 and v.co.z > prof(max(0, s_))[3] - 0.02:
+        w_ = max(0.0, 1 - (v.co - MC).length / 0.26); w_ = w_ * w_ * (3 - 2 * w_)
+        if w_ > 0:
+            vg["melon"].add([v.index], w_, 'REPLACE')
+            for g in v.groups:
+                if g.group == vg["head"].index: g.weight = max(0.0, g.weight - w_)
 am = bel.modifiers.new("Armature", 'ARMATURE'); am.object = rig
 bel.modifiers.move(len(bel.modifiers) - 1, 0)
 bel.parent = rig
@@ -507,9 +535,12 @@ def dom(v):
 SKIN_PREFIX = ("head", "jaw", "eye", "oris", "levator", "special", "orbicularis", "oculi", "temporalis", "risorius", "tongue", "neck02", "neck03",
                "wrist", "finger", "metacarpal")
 vdom = [("" if is_helper(v) else dom(v)) for v in DB.data.vertices]
+NECK_CUT = D.data.bones["neck02"].head_local.z + 0.01
 for f_ in DB.data.polygons:
     names = [vdom[i] for i in f_.vertices]
     skin = sum(1 for nm_ in names if nm_.startswith(SKIN_PREFIX)) >= 2
+    if any(nm_.startswith(("neck", "head", "jaw", "spine01", "clavicle")) for nm_ in names) and not any(nm_.startswith(("oris", "levator", "special", "eye", "orbic", "oculi", "temporalis", "risorius", "tongue")) for nm_ in names):
+        skin = f_.center.z > NECK_CUT
     if not skin:
         f_.material_index = neo_idx
 # dark hair tint
@@ -588,7 +619,7 @@ eyeL, eyeR = bone_world(D, "eye.L"), bone_world(D, "eye.R")
 ec = (eyeL + eyeR) / 2
 face_front_y = min((D.matrix_world @ v.co).y for v in DB.data.vertices if not is_helper(v) and abs((D.matrix_world @ v.co).z - ec.z) < 0.02 and abs((D.matrix_world @ v.co).x) < 0.03)
 bm = bmesh.new()
-W2, H2, DEP = 0.085, 0.042, 0.05
+W2, H2, DEP = 0.072, 0.034, 0.03
 def rr(t, w, h, r):
     """rounded-rect point at parameter t in [0,1)"""
     a = 2 * math.pi * t
@@ -610,9 +641,9 @@ for k in range(len(loops) - 1):
 me = bpy.data.meshes.new("Mask"); bm.to_mesh(me); bm.free()
 mask = bpy.data.objects.new("Diver.Mask", me); link(mask)
 rimg = mask.vertex_groups.new(name="rim"); rimg.add(list(range(0, N)), 1.0, 'REPLACE')
-M_MASKSKIRT = simple_mat("M_MaskSkirt", (0.05, 0.06, 0.07), rough=0.4, sss=0.1)
+M_MASKSKIRT = simple_mat("M_MaskSkirt", (0.015, 0.016, 0.018), rough=0.3)
 mask.data.materials.append(M_MASKSKIRT)
-shw = mask.modifiers.new("Rim", 'SHRINKWRAP'); shw.target = DB; shw.vertex_group = "rim"; shw.offset = 0.003; shw.wrap_method = 'NEAREST_SURFACEPOINT'
+shw = mask.modifiers.new("Rim", 'SHRINKWRAP'); shw.target = DB; shw.vertex_group = "rim"; shw.offset = 0.005; shw.wrap_method = 'NEAREST_SURFACEPOINT'
 sol = mask.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.004
 # lens: flat tinted glass in the frame front loop
 bm = bmesh.new()
@@ -620,7 +651,7 @@ lv = [bm.verts.new((ec.x + rr(j / N, W2 * 0.98, H2 * 0.95, 0.02)[0], face_front_
 bm.faces.new(lv)
 lme = bpy.data.meshes.new("MaskLens"); bm.to_mesh(lme); bm.free()
 lens = bpy.data.objects.new("Diver.MaskLens", lme); link(lens)
-lens.data.materials.append(simple_mat("M_MaskLens", (0.8, 0.9, 0.95), rough=0.02, trans=1.0, ior=1.5))
+lens.data.materials.append(simple_mat("M_MaskLens", (0.95, 0.98, 1.0), rough=0.0, trans=1.0, ior=1.05))
 fr = mask.copy(); fr.data = mask.data.copy(); fr.name = "Diver.MaskFrame"; link(fr)
 for md in list(fr.modifiers): fr.modifiers.remove(md)
 fr.data.materials.clear(); fr.data.materials.append(simple_mat("M_MaskFrame", (0.02, 0.02, 0.022), rough=0.3))
@@ -641,6 +672,8 @@ for o in (mask, lens, fr, strap):
 for o in (mask, fr, lens):
     for f_ in o.data.polygons: f_.use_smooth = True
 
+for o in [o for o in bpy.data.objects if o.name.startswith(("Diver.Fin", "Diver.Mask")) and o.type == 'MESH']:
+    bm_n = bmesh.new(); bm_n.from_mesh(o.data); bmesh.ops.recalc_face_normals(bm_n, faces=bm_n.faces); bm_n.to_mesh(o.data); bm_n.free()
 # ------------------------------------------------------------------ people placement (posed in 03)
 print("DIVER faces suit", sum(1 for f_ in DB.data.polygons if f_.material_index == neo_idx), "of", len(DB.data.polygons))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

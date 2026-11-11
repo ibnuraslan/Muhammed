@@ -165,8 +165,8 @@ DOLPH = lambda k: legs((8 + 10 * math.sin(k), 3, 8 + 14 * max(0, math.sin(k + 0.
 DV.P(1, (X0, EDGE_Y - 0.28, DECK_Z + RZ - 0.02), yaw=180, pitch=8, spine=(10, 0, 0), head=(-8, 0, 0), legs=legs((10, 5, 18, 0)), arms=arms(fwd=70, out=12), curl={"L": (10, 10), "R": (10, 10)})
 DV.P(22, (X0, EDGE_Y - 0.30, DECK_Z + RZ - 0.18), yaw=180, pitch=30, spine=(28, 0, 0), head=(-15, 0, 0), legs=legs((52, 6, 70, 22)), arms=arms(fwd=-35, out=15), curl={"L": (8, 10), "R": (8, 10)})
 DV.P(40, (X0, EDGE_Y - 0.28, DECK_Z + RZ - 0.26), yaw=180, pitch=38, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((62, 6, 88, 25)), arms=arms(fwd=-45, out=12))
-DV.P(54, (X0, EDGE_Y + 0.05, DECK_Z + RZ + 0.05), yaw=180, pitch=55, spine=(5, 0, 0), head=(20, 0, 0), legs=legs((-5, 3, 5, -40)), arms=arms(fwd=150, out=6))
-DV.P(66, (X0, EDGE_Y + 0.75, DECK_Z + 0.55), yaw=180, pitch=105, spine=(12, 0, 0), head=(25, 0, 0), legs=legs((6, 3, 10, -50)), arms=STREAM)
+DV.P(54, (X0, EDGE_Y + 0.15, DECK_Z + RZ + 0.25), yaw=180, pitch=55, spine=(5, 0, 0), head=(20, 0, 0), legs=legs((-5, 3, 5, -40)), arms=arms(fwd=150, out=6))
+DV.P(66, (X0, EDGE_Y + 0.85, DECK_Z + 1.0), yaw=180, pitch=105, spine=(12, 0, 0), head=(25, 0, 0), legs=legs((6, 3, 10, -50)), arms=STREAM)
 DV.P(78, (X0, EDGE_Y + 1.30, WATER_Z - 0.35), yaw=180, pitch=140, spine=(8, 0, 0), head=(20, 0, 0), legs=legs((10, 3, 12, -55)), arms=STREAM)
 for i, f in enumerate(range(92, 169, 12)):
     t = (f - 78) / 90.0
@@ -184,9 +184,9 @@ DV.P(264, SIT, yaw=180, pitch=-10, spine=(18, 0, 0), head=(10, 0, 0), legs=legs(
 CALF_HOLD = lambda f: None
 for k, f in enumerate(range(276, 520, 16)):
     j = (k % 2)
-    kn_r = 50 if j else 12; kn_l = 30 if (k % 3 == 0) else 10
+    kn_r = 22 if j else 4; kn_l = 14 if (k % 3 == 0) else 4
     DV.P(f, (SIT[0], SIT[1] + 0.02 * j, SIT[2] + 0.01 * j), yaw=180, pitch=-6 + 6 * j, roll=3 * (j * 2 - 1), spine=(34 + 10 * j, 4 * (j * 2 - 1), 0),
-         head=(18, 6 * (j * 2 - 1), 0), legs=legs((86 - 0.5 * kn_l, 8, kn_l, -70), (86 - 0.5 * kn_r, 10, kn_r, -72)), jaw=4 + 4 * j,
+         head=(18, 6 * (j * 2 - 1), 0), legs=legs((92 + 0.5 * kn_l, 8, kn_l, -82), (92 + 0.6 * kn_r, 10, kn_r, -84)), jaw=4 + 4 * j,
          arms={"L": ("calf", dict(s="L", t=0.45)), "R": ("calf", dict(s="R", t=0.6))}, curl={"L": (62, 40), "R": (62, 40)})
 # --- beat 4: claws upward, legs locked, rises, sinks back
 DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((86, 8, 10, -72)), arms=arms(fwd=120, out=30))
@@ -202,7 +202,7 @@ for k, f in enumerate(range(620, 661, 10)):
 for k, f in enumerate(range(672, 775, 17)):
     j = k % 2
     DV.P(f, (SIT[0], SIT[1] - 0.03, SIT[2] + 0.02 * j), yaw=180, pitch=-14 - 4 * j, spine=(-6 + 10 * j, 0, 0), head=(-38 + 8 * j, 8 * (j - 0.5), 0),
-         legs=legs((84, 8, 12, -70), (84, 9, 18, -70)), arms=arms(l=dict(fwd=120 + 30 * j, out=40), r=dict(fwd=40 + 50 * j, out=50)), jaw=12 - 6 * j)
+         legs=legs((84, 8, 12, -70), (84, 9, 18, -70)), arms=arms(l=dict(fwd=110 + 30 * j, out=70), r=dict(fwd=50 + 40 * j, out=75)), jaw=12 - 6 * j)
 # --- beats 6–8: weakening, drifting up off the tiles, limp (legs trail forward-down)
 FLOAT = lambda f, t: (SIT[0], SIT[1] - 0.05 - 0.15 * t, SIT[2] + 0.95 * t)
 for k, f in enumerate(range(790, 1380, 30)):
@@ -212,7 +212,7 @@ for k, f in enumerate(range(790, 1380, 30)):
          arms=arms(l=dict(fwd=70 + 20 * math.sin(k), out=55 + 15 * t), r=dict(fwd=60 + 20 * math.cos(k), out=60 + 10 * t)), jaw=6,
          curl={"L": (30, 20), "R": (30, 20)})
 # --- beats 9–11: held by the ankle (right knee bent, shin across the mouth), pushed up, breaks the surface
-RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.45), (1915, 6.25), (1950, 6.45), (1990, 6.15)]
+RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.55), (1950, 5.6), (1990, 5.3)]
 RZF = pchip([(f, z) for f, z in RISE])
 XY0 = Vector(FLOAT(0, 1.0)[:2]); XY1 = Vector((X0 + 0.25, EDGE_Y + 0.95))
 for k, f in enumerate(range(1380, 2000, 20)):
@@ -229,14 +229,14 @@ for k, f in enumerate(range(2000, 2191, 15)):
     t = min(1.0, (f - 2000) / 70.0)
     y = XY1.y - 0.55 * smooth(t)
     gasp = k % 2
-    DV.P(f, (XY1.x, y, 5.55 - 0.05 * gasp + 0.1 * (1 - t)), yaw=180, pitch=-4 + 8 * t, spine=(4 + 10 * t + 6 * gasp, 0, 0), head=(-18 + 12 * gasp, 6 * math.sin(k), 0),
+    DV.P(f, (XY1.x, y, 5.42 - 0.04 * gasp + 0.1 * (1 - t)), yaw=180, pitch=-4 + 8 * t, spine=(4 + 10 * t + 6 * gasp, 0, 0), head=(-18 + 12 * gasp, 6 * math.sin(k), 0),
          legs=legs((25 + 15 * math.sin(k), 8, 40 + 20 * math.sin(k), -40), (30 - 15 * math.sin(k), 8, 45 - 20 * math.sin(k), -40)),
          arms=({"L": ("coping", dict(s="L")), "R": ("coping", dict(s="R"))} if t >= 1.0 else arms(fwd=110 - 40 * gasp, out=40)),
          jaw=26 if gasp else 12, curl={"L": (70, 30), "R": (70, 30)} if t >= 1.0 else {})
 # resolve special arm kinds after body keys exist
 _key_hands_base = DV.key_hands
 def diver_hands(f, p):
-    a = p["arms"]
+    a = dict(p["arms"]); p = dict(p); p["arms"] = a
     for s, (kind, prm) in list(a.items()):
         if kind == "calf":
             ev(f)
@@ -248,11 +248,33 @@ def diver_hands(f, p):
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.3 + Vector((0, 0, -1)) * 0.7, n=-out, pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1
-            W = Vector((XY1.x + sx * 0.26, COP_Y - 0.13, COP_Z + 0.035))
+            W = Vector((XY1.x + sx * 0.26, COP_Y + 0.05, COP_Z + 0.028))
             a[s] = ("world", dict(W=W, d=Vector((0, -1, -0.15)), n=Vector((0, 0, -1)), pole=W + Vector((sx * 0.5, 0.3, -0.4))))
     _key_hands_base(f, p)
 DV.key_hands = diver_hands
 DV.bake()
+# floor solver: near the tiles, lift/lower each key so the lowest point of body + fins rests on the floor (2–5 mm)
+def lowest(f):
+    ev(f); dg = bpy.context.evaluated_depsgraph_get(); z = 9.0
+    for o in [bpy.data.objects["Diver.body"]] + [o for o in bpy.data.objects if o.name.startswith(("Diver.FootPocket",))]:
+        if o.hide_render: continue
+        e = o.evaluated_get(dg); me = e.to_mesh(); mw = o.matrix_world
+        z = min(z, min((mw @ v.co).z for v in list(me.vertices)[::3])); e.to_mesh_clear()
+    return z
+SEAT = (240, 522)
+for it in range(2):
+    adj = 0
+    for f, p in DV.keys:
+        if f <= 45:                       # standing / crouching on the deck
+            lo = lowest(f); p["pos"].z += DECK_Z + 0.003 - lo; adj += 1; continue
+        if p["pos"].z > 1.6: continue
+        lo = lowest(f)
+        if (SEAT[0] <= f <= SEAT[1]) or (f < 790 and lo < 0.003) or (790 <= f < 1380 and lo < 0.003):
+            p["pos"].z += 0.004 - lo; adj += 1
+    D_ = DV.o
+    D_.animation_data_clear()
+    DV.bake()
+    print("FLOOR pass", it, "adjusted", adj)
 print("DIVER keyed", len(DV.keys))
 
 # right fin comes off during the struggle (beat 4) and sinks to the tiles; the left stays on
@@ -298,6 +320,8 @@ def tail_wave(f, freq, amp=1.0, turn=0.0, neck=(0, 0), head=(0, 0)):
         b = BR.pose.bones["tail%d" % k]
         b.rotation_euler = (R_(amp * A[k] * math.sin(ph - 0.75 * k)), 0, R_(turn * (0.10 + 0.04 * k)))
         b.keyframe_insert("rotation_euler", frame=f)
+    mb = BR.pose.bones["melon"]; mw_ = 0.035 * math.sin(ph * 1.0 + 1.3) + 0.02 * math.sin(f * 0.21)
+    mb.scale = (1 + mw_, 1 - mw_ * 0.6, 1 + mw_); mb.keyframe_insert("scale", frame=f)
     for nme, (pp, yy) in (("neck", neck), ("head", head)):
         b = BR.pose.bones[nme]; b.rotation_euler = (R_(pp), 0, R_(yy)); b.keyframe_insert("rotation_euler", frame=f)
 # free-swim path (before the grab and after the release): (frame, pos, roll, freq, amp, turn, neck, head)
@@ -307,11 +331,11 @@ WP = [(1, V(-3.5, 3.2, 3.2), 0, 0.8, 0.6, 0, (0, 0), (0, 0)),
       (775, V(2.6, 3.0, 2.4), -10, 0.9, 0.7, 10, (0, 0), (0, 0)),
       (860, V(2.0, 0.6, 1.8), -15, 1.0, 0.8, 14, (0, 15), (-5, 20)),       # head turns toward her
       (925, V(0.0, -0.9, 2.2), -20, 1.1, 0.8, 18, (0, 10), (0, 15)),
-      (1000, V(-1.7, -2.4, 2.25), 10, 0.9, 0.7, 10, (5, -10), (8, -8)),     # bats the ring
-      (1060, V(-2.6, -2.2, 2.0), 180, 1.3, 0.9, -10, (0, 0), (0, 0)),       # playful barrel roll
-      (1130, V(-2.6, -3.6, 1.65), 0, 0.6, 0.5, 0, (10, 0), (12, 0)),        # nods at the keeper
-      (1170, V(-2.5, -3.55, 1.65), 0, 0.6, 0.5, 0, (-8, 0), (-10, 0)),
-      (1213, V(-2.2, -3.3, 1.7), 0, 0.7, 0.5, 0, (6, 0), (8, 0)),
+      (1000, V(-1.7, -1.9, 2.25), 10, 0.9, 0.7, 10, (5, -10), (8, -8)),     # bats the ring
+      (1060, V(-2.6, -1.6, 2.0), 180, 1.3, 0.9, -10, (0, 0), (0, 0)),       # playful barrel roll
+      (1130, V(-2.6, -2.75, 1.65), 0, 0.6, 0.5, 0, (10, 0), (12, 0)),        # nods at the keeper
+      (1170, V(-2.5, -2.75, 1.65), 0, 0.6, 0.5, 0, (-8, 0), (-10, 0)),
+      (1213, V(-2.2, -2.6, 1.7), 0, 0.7, 0.5, 0, (6, 0), (8, 0)),
       (1260, V(-1.6, -2.6, 1.5), 0, 0.8, 0.6, 20, (0, 25), (0, 25)),        # eye macro, head snaps toward her
       (1330, V(-0.6, -0.6, 0.9), 0, 2.2, 1.4, 0, (0, 0), (0, 0)),           # surges
       (1375, V(-0.2, -0.3, 0.8), 0, 1.6, 1.0, 0, (0, 0), (0, 0))]
@@ -350,28 +374,67 @@ def solve_whale(f, blend_from=None, tb=0.0):
     X = shin; Yl = -fwd; Z = X.cross(Yl).normalized(); X = Yl.cross(Z).normalized()
     Rm = Matrix((X, Yl, Z)).transposed().to_4x4()
     return Matrix.Translation(an) @ Rm @ Matrix.Translation(-SOCK_LOCAL)
+jaw(1, 0.0); jaw(1380, 0.0); jaw(1405, 0.85); jaw(1436, 0.55); jaw(F_REL - 10, 0.55); jaw(F_REL + 10, 1.0); jaw(F_REL + 40, 0.1)
+for f, v in ((1000, 0.0), (1012, 0.3), (1030, 0.0)):
+    jaw(f, v)
+from mathutils.bvhtree import BVHTree
+ev(1440); WLOC = BVHTree.FromObject(BEL, bpy.context.evaluated_depsgraph_get())     # whale in rig space, jaw open on the ankle
+SOCK = SOCK_LOCAL
+def diver_pts(f):
+    ev(f); dg = bpy.context.evaluated_depsgraph_get(); an = DV.world("foot.R", f)
+    pts, ank = [], []
+    for o in [bpy.data.objects["Diver.body"], bpy.data.objects["Diver.FinBlade_L"], bpy.data.objects["Diver.FootPocket_L"], bpy.data.objects["Diver.FootPocket_R"]]:
+        e = o.evaluated_get(dg); me = e.to_mesh(); mw = o.matrix_world
+        for v in list(me.vertices)[::11]:
+            p = mw @ v.co
+            (ank if (p - an).length < 0.13 else pts).append(p)
+        e.to_mesh_clear()
+    return pts, ank
+def pen(M, pts, eps=0.005):
+    Mi = M.inverted(); c = 0
+    for p in pts:
+        q = Mi @ p; loc, n, i, d = WLOC.find_nearest(q, 0.6)
+        if loc is not None and (q - loc).dot(n) < -eps: c += 1
+    return c
+ANG = (0, 15, -15, 30, -30, 45, -45, 60, -60, 80, -80, 100, -100, 130, -130, 160, -160, 180)
+def rot_about_sock(M, a):
+    return M @ Matrix.Translation(SOCK) @ Matrix.Rotation(R_(a), 4, 'X') @ Matrix.Translation(-SOCK)
+SOL = []; prev = 0.0
+for f in range(F_GRAB, F_REL + 1, 4):
+    M = solve_whale(f); pts, ank = diver_pts(f)
+    best = min(ANG, key=lambda a: (pen(rot_about_sock(M, a), pts), abs(a - prev)))
+    prev = best; SOL.append((f, best))
+# smooth the chosen roll angle about the shin and key the hold
+fa_ = pchip([(f, float(a)) for f, a in SOL])
+M0 = None
+STATS = []
 for f in range(F_GRAB0, F_REL + 1, 2):
-    M = solve_whale(f)
-    if f < F_GRAB:     # approach blend into the socket pose
-        p0 = fp(F_GRAB0); t = smooth((f - F_GRAB0) / (F_GRAB - F_GRAB0))
-        M0 = BR.matrix_world.copy() if f == F_GRAB0 else M0
+    M = rot_about_sock(solve_whale(f), fa_(max(F_GRAB, f)))
+    if f < F_GRAB:
+        t = smooth((f - F_GRAB0) / (F_GRAB - F_GRAB0))
+        if M0 is None: M0 = BR.matrix_world.copy()
         loc = M0.translation.lerp(M.translation, t); q = M0.to_quaternion().slerp(M.to_quaternion(), t)
         M = Matrix.Translation(loc) @ q.to_matrix().to_4x4()
     BR.matrix_world = M
     BR.keyframe_insert("location", frame=f); BR.keyframe_insert("rotation_quaternion", frame=f)
     push = 2.0 if 1460 < f < 1930 else 1.0
     tail_wave(f, push, 1.3 if push > 1.5 else 0.8, 0, (0, 0), (0, 0))
-jaw(1, 0.0); jaw(1380, 0.0); jaw(1405, 0.85); jaw(1436, 0.55); jaw(F_REL - 10, 0.55); jaw(F_REL + 10, 1.0); jaw(F_REL + 40, 0.1)
-for f, v in ((1000, 0.0), (1012, 0.3), (1030, 0.0)):
-    jaw(f, v)
+    if f >= F_GRAB and f % 40 == 0:
+        pts, ank = diver_pts(f); Mi = M.inverted(); ds = []
+        for p in ank:
+            q = Mi @ p; loc, n, i, d = WLOC.find_nearest(q, 0.5)
+            if loc is not None: ds.append((q - loc).dot(n))
+        STATS.append((f, pen(M, pts), round(min(ds) * 100, 1) if ds else None, round(sorted(ds)[len(ds) // 2] * 100, 1) if ds else None))
+print("HOLD angles", SOL[::10])
+print("HOLD stats (frame, body pts inside, deepest ankle cm, median ankle cm)", STATS)
 # release: swims a circle beside her on the surface (back out of the water, spout)
 M_rel = BR.matrix_world.copy()
-CIRC_C = Vector((XY1.x - 1.6, XY1.y + 1.9, WATER_Z - 0.22))
+CIRC_C = Vector((XY1.x - 1.2, XY1.y + 3.0, WATER_Z - 0.22))
 for k, f in enumerate(range(F_REL + 2, END + 1, 2)):
     t = (f - F_REL) / (END - F_REL)
     a = R_(200 + 200 * t)
-    p = CIRC_C + Vector((math.cos(a) * 1.9, math.sin(a) * 1.6, 0))
-    tang = Vector((-math.sin(a) * 1.9, math.cos(a) * 1.6, 0)).normalized()
+    p = CIRC_C + Vector((math.cos(a) * 1.6, math.sin(a) * 1.4, 0))
+    tang = Vector((-math.sin(a) * 1.6, math.cos(a) * 1.4, 0)).normalized()
     yaw = math.degrees(math.atan2(tang.x, -tang.y))
     Mc = whale_matrix(p, yaw, 0, -12)
     if t < 0.25:
@@ -391,7 +454,17 @@ for f, p, r in RK:
 
 # =============================================================== spectators + keeper
 PEOPLE = {}
+SOLE = {}
+def sole_offset(h):
+    if h.o.name not in SOLE:
+        z = 0.0
+        for ch in h.o.children:
+            if ch.type == 'MESH' and "shoes" in ch.name:
+                z = min(z, min(v.co.z for v in ch.data.vertices))
+        SOLE[h.o.name] = -z
+    return SOLE[h.o.name]
 def stand(h, f, pos, yaw, spine=(0, 0, 0), head=(0, 0, 0), arms_=None, knee=4, gz=0.0, curl=None):
+    gz = gz + sole_offset(h)
     drop = h.R.BN["upperleg02.L"].length * (1 - math.cos(R_(knee))) * 2.0 * 0.5
     h.P(f, (pos[0], pos[1], gz + h.ROOT.z - drop), yaw=yaw, spine=spine, head=head, legs=legs((knee * 0.5, 4, knee, -knee * 0.5)), arms=arms_ or arms(fwd=6, out=10), curl=curl)
 GLASS_Y = -5.35 - 0.005

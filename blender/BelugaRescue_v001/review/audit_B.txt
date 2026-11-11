@@ -1,0 +1,31 @@
+AUDIT BelugaRescue (step 20 frames, 60 fps)
+DIVER_SINK            1 frames,     1 hits | ranges (s): 9.0-9.0
+      e.g. f541 (9.00s): lowest body point 3.9 cm below the tiles
+FIN_SINK             25 frames,    25 hits | ranges (s): 9.0-9.3, 10.3-11.0, 18.3-24.7
+      e.g. f541 (9.00s): fin 16.9 cm below the tiles
+      e.g. f561 (9.33s): fin 8.0 cm below the tiles
+      e.g. f621 (10.33s): fin 16.5 cm below the tiles
+FOOT_SINK            16 frames,    16 hits | ranges (s): 32.3-32.7, 33.3-33.7, 34.3-34.7, 35.3-35.7
+      e.g. f1941 (32.33s): SpecE shoes 3.3 cm into the floor
+      e.g. f1941 (32.33s): SpecF shoes 2.1 cm into the floor
+      e.g. f1961 (32.67s): SpecE shoes 3.2 cm into the floor
+HAND_FLOAT            6 frames,     6 hits | ranges (s): 35.0-35.0, 35.7-36.0
+      e.g. f2101 (35.00s): diver L hand 4.6 cm off the coping
+      e.g. f2101 (35.00s): diver R hand 4.6 cm off the coping
+      e.g. f2141 (35.67s): diver L hand 4.1 cm off the coping
+MASK_PEN              2 frames,     2 hits | ranges (s): 3.0-3.0, 9.0-9.0
+      e.g. f181 (3.00s): face through the rim by 5.0 mm
+      e.g. f541 (9.00s): face through the rim by 5.0 mm
+MOUTH_CONTACT_INFO   27 frames,     0 hits | ranges (s): 24.0-32.7
+      e.g. f1441 (24.00s): foot in mouth: deepest 6.1 cm, 132 samples inside
+      e.g. f1461 (24.33s): foot in mouth: deepest 5.4 cm, 130 samples inside
+      e.g. f1481 (24.67s): foot in mouth: deepest 5.9 cm, 130 samples inside
+SCENE_PEN             5 frames,   320 hits | ranges (s): 0.0-0.7, 35.3-35.3, 36.3-36.3
+      e.g. f1 (0.00s): diver/fin points inside Coping:24
+      e.g. f21 (0.33s): diver/fin points inside Deck:8, Coping:28
+      e.g. f41 (0.67s): diver/fin points inside Deck:36, Coping:32
+WHALE_DIVER_PEN      31 frames,   755 hits | ranges (s): 22.7-22.7, 23.3-23.3, 24.0-33.3
+      e.g. f1361 (22.67s): 4 diver samples inside the whale (away from the held foot)
+      e.g. f1401 (23.33s): 217 diver samples inside the whale (away from the held foot)
+      e.g. f1441 (24.00s): 4 diver samples inside the whale (away from the held foot)
+PENETRATION/CONTACT TOTAL (hits): 1125

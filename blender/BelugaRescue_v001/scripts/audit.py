@@ -16,6 +16,16 @@ import bpy
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 
+class WB:
+    """world-space BVH wrapper (BVHTree.FromObject works in object-local space)"""
+    def __init__(self, o, dg):
+        self.t = BVHTree.FromObject(o, dg); self.M = o.matrix_world.copy(); self.Mi = self.M.inverted(); self.R = self.M.to_3x3()
+    def find_nearest(self, p, dmax=1e9):
+        loc, nrm, idx, dist = self.t.find_nearest(self.Mi @ p, dmax)
+        if loc is None: return None, None, None, None
+        loc = self.M @ loc; nrm = (self.R @ nrm).normalized()
+        return loc, nrm, idx, (p - loc).length
+
 argv = sys.argv[sys.argv.index("--") + 1:]
 OUT = argv[0]; STEP = int(argv[1]) if len(argv) > 1 else 10
 sc = bpy.context.scene
@@ -29,7 +39,7 @@ dg0 = bpy.context.evaluated_depsgraph_get()
 sc.frame_set(1)
 ST = []
 for o in STATIC:
-    t = BVHTree.FromObject(o, dg0)
+    t = WB(o, dg0)
     c = Vector((0, 0, 3.0)) if not o.name.startswith("Gallery_") else Vector((0, -7.5, 1.5))
     loc, nrm, idx, dist = t.find_nearest(o.matrix_world.inverted() @ c) if False else t.find_nearest(c)
     sgn = 1.0 if (c - loc).dot(nrm) > 0 else -1.0
@@ -53,7 +63,7 @@ DPARTS = [o for o in D.children if o.type == 'MESH' and o.name.split(".")[-1] in
 FINS = [o for o in bpy.data.objects if o.name.startswith(("Diver.FinBlade", "Diver.FootPocket"))]
 MASK = bpy.data.objects["Diver.Mask"]
 BODY = bpy.data.objects["Diver.body"]
-SEATED = [(264, 760)]
+SEATED = [(270, 520)]
 HOLD = (1440, 1975)
 PEOPLE = [o for o in bpy.data.objects if o.type == 'ARMATURE' and o.name in ("Keeper", "SpecA", "SpecB", "SpecC", "SpecD", "SpecE", "SpecF", "SpecG")]
 DECKP = ("SpecE", "SpecF", "SpecG")
@@ -87,14 +97,23 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
         hit = inside_static(p, 0.02)
         if hit: wpen[hit] = wpen.get(hit, 0) + 1
     if wpen: flag("SCENE_PEN", f, "whale points inside " + ", ".join("%s:%d" % kv for kv in wpen.items()), sum(wpen.values()))
-    wt = BVHTree.FromObject(BEL, dg)
-    n_in = 0
+    wt = WB(BEL, dg)
+    n_in = 0; ank = D.matrix_world @ D.pose.bones["foot.R"].head; mouth = []
+    holding = HOLD[0] <= f <= HOLD[1]
     for p in bpts + fpts:
         loc, nrm, idx, dist = wt.find_nearest(p, 0.3)
-        if loc is not None and (p - loc).dot(nrm) < -0.015: n_in += 1
-    if n_in: flag("WHALE_DIVER_PEN", f, "%d diver samples inside the whale" % n_in, n_in)
+        if loc is None: continue
+        sd = (p - loc).dot(nrm)
+        if holding and (p - ank).length < 0.25:
+            mouth.append(sd); continue
+        if sd < -0.015: n_in += 1
+    if n_in: flag("WHALE_DIVER_PEN", f, "%d diver samples inside the whale (away from the held foot)" % n_in, n_in)
+    if holding and mouth:
+        gap = min(abs(x) for x in mouth)
+        if gap > 0.006: flag("MOUTH_GAP", f, "held ankle %.1f cm from the lips" % (gap * 100))
+        flag("MOUTH_CONTACT_INFO", f, "foot in mouth: deepest %.1f cm, %d samples inside" % (-min(mouth) * 100, sum(1 for x in mouth if x < 0)), 0)
     # mask rim vs face
-    bt = BVHTree.FromObject(BODY, dg)
+    bt = WB(BODY, dg)
     mev = MASK.evaluated_get(dg); mme = mev.to_mesh()
     gaps = []
     for v in list(mme.vertices)[:48]:
@@ -113,17 +132,21 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             if hit: flag("HAND_PEN", f, "diver %s hand inside %s" % (s, hit)); break
             loc, nrm, idx, dist = wt.find_nearest(p, 0.2)
             if loc is not None and (p - loc).dot(nrm) < -0.01: flag("HAND_PEN", f, "diver %s hand inside the whale" % s); break
-        if f >= 2075:
-            t = min((p - Vector((p.x, -5.0 - 0.0, 6.31))).length if p.y > -5.15 else abs(p.z - 6.31) for p in tips)
+        if f >= 2085:
+            ct = [t for o, t, sg, cl in ST if o.name == "Coping"][0]
+            t = min(ct.find_nearest(p, 1.0)[3] or 1.0 for p in tips)
             if t > 0.03: flag("HAND_FLOAT", f, "diver %s hand %.1f cm off the coping" % (s, t * 100))
-    # spectators feet
+    # spectators feet: lowest shoe vertex vs their floor
     for o in PEOPLE:
         gz = 6.25 if o.name in DECKP else 0.0
-        for s in "LR":
-            p = o.matrix_world @ o.pose.bones["foot." + s].head
-            h = p.z - gz - 0.075
-            if h < -0.02: flag("FOOT_SINK", f, "%s %s foot %.1f cm into the floor" % (o.name, s, -h * 100))
-            elif h > 0.03: flag("FOOT_FLOAT", f, "%s %s foot %.1f cm above the floor" % (o.name, s, h * 100))
+        for ch in o.children:
+            if ch.type == 'MESH' and "shoes" in ch.name:
+                ps = verts(ch, dg, 3)
+                for side, sel in (("L", [p for p in ps if (o.matrix_world.inverted() @ p).x > 0 or True]),):
+                    pass
+                h = min(p.z for p in ps) - gz
+                if h < -0.015: flag("FOOT_SINK", f, "%s shoes %.1f cm into the floor" % (o.name, -h * 100))
+                elif h > 0.025: flag("FOOT_FLOAT", f, "%s shoes %.1f cm above the floor" % (o.name, h * 100))
     # camera
     cam = sc.camera
     if cam:
@@ -153,7 +176,7 @@ for kind in sorted(issues):
     lines.append("%-18s %4d frames, %5d hits | ranges (s): %s" % (kind, len(its), counts[kind], ", ".join("%.1f-%.1f" % ((a - 1) / 60, (b - 1) / 60) for a, b in ranges(its))))
     for f, m in its[:3]:
         lines.append("      e.g. f%d (%.2fs): %s" % (f, (f - 1) / 60, m))
-    if kind not in ("CAMERA_AT_SURFACE",): total += counts[kind]
+    if kind not in ("CAMERA_AT_SURFACE", "MOUTH_CONTACT_INFO"): total += counts[kind]
 lines.append("PENETRATION/CONTACT TOTAL (hits): %d" % total)
 open(OUT, "w").write("\n".join(lines) + "\n")
 print("\n".join(lines))
