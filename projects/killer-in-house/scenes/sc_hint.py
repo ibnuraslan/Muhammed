@@ -328,12 +328,22 @@ def _tea_pose(c, sec):
 @move("tea_table", "day", 5.0, cast=("hl:helen", "f:friend"), rooms=("kitchen", "upstairs"))
 def _():
     def anim(c, t):
-        _tea_pose(c, t * DUR["tea_table"])
+        sec = t * DUR["tea_table"]
+        _tea_pose(c, sec)
         for ch in c["k_chairs"][:2]:
             ch.hide_render = True
+        if "dust" not in c:
+            c["dust"] = H.leaf_cloud(30, (1.2, 1.95), (0.3, 0.25), C1 - 0.02, col=(0.85, 0.82, 0.75), seed=12)
+            for o in c["dust"]:
+                o.scale = (0.012, 0.012, 1)
+        for o in c["dust"]:
+            x0, y0, z0 = o["p0"]; fall = max(0.0, sec - 2.2) * 0.35 * o["sp"]
+            o.location = (x0, y0, max(0.8, C1 - 0.05 - fall)); o.rotation_euler = (sec, sec * 1.3, 0)
+        up = ease(min(1.0, max(0.0, (sec - 2.4) / 0.8)))
+        H.look(P(c, "hl"), 0, -30 * up); H.look(P(c, "f"), 0, -35 * up)
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.2, -0.0, 1.5)).lerp(Vector((1.2, 0.2, 1.75)), e), Vector((1.2, 2.0, 0.9)).lerp(Vector((1.2, 2.6, C1 + 0.1)), e), 28)
+        return (Vector((1.2, -0.3, 1.55)).lerp(Vector((1.2, 0.3, 1.5)), e), Vector((1.2, 2.0, 1.0)), 30)
     return cam, anim
 
 
@@ -390,19 +400,20 @@ def _():
     return cam, anim
 
 
-@move("stair_dust", "night", 5.0, rooms=("front", "upstairs"), haze=((0.0, -3.6, 0.0), (0.9, -0.2, 5.4)))
+@move("stair_dust", "night", 5.0, rooms=("upstairs", "attic"), haze=((-1.8, -1.2, F2), (-0.6, -0.2, C2)))
 def _():
     def anim(c, t):
         sec = t * DUR["stair_dust"]
+        c["closet_door"].rotation_euler = (0, 0, math.radians(-70))
         if "dust" not in c:
-            c["dust"] = H.leaf_cloud(60, (0.45, -1.5), (0.5, 1.5), C2, col=(0.8, 0.78, 0.72), seed=11)
+            c["dust"] = H.leaf_cloud(45, HATCH, (0.15, 0.22), C2 - 0.02, col=(0.85, 0.82, 0.75), seed=11)
             for o in c["dust"]:
-                o.scale = (0.02, 0.02, 1)
-            c["moonst"] = H.point((0.45, -0.5, F2 + 2.0), 6, (0.55, 0.68, 1.0), 0.3)
-        H.fall_leaves(c["dust"], sec * 0.15, ground=0.0, drift=(0.0, 0.02))
+                o.scale = (0.012, 0.012, 1)
+            c["moonc"] = H.point((-1.5, -1.5, F2 + 2.2), 5, (0.55, 0.68, 1.0), 0.2)
+        H.fall_leaves(c["dust"], sec * 0.2, ground=F2, drift=(0.0, 0.0))
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.45, -4.4, 1.0)).lerp(Vector((0.45, -3.3, 1.9)), e), Vector((0.45, -0.5, F2 + 1.2)), 24)
+        return (Vector((-2.2, -2.9, F2 + 1.2)).lerp(Vector((-1.9, -2.5, F2 + 1.3)), e), Vector((HATCH[0], HATCH[1], C2 - 0.5)), 28)
     return cam, anim
 
 
@@ -619,15 +630,19 @@ def _():
         c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
         if "stool" not in c:
             import ph
-            ch, _ = ph.model("dining_chair_02", loc=(-1.2, -0.8, F2), rot_z=math.pi); c["stool"] = ch
+            ch, _ = ph.model("dining_chair_02", loc=(-1.2, -0.95, F2), rot_z=math.pi); c["stool"] = ch
+            c["torch"] = H.flashlight("ZTorch"); c["torch"].data.energy = 200
         h = P(c, "z")
         rise = 0.47 * ease(min(1.0, sec / 2.5))
-        H.stand_at(h, (-1.2, -0.75, F2 + 0.47), math.radians(90), z=F2 + rise)
-        for sd in ("L", "R"):
-            reach(h, sd, Vector((HATCH[0] + (0.08 if sd == "L" else -0.08), HATCH[1] + (0.14 if sd == "L" else -0.14), C2 + 0.02)), Vector((0, 0, -1)), Vector((0, 0, 1)))
+        H.stand_at(h, (HATCH[0], HATCH[1] - 0.05, F2), math.radians(90), z=F2 + rise)
+        H.look(h, 0, -10)
+        hand = Vector((HATCH[0] + 0.05, HATCH[1] + 0.12, C2 + 0.12 * ease(min(1.0, max(0.0, (sec - 1.5) / 1.5)))))
+        reach(h, "R", hand, Vector((0, 0, -1)), Vector((0, 0, 1)))
+        reach(h, "L", Vector((-1.6, -0.4, F2 + 1.75)), Vector((0, 0, -1)), Vector((-1, 0, 0.3)))
+        H.aim_obj(c["torch"], hand + Vector((0, 0, 0.1)), Vector((HATCH[0] + 1.5, HATCH[1] + 1.5, EAVE + 0.3)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-2.2, -2.6, F2 + 1.1)).lerp(Vector((-2.0, -2.3, F2 + 1.2)), e), Vector((-1.2, -0.75, F2 + 1.9)), 28)
+        return (Vector((-2.4, -2.8, F2 + 1.1)).lerp(Vector((-2.2, -2.5, F2 + 1.2)), e), Vector((-1.2, -0.75, F2 + 1.9)), 26)
     return cam, anim
 
 
@@ -719,17 +734,16 @@ def _():
     def anim(c, t):
         sec = t * DUR["eyes_hatch"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
-        c["hatch"].location = c["hatch_home"] + Vector((0.12, 0, 0.0))
-        h = thin_man(c)
-        reset_pose(h)
-        h.arm.rotation_euler = (math.radians(80), 0, math.radians(0)); h.arm.location = (HATCH[0] - 0.05, HATCH[1] + 1.55, EAVE + 0.02); bpy.context.view_layer.update()
-        H.rotl(h, "head", (1, 0, 0), -35)
-        if "eyelight" not in c:
-            c["eyelight"] = H.point((HATCH[0], HATCH[1] - 0.3, C2 - 0.4), 0.0, (1.0, 0.85, 0.65), 0.01)
-        c["eyelight"].data.energy = 0.4 * ease(min(1.0, max(0.0, (sec - 1.5) / 2.0)))
+        c["hatch"].location = c["hatch_home"] + Vector((0.1, 0, 0.0))
+        if "glints" not in c:
+            gm = emissive("Glint", (1.0, 0.95, 0.88), 0.0); c["glint_mat"] = gm
+            c["glints"] = [cyl("Glint", (HATCH[0] - 0.055 + 0.065 * k, HATCH[1] - 0.12, C2 + 0.05), 0.0035, 0.002, gm, 12, rot=(math.radians(90), 0, 0)) for k in range(2)]
+        k = ease(min(1.0, max(0.0, (sec - 1.8) / 1.5)))
+        blink = 0.0 if 3.6 < sec < 3.75 else 1.0
+        c["glint_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 1.6 * k * blink
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
-        return (Vector((hx - 0.2, hy - 1.0, F2 + 1.3)).lerp(Vector((hx - 0.05, hy - 0.35, C2 - 0.55)), e), Vector((hx, hy, C2)), 35)
+        return (Vector((hx - 0.2, hy - 1.0, F2 + 1.3)).lerp(Vector((hx - 0.05, hy - 0.4, C2 - 0.6)), e), Vector((hx, hy - 0.06, C2)), 35)
     return cam, anim
 
 
@@ -1014,8 +1028,7 @@ def _():
         H.stand_at(d2, (-1.3, -2.0, F2), math.radians(180), z=F2); H.rotl(d2, "spine03", (1, 0, 0), 25)
     def cam(c, t):
         e = ease(t)
-        tgt = Vector((-2.0, -1.8, F2 + 1.0)).lerp(Vector((-1.2, -0.75, C2 - 0.05)), e)
-        return (Vector((-3.7, -4.3, F2 + 1.4)).lerp(Vector((-3.4, -3.9, F2 + 1.3)), e), tgt, 26)
+        return (Vector((-3.8, -4.3, F2 + 1.5)).lerp(Vector((-2.6, -4.4, F2 + 1.5)), e), Vector((-2.4, -1.6, F2 + 1.1)).lerp(Vector((-1.4, -1.4, F2 + 1.1)), e), 26)
     return cam, anim
 
 

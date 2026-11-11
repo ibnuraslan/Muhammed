@@ -66,7 +66,7 @@ def mat(key):
         "chrome": lambda: pbr("Chrome", (0.7, 0.7, 0.72), 0.18, 1.0),
         "glass": lambda: window_glass(),
         "black": lambda: pbr("Black", (0.01, 0.01, 0.01), 0.7),
-        "shade": lambda: pbr("Shade", (0.78, 0.7, 0.52), 0.9, 0.0, **{'Transmission Weight': 0.0, 'Subsurface Weight': 0.3}),
+        "shade": lambda: shade_mat(),
         "lace": lambda: fabric("Lace", (0.85, 0.83, 0.78), 0.9, 0.5, 900),
     }
     _MAT[key] = table[key]()
@@ -83,6 +83,17 @@ def window_glass():
     refl = N.new("ShaderNodeMixShader"); L.new(fr.outputs[0], refl.inputs[0]); L.new(tr.outputs[0], refl.inputs[1]); L.new(gl.outputs[0], refl.inputs[2])
     mx = N.new("ShaderNodeMixShader"); L.new(lp.outputs['Is Shadow Ray'], mx.inputs[0])
     L.new(refl.outputs[0], mx.inputs[1]); L.new(tr.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs['Surface'])
+    return m
+
+
+def shade_mat():
+    """Cream roller shade: diffuse + translucent, so a lamp behind it glows through like real cloth."""
+    m = bpy.data.materials.new("Shade"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); d = N.new("ShaderNodeBsdfDiffuse"); d.inputs['Color'].default_value = (0.78, 0.7, 0.52, 1)
+    tl = N.new("ShaderNodeBsdfTranslucent"); tl.inputs['Color'].default_value = (0.95, 0.8, 0.55, 1)
+    mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.45
+    L.new(d.outputs[0], mx.inputs[1]); L.new(tl.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs['Surface'])
     return m
 
 
@@ -304,7 +315,8 @@ def shell(prefix="H", brick="brick", detail=False, lit=None):
         out.append(box(prefix + "Soffit", (0, sy * (D2 + 0.22), EAVE - 0.2), (2 * W2 + 0.9, 0.5, 0.03), mat("trim")))
     out.append(box(prefix + "Chimney", (3.4, 1.6, (EAVE + RIDGE) / 2 + 0.8), (0.7, 0.5, RIDGE - EAVE + 2.4), bm_))
     out.append(box(prefix + "ChimCap", (3.4, 1.6, RIDGE + 1.38), (0.8, 0.6, 0.06), mat("conc")))
-    out.append(box(prefix + "AtticVent", (W2 + 0.01, 0, RIDGE - 0.75), (0.02, 0.5, 0.35), mat("darktrim")))
+    for k in range(4):
+        out.append(box(prefix + "Louvre", (W2 + 0.03, 0, RIDGE - 0.6 - k * 0.1), (0.06, 0.5, 0.035), mat("trim"), rot=(0, math.radians(30), 0)))
     # porch: slab, steps, two columns, a flat roof
     pz = -0.06
     out.append(box(prefix + "PorchDeck", (0.6, -D2 - 1.1, pz - 0.27), (4.2, 2.2, 0.54), mat("conc")))
@@ -389,7 +401,7 @@ def interiors(c):
     # ---------- attic crawl space: joists, boards, rafters underside
     for k in range(16):
         x = -IX + 0.25 + k * 0.55
-        box("Joist", (x, 0, EAVE - 0.1), (0.05, 2 * IY, 0.12), mat("raw"))
+        box("Joist", (x, 0, EAVE + 0.02), (0.05, 2 * IY, 0.08), mat("raw"))
     boards = [(-2.6, 0.5), (-1.2, 1.4), (0.6, 1.2)]            # loose boards laid over the joists near the hatch
     for (bx, bw) in boards:
         box("AtticBoard", (bx, 0.1, EAVE - 0.025), (bw, 1.6, 0.025), mat("raw"))
@@ -666,11 +678,15 @@ def street(c, season, tod):
         box("Walk", (0, ROAD_Y + sy * 5.0, G - 0.02), (120, 1.6, 0.06), mat("snow") if season == "winter" else mat("pave"))
     box("Path", (0.15, (ROAD_Y + 5.8 - D2 - 2.6) / 2, G - 0.015), (1.4, -(ROAD_Y + 5.8) - D2 - 2.6 + 0.0, 0.06), mat("snow") if season == "winter" else mat("pave"))
     # neighbours: copies of the shell with different brick and lit windows at night
-    lit = emissive("LitPane", (1.0, 0.72, 0.42), 2.2) if tod != "day" else None
+    lit = tod != "day"
     nb = []
     for k, (x, y, rz, br) in enumerate(((-13.0, 0.0, 0, "brick2"), (13.0, 0.5, 0, "brick3"), (-6.5, ROAD_Y * 2 - 0.0, math.pi, "brick3"), (6.5, ROAD_Y * 2 + 0.5, math.pi, "brick2"), (-26, 0.2, 0, "brick"), (26, 0.0, 0, "brick2"))):
-        parts, g, _ = shell("N%d" % k, br, detail=False, lit=(lit if (lit and k in (1, 2)) else None))
+        parts, g, _ = shell("N%d" % k, br, detail=False)
         o = join(parts + g, "Neighbour%d" % k); o.location = (x, y, 0); o.rotation_euler = (0, 0, rz)
+        if lit and k in (1, 2, 4):          # a lamp behind the shades (real glass, no glowing cards)
+            for (lx, lz) in ((-2.4, 1.4), (2.6, 1.4)) if k != 4 else ((2.6, 3.9),):
+                M = Matrix.Translation((x, y, 0)) @ Matrix.Rotation(rz, 4, 'Z')
+                point(tuple(M @ Vector((lx, -D2 + 0.9, lz))), 40, (1.0, 0.7, 0.42), 0.15)
         nb.append(o)
     c["neighbours"] = nb
     col = tree_collection(season)
@@ -702,9 +718,9 @@ def snow_cover(c):
 def lighting(c, season, tod):
     s = bpy.context.scene
     if tod == "night":
-        world_flat((0.018, 0.03, 0.06), 1.0)
-        moon = sun(32, -120, energy=0.35, color=(0.62, 0.74, 1.0), angle_deg=1.0); c["moon"] = moon
-        s.view_settings.exposure = 1.0
+        world_flat((0.022, 0.036, 0.07), 1.0)
+        moon = sun(32, -120, energy=0.6, color=(0.62, 0.74, 1.0), angle_deg=1.0); c["moon"] = moon
+        s.view_settings.exposure = 1.5
     elif season == "winter":
         world_sky(sun_elev_deg=14, sun_rot_deg=200, strength=0.45, tint=(0.78, 0.82, 0.9), air=2.0, aerosol=4.0)
         sun(14, -70, energy=0.6, color=(0.85, 0.88, 0.95), angle_deg=8.0)
@@ -731,11 +747,11 @@ def person(name, kind):
         "friend": dict(gender=0.0, years=62, weight=0.55, height=0.45, cloth="female_elegantsuit01", cv=dict(hue=0.35, sat=0.4, val=0.3), hair="bob02", hv=0.6, hat=False, skin="old_lightskinned_female_diffuse.png"),
         "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit04", cv=dict(hue=0.1, sat=0.4, val=0.25), hair="short01", hv=0.3, hat=False),
         "neighbour_w": dict(gender=0.0, years=45, weight=0.5, height=0.5, cloth="female_casualsuit02", cv=dict(hue=0.6, sat=0.45, val=0.4), hair="bob01", hv=0.25, hat=False),
-        "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.1, sat=0.3, val=0.2), hair="short02", hv=0.2, hat=True),
-        "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_worksuit01", cv=dict(hue=0.62, sat=0.25, val=0.18), hair="short01", hv=0.15, hat=True),
-        "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_worksuit01", cv=dict(hue=0.66, sat=0.6, val=0.1), hair="short01", hv=0.15, hat=True),
-        "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.6, sat=0.2, val=0.15), hair="short02", hv=0.7, hat=False),
-        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.22), hair="long01", hv=0.3, hat=False),
+        "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.08, sat=0.3, val=0.42), hair="short02", hv=0.2, hat=True),
+        "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_worksuit01", cv=dict(hue=0.6, sat=0.2, val=0.4), hair="short01", hv=0.15, hat=True),
+        "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_worksuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
+        "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
+        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.32), hair="long01", hv=0.3, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]

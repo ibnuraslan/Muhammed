@@ -130,7 +130,7 @@ def _():
     def anim(c, t):
         sec = tick(c, t, "window_glow")
         k = max(0.0, min(1.0, (sec - 0.8) / 0.6)) * max(0.0, min(1.0, (3.8 - sec) / 0.25))
-        c["up_light"].data.energy = 45 * k
+        c["up_light"].data.energy = 160 * k
     def cam(c, t):
         e = ease(t)
         return (Vector((-4.0, ROAD_Y - 2.5, 1.3)).lerp(Vector((-3.2, ROAD_Y + 1.0, 1.4)), e), Vector((-2.4, -D2, 3.9)), 42)
@@ -297,7 +297,7 @@ def _():
         sec = tick(c, t, "winter_flicker")
         f = 0.5 + 0.5 * math.sin(23 * sec) * math.sin(7.1 * sec)
         on = 1.0 if 1.2 < sec < 3.6 else 0.0
-        c["up_light"].data.energy = 60 * on * (0.4 + 0.6 * f)
+        c["up_light"].data.energy = 160 * on * (0.4 + 0.6 * f)
     def cam(c, t):
         e = ease(t)
         return (Vector((-6.0, ROAD_Y - 1.0, 1.7)).lerp(Vector((-4.6, ROAD_Y + 2.0, 1.8)), e), Vector((-1.5, -D2, 3.4)), 34)
@@ -460,11 +460,15 @@ def _():
     def anim(c, t):
         sec = tick(c, t, "attic_vent")
         if "vent" not in c:
-            c["vent"] = H.point((H.W2 - 0.3, 0, H.RIDGE - 0.75), 0, (1.0, 0.5, 0.18), 0.1)
-            c["ventglow"] = box("VentGlow", (H.W2 + 0.02, 0, H.RIDGE - 0.75), (0.01, 0.42, 0.28), emissive("VentGlow", (1.0, 0.45, 0.15), 0.0))
+            c["vent"] = H.point((H.W2 - 0.25, 0, H.RIDGE - 0.75), 0, (1.0, 0.5, 0.18), 0.1)
+            # the gable vent behind the louvres is an actual opening: cut the brick gable there
+            for o in bpy.data.objects:
+                if o.name.startswith("HGable"):
+                    m = o.modifiers.new("vent", 'BOOLEAN'); cutter = box("VentCut", (H.W2, 0, H.RIDGE - 0.75), (0.6, 0.5, 0.4)); cutter.hide_render = True; cutter.display_type = 'WIRE'
+                    m.object = cutter; m.operation = 'DIFFERENCE'
+            c["ventsmoke"] = H.leaf_cloud(12, (H.W2 + 0.3, 0.0), (0.2, 0.2), H.RIDGE, col=(0.6, 0.6, 0.62), seed=8)
         k = 0.6 + 0.4 * math.sin(2.3 * sec) * math.sin(0.7 * sec)
-        c["vent"].data.energy = 15 * k
-        c["ventglow"].data.materials[0].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.9 * k
+        c["vent"].data.energy = 40 * k
     def cam(c, t):
         e = ease(t)
         return (Vector((10.0, ROAD_Y + 2.0, 2.0)).lerp(Vector((9.0, ROAD_Y + 4.0, 2.4)), e), Vector((H.W2, 0, H.RIDGE - 1.2)), 40)
@@ -485,7 +489,7 @@ def _():
 def _():
     def anim(c, t):
         sec = tick(c, t, "final_glow")
-        c["up_light"].data.energy = 40 * (1 - ease(min(1.0, max(0.0, (sec - 3.2) / 0.5))))
+        c["up_light"].data.energy = 160 * (1 - ease(min(1.0, max(0.0, (sec - 3.2) / 0.5))))
     def cam(c, t):
         e = ease(t)
         return (Vector((-1.0, ROAD_Y - 3.5, 1.4)).lerp(Vector((-1.4, ROAD_Y + 0.5, 1.5)), e), Vector((-1.0, -D2, 3.2)), 32)

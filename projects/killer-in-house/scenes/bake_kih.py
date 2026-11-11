@@ -90,10 +90,14 @@ emis_e = [(m, sock) for m, sock in emis_nodes() if len(esnap.get(m.name, ())) > 
 print("[bake] energy-keyed lights:", [o.name for o in lights_e], "emission:", [m.name for m, _ in emis_e], flush=True)
 print("[bake] moving objects:", [o.name for o in movers][:20], len(movers), flush=True)
 
+prev_q, prev_e = {}, {}
 for f in range(1, n + 1):
     t = (f - 1) / max(n - 1, 1)
     kit.apply_cam(cam, ctx, spec, t)
     bpy.context.view_layer.update()
+    if "__cam__" in prev_e:          # sign/branch-continuous rotations (shared fix 0037a25: no ghost limbs under blur)
+        e = cam.rotation_euler.copy(); e.make_compatible(prev_e["__cam__"]); cam.rotation_euler = e
+    prev_e["__cam__"] = cam.rotation_euler.copy()
     for prop in ("location", "rotation_euler"):
         cam.keyframe_insert(prop, frame=f)
     cam.data.keyframe_insert("lens", frame=f)
@@ -101,9 +105,24 @@ for f in range(1, n + 1):
     for a in arms:
         a.keyframe_insert("location", frame=f)
         for pb in a.pose.bones:
+            if pb.rotation_mode == 'QUATERNION':
+                q = pb.rotation_quaternion; pq = prev_q.get((a.name, pb.name))
+                if pq is not None and pq.dot(q) < 0:
+                    pb.rotation_quaternion = -q
+                prev_q[(a.name, pb.name)] = pb.rotation_quaternion.copy()
             pb.keyframe_insert("location", frame=f)
             pb.keyframe_insert("rotation_quaternion" if pb.rotation_mode == 'QUATERNION' else "rotation_euler", frame=f)
     for o in movers:
+        if o.rotation_mode == 'QUATERNION':
+            pq = prev_q.get(o.name)
+            if pq is not None and pq.dot(o.rotation_quaternion) < 0:
+                o.rotation_quaternion = -o.rotation_quaternion
+            prev_q[o.name] = o.rotation_quaternion.copy()
+        else:
+            pe = prev_e.get(o.name)
+            if pe is not None:
+                e = o.rotation_euler.copy(); e.make_compatible(pe); o.rotation_euler = e
+            prev_e[o.name] = o.rotation_euler.copy()
         o.keyframe_insert("location", frame=f)
         o.keyframe_insert("rotation_quaternion" if o.rotation_mode == 'QUATERNION' else "rotation_euler", frame=f)
         o.keyframe_insert("scale", frame=f)

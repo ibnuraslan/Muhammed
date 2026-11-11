@@ -100,7 +100,7 @@ MOVES = {
     "interview": dict(kind="anim", dof=None, far=20, anim=anim_interview,
                       cam=lambda c, t: (Vector((-2.2, -1.6, 1.6)).lerp(Vector((-1.9, -1.2, 1.55)), ease(t)), Vector((0.4, 0.5, 1.0)), 28)),
     "photo": dict(kind="anim", dof=2.8, far=20, anim=anim_photo,
-                  cam=lambda c, t: (Vector((-1.5, 1.6, 1.45)).lerp(Vector((-1.3, 1.3, 1.4)), ease(t)), Vector((0.05, -0.7, 1.15)), 40),
+                  cam=lambda c, t: (Vector((-2.4, 2.2, 1.6)).lerp(Vector((-2.1, 1.9, 1.55)), ease(t)), Vector((0.05, -0.4, 1.1)), 30),
                   focus=lambda c, t: Vector((0.1, -0.7, 1.2))),
     "talk": dict(kind="anim", dof=2.8, far=20, anim=anim_talk,
                  cam=lambda c, t: (Vector((1.8, -1.4, 1.35)).lerp(Vector((1.5, -1.1, 1.3)), ease(t)), Vector((0.0, -0.4, 1.05)), 38),

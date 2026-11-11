@@ -125,7 +125,7 @@ MOVES = {
     "dinner": dict(kind="anim", dof=None, far=20, anim=anim_dinner,
                    cam=lambda c, t: (Vector((2.6, -2.4, 1.55)).lerp(Vector((2.6, 0.4, 1.55)), ease(t)), Vector((0.0, -0.4, 0.9)).lerp(Vector((-0.2, 0.3, 0.9)), ease(t)), 30)),
     "plate": dict(kind="anim", dof=None, far=20, anim=anim_plate,
-                  cam=lambda c, t: (Vector((-0.2, -0.6, 1.6)).lerp(Vector((0.1, -0.9, 1.6)), ease(t)), Vector((1.9, -2.1, 1.25)), 34)),
+                  cam=lambda c, t: (Vector((-1.4, 0.4, 1.6)).lerp(Vector((-1.0, 0.1, 1.6)), ease(t)), Vector((1.9, -2.1, 1.1)), 28)),
     "empty_chair": dict(kind="anim", dof=None, far=20, anim=anim_empty,
                         cam=lambda c, t: (Vector((1.4, -2.6, 1.3)).lerp(Vector((1.0, -1.9, 1.2)), ease(t)), Vector((0.75, -1.1, 0.7)), 32)),
 }

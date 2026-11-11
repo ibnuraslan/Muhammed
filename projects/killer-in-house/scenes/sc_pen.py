@@ -39,14 +39,14 @@ def stone():
 def build(variant=None):
     c = {}
     if variant == "cell":
-        world_flat((0.02, 0.025, 0.03), 1.0)
+        world_flat((0.5, 0.6, 0.75), 1.2)
         bpy.context.scene.view_settings.exposure = 0.6
         st = stone()
         box("CFloor", (0, 0, -0.02), (3, 6, 0.04), H.mat("conc"))
         for x in (-1.1, 1.1):
             box("CWall", (x, 0, 1.5), (0.4, 6, 3.0), st)
-        box("CBack", (0, 2.3, 1.5), (2.6, 0.4, 3.0), st); box("CCeil", (0, 0, 3.0), (2.6, 6, 0.2), st)
-        box("CWin", (0, 2.1, 2.3), (0.4, 0.05, 0.3), emissive("CWinSky", (0.8, 0.9, 1.0), 4.0))
+        H.wall_x("CBack", -1.3, 1.3, 2.3, 0, 3.0, 0.4, st, [(-0.2, 0.2, 2.15, 2.45)]); box("CCeil", (0, 0, 3.0), (2.6, 6, 0.2), st)
+        box("CDoorWall", (0, -3.0, 1.5), (2.6, 0.3, 3.0), st)
         for k in range(3):
             box("CWinBar", (-0.12 + k * 0.12, 2.07, 2.3), (0.02, 0.02, 0.32), H.mat("iron"))
         sl = bpy.data.lights.new("Shaft", 'AREA'); sl.size = 0.4; sl.energy = 120; sl.color = (0.9, 0.95, 1.0)

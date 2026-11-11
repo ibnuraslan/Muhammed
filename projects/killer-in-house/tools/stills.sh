@@ -1,7 +1,7 @@
 #!/bin/bash
 # usage: stills.sh outdir set:move[:t] ...   (25% res, 8 samples; skips existing)
-cd /home/user/Muhammed; source ~/render_env/env.sh
-OUT=$1; shift; mkdir -p $OUT
+OUT0=$(realpath -m "$1"); cd /home/user/Muhammed; source ~/render_env/env.sh
+OUT=$OUT0; shift; mkdir -p $OUT
 for sm in "$@"; do
   IFS=: read set mv t <<< "$sm"; t=${t:-0.5}
   d=$OUT/${set}_${mv}; [ -f $d/plate.png ] && continue
