@@ -12,6 +12,18 @@ def T(s): return 1 + round(s * FPS)
 BEAT = [T(t) for t in (0.0, 3.9, 5.2, 8.6, 11.9, 16.4, 18.4, 20.1)]; END = 1590
 C = bpy.data.objects["Composer"]
 CR = make_human_ctrl(C); H = Human(CR); PB = CR.PB
+# ---- hand anatomy limits (client hands rule, Nov 11 23:00): no backward or sideways-twisted joints
+def limit(bn, x, y, z):
+    c = PB[bn].constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HandLimit"
+    for ax, (lo, hi) in zip("xyz", (x, y, z)):
+        setattr(c, "use_limit_" + ax, True); setattr(c, "min_" + ax, R_(lo)); setattr(c, "max_" + ax, R_(hi))
+for s in "LR":
+    for k in range(2, 6):
+        for j in range(1, 4): limit("finger%d-%d.%s" % (k, j, s), (0, 90), (-10, 10), (-10, 10))   # curl forward only, small spread/twist
+    for j in range(1, 4): limit("finger1-%d.%s" % (j, s), (-30, 40), (-30, 30), (-40, 40))          # thumb cone
+    limit("wrist." + s, (-60, 60), (-30, 30), (-25, 25))
+    for b in ("lowerarm01." + s,):                                                                     # elbow: 0-145, no hyper-extension
+        pb = PB[b]; pb.use_ik_limit_x = True; pb.ik_min_x = R_(0); pb.ik_max_x = R_(145)
 piano = bpy.data.objects["Piano"]
 
 # ---------------------------------------------------------------- keyboard geometry (ray cast)
@@ -90,6 +102,7 @@ def phrase(s, f0, f1, centre_fn, every, lift, span=0.12, accent=None):
     while f < f1:
         x = centre_fn(f) + span * math.sin(i * 1.7 + (0 if s == "L" else 2.1)) * 0.5
         x = max(KX0, min(KX1, x))
+        x = min(x, -0.11) if s == "L" else max(x, 0.11)   # each hand keeps its own side: no hand-through-hand
         hit = f; up = f + every // 2
         hand_pose(s, hit, x, 0.0, yaw=RND.uniform(-6, 6)); DOWN.append((s, hit, x))
         c = [RND.uniform(14, 32) for _ in range(4)]; fingers(s, hit, c, spread=4)
@@ -174,9 +187,9 @@ for it in range(3):
 # in-betweens: any frame where a fingertip would dip under the key tops gets its own corrective key
 fix = 0
 for s in "LR":
-    for f in range(1, END + 1, 2):
+    for f in range(1, END + 1):
         ev(f); d, t = low_tip(s)
-        if d < -0.003:
+        if d < -0.003 and (s, f) not in DOWNSET:
             pb = PB["IK_hand." + s]; pb.location = pb.location + (CR.rest("IK_hand." + s).to_3x3().inverted() @ Vector((0, 0, 0.004 - d)))
             pb.keyframe_insert("location", frame=f, group="IK_hand." + s); fix += 1
 print("INBETWEEN_FIX", fix)
