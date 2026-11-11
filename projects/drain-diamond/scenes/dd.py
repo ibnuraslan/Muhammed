@@ -217,8 +217,8 @@ def place(h, loc, face_z, z=0.0):
 
 def face_to(src, dst):
     """rotation z so a person at src faces dst (rest pose faces -Y: z = theta faces (sin, -cos))."""
-    d = Vector(dst) - Vector(src)
-    return math.atan2(d.x, -d.y)
+    dx = dst[0] - src[0]; dy = dst[1] - src[1]
+    return math.atan2(dx, -dy)
 
 
 def arms_relaxed(h, swing=0.0, phase=0.0):

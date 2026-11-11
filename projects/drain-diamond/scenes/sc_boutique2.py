@@ -118,19 +118,32 @@ def build_upstairs(c, after=False):
     c["cases"] = []
     for k, (x, y) in enumerate(((-3.0, 3.0), (0.4, 3.4), (3.4, 3.0))):
         cs, jew = vitrine(f"UVit{k}", (x, y, 0), rng=rng, lit=True); c["cases"].append((cs, jew))
-    # the concealed compartment: a panel in the left wall that slides aside on lit stands
-    niche = dd.Builder("Niche")
-    niche.box((-7.15, 6.0, 1.5), (0.3, 1.6, 1.4), pbr("NicheIn", (0.08, 0.06, 0.05), 0.6))
-    for k in range(3):
-        niche.box((-7.0, 5.5 + k * 0.5, 1.2), (0.12, 0.12, 0.12), pbr("NicheStand", (0.85, 0.84, 0.8), 0.5))
-    niche.done()
-    for k in range(3):
-        dd.ring(f"NicheRing{k}", (-7.0, 5.5 + k * 0.5, 1.28), stone_r=0.006, band="plat" if k % 2 else "gold")
-    nl = bpy.data.lights.new("NicheL", 'AREA'); nl.size = 1.2; nl.energy = 25; nl.color = WARM
-    no = bpy.data.objects.new("NicheL", nl); bpy.context.collection.objects.link(no); no.location = (-6.95, 6.0, 2.1); no.rotation_euler = (0, 0, 0)
-    pnl = dd.Builder("SlidingPanel"); pnl.box((0, 0, 0), (0.06, 1.7, 1.5), pbr("PanelM", (0.72, 0.68, 0.6), 0.55))
-    pnl.box((-0.035, 0, 0), (0.02, 1.4, 1.2), pbr("PanelMould", (0.8, 0.77, 0.7), 0.5))
-    c["panel"] = pnl.done((-6.97, 6.0, 1.5))
+    # the concealed compartment: a shallow built-in cabinet in the panelled left wall, lined in velvet, lit inside;
+    # its front is a moulded panel that slides aside
+    pm = pbr("PanelM", (0.72, 0.68, 0.6), 0.55)
+    vel = dd.tex_mat("velour_velvet", 2.0, tint=(0.22, 0.28, 0.62), name="NicheVel", sat=0.5)
+    N_ = dd.Builder("Niche")
+    N_.box((-6.98, 6.0, 1.5), (0.02, 1.5, 1.3), vel)                          # back
+    for z in (0.85, 2.15):
+        N_.box((-6.85, 6.0, z), (0.28, 1.6, 0.04), pm)                        # bottom / top
+    for y in (5.22, 6.78):
+        N_.box((-6.85, y, 1.5), (0.28, 0.04, 1.34), pm)                       # sides
+    N_.box((-6.85, 6.0, 1.45), (0.24, 1.5, 0.02), vel)                        # a velvet shelf
+    N_.done()
+    stand = pbr("NicheStand", (0.88, 0.86, 0.82), 0.45)
+    for k in range(4):
+        for row, z in enumerate((0.9, 1.48)):
+            y = 5.5 + k * 0.33
+            cyl("NStand", (-6.86, y, z + 0.05), 0.03, 0.1, stand, verts=16)
+            dd.ring(f"NicheRing{k}{row}", (-6.86, y, z + 0.13), stone_r=0.005 + 0.001 * ((k + row) % 2),
+                    band="plat" if (k + row) % 2 else "gold", stone=("diamond", "sapphire", "diamond", "ruby")[k])
+    nl = bpy.data.lights.new("NicheL", 'AREA'); nl.shape = 'RECTANGLE'; nl.size = 1.4; nl.size_y = 0.2; nl.energy = 30; nl.color = WARM
+    no = bpy.data.objects.new("NicheL", nl); bpy.context.collection.objects.link(no); no.location = (-6.82, 6.0, 2.1)
+    nl2 = bpy.data.lights.new("NicheL2", 'AREA'); nl2.shape = 'RECTANGLE'; nl2.size = 1.4; nl2.size_y = 0.15; nl2.energy = 20; nl2.color = WARM
+    no2 = bpy.data.objects.new("NicheL2", nl2); bpy.context.collection.objects.link(no2); no2.location = (-6.82, 6.0, 1.42)
+    pnl = dd.Builder("SlidingPanel"); pnl.box((0, 0, 0), (0.04, 1.62, 1.36), pm)
+    pnl.box((0.025, 0, 0), (0.01, 1.4, 1.14), pbr("PanelMould", (0.8, 0.77, 0.7), 0.5))
+    c["panel"] = pnl.done((-6.7, 6.0, 1.5))
     if after:
         for cs, jew in c["cases"]:                    # emptied cases: jewels gone, a tray fallen on the carpet
             for j in jew:
@@ -139,6 +152,9 @@ def build_upstairs(c, after=False):
             box("FallenTray", (-2.0 + k * 1.4 + rng.uniform(-0.3, 0.3), 4.6 + rng.uniform(-0.5, 0.6), 0.015), (0.4, 0.3, 0.025),
                 dd.tex_mat("velour_velvet", 2.0, tint=(0.25, 0.32, 0.7), name="FallenVel", sat=0.4), rot=(0, 0, rng.uniform(0, 3)))
         c["panel"].location.y = 7.6
+        for o in bpy.data.objects:                   # after hours: the big lights off, only the cases and the window glow
+            if o.type == 'LIGHT' and (o.name.startswith("Chand") or o.name.startswith("CeilFill")):
+                o.data.energy = 0.0
         return
     # sixteen people on the floor along the walls (staff, a customer), seen wide; robbers standing
     c["floor"] = []
@@ -273,7 +289,7 @@ def anim_panel(c, t):
     sec = t * DUR["panel"]
     hide_floor(c)
     u = ease(min(1.0, max(0.0, (sec - 1.0) / 3.5)))
-    c["panel"].location = (-6.97, 6.0 + 1.6 * u, 1.5)
+    c["panel"].location = (-6.7, 6.0 + 1.65 * u, 1.5)
 
 
 def anim_grenade(c, t):
@@ -302,7 +318,7 @@ def cam_xmas(c, t):
 
 def cam_door(c, t):
     e = ease(t); d = c["info"]["door"]
-    return Vector((d.x - 6.5, -6.2, 1.75)).lerp(Vector((d.x - 5.3, -5.6, 1.7)), e), d + Vector((-0.8, -0.6, 1.4)), 32
+    return Vector((d.x - 6.0, -8.6, 1.75)).lerp(Vector((d.x - 5.0, -8.0, 1.72)), e), d + Vector((-0.8, -0.6, 1.4)), 26
 
 
 def cam_getaway(c, t):
@@ -324,7 +340,7 @@ MOVES = {
                      cam=lambda c, t: (Vector((1.4, 3.4, 1.7)).lerp(Vector((1.1, 3.7, 1.65)), ease(t)), Vector((-1.0, 5.4, 0.4)), 30),
                      focus=lambda c, t: Vector((-1.0, 5.4, 0.4))),
     "panel": dict(kind="anim", dof=4.0, anim=anim_panel,
-                  cam=lambda c, t: (Vector((-4.6, 4.2, 1.6)).lerp(Vector((-4.9, 4.6, 1.55)), ease(t)), Vector((-7.0, 6.2, 1.4)), 32),
+                  cam=lambda c, t: (Vector((-3.4, 3.6, 1.65)).lerp(Vector((-3.8, 4.0, 1.6)), ease(t)), Vector((-6.9, 6.4, 1.45)), 30),
                   focus=lambda c, t: Vector((-7.0, 6.0, 1.4))),
     "grenade": dict(kind="anim", dof=5.6, anim=anim_grenade,
                     cam=lambda c, t: (Vector((-5.0, 1.0, 1.7)).lerp(Vector((-4.6, 1.3, 1.65)), ease(t)), Vector((4.0, 8.2, 1.3)), 32),
