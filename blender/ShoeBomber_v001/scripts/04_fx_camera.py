@@ -418,7 +418,6 @@ SEG = [
     (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
     (697, V((0.62, 0.55, 1.42)), bp("Bomber", "upperarm02.R", 697), 34),
     (712, V((0.45, 0.92, 0.80)), bp("Bomber", "upperarm02.R", 712), 36),
-    (728, V((0.62, 0.70, 1.30)), bp("Bomber", "upperarm02.R", 728, (0, 0.2, 0)), 32),
     (748, V((0.45, 0.85, 1.58)), bp("Bomber", "head", 748), 30),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.15, 1.35, 1.65)), bp("Bomber", "foot.L", 800), 26),

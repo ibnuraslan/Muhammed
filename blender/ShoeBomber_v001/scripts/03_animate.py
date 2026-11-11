@@ -32,7 +32,8 @@ print("RIGS_READY")
 # ------------------------------------------------------------------ pose helpers
 FINGERS = [("finger%d-%d" % (k, j)) for k in range(2, 6) for j in range(1, 4)]
 def curl(h, s, f, amt, thumb=None):
-    """amt 0 open .. 1 fist (local X bend)"""
+    """amt 0 open .. 1 fist (local X bend); never flatter than a relaxed curl"""
+    amt = max(amt, 0.25)
     thumb = amt * 0.6 if thumb is None else thumb
     for k in range(1, 6):
         for j in range(1, 4):
@@ -156,7 +157,7 @@ for f in range(600, 721, 12):
     bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-18 + 3 * (1 - w), 32 + 6 * (1 - w)))
 # arms when pinned: left arm twisted behind his back (held by PaxB), right arm out forward on the floor (held by attendant / injected)
 for f in (582, 654, 720, 768, 830, 1068):
-    hand(bom, "L", f, V((-0.08, BY + 0.55, 0.42)), (1, 0, 0.1), (0, 0, 1), pole=(-0.6, BY + 0.6, 0.6), grip=0.5)
+    hand(bom, "L", f, V((-0.30, BY + 0.55, 0.08)), (0, -1, 0), (0, 0, -1), pole=(-0.6, BY + 0.9, 0.4), grip=0.3)
     hand(bom, "R", f, V((0.16, BY + 1.50, 0.34 if f < 720 else 0.30)), (0.05, 0.8, 0.3), (0, 0, -1), pole=(0.6, BY + 1.0, 0.5), grip=0.6 if f < 720 else 0.15)
 # after sedation he lies still; tiny breathing
 for f in range(780, 1069, 30):
@@ -252,8 +253,8 @@ for f in (585, 654, 720, 768):
     pa.key_root(f, V((-0.05, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
     pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(20, 0) if f < 720 else (10, 20))
     pa.key_foot("L", f, V((-0.25, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12, BY - 0.40)), FWD + 20, 0.02, -65)
-    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.33)), (0.1, 1, -0.6), (0, 0, -1), grip=0.3)
-    hand(pa, "R", f, V((0.12, BY + 1.0, 0.33)), (-0.1, 1, -0.6), (0, 0, -1), grip=0.3)
+    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.46)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "R", f, V((0.12, BY + 1.0, 0.46)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
 
 # ---------------------------------------------------------------- PAX B (2C behind, aisle seat; stands, pins the left arm / legs)
 for f in range(1, 470, 20):
@@ -264,11 +265,11 @@ sit(pb, 440, SX["C"], ROW(2), spine=(2, 15, 0), head=(-5, 20))      # looks up a
 stand(pb, 500, V((0.0, ROW(2) + 0.1, 0)), FWD, spine=(10, 0, 0), head=(5, 0))
 stand(pb, 545, V((0.0, ROW(2) + 0.3, 0)), FWD, spine=(30, 0, 0), head=(20, 0), crouch=0.15, stance=0.15)
 for f in (590, 654, 720, 768):     # kneels on his legs side, holds the twisted left arm behind his back
-    pb.key_root(f, V((0.14, BY - 0.55, 0.57)), yaw=FWD - 15, flex=10)
+    pb.key_root(f, V((0.10, BY - 0.80, 0.55)), yaw=FWD, flex=12)
     pb.key_spine(f, flex=62 if f < 720 else 50, twist=-8, head=(20, 0) if f < 720 else (10, -10))
-    pb.key_foot("L", f, V((0.02, BY - 0.95)), FWD - 15, 0.02, -65); pb.key_foot("R", f, V((0.32, BY - 0.92)), FWD - 15, 0.02, -65)
-    hand(pb, "L", f, V((-0.02, BY + 0.5, 0.48)), (0, 1, -0.4), (0, 0, -1), grip=0.85)
-    hand(pb, "R", f, V((0.12, BY + 0.2, 0.40)), (0, 1, -0.6), (0, 0, -1), grip=0.85)
+    pb.key_foot("L", f, V((-0.02, BY - 1.18)), FWD, 0.02, -65); pb.key_foot("R", f, V((0.22, BY - 1.18)), FWD, 0.02, -65)
+    hand(pb, "L", f, V((-0.08, BY - 0.10, 0.31)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on the back of his calves
+    hand(pb, "R", f, V((0.12, BY - 0.12, 0.31)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 
 stand(pa, 800, V((-0.70, BY + 0.38, 0)), 70, spine=(10, 0, 0), head=(15, -20), crouch=0.25)
 for f in (850, 950, 1068):
@@ -498,5 +499,23 @@ for h in (pa, pb, stw, att):
                         fc.keyframe_points.insert(1380, last.co.y).interpolation = 'CONSTANT'
                     fc.update()
 print("REACH_FIXED")
+
+# ================================================================== hand limits (client, Nov 11 23:00): no backward or over-range bends
+import math as _m
+for h in HS.values():
+    for s_ in "LR":
+        for k in range(1, 6):
+            for j in range(1, 4):
+                pbn = h.r.PB["finger%d-%d.%s" % (k, j, s_)]
+                c = pbn.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+                if k == 1:
+                    c.min_x, c.max_x = _m.radians(-30), _m.radians(60); c.min_y, c.max_y = _m.radians(-40), _m.radians(40); c.min_z, c.max_z = _m.radians(-60), _m.radians(60)
+                else:
+                    c.min_x, c.max_x = 0.0, _m.radians(100); c.min_y, c.max_y = _m.radians(-10), _m.radians(10); c.min_z, c.max_z = _m.radians(-10), _m.radians(10)
+        wb = h.r.PB["wrist." + s_]
+        c = wb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.use_limit_x = c.use_limit_z = True
+        c.min_x, c.max_x = _m.radians(-60), _m.radians(60); c.min_z, c.max_z = _m.radians(-25), _m.radians(25)
+print("HAND_LIMITS")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)
