@@ -290,3 +290,36 @@ def leaves(n, area, seed=5, cols=((0.55, 0.3, 0.06), (0.62, 0.42, 0.1), (0.4, 0.
         o = bpy.context.active_object; o.name = "Leaf"; o.scale = (0.06, 0.04, 1); o.rotation_euler = (rng.uniform(-0.3, 0.3), rng.uniform(-0.3, 0.3), rng.uniform(0, 6.28))
         o.data.materials.append(mats[k % len(mats)]); out.append(o)
     return out
+
+
+def ph_instances(aid, placements, pick=None, decimate=None):
+    """Import a Poly Haven model once and place linked copies (shared mesh data): placements = [(loc, rot_z, scale)].
+    pick: keep only the sub-mesh whose name contains this (e.g. one tree of a three-tree asset), centred at the origin;
+    decimate: collapse ratio applied once to the shared mesh (heavy scans)."""
+    import ph
+    root, ms = ph.model(aid)
+    if pick:
+        keep = [o for o in ms if pick in o.name]
+        for o in ms:
+            if o not in keep:
+                me = o.data; bpy.data.objects.remove(o, do_unlink=True); bpy.data.meshes.remove(me)
+        ms = keep
+        lo, hi = ph.bounds(ms)
+        for o in ms:
+            o.location.x -= (lo.x + hi.x) / 2; o.location.y -= (lo.y + hi.y) / 2
+    if decimate:
+        for o in ms:
+            d = o.modifiers.new("dec", 'DECIMATE'); d.ratio = decimate
+            bpy.context.view_layer.objects.active = o; bpy.ops.object.modifier_apply(modifier="dec")
+    out = []
+    for (loc, rz, sc) in placements:
+        r = bpy.data.objects.new(aid + "_inst", None); bpy.context.collection.objects.link(r)
+        for o in ms:
+            n = o.copy(); bpy.context.collection.objects.link(n); n.parent = r
+            n.matrix_parent_inverse = o.matrix_parent_inverse.copy()
+        r.location = loc; r.rotation_euler = (0, 0, rz); r.scale = (sc, sc, sc)
+        out.append(r)
+    root.location = (0, 0, -1000); root.hide_render = True
+    for o in ms:
+        o.hide_render = True
+    return out

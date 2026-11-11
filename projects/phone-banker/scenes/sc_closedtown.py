@@ -31,9 +31,10 @@ def snow_ground(name, size, loc=(0, 0, 0)):
 
 
 def forest(xr, yr, n, seed=2):
+    from pbkit import ph_instances
     r = np.random.default_rng(seed)
-    for k in range(n):
-        ph.model("pine_tree_01" if k % 2 else "fir_tree_01", loc=(r.uniform(*xr), r.uniform(*yr), 0), rot_z=r.uniform(0, 6.28), scale=r.uniform(0.6, 0.9))
+    pl = [((r.uniform(*xr), r.uniform(*yr), 0), r.uniform(0, 6.28), r.uniform(0.6, 0.9)) for _ in range(n)]
+    ph_instances("fir_tree_01", pl, pick="_a_", decimate=0.05)
 
 
 def bus():
@@ -58,10 +59,10 @@ def build(variant=None):
     variant = variant or "checkpoint"
     c = {"variant": variant}
     if variant == "checkpoint":
-        world_flat((0.62, 0.66, 0.72), 0.9)
+        world_flat((0.62, 0.66, 0.72), 0.55)
         snow_ground("Snow", (200, 200))
         road = pbr("SnowRoad", (0.3, 0.3, 0.32), 0.6); box("Road", (0, 0, 0.03), (200, 7, 0.06), road)
-        forest((-60, 60), (12, 50), 40); forest((-60, 60), (-50, -14), 30, seed=4)
+        forest((-60, 60), (14, 50), 18); forest((-60, 60), (-50, -16), 10, seed=4)
         # guard booth, barrier, fence, concrete blocks
         booth = joinm([box("Booth", (0, 0, 1.25), (2.2, 2.0, 2.5), pbr("BoothPaint", (0.45, 0.5, 0.42), 0.6), bevel=0.02),
                        box("BoothRoof", (0, 0, 2.6), (2.6, 2.4, 0.2), pbr("BoothRoofM", (0.25, 0.25, 0.25), 0.7))], "Booth")
@@ -79,9 +80,8 @@ def build(variant=None):
         c["barrier"] = piv
         for k in range(4):
             ph.model("concrete_road_barrier", loc=(-2.5 - k * 1.6, 4.5, 0), rot_z=0.0)
-        for k in range(6):
-            r, _ = ph.model("modular_chainlink_fence", loc=(-8 - k * 8.1, 6.0, 0), rot_z=0.0)
-            r2, _ = ph.model("modular_chainlink_fence", loc=(10 + k * 8.1, 6.0, 0), rot_z=0.0)
+        from pbkit import ph_instances
+        ph_instances("modular_chainlink_fence", [((-8 - k * 8.1, 6.0, 0), 0.0, 1.0) for k in range(5)] + [((10 + k * 8.1, 6.0, 0), 0.0, 1.0) for k in range(5)])
         ph.model("security_light", loc=(2.0, 4.2, 2.5), rot_z=0.0)
         c["bus"] = bus()
         c["guard"] = person("Guard", 1.0, 30, "male_casualsuit05", "short02", cval=0.25, hue=0.3, sat=0.6)
@@ -145,7 +145,7 @@ def build(variant=None):
             k += 1
         # the one lit window, warm, on the near block
         box("LitWindow", (-12.6, 13.98, 7.0), (1.2, 0.02, 1.3), emissive("LitWin", (1.0, 0.75, 0.45), 6.0))
-        forest((-60, 60), (55, 90), 30); forest((-40, -25), (0, 15), 4, seed=6)
+        forest((-60, 60), (55, 90), 14); forest((-40, -25), (0, 15), 4, seed=6)
         for x in (-8, 8):
             ph.model("street_lamp_01", loc=(x, 8, 0))
             sl = bpy.data.lights.new("BLamp", 'POINT'); sl.energy = 220; sl.color = (1.0, 0.7, 0.4)
@@ -164,7 +164,7 @@ def animate(c, sec, move):
         up = ease(min(1.0, max(0.0, (sec - 0.8) / 1.8)))
         c["barrier"].rotation_euler = (math.radians(80 * up), 0, 0)
         x = -30 + 6.0 * max(0.0, sec - 1.2) if sec > 1.2 else -30
-        x = -30 + min(28.0, 7.0 * max(0.0, sec - 1.0))
+        x = -26 + 5.0 * sec
         c["bus"].location = (x, 1.6, 0.05); c["bus"].rotation_euler = (0, 0, 0)
         g = c["guard"]
         stand(g, (1.4, 4.0, 0.1), math.radians(180 + 30))
@@ -192,7 +192,7 @@ def _anim(move):
 
 
 MOVES = {
-    "checkpoint": dict(kind="anim", dof=8.0, far=120.0, anim=_anim("checkpoint"), cam=_push((-6.0, -9.0, 1.7), (-4.5, -8.0, 1.75), (0.0, 3.5, 1.8), (0.5, 3.5, 1.8), 30),
+    "checkpoint": dict(kind="anim", dof=8.0, far=120.0, anim=_anim("checkpoint"), cam=_push((7.0, -8.5, 1.7), (6.0, -8.0, 1.75), (-5.0, 3.0, 1.6), (-3.5, 3.0, 1.6), 28),
                        focus=lambda c, t: Vector((0.8, 3.8, 1.2))),
     "institute": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("institute"), cam=_push((-0.4, -10.5, 1.55), (-0.3, -9.6, 1.55), (0.1, 4.0, 1.3), (0.1, 4.0, 1.3), 30),
                       focus=lambda c, t: Vector((0.2, -6.0 + DUR["institute"] * t, 1.3))),
