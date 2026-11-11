@@ -131,6 +131,11 @@ def _():
     return cam, anim
 
 
+DUR["guitar_dolly"] = 5.0; VARIANT_FOR["guitar_dolly"] = VARIANT_FOR["guitar"]
+MOVES["guitar_dolly"] = dict(MOVES["guitar"], cam=lambda c, t: (Vector((1.2, -4.35, 0.95)).lerp(Vector((2.3, -4.4, 1.05)), ease(t)),
+                                                                   Vector((2.2, -3.6, 0.7)).lerp(Vector((3.2, -2.0, 0.95)), ease(t)), 30))
+
+
 @move("aftermath_push", "dusk", 5.0, rooms=("bedroom",))
 def _():
     def anim(c, t):

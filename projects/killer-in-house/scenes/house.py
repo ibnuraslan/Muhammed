@@ -496,6 +496,7 @@ def front_room_set(c):
     c["lamp"] = point((3.75, -1.2, 1.15), 45, (1.0, 0.68, 0.38), 0.08)
     ph.model("Lantern_01", loc=(4.0, -3.6, 1.55), scale=0.8)
     ph.model("mantel_clock_01", loc=(4.0, -2.4, 1.57), rot_z=math.radians(90))
+    ph.model("standing_picture_frame_01", loc=(2.35, -4.45, 0.0), rot_z=math.radians(170), scale=1.0) if False else None
     rug = box("Rug", (2.6, -2.4, 0.004), (2.6, 2.0, 0.008), fabric("Rug", (0.32, 0.1, 0.07), 0.95, 0.3, 300))
     for k, y in enumerate((-3.2, -2.6)):
         ph.model("fancy_picture_frame_01", loc=(4.18, y, 1.75), rot_z=math.radians(90), scale=0.6)
