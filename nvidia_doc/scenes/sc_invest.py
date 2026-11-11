@@ -157,6 +157,8 @@ def build(variant=None):
             l = area_light((x, y, 2.9), (0, 0, 0), 0.9, 55, (0.9, 0.96, 1.0)); l.rotation_euler = (0, 0, 0); l.visible_camera = False
             if variant == "night":                 # the panels go off one after another, front to back
                 off_at = 30 + int((x + 3) / 3) * 18 + (0 if y > 0 else 9)
+                if x == -3 and y > 0:
+                    off_at = 10 ** 6                   # one panel by the back stays on, dimmed: the papers left out
                 dl = l.data.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = f"55 * (1 if frame < {off_at} else 0.0)"
     # ---------------------------------------------------------------- filing cabinets along the back wall
     steel = pbr("SteelGrey", (0.42, 0.43, 0.44), 0.42, 0.55, **{'Coat Weight': 0.15})
@@ -291,6 +293,10 @@ def build(variant=None):
         L2.new(t2.outputs['UV'], i2.inputs['Vector']); e2 = N2.new("ShaderNodeEmission"); e2.inputs['Strength'].default_value = 1.4
         L2.new(i2.outputs['Color'], e2.inputs['Color']); L2.new(e2.outputs[0], o2.inputs['Surface'])
         c["photo_mat"] = pm_
+    if variant == "night":                         # moonlight through the blinds and one desk lamp left on
+        mn = area_light((5.8, 0, 1.8), (0, 0, 0), 4.0, 60, (0.45, 0.55, 0.9)); point_at(mn, (0, 0, 0.8)); mn.visible_camera = False
+        dl = bpy.data.lights.new("DeskLampOn", 'SPOT'); dl.energy = 80; dl.spot_size = math.radians(70); dl.color = (1.0, 0.72, 0.45)
+        dlo = bpy.data.objects.new("DeskLampOn", dl); bpy.context.collection.objects.link(dlo); dlo.location = (-1.7, -0.6, 1.6); point_at(dlo, (-1.7, -0.6, 0.76))
     # CH3 3A: steel shelving along the left of the back wall; an investigator slides a sealed evidence box onto it
     shelf_m = pbr("ShelfSteel", (0.55, 0.56, 0.58), 0.35, 0.9)
     for z in (0.3, 0.75, 1.2, 1.65):
@@ -313,6 +319,12 @@ def build(variant=None):
     c["people"]["pinner"] = pinner
     c["pin_page"] = sheet("PinPage", (-5.6, 0.45, 1.5), (0.2, 0.26), page_m[2], rot=(math.radians(90), 0, math.radians(90)))
     animate(c, 0.0, {})
+    if variant == "night":                          # after hours: everyone has gone home, the papers stay
+        for h in c["people"].values():
+            for o in [h.arm] + list(h.parts):
+                o.hide_render = True
+        for o in c["held"].values():
+            o.hide_render = True
     return c
 
 

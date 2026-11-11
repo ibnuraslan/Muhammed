@@ -51,7 +51,7 @@ def build(variant=None):
     box("Embank", (0, 1200, 1), (8000, 8, 4), H(pbr("Embank", (0.35, 0.34, 0.32), 0.7)))
     near = pbr("Promenade", (0.32, 0.31, 0.29), 0.75)
     box("NearShore", (0, -150, 0), (8000, 300, 2), near)
-    lf = 0.0 if sg else (0.2 if bj else 0.12)
+    lf = 0.0 if sg else (0.38 if bj else 0.12)
     types = [facade("GlassA", (0.05, 0.08, 0.11), (0.45, 0.47, 0.5) if not bj else (0.08, 0.085, 0.09), floor=4.0, bay=1.6, lit_frac=lf, refl=0.45),
              facade("GlassB", (0.07, 0.1, 0.1), (0.55, 0.55, 0.52), floor=3.8, bay=1.5, lit_frac=0.0 if sg else 0.1, refl=0.4),
              facade("Stone", (0.08, 0.085, 0.09), (0.66, 0.62, 0.56), floor=3.6, bay=1.4, lit_frac=0.0 if sg else 0.15, refl=0.12),
