@@ -299,7 +299,7 @@ def hand(H, s, f, W, d, n, elbow_out=0.35, yaw=0.0):
 def hang(H, s, f, pos, yaw, fwd=0.0):
     sx = 1 if s == "L" else -1
     Rz = Matrix.Rotation(math.radians(yaw), 3, "Z")
-    W = V(pos.x, pos.y, 0) + Rz @ V(sx * 0.22, -fwd, 0) + V(0, 0, H.root_head.z * 0.87)
+    W = V(pos.x, pos.y, 0) + Rz @ V(sx * 0.27, -fwd - 0.05, 0) + V(0, 0, H.root_head.z * 0.9)
     hand(H, s, f, W, V(0, 0, -1) + Rz @ V(0, -0.15, 0), Rz @ V(-sx, 0, 0), 0.3, yaw)
 
 # Surgeon: S0 in front of table 1 / S1 in front of table 2
@@ -311,7 +311,7 @@ _bA = D["MK_BodyA"]
 _sv = max((v.co for v in _bA.data.vertices if abs(v.co.z - 0.30) < 0.02 and abs(v.co.y + 0.28) < 0.03), key=lambda c: c.x)
 SHOULDER_W = M_LIE1 @ _sv
 # beat 1: marker drawing 40-200, left hand steadies the head
-for f in range(1, 252, 6):
+for f in list(range(1, 212, 6)) + [211]:
     sw = 0.5 + 0.5 * math.sin(f / 24.0)
     pose(SURG, f, S0, Y0, flex=26 + 3 * sw, twist=-6, headr=(18, 4))
     a = A0 + (A1 - A0) * smooth((f - 60) / 140.0)
@@ -363,9 +363,14 @@ def beat2_keys(frames):
         for s, (S_, N_, D_) in (("L", (SL, NL, DL)), ("R", (SR, NR_, DR))):
             W, d_, n_ = grip(ff, S_, N_, D_, s)
             Nw = ((head_world(ff) if ff < 376 else M_root(ff)).to_3x3() @ N_).normalized()
-            W = W + Nw * 0.09 * max(app, rel) + V(0, -0.05, 0.04) * max(app, rel)
+            if f < 250 and s == "L":
+                W = (SHOULDER_W + V(0, 0, 0.07)).lerp(W, smooth((f - 212) / 38.0))
+            elif f < 250:
+                W = W + Nw * 0.09 * app + V(0, -0.05, 0.04) * app
+            else:
+                W = W + Nw * 0.09 * rel + V(0, -0.05, 0.04) * rel
             hand(SURG, s, f, W, d_, n_, 0.4, yw)
-            curl(SURG, s, f, GRIP_CURL[s] * (1.0 - max(app, rel)))
+            curl(SURG, s, f, min(GRIP_CURL[s], 0.5 if s == "L" else 0.0) * (1.0 - max(app, rel)))
 
 beat2_keys(list(range(214, 400, 3)) + [400])
 # numeric grip search: back each hand off the head surface until the glove sits on the fur (no verts inside)
@@ -424,28 +429,40 @@ for f in list(range(672, 1040, 6)):
         hang(SURG, "L", f, pos, Y1)
         hand(SURG, "R", f, V(0.48, -0.42, 1.25).lerp(V(0.3, -0.75, 1.0), 1 - k), V(0.3, 1, 0.5), V(1, 0, 0), 0.3, Y1)
     else:
-        for s in "LR": hand(SURG, s, f, pos + Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((0.08 if s == "L" else -0.08), -0.28, 0) + V(0, 0, 1.0), V(0, 1, 0.2) if False else Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((-1 if s == "L" else 1), -0.3, 0), V(0, 0, 1), 0.3, Y1)
+        for s in "LR": hand(SURG, s, f, pos + Matrix.Rotation(math.radians(Y1), 3, "Z") @ V((0.19 if s == "L" else -0.19), -0.26, 0) + V(0, 0, 1.02), Matrix.Rotation(math.radians(Y1), 3, "Z") @ V(0, -1, -0.35), V(0, 0, 1), 0.3, Y1)
 # beats 7-9: recovery corner. Surgeon beside the chair waves a hand in front of the monkey (no reaction), then clipboard at the monitor
 S3 = V(1.44, 1.16, 0); Y3 = yaw_to(S3, CH + V(0, 0.2, 0))
 S4 = V(2.6, 0.6, 0); Y4 = yaw_to(S4, V(3.05, 0.95, 0))
 board = D["Forceps"]
-for f in list(range(1190, 1771, 6)):
+for f in list(range(1190, 1771, 3)):
     if f < 1380:
         pose(SURG, f, S3, Y3, flex=22, twist=-5, headr=(22, 0), crouch=0.05)
         face_w = M_CHAIR @ EYEMID
         wv = math.sin((f - 1230) / 7.0) if 1225 < f < 1310 else 0.0
         Rz = Matrix.Rotation(math.radians(Y3), 3, "Z")
         hand(SURG, "R", f, face_w + (S3 - face_w).normalized() * 0.16 + V(0, 0, 0.05) + Rz @ V(0.06 * wv, 0, 0), V(0, 0, 1), Rz @ V(0, 1, 0), 0.35, Y3)
-        hang(SURG, "L", f, S3, Y3, 0.05)
+        if f < 1350:
+            hang(SURG, "L", f, S3, Y3, 0.05)
+        else:   # lifts the clipboard up before stepping to the monitor
+            Rz3 = Matrix.Rotation(math.radians(Y3), 3, "Z"); k3 = smooth((f - 1350) / 30.0)
+            h0 = V(S3.x, S3.y, 0) + Rz3 @ V(0.27, -0.10, 0) + V(0, 0, SURG.root_head.z * 0.9)
+            c3 = S3 + Rz3 @ V(0.05 + 0.17, -0.52, 0) + V(0, 0, 1.08)
+            d0 = (V(0, 0, -1) + Rz3 @ V(0, -0.15, 0)).normalized(); n0 = Rz3 @ V(-1, 0, 0)
+            d1 = Rz3 @ V(-1, 0, 0); n1 = V(0, 0, 1)
+            hand(SURG, "L", f, h0.lerp(c3, k3) + Rz3 @ V(0.08 * math.sin(math.pi * k3), -0.12 * math.sin(math.pi * k3), 0),
+                 d0.lerp(d1, smooth((k3 - 0.35) / 0.65)).normalized(), n0.lerp(n1, smooth((k3 - 0.35) / 0.65)).normalized(), 0.3, Y3)
     else:
         ur = max(0.0, min(1.0, (f - 1380) / 40.0)); u = smooth(ur)
         pos = S3.lerp(S4, u); yw = Y3 + (Y4 - Y3) * u
-        pose(SURG, f, pos, yw, flex=12 + 10 * smooth((f - 1600) / 80.0), headr=(18 + 14 * smooth((f - 1600) / 80.0), 0), step=(S3, Y3, S4, Y4, ur))
+        pose(SURG, f, pos, yw, flex=22 - 10 * u + 10 * smooth((f - 1600) / 80.0), headr=(18 + 14 * smooth((f - 1600) / 80.0), 0), crouch=0.05 * (1 - u), step=(S3, Y3, S4, Y4, ur))
         Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
-        cb = pos + Rz @ V(0.05, -0.32, 0) + V(0, 0, 1.08)
-        hand(SURG, "L", f, cb + Rz @ V(0.1, 0.02, 0), Rz @ V(-1, 0, 0), V(0, 0, 1), 0.3, yw)
+        bow = smooth((f - 1600) / 80.0)
+        cb = pos + Rz @ V(0.05, -0.36 - 0.14 * bow - 0.16 * (1 - u), 0) + V(0, 0, 1.1 - 0.05 * bow - 0.02 * (1 - u))
+        kk = 1.0
+        hang_w = V(pos.x, pos.y, 0) + Rz @ V(0.27, -0.05, 0) + V(0, 0, SURG.root_head.z * 0.9)
+        hand(SURG, "L", f, (hang_w + Rz @ V(0, -0.15, 0)).lerp(cb + Rz @ V(0.17, 0.02, 0), kk), Rz @ V(-1, 0, 0), V(0, 0, 1), 0.3, yw)
         wr = math.sin(f / 3.0) * 0.01 if 1400 < f < 1560 else 0.0
-        hand(SURG, "R", f, cb + Rz @ V(-0.03 + wr, -0.02, 0.04), Rz @ V(0.3, -1, -0.5), V(0, 0, 1), 0.35, yw)
+        hand(SURG, "R", f, cb + Rz @ V(-0.1 + wr, -0.03, 0.05), Rz @ V(0.3, -1, -0.5), V(0, 0, 1), 0.35, yw)
 hide_keys_people = []
 for ob in [D["Surgeon"]] + [c for c in D["Surgeon"].children]:
     hide_keys(ob, [(1, False), (1036, True), (1187, False)])
@@ -459,7 +476,7 @@ for o in tro:
 NP0 = TRO_END + V(-0.55, -0.75, 0) + V(-0.15, -0.55, 0); NP1 = TRO_END + V(-0.12, -0.55, 0)
 ny = yaw_to(NP1, TRO_END)
 NURSE.walk(lambda f: NP0.lerp(NP1, smooth((f - 1) / 150.0)).to_3d(), lambda f: ny, 1, 160, stride=0.55, duty=0.6, lift=0.07, bob=0.018, crouch=0.04, lean=8)
-for f in range(1, 162, 4):
+for f in list(range(1, 161, 4)) + [160]:
     p = NP0.lerp(NP1, smooth((f - 1) / 150.0))
     for s in "LR":
         Rz = Matrix.Rotation(math.radians(ny), 3, "Z")
@@ -468,7 +485,16 @@ for f in range(1, 162, 4):
 NP2 = V(-1.05, -0.62, 0); ny2 = yaw_to(NP2, V(0.0, 0.05, 0))
 NP2b = V(-0.82, 1.15, 0); ny2b = yaw_to(NP2b, V(-1.35, 1.25, 0))
 WALKS = [(300, 400, NP2, NP2b), (560, 680, NP2b, NP2)]
+def _wh(a0, a1, p0, p1):
+    hd = (p1 - p0).normalized(); return math.degrees(math.atan2(hd.x, -hd.y))
+def _ang_lerp(a, b, t):
+    d = (b - a + 180) % 360 - 180; return a + d * t
 def nurse_at(f):
+    W1, W2 = WALKS
+    if 270 < f < 300: return NP2, _ang_lerp(ny2, _wh(*W1), smooth((f - 270) / 30.0))
+    if 400 < f < 432: return NP2b, _ang_lerp(_wh(*W1), ny2b, smooth((f - 400) / 32.0))
+    if 528 < f < 560: return NP2b, _ang_lerp(ny2b, _wh(*W2), smooth((f - 528) / 32.0))
+    if 680 < f < 716: return NP2, _ang_lerp(_wh(*W2), ny2, smooth((f - 680) / 36.0))
     if f <= 300: return NP2, ny2
     for a0, a1, p0, p1 in WALKS:
         if a0 <= f <= a1:
@@ -479,7 +505,7 @@ for a0, a1, p0, p1 in WALKS:
     hd = (p1 - p0).normalized(); yw_ = math.degrees(math.atan2(hd.x, -hd.y))
     NURSE.walk(lambda f, a0=a0, a1=a1, p0=p0, p1=p1: p0.lerp(p1, smooth((f - a0) / (a1 - a0))).to_3d(), lambda f, yw_=yw_: yw_, a0, a1, stride=0.55, duty=0.6, lift=0.07, bob=0.018, crouch=0.04, lean=6)
 bowl = D["Bowl"]
-for f in list(range(166, 1040, 6)):
+for f in [162, 164] + list(range(166, 1040, 3)):
     ur = max(0.0, min(1.0, (f - 166) / 40.0)); u = smooth(ur)
     walking = any(a0 <= f <= a1 for a0, a1, _, _ in WALKS)
     if f < 300:
@@ -492,6 +518,13 @@ for f in list(range(166, 1040, 6)):
         if not walking:
             pose(NURSE, f, p, yw, flex=10, headr=(12, 10 * math.sin(f / 60.0)))
     Rz = Matrix.Rotation(math.radians(yw), 3, "Z")
+    if f < 196:   # hand-off from the trolley handle
+        Rn = Matrix.Rotation(math.radians(ny), 3, "Z"); kk = smooth((f - 166) / 30.0)
+        for s_ in "LR":
+            g0 = NP1 + Rn @ V((0.16 if s_ == "L" else -0.16), -0.38, 0) + V(0, 0, 0.88)
+            g1 = (p + Rz @ V(0.12, -0.3, 0) + V(0, 0, 0.95)) if s_ == "L" else (V(p.x, p.y, 0) + Rz @ V(-0.27, -0.1, 0) + V(0, 0, NURSE.root_head.z * 0.9))
+            hand(NURSE, s_, f, g0.lerp(g1, kk), Rz @ V(0, -1, -0.3), V(0, 0, 1), 0.3, yw)
+        continue
     if 440 < f < 520:   # turns the gas knob on the anaesthesia machine
         k = math.sin(math.pi * (f - 440) / 80.0)
         hand(NURSE, "R", f, (p + V(0, 0, 0.9) + Rz @ V(-0.15, -0.3, 0)).lerp(V(-1.25, 1.02, 0.92), k), Rz @ V(0, -1, 0), V(0, 0, 1), 0.3, yw)
@@ -641,6 +674,21 @@ for f in range(1, 1771):
     cam_d.dof.focus_distance = (a - p).length; cam_d.dof.keyframe_insert("focus_distance", frame=f)
     CAMLOG.append((f, tuple(round(x, 3) for x in p), tuple(round(x, 3) for x in a), round(fl(f), 1)))
 json.dump(CAMLOG[::30], open(os.path.join(HERE, "..", "camera_path.json"), "w"))
+# ---- hand limits (client rule, 23:00): no backward finger bends, natural wrist range, elbow no hyper-extension
+def add_limit(pb, xr, yr, zr):
+    c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
+    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+    c.min_x, c.max_x = [math.radians(v) for v in xr]; c.min_y, c.max_y = [math.radians(v) for v in yr]; c.min_z, c.max_z = [math.radians(v) for v in zr]
+    c.name = "HandLimit"
+for nm_ in ("Surgeon", "Nurse", "Anaes"):
+    rg = D[nm_]
+    for pb in rg.pose.bones:
+        n = pb.name; side = n[-1]
+        sg = 1 if side == "L" else -1
+        if n.startswith("finger1-"):        # thumb: a natural cone
+            add_limit(pb, (-45, 60) if sg > 0 else (-60, 45), (-30, 30), (-35, 35))
+        elif n.startswith("finger"):        # fingers: forward 0..90, no backward bend, small spread
+            add_limit(pb, (-3, 90) if sg > 0 else (-90, 3), (-8, 8), (-10, 10))
 for o in D:
     set_const(o)
     if o.type == "LIGHT": o.visible_camera = False; o.visible_glossy = False

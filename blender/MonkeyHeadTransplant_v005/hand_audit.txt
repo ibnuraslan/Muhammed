@@ -1,0 +1,17 @@
+f161: Nurse.L:own_Gown 5
+f181: Nurse.R:own_Gown 1
+f213: Surgeon.R:own-body 15, Surgeon.R:own_Gown 1
+f215: Surgeon.R:own-body 10
+f217: Surgeon.R:own-body 10
+f219: Surgeon.R:own-body 8
+f221: Surgeon.R:own-body 2
+f297: Surgeon:hand-hand 1
+f301: Surgeon:hand-hand 1
+f303: Surgeon:hand-hand 2
+f397: Surgeon.R:own-body 10
+f399: Surgeon.L:own-body 9, Surgeon.R:own-body 16
+f401: Surgeon:hand-hand 22, Surgeon.R:own-body 5
+f699: Surgeon.R:own_Gown 2
+f701: Surgeon.R:own_Gown 1
+f705: Surgeon.R:own_Gown 12
+HAND AUDIT: step 2, frames flagged 16, sampled hand verts inside 133
