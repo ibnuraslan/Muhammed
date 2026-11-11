@@ -562,7 +562,7 @@ def anim_floor(c, t):
     sec = t * DUR["floor"]
     p = c["guard_painter"]
     x = -4.4 + 0.5 * math.sin(sec * 0.6)
-    walk_to(p, Vector((-4.85, 3.9, 0)), Vector((-4.95, 7.4, 0)), sec, speed=0.55, cadence=1.2)
+    walk_to(p, Vector((-4.1, 3.9, 0)), Vector((-4.3, 7.6, 0)), sec, speed=0.55, cadence=1.2)
     pp = c["pistol"]
     if pp is not None:
         tip = p.bone_tail("wrist.R") if "wrist.R" in p.arm.pose.bones else p.bone_tail("lowerarm02.R")
