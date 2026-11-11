@@ -18,8 +18,10 @@ import machines as MC
 
 EXPOSURE = -0.3
 LEAD = 2.5
-DUR = {"street_push": LEAD + 3.0, "crane_up": 4.5, "hoist_rise": 4.5, "roof_swing": 5.0, "trailer_seal": 4.5, "hoist_street": 5.0, "truck_leave": 5.0}
+DUR = {"street_push": LEAD + 3.0, "crane_up": 4.5, "hoist_rise": 4.5, "roof_swing": 5.0, "trailer_seal": 4.5, "hoist_street": 5.0, "window_night": 6.0, "truck_leave": 5.0}
 TRUCK = Vector((9.5, -8.3, 0.0))
+VARIANT_FOR = {"window_night": "night"}
+LIT = Vector((-22 + 6.5 * (44 / 14), 0.0, 4 * 3.4 + 1.7))      # the lit office window (column 6, fifth floor)
 FLOORS, FH = 8, 3.4
 BW = 44.0                    # facade width (x), facade plane y = 0, building extends to +y
 ROOF = FLOORS * FH + 1.2     # top of the cornice / parapet base
@@ -97,12 +99,15 @@ def lattice(name, p0, p1, w, mat, n=None):
 
 
 def build(variant=None):
-    c = {}
+    c = {"variant": variant}
+    night = variant == "night"
     rng = np.random.default_rng(84)
     w = world_sky(sun_elev_deg=26, sun_rot_deg=150, strength=0.55, tint=(0.86, 0.9, 1.0), air=1.2, aerosol=1.8)
     w.node_tree.nodes["Sky Texture"].sun_disc = False          # the sun lamp does the sunlight (the disc burns out the facade)
     twp.cloud_sky(w, cover=0.55)
-    sn = bpy.data.lights.new("Sun", 'SUN'); sn.energy = 3.0; sn.angle = math.radians(2.0); sn.color = (1.0, 0.93, 0.84)
+    if night:
+        w.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.012
+    sn = bpy.data.lights.new("Sun", 'SUN'); sn.energy = 3.0 if not night else 0.0; sn.angle = math.radians(2.0); sn.color = (1.0, 0.93, 0.84)
     so = bpy.data.objects.new("Sun", sn); bpy.context.collection.objects.link(so)
     so.rotation_euler = (math.radians(64), 0, math.radians(-150))          # morning sun from the street side, raking
     # ---------------------------------------------------------------- the chancery
@@ -212,8 +217,23 @@ def build(variant=None):
         cyl("WirePole", (x, -6.9, 4.5), 0.09, 9.0, pbr("PoleGrey", (0.3, 0.31, 0.3), 0.5, 0.6), verts=12)
         cyl("Span", (x, ROAD_Y + 0.5, WIRE_Z + 0.3), 0.012, 15, wire_m, verts=6, rot=(math.radians(90), 0, 0))
     for k in range(7):                                   # Soviet concrete masts, arms reaching over the carriageway
-        twp.soviet_lamp((-45 + k * 15 + 7.5, -6.85, 0.0), rot_z=-math.pi / 2, height=9.0, arm=2.4)
-        twp.soviet_lamp((-45 + k * 15 + 7.5, ROAD_Y - 7.6, 0.0), rot_z=math.pi / 2, height=9.0, arm=2.4)
+        for y_, rz, sgn in ((-6.85, -math.pi / 2, -1), (ROAD_Y - 7.6, math.pi / 2, 1)):
+            x_ = -45 + k * 15 + 7.5
+            twp.soviet_lamp((x_, y_, 0.0), rot_z=rz, height=9.0, arm=2.4, lit=night)
+            if night:
+                sl = bpy.data.lights.new("Sodium", 'SPOT'); sl.energy = 2500; sl.spot_size = math.radians(110); sl.spot_blend = 0.7; sl.color = (1.0, 0.62, 0.32)
+                so_ = bpy.data.objects.new("Sodium", sl); bpy.context.collection.objects.link(so_); so_.location = (x_, y_ + sgn * 2.65, 8.8)
+    if night:                                           # lit offices: warm light behind a few windows, one typist at work
+        for k in range(14):
+            col = int(rng.integers(0, COLS)); fl_ = int(rng.integers(1, FLOORS))
+            p_ = Vector((-BW / 2 + (col + 0.5) * BW / COLS, 1.2, fl_ * FH + FH / 2))
+            l = area_light(p_.to_tuple(), (math.radians(90), 0, 0), 1.6, 60, (1.0, 0.78, 0.5)); l.visible_camera = False
+        l = area_light((LIT.x, 1.3, LIT.z + 0.6), (math.radians(110), 0, 0), 1.2, 90, (1.0, 0.8, 0.55)); l.visible_camera = False
+        ty = twp.person("NightTypist", 0.0, 40, "female_casualsuit01", "ponytail01", hv=0.3, cval=0.55, hue=0.55, sat=0.2)
+        twp.seat(ty, (LIT.x + 0.2, 1.15, LIT.z - FH / 2), math.pi / 2, lean=14)
+        twp.ground(ty, LIT.z - FH / 2 + 0.02)
+        c["night_typist"] = ty
+        box("NightDesk", (LIT.x + 0.85, 1.15, LIT.z - FH / 2 + 0.75), (0.7, 1.2, 0.04), ph.texture("dark_wood", scale=1.0, name="NDesk"))
     # the militia booth at the gate, a fence of railings either side of the entrance
     booth = pbr("Booth", (0.4, 0.42, 0.38), 0.5)
     box("Booth", (-3.6, -4.8, 1.2), (1.2, 1.2, 2.4), booth, bevel=0.03)
@@ -462,7 +482,14 @@ def cam_hoist_street(c, t):
     return (Vector((JIB.x + 2.2, -5.2, 1.7)).lerp(Vector((JIB.x + 1.9, -4.9, 1.7)), e), Vector((JIB.x - 0.4, -1.6, 22.0)), 22, (0, 1, 0))
 
 
+def cam_window_night(c, t):
+    e = ease(t)
+    a = LIT + Vector((-1.2, -4.5, 0.2)); b = LIT + Vector((-6.0, -20.0, -4.0))
+    return (a.lerp(b, e), LIT + Vector((0.0, 0.0, -0.2)).lerp(LIT + Vector((0, 0, -2.0)), e), 32)
+
+
 MOVES = {
+    "window_night": dict(kind="anim", dof=None, cam=cam_window_night, anim=anim("window_night")),
     "hoist_street": dict(kind="anim", dof=None, cam=cam_hoist_street, anim=anim("hoist_street")),
     "trailer_seal": dict(kind="anim", dof=3.0, cam=cam_seal, focus=lambda c, t: TRUCK + Vector((-4.8, 0.1, 1.35)), anim=anim("trailer_seal")),
     "truck_leave": dict(kind="anim", dof=None, cam=cam_leave, anim=anim("truck_leave")),
