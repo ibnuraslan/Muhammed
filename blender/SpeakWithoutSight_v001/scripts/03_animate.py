@@ -132,6 +132,42 @@ def rdir(yaw):
     return Vector((-math.cos(R_(yaw)), -math.sin(R_(yaw)), 0))
 UP = Vector((0, 0, 1))
 GIRL, TEACH, MOM, DAD = Person("Girl"), Person("Teacher"), Person("Mother"), Person("Father")
+# ---------------------------------------------- hand joint limits (client rule, Nov 11 23:00): no backward or twisted bends
+def add_hand_limits(P):
+    """Limit Rotation (local space) on every finger, thumb and wrist bone. The flexion axis and its sign are found from the
+    rig itself: the same curl rotation fingers() keys is converted to local euler, the dominant axis is the bend axis."""
+    out = []
+    for s_ in "LR":
+        Rh = P.rest_hand[s_]; a_ = Rh.col[1]; sign = 1 if s_ == "R" else -1
+        for k in range(1, 6):
+            for j in range(1, 4):
+                b = "finger%d-%d.%s" % (k, j, s_)
+                if b not in P.r.PB: continue
+                e = P.r.local_q(b, Matrix.Rotation(R_(40 * sign), 3, a_)).to_euler()
+                ax = max(range(3), key=lambda i: abs(e[i])); sg = 1 if e[ax] > 0 else -1
+                c = P.r.PB[b].constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HandLimit"
+                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+                lim = {0: (c, "x"), 1: (c, "y"), 2: (c, "z")}
+                bend_max = R_(95 if k > 1 else 70)
+                side = R_(12 if k > 1 else 35)
+                for i, nm in enumerate("xyz"):
+                    if i == ax:
+                        lo, hi = (-R_(5), bend_max) if sg > 0 else (-bend_max, R_(5))
+                        if k == 1: lo, hi = (lo - R_(25), hi) if sg > 0 else (lo, hi + R_(25))
+                    else:
+                        lo, hi = -side, side
+                    setattr(c, "min_" + nm, lo); setattr(c, "max_" + nm, hi)
+                out.append(b)
+        # wrist: +/-60 flex, +/-25 side, +/-40 twist (after its Copy Rotation from the IK control)
+        c = P.r.PB["wrist." + s_].constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "WristLimit"
+        c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+        c.min_x, c.max_x = -R_(60), R_(60); c.min_y, c.max_y = -R_(40), R_(40); c.min_z, c.max_z = -R_(30), R_(30)
+        # elbow: the IK solver honours IK limits - no hyper-extension past straight
+        for eb_ in ("lowerarm01." + s_,):
+            pb = P.r.PB[eb_]; pb.ik_stretch = 0.0
+    return len(out)
+for P_ in (GIRL, TEACH, MOM, DAD):
+    print("HAND_LIMITS", P_.name, add_hand_limits(P_))
 BEATS = [1, 163, 397, 595, 697, 895, 1063, 1261, 1453, 1723, 1843]; END = 1980
 sc.frame_start, sc.frame_end = 1, END
 def keys_every(f0, f1, step):
@@ -164,7 +200,7 @@ for f in keys_every(1, END, 40):
 # lap hands (beats 1-2): fingers rubbing, "only touch"
 def lap(s, f):
     sx = 1 if s == "L" else -1
-    return V(CHAIR.x + sx * 0.085, CHAIR.y - 0.22, 0.655), V(-sx * 0.35, -1, -0.2), V(0, 0.1, 1), V(CHAIR.x + sx * 0.4, CHAIR.y + 0.2, 0.75)
+    return V(CHAIR.x + sx * 0.095, CHAIR.y - 0.22, 0.70), V(-sx * 0.1, -1, -0.25), V(0, 0.1, 1), V(CHAIR.x + sx * 0.4, CHAIR.y + 0.2, 0.75)
 for f in keys_every(1, 450, 20):
     for s in "LR":
         W, d, n, pole = lap(s, f)
@@ -299,7 +335,7 @@ for f in throat_keys:
 # teacher's right hand lets go and rests on the girl's forearm, then gestures softly
 def t_thigh_R(f, lift=0.0):
     ev(f); kn = T.bone_world("lowerleg01.R"); hp = T.bone_world("upperleg01.R")
-    p = hp.lerp(kn, 0.55) + V(0, 0, 0.07 + lift) + T_F * 0.02
+    p = hp.lerp(kn, 0.55) + V(0, 0, 0.125 + lift) + T_F * 0.02
     T.hand("R", f, p, T_F * 0.8 - UP * 0.3 - T_R * 0.2, UP + T_F * 0.1, p + T_R * 0.35 + UP * 0.25)
     T.fingers("R", f, 28, 18)
 for f in (548, 600, 700, 820, 900, 1000, 1040):
@@ -308,8 +344,14 @@ for f in (548, 600, 700, 820, 900, 1000, 1040):
 for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee")):
     ev(f)
     if True:
-        p = T_KNEEL + T_F * 0.12 - T_R * 0.12 + V(0, 0, 0.06)
-        T.hand("L", f, p, T_F + UP * -0.5, UP + T_F * 0.2, p - T_R * 0.35 + UP * 0.2)
+        # left hand steadies her on the armchair's arm in front of her (clear of her skirt)
+        chair = bpy.data.objects["ArmChair_01"]; dg_ = bpy.context.evaluated_depsgraph_get(); ec = chair.evaluated_get(dg_); mi = ec.matrix_world.inverted()
+        probe = T_KNEEL + T_F * 0.4 - T_R * 0.06 + V(0, 0, 0.6)
+        hit, loc, nrm, idx = ec.ray_cast(mi @ probe, (mi.to_3x3() @ V(0, 0, -1)).normalized())
+        top = (ec.matrix_world @ loc) if hit else (T_KNEEL + T_F * 0.4 + V(0, 0, 0.15))
+        if f == 442: print("ARMREST", tuple(round(x, 3) for x in top), hit)
+        p = top + V(0, 0, 0.03) - T_F * 0.07
+        T.hand("L", f, p, T_F + UP * -0.35, UP, p - T_R * 0.35 - T_F * 0.15 + UP * 0.1)
     else:
         kn = G.bone_world("lowerleg01.L")
         T.hand("L", f, kn + V(0, 0, 0.07) - T_F * 0.05, T_F * 0.5 + UP * -0.6 + T_R * 0.3, UP, T_KNEEL - T_R * 0.45 + UP * 0.3)
@@ -481,8 +523,8 @@ for f in keys_every(1, END, 12):
     # stitching: left hand holds the hoop, right hand pulls the thread up and pushes it back down
     if u < 0.5:
         ph = (f % 72) / 72.0; up_ = math.sin(math.pi * min(1, ph * 1.6)) if ph < 0.62 else 0.0
-        Mo.hand("L", f, LAP + MO_R * 0.09 + V(0, 0, 0.02), MO_F * 0.6 - MO_R * 0.6, UP, LAP + MO_R * 0.4 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 45, 30)
-        Mo.hand("R", f, LAP - MO_R * 0.06 + MO_F * 0.03 + V(0, 0, 0.06 + 0.16 * up_), MO_F * 0.4 + MO_R * 0.4 - UP * 0.3, UP + MO_F * 0.3, LAP - MO_R * 0.4 - MO_F * 0.2)
+        Mo.hand("L", f, LAP - MO_R * 0.1 + V(0, 0, 0.045), MO_F * 0.6 + MO_R * 0.5, UP, LAP - MO_R * 0.45 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 40, 30)
+        Mo.hand("R", f, LAP + MO_R * 0.08 + MO_F * 0.03 + V(0, 0, 0.075 + 0.16 * up_), MO_F * 0.4 - MO_R * 0.4 - UP * 0.3, UP + MO_F * 0.3, LAP + MO_R * 0.45 - MO_F * 0.2)
         Mo.fingers("R", f, [40, 55, 65, 70], 30)
     else:
         ev(f); ch = Mo.bone_world("spine02") + MO_F * 0.17 + V(0, 0, 0.05)
@@ -496,7 +538,7 @@ hw = bpy.data.materials["M_HoopWood"]; hwn = hw.node_tree.nodes; hp_ = hwn["Prin
 wg = hwn.new("ShaderNodeTexWave"); wg.wave_type = 'RINGS'; wg.inputs["Scale"].default_value = 40; wg.inputs["Distortion"].default_value = 6
 cm = hwn.new("ShaderNodeMix"); cm.data_type = 'RGBA'; cm.inputs["A"].default_value = (0.3, 0.17, 0.08, 1); cm.inputs["B"].default_value = (0.5, 0.33, 0.17, 1)
 hw.node_tree.links.new(wg.outputs["Fac"], cm.inputs["Factor"]); hw.node_tree.links.new(cm.outputs["Result"], hp_.inputs["Base Color"])
-ev(1); hoop.matrix_world = Matrix.Translation(LAP + MO_F * 0.02 + MO_R * 0.02 + V(0, 0, 0.035))
+ev(1); hoop.matrix_world = Matrix.Translation(LAP - MO_R * 0.02 + MO_F * 0.04 + V(0, 0, 0.06))
 c.inverse_matrix = (Mo.o.matrix_world @ Mo.o.pose.bones["wrist.L"].matrix).inverted()
 Mo.face(60, smile=0.0); Mo.face(75, jaw=8, smile=1.0, brow=0.5); Mo.face(150, jaw=2, smile=0.6); Mo.face(200, smile=0.2)
 Mo.face(1880, smile=0.2); Mo.face(1905, jaw=12, oo=0.5, brow=1.0); Mo.face(1940, jaw=3, smile=1.0, brow=0.6); Mo.face(END, jaw=2, smile=1.0)
@@ -529,9 +571,9 @@ for f in keys_every(1, END, 12):
     Fa.root(f, FA_POS + FA_R * sway + V(0, 0, Fa.root_head.z - 0.01 - 0.01 * laugh * abs(math.sin(f / 3.0))), FA_YAW, side=wave(f, 480, 1.5))
     Fa.spine(f, flex=10 - 14 * laugh + laugh * 3 * math.sin(f / 2.5), twist=-20 * turn, head=(18 - 30 * laugh - 14 * turn, -25 * turn))
     bp = fa_book_pos(f)
-    Fa.hand("L", f, bp + FA_R * 0.13 - FA_F * 0.06, FA_F * 0.2 + UP * 0.3 - FA_R * 0.6, -FA_R * 0.3 + -UP, bp + FA_R * 0.5 - FA_F * 0.3)
+    Fa.hand("L", f, bp - FA_R * 0.15 - FA_F * 0.06, FA_F * 0.2 + UP * 0.3 + FA_R * 0.6, FA_R * 0.3 - UP, bp - FA_R * 0.5 - FA_F * 0.3)
     flip = any(a <= f <= a + 20 for a in (30, 330, 760, 1200, 1600))
-    Fa.hand("R", f, bp - FA_R * 0.15 - FA_F * 0.06 + V(0, 0, 0.06 if flip else 0.0), FA_F * 0.2 + UP * 0.3 + FA_R * 0.6, FA_R * 0.3 - UP, bp - FA_R * 0.5 - FA_F * 0.3)
+    Fa.hand("R", f, bp + FA_R * 0.15 - FA_F * 0.06 + V(0, 0, 0.06 if flip else 0.0), FA_F * 0.2 + UP * 0.3 - FA_R * 0.6, -FA_R * 0.3 - UP, bp + FA_R * 0.5 - FA_F * 0.3)
     for s in "LR": Fa.fingers(s, f, 35, 25)
     bk_m = Matrix.Translation(bp) @ Matrix.Rotation(R_(FA_YAW + 180), 4, 'Z') @ Matrix.Rotation(R_(-55 + 50 * smooth((f - 1880) / 30)), 4, 'X')
     book.matrix_world = bk_m; book.keyframe_insert("location", frame=f); book.keyframe_insert("rotation_euler", frame=f)

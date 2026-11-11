@@ -155,8 +155,10 @@ def long_skirt(rig, rgb, flare=0.12, hem_z=0.03, shin=1.0, wrap_low=0.0):
     sp = stock.node_tree.nodes["Principled BSDF"]; sp.inputs["Base Color"].default_value = (*[c * 0.6 for c in rgb], 1); sp.inputs["Roughness"].default_value = 0.7
     sp.inputs["Sheen Weight"].default_value = 0.5
     bm_ = body.data; bm_.materials.append(stock); idx = len(bm_.materials) - 1
+    LEG = {g.index for g in body.vertex_groups if any(k in g.name for k in ("upperleg", "lowerleg", "foot", "toe", "pelvis"))}
+    def legw(v): return sum(g.weight for g in bm_.vertices[v].groups if g.group in LEG)
     for p in bm_.polygons:
-        if p.center.z < zw - 0.03: p.material_index = idx
+        if p.center.z < zw - 0.03 and all(legw(v) > 0.5 for v in p.vertices): p.material_index = idx
     return ob
 long_skirt(bpy.data.objects["Teacher"], (0.06, 0.07, 0.12), flare=0.04, shin=1.0, wrap_low=1.0)
 long_skirt(bpy.data.objects["Mother"], (0.17, 0.05, 0.06))
