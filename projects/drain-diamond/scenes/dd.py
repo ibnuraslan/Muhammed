@@ -586,7 +586,9 @@ class Builder:
 
 # ============================================================================ a better car
 def sedan(name, col=(0.05, 0.055, 0.06), length=4.6, width=1.82, lights=True, window_open=0.0):
-    """A generic European saloon (no badges): the body is a side profile extruded across its width, bevelled and
+    """PLACEHOLDER: every car in this film goes through here. Swap the body for the shared vehicles.make(...)
+    (nvidia_doc/scenes/vehicles.py, branch claude/vehicle-kit) as soon as the hub says it is ready.
+A generic European saloon (no badges): the body is a side profile extruded across its width, bevelled and
     subdivided so it reads as pressed metal; a dark glasshouse, tyres with alloy rims, head and tail lamps.
     Origin on the ground at the car's centre; the nose points +X."""
     L_, W_ = length, width
