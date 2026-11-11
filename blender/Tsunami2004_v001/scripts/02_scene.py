@@ -131,7 +131,10 @@ def water_mat(name, foam_steep=True):
     foam = NN.new("ShaderNodeBsdfPrincipled"); foam.inputs["Base Color"].default_value = (0.82, 0.86, 0.86, 1); foam.inputs["Roughness"].default_value = 0.75
     foam.inputs["Subsurface Weight"].default_value = 0.3; foam.inputs["Subsurface Radius"].default_value = (0.5, 0.5, 0.5)
     ms = NN.new("ShaderNodeMixShader"); LL.new(a4.outputs[0], ms.inputs["Fac"]); LL.new(b.outputs[0], ms.inputs[1]); LL.new(foam.outputs[0], ms.inputs[2])
-    LL.new(ms.outputs[0], NN["Material Output"].inputs["Surface"])
+    # seen from below (camera surfacing): soft teal underwater glow instead of a black underside
+    gb = NN.new("ShaderNodeNewGeometry"); ue = NN.new("ShaderNodeEmission"); ue.inputs["Color"].default_value = (0.08, 0.32, 0.36, 1); ue.inputs["Strength"].default_value = 0.8
+    mb = NN.new("ShaderNodeMixShader"); LL.new(gb.outputs["Backfacing"], mb.inputs["Fac"]); LL.new(ms.outputs[0], mb.inputs[1]); LL.new(ue.outputs[0], mb.inputs[2])
+    LL.new(mb.outputs[0], NN["Material Output"].inputs["Surface"])
     return m
 M_SEA = water_mat("M_Sea", foam_steep=False)
 M_WAVE = water_mat("M_Wave")
@@ -151,7 +154,7 @@ STAGES = {  # crest z, front width, power, lip, back decay, back level
     "S1": (7.0, 75, 2.3, 2.5, 110, -2.6),
     "S2": (32.0, 42, 3.0, 11.0, 90, -0.6),
     "S2b": (17.0, 34, 2.2, 18.0, 70, 2.0),
-    "S3": (5.0, 16, 1.4, 2.0, 30, 2.5),
+    "S3": (5.0, 10, 1.6, 2.5, 30, 2.5),
 }
 def profile(st):
     Zc, c, p, lip, wb, Lb = st
@@ -181,6 +184,9 @@ tx = bpy.data.textures.new("WaveNoiseTex", 'CLOUDS'); tx.noise_scale = 6.0; tx.n
 wn = bpy.data.objects.new("WaveNoiseEmpty", None); C_W.objects.link(wn)
 dm = wave.modifiers.new("chop", 'DISPLACE'); dm.texture = tx; dm.texture_coords = 'OBJECT'; dm.texture_coords_object = wn
 dm.strength = 1.2; dm.mid_level = 0.5
+tx2 = bpy.data.textures.new("WaveChurnTex", 'CLOUDS'); tx2.noise_scale = 1.6; tx2.noise_depth = 3
+dm2 = wave.modifiers.new("churn", 'DISPLACE'); dm2.texture = tx2; dm2.texture_coords = 'OBJECT'; dm2.texture_coords_object = wn
+dm2.strength = 0.0; dm2.mid_level = 0.5
 
 NSR = 8
 def spray_profile(st, k):
@@ -327,6 +333,16 @@ for i in range(9):
         box("Hotel_Col%d_%d" % (i, k), C_H, (0.5, 0.5, FH), (x, HY1 - 0.2, z0 + (k + 0.5) * FH), plaster)
 for k in (1, 2):   # upper floors: glass sliding doors
     box("Hotel_Glass%d" % k, C_H, (32, 0.08, FH - 0.5), (0, HY1 - 0.6, z0 + (k + 0.5) * FH - 0.1), glass)
+for k in range(3):
+    for i in range(10):
+        x = -14.4 + i * 3.2
+        box("Hotel_BackWin%d_%d" % (k, i), C_H, (1.6, 0.12, 1.4), (x, HY0 - 0.12, z0 + (k + 0.5) * FH + 0.2), glass)
+        box("Hotel_BackSill%d_%d" % (k, i), C_H, (1.9, 0.3, 0.12), (x, HY0 - 0.2, z0 + (k + 0.5) * FH - 0.55), plaster)
+    for sx in (-1, 1):
+        for j in range(4):
+            box("Hotel_SideWin%d_%d_%d" % (k, sx, j), C_H, (0.12, 1.5, 1.4), (sx * 16.12, -41 + j * 3.6, z0 + (k + 0.5) * FH + 0.2), glass)
+for i in range(3):
+    box("Hotel_BackDoor%d" % i, C_H, (1.8, 0.12, 2.4), (-8 + i * 8, HY0 - 0.12, z0 + 1.4), door_m if "door_m" in dir() else glass)
 box("Hotel_Inside", C_H, (31.5, 14, 3 * FH - 0.2), (0, -36.6, z0 + 1.5 * FH), dark)
 # ground floor lobby: separate glass panes (blown in at impact), furniture
 HPANES = []
@@ -402,7 +418,7 @@ while len(HOUSES) < 150 and attempts < 6000:
     HOUSES.append(o)
 # parked cars along the beach road and town streets
 CARS = []
-for i, (x, y, yaw) in enumerate([(26, -22.5, 90), (-30, -25.5, -90), (52, -22.6, 92), (-52, -22.4, 88), (34, -60, 0), (80, -100, 180),
+for i, (x, y, yaw) in enumerate([(-92, -22.5, 90), (-30, -25.5, -90), (52, -22.6, 92), (-52, -22.4, 88), (34, -60, 0), (80, -100, 180),
                                  (-24, -110, 2), (34, -150, 178), (-62, -90, 0), (80, -160, 1), (6, -72, 90), (-90, -72.5, -90)]):
     lib = car if i % 2 == 0 else car2
     o = inst(lib, "Car_%02d" % i, C_TOWN, (x + (2.5 if i % 3 == 0 else 0), y, ground(x, y) + 0.08 + 0.1), (0, 0, math.radians(yaw)))

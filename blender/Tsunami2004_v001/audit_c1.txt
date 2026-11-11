@@ -1,0 +1,144 @@
+Tsunami2004 audit, step 12 frames
+FOOT_HOVER            112
+    f  13 (0.20s) KidA_C05 R 3.8 cm
+    f 385 (6.40s) Fisher_C06 L 9.1 cm
+    f 385 (6.40s) Fisher_C06 R 9.1 cm
+    f 397 (6.60s) Fisher_C06 L 9.1 cm
+    f 397 (6.60s) Fisher_C06 R 9.1 cm
+    f 409 (6.80s) Fisher_C06 L 9.1 cm
+    f 409 (6.80s) Fisher_C06 R 9.1 cm
+    f 421 (7.00s) Fisher_C06 L 9.1 cm
+    f 421 (7.00s) Fisher_C06 R 9.1 cm
+    f 433 (7.20s) Fisher_C06 L 9.1 cm
+    f 433 (7.20s) Fisher_C06 R 9.1 cm
+    f 445 (7.40s) Fisher_C06 L 9.1 cm
+    f 445 (7.40s) Fisher_C06 R 9.1 cm
+    f 457 (7.60s) Fisher_C06 L 9.1 cm
+    f 457 (7.60s) Fisher_C06 R 9.1 cm
+    f 457 (7.60s) KidB_C07 L 5.6 cm
+    f 457 (7.60s) KidB_C07 R 5.6 cm
+    f 469 (7.80s) Fisher_C06 L 9.1 cm
+    f 469 (7.80s) Fisher_C06 R 9.1 cm
+    f 469 (7.80s) KidB_C07 L 5.6 cm
+    f 469 (7.80s) KidB_C07 R 5.6 cm
+    f 481 (8.00s) Fisher_C06 L 9.1 cm
+    f 481 (8.00s) Fisher_C06 R 9.1 cm
+    f 481 (8.00s) KidB_C07 L 5.6 cm
+    f 481 (8.00s) KidB_C07 R 5.6 cm
+FOOT_SINK             200
+    f 133 (2.20s) KidA L 3.8 cm
+    f 133 (2.20s) KidA R 3.8 cm
+    f 145 (2.40s) KidA L 6.1 cm
+    f 145 (2.40s) KidA_C05 R 4.5 cm
+    f 157 (2.60s) KidA_C05 L 5.5 cm
+    f 157 (2.60s) KidA_C05 R 5.5 cm
+    f 157 (2.60s) KidB L 3.0 cm
+    f 157 (2.60s) KidB R 3.0 cm
+    f 181 (3.00s) KidA L 5.7 cm
+    f 193 (3.20s) KidA_C05 R 7.9 cm
+    f 217 (3.60s) KidA_C05 L 5.6 cm
+    f 217 (3.60s) KidA_C05 R 5.6 cm
+    f 217 (3.60s) KidB L 4.7 cm
+    f 241 (4.00s) KidA_C05 R 7.3 cm
+    f 253 (4.20s) KidA L 3.8 cm
+    f 253 (4.20s) KidB R 4.9 cm
+    f 265 (4.40s) KidA_C05 L 6.2 cm
+    f 277 (4.60s) KidA R 3.2 cm
+    f 277 (4.60s) KidA_C05 L 3.3 cm
+    f 289 (4.80s) KidA_C05 R 5.1 cm
+    f 289 (4.80s) KidB R 3.2 cm
+    f 301 (5.00s) KidA_C05 R 3.9 cm
+    f 313 (5.20s) KidA_C05 L 4.1 cm
+    f 313 (5.20s) KidA_C05 R 4.1 cm
+    f 313 (5.20s) KidB L 3.2 cm
+FOOT_SLIDE             37
+    f 265 (4.40s) TouristW_C01 L 1.8 cm
+    f 277 (4.60s) TouristW R 1.7 cm
+    f 301 (5.00s) LocalM_C10 R 2.3 cm
+    f 313 (5.20s) LocalM R 2.3 cm
+    f 313 (5.20s) LocalM_C02 L 2.0 cm
+    f 313 (5.20s) TouristM_C08 L 14.2 cm
+    f 325 (5.40s) LocalW R 3.2 cm
+    f 325 (5.40s) LocalW_C09 L 16.3 cm
+    f 337 (5.60s) LocalW_C03 R 3.2 cm
+    f 565 (9.40s) Fisher L 1.7 cm
+    f 565 (9.40s) Fisher_C06 L 3.4 cm
+    f 565 (9.40s) Fisher_C06 R 5.1 cm
+    f 577 (9.60s) Fisher L 12.9 cm
+    f 577 (9.60s) Fisher_C06 L 12.9 cm
+    f 589 (9.80s) KidB_C07 R 13.6 cm
+    f 601 (10.00s) TouristW_C01 L 4.5 cm
+    f 601 (10.00s) TouristW_C01 R 1.5 cm
+    f 613 (10.20s) LocalM_C02 L 4.9 cm
+    f 613 (10.20s) LocalM_C02 R 1.8 cm
+    f 625 (10.40s) Fisher_C06 R 9.1 cm
+    f 625 (10.40s) LocalW_C09 R 9.9 cm
+    f 625 (10.40s) TouristM_C00 R 15.2 cm
+    f 781 (13.00s) KidB_C07 L 15.7 cm
+    f 781 (13.00s) KidB_C07 R 13.4 cm
+    f 805 (13.40s) KidA_C05 L 15.2 cm
+HAND_BODY              65
+    f 397 (6.60s) OldM 10 tri pairs
+    f 397 (6.60s) OldM_C04 9 tri pairs
+    f 409 (6.80s) OldM 11 tri pairs
+    f 409 (6.80s) OldM_C04 5 tri pairs
+    f 469 (7.80s) OldM_C04 6 tri pairs
+    f 481 (8.00s) OldM 6 tri pairs
+    f 481 (8.00s) OldM_C04 7 tri pairs
+    f 493 (8.20s) OldM 8 tri pairs
+    f 493 (8.20s) OldM_C04 7 tri pairs
+    f 505 (8.40s) OldM 8 tri pairs
+    f 505 (8.40s) OldM_C04 8 tri pairs
+    f 517 (8.60s) OldM 8 tri pairs
+    f 517 (8.60s) OldM_C04 7 tri pairs
+    f 529 (8.80s) OldM 4 tri pairs
+    f 637 (10.60s) TouristW 4 tri pairs
+    f 637 (10.60s) TouristW_C01 5 tri pairs
+    f 637 (10.60s) TouristW_C11 4 tri pairs
+    f 649 (10.80s) TouristW 4 tri pairs
+    f 649 (10.80s) TouristW_C01 5 tri pairs
+    f 673 (11.20s) TouristW_C11 4 tri pairs
+    f 685 (11.40s) TouristW_C11 4 tri pairs
+    f 697 (11.60s) TouristW_C11 4 tri pairs
+    f 721 (12.00s) TouristW 4 tri pairs
+    f 733 (12.20s) TouristW_C01 4 tri pairs
+    f 745 (12.40s) LocalW 4 tri pairs
+HAND_PROP               0
+PERSON_PERSON           3
+    f1225 (20.40s) Fisher_C06 x LocalW_C03 15
+    f1249 (20.80s) LocalM x TouristM_C00 47
+    f1261 (21.00s) LocalW_C09 x TouristW_C01 146
+HAND_FLOAT             11
+    f 421 (7.00s) palm 5471.4 cm from fish
+    f 433 (7.20s) palm 5471.4 cm from fish
+    f 445 (7.40s) palm 5471.4 cm from fish
+    f 457 (7.60s) palm 5471.4 cm from fish
+    f 469 (7.80s) palm 5471.4 cm from fish
+    f 481 (8.00s) palm 5471.4 cm from fish
+    f 493 (8.20s) palm 5471.4 cm from fish
+    f 505 (8.40s) palm 5471.4 cm from fish
+    f 517 (8.60s) palm 5471.4 cm from fish
+    f 529 (8.80s) palm 5471.4 cm from fish
+    f 541 (9.00s) palm 5471.4 cm from fish
+CAMERA_UNDER_GROUND     0
+CAMERA_UNDER_WATER     18
+    f 145 (2.40s) SeaPlane surface 0.15 m above camera
+    f 157 (2.60s) SeaPlane surface 0.39 m above camera
+    f 169 (2.80s) SeaPlane surface 0.54 m above camera
+    f 181 (3.00s) SeaPlane surface 0.54 m above camera
+    f 193 (3.20s) SeaPlane surface 0.31 m above camera
+    f 949 (15.80s) SeaPlane surface 1.81 m above camera
+    f 961 (16.00s) SeaPlane surface 1.58 m above camera
+    f 973 (16.20s) SeaPlane surface 2.02 m above camera
+    f 973 (16.20s) Wave surface 0.20 m above camera
+    f 985 (16.40s) SeaPlane surface 2.43 m above camera
+    f 985 (16.40s) Wave surface 0.68 m above camera
+    f 997 (16.60s) SeaPlane surface 2.13 m above camera
+    f 997 (16.60s) Wave surface 0.71 m above camera
+    f1009 (16.80s) SeaPlane surface 0.78 m above camera
+    f1045 (17.40s) Wave surface 0.65 m above camera
+    f1057 (17.60s) Wave surface 7.54 m above camera
+    f1069 (17.80s) Wave surface 19.04 m above camera
+    f1081 (18.00s) Wave surface 7.39 m above camera
+CAMERA_INSIDE           0
+TOTAL 446

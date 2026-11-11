@@ -1,0 +1,29 @@
+Tsunami2004 audit, step 12 frames
+FOOT_HOVER              1
+    f 601 (10.00s) KidB R 4.4 cm
+FOOT_SINK               0
+FOOT_SLIDE              3
+    f 565 (9.40s) Fisher L 1.8 cm
+    f 577 (9.60s) Fisher L 12.9 cm
+    f 601 (10.00s) KidB R 7.0 cm
+HAND_BODY               2
+    f1213 (20.20s) TouristW_C11 4 tri pairs
+    f1273 (21.20s) TouristW_C11 4 tri pairs
+HAND_PROP              11
+    f 433 (7.20s) Fisher x Fish_00 37
+    f 445 (7.40s) Fisher x Fish_00 37
+    f 457 (7.60s) Fisher x Fish_00 37
+    f 469 (7.80s) Fisher x Fish_00 37
+    f 481 (8.00s) Fisher x Fish_00 37
+    f 493 (8.20s) Fisher x Fish_00 37
+    f 505 (8.40s) Fisher x Fish_00 37
+    f 517 (8.60s) Fisher x Fish_00 37
+    f 529 (8.80s) Fisher x Fish_00 37
+    f 541 (9.00s) Fisher x Fish_00 37
+    f1249 (20.80s) KidB_C07 x Car_00 58
+PERSON_PERSON           0
+HAND_FLOAT              0
+CAMERA_UNDER_GROUND     0
+CAMERA_UNDER_WATER      0
+CAMERA_INSIDE           0
+TOTAL 17

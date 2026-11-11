@@ -2,7 +2,11 @@
 import math
 from mathutils import Vector, Matrix
 G = globals()
-def ground_z(x, y): return terrain_h(x, y)
+from mathutils.bvhtree import BVHTree as _BVH
+_TT = _BVH.FromObject(bpy.data.objects["Terrain"], bpy.context.evaluated_depsgraph_get())
+def ground_z(x, y):
+    hit = _TT.ray_cast(Vector((x, y, 50.0)), Vector((0, 0, -1)))
+    return hit[0].z if hit[0] is not None else terrain_h(x, y)
 G["ground_z"] = ground_z           # anim_lib's Human uses this module-level name
 
 def yaw_of(d): return math.degrees(math.atan2(d.x, -d.y))
@@ -36,6 +40,13 @@ class Person:
         return pos
     def go(self, pts, f0, f1, run=False, step=2, yaw_fn=None, head=(0, 0), kid=False):
         pts = [Vector((p[0], p[1], 0)) for p in pts]
+        if yaw_fn is None and f0 in self.st and self.st[f0][2] == "stand":
+            y_st = self.st[f0][1]; y_go = yaw_of(pts[1] - pts[0])
+            dy_ = (y_go - y_st + 180) % 360 - 180
+            yaw_fn_auto = None
+            self._turn = (f0, y_st, y_st + dy_)
+        else:
+            self._turn = None
         seg = [(b - a).length for a, b in zip(pts, pts[1:])]; tot = sum(seg)
         def path(f):
             u = min(1, max(0, (f - f0) / (f1 - f0)))
@@ -51,6 +62,10 @@ class Person:
             if dv.length < 1e-3: dv = pts[-1] - pts[0]
             return yaw_of(dv)
         yf = yaw_fn or yaw_auto
+        if self._turn and yaw_fn is None:
+            ft0, ya, yb = self._turn
+            nt_ = max(14.0, abs(yb - ya) / 5.0)
+            yf = lambda f, ya=ya, yb=yb, ft0=ft0, nt_=nt_: (ya + (yb - ya) * sstep((f - ft0) / nt_)) if f < ft0 + nt_ else yaw_auto(f) + 0 * yb
         sc_ = 0.75 if kid else 1.0
         if run:
             self.H.walk(path, yf, f0, f1, stride=1.75 * sc_, duty=0.4, lift=0.16 * sc_, bob=0.045, crouch=0.07, lean=12, step=step)
@@ -91,13 +106,13 @@ class Person:
                     W = shw + side * 0.08 + fw * (0.28 * L * sw) + up * (-0.88 * L); d = (-up + fw * 0.2).normalized(); n = -side
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "run":
-                    W = shw + side * 0.06 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
+                    W = shw + side * 0.13 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
                     pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
                 elif nm == "point":
                     W = shw + fw * 0.93 * L + up * 0.2 * L + side * 0.05; d = (fw + up * 0.2).normalized(); n = -up
                     pole = shw + side * 0.4 - up * 0.3
                 elif nm == "shade":
-                    W = shw + fw * 0.32 * L + up * 0.55 * L - side * 0.08; d = (-side + up * 0.2).normalized(); n = -up
+                    W = shw + fw * 0.5 * L + up * 0.55 * L - side * 0.06; d = (-side + up * 0.2).normalized(); n = -up
                     pole = shw + side * 0.5 + up * 0.1
                 elif nm == "wave":
                     k = math.sin(f * 0.35)
@@ -170,11 +185,12 @@ q.go([(13, 18), (8, 36), (FP.x, FP.y)], T(4.0), T(6.0))
 q.stand(T(6.0), T(9.1), FP, 180, crouch=lambda f: 0.32 * sstep((f - T(6.1)) / 25) * (1 - sstep((f - T(6.9)) / 25)),
         flex=lambda f: 4 + 58 * sstep((f - T(6.1)) / 25) * (1 - sstep((f - T(6.9)) / 25)),
         head=lambda f: (25 * sstep((f - T(6.0)) / 20) * (1 - sstep((f - T(6.9)) / 20)) - 10 * sstep((f - T(7.6)) / 30), 0), step=3)
-q.go([(FP.x, FP.y), (FP.x + 0.15, FP.y - 0.25)], T(9.1), T(9.5), yaw_fn=lambda f: 180 - 175 * sstep((f - T(9.1)) / 24))
-q.stand(T(9.5), T(10.3), (FP.x + 0.15, FP.y - 0.25), 5, head=(-12, 0), flex=8)
-q.go([(FP.x + 0.15, FP.y - 0.25), (5, 30), (5, 2)], T(10.3), T(12.8), run=True)
+q.go([(FP.x, FP.y), (FP.x + 0.1, FP.y - 0.7)], T(9.1), T(9.6))
+q.stand(T(9.6), T(10.3), (FP.x + 0.1, FP.y - 0.7), 8, head=(-12, 0), flex=8)
+q.go([(FP.x + 0.1, FP.y - 0.7), (5, 30), (5, 2)], T(10.3), T(12.8), run=True)
 fish_pick = bpy.data.objects["Fish_00"]
-fish_pick.location = (FISHPICK.x, FISHPICK.y, ground_z(FISHPICK.x, FISHPICK.y) + 0.06); fish_pick.rotation_euler = (0, math.radians(90), math.radians(80))
+fish_pick.scale = (1.15,) * 3
+fish_pick.location = (FISHPICK.x, FISHPICK.y, ground_z(FISHPICK.x, FISHPICK.y) + 0.07); fish_pick.rotation_euler = (0, math.radians(90), math.radians(80))
 q.reach_target = Vector((FISHPICK.x - 0.1, FISHPICK.y - 0.08, ground_z(FISHPICK.x, FISHPICK.y) + 0.05))
 q.key_arms(T(0), T(12.8), lambda f: ({"R": "reach"} if T(6.45) <= f <= T(6.95) else {"R": "hold", "L": "hang"} if T(6.95) < f <= T(9.0)
                                        else {"L": "wave"} if T(9.5) <= f <= T(10.25) else ("run" if f > T(10.3) else "swing")), step=2)
@@ -198,9 +214,11 @@ for n, pts in RUN.items():
 q = P["Fisher"]
 for f in range(T(6.9), T(9.05), 2):
     sc.frame_set(f)
-    W = q.o.matrix_world @ q.H.r.PB["wrist.R"].tail
-    fish_pick.location = W + Vector((0, 0, -0.03)); fish_pick.keyframe_insert("location", frame=f)
-    fish_pick.rotation_euler = (math.radians(90), 0, math.radians(80)); fish_pick.keyframe_insert("rotation_euler", frame=f)
+    pbw = q.H.r.PB["finger3-1.R"]; Mw = q.o.matrix_world @ pbw.matrix
+    palm = Mw.translation; nrm = (q.o.matrix_world.to_3x3() @ q.H.r.PB["wrist.R"].matrix.to_3x3()) @ Vector((0, 0, 1))
+    fish_pick.location = palm + Vector((0, 0, -0.06)); fish_pick.keyframe_insert("location", frame=f)
+    yawp = math.radians(q.st[min(q.st, key=lambda k: abs(k - f))][1])
+    fish_pick.rotation_euler = (0, math.radians(90), yawp + math.radians(90)); fish_pick.keyframe_insert("rotation_euler", frame=f)
 for f, z in ((T(6.88), 0.06), (T(9.25), 0.05)):
     fish_pick.location = (FISHPICK.x if f < T(7) else fish_pick.location.x, FISHPICK.y if f < T(7) else fish_pick.location.y, ground_z(FISHPICK.x, FISHPICK.y) + z)
     fish_pick.rotation_euler = (0, math.radians(90), math.radians(80)); fish_pick.keyframe_insert("location", frame=f); fish_pick.keyframe_insert("rotation_euler", frame=f)

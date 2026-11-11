@@ -5,6 +5,7 @@ out = sys.argv[sys.argv.index("--") + 1]
 sc = bpy.context.scene
 random.seed(2004)
 SKIP_PEOPLE = "--nopeople" in sys.argv
+CURL = float(next((a.split("=")[1] for a in sys.argv if a.startswith("--curl=")), "55"))
 
 # ---------------------------------------------------------------- people
 if not SKIP_PEOPLE:
@@ -15,6 +16,54 @@ if not SKIP_PEOPLE:
         if o is not None: CP.objects.link(o)
     exec(open("/home/user/Muhammed/blender/pipeline/anim_lib.py").read())
     exec(open(HERE + "/scripts/03_people.py").read())
+    # crowd: time-shifted clones of the eight performers, offset along the beach (x only: the beach height depends on y)
+    def shifted(act, df):
+        a2 = act.copy()
+        for fc in _fcurves(a2):
+            for kp in fc.keyframe_points:
+                kp.co.x += df; kp.handle_left.x += df; kp.handle_right.x += df
+        return a2
+    CLONES = [("TouristM", 9), ("TouristW", -7), ("LocalM", 5), ("LocalW", 12), ("OldM", -4), ("KidA", 14),
+              ("Fisher", 6), ("KidB", -10), ("TouristM", 15), ("LocalW", 3), ("LocalM", -12), ("TouristW", 8)]
+    def pos_at(name, f):
+        st = P[name].st; k = min(st, key=lambda q: abs(q - f)); return st[k][0]
+    SAMPLE = list(range(1, F(21.1), 15))
+    placed = [(n, 0.0, 0) for n in P]          # (source, dx, df)
+    rng = random.Random(7)
+    for i, (src, df) in enumerate(CLONES):
+        best = None
+        cands = [dx for dx in range(-75, 76, 2) if abs(dx) >= 14]
+        rng.shuffle(cands)
+        for dx in cands[:60]:
+            md = 1e9
+            for f in SAMPLE:
+                p0 = pos_at(src, f - df) + Vector((dx, 0, 0))
+                for (n2, dx2, df2) in placed:
+                    q = pos_at(n2, f - df2) + Vector((dx2, 0, 0))
+                    md = min(md, (p0 - q).length)
+            if best is None or md > best[0]: best = (md, dx)
+        placed.append((src, float(best[1]), df)); print("CLONE", src, best[1], df, "min dist %.1f" % best[0])
+    for i, (src, dx, df) in enumerate(placed[len(P):]):
+        rig = bpy.data.objects[src]; r2 = rig.copy(); r2.data = rig.data.copy(); r2.name = "%s_C%02d" % (src, i); CP.objects.link(r2)
+        r2.animation_data.action = shifted(rig.animation_data.action, df); r2.location.x += dx
+        # height correction: the shelf height varies along x, so lift/lower the clone by the local difference
+        for f in range(1, F(21.3), 4):
+            p0 = pos_at(src, f - df)
+            r2.location.z = ground_z(p0.x + dx, p0.y) - ground_z(p0.x, p0.y); r2.keyframe_insert("location", index=2, frame=f)
+        for ch in rig.children:
+            c2 = ch.copy(); c2.name = "%s_C%02d.%s" % (src, i, ch.name.split(".", 1)[1]); CP.objects.link(c2); c2.parent = r2
+            for md in c2.modifiers:
+                if md.type == 'ARMATURE': md.object = r2
+            if ch.animation_data and ch.animation_data.action:
+                c2.animation_data.action = shifted(ch.animation_data.action, df)
+    # grasp: fisher's right fingers close round the fish
+    rr = P["Fisher"].H.r
+    for f, a in ((T(6.5), 0), (T(6.75), 1), (T(9.0), 1), (T(9.2), 0)):
+        for fn_ in ("finger2", "finger3", "finger4", "finger5"):
+            for seg in ("-1", "-2", "-3"):
+                pb = rr.PB[fn_ + seg + ".R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(CURL * a * (0.8 if seg == "-1" else 1.0)), 0, 0)
+                pb.keyframe_insert("rotation_euler", frame=f)
+        pb = rr.PB["finger1-2.R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(CURL * 0.6 * a), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
 
 # ---------------------------------------------------------------- sea drawback
 sea = bpy.data.objects["SeaPlane"]
@@ -49,27 +98,30 @@ for fc in _fcurves(bpy.data.objects["WaveSpray"].data.shape_keys.animation_data.
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 spd = bpy.data.materials["M_CrestSpray"].node_tree.nodes["SPRAY_DENS"].inputs["To Max"]
 nq = bpy.data.materials["M_CrestSpray"].node_tree.nodes["NQ"].inputs["W"]
-for t, d in ((0, 0.0), (7, 0.12), (10, 0.15), (15.6, 0.3), (18.3, 0.45), (21.3, 0.6), (22.3, 0.12), (24, 0.03), (25.5, 0.0)):
+for t, d in ((0, 0.0), (7, 0.12), (10, 0.15), (15.6, 0.3), (18.3, 0.45), (21.3, 0.6), (22.0, 0.15), (22.6, 0.05), (29.6, 0.04), (30.6, 0.0)):
     spd.default_value = d; spd.keyframe_insert("default_value", frame=F(t))
 for t, wv in ((0, 0), (40, 12)):
     nq.default_value = wv; nq.keyframe_insert("default_value", frame=F(t))
-key_hide(bpy.data.objects["WaveSpray"], [(1, False), (F(25.6), True)])
+key_hide(bpy.data.objects["WaveSpray"], [(1, False), (F(30.7), True)])
 fnw = bpy.data.materials["M_Wave"].node_tree.nodes["FN"].inputs["W"]
 for t, wv in ((0, 0), (40, 8)):
     fnw.default_value = wv; fnw.keyframe_insert("default_value", frame=F(t))
 # position should be linear-ish (constant speed between keys)
 for fc in _fcurves(wave.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
+ch = wave.modifiers["churn"]
+for t, v in ((0, 0.0), (20.8, 0.0), (21.8, 1.1), (29.8, 0.9), (31.6, 0.05), (40, 0.05)):
+    ch.strength = v; ch.keyframe_insert("strength", frame=F(t))
 wn = bpy.data.objects["WaveNoiseEmpty"]
 for t in (0, 40):
-    wn.location = (0, -0.0 + t * 2.5, t * 0.8); wn.keyframe_insert("location", frame=F(t))
+    wn.location = (t * 1.5, -0.0 + t * 6.0, t * 2.0); wn.keyframe_insert("location", frame=F(t))
 for fc in _fcurves(wn.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.06, 0.045, 0.03), 0.16),
-                          (30.0, (0.065, 0.05, 0.035), 0.14), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
+    for t, colr, foam in ((0, (0.012, 0.045, 0.05), 0.0), (20.6, (0.012, 0.045, 0.05), 0.15), (22.0, (0.05, 0.038, 0.026), 0.09),
+                          (30.0, (0.055, 0.042, 0.03), 0.07), (31.6, (0.07, 0.06, 0.045), 0.08), (40, (0.07, 0.06, 0.045), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
@@ -254,7 +306,7 @@ for t, v in ((0, 0), (30.5, 0), (32.0, 0.0012), (40, 0.0009)):
 dust = bpy.data.objects["DustVolume"]; key_hide(dust, [(1, True), (F(30.4), False)])
 bowl_hide = [o for o in bpy.data.collections["Diorama"].objects]
 for o in bowl_hide:
-    key_hide(o, [(1, True), (F(12.4), False), (F(16.2), True)])
+    key_hide(o, [(1, True), (F(12.4), False), (F(15.45), True)])
 for o in bpy.data.objects:   # clear the camera's path through the beach furniture at 18-20 s
     if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 5) < 6:
         bpy.data.objects.remove(o, do_unlink=True)
