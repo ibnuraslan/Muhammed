@@ -2,12 +2,7 @@
 
 This is the full 28.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `SurgeonBrandsLivers_v002_60fps.blend.part0` + `.part1`: the self-contained scene (116 MB), split in two because Git LFS uploads are blocked from this studio container and GitHub refuses plain files over 100 MB. Rejoin before use:
-  ```
-  cat SurgeonBrandsLivers_v002_60fps.blend.part0 SurgeonBrandsLivers_v002_60fps.blend.part1 > SurgeonBrandsLivers_v002_60fps.blend
-  sha256sum -c SurgeonBrandsLivers_v002_60fps.blend.sha256
-  ```
-  Every texture is packed inside, and the joined file opens in factory-startup Blender 5.2.2.
+- `SurgeonBrandsLivers_v002_60fps.blend`: the self-contained scene, 62 MB, committed as a normal git file (studio policy: no LFS). Every texture is packed inside, and it opens in factory-startup Blender 5.2.2.
 - `beats.json`: the beat start frames and first words, for the voiceover retime (`pipeline/retime_to_vo.py`).
 - `SETTINGS.md`: render settings and suggested test frames.
 - `CREDITS.md`: the CC-BY credit block for the video description.
@@ -18,7 +13,7 @@ The source is `../SurgeonBrandsLivers_v001/scripts`. To rebuild, run `build.sh` 
 ## Beats (base timing)
 | # | Frame | Line | Picture |
 |---|---|---|---|
-| 1 | 1 | During a transplant… burn his initials into the… liver | OR crane down, then a dive into the cyan studio, where a pen writes a glowing SB with sparks and smoke |
+| 1 | 1 | During a transplant… burn his initials into the… liver | OR crane down, then a dive through the skin into the cyan studio. The pen burns SB *into* the liver surface: a dark seared line with a glowing edge only at the tip, plus sparks and smoke |
 | 2 | 301 | Then he stitched her up and acted like nothing had happened | rise out to the sutures, then the mask comes down to a smirk |
 | 3 | 565 | a week later | whip-pan to the wall calendar, pages flip |
 | 4 | 637 | the new liver started to fail | through the wall into her living room: she drops her mug and doubles over, and the x-ray liver turns blue to red |
@@ -29,7 +24,7 @@ The source is `../SurgeonBrandsLivers_v001/scripts`. To rebuild, run `build.sh` 
 
 ## Known issues
 - **No voiceover yet.** Timing follows the brief's target times. Retime once the VO is in.
-- **Transit frames.** The four dives and the three wall fly-throughs each pass through 0.1–0.3 s of dark or grey frames inside the table, floor or walls. They are meant to read as a whoosh under motion blur. Say if a skin-texture wipe is wanted instead.
+- **Transit wipes.** The camera never sits inside a slab. On the dives and rises it passes through the abdomen skin and a tissue membrane: 4–5 skin frames + 4 membrane frames per dive (about 0.15 s). Wall fly-throughs show 1–3 frames of tile or panel texture. The camera jumps across the slab between two of those textured frames. Motion blur is set to start-on-frame, so the jump does not smear.
 - **Pick-ups.** For about 20 frames while the gavel and stamp are picked up, the finger base is 9–12 cm from the grip point (the wrist is on target). The PanelA gavel grip reads a little stiff.
 - **Feet.** Surgeon 2's left foot slides about 0.1 m/s for about 4 frames as her walk settles (f994–997).
 - **Off-camera teleports.** Surgeon 1, the patient and the nurse move between sets while the camera is in another room. The audit ignores these moments.

@@ -37,7 +37,8 @@ K = [  # frame, camera position, aim point, lens (mm)
     (85, V(0.22, -1.05, 1.68), WINP, 32),
     (115, V(0.06, -0.28, 1.52), WINP + V(0, 0, -0.02), 36),
     (132, V(-0.27, -0.10, 1.26), WINP + V(0, 0.02, -0.4), 30),
-    (141, V(-0.28, -0.07, 0.35), V(-0.25, -0.05, -3.0), 28),
+    (138, V(-0.28, -0.07, -2.5), V(-0.25, -0.06, -6.0), 28),
+    (142, V(-0.12, -0.2, LZ + 0.40), V(-0.05, -0.05, LZ), 32),
     # studio macro: S, then B, then the whole liver
     (152, V(-0.06, -0.30, LZ + 0.30), V(-0.03, -0.03, LZ + 0.02), 38),
     (170, V(-0.11, -0.19, LZ - 0.01), brand(200, "S"), 52),
@@ -46,7 +47,8 @@ K = [  # frame, camera position, aim point, lens (mm)
     (262, V(0.03, -0.30, LZ + 0.02), V(0.0, -0.03, LZ), 48),
     (272, V(0.0, -0.22, LZ + 0.40), V(0.0, -0.05, LZ + 0.7), 35),
     # 2 - rise back out of the window, stitching top-down, crane to his face, mask down, smile
-    (282, V(-0.28, -0.08, 0.55), V(-0.28, -0.06, 2.0), 30),
+    (277, V(-0.12, -0.14, -2.5), V(-0.2, -0.1, 1.0), 30),
+    (281, V(-0.28, -0.08, 1.21), V(-0.28, -0.06, 2.5), 30),
     (292, V(-0.27, -0.12, 1.50), WINP, 34),
     (330, V(-0.30, 0.0, 1.47), WINP, 38),
     (365, V(0.02, -0.02, 1.50), WINP + V(0.02, 0, 0), 40),
@@ -76,15 +78,18 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1025, V(-0.05, -0.25, 1.45), S2H(1020) + V(0, 0, -0.2), 30),
     # 6 - dive into the window again: gloved hands lift the liver into the light; out to her widening eyes
     (1046, V(-0.25, -0.12, 1.42), WINP, 34),
-    (1056, V(-0.28, -0.07, 1.22), WINP + V(0, 0, -0.5), 30),
-    (1064, V(-0.28, -0.06, 0.3), V(-0.25, -0.05, -3.0), 28),
+    (1057, V(-0.28, -0.07, 1.21), WINP + V(0, 0, -0.5), 30),
+    (1060, V(-0.28, -0.065, -2.5), V(-0.25, -0.06, -6.0), 28),
+    (1064, V(-0.02, -0.25, LZ + 0.40), V(0.0, -0.02, LZ), 32),
     (1078, V(0.05, -0.42, LZ + 0.25), V(0.0, -0.02, LZ + 0.02), 34),
     (1105, V(-0.16, -0.36, LZ + 0.06), V(0.0, -0.02, LZ + 0.08), 40),
     (1122, V(0.10, -0.42, LZ + 0.12), V(0.0, -0.02, LZ + 0.14), 42),
     (1140, V(-0.06, -0.42, LZ + 0.20), brand(1150, "S") + V(0.03, 0, -0.01), 46),
     (1168, V(0.03, -0.38, LZ + 0.24), brand(1168, "S") + V(0.03, 0, -0.01), 52),
-    (1180, V(0.0, -0.15, LZ + 0.8), V(0.0, -0.1, LZ + 2.0), 35),
-    (1189, V(-0.28, -0.08, 1.40), V(-0.28, 0.5, 1.6), 30),
+    (1178, V(0.0, -0.15, LZ + 0.40), V(0.0, -0.1, LZ + 2.0), 35),
+    (1182, V(-0.15, -0.1, -2.5), V(-0.2, -0.08, 1.0), 33),
+    (1186, V(-0.28, -0.08, 1.21), V(-0.28, 0.2, 2.2), 30),
+    (1191, V(-0.28, -0.08, 1.42), V(-0.28, 0.5, 1.6), 30),
     (1199, V(-0.29, -0.05, 1.55), S2H(1200), 38),
     (1210, V(-0.30, 0.02, 1.62), S2H(1210), 42),
     (1228, V(-0.30, 0.22, 1.63), S2H(1225), 60),
@@ -125,10 +130,45 @@ def blend(keys):
     p_ = pvec(keys); c_ = catmull(keys)
     return lambda t: (p_(t) + c_(t)) * 0.5
 fc = blend([(f, c) for f, c, a, l in K]); fa = blend([(f, a) for f, c, a, l in K]); fl = pchip([(f, float(l)) for f, c, a, l in K])
-for f in list(range(1, 1711, 2)) + [1710]:
-    cam.location = fc(f); cam.keyframe_insert("location", frame=f)
+# transit snapping: the camera never sits inside a wall, floor or the gap between the OR table and the studio.
+# Frames that would be inside a slab are moved to the nearer face, so each pass-through is a single textured frame.
+MEMB_Z = LZ + 0.45
+def body_h(x, y):
+    u = (x + 0.15) / 0.75; v = y / 0.36
+    torso = 0.21 * max(0.0, 1 - u * u) ** 0.5 * max(0.0, 1 - v ** 4) if abs(u) < 1 else 0.0
+    legs = 0.14 * max(0.0, 1 - (y / 0.3) ** 2) if 0.4 < x < 1.15 else 0.0
+    return max(torso, legs)
+ZONES = [  # axis, lo, hi, extra condition
+    ('x', 3.488, 3.812, lambda p: abs(p.y) < 3.0 and 0 < p.z < 2.7),
+    ('x', -3.912, -3.488, lambda p: abs(p.y) < 3.5 and 0 < p.z < 3.0),
+]
+def snap(f, p, prev_side):
+    q = p.copy()
+    for ax, lo, hi, cond in ZONES:
+        v = getattr(q, ax)
+        if lo < v < hi and cond(q):
+            side = prev_side.get((ax, lo)) or ('lo' if v < (lo + hi) / 2 else 'hi')
+            if (side == 'lo' and v > (lo + hi) / 2) or (side == 'hi' and v < (lo + hi) / 2):
+                side = 'hi' if side == 'lo' else 'lo'
+            setattr(q, ax, lo if side == 'lo' else hi)
+        elif v <= lo: prev_side[(ax, lo)] = 'lo'
+        elif v >= hi: prev_side[(ax, lo)] = 'hi'
+    top = 0.95 + 0.012 + body_h(q.x, q.y) - 0.012       # just under the abdomen skin / drape
+    if abs(q.x) < 0.8 and abs(q.y) < 0.8 and MEMB_Z + 0.012 < q.z < top + 0.024:
+        mid = (MEMB_Z + top) / 2; key = 'dive'
+        side = prev_side.get(key) or ('hi' if q.z > mid else 'lo')
+        if (side == 'hi' and q.z < mid) or (side == 'lo' and q.z > mid):
+            side = 'lo' if side == 'hi' else 'hi'
+        q.z = top + 0.024 if side == 'hi' else MEMB_Z + 0.012
+    elif q.z >= top + 0.024: prev_side['dive'] = 'hi'
+    elif q.z <= MEMB_Z + 0.012: prev_side['dive'] = 'lo'
+    return q
+PS = {}
+for f in range(1, 1711):
+    cam.location = snap(f, fc(f), PS); cam.keyframe_insert("location", frame=f)
     aim.location = fa(f); aim.keyframe_insert("location", frame=f)
-    cam_d.lens = fl(f); cam_d.keyframe_insert("lens", frame=f)
+    if f % 2 or f == 1710:
+        cam_d.lens = fl(f); cam_d.keyframe_insert("lens", frame=f)
 # macro: deeper DOF in the studio, shallower close-ups
 for f, fs in ((1, 4.0), (150, 8.0), (300, 8.0), (318, 4.0), (1060, 4.0), (1075, 8.0), (1185, 8.0), (1195, 3.2), (1240, 4.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)

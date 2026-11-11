@@ -38,7 +38,7 @@ ORC, STU, HOME, HEAR, COR = coll("OR_Set"), coll("Studio_Set"), coll("Home_Set")
 # ------------------------------------------------------------------ world: hospital HDRI, low (reflections only; rooms are closed)
 w = bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
 wn, wl = w.node_tree.nodes, w.node_tree.links; wn.clear()
-env = wn.new('ShaderNodeTexEnvironment'); env.image = img(os.path.join(PH, "hdri/hospital_room_2_2k.hdr"))
+env = wn.new('ShaderNodeTexEnvironment'); env.image = img(os.path.join(PH, "hdri/hospital_room_2_1k.hdr"))
 bg = wn.new('ShaderNodeBackground'); bg.inputs['Strength'].default_value = 0.3
 wo = wn.new('ShaderNodeOutputWorld'); wl.new(env.outputs[0], bg.inputs[0]); wl.new(bg.outputs[0], wo.inputs[0])
 
@@ -63,8 +63,18 @@ M_SKIN = mat("Skin_Abdomen", (0.70, 0.50, 0.40), 0.45, sss=0.25)
 M_INCISION = mat("Incision", (0.45, 0.08, 0.08), 0.35)
 M_SUTURE = mat("Suture", (0.06, 0.05, 0.25), 0.4)
 M_PAPER = mat("Paper", (0.92, 0.9, 0.84), 0.75)
+def _grain(m, scale, strength, tint=None, mottle=0.0):
+    nt = m.node_tree; pr = nt.nodes["Principled BSDF"]
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = scale; nz.inputs['Detail'].default_value = 10.0; nz.inputs['Roughness'].default_value = 0.7
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = strength; bp.inputs['Distance'].default_value = 0.0004
+    nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs['Normal'], pr.inputs['Normal'])
+    if mottle:
+        mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.inputs['A'].default_value = pr.inputs['Base Color'].default_value
+        mx.inputs['B'].default_value = tint; nt.links.new(nz.outputs['Fac'], mx.inputs['Factor']); nt.links.new(mx.outputs['Result'], pr.inputs['Base Color'])
+_grain(M_PAPER, 900.0, 0.25, (0.85, 0.82, 0.74, 1), mottle=0.5)
 M_GOLD = mat("Gold", (0.85, 0.62, 0.25), 0.3, 1.0)
 M_RED_INK = mat("RedInk", (0.62, 0.03, 0.03), 0.6)
+_grain(M_RED_INK, 260.0, 0.15, (0.85, 0.25, 0.22, 1), mottle=0.6)
 
 def fabric_override(ob, rgb):
     m = M_FABRIC.copy(); m.name = "Scrubs_" + ob.name
@@ -79,7 +89,7 @@ fabric_override(bpy.data.objects["Nurse.male_casualsuit01"], (0.16, 0.26, 0.42))
 fabric_override(bpy.data.objects["Surgeon2.female_casualsuit01"], (0.17, 0.27, 0.55))
 fabric_override(bpy.data.objects["Patient.female_casualsuit02"], (0.42, 0.24, 0.28))    # plain lounge set: the stock T-shirt print looked like a logo
 # purple nitrile gloves on the studio hands
-M_GLOVE = mat("Nitrile", (0.36, 0.32, 0.78), 0.32, sss=0.1, coat=0.3)
+M_GLOVE = mat("Nitrile", (0.50, 0.68, 0.88), 0.38, sss=0.15, coat=0.25)
 gb = bpy.data.objects["GloveHands.body"]; gb.data.materials.clear(); gb.data.materials.append(M_GLOVE)
 for ch in bpy.data.objects["GloveHands"].children:
     if ch.type == 'MESH' and ch != gb:
@@ -500,5 +510,17 @@ for pg in range(8):
     PAGES.append(hinge)
 # floor marks, wall scrub sink area
 box("OR_ScrubSink", (1.2, 0.5, 0.9), (-2.7, 3.2, 0.45), M_STEEL, ORC, bevel=0.01)
+# skin micro-detail on every person: pores + slight roughness break-up (reads less like a mannequin)
+for ob in [o for o in bpy.data.objects if o.name.endswith(".body")]:
+    for m in ob.data.materials:
+        if not m or not m.use_nodes or m.get("pores"): continue
+        m["pores"] = 1; nt = m.node_tree
+        for pr in [n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED']:
+            nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1400.0; nz.inputs['Detail'].default_value = 3.0
+            bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.07; bp.inputs['Distance'].default_value = 0.0002
+            nt.links.new(nz.outputs['Fac'], bp.inputs['Height'])
+            if pr.inputs['Normal'].links:
+                nt.links.new(pr.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+            nt.links.new(bp.outputs['Normal'], pr.inputs['Normal'])
 print("SCENE_BUILT")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

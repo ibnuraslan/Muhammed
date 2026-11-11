@@ -42,3 +42,10 @@ See `C_audit.txt`. What remains:
 ## Known / unsure
 - Transit frames read as a short black or grey "whoosh". With motion blur on the farm they should read as a dive. If you'd rather see a skin-texture wipe, I can add one.
 - The patient wears a casual T-shirt with a small abstract print (MakeHuman CC0 asset). There is no text or logo.
+
+## After C (director notes applied before packaging v002)
+- **'SB' is burned into the liver surface** instead of being tube geometry. The pen tip writes into a 1K UV-space mask; each texel stores when the tip reaches it. The shader turns passed texels into dark brown-black char (rougher, no wet coat) with a slight raised bump, and glows orange only at the tip for ~5 frames of travel. The same mask lights the brand on the hearing-room ghost livers. The old floating letters are gone.
+- **Transit wipes**: the camera snaps across slabs, so there are no black or grey frames. Dives and rises pass through the abdomen skin and a tissue membrane (about 4+4 frames). Wall fly-throughs show 1–3 frames of tile or panel texture.
+- **Gloves** are pale-blue nitrile (MPFB hand mesh). **Skin** gets a pore bump on every person. **The certificate** has paper grain and a seal. **The red stamp ink** is mottled.
+- **The patient's top** is a plain lounge set; the stock print looked like a logo.
+- **Package**: 62 MB as a normal git file (no LFS). Textures re-encoded to 1K JPEG/PNG, 2K for faces and the liver, 1K HDRI, the bed decimated.

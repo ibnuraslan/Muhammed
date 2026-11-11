@@ -4,7 +4,7 @@ These values were read back from `SurgeonBrandsLivers_v002_60fps.blend`, opened 
 
 | Item | Value |
 |---|---|
-| File | `SurgeonBrandsLivers_v002_60fps.blend`: 116 MB, compressed. All 90 images are packed (max 2K; most 1K). There are no linked libraries. Stored as two plain-git parts (LFS host blocked); rejoin with `cat` (see README). |
+| File | `SurgeonBrandsLivers_v002_60fps.blend`: 62 MB, compressed, normal git file. All 91 images are packed: 1K JPEG/PNG, 2K only for the three hero faces and the liver, 1K HDRI. The hospital bed is decimated to 20k faces. There are no linked libraries. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -14,7 +14,7 @@ These values were read back from `SurgeonBrandsLivers_v002_60fps.blend`, opened 
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
-| Motion blur | On, shutter 0.5 (180° at 60 fps). The camera dives and wall fly-throughs rely on it. |
+| Motion blur | On, shutter 0.5 (180° at 60 fps), **position: Start on Frame**. Keep Start: the camera jumps across wall and floor slabs between two textured transit frames, and a centred shutter would smear across that jump. |
 | Colour | Display sRGB. View AgX with the look "AgX - Medium High Contrast". Exposure 0, gamma 1. |
 | Output | PNG, RGB, 8-bit, compression 15, written to `//render/SurgeonBrandsLivers_v002_####.png` |
 | Audio | None yet. There is no voiceover. The film is built to the beat-table target times; see `beats.json`. When the VO arrives, retime with `pipeline/retime_to_vo.py`, which swaps in the VO strip. |
@@ -32,8 +32,8 @@ Before approving the whole job, run these test frames:
 - **1300**: hearing room. The translucent ghost livers are transparent and emissive.
 - **1545**: the gavel strike, with motion blur.
 
-If the studio frames (150–300, 1065–1185) are noisy around the smoke, raise samples to 96 for those ranges only.
+If the studio frames (142–275, 1064–1178) are noisy around the smoke, raise samples to 96 for those ranges only.
 
 ## Do not
 - Do not render other cameras; `CAM_Film` is the only one.
-- Do not turn off motion blur. Without it, the four ≤0.3 s transit frames (dives into and out of the abdomen, and the wall fly-throughs) read as plain dark frames.
+- Do not change the motion blur position from Start to Center (see above).

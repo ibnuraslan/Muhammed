@@ -2,7 +2,7 @@
 blender -b scene.blend --python 03_animate.py -- <out.blend>"""
 import sys, os, math, random
 import bpy, bmesh
-from mathutils import Vector, Matrix, Quaternion, Euler
+from mathutils import Vector, Matrix, Quaternion, Euler, noise
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "lib.py")).read())
@@ -274,8 +274,8 @@ def gloves(act, off_at=None):
     gm = body.data.materials[0].copy(); gm.name = "Glove_" + act.o.name
     nt = gm.node_tree; out = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output] or [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL']
     out = out[0]; src = out.inputs['Surface'].links[0].from_socket
-    gp = nt.nodes.new('ShaderNodeBsdfPrincipled'); gp.inputs['Base Color'].default_value = (0.36, 0.32, 0.78, 1)
-    gp.inputs['Roughness'].default_value = 0.32; gp.inputs['Coat Weight'].default_value = 0.3
+    gp = nt.nodes.new('ShaderNodeBsdfPrincipled'); gp.inputs['Base Color'].default_value = (0.50, 0.68, 0.88, 1)
+    gp.inputs['Roughness'].default_value = 0.38; gp.inputs['Coat Weight'].default_value = 0.25; gp.inputs['Subsurface Weight'].default_value = 0.15
     mx = nt.nodes.new('ShaderNodeMixShader'); mx.inputs['Fac'].default_value = 1.0
     nt.links.new(src, mx.inputs[1]); nt.links.new(gp.outputs[0], mx.inputs[2]); nt.links.new(mx.outputs[0], out.inputs['Surface'])
     if off_at:
@@ -893,5 +893,141 @@ tb = bpy.data.objects.new("AnaesTube", cu); bpy.data.collections["OR_Set"].objec
 ev(100); nk = PT.o.matrix_world @ PT.R.PB["neck01"].head
 towel = cyl("NeckTowel", 0.085, 0.2, nk + V(0.02, 0, 0.0), M_DRAPE_T := mat("NeckTowel", (0.05, 0.20, 0.38), 0.85), bpy.data.collections["OR_Set"], verts=24, rot=(0, R_(90), 0))
 key_vis([am, tb, towel] + list(am.children), [(0, 600), (1062, 1710)])
+
+# ================================================================== BURN 'SB' INTO THE LIVER SURFACE (replaces the tube letters)
+# Each stroke point is projected onto the mesh, converted to UV, and rasterised into a 1K mask:
+#   R = frame the pen tip reaches that spot (normalised), G = line coverage (soft edge).
+# The shader compares R with a keyed progress value: seared char behind the tip, a hot orange edge only at the tip.
+import numpy as np
+from mathutils import geometry as mgeo
+me_l = liver.data
+uvl = me_l.uv_layers.active_render or me_l.uv_layers.active
+def surf_uv(p_local):
+    """closest surface point -> (uv, polygon); p_local is already on the surface"""
+    ok, loc, nrm, fi = liver.closest_point_on_mesh(p_local)
+    poly = me_l.polygons[fi]; vs = [me_l.vertices[i].co for i in poly.vertices]; uvs = [uvl.data[li].uv for li in poly.loop_indices]
+    best = None
+    for k in range(1, len(vs) - 1):
+        tri = (vs[0], vs[k], vs[k + 1]); tuv = (uvs[0].to_3d(), uvs[k].to_3d(), uvs[k + 1].to_3d())
+        u = mgeo.barycentric_transform(loc, *tri, *tuv)
+        cp = mgeo.closest_point_on_tri(loc, *tri); d = (cp - loc).length
+        if best is None or d < best[0]: best = (d, u.to_2d())
+    return best[1]
+RES = 1024
+ARR = np.ones((RES, RES), np.float32) * 2.0; COV = np.zeros((RES, RES), np.float32)
+LINE_W = 0.0022            # metres: half-width of the burn line
+B0, B1 = 150.0, 300.0      # progress 0..1 spans frames 150..300
+strokes = []
+for ch in ("S", "B"):
+    _, pts = LETTERS[ch, "Sear"]
+    f0, f1 = WRITE[ch]
+    seg = [0.0]
+    for a_, b_ in zip(pts, pts[1:]): seg.append(seg[-1] + (b_ - a_).length)
+    for i, p_ in enumerate(pts):
+        fr = f0 + (f1 - f0) * seg[i] / seg[-1]
+        strokes.append((ch, p_, surf_uv(p_), (fr - B0) / (B1 - B0)))
+for (c0, p0, u0, t0), (c1, p1, u1, t1) in zip(strokes, strokes[1:]):
+    if c0 != c1: continue
+    wl = max(1e-6, (p1 - p0).length); ul = (u1 - u0).length
+    if ul > 0.05: continue                      # UV seam jump: skip that segment
+    scale = ul / wl if ul > 1e-7 else 0.004 / 0.001
+    rad = LINE_W * scale * RES                  # pixels
+    rad = max(1.5, min(rad, 30))
+    x0, y0 = u0.x * RES, u0.y * RES; x1, y1 = u1.x * RES, u1.y * RES
+    xa, xb = int(min(x0, x1) - rad - 2), int(max(x0, x1) + rad + 2); ya, yb = int(min(y0, y1) - rad - 2), int(max(y0, y1) + rad + 2)
+    xa, ya = max(0, xa), max(0, ya); xb, yb = min(RES - 1, xb), min(RES - 1, yb)
+    if xb <= xa or yb <= ya: continue
+    X, Y = np.meshgrid(np.arange(xa, xb + 1), np.arange(ya, yb + 1))
+    dx, dy = x1 - x0, y1 - y0; L2 = dx * dx + dy * dy + 1e-9
+    tt = np.clip(((X - x0) * dx + (Y - y0) * dy) / L2, 0, 1)
+    d = np.hypot(X - (x0 + tt * dx), Y - (y0 + tt * dy))
+    cov = np.clip(1.0 - d / rad, 0, 1) ** 0.6
+    arr = t0 + (t1 - t0) * tt
+    sub_c = COV[ya:yb + 1, xa:xb + 1]; sub_a = ARR[ya:yb + 1, xa:xb + 1]
+    m_ = cov > 0
+    sub_a[m_] = np.minimum(sub_a[m_], arr[m_]); sub_c[:] = np.maximum(sub_c, cov)
+print("BURN mask pixels", int((COV > 0).sum()))
+img_b = bpy.data.images.new("BrandBurnMask", RES, RES, alpha=False, float_buffer=True)
+px = np.zeros((RES, RES, 4), np.float32); px[..., 0] = ARR; px[..., 1] = COV; px[..., 3] = 1.0
+img_b.pixels.foreach_set(px.ravel()); img_b.update()
+MASK_PATH = os.path.join(os.path.dirname(OUT), "brand_burn_mask.png")
+img_b.file_format = 'PNG'; img_b.save(filepath=MASK_PATH)
+bpy.data.images.remove(img_b)
+img_b = bpy.data.images.load(MASK_PATH); img_b.name = "BrandBurnMask"; img_b.colorspace_settings.name = 'Non-Color'; img_b.pack()
+def burn_nodes(nt, uvname):
+    n, l = nt.nodes, nt.links
+    uvn = n.new('ShaderNodeUVMap'); uvn.uv_map = uvname
+    tx = n.new('ShaderNodeTexImage'); tx.image = img_b; tx.interpolation = 'Linear'; tx.extension = 'CLIP'
+    l.new(uvn.outputs[0], tx.inputs['Vector'])
+    sp_ = n.new('ShaderNodeSeparateColor'); l.new(tx.outputs['Color'], sp_.inputs[0])
+    return sp_
+def mth(nt, op, a, b=None, clamp=False):
+    m = nt.nodes.new('ShaderNodeMath'); m.operation = op; m.use_clamp = clamp
+    for i, v in enumerate((a, b)):
+        if v is None: continue
+        if isinstance(v, (int, float)): m.inputs[i].default_value = v
+        else: nt.links.new(v, m.inputs[i])
+    return m.outputs[0]
+lmat = liver.data.materials[0]; nt = lmat.node_tree; n, l = nt.nodes, nt.links
+pr = n["Principled BSDF"]
+sp_ = burn_nodes(nt, uvl.name)
+R, G = sp_.outputs[0], sp_.outputs[1]
+prog = n.new('ShaderNodeValue'); prog.name = "BurnProgress"
+for f, v in ((1, -1.0), (B0, 0.0), (B1, 1.0), (1710, 1.0)):
+    prog.outputs[0].default_value = v; prog.outputs[0].keyframe_insert("default_value", frame=f)
+for fc in fcurves(nt):
+    if "BurnProgress" in fc.data_path:
+        for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
+P = prog.outputs[0]
+behind = mth(nt, 'SUBTRACT', P, R)                       # >0 where the tip has passed
+burnt = mth(nt, 'GREATER_THAN', behind, 0.0)
+sear = mth(nt, 'MULTIPLY', burnt, G)                     # 0..1 char amount
+cool = mth(nt, 'SUBTRACT', 1.0, mth(nt, 'DIVIDE', behind, 0.035), clamp=True)   # 1 at the tip, 0 after ~5 frames of travel
+hot = mth(nt, 'MULTIPLY', sear, cool)
+# base colour: wet liver -> char brown-black, rougher
+mixc = n.new('ShaderNodeMix'); mixc.data_type = 'RGBA'; mixc.blend_type = 'MIX'
+src = pr.inputs['Base Color'].links[0].from_socket if pr.inputs['Base Color'].links else None
+if src: l.new(src, mixc.inputs['A'])
+else: mixc.inputs['A'].default_value = pr.inputs['Base Color'].default_value
+mixc.inputs['B'].default_value = (0.012, 0.006, 0.004, 1)
+l.new(mth(nt, 'MULTIPLY', sear, 1.0), mixc.inputs['Factor']); l.new(mixc.outputs['Result'], pr.inputs['Base Color'])
+l.new(mth(nt, 'ADD', 0.32, mth(nt, 'MULTIPLY', sear, 0.6), clamp=True), pr.inputs['Roughness'])
+l.new(mth(nt, 'SUBTRACT', 0.7, mth(nt, 'MULTIPLY', sear, 1.0), clamp=True), pr.inputs['Coat Weight'])
+# glow only at the tip (plus a faint ember in the char)
+em_s = mth(nt, 'ADD', mth(nt, 'MULTIPLY', hot, 60.0), mth(nt, 'MULTIPLY', mth(nt, 'MULTIPLY', sear, sear), 0.04))
+pr.inputs['Emission Color'].default_value = (1.0, 0.42, 0.1, 1); l.new(em_s, pr.inputs['Emission Strength'])
+# slight raised char
+bump = n.new('ShaderNodeBump'); bump.inputs['Strength'].default_value = 0.6; bump.inputs['Distance'].default_value = 0.0015
+l.new(sear, bump.inputs['Height'])
+if pr.inputs['Normal'].links:
+    l.new(pr.inputs['Normal'].links[0].from_socket, bump.inputs['Normal'])
+l.new(bump.outputs['Normal'], pr.inputs['Normal'])
+# retire the tube letters (kept hidden as camera/pen references)
+for ch in ("S", "B"):
+    for kind in ("Sear", "Hot"):
+        ob = LETTERS[ch, kind][0]; ob.hide_render = True
+        if ob.data.animation_data: ob.data.animation_data_clear()
+# ghost livers: the same mask glows in their x-ray shader; remove their tube copies
+for o in [o for o in bpy.data.objects if o.name.startswith("GhostBrand_")]:
+    bpy.data.objects.remove(o, do_unlink=True)
+for g in [o for o in bpy.data.objects if o.name.startswith("GhostLiver_")]:
+    gm = g.data.materials[0]; gt = gm.node_tree
+    sp2 = burn_nodes(gt, uvl.name)
+    out = [x for x in gt.nodes if x.type == 'OUTPUT_MATERIAL'][0]; prev = out.inputs['Surface'].links[0].from_socket
+    e2 = gt.nodes.new('ShaderNodeEmission'); e2.inputs['Color'].default_value = (1.0, 0.45, 0.15, 1)
+    gt.links.new(mth(gt, 'MULTIPLY', sp2.outputs[1], 9.0), e2.inputs['Strength'])
+    ad = gt.nodes.new('ShaderNodeAddShader'); gt.links.new(prev, ad.inputs[0]); gt.links.new(e2.outputs[0], ad.inputs[1]); gt.links.new(ad.outputs[0], out.inputs['Surface'])
+
+# tissue membrane in the studio: the camera passes through it on every dive / rise (the transit wipe)
+mb = bpy.data.meshes.new("StudioMembrane"); import bmesh as _bm; bmm = _bm.new(); _bm.ops.create_grid(bmm, x_segments=60, y_segments=60, size=0.8)
+for v in bmm.verts: v.co.z = 0.01 * noise.noise(v.co * 9.0) if 'noise' in globals() else 0.0
+bmm.to_mesh(mb); bmm.free()
+for p_ in mb.polygons: p_.use_smooth = True
+memb = bpy.data.objects.new("StudioMembrane", mb); bpy.data.collections["Studio_Set"].objects.link(memb)
+memb.location = (0.0, -0.1, liver.location.z + 0.084 + 0.45)
+mm = mat("Membrane", (0.72, 0.42, 0.36), 0.35, sss=0.3, coat=0.4, emit=(0.75, 0.38, 0.32), estr=0.6); mb.materials.append(mm)
+mnt = mm.node_tree; nz = mnt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 60.0; nz.inputs['Detail'].default_value = 8.0
+bp = mnt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.35; mnt.links.new(nz.outputs['Fac'], bp.inputs['Height']); mnt.links.new(bp.outputs['Normal'], mnt.nodes["Principled BSDF"].inputs['Normal'])
+key_vis([memb], [(126, 152), (262, 292), (1046, 1074), (1166, 1192)])
 print("ANIM_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
