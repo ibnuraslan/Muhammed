@@ -58,7 +58,7 @@ if "screen_mat" in ctx:
 
 def state(o):
     return (tuple(round(v, 6) for v in o.location), tuple(round(v, 6) for v in o.rotation_euler),
-            tuple(round(v, 6) for v in o.rotation_quaternion))
+            tuple(round(v, 6) for v in o.rotation_quaternion), tuple(round(v, 6) for v in o.scale))
 # find what moves: compare three sample times, then key only those objects every frame
 snap = []
 for t in (0.0, 0.5, 1.0):
@@ -83,6 +83,8 @@ for f in range(1, n + 1):
     for o in movers:
         o.keyframe_insert("location", frame=f)
         o.keyframe_insert("rotation_quaternion" if o.rotation_mode == 'QUATERNION' else "rotation_euler", frame=f)
+        if len({sn[o.name][3] for sn in snap}) > 1:     # animated scale (tape unrolling, telescoping booms, steam)
+            o.keyframe_insert("scale", frame=f)
     if screen_tex is not None and screen_tex.image is not None and screen_tex.image.filepath:
         shutil.copyfile(bpy.path.abspath(screen_tex.image.filepath), os.path.join(ui_dir, f"f{f:04d}.png"))
     print(f"[bake] {name} frame {f}/{n}", flush=True)
