@@ -1,7 +1,7 @@
 """Design system for the film: palette, type, sizes, easing. One place to change the look."""
 import os, math
 
-W, H, FPS = 1920, 1080, 24
+W, H, FPS = 1920, 816, 24          # 2.35:1 scope, matching the reference
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "..", "assets", "fonts")
 SYS = "/usr/share/fonts/opentype/inter/"
