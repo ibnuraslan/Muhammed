@@ -1,0 +1,65 @@
+{
+ "saab": {
+  "uid": "4db0bcbc183a452eb3ef692cce2fe36f",
+  "title": "SAAB 9-5 blue sedan of 1997-2001",
+  "author": "blendffnike",
+  "author_profile": "https://sketchfab.com/blendffnike",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/4db0bcbc183a452eb3ef692cce2fe36f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "wheel": {
+  "uid": "c51b8a7d88354d8db4501eb6cfb0485e",
+  "title": "Steering wheel",
+  "author": "pampi2703",
+  "author_profile": "https://sketchfab.com/pampi2703",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c51b8a7d88354d8db4501eb6cfb0485e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "eye": {
+  "uid": "417cbd1aac554ea189966250b784ab6f",
+  "title": "Realistic Human Eye",
+  "author": "Alexander Antipov",
+  "author_profile": "https://sketchfab.com/Dessen",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/417cbd1aac554ea189966250b784ab6f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "city": {
+  "uid": "1f50f0d6ec5a493d8e91d7db1106b324",
+  "title": "City",
+  "author": "SpatialNeglect",
+  "author_profile": "https://sketchfab.com/jeandiz",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1f50f0d6ec5a493d8e91d7db1106b324",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "streetlight": {
+  "uid": "1fbf6e80cb7e4705b39680cc17e622b2",
+  "title": "Street Light Fbx",
+  "author": "aashifkamran23",
+  "author_profile": "https://sketchfab.com/aashifkashif23",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1fbf6e80cb7e4705b39680cc17e622b2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "road": {
+  "uid": "ffd36f67b0c8476eac5788244158394c",
+  "title": "Road / Highway",
+  "author": "ROY",
+  "author_profile": "https://sketchfab.com/roy.3dartist",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/ffd36f67b0c8476eac5788244158394c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "idr": {
+  "uid": "109ed75bc4df4400a308cbff7cc70f6d",
+  "title": "Volkswagen I.D.R - with interior",
+  "author": "tulex_art",
+  "author_profile": "https://sketchfab.com/CassioFernandes",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/109ed75bc4df4400a308cbff7cc70f6d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
