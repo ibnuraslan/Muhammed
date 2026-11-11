@@ -94,6 +94,8 @@ def build(variant=None):
         for k in range(2):
             parts.append(box("Crate", (-0.25 + 0.5 * j, -1.95 + 0.6 * k, 0.65), (0.48, 0.55, 0.56), card[(j + k) % 3], bevel=0.01))
     fk = join(parts, "Forklift"); fk.location = (0, 2.0, 0)
+    if variant == "dark":                          # the lights-off shot is an empty aisle
+        fk.hide_render = True; fk.hide_viewport = True
     c["forklift"] = fk
     return c
 

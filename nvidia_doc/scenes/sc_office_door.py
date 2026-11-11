@@ -92,7 +92,7 @@ def build(variant=None):
     N = lm.node_tree.nodes; L = lm.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.35, 0.15, 1)
     v = N.new("ShaderNodeValue"); d = v.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'
-    d.expression = "30 * (1 if (frame % 24) < 12 else 0.02)"
+    d.expression = "8 * (1 if (frame % 24) < 12 else 0.02)"
     L.new(v.outputs[0], em.inputs['Strength']); L.new(em.outputs[0], out.inputs['Surface'])
     box("RingLED", (1.47, 3.38, 1.16), (0.025, 0.012, 0.01), lm, rot=(math.radians(-10), 0, math.radians(-15)))
     rl = bpy.data.lights.new("RingGlow", 'POINT'); rl.color = (1.0, 0.4, 0.2); rl.shadow_soft_size = 0.02
@@ -103,7 +103,7 @@ def build(variant=None):
 
 MOVES = {
     "phone_ring": dict(kind="anim", dof=2.0, far=20.0,
-                       cam=lambda c, t: (Vector((0.9, DOOR_Y - 1.1, 1.35)).lerp(Vector((0.95, DOOR_Y - 0.6, 1.3)), ease(t)), c["phone"], 55),
+                       cam=lambda c, t: (Vector((1.1, DOOR_Y - 0.5, 1.32)).lerp(Vector((1.15, DOOR_Y - 0.3, 1.3)), ease(t)), c["phone"], 70),
                        focus=lambda c, t: c["phone"]),
     "door_push": dict(kind="anim", dof=2.8, far=20.0,
                       cam=lambda c, t: (Vector((0.55, -3.4, 1.45)).lerp(Vector((0.3, -1.25, 1.3)), ease(t)), (0.05, 0.0, 1.05), 32),

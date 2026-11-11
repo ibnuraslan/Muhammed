@@ -90,5 +90,5 @@ def anim_press(c, t):
 
 
 MOVES = {"press_run": dict(kind="anim", dof=4.0, far=40.0, anim=anim_press,
-                           cam=lambda c, t: (Vector((-8.0 + 9.0 * ease(t), -4.2, 1.4)), Vector((-4.0 + 9.0 * ease(t), 0.0, 2.2)), 32),
+                           cam=lambda c, t: (Vector((-9.0 + 8.0 * ease(t), -7.5, 2.0)), Vector((-3.0 + 8.0 * ease(t), 0.0, 2.3)), 28),
                            focus=lambda c, t: Vector((-4.0 + 9.0 * ease(t), 0.0, 2.2)))}

@@ -272,6 +272,18 @@ def build(variant=None):
         mx = Nn.new("ShaderNodeMix"); mx.data_type = 'RGBA'; Ll.new(g.outputs[0], mx.inputs['Factor']); Ll.new(im.outputs['Color'], mx.inputs[6]); mx.inputs[7].default_value = (1.0, 0.1, 0.05, 1)
         em = Nn.new("ShaderNodeEmission"); em.inputs['Strength'].default_value = 1.4; Ll.new(mx.outputs[2], em.inputs['Color']); Ll.new(em.outputs[0], oo.inputs['Surface'])
         c["footage_mat"] = fm
+        # the comparison photo: a tighter, cleaner crop of the same moment (stands in for the separate photograph)
+        from PIL import Image as _Im
+        ph_path = os.path.join(paper_tex.GEN, "compare_photo.png")
+        src = _Im.open(foot).convert("RGB"); w_, h_ = src.size
+        crop = src.crop((int(w_ * 0.5), int(h_ * 0.1), int(w_ * 0.85), int(h_ * 0.75))).resize((1600, 900))
+        crop.save(ph_path)
+        pm_ = bpy.data.materials.new("ComparePhoto"); pm_.use_nodes = True
+        N2 = pm_.node_tree.nodes; L2 = pm_.node_tree.links; N2.clear()
+        o2 = N2.new("ShaderNodeOutputMaterial"); t2 = N2.new("ShaderNodeTexCoord"); i2 = N2.new("ShaderNodeTexImage"); i2.image = bpy.data.images.load(ph_path)
+        L2.new(t2.outputs['UV'], i2.inputs['Vector']); e2 = N2.new("ShaderNodeEmission"); e2.inputs['Strength'].default_value = 1.4
+        L2.new(i2.outputs['Color'], e2.inputs['Color']); L2.new(e2.outputs[0], o2.inputs['Surface'])
+        c["photo_mat"] = pm_
     # SET 11A: an investigator standing at the evidence wall, pinning one more page
     pinner = person("Pinner", 1.0, 39, "male_casualsuit01", "short02", hv=0.25)
     stand(pinner, (-5.35, 0.4, 0), -math.pi / 2)                  # faces -X, the wall
@@ -413,6 +425,8 @@ def anim_compare(c, t):
         for o in bpy.data.objects:                 # the left monitor shows the footage instead of the spreadsheet
             if o.name.startswith("Screen") and o.location.y < 0.5 and o.location.x > 4.5:
                 o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(c["footage_mat"])
+            elif o.name.startswith("Screen") and o.location.y > 0.7 and o.location.x > 4.5 and c.get("photo_mat"):
+                o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(c["photo_mat"])
         c["_swapped"] = True
     animate(c, t * DUR["chart"], {"lift": 0.0})
 

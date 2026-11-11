@@ -125,8 +125,11 @@ def build(variant=None):
     sm = bpy.data.materials.new("ScanBeam"); sm.use_nodes = True
     Nn = sm.node_tree.nodes; Ll = sm.node_tree.links; Nn.clear()
     o_ = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.1, 0.06, 1)
-    v = Nn.new("ShaderNodeValue"); dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "20 * (0.6 + 0.4 * sin(frame * 0.8))"
-    Ll.new(v.outputs[0], em.inputs['Strength']); Ll.new(em.outputs[0], o_.inputs['Surface'])
+    v = Nn.new("ShaderNodeValue"); dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "0.12 + 0.06 * sin(frame * 0.8)"
+    tr = Nn.new("ShaderNodeBsdfTransparent"); mxs = Nn.new("ShaderNodeMixShader"); em.inputs['Strength'].default_value = 6.0
+    Ll.new(v.outputs[0], mxs.inputs[0]); Ll.new(tr.outputs[0], mxs.inputs[1]); Ll.new(em.outputs[0], mxs.inputs[2]); Ll.new(mxs.outputs[0], o_.inputs['Surface'])
+    for sx in (-2.75, 2.75):                       # bright red scan bars on the inner faces of the posts
+        box("ScanBar", (-120 + sx, 150, 3.0), (0.05, 0.08, 5.6), emissive("ScanBar", (1.0, 0.12, 0.06), 25))
     box("Beam", (-120, 150, 3.0), (6.0, 0.03, 5.8), sm).visible_shadow = False
     box("GateRoad", (-120, 150, -0.48), (14, 300, 1), pbr("Asphalt", (0.05, 0.05, 0.055), 0.6))
     cab_m = pbr("Cab", (0.08, 0.22, 0.4), 0.35, 0.3)
@@ -185,7 +188,7 @@ def cam_dock(c, t):
 
 MOVES = {
     "scan_gate": dict(kind="anim", far=1200.0, anim=anim_scan,
-                      cam=lambda c, t: (Vector((-110.5, 138, 2.0)).lerp(Vector((-110.8, 140, 2.2)), ease(t)), Vector((-120, 151, 3.0)), 32)),
+                      cam=lambda c, t: (Vector((-104, 132, 2.2)).lerp(Vector((-105, 135, 2.4)), ease(t)), Vector((-120, 150, 3.0)), 35)),
     "ship_lift": dict(kind="anim", far=1200.0, cam=cam_lift, anim=anim_lift),
     "tropical_dock": dict(kind="anim", far=1200.0, cam=cam_dock, anim=anim_dock),
     "crane_rise": dict(kind="anim", far=1200.0, cam=lambda c, t: ((95, -175, 5 + 6 * t), (-5, 10, 24), 32)),

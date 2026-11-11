@@ -125,7 +125,7 @@ def build(variant=None):
                     ox = off.x * math.cos(rz) - off.y * math.sin(rz); oy = off.x * math.sin(rz) + off.y * math.cos(rz)
                     ld = instance(tmpl, (x + ox, y + oy, z + off.z), rot=(0, 0, rz))
                     racks.append((ld, side, k))
-            if k % 3 != 1:
+            if k % 3 != 1 and variant != "half":
                 instance(door_t, (x - side * 0.03, y, RACK_H / 2))
     c["leds"] = racks
     # overhead cable trays with bundled cables, over each row
@@ -157,7 +157,7 @@ def build(variant=None):
     for k in range(6):
         cyl("Fan", (tx + 0.36, ty - 0.2 + k * 0.08, tz + 0.04), 0.035, 0.04, pbr("FanBlack", (0.02, 0.02, 0.02), 0.5), verts=24, rot=(0, math.radians(90), 0))
     c["tray"] = Vector((tx, ty, tz + 0.04))
-    if variant == "one":                         # the open tray only exists in the busy-hall shots
+    if variant in ("one", "half"):               # the open tray only exists in the busy-hall shots
         for o in set(bpy.data.objects) - tray_objs_start:
             o.hide_render = True; o.hide_viewport = True
     # wave timing: racks light up from the far end toward the camera in shot B (frame numbers within the shot)
