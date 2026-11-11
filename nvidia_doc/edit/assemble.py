@@ -99,6 +99,10 @@ def parallax(rgb, depth, t, move):
 
 def plate_frame(scene, move, t):
     d = os.path.join(PLATES, scene, move)
+    if not os.path.isdir(d):            # background use (chapter cards): any rendered move of the scene will do
+        subs = sorted(glob.glob(os.path.join(PLATES, scene, "*", "plate.png")))
+        if subs:
+            d = os.path.dirname(subs[0])
     frames = sorted(glob.glob(os.path.join(d, "f*.png")))
     if frames:
         f = t * (len(frames) - 1); i0 = int(f); fr = f - i0

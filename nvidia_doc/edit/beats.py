@@ -96,7 +96,7 @@ BEATS = [
     B("c1_12", "A different set of records would tell you who rented it and where they connected from.",
       MG("records", focus="access"), [label("ACCESS RECORDS", "Who rented it · where they connected from")], pad=0.4),
     B("c1_13", "That’s the business Alice Huang moves into. She comes from Shanghai’s investment world.",
-      S3("shanghai", move="night_drift"), [label("SHANGHAI", "Finance and investment"), label("ALICE HUANG", None, pos="name")], tag="ILLUSTRATION"),
+      S3("shanghai", move="night_drift"), [label("ALICE HUANG", "From Shanghai’s investment world", pos="name")], tag="ILLUSTRATION"),
     B("c1_14", "In 2023, she takes control of a Singapore company called Megaspeed.",
       MG("structure", step=1), [date("2023")], src="REUTERS"),
     B("c1_15", "It began as a subsidiary of a video game developer. It becomes an Nvidia cloud partner.",
