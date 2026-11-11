@@ -605,61 +605,11 @@ class Builder:
 
 
 # ============================================================================ a better car
-def sedan(name, col=(0.05, 0.055, 0.06), length=4.6, width=1.82, lights=True, window_open=0.0):
-    """PLACEHOLDER: every car in this film goes through here. Swap the body for the shared vehicles.make(...)
-    (nvidia_doc/scenes/vehicles.py, branch claude/vehicle-kit) as soon as the hub says it is ready.
-A generic European saloon (no badges): the body is a side profile extruded across its width, bevelled and
-    subdivided so it reads as pressed metal; a dark glasshouse, tyres with alloy rims, head and tail lamps.
-    Origin on the ground at the car's centre; the nose points +X."""
-    L_, W_ = length, width
-    # side profile (x, z), nose at +x
-    prof = [(-L_ / 2, 0.32), (-L_ / 2 + 0.05, 0.72), (-L_ / 2 + 0.55, 0.8), (-L_ / 2 + 1.05, 0.86), (-0.45, 1.38), (0.75, 1.4),
-            (1.2, 0.9), (L_ / 2 - 0.15, 0.8), (L_ / 2, 0.62), (L_ / 2, 0.32), (L_ / 2 - 0.55, 0.2), (-L_ / 2 + 0.55, 0.2)]
-    bm = bmesh.new()
-    vs0 = [bm.verts.new((x, -W_ / 2, z)) for x, z in prof]
-    vs1 = [bm.verts.new((x, W_ / 2, z)) for x, z in prof]
-    bm.faces.new(vs0[::-1]); bm.faces.new(vs1)
-    n = len(prof)
-    for i in range(n):
-        j = (i + 1) % n
-        bm.faces.new((vs0[i], vs0[j], vs1[j], vs1[i]))
-    # tumblehome: pull the roof edges inward
-    for v in bm.verts:
-        if v.co.z > 0.95:
-            v.co.y *= 0.82
-    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
-    body = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(body)
-    bv = body.modifiers.new("bev", 'BEVEL'); bv.width = 0.08; bv.segments = 4; bv.limit_method = 'ANGLE'
-    ss = body.modifiers.new("sub", 'SUBSURF'); ss.levels = 1; ss.render_levels = 2
-    paint = pbr(name + "Paint", col, 0.25, 0.7, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
-    glass_m = pbr(name + "Glass", (0.015, 0.018, 0.022), 0.03, 0.0, **{'Coat Weight': 1.0})
-    body.data.materials.append(paint); body.data.materials.append(glass_m)
-    # glass: faces of the upper band (between the beltline and roof) get the glass material
-    bpy.context.view_layer.update()
-    for p in body.data.polygons:
-        c_ = p.center
-        if 0.9 < c_.z < 1.36 and abs(p.normal.z) < 0.9:
-            p.material_index = 1
-    for p in body.data.polygons:
-        p.use_smooth = True
-    parts = []
-    tyre = pbr(name + "Tyre", (0.02, 0.02, 0.02), 0.85); rim = pbr(name + "Rim", (0.55, 0.56, 0.58), 0.25, 1.0)
-    wheels = []
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            wx = sx * (L_ / 2 - 0.82)
-            t = cyl(name + "Tyre", (wx, sy * (W_ / 2 - 0.13), 0.32), 0.32, 0.22, tyre, verts=32, rot=(math.radians(90), 0, 0))
-            r = cyl(name + "Rim", (wx, sy * (W_ / 2 - 0.015), 0.32), 0.21, 0.02, rim, verts=24, rot=(math.radians(90), 0, 0))
-            t.parent = body; r.parent = body; wheels += [t, r]
-    for sy in (-1, 1):
-        hl = box(name + "Head", (L_ / 2 - 0.02, sy * (W_ / 2 - 0.32), 0.66), (0.06, 0.38, 0.1),
-                 emissive(name + "HeadE", (1.0, 0.95, 0.85), 25 if lights else 0.3))
-        tl = box(name + "Tail", (-L_ / 2 + 0.02, sy * (W_ / 2 - 0.28), 0.74), (0.06, 0.32, 0.1),
-                 emissive(name + "TailE", (1.0, 0.04, 0.02), 12 if lights else 0.6))
-        mir = box(name + "Mirror", (0.7, sy * (W_ / 2 + 0.06), 1.0), (0.12, 0.1, 0.08), paint)
-        hl.parent = body; tl.parent = body; mir.parent = body
-    grille = box(name + "Grille", (L_ / 2 - 0.01, 0, 0.5), (0.04, 0.8, 0.14), pbr(name + "GrilleM", (0.03, 0.03, 0.03), 0.4)); grille.parent = body
-    if window_open > 0:            # an open front window: a dark gap in the glass on the driver's side (+y)
-        g = box(name + "OpenWin", (0.3, W_ / 2 * 0.86, 1.12), (0.75, 0.04, 0.3 * window_open), pbr(name + "Interior", (0.01, 0.01, 0.012), 0.9))
-        g.parent = body
-    return body
+def sedan(name, col=(0.05, 0.055, 0.06), length=4.6, width=1.82, lights=True, window_open=0.0, variant="unmarked", kind="sedan_modern"):
+    """Every car in this film goes through here: the shared realistic vehicle kit (nvidia_doc/scenes/vehicles.py,
+    branch claude/vehicle-kit). Forward is local +X, origin on the ground under the middle of the car.
+    `length`, `width` and `window_open` are kept for call compatibility (the kit sets its own proportions)."""
+    import vehicles
+    root = vehicles.make(kind, variant=variant, color=col, dirt=0.15, lamps=lights)
+    root.name = name
+    return root
