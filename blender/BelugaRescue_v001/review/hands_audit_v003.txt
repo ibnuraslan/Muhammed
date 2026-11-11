@@ -1,0 +1,12 @@
+HAND AUDIT (diver every 2 frames, others every 6; depth > 4 mm)
+HAND_CLOTH  Keeper                     4 samples in    4 frames, frames 1111-1933
+HAND_CLOTH  SpecB                   1323 samples in  364 frames, frames 1-2185
+HAND_CLOTH  SpecD                     39 samples in   39 frames, frames 25-1921
+HAND_CLOTH  SpecG                   1321 samples in   45 frames, frames 1921-2185
+HAND_HAND   Diver                    346 samples in    2 frames, frames 273-2085
+HAND_HAND   Keeper                   136 samples in    9 frames, frames 1975-2185
+HAND_HAND   SpecB                    103 samples in    9 frames, frames 1975-2185
+HAND_OTHER  Diver/Beluga             422 samples in    2 frames, frames 1381-1387
+HAND_OTHER  SpecF/RingBuoy          1815 samples in  181 frames, frames 1-2005
+HAND_TORSO  Diver                   6035 samples in   81 frames, frames 269-2083
+HAND AUDIT TOTAL: 11544 samples in 736 flagged frame-checks

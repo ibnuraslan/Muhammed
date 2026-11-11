@@ -6,5 +6,7 @@ B=${BLENDER:-/opt/bin/blender}
 $B -b work/people.blend --python scripts/02_build_scene.py -- assets work/scene.blend 2>&1 | grep -E "SCENE_DONE|Error|rror" | grep -v CUEW
 $B -b work/scene.blend --python scripts/03_animate.py -- work/anim.blend 2>&1 | grep -E "ANIM_DONE|HOLD|FLOOR|Error|rror" | grep -v CUEW
 $B -b work/anim.blend --python scripts/03b_fx_camera.py -- work/film.blend 2>&1 | grep -E "FX_CAM_DONE|CAMERA|Error|rror" | grep -v CUEW
+$B -b work/film.blend --python scripts/04_hand_limits.py -- $PWD/work/film_h.blend 2>&1 | grep -E "HAND_LIMITS|rror"
+mv work/film_h.blend work/film.blend
 $B -b work/film.blend --python ../pipeline/anim_look.py -- $PWD/work/film_look.blend --no-sky --sat 1.25 --bump 0.35 2>&1 | grep -E "anim_look|rror"
 mv work/film_look.blend work/film.blend

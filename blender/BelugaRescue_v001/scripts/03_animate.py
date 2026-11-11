@@ -61,6 +61,7 @@ class H:
         bpy.ops.object.mode_set(mode='OBJECT')
         self.ROOT = R.BN["root"].head_local.copy()
         self.SH = {s: R.BN["upperarm01." + s].head_local.copy() for s in "LR"}
+        self.ARM = sum(R.BN[b + ".L"].length for b in ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02"))
         self.REST_HAND = {}
         for s in "LR":
             wv = R.BN["wrist." + s].head_local
@@ -78,9 +79,10 @@ class H:
         Rm = self.hand_basis(s, d, n) @ self.REST_HAND[s].transposed()
         wr = self.R.BN["wrist." + s].head_local
         return Matrix.Translation(W) @ Rm.to_4x4() @ Matrix.Translation(-wr) @ self.R.rest("IK_hand." + s)
-    def arm_rest(self, s, fwd=0.0, out=8.0, L=0.5, twist=0.0):
+    def arm_rest(self, s, fwd=0.0, out=8.0, L=None, twist=0.0):
         sx = 1 if s == "L" else -1
-        Rr = Matrix.Rotation(R_(-fwd), 3, 'X') @ Matrix.Rotation(R_(sx * out), 3, 'Y')
+        L = 0.9 * self.ARM if L is None else min(L, 0.97 * self.ARM)
+        Rr = Matrix.Rotation(R_(-fwd), 3, 'X') @ Matrix.Rotation(R_(-sx * out), 3, 'Y')     # +out = away from the body
         W = self.SH[s] + Vector((sx * 0.04, -0.02, 0)) + Rr @ Vector((0, 0, -L))
         d = Rr @ Vector((sx * 0.05, -0.15, -1.0))
         n = Matrix.Rotation(R_(twist * sx), 3, 'Z') @ (Rr @ Vector((-sx * 0.9, 0.35, 0.0)))
@@ -151,6 +153,7 @@ class H:
         return self.o.matrix_world @ (pb.head if which == "head" else pb.tail)
 
 def arms(l=None, r=None, **both):
+    both = dict(both)
     a = {}
     if both: a["L"] = ("rest", dict(both)); a["R"] = ("rest", dict(both))
     if l is not None: a["L"] = ("rest", l) if isinstance(l, dict) else l
@@ -163,7 +166,7 @@ def legs(l=(0, 4, 4, 0), r=None):
 DV = H("Diver"); RZ = DV.ROOT.z         # root height above the soles when standing (≈1.0)
 EDGE_Y = -5.0                            # coping inner face
 X0 = 0.6
-STREAM = arms(fwd=176, out=4, L=0.52)                 # streamline: arms overhead
+STREAM = arms(fwd=174, out=10, L=0.52)                 # streamline: arms overhead
 DOLPH = lambda k: legs((8 + 10 * math.sin(k), 3, 8 + 14 * max(0, math.sin(k + 0.8)), -55), (8 + 10 * math.sin(k), 3, 8 + 14 * max(0, math.sin(k + 0.8)), -55))
 # --- beat 1: on the coping, crouch, spring, arc, entry, glide down
 DV.P(1, (X0, EDGE_Y + 0.03, DECK_Z + RZ - 0.02), yaw=180, pitch=8, spine=(10, 0, 0), head=(-8, 0, 0), legs=legs((10, 5, 18, 0)), arms=arms(fwd=70, out=12), curl={"L": (10, 10), "R": (10, 10)})
@@ -248,8 +251,8 @@ def diver_hands(f, p):
             c = k0.lerp(k1, prm["t"])
             sx = 1 if s == "L" else -1
             out = (k1 - k0).cross(Vector((0, 0, 1))).normalized() * sx
-            W = c + out * 0.07 + Vector((0, 0, 0.06))
-            a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.3 + Vector((0, 0, -1)) * 0.7, n=-out, pole=W + Vector((sx * 0.3, 0, 0.5))))
+            W = c + out * 0.16 + Vector((0, 0, 0.1))
+            a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.85 + Vector((0, 0, -1)) * 0.15, n=-out * 0.6 + Vector((0, 0, -0.8)), pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1
             W = Vector((XY1.x + sx * 0.24, COP_Y + 0.1, COP_Z + 0.062))
@@ -520,6 +523,9 @@ def sole_offset(h):
         SOLE[h.o.name] = -z
     return SOLE[h.o.name]
 def stand(h, f, pos, yaw, spine=(0, 0, 0), head=(0, 0, 0), arms_=None, knee=4, gz=0.0, curl=None):
+    if arms_:      # hands at the sides never inside the thighs
+        for k_, v_ in list(arms_.items()):
+            if v_[0] == "rest" and v_[1].get("fwd", 0) < 40: arms_[k_] = ("rest", dict(v_[1], out=max(v_[1].get("out", 8), 15)))
     gz = gz + sole_offset(h)
     drop = h.R.BN["upperleg02.L"].length * (1 - math.cos(R_(knee))) * 2.0 * 0.5
     h.P(f, (pos[0], pos[1], gz + h.ROOT.z - drop), yaw=yaw, spine=spine, head=head, legs=legs((knee * 0.5, 4, knee, -knee * 0.5)), arms=arms_ or arms(fwd=6, out=10), curl=curl)
@@ -535,12 +541,12 @@ for nm, x, y in GAL + DECK:
 def clap(h, open_):
     a = {}
     for s_, sx in (("L", 1), ("R", -1)):
-        W = Vector((sx * (0.025 + 0.11 * open_), -0.38, h.SH[s_].z - 0.14))
+        W = Vector((sx * (0.09 + 0.1 * open_), -0.38, h.SH[s_].z - 0.14))
         a[s_] = ("body", dict(W=W, d=Vector((0, -0.35, 1.0)), n=Vector((-sx, 0, 0))))
     return a
 def mouth_hand(h, s_="R"):
     e = h.R.BN["eye.L"].head_local; sx = 1 if s_ == "L" else -1
-    return ("body", dict(W=Vector((sx * 0.01, e.y - 0.09, e.z - 0.09)), d=Vector((-sx * 0.6, 0, 1.0)), n=Vector((0, 1, 0))))
+    return ("body", dict(W=Vector((sx * 0.01, e.y - 0.17, e.z - 0.09)), d=Vector((-sx * 0.6, 0, 1.0)), n=Vector((0, 1, 0))))
 POINT = (0, 88, 88, 85)
 for nm, x, y in GAL:
     h = PEOPLE[nm]
@@ -549,7 +555,7 @@ for nm, x, y in GAL:
         alarmed = BEAT[4] <= f < BEAT[11] + 40; happy = f >= BEAT[11] + 40
         if nm == "Keeper":
             if 1090 <= f <= 1210:          # nods to the beluga, palm on the glass, other hand signals
-                stand(h, f, (x, y), 180, spine=(8, 0, 0), head=(18 * j, 0, 0), arms_={"L": glass_hand(h, "L", x + 0.25, 1.55), "R": ("rest", dict(fwd=60 + 40 * j, out=20))})
+                stand(h, f, (x, y), 180, spine=(8, 0, 0), head=(18 * j, 0, 0), arms_={"L": glass_hand(h, "L", x - 0.25, 1.55), "R": ("rest", dict(fwd=60 + 40 * j, out=25))})
             elif alarmed and f > 1210:      # radios the deck, points up
                 stand(h, f, (x, y), 180, spine=(4, 0, 0), head=(-25, 0, 0), arms_={"L": mouth_hand(h, "L"), "R": ("rest", dict(fwd=150, out=15))}, curl={"R": (POINT, 40)})
             elif happy:
@@ -561,7 +567,7 @@ for nm, x, y in GAL:
             stand(h, f, (x, y), 180, spine=(-4, 0, 0), head=(-12, 6 * math.sin(k), 0), knee=4 + 3 * j, arms_=clap(h, j), curl={"L": (12, 15), "R": (12, 15)})
         elif alarmed and nm in ("SpecA", "SpecC"):
             stand(h, f, (x, y), 180, spine=(10, 0, 0), head=(12, 8 * math.sin(k), 0),
-                  arms_={"L": glass_hand(h, "L", x + 0.22, 1.5 + 0.05 * j), "R": glass_hand(h, "R", x - 0.22, 1.45)}, curl={"L": (8, 10), "R": (8, 10)})
+                  arms_={"L": glass_hand(h, "L", x - 0.24, 1.5 + 0.05 * j), "R": glass_hand(h, "R", x + 0.24, 1.45)}, curl={"L": (8, 10), "R": (8, 10)})
         elif alarmed and nm == "SpecB":
             stand(h, f, (x, y), 180 - 12, spine=(8, 0, 0), head=(5, 10, 0), arms_=arms(l=dict(fwd=100 + 8 * j, out=12), r=dict(fwd=15, out=12)), curl={"L": (POINT, 45)})
         elif alarmed and nm == "SpecD":
@@ -617,7 +623,7 @@ for f in (RUN1 + 30, END):
     K2H.key_spine(f, flex=34, head=(25, 0))
     for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
 # the buoy: a real ring life-buoy (orange/white bands), held in both hands
-bpy.ops.mesh.primitive_torus_add(major_radius=0.3, minor_radius=0.065, major_segments=48, minor_segments=16)
+bpy.ops.mesh.primitive_torus_add(major_radius=0.24, minor_radius=0.055, major_segments=48, minor_segments=16)
 buoy = bpy.context.active_object; buoy.name = "RingBuoy"
 bm_m = bpy.data.materials.new("M_RingBuoy"); bm_m.use_nodes = True
 bnn, bll = bm_m.node_tree.nodes, bm_m.node_tree.links; bpb = bnn["Principled BSDF"]; bpb.inputs['Roughness'].default_value = 0.55
@@ -642,9 +648,9 @@ for f in list(range(1, END + 1, 6)) + [END]:
     buoy.location = c; buoy.rotation_quaternion = q
     buoy.keyframe_insert("location", frame=f); buoy.keyframe_insert("rotation_quaternion", frame=f)
     for s_, sx in (("L", 1), ("R", -1)):
-        W = c + side * sx * 0.33                     # grip on the outer edge of the ring, each side
+        W = c + side * sx * 0.37                     # grip on the outer edge of the ring, each side (palm outside the tube)
         K2H.key_hand(s_, f, W + Vector((0, 0, 0.03)), Vector((0, 0, -1)), -side * sx, pole=W + side * sx * 0.4 - fwd * 0.4 + Vector((0, 0, -0.3)))
-        K2F.key_fingers(s_, f, 70, 45)
+        K2F.key_fingers(s_, f, 45, 40)
 print("DECK KEEPER keyed")
 for nm, h in PEOPLE.items():
     h.bake()

@@ -653,6 +653,21 @@ for m in DB.data.materials:
     mx_ = nt.nodes.new('ShaderNodeMixShader')
     nt.links.new(ga.outputs['Fac'], mr_.inputs['Value']); nt.links.new(mr_.outputs['Result'], mx_.inputs['Fac'])
     nt.links.new(src, mx_.inputs[1]); nt.links.new(gnode.outputs[0], mx_.inputs[2]); nt.links.new(mx_.outputs['Shader'], out.inputs['Surface'])
+# clothes: solid colours (no printed emblems or logos from the MakeHuman textures), keep the weave normal map
+for o in bpy.data.objects:
+    if o.type == 'MESH' and any(k in o.name for k in ("casualsuit", "elegantsuit", "worksuit", "shoes")):
+        for m in o.data.materials:
+            if not m or not m.node_tree: continue
+            for nd in m.node_tree.nodes:
+                if nd.type == 'MIX' and nd.data_type == 'RGBA' and nd.blend_type == 'MULTIPLY':
+                    for lk in list(nd.inputs['A'].links): m.node_tree.links.remove(lk)
+                    nd.inputs['A'].default_value = (0.85, 0.85, 0.85, 1)
+            if "shoes" in o.name:      # shoes: plain colour, no printed stripes
+                for nd in list(m.node_tree.nodes):
+                    if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
+                        for lk in list(nd.outputs['Color'].links):
+                            rgb = m.node_tree.nodes.new('ShaderNodeRGB'); rgb.outputs[0].default_value = (0.75, 0.76, 0.78, 1) if hash(o.name) % 2 else (0.12, 0.12, 0.14, 1)
+                            m.node_tree.links.new(rgb.outputs[0], lk.to_socket)
 # dark hair tint
 for ch in D.children:
     if ch.name.endswith("ponytail01"):
