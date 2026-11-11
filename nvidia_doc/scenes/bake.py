@@ -32,6 +32,20 @@ spec = mod.MOVES[move]
 cam = camera((0, 0, 0), (0, 1, 0), lens=35, dof_dist=3.0, fstop=spec.get("dof", 2.8) or 2.8)
 cam.data.dof.use_dof = bool(spec.get("dof"))
 ctx["cam"] = cam
+# every frame must pose the rigs from the SAME starting pose the build left them in: some anim functions rotate
+# bones relative to their current pose (Human.rot), so without this each frame adds onto the last one and a
+# 14-degree head tilt becomes a spinning head over the shot. A single still never shows it; a bake does.
+_rest = {(a.name, pb.name): (pb.location.copy(), pb.rotation_quaternion.copy(), pb.rotation_euler.copy(), pb.scale.copy())
+         for a in bpy.data.objects if a.type == 'ARMATURE' for pb in a.pose.bones}
+def restore_pose():
+    for a in bpy.data.objects:
+        if a.type != 'ARMATURE':
+            continue
+        for pb in a.pose.bones:
+            r = _rest.get((a.name, pb.name))
+            if r:
+                pb.location, pb.rotation_quaternion, pb.rotation_euler, pb.scale = r
+    bpy.context.view_layer.update()
 if spec.get("title"):                          # chapter title card inside the shot (fades by frame-driven driver)
     import title_card
     small, big, f_in, f_out = spec["title"]
@@ -62,7 +76,7 @@ def state(o):
 # find what moves: compare three sample times, then key only those objects every frame
 snap = []
 for t in (0.0, 0.5, 1.0):
-    kit.apply_cam(cam, ctx, spec, t); bpy.context.view_layer.update()
+    restore_pose(); kit.apply_cam(cam, ctx, spec, t); bpy.context.view_layer.update()
     snap.append({o.name: state(o) for o in movers})
 movers = [o for o in movers if len({sn[o.name] for sn in snap}) > 1]
 print("[bake] moving objects:", [o.name for o in movers][:20], len(movers), flush=True)
@@ -70,7 +84,7 @@ print("[bake] moving objects:", [o.name for o in movers][:20], len(movers), flus
 prev_q, prev_e = {}, {}
 for f in range(1, n + 1):
     t = (f - 1) / max(n - 1, 1)
-    kit.apply_cam(cam, ctx, spec, t)
+    restore_pose(); kit.apply_cam(cam, ctx, spec, t)
     bpy.context.view_layer.update()
     if "__cam__" in prev_e:
         e = cam.rotation_euler.copy(); e.make_compatible(prev_e["__cam__"]); cam.rotation_euler = e
