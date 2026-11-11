@@ -15,8 +15,9 @@ These values are read back from `NukedWell_v002_60fps.blend`, opened in factory-
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 16. Caustics off. Persistent data on. |
 | Volumes | Step rate 2.0, max 256 steps. The fire, smoke, steam and dust are procedural volume shaders; there are no caches. |
-| Motion blur | On, shutter 0.5 (180° at 60 fps) |
-| Colour | Display sRGB. View AgX with the look "AgX - Medium High Contrast". **Exposure is keyframed** for the night, the rewind and the detonation flash, so do not override it. |
+| World | Camera rays see a keyed sky-blue gradient (`anim_look_v1`): day cyan to white, night deep blue. Lighting comes from three Poly Haven sky HDRIs mixed by keys (noon, dusk and night). |
+| Motion blur | Off (the client's animated look, `pipeline/anim_look.py`) |
+| Colour | Display sRGB. View AgX with the look "AgX - Punchy" (the animated look of Nov 11, 22:45). **Exposure is keyframed** for the night, the rewind and the detonation flash, so do not override it. |
 | Output | PNG, RGB, 8-bit, written to `//render/NukedWell_v002_####.png` |
 | Audio | None yet. There is no voiceover for this film. When the VO arrives, retime with `pipeline/retime_to_vo.py` using `beats.json`. |
 | Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. Embers are keyframed objects. |

@@ -267,7 +267,7 @@ for fc in fcurves_of(bpy.data.materials["M_HeatShimmer"].node_tree):
 SH = O["HeatShimmer"]
 for f in range(1, END + 1, 4):
     h = fire_h(f); SH.scale = (1, 1, max(0.01, min(1.0, h))); SH.keyframe_insert("scale", frame=f)
-    SH.hide_render = h < 0.08; SH.keyframe_insert("hide_render", frame=f)
+    SH.hide_render = True; SH.keyframe_insert("hide_render", frame=f)
 # gas flow in the casing: pulses race up during the eruption; cut off above the pinch after beat 10
 gm = bpy.data.materials["M_GasFlow"].node_tree.nodes
 KS(gm["GasAmt"].outputs[0], [(1, 0.0), (b4, 0.0), (b4 + 12, 1.0), (b5 + 60, 1.0), (b5 + 120, 0.0), (BEAT[10] - 40, 0.0), (BEAT[10] - 10, 0.8), (END, 0.8)])
@@ -312,7 +312,7 @@ for f in range(1, END + 1, 2):
 b9, b10 = BEAT[9], BEAT[10]
 BL = O["BlastSphere"]; BLE = bpy.data.materials["M_Blast"].node_tree.nodes["BlastEmit"]
 K(BL, "scale", [(1, (0.001,) * 3), (b9 - 1, (0.001,) * 3), (b9 + 8, (10.5,) * 3), (b9 + 20, (8.5,) * 3), (b10 + 40, (5.5,) * 3)])
-KS(BLE.inputs['Strength'], [(1, 0.0), (b9 - 1, 0.0), (b9 + 2, 120.0), (b9 + 20, 30.0), (b9 + 60, 2.0), (b10, 0.15), (b10 + 60, 0.04)])
+KS(BLE.inputs['Strength'], [(1, 0.0), (b9 - 1, 0.0), (b9 + 2, 120.0), (b9 + 20, 30.0), (b9 + 60, 6.0), (b10, 3.0), (b10 + 60, 2.0)])
 KS(BLE.inputs['Color'], [(b9, (1, 0.97, 0.9, 1)), (b9 + 40, (1.0, 0.6, 0.25, 1)), (b10, (0.8, 0.22, 0.05, 1))])
 K(O["L_Blast"].data, "energy", [(1, 0.0), (b9 - 1, 0.0), (b9 + 3, 6e6), (b9 + 25, 1e6), (b9 + 90, 6e4), (b10 + 120, 1e4)])
 st = bpy.data.materials["M_Strata"].node_tree.nodes
