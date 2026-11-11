@@ -385,7 +385,7 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
     floor = dd.tex_mat("marble_01", 0.35, tint=(0.92, 0.9, 0.86), name="Marble", sat=0.6)
     floor.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.6
     box("Floor", (0, d / 2, -0.05), (w, d, 0.1), floor)
-    rug = dd.tex_mat("quatrefoil_jacquard_fabric", 1.2, tint=(0.95, 0.86, 0.72), name="Rug", sat=0.6)
+    rug = dd.tex_mat("quatrefoil_jacquard_fabric", 1.2, tint=(1.15, 1.02, 0.84), name="Rug", sat=0.0)
     box("Rug", (0, d / 2 + 0.3, 0.004), (8.0, 6.0, 0.008), rug)
     box("RugBorder", (0, d / 2 + 0.3, 0.003), (8.3, 6.3, 0.006), fabric("RugBorder", (0.12, 0.13, 0.2), 0.95, 0.5, 400))
     panel = pbr("Boiserie", (0.72, 0.68, 0.6), 0.55)

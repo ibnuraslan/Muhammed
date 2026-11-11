@@ -172,7 +172,7 @@ def build_upstairs(c, after=False):
                         n.inputs['Strength'].default_value = 0.0
                     if n.type == 'BSDF_PRINCIPLED':
                         n.inputs['Emission Strength'].default_value = 0.0
-        sec_ = bpy.data.lights.new("Security", 'SPOT'); sec_.energy = 900; sec_.spot_size = math.radians(38); sec_.spot_blend = 0.3
+        sec_ = bpy.data.lights.new("Security", 'SPOT'); sec_.energy = 1600; sec_.spot_size = math.radians(38); sec_.spot_blend = 0.3
         sec_.color = (0.72, 0.84, 1.0); sec_.shadow_soft_size = 0.05
         so = bpy.data.objects.new("Security", sec_); bpy.context.collection.objects.link(so); so.location = (5.6, 9.4, 3.85)
         point_at(so, (-0.5, 4.2, 0.0))
@@ -245,7 +245,7 @@ def build_upstairs(c, after=False):
     wg = bpy.context.active_object; wg.name = "Wig"; wg.scale = (1.0, 1.15, 0.45)
     wg.data.materials.append(fabric("WigHair", (0.16, 0.09, 0.05), 0.8, 0.9, 900)); c["wig_obj"] = wg
     disp = wg.modifiers.new("hair", 'DISPLACE'); tx = bpy.data.textures.new("WigN", 'CLOUDS'); tx.noise_scale = 0.03; disp.texture = tx; disp.strength = 0.03
-    sc = dd.model_h("vintage_suitcase", (-1.0, 5.6, 0), 0.45, rot_z=0.3); c["suitcase"] = sc
+    sc = dd.model_h("vintage_suitcase", (2.4, 6.9, 0), 0.45, rot_z=0.3); c["suitcase"] = sc
     c["trays"] = [box(f"Tray{k}", (0, 0, -40), (0.38, 0.28, 0.025), dd.tex_mat("velour_velvet", 2.0, tint=(0.25, 0.32, 0.7), name="TrayV", sat=0.4))
                   for k in range(4)]
     c["grenade"] = cyl("Grenade", (0, 0, -40), 0.03, 0.08, pbr("GrenadeM", (0.06, 0.07, 0.05), 0.6), verts=12)
@@ -310,9 +310,9 @@ def anim_wig(c, t):
     sec = t * DUR["wig"]
     hide_floor(c, keep_wigman=True)
     w = c["wigman"]
-    walk_to(w, Vector((-1.5, 6.4, 0)), Vector((1.8, 8.6, 0)), sec * 0.9 + 1.0, speed=0.8)
+    walk_to(w, Vector((2.3, 6.6, 0)), Vector((4.0, 8.8, 0)), sec * 0.9 + 1.0, speed=0.8)
     u = min(1.0, sec / 0.7)
-    wg = c["wig_obj"]; wg.location = Vector((-1.0, 6.1, 0.05 + 1.5 * (1 - u) ** 2)); wg.rotation_euler = (0.3 * (1 - u), 0.5 * (1 - u), 0.4)
+    wg = c["wig_obj"]; wg.location = Vector((2.6, 6.4, 0.05 + 1.5 * (1 - u) ** 2)); wg.rotation_euler = (0.3 * (1 - u), 0.5 * (1 - u), 0.4)
 
 
 def hide_floor(c, keep_wigman=False):
@@ -332,7 +332,7 @@ def anim_floor16(c, t):
     r = c["robbers"][0]; zero(r); pose_walk(r, 0.0, stride=0.0, arm_swing=0.0)
     place(r, (3.9, 7.4, 0), face_to((3.9, 7.4), (-4, 5))); arms_relaxed(r)
     r.rot("head", (0, 0, 1), 20 * math.sin(sec * 0.5))
-    c["wig_obj"].location = (-1.0, 6.1, 0.05)
+    c["wig_obj"].location = (2.6, 6.4, 0.05)
 
 
 def anim_suitcase(c, t):
@@ -340,16 +340,16 @@ def anim_suitcase(c, t):
     hide_floor(c)
     r = c["robbers"][1]
     from dd import pose_crouch
-    sp = Vector((-1.0, 5.0, 0)); pose_crouch(r, lean=34); r.arm.rotation_euler = (0, 0, face_to(sp, (-1.0, 5.6))); r.arm.location = sp; ground(r)
-    case = Vector((-1.0, 5.6, 0.12))
+    sp = Vector((2.4, 6.3, 0)); pose_crouch(r, lean=34); r.arm.rotation_euler = (0, 0, face_to(sp, (2.4, 6.9))); r.arm.location = sp; ground(r)
+    case = Vector((2.4, 6.9, 0.12))
     for k, tr in enumerate(c["trays"]):
         u = min(1.0, max(0.0, (sec - 1.2 * k) / 1.2))
-        src = Vector((-0.4, 4.7, 0.7)); dst = case + Vector((0, 0, 0.03 * k))
+        src = Vector((3.2, 5.9, 0.7)); dst = case + Vector((0, 0, 0.03 * k))
         tr.location = src.lerp(dst, ease(u)) if u > 0 else Vector((0, 0, -40)); tr.rotation_euler = (0, 0, 0.3)
         if 0 < u < 1:
             reach(r, "R", tr.location + Vector((0.12, -0.1, 0.03)), Vector((0.5, -0.5, -0.5)))
             reach(r, "L", tr.location + Vector((-0.12, -0.1, 0.03)), Vector((-0.5, -0.5, -0.5)))
-    c["wig_obj"].location = (-3.0, 7.5, 0.05)
+    c["wig_obj"].location = (3.4, 8.0, 0.05)
 
 
 def anim_panel(c, t):
@@ -406,14 +406,14 @@ MOVES = {
     "door": dict(kind="anim", dof=5.6, anim=anim_door, cam=cam_door, focus=lambda c, t: c["info"]["door"] + Vector((-1.0, -0.8, 1.4))),
     "getaway": dict(kind="anim", dof=5.6, anim=anim_getaway, cam=cam_getaway, focus=lambda c, t: c["getaway"].location + Vector((0, 0, 0.8))),
     "wig": dict(kind="anim", dof=2.8, anim=anim_wig,
-                cam=lambda c, t: (Vector((-1.6, 5.0, 0.35)).lerp(Vector((-1.4, 4.9, 1.3)), ease(t)), Vector((-0.6, 6.4, 0.2)).lerp(Vector((0.6, 7.6, 1.2)), ease(t)), 32),
-                focus=lambda c, t: Vector((-1.0, 6.1, 0.1)).lerp(Vector((0.8, 7.8, 1.2)), ease(t))),
+                cam=lambda c, t: (Vector((1.6, 4.9, 0.35)).lerp(Vector((1.8, 4.8, 1.3)), ease(t)), Vector((2.6, 6.4, 0.1)).lerp(Vector((3.6, 8.4, 1.2)), ease(t)), 32),
+                focus=lambda c, t: Vector((2.6, 6.4, 0.1)).lerp(Vector((3.8, 8.6, 1.2)), ease(t))),
     "floor16": dict(kind="anim", dof=5.6, anim=anim_floor16,
                     cam=lambda c, t: (Vector((5.2, 1.0, 2.4)).lerp(Vector((4.8, 1.6, 2.3)), ease(t)), Vector((-3.0, 6.5, 0.5)), 22),
                     focus=lambda c, t: Vector((-4.0, 6.0, 0.6))),
     "suitcase": dict(kind="anim", dof=4.0, anim=anim_suitcase,
-                     cam=lambda c, t: (Vector((1.4, 3.4, 1.7)).lerp(Vector((1.1, 3.7, 1.65)), ease(t)), Vector((-1.0, 5.4, 0.4)), 30),
-                     focus=lambda c, t: Vector((-1.0, 5.4, 0.4))),
+                     cam=lambda c, t: (Vector((4.6, 4.4, 1.8)).lerp(Vector((4.3, 4.7, 1.75)), ease(t)), Vector((2.4, 6.7, 0.4)), 30),
+                     focus=lambda c, t: Vector((2.4, 6.7, 0.4))),
     "panel": dict(kind="anim", dof=4.0, anim=anim_panel,
                   cam=lambda c, t: (Vector((-4.9, 3.9, 1.75)).lerp(Vector((-5.0, 4.15, 1.72)), ease(t)), Vector((-6.9, 6.2, 1.45)), 32),
                   focus=lambda c, t: Vector((-7.0, 6.0, 1.4))),
