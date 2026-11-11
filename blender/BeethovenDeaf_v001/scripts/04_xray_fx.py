@@ -72,16 +72,17 @@ rad = nt.nodes.new('ShaderNodeValue'); rad.name = "GlowRadius"
 sub = nt.nodes.new('ShaderNodeMath'); sub.operation = 'SUBTRACT'; nt.links.new(rad.outputs[0], sub.inputs[0]); nt.links.new(ln.outputs['Value'], sub.inputs[1])
 mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = -0.01; mr.inputs['From Max'].default_value = 0.03
 nt.links.new(sub.outputs[0], mr.inputs['Value'])
-ring = nt.nodes.new('ShaderNodeMapRange'); ring.inputs['From Min'].default_value = -0.025; ring.inputs['From Max'].default_value = 0.0; ring.clamp = True
+ring = nt.nodes.new('ShaderNodeMapRange'); ring.inputs['From Min'].default_value = -0.03; ring.inputs['From Max'].default_value = 0.0; ring.clamp = True
 nt.links.new(sub.outputs[0], ring.inputs['Value'])   # bright leading edge
 gs = nt.nodes.new('ShaderNodeValue'); gs.name = "GlowStrength"
-add = nt.nodes.new('ShaderNodeMath'); add.operation = 'ADD'; nt.links.new(mr.outputs['Result'], add.inputs[0])
 edge = nt.nodes.new('ShaderNodeMath'); edge.operation = 'PINGPONG'; edge.inputs[1].default_value = 0.5; nt.links.new(ring.outputs['Result'], edge.inputs[0])
-nt.links.new(edge.outputs[0], add.inputs[1])
+fillw = nt.nodes.new('ShaderNodeMath'); fillw.operation = 'MULTIPLY'; fillw.inputs[1].default_value = 0.35; nt.links.new(mr.outputs['Result'], fillw.inputs[0])
+add = nt.nodes.new('ShaderNodeMath'); add.operation = 'MULTIPLY_ADD'; add.inputs[1].default_value = 3.5   # bright travelling wavefront + soft fill behind it
+nt.links.new(edge.outputs[0], add.inputs[0]); nt.links.new(fillw.outputs[0], add.inputs[2])
 mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; nt.links.new(add.outputs[0], mul.inputs[0]); nt.links.new(gs.outputs[0], mul.inputs[1])
-Pk.inputs['Emission Color'].default_value = (0.05, 0.55, 1.0, 1); nt.links.new(mul.outputs[0], Pk.inputs['Emission Strength'])
+Pk.inputs['Emission Color'].default_value = (0.0, 0.42, 1.0, 1); nt.links.new(mul.outputs[0], Pk.inputs['Emission Strength'])
 key_val(rad.outputs[0], [(1, 0.0), (BEAT[4] - 30, 0.0), (BEAT[4] + 90, 0.13), (BEAT[4] + 200, 0.3)])
-key_val(gs.outputs[0], [(1, 0.0), (BEAT[3] + 20, 0.0), (BEAT[3] + 60, 0.6), (BEAT[4], 0.3), (BEAT[4] + 120, 0.4), (BEAT[5], 1.0), (BEAT[6] + 20, 0.4), (BEAT[6] + 90, 0.0)])
+key_val(gs.outputs[0], [(1, 0.0), (BEAT[3] + 20, 0.0), (BEAT[3] + 60, 0.6), (BEAT[4], 0.6), (BEAT[4] + 120, 0.8), (BEAT[5], 1.0), (BEAT[6] + 20, 0.4), (BEAT[6] + 90, 0.0)])
 # bone translucency so the inner ear reads through the side of the skull (keyed up for the cross-section)
 alpha = nt.nodes.new('ShaderNodeValue'); alpha.name = "SkullAlpha"
 tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMixShader')
