@@ -133,7 +133,9 @@ stripm = [mat("M_strip%d" % i, c, 0.4) for i, c in enumerate([(0.85, 0.7, 0.1), 
 def gondola(name, side):
     """one long shelf run at y = side*SHELF_Y, products facing the aisle; one mesh, many material slots"""
     bm = bmesh.new()
-    mats = [shelfm, uprm] + stripm + pmats + canm + bottm
+    tagm = mat("M_tag", (0.92, 0.92, 0.9), 0.5); chromem = mat("M_rail", (0.8, 0.8, 0.82), 0.2, metal=1.0)
+    mats = [shelfm, uprm] + stripm + pmats + canm + bottm + [tagm, chromem]
+    TAG = len(mats) - 2; RAIL = len(mats) - 1
     uvl = bm.loops.layers.uv.new("UVMap"); rl = bm.faces.layers.float.new("rnd")
     def face_uvs(faces, val):
         for f in faces:
@@ -144,13 +146,43 @@ def gondola(name, side):
             for l in f.loops:
                 l[uvl].uv = ((l.vert.co.dot(u_) - min(us)) / max(1e-6, max(us) - min(us)), (l.vert.co.dot(v_) - min(vs)) / max(1e-6, max(vs) - min(vs)))
             f[rl] = val
-    def add_box(cx, cy, cz, sx, sy, sz, mi):
-        r = bmesh.ops.create_cube(bm, size=1.0)
-        for v in r["verts"]:
-            v.co = Vector((cx + v.co.x * sx, cy + v.co.y * sy, cz + v.co.z * sz))
-        fs = {f for v in r["verts"] for f in v.link_faces}
-        for f in fs: f.material_index = mi
+    def add_box(cx, cy, cz, sx, sy, sz, mi, bevel=0.0, rot=0.0, pouch=False):
+        if pouch:   # pillow pack: squared-off sphere, pinched top seal
+            r = bmesh.ops.create_icosphere(bm, subdivisions=2, radius=0.5); vs = r["verts"]
+            for v in vs:
+                c = v.co * 2
+                q = Vector([math.copysign(abs(a_) ** 0.45, a_) * 0.5 for a_ in c])
+                if q.z > 0.38: q.y *= 0.25
+                q.y *= 0.8 + 0.2 * (1 - abs(c.z)); v.co = q
+        else:
+            r = bmesh.ops.create_cube(bm, size=1.0); vs = r["verts"]
+            if bevel: ed = list({e for v in vs for e in v.link_edges})
+        Rz = Matrix.Rotation(rot, 3, 'Z')
+        for v in vs:
+            v.co = Rz @ Vector((v.co.x * sx, v.co.y * sy, v.co.z * sz)) + Vector((cx, cy, cz))
+        if bevel and not pouch:
+            res = bmesh.ops.bevel(bm, geom=ed + list(vs), offset=bevel, segments=1, affect='EDGES', profile=0.5)
+            vs = [v for v in res["verts"] if v.is_valid]
+        fs = {f for v in vs for f in v.link_faces}
+        for f in fs: f.material_index = mi; f.smooth = pouch
         [f.normal_update() for f in fs]; face_uvs(fs, random.random())
+    def add_lathe(cx, cy, z0, prof, mi, seg=16):
+        rings = []
+        for r_, z_ in prof:
+            if r_ < 1e-4: rings.append([bm.verts.new((cx, cy, z0 + z_))])
+            else: rings.append([bm.verts.new((cx + r_ * math.cos(2 * math.pi * k / seg), cy + r_ * math.sin(2 * math.pi * k / seg), z0 + z_)) for k in range(seg)])
+        fs = []
+        for a_, b_ in zip(rings, rings[1:]):
+            for k in range(seg):
+                if len(a_) == 1: q = (a_[0], b_[(k + 1) % seg], b_[k])
+                elif len(b_) == 1: q = (a_[k], a_[(k + 1) % seg], b_[0])
+                else: q = (a_[k], a_[(k + 1) % seg], b_[(k + 1) % seg], b_[k])
+                f = bm.faces.new(q); f.material_index = mi; f.smooth = True; fs.append(f)
+        h = max(z_ for _, z_ in prof); val = random.random()
+        for f in fs:
+            f.normal_update(); f[rl] = val
+            for l in f.loops:
+                a = math.atan2(l.vert.co.y - cy, l.vert.co.x - cx); l[uvl].uv = ((a / (2 * math.pi)) % 1.0, (l.vert.co.z - z0) / h)
     def add_cyl(cx, cy, cz, rad, h, mi, seg=12):
         r = bmesh.ops.create_cone(bm, cap_ends=True, segments=seg, radius1=rad, radius2=rad, depth=h)
         for v in r["verts"]: v.co += Vector((cx, cy, cz))
@@ -163,6 +195,9 @@ def gondola(name, side):
     for li, z in enumerate(levels):
         add_box(0, (y0 + yb) / 2, z, AISLE_X1 - AISLE_X0, SHELF_D, 0.025, 0)
         add_box(0, y0 - side * 0.005, z - 0.01, AISLE_X1 - AISLE_X0, 0.012, 0.05, 2 + (li % 3))   # price strip (plain colour)
+        add_box(0, y0 - side * 0.004, z + 0.055, AISLE_X1 - AISLE_X0, 0.005, 0.005, RAIL)          # wire front rail
+        for xt in [AISLE_X0 + 0.2 + 0.31 * i + random.uniform(-0.05, 0.05) for i in range(int((AISLE_X1 - AISLE_X0) / 0.31))]:
+            add_box(xt, y0 - side * 0.013, z - 0.008, 0.045, 0.003, 0.03, TAG)                     # blank shelf tags
         x = AISLE_X0 + 0.05; kind = random.choice("bcbbo")
         while x < AISLE_X1 - 0.1:
             if random.random() < 0.08: kind = random.choice("bbbcco")
@@ -172,23 +207,31 @@ def gondola(name, side):
                 for k in range(n_deep):
                     yy = y0 + side * (0.05 + k * (d + 0.01))
                     if abs(yy) > SHELF_Y + SHELF_D - 0.05: break
-                    add_box(x + w / 2, yy, z + 0.0125 + h / 2, w * 0.97, d, h, mi)
+                    add_box(x + w / 2, yy + side * random.uniform(-0.004, 0.012), z + 0.0125 + h / 2, w * 0.97, d, h, mi,
+                            bevel=0.0025, rot=math.radians(random.gauss(0, 1.6)))
                 x += w + 0.005 + (0.03 if random.random() < 0.1 else 0)
             elif kind == "c":
                 rad = 0.035; h = 0.12; mi = 5 + len(pmats) + random.randrange(len(canm))
                 for k in range(5):
                     yy = y0 + side * (0.05 + k * 0.075)
-                    add_cyl(x + rad, yy, z + 0.0125 + h / 2, rad, h, mi)
-                    if random.random() < 0.5: add_cyl(x + rad, yy, z + 0.0125 + h * 1.5, rad, h, mi)
+                    CANP = [(0, 0), (rad * 0.9, 0), (rad * 0.92, 0.004), (rad, 0.011), (rad, h - 0.013), (rad * 0.96, h - 0.006), (rad * 0.98, h - 0.002), (rad * 0.88, h), (0, h - 0.004)]
+                    add_lathe(x + rad, yy, z + 0.0125, CANP, mi)
+                    if random.random() < 0.5: add_lathe(x + rad, yy, z + 0.0125 + h, CANP, mi)
                 x += 2 * rad + 0.005
-            else:
+            elif kind == "o":
                 rad = 0.035; h = 0.22; mi = 5 + len(pmats) + len(canm) + random.randrange(len(bottm))
+                BOT = [(0, 0), (rad * 0.85, 0), (rad, 0.01), (rad, 0.55 * h), (rad * 0.93, 0.66 * h), (rad * 0.5, 0.8 * h), (rad * 0.34, 0.86 * h),
+                       (rad * 0.34, 0.93 * h), (rad * 0.4, 0.935 * h), (rad * 0.4, h), (0, h)]
                 for k in range(4):
-                    add_cyl(x + rad, y0 + side * (0.05 + k * 0.09), z + 0.0125 + h / 2, rad, h, mi, seg=10)
+                    add_lathe(x + rad, y0 + side * (0.05 + k * 0.09), z + 0.0125, BOT, mi, seg=14)
                 x += 2 * rad + 0.01
+            else:
+                w = random.choice([0.12, 0.15, 0.18]); h = random.choice([0.18, 0.24]); mi = 5 + random.randrange(len(pmats))
+                for k in range(3):
+                    add_box(x + w / 2, y0 + side * (0.05 + k * 0.07), z + 0.0125 + h / 2, w * 0.95, 0.05, h, mi, pouch=True, rot=math.radians(random.gauss(0, 4)))
+                x += w + 0.01
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     o = obj(name, me, REAL, mats=mats)
-    for p in me.polygons: p.use_smooth = False
     return o
 gondola("ShelfL", 1); gondola("ShelfR", -1)
 # second aisle rows beyond (seen through gaps / at the end) and coolers at the back wall
@@ -343,7 +386,7 @@ _tc = _nt.nodes.new("ShaderNodeTexCoord"); _wv = _nt.nodes.new("ShaderNodeTexWav
 _wv.inputs["Distortion"].default_value = 2.0; _nt.links.new(_tc.outputs["Object"], _wv.inputs["Vector"])
 _bp = _nt.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.35; _nt.links.new(_wv.outputs["Fac"], _bp.inputs["Height"]); _nt.links.new(_bp.outputs["Normal"], _b.inputs["Normal"])
 _b.inputs["Coat Roughness"].default_value = 0.08
-perit_m = mat("M_peritoneum", (0.95, 0.8, 0.78), 0.1, sss=0.2, coat=1.0, transm=0.5)
+perit_m = mat("M_peritoneum", (0.9, 0.72, 0.7), 0.12, sss=0.3, coat=1.0, transm=0.15)
 gut_m = mat("M_intestine", (0.75, 0.32, 0.3), 0.18, sss=0.6, coat=1.0, noise_amt=0.3, nscale=5, bump=0.2)
 vessel_r = mat("M_vessel_red", (0.6, 0.04, 0.04), 0.3, sss=0.3, coat=0.5)
 vessel_b = mat("M_vessel_blue", (0.15, 0.2, 0.5), 0.3, sss=0.3, coat=0.5)
@@ -425,33 +468,34 @@ def tube(name, pts, rad, m_, cyc=False):
     o = bpy.data.objects.new(name, cu); link(o, MACRO); o.parent = root; cu.materials.append(m_)
     return o
 gut_objs = []
-# front layer: serpentine of vertical runs joined by tight U-bends (folds touch: spacing = 2R)
-xs = [5.56 + R_G + 0.02 + i * 2 * R_G * 0.98 for i in range(3)]
-for layer, (yy, zoff) in enumerate(((-0.08 - R_G, 0.0), (-0.08 - 3 * R_G * 0.95, 0.9))):
-    pts = []; zt = ZH + 0.8; zb = -ZH - 0.8
-    for i, x in enumerate(xs):
-        up = (i % 2 == 0)
-        zz = [zb + k * (zt - zb) / 10 for k in range(11)]
-        if not up: zz = zz[::-1]
-        for k, z in enumerate(zz):
-            pts.append((x + 0.06 * math.sin(z * 1.7 + i + layer), yy + 0.08 * math.cos(z * 1.3 + i), z + zoff * 0.3))
-    gut_objs.append(tube("M_Gut%d" % layer, pts, R_G * (0.97 if layer else 1.0), serosa))
-# extra small loops folding over the front for touching folds
-for g in range(4):
-    zc = -ZH + 1.6 + g * 2.9; xc = 6.4 + 0.4 * (g % 2)
-    pts = [(xc + 0.9 * math.cos(a), -0.08 - R_G * 0.9 + 0.25 * math.sin(a * 2), zc + 0.9 * math.sin(a)) for a in [k * 0.55 for k in range(13)]]
-    gut_objs.append(tube("M_Gut%d" % (g + 2), pts, R_G * 0.85, serosa))
-dg = bpy.context.evaluated_depsgraph_get()
-for i, o in enumerate(list(gut_objs)):
-    me = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); nm = o.name
-    bpy.data.objects.remove(o, do_unlink=True)
-    for p in me.polygons: p.use_smooth = True
-    gut_objs[i] = mobj(nm, me, ())
+# real CC-BY bowel model ("Small and large intestine" by antonia.sundberg), mirrored into the macro frame behind the peritoneum,
+# cropped to the cavity (x 5.62..12) and kept behind the cut plane (y < -0.1)
+import os as _os
+_before = set(bpy.data.objects)
+bpy.ops.import_scene.gltf(filepath=_os.path.join(_os.path.dirname(_os.path.abspath(out)), "assets/models/guts.glb"))
+_new = [o for o in bpy.data.objects if o not in _before]
+bpy.context.view_layer.update()
+GS = 13.0
+bm = bmesh.new()
+for o in _new:
+    if o.type != 'MESH': continue
+    me_ = o.data.copy(); me_.transform(o.matrix_world); bm.from_mesh(me_); bpy.data.meshes.remove(me_)
+for o in _new: bpy.data.objects.remove(o, do_unlink=True)
+M_ = Matrix.Rotation(math.pi, 4, 'Z') @ Matrix.Diagonal((GS, GS, GS, 1))
+bm.transform(M_)
+cx_ = sum(v.co.x for v in bm.verts) / len(bm.verts); cz_ = sum(v.co.z for v in bm.verts) / len(bm.verts); ymax = max(v.co.y for v in bm.verts)
+for v in bm.verts: v.co += Vector((7.6 - cx_, -0.12 - ymax, -cz_))
+bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.x < 5.62 or abs(v.co.z) > ZH + 1.5], context='VERTS')
+gme = bpy.data.meshes.new("GutReal"); bm.to_mesh(gme); bm.free()
+for p_ in gme.polygons: p_.use_smooth = True
+gme.materials.clear(); gme.materials.append(serosa)
+gut_objs.append(mobj("M_GutReal", gme, ()))
+print("GUT verts", len(gme.vertices))
 # mesentery sheet with vessels behind the loops, and a dark body cavity behind that
 mes_m = mat("M_mesentery", (0.55, 0.22, 0.2), 0.3, sss=0.4, coat=0.6, noise_amt=0.5, nscale=3, bump=0.3)
-mes = slab("M_Mesentery", 5.6, 9.6, mes_m); mes.location.y = -0.08 - 4 * R_G - 0.1 - YB / 2
-cav = slab("M_GutBed", 5.6, 10.5, mat("M_cavity", (0.12, 0.03, 0.03), 0.5, sss=0.2, noise_amt=0.5, nscale=2), zh=ZH + 2)
-cav.location.y = -YB / 2 - 2.6
+mes = slab("M_Mesentery", 5.6, 12.0, mes_m, zh=ZH + 2); mes.location.y = -YB / 2 - 9.0
+cav = slab("M_GutBed", 5.6, 13.0, mat("M_cavity", (0.12, 0.03, 0.03), 0.5, sss=0.2, noise_amt=0.5, nscale=2), zh=ZH + 2)
+cav.location.y = -YB / 2 - 10.5
 for v in range(7):
     z0 = random.uniform(-ZH + 0.5, ZH - 0.5)
     pts = [(5.7 + k * 0.6, mes.location.y + YB / 2 + 0.03, z0 + 0.35 * math.sin(k * 1.4 + v)) for k in range(7)]

@@ -290,6 +290,13 @@ for o in [o for o in bpy.data.objects if o.name.startswith("M_MuscleFib")]:
         near = math.exp(-((d - x) / 0.5) ** 2)
         s_ = 1 + 0.08 * near * math.sin(t * 9 + ph) + 0.015 * math.sin(t * 2.2 + ph)
         o.scale = (s_, s_, 1); o.keyframe_insert("scale", frame=f)
+# bring a bowel loop right up behind the peritoneum at the bullet's height (shift in y/z only, so nothing crosses the muscle)
+gr = bpy.data.objects.get("M_GutReal")
+if gr:
+    cand = [v.co for v in gr.data.vertices if 5.66 < v.co.x < 6.1 and abs(v.co.z) < 4.0]
+    best_v = max(cand, key=lambda c: c.y - 0.15 * abs(c.z))          # the frontmost loop near the bullet's height
+    gr.location = (0.0, 0.0, -best_v.z)
+    print("GUT shift", tuple(gr.location), tuple(best_v))
 # intestines glisten and slide (displace noise drifting)
 tex = bpy.data.textures.new("GutNoise", 'CLOUDS'); tex.noise_scale = 1.2
 gn = bpy.data.objects.new("GutNoiseCtl", None); sc.collection.objects.link(gn); gn.parent = root
