@@ -52,7 +52,7 @@ def sheet(path, d, items):
     S = Image.new("RGB", (3 * w + 4 * pad, len(ims) * (h + lab + pad) + pad + 34), (18, 19, 21))
     dr = ImageDraw.Draw(S)
     f = ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf", 20)
-    dr.text((pad, 6), "vehicles.py v1 - turntable QA (Cycles, overcast HDRI for QA only)", fill=(220, 220, 220), font=f)
+    dr.text((pad, 6), "vehicles.py - turntable QA (Cycles, overcast HDRI for QA only)", fill=(220, 220, 220), font=f)
     y = 34
     for name, row in ims:
         dr.text((pad, y + 4), name, fill=(235, 200, 120), font=f)

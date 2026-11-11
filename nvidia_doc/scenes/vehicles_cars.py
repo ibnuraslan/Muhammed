@@ -115,7 +115,7 @@ def sedan_1990s_soviet(variant=None):
         V.add_lightbar(body, (-0.35, 0, 1.43), length=0.95)
         for s in (-1, 1):
             t = V.side_text("Txt", "МИЛИЦИЯ", -0.05, 0.70, 0.823, 0.105, V.simple("V_White", (0.85, 0.86, 0.86), 0.35), s)
-            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.0015
+            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.002; sw.wrap_mode = 'OUTSIDE_SURFACE'
             V.bake(t); t.parent = body
         col = (0.82, 0.83, 0.84)
     else:

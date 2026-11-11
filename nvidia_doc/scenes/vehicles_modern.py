@@ -114,7 +114,7 @@ def sedan_1940s_us(variant=None):
         V.cylinder("Siren", (0.2, 0, 1.70), 0.06, 0.16, ch, axis='X', verts=24).parent = body
         for s in (-1, 1):
             t = V.side_text("Txt", "POLICE", -0.35, 0.80, 0.80, 0.11, V.simple("V_Black", (0.02, 0.02, 0.02), 0.4), s)
-            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.0015
+            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.002; sw.wrap_mode = 'OUTSIDE_SURFACE'
             V.bake(t); t.parent = body
     return V._finish(body, "Sedan1940s" + ("Police" if police else ""), (0.02, 0.022, 0.025) if police else (0.10, 0.16, 0.12))
 
@@ -130,8 +130,9 @@ def sedan_modern(variant=None):
             S(-0.10, 0.30, 0.95, 1.45, 0.90, 0.63, rb=0.08, rs=0.06, rt=0.1, crown=0.05, bul=0.025),
             S(-0.75, 0.30, 0.96, 1.44, 0.90, 0.63, rb=0.08, rs=0.06, rt=0.12, crown=0.05, bul=0.025, soft=True),
             S(-1.62, 0.31, 0.99, 1.06, 0.89, 0.72, rb=0.08, rs=0.06, crown=0.04, bul=0.02),
-            S(-2.12, 0.34, 0.98, 1.05, 0.85, 0.70, rb=0.08, rs=0.08, crown=0.03, bul=0.01),
-            S(-2.28, 0.40, 0.92, 0.98, 0.78, 0.64, rb=0.08, rs=0.08, crown=0.02, bul=0.0)]
+            S(-2.05, 0.33, 0.98, 1.045, 0.84, 0.70, rb=0.09, rs=0.08, crown=0.03, bul=0.01, soft=True),
+            S(-2.22, 0.36, 0.95, 1.0, 0.76, 0.64, rb=0.1, rs=0.1, crown=0.025, bul=0.0),
+            S(-2.29, 0.42, 0.88, 0.93, 0.64, 0.55, rb=0.08, rs=0.08, crown=0.015, bul=0.0)]
     tag = "V_Paint_Modern_" + (variant or "plain")
 
     def masks(g):
@@ -156,7 +157,8 @@ def sedan_modern(variant=None):
         M['rubber'] = g.mx(M['rubber'], side * g.inside(g.z, 0.30, 0.36, 0.004) * g.inside(g.x, -1.0, 1.0))
         M['gap'] = V.gaps(g, [('x', 0.98, 0.37, 0.93), ('x', -0.46, 0.37, 0.97), ('arc', XR, 0.32, 0.46, -1.10, -0.8, 0.35, 0.80),
                               ('x', -1.08, 0.78, 0.98), ('z', 0.37, -0.80, 0.98), ('top_x', 0.90, 0.8), ('top_y', 0.80, 0.9, 2.2),
-                              ('top_x', -1.64, 0.8), ('end_z', -1, 0.70, 0.82), ('end_z', 1, 0.60, 0.8)])
+                              ('top_x', -1.64, 0.8), ('end_z', -1, 0.70, 0.82), ('end_z', 1, 0.60, 0.8), ('end_z', -1, 0.56, 0.9)])
+        M['black'] = g.mx(M['black'], g.ss(0.0, 0.004, g.poly(g.ay, g.z, [(0.0, 0.36), (0.7, 0.38), (0.7, 0.44), (0.0, 0.44)])) * g.ss(0.2, 0.4, -g.nx))
         liv = []
         if variant == "police_fr":
             band = side * g.inside(g.z, 0.38, 0.70, 0.002)
@@ -191,7 +193,7 @@ def sedan_modern(variant=None):
         tc = white if variant == "police_fr" else white
         for s in (-1, 1):
             t = V.side_text("Txt", "POLICE", -0.30, 0.53 if variant == "police_fr" else 0.75, 0.905, 0.17, tc, s)
-            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.0015
+            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.002; sw.wrap_mode = 'OUTSIDE_SURFACE'
             V.bake(t); t.parent = body
         col = (0.88, 0.89, 0.9) if variant == "police_fr" else (0.02, 0.05, 0.22)
     elif variant == "unmarked":
@@ -317,7 +319,6 @@ def delivery_truck(variant=None):
     parts.append(V.rbox("Underrun", (bx0 + 0.05, 0, 0.62), (0.08, 2.1, 0.12), 0.01, dk))
     parts.append(V.rbox("LampBar", (bx0 + 0.02, 0, 0.85), (0.05, 2.2, 0.09), 0.01, dk))
     parts.append(V.cylinder("Tank", (0.65, -0.78, 0.78), 0.26, 1.0, V.alu(), axis='X', verts=32))
-    parts.append(V.rbox("Spoiler", (2.0, 0, 2.95), (0.9, 2.1, 0.08), 0.03, bp, rot=(0, math.radians(-14), 0)))
     parts.append(V.plate("PlateR", (bx0 - 0.04, 0.0, 0.62), facing=-1))
     body = V.join(parts, "DeliveryTruck")
     mf = V.wheel_mesh("truck_f", R, 0.22, RIM, "truckgrey")
@@ -333,22 +334,23 @@ def forklift(variant=None):
     pm = V.paint_shader("V_Paint_Forklift", lambda g: {}, rough=0.4)
     dk, bp = V.steel_dark(), V.black_plastic()
     RF, RR = 0.33, 0.27
-    XF, XR = 0.45, -1.15
+    XF, XR = 0.42, -1.12
     parts = []
-    # chassis tub: lofted, low at the front, rising to the counterweight at the rear
-    keys = [S(0.72, 0.20, 0.60, 0.66, 0.50, 0.44, rb=0.05, rs=0.04, crown=0.01, bul=0.0),
-            S(0.62, 0.18, 0.62, 0.70, 0.55, 0.50, rb=0.06, rs=0.04, crown=0.01, bul=0.0),
-            S(-0.10, 0.18, 0.65, 0.72, 0.55, 0.50, rb=0.06, rs=0.04, crown=0.01, bul=0.0)]
-    tub = V.loft_body("Tub", keys, pm, step=0.15)
+    # chassis: one lofted tub - low operator floor, hood and seat box, heavy rounded counterweight - with wheel arches
+    keys = [S(0.66, 0.30, 0.56, 0.62, 0.50, 0.46, rb=0.06, rs=0.04, crown=0.01, bul=0.0),
+            S(0.60, 0.20, 0.58, 0.64, 0.56, 0.52, rb=0.07, rs=0.04, crown=0.01, bul=0.0),
+            S(-0.12, 0.20, 0.58, 0.64, 0.56, 0.52, rb=0.07, rs=0.04, crown=0.01, bul=0.0),
+            S(-0.24, 0.20, 0.92, 0.98, 0.56, 0.52, rb=0.07, rs=0.05, crown=0.02, bul=0.0),
+            S(-1.05, 0.20, 0.98, 1.04, 0.57, 0.52, rb=0.07, rs=0.05, crown=0.03, bul=0.004, soft=True),
+            S(-1.42, 0.24, 1.02, 1.10, 0.56, 0.50, rb=0.1, rs=0.08, crown=0.03, bul=0.0),
+            S(-1.52, 0.34, 0.95, 1.0, 0.48, 0.42, rb=0.1, rs=0.08, crown=0.02, bul=0.0)]
+    tub = V.loft_body("Tub", keys, pm, step=0.12, extra=0.025)
+    V.cut_arches(tub, [(XF, RF, RF + 0.04, 0.30, 0.8), (XR, RR, RR + 0.04, 0.28, 0.8)], V.liner())
     parts.append(tub)
-    # counterweight: rounded mass across the rear
-    cw = V.rbox("Counterweight", (-1.05, 0, 0.62), (0.75, 1.12, 0.95), 0.2, pm, sub=2)
-    parts.append(cw)
-    parts.append(V.rbox("Hood", (-0.45, 0, 0.82), (0.75, 1.0, 0.25), 0.1, pm, sub=1))
     # seat, steering column + wheel, dash cowl
-    parts.append(V.rbox("Seat", (-0.42, 0, 1.03), (0.45, 0.48, 0.12), 0.05, V.interior(), sub=1))
+    parts.append(V.rbox("Seat", (-0.42, 0, 1.06), (0.45, 0.48, 0.12), 0.05, V.interior(), sub=1))
     parts.append(V.rbox("SeatBack", (-0.66, 0, 1.30), (0.12, 0.46, 0.5), 0.05, V.interior(), sub=1))
-    parts.append(V.rbox("Cowl", (0.38, 0, 0.92), (0.30, 0.9, 0.5), 0.08, pm, sub=1))
+    parts.append(V.rbox("Cowl", (0.48, 0, 0.82), (0.24, 0.86, 0.42), 0.06, pm))
     parts.append(V.cylinder("Column", (0.24, 0, 1.18), 0.03, 0.42, dk, axis='Z', verts=12))
     sw = V.lathe("SteerWheel", [(0.15, 0.0), (0.17, 0.01), (0.17, -0.01), (0.15, 0.0)], bp, 24, axis='Z')
     sw.data.transform(Matrix.Translation((0.20, 0, 1.40)) @ Matrix.Rotation(math.radians(-30), 4, 'Y')); parts.append(sw)

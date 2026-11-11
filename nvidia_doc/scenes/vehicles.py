@@ -544,35 +544,47 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, 
         gap = M.get('gap', 0.0)
         if isinstance(gap, E):
             base = g.mix_col(gap * 0.9, base, (0.01, 0.01, 0.01))
-        p = g.bsdf((0.5, 0.5, 0.5), 0.3, metallic, **{'Coat Weight': 1.0, 'Coat Roughness': 0.03})
-        g.L.new(base, p.inputs['Base Color'])
-        g.link(rough + dmask * 0.5 + streak * 0.04, p.inputs['Roughness'])
-        g.link(1.0 - dmask * 0.9, p.inputs['Coat Weight'])
+        # one Principled BSDF whose inputs are blended by the masks (cheap: few closures, fast to render)
+        col = base
+        rgh = rough + dmask * 0.5 + streak * 0.04
+        met = metallic; coat = 1.0 - dmask * 0.9; trn = 0.0; spec = 0.5
+        ecol = None; estr = 0.0
+        def lerp(a, b, m):
+            return a + (b - a) * m if isinstance(m, E) else a
+        layers = []
+        if 'black' in M:
+            layers.append((M['black'], (0.02, 0.02, 0.022), 0.5, 0.0, 0.0, 0.0, None, 0.0))
+        if 'glass' in M:
+            if glass_thin:
+                layers.append((M['glass'], (0.75, 0.8, 0.8), 0.02 + dirt * 0.2, 0.0, 0.0, 1.0, None, 0.0))
+            else:
+                layers.append((M['glass'], (0.004, 0.005, 0.006), 0.015 + dirt * 0.25, 0.0, 0.0, 0.0, None, 0.0))
+        if 'rubber' in M:
+            layers.append((M['rubber'], (0.012, 0.012, 0.012), 0.55, 0.0, 0.0, 0.0, None, 0.0))
+        if 'chrome' in M:
+            layers.append((M['chrome'], (0.9, 0.9, 0.92), 0.07 + dirt * 0.2, 1.0, 0.0, 0.0, None, 0.0))
+        on = g.attr("lamps")
+        for key, lc, ec, st in (('head', (0.62, 0.63, 0.65), (1.0, 0.93, 0.8), 25.0), ('tail', (0.32, 0.01, 0.008), (1.0, 0.04, 0.02), 10.0),
+                                ('ind', (0.6, 0.26, 0.01), (1.0, 0.45, 0.02), 0.0), ('drl', (0.7, 0.72, 0.75), (0.9, 0.95, 1.0), 12.0)):
+            if key in M:
+                layers.append((M[key], lc, 0.08, 0.6 if key in ('head', 'drl') else 0.1, 1.0, 0.0, ec, st))
+        for (mk, lc, lr, lm, lco, lt, ec, st) in layers:
+            col = g.mix_col(mk, col, lc)
+            rgh = lerp(rgh, lr, mk); met = lerp(met, lm, mk); coat = lerp(coat, lco, mk); trn = lerp(trn, lt, mk)
+            if ec is not None:
+                ecol = g.mix_col(mk, ecol if ecol is not None else (0, 0, 0), ec)
+                estr = estr + mk * on * st
+        p = g.bsdf((0.5, 0.5, 0.5), 0.3, 0.0, **{'Coat Roughness': 0.03, 'IOR': 1.5})
+        g.L.new(col, p.inputs['Base Color']) if not isinstance(col, E) else g.link(col, p.inputs['Base Color'])
+        g.link(rgh, p.inputs['Roughness']); g.link(met, p.inputs['Metallic']); g.link(coat, p.inputs['Coat Weight'])
+        g.link(trn, p.inputs['Transmission Weight'])
+        if glass_thin:
+            p.inputs['Thin Wall'].default_value = True
+        if ecol is not None:
+            g.L.new(ecol, p.inputs['Emission Color']); g.link(estr, p.inputs['Emission Strength'])
         nrm = g.bump(gap * -1.0 if isinstance(gap, E) else 0.0, 0.8, 0.004)
         g.L.new(nrm, p.inputs['Normal'])
         sh = p
-        if 'black' in M:
-            bl = g.bsdf((0.02, 0.02, 0.022), 0.5, 0.0); sh = g.mix_shader(M['black'], sh, bl)
-        if 'glass' in M:
-            if glass_thin:
-                gl = g.bsdf((0.75, 0.8, 0.8), 0.02 + dirt * 0.2, 0.0, **{'Transmission Weight': 1.0, 'Thin Wall': True, 'IOR': 1.5})
-            else:
-                gl = g.bsdf((0.004, 0.005, 0.006), 0.015 + dirt * 0.25, 0.0, **{'Coat Weight': 0.0, 'Specular IOR Level': 0.6})
-            sh = g.mix_shader(M['glass'], sh, gl)
-        if 'rubber' in M:
-            rb = g.bsdf((0.012, 0.012, 0.012), 0.55, 0.0); sh = g.mix_shader(M['rubber'], sh, rb)
-        if 'chrome' in M:
-            ch = g.bsdf((0.9, 0.9, 0.92), 0.07 + dirt * 0.2, 1.0); sh = g.mix_shader(M['chrome'], sh, ch)
-        on = g.attr("lamps")
-        for key, col, ec, st in (('head', (0.62, 0.63, 0.65), (1.0, 0.93, 0.8), 25.0), ('tail', (0.32, 0.01, 0.008), (1.0, 0.04, 0.02), 10.0),
-                                 ('ind', (0.6, 0.26, 0.01), (1.0, 0.45, 0.02), 0.0), ('drl', (0.7, 0.72, 0.75), (0.9, 0.95, 1.0), 12.0)):
-            if key in M:
-                # flush lamp: a glossy lens over a chrome reflector, with faint internal structure
-                inner = g.math('SINE', g.y * 90.0) * 0.5 + 0.5
-                lp = g.bsdf(col, 0.08, 0.6 if key in ('head', 'drl') else 0.1, **{'Coat Weight': 1.0, 'Coat Roughness': 0.01,
-                                                                                  'Emission Color': (*ec, 1)})
-                g.link(on * st * (0.6 + inner * 0.4), lp.inputs['Emission Strength'])
-                sh = g.mix_shader(M[key], sh, lp)
         g.out(sh); return m
     return mat(name, f)
 
