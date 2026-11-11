@@ -60,7 +60,8 @@ def track(keys):
 
 # ------------------------------------------------------------------ fingers
 def curl(rig, s, f, amt, thumb=None, spread=0.0):
-    thumb = amt * 0.6 if thumb is None else thumb
+    amt = max(amt, 22.0)                                  # relaxed default: never flat-splayed
+    thumb = max(14.0, amt * 0.6 if thumb is None else thumb)
     for k in range(1, 6):
         for j in range(1, 4):
             n = "finger%d-%d.%s" % (k, j, s)

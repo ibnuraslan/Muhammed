@@ -1,0 +1,11 @@
+HAND CrowdB    L char Guard     frames=  5  843-851
+HAND CrowdB    R char Guard     frames=  4  845-851
+HAND Guard     L char CrowdB    frames=  4  845-851
+HAND Guard     L other hand     frames=296  1299-1889
+HAND Guard     R char CrowdB    frames=  5  843-851
+HAND Guard     R other hand     frames=296  1299-1889
+HAND Prisoner  L other hand     frames= 17  1255-1285 1353-1353
+HAND Prisoner  L own body       frames= 19  975-979 1009-1039
+HAND Prisoner  R other hand     frames= 17  1255-1285 1353-1353
+HAND Prisoner  R own body       frames= 12  1-5 1165-1165 1193-1195 1323-1327 1339-1343
+HAND_TOTAL flagged frames 675 step 2

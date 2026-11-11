@@ -1,0 +1,5 @@
+HAND Prisoner  L other hand     frames=  1  1353-1353
+HAND Prisoner  L own body       frames=  2  985-985 1001-1001
+HAND Prisoner  R other hand     frames=  1  1353-1353
+HAND Prisoner  R own body       frames=  4  1165-1165 1193-1195 1341-1341
+HAND_TOTAL flagged frames 8 step 2
