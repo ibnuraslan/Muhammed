@@ -4,7 +4,7 @@ These values were read back from `ElectricianPolice_v002_60fps.blend`, opened in
 
 | Item | Value |
 |---|---|
-| File | `ElectricianPolice_v002_60fps.blend`: about 134 MB, compressed. Every image is packed (190 images, ≤1K except the hero's skin and shirt at 2K; two 2K HDRIs). Stored with Git LFS. |
+| File | `ElectricianPolice_v002_60fps.blend`: 44.7 MB (42.6 MiB), compressed, md5 `79977cc74be23b35ceaca734c809b190`. Every image is packed: 256 images, mostly ≤512 px JPEG and ≤1K for large surfaces, with the hero's skin and shirt at 2K and two 1K HDRIs. Committed as a normal git file, with no LFS. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -18,6 +18,7 @@ These values were read back from `ElectricianPolice_v002_60fps.blend`, opened in
 | Colour | Display sRGB. View AgX with the look "AgX - Medium High Contrast". Several things are keyframed: the scene exposure (day 0.0 → dusk interior 1.2 → street 0.9), the world (the day HDRI mixes to the dusk HDRI at 19.2–20.6 s) and the sun. Do not override them. |
 | Output | PNG, RGB, 8-bit, compression 15, written to `//render/ElectricianPolice_v002_####.png` |
 | Audio | None yet. The voiceover has not arrived. `beats.json` lists each beat's start frame for `pipeline/retime_to_vo.py`. |
+| Volumes | `DustHaze` is a low-density warm volume over the street (x ±7.2, y −40…140, z 0…14). It is the only volume. |
 | Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. Sparks, dust and grid pulses are keyframed meshes. Flags and washing use F-curve noise modifiers. |
 | Add-ons | None needed. MPFB2 was only used to build the humans. |
 
@@ -25,7 +26,7 @@ These values were read back from `ElectricianPolice_v002_60fps.blend`, opened in
 - **60**: bike chase. Motion blur on the wheels, the rickshaw and the stalls.
 - **760**: laptop close-up. The emissive screen UI and the red glow on his face.
 - **1065**: the lever arc flash and sparks. This is the brightest frame, so check for clipping.
-- **1300**: station interior at dusk. This is the darkest frame; if it is noisy, raise samples to 96 for frames 1231–1381 only.
+- **1306**: station interior at dusk, with an officer tapping the dead fan. This is the darkest frame; if it is noisy, raise samples to 96 for frames 1231–1381 only.
 - **1550**: the final smirk at dusk, with the street lamps on.
 
 ## Do not

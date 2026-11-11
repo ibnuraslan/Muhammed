@@ -72,10 +72,49 @@ CH = {}
 for src, nm in (("Man", "Man"), ("Man", "ManW"), ("OfficerA", "OfficerA"), ("OfficerB", "OfficerB"), ("OfficerC", "OfficerC"),
                 ("PedA", "PedA"), ("PedB", "PedB")):
     CH[nm] = load_human(src, nm)
+# extras: cheap clones that share mesh data with an existing human (own armature, own pose)
+def clone_human(src, newname, tint=None):
+    arm0 = CH[src]; col = C("Char_" + newname)
+    arm = arm0.copy(); arm.data = arm0.data.copy(); arm.name = newname; arm.data.name = newname; col.objects.link(arm)
+    for o in [x for x in bpy.data.objects if x.parent == arm0 and x.type == "MESH"]:
+        c_ = o.copy(); c_.name = newname + "." + o.name.split(".", 1)[1]; col.objects.link(c_); c_.parent = arm
+        for md in c_.modifiers:
+            if md.type == "ARMATURE": md.object = arm
+        if tint and any(k in o.name for k in ("casualsuit", "elegantsuit")):
+            for slot in c_.material_slots:
+                m2 = slot.material.copy(); slot.link = "OBJECT"; slot.material = m2
+                tex = m2.node_tree.nodes.get("diffuseTexture"); bsdf = next(n for n in m2.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+                mix = m2.node_tree.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.blend_type = "MULTIPLY"; mix.inputs["Factor"].default_value = 1
+                src_s = bsdf.inputs["Base Color"].links[0].from_socket
+                m2.node_tree.links.new(src_s, mix.inputs["A"]); mix.inputs["B"].default_value = (*tint, 1)
+                m2.node_tree.links.new(mix.outputs["Result"], bsdf.inputs["Base Color"])
+    return arm
+EXTRAS = [("PedA", "ExA", (1.0, 0.55, 0.3)), ("PedB", "ExB", (0.5, 0.8, 1.0)), ("PedB", "Vendor", (1.0, 0.95, 0.8)),
+          ("PedA", "ExC", (0.6, 1.0, 0.6)), ("PedB", "ExD", (1.0, 0.7, 0.7)), ("PedA", "ExE", (0.8, 0.6, 1.0))]
+for src, nm, tint in EXTRAS:
+    CH[nm] = clone_human(src, nm, tint)
+CH["OfficerD"] = clone_human("OfficerB", "OfficerD"); CH["OfficerE"] = clone_human("OfficerC", "OfficerE")
+# background characters never open their mouths to camera: drop their teeth/tongue meshes
+for nm, arm in CH.items():
+    if nm in ("Man", "ManW"): continue
+    for o in [x for x in bpy.data.objects if x.parent == arm and any(k in x.name for k in (".teeth", ".tongue"))]:
+        bpy.data.objects.remove(o, do_unlink=True)
+# bake MPFB shape keys into the meshes (smaller file, same shape)
+import numpy as np
+for me in {o.data for o in bpy.data.objects if o.type == "MESH" and o.data.shape_keys}:
+    kb = me.shape_keys.key_blocks; n = len(me.vertices)
+    base = np.empty(n * 3); kb[0].data.foreach_get("co", base); co = base.copy()
+    for k in kb[1:]:
+        if k.mute or abs(k.value) < 1e-6: continue
+        a_ = np.empty(n * 3); k.data.foreach_get("co", a_); r_ = np.empty(n * 3); k.relative_key.data.foreach_get("co", r_)
+        co += (a_ - r_) * k.value
+    users = [o for o in bpy.data.objects if o.data == me]
+    users[0].shape_key_clear()
+    me.vertices.foreach_set("co", co); me.update()
 # de-duplicate images appended twice
 for im in list(bpy.data.images):
     base = im.name.rsplit(".", 1)
-    if len(base) == 2 and base[1].isdigit() and base[0] in bpy.data.images:
+    if len(base) == 2 and base[1].isdigit() and base[0] in bpy.data.images and im.filepath and im.filepath == bpy.data.images[base[0]].filepath:
         im.user_remap(bpy.data.images[base[0]]); bpy.data.images.remove(im)
 
 def meshes(arm): return [o for o in bpy.data.objects if o.parent == arm and o.type == "MESH"]
@@ -168,7 +207,8 @@ VISOR = bpy.data.materials.new("CapVisor"); VISOR.use_nodes = True
 VISOR.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.02, 0.02, 0.02, 1); VISOR.node_tree.nodes["Principled BSDF"].inputs["Roughness"].default_value = 0.2
 def cap(name):
     me = bpy.data.meshes.new(name); bm = bmesh.new()
-    bmesh.ops.create_cone(bm, cap_ends=True, segments=24, radius1=0.105, radius2=0.125, depth=0.08)
+    bmesh.ops.create_cone(bm, cap_ends=True, segments=24, radius1=0.118, radius2=0.132, depth=0.08)
+    bmesh.ops.delete(bm, geom=[f_ for f_ in bm.faces if all(v.co.z < -0.039 for v in f_.verts)], context="FACES_ONLY")   # open underside: the head sits inside
     bm.to_mesh(me); bm.free(); o = bpy.data.objects.new(name, me); me.materials.append(KHAKI_D); C("Props").objects.link(o)
     for p in me.polygons: p.use_smooth = True
     o.scale = (1.0, 1.15, 1.0)
@@ -556,7 +596,10 @@ for o in meshes(CH["ManW"]):
     if o is not GLOVES: key_vis(o, [(318, 506), (508, 1019), (1380, 1560)])
 # final stroll in front of the dark station at dusk, hands in pockets, smirk to camera
 SA, SB = Vector((-3.6, 52.6, W.ROOT.z)), Vector((-3.6, 56.8, W.ROOT.z))
-W.walk(lambda f: SA.lerp(SB, smooth((f - 1380) / 135) * 0.6 + 0.4 * (f - 1380) / 135), lambda f: 180 + 15 * smooth((f - 1490) / 25), 1380, 1515, stride=0.7, lift=0.07, step=2)
+W.walk(lambda f: SA.lerp(SB, smooth((f - 1380) / 135) * 0.6 + 0.4 * (f - 1380) / 135), lambda f: 180 + 15 * smooth((f - 1490) / 25), 1380, 1515, stride=0.85, lift=0.08, bob=0.035, crouch=0.0, lean=-3.0, step=2)
+for f in range(1380, 1516, 10):   # chin up, shoulders rolling: a swagger
+    ph = math.sin((f - 1380) / 135 * 2 * math.pi * 2.3)
+    W.H.key_spine(f, flex=-3, twist=10 * ph, side=3 * ph, head=(-8, -6 * ph))
 for f in range(1380, 1561, 12):
     for s, sx in (("L", 1), ("R", -1)):
         W.hand_b(s, f, sx * 0.19, -0.02, W.ROOT.z - 0.07, d=(sx * 0.15, 0.15, -1), n=(-sx * 0.3, -1, 0)); W.fingers(s, f, 45, 30)
@@ -565,6 +608,37 @@ for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1560, (-9, 14), 
 # teleports between segments are constant (keys exist at both ends)
 teleport_constant(W.o, [1379])
 teleport_constant(M.o, [340])
+
+# ------------------------------------------------------------------ street extras (beats 1-3) and the final street
+def stroll(ch, a, b_, f0, f1, stride=0.62, yaw=None):
+    a, b_ = Vector(a), Vector(b_)
+    d = b_ - a; yw = math.degrees(math.atan2(-d.x, d.y)) + 180 if yaw is None else yaw
+    a.z = b_.z = ch.ROOT.z
+    ch.walk(lambda f: a.lerp(b_, (f - f0) / (f1 - f0)), lambda f: yw, f0, f1, stride=stride, step=2)
+    for f in range(f0, f1 + 1, 30):
+        for s_, ph in (("L", 0), ("R", math.pi)):
+            ch.hang(s_, f, swing=0.17 * math.sin(f / 17 + ph))
+def idle(ch, pos, yaw, f0, f1, talk=False):
+    pos = Vector((pos[0], pos[1], ch.ROOT.z))
+    for i, f in enumerate(range(f0, f1 + 1, 40)):
+        ch.body(f, pos + Vector((0, 0, -0.01 * (i % 2))), yaw=yaw + 8 * math.sin(f / 50), spine=(4, 6 * math.sin(f / 33), 0), head=(-4, 18 * math.sin(f / 41)), jaw=4 * (i % 2) if talk else 0)
+        ch.stand_feet(f)
+        sx = 1
+        ch.hand_b("R", f, -0.2, 0.3 + 0.1 * (i % 2), 1.1 + 0.15 * (i % 2), d=(0.2, 1, 0.3), n=(0, 0, 1)) if talk else ch.hang("R", f)
+        ch.hang("L", f, swing=0.05)
+EX = {k: RIG[k] for k in ("ExA", "ExB", "Vendor", "ExC", "ExD", "ExE")}
+stroll(EX["ExA"], (-6.0, 4.0, 0), (-6.0, 22.0, 0), 1, 420, 0.6)
+stroll(EX["ExB"], (6.0, 34.0, 0), (6.0, 14.0, 0), 1, 420, 0.62)
+idle(EX["Vendor"], (-4.75, 14.2), 90, 1, 420, talk=True)
+stroll(EX["ExC"], (6.1, -2.0, 0), (6.1, 16.0, 0), 1, 420, 0.6)
+stroll(EX["ExD"], (-4.6, 36.5, 0), (4.4, 37.5, 0), 40, 420, 0.62)
+idle(EX["ExE"], (-4.9, 30.6), 90, 1, 420)
+# dusk: two of them walk past the dark station at the end
+stroll(EX["ExA"], (-5.9, 63.0, 0), (-5.9, 52.0, 0), 1381, 1560, 0.6)
+stroll(EX["ExB"], (2.4, 50.0, 0), (2.4, 64.0, 0), 1381, 1560, 0.62)
+for nm in ("ExA", "ExB"): teleport_constant(RIG[nm].o, [1000])
+for nm, ch in EX.items():
+    for o in meshes(CH[nm]): key_vis(o, [(1, 420), (1381, 1560)] if nm in ("ExA", "ExB") else [(1, 420)])
 
 # ------------------------------------------------------------------ station interior: OfficerA slumped, OfficerB fanning, OfficerC phone torch
 def sit(ch, f, base, yaw, lean=0, twist=0, head=(0, 0), seat_z=0.56, jaw=0.0, slide=0.0):
@@ -594,7 +668,23 @@ for i, f in enumerate(range(1160, 1561, 30)):
     OC.body(f, OC_POS, yaw=yw, spine=(2, 8 * math.sin(f / 40), 0), head=(-4, -10 * math.sin(f / 50))); OC.stand_feet(f, width=1.1)
     OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, 82, 55)
     OC.hand_b("L", f, 0.2, 0.05, 0.92, d=(0.1, 0.2, -1), n=(-1, 0, 0))
-for nm in ("OfficerB", "OfficerC"):
+OD, OE = RIG["OfficerD"], RIG["OfficerE"]
+OD_POS = Vector((-11.95, 58.05, OD.ROOT.z)); FAN_TIP = Vector((-12.25, 57.45, 2.47))
+for i, f in enumerate(range(1160, 1561, 8)):
+    tap = i % 2
+    OD.body(f, OD_POS + Vector((0, 0, 0.02 * tap)), yaw=-150, spine=(-14, 0, -4), head=(-38, 0), jaw=6 if tap else 0)
+    OD.stand_feet(f)
+    OD.hand("R", f, FAN_TIP + Vector((0.1, 0.12, -0.28 - 0.08 * tap)), (FAN_TIP - OD.pt(f, -0.2, 0, 1.4)).normalized(), Vector((0, 0, -1))); OD.fingers("R", f, 70, 45)
+    OD.hand_b("L", f, 0.24, 0.05, 0.95 + 0.05 * tap, d=(0.2, 0.3, -1), n=(-1, 0, 0))
+OE_POS = Vector((-17.3, 62.2, OE.ROOT.z))
+for i, f in enumerate(range(1160, 1561, 9)):
+    up = i % 2; wipe = (i // 6) % 3 == 2
+    OE.body(f, OE_POS, yaw=60, spine=(8, 6 * up, 0), head=(-10, 8), jaw=4)
+    OE.stand_feet(f)
+    OE.hand_b("R", f, -0.1 - 0.12 * up, 0.36, 1.48 + 0.05 * up, d=(0.3, 0.1 * up, 1), n=(0, 1, 0)); OE.fingers("R", f, 60, 45)
+    if wipe: OE.hand_b("L", f, 0.0, 0.16, 1.66, d=(-1, 0.1, 0.3), n=(0, 1, 0.4))
+    else: OE.hang("L", f, swing=0.05)
+for nm in ("OfficerB", "OfficerC", "OfficerD", "OfficerE"):
     for o in meshes(CH[nm]): key_vis(o, [(1150, 1560)])
 for o in meshes(CH["OfficerA"]): key_vis(o, [(1, 420), (1171, 1560)])
 

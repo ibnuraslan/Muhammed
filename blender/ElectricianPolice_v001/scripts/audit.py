@@ -72,7 +72,11 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     cp = cam.matrix_world.translation
     inside = 0; nearest = 9e9
     for d in dirs:
-        hit, loc, nrm, idx, ob, _ = sc.ray_cast(dg, cp + d * 1e-4, d, distance=50)
+        o0 = cp + d * 1e-4
+        for _ in range(4):   # step through the dust-haze volume box (a volume, not a surface)
+            hit, loc, nrm, idx, ob, _m = sc.ray_cast(dg, o0, d, distance=50)
+            if hit and ob.name == "DustHaze": o0 = loc + d * 1e-3; continue
+            break
         if hit:
             nearest = min(nearest, (loc - cp).length)
             if nrm.dot(d) > 0.2: inside += 1
@@ -84,6 +88,37 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
         hd = arm.matrix_world @ arm.pose.bones["head"].head
         dd = (hd - cp).length
         if dd < 0.28: cnt["cam_head"] = cnt.get("cam_head", 0) + 1; log("CAM_NEAR_HEAD f%d %s %.2f m" % (f, n, dd))
+# ---- penetration (BVH overlap) between head-worn items, bodies, the bike, and other characters
+from mathutils.bvhtree import BVHTree
+def bvh(o, dg):
+    me = o.evaluated_get(dg).to_mesh(); M = o.matrix_world
+    vs = [M @ v.co for v in me.vertices]; fs = [tuple(p.vertices) for p in me.polygons]
+    o.evaluated_get(dg).to_mesh_clear()
+    return BVHTree.FromPolygons(vs, fs) if fs else None
+def body_of(n): return next((o for o in bpy.data.objects if o.parent and o.parent.name == n and ".body" in o.name), None)
+PAIRS_HAT = [("HardHat_Road", "Man"), ("HardHat_Work", "ManW"), ("Cap_OfficerA", "OfficerA"), ("Cap_OfficerB", "OfficerB")]
+pen = {}
+for f in range(sc.frame_start, sc.frame_end + 1, STEP * 3):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+    for hat, n in PAIRS_HAT:
+        h = bpy.data.objects[hat]; b = body_of(n)
+        if not vis(h) or not vis(b): continue
+        hb, bb = bvh(h, dg), bvh(b, dg)
+        k = len(hb.overlap(bb)) if hb and bb else 0
+        if k: pen["head_item:" + hat] = pen.get("head_item:" + hat, 0) + 1
+    if f < 330:
+        b = body_of("Man"); bk = bpy.data.objects["Bike"]
+        k = len(bvh(b, dg).overlap(bvh(bk, dg)))
+        if k > 40: pen["legs_through_bike"] = pen.get("legs_through_bike", 0) + 1
+    vis_bodies = [(n, body_of(n)) for n in CHARS + ["ExA", "ExB", "ExC", "ExD", "ExE", "Vendor", "OfficerD", "OfficerE"] if body_of(n) and vis(body_of(n))]
+    for i in range(len(vis_bodies)):
+        for j in range(i + 1, len(vis_bodies)):
+            (na, a_), (nb, b_) = vis_bodies[i], vis_bodies[j]
+            pa = bpy.data.objects[na].matrix_world @ bpy.data.objects[na].pose.bones["root"].head
+            pb = bpy.data.objects[nb].matrix_world @ bpy.data.objects[nb].pose.bones["root"].head
+            if (pa - pb).length > 1.2: continue
+            if len(bvh(a_, dg).overlap(bvh(b_, dg))): pen["char_char:%s-%s" % (na, nb)] = pen.get("char_char:%s-%s" % (na, nb), 0) + 1
+log("PENETRATION frames (sampled every %d frames):" % (STEP * 3), pen or "none", "total", sum(pen.values()))
 log("COUNTS", cnt)
 for k in sorted(worst): f, v, t = worst[k]; log("WORST %-22s f%-5d %.3f  %s" % (k, f, abs(v), t))
 open(OUT, "w").write("\n".join(L) + "\n"); print("\n".join(L))

@@ -99,7 +99,7 @@ attach_seq(hatW, [(1, CH["ManW"], "head", head_frame(CH["ManW"], 320), 320), (50
                   (1380, CH["ManW"], "head", head_frame(CH["ManW"], 1390), 1390)])
 for nm, cp in CAPS.items():
     fe_ = 1 if nm == "OfficerA" else 1200
-    attach_seq(cp, [(1, CH[nm], "head", head_frame(CH[nm], fe_, 0.07, 0.0, sink=0.03), fe_)])
+    attach_seq(cp, [(1, CH[nm], "head", head_frame(CH[nm], fe_, 0.07, 0.0, sink=0.005), fe_)])
 # ticket pad (officer's left hand), slip (officer right -> man right), phone torch, fanning paper
 pad = ob("TicketPad"); slip = ob("TicketSlip")
 def palm_pose(rig, s, f, along=0.08, out=0.025, flip=False):
@@ -136,10 +136,11 @@ key_vis(beam, [])   # beam read as an opaque disc at review res; the spot light 
 fp = ob("FanPaper_0")
 loc, f3, n = palm_pose(CH["OfficerB"], "R", 1200, 0.07, -0.02)
 attach_seq(fp, [(1, CH["OfficerB"], "wrist.R", frame_from(loc + f3 * 0.1, f3, -n), 1200)])
-ob("FanPaper_1").location = (OB_SEAT.x + 0.75, OB_SEAT.y + 0.25, 0.795); ob("FanPaper_1").rotation_euler = (0, 0, R_(30))
 for nm, p_ in (("A", A_SEAT), ("B", OB_SEAT)):
     inst(bpy.data.objects["SRC_plastic_monobloc_chair_01"], "St_Chair_" + nm, (p_.x - 0.12, p_.y, 0.0), rotz=R_(90), c="Station")
 inst(bpy.data.objects["SRC_plastic_monobloc_chair_01"], "St_Chair_C", (-16.4, 57.0, 0.0), rotz=R_(-90), c="Station")
+for i_, (x_, y_) in enumerate(((-6.2, 22.5), (-4.6, 15.6))):
+    pass
 
 # ------------------------------------------------------------------ laptop UI on the screen
 lapo = ob("Office_Laptop")
@@ -229,10 +230,10 @@ for k in range(3):
     for o in (pg, tb): key_vis(o, [(642, f0 + 22)])
 # the bill bar grows huge: out of the bezel, across the room toward the switchgear (f895 -> 1000)
 big = bars[POLICE_ROW]
-grow_m = emit("UI_BillBar", (1.0, 0.05, 0.03), 9.0)
+grow_m = emit("UI_BillBar", (1.0, 0.05, 0.03), 16.0)
 bb_ = bpy.data.objects.new("BillBar", bpy.data.meshes.new("billbar")); C("Office").objects.link(bb_)
 bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
-for v in bm.verts: v.co = Vector(((v.co.x + 0.5) * 1.0, v.co.y * hs * 0.07, v.co.z * 0.012))
+for v in bm.verts: v.co = Vector(((v.co.x + 0.5) * 1.0, v.co.y * hs * 0.11, v.co.z * 0.016))
 bm.to_mesh(bb_.data); bm.free(); bb_.data.materials.append(grow_m)
 x0 = scr(-0.7, pr_v, 0.008)
 bb_.matrix_world = Matrix.Translation(x0) @ SCR.to_4x4()
@@ -314,7 +315,12 @@ def spin(o, f0, f1, rpm, axis=2, decel_from=None, decel_to=None):
         e = list(o.rotation_euler); e[axis] = a; o.rotation_euler = e; o.keyframe_insert("rotation_euler", index=axis, frame=f)
 spin(ob("OfficeFan_ceiling_fan_blades"), 1, 1560, 180)
 spin(ob("StationFan_ceiling_fan_blades"), 1, 1560, 180, decel_from=1200, decel_to=1290)
+for nm_ in ("StationFan_ceiling_fan_blades", "StationFan_ceiling_fan"): ob(nm_).location.z = 3.4 - 0.92
 ob("StationFan_ceiling_fan").location = ob("StationFan_ceiling_fan_blades").location
+fp2 = ob("FanPaper_1"); loc, f3, n = palm_pose(CH["OfficerE"], "R", 1200, 0.07, -0.02)
+attach_seq(fp2, [(1, CH["OfficerE"], "wrist.R", frame_from(loc + f3 * 0.1, f3, -n), 1200)])
+fp3 = inst(bpy.data.objects["SRC_clipboard"], "TapFile", (0, 0, 0), c="Station"); loc, f3, n = palm_pose(CH["OfficerD"], "R", 1200, 0.06, -0.02)
+attach_seq(fp3, [(1, CH["OfficerD"], "wrist.R", frame_from(loc + f3 * 0.12, f3, -n), 1200)])
 ob("OfficeFan_ceiling_fan").location = ob("OfficeFan_ceiling_fan_blades").location
 # wall clock: find its thin axis and face it +X on the back wall; hands spin 5 hours (f1290 -> 1381)
 cparts = {n: ob("St_" + n) for n in ("wall_clock", "wall_clock_hours_hand", "wall_clock_minute_hand", "wall_clock_second_hand")}
@@ -374,6 +380,12 @@ drive(ob("Rick_4"), 1370, 1560, (1.9, 75.0, 0), (1.9, 75.0 - 5.0 * 3.2, 0), 0)
 for nm in ("Rick_0", "Rick_1", "Rick_2", "Rick_3"):
     for fc in fcurves(ob(nm)):
         pass
+# animals: the cows chew and sway, the dog breathes
+for nm_, amp in (("Cow", 4.0), ("Cow2", 3.0)):
+    o_ = ob(nm_); r0 = o_.rotation_euler.z
+    for f in range(1, 1561, 45):
+        o_.rotation_euler.z = r0 + R_(amp) * math.sin(f / 37.0); o_.keyframe_insert("rotation_euler", index=2, frame=f)
+bpy.data.objects.remove(ob("Dog"), do_unlink=True)
 # dust puffs kicked up behind the bike
 DUST = bpy.data.materials.new("Dust"); DUST.use_nodes = True; dn = DUST.node_tree.nodes; dl_ = DUST.node_tree.links
 bsd = dn["Principled BSDF"]; bsd.inputs["Base Color"].default_value = (0.55, 0.45, 0.33, 1); bsd.inputs["Roughness"].default_value = 1.0
@@ -518,10 +530,12 @@ CAMK = [
     (619, V(22.1, 42.25, 1.42), SCRN, 30),
     (660, HW[660] + V(0.4, 0.22, 0.0), SCRN, 30),
     (710, V(21.84, 43.38, 1.12), scr(-0.1, pr_v), 36),
-    (760, V(22.28, 43.44, 1.13), HW[760] + V(-0.06, 0.12, -0.07), 32),
-    (810, V(21.78, 43.45, 1.08), scr(0.55, pr_v + 0.1), 40),
-    (860, V(22.05, 43.55, 1.07), HW[860] + V(-0.06, 0.12, -0.07), 30),
-    (895, V(22.32, 43.36, 1.17), HW[895] + V(-0.06, 0.12, -0.07), 36),
+    (735, V(22.25, 43.45, 1.12), HW[710] + V(0, 0.1, -0.04), 32),
+    (770, V(22.1, 43.56, 1.05), HW[760] + V(0, 0.1, -0.04), 34),
+    (805, V(21.8, 43.45, 1.07), scr(0.55, pr_v + 0.1), 42),
+    (835, V(22.3, 43.4, 1.16), HW[810] + V(0, 0.1, -0.04), 34),
+    (865, V(22.12, 43.55, 1.08), HW[860] + V(0, 0.1, -0.04), 36),
+    (895, V(22.32, 43.36, 1.17), HW[895] + V(0, 0.1, -0.04), 36),
     (925, V(22.6, 43.05, 1.15), V(21.6, 43.3, 1.0), 24),
     (960, V(23.4, 43.0, 1.12), V(22.0, 43.4, 1.0), 24),
     (995, V(24.05, 42.85, 1.14), V(22.2, 43.3, 1.15), 26),
@@ -538,9 +552,10 @@ CAMK = [
     (1232, V(-5.3, 53.9, 1.75), V(-9.0, 53.9, 1.6), 26),
     (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 24),
     (1290, V(-9.2, 55.2, 1.5), V(-11.4, 53.6, 1.25), 28),
-    (1310, V(-10.3, 56.2, 1.6), V(-14.2, 56.4, 1.45), 30),
-    (1332, V(-11.7, 57.7, 1.7), V(-14.3, 56.4, 1.5), 30),
-    (1358, V(-15.6, 57.5, 2.15), CLOCK_POS, 42),
+    (1306, V(-10.0, 56.5, 1.45), V(-12.1, 57.8, 1.95), 28),
+    (1324, V(-11.2, 57.1, 1.6), V(-14.3, 56.4, 1.45), 30),
+    (1344, V(-14.4, 59.3, 1.7), V(-17.3, 62.2, 1.45), 30),
+    (1364, V(-15.7, 57.4, 2.15), CLOCK_POS, 42),
     (1381, V(-17.5, 57.1, 2.32), CLOCK_POS, 45),
     (1406, V(-10.1, 59.1, 1.55), V(-11.35, 60.5, 1.12), 30),
     (1424, V(-9.0, 57.4, 1.6), V(-4.0, 56.4, 1.45), 26),

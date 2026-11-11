@@ -1,3 +1,1 @@
 blender/goat_rescue2_v002/*.blend filter=lfs diff=lfs merge=lfs -text
-blender/ElectricianPolice_v002/*.blend filter=lfs diff=lfs merge=lfs -text
-blender/ElectricianPolice_v003/*.blend filter=lfs diff=lfs merge=lfs -text

@@ -7,7 +7,7 @@ This is the full 26 s film at 1080×1920 and 60 fps, ready for RenderStreet. No 
 - `beats.json`: the start frame of each of the 11 beats, built to the brief's target times. When the voiceover arrives, run `pipeline/retime_to_vo.py` to warp every key onto its words, then repackage.
 - `SETTINGS.md`: render settings and suggested test frames.
 - `CREDITS.md`: the CC-BY credit block for the video description.
-- `package_check_f1300_lowres.jpg`: a 270×480, 8-sample frame from the packed file opened in factory Blender. It shows the package works; it is not a quality reference.
+- `package_check_f1306_lowres.jpg`: a 270×480, 8-sample frame from the packed file opened in factory Blender. It shows the package works; it is not a quality reference.
 
 ## Voiceover
 There is no VO mp3 yet. The script is ours (73 words) and is in `../briefs/14_ElectricianPolice.md`.
@@ -25,7 +25,7 @@ The source is `../ElectricianPolice_v001/scripts`. Build order:
 ## Beats (frame = 1 + 60·t)
 | # | Frame | Line | What happens |
 |---|---|---|---|
-| 1 | 1 | "He was riding his motorcycle without a helmet" | Low chase alongside the bike through the market street, past a rickshaw. His hair and shirt ripple in the wind. |
+| 1 | 1 | "He was riding his motorcycle without a helmet" | Low chase alongside the bike through a busy market street with saffron and teal walls, marigold strings, vendor carts, rickshaws, cows, 8 pedestrians and dust haze. His hair and shirt ripple in the wind. |
 | 2 | 169 | "and the police gave him a fine" | The officer waves him over. He brakes and puts a foot down. The officer writes the ticket and the slip passes hand to hand. |
 | 3 | 283 | "But he was an electrician" | He pulls the hard hat off the seat and onto his head. A whip-pan lands on him at the substation gate in a hi-vis vest. |
 | 4 | 397 | "with access to the power grid" | He unlocks the gate and walks in. The camera cranes up the pylon as pulses run out along the lines over the town. |
@@ -34,7 +34,7 @@ The source is `../ElectricianPolice_v001/scripts`. Build order:
 | 7 | 895 | "And that bill was huge" | The red bar bursts out of the screen across the room. He throws his arms up. |
 | 8 | 1057 | "so he cut off their power" | His gloved hand throws the big lever. There is a clunk, sparks and an arc flash, and the cabinet lamps die. |
 | 9 | 1165 | "the police station sat in the dark" | The camera backs out of the window and flies over the roofs at dusk. The station windows go dark one by one. |
-| 10 | 1231 | "For five hours" | The camera flies through a dark window into the station. One officer fans himself, one holds a phone torch and one is slumped. The fan winds down and the clock spins five hours. |
+| 10 | 1231 | "For five hours" | The camera flies through a dark window into the station and passes five officers: one fans himself with a paper, one taps the dead ceiling fan with a file, one holds a phone torch, one fans himself and wipes sweat by the water cooler, and one is slumped with his head back. The fan winds down and the clock spins five hours. |
 | 11 | 1381 | "all because they fined the wrong guy" | The camera backs out through the door. He strolls past the dark station, turns to camera and smirks. |
 
 ## Known issues
@@ -43,7 +43,8 @@ The source is `../ElectricianPolice_v001/scripts`. Build order:
   - The hands-in-pockets at the end are approximate: the hands rest at the pocket line rather than inside it.
   - The fanning paper and the phone are parented to the wrists. Finger grips are curls, not per-finger contact.
 - **Feet:** the walks show 2–4 cm of heel or toe lift on some contact frames (`C_audit.txt`). Planted feet are on the floor.
-- **Characters:** the officers are the same base body re-proportioned, and the third officer is barely seen. There is no lip-sync, because there is no VO yet. The grin and smirk use the lip-corner bones only.
+- **Characters:** the 5 officers and 8 street extras are re-proportioned clones of 4 MPFB bodies, with tinted clothes. Background clones have no teeth or tongue meshes. The street dog was dropped because it read as a food tray at review size. The rickshaw model's food-brand livery was repainted plain green with a yellow roof.
+- **Penetration (BVH, sampled every 12 frames):** 4 frames: 2 where his legs touch the bike seat while riding, and 2 where the hard hat passes through his hand as he grabs it. There is no lip-sync, because there is no VO yet. The grin and smirk use the lip-corner bones only.
 - **Interior:** the station interior at dusk is dim blue rather than pitch black, so the action reads. The phone torch is a spot light with no visible beam.
 - **Screen and clock:** the laptop UI is emissive 3D planes (icons and bars) with no text. The clock's maker's mark is covered by a dial-coloured disc.
 - **Camera:** from 22.4 to 23.4 s the camera turns across a fairly empty back wall of the station.

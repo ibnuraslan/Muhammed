@@ -86,8 +86,8 @@ CONC = ph_mat("concrete_wall_008", 0.3)
 BRICK = ph_mat("brick_wall_10", 0.4)
 CORR = ph_mat("corrugated_iron_02", 0.5)
 WOOD = ph_mat("wood_floor_deck", 0.5)
-PLASTER_TINTS = [(1.0, 0.82, 0.72), (0.98, 0.93, 0.70), (0.72, 0.92, 0.90), (0.95, 0.95, 0.92), (0.95, 0.78, 0.80),
-                 (0.80, 0.88, 0.70), (1.0, 0.88, 0.60), (0.78, 0.84, 0.95)]
+PLASTER_TINTS = [(1.0, 0.62, 0.28), (0.98, 0.9, 0.62), (0.35, 0.78, 0.74), (0.95, 0.95, 0.9), (1.0, 0.7, 0.72),
+                 (0.55, 0.85, 0.75), (1.0, 0.78, 0.35), (0.62, 0.8, 0.95), (1.0, 0.55, 0.3), (0.3, 0.68, 0.7)]   # saffron, teal, pastel
 def plaster(t): return ph_mat("painted_plaster_wall", 0.35, tint=t)
 GLASS_DARK = pbr("WindowGlass", (0.03, 0.04, 0.05), rough=0.08, metal=0.3)
 FRAME_W = pbr("WindowFrame", (0.85, 0.85, 0.82), rough=0.5)
@@ -186,12 +186,14 @@ def glb(name, scale=1.0, rot=None):
     mn = Vector([min(p[i] for p in pts) for i in range(3)]); mx = Vector([max(p[i] for p in pts) for i in range(3)])
     j.data.transform(Matrix.Translation(-Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))))
     j["dims"] = tuple(mx - mn)
-    for o in new: bpy.data.objects.remove(o, do_unlink=True)
+    for o in new:
+        if o.name in bpy.data.objects: bpy.data.objects.remove(o, do_unlink=True)
     print("GLB", name, tuple(round(x, 2) for x in j["dims"]))
     return j
 def ph_joined(pid, names=None, nm=None):
     d = ph_model(pid, names); bpy.context.view_layer.update()
     j = joined(list(d.values()), "SRC_" + (nm or pid))
+    for o in list(d.values()): bpy.data.objects.remove(o, do_unlink=True)
     print("PHM", pid, tuple(round(x, 2) for x in j["dims"]))
     return j, d
 
@@ -229,6 +231,23 @@ LIME, _ = ph_joined("food_lime_01")
 PBOX, _ = ph_joined("power_box_01", ["power_box_01_box", "power_box_01_door"], "powerbox")
 UBOX, _ = ph_joined("utility_box_02")
 
+def decimate(o, ratio):
+    md = o.modifiers.new("dec", "DECIMATE"); md.ratio = ratio
+    with bpy.context.temp_override(object=o, active_object=o, selected_objects=[o], selected_editable_objects=[o]):
+        bpy.ops.object.modifier_apply(modifier="dec")
+for o_, r_ in ((STALL, 0.18), (PLANT, 0.15), (MOTO, 0.75), (OCHAIR, 0.35), (LAMP, 0.3), (BAN, 0.25), (BASKET, 0.3), (DRAWER, 0.4),
+               (CRATE, 0.35), (BOXC, 0.3), (PBOX, 0.35), (DESK_M, 0.6), (WCRATE, 0.5), (TRASH, 0.4), (AC, 0.5)):
+    n0 = len(o_.data.vertices); decimate(o_, r_); print("DEC", o_.name, n0, "->", len(o_.data.vertices))
+COW = glb("cow", 0.1); DOG = glb("dog", 0.25); RICK_M = glb("rickshaw", 0.0123); CART = glb("cart", 0.47)
+decimate(DOG, 0.3); decimate(CART, 0.45)
+# the rickshaw model's livery carries a food-brand logo and lettering: repaint it plain (no text anywhere on screen)
+RICK_PAINT = [pbr("RickPaintGreen", (0.08, 0.38, 0.1), 0.45), pbr("RickPaintYellow", (0.9, 0.68, 0.05), 0.4)]
+me_ = RICK_M.data
+for i_ in range(len(me_.materials)): me_.materials[i_] = RICK_PAINT[0]
+me_.materials.append(RICK_PAINT[1])
+zs_ = [v.co.z for v in me_.vertices]; ztop = max(zs_)
+for p_ in me_.polygons:
+    if p_.center.z > ztop - 0.18: p_.material_index = len(me_.materials) - 1     # roof canopy yellow; decimate(LIME, 0.3); decimate(LAPTOP, 0.6)
 def face_fit(src, name, centre, facing, w, h, c="Set", depth_scale=1.0):
     """place a planar asset (shutter) so its thin axis is along the facing direction and it spans w x h"""
     d = Vector(src["dims"]); thin = 0 if d.x < d.y else 1
@@ -381,6 +400,11 @@ for i, (x, y) in enumerate([(-6.3, -6.0), (6.4, 26.0 + 22), (-6.4, 80.0), (6.3, 
 RICK_BODY = [pbr("RickGreen", (0.12, 0.45, 0.12), 0.35), pbr("RickYellow", (0.95, 0.75, 0.05), 0.35)]
 def rickshaw(name, c="Traffic"):
     root = bpy.data.objects.new(name, None); link(root, c)
+    m_ = inst(RICK_M, name + "_model", (0, 0, 0), rotz=R_(RICK_FRONT), c=c); m_.parent = root
+    root["wheels"] = []
+    return root
+def rickshaw_old(name, c="Traffic"):
+    root = bpy.data.objects.new(name, None); link(root, c)
     parts = []
     b = box(name + "_body", (-0.62, -1.3, 0.3), (0.62, 0.9, 1.05), RICK_BODY[0], c=c, bevel=0.12)
     nose = box(name + "_nose", (-0.35, -1.75, 0.3), (0.35, -1.25, 1.2), RICK_BODY[0], c=c, bevel=0.1)
@@ -396,12 +420,42 @@ def rickshaw(name, c="Traffic"):
         o.parent = root
     root["wheels"] = [w.name for w in wheels]
     return root
-for i in range(5):
+RICK_FRONT = 0.0
+for i in range(7):
     r = rickshaw("Rick_%d" % i)
-    r.location = (random.choice((-1.9, 1.9)), -20 + i * 25, 0.0)
-    for o in r.children:
-        if o.name.endswith("_body") or o.name.endswith("_nose"):
-            o.data.materials[0] = RICK_BODY[0] if i % 2 == 0 else pbr("RickBlack", (0.05, 0.05, 0.05), 0.35)
+    r.location = (random.choice((-1.9, 1.9)), -20 + i * 20, 0.0)
+# animals and vendors on the road edge
+cow = inst(COW, "Cow", (5.3, 30.5, 0.03), rotz=R_(160), c="Town")
+cow2 = inst(COW, "Cow2", (-5.4, 60.5, 0.03), rotz=R_(20), c="Town")
+dog = inst(DOG, "Dog", (-5.6, 26.0, 0.03), rotz=R_(70), c="Town"); dog.hide_render = True   # read as a food tray at review size; dropped
+for i, (x, y, r) in enumerate([(-5.5, 14.0, R_(90)), (5.5, 9.0, R_(-90)), (5.5, 72.0, R_(-90)), (-5.6, 48.0, R_(90))]):
+    inst(CART, "Cart_%d" % i, (x, y, 0.03), rotz=r, c="Town")
+    for k in range(4):
+        inst(BAN if k % 2 else LIME, "Cart_%d_f%d" % (i, k), (x + (0.2 if x < 0 else -0.2) * (k - 1.5), y - 0.4 + k * 0.25, 1.0), scale=(1.0 if k % 2 else 4.0), c="Town")
+# marigold garlands hanging under the shop signs
+MARI = pbr("Marigold", (1.0, 0.45, 0.02), 0.7)
+gm = bpy.data.meshes.new("garland"); bm = bmesh.new()
+for k in range(22):
+    u = k / 21; p = Vector((0, -0.9 + 1.8 * u, -0.35 * 4 * u * (1 - u)))
+    sph = bmesh.ops.create_icosphere(bm, subdivisions=1, radius=0.035)
+    for v in sph["verts"]: v.co += p + Vector((random.uniform(-0.006, 0.006), 0, random.uniform(-0.006, 0.006)))
+bm.to_mesh(gm); bm.free(); gm.materials.append(MARI)
+for o in [x for x in bpy.data.objects if x.name.endswith("_sign")]:
+    for k in (0, 1):
+        g = bpy.data.objects.new(o.name + "_garland%d" % k, gm); link(g, "Town")
+        g.location = o.location + Vector((0.08 if o.location.x > 0 else -0.08, 0, -0.32 - 0.06 * k)) * 1.0
+        g.location.x = o.location.x + (-0.1 if o.location.x > 0 else 0.1)
+        g.scale = (1, 0.8 + 0.3 * k, 1)
+# drainpipes on the facades
+for o in [x for x in bpy.data.objects if x.name.startswith("B_") and x.name.count("_") == 2]:
+    xf = 7.0 * (1 if o.location.x > 0 else -1) + (-0.08 if o.location.x > 0 else 0.08)
+    cyl(o.name + "_pipe", (xf, o.location.y - o.dimensions.y / 2 + 0.25, o.dimensions.z / 2), 0.045, o.dimensions.z, GALV, c="Town", verts=8)
+# warm dust haze over the street (volume only above the road and shoulders)
+HAZE = bpy.data.materials.new("DustHaze"); HAZE.use_nodes = True; hn = HAZE.node_tree.nodes
+for x_ in list(hn): hn.remove(x_)
+hv = hn.new("ShaderNodeVolumePrincipled"); hv.inputs["Density"].default_value = 0.012; hv.inputs["Color"].default_value = (1.0, 0.82, 0.6, 1)
+ho = hn.new("ShaderNodeOutputMaterial"); HAZE.node_tree.links.new(hv.outputs[0], ho.inputs["Volume"])
+haze = box("DustHaze", (-7.2, -40, 0.0), (7.2, 140, 14), HAZE, c="Town"); haze.visible_shadow = False
 
 # ------------------------------------------------------------------ substation
 S_ = SUB
@@ -611,8 +665,8 @@ W = bpy.data.worlds.new("World"); sc.world = W; W.use_nodes = True
 nt = W.node_tree; n = nt.nodes; l = nt.links
 for x in list(n): n.remove(x)
 out = n.new("ShaderNodeOutputWorld")
-e1 = n.new("ShaderNodeTexEnvironment"); e1.image = bpy.data.images.load(f"{ASSETS}/ph/hdri/kloppenheim_06_puresky_2k.hdr")
-e2 = n.new("ShaderNodeTexEnvironment"); e2.image = bpy.data.images.load(f"{ASSETS}/ph/hdri/venice_sunset_2k.hdr")
+e1 = n.new("ShaderNodeTexEnvironment"); e1.image = bpy.data.images.load(f"{ASSETS}/ph/hdri/kloppenheim_06_puresky_1k.hdr")
+e2 = n.new("ShaderNodeTexEnvironment"); e2.image = bpy.data.images.load(f"{ASSETS}/ph/hdri/venice_sunset_1k.hdr")
 mp = n.new("ShaderNodeMapping"); tc = n.new("ShaderNodeTexCoord"); l.new(tc.outputs["Generated"], mp.inputs["Vector"])
 mp.inputs["Rotation"].default_value = (0, 0, R_(200)); l.new(mp.outputs[0], e1.inputs[0]); l.new(mp.outputs[0], e2.inputs[0])
 mx = n.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.name = "DuskMix"; mx.inputs["Factor"].default_value = 0.0

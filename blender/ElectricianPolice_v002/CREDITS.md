@@ -7,7 +7,7 @@ Paste this block into the video description:
 3D models (CC BY 4.0, via Sketchfab):
 Motorcycle by Silas6 · Substation Transformer by HalfCarrot · Old Soviet Transformer Low-Poly by MrUnity ·
 400kV Power Pylon by h1pp0p0t4mu5 · market stall by Kisielev Mikhail · Smartphone by Rafael Benites de Souza ·
-Office chair by AK STUDIO
+Office chair by AK STUDIO · Tricycle by denoises · Cow by Josué Boisvert · GoodBoy by vslite · Fair wooden food cart by David Glynch
 ```
 
 | Asset (used as) | Author | Source |
@@ -19,6 +19,10 @@ Office chair by AK STUDIO
 | market stall (street stalls) | Kisielev Mikhail | https://sketchfab.com/3d-models/6bb15dc7056241bfac6ee747fc866e45 |
 | Smartphone (phone torch) | Rafael Benites de Souza | https://sketchfab.com/3d-models/03c75adf5d9a426a9435d20cc76090be |
 | Office chair (utility office) | AK STUDIO | https://sketchfab.com/3d-models/af2f07d06f6349158c1d24d87f5ceb95 |
+| Tricycle (the auto-rickshaws) | denoises | https://sketchfab.com/3d-models/9fb7acbf49c74eccb393f06156165bb6 |
+| Cow (two cows on the road edge) | Josué Boisvert | https://sketchfab.com/3d-models/99d333e3b4e4470a8d7d38436489c001 |
+| GoodBoy (street dog lying by the officer) | vslite | https://sketchfab.com/3d-models/0ac2e22becfc4e3e9dfb875aaa234a77 |
+| Fair wooden food cart (vendor carts) | David Glynch | https://sketchfab.com/3d-models/e3959a95156746ac88af0d312c841918 |
 
 All of these were obtained through Objaverse (allenai/objaverse on Hugging Face). They were rescaled and recoloured where noted; no logos or text were added.
 
@@ -52,4 +56,4 @@ All of these were obtained through Objaverse (allenai/objaverse on Hugging Face)
 | Humans, clothes, hair (MPFB2 / MakeHuman system assets) | MakeHuman community | CC0, makehumancommunity.org |
 
 ## Ours (built procedurally in `../ElectricianPolice_v001/scripts/`)
-Buildings, road, auto-rickshaws, hard hats, hi-vis vests, gloves, police caps, the laptop screen UI (icons, bars, badge, calendar pages), the bill bar, the knife-switch lever, sparks, dust, bunting, the station signboard emblem (a generic star, no text), the grid pulses, the phone-torch beam.
+Buildings (plaster facades, balconies, blank signboards, drainpipes, wires), road, marigold garlands, hard hats, hi-vis vests, gloves, police caps, the laptop screen UI (icons, bars, badge, calendar pages), the bill bar, the knife-switch lever, sparks, dust, bunting, the station signboard emblem (a generic star, no text), the grid pulses, the phone-torch beam.
