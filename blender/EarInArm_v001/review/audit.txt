@@ -1,0 +1,6 @@
+CAMERA inside geometry at frames: [(346, 'Surgeon.body')]
+LONGEST near-static camera hold: 0.25 s ending f1256
+FOOT hover >2cm (rig, side, frame, gap; walking lifts included): 76 [('Nurse', 'R', 16, 0.048), ('Nurse', 'R', 21, 0.063), ('Nurse', 'L', 31, 0.066), ('Nurse', 'R', 41, 0.067), ('Nurse', 'L', 51, 0.067), ('Nurse', 'R', 61, 0.028), ('Nurse', 'L', 66, 0.061), ('Nurse', 'R', 76, 0.063), ('Nurse', 'L', 86, 0.06), ('Nurse', 'R', 96, 0.067), ('Nurse', 'L', 111, 0.064), ('Nurse', 'L', 116, 0.07), ('Nurse', 'R', 146, 0.025), ('Nurse', 'R', 151, 0.056), ('Nurse', 'R', 156, 0.07), ('Nurse', 'R', 161, 0.054), ('Nurse', 'L', 176, 0.041), ('Nurse', 'L', 181, 0.07), ('Nurse', 'L', 186, 0.041), ('Nurse', 'R', 196, 0.028), ('Nurse', 'R', 201, 0.07), ('Nurse', 'R', 206, 0.04), ('Nurse', 'L', 216, 0.036), ('Nurse', 'L', 221, 0.07), ('Nurse', 'L', 226, 0.032), ('Nurse', 'R', 236, 0.035), ('Nurse', 'R', 241, 0.07), ('Nurse', 'R', 246, 0.048), ('Nurse', 'L', 261, 0.047), ('Nurse', 'L', 266, 0.069)]
+FOOT sink >1.5cm: 0 []
+GRIP prop far from palm (>9cm): 0 []
+SHAVINGS off the tray at end: none
