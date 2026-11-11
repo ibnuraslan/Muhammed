@@ -150,6 +150,13 @@ def long_skirt(rig, rgb, flare=0.12, hem_z=0.03, shin=1.0, wrap_low=0.0):
     bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.25
     nt.links.new(wv.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], p.inputs["Normal"])
     me.materials.append(m)
+    # petticoat / stockings: body below the waist gets a fabric material, so any drape gap shows cloth, never skin
+    stock = bpy.data.materials.new(rig.name + "_Stockings"); stock.use_nodes = True
+    sp = stock.node_tree.nodes["Principled BSDF"]; sp.inputs["Base Color"].default_value = (*[c * 0.6 for c in rgb], 1); sp.inputs["Roughness"].default_value = 0.7
+    sp.inputs["Sheen Weight"].default_value = 0.5
+    bm_ = body.data; bm_.materials.append(stock); idx = len(bm_.materials) - 1
+    for p in bm_.polygons:
+        if p.center.z < zw - 0.03: p.material_index = idx
     return ob
 long_skirt(bpy.data.objects["Teacher"], (0.06, 0.07, 0.12), flare=0.04, shin=1.0, wrap_low=1.0)
 long_skirt(bpy.data.objects["Mother"], (0.17, 0.05, 0.06))
