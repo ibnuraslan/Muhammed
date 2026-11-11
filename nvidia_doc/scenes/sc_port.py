@@ -45,8 +45,8 @@ def crane(x, y, mat, h=52, boom=70):
     return join(parts, "Crane")
 
 
-VARIANT_FOR = {"ship_lift": None, "tropical_dock": "tropical"}
-DUR = {"ship_lift": 5.0, "tropical_dock": 5.0}     # estimates until the chapter 1 voiceover arrives
+VARIANT_FOR = {"ship_lift": None, "tropical_dock": "tropical", "scan_gate": None}
+DUR = {"ship_lift": 5.0, "tropical_dock": 5.0, "scan_gate": 5.0}     # estimates until the chapter 1 voiceover arrives
 
 
 def container_ship(x0, y0, protos, rng, length=220, beam=32):
@@ -117,6 +117,23 @@ def build(variant=None):
     lifted = instance(protos[0], (0, 0, 0)); lifted.name = "Lifted"
     cables = [cyl("HoistCable", (0, 0, 0), 0.05, 1.0, cable, verts=6) for _ in range(4)]
     ctx.update(spreader=spreader, lifted=lifted, cables=cables, crane_x=-2.0)
+    # the scanner portal on the gate road (y = 150) and a truck with a container that drives through it
+    gate_m = pbr("Gate", (0.75, 0.75, 0.73), 0.4, 0.2)
+    for sx in (-3.2, 3.2):
+        box("GatePost", (-120 + sx, 150, 3.0), (0.8, 2.0, 6.0), gate_m, bevel=0.05)
+    box("GateTop", (-120, 150, 6.3), (7.2, 2.0, 0.8), gate_m, bevel=0.05)
+    sm = bpy.data.materials.new("ScanBeam"); sm.use_nodes = True
+    Nn = sm.node_tree.nodes; Ll = sm.node_tree.links; Nn.clear()
+    o_ = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.1, 0.06, 1)
+    v = Nn.new("ShaderNodeValue"); dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "20 * (0.6 + 0.4 * sin(frame * 0.8))"
+    Ll.new(v.outputs[0], em.inputs['Strength']); Ll.new(em.outputs[0], o_.inputs['Surface'])
+    box("Beam", (-120, 150, 3.0), (6.0, 0.03, 5.8), sm).visible_shadow = False
+    box("GateRoad", (-120, 150, -0.48), (14, 300, 1), pbr("Asphalt", (0.05, 0.05, 0.055), 0.6))
+    cab_m = pbr("Cab", (0.08, 0.22, 0.4), 0.35, 0.3)
+    truck = join([box("Cab", (0, 5.6, 1.6), (2.5, 2.2, 2.6), cab_m, bevel=0.15),
+                  box("Chassis", (0, -1.0, 0.8), (2.4, 12.0, 0.5), pbr("Chassis", (0.03, 0.03, 0.03), 0.6))], "Truck")
+    tc_ = instance(protos[2], (0, -1.0, 1.05 + H8 / 2)); tc_.rotation_euler = (0, 0, math.radians(90)); tc_.parent = truck
+    truck.location = (-120, 120, 0); ctx["truck"] = truck
     if tropical:                                   # palms along the quay edge (scanned tree), ship arriving
         import ph
         root, ms = ph.model("island_tree_02", loc=(0, 0, -300))
@@ -151,6 +168,11 @@ def anim_dock(c, t):
     anim_lift(c, 0.0)
 
 
+def anim_scan(c, t):
+    c["truck"].location = (-120, 128 + 9.0 * t * DUR["scan_gate"] / 2.0, 0)
+    anim_lift(c, 0.0)
+
+
 def cam_lift(c, t):
     e = ease(t)
     return (Vector((-75, -135, 6)).lerp(Vector((-68, -128, 7)), e), Vector((-2, -40, 28 + 4 * e)), 45)       # from the water: ship, crane, the lift
@@ -162,6 +184,8 @@ def cam_dock(c, t):
 
 
 MOVES = {
+    "scan_gate": dict(kind="anim", far=1200.0, anim=anim_scan,
+                      cam=lambda c, t: (Vector((-110.5, 138, 2.0)).lerp(Vector((-110.8, 140, 2.2)), ease(t)), Vector((-120, 151, 3.0)), 32)),
     "ship_lift": dict(kind="anim", far=1200.0, cam=cam_lift, anim=anim_lift),
     "tropical_dock": dict(kind="anim", far=1200.0, cam=cam_dock, anim=anim_dock),
     "crane_rise": dict(kind="anim", far=1200.0, cam=lambda c, t: ((95, -175, 5 + 6 * t), (-5, 10, 24), 32)),

@@ -13,7 +13,7 @@ from mathutils import Vector
 from kit import *
 
 EXPOSURE = -0.2
-VARIANT_FOR = {"tray": "on", "install": "on", "wake": "one", "ripple": "one"}
+VARIANT_FOR = {"tray": "on", "install": "on", "wake": "one", "ripple": "one", "half_empty": "half"}
 DUR = {"tray": 5.0, "aisle": 6.0, "install": 5.0, "wake": 4.0, "ripple": 4.0}   # estimates until the chapter 1 voiceover arrives
 ROWS_X = (-1.5, 1.5)                    # rack fronts face the centre aisle (x = 0)
 N_RACKS = 14
@@ -116,7 +116,8 @@ def build(variant=None):
         for k in range(N_RACKS):
             y = k * (RACK_W + 0.02)
             instance(body_t, (x + side * RACK_D / 2, y, RACK_H / 2))
-            for u in range(19):
+            filled = 19 if variant != "half" else (19 if (k + (side > 0)) % 3 == 0 else (6 if k % 2 else 0))
+            for u in range(filled):
                 z = 0.18 + u * 0.1
                 instance(srv_t, (x, y, z), rot=(0, 0, rz))
                 for tmpl, off in ((la_t, la_off), (lb_t, lb_off)):
@@ -235,6 +236,8 @@ def cam_aisle(c, t):
 
 
 MOVES = {
+    "half_empty": dict(kind="anim", dof=4.0, far=30.0, cam=lambda c, t: (Vector((0.1, -1.5 + 1.5 * ease(t), 1.5)), Vector((0.0, 12.0, 1.2)), 28),
+                       focus=lambda c, t: Vector((0.0, 6.0, 1.2))),
     "install": dict(kind="anim", dof=4.0, far=20.0, cam=cam_install, focus=lambda c, t: c["chassis"].location, anim=anim_install),
     "wake": dict(kind="anim", dof=4.0, far=20.0, cam=cam_wake, focus=lambda c, t: Vector((ROWS_X[1], 6 * (RACK_W + 0.02), 1.1))),
     "ripple": dict(kind="anim", dof=2.8, far=10.0, cam=cam_ripple, focus=lambda c, t: Vector((ROWS_X[1], 6 * (RACK_W + 0.02), 1.15))),

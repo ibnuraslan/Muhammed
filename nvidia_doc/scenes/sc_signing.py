@@ -12,7 +12,8 @@ import skia
 
 EXPOSURE = 0.2
 DUR = {"sign": 6.0, "transfer": 5.0}            # estimates until the chapter 1 voiceover arrives
-VARIANT_FOR = {"transfer": "transfer"}
+VARIANT_FOR = {"transfer": "transfer", "memo_pass": "memo", "memo_read": "memo"}
+DUR.update({"memo_pass": 4.5, "memo_read": 4.5})
 GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated")
 
 
@@ -36,7 +37,10 @@ def rule_page(path, W=850, H=1100):
 
 def build(variant=None):
     c = {}
-    world_sky(sun_elev_deg=18, sun_rot_deg=120, strength=0.6, tint=(0.9, 0.93, 1.0))
+    if variant == "memo":
+        world_flat((0.004, 0.005, 0.009), 1.0)
+    else:
+        world_sky(sun_elev_deg=18, sun_rot_deg=120, strength=0.6, tint=(0.9, 0.93, 1.0))
     os.makedirs(GEN, exist_ok=True)
     # room: wood panelling, carpet, tall windows on the left
     panel = ph.texture("wood_table_001", scale=1.2) if False else wood("Panel", (0.09, 0.05, 0.03), (0.2, 0.12, 0.07), scale=(0.3, 6, 6), rough=0.35, coat=0.3)
@@ -55,7 +59,7 @@ def build(variant=None):
         box("Sill", (-3.35, y, 0.5), (0.2, 1.7, 0.08), wall)
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 4.0; pt.size_y = 2.4; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (-3.45, -0.2, 1.75); po.rotation_euler = (0, math.radians(90), 0)
-    sun = bpy.data.lights.new("Sun", 'SUN'); sun.energy = 3.0; sun.angle = math.radians(1.5); sun.color = (1.0, 0.93, 0.82)
+    sun = bpy.data.lights.new("Sun", 'SUN'); sun.energy = 3.0 if variant != "memo" else 0.0; sun.angle = math.radians(1.5); sun.color = (1.0, 0.93, 0.82)
     so = bpy.data.objects.new("Sun", sun); bpy.context.collection.objects.link(so); so.rotation_euler = (math.radians(58), math.radians(-35), math.radians(80))
     box("Ceiling", (0, 0, 3.22), (8, 8, 0.04), pbr("Ceil", (0.7, 0.68, 0.64), 0.9))
     # desk (scanned), lamp, papers
@@ -93,6 +97,23 @@ def build(variant=None):
     dl = bpy.data.lights.new("DeskLamp", 'SPOT'); dl.energy = 60; dl.spot_size = math.radians(70); dl.spot_blend = 0.6; dl.color = (1.0, 0.75, 0.48)
     dlo = bpy.data.objects.new("DeskLamp", dl); bpy.context.collection.objects.link(dlo); dlo.location = (0.55, 0.65, 1.45); point_at(dlo, (0.3, 0.45, 0.8))
     fill = area_light((1.5, -2.0, 2.4), (0, 0, 0), 2.0, 40, (1.0, 0.85, 0.7)); point_at(fill, (0.2, 0.0, 1.0)); fill.visible_camera = False
+    if variant == "memo":                     # night: the room lit only by the desk lamp; a second official across the desk
+        for o in bpy.data.objects:
+            if o.name.startswith(("Fill", "Area")) and o.type == 'LIGHT':
+                o.data.energy *= 0.15
+        dl = bpy.data.objects.get("DeskLamp")
+        if dl:
+            dl.data.energy = 140
+        aide = Human("Aide", gender=1.0, years=44, muscle=0.5, weight=0.5, height=0.5, eyelashes="eyelashes01")
+        add_asset(aide, "clothes", "male_elegantsuit01", val=0.25, rough=0.55); add_asset(aide, "hair", "short02", val=0.25)
+        reset_pose(aide); pose_sit(aide, lean=12)
+        aide.arm.rotation_euler = (0, 0, 0); aide.arm.location = (0.3, 1.45, 0); bpy.context.view_layer.update()
+        w_ = np.concatenate([_world_verts(o) for o in aide.parts if o.type == 'MESH'])
+        aide.arm.location.z -= w_[:, 2].min(); bpy.context.view_layer.update()
+        manila = pbr("Manila", (0.62, 0.5, 0.3), 0.8)
+        memo = join([box("MemoFolder", (0, 0, 0), (0.24, 0.31, 0.012), manila, bevel=0.002),
+                     box("RedTab", (0.1, 0.16, 0.001), (0.05, 0.03, 0.013), pbr("RedTab", (0.6, 0.04, 0.03), 0.5))], "Memo")
+        c.update(aide=aide, memo=memo)
     # the official (or, in the transfer variant, Alice signing for the Singapore company)
     if variant == "transfer":
         from people import woman
@@ -151,6 +172,24 @@ def anim_sign(c, t):
     animate(c, t * DUR["sign"])
 
 
+def anim_memo(c, t, read=False, seconds=4.5):
+    """pass: the aide slides the red-tabbed folder across to him; read: he has it open under the lamp."""
+    sec = t * seconds
+    h = c["h"]; M = c["page"].matrix_world
+    k = 1.0 if read else ease(min(1.0, max(0.0, (sec - 0.6) / 2.0)))
+    far = Vector((0.3, 0.95, 0.795)); near = M @ Vector((0.0, 0.05, 0.0)) + Vector((0, 0, 0.012))
+    c["memo"].location = far.lerp(near, k); c["memo"].rotation_euler = (0, 0, math.radians(8 * (1 - k)))
+    c["page"].hide_render = not read
+    reach(c["aide"], "R", c["memo"].location + Vector((0.05, 0.12, 0.08)) if k < 0.98 else c["aide"].bone_head("upperarm01.R") + Vector((-0.1, -0.3, -0.4)),
+          Vector((-0.6, 0.4, -0.6)), Vector((0, -1, -0.4)))
+    fingers_curl(c["aide"], 30, thumb=15)
+    for sd, sg in (("L", 1), ("R", -1)):
+        reach(h, sd, c["memo"].location + Vector((0.12 * sg * -1, -0.12, 0.08)), Vector((-0.6 * sg, -0.4, -0.6)), Vector((0.1, 0.8, -0.6)))
+    fingers_curl(h, 35, thumb=20)
+    h.rot("neck01", (-1, 0, 0), 4); h.rot("head", (-1, 0, 0), (12 if read else 4) + 2 * math.sin(sec))
+    bpy.context.view_layer.update()
+
+
 def anim_transfer(c, t):
     sec = t * DUR["transfer"]
     animate(c, sec)
@@ -169,6 +208,12 @@ def cam_sign(c, t):
     return (loc, Vector((0.2, 0.05, 1.0)), 40)
 
 
-MOVES = {"sign": dict(kind="anim", dof=2.8, far=12.0, cam=cam_sign, focus=lambda c, t: Vector((0.25, 0.25, 1.0)), anim=anim_sign),
+MOVES = {"memo_pass": dict(kind="anim", dof=2.8, far=12.0, anim=lambda c, t: anim_memo(c, t, False, DUR["memo_pass"]),
+                       cam=lambda c, t: (Vector((-1.6, 0.75, 1.45)).lerp(Vector((-1.35, 0.7, 1.4)), ease(t)), Vector((0.25, 0.7, 0.85)), 35),
+                       focus=lambda c, t: c["memo"].location),
+         "memo_read": dict(kind="anim", dof=2.4, far=12.0, anim=lambda c, t: anim_memo(c, t, True, DUR["memo_read"]),
+                       cam=lambda c, t: (Vector((-1.2, 1.5, 1.4)).lerp(Vector((-1.0, 1.25, 1.35)), ease(t)), Vector((0.2, 0.1, 1.0)), 42),
+                       focus=lambda c, t: Vector((0.2, 0.1, 1.05))),
+         "sign": dict(kind="anim", dof=2.8, far=12.0, cam=cam_sign, focus=lambda c, t: Vector((0.25, 0.25, 1.0)), anim=anim_sign),
          "transfer": dict(kind="anim", dof=2.8, far=12.0, cam=lambda c, t: (Vector((2.3, 0.4, 1.45)).lerp(Vector((2.0, 0.5, 1.4)), ease(t)), Vector((0.25, 0.6, 0.9)), 32),
                           focus=lambda c, t: Vector((0.25, 0.5, 0.9)), anim=anim_transfer)}

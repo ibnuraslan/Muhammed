@@ -256,6 +256,22 @@ def build(variant=None):
         if o.name.startswith("Screen") and o.location.y > 0.7 and o.location.x > 4.5:
             o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(cm)
     c["mon"] = mon
+    # CH2 2B: footage still (left monitor) and a photo (right monitor); a red circle appears on the footage at frame 40
+    foot = os.path.join(paper_tex.GEN, "..", "tv_footage.png")
+    if os.path.exists(foot):
+        fm = bpy.data.materials.new("Footage"); fm.use_nodes = True
+        Nn = fm.node_tree.nodes; Ll = fm.node_tree.links; Nn.clear()
+        oo = Nn.new("ShaderNodeOutputMaterial"); tcx = Nn.new("ShaderNodeTexCoord"); im = Nn.new("ShaderNodeTexImage"); im.image = bpy.data.images.load(foot)
+        Ll.new(tcx.outputs['UV'], im.inputs['Vector'])
+        ring = Nn.new("ShaderNodeVectorMath"); ring.operation = 'DISTANCE'; ring.inputs[1].default_value = (0.66, 0.62, 0)
+        Ll.new(tcx.outputs['UV'], ring.inputs[0])
+        r1 = Nn.new("ShaderNodeMath"); r1.operation = 'COMPARE'; r1.inputs[1].default_value = 0.09; r1.inputs[2].default_value = 0.006
+        Ll.new(ring.outputs['Value'], r1.inputs[0])
+        on = Nn.new("ShaderNodeValue"); dd = on.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "1 if frame >= 40 else 0"
+        g = Nn.new("ShaderNodeMath"); g.operation = 'MULTIPLY'; Ll.new(r1.outputs[0], g.inputs[0]); Ll.new(on.outputs[0], g.inputs[1])
+        mx = Nn.new("ShaderNodeMix"); mx.data_type = 'RGBA'; Ll.new(g.outputs[0], mx.inputs['Factor']); Ll.new(im.outputs['Color'], mx.inputs[6]); mx.inputs[7].default_value = (1.0, 0.1, 0.05, 1)
+        em = Nn.new("ShaderNodeEmission"); em.inputs['Strength'].default_value = 1.4; Ll.new(mx.outputs[2], em.inputs['Color']); Ll.new(em.outputs[0], oo.inputs['Surface'])
+        c["footage_mat"] = fm
     # SET 11A: an investigator standing at the evidence wall, pinning one more page
     pinner = person("Pinner", 1.0, 39, "male_casualsuit01", "short02", hv=0.25)
     stand(pinner, (-5.35, 0.4, 0), -math.pi / 2)                  # faces -X, the wall
@@ -392,6 +408,20 @@ def cam_filing(c, t):
     return (hd + off0.lerp(off1, e), tgt, 35)     # three-quarter front: her face over the filing she is reading
 
 
+def anim_compare(c, t):
+    if not c.get("_swapped") and c.get("footage_mat"):
+        for o in bpy.data.objects:                 # the left monitor shows the footage instead of the spreadsheet
+            if o.name.startswith("Screen") and o.location.y < 0.5 and o.location.x > 4.5:
+                o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(c["footage_mat"])
+        c["_swapped"] = True
+    animate(c, t * DUR["chart"], {"lift": 0.0})
+
+
+def cam_compare(c, t):
+    e = ease(t); m = c["mon"] + Vector((0, -0.32, 0))
+    return (m + Vector((-0.95, -0.5, 0.15)).lerp(Vector((-0.8, -0.42, 0.12)), e), m, 40)
+
+
 def cam_chart(c, t):
     e = ease(t); m = c["mon"]
     return (m + Vector((-0.75, -0.7, 0.12)).lerp(Vector((-0.62, -0.6, 0.1)), e), m + Vector((0, 0.02, 0.0)), 40)      # beside the analyst, not over his head
@@ -404,6 +434,7 @@ def cam_pinning(c, t):
 
 MOVES = {
     "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location, anim=lambda c, t: anim_filing(c, t)),
+    "compare": dict(kind="anim", dof=2.8, far=10.0, cam=cam_compare, focus=lambda c, t: c["mon"] + Vector((0, -0.32, 0)), anim=anim_compare),
     "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=lambda c, t: c["mon"],
                   anim=lambda c, t: animate(c, t * DUR["chart"], {"lift": 0.0})),
     "pinning": dict(kind="anim", dof=3.2, far=20.0, cam=cam_pinning, focus=lambda c, t: Vector((-5.8, 0.42, 1.6)), anim=anim_pinning),
