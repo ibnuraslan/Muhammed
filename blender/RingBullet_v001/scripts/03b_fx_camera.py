@@ -112,8 +112,9 @@ TA = nick_pos(LODGE)
 NM = O["NeckMark"]; at(GRAZE); TB = wpos(NM); TBN = (NM.matrix_world.to_3x3() @ Vector((0, 1, 0))).normalized()
 at(SPLIT); P_S = bul.matrix_world.translation.copy()
 pa = catmull([(SPLIT, P_S), (SPLIT + 60, P_S.lerp(TA, 0.3) + GL * 0.012 - DIR * 0.01), (LODGE, TA)])
+WALL_HIT = Vector((0.532, 1.5, 1.92))   # bookshelf side panel, open upper-left of frame at f1016 (picked by ray cast)   # hits the bookshelf front (books), behind his head as framed
 pbk = [(SPLIT, P_S), (SPLIT + 90, P_S.lerp(TB, 0.35) - GL * 0.02 - DIR * 0.03), (GRAZE - 4, TB + TBN * 0.006 - DIR * 0.01), (GRAZE, TB + TBN * 0.002),
-       (GRAZE + 4, TB + TBN * 0.004 + DIR * 0.03), (GRAZE + 30, TB + DIR * 1.6 + Vector((-0.4, 0, -0.3)))]
+       (GRAZE + 4, TB + TBN * 0.004 + DIR * 0.03), (GRAZE + 5, TB.lerp(WALL_HIT, 0.55)), (GRAZE + 9, WALL_HIT)]
 pb_ = catmull(pbk)
 for o in (fa, fb): o.rotation_mode = 'XYZ'; hide(o, 1, True); hide(o, SPLIT, False)
 for f in range(SPLIT, LODGE + 1, 2):
@@ -121,10 +122,40 @@ for f in range(SPLIT, LODGE + 1, 2):
 for f in range(LODGE + 2, SWAP + 1, 4):
     fa.location = nick_pos(f); key(fa, "location", f)
 hide(fa, SWAP, True)
-for f in range(SPLIT, GRAZE + 31, 2):
+for f in range(SPLIT, GRAZE + 10, 1):
     fb.location = pb_(f); key(fb, "location", f); key(fb, "rotation_euler", f, Euler((f * 0.06, 0, f * 0.04)))
-hide(fb, GRAZE + 32, True)
+hide(fb, GRAZE + 10, True)
 const_hide(fa); const_hide(fb); const_hide(bul)
+
+# ---------------------------------------------------------------- wall hit: dust puff + wood chips (real time after the slow motion)
+WH = GRAZE + 9
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1); puff = bpy.context.active_object; puff.name = "WallDustPuff"
+mpf = bpy.data.materials["M_Smoke"].copy(); mpf.name = "M_WallDust"
+mpf.node_tree.nodes["Principled Volume"].inputs['Color'].default_value = (0.85, 0.76, 0.64, 1)
+puff.data.materials.append(mpf); fxc = bpy.data.collections["FX"]
+for c_ in list(puff.users_collection): c_.objects.unlink(puff)
+fxc.objects.link(puff)
+pd = mpf.node_tree.nodes["SmokeDensity"].inputs[1]
+hide(puff, 1, True); hide(puff, WH, False); hide(puff, WH + 150, True); const_hide(puff)
+for f, sc_, dv, off in ((WH, 0.01, 60, 0.0), (WH + 4, 0.06, 45, 0.04), (WH + 20, 0.11, 25, 0.08), (WH + 90, 0.15, 6, 0.11), (WH + 150, 0.18, 0.0, 0.13)):
+    puff.location = WALL_HIT + Vector((-off, -off * 0.3, -off * 0.2)); key(puff, "location", f); key(puff, "scale", f, (sc_, sc_ * 0.7, sc_))
+    pd.default_value = dv; pd.keyframe_insert("default_value", frame=f)
+M_CHIP = bpy.data.materials["M_DeskWood"] if "M_DeskWood" in bpy.data.materials else bpy.data.materials["M_Trim"]
+for i in range(14):
+    bpy.ops.mesh.primitive_cube_add(size=1); ch = bpy.context.active_object; ch.name = "WallChip%02d" % i
+    ch.scale = (rnd.uniform(0.003, 0.009), rnd.uniform(0.001, 0.003), rnd.uniform(0.002, 0.006)); ch.data.materials.append(M_CHIP)
+    for c_ in list(ch.users_collection): c_.objects.unlink(ch)
+    fxc.objects.link(ch); ch.rotation_mode = 'XYZ'
+    v = Vector((rnd.uniform(-1.8, -0.8), rnd.uniform(-0.8, 0.5), rnd.uniform(-0.2, 1.0))) * rnd.uniform(0.6, 1.3)
+    hide(ch, 1, True); hide(ch, WH, False); const_hide(ch)
+    for f in range(WH, WH + 61, 3):
+        t = (f - WH) / 60.0; pz = WALL_HIT + v * t + Vector((0, 0, -4.9 * t * t))
+        if pz.z < 0.004: pz.z = 0.004
+        ch.location = pz; key(ch, "location", f); key(ch, "rotation_euler", f, Euler((t * 30 + i, t * 20, t * 11)))
+lwd = bpy.data.lights.new("L_WallHit", 'POINT'); lwd.shadow_soft_size = 0.05; lwd.color = (1.0, 0.8, 0.6)
+lwo = bpy.data.objects.new("L_WallHit", lwd); bpy.data.collections["Lights"].objects.link(lwo); lwo.location = WALL_HIT + Vector((-0.15, -0.05, 0.05)); lwo.visible_camera = False
+for f, e in ((1, 0), (WH - 1, 0), (WH + 1, 6), (WH + 10, 2.5), (WH + 40, 1.0), (WH + 90, 0)):
+    lwd.energy = e; lwd.keyframe_insert("energy", frame=f)
 
 # ---------------------------------------------------------------- sparks (impact burst + split burst), slow motion ballistic in world time
 sparks = sorted([o for o in O if o.name.startswith("Spark")], key=lambda o: o.name)
@@ -268,6 +299,12 @@ for f in range(1, 1411):
     if f in range(IMPACT, IMPACT + 18):   # impact shake
         a_ = (IMPACT + 18 - f) / 18.0; p = p + Vector((math.sin(f * 2.1), math.cos(f * 2.9), math.sin(f * 3.7))) * 0.0025 * a_
     q = (t - p).to_track_quat('-Z', 'Y')
+    amp = 0.10
+    for f0_, a0_, d0_ in ((FIRE, 0.9, 22), (IMPACT, 0.6, 30), (SPLIT, 0.25, 20), (GRAZE + 9, 0.35, 18), (SWAP - 4, 0.2, 16)):
+        if f0_ <= f < f0_ + d0_: amp += a0_ * (1 - (f - f0_) / d0_) ** 2
+    jx = math.sin(f * 0.21) * 0.6 + math.sin(f * 0.53 + 1.3) * 0.3 + math.sin(f * 1.37 + 0.4) * 0.1
+    jy = math.sin(f * 0.17 + 2.1) * 0.6 + math.sin(f * 0.61 + 0.2) * 0.3 + math.sin(f * 1.21 + 2.7) * 0.1
+    q = q @ Euler((math.radians(amp * jx), math.radians(amp * jy), 0)).to_quaternion()
     if prev is not None and prev.dot(q) < 0: q = -q
     prev = q
     cam.location = p; cam.keyframe_insert("location", frame=f)
