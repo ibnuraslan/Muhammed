@@ -40,7 +40,7 @@ def build(variant=None):
     rng = np.random.default_rng(56)
     world_flat((0.05, 0.06, 0.07), 1.0)
     box("Floor", (0, 0, -0.01), (40, 20, 0.02), ph.texture("concrete_floor_painted", scale=0.3, name="PlantFloor", tint=(0.62, 0.66, 0.6)))
-    wall = ph.texture("painted_concrete", scale=0.3, name="PlantWall", tint=(0.8, 0.8, 0.76))
+    wall = ph.texture("painted_plaster_wall", scale=0.4, name="PlantWall", tint=(0.78, 0.76, 0.7))
     box("WallBack", (0, 8.0, 3.5), (40, 0.2, 7), wall)
     box("WallL", (-20, 0, 3.5), (0.2, 20, 7), wall)
     for k in range(8):

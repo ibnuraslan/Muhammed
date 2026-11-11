@@ -362,7 +362,7 @@ def animate(c, sec, shot):
     for k, tw in enumerate(c["pair"]):
         bar, lid = tw["bar"], tw["bar_lid"]
         out_ = shot in ("pair", "barlid", "bars")
-        base = Vector((0, T.BAR_Y - 0.13, -0.017 + 0.009)) if out_ else Vector((0, T.BAR_Y, T.BAR_Z))
+        base = Vector((0, T.BAR_Y - 0.13, 0.009)) if out_ else Vector((0, T.BAR_Y, T.BAR_Z))
         bar.location = base
         for o in tw["bug_parts"]:
             if not hasattr(o, "_rest"):

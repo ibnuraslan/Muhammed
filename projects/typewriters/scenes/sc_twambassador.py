@@ -127,12 +127,12 @@ def build(variant=None):
             ph.model("jug_01", loc=(x, TALK.y, 0.96), scale=0.8)
     elif oval:                                   # a Washington office: the desk in front of the window, the figure backlit
         fill.data.energy = 14
-        ph.model("dining_table", loc=OVAL_DESK, rot_z=0.0, scale=0.85)
+        ph.model("painted_wooden_table", loc=OVAL_DESK, rot_z=0.0, scale=0.78)
         ph.model("ArmChair_01", loc=(0.3, 0.6, 0.0), rot_z=0.4)
         ph.model("Sofa_01", loc=(1.6, -1.6, 0.0), rot_z=math.pi / 2) if False else None
         ph.model("vintage_suitcase", loc=(OVAL_DESK.x + 0.45, OVAL_DESK.y - 0.15, 0.74), rot_z=0.1, scale=0.32)
     else:
-        ph.model("dining_table", loc=(0.3, 1.0, 0.0), rot_z=0.0, scale=0.85)          # partner desk
+        ph.model("painted_wooden_table", loc=(0.3, 1.0, 0.0), rot_z=0.0, scale=0.78)          # partner desk
         ph.model("ArmChair_01", loc=(0.3, 1.75, 0.0), rot_z=math.pi)
     for x in (-0.4, 1.0):
         ph.model("GreenChair_01", loc=(x, -0.2, 0.0), rot_z=math.radians(10 if x > 0 else -10))
@@ -341,7 +341,7 @@ def cam_sign(c, t):
 
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
-    return (d + Vector((2.0, -1.7, 1.5)).lerp(Vector((1.75, -1.45, 1.45)), e), d + Vector((0.5, -0.2, 0.95)), 35)
+    return (d + Vector((2.9, -2.6, 1.55)).lerp(Vector((2.6, -2.3, 1.5)), e), d + Vector((0.45, -0.2, 0.95)), 32)
 
 
 def cam_talks_wide(c, t):

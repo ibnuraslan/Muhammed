@@ -409,12 +409,12 @@ def anim(shot):
 
 def cam_wrap(c, t):
     e = ease(t)
-    return (WORK + Vector((-2.6, -3.0, 1.75)).lerp(Vector((-2.2, -2.6, 1.7)), e), WORK + Vector((0.3, 0.6, 0.9)), 30)
+    return (WORK + Vector((-3.2, -3.4, 1.8)).lerp(Vector((-2.8, -3.0, 1.75)), e), WORK + Vector((0.2, 0.3, 0.9)), 28)
 
 
 def cam_seal(c, t):
     e = ease(t)
-    return (WORK + Vector((1.5, -2.1, 1.45)).lerp(Vector((1.3, -1.85, 1.42)), e), WORK + Vector((0.0, -0.4, 0.85)), 35)
+    return (WORK + Vector((2.3, -2.9, 1.55)).lerp(Vector((2.05, -2.6, 1.5)), e), WORK + Vector((-0.1, -0.45, 0.9)), 32)
 
 
 def cam_sensor(c, t):
