@@ -2,7 +2,7 @@
 
 This is the full 38.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `LegoInNose_v003_60fps.blend`: the self-contained scene, with every texture packed inside (48 MB). It's a normal git file, with no LFS.
+- `LegoInNose_v003_60fps.blend`: the self-contained scene, with every texture packed inside (56 MB). It's a normal git file, with no LFS.
 - `beats.json`: start frame and first words for each of the 11 beats (target timing). Use it with `blender/pipeline/retime_to_vo.py` once the voiceover exists.
 - `SETTINGS.md`: render settings and suggested test frames.
 - `CREDITS.md`: the CC-BY credit block for the video description (one model: the sleeping cat), plus provenance for the CC0 assets.
@@ -17,9 +17,12 @@ This is the full 38.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. N
 The tunnel visibility windows and the teleports are keyframes too, so they warp along with everything else.
 
 ## What changed since v002 (director's notes on C)
-- **Cross-sections:**
-  - Real-tissue shaders on every anatomy inlay: wet mucosa with SSS and a clear coat, porous bone, folded brain, pearly cartilage, fibrous muscle on the cut face.
-  - Rounded edges on the inlays, a darker teal-to-navy backdrop, a lower-key studio light, and both bricks glowing faintly.
+- **Cross-sections use real anatomy, not drawn shapes.**
+  - A scanned human skull (CC-BY) and a CT-style nasal-cavity/sinus cast (CC-BY) are fitted into the boy's head and cut on the same sagittal plane. Cut faces are shaded as cut bone and as the cavity interior.
+  - The brain and tongue are displaced solids with gyri and papillae, not flat slabs.
+  - Materials: wet mucosa (SSS and a clear coat), porous bone, fibrous cut muscle.
+  - The backdrop is darker teal-to-navy and the studio light is lower-key.
+  - The bricks sit inside the nasal cavity. The hidden yellow one glows softly.
 - **Tunnel entries:**
   - Nostril-hair strands and wet, veined mucosa.
   - Each tunnel pass is about 0.4 s. At most about 3 flat frames appear where the camera crosses skin or the studio wall.
@@ -53,7 +56,7 @@ There is one camera, `CAM_Film`, on a Catmull-Rom path through about 74 framing 
 - **Mom's walk-in (14.6–15.8 s):** the audit flags 5–9 cm foot heights. These are swing-phase lifts of a fast walk, not hovering plants. Her kneel is approximate, with knees near the rug but not measured.
 - **31.1 s:** the Man in bed is cut off at the left edge of frame for about 4 frames before he is moved to the shower.
 - **Facial acting** uses MakeHuman expression shape keys (smile, open mouth, brows, squint, nostril flare) plus jaw, head and body. The eyebrows and eyelashes don't follow the brow shapes exactly.
-- **Cross-section anatomy** is a clean explainer illustration on the real cut head (skin, cut surface, skull, brain, airway, turbinates, palate, tongue, spine), not a medical-grade model.
+- **Cross-section anatomy:** the skull is an adult scan scaled into a 7-year-old head. The brain and tongue are procedural. It's realistic, but not a medical-grade child model.
 - **Hair at review samples (8)** looks speckled. At the farm's 48 samples it resolves.
 - **Shower modesty** relies on frosted glass (up to 1.42 m) and framing. There are no swim shorts, because MakeHuman has no shorts asset; nothing below the chest is ever seen sharply.
 - **Brick in the palm (35.6–38.5 s):** the brick follows the palm centre within 2.5 cm and rests on the palm; it isn't gripped.

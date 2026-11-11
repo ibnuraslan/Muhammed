@@ -4,11 +4,14 @@
 Paste this block into the video description:
 
 ```
-3D model (CC BY 4.0, via Sketchfab): "Sleeping Cat On The Bed 1 - 3D scan" by Alben Tan
+3D models (CC BY 4.0, via Sketchfab): "Sleeping Cat On The Bed 1 - 3D scan" by Alben Tan ·
+"Human Male Skull" by Ruslan Gadzhiev · "Nasal Cavities // Paranasa Sinuses" by Luke Ledbetter
 ```
 
 | Asset | Author | Licence | Source |
 |---|---|---|---|
+| Human Male Skull (cross-section bone, cut sagittally and scaled into the boy's head) | Ruslan Gadzhiev | CC BY 4.0 | https://sketchfab.com/3d-models/f1eaaef50e5845c796d6834fd1b702e5 (via Objaverse) |
+| Nasal Cavities // Paranasa Sinuses (cross-section airway, cut sagittally) | Luke Ledbetter | CC BY 4.0 | https://sketchfab.com/3d-models/88e6d4f2c0514f9c9ab87315e4bfedc3 (via Objaverse) |
 | Sleeping Cat On The Bed 1 - 3D scan (cat on the sofa) | Alben Tan | CC BY 4.0 | https://sketchfab.com/3d-models/ae07a741be6944e8ba5e2657069d3aaf (via Objaverse, allenai/objaverse on Hugging Face) |
 
 ## CC0 assets (no attribution required; listed for provenance)

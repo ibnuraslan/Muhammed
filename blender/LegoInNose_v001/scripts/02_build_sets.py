@@ -480,28 +480,79 @@ M_CART = tissue("M_XS_Cartilage", (0.7, 0.74, 0.78), (0.9, 0.9, 0.93), rough=0.2
 brain_pts = [P(0.30, 0.62), P(0.33, 0.80), P(0.45, 0.93), P(0.62, 0.96), P(0.80, 0.88), P(0.90, 0.70), P(0.86, 0.52), P(0.70, 0.46), P(0.52, 0.48), P(0.38, 0.52)]
 skull_pts = [P(0.26, 0.60), P(0.29, 0.83), P(0.43, 0.97), P(0.62, 1.0), P(0.83, 0.92), P(0.95, 0.70), P(0.92, 0.45), P(0.86, 0.38),
              P(0.70, 0.40), P(0.52, 0.42), P(0.40, 0.45), P(0.32, 0.47)]
-inlay("XS_Skull", skull_pts, M_BONE, off=0.0004)
-inlay("XS_Brain", brain_pts, M_BRAIN, off=0.0)
-# airway: from the nostril up and back to the throat
-air = [P(0.02, 0.32), P(0.06, 0.40), P(0.16, 0.50), P(0.30, 0.50), P(0.48, 0.44), P(0.60, 0.40), P(0.64, 0.30), P(0.66, 0.10), P(0.60, 0.06),
-       P(0.58, 0.26), P(0.50, 0.32), P(0.32, 0.34), P(0.16, 0.33), P(0.08, 0.28)]
-inlay("XS_Airway", air, M_AIR, off=0.0008)
-inlay("XS_AirwayLining", air, M_MUC, off=0.0012, depth=0.003, bevel=0.0015)
-bpy.data.objects["XS_AirwayLining"].data.fill_mode = "NONE"
-for i, (u0, v0, wl, hl) in enumerate(((0.22, 0.47, 0.18, 0.025), (0.24, 0.42, 0.22, 0.028), (0.26, 0.37, 0.24, 0.025))):
-    tp = [P(u0, v0), P(u0 + wl * 0.5, v0 + hl * 0.6), P(u0 + wl, v0), P(u0 + wl * 0.5, v0 - hl * 0.6)]
-    inlay("XS_Turbinate%d" % i, tp, M_MUC, off=0.0004)
-# frontal sinus (dark pocket above the nose) and sphenoid sinus
-inlay("XS_FrontalSinus", [P(0.18, 0.60), P(0.22, 0.66), P(0.27, 0.62), P(0.23, 0.57)], M_AIR, off=0.0006)
-inlay("XS_SphenoidSinus", [P(0.46, 0.50), P(0.52, 0.53), P(0.56, 0.49), P(0.51, 0.46)], M_AIR, off=0.0006)
-# hard palate + tongue + nose cartilage + spine
-inlay("XS_Palate", [P(0.08, 0.28), P(0.35, 0.29), P(0.52, 0.27), P(0.50, 0.245), P(0.30, 0.255), P(0.10, 0.25)], M_BONE, off=0.0004)
-inlay("XS_Tongue", [P(0.18, 0.22), P(0.30, 0.245), P(0.46, 0.23), P(0.55, 0.15), P(0.50, 0.04), P(0.30, 0.06), P(0.17, 0.14)], M_TONGUE, off=0.0004)
-inlay("XS_NoseCartilage", [P(-0.02, 0.36), P(0.03, 0.47), P(0.10, 0.56), P(0.13, 0.52), P(0.06, 0.42), P(0.02, 0.33)], M_CART, off=0.0003)
-for i in range(4):
-    v0 = 0.36 - i * 0.11
-    inlay("XS_Vertebra%d" % i, [P(0.70, v0), P(0.82, v0 + 0.01), P(0.82, v0 - 0.08), P(0.70, v0 - 0.085)], M_BONE, off=0.0004)
-inlay("XS_Jaw", [P(0.05, 0.13), P(0.12, 0.20), P(0.16, 0.12), P(0.15, 0.0), P(0.06, 0.0)], M_BONE, off=0.0004)
+def organ(name, ctr_uv, rad, mat, cut_col, tex_type="STUCCI", tsize=0.01, strength=0.004, rot_x=0.0, gyri=False):
+    """displaced organic solid (not a slab): ellipsoid + procedural displacement, applied, then cut on the sagittal plane"""
+    y_, z_ = P(*ctr_uv)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=96, ring_count=48, radius=1.0, location=(XCUT + rad[0] * 0.35, y_, z_))
+    o = bpy.context.active_object; o.name = name; o.scale = rad; o.rotation_euler = (R_(rot_x), 0, 0)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    sb = o.modifiers.new("sub", "SUBSURF"); sb.levels = 2
+    tx = bpy.data.textures.new(name + "_Tex", tex_type); tx.noise_scale = tsize
+    if gyri: tx.noise_basis = "VORONOI_F2"; tx.turbulence = 8.0
+    dm = o.modifiers.new("dsp", "DISPLACE"); dm.texture = tx; dm.strength = strength; dm.texture_coords = "GLOBAL"
+    sm = o.modifiers.new("sm", "SMOOTH"); sm.iterations = 2; sm.factor = 0.4
+    dg2 = bpy.context.evaluated_depsgraph_get(); me3 = bpy.data.meshes.new_from_object(o.evaluated_get(dg2))
+    o.modifiers.clear(); old = o.data; o.data = me3; bpy.data.meshes.remove(old)
+    cut_keep_left(me3)
+    for p_ in me3.polygons: p_.use_smooth = True
+    me3.materials.clear(); me3.materials.append(two_sided(name + "_M", mat, cut_col, 0.5))
+    link(o, STUDIO); o.matrix_world = XSM @ o.matrix_world
+    return o
+# --- real anatomy: a scanned human skull and a CT-style nasal cavity / paranasal sinus cast (CC-BY, see CREDITS.md),
+#     fitted into the boy's head, cut on the same sagittal plane, shaded as wet mucosa / porous bone with cut faces.
+def import_glb_mesh(path, name):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=path)
+    new = [o for o in bpy.data.objects if o not in before]
+    meshes = [o for o in new if o.type == "MESH"]
+    bpy.context.view_layer.update()
+    bm2 = bmesh.new()
+    for o in meshes:
+        me2 = o.data.copy(); me2.transform(o.matrix_world); bm2.from_mesh(me2); bpy.data.meshes.remove(me2)
+    for o in new: bpy.data.objects.remove(o, do_unlink=True)
+    me2 = bpy.data.meshes.new(name); bm2.to_mesh(me2); bm2.free()
+    return me2
+def fit(me2, y0, y1, z_top=None, z_bot=None, x_c=0.0):
+    vs2 = [v.co for v in me2.vertices]
+    lo = Vector([min(v[i] for v in vs2) for i in range(3)]); hi = Vector([max(v[i] for v in vs2) for i in range(3)])
+    s2 = (y1 - y0) / (hi.y - lo.y)
+    tz = (z_top - hi.z * s2) if z_top is not None else (z_bot - lo.z * s2)
+    me2.transform(Matrix.Translation(Vector((x_c - (lo.x + hi.x) / 2 * s2, y0 - lo.y * s2, tz))) @ Matrix.Scale(s2, 4))
+    return s2
+def cut_keep_left(me2):
+    bm2 = bmesh.new(); bm2.from_mesh(me2)
+    bmesh.ops.bisect_plane(bm2, geom=bm2.verts[:] + bm2.edges[:] + bm2.faces[:], plane_co=(XCUT, 0, 0), plane_no=(-1, 0, 0), clear_outer=True)
+    bm2.to_mesh(me2); bm2.free()
+def two_sided(name, front, back_col, back_rough=0.45):
+    m = front.copy(); m.name = name; nt_ = m.node_tree; N_ = nt_.nodes; L2 = nt_.links
+    outn = N_["Material Output"]; src_ = outn.inputs["Surface"].links[0].from_socket
+    bb = N_.new("ShaderNodeBsdfPrincipled"); bb.inputs["Base Color"].default_value = (*back_col, 1); bb.inputs["Roughness"].default_value = back_rough
+    nzb = N_.new("ShaderNodeTexNoise"); nzb.inputs["Scale"].default_value = 2500; bpb = N_.new("ShaderNodeBump"); bpb.inputs["Strength"].default_value = 0.5
+    L2.new(nzb.outputs[0], bpb.inputs["Height"]); L2.new(bpb.outputs[0], bb.inputs["Normal"])
+    g_ = N_.new("ShaderNodeNewGeometry"); mx_ = N_.new("ShaderNodeMixShader")
+    L2.new(g_.outputs["Backfacing"], mx_.inputs[0]); L2.new(src_, mx_.inputs[1]); L2.new(bb.outputs[0], mx_.inputs[2]); L2.new(mx_.outputs[0], outn.inputs["Surface"])
+    return m
+ANAT = os.path.join(AS, "anat")
+sk_me = import_glb_mesh(os.path.join(ANAT, "skull.glb"), "XS_RealSkull")
+
+sk_s = fit(sk_me, ny + 0.02, hy_back - 0.007, z_top=top - 0.007)
+cut_keep_left(sk_me)
+sk = bpy.data.objects.new("XS_RealSkull", sk_me); STUDIO.objects.link(sk); sk.matrix_world = XSM
+for p_ in sk_me.polygons: p_.use_smooth = True
+sk_me.materials.append(two_sided("M_XS_SkullCut", M_BONE, (0.86, 0.74, 0.55), 0.7))
+si_me = import_glb_mesh(os.path.join(ANAT, "sinus.glb"), "XS_RealSinus")
+vs_s = [v.co for v in si_me.vertices]; dep = max(v.y for v in vs_s) - min(v.y for v in vs_s)
+sk_depth = (hy_back - 0.007) - (ny + 0.02)
+si_depth = sk_depth * 0.62
+fit(si_me, ny + 0.003, ny + 0.003 + si_depth, z_bot=nz - 0.02)
+cut_keep_left(si_me)
+si = bpy.data.objects.new("XS_RealSinus", si_me); STUDIO.objects.link(si); si.matrix_world = XSM
+for p_ in si_me.polygons: p_.use_smooth = True
+si_me.materials.append(two_sided("M_XS_SinusCut", M_MUC, (0.16, 0.02, 0.03), 0.25))
+# brain with gyri (cut face shows grey/white matter), tongue with papillae, alar cartilage: displaced solids
+organ("XS_Brain", (0.6, 0.73), (0.06, 0.29 * L_, 0.23 * Hh), M_BRAIN, (0.52, 0.38, 0.4), "STUCCI", 0.006, 0.006, gyri=True)
+organ("XS_Tongue", (0.36, 0.13), (0.022, 0.17 * L_, 0.08 * Hh), M_TONGUE, (0.62, 0.16, 0.18), "STUCCI", 0.002, 0.0015, rot_x=-12)
+print("REALANAT skull", len(sk_me.vertices), "sinus", len(si_me.vertices), "scale", round(sk_s, 5))
 # cross-section bricks (same bricks, x6)
 for src, nm in ((big, "XS_Brick_Big"), (small, "XS_Brick_Small")):
     o = src.copy(); o.data = src.data; o.name = nm; STUDIO.objects.link(o); o.scale = (XS,) * 3

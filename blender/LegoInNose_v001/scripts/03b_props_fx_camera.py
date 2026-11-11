@@ -165,34 +165,35 @@ for i in range(16):
 XSB, XSS = bpy.data.objects["XS_Brick_Big"], bpy.data.objects["XS_Brick_Small"]
 ny_, zc_, L__, Hh_, XC_ = sc["XS_P"]
 def Prest(u, v, dx=0.002): return V(XC_ + dx, ny_ + u * L__, zc_ + v * Hh_)
-def xsM(u, v, ang, dx=-0.004):
+def xsM(u, v, ang, dx=-0.001):
     return XSM @ Matrix.Translation(Prest(u, v, dx)) @ Matrix.Rotation(R_(ang), 4, "X") @ Matrix.Rotation(R_(90), 4, "Y")
-for o, keys in ((XSB, ((740, 0.06, 0.34, -40), (800, 0.07, 0.355, -45), (840, 0.10, 0.38, -50), (860, 0.11, 0.385, -52))),
-                (XSS, ((740, 0.02, 0.32, -35), (770, 0.05, 0.34, -40), (800, 0.12, 0.39, -50), (840, 0.17, 0.43, -58), (870, 0.18, 0.44, -60),
-                       (1130, 0.19, 0.455, -62), (1320, 0.19, 0.455, -62)))):
+for o, keys in ((XSB, ((740, 0.10, 0.40, -40), (800, 0.12, 0.41, -45), (840, 0.15, 0.43, -50), (860, 0.16, 0.435, -52))),
+                (XSS, ((740, 0.07, 0.385, -35), (770, 0.10, 0.40, -40), (800, 0.16, 0.44, -50), (840, 0.21, 0.47, -58), (870, 0.22, 0.48, -60),
+                       (1130, 0.20, 0.465, -62), (1320, 0.20, 0.465, -62)))):
     for f, u, v, a in keys:
-        key_obj(o, f, xsM(u, v, a), scale=XS)
+        key_obj(o, f, xsM(u, v, a, dx=(-0.011 if f >= 1130 else -0.001)), scale=XS)
 key_obj(XSB, 1130, xsM(0.4, 0.2, 0, dx=-1.0), scale=0.01)    # gone (pulled out) when we return
 const_at(XSB, {860})
 # both cross-section bricks glow a little for readability (own object-level materials)
-for o_, col_ in ((XSB, (0.85, 0.06, 0.04)), (XSS, (1.0, 0.75, 0.1))):
+for o_, col_ in ((XSB, (0.7, 0.03, 0.02)), (XSS, (0.85, 0.42, 0.01))):
     mg = flat("M_XSGlow_" + o_.name, col_, 0.15, emit=col_, es=0.6, coat=0.8)
     o_.material_slots[0].link = "OBJECT"; o_.material_slots[0].material = mg
 gnode = bpy.data.materials["M_XSGlow_XS_Brick_Small"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
-for f, e in ((1, 0.6), (1150, 0.6), (1185, 3.0), (1250, 4.5), (1320, 3.0)):
+for f, e in ((1, 0.3), (1150, 0.3), (1185, 0.6), (1250, 0.9), (1320, 0.6)):
     gnode.default_value = e; gnode.keyframe_insert("default_value", frame=f)
 MB_YEL = bpy.data.materials["M_Brick_Yellow"]   # glow keyed on the shared material: only visible in the studio (room brick hidden then)
 eo = MB_YEL.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f, e in ((1, 0), (1150, 0), (1185, 2.5), (1250, 4.0), (1320, 3.0), (1345, 0)):
     eo.default_value = e; eo.keyframe_insert("default_value", frame=f)
 glow = bpy.data.objects.new("FX_BrickGlow", bpy.data.lights.new("FX_BrickGlow", "POINT")); PR.objects.link(glow)
-glow.location = xsM(0.19, 0.455, -62, dx=-0.004).translation; glow.data.color = (1.0, 0.8, 0.3); glow.data.shadow_soft_size = 0.05
-for f, e in ((1, 0), (1150, 0), (1185, 12), (1320, 12), (1345, 0)):
+glow.location = xsM(0.20, 0.48, -62, dx=-0.035).translation; glow.data.color = (1.0, 0.8, 0.3); glow.data.shadow_soft_size = 0.05
+for f, e in ((1, 0), (1150, 0), (1185, 1.5), (1320, 1.5), (1345, 0)):
     glow.data.energy = e; glow.data.keyframe_insert("energy", frame=f)
 # mucosa 'breathing' in the studio: the airway lining pulses
-lin = bpy.data.objects["XS_AirwayLining"]
-for f in range(740, 1340, 30):
-    lin.data.bevel_depth = 0.0015 * (1.0 + 0.25 * math.sin(f * 0.21)); lin.data.keyframe_insert("bevel_depth", frame=f)
+lin = bpy.data.objects.get("XS_RealSinus")
+if lin:   # mucosa 'breathing': a tiny pulse in scale around its centre
+    for f in range(740, 1340, 30):
+        lin.scale = (1.0, 1.0 + 0.006 * math.sin(f * 0.21), 1.0 + 0.006 * math.sin(f * 0.21)); lin.keyframe_insert("scale", frame=f)
 
 # --- time-lapse props: gamepad in the teen's hands, laptop on the man's thighs; the toys are gone after childhood
 gp = bpy.data.objects["Prop_Gamepad"]
@@ -364,8 +365,8 @@ def nose_of(c, f, side=1.0):
 def pinch_of(c, s, f): ev(f); return c.pinch(s)
 SCW = Vector((0.0, 0.0, -7.0))
 XS_C = XSM @ Prest(0.3, 0.5, 0)
-XS_AIR = XSM @ Prest(0.12, 0.39, 0)
-XS_HI = XSM @ Prest(0.19, 0.455, 0)
+XS_AIR = XSM @ Prest(0.15, 0.43, 0)
+XS_HI = XSM @ Prest(0.20, 0.465, 0)
 K = []   # (frame, cam, aim, lens)
 def k(f, cam, aim, lens): K.append((f, Vector(cam), Vector(aim), float(lens)))
 # beat 1
