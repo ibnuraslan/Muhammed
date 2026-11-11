@@ -13,18 +13,32 @@ f380 head-to-neck offset 0.3 mm
 f700 head-to-neck offset 0.3 mm
 f1000 head-to-neck offset 0.6 mm
 f1210 head-to-neck offset 0.1 mm
-Surgeon ankle z range L 0.074..0.161  R 0.074..0.160; max planted slide per 4f L 10.8 cm R 4.9 cm
-Nurse ankle z range L 0.062..0.132  R 0.062..0.132; max planted slide per 4f L 14.1 cm R 12.4 cm
-f262 surgeon L fingertip to head surface 3.6 cm
-f262 surgeon R fingertip to head surface 0.7 cm
-f300 surgeon L fingertip to head surface 0.9 cm
-f300 surgeon R fingertip to head surface 0.7 cm
-f340 surgeon L fingertip to head surface 3.6 cm
-f340 surgeon R fingertip to head surface 0.7 cm
-f370 surgeon L fingertip to head surface 3.6 cm
-f370 surgeon R fingertip to head surface 0.6 cm
+Surgeon ankle z range L 0.074..0.160  R 0.074..0.155; max planted slide per 4f L 10.8 cm R 4.9 cm
+Nurse ankle z range L 0.062..0.132  R 0.062..0.132; max planted slide per 4f L 26.0 cm R 20.4 cm
+f262 surgeon L fingertip to head surface 0.7 cm
+f262 surgeon R fingertip to head surface 5.8 cm
+f300 surgeon L fingertip to head surface 3.1 cm
+f300 surgeon R fingertip to head surface 7.7 cm
+f340 surgeon L fingertip to head surface 0.7 cm
+f340 surgeon R fingertip to head surface 5.8 cm
+f370 surgeon L fingertip to head surface 0.7 cm
+f370 surgeon R fingertip to head surface 6.0 cm
 f945 bowl lowest z +0.0286
 f960 bowl lowest z -0.0000
 f1000 bowl lowest z -0.0000
 camera frames flagged: 0 of 354
 cameras ['CAM_Film'] markers 0
+f100 penetrations: Surgeon.body->MK_Head:3, Surgeon.body->MK_BodyA:12
+f230 penetrations: none
+f262 penetrations: Surgeon.body->MK_Head:10
+f300 penetrations: none
+f340 penetrations: Surgeon.body->MK_Head:26
+f372 penetrations: Surgeon.body->MK_Head:13, Nurse_Gown->Anaes_Gown:3
+f450 penetrations: Nurse_Gown->Anaes_Gown:2
+f560 penetrations: Surgeon.body->MK_Head:5, Surgeon.body->MK_BodyB:2, MK_Head->Surgeon.body:1
+f900 penetrations: none
+f1250 penetrations: Surgeon_Gown->MK_BodyB:4
+f1300 penetrations: Surgeon_Gown->MK_BodyB:4
+f1500 penetrations: none
+f1700 penetrations: none
+PENETRATION TOTAL (sampled verts inside other meshes, 13 frames): 85

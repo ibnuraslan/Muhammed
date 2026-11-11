@@ -136,9 +136,14 @@ M_cyanglow = mat("M_CyanGlow", (0, 0, 0, 1), 1.0, emit=(0.45, 0.85, 1.0, 1), est
 M_lampin = mat("M_LampLens", (1, 1, 1, 1), 0.2, emit=(1.0, 0.95, 0.85, 1), estr=30.0)
 M_rubber = mat("M_Rubber", (0.03, 0.03, 0.03, 1), 0.7)
 M_wood = mat("M_WoodDark", (0.22, 0.12, 0.06, 1), 0.45)
-M_glove = mat("M_Glove", (0.86, 0.80, 0.66, 1), 0.35)
-M_glove.node_tree.nodes["Principled BSDF"].inputs["Subsurface Weight"].default_value = 0.2
-M_cap = pbr("M_CapGreen", "cotton_jersey", 0.05, tint=(0.40, 0.62, 0.55, 1), sat=0.0, val=0.95, bump=0.6)
+M_glove = mat("M_Glove", (0.80, 0.76, 0.62, 1), 0.28, coat=0.6)
+_g = M_glove.node_tree; _gp = _g.nodes["Principled BSDF"]
+_gp.inputs["Subsurface Weight"].default_value = 0.25; _gp.inputs["Subsurface Radius"].default_value = (0.004, 0.003, 0.002)
+_gp.inputs["Sheen Weight"].default_value = 0.4; _gp.inputs["Coat Roughness"].default_value = 0.15
+_gn = _g.nodes.new("ShaderNodeTexNoise"); _gn.inputs["Scale"].default_value = 900.0
+_gb = _g.nodes.new("ShaderNodeBump"); _gb.inputs["Strength"].default_value = 0.08
+_g.links.new(_gn.outputs["Fac"], _gb.inputs["Height"]); _g.links.new(_gb.outputs["Normal"], _gp.inputs["Normal"])
+M_cap = pbr("M_CapGreen", "cotton_jersey", 0.05, tint=(0.30, 0.50, 0.43, 1), sat=0.0, val=0.95, bump=0.6)
 M_mask = pbr("M_MaskWhite", "cotton_jersey", 0.03, tint=(0.88, 0.92, 0.9, 1), sat=0.0, val=1.0, bump=0.6)
 M_ink = mat("M_MarkerInk", (0.12, 0.03, 0.2, 1), 0.4)
 M_thread = mat("M_Thread", (0.05, 0.05, 0.08, 1), 0.4)
@@ -239,6 +244,26 @@ for o in [dome, lens, ring, handle, yoke, spot] + [o for o in bpy.data.objects i
     M = o.matrix_world.copy(); o.parent = lamp_piv; o.matrix_world = M
 for o in [arm1, lamp_piv, dome, lens, ring, handle, yoke, spot] + [o for o in bpy.data.objects if o.name.startswith("Lamp_Bulb_")]:
     pass
+# satellite lamp (second, smaller dome) and dust motes drifting in the main lamp's cone
+sat = link(bpy.data.objects.new("Lamp2Sat_Pivot", None)); sat.location = (0.95, 0.75, 2.2)
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.2, location=(0.95, 0.75, 2.05), segments=32, ring_count=16)
+sd = bpy.context.active_object; sd.name = "LampSat_Dome"
+bm = bmesh.new(); bm.from_mesh(sd.data); bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.03], context="VERTS"); bm.to_mesh(sd.data); bm.free()
+sd.modifiers.new("s", "SOLIDIFY").thickness = 0.01; sd.data.materials.append(M_enamel); bpy.ops.object.shade_smooth()
+cyl("LampSat_Lens", 0.18, 0.01, (0.95, 0.75, 2.025), mat("M_LampSatLens", (1, 1, 1, 1), 0.2, emit=(1.0, 0.95, 0.85, 1), estr=25.0), 32)
+cyl("LampSat_Arm", 0.018, 0.9, (0.95, 0.75, 2.55), M_enamel, 12)
+sp2 = bpy.data.lights.new("LampSat_Spot", "SPOT"); sp2.energy = 350; sp2.spot_size = math.radians(45); sp2.spot_blend = 0.5; sp2.shadow_soft_size = 0.15
+s2o = link(bpy.data.objects.new("LampSat_Spot", sp2)); s2o.location = (0.95, 0.75, 2.0)
+s2o.rotation_euler = (V(0.5, 0.1, 0.95) - V(0.95, 0.75, 2.0)).to_track_quat("-Z", "Y").to_euler()
+dust_root = link(bpy.data.objects.new("Dust_Root", None)); dust_root.location = (0.1, 0.12, 1.4)
+dm = mat("M_Dust", (1, 1, 1, 1), 0.5, emit=(1.0, 0.96, 0.88, 1), estr=1.5)
+bpy.ops.mesh.primitive_ico_sphere_add(radius=0.0012, subdivisions=1); dust_src = bpy.context.active_object; dust_src.name = "Dust_Src"; dust_src.data.materials.append(dm)
+for i in range(140):
+    zz = random.uniform(-0.4, 0.4); rr = random.uniform(0, 0.08 + (0.4 - zz) * 0.35); aa = random.uniform(0, 2 * math.pi)
+    d_ = bpy.data.objects.new(f"Dust_{i:03d}", dust_src.data); link(d_); d_.parent = dust_root
+    d_.location = (rr * math.cos(aa), rr * math.sin(aa), zz)
+    d_.scale = (random.uniform(0.6, 1.6),) * 3
+dust_src.hide_render = True; dust_src.hide_viewport = True
 # ------------------------------------------------------------------ props: trolley with tray + instruments, IV stand, stools, bowl
 cart = to_room(glb("Trolley", os.path.join(AS, "cart.glb"), 0.0095, (-1.12, -0.05, 0), rot=(0, 0, math.radians(90))))
 tray = to_room(box("Tray", (0.46, 0.32, 0.02), (-1.12, -0.05, 0.86), M_steel, 0.006))
@@ -250,10 +275,30 @@ to_room(cyl("IV_Base", 0.2, 0.03, (1.05, 0.55, 0.02), M_chrome, 5))
 to_room(box("IV_Hook", (0.3, 0.012, 0.012), (1.05, 0.55, 1.8), M_chrome))
 ivb = to_room(box("IV_Bag", (0.1, 0.04, 0.16), (1.17, 0.55, 1.68), mat("M_IVBag", (0.9, 0.95, 0.95, 1), 0.1, trans=0.8), 0.015))
 to_room(cyl("IV_Tube", 0.003, 0.9, (1.17, 0.55, 1.15), mat("M_Tube", (0.9, 0.9, 0.85, 1), 0.2, trans=0.5), 8))
-for i, (x, y) in enumerate(((-1.6, 1.4), (-2.6, -1.9))):
+for i, (x, y) in enumerate(((-1.45, 0.62), (-2.6, -1.9))):
     to_room(cyl(f"Stool_{i}", 0.17, 0.05, (x, y, 0.6), M_vinyl, 24))
     to_room(cyl(f"StoolLeg_{i}", 0.02, 0.58, (x, y, 0.3), M_chrome, 12))
     to_room(cyl(f"StoolBase_{i}", 0.2, 0.02, (x, y, 0.01), M_chrome, 5))
+# Mayo stand with a second instrument tray beside table 2, a second IV stand behind table 1
+to_room(cyl("Mayo_Pole", 0.015, 0.92, (0.98, -0.62, 0.46), M_chrome, 16)); to_room(cyl("Mayo_Base", 0.22, 0.03, (0.98, -0.62, 0.02), M_chrome, 5))
+to_room(box("Mayo_Arm", (0.04, 0.3, 0.02), (0.98, -0.5, 0.92), M_chrome))
+to_room(box("Mayo_Tray", (0.36, 0.26, 0.02), (0.98, -0.42, 0.94), M_steel, 0.005))
+mt = to_room(glb("Mayo_Instruments", os.path.join(AS, "tools.glb"), 0.75, (0.98, -0.42, 0.951), rot=(math.radians(90), 0, math.radians(90))))
+for i in range(3):
+    to_room(cyl(f"Mayo_Gauze_{i}", 0.025, 0.012, (0.88 + 0.05 * i, -0.33, 0.956), M_gauze, 12))
+to_room(cyl("IV2_Pole", 0.012, 1.8, (-0.98, 0.78, 0.9), M_chrome, 16)); to_room(cyl("IV2_Base", 0.2, 0.03, (-0.98, 0.78, 0.02), M_chrome, 5))
+to_room(box("IV2_Hook", (0.3, 0.012, 0.012), (-0.98, 0.78, 1.8), M_chrome))
+to_room(box("IV2_Bag", (0.1, 0.04, 0.16), (-0.86, 0.78, 1.68), bpy.data.materials["M_IVBag"] if bpy.data.materials.get("M_IVBag") else M_glass, 0.015))
+# back-wall door (staff leave through it at the end)
+to_room(box("Door_Frame_L", (0.06, 0.1, 2.15), (3.67, 2.96, 1.075), M_enamel)); to_room(box("Door_Frame_R", (0.06, 0.1, 2.15), (4.57, 2.96, 1.075), M_enamel))
+to_room(box("Door_Frame_T", (0.96, 0.1, 0.06), (4.12, 2.96, 2.15), M_enamel))
+to_room(box("Door_Dark", (0.86, 0.02, 2.1), (4.12, 3.0, 1.05), mat("M_DoorDark", (0.02, 0.025, 0.03, 1), 0.9)))
+dp = to_room(link(bpy.data.objects.new("Door_Pivot", None))); dp.location = (3.7, 2.93, 0.0)
+door = to_room(box("Door_Panel", (0.84, 0.045, 2.08), (4.12, 2.93, 1.05), mat("M_DoorPanel", (0.55, 0.68, 0.62, 1), 0.45), 0.004))
+dw = to_room(box("Door_Window", (0.3, 0.05, 0.4), (4.12, 2.93, 1.55), M_glass))
+dh = to_room(cyl("Door_Handle", 0.012, 0.12, (4.45, 2.89, 1.0), M_chrome, 12, rot=(0, math.radians(90), 0)))
+for o in (door, dw, dh):
+    M = o.matrix_world.copy(); o.parent = dp; o.matrix_parent_inverse = dp.matrix_world.inverted()
 # old anaesthesia machine silhouette behind table 1 (boxes, gauges, hose) for depth
 am = [box("Anaes_Body", (0.45, 0.4, 0.9), (-1.35, 1.25, 0.55), M_enamel, 0.02), box("Anaes_Top", (0.5, 0.42, 0.04), (-1.35, 1.25, 1.02), M_steel),
       cyl("Anaes_Cyl1", 0.06, 0.7, (-1.62, 1.3, 0.45), mat("M_CylBlue", (0.1, 0.2, 0.5, 1), 0.3)), cyl("Anaes_Cyl2", 0.06, 0.7, (-1.62, 1.15, 0.45), mat("M_CylGrey", (0.5, 0.5, 0.5, 1), 0.3)),
@@ -408,7 +453,11 @@ at = nt.nodes.new("ShaderNodeMath"); at.operation = "ARCTAN2"
 nt.links.new(tc.outputs["Object"], sep.inputs[0]); nt.links.new(sep.outputs["Y"], at.inputs[0]); nt.links.new(sep.outputs["X"], at.inputs[1])
 rv = nt.nodes.new("ShaderNodeValue"); rv.name = rv.label = "Reveal"; rv.outputs[0].default_value = 0.0
 mp_ = nt.nodes.new("ShaderNodeMapRange"); mp_.inputs["From Min"].default_value = -math.pi; mp_.inputs["From Max"].default_value = math.pi
-nt.links.new(at.outputs[0], mp_.inputs["Value"])
+off_ = nt.nodes.new("ShaderNodeValue"); off_.name = off_.label = "RevealStart"; off_.outputs[0].default_value = 0.0
+sub_ = nt.nodes.new("ShaderNodeMath"); sub_.operation = "SUBTRACT"; nt.links.new(at.outputs[0], sub_.inputs[0]); nt.links.new(off_.outputs[0], sub_.inputs[1])
+wr_ = nt.nodes.new("ShaderNodeMath"); wr_.operation = "WRAP"; wr_.inputs[1].default_value = -math.pi; wr_.inputs[2].default_value = math.pi
+nt.links.new(sub_.outputs[0], wr_.inputs[0])
+nt.links.new(wr_.outputs[0], mp_.inputs["Value"])
 cmp = nt.nodes.new("ShaderNodeMath"); cmp.operation = "LESS_THAN"; nt.links.new(mp_.outputs["Result"], cmp.inputs[0]); nt.links.new(rv.outputs[0], cmp.inputs[1])
 dash = nt.nodes.new("ShaderNodeMath"); dash.operation = "SINE"; dmul = nt.nodes.new("ShaderNodeMath"); dmul.operation = "MULTIPLY"; dmul.inputs[1].default_value = 22
 nt.links.new(at.outputs[0], dmul.inputs[0]); nt.links.new(dmul.outputs[0], dash.inputs[0])
@@ -533,7 +582,7 @@ def fade_objects(objs, group):
             if m.name not in cache:
                 m2 = m.copy(); m2.name = m.name + "_" + group; add_fade(m2, group); cache[m.name] = m2
             slot.link = "OBJECT"; slot.material = cache[m.name]
-fade_objects(TABLES["2"] + [cB, seam] + [o for o in bpy.data.objects if o.name.startswith(("IV_", "T1_"))], "T2")
+fade_objects(TABLES["2"] + [cB, seam] + [o for o in bpy.data.objects if o.name.startswith(("IV_", "T1_", "Mayo_"))], "T2")
 fade_objects([chair, fl] + [o for o in bpy.data.objects if o.name.startswith(("MonCart", "Monitor", "Lamp2"))], "Corner")
 print("FADES", {k: len(v) for k, v in FADES.items()})
 
@@ -542,7 +591,7 @@ with bpy.data.libraries.load(os.path.join(BU, "people.blend"), link=False) as (s
     dst.objects = [n for n in src.objects]
 for o in dst.objects:
     if o: col.objects.link(o)
-for nm in ("Surgeon", "Nurse"):
+for nm in ("Surgeon", "Nurse", "Anaes"):
     rig = bpy.data.objects[nm]
     # surgical cap (squashed half sphere) and mask (curved plate) on the head bone; pale gloves = hands of the skin painted over by a glove shell
     pb = rig.pose.bones["head"]; hb = rig.data.bones["head"]
@@ -582,5 +631,63 @@ for nm in ("Surgeon", "Nurse"):
     for p in body.data.polygons:
         if all(i in hand_v for i in p.vertices): p.material_index = gi; n_ += 1
     print("GLOVES", nm, n_, "faces")
+    # surgical gown: a tube around torso + legs, ray-cast to the body (arms excluded), flared at the hem, skinned with the body's weights
+    _mods = [(md_, md_.show_viewport) for md_ in body.modifiers]
+    for md_, _ in _mods: md_.show_viewport = False
+    bpy.context.view_layer.update(); be = body.evaluated_get(bpy.context.evaluated_depsgraph_get()); bme = be.to_mesh()
+    print("GOWN eval verts", len(bme.vertices), "orig", len(body.data.vertices))
+    arm_names = ("clavicle", "shoulder", "upperarm", "lowerarm", "wrist", "finger", "metacarpal")
+    arm_ids = {g.index for g in body.vertex_groups if g.name.startswith(arm_names)}
+    keepv = [any(g.group in arm_ids and g.weight > 0.3 for g in body.data.vertices[i].groups) for i in range(len(bme.vertices))] if len(bme.vertices) == len(body.data.vertices) else None
+    wv = [be.matrix_world @ v.co for v in bme.vertices]
+    polys = [tuple(p_.vertices) for p_ in bme.polygons if keepv is None or not any(keepv[i] for i in p_.vertices)]
+    be.to_mesh_clear()
+    for md_, v_ in _mods: md_.show_viewport = v_
+    hv_ids = {g.index for g in body.vertex_groups if g.name in ("body",)}
+    tb = BVHTree.FromPolygons(wv, polys)
+    Hh = top
+    zs = [Hh * f_ for f_ in (0.30, 0.36, 0.42, 0.48, 0.54, 0.60, 0.66, 0.72, 0.77, 0.81)]
+    NSEG = 32; rings = []
+    for k, z in enumerate(zs):
+        ring = []
+        for j in range(NSEG):
+            a_ = 2 * math.pi * j / NSEG; d_ = V(math.sin(a_), -math.cos(a_), 0)
+            o_ = V(cx, cy - 0.0, z) + d_ * 0.45
+            hit = tb.ray_cast(o_, -d_)
+            r_ = (0.45 - hit[3]) if hit[0] is not None else 0.15
+            if k < 4: r_ = max(r_, 0.2 - 0.02 * k)       # skirt: one tube round both legs
+            flare = max(0.0, (4 - k)) * 0.018
+            ring.append(V(cx, cy, z) + d_ * (r_ + 0.045 + flare))
+        rings.append(ring)
+    bm = bmesh.new(); vv = [[bm.verts.new(p_) for p_ in ring] for ring in rings]
+    for k in range(len(rings) - 1):
+        for j in range(NSEG):
+            bm.faces.new((vv[k][j], vv[k][(j + 1) % NSEG], vv[k + 1][(j + 1) % NSEG], vv[k + 1][j]))
+    gme = bpy.data.meshes.new(nm + "_Gown"); bm.to_mesh(gme); bm.free()
+    gown = bpy.data.objects.new(nm + "_Gown", gme); col.objects.link(gown)
+    for p_ in gme.polygons: p_.use_smooth = True
+    gme.materials.append(M_cap)
+    for g in body.vertex_groups: gown.vertex_groups.new(name=g.name)
+    gbv = BVHTree.FromPolygons(wv, [tuple(p_.vertices) for p_ in body.data.polygons]) if len(wv) == len(body.data.vertices) else None
+    from mathutils.kdtree import KDTree
+    kd = KDTree(len(wv))
+    for i, p_ in enumerate(wv):
+        if keepv is None or not keepv[i]: kd.insert(p_, i)
+    kd.balance()
+    for v in gme.vertices:
+        nearest = kd.find_n(v.co, 6)
+        tot = {}
+        for (co_, idx, dist) in nearest:
+            w_ = 1.0 / (dist + 1e-3)
+            for g in body.data.vertices[idx].groups:
+                tot[g.group] = tot.get(g.group, 0) + g.weight * w_
+        ssum = sum(tot.values()) or 1
+        for gi_, w_ in tot.items():
+            if w_ / ssum > 0.02: gown.vertex_groups[body.vertex_groups[gi_].name].add([v.index], w_ / ssum, "REPLACE")
+    gown.parent = rig; gown.matrix_parent_inverse = rig.matrix_world.inverted()
+    am_ = gown.modifiers.new("arm", "ARMATURE"); am_.object = rig
+    gown.modifiers.new("sol", "SOLIDIFY").thickness = 0.004
+    gown.modifiers.new("sub", "SUBSURF").levels = 1
+    print("GOWN", nm, len(gme.vertices))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)

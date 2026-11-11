@@ -36,5 +36,7 @@ person("Surgeon", 1.0, 0.55, {"asian": 0.1, "caucasian": 0.8, "african": 0.1}, "
        ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 0, (0.42, 0.62, 0.52, 1))
 person("Nurse", 0.0, 0.4, {"asian": 0.3, "caucasian": 0.4, "african": 0.3}, "young_african_female/young_african_female.mhmat",
        ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 1.5, (0.55, 0.72, 0.66, 1))
+person("Anaes", 0.0, 0.6, {"asian": 0.7, "caucasian": 0.2, "african": 0.1}, "middleage_asian_female/middleage_asian_female.mhmat",
+       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], 3.0, (0.42, 0.62, 0.52, 1))
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("SAVED", out)

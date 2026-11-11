@@ -78,3 +78,47 @@ log(f"camera frames flagged: {bad} of {len(range(1, 1771, 5))}")
 # 7. one camera, no markers
 log("cameras", [o.name for o in D if o.type == "CAMERA"], "markers", len(sc.timeline_markers))
 open(OUT, "w").write("\n".join(lines) + "\n")
+# 8. penetration count: people (hands, gowns, bodies) vs monkey meshes, tables, chair, each other
+def bvh_of(o):
+    dg = bpy.context.evaluated_depsgraph_get(); e = o.evaluated_get(dg); m = e.to_mesh()
+    vs = [e.matrix_world @ v.co for v in m.vertices]; ps = [tuple(p.vertices) for p in m.polygons]; e.to_mesh_clear()
+    return BVHTree.FromPolygons(vs, ps), vs
+def inside_count(pts, bvh, tol=0.004):
+    n = 0
+    for p in pts:
+        loc, nrm, idx, d = bvh.find_nearest(p, 0.05)
+        if loc is not None and (p - loc).dot(nrm) < -tol: n += 1
+    return n
+TARGETS = ["MK_Head", "MK_BodyA", "MK_BodyB", "T1_Pad", "T2_Pad", "Chair"]
+PEOPLE = {nm: [o for o in D if o.name.startswith(nm) and o.type == "MESH" and (o.name.endswith((".body", "_Gown", "_Cap", "_Mask")))] for nm in ("Surgeon", "Nurse", "Anaes")}
+total = 0
+for f in (100, 230, 262, 300, 340, 372, 450, 560, 900, 1250, 1300, 1500, 1700):
+    sc.frame_set(f)
+    tb = {t: bvh_of(D[t]) for t in TARGETS if not D[t].hide_render}
+    pb = {nm: [(o.name, bvh_of(o)) for o in objs if not o.hide_render] for nm, objs in PEOPLE.items()}
+    row = []
+    for nm, lst in pb.items():
+        for on, (bv, vs) in lst:
+            pts = vs[::3]
+            for t, (tbv, tvs) in tb.items():
+                c = inside_count(pts, tbv)
+                if c: row.append(f"{on}->{t}:{c}"); total += c
+            # monkey verts inside the person (fingers through fur is the other direction)
+    for t in ("MK_Head",):
+        if t in tb:
+            for nm, lst in pb.items():
+                for on, (bv, vs) in lst:
+                    if on.endswith(".body"):
+                        c = inside_count(tb[t][1][::2], bv)
+                        if c: row.append(f"{t}->{on}:{c}"); total += c
+    # people vs each other
+    names = list(pb)
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            for on, (bv, vs) in pb[names[i]]:
+                for on2, (bv2, vs2) in pb[names[j]]:
+                    c = inside_count(vs[::4], bv2)
+                    if c: row.append(f"{on}->{on2}:{c}"); total += c
+    log(f"f{f} penetrations: {', '.join(row) if row else 'none'}")
+log(f"PENETRATION TOTAL (sampled verts inside other meshes, 13 frames): {total}")
+open(OUT, "w").write("\n".join(lines) + "\n")
