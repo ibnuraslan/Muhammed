@@ -108,21 +108,21 @@ K(700, H_(700) + V(0.75, 0.6, 0.1), H_(700), 45)
 K(748, H_(748) + V(-0.6, 0.6, 0.45), H_(748), 42)
 # beat 6 — rack focus from her face to the whale, orbit the whale's head
 def behind_face(f, wf):
-    h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); return h + d * 0.55 + V(0, 0, 0.1)
+    h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); d = Matrix.Rotation(R_(70), 3, 'Z') @ d; return h + d * 0.75 + V(0, 0, 0.15)
 K(792, behind_face(792, 792), H_(792), 40)
 K(835, behind_face(835, 835) + V(0.1, 0, 0.05), wh(835), 40)
 K(872, wh(872) + V(1.4, -1.1, 0.4), wh(872), 32)
 K(910, wh(910) + V(0.2, -1.6, 0.5), wh(910), 30)
 # beat 7 — beside the whale to the window, ring play, keeper nod, whip pan back
-K(962, wh(962) + V(1.2, 0.6, 0.35), wh(962), 28)
-K(1010, RG(1010) + V(2.1, 1.5, 0.5), RG(1010), 28)
-K(1065, RG(1065) + V(0.6, 2.6, 0.8), wbody(1065), 26)
-K(1120, V(-1.0, -1.9, 1.9), V(-2.6, -4.7, 1.6), 28)
-K(1170, V(-1.4, -2.6, 1.75), V(-2.6, -5.85, 1.55), 34)
-K(1200, V(-1.5, -2.7, 1.8), eye(1200), 36)
+K(962, wh(962) + V(2.0, 1.0, 0.5), wh(962), 26)
+K(1010, RG(1010) + V(2.8, 1.8, 0.7), RG(1010), 26)
+K(1065, wbody(1065) + V(2.6, 2.4, 0.9), wbody(1065), 24)
+K(1120, V(0.2, -1.4, 2.1), V(-2.6, -4.3, 1.6), 26)
+K(1170, V(-0.4, -2.2, 1.9), V(-2.6, -5.85, 1.55), 30)
+K(1200, eye(1200) + V(1.8, 0.4, 0.3), eye(1200), 40)
 # beat 8 — eye macro, head turns, surge
-K(1230, eye(1230) + V(1.1, 0.4, 0.15), eye(1230), 85)
-K(1268, eye(1268) + V(1.4, 0.8, 0.3), eye(1268), 50)
+K(1230, eye(1230) + V(1.3, -0.5, 0.25), eye(1230) + V(0, -0.2, 0), 55)
+K(1268, eye(1268) + V(1.8, 0.4, 0.4), eye(1268), 40)
 K(1305, wbody(1305) + V(2.2, 1.0, 0.7), wh(1305), 26)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up
@@ -132,9 +132,9 @@ K(1545, PEL(1545) + V(1.6, 0.9, -1.7), PEL(1545), 22)
 K(1605, PEL(1605) + V(-0.6, 1.9, -1.2), PEL(1605), 24)
 K(1660, PEL(1660) + V(-1.8, 0.3, -0.6), CH(1660), 26)
 # beat 10 — her face, racing alongside, up into the light
-K(1720, H_(1720) + V(-0.7, 0.55, 0.1), H_(1720), 42)
-K(1775, H_(1775) + V(0.9, 0.9, -0.4), H_(1775), 32)
-K(1840, H_(1840) + V(1.1, 0.4, -0.9), H_(1840) + V(0, 0, 0.3), 26)
+K(1720, H_(1720) + V(0.6, 0.95, 0.25), H_(1720), 40)
+K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
+K(1840, H_(1840) + V(1.4, 0.7, -0.3), H_(1840) + V(0, 0, 0.3), 26)
 # beat 11 — below the surface looking up, burst out, circle the splash
 K(1893, V(X0 + 1.2, -3.1, 5.55), H_(1893) + V(0, 0, 0.3), 24)
 K(1925, V(X0 + 1.4, -2.7, 6.45), H_(1925), 26)
@@ -188,15 +188,15 @@ for f in range(1, END + 1, 2):
     if (p + off).z < 0.15: off.z += 0.15 - (p + off).z
     corr[f] = off
 fr_ = sorted(corr)
+env = {}
+for f in fr_:      # envelope: the strongest correction within +-20 frames
+    env[f] = max((corr[g] for g in fr_ if abs(g - f) <= 20), key=lambda v: v.length)
 for f in list(range(1, END + 1, 2)) + [END]:
     acc = Vector((0, 0, 0)); wsum = 0
     for g in fr_:
-        if abs(g - f) <= 24:
-            w_ = 1 - abs(g - f) / 25.0; acc += corr[g] * w_; wsum += w_
-    # keep the largest correction near the frame so smoothing never lets the lens back inside
-    near = max((corr[g] for g in fr_ if abs(g - f) <= 2), key=lambda v: v.length, default=Vector())
-    sm = acc / max(wsum, 1e-6)
-    cam.location = fc(f) + (sm if sm.length >= near.length else near); cam.keyframe_insert("location", frame=f)
+        if abs(g - f) <= 30:
+            w_ = math.exp(-((g - f) / 14.0) ** 2); acc += env[g] * w_; wsum += w_
+    cam.location = fc(f) + acc / max(wsum, 1e-6); cam.keyframe_insert("location", frame=f)
 print("CAMERA clearance corrected frames:", sum(1 for v in corr.values() if v.length > 1e-4))
 # out-of-breath blur: open the aperture wide
 for f, st in ((1, 2.8), (1700, 2.8), (1740, 0.9), (1800, 0.8), (1870, 2.8), (1930, 4.0), (END, 4.0)):

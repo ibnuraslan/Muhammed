@@ -285,9 +285,9 @@ def prof(s):
             if s <= s1:
                 t = (s - s0) / (s1 - s0); t = t * t * (3 - 2 * t); return v0 + (v1 - v0) * t
         return tab[-1][1]
-    wv = lerp_tab([(0, 0.02), (0.025, 0.09), (0.06, 0.15), (0.1, 0.25), (0.16, 0.30), (0.21, 0.29), (0.3, 0.40), (0.42, 0.46),
+    wv = lerp_tab([(0, 0.02), (0.025, 0.09), (0.06, 0.15), (0.1, 0.25), (0.16, 0.31), (0.21, 0.27), (0.3, 0.40), (0.42, 0.46),
                    (0.55, 0.42), (0.68, 0.28), (0.8, 0.12), (0.88, 0.065), (0.94, 0.05), (1.0, 0.03)])
-    top = lerp_tab([(0, 0.02), (0.025, 0.06), (0.05, 0.12), (0.09, 0.27), (0.14, 0.32), (0.2, 0.27), (0.26, 0.31), (0.4, 0.40),
+    top = lerp_tab([(0, 0.02), (0.025, 0.06), (0.045, 0.13), (0.08, 0.29), (0.13, 0.35), (0.19, 0.27), (0.24, 0.29), (0.4, 0.40),
                     (0.55, 0.37), (0.68, 0.27), (0.8, 0.16), (0.88, 0.10), (0.94, 0.06), (1.0, 0.035)])
     bot = lerp_tab([(0, 0.02), (0.025, 0.06), (0.06, 0.11), (0.12, 0.19), (0.2, 0.24), (0.3, 0.34), (0.42, 0.42), (0.55, 0.36),
                     (0.68, 0.24), (0.8, 0.13), (0.88, 0.085), (0.94, 0.055), (1.0, 0.03)])
@@ -371,16 +371,42 @@ for f_ in bel.data.polygons: f_.use_smooth = True
 S_HINGE = -L_W * 0.42 + 0.115 * L_W
 Y_N0, Y_N1 = -L_W * 0.42 + 0.17 * L_W * 0.94, -L_W * 0.42 + 0.30 * L_W * 0.94
 MOUTH_Z = lambda y: prof(max(0, (y + L_W * 0.42) / (L_W * 0.94)))[3] - 0.015
-bel.shape_key_add(name="Basis")
-jaw = bel.shape_key_add(name="JawOpen", from_mix=False)
-for i, v in enumerate(bel.data.vertices):
-    y, z = v.co.y, v.co.z
-    if y < S_HINGE and z < MOUTH_Z(y) and abs(v.co.x) < 0.32:
-        t = min(1.0, (S_HINGE - y) / (S_HINGE + L_W * 0.42))
-        Rj = Matrix.Rotation(R_(-16) * min(1, 0.4 + t), 3, 'X')
-        piv = Vector((0, S_HINGE, MOUTH_Z(S_HINGE)))
-        jaw.data[i].co = piv + Rj @ (v.co - piv)
-bel.data.shape_keys.use_relative = True
+# dorsal ridge along the back (belugas have a ridge instead of a dorsal fin)
+for v in bel.data.vertices:
+    s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
+    if 0.42 < s_ < 0.8 and v.co.z > 0:
+        w_ = math.sin((s_ - 0.42) / 0.38 * math.pi)
+        v.co.z += 0.03 * w_ * math.exp(-(v.co.x / 0.05) ** 2)
+# mouth: flatten the underside of the head in front of the hinge into a palate; the lower jaw is its own closed mesh on a jaw bone
+S_H = 0.115
+for v in bel.data.vertices:
+    s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
+    if s_ < S_H + 0.05 and abs(v.co.x) < 0.33:
+        mz = MOUTH_Z(v.co.y)
+        if v.co.z < mz:
+            k = 1.0 if s_ <= S_H else max(0.0, 1 - (s_ - S_H) / 0.05)
+            v.co.z = v.co.z + (mz - v.co.z) * k
+bm_j = bmesh.new(); rings_j = []; NJ = 20
+SJ = [i / 28 * (S_H + 0.04) for i in range(29)]
+for s_ in SJ:
+    wv, top, bot, cz = prof(max(s_, 0.004))
+    y = -L_W * 0.42 + s_ * L_W * 0.94
+    mz = MOUTH_Z(y); zb = cz - bot
+    r_ = []
+    for j in range(NJ):
+        a_ = 2 * math.pi * j / NJ; ca, sa = math.cos(a_), math.sin(a_)
+        z = mz + (0.012 * ca if ca > 0 else (mz - zb) * ca * 0.98)
+        r_.append(bm_j.verts.new((wv * 0.96 * sa, y + 0.004, z)))
+    rings_j.append(r_)
+for i in range(len(rings_j) - 1):
+    for j in range(NJ):
+        bm_j.faces.new((rings_j[i][j], rings_j[i][(j + 1) % NJ], rings_j[i + 1][(j + 1) % NJ], rings_j[i + 1][j]))
+bm_j.faces.new(rings_j[0][::-1]); bm_j.faces.new(rings_j[-1])
+bmesh.ops.recalc_face_normals(bm_j, faces=bm_j.faces)
+jme = bpy.data.meshes.new("Beluga_Jaw"); bm_j.to_mesh(jme); bm_j.free()
+jawo = bpy.data.objects.new("Beluga_Jaw", jme); link(jawo)
+for f_ in jme.polygons: f_.use_smooth = True
+jsm = jawo.modifiers.new("Sub", 'SUBSURF'); jsm.levels = 1; jsm.render_levels = 2
 ssm = bel.modifiers.new("Sub", 'SUBSURF'); ssm.levels = 1; ssm.render_levels = 2
 # skin material: SSS white with faint grey mottling, mouth crease, scars
 bm_ = bpy.data.materials.new("M_BelugaSkin"); bm_.use_nodes = True
@@ -430,6 +456,12 @@ bl.new(hgt, bbump.inputs['Height']); bl.new(bbump.outputs['Normal'], bp.inputs['
 cmx = bn.new('ShaderNodeMix'); cmx.data_type = 'RGBA'; cmx.inputs['B'].default_value = (0.62, 0.64, 0.66, 1)
 bl.new(mnode('MULTIPLY', crease, 0.35), cmx.inputs['Factor']); bl.new(bmix.outputs['Result'], cmx.inputs['A']); bl.new(cmx.outputs['Result'], bp.inputs['Base Color'])
 bel.data.materials.append(bm_)
+jawo.data.materials.append(bm_)
+# mouth interior (dark, wet) seen through the open slit; rides on the head bone
+bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(0, -L_W * 0.42 + 0.075 * L_W, MOUTH_Z(-L_W * 0.42 + 0.075 * L_W) - 0.01))
+mi = bpy.context.active_object; mi.name = "Beluga_MouthInterior"; mi.scale = (0.12, 0.2, 0.03)
+mim = simple_mat("M_BelugaMouth", (0.22, 0.09, 0.1), rough=0.25, sss=0.3); mi.data.materials.append(mim)
+[setattr(f_, 'use_smooth', True) for f_ in mi.data.polygons]
 # eyes
 M_EYE = simple_mat("M_BelugaEye", (0.02, 0.02, 0.025), rough=0.05)
 EYE_Y = -L_W * 0.42 + 0.155 * L_W
@@ -449,6 +481,7 @@ eb = arm.edit_bones
 t = eb.new("torso"); t.head = (0, Y(0.30), 0); t.tail = (0, Y(0.40), 0)
 h = eb.new("neck"); h.head = (0, Y(0.30), 0); h.tail = (0, Y(0.22), 0); h.parent = t
 hd = eb.new("head"); hd.head = (0, Y(0.22), 0); hd.tail = (0, Y(0.02), 0); hd.parent = h
+jb = eb.new("jaw"); jb.head = (0, Y(0.125), MOUTH_Z(Y(0.125))); jb.tail = (0, Y(0.0), MOUTH_Z(Y(0.0))); jb.parent = hd
 ml_ = eb.new("melon"); ml_.head = (0, Y(0.17), 0.05); ml_.tail = (0, Y(0.07), 0.16); ml_.parent = hd
 CH = [0.40, 0.52, 0.64, 0.75, 0.85, 0.93, 1.0]
 prev = t
@@ -481,9 +514,9 @@ for v in bel.data.vertices:
 am = bel.modifiers.new("Armature", 'ARMATURE'); am.object = rig
 bel.modifiers.move(len(bel.modifiers) - 1, 0)
 bel.parent = rig
-for side in "LR":
-    e = bpy.data.objects["Beluga_Eye_" + side]; e.parent = rig; e.parent_type = 'BONE'; e.parent_bone = "head"
-    hb = rig.data.bones["head"]
+for nm_, bn_ in [("Beluga_Eye_L", "head"), ("Beluga_Eye_R", "head"), ("Beluga_MouthInterior", "head"), ("Beluga_Jaw", "jaw")]:
+    e = bpy.data.objects[nm_]; e.parent = rig; e.parent_type = 'BONE'; e.parent_bone = bn_
+    hb = rig.data.bones[bn_]
     e.matrix_parent_inverse = (rig.matrix_world @ Matrix.Translation(hb.tail_local) @ hb.matrix_local.to_3x3().to_4x4()).inverted()
 for pb in rig.pose.bones: pb.rotation_mode = 'XYZ'
 # mouth socket empty (where her ankle sits), riding on the head bone
@@ -494,7 +527,7 @@ ms.matrix_parent_inverse = (Matrix.Translation(hb.tail_local) @ hb.matrix_local.
 ms.location = (0, 0, 0)
 ms.matrix_world = Matrix.Translation(Vector((0, Y(0.05), -0.075)))
 BEL_COLL = bpy.data.collections.new("Beluga"); sc.collection.children.link(BEL_COLL)
-for o in [bel, rig, ms] + [bpy.data.objects["Beluga_Eye_" + s] for s in "LR"]:
+for o in [bel, rig, ms, bpy.data.objects["Beluga_MouthInterior"], jawo] + [bpy.data.objects["Beluga_Eye_" + s] for s in "LR"]:
     mv(o, BEL_COLL)
 
 # ------------------------------------------------------------------ diver: wetsuit on the body, mask, fins
@@ -536,13 +569,45 @@ SKIN_PREFIX = ("head", "jaw", "eye", "oris", "levator", "special", "orbicularis"
                "wrist", "finger", "metacarpal")
 vdom = [("" if is_helper(v) else dom(v)) for v in DB.data.vertices]
 NECK_CUT = D.data.bones["neck02"].head_local.z + 0.01
-for f_ in DB.data.polygons:
-    names = [vdom[i] for i in f_.vertices]
-    skin = sum(1 for nm_ in names if nm_.startswith(SKIN_PREFIX)) >= 2
-    if any(nm_.startswith(("neck", "head", "jaw", "spine01", "clavicle")) for nm_ in names) and not any(nm_.startswith(("oris", "levator", "special", "eye", "orbic", "oculi", "temporalis", "risorius", "tongue")) for nm_ in names):
-        skin = f_.center.z > NECK_CUT
-    if not skin:
-        f_.material_index = neo_idx
+FACEB = ("oris", "levator", "special", "eye", "orbic", "oculi", "temporalis", "risorius", "tongue")
+suit = [0.0] * len(DB.data.vertices)
+wr = {s_: (D.data.bones["wrist." + s_].head_local, (D.data.bones["wrist." + s_].head_local - D.data.bones["lowerarm02." + s_].head_local).normalized()) for s_ in "LR"}
+for i, v in enumerate(DB.data.vertices):
+    nm_ = vdom[i]
+    if not nm_: continue
+    if v.co.z > NECK_CUT - 0.25 and abs(v.co.x) < 0.14:
+        suit[i] = max(0.0, min(1.0, 0.5 + (NECK_CUT - 0.006 * math.cos(math.atan2(v.co.y, v.co.x) * 2) - v.co.z) / 0.03))
+    elif nm_.startswith(("lowerarm02", "wrist", "finger", "metacarpal")):
+        side = nm_[-1]; h_, d_ = wr[side]
+        suit[i] = max(0.0, min(1.0, 0.5 + (-0.012 - (v.co - h_).dot(d_)) / 0.03))
+    else:
+        suit[i] = 0.0 if nm_.startswith(SKIN_PREFIX) else 1.0
+at = DB.data.attributes.new("suit", 'FLOAT', 'POINT')
+at.data.foreach_set("value", suit)
+# neoprene as a node group, mixed into every body material by the smooth 'suit' attribute
+NG = bpy.data.node_groups.new("NeopreneShader", 'ShaderNodeTree')
+NG.interface.new_socket("Shader", in_out='OUTPUT', socket_type='NodeSocketShader')
+gn_, gl_ = NG.nodes, NG.links
+go_ = gn_.new('NodeGroupOutput')
+for nd in list(M_NEO.node_tree.nodes):
+    pass
+gp = gn_.new('ShaderNodeBsdfPrincipled'); gp.inputs['Roughness'].default_value = 0.48; gp.inputs['Sheen Weight'].default_value = 0.3
+gp.inputs['Sheen Tint'].default_value = (0.7, 0.75, 0.8, 1); gp.inputs['Base Color'].default_value = (0.045, 0.047, 0.05, 1)
+gtc = gn_.new('ShaderNodeTexCoord'); gnz = gn_.new('ShaderNodeTexNoise'); gnz.inputs['Scale'].default_value = 900.0
+gbm = gn_.new('ShaderNodeBump'); gbm.inputs['Strength'].default_value = 0.08
+gl_.new(gtc.outputs['Object'], gnz.inputs['Vector']); gl_.new(gnz.outputs['Fac'], gbm.inputs['Height']); gl_.new(gbm.outputs['Normal'], gp.inputs['Normal'])
+gl_.new(gp.outputs['BSDF'], go_.inputs[0])
+for m in DB.data.materials:
+    if not m or m == M_NEO or not m.node_tree: continue
+    nt = m.node_tree; out = next((x for x in nt.nodes if x.type == 'OUTPUT_MATERIAL' and x.is_active_output), None)
+    if not out or not out.inputs['Surface'].links: continue
+    src = out.inputs['Surface'].links[0].from_socket
+    ga = nt.nodes.new('ShaderNodeAttribute'); ga.attribute_name = "suit"
+    mr_ = nt.nodes.new('ShaderNodeMapRange'); mr_.inputs['From Min'].default_value = 0.45; mr_.inputs['From Max'].default_value = 0.55
+    gnode = nt.nodes.new('ShaderNodeGroup'); gnode.node_tree = NG
+    mx_ = nt.nodes.new('ShaderNodeMixShader')
+    nt.links.new(ga.outputs['Fac'], mr_.inputs['Value']); nt.links.new(mr_.outputs['Result'], mx_.inputs['Fac'])
+    nt.links.new(src, mx_.inputs[1]); nt.links.new(gnode.outputs[0], mx_.inputs[2]); nt.links.new(mx_.outputs['Shader'], out.inputs['Surface'])
 # dark hair tint
 for ch in D.children:
     if ch.name.endswith("ponytail01"):
@@ -643,7 +708,7 @@ mask = bpy.data.objects.new("Diver.Mask", me); link(mask)
 rimg = mask.vertex_groups.new(name="rim"); rimg.add(list(range(0, N)), 1.0, 'REPLACE')
 M_MASKSKIRT = simple_mat("M_MaskSkirt", (0.015, 0.016, 0.018), rough=0.3)
 mask.data.materials.append(M_MASKSKIRT)
-shw = mask.modifiers.new("Rim", 'SHRINKWRAP'); shw.target = DB; shw.vertex_group = "rim"; shw.offset = 0.005; shw.wrap_method = 'NEAREST_SURFACEPOINT'
+shw = mask.modifiers.new("Rim", 'SHRINKWRAP'); shw.target = DB; shw.vertex_group = "rim"; shw.offset = 0.007; shw.wrap_method = 'NEAREST_SURFACEPOINT'
 sol = mask.modifiers.new("Solid", 'SOLIDIFY'); sol.thickness = 0.004
 # lens: flat tinted glass in the frame front loop
 bm = bmesh.new()
@@ -666,7 +731,8 @@ bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.006, major_seg
 strap = bpy.context.active_object; strap.name = "Diver.MaskStrap"
 strap.scale = (0.86, 1.15, 1.0)
 strap.data.materials.append(M_MASKSKIRT)
-sws = strap.modifiers.new("Wrap", 'SHRINKWRAP'); sws.target = DB; sws.offset = 0.012; sws.wrap_method = 'NEAREST_SURFACEPOINT'
+sws = strap.modifiers.new("Wrap", 'SHRINKWRAP'); sws.target = DB; sws.offset = 0.018; sws.wrap_method = 'NEAREST_SURFACEPOINT'
+strap.modifiers.new("Smooth", 'SMOOTH').iterations = 6; strap.modifiers.new("Sub", 'SUBSURF').levels = 1
 for o in (mask, lens, fr, strap):
     parent_to_bone(o, D, "head")
 for o in (mask, fr, lens):

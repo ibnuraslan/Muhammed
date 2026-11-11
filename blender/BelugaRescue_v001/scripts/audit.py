@@ -97,13 +97,16 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
         hit = inside_static(p, 0.02)
         if hit: wpen[hit] = wpen.get(hit, 0) + 1
     if wpen: flag("SCENE_PEN", f, "whale points inside " + ", ".join("%s:%d" % kv for kv in wpen.items()), sum(wpen.values()))
-    wt = WB(BEL, dg)
+    wt = WB(BEL, dg); wj = WB(bpy.data.objects['Beluga_Jaw'], dg)
     n_in = 0; ank = D.matrix_world @ D.pose.bones["foot.R"].head; mouth = []
     holding = HOLD[0] <= f <= HOLD[1]
     for p in bpts + fpts:
-        loc, nrm, idx, dist = wt.find_nearest(p, 0.3)
-        if loc is None: continue
-        sd = (p - loc).dot(nrm)
+        sds = []
+        for tr in (wt, wj):
+            loc, nrm, idx, dist = tr.find_nearest(p, 0.3)
+            if loc is not None: sds.append((p - loc).dot(nrm))
+        if not sds: continue
+        sd = min(sds, key=abs) if all(x > 0 for x in sds) else min(sds)
         if holding and (p - ank).length < 0.25:
             mouth.append(sd); continue
         if sd < -0.015: n_in += 1
