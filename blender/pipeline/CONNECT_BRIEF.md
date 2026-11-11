@@ -82,7 +82,7 @@ At each checkpoint:
 - A framing that holds longer than about 1.5 s.
 - Empty backgrounds.
 - A beat that does not show its narration line.
-- Exaggerated cartoon proportions. Keep the textured, grounded realism.
+- Exaggerated cartoon proportions, or a photoreal film look. Aim for clean, bright 3D animation (`blender/STYLE_ANIMATED.md`).
 
 ## Clipping check (client, Nov 11). Run it at every checkpoint
 The client checks stills for these first. Before sending stills, render a close-up pass at 270×480 of every contact moment, and fix anything you find:
@@ -95,13 +95,13 @@ Also add a numeric penetration check to your audit (BVH overlap between hand, fo
 
 ## Common rejects from the first blocking reviews (fix them before you send B)
 1. **Untextured clay look.** Check that every material has its texture maps connected: MPFB skin diffuse plus SSS, clothes, walls and props. A grey or white default surface anywhere on screen is a reject.
-2. **Overexposed, flat image.** Use AgX Medium High Contrast and a real key/fill/rim with contrast. Compare against `goat_rescue2_v002/package_check_f700_lowres.png`.
+2. **Wrong look.** The look is bright, clean 3D animation (`blender/STYLE_ANIMATED.md`): AgX Punchy, soft high-key light, saturated colour. A dark, moody or photographic "film" frame is a reject, and so is a blown-out white frame.
 3. **Blank transition frames.** A pass through skin, fabric or a wall may fill the frame for at most about 6 frames, and the surface must show macro detail. A still that is mostly a blank colour is a reject.
 4. **Glove or hand blobs.** Gloves must be the MPFB hand mesh with a glove material, with articulated fingers around the tool. No inflated sausage shapes.
 5. **Stray objects.** Look for floating spheres, helper empties left renderable, and default cubes. Hide every helper with `hide_render`.
 6. **Empty sets.** Every set needs background life: people moving, a monitor trace, a lamp, dust, wind.
 7. **Cut-off or floating body parts.** Never delete body geometry for modesty or framing. Busts, disembodied hands and missing limbs are a reject. Use camera framing, clothes, steam or props instead.
-8. **Pastel, cartoon-flat cutaways.** Anatomy and mechanism cutaways must be realistic: wet SSS tissue, bone texture, metal with wear, saturated contrast against a deeper gradient.
+8. **Flat or gory cutaways.** Anatomy and mechanism cutaways have detailed, correct shapes in clean, colour-coded, glossy layers on the bright sky-blue gradient. Not pastel blobs, and not wet or bloody realism.
 
 ## Package storage: no Git LFS from Connect chats (changed 19:56 UTC)
 Git LFS uploads are refused from Connect sessions (403 on lfs verify). So:
