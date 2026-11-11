@@ -403,8 +403,14 @@ def earring(name, loc, r=0.003, stone="diamond"):
 def tub_material(name, dirt=0.7):
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    p.inputs['Base Color'].default_value = (0.62, 0.64, 0.62, 1); p.inputs['Roughness'].default_value = 0.55
-    p.inputs['Transmission Weight'].default_value = 0.6
+    p.inputs['Base Color'].default_value = (0.86, 0.88, 0.86, 1); p.inputs['Roughness'].default_value = 0.42
+    p.inputs['Transmission Weight'].default_value = 0.9
+    p.inputs['Subsurface Weight'].default_value = 0.25; p.inputs['Subsurface Radius'].default_value = (0.02, 0.02, 0.02)
+    p.inputs['Coat Weight'].default_value = 0.4; p.inputs['Coat Roughness'].default_value = 0.05     # wet film
+    tcs = N.new("ShaderNodeTexCoord"); sc_ = N.new("ShaderNodeTexWave"); sc_.inputs['Scale'].default_value = 90
+    sc_.inputs['Distortion'].default_value = 25; L.new(tcs.outputs['Object'], sc_.inputs['Vector'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.08; L.new(sc_.outputs['Fac'], bp.inputs['Height'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])                                                  # scuffs
     tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 30; nz.inputs['Detail'].default_value = 8
     L.new(tc.outputs['Object'], nz.inputs['Vector'])
     sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
@@ -413,7 +419,7 @@ def tub_material(name, dirt=0.7):
     add = N.new("ShaderNodeMath"); add.operation = 'MULTIPLY'; L.new(nz.outputs['Fac'], add.inputs[0]); L.new(low.outputs[0], add.inputs[1])
     mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.05; mr.inputs['From Max'].default_value = 0.3
     mr.inputs['To Max'].default_value = dirt; L.new(add.outputs[0], mr.inputs['Value'])
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.62, 0.64, 0.6, 1); mx.inputs[7].default_value = (0.2, 0.16, 0.11, 1)
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.86, 0.88, 0.85, 1); mx.inputs[7].default_value = (0.22, 0.17, 0.11, 1)
     L.new(mr.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color'])
     tw = N.new("ShaderNodeMapRange"); tw.inputs['To Min'].default_value = 0.6; tw.inputs['To Max'].default_value = 0.0
     L.new(mr.outputs[0], tw.inputs['Value']); L.new(tw.outputs[0], p.inputs['Transmission Weight'])
@@ -441,8 +447,22 @@ def container(name, loc, size=(0.17, 0.12, 0.075), rot_z=0.0, dirt=0.9, lid_open
     o.location = Vector(loc) + Vector((0, 0, size[2] / 2)); o.rotation_euler = (0, 0, rot_z)
     lid = box(name + "Lid", (0, 0, 0), (size[0] + 0.008, size[1] + 0.008, 0.008), m, bevel=0.004)
     lid.parent = o
-    lid.location = (size[0] * 0.62 * lid_open, 0.02, size[2] / 2 + 0.002 - 0.03 * lid_open)
-    lid.rotation_euler = (0, math.radians(-22 * lid_open), math.radians(9))
+    # half off: one edge still on the rim, the other resting on the ground beside the tub
+    lid.location = (size[0] * 0.78 * lid_open, 0.03, size[2] / 2 - 0.035 * lid_open)
+    lid.rotation_euler = (0, math.radians(32 * lid_open), math.radians(8))
+    drop = bpy.data.materials.new(name + "Drop"); drop.use_nodes = True
+    dp = drop.node_tree.nodes["Principled BSDF"]; dp.inputs['Transmission Weight'].default_value = 1.0; dp.inputs['Roughness'].default_value = 0.0
+    dp.inputs['IOR'].default_value = 1.33
+    rng_ = np.random.default_rng(7)
+    for k in range(40):                                                    # rain droplets on the rim and the lid
+        if k < 22:
+            a = rng_.uniform(0, 2 * math.pi); px = math.cos(a) * size[0] / 2; py = math.sin(a) * size[1] / 2
+            loc_ = (max(-size[0] / 2, min(size[0] / 2, px)), max(-size[1] / 2, min(size[1] / 2, py)), size[2] / 2 + 0.001)
+            par = o
+        else:
+            loc_ = (rng_.uniform(-0.07, 0.07), rng_.uniform(-0.05, 0.05), 0.005); par = lid
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=rng_.uniform(0.0012, 0.0028), segments=10, ring_count=6, location=loc_)
+        d_ = bpy.context.active_object; d_.scale = (1, 1, 0.5); d_.data.materials.append(drop); d_.parent = par
     # a film of muddy water in the bottom
     w = box(name + "Mud", (0, 0, -size[2] / 2 + 0.006), (size[0] - 0.01, size[1] - 0.01, 0.008),
             pbr("MudWater", (0.09, 0.075, 0.055), 0.08, 0.0, **{'Coat Weight': 1.0}))
@@ -464,8 +484,8 @@ def fill_container(box_obj, size, rng, n_rings=12, n_ear=6, hero_scale=1.0):
     for k in range(n_ear):
         a = rng.uniform(0, 6.28); rr = rng.uniform(0.0, 0.03)
         items.append(earring(f"Ear{k}", base + Vector((rr * math.cos(a), rr * math.sin(a), 0.006)), rng.uniform(0.002, 0.003)))
-    hero = ring("HeroRing", base + Vector((0.012, 0.004, 0.012)), stone_r=0.0072 * hero_scale, band="plat_dirty", upright=True, band_r=0.0095,
-                rot=(0.35, 0.1, 0.4), setting_h=0.002)
+    hero = ring("HeroRing", base + Vector((0.004, 0.0, 0.022)), stone_r=0.0085 * hero_scale, band="plat", upright=True, band_r=0.0095,
+                rot=(0.5, 0.05, 0.3), setting_h=0.002)                     # sits on top of the bundle, stone tipped to the light
     return hero, items
 
 

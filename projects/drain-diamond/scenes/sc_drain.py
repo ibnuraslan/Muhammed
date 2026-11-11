@@ -13,7 +13,7 @@ lighter than the rest. Garden: grass edges, gravel, a hedge, a low wall with rai
 """
 import math
 import numpy as np
-import bpy
+import bpy, bmesh
 from mathutils import Vector
 from kit import *
 import ph
@@ -95,34 +95,58 @@ def dust_volume(loc, r=0.28):
 
 
 
-def umbrella(name, radius=0.55):
-    """A proper black umbrella: a domed canopy with 8 scalloped panels and ribs, a shaft and a J handle.
-    Modelled with the canopy tip at the origin, the shaft running down -Z."""
-    fabric_m = pbr(name + "Canopy", (0.012, 0.012, 0.014), 0.45, 0.0, **{'Coat Weight': 0.5, 'Coat Roughness': 0.2, 'Sheen Weight': 0.3})
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=(0, 0, 0))
-    o = bpy.context.active_object; o.name = name
-    import bmesh as _bm
-    bm = _bm.new(); bm.from_mesh(o.data)
-    for v in list(bm.verts):
-        if v.co.z < 0.35:
-            bm.verts.remove(v)
-    for v in bm.verts:                      # flatten to a canopy, scallop between the 8 ribs
-        a = math.atan2(v.co.y, v.co.x); rr = math.hypot(v.co.x, v.co.y)
-        scal = 1.0 - 0.06 * (0.5 - 0.5 * math.cos(8 * a)) * (rr / 0.94)
-        v.co.x *= radius / 0.94 * scal; v.co.y *= radius / 0.94 * scal
-        v.co.z = (v.co.z - 1.0) * 0.55 * radius / 0.65 - 0.06 * (rr / 0.94) ** 2 * (0.5 - 0.5 * math.cos(8 * a))
-    bm.to_mesh(o.data); bm.free()
-    o.data.materials.append(fabric_m); bpy.ops.object.shade_smooth()
-    o.modifiers.new("sol", 'SOLIDIFY').thickness = 0.003
-    metal = pbr(name + "Metal", (0.3, 0.3, 0.32), 0.3, 0.9)
-    parts = [o, cyl(name + "Shaft", (0, 0, -0.42), 0.006, 0.86, metal, verts=8),
-             cyl(name + "Tip", (0, 0, 0.03), 0.004, 0.06, metal, verts=6),
-             cyl(name + "Grip", (0, 0, -0.88), 0.014, 0.12, pbr(name + "Grip", (0.06, 0.035, 0.02), 0.4), verts=10)]
-    for k in range(8):
+def umbrella(name, radius=0.52):
+    """A black umbrella: a deep domed canopy in 8 gores (each sagging between its ribs), visible ribs ending in tips,
+    a shaft, and a hooked J handle. Modelled with the canopy tip at the origin; the shaft runs down -Z."""
+    fabric_m = pbr(name + "Canopy", (0.01, 0.01, 0.012), 0.5, 0.0, **{'Coat Weight': 0.6, 'Coat Roughness': 0.15})
+    metal = pbr(name + "Metal", (0.35, 0.35, 0.37), 0.3, 0.9)
+    grip = pbr(name + "Grip", (0.07, 0.04, 0.02), 0.35)
+    bm = bmesh.new()
+    nr, na = 10, 64
+    rows = []
+    for i in range(nr + 1):
+        u = i / nr                                     # 0 at the tip, 1 at the rim
+        row = []
+        for j in range(na):
+            a = 2 * math.pi * j / na
+            sag = 0.5 - 0.5 * math.cos(8 * a)         # 0 on a rib, 1 mid-gore
+            r = radius * math.sin(u * math.pi / 2) * (1 - 0.04 * sag * u)
+            z = -0.36 * radius * (1 - math.cos(u * math.pi / 2)) - 0.035 * sag * u * u
+            row.append(bm.verts.new((r * math.cos(a), r * math.sin(a), z)))
+        rows.append(row)
+    for i in range(nr):
+        for j in range(na):
+            j2 = (j + 1) % na
+            bm.faces.new((rows[i][j], rows[i][j2], rows[i + 1][j2], rows[i + 1][j]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    can = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(can)
+    can.data.materials.append(fabric_m)
+    for p_ in me.polygons:
+        p_.use_smooth = True
+    can.modifiers.new("sol", 'SOLIDIFY').thickness = 0.003
+    B = dd.Builder(name + "Frame")
+    for k in range(8):                                   # ribs along the canopy underside, tips at the rim
         a = k * math.pi / 4
-        parts.append(cyl(name + "RibTip", (radius * 0.96 * math.cos(a), radius * 0.96 * math.sin(a), -0.33 * radius - 0.02), 0.004, 0.02, metal, verts=6))
-    u = join(parts, name)
-    return u
+        for i in range(nr):
+            u0, u1 = i / nr, (i + 1) / nr
+            p0 = Vector((radius * math.sin(u0 * math.pi / 2) * math.cos(a), radius * math.sin(u0 * math.pi / 2) * math.sin(a), -0.36 * radius * (1 - math.cos(u0 * math.pi / 2)) - 0.004))
+            p1 = Vector((radius * math.sin(u1 * math.pi / 2) * math.cos(a), radius * math.sin(u1 * math.pi / 2) * math.sin(a), -0.36 * radius * (1 - math.cos(u1 * math.pi / 2)) - 0.004))
+            d = p1 - p0; mid = (p0 + p1) / 2
+            B.cyl(mid, 0.003, d.length, metal, verts=6, rot=d.to_track_quat('Z', 'Y').to_euler())
+        tip = Vector((radius * 1.01 * math.cos(a), radius * 1.01 * math.sin(a), -0.36 * radius - 0.01))
+        B.cyl(tip, 0.005, 0.025, metal, verts=6)
+    B.cyl((0, 0, 0.03), 0.004, 0.06, metal, verts=6)
+    B.cyl((0, 0, -0.42), 0.006, 0.84, metal, verts=8)
+    B.cyl((0, 0, -0.88), 0.013, 0.1, grip, verts=10)
+    for k in range(9):                                   # the hooked J handle
+        a0 = math.pi * k / 8; a1 = math.pi * (k + 1) / 8
+        p0 = Vector((0.04 - 0.04 * math.cos(a0), 0, -0.93 - 0.04 * math.sin(a0)))
+        p1 = Vector((0.04 - 0.04 * math.cos(a1), 0, -0.93 - 0.04 * math.sin(a1)))
+        d = p1 - p0
+        if d.length > 1e-4:
+            B.cyl((p0 + p1) / 2, 0.012, d.length + 0.004, grip, verts=8, rot=d.to_track_quat('Z', 'Y').to_euler())
+    fr = B.done(); fr.parent = can
+    return can
 
 
 def wet_concrete(name, tint=(0.62, 0.62, 0.6), scale=0.5, puddles=0.42):
@@ -254,8 +278,8 @@ def build(variant=None):
         ko = bpy.data.objects.new("Glint", k); bpy.context.collection.objects.link(ko); ko.visible_camera = False
         c["glint"] = ko
         for j in range(3):                           # tiny hard sparkle sources
-            pl = bpy.data.lights.new("Spark", 'POINT'); pl.energy = 3; pl.shadow_soft_size = 0.002
-            po = bpy.data.objects.new("Spark", pl); bpy.context.collection.objects.link(po); po.location = CONT_AT + Vector((-0.4 + 0.3 * j, -0.5, 0.7))
+            pl = bpy.data.lights.new("Spark", 'POINT'); pl.energy = 6; pl.shadow_soft_size = 0.001
+            po = bpy.data.objects.new("Spark", pl); bpy.context.collection.objects.link(po); po.location = CONT_AT + Vector((-0.3 + 0.25 * j, -0.35, 0.5))
         if v == "open":
             o = officer("Stand", 45, seed=0); sp = CONT_AT + Vector((-0.9, 0.35, 0)); place(o, sp, face_to(sp, CONT_AT)); arms_relaxed(o)
         if v == "bag":
@@ -278,7 +302,7 @@ def build(variant=None):
             u = umbrella(f"Umb{k}") if k != 1 else None
             c["walkers"].append((h, GATE + Vector((0.15 * k, -2.0 - 1.3 * k, 0)), Vector((0.4 + 1.0 * k, 1.2 - 0.6 * k, 0)), 0.6 * k, u))
     if v == "torch":
-        tl = bpy.data.lights.new("TorchBeam", 'SPOT'); tl.energy = 140; tl.spot_size = math.radians(14); tl.spot_blend = 0.35
+        tl = bpy.data.lights.new("TorchBeam", 'SPOT'); tl.energy = 220; tl.spot_size = math.radians(13); tl.spot_blend = 0.3
         tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.01
         to = bpy.data.objects.new("TorchBeam", tl); bpy.context.collection.objects.link(to); c["torch"] = to
         h = officer("Torch", 41, seed=2); c["torcher"] = h
@@ -321,15 +345,18 @@ def anim_open(c, t, dur):
 def anim_bag(c, t):
     anim_open(c, t, DUR["bag"])
     h = c["photog"]
-    sp = CONT_AT + Vector((0.5, -0.75, 0))
-    pose_crouch(h, lean=32)
-    h.arm.rotation_euler = (0, 0, face_to(sp, CONT_AT)); h.arm.location = sp; dd.ground(h)
-    M = h.arm.matrix_world.to_3x3()
-    camp = h.bone_head("head") + M @ Vector((0, -0.22, -0.1))
-    reach(h, "R", camp + M @ Vector((-0.07, 0.02, -0.04)), M @ Vector((-1, 0.2, -0.5)))
-    reach(h, "L", camp + M @ Vector((0.07, 0.02, -0.05)), M @ Vector((1, 0.2, -0.5)))
+    sp = CONT_AT + Vector((0.55, -0.9, 0))
+    zero(h); pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
+    for b_, a_ in (("spine03", 8), ("spine04", 6), ("neck01", 8), ("head", 18)):
+        h.rot(b_, (1, 0, 0), a_)                                          # leaning a little to look down at the tub
+    place(h, sp, face_to(sp, CONT_AT))
+    M = h.arm.matrix_world.to_3x3(); fwd = M @ Vector((0, -1, 0)); side = M @ Vector((1, 0, 0))
+    eye = h.bone_head("head") + Vector((0, 0, 0.09)) + fwd * 0.1
+    camp = eye + fwd * 0.07 - Vector((0, 0, 0.02))
+    reach(h, "R", camp - side * 0.075 - Vector((0, 0, 0.03)), -side + Vector((0, 0, -1.2)))
+    reach(h, "L", camp + side * 0.06 - Vector((0, 0, 0.045)) + fwd * 0.03, side + Vector((0, 0, -1.2)))
     if c.get("camera_prop") is not None:
-        cp = c["camera_prop"]; cp.location = camp - Vector((0, 0, 0.05)); cp.rotation_euler = (0, 0, h.arm.rotation_euler.z + math.pi)
+        cp = c["camera_prop"]; cp.location = camp - Vector((0, 0, 0.045)); cp.rotation_euler = (0, 0, h.arm.rotation_euler.z + math.pi / 2)
     c["flash"].location = camp + Vector((0, 0, 0.12)); point_at(c["flash"], CONT_AT)
 
 
@@ -349,11 +376,11 @@ def anim_gate(c, t):
         if u is not None:
             M = h.arm.matrix_world.to_3x3()
             hd = h.bone_head("head")
-            grip = hd + M @ Vector((-0.12, -0.22, -0.32))            # in front of the right shoulder
-            tipp = grip + Vector((0.04, 0.03, 1.06))                  # shaft runs up, canopy over the head
+            grip = hd + M @ Vector((-0.14, -0.2, -0.22))            # the hand at shoulder height, in front of the right shoulder
+            tipp = grip + Vector((0.03, 0.02, 0.86))                  # shaft runs up; the canopy rim sits just above the head
             u.location = tipp
             d = (tipp - grip).normalized(); u.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
-            reach(h, "R", grip + Vector((0, 0, 0.02)), M @ Vector((-1, 0.4, -0.6)))
+            reach(h, "R", grip + Vector((0, 0, -0.02)), M @ Vector((-1, 0.4, -0.8)))
             fingers_curl(h, 60, side=("R",), thumb=30)
 
 
@@ -361,8 +388,8 @@ def anim_torch(c, t):
     sec = t * DUR["torch"]
     rain_fall(c, sec)
     # the officer stands just below frame; only the beam pool slides across the wet concrete onto the patch
-    h = c["torcher"]; sp = PATCH + Vector((0.2, -1.5, 0)); place(h, sp, face_to(sp, PATCH)); arms_relaxed(h)
-    hand = sp + Vector((0.05, 0.35, 1.05))
+    h = c["torcher"]; sp = PATCH + Vector((-0.55, -1.05, 0)); place(h, sp, face_to(sp, PATCH)); arms_relaxed(h)
+    hand = sp + Vector((0.12, 0.3, 1.05))
     u = ease(t)
     tgt = (PATCH + Vector((-1.0, -0.55, 0))).lerp(PATCH + Vector((0.02, 0.0, 0)), u)
     to = c["torch"]; to.location = hand; point_at(to, tgt)
@@ -390,8 +417,8 @@ def cam_drill(c, t):
 
 def cam_container(c, t):
     e = ease(t)
-    loc = CONT_AT + Vector((-0.12, -0.3, 0.42)).lerp(Vector((-0.07, -0.18, 0.3)), e)
-    return loc, c["hero"].location + Vector((0, 0, 0.004)), 55
+    loc = CONT_AT + Vector((-0.1, -0.26, 0.3)).lerp(Vector((-0.06, -0.15, 0.2)), e)
+    return loc, c["hero"].location + Vector((0, 0, 0.008)), 60
 
 
 def cam_circle(c, t):
@@ -402,8 +429,8 @@ def cam_circle(c, t):
 
 def cam_bag(c, t):
     e = ease(t)
-    loc = CONT_AT + Vector((-1.9, -2.1, 1.25)).lerp(Vector((-1.7, -1.85, 1.18)), e)
-    return loc, CONT_AT + Vector((0.25, -0.35, 0.4)), 32
+    loc = CONT_AT + Vector((-2.6, -2.4, 1.35)).lerp(Vector((-2.35, -2.15, 1.3)), e)
+    return loc, CONT_AT + Vector((0.3, -0.45, 0.75)), 30
 
 
 def cam_yard(c, t):
@@ -420,8 +447,8 @@ def cam_gate(c, t):
 
 def cam_torch(c, t):
     e = ease(t)
-    loc = PATCH + Vector((-0.6, 0.35, 3.2)).lerp(Vector((-0.45, 0.3, 2.9)), e)
-    return loc, PATCH + Vector((-0.35, -0.3, 0.0)), 30, (0, 1, 0)
+    loc = PATCH + Vector((0.9, -2.3, 3.4)).lerp(Vector((0.8, -2.0, 3.2)), e)
+    return loc, PATCH + Vector((-0.2, -0.2, 0.0)), 26
 
 
 MOVES = {
