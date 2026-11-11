@@ -2,7 +2,12 @@
 
 This is the full 28.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `SurgeonBrandsLivers_v002_60fps.blend`: the self-contained scene. Every texture is packed inside, and it opens in factory-startup Blender 5.2.2.
+- `SurgeonBrandsLivers_v002_60fps.blend.part0` + `.part1`: the self-contained scene (116 MB), split in two because Git LFS uploads are blocked from this studio container and GitHub refuses plain files over 100 MB. Rejoin before use:
+  ```
+  cat SurgeonBrandsLivers_v002_60fps.blend.part0 SurgeonBrandsLivers_v002_60fps.blend.part1 > SurgeonBrandsLivers_v002_60fps.blend
+  sha256sum -c SurgeonBrandsLivers_v002_60fps.blend.sha256
+  ```
+  Every texture is packed inside, and the joined file opens in factory-startup Blender 5.2.2.
 - `beats.json`: the beat start frames and first words, for the voiceover retime (`pipeline/retime_to_vo.py`).
 - `SETTINGS.md`: render settings and suggested test frames.
 - `CREDITS.md`: the CC-BY credit block for the video description.

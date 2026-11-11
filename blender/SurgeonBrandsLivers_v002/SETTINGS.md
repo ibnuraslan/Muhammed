@@ -4,7 +4,7 @@ These values were read back from `SurgeonBrandsLivers_v002_60fps.blend`, opened 
 
 | Item | Value |
 |---|---|
-| File | `SurgeonBrandsLivers_v002_60fps.blend`: 116 MB, compressed. All 90 images are packed (max 2K; most 1K). There are no linked libraries. Stored with Git LFS. |
+| File | `SurgeonBrandsLivers_v002_60fps.blend`: 116 MB, compressed. All 90 images are packed (max 2K; most 1K). There are no linked libraries. Stored as two plain-git parts (LFS host blocked); rejoin with `cat` (see README). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
