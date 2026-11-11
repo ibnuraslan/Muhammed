@@ -48,3 +48,12 @@
 | Connect28 | ToucanBeak | session_01XfwPSkmRyma4xwgQSapnJs | claude/connect28-toucan-beak |
 | Connect29 | AIAsleep | session_01XfwPSnNfLFkY25dy2pPrhR | claude/connect29-ai-asleep |
 | Connect30 | FanCancer | session_01XfwPSk93UWnMkBZTKcWA3L | claude/connect30-fan-cancer |
+
+## Batch 6 (launched 2026-11-11 21:57 UTC; D due 02:30)
+| Chat | Film | Session | Branch |
+|---|---|---|---|
+| Connect31 | PopeShot | session_01XfwPSnonRMxo2S9brj6Zr3 | claude/connect31-pope-shot |
+| Connect32 | GoatOwner | session_01XfwPSmc3wue1mFx4jp83J1 | claude/connect32-goat-owner |
+| Connect33 | WaterTubes | session_01XfwPSosd8Z96un2yj1Qd4F | claude/connect33-water-tubes |
+| Connect34 | EscapeArtist | session_01XfwPSnRw2o9J1kpGVNzjMK | claude/connect34-escape-artist |
+| Connect35 | TitanicIceberg | session_01XfwPSnYRD3H6f6MZgLMRTj | claude/connect35-titanic-iceberg |
