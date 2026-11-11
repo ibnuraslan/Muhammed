@@ -133,7 +133,7 @@ def build(variant=None):
     bpy.context.scene.cycles.volume_bounces = 3
     bpy.context.scene.cycles.volume_step_rate = 2.0
     world_flat((0.04, 0.04, 0.045), 1.0)
-    wall = dd.tex_mat("painted_concrete", 0.6, tint=(0.88, 0.88, 0.85), name="StairWall", sat=0.4)
+    wall = dd.tex_mat("painted_concrete", 0.6, tint=(0.9, 0.88, 0.85), name="StairWall", sat=0.05)
     step = dd.tex_mat("concrete_floor_02", 1.0, tint=(0.75, 0.75, 0.74), name="StairStep", sat=0.2)
     settle = "min(1, max(0, (frame - 10) / 100.0))" if variant == "settle" else "min(0.5, frame / 240.0)"
     dusted(step, settle); dusted(wall, settle + " * 0.4")
