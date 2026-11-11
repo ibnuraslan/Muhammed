@@ -21,3 +21,12 @@
 | Connect13 | FrozenTearsGun | session_01XfwPSnLSNxLDeEJKf7DqL6 | claude/connect13-frozen-tears-gun |
 | Connect14 | ElectricianPolice | session_01XfwPSojF79dPjqVRipTFo3 | claude/connect14-electrician-police |
 | Connect15 | GameBoxBullet | session_01XfwPSnptu51QmjSMaMmQKe | claude/connect15-game-box-bullet |
+
+## Batch 3 (launched 2026-11-11 19:17 UTC)
+| Chat | Film | Session | Branch |
+|---|---|---|---|
+| Connect16 | DrunkTrain | session_01XfwPSkp8x1sSXVwc46CaT2 | claude/connect16-drunk-train |
+| Connect17 | ToddlerWell | session_01XfwPSmkWCLsjaVSQTb7WBQ | claude/connect17-toddler-well |
+| Connect18 | NukedWell | session_01XfwPSovABVGEbjKaubA2qQ | claude/connect18-nuked-well |
+| Connect19 | SpeakWithoutSight | session_01XfwPSkLmuwLAL9ayCcrSJz | claude/connect19-speak-without-sight |
+| Connect20 | HeadsetBullet | session_01XfwPSnzoxGweTjrnJAzPfJ | claude/connect20-headset-bullet |
