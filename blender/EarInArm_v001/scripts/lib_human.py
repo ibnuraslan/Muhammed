@@ -2,7 +2,7 @@
 # FK body/legs, IK hands in armature space, finger curls, face shape keys.
 import math
 import bpy
-from mathutils import Vector, Matrix
+from mathutils import Vector, Matrix, Quaternion
 
 SPINE_W = {"spine05": 0.12, "spine04": 0.18, "spine03": 0.22, "spine02": 0.26, "spine01": 0.22}
 HEAD_W = {"neck01": 0.25, "neck02": 0.25, "neck03": 0.2, "head": 0.3}
@@ -58,15 +58,26 @@ class Person:
                 R.key_rot("foot." + s, f, [("X", -ank)])
         R.key_rot("jaw", f, [("X", -jaw)])
     def key_fingers(self, s, f, curl, thumb=18):
-        Rh = self.rest_hand[s]; d, a = Rh.col[0].copy(), Rh.col[1].copy(); sign = 1 if s == "R" else -1
+        """curl = degrees (or [index, middle, ring, pinky]); bone-local +X curls toward the palm (tested on MPFB 'default')"""
         for k in range(2, 6):
             c = curl[k - 2] if isinstance(curl, (list, tuple)) else curl
             for j in range(1, 4):
-                b = "finger%d-%d.%s" % (k, j, s)
-                self.R.key_q(b, f, self.R.local_q(b, Matrix.Rotation(R_(c * JW[j - 1] * sign), 3, a)))
-        for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
-            b = "finger1-%d.%s" % (j, s)
-            self.R.key_q(b, f, self.R.local_q(b, Matrix.Rotation(R_(fl * sign), 3, a) @ Matrix.Rotation(R_(22 * sign), 3, d)))
+                b = "finger%d-%d.%s" % (k, j, s); pb = self.R.PB[b]
+                q = Quaternion((1, 0, 0), R_(max(5.0, c) * JW[j - 1]))
+                if pb.rotation_quaternion.dot(q) < 0: q = -q
+                pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=b)
+        for j, w in ((1, 0.25), (2, 0.6), (3, 0.8)):
+            b = "finger1-%d.%s" % (j, s); pb = self.R.PB[b]
+            q = Quaternion((1, 0, 0), R_(thumb * w)); pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=b)
+    def limit_hands(self):
+        """no backward finger bends; wrist within a natural range"""
+        for s in "LR":
+            for k in range(1, 6):
+                for j in range(1, 4):
+                    pb = self.R.PB["finger%d-%d.%s" % (k, j, s)]
+                    c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+                    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+                    c.min_x, c.max_x = R_(-5), R_(100); c.min_y, c.max_y = R_(-15), R_(15); c.min_z, c.max_z = R_(-15), R_(15)
     def ik(self, s, f, on):
         """switch arm IK on/off (off = FK arm hangs from its keyed rotations)"""
         c = self.R.PB["lowerarm02." + s].constraints[0]; c.influence = 1.0 if on else 0.0; c.keyframe_insert("influence", frame=f)

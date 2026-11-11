@@ -1,0 +1,8 @@
+CAMERA inside geometry at frames: [(176, 'SA_Membrane')]
+LONGEST near-static camera hold: 0.25 s ending f1256
+FOOT hover >2cm on a planted foot (rig, side, frame, gap): 0 []
+FOOT sink >1.5cm: 0 []
+GRIP prop far from palm (>9cm): 0 []
+SHAVINGS off the tray at end: none
+PENETRATION fingertip-inside-surface count (every 15 f): 28 [(136, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.007), (136, 'Surgeon', 'finger3-3.R', 'Patient.body', 0.009), (271, 'Patient', 'finger4-3.L', 'ArmBoard', 0.006), (571, 'Surgeon', 'finger5-3.R', 'Trolley_Top', 0.007), (676, 'Surgeon', 'finger1-3.L', 'ArmBoard', 0.006), (691, 'Surgeon', 'finger2-3.L', 'ArmBoard', 0.011), (706, 'Surgeon', 'finger2-3.L', 'Patient.body', 0.004), (1096, 'Surgeon', 'finger2-3.L', 'Patient.body', 0.007), (1096, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.007), (1111, 'Surgeon', 'finger2-3.L', 'Patient.body', 0.022), (1111, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.018), (1126, 'Surgeon', 'finger2-3.L', 'Patient.body', 0.021), (1126, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.019), (1141, 'Surgeon', 'finger2-3.L', 'Patient.body', 0.017), (1141, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.021), (1156, 'Surgeon', 'finger2-3.L', 'Patient.body', 0.01), (1156, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.02), (1171, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.015), (1186, 'Surgeon', 'finger3-3.L', 'Patient.body', 0.007), (1396, 'Surgeon', 'finger5-3.R', 'Patient.body', 0.018), (1411, 'Surgeon', 'finger4-3.R', 'Patient.body', 0.005), (1411, 'Surgeon', 'finger5-3.R', 'Patient.body', 0.02), (1426, 'Surgeon', 'finger5-3.R', 'Patient.body', 0.018), (1441, 'Surgeon', 'finger5-3.R', 'Patient.body', 0.014), (1456, 'Surgeon', 'finger5-3.R', 'Patient.body', 0.013)]
+FEET below floor count: 0 []

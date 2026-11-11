@@ -73,6 +73,7 @@ PAT = Person(OB["Patient"]); SUR = Person(OB["Surgeon"]); NUR = Person(OB["Nurse
 # surgeon hands: no wrist copy-rotation (its target orientations twisted the wrist into a ballooned glove); the hand follows the forearm
 for P_ in (SUR, SAS):
     for s_ in "LR": P_.R.PB["wrist." + s_].constraints[0].influence = 0.0
+for P_ in (PAT, SUR, NUR, SAS): P_.limit_hands()
 pr = PAT.o; M = pr.matrix_world.copy(); pr.parent = tilt; pr.matrix_parent_inverse = tilt.matrix_world.inverted()
 for s in "LR":
     PAT.R.PB["lowerleg02." + s].constraints[0].influence = 0.0   # FK seated legs
@@ -241,6 +242,7 @@ stand(SUR, B["end"], SC_ + Vector((0.35, 0.15)), yCC, spine=(2, 0, -6), head=(4,
 # surgeon hands. Block/ear positions on the tray
 TRAY = OB["Tray"].matrix_world.translation.copy()
 BLK = TRAY + Vector((-0.02, -0.02, 0.035))
+SUR_TIPS = []
 def sh(f, s, W, d, n, pole=None):
     """surgeon hand. From the arm beats on, the hand follows the forearm (no wrist copy-rotation), so re-aim it:
     keep the intended tool point ~15 cm beyond the wrist and line the wrist up on the shoulder->tool-point ray"""
@@ -249,6 +251,7 @@ def sh(f, s, W, d, n, pole=None):
         ev_at(f); shp = SUR.wpos("upperarm01." + s)
         tip = W + d * 0.15; dn = (tip - shp).normalized()
         W = tip - dn * 0.15; d = dn
+        SUR_TIPS.append([f, s, tip.copy(), W.copy(), d.copy(), Vector(n)])
     SUR.key_hand(s, f, W, d, n, pole)
 # beat 1: hands together in front, then R hand to the patient's chest on "A surgeon takes"
 CHEST = pat_world(130, (0.08, -0.16, 1.02))
@@ -271,7 +274,9 @@ for f in range(300, 565, 6):
     tgt = BLK + Vector((-0.02 + 0.04 * ph, 0.012 * math.sin(k * 2.3), 0.018 + 0.006 * math.sin(math.pi * ph)))
     shR = Vector((ST.x - 0.18, ST.y - 0.08, 1.38)); dR = (tgt - shR).normalized()
     sh(f, "R", tgt - dR * (0.13 + 0.03 * (1 if f < 350 else 0)) + Vector((0, 0, -0.06)) + away, dR, (-0.2, -0.3, 1.0))
-SUR.key_fingers("L", 300, 45, 35); SUR.key_fingers("R", 300, 55, 40)
+SUR.key_fingers("L", 300, [22, 60, 70, 75], 45); SUR.key_fingers("R", 300, [40, 62, 72, 78], 42)   # L: thumb-index pinch on the cartilage, R: scalpel grip
+SUR.key_fingers("L", 470, [22, 60, 70, 75], 45); SUR.key_fingers("L", 500, [25, 40, 50, 55], 25)
+SUR.key_fingers("R", 566, [30, 58, 68, 74], 42); SUR.key_fingers("L", 566, [25, 50, 60, 66], 35)   # forceps pinch / retracting fingers, never splayed
 # beat 4: R forceps carries the ear to the forearm, slides it in; L forceps lifts the skin edge
 ev_at(640)
 sh(570, "R", BLK + Vector((0.05, -0.04, 0.08)), (-0.6, 0.4, -0.5), (-0.2, -0.4, 1.0))
@@ -323,6 +328,29 @@ for s in "LR":
        Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector((0, -1, -0.5)), (0, 0, 1))
 SUR.key_fingers("R", 1386, 40, 45); SUR.key_fingers("R", B["b9"] + 40, 40, 45); SUR.key_fingers("R", B["b9"] + 70, 20); SUR.key_fingers("L", B["b9"] + 70, 20)
 SUR.face(1, **N0); SUR.face(B["b9"] + 60, **N0); SUR.face(B["b9"] + 90, **dict(N0, eye_left_slit=0.5, eye_right_slit=0.5, mouth_corner_puller=0.7))
+
+# tool tips onto their targets: re-key each surgeon hand key until the forceps / needle tip (or the index tip) lands on it
+TIP_LOCAL = {"F": Vector((0, 0.16, -0.02)), "N": Vector((0, 0.128, -0.025))}
+_fast = []
+for o in bpy.data.objects:
+    if o.type == 'MESH':
+        for m in o.modifiers:
+            if m.type != 'ARMATURE' and m.show_viewport: _fast.append(m); m.show_viewport = False
+for it in range(3):
+    worst = 0.0
+    for rec in SUR_TIPS:
+        f, s_, tip, W, d, n = rec
+        if f > 1500: continue   # stitching: keep the hand above the ear so the macro shows the stitches
+        ev_at(f); WM = SUR.o.matrix_world @ SUR.R.PB["wrist." + s_].matrix
+        if s_ == "R":
+            act = WM @ TIP_LOCAL["F" if f <= 1500 else "N"]
+        else:
+            act = SUR.o.matrix_world @ SUR.R.PB["finger2-3.L"].tail
+        err = tip - act; worst = max(worst, err.length)
+        if err.length > 0.004:
+            rec[3] = W + err * 0.9; SUR.key_hand(s_, f, rec[3], d, n)
+    print("TIP_FIX iter", it, "worst", round(worst, 3))
+for m in _fast: m.show_viewport = True
 
 # ================================================================== nurse
 NH = Human(NUR.R)
