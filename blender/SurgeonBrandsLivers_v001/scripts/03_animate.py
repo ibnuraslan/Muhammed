@@ -430,22 +430,22 @@ mug = bpy.data.objects["Mug"]
 def mug_hand(f):
     ev(f); M = mug.matrix_world; c_ = M @ V(0, 0, 0.05); out = (M.to_3x3() @ V(0, -1, 0)).normalized()
     return c_ + out * 0.048 + V(0, 0, -0.01), (M.to_3x3() @ V(0.0, 1, 0.3)).normalized(), (M.to_3x3() @ V(0, 1, 0)).normalized()
-SIDE_R = ("body", (V(-0.14, -0.10, 1.07), V(0.6, -0.2, -0.6), V(0.9, 0.5, 0)))
+SIDE_R = ("body", (V(-0.185, -0.135, 1.07), V(0.45, -0.35, -0.75), V(0.85, 0.55, 0)))   # palm flat on the outside of her top
 PT.P(605, hp, YP, spine=(2, 0, 0), head=(-4, 0, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": ("rest", dict(out=8, fwd=4))}, curl={"L": (55, 40)})
 PT.P(640, hp, YP, spine=(0, 0, -4), head=(-8, 6, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": ("rest", dict(out=8, fwd=6))}, curl={"L": (55, 40)}, face={"smile": 0.2})
-PT.P(662, hp + V(0, 0, -0.01), YP, spine=(14, 4, 0), head=(6, 0, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": SIDE_R}, curl={"L": (55, 40), "R": (40, 30)}, face={"brow": 0.8, "close": 0.5, "jaw": 4})
-PT.P(685, hp + V(0.02, 0, -0.06), YP, pitch=12, spine=(42, 6, 0), head=(14, 0, 0), feet=FP, hands={"L": ("body", (V(0.16, -0.36, 0.72), V(0.1, -0.4, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (15, 12), "R": (55, 35)}, face={"brow": 1.0, "close": 0.7, "jaw": 7})
+PT.P(662, hp + V(0, 0, -0.01), YP, spine=(14, 4, 0), head=(6, 0, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": SIDE_R}, curl={"L": (55, 40), "R": (14, 12)}, face={"brow": 0.8, "close": 0.5, "jaw": 4})
+PT.P(685, hp + V(0.02, 0, -0.06), YP, pitch=12, spine=(42, 6, 0), head=(14, 0, 0), feet=FP, hands={"L": ("body", (V(0.16, -0.36, 0.72), V(0.1, -0.4, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (15, 12), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 7})
 PT.P(700, hp + V(0.03, -0.02, -0.09), YP - 4, pitch=12, spine=(44, 8, 0), head=(10, 0, 0), feet=FP,
-     hands={"L": ("body", (V(0.12, -0.32, 0.62), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (10, 10), "R": (60, 40)}, face={"brow": 1.0, "close": 0.8, "jaw": 9})
+     hands={"L": ("body", (V(0.12, -0.32, 0.62), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (10, 10), "R": (14, 12)}, face={"brow": 1.0, "close": 0.8, "jaw": 9})
 FPm = {"L": (STP["L"], YP), "R": (STP["R"].lerp(STP2["R"], 0.5), YP - 8, 0.06, 10)}
 PT.P(714, hp + V(0.045, -0.04, -0.11), YP - 6, pitch=13, spine=(45, 9, 0), head=(6, -2, 0), feet=FPm,
-     hands={"L": ("body", (V(0.13, -0.31, 0.58), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (20, 15), "R": (60, 40)}, face={"brow": 1.0, "close": 0.7, "jaw": 9})
+     hands={"L": ("body", (V(0.13, -0.31, 0.58), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (20, 15), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 9})
 PT.P(728, hp + V(0.06, -0.06, -0.12), YP - 8, pitch=15, spine=(46, 10, 0), head=(0, -4, 0), feet=FP2,
-     hands={"L": ("body", (V(0.14, -0.30, 0.55), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (60, 40)}, face={"brow": 1.0, "close": 0.6, "jaw": 10})
+     hands={"L": ("body", (V(0.14, -0.30, 0.55), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.6, "jaw": 10})
 PT.P(760, hp + V(0.06, -0.06, -0.15), YP - 8, pitch=16, spine=(40, 12, 0), head=(-14, -4, 0), feet=FP2,
-     hands={"L": ("body", (V(0.14, -0.30, 0.52), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (65, 40)}, face={"brow": 1.0, "close": 0.4, "jaw": 12})
+     hands={"L": ("body", (V(0.14, -0.30, 0.52), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.4, "jaw": 12})
 PT.P(790, hp + V(0.06, -0.06, -0.17), YP - 8, pitch=17, spine=(44, 12, 0), head=(-10, -4, 0), feet=FP2,
-     hands={"L": ("body", (V(0.14, -0.30, 0.50), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (65, 40)}, face={"brow": 1.0, "close": 0.7, "jaw": 8})
+     hands={"L": ("body", (V(0.14, -0.30, 0.50), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 8})
 # mug: in her hand (keys derived from her hand), slips at 690, falls, bounces
 def mug_key(f, loc, rot):
     mug.location = loc; mug.rotation_euler = rot; mug.keyframe_insert("location", frame=f); mug.keyframe_insert("rotation_euler", frame=f)
@@ -521,8 +521,8 @@ def lamp_handle(f):
     ev(f); M = lamp1.matrix_world; h = M @ V(0, 0, -0.13)
     return h + V(0, 0, -0.03), V(0, 0, 1), V(0, -1, 0)
 NU.P(1, nu_or, YN, spine=(6, 0, 0), head=(10, 0, -4), feet=FN, hands={"L": ("body", (V(0.14, -0.30, 1.0), V(-0.6, -0.4, -0.6), V(-0.2, 1, 0))), "R": ("body", (V(-0.14, -0.30, 1.0), V(0.6, -0.4, -0.6), V(0.2, 1, 0)))})
-NU.P(30, nu_or + V(-0.05, -0.04, 0.02), YN - 8, spine=(-4, 0, -6), head=(-28, 0, 0), feet=FN, hands={"R": ("fn", lamp_handle)}, curl={"R": (60, 45)})
-NU.P(90, nu_or + V(-0.05, -0.04, 0.02), YN - 8, spine=(-4, 0, -6), head=(-24, -4, 0), feet=FN, hands={"R": ("fn", lamp_handle)}, curl={"R": (60, 45)})
+NU.P(30, nu_or, YN - 8, spine=(6, 0, -6), head=(-26, 0, 0), feet=FN, hands={"L": ("world", (V(0.55, 0.28, skin_z(0.55, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1))), "R": ("world", (V(0.3, 0.28, skin_z(0.3, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1)))}, curl={"L": (28, 20), "R": (28, 20)})
+NU.P(90, nu_or, YN - 8, spine=(8, 0, -4), head=(-20, -6, 0), feet=FN, hands={"L": ("world", (V(0.55, 0.28, skin_z(0.55, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1))), "R": ("world", (V(0.3, 0.28, skin_z(0.3, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1)))}, curl={"L": (28, 20), "R": (28, 20)})
 NU.P(130, nu_or, YN, spine=(10, 0, 0), head=(18, 0, 0), feet=FN, hands={"L": ("world", (V(0.55, 0.28, skin_z(0.55, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1))), "R": ("world", (V(0.3, 0.28, skin_z(0.3, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1)))})
 for f in (250, 380, 470):
     NU.P(f, nu_or + V(0, 0, -0.01 * (f % 2)), YN, spine=(12, 0, 2), head=(20, 6 * math.sin(f), 0), feet=FN, hands={"L": ("world", (V(0.55, 0.28, skin_z(0.55, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1))), "R": ("world", (V(0.3, 0.28, skin_z(0.3, 0.25) + 0.03), V(-0.2, -1, -0.5), V(0, 0, -1)))})

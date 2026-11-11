@@ -1,0 +1,19 @@
+Hand audit (every 2 frames, frames 1-1710)
+Limit Rotation constraints added: 256 (fingers 0..95 deg forward only, +-10 spread; thumb cone; wrist +-60 flex / +-25 side)
+Elbow IK limits: one-sided 0..145 deg on every lowerarm01 (side chosen per arm by best target reach)
+
+pass 1 (before re-key): 42 hits
+pass 2 (after 1st re-key): 2 hits
+final: 0 hits
+
+Pass-1 hits by hand / kind (frame ranges):
+  Anaesth    R own body                     10 frames  73-1155
+  Patient    R own body                     3 frames  649-653
+  Surgeon1   L other hand                   2 frames  1291-1419
+  Surgeon1   R other hand                   2 frames  1291-1419
+  Surgeon1   R own body                     21 frames  297-503
+  Surgeon2   L own body                     1 frames  927-927
+  Surgeon2   R own body                     3 frames  897-995
+
+Final remaining hits:
+
