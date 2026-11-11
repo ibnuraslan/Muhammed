@@ -234,8 +234,8 @@ r = ringp(F(19.5)); k_(F(19.5), r + Vector((-0.14, -0.3, 0.14)), r, 55)
 k_(F(20.1), (-0.17, -0.64, 1.52), face(F(20.1)), 45)
 k_(F(20.8), (-0.45, -1.45, 1.75), (0.25, 0.0, 1.4), 32)
 k_(F(21.8), (-0.95, -2.5, 2.1), (1.3, 0.3, 1.1), 24)
-k_(F(22.8), (-0.8, -2.85, 2.28), (2.5, 0.5, 1.1), 24)
-k_(1410, (-0.72, -2.95, 2.33), (2.7, 0.52, 1.1), 24)
+k_(F(22.8), (-0.35, -2.3, 2.05), (2.55, 0.55, 1.15), 28)
+k_(1410, (0.25, -1.75, 1.8), (2.75, 0.6, 1.2), 33)
 cl = catmull([(k[0], k[1]) for k in K]); ct = catmull([(k[0], k[2]) for k in K]); cn = pchip([(k[0], float(k[3])) for k in K])
 cf = catmull([(k[0], k[4]) for k in K])
 cd = bpy.data.cameras.new("Cam"); cam = bpy.data.objects.new("Cam", cd); sc.collection.objects.link(cam); sc.camera = cam
@@ -245,7 +245,7 @@ def ride(f):
     """orbit around the flying bullet: behind-above -> side -> below-side, closing in; target swings from the face to the bullet's nose"""
     u = smooth((f - F(1.25)) / (F(2.95) - F(1.25)))
     sd = DIR.cross(Vector((0, 0, 1))).normalized(); up = sd.cross(DIR).normalized()
-    ang = math.radians(-20 + 110 * u)                      # around the flight axis
+    ang = math.radians(-20 + 75 * u)                      # around the flight axis
     rad = 0.035 + 0.02 * u; back = 0.075 - 0.05 * u
     b = bpos(f); off = (up * math.cos(ang) + sd * math.sin(ang)) * rad - DIR * back
     tgt = b + (face(f) - b).normalized() * 0.012 + up * 0.006
@@ -295,7 +295,7 @@ for m in bpy.data.materials:
     gn = m.node_tree.nodes.get("SkinGroup") if m.node_tree else None
     if gn and m.name.startswith("Owner"):
         cc = gn.inputs["Clearcoat"]
-        for f, v in ((1, 0.12), (FIRE, 0.15), (300, 0.4), (1000, 0.5), (1249, 0.4), (1410, 0.3)):
+        for f, v in ((1, 0.08), (FIRE, 0.1), (300, 0.18), (1000, 0.22), (1249, 0.18), (1410, 0.12)):
             cc.default_value = v; cc.keyframe_insert("default_value", frame=f)
 # lift the shadows in the opening wide (0-1.2 s)
 fl_ = O["L_FillBounce"].data

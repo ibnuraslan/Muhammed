@@ -1,0 +1,24 @@
+# Changes since checkpoint B
+- **Eyes:** the eye mesh no longer casts shadows, which fixes the black and milky eyes. The MPFB cornea is back to its defaults, so the irises, pupils and catchlights read. In the disbelief beat there's a slow blink, brows up, and an eye-bone look down at the ring.
+- **Skin:** more pore relief and SSS. A keyed clearcoat gives a sweat sheen that rises through the terror beats and is kept subtle.
+- **Walk-out:**
+  - The police strobe now flashes red and blue about 3.3 times per second through the door and window, about twice as bright as before.
+  - A generic officer (MPFB, navy uniform with no markings) waits outside the door and beckons.
+  - The door now swings the other way so it doesn't block the view.
+  - The camera now pushes into the doorway instead of holding.
+  - The bandaged hand is held up in front at 20.8–21.2 s.
+- **0–1 s:** a keyed fill lift so the room reads.
+- **Set:**
+  - a proper banker's lamp shade
+  - ceiling beams and a darker ceiling plaster
+  - a glass-front antiques cabinet with a display light
+  - asset orientation fixes (wall clock, mirror, frames)
+  - a wall-clock second hand ticking in world time (slow during the slow motion)
+- **Bullet ride (1.25–2.95 s):** the camera now orbits about 75° around the flying bullet, so the framing changes continuously instead of holding.
+- **Ring:**
+  - The neighbouring fingers are splayed off the band.
+  - A ring-seat displace sits under the band.
+  - The dent only moves the outer surface.
+  - The ring glint and a rim-light boost come just before impact.
+- **Neck grab:** raised onto the neck and collar. The fingers no longer dip into the lapel.
+- **Packaging:** `scripts/prep_package.py` merges duplicate images and re-encodes the 16-bit PNGs and EXRs to JPEG. A packed test came out at 35 MB.
