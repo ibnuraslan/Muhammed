@@ -104,7 +104,7 @@ def anim_stairs(c, t):
     sec = t * DUR["stairs"]
     u = ease(min(1.0, max(0.0, (sec - 1.0) / 2.5)))
     p = c["panel"]; p.location = (0.6 - 0.25 * u, 1.62 - 0.55 * u, 0.58 + 0.15 * u); p.rotation_euler = (0, 0, math.radians(-25 * u))
-    h = c["officer"]; sp = Vector((-0.9, 0.2, 0)); place(h, sp, face_to(sp, (0.6, 2.0))); arms_relaxed(h)
+    h = c["officer"]; sp = Vector((1.75, 0.9, 0)); place(h, sp, face_to(sp, (0.6, 2.0))); arms_relaxed(h)
     to = c["torch"]; to.location = h.bone_head("upperarm01.R") + Vector((0.25, 0.25, -0.15))
     point_at(to, Vector((0.55 + 0.25 * math.sin(sec * 0.5), 2.0, 0.2)))
 
@@ -114,6 +114,6 @@ MOVES = {
                    cam=lambda c, t: (Vector((14.0, -6.5, 2.4)).lerp(Vector((12.0, -6.0, 2.2)), ease(t)), Vector((-1.0, 6.0, 1.0)), 30),
                    focus=lambda c, t: Vector((-1.0, 5.0, 1.0))),
     "stairs": dict(kind="anim", dof=2.8, anim=anim_stairs,
-                   cam=lambda c, t: (Vector((-1.6, -0.9, 1.35)).lerp(Vector((-1.4, -0.7, 1.25)), ease(t)), Vector((0.4, 1.9, 0.45)), 28),
+                   cam=lambda c, t: (Vector((-1.1, -0.7, 1.3)).lerp(Vector((-0.9, -0.5, 1.22)), ease(t)), Vector((0.6, 1.9, 0.5)), 28),
                    focus=lambda c, t: Vector((0.6, 2.0, 0.25))),
 }
