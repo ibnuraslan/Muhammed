@@ -112,7 +112,7 @@ M_leafy = load_mat("leafy_grass"); mapping_scale(M_leafy, 10)
 M_asph = load_mat("asphalt_02"); mapping_scale(M_asph, 8)
 M_conc = load_mat("concrete_floor"); mapping_scale(M_conc, 6)
 M_siding0 = load_mat("weathered_plank_siding"); mapping_scale(M_siding0, 3)
-M_siding = tint(M_siding0, (0.80, 0.86, 0.95), "M_siding_blue")
+M_siding = tint(M_siding0, (1.25, 1.35, 1.5), "M_siding_blue")
 M_plaster0 = load_mat("painted_plaster_wall"); mapping_scale(M_plaster0, 2)
 M_wall_room = tint(M_plaster0, (0.42, 0.47, 0.60), "M_room_wall")
 M_drywall = tint(M_plaster0, (0.95, 0.95, 0.93), "M_drywall")
@@ -216,6 +216,38 @@ def import_model(asset, c, loc, rot=0.0, scale=1.0, skip=("LOD1", "LOD2", "LOD3"
     root.location = loc; root.rotation_euler.z = rot; root.scale = (scale,) * 3
     return root
 
+_GLB = {}
+def import_glb(name, c, loc, rotz=0.0, height=None, scale=1.0):
+    """CC-BY model (Objaverse GLB) normalised: bbox centred on xy, base on z=0, optional target height"""
+    root = bpy.data.objects.new("GLB_" + name, None); c.objects.link(root)
+    if name in _GLB:
+        src, k = _GLB[name]; mp = {}
+        for o in src:
+            n = o.copy(); c.objects.link(n); mp[o] = n
+        for o in src: mp[o].parent = mp[o.parent] if o.parent in mp else root
+    else:
+        before = set(bpy.data.objects)
+        bpy.ops.import_scene.gltf(filepath=os.path.join(A, "glb", name + ".glb"))
+        new = [o for o in bpy.data.objects if o not in before]
+        for o in new:
+            for cc in list(o.users_collection): cc.objects.unlink(o)
+            c.objects.link(o)
+        bpy.context.view_layer.update()
+        ms = [o for o in new if o.type == "MESH"]
+        pts = [o.matrix_world @ Vector(b) for o in ms for b in o.bound_box]
+        lo = Vector([min(p_[i] for p_ in pts) for i in range(3)]); hi = Vector([max(p_[i] for p_ in pts) for i in range(3)])
+        k = (height / (hi.z - lo.z)) if height else 1.0
+        tops = [o for o in new if o.parent is None]
+        piv = bpy.data.objects.new("GLBpiv_" + name, None); c.objects.link(piv)
+        piv.location = (-(lo.x + hi.x) / 2, -(lo.y + hi.y) / 2, -lo.z)
+        for o in tops: o.parent = piv
+        piv.parent = root; new.append(piv)
+        for o in new:
+            if o.type in ("LIGHT", "CAMERA"): o.hide_render = True
+        _GLB[name] = ([o for o in new], k)
+    root.location = loc; root.rotation_euler.z = rotz; root.scale = (k * scale,) * 3
+    return root
+
 TREE_SKIP = ("LOD0", "LOD2", "LOD3", "wdg_", "hlp_", "rig_")
 import_model("tree_small_02", C_EXT, (-4.5, -9.0, 0), 0.7, 1.0, skip=TREE_SKIP, dec=0.3)
 import_model("tree_small_02", C_EXT, (7.5, -14.0, 0), 2.1, 1.15, skip=TREE_SKIP)
@@ -259,10 +291,11 @@ def house(name, x0, x1, y0, y1, h, col, c=C_EXT, door_x=None, windows=()):
         box(name + "_door", c, door_x - 0.48, door_x + 0.48, y0 - 0.04, y0 + 0.01, 0, 2.1, M_door)
     return w
 
-house("NbrL", -19, -9, 1.0, 10, 2.9, (0.95, 0.90, 0.78), door_x=-12, windows=[(-16, 1.5, 1.4, 1.2), (-10.3, 1.5, 1.0, 1.2)])
-house("NbrR", 9.5, 19, 2.0, 11, 3.0, (0.75, 0.82, 0.78), door_x=11.5, windows=[(14.5, 1.5, 1.6, 1.2), (17.5, 1.5, 1.0, 1.2)])
-house("FarL", -34, -24, 3.0, 11, 2.8, (0.85, 0.75, 0.68), windows=[(-29, 1.5, 1.6, 1.2)])
-house("FarR", 24, 33, 2.0, 10, 2.9, (0.9, 0.9, 0.92), windows=[(28, 1.5, 1.6, 1.2)])
+# neighbour houses: real model (Suburban House, CC-BY), porch side (+X in the model) turned to face the street
+import_glb("houseA", C_EXT, (-14.5, 5.5, 0.0), R_(-90), height=7.8)
+import_glb("houseA", C_EXT, (14.5, 6.0, 0.0), R_(-90), height=7.8, scale=1.05)
+import_glb("houseA", C_EXT, (-29.0, 7.0, 0.0), R_(-90), height=7.8, scale=0.95)
+import_glb("houseA", C_EXT, (28.5, 6.5, 0.0), R_(-90), height=7.8)
 
 # ---- our house: walls except the front, roof, front wall built in layers with the bullet hole at x 0, z 1.30
 HX0, HX1, HD, HH = -6.0, 6.0, 9.0, 2.75
@@ -305,6 +338,10 @@ def front_layer(name, y0, y1, mat, hole_r, jag, seed, window=True):
 front_layer("Wall_siding", -0.025, 0.0, M_siding, 0.075, 0.6, 1)
 front_layer("Wall_osb", 0.0, 0.012, M_osb, 0.08, 0.5, 2)
 front_layer("Wall_drywall", 0.145, 0.16, M_drywall, 0.11, 0.7, 3)
+# intact plugs over the holes until the bullet arrives (hidden on impact in 03)
+box("Plug_siding", C_WALL, -0.12, 0.12, -0.025, 0.0, 1.35, 1.59, M_siding)
+box("Plug_osb", C_WALL, -0.12, 0.12, 0.0, 0.012, 1.35, 1.59, M_osb)
+box("Plug_drywall", C_WALL, -0.14, 0.14, 0.145, 0.16, 1.33, 1.61, M_drywall)
 # studs (bullet passes between the x = -0.2 and +0.2 studs), plates, insulation batts with a torn tunnel
 for i, x in enumerate([HX0 + 0.1] + [-3.4 + 0.4 * k for k in range(int((DOOR[0] - 0.2 + 3.4) / 0.4) + 1)]):
     if WIN[0] - 0.05 < x < WIN[1] + 0.05: continue
@@ -320,6 +357,23 @@ for (a0, a1, b0, b1) in [(WIN[0] - 0.08, WIN[0], WIN[2] - 0.08, WIN[3] + 0.08), 
                          (WIN[0], WIN[1], WIN[2] - 0.08, WIN[2]), (WIN[0], WIN[1], WIN[3], WIN[3] + 0.08), (WIN[0], WIN[1], (WIN[2] + WIN[3]) / 2 - 0.02, (WIN[2] + WIN[3]) / 2 + 0.02)]:
     box("Win_frame", C_WALL, a0, a1, -0.06, 0.16, b0, b1, M_trim)
 box("Front_door", C_WALL, DOOR[0], DOOR[1], 0.0, 0.05, 0.25, 2.15, M_door, 0.01)
+# more front windows (glass + mullions + trim + shutters), porch light and flower beds so the facade reads as a real house
+M_shutter = P("M_shutter", (0.08, 0.12, 0.18), 0.45, coat=0.3)
+M_winglass = P("M_win_glass_ext", (0.03, 0.04, 0.05), 0.05, metal=0.4)
+for (cx, w_) in ((-4.6, 1.3), (4.4, 1.3), (0.0, 0.0)):
+    if w_ == 0.0: continue
+    x0, x1, z0, z1 = cx - w_ / 2, cx + w_ / 2, 0.95, 2.05
+    box("FWin_glass", C_WALL, x0, x1, -0.04, -0.03, z0, z1, M_winglass)
+    for (a0, a1, b0, b1) in [(x0 - 0.08, x0, z0 - 0.1, z1 + 0.08), (x1, x1 + 0.08, z0 - 0.1, z1 + 0.08), (x0, x1, z0 - 0.1, z0), (x0, x1, z1, z1 + 0.08),
+                             (cx - 0.02, cx + 0.02, z0, z1), (x0, x1, (z0 + z1) / 2 - 0.02, (z0 + z1) / 2 + 0.02)]:
+        box("FWin_trim", C_WALL, a0, a1, -0.07, -0.025, b0, b1, M_trim)
+    box("FWin_sill", C_WALL, x0 - 0.12, x1 + 0.12, -0.12, -0.02, z0 - 0.14, z0 - 0.1, M_trim)
+    for sx_ in (x0 - 0.5, x1 + 0.1):
+        sh = box("FWin_shutter", C_WALL, sx_, sx_ + 0.4, -0.06, -0.03, z0 - 0.05, z1 + 0.05, M_shutter)
+for sx_ in (WIN[0] - 0.5, WIN[1] + 0.1):
+    box("FWin_shutter", C_WALL, sx_, sx_ + 0.4, -0.06, -0.03, WIN[2] - 0.05, WIN[3] + 0.05, M_shutter)
+box("Porch_light", C_WALL, DOOR[1] + 0.15, DOOR[1] + 0.27, -0.1, -0.02, 2.0, 2.2, P("M_porchlamp", (0.1, 0.1, 0.1), 0.3, emit=(1.0, 0.8, 0.5), ew=2))
+box("Bed_soil", C_WALL, HX0 + 0.3, DOOR[0] - 0.4, -1.0, -0.15, 0, 0.12, P("M_mulch", (0.12, 0.07, 0.04), 0.95))
 box("Door_step", C_WALL, DOOR[0] - 0.3, DOOR[1] + 0.3, -0.6, 0, 0, 0.18, M_conc)
 box("Gutter", C_WALL, HX0 - 0.45, HX1 + 0.45, -0.58, -0.47, HH - 0.22, HH - 0.12, M_white)
 for x in (HX0 + 0.2, -4.0, 4.0, HX1 - 0.2):
@@ -415,6 +469,17 @@ for i, x in enumerate((WIN[0] - 0.15, WIN[1] - 0.05)):
         v.co = Vector((x + u * 0.25, 0.22 + 0.02 * math.sin(u * 30), WIN[2] - 0.2 + vv * (WIN[3] - WIN[2] + 0.45)))
     cu = mesh_obj("Curtain_%d" % i, bm, C_ROOM, P("M_curtain", (0.5, 0.48, 0.42), 0.9))
     cu.data.polygons.foreach_set("use_smooth", [True] * len(cu.data.polygons))
+# real furniture replaces the blocked-out pieces: gaming desk + chair + PC (CC-BY) and a wooden bed (CC-BY)
+for o in [o for o in C_ROOM.objects if o.name.startswith(("Desk_", "Monitor", "Keyboard", "PC_", "Chair_", "Bed_"))]:
+    bpy.data.objects.remove(o, do_unlink=True)
+for o in [o for o in C_ROOM.objects if o.name.startswith(("gaming_console", "gamepad"))]:
+    bpy.data.objects.remove(o, do_unlink=True)
+desk = import_glb("desk", C_ROOM, (RX0 + 0.95, 1.65, FLOOR_Z), R_(90), height=1.35)
+bed = import_glb("bed", C_ROOM, (RX1 - 0.55, 3.55, FLOOR_Z), R_(90), height=0.62)
+# the monitor shows the abstract animated glow (no UI, no text)
+for o in bpy.data.objects:
+    if o.type == "MESH" and o.name.lower().startswith(("monitor", "screen")):
+        if "wallpaperScreen" in o.name: o.data.materials[0] = bpy.data.materials["M_screen"]
 # room lights: monitor glow, lamp, a soft fill, bounce from the window
 def area(name, loc, rot, size, energy, col):
     l = bpy.data.lights.new(name, "AREA"); l.size = size; l.energy = energy; l.color = col

@@ -424,18 +424,20 @@ pst = bpy.data.objects["Poster3"]; pst.rotation_mode = "XYZ"; y0_ = pst.rotation
 for f, a in ((1, 0), (205, 0), (260, -5), (320, -3.5), (F_END, -4)):
     pst.rotation_euler.y = y0_ + R_(a); kf(pst, "rotation_euler", f, 1)
 puff("Dust_ceiling", V((-0.4, 0.5, 2.62)), V((0.0, 0.1, -0.5)), 215, 0.05, 0.35, M_drydust, 400)
+for n_, fh in (("Plug_siding", F_WALL), ("Plug_osb", F_WALL + 2), ("Plug_drywall", 178)):
+    o = bpy.data.objects[n_]; o.hide_render = False; kf(o, "hide_render", fh - 1); o.hide_render = True; kf(o, "hide_render", fh)
 # a little light inside the wall cavity so studs/insulation read as the camera passes
 cl = bpy.data.lights.new("L_cavity", "POINT"); cl.shadow_soft_size = 0.02; cl.color = (1.0, 0.9, 0.75)
 clo = bpy.data.objects.new("L_cavity", cl); bpy.data.collections["Wall"].objects.link(clo); clo.location = (0.0, 0.08, 1.59)
 for f, e in ((1, 0.0), (165, 0.0), (180, 3.0), (205, 3.0), (215, 0.0)):
     cl.energy = e; cl.keyframe_insert("energy", frame=f)
 # sharp bright streak behind the bullet outside
-bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=12, radius1=0.0035, radius2=0.0006, depth=1.6)
-bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X')); bmesh.ops.translate(bm, verts=bm.verts, vec=(0, -0.83, 0))
+bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=12, radius1=0.0022, radius2=0.0003, depth=0.6)
+bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X')); bmesh.ops.translate(bm, verts=bm.verts, vec=(0, -0.32, 0))
 me = bpy.data.meshes.new("Streak"); bm.to_mesh(me); bm.free()
 mst = bpy.data.materials.new("M_streak"); mst.use_nodes = True; nt_ = mst.node_tree; nt_.nodes.clear()
 e_ = nt_.nodes.new("ShaderNodeEmission"); e_.inputs["Color"].default_value = (1.0, 0.85, 0.6, 1); e_.inputs["Strength"].default_value = 6
-t_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); m_ = nt_.nodes.new("ShaderNodeMixShader"); m_.inputs[0].default_value = 0.45
+t_ = nt_.nodes.new("ShaderNodeBsdfTransparent"); m_ = nt_.nodes.new("ShaderNodeMixShader"); m_.inputs[0].default_value = 0.75
 o_ = nt_.nodes.new("ShaderNodeOutputMaterial"); nt_.links.new(e_.outputs[0], m_.inputs[1]); nt_.links.new(t_.outputs[0], m_.inputs[2]); nt_.links.new(m_.outputs[0], o_.inputs[0])
 me.materials.append(mst); stk = bpy.data.objects.new("Bullet_streak", me); bpy.data.collections["FX"].objects.link(stk); stk.parent = bullet
 for f, v in ((1, False), (F_WALL, False), (F_WALL + 2, True)):

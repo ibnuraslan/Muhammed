@@ -1,8 +1,20 @@
 # GameBoxBullet: credits
 
-## Required attribution
-None. Every third-party asset in this film is CC0, so the video description needs no credit block.
-(Optional courtesy line: "Some 3D assets from Poly Haven (CC0) and MakeHuman (CC0).")
+## Required attribution (CC BY 4.0)
+Paste this block into the video description:
+
+```
+3D models (CC BY 4.0, via Sketchfab):
+PC Setup with Gaming Chair by BCANG · Single wooden bed by franckross · Suburban House by mbuannoart
+```
+
+| Asset | Author | Source |
+|---|---|---|
+| PC Setup with Gaming Chair (desk, PC, keyboard, monitor, chair; the screen shows our own abstract glow) | BCANG | https://sketchfab.com/3d-models/ccccc3cd720d48f4808f0d71161c7dd9 |
+| Single wooden bed | franckross | https://sketchfab.com/3d-models/c7bea79b8c7a4b7c9ec5eadfa2529b9a |
+| Suburban House (the neighbour houses, 4 instances) | mbuannoart | https://sketchfab.com/3d-models/b8375c5e5e6b40639fc06492fbd95fcb |
+
+All three were obtained through Objaverse (allenai/objaverse on Hugging Face).
 
 ## CC0 assets (listed for provenance)
 | Asset | Author | Source |
