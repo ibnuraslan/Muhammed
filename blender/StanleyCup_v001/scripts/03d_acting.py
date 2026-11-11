@@ -63,8 +63,10 @@ CUP_LIFT = [(1452, Vector((0, 0, 0))), (1478, Vector((0.02, 0.015, 0.018))), (15
 c_rest = CUP.location.copy()       # (after the skid keys, this is the final skid position from 03b)
 sc.frame_set(1452); c_rest = CUP.matrix_world.translation.copy()
 r_wr = W_HANDS[1447][0][0]; r_d = W_HANDS[1447][0][1]
+rz0 = CUP.rotation_euler.z
 for f, off in CUP_LIFT:
     CUP.location = c_rest + off; CUP.keyframe_insert("location", frame=f)
+    CUP.rotation_euler.z = rz0 + {1452: 0.0, 1478: R_(-4), 1530: R_(22)}[f]; CUP.keyframe_insert("rotation_euler", frame=f)
     ws.hand("R", f, r_wr + off, r_d, UP)
 # ---- him: mid-story gesturing, then turns toward the noise, eyes wide, reaches toward her in slow motion; real time: half-rises,
 #      leans across the corner and takes her forearm

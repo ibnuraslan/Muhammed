@@ -293,7 +293,7 @@ for i, (u0, u1, z0, z1) in enumerate(WIN_EXT):
             c = box("Curtain", (WALL_IN + 0.06, a, 0.05), (WALL_IN + 0.09, b, H - 0.15), M_CURT, C_ROOM)
             sd = c.modifiers.new("sub", "SUBSURF"); sd.levels = sd.render_levels = 2
             wv = c.modifiers.new("folds", "WAVE"); wv.use_x = False; wv.use_y = True; wv.use_normal = False
-            wv.height = 0.025; wv.width = 0.12; wv.narrowness = 1.0; wv.speed = 0.0
+            wv.height = 0.025; wv.width = 0.12; wv.narrowness = 1.0; wv.speed = 0.0012
         # glow behind the hall window/door (beyond the room) reads as lived-in
 for (u0, u1, z0, z1) in WIN_EXT[3:]:
     box("HallGlow", (WALL_OUT + 0.4, u0, z0), (WALL_OUT + 0.42, u1, z1), M_WARMWIN, C_EXT)
@@ -381,11 +381,33 @@ def neighbour(x0, y0, w, d, h, face_sign, mat):
                     (x0 + d / 2, y0 - 0.4, zz + 2.0), (x0 + d / 2, y0 + w + 0.4, zz + 2.0)], [],
                    [(0, 4, 5, 3), (1, 2, 5, 4), (0, 1, 4), (3, 5, 2)])
     me.uv_layers.new(); o = bpy.data.objects.new("NbRoof", me); C_EXT.objects.link(o); me.materials.append(M_ROOF)
-neighbour(-0.5, -22.0, 10, 9, 3.4, -1, M_SID2)
-neighbour(-0.5, 13.0, 9, 9, 3.4, -1, M_SID3)
-neighbour(-30.0, -12.0, 10, 9, 3.4, 1, M_SID3)
-neighbour(-30.0, 2.0, 11, 9, 3.4, 1, M_SID2)
-neighbour(-30.0, 17.0, 10, 9, 3.4, 1, M_SID2)
+# neighbour houses: real CC-BY models (Sketchfab via Objaverse), scaled to ~10 m wide, front turned to the street
+GLB = os.path.join(A, "glb")
+def glb_house(name, centre, face_sign, width=10.0, rz_extra=0.0):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=os.path.join(GLB, name + ".glb"))
+    new = [o for o in bpy.data.objects if o not in before]
+    root = bpy.data.objects.new(name + "_root", None); C_EXT.objects.link(root)
+    for o in new:
+        for c in o.users_collection: c.objects.unlink(o)
+        C_EXT.objects.link(o)
+        if o.parent is None: o.parent = root
+    bpy.context.view_layer.update()
+    pts = [o.matrix_world @ Vector(c) for o in new if o.type == "MESH" for c in o.bound_box]
+    mn = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts))); mx = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
+    k = width / max(mx.x - mn.x, mx.y - mn.y)
+    for o in new:
+        if o.parent is root: o.location -= Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z))
+    root.scale = (k, k, k); root.rotation_euler = (0, 0, R_(-90 if face_sign < 0 else 90) + rz_extra); root.location = (centre[0], centre[1], GROUND_Z)
+    print("NB", name, round(k, 3), tuple(round(x, 1) for x in (mx - mn) * k))
+glb_house("nb_2story", (4.0, -17.0), -1, 9.0)
+glb_house("nb_american", (4.0, 17.5), -1, 9.0)
+glb_house("nb_starter", (-25.5, -7.0), 1, 10.0)
+glb_house("nb_wheeler", (-25.5, 7.5), 1, 12.0)
+glb_house("nb_american", (-25.5, 21.0), 1, 9.0)
+box("LawnAcross", (-45.0, -40, GROUND_Z - 0.05), (-21.0, 40, GROUND_Z), M_GRASS, C_EXT)
+box("SidewalkAcross", (-21.0, -40, GROUND_Z - 0.04), (-19.4, 40, GROUND_Z + 0.03), M_CONC, C_EXT)
+box("CurbAcross", (-19.4, -40, GROUND_Z - 0.15), (-19.0, 40, GROUND_Z + 0.02), M_CONC, C_EXT)
 # shrubs along the façade and yard
 sh_root, _ = append_asset("shrub_02", C_EXT, (WALL_OUT - 0.7, -0.3, GROUND_Z), 0, 0.9, keep=lambda n: n.endswith("LOD1"))
 sh_root.name = "Shrub_src"
@@ -401,6 +423,14 @@ for (asset, loc, rz, s) in [("Sofa_01", (5.6, 2.2, 0), R_(90), 1.15), ("coffee_t
                             ("hanging_picture_frame_02", (6.58, -1.0, 1.65), R_(90), 1.2), ("hanging_picture_frame_02", (1.6, 3.19, 1.6), R_(180), 0.9),
                             ("ceramic_vase_02", (6.45, -2.5, 1.14), 0, 0.6), ("potted_plant_04", (4.5, 2.2, 0.37), 0, 1.0)]:
     append_asset(asset, C_ROOM if "plant" in asset or "Sofa" in asset or "Shelf" in asset else C_PROP, loc, rz, s)
+for (asset, loc, rz, sc_) in [("fancy_picture_frame_01", (6.58, 2.2, 1.75), R_(90), 1.0), ("hanging_picture_frame_03", (3.0, -3.39, 1.62), 0.0, 1.0),
+                              ("hanging_picture_frame_03", (4.75, -3.39, 1.5), 0.0, 0.8), ("potted_plant_02", (6.25, 0.85, 0), 0.4, 1.0),
+                              ("potted_plant_02", (1.1, -3.05, 0), 1.9, 0.85), ("ArmChair_01", (5.7, -2.6, 0), R_(200), 1.0),
+                              ("industrial_wall_sconce", (2.0, -3.39, 1.85), 0.0, 1.0), ("industrial_wall_sconce", (5.6, -3.39, 1.85), 0.0, 1.0)]:
+    append_asset(asset, C_ROOM, loc, rz, sc_)
+for xx in (2.0, 5.6):
+    l_ = bpy.data.lights.new("SconceLight", "POINT"); l_.energy = 35; l_.color = (1.0, 0.68, 0.38); l_.shadow_soft_size = 0.05
+    o_ = bpy.data.objects.new("SconceLight", l_); o_.location = (xx, -3.25, 1.9); C_ROOM.objects.link(o_)
 bk_root, bk_obs = append_asset("book_encyclopedia_set_01", C_PROP, (6.45, -2.0, 0.73), R_(-90), 0.9, keep=lambda n: "book" in n)
 ch_root, _ = append_asset("dining_chair_02", C_ROOM, WOMAN_SEAT, R_(-90))          # chair faces -X (towards the wall)
 ch_root.name = "Chair_Woman"
@@ -476,6 +506,14 @@ em = N.new("ShaderNodeEmission"); em.inputs[0].default_value = (0.35, 0.85, 1.0,
 mixg = N.new("ShaderNodeMixShader"); L.new(fres.outputs["Facing"], mixg.inputs[0]); L.new(ghost.outputs[0], mixg.inputs[1]); L.new(em.outputs[0], mixg.inputs[2])
 mixx = N.new("ShaderNodeMixShader"); mixx.name = "XRAY"; mixx.inputs[0].default_value = 0.0
 L.new(b.outputs[0], mixx.inputs[1]); L.new(mixg.outputs[0], mixx.inputs[2]); L.new(mixx.outputs[0], N["Material Output"].inputs[0])
+_at = N.new("ShaderNodeAttribute"); _at.attribute_name = "chip"; _cv = N.new("ShaderNodeValue"); _cv.name = "CHIP"; _cv.outputs[0].default_value = 0.0
+_nz2 = N.new("ShaderNodeTexNoise"); _nz2.inputs["Scale"].default_value = 400; _m1 = N.new("ShaderNodeMath"); _m1.operation = "MULTIPLY"
+L.new(_at.outputs["Fac"], _m1.inputs[0]); L.new(_cv.outputs[0], _m1.inputs[1])
+_m2 = N.new("ShaderNodeMath"); _m2.operation = "GREATER_THAN"; _m3 = N.new("ShaderNodeMath"); _m3.operation = "MULTIPLY"; _m3.inputs[1].default_value = 0.9
+L.new(_m1.outputs[0], _m3.inputs[0]); L.new(_m3.outputs[0], _m2.inputs[0]); L.new(_nz2.outputs[0], _m2.inputs[1])
+_steel = N.new("ShaderNodeBsdfPrincipled"); _steel.inputs["Base Color"].default_value = (0.62, 0.62, 0.6, 1); _steel.inputs["Metallic"].default_value = 1.0; _steel.inputs["Roughness"].default_value = 0.3
+_mc = N.new("ShaderNodeMixShader"); L.new(_m2.outputs[0], _mc.inputs[0]); L.new(b.outputs[0], _mc.inputs[1]); L.new(_steel.outputs[0], _mc.inputs[2])
+L.new(_mc.outputs[0], mixx.inputs[1])
 M_STEEL = flat("M_Steel", (0.78, 0.78, 0.78), 0.18, 1.0)
 M_LID = flat("M_LidPlastic", (0.82, 0.86, 0.85), 0.35)
 M_STRAW = flat("M_Straw", (0.16, 0.34, 0.36), 0.3, alpha=1.0)
@@ -556,13 +594,17 @@ sc["impact_local_z"] = imp_z
 inv = cup_root.matrix_world.inverted().to_3x3()
 dirl = inv @ Vector((-1, -SHOT_SLOPE, 0)).normalized()          # local direction the bullet comes from
 ang0 = math.atan2(dirl.y, dirl.x); sc["impact_local_angle"] = ang0
+chip = [0.0] * len(body.data.vertices)
 for v in body.data.vertices:
     a = math.atan2(v.co.y, v.co.x); da = math.atan2(math.sin(a - ang0), math.cos(a - ang0))
     dz = v.co.z - imp_z; rr = math.hypot(v.co.x, v.co.y)
-    w = math.exp(-((rr * da) ** 2 + dz ** 2) / (2 * 0.011 ** 2))
+    w = math.exp(-((rr * da) ** 2 + dz ** 2) / (2 * 0.012 ** 2))
     ring = 0.0009 * math.exp(-(((rr * da) ** 2 + dz ** 2) ** 0.5 - 0.016) ** 2 / (2 * 0.004 ** 2))
-    push = 0.0026 * w - ring * 0.5
+    push = 0.0042 * w - ring * 0.7
+    chip[v.index] = min(1.0, 1.8 * math.exp(-((rr * da) ** 2 + dz ** 2) / (2 * 0.0095 ** 2)))
     dk.data[v.index].co = v.co - Vector((v.co.x, v.co.y, 0)).normalized() * push if rr > 1e-5 else v.co
+at = body.data.attributes.new("chip", "FLOAT", "POINT")
+for i_, c_ in enumerate(chip): at.data[i_].value = c_
 sd = body.modifiers.new("sub", "SUBSURF"); sd.levels = 1; sd.render_levels = 2
 
 # ------------------------------------------------------------------ bullet (jacketed round nose, ~9 mm) with a mushroom shape key

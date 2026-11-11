@@ -114,6 +114,9 @@ for f, e in ((1, 0), (F_SIDING, 0), (F_SIDING + 20, 0.25), (F_DRY + 10, 0.25), (
 body = bpy.data.objects["Tumbler_Body"]; dk = body.data.shape_keys.key_blocks["Dent"]
 for f, v in ((1, 0), (F_IMPACT - 1, 0), (F_IMPACT + 10, 0.75), (F_IMPACT + 26, 1.08), (F_IMPACT + 60, 1.0)):
     dk.value = v; dk.keyframe_insert("value", frame=f)
+chipv = bpy.data.materials["M_Powdercoat"].node_tree.nodes["CHIP"].outputs[0]
+for f, v in ((1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 12, 1.0)):
+    chipv.default_value = v; chipv.keyframe_insert("default_value", frame=f)
 # cup skids 1.5 cm and rocks (slow-mo), settles
 CUP.rotation_mode = "XYZ"; c0 = CUP.location.copy(); r0 = CUP.rotation_euler.copy()
 for f, dp, tilt in ((1, 0, 0), (F_IMPACT, 0, 0), (F_IMPACT + 60, 0.008, 3.0), (F_IMPACT + 160, 0.015, 1.5), (1285, 0.016, 0.0), (1300, 0.016, -0.8), (1330, 0.016, 0.0)):

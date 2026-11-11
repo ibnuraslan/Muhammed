@@ -11,6 +11,7 @@ COUPLE = (HER_HEAD + HIS_HEAD) / 2 - Z(0.15)
 HOUSE = Vector((WALL_OUT, HOLE.y, 1.0))
 sc.frame_set(1452); HANDLE_POS = CUP.matrix_world @ Vector((0.0, 0.0, 0.14))
 FL = P(1395)
+sc.frame_set(842); _fr = bpy.data.objects['Fiance_rig']; HIS_HAND_842 = _fr.matrix_world @ _fr.pose.bones['wrist.R'].head
 CAM = [  # frame, camera, aim, lens, fstop
     # beat 1: street at dusk, bullet streaks in past the lens, camera whips in behind it and chases it to the siding
     (1, P(1) - D * 0.13 - SV * 0.035 + Z(0.02), P(1) + D * 4.0, 24, 8),
@@ -39,9 +40,11 @@ CAM = [  # frame, camera, aim, lens, fstop
     # beat 5: rack focus to the tumbler, orbit + condensation macro, top-down into the lid, reflection, alignment, contact point
     (640, P(640) - D * 0.1 + SV * 0.05 + Z(0.02), C3 - DXY * 0.045, 50, 2.8),
     (700, C3 + Vector((-0.17, -0.15, 0.01)), C3 + Vector((-0.032, -0.03, -0.01)), 55, 4),
-    (760, C3 + Vector((0.12, -0.2, -0.07)), C3 + Vector((0.0, 0.0, 0.06)), 32, 5.6),
-    (820, C3 + Vector((0.09, -0.12, 0.36)), C3 + Z(0.13), 45, 5.6),
-    (870, C3 + Vector((0.16, -0.16, 0.05)), C3 + Vector((0.03, -0.03, 0.02)), 45, 4),
+    (724, Vector((4.36, -0.45, 1.17)), C3 + Vector((0.2, 0.1, 0.2)), 45, 4),
+    (748, Vector((4.52, -0.14, 1.27)), HER_HEAD + Vector((0.0, 0.02, 0.02)), 45, 2.8),
+    (795, C3 + Vector((0.08, -0.10, 0.34)), C3 + Z(0.13), 40, 5.6),
+    (842, HIS_HAND_842 + Vector((-0.10, -0.24, 0.10)), HIS_HAND_842 + Vector((0.03, 0.05, 0.0)), 35, 4),
+    (885, C3 + Vector((-0.16, -0.18, 0.02)), C3 + Vector((0.02, 0.0, 0.03)), 40, 4),
     (920, P(920) - D * 0.35 + SV * 0.10 + Z(0.07), C3 + Z(0.03), 40, 4),
     (960, IMP + SV * 0.10 - D * 0.04 + Z(0.015), IMP, 55, 2.8),
     # beat 6: macro impact, orbit through the sparks, dive into the x-ray cup to see the ripples, out again, wider on their reaction

@@ -53,8 +53,8 @@ TABLE_EDGE_Y = TABLE_C.y - 0.705 * TABLE_SY
 p_imp = on_line(X_IMPACT)
 REB = p_imp - DXY * 0.085 + Vector((0, -0.04, 0))
 LAND = Vector((REB.x - 0.42, REB.y - 0.06, 0.0046))
-BOUNCES = [(1285, REB + Vector((0, 0, -0.06))), (1306, LAND + Vector((0.03, 0.01, 0))), (1322, LAND + Vector((-0.03, -0.01, 0.0))),
-           (1333, LAND + Vector((-0.08, -0.01, 0))), (1341, LAND + Vector((-0.1, -0.01, 0))), (1395, LAND + Vector((-0.16, 0.0, 0)))]
+BOUNCES = [(1285, REB + Vector((0, 0, -0.06))), (1306, LAND + Vector((0.03, 0.01, 0))), (1328, LAND + Vector((-0.04, -0.01, 0.0045))),
+           (1336, LAND + Vector((-0.07, -0.01, 0.0045))), (1395, LAND + Vector((-0.16, 0.0, 0.0045)))]
 def BPOST(f):
     if f <= 1120:                       # pop back, slow-mo
         u = smooth((f - F_IMPACT) / (1120 - F_IMPACT)); return p_imp.lerp(REB, u) + Vector((0, 0, 0.012 * math.sin(math.pi * u)))
@@ -68,7 +68,7 @@ def BPOST(f):
             base = pa.lerp(pb, u)
             if fa == 1285:              # parabolic drop
                 z = pa.z + (pb.z - pa.z) * u * u; return Vector((base.x, base.y, z))
-            hop = {1306: 0.05, 1322: 0.018, 1333: 0.005}.get(fa, 0.0)
+            hop = {1306: 0.045}.get(fa, 0.0)
             return base + Vector((0, 0, hop * 4 * u * (1 - u)))
     return pts[-1][1]
 BUL = bpy.data.objects["Bullet"]; WAKE = bpy.data.objects["BulletWake"]
@@ -85,7 +85,7 @@ for f in range(1, END + 1, 1):
     else:
         u = min(1.0, (f - 1285) / 110.0)
         q = qd @ Quaternion((0, 0, 1), R_(160) + R_(400) * smooth(u)) @ Quaternion((1, 0, 0), R_(300) + R_(200) * smooth(u)) @ Quaternion((0, 1, 0), R_(70) + R_(20) * smooth(u))
-        if f >= 1341: q = qd @ Quaternion((0, 0, 1), R_(560) + R_(60) * smooth((f - 1341) / 54)) @ Quaternion((1, 0, 0), R_(90))   # rolls, then lies on its side
+        if f >= 1328: q = qd @ Quaternion((0, 0, 1), R_(560) + R_(80) * smooth((f - 1328) / 67)) @ Quaternion((1, 0, 0), R_(90) + R_(540) * smooth((f - 1328) / 67))   # rolls, then lies on its side
     if BUL.rotation_quaternion.dot(q) < 0: q = -q
     BUL.rotation_quaternion = q; BUL.keyframe_insert("rotation_quaternion", frame=f)
 mk = BUL.data.shape_keys.key_blocks["Mushroom"]
