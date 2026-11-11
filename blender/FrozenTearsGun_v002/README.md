@@ -30,5 +30,5 @@ No VO was supplied. The film is built to the target beat times in `beats.json` (
 - **Hands and fingers.**
   - The fingers on the gun grip and the valve wheel are posed procedurally. They read correctly in the macro shots, but are not individually sculpted around every surface.
   - At the valve, one chamber drop sits 0.2 mm inside a fingertip at frame 349, which is not visible.
-- **Mentor in the office (19.4–21 s).** The camera on him is a slow arc; it is the calmest stretch of the film.
+- **Mentor in the office (19.4–21 s).** The camera now drops into a low-angle push-in on him at 20.4 s.
 - **Explainer backdrop.** This is the cyan gradient card behind the gun from 4.5 to 15 s. It sits just behind the gun, so the edge of the workbench shows in front of it in a few valve frames (6–7 s).

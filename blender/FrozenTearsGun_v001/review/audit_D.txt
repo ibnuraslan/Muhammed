@@ -1,0 +1,4 @@
+FrozenTearsGun audit, every 6 frames
+tear centre inside skin                          count    1  worst 0.0002 m at frame 349
+    frames: 349:Tear_06
+camera inside closed geometry: none
