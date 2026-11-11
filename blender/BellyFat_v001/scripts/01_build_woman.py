@@ -51,7 +51,15 @@ for m in bpy.data.objects["Woman.female_casualsuit01"].data.materials:
     for nd in m.node_tree.nodes:
         if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
             nd.image = bpy.data.images.load(clean)
-S1.location.x = 3; S2.location.x = 6
+S3 = person("Stocker", {"gender": 1.0, "age": 0.35, "muscle": 0.6, "weight": 0.5, "proportions": 0.6, "height": 0.6,
+                         "cupsize": 0.5, "firmness": 0.5, "race": {"asian": 0.1, "caucasian": 0.6, "african": 0.3}},
+            "short04/short04.mhclo", ["male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo"],
+            "young_caucasian_male/young_caucasian_male.mhmat")
+S4 = person("ShopperC", {"gender": 0.0, "age": 0.75, "muscle": 0.4, "weight": 0.6, "proportions": 0.55, "height": 0.45,
+                         "cupsize": 0.5, "firmness": 0.5, "race": {"asian": 0.2, "caucasian": 0.7, "african": 0.1}},
+            "long01/long01.mhclo", ["female_elegantsuit01/female_elegantsuit01.mhclo", "shoes02/shoes02.mhclo"],
+            "old_caucasian_female/old_caucasian_female.mhmat", tint={"long01": (0.55, 0.52, 0.5, 1)})
+S1.location.x = 3; S2.location.x = 6; S3.location.x = 9; S4.location.x = 12
 for ob in bpy.data.objects:
     print("OBJ", ob.name, ob.type, ob.parent.name if ob.parent else None,
           [m.name for m in ob.material_slots] if ob.type == "MESH" else "", tuple(round(d, 3) for d in ob.dimensions))

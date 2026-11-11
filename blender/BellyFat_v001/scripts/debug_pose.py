@@ -4,8 +4,9 @@ from mathutils import Vector
 a = sys.argv[sys.argv.index("--") + 1:]; OUT = a[0]; FR = [int(x) for x in a[1].split(",")]
 sc = bpy.context.scene
 cd = bpy.data.cameras.new("DBG"); c = bpy.data.objects.new("DBG", cd); sc.collection.objects.link(c); sc.camera = c
-pos = Vector(a[2].split(",")).__class__([float(x) for x in a[2].split(",")]) if len(a) > 2 else Vector((2.6, -1.2, 1.2))
-c.location = pos; d = Vector((0.0, 0.45, 1.0)) - pos; c.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler(); cd.lens = 30
+pos = Vector([float(x) for x in a[2].split(",")]) if len(a) > 2 else Vector((2.6, -1.2, 1.2))
+tg = Vector([float(x) for x in a[3].split(",")]) if len(a) > 3 else Vector((0.0, 0.45, 1.0))
+c.location = pos; d = tg - pos; c.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler(); cd.lens = 30
 sc.render.resolution_x, sc.render.resolution_y = 360, 640; sc.cycles.samples = 8
 os.makedirs(OUT, exist_ok=True)
 for act in bpy.data.actions:

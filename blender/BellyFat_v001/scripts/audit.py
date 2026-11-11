@@ -17,7 +17,7 @@ def flag(k, f, m): issues.setdefault(k, []).append((f, m))
 def stat(k, v): stats.setdefault(k, []).append(v)
 root = bpy.data.objects["MacroRoot"]; cam = bpy.data.objects["CAM_Film"]; bul = bpy.data.objects["Bullet"]
 W = bpy.data.objects["Woman"]
-shoes = {"Woman": "Woman.shoes02", "ShopperA": "ShopperA.shoes03", "ShopperB": "ShopperB.shoes02"}
+shoes = {"Woman": "Woman.shoes02", "ShopperA": "ShopperA.shoes03", "ShopperB": "ShopperB.shoes02", "Stocker": "Stocker.shoes03", "ShopperC": "ShopperC.shoes02"}
 def ev_mesh_world(o, dg, every=1):
     e = o.evaluated_get(dg); me = e.to_mesh(); mw = o.matrix_world
     pts = [mw @ v.co for v in list(me.vertices)[::every]]; e.to_mesh_clear(); return pts
@@ -99,6 +99,14 @@ for f in macro_frames:
         c = o.location; r = max(o.scale) * 0.92
         ov = BR + r - seg_dist(c)
         if ov > worst: worst, wn = ov, o.name
+    fp = bpy.data.objects.get("M_FatPoints")
+    if fp is not None:
+        for inst in dg.object_instances:
+            if not inst.is_instance or inst.parent is None or inst.parent.original != fp: continue
+            Ml = Mi @ inst.matrix_world
+            c = Ml.translation; r = max(Ml.to_scale()) * 1.0
+            ov = BR + r * 0.85 - seg_dist(c)
+            if ov > worst: worst, wn = ov, "lobule instance"
     stat("lobule_overlap", worst)
     if worst > 0.12: flag("BULLET_IN_LOBULE", f, "%s overlaps the bullet by %.2f u (%.1f mm)" % (wn, worst, worst * 25))
     # fibres: the parted shape key moves the front rows aside; sample their evaluated verts near the axis

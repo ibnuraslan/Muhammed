@@ -210,7 +210,7 @@ for x in [-8 + 2.0 * i for i in range(9)]:
         obj("Tube", box_mesh("Tube", 1.4, 0.18, 0.03), REAL, (x, y, 3.56), [tubem])
 for x in [-8 + 4.0 * i for i in range(5)]:
     ld = bpy.data.lights.new("StoreArea", 'AREA'); ld.shape = 'RECTANGLE'; ld.size = 3.0; ld.size_y = 1.4
-    ld.energy = 220; ld.color = (1.0, 0.96, 0.9)
+    ld.energy = 165; ld.color = (1.0, 0.96, 0.9)
     lo = bpy.data.objects.new("StoreArea", ld); link(lo, REAL); lo.location = (x, 0, 3.45); LIGHTS.append(lo)
 # store world: soft warm grey (enclosed set; only seen in reflections)
 w = bpy.data.worlds.new("W_store"); sc.world = w; w.use_nodes = True
@@ -326,15 +326,15 @@ def grid_slab(name, x0, x1, m_, nz=72, ny=64):
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     for p in me.polygons: p.use_smooth = True
     return mobj(name, me, [m_])
-fabric_m = mat("M_fabric_macro", (0.03, 0.10, 0.28), 0.85, noise_amt=0.5, nscale=60, bump=0.4)
+fabric_m = mat("M_fabric_macro", (0.02, 0.065, 0.19), 0.85, noise_amt=0.5, nscale=60, bump=0.4)
 skin_epi = mat("M_skin_epi", (0.78, 0.55, 0.42), 0.45, sss=0.3, noise_amt=0.3, nscale=25, bump=0.2)
 skin_der = mat("M_dermis", (0.85, 0.45, 0.42), 0.5, sss=0.4, noise_amt=0.4, nscale=12, bump=0.3)
-fat_m = mat("M_fat_lobule", (1.0, 0.60, 0.10), 0.3, sss=0.3, coat=0.8, noise_amt=0.3, nscale=9, bump=0.12)
+fat_m = mat("M_fat_lobule", (1.0, 0.63, 0.24), 0.3, sss=0.5, coat=0.8, noise_amt=0.22, nscale=9, bump=0.12)
 _nt = fat_m.node_tree; _b = _nt.nodes["Principled BSDF"]; _lw = _nt.nodes.new("ShaderNodeLayerWeight"); _lw.inputs["Blend"].default_value = 0.12
 _src = _b.inputs["Base Color"].links[0].from_socket
 _mx = _nt.nodes.new("ShaderNodeMix"); _mx.data_type = 'RGBA'; _lpw = _nt.nodes.new("ShaderNodeMath"); _lpw.operation = "POWER"; _lpw.inputs[1].default_value = 3.0; _nt.links.new(_lw.outputs["Facing"], _lpw.inputs[0]); _nt.links.new(_lpw.outputs[0], _mx.inputs["Factor"])
-_nt.links.new(_src, _mx.inputs["A"]); _mx.inputs["B"].default_value = (0.95, 0.88, 0.72, 1); _nt.links.new(_mx.outputs["Result"], _b.inputs["Base Color"])
-_b.inputs["Subsurface Radius"].default_value = (1.0, 0.55, 0.15); _b.inputs["Coat Roughness"].default_value = 0.06
+_nt.links.new(_src, _mx.inputs["A"]); _mx.inputs["B"].default_value = (0.96, 0.86, 0.66, 1); _nt.links.new(_mx.outputs["Result"], _b.inputs["Base Color"])
+_b.inputs["Subsurface Radius"].default_value = (1.1, 0.65, 0.2); _b.inputs["Coat Roughness"].default_value = 0.06
 sept_m = mat("M_septa", (0.9, 0.8, 0.62), 0.3, sss=0.4, coat=0.6, noise_amt=0.4, nscale=8)
 fascia_m = mat("M_fascia", (0.92, 0.88, 0.85), 0.3, sss=0.2, coat=0.5, noise_amt=0.3, nscale=20)
 musc_m = mat("M_muscle", (0.42, 0.03, 0.03), 0.35, sss=0.3, coat=0.7, noise_amt=0.45, nscale=14, bump=0.3)
@@ -347,6 +347,29 @@ perit_m = mat("M_peritoneum", (0.95, 0.8, 0.78), 0.1, sss=0.2, coat=1.0, transm=
 gut_m = mat("M_intestine", (0.75, 0.32, 0.3), 0.18, sss=0.6, coat=1.0, noise_amt=0.3, nscale=5, bump=0.2)
 vessel_r = mat("M_vessel_red", (0.6, 0.04, 0.04), 0.3, sss=0.3, coat=0.5)
 vessel_b = mat("M_vessel_blue", (0.15, 0.2, 0.5), 0.3, sss=0.3, coat=0.5)
+def add_weave(m_, root_obj, strength, dist=0.0005):
+    nt = m_.node_tree; N = nt.nodes; L = nt.links; b = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); tc.object = root_obj
+    sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Object"], sep.inputs[0])
+    def sinw(sock, k):
+        m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; m1.inputs[1].default_value = k; L.new(sock, m1.inputs[0])
+        m2 = N.new("ShaderNodeMath"); m2.operation = 'SINE'; L.new(m1.outputs[0], m2.inputs[0]); return m2.outputs[0]
+    a_ = sinw(sep.outputs["Y"], 2 * math.pi / 0.04); b2 = sinw(sep.outputs["Z"], 2 * math.pi / 0.04)
+    pr = N.new("ShaderNodeMath"); pr.operation = 'MULTIPLY'; L.new(a_, pr.inputs[0]); L.new(b2, pr.inputs[1])
+    ab = N.new("ShaderNodeMath"); ab.operation = 'ABSOLUTE'; L.new(pr.outputs[0], ab.inputs[0])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = strength; bp.inputs["Distance"].default_value = dist
+    L.new(ab.outputs[0], bp.inputs["Height"])
+    old = b.inputs["Normal"].links[0].from_socket if b.inputs["Normal"].links else None
+    if old: L.new(old, bp.inputs["Normal"])
+    L.new(bp.outputs["Normal"], b.inputs["Normal"])
+    cm = N.new("ShaderNodeMix"); cm.data_type = 'RGBA'; cm.blend_type = 'MULTIPLY'; cm.inputs["Factor"].default_value = 0.35
+    src = b.inputs["Base Color"].links[0].from_socket if b.inputs["Base Color"].links else None
+    if src: L.new(src, cm.inputs["A"])
+    else: cm.inputs["A"].default_value = b.inputs["Base Color"].default_value
+    mr = N.new("ShaderNodeMapRange"); mr.inputs["To Min"].default_value = 0.75; mr.inputs["To Max"].default_value = 1.1; L.new(ab.outputs[0], mr.inputs["Value"])
+    L.new(mr.outputs["Result"], cm.inputs["B"]); L.new(cm.outputs["Result"], b.inputs["Base Color"])
+add_weave(fabric_m, root, 0.6)
+for m_ in bpy.data.objects["Woman.female_casualsuit01"].data.materials: add_weave(m_, root, 1.0, 0.004)
 fabric = grid_slab("M_Fabric", -0.06, 0.0, fabric_m, 48, 40)
 epi = grid_slab("M_Epidermis", 0.0, 0.06, skin_epi)
 der = grid_slab("M_Dermis", 0.06, 0.32, skin_der)
@@ -434,10 +457,20 @@ for v in range(7):
     pts = [(5.7 + k * 0.6, mes.location.y + YB / 2 + 0.03, z0 + 0.35 * math.sin(k * 1.4 + v)) for k in range(7)]
     tube("M_MesVessel%d" % v, pts, 0.05, vessel_r)
 # ---- capillaries + small vessels over the cut face of the fat (kept off the bullet channel |z| > 0.7)
-for v in range(9):
-    side = random.choice((-1, 1)); z0 = side * random.uniform(0.8, ZH - 0.4)
-    pts = [(0.45 + k * 0.48, 0.04 + random.uniform(-0.04, 0.04), z0 + random.uniform(-0.35, 0.35)) for k in range(9)]
-    tube("M_Vessel%d" % v, pts, random.choice((0.012, 0.016, 0.022)), vessel_r if v % 4 else vessel_b)
+def capillary(name, p0, direction, n, step, rad, depth=0):
+    pts = []; p = Vector(p0); d = Vector(direction).normalized(); ph = random.uniform(0, 6.28)
+    for k in range(n):
+        pts.append(tuple(p)); w = 0.55 * math.sin(k * 0.9 + ph)
+        d = (d + Vector((0, 0, w * 0.9)) + Vector((random.uniform(-0.2, 0.2), 0, random.uniform(-0.45, 0.45)))).normalized()
+        d.y = 0.0; d.normalize(); p = p + d * step; p.y = 0.03 + 0.02 * math.sin(k * 1.7 + ph)
+        if abs(p.z) < 0.7: p.z = math.copysign(0.7, p.z if p.z != 0 else 1)
+        if depth < 1 and k in (n // 3, 2 * n // 3) and random.random() < 0.8:
+            capillary(name + "b%d" % k, p, (d.x, 0, d.z + random.choice((-1, 1)) * 0.9), max(4, n // 2), step * 0.8, rad * 0.65, depth + 1)
+    if p.x < 4.25 and len(pts) > 3:
+        tube(name, [q for q in pts if 0.36 < q[0] < 4.25] or pts, rad, vessel_r if random.random() < 0.8 else vessel_b)
+for v in range(10):
+    side = random.choice((-1, 1)); z0 = side * random.uniform(0.9, ZH - 0.5)
+    capillary("M_Vessel%d" % v, (0.4, 0.03, z0), (1, 0, random.uniform(-0.4, 0.4)), 22, 0.18, random.choice((0.008, 0.011, 0.014)))
 # ---- fat: ~8k packed, overlapping lobules (3-11 mm) instanced by geometry nodes, deformation driven live by TipCtl
 lob_c = bpy.data.collections.new("LobuleProtos")          # not linked to the scene: only instanced
 for k in range(6):
@@ -552,11 +585,12 @@ for i in range(12):
     o = mobj("M_Ring%02d" % i, rme, ()); o.scale = (1, 0.01, 0.01); o.color = (1, 1, 1, 0)
     sol = o.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.07
 # entry hole decal on fabric + skin (dark ring) — appears after pierce
-hole_m = mat("M_hole", (0.05, 0.03, 0.03), 0.6)
+hole_m = mat("M_hole", (0.07, 0.025, 0.02), 0.7)
 bm = bmesh.new(); bmesh.ops.create_circle(bm, cap_ends=True, segments=24, radius=0.2)
 for v in bm.verts: v.co = Matrix.Rotation(math.pi / 2, 3, 'Y') @ v.co + Vector((-0.065, 0, 0))
 hme = bpy.data.meshes.new("Hole"); bm.to_mesh(hme); bm.free(); hme.materials.append(hole_m)
 hole = mobj("M_HoleDecal", hme, ())
+th = bpy.data.objects.new("TeeHole", hme); REAL.objects.link(th); th.parent = root      # same hole on the real tee (store side of the swap)
 # studio backdrop dome: cyan -> white gradient (emission), seen only from inside
 bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=48, v_segments=24, radius=30.0)
 bmesh.ops.reverse_faces(bm, faces=bm.faces[:])

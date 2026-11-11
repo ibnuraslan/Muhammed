@@ -96,11 +96,20 @@ def pathA(f):
     return Vector((-6.4 + 2.9 * (1.6 * u - 0.6 * u * u), -0.35, 0))
 AH.walk(pathA, lambda f: 90.0, 1, F(2.6), stride=0.62, lift=0.07)
 apos = pathA(F(2.6))
-for s in "LR":
-    for f in (F(2.6), FEND):
-        AH.key_foot(s, f, AH.foot_xy(s, apos, 90.0), 90.0)
-for t, fl, tw, hy in ((2.6, 6, 0, 0), (3.2, 2, -10, 30), (20.4, 0, -12, 35), (21.5, 2, -10, 32)):
-    AH.key_root(F(t), Vector((apos.x, apos.y, AH.root_head.z - 0.01)), yaw=90.0, flex=fl * 0.3)
+# planted until the end, then (beat 7) he turns to her and takes a step toward her: right foot, then left
+STEPV = Vector((0.1, 0.36, 0))
+for s_ in "LR":
+    for f in (F(2.6), F(20.5)):
+        AH.key_foot(s_, f, AH.foot_xy(s_, apos, 90.0), 90.0)
+AH.key_foot("R", F(20.68), AH.foot_xy("R", apos + STEPV * 0.5, 90.0), 90.0, lift=0.07, pitch=15)
+for f in (F(20.86), FEND): AH.key_foot("R", f, AH.foot_xy("R", apos + STEPV, 90.0), 90.0)
+AH.key_foot("L", F(21.0), AH.foot_xy("L", apos, 90.0), 90.0)
+AH.key_foot("L", F(21.17), AH.foot_xy("L", apos + STEPV * 0.5, 90.0), 90.0, lift=0.07, pitch=15)
+for f in (F(21.34), FEND): AH.key_foot("L", f, AH.foot_xy("L", apos + STEPV, 90.0), 90.0)
+for t, fl, tw, hy, k in ((2.6, 6, 0, 0, 0), (3.2, 2, -10, 30, 0), (20.4, 0, -12, 35, 0), (20.55, 8, -4, 20, 0.05), (20.86, 10, 0, 8, 0.55),
+                         (21.17, 9, 0, 4, 0.75), (21.34, 8, 0, 2, 1.0), (21.5, 8, 0, 2, 1.0)):
+    pr = apos + STEPV * k
+    AH.key_root(F(t), Vector((pr.x, pr.y, AH.root_head.z - 0.01 - 0.02 * math.sin(math.pi * min(1, k * 2) ))), yaw=90.0, flex=fl * 0.3)
     AH.key_spine(F(t), flex=fl, twist=tw, head=(-4, hy))
 for f in range(1, FEND + 1, 4):
     p = pathA(min(f, F(2.6)))
@@ -112,9 +121,43 @@ for f in range(1, FEND + 1, 4):
 # shopper A: after the bang he lets go and raises his hands, frozen in surprise
 AH.key_hand("L", F(3.4), Vector((apos.x + 0.25, apos.y + 0.22, 1.32)), Vector((0.2, 0.2, 1)), Vector((1, 0, 0)), Vector((apos.x - 0.2, apos.y + 0.6, 1.0)))
 AH.key_hand("R", F(3.4), Vector((apos.x + 0.25, apos.y - 0.22, 1.32)), Vector((0.2, -0.2, 1)), Vector((1, 0, 0)), Vector((apos.x - 0.2, apos.y - 0.6, 1.0)))
-AH.key_hand("L", FEND, Vector((apos.x + 0.27, apos.y + 0.23, 1.34)), Vector((0.2, 0.2, 1)), Vector((1, 0, 0)), Vector((apos.x - 0.2, apos.y + 0.6, 1.0)))
-AH.key_hand("R", FEND, Vector((apos.x + 0.27, apos.y - 0.23, 1.34)), Vector((0.2, -0.2, 1)), Vector((1, 0, 0)), Vector((apos.x - 0.2, apos.y - 0.6, 1.0)))
+AH.key_hand("L", F(20.5), Vector((apos.x + 0.27, apos.y + 0.23, 1.34)), Vector((0.2, 0.2, 1)), Vector((1, 0, 0)), Vector((apos.x - 0.2, apos.y + 0.6, 1.0)))
+AH.key_hand("R", F(20.5), Vector((apos.x + 0.27, apos.y - 0.23, 1.34)), Vector((0.2, -0.2, 1)), Vector((1, 0, 0)), Vector((apos.x - 0.2, apos.y - 0.6, 1.0)))
+ap2 = apos + STEPV   # reaching toward her as he steps in
+AH.key_hand("L", FEND, Vector((ap2.x + 0.42, ap2.y + 0.2, 1.18)), Vector((1, 0.1, 0.2)), Vector((0, 0, -1)), Vector((ap2.x - 0.1, ap2.y + 0.6, 1.0)))
+AH.key_hand("R", FEND, Vector((ap2.x + 0.35, ap2.y - 0.22, 1.12)), Vector((1, -0.1, 0.1)), Vector((0, 0, -1)), Vector((ap2.x - 0.1, ap2.y - 0.6, 1.0)))
 
+# stocker restocking down the aisle: holds a carton in both hands (grasp), then turns toward the bang
+import bmesh as _bm2
+STK = bpy.data.objects["Stocker"]; SR = make_human_ctrl(STK); SH = Human(SR); STK.location.z = 0.015
+spos = Vector((-7.4, -0.55, 0)); syaw = 0.0
+for s_ in "LR":
+    for f in (1, FEND): SH.key_foot(s_, f, SH.foot_xy(s_, spos, syaw), syaw)
+_b = _bm2.new(); _bm2.ops.create_cube(_b, size=1.0)
+for v in _b.verts: v.co = Vector((v.co.x * 0.34, v.co.y * 0.22, v.co.z * 0.24))
+cme = bpy.data.meshes.new("Carton"); _b.to_mesh(cme); _b.free(); cme.materials.append(bpy.data.materials["M_pack05"])
+carton = bpy.data.objects.new("Carton", cme); bpy.data.collections["REAL"].objects.link(carton)
+for t, fl, tw, hy, cz, cy in ((0.0, 8, 0, -10, 1.02, -0.86), (1.0, 14, -4, -16, 1.12, -0.88), (2.0, 6, 0, -6, 1.06, -0.85), (2.6, 4, 10, 30, 1.0, -0.84),
+                              (20.4, 2, 18, 45, 0.98, -0.83), (21.5, 2, 20, 48, 0.98, -0.83)):
+    f = F(t)
+    SH.key_root(f, Vector((spos.x, spos.y, SH.root_head.z - 0.015)), yaw=syaw, flex=fl * 0.3)
+    SH.key_spine(f, flex=fl, twist=tw, head=(-6 + fl * 0.5, hy))
+    c = Vector((spos.x + 0.02 * math.sin(t), cy, cz))
+    carton.location = c; carton.rotation_euler = (0, 0, math.radians(tw * 0.6)); carton.keyframe_insert("location", frame=f); carton.keyframe_insert("rotation_euler", frame=f)
+    for s_, sx in (("L", 1), ("R", -1)):
+        SH.key_hand(s_, f, c + Vector((sx * 0.2, 0.02, -0.02)), Vector((-sx * 0.3, -1, 0.1)), Vector((-sx, 0, 0)), Vector((spos.x + sx * 0.5, spos.y + 0.3, 1.0)))
+# shopper C browsing the shelf, then turns to look, hand to her chest
+SC = bpy.data.objects["ShopperC"]; CR_ = make_human_ctrl(SC); CH = Human(CR_)
+cpos = Vector((-2.1, -0.5, 0)); cyaw = 0.0
+for s_ in "LR":
+    for f in (1, FEND): CH.key_foot(s_, f, CH.foot_xy(s_, cpos, cyaw), cyaw)
+for t, tw, hy, hp in ((0.0, 0, -10, 12), (1.2, 4, -4, 18), (2.3, 6, 0, 14), (2.9, 25, 50, 0), (20.4, 30, 58, -2), (21.5, 32, 60, -2)):
+    f = F(t); CH.key_root(f, Vector((cpos.x, cpos.y, CH.root_head.z - 0.01)), yaw=cyaw)
+    CH.key_spine(f, flex=4, twist=tw, head=(hp, hy))
+for t, p in ((0.0, (-2.15, -0.86, 1.18)), (1.2, (-2.2, -0.9, 1.22)), (2.3, (-2.2, -0.9, 1.22)), (2.9, (-2.1, -0.68, 1.28)), (21.5, (-2.08, -0.67, 1.29))):
+    CH.key_hand("R", F(t), Vector(p), Vector((0, -1, 0.4)) if t < 2.5 else Vector((0.3, 0.2, 1.0)), Vector((1, 0, 0)), Vector((cpos.x - 0.45, cpos.y + 0.2, 1.0)))
+for t in (0.0, 21.5):
+    CH.key_hand("L", F(t), Vector((cpos.x + 0.22, cpos.y - 0.02, 0.8)), Vector((0, 0, -1)), Vector((1, 0, 0)), Vector((cpos.x + 0.5, cpos.y + 0.3, 1.0)))
 B_ = bpy.data.objects["ShopperB"]; BR_ = make_human_ctrl(B_); BH = Human(BR_)
 def pathB(f):
     t = min(T(f), 2.3); return Vector((-9.75, -3.2 + 1.25 * t, 0))
@@ -212,9 +255,10 @@ wm = tee.modifiers.new("Dimple", 'WARP'); wm.object_from = we_from; wm.object_to
 wv = tee.modifiers.new("Ripple", 'WAVE'); wv.start_position_object = we_from; wv.use_normal = True; wv.use_x = wv.use_y = True
 wv.height = 0.004; wv.width = 0.03; wv.narrowness = 1.2; wv.speed = 0.006; wv.time_offset = F(2.0); wv.lifetime = 60; wv.damping_time = 40
 wv.falloff_radius = 0.22
-hole = bpy.data.objects["M_HoleDecal"]
-for t, s_ in ((0, 0.0), (3.15, 0.0), (3.3, 1.0), (21.5, 1.0)):
-    hole.scale = (1, s_, s_); hole.keyframe_insert("scale", frame=F(t))
+for hn in ("M_HoleDecal", "TeeHole"):
+    hole = bpy.data.objects[hn]
+    for t, s_ in ((0, 0.0), (3.15, 0.0), (3.3, 1.0), (21.5, 1.0)):
+        hole.scale = (1, s_ * 0.8, s_ * 0.8); hole.keyframe_insert("scale", frame=F(t))
 
 def vel(t): return (D(t + 0.02) - D(t - 0.02)) / 0.04
 # fat lobules are geometry-node instances (02_build_scene); their push / squash / ripple / settle come from TipCtl:
@@ -329,12 +373,14 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (13.0, "tip", (0.1, 0, 0), 78, 5, 2.4, 45),
       (14.0, "tip", (0.1, 0, 0), 95, -35, 2.3, 45),
       (15.0, "tip", (0.3, 0, 0), 45, 10, 3.6, 35),
-      (16.0, "tip", (0.3, 0, 0), 70, 45, 3.2, 35),
-      (17.0, "tip", (0.2, 0, 0), 112, 18, 2.2, 45),
-      (18.0, "tip", (0.3, 0, 0), 140, -15, 3.4, 35),
+      (16.0, "tip", (0.3, 0, 0), 66, 42, 3.0, 35),
+      (16.6, "tip", (0.2, 0, 0), 48, 14, 2.4, 40),
+      (17.8, "tip", (0.3, 0, 0), 150, -8, 3.0, 38),
+      (18.4, "tip", (0.3, 0, 0), 138, -22, 3.4, 35),
       (19.0, "tip", (0.3, 0, 0), 110, -35, 3.8, 35),
       (19.8, "tip", (-0.8, 0, 0), 98, 8, 6.0, 32),
       (20.1, "hole", (1.2, -0.2, 0), 105, 15, 4.2, 40),
+      (20.27, "hole", (0.0, -0.35, 0.1), 132, 28, 1.7, 48),
       (20.4, "hole", (0, -0.55, 0.1), 160, 5, 0.72, 50),
       (20.6, "hole", (-3.0, 0, 2.0), 158, 6, 6.0, 45),
       (20.8, "face", (-2, 0, -6), 152, 6, 28, 40),
@@ -389,7 +435,11 @@ for f in range(1, FEND + 1):
     cd.lens = lens_; cd.keyframe_insert("lens", frame=f)
     dw = dist * S
     cd.clip_start = max(0.0002, min(0.05, 0.04 * dw)); cd.keyframe_insert("clip_start", frame=f)
-    cd.dof.use_dof = True; cd.dof.focus_distance = (tw_ - cw).length; cd.dof.keyframe_insert("focus_distance", frame=f)
+    fdist = (tw_ - cw).length
+    fl_ = (tgt - cp).normalized()
+    if cp.x < -0.01 and fl_.x > 0.3 and dw < 0.25:      # close to the shirt and facing it: focus on the fabric plane
+        fdist = min(fdist, (-cp.x / fl_.x) * S)
+    cd.dof.use_dof = True; cd.dof.focus_distance = fdist; cd.dof.keyframe_insert("focus_distance", frame=f)
     cd.dof.aperture_fstop = 2.8 + 8.2 * smooth((0.4 - dw) / 0.3); cd.dof.keyframe_insert("aperture_fstop", frame=f)
     CAMLOG.append((f, tuple(cw), tuple(cp), dw))
 import json
