@@ -204,7 +204,7 @@ def stand_B(Bd, pos_xy, yaw, z_off=0.0, side=0.0, flex=0.0):
     p = V(pos_xy[0], pos_xy[1], ground_z(pos_xy[0], pos_xy[1]) + Bd.RH.z + z_off)
     return Bd.B(p, Rbody(yaw=yaw, pitch=flex, side=side)), p
 
-def hang_arms(Bd, f, Bm, swing=(0.0, 0.0), out=(0.12, 0.12), bend=(0.1, 0.1)):
+def hang_arms(Bd, f, Bm, swing=(0.0, 0.0), out=(0.3, 0.3), bend=(0.1, 0.1)):
     for k, s in enumerate("LR"):
         sx = 1 if s == "L" else -1
         d = V(sx * out[k], -swing[k], -1.0)
@@ -299,7 +299,7 @@ for f, roll_z, prog in ((f_flop, 0.13, 0.0), (f_flop + 4, 0.13, 0.45), (f_land, 
         sx = 1 if s == "L" else -1
         k = min(1.0, prog)
         LB.foot(s, f, Bm, V(sx * (0.17 + 0.07 * k), -0.55 * (1 - k) + (LB.an[s].y + 0.02) * k, (RH.z - 0.07) * (1 - k) + LB.an[s].z * k), Matrix.Rotation(R_(-20 * (1 - k) + 0), 3, 'X') @ Matrix.Rotation(R_(sx * 25 * k), 3, 'Z'))
-        LB.arm_dir(s, f, Bm, V(sx * (0.35 + 0.5 * k), 0.35 * (1 - k) + 0.05, -0.9 + 0.5 * k), 0.95, palm=V(0, 0.3, -1))
+        LB.arm_dir(s, f, Bm, V(sx * (0.6 + 0.3 * k), 0.35 * (1 - k) + 0.05, -0.9 + 0.5 * k), 0.95, palm=V(0, 0.3, -1))
 # yaw 90 + pitch -90: rest +Z (head) maps to Rz(90) @ Rx(-90) @ Z = Rz(90) @ (0,1,0) = (-1,0,0): head toward -X. Good.
 # --- lying, snoring: chest breathes, right hand flops off the belly, rail tremor shakes the head before impact
 f_lie0, f_lie1 = f_land + 10, T_IMP - 1
@@ -405,6 +405,8 @@ for f in list(range(T_IMP, f_rest + 1, 2)) + [f_rest]:
             d_w.x = -0.15; d_w.z = max(d_w.z, -0.2); d_w.normalize()
         d_w = above_ground(Bm @ LB.sh[s], d_w, LB.L_arm[s] * 0.98, ceil=(0.36 if p.y - train_front(f) < 1.3 else 0.4) if f > T_IMP + 10 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
+        sxx = 1 if s == "L" else -1
+        if sxx * d_l.x < 0.3: d_l.x = sxx * 0.3; d_l.normalize()       # flung arms never cross his own body
         LB.arm_dir(s, f, Bm, d_l, 0.98 if f > T_IMP + 10 else 0.92)
     for s, key, LBm in (("L", "lL", lag_B2), ("R", "lR", lag_B2)):
         d_w = LBm.to_3x3() @ limb_dir(key, f)
@@ -436,7 +438,7 @@ for f, push in ((f_stir + 4, 0.0), (f_stir + 10, 0.35), (f_crawl0, 1.0)):
     LAD.key_spine(f, flex=4 - 18 * push, head=(-25 * push, -40 * (1 - push)))
     for s in "LR":
         sx = 1 if s == "L" else -1
-        LB.hand(s, f, Bm, LB.sh[s] + V(sx * 0.05, -0.35 * push, -0.05), V(0, -1, -0.2).normalized(), V(0, 1, 0))
+        LB.hand(s, f, Bm, LB.sh[s] + V(sx * 0.2, -0.35 * push, -0.05), V(0, -1, -0.2).normalized(), V(0, 1, 0))
     for s, key in (("L", "lL"), ("R", "lR")):
         LB.leg_dir(s, f, Bm, {"lL": V(0.12, 0.05, -1), "lR": V(-0.1, 0.1, -1)}[key], 0.97)
 # crawl: on all fours, torso horizontal facing +X, hands and knees alternate (planted in world)
@@ -497,7 +499,7 @@ for f in list(range(f_up1 + 2, f_fb1 + 1, 3)) + [f_fb1]:
     if f >= f_fb0 - 6:
         # right hand brings the bottle to the mouth
         mouth = LB.head + V(0, -0.11, 0.02)
-        rest_p = LB.sh["R"] + V(-0.12, -0.12, -0.5)
+        rest_p = LB.sh["R"] + V(-0.22, -0.2, -0.45)
         up_p = mouth + V(-0.03, -0.02, -0.04)
         W = rest_p.lerp(up_p, tilt)
         d = V(0.1, -0.35, 1.0).lerp(V(0.3, -0.2, 1.0), tilt).normalized()
@@ -630,7 +632,7 @@ for name in BYS:
     p0, y0 = START[name]; p1, y1 = GOAL[name]
     idle(name, 1, f_run0[name] - 1, p0, y0, react=T_IMP + (6 if name == "Worker" else 12))
     # run: along the platform, down the ramp, along the ballast to the train
-    lane = {"Worker": -0.7, "WitA": 0.3, "WitB": 1.2}[name]
+    lane = {"Worker": -0.9, "WitA": 0.5, "WitB": 1.3}[name]
     mid = V((RAMP["x0"] + RAMP["x1"]) / 2 - 0.6 + lane, RAMP["y0"] + 1.0, 0); mid2 = V(RAMP["x0"] + 0.4 + lane * 0.5, RAMP["y1"] + 0.5, 0)
     path = catmull([(f_run0[name], p0), (f_run0[name] + 35, mid), (f_run0[name] + 70, mid2), (f_run1[name], p1)])
     def yawf(f, path=path, f0=f_run0[name], f1=f_run1[name], y0=y0, y1=y1):
@@ -644,8 +646,9 @@ for name in BYS:
     def run_arms(f, cyc, p, yw, sd, Bd=Bd):
         Bm = Bd.B(p, Rbody(yaw=yw, pitch=14, side=sd))
         s_ = math.sin(2 * math.pi * cyc)
-        Bd.arm_dir("L", f, Bm, V(0.2, -0.8 * s_, -0.7), 0.75, pole_local=Bd.el["L"] + V(0.2, 0.6, -0.1))
-        Bd.arm_dir("R", f, Bm, V(-0.2, 0.8 * s_, -0.7), 0.75, pole_local=Bd.el["R"] + V(-0.2, 0.6, -0.1))
+        ow = 0.8 if Bd is BODY.get("WitB") else 0.55          # her jacket flares: swing wider
+        Bd.arm_dir("L", f, Bm, V(ow, -0.9 * s_ - 0.15, -0.6), 0.85, pole_local=Bd.el["L"] + V(0.35, 0.6, -0.1))
+        Bd.arm_dir("R", f, Bm, V(-ow, 0.9 * s_ - 0.15, -0.6), 0.85, pole_local=Bd.el["R"] + V(-0.35, 0.6, -0.1))
     gait(H, path, yawf, f_run0[name], f_run1[name], stride=1.45, duty=0.42, lift=0.16, bob=0.05, crouch=0.08, lean=16, arms_fn=run_arms)
     # react pose at the goal: WitA hands to mouth, WitB hands on head, Worker crouches and peers under the train
     for f in list(range(f_run1[name] + 2, f_back0 + 1, 4)) + [f_back0]:
@@ -654,7 +657,7 @@ for name in BYS:
             Bm, p = stand_B(Bd, p1, y1 + 5 * math.sin(f / 20.0), z_off=-0.42 * u, flex=30 * u)
             H.r.key_world("root", f, Bm @ H.r.rest("root"))
             H.key_spine(f, flex=30 * u, head=(-25 * u, 10 * math.sin(f / 25.0)))
-            Bd.hand("L", f, Bm, Bd.kn["L"] + V(0.02, -0.2, 0.15), V(0, -1, -0.3).normalized(), V(0, 0, -1))
+            Bd.arm_dir("L", f, Bm, V(0.65, -0.55, -0.35), 0.92)        # steadying arm out to the side
             Bd.arm_dir("R", f, Bm, V(-0.5, -0.8, -0.1), 0.9)          # one arm out, steadying, reaching toward him
         else:
             Bm, p = stand_B(Bd, p1, y1 + 4 * math.sin(f / 23.0), flex=-6 * u)
@@ -664,11 +667,15 @@ for name in BYS:
             for s in "LR":
                 sx = 1 if s == "L" else -1
                 if name == "WitA":
-                    Wt = mouth + V(sx * 0.045, -0.075, -0.13)
-                    Bd.hand(s, f, Bm, (Bd.sh[s] + V(0, -0.1, -0.45)).lerp(Wt, u), V(-sx * 0.25, -0.15, 1).normalized(), V(0, 1, 0))
+                    if s == "L":      # one hand over the mouth
+                        Wt = mouth + V(0.05, -0.13, -0.15)
+                        Bd.hand(s, f, Bm, (Bd.sh[s] + V(sx * 0.28, -0.25, -0.38)).lerp(Wt, u), V(-0.3, -0.15, 1).normalized(), V(0, 1, 0))
+                    else:             # the other held just off her chest
+                        Wt = Bd.sh["R"] + V(0.1, -0.24, -0.2)
+                        Bd.hand(s, f, Bm, (Bd.sh[s] + V(sx * 0.28, -0.25, -0.38)).lerp(Wt, u), V(0.6, -0.2, 0.75).normalized(), V(0, 1, 0))
                 else:
-                    Wt = Bd.head + V(sx * 0.16, 0.0, 0.08)
-                    Bd.hand(s, f, Bm, (Bd.sh[s] + V(0, -0.1, -0.45)).lerp(Wt, u), V(-sx * 0.7, 0.2, 0.6).normalized(), V(-sx, 0, 0))
+                    Wt = Bd.head + V(sx * 0.19, 0.02, 0.02)
+                    Bd.hand(s, f, Bm, (Bd.sh[s] + V(sx * 0.28, -0.25, -0.38)).lerp(Wt, u), V(-sx * 0.25, 0.1, 1.0).normalized(), V(-sx, 0, 0))
         if f in (f_run1[name] + 2, f_back0):
             for s in "LR":
                 xy = H.foot_xy(s, p1, y1)
@@ -694,8 +701,8 @@ for name in BYS:
             Bd.hand("R", f, Bm, Bd.head + V(-0.17, 0.03, 0.2), V(0.6, 0.1, 0.6).normalized(), V(1, 0, 0))     # scratches his hard hat
             Bd.arm_dir("L", f, Bm, V(0.15, 0.0, -1), 0.95)
         elif name == "WitA":
-            Bd.hand("L", f, Bm, Bd.head + V(0.05, -0.18, -0.13), V(-0.25, -0.15, 1).normalized(), V(0, 1, 0))
-            Bd.arm_dir("R", f, Bm, V(-0.15, -0.1, -1), 0.95)
+            Bd.hand("L", f, Bm, Bd.head + V(0.07, -0.22, -0.15), V(-0.25, -0.15, 1).normalized(), V(0, 1, 0))
+            Bd.arm_dir("R", f, Bm, V(-0.42, -0.1, -1), 0.95)
         else:
             hang_arms(Bd, f, Bm)
     for s in "LR":
