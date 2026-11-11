@@ -8,7 +8,7 @@ The procedural ear-canal half-pipe has been removed, because the client wants no
 - **X-ray look:**
   - The studio backdrop is a vertical navy → deep cyan → navy gradient, dark at the top and bottom of the frame, on a smooth sphere.
   - The skull has a cyan fresnel rim and 15 % translucency through the dive, rising to 86 % for the ear macros. The skull glow is a cyan wavefront.
-  - The cutaway is saturated: a red-pink ear canal, gold ossicles, yellow nerves, a blue labyrinth with a cyan-lit cochlea that warms to white-gold on "so he could still hear", and the grey torn eardrum.
+  - The cutaway is saturated: gold ossicles, yellow nerves, a blue labyrinth with a cyan-lit cochlea that warms to white-gold on "so he could still hear", and the grey torn eardrum.
 - **Hair:** wild clumped strand locks (420 guide hairs × 40 clumped children), swept back and up, with per-strand grey variation. It replaces the earlier puff.
 - **Keys:**
   - The model's fused keys were replaced by 88 separate hinged keys (52 ivory, 36 ebony).
