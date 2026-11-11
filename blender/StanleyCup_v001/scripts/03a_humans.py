@@ -26,10 +26,10 @@ class Sitter:
             ax = self.H.ankle[s].x * 0.85 + sg * spread
             xy = to_w(Vector((self.seat.x, self.seat.y, 0)), self.yaw, ax, self.kf + fw, 0)
             self.H.key_foot(s, f, Vector((xy.x, xy.y)), self.yaw + sg * 6, lf + self.sole, 0)
-    def hand(self, s, f, W, d, n, elbow_out=0.35, elbow_down=0.25):
+    def hand(self, s, f, W, d, n, elbow_out=0.35, elbow_down=0.25, elbow_back=0.35):
         sg = 1 if s == "L" else -1
         sh = to_w(self.hip, self.yaw, sg * 0.2, 0.0, 0.45)
-        pole = (sh + W) / 2 + side(self.yaw) * sg * elbow_out - fwd(self.yaw) * 0.35 + Vector((0, 0, -elbow_down))
+        pole = (sh + W) / 2 + side(self.yaw) * sg * elbow_out - fwd(self.yaw) * elbow_back + Vector((0, 0, -elbow_down))
         self.H.key_hand(s, f, W, d, n, pole)
     def face(self, f, lids=0.0, brows=0.0, jaw=0.0, smile=0.0, look=(0.0, 0.0)):
         """lids: +1 wide open, -1 closed; brows: +1 raised; jaw: open (deg); smile 0..1; look: (yaw, pitch) of the eyes in deg"""

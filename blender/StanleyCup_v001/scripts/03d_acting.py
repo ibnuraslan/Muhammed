@@ -13,7 +13,7 @@ W_BODY = [  # frame, lean, twist, side, head(pitch, yaw), dz, back
     (420, 6, -6, 0, (-4, -4), 0.012, 0.01), (520, 3, -8, 0, (-5, -6), 0.02, 0.025), (640, 1, -8, -1, (-4, -6), 0.024, 0.04),
     (800, 0, -9, -1, (-3, -5), 0.026, 0.05), (960, -1, -10, -2, (-2, -5), 0.028, 0.055), (1060, -5, -18, -4, (4, -22), 0.03, 0.075),
     (1200, -6, -16, -3, (2, -18), 0.03, 0.08), (1284, -6, -14, -3, (0, -15), 0.03, 0.08), (1296, -9, -10, -2, (-6, -8), 0.045, 0.1),
-    (1330, 14, 8, 4, (28, 18), 0.0, 0.02), (1380, 18, 10, 5, (32, 22), -0.005, 0.0), (1420, 10, 4, 2, (16, 10), 0.0, 0.02),
+    (1330, 10, 8, 4, (12, 18), 0.0, 0.02), (1380, 14, 10, 5, (22, 22), -0.005, 0.0), (1420, 10, 4, 2, (16, 10), 0.0, 0.02),
     (1460, 14, 2, 0, (18, 4), 0.0, 0.0), (1500, 8, 0, -1, (10, 0), 0.005, 0.02), (1530, 6, -2, -1, (6, -4), 0.005, 0.025)]
 for f, lean, tw, sd, hd, dz, bk in W_BODY:      # hips stay on the seat: the recoil is in the spine/head (dz -> shoulders via lean)
     ws.body(f, lean=lean, twist=tw, sidebend=sd, head=hd, dz=0.0, back=min(bk, 0.02) * 0.5)
@@ -42,23 +42,32 @@ W_HANDS = {  # frame: (R wrist, R fingers dir, R back-of-hand normal), (L ...)
     960: ((wpt(-0.14, 0.28, 0.24), WF + UP, -WL), (wpt(0.13, 0.27, 0.24), WF + UP, WL)),
     1060: ((wpt(-0.13, 0.2, 0.33), UP + WF * 0.4, -WF), (wpt(0.12, 0.2, 0.33), UP + WF * 0.4, -WF)),
     1284: ((wpt(-0.13, 0.21, 0.32), UP + WF * 0.4, -WF), (wpt(0.12, 0.21, 0.32), UP + WF * 0.4, -WF)),
-    1300: ((wpt(-0.15, 0.17, 0.36), UP + WF * 0.2, -WF), (wpt(0.14, 0.17, 0.36), UP + WF * 0.2, -WF)),
-    1360: ((wpt(-0.18, 0.34, 0.10), WF, -WL), (wpt(0.03, 0.13, 0.31), -WL + UP * 0.2, -WF)),
-    1420: ((wpt(-0.17, 0.40, 0.06), WF, UP), (wpt(0.03, 0.12, 0.30), -WL + UP * 0.2, -WF)),
-    1447: ((handle_w + Vector((0.035, 0.035, 0.0)), (handle_w - Vector((0.01, 0.01, 0))) - wpt(-0.17, 0.30, 0.15), UP), (wpt(0.03, 0.12, 0.30), -WL + UP * 0.2, -WF)),
+    1300: ((wpt(-0.16, 0.32, 0.30), UP + WF * 0.2, -WF), (wpt(0.13, 0.37, 0.21), UP + WF * 0.2, -WF)),
+    1360: ((wpt(-0.18, 0.34, 0.10), WF, -WL), (wpt(0.05, 0.38, 0.26), -WL + UP * 0.2, -WF)),
+    1420: ((wpt(-0.17, 0.40, 0.06), WF, UP), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
+    1447: ((handle_w + Vector((0.035, 0.035, 0.0)), (handle_w - Vector((0.01, 0.01, 0))) - wpt(-0.17, 0.30, 0.15), UP), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
 }
 for f, (r, l) in W_HANDS.items():
-    ws.hand("R", f, r[0], r[1], r[2]); ws.hand("L", f, l[0], l[1], l[2])
+    ws.hand("R", f, r[0], r[1], r[2])
+    if f >= 1300:   # hand to chest / raised in front: elbow down and out, in front of the body (no arm wrapping over the shoulder)
+        ws.hand("L", f, l[0], l[1], l[2], elbow_out=0.35, elbow_down=0.55, elbow_back=-0.05)
+    else:
+        ws.hand("L", f, l[0], l[1], l[2])
 # grip: from f1452 the tumbler follows her right hand (child-of constraint keyed on)
 # her grip on the handle (fingers curl) and the lift: the cup follows the hand from f1452
 def curl(R, s, f, amt, thumb=None):
+    """finger flexion about each bone's own local X (+X folds toward the palm on this rig); thumb flexes across the palm"""
     for k in range(2, 6):
+        spread = (k - 3.5) * 2.0 * (1 - min(1.0, amt))          # slight fan when relaxed, together when gripping
         for j in range(1, 4):
-            R.key_rot("finger%d-%d.%s" % (k, j, s), f, [("X", amt * (55 if j == 1 else 70))])
+            ang = amt * (48 if j == 1 else (62 if j == 2 else 45))
+            q = Quaternion((1, 0, 0), R_(ang)) @ Quaternion((0, 0, 1), R_(spread if j == 1 else 0))
+            R.key_q("finger%d-%d.%s" % (k, j, s), f, q)
     t = amt if thumb is None else thumb
-    for j in range(1, 4): R.key_rot("finger1-%d.%s" % (j, s), f, [("Z", (-1 if s == "L" else 1) * 25 * t)])
-for f, a in ((1, 0.15), (1440, 0.15), (1452, 0.9), (1530, 0.9)): curl(RW, "R", f, a)
-for f, a in ((1, 0.15), (1300, 0.4), (1360, 0.2), (1530, 0.25)): curl(RW, "L", f, a, 0.1)
+    for j in range(1, 4):
+        R.key_q("finger1-%d.%s" % (j, s), f, Quaternion((1, 0, 0), R_(t * (18 if j == 1 else 30))))
+for f, a in ((1, 0.3), (1440, 0.3), (1452, 1.25), (1530, 1.25)): curl(RW, "R", f, a, 0.9 if f >= 1452 else None)
+for f, a in ((1, 0.3), (1300, 0.45), (1360, 0.45), (1530, 0.45)): curl(RW, "L", f, a, 0.35)
 CUP_LIFT = [(1452, Vector((0, 0, 0))), (1478, Vector((0.02, 0.015, 0.018))), (1530, Vector((0.10, 0.07, 0.09)))]
 c_rest = CUP.location.copy()       # (after the skid keys, this is the final skid position from 03b)
 sc.frame_set(1452); c_rest = CUP.matrix_world.translation.copy()
@@ -98,11 +107,11 @@ F_HANDS = {
     1284: ((fpt(-0.55, 0.6, 0.24), FF - FL + UP * 0.2, UP), (fpt(0.18, 0.42, 0.02), FF, UP)),
     1298: ((fpt(-0.5, 0.55, 0.22), FF - FL + UP * 0.2, UP), (fpt(0.16, 0.45, 0.03), FF, UP)),
     1340: ((fpt(-0.48, 0.62, 0.02), FF - FL, UP), (fpt(0.05, 0.5, 0.02), FF, UP)),
-    1400: ((her_forearm() + Vector((0.0, -0.05, 0.0)), -FL + UP * 0.2, FF), (fpt(0.02, 0.5, 0.02), FF, UP)),
-    1530: ((her_forearm() + Vector((0.0, -0.04, -0.01)), -FL + UP * 0.2, FF), (fpt(0.02, 0.5, 0.02), FF, UP)),
+    1400: ((her_forearm() + Vector((0.0, -0.035, 0.01)), -FL + UP * 0.2, FF), (fpt(0.02, 0.5, 0.02), FF, UP)),
+    1530: ((her_forearm() + Vector((0.0, -0.03, 0.0)), -FL + UP * 0.2, FF), (fpt(0.02, 0.5, 0.02), FF, UP)),
 }
 for f, (r, l) in F_HANDS.items():
     fs.hand("R", f, r[0], r[1], r[2]); fs.hand("L", f, l[0], l[1], l[2])
-for f, a in ((1, 0.15), (40, 0.05), (95, 0.3), (150, 0.05), (260, 0.2), (500, 0.05), (1284, 0.1), (1340, 0.3), (1400, 0.75), (1530, 0.8)):
-    curl(RF, "R", f, a)
-for f, a in ((1, 0.2), (1530, 0.2)): curl(RF, "L", f, a)
+for f, a in ((1, 0.3), (40, 0.28), (95, 0.4), (150, 0.28), (260, 0.35), (500, 0.3), (1284, 0.3), (1340, 0.4), (1400, 1.05), (1530, 1.1)):
+    curl(RF, "R", f, a, 0.8 if f >= 1400 else None)
+for f, a in ((1, 0.32), (1530, 0.32)): curl(RF, "L", f, a)
