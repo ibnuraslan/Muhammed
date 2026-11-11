@@ -87,6 +87,17 @@ def noisy(name, rgb, rgb2, scale=40.0, rough=0.6, metal=0.0, bump=0.1, rough2=No
         l.new(nz.outputs['Fac'], mr.inputs[0]); l.new(mr.outputs[0], p.inputs['Roughness'])
     return m
 
+def tex_mat(name, folder, diff, nor, rough, scale, val=1.0, bump=1.0):
+    m = bpy.data.materials.new(name); m.use_nodes = True; n, l = m.node_tree.nodes, m.node_tree.links; p = n["Principled BSDF"]
+    tc = n.new('ShaderNodeTexCoord'); mp = n.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1 / scale,) * 3; l.new(tc.outputs['Object'], mp.inputs['Vector'])
+    T = os.path.join(AS, folder, "textures"); ims = []
+    for fn, nc in ((diff, False), (nor, True), (rough, True)):
+        t = n.new('ShaderNodeTexImage'); t.image = img(os.path.join(T, fn), nc); t.projection = 'BOX'; t.projection_blend = 0.3; l.new(mp.outputs['Vector'], t.inputs['Vector']); ims.append(t)
+    hsv = n.new('ShaderNodeHueSaturation'); hsv.inputs['Value'].default_value = val; l.new(ims[0].outputs['Color'], hsv.inputs['Color']); l.new(hsv.outputs['Color'], p.inputs['Base Color'])
+    nm = n.new('ShaderNodeNormalMap'); nm.inputs['Strength'].default_value = bump; l.new(ims[1].outputs['Color'], nm.inputs['Color']); l.new(nm.outputs['Normal'], p.inputs['Normal'])
+    l.new(ims[2].outputs['Color'], p.inputs['Roughness'])
+    return m
+
 M_WALL = pbr_tex("M_WallPanel", "dark_paneled_wood", "dark_paneled_wood", 1.6, val=1.1, bump=0.6)
 M_FLOOR = pbr_tex("M_Parquet", "herringbone_parquet", "herringbone_parquet", 1.2, val=0.75, bump=0.5, rough_mul=0.8)
 M_CEIL = noisy("M_Ceiling", (0.36, 0.31, 0.25), (0.28, 0.24, 0.19), 6, 0.9, bump=0.2)
@@ -101,9 +112,9 @@ M_GLASS = flat("M_Glass", (0.9, 0.95, 0.95), 0.02, trans=1.0, ior=1.5)
 M_GREENGLASS = flat("M_LampShade", (0.02, 0.22, 0.07), 0.12, coat=1.0, emit=(0.1, 0.5, 0.2), estr=0.15)
 M_BULB = flat("M_Bulb", (1, 0.85, 0.6), 0.3, emit=(1.0, 0.78, 0.5), estr=40)
 M_PAPER = noisy("M_Paper", (0.85, 0.82, 0.74), (0.78, 0.74, 0.66), 30, 0.85)
-M_RUG = noisy("M_Rug", (0.32, 0.07, 0.05), (0.18, 0.05, 0.04), 18, 0.95, bump=0.3)
-M_BANDAGE = noisy("M_Bandage", (0.92, 0.9, 0.86), (0.8, 0.78, 0.74), 400, 0.9, bump=0.3)
-M_PLASTER = noisy("M_Plaster", (0.86, 0.68, 0.55), (0.8, 0.62, 0.5), 200, 0.6, bump=0.05)
+M_RUG = tex_mat("M_Rug", "fabric_pattern_07", "fabric_pattern_07_col_1_1k.png", "fabric_pattern_07_nor_gl_1k.exr", "fabric_pattern_07_rough_1k.jpg", 1.6, val=0.42)
+M_BANDAGE = tex_mat("M_Bandage", "medical_tape", "medical_tape_diff_1k.jpg", "medical_tape_nor_gl_1k.exr", "medical_tape_rough_1k.exr", 0.012, val=1.05, bump=1.5)
+M_PLASTER = tex_mat("M_Plaster", "medical_tape", "medical_tape_diff_1k.jpg", "medical_tape_nor_gl_1k.exr", "medical_tape_rough_1k.exr", 0.01, val=0.85, bump=1.0)
 M_NICK = flat("M_Nick", (0.28, 0.06, 0.05), 0.55)
 M_MARK = flat("M_NeckMark", (0.55, 0.18, 0.16), 0.6)
 
@@ -273,37 +284,42 @@ make_dust("DustMotes", (2.4, 3.0, 1.6), (0.0, -1.0, 1.4), 2500)
 
 # ------------------------------------------------------------------ furniture & props
 # desk: y [-1.02,-0.3], x [-0.8,0.8], top at 0.78
-DESK_Y, DESK_TOP = -0.66, 0.78
-box("DeskTop", (1.6, 0.72, 0.045), (0, DESK_Y, DESK_TOP - 0.0225), M_DESK, cl=C_PROPS, bevel=0.008)
-box("DeskInlay", (1.3, 0.5, 0.004), (0, DESK_Y, DESK_TOP + 0.002), M_LEATHER, cl=C_PROPS)
-for sx in (-1, 1):
-    box("DeskPedestal%+d" % sx, (0.42, 0.66, DESK_TOP - 0.045), (sx * 0.56, DESK_Y, (DESK_TOP - 0.045) / 2), M_DESK, cl=C_PROPS, bevel=0.006)
-    for k in range(3):
-        z = 0.14 + k * 0.22
-        box("Drawer%+d_%d" % (sx, k), (0.38, 0.012, 0.19), (sx * 0.56, DESK_Y - 0.335, z + 0.02), M_DESK, cl=C_PROPS, bevel=0.004)
-        cyl("Knob%+d_%d" % (sx, k), 0.012, 0.02, (sx * 0.56, DESK_Y - 0.35, z + 0.02), M_BRASS, rot=(math.pi / 2, 0, 0))
-box("DeskModesty", (0.7, 0.02, 0.6), (0, DESK_Y - 0.3, 0.45), M_DESK, cl=C_PROPS)
+DESK_Y, DESK_TOP = -0.72, 0.78
+def import_glb(path, name, height=None, length=None, loc=(0, 0, 0), rot_z=0.0, cl=C_PROPS):
+    before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=path)
+    new = [o for o in bpy.data.objects if o not in before]; meshes = [o for o in new if o.type == 'MESH']
+    for o in meshes:
+        mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+    for o in new:
+        if o.type != 'MESH': bpy.data.objects.remove(o, do_unlink=True)
+    for o in bpy.data.objects: o.select_set(False)
+    for o in meshes: o.select_set(True)
+    bpy.context.view_layer.objects.active = meshes[0]
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    if len(meshes) > 1: bpy.ops.object.join()
+    ob = bpy.context.view_layer.objects.active; ob.name = name
+    pts = [Vector(v.co) for v in ob.data.vertices]
+    mn = Vector([min(p[i] for p in pts) for i in range(3)]); mx = Vector([max(p[i] for p in pts) for i in range(3)])
+    s_ = height / (mx.z - mn.z) if height else (length / max(mx.x - mn.x, mx.y - mn.y) if length else 1.0)
+    ob.data.transform(Matrix.Translation(Vector((-(mn.x + mx.x) / 2, -(mn.y + mx.y) / 2, -mn.z)))); ob.data.transform(Matrix.Scale(s_, 4))
+    ob.location = loc; ob.rotation_euler = (0, 0, rot_z)
+    for c_ in list(ob.users_collection): c_.objects.unlink(ob)
+    cl.objects.link(ob); return ob
+OBJV = os.path.join(AS, "objv")
+desk = import_glb(os.path.join(OBJV, "desk.glb"), "Desk", height=DESK_TOP, loc=(0, DESK_Y, 0), rot_z=math.pi)   # drawers toward the owner
+print("DESK dims", tuple(round(v, 3) for v in desk.dimensions))
 # banker's lamp on desk (left), shade faces the man
 LAMP = Vector((-0.5, DESK_Y + 0.12, DESK_TOP))
-lathe("LampBase", [(0.0, 0.0), (0.075, 0.0), (0.075, 0.012), (0.05, 0.025), (0.012, 0.035), (0.0, 0.035)], M_BRASS).location = LAMP
-cyl("LampStem", 0.008, 0.33, LAMP + Vector((0, 0, 0.18)), M_BRASS)
-me = bpy.data.meshes.new("LampShade"); bm = bmesh.new(); N_ = 24; rows = []
-for xx in (-0.16, 0.16):
-    rows.append([bm.verts.new((xx, 0.075 * math.cos(math.pi * i / N_), 0.06 * math.sin(math.pi * i / N_))) for i in range(N_ + 1)])
-for i in range(N_): bm.faces.new((rows[0][i], rows[0][i + 1], rows[1][i + 1], rows[1][i]))
-for row in rows: bm.faces.new(row)          # end caps (half discs)
-bm.to_mesh(me); bm.free()
-for p_ in me.polygons: p_.use_smooth = True
-sh = bpy.data.objects.new("LampShade", me); C_PROPS.objects.link(sh); me.materials.append(M_GREENGLASS)
-sh.location = LAMP + Vector((0, 0, 0.33)); sh.modifiers.new("sol", 'SOLIDIFY').thickness = 0.003
-cyl("LampBulb", 0.018, 0.22, LAMP + Vector((0, 0, 0.345)), M_BULB, rot=(0, math.pi / 2, 0))
+lampm = import_glb(os.path.join(OBJV, "bankers_lamp.glb"), "BankersLamp", height=0.44, loc=LAMP, rot_z=math.pi)
+print("LAMP dims", tuple(round(v, 3) for v in lampm.dimensions))
 # papers on desk (will flutter)
 for i in range(5):
     p_ = box("Paper%d" % i, (0.21, 0.297, 0.0008), (0.15 + 0.07 * i - 0.1, DESK_Y + random.uniform(-0.12, 0.08), DESK_TOP + 0.005 + 0.001 * i), M_PAPER,
              cl=C_PROPS, rot=(0, 0, math.radians(random.uniform(-25, 25))))
     p_.data.vertices  # keep simple
 # ledger + pen + tea set
-box("Ledger", (0.24, 0.32, 0.035), (0.48, DESK_Y + 0.05, DESK_TOP + 0.018), flat("M_Ledger", (0.25, 0.05, 0.04), 0.5), cl=C_PROPS, bevel=0.004, rot=(0, 0, 0.15))
+_bk = [o for o in bpy.data.objects if o.name.startswith("book_encyclopedia_set_01_book")]
+ledger = None
 cyl("Pen", 0.005, 0.14, (0.3, DESK_Y - 0.12, DESK_TOP + 0.006), flat("M_Pen", (0.02, 0.02, 0.02), 0.2, coat=1.0), rot=(0, math.pi / 2, 0.4))
 tea = append_blend(os.path.join(AS, "tea_set_01/tea_set_01_1k.blend"), ["tea_set_01_cup_small_01", "tea_set_01_saucer_circular_03"])
 for o in tea: o.location = (-0.15, DESK_Y + 0.2, DESK_TOP + (0.0 if "saucer" in o.name else 0.008)); o.rotation_euler = (0, 0, 0.6)
@@ -331,14 +347,17 @@ for shelf_z in (0.42, 0.86, 1.3, 1.72):
         o.location = (x + w / 2, YB - 0.33, shelf_z + o.dimensions.z / 2 - 0.12 + random.uniform(-0.005, 0.005)); o.rotation_euler = (0, 0, math.pi)
         x += w + 0.003
         if random.random() < 0.08: x += 0.12
+# ledger on the desk: a real book lying flat
+_src = next(o for o in bpy.data.objects if o.name.startswith("book_encyclopedia_set_01_book01"))
+ledger = _src.copy(); ledger.data = _src.data.copy(); C_PROPS.objects.link(ledger); ledger.name = "Ledger"
+ledger.rotation_euler = (0, math.radians(90), 0.15 + math.pi / 2)
+bpy.context.view_layer.update(); ledger.location = (0.45, DESK_Y + 0.05, DESK_TOP + ledger.dimensions.x / 2 + 0.002)
 # grandfather clock back-left with swinging pendulum disc added
 gc = append_blend(os.path.join(AS, "vintage_grandfather_clock_01/vintage_grandfather_clock_01_1k.blend"))
 for o in list(gc):
     if o.name.startswith("wdg"): bpy.data.objects.remove(o); gc.remove(o)
 place(gc, Vector((-2.15, YB - 0.28, 0)), 180)
 pend = bpy.data.objects.new("PendulumPivot", None); C_PROPS.objects.link(pend); pend.location = (-2.15, YB - 0.27 - 0.2, 1.42)
-rod = cyl("PendulumRod", 0.003, 0.6, (0, 0, -0.3), M_BRASS); rod.parent = pend
-bob = cyl("PendulumBob", 0.07, 0.01, (0, 0, -0.62), M_BRASS, rot=(math.pi / 2, 0, 0)); bob.parent = pend
 # glass-front antiques cabinet on the left wall, filled with brass and porcelain
 cab = append_blend(os.path.join(AS, "vintage_cabinet_01/vintage_cabinet_01_1k.blend"), ["vintage_cabinet_01_body"]); place(cab, Vector((XL + 0.36, -0.95, 0)), 90)
 for i, (y, z) in enumerate([(y_, z_) for z_ in (1.02, 1.42, 1.8) for y_ in (-1.7, -1.35, -0.95, -0.55, -0.2)]):
@@ -388,11 +407,12 @@ for i, v in enumerate(bullet.data.vertices):
     f = 1.0 + 0.9 * z * z; sk.data[i].co = Vector((co.x * f * 1.15, co.y * f * 0.8, co.z * (0.55 + 0.15 * (1 - z))))
 # fragments (two irregular lumps)
 def frag(name, seed, s):
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0); o = bpy.context.active_object; o.name = name
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1.0); o = bpy.context.active_object; o.name = name
     rr = random.Random(seed)
-    for v in o.data.vertices:
-        v.co = Vector((v.co.x * s[0], v.co.y * s[1], v.co.z * s[2])) * (1 + 0.25 * rr.uniform(-1, 1))
-    o.data.materials.append(M_LEAD); bpy.ops.object.shade_smooth(); return link(o, C_FX)
+    for v in o.data.vertices:   # torn, jagged lead/copper shard (flat-shaded facets, peeled jacket lip)
+        k = 1 + 0.45 * rr.uniform(-1, 1) + (0.35 if v.co.z > 0.6 else 0.0)
+        v.co = Vector((v.co.x * s[0], v.co.y * s[1] * (0.6 if v.co.x > 0.3 else 1.0), v.co.z * s[2])) * k
+    o.data.materials.append(M_LEAD); bpy.ops.object.shade_flat(); return link(o, C_FX)
 fragA = frag("FragmentA", 1, (0.0034, 0.0026, 0.0048)); fragB = frag("FragmentB", 2, (0.003, 0.0024, 0.0042))
 # muzzle-side casing
 casing = lathe("Casing", [(0.0, 0.0), (0.0048, 0.0), (0.0048, 0.0012), (0.0043, 0.0014), (0.0048, 0.0018), (0.0048, 0.019), (0.0045, 0.019), (0.0045, 0.002), (0.0, 0.002)], M_BRASS, 32)
@@ -415,9 +435,10 @@ for i, v in enumerate(ring.data.vertices):
     dk.data[i].co = Vector((co.x / rr_ * (nr + bend), co.y / rr_ * nr, co.z + 0.0008 * d * (1 if co.z > 0 else -1)))
 # simple dark pistol silhouette (no detail): slide + frame + grip, barrel along +X, muzzle at x=0.19
 gun = bpy.data.objects.new("Gun", None); C_PROPS.objects.link(gun)
-for nm, sz, lc, rot in (("GunSlide", (0.19, 0.03, 0.035), (0.095, 0, 0.0), 0), ("GunFrame", (0.13, 0.027, 0.02), (0.08, 0, -0.025), 0),
-                        ("GunGrip", (0.045, 0.03, 0.11), (0.005, 0, -0.07), -0.25), ("GunGuard", (0.04, 0.012, 0.006), (0.06, 0, -0.055), 0)):
-    g = box(nm, sz, lc, M_GUN, cl=C_PROPS, bevel=0.004, rot=(0, rot, 0)); g.parent = gun
+gp = append_blend(os.path.join(AS, "service_pistol/service_pistol_1k.blend"),
+                  ["service_pistol_pistol_a", "service_pistol_slide_a", "service_pistol_trigger_a", "service_pistol_hammer_a"])
+for g in gp:      # Poly Haven CC0 model, kept dark; barrel axis -> local Z 0, muzzle -> local X 0.19
+    g.location = g.location + Vector((0.016, 0, -0.06)); g.parent = gun
 # muzzle flash: crossed emissive cards, star shaped via a radial gradient
 M_FLASH = flat("M_MuzzleFlash", (1, 0.7, 0.3), 1.0, emit=(1.0, 0.72, 0.35), estr=0.0)
 nf, lf = M_FLASH.node_tree.nodes, M_FLASH.node_tree.links
@@ -467,6 +488,9 @@ bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=1); mark 
 mark.scale = (0.005, 0.0012, 0.0025); mark.data.materials.append(M_MARK); link(mark, C_FX)
 band = lathe("FingerBandage", [(0.0, -0.016), (0.0098, -0.016), (0.0106, -0.012), (0.0108, 0.0), (0.0106, 0.012), (0.0098, 0.016), (0.0, 0.016)], M_BANDAGE, 32)
 link(band, C_FX)
+sb_ = band.modifiers.new("sub", 'SUBSURF'); sb_.levels = sb_.render_levels = 2
+tx_ = bpy.data.textures.new("BandageWrinkle", 'CLOUDS'); tx_.noise_scale = 0.004
+dp_ = band.modifiers.new("wrinkle", 'DISPLACE'); dp_.texture = tx_; dp_.strength = 0.0007; dp_.mid_level = 0.5
 bpy.ops.mesh.primitive_cube_add(size=1); plas = bpy.context.active_object; plas.name = "NeckPlaster"
 plas.scale = (0.03, 0.003, 0.022); bpy.ops.object.transform_apply(scale=True)
 bvp = plas.modifiers.new("bv", 'BEVEL'); bvp.width = 0.0012; bvp.segments = 3
@@ -494,9 +518,10 @@ for nm, col, loc in (("L_PoliceRed_Win", (1.0, 0.05, 0.03), ((WX0 + WX1) / 2 - 0
     L_ = light(nm, 'AREA', 0.0, col, loc, 1.2)
     tgt = Vector((0, 0, 1.2)) - Vector(loc); L_.rotation_euler = tgt.to_track_quat('-Z', 'Y').to_euler()
 # police light bar outside the door (generic, no markings): emissive red/blue blocks on a dark car-height post
-for nm, col, y in (("PoliceBarRed", (1, 0.05, 0.03), -0.2), ("PoliceBarBlue", (0.05, 0.2, 1), 1.3)):
-    pb_ = box(nm, (0.25, 0.6, 0.12), (XR + 3.6, y, 1.5), flat("M_" + nm, col, 0.3, emit=col, estr=0.0), cl=C_FX, bevel=0.02)
-box("PoliceCarShape", (1.8, 4.4, 0.9), (XR + 3.6, 0.55, 0.75), flat("M_CarDark", (0.02, 0.02, 0.025), 0.15, 0.6, coat=1.0), cl=C_PROPS, bevel=0.2)
+for nm, col in (("PoliceBarRed", (1, 0.05, 0.03)), ("PoliceBarBlue", (0.05, 0.2, 1))):
+    flat("M_" + nm, col, 0.3, emit=col, estr=0.0).use_fake_user = True   # kept for the keyed strobe; the car itself stays off-screen
+sl = append_blend(os.path.join(AS, "street_lamp_01/street_lamp_01_1k.blend")); place(sl, Vector((XR + 6.0, 2.6, 0)), 90)
+light("L_StreetLamp", 'POINT', 150.0, (1.0, 0.7, 0.4), (XR + 5.6, 2.6, 4.2), 0.1)
 
 # ------------------------------------------------------------------ humans: tint robber dark, drop his shoes, hide owner jacket? (keep)
 for o in bpy.data.objects:
