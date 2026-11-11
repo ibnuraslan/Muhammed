@@ -159,7 +159,7 @@ fo_pose(F(31.4), (0.45, 1.16, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-3
 fo_pose(F(32.4), (0.62, 0.95, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20), armR=(60, -20, 15))
 fo_pose(F(33.4), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20), armR=(58, 0, 15))
 fo_pose(F(38.0), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10), armR=(60, 0, 10))
-for f in range(F(38.0) + 60, 4350, 240):
+for f in range(F(38.0) + 60, 4410, 240):
     fo_pose(f, (0.78, 0.72, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45 + 4 * math.sin(f), hside=35, legs=(80, 20), armL=(55, 5, 10), armR=(60, 0, 10))
 
 # ------------------------------------------------------------------ props
@@ -242,16 +242,16 @@ ER.rotation_mode = 'YXZ'
 FL = [(0.0, 0, 0, 0, 3000, 120), (33.7, 0, 0, 0, 3000, 120), (34.6, 8, 6, 0, 2985, 125), (35.5, 18, 16, 4, 2930, 135), (36.5, 26, 28, 12, 2800, 150),
       (37.6, 30, 38, 26, 2590, 165), (38.8, 32, 44, 40, 2330, 175), (39.8, 30, 40, 52, 2100, 180), (40.8, 25, 30, 60, 1890, 180),
       (41.8, 18, 20, 66, 1720, 175), (42.5, 13, 14, 69, 1620, 170), (43.6, 7, 7, 72, 1520, 160), (44.7, 3, 3, 73, 1460, 150),
-      (45.8, 1, 1, 73.5, 1420, 140), (47.1, 1.5, -1, 74, 1380, 135), (53.5, 2, 1, 74, 720, 120), (56.8, 1.5, -1, 74, 520, 110),
-      (64.6, 1.5, 1, 74, 300, 100), (68.9, 1.5, 0, 74, 210, 95), (72.5, 1.2, 0, 74, 160, 90)]
+      (45.8, 1, 1, 73.5, 1420, 140), (47.1, 1.5, -1, 74, 1380, 135), (49.6, 2.5, -7, 72, 1180, 130), (52.3, 2, 6, 73, 900, 125), (53.5, 2, 1, 74, 720, 120), (56.8, 1.5, -5, 74, 520, 110), (60.4, 1.5, 6, 75, 400, 105), (62.6, 1.5, -3, 74, 340, 100),
+      (64.6, 1.5, 1, 74, 300, 100), (68.9, 1.5, 0, 74, 210, 95), (72.5, 1.2, 0, 74, 160, 90), (73.5, 1.2, 0, 74, 150, 88)]
 def flk(i): return catmull([(F(r[0]), r[i]) for r in FL])
 P_, R2_, H_, A_, V_ = flk(1), flk(2), flk(3), flk(4), flk(5)
 pos = Vector((0, 0)); POS = {}
-for f in range(1, 4351):
+for f in range(1, 4411):
     hd = R_(H_(f)); pos += Vector((-math.sin(hd), math.cos(hd))) * V_(f) / FPS * math.cos(R_(P_(f)))
     POS[f] = pos.copy()
 TOWN1 = None
-for f in range(1, 4351, 2):
+for f in range(1, 4411, 2):
     # plane sees the world rotated by the inverse of its attitude
     att = (Matrix.Rotation(R_(H_(f)), 3, 'Z') @ Matrix.Rotation(R_(-P_(f)), 3, 'X') @ Matrix.Rotation(R_(R2_(f)), 3, 'Y'))
     inv = att.inverted()
@@ -280,7 +280,7 @@ town("TOWN_DIVE", c1.x, c1.y, 1800, 1400, 1.6)
 c2 = at(F(53.5), 2600)                     # town before the field
 town("TOWN_FIELD", c2.x, c2.y, 900, 500)
 hd = R_(H_(F(60)))
-cf = at(4350, 2600)
+cf = at(4410, 2600)
 fm = MB("LONG_FIELD")
 fw = Vector((-math.sin(hd), math.cos(hd)))
 fm.box((cf.x, cf.y, 0.4), (320, 4200, 0.8), mat("M_long_field", (0.22, 0.48, 0.06), rough=0.9, noise=0.35, nscale=0.01), rot=(0, 0, H_(F(60))))
@@ -293,7 +293,7 @@ rvo = rv.obj(cT); rvo.parent = EM
 NEED = [o for o in bpy.data.objects if o.name.startswith("NEEDLE_")]
 for o in NEED:
     base = random.uniform(-120, 120)
-    for f in range(1, 4351, 30):
+    for f in range(1, 4411, 30):
         t = (f - 1) / FPS
         if F(33.7) <= f <= F(44.0):
             a = base + (f - F(33.7)) * random.uniform(4, 11) * random.choice((-1, 1))
@@ -304,12 +304,76 @@ for o in NEED:
         keyrot(o, f, (0, a, 0))
 ALT = OB["NEEDLE_R3"]
 ALT.animation_data_clear()
-for f in range(1, 4351, 10):
+for f in range(1, 4411, 10):
     keyrot(ALT, f, (0, -A_(f) * 0.36, 0))   # one turn per 1000 m, unwinding as you sink
-for side in "LR":
-    adi = OB["ADI_%s" % side]; adi.rotation_mode = 'XYZ'
-    for f in range(1, 4351, 6):
-        adi.rotation_euler = (R_(P_(f)), R_(-R2_(f)), 0); adi.keyframe_insert("rotation_euler", frame=f)
+ATT = bpy.data.materials["M_attitude"].node_tree.nodes["ATT"]
+TA = bpy.data.materials["M_tape_alt"].node_tree.nodes["SCROLL"]; TS = bpy.data.materials["M_tape_spd"].node_tree.nodes["SCROLL"]
+for f in range(1, 4411, 6):
+    ATT.inputs["Rotation"].default_value = (0, 0, R_(-R2_(f))); ATT.inputs["Rotation"].keyframe_insert("default_value", frame=f)
+    ATT.inputs["Location"].default_value = (-0.5, -0.5 + P_(f) * 0.012, 0); ATT.inputs["Location"].keyframe_insert("default_value", frame=f)
+    TA.inputs["Location"].default_value = (0, A_(f) / 900.0, 0); TA.inputs["Location"].keyframe_insert("default_value", frame=f)
+    TS.inputs["Location"].default_value = (0, V_(f) / 120.0, 0); TS.inputs["Location"].keyframe_insert("default_value", frame=f)
+CAU = bpy.data.materials["M_caution"].node_tree.nodes["Emission"].inputs["Strength"]
+kv(CAU, "default_value", 1, 0.2)
+for t0, t1, per in ((33.9, 46.0, 14), (47.3, 53.4, 18)):
+    f = F(t0); on = True
+    while f < F(t1):
+        kv(CAU, "default_value", f, 25.0 if on else 0.2); f += per; on = not on
+kv(CAU, "default_value", F(53.5), 0.2)
+for kp in bpy.data.materials["M_caution"].node_tree.animation_data.action.layers[0].strips[0].channelbags[0].fcurves[0].keyframe_points: kp.interpolation = 'CONSTANT'
+
+# loose items float up in the dive (negative g), tumble, then drop
+for nm, up, lands in (("MUG_L", 0.32, (-0.85, 1.25, 0.05)), ("MUG_R", 0.28, (0.92, 1.05, 0.05)), ("CLIPBOARD", 0.45, (-0.55, 0.95, 0.01)), ("PEN", 0.5, (-0.2, 1.1, 0.01))):
+    o = OB[nm]; p0 = o.location.copy(); rnd = random.Random(nm)
+    o.keyframe_insert("location", frame=F(34.8)); keyrot(o, F(34.8), (0, 0, 0))
+    for i, t in enumerate((35.6, 36.6, 37.6, 38.6, 39.4)):
+        u = (i + 1) / 5
+        tgt_ = Vector((0.15 + rnd.uniform(-0.25, 0.25), 1.95 + rnd.uniform(-0.1, 0.15), 1.05 + rnd.uniform(0, 0.25)))
+        o.location = p0.lerp(tgt_, smooth(u) * 0.85) + Vector((0, 0, 0.05 * math.sin(u * 7)))
+        o.keyframe_insert("location", frame=F(t)); keyrot(o, F(t), (rnd.uniform(-90, 90) * u, rnd.uniform(-90, 90) * u, rnd.uniform(-120, 120) * u))
+    o.location = lands; o.keyframe_insert("location", frame=F(40.4)); keyrot(o, F(40.4), (90 if "MUG" in nm else 0, 0, rnd.uniform(0, 300)))
+    o.location = lands; o.keyframe_insert("location", frame=F(41.0))
+
+# oxygen masks drop in the cabin (seen through the door on the look-back)
+cM = coll("MASKS"); M_mask = mat("M_mask", (0.85, 0.62, 0.05), rough=0.5); M_tube = mat("M_mask_tube", (0.8, 0.8, 0.75), rough=0.6)
+for i in range(9):
+    y = ROW0 - PITCH * i
+    for sx in (-1, 1):
+        for k in range(2):
+            x = sx * (0.8 + 0.1 * k); mb_ = MB("MASK_%d_%d_%d" % (i, sx, k))
+            mb_.cyl((0, 0, -0.28), 0.003, 0.56, M_tube, seg=6); mb_.cyl((0, 0, -0.58), 0.032, 0.06, M_mask, seg=12, r2=0.022)
+            mo = mb_.obj(cM); mo.location = (x, y - 0.05, 1.55)
+            t0 = 34.0 + 0.05 * i + 0.03 * k
+            mo.scale = (1, 1, 0.02); mo.keyframe_insert("scale", frame=F(t0))
+            mo.scale = (1, 1, 1.08); mo.keyframe_insert("scale", frame=F(t0 + 0.35)); mo.scale = (1, 1, 0.96); mo.keyframe_insert("scale", frame=F(t0 + 0.6))
+            mo.scale = (1, 1, 1.0); mo.keyframe_insert("scale", frame=F(t0 + 0.9))
+            for f in range(F(t0 + 1.0), 4411, 50):
+                keyrot(mo, f, (random.uniform(-8, 8) * (2.5 if f < F(44) else 1), random.uniform(-8, 8) * (2.5 if f < F(44) else 1), 0))
+
+# clouds whipping past beside the plane in the descent, and a bird flock ahead
+cW = bpy.data.collections["CLOUDS"]; cm_ = bpy.data.materials["M_cloud"]
+for i, t in enumerate([47.4 + 0.55 * k for k in range(18)]):
+    f = F(t); hd = R_(H_(f)); fw = Vector((-math.sin(hd), math.cos(hd))); rt = Vector((fw.y, -fw.x))
+    side = (1 if i % 2 else -1) * random.uniform(45, 140)
+    c = POS[f] + rt * side
+    for j in range(3):
+        sz = random.uniform(40, 90)
+        me = bpy.data.meshes.new("puff"); me.from_pydata([(-sz, 0, -sz * 0.6), (sz, 0, -sz * 0.6), (sz, 0, sz * 0.6), (-sz, 0, sz * 0.6)], [], [(0, 1, 2, 3)])
+        me.uv_layers.new(); me.materials.append(cm_)
+        o = bpy.data.objects.new("PUFF_%02d_%d" % (i, j), me); cW.objects.link(o); o.parent = EM
+        o.location = (c.x + random.uniform(-30, 30), c.y + random.uniform(-30, 30), A_(f) + random.uniform(-35, 25))
+        o.rotation_euler = (0, 0, hd + R_(j * 60)); o.visible_shadow = False
+cB = coll("BIRDS"); M_bird = mat("M_bird", (0.05, 0.05, 0.05), rough=0.8)
+fc = F(61.6); hd = R_(H_(fc)); fw = Vector((-math.sin(hd), math.cos(hd))); rt = Vector((fw.y, -fw.x))
+for i in range(22):
+    bmb = MB("BIRD_%02d" % i); bmb.box((-0.45, 0, 0), (0.9, 0.18, 0.03), M_bird, rot=(0, 18, 0)); bmb.box((0.45, 0, 0), (0.9, 0.18, 0.03), M_bird, rot=(0, -18, 0))
+    bmb.box((0, 0.1, 0), (0.12, 0.6, 0.12), M_bird); bo = bmb.obj(cB); bo.parent = EM
+    off = Vector((((i % 11) - 5) * 3.5, -abs((i % 11) - 5) * 3.0 + (i // 11) * 4))
+    for f in range(F(57.0), F(64.0), 10):
+        p = POS[fc] + fw * 60 + rt * (-60 + (f - F(57)) * 0.32) + rt * off.x + fw * off.y
+        bo.location = (p.x, p.y, A_(fc) + 6 + 2 * math.sin(f * 0.05 + i)); bo.keyframe_insert("location", frame=f)
+        bo.rotation_euler = (0, 0, hd - R_(90)); bo.keyframe_insert("rotation_euler", frame=f)
+        bo.scale = (1, 1, 1 + 0.8 * math.sin(f * 0.6 + i)); bo.keyframe_insert("scale", frame=f)
 
 # ------------------------------------------------------------------ YOU (POV body)
 YOU = OB["YOU"]
@@ -494,8 +558,8 @@ for f in range(F(39.2), F(45.0), 15):
 SEATB = lambda f, flex=-4, sflex=8, twist=0, head=(10, 0), dz=0.0, dy=0.0, dx=0.0: body(f, (CS[0] + dx, CS[1] + dy, CS[2] + dz), flex=flex, sflex=sflex, twist=twist, head=head)
 for t, sf, hd in ((39.8, 26, (30, 0)), (40.8, 16, (10, 20)), (41.8, 10, (0, 0)), (42.5, 8, (0, 0)), (43.6, 14, (25, 0)), (44.7, 6, (0, 0)), (45.8, 4, (0, 0))):
     SEATB(F(t), sflex=sf, head=hd, flex=4 if t < 44 else 0, dy=0.06)
-for f in range(F(45.0), F(56.6), 40):
-    hands_on_yoke(f, 55, 0.002)
+for f in range(F(45.0), F(56.6), 20):
+    hands_on_yoke(f, 60, 0.004)
 # beat 14-15
 SEATB(F(47.1), sflex=16, head=(15, -5)); SEATB(F(48.4), sflex=26, head=(18, -8), dy=0.08)
 SEATB(F(49.6), sflex=2, head=(0, 0)); SEATB(F(51.0), sflex=8, twist=-12, head=(0, -50)); SEATB(F(52.3), sflex=2, head=(0, 0))
@@ -524,14 +588,14 @@ SEATB(F(64.6), sflex=14, twist=45, head=(0, 50), dy=0.12, dx=-0.10); SEATB(F(65.
 SEATB(F(66.9), sflex=16, twist=75, head=(5, 80), dy=0.16, dx=-0.18); SEATB(F(67.9), sflex=10, twist=40, head=(5, 50), dy=0.08, dx=-0.06)
 # beat 18-19: forward, hands back on the yoke, wide-eyed
 SEATB(F(68.9), sflex=4, twist=-5, head=(0, -5))
-for f in (F(68.9), F(70.0), F(71.0), F(72.0), F(72.6)):
-    hands_on_yoke(f, 70)
-SEATB(F(70.0), sflex=8, head=(0, 0), dy=0.06); SEATB(F(71.0), sflex=4, head=(-4, 0), dy=0.03); SEATB(F(72.5), sflex=2, head=(-6, 0))
+for f in range(F(68.9), F(73.5), 20):
+    hands_on_yoke(f, 70, 0.004)
+SEATB(F(70.0), sflex=8, head=(0, 0), dy=0.06); SEATB(F(71.0), sflex=4, head=(-4, 0), dy=0.03); SEATB(F(72.5), sflex=2, head=(-6, 0)); SEATB(F(73.4), sflex=3, head=(-5, 0))
 for s in "LR":
     RY.key_rot("orbicularis03." + s, 1, [("X", 25)]); RY.key_rot("orbicularis03." + s, F(0.6), [("X", 10)])
-    RY.key_rot("orbicularis03." + s, F(1.2), [("X", 0)]); RY.key_rot("orbicularis03." + s, F(71.0), [("X", 0)])
-    RY.key_rot("orbicularis03." + s, F(71.6), [("X", -8)])                                             # wide-eyed
-RY.key_rot("jaw", 1, [("X", 0)]); RY.key_rot("jaw", F(71.2), [("X", 0)]); RY.key_rot("jaw", F(71.8), [("X", 7)])
+    RY.key_rot("orbicularis03." + s, F(1.2), [("X", 0)]); RY.key_rot("orbicularis03." + s, F(71.9), [("X", 0)])
+    RY.key_rot("orbicularis03." + s, F(72.4), [("X", -8)])                                             # wide-eyed
+RY.key_rot("jaw", 1, [("X", 0)]); RY.key_rot("jaw", F(72.0), [("X", 0)]); RY.key_rot("jaw", F(72.6), [("X", 7)])
 
 def quick_steps():
     """turn slow slides between sparse IK_foot keys into quick lifted steps (hold, then step in the last 14 frames)"""
@@ -568,19 +632,21 @@ LOOK = [(0.0, 0, -48), (0.6, 4, -38), (1.2, 0, -8), (2.3, -65, -10), (3.4, 53, -
         (22.8, 4, -30), (23.9, -6, -26), (25.2, 0, -52), (26.0, 4, -48), (26.9, -48, -20), (28.0, -42, -26), (29.0, -34, -22),
         (30.5, -18, -32), (31.8, -22, -36), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
         (38.8, 0, -28), (39.8, 0, -48), (40.8, 22, -34), (41.8, 0, -8), (42.5, 0, -5), (43.6, 0, -34), (44.7, 0, -6), (45.8, 4, -4),
-        (47.1, -14, -26), (48.4, -15, -28), (49.6, 0, -6), (51.0, -66, -26), (52.3, 0, -6), (53.5, 0, -12), (54.6, 2, -14), (55.7, 0, -16),
-        (56.8, 48, -30), (58.0, 0, -8), (59.2, 48, -33), (60.4, 5, -44), (61.5, 0, -8), (62.6, 72, -12), (63.6, 45, -30),
-        (64.6, 100, -12), (65.8, 150, -40), (66.9, 168, -8), (67.9, 110, -14), (68.9, 30, -8), (69.6, 0, -10), (70.4, 2, -10)]
+        (47.1, -14, -26), (48.0, -16, -30), (48.8, -4, -6), (49.6, 0, -48), (50.4, -55, -18), (51.2, -70, -28), (52.0, -10, -8), (52.9, 60, -34), (53.5, 0, -12), (54.6, 2, -14), (55.7, 0, -16),
+        (56.8, 48, -30), (57.4, 30, -14), (58.0, 0, -8), (58.6, -12, 2), (59.2, 48, -33), (60.4, 5, -44), (61.5, 0, 4), (62.0, 8, -4), (62.6, 72, -12), (63.6, 45, -30),
+        (64.6, 100, -12), (65.8, 150, -40), (66.9, 168, -8), (67.9, 110, -14), (68.9, 30, -8), (69.6, 0, -10), (70.4, 2, -12), (71.0, -2, -9), (71.4, 0, -8)]
 ROLL = {33.7: 0, 35.5: -6, 36.5: 8, 37.6: -10, 38.8: 6, 40.8: -4, 42.5: 0}
 yaw_f = catmull([(F(t), y) for t, y, p in LOOK]); pit_f = catmull([(F(t), p) for t, y, p in LOOK])
-rol_f = catmull([(1, 0.0)] + [(F(t), r) for t, r in sorted(ROLL.items())] + [(4350, 0.0)])
+rol_f = catmull([(1, 0.0)] + [(F(t), r) for t, r in sorted(ROLL.items())] + [(4410, 0.0)])
 def shake(f):
     t = f / FPS; a = 0.0
     if F(21.5) <= f <= F(25.4): a = 0.5
-    if F(33.7) <= f <= F(44.5): a = 1.6 * min(1, (f - F(33.7)) / 20) * (1 - max(0, (f - F(42.5)) / (F(44.5) - F(42.5))))
-    return Vector((math.sin(t * 37.1) * 0.6 + math.sin(t * 23.3), math.sin(t * 29.7) + math.sin(t * 41.9) * 0.5, math.sin(t * 19.1))) * a
-FLOAT0, FLOATR, FLOAT1 = F(70.6), F(71.9), F(72.5)
-FREE = [(FLOAT0, None), (F(71.25), Vector((0.66, 1.62, 1.44))), (FLOATR, Vector((0.56, 1.93, 1.34))), (4350, Vector((0.54, 1.88, 1.31)))]
+    if F(33.7) <= f <= F(44.5): a = 2.4 * min(1, (f - F(33.7)) / 20) * (1 - max(0, (f - F(42.5)) / (F(44.5) - F(42.5))))
+    if F(38.8) <= f <= F(46.0): a = max(a, 0.6)                      # straining on the yoke
+    br = Vector((0.35 * math.sin(t * 1.9), 0.25 * math.sin(t * 1.3 + 1), 0.2 * math.sin(t * 0.9)))   # breathing sway, never still
+    return Vector((math.sin(t * 37.1) * 0.6 + math.sin(t * 23.3), math.sin(t * 29.7) + math.sin(t * 41.9) * 0.5, math.sin(t * 19.1))) * a + br
+FLOAT0, FLOATR, FLOAT1 = F(71.4), F(72.6), F(73.5)
+FREE = [(FLOAT0, None), (F(72.0), Vector((0.66, 1.62, 1.44))), (FLOATR, Vector((0.56, 1.93, 1.34))), (4410, Vector((0.535, 1.86, 1.31)))]
 def eye(f):
     M = YOU.matrix_world; pb = YOU.pose.bones
     e = (M @ pb["eye.L"].head + M @ pb["eye.R"].head) / 2
@@ -596,7 +662,7 @@ def head_look():
     c = YOU.pose.bones["head"].constraints.new('DAMPED_TRACK'); c.target = tgt
     c.track_axis = ("TRACK_NEGATIVE_" if neg else "TRACK_") + "XYZ"[ax]
     c.influence = 0.9
-    for f in range(1, 4351, 3):
+    for f in range(1, 4411, 3):
         sc.frame_set(f)
         base = YOU.matrix_world @ YOU.pose.bones["neck03"].head
         Rm = Euler((R_(90 + pit_f(f)), 0, R_(yaw_f(f))), 'XYZ').to_matrix()
@@ -614,7 +680,7 @@ def bake():
         lc = bpy.context.view_layer.layer_collection.children[c.name]; lc.exclude = True; hidden.append(lc)
     E = {}; HSM = {}
     hold0, hold1 = F(20.9), F(26.3)
-    for f in range(1, 4351):
+    for f in range(1, 4411):
         sc.frame_set(f)
         E[f] = eye(f)
         if hold0 <= f <= hold1:
@@ -635,18 +701,18 @@ def bake():
         HS.matrix_world = HSM[f] @ off; HS.keyframe_insert("location", frame=f); HS.keyframe_insert("rotation_euler", frame=f)
     HS.matrix_world = HS0; HS.keyframe_insert("location", frame=hold1 + 1); HS.keyframe_insert("rotation_euler", frame=hold1 + 1)
     face = None
-    for f in range(1, 4351):
+    for f in range(1, 4411):
         fwd = Vector((0, 0.035, 0))
         yw, pt, rl = yaw_f(f), pit_f(f), rol_f(f)
         Rm = Euler((R_(90 + pt), R_(rl), R_(yw)), 'XYZ').to_matrix()
         d = Rm @ Vector((0, 0, -1))
-        p = Es[f] + d * 0.045
+        p = Es[f] + d * 0.045 + Vector((0, 0, 0.005 * math.sin((f / FPS) * 1.6)))
         if f >= FLOAT0:
             if face is None: face = Es[F(72.0)] if F(72.0) in Es else Es[f]
             u = smooth((f - FLOAT0) / (FLOATR - FLOAT0))
             k = catmull([(FREE[0][0], Es[FLOAT0] + d * 0.045)] + FREE[1:])
             q = k(f); p = p.lerp(q, u)
-            target_free = Es[min(f, 4350)] + Vector((0, 0.02, -0.03))
+            target_free = Es[min(f, 4410)] + Vector((0, 0.02, -0.03))
             Rf = (target_free - p).to_track_quat('-Z', 'Y').to_matrix()
             Rm = Rm.to_quaternion().slerp(Rf.to_quaternion(), u).to_matrix()
         s = shake(f)
@@ -658,7 +724,7 @@ if not NOBAKE:
     bake()
 # render defaults (farm)
 r = sc.render; r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100; r.fps = 60; r.fps_base = 1.0
-sc.frame_start, sc.frame_end = 1, 4350
+sc.frame_start, sc.frame_end = 1, 4410
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5
 camd.dof.use_dof = False

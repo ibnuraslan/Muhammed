@@ -9,7 +9,7 @@ random.seed(12)
 for ob in list(bpy.data.objects): bpy.data.objects.remove(ob, do_unlink=True)
 sc = C.scene
 sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
-sc.render.fps = 60; sc.frame_start, sc.frame_end = 1, 4350
+sc.render.fps = 60; sc.frame_start, sc.frame_end = 1, 4410
 sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"
 
 ROW0, PITCH, NROW = -2.4, 0.81, 14
@@ -23,9 +23,9 @@ M_plast = mat("M_cabin_plastic", (0.72, 0.71, 0.67), rough=0.45, noise=0.15, nsc
 M_plast_d = mat("M_plastic_grey", (0.22, 0.23, 0.24), rough=0.5, noise=0.2, nscale=30)
 M_carpet = mat("M_carpet", (0.07, 0.075, 0.1), rough=0.95, noise=0.7, nscale=300, bump=0.4)
 M_carpet2 = mat("M_carpet_aisle", (0.16, 0.06, 0.06), rough=0.95, noise=0.6, nscale=300, bump=0.4)
-M_steel = mat("M_steel", (0.55, 0.56, 0.58), rough=0.3, metal=1.0, noise=0.2, nscale=20)
-M_dark = mat("M_cockpit_dark", (0.035, 0.037, 0.04), rough=0.55, noise=0.25, nscale=60, bump=0.05)
-M_panel = mat("M_panel", (0.06, 0.065, 0.07), rough=0.6, noise=0.2, nscale=80)
+M_steel = mat("M_steel", (0.55, 0.56, 0.58), rough=0.38, metal=1.0, noise=0.5, nscale=35, bump=0.2)
+M_dark = mat("M_cockpit_dark", (0.035, 0.037, 0.04), rough=0.6, noise=0.45, nscale=90, bump=0.35)
+M_panel = mat("M_panel", (0.075, 0.08, 0.088), rough=0.55, noise=0.4, nscale=140, bump=0.3)
 M_black = mat("M_black_gloss", (0.01, 0.01, 0.012), rough=0.15)
 M_white_e = emit_mat("M_light_strip", (1.0, 0.93, 0.82), 6.0)
 M_needle = emit_mat("M_needle", (1.0, 1.0, 0.95), 4.0)
@@ -159,8 +159,12 @@ for i in range(NROW):
             ob = bpy.data.objects.new(nm, me); ob.location = (x, y, 0); cSeats.objects.link(ob); SEATS[nm] = ob
 
 # ------------------------------------------------------------------ door
-d = MB("DOOR"); d.box((0.36, 0.0, 0.965), (0.72, 0.045, 1.93), M_plast_d, bevel=0.008)
-d.box((0.36, -0.024, 1.0), (0.6, 0.004, 1.6), M_plast)
+M_door = mat("M_door", (0.40, 0.40, 0.38), rough=0.5, noise=0.35, nscale=25, bump=0.4)
+M_doorp = mat("M_door_panel", (0.55, 0.55, 0.52), rough=0.45, noise=0.3, nscale=18, bump=0.3)
+d = MB("DOOR"); d.box((0.36, 0.0, 0.965), (0.72, 0.045, 1.93), M_door, bevel=0.008)
+for zc, hh in ((1.42, 0.62), (0.82, 0.42)):
+    d.box((0.36, -0.024, zc), (0.56, 0.004, hh), M_doorp, bevel=0.004)
+d.box((0.36, -0.027, 1.82), (0.2, 0.003, 0.05), M_steel)
 d.cyl((0.62, -0.05, 1.0), 0.012, 0.12, M_steel, rot=(0, 90, 0)); d.cyl((0.62, -0.035, 1.0), 0.012, 0.03, M_steel, rot=(90, 0, 0))
 d.cyl((0.36, -0.024, 1.55), 0.012, 0.006, M_steel, rot=(90, 0, 0))
 d.box((0.36, -0.024, 0.35), (0.6, 0.004, 0.25), M_steel)                     # kick plate                      # peephole plate (no text)
@@ -190,8 +194,6 @@ ck.box((0, 1.35, 0.775), (0.3, 0.16, 0.02), M_black)                            
 ck.box((0, 2.32, 0.80), (1.9, 0.12, 0.5), M_panel, rot=(-14, 0, 0))
 ck.box((0, 2.33, 1.03), (1.9, 0.38, 0.05), M_dark, bevel=0.01)
 ck.box((0, 2.15, 1.005), (1.5, 0.05, 0.06), M_panel)
-for x in (-0.52, 0.52, 0.0):
-    ck.box((x, 2.255, 0.82), (0.32 if x else 0.26, 0.01, 0.2), M_black, rot=(-14, 0, 0))   # dark display glass
 # overhead panel
 ck.box((0, 1.25, 2.08), (0.9, 1.1, 0.08), M_panel, rot=(8, 0, 0))
 # side consoles
@@ -241,8 +243,8 @@ cG = coll("GAUGES", cSet)
 GAUGES = []
 tilt = Matrix.Rotation(R_(-14), 3, 'X')
 for side, cx in (("L", -0.52), ("R", 0.52)):
-    for gi, (ox, oz, rr) in enumerate(((-0.22, 0.12, 0.042), (0.22, 0.12, 0.042), (-0.22, -0.02, 0.042), (0.22, -0.02, 0.05),
-                                        (-0.36, 0.05, 0.035), (0.36, 0.05, 0.035))):
+    for gi, (ox, oz, rr) in enumerate(((-0.30, 0.12, 0.036), (0.30, 0.12, 0.036), (-0.30, 0.0, 0.036), (0.29, -0.01, 0.042),
+                                        (-0.39, 0.06, 0.03), (0.38, 0.09, 0.028))):
         c = Vector((0, 2.258, 0.82)) + tilt @ Vector((cx + ox, 0, oz)) - Vector((0, 0, 0)) ; c.x = cx + ox
         g = MB("GAUGE_%s%d" % (side, gi)); g.cyl((0, 0, 0), rr, 0.012, M_gface, rot=(90, 0, 0), seg=32)
         g.cyl((0, -0.004, 0), rr * 1.08, 0.008, M_steel, rot=(90, 0, 0), seg=32)
@@ -251,22 +253,6 @@ for side, cx in (("L", -0.52), ("R", 0.52)):
         n = MB("NEEDLE_%s%d" % (side, gi)); n.box((0, 0, rr * 0.4), (0.004, 0.003, rr * 0.8), M_needle)
         no = n.obj(cG); no.parent = go; no.location = (0, -0.009, 0)
         GAUGES.append(no.name)
-# attitude indicator (ball: sky blue over earth brown) for each pilot, centre display
-M_adi = None
-m, nt = nodes_mat("M_adi")
-N, L = nt.nodes, nt.links; p = N["Principled BSDF"]
-tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs["Object"], sep.inputs[0])
-gt = N.new("ShaderNodeMath"); gt.operation = "GREATER_THAN"; L.new(sep.outputs[2], gt.inputs[0]); gt.inputs[1].default_value = 0.0
-mc = N.new("ShaderNodeMix"); mc.data_type = 'RGBA'; L.new(gt.outputs[0], mc.inputs["Factor"])
-mc.inputs["A"].default_value = (0.35, 0.18, 0.06, 1); mc.inputs["B"].default_value = (0.1, 0.4, 0.9, 1)
-e = N.new("ShaderNodeEmission"); L.new(mc.outputs["Result"], e.inputs["Color"]); e.inputs["Strength"].default_value = 1.5
-L.new(e.outputs[0], N["Material Output"].inputs["Surface"]); M_adi = m
-for side, cx in (("L", -0.52), ("R", 0.52)):
-    a = MB("ADI_%s" % side); a.sphere((0, 0, 0), 0.06, M_adi, seg=24); ao = a.obj(cG, smooth=True)
-    ao.location = (cx, 2.235, 0.825); ao.scale = (1, 0.4, 1)
-    w = MB("ADI_WINGS_%s" % side); w.box((-0.04, 0, 0), (0.05, 0.004, 0.006), M_needle); w.box((0.04, 0, 0), (0.05, 0.004, 0.006), M_needle)
-    w.box((0, 0, 0), (0.008, 0.004, 0.008), M_needle); wo = w.obj(cG); wo.location = (cx, 2.205, 0.825)
-
 # yokes (origin at column base, rotate about local X)
 for side, x in (("L", -0.52), ("R", 0.52)):
     y = MB("YOKE_%s" % side)
@@ -308,6 +294,148 @@ lo = bpy.data.objects.new("L_alarm", ld); lo.location = (0, 1.7, 1.7); cSet.obje
 ld = bpy.data.lights.new("L_alarm_cabin", 'POINT'); ld.color = (1, 0.06, 0.03); ld.energy = 0; ld.shadow_soft_size = 0.3
 lo = bpy.data.objects.new("L_alarm_cabin", ld); lo.location = (0, -0.6, 1.9); cSet.objects.link(lo)
 
+
+# ------------------------------------------------------------------ cockpit density pass (director notes: real airliner clutter)
+TEX = os.path.join(HERE, "..", "work", "tex")
+def img_mat(name, fn, strength=1.6, emit=True, scroll=False):
+    m, nt = nodes_mat(name); N, L = nt.nodes, nt.links
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(os.path.join(TEX, fn)); t.interpolation = 'Linear'
+    if scroll:
+        tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.name = "SCROLL"
+        L.new(tc.outputs["UV"], mp.inputs["Vector"]); L.new(mp.outputs[0], t.inputs["Vector"]); t.extension = 'REPEAT'
+    p = N["Principled BSDF"]
+    if emit:
+        p.inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1); p.inputs["Roughness"].default_value = 0.08
+        L.new(t.outputs["Color"], p.inputs["Emission Color"]); p.inputs["Emission Strength"].default_value = strength
+    else:
+        L.new(t.outputs["Color"], p.inputs["Base Color"]); p.inputs["Roughness"].default_value = 0.7
+    return m
+def quad(name, c, w, h, m, rot=(0, 0, 0), coll_=None):
+    me = bpy.data.meshes.new(name); me.from_pydata([(-w / 2, 0, -h / 2), (w / 2, 0, -h / 2), (w / 2, 0, h / 2), (-w / 2, 0, h / 2)], [], [(0, 1, 2, 3)])
+    me.uv_layers.new(); uv = me.uv_layers[0].data
+    for i, (u, v) in enumerate(((0, 0), (1, 0), (1, 1), (0, 1))): uv[i].uv = (u, v)
+    me.materials.append(m); o = bpy.data.objects.new(name, me); (coll_ or cSet).objects.link(o)
+    o.location = c; o.rotation_euler = [R_(a) for a in rot]; return o
+M_pfd, M_nd, M_eic = img_mat("M_disp_pfd", "disp_pfd.png"), img_mat("M_disp_nd", "disp_nd.png"), img_mat("M_disp_eicas", "disp_eicas.png")
+M_tapeA = img_mat("M_tape_alt", "disp_tape.png", 1.4, scroll=True); M_tapeS = img_mat("M_tape_spd", "disp_tape.png", 1.4, scroll=True)
+# attitude square: blue over brown split, rotated/offset by keyed mapping (roll / pitch) in 03
+m, nt = nodes_mat("M_attitude"); N, L = nt.nodes, nt.links; N.remove(N["Principled BSDF"])
+tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.name = "ATT"; mp.vector_type = 'POINT'
+mp.inputs["Location"].default_value = (-0.5, -0.5, 0)
+L.new(tc.outputs["UV"], mp.inputs["Vector"]); sep = N.new("ShaderNodeSeparateXYZ"); L.new(mp.outputs[0], sep.inputs[0])
+gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; L.new(sep.outputs[1], gt.inputs[0]); gt.inputs[1].default_value = 0.0
+lad = N.new("ShaderNodeMath"); lad.operation = 'PINGPONG'; L.new(sep.outputs[1], lad.inputs[0]); lad.inputs[1].default_value = 0.06
+ln = N.new("ShaderNodeMath"); ln.operation = 'LESS_THAN'; L.new(lad.outputs[0], ln.inputs[0]); ln.inputs[1].default_value = 0.004
+cx_ = N.new("ShaderNodeMath"); cx_.operation = 'ABSOLUTE'; L.new(sep.outputs[0], cx_.inputs[0])
+cw = N.new("ShaderNodeMath"); cw.operation = 'LESS_THAN'; L.new(cx_.outputs[0], cw.inputs[0]); cw.inputs[1].default_value = 0.12
+lw = N.new("ShaderNodeMath"); lw.operation = 'MULTIPLY'; L.new(ln.outputs[0], lw.inputs[0]); L.new(cw.outputs[0], lw.inputs[1])
+mc = N.new("ShaderNodeMix"); mc.data_type = 'RGBA'; L.new(gt.outputs[0], mc.inputs["Factor"])
+mc.inputs["A"].default_value = (0.32, 0.17, 0.05, 1); mc.inputs["B"].default_value = (0.08, 0.35, 0.85, 1)
+mw = N.new("ShaderNodeMix"); mw.data_type = 'RGBA'; L.new(lw.outputs[0], mw.inputs["Factor"]); L.new(mc.outputs["Result"], mw.inputs["A"]); mw.inputs["B"].default_value = (1, 1, 1, 1)
+em = N.new("ShaderNodeEmission"); em.inputs["Strength"].default_value = 1.4; L.new(mw.outputs["Result"], em.inputs["Color"])
+L.new(em.outputs[0], N["Material Output"].inputs["Surface"]); M_att = m
+cD = coll("DISPLAYS", cSet)
+tilt = Matrix.Rotation(R_(-14), 3, 'X')
+def on_panel(x, z_off, depth=0.0):
+    base = Vector((0, 2.262, 0.80)) + tilt @ Vector((0, -depth, z_off)); return Vector((x, base.y, base.z))
+WD = 0.17
+for side, cx, order in (("L", -0.52, ("pfd", "nd")), ("R", 0.52, ("nd", "pfd"))):
+    for k, kind in enumerate(order):
+        x = cx + (-0.095 if k == 0 else 0.095)
+        q = quad("DISP_%s_%s" % (kind.upper(), side), on_panel(x, 0.03, 0.004), WD, WD, M_pfd if kind == "pfd" else M_nd, (-14, 0, 0), cD)
+        ck2 = MB("BEZEL_%s_%s" % (kind, side)); ck2.box((0, 0, 0), (WD + 0.02, 0.012, WD + 0.02), M_black, bevel=0.004)
+        bo = ck2.obj(cD); bo.location = on_panel(x, 0.03, -0.003); bo.rotation_euler = (R_(-14), 0, 0)
+        for bi in range(5):   # bezel keys
+            kb = MB("BK"); kb.box((0, 0, 0), (0.016, 0.008, 0.01), M_btn[(bi + k) % 4] if 'M_btn' in dir() else M_steel); kbo = kb.obj(cD)
+            kbo.location = on_panel(x - 0.07 + bi * 0.035, 0.03 - WD / 2 - 0.018, 0.002); kbo.rotation_euler = (R_(-14), 0, 0)
+        if kind == "pfd":
+            quad("ATT_%s" % side, on_panel(x, 0.03 + WD * 0.09, 0.006), WD * 0.40, WD * 0.46, M_att, (-14, 0, 0), cD)
+            quad("TAPE_ALT_%s" % side, on_panel(x + WD * 0.37, 0.03 + WD * 0.04, 0.006), WD * 0.13, WD * 0.58, M_tapeA, (-14, 0, 0), cD)
+            quad("TAPE_SPD_%s" % side, on_panel(x - WD * 0.37, 0.03 + WD * 0.04, 0.006), WD * 0.13, WD * 0.58, M_tapeS, (-14, 0, 0), cD)
+quad("DISP_EICAS_UP", on_panel(0.0, 0.03, 0.004), WD, WD, M_eic, (-14, 0, 0), cD)
+ck2 = MB("BEZEL_EICAS"); ck2.box((0, 0, 0), (WD + 0.02, 0.012, WD + 0.02), M_black, bevel=0.004); bo = ck2.obj(cD); bo.location = on_panel(0, 0.03, -0.003); bo.rotation_euler = (R_(-14), 0, 0)
+quad("DISP_EICAS_LOW", (0, 2.205, 0.66), WD, WD * 0.8, M_nd, (-40, 0, 0), cD)
+pd = MB("PEDESTAL_FWD"); pd.box((0, 2.18, 0.62), (0.34, 0.16, 0.25), M_panel, rot=(-40, 0, 0), bevel=0.01); pd.obj(cSet)
+
+# glareshield autopilot panel: knobs, segment windows, backlit keys
+gp = MB("GLARESHIELD_AP")
+gp.box((0, 2.14, 0.975), (0.86, 0.03, 0.07), M_panel, bevel=0.004)
+M_seg = emit_mat("M_seg_green", (0.2, 1.0, 0.35), 3.0)
+for i, x in enumerate((-0.33, -0.2, -0.06, 0.08, 0.21, 0.33)):
+    gp.cyl((x, 2.118, 0.975), 0.014, 0.022, M_black, rot=(90, 0, 0), seg=14)
+    gp.cyl((x, 2.106, 0.975), 0.009, 0.006, M_steel, rot=(90, 0, 0), seg=12)
+    gp.box((x + 0.05, 2.124, 0.985), (0.05, 0.004, 0.016), M_black)
+    for k in range(3): gp.box((x + 0.033 + k * 0.016, 2.121, 0.985), (0.01, 0.002, 0.009), M_seg)
+    gp.box((x + 0.05, 2.124, 0.958), (0.03, 0.006, 0.012), M_btn[1 + i % 3])
+for s_ in (-1, 1):   # efis control panels at each side
+    gp.box((s_ * 0.72, 2.14, 0.975), (0.24, 0.03, 0.07), M_panel, bevel=0.004)
+    for k in range(4): gp.cyl((s_ * 0.72 - 0.08 + k * 0.055, 2.118, 0.975), 0.011, 0.02, M_black, rot=(90, 0, 0), seg=12)
+gp.obj(cSet)
+
+# overhead: guarded toggles, rotary knobs, annunciator strips
+ov = MB("OVERHEAD_SWITCHES"); M_guard = mat("M_guard", (0.55, 0.06, 0.04), rough=0.4); M_amber = emit_mat("M_annun_amber", (1.0, 0.6, 0.1), 1.2)
+M_annun_g = emit_mat("M_annun_green", (0.2, 1.0, 0.4), 1.0)
+def ovz(y): return 2.03 - (y - 1.25) * math.tan(R_(8))
+for j in range(12):
+    x = -0.38 + j * 0.069
+    for y in (0.72, 1.82):
+        ov.cyl((x, y, ovz(y) - 0.02), 0.004, 0.035, M_steel, rot=(30, 0, 0), seg=8)
+        ov.sphere((x, y - 0.008, ovz(y) - 0.036), 0.007, M_steel, seg=8)
+        if j % 3 == 0:
+            ov.box((x - 0.012, y, ovz(y) - 0.02), (0.003, 0.03, 0.03), M_guard); ov.box((x + 0.012, y, ovz(y) - 0.02), (0.003, 0.03, 0.03), M_guard)
+    ov.cyl((x, 1.55, ovz(1.55) - 0.015), 0.014, 0.02, M_black, seg=14)
+    ov.box((x, 1.64, ovz(1.64) - 0.006), (0.05, 0.016, 0.006), M_amber if j % 4 == 1 else (M_annun_g if j % 5 == 2 else M_black))
+for k in range(5): ov.box((0, 0.7 + k * 0.25, ovz(0.7 + k * 0.25) - 0.008), (0.86, 0.004, 0.004), M_steel)
+ov.obj(cSet)
+
+# pedestal: radio heads, flap + speedbrake levers, trim wheels, fire handles
+pe = MB("PEDESTAL_ITEMS"); M_radio = img_mat("M_radio_head", "disp_radio.png", 1.0)
+pe.box((0, 1.56, 0.80), (0.32, 0.20, 0.04), M_panel, bevel=0.004)
+pe.box((0.10, 1.96, 0.79), (0.03, 0.12, 0.012), M_black); pe.box((-0.10, 1.96, 0.79), (0.03, 0.12, 0.012), M_black)
+for s_ in (-1, 1):
+    pe.cyl((s_ * 0.185, 1.72, 0.55), 0.11, 0.035, M_dark, rot=(0, 90, 0), seg=28)
+    for k in range(12):
+        a = k * 30; pe.box((s_ * 0.185, 1.72 + 0.11 * math.cos(R_(a)), 0.55 + 0.11 * math.sin(R_(a))), (0.04, 0.012, 0.012), M_white_e if k == 0 else M_steel, rot=(a, 0, 0))
+for k in range(3): pe.box((-0.08 + k * 0.08, 2.08, 0.82), (0.05, 0.03, 0.03), M_guard)
+po = pe.obj(cSet)
+for i, y in enumerate((1.51, 1.61)):
+    quad("RADIO_HEAD_%d" % i, (0, y, 0.823), 0.28, 0.07, M_radio, (-90, 0, 0))
+fl = MB("FLAP_LEVER"); fl.box((0, 0, 0.06), (0.012, 0.012, 0.12), M_steel); fl.box((0, 0, 0.125), (0.05, 0.02, 0.02), M_plast); flo = fl.obj(cSet); flo.location = (0.10, 1.96, 0.79)
+sb = MB("SPEEDBRAKE_LEVER"); sb.box((0, 0, 0.06), (0.012, 0.012, 0.12), M_steel); sb.box((0, 0, 0.125), (0.02, 0.05, 0.02), M_dark); sbo = sb.obj(cSet); sbo.location = (-0.10, 1.96, 0.79)
+
+# sun visors, window frames, clipboard, cups (cups/clipboard/pen are loose props, animated in 03)
+M_visor = mat("M_visor", (0.05, 0.12, 0.06), rough=0.15); M_visor.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = 0.55
+for s_ in (-1, 1):
+    v = MB("VISOR_%s" % ("L" if s_ < 0 else "R")); v.box((0, 0, -0.07), (0.42, 0.006, 0.15), M_visor); v.cyl((0, 0, 0), 0.008, 0.44, M_dark, rot=(0, 90, 0))
+    vo = v.obj(cSet); vo.location = (s_ * 0.5, 2.18, 1.76); vo.rotation_euler = (R_(-62), 0, 0)
+    fr = MB("SIDEWIN_FRAME_%s" % ("L" if s_ < 0 else "R"))
+    fr.box((s_ * 1.13, 1.42, 1.62), (0.05, 0.95, 0.03), M_dark); fr.box((s_ * 1.18, 1.42, 1.11), (0.05, 0.95, 0.03), M_dark)
+    fr.box((s_ * 1.15, 1.42, 1.37), (0.04, 0.03, 0.52), M_dark); fr.box((s_ * 1.13, 1.20, 1.66), (0.03, 0.03, 0.04), M_steel)
+    fr.obj(cSet)
+cL = coll("LOOSE", cSet)
+M_chk = img_mat("M_checklist", "checklist.png", emit=False)
+cb = MB("CLIPBOARD"); cb.box((0, 0, 0), (0.17, 0.24, 0.006), mat("M_clipboard", (0.25, 0.16, 0.08), rough=0.6, noise=0.3, nscale=40)); cbo = cb.obj(cL)
+cbo.location = (-0.98, 1.45, 0.665)
+q = quad("CHECKLIST_SHEET", (0, 0, 0.0035), 0.15, 0.21, M_chk, (-90, 0, 0), cL); q.parent = cbo
+pen = MB("PEN"); pen.cyl((0, 0, 0), 0.005, 0.13, mat("M_pen", (0.05, 0.08, 0.3), rough=0.3), rot=(0, 90, 0), seg=8); peno = pen.obj(cL); peno.location = (-0.95, 1.62, 0.668)
+M_mug = mat("M_mug", (0.75, 0.73, 0.7), rough=0.3); M_cof = mat("M_coffee", (0.05, 0.025, 0.01), rough=0.05)
+for s_ in (-1, 1):
+    u = MB("MUG_%s" % ("L" if s_ < 0 else "R")); u.cyl((0, 0, 0.045), 0.035, 0.09, M_mug, seg=18); u.cyl((0, 0, 0.087), 0.031, 0.004, M_cof, seg=18)
+    u.box((0.04, 0, 0.05), (0.012, 0.008, 0.045), M_mug); uo = u.obj(cL); uo.location = (s_ * 1.0, 1.78, 0.665)
+    ch = MB("CUPHOLDER_%s" % ("L" if s_ < 0 else "R")); ch.cyl((s_ * 1.0, 1.78, 0.66), 0.045, 0.012, M_steel, seg=18); ch.obj(cSet)
+# yoke buttons
+for side in ("L", "R"):
+    y = bpy.data.objects["YOKE_%s" % side]; b = MB("YOKE_BTN_%s" % side)
+    for s_ in (-1, 1):
+        b.cyl((s_ * 0.17, -0.205, 0.875), 0.008, 0.012, mat("M_btn_red", (0.6, 0.03, 0.02), rough=0.3), seg=10)
+        b.box((s_ * 0.15, -0.215, 0.85), (0.012, 0.01, 0.02), M_black)
+    b.cyl((0, -0.225, 0.74), 0.03, 0.006, M_steel, rot=(90, 0, 0), seg=20)
+    bo = b.obj(cSet); bo.parent = y
+# master caution lamps (amber, keyed in 03)
+M_caut = emit_mat("M_caution", (1.0, 0.55, 0.05), 0.2)
+for x in (-0.48, 0.48):
+    c_ = MB("CAUTION_%s" % ("L" if x < 0 else "R")); c_.box((0, 0, 0), (0.06, 0.02, 0.035), M_caut, bevel=0.004); co = c_.obj(cSet); co.location = (x, 2.15, 1.055)
+
 # ------------------------------------------------------------------ interior lights
 for i in range(5):
     ld = bpy.data.lights.new("L_cabin_%d" % i, 'AREA'); ld.shape = 'RECTANGLE'; ld.size, ld.size_y = 0.4, 2.4
@@ -315,6 +443,8 @@ for i in range(5):
     lo = bpy.data.objects.new(ld.name, ld); lo.location = (0, -2.6 - 2.6 * i, 2.0); cSet.objects.link(lo)
 ld = bpy.data.lights.new("L_cockpit", 'AREA'); ld.size = 0.8; ld.energy = 80; ld.color = (1, 0.97, 0.92)
 lo = bpy.data.objects.new("L_cockpit", ld); lo.location = (0, 1.0, 2.0); cSet.objects.link(lo)
+ld = bpy.data.lights.new("L_door_fill", 'AREA'); ld.size = 0.6; ld.energy = 45; ld.color = (1, 0.95, 0.9)
+lo = bpy.data.objects.new("L_door_fill", ld); lo.location = (0.1, 0.35, 1.95); cSet.objects.link(lo)
 ld = bpy.data.lights.new("L_panel_glow", 'AREA'); ld.size = 1.6; ld.size_y = 0.2; ld.shape = 'RECTANGLE'; ld.energy = 8; ld.color = (0.7, 0.85, 1)
 lo = bpy.data.objects.new("L_panel_glow", ld); lo.location = (0, 2.0, 0.85); lo.rotation_euler = (R_(-90), 0, 0); cSet.objects.link(lo)
 
