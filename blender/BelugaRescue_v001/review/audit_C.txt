@@ -1,0 +1,26 @@
+AUDIT BelugaRescue (step 10 frames, 60 fps)
+FIN_SINK              2 frames,     2 hits | ranges (s): 9.0-9.0, 22.8-22.8
+      e.g. f541 (9.00s): fin 6.4 cm below the tiles
+      e.g. f1371 (22.83s): fin 8.8 cm below the tiles
+HAND_PEN             20 frames,    20 hits | ranges (s): 34.8-36.3
+      e.g. f2091 (34.83s): diver L hand inside Coping
+      e.g. f2091 (34.83s): diver R hand inside Coping
+      e.g. f2101 (35.00s): diver L hand inside Coping
+MASK_PEN              2 frames,     2 hits | ranges (s): 3.0-3.0, 9.0-9.0
+      e.g. f181 (3.00s): face through the rim by 7.0 mm
+      e.g. f541 (9.00s): face through the rim by 7.0 mm
+MOUTH_CONTACT_INFO   54 frames,     0 hits | ranges (s): 24.0-32.8
+      e.g. f1441 (24.00s): foot in mouth: deepest 4.7 cm, 135 samples inside
+      e.g. f1451 (24.17s): foot in mouth: deepest 4.8 cm, 139 samples inside
+      e.g. f1461 (24.33s): foot in mouth: deepest 4.9 cm, 137 samples inside
+SCENE_PEN            11 frames,  2012 hits | ranges (s): 0.8-0.8, 34.8-36.3
+      e.g. f51 (0.83s): diver/fin points inside Deck:32
+      e.g. f2091 (34.83s): diver/fin points inside Coping:198
+      e.g. f2101 (35.00s): diver/fin points inside Coping:198
+WHALE_DIVER_PEN      33 frames,   945 hits | ranges (s): 22.7-22.7, 23.0-23.0, 23.8-24.0, 26.3-26.7, 27.3-28.0, 28.3-29.7, 30.8-31.0, 31.5-32.5, 33.0-33.3
+      e.g. f1361 (22.67s): 5 diver samples inside the whale (away from the held foot)
+      e.g. f1381 (23.00s): 37 diver samples inside the whale (away from the held foot)
+      e.g. f1431 (23.83s): 28 diver samples inside the whale (away from the held foot)
+WHALE_FLOOR           1 frames,     1 hits | ranges (s): 28.3-28.3
+      e.g. f1701 (28.33s): whale 7.7 cm below the tiles
+PENETRATION/CONTACT TOTAL (hits): 2982
