@@ -1,0 +1,76 @@
+DrunkTrain audit, every 6 frames (345 frames sampled)
+penetration counts (frames with overlap): Lad-train 5, people-people 0, hat-head 0
+
+BODY_HOVER: 2
+   f295  lowest point 4.1 cm above
+   f301  lowest point 5.7 cm above
+BODY_SINK: 1
+   f283  15.4 cm below
+CAMERA_INSIDE: 1
+   f823  camera 0.6 cm from Loco
+FOOT_HOVER: 76
+   f55  Lad L 3.6 cm above while planted
+   f229  Lad R 3.3 cm above while planted
+   f235  Lad R 5.6 cm above while planted
+   f241  Lad L 5.9 cm above while planted
+   f241  Lad R 7.9 cm above while planted
+   f247  Lad L 10.7 cm above while planted
+   f247  Lad R 9.5 cm above while planted
+   f253  Lad L 12.5 cm above while planted
+   f253  Lad R 9.8 cm above while planted
+   f259  Lad R 6.0 cm above while planted
+   f271  Lad R 3.5 cm above while planted
+   f277  Lad L 6.8 cm above while planted
+   f277  Lad R 7.3 cm above while planted
+   f283  Lad L 10.5 cm above while planted
+   f283  Lad R 10.6 cm above while planted
+   f301  Lad L 15.9 cm above while planted
+   f301  Lad R 16.5 cm above while planted
+   f313  Lad R 3.5 cm above while planted
+   f319  Lad R 3.5 cm above while planted
+   f325  Lad R 3.5 cm above while planted
+   f331  Lad R 3.5 cm above while planted
+   f337  Lad R 3.5 cm above while planted
+   f343  Lad R 3.5 cm above while planted
+   f349  Lad R 3.5 cm above while planted
+   f355  Lad R 3.5 cm above while planted
+   f361  Lad R 3.5 cm above while planted
+   f367  Lad R 3.5 cm above while planted
+   f373  Lad R 3.5 cm above while planted
+   f379  Lad R 3.5 cm above while planted
+   f385  Lad R 3.5 cm above while planted
+   f391  Lad R 3.5 cm above while planted
+   f397  Lad R 3.5 cm above while planted
+   f403  Lad R 3.5 cm above while planted
+   f409  Lad R 3.5 cm above while planted
+   f415  Lad R 3.5 cm above while planted
+   f421  Lad R 3.5 cm above while planted
+   f427  Lad R 3.5 cm above while planted
+   f433  Lad R 3.5 cm above while planted
+   f439  Lad R 3.5 cm above while planted
+   f445  Lad R 3.5 cm above while planted
+FOOT_SINK: 13
+   f55  Lad R 4.6 cm under
+   f61  Lad R 4.6 cm under
+   f121  Lad R 15.1 cm under
+   f127  Lad L 10.8 cm under
+   f127  Lad R 12.8 cm under
+   f739  Lad L 3.6 cm under
+   f841  Lad L 3.4 cm under
+   f847  Lad L 3.7 cm under
+   f853  Lad L 3.7 cm under
+   f1189  Lad R 8.9 cm under
+   f1195  Lad L 12.2 cm under
+   f1195  Lad R 7.8 cm under
+   f1201  Lad L 6.4 cm under
+HEAD_ON_RAIL: 4
+   f283  no head contact over the railhead
+   f289  no head contact over the railhead
+   f295  head 4.1 cm above the railhead
+   f301  head 5.7 cm above the railhead
+PEN_TRAIN: 5
+   f667  Lad x Loco: 34 tri pairs
+   f757  Lad x Loco: 46 tri pairs
+   f763  Lad x Loco: 61 tri pairs
+   f1177  Lad x Loco: 158 tri pairs
+   f1183  Lad x Loco: 16 tri pairs

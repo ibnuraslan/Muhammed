@@ -678,7 +678,12 @@ mixn = [n for n in mt_.nodes if n.type == 'MIX' and n.data_type == 'RGBA' and n.
 if mixn:
     tcg = mt_.nodes.new('ShaderNodeTexCoord'); sxz = mt_.nodes.new('ShaderNodeSeparateXYZ'); mt_.links.new(tcg.outputs['Generated'], sxz.inputs[0])
     gtz = mt_.nodes.new('ShaderNodeMath'); gtz.operation = 'GREATER_THAN'; gtz.inputs[1].default_value = (WAIST_Z - zmin_) / (zmax_ - zmin_)
-    mt_.links.new(sxz.outputs['Z'], gtz.inputs[0]); mt_.links.new(gtz.outputs[0], mixn[0].inputs['Factor'])
+    colfac = mixn[0].inputs['Factor'].links[0].from_socket          # 1 where the texture is not denim-blue
+    gtl = mt_.nodes.new('ShaderNodeMath'); gtl.operation = 'GREATER_THAN'; gtl.inputs[1].default_value = (WAIST_Z - 0.17 - zmin_) / (zmax_ - zmin_)
+    mt_.links.new(sxz.outputs['Z'], gtz.inputs[0]); mt_.links.new(sxz.outputs['Z'], gtl.inputs[0])
+    mn2 = mt_.nodes.new('ShaderNodeMath'); mn2.operation = 'MINIMUM'; mt_.links.new(gtl.outputs[0], mn2.inputs[0]); mt_.links.new(colfac, mn2.inputs[1])
+    mx2 = mt_.nodes.new('ShaderNodeMath'); mx2.operation = 'MAXIMUM'; mt_.links.new(gtz.outputs[0], mx2.inputs[0]); mt_.links.new(mn2.outputs[0], mx2.inputs[1])
+    mt_.links.new(mx2.outputs[0], mixn[0].inputs['Factor'])    # chest up: always tee colour; hem zone: tee colour wherever it is not denim
     print("TEE split at generated z", round(gtz.inputs[1].default_value, 3))
 for o in bpy.data.objects:
     if o.type == 'ARMATURE': link(o, "People")

@@ -26,7 +26,9 @@ for im in list(bpy.data.images):
     pth = os.path.join(TMP, "".join(c if c.isalnum() else "_" for c in im.name) + ext)
     im.filepath_raw = pth; im.file_format = fmt
     if fmt == 'JPEG': bpy.context.scene.render.image_settings.quality = 88
-    im.save(); im.filepath = pth; im.reload(); n_done += 1
+    im.save()
+    new = bpy.data.images.load(pth); new.colorspace_settings.name = im.colorspace_settings.name; new.alpha_mode = im.alpha_mode
+    im.user_remap(new); bpy.data.images.remove(im); n_done += 1
 print("TEXTURES re-saved at <=1K:", n_done)
 for _ in range(3):
     bpy.data.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)

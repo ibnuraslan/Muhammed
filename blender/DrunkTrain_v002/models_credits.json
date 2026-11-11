@@ -1,0 +1,74 @@
+{
+ "gp18": {
+  "uid": "9fbd813e78ee4bf887eaea0b989fb925",
+  "title": "EMD GP18",
+  "author": "Ronin1996",
+  "author_profile": "https://sketchfab.com/bonneauchristian9",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/9fbd813e78ee4bf887eaea0b989fb925",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "wagon": {
+  "uid": "2cd8d1032b53426a92abb64a71743aa6",
+  "title": "Train Freight Compartment",
+  "author": "Prabhu Ram",
+  "author_profile": "https://sketchfab.com/virtualmakes",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2cd8d1032b53426a92abb64a71743aa6",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hardhat": {
+  "uid": "5a67c92ce3174c37946076512356b0c7",
+  "title": "Hard Hat",
+  "author": "Kristiyan Marinov",
+  "author_profile": "https://sketchfab.com/kristiyan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5a67c92ce3174c37946076512356b0c7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "muscles": {
+  "uid": "991eb96938be4d0d8fadee241a1063d3",
+  "title": "Male Body Muscular System - Anatomy Study",
+  "author": "Ruslan Gadzhiev",
+  "author_profile": "https://sketchfab.com/ruslangadzhiev",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/991eb96938be4d0d8fadee241a1063d3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "houseA": {
+  "uid": "c9ef0a360eff405682015c8813eee41d",
+  "title": "Small Brick House",
+  "author": "jimbogies",
+  "author_profile": "https://sketchfab.com/jimbogies",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c9ef0a360eff405682015c8813eee41d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "houseB": {
+  "uid": "da52ae1caf4f4b088529e1fb0d34fe6c",
+  "title": "Brick Home",
+  "author": "jimbogies",
+  "author_profile": "https://sketchfab.com/jimbogies",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/da52ae1caf4f4b088529e1fb0d34fe6c",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "houseC": {
+  "uid": "b8375c5e5e6b40639fc06492fbd95fcb",
+  "title": "Suburban House",
+  "author": "mbuannoart",
+  "author_profile": "https://sketchfab.com/mbuannoart",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b8375c5e5e6b40639fc06492fbd95fcb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "streetlamp": {
+  "uid": "fdc8b5ba548243448f9b918ea7892786",
+  "title": "Suburban Street Lamp",
+  "author": "gadsby",
+  "author_profile": "https://sketchfab.com/gadsby",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/fdc8b5ba548243448f9b918ea7892786",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
