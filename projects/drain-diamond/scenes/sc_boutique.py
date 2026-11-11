@@ -32,7 +32,7 @@ _M = {}
 
 def mats():
     if not _M:
-        _M["stone"] = dd.tex_mat("white_sandstone_blocks_02", 0.32, tint=(0.98, 0.93, 0.85), name="Limestone", sat=0.7)
+        _M["stone"] = dd.tex_mat("white_sandstone_blocks_02", 0.45, tint=(0.98, 0.93, 0.85), name="Limestone", sat=0.7)
         _M["stone_plain"] = dd.tex_mat("white_sandstone_bricks", 0.6, tint=(0.95, 0.9, 0.83), name="LimestoneP", sat=0.6)
         _M["slate"] = dd.tex_mat("roof_slates_02", 0.5, tint=(0.55, 0.6, 0.66), name="Slate", sat=0.5)
         _M["glass"] = pbr("WinGlass", (0.02, 0.025, 0.03), 0.03, 0.2, **{'Coat Weight': 1.0})
@@ -222,8 +222,8 @@ def paint_tin(name):
 
 # ============================================================================ variants
 def build_dawn(c):
-    world_sky(sun_elev_deg=3, sun_rot_deg=95, strength=0.35, tint=(0.88, 0.92, 1.0))
-    sun(3, 95, energy=1.4, color=(1.0, 0.72, 0.5), angle_deg=1.5)
+    world_sky(sun_elev_deg=4, sun_rot_deg=200, strength=0.6, tint=(0.88, 0.92, 1.0))
+    sun(4, 200, energy=0.9, color=(1.0, 0.72, 0.5), angle_deg=2.0)
     blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.08)
     haussmann(-34, -11, seed=2, lit_frac=0.12); haussmann(11, 33, seed=3, lit_frac=0.1)
     haussmann(33, 55, seed=4, lit_frac=0.1); haussmann(-56, -34, seed=5, lit_frac=0.1)
@@ -250,6 +250,7 @@ def build_lane(c):
     haussmann(-30, 30, seed=8, rot_z=math.radians(90), origin=(-4.0, 0, 0), lit_frac=0.06, gf=5.0)
     road = dd.wet(dd.tex_mat("cobblestone_floor_04", 0.6, tint=(0.55, 0.55, 0.56), name="Cobbles", sat=0.4), 0.4, 0.4, ripples=False)
     box("Lane", (0, 0, -0.05), (8, 70, 0.1), road)
+    haussmann(-12, 12, seed=9, rot_z=0.0, origin=(0, 30.0, 0), lit_frac=0.1)      # closes the end of the lane
     for sx in (-1, 1):
         box("LanePave", (sx * 3.3, 0, 0.02), (1.4, 70, 0.14), dd.tex_mat("concrete_floor_02", 0.5, tint=(0.6, 0.6, 0.58), name="LP", sat=0.3))
     # the service door on the right wall: plain dark steel, a small caged lamp above
@@ -259,7 +260,6 @@ def build_lane(c):
     lo = bpy.data.objects.new("DoorLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (3.7, 9.0, 2.8)
     box("DoorLampBox", (3.85, 9.0, 2.8), (0.15, 0.15, 0.2), emissive("DoorLampGlow", WARM, 6))
     c["door_at"] = Vector((3.4, 9.0, 0))
-    v = car("Van", (0.8, 0.8, 0.79), length=5.0, width=2.0); v.location = (-2.2, 2.0, 0); v.rotation_euler = (0, 0, math.pi / 2)
     c["painters"] = []
     for k in range(4):
         h = painter(f"Painter{k}", 30 + 6 * k, k)
@@ -363,8 +363,8 @@ def build_salon(c):
 
 def build_safe(c):
     world_flat((0.02, 0.02, 0.025), 1.0)
-    steel = pbr("SafeSteel", (0.45, 0.46, 0.47), 0.32, 0.9)
-    wall = pbr("SafeWall", (0.55, 0.55, 0.53), 0.7)
+    steel = brushed_metal("SafeSteel", (0.5, 0.51, 0.52))
+    wall = pbr("SafeWall", (0.22, 0.24, 0.23), 0.6)
     box("Floor", (0, 2, -0.05), (6, 6, 0.1), dd.tex_mat("concrete_floor_painted", 0.6, tint=(0.6, 0.6, 0.6), name="SafeFloor", sat=0.4))
     box("Back", (0, 4.6, 1.5), (6, 0.2, 3.0), wall); box("L", (-3.0, 2, 1.5), (0.2, 6, 3.0), wall); box("R", (3.0, 2, 1.5), (0.2, 6, 3.0), wall)
     box("Ceil", (0, 2, 3.0), (6, 6, 0.1), wall)
@@ -377,13 +377,15 @@ def build_safe(c):
     # the vault door in the back wall: a thick round door hinged on its left edge
     box("VaultFrame", (0.8, 4.48, 1.15), (2.2, 0.1, 2.2), steel)
     box("VaultDark", (0.8, 4.52, 1.15), (1.6, 0.05, 1.6), pbr("VaultIn", (0.05, 0.05, 0.05), 0.6))
-    vd = [cyl("Door", (0.85, 0, 0), 0.82, 0.3, steel, verts=64, rot=(math.radians(90), 0, 0))]
+    B = dd.Builder("VaultDoor"); R = (math.radians(90), 0, 0)
+    B.cyl((0.85, 0, 0), 0.82, 0.3, steel, verts=64, rot=R)
     for k in range(6):
         a = k * math.pi / 3
-        vd.append(cyl("Spoke", (0.85 + 0.18 * math.cos(a), -0.2, 0.18 * math.sin(a)), 0.02, 0.36, mats()["bronze"], verts=8,
-                      rot=(0, math.pi / 2 - a, 0)))
-    vd.append(cyl("Hub", (0.85, -0.2, 0), 0.07, 0.08, mats()["bronze"], verts=24, rot=(math.radians(90), 0, 0)))
-    door = join(vd, "VaultDoor"); door.location = (0.8 - 0.85, 4.25, 1.15); c["vault"] = door
+        B.cyl((0.85 + 0.18 * math.cos(a), -0.2, 0.18 * math.sin(a)), 0.02, 0.36, mats()["bronze"], verts=8, rot=(0, math.pi / 2 - a, 0))
+    B.cyl((0.85, -0.2, 0), 0.07, 0.08, mats()["bronze"], verts=24, rot=R)
+    door = B.done((0.8 - 0.85, 4.25, 1.15)); c["vault"] = door
+    bpy.ops.object.select_all(action='DESELECT'); door.select_set(True); bpy.context.view_layer.objects.active = door
+    bpy.ops.object.shade_smooth()
     # alarm keypad with a status LED (red, then green: frame driver)
     box("Keypad", (2.88, 2.6, 1.45), (0.04, 0.22, 0.3), pbr("KeypadM", (0.85, 0.85, 0.82), 0.4))
     for i in range(3):
@@ -398,7 +400,7 @@ def build_safe(c):
     box("LED", (2.85, 2.6, 1.58), (0.01, 0.03, 0.02), led)
     for x in (-1.2, 1.2):
         box("Tube", (x, 2.0, 2.94), (0.12, 2.4, 0.04), emissive("Tube", (0.9, 0.95, 1.0), 6))
-        a = bpy.data.lights.new("TubeL", 'AREA'); a.shape = 'RECTANGLE'; a.size = 0.2; a.size_y = 2.4; a.energy = 150; a.color = (0.9, 0.95, 1.0)
+        a = bpy.data.lights.new("TubeL", 'AREA'); a.shape = 'RECTANGLE'; a.size = 0.2; a.size_y = 2.4; a.energy = 60; a.color = (0.9, 0.95, 1.0)
         o = bpy.data.objects.new("TubeL", a); bpy.context.collection.objects.link(o); o.location = (x, 2.0, 2.9)
     mg = person("Manager", 0.0, 46, "female_elegantsuit01", "bob01", cval=0.1, hv=0.25); c["manager"] = mg
     pt = painter("PainterS", 34, 2); c["safe_painter"] = pt
@@ -451,7 +453,7 @@ def arms_relaxed_one(h, sd):
 def cam_grille(c, t):
     e = ease(t)
     d = c["info"]["door"]
-    loc = Vector((d.x - 11.0, -10.5, 1.9)).lerp(Vector((d.x - 6.5, -9.0, 1.85)), e)
+    loc = Vector((d.x - 7.5, -8.0, 1.8)).lerp(Vector((d.x - 4.5, -7.0, 1.75)), e)
     return loc, d + Vector((0.0, 0, 2.0)), 32
 
 
@@ -474,7 +476,7 @@ def anim_floor(c, t):
     sec = t * DUR["floor"]
     p = c["guard_painter"]
     x = -4.4 + 0.5 * math.sin(sec * 0.6)
-    walk_to(p, Vector((-4.2, 3.8, 0)), Vector((-4.6, 7.6, 0)), sec, speed=0.55, cadence=1.2)
+    walk_to(p, Vector((-4.85, 3.9, 0)), Vector((-4.95, 7.4, 0)), sec, speed=0.55, cadence=1.2)
     pp = c["pistol"]
     if pp is not None:
         tip = p.bone_tail("wrist.R") if "wrist.R" in p.arm.pose.bones else p.bone_tail("lowerarm02.R")
@@ -485,8 +487,8 @@ def anim_floor(c, t):
 
 def cam_floor(c, t):
     e = ease(t)
-    loc = Vector((2.5, 9.2, 1.7)).lerp(Vector((1.6, 9.0, 1.65)), e)
-    return loc, Vector((-5.0, 5.2, 0.7)), 26
+    loc = Vector((-0.6, 9.3, 1.75)).lerp(Vector((-1.3, 9.1, 1.7)), e)
+    return loc, Vector((-5.6, 5.6, 0.7)), 26
 
 
 def anim_safe(c, t):
@@ -499,15 +501,15 @@ def anim_safe(c, t):
     reach(mg, "L", Vector((2.8 - press, 2.62, 1.42)), M @ Vector((0.6, 0.2, -0.8)))
     arms_relaxed_one(mg, "R")
     mg.rot("head", (0, 1, 0), -6)
-    p = c["safe_painter"]; place(p, (0.6, 1.0, 0), face_to((0.6, 1.0), (2.3, 2.6))); arms_relaxed(p)
+    p = c["safe_painter"]; place(p, (1.0, 1.5, 0), face_to((1.0, 1.5), (2.3, 2.6))); arms_relaxed(p)
     u = ease(min(1.0, max(0.0, (sec - 2.2) / 2.6)))
     c["vault"].rotation_euler = (0, 0, math.radians(-95 * u))
 
 
 def cam_safe(c, t):
     e = ease(t)
-    loc = Vector((-2.2, -0.6, 1.75)).lerp(Vector((-1.8, -0.2, 1.7)), e)
-    return loc, Vector((1.4, 3.6, 1.2)), 24
+    loc = Vector((-2.3, 0.0, 1.6)).lerp(Vector((-2.0, 0.35, 1.55)), e)
+    return loc, Vector((1.2, 3.4, 1.25)), 22
 
 
 MOVES = {
