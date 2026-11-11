@@ -32,7 +32,7 @@ def key_z(x):
 # ---------------------------------------------------------------- bench + seat
 bench = bpy.data.objects["Bench"]; bench.location = (0, -0.60, 0); bench.rotation_euler = (0, 0, 0)
 SEAT_Z = 0.4507
-ROOT_P = Vector((0, -0.56, SEAT_Z + 0.105))
+ROOT_P = Vector((0, -0.56, SEAT_Z + 0.113))
 
 # ---------------------------------------------------------------- body keys: rocking, leaning toward the rod, bigger as the music grows
 def intensity(f):
@@ -58,11 +58,11 @@ for f in range(1, END + 1, step):
 for s in "LR":
     sx = 1 if s == "L" else -1
     for f in (1, END):
-        H.key_foot(s, f, Vector((sx * 0.15, -0.05 - (0.04 if s == "R" else 0))), 180 + sx * 6)
+        H.key_foot(s, f, Vector((sx * 0.15, -0.05 - (0.04 if s == "R" else 0))), 180 + sx * 6, 0.025)
 # right foot works the sustain pedal in beat 8 (toe dips, heel planted)
 for f in range(BEAT[7], END - 40, 60):
     for df, p in ((0, 0), (8, -9), (40, -9), (48, 0)):
-        H.key_foot("R", f + df, Vector((-0.15, -0.09)), 174, 0.0, p)
+        H.key_foot("R", f + df, Vector((-0.15, -0.09)), 174, 0.025 + 0.012 * (p != 0), p)
 
 # ---------------------------------------------------------------- hands on the keys
 SH = {s: CR.BN["upperarm01." + s].head_local.copy() for s in "LR"}
@@ -72,8 +72,9 @@ def hand_pose(s, f, x, lift, yaw=0.0, wrist_up=0.0):
     W = Vector((x, KEY_Y - 0.115, key_z(x) + 0.055 + lift))
     d = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((-0.12 * sx * 0, 1.0, -0.42 + wrist_up)).normalized()
     nrm = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((0.18 * sx, 0.0, -1.0))
-    pole = W + Vector((sx * 0.45, -0.35, -0.15))
+    pole = W + Vector((-sx * 0.45, -0.35, -0.15))   # his left is world -X (rig yawed 180)
     H.key_hand(s, f, W, d, nrm, pole)
+FINGER_SIGN = float(os.environ.get('FINGER_SIGN', '1'))
 def fingers(s, f, curl, spread=0.0, thumb=20):
     sx = 1 if s == "L" else -1
     for k in range(1, 6):
@@ -82,7 +83,7 @@ def fingers(s, f, curl, spread=0.0, thumb=20):
             if k == 1:
                 CR.key_rot(b, f, [("Z", sx * (thumb * 0.5 * j))]); continue
             c = curl[k - 2] if isinstance(curl, (list, tuple)) else curl
-            CR.key_rot(b, f, [("X", -c * (0.8, 1.1, 0.8)[j - 1]), ("Z", sx * spread * (k - 3) * (1 if j == 1 else 0))])
+            CR.key_rot(b, f, [("X", FINGER_SIGN * c * (0.8, 1.1, 0.8)[j - 1]), ("Z", sx * spread * (k - 3) * (1 if j == 1 else 0))])
 def phrase(s, f0, f1, centre_fn, every, lift, span=0.12, accent=None):
     f = f0; i = 0
     while f < f1:
@@ -90,10 +91,10 @@ def phrase(s, f0, f1, centre_fn, every, lift, span=0.12, accent=None):
         x = max(KX0, min(KX1, x))
         hit = f; up = f + every // 2
         hand_pose(s, hit, x, 0.0, yaw=RND.uniform(-6, 6)); DOWN.append((s, hit, x))
-        c = [RND.uniform(25, 50) for _ in range(4)]; fingers(s, hit, c, spread=4)
+        c = [RND.uniform(14, 32) for _ in range(4)]; fingers(s, hit, c, spread=4)
         L_ = lift * (accent(f) if accent else 1.0)
         hand_pose(s, up, x + RND.uniform(-0.03, 0.03), L_, yaw=RND.uniform(-6, 6), wrist_up=0.15 * L_ / max(lift, 1e-3))
-        fingers(s, up, [RND.uniform(8, 20) for _ in range(4)], spread=8)
+        fingers(s, up, [RND.uniform(4, 12) for _ in range(4)], spread=8)
         f += every; i += 1
 # beat 1: gentle, he is mid-piece as he bites
 phrase("L", 1, BEAT[1] - 6, lambda f: -0.28 + 0.04 * math.sin(f / 40), 18, 0.03)
@@ -103,8 +104,8 @@ for s, x0 in (("L", -0.2), ("R", 0.12)):
     sx = 1 if s == "L" else -1
     hand_pose(s, BEAT[1] - 2, x0, 0.05); fingers(s, BEAT[1] - 2, 20)
     hand_pose(s, BEAT[1] + 10, x0 - sx * 0.02, 0.17, wrist_up=0.1); fingers(s, BEAT[1] + 10, 5, spread=14)
-    hand_pose(s, BEAT[1] + 17, x0 - sx * 0.03, 0.0); fingers(s, BEAT[1] + 17, [55, 60, 55, 50], spread=12); DOWN.append((s, BEAT[1] + 17, x0 - sx * 0.03))
-    hand_pose(s, BEAT[1] + 21, x0 - sx * 0.03, 0.0); DOWN.append((s, BEAT[1] + 21, x0 - sx * 0.03)); fingers(s, BEAT[1] + 21, [55, 60, 55, 50], spread=12)
+    hand_pose(s, BEAT[1] + 17, x0 - sx * 0.03, 0.0); fingers(s, BEAT[1] + 17, [30, 34, 30, 26], spread=12); DOWN.append((s, BEAT[1] + 17, x0 - sx * 0.03))
+    hand_pose(s, BEAT[1] + 21, x0 - sx * 0.03, 0.0); DOWN.append((s, BEAT[1] + 21, x0 - sx * 0.03)); fingers(s, BEAT[1] + 21, [30, 34, 30, 26], spread=12)
 phrase("L", BEAT[1] + 30, BEAT[2] + 10, lambda f: -0.23 - 0.30 * smooth((f - BEAT[1] - 30) / 60), 8, 0.09)
 phrase("R", BEAT[1] + 30, BEAT[2] + 10, lambda f: 0.15 + 0.32 * smooth((f - BEAT[1] - 30) / 60), 8, 0.09)
 # beats 3-7: steady, expressive playing (mostly seen from inside his head, but always moving)
@@ -115,14 +116,15 @@ phrase("L", BEAT[7], 1380, lambda f: -0.35 + 0.18 * math.sin((f - BEAT[7]) / 30)
 phrase("R", BEAT[7] + 4, 1380, lambda f: 0.25 + 0.2 * math.sin((f - BEAT[7]) / 26 + 2), 9, 0.13, span=0.2)
 for s, x0 in (("L", -0.3), ("R", 0.3)):   # arms fly up and slam a big chord
     hand_pose(s, 1392, x0, 0.2, wrist_up=0.12); fingers(s, 1392, 5, spread=15)
-    hand_pose(s, 1402, x0 * 1.1, 0.0); fingers(s, 1402, [55, 60, 55, 50], spread=12); DOWN.append((s, 1402, x0 * 1.1))
-    hand_pose(s, 1406, x0 * 1.1, 0.0); fingers(s, 1406, [55, 60, 55, 50], spread=12); DOWN.append((s, 1406, x0 * 1.1))
+    hand_pose(s, 1402, x0 * 1.1, 0.0); fingers(s, 1402, [30, 34, 30, 26], spread=12); DOWN.append((s, 1402, x0 * 1.1))
+    hand_pose(s, 1406, x0 * 1.1, 0.0); fingers(s, 1406, [30, 34, 30, 26], spread=12); DOWN.append((s, 1406, x0 * 1.1))
 phrase("L", 1414, END, lambda f: -0.42 + 0.25 * smooth((f - 1414) / 170), 10, 0.12, span=0.22)
 phrase("R", 1418, END, lambda f: 0.42 - 0.2 * smooth((f - 1418) / 170), 9, 0.12, span=0.22)
 
 # ---------------------------------------------------------------- jaw: open for the hook, clamps on the rod at f30, keeps the clamp
-JAW_KEYS = [(1, 14), (18, 16), (28, 5), (32, 3.2), (END, 3.2)]
-for f, a_ in JAW_KEYS: CR.key_rot("jaw", f, [("X", -a_)])
+JAW_SIGN = float(os.environ.get('JAW_SIGN', '1'))
+JAW_KEYS = [(1, 9), (18, 11), (28, 4), (32, 1.6), (END, 1.6)]
+for f, a_ in JAW_KEYS: CR.key_rot("jaw", f, [("X", JAW_SIGN * a_)])
 # lips pulled back in effort while clamped; brief grimace at the crash
 for f, a_ in ((1, 0), (30, 4), (BEAT[1] + 15, 9), (BEAT[2], 4), (BEAT[6] + 40, 7), (END, 6)):
     for s in "LR":
@@ -139,20 +141,43 @@ for b in (150, 420, 760, 960):
 lids(CLOSE - 1, 0, 0); lids(CLOSE + 16, 27, -9); lids(1290, 27, -9); lids(1302, 6, 0); lids(1440, 6, 0); lids(1446, 24, -7); lids(1452, 6, 0); lids(END, 6, 0)
 
 # ---------------------------------------------------------------- fingertip contact: correct each DOWN key so the middle fingertip lands on the key top
-def tip(s):
-    pb = PB["finger3-3." + s]; return C.matrix_world @ pb.tail
-for it in range(2):
+TIPN = ["finger%d-3." % k for k in range(1, 6)]
+def low_tip(s):
+    best = None
+    for n in TIPN:
+        t = C.matrix_world @ PB[n + s].tail
+        kz = key_z(t.x) if KX0 - 0.05 < t.x < KX1 + 0.05 else KEY_Z
+        d = t.z - kz
+        if best is None or d < best[0]: best = (d, t)
+    return best
+# every keyed hand frame: the lowest fingertip rests exactly on the key top at strikes, never below it otherwise
+KEYED = {}
+for s in "LR":
+    for fc in C.animation_data.action.layers[0].strips[0].channelbags[0].fcurves:
+        if fc.data_path == 'pose.bones["IK_hand.%s"].location' % s:
+            for kp in fc.keyframe_points: KEYED.setdefault(s, set()).add(int(round(kp.co.x)))
+DOWNSET = {(s, f) for s, f, x in DOWN}
+for it in range(3):
     err = []
-    for s, f, x in DOWN:
-        ev(f); tz = tip(s).z; target = key_z(tip(s).x) + 0.006
-        dz = target - tz; err.append(abs(dz))
-        pb = PB["IK_hand." + s]
-        # IK_hand is a root-level bone: shift its armature-space location by dz
-        M = CR.rest("IK_hand." + s) @ Matrix.Translation(pb.location)
-        pb.location = pb.location + (CR.rest("IK_hand." + s).to_3x3().inverted() @ Vector((0, 0, dz)))
-        pb.keyframe_insert("location", frame=f, group="IK_hand." + s)
-    print("TIP_ERR iter", it, "max %.3f mean %.3f" % (max(err), sum(err) / len(err)))
-
+    for s in "LR":
+        for f in sorted(KEYED[s]):
+            ev(f); d, t = low_tip(s)
+            if (s, f) in DOWNSET: dz = 0.004 - d
+            elif d < 0.006: dz = 0.006 - d
+            else: continue
+            err.append(abs(dz)); pb = PB["IK_hand." + s]
+            pb.location = pb.location + (CR.rest("IK_hand." + s).to_3x3().inverted() @ Vector((0, 0, dz)))
+            pb.keyframe_insert("location", frame=f, group="IK_hand." + s)
+    print("TIP_ERR iter", it, "n", len(err), "max %.3f" % (max(err) if err else 0))
+# in-betweens: any frame where a fingertip would dip under the key tops gets its own corrective key
+fix = 0
+for s in "LR":
+    for f in range(1, END + 1, 2):
+        ev(f); d, t = low_tip(s)
+        if d < -0.003:
+            pb = PB["IK_hand." + s]; pb.location = pb.location + (CR.rest("IK_hand." + s).to_3x3().inverted() @ Vector((0, 0, 0.004 - d)))
+            pb.keyframe_insert("location", frame=f, group="IK_hand." + s); fix += 1
+print("INBETWEEN_FIX", fix)
 # ---------------------------------------------------------------- the brass rod: pinned on the piano, its tip clamped between his teeth from f30
 head_pb = PB["head"]
 bite = bpy.data.objects.new("Bite", None); sc.collection.objects.link(bite)
@@ -236,23 +261,6 @@ for m in suit.data.materials:
                 nt.links.new(sat.outputs['Result'], tie.inputs['Factor']); nt.links.new(shirt.outputs['Result'], tie.inputs['A'])
                 tie.inputs['B'].default_value = (0.42, 0.03, 0.03, 1)
                 nt.links.new(tie.outputs['Result'], lk.to_socket)
-# cravat: a puffed silk neckcloth wrapped round the collar, knot and falls at the front
-silk = bpy.data.materials.new("M_CravatSilk"); silk.use_nodes = True; P = silk.node_tree.nodes["Principled BSDF"]
-P.inputs['Base Color'].default_value = (0.5, 0.025, 0.03, 1); P.inputs['Roughness'].default_value = 0.38; P.inputs['Sheen Weight'].default_value = 0.6
-nk = CR.BN["neck01"].head_local
-bpy.ops.mesh.primitive_torus_add(major_radius=0.058, minor_radius=0.011, major_segments=32, minor_segments=12, location=nk + Vector((0, -0.008, 0.03)))
-band = bpy.context.active_object; band.name = "Cravat_Band"; band.scale = (1.0, 0.92, 1.0); band.rotation_euler = (R_(-14), 0, 0)
-bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=0.027, location=nk + Vector((0, -0.07, 0.005)))
-knot = bpy.context.active_object; knot.name = "Cravat_Knot"; knot.scale = (1.1, 0.6, 0.85)
-bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=0.034, location=nk + Vector((0, -0.075, -0.045)))
-fall = bpy.context.active_object; fall.name = "Cravat_Fall"; fall.scale = (0.85, 0.38, 1.1)
-for o in (band, knot, fall):
-    o.data.materials.append(silk)
-    tx = bpy.data.textures.new(o.name + "_folds", 'CLOUDS'); tx.noise_scale = 0.02
-    dsp = o.modifiers.new("folds", 'DISPLACE'); dsp.texture = tx; dsp.strength = 0.006; dsp.texture_coords = 'OBJECT'
-    o.modifiers.new("sub", 'SUBSURF').levels = 1
-    cc_ = o.constraints.new('CHILD_OF'); cc_.target = C; cc_.subtarget = "neck01"
-    cc_.inverse_matrix = (C.matrix_world @ CR.BN["neck01"].matrix_local).inverted()
 hair = bpy.data.objects["Composer.short02"]
 hm = bpy.data.materials.new("M_GreyHair"); hm.use_nodes = True; hn = hm.node_tree.nodes; hn.clear()
 ho = hn.new('ShaderNodeOutputMaterial'); hb_ = hn.new('ShaderNodeBsdfHairPrincipled'); hb_.parametrization = 'COLOR'
@@ -284,6 +292,27 @@ for m in bpy.data.objects["Composer.eyebrow010"].data.materials:
                 hs = m.node_tree.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 0.1; hs.inputs['Value'].default_value = 1.6
                 m.node_tree.links.new(nd.outputs['Color'], hs.inputs['Color']); m.node_tree.links.new(hs.outputs['Color'], lk.to_socket)
 
+# ---------------------------------------------------------------- quaternion continuity: no long-way flips between keys
+cb_ = C.animation_data.action.layers[0].strips[0].channelbags[0]
+groups = {}
+for fc in cb_.fcurves:
+    if fc.data_path.endswith("rotation_quaternion"): groups.setdefault(fc.data_path, {})[fc.array_index] = fc
+nflip = 0
+for dp, chans in groups.items():
+    if len(chans) != 4: continue
+    frames = sorted({round(kp.co.x) for kp in chans[0].keyframe_points})
+    def kp_at(fc, f): return next(k for k in fc.keyframe_points if round(k.co.x) == f)
+    prev = None
+    for f in frames:
+        try: ks = [kp_at(chans[i], f) for i in range(4)]
+        except StopIteration: continue
+        q = [k.co.y for k in ks]
+        if prev and sum(a * b for a, b in zip(q, prev)) < 0:
+            for k in ks: k.co.y = -k.co.y; k.handle_left.y = -k.handle_left.y; k.handle_right.y = -k.handle_right.y
+            q = [-x for x in q]; nflip += 1
+        prev = q
+    for fc in chans.values(): fc.update()
+print("QUAT_FLIPS_FIXED", nflip)
 # ---------------------------------------------------------------- candle flicker (flames scale + lights)
 for i, fl in enumerate([o for o in bpy.data.objects if o.name.startswith("Flame")]):
     s0 = fl.scale.copy(); ph = RND.uniform(0, 10)
@@ -295,6 +324,12 @@ for i, L in enumerate([o for o in bpy.data.objects if o.name.startswith("CandleL
     e0 = L.data.energy; ph = RND.uniform(0, 10)
     for f in range(1, END + 1, 6):
         L.data.energy = e0 * (1 + 0.18 * math.sin(f * 0.37 + ph) + 0.1 * math.sin(f * 1.3 + ph)); L.data.keyframe_insert("energy", frame=f)
+# soft warm fill on the face that rides the head (candle bounce from the music desk), so the eyes never go black
+ld = bpy.data.lights.new("Face_Fill", 'AREA'); ld.energy = 2.5; ld.size = 0.35; ld.color = (1.0, 0.78, 0.55)
+FL = bpy.data.objects.new("Face_Fill", ld); sc.collection.objects.link(FL); FL.location = (0.05, -0.75, 1.5)
+FL.rotation_euler = (Vector((0, -0.1, 1.58)) - FL.location).to_track_quat('-Z', 'Y').to_euler()
+fc_ = FL.constraints.new('CHILD_OF'); fc_.target = C; fc_.subtarget = "head"; fc_.inverse_matrix = (C.matrix_world @ CR.BN["head"].matrix_local).inverted()
+import json as _j; sc["down"] = _j.dumps(DOWN)
 print("DOWN", len(DOWN))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_DONE")

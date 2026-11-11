@@ -79,16 +79,16 @@ add = nt.nodes.new('ShaderNodeMath'); add.operation = 'ADD'; nt.links.new(mr.out
 edge = nt.nodes.new('ShaderNodeMath'); edge.operation = 'PINGPONG'; edge.inputs[1].default_value = 0.5; nt.links.new(ring.outputs['Result'], edge.inputs[0])
 nt.links.new(edge.outputs[0], add.inputs[1])
 mul = nt.nodes.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; nt.links.new(add.outputs[0], mul.inputs[0]); nt.links.new(gs.outputs[0], mul.inputs[1])
-Pk.inputs['Emission Color'].default_value = (0.35, 0.85, 1.0, 1); nt.links.new(mul.outputs[0], Pk.inputs['Emission Strength'])
+Pk.inputs['Emission Color'].default_value = (0.05, 0.55, 1.0, 1); nt.links.new(mul.outputs[0], Pk.inputs['Emission Strength'])
 key_val(rad.outputs[0], [(1, 0.0), (BEAT[4] - 30, 0.0), (BEAT[4] + 90, 0.13), (BEAT[4] + 200, 0.3)])
-key_val(gs.outputs[0], [(1, 0.0), (BEAT[3] + 20, 0.0), (BEAT[3] + 60, 0.6), (BEAT[4], 0.8), (BEAT[4] + 120, 1.1), (BEAT[5], 1.0), (BEAT[6] + 20, 0.4), (BEAT[6] + 90, 0.0)])
+key_val(gs.outputs[0], [(1, 0.0), (BEAT[3] + 20, 0.0), (BEAT[3] + 60, 0.6), (BEAT[4], 0.3), (BEAT[4] + 120, 0.4), (BEAT[5], 1.0), (BEAT[6] + 20, 0.4), (BEAT[6] + 90, 0.0)])
 # bone translucency so the inner ear reads through the side of the skull (keyed up for the cross-section)
 alpha = nt.nodes.new('ShaderNodeValue'); alpha.name = "SkullAlpha"
 tr = nt.nodes.new('ShaderNodeBsdfTransparent'); mix = nt.nodes.new('ShaderNodeMixShader')
 outk = next(x for x in nt.nodes if x.type == 'OUTPUT_MATERIAL')
 src = outk.inputs['Surface'].links[0].from_socket
 nt.links.new(alpha.outputs[0], mix.inputs['Fac']); nt.links.new(src, mix.inputs[1]); nt.links.new(tr.outputs[0], mix.inputs[2]); nt.links.new(mix.outputs[0], outk.inputs['Surface'])
-key_val(alpha.outputs[0], [(1, 0.0), (BEAT[4] + 150, 0.0), (BEAT[4] + 210, 0.62), (BEAT[6] + 40, 0.62), (BEAT[6] + 75, 0.0)])
+key_val(alpha.outputs[0], [(1, 0.0), (BEAT[4] + 150, 0.0), (BEAT[4] + 210, 0.62), (BEAT[6] + 25, 0.62), (BEAT[6] + 52, 1.0)])
 
 # ---------------------------------------------------------------- inner ear (osuecampus, CC-BY): eardrum, ossicles, labyrinth+cochlea, nerves; ~2.5x life size
 new = imp("inner_ear2")
@@ -135,7 +135,7 @@ ccol = nt.nodes.new('ShaderNodeMix'); ccol.data_type = 'RGBA'; ccol.name = "Coch
 ccol.inputs['A'].default_value = (0.3, 0.85, 1.0, 1); ccol.inputs['B'].default_value = (1.0, 0.85, 0.6, 1)
 nt.links.new(ccol.outputs['Result'], P.inputs['Emission Color']); nt.links.new(mu.outputs[0], P.inputs['Emission Strength'])
 key_val(cr.outputs[0], [(1, 0.0), (BEAT[6] - 10, 0.0), (BEAT[6] + 45, 0.05)])
-key_val(cs.outputs[0], [(1, 0.0), (BEAT[4] + 60, 0.0), (BEAT[4] + 80, 0.6), (BEAT[6] - 10, 0.6), (BEAT[6] + 30, 8.0), (BEAT[6] + 75, 5.0), (BEAT[7] + 20, 0.0)])
+key_val(cs.outputs[0], [(1, 0.0), (BEAT[4] + 60, 0.0), (BEAT[4] + 80, 0.6), (BEAT[6] - 10, 0.6), (BEAT[6] + 30, 3.0), (BEAT[6] + 75, 2.0), (BEAT[7] + 20, 0.0)])
 key_val(ccol.inputs['Factor'], [(1, 0.0), (BEAT[6] + 20, 0.0), (BEAT[6] + 60, 0.85)])
 # the eardrum: dull, grey, scarred and torn (ragged hole), no glow
 dm = bpy.data.materials.new("M_EardrumTorn"); dm.use_nodes = True; nt = dm.node_tree; P = nt.nodes["Principled BSDF"]
@@ -171,17 +171,13 @@ me = bpy.data.meshes.new("Ear_Canal"); me.from_pydata(verts, [], faces); can = b
 can.modifiers.new("sol", 'SOLIDIFY').thickness = 0.0025; can.modifiers.new("sub", 'SUBSURF').levels = 1
 can.data.materials.append(can_m); to_head(can)
 EAR["Ear_Canal"] = can
-ANAT_SPAN = [(BEAT[3] + 30, BEAT[6] + 80)]
+ANAT_SPAN = [(BEAT[3] + 30, BEAT[6] + 55)]
 for o in list(EAR.values()) + [sk]: key_vis(o, ANAT_SPAN)
-for n_ in ("Cravat_Band", "Cravat_Knot", "Cravat_Fall"):   # the silk reads as a red blob through the ghosted body: off while inside the head
-    o = bpy.data.objects[n_]
-    for f, v in ((1, False), (BEAT[3] + 95, True), (BEAT[6] + 45, False)): o.hide_render = v; o.keyframe_insert("hide_render", frame=f)
-
 # ---------------------------------------------------------------- ghost the composer: spherical porthole around the head, then the whole body
 xc = bpy.data.objects.new("XRay_Center", None); xc.location = Vector((0, -0.05, 1.55)); sc.collection.objects.link(xc); link(xc); to_head(xc)
-XR_R = [(1, 0.0), (BEAT[3] - 5, 0.0), (BEAT[3] + 40, 0.16), (BEAT[3] + 75, 0.22), (BEAT[3] + 115, 2.5), (BEAT[6] + 25, 2.5), (BEAT[6] + 60, 0.2), (BEAT[6] + 80, 0.0)]
+XR_R = [(1, 0.0), (BEAT[3] - 5, 0.0), (BEAT[3] + 40, 0.16), (BEAT[3] + 75, 0.22), (BEAT[3] + 115, 2.5), (BEAT[6] + 25, 2.5), (BEAT[6] + 55, 0.2), (BEAT[6] + 75, 0.0)]
 done = set()
-cobjs = [o for o in bpy.data.objects if o.parent == C and o.type == 'MESH'] + [bpy.data.objects[n] for n in ("Cravat_Band", "Cravat_Knot", "Cravat_Fall")]
+cobjs = [o for o in bpy.data.objects if o.parent == C and o.type == 'MESH']
 for ob in cobjs:
     for m in ob.data.materials:
         if not m or m.name in done or not m.node_tree: continue
@@ -210,7 +206,7 @@ for f, v in ((1, True), (BEAT[3] + 95, False), (BEAT[6] + 45, True)): hp.show_re
 print("GHOSTED", sorted(done))
 
 # ---------------------------------------------------------------- cyan-to-white studio backdrop around the head (inside it the room is gone)
-bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=0.75, location=(0, -0.05, 1.55)); bd = bpy.context.active_object; bd.name = "XRay_Backdrop"; link(bd)
+bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=24, radius=0.5, location=(0, -0.05, 1.55)); bd = bpy.context.active_object; bd.name = "XRay_Backdrop"; link(bd)
 bd.visible_shadow = False
 bm = bpy.data.materials.new("M_StudioBackdrop"); bm.use_nodes = True; nt = bm.node_tree; n = nt.nodes; n.clear()
 o_ = n.new('ShaderNodeOutputMaterial'); tc = n.new('ShaderNodeTexCoord'); sp = n.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Generated'], sp.inputs[0])
@@ -220,6 +216,9 @@ em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 1.1; nt.
 tr = n.new('ShaderNodeBsdfTransparent'); mx = n.new('ShaderNodeMixShader'); fv = n.new('ShaderNodeValue'); fv.name = "BackdropFade"
 nt.links.new(fv.outputs[0], mx.inputs['Fac']); nt.links.new(tr.outputs[0], mx.inputs[1]); nt.links.new(em.outputs[0], mx.inputs[2]); nt.links.new(mx.outputs[0], o_.inputs['Surface'])
 key_val(fv.outputs[0], [(1, 0.0), (BEAT[3] + 60, 0.0), (BEAT[3] + 110, 1.0), (BEAT[6] + 30, 1.0), (BEAT[6] + 70, 0.0)])
+for n_ in ["Bench", "Piano", "Fallboard_Panel", "MusicDesk", "MusicDesk_Ledge"] + list(sc["desk_pages"]):   # set pieces that poke into the studio sphere
+    o = bpy.data.objects[n_]
+    for f, v in ((1, False), (BEAT[3] + 112, True), (BEAT[6] + 32, False)): o.hide_render = v; o.keyframe_insert("hide_render", frame=f)
 bd.data.materials.append(bm); to_head(bd); key_vis(bd, [(BEAT[3] + 55, BEAT[6] + 75)])
 # studio key + rim on the anatomy, riding the head
 for nm, off, en, col in (("XRay_Key", Vector((0.35, -0.35, 0.3)), 6.0, (1, 0.97, 0.92)), ("XRay_Rim", Vector((-0.2, 0.4, 0.2)), 4.0, (0.6, 0.9, 1.0))):
@@ -229,7 +228,7 @@ for nm, off, en, col in (("XRay_Key", Vector((0.35, -0.35, 0.3)), 6.0, (1, 0.97,
         ld.energy = v; ld.keyframe_insert("energy", frame=f)
 
 # ---------------------------------------------------------------- vibration rings
-cyan = emit_mat("M_RingCyan", (0.3, 0.9, 1.0), 14.0); red = emit_mat("M_PulseRed", (1.0, 0.08, 0.05), 16.0)
+cyan = emit_mat("M_RingCyan", (0.05, 0.7, 1.0), 5.0); red = emit_mat("M_PulseRed", (1.0, 0.08, 0.05), 16.0)
 def make_ring(name, R, r, mat):
     bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=r / R, major_segments=32, minor_segments=8); o = bpy.context.active_object
     o.name = name; o.data.materials.append(mat); o.visible_shadow = False; link(o, C_FX); return o

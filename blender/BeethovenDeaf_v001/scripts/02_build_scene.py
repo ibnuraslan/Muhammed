@@ -132,7 +132,7 @@ bench = bake_group(imp("bench", C_SET), "Bench", 0.0105)
 bmn, bmx = bbox([bench]); print("BENCH", tuple(bmn), tuple(bmx))
 
 # ---------------------------------------------------------------- room shell 7 x 7 x 3.8, piano near the middle
-floor_m = ph_mat("M_Parquet", "herringbone_parquet", 1.4, tint=(0.85, 0.72, 0.6), bump=0.25)
+floor_m = ph_mat("M_Parquet", "herringbone_parquet", 1.4, tint=(0.75, 0.6, 0.5), rough_mul=1.5, bump=0.25)
 wall_m = ph_mat("M_Plaster", "plastered_wall_02", 1.0, tint=(0.78, 0.66, 0.52), bump=0.4)
 wood_m = ph_mat("M_DarkWood", "dark_wooden_planks", 1.5, tint=(0.7, 0.55, 0.42), bump=0.2)
 table_m = ph_mat("M_TableWood", "wood_table_worn", 1.0, tint=(0.8, 0.6, 0.45), bump=0.2)
@@ -222,7 +222,7 @@ def candle(loc, h=0.18, r=0.012, light=True, coll=C_PROPS):
     for c_ in f.users_collection: c_.objects.unlink(f)
     C_FX.objects.link(f); FLAMES.append(f)
     if light:
-        ld = bpy.data.lights.new("CandleLight", 'POINT'); ld.energy = 6.0; ld.color = (1.0, 0.62, 0.3); ld.shadow_soft_size = 0.03
+        ld = bpy.data.lights.new("CandleLight", 'POINT'); ld.energy = 9.0; ld.color = (1.0, 0.62, 0.3); ld.shadow_soft_size = 0.03
         L = bpy.data.objects.new("CandleLight", ld); L.location = f.location + Vector((0, 0, 0.01)); C_FX.objects.link(L)
     return c
 cand = bake_group(imp("candelabra", C_PROPS), "Candelabra_A", 1.25, drop=("M_Candle",))
@@ -292,20 +292,45 @@ for dx in (-0.21, 0.21):
         box("Chair_Leg", (0.04, 0.04, 0.44), (-2.6 + dx, 2.3 + dy, 0.22), table_m, C_PROPS)
 uv_cube_project(chair_seat, 0.5)
 
+# two candelabras on the piano lid (left front + far curve), lit
+LID_Z = 1.0206
+for o, (x, y) in ((cand, (-0.5, 0.42)), (cb, (0.45, 1.45))):
+    o.location = (x, y, LID_Z); o.rotation_euler = (0, 0, R_(RND.uniform(-30, 30)))
+    for t in CA_TIPS:
+        tw = Matrix.Rotation(o.rotation_euler.z, 3, 'Z') @ Vector(t)
+        candle((x + tw.x, y + tw.y, LID_Z + tw.z), 0.15)
+# wall sconces either side of the back paintings
+for x in (-3.0, -0.8, 0.8, 3.0):
+    box("Sconce_Plate", (0.08, 0.03, 0.14), (x, RY1 - 0.02, 1.9), brass, C_PROPS, 0.01)
+    candle((x, RY1 - 0.1, 1.86), 0.14)
+# dust motes drifting in the candlelight (keyed, no simulation)
+mote_m = bpy.data.materials.new("M_Mote"); mote_m.use_nodes = True; mn_ = mote_m.node_tree.nodes; mn_.clear()
+mo_ = mn_.new('ShaderNodeOutputMaterial'); me_ = mn_.new('ShaderNodeEmission'); me_.inputs['Color'].default_value = (1.0, 0.8, 0.55, 1); me_.inputs['Strength'].default_value = 0.5
+mote_m.node_tree.links.new(me_.outputs[0], mo_.inputs['Surface'])
+for i in range(70):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=RND.uniform(0.0006, 0.0013)); m_ = bpy.context.active_object; m_.name = "Mote"
+    m_.data.materials.append(mote_m); m_.visible_shadow = False
+    for c_ in m_.users_collection: c_.objects.unlink(m_)
+    C_FX.objects.link(m_)
+    p0 = Vector((RND.uniform(-1.4, 1.4), RND.uniform(-1.4, 1.6), RND.uniform(0.6, 2.2))); ph = RND.uniform(0, 6.3)
+    for f in range(1, 1591, 30):
+        t = f / 60.0
+        m_.location = p0 + Vector((0.05 * math.sin(t * 0.4 + ph), 0.05 * math.cos(t * 0.33 + ph), 0.02 * t - 0.04 * math.sin(t * 0.5 + ph)))
+        m_.keyframe_insert("location", frame=f)
 # ---------------------------------------------------------------- world: old-hall HDRI, very dim (candles are the key)
 w = bpy.data.worlds.new("World_Room"); sc.world = w; w.use_nodes = True; nt = w.node_tree; n = nt.nodes
 bg = n["Background"]; env = n.new('ShaderNodeTexEnvironment'); env.image = bpy.data.images.load(os.path.join(AS, "ph", "hdri", "old_hall_2k.hdr"))
-nt.links.new(env.outputs['Color'], bg.inputs['Color']); bg.inputs['Strength'].default_value = 0.06; bg.name = "RoomBG"
+nt.links.new(env.outputs['Color'], bg.inputs['Color']); bg.inputs['Strength'].default_value = 0.03; bg.name = "RoomBG"
 # soft cool moonlight through the window + warm key bounce (so the room never goes black)
-ld = bpy.data.lights.new("Moon_Window", 'AREA'); ld.energy = 260; ld.size = 1.4; ld.color = (0.55, 0.68, 1.0)
+ld = bpy.data.lights.new("Moon_Window", 'AREA'); ld.energy = 200; ld.size = 1.4; ld.color = (0.55, 0.68, 1.0)
 L = bpy.data.objects.new("Moon_Window", ld); L.location = (RX0 + 0.4, 0.9, 2.2); L.rotation_euler = (0, R_(-90), 0); C_FX.objects.link(L)
-ld = bpy.data.lights.new("Warm_Fill", 'AREA'); ld.energy = 120; ld.size = 3.0; ld.color = (1.0, 0.7, 0.45)
+ld = bpy.data.lights.new("Warm_Fill", 'AREA'); ld.energy = 40; ld.size = 3.0; ld.color = (1.0, 0.7, 0.45)
 L = bpy.data.objects.new("Warm_Fill", ld); L.location = (0.8, -2.4, 3.2); L.rotation_euler = (Vector((0, 0.5, 0.8)) - L.location).to_track_quat('-Z', 'Y').to_euler(); C_FX.objects.link(L)
-ld = bpy.data.lights.new("Rim_Back", 'AREA'); ld.energy = 90; ld.size = 1.0; ld.color = (1.0, 0.75, 0.5)
+ld = bpy.data.lights.new("Rim_Back", 'AREA'); ld.energy = 55; ld.size = 1.0; ld.color = (1.0, 0.75, 0.5)
 L = bpy.data.objects.new("Rim_Back", ld); L.location = (-0.6, 2.8, 2.6); L.rotation_euler = (Vector((0, -0.4, 1.3)) - L.location).to_track_quat('-Z', 'Y').to_euler(); C_FX.objects.link(L)
 
 # colour management
-sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
+sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'; sc.view_settings.exposure = -0.35
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True; sc.cycles.denoiser = 'OPENIMAGEDENOISE'
 sc.cycles.max_bounces = 8; sc.cycles.diffuse_bounces = 3; sc.cycles.glossy_bounces = 3; sc.cycles.transmission_bounces = 8; sc.cycles.transparent_max_bounces = 16
 sc.cycles.caustics_reflective = sc.cycles.caustics_refractive = False; sc.render.use_persistent_data = True

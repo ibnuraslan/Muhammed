@@ -60,3 +60,30 @@ Sheet music uses staff lines and note blobs only, with no titles or legible text
   - Hand contact is not audited yet.
   - A red shape shows under the skull at about 14 s (still finding its source).
   - Lighting is not graded yet.
+
+## Checkpoint C (polish)
+- **Sheets:** `review/C_polish_0p2s_a/b/c.jpg`, 0.2 s per still (0–10 s, 10–20 s, 20–26.4 s).
+- **Audit:** `review/C_audit.txt`, produced by `scripts/06_audit.py`.
+
+### Changes since B
+- **Brand removal:** the piano's fallboard maker's-name inlay is covered by a plain panel in the piano's own wood. It is placed by ray-cast.
+- **Studio sphere:** the backdrop radius is now 0.5 m. The bench, piano, music desk and desk pages are hidden while it is fully opaque, which fixes the red bench showing through at 14 s.
+- **Hands:**
+  - The elbow poles were mirrored for the 180°-yawed rig, so elbows now point outward.
+  - The finger-curl sign was reversed (fingers were hyper-extending), so fingers now curl onto the keys.
+  - Curls are softer.
+  - At every strike the lowest fingertip of the five lands on the key top. In-between frames get corrective keys, so no fingertip goes more than 8 mm under the key tops.
+- **Feet and seat:** feet were raised 2.5 cm, because the shoe soles were under the floor. The pelvis was raised 8 mm, so the trousers sit on the cushion within ±3 mm.
+- **Jaw:** the sign was fixed. The mouth is open for the hook, then clamps (1.6°) on the rod at 0.5 s.
+- **Cravat:** the floating procedural pieces were removed. The neckcloth is the suit's tie region recoloured to deep red silk.
+- **Glow levels:** the rings, skull glow and cochlea glow were brought down from blown-out white to cyan. The cochlea still warms to white-gold.
+- **Exit from the X-ray:** the skull now fades fully before the skin returns, so no skull patch shows on the face.
+- **Lighting:**
+  - The room is darker and candle-led, with exposure −0.35 and fills cut by about 60 %. The parquet is rougher.
+  - Two candelabras were added on the lid, plus four wall sconces, with all flames flickering.
+  - A soft face fill rides the head so the eyes never go black.
+- **Motes:** 70 dust motes drift in the candlelight. They are keyed, with no simulation.
+- **Camera:**
+  - World-space framings moved to his left side, matching the head-space shots; the earlier path went through his head at 2 s.
+  - The beat-8 pull-out was raised, because it clipped the piano case at f1213–1229.
+  - The beat-2 keys framing was raised.
