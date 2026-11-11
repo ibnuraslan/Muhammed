@@ -389,23 +389,23 @@ def grime(src_mat, name):
     m = pbr(name, "rust_coarse_01", 1.5, sat=0.35, val=1.0, rough_mul=0.9)
     n, l = m.node_tree.nodes, m.node_tree.links
     pr = n["Principled BSDF"]; link_ = pr.inputs['Base Color'].links[0]; srcsock = link_.from_socket
-    mx_ = n.new('ShaderNodeMix'); mx_.data_type = 'RGBA'; mx_.blend_type = 'MULTIPLY'; mx_.inputs['Factor'].default_value = 0.75
+    mx_ = n.new('ShaderNodeMix'); mx_.data_type = 'RGBA'; mx_.blend_type = 'MULTIPLY'; mx_.inputs['Factor'].default_value = 0.12
     mx_.inputs['A'].default_value = tuple(min(1, c_ * 1.6 + 0.04) for c_ in col) + (1,)
     l.new(srcsock, mx_.inputs['B']); l.new(mx_.outputs['Result'], pr.inputs['Base Color'])
     pr.inputs['Metallic'].default_value = 0.25
     tcw = n.new('ShaderNodeTexCoord'); sxyz = n.new('ShaderNodeSeparateXYZ'); l.new(tcw.outputs['Object'], sxyz.inputs[0])
     mpw = n.new('ShaderNodeMapping'); mpw.inputs['Scale'].default_value = (9.0, 9.0, 0.35); l.new(tcw.outputs['Object'], mpw.inputs['Vector'])
     nzs = n.new('ShaderNodeTexNoise'); nzs.inputs['Scale'].default_value = 3.0; nzs.inputs['Detail'].default_value = 8; l.new(mpw.outputs['Vector'], nzs.inputs['Vector'])
-    st_ = n.new('ShaderNodeMapRange'); st_.inputs['From Min'].default_value = 0.52; st_.inputs['From Max'].default_value = 0.68; l.new(nzs.outputs['Fac'], st_.inputs['Value'])
+    st_ = n.new('ShaderNodeMapRange'); st_.inputs['From Min'].default_value = 0.52; st_.inputs['From Max'].default_value = 0.68; st_.inputs['To Max'].default_value = 0.0; l.new(nzs.outputs['Fac'], st_.inputs['Value'])
     rs_ = n.new('ShaderNodeMix'); rs_.data_type = 'RGBA'; rs_.blend_type = 'MULTIPLY'; rs_.inputs['B'].default_value = (0.42, 0.22, 0.1, 1)
     l.new(st_.outputs['Result'], rs_.inputs['Factor']); l.new(mx_.outputs['Result'], rs_.inputs['A'])
     dz_ = n.new('ShaderNodeMapRange'); dz_.inputs['From Min'].default_value = 1.4; dz_.inputs['From Max'].default_value = 0.2; l.new(sxyz.outputs['Z'], dz_.inputs['Value'])
     nzd = n.new('ShaderNodeTexNoise'); nzd.inputs['Scale'].default_value = 6.0; l.new(tcw.outputs['Object'], nzd.inputs['Vector'])
     dm_ = n.new('ShaderNodeMath'); dm_.operation = 'MULTIPLY'; l.new(dz_.outputs['Result'], dm_.inputs[0]); l.new(nzd.outputs['Fac'], dm_.inputs[1])
-    du_ = n.new('ShaderNodeMix'); du_.data_type = 'RGBA'; du_.inputs['B'].default_value = (0.33, 0.27, 0.2, 1)
+    du_ = n.new('ShaderNodeMix'); du_.data_type = 'RGBA'; du_.inputs['B'].default_value = (0.33, 0.27, 0.2, 1); dz_.inputs['To Max'].default_value = 0.25
     l.new(dm_.outputs[0], du_.inputs['Factor']); l.new(rs_.outputs['Result'], du_.inputs['A'])
     nzo = n.new('ShaderNodeTexNoise'); nzo.inputs['Scale'].default_value = 1.6; l.new(tcw.outputs['Object'], nzo.inputs['Vector'])
-    oi_ = n.new('ShaderNodeMapRange'); oi_.inputs['From Min'].default_value = 0.6; oi_.inputs['From Max'].default_value = 0.7; oi_.inputs['To Max'].default_value = 0.7
+    oi_ = n.new('ShaderNodeMapRange'); oi_.inputs['From Min'].default_value = 0.6; oi_.inputs['From Max'].default_value = 0.7; oi_.inputs['To Max'].default_value = 0.0
     l.new(nzo.outputs['Fac'], oi_.inputs['Value'])
     ol_ = n.new('ShaderNodeMix'); ol_.data_type = 'RGBA'; ol_.inputs['B'].default_value = (0.02, 0.018, 0.015, 1)
     l.new(oi_.outputs['Result'], ol_.inputs['Factor']); l.new(du_.outputs['Result'], ol_.inputs['A'])
@@ -451,7 +451,7 @@ def build_vehicle(path, name, length, y_off, keep_wheels):
 def paint(name, col, rough=0.55, metal=0.2):
     m = flat("tmp_" + name, col, rough, metal)
     g = grime(m, name); bpy.data.materials.remove(m); return g
-LOCO_PAINT = {"Rock_Island_Rusty": paint("LocoPaint", (0.33, 0.07, 0.05), 0.5),           # weathered maroon hood
+LOCO_PAINT = {"Rock_Island_Rusty": paint("LocoPaint", (0.62, 0.08, 0.05), 0.4),           # clean bright red hood
               "M_0136_Charcoal": paint("LocoTrucks", (0.05, 0.05, 0.05), 0.6, 0.6),
               "black": paint("LocoBlack", (0.03, 0.03, 0.03), 0.6, 0.5),
               "Metal_Corrugated_Shiny_1": paint("LocoMetal", (0.25, 0.25, 0.24), 0.4, 0.8)}
@@ -459,7 +459,9 @@ M_GLASS = flat("LocoGlass", (0.03, 0.04, 0.045), 0.05, 0.0)
 M_LENS = flat("LocoLens", (1, 1, 0.9), 0.2, emit=(1.0, 0.93, 0.75), estr=8)
 gp = import_glb(os.path.join(GLB, "gp18.glb"))
 for o in list(gp):
-    if o.name.startswith("Cube"): bpy.data.objects.remove(o, do_unlink=True); gp.remove(o)
+    # drop the helper cube and the modelled cab numbers (on-screen text is not allowed)
+    if o.name.startswith("Cube") or any(m_ and m_.name in ("Material.004", "Material.006") for m_ in o.data.materials):
+        gp.remove(o); bpy.data.objects.remove(o, do_unlink=True)
 mn, mx_ = bbox(gp); s = 17.8 / (mx_.y - mn.y)
 T = Matrix.Translation((0, 0, RAIL_H)) @ Matrix.Scale(s, 4) @ Matrix.Translation(-Vector(((mn.x + mx_.x) / 2, mn.y, mn.z + 0.0)))
 # wheel axles (model space) found by the loose-part survey: 4 axles, wheels r 0.405, centre z 0.13, gauge centre x -1.38
@@ -562,10 +564,10 @@ M_CYC = bpy.data.materials.new("StudioCyc"); M_CYC.use_nodes = True
 nn, ll = M_CYC.node_tree.nodes, M_CYC.node_tree.links
 pc = nn["Principled BSDF"]; pc.inputs['Roughness'].default_value = 0.9
 gtc = nn.new('ShaderNodeTexCoord'); gsep = nn.new('ShaderNodeSeparateXYZ'); ll.new(gtc.outputs['Generated'], gsep.inputs[0])
-cr = nn.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.12, 0.55, 0.72, 1); cr.color_ramp.elements[1].color = (0.01, 0.035, 0.09, 1)
+cr = nn.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); cr.color_ramp.elements[1].color = (0.08, 0.55, 0.93, 1)
 cr.color_ramp.elements[0].position = 0.08; cr.color_ramp.elements[1].position = 0.75
 ll.new(gsep.outputs['Z'], cr.inputs['Fac']); ll.new(cr.outputs['Color'], pc.inputs['Base Color'])
-pc.inputs['Emission Strength'].default_value = 0.5; ll.new(cr.outputs['Color'], pc.inputs['Emission Color'])
+pc.inputs['Emission Strength'].default_value = 0.35; ll.new(cr.outputs['Color'], pc.inputs['Emission Color'])
 bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=48, v_segments=24, radius=1.0)
 for v_ in bm.verts:
     v_.co = Vector((v_.co.x * 12, v_.co.y * 12, max(v_.co.z, -0.0) * 9 - 0.03 if v_.co.z > 0 else -0.03))

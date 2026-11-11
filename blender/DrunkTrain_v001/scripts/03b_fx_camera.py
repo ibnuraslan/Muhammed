@@ -505,9 +505,9 @@ def key_light(f, col, en, wb, ex):
     SUN.color = col; SUN.energy = en; SUN.keyframe_insert("color", frame=f); SUN.keyframe_insert("energy", frame=f)
     W_BG.default_value = wb; W_BG.keyframe_insert("default_value", frame=f)
     sc.view_settings.exposure = ex; sc.view_settings.keyframe_insert("exposure", frame=f)
-day = ((1.0, 0.96, 0.9), 3.5, 1.0)
+day = ((1.0, 0.97, 0.92), 4.2, 1.3)
 key_light(1, *day, 0.0)
-key_light(F(11.3), *day, 0.0); key_light(F(11.7), *day, 0.9); key_light(F(14.0), *day, 0.9); key_light(F(14.6), *day, 0.0)  # under the train
+key_light(F(11.3), *day, 0.0); key_light(F(11.7), *day, 1.2); key_light(F(14.0), *day, 1.2); key_light(F(14.6), *day, 0.0)  # under the train
 key_light(sc['f_stir'] - 20, *day, 0.0); key_light(sc['f_stir'] + 10, *day, 0.7); key_light(f_fb0 - 8, *day, 0.7); key_light(f_fb0 - 3, *day, 0.0); key_light(f_fb0 + 3, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25)       # flash-back: warm, low gold sun
 key_light(f_fb1 - 2, (1.0, 0.62, 0.32), 4.5, 0.55, 0.25); key_light(f_fb1, *day, 0.0)
 key_light(f_r1, *day, 0.0); key_light(F(33.0), *day, 0.0); key_light(F(33.6), *day, 0.55); key_light(sc.frame_end, *day, 0.55)
@@ -626,4 +626,28 @@ for f in range(F(6.3), T_IMP + 60, 2):
     amp = 0.004 + 0.02 * ((f - F(6.3)) / (T_IMP - F(6.3))) ** 2 if f < T_IMP else 0.03 * math.exp(-(f - T_IMP) / 15.0)
     base = fc_(f); n_ = mn_.noise_vector(Vector((f * 0.35, 1.7, 3.1)))
     cam.location = base + n_ * amp; cam.keyframe_insert("location", frame=f)
+fl_d = bpy.data.lights.new("UnderFill", 'POINT'); fl_d.color = (0.75, 0.88, 1.0); fl_d.shadow_soft_size = 0.6
+fl_o = bpy.data.objects.new("UnderFill", fl_d); sc.collection.objects.link(fl_o)
+for f in list(range(F(10.6), F(14.6), 4)) + list(range(sc["f_stir"] - 30, F(21.0), 4)):
+    p_ = lad_p(min(f, f_rest)) if f < F(15) else V(*eval(sc["lad_rest"]))
+    if f >= F(15) and f > sc["f_stir"] + 12: p_ = V(min(2.0, 0.2 + 1.8 * (f - sc["f_stir"] - 12) / (F(20.4) - sc["f_stir"] - 12)), p_.y, 0)
+    fl_o.location = V(p_.x + 1.2, p_.y - 0.6, 0.45); fl_o.keyframe_insert("location", frame=f)
+    fl_d.energy = 60.0; fl_d.keyframe_insert("energy", frame=f)
+for f in (F(10.5), F(14.7), sc["f_stir"] - 34, F(21.05)):
+    fl_d.energy = 0.0; fl_d.keyframe_insert("energy", frame=f)
+# stylised impact flash: a bright star burst at the plough at the hit, gone in 8 frames
+bmg = bmesh.new()
+for k in range(12):
+    a0 = 2 * math.pi * k / 12; r_ = 0.9 if k % 2 == 0 else 0.45
+    v0 = bmg.verts.new((0, 0, 0)); v1 = bmg.verts.new((r_ * math.cos(a0 - 0.12), 0, r_ * math.sin(a0 - 0.12))); v2 = bmg.verts.new((r_ * math.cos(a0 + 0.12), 0, r_ * math.sin(a0 + 0.12)))
+    bmg.faces.new((v0, v1, v2))
+me_ = bpy.data.meshes.new("ImpactStar"); bmg.to_mesh(me_); bmg.free(); star = bpy.data.objects.new("ImpactStar", me_); fx.objects.link(star)
+M_STAR = bpy.data.materials.new("ImpactStar"); M_STAR.use_nodes = True
+spn2 = M_STAR.node_tree.nodes; spn2.remove(spn2["Principled BSDF"]); es_ = spn2.new('ShaderNodeEmission'); es_.inputs['Color'].default_value = (1.0, 0.62, 0.12, 1); es_.inputs['Strength'].default_value = 3.5
+M_STAR.node_tree.links.new(es_.outputs[0], spn2["Material Output"].inputs['Surface']); me_.materials.append(M_STAR)
+for f, s_ in ((T_IMP - 1, 0.05), (T_IMP + 1, 1.0), (T_IMP + 4, 1.5), (T_IMP + 8, 0.1)):
+    star.location = V(LIE_X - 0.5, train_front(f) - 0.25, 0.45); star.scale = (s_, s_, s_)
+    star.keyframe_insert("location", frame=f); star.keyframe_insert("scale", frame=f)
+star.rotation_euler = (0, 0, math.radians(-30))
+vis(star, [(T_IMP - 1, T_IMP + 8)])
 print("FX_CAMERA_DONE")
