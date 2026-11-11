@@ -360,17 +360,22 @@ def beat2_keys(frames):
             lf = 0.07 * math.sin(math.pi * max(0.0, min(1.0, (f - ph0) / 30.0)))
             SURG.key_foot(s, f, xy, yw_, lift=lf)
         ff = min(f, 384); app = 1 - smooth((f - 214) / 34.0); rel = smooth((f - 384) / 16.0)
-        for s, (S_, N_, D_) in (("L", (SL, NL, DL)), ("R", (SR, NR_, DR))):
+        for s, (S_, N_, D_) in (("L", (SR, NR_, DR)), ("R", (SL, NL, -DL))):   # left hand cradles the back of the skull, right palm on the temple (no crossed forearms)
             W, d_, n_ = grip(ff, S_, N_, D_, s)
             Nw = ((head_world(ff) if ff < 376 else M_root(ff)).to_3x3() @ N_).normalized()
             if f < 250 and s == "L":
                 W = (SHOULDER_W + V(0, 0, 0.07)).lerp(W, smooth((f - 212) / 38.0))
             elif f < 250:
-                W = W + Nw * 0.09 * app + V(0, -0.05, 0.04) * app
+                tip0 = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10)
+                R0 = tip0 + V(0, -0.04, 0.13); R0.z = max(R0.z, NA.z + 0.13)
+                k_ = smooth((f - 226) / 30.0)
+                W = R0.lerp(W, k_) + V(0, 0.10, 0.08) * math.sin(math.pi * k_)
+                kd = smooth((f - 226) / 26.0)
+                d_ = V(0.1, 0.3, -1).normalized().lerp(d_, kd).normalized(); n_ = V(1, 0, 0.2).normalized().lerp(n_, kd).normalized()
             else:
                 W = W + Nw * 0.09 * rel + V(0, -0.05, 0.04) * rel
             hand(SURG, s, f, W, d_, n_, 0.4, yw)
-            curl(SURG, s, f, min(GRIP_CURL[s], 0.5 if s == "L" else 0.0) * (1.0 - max(app, rel)))
+            curl(SURG, s, f, min(GRIP_CURL[s], 0.0 if s == "L" else 0.5) * (1.0 - max(app, rel)))
 
 beat2_keys(list(range(214, 400, 3)) + [400])
 # numeric grip search: back each hand off the head surface until the glove sits on the fur (no verts inside)
@@ -417,7 +422,7 @@ for f in list(range(403, 672, 3)):
     arc = V(0.0, -0.03 * math.cos(2 * math.pi * ph), 0.03 * math.sin(2 * math.pi * ph))
     hand(SURG, "R", f, seam_pt + V(0.03, -0.13, 0.15) + arc, V(0.2, 0.6, -0.6), V(1, 0, 0.4), 0.35, Y1)
     hand(SURG, "L", f, neck_ring(M_LIE2, A_UP + 0.9, 0.09) + V(-0.07, -0.11, 0.15) + V(0, 0, 0.01 * math.sin(f / 9.0)), V(-0.1, 0.6, -0.6), V(-1, 0, 0.3), 0.35, Y1)
-    curl(SURG, "R", f, 0.75); curl(SURG, "L", f, 0.6)
+    curl(SURG, "R", f, 0.55); curl(SURG, "L", f, 0.5)
 # beats 4-5: steps back, watches; snaps fingers near the ear at 920 (the "hear" cue together with the bowl)
 S2 = V(0.25, -0.95, 0)
 for f in list(range(672, 1040, 6)):
@@ -597,13 +602,17 @@ for tool, s, off in ((nh, "R", V(0, 0.07, 0.0)), (fcp, "L", V(0, 0.07, 0.0))):
     tool.rotation_mode = "QUATERNION"
     for f in list(range(380, 680, 3)):
         M = wrist_M(f, s)
-        tool.location = M @ off; tool.keyframe_insert("location", frame=f)
+        rg_ = D["Surgeon"]
+        t1 = rg_.matrix_world @ rg_.pose.bones["finger1-3." + s].tail; t2 = rg_.matrix_world @ rg_.pose.bones["finger2-3." + s].tail
+        tool.location = (t1 + t2) * 0.5; tool.keyframe_insert("location", frame=f)   # held in the thumb-index pinch
         tool.rotation_quaternion = M.to_quaternion() @ Quaternion((1, 0, 0), math.radians(90)); tool.keyframe_insert("rotation_quaternion", frame=f)
     hide_keys(tool, [(1, True), (382, False), (676, True)])
 
 # ------------------------------------------------------------------ camera: one spline (keys in world, or in monkey-B space during the void)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 28; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.01
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
+for f_, fs_ in ((1, 5.6), (380, 5.6), (400, 11.0), (660, 11.0), (690, 5.6)):
+    cam_d.dof.aperture_fstop = fs_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 void = D["XR_Void"]; void.parent = cam; void.matrix_parent_inverse = Matrix.Identity(4); void.location = (0, 0, 0)
 kl = bpy.data.lights.new("XR_Key", "AREA"); kl.energy = 0; kl.size = 0.4; kl.color = (0.85, 1.0, 0.95)
