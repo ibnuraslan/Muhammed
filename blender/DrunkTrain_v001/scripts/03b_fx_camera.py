@@ -73,8 +73,9 @@ def attach_bone(o, rig, bn, M_world_rest):
 WKO = bpy.data.objects["Worker"]; hat = bpy.data.objects["HardHat"]
 hb = WKO.data.bones["head"]
 top = hb.head_local + (hb.tail_local - hb.head_local) * 1.0
-attach_bone(hat, WKO, "head", Matrix.Translation(top + V(0, 0.005, -0.075)) @ Matrix.Rotation(R_(90), 4, 'Z'))
+attach_bone(hat, WKO, "head", Matrix.Translation(top + V(0, 0.005, -0.045)) @ Matrix.Rotation(R_(90), 4, 'Z') @ Matrix.Scale(1.12, 4))
 hide_in(hat, [(f_fb0, f_r1)])
+bpy.data.objects["Worker.short01"].animation_data_clear(); vis(bpy.data.objects["Worker.short01"], [])          # hair hidden under the hard hat
 
 # palm cuts on Lad's left palm (metacarpal bone), visible from the walk-off
 body = bpy.data.objects["Lad.body"]
@@ -121,6 +122,40 @@ for f in list(range(f_fb0 - 8, f_fb1, 2)):
     key_mat(bot, f, hand_bottle_matrix(f))
 vis(bot, [(1, f_fb0 - 9), (f_fb0 - 8, f_fb1 - 1)])
 
+# ------------------------------------------------------------------ hands grip, eyelids, birds
+def key_local_rot(rig, n, f, deg):
+    pb = rig.pose.bones[n]; pb.rotation_quaternion = Quaternion((1, 0, 0), math.radians(deg)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+def ramp_keys(rig, names, pts):
+    for f, deg in pts:
+        for n, w_ in names:
+            if n in rig.pose.bones: key_local_rot(rig, n, f, deg * w_)
+FING_R = [("finger%d-%d.R" % (i, j), 0.6 if i == 1 else 1.0) for i in range(1, 6) for j in range(1, 4)]
+ramp_keys(LADO, FING_R, [(1, 60), (f_drop - 2, 60), (f_drop + 4, 8), (f_fb0 - 14, 8), (f_fb0 - 8, 60), (f_fb1 - 2, 60), (f_fb1 + 4, 8)])
+LIDS = [("orbicularis03.L", 1.0), ("orbicularis03.R", 1.0)]
+f_land_ = int(eval(sc["lad_rest"]) and 0) or 0
+f_shut = 262; f_open = sc["f_stir"] + 8
+ramp_keys(LADO, LIDS, [(1, 18), (60, 26), (64, 6), (68, 22), (f_shut - 30, 22), (f_shut, 46), (f_open, 46), (f_open + 10, 20),
+                       (f_open + 30, 10), (f_open + 34, 40), (f_open + 38, 12), (sc.frame_end - 120, 14), (sc.frame_end - 116, 38), (sc.frame_end - 112, 18)])
+# birds on the fence lift off when he staggers by, and again at the horn
+M_BIRD = bpy.data.materials.new("Bird"); M_BIRD.use_nodes = True
+M_BIRD.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.08, 0.08, 0.09, 1)
+for k in range(9):
+    bmg = bmesh.new()
+    v = [bmg.verts.new(p_) for p_ in ((0, -0.09, 0), (0, 0.07, 0.01), (-0.17, 0.0, 0.0), (0.17, 0.0, 0.0), (0, 0.11, 0.0))]
+    bmg.faces.new((v[0], v[2], v[1])); bmg.faces.new((v[0], v[1], v[3])); bmg.faces.new((v[1], v[2], v[4]))
+    me = bpy.data.meshes.new("Bird%d" % k); bmg.to_mesh(me); bmg.free(); o = bpy.data.objects.new("Bird%d" % k, me); fx.objects.link(o) if 'fx' in dir() else sc.collection.objects.link(o)
+    me.materials.append(M_BIRD)
+    sk = o.shape_key_add(name="Basis"); up = o.shape_key_add(name="Up")
+    for i in (2, 3): up.data[i].co.z += 0.12
+    perch = V(9.5, random.uniform(-3, 8), 1.86); t0 = random.randint(40, 80) if k < 5 else random.randint(330, 380)
+    d = V(random.uniform(0.3, 1.0), random.uniform(0.2, 1.0), 0.6).normalized()
+    for f in range(1, sc.frame_end + 1, 2):
+        if f < t0: p_ = perch
+        else:
+            t = (f - t0) / FPS; p_ = perch + d * (4.5 * t) + V(0, 0, 1.2 * t * t)
+        o.location = p_; o.rotation_euler = (0, 0, math.atan2(-d.x, d.y)); o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
+        up.value = 0.0 if f < t0 else 0.5 + 0.5 * math.sin((f - t0) * 1.3); up.keyframe_insert("value", frame=f)
+    hide_in(o, [STUDIO, (f_fb0, f_fb1)])
 # ------------------------------------------------------------------ x-ray: translucent body + loose "rope" muscles + skeleton
 bm_ = body.data.materials[0]
 nt = bm_.node_tree; outn = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL'][0]
@@ -478,11 +513,12 @@ CAM = [  # frame, camera, aim, lens
     (575, V(3.3, -9.5, 1.15), lad_p(575, 0.1), 24),
     (615, V(3.2, y(615) - 3.5, 0.95), lad_p(615), 24),
     (660, V(2.7, y(660) - 2.6, 0.6), lad_p(660), 24),
-    (700, V(2.4, y(700) - 1.9, 0.36), lad_p(700), 24),
-    (755, V(2.45, y(755) + 1.6, 0.36), lad_p(755) + V(0, -0.4, 0), 26),
-    (815, V(2.6, y(815) - 2.2, 0.55), lad_p(815), 24),
+    (700, V(2.75, y(700) - 1.9, 0.38), lad_p(700), 24),
+    (755, V(2.75, y(755) + 1.6, 0.38), lad_p(755) + V(0, -0.4, 0), 26),
+    (815, V(2.9, y(815) - 2.2, 0.55), lad_p(815), 24),
     (862, V(3.3, -43.2, 1.0), V(1.1, -40.0, 0.4), 24),
-    (905, V(2.45, TF(905) + 1.5, 0.38), V(0.72, TF(905) + 4.5, 0.5), 24),
+    (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
+    (935, V(2.7, -45.0, 1.7), V(0.9, -50.0, 0.8), 23),
     (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
     (1060, V(6.3, -36.4, 2.4), V(3.8, -39.0, 1.35), 26),

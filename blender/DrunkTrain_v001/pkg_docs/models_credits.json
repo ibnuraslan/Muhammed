@@ -1,0 +1,29 @@
+{
+ "loco": {
+  "uid": "0eea1fa85cfa40769ce8e0cbb98e1d05",
+  "title": "Train | Locomotive, Low-poly locomotive",
+  "author": "Nikcore",
+  "author_profile": "https://sketchfab.com/nikcore76",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0eea1fa85cfa40769ce8e0cbb98e1d05",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "wagon": {
+  "uid": "2cd8d1032b53426a92abb64a71743aa6",
+  "title": "Train Freight Compartment",
+  "author": "Prabhu Ram",
+  "author_profile": "https://sketchfab.com/virtualmakes",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2cd8d1032b53426a92abb64a71743aa6",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hardhat": {
+  "uid": "5a67c92ce3174c37946076512356b0c7",
+  "title": "Hard Hat",
+  "author": "Kristiyan Marinov",
+  "author_profile": "https://sketchfab.com/kristiyan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5a67c92ce3174c37946076512356b0c7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}

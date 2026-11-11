@@ -526,7 +526,7 @@ def tee_recolour(mat, color):
                 sb = N_.new('ShaderNodeMath'); sb.operation = 'GREATER_THAN'; sb.inputs[1].default_value = 0.16; L_.new(sh.outputs[1], sb.inputs[0])
                 bl = N_.new('ShaderNodeMath'); bl.operation = 'MULTIPLY'; L_.new(hb.outputs[0], bl.inputs[0]); L_.new(sb.outputs[0], bl.inputs[1])
                 fac = N_.new('ShaderNodeMath'); fac.operation = 'SUBTRACT'; fac.inputs[0].default_value = 1.0; L_.new(bl.outputs[0], fac.inputs[1])
-                vv = N_.new('ShaderNodeMapRange'); vv.inputs['To Min'].default_value = 0.82; vv.inputs['To Max'].default_value = 1.0
+                vv = N_.new('ShaderNodeMapRange'); vv.inputs['To Min'].default_value = 0.93; vv.inputs['To Max'].default_value = 1.0
                 vv.inputs['From Min'].default_value = 0.3; vv.inputs['From Max'].default_value = 0.9; L_.new(sh.outputs[2], vv.inputs['Value'])
                 cm = N_.new('ShaderNodeMix'); cm.data_type = 'RGBA'; cm.blend_type = 'MULTIPLY'; cm.inputs['Factor'].default_value = 1.0
                 cm.inputs['A'].default_value = color + (1,); L_.new(vv.outputs['Result'], cm.inputs['B'])

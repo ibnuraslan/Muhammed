@@ -284,7 +284,7 @@ for f, roll_z, prog in ((f_flop, 0.13, 0.0), (f_flop + 4, 0.13, 0.45), (f_land, 
     xx = SIT_P.x + (lying_B(f)[1].x - SIT_P.x) * min(1.0, prog) * 0.0 + (lying_B(f)[1].x - SIT_P.x) * min(1, prog)
     Bm = LB.B(V(xx, HEAD_Y * prog + SIT_P.y * (1 - prog), roll_z), Rbody(yaw=90, pitch=pi))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
-    LAD.key_spine(f, flex=30 * (1 - prog) + 6 * prog, side=0, head=(20 * prog - 10 * (1 - prog) + (8 if f == f_land + 4 else 0), 25 * prog))
+    LAD.key_spine(f, flex=30 * (1 - prog) + 6 * prog, side=0, head=(6 * prog - 10 * (1 - prog) + (8 if f == f_land + 4 else 0), 25 * prog))
     for s in "LR":
         sx = 1 if s == "L" else -1
         k = min(1.0, prog)
@@ -294,17 +294,17 @@ for f, roll_z, prog in ((f_flop, 0.13, 0.0), (f_flop + 4, 0.13, 0.45), (f_land, 
 # --- lying, snoring: chest breathes, right hand flops off the belly, rail tremor shakes the head before impact
 f_lie0, f_lie1 = f_land + 10, T_IMP - 1
 def lie_B(f):
-    return LB.B(V(lying_B(f)[1].x, HEAD_Y, 0.12), Rbody(yaw=90, pitch=-90))
+    return LB.B(V(lying_B(f)[1].x, HEAD_Y, 0.085), Rbody(yaw=90, pitch=-90))
 for f in list(range(f_lie0, f_lie1 + 1, 3)) + [f_lie1]:
     Bm = lie_B(f)
     br = math.sin(2 * math.pi * (f - f_lie0) / 150.0)            # 2.5 s snore cycle
     trem = 0.0 if f < F(7.0) else (f - F(7.0)) / (f_lie1 - F(7.0))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=6 - 3.5 * br, side=0, twist=0,
-                  head=(20 + 2.5 * trem * math.sin(f * 2.7), 25 + 2 * math.sin(f / 37.0) + 3 * trem * math.sin(f * 3.1)))
+                  head=(4.5 + 3.5 * br + 2.5 * trem * math.sin(f * 2.7), 25 + 2 * math.sin(f / 37.0) + 3 * trem * math.sin(f * 3.1)))
     for s in "LR":
         sx = 1 if s == "L" else -1
-        LB.foot(s, f, Bm, V(sx * 0.24, LB.an[s].y + 0.02, LB.an[s].z), Matrix.Rotation(R_(sx * 25), 3, 'Z'))
+        LB.foot(s, f, Bm, V(sx * 0.24, LB.an[s].y + 0.1, LB.an[s].z), Matrix.Rotation(R_(sx * 25), 3, 'Z'))
     LB.arm_dir("L", f, Bm, V(0.85, 0.08, -0.5), 0.95, palm=V(0, 0.3, -1))
     if f < F(4.6):
         LB.hand("R", f, Bm, V(-0.02, -0.16 - 0.012 * br, RH.z + 0.18), V(0.9, -0.1, -0.2), V(0, 1, 0))     # hand resting on his belly
@@ -324,8 +324,8 @@ def drag_state(f):
         u = (f - T_IMP) / 120.0
         rel = -0.35 + 3.2 * smooth(u)                    # in front of the plough -> pulled under the front bogie side
         y = tf + rel
-        x = LIE_X + (1.3 - LIE_X) * smooth(u)
-        z = 0.14 + 0.55 * math.sin(math.pi * min(1, u * 1.6)) * math.exp(-u * 1.5) + 0.05 * abs(math.sin(u * 9))
+        x = LIE_X + (1.55 - LIE_X) * smooth(u)
+        z = 0.14 + 0.42 * math.sin(math.pi * min(1, u * 1.6)) * math.exp(-u * 2.2) + 0.04 * abs(math.sin(u * 9))
         yaw = 90 + 450 * (1 - (1 - u) ** 2)              # spins around (ends heading -Y)
         roll = 300 * u + 40 * math.sin(u * 7)
         pitch = -90 + 35 * math.sin(u * 6.5) * (1 - u)
@@ -333,8 +333,8 @@ def drag_state(f):
         u = (f - (T_IMP + 120)) / (f_rest - (T_IMP + 120))
         y0 = train_front(T_IMP + 120) + 2.85
         y = y0 + (STOP_Y - y0) * (1 - (1 - min(1, u)) ** 2.2)
-        x = 1.3 + 0.05 * math.sin(u * 13)
-        z = 0.15 + 0.07 * abs(math.sin(u * 22)) * (1 - u)
+        x = 1.55 + 0.04 * math.sin(u * 13)
+        z = 0.15 + 0.08 * smooth(min(1, u)) + 0.07 * abs(math.sin(u * 22)) * (1 - u)
         yaw = 540 + 25 * math.sin(u * 8) * (1 - u)
         roll = 300 + 40 * math.sin(7) + 900 * (1 - (1 - min(1, u)) ** 2)     # log-rolls 2.5 turns; ends prone (300+900 = 1200 = 3*360+120 -> fix below)
         pitch = -90
@@ -347,6 +347,16 @@ def drag_full(f):
     if f > T_IMP + 120:
         u = (f - (T_IMP + 120)) / (f_rest - (T_IMP + 120)); rl += ROLL_FIX * smooth(u)
     return p, Rbody(yaw=yw, pitch=pi, roll=rl)
+def above_ground(origin, d_w, L, floor=0.07, ceil=None):
+    d_w = d_w.normalized(); e = origin + d_w * L
+    if ceil is not None and e.z > ceil and e.x < 1.55:
+        d_w = V(d_w.x, d_w.y, (ceil - origin.z) / L); d_w.normalize(); e = origin + d_w * L
+    if e.z < floor:
+        dz = (floor - origin.z) / L
+        dz = max(-1.0, min(1.0, dz)); h = math.sqrt(max(0.0, 1 - dz * dz)); hv = V(d_w.x, d_w.y, 0)
+        hv = hv.normalized() if hv.length > 1e-4 else V(1, 0, 0)
+        d_w = V(hv.x * h, hv.y * h, dz)
+    return d_w
 HIST = {}
 for f in range(T_IMP - 12, f_rest + 1):
     HIST[f] = drag_full(f) if f >= T_IMP else (lie_B(f), None)
@@ -377,10 +387,16 @@ for f in list(range(T_IMP, f_rest + 1, 2)) + [f_rest]:
     # limbs trail the torso: directions expressed in the torso frame of a few frames ago
     for s, key, LBm in (("L", "aL", lag_B), ("R", "aR", lag_B)):
         d_w = LBm.to_3x3() @ limb_dir(key, f)
+        if f > T_IMP + 40 and d_w.x < -0.15:                  # keep the flung arms clear of the wheels (wheels are on his -X side)
+            d_w.x = -0.15; d_w.z = max(d_w.z, -0.2); d_w.normalize()
+        d_w = above_ground(Bm @ LB.sh[s], d_w, LB.L_arm[s] * 0.92, ceil=0.48 if f > T_IMP + 45 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
         LB.arm_dir(s, f, Bm, d_l, 0.92)
     for s, key, LBm in (("L", "lL", lag_B2), ("R", "lR", lag_B2)):
         d_w = LBm.to_3x3() @ limb_dir(key, f)
+        if f > T_IMP + 40 and d_w.x < -0.15:
+            d_w.x = -0.15; d_w.normalize()
+        d_w = above_ground(Bm @ LB.hip[s], d_w, LB.L_leg[s] * 0.97, ceil=0.48 if f > T_IMP + 45 else None)
         d_l = Bm.to_3x3().inverted() @ d_w
         LB.leg_dir(s, f, Bm, d_l, 0.97)
 REST_P, REST_R = drag_full(f_rest)
@@ -466,7 +482,7 @@ for f in list(range(f_up1 + 2, f_fb1 + 1, 3)) + [f_fb1]:
         # right hand brings the bottle to the mouth
         mouth = LB.head + V(0, -0.11, 0.02)
         rest_p = LB.sh["R"] + V(-0.12, -0.12, -0.5)
-        up_p = mouth + V(-0.06, -0.14, -0.1)
+        up_p = mouth + V(-0.04, 0.06, -0.15)
         W = rest_p.lerp(up_p, tilt)
         d = V(0.1, -0.35, 1.0).lerp(V(0.3, -0.2, 1.0), tilt).normalized()
         LB.hand("R", f, Bm, W, d, V(1, 0, 0))
@@ -573,7 +589,7 @@ def alerp(a, b, u):
     d = ((b - a + 180) % 360) - 180; return a + d * u
 START = {"WitA": (V(5.2, -50.5, 0), -70.0), "WitB": (V(6.0, -52.0, 0), -100.0), "Worker": (V(4.4, -48.5, 0), -95.0)}
 GOAL = {}
-for k, g_ in (("WitA", V(3.75, STOP_Y + 2.4, 0)), ("WitB", V(4.55, STOP_Y + 0.9, 0)), ("Worker", V(3.35, STOP_Y - 1.9, 0))):
+for k, g_ in (("WitA", V(3.75, STOP_Y + 2.4, 0)), ("WitB", V(4.55, STOP_Y + 0.9, 0)), ("Worker", V(3.15, STOP_Y - 1.9, 0))):
     GOAL[k] = (g_, face(g_, LAD_REST_XY))
 BACK = {k: (GOAL[k][0] + (GOAL[k][0] - LAD_REST_XY).normalized() * 0.55, GOAL[k][1]) for k in GOAL}
 f_run0 = {"WitA": F(14.6), "WitB": F(14.8), "Worker": F(14.5)}
@@ -598,7 +614,8 @@ for name in BYS:
     p0, y0 = START[name]; p1, y1 = GOAL[name]
     idle(name, 1, f_run0[name] - 1, p0, y0, react=T_IMP + (6 if name == "Worker" else 12))
     # run: along the platform, down the ramp, along the ballast to the train
-    mid = V((RAMP["x0"] + RAMP["x1"]) / 2 - 0.6, RAMP["y0"] + 1.0, 0); mid2 = V(RAMP["x0"] + 0.4, RAMP["y1"] + 0.5, 0)
+    lane = {"Worker": -0.7, "WitA": 0.3, "WitB": 1.2}[name]
+    mid = V((RAMP["x0"] + RAMP["x1"]) / 2 - 0.6 + lane, RAMP["y0"] + 1.0, 0); mid2 = V(RAMP["x0"] + 0.4 + lane * 0.5, RAMP["y1"] + 0.5, 0)
     path = catmull([(f_run0[name], p0), (f_run0[name] + 35, mid), (f_run0[name] + 70, mid2), (f_run1[name], p1)])
     def yawf(f, path=path, f0=f_run0[name], f1=f_run1[name], y0=y0, y1=y1):
         a, b = path(max(f0, f - 3)), path(min(f1, f + 3))
@@ -658,7 +675,7 @@ for name in BYS:
         H.r.key_world("root", f, Bm @ H.r.rest("root"))
         H.key_spine(f, flex=4, head=(0, 0.5 * (((look - yb) + 180) % 360 - 180)))
         if name == "Worker" and f > F(32.5):
-            Bd.hand("R", f, Bm, Bd.head + V(-0.12, 0.02, 0.12), V(0.5, 0.1, 0.8).normalized(), V(1, 0, 0))     # scratches his hard hat
+            Bd.hand("R", f, Bm, Bd.head + V(-0.17, 0.03, 0.2), V(0.6, 0.1, 0.6).normalized(), V(1, 0, 0))     # scratches his hard hat
             Bd.arm_dir("L", f, Bm, V(0.15, 0.0, -1), 0.95)
         elif name == "WitA":
             Bd.hand("L", f, Bm, Bd.head + V(0.05, -0.18, -0.13), V(-0.25, -0.15, 1).normalized(), V(0, 1, 0))
