@@ -119,7 +119,7 @@ for f, sm_, wd in ((1, 0.6, 0.0), (90, 1.0, 0.0), (200, 0.8, 0.0), (300, 1.0, 0.
                    (700, -0.2, 1.0), (1300, -0.2, 0.8), (1380, 0.0, 0.6), (1440, -0.1, 1.0), (F_END, -0.1, 0.95)):
     key_face(f, sm_, wd)
 # hands grip the box sides (wrist targets ride with the box)
-GRIP_L = V((0.128, 0.050, -0.226)); GRIP_R = V((-0.128, 0.050, -0.226))
+GRIP_L = V((0.128, 0.040, -0.238)); GRIP_R = V((-0.128, 0.040, -0.238))
 HAND_SIGN = float(os.environ.get("HAND_SIGN", "1"))
 def key_hands(f):
     M = box_M(f); Rb = M.to_3x3()
@@ -136,10 +136,10 @@ CURL = float(os.environ.get("CURL", "1"))
 for f in (1, F_END):
     for s in "LR":
         for k in range(2, 6):
-            for j, a in {2: ((1, 10), (2, 55), (3, 8)), 3: ((1, 10), (2, 50), (3, 5)), 4: ((1, -6), (2, -4), (3, -4)), 5: ((1, -8), (2, -4), (3, -4))}[k]:
+            for j, a in {2: ((1, 10), (2, 45), (3, 0)), 3: ((1, 10), (2, 42), (3, 0)), 4: ((1, 2), (2, 3), (3, 3)), 5: ((1, 2), (2, 3), (3, 3))}[k]:
                 n = "finger%d-%d.%s" % (k, j, s); pb = R.PB[n]
                 pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * CURL)); pb.keyframe_insert("rotation_quaternion", frame=f)
-        for j, a in ((2, 0), (3, 0)):
+        for j, a in ((2, 10), (3, 8)):   # thumb rests on the box side, opposing the fingers underneath
             n = "finger1-%d.%s" % (j, s); pb = R.PB[n]
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * CURL)); pb.keyframe_insert("rotation_quaternion", frame=f)
 bpy.ops.object.mode_set(mode='OBJECT')
@@ -397,10 +397,35 @@ RW = make_human_ctrl(walker); HW = Human(RW)
 bpy.context.view_layer.objects.active = walker; bpy.ops.object.mode_set(mode='POSE')
 wpath = lambda f: V((-1.9 + 0.40 * (f - 1) / 300.0, -22.9, 0.0))
 HW.walk(wpath, lambda f: -90.0, 1, 301, stride=0.7, step=3)
-for sd in "LR":   # arms swing loosely
-    for f, a in ((1, 12 if sd == "L" else -12), (150, -4 if sd == "L" else 4), (301, -12 if sd == "L" else 12)):
-        RW.key_rot("upperarm01." + sd, f, [("X", a)])
+WARM = float(os.environ.get("WARM", "-1"))
+for pb in walker.pose.bones:      # her hands carry nothing: arms are FK, not reaching for an unkeyed IK target
+    for c in pb.constraints:
+        if c.type in ("IK", "COPY_ROTATION") and (c.subtarget.startswith("IK_hand")): c.mute = True
+for sd, sx in (("L", 1), ("R", -1)):   # arms hang at the sides and swing a little
+    for f, a in ((1, 12), (150, -6), (301, 12)):
+        RW.key_rot("upperarm01." + sd, f, [("Y", -sx * 32 * WARM), ("X", a * sx)])
+for f in (1, 301):   # relaxed, slightly curled hands
+    for sd in "LR":
+        for k in range(2, 6):
+            for j, a in ((1, 12), (2, 22), (3, 14)):
+                pb = RW.PB["finger%d-%d.%s" % (k, j, sd)]; pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a)); pb.keyframe_insert("rotation_quaternion", frame=f)
+        for j, a in ((2, 12), (3, 10)):
+            pb = RW.PB["finger1-%d.%s" % (j, sd)]; pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a)); pb.keyframe_insert("rotation_quaternion", frame=f)
 bpy.ops.object.mode_set(mode='OBJECT')
+# joint limits on every finger, thumb and wrist (local space): no backward bends
+def hand_limits(rig):
+    for pb in rig.pose.bones:
+        n = pb.name
+        if n.startswith("finger") and not n.startswith("finger1"):
+            lim = ((0, 90), (-10, 10), (-10, 10))
+        elif n.startswith("finger1"):
+            lim = ((-20, 60), (-30, 30), (-30, 30))
+        else:
+            continue
+        c = pb.constraints.new("LIMIT_ROTATION"); c.name = "HandLimit"; c.owner_space = "LOCAL"
+        c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+        (c.min_x, c.max_x), (c.min_y, c.max_y), (c.min_z, c.max_z) = [(R_(a), R_(b)) for a, b in lim]
+hand_limits(man); hand_limits(walker)
 # sprinkler: spinner turns, water jets frozen into slow-motion arcs of droplets
 spin = bpy.data.objects.get("garden_sprinkler_01_spinner")
 M_water = bpy.data.materials.new("M_water"); M_water.use_nodes = True

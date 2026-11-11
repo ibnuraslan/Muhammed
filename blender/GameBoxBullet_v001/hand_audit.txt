@@ -1,0 +1,2 @@
+HAND AUDIT GameBoxBullet: frames 1-1500 every 2 frames (750 frames), 2 characters
+flagged frames: 0, overlapping triangle pairs: 0
