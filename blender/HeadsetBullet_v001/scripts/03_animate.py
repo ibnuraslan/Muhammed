@@ -225,7 +225,7 @@ def grip_world(s, D, close=1.0):
     R3 = D.to_3x3().normalized()
     face = D @ CUP_FACE[s]; out = (R3 @ OUTV[s]).normalized()
     up = (R3 @ Vector((0, 0.25, 1))).normalized()
-    W = face + out * (0.043 + 0.015 * (1 - close)) - up * 0.062
+    W = face + out * (0.052 + 0.015 * (1 - close)) - up * 0.062
     return W, up, -out
 # his LEFT is rest +X: the L hand holds the left (hit) cup
 F_REACH0 = 1168
