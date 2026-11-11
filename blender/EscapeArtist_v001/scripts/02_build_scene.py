@@ -149,7 +149,15 @@ for x in CX:
         bx = x - WHW + 0.8 * (k + 0.5) / 5
         cyl("WinBar_%g_%d" % (x, k), (bx, -3.2, WZ0), (bx, -3.2, WZ1), 0.014, M_RUST)
 # exterior skin of the block (brick) so the yard side looks like a building
-wall("Block_Exterior", -11, 13, -3.48, -3.4, 0.0, 3.0, M_BRICK_OUT, rough=0.0).hide_render = True
+for i in range(0, len(segs), 2):
+    wall("BlockExt_%d" % i, segs[i], segs[i + 1], -3.5, -3.4, 0.0, 4.2, M_BRICK_OUT, rough=0.0)
+for x in CX:
+    wall("BlockExt_Below_%g" % x, x - WHW, x + WHW, -3.5, -3.4, 0.0, WZ0, M_BRICK_OUT, rough=0.0)
+    wall("BlockExt_Above_%g" % x, x - WHW, x + WHW, -3.5, -3.4, WZ1, 4.2, M_BRICK_OUT, rough=0.0)
+    box("Sill_%g" % x, None, (x, -3.52, WZ0 - 0.03), (0.95, 0.14, 0.06), M_CONC, bevel=0.01)
+wall("Block_Roof", -11.2, 13.2, -3.6, 3.3, 4.2, 4.4, M_CONC, rough=0.0)
+box("Gutter", None, (1, -3.62, 4.15), (24.4, 0.12, 0.1), M_STEEL, bevel=0.01)
+for k, x in enumerate((-9.0, 4.5, 11.5)): cyl("Downpipe_%d" % k, (x, -3.6, 0), (x, -3.6, 4.15), 0.05, M_STEEL)
 # cell fronts: vertical bars + two straps; hero cell (x=0) and x=3 get a hinged door
 FR_Y = 0.0
 for x in CX:
@@ -278,7 +286,7 @@ for i, x in enumerate((-10, 14)):
 bpy.ops.object.light_add(type="SPOT", location=(-10, FY + 1.2, 7.5)); sp = bpy.context.object; sp.name = "Searchlight"
 sp.data.energy = 60000; sp.data.spot_size = R_(22); sp.data.spot_blend = 0.4; sp.data.color = (0.85, 0.9, 1.0); link(sp, "LIGHTS")
 bpy.ops.object.light_add(type="SPOT", location=(14, FY + 1.2, 7.5)); sp2 = bpy.context.object; sp2.name = "Floodlight"
-sp2.data.energy = 30000; sp2.data.spot_size = R_(70); sp2.data.spot_blend = 0.6; sp2.data.color = (1.0, 0.85, 0.6); link(sp2, "LIGHTS")
+sp2.data.energy = 60000; sp2.data.spot_size = R_(70); sp2.data.spot_blend = 0.6; sp2.data.color = (1.0, 0.85, 0.6); link(sp2, "LIGHTS")
 sp2.rotation_euler = (R_(50), 0, R_(130))
 # outer perimeter wall + field tufts beyond the fence (instanced dark grass clumps)
 wall("Perimeter_Wall", -30, 30, -31, -30.5, 0, 4.5, M_BRICK_OUT)
@@ -296,7 +304,7 @@ bpy.data.objects.remove(tuft)
 w = bpy.data.worlds.new("Night"); sc.world = w; w.use_nodes = True
 en = w.node_tree.nodes.new("ShaderNodeTexEnvironment")
 en.image = bpy.data.images.load(os.path.join(PH, "hdri", "moonless_golf_1k.hdr"))
-bg = w.node_tree.nodes["Background"]; bg.inputs["Strength"].default_value = 0.35
+bg = w.node_tree.nodes["Background"]; bg.inputs["Strength"].default_value = 0.7
 w.node_tree.links.new(en.outputs["Color"], bg.inputs["Color"])
 
 # ---------------------------------------------------------------- MEMORY HOUSE (behind far corridor wall) y[3.3,9]

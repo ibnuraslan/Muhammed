@@ -64,7 +64,7 @@ VIS = {
 for n, rg in VIS.items(): vis_key(human_objs(n), rg)
 
 # ================================================================ BEAT 1 (0-276): guard walks past, key ring swings; prisoner at the bars watches
-g1_pts = [(0, (4.2, 1.15)), (140, (1.2, 1.15)), (276, (-2.6, 1.2)), (420, (-6.0, 1.3)), (557, (-9.5, 1.3))]
+g1_pts = [(0, (4.0, 1.15)), (110, (1.6, 1.15)), (200, (-1.2, 1.2)), (380, (-6.0, 1.3)), (557, (-9.5, 1.3))]
 walk(G1, g1_pts, 0, 557)
 face(G1, 0, brow=-0.3); face(G1, 557, brow=-0.3)
 PR = Vector((0.4, -0.38, Z["Prisoner"]))
@@ -195,7 +195,7 @@ for f in range(1040, 1422, 10):
 key_obj(chair, 0, rot=(0, 0, R_(200)))
 
 # ================================================================ BEAT 6 (1128-1422): stepmother on the phone, angry, pointing; police lights
-SR = Vector((6.55, 7.3, Z["Stepmother"])); SYw = 120
+SR = Vector((6.55, 7.3, Z["Stepmother"])); SYw = -35
 walk(SM, [(942, (7.5, 4.0)), (1020, (7.0, 6.0)), (1100, (6.55, 7.3))], 942, 1100)
 phone = O["Phone"]
 key_obj(phone, 0, loc=(6.9, 7.8, 0.435), rot=(0, 0, R_(200))); key_obj(phone, 1140, loc=(6.9, 7.8, 0.435), rot=(0, 0, R_(200)))
@@ -408,7 +408,7 @@ for i, (f, kind) in enumerate(TL):
             elif kind == "window":
                 r = Vector((0.0, -2.62, z)); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
                 pose(H, ff, r, yaw=0, spine=(-4, 0, 0), head=(-12, 0),
-                     hands={"L": (Vector((-0.08, -3.15, 1.6)), dd, nn_, None), "R": (Vector((0.16, -3.15, 1.6)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
+                     hands={"L": (Vector((-0.16, -3.16, 1.6)), dd, nn_, None), "R": (Vector((0.16, -3.16, 1.6)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
             elif kind == "scratch":
                 r = Vector((-0.85, -1.6 - w * 2, z)); dd, nn_ = hand_dirs(90, (0, 1, 0.2), (0, 0, -1))
                 pose(H, ff, r, yaw=90, spine=(4, 0, 0), head=(5, 0), hands={"R": (Vector((-1.33, -1.4 - w * 4, 1.9 - w * 6)), dd, nn_, None)}, fingers={"R": 0.9})
@@ -429,7 +429,7 @@ for f in range(0, END + 1, 4):
     sun.data.keyframe_insert("energy", frame=f); sun.keyframe_insert("rotation_euler", frame=f); sun.data.keyframe_insert("color", frame=f)
 
 # ================================================================ BEAT 13 (3228-3498): old man in solitary, the light shifts across decades
-for f in range(3228, 3500, 10):
+for f in range(3228, 3461, 10):
     t = (f - 3228) / 270
     pose(PO, f, sit_root + Vector((0, 0, -0.02)), yaw=SY, flex=-4, feet=feet_sit, spine=(30 - 10 * t, 0, 0), head=(25 - 35 * t, 10 * math.sin(t * 4)),
          hands={"L": (rel(sit_root, SY, (-0.12, 0.4, 0.06)), *hand_dirs(SY, (0, 0.3, -1), (1, 0, 0)), None),
@@ -478,12 +478,13 @@ for k, (x, y) in enumerate(((0.4, -17.0), (-0.9, -16.9), (1.6, -17.1))):
     for f in range(3460, END + 1, 3):
         cl.data.energy = 25 + 10 * random.random(); cl.data.keyframe_insert("energy", frame=f)
     cl.data.energy = 0; cl.data.keyframe_insert("energy", frame=3440)
+walk(PO, [(3466, (0.35, -1.95)), (3482, (0.15, -2.3)), (3498, (0.0, -2.62))], 3466, 3498)
 # the old man at the window, looking out
 for f in range(3498, END + 1, 8):
     t = (f - 3498) / 252
     r = Vector((0.0, -2.62, Z["PrisonerOld"])); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
     pose(PO, f, r + Vector((0, 0, -0.005 * math.sin(f / 20))), yaw=0, spine=(-2, 0, 0), head=(-10, 4 * math.sin(f / 50)),
-         hands={"L": (Vector((-0.08, -3.15, 1.62)), dd, nn_, None), "R": (Vector((0.16, -3.15, 1.62)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
+         hands={"L": (Vector((-0.16, -3.16, 1.62)), dd, nn_, None), "R": (Vector((0.16, -3.16, 1.62)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
     face(PO, f, brow=0.4, lid=0.15, smile=0.2 * t)
 
 # ================================================================ corridor/inmate life: neighbour inmate paces in cell x=3; second guard at the far end
@@ -514,15 +515,46 @@ pd.count = 1500; pd.frame_start, pd.frame_end = -200, -199; pd.lifetime = 5000; 
 pd.effector_weights.gravity = 0.0; pd.brownian_factor = 0.02; pd.render_type = "OBJECT"; pd.instance_object = dm; dv.show_instancer_for_render = False
 sc.frame_start = 0
 
+
+# ================================================================ extra light: caged cell bulb + moonlight through the window (keeps night beats readable)
+bpy.ops.object.light_add(type="POINT", location=(0.0, -1.4, 2.75)); cb_ = bpy.context.object; cb_.name = "CellBulb"
+cb_.data.color = (1.0, 0.78, 0.5); cb_.data.shadow_soft_size = 0.05
+for f, e in ((0, 25), (276, 25), (300, 45), (557, 45), (1859, 45), (1860, 18), (2171, 18), (2172, 40), (3227, 40), (3228, 22), (3497, 22), (3498, 40)):
+    cb_.data.energy = e; cb_.data.keyframe_insert("energy", frame=f)
+bpy.ops.object.light_add(type="AREA", location=(0.6, -5.5, 3.3)); mn_ = bpy.context.object; mn_.name = "Moonlight"
+mn_.data.energy = 450; mn_.data.size = 1.5; mn_.data.color = (0.55, 0.68, 1.0)
+mn_.rotation_euler = ((Vector((0, -2.0, 1.0)) - mn_.location).to_track_quat("-Z", "Y").to_euler())
+bpy.ops.object.light_add(type="POINT", location=(0.0, -2.2, 1.9)); fl2 = bpy.context.object; fl2.name = "CellFace_Fill"
+fl2.data.energy = 15; fl2.data.color = (1.0, 0.85, 0.7); fl2.data.shadow_soft_size = 0.4
+# orange prison overalls (hue-shift the MakeHuman denim), print-free clothes everywhere
+def hue_shift(mat, hue, sat=1.0, val=1.0):
+    nt = mat.node_tree; bsdf = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+    if not bsdf or not bsdf.inputs["Base Color"].links: return
+    lk = bsdf.inputs["Base Color"].links[0]; src = lk.from_socket
+    hs = nt.nodes.new("ShaderNodeHueSaturation"); hs.inputs["Hue"].default_value = hue; hs.inputs["Saturation"].default_value = sat; hs.inputs["Value"].default_value = val
+    nt.links.remove(lk); nt.links.new(src, hs.inputs["Color"]); nt.links.new(hs.outputs["Color"], bsdf.inputs["Base Color"])
+done = set()
+for n in ("Prisoner", "PrisonerOld"):
+    for m in O[n + ".male_worksuit01"].data.materials:
+        if m and m.name not in done: hue_shift(m, 0.98, 1.25, 0.9); done.add(m.name)
+for m in O["Boy.male_casualsuit03"].data.materials:
+    if m and m.name not in done:
+        if m.users > 1:
+            m2 = m.copy(); O["Boy.male_casualsuit03"].data.materials[0] = m2; m = m2
+        hue_shift(m, 0.3, 1.0, 1.1); done.add(m.name)
+# old man: grey hair
+for m in O["PrisonerOld.short02"].data.materials:
+    if m: hue_shift(m, 0.5, 0.05, 1.8)
+
 # ================================================================ CAMERA: one continuous Catmull-Rom move through every framing
 camd = bpy.data.cameras.new("CAM_Main"); cam = bpy.data.objects.new("CAM_Main", camd); sc.collection.objects.link(cam); sc.camera = cam
-camd.dof.use_dof = True; camd.dof.aperture_fstop = 2.8; camd.clip_start = 0.02; camd.sensor_width = 36
+camd.dof.use_dof = True; camd.dof.aperture_fstop = 4.0; camd.clip_start = 0.02; camd.sensor_width = 36
 CK = [
  # beat 1: corridor, guard & key ring, then the prisoner's eyes
  (0,   (5.2, 2.4, 0.45), (3.4, 1.0, 1.0), 24, 0),
- (45,  (3.5, 1.9, 0.75), (2.4, 1.1, 0.95), 30, -4),
- (95,  (2.0, 1.55, 0.9), (1.25, 1.0, 0.95), 45, 0),
- (150, (0.9, 0.85, 1.55), (0.38, -0.3, 1.62), 40, 0),
+ (45,  (3.6, 2.3, 0.9), (3.1, 1.4, 1.0), 40, -4),
+ (95,  (2.4, 2.05, 1.0), (2.0, 1.4, 1.0), 70, 0),
+ (150, (1.4, 1.7, 1.6), (0.38, -0.3, 1.62), 40, 0),
  (205, (0.42, 0.32, 1.66), (0.38, -0.3, 1.66), 70, 0),
  # beat 2: rise over the bars into the night cell, down to the hands filing
  (276, (0.40, 0.05, 2.35), (0.3, -1.6, 0.8), 28, 0),
@@ -537,14 +569,14 @@ CK = [
  # beat 4: turn and fly through the far wall into the memory workshop
  (690, (0.6, 2.75, 1.5), (0.6, 4.5, 1.3), 26, 0),
  (712, (0.55, 5.6, 1.45), (0.45, 8.3, 0.9), 28, 0),
- (770, (0.9, 7.2, 1.2), (0.45, 8.45, 0.82), 35, 0),
- (830, (0.75, 8.0, 1.05), (0.45, 8.5, 0.78), 55, 0),
- (890, (0.95, 8.25, 1.25), (0.45, 8.0, 1.25), 40, 0),
+ (770, (1.55, 7.95, 1.3), (0.5, 8.3, 0.95), 32, 0),
+ (830, (0.8, 8.3, 1.05), (0.45, 8.52, 0.8), 50, 0),
+ (890, (1.0, 8.38, 1.3), (0.45, 8.05, 1.25), 35, 0),
  # beat 5: two-shot of the handover, then rack to the empty chair
- (942, (2.4, 6.4, 1.4), (1.2, 7.7, 1.0), 30, 0),
- (1000, (2.6, 6.3, 1.0), (1.5, 7.6, 0.8), 32, 0),
- (1050, (1.9, 6.6, 1.05), (1.0, 7.75, 0.9), 38, 0),
- (1095, (3.3, 6.3, 1.2), (4.4, 7.4, 0.7), 35, 0),
+ (942, (2.6, 5.9, 1.5), (1.0, 7.6, 1.0), 26, 0),
+ (1000, (3.2, 5.5, 1.4), (1.5, 7.6, 0.8), 26, 0),
+ (1050, (2.1, 6.6, 1.2), (1.0, 7.75, 0.85), 32, 0),
+ (1078, (3.0, 5.9, 1.3), (4.4, 7.4, 0.55), 30, 0),
  # beat 6: past the chair to the stepmother on the phone, drift to the window lights
  (1128, (4.6, 6.1, 1.5), (6.55, 7.3, 1.45), 30, 0),
  (1190, (5.6, 6.4, 1.55), (6.55, 7.3, 1.5), 45, 0),
@@ -565,21 +597,23 @@ CK = [
  (1760, (7.6, -12.6, 4.6), (7.0, -14.2, 3.6), 24, 0),
  (1810, (8.2, -15.0, 1.6), (6.9, -16.5, 1.0), 26, 0),
  # beat 9: back to the building, in through the hero window: solitary
- (1860, (6.0, -19.5, 1.4), (5.6, -23.5, 1.0), 26, 0),
- (1880, (2.0, -9.5, 2.5), (0.0, -3.2, 1.7), 30, 0),
+ (1840, (7.6, -17.5, 1.3), (6.0, -21.0, 1.1), 30, 0),
+ (1862, (4.8, -13.6, 4.7), (1.0, -6.0, 2.0), 28, 0),
+ (1884, (1.6, -8.5, 2.4), (0.0, -3.2, 1.7), 30, 0),
  (1905, (0.0, -3.6, 1.72), (0.0, -2.0, 1.4), 26, 0),
  (1950, (-0.2, -2.6, 1.6), (0.4, -1.6, 0.8), 24, 0),
  (2010, (-0.7, -2.3, 1.1), (0.4, -1.8, 0.95), 30, 0),
  (2080, (-0.6, -1.0, 1.3), (0.5, -2.0, 0.9), 30, 0),
- (2140, (-0.3, -1.9, 1.7), (0.0, -3.0, 1.6), 26, 0),
+ (2125, (-0.3, -1.9, 1.7), (0.0, -3.0, 1.6), 26, 0),
  # beat 10: the saw on the bar, macro, his straining face, glance at the door
- (2172, (-0.35, -2.75, 1.7), (0.0, -3.2, 1.62), 40, 0),
- (2230, (0.3, -2.9, 1.62), (0.0, -3.2, 1.62), 55, 0),
- (2290, (0.3, -2.65, 1.78), (0.05, -2.55, 1.72), 38, 0),
- (2360, (-0.25, -2.35, 1.6), (0.05, -2.55, 1.7), 35, 0),
- (2430, (-0.2, -2.9, 1.5), (0.0, -3.2, 1.62), 45, 0),
+ (2160, (0.08, -3.2, 1.72), (0.05, -2.3, 1.55), 26, 0),
+ (2190, (0.3, -3.8, 1.66), (0.0, -3.2, 1.62), 40, 0),
+ (2250, (0.13, -3.52, 1.62), (0.0, -3.2, 1.62), 60, 0),
+ (2310, (-0.25, -3.75, 1.78), (0.05, -2.6, 1.72), 40, 0),
+ (2380, (0.35, -3.9, 2.1), (0.0, -2.8, 1.5), 32, 0),
+ (2450, (0.24, -3.55, 1.97), (0.24, -2.0, 1.8), 28, 0),
  # beat 11: out to the corridor: silhouette profile, swing to frozen guards, chase dolly
- (2484, (0.3, -1.6, 1.5), (-0.3, 0.6, 1.4), 26, 0),
+ (2490, (0.3, -1.6, 1.75), (-0.5, 0.6, 1.1), 26, 0),
  (2545, (-1.2, 2.7, 1.25), (-1.5, 1.2, 1.5), 28, 0),
  (2600, (-1.4, 2.8, 1.3), (-4.0, 1.3, 1.5), 30, 0),
  (2650, (-2.6, 2.6, 1.6), (-4.8, 1.4, 1.5), 34, 0),
@@ -596,7 +630,7 @@ CK = [
  (3228, (-0.2, -0.9, 1.5), (0.55, -1.85, 1.0), 30, 0),
  (3300, (-0.45, -1.8, 1.25), (0.55, -1.85, 1.05), 32, 0),
  (3370, (-0.3, -2.7, 1.35), (0.55, -1.85, 1.05), 32, 0),
- (3440, (0.2, -2.8, 1.7), (0.6, -1.8, 1.15), 30, 0),
+ (3440, (-0.4, -2.6, 1.6), (0.4, -2.0, 1.3), 28, 0),
  # beat 14: past him, out through the window, over the fence to the protesters
  (3498, (0.0, -2.2, 1.85), (0.0, -3.5, 1.75), 26, 0),
  (3525, (0.0, -3.5, 1.72), (0.0, -10.0, 2.0), 24, 0),
@@ -608,7 +642,7 @@ CK = [
  (3750, (0.0, -5.0, 1.95), (0.0, -2.8, 1.65), 32, 0),
 ]
 build_camera(cam, CK)
-for f, fs in ((0, 2.8), (676, 2.8), (700, 1.6), (1420, 1.6), (1440, 2.8)):
+for f, fs in ((0, 4.0), (676, 4.0), (700, 2.0), (1420, 2.0), (1440, 4.0)):
     camd.dof.aperture_fstop = fs; camd.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # beats.json for VO retime
