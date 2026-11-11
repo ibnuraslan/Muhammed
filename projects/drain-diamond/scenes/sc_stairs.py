@@ -11,8 +11,8 @@ import dd
 from dd import walk_to, place, face_to
 from sc_boutique import painter
 
-EXPOSURE = 0.3
-DUR = {"powder": 5.0, "settle": 5.0}
+EXPOSURE = 1.0
+DUR = {"powder": 9.0, "settle": 9.0}
 VARIANT_FOR = {"settle": "settle"}
 FH = 3.0            # floor height
 NSTEP = 10          # steps per half flight
@@ -131,7 +131,7 @@ def build(variant=None):
     # light: one caged bulb per landing, warm; a green exit sign glow (no text)
     for f in range(-1, 2):
         for (y, dz) in ((-0.9, 2.6), (L + 1.0, 2.6 + FH / 2)):
-            l = bpy.data.lights.new("Bulb", 'POINT'); l.energy = 140; l.color = (1.0, 0.85, 0.65); l.shadow_soft_size = 0.05
+            l = bpy.data.lights.new("Bulb", 'POINT'); l.energy = 320; l.color = (1.0, 0.92, 0.8); l.shadow_soft_size = 0.05
             o = bpy.data.objects.new("Bulb", l); bpy.context.collection.objects.link(o); o.location = (0.9, y, f * FH + dz)
             cyl("BulbGlass", (0.9, y, f * FH + dz), 0.04, 0.1, emissive("BulbE", (1.0, 0.85, 0.65), 20), verts=12)
     box("ExitSign", (-1.29, -0.6, 2.4), (0.02, 0.35, 0.15), emissive("ExitGreen", (0.1, 1.0, 0.35), 3))
@@ -139,9 +139,9 @@ def build(variant=None):
     if variant == "settle":
         c["ext"] = extinguisher("Ext1")
         e2 = extinguisher("Ext2"); e2.location = (-0.3, -0.75, 0.09); e2.rotation_euler = (0, 0, 0.7)
-        powder_volume("Powder", (0, L / 2, 1.5), (2.6, L + 2.6, 4.5), "max(0.08, 1.1 - frame / 110.0)", drift=(0.0, 0.03, -0.12), scale=2.2)
+        powder_volume("Powder", (0, -0.3, 0.6), (2.6, 2.0, 1.2), "max(0.08, 1.1 - frame / 110.0)", drift=(0.0, 0.03, -0.12), scale=2.2)
     else:
-        powder_volume("Powder", (0, L / 2, 1.5), (2.6, L + 2.6, 4.5), "min(1.6, 0.4 + frame / 50.0)", drift=(0.05, -0.15, -0.05), scale=2.6)
+        powder_volume("Powder", (0, 0.8, 1.0), (2.6, 4.0, 3.0), "min(3.0, 0.8 + frame / 30.0)", drift=(0.05, -0.15, -0.05), scale=2.6)
         powder_volume("Billow", (0.4, 0.2, 0.9), (1.6, 1.8, 1.8), "min(4.0, frame / 15.0)", drift=(0.25, 0.4, 0.3), scale=3.5)
         c["men"] = []
         for k in range(2):

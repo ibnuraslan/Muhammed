@@ -27,8 +27,8 @@ DRAIN = Vector((3.2, 3.4, 0.0))       # centre of the pit opening (ground level)
 PIT_IN, PIT_RIM, PIT_D = 0.5, 0.7, 0.26
 GATE = Vector((1.7, -5.0, 0.0))
 LEAD = 2.5
-DUR = {"walk": LEAD + 4.5, "patch": 4.5, "drill": 4.0, "container": 4.8,
-       "yard": 4.5, "gate": 4.5, "torch": 4.5, "circle": 5.0, "bag": 4.5}
+DUR = {"walk": LEAD + 8.0, "patch": 9.0, "drill": 9.0, "container": 9.0,
+       "yard": 9.0, "gate": 9.0, "torch": 9.0, "circle": 9.0, "bag": 9.0}
 VARIANT_FOR = {"walk": "walk", "patch": "patch", "drill": "drill", "container": "open", "yard": "yard",
                "gate": "gate", "torch": "torch", "circle": "open_rain", "bag": "bag"}
 CONT_SIZE = (0.24, 0.17, 0.09)
@@ -357,8 +357,8 @@ def cam_gate(c, t):
 
 def cam_torch(c, t):
     e = ease(t)
-    loc = Vector((DRAIN.x - 1.9, DRAIN.y + 1.1, 1.25)).lerp(Vector((DRAIN.x - 1.7, DRAIN.y + 0.9, 1.15)), e)
-    return loc, DRAIN + Vector((0.3, -0.3, 0.35)), 30
+    loc = Vector((DRAIN.x - 1.2, DRAIN.y + 0.6, 3.4)).lerp(Vector((DRAIN.x - 1.0, DRAIN.y + 0.5, 3.0)), e)
+    return loc, DRAIN + Vector((0.2, -0.2, 0.0)), 30
 
 
 MOVES = {
