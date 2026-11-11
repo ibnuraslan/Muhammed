@@ -639,9 +639,9 @@ def anim_facade(c, t):
 def cam_facade(c, t):
     e = ease(t)
     d = c["info"]["door"]
-    loc = Vector((d.x - 2.5, -4.6, 1.6)).lerp(Vector((d.x - 1.8, -4.2, 3.2)), e)
-    tgt = Vector((d.x, 0, 3.0)).lerp(Vector((d.x, 0, 16.0)), e)
-    return loc, tgt, 16
+    loc = Vector((d.x - 5.0, -5.6, 1.6)).lerp(Vector((d.x - 4.0, -5.2, 4.2)), e)
+    tgt = Vector((d.x + 1.0, 0, 3.2)).lerp(Vector((d.x + 1.0, 0, 9.5)), e)
+    return loc, tgt, 18
 
 
 def anim_grille(c, t):
