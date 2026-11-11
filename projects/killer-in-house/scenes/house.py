@@ -1,0 +1,964 @@
+"""THE HOUSE (hero set, built once): a modest two-storey 1941 Denver brick house on a quiet elm street.
+
+Coordinates (metres): the house is centred at the origin, front wall at y = -5 facing the street (-Y).
+  grade z = -0.6 ; ground floor 0 .. 2.7 ; upstairs floor 2.9 .. 5.4 ; ceiling joists 5.4 .. 5.5 ; attic to the ridge 7.25
+  ground floor:  front bedroom  x[-4.2,-0.6] y[-4.7,-0.2]   hall x[-0.6,0.9] (stairs x[0,0.9] rising +y)   front room x[0.9,4.2]
+                 back room      x[-4.2,-1.5] y[-0.2, 4.7]   kitchen x[-1.5,4.2] y[-0.2,4.7]  (icebox, iron stove, back door)
+  upstairs:      bedroom        x[-4.2,-0.6] y[-4.7,-0.2]   closet x[-1.8,-0.6] y[-1.2,-0.2] with the 8 x 15 in hatch
+  attic:         crawl space under the sloping roof boards, reached only through the closet hatch
+  cellar:        z[-2.7,-0.15] under the back rooms, shelves of preserve jars
+The street runs along x at y = -15 (road), neighbours left/right and across the street.
+
+build_house(season, tod, ...) -> ctx dict.  season: autumn | winter | summer ; tod: day | night | dusk
+"""
+import os, sys, math
+import numpy as np
+import bpy
+from mathutils import Vector, Matrix
+from kit import *
+import ph
+import human as _hm
+from human import Human, add_asset, pose_walk, fingers_curl, rotate_bone, aim_bone, _world_verts, reach, pose_sit
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+W2, D2 = 4.5, 5.0                  # half width / half depth of the brick shell (outer faces)
+T = 0.3                            # exterior wall thickness
+G = -0.6                           # grade
+F1, C1 = 0.0, 2.7                  # ground floor / ceiling
+F2, C2 = 2.9, 5.4                  # upstairs floor / ceiling
+EAVE, RIDGE = 5.55, 7.25
+ROAD_Y = -15.5
+HATCH = (-1.2, -0.7)               # closet ceiling hatch centre (x, y)
+HATCH_W, HATCH_L = 0.2, 0.38       # about eight by fifteen inches
+
+_MAT = {}
+
+
+# ============================================================================ materials
+def mat(key):
+    if key in _MAT:
+        return _MAT[key]
+    T_ = lambda aid, sc, tint=None: ph.texture(aid, scale=sc, name=key, tint=tint)
+    table = {
+        "brick": lambda: T_("red_brick_03", 0.8, (0.95, 0.86, 0.8)),
+        "brick2": lambda: T_("red_brick_03", 0.8, (0.8, 0.82, 0.85)),
+        "brick3": lambda: T_("red_brick_03", 0.8, (1.0, 0.95, 0.75)),
+        "roof": lambda: T_("grey_roof_tiles", 0.45, (0.55, 0.5, 0.48)),
+        "floor": lambda: T_("old_wood_floor", 0.5),
+        "lino": lambda: T_("old_linoleum_flooring_01", 0.5),
+        "plaster": lambda: T_("painted_plaster_wall", 0.4, (0.95, 0.88, 0.74)),
+        "paper": lambda: T_("decrepit_wallpaper", 0.6, (1.0, 0.92, 0.8)),
+        "conc": lambda: T_("rough_concrete", 0.4),
+        "stone": lambda: T_("stone_wall", 0.5, (0.8, 0.78, 0.74)),
+        "planks": lambda: T_("roof_planks", 0.5, (0.85, 0.75, 0.62)),
+        "raw": lambda: T_("raw_plank_wall", 0.6, (0.8, 0.72, 0.62)),
+        "grass": lambda: T_("leafy_grass", 0.25),
+        "leafground": lambda: T_("dry_decay_leaves", 0.3),
+        "asphalt": lambda: T_("asphalt_02", 0.12),
+        "pave": lambda: T_("concrete_pavement", 0.35),
+        "snow": lambda: T_("snow_02", 0.25),
+        "trim": lambda: pbr("Trim", (0.78, 0.74, 0.64), 0.45),
+        "darktrim": lambda: pbr("DarkTrim", (0.12, 0.14, 0.12), 0.45),
+        "door": lambda: wood("DoorWood", (0.09, 0.045, 0.02), (0.2, 0.11, 0.055), scale=(0.3, 6, 6), rough=0.4, coat=0.3),
+        "oak": lambda: wood("Oak", (0.14, 0.08, 0.04), (0.3, 0.18, 0.09), scale=(0.3, 6, 6), rough=0.4, coat=0.3),
+        "enamel": lambda: pbr("Enamel", (0.82, 0.8, 0.74), 0.2, 0.0, **{'Coat Weight': 0.6}),
+        "iron": lambda: pbr("CastIron", (0.035, 0.035, 0.037), 0.55, 0.9),
+        "chrome": lambda: pbr("Chrome", (0.7, 0.7, 0.72), 0.18, 1.0),
+        "glass": lambda: window_glass(),
+        "black": lambda: pbr("Black", (0.01, 0.01, 0.01), 0.7),
+        "shade": lambda: pbr("Shade", (0.78, 0.7, 0.52), 0.9, 0.0, **{'Transmission Weight': 0.0, 'Subsurface Weight': 0.3}),
+        "lace": lambda: fabric("Lace", (0.85, 0.83, 0.78), 0.9, 0.5, 900),
+    }
+    _MAT[key] = table[key]()
+    return _MAT[key]
+
+
+def window_glass():
+    """Reflective for the camera, transparent to shadow rays so daylight reaches the rooms cleanly."""
+    m = bpy.data.materials.new("WinGlass"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); lp = N.new("ShaderNodeLightPath")
+    tr = N.new("ShaderNodeBsdfTransparent"); gl = N.new("ShaderNodeBsdfGlossy"); gl.inputs['Roughness'].default_value = 0.03
+    fr = N.new("ShaderNodeFresnel"); fr.inputs['IOR'].default_value = 1.6
+    refl = N.new("ShaderNodeMixShader"); L.new(fr.outputs[0], refl.inputs[0]); L.new(tr.outputs[0], refl.inputs[1]); L.new(gl.outputs[0], refl.inputs[2])
+    mx = N.new("ShaderNodeMixShader"); L.new(lp.outputs['Is Shadow Ray'], mx.inputs[0])
+    L.new(refl.outputs[0], mx.inputs[1]); L.new(tr.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], out.inputs['Surface'])
+    return m
+
+
+def retint(m, mul=(1, 1, 1), hue=0.5, sat=1.0, val=1.0):
+    """Multiply/hue-shift a material's base colour (autumn leaves, faded paint)."""
+    N = m.node_tree.nodes; L = m.node_tree.links
+    p = next((n for n in N if n.type == 'BSDF_PRINCIPLED'), None)
+    if p is None:
+        return m
+    src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+    hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Hue'].default_value = hue; hs.inputs['Saturation'].default_value = sat; hs.inputs['Value'].default_value = val
+    if src is not None:
+        L.new(src, hs.inputs['Color'])
+    else:
+        hs.inputs['Color'].default_value = p.inputs['Base Color'].default_value
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+    L.new(hs.outputs[0], mx.inputs[6]); mx.inputs[7].default_value = (*mul, 1)
+    L.new(mx.outputs[2], p.inputs['Base Color'])
+    return m
+
+
+def driven_emission(m_or_light, expr, base, prop="energy"):
+    """Frame-driven light/emission strength (flicker, lights dying) that plays in any render of the .blend."""
+    if isinstance(m_or_light, bpy.types.Light):
+        d = m_or_light.driver_add(prop).driver
+    else:
+        p = m_or_light.node_tree.nodes["Principled BSDF"]
+        d = p.inputs['Emission Strength'].driver_add("default_value").driver
+    d.type = 'SCRIPTED'; d.expression = f"{base} * ({expr})"
+    return d
+
+
+# ============================================================================ geometry helpers
+def wall_x(name, x0, x1, y, z0, z1, t, m, holes=()):
+    """Wall running along X at y (thickness t along Y). holes: (xa, xb, za, zb)."""
+    parts = []; hs = sorted(holes); cx = x0
+    for (xa, xb, za, zb) in hs:
+        if xa > cx:
+            parts.append(box(name, ((cx + xa) / 2, y, (z0 + z1) / 2), (xa - cx, t, z1 - z0), m))
+        if za > z0:
+            parts.append(box(name, ((xa + xb) / 2, y, (z0 + za) / 2), (xb - xa, t, za - z0), m))
+        if zb < z1:
+            parts.append(box(name, ((xa + xb) / 2, y, (zb + z1) / 2), (xb - xa, t, z1 - zb), m))
+        cx = xb
+    if x1 > cx:
+        parts.append(box(name, ((cx + x1) / 2, y, (z0 + z1) / 2), (x1 - cx, t, z1 - z0), m))
+    return parts
+
+
+def wall_y(name, y0, y1, x, z0, z1, t, m, holes=()):
+    parts = []; hs = sorted(holes); cy = y0
+    for (ya, yb, za, zb) in hs:
+        if ya > cy:
+            parts.append(box(name, (x, (cy + ya) / 2, (z0 + z1) / 2), (t, ya - cy, z1 - z0), m))
+        if za > z0:
+            parts.append(box(name, (x, (ya + yb) / 2, (z0 + za) / 2), (t, yb - ya, za - z0), m))
+        if zb < z1:
+            parts.append(box(name, (x, (ya + yb) / 2, (zb + z1) / 2), (t, yb - ya, z1 - zb), m))
+        cy = yb
+    if y1 > cy:
+        parts.append(box(name, (x, (cy + y1) / 2, (z0 + z1) / 2), (t, y1 - cy, z1 - z0), m))
+    return parts
+
+
+def window_unit(axis, u, w, pos, za, zb, depth=0.12, panes=True, lit_glass=None):
+    """Double-hung sash window filling a hole. axis 'x': wall along X at y=pos ; 'y': wall along Y at x=pos."""
+    tr = mat("trim"); parts = []; g = []
+    def B(nm, cu, cz, su, sz, sd, mm, off=0.0):
+        if axis == 'x':
+            return box(nm, (cu, pos + off, cz), (su, sd, sz), mm)
+        return box(nm, (pos + off, cu, cz), (sd, su, sz), mm)
+    f = 0.06
+    parts += [B("WFrame", u, za + f / 2, w, f, depth, tr), B("WFrame", u, zb - f / 2, w, f, depth, tr),
+              B("WFrame", u - w / 2 + f / 2, (za + zb) / 2, f, zb - za, depth, tr), B("WFrame", u + w / 2 - f / 2, (za + zb) / 2, f, zb - za, depth, tr)]
+    zm = (za + zb) / 2
+    parts.append(B("WRail", u, zm, w - 2 * f, 0.05, 0.08, tr))
+    if panes:
+        for k in (-1, 1):
+            parts.append(B("WMunt", u, (zm + (zb if k > 0 else za)) / 2, 0.025, (zb - za) / 2 - f, 0.04, tr))
+    g.append(B("WGlass", u, zm, w - 2 * f, zb - za - 2 * f, 0.008, lit_glass or mat("glass")))
+    # pull-down shade (cream) and lace curtains just inside: the windows read as lived-in rooms
+    inward = 0.12 if (pos < 0) else -0.12
+    if lit_glass is None:
+        sh = (zb - za) * 0.38
+        parts.append(B("WShade", u, zb - f - sh / 2, w - 2 * f, sh, 0.01, mat("shade"), off=inward))
+        for k in (-1, 1):
+            parts.append(B("WCurtain", u + k * (w / 2 - f - 0.1), zm, 0.2, zb - za - 2 * f, 0.02, mat("lace"), off=inward + (0.03 if pos < 0 else -0.03)))
+    parts.append(B("WSill", u, za - 0.03, w + 0.16, 0.05, depth + 0.14, tr, off=0.0))
+    return parts, g
+
+
+def hinge_door(name, hinge, width, height, thick, m, axis='x', open_dir=1, knob=True):
+    """A door panel parented to a hinge empty (rotate the empty about Z to open)."""
+    e = bpy.data.objects.new(name + "Hinge", None); bpy.context.collection.objects.link(e); e.location = hinge
+    if axis == 'x':
+        d = box(name, (hinge[0] + width / 2, hinge[1], hinge[2] + height / 2), (width, thick, height), m, bevel=0.004)
+    else:
+        d = box(name, (hinge[0], hinge[1] + width / 2, hinge[2] + height / 2), (thick, width, height), m, bevel=0.004)
+    parts = [d]
+    # raised panels
+    for k in range(3):
+        zc = hinge[2] + height * (0.22 + 0.3 * k)
+        if axis == 'x':
+            for s in (-1, 1):
+                parts.append(box(name + "Pan", (hinge[0] + width / 2, hinge[1] + s * thick / 2, zc), (width * 0.7, 0.012, height * 0.22), m, bevel=0.005))
+        else:
+            for s in (-1, 1):
+                parts.append(box(name + "Pan", (hinge[0] + s * thick / 2, hinge[1] + width / 2, zc), (0.012, width * 0.7, height * 0.22), m, bevel=0.005))
+    if knob:
+        kz = hinge[2] + 0.95
+        if axis == 'x':
+            for s in (-1, 1):
+                parts.append(cyl(name + "Knob", (hinge[0] + width - 0.07, hinge[1] + s * (thick / 2 + 0.03), kz), 0.028, 0.05, mat("chrome"), 16, rot=(math.radians(90), 0, 0)))
+        else:
+            for s in (-1, 1):
+                parts.append(cyl(name + "Knob", (hinge[0] + s * (thick / 2 + 0.03), hinge[1] + width - 0.07, kz), 0.028, 0.05, mat("chrome"), 16, rot=(0, math.radians(90), 0)))
+    dj = join(parts, name)
+    dj.parent = e; dj.matrix_parent_inverse = e.matrix_world.inverted()
+    return e
+
+
+def gable_roof(name, m, w2=W2 + 0.45, d2=D2 + 0.45, eave=EAVE, ridge=RIDGE, thick=0.12):
+    """Gable roof, ridge along X at y=0, two slopes front/back; gable ends brick-filled."""
+    import bmesh
+    me = bpy.data.meshes.new(name); bm = bmesh.new()
+    def slab(sign):
+        a = bm.verts.new((-w2, sign * d2, eave)); b = bm.verts.new((w2, sign * d2, eave))
+        c = bm.verts.new((w2, 0, ridge)); d = bm.verts.new((-w2, 0, ridge))
+        a2 = bm.verts.new((-w2, sign * d2, eave - thick)); b2 = bm.verts.new((w2, sign * d2, eave - thick))
+        c2 = bm.verts.new((w2, 0, ridge - thick)); d2_ = bm.verts.new((-w2, 0, ridge - thick))
+        fs = [(a, b, c, d), (d2_, c2, b2, a2), (a, a2, b2, b), (b, b2, c2, c), (d, c2 if False else d2_, a2, a)]
+        for f in fs:
+            try:
+                bm.faces.new(f if sign > 0 else f[::-1])
+            except Exception:
+                pass
+    slab(1); slab(-1)
+    bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o); o.data.materials.append(m)
+    for p in o.data.polygons:
+        p.use_smooth = False
+    return o
+
+
+def gable_fill(name, m, w=W2, d=D2, z0=EAVE - 0.15, ridge=RIDGE - 0.1, t=T):
+    import bmesh
+    objs = []
+    for sx in (-1, 1):
+        me = bpy.data.meshes.new(name); bm = bmesh.new()
+        x0, x1 = sx * w - t / 2, sx * w + t / 2
+        v = [bm.verts.new((x, y, z)) for x in (x0, x1) for (y, z) in ((-d, z0), (d, z0), (0, ridge))]
+        bm.faces.new((v[0], v[1], v[2])); bm.faces.new((v[5], v[4], v[3]))
+        for i, j in ((0, 1), (1, 2), (2, 0)):
+            bm.faces.new((v[i], v[3 + i], v[3 + j], v[j]))
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+        bm.to_mesh(me); bm.free()
+        o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o); o.data.materials.append(m); objs.append(o)
+    return objs
+
+
+# ============================================================================ the shell (used for the hero and the neighbours)
+FRONT_WINDOWS_1 = [(-2.4, 1.3), (2.6, 1.6)]           # (x centre, width) ground floor front: bedroom, front room
+FRONT_WINDOWS_2 = [(-2.4, 1.1), (-0.0, 0.7), (2.6, 1.1)]
+SIDE_WINDOWS = [(-2.5, 1.0), (2.2, 0.9)]
+BACK_WINDOWS_1 = [(1.1, 1.1), (-2.9, 0.9)]            # kitchen sink window, back room
+BACK_WINDOWS_2 = [(-2.4, 0.9), (2.4, 0.9)]
+FRONT_DOOR = (0.15, 0.95)                             # x centre, width
+BACK_DOOR = (3.05, 0.85)
+
+
+def shell(prefix="H", brick="brick", detail=False, lit=None):
+    """Brick shell + roof + porch. Returns (objects, glass list, ctx bits). lit: material for glowing panes (neighbours)."""
+    out = []; glass_ = []; c = {}
+    bm_ = mat(brick)
+    w1a, w1b = 0.9, 2.25        # window sill/head heights, ground floor
+    w2a, w2b = 3.75, 5.05
+    holes_f = [(x - w / 2, x + w / 2, w1a, w1b) for x, w in FRONT_WINDOWS_1] + [(FRONT_DOOR[0] - FRONT_DOOR[1] / 2, FRONT_DOOR[0] + FRONT_DOOR[1] / 2, 0.0, 2.15)]
+    holes_f += [(x - w / 2, x + w / 2, w2a, w2b) for x, w in FRONT_WINDOWS_2]
+    out += wall_x(prefix + "Front", -W2, W2, -D2 + T / 2, G, EAVE, T, bm_, holes_f)
+    holes_b = [(x - w / 2, x + w / 2, w1a + (0.25 if x > 0 else 0), w1b) for x, w in BACK_WINDOWS_1] + [(BACK_DOOR[0] - BACK_DOOR[1] / 2, BACK_DOOR[0] + BACK_DOOR[1] / 2, 0.0, 2.1)]
+    holes_b += [(x - w / 2, x + w / 2, w2a, w2b) for x, w in BACK_WINDOWS_2]
+    out += wall_x(prefix + "Back", -W2, W2, D2 - T / 2, G, EAVE, T, bm_, holes_b)
+    for sx in (-1, 1):
+        hs = [(y - w / 2, y + w / 2, w1a, w1b) for y, w in SIDE_WINDOWS] + [(y - w / 2, y + w / 2, w2a, w2b) for y, w in SIDE_WINDOWS]
+        out += wall_y(prefix + "Side", -D2 + T, D2 - T, sx * (W2 - T / 2), G, EAVE, T, bm_, hs)
+    out += gable_fill(prefix + "Gable", bm_)
+    if detail:          # plaster lining on the inside faces (rooms are plaster, not brick)
+        pl = mat("plaster"); lz0, lz1 = F1 - 0.05, EAVE - 0.06
+        clip = lambda hs: [(a, b, max(za, lz0), min(zb, lz1)) for (a, b, za, zb) in hs]
+        wall_x("LineF", -W2 + T, W2 - T, -D2 + T + 0.011, lz0, lz1, 0.02, pl, clip(holes_f))
+        wall_x("LineB", -W2 + T, W2 - T, D2 - T - 0.011, lz0, lz1, 0.02, pl, clip(holes_b))
+        for sx in (-1, 1):
+            hs = [(y - w / 2, y + w / 2, w1a, w1b) for y, w in SIDE_WINDOWS] + [(y - w / 2, y + w / 2, w2a, w2b) for y, w in SIDE_WINDOWS]
+            wall_y("LineS", -D2 + T, D2 - T, sx * (W2 - T - 0.011), lz0, lz1, 0.02, pl, hs)
+        box("CellarCeil", (0, 2.25, -0.14), (2 * (W2 - T), D2 - T + 0.2, 0.04), mat("raw"))
+    # cellar window wells / foundation band
+    out.append(box(prefix + "Found", (0, 0, G + 0.2), (2 * W2 + 0.04, 2 * D2 + 0.04, 0.4), mat("conc")))
+    # windows
+    for x, w in FRONT_WINDOWS_1:
+        p, g = window_unit('x', x, w, -D2 + 0.08, w1a, w1b, lit_glass=lit); out += p; glass_ += g
+    for x, w in FRONT_WINDOWS_2:
+        p, g = window_unit('x', x, w, -D2 + 0.08, w2a, w2b, lit_glass=lit); out += p; glass_ += g
+    for x, w in BACK_WINDOWS_1:
+        p, g = window_unit('x', x, w, D2 - 0.08, w1a + (0.25 if x > 0 else 0), w1b, lit_glass=lit); out += p; glass_ += g
+    for x, w in BACK_WINDOWS_2:
+        p, g = window_unit('x', x, w, D2 - 0.08, w2a, w2b, lit_glass=lit); out += p; glass_ += g
+    for sx in (-1, 1):
+        for y, w in SIDE_WINDOWS:
+            for (a, b) in ((w1a, w1b), (w2a, w2b)):
+                p, g = window_unit('y', y, w, sx * (W2 - 0.08), a, b, lit_glass=lit); out += p; glass_ += g
+    # brick lintels / sills in a lighter course
+    for x, w in FRONT_WINDOWS_1 + FRONT_WINDOWS_2:
+        for z in ((w1b, w2b) if True else ()):
+            pass
+    # roof + fascia + chimney
+    rf = gable_roof(prefix + "Roof", mat("roof")); out.append(rf)
+    for sy in (-1, 1):
+        out.append(box(prefix + "Fascia", (0, sy * (D2 + 0.45), EAVE - 0.1), (2 * W2 + 0.95, 0.04, 0.22), mat("trim")))
+        out.append(box(prefix + "Soffit", (0, sy * (D2 + 0.22), EAVE - 0.2), (2 * W2 + 0.9, 0.5, 0.03), mat("trim")))
+    out.append(box(prefix + "Chimney", (3.4, 1.6, (EAVE + RIDGE) / 2 + 0.8), (0.7, 0.5, RIDGE - EAVE + 2.4), bm_))
+    out.append(box(prefix + "ChimCap", (3.4, 1.6, RIDGE + 1.38), (0.8, 0.6, 0.06), mat("conc")))
+    out.append(box(prefix + "AtticVent", (W2 + 0.01, 0, RIDGE - 0.75), (0.02, 0.5, 0.35), mat("darktrim")))
+    # porch: slab, steps, two columns, a flat roof
+    pz = -0.06
+    out.append(box(prefix + "PorchDeck", (0.6, -D2 - 1.1, pz - 0.27), (4.2, 2.2, 0.54), mat("conc")))
+    for k in range(3):
+        out.append(box(prefix + "Step", (0.15, -D2 - 2.35 - k * 0.3, G + 0.42 - k * 0.18), (1.6, 0.32, 0.18), mat("conc")))
+    for x in (-1.3, 2.5):
+        out.append(box(prefix + "PCol", (x, -D2 - 2.0, 1.25), (0.32, 0.32, 2.6), bm_))
+    out.append(box(prefix + "PRoof", (0.6, -D2 - 1.15, 2.62), (4.5, 2.5, 0.16), mat("trim")))
+    out.append(box(prefix + "PRail", (2.0, -D2 - 2.0, 0.42), (1.0, 0.12, 0.9), bm_))
+    out.append(box(prefix + "PRail", (-0.8, -D2 - 2.0, 0.42), (0.6, 0.12, 0.9), bm_))
+    return out, glass_, c
+
+
+# ============================================================================ interiors (hero house only)
+def interiors(c):
+    """Floors, partitions, stairs, closet + hatch, attic, cellar. Doors are hinge empties in c."""
+    pl = mat("plaster"); fl = mat("floor"); tr = mat("trim")
+    IX, IY = W2 - T, D2 - T       # inner faces
+    # floors / ceilings
+    box("FloorFront", (0, (-IY - 0.2) / 2, -0.06), (2 * IX, IY - 0.2, 0.12), fl)
+    box("FloorKitchen", (1.35, (IY - 0.2) / 2, -0.06), (IX + 1.5, IY + 0.2, 0.12), mat("lino"))
+    box("FloorBack", (-2.85, (IY - 0.2) / 2, -0.06), (IX - 1.5, IY + 0.2, 0.12), fl)
+    c["cellar_hole"] = (-3.6, 3.0)
+    # ceiling of ground floor / floor upstairs (with stair opening x[0,0.9] y[-3.6,-0.2])
+    sl = []
+    sl.append(box("Slab", (-(IX + 0.0) / 2, 0, (C1 + F2) / 2), (IX, 2 * IY, F2 - C1), pl))
+    sl.append(box("Slab", ((0.9 + IX) / 2, 0, (C1 + F2) / 2), (IX - 0.9, 2 * IY, F2 - C1), pl))
+    sl.append(box("Slab", (0.45, (-0.2 + IY) / 2, (C1 + F2) / 2), (0.9, IY + 0.2, F2 - C1), pl))
+    sl.append(box("Slab", (0.45, (-IY - 3.6) / 2, (C1 + F2) / 2), (0.9, IY - 3.6, F2 - C1), pl))
+    box("FloorUp", (0, 0, F2 + 0.005), (2 * IX, 2 * IY, 0.01), fl).hide_render = True     # (visual floor pieces below)
+    for (cx, cy, sx, sy) in ((-(IX) / 2, 0, IX, 2 * IY), ((0.9 + IX) / 2, 0, IX - 0.9, 2 * IY), (0.45, (-0.2 + IY) / 2, 0.9, IY + 0.2), (0.45, (-IY - 3.6) / 2, 0.9, IY - 3.6)):
+        box("FloorUp", (cx, cy, F2 + 0.006), (sx, sy, 0.012), fl)
+    # upstairs ceiling with the closet hatch hole
+    hx, hy = HATCH
+    cz = (C2 + EAVE - 0.05) / 2; ct = EAVE - 0.05 - C2
+    box("CeilUp", ((-IX + hx - HATCH_W / 2) / 2, 0, cz), (hx - HATCH_W / 2 + IX, 2 * IY, ct), pl)
+    box("CeilUp", ((IX + hx + HATCH_W / 2) / 2, 0, cz), (IX - hx - HATCH_W / 2, 2 * IY, ct), pl)
+    box("CeilUp", (hx, (-IY + hy - HATCH_L / 2) / 2, cz), (HATCH_W, hy - HATCH_L / 2 + IY, ct), pl)
+    box("CeilUp", (hx, (IY + hy + HATCH_L / 2) / 2, cz), (HATCH_W, IY - hy - HATCH_L / 2, ct), pl)
+    # hatch panel (slides aside over the boards in the crawl space)
+    c["hatch"] = box("HatchPanel", (hx, hy, EAVE - 0.03), (HATCH_W + 0.06, HATCH_L + 0.06, 0.02), mat("raw"))
+    c["hatch_home"] = Vector((hx, hy, EAVE - 0.03))
+    # ---------- partitions, ground floor (t = 0.12)
+    t = 0.12; DH = 2.1
+    wall_y("PartA", -IY, -0.2, -0.6, F1, C1, t, pl, [(-1.6, -0.75, F1, DH)])                  # bedroom | hall (door)
+    wall_y("PartB", -IY, -0.2, 0.9, F1, C1, t, pl, [(-3.3, -1.3, F1, 2.3)])                    # hall | front room (wide arch)
+    wall_x("PartC", -IX, IX, -0.2, F1, C1, t, pl, [(-0.55, 0.0, F1, DH), (2.4, 3.3, F1, DH), (-3.0, -2.2, F1, DH)])  # front | back
+    wall_y("PartD", -0.2, IY, -1.5, F1, C1, t, pl, [(1.2, 2.1, F1, DH)])                       # back room | kitchen
+    # ---------- partitions, upstairs
+    wall_y("PartUA", -IY, 1.8, -0.6, F2, C2, t, pl, [(-3.1, -2.3, F2, F2 + DH)])
+    wall_y("PartUB", -IY, 1.8, 0.9, F2, C2, t, pl, [(-1.2, -0.4, F2, F2 + DH)])
+    wall_x("PartUC", -IX, IX, -0.2, F2, C2, t, pl, [(-0.55, 0.85, F2, F2 + DH)])
+    wall_x("PartUD", -0.6, 0.9, 1.8, F2, C2, t, pl, [(-0.3, 0.5, F2, F2 + DH)])
+    # the closet in the upstairs bedroom (back-right corner): x[-1.8,-0.6] y[-1.2,-0.2]
+    wall_x("ClosetF", -1.8, -0.6, -1.2, F2, C2, 0.1, pl, [(-1.62, -0.92, F2, F2 + 2.0)])
+    wall_y("ClosetS", -1.2, -0.2, -1.8, F2, C2, 0.1, pl)
+    c["closet_door"] = hinge_door("ClosetDoor", (-1.62, -1.25, F2), 0.7, 2.0, 0.035, mat("door"))
+    box("ClosetShelf", (-1.2, -0.45, F2 + 1.75), (1.1, 0.4, 0.025), mat("oak"))
+    box("ClosetRod", (-1.2, -0.55, F2 + 1.68), (1.1, 0.02, 0.02), mat("chrome"))
+    # doors
+    c["front_door"] = hinge_door("FrontDoor", (FRONT_DOOR[0] - FRONT_DOOR[1] / 2 + 0.03, -D2 + 0.12, F1), FRONT_DOOR[1] - 0.06, 2.1, 0.045, mat("door"))
+    c["back_door"] = hinge_door("BackDoor", (BACK_DOOR[0] - BACK_DOOR[1] / 2 + 0.03, D2 - 0.12, F1), BACK_DOOR[1] - 0.06, 2.05, 0.045, mat("door"))
+    c["bed_door"] = hinge_door("BedDoor", (-0.6, -1.58, F1), 0.8, 2.05, 0.04, mat("door"), axis='y')
+    c["upbed_door"] = hinge_door("UpBedDoor", (-0.6, -3.08, F2), 0.75, 2.05, 0.04, mat("door"), axis='y')
+    # stairs: 13 risers from y=-3.55 to -0.2 along +y, x[0.0,0.9]
+    n = 13; rise = F2 / n; run = 3.35 / n
+    for k in range(n):
+        box("Tread", (0.45, -3.55 + run * (k + 0.5), rise * (k + 1) - 0.02), (0.9, run + 0.03, 0.04), mat("oak"))
+        box("Riser", (0.45, -3.55 + run * k, rise * (k + 0.5)), (0.9, 0.02, rise), tr)
+    box("Stringer", (0.02, -1.9, 1.45), (0.04, 3.6, 0.3), tr, rot=(math.atan2(F2, 3.35), 0, 0))
+    for k in range(12):
+        y = -3.4 + k * 0.28; z = rise * ((y + 3.55) / run) + 0.45
+        box("Baluster", (0.03, y, z), (0.03, 0.03, 0.9), tr)
+    box("Handrail", (0.03, -1.9, 1.45 + 0.95), (0.06, 4.4, 0.06), mat("oak"), rot=(math.atan2(F2, 3.35), 0, 0))
+    box("UpRail", (-0.02, -2.0, F2 + 0.9), (0.06, 3.4, 0.06), mat("oak"))
+    for k in range(10):
+        box("UpBal", (-0.02, -3.5 + k * 0.33, F2 + 0.45), (0.03, 0.03, 0.9), tr)
+    # baseboards & picture rails along the main rooms (cheap: a few strips)
+    for (x0, x1, y) in ((-IX, -0.6, -IY + 0.01), (0.9, IX, -IY + 0.01)):
+        box("Base", ((x0 + x1) / 2, y, 0.08), (x1 - x0, 0.02, 0.16), tr)
+        box("Base", ((x0 + x1) / 2, y, F2 + 0.08), (x1 - x0, 0.02, 0.16), tr)
+    # ---------- attic crawl space: joists, boards, rafters underside
+    for k in range(16):
+        x = -IX + 0.25 + k * 0.55
+        box("Joist", (x, 0, EAVE - 0.1), (0.05, 2 * IY, 0.12), mat("raw"))
+    boards = [(-2.6, 0.5), (-1.2, 1.4), (0.6, 1.2)]            # loose boards laid over the joists near the hatch
+    for (bx, bw) in boards:
+        box("AtticBoard", (bx, 0.1, EAVE - 0.025), (bw, 1.6, 0.025), mat("raw"))
+    for k in range(18):
+        x = -W2 + 0.25 + k * 0.5
+        for sy in (-1, 1):
+            ang = math.atan2(RIDGE - EAVE, D2 + 0.45)
+            box("Rafter", (x, sy * (D2 + 0.45) / 2, (EAVE + RIDGE) / 2 - 0.2), (0.05, (D2 + 0.45) / math.cos(ang), 0.14), mat("raw"), rot=(-sy * ang, 0, 0))
+    for sy in (-1, 1):
+        ang = math.atan2(RIDGE - EAVE, D2 + 0.45)
+        box("Sheathing", (0, sy * (D2 + 0.45) / 2, (EAVE + RIDGE) / 2 - 0.29), (2 * W2, (D2 + 0.45) / math.cos(ang), 0.02), mat("planks"), rot=(-sy * ang, 0, 0))
+    # ---------- cellar under the back rooms
+    cz0 = -2.7
+    box("CellarFloor", (0, 2.25, cz0), (2 * IX, IY + 0.2 + 0.4, 0.1), mat("conc"))
+    for x in (-IX, IX):
+        box("CellarWall", (x, 2.25, (cz0 + G) / 2), (0.3, IY + 0.6, -cz0 + G), mat("stone"))
+    box("CellarWall", (0, IY, (cz0 + G) / 2), (2 * IX, 0.3, -cz0 + G), mat("stone"))
+    box("CellarWall", (0, -0.35, (cz0 + G) / 2), (2 * IX, 0.3, -cz0 + G), mat("stone"))
+    box("CellarWallHi", (0, 2.25, (G - 0.12) / 2), (2 * IX + 0.6, IY + 0.6, 0.0), mat("stone")).hide_render = True
+    return c
+
+
+def stove(loc, rot_z=0.0):
+    """Cast-iron kitchen range with a stove pipe, and the iron shaker tool hung on its rail."""
+    ir = mat("iron"); parts = []
+    parts.append(box("Stove", (0, 0, 0.42), (1.05, 0.68, 0.7), ir, bevel=0.02))
+    parts.append(box("StoveTop", (0, 0, 0.8), (1.12, 0.72, 0.05), ir, bevel=0.01))
+    for x in (-0.28, 0.28):
+        for y in (-0.15, 0.15):
+            parts.append(cyl("Lid", (x - 0.05, y, 0.83), 0.11, 0.012, ir, 24))
+    parts.append(box("Warmer", (0, 0.22, 1.42), (1.05, 0.28, 0.05), ir, bevel=0.01))
+    parts.append(box("WarmerBack", (0, 0.34, 1.1), (1.05, 0.04, 0.6), ir, bevel=0.01))
+    parts.append(box("Oven", (0.22, -0.345, 0.45), (0.45, 0.02, 0.42), mat("enamel"), bevel=0.01))
+    parts.append(box("Firebox", (-0.3, -0.345, 0.55), (0.3, 0.02, 0.3), ir, bevel=0.01))
+    for x in (-0.4, 0.45):
+        parts.append(cyl("Leg", (x, -0.25, 0.04), 0.035, 0.09, ir, 12))
+        parts.append(cyl("Leg", (x, 0.25, 0.04), 0.035, 0.09, ir, 12))
+    parts.append(cyl("Pipe", (-0.3, 0.3, 2.1), 0.075, 1.6, ir, 20))
+    parts.append(box("Rail", (0, -0.4, 0.72), (1.0, 0.02, 0.02), mat("chrome")))
+    s = join(parts, "Stove"); s.location = loc; s.rotation_euler = (0, 0, rot_z)
+    return s
+
+
+def shaker_tool(name="StoveTool"):
+    """The heavy iron grate shaker: a bar with a forked socket end and a looped handle (modelled lying along X)."""
+    ir = mat("iron")
+    parts = [cyl("ToolBar", (0, 0, 0.015), 0.012, 0.62, ir, 12, rot=(0, math.radians(90), 0)),
+             box("ToolSocket", (0.33, 0, 0.02), (0.07, 0.05, 0.04), ir),
+             box("ToolFork", (0.38, 0.018, 0.02), (0.05, 0.012, 0.03), ir), box("ToolFork", (0.38, -0.018, 0.02), (0.05, 0.012, 0.03), ir)]
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.045, minor_radius=0.01, location=(-0.35, 0, 0.012), rotation=(0, 0, 0))
+    tor = bpy.context.active_object; tor.data.materials.append(ir); parts.append(tor)
+    return join(parts, name)
+
+
+def icebox(loc, rot_z=0.0):
+    """1930s oak icebox: two doors (the lower one hinged so it can open), nickel latches."""
+    oak = mat("oak"); parts = [box("Icebox", (0, 0, 0.72), (0.8, 0.55, 1.44), oak, bevel=0.015)]
+    parts.append(box("IceTop", (0, 0, 1.46), (0.84, 0.58, 0.04), oak, bevel=0.01))
+    parts.append(box("IceUpper", (0.0, -0.28, 1.18), (0.7, 0.02, 0.4), oak, bevel=0.01))
+    parts.append(box("IceLatch", (0.28, -0.3, 1.18), (0.05, 0.03, 0.1), mat("chrome")))
+    ib = join(parts, "Icebox"); ib.location = loc; ib.rotation_euler = (0, 0, rot_z)
+    # interior (pale zinc) and the lower door on a hinge
+    e = bpy.data.objects.new("IceDoorHinge", None); bpy.context.collection.objects.link(e)
+    dpart = [box("IceDoor", (0.35, 0, 0.0), (0.7, 0.03, 0.75), oak, bevel=0.01), box("IceLatch2", (0.62, -0.03, 0.05), (0.05, 0.03, 0.1), mat("chrome"))]
+    d = join(dpart, "IceDoor"); d.parent = e
+    lin = box("IceLining", (0, -0.25, 0.52), (0.68, 0.02, 0.72), pbr("Zinc", (0.6, 0.62, 0.62), 0.35, 0.8))
+    lin.hide_render = True
+    M = Matrix.Translation(loc) @ Matrix.Rotation(rot_z, 4, 'Z')
+    e.matrix_world = M @ Matrix.Translation((-0.35, -0.29, 0.52))
+    return ib, e
+
+
+def kitchen_set(c):
+    """Kitchen x[-1.5,4.2] y[-0.2,4.7]: stove on the right wall, icebox by the back door, table, sink under the window."""
+    c["stove"] = stove((3.75, 1.6, 0), math.radians(90))
+    ib, door = icebox((-0.85, 4.35, 0), 0.0); c["icebox"] = ib; c["ice_door"] = door
+    box("Sink", (1.1, 4.4, 0.85), (1.1, 0.5, 0.2), mat("enamel"), bevel=0.03)
+    box("SinkCab", (1.1, 4.4, 0.4), (1.2, 0.52, 0.75), mat("trim"), bevel=0.01)
+    box("Counter", (2.4, 4.4, 0.9), (1.4, 0.55, 0.04), mat("oak"))
+    box("CounterCab", (2.4 - 0.4, 4.4, 0.44), (0.6, 0.52, 0.85), mat("trim"), bevel=0.01)
+    box("WallCab", (2.3, 4.5, 1.85), (1.0, 0.34, 0.6), mat("trim"), bevel=0.01)
+    r, _ = ph.model("WoodenTable_02", loc=(1.2, 1.9, 0.0)); c["k_table"] = r
+    chairs = []
+    for (x, y, rz) in ((0.4, 1.9, math.radians(-90)), (2.0, 1.9, math.radians(90)), (1.2, 2.7, math.radians(180))):
+        ch, _ = ph.model("dining_chair_02", loc=(x, y, 0), rot_z=rz); chairs.append(ch)
+    c["k_chairs"] = chairs
+    try:
+        r, _ = ph.model("vintage_electric_kettle", loc=(3.6, 1.35, 0.83))
+    except Exception:
+        pass
+    sock, _ = ph.model("pull_chain_light_socket", loc=(1.3, 2.0, C1)); c["k_bulb_obj"] = sock
+    c["k_light"] = point((1.3, 2.0, C1 - 0.25), 60, (1.0, 0.72, 0.42), 0.05)
+    c["tool"] = shaker_tool(); c["tool"].location = (3.62, 1.75, 0.6); c["tool"].rotation_euler = (math.radians(90), 0, math.radians(90))
+
+
+def front_room_set(c):
+    """Front room x[0.9,4.2] y[-4.7,-0.2]: armchair by a lamp, sofa, radio cabinet, guitar, railroad lantern, photos."""
+    ar, _ = ph.model("ArmChair_01", loc=(3.2, -2.0, 0), rot_z=math.radians(120)); c["armchair"] = ar
+    ar2, _ = ph.model("Rockingchair_01", loc=(2.2, -3.6, 0), rot_z=math.radians(200)); c["chair2"] = ar2
+    ph.model("painted_wooden_shelves", loc=(4.0, -3.0, 0), rot_z=math.radians(90))
+    ph.model("vintage_radio_transceiver", loc=(3.9, -3.9, 0.0), rot_z=math.radians(90), scale=0.9)
+    st, _ = ph.model("side_table_01", loc=(3.75, -1.2, 0)); c["side_table"] = st
+    lamp, _ = ph.model("vintage_oil_lamp", loc=(3.75, -1.2, 0.55), scale=0.9); c["lamp_obj"] = lamp
+    c["lamp"] = point((3.75, -1.2, 1.15), 45, (1.0, 0.68, 0.38), 0.08)
+    ph.model("Lantern_01", loc=(4.0, -3.6, 1.55), scale=0.8)
+    ph.model("mantel_clock_01", loc=(4.0, -2.4, 1.57), rot_z=math.radians(90))
+    rug = box("Rug", (2.6, -2.4, 0.004), (2.6, 2.0, 0.008), fabric("Rug", (0.32, 0.1, 0.07), 0.95, 0.3, 300))
+    for k, y in enumerate((-3.2, -2.6)):
+        ph.model("fancy_picture_frame_01", loc=(4.18, y, 1.75), rot_z=math.radians(90), scale=0.6)
+
+
+def front_bedroom_set(c):
+    """Front bedroom x[-4.2,-0.6] y[-4.7,-0.2]: iron bed, nightstand with a lamp, a wooden chair, a dresser."""
+    b, _ = ph.model("old_bed_frame", loc=(-3.4, -2.2, 0), scale=1.0); c["bed1"] = b
+    box("Mattress1", (-3.4, -2.2, 0.48), (0.86, 1.9, 0.18), fabric("Ticking", (0.75, 0.72, 0.65), 0.9, 0.3, 500), bevel=0.04)
+    box("Quilt1", (-3.4, -2.0, 0.59), (0.95, 1.4, 0.05), fabric("Quilt", (0.5, 0.25, 0.18), 0.9, 0.5, 300), bevel=0.02)
+    ns, _ = ph.model("ClassicNightstand_01", loc=(-3.4, -3.5, 0)); c["ns1"] = ns
+    ch, _ = ph.model("dining_chair_02", loc=(-1.6, -3.6, 0), rot_z=math.radians(30)); c["bed_chair"] = ch
+    ph.model("painted_wooden_cabinet", loc=(-4.0, -0.9, 0), rot_z=math.radians(-90), scale=0.9)
+    lamp, _ = ph.model("vintage_oil_lamp", loc=(-3.4, -3.5, 0.7), scale=0.7)
+    c["bed_lamp"] = point((-3.4, -3.5, 1.2), 25, (1.0, 0.68, 0.38), 0.06)
+    sock, _ = ph.model("pull_chain_light_socket", loc=(-2.4, -2.4, C1)); c["bed_bulb_obj"] = sock
+
+
+def upstairs_set(c):
+    """Upstairs bedroom x[-4.2,-0.6] y[-4.7,-0.2]: a bed, a dresser and the closet; a ceiling bulb."""
+    b, _ = ph.model("GothicBed_01", loc=(-3.2, -2.6, F2), rot_z=math.radians(90), scale=0.9); c["bed2"] = b
+    ph.model("painted_wooden_nightstand", loc=(-4.0, -3.9, F2), rot_z=math.radians(-90))
+    sock, _ = ph.model("pull_chain_light_socket", loc=(-2.4, -2.4, C2)); c["up_bulb_obj"] = sock
+    c["up_light"] = point((-2.4, -2.4, C2 - 0.25), 40, (1.0, 0.7, 0.42), 0.05)
+    c["closet_light"] = point((-1.2, -0.7, C2 - 0.3), 0.0, (1.0, 0.7, 0.42), 0.05)
+
+
+def attic_set(c):
+    """The crawl space beside the hatch: a hot plate, a 1940s radio, a bare wire to the outlet, a thin blanket."""
+    hx, hy = HATCH; z = EAVE
+    hp = join([box("HotPlate", (0, 0, 0.04), (0.28, 0.22, 0.07), pbr("HPEnamel", (0.35, 0.34, 0.3), 0.4, 0.3), bevel=0.01),
+               cyl("HPCoil", (0, 0, 0.08), 0.085, 0.01, emissive("Coil", (1.0, 0.25, 0.05), 0.0), 24)], "HotPlate")
+    hp.location = (hx + 0.9, hy + 0.5, z); c["hotplate"] = hp
+    coil = [m for m in hp.data.materials if m.name.startswith("Coil")][0]; c["coil_mat"] = coil
+    rad = join([box("Radio", (0, 0, 0.17), (0.36, 0.2, 0.34), wood("RadioWood", (0.08, 0.04, 0.02), (0.22, 0.12, 0.06), scale=(0.3, 6, 6)), bevel=0.04),
+                box("RadioCloth", (0, -0.101, 0.2), (0.24, 0.004, 0.16), fabric("Grille", (0.5, 0.42, 0.3), 0.9, 0.2, 800)),
+                box("RadioDial", (0, -0.101, 0.07), (0.2, 0.004, 0.05), emissive("Dial", (1.0, 0.7, 0.35), 0.6))], "Radio")
+    rad.location = (hx - 0.9, hy + 0.6, z); rad.rotation_euler = (0, 0, math.radians(15)); c["radio"] = rad
+    # the bare wire: a thin curve from the radio and hot plate to an outlet rigged on a rafter
+    cu = bpy.data.curves.new("Wire", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004
+    sp = cu.splines.new('BEZIER'); pts = [(hx - 0.8, hy + 0.7, z + 0.02), (hx + 0.2, hy + 1.2, z + 0.01), (hx + 0.9, hy + 0.6, z + 0.03), (hx + 1.6, hy + 1.3, z + 0.5)]
+    sp.bezier_points.add(len(pts) - 1)
+    for bp, p in zip(sp.bezier_points, pts):
+        bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    w = bpy.data.objects.new("Wire", cu); bpy.context.collection.objects.link(w); w.data.materials.append(mat("black"))
+    box("Outlet", (hx + 1.6, hy + 1.3, z + 0.55), (0.07, 0.04, 0.1), pbr("Bakelite", (0.1, 0.06, 0.03), 0.3))
+    bl = box("Blanket", (hx + 0.1, hy + 1.9, z + 0.02), (0.8, 1.7, 0.03), fabric("Blanket", (0.32, 0.3, 0.24), 0.95, 0.4, 250), bevel=0.012)
+    bl.rotation_euler = (0, 0, math.radians(8)); c["blanket"] = bl
+    # a few cans and a jar
+    for k in range(3):
+        cyl("Can", (hx + 0.5 + 0.09 * k, hy + 0.15, z + 0.06), 0.035, 0.11, pbr("Tin", (0.55, 0.52, 0.48), 0.35, 0.9), 16)
+    c["hp_light"] = point((hx + 0.9, hy + 0.5, z + 0.15), 0.0, (1.0, 0.35, 0.08), 0.06)
+
+
+def cellar_set(c):
+    """Cellar: wooden shelves of preserve jars along the back wall; one gap where a jar is missing; steps down."""
+    z0 = -2.65
+    sh = mat("raw")
+    c["jars"] = []
+    cols = [(0.55, 0.12, 0.08), (0.7, 0.45, 0.08), (0.35, 0.3, 0.12), (0.6, 0.2, 0.25)]
+    rng = np.random.default_rng(3)
+    jar_glass = lambda col: pbr("JarGlass", col, 0.08, 0.0, **{'Transmission Weight': 0.85, 'IOR': 1.45})
+    jm = [jar_glass(col) for col in cols]; lid = pbr("JarLid", (0.6, 0.55, 0.4), 0.3, 1.0)
+    for row in range(4):
+        z = z0 + 0.45 + row * 0.48
+        box("Shelf", (0.0, 4.35, z), (4.2, 0.34, 0.03), sh)
+        for k in range(14):
+            x = -1.95 + k * 0.3
+            if row == 2 and k == 7:
+                c["gap"] = Vector((x, 4.33, z + 0.1)); continue
+            jx = cyl("Jar", (x, 4.33, z + 0.1), 0.055, 0.17, jm[int(rng.integers(0, 4))], 20)
+            cyl("JarLid", (x, 4.33, z + 0.195), 0.052, 0.02, lid, 20)
+            c["jars"].append(jx)
+    for x in (-2.1, 2.1):
+        box("ShelfPost", (x, 4.35, z0 + 1.0), (0.05, 0.34, 2.0), sh)
+    # the taken jar (moves in the cellar shots)
+    c["jar_taken"] = cyl("JarTaken", (c["gap"].x, c["gap"].y, c["gap"].z), 0.055, 0.17, jm[0], 20)
+    # steps down from the back room hole (x -3.6 .. -2.8, y 1.0 .. 3.4)
+    n = 11
+    for k in range(n):
+        box("CStep", (-3.5, 0.5 + k * 0.26, -0.12 - (k + 1) * 0.235), (0.8, 0.28, 0.04), sh)
+    sock, _ = ph.model("pull_chain_light_socket", loc=(0.0, 3.2, G - 0.05))
+    c["cellar_light"] = point((0.0, 3.2, G - 0.3), 30, (1.0, 0.7, 0.42), 0.05)
+
+
+def point(loc, energy, col, radius=0.05):
+    l = bpy.data.lights.new("Point", 'POINT'); l.energy = energy; l.color = col; l.shadow_soft_size = radius
+    o = bpy.data.objects.new("Point", l); bpy.context.collection.objects.link(o); o.location = loc
+    return o
+
+
+# ============================================================================ street, trees, leaves, snow
+_TREE = {}
+
+
+def tree_collection(season):
+    """An elm stand-in (Poly Haven jacaranda, broad vase crown) as a collection to instance along the street."""
+    key = season
+    if key in _TREE:
+        return _TREE[key]
+    col = bpy.data.collections.new("Elm_" + season)
+    root, ms = ph.model("jacaranda_tree", loc=(0, 0, -1000), scale=0.5)
+    for o in [root] + list(root.children_recursive):
+        for cc in o.users_collection:
+            cc.objects.unlink(o)
+        col.objects.link(o)
+    root.location = (0, 0, 0)
+    for m in ms:
+        for mm in m.data.materials:
+            if "leaves" in mm.name:
+                if season == "autumn":
+                    retint(mm, (1.0, 0.75, 0.42), hue=0.42, sat=1.25, val=1.0)
+                elif season == "summer":
+                    retint(mm, (0.55, 0.85, 0.45), hue=0.62, sat=0.8, val=0.8)
+        if season == "winter" and any("leaves" in mm.name for mm in m.data.materials):
+            m.hide_render = True
+    _TREE[key] = col
+    return col
+
+
+def tree_at(col, loc, rot_z, scale=1.0, name="Elm"):
+    e = bpy.data.objects.new(name, None); e.instance_type = 'COLLECTION'; e.instance_collection = col
+    bpy.context.collection.objects.link(e); e.location = loc; e.rotation_euler = (0, 0, rot_z); e.scale = (scale,) * 3
+    e["base_rot"] = rot_z
+    return e
+
+
+def sway_trees(c, sec, amp=0.006):
+    for k, e in enumerate(c.get("trees", [])):
+        e.rotation_euler = (amp * math.sin(0.9 * sec + k * 1.7), amp * 0.7 * math.sin(0.7 * sec + k), e["base_rot"])
+
+
+def leaf_cloud(n, center, spread, z_top, col=(0.75, 0.33, 0.06), seed=1):
+    """Small falling leaves (flat planes) to animate with fall_leaves()."""
+    rng = np.random.default_rng(seed)
+    lm = pbr("FallLeaf", col, 0.6, 0.0, **{'Subsurface Weight': 0.0})
+    lm2 = pbr("FallLeaf2", (col[0] * 0.8, col[1] * 1.2, col[2]), 0.6)
+    leaves = []
+    for k in range(n):
+        bpy.ops.mesh.primitive_plane_add(size=1)
+        o = bpy.context.active_object; o.name = "Leaf"; o.scale = (0.06, 0.035, 1)
+        bpy.ops.object.transform_apply(scale=True)
+        o.data.materials.append(lm if k % 2 else lm2)
+        o["p0"] = (center[0] + rng.uniform(-spread[0], spread[0]), center[1] + rng.uniform(-spread[1], spread[1]), z_top + rng.uniform(-3, 3))
+        o["ph"] = float(rng.uniform(0, 6.28)); o["sp"] = float(rng.uniform(0.6, 1.1))
+        leaves.append(o)
+    return leaves
+
+
+def fall_leaves(leaves, sec, ground=G + 0.01, drift=(0.35, 0.1)):
+    for o in leaves:
+        x0, y0, z0 = o["p0"]; ph_ = o["ph"]; sp = o["sp"]
+        h = z0 - ground
+        z = z0 - (sec * sp + ph_ * 1.6) % (h + 0.001)
+        tt = sec + ph_
+        o.location = (x0 + drift[0] * tt + 0.35 * math.sin(1.7 * tt), y0 + drift[1] * tt + 0.25 * math.cos(1.3 * tt), z)
+        o.rotation_euler = (1.2 * math.sin(2.1 * tt), 1.4 * math.cos(1.6 * tt), tt * 1.1)
+
+
+def street(c, season, tod):
+    """Road, sidewalks, lawns, neighbours (left, right, across), elms, street lamps, a picket of hedges."""
+    ground = mat("snow") if season == "winter" else (mat("leafground") if season == "autumn" else mat("grass"))
+    box("Lawn", (0, -2, G - 0.05), (90, 60, 0.1), ground)
+    box("Road", (0, ROAD_Y, G - 0.1), (120, 7.0, 0.1), mat("snow") if season == "winter" else mat("asphalt"))
+    for sy in (-1, 1):
+        box("Curb", (0, ROAD_Y + sy * 3.6, G - 0.04), (120, 0.25, 0.14), mat("conc"))
+        box("Walk", (0, ROAD_Y + sy * 5.0, G - 0.02), (120, 1.6, 0.06), mat("snow") if season == "winter" else mat("pave"))
+    box("Path", (0.15, (ROAD_Y + 5.8 - D2 - 2.6) / 2, G - 0.015), (1.4, -(ROAD_Y + 5.8) - D2 - 2.6 + 0.0, 0.06), mat("snow") if season == "winter" else mat("pave"))
+    # neighbours: copies of the shell with different brick and lit windows at night
+    lit = emissive("LitPane", (1.0, 0.72, 0.42), 2.2) if tod != "day" else None
+    nb = []
+    for k, (x, y, rz, br) in enumerate(((-13.0, 0.0, 0, "brick2"), (13.0, 0.5, 0, "brick3"), (-6.5, ROAD_Y * 2 - 0.0, math.pi, "brick3"), (6.5, ROAD_Y * 2 + 0.5, math.pi, "brick2"), (-26, 0.2, 0, "brick"), (26, 0.0, 0, "brick2"))):
+        parts, g, _ = shell("N%d" % k, br, detail=False, lit=(lit if (lit and k in (1, 2)) else None))
+        o = join(parts + g, "Neighbour%d" % k); o.location = (x, y, 0); o.rotation_euler = (0, 0, rz)
+        nb.append(o)
+    c["neighbours"] = nb
+    col = tree_collection(season)
+    trees = []
+    for k, (x, y) in enumerate(((-8.5, ROAD_Y + 4.3), (9.0, ROAD_Y + 4.2), (-21, ROAD_Y + 4.3), (21.5, ROAD_Y + 4.3),
+                                (-9.0, ROAD_Y - 4.3), (8.0, ROAD_Y - 4.3), (-22, ROAD_Y - 4.3), (22, ROAD_Y - 4.2), (34, ROAD_Y + 4.3), (-34, ROAD_Y - 4.3))):
+        trees.append(tree_at(col, (x, y, G), k * 1.3, 0.95 + 0.1 * (k % 3)))
+    c["trees"] = trees
+    lamps = []
+    for x in (-15.0, 16.0):
+        r, ms = ph.model("street_lamp_01", loc=(x, ROAD_Y + 4.3, G), scale=1.1)
+        if tod != "day":
+            lamps.append(point((x, ROAD_Y + 4.3, G + 4.1), 220, (1.0, 0.74, 0.45), 0.12))
+    c["street_lamps"] = lamps
+    for x in (-3.2, 3.6):
+        for k in range(4):
+            box("Hedge", (x + (k - 1.5) * 0.7 * (1 if x > 0 else -1), -D2 - 1.0, G + 0.35), (0.8, 0.7, 0.75), pbr("Hedge", (0.06, 0.09, 0.04) if season != "autumn" else (0.12, 0.09, 0.03), 0.85), bevel=0.25)
+
+
+def snow_cover(c):
+    """Snow on the roof slopes, the porch roof and window sills (thin white slabs)."""
+    sn = mat("snow")
+    ang = math.atan2(RIDGE - EAVE, D2 + 0.45)
+    for sy in (-1, 1):
+        o = box("RoofSnow", (0, sy * (D2 + 0.45) / 2, (EAVE + RIDGE) / 2 + 0.02), (2 * W2 + 0.9, (D2 + 0.45) / math.cos(ang), 0.06), sn, rot=(-sy * ang, 0, 0))
+    box("PorchSnow", (0.6, -D2 - 1.15, 2.73), (4.5, 2.5, 0.06), sn)
+
+
+def lighting(c, season, tod):
+    s = bpy.context.scene
+    if tod == "night":
+        world_flat((0.018, 0.03, 0.06), 1.0)
+        moon = sun(32, -120, energy=0.35, color=(0.62, 0.74, 1.0), angle_deg=1.0); c["moon"] = moon
+        s.view_settings.exposure = 1.0
+    elif season == "winter":
+        world_sky(sun_elev_deg=14, sun_rot_deg=200, strength=0.45, tint=(0.78, 0.82, 0.9), air=2.0, aerosol=4.0)
+        sun(14, -70, energy=0.6, color=(0.85, 0.88, 0.95), angle_deg=8.0)
+        s.view_settings.exposure = 0.1
+    elif season == "autumn":
+        world_sky(sun_elev_deg=16, sun_rot_deg=235, strength=0.45, tint=(1.0, 0.92, 0.82))
+        sun(18, -55, energy=3.2, color=(1.0, 0.8, 0.58), angle_deg=1.5)
+        s.view_settings.exposure = -0.1
+    else:
+        world_sky(sun_elev_deg=38, sun_rot_deg=150, strength=0.4, tint=(0.95, 0.97, 1.0))
+        sun(38, -40, energy=3.2, color=(1.0, 0.93, 0.84), angle_deg=1.2)
+        s.view_settings.exposure = -0.3
+
+
+# ============================================================================ people (1941-42, unnamed MakeHuman figures)
+HAT = {}
+
+
+def person(name, kind):
+    """kind: philip | helen | friend | neighbour_m | neighbour_w | detective | officer | thin | captain | nurse | boy"""
+    spec = {
+        "philip": dict(gender=1.0, years=73, weight=0.42, height=0.42, cloth="male_casualsuit02", cv=dict(hue=0.55, sat=0.35, val=0.32), hair="short02", hv=0.85, hat=False, skin="old_lightskinned_male_diffuse.png"),
+        "helen": dict(gender=0.0, years=68, weight=0.5, height=0.4, cloth="female_casualsuit01", cv=dict(hue=0.95, sat=0.35, val=0.45), hair="bob01", hv=0.8, hat=False, skin="old_lightskinned_female_diffuse.png"),
+        "friend": dict(gender=0.0, years=62, weight=0.55, height=0.45, cloth="female_elegantsuit01", cv=dict(hue=0.35, sat=0.4, val=0.3), hair="bob02", hv=0.6, hat=False, skin="old_lightskinned_female_diffuse.png"),
+        "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit04", cv=dict(hue=0.1, sat=0.4, val=0.25), hair="short01", hv=0.3, hat=False),
+        "neighbour_w": dict(gender=0.0, years=45, weight=0.5, height=0.5, cloth="female_casualsuit02", cv=dict(hue=0.6, sat=0.45, val=0.4), hair="bob01", hv=0.25, hat=False),
+        "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.1, sat=0.3, val=0.2), hair="short02", hv=0.2, hat=True),
+        "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_worksuit01", cv=dict(hue=0.62, sat=0.25, val=0.18), hair="short01", hv=0.15, hat=True),
+        "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_worksuit01", cv=dict(hue=0.66, sat=0.6, val=0.1), hair="short01", hv=0.15, hat=True),
+        "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.6, sat=0.2, val=0.15), hair="short02", hv=0.7, hat=False),
+        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.22), hair="long01", hv=0.3, hat=False),
+        "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
+        "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
+    }[kind]
+    sk = spec.get("skin") or ("middleage_lightskinned_female_diffuse.png" if spec["gender"] < 0.5 else "middleage_lightskinned_male_diffuse.png")
+    h = Human(name, gender=spec["gender"], years=spec["years"], muscle=spec.get("muscle", 0.5), weight=spec["weight"], height=spec["height"],
+              skin=sk, eyelashes="eyelashes01")
+    add_asset(h, "clothes", spec["cloth"], rough=0.8, sheen=0.3, **spec["cv"])
+    add_asset(h, "clothes", "shoes02" if spec["gender"] < 0.5 else "shoes01", val=0.15, rough=0.45)
+    if spec["hat"]:
+        add_hat(h, "grey" if kind in ("detective", "son") else "black")
+    else:
+        add_asset(h, "hair", spec["hair"], sat=0.1 if spec["hv"] > 0.6 else 0.5, val=spec["hv"], rough=0.45)
+    h.kind = kind
+    return h
+
+
+def add_hat(h, tone="grey"):
+    from human import textured_material, MH
+    d = os.path.join(MH, "clothes", "fedora01")
+    tex = os.path.join(d, "materials", "fedora_texture_grey.png" if tone == "grey" else "fedora_texture_black.png")
+    m = textured_material(h.name + "_fedora", tex, os.path.join(d, "materials", "fedora_normal.png"), rough=0.75, val=0.7 if tone == "grey" else 1.0)
+    o, _ = h.add_proxy(os.path.join(d, "fedora.mhpxy"), "fedora", mat=m, subsurf=1)
+    return o
+
+
+def reset_pose(h):
+    """Rest pose AND zero body rotation, so procedural poses (world-axis bone turns) are built facing -Y."""
+    h.arm.rotation_euler = (0, 0, 0)
+    _hm.reset_pose(h)
+
+
+def rotl(h, bone, axis, deg):
+    """Rotate a bone about an axis given in the BODY frame (x = character's left, -y = forward, z = up)."""
+    bpy.context.view_layer.update()
+    ax = h.arm.matrix_world.to_3x3() @ Vector(axis)
+    h.rot(bone, ax, deg)
+
+
+def ground_to(h, z):
+    bpy.context.view_layer.update()
+    w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
+    h.arm.location.z += z - w[:, 2].min(); bpy.context.view_layer.update()
+
+
+def arms_relaxed(h, swing=0.0, phase=0.0):
+    M = h.arm.matrix_world.to_3x3(); fwd = (M @ Vector((0, -1, 0))).normalized(); left = (M @ Vector((1, 0, 0))).normalized()
+    for sd, sg in (("L", 1), ("R", -1)):
+        a = math.radians(swing) * math.sin(2 * math.pi * phase + (math.pi if sd == "L" else 0.0))
+        up = (Vector((0, 0, -1)) * math.cos(a) + fwd * math.sin(a) + left * (0.12 * sg)).normalized()
+        lo = (up + fwd * (0.25 + 0.15 * max(0.0, math.sin(a)))).normalized()
+        h.aim(f"upperarm01.{sd}", up); h.aim(f"upperarm02.{sd}", up)
+        h.aim(f"lowerarm01.{sd}", lo); h.aim(f"lowerarm02.{sd}", lo); h.aim(f"wrist.{sd}", lo + left * (0.1 * sg))
+    fingers_curl(h, 25)
+
+
+def stand_at(h, loc, face_z, z=None):
+    """Standing, arms relaxed; face_z rotation (0 faces -Y). z = floor height (default loc[2])."""
+    reset_pose(h); h.arm.location = (loc[0], loc[1], 0); pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
+    h.arm.rotation_euler = (0, 0, face_z); h.arm.location = (loc[0], loc[1], 0); bpy.context.view_layer.update()
+    arms_relaxed(h)
+    ground_to(h, loc[2] if z is None else z)
+
+
+def walk_to(h, p0, p1, u, stride=1.25, face=None, swing=14, floor=None):
+    """Walk from p0 to p1 (fraction u, 0..1). Faces the direction of travel."""
+    p0 = Vector(p0); p1 = Vector(p1); d = p1 - p0; L_ = d.length
+    pos = p0.lerp(p1, u)
+    reset_pose(h)
+    phase = (u * L_ / stride) % 1.0
+    pose_walk(h, phase, stride=24, arm_swing=0)
+    fz = face if face is not None else math.atan2(d.x, -d.y)
+    h.arm.rotation_euler = (0, 0, fz); h.arm.location = (pos.x, pos.y, 0); bpy.context.view_layer.update()
+    arms_relaxed(h, swing, phase)
+    ground_to(h, pos.z if floor is None else floor)
+    return pos
+
+
+def face_dir(target, frm):
+    d = Vector(target) - Vector(frm)
+    return math.atan2(d.x, -d.y)
+
+
+def look(h, yaw=0.0, pitch=0.0):
+    """yaw: + turns toward the character's left ; pitch: + looks down."""
+    rotl(h, "neck01", (0, 0, 1), yaw * 0.4); rotl(h, "head", (0, 0, 1), yaw * 0.6)
+    rotl(h, "head", (1, 0, 0), pitch)
+
+
+def flashlight(name="Torch"):
+    """A 1940s flashlight: spot light with a visible beam (needs haze) parented to an empty."""
+    l = bpy.data.lights.new(name, 'SPOT'); l.energy = 60; l.spot_size = math.radians(28); l.spot_blend = 0.5
+    l.color = (1.0, 0.88, 0.7); l.shadow_soft_size = 0.02
+    o = bpy.data.objects.new(name, l); bpy.context.collection.objects.link(o)
+    return o
+
+
+def aim_obj(o, loc, tgt):
+    o.location = loc; d = Vector(tgt) - Vector(loc)
+    o.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
+
+
+# ============================================================================ the whole set
+def build_house(season="autumn", tod="day", ext=True, rooms=("kitchen", "front", "bedroom", "upstairs", "attic", "cellar"), haze_room=None):
+    _MAT.clear(); _TREE.clear()
+    c = dict(season=season, tod=tod)
+    lighting(c, season, tod)
+    parts, g, _ = shell("H", "brick", detail=True)
+    c["shell"] = parts; c["glass"] = g
+    interiors(c)
+    if "kitchen" in rooms:
+        kitchen_set(c)
+    if "front" in rooms:
+        front_room_set(c)
+    if "bedroom" in rooms:
+        front_bedroom_set(c)
+    if "upstairs" in rooms:
+        upstairs_set(c)
+    if "attic" in rooms:
+        attic_set(c)
+    if "cellar" in rooms:
+        cellar_set(c)
+    if ext:
+        street(c, season, tod)
+    if season == "winter":
+        snow_cover(c)
+    # porch light (dim at night) and a window portal for daylight interiors
+    c["porch_light"] = point((0.15, -D2 - 0.4, 2.45), 25 if tod == "night" else 0, (1.0, 0.75, 0.45), 0.05)
+    if haze_room:
+        lo, hi = haze_room
+        hz = haze(((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2), (hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]), density=0.035, color=(0.9, 0.9, 0.95), anis=0.5)
+        c["haze"] = hz
+    return c
+
+
+def day_fill(loc, size, energy, col=(0.9, 0.93, 1.0), rot=(0, 0, 0)):
+    """Soft hidden fill (window bounce) for interiors."""
+    l = area_light(loc, rot, size, energy, col); l.visible_camera = False; l.visible_glossy = False
+    return l
+
+
+# ============================================================================ 1940s vehicles
+def car1940(name, col=(0.02, 0.02, 0.022), kind="sedan", length=5.0, width=1.85):
+    """A rounded 1940s sedan / panel van: body, pontoon fenders, running boards, chrome grille, round lamps.
+    Returns the root empty (moves the car; local +X is forward) with ['wheels'] and ['tail'] lamp lights."""
+    body = pbr(name + "Paint", col, 0.25, 0.5, **{'Coat Weight': 1.0, 'Coat Roughness': 0.06})
+    chrome = mat("chrome"); glassm = pbr("CarGlass", (0.015, 0.02, 0.025), 0.04, 0.0, **{'Coat Weight': 1.0})
+    tyre = pbr("Tyre", (0.02, 0.02, 0.02), 0.85); white = pbr("Whitewall", (0.75, 0.74, 0.7), 0.6)
+    L_, W_ = length, width; parts = []
+    parts.append(box("CBody", (0, 0, 0.72), (L_ * 0.98, W_ - 0.2, 0.55), body, bevel=0.2))
+    if kind != "van":       # hollow cockpit: the body top is open where the seats are (people inside read through glass)
+        parts.append(box("CSeat", (-L_ * 0.1, 0, 1.0), (L_ * 0.4, W_ - 0.3, 0.02), pbr("Seat", (0.08, 0.06, 0.05), 0.7)))
+    parts.append(box("CHood", (L_ * 0.28, 0, 0.92), (L_ * 0.38, W_ * 0.62, 0.32), body, bevel=0.14))
+    if kind == "van":
+        parts.append(box("CCabin", (-L_ * 0.12, 0, 1.55), (L_ * 0.72, W_ - 0.2, 1.4), body, bevel=0.12))
+        parts.append(box("CWind", (L_ * 0.235, 0, 1.55), (0.02, W_ - 0.5, 0.45), glassm))
+    else:
+        cx, cl, cw = -L_ * 0.1, L_ * 0.44, W_ - 0.32
+        parts.append(box("CRoof", (cx, 0, 1.6), (cl - 0.1, cw, 0.08), body, bevel=0.035))
+        for sx in (-1, 1):
+            for sy in (-1, 1):
+                parts.append(box("CPillar", (cx + sx * (cl / 2 - 0.06), sy * (cw / 2 - 0.03), 1.3), (0.08, 0.05, 0.6), body))
+            parts.append(box("CPillarB", (cx, sx * (cw / 2 - 0.03), 1.3), (0.06, 0.05, 0.6), body))
+        gm = mat("glass")
+        for sy in (-1, 1):
+            parts.append(box("CGlassS", (cx, sy * (cw / 2 - 0.03), 1.3), (cl - 0.16, 0.01, 0.56), gm))
+        parts.append(box("CWind", (cx + cl / 2 - 0.02, 0, 1.3), (0.01, cw - 0.1, 0.56), gm))
+        parts.append(box("CRear", (cx - cl / 2 + 0.02, 0, 1.3), (0.01, cw - 0.1, 0.56), gm))
+        parts.append(box("CDash", (cx + cl / 2 - 0.25, 0, 1.0), (0.3, cw - 0.1, 0.1), pbr("Dash", (0.05, 0.035, 0.03), 0.5)))
+    for sy in (-1, 1):
+        for sx in (-1, 1):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(sx * L_ * 0.33, sy * (W_ / 2 - 0.12), 0.62))
+            f = bpy.context.active_object; f.scale = (0.62, 0.2, 0.36); f.data.materials.append(body); parts.append(f)
+        parts.append(box("CBoard", (0, sy * (W_ / 2 - 0.05), 0.33), (L_ * 0.42, 0.18, 0.04), pbr("Board", (0.05, 0.05, 0.05), 0.7)))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.1, location=(L_ * 0.43, sy * 0.62, 0.95))
+        hl = bpy.context.active_object; hl.data.materials.append(emissive("CarHead", (1.0, 0.9, 0.72), 0.0)); parts.append(hl)
+        parts.append(box("CTail", (-L_ * 0.49, sy * 0.68, 0.85), (0.04, 0.1, 0.14), emissive("CarTail", (1.0, 0.05, 0.02), 6.0)))
+    parts.append(box("CGrille", (L_ * 0.49, 0, 0.78), (0.04, 0.6, 0.38), chrome, bevel=0.04))
+    for k in range(7):
+        parts.append(box("CGBar", (L_ * 0.505, -0.27 + k * 0.09, 0.78), (0.02, 0.02, 0.34), mat("black")))
+    for sx in (-1, 1):
+        parts.append(box("CBumper", (sx * L_ * 0.51, 0, 0.45), (0.08, W_ - 0.1, 0.12), chrome, bevel=0.04))
+    car = join(parts, name)
+    root = bpy.data.objects.new(name + "Root", None); bpy.context.collection.objects.link(root)
+    car.parent = root
+    wheels = []
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            w = join([cyl("Tyre", (0, 0, 0), 0.36, 0.2, tyre, 28, rot=(math.radians(90), 0, 0)),
+                      cyl("Wall", (0, sy * 0.101, 0), 0.25, 0.005, white, 28, rot=(math.radians(90), 0, 0)),
+                      cyl("Hub", (0, sy * 0.105, 0), 0.14, 0.01, chrome, 20, rot=(math.radians(90), 0, 0))], "Wheel")
+            w.parent = root; w.location = (sx * L_ * 0.33, sy * (W_ / 2 - 0.15), 0.36); wheels.append(w)
+    root["L"] = L_
+    root["wheels"] = [w.name for w in wheels]
+    return root
+
+
+def drive(root, p0, p1, u, heading=None):
+    """Place the car along p0->p1 (u in 0..1), wheels rolling."""
+    p0 = Vector(p0); p1 = Vector(p1); pos = p0.lerp(p1, u)
+    hz = heading if heading is not None else math.atan2((p1 - p0).y, (p1 - p0).x)
+    root.location = pos; root.rotation_euler = (0, 0, hz)
+    dist = (pos - p0).length
+    for n in root["wheels"]:
+        w = bpy.data.objects[n]; w.rotation_euler = (0, -dist / 0.36, 0)
+
+
+def porch_lamp(c, swing=0.0):
+    """A small lantern hanging from the porch ceiling on a chain (can swing)."""
+    if "plamp" not in c:
+        piv = Vector((0.15, -D2 - 0.6, 2.54))
+        l = join([box("PLChain", (0, 0, -0.15), (0.01, 0.01, 0.3), mat("black")),
+                  box("PLCage", (0, 0, -0.42), (0.16, 0.16, 0.24), mat("black"), bevel=0.02),
+                  box("PLGlass", (0, 0, -0.42), (0.13, 0.13, 0.2), emissive("PLGlow", (1.0, 0.75, 0.45), 2.0 if c.get("tod") == "night" else 0.0))], "PorchLamp")
+        e = bpy.data.objects.new("PorchLampPivot", None); bpy.context.collection.objects.link(e); e.location = piv
+        l.parent = e; l.location = (0, 0, 0); c["plamp"] = e
+        c["porch_light"].parent = e; c["porch_light"].location = (0, 0, -0.5)
+    c["plamp"].rotation_euler = (swing, swing * 0.3, 0)
+
+
+def porch_swing(c, a=0.0):
+    if "pswing" not in c:
+        piv = Vector((2.2, -D2 - 0.5, 2.52))
+        sw = join([box("SwSeat", (0, 0, -1.95), (1.3, 0.5, 0.06), mat("oak")), box("SwBack", (0, 0.24, -1.7), (1.3, 0.04, 0.45), mat("oak")),
+                   box("SwChain", (-0.62, 0, -1.0), (0.012, 0.012, 1.9), mat("black")), box("SwChain", (0.62, 0, -1.0), (0.012, 0.012, 1.9), mat("black"))], "PorchSwing")
+        e = bpy.data.objects.new("SwingPivot", None); bpy.context.collection.objects.link(e); e.location = piv
+        sw.parent = e; c["pswing"] = e
+    c["pswing"].rotation_euler = (a, 0, 0)
