@@ -2,6 +2,8 @@
 
 The client says many films look **too realistic, like live-action film**, and that is dangerous for the channel: realistic injuries, weapons and disasters can read as real footage. The target is the reference channel's look, a **bright, clean 3D animation**, something like a polished game cinematic or an animated explainer. Nobody should be able to mistake a frame for a photograph.
 
+**Exact target (client's words):** "animated style, but not too animated: close to realistic CGI, 3D animated." So: realistic CGI characters and objects with real proportions and detail, in the polish of 3D animation. Not cartoon, not Pixar-style exaggeration, not live-action film. Approved examples: HeadsetBullet v004, BellyFat v005, PrisonKeyCake v004.
+
 **What stays:** detailed, believable *shapes*. "Not blocks" still applies: real models, correct anatomy, proper buildings and vehicles, no capsules or slabs. What changes is how those shapes are **surfaced, lit and photographed**.
 
 ## Do
