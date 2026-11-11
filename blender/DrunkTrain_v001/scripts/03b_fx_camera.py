@@ -344,9 +344,9 @@ for sx in (-1, 1):
     for i in range(6): bmg.faces.new((ring0[i], ring0[(i + 1) % 6], ring1[(i + 1) % 6], ring1[i]))
     me = bpy.data.meshes.new("GhostRail"); bmg.to_mesh(me); bmg.free(); go = bpy.data.objects.new("GhostRail%d" % sx, me); ghost_coll.objects.link(go)
     me.materials.append(M_GHOST); vis(go, [(f_r0, f_r1)])
-loco = bpy.data.objects["Loco"]; plough = bpy.data.objects["Plough"]
+loco = bpy.data.objects["Loco"]
 GHOSTS = []
-for src in (loco, plough):
+for src in (loco,):
     g = src.copy(); g.name = "Ghost" + src.name; g.parent = None; ghost_coll.objects.link(g)
     g.animation_data_clear()
     for sl in g.material_slots: sl.link = 'OBJECT'; sl.material = M_GHOST
@@ -493,9 +493,9 @@ for k in range(10):
     for f, s_, dx in ((st_, 0.2, 1.6), (st_ + 40, 1.0, 2.4), (st_ + 120, 1.6, 3.2), (st_ + 240, 2.0, 3.8)):
         o.scale = (s_ * 0.9, s_ * 1.6, s_ * 0.45); o.location = (sx * dx, yy, 0.25 * s_)
         o.keyframe_insert("scale", frame=f); o.keyframe_insert("location", frame=f)
-    vis(o, [(st_, min(st_ + 240, f_fb0 - 1))])
+    vis(o, [(st_, min(st_ + 240, F(16.6)))])
 dust_den = dn["DustDen"].inputs[1]
-for f, d in ((1, 0.9), (T_STOP + 60, 0.7), (T_STOP + 200, 0.25)):
+for f, d in ((1, 0.6), (T_STOP + 60, 0.35), (T_STOP + 200, 0.12)):
     dust_den.default_value = d; dust_den.keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ light grade: flash-back warm, studio, under-train exposure lift
@@ -603,7 +603,7 @@ for nm_ in ("HeadlampL", "HeadlampR", "HeadlampTop"):
     hl_ = bpy.data.objects[nm_]
     bmg = bmesh.new(); bmesh.ops.create_uvsphere(bmg, u_segments=24, v_segments=12, radius=0.24)
     me_ = bpy.data.meshes.new("Flare"); bmg.to_mesh(me_); bmg.free(); fo = bpy.data.objects.new("Flare_" + nm_, me_); fx.objects.link(fo)
-    me_.materials.append(M_FLARE); fo.parent = TRO; fo.location = hl_.location + V(0, -0.35, 0)
+    me_.materials.append(M_FLARE); fo.parent = TRO; fo.location = hl_.location + V(0, -0.3, 0)
     for poly in me_.polygons: poly.use_smooth = True
     vis(fo, [(1, T_IMP - 6)])
 # horn blast: exhaust/dust kick off the roof and a ground dust kick ahead of the plough as the horn sounds

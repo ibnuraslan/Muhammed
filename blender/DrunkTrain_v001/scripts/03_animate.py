@@ -396,7 +396,7 @@ for f in list(range(T_IMP, f_rest + 1, 2)) + [f_rest]:
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     u = min(1.0, (f - T_IMP) / 120.0); calm = max(0.0, min(1.0, (f - (f_rest - 70)) / 70.0))
     LAD.key_spine(f, flex=(25 * math.sin(f / 5.0)) * (1 - calm) + 4 * calm, twist=30 * math.sin(f / 7.0) * (1 - calm),
-                  side=25 * math.sin(f / 6.0 + 1) * (1 - calm), head=(30 * math.sin(f / 4.0 + 2) * (1 - calm), (35 * math.sin(f / 5.0)) * (1 - calm) - 40 * calm))
+                  side=25 * math.sin(f / 6.0 + 1) * (1 - calm), head=((30 if f < T_IMP + 60 else 10) * math.sin(f / 4.0 + 2) * (1 - calm), (35 * math.sin(f / 5.0)) * (1 - calm) - 40 * calm))
     lag_B = Bm_at(f - 5); lag_B2 = Bm_at(f - 8)
     # limbs trail the torso: directions expressed in the torso frame of a few frames ago
     for s, key, LBm in (("L", "aL", lag_B), ("R", "aR", lag_B)):

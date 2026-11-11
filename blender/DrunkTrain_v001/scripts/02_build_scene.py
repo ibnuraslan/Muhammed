@@ -58,7 +58,9 @@ def tex_files(tid, res="2k"):
         for f in sorted(fs):
             if key in f and res in f: return os.path.join(d, f)
         return None
-    return pick("_diff_"), pick("_rough_"), pick("_nor_gl_")
+    out = (pick("_diff_"), pick("_rough_"), pick("_nor_gl_"))
+    if out[0] is None and res != "1k": return tex_files(tid, "1k")
+    return out
 
 def pbr(name, tid, scale, sat=1.0, val=1.0, bump=1.0, rough_mul=1.0, tint=None, coords='Object', metal=0.0):
     m = bpy.data.materials.new(name); m.use_nodes = True
@@ -228,25 +230,33 @@ scatter(patch, rc, 900.0, 3, scale=(0.7, 1.2), name="Stones")
 # ------------------------------------------------------------------ platform, fence, houses, poles, trees, grass clumps
 PLAT = dict(x0=3.05, x1=7.5, y0=-80.0, y1=-46.0, h=0.92)
 sc["plat"] = str(PLAT)
-box("Platform", (PLAT["x1"] - PLAT["x0"], PLAT["y1"] - PLAT["y0"], PLAT["h"] + 0.1),
-    ((PLAT["x0"] + PLAT["x1"]) / 2, (PLAT["y0"] + PLAT["y1"]) / 2, (PLAT["h"] - 0.1) / 2), M_CONC, bevel=0.02)
-edge = box("PlatformEdge", (0.5, PLAT["y1"] - PLAT["y0"], 0.012), (PLAT["x0"] + 0.25, (PLAT["y0"] + PLAT["y1"]) / 2, PLAT["h"] + 0.002),
-           flat("EdgePaint", (0.85, 0.72, 0.15), 0.7))
+M_PAVERS = pbr("Pavers", "concrete_pavers_02", 1.2, sat=0.5, val=0.95, bump=1.2)
+M_COPING = pbr("Coping", "concrete_floor_02", 0.8, sat=0.3, val=1.15, bump=1.5)
+body = box("Platform", (PLAT["x1"] - PLAT["x0"], PLAT["y1"] - PLAT["y0"], PLAT["h"] - 0.02),
+           ((PLAT["x0"] + PLAT["x1"]) / 2, (PLAT["y0"] + PLAT["y1"]) / 2, (PLAT["h"] - 0.02) / 2 - 0.08 / 2 + 0.0), M_BRICK, bevel=0.015)
+box("PlatformTop", (PLAT["x1"] - PLAT["x0"] - 0.55, PLAT["y1"] - PLAT["y0"], 0.05), ((PLAT["x0"] + 0.55 + PLAT["x1"]) / 2, (PLAT["y0"] + PLAT["y1"]) / 2, PLAT["h"] - 0.025), M_PAVERS, bevel=0.005)
+# coping stones: individual slabs with joints, a slight overhang and small random settling
+y_ = PLAT["y0"]; k = 0
+while y_ < PLAT["y1"] - 0.3:
+    L_ = min(0.9, PLAT["y1"] - y_ - 0.006)
+    cs = box("Coping%d" % k, (0.6, L_ - 0.006, 0.08), (PLAT["x0"] + 0.25, y_ + L_ / 2, PLAT["h"] - 0.04 + random.uniform(-0.003, 0.003)), M_COPING, bevel=0.012)
+    cs.rotation_euler = (random.uniform(-0.004, 0.004), random.uniform(-0.004, 0.004), random.uniform(-0.003, 0.003))
+    y_ += L_; k += 1
+M_EDGEPAINT = flat("EdgePaint", (0.78, 0.62, 0.12), 0.75)
+_n = M_EDGEPAINT.node_tree.nodes; _l = M_EDGEPAINT.node_tree.links
+_nz = _n.new('ShaderNodeTexNoise'); _nz.inputs['Scale'].default_value = 18; _nz.inputs['Detail'].default_value = 8
+_cr = _n.new('ShaderNodeValToRGB'); _cr.color_ramp.elements[0].position = 0.42; _cr.color_ramp.elements[1].position = 0.6
+_cr.color_ramp.elements[0].color = (0.33, 0.31, 0.28, 1); _cr.color_ramp.elements[1].color = (0.78, 0.62, 0.12, 1)
+_l.new(_nz.outputs['Fac'], _cr.inputs['Fac']); _l.new(_cr.outputs['Color'], _n["Principled BSDF"].inputs['Base Color'])
+edge = box("PlatformEdge", (0.1, PLAT["y1"] - PLAT["y0"], 0.004), (PLAT["x0"] + 0.48, (PLAT["y0"] + PLAT["y1"]) / 2, PLAT["h"] + 0.0005), M_EDGEPAINT)
 # ramp down at the north end
 bm = bmesh.new()
 v = [bm.verts.new(p_) for p_ in ((PLAT["x0"] + 1.0, PLAT["y1"], PLAT["h"]), (PLAT["x1"], PLAT["y1"], PLAT["h"]), (PLAT["x1"], PLAT["y1"] + 5.5, -0.03),
                                   (PLAT["x0"] + 1.0, PLAT["y1"] + 5.5, -0.03), (PLAT["x0"] + 1.0, PLAT["y1"], -0.03), (PLAT["x1"], PLAT["y1"], -0.03))]
 bm.faces.new((v[0], v[3], v[2], v[1])); bm.faces.new((v[0], v[4], v[3])); bm.faces.new((v[1], v[2], v[5])); bm.faces.new((v[0], v[1], v[5], v[4]))
-mesh_obj("Ramp", bm, M_CONC)
+mesh_obj("Ramp", bm, M_PAVERS)
 sc["ramp"] = str(dict(x0=PLAT["x0"] + 1.0, x1=PLAT["x1"], y0=PLAT["y1"], y1=PLAT["y1"] + 5.5, h=PLAT["h"]))
 M_POLE = flat("PoleGrey", (0.35, 0.36, 0.37), 0.5, 0.6)
-for yy in (-75, -62, -50):
-    box("LampPole%d" % yy, (0.1, 0.1, 3.6), (6.6, yy, PLAT["h"] + 1.8), M_POLE)
-    box("LampHead%d" % yy, (0.7, 0.18, 0.12), (6.3, yy, PLAT["h"] + 3.6), M_POLE)
-box("Bench", (0.5, 1.8, 0.08), (6.4, -56, PLAT["h"] + 0.45), flat("BenchWood", (0.35, 0.2, 0.1), 0.6))
-box("Shelter", (1.8, 5.0, 0.08), (6.6, -68, PLAT["h"] + 2.6), flat("ShelterRoof", (0.3, 0.33, 0.35), 0.4, 0.5))
-for yy in (-70.4, -65.6):
-    box("ShelterPost%d" % int(yy), (0.08, 0.08, 2.6), (5.9, yy, PLAT["h"] + 1.3), M_POLE)
 # fence (chain link look via procedural mask) along x = +9.5
 M_FENCE = flat("ChainLink", (0.55, 0.57, 0.58), 0.4, 0.8)
 fn = M_FENCE.node_tree.nodes; fl = M_FENCE.node_tree.links
@@ -267,9 +277,11 @@ fence = mesh_obj("Fence", bm, M_FENCE)
 for yy in range(-120, 121, 3):
     box("FPost%d" % yy, (0.05, 0.05, 1.9), (9.5, yy, 0.87), M_POLE)
 # poles + wires (no text anywhere)
-M_WOOD = flat("PoleWood", (0.28, 0.2, 0.13), 0.8)
+M_WOOD = pbr("PoleWood", "rust_coarse_01", 0.5, sat=0.25, val=0.6, tint=(0.55, 0.42, 0.3), rough_mul=1.0)
 for yy in range(-110, 200, 32):
-    box("Pole%d" % yy, (0.22, 0.22, 8.5), (8.6, yy, 4.2), M_WOOD)
+    bmp = bmesh.new(); bmesh.ops.create_cone(bmp, cap_ends=True, segments=16, radius1=0.14, radius2=0.11, depth=8.5)
+    po = mesh_obj("Pole%d" % yy, bmp, M_WOOD); po.location = (8.6, yy, 4.2)
+    for poly in po.data.polygons: poly.use_smooth = True
     box("Arm%d" % yy, (1.6, 0.12, 0.12), (8.6, yy, 8.0), M_WOOD)
 M_WIRE = flat("Wire", (0.05, 0.05, 0.05), 0.4)
 for wx in (7.95, 9.25):
@@ -305,12 +317,6 @@ def house(name, cx, cy, w_, d_, h_, mat, face=-1):
     # garden fence toward the rail
     gx = cx + face * (w_ / 2 + 4.5)
     box(name + "_gfence", (0.05, d_ + 6, 1.3), (gx, cy, 0.57), M_GARDENFENCE)
-HOUSES = []
-for i, yy in enumerate(range(-100, 130, 19)):
-    hx = 21.0 + random.uniform(-1.5, 1.5)
-    house("House%d" % i, hx, yy + random.uniform(-2, 2), 8.5, 10.5, random.choice((5.6, 6.0, 6.4)), M_BRICK if i % 2 else M_RENDER, face=-1)
-for i, yy in enumerate(range(-90, 120, 23)):
-    house("HouseW%d" % i, -27.0 + random.uniform(-2, 2), yy, 8.0, 11.0, 6.0, M_RENDER if i % 2 else M_BRICK, face=1)
 # laundry line in one garden (cloth with wave = wind; no sim)
 M_SHEET = flat("Laundry", (0.85, 0.85, 0.9), 0.8)
 for k, yy in enumerate((-31.5, -30.0, -28.6)):
@@ -349,10 +355,7 @@ bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=1.0
 for v_ in bm.verts: v_.co = Vector((v_.co.x * 4.6 - 1.6, v_.co.y * 40 - 22, -0.02))
 weeds = mesh_obj("BallastWeeds", bm, M_GRAVEL); weeds.hide_render = False
 scatter(weeds, gc, 0.35, 11, scale=(0.18, 0.4), name="Weeds", keep_base=False)
-# signal post (lights only, no text)
-box("SignalPost", (0.15, 0.15, 4.5), (2.2, 35, 2.2), M_POLE)
-box("SignalHead", (0.4, 0.25, 0.9), (2.2, 34.88, 4.4), flat("SignalBlack", (0.02, 0.02, 0.02), 0.5))
-box("SignalLamp", (0.16, 0.05, 0.16), (2.2, 34.74, 4.6), flat("SignalRed", (0.5, 0.02, 0.02), 0.3, emit=(1, 0.05, 0.02), estr=8))
+
 
 # ------------------------------------------------------------------ train: loco + 2 wagons (GLB, re-materialled with grime)
 def import_glb(path):
@@ -444,54 +447,115 @@ def build_vehicle(path, name, length, y_off, keep_wheels):
     print("VEHICLE", name, round(s, 3), [round(v, 2) for v in mnb], [round(v, 2) for v in mxb], len(wheels), "wheels")
     return b, wheels
 
-loco, lw = build_vehicle(os.path.join(GLB, "loco.glb"), "Loco", 17.0, 0.0, True)
-bpy.context.view_layer.update()
-# the wheel bottoms must sit on the railhead: lift everything so the lowest wheel point = rail top
-mnw = min((w_.matrix_world @ Vector(cc)).z for w_ in lw for cc in w_.bound_box)
-lift = RAIL_H - mnw
-for o in [loco] + lw:
-    o.location.z += lift
-wag1, _ = build_vehicle(os.path.join(GLB, "wagon.glb"), "Wagon1", 14.5, 17.6, False)
-wag2 = wag1.copy(); wag2.data = wag1.data; wag2.name = "Wagon2"; coll("Train").objects.link(wag2); wag2.location.y += 15.1
-mn1, _ = bbox([wag1]); dz = RAIL_H + 0.0 - mn1.z
-wag1.location.z += dz; wag2.location.z += dz
-sc["wheel_r"] = max(w_.dimensions.z for w_ in lw) / 2
-# the model's "wheels" are solid drums across the track: rebuild each as a real wheelset (two flanged discs + thin axle)
-WR = sc["wheel_r"]
+# ---- locomotive: EMD GP18 (CC-BY), detailed real geometry, untextured -> our weathered paint and metal
+def paint(name, col, rough=0.55, metal=0.2):
+    m = flat("tmp_" + name, col, rough, metal)
+    g = grime(m, name); bpy.data.materials.remove(m); return g
+LOCO_PAINT = {"Rock_Island_Rusty": paint("LocoPaint", (0.33, 0.07, 0.05), 0.5),           # weathered maroon hood
+              "M_0136_Charcoal": paint("LocoTrucks", (0.05, 0.05, 0.05), 0.6, 0.6),
+              "black": paint("LocoBlack", (0.03, 0.03, 0.03), 0.6, 0.5),
+              "Metal_Corrugated_Shiny_1": paint("LocoMetal", (0.25, 0.25, 0.24), 0.4, 0.8)}
+M_GLASS = flat("LocoGlass", (0.03, 0.04, 0.045), 0.05, 0.0)
+M_LENS = flat("LocoLens", (1, 1, 0.9), 0.2, emit=(1.0, 0.93, 0.75), estr=8)
+gp = import_glb(os.path.join(GLB, "gp18.glb"))
+for o in list(gp):
+    if o.name.startswith("Cube"): bpy.data.objects.remove(o, do_unlink=True); gp.remove(o)
+mn, mx_ = bbox(gp); s = 17.8 / (mx_.y - mn.y)
+T = Matrix.Translation((0, 0, RAIL_H)) @ Matrix.Scale(s, 4) @ Matrix.Translation(-Vector(((mn.x + mx_.x) / 2, mn.y, mn.z + 0.0)))
+# wheel axles (model space) found by the loose-part survey: 4 axles, wheels r 0.405, centre z 0.13, gauge centre x -1.38
+AX_Y = [-3.92, -1.81, 4.06, 6.18]; WZ, WRm = 0.13, 0.405
+low = -0.27   # model z of the wheel bottoms
+T = Matrix.Translation((0, 0, RAIL_H)) @ Matrix.Scale(s, 4) @ Matrix.Translation(-Vector((-1.38, mn.y, low)))
+for o in gp:
+    me = o.data
+    # cut the model's static wheel discs out; our wheelsets spin in their place
+    bmw = bmesh.new(); bmw.from_mesh(me)
+    kill = [v for v in bmw.verts if any(math.hypot(v.co.y - ay, v.co.z - WZ) < WRm + 0.03 and abs(abs(v.co.x + 1.38) - 0.575) < 0.11 for ay in AX_Y)]
+    bmesh.ops.delete(bmw, geom=kill, context='VERTS'); bmw.to_mesh(me); bmw.free()
+    me.transform(T)
+    # open a body-sized gap under the loco: centre under-gear and the pilot's lower plate (camera never sees inside the trucks)
+    bmw = bmesh.new(); bmw.from_mesh(me)
+    kill = [v for v in bmw.verts if (abs(v.co.x) < 0.55 and v.co.z < 0.52) or (v.co.y < 1.3 and v.co.z < 0.48 and abs(v.co.x) < 1.45)]
+    bmesh.ops.delete(bmw, geom=kill, context='VERTS'); bmw.to_mesh(me); bmw.free()
+    for i, m_ in enumerate(me.materials):
+        nm = m_.name if m_ else ""
+        if nm in LOCO_PAINT: me.materials[i] = LOCO_PAINT[nm]
+        elif "Window" in nm or "Translucent" in nm: me.materials[i] = M_GLASS
+        elif nm == "light_marker_effect_white": me.materials[i] = M_LENS
+        elif "marker" in nm.lower() or "light" in nm.lower(): me.materials[i] = M_GLASS
+        else: me.materials[i] = LOCO_PAINT["black"] if False else paint("LocoPart_" + nm[:12], (0.12, 0.12, 0.11), 0.6, 0.5)
+    link(o, "Train")
+bpy.ops.object.select_all(action='DESELECT')
+for o in gp: o.select_set(True)
+bpy.context.view_layer.objects.active = gp[0]; bpy.ops.object.join()
+loco = bpy.context.view_layer.objects.active; loco.name = "Loco"; loco.parent = TRAIN
+WR = WRm * s
+sc["wheel_r"] = WR
 M_WHEEL = pbr("WheelSteel", "rusty_metal_02", 0.4, sat=0.3, val=0.55, metal=0.8, rough_mul=0.8)
 def wheelset_mesh(name):
     bmw = bmesh.new()
     for sx in (-1, 1):
         for rad, w0, w1 in ((WR, 0.0, 0.13), (WR + 0.03, -0.03, 0.0), (WR * 0.55, 0.13, 0.17)):
-            x0, x1 = sx * (GAUGE + (w0 - 0.035) * -sx * -1), sx * (GAUGE + (w1 - 0.035))
             m_ = Matrix.Translation((sx * (GAUGE - 0.035 + (w0 + w1) / 2), 0, 0)) @ Matrix.Rotation(math.radians(90), 4, 'Y')
-            bmesh.ops.create_cone(bmw, cap_ends=True, segments=28, radius1=rad, radius2=rad, depth=(w1 - w0), matrix=m_)
+            bmesh.ops.create_cone(bmw, cap_ends=True, segments=32, radius1=rad, radius2=rad, depth=(w1 - w0), matrix=m_)
     bmesh.ops.create_cone(bmw, cap_ends=True, segments=16, radius1=0.085, radius2=0.085, depth=2 * GAUGE + 0.3, matrix=Matrix.Rotation(math.radians(90), 4, 'Y'))
     me_ = bpy.data.meshes.new(name); bmw.to_mesh(me_); bmw.free(); me_.materials.append(M_WHEEL)
+    for poly in me_.polygons: poly.use_smooth = True
     return me_
 WS_ME = wheelset_mesh("Wheelset")
-for w_ in lw:
-    w_.data = WS_ME
+lw = []
+for k, ay in enumerate(AX_Y):
+    wo = bpy.data.objects.new("wheelset%d" % k, WS_ME); coll("Train").objects.link(wo)
+    wo.location = ((0.0), (ay - mn.y) * s, RAIL_H + WR); wo.parent = TRAIN; wo.rotation_mode = 'XYZ'
+    lw.append(wo); WHEELS.append(wo)
+bpy.context.view_layer.update()
+print("VEHICLE Loco GP18 scale", round(s, 3), [round(v, 2) for v in bbox([loco])[0]], [round(v, 2) for v in bbox([loco])[1]], "wheel r", round(WR, 3))
+wag1, _ = build_vehicle(os.path.join(GLB, "wagon.glb"), "Wagon1", 14.5, 18.4, False)
+wag2 = wag1.copy(); wag2.data = wag1.data; wag2.name = "Wagon2"; coll("Train").objects.link(wag2); wag2.location.y += 15.1
+mn1, _ = bbox([wag1]); dz = RAIL_H + 0.0 - mn1.z
+wag1.location.z += dz; wag2.location.z += dz
 print("WHEELS", len(WHEELS), "r", sc["wheel_r"])
-# headlights + undercarriage light catcher at the leading (-Y) end
 mnL, mxL = bbox([loco])
 sc["loco_front"] = mnL.y; sc["loco_len"] = mxL.y - mnL.y; sc["loco_halfw"] = (mxL.x - mnL.x) / 2; sc["loco_top"] = mxL.z
+# headlight glow points: the GP18's own headlight (above the cab windows) and two ditch lights on the pilot
 M_HEAD = flat("Headlamp", (1, 1, 0.9), 0.2, emit=(1.0, 0.93, 0.75), estr=60)
-for hx_ in (-0.55, 0.55):
-    hl = box("Headlamp%s" % ("L" if hx_ < 0 else "R"), (0.26, 0.06, 0.26), (hx_, mnL.y - 0.03, 2.2), M_HEAD); link(hl, "Train"); hl.parent = TRAIN
-hl = box("HeadlampTop", (0.3, 0.06, 0.3), (0.0, mnL.y - 0.03, mxL.z - 0.5), M_HEAD); link(hl, "Train"); hl.parent = TRAIN
+LV = [loco.matrix_world @ v.co for v in loco.data.vertices]
+def nose_y(xc, zc, dx=0.25, dz=0.2):
+    ys = [v.y for v in LV if abs(v.x - xc) < dx and abs(v.z - zc) < dz]
+    return min(ys) if ys else mnL.y
+for nm_, (hx_, hz_) in (("HeadlampL", (-0.62, 1.35)), ("HeadlampR", (0.62, 1.35)), ("HeadlampTop", (0.0, (2.08 - low) * s + RAIL_H))):
+    bmh = bmesh.new(); bmesh.ops.create_cone(bmh, cap_ends=True, segments=20, radius1=0.11, radius2=0.11, depth=0.04, matrix=Matrix.Rotation(math.radians(90), 4, 'X'))
+    hl = mesh_obj(nm_, bmh, M_HEAD, "Train"); hl.location = (hx_, nose_y(hx_, hz_) - 0.025, hz_); hl.parent = TRAIN
 for hx_ in (-0.55, 0.55):
     sl = bpy.data.lights.new("HeadSpot", 'SPOT'); sl.energy = 6000; sl.spot_size = math.radians(40); sl.color = (1, 0.92, 0.75); sl.shadow_soft_size = 0.1
     so = bpy.data.objects.new("HeadSpot%s" % ("L" if hx_ < 0 else "R"), sl); coll("Train").objects.link(so); so.parent = TRAIN
-    so.location = (hx_, mnL.y - 0.2, 2.2); so.rotation_euler = (math.radians(95), 0, 0)
-# plough (pilot) at the front: a wedge just above the rails
-bm = bmesh.new()
-pv = [bm.verts.new(p_) for p_ in ((-1.45, 0.4, 0.95), (1.45, 0.4, 0.95), (1.4, 0.15, 0.44), (-1.4, 0.15, 0.44),
-                                  (0, -0.5, 0.44), (0, -0.35, 0.95))]
-bm.faces.new((pv[3], pv[4], pv[5], pv[0])); bm.faces.new((pv[4], pv[2], pv[1], pv[5])); bm.faces.new((pv[0], pv[5], pv[1]))
-pl = mesh_obj("Plough", bm, M_TRAINPAINT.get("x") or grime(None, "PloughPaint"), "Train"); pl.location = (0, mnL.y, 0); pl.parent = TRAIN
-sc["plough_tip"] = mnL.y - 0.5
+    so.location = (hx_, nose_y(hx_, 1.35) - 0.08, 1.35); so.rotation_euler = (math.radians(-85), 0, 0)    # beams forward along the track
+sc["plough_tip"] = mnL.y          # the GP18's own pilot is the front-most part
 
+# ---- suburban houses (CC-BY models) and platform street lamps (CC-BY)
+def glb_asset(fname, name, target, axis="max", cname="Set"):
+    ms_ = import_glb(os.path.join(GLB, fname))
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in ms_: o.select_set(True)
+    bpy.context.view_layer.objects.active = ms_[0]
+    if len(ms_) > 1: bpy.ops.object.join()
+    o = bpy.context.view_layer.objects.active; o.name = name
+    mn_, mx_ = bbox([o]); ext = mx_ - mn_
+    sz = (max(ext.x, ext.y) if axis == "max" else ext.z)
+    sc_ = target / sz
+    o.data.transform(Matrix.Scale(sc_, 4) @ Matrix.Translation(-Vector(((mn_.x + mx_.x) / 2, (mn_.y + mx_.y) / 2, mn_.z))))
+    link(o, "Hidden")
+    return o
+HOUSE_SRC = [glb_asset("houseA.glb", "HouseSrcA", 10.0), glb_asset("houseB.glb", "HouseSrcB", 11.0), glb_asset("houseC.glb", "HouseSrcC", 11.0)]
+for i, yy in enumerate(range(-100, 130, 19)):
+    src = HOUSE_SRC[i % 3]; o = src.copy(); o.name = "House%d" % i; coll("Set").objects.link(o)
+    o.location = (21.0 + random.uniform(-1.5, 1.5), yy + random.uniform(-2, 2), -0.08); o.rotation_euler.z = math.radians(90 + random.choice((0, 180)) + random.uniform(-4, 4))
+for i, yy in enumerate(range(-90, 120, 23)):
+    src = HOUSE_SRC[(i + 1) % 3]; o = src.copy(); o.name = "HouseW%d" % i; coll("Set").objects.link(o)
+    o.location = (-27.0 + random.uniform(-2, 2), yy, -0.08); o.rotation_euler.z = math.radians(-90 + random.choice((0, 180)) + random.uniform(-4, 4))
+LAMP_SRC = glb_asset("streetlamp.glb", "LampSrc", 4.2, axis="z")
+for yy in (-75, -62, -50):
+    o = LAMP_SRC.copy(); o.name = "Lamp%d" % yy; coll("Set").objects.link(o); o.location = (6.9, yy, PLAT["h"]); o.rotation_euler.z = math.radians(90)
 # ------------------------------------------------------------------ x-ray studio (cyan-to-white gradient cyclorama around the stop point)
 SX, SY = 2.4, STOP_Y
 M_CYC = bpy.data.materials.new("StudioCyc"); M_CYC.use_nodes = True
