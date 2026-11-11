@@ -77,6 +77,40 @@ ds = []
 for f in range(2152, 2310, 6):
     sc.frame_set(f); ds.append((o.matrix_world.translation - a.matrix_world @ a.pose.bones["finger3-1.L"].head).length)
 log("PALM brick to palm centre max %.1f mm" % (max(ds) * 1000))
+# --- penetration count: fingertips/toes inside furniture or floors, and characters intersecting each other
+dg = bpy.context.evaluated_depsgraph_get()
+solids = [o for o in bpy.data.objects if o.type == "MESH" and (o.name.endswith("_Floor") or o.name in ("BR_Mattress", "Prop_Tub", "LR_Rug", "BA_ShowerTray")
+          or (o.parent and o.parent.name in ("LR_Sofa", "LR_Bench", "LR_CoffeeTable")))]
+def inside(p, o):
+    """parity ray test against one evaluated mesh"""
+    oe = o.evaluated_get(dg); Mi = oe.matrix_world.inverted(); q = Mi @ p; d = (Mi.to_3x3() @ Vector((0, 0, 1))).normalized()
+    n_ = 0; start = q
+    for _ in range(12):
+        hit, loc, nrm, idx = oe.ray_cast(start + d * 1e-5, d)
+        if not hit: break
+        n_ += 1; start = loc
+    return n_ % 2 == 1
+TIPS = ["finger%d-3.%s" % (i, s) for i in range(1, 6) for s in "LR"]
+pen = []
+chars = [bpy.data.objects[n] for n in ("Boy", "Teen", "Man", "Mom")]
+for f in range(1, sc.frame_end + 1, 10):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+    vis = [a for a in chars if not a.hide_render]
+    for a in vis:
+        for b in TIPS:
+            p = a.matrix_world @ a.pose.bones[b].tail
+            for o in solids:
+                lo = o.matrix_world @ Vector(o.bound_box[0]); hi = o.matrix_world @ Vector(o.bound_box[6])
+                if all(min(lo[i], hi[i]) - 0.01 < p[i] < max(lo[i], hi[i]) + 0.01 for i in range(3)) and inside(p, o):
+                    pen.append((f, a.name, b, o.name))
+    for i, a in enumerate(vis):
+        for b2 in vis[i + 1:]:
+            pa = [a.matrix_world @ pb.head for pb in a.pose.bones if pb.bone.use_deform and not pb.name.startswith(("finger", "tongue", "toe", "orbic", "oris", "levator", "risor", "temporal", "oculi", "special", "jaw", "eye"))]
+            pb_ = [b2.matrix_world @ pb.head for pb in b2.pose.bones if pb.bone.use_deform and not pb.name.startswith(("finger", "tongue", "toe", "orbic", "oris", "levator", "risor", "temporal", "oculi", "special", "jaw", "eye"))]
+            dmin = min((x - y).length for x in pa for y in pb_)
+            if dmin < 0.06: pen.append((f, a.name, "body", b2.name, round(dmin, 3)))
+import collections
+log("PENETRATION count (fingertips inside furniture/floors + characters' joints <6 cm apart, every 10th frame):", len(pen), "by kind:", dict(collections.Counter((p[1], p[3]) for p in pen)), "examples:", pen[:6])
 # --- camera never switches
 log("CAMERAS", [o.name for o in bpy.data.objects if o.type == "CAMERA"], "markers bound to cameras:", [m.name for m in sc.timeline_markers if m.camera])
 open(OUT, "w").write("\n".join(L) + "\n")

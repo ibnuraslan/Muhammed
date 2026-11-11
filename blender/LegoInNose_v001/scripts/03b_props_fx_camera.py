@@ -194,6 +194,20 @@ lin = bpy.data.objects["XS_AirwayLining"]
 for f in range(740, 1340, 30):
     lin.data.bevel_depth = 0.0015 * (1.0 + 0.25 * math.sin(f * 0.21)); lin.data.keyframe_insert("bevel_depth", frame=f)
 
+# --- time-lapse props: gamepad in the teen's hands, laptop on the man's thighs; the toys are gone after childhood
+gp = bpy.data.objects["Prop_Gamepad"]
+lp = box("Prop_Phone", PR, (0.072, 0.148, 0.008), (50, 50, 0), flat("M_Phone", (0.02, 0.02, 0.025), 0.2, metal=0.3, coat=0.8), bevel=0.006)
+scr = box("Prop_PhoneScreen", PR, (0.064, 0.136, 0.001), (0, 0, 0.0042), flat("M_PhoneScreen", (0.1, 0.15, 0.2), 0.1, emit=(0.55, 0.7, 0.95), es=3.0))
+scr.parent = lp
+for f, p in TEEN_PAD.items():
+    key_obj(gp, f, Matrix.Translation(p + V(0, 0, 0.02)) @ Matrix.Rotation(R_(-35), 4, "X"))
+for f, p in MAN_LAP.items():
+    ev(f); key_obj(lp, f, Matrix.Translation((M.pinch("L") + M.pinch("R")) / 2 + V(0, 0, 0.01)) @ Matrix.Rotation(R_(40), 4, "X"))
+key_vis(["Prop_Gamepad"], [(1395, 1439)]); key_vis(["Prop_Phone"], [(1440, 1469)])
+for o in bpy.data.objects:
+    if o.name.startswith(("TubBrick", "RugBrick", "HouseBrick", "Prop_Tub")):
+        for f, v in ((1, False), (1395, True)):
+            o.hide_render = v; o.keyframe_insert("hide_render", frame=f)
 # --- tissues + inhaler (beat 9)
 for i in range(14):
     key_vis(["LR_TissueBall%02d" % i], [(1470, 1746)])
@@ -331,7 +345,7 @@ def ex_step(f_mid, before, after):
     ex_fc.keyframe_points.insert(f_mid - 1, before); ex_fc.keyframe_points.insert(f_mid, after)
     for kp in ex_fc.keyframe_points:
         if int(round(kp.co.x)) == f_mid - 1: kp.interpolation = "CONSTANT"
-ex_step(741, 0.6, -0.6); ex_step(864, -0.6, 0.6); ex_step(1121, 0.6, -0.6); ex_step(1318, -0.6, 0.6)
+ex_step(735, 0.6, -0.6); ex_step(861, -0.6, 0.6); ex_step(1115, 0.6, -0.6); ex_step(1322, -0.6, 0.6)
 for kp in ex_fc.keyframe_points:
     if kp.co.x >= 1882: kp.co.y = 0.0
     elif 1470 <= kp.co.x <= 1720: kp.co.y = 0.15
@@ -374,20 +388,20 @@ k(612, V(0.35, -0.6, 0.6), face_of(B, 612), 42)
 k(660, V(0.1, -0.5, 0.4), face_of(B, 660), 34)
 k(700, nose_of(B, 700) + V(0.03, -0.13, -0.05), nose_of(B, 700), 50)
 N0 = nose_of(B, 724); fwB = fw_of(B); upB = up_of(B)
-k(716, N0 + fwB * 0.035 - upB * 0.02, N0, 40)
-DIVE1 = [(724, N0 + fwB * 0.002), (729, N0 + upB * 0.03 - fwB * 0.01), (737, V(0.15, 0.3, -1.0)), (746, V(0.0, -1.4, -3.6)), (757, V(0.05, -2.75, -6.2))]
+k(718, N0 + fwB * 0.03 - upB * 0.018, N0, 40)
+DIVE1 = [(724, N0 + fwB * 0.002), (728, N0 + upB * 0.03 - fwB * 0.01), (733, V(0.15, 0.3, -1.0)), (739, V(0.0, -1.4, -3.6)), (747, V(0.05, -2.75, -6.2))]
 for i, (f, p) in enumerate(DIVE1):
     nxt = DIVE1[i + 1][1] if i + 1 < len(DIVE1) else XS_C
     k(f, p, nxt, 32)
 # beat 5: studio, wedge
 k(790, V(0.7, -1.9, -6.45), XS_AIR, 32)
 k(828, XS_AIR + V(0.1, -0.75, 0.05), XS_AIR + V(0, 0, 0.02), 40)
-RET1 = [(846, V(0.25, -1.6, -5.6)), (855, V(0.1, -1.2, -3.6)), (863, V(0.15, 0.3, -1.0))]
-N1 = nose_of(B, 872); fw1 = fw_of(B)
-RET1 += [(872, N1 + fw1 * 0.002), (880, N1 + fw1 * 0.09)]
+RET1 = [(852, V(0.25, -1.6, -5.6)), (858, V(0.1, -1.2, -3.6)), (864, V(0.15, 0.3, -1.0))]
+N1 = nose_of(B, 870); fw1 = fw_of(B)
+RET1 += [(870, N1 + fw1 * 0.002), (879, N1 + fw1 * 0.09)]
 for i, (f, p) in enumerate(RET1):
     prv = RET1[i - 1][1] if i > 0 else XS_AIR
-    k(f, p, prv if f < 872 else N1, 32 if f < 872 else 38)
+    k(f, p, prv if f < 870 else N1, 32 if f < 870 else 38)
 k(905, V(0.3, -1.05, 0.62), face_of(B, 905), 30)
 # beat 6: mom
 k(950, V(0.05, -1.4, 0.95), (face_of(B, 950) + V(0.8, 0.0, 0.3)), 26)
@@ -398,25 +412,25 @@ k(1075, BOYP + V(-0.2, -0.75, 0.95), twz_tip(1075).translation, 36)
 # beat 7: dive two
 N2 = nose_of(B, 1104); fw2 = fw_of(B); up2 = up_of(B)
 k(1094, N2 + fw2 * 0.08 + V(0.03, 0, 0.0), N2, 48)
-DIVE2 = [(1104, N2 + fw2 * 0.002), (1109, N2 + up2 * 0.03 - fw2 * 0.01), (1117, V(0.15, 0.3, -1.0)), (1126, V(-0.3, -1.4, -3.6)), (1138, V(-1.0, -2.7, -6.0))]
+DIVE2 = [(1104, N2 + fw2 * 0.002), (1108, N2 + up2 * 0.03 - fw2 * 0.01), (1113, V(0.15, 0.3, -1.0)), (1119, V(-0.3, -1.4, -3.6)), (1128, V(-1.0, -2.7, -6.0))]
 for i, (f, p) in enumerate(DIVE2):
     nxt = DIVE2[i + 1][1] if i + 1 < len(DIVE2) else XS_C
     k(f, p, nxt, 30)
 k(1185, V(-0.55, -1.7, -6.25), XS_HI, 34)
 k(1240, XS_HI + V(0.35, -0.75, -0.05), XS_HI, 48)
 k(1285, XS_HI + V(0.75, -0.95, 0.2), XS_HI, 42)
-RET2 = [(1305, V(0.4, -1.6, -5.5)), (1314, V(0.1, -1.2, -3.6)), (1322, V(0.15, 0.3, -1.0))]
-N3 = nose_of(B, 1332); fw3 = fw_of(B)
-RET2 += [(1332, N3 + fw3 * 0.002), (1342, N3 + fw3 * 0.12)]
+RET2 = [(1312, V(0.4, -1.6, -5.5)), (1318, V(0.1, -1.2, -3.6)), (1324, V(0.15, 0.3, -1.0))]
+N3 = nose_of(B, 1330); fw3 = fw_of(B)
+RET2 += [(1330, N3 + fw3 * 0.002), (1342, N3 + fw3 * 0.12)]
 for i, (f, p) in enumerate(RET2):
     prv = RET2[i - 1][1] if i > 0 else XS_HI
-    k(f, p, prv if f < 1332 else N3, 30 if f < 1332 else 36)
+    k(f, p, prv if f < 1330 else N3, 30 if f < 1330 else 36)
 # beat 8: time-lapse orbit
 SITC = BOYP + V(0, 0, 0.55)
 k(1365, V(0.45, -0.75, 0.75), SITC, 26)
 k(1395, V(1.25, -1.35, 1.05), SITC, 24)
-k(1425, V(1.75, 0.15, 1.2), SITC, 24)
-k(1455, V(0.8, 1.0, 1.25), SITC + V(-0.4, 0.4, 0.1), 24)
+k(1425, V(1.3, -0.75, 0.95), SITC + V(0, 0, -0.05), 30)
+k(1455, V(-0.15, -0.95, 0.85), BOYP + V(0, 0, 0.45), 30)
 # beat 9: bench, inhaler, through the door to the bedroom at night
 k(1485, V(-0.35, 0.55, 1.05), face_of(M, 1485), 30)
 k(1530, V(-0.85, 1.15, 1.05), face_of(M, 1530), 45)
@@ -470,12 +484,18 @@ wvt = N.new("ShaderNodeTexWave"); wvt.inputs["Scale"].default_value = 3.0; wvt.i
 adh = N.new("ShaderNodeMath"); adh.operation = "ADD"
 Lk.new(nzt.outputs[0], adh.inputs[0]); Lk.new(wvt.outputs[1], adh.inputs[1])
 Lk.new(adh.outputs[0], bp.inputs["Height"]); Lk.new(bp.outputs[0], bs.inputs["Normal"])
-cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.35, 0.05, 0.07, 1); cr.color_ramp.elements[1].color = (0.85, 0.35, 0.35, 1)
-Lk.new(wvt.outputs[1], cr.inputs[0]); Lk.new(cr.outputs[0], bs.inputs["Base Color"])
+cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.25, 0.02, 0.04, 1); cr.color_ramp.elements[1].color = (0.82, 0.3, 0.3, 1)
+vn = N.new("ShaderNodeTexVoronoi"); vn.feature = "DISTANCE_TO_EDGE"; vn.inputs["Scale"].default_value = 9
+vr = N.new("ShaderNodeMapRange"); vr.inputs[1].default_value = 0.0; vr.inputs[2].default_value = 0.04; Lk.new(vn.outputs["Distance"], vr.inputs[0])
+bs.inputs["Coat Weight"].default_value = 1.0; bs.inputs["Coat Roughness"].default_value = 0.03; bs.inputs["Roughness"].default_value = 0.15
+Lk.new(wvt.outputs[1], cr.inputs[0])
+veinmix = N.new("ShaderNodeMix"); veinmix.data_type = "RGBA"; veinmix.inputs[7].default_value = (0.3, 0.02, 0.05, 1)
+Lk.new(vr.outputs[0], veinmix.inputs[0]); Lk.new(cr.outputs[0], veinmix.inputs[7]); veinmix.inputs[6].default_value = (0.32, 0.03, 0.08, 1)
+Lk.new(veinmix.outputs[2], bs.inputs["Base Color"])
 def tunnel(name, f0, f1, nostril_end):
     """tube around the camera path between frames f0..f1; small at the nostril end, flared at the studio end"""
     pts = [fc_(f0 + (f1 - f0) * i / 120.0) for i in range(121)]
-    bm_ = bmesh.new(); rings = []
+    bm_ = bmesh.new(); rings = []; ringpos = []
     seg = 20
     a_prev = None
     for i, p in enumerate(pts):
@@ -489,7 +509,7 @@ def tunnel(name, f0, f1, nostril_end):
             a = (a_prev - d * a_prev.dot(d)); a = a.normalized() if a.length > 1e-6 else d.orthogonal().normalized()
         a_prev = a; b_ = d.cross(a).normalized()
         ring = [bm_.verts.new(p + (a * math.cos(2 * math.pi * j / seg) + b_ * math.sin(2 * math.pi * j / seg)) * r * (1 + 0.15 * math.sin(j * 1.7 + i * 0.5))) for j in range(seg)]
-        rings.append(ring)
+        rings.append(ring); ringpos.append([v.co.copy() for v in ring])
     for r0, r1 in zip(rings, rings[1:]):
         for j in range(seg):
             bm_.faces.new((r0[j], r0[(j + 1) % seg], r1[(j + 1) % seg], r1[j]))
@@ -497,19 +517,35 @@ def tunnel(name, f0, f1, nostril_end):
     o = bpy.data.objects.new(name, me_); bpy.data.collections["Set_Studio"].objects.link(o); me_.materials.append(TM)
     for p in me_.polygons: p.use_smooth = True
     o.modifiers.new("sub", "SUBSURF").levels = 1
+    # nostril hairs: dark curved strands from the wall near the nostril end, pointing inward/along the tube
+    hm = bpy.data.materials.get("M_NoseHair") or flat("M_NoseHair", (0.08, 0.05, 0.035), 0.35, coat=0.5)
+    cu = bpy.data.curves.new(name + "_Hairs", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = 1.0; cu.bevel_resolution = 1
+    ho = bpy.data.objects.new(name + "_Hairs", cu); bpy.data.collections["Set_Studio"].objects.link(ho); cu.materials.append(hm)
+    for hcount in range(70):
+        tn = random.uniform(0.02, 0.22); i = int((tn if nostril_end == "start" else 1 - tn) * 120)
+        ring_ = ringpos[i]; j = random.randrange(seg); root = ring_[j].copy(); ctr = pts[i]
+        d = (pts[min(120, i + 1)] - pts[max(0, i - 1)]).normalized() * (1 if nostril_end == "start" else -1)
+        inward = (ctr - root); rr = inward.length; inward.normalize()
+        L_ = rr * random.uniform(0.5, 0.95)
+        sp = cu.splines.new("BEZIER"); sp.bezier_points.add(2)
+        cps = [root, root + inward * L_ * 0.45 + d * L_ * 0.35, root + inward * L_ * 0.8 + d * L_ * 0.9]
+        for bp, c_ in zip(sp.bezier_points, cps):
+            bp.co = c_; bp.handle_left_type = bp.handle_right_type = "AUTO"; bp.radius = rr * 0.012
+        sp.bezier_points[-1].radius = rr * 0.003
+    key_vis([ho.name], [(f0 - 1, f1 + 2)])
     key_vis([name], [(f0 - 1, f1 + 2)])
     lt = bpy.data.objects.new(name + "_Light", bpy.data.lights.new(name + "_Light", "POINT")); bpy.data.collections["Set_Studio"].objects.link(lt)
     lt.data.energy = 0.4; lt.data.color = (1.0, 0.75, 0.7); lt.data.shadow_soft_size = 0.02
     for f in range(f0, f1 + 1, 2):
         lt.location = fc_(f + 1); lt.keyframe_insert("location", frame=f)
     key_vis([lt.name], [(f0 - 1, f1 + 2)])
-tunnel("Tunnel_Dive1", 719, 752, "start")
-tunnel("Tunnel_Return1", 845, 874, "end")
-tunnel("Tunnel_Dive2", 1099, 1134, "start")
-tunnel("Tunnel_Return2", 1303, 1334, "end")
+tunnel("Tunnel_Dive1", 720, 744, "start")
+tunnel("Tunnel_Return1", 850, 872, "end")
+tunnel("Tunnel_Dive2", 1100, 1125, "start")
+tunnel("Tunnel_Return2", 1310, 1332, "end")
 # while the camera is inside a tunnel, the room, props and people are invisible to the camera only (shadows/light unchanged):
 # otherwise the floor slab and the boy's own skin cut across the tube as membranes.
-INSIDE = [(726, 754), (845, 871), (1106, 1136), (1303, 1331)]
+INSIDE = [(726, 748), (849, 869), (1106, 1130), (1309, 1329)]
 hide_cols = [bpy.data.collections[n] for n in ("Set_LivingRoom", "Props")]
 obs = set(o for c_ in hide_cols for o in c_.all_objects)
 for nm in ("Boy", "Teen", "Man", "Mom"):

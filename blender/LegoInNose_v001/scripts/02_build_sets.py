@@ -105,7 +105,7 @@ def append_model(key, c, loc, rot_z=0.0, scale=1.0, name=None):
 
 # ------------------------------------------------------------------ clothes: remove the printed logo from the T-shirts (non-blue pixels -> plain shirt blue)
 for ob in bpy.data.objects:
-    if ob.type != "MESH" or not any(k in ob.name for k in ("casualsuit04", "female_casualsuit01")): continue
+    if ob.type != "MESH" or not any(k in ob.name for k in ("casualsuit04", "casualsuit02", "female_casualsuit01")): continue
     for ms in ob.material_slots:
         m = ms.material
         if not m or not m.use_nodes: continue
@@ -120,7 +120,12 @@ for ob in bpy.data.objects:
                 nt.links.new(sub.outputs[0], mr.inputs[0])
                 mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"
                 mx.inputs[6].default_value = (0.03, 0.12, 0.36, 1)
-                nt.links.new(mr.outputs[0], mx.inputs[0]); nt.links.new(src, mx.inputs[7])
+                # also replace bright (light-blue / white) print lines: keep only blue pixels that are not bright
+                mr2 = nt.nodes.new("ShaderNodeMapRange"); mr2.inputs[1].default_value = 0.22; mr2.inputs[2].default_value = 0.34
+                nt.links.new(sep.outputs[1], mr2.inputs[0])
+                inv = nt.nodes.new("ShaderNodeMath"); inv.operation = "SUBTRACT"; inv.inputs[0].default_value = 1.0; nt.links.new(mr2.outputs[0], inv.inputs[1])
+                mul = nt.nodes.new("ShaderNodeMath"); mul.operation = "MULTIPLY"; nt.links.new(mr.outputs[0], mul.inputs[0]); nt.links.new(inv.outputs[0], mul.inputs[1])
+                nt.links.new(mul.outputs[0], mx.inputs[0]); nt.links.new(src, mx.inputs[7])
                 nt.links.new(mx.outputs[2], dst)
                 print("DELOGO", ob.name, m.name)
 
@@ -216,6 +221,8 @@ if os.path.exists(cp):
         if o.parent is catr: o.location -= Vector(((lo.x + hi.x) / 2, (lo.y + hi.y) / 2, lo.z))
     catr.scale = (s_,) * 3; catr.location = (1.62, 1.82, 0.43); catr.rotation_euler = (0, 0, R_(160))
     print("CAT", [o.name for o in new], s_, hi - lo)
+# time-lapse props: the teen's gamepad and the man's laptop
+append_model("gamepad", PROPS, (50, 50, 0), 0, 1.0, name="Prop_Gamepad")
 # picture frames (abstract colour fields, no text)
 for i, (x, col) in enumerate(((-0.1, (0.3, 0.45, 0.6)), (0.25, (0.75, 0.55, 0.3)))):
     box("LR_Frame%d" % i, ROOM, (0.3, 0.03, 0.4), (x, 2.33, 1.75 + 0.05 * i), flat("M_Art%d" % i, col, 0.8), bevel=0.004)

@@ -212,7 +212,7 @@ for f, what in ((1, "floor"), (230, "floor"), (275, "knee"), (420, "knee"), (640
                 (925, "flapB"), (940, "flapA"), (960, "flapB"), (990, "floor"), (1360, "floor")):
     ev(f)
     sh = b.bone_world("upperarm01.L")
-    if what == "floor": W_ = BOYP + V(0.24, 0.12, 0.045); b.h.key_hand("L", f, W_, V(0.3, -0.4, -0.8).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
+    if what == "floor": W_ = BOYP + V(0.24, 0.12, 0.062); b.h.key_hand("L", f, W_, V(0.3, -0.85, -0.22).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
     elif what == "knee": W_ = BOYP + V(0.16, -0.24, 0.27); b.h.key_hand("L", f, W_, V(0.0, -0.6, -0.6).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
     elif what == "chest": W_ = b.bone_world("spine02") + V(0.08, -0.13, -0.02); b.h.key_hand("L", f, W_, V(-1, -0.2, 0).normalized(), V(0, 1, 0), sh + V(0.4, 0.1, -0.2))
     elif what == "flapA": W_ = sh + V(0.22, -0.12, 0.22); b.h.key_hand("L", f, W_, V(0.4, -0.2, 1.0).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
@@ -285,12 +285,30 @@ for f, kw in ((870, dict(worry=0.8, open=0.3)), (960, dict(worry=0.7, frown=0.2)
 key_vis(["Mom"], [(870, 1145)])
 
 # ================================================================== TEEN + MAN aging on the rug (beat 8), then the bench (beat 9a,b)
-for c, f0, f1 in ((T, 1395, 1438), (M, 1440, 1468)):
-    for f in (f0, f1):
-        sit_floor(c, f, BOYP, lean=8 if c is T else 4, head=(10, -6) if f == f0 else (4, 8), legs=(0.2, 0.7))
-        for s in "LR":
-            ev(f)
-            c.h.key_hand(s, f, BOYP + V(0.22 * (1 if s == "L" else -1), -0.3, 0.33), V(0, -0.7, -0.5).normalized(), V(0, 0, -1))
+# teen (~15, long-sleeve sweatshirt) hunched over a gamepad; man (33) with a laptop on his thighs: visible ageing + room change
+TEEN_PAD = {}
+for f in range(1395, 1439, 6):
+    sit_floor(T, f, BOYP, lean=18 + 4 * math.sin(f * 0.3), head=(8, 4 * math.sin(f * 0.2)), legs=(0.22, 0.62), knee_up=0.75)
+for f in range(1395, 1439, 6):
+    ev(f); hm = T.head_M(); fwT = fw_of_c = (hm.to_3x3() @ V(0, -1, 0)).normalized()
+    pad = T.bone_world("spine02") + V(0, -0.3, -0.08) + V(0, 0, 0.01 * math.sin(f * 0.9)); TEEN_PAD[f] = pad
+    for s, sx in (("L", 1), ("R", -1)):
+        hand_at(T, s, f, pad + V(sx * 0.055, 0.0, 0.0), V(-sx * 0.3, -0.5, 0.6).normalized(), V(0, 0.4, 1).normalized(),
+                pole=T.bone_world("upperarm01." + s) + V(sx * 0.35, 0.1, -0.3))
+        fingers(T.r, s, f, 0.6, 0.45 + 0.15 * math.sin(f * 1.3 + sx), 0.2 + 0.2 * math.sin(f * 1.1))
+for f, kw in ((1395, dict(squint=0.4, frown=0.3)), (1420, dict(squint=0.5, open=0.2)), (1438, dict(smile=0.3, squint=0.3))):
+    face(T.body, f, **kw)
+MAN_LAP = {}
+for f in range(1440, 1469, 7):
+    sit_floor(M, f, BOYP, lean=14, head=(10, 0), legs=(0.18, 0.72), knee_up=0.35)
+for f in range(1440, 1469, 7):
+    ev(f); kn = (M.bone_world("lowerleg01.L") + M.bone_world("lowerleg01.R")) / 2; hp = M.bone_world("root")
+    lap = M.bone_world("spine02") + V(0, -0.32, -0.12); MAN_LAP[f] = lap
+    for s, sx in (("L", 1), ("R", -1)):
+        tip = lap + V(sx * 0.04, 0.0, 0.005 * math.sin(f * 1.7 + sx))
+        hand_at(M, s, f, tip, V(-sx * 0.3, -0.5, 0.6).normalized(), V(0, 0.4, 1).normalized(), pole=M.bone_world("upperarm01." + s) + V(sx * 0.35, 0.1, -0.3))
+for f, kw in ((1440, dict(frown=0.4, squint=0.3)), (1468, dict(frown=0.5, sad=0.3, flare=0.4))):
+    face(M.body, f, **kw)
 BENCH = V(-1.2, 1.98, 0.0)
 SEATZ = 0.47
 def man_bench(f, lean=10, head=(0, 0), twist=0.0, side=0.0):
@@ -351,7 +369,8 @@ for f in (1724, 1800, 1852, 1868):
     ev(f)
     for s in "LR":
         sh = M.bone_world("upperarm01." + s); sx = 1 if s == "R" else -1
-        M.h.key_hand(s, f, sh + V(sx * 0.25, -0.35 if f != 1800 else 0.1, -0.12 if f < 1855 else -0.25), V(0, -1, 0), V(0, 0, -1))
+        W_ = sh + V(sx * 0.25, -0.35 if f != 1800 else 0.1, -0.12 if f < 1852 else -0.25); W_.z = max(W_.z, 0.64)
+        M.h.key_hand(s, f, W_, V(0, -1, 0.15).normalized(), V(0, 0, -1))
 
 # ================================================================== MAN in the shower (beats 10-11)
 SHW = V(8.35, 1.8, 0.06)
@@ -382,12 +401,13 @@ for f, what in ((1870, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press")
         tR = nt + rt * 0.012 + fw * 0.004; dR, nR = (up + rt * 0.3).normalized(), -rt
         tL = shL + fw * 0.25 - up * 0.3; dL, nL = fw, up
     else:
-        tR = shR + fw * 0.15 - up * 0.42; dR, nR = (fw - up).normalized(), rt
+        tR = shR + rt * 0.1 + fw * 0.02 - up * 0.5; dR, nR = (-up + fw * 0.2).normalized(), rt
         cup = nt + fw * (0.2 if what == "palm" else 0.24) - up * (0.2 if what == "palm" else 0.12)
         tL = cup; dL, nL = (fw + rt * 0.3).normalized(), up
         M_PALM[f] = cup.copy()
-    hand_at(M, "R", f, tR, dR, nR, shR - rt * 0.3 - up * 0.3)
-    hand_at(M, "L", f, tL, dL, nL, shL + rt * 0.3 - up * 0.3)
+    bk_ = -fw
+    hand_at(M, "R", f, tR, dR, nR, shR + rt * 0.45 - up * 0.35 + bk_ * 0.25)
+    hand_at(M, "L", f, tL, dL, nL, shL - rt * 0.45 - up * 0.35 + bk_ * 0.25)
 fingers(M.r, "R", 1870, 0.2, 0.1, 0.1); fingers(M.r, "L", 1870, 0.2, 0.1, 0.1); fingers(M.r, "L", 2077, 0.35, 0.3, 0.2)
 for f, kw in ((1870, dict(squint=0.6, sad=0.2)), (1960, dict(squint=0.7, purse=0.3)), (1990, dict(squint=1.0, purse=0.8, flare=1.0)), (2040, dict(squint=1.0, purse=1.0, flare=1.0)),
               (2085, dict(squint=1.0, purse=1.0, flare=1.0)), (2095, dict(wide=1.0, open=0.5, brows=0.8)), (2150, dict(wide=1.0, open=0.6, brows=1.0)),
