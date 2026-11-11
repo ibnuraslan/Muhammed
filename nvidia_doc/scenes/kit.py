@@ -306,7 +306,14 @@ def render_depth(path, near=0.1, far=60.0):
     s.world.use_nodes = True; s.world.node_tree.nodes["Background"].inputs['Color'].default_value = (1, 1, 1, 1)
     samples, den, vt = s.cycles.samples, s.cycles.use_denoising, s.view_settings.view_transform
     s.cycles.samples = 4; s.cycles.use_denoising = False; s.view_settings.view_transform = 'Standard'
-    hidden = [o for o in s.objects if o.name.startswith("Haze") and not o.hide_render]
+    def see_through(o):
+        for m in getattr(o.data, "materials", []) or []:
+            if m and m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
+                if m.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value > 0.5:
+                    return True
+        return False
+    # haze volumes and glass would read as solid surfaces in the depth pass: leave them out
+    hidden = [o for o in s.objects if not o.hide_render and (o.name.startswith("Haze") or (o.type == 'MESH' and see_through(o)))]
     for o in hidden:
         o.hide_render = True
     s.render.filepath = path; bpy.ops.render.render(write_still=True)
