@@ -1,0 +1,110 @@
+{
+ "hero_house": {
+  "uid": "faa69249ddb84765921401fa9438861f",
+  "title": "2 Story House",
+  "author": "Designed By Jonathan",
+  "author_profile": "https://sketchfab.com/designedbyjonathan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/faa69249ddb84765921401fa9438861f",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house_a": {
+  "uid": "b8375c5e5e6b40639fc06492fbd95fcb",
+  "title": "Suburban House",
+  "author": "mbuannoart",
+  "author_profile": "https://sketchfab.com/mbuannoart",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b8375c5e5e6b40639fc06492fbd95fcb",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house_b": {
+  "uid": "a0c72713894e418d8f93223c91eb1eac",
+  "title": "Suburban Home",
+  "author": "Designed By Jonathan",
+  "author_profile": "https://sketchfab.com/designedbyjonathan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/a0c72713894e418d8f93223c91eb1eac",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house_c": {
+  "uid": "b9ec496c621346d7ba66f555a09ab8a7",
+  "title": "Wheeler House",
+  "author": "Sea Land Air",
+  "author_profile": "https://sketchfab.com/sealandair",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b9ec496c621346d7ba66f555a09ab8a7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house_d": {
+  "uid": "13a17971271d402886c164628afd50c7",
+  "title": "Surburban Starter House",
+  "author": "novusod",
+  "author_profile": "https://sketchfab.com/novusod",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/13a17971271d402886c164628afd50c7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house_e": {
+  "uid": "fb722ab0446d45a8829d55f436e3c2ba",
+  "title": "American style house",
+  "author": "Kishikov",
+  "author_profile": "https://sketchfab.com/pkishikov",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/fb722ab0446d45a8829d55f436e3c2ba",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "car": {
+  "uid": "78f76d386a4341b0b71745bdc50fd5ab",
+  "title": "Oldsmobile Cutlass Supreme Sedan '71",
+  "author": "Barbo",
+  "author_profile": "https://sketchfab.com/barbo-autos",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/78f76d386a4341b0b71745bdc50fd5ab",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bin": {
+  "uid": "f3db8d79ecdc4615b01b99987f44eb4a",
+  "title": "Trash bin",
+  "author": "tasha.kosaykina",
+  "author_profile": "https://sketchfab.com/tasha.kosaykina",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/f3db8d79ecdc4615b01b99987f44eb4a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "43f8b3127fba4800bfc3f36078393e87",
+  "title": "Wooden Fence",
+  "author": "DmitriyGDS",
+  "author_profile": "https://sketchfab.com/DmitriyGDS",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/43f8b3127fba4800bfc3f36078393e87",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "sofa": {
+  "uid": "3fe7ed15c42e48b8820792e8cef64f93",
+  "title": "Old Sofa",
+  "author": "glezova",
+  "author_profile": "https://sketchfab.com/glezova",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3fe7ed15c42e48b8820792e8cef64f93",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "hose": {
+  "uid": "6f054321e329476d859df23b608dc7f6",
+  "title": "Domestic Hose Unit",
+  "author": "Glowbox 3D",
+  "author_profile": "https://sketchfab.com/glowbox3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6f054321e329476d859df23b608dc7f6",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "mailbox": {
+  "uid": "d3768223323e4462bbe6c048c9b400ab",
+  "title": "Simple Mailbox",
+  "author": "Blender3D",
+  "author_profile": "https://sketchfab.com/Blender3D",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/d3768223323e4462bbe6c048c9b400ab",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
