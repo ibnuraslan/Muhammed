@@ -84,10 +84,27 @@ def build(variant=None):
     wash = bpy.data.lights.new("Wash", 'AREA'); wash.energy = 12; wash.size = 3; wash.color = (0.8, 0.88, 1.0)
     o = bpy.data.objects.new("Wash", wash); bpy.context.collection.objects.link(o); o.location = (0, 4.5, 2.7)
     box("Exit", (2.8, 4.9, 2.4), (0.3, 0.02, 0.12), emissive("Exit", (0.3, 1.0, 0.5), 8))
-    return dict(door=Vector((0, DOOR_Y, 1.1)), chairs=Vector((-1.3, 2.0, 0.55)), name=Vector((0, 4.95, 1.95)))
+    # CH2 7B: a desk phone on the reception desk; its line light blinks while it rings, unanswered
+    phone_m = pbr("PhoneBody", (0.03, 0.03, 0.033), 0.35)
+    box("DeskPhone", (1.4, 3.45, 1.13), (0.22, 0.2, 0.05), phone_m, bevel=0.01, rot=(math.radians(-10), 0, math.radians(-15)))
+    box("Handset", (1.33, 3.43, 1.17), (0.06, 0.2, 0.035), phone_m, bevel=0.012, rot=(math.radians(-10), 0, math.radians(-15)))
+    lm = bpy.data.materials.new("RingLight"); lm.use_nodes = True
+    N = lm.node_tree.nodes; L = lm.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.35, 0.15, 1)
+    v = N.new("ShaderNodeValue"); d = v.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'
+    d.expression = "30 * (1 if (frame % 24) < 12 else 0.02)"
+    L.new(v.outputs[0], em.inputs['Strength']); L.new(em.outputs[0], out.inputs['Surface'])
+    box("RingLED", (1.47, 3.38, 1.16), (0.025, 0.012, 0.01), lm, rot=(math.radians(-10), 0, math.radians(-15)))
+    rl = bpy.data.lights.new("RingGlow", 'POINT'); rl.color = (1.0, 0.4, 0.2); rl.shadow_soft_size = 0.02
+    dl = rl.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = "3 * (1 if (frame % 24) < 12 else 0.02)"
+    ro = bpy.data.objects.new("RingGlow", rl); bpy.context.collection.objects.link(ro); ro.location = (1.47, 3.36, 1.2)
+    return dict(door=Vector((0, DOOR_Y, 1.1)), chairs=Vector((-1.3, 2.0, 0.55)), name=Vector((0, 4.95, 1.95)), phone=Vector((1.4, 3.45, 1.15)))
 
 
 MOVES = {
+    "phone_ring": dict(kind="anim", dof=2.0, far=20.0,
+                       cam=lambda c, t: (Vector((0.9, DOOR_Y - 1.1, 1.35)).lerp(Vector((0.95, DOOR_Y - 0.6, 1.3)), ease(t)), c["phone"], 55),
+                       focus=lambda c, t: c["phone"]),
     "door_push": dict(kind="anim", dof=2.8, far=20.0,
                       cam=lambda c, t: (Vector((0.55, -3.4, 1.45)).lerp(Vector((0.3, -1.25, 1.3)), ease(t)), (0.05, 0.0, 1.05), 32),
                       focus=lambda c, t: (0.07, 0.0, 1.05)),

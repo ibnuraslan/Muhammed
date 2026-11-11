@@ -10,7 +10,7 @@ from people import man, woman
 
 DUR = {"tv_handheld": 5.0}          # estimate until the chapter 2 voiceover arrives
 
-EXPOSURE = 0.3
+EXPOSURE = 1.0
 
 
 def build(variant=None):
