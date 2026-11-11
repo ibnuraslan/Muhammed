@@ -338,11 +338,11 @@ o_ = N.new("ShaderNodeOutputMaterial"); em = N.new("ShaderNodeEmission"); gc = N
 ramp = N.new("ShaderNodeValToRGB"); L.new(gc.outputs["Object"], sep.inputs[0])
 mth = N.new("ShaderNodeMapRange"); mth.inputs[1].default_value = -SR; mth.inputs[2].default_value = SR
 L.new(sep.outputs[2], mth.inputs[0]); L.new(mth.outputs[0], ramp.inputs[0])
-ramp.color_ramp.elements[0].color = (0.18, 0.62, 0.78, 1); ramp.color_ramp.elements[0].position = 0.15
-ramp.color_ramp.elements[1].color = (0.93, 0.98, 1.0, 1); ramp.color_ramp.elements[1].position = 0.85
+ramp.color_ramp.elements[0].color = (0.01, 0.04, 0.12, 1); ramp.color_ramp.elements[0].position = 0.1
+ramp.color_ramp.elements[1].color = (0.08, 0.42, 0.52, 1); ramp.color_ramp.elements[1].position = 0.9
 L.new(ramp.outputs[0], em.inputs[0]); em.inputs[1].default_value = 0.9; L.new(em.outputs[0], o_.inputs[0])
 sph.data.materials.append(m)
-box("Studio_Floor", STUDIO, (6, 6, 0.02), SC + Vector((0, 0, -1.6)), flat("M_StudioFloor", (0.8, 0.93, 0.97), 0.35))
+box("Studio_Floor", STUDIO, (6, 6, 0.02), SC + Vector((0, 0, -1.6)), flat("M_StudioFloor", (0.05, 0.16, 0.22), 0.3))
 st_floor = bpy.data.objects["Studio_Floor"]; st_floor.visible_camera = True
 for i, (loc, e, sz) in enumerate(((Vector((-2.5, -2.5, 2.5)), 900, 2.5), (Vector((2.8, -1.0, 1.5)), 500, 2.0), (Vector((0.5, 2.8, 2.0)), 600, 2.0))):
     ld = bpy.data.lights.new("Studio_Key%d" % i, "AREA"); ld.energy = e; ld.size = sz; ld.color = (1.0, 0.98, 0.95) if i != 2 else (0.75, 0.9, 1.0)
@@ -383,8 +383,12 @@ else:
     bs.inputs["Base Color"].default_value = (0.8, 0.55, 0.45, 1)
 bs.inputs["Roughness"].default_value = 0.5; bs.inputs["Subsurface Weight"].default_value = 0.15
 bs.inputs["Subsurface Radius"].default_value = (0.05, 0.02, 0.01)
-cut = N.new("ShaderNodeBsdfPrincipled"); cut.inputs["Base Color"].default_value = (0.78, 0.36, 0.34, 1); cut.inputs["Roughness"].default_value = 0.6
-cut.inputs["Emission Color"].default_value = (0.86, 0.45, 0.42, 1); cut.inputs["Emission Strength"].default_value = 0.1
+cut = N.new("ShaderNodeBsdfPrincipled"); cut.inputs["Base Color"].default_value = (0.55, 0.13, 0.14, 1); cut.inputs["Roughness"].default_value = 0.3
+cut.inputs["Coat Weight"].default_value = 0.6; cut.inputs["Subsurface Weight"].default_value = 0.2
+cnz = N.new("ShaderNodeTexNoise"); cnz.inputs["Scale"].default_value = 300; cbp = N.new("ShaderNodeBump"); cbp.inputs["Strength"].default_value = 0.4
+L.new(cnz.outputs[0], cbp.inputs["Height"]); L.new(cbp.outputs[0], cut.inputs["Normal"])
+ccr = N.new("ShaderNodeValToRGB"); ccr.color_ramp.elements[0].color = (0.4, 0.07, 0.08, 1); ccr.color_ramp.elements[1].color = (0.7, 0.24, 0.22, 1)
+L.new(cnz.outputs[0], ccr.inputs[0]); L.new(ccr.outputs[0], cut.inputs["Base Color"])
 geo = N.new("ShaderNodeNewGeometry"); mix = N.new("ShaderNodeMixShader")
 L.new(geo.outputs["Backfacing"], mix.inputs[0]); L.new(bs.outputs[0], mix.inputs[1]); L.new(cut.outputs[0], mix.inputs[2])
 L.new(mix.outputs[0], N["Material Output"].inputs[0]); me.materials.append(mk)
@@ -413,7 +417,7 @@ if XS_HAIR: XS_HAIR.matrix_world = XSM
 def xs(p):   # boy rest-space point -> studio world point
     return XSM @ Vector(p)
 # inlays drawn on the cut plane (model x = XCUT + tiny offset into the head), in model (y, z) coords of the boy's rest head
-def inlay(name, pts_yz, mat, depth=0.004, off=0.0006, bevel=0.0):
+def inlay(name, pts_yz, mat, depth=0.004, off=0.0006, bevel=0.0012):
     cu = bpy.data.curves.new(name, "CURVE"); cu.dimensions = "2D"; cu.fill_mode = "BOTH"; cu.extrude = depth / 2
     cu.bevel_depth = bevel
     sp = cu.splines.new("BEZIER"); sp.bezier_points.add(len(pts_yz) - 1); sp.use_cyclic_u = True
@@ -430,20 +434,41 @@ hy_back = max(v.y for v in vs if v.z > HB.z); top = max(v.z for v in vs)
 L_ = hy_back - ny; Hh = top - zcut
 def P(u, v):  # u: 0 = nose tip .. 1 = back of head ; v: 0 = cut level .. 1 = top
     return (ny + u * L_, zcut + v * Hh)
-M_BONE = flat("M_XS_Bone", (0.82, 0.72, 0.52), 0.55)
-M_BRAIN = flat("M_XS_Brain", (0.72, 0.48, 0.52), 0.5, sss=0.1)
-for mm_, sc_, st_ in ((M_BRAIN, 900, 0.6), (M_BONE, 2500, 0.25)):
-    nt_ = mm_.node_tree; nz_ = nt_.nodes.new("ShaderNodeTexNoise"); nz_.inputs["Scale"].default_value = sc_ if mm_ is M_BONE else 1
-    if mm_ is M_BRAIN:
-        wv = nt_.nodes.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.inputs["Scale"].default_value = 160; wv.inputs["Distortion"].default_value = 14
-        src_ = wv.outputs[1]
-    else: src_ = nz_.outputs[0]
-    bp_ = nt_.nodes.new("ShaderNodeBump"); bp_.inputs["Strength"].default_value = st_; nt_.links.new(src_, bp_.inputs["Height"])
-    nt_.links.new(bp_.outputs[0], nt_.nodes["Principled BSDF"].inputs["Normal"])
-M_MUC = flat("M_XS_Mucosa", (0.7, 0.18, 0.2), 0.25, sss=0.2, coat=0.4)
-M_AIR = flat("M_XS_Airway", (0.28, 0.06, 0.08), 0.35, coat=0.5)
-M_TONGUE = flat("M_XS_Tongue", (0.72, 0.26, 0.3), 0.4, sss=0.2)
-M_CART = flat("M_XS_Cartilage", (0.82, 0.86, 0.9), 0.4, sss=0.1)
+def tissue(name, c0, c1, rough=0.4, sss=0.0, coat=0.0, scale=600.0, bump=0.3, kind="noise", spec=0.5, sssr=(0.006, 0.002, 0.001)):
+    """realistic tissue: colour varied between c0/c1 by noise, bump from noise / voronoi pores / wave folds, SSS + wet coat"""
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt_ = m.node_tree; N_ = nt_.nodes; L2 = nt_.links
+    b_ = N_["Principled BSDF"]
+    tc_ = N_.new("ShaderNodeTexCoord")
+    nz_ = N_.new("ShaderNodeTexNoise"); nz_.inputs["Scale"].default_value = scale * 0.15; nz_.inputs["Detail"].default_value = 8
+    L2.new(tc_.outputs["Object"], nz_.inputs["Vector"])
+    cr_ = N_.new("ShaderNodeValToRGB"); cr_.color_ramp.elements[0].color = (*c0, 1); cr_.color_ramp.elements[1].color = (*c1, 1)
+    L2.new(nz_.outputs[0], cr_.inputs[0]); L2.new(cr_.outputs[0], b_.inputs["Base Color"])
+    if kind == "pores":
+        vo = N_.new("ShaderNodeTexVoronoi"); vo.inputs["Scale"].default_value = scale; L2.new(tc_.outputs["Object"], vo.inputs["Vector"]); hsrc = vo.outputs["Distance"]
+    elif kind == "folds":
+        wv = N_.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.inputs["Scale"].default_value = scale * 0.25; wv.inputs["Distortion"].default_value = 16
+        wv.inputs["Detail"].default_value = 4; L2.new(tc_.outputs["Object"], wv.inputs["Vector"]); hsrc = wv.outputs[1]
+    elif kind == "fibres":
+        mp_ = N_.new("ShaderNodeMapping"); mp_.inputs["Scale"].default_value = (1, 1, 8); L2.new(tc_.outputs["Object"], mp_.inputs[0])
+        nz2 = N_.new("ShaderNodeTexNoise"); nz2.inputs["Scale"].default_value = scale; L2.new(mp_.outputs[0], nz2.inputs["Vector"]); hsrc = nz2.outputs[0]
+    else:
+        nz2 = N_.new("ShaderNodeTexNoise"); nz2.inputs["Scale"].default_value = scale; nz2.inputs["Detail"].default_value = 10
+        L2.new(tc_.outputs["Object"], nz2.inputs["Vector"]); hsrc = nz2.outputs[0]
+    bp_ = N_.new("ShaderNodeBump"); bp_.inputs["Strength"].default_value = bump; L2.new(hsrc, bp_.inputs["Height"]); L2.new(bp_.outputs[0], b_.inputs["Normal"])
+    b_.inputs["Roughness"].default_value = rough
+    if "Specular IOR Level" in b_.inputs: b_.inputs["Specular IOR Level"].default_value = spec
+    if sss: b_.inputs["Subsurface Weight"].default_value = sss; b_.inputs["Subsurface Radius"].default_value = sssr
+    if coat:
+        b_.inputs["Coat Weight"].default_value = coat; b_.inputs["Coat Roughness"].default_value = 0.05
+        L2.new(bp_.outputs[0], b_.inputs["Coat Normal"])
+    m.diffuse_color = (*c0, 1)
+    return m
+M_BONE = tissue("M_XS_Bone", (0.5, 0.4, 0.27), (0.78, 0.7, 0.55), rough=0.62, sss=0.05, scale=1600, bump=0.45, kind="pores")
+M_BRAIN = tissue("M_XS_Brain", (0.5, 0.3, 0.32), (0.68, 0.46, 0.47), rough=0.38, sss=0.3, coat=0.4, scale=700, bump=0.7, kind="folds")
+M_MUC = tissue("M_XS_Mucosa", (0.45, 0.05, 0.07), (0.78, 0.22, 0.24), rough=0.2, sss=0.45, coat=1.0, scale=900, bump=0.35)
+M_AIR = tissue("M_XS_Airway", (0.12, 0.02, 0.03), (0.32, 0.06, 0.07), rough=0.25, sss=0.2, coat=1.0, scale=700, bump=0.5)
+M_TONGUE = tissue("M_XS_Tongue", (0.5, 0.1, 0.12), (0.72, 0.25, 0.27), rough=0.3, sss=0.4, coat=0.8, scale=2200, bump=0.4, kind="pores")
+M_CART = tissue("M_XS_Cartilage", (0.7, 0.74, 0.78), (0.9, 0.9, 0.93), rough=0.22, sss=0.6, coat=0.7, scale=500, bump=0.1, sssr=(0.01, 0.01, 0.012))
 # brain (upper back) and skull band around it
 brain_pts = [P(0.30, 0.62), P(0.33, 0.80), P(0.45, 0.93), P(0.62, 0.96), P(0.80, 0.88), P(0.90, 0.70), P(0.86, 0.52), P(0.70, 0.46), P(0.52, 0.48), P(0.38, 0.52)]
 skull_pts = [P(0.26, 0.60), P(0.29, 0.83), P(0.43, 0.97), P(0.62, 1.0), P(0.83, 0.92), P(0.95, 0.70), P(0.92, 0.45), P(0.86, 0.38),

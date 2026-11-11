@@ -174,13 +174,20 @@ for o, keys in ((XSB, ((740, 0.06, 0.34, -40), (800, 0.07, 0.355, -45), (840, 0.
         key_obj(o, f, xsM(u, v, a), scale=XS)
 key_obj(XSB, 1130, xsM(0.4, 0.2, 0, dx=-1.0), scale=0.01)    # gone (pulled out) when we return
 const_at(XSB, {860})
+# both cross-section bricks glow a little for readability (own object-level materials)
+for o_, col_ in ((XSB, (0.85, 0.06, 0.04)), (XSS, (1.0, 0.75, 0.1))):
+    mg = flat("M_XSGlow_" + o_.name, col_, 0.15, emit=col_, es=0.6, coat=0.8)
+    o_.material_slots[0].link = "OBJECT"; o_.material_slots[0].material = mg
+gnode = bpy.data.materials["M_XSGlow_XS_Brick_Small"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
+for f, e in ((1, 0.6), (1150, 0.6), (1185, 3.0), (1250, 4.5), (1320, 3.0)):
+    gnode.default_value = e; gnode.keyframe_insert("default_value", frame=f)
 MB_YEL = bpy.data.materials["M_Brick_Yellow"]   # glow keyed on the shared material: only visible in the studio (room brick hidden then)
 eo = MB_YEL.node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f, e in ((1, 0), (1150, 0), (1185, 2.5), (1250, 4.0), (1320, 3.0), (1345, 0)):
     eo.default_value = e; eo.keyframe_insert("default_value", frame=f)
 glow = bpy.data.objects.new("FX_BrickGlow", bpy.data.lights.new("FX_BrickGlow", "POINT")); PR.objects.link(glow)
 glow.location = xsM(0.19, 0.455, -62, dx=-0.004).translation; glow.data.color = (1.0, 0.8, 0.3); glow.data.shadow_soft_size = 0.05
-for f, e in ((1, 0), (1150, 0), (1185, 60), (1320, 60), (1345, 0)):
+for f, e in ((1, 0), (1150, 0), (1185, 12), (1320, 12), (1345, 0)):
     glow.data.energy = e; glow.data.keyframe_insert("energy", frame=f)
 # mucosa 'breathing' in the studio: the airway lining pulses
 lin = bpy.data.objects["XS_AirwayLining"]
@@ -324,14 +331,14 @@ def ex_step(f_mid, before, after):
     ex_fc.keyframe_points.insert(f_mid - 1, before); ex_fc.keyframe_points.insert(f_mid, after)
     for kp in ex_fc.keyframe_points:
         if int(round(kp.co.x)) == f_mid - 1: kp.interpolation = "CONSTANT"
-ex_step(741, 0.6, -0.7); ex_step(864, -0.7, 0.6); ex_step(1121, 0.6, -0.7); ex_step(1318, -0.7, 0.6)
+ex_step(741, 0.6, -0.6); ex_step(864, -0.6, 0.6); ex_step(1121, 0.6, -0.6); ex_step(1318, -0.6, 0.6)
 for kp in ex_fc.keyframe_points:
     if kp.co.x >= 1882: kp.co.y = 0.0
     elif 1470 <= kp.co.x <= 1720: kp.co.y = 0.15
 ex_fc.update()
 # studio light is self-contained (sphere emission + 3 area keys); dim them a little so whites do not clip
-for i, e in enumerate((300, 160, 220)): bpy.data.objects["Studio_Key%d" % i].data.energy = e
-sph_em = bpy.data.materials["M_StudioGradient"].node_tree.nodes["Emission"].inputs[1]; sph_em.default_value = 0.6
+for i, e in enumerate((420, 90, 260)): bpy.data.objects["Studio_Key%d" % i].data.energy = e
+sph_em = bpy.data.materials["M_StudioGradient"].node_tree.nodes["Emission"].inputs[1]; sph_em.default_value = 1.0
 
 # ------------------------------------------------------------------ the one camera (Catmull-Rom through framing keys)
 def fw_of(c): return (c.head_M().to_3x3() @ V(0, -1, 0)).normalized()
