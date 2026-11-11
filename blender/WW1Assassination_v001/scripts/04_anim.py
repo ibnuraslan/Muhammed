@@ -142,7 +142,7 @@ def arm_pose(H, s, f, pos, yaw, gz, kind, k=0.0, ph=0.0, extra=None):
             loc = loc.lerp(up, k); d = d.lerp(Vector((0, 0, 1)), k); n = n.lerp(Vector((0, -1, 0)), k)
             pole = pole.lerp(Vector((S.x + sx * 0.6, S.y + 0.2, S.z)), k)
         if kind == "clap" and k > 0.01:
-            c = 0.03 + 0.06 * (0.5 + 0.5 * math.sin(s * 14 + ph))
+            c = 0.1 + 0.05 * (0.5 + 0.5 * math.sin(s * 14 + ph))   # curled fingers stay clear of the other hand
             mid = Vector((sx * c, S.y - 0.33, S.z - 0.2))
             loc = loc.lerp(mid, k); d = d.lerp(Vector((0, -0.6, 0.8)), k); n = n.lerp(Vector((-sx, 0, 0)), k)
         if kind == "coat" and side == "R":
@@ -441,7 +441,7 @@ def off_plan(s):
 def off_arms(H, s, f, pos, yw, gz, mode):
     if s < 26.9: arm_pose(H, s, f, pos, yw, gz, "down"); return
     k = smooth((s - 26.9) / 0.4)
-    gp, gy, _ = gun_plan(s); grab = Vector((gp.x, gp.y, 1.25))
+    gp, gy, _ = gun_plan(s); side_ = Matrix.Rotation(R_(gy), 3, 'Z') @ Vector((-0.3, 0.05, 0)); grab = Vector((gp.x + side_.x, gp.y + side_.y, 1.32))   # his right upper arm
     Rz = Matrix.Rotation(R_(yw), 3, 'Z'); Mw = person_M(pos, yw, gz)
     local = Mw.inverted() @ grab
     for side in "LR":

@@ -1,0 +1,68 @@
+[
+ {
+  "beat": 1,
+  "frame": 1,
+  "t": 0.0,
+  "first_words": "He fired at the car"
+ },
+ {
+  "beat": 2,
+  "frame": 181,
+  "t": 3.0,
+  "first_words": "aiming at the Archduke"
+ },
+ {
+  "beat": 3,
+  "frame": 415,
+  "t": 6.9,
+  "first_words": "But he wasn't the first"
+ },
+ {
+  "beat": 4,
+  "frame": 607,
+  "t": 10.1,
+  "first_words": "Earlier, two would-be assassins"
+ },
+ {
+  "beat": 5,
+  "frame": 745,
+  "t": 12.4,
+  "first_words": "Then a third threw a bomb"
+ },
+ {
+  "beat": 6,
+  "frame": 931,
+  "t": 15.5,
+  "first_words": "and exploded under the car"
+ },
+ {
+  "beat": 7,
+  "frame": 1111,
+  "t": 18.5,
+  "first_words": "Later, their driver turned"
+ },
+ {
+  "beat": 8,
+  "frame": 1345,
+  "t": 22.4,
+  "first_words": "right where another assassin"
+ },
+ {
+  "beat": 9,
+  "frame": 1489,
+  "t": 24.8,
+  "first_words": "He fired twice"
+ },
+ {
+  "beat": 10,
+  "frame": 1687,
+  "t": 28.1,
+  "first_words": "Their country declared war"
+ },
+ {
+  "beat": 11,
+  "frame": 1921,
+  "t": 32.0,
+  "first_words": "and that's how World War One began"
+ }
+]
