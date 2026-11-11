@@ -349,8 +349,9 @@ for f in men_f:
         neck = (hm @ (M.R.rest("head").inverted() @ Vector((-0.095, 0.115, M.R.BN["head"].head_local.z - 0.05))), Vector((0.7, 0.2, 0.6)), Vector((0, -1, 0)))
         g = lerp_grip(rest, jb, jab)
         g = lerp_grip(g, neck, awk)
-        shieldR = (D @ Vector((-0.02, -0.33, 1.55)), Vector((0.8, 0.1, 0.6)), Vector((0, -1, 0)))
-        shieldL = (D @ Vector((0.05, -0.36, 1.48)), Vector((-0.8, 0.1, 0.6)), Vector((0, -1, 0)))
+        D3m = D.to_3x3()   # rest-body directions (he faces rest -Y): palms out towards her, fingers up, arms apart
+        shieldR = (D @ Vector((-0.10, -0.34, 1.50)), D3m @ Vector((0.15, -0.1, 1.0)), D3m @ Vector((0.1, -1, 0)))
+        shieldL = (D @ Vector((0.30, -0.30, 1.42)), D3m @ Vector((0.25, -0.1, 1.0)), D3m @ Vector((-0.1, -1, 0)))
         slap = (Vector((POS_MO.x + 0.12, desk_y - 0.02, DT + 0.03 + 0.12 * (1 - min(1, SLAP(f) * 1.6)))), Vector((-0.1, 1, -0.1)), Vector((0, 0, -1)))
         g = lerp_grip(g, slap, SLAP(f))
         g = lerp_grip(g, shieldR, pelt)

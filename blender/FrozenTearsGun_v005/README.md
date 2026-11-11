@@ -35,6 +35,7 @@ No VO was supplied. The film is built to the target beat times in `beats.json` (
   - Hand moves arc around the gun instead of passing through it.
 - **Office crying:** her right hand now presses to the bridge of her nose over her eyes, and her left hand stays near her lap. The old two-hands-on-face pose made the hands merge at her nose.
 - **Time-lapse filing:** both hands hold the file overhand on the correct sides, so the arms no longer cross.
+- **Mentor shielding (26.3–28.2 s):** his palms now face out towards her and his arms stay apart, no longer crossing. The directions are now set in his body space.
 - **Hand audit** (`FrozenTearsGun_v001/scripts/hand_audit.py`, every 2 frames; checks hand vs hand, hand vs own torso/head, hand vs other character):
   - 5 samples remain, all explained in `review/hand_audit_v005.txt`.
   - Fingertip-in-gun samples: 5 single frames during fast moves.
