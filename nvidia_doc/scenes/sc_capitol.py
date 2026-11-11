@@ -5,7 +5,8 @@ import bpy
 from mathutils import Vector
 from kit import *
 
-VARIANT_FOR = {"night_rise": "night"}
+VARIANT_FOR = {"night_rise": "night", "dawn_push": "dawn"}
+DUR = {"dawn_push": 7.5}            # estimate until the chapter 1 voiceover arrives
 EXPOSURE = -1.0
 
 
@@ -69,10 +70,87 @@ def build(variant=None):
             l = bpy.data.lights.new("Flood", 'SPOT'); l.energy = 2.5e5; l.spot_size = math.radians(40); l.spot_blend = 0.5; l.color = (1.0, 0.88, 0.7)
             o = bpy.data.objects.new("Flood", l); bpy.context.collection.objects.link(o); o.location = (x, y, 2); point_at(o, (x * 0.3, 0, 45))
         haze((0, -60, 40), (500, 260, 90), density=0.0006, color=(0.7, 0.75, 0.9), anis=0.4)
-    return dict(dome=Vector((0, 0, 50)))
+    ctx = dict(dome=Vector((0, 0, 50)))
+    if variant == "dawn":
+        ctx.update(dawn_extras())
+    return ctx
+
+
+def flag_image(path):
+    """US flag: 13 stripes, a blue canton with 50 stars."""
+    from PIL import Image, ImageDraw
+    W, H = 1900, 1000
+    im = Image.new("RGB", (W, H), (255, 255, 255)); d = ImageDraw.Draw(im)
+    for k in range(13):
+        if k % 2 == 0:
+            d.rectangle([0, k * H / 13, W, (k + 1) * H / 13], fill=(178, 34, 52))
+    cw, ch = W * 0.4, H * 7 / 13
+    d.rectangle([0, 0, cw, ch], fill=(60, 59, 110))
+    for r in range(9):
+        n = 6 if r % 2 == 0 else 5
+        for k in range(n):
+            x = cw * (k * 2 + (1 if r % 2 == 0 else 2)) / 12; y = ch * (r + 1) / 10
+            pts = [(x + 18 * math.cos(math.pi / 2 + j * 4 * math.pi / 5), y - 18 * math.sin(math.pi / 2 + j * 4 * math.pi / 5)) for j in range(5)]
+            d.polygon(pts, fill=(255, 255, 255))
+    im.save(path); return path
+
+
+def dawn_extras():
+    """Autumn trees along the lawn, gravel paths, two flagpoles with waving flags, a few distant walkers."""
+    import os
+    rng = np.random.default_rng(10)
+    out = {}
+    gravel = pbr("Gravel", (0.42, 0.39, 0.34), 0.9)
+    for x in (-22, 22):
+        box("Path", (x, -150, -0.42), (6, 200, 1), gravel)
+    box("CrossPath", (0, -95, -0.42), (120, 6, 1), gravel)
+    # trees: a scanned tree (Poly Haven, CC0) instanced along both sides of the lawn, leaves turned to autumn
+    import ph
+    root, ms = ph.model("tree_small_02", loc=(0, 0, -300))
+    tree = ms[0]
+    for mat in tree.data.materials:
+        N = mat.node_tree.nodes; L = mat.node_tree.links; pb = next((n for n in N if n.type == 'BSDF_PRINCIPLED'), None)
+        if pb is None or not pb.inputs['Base Color'].links:
+            continue
+        src = pb.inputs['Base Color'].links[0].from_socket
+        hs = N.new("ShaderNodeHueSaturation"); oi = N.new("ShaderNodeObjectInfo")
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['To Min'].default_value = 0.29; mr.inputs['To Max'].default_value = 0.42
+        L.new(oi.outputs['Random'], mr.inputs['Value']); L.new(mr.outputs[0], hs.inputs['Hue'])
+        hs.inputs['Saturation'].default_value = 1.15; hs.inputs['Value'].default_value = 0.9
+        L.new(src, hs.inputs['Color']); L.new(hs.outputs['Color'], pb.inputs['Base Color'])
+    for side in (-1, 1):
+        for k in range(16):
+            x = side * rng.uniform(32, 46); y = -60 - k * 13 + rng.uniform(-3, 3); sc_ = rng.uniform(3.4, 4.4)
+            instance(tree, (x, y, 0.0), rot=(0, 0, rng.uniform(0, 6.28)), scale=(sc_, sc_, sc_))
+    # flagpoles either side of the plaza, flags waving (Wave modifier: animates by itself, no keys)
+    import tempfile
+    gen = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated"); os.makedirs(gen, exist_ok=True)
+    fimg = flag_image(os.path.join(gen, "us_flag.png"))
+    fm = bpy.data.materials.new("Flag"); fm.use_nodes = True
+    N = fm.node_tree.nodes; L = fm.node_tree.links; t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(fimg)
+    tc = N.new("ShaderNodeTexCoord"); L.new(tc.outputs['UV'], t.inputs['Vector']); L.new(t.outputs['Color'], N["Principled BSDF"].inputs['Base Color'])
+    N["Principled BSDF"].inputs['Roughness'].default_value = 0.8; N["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.4
+    pole = pbr("FlagPole", (0.75, 0.75, 0.74), 0.3, 1.0)
+    for x in (-60, 60):
+        cyl("FlagPole", (x, -75, 13), 0.18, 26, pole, verts=16)
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=32, size=1, location=(x + 4.0, -75, 23.6), rotation=(math.radians(90), 0, 0))
+        f = bpy.context.active_object; f.name = "Flag"; f.scale = (7.6, 4.0, 1); f.data.materials.append(fm)
+        wv = f.modifiers.new("wave", 'WAVE'); wv.use_x = True; wv.use_y = False; wv.height = 0.35; wv.width = 2.2; wv.speed = 0.12
+        wv.start_position_x = -3.8; wv.falloff_radius = 0.0; wv.narrowness = 1.5
+        f.modifiers.new("sub", 'SUBSURF').levels = 1
+    # a few people far up the path (small, walking slowly)
+    out["walkers"] = []
+    return out
+
+
+def _cam_dawn(c, t):
+    """Low over the lawn between the autumn trees, pushing slowly toward the dome."""
+    e = ease(t)
+    return (Vector((-6, -260, 2.2)).lerp(Vector((-3, -175, 3.0)), e), Vector((0, 0, 40 - 6 * e)), 45)
 
 
 MOVES = {
+    "dawn_push": dict(kind="anim", far=900.0, cam=_cam_dawn, title=("CHAPTER 1", "FOLLOW THE CHIPS", 18, 120)),
     "slow_push": dict(kind="plate", far=900.0, cam=lambda c, t: ((-70, -230, 8), (0, 0, 38), 50)),
     "dusk_push": dict(kind="plate", far=900.0, cam=lambda c, t: ((110, -210, 4), (0, 0, 42), 55)),
     "night_rise": dict(kind="plate", far=900.0, cam=lambda c, t: ((-30, -190, 3 + 12 * t), (0, 0, 45), 45)),

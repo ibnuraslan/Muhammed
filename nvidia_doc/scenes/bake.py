@@ -32,6 +32,10 @@ spec = mod.MOVES[move]
 cam = camera((0, 0, 0), (0, 1, 0), lens=35, dof_dist=3.0, fstop=spec.get("dof", 2.8) or 2.8)
 cam.data.dof.use_dof = bool(spec.get("dof"))
 ctx["cam"] = cam
+if spec.get("title"):                          # chapter title card inside the shot (fades by frame-driven driver)
+    import title_card
+    small, big, f_in, f_out = spec["title"]
+    title_card.add_title(cam, small, big, f_in, f_out)
 
 n = int(round(SECONDS * FPS))
 s.frame_start, s.frame_end = 1, n
