@@ -29,7 +29,7 @@ def tile(kind, variant, out, pct, samples, dirt):
     bpy.context.view_layer.update()
     pts = [o.matrix_world @ Vector(c) for o in [v] + list(v.children_recursive) if o.type == 'MESH' for c in o.bound_box]
     lo = Vector((min(p.x for p in pts), min(p.y for p in pts), 0)); hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
-    c = (lo + hi) / 2; ext = max(hi.x - lo.x, hi.y - lo.y, (hi.z - lo.z) * 1.9)
+    c = (lo + hi) / 2; ext = max(hi.x - lo.x, hi.y - lo.y, (hi.z - lo.z) * 2.3)
     cam = camera((0, 0, 0), (0, 1, 0), lens=50)
     for k, (lab, az) in enumerate(ANGLES):
         d = ext * 1.55 + 2.0

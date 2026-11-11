@@ -222,9 +222,10 @@ def plate_mat(style="eu"):
     return mat("V_Plate_" + style, f)
 
 
-def tyre_mat():
+def tyre_mat(whitewall=False):
+    nm = "V_TyreWW" if whitewall else "V_Tyre"
     def f():
-        m, g = _newmat("V_Tyre")
+        m, g = _newmat(nm)
         x, y, z = g.x, g.y, g.z
         r = g.math('SQRT', x * x + z * z)
         ang = g.math('ARCTAN2', x, z)
@@ -235,9 +236,12 @@ def tyre_mat():
         h = tread * (1.0 - g.ss(0.35, 0.55, blocks) * 0.8) * (1.0 - grooves)
         wear = g.noise(30.0, 3.0)
         p = g.bsdf((0.03, 0.03, 0.03), 0.62 + tread * 0.25 + wear * 0.06, 0.0)
+        if whitewall:
+            ww = g.inside(r / rmax, 0.66, 0.86, 0.01) * g.ss(0.03, 0.05, abs(y))
+            g.L.new(g.mix_col(ww, (0.03, 0.03, 0.03), (0.78, 0.77, 0.72)), p.inputs['Base Color'])
         g.L.new(g.bump(h + (1 - tread) * wear * 0.05, 0.6, 0.004), p.inputs['Normal'])
         g.out(p); return m
-    return mat("V_Tyre", f)
+    return mat(nm, f)
 
 
 def rim_mat(style):
@@ -521,7 +525,7 @@ def cut_arches(body, arches, m_liner, solver='EXACT'):
 
 
 # ============================================================================ paint with masks
-def paint_shader(name, build_masks, metallic=0.0, rough=0.32):
+def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, fixed_color=None):
     """Clear-coat paint whose base colour comes from the object colour (so one material serves a whole fleet) and
     whose glass, seals, chrome, gaps and livery come from object-space masks.
     build_masks(g) -> dict with optional keys: glass, rubber, chrome, black, gap, livery=[(mask, colour)],
@@ -529,7 +533,7 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32):
     def f():
         m, g = _newmat(name)
         M = build_masks(g)
-        base = obj_color(g)
+        base = obj_color(g) if fixed_color is None else g.mix_col(0.0, fixed_color, fixed_color)
         for msk, col in M.get('livery', []):
             base = g.mix_col(msk, base, col)
         dirt = g.attr("dirt")
@@ -550,12 +554,25 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32):
         if 'black' in M:
             bl = g.bsdf((0.02, 0.02, 0.022), 0.5, 0.0); sh = g.mix_shader(M['black'], sh, bl)
         if 'glass' in M:
-            gl = g.bsdf((0.004, 0.005, 0.006), 0.015 + dirt * 0.25, 0.0, **{'Coat Weight': 0.0, 'Specular IOR Level': 0.6})
+            if glass_thin:
+                gl = g.bsdf((0.75, 0.8, 0.8), 0.02 + dirt * 0.2, 0.0, **{'Transmission Weight': 1.0, 'Thin Wall': True, 'IOR': 1.5})
+            else:
+                gl = g.bsdf((0.004, 0.005, 0.006), 0.015 + dirt * 0.25, 0.0, **{'Coat Weight': 0.0, 'Specular IOR Level': 0.6})
             sh = g.mix_shader(M['glass'], sh, gl)
         if 'rubber' in M:
             rb = g.bsdf((0.012, 0.012, 0.012), 0.55, 0.0); sh = g.mix_shader(M['rubber'], sh, rb)
         if 'chrome' in M:
             ch = g.bsdf((0.9, 0.9, 0.92), 0.07 + dirt * 0.2, 1.0); sh = g.mix_shader(M['chrome'], sh, ch)
+        on = g.attr("lamps")
+        for key, col, ec, st in (('head', (0.62, 0.63, 0.65), (1.0, 0.93, 0.8), 25.0), ('tail', (0.32, 0.01, 0.008), (1.0, 0.04, 0.02), 10.0),
+                                 ('ind', (0.6, 0.26, 0.01), (1.0, 0.45, 0.02), 0.0), ('drl', (0.7, 0.72, 0.75), (0.9, 0.95, 1.0), 12.0)):
+            if key in M:
+                # flush lamp: a glossy lens over a chrome reflector, with faint internal structure
+                inner = g.math('SINE', g.y * 90.0) * 0.5 + 0.5
+                lp = g.bsdf(col, 0.08, 0.6 if key in ('head', 'drl') else 0.1, **{'Coat Weight': 1.0, 'Coat Roughness': 0.01,
+                                                                                  'Emission Color': (*ec, 1)})
+                g.link(on * st * (0.6 + inner * 0.4), lp.inputs['Emission Strength'])
+                sh = g.mix_shader(M[key], sh, lp)
         g.out(sh); return m
     return mat(name, f)
 
@@ -625,7 +642,7 @@ def gaps(g, lines, w=0.0022):
 
 
 # ============================================================================ wheels
-def wheel_mesh(key, R, W, rim_r, style="steel", segs=56, dual=False):
+def wheel_mesh(key, R, W, rim_r, style="steel", segs=56, dual=False, whitewall=False):
     """One shared wheel mesh: lathed tyre (sidewall bulge, rounded shoulder, tread via shader) + rim + hub.
     Outer face towards local +Y."""
     nm = f"Wheel_{key}"
@@ -637,7 +654,7 @@ def wheel_mesh(key, R, W, rim_r, style="steel", segs=56, dual=False):
           (R - 0.022, -h * 0.92), (R - 0.006, -h * 0.80), (R, -h * 0.62), (R, -h * 0.2), (R, h * 0.2), (R, h * 0.62),
           (R - 0.006, h * 0.80), (R - 0.022, h * 0.92), (rim_r + sw * 0.7, h * 0.99), (rim_r + sw * 0.35, h * 1.0),
           (rim_r + 0.012, h * 0.94), (rim_r - 0.004, h * 0.80)]
-    tyre = lathe("Tyre", tp, tyre_mat(), segs)
+    tyre = lathe("Tyre", tp, tyre_mat(whitewall), segs)
     rr = rim_r
     if style.startswith("alloy"):
         rp = [(rr - 0.01, -h * 0.75), (rr - 0.008, h * 0.70), (rr + 0.006, h * 0.80), (rr + 0.004, h * 0.88), (rr - 0.006, h * 0.86),
@@ -898,6 +915,12 @@ def _finish(body, name, color, wheel_list=(), heads=()):
 # ============================================================================ vehicle builders
 from vehicles_cars import register as _reg_cars          # noqa: E402
 _reg_cars(KINDS)
+try:
+    from vehicles_modern import register as _reg_modern  # noqa: E402
+    _reg_modern(KINDS)
+except ImportError as e:
+    if "vehicles_modern" not in str(e):
+        raise
 try:
     from vehicles_heavy import register as _reg_heavy    # noqa: E402
     _reg_heavy(KINDS)
