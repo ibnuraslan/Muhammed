@@ -4,7 +4,7 @@ These values were read back from `FrozenTearsGun_v002_60fps.blend`, opened in fa
 
 | Item | Value |
 |---|---|
-| File | `FrozenTearsGun_v002_60fps.blend`, compressed (size in README). Every image is packed; the check found no unpacked images and no linked libraries. Stored with Git LFS. |
+| File | `FrozenTearsGun_v002_60fps.blend`: 57 MB, compressed, a normal git file (no LFS). Every image is packed: 1K textures, 2K for her face skin, a 1K HDRI. The check found no unpacked images and no linked libraries. |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU; GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
