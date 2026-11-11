@@ -13,9 +13,11 @@ def tint(rig, cloth_key, rgb):
                 for nd in list(m.node_tree.nodes):
                     if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
                         for lk in list(nd.outputs['Color'].links):
+                            hs = m.node_tree.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 0.0; hs.inputs['Value'].default_value = 1.0
                             mx = m.node_tree.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
                             mx.inputs['Factor'].default_value = 1.0; mx.inputs['B'].default_value = (*rgb, 1)
-                            m.node_tree.links.new(nd.outputs['Color'], mx.inputs['A']); m.node_tree.links.new(mx.outputs['Result'], lk.to_socket)
+                            m.node_tree.links.new(nd.outputs['Color'], hs.inputs['Color']); m.node_tree.links.new(hs.outputs['Color'], mx.inputs['A'])
+                            m.node_tree.links.new(mx.outputs['Result'], lk.to_socket)
 
 def person(name, age, race, hair, clothes, skin, tintrgb, x, muscle=0.6, weight=0.5, height=0.55):
     info = HumanService._create_default_human_info_dict()
@@ -34,12 +36,12 @@ def person(name, age, race, hair, clothes, skin, tintrgb, x, muscle=0.6, weight=
     tint(rig, clothes.split("/")[0], tintrgb)
     return rig
 
-OLIVE = (0.42, 0.45, 0.26); KHAKI = (0.62, 0.55, 0.40); GREY = (0.45, 0.45, 0.42)
+OLIVE = (0.30, 0.33, 0.17); KHAKI = (0.55, 0.47, 0.32); GREY = (0.36, 0.36, 0.34)
 person("SolA", 0.45, {"asian": 0.6, "caucasian": 0.4, "african": 0.0}, "short02/short02.mhclo", "male_worksuit01/male_worksuit01.mhclo", "young_asian_male/young_asian_male.mhmat", OLIVE, 0)
 person("SolB", 0.42, {"asian": 0.2, "caucasian": 0.8, "african": 0.0}, "short01/short01.mhclo", "male_worksuit01/male_worksuit01.mhclo", "young_caucasian_male/young_caucasian_male.mhmat", OLIVE, 2, height=0.6)
 person("SolC", 0.48, {"asian": 0.8, "caucasian": 0.2, "african": 0.0}, "short03/short03.mhclo", "male_worksuit01/male_worksuit01.mhclo", "middleage_asian_male/middleage_asian_male.mhmat", OLIVE, 4, weight=0.6)
-person("EngA", 0.7, {"asian": 0.1, "caucasian": 0.9, "african": 0.0}, "short04/short04.mhclo", "male_casualsuit02/male_casualsuit02.mhclo", "middleage_caucasian_male/middleage_caucasian_male.mhmat", KHAKI, 6)
-person("EngB", 0.6, {"asian": 0.5, "caucasian": 0.5, "african": 0.0}, "short02/short02.mhclo", "male_casualsuit04/male_casualsuit04.mhclo", "middleage_asian_male/middleage_asian_male.mhmat", GREY, 8, weight=0.55)
+person("EngA", 0.7, {"asian": 0.1, "caucasian": 0.9, "african": 0.0}, "short04/short04.mhclo", "male_worksuit01/male_worksuit01.mhclo", "middleage_caucasian_male/middleage_caucasian_male.mhmat", KHAKI, 6)
+person("EngB", 0.6, {"asian": 0.5, "caucasian": 0.5, "african": 0.0}, "short02/short02.mhclo", "male_worksuit01/male_worksuit01.mhclo", "middleage_asian_male/middleage_asian_male.mhmat", GREY, 8, weight=0.55)
 person("SolD", 0.4, {"asian": 0.4, "caucasian": 0.6, "african": 0.0}, "short01/short01.mhclo", "male_worksuit01/male_worksuit01.mhclo", "young_caucasian_male2/young_caucasian_male2.mhmat", OLIVE, 10, height=0.5)
 for ob in bpy.data.objects:
     if ob.type == 'ARMATURE':

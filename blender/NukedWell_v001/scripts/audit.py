@@ -18,8 +18,8 @@ sc = bpy.context.scene; O = bpy.data.objects
 SHAFT = Vector((-14.0, -2.7))
 CREW = ["SolA", "SolB", "SolC", "SolD", "EngA", "EngB"]
 GRIP = {  # name: (frame range, object, kind)
-    "SolA": [((1325, 1449), "Device", "device"), ((860, 1300), "HoseA", "hose")],
-    "SolB": [((1325, 1449), "Device", "device"), ((860, 1300), "HoseA", "hose")],
+    "SolA": [((1380, 1449), "Device", "device"), ((860, 1300), "HoseA", "hose")],
+    "SolB": [((1380, 1449), "Device", "device"), ((860, 1300), "HoseA", "hose")],
     "SolC": [((860, 1300), "HoseB", "hose")], "SolD": [((860, 1300), "HoseB", "hose")],
 }
 issues = {}
@@ -69,9 +69,8 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             body = child(nm, "body")
             for s in "LR":
                 hp = mesh_pts(body, dg, vg=["finger", "metacarpal"] if False else ["wrist." + s, "finger1", "finger2", "finger3"]) if False else None
-                palm = rig.matrix_world @ rig.pose.bones["finger3-1." + s].head
-                loc, nrm, idx, dist = tree.find_nearest(palm)
-                if loc is None: continue
+                dist = min(tree.find_nearest(rig.matrix_world @ rig.pose.bones[bn + "." + s].head)[3] or 9
+                           for bn in ("finger3-1", "finger2-2", "finger3-2", "finger4-2", "metacarpal2", "metacarpal3"))
                 if dist > 0.06 + 0.03: flag("HAND_FAR", f, "%s %s palm %.1f cm from the %s" % (nm, s, dist * 100, kind))
             # finger vertices inside the prop
             body = child(nm, "body")

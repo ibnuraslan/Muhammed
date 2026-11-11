@@ -2,7 +2,7 @@
 blender -b scene.blend --python 03_animate.py -- <pipeline_dir> <out.blend>"""
 import sys, os, math, random
 import bpy
-from mathutils import Vector, Matrix
+from mathutils import Vector, Matrix, Quaternion
 
 PIPE, OUT = sys.argv[sys.argv.index("--") + 1:][:2]
 exec(open(os.path.join(PIPE, "anim_lib.py")).read())
@@ -93,10 +93,10 @@ def dev_state(f):
     b8 = BEAT[8]
     if f < 1250: return YAW_PARK, R_SHAFT, TOPZ - 3, False
     if f < b8:   # crane swings the device over the shaft (after the cap job)
-        t = smooth((f - 1255) / 110.0); return YAW_PARK + (YAW_SHAFT - YAW_PARK) * t, R_SHAFT, TOPZ - 3 - (TOPZ - 3 - 10.6) * smooth((f - 1290) / 90.0), True
-    if f < 1460: return YAW_SHAFT, R_SHAFT, 10.6 - 0.9 * smooth((f - b8) / 79.0), True
+        t = smooth((f - 1255) / 110.0); return YAW_PARK + (YAW_SHAFT - YAW_PARK) * t, R_SHAFT, TOPZ - 3 - (TOPZ - 3 - 9.7) * smooth((f - 1290) / 90.0), True
+    if f < 1460: return YAW_SHAFT, R_SHAFT, 9.7 - 0.5 * smooth((f - b8) / 79.0), True
     t = (f - 1460) / (BEAT[9] - 6 - 1460)
-    return YAW_SHAFT, R_SHAFT, 9.7 + (-57.0 - 9.7) * smooth(min(1, t)) ** 1.6, True
+    return YAW_SHAFT, R_SHAFT, 9.2 + (-57.0 - 9.2) * smooth(min(1, t)) ** 1.6, True
 
 def cap_state(f):
     """cap: hangs from the hook 1040-1170 over the well, sits on the wellhead after"""
@@ -122,7 +122,7 @@ for f in range(1, END + 1, 2):
     CABLE.location = (tip.x, tip.y, hook_z + 1.2); CABLE.scale = (1, 1, max(0.1, 32.4 - (hook_z + 1.2)))
     CABLE.keyframe_insert("location", frame=f); CABLE.keyframe_insert("scale", frame=f)
     swing = 0.0
-    if f > BEAT[8] - 130 and f < 1460: swing = 0.6 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0))
+    if f > BEAT[8] - 130 and f < 1460: swing = 0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0))
     DEV.location = (tip.x + swing, tip.y, z_d); DEV.rotation_euler = (0, R_(swing * 2), (f * 0.002) % 6.3)
     DEV.keyframe_insert("location", frame=f); DEV.keyframe_insert("rotation_euler", frame=f)
     yaw_c, r_c, z_c = cap_state(f)
@@ -260,6 +260,14 @@ for i in range(70):
             e.location = (WELL.x + r * math.cos(a), WELL.y + r * math.sin(a), 6 + t * 150 * h)
         e.keyframe_insert("location", frame=f)
         e.scale = (max(0.05, 1 - t),) * 3; e.keyframe_insert("scale", frame=f)
+shn = bpy.data.materials["M_HeatShimmer"].node_tree.nodes
+KS(shn["ShimmerNoise"].inputs['W'], [(1, 0.0), (END, 60.0)])
+for fc in fcurves_of(bpy.data.materials["M_HeatShimmer"].node_tree):
+    for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
+SH = O["HeatShimmer"]
+for f in range(1, END + 1, 4):
+    h = fire_h(f); SH.scale = (1, 1, max(0.01, min(1.0, h))); SH.keyframe_insert("scale", frame=f)
+    SH.hide_render = h < 0.08; SH.keyframe_insert("hide_render", frame=f)
 # gas flow in the casing: pulses race up during the eruption; cut off above the pinch after beat 10
 gm = bpy.data.materials["M_GasFlow"].node_tree.nodes
 KS(gm["GasAmt"].outputs[0], [(1, 0.0), (b4, 0.0), (b4 + 12, 1.0), (b5 + 60, 1.0), (b5 + 120, 0.0), (BEAT[10] - 40, 0.0), (BEAT[10] - 10, 0.8), (END, 0.8)])
@@ -357,6 +365,9 @@ def body_frame(yaw):
 def yaw_to(src, dst):
     d = (dst - src).to_2d(); return math.degrees(math.atan2(d.x, -d.y))
 CREW = {}
+_kf = Human.key_foot
+def _key_foot(self, s, f, xy, yaw, lift=0.0, pitch=0.0): _kf(self, s, f, xy, yaw, lift + 0.027, pitch)
+Human.key_foot = _key_foot
 for nm in ("SolA", "SolB", "SolC", "SolD", "EngA", "EngB"):
     rig = make_human_ctrl(O[nm]); CREW[nm] = Human(rig)
 # ---------------- soldiers' field caps: rigid, bone-parented to 'head', sized to clear the hair
@@ -410,8 +421,21 @@ HANDS = {   # local offsets (left(+)/right(-) x, forward, up), finger dir, palm 
     "radio": ((0.12, 0.08, 1.58), (0, 0.2, 1), (1, 0, 0)),
     "brace": ((0.3, 0.25, 1.05), (0, 0.6, -0.4), None),
 }
+GRIP_AXIS = Vector((1, 0, 0)); GRIP_SIGN = 1.0
+def key_grip(nm, f, s, amt):
+    """curl the fingers: amt 0 = open, 1 = closed fist around a ~5 cm handle"""
+    P = CREW[nm].r.PB
+    for i in range(2, 6):
+        for j, ang in ((1, 55), (2, 70), (3, 45)):
+            n = "finger%d-%d.%s" % (i, j, s)
+            if n in P:
+                P[n].rotation_quaternion = Quaternion(GRIP_AXIS, GRIP_SIGN * R_(ang * amt)); P[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
+    for j, ang in ((2, 25), (3, 30)):
+        n = "finger1-%d.%s" % (j, s)
+        if n in P:
+            P[n].rotation_quaternion = Quaternion(GRIP_AXIS, GRIP_SIGN * R_(ang * amt)); P[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
 def pose(nm, f, pos, yaw, L="side", R="side", crouch=0.03, flex=6.0, twist=0.0, side=0.0, head=(0.0, 0.0),
-         feet=None, sway=0.0, hand_world=None):
+         feet=None, sway=0.0, hand_world=None, grip=(0.2, 0.2)):
     """one full key: root, spine, both feet (planted unless given), both hands"""
     h = CREW[nm]; pos = Vector((pos[0], pos[1]))
     fw, lf = body_frame(yaw)
@@ -431,6 +455,7 @@ def pose(nm, f, pos, yaw, L="side", R="side", crouch=0.03, flex=6.0, twist=0.0, 
             nl = None if nl is None else (nl[0] * sx, nl[1], nl[2])
             W, d, n = hand_local(h, s, pos, yaw, off, dl, nl)
         h.key_hand(s, f, W, d, n, pole_for(pos, yaw, s))
+        key_grip(nm, f, s, grip[0 if s == 'L' else 1])
 def stance(nm, pos, yaw, front=0.0, width=1.0):
     """feet placement dict: brace stance (L forward, R back)"""
     h = CREW[nm]; fw, lf = body_frame(yaw); pos = Vector(pos)
@@ -494,28 +519,24 @@ H2 = (Vector((-16.5, 17.5)), Vector((-19.0, 21.6)))
 def hose_setup(name, front, back, nmF, nmB, f0, f1):
     tgt = WELL; yawF = yaw_to(front, tgt)
     fw, lf = body_frame(yawF)
-    nozzle = front.to_3d() + fw * 0.85 + Vector((0, 0, 1.12)) - lf * 0.12
-    tail = back.to_3d() - fw * 3.0 + Vector((0, 0, 0.1))
-    # hose: nozzle -> back person's hands -> trailing on the ground to the truck
-    hp = [nozzle, front.to_3d() + fw * 0.2 + Vector((0, 0, 1.0)) - lf * 0.15, back.to_3d() + fw * 0.35 + Vector((0, 0, 0.95)) - lf * 0.12,
-          back.to_3d() - fw * 0.8 + Vector((0, 0, 0.2)), tail]
-    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.055; cu.bevel_resolution = 2
-    sp = cu.splines.new('NURBS'); sp.points.add(len(hp) - 1); sp.use_endpoint_u = True; sp.order_u = 3
+    def side_pt(pos, fwd, right, z): return pos.to_3d() + fw * fwd - lf * right + Vector((0, 0, z))
+    nozzle = side_pt(front, 1.0, 0.18, 1.14)
+    fL, fR = side_pt(front, 0.62, 0.22, 1.08), side_pt(front, 0.22, 0.30, 1.0)
+    bL, bR = side_pt(back, 0.62, 0.24, 1.0), side_pt(back, 0.15, 0.32, 0.95)
+    hp = [nozzle, fL, fR, bL, bR, side_pt(back, -0.8, 0.3, 0.25), side_pt(back, -2.0, 0.3, 0.06), back.to_3d() - fw * 6.0 + Vector((0, 0, 0.06))]
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.05; cu.bevel_resolution = 2
+    sp = cu.splines.new('POLY'); sp.points.add(len(hp) - 1)
     for p_, v in zip(sp.points, hp): p_.co = (*v, 1)
     ho = bpy.data.objects.new(name, cu); bpy.data.collections["Props"].objects.link(ho); cu.materials.append(bpy.data.materials["M_DarkSteel"])
-    nz = bpy.data.objects.new(name + "_Nozzle", None); bpy.data.collections["Props"].objects.link(nz)
-    # hands: on the hose line
-    def on_line(a, b, t): return a.lerp(b, t)
-    for nm, pos, a, b in ((nmF, front, hp[0], hp[1]), (nmB, back, hp[1], hp[2])):
+    for nm, pos, WL, WR, nxt in ((nmF, front, fL, fR, nozzle), (nmB, back, bL, bR, fR)):
         yw = yaw_to(pos, tgt)
-        WL = on_line(a, b, 0.25 if nm == nmF else 0.55); WR = on_line(a, b, 0.75 if nm == nmF else 0.85)
-        dvec = (a - b).normalized()
-        hw = {"L": (WL + Vector((0, 0, 0.03)), dvec, Vector((0, 0, -1))), "R": (WR + Vector((0, 0, 0.03)), dvec, Vector((0, 0, -1)))}
+        dvec = (nxt - WL).normalized() if nm == nmF else (WL - WR).normalized()
+        hw = {"L": (WL + Vector((0, 0, 0.04)), dvec, Vector((0, 0, -1))), "R": (WR + Vector((0, 0, 0.04)), dvec, Vector((0, 0, -1)))}
         ft = stance(nm, pos, yw, front=0.38, width=1.3)
         f = f0; i = 0
         while f <= f1:
             k = math.sin(i * 1.3)
-            pose(nm, f, pos, yw, crouch=0.12 + 0.03 * k, flex=18 + 4 * k, side=2 * k, head=(5, 6 * k), feet=ft, hand_world=hw)
+            pose(nm, f, pos, yw, crouch=0.10 + 0.03 * k, flex=14 + 4 * k, side=2 * k, head=(5, 6 * k), feet=ft, hand_world=hw, grip=(0.85, 0.85))
             f += 18; i += 1
     # water arc
     tgt3 = Vector((WELL.x, WELL.y, 6.0)); d = (tgt3 - nozzle)
@@ -554,24 +575,26 @@ for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", 
 T8 = B[8] - 69
 DZ0 = 10.6 - 9.0   # device bottom at the start of beat 8
 def dev_guide(nm, sgn, f0, f1):
-    pos = SHAFT + Vector((sgn * 2.75, 0.55)); yw = yaw_to(pos, SHAFT)
+    pos = SHAFT + Vector((sgn * 2.52, 0.3)); yw = yaw_to(pos, SHAFT + Vector((0, 0.3)))
     pose(nm, f0 - 1, pos, yw)
     f = f0
     while f <= f1:
         _, _, zd, _ = dev_state(f); zb = zd - 9.0
-        hz = max(zb + 0.5, 1.55); hz = min(hz, zb + 2.5)
-        cx = SHAFT.x + sgn * 1.76 + (0.6 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
+        hz = max(zb + 0.6, 1.15); hz = min(hz, zb + 2.5)
+        cx = SHAFT.x + sgn * 1.72 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
         release = smooth((f - 1452) / 14.0)
         hw = {}
-        for s, dy in (("L", 0.38 * sgn), ("R", -0.38 * sgn)):
-            W = Vector((cx + sgn * 0.02 + sgn * 0.35 * release, SHAFT.y + dy + 0.15, hz + 0.0 - 0.3 * release))
+        for s, dy in (("L", -0.25 * sgn), ("R", 0.25 * sgn)):
+            W = Vector((cx + sgn * 0.03 + sgn * 0.35 * release, SHAFT.y + dy + 0.3, hz + 0.0 - 0.3 * release))
             hw[s] = (W, Vector((0, 0, 1)), Vector((-sgn, 0, 0)))
-        pose(nm, f, pos, yw, crouch=0.05, flex=22 - 10 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1))
+        pose(nm, f, pos, yw, crouch=0.12, flex=46 - 26 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1), grip=(0.15, 0.15))
         f += 6
-dev_guide("SolA", -1, T8 + 2, 1500)
-dev_guide("SolB", 1, T8 + 2, 1500)
-idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-2.75, 0.55)), yaw_to(SHAFT + Vector((-2.75, 0.55)), SHAFT), "side", "point_down", flex=16)
-idle("SolB", 1501, B[9] - 6, SHAFT + Vector((2.75, 0.55)), yaw_to(SHAFT + Vector((2.75, 0.55)), SHAFT), "side", "side", flex=16)
+for nm, sg in (("SolA", -1), ("SolB", 1)):
+    pp = SHAFT + Vector((sg * 2.52, 0.3)); idle(nm, T8, 1360, pp, yaw_to(pp, SHAFT + Vector((0, 0.3)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
+dev_guide("SolA", -1, 1372, 1500)
+dev_guide("SolB", 1, 1372, 1500)
+idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-2.52, 0.3)), yaw_to(SHAFT + Vector((-2.52, 0.3)), SHAFT), "side", "point_down", flex=16)
+idle("SolB", 1501, B[9] - 6, SHAFT + Vector((2.52, 0.3)), yaw_to(SHAFT + Vector((2.52, 0.3)), SHAFT), "side", "side", flex=16)
 pE = Vector((-8.5, 4.5)); pose("EngA", T8, pE, yaw_to(pE, CB.to_2d()))
 idle("EngA", T8 + 1, B[9] - 6, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
      gest=[(T8 + 1, "wave_a", "side"), (T8 + 13, "wave_b", "side"), (T8 + 25, "wave_a", "side"), (T8 + 37, "wave_b", "side"), (1440, "up", "point"), (1480, "side", "point_down")], head=(18, 0))
@@ -627,8 +650,8 @@ CAMK = [  # frame, camera, target, lens
     (990,  (20.0, 15.0, 5.0), (3.0, 2.0, 8.0), 24),
     (1045, (6.0, 26.0, 9.0), (-3.0, 4.0, 10.0), 24),
     (1095, (-30.0, 12.0, 9.0), (-6.0, 14.0, 6.0), 24),
-    (1140, (15.0, -22.0, 11.0), (0.0, -1.6, 7.5), 50),
-    (1180, (12.0, -18.0, 5.5), (0.0, -1.6, 3.4), 50),
+    (1140, (17.0, -26.0, 9.0), (0.0, -1.6, 9.0), 36),
+    (1180, (13.0, -19.0, 5.0), (0.0, -1.6, 3.4), 40),
     (1240, (13.0, -24.0, 14.0), (2.0, 10.0, 1.0), 26),
     (1300, (32.0, -62.0, 46.0), (0.0, 14.0, 3.0), 24),
     (1350, (2.0, -40.0, 20.0), (-12.0, 0.0, 6.0), 26),
@@ -640,13 +663,14 @@ CAMK = [  # frame, camera, target, lens
     (1632, (-8.0, -72.0, -6.0), (-14.0, 0.0, -20.0), 22),
     (1665, (-21.0, -62.0, 10.0), (-14.0, 5.0, 2.0), 22),
     (1705, (-6.0, -46.0, -40.0), (-7.0, 0.0, -55.0), 26),
-    (1760, (-2.0, -17.0, -58.0), (0.0, -1.6, -60.0), 38),
-    (1830, (4.0, -40.0, -55.0), (-5.0, 0.0, -55.0), 30),
+    (1760, (-3.0, -30.0, -57.0), (-3.0, -1.6, -59.0), 30),
+    (1830, (5.0, -46.0, -50.0), (-5.0, 0.0, -54.0), 28),
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
     (1925, (2.0, -50.0, 0.5), (0.0, 0.0, 24.0), 24),
-    (1968, (14.0, 16.0, 5.0), (0.0, -1.6, 5.0), 26),
-    (2015, (-21.0, 50.5, 2.0), (-25.0, 62.0, 1.6), 30),
-    (2055, (-17.0, 64.0, 5.5), (-20.0, 40.0, 3.0), 28),
+    (1965, (7.0, 9.0, 6.0), (0.0, -1.6, 5.0), 26),
+    (2000, (-15.0, 42.0, 3.0), (-25.0, 62.0, 1.6), 28),
+    (2030, (-21.0, 53.0, 2.0), (-25.0, 62.3, 1.6), 30),
+    (2065, (-17.0, 65.0, 5.5), (-20.0, 40.0, 3.0), 28),
     (2100, (-28.0, 76.0, 11.0), (-8.0, 0.0, 6.0), 26),
     (2160, (-32.0, 98.0, 30.0), (-6.0, 0.0, 4.0), 26),
 ]

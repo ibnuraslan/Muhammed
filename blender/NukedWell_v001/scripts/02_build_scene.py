@@ -314,15 +314,18 @@ DEV_L, DEV_R = 9.0, 1.7
 def build_device():
     bm = bmesh.new()
     bmesh.ops.create_cone(bm, cap_ends=True, segments=40, radius1=DEV_R, radius2=DEV_R, depth=DEV_L, matrix=Matrix.Translation((0, 0, -DEV_L / 2)))
-    for v in bm.verts:   # rounded ends
-        if v.co.z > -0.2: v.co.x *= 0.85; v.co.y *= 0.85
-        if v.co.z < -DEV_L + 0.2: v.co.x *= 0.8; v.co.y *= 0.8
+    vert_edges = [e for e in bm.edges if abs(e.verts[0].co.z - e.verts[1].co.z) > 1.0]
+    bmesh.ops.subdivide_edges(bm, edges=vert_edges, cuts=17, use_grid_fill=False)
+    for v in bm.verts:   # rounded ends over the last 0.5 m only; the body stays a true R cylinder
+        d_end = min(-v.co.z, v.co.z + DEV_L)
+        if d_end < 0.5 and v.co.xy.length > 0.01:
+            k = 0.82 + 0.18 * math.sqrt(max(0.0, d_end / 0.5)); v.co.x *= k; v.co.y *= k
     me = bpy.data.meshes.new("Device"); bm.to_mesh(me); bm.free()
     mod_o = bpy.data.objects.new("Device", me); link(mod_o, C_PROP); me.materials.append(M_DEVICE)
     for p_ in me.polygons: p_.use_smooth = True
     bv = mod_o.modifiers.new("bevel", 'BEVEL'); bv.width = 0.25; bv.segments = 3; bv.limit_method = 'ANGLE'
     for z_ in (-1.5, -DEV_L + 1.5):
-        b = cyl("Device_band", DEV_R + 0.04, z_ - 0.15, z_ + 0.15, mat=M_DARK, c_=C_PROP); b.parent = mod_o
+        b = cyl("Device_band", DEV_R + 0.025, z_ - 0.15, z_ + 0.15, mat=M_DARK, c_=C_PROP); b.parent = mod_o
     eye = cyl("Device_eye", 0.35, 0.0, 0.7, mat=M_DARK, c_=C_PROP); eye.parent = mod_o
     ring = bpy.data.objects.new("Device_ring", bpy.data.meshes.new("ring")); link(ring, C_PROP)
     bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=16, radius1=0.12, radius2=0.12, depth=0.1)
@@ -520,7 +523,7 @@ def fire_material(name, dens=6.0, smoke=False):
         l.new(M('MULTIPLY', hot, zz), ramp.inputs['Fac'])
         l.new(ramp.outputs['Color'], vol.inputs['Emission Color'])
         lift = M('MULTIPLY', M('SUBTRACT', z, 0.02), 25.0, clamp=True)
-        l.new(M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.5), vol.inputs['Emission Strength'])
+        l.new(M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.22), vol.inputs['Emission Strength'])
     else:
         f1 = M('MULTIPLY_ADD', core, 0.3); f1.node.inputs[2].default_value = -0.6
         field = M('ADD', f1, nz.outputs['Fac'])
@@ -538,7 +541,24 @@ def fire_obj(name, base, r0, r1, h, mat):
     o.visible_shadow = True
     return o
 FIRE = fire_obj("FireColumn", (0, -1.6, 3.4), 5.0, 30.0, 125.0, fire_material("M_Fire", 3.0))
-SMOKE = fire_obj("SmokePlume", (4, 8, 70), 20.0, 80.0, 190.0, fire_material("M_Smoke", 0.3, smoke=True))
+SMOKE = fire_obj("SmokePlume", (4, 8, 70), 20.0, 80.0, 190.0, fire_material("M_Smoke", 0.2, smoke=True))
+# heat shimmer: a camera-only refractive sleeve around the column (IOR barely above 1, animated noise normal)
+bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=48, radius1=13.0, radius2=34.0, depth=95.0, matrix=Matrix.Translation((0, 0, 47.5)))
+me = bpy.data.meshes.new("HeatShimmer"); bm.to_mesh(me); bm.free()
+SHIM = bpy.data.objects.new("HeatShimmer", me); SHIM.location = (0, -1.6, 0.5); link(SHIM, C_FX)
+for p_ in me.polygons: p_.use_smooth = True
+msh = bpy.data.materials.new("M_HeatShimmer"); msh.use_nodes = True
+n, l = msh.node_tree.nodes, msh.node_tree.links; n.remove(n["Principled BSDF"])
+tc = n.new('ShaderNodeTexCoord'); nz = n.new('ShaderNodeTexNoise'); nz.name = "ShimmerNoise"; nz.noise_dimensions = '4D'
+nz.inputs['Scale'].default_value = 0.35; nz.inputs['Detail'].default_value = 2; l.new(tc.outputs['Object'], nz.inputs['Vector'])
+bp = n.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 1.0; bp.inputs['Distance'].default_value = 0.4; l.new(nz.outputs['Fac'], bp.inputs['Height'])
+rf = n.new('ShaderNodeBsdfRefraction'); rf.inputs['IOR'].default_value = 1.012; rf.inputs['Roughness'].default_value = 0.0; rf.inputs['Color'].default_value = (1, 1, 1, 1)
+l.new(bp.outputs['Normal'], rf.inputs['Normal'])
+amt = n.new('ShaderNodeValue'); amt.name = "ShimmerAmt"; amt.outputs[0].default_value = 1.0
+tr = n.new('ShaderNodeBsdfTransparent'); mx = n.new('ShaderNodeMixShader')
+l.new(amt.outputs[0], mx.inputs['Fac']); l.new(tr.outputs['BSDF'], mx.inputs[1]); l.new(rf.outputs['BSDF'], mx.inputs[2])
+l.new(mx.outputs['Shader'], n["Material Output"].inputs['Surface']); me.materials.append(msh)
+SHIM.visible_shadow = False; SHIM.visible_diffuse = False; SHIM.visible_glossy = False; SHIM.visible_transmission = False; SHIM.visible_volume_scatter = False
 FISSURES = []
 FIS_PTS = [(13, 6), (-6, 14), (17, 26), (-24, 4), (6, 34), (-12, 30)]
 M_FIS = fire_material("M_FissureFire", 6.0)
