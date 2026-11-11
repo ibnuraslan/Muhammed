@@ -1,0 +1,865 @@
+{
+"hits": [
+[
+1195,
+"hand.R",
+"own torso/head",
+7
+],
+[
+1195,
+"hand.R",
+"own clothes",
+2
+],
+[
+1197,
+"hand.R",
+"own torso/head",
+8
+],
+[
+1197,
+"hand.R",
+"own clothes",
+9
+],
+[
+1199,
+"hand.R",
+"own torso/head",
+9
+],
+[
+1199,
+"hand.R",
+"own clothes",
+8
+],
+[
+1201,
+"hand.R",
+"own torso/head",
+9
+],
+[
+1201,
+"hand.R",
+"own clothes",
+5
+],
+[
+1203,
+"hand.R",
+"own torso/head",
+8
+],
+[
+1203,
+"hand.R",
+"own clothes",
+7
+],
+[
+1205,
+"hand.R",
+"own torso/head",
+6
+],
+[
+1205,
+"hand.R",
+"own clothes",
+9
+],
+[
+1207,
+"hand.R",
+"own torso/head",
+2
+],
+[
+1207,
+"hand.R",
+"own clothes",
+8
+],
+[
+1209,
+"hand.R",
+"own clothes",
+3
+],
+[
+1211,
+"hand.R",
+"own clothes",
+3
+],
+[
+1213,
+"hand.R",
+"own clothes",
+7
+],
+[
+1215,
+"hand.R",
+"own clothes",
+9
+],
+[
+1217,
+"hand.R",
+"own clothes",
+9
+],
+[
+1219,
+"hand.R",
+"own clothes",
+8
+],
+[
+1221,
+"hand.R",
+"own clothes",
+11
+],
+[
+1223,
+"hand.R",
+"own clothes",
+8
+],
+[
+1301,
+"hand.L",
+"own clothes",
+1
+],
+[
+1305,
+"hand.L",
+"own clothes",
+1
+],
+[
+1307,
+"hand.L",
+"own clothes",
+1
+],
+[
+1309,
+"hand.L",
+"own clothes",
+1
+],
+[
+1313,
+"hand.L",
+"own clothes",
+1
+],
+[
+1315,
+"hand.L",
+"own clothes",
+1
+],
+[
+1317,
+"hand.L",
+"own clothes",
+1
+],
+[
+1319,
+"hand.L",
+"own clothes",
+1
+],
+[
+1321,
+"hand.L",
+"own clothes",
+1
+],
+[
+1323,
+"hand.L",
+"own clothes",
+1
+],
+[
+1325,
+"hand.L",
+"own clothes",
+1
+],
+[
+1327,
+"hand.L",
+"own clothes",
+1
+],
+[
+1343,
+"hand.L",
+"own clothes",
+2
+],
+[
+1345,
+"hand.L",
+"own clothes",
+1
+],
+[
+1347,
+"hand.L",
+"own clothes",
+1
+],
+[
+1349,
+"hand.L",
+"own clothes",
+1
+],
+[
+1351,
+"hand.L",
+"own clothes",
+1
+],
+[
+1353,
+"hand.L",
+"own clothes",
+2
+],
+[
+1355,
+"hand.L",
+"own clothes",
+1
+],
+[
+1357,
+"hand.L",
+"own clothes",
+1
+],
+[
+1409,
+"hand.L",
+"own clothes",
+1
+],
+[
+1411,
+"hand.L",
+"own clothes",
+2
+],
+[
+1413,
+"hand.L",
+"own clothes",
+1
+],
+[
+1415,
+"hand.L",
+"own clothes",
+2
+],
+[
+1417,
+"hand.L",
+"own clothes",
+1
+],
+[
+1419,
+"hand.L",
+"own clothes",
+1
+],
+[
+1421,
+"hand.L",
+"own clothes",
+1
+],
+[
+1423,
+"hand.L",
+"own clothes",
+2
+],
+[
+1425,
+"hand.L",
+"own clothes",
+2
+],
+[
+1427,
+"hand.L",
+"own clothes",
+2
+],
+[
+1429,
+"hand.L",
+"own clothes",
+3
+],
+[
+1431,
+"hand.L",
+"own clothes",
+2
+],
+[
+1433,
+"hand.L",
+"own clothes",
+2
+],
+[
+1435,
+"hand.L",
+"own clothes",
+1
+],
+[
+1437,
+"hand.L",
+"own clothes",
+2
+],
+[
+1439,
+"hand.L",
+"own clothes",
+2
+],
+[
+1441,
+"hand.L",
+"own clothes",
+1
+],
+[
+1443,
+"hand.L",
+"own clothes",
+1
+],
+[
+1445,
+"hand.L",
+"own clothes",
+2
+],
+[
+1447,
+"hand.L",
+"own clothes",
+1
+],
+[
+1451,
+"hand.L",
+"own clothes",
+1
+],
+[
+1453,
+"hand.L",
+"own clothes",
+1
+],
+[
+1455,
+"hand.L",
+"own clothes",
+1
+],
+[
+1457,
+"hand.L",
+"own clothes",
+1
+],
+[
+1459,
+"hand.L",
+"own clothes",
+1
+],
+[
+1463,
+"hand.L",
+"own clothes",
+2
+],
+[
+1465,
+"hand.L",
+"own clothes",
+1
+],
+[
+1467,
+"hand.L",
+"own clothes",
+1
+],
+[
+1473,
+"hand.L",
+"own clothes",
+1
+],
+[
+1475,
+"hand.L",
+"own clothes",
+1
+],
+[
+1479,
+"hand.L",
+"own clothes",
+1
+],
+[
+1481,
+"hand.L",
+"own clothes",
+1
+],
+[
+1483,
+"hand.L",
+"own clothes",
+1
+],
+[
+1485,
+"hand.L",
+"own clothes",
+1
+],
+[
+1487,
+"hand.L",
+"own clothes",
+1
+],
+[
+1489,
+"hand.L",
+"own clothes",
+1
+],
+[
+1495,
+"hand.L",
+"own clothes",
+1
+],
+[
+1497,
+"hand.L",
+"own clothes",
+1
+],
+[
+1499,
+"hand.L",
+"own clothes",
+1
+]
+],
+"joint": [
+[
+35,
+"wrist.L",
+62
+],
+[
+37,
+"wrist.L",
+65
+],
+[
+39,
+"wrist.L",
+68
+],
+[
+41,
+"wrist.L",
+71
+],
+[
+43,
+"wrist.L",
+74
+],
+[
+45,
+"wrist.L",
+77
+],
+[
+47,
+"wrist.L",
+79
+],
+[
+49,
+"wrist.L",
+81
+],
+[
+51,
+"wrist.L",
+83
+],
+[
+53,
+"wrist.L",
+84
+],
+[
+55,
+"wrist.L",
+85
+],
+[
+57,
+"wrist.L",
+85
+],
+[
+59,
+"wrist.L",
+86
+],
+[
+61,
+"wrist.L",
+86
+],
+[
+63,
+"wrist.L",
+85
+],
+[
+65,
+"wrist.L",
+85
+],
+[
+67,
+"wrist.L",
+84
+],
+[
+69,
+"wrist.L",
+82
+],
+[
+71,
+"wrist.L",
+81
+],
+[
+73,
+"wrist.L",
+79
+],
+[
+75,
+"wrist.L",
+76
+],
+[
+77,
+"wrist.L",
+74
+],
+[
+79,
+"wrist.L",
+71
+],
+[
+81,
+"wrist.L",
+69
+],
+[
+83,
+"wrist.L",
+66
+],
+[
+85,
+"wrist.L",
+63
+],
+[
+87,
+"wrist.L",
+60
+],
+[
+173,
+"wrist.L",
+79
+],
+[
+173,
+"wrist.R",
+117
+],
+[
+175,
+"wrist.L",
+87
+],
+[
+175,
+"wrist.R",
+113
+],
+[
+177,
+"wrist.L",
+86
+],
+[
+177,
+"wrist.R",
+111
+],
+[
+179,
+"wrist.L",
+84
+],
+[
+179,
+"wrist.R",
+108
+],
+[
+181,
+"wrist.L",
+80
+],
+[
+181,
+"wrist.R",
+104
+],
+[
+183,
+"wrist.L",
+73
+],
+[
+183,
+"wrist.R",
+98
+],
+[
+185,
+"wrist.L",
+65
+],
+[
+185,
+"wrist.R",
+90
+],
+[
+187,
+"wrist.R",
+82
+],
+[
+189,
+"wrist.R",
+73
+],
+[
+191,
+"wrist.R",
+65
+],
+[
+1171,
+"wrist.R",
+86
+],
+[
+1173,
+"wrist.R",
+86
+],
+[
+1175,
+"wrist.R",
+86
+],
+[
+1177,
+"wrist.R",
+86
+],
+[
+1179,
+"wrist.R",
+86
+],
+[
+1181,
+"wrist.R",
+86
+],
+[
+1183,
+"wrist.R",
+86
+],
+[
+1185,
+"wrist.R",
+86
+],
+[
+1187,
+"wrist.R",
+86
+],
+[
+1189,
+"wrist.R",
+86
+],
+[
+1191,
+"wrist.R",
+88
+],
+[
+1193,
+"wrist.R",
+92
+],
+[
+1195,
+"wrist.R",
+132
+],
+[
+1197,
+"wrist.R",
+120
+],
+[
+1199,
+"wrist.R",
+125
+],
+[
+1201,
+"wrist.R",
+137
+],
+[
+1203,
+"wrist.R",
+151
+],
+[
+1205,
+"wrist.R",
+142
+],
+[
+1207,
+"wrist.R",
+143
+],
+[
+1209,
+"wrist.R",
+145
+],
+[
+1211,
+"wrist.R",
+148
+],
+[
+1213,
+"wrist.R",
+150
+],
+[
+1215,
+"wrist.R",
+151
+],
+[
+1217,
+"wrist.R",
+151
+],
+[
+1219,
+"wrist.R",
+146
+],
+[
+1221,
+"wrist.R",
+138
+],
+[
+1223,
+"wrist.R",
+125
+],
+[
+1225,
+"wrist.R",
+99
+],
+[
+1227,
+"wrist.R",
+64
+],
+[
+1365,
+"wrist.L",
+61
+]
+],
+"frames": 750,
+"count_hits": 81,
+"count_joint": 74
+}

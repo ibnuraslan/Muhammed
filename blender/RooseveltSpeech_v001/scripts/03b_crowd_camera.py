@@ -13,7 +13,10 @@ def instance(variant, name, loc, yaw, coll, black=False):
         for m in c.modifiers:
             if m.type == "ARMATURE": m.object = a
         coll.objects.link(c)
-    for pb in a.pose.bones: pb.rotation_mode = "QUATERNION"
+    for pb in a.pose.bones:
+        pb.rotation_mode = "QUATERNION"
+        if pb.name.startswith("finger"):   # relaxed default hand: fingers gently curled, never flat-splayed
+            j = pb.name.split("-")[1][0]; pb.rotation_quaternion = Quaternion((1, 0, 0), R_(12 if pb.name.startswith("finger1") else (18 if j == "1" else 25)))
     return a
 SIL = bpy.data.materials.new("Silhouette"); SIL.use_nodes = True
 SIL.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.004, 0.004, 0.005, 1)
@@ -42,7 +45,7 @@ def pose_dirs(kind, s, t, ph):
         if s == "R": return Vector((-0.6, -0.25, 0.75)), Vector((-0.25 + 0.45 * o, -0.1, 1))
         return pose_dirs("relaxed", s, t, ph)
     if kind == "gasp": return Vector((0.25 * sx, -0.7, -0.6)), Vector((-0.25 * sx, -0.25, 1))
-    if kind == "clap": return Vector((0.2 * sx, -0.8, -0.55)), Vector((-0.55 * sx * (0.6 + 0.4 * o2), -0.7, 0.3))
+    if kind == "clap": return Vector((0.22 * sx, -0.8, -0.55)), Vector((-0.3 * sx * (0.55 + 0.45 * o2), -0.75, 0.3))
     if kind == "fist":
         if s == "L": return Vector((0.3, -0.25, 1)), Vector((0.1, -0.1, 1 + 0.3 * o2))
         return pose_dirs("clap", s, t, ph)

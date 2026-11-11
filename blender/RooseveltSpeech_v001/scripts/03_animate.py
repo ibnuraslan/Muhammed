@@ -66,6 +66,20 @@ stw = pk([(1, -8.0), (60, 12.0), (120, -6.0), (F_IMPACT, -4.0), (F_IMPACT + 6, -
 hpitch = pk([(1, -4.0), (F_IMPACT, -2.0), (F_IMPACT + 5, -14.0), (205, 10.0), (260, -6.0), (300, -8.0), (1190, 0.0), (1230, -14.0), (1290, 4.0), (1340, -8.0), (1400, 6.0), (1450, -10.0), (1500, -4.0)])
 hyaw = pk([(1, -10.0), (60, 18.0), (120, -16.0), (F_IMPACT, -20.0), (200, 10.0), (260, -6.0), (300, 0.0), (1190, 0.0), (1250, 10.0), (1320, -16.0), (1380, 18.0), (1440, -10.0), (1500, 0.0)])
 
+# wrist range: hand direction kept within 50 deg of the forearm, eased over frames (no wrong-way bends, no snaps)
+_prev = {}
+def clamp_wrist(s, W, d, n, f):
+    sh = Vector((0.19 if s == "L" else -0.19, -0.01, 1.39 + rz(f)))
+    fa = (W - sh).normalized(); d = d.normalized()
+    ang = math.degrees(fa.angle(d))
+    if F_IMPACT - 2 < f < 192: d = fa.copy(); ang = 0   # flail at the hit: hand follows the forearm
+    if ang > 35: d = fa.slerp(d, 35 / ang) if hasattr(fa, "slerp") else (fa.lerp(d, 35 / ang)).normalized()
+    if s in _prev:   # ease: at most 9 deg change of hand direction per key (2 frames)
+        pd = _prev[s]; a2 = math.degrees(pd.angle(d)) if pd.length else 0
+        if a2 > 9: d = pd.lerp(d, 9 / a2).normalized()
+    _prev[s] = d.copy()
+    n = (n - d * n.dot(d)); n = n.normalized() if n.length > 1e-4 else Vector((1, 0, 0)).cross(d).normalized()
+    return d, n
 # hands (world wrist targets)
 def wave_R(f):   # hat waving arc above the head
     a = math.sin(2 * math.pi * f / 42.0)
@@ -107,15 +121,16 @@ for f in range(1, END + 1, 2):
     breath = 1.5 * math.sin(2 * math.pi * w / 200.0)
     HU.key_spine(f, flex=sflex(w) + breath, twist=stw(w) * 0.6, side=rside(w) * 0.5, head=(hpitch(w), hyaw(w)))
     pr = Vector((-0.55, 0.45, 1.0)); pl = Vector((0.55, 0.45, 1.0))
-    HU.key_hand("R", f, hand_R(w), *hand_frame_R(w), pole=pr)
-    HU.key_hand("L", f, hL(w), *hand_frame_L(w), pole=pl)
+    for s_, W_, (d_, n_), pol in (("R", hand_R(w), hand_frame_R(w), pr), ("L", hL(w), hand_frame_L(w), pl)):
+        if s_ == "L" and 190 <= w <= 1170: HU.key_hand(s_, f, W_, d_, n_, pole=pol); continue   # rail grip keeps its pose
+        HU.key_hand(s_, f, W_, *clamp_wrist(s_, W_, d_, n_, f), pole=pol)
     if "jaw" in R.PB:   # speaking in beat 9 (and a gasp at the hit)
         j = 0.0
         if f > 1240: j = 7 * max(0.0, math.sin(2 * math.pi * f / 11.0)) * (0.6 + 0.4 * math.sin(f / 23.0))
         elif F_IMPACT < w < F_IMPACT + 30: j = 9 * math.sin(math.pi * (w - F_IMPACT) / 30)
         R.key_rot("jaw", f, [("X", j)])
 for f, cr, cl in ((1, 70, 25), (F_IMPACT + 4, 70, 25), (F_IMPACT + 10, 30, 45), (188, 20, 30), (198, 20, 80), (1170, 20, 80), (1182, 20, 30),
-                  (1192, 20, 25), (1204, 25, 25), (1216, 75, 25), (1290, 75, 25), (1300, 75, 95), (1365, 75, 95), (1372, 75, 25), (1395, 75, 25), (1405, 75, 95), (1500, 75, 95)):
+                  (1192, 20, 25), (1204, 25, 25), (1216, 75, 25), (1290, 75, 25), (1300, 75, 80), (1365, 75, 80), (1372, 75, 25), (1395, 75, 25), (1405, 75, 80), (1500, 75, 80)):
     fingers(R.PB, "R", f, cr); fingers(R.PB, "L", f, cl)
 
 # ------------------------------------------------------------------ head items: spectacles + moustache (Child Of head bone)
@@ -306,29 +321,32 @@ sc.frame_set(1216); c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].ma
 for f_, a_, b_ in ((1, 1.0, 0.0), (1215, 1.0, 0.0), (1216, 0.0, 1.0)):
     c_sp.influence = a_; c_hand.influence = b_
     c_sp.keyframe_insert("influence", frame=f_); c_hand.keyframe_insert("influence", frame=f_)
+sc.frame_set(1180); _ms0 = MS.location.copy()
+for f_, u_ in ((1, 0.0), (1182, 0.0), (1200, 1.0), (END, 1.0)):
+    MS.location = _ms0 + (Pocket.matrix_world.to_3x3() @ Vector((0.0, -0.006, 0.065))) * u_; MS.keyframe_insert("location", frame=f_)
 # right hand reaches the manuscript's top edge in the pocket (1199-1216), re-keyed now that the pocket is known
 for f in range(1197, 1219, 2):
     sc.frame_set(f)
-    top = MS.matrix_world @ Vector((0.0, 0.08, 0.014))
+    top = MS.matrix_world @ Vector((0.0, 0.08, 0.014)) + Vector((0, -0.022, 0.006))
     u = smooth((f - 1197) / 10.0)
-    Wt = hR(1196).lerp(top + Vector((0.0, -0.025, 0.075)), u)
-    if f > 1215: Wt = Wg_hold
-    HU.key_hand("R", f, Wt, Vector((0.05, 0.25, -1)), Vector((0, 1, 0)), pole=Vector((-0.55, 0.45, 1.0)))
+    Wt = hR(1196).lerp(top + Vector((0.0, -0.025, 0.075)), u) + Vector((-0.03, -0.12, 0.03)) * math.sin(math.pi * min(1.0, u))
+    if f > 1215: Wt = Wg_hold + Vector((0.0, -0.008, 0.004))
+    HU.key_hand("R", f, Wt, Vector((0.9, 0.25, -0.35)), Vector((0, 1, 0.2)), pole=Vector((-0.55, 0.45, 1.0)))
     if 1205 <= f <= 1215:   # land the finger pads on the manuscript's top edge (2 correction passes)
         for _ in range(2):
-            sc.frame_set(f); top = MS.matrix_world @ Vector((0.0, 0.08, 0.014))
+            sc.frame_set(f); top = MS.matrix_world @ Vector((0.0, 0.08, 0.014)) + Vector((0, -0.022, 0.006))
             fp = H.matrix_world @ R.PB["finger3-2.R"].head.lerp(R.PB["finger1-3.R"].head, 0.5)
             Wt = Wt + (top - fp)
-            HU.key_hand("R", f, Wt, Vector((0.05, 0.25, -1)), Vector((0, 1, 0)), pole=Vector((-0.55, 0.45, 1.0)))
+            HU.key_hand("R", f, Wt, Vector((0.9, 0.25, -0.35)), Vector((0, 1, 0.2)), pole=Vector((-0.55, 0.45, 1.0)))
         Wg_hold = Wt.copy()
 Wg = Wt.copy()
 def _two(a_, m_, b_, u):
     return (a_.lerp(m_, u * 2) if u < 0.5 else m_.lerp(b_, u * 2 - 1)).normalized()
 for f in range(1219, 1245, 2):   # ease out of the grasp into the lift, no orientation snap
     u = smooth((f - 1217) / 26.0)
-    W_ = hR(f) + (Wg - hR(1217)) * (1 - u)
-    d_ = _two(Vector((0.05, 0.25, -1)), Vector((0.2, -1, 0.2)), Vector((0.1, -0.2, 1)), u)
-    n_ = _two(Vector((0, 1, 0)), Vector((0, 0.2, 1)), Vector((-0.2, -1, 0)), u)
+    W_ = hR(f) + (Wg - hR(1217)) * (1 - u) + Vector((0.0, -0.05, 0.0)) * math.sin(math.pi * u)
+    d_ = _two(Vector((0.9, 0.25, -0.35)), Vector((0.5, -0.6, 0.6)), Vector((0.1, -0.2, 1)), u)
+    n_ = _two(Vector((0, 1, 0.2)), Vector((0.3, 0.5, 0.6)), Vector((-0.2, -1, 0)), u)
     HU.key_hand("R", f, W_, d_, n_, pole=Vector((-0.55, 0.45, 1.0)))
 c_hand.influence = 0.0; c_sp.influence = 1.0
 sc.frame_set(1215)
@@ -507,6 +525,20 @@ for i, f_ in enumerate([o for o in bpy.data.objects if o.name.startswith("Flag")
     if dmod:
         e = bpy.data.objects.new(f"FlagWind{i}", None); C_HALL.objects.link(e); dmod.texture_coords = "OBJECT"; dmod.texture_coords_object = e
         for fr_, x_ in ((1, 0.0), (END, 6.0 + i)): e.location = (x_, 0, x_ * 0.3); e.keyframe_insert("location", frame=fr_)
+def limit_hands(rig):
+    for pb in rig.pose.bones:
+        nm = pb.name
+        if nm.startswith("finger"):
+            c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.name = "HandLimit"
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            if nm.startswith("finger1"):   # thumb: a natural cone
+                c.min_x, c.max_x = R_(-20), R_(70); c.min_y, c.max_y = R_(-30), R_(30); c.min_z, c.max_z = R_(-30), R_(30)
+            else:
+                c.min_x, c.max_x = R_(0), R_(90); c.min_y, c.max_y = R_(-10), R_(10); c.min_z, c.max_z = R_(-10), R_(10)
+        elif nm.startswith("wrist."):
+            c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.name = "WristLimit"
+            c.use_limit_x = c.use_limit_z = True; c.min_x, c.max_x = R_(-60), R_(60); c.min_z, c.max_z = R_(-25), R_(25)
+limit_hands(H)
 exec(open(HERE + "/03b_crowd_camera.py").read())
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("ANIM OK")
