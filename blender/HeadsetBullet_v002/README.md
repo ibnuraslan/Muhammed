@@ -13,7 +13,8 @@ The source is `../HeadsetBullet_v001/scripts`. Build order:
 2. `01_build_teen.py`
 3. `02_build_scene.py`
 4. `03_animate.py`, which runs `03a_headset.py`, `03b_effects.py` and `03c_camera.py`
-5. `pipeline/package_for_farm.py`
+5. `05_shrink.py` (1K textures, JPEG/8-bit, orphan purge)
+6. `pipeline/package_for_farm.py`
 
 The audit is `scripts/audit.py`. Review sheets and notes are in `../HeadsetBullet_v001/review/`.
 

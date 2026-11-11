@@ -4,7 +4,7 @@ These values were read back from `HeadsetBullet_v002_60fps.blend`, opened in fac
 
 | Item | Value |
 |---|---|
-| File | `HeadsetBullet_v002_60fps.blend`: 131 MB, compressed. Every image is packed (no unpacked or dirty images). Stored with Git LFS. |
+| File | `HeadsetBullet_v002_60fps.blend`: 57 MB, compressed. Every image is packed (no unpacked or dirty images). Textures are 1K (the face skin is 2K), the HDRI is 1K, opaque maps are JPEG q92, and alpha maps are 8-bit PNG. It is a normal git file (no LFS). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -23,7 +23,7 @@ These values were read back from `HeadsetBullet_v002_60fps.blend`, opened in fac
 | Add-ons | None needed. MPFB2 only built the file. |
 
 ## Measured cost
-MEASURED_COST
+One full frame (f700: 1080×1920, 48 samples, motion blur, the macro with DOF) took **5 min 23 s** on this 4-core cloud CPU. That is about 135 h for 1500 frames locally, so render on the farm GPU nodes.
 
 Suggested test frames on RenderStreet before you approve the whole job:
 - **40**: exterior chase, with the bullet at 12 cm, the HDRI sky, the tree and the car
