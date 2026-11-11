@@ -39,3 +39,12 @@
 | Connect23 | CaveRescue | session_01XfwPSnVQt4zPTKidPYZ4nU | claude/connect23-cave-rescue |
 | Connect24 | RooseveltSpeech | session_01XfwPSmDU9rog858gx2mfei | claude/connect24-roosevelt-speech |
 | Connect25 | Tsunami2004 | session_01XfwPSoTDCrShDRDvrevxrF | claude/connect25-tsunami-2004 |
+
+## Batch 5 (launched 2026-11-11 21:53 UTC; D due 02:15)
+| Chat | Film | Session | Branch |
+|---|---|---|---|
+| Connect26 | DwarfGiant | session_01XfwPSoDNW5SmFgaMHTSVnb | claude/connect26-dwarf-giant |
+| Connect27 | SwedishCoffee | session_01XfwPSoiaQxGnmVheDvzRPq | claude/connect27-swedish-coffee |
+| Connect28 | ToucanBeak | session_01XfwPSkmRyma4xwgQSapnJs | claude/connect28-toucan-beak |
+| Connect29 | AIAsleep | session_01XfwPSnNfLFkY25dy2pPrhR | claude/connect29-ai-asleep |
+| Connect30 | FanCancer | session_01XfwPSk93UWnMkBZTKcWA3L | claude/connect30-fan-cancer |
