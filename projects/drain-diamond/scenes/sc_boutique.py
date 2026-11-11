@@ -228,7 +228,7 @@ def street(c, y_kerb=-6.0, length=140, opposite=True):
     rng = np.random.default_rng(77)
     for k in range(-4, 5):                       # plane trees along the kerb (none in front of the boutique door)
         x = k * 11.0 + 5.5 + float(rng.uniform(-0.6, 0.6))
-        if abs(x) > 4.0:
+        if abs(x) > 10.0:
             dd.model_h("jacaranda_tree", (x, y_kerb + 0.9, 0.06), float(rng.uniform(10.0, 12.0)), rot_z=float(rng.uniform(0, 6)))
         if opposite:
             dd.model_h("jacaranda_tree", (x + 4.0, y_kerb - 16.8, 0.06), float(rng.uniform(10.0, 12.0)), rot_z=float(rng.uniform(0, 6)))
@@ -296,7 +296,7 @@ def paint_tin(name):
 
 # ============================================================================ variants
 def build_dawn(c):
-    w = world_sky(sun_elev_deg=6, sun_rot_deg=300, strength=3.0, tint=(0.9, 0.93, 1.0))
+    w = world_sky(sun_elev_deg=6, sun_rot_deg=300, strength=6.0, tint=(0.9, 0.93, 1.0))
     [n for n in w.node_tree.nodes if n.type == 'TEX_SKY'][0].sun_disc = False
     blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.3)
     haussmann(-34, -11, seed=2, lit_frac=0.28); haussmann(11, 33, seed=3, lit_frac=0.25)
