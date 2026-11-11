@@ -4,7 +4,7 @@ Values read back from `GameBoxBullet_v002_60fps.blend` opened in factory-startup
 
 | Item | Value |
 |---|---|
-| File | `GameBoxBullet_v002_60fps.blend`: __SIZE__ MB, compressed, plain git (no LFS). All images packed. |
+| File | `GameBoxBullet_v002_60fps.blend`: 76 MB, compressed, plain git (no LFS). All images packed. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles, saved as CPU; GPU is fine. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -22,7 +22,7 @@ Values read back from `GameBoxBullet_v002_60fps.blend` opened in factory-startup
 | Add-ons | None needed. |
 
 ## Measured cost
-__COST__
+One frame (f960, cross-section with shards, 48 spp, motion blur) at 50 % resolution took **125 s** on this 4-core cloud CPU, so a full 1080×1920 frame is about 8 min here (about 200 h for 1500 frames on this machine). A farm GPU node will be far faster; run the test frames first.
 
 Suggested test frames before approving the whole job:
 - **20**: exterior, bullet streak, sprinkler, walker

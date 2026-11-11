@@ -23,7 +23,7 @@ for im in list(bpy.data.images):
     if k in seen: im.user_remap(seen[k])
     else: seen[k] = im
 bpy.data.orphans_purge(do_recursive=True)
-ALPHA_KEYS = ("leaves", "leaf", "grass", "shrub", "mask", "alpha", "branch", "opacity", "eyelash", "eyebrow", "hair", "ponytail", "short02")
+ALPHA_KEYS = ("_eye", "leaves", "leaf", "grass", "shrub", "mask", "alpha", "branch", "opacity", "eyelash", "eyebrow", "hair", "ponytail", "short02")
 n_done = 0
 for im in list(bpy.data.images):
     if im.source != "FILE" or im.packed_file or im.filepath.lower().endswith(".hdr"): continue
