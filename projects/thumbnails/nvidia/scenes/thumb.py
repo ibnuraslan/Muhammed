@@ -37,6 +37,9 @@ cam = camera(tuple(loc), tuple(tgt), lens=lens, dof_dist=1.0, fstop=ctx.get("fst
 cam.data.dof.focus_distance = (Vector(loc) - Vector(ctx["focus"])).length
 if ctx.get("shift"):
     cam.data.shift_x, cam.data.shift_y = ctx["shift"]
+for o in bpy.data.objects:          # light sources never show as shapes; practicals are emissive meshes
+    if o.type == 'LIGHT':
+        o.visible_camera = False
 if "post" in ctx:
     ctx["post"](ctx, cam)
 grade.add_grade(s, bloom=getattr(mod, "BLOOM", 0.45), vignette=getattr(mod, "VIGNETTE", 0.65))

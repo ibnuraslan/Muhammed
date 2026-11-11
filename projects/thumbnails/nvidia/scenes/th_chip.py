@@ -30,9 +30,8 @@ def room():
     # the street outside: red and teal glows, far and soft
     for x, z, col, st, sz in ((-1.6, 2.0, (1.0, 0.05, 0.04), 25, (1.6, 0.05, 0.5)), (-0.6, 1.2, (1.0, 0.25, 0.1), 8, (0.5, 0.05, 0.9)),
                               (1.4, 1.9, (0.2, 0.7, 1.0), 6, (1.0, 0.05, 0.4)), (-2.6, 1.0, (1.0, 0.6, 0.3), 6, (0.4, 0.05, 0.4))):
-        glow_card((x * 2.5, 9.0, z * 1.6), (sz[0] * 1.2, 0.05, sz[2] * 1.2), col, st * 0.35, name="Street")
+        glow_card((x * 2.5, 9.0, z * 1.6), (sz[0] * 1.2, 0.05, sz[2] * 1.2), tuple(v * 0.9 for v in col), st * 0.12, name="Street")
     box("Road", (0, 6, -0.05), (30, 8, 0.1), pbr("WetRoad", (0.01, 0.01, 0.012), 0.04, 0.0, **{'Specular IOR Level': 0.9}))
-    point((-3, 8, 3), 600, (1.0, 0.1, 0.06), 1.0, "StreetRed")
 
 
 def build(variant=None):
@@ -58,7 +57,7 @@ def build(variant=None):
         if o.type == 'MESH' and o.parent is None and o.name.startswith(("Board", "Substrate", "Interposer", "Die", "HBM", "Underfill", "Frame", "Pad", "Inductor", "Cap2")):
             o.parent = holder
     bp = Vector((0.02, -0.12, top + 0.001))
-    holder.location = bp; holder.rotation_euler = (0, 0, math.radians(18)); holder.scale = (1.7, 1.7, 1.7)
+    holder.location = bp; holder.rotation_euler = (0, 0, math.radians(18)); holder.scale = (2.1, 2.1, 2.1)
     bpy.context.view_layer.update()
     # her hand on the board's left edge, pushing it toward him; his hands rest on the table edge
     edge_w = bp + Vector((-0.13, -0.02, 0.03))
@@ -72,18 +71,18 @@ def build(variant=None):
     look_at(w, m.bone_head("head") + Vector((0, 0, 0.05)), 0.8); gaze(w, m.bone_head("head") + Vector((0, 0, 0.08)))
     look_at(m, w.bone_head("head") + Vector((0, 0, -0.05)), 0.7); gaze(m, w.bone_head("head") + Vector((0, 0, 0.1)))
     # ---- light: the board glows green up into their faces; warm lamp pool; red street rim on them
-    glow = box("BoardGlow", tuple(bp + Vector((0, 0, 0.0015))), (0.26, 0.2, 0.002), emissive("GreenUnder", (0.2, 1.0, 0.35), 8), rot=(0, 0, math.radians(18)))
+    glow = box("BoardGlow", tuple(bp + Vector((0, 0, 0.0015))), (0.26, 0.2, 0.002), emissive("GreenUnder", (0.2, 1.0, 0.35), 14), rot=(0, 0, math.radians(18)))
     glow.visible_camera = False
     point(bp + Vector((0, 0, 0.05)), 3, (0.25, 1.0, 0.4), 0.06, "ChipGlow")
-    soft(bp + Vector((0, -0.05, 0.02)), Vector((0, 0.3, 1.25)), 10, (0.2, 1.0, 0.35), size=0.25, name="GreenUp")
+    soft(bp + Vector((0, -0.05, 0.02)), Vector((0, 0.3, 1.25)), 6, (0.2, 1.0, 0.35), size=0.25, name="GreenUp")
     spot((0, 0.1, 1.95), (0, 0, top), 260, (1.0, 0.7, 0.45), 70, 0.6, 0.08, "LampPool")
-    spot((0.0, 3.5, 2.4), (0, 0.3, 1.2), 380, (1.0, 0.08, 0.05), 40, 0.6, 0.5, "RedRim")
+    spot((0.0, 1.45, 2.3), (0, 0.3, 1.2), 300, (1.0, 0.08, 0.05), 40, 0.6, 0.5, "RedRim")
     soft((1.8, -1.6, 1.6), (0.3, 0.3, 1.2), 25, (0.5, 0.65, 1.0), size=1.0, name="CoolFill")
     haze((0, 0.2, 1.5), (6, 3, 3), density=0.02, color=(0.95, 0.95, 1.0), anis=0.4)
-    cam = Vector((0.42, -1.05, 0.98))
+    cam = Vector((0.3, -1.05, 0.98))
     c = dict(m=m, w=w)
     c["cam"] = (cam, Vector((-0.1, 0.25, 0.98)), 26)
-    c["shift"] = (-0.17, 0.0)
+    c["shift"] = (-0.1, 0.0)
     c["focus"] = bp + Vector((0, 0, 0.01))
     c["fstop"] = 2.2
     return c

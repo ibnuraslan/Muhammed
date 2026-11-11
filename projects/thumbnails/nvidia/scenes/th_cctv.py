@@ -30,8 +30,8 @@ def build(variant=None):
     size = max(hi.x - lo.x, hi.y - lo.y, hi.z - lo.z)
     k = 0.42 / size; cc.scale = (k, k, k)
     vcam = Vector((p.x - 9.2, c["walk_y"] - 1.35, 1.45))
-    cc.location = vcam + Vector((1.15, 0.36, 0.2))
-    cc.rotation_euler = (math.radians(10), 0, math.radians(97))       # lens (-Y) turned to +X: down the pavement at her
+    cc.location = vcam + Vector((1.0, 0.33, 0.1))
+    cc.rotation_euler = (math.radians(10), 0, math.radians(108))       # lens (-Y) turned to +X: down the pavement at her
     bpy.context.view_layer.update()
     clo, chi = ph_bounds(cm)
     bm = pbr("BracketM", (0.05, 0.05, 0.055), 0.5, 0.6)
@@ -40,7 +40,7 @@ def build(variant=None):
     box("Pole", (cx - 0.18, cy, (chi.z + 3.6) / 2), (0.05, 0.05, 3.6 - chi.z), bm)
     for mt in bpy.data.materials:                 # lanterns calmer: the right third stays dark for the title
         if mt.name.startswith("Lantern") and mt.use_nodes:
-            mt.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 1.5
+            mt.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.6
     rec = point(Vector(((clo.x + chi.x) / 2 + 0.02, (clo.y + chi.y) / 2, chi.z + 0.01)), 0.6, (1.0, 0.03, 0.02), 0.005, "RecLed")
     bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.008, location=rec.location)
     bpy.context.active_object.data.materials.append(emissive("Rec", (1.0, 0.02, 0.01), 60))
@@ -49,10 +49,20 @@ def build(variant=None):
     spot((p.x - 2.5, p.y - 2.5, 3.0), Vector((p.x, p.y, 1.3)), 300, (1.0, 0.12, 0.08), 30, 0.7, 0.3, "RedKey")
     rim = soft(cc.location + Vector((-0.6, -0.9, 0.5)), cc.location, 30, (0.55, 0.7, 1.0), size=0.5, name="CamRim")
     light_only(rim, cm)
+    for o in cm:                                  # weathered grey, not studio white
+        for mt in o.data.materials:
+            if mt and mt.use_nodes and "Principled BSDF" in mt.node_tree.nodes:
+                b = mt.node_tree.nodes["Principled BSDF"].inputs['Base Color']
+                if not b.is_linked:
+                    b.default_value = tuple(v * 0.4 for v in b.default_value[:3]) + (1,)
+                else:
+                    mx = mt.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'
+                    mx.inputs['Factor'].default_value = 1.0; mx.inputs[7].default_value = (0.4, 0.4, 0.42, 1)
+                    src = b.links[0].from_socket; mt.node_tree.links.new(src, mx.inputs[6]); mt.node_tree.links.new(mx.outputs[2], b)
     rain_curtains([p.y - 2.2, p.y - 4.8], width=30, height=9, x0=p.x - 4, density=0.94, strength=0.5)
     c["cam"] = (vcam, Vector((p.x, p.y - 1.2, 1.55)), 45)
-    c["focus"] = Vector((p.x, p.y, 1.5))
-    c["fstop"] = 3.5
+    c["focus"] = cc.location + Vector((0, -0.1, 0.05))
+    c["fstop"] = 5.6
     c["cctv"] = cc
     return c
 
