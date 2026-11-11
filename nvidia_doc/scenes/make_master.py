@@ -21,7 +21,9 @@ CHAPTERS = {
               ("cafe_pull_back", "Set 4B  'Washington is trying to keep out of China.'")],
 }
 
-chapter, folder, vo = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:4]
+args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
+chapter, folder, vo = args[:3]
+LEAD = float(args[3]) if len(args) > 3 else (2.5 if chapter == "intro" else 0.0)   # seconds of picture before the first word
 folder = os.path.abspath(folder)
 shots = CHAPTERS[chapter]
 
@@ -58,7 +60,7 @@ for k, (name, label) in enumerate(shots):
 master.frame_start, master.frame_end = 1, frame - 1
 # voiceover (packed into the master)
 vo_path = os.path.abspath(vo)
-snd = strips.new_sound("Voiceover", vo_path, channel=2, frame_start=1)
+snd = strips.new_sound("Voiceover", vo_path, channel=2, frame_start=1 + int(round(LEAD * 24)))
 bpy.ops.file.pack_all() if False else None
 try:
     snd.sound.pack()

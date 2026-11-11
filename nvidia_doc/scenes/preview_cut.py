@@ -3,7 +3,8 @@ shots joined in order, film grain, voiceover underneath -> out/intro_preview.mp4
 import os, subprocess, glob
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 PREV = os.path.join(ROOT, "out", "preview", "intro")
-SHOTS = [("home_behind", 78), ("home_front", 112), ("invest_drawer", 77), ("invest_reveal", 84),
+LEAD = 2.5          # the voiceover starts 2.5 s in
+SHOTS = [("home_behind", 138), ("home_front", 112), ("invest_drawer", 77), ("invest_reveal", 84),
          ("street_bus_reveal", 78), ("street_walk_track", 64), ("cafe_title_push", 68), ("cafe_pull_back", 100)]
 FAST = {"invest_reveal", "cafe_pull_back"}
 clips = []
@@ -21,6 +22,6 @@ lst = os.path.join(PREV, "list.txt")
 open(lst, "w").write("".join(f"file '{c}'\n" for c in clips))
 final = os.path.join(ROOT, "out", "intro_preview.mp4")
 subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-i", os.path.join(ROOT, "vo", "intro_vo.mp3"),
-                "-vf", "scale=1920:816:flags=lanczos,noise=c0s=7:c0f=t+u", "-c:v", "libx264", "-crf", "18", "-preset", "slow",
+                "-af", f"adelay={int(LEAD * 1000)}:all=1", "-vf", "scale=1920:816:flags=lanczos,noise=c0s=7:c0f=t+u", "-c:v", "libx264", "-crf", "18", "-preset", "slow",
                 "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", final], check=True)
 print("[cut] wrote", final)
