@@ -1,0 +1,119 @@
+{
+ "lamp": {
+  "uid": "c53c0856cea944b284ff97465823853e",
+  "title": "Vintage desk lamp",
+  "author": "dusan.lamos",
+  "author_profile": "https://sketchfab.com/dusan.lamos",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c53c0856cea944b284ff97465823853e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "desk": {
+  "uid": "c491f647da5947978ba8113951ee2efc",
+  "title": "Antique Desk",
+  "author": "Matthew Collings",
+  "author_profile": "https://sketchfab.com/mtcollings",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/c491f647da5947978ba8113951ee2efc",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "chair": {
+  "uid": "72b2c9d23bbd4ae4b63d4537c0c5b28d",
+  "title": "Wooden chair",
+  "author": "Kirhl",
+  "author_profile": "https://sketchfab.com/Kirhl",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/72b2c9d23bbd4ae4b63d4537c0c5b28d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "gauge": {
+  "uid": "60fea268c6cf4dfbb0d9e46ac157f2d7",
+  "title": "Vertical Height Gauge",
+  "author": "vramstudio",
+  "author_profile": "https://sketchfab.com/vramstudio",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60fea268c6cf4dfbb0d9e46ac157f2d7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ironbed": {
+  "uid": "04eec268506d45a192f70aea01b8d292",
+  "title": "Hospital Bed",
+  "author": "Larry3d",
+  "author_profile": "https://sketchfab.com/larry3d",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/04eec268506d45a192f70aea01b8d292",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "optable": {
+  "uid": "02ab679ff3f24018a8bcaf30b3b2cd47",
+  "title": "Hospital Bed",
+  "author": "CobbleGames",
+  "author_profile": "https://sketchfab.com/cobblegames",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/02ab679ff3f24018a8bcaf30b3b2cd47",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "graves": {
+  "uid": "08baef4509bd491cbbcf38a91f188ac3",
+  "title": "Gravestones",
+  "author": "fruitsue",
+  "author_profile": "https://sketchfab.com/fruitsue",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/08baef4509bd491cbbcf38a91f188ac3",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "mirror": {
+  "uid": "184baa16500841ef86fdc94e62017e58",
+  "title": "Magic Mirror",
+  "author": "allyc3d",
+  "author_profile": "https://sketchfab.com/AllyC3D",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/184baa16500841ef86fdc94e62017e58",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "spine": {
+  "uid": "306f37556b3e40ed9fb4bbfa819f35e2",
+  "title": "Human Spine",
+  "author": "EdwinCaBe",
+  "author_profile": "https://sketchfab.com/Edwin.Ca.be",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/306f37556b3e40ed9fb4bbfa819f35e2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "skeleton": {
+  "uid": "ee87f94159cf4767b1977659db3fb7aa",
+  "title": "Skeleton Rig",
+  "author": "CreativeMachine",
+  "author_profile": "https://sketchfab.com/CreativeMachine",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/ee87f94159cf4767b1977659db3fb7aa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "door": {
+  "uid": "ea0815a578db412389bd57d945b1d6bf",
+  "title": "wooden door",
+  "author": "Pavan Salam",
+  "author_profile": "https://sketchfab.com/pavansalam",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/ea0815a578db412389bd57d945b1d6bf",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "table": {
+  "uid": "7fc479c22ffa4a0eb4000390ce17170e",
+  "title": "Wooden table",
+  "author": "Hrisan",
+  "author_profile": "https://sketchfab.com/Hrisan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7fc479c22ffa4a0eb4000390ce17170e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "brain": {
+  "uid": "0aa0e33c5c854d1bab7bac9e1c7acaec",
+  "title": "Human brain, Cerebrum & Brainstem",
+  "author": "FrankJohansson",
+  "author_profile": "https://sketchfab.com/pranktoy",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/0aa0e33c5c854d1bab7bac9e1c7acaec",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}
