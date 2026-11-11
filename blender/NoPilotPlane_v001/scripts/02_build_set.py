@@ -90,9 +90,9 @@ def win_shell_mat(name, base, cabin=True):
         hole = M("MINIMUM", M("ADD", ws, sw), 1.0)
         bez = hole
     if not cabin:   # cockpit liner: quilted panels with seams, fine grain
-        br = N.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 1.6; br.inputs["Mortar Size"].default_value = 0.012
+        br = N.new("ShaderNodeTexBrick"); br.inputs["Scale"].default_value = 2.2; br.inputs["Mortar Size"].default_value = 0.004
         br.inputs["Color1"].default_value = (*base, 1); br.inputs["Color2"].default_value = tuple(c * 0.9 for c in base) + (1,)
-        br.inputs["Mortar"].default_value = (0.05, 0.05, 0.055, 1); br.offset = 0.0
+        br.inputs["Mortar"].default_value = (0.11, 0.11, 0.115, 1); br.offset = 0.0
         L.new(tc.outputs["Object"], br.inputs["Vector"])
         gn = N.new("ShaderNodeTexNoise"); gn.inputs["Scale"].default_value = 260; L.new(tc.outputs["Object"], gn.inputs["Vector"])
         bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.6; bp.inputs["Distance"].default_value = 0.003
