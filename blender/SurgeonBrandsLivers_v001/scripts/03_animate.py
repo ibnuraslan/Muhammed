@@ -815,9 +815,9 @@ for i, f0 in enumerate((168, 190, 212, 236, 258, 280)):
     key_vis([sm], [(f0, f0 + 44)])
 # glove hands: right hand holds the pen; left steadies the liver; then (beat 6) both lift the liver into the light
 gh_pos = V(0.0, 0.36, (LIVER_Z := liver.location.z + 0.084) + 0.33 - GH.SH["L"].z + GH.ROOT.z)
-GH.P(1, gh_pos, 0, spine=(30, 0, 0), feet="body", hands={"R": ("fn", tool_hand(pen, 0.08)), "L": ("world", (liver.location + V(0.10, 0.05, 0.14), V(-0.3, -0.6, -0.8), V(0, 0.3, -1)))}, curl={"R": (55, 40), "L": (25, 18)})
+GH.P(1, gh_pos, 0, spine=(30, 0, 0), feet="body", hands={"R": ("fn", tool_hand(pen, 0.08)), "L": ("world", (liver.location + V(0.10, 0.06, 0.185), V(-0.3, -0.6, -0.8), V(0, 0.3, -1)))}, curl={"R": (55, 40), "L": (25, 18)})
 for f in range(140, 301, 12):
-    GH.P(f, gh_pos + V(0.01 * math.sin(f / 20), 0, 0), 0, spine=(30, 0, 0), feet="body", hands={"R": ("fn", tool_hand(pen, 0.08)), "L": ("world", (liver.location + V(0.10, 0.05, 0.14), V(-0.3, -0.6, -0.8), V(0, 0.3, -1)))}, curl={"R": (55, 40), "L": (25, 18)})
+    GH.P(f, gh_pos + V(0.01 * math.sin(f / 20), 0, 0), 0, spine=(30, 0, 0), feet="body", hands={"R": ("fn", tool_hand(pen, 0.08)), "L": ("world", (liver.location + V(0.10, 0.06, 0.185), V(-0.3, -0.6, -0.8), V(0, 0.3, -1)))}, curl={"R": (55, 40), "L": (25, 18)})
 # beat 6: liver keys + cupping hands
 L0 = liver.location.copy(); R0 = liver.rotation_euler.copy()
 def lkey(f, dz, rz, rx=0.0):
@@ -828,7 +828,7 @@ def cup(s):
     sx = 1 if s == "L" else -1
     def fn(f):
         ev(f); M = liver.matrix_world
-        W = M @ V(-sx * 0.125, 0.02, 0.005)
+        W = M @ V(-sx * (0.145 if s == "L" else 0.10), 0.03, -0.02)      # fingers under the lobe edge (the right lobe is narrower)
         return W, (M.to_3x3() @ V(sx * 0.6, -0.3, 0.4)).normalized(), (M.to_3x3() @ V(sx * 0.4, 0, 1)).normalized()
     return fn
 gh6 = V(0.0, 0.32, LIVER_Z - 0.15 - GH.SH["L"].z + GH.ROOT.z + 0.35)
