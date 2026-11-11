@@ -14,7 +14,7 @@ def visible(ob, f):
     return not ob.hide_render
 STAND = {   # actor: frame ranges where it stands/sits on its feet (feet must be planted, not lying/carried)
     "Surgeon1": [(1, 600), (1200, 1710)], "Patient": [(605, 790)], "Surgeon2": [(850, 1300)], "Nurse": [(1, 600), (766, 1100)],
-    "PanelA": [(1231, 1710)], "PanelB": [(1231, 1710)], "PanelC": [(1231, 1710)]}
+    "PanelA": [(1231, 1710)], "Anaesth": [(1, 1240)], "PanelB": [(1231, 1710)], "PanelC": [(1231, 1710)]}
 GRASP = [  # (actor, side, prop object, local grip point, frame range)
     ("Surgeon1", "R", "ArgonPen_OR", V((0, 0, 0.07)), (1, 300)),
     ("Surgeon1", "R", "NeedleDriver", V((0, 0, 0.115)), (330, 440)),

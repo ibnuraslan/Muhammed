@@ -184,6 +184,7 @@ def part(rig, suffix):
     return [c for c in bpy.data.objects[rig].children if c.name.split(".")[-1] == suffix]
 
 S1, PT, S2, NU, GH = Actor("Surgeon1"), Actor("Patient"), Actor("Surgeon2"), Actor("Nurse"), Actor("GloveHands")
+AN = Actor("Anaesth")
 PA, PBn, PC = Actor("PanelA"), Actor("PanelB"), Actor("PanelC")
 
 # ------------------------------------------------------------------ caps + masks (fitted to each head)
@@ -292,9 +293,9 @@ def gloves(act, off_at=None):
     for p in body.data.polygons:
         if all(i in hand for i in p.vertices):
             p.material_index = slot
-gloves(S1, 1100); gloves(S2); gloves(NU)
-CAPS = {a.o.name: make_cap(a, M_CAP if a is not S2 else M_CAP2) for a in (S1, S2, NU)}
-MASKS = {a.o.name: make_mask(a) for a in (S1, S2, NU)}
+gloves(S1, 1100); gloves(S2); gloves(NU); gloves(AN)
+CAPS = {a.o.name: make_cap(a, M_CAP if a is not S2 else M_CAP2) for a in (S1, S2, NU, AN)}
+MASKS = {a.o.name: make_mask(a) for a in (S1, S2, NU, AN)}
 
 # ================================================================== SURGEON 1
 s1_or = V(-0.25, -0.66, S1.ROOT.z - 0.03); Y1 = 180
@@ -544,6 +545,20 @@ for f in list(range(766, 991, 6)) + [990, 1100]:
         NU.R.key_world("IK_hand." + s, f, NU.hand_matrix(s, W, d, n))
 stepped(NU.o, {600})
 vis([NU.o.name + "." + x for x in ("body",)] + [c for c in NU.o.children], [(0, 1300)])
+
+# ================================================================== ANAESTHETIST (background life at the head end)
+an_pos = V(-1.22, 0.42, AN.ROOT.z - 0.02); YA = 150
+STA = AN.stance(an_pos, YA); FA = {s: (STA[s], YA) for s in "LR"}
+monA = bpy.data.objects["Monitor_B"]
+def screen_touch(f):
+    ev(f); M = monA.matrix_world; return M @ V(0.12, -0.03, -0.05), (M.to_3x3() @ V(0, 1, 0.3)).normalized(), (M.to_3x3() @ V(0, 1, 0)).normalized()
+for i, f in enumerate(range(1, 1711, 45)):
+    look_mon = (i % 3 != 2)
+    hands = {"L": ("body", (V(0.16, -0.30, 1.0), V(-0.5, -0.5, -0.6), V(-0.2, 1, 0))), "R": ("fn", screen_touch) if i % 4 == 1 else ("body", (V(-0.16, -0.30, 1.0), V(0.5, -0.5, -0.6), V(0.2, 1, 0)))}
+    AN.P(f, an_pos + V(0.01 * math.sin(i), 0, -0.005 * (i % 2)), YA + (0 if look_mon else -35), spine=(8, 0, 4 if look_mon else -10),
+         head=((-6, 22, 0) if look_mon else (14, -20, 0)), feet=FA, hands=hands, curl={"R": (25, 18) if i % 4 == 1 else (30, 22)}, face={"brow": 0.2 * (i % 2)})
+AN.bake()
+vis(["Anaesth"] + [c for c in AN.o.children] + [CAPS["Anaesth"], MASKS["Anaesth"]] + list(MASKS["Anaesth"].children), [(0, 1240)])
 
 # ================================================================== SURGEON 2
 s2_start = V(-1.75, 2.45, S2.ROOT.z - 0.02); s2_end = V(-0.3, 0.68, S2.ROOT.z - 0.02); Y2 = 0

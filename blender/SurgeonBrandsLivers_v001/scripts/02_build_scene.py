@@ -82,10 +82,25 @@ def fabric_override(ob, rgb):
     mx.inputs['Factor'].default_value = 1.0; mx.inputs['A'].default_value = (0.9, 0.9, 0.9, 1); mx.inputs['B'].default_value = (*rgb, 1)
     m.node_tree.links.new(mx.outputs['Result'], tnode["Principled BSDF"].inputs['Base Color'])
     tnode["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.4
+    # wrinkles: large soft creases layered over the weave normal
+    pr_ = tnode["Principled BSDF"]; tc_ = tnode.new('ShaderNodeTexCoord')
+    wv = tnode.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 9.0
+    wv.inputs['Distortion'].default_value = 6.0; wv.inputs['Detail'].default_value = 4.0; wv.inputs['Detail Scale'].default_value = 1.5
+    m.node_tree.links.new(tc_.outputs['Object'], wv.inputs['Vector'])
+    nz_ = tnode.new('ShaderNodeTexNoise'); nz_.inputs['Scale'].default_value = 14.0; nz_.inputs['Detail'].default_value = 6.0
+    m.node_tree.links.new(tc_.outputs['Object'], nz_.inputs['Vector'])
+    mx2 = tnode.new('ShaderNodeMath'); mx2.operation = 'MULTIPLY'
+    m.node_tree.links.new(wv.outputs['Fac'], mx2.inputs[0]); m.node_tree.links.new(nz_.outputs['Fac'], mx2.inputs[1])
+    bp_ = tnode.new('ShaderNodeBump'); bp_.inputs['Strength'].default_value = 0.35; bp_.inputs['Distance'].default_value = 0.004
+    m.node_tree.links.new(mx2.outputs[0], bp_.inputs['Height'])
+    if pr_.inputs['Normal'].links:
+        m.node_tree.links.new(pr_.inputs['Normal'].links[0].from_socket, bp_.inputs['Normal'])
+    m.node_tree.links.new(bp_.outputs['Normal'], pr_.inputs['Normal'])
     ob.data.materials.clear(); ob.data.materials.append(m)
 
 fabric_override(bpy.data.objects["Surgeon1.male_casualsuit01"], (0.10, 0.36, 0.36))
 fabric_override(bpy.data.objects["Nurse.male_casualsuit01"], (0.16, 0.26, 0.42))
+fabric_override(bpy.data.objects["Anaesth.male_casualsuit01"], (0.12, 0.30, 0.30))
 fabric_override(bpy.data.objects["Surgeon2.female_casualsuit01"], (0.17, 0.27, 0.55))
 fabric_override(bpy.data.objects["Patient.female_casualsuit02"], (0.42, 0.24, 0.28))    # plain lounge set: the stock T-shirt print looked like a logo
 # purple nitrile gloves on the studio hands

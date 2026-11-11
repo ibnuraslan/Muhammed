@@ -66,6 +66,10 @@ nu = person("Nurse", 1.0, 0.35, {"asian": 0.7, "caucasian": 0.2, "african": 0.1}
             ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"],
             "young_asian_male/young_asian_male.mhmat", weight=0.5)
 tint(nu, "male_casualsuit01", (0.36, 0.48, 0.62, 1))
+# Anaesthetist (background, OR head end): male, older, teal scrubs
+an = person("Anaesth", 1.0, 0.62, {"asian": 0.3, "caucasian": 0.3, "african": 0.4}, "",
+            ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"],
+            "middleage_african_male/middleage_african_male.mhmat", weight=0.6)
 # Gloved hands for the studio macro (a copy of surgeon 2, masked down to forearms + hands later)
 gh = person("GloveHands", 0.0, 0.5, {"asian": 0.05, "caucasian": 0.1, "african": 0.85}, "", [],
             "middleage_african_female/middleage_african_female.mhmat", weight=0.45)
