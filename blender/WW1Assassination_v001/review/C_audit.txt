@@ -1,0 +1,22 @@
+Audit over 350 frames (every 5) up to the map swap (f1748).
+Worst per item (kind, who, value):
+  CAM_IN     Cafe_Side                    1.000
+  CAM_IN     Cafe_Building                1.000
+  SINK       Crowd_corner_23.L            0.044
+  SINK       Crowd_corner_26.L            0.030
+  SINK       NerveA.L                     0.028
+
+13 flagged samples. First 200:
+CAM_IN     f  321 Cafe_Side                    +1.000
+CAM_IN     f  326 Cafe_Building                +1.000
+CAM_IN     f  326 Cafe_Side                    +1.000
+CAM_IN     f  331 Cafe_Building                +1.000
+CAM_IN     f  331 Cafe_Side                    +1.000
+CAM_IN     f  336 Cafe_Building                +1.000
+CAM_IN     f  336 Cafe_Side                    +1.000
+CAM_IN     f  341 Cafe_Side                    +1.000
+CAM_IN     f  346 Cafe_Side                    +1.000
+CAM_IN     f  351 Cafe_Side                    +1.000
+SINK       f  566 NerveA.L                     -0.028
+SINK       f 1591 Crowd_corner_23.L            -0.044
+SINK       f 1616 Crowd_corner_26.L            -0.030

@@ -131,7 +131,7 @@ hat = mesh_obj("WideHat", bm, [M_WHITE], CP)
 # parasol: origin at grip, shaft along +Z
 bm = bmesh.new()
 cone(bm, 0.008, 0.008, 0.95, Matrix.Translation(V(0, 0, 0.42)), seg=8, mat=1)
-res = bmesh.ops.create_cone(bm, cap_ends=False, segments=10, radius1=0.4, radius2=0.0, depth=0.2, matrix=Matrix.Translation(V(0, 0, 0.82)))
+res = bmesh.ops.create_cone(bm, cap_ends=True, segments=10, radius1=0.065, radius2=0.01, depth=0.55, matrix=Matrix.Translation(V(0, 0, 0.62)))   # furled
 for f in bm.faces:
     if f.material_index == 0 and all(v.co.z > 0.65 for v in f.verts): f.material_index = 0
 parasol = mesh_obj("Parasol", bm, [M_LACE, M_GOLD], CP)

@@ -85,16 +85,16 @@ l.new(tc.outputs['Object'], nz.inputs['Vector']); l.new(math_('DIVIDE', clock.ou
 front = math_('SUBTRACT', math_('ADD', clock.outputs[0], math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.5), 50.0)), igt)
 burn = math_('MINIMUM', math_('MAXIMUM', math_('DIVIDE', front, 25.0), 0.0), 1.0)
 edge = math_('MULTIPLY', math_('MINIMUM', math_('MAXIMUM', math_('DIVIDE', front, 12.0), 0.0), 1.0),
-             math_('MAXIMUM', math_('SUBTRACT', 1.0, math_('DIVIDE', front, 70.0)), 0.0))
+             math_('MAXIMUM', math_('SUBTRACT', 1.0, math_('DIVIDE', front, 28.0)), 0.0))
 fcol = n.new('ShaderNodeValToRGB'); fc = fcol.color_ramp
-fc.elements[0].color = (0.6, 0.05, 0.0, 1); fc.elements[1].color = (1.0, 0.55, 0.1, 1)
+fc.elements[0].color = (0.8, 0.03, 0.0, 1); fc.elements[1].color = (1.0, 0.22, 0.0, 1)
 l.new(nz.outputs['Fac'], fcol.inputs[0])
-scorch = n.new('ShaderNodeMix'); scorch.data_type = 'RGBA'; scorch.inputs['B'].default_value = (0.16, 0.05, 0.03, 1)
-l.new(math_('MULTIPLY', burn, 0.75), scorch.inputs['Factor']); l.new(bmix.outputs['Result'], scorch.inputs['A'])
+scorch = n.new('ShaderNodeMix'); scorch.data_type = 'RGBA'; scorch.inputs['B'].default_value = (0.07, 0.025, 0.015, 1)
+l.new(math_('MULTIPLY', burn, 0.88), scorch.inputs['Factor']); l.new(bmix.outputs['Result'], scorch.inputs['A'])
 l.new(scorch.outputs['Result'], bs.inputs['Base Color'])
 l.new(fcol.outputs[0], bs.inputs['Emission Color'])
-ember = math_('MULTIPLY', burn, math_('MINIMUM', math_('MAXIMUM', math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.6), 9.0), 0.0), 1.0))
-l.new(math_('ADD', math_('MULTIPLY', edge, 9.0), math_('MULTIPLY', ember, 3.5)), bs.inputs['Emission Strength'])
+ember = math_('MULTIPLY', burn, math_('MINIMUM', math_('MAXIMUM', math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.56), 7.0), 0.0), 1.0))
+l.new(math_('ADD', math_('MULTIPLY', edge, 3.5), math_('MULTIPLY', ember, 2.2)), bs.inputs['Emission Strength'])
 l.new(bs.outputs[0], out.inputs[0])
 me.materials.append(M)
 for f, v in ((1, 1.0), (F_END_ := 2130, 2130.0)):
@@ -111,7 +111,7 @@ sea = mesh_obj("MapSea", bm, [SEA], CM)
 def map_flag(name, lonlat, cols, t_pop):
     p = ll(*lonlat)
     hz = float(hgt[int((YMAX - p.y) / (YMAX - YMIN) * ny), int((p.x - XMIN) / (XMAX - XMIN) * nx)])
-    root = bpy.data.objects.new(name, None); CM.objects.link(root); root.location = (p.x, p.y, hz); SC_ = 2.6
+    root = bpy.data.objects.new(name, None); CM.objects.link(root); root.location = (p.x, p.y, hz); SC_ = 5.0
     bm = bmesh.new(); add_box(bm, V(-0.12, -0.12, 0), V(0.12, 0.12, 9.0), 0)
     pole = mesh_obj(name + "_Pole", bm, [flat("MapPole", (0.8, 0.7, 0.4), rough=0.3, metal=1.0)], CM); pole.parent = root
     bm = bmesh.new(); nseg = 16
@@ -173,9 +173,16 @@ COLS_ = [("ColWest1", [(13.4, 52.5), (9.0, 51.0), (6.5, 50.6), (4.5, 50.4)], 30.
 for nm, pts, t0, t1 in COLS_: column(nm, pts, t0, t1)
 
 # --- smoke plumes rising where the fire has passed, and front flashes
-SMOKE = bpy.data.materials.new("MapSmoke"); n, l = nodes_of(SMOKE); n.clear()
-o_ = n.new('ShaderNodeOutputMaterial'); pv = n.new('ShaderNodeVolumePrincipled'); pv.inputs['Density'].default_value = 0.35
-pv.inputs['Color'].default_value = (0.3, 0.28, 0.26, 1); l.new(pv.outputs[0], o_.inputs['Volume'])
+SMOKE = bpy.data.materials.new("MapSmoke"); n, l = nodes_of(SMOKE)
+SMOKE.blend_method = 'BLEND' if hasattr(SMOKE, "blend_method") else None
+bs_ = n["Principled BSDF"]; bs_.inputs['Base Color'].default_value = (0.42, 0.4, 0.38, 1); bs_.inputs['Roughness'].default_value = 1.0
+tc2 = n.new('ShaderNodeTexCoord'); nz2 = n.new('ShaderNodeTexNoise'); nz2.inputs['Scale'].default_value = 2.5; nz2.inputs['Detail'].default_value = 4
+l.new(tc2.outputs['Object'], nz2.inputs['Vector'])
+lw = n.new('ShaderNodeLayerWeight'); lw.inputs['Blend'].default_value = 0.45
+fac = n.new('ShaderNodeMath'); fac.operation = 'SUBTRACT'; fac.inputs[0].default_value = 1.0; l.new(lw.outputs['Facing'], fac.inputs[1])
+th = n.new('ShaderNodeMapRange'); th.inputs['From Min'].default_value = 0.35; th.inputs['From Max'].default_value = 0.7; l.new(nz2.outputs['Fac'], th.inputs['Value'])
+m1 = n.new('ShaderNodeMath'); m1.operation = 'MULTIPLY'; l.new(fac.outputs[0], m1.inputs[0]); l.new(th.outputs['Result'], m1.inputs[1])
+m2 = n.new('ShaderNodeMath'); m2.operation = 'MULTIPLY'; m2.inputs[1].default_value = 0.8; l.new(m1.outputs[0], m2.inputs[0]); l.new(m2.outputs[0], bs_.inputs['Alpha'])
 land_pts = np.argwhere((sid > 0) & (sid < 14))
 plumes = []
 for k in range(46):
@@ -184,10 +191,11 @@ for k in range(46):
     t_ig = float(ign[iy, ix])
     if t_ig > 2100: continue
     bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=2, radius=1.0)
-    o = mesh_obj(f"Plume_{k:02d}", bm, [SMOKE], CM); z0 = float(hgt[iy, ix])
+    o = mesh_obj(f"Plume_{k:02d}", bm, [SMOKE], CM); z0 = float(hgt[iy, ix]); o.visible_shadow = False
+    for p_ in o.data.polygons: p_.use_smooth = True
     f0 = int(t_ig) + random.randint(10, 40)
     for f, sc_, dz in ((1, 0.01, 0), (f0, 0.01, 0), (f0 + 40, 3.5, 4), (f0 + 120, 7.0, 12), (2130, 9.0, 22)):
-        o.location = (x, y, z0 + dz); o.scale = (sc_, sc_, sc_ * 1.6)
+        o.location = (x, y, z0 + dz * 1.4); o.scale = (sc_ * 0.8, sc_ * 0.8, sc_ * 2.6)
         o.keyframe_insert("location", frame=f); o.keyframe_insert("scale", frame=f)
     plumes.append(o)
 FL = flat("MapFlash", (1, 0.8, 0.5), emit=(1.0, 0.7, 0.35), emit_str=0.0)

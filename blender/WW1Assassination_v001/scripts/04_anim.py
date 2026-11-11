@@ -129,7 +129,7 @@ def arm_pose(H, s, f, pos, yaw, gz, kind, k=0.0, ph=0.0, extra=None):
     for side in "LR":
         sx = 1 if side == "L" else -1
         S = sh[side]
-        loc = Vector((S.x + sx * 0.04, S.y + 0.03, S.z - 0.56)); d = Vector((0, 0.05, -1)); n = Vector((-sx, 0, 0))
+        loc = Vector((S.x + sx * 0.07, S.y - 0.05, S.z - 0.55)); d = Vector((0, -0.05, -1)); n = Vector((-sx, 0, 0))
         pole = Vector((S.x + sx * 0.3, S.y + 0.5, S.z - 0.3))
         sway = 0.02 * math.sin(s * 1.3 + ph + (0 if side == "L" else 1.7))
         loc = loc + Vector((0, sway, 0))
@@ -146,7 +146,7 @@ def arm_pose(H, s, f, pos, yaw, gz, kind, k=0.0, ph=0.0, extra=None):
             mid = Vector((sx * c, S.y - 0.33, S.z - 0.2))
             loc = loc.lerp(mid, k); d = d.lerp(Vector((0, -0.6, 0.8)), k); n = n.lerp(Vector((-sx, 0, 0)), k)
         if kind == "coat" and side == "R":
-            chest = Vector((0.06, S.y - 0.12, S.z - 0.2))
+            chest = Vector((0.07, S.y - 0.2, S.z - 0.14))
             loc = loc.lerp(chest, k); d = d.lerp(Vector((1, 0.3, 0.2)), k); n = n.lerp(Vector((0, 1, 0)), k)
         if kind == "aim" and side == "R" and extra is not None:
             tgt, kk = extra
@@ -392,7 +392,7 @@ pb = DUCH.r.PB["wrist.L"]
 Mw = DUCH.r.o.matrix_world @ pb.matrix
 grip = Mw @ Vector((0, 0.06, 0))
 Rcar = C1S.matrix_world.to_3x3().normalized().to_4x4()
-par.matrix_world = Matrix.Translation(grip - Rcar.to_3x3() @ Vector((0, 0, 0.25))) @ Rcar @ Matrix.Rotation(R_(14), 4, 'X') @ Matrix.Rotation(R_(-10), 4, 'Y')
+par.matrix_world = Matrix.Translation(grip - Rcar.to_3x3() @ Vector((0, 0, 0.25))) @ Rcar @ Matrix.Rotation(R_(38), 4, 'X') @ Matrix.Rotation(R_(-22), 4, 'Y')
 cst.inverse_matrix = Mw.inverted()
 
 # ================================================================ assassins + officer (standing, story-driven)
