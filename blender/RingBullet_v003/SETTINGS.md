@@ -22,6 +22,6 @@ Notes:
 - Persistent data is on.
 
 ## Package check (factory startup)
-- `blender -b --factory-startup RingBullet_v003_60fps.blend` opens with **0 unpacked images**, one camera (`Cam`), no timeline markers, and no linked libraries. `package_check_factory_f36_f1020_lowres.jpg` shows two frames rendered from the packed file (f36 muzzle shake, f1020 wall dust) at 270×480 and 8 samples.
+- `blender -b --factory-startup RingBullet_v003_60fps.blend` opens with **0 unpacked images**, one camera (`Cam`), no timeline markers, and no linked libraries. `package_check_factory_f36_f1020_f1258_lowres.jpg` shows two frames rendered from the packed file (f36 pistol + muzzle shake, f1020 bookshelf dust, f1258 desk, lamp, bandage) at 270×480 and 8 samples.
 - Size: 48 MB, compressed, all textures packed. Textures are 1K, except the owner's skin and suit diffuse maps at 2K. The HDRI is 2K.
 - Rendering needs no Python auto-run. The drivers are simple expressions reading `TimeCtl["wt"]`.

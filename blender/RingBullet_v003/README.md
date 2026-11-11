@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| File | `RingBullet_v003_60fps.blend` (48 MB, packed, compressed; a normal git file, no LFS) |
+| File | `RingBullet_v003_60fps.blend` (58 MB, packed, compressed; a normal git file, no LFS) |
 | Format | 1080×1920, 60 fps, frames 1–1410 (23.5 s), Cycles CPU, 48 samples + OIDN, motion blur 0.5 |
 | Camera | one camera (`Cam`) on one continuous move, no cuts, no markers |
 | Output | `//render/RingBullet_v003_####.png` |
@@ -15,6 +15,16 @@
   - After grazing the neck, fragment B hits the side panel of the bookshelf behind him (upper left of frame, about 16.85 s).
   - A volumetric dust puff blows out of the hit, with 14 wood chips falling ballistically and a brief warm light flick at the hit point.
 - **Smaller tweaks:** the skin sheen is toned down, the bullet-orbit range is narrowed, and the walk-out ends on a push-in to the doorway.
+- **Realism pass (client rule: nothing may read as primitive geometry).** Replaced:
+  - the box-built desk with a real *Old Wooden Desk* model (CC-BY)
+  - the procedural banker's lamp with a real *Vintage desk lamp* (CC-BY)
+  - the box pistol silhouette with Poly Haven's CC0 *Service Pistol* (dark, side-on, in the opening only)
+  - the ledger box with a real book model
+  - the flat rug with a Poly Haven fabric texture
+  - the bandage and plaster, now with medical-tape cloth texture and wrinkle displacement
+  - the smooth fragment blobs with jagged, flat-faceted shards
+
+  The rounded-box police car and the loose pendulum disc are gone; a Poly Haven street lamp now stands outside the door.
 - The audit still reports 0 flags (`../RingBullet_v001/review/audit_v003.txt`).
 
 ## Story beats as built

@@ -10,14 +10,14 @@ HERO = ("middleage_lightskinned_male_diffuse", "male_elegantsuit01_diffuse")
 # de-duplicate images appended several times (same source file)
 seen = {}
 for im in list(bpy.data.images):
-    if im.source != 'FILE': continue
+    if im.source != 'FILE' or im.packed_file or not im.filepath: continue   # GLB-embedded images share an empty path: never merge them
     k = bpy.path.abspath(im.filepath)
     if k in seen and seen[k].colorspace_settings.name == im.colorspace_settings.name:
         im.user_remap(seen[k]); bpy.data.images.remove(im)
     else: seen[k] = im
 n = 0
 for im in list(bpy.data.images):
-    if im.source != 'FILE' or im.name.endswith(".hdr") or im.size[0] == 0: continue
+    if im.source != 'FILE' or im.name.endswith(".hdr") or im.size[0] == 0 or im.packed_file: continue   # GLB-embedded maps are already compact; leave them
     w, h = im.size; base = os.path.splitext(im.name)[0]
     lim = 2048 if base.startswith(HERO) else 1024
     if base.startswith(("teeth", "tongue", "short02", "eyebrow", "eyelash")): lim = 512
