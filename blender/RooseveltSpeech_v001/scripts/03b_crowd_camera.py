@@ -118,6 +118,43 @@ sc.frame_set(1); blob.matrix_world = (sh.matrix_world @ sh.pose.bones["wrist.R"]
 cb = blob.constraints.new("CHILD_OF"); cb.target = sh; cb.subtarget = "wrist.R"; cb.inverse_matrix = (sh.matrix_world @ sh.pose.bones["wrist.R"].matrix).inverted()
 for o in [sh, blob] + list(sh.children):
     o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
+# policeman silhouette restraining the shooter (background), arms on the shooter from just after the shot
+cop_pos = SHOOTER_POS + Vector((-0.45, -0.6, 0))
+cop = instance("CrowdD", "Policeman", cop_pos, math.atan2(-(SHOOTER_POS.x - cop_pos.x), -(SHOOTER_POS.y - cop_pos.y)), CR, black=True)
+fkc = FK(cop); to_sh = cop.matrix_world.to_3x3().inverted() @ (SHOOTER_POS + Vector((0, 0, 1.35)) - (cop_pos + Vector((0, 0, 1.35)))).normalized()
+for f in range(1, F_OUT, 4):
+    t = wt(f); u = smooth((t - F_IMPACT - 8) / 18.0)
+    for sd in "LR":
+        a0, b0 = pose_dirs("relaxed", sd, t, 0.3); tgt = (to_sh + Vector((0.25 if sd == "L" else -0.25, 0, 0.1 * (1 if sd == "L" else -1)))).normalized()
+        fkc.arm(sd, f, a0.normalized().lerp(tgt, u), b0.normalized().lerp(tgt, u))
+    fkc.body(f, flex=14 * u, twist=6 * u * math.sin(t / 9.0), head=(8 * u, 0))
+    cop.location = cop_pos.lerp(SHOOTER_POS + Vector((-0.25, -0.35, 0)), 0.6 * u); cop.keyframe_insert("location", frame=f)
+for o in [cop] + list(cop.children):
+    o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
+# breath vapour in the cold night air: small volume puffs at mouths, exhaled every ~2.5 s of world time
+breath_m = bpy.data.materials.new("Breath"); breath_m.use_nodes = True; bnt = breath_m.node_tree
+for x_ in list(bnt.nodes):
+    if x_.type == "BSDF_PRINCIPLED": bnt.nodes.remove(x_)
+bv_ = bnt.nodes.new("ShaderNodeVolumePrincipled"); bv_.inputs["Color"].default_value = (0.8, 0.82, 0.85, 1)
+bnz = bnt.nodes.new("ShaderNodeTexNoise"); bnz.inputs["Scale"].default_value = 9; bmr = bnt.nodes.new("ShaderNodeMapRange"); bmr.inputs["To Max"].default_value = 0.35
+bnt.links.new(bnz.outputs["Fac"], bmr.inputs["Value"]); bnt.links.new(bmr.outputs["Result"], bv_.inputs["Density"])
+bnt.links.new(bv_.outputs[0], bnt.nodes["Material Output"].inputs["Volume"])
+breathers = [bpy.data.objects[f"StreetP{i:02d}"] for i in range(0, len(SPOTS), 3)] + [H]
+for i, a in enumerate(breathers):
+    bpy.ops.mesh.primitive_ico_sphere_add(radius=0.06, subdivisions=2)
+    pf = bpy.context.object; pf.name = f"Breath{i:02d}"; pf.data.materials.append(breath_m)
+    for c_ in list(pf.users_collection): c_.objects.unlink(pf)
+    C_STREET.objects.link(pf); pf.visible_shadow = False
+    sc.frame_set(1); hm = a.matrix_world @ a.pose.bones["head"].matrix
+    fwd = (a.matrix_world.to_3x3() @ a.pose.bones["head"].matrix.to_3x3() @ Vector((0, 0, 1))).normalized() if False else (hm.to_3x3() @ Vector((0, 0, -1)))
+    pf.matrix_world = Matrix.Translation(hm @ Vector((0, 0.03, 0)) + (a.matrix_world.to_3x3() @ Vector((0, -0.14, -0.02))))
+    cn = pf.constraints.new("CHILD_OF"); cn.target = a; cn.subtarget = "head"; cn.inverse_matrix = hm.inverted()
+    ph = random.random()
+    for f in range(1, F_OUT, 6):
+        c_ = ((wt(f) / 150.0) + ph) % 1.0
+        k_ = 0.05 if c_ > 0.5 else (0.8 + 3.5 * c_)
+        pf.scale = (k_, k_ * 1.3, k_); pf.keyframe_insert("scale", frame=f)
+    vis(pf, ((1, False), (F_OUT, True)))
 # ---------------------------------------------------------------- hall audience: packed floor + balcony, roaring in beat 9
 HALL_SPOTS = []
 for row in range(9):
@@ -172,8 +209,8 @@ K = [  # frame, position, target, lens
  (600, P((0.204, -0.092, 0.13)), P((0, 0.03, -0.02)), 30),
  (660, P((0.041, -0.038, 0.208)), P((0, 0.03, -0.01)), 30),          # over the fold edge
  (B[4], P((-0.153, -0.11, 0.075)), P((0.01, 0.04, -0.02)), 30),
- (780, P((0.178, -0.044, -0.016)), P((0.035, 0.047, -0.03)), 32),     # lateral to the steel case
- (840, P((0.124, 0.01, -0.139)), P((0.035, 0.047, -0.03)), 32),     # low over the hinge
+ (780, P((0.178, -0.044, -0.016)), P((0.035, 0.031, -0.03)), 32),     # lateral to the steel case
+ (840, P((0.124, 0.01, -0.139)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
  (B[5], P((-0.177, -0.129, 0.014)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
  (940, P((-0.147, -0.035, 0.048)), P((0.015, 0.025, -0.02)), 35),
  (B[6], P((-0.133, 0.016, -0.037)), P((0.02, 0.05, -0.02)), 35),       # push to the dent

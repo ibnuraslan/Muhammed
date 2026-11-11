@@ -156,7 +156,7 @@ mo = bpy.context.object; mo.name = "Moustache"; mo.scale = (1.55, 0.42, 0.42); b
 for v in mo.data.vertices:
     v.co.z -= 0.25 * (v.co.x / 0.046) ** 2 * 0.02    # droop at the ends
 hairm = bpy.data.materials.new("MoustacheHair"); hairm.use_nodes = True
-hb = hairm.node_tree.nodes["Principled BSDF"]; hb.inputs["Base Color"].default_value = (0.2, 0.14, 0.09, 1); hb.inputs["Roughness"].default_value = 0.7
+hb = hairm.node_tree.nodes["Principled BSDF"]; hb.inputs["Base Color"].default_value = (0.33, 0.28, 0.23, 1); hb.inputs["Roughness"].default_value = 0.7
 mo.data.materials.append(hairm)
 dsp = mo.modifiers.new("Bristle", "DISPLACE"); tx = bpy.data.textures.new("Bristle", "STUCCI"); tx.noise_scale = 0.004; dsp.texture = tx; dsp.strength = 0.003
 bpy.ops.object.shade_smooth(); specs.append(mo)
@@ -170,7 +170,7 @@ ps.use_emit_random = True; ps.emit_from = "FACE"
 ps.render_type = "PATH"; ps.display_step = 3; ps.render_step = 4
 mo.show_instancer_for_render = True
 skin_m = bpy.data.materials.new("MoustacheBase"); skin_m.use_nodes = True
-skin_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.16, 0.11, 0.075, 1)
+skin_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.24, 0.2, 0.16, 1)
 mo.data.materials.clear(); mo.data.materials.append(skin_m); mo.data.materials.append(hairm)
 _c = sum((v.co for v in mo.data.vertices), Vector()) / len(mo.data.vertices)
 for v in mo.data.vertices: v.co = _c + Vector(((v.co - _c).x * 0.78, (v.co - _c).y * 0.7, (v.co - _c).z * 0.6))
@@ -274,11 +274,11 @@ for ob in [o for o in H.children if o.type == "MESH"]:
         # x-ray: porthole fully clear around the pocket, glass ghost elsewhere
         tc = n.new("ShaderNodeTexCoord"); tc.object = xc
         ln = n.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; l.new(tc.outputs["Object"], ln.inputs[0])
-        mr = n.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.10; mr.inputs["From Max"].default_value = 0.22
+        mr = n.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.045; mr.inputs["From Max"].default_value = 0.11
         mr.inputs["To Min"].default_value = 1.0; mr.inputs["To Max"].default_value = 0.0; l.new(ln.outputs["Value"], mr.inputs["Value"])
         tr = n.new("ShaderNodeBsdfTransparent")
-        fr = n.new("ShaderNodeLayerWeight"); fr.inputs["Blend"].default_value = 0.25
-        em = n.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.55, 0.9, 1.0, 1); em.inputs["Strength"].default_value = 0.8
+        fr = n.new("ShaderNodeLayerWeight"); fr.inputs["Blend"].default_value = 0.22
+        em = n.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.35, 0.75, 1.0, 1); em.inputs["Strength"].default_value = 0.9
         gm = n.new("ShaderNodeMixShader"); l.new(fr.outputs["Facing"], gm.inputs["Fac"]); l.new(tr.outputs["BSDF"], gm.inputs[1]); l.new(em.outputs["Emission"], gm.inputs[2])
         hole = n.new("ShaderNodeMixShader"); l.new(mr.outputs["Result"], hole.inputs["Fac"]); l.new(gm.outputs["Shader"], hole.inputs[1]); l.new(tr.outputs["BSDF"], hole.inputs[2])
         val = n.new("ShaderNodeValue"); val.name = "XRayFade"
@@ -290,9 +290,9 @@ for ob in [o for o in H.children if o.type == "MESH"]:
 MS = bpy.data.objects["Manuscript"]; GC = bpy.data.objects["GlassesCase"]; BL = bpy.data.objects["Bullet"]
 SHEETS = sorted([o for o in MS.children if o.name.startswith("Sheet")], key=lambda o: o.name)
 # stack normal (local +z) points out of the chest; sheet 49 outermost
-MS.matrix_world = PW @ Matrix.Translation(Vector((-0.002, 0.032, -0.03))) @ Matrix.Rotation(R_(90), 4, "X")
+MS.matrix_world = PW @ Matrix.Translation(Vector((-0.002, 0.010, -0.03))) @ Matrix.Rotation(R_(90), 4, "X")
 c_sp = child_of(MS, H, "spine01", 400)
-GC.matrix_world = PW @ Matrix.Translation(Vector((0.035, 0.047, -0.03))) @ Matrix.Rotation(R_(90), 4, "Y") @ Matrix.Rotation(R_(90), 4, "X")
+GC.matrix_world = PW @ Matrix.Translation(Vector((0.035, 0.031, -0.03))) @ Matrix.Rotation(R_(90), 4, "Y") @ Matrix.Rotation(R_(90), 4, "X")
 child_of(GC, H, "spine01", 400)
 # visible only inside the x-ray; the manuscript reappears in the hall in his hand
 def vis(o, keys):
@@ -370,7 +370,12 @@ def glow(mat, out_sock_fn, keys, col):
     l.new(mm.outputs[0], em.inputs["Strength"])
     ad = n.new("ShaderNodeAddShader"); l.new(src, ad.inputs[0]); l.new(em.outputs["Emission"], ad.inputs[1]); l.new(ad.outputs[0], o_.inputs["Surface"])
 glow(pm, None, ((1, 0.0), (B[3] + 40, 0.0), (B[3] + 70, 2.5), (B[3] + 150, 1.2), (B[4] - 10, 0.6), (B[4] + 20, 0.0), (B[5] + 10, 0.0), (B[5] + 30, 1.5), (B[6], 0.3)), (1.0, 0.8, 0.35))
-glow(bpy.data.materials["BrushedSteel"], None, ((1, 0.0), (B[4], 0.0), (B[4] + 25, 3.0), (B[5] - 10, 1.0), (B[5] + 100, 2.0), (B[6] + 10, 0.0)), (1.0, 0.85, 0.4))
+glow(bpy.data.materials["BrushedSteel"], None, ((1, 0.0), (B[4], 0.0), (B[4] + 25, 0.9), (B[5] - 10, 0.3), (B[5] + 100, 0.6), (B[6] + 10, 0.0)), (1.0, 0.85, 0.4))
+# pages fan open as the camera reveals the stack, riffle again under the bullet
+for k, s in enumerate(SHEETS):
+    kb = s.data.shape_keys.key_blocks["Fan"]
+    for f_, v_ in ((1, 0.0), (B[3] + 30, 0.0), (B[3] + 150 + k, 1.0), (B[4] - 20, 0.7), (B[5] - 20, 0.15), (B[5] + 20 + k // 2, 0.45), (B[6] + 40, 0.2), (END, 0.12)):
+        kb.value = v_; kb.keyframe_insert("value", frame=int(f_))
 # punch ripple per sheet as the bullet passes (outermost first)
 T_IN, T_OUT = B[5] + 6, B[5] + 60
 for k, s in enumerate(reversed(SHEETS)):
@@ -389,7 +394,6 @@ CASEw = GC.matrix_world.to_translation()
 case_hit = HPw + dirv * 0.032
 stop = HPw + dirv * 0.062
 BL.rotation_mode = "QUATERNION"; qd = Vector((0, 1, 0)).rotation_difference(dirv)
-trail = bpy.data.objects["BulletTrail"]
 for f in range(F_FLASH, F_IMPACT + 1):
     u = (f - F_FLASH) / (F_IMPACT - F_FLASH)
     BL.location = SHOOTER.lerp(HIT, u); BL.rotation_quaternion = qd
@@ -399,8 +403,7 @@ blf = pk(bl_keys)
 for f in range(B[5] - 10, B[6] + 61, 2):
     BL.location = blf(f); BL.rotation_quaternion = qd @ Quaternion((0, 1, 0), R_(f * 6))
     BL.keyframe_insert("location", frame=f); BL.keyframe_insert("rotation_quaternion", frame=f)
-for o in (BL, trail): vis(o, ((1, True), (F_FLASH, False), (F_IMPACT + 1, True), (B[5] - 10, False), (1180, True)))
-for f_, h_ in ((1, False), (B[5] + 100, True)): trail.hide_render = h_; trail.keyframe_insert("hide_render", frame=f_)
+vis(BL, ((1, True), (F_FLASH, False), (F_IMPACT + 1, True), (B[5] - 10, False), (1180, True)))
 # dent in the case when the bullet arrives
 dk = GC.data.shape_keys.key_blocks["Dent"]
 hl = GC.matrix_world.inverted() @ case_hit
@@ -443,15 +446,13 @@ for grp, nm, size, cen in ((ribs, "RibsRoot", (0.33, 0.24, 0.34), thor + Vector(
         o.matrix_world = Matrix.Translation(cen) @ Matrix.Scale(s, 4) @ Matrix.Translation(-c0) @ o.matrix_world
         o.parent = root; o.matrix_parent_inverse = root.matrix_world.inverted()
     child_of(root, H, "spine01", 400)
-    for o in [root] + grp: vis(o, ((1, True), (B[6] - 40, False), (1180, True)))
+    for o in [root] + grp: vis(o, ((1, True), (B[3] + 15, False), (1180, True)))
     if nm == "LungsRoot":
-        for f in range(B[6] - 40, 1181, 10):
+        for f in range(B[3] + 15, 1181, 10):
             k = 1.0 + 0.03 * math.sin(2 * math.pi * f / 120.0); root.scale = (k, k, k); root.keyframe_insert("scale", frame=f)
 mp = bpy.data.objects["MusclePatch"]; mp.location = stop + dirv * 0.004; mp.rotation_mode = "QUATERNION"; mp.rotation_quaternion = qd
-child_of(mp, H, "spine01", 400); vis(mp, ((1, True), (B[6] - 20, False), (1180, True)))
-gr = bpy.data.objects["GapRing"]; gr.location = stop + dirv * 0.02; gr.rotation_mode = "QUATERNION"; gr.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(dirv)
-child_of(gr, H, "spine01", 400); vis(gr, ((1, True), (B[6] + 40, False), (1180, True)))
-for f_, s_ in ((B[6] + 40, 0.2), (B[6] + 70, 1.0), (1180, 1.0)): gr.scale = (s_,) * 3; gr.keyframe_insert("scale", frame=f_)
+child_of(mp, H, "spine01", 400); vis(mp, ((1, True), (B[5], False), (1180, True)))
+
 # ------------------------------------------------------------------ studio dome + lights, set swap
 dome = bpy.data.objects["StudioDome"]; dome.visible_shadow = True
 sc.frame_set(400); dome.location = PL((0, 0.02, 0))

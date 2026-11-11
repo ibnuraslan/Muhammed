@@ -43,5 +43,32 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/4866bd05df2d4febba463295cd24b564",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "facade_hotel": {
+  "uid": "097ea6845423427480b15a3e1cfb0801",
+  "title": "Brick & Door in Berlin, Germany",
+  "author": "Azad Balabanian",
+  "author_profile": "https://sketchfab.com/azadbal",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/097ea6845423427480b15a3e1cfb0801",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "facade_side": {
+  "uid": "1a015406047e43d78530c5eaf355416e",
+  "title": "Building Facade - Quick Scan",
+  "author": "L\u00e9onard_Doye / Leoskateman",
+  "author_profile": "https://sketchfab.com/leoskateman",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1a015406047e43d78530c5eaf355416e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "carriage": {
+  "uid": "db4460e67e164cdcb33b0c3ba31c641d",
+  "title": "19th Century Carriage",
+  "author": "Digital Goblin",
+  "author_profile": "https://sketchfab.com/DigitalGoblin",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/db4460e67e164cdcb33b0c3ba31c641d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }
