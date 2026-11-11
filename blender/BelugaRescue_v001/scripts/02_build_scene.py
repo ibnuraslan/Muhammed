@@ -101,7 +101,7 @@ PH = A
 w = bpy.data.worlds.new("World_Hall"); sc.world = w; w.use_nodes = True
 wn, wl = w.node_tree.nodes, w.node_tree.links
 env = wn.new('ShaderNodeTexEnvironment'); env.image = img(os.path.join(PH, "hdri", "events_hall_interior_2k.hdr"))
-bg = wn["Background"]; bg.inputs['Strength'].default_value = 0.8; bg.name = "SkyStrength"
+bg = wn["Background"]; bg.inputs['Strength'].default_value = 0.55; bg.name = "SkyStrength"
 tintw = wn.new('ShaderNodeMix'); tintw.data_type = 'RGBA'; tintw.blend_type = 'MULTIPLY'; tintw.inputs['Factor'].default_value = 1.0
 tintw.inputs['B'].default_value = (0.85, 0.95, 1.05, 1); tintw.name = "SkyTint"
 wl.new(env.outputs['Color'], tintw.inputs['A']); wl.new(tintw.outputs['Result'], bg.inputs['Color'])
@@ -132,7 +132,8 @@ M_STEEL = simple_mat("M_Steel", (0.75, 0.76, 0.78), rough=0.25, metal=1.0)
 M_GALLERY = simple_mat("M_GalleryWall", (0.06, 0.08, 0.11), rough=0.7)
 M_GFLOOR = simple_mat("M_GalleryFloor", (0.09, 0.09, 0.1), rough=0.35)
 M_RING = simple_mat("M_RingToy", (0.95, 0.38, 0.06), rough=0.45)
-M_ICEFLOE = simple_mat("M_IceFloe", (0.85, 0.93, 1.0), rough=0.15, trans=0.6, ior=1.31, sss=0.3)
+M_ICEFLOE = pbr("M_IceFloe", os.path.join(PH, "snow_02"), "snow_02", 0.8, tint=(0.88, 0.95, 1.0), bump=1.2, rough_mul=0.6)
+M_ICEFLOE.node_tree.nodes["Principled BSDF"].inputs["Subsurface Weight"].default_value = 0.4
 
 # ------------------------------------------------------------------ tank shell
 TANK = bpy.data.collections.new("Tank"); sc.collection.children.link(TANK)
@@ -198,7 +199,8 @@ mv(box("Gallery_Bench", -2.0, 2.0, -8.3, -7.8, 0.0, 0.45, simple_mat("M_Bench", 
 
 # deck above the front wall + coping + railing + ladder
 mv(box("Deck", -TX - 1, TX + 1, -9.5, WY1, DECK_Z - 0.3, DECK_Z, M_DECK))
-cop = mv(box("Coping", -TX - 1, TX + 1, WY1 - 0.05, WY1 + 0.14, DECK_Z - 0.35, DECK_Z + 0.06, simple_mat("M_Coping", (0.82, 0.83, 0.82), rough=0.45), bevel=0.05))
+M_COP = pbr("M_Coping", os.path.join(PH, "rock_face_03"), "rock_face_03", 3.0, tint=(0.85, 0.86, 0.86), sat=0.0, val=1.3, bump=0.35)
+cop = mv(box("Coping", -TX - 1, TX + 1, WY1 - 0.05, WY1 + 0.14, DECK_Z - 0.35, DECK_Z + 0.06, M_COP, bevel=0.05))
 for i, x in enumerate([x * 0.5 for x in range(-12, 13)]):
     bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.025, depth=1.0, location=(x, -6.4, DECK_Z + 0.5))
     o = mv(bpy.context.active_object); o.name = "Rail_Post_%d" % i; o.data.materials.append(M_STEEL)
@@ -241,8 +243,10 @@ for i in range(9):
     x, y = random.uniform(-5, 5), random.uniform(-1.5, 4.2)
     if abs(x) < 2.0 and y < -2.5: continue
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=random.uniform(0.18, 0.4), location=(x, y, WATER_Z + 0.02))
-    o = mv(bpy.context.active_object, WAT); o.name = "IceFloe_%d" % i; o.scale = (1.0, random.uniform(0.6, 1.0), 0.22)
-    for v in o.data.vertices: v.co *= 1 + 0.2 * noise.noise(v.co * 3 + Vector((i, 0, 0)))
+    o = mv(bpy.context.active_object, WAT); o.name = "IceFloe_%d" % i; o.scale = (1.0, random.uniform(0.55, 1.0), 0.3)
+    for v in o.data.vertices:      # jagged, broken-off chunk: strong multi-octave noise, flat-ish waterline top
+        v.co *= 1 + 0.45 * noise.fractal(v.co * 2.2 + Vector((i, 2 * i, 0)), 0.7, 2.0, 4)
+        if v.co.z > 0.05: v.co.z = 0.05 + (v.co.z - 0.05) * 0.35 + 0.04 * noise.noise(v.co * 7)
     o.data.materials.append(M_ICEFLOE); [setattr(f_, 'use_smooth', True) for f_ in o.data.polygons]
 
 # ------------------------------------------------------------------ props: ring toy
@@ -285,12 +289,12 @@ def prof(s):
             if s <= s1:
                 t = (s - s0) / (s1 - s0); t = t * t * (3 - 2 * t); return v0 + (v1 - v0) * t
         return tab[-1][1]
-    wv = lerp_tab([(0, 0.02), (0.025, 0.09), (0.06, 0.15), (0.1, 0.25), (0.16, 0.31), (0.21, 0.27), (0.3, 0.40), (0.42, 0.46),
-                   (0.55, 0.42), (0.68, 0.28), (0.8, 0.12), (0.88, 0.065), (0.94, 0.05), (1.0, 0.03)])
-    top = lerp_tab([(0, 0.02), (0.025, 0.06), (0.045, 0.13), (0.08, 0.29), (0.13, 0.35), (0.19, 0.27), (0.24, 0.29), (0.4, 0.40),
-                    (0.55, 0.37), (0.68, 0.27), (0.8, 0.16), (0.88, 0.10), (0.94, 0.06), (1.0, 0.035)])
-    bot = lerp_tab([(0, 0.02), (0.025, 0.06), (0.06, 0.11), (0.12, 0.19), (0.2, 0.24), (0.3, 0.34), (0.42, 0.42), (0.55, 0.36),
-                    (0.68, 0.24), (0.8, 0.13), (0.88, 0.085), (0.94, 0.055), (1.0, 0.03)])
+    wv = lerp_tab([(0, 0.025), (0.02, 0.08), (0.045, 0.13), (0.08, 0.25), (0.13, 0.31), (0.18, 0.31), (0.22, 0.29), (0.3, 0.44), (0.42, 0.52),
+                   (0.55, 0.47), (0.68, 0.31), (0.8, 0.13), (0.88, 0.065), (0.94, 0.05), (1.0, 0.03)])
+    top = lerp_tab([(0, 0.025), (0.02, 0.05), (0.035, 0.07), (0.05, 0.2), (0.075, 0.36), (0.115, 0.43), (0.16, 0.39), (0.205, 0.29), (0.25, 0.31),
+                    (0.4, 0.44), (0.55, 0.41), (0.68, 0.29), (0.8, 0.16), (0.88, 0.10), (0.94, 0.06), (1.0, 0.035)])
+    bot = lerp_tab([(0, 0.025), (0.025, 0.06), (0.06, 0.11), (0.12, 0.2), (0.2, 0.27), (0.3, 0.38), (0.42, 0.47), (0.55, 0.4),
+                    (0.68, 0.26), (0.8, 0.13), (0.88, 0.085), (0.94, 0.055), (1.0, 0.03)])
     cz = lerp_tab([(0, -0.06), (0.06, -0.06), (0.15, -0.02), (0.4, 0.0), (0.8, 0.02), (1.0, 0.03)])
     return wv, top, bot, cz
 NS, NR = 72, 28
@@ -370,7 +374,18 @@ for f_ in bel.data.polygons: f_.use_smooth = True
 # mouth line + jaw open shape key (hinge at s ~ 0.12)
 S_HINGE = -L_W * 0.42 + 0.115 * L_W
 Y_N0, Y_N1 = -L_W * 0.42 + 0.17 * L_W * 0.94, -L_W * 0.42 + 0.30 * L_W * 0.94
-MOUTH_Z = lambda y: prof(max(0, (y + L_W * 0.42) / (L_W * 0.94)))[3] - 0.015
+def MOUTH_Z(y):
+    s_ = max(0, (y + L_W * 0.42) / (L_W * 0.94)); u = max(0.0, min(1.0, (s_ - 0.05) / 0.065)); u = u * u * (3 - 2 * u)
+    return prof(s_)[3] - 0.015 + 0.03 * u          # the beluga smile: corners turn up toward the hinge
+# thick neck folds (three rolls, deepest on the sides and top)
+for v in bel.data.vertices:
+    s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
+    if 0.175 < s_ < 0.29:
+        cz_ = prof(s_)[3]; r = Vector((v.co.x, 0, v.co.z - cz_))
+        if r.length < 1e-4: continue
+        k = math.sin((s_ - 0.175) / 0.115 * 3 * math.pi) ** 2 * math.sin((s_ - 0.175) / 0.115 * math.pi)
+        up = 0.65 + 0.35 * max(0.0, r.normalized().z)
+        v.co -= r.normalized() * 0.03 * k * up
 # dorsal ridge along the back (belugas have a ridge instead of a dorsal fin)
 for v in bel.data.vertices:
     s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
@@ -408,6 +423,13 @@ jawo = bpy.data.objects.new("Beluga_Jaw", jme); link(jawo)
 for f_ in jme.polygons: f_.use_smooth = True
 jsm = jawo.modifiers.new("Sub", 'SUBSURF'); jsm.levels = 1; jsm.render_levels = 2
 ssm = bel.modifiers.new("Sub", 'SUBSURF'); ssm.levels = 1; ssm.render_levels = 2
+wtx = bpy.data.textures.new("BelugaWrinkle", 'DISTORTED_NOISE'); wtx.noise_scale = 0.018; wtx.distortion = 2.0
+wvg = bel.vertex_groups.new(name="wrinkle")
+for v in bel.data.vertices:
+    s_ = (v.co.y + L_W * 0.42) / (L_W * 0.94)
+    w_ = 0.15 + 0.85 * math.exp(-((s_ - 0.23) / 0.07) ** 2) + (0.4 if (v.co.z < -0.2 and 0.3 < s_ < 0.6) else 0)
+    wvg.add([v.index], min(1.0, w_), 'REPLACE')
+wdm = bel.modifiers.new("Wrinkles", 'DISPLACE'); wdm.texture = wtx; wdm.strength = 0.004; wdm.mid_level = 0.5; wdm.texture_coords = 'LOCAL'; wdm.vertex_group = "wrinkle"
 # skin material: SSS white with faint grey mottling, mouth crease, scars
 bm_ = bpy.data.materials.new("M_BelugaSkin"); bm_.use_nodes = True
 bn, bl = bm_.node_tree.nodes, bm_.node_tree.links
@@ -417,7 +439,8 @@ bp.inputs['Subsurface Radius'].default_value = (0.4, 0.3, 0.25); bp.inputs['Subs
 bp.inputs['Coat Weight'].default_value = 0.25; bp.inputs['Coat Roughness'].default_value = 0.08
 btc = bn.new('ShaderNodeTexCoord')
 bnz = bn.new('ShaderNodeTexNoise'); bnz.inputs['Scale'].default_value = 1.6; bnz.inputs['Detail'].default_value = 6
-bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.55, 0.58, 0.6, 1); bramp.color_ramp.elements[1].color = (0.9, 0.9, 0.86, 1)
+bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.66, 0.68, 0.69, 1); bramp.color_ramp.elements[1].color = (0.92, 0.91, 0.87, 1)
+bramp.color_ramp.elements[0].position = 0.35; bramp.color_ramp.elements[1].position = 0.65
 bl.new(btc.outputs['Object'], bnz.inputs['Vector']); bl.new(bnz.outputs['Fac'], bramp.inputs['Fac'])
 # mouth crease: dark line at the mouth height in the front of the head
 bsep = bn.new('ShaderNodeSeparateXYZ'); bl.new(btc.outputs['Object'], bsep.inputs['Vector'])
@@ -436,6 +459,7 @@ yfront = mnode('LESS_THAN', bsep.outputs['Y'], S_HINGE)
 zline = mnode('LESS_THAN', mnode('ABSOLUTE', mnode('SUBTRACT', bsep.outputs['Z'], -0.078)), 0.008)
 mouth = mnode('MULTIPLY', yfront, zline)
 bmix = bn.new('ShaderNodeMix'); bmix.data_type = 'RGBA'; bmix.inputs['B'].default_value = (0.32, 0.33, 0.35, 1)
+mouth = mnode('MULTIPLY', mouth, 0.0)
 bl.new(mouth, bmix.inputs['Factor']); bl.new(bramp.outputs['Color'], bmix.inputs['A']); bl.new(bmix.outputs['Result'], bp.inputs['Base Color'])
 bbump = bn.new('ShaderNodeBump'); bbump.inputs['Strength'].default_value = 0.18; bbump.inputs['Distance'].default_value = 0.01
 bnz2 = bn.new('ShaderNodeTexNoise'); bnz2.inputs['Scale'].default_value = 40.0
@@ -452,9 +476,28 @@ nk = mnode('MULTIPLY', mnode('GREATER_THAN', bsep.outputs['Y'], Y_N0), mnode('LE
 crease = mnode('MULTIPLY', mnode('MULTIPLY', bwv.outputs['Fac'], nk), 1.2)
 hgt = mnode('ADD', mnode('ADD', mnode('MULTIPLY', bnz2.outputs['Fac'], 0.3), wr), crease)
 bl.new(hgt, bbump.inputs['Height']); bl.new(bbump.outputs['Normal'], bp.inputs['Normal'])
+# rake-mark scars: thin voronoi edges, sparse, pale grey; wet specular breakup on the roughness
+svo = bn.new('ShaderNodeTexVoronoi'); svo.feature = 'DISTANCE_TO_EDGE'; svo.inputs['Scale'].default_value = 9.0
+smap = bn.new('ShaderNodeMapping'); smap.inputs['Scale'].default_value = (1.0, 0.25, 1.0); bl.new(btc.outputs['Object'], smap.inputs['Vector']); bl.new(smap.outputs['Vector'], svo.inputs['Vector'])
+snz = bn.new('ShaderNodeTexNoise'); snz.inputs['Scale'].default_value = 2.5; bl.new(btc.outputs['Object'], snz.inputs['Vector'])
+scar = mnode('MULTIPLY', mnode('LESS_THAN', svo.outputs['Distance'], 0.007), mnode('GREATER_THAN', snz.outputs['Fac'], 0.68))
+rnz = bn.new('ShaderNodeTexNoise'); rnz.inputs['Scale'].default_value = 9.0; bl.new(btc.outputs['Object'], rnz.inputs['Vector'])
+rmr = bn.new('ShaderNodeMapRange'); rmr.inputs['To Min'].default_value = 0.14; rmr.inputs['To Max'].default_value = 0.48
+rmr.inputs['From Min'].default_value = 0.35; rmr.inputs['From Max'].default_value = 0.65
+bl.new(rnz.outputs['Fac'], rmr.inputs['Value']); bl.new(rmr.outputs['Result'], bp.inputs['Roughness'])
+# eyelid crease: ring around each eye (mirrored by |x|)
+eabs = mnode('ABSOLUTE', bsep.outputs['X'])
+ecomb = bn.new('ShaderNodeCombineXYZ'); bl.new(eabs, ecomb.inputs['X']); bl.new(bsep.outputs['Y'], ecomb.inputs['Y']); bl.new(bsep.outputs['Z'], ecomb.inputs['Z'])
+_ew, _et, _eb, _ec = prof(0.155)
+edv = bn.new('ShaderNodeVectorMath'); edv.operation = 'DISTANCE'; bl.new(ecomb.outputs[0], edv.inputs[0])
+edv.inputs[1].default_value = (_ew - 0.012, -L_W * 0.42 + 0.155 * L_W, _ec - 0.02)
+lid = mnode('MULTIPLY', mnode('GREATER_THAN', edv.outputs['Value'], 0.022), mnode('LESS_THAN', edv.outputs['Value'], 0.034))
+hgt = mnode('ADD', mnode('ADD', hgt, mnode('MULTIPLY', scar, -0.4)), mnode('MULTIPLY', lid, -0.8))
+bl.new(hgt, bbump.inputs['Height'])
 # darker grey in the creases
 cmx = bn.new('ShaderNodeMix'); cmx.data_type = 'RGBA'; cmx.inputs['B'].default_value = (0.62, 0.64, 0.66, 1)
-bl.new(mnode('MULTIPLY', crease, 0.35), cmx.inputs['Factor']); bl.new(bmix.outputs['Result'], cmx.inputs['A']); bl.new(cmx.outputs['Result'], bp.inputs['Base Color'])
+bl.new(mnode('MINIMUM', mnode('ADD', mnode('ADD', mnode('MULTIPLY', crease, 0.35), mnode('MULTIPLY', scar, 0.5)), mnode('MULTIPLY', lid, 0.7)), 1.0), cmx.inputs['Factor'])
+bl.new(bmix.outputs['Result'], cmx.inputs['A']); bl.new(cmx.outputs['Result'], bp.inputs['Base Color'])
 bel.data.materials.append(bm_)
 jawo.data.materials.append(bm_)
 # mouth interior (dark, wet) seen through the open slit; rides on the head bone
@@ -467,7 +510,7 @@ M_EYE = simple_mat("M_BelugaEye", (0.02, 0.02, 0.025), rough=0.05)
 EYE_Y = -L_W * 0.42 + 0.155 * L_W
 for side in (-1, 1):
     wv, top, bot, cz = prof(0.155)
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.022, location=(side * (wv - 0.012), EYE_Y, cz - 0.02))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.017, location=(side * (wv - 0.01), EYE_Y, cz - 0.02))
     e = bpy.context.active_object; e.name = "Beluga_Eye_" + ("L" if side > 0 else "R"); e.data.materials.append(M_EYE)
     e.scale = (0.7, 1.0, 0.8)
 
@@ -684,14 +727,14 @@ eyeL, eyeR = bone_world(D, "eye.L"), bone_world(D, "eye.R")
 ec = (eyeL + eyeR) / 2
 face_front_y = min((D.matrix_world @ v.co).y for v in DB.data.vertices if not is_helper(v) and abs((D.matrix_world @ v.co).z - ec.z) < 0.02 and abs((D.matrix_world @ v.co).x) < 0.03)
 bm = bmesh.new()
-W2, H2, DEP = 0.072, 0.034, 0.03
+W2, H2, DEP = 0.058, 0.029, 0.022
 def rr(t, w, h, r):
     """rounded-rect point at parameter t in [0,1)"""
     a = 2 * math.pi * t
     x = math.copysign(min(1, abs(math.cos(a)) ** 0.5), math.cos(a)) * w
     z = math.copysign(min(1, abs(math.sin(a)) ** 0.5), math.sin(a)) * h
-    if z < 0 and abs(x) < 0.022:           # nose pocket notch on the lower edge
-        z -= 0.03 * (1 - abs(x) / 0.022)
+    if z < 0 and abs(x) < 0.018:           # nose pocket notch on the lower edge
+        z -= 0.02 * (1 - abs(x) / 0.018)
     return x, z
 N = 48; loops = []
 for k, (scale, yoff) in enumerate(((1.0, 0.0), (1.02, -0.015), (1.0, -0.032), (0.97, -DEP))):
@@ -727,7 +770,7 @@ fso = fr.modifiers.new("Solid", 'SOLIDIFY'); fso.thickness = 0.006; fso.offset =
 # strap: ring around the head at eye height, shrinkwrapped (offset over the hair)
 hb_ = D.data.bones["head"]
 bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.006, major_segments=48, minor_segments=6,
-                                 location=(ec.x, ec.y + 0.09, ec.z + 0.012), rotation=(R_(90 - 12), 0, 0))
+                                 location=(ec.x, ec.y + 0.09, ec.z + 0.02), rotation=(R_(-14), 0, 0))
 strap = bpy.context.active_object; strap.name = "Diver.MaskStrap"
 strap.scale = (0.86, 1.15, 1.0)
 strap.data.materials.append(M_MASKSKIRT)
@@ -735,6 +778,7 @@ sws = strap.modifiers.new("Wrap", 'SHRINKWRAP'); sws.target = DB; sws.offset = 0
 strap.modifiers.new("Smooth", 'SMOOTH').iterations = 6; strap.modifiers.new("Sub", 'SUBSURF').levels = 1
 for o in (mask, lens, fr, strap):
     parent_to_bone(o, D, "head")
+    o.visible_shadow = False
 for o in (mask, fr, lens):
     for f_ in o.data.polygons: f_.use_smooth = True
 

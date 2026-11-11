@@ -127,7 +127,11 @@ class H:
         for s in "LR":
             sx = 1 if s == "L" else -1
             kind, prm = p["arms"].get(s, ("rest", dict()))
-            if kind == "world":
+            if kind == "body":
+                W, d, n = prm["W"], prm["d"], prm["n"]
+                R.key_world("IK_hand." + s, f, self.hand_matrix(s, M @ W, R3 @ d, R3 @ n))
+                pole = M @ (self.SH[s] + Vector((0.45 * sx, 0.35, -0.3)))
+            elif kind == "world":
                 W, d, n = prm["W"], prm["d"], prm["n"]
                 R.key_world("IK_hand." + s, f, self.hand_matrix(s, W, d, n))
                 pole = prm.get("pole", M @ (self.SH[s] + Vector((0.35 * sx, 0.45, -0.25))))
@@ -503,39 +507,123 @@ def glass_hand(h, s, x, z):
     W = Vector((x, GLASS_Y - 0.035, z))
     return ("world", dict(W=W, d=Vector((0, 0.15, 1)), n=Vector((0, 1, 0)), pole=W + Vector((sx * 0.4, -0.5, -0.5))))
 GAL = [("Keeper", -2.6, -5.85), ("SpecA", 1.4, -5.7), ("SpecB", 2.5, -6.3), ("SpecC", -0.6, -5.75), ("SpecD", -1.5, -6.6)]
-DECK = [("SpecE", -0.5, -6.0), ("SpecF", 1.6, -6.05), ("SpecG", 0.4, -6.9)]
+DECK = [("SpecE", -0.5, -6.0), ("SpecG", 0.4, -6.9)]
 for nm, x, y in GAL + DECK:
     PEOPLE[nm] = H(nm)
+def clap(h, open_):
+    a = {}
+    for s_, sx in (("L", 1), ("R", -1)):
+        W = Vector((sx * (0.025 + 0.11 * open_), -0.38, h.SH[s_].z - 0.14))
+        a[s_] = ("body", dict(W=W, d=Vector((0, -0.35, 1.0)), n=Vector((-sx, 0, 0))))
+    return a
+def mouth_hand(h, s_="R"):
+    e = h.R.BN["eye.L"].head_local; sx = 1 if s_ == "L" else -1
+    return ("body", dict(W=Vector((sx * 0.01, e.y - 0.09, e.z - 0.09)), d=Vector((-sx * 0.6, 0, 1.0)), n=Vector((0, 1, 0))))
+POINT = (0, 88, 88, 85)
 for nm, x, y in GAL:
     h = PEOPLE[nm]
-    for k, f in enumerate(range(1, END + 1, 60)):
+    for k, f in enumerate(range(1, END + 1, 30)):
         j = k % 2
+        alarmed = BEAT[4] <= f < BEAT[11] + 40; happy = f >= BEAT[11] + 40
         if nm == "Keeper":
-            if 1100 <= f <= 1200:
+            if 1090 <= f <= 1210:          # nods to the beluga, palm on the glass, other hand signals
                 stand(h, f, (x, y), 180, spine=(8, 0, 0), head=(18 * j, 0, 0), arms_={"L": glass_hand(h, "L", x + 0.25, 1.55), "R": ("rest", dict(fwd=60 + 40 * j, out=20))})
+            elif alarmed and f > 1210:      # radios the deck, points up
+                stand(h, f, (x, y), 180, spine=(4, 0, 0), head=(-25, 0, 0), arms_={"L": mouth_hand(h, "L"), "R": ("rest", dict(fwd=150, out=15))}, curl={"R": (POINT, 40)})
+            elif happy:
+                stand(h, f, (x, y), 180, spine=(0, 0, 0), head=(-15, 0, 0), arms_=clap(h, j))
             else:
                 stand(h, f, (x, y), 180 + 5 * math.sin(k), spine=(4, 0, 2 * j), head=(5, 10 * math.sin(k * 0.7), 0), arms_=arms(fwd=12, out=10))
+            continue
+        if happy:
+            stand(h, f, (x, y), 180, spine=(-4, 0, 0), head=(-12, 6 * math.sin(k), 0), knee=4 + 3 * j, arms_=clap(h, j), curl={"L": (12, 15), "R": (12, 15)})
+        elif alarmed and nm in ("SpecA", "SpecC"):
+            stand(h, f, (x, y), 180, spine=(10, 0, 0), head=(12, 8 * math.sin(k), 0),
+                  arms_={"L": glass_hand(h, "L", x + 0.22, 1.5 + 0.05 * j), "R": glass_hand(h, "R", x - 0.22, 1.45)}, curl={"L": (8, 10), "R": (8, 10)})
+        elif alarmed and nm == "SpecB":
+            stand(h, f, (x, y), 180 - 12, spine=(8, 0, 0), head=(5, 10, 0), arms_=arms(l=dict(fwd=100 + 8 * j, out=12), r=dict(fwd=15, out=12)), curl={"L": (POINT, 45)})
+        elif alarmed and nm == "SpecD":
+            stand(h, f, (x, y), 180, spine=(12, 0, 0), head=(8, 0, 0), arms_={"R": mouth_hand(h, "R"), "L": ("rest", dict(fwd=40 + 15 * j, out=15))})
         else:
-            alarmed = BEAT[4] <= f <= BEAT[12] + 60
-            if alarmed and nm in ("SpecA", "SpecC"):
-                stand(h, f, (x, y), 180, spine=(10, 0, 0), head=(12, 8 * math.sin(k), 0),
-                      arms_={"L": glass_hand(h, "L", x + 0.22, 1.5 + 0.05 * j), "R": glass_hand(h, "R", x - 0.22, 1.45)}, curl={"L": (8, 10), "R": (8, 10)})
-            elif alarmed:
-                stand(h, f, (x, y), 180, spine=(6, 0, 0), head=(5, 0, 0), arms_=arms(l=dict(fwd=95, out=15), r=dict(fwd=30 + 60 * j, out=20)))
-            else:
-                stand(h, f, (x, y), 180 + 8 * math.sin(k + x), spine=(3, 0, 0), head=(4 * j, 12 * math.sin(k * 0.5 + x), 0), arms_=arms(fwd=10 + 20 * j, out=12))
+            stand(h, f, (x, y), 180 + 8 * math.sin(k + x), spine=(3, 0, 0), head=(4 * j, 12 * math.sin(k * 0.5 + x), 0), arms_=arms(fwd=10 + 20 * j, out=12))
 for nm, x, y in DECK:
     h = PEOPLE[nm]
-    for k, f in enumerate(range(1, END + 1, 30 if True else 60)):
+    for k, f in enumerate(range(1, END + 1, 12)):
         j = k % 2
-        if f >= BEAT[11] + 30:       # cheering
-            stand(h, f, (x, y), 180 - 6 * x, spine=(-6 + 6 * j, 0, 0), head=(-10, 0, 0), knee=4 + 4 * j, gz=DECK_Z,
-                  arms_=arms(l=dict(fwd=165 - 20 * j, out=25), r=dict(fwd=150 + 20 * j, out=30)), curl={"L": (60, 30), "R": (60, 30)})
-        elif f >= BEAT[4]:
-            stand(h, f, (x, y), 180 - 6 * x, spine=(25, 0, 0), head=(35, 6 * math.sin(k), 0), gz=DECK_Z,
-                  arms_=arms(l=dict(fwd=80, out=20), r=dict(fwd=20 + 50 * j, out=15)))
-        else:
+        if f >= BEAT[11] + 30:       # clap, and one fist pump
+            if nm == "SpecE" and (k // 3) % 2:
+                stand(h, f, (x, y), 180 - 6 * x, spine=(-4, 0, 0), head=(-8, 0, 0), knee=4, gz=DECK_Z,
+                      arms_=arms(l=dict(fwd=160 - 25 * j, out=20), r=dict(fwd=20, out=15)), curl={"L": (85, 50), "R": (25, 20)})
+            else:
+                stand(h, f, (x, y), 180 - 6 * x, spine=(6, 0, 0), head=(20, 0, 0), knee=4, gz=DECK_Z, arms_=clap(h, j), curl={"L": (12, 15), "R": (12, 15)})
+        elif f >= BEAT[4]:           # lean over the rail, point down into the tank
+            stand(h, f, (x, y), 180 - 6 * x, spine=(28, 0, 0), head=(35, 6 * math.sin(k * 0.3), 0), gz=DECK_Z,
+                  arms_=arms(l=dict(fwd=60 + 6 * j, out=15), r=dict(fwd=20, out=15)), curl={"L": (POINT, 45)})
+        elif k % 5 == 0 or f == 1:
             stand(h, f, (x, y), 180 - 6 * x, spine=(10, 0, 0), head=(20, 6 * math.sin(k * 0.6), 0), gz=DECK_Z, arms_=arms(fwd=15 + 15 * j, out=12))
+# deck keeper (SpecF in a navy staff top) runs to the edge with a ring buoy and holds it out to her
+K2 = bpy.data.objects["SpecF"]
+for ch in K2.children:
+    if ch.type == 'MESH' and "casualsuit" in ch.name:
+        for m in ch.data.materials:
+            for nd in m.node_tree.nodes:
+                if nd.type == 'MIX' and nd.data_type == 'RGBA' and nd.blend_type == 'MULTIPLY': nd.inputs['B'].default_value = (0.16, 0.22, 0.4, 1)
+K2R = make_human_ctrl(K2); K2H = Human(K2R)
+K2F = H.__new__(H); K2F.R = K2R; K2F.REST_HAND = {}
+for s_ in "LR":
+    wv_ = K2R.BN["wrist." + s_].head_local; d_ = K2R.BN["finger3-1." + s_].head_local - wv_
+    a_ = K2R.BN["finger2-1." + s_].head_local - K2R.BN["finger5-1." + s_].head_local
+    K2F.REST_HAND[s_] = H.hand_basis(s_, d_, d_.cross(a_) if s_ == "L" else a_.cross(d_))
+SOLE_K2 = -min((min(v.co.z for v in ch.data.vertices) for ch in K2.children if ch.type == 'MESH' and "shoes" in ch.name), default=0.0)
+GROUND[0] = DECK_Z + SOLE_K2
+P0 = Vector((3.6, -7.6, 0)); P1 = Vector((XY1.x + 0.75, -5.42, 0))
+RUN0, RUN1 = 1840, 1985
+def k2_path(f):
+    t = smooth(max(0.0, min(1.0, (f - RUN0) / (RUN1 - RUN0)))); return P0.lerp(P1, t)
+d_ = (P1 - P0); YAW_RUN = math.degrees(math.atan2(d_.x, -d_.y))
+def k2_yaw(f):
+    return YAW_RUN if f < RUN1 else YAW_RUN + (180 - YAW_RUN) * smooth(min(1.0, (f - RUN1) / 25.0))
+for f in (1, 900, RUN0):
+    p = k2_path(f)
+    K2H.key_root(f, Vector((p.x, p.y, GROUND[0] + K2H.root_head.z - 0.02)), yaw=k2_yaw(f))
+    K2H.key_spine(f, flex=6, head=(10, -20 if f < 900 else 0))
+    for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
+K2H.walk(k2_path, k2_yaw, RUN0, RUN1, stride=1.05, lift=0.1, bob=0.03, crouch=0.06, lean=14)
+for f in (RUN1 + 30, END):
+    p = k2_path(f)
+    K2H.key_root(f, Vector((p.x, p.y, GROUND[0] + K2H.root_head.z - 0.12)), yaw=k2_yaw(f), flex=12)
+    K2H.key_spine(f, flex=34, head=(25, 0))
+    for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
+# the buoy: a real ring life-buoy (orange/white bands), held in both hands
+bpy.ops.mesh.primitive_torus_add(major_radius=0.3, minor_radius=0.065, major_segments=48, minor_segments=16)
+buoy = bpy.context.active_object; buoy.name = "RingBuoy"
+bm_m = bpy.data.materials.new("M_RingBuoy"); bm_m.use_nodes = True
+bnn, bll = bm_m.node_tree.nodes, bm_m.node_tree.links; bpb = bnn["Principled BSDF"]; bpb.inputs['Roughness'].default_value = 0.55
+btc_ = bnn.new('ShaderNodeTexCoord'); bsep_ = bnn.new('ShaderNodeSeparateXYZ'); bll.new(btc_.outputs['Object'], bsep_.inputs['Vector'])
+bat = bnn.new('ShaderNodeMath'); bat.operation = 'ARCTAN2'; bll.new(bsep_.outputs['Y'], bat.inputs[0]); bll.new(bsep_.outputs['X'], bat.inputs[1])
+bsn = bnn.new('ShaderNodeMath'); bsn.operation = 'SINE'; bmu = bnn.new('ShaderNodeMath'); bmu.operation = 'MULTIPLY'; bmu.inputs[1].default_value = 2.0
+bll.new(bat.outputs[0], bmu.inputs[0]); bll.new(bmu.outputs[0], bsn.inputs[0])
+bgt = bnn.new('ShaderNodeMath'); bgt.operation = 'GREATER_THAN'; bgt.inputs[1].default_value = 0.0; bll.new(bsn.outputs[0], bgt.inputs[0])
+bcm = bnn.new('ShaderNodeMix'); bcm.data_type = 'RGBA'; bcm.inputs['A'].default_value = (0.9, 0.22, 0.03, 1); bcm.inputs['B'].default_value = (0.92, 0.92, 0.9, 1)
+bll.new(bgt.outputs[0], bcm.inputs['Factor']); bll.new(bcm.outputs['Result'], bpb.inputs['Base Color'])
+bnz_ = bnn.new('ShaderNodeTexNoise'); bnz_.inputs['Scale'].default_value = 120; bbp = bnn.new('ShaderNodeBump'); bbp.inputs['Strength'].default_value = 0.15
+bll.new(bnz_.outputs['Fac'], bbp.inputs['Height']); bll.new(bbp.outputs['Normal'], bpb.inputs['Normal'])
+buoy.data.materials.append(bm_m); [setattr(f_, 'use_smooth', True) for f_ in buoy.data.polygons]
+buoy.rotation_mode = 'QUATERNION'
+for f in list(range(1, END + 1, 6)) + [END]:
+    ev(f)
+    sp = K2.matrix_world @ K2R.PB["spine02"].head
+    yw = R_(k2_yaw(f)); fwd = Vector((math.sin(yw), -math.cos(yw), 0)); side = Vector((math.cos(yw), math.sin(yw), 0))
+    reach = 0.0 if f < RUN1 else smooth(min(1.0, (f - RUN1) / 40.0))
+    c = sp + fwd * (0.42 + 0.35 * reach) + Vector((0, 0, -0.18 - 0.35 * reach))
+    q = Vector((0, 0, 1)).rotation_difference(fwd)
+    buoy.location = c; buoy.rotation_quaternion = q
+    buoy.keyframe_insert("location", frame=f); buoy.keyframe_insert("rotation_quaternion", frame=f)
+    for s_, sx in (("L", 1), ("R", -1)):
+        W = c + side * sx * 0.33                     # grip on the outer edge of the ring, each side
+        K2H.key_hand(s_, f, W + Vector((0, 0, 0.03)), Vector((0, 0, -1)), -side * sx, pole=W + side * sx * 0.4 - fwd * 0.4 + Vector((0, 0, -0.3)))
+        K2F.key_fingers(s_, f, 70, 45)
+print("DECK KEEPER keyed")
 for nm, h in PEOPLE.items():
     h.bake()
 print("PEOPLE keyed")

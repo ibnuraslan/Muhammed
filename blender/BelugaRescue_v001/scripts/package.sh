@@ -5,7 +5,8 @@ set -e
 N=${1:-002}; B=${BLENDER:-/opt/bin/blender}
 OUTD=../BelugaRescue_v$N; mkdir -p $OUTD
 OUT=$PWD/$OUTD/BelugaRescue_v${N}_60fps.blend
-$B -b work/film.blend --python ../pipeline/package_for_farm.py -- $OUT 2>&1 | grep -E "FARM|PROBLEMS|SAVED|rror"
+$B -b work/film.blend --python scripts/shrink_textures.py -- $PWD/work/film_small.blend 2>&1 | grep -E "SHRUNK|rror"
+$B -b work/film_small.blend --python ../pipeline/package_for_farm.py -- $OUT 2>&1 | grep -E "FARM|PROBLEMS|SAVED|rror"
 cp beats.json camera_path.json CREDITS.md $OUTD/
 # verify: factory startup, nothing unpacked, settings read back
 $B -b --factory-startup $OUT --python-expr "

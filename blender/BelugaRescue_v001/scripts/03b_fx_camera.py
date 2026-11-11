@@ -121,8 +121,8 @@ K(1120, V(0.2, -1.4, 2.1), V(-2.6, -4.3, 1.6), 26)
 K(1170, V(-0.4, -2.2, 1.9), V(-2.6, -5.85, 1.55), 30)
 K(1200, eye(1200) + V(1.8, 0.4, 0.3), eye(1200), 40)
 # beat 8 — eye macro, head turns, surge
-K(1230, eye(1230) + V(1.3, -0.5, 0.25), eye(1230) + V(0, -0.2, 0), 55)
-K(1268, eye(1268) + V(1.8, 0.4, 0.4), eye(1268), 40)
+K(1230, eye(1230) + V(1.9, -1.2, 0.35), eye(1230) + V(0, -0.25, 0), 38)
+K(1268, eye(1268) + V(2.3, -0.4, 0.6), eye(1268).lerp(H_(1268), 0.4), 30)
 K(1305, wbody(1305) + V(2.2, 1.0, 0.7), wh(1305), 26)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up
@@ -212,7 +212,7 @@ cn, cl = cm.node_tree.nodes, cm.node_tree.links; cn.clear()
 co = cn.new('ShaderNodeOutputMaterial'); em = cn.new('ShaderNodeEmission'); tr = cn.new('ShaderNodeBsdfTransparent'); mx = cn.new('ShaderNodeMixShader')
 tc = cn.new('ShaderNodeTexCoord'); gr = cn.new('ShaderNodeTexGradient'); gr.gradient_type = 'SPHERICAL'
 mp = cn.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1.4, 1.4, 1.4)
-rp = cn.new('ShaderNodeValToRGB'); rp.color_ramp.elements[0].color = (0.45, 0.82, 0.92, 1); rp.color_ramp.elements[1].color = (0.97, 0.99, 1.0, 1)
+rp = cn.new('ShaderNodeValToRGB'); rp.color_ramp.elements[0].color = (0.04, 0.32, 0.45, 1); rp.color_ramp.elements[1].color = (0.75, 0.93, 1.0, 1)
 val = cn.new('ShaderNodeValue'); val.name = "CardFade"
 cl.new(tc.outputs['Object'], mp.inputs['Vector']); cl.new(mp.outputs['Vector'], gr.inputs['Vector']); cl.new(gr.outputs['Fac'], rp.inputs['Fac'])
 cl.new(rp.outputs['Color'], em.inputs['Color']); em.inputs['Strength'].default_value = 1.6
@@ -238,6 +238,14 @@ xc.parent = D; xc.parent_type = 'BONE'; xc.parent_bone = "lowerleg01.R"
 xc.matrix_parent_inverse = (D.matrix_world @ lb.matrix @ Matrix.Translation(Vector((0, lb.length, 0)))).inverted()
 xc.matrix_world = Matrix.Translation(D.matrix_world @ (lb.head.lerp(lb.tail, 0.6) + Vector((0, 0.03, 0))))
 XK = ((1, 0.0), (340, 0.0), (360, 1.0), (468, 1.0), (492, 0.0))
+_gn = {g.index: g.name for g in DB.vertex_groups}
+_leg = [0.0] * len(DB.data.vertices)
+for i_, v_ in enumerate(DB.data.vertices):
+    gs = [(_gn[g.group], g.weight) for g in v_.groups if _gn[g.group] in D.data.bones]
+    if gs:
+        nm_ = max(gs, key=lambda x: x[1])[0]
+        _leg[i_] = 1.0 if nm_ in ("lowerleg01.R", "lowerleg02.R", "foot.R", "upperleg02.R") else 0.0
+_la = DB.data.attributes.new("legmask", 'FLOAT', 'POINT'); _la.data.foreach_set("value", _leg)
 done = set()
 for ob in [DB] + [o for o in D.children if o.name.endswith("FootPocket_R")]:
     for m in ob.data.materials:
@@ -249,50 +257,108 @@ for ob in [DB] + [o for o in D.children if o.name.endswith("FootPocket_R")]:
         src = out.inputs['Surface'].links[0].from_socket
         tcx = n.new('ShaderNodeTexCoord'); tcx.object = xc
         ln = n.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'
-        mr = n.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.09; mr.inputs['From Max'].default_value = 0.13
+        mr = n.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.10; mr.inputs['From Max'].default_value = 0.14
         mr.inputs['To Min'].default_value = 1.0; mr.inputs['To Max'].default_value = 0.0
         v_ = n.new('ShaderNodeValue'); v_.name = "XRayFade"
         mu = n.new('ShaderNodeMath'); mu.operation = 'MULTIPLY'
         trn = n.new('ShaderNodeBsdfTransparent'); trn.inputs['Color'].default_value = (0.7, 0.92, 1.0, 1)
         mxs = n.new('ShaderNodeMixShader')
         l.new(tcx.outputs['Object'], ln.inputs[0]); l.new(ln.outputs['Value'], mr.inputs['Value'])
-        l.new(mr.outputs['Result'], mu.inputs[0]); l.new(v_.outputs[0], mu.inputs[1])
+        lg = n.new('ShaderNodeAttribute'); lg.attribute_name = "legmask"
+        mu2 = n.new('ShaderNodeMath'); mu2.operation = 'MULTIPLY'
+        l.new(mr.outputs['Result'], mu2.inputs[0]); l.new(lg.outputs['Fac'], mu2.inputs[1])
+        if ob is not DB: mu2.inputs[1].default_value = 1.0; l.remove(mu2.inputs[1].links[0])
+        l.new(mu2.outputs[0], mu.inputs[0]); l.new(v_.outputs[0], mu.inputs[1])
         l.new(mu.outputs[0], mxs.inputs['Fac']); l.new(src, mxs.inputs[1]); l.new(trn.outputs['BSDF'], mxs.inputs[2])
         l.new(mxs.outputs['Shader'], out.inputs['Surface'])
         for f, v in XK:
             v_.outputs[0].default_value = v; v_.outputs[0].keyframe_insert("default_value", frame=f)
-# gastrocnemius (two heads) + soleus + tibia: smooth spindles along the shin, Child Of the lower-leg bone
-def spindle(name, length, rad, off, mat):
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=1.0)
-    o = bpy.context.active_object; o.name = name
-    for v in o.data.vertices:
-        t = v.co.y; v.co.x *= rad[0] * (1 - 0.35 * t * t); v.co.z *= rad[1] * (1 - 0.35 * t * t); v.co.y *= length / 2
-    [setattr(f_, 'use_smooth', True) for f_ in o.data.polygons]
-    o.data.materials.append(mat)
-    o.parent = D; o.parent_type = 'BONE'; o.parent_bone = "lowerleg01.R"
-    o.matrix_parent_inverse = Matrix.Identity(4)
-    o.location = Vector(off) + Vector((0, -lb.length, 0))   # bone-tail space -> along the bone
-    return o
+# real calf muscles: right lower leg cut from "Female Body Muscular System - Anatomy Study" (Ruslan Gadzhiev, CC-BY), fitted inside her shin
+import bmesh as _bm
+_before = set(bpy.data.objects)
+bpy.ops.import_scene.gltf(filepath=os.path.join(HERE, "..", "assets", "objv", "muscles_f.glb"))
+_new = [o for o in bpy.data.objects if o not in _before]
+_meshes = [o for o in _new if o.type == 'MESH']
+for o in _meshes:
+    mw_ = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw_
+for o in _new:
+    if o.type != 'MESH': bpy.data.objects.remove(o, do_unlink=True)
+for o in bpy.data.objects: o.select_set(False)
+for o in _meshes: o.select_set(True)
+bpy.context.view_layer.objects.active = _meshes[0]
+bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+if len(_meshes) > 1: bpy.ops.object.join()
+mus = bpy.context.active_object; mus.name = "XRay_CalfMuscles"
+zs = [v.co.z for v in mus.data.vertices]; Z0, Z1 = min(zs), max(zs); HH = Z1 - Z0
+KZ, AZ = Z0 + 0.285 * HH, Z0 + 0.045 * HH
+bm_ = _bm.new(); bm_.from_mesh(mus.data)
+_bm.ops.delete(bm_, geom=[v for v in bm_.verts if not (AZ <= v.co.z <= KZ and v.co.x < -0.15)], context='VERTS')
+bm_.to_mesh(mus.data); bm_.free()
+vs = mus.data.vertices
+def _slice_c(z0, z1):
+    sel = [v.co for v in vs if z0 <= v.co.z <= z1]
+    return sum(sel, Vector()) / max(1, len(sel))
+k_top = _slice_c(KZ - 0.02 * HH, KZ); a_bot = _slice_c(AZ, AZ + 0.02 * HH)
+ev(1)
+K_ = D.matrix_world @ D.data.bones["lowerleg01.R"].head_local; A_ = D.matrix_world @ D.data.bones["foot.R"].head_local
+sc_ = (A_ - K_).length / (a_bot - k_top).length
+Rm = (a_bot - k_top).normalized().rotation_difference((A_ - K_).normalized()).to_matrix().to_4x4()
+mus.data.transform(Matrix.Translation(-k_top)); mus.data.transform(Matrix.Scale(sc_, 4)); mus.data.transform(Rm)
+# radial shrink so the muscle stays inside her skin
+axis = (A_ - K_).normalized()
+for v in mus.data.vertices:
+    along = axis * v.co.dot(axis); v.co = along + (v.co - along) * 0.86
+mus.data.transform(Matrix.Translation(K_))
+dec = mus.modifiers.new("Dec", 'DECIMATE'); dec.ratio = 0.5
+for f_ in mus.data.polygons: f_.use_smooth = True
+mus.data.materials.clear()
 mm = bpy.data.materials.new("M_CalfMuscle"); mm.use_nodes = True
 mn, ml = mm.node_tree.nodes, mm.node_tree.links
-mp_ = mn["Principled BSDF"]; mp_.inputs['Base Color'].default_value = (0.62, 0.12, 0.1, 1); mp_.inputs['Roughness'].default_value = 0.35
-mp_.inputs['Subsurface Weight'].default_value = 0.3; mp_.inputs['Coat Weight'].default_value = 0.4
-wv = mn.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = 'Y'; wv.inputs['Scale'].default_value = 30; wv.inputs['Distortion'].default_value = 4
-bmp = mn.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.4
-ml.new(wv.outputs['Fac'], bmp.inputs['Height']); ml.new(bmp.outputs['Normal'], mp_.inputs['Normal'])
-mp_.inputs['Emission Color'].default_value = (1.0, 0.1, 0.05, 1)
-for f, v in ((1, 0.0), (360, 0.0), (372, 6.0), (384, 1.0), (396, 7.0), (408, 1.0), (420, 8.0), (436, 1.5), (448, 7.0), (465, 0.0)):
-    mp_.inputs['Emission Strength'].default_value = v; mp_.inputs['Emission Strength'].keyframe_insert("default_value", frame=f)
-bone_m = bpy.data.materials.new("M_Tibia"); bone_m.use_nodes = True
-bp = bone_m.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.92, 0.9, 0.84, 1); bp.inputs['Roughness'].default_value = 0.4
-parts = [spindle("XRay_Gastroc_Med", 0.2, (0.03, 0.026), (0.015, 0.06, 0.03), mm), spindle("XRay_Gastroc_Lat", 0.19, (0.026, 0.024), (-0.02, 0.06, 0.028), mm),
-         spindle("XRay_Soleus", 0.24, (0.032, 0.02), (0.0, 0.0, 0.015), mm), spindle("XRay_Tibia", 0.36, (0.013, 0.013), (0.0, -0.02, -0.025), bone_m)]
-for o in parts:
-    for f, h in ((1, True), (345, False), (490, True)):
-        o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
-    for f, s in ((372, 1.0), (378, 1.12), (390, 1.0), (396, 1.14), (408, 1.0), (420, 1.16), (436, 1.0), (448, 1.12), (460, 1.0)):
-        if "Tibia" in o.name: break
-        o.scale = (s, 1 / s, s); o.keyframe_insert("scale", frame=f)
+mp_ = mn["Principled BSDF"]; mp_.inputs['Roughness'].default_value = 0.28
+mp_.inputs['Subsurface Weight'].default_value = 0.45; mp_.inputs['Subsurface Radius'].default_value = (0.9, 0.25, 0.15)
+mp_.inputs['Coat Weight'].default_value = 0.6; mp_.inputs['Coat Roughness'].default_value = 0.12
+mtc = mn.new('ShaderNodeTexCoord')
+wv = mn.new('ShaderNodeTexWave'); wv.wave_type = 'BANDS'; wv.bands_direction = 'X'; wv.inputs['Scale'].default_value = 140; wv.inputs['Distortion'].default_value = 6
+wv.inputs['Detail'].default_value = 4
+nzm = mn.new('ShaderNodeTexNoise'); nzm.inputs['Scale'].default_value = 60
+ml.new(mtc.outputs['Object'], wv.inputs['Vector']); ml.new(mtc.outputs['Object'], nzm.inputs['Vector'])
+ramp = mn.new('ShaderNodeValToRGB'); ramp.color_ramp.elements[0].color = (0.12, 0.01, 0.012, 1); ramp.color_ramp.elements[1].color = (0.45, 0.05, 0.04, 1)
+ml.new(wv.outputs['Fac'], ramp.inputs['Fac'])
+# tendon (Achilles) toward the ankle: pale, glossy
+geo = mn.new('ShaderNodeNewGeometry'); dz = mn.new('ShaderNodeVectorMath'); dz.operation = 'DOT_PRODUCT'
+dz.inputs[1].default_value = tuple(axis)
+ml.new(geo.outputs['Position'], dz.inputs[0])
+tmr = mn.new('ShaderNodeMapRange'); tmr.inputs['From Min'].default_value = K_.dot(axis) + 0.27; tmr.inputs['From Max'].default_value = K_.dot(axis) + 0.33
+ml.new(dz.outputs['Value'], tmr.inputs['Value'])
+tmix = mn.new('ShaderNodeMix'); tmix.data_type = 'RGBA'; tmix.inputs['B'].default_value = (0.85, 0.78, 0.68, 1)
+ml.new(tmr.outputs['Result'], tmix.inputs['Factor']); ml.new(ramp.outputs['Color'], tmix.inputs['A']); ml.new(tmix.outputs['Result'], mp_.inputs['Base Color'])
+bmp = mn.new('ShaderNodeBump'); bmp.inputs['Strength'].default_value = 0.6
+add_ = mn.new('ShaderNodeMath'); add_.operation = 'ADD'; ml.new(wv.outputs['Fac'], add_.inputs[0]); ml.new(nzm.outputs['Fac'], add_.inputs[1])
+ml.new(add_.outputs[0], bmp.inputs['Height']); ml.new(bmp.outputs['Normal'], mp_.inputs['Normal'])
+mp_.inputs['Emission Color'].default_value = (1.0, 0.08, 0.04, 1)
+# the red pulse rides the fibres (bands light up), keyed strength
+emul = mn.new('ShaderNodeMath'); emul.operation = 'MULTIPLY'; ml.new(wv.outputs['Fac'], emul.inputs[0]); emul.name = "PulseMul"
+ml.new(emul.outputs[0], mp_.inputs['Emission Strength'])
+for f, v in ((1, 0.0), (360, 0.0), (372, 3.0), (384, 0.4), (396, 3.5), (408, 0.4), (420, 4.0), (436, 0.6), (448, 3.5), (465, 0.0)):
+    emul.inputs[1].default_value = v; emul.inputs[1].keyframe_insert("default_value", frame=f)
+# visible only inside the porthole sphere (never pokes through the skin elsewhere)
+xtc = mn.new('ShaderNodeTexCoord'); xtc.object = xc
+xln = mn.new('ShaderNodeVectorMath'); xln.operation = 'LENGTH'; ml.new(xtc.outputs['Object'], xln.inputs[0])
+xmr = mn.new('ShaderNodeMapRange'); xmr.inputs['From Min'].default_value = 0.12; xmr.inputs['From Max'].default_value = 0.14
+xmr.inputs['To Min'].default_value = 0.0; xmr.inputs['To Max'].default_value = 1.0; ml.new(xln.outputs['Value'], xmr.inputs['Value'])
+xtr = mn.new('ShaderNodeBsdfTransparent'); xmx = mn.new('ShaderNodeMixShader')
+mout = mn["Material Output"]
+ml.new(xmr.outputs['Result'], xmx.inputs['Fac']); ml.new(mp_.outputs['BSDF'], xmx.inputs[1]); ml.new(xtr.outputs[0], xmx.inputs[2]); ml.new(xmx.outputs[0], mout.inputs['Surface'])
+mus.data.materials.append(mm)
+# ride the shin bone
+mw_ = mus.matrix_world.copy(); ev(1)
+mus.parent = D; mus.parent_type = 'BONE'; mus.parent_bone = "lowerleg01.R"
+_bl = D.data.bones["lowerleg01.R"]
+mus.matrix_parent_inverse = (D.matrix_world @ _bl.matrix_local @ Matrix.Translation(Vector((0, _bl.length, 0)))).inverted()
+mus.location = (0, 0, 0); mus.rotation_euler = (0, 0, 0); mus.scale = (1, 1, 1)
+for f, h in ((1, True), (345, False), (490, True)):
+    mus.hide_render = h; mus.keyframe_insert("hide_render", frame=f)
+print("CALF muscles", len(mus.data.vertices), "verts, scale", round(sc_, 4))
 
 # ------------------------------------------------------------------ bubbles (Geometry Nodes: points rising from emitters, burst amount keyable)
 def bubble_system(name, parent, bone, rate_keys, spread=0.06, rise=0.55, life=4.0, size=(0.004, 0.018)):
