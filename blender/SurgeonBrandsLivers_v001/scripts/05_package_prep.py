@@ -49,7 +49,7 @@ r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100
 r.fps, r.fps_base = 60, 1.0
 cy.samples = 48; cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.05; cy.use_denoising = True
 cy.texture_limit_render = 'OFF'
-r.use_motion_blur = True; r.motion_blur_shutter = 0.5; r.motion_blur_position = 'START'   # no smear across the one-frame transit snaps
+r.use_motion_blur = not sc.get("anim_look"); r.motion_blur_shutter = 0.5; r.motion_blur_position = 'START'   # animated look (v004+): motion blur off
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '8'
 for o in [o for o in bpy.data.objects if o.type == 'CAMERA' and o.name != "CAM_Film"]:
     bpy.data.objects.remove(o, do_unlink=True)
