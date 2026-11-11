@@ -93,9 +93,9 @@ def cone(bm, r1, r2, d, M, seg=16, mat=0):
     for v in res['verts']:
         for f in v.link_faces: f.material_index = mat
 
-M_DKBLUE = flat("HelmetBlack", (0.02, 0.025, 0.04), rough=0.3, metal=0.3)
+M_DKBLUE = flat("HelmetBlack", (0.015, 0.03, 0.02), rough=0.25, metal=0.2)
 M_GOLD = flat("Gold", (0.8, 0.55, 0.2), rough=0.3, metal=1.0)
-M_PLUME = flat("PlumeGreen", (0.04, 0.32, 0.1), rough=0.6)
+M_PLUME = flat("PlumeGreen", (0.02, 0.12, 0.04), rough=0.55)
 M_WHITE = flat("HatWhite", (0.88, 0.87, 0.84), rough=0.7)
 M_LACE = flat("ParasolLace", (0.9, 0.89, 0.86), rough=0.8, trans=0.15)
 M_GUN = flat("GunMetal", (0.02, 0.02, 0.02), rough=0.35, metal=0.9)
@@ -103,20 +103,25 @@ M_GRIP = flat("GripWood", (0.15, 0.08, 0.04), rough=0.6)
 M_BOMB = flat("DarkObject", (0.03, 0.03, 0.028), rough=0.5, metal=0.6)
 M_CAP = flat("CapDark", (0.05, 0.05, 0.06), rough=0.6)
 
-# helmet with green plume: origin = head top
+# general's helmet: dark shell fitted to the skull, thin gold band, finial, and a crest of thin dark-green plume strands
+# streaming back (head faces -Y, so back is +Y). Origin = skull top.
 bm = bmesh.new()
-bmesh.ops.create_uvsphere(bm, u_segments=20, v_segments=10, radius=0.115, matrix=Matrix.Translation(V(0, 0, -0.02)) @ Matrix.Diagonal((1.0, 1.15, 0.75, 1)))
-bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.035], context='VERTS')
-cone(bm, 0.135, 0.135, 0.012, Matrix.Translation(V(0, -0.015, -0.035)) @ Matrix.Diagonal((1, 1.15, 1, 1)), seg=20, mat=1)
-cone(bm, 0.018, 0.012, 0.05, Matrix.Translation(V(0, 0, 0.085)), seg=8, mat=1)
+bmesh.ops.create_uvsphere(bm, u_segments=24, v_segments=12, radius=0.104, matrix=Matrix.Translation(V(0, 0.008, -0.075)) @ Matrix.Diagonal((0.98, 1.12, 0.92, 1)))
+bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.083], context='VERTS')
+cone(bm, 0.104, 0.104, 0.012, Matrix.Translation(V(0, 0.008, -0.078)) @ Matrix.Diagonal((0.98, 1.12, 1, 1)), seg=24, mat=1)
+cone(bm, 0.016, 0.006, 0.045, Matrix.Translation(V(0, 0.0, 0.035)), seg=8, mat=1)
 random.seed(7)
-for i in range(34):
-    a = R_(random.uniform(0, 360)); L = random.uniform(0.22, 0.34); w = 0.03
-    d = V(math.cos(a) * 0.9, math.sin(a) * 0.9 - 0.15, 0.55).normalized()
-    p0 = V(0, 0, 0.1); p1 = p0 + d * L * 0.5 + V(0, 0, 0.02); p2 = p0 + d * L - V(0, 0, 0.12)
-    side = d.cross(V(0, 0, 1)).normalized() * w
-    vs = [bm.verts.new(p) for p in (p0 - side * 0.3, p0 + side * 0.3, p1 + side, p2 + side * 0.2, p2 - side * 0.2, p1 - side)]
-    f = bm.faces.new(vs); f.material_index = 2
+for i in range(70):
+    a0 = random.uniform(-0.6, 0.6); L = random.uniform(0.18, 0.3); w = 0.006
+    p = [V(0, 0, 0.05)]
+    d = V(math.sin(a0) * 0.35, random.uniform(0.4, 0.8), random.uniform(0.5, 0.9)).normalized()
+    for k in range(1, 5):
+        u = k / 4
+        p.append(V(0, 0, 0.05) + d * L * u + V(0, 0.06 * u * u, -0.18 * u * u))
+    side = V(math.cos(a0), 0, 0) * w
+    vl = [bm.verts.new(q - side * (1 - j / 5)) for j, q in enumerate(p)]; vr = [bm.verts.new(q + side * (1 - j / 5)) for j, q in enumerate(p)]
+    for j in range(len(p) - 1):
+        f = bm.faces.new((vl[j], vr[j], vr[j + 1], vl[j + 1])); f.material_index = 2
 helmet = mesh_obj("Helmet", bm, [M_DKBLUE, M_GOLD, M_PLUME], CP)
 # wide white hat
 bm = bmesh.new()
@@ -162,10 +167,35 @@ def attach_to_bone(obj, arm, bone, M_world):
 def head_top(arm):
     b = arm.data.bones["head"]
     return arm.matrix_world @ b.tail_local, b
-for nm, obj, dz, dy in (("Archduke", helmet, -0.125, 0.01), ("Duchess", hat, -0.085, 0.01), ("Driver", bpy.data.objects["DriverCap"], -0.075, 0.0),
+# handlebar moustache: placed under the nose tip found on the body mesh
+def body_verts(arm):
+    body = bpy.data.objects[arm.name + ".body"]; dg = bpy.context.evaluated_depsgraph_get(); ev = body.evaluated_get(dg); me = ev.to_mesh()
+    vs = [body.matrix_world @ v.co for v in me.vertices]; ev.to_mesh_clear(); return vs
+def nose_tip(arm):
+    vs = [v for v in body_verts(arm) if abs(v.x) < 0.012 and v.z > 1.2]
+    zt = max(v.z for v in vs)
+    return min((v for v in vs if zt - 0.32 < v.z < zt - 0.12), key=lambda v: v.y)
+def skull_top(arm):
+    vs = [v for v in body_verts(arm) if abs(v.x) < 0.03 and v.z > 1.0]
+    t = max(vs, key=lambda v: v.z); return t
+arch = bpy.data.objects["Archduke"]
+nt = nose_tip(arch)
+bm = bmesh.new()
+for sx in (1, -1):
+    pts = [V(0.004 * sx, -0.004, -0.03), V(0.02 * sx, 0.0, -0.035), V(0.038 * sx, 0.008, -0.03), V(0.05 * sx, 0.016, -0.017), V(0.056 * sx, 0.02, -0.005)]
+    ws = [0.009, 0.008, 0.006, 0.004, 0.002]
+    vu = [bm.verts.new(p + V(0, 0, w)) for p, w in zip(pts, ws)]; vd = [bm.verts.new(p - V(0, 0, w)) for p, w in zip(pts, ws)]
+    vb = [bm.verts.new(p + V(0, 0.006, 0)) for p in pts]
+    for j in range(len(pts) - 1):
+        bm.faces.new((vu[j], vu[j + 1], vd[j + 1], vd[j])); bm.faces.new((vu[j], vb[j], vb[j + 1], vu[j + 1])); bm.faces.new((vd[j], vd[j + 1], vb[j + 1], vb[j]))
+mous = mesh_obj("Moustache", bm, [flat("MoustacheHair", (0.05, 0.035, 0.025), rough=0.6)], CP); shade_smooth(mous)
+attach_to_bone(mous, arch, "head", Matrix.Translation(nt))
+print("NOSE", nt)
+cap("FlatCapA", flat("FlatCapTweed", (0.2, 0.17, 0.13), rough=0.9))
+for nm, obj, dz, dy in (("Archduke", helmet, 0.0, 0.012), ("NerveA", bpy.data.objects["FlatCapA"], -0.055, 0.0), ("Duchess", hat, -0.085, 0.01), ("Driver", bpy.data.objects["DriverCap"], -0.075, 0.0),
                         ("Officer", bpy.data.objects["OfficerCap"], -0.075, 0.0)):
     arm = bpy.data.objects[nm]
-    top, b = head_top(arm)
+    top = (skull_top(arm) + V(0, 0, 0.012)) if nm in ('Archduke', 'NerveA') else head_top(arm)[0]   # skull top + hair for the new pieces
     attach_to_bone(obj, arm, "head", Matrix.Translation(top + V(0, dy, dz)))
 print("PROPS_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

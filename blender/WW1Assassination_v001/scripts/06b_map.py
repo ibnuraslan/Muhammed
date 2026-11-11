@@ -18,7 +18,7 @@ sid, hgt, ign, bord = D["sid"], D["height"], D["ignite"], D["border"]
 XMIN, XMAX, YMIN, YMAX = [float(v) for v in D["ext"]]
 LON0, LAT0, KX, KY = 18.41, 43.86, 7.98, 11.1
 def ll(lon, lat): return Vector(((lon - LON0) * KX, (lat - LAT0) * KY))
-STEP = 2
+STEP = 4
 ny, nx = sid.shape
 ys = list(range(0, ny, STEP)); xs = list(range(0, nx, STEP))
 NXv, NYv = len(xs), len(ys)
@@ -65,18 +65,17 @@ terr = n.new('ShaderNodeMix'); terr.data_type = 'RGBA'; terr.blend_type = 'OVERL
 l.new(ramp.outputs[0], terr.inputs['A']); l.new(rt.outputs['Color'], terr.inputs['B'])
 # state tint (muted parchment variety), neutral states stay plain
 tint = n.new('ShaderNodeValToRGB'); tr = tint.color_ramp; tr.interpolation = 'CONSTANT'
-COLS = {0: (0.5, 0.5, 0.5), 1: (0.78, 0.66, 0.38), 2: (0.66, 0.5, 0.48), 3: (0.55, 0.62, 0.5), 4: (0.6, 0.6, 0.62), 5: (0.55, 0.6, 0.72),
-        6: (0.72, 0.62, 0.5), 7: (0.7, 0.52, 0.5), 8: (0.72, 0.66, 0.5), 9: (0.6, 0.68, 0.55), 10: (0.62, 0.72, 0.58), 11: (0.7, 0.62, 0.6),
-        12: (0.6, 0.66, 0.7), 13: (0.62, 0.7, 0.75), 20: (0.6, 0.6, 0.58)}
+CP_ = (0.62, 0.3, 0.26); EN_ = (0.3, 0.4, 0.62); NE_ = (0.62, 0.6, 0.52)
+COLS = {k: (CP_ if k in (1, 4, 8, 9) else EN_) for k in range(1, 14)}; COLS[0] = NE_; COLS[20] = NE_
 tr.elements[0].position = 0.0; tr.elements[0].color = (0.5, 0.5, 0.5, 1)
 tr.elements[1].position = 0.999; tr.elements[1].color = (*COLS[20], 1)
 for k in range(1, 14):
     e = tr.elements.new((k - 0.5) / 21.0); e.color = (*COLS[k], 1)
 e = tr.elements.new(13.5 / 21.0); e.color = (*COLS[20], 1)
 l.new(math_('DIVIDE', state, 21.0), tint.inputs[0])
-mixt = n.new('ShaderNodeMix'); mixt.data_type = 'RGBA'; mixt.blend_type = 'MULTIPLY'; mixt.inputs['Factor'].default_value = 0.55
+mixt = n.new('ShaderNodeMix'); mixt.data_type = 'RGBA'; mixt.blend_type = 'MULTIPLY'; mixt.inputs['Factor'].default_value = 0.8
 l.new(terr.outputs['Result'], mixt.inputs['A']); l.new(tint.outputs[0], mixt.inputs['B'])
-bmix = n.new('ShaderNodeMix'); bmix.data_type = 'RGBA'; bmix.inputs['B'].default_value = (0.04, 0.03, 0.02, 1)
+bmix = n.new('ShaderNodeMix'); bmix.data_type = 'RGBA'; bmix.inputs['B'].default_value = (0.95, 0.9, 0.75, 1)
 l.new(math_('MULTIPLY', bdr, 0.85), bmix.inputs['Factor']); l.new(mixt.outputs['Result'], bmix.inputs['A'])
 # fire: clock - ignite (frames), noisy front
 clock = n.new('ShaderNodeValue'); clock.name = "MapClock"; clock.label = "MapClock"
@@ -90,7 +89,7 @@ fcol = n.new('ShaderNodeValToRGB'); fc = fcol.color_ramp
 fc.elements[0].color = (0.8, 0.03, 0.0, 1); fc.elements[1].color = (1.0, 0.22, 0.0, 1)
 l.new(nz.outputs['Fac'], fcol.inputs[0])
 scorch = n.new('ShaderNodeMix'); scorch.data_type = 'RGBA'; scorch.inputs['B'].default_value = (0.07, 0.025, 0.015, 1)
-l.new(math_('MULTIPLY', burn, 0.88), scorch.inputs['Factor']); l.new(bmix.outputs['Result'], scorch.inputs['A'])
+l.new(math_('MULTIPLY', burn, 0.5), scorch.inputs['Factor']); l.new(bmix.outputs['Result'], scorch.inputs['A'])
 l.new(scorch.outputs['Result'], bs.inputs['Base Color'])
 l.new(fcol.outputs[0], bs.inputs['Emission Color'])
 ember = math_('MULTIPLY', burn, math_('MINIMUM', math_('MAXIMUM', math_('MULTIPLY', math_('SUBTRACT', nz.outputs['Fac'], 0.56), 7.0), 0.0), 1.0))
@@ -104,7 +103,7 @@ for fcv in M.node_tree.animation_data.action.layers[0].strips[0].channelbags[0].
 
 # sea
 bm = bmesh.new(); add_box(bm, V(XMIN - 400, YMIN - 400, -3.0), V(XMAX + 400, YMAX + 400, -0.45), 0)
-SEA = flat("MapSea", (0.03, 0.07, 0.12), rough=0.25)
+SEA = flat("MapSea", (0.012, 0.03, 0.06), rough=0.3)
 sea = mesh_obj("MapSea", bm, [SEA], CM)
 # a dark table base under the map edge
 # --- flags on poles: Austria-Hungary (black/yellow) at Vienna, Serbia (red/blue/white) at Belgrade
@@ -225,16 +224,16 @@ SWAP_F = f_of(29.12)
 bm = bmesh.new(); add_box(bm, V(-420, -380, 58), V(420, 420, 118), 0)
 CLOUD = bpy.data.materials.new("Clouds"); n, l = nodes_of(CLOUD); n.clear()
 o_ = n.new('ShaderNodeOutputMaterial'); pv = n.new('ShaderNodeVolumePrincipled')
-tc = n.new('ShaderNodeTexCoord'); nz = n.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 0.012; nz.inputs['Detail'].default_value = 5
+tc = n.new('ShaderNodeTexCoord'); nz = n.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 0.035; nz.inputs['Detail'].default_value = 8
 l.new(tc.outputs['Object'], nz.inputs['Vector'])
-rmp = n.new('ShaderNodeMapRange'); rmp.inputs['From Min'].default_value = 0.48; rmp.inputs['From Max'].default_value = 0.62
+rmp = n.new('ShaderNodeMapRange'); rmp.inputs['From Min'].default_value = 0.45; rmp.inputs['From Max'].default_value = 0.68
 l.new(nz.outputs['Fac'], rmp.inputs['Value'])
 dens = n.new('ShaderNodeValue'); dens.name = "CloudDensity"
 mul = n.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; l.new(rmp.outputs['Result'], mul.inputs[0]); l.new(dens.outputs[0], mul.inputs[1])
 l.new(mul.outputs[0], pv.inputs['Density']); pv.inputs['Color'].default_value = (1, 1, 1, 1)
 l.new(pv.outputs[0], o_.inputs['Volume'])
 clouds = mesh_obj("CloudLayer", bm, [CLOUD], CM)
-for f, v in ((1, 0.0), (f_of(27.6), 0.0), (f_of(28.6), 0.25), (SWAP_F - 6, 0.45), (SWAP_F + 6, 0.45), (f_of(29.8), 0.06), (f_of(30.6), 0.0), (2130, 0.0)):
+for f, v in ((1, 0.0), (f_of(27.6), 0.0), (f_of(28.6), 0.07), (SWAP_F - 6, 0.08), (SWAP_F + 6, 0.08), (f_of(29.8), 0.05), (f_of(30.6), 0.0), (2130, 0.0)):
     dens.outputs[0].default_value = v; dens.outputs[0].keyframe_insert("default_value", frame=f)
 # whiteout near the swap: a camera-parented white card fades in/out (added in 05 where the camera exists)
 sc["SWAP_F"] = SWAP_F

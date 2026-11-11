@@ -135,7 +135,7 @@ l.new(val.outputs[0], mx.inputs[0]); l.new(tr.outputs[0], mx.inputs[1]); l.new(e
 card = mesh_obj("WhiteoutCard", bm, [WM], CF); card.parent = cam; card.location = (0, 0, -0.05); card.scale = (0.2, 0.2, 1)
 card.visible_shadow = False
 SW = sc.get("SWAP_F", f_of(29.12))
-for f, v in ((1, 0.0), (SW - 22, 0.0), (SW - 4, 1.0), (SW + 4, 1.0), (SW + 26, 0.0), (F_END, 0.0)):
+for f, v in ((1, 0.0), (SW - 14, 0.0), (SW - 2, 0.6), (SW + 2, 0.6), (SW + 14, 0.0), (F_END, 0.0)):
     val.outputs[0].default_value = v; val.outputs[0].keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ muzzle flashes (pistol), with a light that pops on faces and paint
@@ -181,7 +181,7 @@ mr.inputs['To Min'].default_value = 1.0; mr.inputs['To Max'].default_value = 0.0
 mul = n.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; l.new(mr.outputs['Result'], mul.inputs[0]); l.new(nz.outputs['Fac'], mul.inputs[1])
 dval = n.new('ShaderNodeValue'); dval.name = "SmokeDensity"
 mul2 = n.new('ShaderNodeMath'); mul2.operation = 'MULTIPLY'; l.new(mul.outputs[0], mul2.inputs[0]); l.new(dval.outputs[0], mul2.inputs[1])
-l.new(mul2.outputs[0], pv.inputs['Density']); pv.inputs['Color'].default_value = (0.32, 0.3, 0.28, 1)
+l.new(mul2.outputs[0], pv.inputs['Density']); pv.inputs['Color'].default_value = (0.1, 0.1, 0.1, 1)
 l.new(pv.outputs[0], o_.inputs['Volume'])
 puffs = []
 for k in range(5):
@@ -216,7 +216,7 @@ for f in range(1, F_END + 1, 2):
         else:
             o.location = E; o.scale = (0.001,) * 3
         o.keyframe_insert("location", frame=f); o.keyframe_insert("scale", frame=f)
-    dval.outputs[0].default_value = (0.25 * min(1.0, u / 0.15) * math.exp(-0.18 * max(0, u - 0.3))) if u > 0 else 0.0
+    dval.outputs[0].default_value = (0.4 * min(1.0, u / 0.15) * math.exp(-0.18 * max(0, u - 0.3))) if u > 0 else 0.0
     dval.outputs[0].keyframe_insert("default_value", frame=f)
     rr = 0.2 + 7.0 * (1 - math.exp(-3 * u)) if u > 0 else 0.001
     ring.scale = (rr, rr, 1.0 if u > 0 else 0.001); ring.keyframe_insert("scale", frame=f)

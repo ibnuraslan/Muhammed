@@ -50,8 +50,8 @@ human("Gunman", 1, 0.24, 0.35, "short04", ["male_elegantsuit01", "shoes03"], "yo
       [("male_elegantsuit01", (0.3, 0.28, 0.26), "MIX", 0.35)], height=0.45, muscle=0.4)
 human("Bomber", 1, 0.3, 0.45, "short03", ["male_elegantsuit01", "fedora01", "shoes03"], "young_caucasian_male2",
       [("male_elegantsuit01", (0.42, 0.36, 0.3), "MIX", 0.4)])
-human("NerveA", 1, 0.27, 0.4, "short01", ["male_worksuit01", "shoes03"], "young_caucasian_male",
-      [("male_worksuit01", (0.45, 0.42, 0.36))], height=0.5)
+human("NerveA", 1, 0.27, 0.4, "short01", ["male_elegantsuit01", "shoes03"], "young_caucasian_male",
+      [("male_elegantsuit01", (0.36, 0.3, 0.24), "MIX", 0.45)], height=0.5)
 human("NerveB", 1, 0.26, 0.45, "short02", ["male_elegantsuit01", "fedora_cocked", "shoes03"], "young_caucasian_male2",
       [("male_elegantsuit01", (0.36, 0.38, 0.42), "MIX", 0.4)])
 human("Officer", 1, 0.5, 0.6, "short02", ["male_elegantsuit01", "shoes02"], "middleage_caucasian_male",

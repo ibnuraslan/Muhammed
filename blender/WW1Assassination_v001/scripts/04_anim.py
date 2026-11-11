@@ -238,7 +238,7 @@ crowd = []
 def add_crowd(n, region, yaw, fr, group):
     for k in range(n):
         x = random.uniform(*region[0]); y = random.uniform(*region[1])
-        if any((Vector((x, y)) - c[1]).length < 0.62 for c in crowd): continue
+        if any((Vector((x, y)) - c[1]).length < 0.8 for c in crowd): continue
         crowd.append((group, Vector((x, y)), yaw + random.uniform(-25, 25), fr))
 add_crowd(16, ((-20, -3.2), (6.35, 7.8)), 0, CORNER_FR, "corner")
 add_crowd(12, ((5.0, 24), (6.35, 6.8)), 0, CORNER_FR, "corner")
@@ -249,13 +249,16 @@ add_crowd(26, ((64, 104), (6.35, 7.9)), 0, BOMB_FR, "bomb")
 add_crowd(12, ((66, 102), (-6.9, -5.8)), 180, BOMB_FR, "bomb")
 print("CROWD", len(crowd))
 
+AWAYS = []
 def crowd_plan_factory(home, yaw, group):
     away = None
     if group == "bomb":
         d = Vector((home.x - BLAST_P.x, home.y - BLAST_P.y)); dist = d.length
         if dist < 16:
             dd = Vector((d.x, 0.0)).normalized() if abs(d.x) > 0.5 else Vector((1.0, 0.0))
-            away = home + dd * (9.0 - 0.3 * dist) + Vector((0, random.uniform(-0.4, 0.4)))
+            away = home + dd * (9.0 - 0.3 * dist) * random.uniform(0.7, 1.3) + Vector((0, random.uniform(-1.0, 1.0)))
+            if group == 'bomb' and any((away - c).length < 0.9 for c in AWAYS): away = away + Vector((random.choice((-1, 1)) * 1.2, 0))
+            AWAYS.append(away)
     surge = None
     if group == "corner" and home.y > 6.2 and (home - GUNMAN1).length < 12:
         surge = home + (GUNMAN1 - home).normalized() * min(2.2, (GUNMAN1 - home).length - 1.0)
@@ -321,7 +324,7 @@ def parent_to(arm, parent):
 
 ARCH, DUCH, DRV = HUM["Archduke"], HUM["Duchess"], HUM["Driver"]
 for H in (ARCH, DUCH, DRV): parent_to(H.r.o, C1S)
-A_BASE = Vector((-0.33, 0.92, SEAT_R + 0.03)); D_BASE = Vector((0.31, 0.92, SEAT_R + 0.01)); V_BASE = Vector((0.2, 0.08, SEAT_F + 0.1))
+A_BASE = Vector((-0.33, 0.92, SEAT_R - 0.07)); D_BASE = Vector((0.31, 0.92, SEAT_R - 0.09)); V_BASE = Vector((0.2, 0.08, SEAT_F + 0.1))
 GUN_LOCAL = None
 def world_to_car_local(s, pw):
     p, h = car1(s); M = Matrix.Translation(Vector((p.x, p.y, 0))) @ Matrix.Rotation(h, 4, 'Z')

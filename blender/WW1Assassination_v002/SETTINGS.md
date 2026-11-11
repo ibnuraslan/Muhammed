@@ -4,7 +4,7 @@ These values are read back from `WW1Assassination_v002_60fps.blend`, opened in f
 
 | Item | Value |
 |---|---|
-| File | `WW1Assassination_v002_60fps.blend`: 119 MB, compressed. Every image is packed. Stored with Git LFS. |
+| File | `WW1Assassination_v002_60fps.blend`: 91.7 MB (87 MiB), compressed. Every image is packed. Committed as a normal git file, with no LFS. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. |
 | Resolution | 1080 × 1920 at 100 % |

@@ -1,0 +1,89 @@
+PENETRATION COUNTS: {'people_overlap': 73, 'hand_off_prop': 0, 'helmet_clip_or_gap': 0, 'seat_sink': 0}
+Audit over 175 frames (every 10) up to the map swap (f1748).
+Worst per item (kind, who, value):
+  CAM_IN     Cafe_Side                    1.000
+  CAM_IN     Cafe_Building                1.000
+  SINK       Crowd_corner_22.L            0.047
+
+81 flagged samples. First 200:
+PENETRATION COUNTS (frames sampled every 20): {'people_overlap': 73, 'hand_off_prop': 0, 'helmet_clip_or_gap': 0, 'seat_sink': 0}
+CAM_IN     f  321 Cafe_Side                    +1.000
+CAM_IN     f  331 Cafe_Building                +1.000
+CAM_IN     f  331 Cafe_Side                    +1.000
+CAM_IN     f  341 Cafe_Building                +1.000
+CAM_IN     f  341 Cafe_Side                    +1.000
+CAM_IN     f  351 Cafe_Side                    +1.000
+SINK       f 1611 Crowd_corner_22.L            -0.047
+OVERLAP    f    1 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f   21 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f   41 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f   61 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f   81 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  101 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  121 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  141 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  161 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  181 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  201 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  221 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  241 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  261 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  281 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  301 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  321 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  341 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  361 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  381 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  401 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  421 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  441 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  461 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  481 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  501 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f  521 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1021 Crowd_bomb_48 ~ Crowd_bomb_55 0.18
+OVERLAP    f 1041 Crowd_bomb_69 ~ Crowd_bomb_73 0.10
+OVERLAP    f 1061 Crowd_bomb_53 ~ Crowd_bomb_62 0.11
+OVERLAP    f 1061 Crowd_bomb_66 ~ Crowd_bomb_73 0.13
+OVERLAP    f 1081 Crowd_bomb_66 ~ Crowd_bomb_69 0.16
+OVERLAP    f 1101 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1121 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1141 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1161 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1181 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1201 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1221 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1241 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1261 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1281 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1301 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1321 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1341 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1361 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1381 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1401 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1421 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1441 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1461 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1481 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1501 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1521 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1541 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1561 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1581 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1601 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1601 Gunman ~ Officer 0.26
+OVERLAP    f 1621 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1621 Gunman ~ Officer 0.16
+OVERLAP    f 1641 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1641 Gunman ~ Officer 0.27
+OVERLAP    f 1661 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1661 Gunman ~ Officer 0.27
+OVERLAP    f 1681 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1681 Gunman ~ Officer 0.27
+OVERLAP    f 1701 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1701 Gunman ~ Officer 0.27
+OVERLAP    f 1721 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1721 Gunman ~ Officer 0.27
+OVERLAP    f 1741 Crowd_bomb_42 ~ Crowd_bomb_55 0.27
+OVERLAP    f 1741 Gunman ~ Officer 0.27
