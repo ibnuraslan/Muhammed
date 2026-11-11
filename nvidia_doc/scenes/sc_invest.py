@@ -224,20 +224,37 @@ def build(variant=None):
     # the paper each reader holds (follows the hands every frame)
     c["held"] = {nm: sheet("Held" + nm, (0, 0, -5), (0.21, 0.28), page_m[k]) for k, nm in enumerate(("ReaderA", "ReaderB", "ReaderC"))}
     c["lift"] = None
-    # SET 8B: a bar chart on the analyst's right monitor - two bars, the second grows by a frame driver
+    # SET 8B: the analyst's right monitor shows total assets: the 2024 bar grows bottom-to-top (frame driver wipe)
     mon = Vector((4.83, 0.92, 1.12))
-    bar_m = emissive("BarBlue", (0.25, 0.55, 1.0), 2.0); bar2_m = emissive("BarRed", (1.0, 0.35, 0.25), 2.5)
-    b1 = box("Bar2023", mon + Vector((-0.01, -0.12, -0.15)), (0.006, 0.08, 0.004), bar_m)
-    b2 = box("Bar2024", mon + Vector((-0.01, 0.06, -0.15)), (0.006, 0.08, 0.004), bar2_m)
-    for b, frac in ((b1, 0.012), (b2, 1.0)):
-        b.location.z = mon.z - 0.15
-        dd = b.driver_add("scale", 2).driver; dd.type = 'SCRIPTED'
-        dd.expression = (f"1 + {frac * 70} * min(1, max(0, (frame - 30) / 50))") if frac == 1.0 else "1 + 0.8"
-        dz = b.driver_add("location", 2).driver; dz.type = 'SCRIPTED'
-        dz.expression = (f"{mon.z - 0.15} + 0.002 * {frac * 70} * min(1, max(0, (frame - 30) / 50))") if frac == 1.0 else f"{mon.z - 0.15} + 0.0016"
-    for txt, off in (("$33M", -0.12), ("$3B", 0.06)):
-        text_obj("BarLabel", txt, mon + Vector((-0.012, off, -0.19)), 0.025, emissive("BarTxt", (0.9, 0.92, 0.95), 2.0),
-                 rot=(math.radians(90), 0, math.radians(-90)))
+    import skia as _sk
+    def chart(path, full):
+        W, Hh = 1600, 900
+        sf = _sk.Surface(W, Hh); cv = sf.getCanvas(); cv.clear(_sk.Color4f(0.035, 0.045, 0.06, 1))
+        pp = _sk.Paint(AntiAlias=True); f1 = _sk.Font(_sk.Typeface.MakeFromFile(paper_tex.SANS_SB), 46); f2 = _sk.Font(_sk.Typeface.MakeFromFile(paper_tex.SANS_SB), 64)
+        pp.setColor4f(_sk.Color4f(0.85, 0.88, 0.92, 1)); cv.drawString("TOTAL ASSETS", 90, 110, f1, pp)
+        pp.setColor4f(_sk.Color4f(0.3, 0.32, 0.36, 1)); cv.drawRect(_sk.Rect.MakeXYWH(90, 780, 1420, 3), pp)
+        pp.setColor4f(_sk.Color4f(0.3, 0.55, 1.0, 1)); cv.drawRect(_sk.Rect.MakeXYWH(330, 772, 260, 8), pp)
+        pp.setColor4f(_sk.Color4f(0.85, 0.88, 0.92, 1)); cv.drawString("2023", 400, 850, f1, pp); cv.drawString("$33M", 370, 740, f2, pp)
+        cv.drawString("2024", 1060, 850, f1, pp)
+        if full:
+            pp.setColor4f(_sk.Color4f(1.0, 0.38, 0.28, 1)); cv.drawRect(_sk.Rect.MakeXYWH(990, 190, 260, 590), pp)
+            pp.setColor4f(_sk.Color4f(0.95, 0.96, 0.98, 1)); cv.drawString("$3B", 1060, 165, f2, pp)
+        sf.makeImageSnapshot().save(path, _sk.kPNG); return path
+    c0 = chart(os.path.join(paper_tex.GEN, "chart_base.png"), False); c1 = chart(os.path.join(paper_tex.GEN, "chart_full.png"), True)
+    cm = bpy.data.materials.new("ChartScreen"); cm.use_nodes = True
+    N = cm.node_tree.nodes; L = cm.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
+    i0 = N.new("ShaderNodeTexImage"); i0.image = bpy.data.images.load(c0); i1 = N.new("ShaderNodeTexImage"); i1.image = bpy.data.images.load(c1)
+    L.new(tc.outputs['UV'], i0.inputs['Vector']); L.new(tc.outputs['UV'], i1.inputs['Vector'])
+    sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['UV'], sep.inputs[0])
+    rv = N.new("ShaderNodeValue"); dr = rv.outputs[0].driver_add("default_value").driver; dr.type = 'SCRIPTED'
+    dr.expression = "0.13 + 0.8 * min(1, max(0, (frame - 25) / 50))"
+    lt = N.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; L.new(sep.outputs['Y'], lt.inputs[0]); L.new(rv.outputs[0], lt.inputs[1])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(lt.outputs[0], mx.inputs['Factor']); L.new(i0.outputs['Color'], mx.inputs[6]); L.new(i1.outputs['Color'], mx.inputs[7])
+    em = N.new("ShaderNodeEmission"); em.inputs['Strength'].default_value = 1.4; L.new(mx.outputs[2], em.inputs['Color']); L.new(em.outputs[0], out.inputs['Surface'])
+    for o in bpy.data.objects:                       # put the chart on the right-hand monitor
+        if o.name.startswith("Screen") and o.location.y > 0.7 and o.location.x > 4.5:
+            o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(cm)
     c["mon"] = mon
     # SET 11A: an investigator standing at the evidence wall, pinning one more page
     pinner = person("Pinner", 1.0, 39, "male_casualsuit01", "short02", hv=0.25)
@@ -377,7 +394,7 @@ def cam_filing(c, t):
 
 def cam_chart(c, t):
     e = ease(t); m = c["mon"]
-    return (m + Vector((-0.9, -0.35, 0.05)).lerp(Vector((-0.6, -0.22, 0.03)), e), m + Vector((0, 0, -0.05)), 40)
+    return (m + Vector((-0.75, -0.7, 0.12)).lerp(Vector((-0.62, -0.6, 0.1)), e), m + Vector((0, 0.02, 0.0)), 40)      # beside the analyst, not over his head
 
 
 def cam_pinning(c, t):
