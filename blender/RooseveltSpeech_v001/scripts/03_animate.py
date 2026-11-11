@@ -70,17 +70,17 @@ hyaw = pk([(1, -10.0), (60, 18.0), (120, -16.0), (F_IMPACT, -20.0), (200, 10.0),
 def wave_R(f):   # hat waving arc above the head
     a = math.sin(2 * math.pi * f / 42.0)
     return Vector((-0.36 + 0.10 * a, -0.16, 1.86 + 0.05 * abs(a)))
-RAIL = Vector((0.26, -0.10, 0.99))            # brass grab rail on the front seat back
+RAIL = Vector((0.26, -0.10, 1.025))            # brass grab rail on the front seat back
 POCKET_REACH = Vector((-0.06, -0.30, 1.24))
 hR_keys = [(1, wave_R(1)), (F_IMPACT, wave_R(F_IMPACT)), (F_IMPACT + 6, Vector((-0.42, -0.18, 1.5))), (195, Vector((-0.40, -0.12, 1.0))),
            (240, Vector((-0.33, -0.10, 0.92))), (300, Vector((-0.30, -0.08, 0.90))), (1150, Vector((-0.30, -0.08, 0.90))),
-           (1185, Vector((-0.20, -0.30, 1.05))), (1205, POCKET_REACH), (1216, POCKET_REACH + Vector((0.0, 0.0, 0.0))),
+           (1185, Vector((-0.22, -0.26, 1.14))), (1205, POCKET_REACH), (1216, POCKET_REACH + Vector((0.0, 0.0, 0.0))),
            (1238, Vector((-0.30, -0.42, 1.45))), (1262, Vector((-0.30, -0.30, 1.98))), (1285, Vector((-0.30, -0.30, 2.0))),
            (1310, Vector((-0.26, -0.45, 1.35))), (1360, Vector((-0.22, -0.44, 1.22))), (1420, Vector((-0.30, -0.42, 1.40))), (1500, Vector((-0.24, -0.44, 1.25)))]
 hL_keys = [(1, Vector((0.30, -0.12, 0.95))), (60, Vector((0.36, -0.30, 1.2))), (100, Vector((0.32, -0.20, 1.05))), (F_IMPACT, Vector((0.31, -0.14, 1.0))),
            (F_IMPACT + 7, Vector((0.48, -0.10, 1.25))), (188, RAIL + Vector((0, 0, 0.06))), (196, RAIL), (1150, RAIL), (1180, Vector((0.32, -0.25, 1.05))),
-           (1192, Vector((0.24, -0.37, 1.13))), (1285, Vector((0.24, -0.37, 1.13))), (1300, Vector((0.36, -0.30, 1.75))), (1318, Vector((0.38, -0.28, 1.88))),
-           (1336, Vector((0.36, -0.30, 1.70))), (1352, Vector((0.38, -0.28, 1.90))), (1372, Vector((0.24, -0.40, 1.16))), (1388, Vector((0.24, -0.40, 1.16))),
+           (1192, Vector((0.24, -0.33, 1.18))), (1285, Vector((0.24, -0.33, 1.18))), (1300, Vector((0.36, -0.30, 1.75))), (1318, Vector((0.38, -0.28, 1.88))),
+           (1336, Vector((0.36, -0.30, 1.70))), (1352, Vector((0.38, -0.28, 1.90))), (1372, Vector((0.24, -0.36, 1.19))), (1388, Vector((0.24, -0.36, 1.19))),
            (1410, Vector((0.37, -0.30, 1.86))), (1430, Vector((0.38, -0.28, 1.96))), (1460, Vector((0.37, -0.30, 1.84))), (1500, Vector((0.38, -0.28, 1.92)))]
 hR = pk(hR_keys); hL = pk(hL_keys)
 def hand_R(f):
@@ -101,7 +101,7 @@ for f in range(1, END + 1, 2):
     w = wt(f) if f < F_SWAP else f
     if f >= F_SWAP and f < 1190: w = 1190 if f > 1170 else wt(f)
     xyR, lift = foot_R(f)
-    HU.key_foot("L", f, FOOT["L"], 0.0); HU.key_foot("R", f, xyR, 0.0, lift)
+    HU.key_foot("L", f, FOOT["L"], 0.0, 0.015); HU.key_foot("R", f, xyR, 0.0, lift + 0.015)
     pos = Vector((rx(w), ry(w), HB["root"].head_local.z + rz(w)))
     HU.key_root(f, pos, yaw=ryaw(w) * 0.25, flex=rflex(w) * 0.5, side=rside(w))
     breath = 1.5 * math.sin(2 * math.pi * w / 200.0)
@@ -146,20 +146,35 @@ for sx in (-1, 1):
     t = bpy.context.object; t.name = f"SpecRim{sx}"; t.data.materials.append(wire); specs.append(t)
     bpy.ops.mesh.primitive_cylinder_add(radius=0.0175, depth=0.0012, location=E(sx * EX, -0.02, 0), rotation=(R_(90), 0, 0), vertices=32)
     t = bpy.context.object; t.name = f"SpecLens{sx}"; t.data.materials.append(lens_m); specs.append(t)
-    bpy.ops.mesh.primitive_cylinder_add(radius=0.0009, depth=0.10, location=E(sx * (EX + 0.038), 0.031, 0.006), rotation=(R_(90), 0, 0), vertices=8)
+    bpy.ops.mesh.primitive_cylinder_add(radius=0.0009, depth=0.085, location=E(sx * (EX + 0.062), 0.05, 0.006), rotation=(R_(90), 0, 0), vertices=8)
     t = bpy.context.object; t.name = f"SpecArm{sx}"; t.data.materials.append(wire); specs.append(t)
 bpy.ops.mesh.primitive_cylinder_add(radius=0.001, depth=0.03, location=E(0, -0.023, 0.006), rotation=(0, R_(90), 0), vertices=8)
 t = bpy.context.object; t.name = "SpecBridge"; t.data.materials.append(wire); specs.append(t)
 # moustache: a bushy walrus moustache (dense short hair strands on a hidden lip patch)
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.03, segments=24, ring_count=12, location=E(0, -0.009, -0.054))
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.03, segments=24, ring_count=12, location=E(0, -0.010, -0.047))
 mo = bpy.context.object; mo.name = "Moustache"; mo.scale = (1.55, 0.42, 0.42); bpy.ops.object.transform_apply(scale=True)
 for v in mo.data.vertices:
     v.co.z -= 0.25 * (v.co.x / 0.046) ** 2 * 0.02    # droop at the ends
 hairm = bpy.data.materials.new("MoustacheHair"); hairm.use_nodes = True
-hb = hairm.node_tree.nodes["Principled BSDF"]; hb.inputs["Base Color"].default_value = (0.09, 0.06, 0.045, 1); hb.inputs["Roughness"].default_value = 0.7
+hb = hairm.node_tree.nodes["Principled BSDF"]; hb.inputs["Base Color"].default_value = (0.2, 0.14, 0.09, 1); hb.inputs["Roughness"].default_value = 0.7
 mo.data.materials.append(hairm)
 dsp = mo.modifiers.new("Bristle", "DISPLACE"); tx = bpy.data.textures.new("Bristle", "STUCCI"); tx.noise_scale = 0.004; dsp.texture = tx; dsp.strength = 0.003
 bpy.ops.object.shade_smooth(); specs.append(mo)
+mo.modifiers.remove(dsp)
+psm = mo.modifiers.new("Hair", "PARTICLE_SYSTEM"); ps = psm.particle_system.settings
+ps.type = "HAIR"; ps.count = 2500; ps.hair_length = 0.016; ps.use_advanced_hair = True
+ps.normal_factor = 0.0009; ps.object_align_factor = (0.0, -0.0003, -0.0032); ps.factor_random = 0.0004; ps.brownian_factor = 0.0
+ps.root_radius = 0.00025; ps.tip_radius = 0.00006; ps.radius_scale = 1.0; ps.material = 1
+ps.child_type = "INTERPOLATED"; ps.rendered_child_count = 6; ps.child_length = 0.9; ps.roughness_1 = 0.002
+ps.use_emit_random = True; ps.emit_from = "FACE"
+ps.render_type = "PATH"; ps.display_step = 3; ps.render_step = 4
+mo.show_instancer_for_render = True
+skin_m = bpy.data.materials.new("MoustacheBase"); skin_m.use_nodes = True
+skin_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.16, 0.11, 0.075, 1)
+mo.data.materials.clear(); mo.data.materials.append(skin_m); mo.data.materials.append(hairm)
+_c = sum((v.co for v in mo.data.vertices), Vector()) / len(mo.data.vertices)
+for v in mo.data.vertices: v.co = _c + Vector(((v.co - _c).x * 0.78, (v.co - _c).y * 0.7, (v.co - _c).z * 0.6))
+mo.data.update()
 for o in specs:
     for c_ in list(o.users_collection): c_.objects.unlink(o)
     sc.collection.objects.link(o)
@@ -191,12 +206,12 @@ hc = hat.constraints.new("CHILD_OF"); hc.target = H; hc.subtarget = "wrist.R"
 for f, inf in ((1, 1.0), (F_IMPACT + 3, 1.0), (F_IMPACT + 4, 0.0)):
     hc.influence = inf; hc.keyframe_insert("influence", frame=f)
 Wr = wrist_w("R"); hat_off = Matrix.Translation(Vector((0.0, 0.0, 0.0)))
-hat.matrix_world = Wr @ Matrix.Translation(Vector((0, 0.13, 0.03))) @ Matrix.Rotation(R_(90), 4, "X")
+hat.matrix_world = Wr @ Matrix.Translation(Vector((0, 0.14, 0.04))) @ Matrix.Rotation(R_(90), 4, "X")
 hc.inverse_matrix = Wr.inverted()
 local = hat.matrix_basis.copy()
 # free-fall keys (constraint off): start where the hand left it
 sc.frame_set(F_IMPACT + 3)
-start = (H.matrix_world @ R.PB["wrist.R"].matrix) @ Wr.inverted() @ (Wr @ Matrix.Translation(Vector((0, 0.13, 0.03))) @ Matrix.Rotation(R_(90), 4, "X"))
+start = (H.matrix_world @ R.PB["wrist.R"].matrix) @ Wr.inverted() @ (Wr @ Matrix.Translation(Vector((0, 0.14, 0.04))) @ Matrix.Rotation(R_(90), 4, "X"))
 p0 = start.to_translation(); e0 = start.to_euler()
 hat.rotation_mode = "XYZ"
 land = Vector((-0.55, -0.62, STREET_Z + 0.06))   # tumbles over the door onto the street
@@ -297,9 +312,30 @@ for f in range(1197, 1219, 2):
     top = MS.matrix_world @ Vector((0.0, 0.08, 0.014))
     u = smooth((f - 1197) / 10.0)
     Wt = hR(1196).lerp(top + Vector((0.0, -0.025, 0.075)), u)
+    if f > 1215: Wt = Wg_hold
     HU.key_hand("R", f, Wt, Vector((0.05, 0.25, -1)), Vector((0, 1, 0)), pole=Vector((-0.55, 0.45, 1.0)))
+    if 1205 <= f <= 1215:   # land the finger pads on the manuscript's top edge (2 correction passes)
+        for _ in range(2):
+            sc.frame_set(f); top = MS.matrix_world @ Vector((0.0, 0.08, 0.014))
+            fp = H.matrix_world @ R.PB["finger3-2.R"].head.lerp(R.PB["finger1-3.R"].head, 0.5)
+            Wt = Wt + (top - fp)
+            HU.key_hand("R", f, Wt, Vector((0.05, 0.25, -1)), Vector((0, 1, 0)), pole=Vector((-0.55, 0.45, 1.0)))
+        Wg_hold = Wt.copy()
+Wg = Wt.copy()
+def _two(a_, m_, b_, u):
+    return (a_.lerp(m_, u * 2) if u < 0.5 else m_.lerp(b_, u * 2 - 1)).normalized()
+for f in range(1219, 1245, 2):   # ease out of the grasp into the lift, no orientation snap
+    u = smooth((f - 1217) / 26.0)
+    W_ = hR(f) + (Wg - hR(1217)) * (1 - u)
+    d_ = _two(Vector((0.05, 0.25, -1)), Vector((0.2, -1, 0.2)), Vector((0.1, -0.2, 1)), u)
+    n_ = _two(Vector((0, 1, 0)), Vector((0, 0.2, 1)), Vector((-0.2, -1, 0)), u)
+    HU.key_hand("R", f, W_, d_, n_, pole=Vector((-0.55, 0.45, 1.0)))
 c_hand.influence = 0.0; c_sp.influence = 1.0
-sc.frame_set(1216); c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].matrix).inverted() @ (H.matrix_world @ R.PB["spine01"].matrix) @ c_sp.inverse_matrix
+sc.frame_set(1215)
+_fist = sum((H.matrix_world @ R.PB[f"finger{k}-2.R"].head for k in (2, 3, 4, 5)), Vector()) / 4
+_top = MS.matrix_world @ Vector((0.0, 0.065, 0.014))
+c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].matrix).inverted() @ Matrix.Translation(_fist - _top) @ (H.matrix_world @ R.PB["spine01"].matrix) @ c_sp.inverse_matrix
+print("GRIP SNAP", round((_fist - _top).length, 3))
 # paper hole: charred ring + clear hole through every sheet after the bullet passes (paper material, object coords of HoleEmpty)
 hole_e = bpy.data.objects.new("HoleEmpty", None); C_STUDIO.objects.link(hole_e); hole_e.parent = MS
 HP_LOCAL = Vector((0.012, 0.01, 0.0))
@@ -323,6 +359,18 @@ m1 = n.new("ShaderNodeMixShader"); l.new(lc.outputs[0], m1.inputs["Fac"]); l.new
 trp = n.new("ShaderNodeBsdfTransparent")
 m2 = n.new("ShaderNodeMixShader"); l.new(lt_.outputs[0], m2.inputs["Fac"]); l.new(m1.outputs["Shader"], m2.inputs[1]); l.new(trp.outputs["BSDF"], m2.inputs[2])
 l.new(m2.outputs["Shader"], o_.inputs["Surface"])
+# "highlight the thing being named": warm rim glow on the manuscript (beat 4) and the steel case (beat 5)
+def glow(mat, out_sock_fn, keys, col):
+    nt = mat.node_tree; n, l = nt.nodes, nt.links; o_ = n["Material Output"]; src = o_.inputs["Surface"].links[0].from_socket
+    lw = n.new("ShaderNodeLayerWeight"); lw.inputs["Blend"].default_value = 0.35
+    em = n.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (*col, 1)
+    hv = n.new("ShaderNodeValue"); hv.name = "Highlight"
+    for f_, v_ in keys: hv.outputs[0].default_value = v_; hv.outputs[0].keyframe_insert("default_value", frame=f_)
+    mm = n.new("ShaderNodeMath"); mm.operation = "MULTIPLY"; l.new(lw.outputs["Fresnel"], mm.inputs[0]); l.new(hv.outputs[0], mm.inputs[1])
+    l.new(mm.outputs[0], em.inputs["Strength"])
+    ad = n.new("ShaderNodeAddShader"); l.new(src, ad.inputs[0]); l.new(em.outputs["Emission"], ad.inputs[1]); l.new(ad.outputs[0], o_.inputs["Surface"])
+glow(pm, None, ((1, 0.0), (B[3] + 40, 0.0), (B[3] + 70, 2.5), (B[3] + 150, 1.2), (B[4] - 10, 0.6), (B[4] + 20, 0.0), (B[5] + 10, 0.0), (B[5] + 30, 1.5), (B[6], 0.3)), (1.0, 0.8, 0.35))
+glow(bpy.data.materials["BrushedSteel"], None, ((1, 0.0), (B[4], 0.0), (B[4] + 25, 3.0), (B[5] - 10, 1.0), (B[5] + 100, 2.0), (B[6] + 10, 0.0)), (1.0, 0.85, 0.4))
 # punch ripple per sheet as the bullet passes (outermost first)
 T_IN, T_OUT = B[5] + 6, B[5] + 60
 for k, s in enumerate(reversed(SHEETS)):

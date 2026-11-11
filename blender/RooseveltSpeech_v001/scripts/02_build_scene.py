@@ -246,6 +246,15 @@ for k in range(-3, 4): swag(f"StageSwag{k}", k * 2.0, -2.02, -0.02, 2.0)
 box("Balcony", (28, 4, 0.4), (0, -22.5, 3.2), hallfloor, C_HALL)
 box("BalconyFront", (28, 0.2, 1.0), (0, -20.5, 3.8), plaster, C_HALL)
 for k in range(-6, 7): swag(f"BalcSwag{k}", k * 2.0, -20.38, 4.25, 2.0)
+for sx in (-1, 1):   # side walls: bunting rows, striped banners, pilasters
+    for k in range(12): swag(f"SideSwag{sx}_{k}", sx * 14.75, 3.0 - k * 2.0, 5.2, 2.0, rot_z=R_(90 * sx))
+    for k in range(5):
+        y = 1.5 - k * 5.0
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=8, y_subdivisions=24, size=1, location=(sx * 14.76, y, 7.8), rotation=(R_(90), 0, R_(90 * sx)))
+        bn = bpy.context.object; bn.name = f"Banner{sx}_{k}"; bn.scale = (1.1, 3.2, 1); bpy.ops.object.transform_apply(scale=True)
+        bn.data.materials.append(stripe_mat(f"BannerM{sx}{k}", [RED, WHITE] if k % 2 else [BLUE, WHITE, RED], 7, horiz=False)); link(bn, C_HALL)
+        box(f"Pilaster{sx}_{k}", (0.5, 0.6, 12), (sx * 14.7, y + 2.5, 5.8), trim, C_HALL)
+for k in range(-6, 7): swag(f"BackSwag{k}", k * 2.0, 4.95, 9.9, 2.0)
 # podium (procedural, oak with brass trim)
 oak = pbr("Oak", "wood_table_worn", 1.5, tint=(0.75, 0.5, 0.3), box=True)
 box("PodiumBody", (0.7, 0.45, 1.05), (0, -0.62, 0.525), oak, C_HALL)
@@ -253,12 +262,12 @@ box("PodiumTop", (0.8, 0.55, 0.06), (0, -0.62, 1.08), oak, C_HALL, rot=(R_(-12),
 box("PodiumBase", (0.85, 0.6, 0.08), (0, -0.62, 0.04), oak, C_HALL)
 # wall clock (CC-BY 3DGunsmith) on the far wall above the balcony; hands spun in animation
 croot, cparts = glb(A + "/models/clock.glb", C_HALL, "WallClock")
-croot.scale = (3.0,) * 3; croot.location = (0, -24.9, 7.2); croot.rotation_euler = (0, 0, 0)
+croot.scale = (6.0,) * 3; croot.location = (0, -24.9, 7.6); croot.rotation_euler = (0, 0, 0)
 handm = flat("ClockHand", (0.02, 0.02, 0.02), 0.4, 0.5)
-for nm, ln, wd in (("ClockHour", 0.32, 0.05), ("ClockMinute", 0.5, 0.035)):
+for nm, ln, wd in (("ClockHour", 0.62, 0.09), ("ClockMinute", 0.98, 0.06)):
     o = box(nm, (wd, 0.02, ln), (0, 0, ln / 2 - 0.05), handm, C_HALL)
     bpy.context.scene.cursor.location = (0, 0, 0); bpy.ops.object.origin_set(type="ORIGIN_CURSOR")
-    o.location = (0, -24.78, 7.2)
+    o.location = (0, -24.72, 7.6)
 # chandeliers + warm hall light
 for i, (x, y) in enumerate(((-6, -6), (6, -6), (-6, -15), (6, -15), (0, -10.5))):
     box(f"Chand{i}", (0.6, 0.6, 0.5), (x, y, 10.6), flat(f"ChandGlow{i}", (1, 0.85, 0.6), emit=(1, 0.8, 0.5), es=12), C_HALL)
@@ -298,13 +307,13 @@ nt = paper_m.node_tree; n, l = nt.nodes, nt.links; b = n["Principled BSDF"]
 b.inputs["Base Color"].default_value = (0.8, 0.74, 0.6, 1); b.inputs["Roughness"].default_value = 0.85
 b.inputs["Subsurface Weight"].default_value = 0.15
 tcp = n.new("ShaderNodeTexCoord"); wv = n.new("ShaderNodeTexWave"); wv.wave_profile = "SAW"; wv.inputs["Scale"].default_value = 22
-wv.bands_direction = "Z"; l.new(tcp.outputs["Generated"], wv.inputs["Vector"])
+wv.bands_direction = "Y"; l.new(tcp.outputs["UV"], wv.inputs["Vector"])
 nz = n.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 90; l.new(tcp.outputs["Generated"], nz.inputs["Vector"])
-mr = n.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.78; mr.inputs["From Max"].default_value = 0.9
+mr = n.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.86; mr.inputs["From Max"].default_value = 0.93
 l.new(wv.outputs["Fac"], mr.inputs["Value"])
 mu = n.new("ShaderNodeMath"); mu.operation = "MULTIPLY"; l.new(mr.outputs["Result"], mu.inputs[0]); l.new(nz.outputs["Fac"], mu.inputs[1])
-mc = n.new("ShaderNodeMix"); mc.data_type = "RGBA"; mc.inputs["A"].default_value = (0.8, 0.74, 0.6, 1); mc.inputs["B"].default_value = (0.22, 0.22, 0.24, 1)
-l.new(mu.outputs[0], mc.inputs["Factor"]); l.new(mc.outputs["Result"], b.inputs["Base Color"])
+mc = n.new("ShaderNodeMix"); mc.data_type = "RGBA"; mc.inputs["A"].default_value = (0.8, 0.74, 0.6, 1); mc.inputs["B"].default_value = (0.16, 0.16, 0.2, 1)
+l.new(mr.outputs["Result"], mc.inputs["Factor"]); l.new(mc.outputs["Result"], b.inputs["Base Color"])
 MS = bpy.data.objects.new("Manuscript", None); C_STUDIO.objects.link(MS)
 N_SHEETS = 50; W, H = 0.11, 0.16; T = 0.00028
 for k in range(N_SHEETS):
@@ -333,7 +342,7 @@ gc.shape_key_add(name="Basis"); dk = gc.shape_key_add(name="Dent")
 for i, v in enumerate(gc.data.vertices):
     r = math.hypot(v.co.x - 0.02, v.co.y - 0.0)
     if v.co.z < 0: dk.data[i].co.z = v.co.z + 0.007 * math.exp(-(r / 0.009) ** 2)
-steel = flat("BrushedSteel", (0.72, 0.72, 0.74), rough=0.22, metal=1.0)
+steel = flat("BrushedSteel", (0.5, 0.5, 0.52), rough=0.32, metal=1.0)
 bs = steel.node_tree.nodes["Principled BSDF"]; bs.inputs["Anisotropic"].default_value = 0.6
 gc.data.materials.append(steel); link(gc, C_STUDIO); bpy.ops.object.shade_smooth()
 box("CaseHinge", (0.15, 0.004, 0.004), (0, 0.03, 0.013), steel, C_STUDIO).parent = gc
@@ -344,7 +353,7 @@ for v in bl.data.vertices:
     if v.co.y > 0: v.co.y *= 1.0
     else: v.co.y = v.co.y * 2.4
 bl.data.materials.append(flat("Lead", (0.42, 0.42, 0.44), 0.35, 0.9)); link(bl, C_STUDIO); bpy.ops.object.shade_smooth()
-bpy.ops.mesh.primitive_cone_add(radius1=0.004, radius2=0.0, depth=0.18, location=(0, -0.1, 0), rotation=(R_(90), 0, 0), vertices=16)
+bpy.ops.mesh.primitive_cone_add(radius1=0.0035, radius2=0.0, depth=0.06, location=(0, -0.035, 0), rotation=(R_(90), 0, 0), vertices=16)
 trail = bpy.context.object; trail.name = "BulletTrail"
 tm = flat("Trail", (1, 0.9, 0.7), emit=(1, 0.85, 0.6), es=4, alpha=0.35); tm.blend_method = "BLEND" if hasattr(tm, "blend_method") else None
 trail.data.materials.append(tm); link(trail, C_STUDIO); trail.parent = bl
@@ -361,8 +370,8 @@ for o in C_STUDIO.objects:
         o.data.materials.clear(); o.data.materials.append(bone_m)
 muscle = flat("ChestMuscle", (0.55, 0.12, 0.1), 0.45)
 muscle.node_tree.nodes["Principled BSDF"].inputs["Subsurface Weight"].default_value = 0.3
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.06, segments=32, ring_count=16)
-mp = bpy.context.object; mp.name = "MusclePatch"; mp.scale = (1.0, 0.25, 1.0); bpy.ops.object.transform_apply(scale=True)
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.035, segments=32, ring_count=16)
+mp = bpy.context.object; mp.name = "MusclePatch"; mp.scale = (1.0, 0.3, 1.0); bpy.ops.object.transform_apply(scale=True)
 mp.data.materials.append(muscle); link(mp, C_STUDIO); bpy.ops.object.shade_smooth()
 bpy.ops.mesh.primitive_torus_add(major_radius=0.03, minor_radius=0.0015)
 gr = bpy.context.object; gr.name = "GapRing"; gr.data.materials.append(flat("GapGlow", (0.3, 0.9, 1), emit=(0.3, 0.9, 1.0), es=6)); link(gr, C_STUDIO)
