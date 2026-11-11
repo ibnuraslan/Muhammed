@@ -76,6 +76,25 @@ def burlap_crate(name, size=(1.3, 1.0, 1.1)):
     return join(parts, name)
 
 
+def frontage(cx, fy, width, floors, mat, unit, facing=1, bay=3.6, ww=1.35, wh=1.9):
+    """A plaster frontage with true window recesses: piers and spandrels in front of a back wall, a window unit in each
+    opening. facing=1: the front faces -Y (like the embassy); facing=-1: it faces +Y (across the street)."""
+    n = int(width / bay)
+    sgn = facing
+    for f in range(1, floors + 1):
+        box("FSpandrel", (cx, fy + sgn * 0.18, f * FH), (width, 0.4, FH - wh), mat)
+    for k in range(n + 1):
+        x = cx - width / 2 + k * bay
+        box("FPier", (x, fy + sgn * 0.19, FH + (floors - 1) * FH / 2), (bay - ww, 0.4, (floors - 1) * FH), mat)
+    box("FBack", (cx, fy + sgn * 1.75, floors * FH / 2), (width, 0.1, floors * FH), mat)
+    for f in range(1, floors):
+        for k in range(n):
+            x = cx - width / 2 + (k + 0.5) * bay
+            o = instance(unit, (x, fy, f * FH + FH / 2)); o.location = (x, fy, f * FH + FH / 2)
+            if facing < 0:
+                o.rotation_euler = (0, 0, math.pi)
+
+
 def lattice(name, p0, p1, w, mat, n=None):
     """Steel lattice member from p0 to p1: four corner chords and zig-zag bracing (a real crane boom/mast look)."""
     p0 = Vector(p0); p1 = Vector(p1); d = p1 - p0; L = d.length
@@ -168,12 +187,9 @@ def build(variant=None):
     for sx, col, h in ((-1, (0.6, 0.52, 0.4), 27.2), (1, (0.55, 0.54, 0.5), 30.6)):
         ph_ = stone(f"Plaster{sx}", col)
         cx = sx * (BW / 2 + 16.5)
-        box("Neighbour", (cx, 8.4, h / 2), (32, 16, h), ph_)
+        box("Neighbour", (cx, 9.85, h / 2), (32, 16, h), ph_)
         floors = int(h / FH)
-        for f in range(1, floors):
-            box("NBand", (cx, -0.08, f * FH - 0.05), (32, 0.25, 0.14), ph_)
-            for k in range(9):
-                o = instance(unit, (cx - 14.4 + k * 3.6, -0.02, f * FH + FH / 2)); o.location = (cx - 14.4 + k * 3.6, -0.02, f * FH + FH / 2)
+        frontage(cx, 0.0, 32.4, floors, ph_, unit, facing=1)
         box("NCornice", (cx, -0.3, h - 0.3), (32.4, 0.9, 0.6), ph_, bevel=0.06)
         box("NBase", (cx, -0.12, FH / 2), (32, 0.3, FH), stone(f"NBase{sx}", (col[0] * 0.75, col[1] * 0.75, col[2] * 0.75)))
         for k in range(5):
@@ -201,12 +217,8 @@ def build(variant=None):
     box("FarPavement", (0, ROAD_Y - 9.0, -0.05), (200, 3.0, 0.2), pave)
     # the far side of the boulevard: a long Stalinist frontage with recessed windows facing the embassy
     fp = stone("FarPlaster", (0.62, 0.55, 0.44)); fy = ROAD_Y - 10.5
-    box("FarBlock", (0, fy - 7.0, 13.6), (200, 14, 27.2), fp)
-    for f in range(1, 8):
-        box("FarBand", (0, fy + 0.08, f * FH - 0.05), (200, 0.25, 0.14), fp)
-        for k in range(36):
-            x = -63 + k * 3.6
-            o = instance(unit, (x, fy, f * FH + FH / 2)); o.location = (x, fy, f * FH + FH / 2); o.rotation_euler = (0, 0, math.pi)
+    box("FarBlock", (0, fy - 8.85, 13.6), (200, 14, 27.2), fp)
+    frontage(0.0, fy, 129.6, 8, fp, unit, facing=-1)
     box("FarCornice", (0, fy + 0.3, 27.0), (200, 0.9, 0.6), fp, bevel=0.06)
     box("FarBase", (0, fy + 0.12, FH / 2), (200, 0.3, FH), stone("FarBaseS", (0.45, 0.42, 0.36)))
     wire_m = pbr("Wire", (0.02, 0.02, 0.02), 0.4, 0.8)
