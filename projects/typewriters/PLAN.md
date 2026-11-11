@@ -14,7 +14,7 @@ Real people appear only as unnamed figures in mood light. DRAMATIZATION where ne
 | 5 Attic staging | "Copiers. Computers. Encryption machines." | Track along rows of copiers, terminals and cipher boxes under bare bulbs. | A worker staples burlap over the last crate. |
 | 6 Embassy courtyard, trailers | "All of it is going back to the United States." | A trailer door swings shut; a man crimps the seal. | The truck pulls out of the gate. |
 | 7 Communications vault | "...looking hardest at the machines that send secret messages." | Slow push past a teletype printing tape beside a cipher machine. | A Marine's flashlight sweeps the dark vault. |
-| 8 Dark office, the typewriter | "The one they're looking for is a typewriter." | Push in on the lone typewriter under a desk lamp. | The ball tilts and strikes by itself; a line appears. |
+| 8 Dark office, the typewriter | "The one they're looking for is a typewriter." | Push in on the lone typewriter under a desk lamp. | No hands in frame: the ball types one short line, then stops. |
 
 ## Chapter One · The Swap
 
@@ -67,9 +67,15 @@ Real people appear only as unnamed figures in mood light. DRAMATIZATION where ne
 | 2 Soviet customs, night | "...one typewriter was left in Soviet customs overnight." | A crate in a dim customs shed; a flashlight enters. | The wall clock ticks past 3:00 over the crate, lid ajar. |
 | 3 Records room | "Some inventory records were routinely destroyed..." | An FBI agent opens a drawer of thin, half-empty files. | Boxes of old records tipped into a burn bag. |
 | 4 Safe house | "...a former KGB officer gives the NSA one example..." | An unnamed man talks at a kitchen table to two officers. | A tape recorder's reels turn between them. |
-| 5 Attaché's office | "...the office of the American agricultural attaché." | The attaché types at the typewriter, wheat sample on the desk. | The page on the platen: GRAIN POSITION, as the ball types. |
+| 5 Attaché's office | "...the office of the American agricultural attaché." | The attaché types at the typewriter, wheat sample on the desk. | The page on the platen as the ball types: generic, mostly unreadable text. |
 | 6 Grain negotiations | "...passed it to its negotiators before the next session." | Two delegations take their seats at a long table. | A Soviet negotiator reads a page, then looks across. |
-| 7 1985 newsroom | "In March 1985, CBS breaks the story." | A newsroom: cameras roll on an anchor desk. | A teletype in the newsroom chatters out the wire copy. |
+| 7 1985 newsroom | "In March 1985, CBS breaks the story." | A generic newsroom (no logos): cameras roll on an anchor desk. | A teletype in the newsroom chatters out the wire copy. |
 | 8 Shipping dock | "The State Department tightens procedures..." | Inspectors X-ray every crate at the dock. | An inspector checks a seal against a sheet. |
 | 9 Cipher room, pouch | "The embassy could encrypt a message... a sealed pouch." | A cipher machine clicks through a tape. | A courier seals a diplomatic pouch. |
 | 10 The typewriter, Moscow night | "...part of that message could already have reached a Soviet listening post." | The page rolls out of the typewriter. | Pull back through the window to the night city and the TV tower. |
+
+## Producer notes
+- Newsroom generic: no network names or logos.
+- Typed pages generic and mostly unreadable; no invented quotes.
+- Intro 8B subtle, not supernatural.
+- Ch3 mechanism is the showpiece: ball and arms read clearly at medium-close distance, no hand close-ups.
