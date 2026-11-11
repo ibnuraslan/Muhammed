@@ -46,3 +46,16 @@
    - Candle flicker, and the double gates swing with overshoot and settle.
 8. **Fixes:** the lock, bolt and grille parenting; feet sole offsets; the cake key path; the guard's hands on the box; the corridor double gates and the guard's position; a blank white frame at 905, now routed over his head.
 9. **Package:** 67 MB, a normal git file (no LFS). It now JPEG-encodes images, uses 1K textures (hero skin at 2K) and 1K HDRIs, bakes MPFB body shape keys, and purges orphans. Renders match the source film.
+
+## Realism pass (client note, 21:00): primitives replaced with real models
+| Shot | Was | Now |
+|---|---|---|
+| Keys, beats 1–8 (master, cast copies, glowing casting) | procedural ring/shaft/bit | **Old Key** by Meerschaum Digital (CC BY). The wax imprint is now ray-cast from this key's real silhouette. |
+| Cell door lock, beats 6 and 8 | rusty box | **Pocket Door Lock** scan by IU Indianapolis University Library (CC BY), with a brass escutcheon keyhole on the door's inside face |
+| Cakes, beats 5 and 8 | procedural iced cylinder | **Christmas Panettone** scan by alban (CC BY). Cake 2 is bisected from the scan into the main cake and the slice, with crumb on the cut faces. |
+| Government building, beat 10 | box portico, cylinder columns, pediment | **Prefettura di Trieste** by Karpulya (CC BY), on a sandstone plinth at the top of the steps |
+| Foundry crucible, beat 4 | noise cylinder | **Lead melting crucible** scan by City of Ballarat (CC BY) |
+| Barrels, yard and foundry | wood-textured cylinders | Poly Haven **Wine Barrel 01** (CC0) |
+| Cell bucket | metal cone | Poly Haven **Wooden Bucket 01** (CC0) |
+
+Removed: the pigeon flock at the reveal. The CC-BY pigeon model broke when its rig was stripped, so only five small birds stay, circling high over the yard.
