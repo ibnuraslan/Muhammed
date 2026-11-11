@@ -158,6 +158,44 @@ for i in range(NROW):
             me = SEAT_TRAY if (i + 1, side, k) in ((3, "L", 1), (3, "R", 0), (6, "R", 1), (9, "L", 0)) else SEAT_UP
             ob = bpy.data.objects.new(nm, me); ob.location = (x, y, 0); cSeats.objects.link(ob); SEATS[nm] = ob
 
+# real seat model (maximmus, CC-BY) replaces the procedural seat on every row; procedural trays stay where a tray is down
+SEAT_GLB = os.path.join(HERE, "..", "work", "models", "seat.glb")
+if os.path.exists(SEAT_GLB):
+    before = set(bpy.data.objects)
+    bpy.ops.import_scene.gltf(filepath=SEAT_GLB)
+    new = [o for o in bpy.data.objects if o not in before]
+    new_names = [o.name for o in new]
+    meshes = [o for o in new if o.type == 'MESH']
+    for o in meshes:
+        M = o.matrix_world.copy(); o.parent = None; o.matrix_world = M
+    bpy.ops.object.select_all(action='DESELECT')
+    for o in meshes: o.select_set(True)
+    C.view_layer.objects.active = meshes[0]; bpy.ops.object.join()
+    sm = C.active_object; sm.name = "SEAT_MODEL"
+    for n_ in new_names:
+        if n_ in bpy.data.objects and n_ != sm.name: bpy.data.objects.remove(bpy.data.objects[n_])
+    # mm -> m, narrow to the 0.48 m seat pitch across, slightly shallower, face +Y, floor at z=0, cushion centre at origin
+    sm.matrix_world = Matrix.Diagonal((0.00085, 0.0009, 0.001, 1.0)) @ sm.matrix_world
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    me = sm.data
+    for v in me.vertices: v.co = Vector((-v.co.x, -v.co.y, v.co.z - 0.235))
+    for v in me.vertices: v.co.y += 0.27
+    me.update()
+    for p_ in me.polygons: p_.use_smooth = True
+    link(sm, cSet); sm.hide_render = True; sm.hide_viewport = True
+    trayM = MB("TRAY_tmp"); trayM.box((0, -0.56, 0.70), (0.38, 0.27, 0.018), M_plast); trayM.box((0, -0.43, 0.70), (0.3, 0.02, 0.01), M_steel)
+    tray_me = trayM.obj(cSet).data; bpy.data.objects.remove(bpy.data.objects["TRAY_tmp"])
+    for nm, ob in list(SEATS.items()):
+        tray = ob.data == SEAT_TRAY
+        ob.data = sm.data
+        if tray:
+            t = bpy.data.objects.new(nm.replace("SEAT", "TRAY"), tray_me); t.location = ob.location; cSeats.objects.link(t)
+    # measure for the passenger fit
+    dg = C.evaluated_depsgraph_get(); o0 = SEATS["SEAT_05L1"]
+    h = o0.ray_cast(Vector((0, 0.0, 2.0)), Vector((0, 0, -1)))
+    b = o0.ray_cast(Vector((0, 0.3, 0.85)), Vector((0, -1, 0)))
+    print("SEATFIT cushion_top", round(h[1].z, 3) if h[0] else None, "back_front_y@0.85", round(b[1].y, 3) if b[0] else None)
+
 # ------------------------------------------------------------------ door
 M_door = mat("M_door", (0.40, 0.40, 0.38), rough=0.5, noise=0.35, nscale=25, bump=0.4)
 M_doorp = mat("M_door_panel", (0.55, 0.55, 0.52), rough=0.45, noise=0.3, nscale=18, bump=0.3)
