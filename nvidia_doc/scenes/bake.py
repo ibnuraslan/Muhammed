@@ -44,7 +44,7 @@ s.render.filepath = f"//render/{name}_"
 s.render.image_settings.file_format = 'PNG'
 
 # objects whose transforms we key every frame
-movers = [o for o in bpy.data.objects if o.type in ('MESH', 'EMPTY', 'LIGHT') and o.parent is None and not o.name.startswith(("Floor", "Wall"))]
+movers = [o for o in bpy.data.objects if o.type in ('MESH', 'EMPTY', 'LIGHT', 'CURVE') and o.name != cam.name]
 arms = [o for o in bpy.data.objects if o.type == 'ARMATURE']
 ui_dir = os.path.join(OUTDIR, name + "_ui")
 screen_tex = None

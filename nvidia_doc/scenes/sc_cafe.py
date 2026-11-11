@@ -77,7 +77,7 @@ def build(variant=None):
     # warm key over their table + soft fill so faces read as shapes, not detail
     k = bpy.data.lights.new("TheirLamp", 'SPOT'); k.energy = 260; k.spot_size = math.radians(70); k.spot_blend = 0.7; k.color = (1.0, 0.72, 0.45)
     ko = bpy.data.objects.new("TheirLamp", k); bpy.context.collection.objects.link(ko); ko.location = (-1.6, 1.0, 2.1); point_at(ko, (-1.6, 1.5, 0.9))
-    f = area_light((0.5, 0.2, 1.6), (0, 0, 0), 1.2, 25, (1.0, 0.8, 0.6)); point_at(f, (-1.6, 1.6, 1.1)); f.visible_camera = False
+    f = area_light((0.5, 0.2, 1.6), (0, 0, 0), 1.2, 25, (1.0, 0.8, 0.6)); point_at(f, (-1.6, 1.6, 1.1)); f.visible_camera = False; f.visible_glossy = False; f.visible_transmission = False
     m = man("Man"); seated(m, -1.95, 1.7, math.radians(8), lean=6, turn=12)
     w = woman("Woman"); seated(w, -1.25, 1.72, math.radians(-10), lean=4, turn=-6)
     # ------------------------------------------------------------------ the window and the street outside
@@ -89,10 +89,74 @@ def build(variant=None):
     sign = text_obj("CafeSign", "CAFE", (1.9, GLASS_Y - 0.02, 2.5), 0.32, emissive("SignTxt", (1.0, 0.8, 0.5), 6),
                     rot=(math.radians(90), 0, 0), font_path="/usr/share/fonts/opentype/inter/Inter-Light.otf", spacing=1.6)
     box("Pavement", (0, -2.5, -0.02), (14, 5, 0.04), pbr("WetPave", (0.03, 0.03, 0.032), 0.04, 0.0, **{'Specular IOR Level': 0.8}))
+    # the building: brick facade around the window, upper floors, an awning, a lamp post on the kerb
+    for x0, x1 in ((-9.0, -3.06), (3.06, 9.0)):
+        box("Facade", ((x0 + x1) / 2, GLASS_Y + 0.12, 3.6), (x1 - x0, 0.24, 7.2), brick)
+    box("FacadeTop", (0, GLASS_Y + 0.12, 5.05), (6.12, 0.24, 4.3), brick)
+    upper = window_material("UpperWin", lit=(1.0, 0.8, 0.55), density=0.35, floor=2.6, bay=1.4, strength=0.6)
+    for x in (-6.0, -2.0, 2.0, 6.0):
+        box("UpperWin", (x, GLASS_Y - 0.01, 4.6), (1.3, 0.03, 1.5), upper)
+    awning = fabric("Awning", (0.06, 0.12, 0.09), 0.8, 0.3, 300)
+    box("Awning", (0, GLASS_Y - 0.6, 3.15), (6.6, 1.2, 0.06), awning, rot=(math.radians(-14), 0, 0))
+    for x in (-7.5, 7.5):
+        box("Door", (x * 0.62, GLASS_Y - 0.01, 1.15), (1.0, 0.04, 2.3), pbr("DoorWood", (0.05, 0.03, 0.02), 0.5))
+    pole = pbr("LampPole", (0.03, 0.03, 0.03), 0.4, 0.8)
+    cyl("LampPost", (3.8, -4.6, 2.2), 0.06, 4.4, pole, verts=12)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=0.22, location=(3.8, -4.6, 4.5))
+    bpy.context.active_object.data.materials.append(emissive("LampGlobe", (1.0, 0.75, 0.45), 14))
+    ll = bpy.data.lights.new("PostLight", 'POINT'); ll.energy = 400; ll.color = (1.0, 0.72, 0.42); ll.shadow_soft_size = 0.2
+    lo = bpy.data.objects.new("PostLight", ll); bpy.context.collection.objects.link(lo); lo.location = (3.8, -4.6, 4.45)
+    box("Road", (0, -9.0, -0.06), (40, 8, 0.1), pbr("WetRoad", (0.02, 0.02, 0.022), 0.05, 0.0, **{'Specular IOR Level': 0.8}))
+    box("KerbC", (0, -5.0, 0.0), (40, 0.25, 0.14), pbr("KerbStone", (0.25, 0.25, 0.24), 0.4))
+    # rain: curtains of streaks between the camera and the window, scrolled down every frame
+    c_rain = []
+    rm = bpy.data.materials.new("RainStreaks"); rm.use_nodes = True; 
+    N = rm.node_tree.nodes; L = rm.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (14 * 45, 7 * 3.5, 1)          # ~2 cm x 28 cm streaks
+    wn = N.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = '2D'
+    fl = N.new("ShaderNodeMath"); fl.operation = 'FLOOR'
+    L.new(tc.outputs['Object'], mp.inputs['Vector']); L.new(mp.outputs[0], wn.inputs['Vector'])
+    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.93; L.new(wn.outputs['Value'], gt.inputs[0])
+    sc = N.new("ShaderNodeMath"); sc.operation = 'MULTIPLY'; sc.inputs[1].default_value = 0.35; L.new(gt.outputs[0], sc.inputs[0])
+    tr = N.new("ShaderNodeBsdfTransparent"); gl = N.new("ShaderNodeEmission"); gl.inputs['Color'].default_value = (0.75, 0.8, 0.9, 1); gl.inputs['Strength'].default_value = 0.6
+    mx = N.new("ShaderNodeMixShader"); L.new(sc.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs['Surface'])
+    for k, y in enumerate((-0.7, -2.0, -3.4, -5.2, -7.2)):
+        for j in range(2):
+            bpy.ops.mesh.primitive_plane_add(size=1, location=(0, y, 3.5 + j * 7.0), rotation=(math.radians(90), 0, 0))
+            o = bpy.context.active_object; o.name = "Rain"; o.scale = (14, 7.0, 1); o.data.materials.append(rm)
+            o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False
+            c_rain.append((o, y, j))
     # neon behind the camera, for reflections in the glass
     for k, col in enumerate(((1.0, 0.2, 0.4), (0.2, 0.8, 1.0), (1.0, 0.6, 0.2))):
-        box("StreetNeon", (-3 + k * 3, -9, 3.0), (1.6, 0.1, 0.5), emissive("StreetNeon", col, 8))
-    return dict(m=m, w=w, couple=Vector((-1.6, 1.6, 1.05)), glass=Vector((-1.4, GLASS_Y, 1.15)))
+        nl = area_light((-3 + k * 3, -11, 3.0), (0, 0, 0), 1.6, 120, col); point_at(nl, (-3 + k * 3, 0, 1.5))
+        nl.visible_camera = False; nl.visible_glossy = False; nl.visible_transmission = False   # coloured street light, never seen as a shape
+    return dict(m=m, w=w, couple=Vector((-1.6, 1.6, 1.05)), glass=Vector((-1.4, GLASS_Y, 1.15)), rain=c_rain)
+
+
+DUR = {"title_push": 2.84, "pull_back": 4.17}       # from the voiceover: 20.50-23.34 / 23.34-26.51 + 1 s tail
+
+
+def rain_fall(c, sec):
+    for o, y, j in c.get("rain", []):
+        z = 3.5 + j * 7.0 - (sec * 7.5 * (1 + 0.15 * (y % 1))) % 7.0       # each curtain pair scrolls down and wraps
+        o.location = (0.3 * (y % 0.7), y, z)
+
+
+def anim_push(c, t):
+    rain_fall(c, t * DUR["title_push"])
+
+
+def anim_pull(c, t):
+    rain_fall(c, DUR["title_push"] + t * DUR["pull_back"])
+
+
+def _cam_pull(c, t):
+    e = ease(t)
+    start = Vector((-0.95, -1.55, 1.2)); end = Vector((0.6, -8.6, 1.75))
+    tgt = (c["couple"] + Vector((0.3, 0, -0.05))).lerp(Vector((0.0, 0.0, 2.6)), e)
+    return (start.lerp(end, e), tgt, 40 - 12 * e)
 
 
 def _cam(c, t):
@@ -106,4 +170,6 @@ def _focus(c, t):
     return c["glass"].lerp(c["couple"], k)
 
 
-MOVES = {"title_push": dict(kind="anim", dof=2.2, far=20.0, cam=_cam, focus=_focus)}
+MOVES = {"title_push": dict(kind="anim", dof=2.2, far=20.0, cam=_cam, focus=_focus, anim=anim_push),
+         "pull_back": dict(kind="anim", dof=4.0, far=30.0, cam=_cam_pull,
+                           focus=lambda c, t: c["couple"].lerp(Vector((0.0, 0.0, 2.0)), ease(t)), anim=anim_pull)}
