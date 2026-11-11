@@ -68,13 +68,32 @@ def wet(m, amount=0.5, puddle_scale=0.5, ripples=True, ripple_scale=9.0):
     return m
 
 
+_MODEL_CACHE = {}
+
+
 def model_h(aid, loc, height, rot_z=0.0):
-    """Poly Haven model scaled to a target height (m), standing on loc.z."""
+    """Poly Haven model scaled to a target height (m), standing on loc.z. Repeats share mesh data (linked copies)."""
+    if aid in _MODEL_CACHE:
+        src_root, src_ms, lo0, hi0 = _MODEL_CACHE[aid]
+        root = bpy.data.objects.new(aid, None); bpy.context.collection.objects.link(root)
+        for o in src_root.children_recursive:
+            if o.type != 'MESH':
+                continue
+            n = bpy.data.objects.new(o.name, o.data); bpy.context.collection.objects.link(n)
+            from mathutils import Matrix as _Mx
+            n.parent = root; n.matrix_parent_inverse = _Mx.Identity(4)
+            n.matrix_basis = (src_root.matrix_world.inverted() @ o.matrix_world)
+        s_ = height / max(hi0.z - lo0.z, 1e-3)
+        root.rotation_euler = (0, 0, rot_z); root.scale = (s_, s_, s_); root.location = Vector(loc) - Vector((0, 0, lo0.z * s_))
+        bpy.context.view_layer.update()
+        return root
     try:
-        root, ms = ph.model(aid, loc=(0, 0, 0), rot_z=rot_z)
+        root, ms = ph.model(aid, loc=(0, 0, 0), rot_z=0.0)
     except Exception as e:
         print("[dd] model skipped", aid, e); return None
     lo, hi = ph.bounds(ms)
+    _MODEL_CACHE[aid] = (root, ms, lo.copy(), hi.copy())
+    root.rotation_euler = (0, 0, rot_z)
     s = height / max(hi.z - lo.z, 1e-3)
     root.scale = (s, s, s); root.location = Vector(loc) - Vector((0, 0, lo.z * s))
     bpy.context.view_layer.update()
@@ -118,25 +137,67 @@ def rain_fall(c, sec, speed=7.0):
 
 
 # ============================================================================ people
-def person(name, gender=1.0, years=40, cloth="male_casualsuit01", hair="short02", cval=0.25, hv=0.3, sat=1.0, hue=0.5,
-           skin=None, height=0.5, weight=0.45, shoes="shoes02"):
+def person(name, gender=1.0, years=40, cloth="male_casualsuit01", hair="short02", cval=1.0, hv=0.3, sat=1.0, hue=0.5,
+           skin=None, height=0.5, weight=0.45, shoes="shoes02", tint=(1, 1, 1)):
+    """cval is the HSV value multiplier of the clothes texture (1 = as authored); tint multiplies its colour."""
     h = Human(name, gender=gender, years=years, muscle=0.5, weight=weight, height=height, eyelashes="eyelashes01",
               skin=skin or ("middleage_lightskinned_female_diffuse.png" if gender < 0.5 else "middleage_lightskinned_male_diffuse.png"))
-    add_asset(h, "clothes", cloth, val=cval, rough=0.7, sat=sat, hue=hue)
-    add_asset(h, "clothes", shoes, val=0.2, rough=0.4)
+    add_asset(h, "clothes", cloth, val=cval, rough=0.7, sat=sat, hue=hue, tint=tint)
+    add_asset(h, "clothes", shoes, val=0.5, rough=0.4)
     if hair:
         add_asset(h, "hair", hair, val=hv, rough=0.45)
     return h
 
 
-def officer(name, years=40, seed=0, gender=1.0):
-    """Plain-clothes detective: dark navy / charcoal jacket."""
-    vals = (0.16, 0.2, 0.13, 0.22)
-    hairs = ("short02", "short04", "short03", "short01") if gender > 0.5 else ("bob01", "ponytail01", "bob02")
-    # (no casualsuit02/04/female_casualsuit01/02: their T-shirts carry a printed logo)
-    cloth = ("male_casualsuit05", "male_casualsuit01", "male_casualsuit05", "male_casualsuit03")[seed % 4] if gender > 0.5 else "female_elegantsuit01"
-    return person(name, gender, years, cloth, hairs[seed % len(hairs)], cval=vals[seed % 4], hv=0.25 + 0.1 * (seed % 2),
-                  sat=0.5, height=0.45 + 0.05 * (seed % 3))
+def armband(h, side="L", col=(0.9, 0.32, 0.04)):
+    """An orange POLICE armband: a short tube parented to the upper-arm bone (follows the baked rig)."""
+    b = f"upperarm02.{side}"
+    bpy.ops.mesh.primitive_cylinder_add(vertices=20, radius=0.058, depth=0.09)
+    o = bpy.context.active_object; o.name = h.name + "_armband"
+    o.data.materials.append(pbr("Armband", col, 0.6))
+    pb = h.arm.pose.bones[b]
+    o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = b
+    # bone space: Y runs along the bone; the tube's axis is Z -> rotate to Y, sit at the bone's middle
+    o.rotation_euler = (math.radians(90), 0, 0)
+    o.location = (0, -pb.length * 0.5, 0)
+    return o
+
+
+POLICE_LOOKS = [("male_casualsuit05", 0.5, 1.0, 1.15, (1.0, 1.0, 1.0)),      # (cloth, hue, sat, val, tint)
+                ("male_casualsuit01", 0.5, 0.9, 1.0, (1.0, 1.0, 1.0)),
+                ("male_casualsuit05", 0.58, 0.8, 1.6, (1.0, 0.92, 0.8)),
+                ("male_casualsuit03", 0.5, 0.6, 1.2, (1.0, 1.0, 1.0)),
+                ("male_casualsuit01", 0.45, 0.7, 1.3, (0.85, 0.9, 1.0))]
+
+
+def officer(name, years=40, seed=0, gender=1.0, band=True):
+    """Plain-clothes detective: varied coats / shirts and jeans, an orange POLICE armband.
+    (no casualsuit02/04/female_casualsuit01/02: their T-shirts carry a printed logo)"""
+    if gender > 0.5:
+        cl, hue, sat, val, tint = POLICE_LOOKS[seed % len(POLICE_LOOKS)]
+        hair = ("short02", "short04", "short03", "short01")[seed % 4]
+    else:
+        cl, hue, sat, val, tint = "female_elegantsuit01", 0.5, 0.6, 1.5, (0.75, 0.82, 1.0)
+        hair = ("bob01", "ponytail01", "bob02")[seed % 3]
+    h = person(name, gender, years, cl, hair, cval=val, hv=0.25 + 0.15 * (seed % 3), sat=sat, hue=hue, tint=tint,
+               height=0.45 + 0.05 * (seed % 3))
+    if band:
+        armband(h, "L")
+    return h
+
+
+def staff(name, gender, years, hair, seed=0):
+    """Boutique staff: navy or grey suits."""
+    cl = "male_elegantsuit01" if gender > 0.5 else "female_elegantsuit01"
+    navy = seed % 2 == 0
+    if gender > 0.5:
+        return person(name, gender, years, cl, hair, cval=1.9 if navy else 2.4, sat=0.0, tint=(0.42, 0.5, 0.82) if navy else (0.8, 0.8, 0.82), hv=0.35)
+    return person(name, gender, years, cl, hair, cval=1.3 if navy else 1.6, sat=0.0, tint=(0.5, 0.58, 0.9) if navy else (0.85, 0.85, 0.86), hv=0.35)
+
+
+def guard(name, years=41, hair="short02"):
+    """Security guard: dark navy uniform suit, white shirt."""
+    return person(name, 1.0, years, "male_elegantsuit01", hair, cval=1.0, sat=0.0, tint=(0.55, 0.62, 0.85), hv=0.3)
 
 
 def zero(h):
@@ -236,21 +297,32 @@ def pose_floor_sit(h, hunch=14, hands_back=True):
 
 
 # ============================================================================ jewels
-def diamond_mesh(name, r=0.01, table=0.56, crown=0.16, pavilion=0.43, n=16):
-    """A round brilliant: girdle ring, crown up to a flat table, pavilion down to a culet point. r = girdle radius."""
+def diamond_mesh(name, r=0.01):
+    """A round brilliant cut (r = girdle radius): table, star, kite and girdle facets above; pavilion mains and
+    lower-girdle facets below, built as the convex hull of the facet corner points (crisp flat facets)."""
+    pts = []
+    for k in range(8):
+        a = 2 * math.pi * k / 8
+        pts.append((0.54 * r * math.cos(a), 0.54 * r * math.sin(a), 0.34 * r))             # table
+        a2 = a + math.pi / 8
+        pts.append((0.80 * r * math.cos(a2), 0.80 * r * math.sin(a2), 0.215 * r))          # star points
+        pts.append((0.93 * r * math.cos(a), 0.93 * r * math.sin(a), 0.11 * r))            # kite tips
+    for k in range(32):
+        a = 2 * math.pi * k / 32
+        pts.append((r * math.cos(a), r * math.sin(a), 0.02 * r))                             # girdle
+        pts.append((r * math.cos(a), r * math.sin(a), -0.02 * r))
+    for k in range(16):
+        a = 2 * math.pi * (k + 0.5) / 16
+        pts.append((0.62 * r * math.cos(a), 0.62 * r * math.sin(a), -0.33 * r))           # lower girdle
+    for k in range(8):
+        a = 2 * math.pi * k / 8
+        pts.append((0.3 * r * math.cos(a), 0.3 * r * math.sin(a), -0.63 * r))             # pavilion mains
+    pts.append((0, 0, -0.86 * r))                                                           # culet
     bm = bmesh.new()
-    g = [bm.verts.new((r * math.cos(2 * math.pi * k / n), r * math.sin(2 * math.pi * k / n), 0.0)) for k in range(n)]
-    g2 = [bm.verts.new((r * math.cos(2 * math.pi * k / n), r * math.sin(2 * math.pi * k / n), r * 0.04)) for k in range(n)]
-    t = [bm.verts.new((r * table * math.cos(2 * math.pi * (k + 0.5) / n), r * table * math.sin(2 * math.pi * (k + 0.5) / n), r * (0.04 + crown * 2)))
-         for k in range(n)]
-    cul = bm.verts.new((0, 0, -r * pavilion * 2))
-    for k in range(n):
-        k1 = (k + 1) % n
-        bm.faces.new((g[k], g[k1], g2[k1], g2[k]))
-        bm.faces.new((g2[k], g2[k1], t[k]))
-        bm.faces.new((t[k], g2[k1], t[k1]))
-        bm.faces.new((g[k1], g[k], cul))
-    bm.faces.new(t)
+    for p in pts:
+        bm.verts.new(p)
+    bmesh.ops.convex_hull(bm, input=list(bm.verts))
+    bmesh.ops.dissolve_limit(bm, angle_limit=math.radians(1.0), verts=list(bm.verts), edges=list(bm.edges))
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
     o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
     for p in me.polygons:
@@ -261,15 +333,35 @@ def diamond_mesh(name, r=0.01, table=0.56, crown=0.16, pavilion=0.43, n=16):
 _MATS = {}
 
 
+def muddy(m, amount=0.55, col=(0.16, 0.13, 0.09)):
+    """Smear a material with dried mud: noise-masked brown, rough and non-metal."""
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 220; nz.inputs['Detail'].default_value = 6
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.42; mr.inputs['From Max'].default_value = 0.62
+    mr.inputs['To Max'].default_value = amount; L.new(nz.outputs['Fac'], mr.inputs['Value'])
+    base = tuple(p.inputs['Base Color'].default_value)
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = base; mx.inputs[7].default_value = (*col, 1)
+    L.new(mr.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color'])
+    for inp, lo, hi in (('Metallic', p.inputs['Metallic'].default_value, 0.0), ('Roughness', p.inputs['Roughness'].default_value, 0.9)):
+        r = N.new("ShaderNodeMapRange"); r.inputs['To Min'].default_value = lo; r.inputs['To Max'].default_value = hi
+        L.new(mr.outputs[0], r.inputs['Value']); L.new(r.outputs[0], p.inputs[inp])
+    return m
+
+
 def jewel_mats():
     if not _MATS:
         d = bpy.data.materials.new("Diamond"); d.use_nodes = True
         p = d.node_tree.nodes["Principled BSDF"]
         p.inputs['Base Color'].default_value = (1, 1, 1, 1); p.inputs['Transmission Weight'].default_value = 1.0
         p.inputs['IOR'].default_value = 2.42; p.inputs['Roughness'].default_value = 0.0
+        if 'Dispersion' in p.inputs:
+            p.inputs['Dispersion'].default_value = 0.6
         _MATS["diamond"] = d
         _MATS["plat"] = pbr("Platinum", (0.78, 0.78, 0.8), 0.12, 1.0)
         _MATS["gold"] = pbr("Gold", (0.95, 0.72, 0.36), 0.14, 1.0)
+        _MATS["plat_dirty"] = muddy(pbr("PlatinumDirty", (0.7, 0.7, 0.72), 0.3, 1.0))
+        _MATS["gold_dirty"] = muddy(pbr("GoldDirty", (0.85, 0.64, 0.32), 0.32, 1.0))
         for nm, col in (("ruby", (0.6, 0.02, 0.05)), ("sapphire", (0.03, 0.08, 0.5)), ("emerald", (0.02, 0.4, 0.15))):
             g = bpy.data.materials.new(nm); g.use_nodes = True; q = g.node_tree.nodes["Principled BSDF"]
             q.inputs['Base Color'].default_value = (*col, 1); q.inputs['Transmission Weight'].default_value = 1.0
@@ -278,7 +370,7 @@ def jewel_mats():
     return _MATS
 
 
-def ring(name, loc, stone_r=0.004, band="plat", stone="diamond", rot=(0, 0, 0), band_r=0.0095, upright=True):
+def ring(name, loc, stone_r=0.004, band="plat", stone="diamond", rot=(0, 0, 0), band_r=0.0095, upright=True, setting_h=0.0):
     """A ring: torus band with a stone on top. Returns the parent empty."""
     M = jewel_mats()
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
@@ -288,11 +380,14 @@ def ring(name, loc, stone_r=0.004, band="plat", stone="diamond", rot=(0, 0, 0), 
     bpy.ops.object.shade_smooth()
     top = Vector((0, 0, band_r + 0.0012)) if upright else Vector((band_r, 0, 0.0012))
     st = diamond_mesh(name + "_stone", stone_r); st.data.materials.append(M[stone]); st.parent = root
-    st.location = top + Vector((0, 0, stone_r * 0.8))
+    st.location = top + Vector((0, 0, stone_r * 0.65 + setting_h))
+    if setting_h:
+        bc = cyl(name + "_basket", top + Vector((0, 0, setting_h / 2 + 0.0005)), stone_r * 0.45, setting_h, M[band], verts=16); bc.parent = root
     # four prongs
     for k in range(4):
         a = math.pi / 4 + k * math.pi / 2
-        pr = cyl(name + "_prong", top + Vector((stone_r * 0.9 * math.cos(a), stone_r * 0.9 * math.sin(a), stone_r * 0.7)), 0.0005, stone_r * 1.6, M[band], verts=6)
+        pr = cyl(name + "_prong", top + Vector((stone_r * 0.93 * math.cos(a), stone_r * 0.93 * math.sin(a), (stone_r * 0.65 + setting_h) * 0.75)),
+                 max(0.0004, stone_r * 0.07), stone_r * 0.65 + setting_h + stone_r * 0.3, M[band], verts=6)
         pr.parent = root
     root.location = loc; root.rotation_euler = rot
     return root
@@ -305,8 +400,27 @@ def earring(name, loc, r=0.003, stone="diamond"):
     return st
 
 
-def container(name, loc, size=(0.24, 0.17, 0.09), rot_z=0.0, dirt=0.75):
-    """A milky plastic food box with no lid (open top), slightly grimy."""
+def tub_material(name, dirt=0.7):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    p.inputs['Base Color'].default_value = (0.78, 0.8, 0.78, 1); p.inputs['Roughness'].default_value = 0.5
+    p.inputs['Transmission Weight'].default_value = 0.6
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 30; nz.inputs['Detail'].default_value = 8
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
+    low = N.new("ShaderNodeMapRange"); low.inputs['From Min'].default_value = 0.6; low.inputs['From Max'].default_value = 0.0
+    L.new(sep.outputs['Z'], low.inputs['Value'])                       # more mud toward the bottom
+    add = N.new("ShaderNodeMath"); add.operation = 'MULTIPLY'; L.new(nz.outputs['Fac'], add.inputs[0]); L.new(low.outputs[0], add.inputs[1])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.15; mr.inputs['From Max'].default_value = 0.45
+    mr.inputs['To Max'].default_value = dirt; L.new(add.outputs[0], mr.inputs['Value'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.78, 0.8, 0.78, 1); mx.inputs[7].default_value = (0.2, 0.16, 0.11, 1)
+    L.new(mr.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color'])
+    tw = N.new("ShaderNodeMapRange"); tw.inputs['To Min'].default_value = 0.6; tw.inputs['To Max'].default_value = 0.0
+    L.new(mr.outputs[0], tw.inputs['Value']); L.new(tw.outputs[0], p.inputs['Transmission Weight'])
+    return m
+
+
+def _open_box(name, size, bevel=0.01):
     bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 0))
     o = bpy.context.active_object; o.name = name; o.scale = size
     bpy.ops.object.transform_apply(scale=True)
@@ -315,110 +429,119 @@ def container(name, loc, size=(0.24, 0.17, 0.09), rot_z=0.0, dirt=0.75):
         if f.normal.z > 0.9:
             bm.faces.remove(f)
     bm.to_mesh(o.data); bm.free()
-    bv = o.modifiers.new("bev", 'BEVEL'); bv.width = 0.012; bv.segments = 3
-    so = o.modifiers.new("sol", 'SOLIDIFY'); so.thickness = 0.0025
-    m = bpy.data.materials.new(name + "Plastic"); m.use_nodes = True
-    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    p.inputs['Base Color'].default_value = (0.82, 0.84, 0.82, 1); p.inputs['Roughness'].default_value = 0.45
-    p.inputs['Transmission Weight'].default_value = 0.35
-    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 25
-    L.new(tc.outputs['Object'], nz.inputs['Vector'])
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[6].default_value = (0.55, 0.57, 0.56, 1)
-    mx.inputs[7].default_value = (0.22, 0.2, 0.17, 1)
-    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.75
-    mr.inputs['To Max'].default_value = dirt
-    L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], mx.inputs['Factor']); L.new(mx.outputs[2], p.inputs['Base Color'])
-    o.data.materials.append(m)
-    o.location = Vector(loc) + Vector((0, 0, size[2] / 2)); o.rotation_euler = (0, 0, rot_z)
+    bv = o.modifiers.new("bev", 'BEVEL'); bv.width = bevel; bv.segments = 3
+    so = o.modifiers.new("sol", 'SOLIDIFY'); so.thickness = 0.002
     return o
 
 
-def fill_container(box_obj, size, rng, n_rings=12, n_ear=6, hero_scale=2.4):
-    """Rings and earrings resting in the bottom of the container, one big diamond ring on top in the middle."""
-    base = box_obj.location - Vector((0, 0, size[2] / 2 - 0.004))
-    # a dark cloth the pieces were wrapped in, crumpled in the bottom
-    bpy.ops.mesh.primitive_grid_add(x_subdivisions=30, y_subdivisions=24, size=1, location=base + Vector((0, 0, 0.0015)))
-    cl = bpy.context.active_object; cl.name = "Cloth"; cl.scale = (size[0] * 0.92, size[1] * 0.9, 1); cl.rotation_euler = box_obj.rotation_euler
-    dsp = cl.modifiers.new("crumple", 'DISPLACE'); tx = bpy.data.textures.new("Crumple", 'CLOUDS'); tx.noise_scale = 0.25
-    dsp.texture = tx; dsp.strength = 0.006; dsp.mid_level = 0.3
-    cl.data.materials.append(fabric("Velvet", (0.025, 0.028, 0.035), 0.9, 0.8, 300))
-    bpy.ops.object.shade_smooth()
+def container(name, loc, size=(0.17, 0.12, 0.075), rot_z=0.0, dirt=0.7, lid_open=0.6):
+    """A small grimy translucent plastic food tub; its lid sits half off, tipped against the rim."""
+    m = tub_material(name + "Plastic", dirt)
+    o = _open_box(name, size, 0.012); o.data.materials.append(m)
+    o.location = Vector(loc) + Vector((0, 0, size[2] / 2)); o.rotation_euler = (0, 0, rot_z)
+    lid = box(name + "Lid", (0, 0, 0), (size[0] + 0.008, size[1] + 0.008, 0.008), m, bevel=0.004)
+    lid.parent = o
+    lid.location = (size[0] * 0.42 * lid_open, 0.01, size[2] / 2 + 0.008 + 0.02 * lid_open)
+    lid.rotation_euler = (0, math.radians(-14 * lid_open), math.radians(6))
+    # a film of muddy water in the bottom
+    w = box(name + "Mud", (0, 0, -size[2] / 2 + 0.006), (size[0] - 0.01, size[1] - 0.01, 0.008),
+            pbr("MudWater", (0.09, 0.075, 0.055), 0.08, 0.0, **{'Coat Weight': 1.0}))
+    w.parent = o
+    return o
+
+
+def fill_container(box_obj, size, rng, n_rings=12, n_ear=6, hero_scale=1.0):
+    """The pieces bundled together in the bottom of the tub (a heap, not laid out); the big diamond ring on top."""
+    base = box_obj.location - Vector((0, 0, size[2] / 2 - 0.01))
     stones = ["diamond"] * 7 + ["ruby", "sapphire", "emerald", "diamond", "sapphire"]
     items = []
     for k in range(n_rings):
-        x = rng.uniform(-size[0] / 2 + 0.025, size[0] / 2 - 0.025); y = rng.uniform(-size[1] / 2 + 0.025, size[1] / 2 - 0.025)
-        r = ring(f"Ring{k}", base + Vector((x, y, 0.0012)), stone_r=rng.uniform(0.0025, 0.0045), band="plat" if k % 3 else "gold",
-                 stone=stones[k % len(stones)], upright=False, rot=(rng.uniform(-0.15, 0.15), rng.uniform(-0.15, 0.15), rng.uniform(0, 6.28)))
+        a = rng.uniform(0, 6.28); rr = rng.uniform(0.0, 0.028)
+        p = base + Vector((rr * math.cos(a) - 0.01, rr * math.sin(a), 0.0015 + 0.004 * (k % 3) + 0.006 * (rr < 0.012)))
+        r = ring(f"Ring{k}", p, stone_r=rng.uniform(0.0022, 0.004), band="plat_dirty" if k % 3 else "gold_dirty",
+                 stone=stones[k % len(stones)], upright=False, rot=(rng.uniform(-0.6, 0.6), rng.uniform(-0.6, 0.6), rng.uniform(0, 6.28)))
         items.append(r)
     for k in range(n_ear):
-        x = rng.uniform(-size[0] / 2 + 0.02, size[0] / 2 - 0.02); y = rng.uniform(-size[1] / 2 + 0.02, size[1] / 2 - 0.02)
-        items.append(earring(f"Ear{k}", base + Vector((x, y, 0.004)), rng.uniform(0.0022, 0.0035)))
-    hero = ring("HeroRing", base + Vector((0.01, 0.0, 0.006)), stone_r=0.0105, band="plat", upright=False, band_r=0.0105,
-                rot=(0.08, -0.05, 0.4))
+        a = rng.uniform(0, 6.28); rr = rng.uniform(0.0, 0.03)
+        items.append(earring(f"Ear{k}", base + Vector((rr * math.cos(a), rr * math.sin(a), 0.006)), rng.uniform(0.002, 0.003)))
+    hero = ring("HeroRing", base + Vector((0.012, 0.004, 0.012)), stone_r=0.0072 * hero_scale, band="plat_dirty", upright=True, band_r=0.0095,
+                rot=(0.35, 0.1, 0.4), setting_h=0.002)
     return hero, items
 
 
 # ============================================================================ the pavillon (suburban house)
-def pavillon(origin=(0, 0, 0), w=9.0, d=8.0, floors=2, rot_z=0.0, name="House", stone=True):
-    """A 1930s Paris-suburb pavillon: millstone (meuliere) walls, a pitched clay-tile roof, white shutters, zinc gutter."""
+def roller_shutter_mat(name):
+    """White PVC roller-shutter slats (procedural horizontal grooves)."""
+    m = pbr(name, (0.8, 0.8, 0.78), 0.45)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
+    w = N.new("ShaderNodeTexWave"); w.wave_type = 'BANDS'; w.bands_direction = 'Z'; w.inputs['Scale'].default_value = 40
+    L.new(tc.outputs['Object'], w.inputs['Vector'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.4; L.new(w.outputs['Fac'], bp.inputs['Height'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def pavillon(origin=(0, 0, 0), w=9.0, d=8.0, floors=2, rot_z=0.0, name="House", stone=True, shutters=(0.55, 0.3, 0.0, 0.7, 0.45)):
+    """A 1930s Paris-suburb pavillon: millstone (meuliere) ground storey, cream render above with stone quoins,
+    a clay-tile roof, white roller shutters part-down over the windows, a zinc gutter and downpipe."""
     ox, oy, oz = origin
     fh = 2.9
     H = floors * fh
-    walls = tex_mat("old_stone_wall", 0.45, tint=(0.95, 0.88, 0.78), name=name + "Meuliere", sat=0.6) if stone else \
-        tex_mat("plastered_wall_03", 0.5, tint=(0.92, 0.88, 0.8), name=name + "Plaster")
-    roof = tex_mat("clay_roof_tiles_02", 0.8, tint=(0.75, 0.5, 0.4), name=name + "Roof")
-    trim = pbr(name + "Trim", (0.86, 0.84, 0.8), 0.6)
-    shut = pbr(name + "Shutter", (0.82, 0.83, 0.82), 0.5)
+    meul = tex_mat("old_stone_wall", 0.45, tint=(0.95, 0.88, 0.78), name=name + "Meuliere", sat=0.6)
+    render_ = tex_mat("plastered_wall_03", 0.4, tint=(0.95, 0.9, 0.8), name=name + "Render", sat=0.7) if stone else \
+        tex_mat("plastered_wall_03", 0.4, tint=(0.85, 0.86, 0.84), name=name + "RenderG", sat=0.5)
+    roof = tex_mat("clay_roof_tiles_02", 0.8, tint=(0.72, 0.5, 0.42), name=name + "Roof", sat=0.7)
+    trim = pbr(name + "Trim", (0.82, 0.8, 0.76), 0.6)
+    brick = tex_mat("red_brick_03", 0.9, tint=(0.8, 0.6, 0.5), name=name + "Brick", sat=0.6) if stone else trim
+    rs = roller_shutter_mat(name + "Roller")
     glass_m = pbr(name + "Glass", (0.03, 0.035, 0.04), 0.04, 0.0, **{'Coat Weight': 1.0})
+    curtain = fabric(name + "Curtain", (0.62, 0.58, 0.5), 0.9, 0.4, 300)
     zinc = pbr(name + "Zinc", (0.42, 0.44, 0.45), 0.35, 0.9)
-    parts = []
-    parts.append(box(name + "Walls", (0, d / 2, H / 2), (w, d, H), walls))
-    parts.append(box(name + "Plinth", (0, d / 2, 0.25), (w + 0.06, d + 0.06, 0.5), pbr(name + "Plinth", (0.45, 0.44, 0.42), 0.8)))
+    B = Builder(name)
+    B.box((0, d / 2, fh / 2), (w, d, fh), meul if stone else render_)
+    B.box((0, d / 2, fh + (H - fh) / 2), (w, d, H - fh), render_)
+    B.box((0, d / 2, 0.25), (w + 0.06, d + 0.06, 0.5), pbr(name + "Plinth", (0.4, 0.39, 0.37), 0.8))
+    for sx in (-1, 1):                                    # brick quoins at the corners
+        for k in range(int(H / 0.3)):
+            ln = 0.42 if k % 2 else 0.26
+            B.box((sx * (w / 2 - ln / 2 + 0.02), -0.02, 0.15 + k * 0.3), (ln, 0.06, 0.26), brick)
     for k in range(floors):
-        parts.append(box(name + "Band", (0, -0.03, (k + 1) * fh - 0.1), (w + 0.04, 0.08, 0.16), trim))
-    # roof: two slopes meeting at a ridge along x
+        B.box((0, -0.04, (k + 1) * fh - 0.1), (w + 0.04, 0.1, 0.16), trim)
     pitch = math.radians(38); half = d / 2 + 0.4; rl = half / math.cos(pitch)
     for sgn in (-1, 1):
-        r = box(name + "RoofSlope", (0, d / 2 + sgn * half / 2, H + half * math.tan(pitch) / 2), (w + 0.6, rl, 0.12), roof,
-                rot=(sgn * pitch, 0, 0))
-        parts.append(r)
-    # gable infill
-    bm = bmesh.new()
-    for sx in (-w / 2, w / 2):
-        v = [bm.verts.new((sx, 0, H)), bm.verts.new((sx, d, H)), bm.verts.new((sx, d / 2, H + (d / 2) * math.tan(pitch)))]
-        bm.faces.new(v)
-    me = bpy.data.meshes.new(name + "Gable"); bm.to_mesh(me); bm.free()
-    g = bpy.data.objects.new(name + "Gable", me); bpy.context.collection.objects.link(g); g.data.materials.append(walls)
-    g.modifiers.new("s", 'SOLIDIFY').thickness = 0.2
-    parts.append(g)
-    # windows with shutters on the front (y = 0 face)
-    wins = []
+        B.box((0, d / 2 + sgn * half / 2, H + half * math.tan(pitch) / 2), (w + 0.6, rl, 0.12), roof, rot=(sgn * pitch, 0, 0))
+    B.box((0, d / 2, H + half * math.tan(pitch) + 0.05), (w + 0.6, 0.25, 0.18), roof)
+    B.box((w * 0.25, d * 0.6, H + 2.6), (0.6, 0.6, 1.6), brick)          # chimney
     cols = [-w / 2 + 1.6, -0.3, w / 2 - 1.6]
+    wins = []
+    si = 0
     for k in range(floors):
         z = k * fh + 1.55
         for i, x in enumerate(cols):
             if k == 0 and i == 1:
-                # front door
-                parts.append(box(name + "Door", (x, -0.02, 1.15), (1.0, 0.06, 2.2), pbr(name + "DoorWood", (0.14, 0.09, 0.06), 0.5)))
-                parts.append(box(name + "DoorFrame", (x, -0.03, 2.3), (1.3, 0.08, 0.14), trim))
-                parts.append(box(name + "Step", (x, -0.4, 0.09), (1.6, 0.8, 0.18), pbr(name + "Step", (0.5, 0.49, 0.47), 0.7)))
+                B.box((x, -0.03, 1.15), (1.0, 0.08, 2.2), pbr(name + "DoorWood", (0.16, 0.1, 0.07), 0.45))
+                B.box((x, -0.05, 2.33), (1.3, 0.1, 0.16), trim)
+                B.box((x, -0.45, 0.09), (1.6, 0.8, 0.18), pbr(name + "Step", (0.5, 0.49, 0.47), 0.7))
+                B.box((x + 0.3, -0.08, 1.05), (0.04, 0.03, 0.12), zinc)
                 continue
-            parts.append(box(name + "Win", (x, -0.015, z), (1.0, 0.04, 1.4), glass_m))
-            parts.append(box(name + "Sill", (x, -0.08, z - 0.75), (1.2, 0.18, 0.08), trim))
-            parts.append(box(name + "Lintel", (x, -0.03, z + 0.76), (1.2, 0.08, 0.14), trim))
-            parts.append(box(name + "Mull", (x, -0.03, z), (0.05, 0.03, 1.4), trim))
+            B.box((x, 0.02, z), (1.0, 0.04, 1.4), glass_m)
+            B.box((x, 0.05, z), (1.0, 0.02, 1.4), curtain)
+            B.box((x, -0.08, z - 0.75), (1.2, 0.18, 0.08), trim)
+            B.box((x, -0.02, z), (0.05, 0.03, 1.4), trim)
             for sx in (-1, 1):
-                s = box(name + "Shut", (x + sx * 0.78, -0.06, z), (0.5, 0.04, 1.45), shut)
-                parts.append(s)
-                for j in range(9):
-                    parts.append(box(name + "Slat", (x + sx * 0.78, -0.085, z - 0.6 + j * 0.15), (0.44, 0.012, 0.03), shut))
+                B.box((x + sx * 0.54, -0.03, z), (0.08, 0.08, 1.45), trim)
+            # roller shutter: box above, the slatted curtain drawn part-way down
+            down = shutters[si % len(shutters)]; si += 1
+            B.box((x, -0.07, z + 0.82), (1.16, 0.2, 0.24), rs)
+            if down > 0.02:
+                hh = 1.4 * down
+                B.box((x, -0.04, z + 0.7 - hh / 2), (1.04, 0.03, hh), rs)
             wins.append(Vector((x, 0, z)))
-    # gutter + downpipe at the front right
-    parts.append(cyl(name + "Gutter", (0, -0.5, H + 0.05), 0.06, w + 0.6, zinc, verts=12, rot=(0, math.radians(90), 0)))
+    B.cyl((0, -0.5, H + 0.05), 0.06, w + 0.6, zinc, verts=12, rot=(0, math.radians(90), 0))
     dp_x = w / 2 - 0.5
-    parts.append(cyl(name + "Downpipe", (dp_x, -0.12, H / 2), 0.045, H, zinc, verts=12))
-    house = join(parts, name)
-    house.location = (ox, oy, oz); house.rotation_euler = (0, 0, rot_z)
+    B.cyl((dp_x, -0.12, H / 2 + 0.2), 0.045, H - 0.4, zinc, verts=12)
+    house = B.done((ox, oy, oz), rot_z)
     return house, dict(downpipe=Vector((ox + dp_x, oy - 0.12, 0)), door=Vector((ox - 0.3, oy - 0.4, 0)), height=H)
 
 

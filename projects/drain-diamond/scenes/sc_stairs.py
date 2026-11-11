@@ -50,7 +50,7 @@ def powder_volume(name, loc, size, expr_density, drift=(0.0, 0.0, -0.06), scale=
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled")
-    vol.inputs['Color'].default_value = (0.95, 0.95, 0.93, 1); vol.inputs['Anisotropy'].default_value = 0.2
+    vol.inputs['Color'].default_value = (1.0, 1.0, 1.0, 1); vol.inputs['Anisotropy'].default_value = 0.35
     tc = N.new("ShaderNodeTexCoord"); t = dd.frame_value(N, "frame / 24.0", "T")
     off = N.new("ShaderNodeCombineXYZ")
     for i, ax in enumerate("XYZ"):
@@ -62,7 +62,7 @@ def powder_volume(name, loc, size, expr_density, drift=(0.0, 0.0, -0.06), scale=
     tw = N.new("ShaderNodeMath"); tw.operation = 'MULTIPLY'; tw.inputs[1].default_value = 0.25; L.new(t.outputs[0], tw.inputs[0])
     L.new(add.outputs[0], nz.inputs['Vector']); L.new(tw.outputs[0], nz.inputs['W'])
     mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.42; mr.inputs['From Max'].default_value = 0.72
-    mr.inputs['To Max'].default_value = 1.0; L.new(nz.outputs['Fac'], mr.inputs['Value'])
+    mr.inputs['To Max'].default_value = 3.0; L.new(nz.outputs['Fac'], mr.inputs['Value'])
     # soft edges toward the box faces (generated coords 0..1)
     edge = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], edge.inputs[0])
     fall = None
@@ -103,20 +103,36 @@ def dusted(m, expr):
 
 
 def extinguisher(name):
-    red = pbr("ExtRed", (0.5, 0.03, 0.02), 0.3, 0.1, **{'Coat Weight': 0.8})
-    blk = pbr("ExtBlack", (0.02, 0.02, 0.02), 0.5)
-    R = (math.radians(90), 0, 0)              # body axis along Y, so it rolls along X
+    """A red stored-pressure extinguisher lying on its side (axis along Y, so it rolls along X): domed cylinder, neck,
+    black valve head with carry handle and squeeze lever, a plain white label band, a black hose with a nozzle."""
+    red = pbr("ExtRed", (0.55, 0.02, 0.015), 0.22, 0.1, **{'Coat Weight': 1.0, 'Coat Roughness': 0.05})
+    blk = pbr("ExtBlack", (0.02, 0.02, 0.02), 0.45)
+    chrome = pbr("ExtChrome", (0.7, 0.7, 0.72), 0.15, 1.0)
+    label = pbr("ExtLabel", (0.82, 0.82, 0.78), 0.6)
+    R = (math.radians(90), 0, 0)
     B = dd.Builder(name)
-    B.cyl((0, 0, 0), 0.08, 0.5, red, verts=24, rot=R).cyl((0, 0.29, 0), 0.025, 0.08, blk, verts=12, rot=R)
-    B.box((0, 0.34, 0.04), (0.02, 0.12, 0.015), blk).cyl((0.07, 0.15, 0.04), 0.012, 0.35, blk, verts=8, rot=R)
+    B.cyl((0, 0, 0), 0.08, 0.42, red, verts=32, rot=R)
+    B.cyl((0, -0.02, 0), 0.0805, 0.16, label, verts=32, rot=R)
+    for k in range(5):                                   # the domed top as stacked rings
+        r_ = 0.08 * math.cos(math.radians(18 * (k + 1)))
+        B.cyl((0, 0.21 + 0.012 * k + 0.006, 0), r_, 0.014, red, verts=32, rot=R)
+    B.cyl((0, -0.215, 0), 0.078, 0.012, blk, verts=32, rot=R)
+    B.cyl((0, 0.29, 0), 0.022, 0.05, chrome, verts=16, rot=R)
+    B.box((0, 0.335, 0.0), (0.05, 0.05, 0.05), blk)
+    B.box((0, 0.36, 0.06), (0.03, 0.12, 0.012), blk, rot=(math.radians(-15), 0, 0))     # lever
+    B.box((0, 0.35, -0.045), (0.03, 0.1, 0.012), blk, rot=(math.radians(10), 0, 0))     # carry handle
+    for k in range(10):                                  # hose: a curve of short segments down the body
+        a = k / 9.0
+        B.cyl((0.075 + 0.02 * math.sin(a * 3.0), 0.33 - 0.5 * a, 0.03 - 0.06 * a), 0.011, 0.07, blk, verts=8, rot=R)
+    B.cyl((0.09, -0.2, -0.03), 0.016, 0.07, blk, verts=10, rot=R)
     return B.done()
 
 
 def build(variant=None):
     c = {}
     world_flat((0.04, 0.04, 0.045), 1.0)
-    wall = dd.tex_mat("painted_plaster_wall", 0.8, tint=(0.85, 0.85, 0.82), name="StairWall", sat=0.4)
-    step = dd.tex_mat("concrete_floor_painted", 1.0, tint=(0.6, 0.6, 0.6), name="StairStep", sat=0.3)
+    wall = dd.tex_mat("painted_concrete", 0.6, tint=(0.88, 0.88, 0.85), name="StairWall", sat=0.4)
+    step = dd.tex_mat("concrete_floor_02", 1.0, tint=(0.75, 0.75, 0.74), name="StairStep", sat=0.2)
     settle = "min(1, max(0, (frame - 10) / 100.0))" if variant == "settle" else "min(0.5, frame / 240.0)"
     dusted(step, settle); dusted(wall, settle + " * 0.4")
     nose = pbr("Nosing", (0.2, 0.2, 0.21), 0.4, 0.8)
@@ -131,9 +147,10 @@ def build(variant=None):
     # light: one caged bulb per landing, warm; a green exit sign glow (no text)
     for f in range(-1, 2):
         for (y, dz) in ((-0.9, 2.6), (L + 1.0, 2.6 + FH / 2)):
-            l = bpy.data.lights.new("Bulb", 'POINT'); l.energy = 320; l.color = (0.92, 0.96, 1.0); l.shadow_soft_size = 0.05
-            o = bpy.data.objects.new("Bulb", l); bpy.context.collection.objects.link(o); o.location = (0.9, y, f * FH + dz)
-            cyl("BulbGlass", (0.9, y, f * FH + dz), 0.04, 0.1, emissive("BulbE", (0.92, 0.96, 1.0), 20), verts=12)
+            l = bpy.data.lights.new("Fluo", 'AREA'); l.shape = 'RECTANGLE'; l.size = 1.2; l.size_y = 0.12; l.energy = 260; l.color = (0.9, 0.96, 1.0)
+            o = bpy.data.objects.new("Fluo", l); bpy.context.collection.objects.link(o); o.location = (0.0, y, f * FH + dz + 0.25)
+            box("FluoHousing", (0.0, y, f * FH + dz + 0.33), (1.25, 0.14, 0.05), pbr("FluoH", (0.85, 0.85, 0.83), 0.5))
+            box("FluoTube", (0.0, y, f * FH + dz + 0.29), (1.2, 0.05, 0.03), emissive("FluoE", (0.9, 0.96, 1.0), 12))
     box("ExitSign", (-1.29, -0.6, 2.4), (0.02, 0.35, 0.15), emissive("ExitGreen", (0.1, 1.0, 0.35), 3))
     box("ExitDoor", (-1.29, -0.5, 1.05), (0.04, 0.95, 2.1), pbr("ExitDoorM", (0.25, 0.27, 0.28), 0.4, 0.6))
     if variant == "settle":

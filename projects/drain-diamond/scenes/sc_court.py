@@ -26,14 +26,15 @@ DOCK = (4.6, 6.6, 9.0, 13.5)      # x0, x1, y0, y1 of the glass dock
 
 
 def room():
-    oak = wood("CourtOak", (0.16, 0.09, 0.045), (0.3, 0.18, 0.09), scale=(0.3, 6, 6), rough=0.4, coat=0.3)
-    dark = wood("CourtDark", (0.07, 0.04, 0.02), (0.15, 0.085, 0.04), scale=(0.3, 6, 6), rough=0.35, coat=0.35)
+    oak = dd.tex_mat("oak_veneer_01", 1.2, tint=(0.85, 0.75, 0.62), name="CourtOak", sat=0.8, coat=0.25)
+    dark = dd.tex_mat("walnut_veneer", 1.2, tint=(0.7, 0.62, 0.55), name="CourtDark", sat=0.8, coat=0.3)
+    panel = dd.tex_mat("wooden_panels", 0.5, tint=(0.8, 0.7, 0.58), name="CourtPanel", sat=0.8)
     plaster = pbr("CourtPlaster", (0.68, 0.66, 0.6), 0.85)
     B = dd.Builder("Courtroom")
     B.box((0, 10, -0.05), (14, 22, 0.1), dd.tex_mat("herringbone_parquet", 0.5, tint=(0.75, 0.68, 0.6), name="Parquet", sat=0.7))
-    B.box((0, 20.6, 4), (14, 0.2, 8), oak).box((-7.1, 10, 4), (0.2, 22, 8), plaster).box((0, -0.6, 4), (14, 0.2, 8), plaster)
+    B.box((0, 20.6, 4), (14, 0.2, 8), panel).box((-7.1, 10, 4), (0.2, 22, 8), plaster).box((0, -0.6, 4), (14, 0.2, 8), plaster)
     B.box((0, 10, 8.1), (14, 22, 0.2), pbr("CourtCeil", (0.72, 0.7, 0.66), 0.85))
-    B.box((-7.0, 10, 1.1), (0.1, 22, 2.2), oak)                       # wainscot
+    B.box((-7.0, 10, 1.1), (0.1, 22, 2.2), panel)                     # wainscot
     for y in np.arange(0.5, 20, 1.6):
         B.box((-6.95, y, 1.1), (0.03, 0.05, 2.2), dark)
     for k in range(6):                                               # right wall: tall windows
@@ -43,7 +44,7 @@ def room():
     B.box((0, BENCH_Y + 1.0, 0.25), (9, 3.0, 0.5), oak)
     B.box((0, BENCH_Y, 1.05), (7.5, 0.9, 1.1), dark).box((0, BENCH_Y, 1.62), (7.7, 1.0, 0.05), oak)
     for x in (-1.6, 0, 1.6):
-        B.box((x, BENCH_Y + 0.9, 1.35), (0.7, 0.6, 1.7), pbr("JudgeChair", (0.12, 0.03, 0.03), 0.45))
+        B.box((x, BENCH_Y + 0.9, 1.35), (0.7, 0.6, 1.7), dd.tex_mat("leather_red_02", 1.0, tint=(0.6, 0.5, 0.5), name="JudgeLeather"))
     B.box((-2.8, BENCH_Y - 2.0, 0.55), (2.6, 0.8, 1.1), dark)          # clerk
     B.box((-5.3, 13.5, 0.2), (2.4, 3.0, 0.4), oak).box((-4.6, 13.5, 0.95), (0.8, 2.6, 1.1), dark)   # prosecutor
     # the glass dock: oak base, glass walls

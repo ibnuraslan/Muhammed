@@ -34,17 +34,51 @@ _M = {}
 
 def mats():
     if not _M:
-        _M["stone"] = dd.tex_mat("white_sandstone_blocks_02", 0.3, tint=(0.98, 0.93, 0.85), name="Limestone", sat=0.7)
-        _M["stone_plain"] = dd.tex_mat("white_sandstone_bricks", 0.6, tint=(0.95, 0.9, 0.83), name="LimestoneP", sat=0.6)
+        _M["stone"] = ashlar("Limestone", course=0.52, block=1.15)
+        _M["stone_gf"] = ashlar("LimestoneGF", course=0.42, block=1.0, mortar=0.022, groove=True)
+        _M["stone_plain"] = ashlar("LimestoneP", course=10.0, block=10.0, mortar=0.0)
         _M["slate"] = dd.tex_mat("roof_slates_02", 0.5, tint=(0.55, 0.6, 0.66), name="Slate", sat=0.5)
         _M["glass"] = pbr("WinGlass", (0.02, 0.025, 0.03), 0.03, 0.2, **{'Coat Weight': 1.0})
         _M["frame"] = pbr("WinFrame", (0.78, 0.76, 0.72), 0.5)
         _M["iron"] = pbr("Iron", (0.025, 0.027, 0.03), 0.45, 0.7)
-        _M["bronze"] = pbr("Bronze", (0.16, 0.11, 0.06), 0.3, 0.9)
+        _M["bronze"] = pbr("Bronze", (0.5, 0.36, 0.16), 0.28, 1.0)
+        _M["lacquer"] = pbr("BlackLacquer", (0.012, 0.012, 0.014), 0.12, 0.0, **{'Coat Weight': 1.0, 'Coat Roughness': 0.03})
         _M["awning"] = fabric("Awning", (0.018, 0.02, 0.026), 0.85, 0.4, 600)
         _M["lit"] = emissive("ShopGlow", WARM, 2.5)
-        _M["curtain_lit"] = emissive("RoomGlow", (1.0, 0.82, 0.6), 0.8)
+        _M["curtain_lit"] = emissive("RoomGlow", (1.0, 0.8, 0.55), 1.6)
     return _M
+
+
+def ashlar(name, course=0.5, block=1.1, mortar=0.006, groove=False):
+    """Paris limestone ashlar: a pale stone texture laid in courses with fine joints (Brick Texture on the facade's
+    x/z), each block a slightly different cream; the ground floor gets deeper rusticated grooves."""
+    m = dd.tex_mat("beige_wall_001", 0.6, tint=(1.0, 0.97, 0.9), name=name, sat=0.6)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    src = p.inputs['Base Color'].links[0].from_socket
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
+    # horizontal coordinate: x on y-facing faces, y on x-facing faces
+    geo = N.new("ShaderNodeNewGeometry"); nrm = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Normal'], nrm.inputs[0])
+    ax = N.new("ShaderNodeMath"); ax.operation = 'ABSOLUTE'; L.new(nrm.outputs['X'], ax.inputs[0])
+    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.5; L.new(ax.outputs[0], gt.inputs[0])
+    hm = N.new("ShaderNodeMix"); hm.data_type = 'FLOAT'; L.new(gt.outputs[0], hm.inputs['Factor']); L.new(sep.outputs['X'], hm.inputs[2]); L.new(sep.outputs['Y'], hm.inputs[3])
+    uv = N.new("ShaderNodeCombineXYZ"); L.new(hm.outputs[0], uv.inputs['X']); L.new(sep.outputs['Z'], uv.inputs['Y'])
+    br = N.new("ShaderNodeTexBrick"); br.offset = 0.5; br.squash = 1.0
+    br.inputs['Scale'].default_value = 1.0; br.inputs['Brick Width'].default_value = block; br.inputs['Row Height'].default_value = course
+    br.inputs['Mortar Size'].default_value = mortar; br.inputs['Mortar Smooth'].default_value = 0.3; br.inputs['Bias'].default_value = 0.0
+    br.inputs['Color1'].default_value = (1.0, 0.985, 0.95, 1); br.inputs['Color2'].default_value = (0.93, 0.9, 0.84, 1)
+    br.inputs['Mortar'].default_value = (0.62, 0.58, 0.52, 1)
+    L.new(uv.outputs[0], br.inputs['Vector'])
+    mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
+    L.new(src, mul.inputs[6]); L.new(br.outputs['Color'], mul.inputs[7]); L.new(mul.outputs[2], p.inputs['Base Color'])
+    if mortar > 0:
+        inv = N.new("ShaderNodeMath"); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0; L.new(br.outputs['Fac'], inv.inputs[1])
+        bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.9 if groove else 0.35
+        bp.inputs['Distance'].default_value = 0.02 if groove else 0.004
+        L.new(inv.outputs[0], bp.inputs['Height'])
+        if p.inputs['Normal'].is_linked:
+            L.new(p.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+        L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    return m
 
 
 # ============================================================================ the Haussmann block
@@ -74,11 +108,11 @@ def haussmann(x0, x1, seed=0, boutique=False, depth=14.0, gf=5.0, floors=5, fh=3
             B.box((x, 0.0, zc + wh * 0.25), (1.25, 0.04, 0.04), M["frame"])
             if rng.random() < lit_frac:
                 B.box((x, 0.12, zc), (1.2, 0.02, wh * 0.95), M["curtain_lit"])
-            if f not in (0, 3):           # individual balconettes (continuous balconies on floors 1 and 4)
+            if f not in (1, 4):           # individual balconettes (continuous balconies on the 2nd and 5th floors)
                 B.box((x, -0.18, z0 + 0.95), (1.3, 0.02, 0.05), M["iron"])
                 for k in range(9):
                     B.box((x - 0.6 + k * 0.15, -0.18, z0 + 0.7), (0.012, 0.012, 0.5), M["iron"])
-        if f in (0, 3):                   # continuous balcony
+        if f in (1, 4):                   # continuous balcony
             B.box((cx, -0.45, z0 + 0.05), (w - 0.2, 0.9, 0.16), M["stone_plain"])
             B.box((cx, -0.86, z0 + 1.08), (w - 0.2, 0.03, 0.05), M["iron"])
             n = int((w - 0.3) / 0.13)
@@ -113,9 +147,9 @@ def haussmann(x0, x1, seed=0, boutique=False, depth=14.0, gf=5.0, floors=5, fh=3
     edges = [x0] + [e for x, ww in sorted(opens) for e in (x - ww / 2, x + ww / 2)] + [x1]
     for a_, b_ in zip(edges[0::2], edges[1::2]):
         if b_ - a_ > 0.01:
-            B.box(((a_ + b_) / 2, 0.6, gf / 2), (b_ - a_, 1.2, gf), M["stone"])
+            B.box(((a_ + b_) / 2, 0.6, gf / 2), (b_ - a_, 1.2, gf), M["stone_gf"])
     for x, ww in opens:
-        B.box((x, 0.6, 4.4), (ww, 1.2, gf - 4.0 if gf > 4.4 else 0.2), M["stone"])
+        B.box((x, 0.6, 4.4), (ww, 1.2, gf - 4.0 if gf > 4.4 else 0.2), M["stone_gf"])
     B.box((cx, -0.08, gf - 0.1), (w + 0.04, 0.2, 0.3), M["stone_plain"])
     o = B.done(origin, rot_z)
     return o, info
@@ -130,11 +164,16 @@ def shop_front(B, x0, x1, gf, info):
         isdoor = (i == 1)
         ww = 2.4 if isdoor else 3.6
         for sx in (-1, 1):
-            B.box((x + sx * (ww / 2 + 0.07), 0.0, 2.0), (0.14, 0.14, 4.0), M["bronze"])
-        B.box((x, 0.0, 4.0), (ww + 0.3, 0.14, 0.14), M["bronze"])
+            B.box((x + sx * (ww / 2 + 0.09), -0.02, 2.0), (0.18, 0.16, 4.0), M["lacquer"])
+            B.box((x + sx * (ww / 2 + 0.005), -0.1, 2.0), (0.025, 0.02, 4.0), M["bronze"])
+        B.box((x, -0.02, 4.02), (ww + 0.36, 0.16, 0.2), M["lacquer"])
+        B.box((x, -0.11, 3.94), (ww + 0.1, 0.02, 0.025), M["bronze"])
+        B.box((x, -0.02, 0.1), (ww + 0.36, 0.16, 0.2), M["lacquer"])
         if isdoor:
             B.box((x, 0.03, 1.6), (ww - 0.2, 0.04, 3.2), M["glass"])
-            B.box((x, 0.0, 1.6), (0.06, 0.06, 3.2), M["bronze"])
+            B.box((x, 0.0, 1.6), (0.08, 0.08, 3.2), M["lacquer"])
+            for sx in (-1, 1):
+                B.box((x + sx * 0.12, -0.04, 1.2), (0.03, 0.03, 0.9), M["bronze"])       # brass pull handles
             B.box((x, -0.45, 0.06), (ww + 0.8, 0.9, 0.12), M["stone_plain"])
             doors.append(Vector((x, 0, 0)))
         else:
@@ -177,8 +216,13 @@ def street(c, y_kerb=-6.0, length=140, opposite=True):
     # lamp posts and a few parked cars along the kerb
     for k in range(-5, 6):
         x = k * 11.0 + 3.0
-        cyl("LampPost", (x, y_kerb + 0.6, 2.4), 0.07, 4.8, mats()["iron"], verts=12)
-        box("LampHead", (x, y_kerb + 0.6, 5.0), (0.35, 0.35, 0.5), pbr("LampGlass", (0.8, 0.78, 0.7), 0.3))
+        dd.model_h("street_lamp_02", (x, y_kerb + 0.6, 0.06), 4.6) if k % 2 == 0 else None
+    rng = np.random.default_rng(77)
+    for k in range(-4, 5):                       # plane trees along the kerb (and on the far side)
+        x = k * 9.0 - 1.5 + float(rng.uniform(-1, 1))
+        dd.model_h(("island_tree_02", "island_tree_01")[k % 2], (x, y_kerb + 1.4, 0.06), float(rng.uniform(8.5, 10.5)), rot_z=float(rng.uniform(0, 6)))
+        if opposite:
+            dd.model_h(("island_tree_01", "island_tree_02")[k % 2], (x + 4.0, y_kerb - 17.2, 0.06), float(rng.uniform(8.5, 10.5)), rot_z=float(rng.uniform(0, 6)))
     cars = []
     for k, (x, col) in enumerate(((-14, (0.05, 0.05, 0.06)), (-8.5, (0.4, 0.41, 0.43)), (9, (0.12, 0.14, 0.18)), (15, (0.6, 0.6, 0.6)))):
         cr = car(f"Parked{k}", col); cr.location = (x, y_kerb - 1.2, 0); cars.append(cr)
@@ -186,7 +230,7 @@ def street(c, y_kerb=-6.0, length=140, opposite=True):
 
 
 def doorman(c, loc):
-    h = person("Doorman", 1.0, 52, "male_elegantsuit01", "short04", cval=0.12, hv=0.6, sat=0.3)
+    h = dd.guard("Doorman", 52, "short04")
     broom = dd.model_h("wooden_broom", (0, 0, 0), 1.35) or cyl("Broom", (0, 0, 0.65), 0.012, 1.3, pbr("BroomW", (0.3, 0.2, 0.1), 0.6))
     c["doorman"] = h; c["broom"] = broom; c["doorman_at"] = Vector(loc)
 
@@ -209,9 +253,28 @@ def anim_doorman(c, sec):
     fingers_curl(h, 60, thumb=30)
 
 
+def paint_stains(m, seed=0):
+    """Splashes and smears of paint on the white overalls (noise-masked flecks, a few colours)."""
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    src = p.inputs['Base Color'].links[0].from_socket
+    tc = N.new("ShaderNodeTexCoord"); cur = src
+    for k, (col, sc, th) in enumerate((((0.55, 0.62, 0.7), 9.0, 0.7), ((0.85, 0.8, 0.62), 14.0, 0.72), ((0.35, 0.36, 0.38), 30.0, 0.76))):
+        nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['W'].default_value = seed * 3.1 + k * 7.7
+        nz.inputs['Scale'].default_value = sc; nz.inputs['Detail'].default_value = 8; nz.inputs['Roughness'].default_value = 0.7
+        L.new(tc.outputs['Object'], nz.inputs['Vector'])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = th; mr.inputs['From Max'].default_value = th + 0.03
+        L.new(nz.outputs['Fac'], mr.inputs['Value'])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs[7].default_value = (*col, 1)
+        L.new(mr.outputs[0], mx.inputs['Factor']); L.new(cur, mx.inputs[6]); cur = mx.outputs[2]
+    L.new(cur, p.inputs['Base Color'])
+
+
 def painter(name, years, seed):
-    h = person(name, 1.0, years, "male_worksuit01", ("short02", "short01", "short03", "short04")[seed % 4], cval=1.05, sat=0.0,
+    h = person(name, 1.0, years, "male_worksuit01", ("short02", "short01", "short03", "short04")[seed % 4], cval=1.75, sat=0.0,
                hv=0.2 + 0.15 * (seed % 2), height=0.45 + 0.05 * (seed % 3), weight=0.5)
+    m = bpy.data.materials.get(f"{name}_male_worksuit01")
+    if m:
+        paint_stains(m, seed)
     return h
 
 
@@ -226,9 +289,9 @@ def paint_tin(name):
 def build_dawn(c):
     world_sky(sun_elev_deg=4, sun_rot_deg=200, strength=0.6, tint=(0.88, 0.92, 1.0))
     sun(4, 200, energy=0.9, color=(1.0, 0.72, 0.5), angle_deg=2.0)
-    blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.08)
-    haussmann(-34, -11, seed=2, lit_frac=0.12); haussmann(11, 33, seed=3, lit_frac=0.1)
-    haussmann(33, 55, seed=4, lit_frac=0.1); haussmann(-56, -34, seed=5, lit_frac=0.1)
+    blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.3)
+    haussmann(-34, -11, seed=2, lit_frac=0.28); haussmann(11, 33, seed=3, lit_frac=0.25)
+    haussmann(33, 55, seed=4, lit_frac=0.25); haussmann(-56, -34, seed=5, lit_frac=0.25)
     show_lights(info); c["info"] = info
     street(c)
     doorman(c, info["door"] + Vector((1.1, -0.9, 0)))
@@ -239,7 +302,7 @@ def build_dawn(c):
     for k in range(12):
         gr.append(box("GrilleH", (0, 0, 0.1 + k * 0.28), (2.5, 0.02, 0.02), mats()["iron"]))
     c["grille"] = join(gr, "Grille"); c["grille"].location = info["door"] + Vector((0, -0.1, 0))
-    st = person("Staff", 0.0, 34, "female_elegantsuit01", "bob01", cval=0.15, hv=0.25)
+    st = dd.staff("Staff", 0.0, 34, "bob01", seed=0)
     c["staff"] = st
     haze = dd.frame_value  # (unused placeholder to keep imports explicit)
 
@@ -251,16 +314,24 @@ def build_lane(c, night=False):
             sl = bpy.data.lights.new("StreetL", 'SPOT'); sl.energy = 500; sl.spot_size = math.radians(110); sl.color = (1.0, 0.7, 0.42)
             so = bpy.data.objects.new("StreetL", sl); bpy.context.collection.objects.link(so); so.location = (-3.5, y, 6.0)
     else:
-        world_sky(sun_elev_deg=4, sun_rot_deg=95, strength=0.8, tint=(0.88, 0.92, 1.0))
-        sun(4, 95, energy=0.9, color=(1.0, 0.75, 0.55), angle_deg=1.5)
+        world_sky(sun_elev_deg=6, sun_rot_deg=180, strength=1.4, tint=(0.9, 0.93, 1.0))
+        sun(6, 180, energy=1.4, color=(1.0, 0.72, 0.5), angle_deg=3.0)
     # a narrow rue running along +Y: the boutique block's side on the right (x>0), another block on the left
     haussmann(-30, 30, seed=7, rot_z=math.radians(-90), origin=(4.0, 0, 0), lit_frac=0.06, gf=5.0)
     haussmann(-30, 30, seed=8, rot_z=math.radians(90), origin=(-4.0, 0, 0), lit_frac=0.06, gf=5.0)
     road = dd.wet(dd.tex_mat("cobblestone_floor_04", 0.6, tint=(0.55, 0.55, 0.56), name="Cobbles", sat=0.4), 0.4, 0.4, ripples=False)
     box("Lane", (0, 0, -0.05), (8, 70, 0.1), road)
     haussmann(-12, 12, seed=9, rot_z=0.0, origin=(0, 30.0, 0), lit_frac=0.1)      # closes the end of the lane
-    for sx in (-1, 1):
-        box("LanePave", (sx * 3.3, 0, 0.02), (1.4, 70, 0.14), dd.tex_mat("concrete_floor_02", 0.5, tint=(0.6, 0.6, 0.58), name="LP", sat=0.3))
+    for sx in (-1, 1):                         # granite kerbs; wall lamps along both walls
+        box("LaneKerb", (sx * 3.6, 0, 0.04), (0.3, 70, 0.1), pbr("LaneKerbM", (0.3, 0.3, 0.31), 0.55))
+        for y in (-8.0, 2.0, 12.0, 22.0):
+            dd.model_h("industrial_wall_lamp", (sx * 3.92, y + (0 if sx > 0 else 4.0), 3.0), 0.32, rot_z=(-math.pi / 2 if sx > 0 else math.pi / 2))
+            wl = bpy.data.lights.new("WallLamp", 'POINT'); wl.energy = 40 if not night else 90; wl.color = WARM; wl.shadow_soft_size = 0.08
+            wo = bpy.data.objects.new("WallLamp", wl); bpy.context.collection.objects.link(wo); wo.location = (sx * 3.6, y + (0 if sx > 0 else 4.0), 2.95)
+    for k in range(4):                         # a few drainpipes, a bin, a crate on the cobbles
+        cyl("LanePipe", (3.9, -12 + k * 9.3, 4.0), 0.05, 8.0, pbr("PipeL", (0.35, 0.37, 0.38), 0.4, 0.8), verts=12)
+    dd.model_h("metal_trash_can", (-3.3, 5.5, 0.0), 0.75)
+    dd.model_h("plastic_crate_01", (-3.2, 6.4, 0.0), 0.3, rot_z=0.4)
     # the service door on the right wall: plain dark steel, a small caged lamp above
     D = dd.Builder("ServiceDoor"); D.box((-0.0, 0.55, 1.15), (0.06, 1.1, 2.3), pbr("SteelDoor", (0.08, 0.085, 0.09), 0.45, 0.6))
     c["sdoor"] = D.done((3.94, 8.45, 0.0))
@@ -273,11 +344,11 @@ def build_lane(c, night=False):
     c["door_at"] = Vector((3.4, 9.0, 0))
     c["painters"] = []
     if night:
-        g = person("Guard", 1.0, 41, "male_elegantsuit01", "short02", cval=0.08); c["guard"] = g
+        g = dd.guard("Guard", 41, "short02"); c["guard"] = g
         place(g, (3.75, 9.0, 0.12), math.radians(90), z=0.12); arms_relaxed(g)
         for k in range(4):
             h = person(f"Shape{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01", "short03")[k],
-                       cval=0.06, hv=0.15)
+                       cval=0.85, hv=0.15)
             c["painters"].append((h, None, Vector((-0.6 + 0.5 * (k % 2), -4.0 - 1.4 * k, 0)), 0.3 * k))
         return
     for k in range(4):
@@ -291,8 +362,9 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
     floor = dd.tex_mat("marble_01", 0.35, tint=(0.92, 0.9, 0.86), name="Marble", sat=0.6)
     floor.node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.6
     box("Floor", (0, d / 2, -0.05), (w, d, 0.1), floor)
-    if carpet:
-        box("Rug", (0, d / 2 + 0.5, 0.004), (6.5, 4.5, 0.008), fabric("Rug", (0.32, 0.27, 0.22), 0.95, 0.4, 400))
+    rug = fabric("Rug", (0.42, 0.36, 0.28), 0.95, 0.5, 400)
+    box("Rug", (0, d / 2 + 0.3, 0.004), (8.0, 6.0, 0.008), rug)
+    box("RugBorder", (0, d / 2 + 0.3, 0.003), (8.3, 6.3, 0.006), fabric("RugBorder", (0.12, 0.13, 0.2), 0.95, 0.5, 400))
     panel = pbr("Boiserie", (0.72, 0.68, 0.6), 0.55)
     mould = pbr("Moulding", (0.8, 0.77, 0.7), 0.5)
     box("WallBack", (0, d + 0.1, hgt / 2), (w, 0.2, hgt), panel)
@@ -317,12 +389,25 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
     for x in (-7.0, -2.5, 2.5, 7.0):
         box("FrontPier", (x, 0.0, hgt / 2), (1.4 if abs(x) < 7 else 0.6, 0.3, hgt), panel)
     box("FrontHead", (0, 0.0, 4.3), (w, 0.3, 0.6), panel)
+    if not night:
+        for x in (-3.5, 3.5):
+            f_ = bpy.data.lights.new("CeilFill", 'AREA'); f_.size = 4.0; f_.energy = 380; f_.color = (1.0, 0.9, 0.78)
+            fo = bpy.data.objects.new("CeilFill", f_); bpy.context.collection.objects.link(fo); fo.location = (x, d / 2, hgt - 0.05); fo.visible_camera = False
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = w; pt.size_y = 4.0; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, -0.1, 2.0); po.rotation_euler = (math.radians(-90), 0, 0)
     # chandeliers + warm ceiling wash
+    # dressing: gilt mirrors on the back wall, a console with a vase, sofa and armchairs, wall sconces
+    for x in (-4.4, 4.4):
+        dd.model_h("ornate_mirror_01", (x, d - 0.08, 1.0), 1.7)
+    dd.model_h("ClassicConsole_01", (0.0, d - 0.35, 0), 0.85, rot_z=math.pi)
+    dd.model_h("ceramic_vase_01", (0.0, d - 0.35, 0.86), 0.45)
+    dd.model_h("Sofa_01", (2.6, d - 1.1, 0), 0.95, rot_z=math.pi)
+    for x in (-6.2, 6.2):
+        for y in (3.0, 7.0):
+            box("Sconce", (x + (0.1 if x < 0 else -0.1), y, 2.6), (0.06, 0.18, 0.28), emissive("SconceE", WARM, 0 if night else 6))
     for x in (-3.5, 3.5):
-        dd.model_h("Chandelier_01", (x, d / 2, hgt - 1.0), 0.95)
-        l = bpy.data.lights.new("Chand", 'POINT'); l.energy = 0 if night else 140; l.color = WARM; l.shadow_soft_size = 0.4
+        dd.model_h("Chandelier_03", (x, d / 2, hgt - 1.1), 1.0)
+        l = bpy.data.lights.new("Chand", 'POINT'); l.energy = 0 if night else 320; l.color = WARM; l.shadow_soft_size = 0.4
         o = bpy.data.objects.new("Chand", l); bpy.context.collection.objects.link(o); o.location = (x, d / 2, hgt - 0.6)
     return panel
 
@@ -331,7 +416,7 @@ def vitrine(name, loc, size=(1.4, 0.6), rot_z=0.0, rng=None, lit=True):
     """A display case: dark wood base, glass top, a warm light strip inside and jewels on small stands."""
     rng = rng or np.random.default_rng(3)
     M = mats(); W, D = size
-    wood_ = wood(name + "Wood", (0.05, 0.03, 0.02), (0.12, 0.07, 0.04), scale=(0.3, 6, 6), rough=0.3, coat=0.5)
+    wood_ = dd.tex_mat("walnut_veneer", 1.5, tint=(0.6, 0.5, 0.42), name=name + "Wood", sat=0.8, coat=0.6)
     parts = [box(name + "Base", (0, 0, 0.45), (W, D, 0.9), wood_, bevel=0.01),
              box(name + "Bed", (0, 0, 0.91), (W - 0.06, D - 0.06, 0.02), fabric(name + "Velvet", (0.05, 0.06, 0.08), 0.9, 0.7, 300))]
     case = join(parts, name)
@@ -339,14 +424,17 @@ def vitrine(name, loc, size=(1.4, 0.6), rot_z=0.0, rng=None, lit=True):
     gl.parent = case
     if lit:
         st = box(name + "Strip", (0, D / 2 - 0.04, 1.32), (W - 0.1, 0.02, 0.01), emissive(name + "StripE", WARM, 25)); st.parent = case
-        l = bpy.data.lights.new(name + "L", 'AREA'); l.size = W * 0.8; l.energy = 12; l.color = WARM
+        l = bpy.data.lights.new(name + "L", 'AREA'); l.size = W * 0.8; l.energy = 30; l.color = WARM
         lo = bpy.data.objects.new(name + "L", l); bpy.context.collection.objects.link(lo); lo.parent = case; lo.location = (0, 0, 1.3)
     jew = []
+    tray_m = dd.tex_mat("velour_velvet", 2.0, tint=(0.25, 0.32, 0.7), name=name + "Tray", sat=0.4)
+    for k in range(2):
+        t_ = box(name + "TrayV", (-W / 4 + k * W / 2, 0.0, 0.93), (W / 2 - 0.08, D - 0.16, 0.025), tray_m, bevel=0.006); t_.parent = case
     for k in range(int(W / 0.25)):
         x = -W / 2 + 0.15 + k * 0.25
         stand_m = pbr(name + "Stand", (0.82, 0.8, 0.76), 0.5)
-        s = cyl(name + "Stand", (x, 0.0, 0.94), 0.025, 0.05, stand_m, verts=16); s.parent = case
-        r = dd.ring(f"{name}R{k}", (x, 0.0, 0.98), stone_r=rng.uniform(0.003, 0.006), band="plat" if k % 2 else "gold",
+        s = cyl(name + "Stand", (x, 0.0, 0.965), 0.025, 0.05, stand_m, verts=16); s.parent = case
+        r = dd.ring(f"{name}R{k}", (x, 0.0, 1.0), stone_r=rng.uniform(0.003, 0.006), band="plat" if k % 2 else "gold",
                     stone=("diamond", "ruby", "diamond", "sapphire", "emerald")[k % 5])
         r.parent = case; jew.append(r)
     case.location = loc; case.rotation_euler = (0, 0, rot_z)
@@ -374,7 +462,7 @@ def build_salon(c, night=False):
         so = bpy.data.objects.new("Downstairs", sl); bpy.context.collection.objects.link(so); so.location = (5.0, 9.6, 0.4); so.rotation_euler = (math.radians(-60), 0, 0)
         c["seated"] = []
         for k, (x, y) in enumerate(((-5.9, 4.6), (-5.85, 5.6), (-5.95, 6.6), (-5.9, 7.6))):
-            h = person(f"Waiter{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01", "short03")[k], cval=0.06)
+            h = person(f"Waiter{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01", "short03")[k], cval=0.85)
             pose_floor_sit(h, hunch=10, hands_back=False); place(h, (x, y, 0), face_to((x, y), (0.0, y)))
             c["seated"].append(h)
         for k, (x, y) in enumerate(((-3.0, 3.2), (0.4, 3.6), (3.5, 3.2), (-2.4, 6.6), (3.5, 6.4))):
@@ -390,7 +478,7 @@ def build_salon(c, night=False):
     who = [("Staff0", 0.0, 32, "female_elegantsuit01", "bob02"), ("Staff1", 1.0, 45, "male_elegantsuit01", "short02"),
            ("Staff2", 0.0, 51, "female_elegantsuit01", "ponytail01"), ("Staff3", 1.0, 29, "male_elegantsuit01", "short04")]
     for (x, y), (nm, g, yr, cl, hr) in zip(spots, who):
-        h = person(nm, g, yr, cl, hr, cval=0.12, hv=0.3)
+        h = dd.staff(nm, g, yr, hr, seed=len(c["seated"]))
         pose_floor_sit(h, hunch=16)
         place(h, (x, y, 0), face_to((x, y), (0.0, y)))
         c["seated"].append(h)
@@ -420,9 +508,22 @@ def build_safe(c):
         a = k * math.pi / 3
         B.cyl((0.85 + 0.18 * math.cos(a), -0.2, 0.18 * math.sin(a)), 0.02, 0.36, mats()["bronze"], verts=8, rot=(0, math.pi / 2 - a, 0))
     B.cyl((0.85, -0.2, 0), 0.07, 0.08, mats()["bronze"], verts=24, rot=R)
+    B.cyl((0.85, -0.18, 0), 0.62, 0.04, steel, verts=64, rot=R)                     # raised inner ring
+    for k in range(48):                                                            # the hand wheel rim
+        a = 2 * math.pi * k / 48
+        B.cyl((0.85 + 0.36 * math.cos(a), -0.38, 0.36 * math.sin(a)), 0.018, 0.05, mats()["bronze"], verts=8, rot=(0, -a, 0))
+    for k in range(16):                                                            # locking bolts round the edge
+        a = 2 * math.pi * k / 16
+        B.cyl((0.85 + 0.84 * math.cos(a), 0.0, 0.84 * math.sin(a)), 0.035, 0.22, steel, verts=12, rot=(0, math.pi / 2 - a, 0))
+    for k in range(3):                                                             # hinge knuckles on the left edge
+        B.box((0.05, -0.05, -0.45 + k * 0.45), (0.16, 0.2, 0.22), steel)
     door = B.done((0.8 - 0.85, 4.25, 1.15)); c["vault"] = door
     bpy.ops.object.select_all(action='DESELECT'); door.select_set(True); bpy.context.view_layer.objects.active = door
     bpy.ops.object.shade_smooth()
+    for i in range(5):                       # more deposit boxes on the right wall, nearer the door
+        for j in range(7):
+            box("BoxR", (2.88, 0.2 + i * 0.32, 0.4 + j * 0.3), (0.05, 0.3, 0.28), br, bevel=0.004)
+    box("SafeCabinet", (-1.6, 4.3, 0.55), (1.0, 0.5, 1.1), steel, bevel=0.01)
     # alarm keypad with a status LED (red, then green: frame driver)
     box("Keypad", (2.88, 2.6, 1.45), (0.04, 0.22, 0.3), pbr("KeypadM", (0.85, 0.85, 0.82), 0.4))
     for i in range(3):
@@ -439,7 +540,7 @@ def build_safe(c):
         box("Tube", (x, 2.0, 2.94), (0.12, 2.4, 0.04), emissive("Tube", (0.9, 0.95, 1.0), 6))
         a = bpy.data.lights.new("TubeL", 'AREA'); a.shape = 'RECTANGLE'; a.size = 0.2; a.size_y = 2.4; a.energy = 60; a.color = (0.9, 0.95, 1.0)
         o = bpy.data.objects.new("TubeL", a); bpy.context.collection.objects.link(o); o.location = (x, 2.0, 2.9)
-    mg = person("Manager", 0.0, 46, "female_elegantsuit01", "bob01", cval=0.1, hv=0.25); c["manager"] = mg
+    mg = dd.staff("Manager", 0.0, 46, "bob01", seed=1); c["manager"] = mg
     pt = painter("PainterS", 34, 2); c["safe_painter"] = pt
 
 
@@ -477,10 +578,30 @@ def build_corridor(c, empty=False):
     d = tl.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = "45 * (" + expr + ")"
     to = bpy.data.objects.new("TubeL", tl); bpy.context.collection.objects.link(to); to.location = (0, 8.3, 2.5)
     if empty:
-        chair = dd.model_h("SchoolChair_01", (0.55, 8.7, 0), 0.85, rot_z=math.radians(200))
-        lan = pbr("Lanyard", (0.05, 0.1, 0.35), 0.7)
-        box("Lanyard", (0.6, 8.6, 0.47), (0.02, 0.4, 0.004), lan, rot=(0, 0, 0.3))
-        box("Badge", (0.62, 8.42, 0.475), (0.06, 0.09, 0.004), pbr("Badge", (0.9, 0.9, 0.88), 0.4))
+        # the guard's post by the door: a small metal desk with a CCTV monitor, an office chair, a lanyard on the seat
+        from sc_invest import office_chair
+        dd.model_h("metal_office_desk", (-0.58, 8.3, 0), 0.76, rot_z=math.radians(-90))
+        ch = office_chair((0.15, 8.25, 0), math.radians(110), fabric("ChairFab", (0.05, 0.05, 0.06), 0.9, 0.3, 400),
+                          pbr("ChairMetal", (0.25, 0.25, 0.27), 0.35, 0.9))
+        tv = dd.model_h("Television_01", (-0.62, 8.15, 0.76), 0.32, rot_z=math.radians(-90))
+        scr = bpy.data.materials.new("CCTV"); scr.use_nodes = True
+        N = scr.node_tree.nodes; L = scr.node_tree.links; N.clear()
+        out = N.new("ShaderNodeOutputMaterial"); em = N.new("ShaderNodeEmission"); tc = N.new("ShaderNodeTexCoord")
+        nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 60
+        fv = dd.frame_value(N, "frame * 0.37", "Static"); L.new(fv.outputs[0], nz.inputs['W']); L.new(tc.outputs['Object'], nz.inputs['Vector'])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['To Min'].default_value = 0.25; mr.inputs['To Max'].default_value = 0.6
+        L.new(nz.outputs['Fac'], mr.inputs['Value'])
+        cr = N.new("ShaderNodeCombineColor"); L.new(mr.outputs[0], cr.inputs[0]); L.new(mr.outputs[0], cr.inputs[1]); L.new(mr.outputs[0], cr.inputs[2])
+        L.new(cr.outputs[0], em.inputs['Color']); em.inputs['Strength'].default_value = 2.0; L.new(em.outputs[0], out.inputs['Surface'])
+        box("CCTVScreen", (-0.44, 8.12, 0.92), (0.005, 0.2, 0.15), scr)
+        lan = pbr("Lanyard", (0.08, 0.14, 0.42), 0.7)
+        box("Lanyard", (0.15, 8.25, 0.52), (0.3, 0.015, 0.004), lan, rot=(0, 0, 0.4))
+        box("Badge", (0.25, 8.32, 0.525), (0.07, 0.1, 0.004), pbr("Badge", (0.92, 0.92, 0.9), 0.4), rot=(0, 0, 0.4))
+        # a coat hook rail on the right wall with a dark jacket hanging
+        box("HookRail", (0.89, 7.4, 1.7), (0.03, 0.6, 0.05), pbr("HookWood", (0.3, 0.2, 0.12), 0.5))
+        for k in range(3):
+            box("Hook", (0.86, 7.2 + k * 0.2, 1.68), (0.05, 0.015, 0.015), pbr("HookM", (0.6, 0.6, 0.6), 0.3, 1.0))
+        box("Jacket", (0.83, 7.4, 1.3), (0.1, 0.45, 0.75), fabric("JacketF", (0.04, 0.05, 0.08), 0.9, 0.4, 300), bevel=0.04)
     else:
         c["waiting"] = []
         for k, (x, y, f) in enumerate(((-0.55, 7.2, 0.4), (0.5, 6.5, -0.3), (-0.5, 5.6, 0.2), (0.45, 4.6, -0.5))):
@@ -587,15 +708,15 @@ def anim_safe(c, t):
     reach(mg, "L", Vector((2.8 - press, 2.62, 1.42)), M @ Vector((0.6, 0.2, -0.8)))
     arms_relaxed_one(mg, "R")
     mg.rot("head", (0, 1, 0), -6)
-    p = c["safe_painter"]; place(p, (-1.5, 2.6, 0), face_to((-1.5, 2.6), (2.3, 2.6))); arms_relaxed(p)
+    p = c["safe_painter"]; place(p, (0.2, 1.4, 0), face_to((0.2, 1.4), (2.3, 2.6))); arms_relaxed(p)
     u = ease(min(1.0, max(0.0, (sec - 2.2) / 2.6)))
     c["vault"].rotation_euler = (0, 0, math.radians(-95 * u))
 
 
 def cam_safe(c, t):
     e = ease(t)
-    loc = Vector((-0.3, -0.5, 1.65)).lerp(Vector((0.0, -0.2, 1.6)), e)
-    return loc, Vector((0.9, 3.5, 1.2)), 20
+    loc = Vector((-1.8, 0.3, 1.75)).lerp(Vector((-1.5, 0.6, 1.7)), e)
+    return loc, Vector((1.3, 3.4, 1.15)), 20
 
 
 def anim_corridor(c, t):
