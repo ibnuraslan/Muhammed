@@ -132,8 +132,8 @@ gun = bpy.data.objects["Gun"]
 GUN_REST = Matrix.Translation((0.035, -0.33, 1.08)) @ Matrix.Rotation(R_(-4), 4, 'X')   # rest-body coords (gun points -Y)
 GUN_AIM = Matrix.Translation((0.03, -0.40, 1.18)) @ Matrix.Rotation(R_(2), 4, 'X')
 # hand grips in gun-local coordinates: (wrist, finger direction, palm normal)
-GRIP_R = (Vector((-0.021, 0.07, -0.035)), Vector((0.25, -1.0, -0.55)), Vector((1.0, 0.0, 0.0)))
-SUPPORT_L = (Vector((0.055, -0.05, -0.045)), Vector((-1.0, -0.5, 0.15)), Vector((0.0, 0.0, 1.0)))
+GRIP_R = (Vector((-0.03, 0.085, -0.03)), Vector((0.12, -1.0, -0.22)), Vector((1.0, 0.0, 0.0)))   # palm on the grip's right side, fingers wrap its front
+SUPPORT_L = (Vector((0.05, -0.082, -0.05)), Vector((-1.0, -0.4, 0.1)), Vector((0.0, 0.0, 1.0)))   # palm cradles the canister from below
 VALVE_L = (Vector((0.104, -0.025, 0.13)), Vector((-0.25, -0.6, -0.75)), Vector((-1.0, 0.0, 0.2)))
 inv_f = list(range(1, 2101, 4)) + [T_OFFICE_IN, T_OFFICE_IN + 1, T_OFFICE_OUT, T_OFFICE_OUT + 1, F(29.3) - 1, F(29.3), F(30.3) - 1, F(30.3)]
 inv_f = sorted(set(inv_f))
@@ -141,8 +141,8 @@ SOB_W = track([(1, 1.0), (F(4), 0.8), (F(6), 0.35), (F(15), 0.3), (F(18.7), 0.2)
 def sob(f, rate=3.6):
     return math.sin(2 * math.pi * f / (FPS / rate))
 # office tracks (t in s)
-OF_FLEX = track([(F(18.7), 14), (F(21), 22), (F(22.4), 24), (F(23.0), 38), (F(25.3), 36), (F(26.0), 14), (F(28.3), 12)])
-OF_HEADP = track([(F(18.7), 12), (F(21), 18), (F(22.4), 20), (F(23.0), 28), (F(25.3), 24), (F(26.0), -6), (F(28.3), -4)])
+OF_FLEX = track([(F(18.7), 14), (F(21), 22), (F(22.4), 24), (F(23.0), 26), (F(25.3), 25), (F(26.0), 14), (F(28.3), 12)])
+OF_HEADP = track([(F(18.7), 12), (F(21), 18), (F(22.4), 16), (F(23.0), 10), (F(25.3), 10), (F(26.0), -6), (F(28.3), -4)])
 OF_SOB = track([(F(18.7), 0.15), (F(22.4), 0.2), (F(22.8), 1.4), (F(25.3), 1.2), (F(26.0), 0.3), (F(28.3), 0.2)])
 OF_FACE = track([(F(18.7), 0.0), (F(22.4), 0.0), (F(22.8), 1.0), (F(25.5), 1.0), (F(26.2), 0.0)])   # 0 lap, 1 hands on face
 # workshop C (time-lapse + finale)
@@ -230,7 +230,7 @@ for f in inv_f:
         Wg, dg, ng = GRIP_R
         W.key_hand("R", f, G @ Wg, G3 @ dg, G3 @ ng, pole=G @ Vector((-0.35, 0.25, -0.25)))
         trig = 26 + 30 * smooth((t - 13.5) / 0.4) * (1 - smooth((t - 15.15) / 0.2))
-        W.key_fingers("R", f, [trig, 62, 64, 66], thumb=34)
+        W.key_fingers("R", f, [trig, 60, 62, 64], thumb=34)
         v = smooth((t - 5.6) / 0.35) * (1 - smooth((t - 7.4) / 0.4))
         g = lerp_grip(SUPPORT_L, VALVE_L, v)
         g = (g[0] + Vector((0.085 * math.sin(math.pi * v) ** 0.5, 0.0, -0.02 * math.sin(math.pi * v))), g[1], g[2])   # swing out around the gun body
@@ -238,7 +238,7 @@ for f in inv_f:
         Rt = Matrix.Rotation(R_(-35 * turn), 3, 'X')
         W.key_hand("L", f, G @ (Vector((0.05, -0.095, 0.085)) + Rt @ (g[0] - Vector((0.05, -0.095, 0.085)))), G3 @ (Rt @ g[1]), G3 @ (Rt @ g[2]),
                    pole=G @ Vector((0.4, 0.25, -0.3)))
-        W.key_fingers("L", f, [25 + 20 * v, 32 + 25 * v, 36 + 28 * v, 40 + 28 * v], thumb=15 + 25 * v)
+        W.key_fingers("L", f, [30 + 5 * v, 34 + 15 * v, 37 + 20 * v, 40 + 20 * v], thumb=24 + 12 * v)
     elif p["set"] == "of":
         hm = W.head_M(); hm3 = hm.to_3x3()
         fs = OF_FACE(f)
@@ -249,19 +249,21 @@ for f in inv_f:
             Dh = hm @ W.R.rest("head").inverted(); Dh3 = Dh.to_3x3()
             hz = W.R.BN["head"].head_local.z
             # wrist below the cheek, fingers up over the eyes, palm towards the face (rest-body coords mapped by the head delta)
-            fc = (Dh @ Vector((sx * 0.05, -0.13, hz - 0.03)), Dh3 @ Vector((-sx * 0.2, 0.15, 1.0)), Dh3 @ Vector((0, 1.0, 0.0)))
-            g = lerp_grip(lap, fc, fs)
+            fc = (Dh @ Vector((sx * 0.03, -0.215, hz - 0.005)), Dh3 @ Vector((-sx * 0.35, 0.05, 1.0)), Dh3 @ Vector((0.0, 1.0, 0.0)))   # palms on the cheeks, hands apart
+            g = lerp_grip(lap, fc, fs if s == "R" else 0.25 * fs)   # right hand over her eyes, left hand stays near her lap (no hand-on-hand)
+            fw_ = fs if s == "R" else 0.25 * fs
+            g = (g[0] + Dh3 @ Vector((sx * 0.05, -0.15, -0.03)) * math.sin(math.pi * fw_), g[1], g[2])   # arc in front of the chin
             fist = smooth((t - 26.0) / 0.4)
             W.key_hand(s, f, g[0], g[1], g[2], pole=g[0] + Vector((sx * 0.4, 0.3, -0.3)))
-            W.key_fingers(s, f, [15 + 60 * fist + 10 * fs] * 4, thumb=20 + 20 * fist)
+            W.key_fingers(s, f, [15 + 60 * fist + 8 * fs, 18 + 60 * fist + 8 * fs, 22 + 58 * fist + 8 * fs, 26 + 56 * fist + 8 * fs], thumb=20 + 20 * fist)
     elif p["set"] == "tl":
         ph = p["phase"]
         pts = {0: {"R": (Vector((0.12, 0.18, BT + 0.035)), Vector((0.1, -1, -0.8)), Vector((0, 0, -1))),
                    "L": (Vector((-0.12, 0.15, BT + 0.03)), Vector((0.4, -1, -0.3)), Vector((0, 0, -1)))},
-               1: {"R": (Vector((-0.42, -0.02, BT + 0.2)), Vector((-1, -0.3, -0.3)), Vector((0, 0, -1))),
-                   "L": (Vector((-0.6, -0.02, BT + 0.2)), Vector((-1, -0.3, -0.2)), Vector((0, 0, -1)))},
-               2: {"R": (Vector((-0.02, 0.18, BT + 0.07)), Vector((0.3, -1, -0.4)), Vector((0.5, 0, -1))),
-                   "L": (Vector((0.16, 0.18, BT + 0.07)), Vector((-0.3, -1, -0.4)), Vector((-0.5, 0, -1)))}}[ph]
+               1: {"R": (Vector((-0.64, 0.02, BT + 0.25)), Vector((0.1, -1, -0.6)), Vector((0, 0, -1))),
+                   "L": (Vector((-0.38, 0.02, BT + 0.25)), Vector((-0.1, -1, -0.6)), Vector((0, 0, -1)))},
+               2: {"R": (Vector((-0.09, 0.18, BT + 0.07)), Vector((0.3, -1, -0.4)), Vector((0.5, 0, -1))),
+                   "L": (Vector((0.21, 0.18, BT + 0.07)), Vector((-0.3, -1, -0.4)), Vector((-0.5, 0, -1)))}}[ph]
         wob = 0.02 * math.sin(f * 0.8)
         for s in "LR":
             Wp, d_, n_ = pts[s]
@@ -280,17 +282,19 @@ for f in inv_f:
             g = (G @ Wg, G3 @ dg, G3 @ ng)
         W.key_hand("R", f, g[0], g[1], g[2], pole=g[0] + Vector((-0.4, 0.3, -0.3)))
         trig = 26 + 30 * smooth((t - 32.25) / 0.15) * (1 - smooth((t - 32.7) / 0.2))
-        W.key_fingers("R", f, [trig, 62, 64, 66] if t >= 31.4 else 30, thumb=34 if t >= 31.4 else 15)
+        W.key_fingers("R", f, [trig, 60, 62, 64] if t >= 31.4 else 30, thumb=34 if t >= 31.4 else 15)
         restL = (Vector((0.22, 0.1, BT + 0.05)), Vector((-0.2, -1, -0.6)), Vector((0, 0, -1)))
         if t < 31.8:
             gl = restL
         else:
             sL = smooth((t - 31.8) / 0.4) * (1 - smooth((t - 33.4) / 0.5))
-            tgt = (G @ SUPPORT_L[0], G3 @ SUPPORT_L[1], G3 @ SUPPORT_L[2])
+            tgt = (G @ (SUPPORT_L[0] + Vector((0.012, -0.02, -0.004))), G3 @ SUPPORT_L[1], G3 @ SUPPORT_L[2])
             free = (D @ Vector((0.2, -0.25, 1.0)), Vector((-0.4, -1, 0.2)), Vector((-1, 0, 0)))
             gl = lerp_grip(restL if t < 33.0 else free, tgt, sL)
+            arc = math.sin(math.pi * max(0.0, min(1.0, sL)))
+            gl = (gl[0] + G3 @ Vector((0.12 * arc, -0.03 * arc, -0.08 * arc)), gl[1], gl[2])   # swing around the gripping hand
         W.key_hand("L", f, gl[0], gl[1], gl[2], pole=gl[0] + Vector((0.4, 0.3, -0.3)))
-        W.key_fingers("L", f, 45, thumb=25)
+        W.key_fingers("L", f, 32, thumb=24)
 
 # ------------------------------------------------------------------ MENTOR
 POS_MO = OF(0.3, 1.32, 0.0)        # behind the desk, facing world +Y (towards her)
@@ -342,7 +346,7 @@ for f in men_f:
         jabW = D @ Vector((-0.12, -0.55 - 0.06 * talk, 1.36 + 0.04 * talk))
         jb = (jabW, Vector((0.05, 1, -0.1)), Vector((-0.3, 0, -1)))
         hm = M.head_M()
-        neck = (hm @ (M.R.rest("head").inverted() @ Vector((-0.07, 0.09, M.R.BN["head"].head_local.z - 0.06))), Vector((0.7, 0.2, 0.6)), Vector((0, -1, 0)))
+        neck = (hm @ (M.R.rest("head").inverted() @ Vector((-0.095, 0.115, M.R.BN["head"].head_local.z - 0.05))), Vector((0.7, 0.2, 0.6)), Vector((0, -1, 0)))
         g = lerp_grip(rest, jb, jab)
         g = lerp_grip(g, neck, awk)
         shieldR = (D @ Vector((-0.02, -0.33, 1.55)), Vector((0.8, 0.1, 0.6)), Vector((0, -1, 0)))

@@ -1,0 +1,7 @@
+Hand audit every 2 frames (penetration 4-15 mm; open sub-mesh test)
+Inventor hand.L inside hand.R                     2 frames: 1929 2009
+Inventor hand.R inside own torso/head             3 frames: 1367 1533 1535
+TOTAL flagged samples: 5
+Explained:
+- 1929 and 2009, hand.L vs hand.R: the two-handed grip. Her left fingers rest against the right hand's fingers under the barrel, as the support hand settles (contact, not merging).
+- 1367, 1533 and 1535, hand.R vs head: single transition frames as the right hand rises to, and leaves, the bridge of her nose.
