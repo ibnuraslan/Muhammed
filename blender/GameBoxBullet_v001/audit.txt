@@ -1,0 +1,12 @@
+AUDIT GameBoxBullet  frames 1-1500 step 5
+
+worst box_chest_gap          f1431  -0.0237
+worst fingertip_in_box_L     f   1  +0.0000
+worst fingertip_in_box_R     f   1  +0.0000
+worst sole_L                 f 781  -0.0001
+worst sole_R                 f 426  -0.0001
+worst wrist_gap_L            f1451  +0.0310
+worst wrist_gap_R            f1416  +0.0291
+min   camera_clearance       f 189  +0.0242 m
+
+0 failures

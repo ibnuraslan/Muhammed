@@ -287,7 +287,7 @@ for i, x in enumerate([HX0 + 0.1] + [-3.4 + 0.4 * k for k in range(int((DOOR[0] 
 box("Wall_plate", C_WALL, HX0, HX1, 0.012, 0.10, 0.25, 0.29, M_stud)
 ins = box("Wall_insulation", C_WALL, -0.18, 0.18, 0.012, 0.10, 0.29, HH - 0.05, M_insul)
 dp = ins.modifiers.new("fluff", "DISPLACE"); tex = bpy.data.textures.new("fluff", "CLOUDS"); tex.noise_scale = 0.05; dp.texture = tex; dp.strength = 0.01
-cut_hole(ins, 0.10, y0=0.0, y1=0.12, jag=0.8, seed=4)
+cut_hole(ins, 0.17, y0=0.0, y1=0.12, jag=0.3, seed=4)
 ins.modifiers.new("sub", "SUBSURF").levels = 1
 # window frame + glass, door, trims, gutter
 box("Win_glass", C_WALL, WIN[0], WIN[1], 0.06, 0.07, WIN[2], WIN[3], M_glass)
@@ -455,7 +455,14 @@ ln = N.new("ShaderNodeMath"); ln.operation = "LESS_THAN"; ln.inputs[1].default_v
 # radial spokes too
 crk = N.new("ShaderNodeMath"); crk.operation = "MULTIPLY"; L.new(ln.outputs[0], crk.inputs[0]); L.new(radial_.outputs[0], crk.inputs[1])
 colc = N.new("ShaderNodeMix"); colc.data_type = "RGBA"; colc.inputs[7].default_value = (0.75, 0.75, 0.72, 1)   # stressed white plastic in the cracks
-L.new(crk.outputs[0], colc.inputs[0]); L.new(colr.outputs[2], colc.inputs[6]); L.new(colc.outputs[2], bsdf.inputs["Base Color"])
+hl = N.new("ShaderNodeVectorMath"); hl.operation = "LENGTH"; L.new(cen.outputs[0], hl.inputs[0])
+hlt = N.new("ShaderNodeMapRange"); hlt.inputs[1].default_value = 0.0065; hlt.inputs[2].default_value = 0.0085; hlt.inputs[3].default_value = 1.0; hlt.inputs[4].default_value = 0.0
+L.new(hl.outputs["Value"], hlt.inputs[0])
+hon = N.new("ShaderNodeValue"); hon.name = "hole_on"; hon.outputs[0].default_value = 0.0
+hm = N.new("ShaderNodeMath"); hm.operation = "MULTIPLY"; L.new(hlt.outputs[0], hm.inputs[0]); L.new(hon.outputs[0], hm.inputs[1])
+colh = N.new("ShaderNodeMix"); colh.data_type = "RGBA"; colh.inputs[7].default_value = (0.01, 0.008, 0.006, 1)
+L.new(hm.outputs[0], colh.inputs[0])
+L.new(crk.outputs[0], colc.inputs[0]); L.new(colr.outputs[2], colc.inputs[6]); L.new(colc.outputs[2], colh.inputs[6]); L.new(colh.outputs[2], bsdf.inputs["Base Color"])
 bmp = N.new("ShaderNodeBump"); bmp.inputs["Strength"].default_value = 0.6; bmp.inputs["Distance"].default_value = 0.002
 hsum = N.new("ShaderNodeMath"); hsum.operation = "SUBTRACT"; L.new(emb.outputs[0], hsum.inputs[0]); L.new(crk.outputs[0], hsum.inputs[1])
 L.new(hsum.outputs[0], bmp.inputs["Height"]); L.new(bmp.outputs[0], bsdf.inputs["Normal"])
@@ -523,6 +530,7 @@ def xp_mat(m):
         c = m.copy(); c.name = m.name + "_xp"; cutmat_real(c); XP[m.name] = c
     return XP[m.name]
 for o in [o for o in C_BOX.objects if o.type == "MESH" and not o.name.startswith("Shard_")]:
+    of = o.copy(); of.data = o.data.copy(); of.name = o.name + "_full"; C_BOX.objects.link(of); of["full_of"] = o.name
     px = CUTX - o.location.x
     me2 = o.data.copy(); o2 = o.copy(); o2.data = me2; o2.name = o.name + "_xp"; C_BOX.objects.link(o2)
     if o2.data.shape_keys:
@@ -593,16 +601,18 @@ for j, v in enumerate(bullet.data.vertices):
     mush.data[j].co.y = v.co.y * (1 - 0.55 * t) - 0.004 * t
 bullet.modifiers.new("sub", "SUBSURF").levels = 1
 # air-shock trail behind the bullet (outside only): stretched transparent cone
-bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=24, radius1=0.004, radius2=0.03, depth=1.0)
+bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=False, segments=24, radius1=0.005, radius2=0.045, depth=1.0)
 bmesh.ops.rotate(bm, verts=bm.verts, cent=(0, 0, 0), matrix=Matrix.Rotation(R_(90), 3, 'X'))
 bmesh.ops.translate(bm, verts=bm.verts, vec=(0, -0.53, 0))
 mt = bpy.data.materials.new("M_trail"); mt.use_nodes = True; tn = mt.node_tree.nodes; tl = mt.node_tree.links
 bsd = tn["Principled BSDF"]; bsd.inputs["Transmission Weight"].default_value = 1.0; bsd.inputs["Roughness"].default_value = 0.0; bsd.inputs["IOR"].default_value = 1.06
 lw = tn.new("ShaderNodeLayerWeight"); lw.inputs[0].default_value = 0.3
 mix = tn.new("ShaderNodeMixShader"); tr = tn.new("ShaderNodeBsdfTransparent")
-tl.new(lw.outputs["Facing"], mix.inputs[0]); tl.new(bsd.outputs[0], mix.inputs[1]); tl.new(tr.outputs[0], mix.inputs[2])
+emt = tn.new("ShaderNodeEmission"); emt.inputs["Color"].default_value = (1.0, 0.95, 0.9, 1); emt.inputs["Strength"].default_value = 1.5
+inv = tn.new("ShaderNodeMath"); inv.operation = "MULTIPLY_ADD"; inv.inputs[1].default_value = 0.35; inv.inputs[2].default_value = 0.6
+tl.new(lw.outputs["Facing"], inv.inputs[0])
+tl.new(inv.outputs[0], mix.inputs[0]); tl.new(emt.outputs[0], mix.inputs[1]); tl.new(tr.outputs[0], mix.inputs[2])
 tl.new(mix.outputs[0], tn["Material Output"].inputs[0])
-mix.inputs[0].default_value = 0.5
 trail = mesh_obj("Bullet_trail", bm, C_FX, mt); trail.parent = bullet
 
 bpy.data.collections.remove(gc) if False else None

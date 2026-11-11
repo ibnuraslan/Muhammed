@@ -43,9 +43,9 @@ def box_pose(f):
     # beat 10: lowers the box and tilts the face up toward his eyes, then holds it out a little
     if f > 1355:
         u = smooth((f - 1355) / 70.0)
-        loc.z -= 0.15 * u; loc.y -= 0.10 * u; rx += R_(34) * u; rz += R_(-12) * u
+        loc.z -= 0.15 * u; loc.y -= 0.10 * u; rx += R_(-30) * u
         w = smooth((f - 1430) / 50.0)
-        loc.z += 0.03 * w; rz += R_(6) * w
+        loc.z += 0.03 * w; rx += R_(8) * w
     return loc, Euler((rx, 0, rz))
 
 for f in range(1, F_END + 1, 2):
@@ -64,7 +64,7 @@ bpy.context.view_layer.objects.active = man; bpy.ops.object.mode_set(mode='POSE'
 for f in (1, F_END):
     for s, dx in (("L", 0.13), ("R", -0.13)):
         xy = V((MAN.x + dx, MAN.y + 0.02 + (0.03 if s == "R" else -0.02)))
-        a = H.ankle[s]; z = FZ + a.z
+        a = H.ankle[s]; z = FZ + a.z + 0.0165
         M = Matrix.Translation(V((xy.x, xy.y, z))) @ Matrix.Rotation(R_(8 if s == "L" else -8), 4, 'Z') @ Matrix.Translation(-a) @ R.rest("IK_foot." + s)
         R.key_world("IK_foot." + s, f, M)
         pole = V((xy.x + dx, xy.y - 0.7, z + 0.45)); n = "Pole_knee." + s; pb = R.PB[n]
@@ -156,18 +156,15 @@ cutnode = bpy.data.node_groups["CutAway"].nodes["cut"]
 for f, v in ((1, 1.0), (752, 1.0), (800, 0.0), (1352, 0.0), (1392, 1.0)):
     cutnode.outputs[0].default_value = v; cutnode.outputs[0].keyframe_insert("default_value", frame=f)
 for o2 in [o for o in bpy.data.objects if o.get("xp_of")]:
-    o1 = bpy.data.objects[o2["xp_of"]]
-    full = o1.copy(); full.data = o1.data.copy(); full.name = o1.name + "_full"; bpy.data.collections["Box"].objects.link(full)
-    # rebuild the full part = join of both halves
-    import bmesh as _bm
-    bm = _bm.new(); bm.from_mesh(o1.data); bm.from_mesh(o2.data); bm.to_mesh(full.data); bm.free()
-    full.data.materials.clear()
-    for m in o1.data.materials: full.data.materials.append(m)
+    o1 = bpy.data.objects[o2["xp_of"]]; full = bpy.data.objects[o1.name + "_full"]
     for ob_, vis in ((full, [(1, False), (752, True), (1393, False)]), (o1, [(1, True), (752, False), (1393, True)]), (o2, [(1, True), (752, False), (801, True), (1352, False), (1393, True)])):
         for f, hidden in vis:
             ob_.hide_render = hidden; kf(ob_, "hide_render", f)
     if o1.name.startswith("Disc_"):
         full.hide_render = True; kf(full, "hide_render", 1393)
+hon = bpy.data.materials["M_box_cover"].node_tree.nodes["hole_on"]
+for f, v in ((1, 0.0), (F_HIT + 8, 0.0), (F_HIT + 30, 1.0)):
+    hon.outputs[0].default_value = v; hon.outputs[0].keyframe_insert("default_value", frame=f)
 crR = bpy.data.materials["M_box_cover"].node_tree.nodes["crack_radius"]
 for f, v in ((1, 0.001), (F_HIT, 0.001), (F_HIT + 20, 0.012), (600, 0.03), (661, 0.045), (720, 0.11), (760, 0.16), (900, 0.20)):
     crR.outputs[0].default_value = v; crR.outputs[0].keyframe_insert("default_value", frame=f)
@@ -199,6 +196,8 @@ for dn, fh in DISC_HIT.items():
 
 # pages bow ahead of the nose, then stay bent
 for i, pgn in enumerate(sorted(o.name for o in bpy.data.objects if o.name.startswith("Page_") and not o.name.endswith("_xp") and not o.name.endswith("_full"))):
+  pgf = bpy.data.objects[pgn + "_full"]
+  pgf.data.shape_keys.key_blocks["bulge"].value = 0.0
   for pg in (bpy.data.objects[pgn], bpy.data.objects[pgn + "_xp"]):
     py = -0.040 + i * 0.00105
     kb = pg.data.shape_keys.key_blocks["bulge"]
@@ -226,12 +225,11 @@ C_FX = bpy.data.collections["FX"]
 RING_F = [(F_HIT + 2, (1.0, 0.55, 0.15)), (790, (0.3, 0.8, 1.0)), (815, (0.3, 0.8, 1.0)), (845, (1.0, 0.7, 0.3)), (905, (1.0, 0.85, 0.5)),
           (940, (1.0, 0.85, 0.5)), (975, (1.0, 0.85, 0.5)), (1030, (0.3, 0.8, 1.0)), (1062, (1.0, 0.7, 0.3)), (1110, (1.0, 0.5, 0.2))]
 for i, (fr, col) in enumerate(RING_F):
-    bm = bmesh.new(); bmesh.ops.create_circle(bm, cap_ends=False, segments=48, radius=1.0)
-    me = bpy.data.meshes.new("Ring%d" % i); bm.to_mesh(me); bm.free()
-    o = bpy.data.objects.new("EnergyRing_%02d" % i, me); C_FX.objects.link(o); me.materials.append(ringmat)
-    sk = o.modifiers.new("skin", "SCREW"); o.modifiers.remove(sk)
-    sol = o.modifiers.new("w", "WIREFRAME"); sol.thickness = 0.06; sol.use_relative_offset = False
-    o.parent = broot; o.rotation_euler = (R_(90), 0, 0); o.location = (0, depth(fr) - 0.003, 0.05)
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.035, major_segments=64, minor_segments=8)
+    o = bpy.context.active_object; o.name = "EnergyRing_%02d" % i
+    for c_ in list(o.users_collection): c_.objects.unlink(o)
+    C_FX.objects.link(o); o.data.materials.append(ringmat)
+    o.parent = broot; o.rotation_euler = (R_(90), 0, 0); o.location = (0, depth(fr) - 0.006, 0.05)
     big = 0.05 if i else 0.09
     for f, s_, a in ((fr - 1, 0.002, 0.0), (fr, 0.004, 1.0), (fr + 30, big * 0.7, 0.5), (fr + 70, big, 0.0)):
         o.scale = (s_, s_, s_); o.color = (*col, a); kf(o, "scale", f); kf(o, "color", f)
@@ -293,9 +291,9 @@ for i in range(70):
         o = piece("Splinter_in_%02d" % i, (random.uniform(0.003, 0.008), random.uniform(0.02, 0.07), random.uniform(0.003, 0.008)), M_splinter)
     else:
         o = piece("Fluff_%02d" % i, [random.uniform(0.008, 0.02)] * 3, M_fluff)
-    a = random.uniform(0, 6.28); r = random.uniform(0.0, 0.10)
+    a = random.uniform(0, 6.28); r = random.uniform(0.04, 0.10)
     p0 = HOLE + V((r * math.cos(a), 0.16, r * math.sin(a)))
-    cone = random.uniform(0.05, 0.45)
+    cone = random.uniform(0.18, 0.5)
     v0 = V((math.cos(a) * cone, random.uniform(0.25, 0.9), math.sin(a) * cone))
     ballistic(o, p0, v0, 190 + random.randint(0, 10), F_END, grav=0.35, floor=FZ + 0.005)
 # dust puffs (volumes) both sides of the wall, expanding and thinning
@@ -357,8 +355,8 @@ B = bpos
 def behind(f, back, up=0.0, side=0.0):
     return B(f) + V((side, -back, up))
 CK = [  # frame, camera position, aim point, lens
-    (1,    V((0.9, -31.9, 1.95)),       V((0.0, -18.0, 1.35)), 30),
-    (45,   V((0.45, -23.4, 1.55)),      V((0.0, -12.0, 1.30)), 32),
+    (1,    behind(1, 0.9, 0.18, 0.14),     V((0.0, -20.0, 1.32)), 30),
+    (45,   behind(45, 0.55, 0.08, 0.10),   V((0.0, -12.0, 1.30)), 32),
     (95,   V((0.9, -14.0, 0.45)),       V((0.0, -2.0, 1.55)), 26),
     (130,  V((0.25, -6.5, 1.20)),       V((0.0, 0.0, 1.30)), 32),
     (150,  behind(150, 0.55, 0.04, 0.06), V((0.0, 0.3, 1.30)), 36),
@@ -384,11 +382,11 @@ def nose_cam(f, dx, dz, dy=-0.016, ady=-0.012):
 for f, dx, dz, lens in ((845, 0.22, 0.07, 50), (900, 0.19, 0.09, 55), (960, 0.18, 0.05, 60), (1020, 0.19, 0.09, 62), (1075, 0.20, 0.07, 62)):
     c, a = nose_cam(f, dx, dz); CK.append((f, c, a, lens))
 CK += [
-    (1140, V((0.55, 2.97, 1.36)),       V((0.0, 2.985, 1.25)), 46),
+    (1140, V((0.50, 2.90, 1.52)),       V((0.0, 2.975, 1.27)), 46),
     (1200, V((0.50, 2.86, 1.46)),       V((0.0, 2.975, 1.27)), 50),
 ]
 cB = lambda: B(1240)
-for f, a, h, r, lens in ((1245, -62, 0.04, 0.16, 55), (1290, -18, 0.08, 0.15, 55), (1335, 15, 0.11, 0.17, 50)):
+for f, a, h, r, lens in ((1245, -35, 0.06, 0.20, 55), (1290, 0, 0.09, 0.19, 55), (1335, 22, 0.12, 0.20, 50)):
     c0 = B(f); c = c0 + V((r * math.cos(R_(a)), r * math.sin(R_(a)), h)); CK.append((f, c, c0 + V((0, -0.01, 0)), lens))
 CK += [
     (1395, V((0.80, 2.20, 1.55)),       V((0.0, 2.95, 1.30)), 35),
