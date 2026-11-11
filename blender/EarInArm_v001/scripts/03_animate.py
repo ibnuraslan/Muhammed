@@ -70,6 +70,9 @@ def clone_rig(src, name):
     return r
 SA_RIG = clone_rig(OB["Surgeon"], "SurgeonSA")
 PAT = Person(OB["Patient"]); SUR = Person(OB["Surgeon"]); NUR = Person(OB["Nurse"]); SAS = Person(SA_RIG)
+# surgeon hands: no wrist copy-rotation (its target orientations twisted the wrist into a ballooned glove); the hand follows the forearm
+for P_ in (SUR, SAS):
+    for s_ in "LR": P_.R.PB["wrist." + s_].constraints[0].influence = 0.0
 pr = PAT.o; M = pr.matrix_world.copy(); pr.parent = tilt; pr.matrix_parent_inverse = tilt.matrix_world.inverted()
 for s in "LR":
     PAT.R.PB["lowerleg02." + s].constraints[0].influence = 0.0   # FK seated legs
@@ -214,7 +217,7 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
     H.walk(path, yawf, f0, f1, stride=stride, lift=0.07, bob=0.015, crouch=0.03, lean=4.0, step=2)
 
 SA_ = Vector((-0.5, -0.42)); yA = yaw_to(Vector((0, -0.05)) - SA_)
-ST = Vector((1.05, -0.32)); yT = 0.0
+ST = Vector((1.05, -0.4)); yT = 0.0
 SB_ = Vector((INC.x - 0.02, INC.y + 0.42)); yB = 0.0
 SC_ = Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)); yC = yaw_to(EAR_W.to_2d() - Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)))
 stand(SUR, 1, SA_, yA, head=(10, 0, 0)); stand(SUR, 60, SA_, yA, spine=(6, 0, 0), head=(14, 0, 0)); stand(SUR, 128, SA_, yA, spine=(14, 0, 4), head=(18, 0, 0), crouch=0.03)
@@ -222,7 +225,7 @@ stand(SUR, 160, SA_, yA, spine=(8, 0, 0))
 stand(SUR, 199, SA_, yA, spine=(8, 0, 0)); stand(SUR, 200, ST, yT, spine=(18, 0, 0))
 stand(SUR, 330, ST, yT, spine=(18, 0, 0), head=(28, 0, 0), crouch=0.02)
 for f in range(343, 565, 40):
-    stand(SUR, f, ST, yT, spine=(20 + 3 * math.sin(f), 2 * math.sin(f * 0.3), 3 * math.sin(f * 0.2)), head=(30, 4 * math.sin(f * 0.1), 0), crouch=0.03)
+    stand(SUR, f, ST, yT, spine=(30 + 3 * math.sin(f), 2 * math.sin(f * 0.3), 3 * math.sin(f * 0.2)), head=(30, 4 * math.sin(f * 0.1), 0), crouch=0.06)
 stand(SUR, 566, ST, yT, spine=(18, 0, 0)); walk(SUR, ST, Vector((1.0, 0.75)), 567, 625, yT, 100, stride=0.45); walk(SUR, Vector((1.0, 0.75)), SB_, 626, 660, 100, yB, stride=0.4)
 for f in range(662, 1309, 60):
     stand(SUR, f, SB_, yB, spine=(22 + 2 * math.sin(f * 0.05), 0, 2 * math.sin(f * 0.07)), head=(30, 0, 0), crouch=0.04)
@@ -238,7 +241,15 @@ stand(SUR, B["end"], SC_ + Vector((0.35, 0.15)), yCC, spine=(2, 0, -6), head=(4,
 # surgeon hands. Block/ear positions on the tray
 TRAY = OB["Tray"].matrix_world.translation.copy()
 BLK = TRAY + Vector((-0.02, -0.02, 0.035))
-def sh(f, s, W, d, n, pole=None): SUR.key_hand(s, f, W, d, n, pole)
+def sh(f, s, W, d, n, pole=None):
+    """surgeon hand. From the arm beats on, the hand follows the forearm (no wrist copy-rotation), so re-aim it:
+    keep the intended tool point ~15 cm beyond the wrist and line the wrist up on the shoulder->tool-point ray"""
+    W = Vector(W); d = Vector(d).normalized()
+    if f >= 566:
+        ev_at(f); shp = SUR.wpos("upperarm01." + s)
+        tip = W + d * 0.15; dn = (tip - shp).normalized()
+        W = tip - dn * 0.15; d = dn
+    SUR.key_hand(s, f, W, d, n, pole)
 # beat 1: hands together in front, then R hand to the patient's chest on "A surgeon takes"
 CHEST = pat_world(130, (0.08, -0.16, 1.02))
 for f in (1, 60):
@@ -253,13 +264,14 @@ sh(199, "R", CHEST + Vector((-0.02, -0.075, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6
 for f in range(300, 565, 6):
     k = (f - 343) / 37.0
     away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(462, 488, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
-    dL = Vector((-0.85, -0.45, -0.3)).normalized()
-    sh(f, "L", BLK + Vector((0.025, -0.005, 0.012)) - dL * 0.085 + away, dL, (0.0, 0.2, 1.0))
+    shL = Vector((ST.x + 0.18, ST.y - 0.08, 1.38)); gripL = BLK + Vector((0.028, -0.005, 0.01))
+    dL = (gripL - shL).normalized()
+    sh(f, "L", gripL - dL * 0.075 + Vector((0, 0, -0.065)) + away, dL, (0.0, 0.2, 1.0))
     ph = (k % 1.0)
     tgt = BLK + Vector((-0.02 + 0.04 * ph, 0.012 * math.sin(k * 2.3), 0.018 + 0.006 * math.sin(math.pi * ph)))
-    dR = Vector((0.55, -0.65, -0.55)).normalized()
-    sh(f, "R", tgt - dR * (0.135 + 0.03 * (1 if f < 350 else 0)) + away, dR, (-0.2, -0.3, 1.0))
-SUR.key_fingers("L", 300, 28, 30); SUR.key_fingers("R", 300, 38, 32)
+    shR = Vector((ST.x - 0.18, ST.y - 0.08, 1.38)); dR = (tgt - shR).normalized()
+    sh(f, "R", tgt - dR * (0.13 + 0.03 * (1 if f < 350 else 0)) + Vector((0, 0, -0.06)) + away, dR, (-0.2, -0.3, 1.0))
+SUR.key_fingers("L", 300, 45, 35); SUR.key_fingers("R", 300, 55, 40)
 # beat 4: R forceps carries the ear to the forearm, slides it in; L forceps lifts the skin edge
 ev_at(640)
 sh(570, "R", BLK + Vector((0.05, -0.04, 0.08)), (-0.6, 0.4, -0.5), (-0.2, -0.4, 1.0))
