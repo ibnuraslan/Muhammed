@@ -209,6 +209,9 @@ def join(objs, name):
     bpy.context.view_layer.objects.active = objs[0]
     bpy.ops.object.join()
     o = bpy.context.active_object; o.name = name
+    # parts are modelled around the world origin: put the object origin there, so setting .location places it
+    bpy.context.scene.cursor.location = (0, 0, 0)
+    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
     return o
 
 
