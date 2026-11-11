@@ -53,7 +53,9 @@ def build(variant=None):
     B.done()
     c["bags"] = []
     for k, p in enumerate(BAGS):
-        b = heavy_bag(f"Heavy{k}"); b.location = p + Vector((0, 0, 3.5)); c["bags"].append(b)
+        b = heavy_bag(f"Heavy{k}"); b.location = p + Vector((0, 0, 1.95)); c["bags"].append(b)
+        ch = cyl(f"Chain{k}", p + Vector((0, 0, 2.75)), 0.008, 1.6, pbr("ChainL", (0.5, 0.5, 0.52), 0.3, 1.0), verts=6); ch.parent = b
+        ch.location = (0, 0, 0.8)
     for x in (-3.0, 0.0, 3.0):
         box("GymLight", (x, 3, 3.97), (0.25, 1.4, 0.04), emissive("GymLE", (0.95, 0.95, 1.0), 4))
         a = bpy.data.lights.new("GymL", 'AREA'); a.shape = 'RECTANGLE'; a.size = 0.25; a.size_y = 1.4; a.energy = 160
@@ -78,7 +80,7 @@ def anim_bag(c, t):
         u = max(0.0, math.sin(2 * math.pi * (sec * 0.9 + ph_))) ** 3          # jab rhythm
         sh = h.bone_head(f"upperarm01.{sd}")
         guard_ = sh + M @ Vector((0.12 if sd == "R" else -0.12, -0.2, 0.05))
-        hit = bag + Vector((0.0, -0.2, 1.35))
+        hit = bag + Vector((0.0, -0.17, 1.35))
         reach(h, sd, guard_.lerp(hit, u * 0.85), M @ Vector((1 if sd == "L" else -1, 0.3, -0.6)))
     fingers_curl_fist(h)
     for k, b in enumerate(c["bags"]):
@@ -107,7 +109,7 @@ def anim_lockers(c, t):
 
 MOVES = {
     "bag": dict(kind="anim", dof=4.0, anim=anim_bag,
-                cam=lambda c, t: (Vector((-3.2 + 2.0 * ease(t), 0.2, 1.6)), BAGS[1] + Vector((-0.3, -0.3, 1.3)), 32),
+                cam=lambda c, t: (Vector((-3.2 + 2.0 * ease(t), 0.2, 1.6)), BAGS[1] + Vector((0.0, -0.3, 1.25)), 30),
                 focus=lambda c, t: BAGS[1] + Vector((0, -0.6, 1.3))),
     "lockers": dict(kind="anim", dof=5.6, anim=anim_lockers,
                     cam=lambda c, t: (Vector((-2.8, -1.6, 1.7)).lerp(Vector((-2.2, -1.2, 1.65)), ease(t)), Vector((4.3, 2.0, 1.2)), 28),

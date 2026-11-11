@@ -106,7 +106,7 @@ def anim_final(c, t):
 
 MOVES = {
     "layout": dict(kind="anim", dof=None, anim=anim_layout,
-                   cam=lambda c, t: (Vector((-TL / 2 + 0.5 + 2.5 * ease(t), 0.0, 3.4)), Vector((-TL / 2 + 1.6 + 2.5 * ease(t), 0.0, TZ)), 28, (1, 0, 0))),
+                   cam=lambda c, t: (Vector((-TL / 2 + 0.3 + 2.5 * ease(t), -1.2, 2.5)), Vector((-TL / 2 + 1.8 + 2.5 * ease(t), 0.0, TZ)), 26)),
     "tags": dict(kind="anim", dof=5.6, anim=anim_tags,
                  cam=lambda c, t: (Vector((-2.5 + 2.0 * ease(t), 2.8, 2.6)), Vector((0.0 + 2.0 * ease(t), -0.6, 0.6)), 28),
                  focus=lambda c, t: c["counter"].arm.location + Vector((0, 0, 1.0))),

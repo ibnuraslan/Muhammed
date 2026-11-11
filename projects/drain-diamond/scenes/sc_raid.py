@@ -71,10 +71,12 @@ def build_hall(c):
         box("NeckBust", (0.35 + k * 0.3, 2.3, 0.2), (0.12, 0.08, 0.3), fabric("BustVel", (0.08, 0.08, 0.1), 0.9, 0.6, 300))
     pnl = dd.Builder("HiddenPanel"); pnl.box((0, 0, 0), (0.95, 0.04, 1.1), dd.tex_mat("wooden_panels", 0.6, tint=(0.75, 0.68, 0.58), name="HidPanel", sat=0.8))
     c["panel"] = pnl.done((0.6, 1.62, 0.58))
-    tl = bpy.data.lights.new("RaidTorch", 'SPOT'); tl.energy = 40; tl.spot_size = math.radians(22); tl.spot_blend = 0.4; tl.color = (1.0, 0.95, 0.85)
+    tl = bpy.data.lights.new("RaidTorch", 'SPOT'); tl.energy = 90; tl.spot_size = math.radians(22); tl.spot_blend = 0.4; tl.color = (1.0, 0.95, 0.85)
     to = bpy.data.objects.new("RaidTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
-    dawn = bpy.data.lights.new("DawnWin", 'AREA'); dawn.size = 1.5; dawn.energy = 60; dawn.color = (0.7, 0.8, 1.0)
+    dawn = bpy.data.lights.new("DawnWin", 'AREA'); dawn.size = 2.0; dawn.energy = 260; dawn.color = (0.7, 0.8, 1.0)
     do = bpy.data.objects.new("DawnWin", dawn); bpy.context.collection.objects.link(do); do.location = (2.5, -2.0, 2.0); point_at(do, (0, 1, 0.5))
+    hl = bpy.data.lights.new("HallLamp", 'POINT'); hl.energy = 120; hl.color = (1.0, 0.8, 0.55); hl.shadow_soft_size = 0.2
+    ho = bpy.data.objects.new("HallLamp", hl); bpy.context.collection.objects.link(ho); ho.location = (0.0, 0.2, 2.6)
     c["officer"] = officer("Searcher", 39, seed=2)
 
 
@@ -112,6 +114,6 @@ MOVES = {
                    cam=lambda c, t: (Vector((14.0, -6.5, 2.4)).lerp(Vector((12.0, -6.0, 2.2)), ease(t)), Vector((-1.0, 6.0, 1.0)), 30),
                    focus=lambda c, t: Vector((-1.0, 5.0, 1.0))),
     "stairs": dict(kind="anim", dof=2.8, anim=anim_stairs,
-                   cam=lambda c, t: (Vector((-0.2, -0.6, 0.95)).lerp(Vector((0.0, -0.3, 0.8)), ease(t)), Vector((0.6, 2.0, 0.3)), 30),
+                   cam=lambda c, t: (Vector((-1.6, -0.9, 1.35)).lerp(Vector((-1.4, -0.7, 1.25)), ease(t)), Vector((0.4, 1.9, 0.45)), 28),
                    focus=lambda c, t: Vector((0.6, 2.0, 0.25))),
 }

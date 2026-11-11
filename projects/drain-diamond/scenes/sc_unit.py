@@ -119,8 +119,8 @@ def anim_read(c, t):
 
 MOVES = {
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
-                cam=lambda c, t: (Vector((2.4, 1.0, 1.7)).lerp(Vector((1.5, 3.2, 1.65)), ease(t)), Vector((-1.0, 8.4, 1.5)), 28)),
+                cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
     "read": dict(kind="anim", dof=2.8, anim=anim_read,
-                 cam=lambda c, t: (Vector((1.4, 2.2, 1.45)).lerp(Vector((1.6, 2.5, 1.42)), ease(t)), Vector((4.3, 3.7, 1.1)), 40),
+                 cam=lambda c, t: (Vector((1.6, 5.6, 1.6)).lerp(Vector((1.9, 5.3, 1.55)), ease(t)), Vector((4.0, 3.6, 1.05)), 32),
                  focus=lambda c, t: Vector((4.0, 3.6, 1.2))),
 }

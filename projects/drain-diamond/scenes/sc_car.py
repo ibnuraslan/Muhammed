@@ -13,7 +13,7 @@ from dd import person, place, face_to, zero, ground, rain, rain_fall
 from human import reach, pose_sit, reset_pose, fingers_curl
 from sc_boutique import haussmann
 
-EXPOSURE = 0.6
+EXPOSURE = 1.0
 DUR = {"mic": 9.0, "envelope": 9.0, "reels": 9.0}
 VARIANT_FOR = {"mic": "interior", "envelope": "street", "reels": "interior_day"}
 
@@ -59,7 +59,7 @@ def interior(c, day=False):
             l = bpy.data.lights.new("StreetLamp", 'POINT'); l.energy = 600; l.color = (1.0, 0.68, 0.38); l.shadow_soft_size = 0.2
             o = bpy.data.objects.new("StreetLamp", l); bpy.context.collection.objects.link(o); o.location = (-12 + k * 9.0, 5.0, 5.0)
             cyl("LampGlow", (-12 + k * 9.0, 5.0, 5.0), 0.15, 0.3, emissive("LampGlowE", (1.0, 0.7, 0.4), 30), verts=12)
-        il = bpy.data.lights.new("Interior", 'POINT'); il.energy = 2; il.color = (1.0, 0.8, 0.6)
+        il = bpy.data.lights.new("Interior", 'POINT'); il.energy = 18; il.color = (1.0, 0.8, 0.6)
         io = bpy.data.objects.new("Interior", il); bpy.context.collection.objects.link(io); io.location = (0.2, 0, 1.3)
 
 
@@ -71,7 +71,7 @@ def build(variant=None):
         if v == "interior":
             h = person("Tech", 1.0, 36, "male_casualsuit05", "short02", cval=1.1)
             c["tech"] = h
-            tl = bpy.data.lights.new("TechTorch", 'SPOT'); tl.energy = 6; tl.spot_size = math.radians(40); tl.color = (1.0, 0.95, 0.85)
+            tl = bpy.data.lights.new("TechTorch", 'SPOT'); tl.energy = 25; tl.spot_size = math.radians(40); tl.color = (1.0, 0.95, 0.85)
             to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
             c["mic"] = cyl("Mic", (0, 0, -10), 0.008, 0.03, pbr("MicM", (0.02, 0.02, 0.02), 0.5), verts=10)
         else:
@@ -92,8 +92,8 @@ def build(variant=None):
             l = bpy.data.lights.new("StreetLamp", 'POINT'); l.energy = 900; l.color = (1.0, 0.68, 0.38); l.shadow_soft_size = 0.2
             o = bpy.data.objects.new("StreetLamp", l); bpy.context.collection.objects.link(o); o.location = (-14 + k * 7.0, 2.8, 5.0)
             dd.model_h("street_lamp_02", (-14 + k * 7.0, 3.0, 0.1), 5.0)
-        a = dd.sedan("CarA", (0.08, 0.09, 0.1), lights=False, window_open=1.0); a.location = (0, 0.95, 0)
-        b = dd.sedan("CarB", (0.35, 0.36, 0.38), lights=False, window_open=1.0); b.location = (0.4, -0.95, 0); b.rotation_euler = (0, 0, math.pi)
+        a = dd.sedan("CarA", (0.08, 0.09, 0.1), lights=False, window_open=1.0); a.location = (0, 1.2, 0)
+        b = dd.sedan("CarB", (0.35, 0.36, 0.38), lights=False, window_open=1.0); b.location = (0.4, -1.2, 0); b.rotation_euler = (0, 0, math.pi)
         c["env"] = box("Envelope", (0, 0, 0), (0.23, 0.005, 0.12), pbr("EnvM", (0.7, 0.6, 0.42), 0.7))
         for name, loc in (("DrvA", (0.3, 0.55, 0.0)), ("DrvB", (0.1, -0.55, 0.0))):
             h = person(name, 1.0, 40, "male_casualsuit05", "short02", cval=1.0)
@@ -102,7 +102,7 @@ def build(variant=None):
             hip = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) / 2; h.arm.location.z += 0.5 - hip.z
             c[name] = h
         c["rain_ys"] = (-6.0, -3.0, -1.6)
-        rain(c, 0, c["rain_ys"], width=30, height=8, strength=5.0, density=0.988)
+        rain(c, 0, c["rain_ys"], width=30, height=8, strength=3.0, density=0.985)
     return c
 
 
@@ -123,7 +123,7 @@ def anim_envelope(c, t):
     sec = t * DUR["envelope"]
     rain_fall(c, sec)
     u = ease(min(1.0, max(0.0, (sec - 2.5) / 2.5)))
-    a = Vector((0.3, 0.95 - 0.86, 1.08)); b = Vector((0.15, -0.95 + 0.86, 1.08))
+    a = Vector((0.3, 1.2 - 0.8, 1.08)); b = Vector((0.15, -1.2 + 0.8, 1.08))
     e = c["env"]; e.location = a.lerp(b, u) + Vector((0, 0, 0.05 * math.sin(math.pi * u))); e.rotation_euler = (0, 0, 0)
     da, db = c["DrvA"], c["DrvB"]
     if u < 0.55:
@@ -146,6 +146,6 @@ MOVES = {
                      cam=lambda c, t: (Vector((6.5, -6.5, 2.4)).lerp(Vector((5.8, -6.0, 2.2)), ease(t)), Vector((0.2, 0.0, 1.0)), 32),
                      focus=lambda c, t: Vector((0.2, 0.0, 1.0))),
     "reels": dict(kind="anim", dof=1.8, anim=anim_reels,
-                  cam=lambda c, t: (Vector((-0.6, 0.1, 1.0)).lerp(Vector((-0.5, 0.05, 0.95)), ease(t)), Vector((-0.1, -0.33, 0.5)), 35),
+                  cam=lambda c, t: (Vector((-0.75, 0.35, 1.05)).lerp(Vector((-0.65, 0.3, 1.02)), ease(t)), Vector((0.6, -1.0, 0.75)), 30),
                   focus=lambda c, t: Vector((-0.1, -0.33, 0.52))),
 }
