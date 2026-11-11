@@ -765,6 +765,11 @@ for nm in ("WS_FrontWall", "OF_FrontWall", "WS_PhotoFrame"):
     for o2 in objs:
         key_hide(o2, [(1, False), (F(18.86), False), (F(18.88), True), (F(19.12), True), (F(19.14), False),
                       (F(28.28), False), (F(28.3), True), (F(28.6), True), (F(28.62), False)])
+# volumes only render where they are used (they cost render time even at zero density)
+for o in [bpy.data.objects["Gas_%d" % i] for i in range(6)]:
+    key_hide(o, [(1, True), (F(7.3), False), (F(12.7), True)])
+key_hide(bpy.data.objects["MuzzlePuff"], [(1, True), (F(14.95), False), (F(16.1), True), (F(32.35), False), (F(33.5), True)])
+key_hide(bpy.data.objects["ImpactPuff"], [(1, True), (F(32.85), False), (F(34.9), True)])
 # exposure: white flashes for the memory in / out, office a touch brighter
 vs = sc.view_settings
 for t, e in ((0, 0.0), (18.62, 0.0), (18.92, 5.5), (19.05, 5.5), (19.35, -0.4), (28.05, -0.4), (28.32, 5.5), (28.45, 5.5), (28.8, 0.0)):
