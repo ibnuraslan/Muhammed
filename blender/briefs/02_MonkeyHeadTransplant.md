@@ -30,6 +30,6 @@ In 1970, a surgeon removed the head of a monkey and attached it to the body of a
   - No logos, brand names or watermarks on anything: clothes, cups, monitors, props.
   - No likeness of any real person; use generic characters.
 - **Look:** textured, grounded realism, with anatomy believable and clean, never gory.
-  - Medical "inside the body" beats use the clean explainer look: a deep teal-to-navy studio gradient behind realistic anatomy and studio lighting.
+  - Medical "inside the body" beats use the clean explainer look: a bright sky-blue gradient (cyan to near-white) behind clean, colour-coded anatomy in soft, high-key light (see `blender/STYLE_ANIMATED.md`).
   - Real-world beats use real sets.
 - **Deliverable tonight:** checkpoint D package in `blender/MonkeyHeadTransplant_v002/`, committed as a normal git file with no LFS. Keep the .blend under 95 MB (1K textures, 2K only for hero close-ups, 1K HDRI).
