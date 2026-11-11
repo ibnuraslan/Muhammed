@@ -82,7 +82,7 @@ def ashlar(name, course=0.5, block=1.1, mortar=0.006, groove=False):
 
 
 # ============================================================================ the Haussmann block
-def haussmann(x0, x1, seed=0, boutique=False, depth=14.0, gf=5.0, floors=5, fh=3.25, lit_frac=0.12, rot_z=0.0, origin=(0, 0, 0)):
+def haussmann(x0, x1, seed=0, boutique=False, depth=14.0, gf=5.0, floors=5, fh=3.25, lit_frac=0.12, rot_z=0.0, origin=(0, 0, 0), shops=True):
     """A limestone apartment block with its front face on y=0 (street at -y). Returns the joined object + info."""
     M = mats(); rng = np.random.default_rng(seed)
     w = x1 - x0; cx = (x0 + x1) / 2
@@ -136,13 +136,21 @@ def haussmann(x0, x1, seed=0, boutique=False, depth=14.0, gf=5.0, floors=5, fh=3
     info = dict(H=H, gf=gf, x0=x0, x1=x1)
     if boutique:
         opens = shop_front(B, x0, x1, gf, info)
-    else:
+    elif shops:
         gfn = max(2, int(round(w / 4.5))); opens = []
         for b in range(gfn):
             x = x0 + w / gfn * (b + 0.5); ww = w / gfn - 1.0
-            B.box((x, 0.06, 2.0), (ww, 0.05, 3.6), M["glass"])
+            B.box((x, 0.06, 1.95), (ww, 0.05, 3.7), M["glass"])
+            B.box((x, 0.05, 0.12), (ww, 0.2, 0.24), M["iron"])
             B.box((x, 0.0, 3.85), (ww, 0.12, 0.12), M["iron"])
             opens.append((x, ww))
+    else:                                   # a plain rusticated ground floor with a few small barred windows
+        opens = []
+        for b in range(max(2, int(w / 6.0))):
+            x = x0 + 3.0 + b * 6.0
+            B.box((x, -0.01, 2.6), (0.9, 0.04, 1.2), M["glass"])
+            for k in range(5):
+                B.box((x - 0.36 + k * 0.18, -0.06, 2.6), (0.02, 0.02, 1.2), M["iron"])
     # stone piers between the ground-floor openings, the openings themselves recessed 1.2 m
     edges = [x0] + [e for x, ww in sorted(opens) for e in (x - ww / 2, x + ww / 2)] + [x1]
     for a_, b_ in zip(edges[0::2], edges[1::2]):
@@ -288,8 +296,8 @@ def paint_tin(name):
 
 # ============================================================================ variants
 def build_dawn(c):
-    world_sky(sun_elev_deg=5, sun_rot_deg=200, strength=1.6, tint=(0.88, 0.92, 1.0))
-    sun(5, 200, energy=1.2, color=(1.0, 0.72, 0.5), angle_deg=2.0)
+    w = world_sky(sun_elev_deg=6, sun_rot_deg=300, strength=3.0, tint=(0.9, 0.93, 1.0))
+    [n for n in w.node_tree.nodes if n.type == 'TEX_SKY'][0].sun_disc = False
     blk, info = haussmann(-11, 11, seed=1, boutique=True, lit_frac=0.3)
     haussmann(-34, -11, seed=2, lit_frac=0.28); haussmann(11, 33, seed=3, lit_frac=0.25)
     haussmann(33, 55, seed=4, lit_frac=0.25); haussmann(-56, -34, seed=5, lit_frac=0.25)
@@ -315,11 +323,11 @@ def build_lane(c, night=False):
             sl = bpy.data.lights.new("StreetL", 'SPOT'); sl.energy = 1500; sl.spot_size = math.radians(120); sl.color = (1.0, 0.7, 0.42)
             so = bpy.data.objects.new("StreetL", sl); bpy.context.collection.objects.link(so); so.location = (-3.5, y, 6.0)
     else:
-        world_sky(sun_elev_deg=6, sun_rot_deg=150, strength=0.7, tint=(0.9, 0.93, 1.0))
-        sun(6, 150, energy=0.6, color=(1.0, 0.72, 0.5), angle_deg=3.0)
+        w = world_sky(sun_elev_deg=6, sun_rot_deg=300, strength=2.2, tint=(0.9, 0.93, 1.0))
+        [n for n in w.node_tree.nodes if n.type == 'TEX_SKY'][0].sun_disc = False
     # a narrow rue running along +Y: the boutique block's side on the right (x>0), another block on the left
-    haussmann(-30, 30, seed=7, rot_z=math.radians(-90), origin=(4.0, 0, 0), lit_frac=0.06, gf=5.0)
-    haussmann(-30, 30, seed=8, rot_z=math.radians(90), origin=(-4.0, 0, 0), lit_frac=0.06, gf=5.0)
+    haussmann(-30, 30, seed=7, rot_z=math.radians(-90), origin=(4.0, 0, 0), lit_frac=0.06, gf=5.0, shops=False)
+    haussmann(-30, 30, seed=8, rot_z=math.radians(90), origin=(-4.0, 0, 0), lit_frac=0.06, gf=5.0, shops=False)
     road = dd.wet(dd.tex_mat("cobblestone_floor_04", 0.6, tint=(0.55, 0.55, 0.56), name="Cobbles", sat=0.4), 0.4, 0.4, ripples=False)
     box("Lane", (0, 0, -0.05), (8, 70, 0.1), road)
     haussmann(-12, 12, seed=9, rot_z=0.0, origin=(0, 30.0, 0), lit_frac=0.1)      # closes the end of the lane
@@ -631,9 +639,9 @@ def anim_facade(c, t):
 def cam_facade(c, t):
     e = ease(t)
     d = c["info"]["door"]
-    loc = Vector((d.x - 9.0, -17.0, 1.7)).lerp(Vector((d.x - 7.0, -16.0, 6.5)), e)
-    tgt = Vector((d.x, 0, 3.0)).lerp(Vector((d.x, 0, 11.0)), e)
-    return loc, tgt, 26
+    loc = Vector((d.x - 2.5, -4.6, 1.6)).lerp(Vector((d.x - 1.8, -4.2, 3.2)), e)
+    tgt = Vector((d.x, 0, 3.0)).lerp(Vector((d.x, 0, 16.0)), e)
+    return loc, tgt, 16
 
 
 def anim_grille(c, t):
@@ -661,8 +669,8 @@ def arms_relaxed_one(h, sd):
 def cam_grille(c, t):
     e = ease(t)
     d = c["info"]["door"]
-    loc = Vector((d.x - 7.5, -8.0, 1.8)).lerp(Vector((d.x - 4.5, -7.0, 1.75)), e)
-    return loc, d + Vector((0.0, 0, 2.0)), 32
+    loc = Vector((d.x - 4.0, -4.4, 1.7)).lerp(Vector((d.x - 2.6, -4.0, 1.68)), e)
+    return loc, d + Vector((0.4, 0, 2.2)), 24
 
 
 def anim_painters(c, t):
