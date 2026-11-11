@@ -165,31 +165,58 @@ for sx in (-1, 1):
     t = bpy.context.object; t.name = f"SpecArm{sx}"; t.data.materials.append(wire); specs.append(t)
 bpy.ops.mesh.primitive_cylinder_add(radius=0.001, depth=0.03, location=E(0, -0.023, 0.006), rotation=(0, R_(90), 0), vertices=8)
 t = bpy.context.object; t.name = "SpecBridge"; t.data.materials.append(wire); specs.append(t)
-# moustache: a bushy walrus moustache (dense short hair strands on a hidden lip patch)
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.03, segments=24, ring_count=12, location=E(0, -0.010, -0.047))
-mo = bpy.context.object; mo.name = "Moustache"; mo.scale = (1.55, 0.42, 0.42); bpy.ops.object.transform_apply(scale=True)
-for v in mo.data.vertices:
-    v.co.z -= 0.25 * (v.co.x / 0.046) ** 2 * 0.02    # droop at the ends
+# moustache: sculpted walrus moustache following the upper-lip curve (rest pose), brown hair strands combed down
+from mathutils.bvhtree import BVHTree
+import bmesh as _bmm
+_bd = bpy.data.objects["Hero.body"]
+_bvh = BVHTree.FromPolygons([_bd.matrix_world @ v.co for v in _bd.data.vertices], [tuple(p.vertices) for p in _bd.data.polygons])
+LIPZ = EZ - 0.050
+NS_, NR_ = 21, 12
+_bm = _bmm.new(); rings = []
+for i in range(NS_):
+    t = (i / (NS_ - 1)) * 2 - 1                      # -1 .. 1 across the lip
+    x = 0.043 * t; z = LIPZ - 0.016 * t ** 4 - 0.004 * t * t   # droops over the mouth corners
+    hit = _bvh.ray_cast(Vector((x, -0.5, z)), Vector((0, 1, 0)))
+    P = hit[0] if hit[0] is not None else Vector((x, EY + 0.01 + 0.02 * t * t, z))
+    nrm = (hit[1] if hit[1] is not None else Vector((0, -1, 0))).normalized()
+    up = Vector((0, 0, 1)); up = (up - nrm * up.dot(nrm)).normalized()
+    th = 0.0032 * (1 - 0.6 * t * t) + 0.0008       # thickness off the skin, tapered
+    hh = 0.006 * (1 - 0.5 * t * t) + 0.0012       # half height, tapered
+    ring = []
+    for k in range(NR_):
+        a = math.pi * 2 * k / NR_
+        off = nrm * (th * max(0.0, math.cos(a)) * 1.0 - 0.0015) + up * (hh * math.sin(a))
+        ring.append(_bm.verts.new(P + off))
+    rings.append(ring)
+for i in range(NS_ - 1):
+    for k in range(NR_):
+        _bm.faces.new((rings[i][k], rings[i][(k + 1) % NR_], rings[i + 1][(k + 1) % NR_], rings[i + 1][k]))
+_bm.faces.new(rings[0][::-1]); _bm.faces.new(rings[-1])
+_me = bpy.data.meshes.new("Moustache"); _bm.to_mesh(_me); _bm.free()
+mo = bpy.data.objects.new("Moustache", _me); sc.collection.objects.link(mo)
+for p_ in _me.polygons: p_.use_smooth = True
 hairm = bpy.data.materials.new("MoustacheHair"); hairm.use_nodes = True
-hb = hairm.node_tree.nodes["Principled BSDF"]; hb.inputs["Base Color"].default_value = (0.33, 0.28, 0.23, 1); hb.inputs["Roughness"].default_value = 0.7
-mo.data.materials.append(hairm)
-dsp = mo.modifiers.new("Bristle", "DISPLACE"); tx = bpy.data.textures.new("Bristle", "STUCCI"); tx.noise_scale = 0.004; dsp.texture = tx; dsp.strength = 0.003
-bpy.ops.object.shade_smooth(); specs.append(mo)
-mo.modifiers.remove(dsp)
-psm = mo.modifiers.new("Hair", "PARTICLE_SYSTEM"); ps = psm.particle_system.settings
-ps.type = "HAIR"; ps.count = 2500; ps.hair_length = 0.016; ps.use_advanced_hair = True
-ps.normal_factor = 0.0009; ps.object_align_factor = (0.0, -0.0003, -0.0032); ps.factor_random = 0.0004; ps.brownian_factor = 0.0
-ps.root_radius = 0.00025; ps.tip_radius = 0.00006; ps.radius_scale = 1.0; ps.material = 1
-ps.child_type = "INTERPOLATED"; ps.rendered_child_count = 6; ps.child_length = 0.9; ps.roughness_1 = 0.002
-ps.use_emit_random = True; ps.emit_from = "FACE"
-ps.render_type = "PATH"; ps.display_step = 3; ps.render_step = 4
-mo.show_instancer_for_render = True
+_hn = hairm.node_tree; [_hn.nodes.remove(x_) for x_ in list(_hn.nodes) if x_.type == "BSDF_PRINCIPLED"]
+_ph = _hn.nodes.new("ShaderNodeBsdfHairPrincipled")
+try: _ph.parametrization = "MELANIN"
+except Exception: pass
+for k_, v_ in (("Melanin", 0.55), ("Melanin Redness", 0.5), ("Roughness", 0.32), ("Radial Roughness", 0.4), ("Random Roughness", 0.15)):
+    if k_ in _ph.inputs: _ph.inputs[k_].default_value = v_
+_hn.links.new(_ph.outputs[0], _hn.nodes["Material Output"].inputs["Surface"])
 skin_m = bpy.data.materials.new("MoustacheBase"); skin_m.use_nodes = True
-skin_m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.24, 0.2, 0.16, 1)
-mo.data.materials.clear(); mo.data.materials.append(skin_m); mo.data.materials.append(hairm)
-_c = sum((v.co for v in mo.data.vertices), Vector()) / len(mo.data.vertices)
-for v in mo.data.vertices: v.co = _c + Vector(((v.co - _c).x * 0.78, (v.co - _c).y * 0.7, (v.co - _c).z * 0.6))
-mo.data.update()
+_sb = skin_m.node_tree.nodes["Principled BSDF"]; _sb.inputs["Base Color"].default_value = (0.11, 0.065, 0.035, 1); _sb.inputs["Roughness"].default_value = 0.9
+_tw = skin_m.node_tree.nodes.new("ShaderNodeTexWave"); _tw.bands_direction = "X"; _tw.inputs["Scale"].default_value = 900; _tw.inputs["Distortion"].default_value = 3
+_bp = skin_m.node_tree.nodes.new("ShaderNodeBump"); _bp.inputs["Strength"].default_value = 0.4
+skin_m.node_tree.links.new(_tw.outputs["Fac"], _bp.inputs["Height"]); skin_m.node_tree.links.new(_bp.outputs["Normal"], _sb.inputs["Normal"])
+_me.materials.append(skin_m); _me.materials.append(hairm)
+psm = mo.modifiers.new("Hair", "PARTICLE_SYSTEM"); ps = psm.particle_system.settings
+ps.type = "HAIR"; ps.count = 3000; ps.hair_length = 0.009; ps.use_advanced_hair = True
+ps.normal_factor = 0.0012; ps.object_align_factor = (0.0, -0.0005, -0.0026); ps.factor_random = 0.0004; ps.brownian_factor = 0.0
+ps.root_radius = 0.00022; ps.tip_radius = 0.00005; ps.radius_scale = 1.0; ps.material = 2
+ps.child_type = "INTERPOLATED"; ps.rendered_child_count = 5; ps.child_length = 0.95; ps.roughness_1 = 0.0012; ps.clump_factor = 0.15
+ps.use_emit_random = True; ps.emit_from = "FACE"; ps.render_type = "PATH"; ps.display_step = 3; ps.render_step = 4
+mo.show_instancer_for_render = True
+specs.append(mo)
 for o in specs:
     for c_ in list(o.users_collection): c_.objects.unlink(o)
     sc.collection.objects.link(o)
