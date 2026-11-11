@@ -13,7 +13,7 @@ The source is `../HeadsetBullet_v001/scripts`. Build order:
 2. `01_build_teen.py`
 3. `02_build_scene.py`
 4. `03_animate.py`, which runs `03a_headset.py`, `03b_effects.py` and `03c_camera.py`
-5. `pipeline/anim_look.py`, then `06_anim_look_fixes.py` (v005 look)
+5. `pipeline/anim_look.py`, then `06_anim_look_fixes.py` (v004 look)
 6. `07_hand_limits.py` (v005 hands)
 7. `05_shrink.py` (1K textures, JPEG/8-bit, orphan purge)
 8. `pipeline/package_for_farm.py`
