@@ -501,7 +501,7 @@ P2 = V((CX + 0.8, 1.25, 0))
 DIVERS_IN = 1715
 # diver B swims back up the passage ahead of the rising camera (beat 8), surfaces beside the boy at the edge and waits
 for f in range(1716, 1836, 10):
-    u = (f - 1716) / 120.0; y = -9.0 + 5.4 * u
+    u = min(1.0, (f - 1716) / 84.0); y = -9.0 + 6.4 * u
     swim("DiverB", f, pas_mid(y, 0.9 + 0.4 * u), 180.0, pitch=-12 * u, phase=f * 0.25, kick=1.0)
 for f in (1850, 1900, 1950, 1995):
     H = HUM["DiverB"]; P = V((CX - 0.75, -2.35, WZ - 0.86 + 0.02 * math.sin(f * 0.1))); Rb = body_R(180 + 15, 0)
