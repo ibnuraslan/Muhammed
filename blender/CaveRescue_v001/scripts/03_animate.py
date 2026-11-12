@@ -427,7 +427,7 @@ for n, x, y, yaw in HUDDLE:
             ev(f - 1)
             hd = RIG[n].o.matrix_world @ RIG[n].PB["head"].head
             fw = Rz(yaw + look_pool) @ V((0, -1, 0))
-            hov = {"R": (hd + fw * 0.3 + V((0, 0, 0.2)) + Rz(yaw) @ V((-0.03, 0, 0)), (Rz(yaw) @ V((1, 0, 0.25))).normalized(), -fw)}
+            hov = {"R": (hd + fw * 0.34 + V((0, 0, 0.26)) + Rz(yaw) @ V((-0.03, 0, 0)), (Rz(yaw) @ V((1, 0, 0.25))).normalized(), -fw)}
         seated(n, f, X, y, yaw, lean=10 if f > F_SURF else 22, head=(-12 if f > F_SURF else 22, look_pool if f > F_SURF else 0), hand_over=hov)
     TELE[n].add(F_CH0 - 13)
 # diver A surfaces in the pool, holds the ledge edge (head torch blazing), then hauls out
@@ -547,10 +547,12 @@ for f in (2155, 2190, 2230, 2270, 2300, 2328):
     W = tip + outw * 0.09 + V((0, 0, 0.02))
     HUM[DA].key_hand("R", f, W, -outw, V((0, 0, 1)), W + V((0.3, 0.3, -0.4)))
     key_fingers(DA, "R", f, "tripod"); key_fingers(DA, "L", f, "cup_hold")
-    HUM[DA].key_hand("L", f, arm + V((0, 0, 0.09)) + outw * 0.02, V((0, -1, -0.4)).normalized(), V((0, 0, -1)), arm + V((0.4, 0.4, 0.0)))
-    # syringe follows the right hand (palm side) along -outw
+    sh_b = bone_w("Boy2", "upperarm02.L", 0.05)          # steadying hand higher up the arm, near the shoulder, clear of the needle
+    HUM[DA].key_hand("L", f, sh_b + V((0, 0, 0.08)) + outw * 0.02, V((0, -1, -0.4)).normalized(), V((0, 0, -1)), sh_b + V((0.4, 0.4, 0.0)))
+    # syringe in the medic's right hand (shared grip_object: pinches the thin barrel, thumb opposing)
     syr.location = tip + outw * 0.055; syr.rotation_euler = (-outw).to_track_quat('-Z', 'Y').to_euler()
     syr.keyframe_insert("location", frame=f); syr.keyframe_insert("rotation_euler", frame=f)
+    ev(f); grip_object(RIG[DA].o, "R", f, syr, syr.matrix_world.translation + outw * 0.02, -V((0, 0, 1)))
 for f, h in ((1, True), (2150, False), (2335, True)):
     syr.hide_render = h; syr.keyframe_insert("hide_render", frame=f); ndl.hide_render = h; ndl.keyframe_insert("hide_render", frame=f)
 for f, a in ((2155, 0), (2280, 0), (2320, 1)):
@@ -597,7 +599,8 @@ for f in (2329, 2345, 2365, 2385, 2406):
         key_fingers("DiverB", s, f, "pinch")
         if f < 2380:
             W = c_ + side * (0.11 * -sx) + fwd2 * 0.02 + V((0, 0, -0.02))
-            HUM["DiverB"].key_hand(s, f, W, (-side * -sx + fwd2 * 0.2).normalized(), -fwd2, W + fwd2 * 0.5 + side * 0.4 * -sx + V((0, 0, -0.3)))
+            ev(f); cpt = c_ + side * (0.075 * -sx)
+            grip_object(RIG["DiverB"].o, s, f, fm_, cpt, (side * sx).normalized())        # fingers close on the mask rim
         else:      # pull the straps behind the head
             W = c_ - fwd2 * 0.13 + side * (0.1 * -sx) + V((0, 0, 0.05))
             HUM["DiverB"].key_hand(s, f, W, (fwd2 * -1 + V((0, 0, 0.3))).normalized(), side * sx, W + fwd2 * 0.6 + side * 0.4 * -sx)
@@ -651,13 +654,13 @@ bpy.ops.mesh.primitive_cube_add(size=1); stre = bpy.context.active_object; stre.
 stre.data.transform(Matrix.Diagonal((0.55, 2.0, 0.04, 1))); stre.data.materials.append(m_canvas)
 stre.data.materials.append(bpy.data.materials["M_Tank"])
 import bmesh as _bm_
-_b = _bm_.new(); _b.from_mesh(stre.data)
+_sb = _bm_.new(); _sb.from_mesh(stre.data)
 for sx in (-1, 1):
-    r_ = _bm_.ops.create_cone(_b, cap_ends=True, segments=10, radius1=0.018, radius2=0.018, depth=2.5,
+    r_ = _bm_.ops.create_cone(_sb, cap_ends=True, segments=10, radius1=0.018, radius2=0.018, depth=2.5,
                               matrix=Matrix.Translation((0.29 * sx, 0, 0.0)) @ Matrix.Rotation(R_(90), 4, 'X'))
     for v_ in r_['verts']:
         for f_ in v_.link_faces: f_.material_index = 1
-_b.to_mesh(stre.data); _b.free()
+_sb.to_mesh(stre.data); _sb.free()
 # carriers walk out of the mouth: DiverA front, DiverB back, stretcher between at hip height, Boy4 lying on it
 OUT0, OUT1 = 2725, 2928
 def carry_path(f, off):

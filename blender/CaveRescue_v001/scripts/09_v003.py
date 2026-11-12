@@ -141,5 +141,19 @@ for o in bpy.data.objects:
             nt.links.new(mxc.outputs['Result'], p.inputs['Base Color'])
             if 'Sheen Weight' in p.inputs: p.inputs['Sheen Weight'].default_value = 0.12; p.inputs['Sheen Tint'].default_value = (0.2, 0.3, 0.45, 1)
             p.inputs['Roughness'].default_value = 0.4
+# render-only helpers stay out of viewport ray casts (QA): the murk / silt volumes and the rock-wipe card in front of the lens
+for nm in ("S5_Murk", "S5_Silt", "CAM_RockWipe"):
+    o = bpy.data.objects.get(nm)
+    if o: o.hide_viewport = True
+# the full-face mask waits in the gear bag (far from every hand) until the fit begins
+fm = bpy.data.objects["Prop_FullFaceMask"]
+ad = fm.animation_data
+fc_loc = [fc for fc in ad.action.layers[0].strips[0].channelbags[0].fcurves if fc.data_path == "location"]
+first = {fc.array_index: fc.evaluate(2329) for fc in fc_loc}
+bag = bpy.data.objects["S4_GearBag_0"].location
+for fc in fc_loc:
+    for f_, v_ in ((1, bag[fc.array_index] + (0.3 if fc.array_index == 2 else 0)), (2322, bag[fc.array_index] + (0.3 if fc.array_index == 2 else 0))):
+        kp = fc.keyframe_points.insert(f_, v_); kp.interpolation = 'CONSTANT'
+    fc.update()
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("V003_OK")

@@ -344,7 +344,7 @@ for i in range(150):
     t = inst(random.choice(trees), "S1_Tree_%d" % i, (x, y, H1(x, y) - 0.2), random.uniform(0, 6.3), s, S1); TREES.append(t)
 for i in range(1100):
     x = random.gauss(0, 12); y = random.uniform(-45, 25)
-    if abs(x - 0.25 * math.sin(y * 0.15)) < 1.5 and y < 0: continue
+    if abs(x - 0.25 * math.sin(y * 0.15)) < 2.7 and y < 0: continue
     if -3.5 < y < 1.0 and abs(x) < 3.0: continue
     if abs(x) < 9 and -30 < y < -9 and random.random() < 0.8: continue
     src = random.choice(ferns + shrubs)
