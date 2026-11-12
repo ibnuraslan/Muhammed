@@ -716,9 +716,9 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (1976, Vector((2.35, -0.5, 1.5)), HEADE + Vector((0, 0, 0.1)), 24),
  (2010, ENC + Vector((0.95, 0.3, 0.3)), HEADE, 34),
  (2070, ENC + Vector((0.72, 0.72, 0.16)), HEADE + Vector((0, 0.1, -0.05)), 36),
- (2130, ENC + Vector((0.1, 0.95, 0.3)), HEADE, 36),
- (2195, ENC + Vector((-0.35, 0.85, 0.32)), HEADE, 34),
- (2250, ENC + Vector((-0.45, 0.78, 0.36)), HEADE, 34),
+ (2130, ENC + Vector((0.9, 0.2, 0.22)), HEADE, 36),
+ (2195, ENC + Vector((0.88, 0.42, 0.26)), HEADE, 36),
+ (2250, ENC + Vector((0.82, 0.55, 0.3)), HEADE, 36),
 ]
 fp, ft, fl = catmull([(k[0], k[1]) for k in K]), catmull([(k[0], k[2]) for k in K]), pchip([(k[0], float(k[3])) for k in K])
 cam.rotation_mode = 'QUATERNION'; prevq = None

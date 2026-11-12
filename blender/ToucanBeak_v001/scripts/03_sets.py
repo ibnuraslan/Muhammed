@@ -374,6 +374,14 @@ for k, (loc, face) in enumerate([((9.93, -0.75, 1.55), (-1, 0)), ((6.6, 2.93, 1.
     ph_.location = Vector(loc) + Vector((face[0], face[1], 0)) * 0.012
     for l_ in ph_.data.uv_layers.active.data: l_.uv = (0.15 + l_.uv[0] * 0.35 + 0.2 * k, 0.35 + l_.uv[1] * 0.3)
 
+# X-ray lightbox (beak X-ray rendered from the real bird meshes by 01b_xray.py) on the east wall above the print bench
+lbx = box("Xray_lightbox", C_C, (0.06, 0.72, 0.56), (9.96, -2.05, 1.62), M_steel, bevel=0.008)
+M_xr = bpy.data.materials.new("Xray_film"); M_xr.use_nodes = True; xt = M_xr.node_tree; xb = xt.nodes["Principled BSDF"]
+xi = xt.nodes.new("ShaderNodeTexImage"); xi.image = bpy.data.images.load(os.path.join(A, "xray_beak.png"))
+xt.links.new(xi.outputs[0], xb.inputs["Base Color"]); xt.links.new(xi.outputs[0], xb.inputs["Emission Color"]); xb.inputs["Emission Strength"].default_value = 3.0
+bpy.ops.mesh.primitive_plane_add(size=1, location=(9.925, -2.05, 1.62)); xp = bpy.context.active_object; link(xp, C_C); xp.name = "Xray_film"
+xp.scale = (0.64, 0.48, 1); xp.rotation_euler = (R_(90), 0, R_(-90)); xp.data.materials.append(M_xr)
+
 printer = imp("printer", C_C, size=0.55, loc=(9.62, -1.65, 0.905), rotz=R_(-90), join=True)
 syr = imp("syringe", C_P, size=0.12, base=False); syr.name = "Glue_syringe"
 twz = imp("tweezers", C_P, size=0.12, base=False); twz.name = "Tweezers"

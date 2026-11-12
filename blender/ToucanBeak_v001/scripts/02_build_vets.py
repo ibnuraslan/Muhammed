@@ -24,7 +24,13 @@ def fabric_mat(name, rgb):
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs[0].default_value = 1
     cr = N.new("ShaderNodeCombineColor"); L.new(mr.outputs[0], cr.inputs[0]); L.new(mr.outputs[0], cr.inputs[1]); L.new(mr.outputs[0], cr.inputs[2])
     L.new(cr.outputs[0], mx.inputs[6]); mx.inputs[7].default_value = rgb + (1,)
-    L.new(mx.outputs[2], b.inputs["Base Color"])
+    # trousers darker than the top (reads as scrub top + trousers, not a one-piece suit)
+    tcz = N.new("ShaderNodeTexCoord"); sz = N.new("ShaderNodeSeparateXYZ"); L.new(tcz.outputs["Object"], sz.inputs[0])
+    mrz = N.new("ShaderNodeMapRange"); mrz.interpolation_type = 'SMOOTHSTEP'; L.new(sz.outputs["Z"], mrz.inputs[0])
+    mrz.inputs[1].default_value = 0.93; mrz.inputs[2].default_value = 0.97; mrz.inputs[3].default_value = 0.55; mrz.inputs[4].default_value = 1.0
+    dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; dk.inputs[0].default_value = 1
+    L.new(mx.outputs[2], dk.inputs[6]); cz = N.new("ShaderNodeCombineColor"); L.new(mrz.outputs[0], cz.inputs[0]); L.new(mrz.outputs[0], cz.inputs[1]); L.new(mrz.outputs[0], cz.inputs[2])
+    L.new(cz.outputs[0], dk.inputs[7]); L.new(dk.outputs[2], b.inputs["Base Color"])
     r = tex("rough", True); L.new(r.outputs[0], b.inputs["Roughness"])
     n = tex("nor_gl", True); nm = N.new("ShaderNodeNormalMap"); L.new(n.outputs[0], nm.inputs["Color"]); L.new(nm.outputs[0], b.inputs["Normal"])
     b.inputs["Sheen Weight"].default_value = 0.05
@@ -77,9 +83,9 @@ def person(name, gender, age, race, hair, clothes, shoes, skin, x, scrub_rgb, gl
     return rig
 
 person("VetA", 0.0, 0.45, {"asian": 0.1, "caucasian": 0.2, "african": 0.0, }, "ponytail01/ponytail01.mhclo",
-       "male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo", "young_caucasian_female2/young_caucasian_female2.mhmat", 0, (0.04, 0.2, 0.2), True, 0.45)
+       "female_casualsuit01/female_casualsuit01.mhclo", "shoes03/shoes03.mhclo", "young_caucasian_female2/young_caucasian_female2.mhmat", 0, (0.04, 0.2, 0.2), True, 0.45)
 person("VetB", 1.0, 0.5, {"asian": 0.0, "caucasian": 0.3, "african": 0.7}, "short02/short02.mhclo",
-       "male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo", "young_african_male/young_african_male.mhmat", 2, (0.05, 0.1, 0.26), True, 0.55)
+       "male_casualsuit04/male_casualsuit04.mhclo", "shoes03/shoes03.mhclo", "young_african_male/young_african_male.mhmat", 2, (0.05, 0.1, 0.26), True, 0.55)
 person("Assist", 1.0, 0.4, {"asian": 0.7, "caucasian": 0.3, "african": 0.0}, "short04/short04.mhclo",
        "male_casualsuit02/male_casualsuit02.mhclo", "shoes01/shoes01.mhclo", "young_asian_male/young_asian_male.mhmat", 4, (0.18, 0.2, 0.24), False, 0.5)
 for ob in bpy.data.objects:
