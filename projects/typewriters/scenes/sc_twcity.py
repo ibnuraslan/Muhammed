@@ -18,8 +18,29 @@ DUR = {"tower": 5.0, "antenna": 4.5, "pullback": 6.0}
 TOWER = Vector((0.0, 420.0, 0.0))
 
 
-def win_mat(name, lit=(1.0, 0.7, 0.42), density=0.3, strength=1.6):
-    return window_material(name, lit=lit, density=density, floor=2.8, bay=1.4, strength=strength, glass_col=(0.02, 0.022, 0.025))
+def win_mat(name, lit=(1.0, 0.7, 0.42), density=0.3, strength=0.7):
+    """Lit flat windows with something inside them: curtains and lamp falloff break up each cell (no flat glowing
+    rectangles), the light fades toward the head of the window, and each window gets its own warmth."""
+    m = window_material(name, lit=lit, density=density, floor=2.8, bay=1.4, strength=strength, glass_col=(0.02, 0.022, 0.025))
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    es = p.inputs['Emission Strength'].links[0].from_socket
+    geo = next(n for n in N if n.bl_idname == "ShaderNodeNewGeometry")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.9; nz.inputs['Detail'].default_value = 4.0
+    L.new(geo.outputs['Position'], nz.inputs['Vector'])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].position = 0.38; cr.color_ramp.elements[0].color = (0.08, 0.08, 0.08, 1)
+    cr.color_ramp.elements[1].position = 0.62; cr.color_ramp.elements[1].color = (1, 1, 1, 1); L.new(nz.outputs['Fac'], cr.inputs[0])
+    sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sep.inputs[0])
+    fz = N.new("ShaderNodeMath"); fz.operation = 'WRAP'; fz.inputs[1].default_value = 2.8; fz.inputs[2].default_value = 0.0; L.new(sep.outputs[2], fz.inputs[0])
+    gz = N.new("ShaderNodeMapRange"); gz.inputs['From Min'].default_value = 0.4; gz.inputs['From Max'].default_value = 2.6
+    gz.inputs['To Min'].default_value = 1.0; gz.inputs['To Max'].default_value = 0.35; L.new(fz.outputs[0], gz.inputs['Value'])
+    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(es, m1.inputs[0]); L.new(cr.outputs[0], m1.inputs[1])
+    m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; L.new(m1.outputs[0], m2.inputs[0]); L.new(gz.outputs[0], m2.inputs[1])
+    L.new(m2.outputs[0], p.inputs['Emission Strength'])
+    hue = N.new("ShaderNodeTexNoise"); hue.inputs['Scale'].default_value = 0.35; L.new(geo.outputs['Position'], hue.inputs['Vector'])
+    hr = N.new("ShaderNodeValToRGB"); hr.color_ramp.elements[0].color = (*[x * 0.9 for x in lit], 1); hr.color_ramp.elements[1].color = (1.0, 0.85, 0.62, 1)
+    hr.color_ramp.elements[0].position = 0.35; hr.color_ramp.elements[1].position = 0.65
+    L.new(hue.outputs['Fac'], hr.inputs[0]); L.new(hr.outputs[0], p.inputs['Emission Color'])
+    return m
 
 
 def aerial(x, y, z, rng, m):

@@ -217,7 +217,7 @@ def build(variant=None):
     # the X-ray cabinet: a steel box with a sliding drawer, a warning lamp, a control panel
     cab = ph.texture("metal_plate_02", scale=2.0, name="XCab", tint=(0.5, 0.56, 0.52))
     box("XCabinet", (XC.x, XC.y, 0.75), (1.2, 1.0, 1.5), cab, bevel=0.02)
-    box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.01, 0.01, 0.012), 0.6))
+    box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.03, 0.035, 0.03), 0.12, 0.0, **{"Coat Weight": 1.0, "Coat Roughness": 0.05}))
     xl = area_light((XC.x, XC.y - 0.9, 1.3), (0, 0, 0), 0.5, 20, (0.9, 0.95, 1.0)); point_at(xl, (XC.x, XC.y - 0.8, 0.6)); xl.visible_camera = False
     tray = join([box("Tray", (0, 0, 0), (0.85, 0.8, 0.03), pbr("TrayM", (0.55, 0.56, 0.57), 0.3, 0.9)),
                  box("TrayFront", (0, -0.41, 0.15), (0.9, 0.03, 0.42), cab)], "XTray")
@@ -339,7 +339,7 @@ def animate(c, sec, shot):
             twp.work(h, {"L": tgt + Vector((0.13 + w, -0.05, 0.02 * math.sin(sec * 3))), "R": tgt + Vector((-0.13 + w, -0.05, 0))}, head=16)
     elif shot == "calendar":
         twp.walk(tC, (3.6, 3.25), (-2.6, 3.25), sec, speed=0.9)
-        box_ = c["carry"]; box_.location = twp.chest_point(tC, 0.3, 0.42)
+        box_ = c["carry"]; box_.location = twp.chest_point(tC, 0.22, 0.3)
         box_.rotation_euler = (0, 0, tC.arm.rotation_euler.z + math.pi)
         for sd, sg in (("L", 1), ("R", -1)):
             side = twp.forward(tC).cross(Vector((0, 0, 1)))
@@ -442,7 +442,7 @@ CAMS = {
     "pair": lambda c, t: (PAIR + V3(-1.3, -1.9, 0.65).lerp(V3(-1.1, -1.65, 0.6), ease(t)), PAIR + V3(0.15, -0.1, 0.2), 30),
     "barlid": lambda c, t: (PAIR + V3(0.95, -0.65, 0.32).lerp(V3(0.85, -0.55, 0.27), ease(t)), PAIR + V3(0.55, -0.16, 0.01), 45),
     "bars": lambda c, t: (PAIR + V3(1.32, -0.78, 0.46).lerp(V3(1.3, -0.68, 0.41), ease(t)), PAIR + V3(1.27, -0.2, 0.0), 40),
-    "inspect78": lambda c, t: (XC + V3(0.9, -2.5, 1.55).lerp(V3(0.75, -2.2, 1.5), ease(t)), XC + V3(-0.2, -0.6, 0.85), 30),
+    "inspect78": lambda c, t: (XC + V3(1.5, -3.3, 1.8).lerp(V3(1.3, -3.0, 1.75), ease(t)), XC + V3(-0.15, -0.5, 1.0), 28),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
 }
 

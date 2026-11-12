@@ -109,15 +109,15 @@ def cam_xray(c, t):
 
 def cam_space(c, t):
     e = ease(t); b = ball(c)
-    return (W(c, (0.05, -0.34, 0.2)).lerp(W(c, (0.06, -0.3, 0.18)), e), W(c, (-0.04, -0.09, 0.1)), 45)
+    return (W(c, (-0.26, -0.44, 0.11)).lerp(W(c, (-0.22, -0.39, 0.1)), e), W(c, (-0.02, -0.12, 0.06)), 40)       # low, front-left: the long bar and the still ball beyond
 
 
 MOVES = {
     "strike": dict(kind="anim", dof=7.1, cam=cam_strike, focus=lambda c, t: ball(c), anim=anim("strike"), title=("CHAPTER 3", "THE SIGNAL", 10, 130)),
     "platen": dict(kind="anim", dof=6.3, cam=cam_platen, focus=lambda c, t: W(c, (T.PAGE_LEFT + T.MARGIN + 0.03, T.PLATEN_Y - T.PLATEN_R, T.PLATEN_Z)), anim=anim("platen")),
-    "sink": dict(kind="anim", dof=5.6, cam=cam_sink, focus=lambda c, t: ball(c).lerp(W(c, (0.0, T.BAR_Y + 0.03, 0.04)), ease(t)), anim=anim("sink")),
+    "sink": dict(kind="anim", dof=11.0, cam=cam_sink, focus=lambda c, t: ball(c).lerp(W(c, (0.0, T.BAR_Y + 0.03, 0.04)), ease(t)), anim=anim("sink")),
     "arms": dict(kind="anim", dof=5.6, cam=cam_arms, focus=lambda c, t: W(c, (0.0, -0.085, 0.04)), anim=anim("arms")),
-    "magnets": dict(kind="anim", dof=8.0, cam=cam_magnets, focus=lambda c, t: W(c, (0.0, T.BAR_Y + 0.004, T.BAR_Z + 0.012)), anim=anim("magnets")),
+    "magnets": dict(kind="anim", dof=16.0, cam=cam_magnets, focus=lambda c, t: W(c, (0.0, T.BAR_Y + 0.004, T.BAR_Z + 0.012)), anim=anim("magnets")),
     "xray": dict(kind="anim", dof=8.0, cam=cam_xray, focus=lambda c, t: W(c, (0.0, -0.06, 0.06)), anim=anim("xray")),
-    "space": dict(kind="anim", dof=5.6, cam=cam_space, focus=lambda c, t: W(c, (-0.04, -0.09, 0.1)), anim=anim("space")),
+    "space": dict(kind="anim", dof=8.0, cam=cam_space, focus=lambda c, t: W(c, (0.0, -0.17, 0.05)), anim=anim("space")),
 }
