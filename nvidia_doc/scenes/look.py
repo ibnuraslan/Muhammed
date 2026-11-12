@@ -46,7 +46,11 @@ MOODS = {
     "low_sun":  dict(key=(1.0, 0.76, 0.56), gain=1.35, sky=0.14, tint=(0.85, 0.88, 0.95), elev=7, angle=1.2,
                      sun=4.2, haze=(1.0, 0.80, 0.62), exposure=-0.6),
 }
-WARM = (1.0, 0.72, 0.46)          # practicals: tungsten-ish
+WARM = (1.0, 0.72, 0.46)
+# clear-day sky for exteriors (day_light(..., sky="blue")): deep rich blue at the top of frame, lighter and a little
+# warmer at the horizon. Never grey: the person wants the colours of a real day, the mood from light and shadow.
+BLUE_SKY = dict(horizon=(0.34, 0.40, 0.50), zenith=(0.015, 0.055, 0.24), ground=(0.05, 0.05, 0.05),
+                mid=(0.07, 0.16, 0.40))     # mid: the deep blue already ~15 degrees up, so the frame's sky reads blue          # practicals: tungsten-ish
 
 
 def set_grade(**cine):
@@ -174,9 +178,14 @@ def _light(kind, name, energy, color, loc=None, target=None, size=None, angle=No
     return o
 
 
-def sky(mood="overcast", azim=200, elev=None, strength=None):
-    """World: a physical sky with no sun disc (the sun is a lamp, so the key is controllable), low strength."""
+def sky(mood="overcast", azim=200, elev=None, strength=None, colors=None):
+    """World: a physical sky with no sun disc (the sun is a lamp, so the key is controllable), low strength.
+    colors: a gradient dict like BLUE_SKY (horizon, zenith, ground) instead of the mood's own sky."""
     md = MOODS[mood]
+    if colors is not None:
+        md = dict(md, **colors)
+        if strength is None:
+            strength = 1.0
     w = bpy.data.worlds.new("LookSky"); bpy.context.scene.world = w; w.use_nodes = True
     N = w.node_tree.nodes; L = w.node_tree.links; N.clear()
     if "zenith" in md:                          # overcast / mist: a slate gradient, dark at the top, pale low down
@@ -184,6 +193,8 @@ def sky(mood="overcast", azim=200, elev=None, strength=None):
         rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
         el[0].position = 0.0; el[0].color = (*md["ground"], 1); el[1].position = 0.55; el[1].color = (*md["zenith"], 1)
         e2 = el.new(0.03); e2.color = (*md["horizon"], 1)          # direction z: below horizon dark, pale band, dark top
+        if "mid" in md:
+            e3 = el.new(0.2); e3.color = (*md["mid"], 1)
         bias = N.new("ShaderNodeMath"); bias.operation = 'ADD'; bias.inputs[1].default_value = 0.02
         L.new(sp.outputs['Z'], bias.inputs[0]); L.new(bias.outputs[0], rp.inputs['Fac'])
         bg = N.new("ShaderNodeBackground"); bg.inputs['Strength'].default_value = md["sky"] if strength is None else strength
@@ -203,6 +214,9 @@ def sky(mood="overcast", azim=200, elev=None, strength=None):
     out = N.new("ShaderNodeOutputWorld")
     L.new(sk.outputs['Color'], mx.inputs[6]); L.new(mx.outputs[2], bg.inputs['Color']); L.new(bg.outputs[0], out.inputs['Surface'])
     return w
+
+
+_make_sky = sky        # day_light's `sky=` argument shadows the function name inside it
 
 
 def sun_key(mood="low_sun", azim=200, elev=None, energy=None):
@@ -272,23 +286,26 @@ def face_fill(energy=30.0, color=(1.0, 0.86, 0.72), dist=1.3, size=0.9, side=0.6
 
 # ----------------------------------------------------------------------------------------------- recipes
 def day_light(mood="overcast", azim=200, elev=None, sun_energy=None, sky_strength=None, haze_box=None,
-              haze_density=None, replace=True, exposure=None):
+              haze_density=None, replace=True, exposure=None, sky=None):
     """Exterior day. Replaces the set's sky and sun lamps (replace=True) with a low sky and one sun key.
     haze_box=(center, size) adds atmosphere. Sets the scene exposure for this mood (pass exposure= to override).
-    Pick azim so the sun comes from the side or behind the subject, never from the camera."""
+    Pick azim so the sun comes from the side or behind the subject, never from the camera.
+    sky="blue": a deep blue clear-day gradient (BLUE_SKY): use it with "low_sun" for stone / buildings / streets.
+    "overcast" only when the script says rain or fog. Exteriors keep full colour (grade saturation 1.0)."""
     if not enabled():
         return None
     s = bpy.context.scene
     if replace:
         for o in [o for o in s.objects if o.type == 'LIGHT' and o.data.type == 'SUN']:
             bpy.data.objects.remove(o)
-    sky(mood, azim, elev, sky_strength)
+    _make_sky(mood, azim, elev, sky_strength, colors=BLUE_SKY if sky == "blue" else sky if isinstance(sky, dict) else None)
     k = sun_key(mood, azim, elev, sun_energy)
     if haze_box is not None:
         haze(haze_box[0], haze_box[1], mood, haze_density)
     s.view_settings.exposure = MOODS[mood]["exposure"] if exposure is None else exposure
     if MOODS[mood].get("cine"):
         set_grade(**MOODS[mood]["cine"])
+    set_grade(sat=1.0)                                  # exteriors never lose colour
     return k
 
 
