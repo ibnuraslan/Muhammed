@@ -16,6 +16,8 @@ Per sampled frame it reports:
              3 cm of a prop surface
   CAMJUMP    (every frame) a camera switch, or the camera teleports >0.25 m in one frame (or turns >60 deg): a hard cut.
              The film is ONE continuous camera; only a fully covered wipe may hide a jump.
+  PROPMOVE   a hand-sized prop moves with no hand within 10 cm (a prop moving by itself: floating pen, tool)
+  ATTACH     a worn item (mask, cap, hat, glasses) drifts more than 2 cm off the head it sits on
   ROLL       the horizon is tilted more than ~20 deg (upside-down / sideways frame from an aim constraint).
 A clean film reports 0 for every category except intended, listed exceptions.
 Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
@@ -223,6 +225,61 @@ for (f, c, m) in P[::max(1, STEP // 2)]:
     x = m.col[0].xyz.normalized(); fwd = (-m.col[2].xyz).normalized()
     if abs(fwd.z) < 0.85 and abs(x.z) > 0.34:
         flag(f, "ROLL", "horizon tilted %.0f deg" % math.degrees(math.asin(min(1.0, abs(x.z)))))
+
+# PROPMOVE: "props never move by themselves". A hand-sized prop (bbox under 1.5 m) that moves more than 5 mm
+# between samples while in view must have a fingertip or palm of some visible character within 3 cm of its
+# bounding box, i.e. a hand is ON it. This catches a pen or tool that follows the wrist at an offset and floats
+# beside the hand. Props parented to a rig or to another object move with their carrier and are skipped.
+# Falling or thrown props are allowed only when listed in ACTING_notes.md.
+# ATTACH: worn items (mask, cap, hat, glasses, goggles, helmet, headlamp, visor) must sit ON the skin: the
+# median distance of their vertices to the wearer's body surface must be 1.5 cm or less (catches a mask that
+# hangs below the nose or floats off the face).
+import re
+WORN = {"mask", "cap", "hat", "glasses", "goggles", "helmet", "headlamp", "visor", "spectacles"}
+def _tokens(n): return set(t for t in re.split(r"[^a-z]+", re.sub(r"([a-z])([A-Z])", r"\1 \2", n).lower()) if t)
+def _bbox(o, dg):
+    e = o.evaluated_get(dg); mw = e.matrix_world
+    pts = [mw @ Vector(c) for c in e.bound_box]
+    lo = Vector((min(p.x for p in pts), min(p.y for p in pts), min(p.z for p in pts)))
+    hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
+    return lo, hi
+def _box_dist(lo, hi, p):
+    return Vector((max(lo.x - p.x, 0, p.x - hi.x), max(lo.y - p.y, 0, p.y - hi.y), max(lo.z - p.z, 0, p.z - hi.z))).length
+HANDB = [("wrist", False)] + [("finger%d-%d" % (k, j), True) for k in (1, 2, 3, 4, 5) for j in (2, 3)]
+MOVERS = [o for o in PROPS if o.parent is None]
+worn = [o for o in bpy.data.objects if o.type == 'MESH' and _tokens(o.name) & WORN]
+prevc = {}; nsamp = 0
+for f in range(sc.frame_start, sc.frame_end + 1, STEP):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); nsamp += 1
+    live = [r for r in RIGS if not hidden(r)]
+    hands = []
+    for r in live:
+        for side in ("L", "R"):
+            for b, tl in HANDB:
+                n = b + "." + side
+                if n in r.pose.bones: hands.append(wpos(r, n, tail=tl))
+    for o in MOVERS:
+        if o.hide_render or not o.visible_get(): prevc.pop(o.name, None); continue
+        lo, hi = _bbox(o, dg)
+        if (hi - lo).length > 1.5: continue
+        c = (lo + hi) / 2; pc = prevc.get(o.name); prevc[o.name] = c
+        if pc is None or (c - pc).length < 0.005 or not visible(c): continue
+        dmin = min((_box_dist(lo, hi, h) for h in hands), default=9)
+        if dmin > 0.03: flag(f, "PROPMOVE", "%s moves %.1f cm with no hand on it (nearest finger %.0f cm)" % (o.name, (c - pc).length * 100, dmin * 100))
+    if nsamp % 4 != 1: continue
+    for o in worn:
+        if o.hide_render or not o.visible_get() or not live: continue
+        lo, hi = _bbox(o, dg); c = (lo + hi) / 2
+        if not visible(c): continue
+        r = min(live, key=lambda q: (wpos(q, "head") - c).length)
+        b = BODY.get(r.name)
+        if b is None: continue
+        eb = b.evaluated_get(dg); mb = eb.to_mesh(); mw = eb.matrix_world
+        bvh = BVHTree.FromPolygons([mw @ v.co for v in mb.vertices], [tuple(p.vertices) for p in mb.polygons]); eb.to_mesh_clear()
+        ew = o.evaluated_get(dg); mwm = ew.to_mesh(); ow = ew.matrix_world
+        ds = sorted((bvh.find_nearest(ow @ v.co, 0.5)[3] or 0.5) for v in mwm.vertices); ew.to_mesh_clear()
+        lim = 0.04 if _tokens(o.name) & {"cap", "hat", "helmet"} else 0.015   # caps and hats sit on hair, not skin
+        if ds and ds[len(ds) // 2] > lim: flag(f, "ATTACH", "%s is %.1f cm off %s's skin (median)" % (o.name, ds[len(ds) // 2] * 100, r.name))
 
 json.dump(res, open(OUT, "w"), indent=1)
 print("QA_COUNTS", res["counts"])
