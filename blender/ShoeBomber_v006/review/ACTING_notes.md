@@ -53,7 +53,32 @@ Two things in the v004 file made `pipeline/clip_scan.py` report false hits. Both
 - clip_scan disables every MASK modifier, which exposed the MPFB "hide helpers" geometry (HelperGeometry/JointCubes) inside every body as an 'other' target. v006 deletes those helper vertices from all 13 bodies. They were never rendered.
 - The ShoeHide foot masks were toggled by a keyed `show_viewport`, so `frame_set` re-enabled them and the vertex indices shifted under the scan. They're now toggled by a keyed mask threshold.
 
-## Submission status (16:10 UTC, deadline build)
+## Resubmission status (17:2x UTC)
+The director's review items are now fixed:
+- The contact snap pass (`04b_contact_snap.py`) ran after the camera step: 141 hands snapped onto surfaces, 166 moved clear. `03b_hand_pushout.py` then ran again so no hand ends up inside a body.
+- The cabin camera is now a set of shots joined by cuts. Each static shot was chosen with qa_check's own criteria by `scripts/cam_search.py`, then checked with `scripts/cam_inside_check.py`.
+- 0.0 s now opens on his face over the shoe, and 25.5 s is the traveller's face.
+- BACKHEAD at 655 and 769 is fixed. EMPTY 205–241, 379–403, 469–571 and 1465–1555 are fixed.
+- The airport tray insert, which showed no person, was dropped.
+
+**qa_check.py** (`review/qa_v006.json`): HOVER 0, CLAW 0, FACEPRESS 0, BACKHEAD 0. Every remaining flag is intended:
+- EMPTY 1063–1392: the studio shoe cutaway and the sky dive, props only.
+- EMPTY 1057 (12 %): the macro push into the sole, the black wipe into the studio.
+- FILL/INSIDE 1069, 1243, 1255: the camera flying through the cloud-bank wipes.
+
+**clip_scan.py** (`review/clip_scan_v006.json`): bad range [865], one sampled frame (the attendant's hand at his heel as she grasps the shoe).
+
+**Note for the director's QA:** qa_check's INSIDE test casts from the camera, so it hits the lens-parented WipeCard (3 cm ahead) first and misses a camera inside a body. In one v016 build that was a black shot inside PaxA at 649–668. `scripts/cam_inside_check.py` hides the card and reports only the cloud wipe at 1253.
+
+## 6-point self-check (resubmission)
+1. Hands touch what they hold: **checked.** The snap pass ran (QA HOVER 0). The match is pinched, and the shoe, syringe, belt, tray, seat-back and lap contacts touch.
+2. No claws: **checked.** QA CLAW 0, with every finger pose from `hand_poses.py`.
+3. Nothing pressed into a face: **checked.** QA FACEPRESS 0.
+4. No empty, blurred or black cells, and no back of head on beats: **checked.** QA BACKHEAD 0, and no black or blurred cells on the sheet. The weakest cell is 24.5 s, where the traveller's head is bowed as he picks up the shoe.
+5. Close-ups show hands: **checked.** No blurs. Each camera searches for a sightline whose first hit is the hand. Cells 3, 8, 9 and 25 show the contact only partly: heads, a sleeve or a shoe are in front.
+6. `hand_poses.py` used: **checked.**
+
+## First submission status (16:10 UTC, superseded)
 **clip_scan.py** (`review/clip_scan_v006.json`): bad ranges [415], [649], two single sampled frames. v004 had large ranges from 1 to 937.
 
 **qa_check.py** (`review/qa_v006.json`, commit c6240b2 version): HOVER 0, CLAW 0, FACEPRESS 0, EMPTY 122, FILL 5, BACKHEAD 2, INSIDE 1.

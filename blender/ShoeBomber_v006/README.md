@@ -9,10 +9,11 @@
 The scripts are in `../ShoeBomber_v001/scripts/`. Build order:
 1. `03_animate.py`: animation. Fingers come from `pipeline/hand_poses.py`.
 2. `03b_hand_pushout.py`: the hand/body contact pass.
-3. `04_fx_camera.py`
-4. `pipeline/anim_look.py -- --no-sky`
-5. `06_v003_look.py`
-6. `05_shrink_textures.py`
-7. `pipeline/package_for_farm.py`
+3. `04_fx_camera.py`: the camera, as cut-joined shots chosen with `cam_search.py`
+4. `04b_contact_snap.py`: hand-to-prop contact
+5. `03b_hand_pushout.py -- <out> 400 1068 3`: the body push-out, run again after the snap
+6. `pipeline/anim_look.py -- --no-sky`
+7. `06_v003_look.py`
+8. `05_shrink_textures.py`
+9. `pipeline/package_for_farm.py`
 
-`04b_contact_snap.py` (hand-to-prop snap) is written but wasn't run in this build because of the deadline.

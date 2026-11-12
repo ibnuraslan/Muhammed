@@ -1,45 +1,36 @@
 {
  "frames": {
-  "415": {
-   "PaxD": {
-    "self": 207,
+  "247": {
+   "Attendant": {
+    "self": 6,
     "clothes": 0,
     "other": 0
    }
   },
-  "493": {
+  "589": {
+   "PaxA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "697": {
    "Attendant": {
     "self": 0,
     "clothes": 0,
-    "other": 1
+    "other": 3
+   },
+   "PaxA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 22
    }
   },
-  "547": {
-   "PaxA": {
-    "self": 1,
+  "865": {
+   "Attendant": {
+    "self": 110,
     "clothes": 0,
     "other": 0
-   }
-  },
-  "649": {
-   "Steward": {
-    "self": 0,
-    "clothes": 0,
-    "other": 44
-   }
-  },
-  "691": {
-   "PaxA": {
-    "self": 0,
-    "clothes": 0,
-    "other": 24
-   }
-  },
-  "703": {
-   "PaxA": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
    }
   }
  },
@@ -47,12 +38,8 @@
  "depth_cm": 2.0,
  "bad_ranges": [
   [
-   415,
-   415
-  ],
-  [
-   649,
-   649
+   865,
+   865
   ]
  ],
  "fps": 60
