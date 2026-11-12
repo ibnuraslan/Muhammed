@@ -53,6 +53,7 @@ def build(variant=None):
     if variant == "presses":                 # the shared press hall (nvidia_doc sc_press), with our generic SPIDER MAN page
         import sc_press as NP
         NP.newsprint = lambda path, W=1024, H=1400: front_page(path)
+        os.makedirs(GEN, exist_ok=True); NP.GEN = GEN                  # write our page into the project, never the shared asset
         c = NP.build(); c["np"] = NP
         bpy.context.scene.view_settings.exposure = 0.3
         return c
