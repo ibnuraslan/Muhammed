@@ -1,0 +1,196 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "BACKHEAD",
+    "Shover"
+   ]
+  ],
+  "7": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "25": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "31": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "151": [
+   [
+    "BACKHEAD",
+    "Woman"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "943": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1009": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1015": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1861": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1403": [
+   [
+    "CAMJUMP",
+    "cut: 0.05 m, 180 deg in one frame (neighbours 0.02 m, 2 deg)"
+   ]
+  ],
+  "1556": [
+   [
+    "CAMJUMP",
+    "cut: 0.05 m, 180 deg in one frame (neighbours 0.00 m, 1 deg)"
+   ]
+  ],
+  "1564": [
+   [
+    "CAMJUMP",
+    "cut: 0.02 m, 110 deg in one frame (neighbours 0.02 m, 20 deg)"
+   ]
+  ],
+  "1856": [
+   [
+    "CAMJUMP",
+    "cut: 0.01 m, 37 deg in one frame (neighbours 0.01 m, 8 deg)"
+   ]
+  ],
+  "1857": [
+   [
+    "CAMJUMP",
+    "cut: 0.01 m, 154 deg in one frame (neighbours 0.01 m, 8 deg)"
+   ]
+  ],
+  "1869": [
+   [
+    "CAMJUMP",
+    "cut: 0.05 m, 180 deg in one frame (neighbours 0.01 m, 7 deg)"
+   ]
+  ],
+  "1872": [
+   [
+    "CAMJUMP",
+    "cut: 0.06 m, 52 deg in one frame (neighbours 0.07 m, 15 deg)"
+   ]
+  ],
+  "1873": [
+   [
+    "CAMJUMP",
+    "cut: 0.07 m, 47 deg in one frame (neighbours 0.07 m, 7 deg)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 18,
+  "BACKHEAD": 2,
+  "FILL": 4,
+  "CAMJUMP": 8
+ }
+}
