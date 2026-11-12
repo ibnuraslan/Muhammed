@@ -58,3 +58,7 @@ Checked as OK:
 5. **Crown macro:** now under 0.5 s (around frame 1318), then a pull-back to the statue and the cleric's hand by frame 1345.
 
 `qa_check` (step 12, on the packed file): INSIDE 7 (the x-ray backdrop dome, by design), EMPTY 13 (the half-second fly-through transitions and the short crown insert), BACKHEAD 1 (frame 1153, the Pope at 7 m seen through the cell window). HOVER, CLAW, FACEPRESS and FILL are 0.
+
+## Round 3 (16:17 note): 10.5 s
+- The jeep and the Pope (held by the aides) stay in the foreground until frame 624. The fly into the theatre window now takes about 10 frames (under 0.3 s), and people stay visible at the bottom of the frame.
+- `qa_check` (step 12, on the packed file): INSIDE 7 (x-ray dome), EMPTY 11 (transitions and the crown insert), BACKHEAD 2. The BACKHEADs are frame 625, the Pope seen from behind the jeep as the camera lifts away from it, and frame 1153, the beat-7 wide. HOVER, CLAW, FACEPRESS and FILL are 0.

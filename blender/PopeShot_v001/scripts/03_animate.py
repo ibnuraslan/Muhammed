@@ -1070,8 +1070,8 @@ K += [
  (505,  popechest(505) + FD * 2.1 + PERP * 0.5 + Vector((0, 0, 0.3)), popechest(505) + Vector((0, 0, -0.1)), 30),
  (555,  popechest(505) + FD * 1.6 - PERP * 1.5 + Vector((0, 0, -0.5)), popechest(505) + Vector((0, 0, -0.35)), 24),
  (598,  popechest(505) + FD * 1.7 - PERP * 3.0 + Vector((0, 0, 0.8)), popechest(505) + Vector((0, 0, -0.3)), 22),
- (628,  Vector((-5.2, 8.0, 4.6)),               Vector((-7.0, 30.0, 7.0)), 22),
- (640,  Vector((-7.7, 31.5, 9.0)),              Vector((-8.0, 36.0, 9.3)), 22),
+ (624,  Vector((-1.8, -6.2, 3.4)),              Vector((-3.0, 8.0, 2.4)), 22),    # jeep + Pope in the foreground, facade far
+ (641,  Vector((-7.7, 31.5, 9.0)),              Vector((-8.0, 36.0, 9.3)), 22),
  (650,  Vector((-8.0, 35.3, 9.35)),             Vector((-8.0, 40.0, 8.6)), 22),
  (668,  Vector((-8.1, 38.0, 10.3)),             Vector((-8.0, 40.3, 8.1)), 24),
  (700,  Vector((-6.6, 39.0, 9.6)),             Vector((-8.0, 40.4, 8.2)), 26),
