@@ -651,8 +651,10 @@ def anim_drop(c, t):
     blade = mouth + Vector((0, 0, 0.12)) - fwd * 0.12
     handle = blade - fwd * 0.95 + Vector((0, 0, -0.1 + 0.12 * tip_k))
     h2.rot("spine03", side, -10); h2.rot("spine05", side, -6)
-    reach(h2, "R", handle, Vector((side.x * 0.6, side.y * 0.6, -1.0)), blade - handle)
-    reach(h2, "L", handle.lerp(blade, 0.35), Vector((-side.x * 0.6, -side.y * 0.6, -1.0)), blade - handle)
+    from rs_kit import _reach_raw              # full reach: the hands must close ON the shaft (no elbow clamp here)
+    ax = (blade - handle).normalized(); across = ax.cross(Vector((0, 0, 1))).normalized()
+    _reach_raw(h2, "R", handle - across * 0.03, Vector((side.x * 0.6, side.y * 0.6, -1.0)), -across + ax * 0.2)
+    _reach_raw(h2, "L", handle.lerp(blade, 0.35) + across * 0.03, Vector((-side.x * 0.6, -side.y * 0.6, -1.0)), across + ax * 0.2)
     fingers_curl(h2, 95, thumb=70)
     sp = c["spade"]
     if sp is not None:

@@ -609,12 +609,13 @@ def c2_6a(c, t):          # medium: the doctor lifts the receiver to his ear, hi
     stand_at(h, loc, ns + Vector((0.3, 0, 0)))
     sd = forward(h).cross(Vector((0, 0, 1))).normalized()
     k = ease(min(1.0, sec / 0.9))
-    ear = h.bone_head("head") - sd * 0.1 + Vector((0, 0, -0.05)) + forward(h) * 0.03      # his LEFT ear (sd points right)
+    ear = h.bone_head("head") - sd * 0.085 + Vector((0, 0, 0.09)) + forward(h) * 0.02     # his LEFT ear (head bone starts at the neck)
     rest = ns + Vector((0.4, 0.05, 1.18))
-    hs_at = rest.lerp(ear + Vector((0, 0, -0.06)), k)
-    reach(h, "L", hs_at, Vector((-sd.x, -sd.y, -1.0)), Vector((0, 0, 1)))
+    hs_at = rest.lerp(ear, k)                                             # receiver at the ear
+    wr = hs_at + Vector((0, 0, -0.1)) - sd * 0.03                         # the hand wraps the handle below it
+    reach(h, "L", wr, Vector((-sd.x, -sd.y, -1.0)), Vector((0, 0, 1)) - sd * 0.2)
     reach(h, "R", ns + Vector((0.05, 0.22, 1.15)), Vector((sd.x, sd.y, -1.0)), forward(h))
-    fingers_curl(h, 55, thumb=40)
+    fingers_curl(h, 85, thumb=60)
     hs = c["handset"]; hs.location = hs_at; hs.rotation_euler = (math.radians(80 * k), 0, math.atan2(sd.y, sd.x))
     h.rot("head", sd, -6)
     c["focus"] = h.bone_head("head")
@@ -665,9 +666,13 @@ def c4_2a(c, t):          # the technician holds a sample tube up to the window 
     loc = LAB + Vector((-0.9, -1.3, 0)); stand_at(h, loc, win)
     sd = forward(h).cross(Vector((0, 0, 1)))
     k = ease(min(1.0, sec / 1.4))
-    tube = h.bone_head("head") + forward(h) * 0.24 + sd * 0.06 + Vector((0, 0, -0.42 + 0.16 * k))      # lifts only to chin height
-    reach(h, "R", tube, Vector((sd.x * 0.3, sd.y * 0.3, -1.0)), forward(h) + Vector((0, 0, 0.4)))
-    fingers_curl(h, 70, thumb=50)
+    chest = h.bone_head("spine02") + forward(h) * 0.3 + sd * 0.05 + Vector((0, 0, 0.12))
+    wrist = chest + Vector((0, 0, -0.06 * (1 - k)))                       # lifts a little to chest height
+    reach(h, "R", wrist, Vector((sd.x * 0.6, sd.y * 0.6, -1.0)), forward(h) - sd * 0.3)
+    fingers_curl(h, 92, thumb=70)                                         # closed hand around the tube
+    bpy.context.view_layer.update()
+    tube = h.bone_head("wrist.R") + (forward(h) - sd * 0.3).normalized() * 0.07 + Vector((0, 0, -0.05))   # sits in the fist
+    h.rot("head", sd, -10 * k)                                            # looks down at it against the window
     c["tube"].location = tube + Vector((0, 0, 0.06)); c["tube_blood"].location = tube + Vector((0, 0, 0.045))
     c["focus"] = h.bone_head("head")
 

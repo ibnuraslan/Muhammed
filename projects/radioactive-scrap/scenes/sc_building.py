@@ -218,17 +218,22 @@ def c1_3b(c, t):           # the truck pulls away and joins the traffic
         car_.location = (x if j % 2 == 0 else -x, -17.5 if j % 2 == 0 else -14.8, 0); car_.rotation_euler = (0, 0, 0 if j % 2 == 0 else math.pi)
 
 
-def c2_13a(c, t):          # a forklift sets two packages down inside the warehouse
+def c2_13a(c, t):          # a man wheels the second package in on a hand truck; the first already stands on the floor
     sec = t * dur("ch2_13a"); doors(c, 0.2, 0.2)
-    k = ease(min(1.0, sec / (dur("ch2_13a") * 0.7)))
-    fk = c["fk"]; fk.location = Vector((3.5, 5.0 - 3.5 * k, 0)); fk.rotation_euler = (0, 0, math.radians(-90) - math.radians(20) * (1 - k))
-    lift = 0.6 * (1 - ease(min(1.0, max(0.0, (sec - dur("ch2_13a") * 0.7) / (dur("ch2_13a") * 0.3)))))
-    if c["fk_car"] is not None:
-        c["fk_car"].location.z = c["fk_z0"] + lift
-    bpy.context.view_layer.update()
-    for j, o in enumerate(c["pk"]):
-        o.location = fk.matrix_world @ Vector((1.9, 0.55 * (j - 0.5) * 2, 0.15 + lift))
-        o.rotation_euler = (0, 0, fk.rotation_euler.z)
+    c["fk"].location = (0, -150, 0)                    # the kit forklift read as a toy: not used
+    a = Vector((5.0, 3.2, 0)); b = Vector((2.4, -0.2, 0))
+    h = c["people"]["a"]; p = walk_to(h, a, b, sec, speed=0.75, swing=0)
+    d = (b - a).normalized(); cart = p + d * 0.75
+    ht = c["handtruck"]
+    if ht is not None:
+        ht.location = cart; ht.rotation_euler = (0, 0, math.atan2(d.y, d.x) + math.pi / 2)
+    c["pk"][0].location = cart + d * 0.25 + Vector((0, 0, 0.08)); c["pk"][0].rotation_euler = (0, 0, math.atan2(d.y, d.x))
+    c["pk"][1].location = Vector((1.4, -1.2, 0.0)); c["pk"][1].rotation_euler = (0, 0, 0.3)
+    sd = forward(h).cross(Vector((0, 0, 1)))
+    grip = p + d * 0.45 + Vector((0, 0, 1.0))
+    reach(h, "R", grip + sd * 0.2, Vector((sd.x, sd.y, -0.7)), d); reach(h, "L", grip - sd * 0.2, Vector((-sd.x, -sd.y, -0.7)), d)
+    fingers_curl(h, 90, thumb=60)
+    c["focus"] = h.bone_head("head")
 
 
 def c2_13b(c, t):          # one package wheeled on a hand truck through the doorway into the next building

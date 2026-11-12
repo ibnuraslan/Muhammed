@@ -409,7 +409,7 @@ def _hat(h, kind, col):
         band = bpy.context.active_object; band.scale = (1.0, 1.06, 1.0); bpy.ops.object.shade_smooth()
         parts = [c, band]
     elif kind == "nurse":   # small starched white cap sitting on the crown, slightly back
-        bpy.ops.mesh.primitive_cube_add(size=1, location=crown + up * 0.035 + Vector((0, 0.03, 0)))
+        bpy.ops.mesh.primitive_cube_add(size=1, location=crown + up * 0.012 + Vector((0, 0.035, 0)))   # seated on the hair, no gap
         c = bpy.context.active_object; c.scale = (0.17, 0.09, 0.05); c.rotation_euler = (math.radians(-15), 0, 0)
         bv = c.modifiers.new("Bevel", 'BEVEL'); bv.width = 0.012; bv.segments = 3
         bpy.context.view_layer.objects.active = c; bpy.ops.object.modifier_apply(modifier="Bevel"); bpy.ops.object.shade_smooth()
@@ -991,3 +991,21 @@ def reach(h, side, target, pole=None, hand_dir=None, *a, **kw):
 
 
 _human.reach = reach
+
+
+# ---- finger curl in each finger's OWN frame (human.fingers_curl turned about the WORLD X axis, so hands facing
+# any other way splayed into claws instead of closing). Local X of MakeHuman finger bones is the knuckle hinge.
+CURL_SIGN = float(__import__("os").environ.get("RS_CURL_SIGN", "1"))
+
+
+def fingers_curl(h, deg=35, side=("L", "R"), thumb=15):
+    from human import rotate_bone, SIDE
+    for sd in side:
+        for f in range(2, 6):
+            for k in (1, 2, 3):
+                rotate_bone(h.arm, f"finger{f}-{k}.{sd}", (1, 0, 0), CURL_SIGN * deg * (0.8 if k == 1 else 1.0), space="LOCAL")
+        for k in (2, 3):
+            rotate_bone(h.arm, f"finger1-{k}.{sd}", (1, 0, 0), CURL_SIGN * thumb, space="LOCAL")
+
+
+_human.fingers_curl = fingers_curl
