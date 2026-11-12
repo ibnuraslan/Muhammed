@@ -43,7 +43,7 @@ Source: `BEFORE_v004_sheet_0.5s.jpg` (every 30 frames, 270×480, 8 samples) and 
 | 23 | 17–20.7 s WitA | Palm on her nose. | The hand is lower, at the mouth and chin, angled across, with `open_alarm`. |
 | 24 | All idle hands | The default curl (20/26/32°) read as claws. | `hand_poses.py` `relaxed` plus `add_hand_limits` on all four rigs. Bottle: `wrap_grip`. Worker hat: `cup_hold`. |
 | 25 | 15.5 s | Empty track cell. | The camera aims at the braking train. |
-| 26 | 19.5 s (beat 8) | He was hidden under the loco. | Lower camera, under the skirt line. |
+| 26 | 19.5 s (beat 8) | He was hidden under the loco (behind the fuel tank from the side). | The camera is low inside the gauge, in front of him; his face is lit and reads as he crawls toward the camera (19.3–19.6 s). |
 | 27 | 31.0–32.5 s (beat 12) | Back of his head at the beat start. | The camera is in front of him, walking back as he walks. |
 | 28 | 26.5 s (beat 11) | Torso-only macro. | Wider and higher, so his head is in frame. |
 
