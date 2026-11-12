@@ -60,7 +60,7 @@ def anim(c, t, move):
     for k, h in enumerate(c["shoppers"]):
         d = 1 if k % 2 == 0 else -1
         x0 = -8.0 * d + k * 0.7; u = (sec / 14.0 + k * 0.23) % 1.0
-        B.walk_to(h, (x0, 0.7 - 0.5 * (k % 2), 0), (x0 + 16 * d, 0.6 - 0.5 * (k % 2), 0), u, 10.0 * u, stride=18, swing=10)
+        B.walk_to(h, (x0, 3.7 + 0.6 * (k % 2), 0), (x0 + 16 * d, 3.7 + 0.6 * (k % 2), 0), u, 10.0 * u, stride=18, swing=10)
     bpy.context.view_layer.update()
 
 

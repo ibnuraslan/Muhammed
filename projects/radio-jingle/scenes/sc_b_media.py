@@ -203,7 +203,7 @@ def cam(a, b, tgt, lens):
 
 
 MOVES = {
-    "appeal": dict(kind="anim", dof=4.0, cam=cam((-3.6, -3.2, 1.75), (-3.2, -2.9, 1.72), (0.0, 3.0, 1.25), 40),
+    "appeal": dict(kind="anim", dof=4.0, cam=cam((2.2, -3.6, 1.7), (1.7, -3.2, 1.68), (0.0, 3.0, 1.25), 40),
                    anim=lambda c, t: anim(c, t, "appeal"), focus=lambda c, t: c["pres"].bone_head("head")),
     "phones": dict(kind="anim", dof=4.0, cam=cam((3.4, -1.6, 1.7), (3.8, -1.3, 1.65), (7.2, 1.3, 0.95), 30),
                    anim=lambda c, t: anim(c, t, "phones"), focus=lambda c, t: Vector((6.3, 1.1, 1.0))),

@@ -108,8 +108,11 @@ def build(variant=None):
         box("KFloor", (0, 0, -0.01), (5, 4, 0.02), B.tex_mat("KFl", "floor_tiles_06", scale=0.5, tint=(0.6, 0.6, 0.58)))
         kw = B.plaster("KWall", (0.6, 0.58, 0.52), dirt=0.1)
         box("KWallB", (0, 2.0, 1.3), (5, 0.1, 2.6), kw); box("KWallL", (-2.5, 0, 1.3), (0.1, 4, 2.6), kw); box("KWallR", (2.5, 0, 1.3), (0.1, 4, 2.6), kw)
-        box("KWin", (0.0, 1.96, 1.5), (1.2, 0.02, 1.0), emissive("KGrey", (0.75, 0.8, 0.85), 1.2))
-        B.key_spot((0.0, 2.6, 2.0), (0, 0.3, 0.8), 900, 50, (0.8, 0.86, 0.95), soft=0.6, name="KWinKey")
+        box("KWin", (0.0, 1.96, 1.5), (1.2, 0.02, 1.0), emissive("KGrey", (0.75, 0.8, 0.85), 0.35))
+        for (bx, bz, sx, sz) in ((0.0, 1.5, 0.05, 1.0), (0.0, 1.5, 1.2, 0.05), (0.0, 2.0, 1.25, 0.06), (0.0, 1.0, 1.25, 0.06), (-0.6, 1.5, 0.06, 1.05), (0.6, 1.5, 0.06, 1.05)):
+            box("KMull", (bx, 1.94, bz), (sx, 0.03, sz), pbr("KFrame", (0.8, 0.8, 0.78), 0.5))
+        B.key_spot((0.6, 1.85, 2.1), (0, 0.3, 0.8), 700, 70, (0.8, 0.86, 0.95), soft=0.6, name="KWinKey")
+        B.fill((-2.0, -1.5, 2.0), (0, 0.5, 1.0), 25, 2.0, (0.5, 0.55, 0.7))
         ph.model("wooden_table_02", loc=(0, 0.5, 0), rot_z=0)
         for x, fz in ((-0.1, math.pi), (0.25, 0.0)):
             ph.model("dining_chair_02", loc=(x, -0.15 if fz == math.pi else 1.15, 0), rot_z=fz + math.pi)
@@ -359,7 +362,7 @@ def cam_quay(c, t):
 
 
 MOVES = {
-    "saliva": dict(kind="anim", dof=2.8, cam=cam((-0.9, -1.9, 1.6), (-0.7, -1.6, 1.55), (0.15, 0.7, 1.05), 32),
+    "saliva": dict(kind="anim", dof=2.8, cam=cam((-1.5, -2.7, 1.7), (-1.3, -2.4, 1.66), (0.25, 0.9, 1.1), 32),
                    anim=lambda c, t: anim(c, t, "saliva"), focus=lambda c, t: c["off"].bone_head("spine03")),
     "quay": dict(kind="anim", dof=None, cam=cam_quay, anim=lambda c, t: anim(c, t, "quay")),
     "watch": dict(kind="anim", dof=2.0, cam=cam((0.15, 2.0, 1.25), (0.3, 2.0, 1.24), (6.0, 5.0, 1.2), 32),
