@@ -20,7 +20,7 @@ PLAN = {
     },
     "sc_bank": {
         "dusk": (KEEP, {}),
-        "summer": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "summer": (EXT, dict(mood="low_sun", elev=14, sky="blue", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
         "autumn": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
         "winter": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
         "seasons": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
@@ -46,13 +46,13 @@ PLAN = {
         "archive": (NIGHT, {}),
     },
     "sc_closedtown": {
-        "checkpoint": (FOREST, dict(mood="mist", azim=140, area=((-20, 30), (220, 90)), canopy=20.0)),
-        None: (FOREST, dict(mood="mist", azim=140, area=((-20, 30), (220, 90)), canopy=20.0)),
+        "checkpoint": (EXT, dict(mood="overcast", azim=60, haze_box=((-20, 30, 10), (220, 90, 20)))),
+        None: (EXT, dict(mood="overcast", azim=60, haze_box=((-20, 30, 10), (220, 90, 20)))),
         "institute": (INT, dict(window=((0.0, 15.4, 1.8), (0.0, 8.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "kitchen": (NIGHT, {}), "blocks": (KEEP, {}),
     },
-    "sc_apartment": {None: (EXT, dict(mood="overcast", azim=-55, haze_box=((0, -12, 12), (90, 50, 26))))},
-    "sc_salisbury": {None: (EXT, dict(mood="overcast", azim=50, haze_box=((-10, 0, 10), (120, 60, 22))))},
+    "sc_apartment": {None: (EXT, dict(mood="low_sun", elev=16, sky="blue", azim=-55, haze_box=((0, -12, 12), (90, 50, 26))))},
+    "sc_salisbury": {None: (EXT, dict(mood="low_sun", elev=12, sky="blue", azim=50, haze_box=((-10, 0, 10), (120, 60, 22))))},
     "sc_station": {None: (NIGHT, {})},
 }
 
@@ -78,14 +78,11 @@ def apply(set_name, variant=None):
             look.set_grade(**md["cine"])                                            # the mood's own tone (as look.forest does)
         if hz is not None:                                                          # haze that hugs the street, the sky stays clean
             look.ground_haze((hz[0][0], hz[0][1]), (hz[1][0], hz[1][1]), kw.get("mood", "overcast"), height=8.0,
-                             density=0.008 if kw.get("mood") in ("mist", "dusk") else 0.004)
+                             density={"mist": 0.008, "dusk": 0.008, "low_sun": 0.0015}.get(kw.get("mood"), 0.004))
     elif recipe == FOREST:
         look.forest(**kw)
     elif recipe == INT:
         look.interior_day(**kw)
-        w0, w1 = kw["window"]                                                       # a thin room haze so the window key reads as shafts
-        cx, cy = (w0[0] + w1[0]) / 2, (w0[1] + w1[1]) / 2
-        look.haze((cx, cy, 1.6), (abs(w0[0] - w1[0]) + 6, abs(w0[1] - w1[1]) + 6, 3.2), "mist", density=0.02)
         gk = "office" if set_name == "sc_bankoffice" and variant not in ("ante", "ledger") else (variant or "room")
         for g in GOBOS.get((set_name, gk), []):
             look.gobo(**g)
