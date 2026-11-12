@@ -523,5 +523,6 @@ def build(variant=None):
     if variant == "night":
         look.night_interior()
     else:
-        look.day_light("overcast", azim=210, haze_box=((0, 0, 15), (120, 120, 30)))
+        look.day_light("mist", azim=210)
+        look.ground_haze((0, 0), (160, 160), mood="mist", height=12.0, density=0.012)
     return c

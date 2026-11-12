@@ -502,5 +502,7 @@ def build(variant=None):
     if variant == "night":
         look.night_interior()
     else:
-        look.interior_day(window=((-7.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="overcast", key_size=3.0)
+        look.interior_day(window=((-7.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="low_sun", key_size=3.0)
+        look.gobo((-7.2, 0.0, 1.85), (8.0, 1.7), axis="x", bars=8, kind="blinds")
+        look.haze((0, 0, 1.6), (14, 8, 3.2), "low_sun", 0.025)
     return c

@@ -202,5 +202,6 @@ _build_raw = build
 
 def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
-    look.interior_day(window=((-0.5, -LY * 0.75, 2.1), (0.5, 0.8, 0.3)), mood="overcast", key_size=1.5)
+    look.interior_day(window=((-0.5, -LY * 0.75, 2.1), (0.5, 0.8, 0.3)), mood="low_sun", key_size=1.5)
+    look.haze((0, 0, 1.7), (18, 6.8, 3.4), "low_sun", 0.04)
     return c

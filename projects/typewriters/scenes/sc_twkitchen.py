@@ -255,7 +255,8 @@ _build_raw = build
 def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     if variant == "safe":
-        look.interior_day(window=((0.0, 2.9, 1.5), (0.0, 0.0, 0.8)), mood="overcast", key_size=1.8)
+        look.interior_day(window=((0.0, 2.9, 1.5), (0.0, 0.0, 0.8)), mood="low_sun", key_size=1.8)
+        look.haze((0, 0, 1.3), (5, 5, 2.6), "low_sun", 0.03)
     else:
         look.night_interior()
     return c

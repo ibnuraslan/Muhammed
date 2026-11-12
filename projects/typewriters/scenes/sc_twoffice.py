@@ -559,4 +559,5 @@ def build(variant=None):
         look.night_interior()
     else:
         look.interior_day(window=((4.5, 0.0, 1.7), (0.0, 0.0, 0.8)), mood="low_sun", key_size=2.5)
+        look.haze((0, 0, 1.5), (8, 6, 3.0), "low_sun", 0.03)
     return c
