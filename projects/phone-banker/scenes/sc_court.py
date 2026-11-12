@@ -315,7 +315,6 @@ def animate(c, sec, move):
             hand_to(D, "R", hp, hand_dir=toward + Vector((0, 0, -0.3)), curl=45)          # holding a page, not an empty hand
             if "def_doc" not in c:
                 import paper_tex
-                from pbkit import image_plane
                 c["def_doc"] = image_plane("DefencePage", paper_tex.make_all()["pages"][3], (0, 0, 0), (0.21, 0.28), (0, 0, 0), rough=0.8)
             bpy.context.view_layer.update()
             tipw = D.arm.matrix_world @ D.arm.pose.bones["finger3-1.R"].head
