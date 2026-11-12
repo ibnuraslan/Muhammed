@@ -229,7 +229,7 @@ def c2_14b(c, t):          # a buyer and an agent walk past the packages without
 SHOTS = {
     "ch1_2a": ("clear", c1_2a, C(Vector((3.0, 8.5, 1.6)), Vector((2.6, 8.0, 1.6)), Vector((0.0, -7.0, 1.5)), 26), None),
     "ch1_2b": ("clear", c1_2b, C(Vector((-6.5, 5.5, 1.3)), Vector((-2.8, -1.8, 1.0)), Vector((-0.6, -4.3, 0.6)), 30), 4.0),
-    "ch1_3a": ("clear", c1_3a, C(Vector((4.6, -7.6, 1.4)), Vector((4.2, -8.0, 1.4)), Vector((-0.6, -9.0, 1.0)), 30), 4.0),
+    "ch1_3a": ("clear", c1_3a, C(Vector((5.5, -11.0, 1.5)), Vector((5.1, -10.6, 1.5)), Vector((-0.6, -8.6, 1.0)), 30), 4.0),
     "ch1_3b": ("clear", c1_3b, C(Vector((7.0, -22.0, 1.6)), Vector((6.0, -22.0, 1.6)), Vector((-4.0, -12.0, 1.5)), 30), None),
     "ch2_13a": ("dim", c2_13a, C(Vector((-3.5, -2.0, 1.4)), Vector((-3.0, -2.6, 1.45)), Vector((2.0, -1.0, 0.9)), 30), 4.0),
     "ch2_13b": ("dim", c2_13b, C(Vector((6.0, -4.5, 1.5)), Vector((6.6, -4.2, 1.5)), Vector((9.5, -1.0, 1.2)), 32), 4.0),

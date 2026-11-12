@@ -238,7 +238,7 @@ def build(variant=None):
         sun_.rotation_euler = (math.radians(90 - 5), 0, math.radians(250)); sun_.data.energy = 2.6; sun_.data.color = (1.0, 0.78, 0.55)
     if v == "night":
         bg = w_.node_tree.nodes["Background"]; bg.inputs['Strength'].default_value = 0.25; sun_.data.energy = 0.0
-        bpy.context.scene.view_settings.exposure = 1.2
+        bpy.context.scene.view_settings.exposure = 0.3
     if v in ("dusk", "yard_dusk"):
         bpy.context.scene.view_settings.exposure = 1.4
     mud = ph_mat("muddy_tracks", 0.25, (0.25, 0.21, 0.17), name="Mud")
@@ -542,7 +542,9 @@ def C(p0, p1, tgt, lens, tgt1=None):
 
 
 def S(name, t):
-    return t * dur(name)
+    sec = t * dur(name)
+    bpy.context.scene.frame_current = int(round(sec * 24)) + 1      # frame-driven effects (rain, snow, lamps) match the shot time
+    return sec
 
 
 # ---- intro
@@ -940,8 +942,8 @@ SHOTS = {
     "intro_3b": ("yard", i3b, C((-2.45, 3.75, 1.12), (-2.65, 3.8, 1.12), (-5.3, 3.75, 1.2), 40), 2.0),
     "intro_4a": ("late", i4a, C((-6.5, 11.8, 1.05), (-6.2, 12.1, 1.05), (-2.9, 14.6, 0.55), 32), 3.5),
     "intro_4b": ("dusk", i4b, C((-5.5, 1.0, 1.6), (-4.0, 4.0, 1.55), (6.0, 11.5, 1.4), 28), 5.6),
-    "ch1_1a": ("drive", c1_1a, C((-18, -16, 12), (-16, -14, 5.5), (-4, -4, 1.2), 28), None),
-    "ch1_1b": ("drive", c1_1b, C((-1.5, 1.0, 1.5), (-1.2, 1.4, 1.5), (7.0, 4.6, 1.3), 35), 4.0),
+    "ch1_1a": ("drive", c1_1a, C((-26, -0.8, 13), (-22, -0.8, 4.5), (-4, -4, 1.2), 28), None),
+    "ch1_1b": ("drive", c1_1b, C((-0.5, -1.8, 1.5), (-0.2, -1.5, 1.5), (6.0, 4.2, 1.2), 35), 4.0),
     "ch1_4a": ("lot", c1_4a, C((6.0, -18.0, 4.5), (5.0, -17.0, 4.0), (0.0, -10.0, 0.8), 28), None),
     "ch1_4b": ("lot", c1_4b, C((LOT.x + 3.2, LOT.y - 3.4, 1.3), (LOT.x + 2.9, LOT.y - 3.0, 1.3), (LOT.x + 0.4, LOT.y - 0.8, 0.9), 35), 2.8),
     "ch1_5a": ("lot", c1_5a, C((LOT.x + 2.8, LOT.y - 2.5, 1.1), (LOT.x + 2.5, LOT.y - 2.9, 1.1), (LOT.x - 1.2, LOT.y - 1.6, 0.8), 32), 4.0),
@@ -953,12 +955,12 @@ SHOTS = {
     "ch1_8a": ("yard_morning", c1_8a, C((6.0, 3.0, 2.4), (5.2, 3.4, 2.5), (0.6, 9.5, 0.8), 26), None),
     "ch1_8b": ("yard_morning", c1_8b, C((5.6, 6.0, 1.6), (5.0, 6.4, 1.7), (0.0, 11.0, 1.5), 28), None),
     "ch1_9a": ("yard_morning", c1_9a, C((-1.0, 6.5, 1.5), (-1.4, 6.2, 1.5), (-4.6, 3.6, 1.4), 35), 2.8),
-    "ch1_9b": ("yard_morning", c1_9b, C((C2.x + 0.8, C2.y - 2.0, 1.2), (C2.x + 0.4, C2.y - 1.2, 1.0), (C2.x, C2.y, 0.6), 40), 2.0),
+    "ch1_9b": ("yard_morning", c1_9b, C((C2.x + 0.9, C2.y - 1.8, 1.9), (C2.x + 0.6, C2.y - 1.2, 1.6), (C2.x - 0.1, C2.y - 0.1, 0.7), 40), 2.0),
     "ch1_10a": ("late", c1_10a, C((C2.x + 1.2, C2.y - 4.4, 1.3), (C2.x + 0.9, C2.y - 4.0, 1.25), (C2.x - 1.6, C2.y - 1.4, 0.9), 35), 2.8),
     "ch1_10b": ("late", c1_10b, C((-4.0, 1.5, 1.5), (-4.4, 1.9, 1.5), (-8.2, 5.0, 1.2), 35), 2.8),
     "ch1_12a": ("night", c1_12a, C((FAM.x + 1.5, FAM.y - 2.6, 1.55), (FAM.x + 1.3, FAM.y - 2.3, 1.5), (KITCHEN_WIN.x + 2.4, KITCHEN_WIN.y + 0.1, 0.95), 28), 2.4),
     "ch1_12b": ("night", c1_12b, C((2.0, 9.0, 1.6), (2.6, 9.6, 1.65), (KITCHEN_WIN.x, KITCHEN_WIN.y, 1.5), 32), 4.0),
-    "ch1_13a": ("scrapload", c1_13a, C((5.5, 9.5, 1.5), (5.1, 9.8, 1.5), (2.0, 12.4, 1.1), 30), 4.0),
+    "ch1_13a": ("scrapload", c1_13a, C((7.0, 8.0, 1.8), (6.6, 8.3, 1.8), (2.0, 12.4, 1.1), 30), 4.0),
     "ch1_13b": ("scrapload", c1_13b, C((-8.0, -3.0, 1.2), (-7.5, -2.6, 1.3), (0.0, 4.0, 1.5), 30), 4.0),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}

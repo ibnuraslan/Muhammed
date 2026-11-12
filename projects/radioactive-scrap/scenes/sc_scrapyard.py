@@ -701,7 +701,9 @@ def C(p0, p1, tgt, lens, rel=True):
 
 
 def sec_of(name, t):
-    return t * dur(name)
+    sec = t * dur(name)
+    bpy.context.scene.frame_current = int(round(sec * 24)) + 1
+    return sec
 
 
 def carry(c, obj, a, b, k, lift=1.6, hang=1.15):

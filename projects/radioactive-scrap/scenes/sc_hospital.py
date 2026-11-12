@@ -310,7 +310,9 @@ def ward_patients(c, sec, upright=None):
 
 
 def S(name, t):
-    return t * dur(name)
+    sec = t * dur(name)
+    bpy.context.scene.frame_current = int(round(sec * 24)) + 1
+    return sec
 
 
 def C(p0, p1, tgt, lens, tgt1=None):
