@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 projects/*/out/
 projects/*/assets/generated/
+projects/*/review/_sheet_tmp/
