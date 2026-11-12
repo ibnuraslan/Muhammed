@@ -52,3 +52,28 @@ Frames are on the v004 timeline (60 fps, frame = 1 + 60·t). The beat start fram
 Two things in the v004 file made `pipeline/clip_scan.py` report false hits. Both are fixed **in the film**, so the unmodified tool reads true:
 - clip_scan disables every MASK modifier, which exposed the MPFB "hide helpers" geometry (HelperGeometry/JointCubes) inside every body as an 'other' target. v006 deletes those helper vertices from all 13 bodies. They were never rendered.
 - The ShoeHide foot masks were toggled by a keyed `show_viewport`, so `frame_set` re-enabled them and the vertex indices shifted under the scan. They're now toggled by a keyed mask threshold.
+
+## Submission status (16:10 UTC, deadline build)
+**clip_scan.py** (`review/clip_scan_v006.json`): bad ranges [415], [649], two single sampled frames. v004 had large ranges from 1 to 937.
+
+**qa_check.py** (`review/qa_v006.json`, commit c6240b2 version): HOVER 0, CLAW 0, FACEPRESS 0, EMPTY 122, FILL 5, BACKHEAD 2, INSIDE 1.
+
+Intended (by design):
+- EMPTY 1063–1392: the studio shoe-explainer cutaway (props only, no characters) and the sky dive.
+- FILL/INSIDE 1069, 1243, 1255: the camera flying through the cloud-bank wipe between sets.
+
+Still open (not fixed by the deadline):
+- EMPTY 205–223: the aisle walk while the attendant is still far away.
+- EMPTY 379–403: the over-shoulder shot at the start of beat 3.
+- EMPTY 469–571: the tackle wide shots, where seat backs take over 85 % of the frame and the people are 6–14 %.
+- EMPTY 1465–1477 and 1537: the airport squat and tray.
+- BACKHEAD 655 (Steward) and 769 (PaxA).
+- On the sheet: 0.0 s has a shoe sole and hand in the foreground; 25.5 s is the traveller's back.
+
+## 6-point self-check
+1. Hands touch what they hold: **checked, partly fails.** The match is pinched, and the shoes, syringe, belt and tray contacts touch. Some rests (seat-backs, a lap or two) sit just off the surface in the close-ups. `04b_contact_snap.py` fixes these, but it wasn't run in time.
+2. No claws: **checked.** QA CLAW 0, with every finger pose from `hand_poses.py`.
+3. Nothing pressed into a face: **checked.** QA FACEPRESS 0. The bomber's head no longer goes into the seatback.
+4. No empty, blurred or black cells, and no back of head on beats: **checked, fails** at the cells listed above (0.0 s, 25.5 s, and BACKHEAD at 655 and 769).
+5. Close-ups show hands: **checked.** The cameras now search for a clear sightline. 25 of 26 show the hand; one (cell 15) is a blur.
+6. `hand_poses.py` used: **checked.** `curl()` in 03 keys library poses (relaxed, cup_hold, wrap_grip, pinch for the match), and `add_hand_limits` is on every rig.

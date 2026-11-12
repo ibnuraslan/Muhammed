@@ -1,0 +1,59 @@
+{
+ "frames": {
+  "415": {
+   "PaxD": {
+    "self": 207,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "493": {
+   "Attendant": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "547": {
+   "PaxA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "649": {
+   "Steward": {
+    "self": 0,
+    "clothes": 0,
+    "other": 44
+   }
+  },
+  "691": {
+   "PaxA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 24
+   }
+  },
+  "703": {
+   "PaxA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   415,
+   415
+  ],
+  [
+   649,
+   649
+  ]
+ ],
+ "fps": 60
+}

@@ -18,7 +18,24 @@ SHOTS = [(60, "Bomber", "wrist.R", (0.35, 0.25, 0.25)), (60, "Bomber", "wrist.L"
          (480, "PaxA", "wrist.R", (0.3, 0.3, 0.3)), (500, "Attendant", "wrist.R", (0.3, -0.3, 0.3)), (600, "PaxC", "wrist.R", (-0.3, 0.3, 0.3)),
          (600, "PaxD", "wrist.R", (0.3, 0.35, 0.3)), (690, "Steward", "wrist.R", (0.35, 0.1, 0.3)), (690, "Steward", "wrist.L", (0.35, 0.2, 0.3)),
          (720, "Attendant", "wrist.R", (0.3, 0.3, 0.3)), (876, "Attendant", "wrist.R", (0.3, 0.3, 0.3)), (900, "PaxA", "wrist.L", (0.3, 0.3, 0.3))]
+# v006: each close-up camera searches for a clear sightline to the hand (no seat/body between, not inside anything) and carries a light
+ld = bpy.data.lights.new("HandCheckLight", 'POINT'); ld.energy = 25; ld.shadow_soft_size = 0.3
+lo = bpy.data.objects.new("HandCheckLight", ld); sc.collection.objects.link(lo)
+import itertools
+DIRS = [Vector(v).normalized() for v in itertools.product((-1, 0, 1), repeat=3) if any(v)]
 for i, (f, rig, bone, off) in enumerate(SHOTS):
-    sc.frame_set(f); r = O[rig]; p = (r.matrix_world @ r.pose.bones[bone].matrix).translation
-    cam.location = p + Vector(off); cam.rotation_euler = (p - cam.location).to_track_quat('-Z', 'Y').to_euler()
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); r = O[rig]
+    p = (r.matrix_world @ r.pose.bones[bone].matrix).translation
+    hand_c = (p + r.matrix_world @ r.pose.bones[bone.replace("wrist", "finger3-1")].tail) / 2
+    def score(d):
+        c = hand_c + d * 0.42
+        ok, loc, n, idx, ob, _ = sc.ray_cast(dg, c, (hand_c - c).normalized(), distance=0.40)
+        if ok and not (ob.parent == r): return -1
+        for dd in DIRS[::3]:
+            ok2, l2, n2, _, ob2, _ = sc.ray_cast(dg, c, dd, distance=0.08)
+            if ok2: return -1
+        return d.dot(Vector(off).normalized()) + 0.5 * d.z
+    best = max(DIRS, key=score)
+    cam.location = hand_c + best * 0.42; cam.rotation_euler = (hand_c - cam.location).to_track_quat('-Z', 'Y').to_euler()
+    lo.location = cam.location + Vector((0, 0, 0.15))
     sc.render.filepath = "%s_%02d_f%d_%s_%s.jpg" % (OUT, i, f, rig, bone); bpy.ops.render.render(write_still=True)
