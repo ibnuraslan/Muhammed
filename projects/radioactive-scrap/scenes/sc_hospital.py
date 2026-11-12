@@ -371,7 +371,7 @@ def build(variant=None):
     dome = bpy.context.active_object; dome.scale = (1, 1, 0.35); dome.data.materials.append(painted_steel("LampDome", (0.82, 0.83, 0.8), 0.35, 0.2))
     bulbm = bpy.data.materials.new("ORBulb"); bulbm.use_nodes = True
     bp = bulbm.node_tree.nodes["Principled BSDF"]; bp.inputs['Base Color'].default_value = (0.8, 0.8, 0.8, 1); bp.inputs['Emission Color'].default_value = (1.0, 0.97, 0.9, 1)
-    vb = bulbm.node_tree.nodes.new("ShaderNodeValue"); db = vb.outputs[0].driver_add("default_value").driver; db.type = 'SCRIPTED'; db.expression = "12 * min(1, max(0, (frame - 36) / 3))"
+    vb = bulbm.node_tree.nodes.new("ShaderNodeValue"); db = vb.outputs[0].driver_add("default_value").driver; db.type = 'SCRIPTED'; db.expression = "12 * min(1, max(0, (frame - 14) / 3))"
     bulbm.node_tree.links.new(vb.outputs[0], bp.inputs['Emission Strength'])
     for k in range(6):
         a = k / 6 * 2 * math.pi
@@ -379,7 +379,8 @@ def build(variant=None):
     sl = bpy.data.lights.new("ORLamp", 'SPOT'); sl.spot_size = math.radians(45); sl.spot_blend = 0.4; sl.shadow_soft_size = 0.3; sl.color = (1.0, 0.97, 0.92)
     ds = sl.driver_add("energy").driver; ds.type = 'SCRIPTED'; ds.expression = "1500 * min(1, max(0, (frame - 14) / 3))"
     so = bpy.data.objects.new("ORLamp", sl); bpy.context.collection.objects.link(so); so.location = OR_ + Vector((0, 0, 2.1))
-    tube_light(OR_ + Vector((1.8, 1.8, 3.15)), energy=12); tube_light(OR_ + Vector((-1.8, -1.8, 3.15)), energy=12)
+    tube_light(OR_ + Vector((1.8, 1.8, 3.15)), energy=70); tube_light(OR_ + Vector((-1.8, -1.8, 3.15)), energy=70)
+    tube_light(OR_ + Vector((1.8, -1.8, 3.15)), energy=50)
     ph_model("industrial_storage_cart", loc=OR_ + Vector((-2.0, 1.6, 0)), rot_z=0.4)
     # ---------------- local clinic (December, evening)
     cf = ph_mat("worn_brick_floor", 0.6, (0.4, 0.3, 0.25), name="ClinicFloor")
@@ -662,8 +663,8 @@ def c4_2a(c, t):          # the technician holds a sample tube up to the window 
     loc = LAB + Vector((-0.9, -1.3, 0)); stand_at(h, loc, win)
     sd = forward(h).cross(Vector((0, 0, 1)))
     k = ease(min(1.0, sec / 1.4))
-    tube = h.bone_head("head") + forward(h) * 0.24 + sd * 0.06 + Vector((0, 0, -0.32 + 0.24 * k))
-    reach(h, "R", tube, Vector((sd.x * 0.4, sd.y * 0.4, -1.0)), forward(h))
+    tube = h.bone_head("head") + forward(h) * 0.24 + sd * 0.06 + Vector((0, 0, -0.42 + 0.16 * k))      # lifts only to chin height
+    reach(h, "R", tube, Vector((sd.x * 0.3, sd.y * 0.3, -1.0)), Vector((0, 0, 1)))
     fingers_curl(h, 70, thumb=50)
     c["tube"].location = tube + Vector((0, 0, 0.06)); c["tube_blood"].location = tube + Vector((0, 0, 0.045))
     c["focus"] = h.bone_head("head")
@@ -815,7 +816,7 @@ SHOTS = {
     "ch4_11b": ("morning", c4_11b, C(EXT + Vector((5.0, -26.0, 1.5)), EXT + Vector((5.6, -25.5, 1.5)), EXT + Vector((10.6, -20.0, 1.2)), 32), 4.0),
     "ch4_12a": ("day", c4_12a, C(OFFICE + Vector((-1.5, -0.4, 1.6)), OFFICE + Vector((-1.3, -0.2, 1.6)), OFFICE + Vector((0.1, 1.5, 1.5)), 32), 2.8),
     "ch4_12b": ("day", c4_12b, C(OFFICE + Vector((1.6, -0.8, 1.6)), OFFICE + Vector((1.4, -0.6, 1.6)), OFFICE + Vector((0.1, 1.5, 1.5)), 32), 2.8),
-    "ch4_13a": ("day", c4_13a, C(OR_ + Vector((2.2, -2.4, 1.2)), OR_ + Vector((1.9, -2.1, 1.25)), OR_ + Vector((0, 0, 1.6)), 28), None),
+    "ch4_13a": ("day", c4_13a, C(OR_ + Vector((2.3, -2.5, 1.75)), OR_ + Vector((2.0, -2.2, 1.75)), OR_ + Vector((0, 0, 1.45)), 24), None),
     "ch4_13b": ("day", c4_13b, C(COR + Vector((2.0, 0.0, 1.6)), COR + Vector((8.0, 0.0, 1.6)), COR + Vector((15.0, 0.0, 1.4)), 30), 5.6),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
