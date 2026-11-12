@@ -1,7 +1,7 @@
 """RAILWAY PLATFORM, Moscow, night rain (dramatization; a generic suburban-line platform, not a likeness).
   handover : under a sodium lamp on the wet platform, beside a waiting train, a small parcel changes hands (Ch2 6A)
   platform : one of them stands alone as the train pulls out (Ch2 6B)
-The train is a placeholder electric train (lit interiors behind real glass) until the shared vehicle kit's elektrichka lands."""
+The train is the shared vehicle kit's ER2-style elektrichka (lit interiors, pantographs)."""
 import math
 import numpy as np
 import bpy
@@ -17,45 +17,9 @@ BOUNCES = 6
 DUR = {"handover": 6.0, "platform": 6.5}
 VARIANT_FOR = {"handover": None, "platform": None}
 TRACK_Y = -4.6
+TRAIN_X = 24.0
+RAIL_TOP = 0.19
 rng = np.random.default_rng(41)
-
-
-def train_car(name, x, y, front=False):
-    """A green suburban electric-train car: rounded body, red band, real glass windows with a lit interior
-    (seat rows, a warm ceiling light) visible through them."""
-    green = pbr("TrainGreen", (0.12, 0.26, 0.16), 0.4, 0.25, **{'Coat Weight': 0.5, 'Coat Roughness': 0.15})
-    red = pbr("TrainRed", (0.45, 0.06, 0.04), 0.4, 0.2, **{'Coat Weight': 0.5})
-    gl = glass("TrainGlass", (0.85, 0.9, 0.88), 0.03)
-    L_, W_, H_ = 19.5, 3.4, 3.3
-    parts = [box("TLower", (0, 0, 1.05), (L_, W_, 1.1), green, bevel=0.12),
-             box("TBand", (0, 0, 1.0), (L_ + 0.01, W_ + 0.01, 0.16), red),
-             box("TUpper", (0, 0, 3.05), (L_, W_, 1.0), green, bevel=0.25),
-             box("TRoof", (0, 0, 3.6), (L_ - 0.3, W_ - 0.4, 0.2), pbr("TRoofGrey", (0.3, 0.3, 0.3), 0.6), bevel=0.15),
-             box("TFloor", (0, 0, 1.62), (L_ - 0.2, W_ - 0.2, 0.05), pbr("TFloorM", (0.25, 0.22, 0.18), 0.8))]
-    for k in range(9):                                          # window piers between the glass
-        for sy in (-1, 1):
-            parts.append(box("TPier", (-L_ / 2 + 0.6 + k * 2.3, sy * (W_ / 2 - 0.03), 2.05), (0.5, 0.06, 0.9), green))
-    for sy in (-1, 1):
-        parts.append(box("TDoor", (-L_ / 2 + 1.2, sy * (W_ / 2 + 0.005), 1.9), (1.3, 0.02, 2.1), pbr("DoorGrey", (0.35, 0.37, 0.35), 0.5)))
-    seat = pbr("SeatWood", (0.42, 0.25, 0.12), 0.5)
-    for k in range(14):                                         # bench seats inside
-        for sy in (-1, 1):
-            parts.append(box("TSeat", (-L_ / 2 + 2.5 + k * 1.15, sy * 1.05, 1.95), (0.5, 0.95, 0.12), seat))
-            parts.append(box("TBack", (-L_ / 2 + 2.25 + k * 1.15, sy * 1.05, 2.3), (0.08, 0.95, 0.6), seat))
-    body = joinm(parts, name)
-    for sy in (-1, 1):
-        g = box("TGlass", (0, sy * (W_ / 2 - 0.02), 2.05), (L_ - 0.4, 0.01, 0.9), gl); g.parent = body
-    for k in range(4):                                          # warm ceiling lights inside
-        l = bpy.data.lights.new("TrainInt", 'AREA'); l.energy = 40; l.size = 1.2; l.color = (1.0, 0.86, 0.62)
-        o = bpy.data.objects.new("TrainInt", l); bpy.context.collection.objects.link(o); o.parent = body; o.location = (-7.5 + k * 5.0, 0, 3.0)
-    if front:
-        cab = joinm([box("Cab", (L_ / 2 + 0.6, 0, 2.1), (1.4, W_, 2.9), red, bevel=0.5),
-                     box("CabWin", (L_ / 2 + 1.25, 0, 2.6), (0.05, 2.6, 0.8), gl)], name + "Cab")
-        cab.parent = body
-        for sy in (-0.9, 0.9):
-            h = cyl("Headlamp", (L_ / 2 + 1.31, sy, 1.4), 0.12, 0.04, emissive("TrainHead", (1.0, 0.92, 0.8), 8), verts=20, rot=(0, math.radians(90), 0)); h.parent = body
-    body.location = (x, y, 0.15)
-    return body
 
 
 def build(variant=None):
@@ -82,7 +46,8 @@ def build(variant=None):
         cyl("CanopyCol", (x, 2.4, 2.65), 0.1, 3.1, pbr("ColGreen", (0.12, 0.22, 0.16), 0.5, 0.4), verts=16)
     ph_instances("painted_wooden_bench", [((x, 2.2, 1.1), math.pi, 1.0) for x in (5.5, 18.0)])
     box("FarBuildings", (0, -40, 9), (160, 2, 18), masonry_facade("FarB", (0.4, 0.4, 0.38), 3.2, 2.6, 1.2, 1.5, 0.22, lit_strength=0.8))
-    c["train"] = [train_car(f"Car{k}", -6 + k * 20.2, TRACK_Y, front=(k == 0)) for k in range(4)]
+    import vehicles
+    c["train"] = vehicles.make("train_soviet_electric", (TRAIN_X, TRACK_Y, RAIL_TOP), 0.0, cars=4, lamps=True, real_lights=True)
     c["rain"] = precip_curtains("rain", x_range=(-30, 30), ys=(-7, -3, 0.5, 3.5), top=10)
     c["a"] = person("Courier", 1.0, 45, "male_casualsuit05", "short02", hv=0.3, col=(0.22, 0.2, 0.17))
     c["b"] = person("Buyer", 1.0, 38, "male_elegantsuit01", "short01", hv=0.15, col=(0.28, 0.3, 0.33))
@@ -96,8 +61,7 @@ def animate(c, sec, move):
     a, b = c["a"], c["b"]
     Z = 1.1
     if move == "handover":
-        for k, car in enumerate(c["train"]):
-            car.location.x = -6 + k * 20.2
+        c["train"].location.x = TRAIN_X
         stand(a, (-0.4, -0.6, Z), math.radians(90))                       # face each other along the platform
         stand(b, (0.4, -0.6, Z), math.radians(-90))
         k = ease(min(1.0, max(0.0, (sec - 1.2) / 2.2)))
@@ -114,8 +78,10 @@ def animate(c, sec, move):
         a.rot("head", (0, 0, 1), -25 * max(0.0, math.sin(min(1.0, max(0.0, (sec - 4.2) / 1.6)) * math.pi)))      # a glance along the platform
     else:
         hide(b, True); c["parcel"].hide_render = True
-        for k, car in enumerate(c["train"]):
-            car.location.x = -6 + k * 20.2 + (0.0 if sec < 0.8 else 0.55 * (sec - 0.8) ** 1.7)
+        import vehicles
+        dx = 0.0 if sec < 0.8 else 0.55 * (sec - 0.8) ** 1.7
+        c["train"].location.x = TRAIN_X + dx
+        vehicles.spin_wheels(c["train"], dx)
         stand(a, (-2.0, -1.2, Z), 0.0)                                    # facing the train (-Y)
         nod(a, "head", 6); look(a, Vector((14.0, TRACK_Y, 2.0)), 0.5 * min(1.0, sec / 4.0))
     bpy.context.view_layer.update()
