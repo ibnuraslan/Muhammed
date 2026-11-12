@@ -88,7 +88,6 @@ RAIL = Vector((0.26, -0.10, 1.025))            # brass grab rail on the front se
 POCKET_REACH = Vector((-0.06, -0.30, 1.24))
 hR_keys = [(1, wave_R(1)), (F_IMPACT, wave_R(F_IMPACT)), (F_IMPACT + 6, Vector((-0.42, -0.18, 1.5))), (195, Vector((-0.40, -0.12, 1.0))),
            (240, Vector((-0.33, -0.10, 0.92))), (300, Vector((-0.30, -0.08, 0.90))), (1150, Vector((-0.30, -0.08, 0.90))),
-           (1185, Vector((-0.22, -0.26, 1.14))), (1205, POCKET_REACH), (1216, POCKET_REACH + Vector((0.0, 0.0, 0.0))),
            (1238, Vector((-0.30, -0.42, 1.45))), (1262, Vector((-0.30, -0.30, 1.98))), (1285, Vector((-0.30, -0.30, 2.0))),
            (1310, Vector((-0.26, -0.45, 1.35))), (1360, Vector((-0.22, -0.44, 1.22))), (1420, Vector((-0.30, -0.42, 1.40))), (1500, Vector((-0.24, -0.44, 1.25)))]
 hL_keys = [(1, Vector((0.30, -0.12, 0.95))), (60, Vector((0.36, -0.30, 1.2))), (100, Vector((0.32, -0.20, 1.05))), (F_IMPACT, Vector((0.31, -0.14, 1.0))),
@@ -332,7 +331,7 @@ for ob in [o for o in H.children if o.type == "MESH"]:
 MS = bpy.data.objects["Manuscript"]; GC = bpy.data.objects["GlassesCase"]; BL = bpy.data.objects["Bullet"]
 SHEETS = sorted([o for o in MS.children if o.name.startswith("Sheet")], key=lambda o: o.name)
 # stack normal (local +z) points out of the chest; sheet 49 outermost
-MS.matrix_world = PW @ Matrix.Translation(Vector((-0.002, 0.010, -0.03))) @ Matrix.Rotation(R_(90), 4, "X")
+MS.matrix_world = PW @ Matrix.Translation(Vector((-0.002, -0.014, -0.035))) @ Matrix.Rotation(R_(90), 4, "X")
 c_sp = child_of(MS, H, "spine01", 400)
 GC.matrix_world = PW @ Matrix.Translation(Vector((0.035, 0.031, -0.03))) @ Matrix.Rotation(R_(90), 4, "Y") @ Matrix.Rotation(R_(90), 4, "X")
 child_of(GC, H, "spine01", 400)
@@ -345,42 +344,64 @@ for o in [MS] + list(MS.children): vis(o, ((1, True), (B[3] + 15, False)))
 # manuscript hand-off: pocket (spine01) -> right hand from the grasp at 1216
 c_hand = MS.constraints.new("CHILD_OF"); c_hand.target = H; c_hand.subtarget = "wrist.R"
 sc.frame_set(1216); c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].matrix).inverted() @ (H.matrix_world @ R.PB["spine01"].matrix) @ c_sp.inverse_matrix
-for f_, a_, b_ in ((1, 1.0, 0.0), (1215, 1.0, 0.0), (1216, 0.0, 1.0)):
+for f_, a_, b_ in ((1, 1.0, 0.0),):   # hand-off keys are set in the pinch block below
     c_sp.influence = a_; c_hand.influence = b_
     c_sp.keyframe_insert("influence", frame=f_); c_hand.keyframe_insert("influence", frame=f_)
-sc.frame_set(1180); _ms0 = MS.location.copy()
-for f_, u_ in ((1, 0.0), (1205, 0.0), (1216, 1.0), (END, 1.0)):   # the hand pulls it up: rises only while gripped
-    MS.location = _ms0 + (Pocket.matrix_world.to_3x3() @ Vector((0.0, -0.006, 0.065))) * u_; MS.keyframe_insert("location", frame=f_)
-# right hand reaches the manuscript's top edge in the pocket (1199-1216), re-keyed now that the pocket is known
-for f in range(1197, 1219, 2):
+# ---- manuscript pull (director v007 note): thumb + index pinch the top corner and draw it out while the coat is still
+#      x-ray ghost (1150-1184); the pinch holds through the lift. Timeline: reach 1151-1166, pinch, pull 1168-1184,
+#      hold at the chest, hand-off to the wrist at 1196, lift to the audience (1238-1262).
+T_PINCH, T_PULL0, T_PULL1, T_HAND = 1166, 1168, 1184, 1196
+sc.frame_set(1150); _ms0 = MS.location.copy()
+for f_, u_ in ((1, 0.0), (T_PINCH, 0.0), (T_PINCH + 4, 0.6), (T_PULL1, 1.0), (END, 1.0)):   # moves only while pinched; drawn out fast, then eases
+    MS.location = _ms0 + (Pocket.matrix_world.to_3x3() @ Vector((-0.03, -0.15, 0.03))) * u_; MS.keyframe_insert("location", frame=f_)
+_cands = (Vector((-0.043, 0.074, 0.0)), Vector((0.043, 0.074, 0.0)))
+sc.frame_set(1150)
+CORNER = min(_cands, key=lambda c: ((MS.matrix_world @ c) - hR(1150)).length)
+def pinch_mid():
+    return (H.matrix_world @ R.PB["finger1-3.R"].tail + H.matrix_world @ R.PB["finger2-3.R"].tail) / 2
+def pinch_pose(f):
+    for k in range(1, 6):
+        for j in range(1, 4):
+            n = f"finger{k}-{j}.R"
+            if n not in R.PB: continue
+            a = (15, 30, 21)[j - 1] if k == 1 else ((27, 45, 31)[j - 1] if k == 2 else (18, 26, 18)[j - 1])   # thumb-index tip gap ~1 cm
+            pb = R.PB[n]; pb.rotation_quaternion = Quaternion((1, 0, 0), R_(a)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+for f_ in (1150, 1160) + tuple(x for x in (1170, 1182, 1192, 1204, 1216, 1290, 1300, 1365, 1372, 1395, 1405, 1500)):
+    if f_ >= 1160: pinch_pose(f_)
+D_G, N_G = Vector((0.9, 0.1, -0.45)), Vector((0, 1, 0.1))   # fingers across and down the chest, palm toward the coat
+Wt = hR(1150)
+for f in range(1151, T_HAND + 1, 2):
     sc.frame_set(f)
-    top = MS.matrix_world @ Vector((0.0, 0.08, 0.014)) + Vector((0, -0.022, 0.006))
-    u = smooth((f - 1197) / 10.0)
-    Wt = hR(1196).lerp(top + Vector((0.0, -0.025, 0.075)), u) + Vector((-0.03, -0.12, 0.03)) * math.sin(math.pi * min(1.0, u))
-    if f > 1215: Wt = Wg_hold + Vector((0.0, -0.008, 0.004))
-    HU.key_hand("R", f, Wt, Vector((0.9, 0.25, -0.35)), Vector((0, 1, 0.2)), pole=Vector((-0.55, 0.45, 1.0)))
-    if 1205 <= f <= 1215:   # land the finger pads on the manuscript's top edge (2 correction passes)
-        for _ in range(2):
-            sc.frame_set(f); top = MS.matrix_world @ Vector((0.0, 0.08, 0.014)) + Vector((0, -0.022, 0.006))
-            fp = H.matrix_world @ R.PB["finger3-2.R"].head.lerp(R.PB["finger1-3.R"].head, 0.5)
-            Wt = Wt + (top - fp)
-            HU.key_hand("R", f, Wt, Vector((0.9, 0.25, -0.35)), Vector((0, 1, 0.2)), pole=Vector((-0.55, 0.45, 1.0)))
-        Wg_hold = Wt.copy()
+    corner = MS.matrix_world @ CORNER
+    u = smooth((f - 1151) / float(T_PINCH - 1151))
+    if f < T_PINCH:   # approach from outside the chest, arcing out
+        Wt = hR(1150).lerp(corner + Vector((0.02, -0.06, 0.09)), u) + Vector((-0.04, -0.10, 0.03)) * math.sin(math.pi * u)
+        DN = clamp_wrist("R", Wt, D_G, N_G, f)
+        HU.key_hand("R", f, Wt, *DN, pole=Vector((-0.55, 0.45, 1.0)))
+    else:             # fingertips on the corner: 3 correction passes per key
+        DN = clamp_wrist("R", Wt, D_G, N_G, f)
+        HU.key_hand("R", f, Wt, *DN, pole=Vector((-0.55, 0.45, 1.0)))
+        for _ in range(3):
+            sc.frame_set(f); corner = MS.matrix_world @ CORNER
+            Wt = Wt + (corner - pinch_mid())
+            HU.key_hand("R", f, Wt, *DN, pole=Vector((-0.55, 0.45, 1.0)))
 Wg = Wt.copy()
 def _two(a_, m_, b_, u):
     return (a_.lerp(m_, u * 2) if u < 0.5 else m_.lerp(b_, u * 2 - 1)).normalized()
-for f in range(1219, 1245, 2):   # ease out of the grasp into the lift, no orientation snap
-    u = smooth((f - 1217) / 26.0)
-    W_ = hR(f) + (Wg - hR(1217)) * (1 - u) + Vector((0.0, -0.075, 0.02)) * math.sin(math.pi * u)
-    d_ = _two(Vector((0.9, 0.25, -0.35)), Vector((0.5, -0.6, 0.6)), Vector((0.1, -0.2, 1)), u)
-    n_ = _two(Vector((0, 1, 0.2)), Vector((0.3, 0.5, 0.6)), Vector((-0.2, -1, 0)), u)
+for f in range(T_HAND + 1, 1247, 2):   # ease from the chest into the lift, the paper stays pinched (child of the wrist)
+    u = smooth((f - T_HAND) / 48.0)
+    W_ = hR(f) + (Wg - hR(T_HAND)) * (1 - u) + Vector((0.0, -0.06, 0.02)) * math.sin(math.pi * u)
+    d_ = _two(DN[0], Vector((0.5, -0.6, 0.6)), Vector((0.1, -0.2, 1)), u)
+    n_ = _two(DN[1], Vector((0.3, 0.5, 0.6)), Vector((-0.2, -1, 0)), u)
     HU.key_hand("R", f, W_, d_, n_, pole=Vector((-0.55, 0.45, 1.0)))
+for f_, a_, b_ in ((1, 1.0, 0.0), (T_HAND - 1, 1.0, 0.0), (T_HAND, 0.0, 1.0)):
+    c_sp.influence = a_; c_hand.influence = b_; c_sp.keyframe_insert("influence", frame=f_); c_hand.keyframe_insert("influence", frame=f_)
+for fc_owner in (c_sp, c_hand): pass
 c_hand.influence = 0.0; c_sp.influence = 1.0
-sc.frame_set(1215)
-_fist = sum((H.matrix_world @ R.PB[f"finger{k}-2.R"].head for k in (2, 3, 4, 5)), Vector()) / 4
-_top = MS.matrix_world @ Vector((0.0, 0.065, 0.014))
-c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].matrix).inverted() @ Matrix.Translation(_fist - _top) @ (H.matrix_world @ R.PB["spine01"].matrix) @ c_sp.inverse_matrix
-print("GRIP SNAP", round((_fist - _top).length, 3))
+sc.frame_set(T_HAND - 1)
+_pm = pinch_mid(); _cw = MS.matrix_world @ CORNER
+c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].matrix).inverted() @ Matrix.Translation(_pm - _cw) @ (H.matrix_world @ R.PB["spine01"].matrix) @ c_sp.inverse_matrix
+print("GRIP SNAP", round((_pm - _cw).length, 3))
 # paper hole: charred ring + clear hole through every sheet after the bullet passes (paper material, object coords of HoleEmpty)
 hole_e = bpy.data.objects.new("HoleEmpty", None); C_STUDIO.objects.link(hole_e); hole_e.parent = MS
 HP_LOCAL = Vector((0.012, 0.01, 0.0))

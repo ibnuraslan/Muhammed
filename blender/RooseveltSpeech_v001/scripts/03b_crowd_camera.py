@@ -103,7 +103,7 @@ for i, p in enumerate(SPOTS):
     for o in [a] + list(a.children):
         o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
 # the shooter: a black silhouette, arm raised toward the car; no weapon detail (a dark blob in the hand)
-sh = instance("CrowdB", "Shooter", SHOOTER_POS, math.atan2(-(0 - SHOOTER_POS.x), -(0 - SHOOTER_POS.y)) + R_(180), CR, black=True)
+sh = instance("CrowdB", "Shooter", SHOOTER_POS, math.atan2(-(0 - SHOOTER_POS.x), -(0 - SHOOTER_POS.y)) + R_(180), CR, black=False)   # dark overcoat and hat, lit like everyone else (no flat black blob)
 fks = FK(sh)
 aim = (HIT - (SHOOTER_POS + Vector((-0.2, 0, 1.4)))).normalized()
 aim_l = sh.matrix_world.to_3x3().inverted() @ aim
@@ -126,7 +126,7 @@ for o in [sh, blob] + list(sh.children):
     o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
 # policeman silhouette restraining the shooter (background), arms on the shooter from just after the shot
 cop_pos = SHOOTER_POS + Vector((0.6, -0.35, 0))
-cop = instance("CrowdD", "Policeman", cop_pos, math.atan2(-(SHOOTER_POS.x - cop_pos.x), -(SHOOTER_POS.y - cop_pos.y)), CR, black=True)
+cop = instance("CrowdD", "Policeman", cop_pos, math.atan2(-(SHOOTER_POS.x - cop_pos.x), -(SHOOTER_POS.y - cop_pos.y)), CR, black=False)
 fkc = FK(cop); to_sh = cop.matrix_world.to_3x3().inverted() @ (SHOOTER_POS + Vector((0, 0, 1.35)) - (cop_pos + Vector((0, 0, 1.35)))).normalized()
 for f in range(1, F_OUT, 4):
     t = wt(f); u = smooth((t - F_IMPACT - 8) / 18.0)
@@ -208,13 +208,13 @@ K = [  # frame, position, target, lens
  (300,  Vector((0.55, -1.15, 1.6)),  Vector((0.0, -0.12, 1.55)), 35),   # face, straightening
  (B[2], Vector((0.15, -1.05, 1.45)), Vector((-0.05, -0.15, 1.38)), 35),
  (395,  Vector((-0.85, -0.85, 1.4)), P((0, 0, 0.02)), 35),              # orbit to the coat breast
- (B[3], P((-0.204, -0.544, 0.051)), P((0, 0, 0)), 35),
+ (B[3], P((-0.32, -0.78, 0.13)), P((0, 0, 0.12)), 30),   # pocket and his eyes both in frame
  (480, P((-0.06, -0.30, 0.03)), P((0, 0.03, -0.01)), 30),              # through the cloth
- (540, P((0.15, -0.27, 0.09)), P((0, 0.03, -0.02)), 28),
- (600, P((0.204, -0.092, 0.13)), P((0, 0.03, -0.02)), 30),
- (660, P((0.041, -0.038, 0.208)), P((0, 0.03, -0.01)), 30),          # over the fold edge
- (B[4], P((-0.234, -0.185, 0.123)), P((0.01, 0.04, -0.02)), 30),
- (780, P((0.335, -0.126, -0.001)), P((0.035, 0.031, -0.03)), 32),     # lateral to the steel case
+ (540, P((0.21, -0.4, 0.145)), P((-0.015, 0.05, -0.02)), 28),
+ (600, P((0.291, -0.133, 0.205)), P((-0.015, 0.05, -0.02)), 30),
+ (660, P((0.046, -0.052, 0.317)), P((-0.015, 0.05, -0.01)), 30),          # over the fold edge
+ (B[4], P((-0.371, -0.278, 0.194)), P((-0.005, 0.06, -0.02)), 30),
+ (780, P((0.47, -0.184, 0.013)), P((0.02, 0.051, -0.03)), 32),     # lateral to the steel case
  (840, P((0.169, -0.001, -0.194)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
  (B[5], P((-0.27, -0.189, 0.031)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
  (940, P((-0.212, -0.059, 0.075)), P((0.015, 0.025, -0.02)), 35),

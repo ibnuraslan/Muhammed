@@ -1,14 +1,38 @@
 {
-"hits": [
+"hits": [],
+"joint": [
 [
-1225,
-"hand.R",
-"own clothes",
-1
+1151,
+"wrist.R",
+65
+],
+[
+1169,
+"elbow.R",
+151
+],
+[
+1171,
+"wrist.R",
+62
+],
+[
+1171,
+"elbow.R",
+153
+],
+[
+1173,
+"wrist.R",
+62
+],
+[
+1173,
+"elbow.R",
+152
 ]
 ],
-"joint": [],
 "frames": 750,
-"count_hits": 1,
-"count_joint": 0
+"count_hits": 0,
+"count_joint": 6
 }

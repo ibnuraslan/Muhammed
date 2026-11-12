@@ -69,10 +69,22 @@
     "clothes": 0,
     "other": 0
    }
+  },
+  "1171": {
+   "Hero": {
+    "self": 246,
+    "clothes": 0,
+    "other": 0
+   }
   }
  },
  "step": 6,
  "depth_cm": 2.0,
- "bad_ranges": [],
+ "bad_ranges": [
+  [
+   1171,
+   1171
+  ]
+ ],
  "fps": 60
 }

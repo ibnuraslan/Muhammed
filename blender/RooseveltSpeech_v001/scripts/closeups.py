@@ -6,13 +6,17 @@ sc = bpy.context.scene; H = bpy.data.objects["Hero"]; cam = sc.camera
 cam.animation_data_clear(); cam.data.animation_data_clear(); cam.rotation_mode = "QUATERNION"; cam.data.lens = 45
 sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 8; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = "JPEG"
-SHOTS = [("pocket_1205", 1205, "wrist.R", (-0.3, -0.5, 0.05)), ("pocket_1223", 1223, "wrist.R", (-0.25, -0.5, 0.0)), ("flail_178", 178, "wrist.L", (0.4, -0.6, 0.1)), ("impact_R_180", 180, "wrist.R", (-0.4, -0.6, 0.1)), ("hat_grip", 60, "wrist.R", (0.25, -0.5, 0.1)), ("rail_grip_L", 260, "wrist.L", (0.35, -0.45, 0.15)), ("rail_grip_L_frozen", 900, "wrist.L", (0.1, -0.5, 0.3)),
-         ("feet_car", 120, "foot.L", (0.5, -0.8, 0.45)), ("feet_step", 230, "foot.R", (-0.4, -0.8, 0.4)), ("specs_moustache", 300, "head", (0.2, -0.45, 0.05)),
+SHOTS = [("pinch_1166", 1166, "finger2-3.R", (-0.15, -0.3, 0.05)), ("pinch_pull_1176", 1176, "finger2-3.R", (-0.15, -0.3, 0.05)), ("pinch_hold_1196", 1196, "finger2-3.R", (-0.18, -0.32, 0.06)), ("pinch_lift_1230", 1230, "finger2-3.R", (-0.2, -0.35, 0.02)), ("pocket_1205", 1205, "wrist.R", (-0.3, -0.5, 0.05)), ("pocket_1223", 1223, "wrist.R", (-0.25, -0.5, 0.0)), ("flail_178", 178, "wrist.L", (0.4, -0.6, 0.1)), ("impact_R_180", 180, "wrist.R", (-0.4, -0.6, 0.1)), ("hat_grip", 60, "wrist.R", (0.25, -0.5, 0.1)), ("rail_grip_L", 260, "wrist.L", (0.35, -0.45, 0.15)), ("rail_grip_L_frozen", 900, "wrist.L", (0.1, -0.5, 0.3)),
+         ("feet_car", 120, "foot.L", (-0.15, -0.6, 0.85)), ("feet_step", 230, "foot.R", (-0.2, -0.6, 0.85)), ("feet_step_mid", 211, "foot.R", (-0.2, -0.6, 0.85)), ("specs_moustache", 300, "head", (0.2, -0.45, 0.05)),
          ("specs_side", 1300, "head", (0.45, -0.1, 0.05)), ("pocket_grasp", 1212, "wrist.R", (-0.3, -0.5, 0.05)), ("manuscript_lift", 1262, "wrist.R", (-0.3, -0.55, 0.0)),
          ("podium_hand_L", 1250, "wrist.L", (0.35, -0.5, 0.15)), ("fist_L", 1320, "wrist.L", (0.4, -0.5, 0.05)), ("podium_slam_L", 1380, "wrist.L", (0.3, -0.5, 0.2)),
          ("feet_stage", 1330, "foot.L", (0.5, -0.8, 0.4)), ("elbow_armpit", 1320, "lowerarm01.L", (0.6, -0.6, 0.1))]
+fill = bpy.data.lights.new("ReviewFill", "AREA"); fill.energy = 0.0; fill.size = 0.4
+fo = bpy.data.objects.new("ReviewFill", fill); sc.collection.objects.link(fo)   # review-only light, not in the package
 for name, f, bone, off in SHOTS:
     sc.frame_set(f); p = H.matrix_world @ H.pose.bones[bone].head
     cam.location = p + Vector(off); cam.rotation_quaternion = (p - cam.location).to_track_quat("-Z", "Y")
+    if name.startswith("pinch"): cam.location = p + Vector(off) * 0.6; cam.rotation_quaternion = (p - cam.location).to_track_quat("-Z", "Y")
+    fill.energy = 40.0 if name.startswith("feet") else 0.0; fo.location = cam.location; fo.rotation_euler = cam.rotation_quaternion.to_euler()
     sc.render.filepath = os.path.join(OUT, f"{name}_f{f}.jpg"); bpy.ops.render.render(write_still=True)
 print("CLOSEUPS", len(SHOTS))

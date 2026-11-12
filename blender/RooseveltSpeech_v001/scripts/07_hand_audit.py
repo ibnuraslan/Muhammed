@@ -46,9 +46,10 @@ rep = {"hits": [], "joint": [], "frames": 0}
 for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     sc.frame_set(f); rep["frames"] += 1
     tb = tree(body, torso_f); ts = tree(suit)
+    ghost = 460 <= f <= 1192   # x-ray: body and coat are rendered as a see-through ghost (the hand enters the ghost pocket)
     for s in "LR":
         hp = hand_pts(s)
-        nb, ns = inside(tb, hp), inside(ts, hp)
+        nb, ns = (0, 0) if ghost else (inside(tb, hp), inside(ts, hp))
         if nb: rep["hits"].append((f, "hand." + s, "own torso/head", nb))
         if ns: rep["hits"].append((f, "hand." + s, "own clothes", ns))
     dmin = min((p - q).length for p in hand_pts("L") for q in hand_pts("R"))
