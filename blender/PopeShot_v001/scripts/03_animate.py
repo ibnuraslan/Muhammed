@@ -162,7 +162,11 @@ def glove_paint(rig):
             nt.links.new(at.outputs['Fac'], mr.inputs['Value']); nt.links.new(mr.outputs['Result'], bs.inputs['Roughness'])
 def setup_heroes():
     pope = O["Pope"]
-    cassock(pope, bpy.data.materials["WhiteWool"])
+    cm_ = bpy.data.materials.new("CassockWhite"); cm_.use_nodes = True; nt_ = cm_.node_tree; bs_ = nt_.nodes["Principled BSDF"]
+    bs_.inputs['Base Color'].default_value = (0.93, 0.9, 0.84, 1); bs_.inputs['Roughness'].default_value = 0.75; bs_.inputs['Sheen Weight'].default_value = 0.4
+    nz_ = nt_.nodes.new('ShaderNodeTexNoise'); nz_.inputs['Scale'].default_value = 400; bp_ = nt_.nodes.new('ShaderNodeBump'); bp_.inputs['Strength'].default_value = 0.08
+    nt_.links.new(nz_.outputs['Fac'], bp_.inputs['Height']); nt_.links.new(bp_.outputs['Normal'], bs_.inputs['Normal'])
+    cas = cassock(pope, cm_); cas.data.materials[0] = cm_
     hb = pope.data.bones["head"]; ht = hb.tail_local; top = max(c.z for c in mixed_coords(body_of(pope).data))
     shell(pope, "Zucchetto", lambda co, w: co.z > top - 0.05 and co.y > hb.head_local.y - 0.03, 0.03, skull_m)
     for nm in ("SurgA", "SurgB", "SurgC", "Nurse"):
@@ -531,6 +535,7 @@ done = set()
 for ob in [c for c in O if c.parent == pope and c.type == 'MESH']:
     for m in ob.data.materials:
         if not m or m.name in done or not m.node_tree: continue
+        if m.name.startswith("CassockWhite"): continue
         if m.users > 1 and m.name in ("WhiteWool",):
             m2 = m.copy(); m2.name = "PopeWool"; ob.data.materials[0] = m2; m = m2
         done.add(m.name)
@@ -712,9 +717,16 @@ for v in drape.vertices:      # 1.15 m x 1.45 m sheet: flat on the pad, hanging 
     if ex > 0: v.co.x = math.copysign(0.28 + ex * 0.25, v.co.x)
 dro = bpy.data.objects.new("Drape", drape); bpy.data.collections["Theatre"].objects.link(dro)
 dro.location = (-8.0, 40.5 - 0.25, tz + 0.012); drape.materials.append(bpy.data.materials["SurgDrape"])
-sw = dro.modifiers.new("shrink", 'SHRINKWRAP'); sw.wrap_method = 'NEAREST_SURFACEPOINT'; sw.wrap_mode = 'OUTSIDE'
-sw.target = body_of(pope); sw.offset = 0.04
-dro.modifiers.new("smooth", 'CORRECTIVE_SMOOTH').iterations = 8
+# drape over the patient: a body-shaped rise (feet low, chest high) over the pad, edges hanging off the table
+ev(700); bb = body_of(pope).evaluated_get(bpy.context.evaluated_depsgraph_get()).to_mesh(); Mb = body_of(pope).matrix_world
+pts = [Mb @ v.co for v in bb.vertices]
+for v in drape.vertices:
+    w = dro.location + v.co
+    near = [p for p in pts if abs(p.x - w.x) < 0.03 and abs(p.y - w.y) < 0.03]
+    if near:
+        v.co.z = max(v.co.z, max(p.z for p in near) - dro.location.z + 0.07)
+body_of(pope).evaluated_get(bpy.context.evaluated_depsgraph_get()).to_mesh_clear()
+sw = dro.modifiers.new("smooth0", 'SMOOTH'); sw.factor = 0.3; sw.iterations = 2
 dro.modifiers.new("sol", 'SOLIDIFY').thickness = 0.006
 dro.modifiers.new("sub", 'SUBSURF').levels = 1
 key_vis(dro, ((1, False), (631, True), (763, False)))
@@ -918,7 +930,7 @@ for f in range(780, 1015, 30):          # blessing: two fingers up, ring + littl
             b = pope.pose.bones["finger%d-%d.R" % (fi, seg)]; b.rotation_quaternion = Quaternion((1, 0, 0), R_(CURL_SIGN * a_)); b.keyframe_insert("rotation_quaternion", frame=f)
 for nm in ("AideA", "AideB"):
     for s_ in "LR": curl_keys(O[nm], s_, [(1, 20, 10), (512, 20, 10), (528, 60, 40), (700, 25, 15)])
-curl_keys(O["AideB"], "R", [(1153, 20, 10), (1190, 40, 45), (1320, 40, 45), (1328, 15, 10)])
+curl_keys(O["AideB"], "R", [(1153, 12, 10), (1190, 18, 40), (1320, 18, 40), (1328, 10, 8)])
 curl_keys(shooter, "R", [(1, 75, 50)]); curl_keys(shooter, "L", [(1, 25, 15)])
 for nm in ("SurgA", "SurgB", "SurgC", "Nurse"):
     for s_ in "LR": curl_keys(O[nm], s_, [(600, 25, 15), (680, 35, 25), (740, 22, 15)])

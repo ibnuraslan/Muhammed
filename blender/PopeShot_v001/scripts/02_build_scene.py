@@ -78,13 +78,14 @@ def simple(name, color, rough=0.5, metal=0.0, emit=None, estr=0.0, noise_bump=0.
 
 M = dict(
     cobble=pbr("Cobble", "cobblestone_floor_08", 0.35, (0.95, 0.9, 0.82)),
-    trav=pbr("Travertine", "rough_plaster_03", 1.4, (1.0, 0.93, 0.8)),
+    trav=pbr("Travertine", "marble_01", 0.5, (1.02, 0.94, 0.8), 0.5),
+    ashlar=pbr("AshlarCream", "castle_brick_07", 0.32, (1.45, 1.3, 1.05), 0.6),
     plaster=pbr("Plaster", "plastered_wall_04", 0.5, (0.95, 0.88, 0.75)),
     brick=pbr("Brick", "castle_brick_07", 0.4, (1, 0.95, 0.9)),
     whitepl=pbr("WhitePlaster", "white_plaster_02", 0.6, (0.95, 0.95, 0.93)),
     marble=pbr("Marble", "marble_01", 1.2, (1, 0.98, 0.95), 0.4, spec=0.6),
     concrete=pbr("Concrete", "concrete_wall_008", 0.6, (0.75, 0.72, 0.68)),
-    tiles=pbr("Tiles", "floor_tiles_06", 0.8, (0.85, 0.95, 0.95)),
+    tiles=pbr("TheatreWall", "white_plaster_02", 0.8, (0.72, 0.92, 0.82)),
     wood=pbr("Wood", "wood_floor_deck", 1.0, (0.7, 0.5, 0.35)),
     linen=pbr("WhiteWool", "rough_linen", 6.0, (1.3, 1.22, 1.08), 1.0, spec=0.3),
     drape=pbr("SurgDrape", "cotton_jersey", 5.0, (0.25, 0.5, 0.48), 1.0, spec=0.3),
@@ -94,6 +95,10 @@ M = dict(
     shutter=pbr("PaintedMetal", "painted_metal_shutter", 1.0, (0.9, 0.9, 0.9)),
 )
 M["plate"].node_tree.nodes["Principled BSDF"].inputs['Metallic'].default_value = 0.8
+for key in ("ashlar",):        # cream stone: desaturate the brick photo before the tint
+    nt = M[key].node_tree; mx = next(n for n in nt.nodes if n.type == 'MIX')
+    src = mx.inputs['A'].links[0].from_socket; hs = nt.nodes.new('ShaderNodeHueSaturation'); hs.inputs['Saturation'].default_value = 0.08
+    hs.inputs['Value'].default_value = 1.35; nt.links.new(src, hs.inputs['Color']); nt.links.new(hs.outputs['Color'], mx.inputs['A'])
 M["gold"] = simple("Gold", (1.0, 0.72, 0.32), 0.25, 1.0, noise_bump=0.08, nscale=120)
 M["brass"] = simple("Brass", (0.8, 0.58, 0.3), 0.35, 1.0, noise_bump=0.1)
 M["bullet"] = simple("BulletLead", (0.55, 0.52, 0.48), 0.35, 1.0, noise_bump=0.15, nscale=200)
@@ -214,7 +219,7 @@ for side in (-1, 1):
         box("Entab", (8.6, 5.0, 1.6), (x, y, 12.15), M["trav"], "Square", rot=side * -(math.pi / 2 - t0) if side > 0 else (math.pi / 2 - t0))
         box("Attic", (8.6, 4.4, 1.0), (x, y, 13.4), M["trav"], "Square", rot=side * -(math.pi / 2 - t0) if side > 0 else (math.pi / 2 - t0))
 # facade (back, y=36): wall with openings for the theatre window, balcony door and side windows
-fac = box("Facade", (70, 1.5, 30), (0, 36, 15), M["trav"], "Square")
+fac = box("Facade", (70, 1.5, 30), (0, 36, 15), M["ashlar"], "Square")
 cut(fac, (2.2, 3, 2.4), (-8, 36, 9.3))          # theatre window
 cut(fac, (2.0, 3, 3.2), (0, 36, 8.6))            # balcony door
 for x in (-22, -16, 8, 16, 22):
@@ -231,6 +236,13 @@ def surround(x, z, w, h, ped=True):
             o = box("WinPediment", ((w + 1.2) / 2 * 1.08, 0.55, 0.16), (x + sgn * (w + 1.2) / 4, 35.1, z + h / 2 + 0.62), M["trav"], "Square", bevel=0.03)
             o.rotation_euler = (0, sgn * -0.38, 0)
 for x in (-22, -16, -8, 8, 16, 22): surround(x, 9.3, 2.0, 2.6)
+shut = simple("Shutter", (0.12, 0.3, 0.2), 0.5, noise_bump=0.02)
+for x in (-22, -16, 8, 16, 22):
+    for z in (9.3, 17.0):
+        for sg in (-1, 1):
+            for k in range(6):
+                box("ShutterSlat", (0.95, 0.06, 0.08), (x + sg * 1.75, 35.2, z - 1.15 + k * 0.46), shut, "Square").rotation_euler = (0.5, 0, 0)
+            box("ShutterFrame", (1.0, 0.08, 2.7), (x + sg * 1.75, 35.27, z), shut, "Square")
 for x in (-22, -16, -8, 0, 8, 16, 22): surround(x, 17.0, 2.0, 2.6, ped=False)
 surround(0, 8.6, 2.0, 3.2)
 pil = lathe("PilasterSrc", [(0.8, 0), (0.8, 0.4), (0.62, 0.55), (0.6, 22.0), (0.75, 22.3), (0.85, 22.6)], M["trav"], seg=40, flutes=24, fdepth=0.05, c="Hidden")
@@ -304,14 +316,14 @@ dome = lathe("Dome", [(9.0, 0), (9.0, 6), (8.8, 7), (8.0, 10), (6.5, 13), (4.5, 
 lathe("DomeDrum", [(10.5, 0), (10.5, 6)], M["trav"], seg=64, flutes=32, fdepth=0.03, loc=(0, 52, 20), c="Square")
 
 # ------------------------------------------------------------------ THEATRE (behind the left window, floor z=7)
-room("Theatre", -13, -3, 36.75, 45, 7, 11, M["tiles"], floor=M["concrete"], ceil=M["whitepl"], drop=("ymin",), c="Theatre")
+room("Theatre", -13, -3, 36.75, 45, 7, 11, M["tiles"], floor=M["whitepl"], ceil=M["whitepl"], drop=("ymin",), c="Theatre")
 # ------------------------------------------------------------------ CORRIDOR + CELL (behind the balcony door)
-room("Corridor", -1.4, 1.4, 36.75, 38.2, 7, 10.4, M["concrete"], drop=("ymin", "ymax"), c="Cell")
-cell = room("Cell", -2.5, 2.5, 38.2, 43.0, 7, 10.2, M["plaster"], floor=M["concrete"], ceil=M["concrete"], c="Cell")
+room("Corridor", -1.4, 1.4, 36.75, 38.2, 7, 10.4, M["ashlar"], drop=("ymin", "ymax"), c="Cell")
+cell = room("Cell", -2.5, 2.5, 38.2, 43.0, 7, 10.2, M["ashlar"], floor=M["concrete"], ceil=M["whitepl"], c="Cell")
 cut(cell, (1.2, 1.2, 0.9), (0, 43.0, 9.0))
 cut(cell, (1.3, 1.0, 2.3), (0, 38.2, 8.15))      # door opening (the barred door sits in it)
 # ------------------------------------------------------------------ SHRINE (behind the cell window)
-shr = room("Shrine", -6, 6, 43.3, 56, 7, 16, M["trav"], floor=M["marble"], ceil=M["plaster"], c="Shrine")
+shr = room("Shrine", -6, 6, 43.3, 56, 7, 16, M["ashlar"], floor=M["marble"], ceil=M["whitepl"], c="Shrine")
 cut(shr, (1.2, 1.2, 0.9), (0, 43.3, 9.0))
 # apse niche + pedestal for the statue
 lathe("Pedestal", [(0.75, 0), (0.75, 0.15), (0.6, 0.25), (0.55, 1.1), (0.68, 1.2), (0.72, 1.3)], M["marble"], seg=48, flutes=12, fdepth=0.04, loc=(0, 53.6, 7), c="Shrine")

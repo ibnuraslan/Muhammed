@@ -22,7 +22,7 @@ for im in list(bpy.data.images):
     except Exception:
         continue
     hero = any(k in im.name.lower() for k in ("kloppenheim", "marble", "old_caucasian_male", "elegantsuit", "rough_linen"))
-    lim = 2048 if "kloppenheim" in im.name else 1024 if hero else 512
+    lim = 2048 if "kloppenheim" in im.name else 1024 if hero else 384
     if im.name.endswith(".hdr"):
         continue
     s = min(1.0, lim / max(w, h)); nw, nh = max(1, int(w * s)), max(1, int(h * s)); im.scale(nw, nh); n += 1   # always re-encode
@@ -61,9 +61,9 @@ r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100
 r.fps, r.fps_base = 60, 1.0
 r.engine = 'CYCLES'; sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 sc.cycles.texture_limit_render = 'OFF'
-r.use_motion_blur = True; r.motion_blur_shutter = 0.5
+r.use_motion_blur = False   # animated look: no motion blur
 r.image_settings.file_format = 'PNG'
-sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
+sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Punchy'
 bpy.data.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)
 print("PREPARED", out)
