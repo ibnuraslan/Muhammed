@@ -42,9 +42,9 @@ W_HANDS = {  # frame: (R wrist, R fingers dir, R palm normal), (L ...). Resting 
     760: ((wpt(-0.17, 0.33, 0.12), WF + UP * 0.6, -WL), (wpt(0.16, 0.32, 0.12), WF + UP * 0.6, WL)),
     870: ((wpt(-0.16, 0.30, 0.18), WF + UP * 0.8, -WL), (wpt(0.15, 0.31, 0.2), WF + UP * 0.8, WL)),
     960: ((wpt(-0.14, 0.28, 0.24), WF + UP, -WL), (wpt(0.13, 0.27, 0.24), WF + UP, WL)),
-    1060: ((wpt(-0.13, 0.2, 0.33), UP + WF * 0.4, -WF), (wpt(0.12, 0.2, 0.33), UP + WF * 0.4, -WF)),
-    1170: ((wpt(-0.15, 0.24, 0.30), UP + WF * 0.5, -WF), (wpt(0.1, 0.23, 0.28), UP + WF * 0.5, -WF)),
-    1284: ((wpt(-0.13, 0.21, 0.32), UP + WF * 0.4, -WF), (wpt(0.12, 0.21, 0.32), UP + WF * 0.4, -WF)),
+    1060: ((wpt(-0.14, 0.33, 0.26), UP + WF * 0.4, WF), (wpt(0.13, 0.33, 0.26), UP + WF * 0.4, WF)),
+    1170: ((wpt(-0.15, 0.34, 0.25), UP + WF * 0.5, WF), (wpt(0.12, 0.33, 0.24), UP + WF * 0.5, WF)),
+    1284: ((wpt(-0.14, 0.33, 0.26), UP + WF * 0.4, WF), (wpt(0.12, 0.33, 0.25), UP + WF * 0.4, WF)),
     1300: ((wpt(-0.16, 0.32, 0.30), UP + WF * 0.2, -WF), (wpt(0.13, 0.37, 0.21), UP + WF * 0.2, -WF)),
     1360: ((wpt(-0.18, 0.34, 0.10), WF, -WL), (wpt(0.05, 0.38, 0.26), -WL + UP * 0.2, -WF)),
     1420: ((wpt(-0.17, 0.56, 0.085), WF, -UP), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
@@ -70,8 +70,8 @@ def curl(R, s, f, amt, thumb=None):
     t = amt if thumb is None else thumb
     for j in range(1, 4):
         R.key_q("finger1-%d.%s" % (j, s), f, Quaternion((1, 0, 0), R_(t * (18 if j == 1 else 30))))
-for f, a in ((1, 0.3), (1440, 0.3), (1452, 1.25), (1530, 1.25)): curl(RW, "R", f, a, 0.9 if f >= 1452 else None)
-for f, a in ((1, 0.3), (1300, 0.45), (1360, 0.45), (1530, 0.45)): curl(RW, "L", f, a, 0.35)
+for f, a in ((1, 0.4), (600, 0.4), (700, 0.12), (1290, 0.12), (1360, 0.35), (1440, 0.4), (1452, 1.25), (1530, 1.25)): curl(RW, "R", f, a, 0.9 if f >= 1452 else None)
+for f, a in ((1, 0.4), (600, 0.4), (700, 0.12), (1285, 0.12), (1300, 0.45), (1360, 0.45), (1530, 0.45)): curl(RW, "L", f, a, 0.35 if f >= 1300 or f < 600 else 0.1)
 CUP_LIFT = [(1452, Vector((0, 0, 0))), (1478, Vector((0.02, 0.015, 0.018))), (1530, Vector((0.10, 0.07, 0.09)))]
 c_rest = CUP.location.copy()       # (after the skid keys, this is the final skid position from 03b)
 sc.frame_set(1452); c_rest = CUP.matrix_world.translation.copy()
@@ -120,6 +120,6 @@ F_HANDS = {  # his table edge is 0.69 m in front of his seat: resting hands at l
 }
 for f, (r, l) in F_HANDS.items():
     fs.hand("R", f, r[0], r[1], r[2]); fs.hand("L", f, l[0], l[1], l[2])
-for f, a in ((1, 0.3), (40, 0.28), (95, 0.4), (150, 0.28), (260, 0.35), (500, 0.3), (1284, 0.3), (1340, 0.4), (1400, 1.05), (1530, 1.1)):
+for f, a in ((1, 0.42), (40, 0.4), (95, 0.45), (150, 0.4), (260, 0.42), (500, 0.45), (1284, 0.48), (1340, 0.45), (1400, 1.05), (1530, 1.1)):
     curl(RF, "R", f, a, 0.8 if f >= 1400 else None)
-for f, a in ((1, 0.32), (1530, 0.32)): curl(RF, "L", f, a)
+for f, a in ((1, 0.4), (1530, 0.4)): curl(RF, "L", f, a)
