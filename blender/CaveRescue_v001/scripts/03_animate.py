@@ -499,10 +499,28 @@ TELE[B3].add(1704)
 # beats 9-11: team kneels around Boy2 (medic = DiverA, mask = DiverB), coach keeps a hand on the boy
 P2 = V((CX + 0.8, 1.25, 0))
 DIVERS_IN = 1715
-for f in (DIVERS_IN, 1800, 1900, 1990, 2017, 2060, 2110, 2154):    # leaning in, nodding, looking at each other and the boy
+# diver B swims back up the passage ahead of the rising camera (beat 8), surfaces beside the boy at the edge and waits
+for f in range(1716, 1836, 10):
+    u = (f - 1716) / 120.0; y = -9.0 + 5.4 * u
+    swim("DiverB", f, pas_mid(y, 0.9 + 0.4 * u), 180.0, pitch=-12 * u, phase=f * 0.25, kick=1.0)
+for f in (1850, 1900, 1950, 1995):
+    H = HUM["DiverB"]; P = V((CX - 0.75, -2.35, WZ - 0.86 + 0.02 * math.sin(f * 0.1))); Rb = body_R(180 + 15, 0)
+    H.key_root(f, P, yaw=195, flex=0); H.key_spine(f, flex=-4, head=(8, 25 * math.sin(f * 0.02)))
+    for s in "LR":
+        key_foot_free("DiverB", s, f, bw("DiverB", P, Rb, H.ankle[s] + V((0, 0.12 * math.sin(f * 0.12 + (0 if s == "L" else 3)), 0.05))), Rb @ Rx(-50))
+    hh = {}
+    for s in "LR":
+        sx = 1 if s == "L" else -1
+        ex = V((P.x + 0.28 * sx, P.y + 0.72, 0)); g = ground_z(ex.x, ex.y)
+        hh[s] = (V((ex.x, ex.y, g + 0.045)), V((0, 1, -0.2)).normalized(), V((0, 0, -1)), V((ex.x + 0.6 * sx, P.y + 0.3, g - 0.4)))
+        key_fingers("DiverB", s, f, 50)
+    key_hands("DiverB", f, P, Rb, hh)
+TELE["DiverB"].add(1995)
+for f in (2005, 2017, 2060, 2110, 2154):
     kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=24 + 6 * math.sin(f * 0.045), head=(22 + 8 * math.sin(f * 0.05), 14 * math.sin(f * 0.03)))
+for f in (DIVERS_IN, 1800, 1900, 1990, 2017, 2060, 2110, 2154):    # leaning in, nodding, looking at each other and the boy
     kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=28 + 5 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
-TELE["DiverB"].add(DIVERS_IN - 1); TELE[DA].add(DIVERS_IN - 1)
+TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue
     X = CX + x

@@ -19,7 +19,7 @@ SHOTS = [  # label, frame, rig, hand bone, extra up
     ("rope_hand", 1330, "DiverB", "wrist.R", 0.1), ("edge_palms_on_rock", 1900, "Boy3", "wrist.L", 0.2),
     ("medic_syringe_grip", 2240, "DiverA", "wrist.R", 0.1), ("medic_steadying_hand", 2240, "DiverA", "wrist.L", 0.1),
     ("mask_fit_L", 2350, "DiverB", "wrist.L", 0.05), ("mask_fit_R", 2350, "DiverB", "wrist.R", 0.05),
-    ("mask_straps", 2395, "DiverB", "wrist.L", 0.1), ("tow_harness_grip", 2500, "DiverB", "wrist.L", 0.15),
+    ("mask_straps", 2395, "DiverB", "wrist.L", 0.3), ("tow_harness_grip", 2500, "DiverB", "wrist.L", 0.15),
     ("stretcher_front_grip", 2800, "DiverA", "wrist.R", 0.1), ("stretcher_back_grip", 2800, "DiverB", "wrist.L", 0.1),
     ("stretcher_boy_hands", 2850, "Boy4", "wrist.L", 0.3), ("crowd_clap", 2900, "Crowd1", "wrist.R", 0.05),
     ("boy_wave", 2900, "Boy1", "wrist.R", 0.05)]
