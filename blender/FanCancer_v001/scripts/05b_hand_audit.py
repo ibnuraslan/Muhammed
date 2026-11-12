@@ -14,10 +14,11 @@ HAND = ("wrist", "finger", "metacarpal")
 def mesh_parts(o, dg):
     e = o.evaluated_get(dg); m = e.to_mesh(); M = o.matrix_world
     vs = [M @ v.co for v in m.vertices]
-    vg = {g.index: g.name for g in o.vertex_groups}
+    bones = set(o.parent.data.bones.keys()) if o.parent and o.parent.type == 'ARMATURE' else set()
+    vg = {g.index: g.name for g in o.vertex_groups if g.name in bones}
     side = {}
     for v in o.data.vertices:
-        best = max(v.groups, key=lambda g: g.weight, default=None)
+        best = max((g for g in v.groups if g.group in vg), key=lambda g: g.weight, default=None)
         side[v.index] = vg.get(best.group, "") if best else ""
     polys = [list(p.vertices) for p in m.polygons]
     e.to_mesh_clear()
