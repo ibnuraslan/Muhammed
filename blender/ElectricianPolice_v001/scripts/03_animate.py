@@ -548,7 +548,7 @@ for f, hp in ((530, -20), (545, -28)):     # stops, looks up at the pylon and li
     W.hang("L", f); W.hang("R", f)
 for f in range(428, 521, 8):
     for s, ph in (("L", 0), ("R", math.pi)):
-        W.hang(s, f, swing=0.2 * math.sin(f / 13 + ph))
+        W.hang(s, f, swing=0.2 * math.sin(f / 13 + ph), out=0.05)
 # office: seated at the laptop from f508
 SEAT_P = Vector((CHAIR.x, CHAIR.y + 0.02, 0.60))
 KB = Vector((DESK.x, DESK.y - 0.27, 0.815))     # keyboard centre
