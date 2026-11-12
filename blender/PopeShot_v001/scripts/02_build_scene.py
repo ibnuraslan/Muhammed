@@ -86,7 +86,7 @@ M = dict(
     concrete=pbr("Concrete", "concrete_wall_008", 0.6, (0.75, 0.72, 0.68)),
     tiles=pbr("Tiles", "floor_tiles_06", 0.8, (0.85, 0.95, 0.95)),
     wood=pbr("Wood", "wood_floor_deck", 1.0, (0.7, 0.5, 0.35)),
-    linen=pbr("WhiteWool", "rough_linen", 6.0, (1.25, 1.22, 1.15), 1.0, spec=0.3),
+    linen=pbr("WhiteWool", "rough_linen", 6.0, (1.3, 1.22, 1.08), 1.0, spec=0.3),
     drape=pbr("SurgDrape", "cotton_jersey", 5.0, (0.25, 0.5, 0.48), 1.0, spec=0.3),
     fabric=pbr("Banner", "fabric_pattern_07", 3.0, (0.8, 0.75, 0.6)),
     rust=pbr("RustMetal", "rusty_metal_02", 2.0, (0.6, 0.6, 0.6)),
@@ -221,6 +221,18 @@ for x in (-22, -16, 8, 16, 22):
     cut(fac, (2.0, 3, 2.6), (x, 36, 9.3))
 for x in (-22, -16, -8, 0, 8, 16, 22):
     cut(fac, (2.0, 3, 2.6), (x, 36, 17.0))
+def surround(x, z, w, h, ped=True):
+    box("WinFrameL", (0.25, 0.5, h + 0.5), (x - w / 2 - 0.12, 35.15, z), M["trav"], "Square", bevel=0.03)
+    box("WinFrameR", (0.25, 0.5, h + 0.5), (x + w / 2 + 0.12, 35.15, z), M["trav"], "Square", bevel=0.03)
+    box("WinSill", (w + 0.9, 0.7, 0.18), (x, 35.05, z - h / 2 - 0.2), M["trav"], "Square", bevel=0.04)
+    box("WinLintel", (w + 0.8, 0.6, 0.3), (x, 35.1, z + h / 2 + 0.25), M["trav"], "Square", bevel=0.04)
+    if ped:
+        for sgn in (-1, 1):
+            o = box("WinPediment", ((w + 1.2) / 2 * 1.08, 0.55, 0.16), (x + sgn * (w + 1.2) / 4, 35.1, z + h / 2 + 0.62), M["trav"], "Square", bevel=0.03)
+            o.rotation_euler = (0, sgn * -0.38, 0)
+for x in (-22, -16, -8, 8, 16, 22): surround(x, 9.3, 2.0, 2.6)
+for x in (-22, -16, -8, 0, 8, 16, 22): surround(x, 17.0, 2.0, 2.6, ped=False)
+surround(0, 8.6, 2.0, 3.2)
 pil = lathe("PilasterSrc", [(0.8, 0), (0.8, 0.4), (0.62, 0.55), (0.6, 22.0), (0.75, 22.3), (0.85, 22.6)], M["trav"], seg=40, flutes=24, fdepth=0.05, c="Hidden")
 for x in (-26, -19, -12, -4, 4, 12, 19, 26):
     inst(pil, "Pilaster", (x, 35.0, 0), c="Square")
@@ -237,6 +249,9 @@ for x in (-22, -16, -8, 0, 8, 16, 22):
 # balcony on the facade
 box("BalconySlab", (5.0, 2.2, 0.35), (0, 34.2, 6.85), M["trav"], "Square", bevel=0.05)
 bal = lathe("BalusterSrc", [(0.07, 0), (0.07, 0.06), (0.05, 0.12), (0.1, 0.35), (0.05, 0.6), (0.06, 0.7), (0.07, 0.76)], M["trav"], seg=16, c="Hidden")
+for i in range(60):
+    inst(bal, "AtticBaluster", (-29.5 + i * 1.0, 34.95, 23.9), scale=1.3, c="Square")
+box("AtticRail", (60, 0.4, 0.15), (0, 34.95, 24.95), M["trav"], "Square", bevel=0.03)
 for i in range(15):
     inst(bal, "Baluster", (-2.3 + i * 4.6 / 14, 33.25, 7.02))
 for i in range(5):
@@ -248,17 +263,27 @@ bmesh.ops.create_grid(bm, x_segments=40, y_segments=20, size=1); bm.to_mesh(dr)
 dro = bpy.data.objects.new("BalconyDrape", dr); dro.scale = (2.0, 0.8, 1); dro.rotation_euler = (R_(90), 0, 0); dro.location = (0, 33.1, 7.0)
 dmat = pbr("Crimson", "fabric_pattern_07", 3.0, (0.55, 0.05, 0.06)); dr.materials.append(dmat); link(dro, "Square")
 tx = bpy.data.textures.new("DrapeFold", 'WOOD'); tx.wood_type = 'BANDNOISE'; tx.noise_scale = 0.12; tx.turbulence = 3
-dm = dro.modifiers.new("fold", 'DISPLACE'); dm.texture = tx; dm.strength = 0.08
-# barriers along the lane (wooden sawhorse barriers), y -18..14, both sides
+tx.noise_basis = 'ORIGINAL_PERLIN'; tx.noise_scale = 0.35; tx.turbulence = 1.5
+dro.modifiers.new("sub0", 'SUBSURF').levels = 2
+dm = dro.modifiers.new("fold", 'DISPLACE'); dm.texture = tx; dm.strength = 0.05
+# metal crowd-control barriers (galvanised, linked copies of one segment) along the lane, y -18..14
+galv = simple("Galvanised", (0.62, 0.64, 0.66), 0.35, 0.9, noise_bump=0.02)
+seg = []
+def tube(p0, p1, r=0.016):
+    d = (Vector(p1) - Vector(p0)); bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=r, depth=d.length, location=(Vector(p0) + Vector(p1)) / 2)
+    o = bpy.context.object; o.rotation_euler = d.to_track_quat('Z', 'Y').to_euler(); seg.append(o)
+for z in (0.12, 1.08): tube((0, -1.1, z), (0, 1.1, z), 0.02)
+for yy in (-1.1, 1.1): tube((0, yy, 0.0), (0, yy, 1.1), 0.02)
+for k in range(16): tube((0, -1.0 + k * 2.0 / 15, 0.12), (0, -1.0 + k * 2.0 / 15, 1.08), 0.009)
+for yy in (-1.05, 1.05): tube((-0.28, yy, 0.02), (0.28, yy, 0.02), 0.018)
+bpy.ops.object.select_all(action='DESELECT')
+for o in seg: o.select_set(True)
+bpy.context.view_layer.objects.active = seg[0]; bpy.ops.object.join(); barsrc = bpy.context.object; barsrc.name = "BarrierSrc"
+bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+barsrc.data.materials.append(galv); link(barsrc, "Hidden")
 for side in (-1, 1):
-    for k in range(9):
-        y = -18 + k * 3.6
-        box("BarrierRail", (0.08, 3.4, 0.12), (side * 2.9, y, 0.95), M["wood"], "Square", bevel=0.01)
-        box("BarrierRail2", (0.08, 3.4, 0.1), (side * 2.9, y, 0.55), M["wood"], "Square", bevel=0.01)
-        for dy in (-1.5, 1.5):
-            for dx in (-0.15, 0.15):
-                o = box("BarrierLeg", (0.06, 0.07, 1.05), (side * 2.9 + dx, y + dy, 0.5), M["wood"], "Square")
-                o.rotation_euler = (0, R_(-9 if dx < 0 else 9), 0)
+    for k in range(15):
+        inst(barsrc, "Barrier", (side * 2.9, -18.5 + k * 2.25, 0), rot=0.0, c="Square")
 # flagpoles with plain flags (no emblems) behind the crowd
 flagcols = [(0.9, 0.8, 0.2), (0.92, 0.9, 0.85), (0.15, 0.25, 0.6), (0.7, 0.1, 0.1), (0.9, 0.8, 0.2), (0.92, 0.9, 0.85)]
 for i, (x, y) in enumerate(((-6.5, -9), (6.8, -4), (-7.2, 2), (7.4, 7), (-6.0, 9), (6.2, -13))):
@@ -343,11 +368,23 @@ for m in jeep.data.materials:
     src = bs.inputs['Base Color'].links[0].from_socket if bs.inputs['Base Color'].links else None
     if src is None: bs.inputs['Base Color'].default_value = (0.85, 0.85, 0.83, 1); continue
     rgb = nt.nodes.new('ShaderNodeRGBToBW'); nt.links.new(src, rgb.inputs['Color'])
-    mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.02; mr.inputs['From Max'].default_value = 0.09
+    mr = nt.nodes.new('ShaderNodeMapRange'); mr.inputs['From Min'].default_value = 0.008; mr.inputs['From Max'].default_value = 0.02
     nt.links.new(rgb.outputs['Val'], mr.inputs['Value'])
     mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; nt.links.new(mr.outputs['Result'], mx.inputs['Factor'])
     mx.inputs['A'].default_value = (0.03, 0.03, 0.03, 1); mx.inputs['B'].default_value = (0.82, 0.82, 0.8, 1)
     nt.links.new(mx.outputs['Result'], bs.inputs['Base Color'])
+
+# pigeon plumage: slate grey with iridescent neck variation (replaces the asset's flat colours)
+pm = bpy.data.materials.new("Plumage"); pm.use_nodes = True; nt = pm.node_tree; bs = nt.nodes["Principled BSDF"]
+nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 60; nz.inputs['Detail'].default_value = 10
+cr_ = nt.nodes.new('ShaderNodeValToRGB'); cr_.color_ramp.elements[0].color = (0.12, 0.13, 0.16, 1); cr_.color_ramp.elements[1].color = (0.42, 0.44, 0.5, 1)
+tc_ = nt.nodes.new('ShaderNodeTexCoord'); sp_ = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc_.outputs['Object'], sp_.inputs[0])
+mx_ = nt.nodes.new('ShaderNodeMix'); mx_.data_type = 'RGBA'; mx_.inputs['B'].default_value = (0.15, 0.3, 0.22, 1)
+mr_ = nt.nodes.new('ShaderNodeMapRange'); mr_.inputs['From Min'].default_value = 0.17; mr_.inputs['From Max'].default_value = 0.21; mr_.inputs['To Max'].default_value = 0.6
+nt.links.new(sp_.outputs['Z'], mr_.inputs['Value']); nt.links.new(nz.outputs['Fac'], cr_.inputs['Fac']); nt.links.new(cr_.outputs['Color'], mx_.inputs['A'])
+nt.links.new(mr_.outputs['Result'], mx_.inputs['Factor']); nt.links.new(mx_.outputs['Result'], bs.inputs['Base Color'])
+bs.inputs['Roughness'].default_value = 0.6; bs.inputs['Sheen Weight'].default_value = 0.4
+pig.data.materials.clear(); pig.data.materials.append(pm)
 
 # ------------------------------------------------------------------ HUMANS (append)
 with bpy.data.libraries.load(HUM, link=False) as (src, dst):
