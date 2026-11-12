@@ -416,7 +416,8 @@ for f in range(RISE0, RISE1 + 1, 4):
     tr = TD_ROOT + V((0, 0, dz))
     T.key(f, V((0, 0)), yb, root_world=tr, flex=-4, head=(-35, 10 * math.sin(f * 0.1)),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, -0.02, -T.root.z + T.ankle[s].z + 0.03 * math.sin(f * 0.2 + (s == "L") * 3))), Rz(yb)) for s in "LR"},
-          hands={"L": ("w", gl + V((0, 0, 0.01))), "R": ("w", gr + V((0, 0, 0.01)))})
+          hands={"L": ("w", gl + V((0.0, 0, 0.07)) - (Rz(yb) @ V((0, -1, 0))) * 0.055), "R": ("w", gr + V((0.0, 0, 0.07)) - (Rz(yb) @ V((0, -1, 0))) * 0.055)})   # on his forearms, above his hands
+HOLD = {RB: V((-0.55, 0.45)), RA: V((0.55, 0.45))}     # beside the rim, close enough to reach his shins
 # rescuers: hold his legs while he goes in (1312-1400), then haul line; haul hand over hand in beat 10
 for f in range(1314, 1420, 4):
     st = TE.state.get(f) or TE.state.get(f - 2) or TE.state.get(f + 2)
@@ -424,22 +425,27 @@ for f in range(1314, 1420, 4):
         continue
     rp, flex = st["rp"], st["flex"]
     Rb = Rx(flex)
-    for c, s_, pos in ((RB, "R", V((-0.7, 0.68))), (RA, "L", V((0.7, 0.68)))):     # each holds the leg on his own side
+    for c, s_, pos in ((RB, "R", HOLD[RB]), (RA, "L", HOLD[RA])):     # each holds the leg on his own side
         sx = -1 if c is RB else 1
-        hipw = rp + Rb @ (V((TE.ankle[s_].x * 0.6, 0.0, 0.0)) + V((0, 0, -0.08)))
-        ank = teen_ank(rp, Rb, s_, flex)
-        if f <= 1326:      # legs still planted: hands on the back of his thigh
-            leg = V((TE.ankle[s_].x, RIM.y + 0.03, TE.root.z * 0.62))
-        else:              # the point on his leg that is in reach (about 1.1 m up), sliding to the ankle as he goes down
-            t = max(0.25, min(1.0, (hipw.z - 1.1) / max(0.05, hipw.z - ank.z))) if hipw.z > 1.1 else 1.0
-            leg = hipw.lerp(ank, t)
+        if f <= 1326:      # legs still planted: the leg is a vertical segment at the rim
+            ax_ = TE.ankle[s_].x
+            hipw, ank = V((ax_, RIM.y, TE.root.z * 0.9)), V((ax_, RIM.y, 0.1))
+        else:
+            hipw = rp + Rb @ (V((TE.ankle[s_].x * 0.6, 0.0, 0.0)) + V((0, 0, -0.08)))
+            ank = teen_ank(rp, Rb, s_, flex)
         if f > 1350 and ank.z < 0.55: break
-        hy = yaw_to(pos, (0, 0.45)); left = Rz(hy) @ V((1, 0, 0))     # his own left/right, so the arms never cross
-        c.key(f, pos, hy, flex=30, crouch=0.06, head=(20, 0),
-              hands={"L": ("wg", leg + V((0.11 * sx, 0, 0)) + left * 0.06 + V((0, 0, 0.04))), "R": ("wg", leg + V((0.11 * sx, 0, 0)) - left * 0.06 - V((0, 0, 0.04)))})
-for c, pos in ((RB, V((-0.7, 0.68))), (RA, V((0.7, 0.68)))):     # waiting beside the rim, hands ready, before he bends
+        sh = V((pos.x, pos.y, 1.38)) - V((sx * 0.15, 0, 0))          # his shoulder on the pipe side
+        axis = ank - hipw; t = max(0.45, min(0.9, (sh - hipw).dot(axis) / max(1e-4, axis.length_squared)))
+        if f <= 1326: t = 0.25     # back of the thigh
+        leg = hipw + axis * t; adir = axis.normalized()
+        leg = leg + (sh - leg).normalized() * 0.08     # on the surface of his leg, not its axis
+        hy = yaw_to(pos, (0, 0.25))
+        low = max(0.0, min(1.0, (1.25 - leg.z) / 0.8))                 # crouch only as far as the leg is low
+        c.key(f, pos, hy, flex=10 + 25 * low, crouch=0.08 * low, head=(20, 0),
+              hands={"L": ("wg", leg + adir * 0.07), "R": ("wg", leg - adir * 0.07)})
+for c, pos in ((RB, HOLD[RB]), (RA, HOLD[RA])):     # waiting beside the rim, hands ready, before he bends
     for f in (1296, 1306):
-        c.key(f, pos, yaw_to(pos, (0, 0.45)), flex=12, head=(10, 0), hands={"L": ("rel", (0.2, 0.32, -0.3 * c.arm)), "R": ("rel", (0.2, 0.32, -0.3 * c.arm))})
+        c.key(f, pos, yaw_to(pos, (0, 0.25)), flex=12, head=(10, 0), hands={"L": ("rel", (0.2, 0.32, -0.3 * c.arm)), "R": ("rel", (0.2, 0.32, -0.3 * c.arm))})
 HAUL = {RA: V((-0.24, 1.6)), RB: V((-0.21, 2.6)), RC: V((-0.18, 3.6))}     # rope runs past their right side
 HAUL_FROM = {RA: 1502, RB: 1492, RC: 1324}
 def rope_haul_line(f):
@@ -478,7 +484,7 @@ for f in range(1772, 1812, 4):
         feet = {s: teen_foot(rp, Rb, s, 180 * (1 - k)) for s in "LR"}
     else:
         feet = {s: ("xy", OUTP + V((0.12 if s == "R" else -0.12, 0.0)), 180) for s in "LR"}
-    gl = rp + Rb @ V((0.2, -0.45, 0.55 - 0.35 * k)); gr = rp + Rb @ V((-0.2, -0.45, 0.55 - 0.35 * k))
+    gl = rp + Rb @ V((0.25, -0.45, 0.55 - 0.35 * k)); gr = rp + Rb @ V((-0.25, -0.45, 0.55 - 0.35 * k))
     TE.key(f, xy, 0, root_world=rp if k < 0.85 else None, flex=180, side=-180 * k, head=(-20, 0), feet=feet,
            hands={"L": ("wg", gl), "R": ("wg", gr)})
     # ResA, behind him on the +y side, grips his hips and guides him out and down onto his feet
@@ -488,18 +494,18 @@ for f in range(1772, 1812, 4):
     tr = (gl + gr) / 2 + V((0, 0, -0.52))
     T.key(f, V((0, 0)), yb + 160 * k, root_world=tr, flex=0, head=(-25, 0),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.04)), Rz(yb)) for s in "LR"},
-          hands={"L": ("w", gl + V((-0.04, 0, -0.06))), "R": ("w", gr + V((0.04, 0, -0.06)))})
+          hands={"L": ("w", gl + V((0.0, 0, 0.07))), "R": ("w", gr + V((0.0, 0, 0.07)))})
 # hold up (1816-1870) then hand to the mother (1870-1950)
 for i, f in enumerate(range(1816, 1872, 8)):
     k = ease((f - 1816) / 30)
     yawT = 180 - 30 * k
     rp = V((OUTP.x, OUTP.y, TE.root.z))
-    gl = rp + Rz(yawT) @ V((0.21, -0.3, 0.25 + 0.75 * k)); gr = rp + Rz(yawT) @ V((-0.21, -0.3, 0.25 + 0.75 * k))
+    gl = rp + Rz(yawT) @ V((0.25, -0.3, 0.25 + 0.75 * k)); gr = rp + Rz(yawT) @ V((-0.25, -0.3, 0.25 + 0.75 * k))
     TE.key(f, OUTP, yawT, flex=-8 * k, head=(-20 * k, 0), hands={"L": ("wg", gl), "R": ("wg", gr)})
     tr = (gl + gr) / 2 + V((0, 0, -0.18))
     T.key(f, V((0, 0)), yawT + 180 - 180, root_world=tr, flex=0, head=(-10, 8 * math.sin(i)),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.02)), Rz(yawT)) for s in "LR"},
-          hands={"L": ("wg", gl + Rz(yawT) @ V((0.0, 0.16, 0.04))), "R": ("wg", gr + Rz(yawT) @ V((0.0, 0.16, 0.04)))})
+          hands={"L": ("wg", gl + Rz(yawT) @ V((0.0, 0.16, 0.08))), "R": ("wg", gr + Rz(yawT) @ V((0.0, 0.16, 0.08)))})
 # mother: ducks the tape, runs in, takes him in a hug
 MO.walk([V(CROWD_POS["Mother"]), V((-1.0, 5.2)), V((-0.8, 3.2)), V((-0.6, 1.9))], 1800, 1866, stride=1.0, lift=0.11, arm_swing=0.3, lean=10)
 MP = V((-0.6, 1.9)); myaw = yaw_to(MP, OUTP)
@@ -511,12 +517,12 @@ for i, f in enumerate(range(1872, END + 10, 8)):
     jaw(T, f, JAW * max(0.0, 1 - ease((f - 1890) / 40)))
     MO.key(f, MP, myaw + 4 * math.sin(i * 0.7), flex=8 + 10 * (cr_ > 0.05), crouch=cr_, head=(10, 0), twist=10 * math.sin(i * 0.5),
            feet={"L": ("xy", MP + (Rz(myaw) @ V((0.12, 0.12, 0))).to_2d(), myaw), "R": ("xy", MP + (Rz(myaw) @ V((-0.12, -0.05, 0))).to_2d(), myaw, 0.0, 0.0)},
-           hands={"L": ("wg", held + Rz(myaw) @ V((0.15, -0.02, -0.06))), "R": ("wg", held + Rz(myaw) @ V((-0.15, -0.03, 0.04)))})   # both arms: under him and across his back
+           hands={"L": ("w", held + Rz(myaw) @ V((0.2, 0.06, -0.06))), "R": ("w", held + Rz(myaw) @ V((-0.2, 0.05, 0.04)))})   # both arms: under him and across his back
     T.key(f, V((0, 0)), myaw + 180, root_world=held + V((0, 0, -0.1)), flex=10, head=(5 + 10 * k, 25 * k),
           feet={s: ("w", held + V((0.05 if s == "L" else -0.05, 0, -0.1 - T.root.z + T.ankle[s].z + 0.05)), Rz(myaw + 180)) for s in "LR"},
           hands={"L": ("wg", held + Rz(myaw) @ V((0.17, 0.2, 0.34))), "R": ("wg", held + Rz(myaw) @ V((-0.17, 0.2, 0.34)))})
     TE.key(f, OUTP, 150 - 20 * k, flex=-5, head=(-15, 0),
-           hands={"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.12 else {"L": ("wg", held + V((0.2, 0, 0.05))), "R": ("wg", held + V((-0.2, 0, 0.05)))})
+           hands={"L": UP(TE, 0.25, 0.1), "R": UP(TE, 0.25, 0.1)} if k > 0.12 else {"L": ("w", held + V((0.26, 0, 0.05))), "R": ("w", held + V((-0.26, 0, 0.05)))})
 for c, p in ((RA, V((0.95, 1.75))), (RB, V((-1.45, 1.55))), (RC, V((1.0, 3.3)))):
     for i, f in enumerate(range(1836, END + 10, 10)):
         ph = i * 1.4
@@ -537,11 +543,11 @@ def clear_keys(c, f0, f1):
                     for i in reversed(kill): fc.keyframe_points.remove(fc.keyframe_points[i])
 MOVES = [
  (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
- (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.7, 0.68)]),
- (RA, 1430, 1500, [(0.7, 0.68), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1742, 1766, [(-0.24, 1.6), (-0.95, 0.9), (-0.9, -0.1), (-0.5, -0.12)]), (RA, 1812, 1836, [(-0.5, -0.12), (0.4, -0.7), (1.2, 0.2), (0.95, 1.75)]),
+ (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.55, 0.45)]),
+ (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1742, 1766, [(-0.24, 1.6), (-0.95, 0.9), (-0.9, -0.1), (-0.5, -0.12)]), (RA, 1812, 1836, [(-0.5, -0.12), (0.4, -0.7), (1.2, 0.2), (0.95, 1.75)]),
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
  (RB, 905, 925, [(0.4, 2.6), (0.1, 1.9)]), (RB, 1130, 1162, [(0.1, 1.9), (-0.45, 0.9), tuple(RBT)]),
- (RB, 1262, 1288, [tuple(RBT), (-0.95, 0.9), (-0.7, 0.68)]), (RB, 1430, 1490, [(-0.7, 0.68), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),
+ (RB, 1262, 1288, [tuple(RBT), (-0.95, 0.9), (-0.55, 0.45)]), (RB, 1430, 1490, [(-0.55, 0.45), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),
  (RB, 1770, 1800, [(-0.21, 2.6), (-0.8, 2.2), (-1.45, 1.55)]),
  (RC, 463, 560, [RC_P, (-1.4, -0.9), (0.3, -2.4), (1.9, -2.8)]), (RC, 674, 702, [(1.9, -2.8), (0.5, -2.4), (-1.7, -1.2), (-2.4, 1.2)]),
  (RC, 905, 920, [(-2.4, 1.2), (-1.9, 0.2)]), (RC, 1130, 1170, [(-1.9, 0.2), (-2.3, 1.4), (-1.6, 2.7), (-0.2, 2.6)]),
@@ -769,9 +775,9 @@ for k, (dx, dy, rz, toff) in enumerate(SPOTS):
                     if base: slot.link = "OBJECT"; slot.material = tinted(base, COLS[(k + j) % len(COLS)])
 # ================================================================== HANDS: shared pose library (pipeline/hand_poses.py)
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../pipeline/hand_poses.py")).read())
-GRIPS = {"ResA": [(241, 470, "wrap_grip"), (1190, 1290, "wrap_grip"), (1314, 1420, "wrap_grip"), (1502, 1740, "wrap_grip"), (1776, 1812, "wrap_grip")],
-         "ResB": [(1164, 1262, "wrap_grip"), (1314, 1420, "wrap_grip"), (1492, 1770, "wrap_grip")],
-         "ResC": [(1324, 1770, "wrap_grip")], "Teen": [(1530, 1872, "wrap_grip")], "Toddler": [(1530, 1812, "wrap_grip")],
+GRIPS = {"ResA": [(241, 470, "wrap_grip"), (1190, 1290, "wrap_grip"), (1314, 1420, "cup_hold"), (1502, 1740, "wrap_grip"), (1776, 1812, "wrap_grip")],
+         "ResB": [(1164, 1262, "wrap_grip"), (1314, 1420, "cup_hold"), (1492, 1770, "wrap_grip")],
+         "ResC": [(1324, 1770, "wrap_grip")], "Teen": [(1530, 1872, "cup_hold")], "Toddler": [(1530, 1812, "cup_hold")],
          "Mother": [(1872, END + 10, "cup_hold")], "Crowd1": [(470, 1760, "flat_palm")], "Operator": [(1, END + 10, "wrap_grip")]}
 for o in [o for o in bpy.data.objects if o.type == "ARMATURE" and "_dup" not in o.name and (o.name in CH or o.name == "Operator")]:
     add_hand_limits(o)
