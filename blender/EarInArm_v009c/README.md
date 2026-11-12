@@ -43,6 +43,7 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
   - Scalpel: `cup_hold`. Needle holder: `tripod`.
 - **Nurse:** her arms hang at her sides from 9.5 s; she no longer carries the dish, which stays on the counter. She stands 12 cm further from the tray and lowers her arms while the surgeon passes her (9.5–10 s).
 - **Camera:** pulled back 25 cm along its view line at 2.9–4.4 s (chest) and 20 cm at 14.5–17.2 s (x-ray). The 10 s key is raised above head height so the nurse no longer walks into the lens.
+- **Released tools:** the forceps (331) and the scalpel (464) lie flat on the tray where the hand lets go. Before, they glided 22 cm back to a rest spot (qa PROPMOVE).
 - **f1–45:** the surgeon stands 10 cm further from the patient's knee, so the patient's resting left hand no longer touches his hip.
 
 ## v009b vs v009: hands closed on what they hold (director review of v009)
@@ -52,7 +53,7 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
 - **Tray (8.9–9.4 s):** the left hand pinches the carved ear (`grip_object`, pinch), and the right hand is flat on the tray (`place_hand`).
 - **Ear placement (23.2–25 s):** the left hand is flat on the scalp above the ear (`place_hand` on the skin surface).
 - **Patient's free (right) hand, reclined (8–27 s):** relaxed on the armrest (`place_hand`).
-- **Nurse:** relaxed hands (she carries the dish on her forearms; no finger grip is claimed).
+- **Nurse:** relaxed hands (v009c: arms at her sides, no dish).
 - **Unclip pass:** a hand vertex inside or within 1 cm of a nearby body is pushed out along the surface normal at f13–49, 139–283, 562–599, 637–715, 1357–1396 and 1405–1465.
 - **Camera:** starts beside the surgeon (no back-of-head fill at 0.5 s). The tray shot (8.7–10 s) is seen from across the tray. The arm shots (11.5–13.5 s and 16.5–18.8 s) are raised about 25–30 cm, so the hands and the arm with the ear read over the gown.
 

@@ -606,13 +606,20 @@ def keymat(o, f, M):
 for o in (scal, forc, nh, ear_arm, ear_new, kd):
     o.rotation_mode = 'XYZ'
 HEADSIDE = None
+def lay_flat(M):   # the tool lies flat on the tray right under where it was let go
+    y = M.to_3x3() @ Vector((0, 1, 0)); y.z = 0; y.normalize(); x = y.cross(Vector((0, 0, 1)))
+    R3 = Matrix((x, y, Vector((0, 0, 1)))).transposed(); p = M.translation.copy(); p.z = TRAY.z + 0.012
+    return Matrix.Translation(p) @ R3.to_4x4()
+DROP = {}   # v009c: a released tool stays exactly where the hand put it down (no glide back to a rest spot)
 for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     sc.frame_set(f)
     Rw = wrist_w(SUR, "R").to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
     if f == 1501: HEADSIDE = Matrix.Translation(pinch_pt(SUR, "R") + Vector((0, 0.06, -0.06)))
-    keymat(scal, f, PP @ Rw @ Matrix.Translation((0, -0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'Z') if 343 <= f <= 464 else scal_rest)
-    held_f = f <= 337 or 566 <= f <= 1500
-    keymat(forc, f, PP @ Rw @ Matrix.Translation((0, -0.04, 0)) if held_f else (forc_rest if f < 1500 else HEADSIDE @ Matrix.Rotation(R_(90), 4, 'Z')))
+    keymat(scal, f, PP @ Rw @ Matrix.Translation((0, -0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'Z') if 343 <= f <= 464 else (DROP.get("scal", scal_rest) if f > 464 else scal_rest))
+    if f == 463: DROP["scal"] = lay_flat(scal.matrix_world)
+    held_f = f <= 331 or 566 <= f <= 1500
+    keymat(forc, f, PP @ Rw @ Matrix.Translation((0, -0.04, 0)) if held_f else ((DROP.get("forc", forc_rest)) if f < 1500 else HEADSIDE @ Matrix.Rotation(R_(90), 4, 'Z')))
+    if f == 331: DROP["forc"] = lay_flat(forc.matrix_world)
     keymat(nh, f, PP @ Rw @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(180), 4, 'Z') if 1502 <= f <= B["b9"] + 40 else
            (nh_rest if f < 1502 else HEADSIDE @ Matrix.Translation((0.03, 0, 0)) @ Matrix.Rotation(R_(90), 4, 'Z')))
     tip = forc.matrix_world @ Vector((0, 0.13, 0))

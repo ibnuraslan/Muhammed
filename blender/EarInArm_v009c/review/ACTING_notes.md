@@ -62,7 +62,7 @@ See `../README.md` for the full list. Each point from the review:
 ## Remaining flags (with reasons)
 Both checks were run on the packed `EarInArm_v009c_60fps.blend`, step 6, with `beats.json`.
 
-**qa_check:** HOVER 0, CLAW 0, FACEPRESS 0, INSIDE 0, CAMJUMP 0, ROLL 0, BACKHEAD 1, EMPTY 3, FILL 9.
+**qa_check (e7b25f7):** HOVER 0, CLAW 0, FACEPRESS 0, INSIDE 0, CAMJUMP 0, ROLL 0, **ATTACH 0**, BACKHEAD 1, EMPTY 3, FILL 9, PROPMOVE 123. None of the PROPMOVE flags is a hand tool: forceps, scalpel and needle holder are 0.
 
 | Frame | Flag | Reason |
 |---|---|---|
@@ -70,5 +70,13 @@ Both checks were run on the packed `EarInArm_v009c_60fps.blend`, step 6, with `b
 | 619–631 | EMPTY: characters 10–11 % | The high shot that follows the forceps carrying the ear to the arm. The arm, the gloved hand and the ear are all in frame and read clearly (checked at 607/619/631/643). Floor and cabinets fill the rest. |
 | 49, 139 | FILL: surface < 12 cm | The push-ins to the dressing and to the chest. |
 | 877, 1225–1273 | FILL: hair / top of head 25–29 % | The surgeon's cap at the frame edge while the camera follows the forceps. |
+
+| 307–331 | PROPMOVE: Chest_Piece_Carry | The cartilage piece rides in the forceps tips while the surgeon carries it to the tray (nearest finger 3 cm; the forceps tips hold it). |
+| 577–715 | PROPMOVE: Ear_InArm | The carved ear rides in the forceps tips from the tray to the arm (566–712), then slides into the pocket (712–715). |
+| 1177–1440 | PROPMOVE: Ear_New | The grown ear rides in the forceps tips from the arm to the head. |
+| 1440–1735 | PROPMOVE: Ear_New | The ear is grafted on the head and moves with it as the chair rises and he turns. |
+| 361–559 | PROPMOVE: Shaving0–27 | The shavings are cut off by the scalpel stroke, fly and land on the tray. |
+
+Tool fixes for PROPMOVE: the forceps (released at 331) and the scalpel (released at 464) now lie flat on the tray right where the hand lets go. They used to glide 22 cm back to a rest spot. Masks and caps: ATTACH 0.
 
 **clip_scan (40c131b): 0 bad ranges.**

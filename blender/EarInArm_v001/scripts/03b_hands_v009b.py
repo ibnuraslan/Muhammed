@@ -209,7 +209,7 @@ def R_(d): return math.radians(d)
 CARRY = OB.get("Chest_Piece_Carry"); EAR_ARM = OB["Ear_InArm"]
 def keymat(o, f, M):
     o.matrix_world = M; o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
-for f in [f for f in range(1, 1501, 2) if f <= 337 or 566 <= f <= 1500]:
+for f in [f for f in range(1, 1501, 2) if f <= 331 or 566 <= f <= 1500]:
     sc.frame_set(f)
     Rw = (SUR.matrix_world @ SUR.pose.bones["wrist.R"].matrix).to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
     keymat(FORC, f, PP @ Rw @ Matrix.Translation((0, -0.04, 0)))
