@@ -183,8 +183,7 @@ def parent_keep(obj, h, bone):
 
 
 def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.35, 0.85)):
-    """Forensic protective kit: a pale Tyvek hood, a full-face respirator with a clear visor (eyes visible) and a
-    filter, blue nitrile gloves (the hand faces of the body mesh are re-materialled), blue overshoes.
+    """Forensic protective kit: a pale Tyvek hood, a full-face rubber gas mask (two eyepieces, one front filter canister), blue nitrile gloves (the hand faces of the body mesh are re-materialled), blue overshoes.
     Call right after building the person, while it stands in the rest orientation at the origin."""
     from kit import box, cyl, pbr, glass
     from pbkit import joinm
@@ -206,18 +205,28 @@ def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.3
     parent_keep(col, h, "neck01")
     rub = pbr(h.name + "Resp", (0.05, 0.05, 0.055), 0.55)
     if full_face:
-        face = Vector((c.x, c.y - 0.1, c.z - 0.01))
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=tuple(face))
-        vis = bpy.context.active_object; vis.name = h.name + "Visor"; vis.scale = (0.085, 0.045, 0.1)
-        kill = [v.index for v in vis.data.vertices if v.co.y > -0.1]
-        bm = bmesh.new(); bm.from_mesh(vis.data); bm.verts.ensure_lookup_table()
-        bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(vis.data); bm.free()
-        bpy.ops.object.shade_smooth(); vis.data.materials.append(glass(h.name + "VisorGlass", (0.93, 0.95, 0.96), 0.02))
-        parent_keep(vis, h, "head")
-        rim = joinm([cyl("Rim", (face.x, face.y + 0.012, face.z), 0.098, 0.03, rub, verts=40, rot=(math.radians(90), 0, 0)),
-                     cyl("Filter", (face.x, face.y - 0.035, face.z - 0.08), 0.042, 0.04, pbr("FilterGrey", (0.3, 0.3, 0.3), 0.5), verts=24, rot=(math.radians(70), 0, 0))], h.name + "MaskRim")
-        rim.scale = (0.95, 1, 1.12)
-        parent_keep(rim, h, "head")
+        # 1990s full-face gas mask (GP-5 style): a grey rubber face piece, two round eyepieces, one front filter canister
+        rub = pbr(h.name + "MaskRubber", (0.16, 0.17, 0.16), 0.6, 0.0, **{'Sheen Weight': 0.2})
+        o_ = Vector((c.x, c.y - 0.055, c.z - 0.008))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=tuple(o_))
+        fp = bpy.context.active_object; fp.name = h.name + "FacePiece"
+        kill = [v.index for v in fp.data.vertices if v.co.y > 0.05]
+        bm = bmesh.new(); bm.from_mesh(fp.data); bm.verts.ensure_lookup_table()
+        bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(fp.data); bm.free()
+        fp.scale = (0.096, 0.08, 0.122)
+        fs = fp.modifiers.new("t", 'SOLIDIFY'); fs.thickness = 0.05
+        bpy.ops.object.shade_smooth(); fp.data.materials.append(rub)
+        parts = []
+        for sx in (-1, 1):
+            ex, ez = c.x + sx * 0.036, c.z + 0.012
+            ey = o_.y - 0.08 * math.sqrt(max(0.0, 1 - (0.036 / 0.096) ** 2 - (0.02 / 0.122) ** 2))
+            parts.append(cyl("EyeRim", (ex, ey - 0.004, ez), 0.031, 0.016, pbr(h.name + "EyeRimM", (0.1, 0.1, 0.1), 0.4, 0.6), verts=28, rot=(math.radians(90), 0, 0)))
+            parts.append(cyl("EyeGlass", (ex, ey - 0.0125, ez), 0.025, 0.002, pbr(h.name + "EyeGlassM", (0.35, 0.38, 0.4), 0.05, 0.0, **{"Coat Weight": 1.0}), verts=28, rot=(math.radians(90), 0, 0)))
+        fy = o_.y - 0.08 * math.sqrt(1 - (0.067 / 0.122) ** 2)
+        parts.append(cyl("FilterNeck", (c.x, fy - 0.012, c.z - 0.075), 0.022, 0.03, rub, verts=20, rot=(math.radians(75), 0, 0)))
+        parts.append(cyl("Filter", (c.x, fy - 0.045, c.z - 0.085), 0.04, 0.075, pbr(h.name + "FilterOlive", (0.22, 0.25, 0.18), 0.55, 0.2), verts=28, rot=(math.radians(75), 0, 0)))
+        mask = joinm(parts, h.name + "MaskParts")
+        parent_keep(fp, h, "head"); parent_keep(mask, h, "head")
     # blue nitrile gloves: re-material the hand faces of the body mesh (they bend with the fingers)
     glove_m = pbr(h.name + "Glove", gloves, 0.35, 0.0, **{'Coat Weight': 0.3})
     body = h.body; body.data.materials.append(glove_m); gi = len(body.data.materials) - 1
