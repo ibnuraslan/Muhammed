@@ -85,9 +85,10 @@ wetall = NN.new("ShaderNodeMath"); wetall.operation = 'MAXIMUM'; LL.new(wet.outp
 dk = NN.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; LL.new(wetall.outputs[0], dk.inputs["Factor"])
 dk.inputs["B"].default_value = (0.78, 0.78, 0.78, 1); LL.new(col, dk.inputs["A"])
 LL.new(dk.outputs["Result"], bsdf.inputs["Base Color"]); LL.new(nor, bsdf.inputs["Normal"])
-rw = NN.new("ShaderNodeMix"); rw.data_type = 'FLOAT'; LL.new(wetall.outputs[0], rw.inputs["Factor"]); LL.new(rou, rw.inputs["A"]); rw.inputs["B"].default_value = 0.18
+rw = NN.new("ShaderNodeMix"); rw.data_type = 'FLOAT'; LL.new(wetall.outputs[0], rw.inputs["Factor"]); LL.new(rou, rw.inputs["A"]); rw.inputs["B"].default_value = 0.42
 LL.new(rw.outputs["Result"], bsdf.inputs["Roughness"])
 _go = NN.new("ShaderNodeNewGeometry"); _em = NN.new("ShaderNodeEmission"); _em.inputs["Color"].default_value = (0.42, 0.33, 0.2, 1); _em.inputs["Strength"].default_value = 1.0
+LL.new(dk.outputs["Result"], _em.inputs["Color"]); _em.inputs["Strength"].default_value = 1.3
 _mx = NN.new("ShaderNodeMixShader"); LL.new(_go.outputs["Backfacing"], _mx.inputs["Fac"]); LL.new(bsdf.outputs[0], _mx.inputs[1]); LL.new(_em.outputs[0], _mx.inputs[2])
 LL.new(_mx.outputs[0], NN["Material Output"].inputs["Surface"])
 terr.data.materials.append(m); deep.data.materials.append(simple_mat("M_Deep", (0.05, 0.06, 0.05), 0.9))
@@ -140,6 +141,9 @@ def water_mat(name, foam_steep=True):
     LL.new(mb.outputs[0], NN["Material Output"].inputs["Surface"])
     return m
 M_SEA = water_mat("M_Sea", foam_steep=False)
+_nt = M_SEA.node_tree; _ue = next(n for n in _nt.nodes if n.type == 'EMISSION' and abs(n.inputs["Color"].default_value[1] - 0.32) < 0.01)
+_tr = _nt.nodes.new("ShaderNodeBsdfTransparent")
+for l_ in list(_ue.outputs[0].links): _nt.links.new(_tr.outputs[0], l_.to_socket)   # from below the drained sea is see-through (camera exits through the sea floor)
 M_WAVE = water_mat("M_Wave")
 
 sea = mesh_obj("SeaPlane", [(-3000, -10, 0), (3000, -10, 0), (3000, 7000, 0), (-3000, 7000, 0)], [(0, 1, 2, 3)], C_W, [M_SEA])

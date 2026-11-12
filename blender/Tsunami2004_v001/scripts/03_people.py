@@ -113,10 +113,13 @@ class Person:
                     W = shw + side * 0.10 + fw * (0.28 * L * sw) + up * (-0.84 * L); d = (-up + fw * 0.2).normalized(); n = (-side - fw * 0.5).normalized()
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "run":
-                    W = shw + side * 0.17 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
-                    pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
+                    # arms pump front-to-back close to the ribs; loose fists, straight wrists (hand continues the forearm)
+                    W = shw + side * 0.06 + fw * (0.18 * L + 0.4 * L * sw) + up * (-0.62 * L + 0.08 * L * sw)
+                    elb = shw - up * 0.5 * L - fw * 0.12 * L + side * 0.06
+                    d = (W - elb).normalized(); n = -side
+                    pole = shw + side * 0.12 - fw * 0.55 - up * 0.35
                 elif nm == "point":
-                    W = shw + fw * 0.93 * L + up * (0.2 + 0.05 * math.sin(f * 0.13)) * L + side * (0.05 + 0.04 * math.sin(f * 0.07)); d = (fw + up * 0.2).normalized(); n = -up
+                    W = shw + fw * 0.93 * L + up * (0.2 + 0.05 * math.sin(f * 0.13)) * L + side * (0.05 + 0.04 * math.sin(f * 0.07)); d = (W - shw).normalized(); n = -up
                     pole = shw + side * 0.4 - up * 0.3
                 elif nm == "shade":
                     W = shw + fw * 0.72 * L + up * 0.6 * L - side * 0.04; d = (-side + up * 0.2).normalized(); n = -up
@@ -133,7 +136,23 @@ class Person:
                     W = shw + fw * 0.72 * L + up * (-0.32 * L) - side * 0.02; d = (fw - side * 0.6).normalized(); n = up
                     pole = shw + side * 0.4 - fw * 0.1 - up * 0.4
                 H.key_hand(s, f, W, d, n, pole=pole)
+                if not (self.name == "Fisher" and s == "R" and T(6.3) <= f <= T(9.35)):
+                    self.key_fingers(s, f, nm)
 
+    FPOSE = {"point": ((4, 2, 2), (75, 85, 70), (20, 35, 30)),   # index straight, other three curled, thumb tucked
+             "run": ((50, 55, 40), (55, 60, 45), (15, 30, 25)),    # loose fist
+             "relax": ((15, 18, 12), (18, 22, 15), (8, 10, 8))}
+    def key_fingers(self, s, f, nm):
+        idx, rest, th = self.FPOSE.get(nm if nm in self.FPOSE else "relax")
+        R_ = math.radians; PB = self.o.pose.bones
+        for k in range(2, 6):
+            src = idx if k == 2 else rest
+            for j, seg in enumerate(("-1", "-2", "-3")):
+                pb = PB.get("finger%d%s.%s" % (k, seg, s))
+                if pb: pb.rotation_mode = 'XYZ'; pb.rotation_euler = (R_(src[j]), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+        for j, seg in enumerate(("-1", "-2", "-3")):
+            pb = PB.get("finger1%s.%s" % (seg, s))
+            if pb: pb.rotation_mode = 'XYZ'; pb.rotation_euler = (R_(th[j]), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
     def hand_limits(self):
         """client hands rule: no backward bends; relaxed curled default"""
         R_ = math.radians

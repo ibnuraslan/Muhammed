@@ -123,11 +123,11 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.07, 0.065, 0.04), 0.2),
-                          (30.0, (0.075, 0.07, 0.045), 0.18), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.05, 0.075, 0.06), 0.42),
+                          (30.0, (0.055, 0.08, 0.065), 0.36), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.4), (31.0, 0.4), (32.0, 0.05)):
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.09), (31.0, 0.09), (32.0, 0.05)):
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))

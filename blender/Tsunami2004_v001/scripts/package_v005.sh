@@ -3,7 +3,7 @@ cd /home/user/Muhammed/blender/Tsunami2004_v001
 B=/opt/blender/blender-5.2.2-linux-x64/blender
 OUT=/home/user/Muhammed/blender/Tsunami2004_v005
 mkdir -p "$OUT" review
-cp ../Tsunami2004_v004/{CREDITS.md,SETTINGS.md,README.md} "$OUT"/ ; cp beats.json "$OUT"/
+cp beats.json "$OUT"/
 $B -b film.blend --python ../pipeline/clip_scan.py -- $PWD/review/clip_scan_v005.json 6 > /tmp/claude-0/cs.log 2>&1
 $B -b film.blend --python scripts/hand_audit.py -- $PWD/review/hand_audit_v005.txt 2 > /tmp/claude-0/ha5.log 2>&1
 rm -rf /tmp/claude-0/shrink && $B -b film.blend --python scripts/05_shrink_textures.py -- /tmp/claude-0/shrink $PWD/film_small.blend > /tmp/claude-0/sh5.log 2>&1
