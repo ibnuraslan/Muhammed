@@ -342,6 +342,7 @@ def surf(p):
 # left palm on the up-facing temple (model +X), fingers toward the crown; right hand cradles the back of the skull, fingers wrapping over
 SL, NL = surf(HC_M + V(0.07, 0, 0.0)); DL = V(0, 0, 1)
 SR, NR_ = surf(HC_M - FM * 0.075 + V(0, 0, -0.01)); DR = V(1, 0, 0.25).normalized()
+GRIPS_ON = False
 GRIP_OFF = {"L": 0.03, "R": 0.03}; GRIP_CURL = {"L": 1.0, "R": 1.0}
 def grip(f, S_, N_, D_, s):
     M = head_world(f) if f < 376 else M_root(f)
@@ -362,6 +363,7 @@ def beat2_keys(frames):
             lf = 0.07 * math.sin(math.pi * max(0.0, min(1.0, (f - ph0) / 30.0)))
             SURG.key_foot(s, f, xy, yw_, lift=lf)
         ff = min(f, 384); app = 1 - smooth((f - 214) / 34.0); rel = smooth((f - 384) / 16.0)
+        if GRIPS_ON and 248 < f < 382: continue      # grip_object owns the hands while the head is held
         for s, (S_, N_, D_) in (("L", (SR, NR_, DR)), ("R", (SL, NL, -DL))):   # left hand cradles the back of the skull, right palm on the temple (no crossed forearms)
             W, d_, n_ = grip(ff, S_, N_, D_, s)
             Nw = ((head_world(ff) if ff < 376 else M_root(ff)).to_3x3() @ N_).normalized()
@@ -413,7 +415,20 @@ for s_ in "LR":
     GRIP_OFF[s_], GRIP_CURL[s_] = best[1], best[2]
     print("GRIPSEARCH", s_, "off", best[1], "curl", best[2], "inside", best[3], "nearest", round(best[4] * 100, 2), "cm")
 for md_, v_ in _mods_sb: md_.show_viewport = v_
+GRIPS_ON = True
 beat2_keys(list(range(214, 400, 3)) + [400])
+# real grips (hand_poses.grip_object): hand placed on the head surface, fingers closed until they touch it, thumb opposed
+HEAD_GRIPS = (("L", SR, NR_), ("R", SL, NL))
+GRIP_LOG = {}
+for f in list(range(250, 381, 4)) + [380]:
+    M = head_world(f) if f < 376 else M_root(f); R3 = M.to_3x3()
+    for s_, S_, N_ in HEAD_GRIPS:
+        C = M @ S_; Nw = (R3 @ N_).normalized()
+        try:
+            GRIP_LOG[(f, s_)] = grip_object(SURG.r.o, s_, f, head, C, -Nw)
+        except Exception as e:
+            print("GRIPFAIL", f, s_, e)
+print("HEADGRIPS", len(GRIP_LOG), list(GRIP_LOG.items())[:2])
 # beat 3: stitching 400-665 - right hand needle holder arcs in at each stitch, left hand forceps holds the edge
 stitch_ang = [2 * math.pi * i / len(st) for i in range(len(st))]
 for f in list(range(403, 672, 3)):
@@ -422,9 +437,9 @@ for f in list(range(403, 672, 3)):
     a = stitch_ang[STITCH_ORDER[k]] + 0.12
     seam_pt = neck_ring(M_LIE2, a, 0.074)
     arc = V(0.0, -0.03 * math.cos(2 * math.pi * ph), 0.03 * math.sin(2 * math.pi * ph))
-    hand(SURG, "R", f, seam_pt + V(0.03, -0.13, 0.15) + arc, V(0.2, 0.6, -0.6), V(1, 0, 0.4), 0.35, Y1)
-    hand(SURG, "L", f, neck_ring(M_LIE2, A_UP + 0.9, 0.09) + V(-0.07, -0.11, 0.15) + V(0, 0, 0.01 * math.sin(f / 9.0)), V(-0.1, 0.6, -0.6), V(-1, 0, 0.3), 0.35, Y1)
-    pose_hand(SURG, "R", f, "pinch"); pose_hand(SURG, "L", f, "pinch")
+    pass
+    pass
+    pass
 # beats 4-5: steps back, watches; snaps fingers near the ear at 920 (the "hear" cue together with the bowl)
 S2 = V(0.25, -0.95, 0)
 for f in list(range(672, 1040, 6)):
@@ -448,7 +463,7 @@ for f in list(range(1190, 1771, 3)):
         wv = math.sin((f - 1230) / 7.0) if 1225 < f < 1310 else 0.0
         Rz = Matrix.Rotation(math.radians(Y3), 3, "Z")
         hand(SURG, "R", f, face_w + (S3 - face_w).normalized() * 0.16 + V(0, 0, 0.05) + Rz @ V(0.06 * wv, 0, 0), V(0, 0, 1), Rz @ V(0, 1, 0), 0.35, Y3)
-        if f < 1350:
+        if True:
             hang(SURG, "L", f, S3, Y3, 0.05)
         else:   # lifts the clipboard up before stepping to the monitor
             Rz3 = Matrix.Rotation(math.radians(Y3), 3, "Z"); k3 = smooth((f - 1350) / 30.0)
@@ -467,7 +482,7 @@ for f in list(range(1190, 1771, 3)):
         cb = pos + Rz @ V(0.05, -0.36 - 0.14 * bow - 0.16 * (1 - u), 0) + V(0, 0, 1.1 - 0.05 * bow - 0.02 * (1 - u))
         kk = 1.0
         hang_w = V(pos.x, pos.y, 0) + Rz @ V(0.27, -0.05, 0) + V(0, 0, SURG.root_head.z * 0.9)
-        hand(SURG, "L", f, (hang_w + Rz @ V(0, -0.15, 0)).lerp(cb + Rz @ V(0.17, 0.02, 0), kk), Rz @ V(-1, 0, 0), V(0, 0, 1), 0.3, yw)
+        hang(SURG, "L", f, pos, yw, 0.06); hang(SURG, "R", f, pos, yw, 0.06); continue   # watches the monitor, hands relaxed (no mimed clipboard)
         wr = math.sin(f / 3.0) * 0.01 if 1400 < f < 1560 else 0.0
         hand(SURG, "R", f, cb + Rz @ V(-0.1 + wr, -0.03, 0.05), Rz @ V(0.3, -1, -0.5), V(0, 0, 1), 0.35, yw)
 hide_keys_people = []
@@ -532,19 +547,27 @@ for f in [162, 164] + list(range(166, 1040, 3)):
             g1 = (p + Rz @ V(0.12, -0.3, 0) + V(0, 0, 0.95)) if s_ == "L" else (V(p.x, p.y, 0) + Rz @ V(-0.27, -0.1, 0) + V(0, 0, NURSE.root_head.z * 0.9))
             hand(NURSE, s_, f, g0.lerp(g1, kk), Rz @ V(0, -1, -0.3), V(0, 0, 1), 0.3, yw)
         continue
-    if 440 < f < 520:   # turns the gas knob on the anaesthesia machine
+    if 452 <= f <= 508:   # turns the gas knob on the anaesthesia machine
+        g_ = D["Anaes_Gauge1_Face"]
+        try: grip_object(D["Nurse"], "R", f, g_, g_.matrix_world.translation + V(0, -0.004, 0.0), V(0, 1, 0))
+        except Exception as e: print("KNOBFAIL", f, e)
+    elif 440 < f < 452 or 508 < f < 520:
         k = math.sin(math.pi * (f - 440) / 80.0)
-        hand(NURSE, "R", f, (p + V(0, 0, 0.9) + Rz @ V(-0.15, -0.3, 0)).lerp(V(-1.25, 1.02, 0.92), k), Rz @ V(0, -1, 0), V(0, 0, 1), 0.3, yw)
+        hand(NURSE, "R", f, (p + V(0, 0, 0.9) + Rz @ V(-0.15, -0.3, 0)).lerp(V(-1.25, 0.96, 0.9), k), Rz @ V(0, -1, 0), V(0, 0, 1), 0.3, yw)
     else:
         hang(NURSE, "R", f, p, yw, 0.05)
-    hand(NURSE, "L", f, p + Rz @ V(0.12, -0.3, 0) + V(0, 0, 0.95), Rz @ V(-1, -0.4, 0), V(0, 0, 1), 0.3, yw)
-    if f >= 196: pose_hand(NURSE, "L", f, "pinch")
+    if f < 200: hand(NURSE, "L", f, p + Rz @ V(0.12, -0.3, 0) + V(0, 0, 0.95), Rz @ V(-1, -0.4, 0), V(0, 0, 1), 0.3, yw)
 # bowl: on the tray -> in the nurse's left hand (from 200) -> slips at 918, hits the floor 940, bounces, rattles
-for f in range(1, 918, 6):
-    if f < 200: continue
-    ev(f); M = D["Nurse"].matrix_world @ NURSE.r.PB["wrist.L"].matrix
-    pp = (fingertip(NURSE, "L", 1) + fingertip(NURSE, "L", 2)) / 2.0; out_ = pp - M.translation; out_.z = 0
-    bowl.location = pp + out_.normalized() * 0.072 + V(0, 0, -0.012); bowl.keyframe_insert("location", frame=f)
+for f in list(range(200, 918, 6)) + [917]:
+    p_, yw_ = nurse_at(f) if f >= 166 else (NP1, ny)
+    if yw_ is None:
+        a0, a1, p0, p1 = next(w for w in WALKS if w[0] <= f <= w[1]); hd = (p1 - p0).normalized(); yw_ = math.degrees(math.atan2(hd.x, -hd.y))
+    Rz_ = Matrix.Rotation(math.radians(yw_), 3, "Z")
+    bowl.location = p_ + Rz_ @ V(0.10, -0.40, 0) + V(0, 0, 0.93); bowl.keyframe_insert("location", frame=f)
+    bpy.context.view_layer.update()
+    rim = bowl.location + Rz_ @ V(0.0, 0.075, 0) + V(0, 0, 0.018)
+    try: grip_object(D["Nurse"], "L", f, bowl, rim, V(0, 0, -1), finger_dir=Rz_ @ V(0, -1, 0))
+    except Exception as e: print("BOWLFAIL", f, e)
 p0 = bowl.location.copy()
 for df, dz, dx in ((0, 0, 0), (10, -0.35, 0.05), (22, -(p0.z - 0.02), 0.1), (28, -(p0.z - 0.02) + 0.09, 0.14), (34, -(p0.z - 0.02), 0.17), (38, -(p0.z - 0.02) + 0.03, 0.18), (42, -(p0.z - 0.02), 0.19)):
     bowl.location = p0 + V(dx, -dx * 0.5, dz); bowl.keyframe_insert("location", frame=918 + df)
@@ -581,12 +604,18 @@ for f in list(range(1, 1771, 6)):
     ANA.key_spine(f, flex=14, twist=-6, head=(14 + 6 * math.sin(f / 90.0), 18 * math.sin(f / 140.0)))
     for s in "LR":
         ANA.key_foot(s, f, ANA.foot_xy(s, V(AP.x, AP.y, 0), AY) + (RzA @ V(0, -0.42, 0)).to_2d(), AY + (10 if s == "L" else -10))
-    hand(ANA, "R", f, bag_c + RzA @ V(-0.06, -0.09 + 0.02 * br, 0.0), RzA @ V(0.2, 1, 0), RzA @ V(-1, 0, 0), 0.3, AY)
-    pose_hand(ANA, "R", f, "cup_hold")
+    pass
     hand(ANA, "L", f, V(-1.30, 1.0, 0.93) + V(0, 0, 0.01 * math.sin(f / 30.0)), RzA @ V(0, 1, -0.4), V(0, 0, 1), 0.3, AY)
     bag.scale = (1.0 + 0.12 * br, 1.0 + 0.12 * br, 1.0 - 0.05 * br); bag.keyframe_insert("scale", frame=f)
 for ob in [D["Anaes"]] + [c for c in D["Anaes"].children]:
     hide_keys(ob, [(1, False), (1036, True), (1187, False)])
+bag.keyframe_insert("scale", frame=1)
+for f in range(1, 1771, 30):
+    sc.frame_set(f); bw = bag.matrix_world.translation; r_ = bag.dimensions.x / 2
+    toward = V(AP.x, AP.y, bw.z) - bw; toward.z = 0; toward.normalize()
+    C = bw + toward * r_ + V(0, 0, 0.02)
+    try: grip_object(D["Anaes"], "R", f, bag, C, -toward)
+    except Exception as e: print("BAGFAIL", f, e)
 # dust motes drift (and hide before the void fades in)
 dr_ = D["Dust_Root"]
 for f in range(1, 1771, 30):
@@ -602,15 +631,25 @@ for f_, a_ in ((1300, 0.0), (1345, 3.0), (1770, 3.4)):
     l_, q_, _ = Md.decompose(); head.location = l_; head.keyframe_insert("location", frame=f_)
     head.rotation_quaternion = q_; head.keyframe_insert("rotation_quaternion", frame=f_)
 # needle holder / forceps follow the surgeon's hands (beat 3 only), parked on the tray otherwise
-for tool, s, off in ((nh, "R", V(0, 0.07, 0.0)), (fcp, "L", V(0, 0.07, 0.0))):
+for tool in (nh, fcp):
     tool.rotation_mode = "QUATERNION"
-    for f in list(range(380, 680, 3)):
-        M = wrist_M(f, s)
-        rg_ = D["Surgeon"]
-        t1 = rg_.matrix_world @ rg_.pose.bones["finger1-3." + s].tail; t2 = rg_.matrix_world @ rg_.pose.bones["finger2-3." + s].tail
-        tool.location = (t1 + t2) * 0.5; tool.keyframe_insert("location", frame=f)   # held in the thumb-index pinch
-        tool.rotation_quaternion = M.to_quaternion() @ Quaternion((1, 0, 0), math.radians(90)); tool.keyframe_insert("rotation_quaternion", frame=f)
     hide_keys(tool, [(1, True), (382, False), (676, True)])
+TOOL_LOG = []
+for f in list(range(400, 672, 6)):
+    k = min((f - 395) // 26, len(STITCH_ORDER) - 1); ph = ((f - 395) % 26) / 26.0
+    a = stitch_ang[STITCH_ORDER[k]] + 0.12
+    seam_pt = neck_ring(M_LIE2, a, 0.074)
+    up_ = V(0, -0.55, 0.85).normalized()                        # tools lean back toward the surgeon
+    for tool, s_, off_a, arc_ in ((nh, "R", 0.0, 0.012 * math.sin(2 * math.pi * ph)), (fcp, "L", -0.6, 0.0)):
+        sp_ = neck_ring(M_LIE2, a + off_a, 0.078) + V(0, 0, arc_)
+        dir_ = (up_ + V(0.15 if s_ == "R" else -0.15, 0, 0)).normalized()
+        tool.location = sp_ + dir_ * 0.075
+        tool.rotation_quaternion = dir_.to_track_quat("Z", "Y"); tool.keyframe_insert("location", frame=f); tool.keyframe_insert("rotation_quaternion", frame=f)
+        bpy.context.view_layer.update()
+        C = sp_ + dir_ * 0.12; side_ = dir_.cross(V(0, 0, 1)).normalized()
+        try: TOOL_LOG.append(grip_object(SURG.r.o, s_, f, tool, C, -side_ if s_ == "R" else side_))
+        except Exception as e: print("TOOLFAIL", f, s_, e)
+print("TOOLGRIPS", len(TOOL_LOG))
 
 # ------------------------------------------------------------------ camera: one spline (keys in world, or in monkey-B space during the void)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 28; cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.01
@@ -688,6 +727,10 @@ for f in range(1, 1771):
     CAMLOG.append((f, tuple(round(x, 3) for x in p), tuple(round(x, 3) for x in a), round(fl(f), 1)))
 json.dump(CAMLOG[::30], open(os.path.join(HERE, "..", "camera_path.json"), "w"))
 for nm_ in ("Surgeon", "Nurse", "Anaes"): add_hand_limits(D[nm_])
+# table-2 group is transparent after the void and never seen again: hide it for good (QA: no invisible fill)
+for o in D:
+    if o.type in ("MESH", "CURVE") and any(sl.material and "Fade_T2" in sl.material.node_tree.nodes for sl in o.material_slots if sl.material and sl.material.use_nodes):
+        o.hide_render = True; o.keyframe_insert("hide_render", frame=1187); o.hide_viewport = True; o.keyframe_insert("hide_viewport", frame=1187)
 # x-ray void sphere only exists while it is on (QA: camera is not inside a transparent sphere)
 hide_keys(D["XR_Void"], [(1, True), (1016, False), (1212, True)])
 import bmesh as _bm
