@@ -1,40 +1,43 @@
-# Ease one-frame camera snaps (view turns > MAXDEG in one frame) into a short whip with the same start and end framings.
-# Run on the baked film: blender -b in.blend --python 10_camjump.py -- out.blend
+# Ease one-frame camera snaps into a short whip with the same start and end framings (qa_check CAMJUMP criterion:
+# full rotation incl. roll > 60 deg in one frame and > 3x the neighbours). The Track-To camera flipped its roll when
+# looking near straight down; the camera rotation is baked per frame (constraint removed), and each snap window
+# is a smoothstep slerp between its end framings.
+# blender -b in.blend --python 10_camjump.py -- out.blend
 import bpy, sys, math
-from mathutils import Vector
 OUT = sys.argv[sys.argv.index("--") + 1]
-sc = bpy.context.scene; cam = sc.camera; aim = bpy.data.objects["CAM_Film_Aim"]
-F0, F1 = sc.frame_start, sc.frame_end; MAXDEG = 45.0
-def state(f):
-    sc.frame_set(f); c = cam.matrix_world.translation.copy(); a = aim.matrix_world.translation.copy()
-    return c, a
-S = {f: state(f) for f in range(F0, F1 + 1)}
-def ang(f):
-    (c0, a0), (c1, a1) = S[f - 1], S[f]
-    d0, d1 = (a0 - c0).normalized(), (a1 - c1).normalized()
-    return math.degrees(d0.angle(d1))
-snaps = [f for f in range(F0 + 1, F1 + 1) if ang(f) > MAXDEG]
-print("CAMJUMP snaps", [(f, round(ang(f))) for f in snaps])
-done = set()
-for f in snaps:
-    if f in done: continue
-    a, b = f - 3, f + 2
-    while b < F1 and ang(b + 1) > MAXDEG: b += 1
-    ca, aa = S[a]; cb, ab = S[b]
-    da, db = (aa - ca).normalized(), (ab - cb).normalized(); La, Lb = (aa - ca).length, (ab - cb).length
-    tot = da.angle(db)
+sc = bpy.context.scene; cam = sc.camera
+F0, F1 = sc.frame_start, sc.frame_end
+Q = {}
+for f in range(F0, F1 + 1):
+    sc.frame_set(f); Q[f] = cam.matrix_world.to_quaternion()
+def turn(q0, q1):
+    a = math.degrees(q0.rotation_difference(q1).angle); return min(a, 360 - a)
+def snaps():
+    D = {f: turn(Q[f - 1], Q[f]) for f in range(F0 + 1, F1 + 1)}
+    out = []
+    for f in D:
+        nb = sorted(D[x] for x in range(max(F0 + 1, f - 3), min(F1, f + 3) + 1) if x != f)
+        va = nb[len(nb) // 2] if nb else 0
+        if D[f] > 60 and D[f] > 3 * va + 1: out.append((f, round(D[f])))
+    return out, max(D.values())
+s0, m0 = snaps(); print("CAMJUMP before", s0, "max", round(m0, 1))
+for f, _ in s0:
+    a, b = f - 3, f + 3
+    qa, qb = Q[a], Q[b]
     for g in range(a + 1, b):
-        u = (g - a) / (b - a); w = u * u * (3 - 2 * u)
-        c, _ = S[g]
-        # slerp of the view direction
-        if tot < 1e-4: d = da
-        else: d = (da * math.sin((1 - w) * tot) + db * math.sin(w * tot)) / math.sin(tot)
-        aim.location = c + d.normalized() * (La + (Lb - La) * w)
-        aim.keyframe_insert("location", frame=g)
-    for g in (a, b):   # pin the end framings exactly
-        aim.location = S[g][1]; aim.keyframe_insert("location", frame=g)
-    done.update(range(a, b + 1))
-    print("CAMJUMP eased", a, "->", b, "total turn", round(math.degrees(tot)), "deg over", b - a, "frames")
-S = {f: state(f) for f in range(F0, F1 + 1)}
-print("CAMJUMP max turn after", round(max(ang(f) for f in range(F0 + 1, F1 + 1)), 1), "deg/frame")
-bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=False)
+        u = (g - a) / (b - a); w = u * u * (3 - 2 * u); Q[g] = qa.slerp(qb, w)
+s1, m1 = snaps(); print("CAMJUMP after", s1, "max", round(m1, 1))
+for c in list(cam.constraints): cam.constraints.remove(c)
+cam.rotation_mode = 'QUATERNION'; prev = None
+for f in range(F0, F1 + 1):
+    q = Q[f].copy()
+    if prev is not None and prev.dot(q) < 0: q.negate()
+    cam.rotation_quaternion = q; cam.keyframe_insert("rotation_quaternion", frame=f); prev = q
+for l in cam.animation_data.action.layers:
+    for st in l.strips:
+        for cb in st.channelbags:
+            for fc in cb.fcurves:
+                if fc.data_path == "rotation_quaternion":
+                    for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
+print("CAMJUMP baked", F1 - F0 + 1, "rotation keys")
+bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
