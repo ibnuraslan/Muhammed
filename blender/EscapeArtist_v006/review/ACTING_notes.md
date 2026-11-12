@@ -26,3 +26,19 @@ Special cases:
 See the counts in the submission message. HOVER, INSIDE and FACEPRESS are 0.
 
 EMPTY "wall/prop fills the frame, character under 15 %" covers the room-wide framings, which are **intended** per the director (17:52).
+
+## Final QA on the packed v006 (`review/qa_v006.json`, qa_check fc62c27, step 6)
+`{'EMPTY': 155, 'FILL': 7, 'CLAW': 64, 'BACKHEAD': 1}`. **CAMJUMP 0, HOVER 0, INSIDE 0, FACEPRESS 0.**
+
+Camera fixes needed for CAMJUMP 0:
+- **1525/1548:** the camera passes the runner to the side instead of over him.
+- **3630:** key removed, so the turn back to the building is spread over 28 frames.
+- **2898:** the corridor-run aim ends at 2893, before the beat-12 cut-over.
+- **3505+:** the outside aims target the protesters.
+
+EMPTY detail:
+- 119 frames are "wall/prop fills, character under 15 %" on room-wide framings: **intended** (director, 17:52).
+- 30 frames have no character in view, or only one wall or prop in view: `[696, 702, 1404, 1482, 1506, 1512, 1518, 1860, 1866, 1890, 2886, 2892, 2922, 3156, 3162, 3168, 3174, 3522, 3528, 3534, 3540, 3546, 3552, 3558, 3564, 3570, 3576, 3582, 3744, 3750]`.
+  - 3156–3174 hide the young→old swap: **intended**.
+  - 1506–1518 (gate whip) and 1860–1890 (field→cell fly) had their aims dropped to keep CAMJUMP at 0: **open**.
+  - 3522–3582 (flight out to the protesters): the protesters are under the 15 % / visibility threshold: **open**.

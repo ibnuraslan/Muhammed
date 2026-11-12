@@ -22,6 +22,8 @@ for r0, r1 in ranges:
     live = [r for r in RIGS if body(r) and not body(r).hide_render]
     if not live: print("AIMFIX no live char", r0, r1); continue
     tgt = min(live, key=lambda r: (r.matrix_world @ r.pose.bones["head"].head - cp).length)
+    if r0 >= 3505 and "Protester1" in bpy.data.objects: tgt = bpy.data.objects["Protester1"]     # outside: the protesters, not the old man behind the wall
+    if 2840 <= r0 <= 2900: tgt = bpy.data.objects["Prisoner"]                                     # the runner in the corridor, not the inmate behind cell walls
     c = cons.get(tgt.name)
     if c is None:
         c = cam.constraints.new("DAMPED_TRACK"); c.name = "AimFix_" + tgt.name; c.target = tgt; c.subtarget = "head"; c.track_axis = "TRACK_NEGATIVE_Z"
@@ -42,6 +44,9 @@ if c and c.id_data.animation_data:
     for f, v in ((3116, 0.0), (3126, 1.0), (3150, 1.0), (3160, 0.0)):
         c.influence = v; c.keyframe_insert("influence", frame=f)
     co = cam.constraints.get("AimFix_PrisonerOld")
+    if co is None:
+        co = cam.constraints.new("DAMPED_TRACK"); co.name = "AimFix_PrisonerOld"; co.target = bpy.data.objects["PrisonerOld"]; co.subtarget = "head"
+        co.track_axis = "TRACK_NEGATIVE_Z"; co.influence = 0.0; co.keyframe_insert("influence", frame=0)
     for f, v in ((3172, 0.0), (3182, 1.0), (3204, 1.0), (3214, 0.0)):
         co.influence = v; co.keyframe_insert("influence", frame=f)
     bpy.ops.wm.save_as_mainfile(filepath=OUT); print("AIMFIX_SWAP_SPLIT")
@@ -56,3 +61,9 @@ def _drop(name, f0, f1):
         fc.keyframe_points.insert(f0, 0.0); fc.keyframe_points.insert(f1, 0.0)
 _drop("AimFix_Guard", 1485, 1545); _drop("AimFix_Prisoner", 1840, 1885); _drop("AimFix_Guard2", 3605, 3645)
 bpy.ops.wm.save_as_mainfile(filepath=OUT); print("AIMFIX_DROPPED")
+# the corridor-run aim must be off before the beat-12 cut-over at 2898 (the target moves sets there)
+_drop("AimFix_Prisoner", 2815, 2915)
+_c = cam.constraints.get("AimFix_Prisoner")
+for f, v in ((2826, 0.0), (2836, 1.0), (2884, 1.0), (2893, 0.0)):
+    _c.influence = v; _c.keyframe_insert("influence", frame=f)
+bpy.ops.wm.save_as_mainfile(filepath=OUT); print("AIMFIX_2898")

@@ -571,7 +571,7 @@
   "1530": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1602": [
@@ -587,6 +587,10 @@
    ]
   ],
   "1614": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
    [
     "CLAW",
     "Prisoner.L curl 52"
@@ -615,7 +619,7 @@
   "1632": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 11%"
    ],
    [
     "CLAW",
@@ -882,54 +886,10 @@
     "wall/prop fills the frame, character only 10%"
    ]
   ],
-  "2856": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ]
-  ],
-  "2862": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "2868": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "2874": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "2880": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only Cell_Divider_3 in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
    ]
   ],
   "2886": [
@@ -945,13 +905,11 @@
   "2892": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "2898": [
+    "wall/prop fills the frame, character only 0%"
+   ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "no character in view"
    ]
   ],
   "2922": [
@@ -1120,16 +1078,34 @@
     "wall/prop fills the frame, character only 5%"
    ]
   ],
+  "3516": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3522": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
   "3528": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "no character in view"
    ]
   ],
   "3534": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "no character in view"
+   ]
+  ],
+  "3540": [
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "3546": [
@@ -1153,10 +1129,18 @@
   "3564": [
    [
     "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
   "3570": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
    [
     "EMPTY",
     "no character in view"
@@ -1165,16 +1149,14 @@
   "3576": [
    [
     "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "3582": [
+    "wall/prop fills the frame, character only 0%"
+   ],
    [
     "EMPTY",
     "no character in view"
    ]
   ],
-  "3588": [
+  "3582": [
    [
     "FILL",
     "Object_12"
@@ -1190,6 +1172,12 @@
    [
     "EMPTY",
     "no character in view"
+   ]
+  ],
+  "3588": [
+   [
+    "CLAW",
+    "Protester2.L curl 50"
    ]
   ],
   "3594": [
@@ -1234,18 +1222,10 @@
     "Protester2.R curl 45"
    ]
   ],
-  "3624": [
+  "3678": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only Object_12 in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "3684": [
@@ -1263,49 +1243,30 @@
   "3738": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "3744": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ]
-  ],
-  "3750": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "only Yard_Ground in view"
    ],
    [
     "EMPTY",
     "no character in view"
    ]
   ],
-  "1539": [
+  "3750": [
    [
-    "CAMJUMP",
-    "cut: 0.41 m, 65 deg in one frame (neighbours 0.42 m, 16 deg)"
-   ]
-  ],
-  "3621": [
-   [
-    "CAMJUMP",
-    "cut: 0.27 m, 75 deg in one frame (neighbours 0.34 m, 11 deg)"
-   ]
-  ],
-  "3622": [
-   [
-    "CAMJUMP",
-    "cut: 0.34 m, 61 deg in one frame (neighbours 0.38 m, 11 deg)"
+    "EMPTY",
+    "no character in view"
    ]
   ]
  },
  "counts": {
-  "EMPTY": 160,
+  "EMPTY": 155,
   "FILL": 7,
-  "CLAW": 63,
-  "BACKHEAD": 1,
-  "CAMJUMP": 3
+  "CLAW": 64,
+  "BACKHEAD": 1
  }
 }
