@@ -294,6 +294,8 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt = cam.constraints.new('TRACK_TO'); tt.target = aim; tt.track_axis = 'TRACK_NEGATIVE_Z'; tt.up_axis = 'UP_Y'
 cam_d.dof.focus_object = aim
+for f_, fs_ in ((1, 5.6), (1290, 5.6), (1310, 11.0), (1395, 11.0), (1415, 5.6)):   # v004b: deeper focus on the nose macro
+    cam_d.dof.aperture_fstop = fs_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 def gface(f): ev(f); return G.bone_world("head") + V(0, -0.07, 0.05)
 def geye(f): ev(f); return G.bone_world("eye.R", tail=True)
 def tmouth(f): return t_mouth(f)[0]
@@ -325,8 +327,8 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (1125, lambda f: tmouth(f) + TRw * 0.36 - TFw * 0.04 + V(0, 0, 0.04), tmouth, 55),
     (1190, lambda f: tmouth(f) + TRw * 0.32 + TFw * 0.06 + V(0, 0, 0.1), tmouth, 55),
     (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
-    (1320, lambda f: tmouth(f) + TRw * 0.28 - TFw * 0.12 + V(0, 0, 0.0), tmouth, 60),
-    (1385, lambda f: tmouth(f) + TRw * 0.3 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 55),
+    (1320, lambda f: tmouth(f) + TRw * 0.38 - TFw * 0.17 + V(0, 0, 0.0), tmouth, 45),   # v004b: pulled back ~9 cm, fingertip + eyes both sharp
+    (1385, lambda f: tmouth(f) + TRw * 0.39 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 45),
     (1420, lambda f: tmouth(f) + TRw * 0.6 - TFw * 0.3 + V(0, 0, 0.08), tmouth, 32), (1453, lambda f: pair(f) + V(0.9, -0.6, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
     (1590, lambda f: gmouth(f) + V(0.3, -0.45, 0.06), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them

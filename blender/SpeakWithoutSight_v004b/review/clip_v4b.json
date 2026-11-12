@@ -1,0 +1,78 @@
+{
+ "frames": {
+  "481": {
+   "Teacher": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "505": {
+   "Girl": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "973": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1231": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 9
+   }
+  },
+  "1435": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1441": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1501": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1657": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1693": {
+   "Teacher": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1717": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 24
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

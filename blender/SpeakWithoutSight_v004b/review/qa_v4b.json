@@ -1,0 +1,926 @@
+{
+ "frames": {
+  "181": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "187": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "193": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "199": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "205": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "211": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "217": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "259": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "265": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "271": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "277": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "283": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "289": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "295": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "313": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "319": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "325": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "331": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "451": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "457": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "463": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "469": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "475": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "481": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "487": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "493": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "499": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "505": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "511": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "529": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "535": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "541": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "547": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "553": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "643": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "655": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "661": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "667": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "709": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "721": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "739": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "763": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "769": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "775": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "781": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "787": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "793": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "799": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "805": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "811": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "817": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "823": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "829": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "841": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "847": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "853": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "859": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "865": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "871": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "877": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "883": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "889": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "895": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "931": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "949": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "955": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "961": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "967": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "973": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "985": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "991": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "997": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1015": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1021": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1033": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1045": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1051": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1057": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1087": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1093": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1099": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1111": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1117": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1123": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1129": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1135": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1141": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1147": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "1153": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1159": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1165": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1171": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "1177": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "1183": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1189": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1195": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1201": [
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "1207": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1213": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1231": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1243": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1255": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1297": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1303": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1321": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1327": [
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "1333": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1339": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1345": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1363": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1375": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1387": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1393": [
+   [
+    "FILL",
+    "hair / top of head 55%"
+   ]
+  ],
+  "1399": [
+   [
+    "FILL",
+    "hair / top of head 44%"
+   ]
+  ],
+  "1405": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1411": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1417": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1423": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1429": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1519": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1537": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1543": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1549": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1555": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1561": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1567": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1573": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1579": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "1585": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "1591": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1597": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "1603": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1609": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1621": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1627": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1633": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1639": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1657": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1879": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1885": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1891": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ]
+ },
+ "counts": {
+  "FILL": 123,
+  "INSIDE": 33
+ }
+}
