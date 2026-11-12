@@ -218,7 +218,7 @@ def anim(shot):
 
 def cam_silent(c, t):
     e = ease(t)
-    return (TABLE + Vector((0.85, 1.35, 1.35)).lerp(Vector((0.7, 1.15, 1.3)), e), TABLE + Vector((0.0, -0.6, 0.95)), 35)
+    return (TABLE + Vector((1.65, 0.95, 1.6)).lerp(Vector((1.45, 0.78, 1.55)), e), TABLE + Vector((0.0, -0.5, 1.0)), 38)
 
 
 def cam_wide(c, t):

@@ -97,7 +97,7 @@ def build(variant=None):
     d.type = 'SCRIPTED'; d.expression = "8 * (1 if frame < 40 else 0) + 3 * (1 if 43 < frame < 46 else 0)"
     c["lift_lamp"] = lamp_m
     # ---------------------------------------------------------------- the Marine post (by the lift lobby): desk, alarm panel
-    ph.model("metal_office_desk", loc=(-11.2, -0.55, 0), rot_z=-math.pi / 2, scale=0.7)
+    ph.model("metal_office_desk", loc=(-10.0, -0.55, 0), rot_z=math.pi / 2, scale=0.7)          # in front of the Marine, who faces down the corridor
     panel = box("AlarmPanel", (-11.55, -0.6, 1.25), (0.08, 0.6, 0.4), pbr("PanelGrey", (0.35, 0.37, 0.35), 0.4, 0.3), bevel=0.01)
     pl = pbr("AlarmLamp", (0.3, 0.04, 0.03), 0.3, 0.0, **{'Emission Color': (1.0, 0.12, 0.05, 1), 'Emission Strength': 0.0})
     pg = pbr("AlarmGreen", (0.05, 0.2, 0.06), 0.3, 0.0, **{'Emission Color': (0.3, 1.0, 0.35, 1), 'Emission Strength': 2.0})
@@ -112,9 +112,10 @@ def build(variant=None):
     for o in marine.parts:
         if "elegantsuit" in o.name:
             twp.two_tone(o, 0.74, (0.62, 0.52, 0.32), (0.03, 0.04, 0.09))         # khaki shirt over blue trousers (seated)
-    twp.marine_cap((-11.25, -0.25, 0.555), 0.4)
+    c["cap"] = twp.marine_cap((-9.85, -0.1, 0.555), 2.0)
     c["marine"] = marine
-    twp.model_fit("SchoolChair_01", (-10.55, -0.55, 0), rot_z=math.pi / 2, height=0.92)
+    twp.model_fit("SchoolChair_01", (-10.75, -0.55, 0), rot_z=math.pi / 2, height=0.92)
+    c["insignia"] = [box(f"Insignia{k}", (0, 0, -5), (0.018, 0.006, 0.014), pbr("InsigniaGold", (0.75, 0.55, 0.2), 0.3, 1.0)) for k in range(2)]
     # ---------------------------------------------------------------- stairwell (x around STAIR_X), three storeys, open well
     conc = ph.texture("concrete_floor_02", scale=0.5, name="StairConc", tint=(0.75, 0.75, 0.72))
     rail = pbr("StairRail", (0.1, 0.1, 0.1), 0.4, 0.7)
@@ -204,16 +205,17 @@ def animate(c, sec, shot):
         twp.walk(P["clerk"], (-9.0, -2.4), (-9.0, 2.6), sec, speed=0.9)
     elif shot == "chat":
         a, b = P["staffA"], P["staffB"]
-        twp.stand(a, (0.7, 0.2, 0), math.radians(150)); twp.stand(b, (1.6, 0.05, 0), math.radians(-150))
+        twp.stand(a, (0.75, 0.15, 0), math.pi); twp.stand(b, (1.75, -0.1, 0), math.radians(-130))      # A in profile at the notice, B turned to her and to us
         cb = c["clipboard"]; twp.hide([cb] + list(cb.children_recursive), False)          # she holds a folder at her chest
         fa = twp.forward(a); cb.location = a.bone_head("spine03") + fa * 0.25 + Vector((0, 0, -0.1)); cb.rotation_euler = (math.radians(-60), 0, math.atan2(fa.x, -fa.y))
         sa = fa.cross(Vector((0, 0, 1)))
         for sd, sg in (("L", 1), ("R", -1)):
             reach(a, sd, cb.location - sa * 0.08 * sg + Vector((0, 0, -0.04)), Vector((-sg * sa.x, -sg * sa.y, -0.8)), fa)
-        a.rot("head", (0, 0, 1), 15 * math.sin(sec * 0.7)); b.rot("head", (0, 0, 1), -10)
-        nb = Vector((1.1, CW / 2 - 0.05, 1.5))                                  # B points, small, at the notice
-        sh = b.bone_head("upperarm01.R")
-        reach(b, "R", sh + (nb - sh).normalized() * 0.42 + Vector((0, 0, -0.18)), Vector((0.3, -0.5, -0.8)), nb - sh)
+        a.rot("head", (0, 0, 1), -20 + 12 * math.sin(sec * 0.7)); b.rot("head", (0, 0, 1), 10)
+        nb = Vector((1.1, CW / 2 - 0.05, 1.5))                                  # B points, small, at the notice: forearm only, elbow at the side
+        sh = b.bone_head("upperarm01.R"); fb = twp.forward(b); rb = fb.cross(Vector((0, 0, 1))).normalized()
+        hand = sh + Vector((0, 0, -0.3)) + rb * 0.08 + ((nb - sh) * Vector((1, 1, 0))).normalized() * 0.32
+        reach(b, "R", hand, rb * 0.5 + Vector((0, 0, -1)) - fb * 0.3, nb - hand)
         twp.walk(P["clerk"], (6.0, -0.3), (-6.0, -0.3), sec, speed=1.1)
     elif shot == "lift":
         a, b = P["workA"], P["workB"]
@@ -229,11 +231,14 @@ def animate(c, sec, shot):
         a.rot("head", (0, 0, 1), 20 * turn)
     elif shot == "marine":
         m = c["marine"]
-        twp.seat(m, (-10.65, -0.55, 0), math.pi / 2, lean=8)
+        twp.seat(m, (-10.7, -0.55, 0), math.pi / 2, lean=6)                   # faces +X down the corridor, desk in front
         alarm = ease(min(1.0, max(0.0, (sec - 1.5) / 0.6)))
-        m.rot("head", (0, 0, 1), -20 * alarm); m.rot("spine03", (0, 0, 1), -10 * alarm)
-        reach(m, "R", Vector((-11.0, -0.68 + 0.08 * alarm, 0.62 + 0.12 * alarm)), Vector((0.5, -0.6, -0.7)), Vector((-1, 0, -0.3)))
-        reach(m, "L", Vector((-11.0, -0.38, 0.6)), Vector((0.5, 0.6, -0.7)), Vector((-1, 0, -0.3)))
+        twp.work(m, {"R": Vector((-10.3, -0.72, 0.6)), "L": Vector((-10.3, -0.36, 0.6))}, head=0)
+        m.rot("spine03", (0, 0, 1), 18 * alarm); m.rot("neck01", (0, 0, 1), 20 * alarm); m.rot("head", (0, 0, 1), 30 * alarm)   # turns to the panel behind him
+        fw = twp.forward(m); sd_ = fw.cross(Vector((0, 0, 1))).normalized(); nk = m.bone_head("neck01")
+        for k, sg in enumerate((-1, 1)):                                        # collar insignia
+            o = c["insignia"][k]; o.location = nk + fw * 0.07 + sd_ * sg * 0.055 + Vector((0, 0, -0.035))
+            o.rotation_euler = (0, 0, math.atan2(fw.x, -fw.y) + sg * 0.5)
     elif shot in ("landing", "stairs"):
         a, b = P["workA"], P["workB"]
         tty = c["tty"]; twp.hide([tty] + list(tty.children), False)
@@ -276,7 +281,7 @@ def cam_lift(c, t):
 
 def cam_marine(c, t):
     e = ease(t)
-    return (Vector((-9.0, 0.7, 1.45)).lerp(Vector((-9.3, 0.6, 1.42)), e), Vector((-11.1, -0.5, 1.0)), 32)
+    return (Vector((-8.2, 0.75, 1.5)).lerp(Vector((-8.5, 0.6, 1.47)), e), Vector((-10.65, -0.5, 1.05)), 32)
 
 
 def cam_landing(c, t):

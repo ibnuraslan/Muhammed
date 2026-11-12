@@ -76,6 +76,10 @@ def walk(h, p0, p1, s, speed=1.2, stride=26, z0=0.0):
     moving = dist < L - 1e-3
     upright(h)
     pose_walk(h, phase if moving else 0.0, stride=stride if moving else 0.0, arm_swing=20 if moving else 0.0)
+    from human import SIDE
+    for sd, sg in SIDE.items():                       # arms in at the sides (MakeHuman's A-pose reads as a puppet)
+        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 30)
+        h.rot(f"lowerarm01.{sd}", (1, 0, 0), -8)
     ang = math.atan2(d.x, -d.y)                 # rotation z that faces direction d
     h.arm.rotation_euler = (0, 0, ang)
     h.arm.location = p0 + d.normalized() * dist; h.arm.location.z = z0; ground(h)
@@ -219,16 +223,65 @@ def two_tone(o, split_z, top, bottom, stripe=None):
 
 
 def marine_cap(loc, rot_z=0.0):
-    """A white peaked service cover lying on the desk."""
+    """A white peaked service cover lying on the desk: black band, domed white crown overhanging it, a glossy
+    black visor angled down at the front, a gold badge on the band. Visor points along local -Y."""
     from kit import cyl, box, pbr, join
-    white = pbr("CoverWhite", (0.88, 0.88, 0.86), 0.4)
-    blk = pbr("CoverVisor", (0.01, 0.01, 0.012), 0.12, 0.0, **{'Coat Weight': 1.0})
-    parts = [cyl("CoverBand", (0, 0, 0.03), 0.095, 0.06, blk, verts=40)]
-    bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.14, depth=0.03, location=(0, 0.01, 0.075))      # the flat white top, wider than the band
-    top = bpy.context.active_object; top.scale = (1.0, 0.92, 1); top.data.materials.append(white)
-    bv = top.modifiers.new("b", 'BEVEL'); bv.width = 0.01; bv.segments = 3; parts.append(top)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.1, depth=0.006, location=(0, -0.09, 0.012))
-    v = bpy.context.active_object; v.scale = (1.0, 0.5, 1); v.rotation_euler = (math.radians(-15), 0, 0); v.data.materials.append(blk); parts.append(v)
-    parts.append(box("Emblem", (0, -0.096, 0.045), (0.035, 0.004, 0.03), pbr("CoverEmblem", (0.75, 0.6, 0.3), 0.3, 1.0)))
+    white = pbr("CoverWhite", (0.86, 0.86, 0.84), 0.35)
+    blk = pbr("CoverVisor", (0.01, 0.01, 0.012), 0.1, 0.0, **{'Coat Weight': 1.0})
+    gold = pbr("CoverEmblem", (0.8, 0.6, 0.25), 0.3, 1.0)
+    parts = [cyl("CoverBand", (0, 0, 0.035), 0.092, 0.07, blk, verts=48)]
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=16, radius=1.0, location=(0, 0.015, 0.078))
+    top = bpy.context.active_object; top.scale = (0.135, 0.125, 0.035); top.data.materials.append(white)
+    bpy.ops.object.transform_apply(scale=True); parts.append(top)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.1, depth=0.005, location=(0, -0.075, 0.012))
+    v = bpy.context.active_object; v.scale = (0.95, 0.55, 1); v.rotation_euler = (math.radians(-18), 0, 0); v.data.materials.append(blk); parts.append(v)
+    parts.append(box("CoverStrap", (0, -0.091, 0.022), (0.15, 0.004, 0.008), blk))
+    parts.append(box("Emblem", (0, -0.094, 0.05), (0.03, 0.004, 0.032), gold))
     o = join(parts, "MarineCover"); o.location = loc; o.rotation_euler = (0, 0, rot_z)
     return o
+
+
+def arm_len(h, side="R"):
+    b = h.arm.data.bones
+    return sum(b[f"{n}.{side}"].length for n in ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02"))
+
+
+def bend_to(h, target, frac=0.8, max_deg=40, step=3.0):
+    """Lean the upper body forward (spine and a little hip) until `target` is within a relaxed reach of the
+    shoulders, so a reach ends in bent elbows instead of stiff outstretched arms."""
+    target = Vector(target); L = arm_len(h)
+    side = forward(h).cross(Vector((0, 0, 1))).normalized()
+
+    def dist():
+        m = (h.bone_head("upperarm01.L") + h.bone_head("upperarm01.R")) * 0.5
+        return (target - m).length
+    done = 0.0; sgn = -1.0; d0 = dist()
+    while d0 > frac * L and done < max_deg:
+        for b in ("spine01", "spine02", "spine03"):
+            h.rot(b, side, sgn * step / 3)
+        d1 = dist()
+        if d1 > d0 and done == 0.0:                     # wrong way: undo and flip
+            for b in ("spine01", "spine02", "spine03"):
+                h.rot(b, side, -sgn * step / 3)
+            sgn = -sgn; continue
+        d0 = d1; done += step
+    return done
+
+
+def work(h, targets, poles=None, hand_dir=None, head=10):
+    """Both (or one) hands on something in front: lean in as needed, then IK each arm with the elbows down
+    and slightly out. targets: {"L": vec, "R": vec}."""
+    from human import SIDE
+    mid = sum((Vector(v) for v in targets.values()), Vector()) / len(targets)
+    bend_to(h, mid)
+    fwd = forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()     # side = the character's right
+    targets = dict(targets)
+    if "L" in targets and "R" in targets and (Vector(targets["L"]) - Vector(targets["R"])).dot(side) > 0:
+        targets["L"], targets["R"] = targets["R"], targets["L"]                # never cross the arms
+    for sd, t in targets.items():
+        sg = SIDE[sd]                                    # character's left is -side
+        pole = (poles or {}).get(sd) or (-side * sg * 0.35 + Vector((0, 0, -1)) - fwd * 0.2)
+        reach(h, sd, Vector(t), pole, hand_dir if hand_dir is not None else fwd + Vector((0, 0, -0.6)))
+    fingers_curl(h, 30)
+    if head:
+        h.rot("head", side, head)

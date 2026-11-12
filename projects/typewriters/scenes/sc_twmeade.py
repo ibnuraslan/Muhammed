@@ -190,6 +190,7 @@ def build(variant=None):
     bpy.ops.mesh.primitive_plane_add(size=1); pg = bpy.context.active_object; pg.scale = (0.3, 0.42, 1); bpy.ops.object.transform_apply(scale=True)
     pg.data.materials.append(pages[0]); pg.parent = hinge; pg.rotation_euler = (math.radians(90), 0, math.pi); pg.location = (0, 0, -0.21)
     c["cal"] = hinge
+    c["carry"] = box("CarryCrate", (0, 0, -5), (0.42, 0.3, 0.26), ph.texture("brown_planks_03", scale=0.6, name="CarryWood"), bevel=0.01)
     # ---------------------------------------------------------------- lightbox wall and X-ray films
     import sc_twlab as L_
     boxes = L_.lightbox_wall(c, LB, -math.pi / 2, 3)
@@ -214,7 +215,7 @@ def build(variant=None):
         f.parent = lb; f.location = (0, -0.008, 0); f.rotation_euler = (math.radians(90), 0, 0)
         c["film_objs"].append(f)
     # the X-ray cabinet: a steel box with a sliding drawer, a warning lamp, a control panel
-    cab = ph.texture("painted_concrete", scale=1.5, name="XCab", tint=(0.55, 0.6, 0.58))
+    cab = ph.texture("metal_plate_02", scale=2.0, name="XCab", tint=(0.5, 0.56, 0.52))
     box("XCabinet", (XC.x, XC.y, 0.75), (1.2, 1.0, 1.5), cab, bevel=0.02)
     box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.01, 0.01, 0.012), 0.6))
     xl = area_light((XC.x, XC.y - 0.9, 1.3), (0, 0, 0), 0.5, 20, (0.9, 0.95, 1.0)); point_at(xl, (XC.x, XC.y - 0.8, 0.6)); xl.visible_camera = False
@@ -334,12 +335,11 @@ def animate(c, sec, shot):
         place(tC, (1.4, 1.75, 0), math.pi); place(tD, (2.9, 1.75, 0), math.pi); place(tE, (-3.0, 1.75, 0), math.pi)
         for h, tgt in ((tA, Vector((-3.8, ROW_Y - 0.25, 0.98))), (tB, Vector((-1.35, ROW_Y - 0.25, 0.98))), (tC, Vector((1.4, 2.1, 1.0))),
                        (tD, Vector((2.9, 2.1, 1.0))), (tE, Vector((-3.0, 2.1, 0.98)))):
-            for sd, dx in (("L", 0.15), ("R", -0.15)):
-                reach(h, sd, tgt + Vector((dx + 0.03 * math.sin(sec * 2 + dx * 9), 0, 0.02 * math.sin(sec * 3))), Vector((dx, -0.3, -0.9)), Vector((0, 0.3, -1)))
-            h.rot("head", (1, 0, 0), 12)
+            w = 0.03 * math.sin(sec * 2 + tgt.x * 3)
+            twp.work(h, {"L": tgt + Vector((0.13 + w, -0.05, 0.02 * math.sin(sec * 3))), "R": tgt + Vector((-0.13 + w, -0.05, 0))}, head=16)
     elif shot == "calendar":
         twp.walk(tC, (3.6, 3.25), (-2.6, 3.25), sec, speed=0.9)
-        box_ = c["ciphers"][2]; box_.location = tC.bone_head("spine03") + twp.forward(tC) * 0.32 + Vector((0, 0, -0.35))
+        box_ = c["carry"]; box_.location = tC.bone_head("spine03") + twp.forward(tC) * 0.32 + Vector((0, 0, -0.35))
         box_.rotation_euler = (0, 0, tC.arm.rotation_euler.z + math.pi)
         for sd, sg in (("L", 1), ("R", -1)):
             side = twp.forward(tC).cross(Vector((0, 0, 1)))
@@ -347,9 +347,8 @@ def animate(c, sec, shot):
         place(tB, (-0.6, 1.4, 0), math.pi * 0.85)
     elif shot == "clear":
         cp = c["ciphers"][0]; place(tD, (cp.location.x, cp.location.y - 0.62, 0), math.pi)
-        reach(tD, "R", cp.location + Vector((0.08, -0.28, 0.42 + 0.06 * (1 - ease(min(1.0, sec / 1.5))))), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, -0.3)))
-        reach(tD, "L", cp.location + Vector((-0.15, -0.3, 0.3)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, 0)))
-        tD.rot("head", (1, 0, 0), 14)
+        lift = 0.06 * (1 - ease(min(1.0, sec / 1.5)))
+        twp.work(tD, {"R": cp.location + Vector((-0.14, -0.2, 0.2 + lift)), "L": cp.location + Vector((0.14, -0.2, 0.2 + lift))}, head=16)
     elif shot == "stack":
         nc = c["new_crate"]; k = ease(min(1.0, max(0.0, (sec - 0.6) / 2.6)))
         tgt = Vector((-1.55, -3.55, 0.28 + 0.56)); start = tgt + Vector((0.2, 1.4, 0.35))
@@ -362,13 +361,12 @@ def animate(c, sec, shot):
         x = -4.6 + (n_up - 1) * 0.82 if shot == "covers" else -4.6
         place(tB, (x, ROW_Y - 0.58, 0), math.pi)
         lid_pt = T.world(c["row"][max(0, n_up - 1)], (0, 0.0, 0.16))
-        reach(tB, "R", lid_pt + Vector((0.12, -0.1, 0.05)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, 0.3)))
-        reach(tB, "L", lid_pt + Vector((-0.12, -0.1, 0.05)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, 0.3)))
+        twp.work(tB, {"R": lid_pt + Vector((-0.12, -0.1, 0.05)), "L": lid_pt + Vector((0.12, -0.1, 0.05))}, head=14)
         place(tA, (x + 1.8, ROW_Y - 0.62, 0), math.pi + 0.3)
-        reach(tA, "R", Vector((x + 1.75, ROW_Y - 0.25, 0.97)), Vector((-0.3, -0.4, -0.8)), Vector((0, 0.3, -1)))
+        twp.work(tA, {"R": Vector((x + 1.68, ROW_Y - 0.22, 0.97)), "L": Vector((x + 1.92, ROW_Y - 0.22, 0.97))}, head=14)
         if shot == "covers":
             place(tE, (x - 1.4, ROW_Y - 0.62, 0), math.pi - 0.2)
-            reach(tE, "L", Vector((x - 1.35, ROW_Y - 0.25, 0.97)), Vector((0.3, -0.4, -0.8)), Vector((0, 0.3, -1)))
+            twp.work(tE, {"R": Vector((x - 1.5, ROW_Y - 0.22, 0.97)), "L": Vector((x - 1.28, ROW_Y - 0.22, 0.97))}, head=14)
     elif shot == "lone":
         twp.seat(ar, (-4.6, ROW_Y - 0.62, 0), math.pi, lean=24)
         for sd, dx in (("L", 0.14), ("R", -0.14)):
@@ -379,15 +377,14 @@ def animate(c, sec, shot):
         front = tray.location.y - 0.42                          # he walks the tray in, then turns to the control panel
         if slide < 0.98:
             place(h, (XC.x - 0.05, front - 0.42, 0), math.pi)
-            reach(h, "R", Vector((XC.x + 0.2, front, 0.74)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, 0)))
-            reach(h, "L", Vector((XC.x - 0.2, front, 0.74)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, 0)))
+            twp.work(h, {"R": Vector((XC.x - 0.2, front, 0.74)), "L": Vector((XC.x + 0.2, front, 0.74))}, head=10)
         else:
             place(h, (XC.x - 0.4, XC.y - 0.95, 0), math.pi)
-            reach(h, "R", Vector((XC.x - 0.3, XC.y - 0.53, 1.24)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, 0)))
+            twp.work(h, {"R": Vector((XC.x - 0.3, XC.y - 0.55, 1.2))}, hand_dir=Vector((0, 1, 0)), head=0)
     elif shot == "film":
         fo = c["film_objs"][1].matrix_world.translation
         place(ar, (LB.x - 0.55, fo.y - 0.62, 0), math.pi / 2 + 0.5)          # beside the box, half turned to it
-        reach(ar, "L", fo + Vector((-0.04, -0.2, 0.17)), Vector((-0.3, -0.5, -0.8)), Vector((1, 0, 0.2)))
+        twp.work(ar, {"L": fo + Vector((-0.04, -0.12, 0.12))}, hand_dir=Vector((1, 0, 0.2)), head=0)
     elif shot in ("debate", "memory", "motorfilm"):
         fo = c["film_objs"][1 if shot != "motorfilm" else 2].matrix_world.translation
         group = (tA, tC, tD) if shot != "motorfilm" else (tC,)
@@ -398,9 +395,7 @@ def animate(c, sec, shot):
         reach(group[0], "L", fo + Vector((-0.04 - 0.03 * tap, -0.12, 0.0)), Vector((-0.3, -0.5, -0.8)), Vector((1, 0, 0)))
     elif shot == "pair":
         place(tE, (PAIR.x + 1.0, PAIR.y - 0.62, 0), math.pi + 0.7)            # at the end of the pair, bent over the right-hand machine
-        reach(tE, "R", Vector((PAIR.x + 0.62, PAIR.y - 0.28, 0.95)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, -0.4)))
-        reach(tE, "L", Vector((PAIR.x + 0.85, PAIR.y - 0.3, 0.93)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, -0.4)))
-        tE.rot("head", (1, 0, 0), 18)
+        twp.work(tE, {"R": Vector((PAIR.x + 0.6, PAIR.y - 0.26, 0.95)), "L": Vector((PAIR.x + 0.84, PAIR.y - 0.34, 0.93))}, head=18)
     # the pair: both bars lifted out and laid in front; the altered bar's lid slides off in "barlid"
     for k, tw in enumerate(c["pair"]):
         bar, lid = tw["bar"], tw["bar_lid"]
@@ -433,20 +428,20 @@ def V3(*a):
 
 CAMS = {
     "team": lambda c, t: (V3(5.6, -3.4, 2.3).lerp(V3(5.0, -3.0, 2.2), ease(t)), V3(-1.0, 0.6, 0.9), 24),
-    "calendar": lambda c, t: (V3(1.6, 0.9, 1.6).lerp(V3(1.3, 1.2, 1.6), ease(t)), V3(-1.0, 3.8, 1.55), 28),
+    "calendar": lambda c, t: (V3(3.3, -0.6, 1.75).lerp(V3(3.0, -0.35, 1.72), ease(t)), V3(-0.6, 3.6, 1.35), 30),
     "clear": lambda c, t: (V3(4.6, 0.2, 1.65).lerp(V3(4.3, 0.4, 1.6), ease(t)), V3(2.4, 2.4, 1.05), 30),
     "stack": lambda c, t: (V3(1.6, -0.6, 1.7).lerp(V3(1.3, -0.8, 1.65), ease(t)), V3(-1.5, -3.5, 0.75), 28),
     "row": lambda c, t: (V3(-5.6, ROW_Y - 1.6, 1.45).lerp(V3(-5.3, ROW_Y - 1.4, 1.42), ease(t)), V3(-3.6, ROW_Y + 0.05, 1.0), 32),
     "covers": lambda c, t: (V3(-4.8 + 4.0 * ease(t), ROW_Y + 1.5, 1.55), V3(-3.6 + 4.0 * ease(t), ROW_Y, 1.0), 30),
     "lone": lambda c, t: (V3(-2.2, ROW_Y - 2.4, 1.6).lerp(V3(-2.5, ROW_Y - 2.1, 1.55), ease(t)), V3(-4.5, ROW_Y - 0.3, 1.0), 30),
-    "coil": lambda c, t: (T.world(c["row"][0], (0.42, -0.45, 0.34)).lerp(T.world(c["row"][0], (0.34, -0.36, 0.27)), ease(t)), T.world(c["row"][0], (0.12, -0.06, 0.05)), 45),
+    "coil": lambda c, t: (T.world(c["row"][0], (0.36, -0.3, 0.24)).lerp(T.world(c["row"][0], (0.3, -0.25, 0.2)), ease(t)), T.world(c["row"][0], (0.162, -0.068, 0.035)), 55),
     "cabinet": lambda c, t: (XC + V3(-2.6, -2.6, 1.6).lerp(V3(-2.3, -2.3, 1.55), ease(t)), XC + V3(-0.1, -0.8, 0.9), 30),
     "film": lambda c, t: (V3(LB.x - 2.0, LB.y + 0.9, 1.65).lerp(V3(LB.x - 1.7, LB.y + 0.75, 1.62), ease(t)), V3(LB.x, LB.y - 0.2, 1.5), 32),
-    "debate": lambda c, t: (V3(LB.x - 0.45, LB.y + 1.9, 1.65).lerp(V3(LB.x - 0.6, LB.y + 1.7, 1.62), ease(t)), V3(LB.x - 1.0, LB.y - 0.4, 1.4), 26),
+    "debate": lambda c, t: (V3(LB.x - 0.3, LB.y + 2.45, 1.72).lerp(V3(LB.x - 0.45, LB.y + 2.25, 1.7), ease(t)), V3(LB.x - 0.95, LB.y - 0.45, 1.4), 30),
     "memory": lambda c, t: (MEM + V3(-1.5, -0.9, 0.45).lerp(V3(-1.25, -0.75, 0.38), ease(t)), MEM + V3(0, 0, 0.1), 35),
     "pair": lambda c, t: (PAIR + V3(-1.3, -1.9, 0.65).lerp(V3(-1.1, -1.65, 0.6), ease(t)), PAIR + V3(0.15, -0.1, 0.2), 30),
     "barlid": lambda c, t: (PAIR + V3(0.95, -0.65, 0.32).lerp(V3(0.85, -0.55, 0.27), ease(t)), PAIR + V3(0.55, -0.16, 0.01), 45),
-    "bars": lambda c, t: (PAIR + V3(1.25, -0.6, 0.3).lerp(V3(1.25, -0.5, 0.25), ease(t)), PAIR + V3(1.3, -0.2, 0.0), 45),
+    "bars": lambda c, t: (PAIR + V3(1.32, -0.78, 0.46).lerp(V3(1.3, -0.68, 0.41), ease(t)), PAIR + V3(1.27, -0.2, 0.0), 40),
     "inspect78": lambda c, t: (XC + V3(0.9, -2.5, 1.55).lerp(V3(0.75, -2.2, 1.5), ease(t)), XC + V3(-0.2, -0.6, 0.85), 30),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
 }
@@ -455,7 +450,7 @@ MOVES = {k: dict(kind="anim", dof=3.0, cam=fn, anim=anim(k)) for k, fn in CAMS.i
 MOVES["team"]["title"] = ("CHAPTER 2", "THE X-RAY", 10, 130)
 MOVES["team"]["dof"] = None
 for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04))), ("barlid", lambda c, t: PAIR + V3(0.55, -0.12, 0.0)),
-               ("bars", lambda c, t: PAIR + V3(1.3, -0.2, 0.0)), ("film", lambda c, t: V3(LB.x, LB.y, 1.55)), ("memory", lambda c, t: MEM + V3(0, 0, 0.1))):
+               ("bars", lambda c, t: PAIR + V3(1.27, -0.2, 0.01)), ("film", lambda c, t: V3(LB.x, LB.y, 1.55)), ("memory", lambda c, t: MEM + V3(0, 0, 0.1))):
     MOVES[k]["focus"] = foc
     MOVES[k]["dof"] = 4.0
 for k in MOVES:

@@ -104,6 +104,7 @@ def build(variant=None):
     c["cable"] = cab
     reel = cyl("CableReel", (0, 0, 0), 0.14, 0.08, pbr("Reel", (0.35, 0.3, 0.2), 0.6), verts=24, rot=(math.radians(90), 0, 0))
     c["reel"] = reel
+    box("CableBeam", (0.5, 1.38, 2.27), (13.0, 0.09, 0.07), ph.texture("brown_planks_03", scale=0.5, name="BeamWood"))   # the purlin the cable is clipped under
     for k in range(12):
         cyl("Clip", (6.5 - k * 0.6, 1.35, 2.2), 0.012, 0.02, pbr("ClipM", (0.6, 0.6, 0.6), 0.3, 1.0), verts=8)
     ht, _ = ph.model("hand_truck")
@@ -184,7 +185,7 @@ def cam_staple(c, t):
 def cam_cable(c, t):
     e = ease(t)
     tc = c["tech"].arm.location
-    return (Vector((tc.x + 1.6, 0.2, 1.65)), Vector((tc.x - 0.8, 1.3, 2.0)), 30)              # behind him, along the rafters he is wiring
+    return (Vector((tc.x + 3.4 - 0.3 * e, -0.1, 1.85)), Vector((tc.x - 1.4, 1.25, 1.75)), 28)              # behind him, along the rafters he is wiring
 
 
 MOVES = {
