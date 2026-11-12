@@ -26,7 +26,8 @@ def build(variant=None):
     world_sky(sun_elev_deg=18, sun_rot_deg=100, strength=0.5, tint=(0.88, 0.93, 1.0))
     sun(18, 20, energy=1.8, color=(0.92, 0.95, 1.0), angle_deg=3.0)
     bpy.context.scene.view_settings.exposure = 0.35
-    oak = pbr("COak", (0.2, 0.12, 0.065), 0.42, 0.0, **{'Coat Weight': 0.25}); dark = pbr("CDark", (0.075, 0.045, 0.026), 0.4, 0.0, **{'Coat Weight': 0.3})
+    oak = wood("COak", (0.17, 0.1, 0.05), (0.26, 0.15, 0.08), scale=(0.04, 0.8, 0.8), rough=0.45, coat=0.2)      # grain enlarged ~8x
+    dark = wood("CDark", (0.06, 0.035, 0.02), (0.11, 0.065, 0.035), scale=(0.04, 0.8, 0.8), rough=0.42, coat=0.25)
     pl = pbr("CPlaster", (0.66, 0.63, 0.56), 0.9)
     box("Floor", (0, 2, -0.02), (14, 18, 0.04), fabric("CourtCarpet", (0.2, 0.08, 0.06), 0.95, 0.2, 500))
     box("WallBack", (0, 9.5, 3.5), (14, 0.2, 7), dark)
@@ -35,7 +36,7 @@ def build(variant=None):
     H.wall_y("WinWall", -7, 11, 7, 0, 7, 0.25, pl, [(y - 0.7, y + 0.7, 1.4, 5.6) for y in (-3, 0.5, 4, 7.5)])
     for y in (-3, 0.5, 4, 7.5):
         H.window_unit('y', y, 1.4, 7.0, 1.4, 5.6)
-    c["haze"] = haze((0, 2, 3.5), (13.6, 18, 7), density=0.008, color=(1.0, 0.95, 0.85), anis=0.6)
+    sc_ = bpy.context.scene; sc_.cycles.sample_clamp_indirect = 3.0; sc_.cycles.use_denoising = True   # no speckle on panelling
     for x in (-3, 0, 3):
         H.point((x, 3, 6.2), 60, (1.0, 0.85, 0.65), 0.3)
     box("Bench", (0, 7.6, 0.95), (4.4, 1.2, 1.9), dark, bevel=0.02); box("BenchTop", (0, 7.6, 1.92), (4.6, 1.3, 0.05), oak)
@@ -76,9 +77,9 @@ def build(variant=None):
     jk = ["neighbour_m", "captain", "son", "detective2", "neighbour_m", "captain", "son", "neighbour_m", "detective2", "captain", "son", "neighbour_m"]
     jury = {"j%d" % (k + 1): jk[k] for k in range(12)}
     gallery = {"g%d" % (k + 1): ("detective", "detective2", "officer", "son")[k % 4] for k in range(8)}
-    kinds = {"prosecutor": dict(pr="detective2", **jury, **gallery),
+    kinds = {"prosecutor": dict(pr="detective2", judge="judge", **jury, **gallery),
              "stand": {"def": "thin_court", "judge": "judge"},
-             "jury_in": dict(jury),
+             "jury_in": dict(judge="judge", **jury),
              "gavel": {"def": "thin_court", "judge": "judge", "law": "detective2"}}[variant]
     c["cast"] = {k: H.person(v.capitalize() + k, v) for k, v in kinds.items()}
     return c
@@ -98,7 +99,7 @@ GALLERY = [(x, -1.2 - k * 1.2) for k in range(2) for x in (-3.8, -2.0, 1.9, 3.6)
 
 
 def anim_prosecutor(c, t):
-    sec = t * DUR["prosecutor"]
+    sec = t * DUR["prosecutor"]; judge(c, sec)
     for k in range(12):
         x, y = JURY[k]; key = "j%d" % (k + 1)
         seat(c["cast"][key], Vector((x, y, 0)), math.radians(-90), 6, floor=0.24 if y > 2 else 0.0)
@@ -112,13 +113,15 @@ def anim_prosecutor(c, t):
 
 def anim_stand(c, t):
     sec = t * DUR["stand"]; judge(c, sec)
+    if "key" not in c:
+        c["key"] = area_light((1.6, 6.6, 2.2), (0, 0, 0), 0.8, 120, (1.0, 0.95, 0.88)); point_at(c["key"], (3.2, 6.9, 1.3)); c["key"].visible_camera = False
     d = c["cast"]["def"]; seat(d, Vector((3.2, 6.9, 0.25)), 0.0, 10, floor=0.25)          # faces the court
     H.look(d, 10 * math.sin(0.8 * sec), 8)
     reach(d, "R", Vector((3.05, 6.55, 0.95)), Vector((0, 0, -1)), Vector((0, -1, 0)))
 
 
 def anim_jury(c, t):
-    sec = t * DUR["jury_in"]
+    sec = t * DUR["jury_in"]; judge(c, sec)
     keys = tuple("j%d" % (k + 1) for k in range(12))
     for k, key in enumerate(keys):
         h = c["cast"][key]; x, y = JURY[k]
@@ -136,8 +139,8 @@ def anim_jury(c, t):
 
 def anim_gavel(c, t):
     sec = t * DUR["gavel"]; judge(c, sec)
-    d = c["cast"]["def"]; seat(d, Vector((1.6, 2.4, 0)), math.pi, 10)             # facing the bench
-    H.rotl(d, "head", (1, 0, 0), 18)
+    d = c["cast"]["def"]; H.stand_at(d, (1.6, 2.2, 0), math.pi)                   # standing for the verdict
+    H.rotl(d, "head", (1, 0, 0), 14)
     l = c["cast"]["law"]; seat(l, Vector((2.4, 2.4, 0)), math.pi, 10)
     hit = 1.0 - max(0.0, math.sin(math.pi * min(1.0, max(0.0, (sec - 2.0) / 0.6))))
     gz = 1.98 + 0.25 * (1 - hit) if sec < 2.6 else 1.98
@@ -149,10 +152,10 @@ MOVES = {
     "prosecutor": dict(kind="anim", dof=None, far=30, anim=anim_prosecutor,
                        cam=lambda c, t: (Vector((5.6, -5.2, 2.5)).lerp(Vector((5.2, -4.6, 2.45)), ease(t)), Vector((-2.2, 2.2, 1.0)), 24)),
     "stand": dict(kind="anim", dof=None, far=30, anim=anim_stand,
-                  cam=lambda c, t: (Vector((1.6, 3.6, 1.45)).lerp(Vector((1.9, 4.2, 1.45)), ease(t)), Vector((3.2, 6.85, 1.3)), 36)),
+                  cam=lambda c, t: (Vector((1.2, 5.9, 1.45)).lerp(Vector((1.5, 6.0, 1.45)), ease(t)), Vector((3.2, 6.95, 1.3)), 40)),
     "jury_in": dict(kind="anim", dof=None, far=30, anim=anim_jury,
                     cam=lambda c, t: (Vector((-0.4, -0.4, 1.5)).lerp(Vector((-0.6, 0.0, 1.5)), ease(t)), Vector((-4.0, 1.7, 1.1)), 28)),
     "gavel": dict(kind="anim", dof=4.0, far=30, anim=anim_gavel,
-                  cam=lambda c, t: (Vector((2.3, 0.7, 1.45)).lerp(Vector((2.2, 1.1, 1.45)), ease(t)), Vector((0.6, 7.2, 1.8)), 40),
-                  focus=lambda c, t: Vector((0.4, 7.2, 2.0))),
+                  cam=lambda c, t: (Vector((3.4, 1.2, 1.6)).lerp(Vector((3.1, 1.45, 1.6)), ease(t)), Vector((1.1, 3.6, 1.6)), 34),
+                  focus=lambda c, t: Vector((1.6, 2.2, 1.6))),
 }

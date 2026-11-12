@@ -55,6 +55,9 @@ def build(variant=None):
         NP.newsprint = lambda path, W=1024, H=1400: front_page(path)
         os.makedirs(GEN, exist_ok=True); NP.GEN = GEN                  # write our page into the project, never the shared asset
         c = NP.build(); c["np"] = NP
+        for o in bpy.data.objects:                       # open the near side frames so the cylinders and web read
+            if o.name.startswith("UnitL"):
+                o.hide_render = True
         bpy.context.scene.view_settings.exposure = 0.3
         return c
     c = {}
@@ -114,8 +117,8 @@ def anim_stacks(c, t):
 
 MOVES = {
     "presses": dict(kind="anim", dof=4.0, far=40, anim=anim_presses,
-                    cam=lambda c, t: (Vector((-9.0 + 8.0 * ease(t), -7.5, 2.0)), Vector((-3.0 + 8.0 * ease(t), 0.0, 2.3)), 28),
-                    focus=lambda c, t: Vector((-4.0 + 9.0 * ease(t), 0.0, 2.2))),
+                    cam=lambda c, t: (Vector((-6.0 + 17.0 * ease(t), -4.2, 2.3 - 0.6 * ease(t))), Vector((-2.0 + 16.0 * ease(t), 0.0, 1.9 - 0.8 * ease(t))), 30),
+                    focus=lambda c, t: Vector((-2.0 + 16.0 * ease(t), 0.0, 1.6))),
     "stacks": dict(kind="anim", dof=2.8, far=20, anim=anim_stacks,
                    cam=lambda c, t: (Vector((1.2, -4.6, 1.45)).lerp(Vector((1.6, -4.5, 1.4)), ease(t)), Vector((2.4, -3.4, 0.95)), 32),
                    focus=lambda c, t: Vector((2.4, -3.4, 0.95))),

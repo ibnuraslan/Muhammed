@@ -28,12 +28,12 @@ def mountains():
     ridge = np.clip((Y + 0.2) * 1.4, 0, 1)
     h = (h * 0.5 + 0.6) * ridge
     o = grid_mesh("Mountains", h.astype(np.float32), 2400, 1200, 420, origin=(0, 900, -20))
-    o.data.materials.append(H.ph.texture("rock_face", 0.004, name="MtnRock", tint=(0.78, 0.5, 0.38)))       # red-rock foothills (Royal Gorge)
+    o.data.materials.append(H.ph.texture("rock_face", 0.004, name="MtnRock", tint=(0.55, 0.3, 0.22)))       # darker red-rock foothills (Royal Gorge)
     return o
 
 
 def stone():
-    return H.ph.texture("stone_wall", 0.45, name="PenStone", tint=(0.66, 0.66, 0.66))                     # grey granite
+    return H.ph.texture("stone_wall", 0.45, name="PenStone", tint=(0.33, 0.36, 0.42))                     # grey granite block
 
 
 def build(variant=None):
@@ -61,7 +61,7 @@ def build(variant=None):
         H.point((0, -2.5, 2.6), 20, (1.0, 0.8, 0.55), 0.2)
         c["man"] = H.person("Thin", "thin_court")
         return c
-    world_sky(sun_elev_deg=20, sun_rot_deg=120, strength=0.6, tint=(0.85, 0.92, 1.0))            # cold clear winter sky
+    world_sky(sun_elev_deg=20, sun_rot_deg=120, strength=0.7, tint=(0.72, 0.84, 1.0))            # cold clear winter sky
     sun(20, -30, energy=3.0, color=(1.0, 0.95, 0.88), angle_deg=1.0)
     bpy.context.scene.view_settings.exposure = -0.4
     mountains()
@@ -69,9 +69,9 @@ def build(variant=None):
     # pines dotting the foothills, and the nearer slopes
     rng = np.random.default_rng(4); pine = pbr("Pine", (0.04, 0.08, 0.05), 0.85); trunk = pbr("PTrunk", (0.12, 0.08, 0.05), 0.9)
     for k in range(260):
-        x = rng.uniform(-260, 260); y = rng.uniform(70, 420)
-        if abs(x) < 70 and y < 120: continue
-        sc_ = rng.uniform(3.0, 7.0)
+        x = rng.uniform(-200, 200); y = rng.uniform(15, 160)
+        if abs(x) < 18 and y < 45: continue
+        sc_ = rng.uniform(4.0, 8.0)
         bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.35 * sc_, radius2=0.0, depth=sc_ * 1.6, location=(x, y, sc_ * 0.8 + 0.02 * y))
         bpy.context.active_object.data.materials.append(pine)
     for k in range(40):
@@ -82,6 +82,14 @@ def build(variant=None):
         bpy.context.active_object.data.materials.append(pine)
         cyl("PTrunkC", (x, y, 0.3), 0.08 * sc_, 0.6, trunk, 8)
     snow = pbr("Snow", (0.85, 0.87, 0.9), 0.6)
+    dg = bpy.context.evaluated_depsgraph_get()
+    for k in range(90):                                                     # snow patches lying on the hills
+        x_, y_ = rng.uniform(-600, 600), rng.uniform(320, 1100)
+        ok, loc, nrm, *_ = bpy.context.scene.ray_cast(dg, Vector((x_, y_, 800)), Vector((0, 0, -1)))
+        if not ok or loc.z < 30: continue
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=6, radius=1, location=loc)
+        o_ = bpy.context.active_object; o_.scale = (rng.uniform(12, 40), rng.uniform(8, 22), 2.0); o_.data.materials.append(snow)
+        o_.rotation_euler = Vector((0, 0, 1)).rotation_difference(nrm).to_euler()
     for k in range(22):                                                     # a little snow in the shadow of the wall
         box("SnowPatch", (rng.uniform(-55, 55), rng.uniform(0.9, 2.2), 0.0), (rng.uniform(2, 7), rng.uniform(0.6, 1.4), 0.06), snow, bevel=0.03)
     box("Road", (0, -30, -0.02), (7, 60, 0.05), H.mat("asphalt"))

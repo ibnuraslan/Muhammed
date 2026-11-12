@@ -586,7 +586,13 @@ def kitchen_set(c):
     """Kitchen x[-1.5,4.2] y[-0.2,4.7]: stove on the right wall, icebox by the back door, table, sink under the window."""
     c["stove"] = stove((3.75, 1.6, 0), math.radians(90))
     ib, door = icebox((-0.85, 4.35, 0), 0.0); c["icebox"] = ib; c["ice_door"] = door
-    for (cx, cy, sx, sy) in ((1.35, 4.68, 5.6, 0.02), (4.18, 2.25, 0.02, 4.8), (1.35, -0.13, 5.6, 0.02)):
+    # beadboard wainscot, broken at the door openings (back door; the doors through to the hall and front room)
+    bx0, bx1 = BACK_DOOR[0] - BACK_DOOR[1] / 2, BACK_DOOR[0] + BACK_DOOR[1] / 2
+    runs = [(-1.45, bx0, 4.68, 'x'), (bx1, 4.15, 4.68, 'x'), (-0.2, 4.7, 4.18, 'y'),
+            (-1.45, -0.55, -0.13, 'x'), (0.0, 2.4, -0.13, 'x'), (3.3, 4.15, -0.13, 'x')]
+    for (a, b, w, ax) in runs:
+        if b - a < 0.05: continue
+        cx, cy, sx, sy = ((a + b) / 2, w, b - a, 0.02) if ax == 'x' else (w, (a + b) / 2, 0.02, b - a)
         box("Wainscot", (cx, cy, 0.6), (sx, sy, 1.2), pbr("Beadboard", (0.72, 0.74, 0.62), 0.5))
         box("WainCap", (cx, cy, 1.21), (sx + 0.01, sy + 0.03, 0.03), mat("trim"))
     box("Sink", (1.1, 4.4, 0.85), (1.1, 0.5, 0.2), mat("enamel"), bevel=0.03)
@@ -915,6 +921,7 @@ def person(name, kind):
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=1.6, hat=False),
         "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="short02", hv=0.12, hat=False),
         "thin_court": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.1, val=0.35), hair="short02", hv=0.12, hat=False),
+        "philip_pj": dict(gender=1.0, years=86, weight=0.38, height=0.4, cloth="male_casualsuit03", cv=dict(hue=0.55, sat=0.25, val=1.6), hair="short02", hv=2.8, hat=False, skin="old_lightskinned_male_diffuse.png"),
         "judge": dict(gender=1.0, years=64, weight=0.55, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.05), hair="short02", hv=2.2, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=2.2), hair="roll", roll=(0.5, 0.0), hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit01", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
@@ -933,8 +940,8 @@ def person(name, kind):
     if spec["gender"] < 0.5:
         long_skirt(h)
     elif kind != "thin" and "casualsuit" in spec["cloth"]:
-        wool_trousers(h, (0.2, 0.17, 0.13) if kind == "philip" else (0.14, 0.14, 0.15))
-    if kind in ("philip", "helen"):
+        wool_trousers(h, (0.2, 0.17, 0.13) if kind == "philip" else (0.5, 0.55, 0.62) if kind == "philip_pj" else (0.14, 0.14, 0.15))
+    if kind in ("philip", "philip_pj", "helen"):
         aged_face(h)
     if kind == "thin":
         ragged(h); coneys_hair(h)
@@ -1088,7 +1095,7 @@ def reset_pose(h):
     The elderly keep a slight stoop (upper back rounded, head forward)."""
     h.arm.rotation_euler = (0, 0, 0)
     _hm.reset_pose(h)
-    if getattr(h, "kind", "") in ("philip", "helen"):
+    if getattr(h, "kind", "") in ("philip", "philip_pj", "helen"):
         for b, d in (("spine03", 6), ("spine01", 7), ("neck01", 9)):
             if b in h.arm.pose.bones: rotl(h, b, (1, 0, 0), d)
 

@@ -892,7 +892,7 @@ def _():
         _club(c, t * DUR["club_guest"], with_guest=True)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.65, -2.35, 1.45)).lerp(Vector((0.85, -2.6, 1.42)), e), Vector((1.25, -3.3, 1.1)), 40)   # push in behind the guest to his profile
+        return (Vector((1.05, -4.45, 1.55)).lerp(Vector((1.15, -4.25, 1.52)), e), Vector((2.4, -2.6, 1.05)), 26)   # three-quarter behind him, the circle beyond
     return cam, anim
 
 
@@ -935,7 +935,7 @@ def _():
         c["sunin"].data.energy = 300 * ease(min(1.0, max(0.0, (sec - 0.6) / 3.0)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.9, 2.3, 1.5)).lerp(Vector((2.1, 2.7, 1.48)), e), Vector((3.35, D2, 1.05)), 28)
+        return (Vector((-1.2, 0.15, 1.7)).lerp(Vector((-1.05, 0.4, 1.68)), e), Vector((1.9, 3.7, 0.9)), 22)
     return cam, anim
 
 
@@ -1009,7 +1009,7 @@ def crouch(h, xy, rz, lean=30):
 def _icebox_scene(c, sec):
     c["ice_door"].rotation_euler = (0, 0, math.radians(-100))
     if "iceglow" not in c:
-        c["iceglow"] = H.point((-0.85, 4.05, 0.55), 6, (0.8, 0.9, 1.0), 0.15)
+        c["iceglow"] = H.point((-0.85, 3.95, 0.8), 28, (0.78, 0.88, 1.0), 0.15)
         c["roast"] = cyl("Roast", (0, 0, 0), 0.09, 0.08, pbr("Roast", (0.28, 0.12, 0.05), 0.6), 20)
     h = P(c, "y")
     reset_pose(h); pose_sit(h, lean=35)
@@ -1030,7 +1030,7 @@ def _():
     return cam, anim
 
 
-@move("philip_doorway", "night", 4.5, cast=("p:philip", "y:thin"), rooms=("kitchen", "front", "bedroom"))
+@move("philip_doorway", "night", 4.5, cast=("p:philip_pj", "y:thin"), rooms=("kitchen", "front", "bedroom"))
 def _():
     def anim(c, t):
         sec = t * DUR["philip_doorway"]
@@ -1042,7 +1042,7 @@ def _():
         H.look(p, 15, 10)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.25, 3.95, 1.55)).lerp(Vector((-0.2, 3.85, 1.55)), e), Vector((-0.3, -0.35, 1.35)), 30)   # over Coneys at the icebox to Philip in the doorway
+        return (Vector((-0.5, 3.75, 1.4)).lerp(Vector((-0.48, 3.65, 1.42)), e), Vector((-0.25, -0.35, 1.25)), 30)   # past Coneys's shoulder to Philip
     return cam, anim
 
 
@@ -1161,11 +1161,18 @@ def _():
         sec = t * DUR["dust_sheets"]
         if "sheets" not in c:
             sh = fabric("DustSheet", (0.86, 0.84, 0.78), 0.9, 0.5, 400)
-            c["sheets"] = []
-            for (x, y, sx, sy, sz) in ((3.2, -2.0, 1.0, 1.0, 1.1), (4.0, -3.0, 0.6, 0.6, 1.2)):
-                bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(x, y, 0))
-                o = bpy.context.active_object; o.scale = (sx / 1.6, sy / 1.6, sz); o.data.materials.append(sh); c["sheets"].append(o)
             c["armchair"].location = (3.2, -2.0, 0)
+            # draped cloth over the armchair and a sofa-shaped settee, folds pooling on the floor (as the intro sheets)
+            import ph as _ph
+            sofa = join([box("Settee", (3.0, -4.15, 0.25), (1.9, 0.75, 0.42), H.mat("oak"), bevel=0.06),
+                         box("SetteeBack", (3.0, -4.45, 0.62), (1.9, 0.18, 0.55), H.mat("oak"), bevel=0.06),
+                         box("SetteeArmL", (2.1, -4.15, 0.48), (0.16, 0.75, 0.32), H.mat("oak"), bevel=0.05),
+                         box("SetteeArmR", (3.9, -4.15, 0.48), (0.16, 0.75, 0.32), H.mat("oak"), bevel=0.05)], "Settee")
+            c["sheets"] = []
+            for k, key in enumerate(("armchair",)):
+                c["sheets"].append(H.drape("DSheet%d" % k, [c[key]], seed=21 + k)); c[key].hide_render = True
+                for ch in c[key].children_recursive: ch.hide_render = True
+            c["sheets"].append(H.drape("DSheetSofa", [sofa], seed=31)); sofa.hide_render = True
             c["flying"] = box("FlyingSheet", (0, 0, 0), (1.6, 1.4, 0.01), sh)
             c["flying"].modifiers.new("w", 'WAVE').height = 0.06
         h = P(c, "s"); H.stand_at(h, (2.2, -1.4, 0), math.radians(-130))
@@ -1176,7 +1183,7 @@ def _():
             reach(h, sd, c["flying"].location + Vector((-0.6, 0.35 * (1 if sd == "L" else -1), 0.0)), Vector((0, 0, -1)), Vector((1, -1, -0.5)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.1, -4.3, 1.6)).lerp(Vector((1.35, -4.2, 1.58)), e), Vector((2.6, -1.5, 0.9)), 26)
+        return (Vector((0.95, -4.35, 1.8)).lerp(Vector((1.1, -4.2, 1.78)), e), Vector((2.7, -2.4, 0.7)), 22)
     return cam, anim
 
 
