@@ -123,6 +123,11 @@ def park(n, f):
 TELE = {n: set() for n in ALL}
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())     # shared presets: relaxed, wrap_grip, pinch, tripod ...
 for _n in RIG: add_hand_limits(RIG[_n].o)
+m_strap_h = bpy.data.materials.new("M_Harness"); m_strap_h.use_nodes = True
+m_strap_h.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.9, 0.45, 0.05, 1)
+def key_elbow(n, s, f, pole_w):
+    pb = RIG[n].PB["Pole_elbow." + s]; nm = "Pole_elbow." + s
+    pb.location = RIG[n].rest(nm).to_3x3().inverted() @ (pole_w - RIG[n].BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
 def key_fingers(n, s, f, pose):
     """key a shared hand_poses preset; numbers map to the nearest preset (no hand-set finger angles)"""
     if not isinstance(pose, str):
@@ -610,6 +615,13 @@ for f in (2329, 2345, 2365, 2385, 2406):
 kneel("DiverB", 2415, P2.x - 0.45, P2.y - 0.45, 135, lean=30, head=(25, 0))
 seated("Boy2", 2415, P2.x, P2.y, -10, lean=14, head=(28, 20), hug=False)
 TOW0, TOW1 = 2421, 2570
+# tow harness: a webbing handle on the boy's chest (Child Of spine02), the diver grips it
+bpy.ops.mesh.primitive_torus_add(major_radius=0.045, minor_radius=0.011, major_segments=24, minor_segments=8, rotation=(R_(90), 0, 0))
+harness = bpy.context.active_object; harness.name = "Prop_TowHarness"; harness.data.materials.append(m_strap_h)
+harness.location = rest_head("Boy2", "spine02") + V((0, -0.16, 0.0))
+rest_attach(harness, "Boy2", "spine02")
+for f_, h_ in ((1, True), (2415, True), (2416, False), (2575, True)):
+    harness.hide_render = h_; harness.keyframe_insert("hide_render", frame=f_)
 for f in range(TOW0, TOW1 + 1, 10):
     u = (f - TOW0) / (TOW1 - TOW0); y = -1.6 - 10.3 * u      # starts behind the diving camera, swims into frame
     sq = math.exp(-((y + 13.0) ** 2) / 4.0)
@@ -623,8 +635,9 @@ for f in range(TOW0, TOW1 + 1, 10):
     key_hands("Boy2", f, Pb, Rb, {s: relaxed_hand("Boy2", Pb, Rb, s, out=0.02) for s in "LR"})
     # diver's left hand on the harness at the boy's chest
     ch_ = bw("Boy2", Pb, Rb, rest_head("Boy2", "spine02")) + V((0, 0, 0.12))
-    key_fingers("DiverB", "L", f, "wrap_grip")
-    HUM["DiverB"].key_hand("L", f, ch_ + V((0.08, 0, 0.05)), V((-1, 0, -0.3)).normalized(), V((0, 0, -1)), ch_ + V((0.5, 0.3, 0.4)))
+    ev(f); hpt = harness.matrix_world.translation
+    grip_object(RIG["DiverB"].o, "L", f, harness, hpt, V((0, 0, -1)))                          # fingers wrap the harness handle
+    key_elbow("DiverB", "L", f, hpt + V((0.5, 0.3, 0.4)))
 for n in ("DiverB", "Boy2"): TELE[n].add(TOW0 - 1)
 # mask: Child Of Boy2's head from the fitting onward
 ev(2366)
@@ -681,10 +694,9 @@ for f in range(OUT0, OUT1 + 1, 6):
     for n, end, inward in (("DiverA", mid + d_ * 1.2, -d_), ("DiverB", mid - d_ * 1.2, d_)):
         for s in "LR":
             sx = 1 if s == "L" else -1
-            grip = end + sdv * (0.29 * (1 if (s == "L") == (n == "DiverB") else -1)) + V((0, 0, 0.025))   # on the pole, palm over it
-            W = grip - inward * 0.0 + V((0, 0, 0.03))
-            HUM[n].key_hand(s, f, W, inward, V((0, 0, -1)), W + V((0.0, 0.0, 0.5)) - inward * 0.3)
-            key_fingers(n, s, f, "wrap_grip")
+            pole_pt = end + sdv * (0.29 * (1 if (s == "L") == (n == "DiverB") else -1))       # centre of the pole
+            ev(f); grip_object(RIG[n].o, s, f, stre, pole_pt, V((0, 0, -1)))                     # fingers wrap the pole from above
+            key_elbow(n, s, f, pole_pt + V((0.4 * (1 if pole_pt.x > mid.x else -1), 0, -0.2)) - inward * 0.25)
     # Boy4 lies on the stretcher (face up, head toward the front carrier)
     H = HUM["Boy4"]; Rb = body_R(0, -88) ; Pboy = mid + V((0, 0.15, 0.0))
     H.key_root(f, Pboy, yaw=0, flex=-88); H.key_spine(f, head=(-5, 0))

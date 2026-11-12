@@ -12,6 +12,7 @@ wipe = bpy.data.objects.get("CAM_RockWipe")
 if wipe: wipe.hide_render = True
 sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 8; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = 'JPEG'
+OVR = {"diver_hands_on_ledge": ((0.0, 0.55, 0.35), 8), "medic_syringe_grip": ((0.35, -0.45, 0.1), 6)}   # label: (camera offset from the hand, light W)
 SHOTS = [  # label, frame, rig, hand bone, extra up
     ("walk_hand", 200, "Boy2", "wrist.L", 0.1), ("run_hand", 480, "Boy5", "wrist.R", 0.1),
     ("huddle_hands_on_knees", 1050, "HB2", "wrist.L", 0.15), ("huddle_hands_boy1", 1050, "Boy1", "wrist.R", 0.15),
@@ -30,6 +31,9 @@ for i, (lab, f, rn, bn, up) in enumerate(SHOTS):
     side = V((h.x - root.x, h.y - root.y, 0))
     side = side.normalized() if side.length > 1e-3 else V((1, 0, 0))
     cam.location = h + side * 0.38 + V((0, 0, 0.12 + up))
+    lt.data.energy = 25
+    if lab in OVR:
+        cam.location = h + V(OVR[lab][0]); lt.data.energy = OVR[lab][1]
     cam.rotation_euler = (h - cam.location).to_track_quat('-Z', 'Y').to_euler()
     lt.location = cam.location + V((0, 0, 0.25)); lt.rotation_euler = (h - lt.location).to_track_quat('-Z', 'Y').to_euler()
     sc.render.filepath = os.path.join(OUT, "c%02d_f%04d_%s.jpg" % (i, f, lab)); bpy.ops.render.render(write_still=True)
