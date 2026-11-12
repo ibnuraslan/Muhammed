@@ -635,8 +635,20 @@ def i2b(c, t):          # dusk, low close on the bucket hooking the shell, men s
     k = ease(min(1.0, sec / dur("intro_2b")))
     set_shell(c["hinge"], 8 + 62 * k); bpy.context.view_layer.update()
     edge = bpy.data.objects[c["hinge"]["fold"]].matrix_world @ Vector((0, 0.0, 0.38))
-    arm_ik(ex, edge + Vector((-0.35, 0, 0.55)))
-    b_ = ex["boom"].rotation_euler.y; s_ = ex["stick"].rotation_euler.y; ex["tool"].rotation_euler = (0, -(b_ + s_) + math.radians(95), 0)
+    # sane digging pose (boom up ~20 deg, stick down ~70 deg, bucket curled); the machine is placed so the
+    # bucket teeth land on the shell edge, about 4 m back from the container
+    from rs_vehicles import pose_arm as _pose, tool_point as _tp
+    goal = edge + Vector((-0.2, 0, 0.35))
+    d = Vector((C1.x - (-6.0), C1.y - 9.4, 0)).normalized(); head = math.atan2(d.y, d.x)
+    ex["base"].rotation_euler = (0, 0, head); ex["base"].location = (0, 0, 0)
+    best = None
+    for bdeg in range(5, 41):
+        _pose(ex, 0.0, math.radians(bdeg), math.radians(70), math.radians(-60))
+        z = _tp(ex).z
+        if best is None or abs(z - goal.z) < best[0]:
+            best = (abs(z - goal.z), bdeg)
+    _pose(ex, 0.0, math.radians(best[1]), math.radians(70), math.radians(-60))
+    tp = _tp(ex); ex["base"].location = (goal.x - tp.x, goal.y - tp.y, 0); bpy.context.view_layer.update()
     p0 = C1 + Vector((1.0, 0.2, 0)); p1 = C1 + Vector((2.4, 0.9, 0))
     q = p0.lerp(p1, ease(min(1.0, sec / 1.4)))
     stand_at(c["people"]["worker"], q, C1, crossed=True)
