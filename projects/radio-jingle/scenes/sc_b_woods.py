@@ -55,7 +55,7 @@ def build(variant=None):
             p = pts[k]
             cyl("Stake", (p.x, p.y, p.z / 2 + gz(p.x, p.y) / 2), 0.015, p.z - gz(p.x, p.y) + 0.05, pbr("StakeW", (0.18, 0.13, 0.08), 0.9), verts=8)
     if variant != "wire":
-        import sc_forest as F
+        import sc_woods as F
         c.update(F.build("grey|detective,detective2"))
         c["F"] = F
         man = B.pfaffinger("Guide")
