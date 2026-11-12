@@ -86,8 +86,8 @@ def P(pos, yaw): return Matrix.Translation(V(pos)) @ Matrix.Rotation(R_(yaw), 4,
 SETDEF = [  # name, frames [on, off), entry portal, exit portal (local pos, yaw of travel)
     ("S1_Courtyard", 1, 175, ((0, -14, 4), 0), ((3.0, 9.0, 6.0), 0)),
     ("S2_ThroneHall", 175, 588, ((0, -8.2, 4.0), 0), ((-1.0, 4.62, 1.22), 0)),
-    ("S3_Street", 588, 725, ((0, -9, 3.0), 0), ((-5.7, 6.0, 2.5), 90)),
-    ("S4_Chamber", 725, 1650, ((0, -5.2, 2.0), 0), ((5.2, -1.0, 1.9), -90)),
+    ("S3_Street", 588, 716, ((0, -9, 3.0), 0), ((-5.7, 6.0, 2.5), 90)),
+    ("S4_Chamber", 716, 1650, ((0, -5.2, 2.0), 0), ((5.2, -1.0, 1.9), -90)),
     ("S5_Church", 1650, 1872, ((0, -16, 2.5), 0), ((0, 7.5, 7.0), 0)),
     ("S6_Ballroom", 1872, 2004, ((0, -10.2, 5.2), 0), ((-8.2, 0.0, 1.8), 90)),
     ("S7_Bedroom", 2004, 2508, ((0, -4.7, 1.7), 0), ((4.7, -1.0, 1.7), -90)),
@@ -192,10 +192,15 @@ def tapestry(c, loc, rz, w=1.6, h=2.4, tint=(0.75, 0.2, 0.15)):
     m = bpy.data.materials.get(nm_)
     if not m:
         m = bpy.data.materials.new(nm_); m.use_nodes = True; N_, L_ = m.node_tree.nodes, m.node_tree.links
-        t_ = N_.new("ShaderNodeTexImage"); t_.image = TAPI; mp_ = N_.new("ShaderNodeMapping"); mp_.inputs["Scale"].default_value = (1.5, 2.2, 1); tc_ = N_.new("ShaderNodeTexCoord")
-        L_.new(tc_.outputs["UV"], mp_.inputs[0]); L_.new(mp_.outputs[0], t_.inputs[0])
-        mx_ = N_.new("ShaderNodeMix"); mx_.data_type = 'RGBA'; mx_.blend_type = 'MULTIPLY'; mx_.inputs[0].default_value = 1; mx_.inputs["B"].default_value = (*tint, 1)
-        L_.new(t_.outputs[0], mx_.inputs["A"]); L_.new(mx_.outputs["Result"], N_["Principled BSDF"].inputs["Base Color"]); N_["Principled BSDF"].inputs["Roughness"].default_value = 0.8
+        tc_ = N_.new("ShaderNodeTexCoord"); mp_ = N_.new("ShaderNodeMapping"); mp_.inputs["Scale"].default_value = (1.0, 1.4, 1); L_.new(tc_.outputs["UV"], mp_.inputs[0])
+        vo_ = N_.new("ShaderNodeTexVoronoi"); vo_.feature = 'SMOOTH_F1'; vo_.inputs["Scale"].default_value = 9.0; L_.new(mp_.outputs[0], vo_.inputs[0])
+        wv_ = N_.new("ShaderNodeTexWave"); wv_.inputs["Scale"].default_value = 14.0; wv_.inputs["Distortion"].default_value = 6.0; L_.new(mp_.outputs[0], wv_.inputs[0])
+        mm_ = N_.new("ShaderNodeMath"); mm_.operation = 'MULTIPLY'; L_.new(vo_.outputs["Distance"], mm_.inputs[0]); L_.new(wv_.outputs["Fac"], mm_.inputs[1])
+        mr_ = N_.new("ShaderNodeMapRange"); mr_.inputs[1].default_value = 0.15; mr_.inputs[2].default_value = 0.35; L_.new(mm_.outputs[0], mr_.inputs[0])
+        mx_ = N_.new("ShaderNodeMix"); mx_.data_type = 'RGBA'; L_.new(mr_.outputs[0], mx_.inputs[0])
+        mx_.inputs["A"].default_value = (*[v * 0.55 for v in tint], 1); mx_.inputs["B"].default_value = (*tint, 1)
+        L_.new(mx_.outputs["Result"], N_["Principled BSDF"].inputs["Base Color"]); N_["Principled BSDF"].inputs["Roughness"].default_value = 0.55
+        N_["Principled BSDF"].inputs["Sheen Weight"].default_value = 0.6
     o = plane("tapestry", c, (w, h), loc, m, (90, 0, rz))
     for i, (u, v) in enumerate([(0, 0), (1, 0), (1, 1), (0, 1)]): o.data.uv_layers[0].data[i].uv = (u, v)
     box("rod", c, (w + 0.2, 0.05, 0.05) if rz in (0, 180) else (0.05, w + 0.2, 0.05), (loc[0], loc[1], loc[2] + h / 2 + 0.03), M["gold"])
@@ -305,8 +310,8 @@ for x in (-3.5, 3.5):
     crowd_idle(W_, 175, 590, (x, 1.0), 90 if x > 0 else -90, "watch", seed=int(x))
 ch = inst(A_["Chandelier_01"] if "Chandelier_01" in A_ else A_["chandelier"], c, (0, 1.5, 5.2), s=1.0)
 for y_ in (-4.0, 2.5):
-    tapestry(c, (-5.95, y_, 3.2), 90, tint=(0.8, 0.25, 0.15)); tapestry(c, (5.95, y_, 3.2), -90, tint=(0.25, 0.35, 0.8))
-tapestry(c, (0, 7.95, 4.2), 180, w=3.0, h=3.0, tint=(0.25, 0.3, 0.85))
+    tapestry(c, (-5.95, y_, 3.2), 90, tint=(0.45, 0.03, 0.05)); tapestry(c, (5.95, y_, 3.2), -90, tint=(0.04, 0.10, 0.45))
+tapestry(c, (0, 7.95, 4.2), 180, w=3.0, h=3.0, tint=(0.04, 0.10, 0.45))
 box("wainscotN", c, (11.9, 0.08, 1.2), (0, 7.95, 0.6), M["oak"]); box("wainscotW2", c, (0.08, 15.9, 1.2), (-5.95, 0, 0.6), M["oak"]); box("wainscotE2", c, (0.08, 15.9, 1.2), (5.95, 0, 0.6), M["oak"])
 for x_ in (-1.8, 1.8): candelabra(c, (x_, 6.0), 1.5)
 inst(A_["GothicCabinet_01"], c, (4.8, 6.6, 0), rz=-90, s=0.9); inst(A_["ArmChair_01"], c, (-3.0, 5.5, 0), rz=200)
@@ -496,7 +501,7 @@ for k, x in enumerate((-1.4, 1.4)):
 # doctors at their desk, observing, writing
 desk = inst(A_["table"], c, (3.0, -2.45, 0), rz=90); desk.scale = (0.75, 0.8, 1.0)
 inst(A_["GothicCabinet_01"], c, (4.3, -4.4, 0), rz=0, s=0.9); inst(A_["GothicCabinet_01"], c, (-4.3, 3.0, 0), rz=-90, s=0.9)
-tapestry(c, (-4.95, -1.5, 2.4), 90, w=1.8, h=2.0, tint=(0.3, 0.45, 0.85)); tapestry(c, (0.0, 4.95, 2.6), 180, w=2.2, h=1.8, tint=(0.85, 0.3, 0.2))
+tapestry(c, (-4.95, -1.5, 2.4), 90, w=1.8, h=2.0, tint=(0.04, 0.10, 0.45)); tapestry(c, (0.0, 4.95, 2.6), 180, w=2.2, h=1.8, tint=(0.45, 0.03, 0.05))
 picture(c, (2.6, -4.93, 2.2), 0, 1.1); picture(c, (-2.5, 4.93, 2.3), 180, 1.0)
 rug(c, (0, 1.2, 0), (4.0, 2.6)); rug(c, (3.0, -2.6, 0), (2.4, 1.8))
 candelabra(c, (-3.8, -3.8), 1.3); candelabra(c, (1.8, 3.9), 1.3)
@@ -559,6 +564,16 @@ for m in A_["church"].data.materials:   # brighten the dark scan materials (clea
     else:
         hs.inputs["Color"].default_value = bs_.inputs["Base Color"].default_value
     m.node_tree.links.new(hs.outputs[0], lift.inputs["A"]); m.node_tree.links.new(lift.outputs["Result"], bs_.inputs["Base Color"])
+    m.use_backface_culling = False
+    if hasattr(m, "use_backface_culling_shadow"): m.use_backface_culling_shadow = False
+    if hasattr(m, "surface_render_method"): m.surface_render_method = 'DITHERED'
+    for lk_ in list(bs_.inputs["Normal"].links): m.node_tree.links.remove(lk_)   # scan normal maps render black after the JPEG shrink
+    for k_ in ("Metallic", "Alpha", "Transmission Weight"):
+        for lk_ in list(bs_.inputs[k_].links): m.node_tree.links.remove(lk_)
+    bs_.inputs["Metallic"].default_value = 0.0; bs_.inputs["Alpha"].default_value = 1.0
+    if any(k in m.name for k in ("Roof", "Wood049", "concrete", "default")):   # roofing scans render near-black: clean slate colour
+        for lk_ in list(bs_.inputs["Base Color"].links): m.node_tree.links.remove(lk_)
+        bs_.inputs["Base Color"].default_value = (0.42, 0.45, 0.52, 1); bs_.inputs["Roughness"].default_value = 0.6
 for t, p, rz in (("house3", (-16, 4, 0), 90), ("htb1", (16, 2, 0), -90)): inst(A_[t], c, p, rz=rz)
 # coffins: hexagonal box built procedurally with dark wood + bevel
 def coffin(name):
@@ -598,10 +613,13 @@ for k, b in enumerate(("TwinA_old", "TwinB_old")):
 # falling snow
 bpy.ops.mesh.primitive_ico_sphere_add(radius=0.012, subdivisions=1); flake = bpy.context.active_object; flake.name = "flake"; link(flake, LIBC); setmat(flake, simple("m_flake", (1, 1, 1), rough=0.6))
 sn = gn_fall("SnowEmit", c, [(random.uniform(-12, 12), random.uniform(-18, 12), random.uniform(0, 14)) for _ in range(7000)], flake, "snow", H=14.0, speed=0.02)
-light(c, 'SUN', (0, 0, 20), 2.2, (0.85, 0.9, 1.0), rot=(55, 0, 20), name="sun")
+light(c, 'SUN', (0, 0, 20), 4.5, (1.0, 0.88, 0.75), rot=(60, 0, 15), name="sun")
 for x_ in (-9, -4, 4, 9):
     light(c, 'POINT', (x_, 11.0, 4.0), 900, (1.0, 0.65, 0.3), 1.0, name="churchWin")
-aim(light(c, 'AREA', (0, -2, 14), 4000, (0.7, 0.8, 1.0), 12, name="moonFill"), (0, 12, 6))
+aim(light(c, 'AREA', (0, -2, 14), 20000, (0.8, 0.85, 1.0), 16, name="moonFill"), (0, 12, 6))
+aim(light(c, 'AREA', (0, 2, 4), 12000, (1.0, 0.85, 0.7), 14, name="facadeFill"), (0, 12, 10))
+for x_ in (-10, 0, 10):   # warm interior glow: the model's roof has open gaps that otherwise show a black interior
+    light(c, 'POINT', (x_, 22, 12), 60000, (1.0, 0.8, 0.6), 3.0, name="churchInterior")
 cam(1650, (0, -15.5, 2.5), (0, 4.0, 1.6), 26)
 cam(1700, (-3.0, -8.0, 2.2), (-0.5, 2.0, 1.4), 30)
 cam(1760, (-3.2, -2.5, 1.6), (0.0, 0.5, 1.4), 32)
@@ -615,6 +633,12 @@ c = S(5)
 room(c, -8, 8, -10.5, 10, 8, M["marble"], M["paleblue"], M["plaster"], skip=("wW",))
 wall_opening(c, "x", -8.0, (-10.5, 10), 8, M["paleblue"], 0.0, 1.8, 0.0, 2.9, M["gold"])
 plane("corridor", c, (6, 4), (-12.0, 0, 2.0), M["oak"], (90, 0, 90))
+for y0_, y1_ in ((-10.4, -0.95), (0.95, 9.9)):
+    box("wainscotBW", c, (0.08, y1_ - y0_, 1.2), (-7.95, (y0_ + y1_) / 2, 0.6), M["oak"])
+for y_ in (-4.5, 4.5): picture(c, (-7.92, y_, 2.6), 90, 1.4)
+tapestry(c, (-7.93, -8.0, 4.0), 90, w=1.6, h=2.6, tint=(0.45, 0.03, 0.05)); tapestry(c, (-7.93, 8.0, 4.0), 90, w=1.6, h=2.6, tint=(0.04, 0.10, 0.45))
+for y_ in (-2.0, 2.0): candelabra(c, (-7.4, y_), 1.5)
+rug(c, (-5.0, 0, 0), (3.0, 4.0))
 plane("corrFloor", c, (5, 3), (-10.5, 0, 0.0), M["planks"])
 light(c, 'POINT', (-10.5, 0.8, 2.2), 60, (1, 0.6, 0.3), 0.05, name="corrLamp")
 for y in (-5, 1, 7):
@@ -738,7 +762,7 @@ for x_ in (-0.78, 0.78):
     box("bedCurtain", c, (0.06, 0.5, 1.9), (x_, 3.45, 1.15), M["velvet"]); box("bedCurtainF", c, (0.06, 0.4, 1.9), (x_, 1.75, 1.15), M["velvet"])
 box("canopy", c, (1.65, 2.15, 0.08), (0, 2.6, 2.15), M["velvet"]); box("canopyTrim", c, (1.72, 2.22, 0.03), (0, 2.6, 2.1), M["gold"])
 rug(c, (0, 0.5, 0), (2.8, 1.8)); picture(c, (-4.45, 0.5, 1.7), 90, 1.0); picture(c, (1.8, 4.45, 1.8), 180, 0.9)
-tapestry(c, (-4.45, -2.5, 1.8), 90, w=1.4, h=1.8, tint=(0.3, 0.5, 0.8))
+tapestry(c, (-4.45, -2.5, 1.8), 90, w=1.4, h=1.8, tint=(0.04, 0.10, 0.45))
 candelabra(c, (1.4, 3.9), 1.2); inst(A_["GothicCabinet_01"], c, (2.9, 4.0, 0), rz=180, s=0.8)
 DR = human("Doctor2", "Doctor_S7", c); crowd_idle(DR, 2004, 2240, (1.3, 0.9), 135, "watch", seed=91)
 
@@ -759,6 +783,17 @@ for f in range(2228, 2510, 5):
     cupV.location = inv @ hold_point(VA.a, "R", f); cupV.keyframe_insert("location", frame=f)
 bpy.ops.mesh.primitive_cylinder_add(radius=0.04, depth=0.35, location=(0, 0, 0.2)); stv = bpy.context.active_object; link(stv, c); setmat(stv, steam_mat("m_steamV", 0.8)); stv.parent = cupV
 light(c, 'AREA', (6.0, -1.0, 2.6), 2500, (1, 0.9, 0.75), 2.0, rot=(0, -75, 0), name="winLight")
+for y0_, y1_ in ((-4.45, -1.75), (-0.25, 4.45)):
+    box("wainscotE7", c, (0.08, y1_ - y0_, 0.9), (4.45, (y0_ + y1_) / 2, 0.45), M["oak"])
+box("sillE7", c, (0.25, 1.6, 0.08), (4.4, -1.0, 0.88), M["oak"])
+for y_ in (-2.05, 0.05):   # window curtains with folds
+    cu = box("winCurtain", c, (0.06, 0.45, 2.6), (4.38, y_, 1.55), M["velvet"])
+    sb = cu.modifiers.new("sub", 'SUBSURF'); sb.levels = sb.render_levels = 2
+    wv = cu.modifiers.new("folds", 'WAVE'); wv.use_normal = True; wv.height = 0.03; wv.width = 0.12; wv.speed = 0; wv.use_x = False
+box("curtainRod", c, (0.04, 3.0, 0.04), (4.38, -1.0, 2.9), M["gold"])
+picture(c, (4.43, 2.6, 1.8), -90, 1.0)
+inst(A_["table"], c, (2.6, -2.9, 0), rz=0).scale = (0.45, 0.25, 0.85)
+candle(c, (2.6, -2.9, 0.67)); rug(c, (3.0, -1.5, 0), (2.2, 2.0))
 light(c, 'AREA', (0, 0.5, 3.3), 700, (1, 0.8, 0.6), 2.0, rot=(0, 0, 0), name="bedTop")
 light(c, 'AREA', (0, -1, 3.4), 900, (1.0, 0.95, 0.88), 4, rot=(0, 0, 0), name="ceilSoft")
 light(c, 'AREA', (-2, -3, 3.3), 900, (0.7, 0.75, 1.0), 2.5, rot=(40, 0, -140), name="fill")
@@ -806,7 +841,7 @@ for i, (nm, on, off, *_r) in enumerate(SETDEF):
     vis(SETC[i], on, off)
 for o, f, h in REKEY:   # per-character swaps inside a set, applied after the set keys
     o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
-world_keys([(1, 1.0), (174, 1.0), (175, 0.12), (587, 0.12), (588, 1.0), (724, 1.0), (725, 0.35), (1649, 0.35), (1650, 0.8), (1871, 0.8), (1872, 0.2), (2003, 0.2), (2004, 0.35), (2507, 0.35), (2508, 1.0)])
+world_keys([(1, 1.0), (174, 1.0), (175, 0.12), (587, 0.12), (588, 1.0), (715, 1.0), (716, 0.35), (1649, 0.35), (1650, 1.4), (1871, 1.4), (1872, 0.2), (2003, 0.2), (2004, 0.35), (2507, 0.35), (2508, 1.0)])
 for fc in (W.node_tree.animation_data.action.fcurves if W.node_tree.animation_data and hasattr(W.node_tree.animation_data.action, "fcurves") else []):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 

@@ -1,6 +1,12 @@
 # SwedishCoffee (Connect27)
 
-Current package: `blender/SwedishCoffee_v003/SwedishCoffee_v003_60fps.blend` (72 MB, normal git). v002 is kept as the 01:00 deliverable.
+Current package: `blender/SwedishCoffee_v004/SwedishCoffee_v004_60fps.blend` (72 MB, normal git). v002 (01:00 deliverable) and v003 are kept.
+
+v004 adds:
+- dressing in the ballroom doorway wall and the bedroom window wall (wainscot, paintings, damask hangings, candelabras, window curtains on a rod, a side table with a candle, rugs)
+- solid deep-red / blue damask hangings instead of the check scan
+- the street-to-chamber transition moved to f716, so the 12 s sample shows the twins at the table
+- a brighter cathedral (sun, moon and façade fill, warm windows, lifted stone)
 
 A 44.5 s vertical true-story short: the 18th-century Swedish king who "tested" coffee on twin prisoners. One continuous camera, 1080×1920, 60 fps, frames 1–2670.
 
@@ -35,9 +41,9 @@ The bright animated-3D look follows `blender/STYLE_ANIMATED.md`: `pipeline/anim_
 
 ## Known issues
 - The skull in the steam (b3, 7.8–9.6 s) reads as a pale skull in mist; density is doubled to survive the look pass.
-- The churchyard (b9): the cathedral walls are lifted and lit with warm windows and moonlight, but the eaves/roof band of the Sketchfab model still renders near-black at 28–31 s.
+- The churchyard (b9): the cathedral walls now read as light stone, but the roof band of the Sketchfab model (its `RooftilesWood` and `BrickOldRounded` materials) still renders black at 28–31 s. These didn't fix it: overriding the base colour, removing the normal/metal/alpha links, turning off backface culling, and adding interior lights. The next thing to try is replacing those faces' material outright, or hiding the roof and adding our own slate roof.
 - The bed curtains and canopy (b11) are simple velvet panels, not cloth-simulated drapes.
-- The tapestries use a woven-check fabric scan, so they read as plaid rather than pictorial.
+- The window curtains and bed curtains are subdivided velvet panels with a light wave fold, not cloth sims, so they read as soft slabs.
 - Set changes are passes through a façade, wall or steam. The wall fills the frame for about 5–6 frames at 2.8 s, 12.0 s and 31.0 s (the 12.0 s still lands on one of them).
 - MPFB garments are recoloured as period coats; collars and cuffs still have a modern cut up close. The king now has powdered long hair (MPFB long01, desaturated and lightened) instead of the cap-like wig model; there's no ermine (the capelet test read as white patches and was removed).
 - The king's collapse (b10) is keyframed: an eased knee buckle, then a fold to the floor. It isn't a physics fall.
