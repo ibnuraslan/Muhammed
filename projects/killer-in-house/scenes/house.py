@@ -913,7 +913,7 @@ def person(name, kind):
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
-        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.2, val=0.55), hair="bob01", hv=0.15, hat=False),
+        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.2, val=0.55), hair="long01", hv=0.34, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]
@@ -977,7 +977,8 @@ def ragged(h):
             x, y, z = co[i]
             beard = max(0.0, 1.0 - (z - zmin) / 0.11) * (1.0 if y < ymin + 0.11 else 0.4)
             cheek = 0.5 * max(0.0, 1.0 - abs(z - (zmin + 0.1)) / 0.03) * (1.0 if abs(x) > 0.035 and y < ymin + 0.07 else 0.0)
-            face[i] = min(1.0, beard + cheek)
+            eye = 0.55 * max(0.0, 1.0 - abs(z - (zmin + 0.145)) / 0.022) * max(0.0, 1.0 - abs(abs(x) - 0.033) / 0.02) * (1.0 if y < ymin + 0.06 else 0.0)
+            face[i] = min(1.0, beard + cheek + eye)
     attr = me.color_attributes.new("beard", 'FLOAT_COLOR', 'POINT')
     for i, f in enumerate(face):
         attr.data[i].color = (f, f, f, 1.0)
@@ -994,7 +995,7 @@ def ragged(h):
     vg = h.body.vertex_groups.new(name="beardvg")
     if len(hv):
         hc_ = co[hv]; z0_ = hc_[:, 2].min(); y0_ = hc_[:, 1].min()
-        sel = [int(i) for i in hv if z0_ + 0.012 < co[i, 2] < z0_ + 0.1 and co[i, 1] < y0_ + 0.12 and not (co[i, 2] > z0_ + 0.075 and abs(co[i, 0]) < 0.012 and co[i, 1] < y0_ + 0.03)]
+        sel = [int(i) for i in hv if z0_ + 0.012 < co[i, 2] < z0_ + 0.078 and co[i, 1] < y0_ + 0.12 and not (co[i, 2] > z0_ + 0.058 and abs(co[i, 0]) < 0.024)]
         vg.add(sel, 1.0, 'REPLACE')
     bd = h.body.copy(); bd.name = h.name + "_beard"; bpy.context.collection.objects.link(bd)
     mk = bd.modifiers.new("beardmask", 'MASK'); mk.vertex_group = "beardvg"
@@ -1006,6 +1007,16 @@ def ragged(h):
         sl.link = 'OBJECT'; sl.material = bm_
     h.parts.append(bd)
     for o in h.parts:            # hair: bigger, matted
+        if "long01" in o.name:   # long hair cut ragged at the collar: strands, face left clear
+            import bmesh
+            bm2 = bmesh.new(); bm2.from_mesh(o.data)
+            hz = h.body.data.vertices; ztop = max(v.co.z for v in hz)
+            rng_ = np.random.default_rng(5)
+            kill = [v for v in bm2.verts if v.co.z < ztop - 0.27 - 0.05 * rng_.random()]
+            bmesh.ops.delete(bm2, geom=kill, context='VERTS'); bm2.to_mesh(o.data); bm2.free()
+            for m in o.data.materials:
+                if m and m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
+                    m.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.75
         if "bob01" in o.name or "short02" in o.name:
             tx = bpy.data.textures.new(o.name + "_mat", 'CLOUDS'); tx.noise_scale = 0.015
             dm = o.modifiers.new("matted", 'DISPLACE'); dm.texture = tx; dm.strength = 0.014; dm.mid_level = 0.4

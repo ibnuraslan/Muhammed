@@ -628,9 +628,9 @@ def _():
 
 def thin_on_bed(c, sec):
     h = thin_man(c)
-    reset_pose(h); pose_sit(h, lean=22)
+    reset_pose(h); pose_sit(h, lean=12)
     h.arm.rotation_euler = (0, 0, math.radians(0)); h.arm.location = (-3.2, -3.5, F2); bpy.context.view_layer.update(); H.ground_to(h, F2)
-    H.rotl(h, "head", (1, 0, 0), 30 + 2 * math.sin(sec))
+    H.rotl(h, "head", (1, 0, 0), 4 + 2 * math.sin(sec))
     return h
 
 

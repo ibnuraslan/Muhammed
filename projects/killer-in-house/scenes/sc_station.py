@@ -12,7 +12,7 @@ from house import reset_pose
 import ph
 from human import pose_sit, reach, fingers_curl
 
-DUR = {"interview": 5.0, "photo": 4.5, "talk": 5.0}
+DUR = {"interview": 5.0, "photo": 4.5, "talk": 5.0, "headcheck": 2.0}
 VARIANT_FOR = {k: k for k in DUR}
 
 
@@ -56,8 +56,8 @@ def seat(h, loc, rz, lean=8):
 
 
 def anim_common(c, sec, lean_in=0.0):
-    seat(c["thin"], Vector((0, -1.0, 0)), math.pi, lean=18)
-    H.rotl(c["thin"], "head", (1, 0, 0), 28)
+    seat(c["thin"], Vector((0, -1.0, 0)), math.pi, lean=10)
+    H.rotl(c["thin"], "head", (1, 0, 0), -12)
     for sd, sg in (("L", 1), ("R", -1)):          # hands in his lap, below the table edge
         c["thin"].aim(f"upperarm01.{sd}", (sg * 0.1, 0.2, -1)); c["thin"].aim(f"lowerarm01.{sd}", (sg * -0.25, 0.8, -0.35))
     seat(c["cap"], Vector((0, 0.75, 0)), 0.0, lean=10 + 20 * lean_in)
@@ -104,4 +104,6 @@ MOVES = {
     "talk": dict(kind="anim", dof=2.8, far=20, anim=anim_talk,
                  cam=lambda c, t: (Vector((1.8, -1.4, 1.35)).lerp(Vector((1.5, -1.1, 1.3)), ease(t)), Vector((0.0, -0.4, 1.05)), 38),
                  focus=lambda c, t: Vector((0.0, -0.75, 1.15))),
+    "headcheck": dict(kind="anim", dof=None, far=20, anim=anim_talk,          # review only: close on his head
+                      cam=lambda c, t: (Vector((0.3, -0.2, 1.08)), c["thin"].bone_head("head") + Vector((0, 0, 0.04)), 40)),
 }
