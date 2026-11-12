@@ -22,6 +22,8 @@ SHOTS = [
     ("coping_hands", 2130, lambda f: (bw(D, "wrist.L", f) + bw(D, "wrist.R", f)) / 2, Vector((0.3, 0.6, 0.35)), 35),
     ("glass_hands", 1100, lambda f: bw(bpy.data.objects["Keeper"], "wrist.L", f), Vector((0.4, -0.5, 0.1)), 35),
     ("glass_spec", 800, lambda f: bw(bpy.data.objects["SpecA"], "wrist.L", f), Vector((0.4, -0.5, 0.1)), 35),
+    ("fin_pull_grip", 490, lambda f: bw(D, "wrist.R", f), Vector((0.45, 0.35, 0.3)), 35),
+    ("fin_pull_off", 512, lambda f: bw(D, "wrist.R", f), Vector((0.45, 0.35, 0.3)), 35),
     ("clap_gallery", 2020, lambda f: bw(bpy.data.objects["SpecA"], "wrist.L", f).lerp(bw(bpy.data.objects["SpecA"], "wrist.R", f), 0.5), Vector((0.1, 0.55, 0.15)), 35),
     ("mouth_hand", 800, lambda f: bw(bpy.data.objects["SpecD"], "wrist.R", f), Vector((0.2, 0.5, 0.1)), 40),
     ("point_specB", 800, lambda f: bw(bpy.data.objects["SpecB"], "wrist.L", f), Vector((0.3, 0.5, 0.1)), 40),

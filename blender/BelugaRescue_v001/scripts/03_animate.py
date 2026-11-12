@@ -120,7 +120,7 @@ class H:
             R.key_rot("foot." + s, f, [("X", -ank)])
         R.key_rot("jaw", f, [("X", -p["jaw"])])
         for s in "LR":
-            c = p["curl"].get(s, (22, 18))
+            c = p["curl"].get(s, (28, 14))
             self.key_fingers(s, f, c[0], c[1])
     def key_hands(self, f, p):
         ev(f)
@@ -186,7 +186,7 @@ DV.P(232, (X0 + 0.1, EDGE_Y + 3.7, 1.05), yaw=180, pitch=-14, spine=(14, 0, 0), 
 SIT_Y = EDGE_Y + 3.75
 SIT = (X0 + 0.1, SIT_Y, 0.13)
 DV.P(252, (X0 + 0.1, SIT_Y, 0.38), yaw=180, pitch=-8, spine=(12, 0, 0), head=(5, 0, 0), legs=legs((84, 8, 12, -72)), arms=arms(fwd=35, out=50))
-DV.P(264, SIT, yaw=180, pitch=-10, spine=(18, 0, 0), head=(10, 0, 0), legs=legs((86, 8, 8, -72)), arms=arms(fwd=30, out=40))
+DV.P(264, SIT, yaw=180, pitch=-10, spine=(26, 0, 0), head=(14, 0, 0), legs=legs((86, 8, 8, -72)), arms={"L": ("calf", dict(s="L", t=0.4)), "R": ("calf", dict(s="R", t=0.55))}, curl={"L": (28, 22), "R": (28, 22)})
 # --- beat 3: cramps — knees jerk, toes lock, hands clutch the right calf
 CALF_HOLD = lambda f: None
 for k, f in enumerate(range(276, 520, 16)):
@@ -195,13 +195,13 @@ for k, f in enumerate(range(276, 520, 16)):
     DV.P(f, (SIT[0], SIT[1] + 0.02 * j, SIT[2] + 0.01 * j), yaw=180, pitch=-6 + 6 * j, roll=3 * (j * 2 - 1), spine=(34 + 10 * j, 4 * (j * 2 - 1), 0),
          head=(18, 6 * (j * 2 - 1), 0), legs=legs((92 + 0.5 * kn_l, 8, kn_l, -82), (92 + 0.6 * kn_r, 10, kn_r, -84)), jaw=4 + 4 * j,
          arms={"L": ("calf", dict(s="L", t=0.45)), "R": (("fin", dict(p=min(1.0, max(0.0, (f - 484) / 32.0)))) if f >= 484 else ("calf", dict(s="R", t=0.6)))},
-         curl={"L": (62, 40), "R": ((70, 45) if f >= 484 else (62, 40))})
+         curl={"L": (28, 22), "R": ((45, 35) if f >= 484 else (28, 22))})
 # --- beat 4: claws upward, legs locked, rises, sinks back
 DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((86, 8, 10, -72)), arms=arms(fwd=120, out=30))
 for k, f in enumerate(range(535, 610, 15)):
     up = k / 5.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 * up, SIT[2] + 0.75 * up), yaw=180, pitch=-28 * up - 8, spine=(-8, 0, 0), head=(-35, 0, 0),
-         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(fwd=175 if k % 2 == 0 else 95, out=8 if k % 2 == 0 else 80), jaw=10, curl={"L": (45, 30), "R": (45, 30)})
+         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(fwd=175 if k % 2 == 0 else 95, out=8 if k % 2 == 0 else 80), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
 for k, f in enumerate(range(620, 661, 10)):
     dn = (k + 1) / 4.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 + 0.12 * dn, SIT[2] + 0.75 * (1 - dn)), yaw=180, pitch=-36 + 26 * dn, spine=(-5 + 20 * dn, 0, 0), head=(-40 + 20 * dn, 0, 0),
@@ -209,7 +209,7 @@ for k, f in enumerate(range(620, 661, 10)):
 # --- beat 5: drowning — head back toward the light, chest heaving, last bubbles
 for k, f in enumerate(range(672, 775, 17)):
     j = k % 2
-    DV.P(f, (SIT[0], SIT[1] - 0.03, SIT[2] + 0.02 * j), yaw=180, pitch=-14 - 4 * j, spine=(-6 + 10 * j, 0, 0), head=(-38 + 8 * j, 8 * (j - 0.5), 0),
+    DV.P(f, (SIT[0], SIT[1] - 0.03, SIT[2] + 0.02 * j), yaw=180, pitch=-14 - 4 * j, spine=(-6 + 10 * j, 0, 0), head=(-20 + 6 * j, 8 * (j - 0.5), 0),
          legs=legs((84, 8, 12, -70), (84, 9, 18, -70)), arms=arms(l=dict(fwd=110 + 30 * j, out=70), r=dict(fwd=50 + 40 * j, out=75)), jaw=12 - 6 * j)
 # --- beats 6–8: weakening, drifting up off the tiles, limp (legs trail forward-down)
 FLOAT = lambda f, t: (SIT[0], SIT[1] - 0.05 - 0.15 * t, SIT[2] + 0.95 * t)
@@ -220,7 +220,7 @@ for k, f in enumerate(range(790, 1380, 30)):
          arms=arms(l=dict(fwd=70 + 20 * math.sin(k), out=55 + 15 * t), r=dict(fwd=60 + 20 * math.cos(k), out=60 + 10 * t)), jaw=6,
          curl={"L": (30, 20), "R": (30, 20)})
 # --- beats 9–11: held by the ankle (right knee bent, shin across the mouth), pushed up, breaks the surface
-RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.55), (1950, 5.6), (1990, 5.3)]
+RISE = [(1380, FLOAT(0, 1.0)[2]), (1440, FLOAT(0, 1.0)[2] + 0.05), (1500, 1.6), (1600, 2.6), (1699, 3.4), (1800, 4.6), (1884, 5.0), (1915, 5.33), (1950, 5.42), (1990, 5.3)]
 RZF = pchip([(f, z) for f, z in RISE])
 XY0 = Vector(FLOAT(0, 1.0)[:2]); XY1 = Vector((X0 + 0.25, EDGE_Y + 1.2))
 for k, f in enumerate(range(1380, 2000, 20)):
@@ -228,8 +228,8 @@ for k, f in enumerate(range(1380, 2000, 20)):
     xy = XY0.lerp(XY1, t)
     limp = 1.0 if f < 1915 else max(0.0, 1 - (f - 1915) / 40.0)
     DV.P(f, (xy.x, xy.y, RZF(f)), yaw=180 + 10 * math.sin(k * 0.3), pitch=6 + 10 * limp, roll=6 * math.sin(k * 0.4), spine=(10 * limp - 12 * (1 - limp), 0, 0),
-         head=(25 * limp - 30 * (1 - limp), 0, 0), legs=legs((62 + 8 * math.sin(k * 0.8), 22, 100 + 10 * math.sin(k * 0.8), -45), (35, 14, 95, -20)),
-         arms=arms(l=dict(fwd=50 + 30 * limp * math.sin(k * 0.9), out=70 - 20 * (1 - limp)), r=dict(fwd=40 + 30 * limp * math.cos(k * 0.9), out=75 - 20 * (1 - limp))),
+         head=(25 * limp - 30 * (1 - limp), 0, 0), legs=legs((62 + 8 * math.sin(k * 0.8), 9, 100 + 10 * math.sin(k * 0.8), -40), (35, 14, 95, -20)),
+         arms=arms(l=dict(fwd=18 + 14 * math.sin(k * 0.9) + 110 * (1 - limp), out=55 + 10 * math.sin(k * 0.7)), r=dict(fwd=16 + 14 * math.cos(k * 0.9) + 100 * (1 - limp), out=58 + 10 * math.cos(k * 0.7))), curl={"L": (30, 14), "R": (30, 14)},
          jaw=4 if limp > 0.5 else 22)
 # --- beat 12: gasps, swims to the coping, clings with both hands
 COP_Z = DECK_Z + 0.06; COP_Y = EDGE_Y + 0.0
@@ -252,14 +252,14 @@ def diver_hands(f, p):
             c = k0.lerp(k1, prm["t"])
             sx = 1 if s == "L" else -1
             out = (k1 - k0).cross(Vector((0, 0, 1))).normalized() * sx
-            W = c + out * 0.16 + Vector((0, 0, 0.1))
+            W = c + out * 0.2 + Vector((0, 0, 0.14))
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.85 + Vector((0, 0, -1)) * 0.15, n=-out * 0.6 + Vector((0, 0, -0.8)), pole=W + Vector((sx * 0.3, 0, 0.5))))
         elif kind == "fin":      # grip the fin blade just past the toes and pull it off along the foot
             ev(f)
             hd = DV.world("foot.R", f); tl = DV.world("foot.R", f, "tail")
             fwd_ = (tl - hd).normalized()
             up_ = Vector((0, 0, 1)) - fwd_ * fwd_.z; up_.normalize()
-            W = tl + fwd_ * (0.06 + 0.22 * prm["p"]) + up_ * 0.035
+            W = tl + fwd_ * (0.12 + 0.2 * prm["p"]) + up_ * 0.12
             a[s] = ("world", dict(W=W, d=fwd_, n=-up_, pole=W + Vector((-0.3, 0.2, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1

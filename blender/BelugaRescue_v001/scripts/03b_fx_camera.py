@@ -110,11 +110,11 @@ K(748, H_(748) + V(-0.6, 0.6, 0.45), H_(748), 42)
 def behind_face(f, wf):
     h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); d = Matrix.Rotation(R_(115), 3, 'Z') @ d; return h + d * 0.8 + V(0, 0, 0.2)
 K(792, H_(792) + V(0.85, 0.75, 0.2), H_(792), 40)
-K(835, H_(835) + V(0.95, 0.55, 0.3), wh(835), 36)
+K(835, H_(835) + V(0.95, 0.55, 0.3), H_(835).lerp(wh(835), 0.35), 34)
 K(872, wh(872) + V(1.4, -1.1, 0.4), wh(872), 32)
-K(910, wh(910) + V(0.2, -1.6, 0.5), wh(910), 30)
+K(910, wh(910) + V(0.6, -2.4, 0.7), wh(910), 26)
 # beat 7 — beside the whale to the window, ring play, keeper nod, whip pan back
-K(962, wh(962) + V(2.0, 1.0, 0.5), wh(962), 26)
+K(962, V(2.2, 1.4, 3.3), wh(962), 28)
 K(1010, RG(1010) + V(2.8, 1.8, 0.7), RG(1010), 26)
 K(1065, wbody(1065) + V(2.6, 2.4, 0.9), wbody(1065), 24)
 K(1120, V(0.2, -1.4, 2.1), V(-2.6, -4.3, 1.6), 26)
@@ -126,13 +126,13 @@ K(1268, eye(1268) + V(0.6, 3.2, 0.9), eye(1268).lerp(H_(1268), 0.5), 24)
 K(1305, wbody(1305) + V(2.2, 1.0, 0.7), wh(1305), 26)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
 # beat 9 — mouth on the ankle, beneath looking up, spiral up
-K(1420, dv("foot.R", 1420) + V(0.75, 0.5, 0.25), dv("foot.R", 1420), 40)
-K(1480, dv("foot.R", 1480) + V(1.1, -0.6, 0.15), dv("foot.R", 1480), 34)
+K(1420, dv("foot.R", 1420) + V(1.3, 0.9, 0.5), dv("foot.R", 1420).lerp(CH(1420), 0.4), 30)
+K(1480, dv("foot.R", 1480) + V(1.6, -1.0, 0.4), dv("foot.R", 1480).lerp(CH(1480), 0.4), 28)
 K(1545, PEL(1545) + V(1.6, 0.9, -1.7), PEL(1545), 22)
 K(1605, PEL(1605) + V(-0.6, 1.9, -1.2), PEL(1605), 24)
 K(1660, PEL(1660) + V(-1.8, 0.3, -0.6), CH(1660), 26)
 # beat 10 — her face, racing alongside, up into the light
-K(1720, H_(1720) + V(0.6, 0.95, -0.1), H_(1720), 40)
+K(1720, H_(1720) + V(0.5, 0.8, -0.5), H_(1720), 38)
 K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
 K(1840, H_(1840) + V(1.4, 0.7, -0.3), H_(1840) + V(0, 0, 0.3), 26)
 # beat 11 — below the surface looking up, burst out, circle the splash
@@ -183,8 +183,8 @@ for f in range(1, END + 1, 2):
             else: break
     for t in ST:
         loc, nrm, idx, dist = t.find_nearest(p + off, 0.5)
-        if loc is not None and ((p + off - loc).dot(nrm) < 0 or dist < 0.12):
-            off += nrm.normalized() * (0.15 + (dist if (p + off - loc).dot(nrm) < 0 else -dist))
+        if loc is not None and ((p + off - loc).dot(nrm) < 0 or dist < 0.4):
+            off += nrm.normalized() * (0.42 + (dist if (p + off - loc).dot(nrm) < 0 else -dist))
     if (p + off).z < 0.15: off.z += 0.15 - (p + off).z
     corr[f] = off
 fr_ = sorted(corr)
