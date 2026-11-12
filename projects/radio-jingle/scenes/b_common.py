@@ -350,3 +350,59 @@ def shrug(h, amt):
     """Shoulders up (amt 0..1)."""
     for sd, sg in (("L", 1), ("R", -1)):
         h.rot(f"clavicle.{sd}", (0, 1, 0), -sg * 14 * amt)
+
+
+# ============================================================================ on-screen label ("Court reconstruction")
+def label_image(text, path, W=1920, H=816):
+    import skia
+    from PIL import Image
+    from scipy.ndimage import gaussian_filter
+    s = skia.Surface(W, H); cv = s.getCanvas(); cv.clear(skia.Color4f(0, 0, 0, 0))
+    p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(1, 1, 1, 1))
+    f = skia.Font(skia.Typeface.MakeFromFile("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf"), 34)
+    x, y = 96, H - 84
+    cv.drawRect(skia.Rect.MakeXYWH(x, y - 30, 4, 38), p)                 # a thin bar before the words
+    tx = x + 18
+    for ch in text.upper():                                              # letter-spaced caps
+        cv.drawString(ch, tx, y, f, p); tx += f.measureText(ch) + 4
+    a = s.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType).astype(np.float32) / 255
+    al = a[..., 3]
+    sh = gaussian_filter(al, 4) * 0.6
+    out = np.zeros_like(a); out[..., :3] = 1.0
+    out[..., 3] = np.clip(al * 0.92 + sh * (1 - al), 0, 1)
+    rgb = out[..., :3] * al[..., None] + 0.0 * (1 - al[..., None])     # shadow is black, letters white
+    out[..., :3] = np.where(al[..., None] > 0.01, 1.0, 0.0)
+    Image.fromarray((out * 255).astype(np.uint8), "RGBA").save(path)
+    return path
+
+
+def label(c, text, f_in=6, fade=12):
+    """Camera-parented plane with a small lower-left caption (fades in by frame driver). Idempotent."""
+    if c.get("_label") or "cam" not in c:
+        return
+    cam = c["cam"]
+    path = os.path.join(GEN, "b_label_" + text.lower().replace(" ", "_") + ".png")
+    if not os.path.exists(path):
+        label_image(text, path)
+    m = bpy.data.materials.new("Label"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
+    tex = N.new("ShaderNodeTexImage"); tex.image = bpy.data.images.load(path); tex.image.alpha_mode = 'STRAIGHT'
+    L.new(tc.outputs['UV'], tex.inputs['Vector'])
+    em = N.new("ShaderNodeEmission"); L.new(tex.outputs['Color'], em.inputs['Color']); em.inputs['Strength'].default_value = 0.9
+    tr = N.new("ShaderNodeBsdfTransparent")
+    fv = N.new("ShaderNodeValue")
+    d = fv.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = f"min(1, max(0, (frame - {f_in}) / {fade}))"
+    mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; L.new(tex.outputs['Alpha'], mul.inputs[0]); L.new(fv.outputs[0], mul.inputs[1])
+    mx = N.new("ShaderNodeMixShader"); L.new(mul.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs['Surface'])
+    dist = 0.5; cd = cam.data; sensor = cd.sensor_width
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0)); o = bpy.context.active_object; o.name = "ReconLabel"
+    o.data.materials.append(m); o.parent = cam; o.location = (0, 0, -dist)
+    for axis, k in ((0, 1.0), (1, 816 / 1920)):
+        dd = o.driver_add("scale", axis).driver; dd.type = 'SCRIPTED'
+        v = dd.variables.new(); v.name = "lens"; v.targets[0].id_type = 'CAMERA'; v.targets[0].id = cd; v.targets[0].data_path = "lens"
+        dd.expression = f"{dist} * {sensor} / lens * {k}"
+    o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False; o.visible_transmission = False
+    o.visible_volume_scatter = False
+    c["_label"] = o
