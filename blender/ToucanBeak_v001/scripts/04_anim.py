@@ -140,7 +140,10 @@ _R = Matrix.Rotation(R_(70), 4, 'Z') @ Matrix.Translation(-(LB_base + LB_tip) / 
 _zmin = min((_R @ v.co).z for v in UP.data.vertices)
 PRO_TABLE = Matrix.Translation(Vector((6.70, 0.30, sc["TABLE_Z"] - _zmin + 0.001))) @ _R
 def pro_seat(f):
-    ev(f); M = UP.matrix_world.copy(); axw = (M.to_3x3() @ axis_r).normalized()
+    # UP is hidden (not evaluated) 104-1976, so its matrix_world is stale: rebuild its bone-parented world matrix from the head bone
+    ev(f); _tr = UP.parent; _pb = _tr.pose.bones[UP.parent_bone]
+    M = _tr.matrix_world @ _pb.matrix @ Matrix.Translation((0, _pb.bone.length, 0)) @ UP.matrix_parent_inverse @ UP.matrix_basis
+    axw = (M.to_3x3() @ axis_r).normalized()
     o_ = pro_off(f); return Matrix.Translation(axw * o_ + Vector((0, 0, 0.004 if o_ > 0 else 0))) @ M
 def mlerp(A, B, t):
     la, qa, sa = A.decompose(); lb, qb, sb = B.decompose()
@@ -422,17 +425,21 @@ def curl(H, side, f, amt, thumb=0.5, spread=0.0):
             a = amt * (0.6 if seg == 1 else 1.0) * (thumb if fi == 1 else 1.0)
             q = Quaternion(Vector((1, 0, 0)), R_(a)) @ Quaternion(Vector((0, 0, 1)), R_(spread * (fi - 3) if seg == 1 else 0))
             H.r.PB[n].rotation_quaternion = q; H.r.PB[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
-for f in (530, 1960):
-    curl(VA, "L", f, 10, 0.4); curl(VA, "R", f, 14, 0.5)
-for f in (530, 690): curl(VB, "R", f, 78, 0.7)
-for f in (712, 1500): curl(VB, "R", f, 25, 0.5)
-for f in (530, 1500, 1712, 1806, 1960): curl(VB, "L", f, 22, 0.5)
-for f in (1506, 1692): curl(VB, "R", f, 46, 1.0)
-for f in (1712, 1800): curl(VB, "R", f, 22, 0.5)
-for f in (1715, 1805): curl(VB, "L", f, 44, 1.0, spread=-4)   # pinch / pen grip on the syringe barrel
-for f in (1810, 1945): curl(VB, "R", f, 38, 1.0, spread=-4)
-for f in (560, 1960): curl(AS, "L", f, 20); curl(AS, "R", f, 20)
-for f in (676, 1505): curl(AS, "R", f, 28, 0.6)
+# finger poses from the shared library (blender/pipeline/hand_poses.py): no hand-set finger angles
+import importlib.util as _ilu
+_spec = _ilu.spec_from_file_location("hand_poses", os.path.join(HERE, "..", "pipeline", "hand_poses.py")); HP = _ilu.module_from_spec(_spec); _spec.loader.exec_module(HP)
+for _h in (VA, VB, AS): HP.add_hand_limits(_h.r.o)
+def hpose(H, side, frames, name):
+    for f in frames: HP.apply_pose(H.r.o, side, name, f)
+hpose(VA, "L", (530, 1960), "flat_palm")              # steadying hand flat on the table
+hpose(VA, "R", (530, 1960), "cup_hold")               # palm on the bird's back, fingers following its curve
+hpose(VB, "R", (760, 1500), "relaxed")                # after the scanner is set down (held frames: closure pass below)
+hpose(VB, "L", (530, 1500, 1712, 1806, 1960), "relaxed")
+hpose(VB, "R", (1506,), "tripod")                     # pre-shape on the reach to the prosthetic
+hpose(VB, "R", (1712, 1800), "relaxed")
+hpose(VB, "L", (1715, 1805), "tripod")                # pre-shape before pick-up / after put-down of the syringe
+hpose(AS, "L", (560, 1960), "relaxed"); hpose(AS, "R", (560, 1960), "relaxed")
+hpose(AS, "R", (676, 1505), "cup_hold")              # hand over the mouse
 
 # relaxed arms while walking / standing idle: hands hang at the thighs with a small counter-swing (no IK target left at the origin)
 def arms_relaxed(H, f0, f1, step=4, swing=0.07, period=48.0):
@@ -601,6 +608,60 @@ follow(SCN, OB["VetB"], "R", 680, 744)
 rest_key(SCN, 746, SCN_REST + Vector((0, 0, 0.0)), Vector((0, 0, 1)).to_track_quat('Z', 'Y'))   # set down upright on the table (camera is inside the void)
 for o_ in (SYR, TWZ, PIN, SCN):
     ev(1000 if o_ is SCN else 1975); print("TOOL", o_.name, [round(x, 3) for x in o_.matrix_world.translation])
+# ---- fingers close onto every held tool, using hand_poses.py presets + its closure test (each finger stops at the
+# first surface contact, the thumb opposes). The wrist placement stays the grip_key solve above (props ride on it).
+def _closest_w(obj, p):
+    ok, loc, nrm, idx = obj.closest_point_on_mesh(obj.matrix_world.inverted() @ p); return obj.matrix_world @ loc
+def nudge_hand(rig, s, f, obj, grip):
+    """like hand_poses.grip_object: move IK_hand so the pinch point (thumb+index tips) / the palm centre lands on obj's surface"""
+    b = HP._b; pb = rig.pose.bones["IK_hand." + s]; Bm = rig.data.bones["IK_hand." + s].matrix_local.to_3x3().inverted()
+    for _ in range(3):
+        ev(f); Mw = rig.matrix_world; Hh = HP._Hand(rig, s)
+        if grip == "pinch":
+            F = Hh.fk(HP._pose_rots(rig, s, "pinch")); P = Mw @ ((F[b(1, 3, s)][1] + F[b(2, 3, s)][1]) / 2); T = _closest_w(obj, P)
+        else:
+            wr_, d_, n_, a_ = Hh.frame(); P = Mw @ (wr_ + d_ * 0.055 + n_ * 0.012); C = _closest_w(obj, P)
+            T = C + (P - C).normalized() * 0.022 if (P - C).length > 1e-6 else C
+        delta = T - P
+        if delta.length < 0.002: break
+        pb.location = pb.location + Bm @ (Mw.inverted().to_3x3() @ delta); pb.keyframe_insert("location", frame=f, group=pb.name)
+def close_on(H, s, f, obj, grip):
+    rig = H.r.o; nudge_hand(rig, s, f, obj, grip); ev(f); Mw = rig.matrix_world; Hh = HP._Hand(rig, s); b = HP._b
+    rot = dict(HP._pose_rots(rig, s, "relaxed")); rep = {}
+    if grip == "pinch":
+        open_ = HP._pose_rots(rig, s, "open_alarm"); closed = HP._pose_rots(rig, s, "pinch"); rot.update(open_)
+        for k in (3, 4, 5):
+            for j in (1, 2, 3): rot[b(k, j, s)] = closed[b(k, j, s)]
+        fingers = (2, 1)
+    else:
+        open_ = HP._pose_rots(rig, s, "shield"); closed = HP._pose_rots(rig, s, "power_fist"); rot.update(open_); fingers = HP.FING
+    def touching(bones, Rq):
+        F = Hh.fk(Rq)
+        for bn in bones:
+            h, t = F[bn]
+            for u in (0.35, 0.7, 1.0):
+                if HP._dist_to(obj, Mw @ h.lerp(t, u)) < 0.008: return True
+        return False
+    for k in fingers:
+        chain = [b(k, j, s) for j in (1, 2, 3)]; probe = chain[1:] if k == 1 else chain; hit = None
+        for i in range(41):
+            u = i / 40; trial = dict(rot)
+            for bn in chain: trial[bn] = open_[bn].slerp(closed[bn], u)
+            if touching(probe, trial): hit = u; break
+            rot = trial
+        rep[k] = hit
+    if grip == "wrap":
+        wr_, d_, n_, a_ = Hh.frame(); F = Hh.fk(rot)
+        side_ = (F[b(2, 1, s)][0] - F[b(3, 1, s)][0]).normalized(); guess = Mw @ (F[b(2, 1, s)][0] + side_ * 0.02 + n_ * 0.035)
+        ok, loc, nrm, idx = obj.closest_point_on_mesh(obj.matrix_world.inverted() @ guess)
+        rot.update(HP._solve_thumb(Hh, rot, ("point", 0.010), wr_, d_, n_, a_, target=Mw.inverted() @ (obj.matrix_world @ loc), obj=obj, radius=0.008))
+    HP._key(rig, s, rot, f, 1.0); return rep
+for obj_, s_, f0_, f1_, g_ in ((SCN, "R", 528, 744, "wrap"), (PRO, "R", 1509, 1692, "wrap"), (SYR, "L", 1717, 1803, "pinch"), (TWZ, "R", 1807, 1962, "pinch")):
+    miss = []
+    for f_ in sorted(set(list(range(f0_, f1_ + 1, 4)) + [f1_])):
+        rp = close_on(VB, s_, f_, obj_, g_)
+        if sum(1 for v in rp.values() if v is not None) < (2 if g_ == "pinch" else 3): miss.append(f_)
+    print("CLOSE", obj_.name, "frames w/o contact", miss)
 ev(1910); print("PIN at 1910", [round(x, 3) for x in PIN.matrix_world.translation], "target", [round(x, 3) for x in pin_in])
 ev(1768); print("SYR tip region at 1768", [round(x, 3) for x in (SYR.matrix_world @ Vector((0, 0, 0.06)))], "dist", round((SYR.matrix_world @ Vector((0, 0, 0.06)) - seam).length, 3), "seam", [round(x, 3) for x in seam])
 

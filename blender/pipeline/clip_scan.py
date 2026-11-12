@@ -28,8 +28,8 @@ SELF_T = ("head", "neck", "jaw", "spine", "pelvis", "upperleg", "lowerleg", "thi
 def chars():
     out = []
     for r in bpy.data.objects:
-        if r.type != 'ARMATURE' or not r.visible_get(): continue
-        kids = [c for c in r.children_recursive if c.type == 'MESH' and c.visible_get() and not c.hide_render]
+        if r.type != 'ARMATURE': continue      # visibility is checked per frame (characters can appear later)
+        kids = [c for c in r.children_recursive if c.type == 'MESH']
         body = [c for c in kids if c.name.endswith(".body") or "body" in c.name.lower() and len(c.data.vertices) > 8000]
         if not body: continue
         body = max(body, key=lambda c: len(c.data.vertices))
@@ -81,7 +81,10 @@ dg = bpy.context.evaluated_depsgraph_get()
 for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     cpos = cam.matrix_world.translation
-    near = [c for c in CH if (c[0].matrix_world.translation - cpos).length < CAMR]
+    def where(r):     # rigs often stay at the origin and move by the root bone
+        pb = r.pose.bones.get("root") or r.pose.bones[0]
+        return r.matrix_world @ pb.head
+    near = [c for c in CH if not c[1].hide_render and not c[0].hide_render and (where(c[0]) - cpos).length < CAMR]
     if not near: continue
     built = {}
     for r, body, cloth in near:
