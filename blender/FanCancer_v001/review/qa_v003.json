@@ -1,0 +1,2120 @@
+{
+ "frames": {
+  "1": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (10.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.2 cm)"
+   ]
+  ],
+  "7": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (10.4 cm)"
+   ]
+  ],
+  "13": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (7.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (10.7 cm)"
+   ]
+  ],
+  "19": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (7.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (11.2 cm)"
+   ]
+  ],
+  "25": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (6.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (11.8 cm)"
+   ]
+  ],
+  "31": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (5.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (12.4 cm)"
+   ]
+  ],
+  "37": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (4.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (13.1 cm)"
+   ]
+  ],
+  "43": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (3.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (13.8 cm)"
+   ]
+  ],
+  "49": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (3.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (14.5 cm)"
+   ]
+  ],
+  "55": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (15.2 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "235": [
+   [
+    "BACKHEAD",
+    "Manager"
+   ]
+  ],
+  "247": [
+   [
+    "HOVER",
+    "FarFan2_4.L near SeatsSrc.011 (14.3 cm)"
+   ]
+  ],
+  "253": [
+   [
+    "HOVER",
+    "FarFan2_4.L near SeatsSrc.011 (13.9 cm)"
+   ]
+  ],
+  "271": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "301": [
+   [
+    "EMPTY",
+    "only SkinTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "only SkinTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "only SkinTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "337": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "343": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "355": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "361": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "367": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "373": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "379": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "385": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "391": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "397": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "403": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "409": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "415": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "445": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "only SkinTop in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "649": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (16.7 cm)"
+   ]
+  ],
+  "655": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (17.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.7 cm)"
+   ]
+  ],
+  "661": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.9 cm)"
+   ]
+  ],
+  "667": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.3 cm)"
+   ]
+  ],
+  "673": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.7 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (3.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "685": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (4.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "691": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (6.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "697": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (5.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "703": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "709": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "715": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "721": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "727": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (19.0 cm)"
+   ]
+  ],
+  "787": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (15.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.2 cm)"
+   ]
+  ],
+  "793": [
+   [
+    "HOVER",
+    "Fan.R near CellSrc (10.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (14.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (3.0 cm)"
+   ]
+  ],
+  "799": [
+   [
+    "HOVER",
+    "Fan.R near CellSrc (17.6 cm)"
+   ]
+  ],
+  "805": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "HOVER",
+    "Fan.R near CellSrc (19.9 cm)"
+   ]
+  ],
+  "811": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (12.8 cm)"
+   ]
+  ],
+  "817": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (12.7 cm)"
+   ]
+  ],
+  "823": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (12.8 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (12.8 cm)"
+   ]
+  ],
+  "835": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (12.9 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.0 cm)"
+   ]
+  ],
+  "847": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.0 cm)"
+   ]
+  ],
+  "853": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.1 cm)"
+   ]
+  ],
+  "859": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.1 cm)"
+   ]
+  ],
+  "865": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.1 cm)"
+   ]
+  ],
+  "871": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.1 cm)"
+   ]
+  ],
+  "877": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.1 cm)"
+   ]
+  ],
+  "883": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.1 cm)"
+   ]
+  ],
+  "889": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.6 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.2 cm)"
+   ]
+  ],
+  "895": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.6 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.2 cm)"
+   ]
+  ],
+  "901": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.3 cm)"
+   ]
+  ],
+  "907": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.4 cm)"
+   ]
+  ],
+  "913": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (13.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.6 cm)"
+   ]
+  ],
+  "919": [
+   [
+    "HOVER",
+    "Fan.L near BoardsCap (14.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (13.8 cm)"
+   ]
+  ],
+  "925": [
+   [
+    "HOVER",
+    "Fan.R near BoardsCap (14.0 cm)"
+   ]
+  ],
+  "943": [
+   [
+    "HOVER",
+    "Fan.L near CellSrc (17.8 cm)"
+   ]
+  ],
+  "949": [
+   [
+    "HOVER",
+    "Fan.L near CellSrc (17.2 cm)"
+   ]
+  ],
+  "955": [
+   [
+    "HOVER",
+    "Fan.L near CellSrc (17.1 cm)"
+   ]
+  ],
+  "991": [
+   [
+    "HOVER",
+    "Fan.L near GlassPane0 (4.0 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "HOVER",
+    "Manager.R near SeatsSrc (1.6 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "HOVER",
+    "Fan.L near GlassPane0 (4.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near SeatsSrc (4.0 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (1.9 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (7.0 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (11.0 cm)"
+   ]
+  ],
+  "1039": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (8.5 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (6.0 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (3.8 cm)"
+   ]
+  ],
+  "1057": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (2.2 cm)"
+   ]
+  ],
+  "1063": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (1.4 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "BACKHEAD",
+    "Manager"
+   ]
+  ],
+  "1093": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (1.5 cm)"
+   ]
+  ],
+  "1099": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (2.5 cm)"
+   ]
+  ],
+  "1105": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (3.7 cm)"
+   ]
+  ],
+  "1111": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (4.8 cm)"
+   ]
+  ],
+  "1117": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (5.6 cm)"
+   ]
+  ],
+  "1123": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (6.0 cm)"
+   ]
+  ],
+  "1129": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (6.2 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1183": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1189": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (12.3 cm)"
+   ]
+  ],
+  "1207": [
+   [
+    "HOVER",
+    "Fan.L near CellSrc (1.6 cm)"
+   ]
+  ],
+  "1219": [
+   [
+    "HOVER",
+    "Fan.L near CellSrc (6.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.L near CellSrc (2.7 cm)"
+   ]
+  ],
+  "1231": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (3.2 cm)"
+   ]
+  ],
+  "1243": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (6.1 cm)"
+   ]
+  ],
+  "1249": [
+   [
+    "HOVER",
+    "Manager.L near CellSrc (6.4 cm)"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1483": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1489": [
+   [
+    "FILL",
+    "hair / top of head 53%"
+   ]
+  ],
+  "1495": [
+   [
+    "FILL",
+    "hair / top of head 68%"
+   ]
+  ],
+  "1501": [
+   [
+    "BACKHEAD",
+    "ManagerB"
+   ]
+  ],
+  "1513": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1519": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1621": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1699": [
+   [
+    "HOVER",
+    "Nurse.L near drawer_cabinet (11.4 cm)"
+   ]
+  ],
+  "1705": [
+   [
+    "FACEPRESS",
+    "Doctor.L hand on face"
+   ]
+  ],
+  "1723": [
+   [
+    "FILL",
+    "hair / top of head 46%"
+   ]
+  ],
+  "1729": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "FILL",
+    "hair / top of head 88%"
+   ]
+  ],
+  "1735": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1921": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1927": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1933": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1939": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1945": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1951": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1957": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1963": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1969": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1975": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1981": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1987": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1993": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CityBlockSrc.003 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2155": [
+   [
+    "FILL",
+    "Curtain"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Curtain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2251": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2257": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2263": [
+   [
+    "FILL",
+    "LaptopScreen"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2269": [
+   [
+    "FILL",
+    "LaptopScreen"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only LaptopScreen in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2281": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (10.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (8.4 cm)"
+   ]
+  ],
+  "2287": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (14.0 cm)"
+   ]
+  ],
+  "2293": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (1.9 cm)"
+   ]
+  ],
+  "2299": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (1.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (6.5 cm)"
+   ]
+  ],
+  "2305": [
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (15.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (10.2 cm)"
+   ]
+  ],
+  "2311": [
+   [
+    "HOVER",
+    "Manager.R near Cheque (7.7 cm)"
+   ]
+  ],
+  "2317": [
+   [
+    "HOVER",
+    "Manager.R near Cheque (10.8 cm)"
+   ]
+  ],
+  "2323": [
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (13.1 cm)"
+   ]
+  ],
+  "2329": [
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.8 cm)"
+   ]
+  ],
+  "2335": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (8.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (11.7 cm)"
+   ]
+  ],
+  "2341": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (9.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (9.6 cm)"
+   ]
+  ],
+  "2347": [
+   [
+    "HOVER",
+    "Manager.R near Cheque (12.0 cm)"
+   ]
+  ],
+  "2365": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (12.4 cm)"
+   ]
+  ],
+  "2371": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (10.4 cm)"
+   ]
+  ],
+  "2377": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (12.6 cm)"
+   ]
+  ],
+  "2383": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.3 cm)"
+   ]
+  ],
+  "2389": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ]
+  ],
+  "2395": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (13.0 cm)"
+   ]
+  ],
+  "2401": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (10.7 cm)"
+   ]
+  ],
+  "2407": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (12.9 cm)"
+   ]
+  ],
+  "2413": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ]
+  ],
+  "2419": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ]
+  ],
+  "2425": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (11.7 cm)"
+   ]
+  ],
+  "2431": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (8.4 cm)"
+   ]
+  ],
+  "2437": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (3.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (10.9 cm)"
+   ]
+  ],
+  "2443": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (9.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (12.5 cm)"
+   ]
+  ],
+  "2449": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (6.4 cm)"
+   ]
+  ],
+  "2455": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (11.0 cm)"
+   ]
+  ],
+  "2461": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (7.7 cm)"
+   ]
+  ],
+  "2467": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Cheque (11.6 cm)"
+   ]
+  ],
+  "2473": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.7 cm)"
+   ]
+  ],
+  "2479": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (3.7 cm)"
+   ]
+  ],
+  "2485": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (6.7 cm)"
+   ]
+  ],
+  "2491": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (9.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near ChequeBorder (8.8 cm)"
+   ]
+  ],
+  "2497": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (12.3 cm)"
+   ]
+  ],
+  "2503": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (14.2 cm)"
+   ]
+  ],
+  "2509": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (15.6 cm)"
+   ]
+  ],
+  "2515": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Skater1.L near Conf237 (10.5 cm)"
+   ]
+  ],
+  "2521": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ]
+  ],
+  "2527": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (15.4 cm)"
+   ]
+  ],
+  "2533": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (11.6 cm)"
+   ]
+  ],
+  "2539": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (8.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (4.6 cm)"
+   ]
+  ],
+  "2545": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.0 cm)"
+   ]
+  ],
+  "2551": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ]
+  ],
+  "2557": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ]
+  ],
+  "2563": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (5.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (5.3 cm)"
+   ]
+  ],
+  "2569": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (14.3 cm)"
+   ]
+  ],
+  "2575": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ]
+  ],
+  "2581": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ]
+  ],
+  "2587": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ]
+  ],
+  "2593": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (14.0 cm)"
+   ]
+  ],
+  "2599": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (3.5 cm)"
+   ]
+  ],
+  "2605": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.1 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Skater4.L near Conf47 (14.1 cm)"
+   ]
+  ],
+  "2611": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Manager.R near Conf257 (15.2 cm)"
+   ]
+  ],
+  "2617": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ]
+  ],
+  "2623": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ]
+  ],
+  "2629": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ]
+  ],
+  "2635": [
+   [
+    "HOVER",
+    "Fan.L near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fan.R near Cheque (2.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "HOVER": 269,
+  "EMPTY": 111,
+  "BACKHEAD": 3,
+  "FILL": 17,
+  "INSIDE": 1,
+  "FACEPRESS": 1
+ }
+}

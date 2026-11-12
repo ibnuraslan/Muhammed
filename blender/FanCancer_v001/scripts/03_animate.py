@@ -126,8 +126,8 @@ def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0
 # palm helpers (body-local, character faces -Y): d = finger direction, n = palm normal
 HANDS_ON_BOARDS = {"L": ((0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1)), "R": ((-0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1))}
 def phone_hold(dz=0.0, both=True, spread=0.0):
-    hd = {"R": ((-0.05, -0.44, 1.10 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
-    if both: hd["L"] = ((0.10 + spread, -0.43, 1.09 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
+    hd = {"R": ((-0.05, -0.36, 1.17 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
+    if both: hd["L"] = ((0.10 + spread, -0.35, 1.16 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
     return hd
 
 # ================================================================== FAN
@@ -171,7 +171,7 @@ def fan_rink():
                                                                      "L": ((0.06, -0.29, 1.07), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))})
     fan.pose(f(16.15), (0.0, 0.5, 0), 0, flex=12, head=(0, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(16.1), brow=0.6, jaw=6, frown=0.3)
-    knock = ((0.30, -0.47, 1.36), (0, -0.2, 1), (1, 0, 0))
+    knock = ((0.30, -0.488, 1.36), (0, -0.2, 1), (0, -1, 0))
     for k, t in enumerate((16.5, 16.65, 16.8, 16.95)):
         L = knock if k % 2 else ((0.30, -0.39, 1.36), (0, -0.2, 1), (1, 0, 0))
         fan.pose(f(t), (0.0, 0.5, 0), 0, flex=12, head=(0, 2), hands={**glassR, "L": L})
@@ -282,8 +282,8 @@ def man_rink():
 man_rink()
 def man_finale():
     f = F; p = FIN + Vector((0.45, 0.05, 0))
-    clap_o = {"L": ((0.025, -0.44, 1.15), (0, -0.3, 1), (-1, 0, 0)), "R": ((-0.025, -0.44, 1.15), (0, -0.3, 1), (1, 0, 0))}
-    clap_c = {"L": ((0.13, -0.44, 1.12), (0, -0.3, 1), (-1, 0, 0)), "R": ((-0.13, -0.44, 1.12), (0, -0.3, 1), (1, 0, 0))}
+    clap_o = {"L": ((0.145, -0.40, 1.18), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.095, -0.40, 1.18), (0, -0.3, 1), (1, 0, 0))}
+    clap_c = {"L": ((0.24, -0.40, 1.15), (0, -0.3, 1), (-1, 0, 0)), "R": ((0.00, -0.40, 1.15), (0, -0.3, 1), (1, 0, 0))}
     for i in range(24):
         t = 38.0 + i * 0.25
         man.pose(f(t), p, -15, flex=2, head=(-4, -14), hands=clap_o if i % 2 else clap_c)
@@ -349,10 +349,10 @@ def doc_anim():
     doc.pose(f(26.0), DOCP, 85, flex=8, head=(4, 20), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps from the pocket
     cut = {"R": ((-0.12, -0.60, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.01, -0.58, 1.40), (0, -0.7, 0.2), (0, -0.5, -0.8))}
     for i, t in enumerate((26.4, 27.0, 27.6, 28.2)):
-        doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=32, head=(34, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
+        doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=26, head=(18, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
     face(DR, f(26.6), brow=-0.3, frown=0.8, squint=0.7)
     _c = dict(cut); _c["L"] = ((0.21, -0.03, 0.92), (0, -0.1, -1), (-1, 0, 0))
-    doc.pose(f(27.85), DOCP + Vector((0.06, 0, 0)), 93, flex=26, head=(30, -2), hands=_c)            # left hand fetches the bandage
+    doc.pose(f(27.85), DOCP + Vector((0.06, 0, 0)), 93, flex=22, head=(14, -2), hands=_c)            # left hand fetches the bandage
     doc.pose(f(28.7), DOCP + Vector((0.04, 0, 0)), 90, flex=14, head=(16, 4), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps back to the pocket
     doc.pose(f(29.2), DOCP, 80, flex=4, head=(0, 20))
     doc.plant = None
@@ -377,6 +377,16 @@ def nurse_anim():
     arm_swing(nur, path, yaw_fn, F(20.0), F(33.0), 0.6)
     face(NR, F(22), brow=0.2); face(NR, F(28), smile=0.5)
 nurse_anim()
+for _i, (_src, _y, _t0) in enumerate((("Crowd4", -1.45, 21.2), ("Crowd2", -0.65, 21.6))):
+    _r = dup_rig(_src, f"Staff{_i}", C_CHAR); _a = Actor(_r.name)
+    _pts = [(F(_t0), Vector((-24.2, _y, 0))), (F(_t0 + 1.5), Vector((-20.5, _y, 0))), (F(_t0 + 3.0), Vector((-16.8, _y + 0.05, 0))), (F(26.5), Vector((-14.5, _y, 0)))]
+    _p = catmull(_pts)
+    def _yf(fr, _p=_p):
+        a_ = _p(fr); b_ = _p(fr + 4); d_ = b_ - a_
+        return math.degrees(math.atan2(d_.x, -d_.y)) if d_.length > 1e-4 else -90
+    _a.H.walk(_p, _yf, F(_t0), F(26.5), stride=0.7, lift=0.07)
+    arm_swing(_a, _p, _yf, F(_t0), F(26.5), 0.7)
+    face(_r, F(_t0), brow=0.2, smile=0.3)
 
 # ================================================================== crowd + players (FK)
 def fk(rig, f, n, seq):
@@ -422,7 +432,7 @@ for row in range(3):   # far side, across the ice
         CROWD.append((r, Vector((x, y, z)), random.random() * 6.28, 180))
 for item in CROWD:
     r, p, ph = item[:3]; yaw = item[3] if len(item) > 3 else 0
-    phone = random.random() < 0.15
+    phone = random.random() < 0.15 and False
     for f in range(1, 2641, 30):
         t = f / 60.0
         goal = 1.0 if 38.4 < t < 44.5 else (0.6 if (3.0 < (t + ph) % 11 < 4.0) else 0.0)

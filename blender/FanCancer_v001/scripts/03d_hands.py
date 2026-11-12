@@ -34,3 +34,17 @@ for r in rigs:
     for s in "LR":
         if s not in plan: apply_pose(r, s, "relaxed", 1); n += 1
 print("HANDS_OK", len(rigs), "rigs", n, "pose keys")
+
+# cheque held at its edges: grip_object for both hands at each finale key
+cq = bpy.data.objects["Cheque"]
+for t in (38.0, 39.0, 40.0, 41.0, 42.0, 43.0, 44.0):
+    f = F(t); sc.frame_set(f)
+    M = cq.matrix_world; xa = (M.to_3x3() @ Vector((1, 0, 0))).normalized(); c0 = M.translation
+    for s_, sg in (("L", 1), ("R", -1)):
+        edge = c0 + xa * sg * 0.46 + Vector((0, 0, 0.05))
+        try: grip_object(FR, s_, f, cq, edge, -xa * sg)
+        except Exception as e: print("GRIPFAIL", t, s_, e)
+# hidden source meshes left at the origin confuse the QA (and add size): remove them; their copies keep the data
+for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.hide_render and o.name.endswith("Src")]:
+    bpy.data.objects.remove(o)
+print("CHEQUE_GRIP_OK")
