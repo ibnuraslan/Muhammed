@@ -130,7 +130,6 @@ def build(variant=None):
         ph.model("painted_wooden_table", loc=OVAL_DESK, rot_z=0.0, scale=0.78)
         ph.model("ArmChair_01", loc=(0.3, 0.6, 0.0), rot_z=0.4)
         ph.model("Sofa_01", loc=(1.6, -1.6, 0.0), rot_z=math.pi / 2) if False else None
-        ph.model("vintage_suitcase", loc=(OVAL_DESK.x + 0.45, OVAL_DESK.y - 0.15, 0.74), rot_z=0.1, scale=0.32)
     else:
         ph.model("painted_wooden_table", loc=(0.3, 1.0, 0.0), rot_z=0.0, scale=0.78)          # partner desk
         ph.model("ArmChair_01", loc=(0.3, 1.75, 0.0), rot_z=math.pi)
@@ -207,15 +206,30 @@ def build(variant=None):
     if oval:
         import skia
         path = os.path.join(T.GEN, "folder_label.png")
-        sf = skia.Surface(900, 640); cv = sf.getCanvas(); cv.clear(skia.Color4f(0.72, 0.6, 0.38, 1))
-        pp = skia.Paint(AntiAlias=True); pp.setColor4f(skia.Color4f(0.9, 0.88, 0.82, 1))
-        cv.drawRect(skia.Rect.MakeXYWH(250, 230, 400, 120), pp)
-        pp.setColor4f(skia.Color4f(0.1, 0.1, 0.12, 1)); f = skia.Font(skia.Typeface.MakeFromFile(T.MONO_B), 40)
-        cv.drawString("PROJECT GUNMAN", 280, 305, f, pp)
+        sf = skia.Surface(900, 1160); cv = sf.getCanvas(); cv.clear(skia.Color4f(0.8, 0.74, 0.58, 1))      # buff cover
+        rp = skia.Paint(AntiAlias=True, Style=skia.Paint.kStroke_Style, StrokeWidth=34); rp.setColor4f(skia.Color4f(0.62, 0.08, 0.06, 1))
+        cv.drawRect(skia.Rect.MakeXYWH(40, 40, 820, 1080), rp)                                                    # red border
+        pp = skia.Paint(AntiAlias=True); pp.setColor4f(skia.Color4f(0.95, 0.94, 0.9, 1))
+        cv.drawRect(skia.Rect.MakeXYWH(170, 420, 560, 170), pp)
+        pp.setColor4f(skia.Color4f(0.08, 0.08, 0.1, 1)); f = skia.Font(skia.Typeface.MakeFromFile(T.MONO_B), 64)
+        cv.drawString("PROJECT GUNMAN", 450 - f.measureText("PROJECT GUNMAN") / 2, 525, f, pp)
         sf.makeImageSnapshot().save(path, skia.kPNG)
         fm = tex_mat("FolderLabel", path, 0.7)
         bpy.ops.mesh.primitive_plane_add(size=1); fo = bpy.context.active_object; fo.name = "Folder"
-        fo.scale = (0.24, 0.31, 1); bpy.ops.object.transform_apply(scale=True); fo.data.materials.append(fm)
+        fo.scale = (0.235, 0.305, 1); bpy.ops.object.transform_apply(scale=True); fo.data.materials.append(fm)
+        # a leather briefcase lying open on the desk (lid hinged at the back), in the lamp's pool of light
+        leather = ph.texture("brown_leather", scale=4.0, name="CaseLeather", tint=(0.55, 0.38, 0.25))
+        brass = pbr("Brass2", (0.75, 0.58, 0.32), 0.3, 1.0)
+        case = join([box("CaseBase", (0, 0, 0.045), (0.44, 0.33, 0.09), leather, bevel=0.012),
+                     box("CaseInside", (0, 0, 0.088), (0.41, 0.3, 0.004), pbr("CaseLining", (0.25, 0.08, 0.06), 0.8)),
+                     box("Latch", (-0.12, -0.166, 0.08), (0.03, 0.006, 0.02), brass), box("Latch2", (0.12, -0.166, 0.08), (0.03, 0.006, 0.02), brass)], "Briefcase")
+        case.location = OVAL_DESK + Vector((0.45, -0.1, 0.752))
+        lid = box("CaseLid", (0, 0.16, 0.0), (0.44, 0.33, 0.04), leather, bevel=0.012)
+        lp = bpy.data.objects.new("CaseLidHinge", None); bpy.context.collection.objects.link(lp); lp.location = case.location + Vector((0, 0.165, 0.09))
+        lid.parent = lp; lid.location = (0, 0.165, 0.0); lp.rotation_euler = (math.radians(-100), 0, 0)
+        c["case"] = case; c["case_lid"] = lp
+        pool = bpy.data.lights.new("CasePool", 'SPOT'); pool.energy = 45; pool.spot_size = math.radians(55); pool.spot_blend = 0.6; pool.color = (1.0, 0.76, 0.5)
+        po = bpy.data.objects.new("CasePool", pool); bpy.context.collection.objects.link(po); po.location = case.location + Vector((0.05, -0.1, 0.7)); point_at(po, case.location)
         fo.modifiers.new("thick", 'SOLIDIFY').thickness = 0.006
         c["folder"] = fo
         aide = twp.person("Aide", 1.0, 37, "male_elegantsuit01", "short03", hv=0.25, cval=0.45, hue=0.6, sat=0.15)
@@ -268,10 +282,11 @@ def animate(c, sec, shot):
         aide = c["aide"]; fo = c["folder"]
         twp.stand(aide, (d.x + 0.95, d.y - 0.35, 0), math.radians(135) if shot == "folder" else math.radians(120))
         if shot == "folder":
-            k = ease(min(1.0, max(0.0, (sec - 0.8) / 2.2)))
-            case = d + Vector((0.45, -0.15, 0.95))
-            start = d + Vector((0.6, -0.55, 1.1))
-            fo.location = start.lerp(case, k); fo.rotation_euler = (math.radians(80 - 10 * k), 0, math.radians(15))
+            k = ease(min(1.0, max(0.0, (sec - 0.6) / 2.4)))
+            cl = c["case"].location
+            start = cl + Vector((0.05, -0.42, 0.11)); end = cl + Vector((0.0, -0.01, 0.1))
+            fo.location = start.lerp(end, k); fo.rotation_euler = (0, 0, math.radians(4 * (1 - k)))      # flat, label up, sliding in
+            c["case_lid"].rotation_euler = (math.radians(-100 + 92 * ease(max(0.0, (sec - 3.4) / 1.0))), 0, 0)
             reach(aide, "R", fo.location + Vector((0.08, -0.08, 0.1)), Vector((0.5, -0.4, -0.7)), Vector((-0.6, 0.6, -0.4)))
             reach(aide, "L", fo.location + Vector((-0.1, -0.12, 0.05)), Vector((-0.5, -0.4, -0.7)), Vector((0.6, 0.6, -0.4)))
         else:
@@ -341,7 +356,8 @@ def cam_sign(c, t):
 
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
-    return (d + Vector((2.9, -2.6, 1.55)).lerp(Vector((2.6, -2.3, 1.5)), e), d + Vector((0.45, -0.2, 0.95)), 32)
+    cl = c["case"].location
+    return (cl + Vector((0.9, -1.25, 0.55)).lerp(Vector((0.75, -1.05, 0.5)), e), cl + Vector((-0.02, -0.18, 0.05)), 38)
 
 
 def cam_talks_wide(c, t):

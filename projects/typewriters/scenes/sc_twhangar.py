@@ -26,9 +26,9 @@ VARIANT_FOR = {"load": "night", "slats": "night", "customs_torch": "customs", "c
 CUSTOMS = Vector((-6.0, 3.0, 0.0))
 DOCK = Vector((2.0, -4.0, 0.0))
 HX, HY, HZ = 18.0, 14.0, 11.0          # hangar half-length (x), half-depth (y), eave height; doors open on -Y
-PLANE = Vector((4.0, -48.0, 0.0))
+PLANE = Vector((26.0, -100.0, 0.0))          # far out on the apron: a soft silhouette until the kit has a cargo plane
 WORK = Vector((-4.0, 2.0, 0.0))         # the wrapping station
-TRAILER = Vector((9.0, 4.0, 0.0))
+TRAILER = Vector((12.0, -HY - 5.0, 0.0))      # parked on the apron just outside the doors
 
 
 def forklift(name):
@@ -66,7 +66,7 @@ def transport(name):
     rp = box("Ramp", (0, -2.5, 0), (3.8, 5.0, 0.15), pbr("RampFloor", (0.2, 0.21, 0.2), 0.6, 0.6)); rp.parent = ramp
     ramp.rotation_euler = (math.radians(-11), 0, 0)
     P(box("Hold", (0, -L / 2 + 4, 2.4), (3.9, 9.0, 3.4), pbr("HoldInside", (0.12, 0.13, 0.12), 0.7)))
-    P(box("HoldLight", (0, -L / 2 + 6, 4.0), (1.0, 6.0, 0.05), pbr("HoldLamp", (0.9, 0.9, 0.85), 0.3, 0.0, **{'Emission Color': (1, 0.9, 0.75, 1), 'Emission Strength': 4.0})))
+    P(box("HoldLight", (0, -L / 2 + 6, 4.0), (1.0, 6.0, 0.05), pbr("HoldLamp", (0.9, 0.9, 0.85), 0.3, 0.0, **{'Emission Color': (1, 0.9, 0.75, 1), 'Emission Strength': 0.15})))
     for x in (-2.4, 2.4):
         P(box("GearPod", (x, 1.0, 1.4), (1.2, 7.0, 1.6), grey, bevel=0.3))
         for y in (-1.5, 2.5):
@@ -93,7 +93,7 @@ def slatted_crate(name, with_tw=True):
         box("TopSlat", (-W_ / 2 + 0.06 + k * 0.125, 0, H_), (0.08, D_, 0.02), wood).parent = r
     tw = None
     if with_tw:
-        tw = T.make(name + "_TW", loc=(0, 0, 0.03), color=(0.2, 0.25, 0.3), mechanism=False, glyphs=False, legends=False, text=" ")
+        tw = T.make(name + "_TW", loc=(0, 0, 0.03), color=(0.2, 0.25, 0.3), mechanism=False, glyphs=True, legends=True, text=" ")
         tw["root"].parent = r
         tw["paper"].hide_render = True
     return r, tw
@@ -137,12 +137,15 @@ def build(variant=None):
     box("Roof", (0, 0, HZ + 1.8), (2 * HX, 2 * HY, 0.15), iron)
     for k in range(5):
         box("Skylight", (-HX + 5 + k * 7.0, 0, HZ + 1.86), (2.0, 2 * HY - 2, 0.02), glass("SkyGlass", (0.85, 0.88, 0.9), 0.2))
+        if not night:
+            sk = area_light((-HX + 5 + k * 7.0, 0, HZ + 1.7), (0, 0, 0), 2.0, 900, (0.88, 0.92, 1.0)); sk.data.shape = 'RECTANGLE'
+            sk.data.size = 2.0; sk.data.size_y = 2 * HY - 2; sk.visible_camera = False
     for x in np.arange(-HX + 4, HX, 6.0):
         for y in (-6.0, 4.0):
             ph.model("hanging_industrial_lamp", loc=(x, y, HZ - 0.1))
             if customs and not (x < -6 and y > 0):
                 continue                                # a Soviet customs shed at night: one lamp left burning
-            pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = (250 if customs else 1200) if night else 500; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
+            pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = (250 if customs else 1200) if night else 1400; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
             pl.color = (1.0, 0.85, 0.65)
             po = bpy.data.objects.new("HangLamp", pl); bpy.context.collection.objects.link(po); po.location = (x, y, HZ - 1.4)
     if not night:
@@ -167,14 +170,23 @@ def build(variant=None):
     # ---------------------------------------------------------------- the wrapping station: one crate being wrapped and sealed
     wood = ph.texture("brown_planks_03", scale=1.5, name="CrateWood")
     crate = box("WrapCrate", (WORK.x, WORK.y, 0.48), (1.0, 0.8, 0.9), wood, bevel=0.01)
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.9, name="BurlapBig", tint=(0.8, 0.68, 0.5))
     wrap = box("Wrapping", (0, 0, 0), (1.03, 0.83, 0.93), hes, bevel=0.03)
+    sub = wrap.modifiers.new("sub", 'SUBSURF'); sub.levels = 3; sub.render_levels = 3; sub.subdivision_type = 'SIMPLE'
+    dsp = wrap.modifiers.new("folds", 'DISPLACE'); tx = bpy.data.textures.new("Folds", 'CLOUDS'); tx.noise_scale = 0.18
+    dsp.texture = tx; dsp.strength = 0.012; dsp.mid_level = 0.5
     wrap.data.transform(Matrix.Translation((0, 0, 0.465)))                         # origin at the bottom: scale z = how far it is wrapped
     wrap.location = (WORK.x, WORK.y, 0.015)
     c["wrap"] = wrap
-    sheet = box("BurlapSheet", (0, 0, 0), (1.1, 0.01, 1.0), hes)
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=24, size=1)
+    sheet = bpy.context.active_object; sheet.name = "BurlapSheet"; sheet.scale = (1.1, 1.0, 1); bpy.ops.object.transform_apply(scale=True)
+    sheet.rotation_mode = 'XYZ'; sheet.data.materials.append(hes)
+    sw = sheet.modifiers.new("drape", 'WAVE'); sw.use_x = True; sw.use_y = True; sw.height = 0.03; sw.width = 0.25; sw.speed = 0.01
     c["sheet"] = sheet
     strap_m = pbr("StrapW", (0.32, 0.27, 0.2), 0.8)
-    strap = box("WrapStrap", (WORK.x, WORK.y - 0.425, 0.48), (0.05, 0.012, 0.95), strap_m); c["strap"] = strap
+    rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
+    strap = cyl("WrapTwine", (WORK.x, WORK.y - 0.43, 0.48), 0.008, 0.95, rope, verts=8); c["strap"] = strap
+    cyl("WrapTwineTop", (WORK.x, WORK.y, 0.955), 0.008, 0.86, rope, verts=8, rot=(math.radians(90), 0, 0))
     seal = join([cyl("SealWireH", (0, 0, 0), 0.002, 0.1, pbr("SealWireMH", (0.6, 0.6, 0.62), 0.3, 1.0), verts=6),
                  cyl("SealLeadH", (0, 0, -0.06), 0.013, 0.012, pbr("LeadH", (0.42, 0.43, 0.45), 0.5, 0.8), verts=16, rot=(math.radians(90), 0, 0))], "SealH")
     c["seal"] = seal
@@ -202,6 +214,8 @@ def build(variant=None):
     cyl("SensorWire", (-3.0, -1.17, 3.2), 0.004, 2.6, pbr("WireB", (0.05, 0.05, 0.05), 0.5), verts=6, rot=(0, math.radians(90), 0)).parent = tr0
     for k in range(4):
         o = MC.burlap_crate(f"TrLoad{k}", tag=False); o.parent = tr0; o.location = (-2.0 + (k // 2) * 1.0, -0.55 + (k % 2) * 1.1, 1.38)
+    if not night:
+        haze((0, -HY - 50, 10), (160, 90, 20), density=0.0025, color=(0.82, 0.86, 0.92), anis=0.3)
     pl, props = transport("Transport"); pl.location = PLANE; pl.rotation_euler = (0, 0, math.pi); c["plane"] = pl; c["props"] = props
     # night: floodlight masts on the apron, crates on a roller conveyor into the hold
     c["roll_crates"] = []
@@ -220,6 +234,10 @@ def build(variant=None):
             o = MC.burlap_crate(f"Roll{k}", size=(0.8, 0.7, 0.7), tag=False); c["roll_crates"].append(o)
         sc, stw = slatted_crate("SlatCrate"); sc.location = (PLANE.x - 2.4, PLANE.y + 23.5, 0.0); sc.rotation_euler = (0, 0, 0.2)
         c["slat"] = sc
+        ss = bpy.data.lights.new("SlatSun", 'SPOT'); ss.energy = 350; ss.spot_size = math.radians(30); ss.spot_blend = 0.2; ss.shadow_soft_size = 0.02
+        ss.color = (1.0, 0.82, 0.6)
+        so_ = bpy.data.objects.new("SlatSun", ss); bpy.context.collection.objects.link(so_)
+        so_.location = Vector(sc.location) + Vector((-0.9, 0.6, 1.8)); point_at(so_, Vector(sc.location) + Vector((0, 0, 0.12)))   # light raking through the slats
         for k in range(5):
             o = MC.burlap_crate(f"Wait{k}", tag=False); o.location = (PLANE.x - 3.6 + (k % 3) * 1.05, PLANE.y + 25 + (k // 3) * 0.9, 0.43)
     if customs:
@@ -347,7 +365,7 @@ def animate(c, sec, shot):
         twp.stand(a, (WORK.x - 0.2, WORK.y - 0.98, 0), math.pi)
         twp.stand(b, (WORK.x + 0.95, WORK.y + 0.05, 0), math.pi / 2 + math.pi)       # faces -X, the crate side
         top = 0.015 + 0.93 * wrap.scale.z
-        sheet.location = (WORK.x, WORK.y - 0.43, top + 0.25); sheet.rotation_euler = (math.radians(-15), 0, 0)
+        sheet.location = (WORK.x, WORK.y - 0.46, top + 0.3); sheet.rotation_euler = (math.radians(75), 0, 0)
         for sd, dx in (("L", 0.35), ("R", -0.35)):
             reach(a, sd, Vector((WORK.x + dx, WORK.y - 0.5, top + 0.25)), Vector((dx, -0.6, -0.6)), Vector((0, 1, 0)))
         reach(b, "R", Vector((WORK.x + 0.55, WORK.y - 0.2, top - 0.05)), Vector((0.3, -0.6, -0.6)), Vector((-1, 0, 0)))
@@ -375,7 +393,7 @@ def animate(c, sec, shot):
         else:
             st.location = (WORK.x + 0.5, WORK.y - 0.2, 0.93); st.rotation_euler = (0, 0, 0.4)
             crimp = max(0.0, math.sin(math.pi * min(1.0, (sec - 3.3) / 0.6))) if sec > 3.3 else 0.0
-            sp = Vector((WORK.x, WORK.y - 0.44, 0.62))
+            sp = Vector((WORK.x, WORK.y - 0.45, 0.66))                       # the lead seal hangs off the twine
             c["seal"].location = sp
             reach(a, "R", sp + Vector((0.07, -0.08, 0.02 - 0.015 * crimp)), Vector((-0.8, -0.3, -0.6)), Vector((-0.3, 1, 0)))
             reach(a, "L", sp + Vector((-0.08, -0.08, 0.02)), Vector((0.8, -0.3, -0.6)), Vector((0.3, 1, 0)))
@@ -426,17 +444,17 @@ def cam_sensor(c, t):
 
 def cam_apron(c, t):
     e = ease(t)
-    return (Vector((-24.0, -HY - 2.0, 2.2)).lerp(Vector((-22.0, -HY - 2.6, 2.3)), e), Vector((4.0, -HY - 30.0, 3.0)), 30)
+    return (Vector((-24.0, -HY - 2.0, 2.0)).lerp(Vector((-22.0, -HY - 2.6, 2.1)), e), Vector((0.0, -HY - 18.0, 1.6)), 30)
 
 
 def cam_load(c, t):
     e = ease(t)
-    return (Vector((PLANE.x + 7.0, PLANE.y + 27.0, 2.2)).lerp(Vector((PLANE.x + 6.0, PLANE.y + 25.5, 2.1)), e), Vector((PLANE.x, PLANE.y + 16.0, 2.0)), 28)
+    return (Vector((PLANE.x + 2.2, PLANE.y + 24.5, 1.05)).lerp(Vector((PLANE.x + 1.8, PLANE.y + 23.2, 1.0)), e), Vector((PLANE.x - 0.1, PLANE.y + 15.8, 1.5)), 32)
 
 
 def cam_slats(c, t):
     e = ease(t); s = c["slat"].location
-    return (s + Vector((1.3, -1.4, 1.0)).lerp(Vector((0.62, -0.68, 0.55)), e), s + Vector((0, 0, 0.18)), 40)
+    return (s + Vector((0.6, -1.6, 1.2)).lerp(Vector((0.18, -0.6, 0.66)), e), s + Vector((0.0, -0.03, 0.14)), 45)
 
 
 def cam_customs_torch(c, t):

@@ -32,7 +32,7 @@ CHAPTERS = {
         ("twoffice", "nsa_plans", 9.0, "2B Take the equipment out... keep the embassy working."),
         ("twambassador", "sign", 3.4, "3A President Reagan authorizes the operation"),
         ("twambassador", "folder", 2.4, "3B It's called Project Gunman."),
-        ("twinterior", "count", 4.5, "4A No central inventory."),
+        ("twoffice", "count", 4.5, "4A No central inventory."),
         ("twinterior", "doors", 4.5, "4B roughly two hundred and fifty typewriters"),
         ("twplant", "line", 4.5, "5A The plant in Lexington can spare fifty."),
         ("twplant", "pallet", 6.0, "5B ...replace the machines in the most sensitive areas."),

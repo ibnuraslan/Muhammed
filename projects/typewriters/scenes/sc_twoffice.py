@@ -16,9 +16,9 @@ import typewriter as T
 import twp
 
 EXPOSURE = -0.1
-DUR = {"analyst": 5.0, "page_out": 5.0, "typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0, "records_drawer": 4.5, "records_burn": 4.5,
+DUR = {"count": 5.0, "analyst": 5.0, "page_out": 5.0, "typing": 4.5, "notice": 5.0, "night_push": 4.5, "night_type": 5.0, "nsa_desk": 5.0, "nsa_plans": 5.0, "records_drawer": 4.5, "records_burn": 4.5,
        "attache": 5.0, "platen": 6.0}
-VARIANT_FOR = {"analyst": "analyst", "night_push": "night", "night_type": "night", "page_out": "night", "nsa_desk": "nsa", "nsa_plans": "nsa",
+VARIANT_FOR = {"count": "count", "analyst": "analyst", "night_push": "night", "night_type": "night", "page_out": "night", "nsa_desk": "nsa", "nsa_plans": "nsa",
                "records_drawer": "records", "records_burn": "records", "attache": "attache", "platen": "attache"}
 DESK_Z = 0.79
 DESK_A = Vector((0.9, 0.4, 0.0))
@@ -94,7 +94,14 @@ def build(variant=None):
                 l = area_light((x, y, 2.92), (0, 0, 0), 0.9, 38, (0.9, 0.96, 1.0)); l.visible_camera = False
     # ---------------------------------------------------------------- desks with typewriters (typists sit at +Y, face -Y)
     c["tws"] = []
-    desks = [(DESK_A, True), (Vector((-1.5, 0.4, 0)), True), (Vector((0.9, -1.9, 0)), True), (Vector((-1.5, -1.9, 0)), False)]
+    desks = [(DESK_A, True), (Vector((-1.5, 0.4, 0)), True), (Vector((0.9, -1.9, 0)), True), (Vector((-1.5, -1.9, 0)), variant == "count")]
+    if variant == "count":                      # every desk in the room has a typewriter on it, side desks too
+        for k, (x, y) in enumerate(((3.25, 0.5), (3.25, -1.6), (-3.3, -2.2))):
+            r_, ms_ = ph.model("SchoolDesk_01", loc=(x, y, 0), rot_z=math.pi if y > 0 else 0.0)
+            lo_, hi_ = ph.bounds(ms_)
+            tw_ = T.make(f"TWside{k}", loc=(x, y, hi_.z - 0.005), rot_z=math.pi if y > 0 else 0.0, color=(0.2, 0.25, 0.3), mechanism=False,
+                         glyphs=False, legends=False, text=" ", seed=20 + k)
+            tw_["paper"].hide_render = True
     paper = paper_tex.make_all()
     pages = [bpy.data.materials.new(f"Pg{k}") for k in range(3)]
     for k, m in enumerate(pages):
@@ -133,6 +140,7 @@ def build(variant=None):
         sp2 = bpy.data.lights.new("Lamp2", 'SPOT'); sp2.energy = 40; sp2.spot_size = math.radians(95); sp2.spot_blend = 0.7; sp2.color = (1.0, 0.76, 0.5)
         l2 = bpy.data.objects.new("Lamp2", sp2); bpy.context.collection.objects.link(l2); l2.location = (-1.3, 0.4, DESK_Z + 0.75); point_at(l2, (-1.5, 0.35, DESK_Z))
         ceil = area_light((-0.3, 0.0, 2.9), (0, 0, 0), 2.0, 25, (0.9, 0.85, 0.75)); ceil.visible_camera = False
+        up = area_light((-1.5, 0.35, DESK_Z + 0.05), (math.radians(180), 0, 0), 0.8, 6, (1.0, 0.85, 0.6)); up.visible_camera = False   # lamp light bouncing off the plans onto faces
     if night:
         sp = bpy.data.lights.new("Lamp", 'SPOT'); sp.energy = 22 if not nsa else 35; sp.spot_size = math.radians(85); sp.spot_blend = 0.6
         sp.color = (1.0, 0.74, 0.48); sp.shadow_soft_size = 0.04
@@ -195,6 +203,10 @@ def build(variant=None):
     c["notice"] = notice
     # ---------------------------------------------------------------- people (day only)
     c["people"] = {}
+    if variant == "count":
+        cnt = twp.person("Counter", 1.0, 44, "male_casualsuit01", "short02", hv=0.35, cval=0.5, hue=0.1, sat=0.2)
+        c["people"]["counter"] = cnt
+        cb, _ = ph.model("clipboard"); c["clipboard"] = cb
     if variant == "analyst":                       # a Soviet analyst, late: a printout of run-together letters, a pencil
         import os
         a_img, b_img = analyst_images(os.path.join(T.GEN, "runon_a.png"), os.path.join(T.GEN, "runon_b.png"))
@@ -242,7 +254,7 @@ def build(variant=None):
         c["people"]["off"] = off
         for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PlanA", 1.0, 45, "male_casualsuit02", "short03", 0.55, 0.1),
                                                           ("PlanB", 1.0, 38, "male_casualsuit04", "short01", 0.5, 0.6),
-                                                          ("PlanC", 0.0, 41, "female_elegantsuit01", "bob01", 0.55, 0.08))):
+                                                          ("PlanC", 1.0, 51, "male_elegantsuit01", "short04", 0.45, 0.6))):
             c["people"][nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.2)
     if variant in (None, "day"):
         sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "ponytail01", hv=0.22, cval=0.55, hue=0.58, sat=0.3)
@@ -262,6 +274,18 @@ def build(variant=None):
 # ============================================================================ animation
 def animate(c, sec, shot=None):
     night = c["variant"] == "night"
+    if c["variant"] == "count":
+        from human import reach, fingers_curl
+        h = c["people"]["counter"]
+        twp.walk(h, (3.8, -0.75), (-3.5, -0.75), sec, speed=0.7)
+        h.rot("head", (0, 0, 1), 40 * math.sin(sec * 1.3))                  # looking from desk to desk, counting
+        fwd = twp.forward(h); cb = c["clipboard"]
+        cb.location = h.bone_head("spine03") + fwd * 0.28 + Vector((0, 0, -0.12)); cb.rotation_euler = (math.radians(-50), 0, math.atan2(fwd.x, -fwd.y))
+        side = fwd.cross(Vector((0, 0, 1)))
+        reach(h, "L", cb.location + side * 0.1 + Vector((0, 0, -0.03)), Vector((side.x, side.y, -0.8)), fwd)
+        reach(h, "R", cb.location - side * 0.05 + Vector((0, 0, 0.03)), Vector((-side.x, -side.y, -0.8)), fwd + Vector((0, 0, -0.6)))
+        bpy.context.view_layer.update()
+        return
     if c["variant"] == "analyst":
         from human import reach, fingers_curl
         an = c["people"]["an"]; pen = c["pencil"]
@@ -326,10 +350,11 @@ def animate(c, sec, shot=None):
             twp.stand(h, (pos.x, pos.y, 0), ang)
             h.rot("spine03", Vector((-d.y, d.x, 0)) * -1, 18); h.rot("head", Vector((-d.y, d.x, 0)) * -1, 18)
             side = d.cross(Vector((0, 0, 1)))
-            if k == 0:
-                reach(h, "R", pl + Vector((0.1 * math.sin(sec * 0.8), -0.12, 0.06)), Vector((0.4, -0.4, -0.7)), d + Vector((0, 0, -0.6)))
-            else:
-                reach(h, "L", pl - d * 0.35 + side * 0.25 + Vector((0, 0, 0.06)), Vector((0, 0, -1)), d + Vector((0, 0, -0.8)))
+            edge = pl - d * (0.38 if k < 2 else 0.5)                      # hands flat on the desk edge, leaning in
+            for sd, sg in (("L", -1), ("R", 1)):
+                reach(h, sd, edge + side * 0.22 * sg + Vector((0, 0, 0.06)), Vector((sg * side.x, sg * side.y, -0.6)), d + Vector((0, 0, -1.2)))
+            from human import fingers_curl as _fc
+            _fc(h, 10, thumb=5)
         bpy.context.view_layer.update()
         return
     if night and shot == "page_out":
@@ -464,7 +489,7 @@ def cam_nsa_desk(c, t):
 
 def cam_nsa_plans(c, t):
     e = ease(t)
-    return (Vector((-1.5, -1.6, 2.45)).lerp(Vector((-1.45, -1.25, 2.35)), e), Vector((-1.5, 0.3, 0.85)), 30)
+    return (Vector((-3.3, 0.6, 1.45)).lerp(Vector((-3.05, 0.55, 1.42)), e), Vector((-1.4, 0.35, 1.15)), 32)        # side-on, eye level
 
 
 def cam_records_drawer(c, t):
@@ -495,7 +520,13 @@ def cam_page_out(c, t):
     return (a.lerp(b, e), _tw(c, (0.0, 0.05, 0.22)), 42)
 
 
+def cam_count(c, t):
+    e = ease(t)
+    return (Vector((-4.5, -3.0, 1.75)).lerp(Vector((-4.0, -2.7, 1.7)), e), Vector((2.0 - 3.5 * e, -0.6, 1.1)), 26)
+
+
 MOVES = {
+    "count": dict(kind="anim", dof=None, cam=cam_count, anim=anim("count")),
     "analyst": dict(kind="anim", dof=2.2, cam=lambda c, t: (Vector((DESK_A.x - 1.0, DESK_A.y - 0.6, 1.55)).lerp(Vector((DESK_A.x - 0.85, DESK_A.y - 0.45, 1.5)), ease(t)),
                                                          Vector((DESK_A.x - 0.15, DESK_A.y + 0.35, 0.95)), 35),
                     focus=lambda c, t: c["printout"].location, anim=anim("analyst")),

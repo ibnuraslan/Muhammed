@@ -128,13 +128,19 @@ def lamp_blink(mat_names=("LampRed", "LampGreen"), period=24, strength=6.0):
 
 
 def burlap_crate(name, size=(0.95, 0.75, 0.85), tag=True):
-    hes = bpy.data.materials.get("Burlap") or ph.texture("hessian_230", scale=2.0, name="Burlap", tint=(0.78, 0.66, 0.5))
-    rope = bpy.data.materials.get("Strap") or pbr("Strap", (0.32, 0.27, 0.2), 0.8)
+    """A crate sewn into coarse burlap: weave texture, rope lashing both ways, staples along the top seam, a tag."""
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.9, name="BurlapBig", tint=(0.8, 0.68, 0.5))
+    rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
+    stm = bpy.data.materials.get("StapleE") or pbr("StapleE", (0.7, 0.7, 0.72), 0.25, 1.0)
     sx, sy, sz = size
-    parts = [box("Crate", (0, 0, 0), size, hes, bevel=0.03)]
+    parts = [box("Crate", (0, 0, 0), size, hes, bevel=0.04)]
     for dx in (-sx * 0.3, sx * 0.3):
-        parts.append(box("StrapV", (dx, 0, 0), (0.05, sy + 0.012, sz + 0.012), rope))
-    parts.append(box("StrapH", (0, 0, 0), (sx + 0.012, sy + 0.012, 0.05), rope))
+        parts.append(cyl("RopeV", (dx, -sy / 2 - 0.008, 0), 0.01, sz + 0.02, rope, verts=8))
+        parts.append(cyl("RopeV", (dx, sy / 2 + 0.008, 0), 0.01, sz + 0.02, rope, verts=8))
+        parts.append(cyl("RopeT", (dx, 0, sz / 2 + 0.008), 0.01, sy + 0.02, rope, verts=8, rot=(math.radians(90), 0, 0)))
+    parts.append(cyl("RopeH", (0, 0, sz / 2 + 0.01), 0.01, sx + 0.02, rope, verts=8, rot=(0, math.radians(90), 0)))
+    for k in range(10):
+        parts.append(box("Staple", (-sx / 2 + 0.06 + k * (sx - 0.12) / 9, -sy / 2 - 0.004, sz / 2 - 0.035), (0.016, 0.003, 0.003), stm))
     if tag:
-        parts.append(box("Tag", (sx * 0.15, -sy / 2 - 0.008, sz * 0.15), (0.16, 0.004, 0.1), pbr("Tag", (0.82, 0.8, 0.72), 0.8)))
+        parts.append(box("Tag", (sx * 0.15, -sy / 2 - 0.01, sz * 0.12), (0.16, 0.004, 0.1), pbr("Tag", (0.82, 0.8, 0.72), 0.8)))
     return join(parts, name)

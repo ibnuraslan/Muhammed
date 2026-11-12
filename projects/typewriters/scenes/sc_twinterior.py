@@ -108,7 +108,11 @@ def build(variant=None):
     # wire bundle running up the wall to the ceiling (from the attic)
     cyl("AlarmWire", (-11.56, -0.35, 2.05), 0.012, 1.5, pbr("WireGrey", (0.2, 0.2, 0.2), 0.5), verts=8)
     ph.model("vintage_telephone_wall_clock", loc=(-12.93, -0.9, 1.4), rot_z=-math.pi / 2)
-    marine = twp.person("MarineP", 1.0, 23, "male_casualsuit06", "short01", hv=0.2, cval=0.55, hue=0.12, sat=0.35)
+    marine = twp.person("MarineP", 1.0, 23, "male_casualsuit03", "short01", hv=0.2, cval=0.55, hue=0.12, sat=0.35)
+    for o in marine.parts:
+        if "casualsuit" in o.name:
+            twp.two_tone(o, 0.74, (0.62, 0.52, 0.32), (0.03, 0.04, 0.09))         # khaki shirt over blue trousers (seated)
+    twp.marine_cap((-11.25, -0.25, 0.555), 0.4)
     c["marine"] = marine
     twp.model_fit("SchoolChair_01", (-10.55, -0.55, 0), rot_z=math.pi / 2, height=0.92)
     # ---------------------------------------------------------------- stairwell (x around STAIR_X), three storeys, open well
@@ -201,7 +205,11 @@ def animate(c, sec, shot):
     elif shot == "chat":
         a, b = P["staffA"], P["staffB"]
         twp.stand(a, (0.7, 0.2, 0), math.radians(150)); twp.stand(b, (1.6, 0.05, 0), math.radians(-150))
-        reach(b, "R", b.bone_head("upperarm01.R") + Vector((-0.25, 0.25, -0.25 + 0.05 * math.sin(sec * 2))), Vector((0.5, -0.5, -0.6)))
+        cb = c["clipboard"]; twp.hide([cb] + list(cb.children_recursive), False)          # she holds a folder at her chest
+        fa = twp.forward(a); cb.location = a.bone_head("spine03") + fa * 0.25 + Vector((0, 0, -0.1)); cb.rotation_euler = (math.radians(-60), 0, math.atan2(fa.x, -fa.y))
+        sa = fa.cross(Vector((0, 0, 1)))
+        for sd, sg in (("L", 1), ("R", -1)):
+            reach(a, sd, cb.location - sa * 0.08 * sg + Vector((0, 0, -0.04)), Vector((-sg * sa.x, -sg * sa.y, -0.8)), fa)
         a.rot("head", (0, 0, 1), 15 * math.sin(sec * 0.7)); b.rot("head", (0, 0, 1), -10)
         twp.walk(P["clerk"], (6.0, -0.3), (-6.0, -0.3), sec, speed=1.1)
     elif shot == "lift":
@@ -223,28 +231,19 @@ def animate(c, sec, shot):
         m.rot("head", (0, 0, 1), -20 * alarm); m.rot("spine03", (0, 0, 1), -10 * alarm)
         reach(m, "R", Vector((-11.0, -0.68 + 0.08 * alarm, 0.62 + 0.12 * alarm)), Vector((0.5, -0.6, -0.7)), Vector((-1, 0, -0.3)))
         reach(m, "L", Vector((-11.0, -0.38, 0.6)), Vector((0.5, 0.6, -0.7)), Vector((-1, 0, -0.3)))
-    elif shot == "landing":
+    elif shot in ("landing", "stairs"):
         a, b = P["workA"], P["workB"]
         tty = c["tty"]; twp.hide([tty] + list(tty.children), False)
         X0, D = STAIR_X, 6.0
-        k = ease(min(1.0, sec / DUR["landing"]))
-        ang = math.radians(90) * k                       # turning round the mid landing
-        piv = Vector((X0 - D / 2 + 0.75, 0.0, 1.7))
-        rel = Vector((0.55 * math.cos(math.pi - ang), 0.55 * math.sin(math.pi - ang) * -1, 0))
+        LZ = 1.7 if shot == "landing" else 5.1                # 11B: the top mid-landing, seen from straight above
+        k = ease(min(1.0, sec / DUR[shot]))
+        ang = math.radians(90) * k                            # turning the teletype round the mid landing
+        piv = Vector((X0 - D / 2 + 0.75, 0.0, LZ))
         tty.location = piv + Vector((0, -0.35 + 0.7 * k, 0.55)); tty.rotation_euler = (math.radians(-12 * math.sin(math.pi * k)), 0, ang)
         fa = tty.location + Vector((0.7, -0.4 + 0.3 * k, 0)); fb = tty.location + Vector((-0.2, 0.7, 0))
-        twp.stand(a, (fa.x, fa.y, 1.7), math.atan2(tty.location.x - fa.x, -(tty.location.y - fa.y)))
-        twp.stand(b, (fb.x, fb.y, 1.7), math.atan2(tty.location.x - fb.x, -(tty.location.y - fb.y)))
+        twp.stand(a, (fa.x, fa.y, LZ), math.atan2(tty.location.x - fa.x, -(tty.location.y - fa.y)))
+        twp.stand(b, (fb.x, fb.y, LZ), math.atan2(tty.location.x - fb.x, -(tty.location.y - fb.y)))
         carry(c, a, b, tty, Vector((0, 0, 0.2)))
-    elif shot == "stairs":
-        a, b = P["workA"], P["workB"]
-        X0, D = STAIR_X, 6.0
-        for k, cr in enumerate(c["crates"]):
-            twp.hide([cr], False)
-            s_ = (sec * 0.5 + k * 0.5) % 1.0
-            cr.location = Vector((X0 + D / 2 - 1.6 - (D - 3.0) * s_, -0.75 if k == 0 else 0.75, -3.4 * k + 1.7 * s_ + 0.7 + (1.7 if k == 1 else 0)))
-        twp.stand(a, (X0 + 0.3 - 1.5 * (sec / 5), -0.75, -3.4 + 0.85 * (1 + sec / 5)), -math.pi / 2)
-        twp.stand(b, (X0 + 1.0 - 1.5 * (sec / 5), 0.75, 1.0), math.pi / 2)
     bpy.context.view_layer.update()
 
 
@@ -284,7 +283,8 @@ def cam_landing(c, t):
 
 def cam_stairs(c, t):
     e = ease(t); X0 = STAIR_X
-    return (Vector((X0 + 0.35, 0.02, 6.6)).lerp(Vector((X0 + 0.3, 0.02, 6.4)), e), Vector((X0 - 0.2, 0.0, -4.0)), 26, (1, 0, 0))
+    D = 6.0
+    return (Vector((X0 - D / 2 + 1.7, 0.05, 9.4)).lerp(Vector((X0 - D / 2 + 1.6, 0.05, 9.0)), e), Vector((X0 - D / 2 + 0.85, 0.0, 5.4)), 30, (1, 0, 0))
 
 
 MOVES = {

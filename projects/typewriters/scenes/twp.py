@@ -199,3 +199,30 @@ def soviet_lamp(loc, rot_z=0.0, height=9.0, arm=2.2, lit=False):
     parts += [head, lens]
     o = join(parts, "SovietLamp"); o.location = loc; o.rotation_euler = (0, 0, rot_z)
     return o
+
+
+def two_tone(o, split_z, top, bottom, stripe=None):
+    """Shirt over trousers on a one-piece garment: colour by world height (fine for a figure that stays put),
+    optional trouser seam stripe (a thin band by object-space x near the leg sides)."""
+    for m in o.data.materials:
+        N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+        geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sep.inputs[0])
+        gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = split_z; L.new(sep.outputs[2], gt.inputs[0])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(gt.outputs[0], mx.inputs['Factor'])
+        mx.inputs[6].default_value = (*bottom, 1); mx.inputs[7].default_value = (*top, 1)
+        L.new(mx.outputs[2], p.inputs['Base Color'])
+        p.inputs['Roughness'].default_value = 0.65
+
+
+def marine_cap(loc, rot_z=0.0):
+    """A white peaked service cover lying on the desk."""
+    from kit import cyl, box, pbr, join
+    white = pbr("CoverWhite", (0.85, 0.85, 0.83), 0.45)
+    blk = pbr("CoverVisor", (0.01, 0.01, 0.012), 0.15, 0.0, **{'Coat Weight': 1.0})
+    parts = [cyl("CoverTop", (0, 0, 0.075), 0.135, 0.02, white, verts=40), cyl("CoverBand", (0, 0, 0.035), 0.1, 0.06, blk, verts=40),
+             cyl("CoverCrown", (0, 0, 0.06), 0.11, 0.04, white, verts=40)]
+    bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.1, depth=0.006, location=(0, -0.08, 0.012))
+    v = bpy.context.active_object; v.scale = (1.0, 0.55, 1); v.rotation_euler = (math.radians(-12), 0, 0); v.data.materials.append(blk); parts.append(v)
+    parts.append(box("Emblem", (0, -0.1, 0.045), (0.03, 0.004, 0.025), pbr("CoverEmblem", (0.75, 0.6, 0.3), 0.3, 1.0)))
+    o = join(parts, "MarineCover"); o.location = loc; o.rotation_euler = (0, 0, rot_z)
+    return o

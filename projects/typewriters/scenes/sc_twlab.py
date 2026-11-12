@@ -249,14 +249,13 @@ def animate(c, sec, shot):
     t_ = P["tech"]
     twp.stand(t_, (-1.4, -1.35, 0), math.pi)                                # faces +Y, the bench
     hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    for sd, dx in (("L", 0.22), ("R", -0.22)):
-        reach(t_, sd, hp + Vector((dx, -0.06, 0.02)), Vector((dx * 3, -0.5, -0.6)), Vector((0, 1, 0.3)))
+    for sd, dx in (("L", 0.15), ("R", -0.15)):
+        reach(t_, sd, hp + Vector((dx, -0.08, 0.0)), Vector((dx * 2, -0.6, -0.8)), Vector((0, 1, 0.3)))
     fingers_curl(t_, 45, thumb=25)
     t_.rot("head", (1, 0, 0), -12)
     a, b = P["usA"], P["usB"]
     twp.stand(a, (-0.3, -1.3, 0), math.radians(150)); twp.stand(b, (-2.4, -1.2, 0), math.radians(-150))
     a.rot("head", (1, 0, 0), -14); b.rot("head", (1, 0, 0), -10 - 4 * lift)
-    reach(a, "R", a.bone_head("upperarm01.R") + Vector((0.05, 0.12, -0.45)), Vector((0.4, -0.4, -0.7)))
     for h in (a, b):
         h.rot("head", (0, 0, 1), 3 * math.sin(sec * 0.6))
     bpy.context.view_layer.update()
