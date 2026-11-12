@@ -20,6 +20,12 @@ for n, e in (("Key_Dash", 14.0), ("Fill_Instrument", 5.0), ("Rim_Window", 10.0))
 fl = bpy.data.lights.new("FaceFill_Soft", "AREA"); fl.energy = 9.0; fl.size = 0.6; fl.color = (0.75, 0.85, 1.0)
 fo = O.new("FaceFill_Soft", fl); bpy.data.collections["CabinFX"].objects.link(fo); fo.location = (-0.35, -0.75, 1.35)
 fo.rotation_euler = (Vector((0, -0.13, 1.28)) - fo.location).to_track_quat("-Z", "Y").to_euler()
+# extra soft fills: over-the-shoulder cabin fill and the HUD/console area (director, 00:41)
+for nm, loc, aim, e, sz, col in (("CabinFill_Rear", (-0.45, 0.55, 1.30), (0.0, -0.3, 1.05), 18.0, 0.8, (0.85, 0.9, 1.0)),
+                                 ("HUD_Fill", (-0.20, -0.40, 1.28), (-0.37, -0.68, 0.95), 7.0, 0.4, (0.9, 0.92, 1.0))):
+    L_ = bpy.data.lights.new(nm, "AREA"); L_.energy = e; L_.size = sz; L_.color = col
+    o_ = O.new(nm, L_); bpy.data.collections["CabinFX"].objects.link(o_); o_.location = loc
+    o_.rotation_euler = (Vector(aim) - Vector(loc)).to_track_quat("-Z", "Y").to_euler()
 # 3. cutaway on the bright sky-blue gradient (cyan #4FC3F7 top -> #E8F7FF bottom)
 bgm = bpy.data.materials["Sec_BackdropGrad"]; cr = next(n for n in bgm.node_tree.nodes if n.type == "VALTORGB")
 cr.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); cr.color_ramp.elements[0].position = 0.30
