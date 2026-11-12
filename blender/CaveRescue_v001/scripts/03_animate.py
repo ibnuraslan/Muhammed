@@ -558,6 +558,8 @@ for f in (2155, 2190, 2230, 2270, 2300, 2328):
     syr.location = tip + outw * 0.055; syr.rotation_euler = (-outw).to_track_quat('-Z', 'Y').to_euler()
     syr.keyframe_insert("location", frame=f); syr.keyframe_insert("rotation_euler", frame=f)
     ev(f); grip_object(RIG[DA].o, "R", f, syr, syr.matrix_world.translation + outw * 0.02, -V((0, 0, 1)))
+for s_ in "LR": key_fingers(DA, s_, 2340, "relaxed")       # syringe handed off: hands relax
+for s_ in "LR": key_fingers("DiverB", s_, 2410, "relaxed")   # straps done: hands relax before the tow grip
 for f, h in ((1, True), (2150, False), (2335, True)):
     syr.hide_render = h; syr.keyframe_insert("hide_render", frame=f); ndl.hide_render = h; ndl.keyframe_insert("hide_render", frame=f)
 for f, a in ((2155, 0), (2280, 0), (2320, 1)):
