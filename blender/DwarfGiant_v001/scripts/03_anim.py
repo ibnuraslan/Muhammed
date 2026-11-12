@@ -62,9 +62,20 @@ def tint_mat(obj, rgb, rough=None):
                 else:
                     inp.default_value = (*rgb, 1)
                 if rough is not None and not n.inputs["Roughness"].links: n.inputs["Roughness"].default_value = rough
-OLIVE = (0.33, 0.33, 0.2); KHAKI_DARK = (0.24, 0.24, 0.15)
-for nm in ("Officer1", "Officer2"):
-    tint_mat(OB[f"{nm}.male_elegantsuit01"], OLIVE if nm == "Officer1" else KHAKI_DARK)
+def uniform_mat(obj, wool):
+    """black suit texture -> field-grey/olive wool via a luminance ramp (suit dark -> wool colour, shirt light -> khaki shirt)"""
+    for i, m in enumerate(obj.data.materials):
+        m2 = m.copy(); obj.data.materials[i] = m2; nt = m2.node_tree
+        b = nt.nodes["Principled BSDF"]; src = nt.nodes["diffuseIntensity"].outputs[0]
+        bw = nt.nodes.new("ShaderNodeRGBToBW"); rp = nt.nodes.new("ShaderNodeValToRGB"); cr = rp.color_ramp
+        cr.elements[0].position = 0.0; cr.elements[0].color = (wool[0] * 0.35, wool[1] * 0.35, wool[2] * 0.35, 1)
+        cr.elements[1].position = 0.12; cr.elements[1].color = (*wool, 1)
+        e = cr.elements.new(0.35); e.color = (0.55, 0.52, 0.42, 1)
+        e = cr.elements.new(0.8); e.color = (0.78, 0.75, 0.64, 1)
+        nt.links.new(src, bw.inputs[0]); nt.links.new(bw.outputs[0], rp.inputs[0]); nt.links.new(rp.outputs[0], b.inputs["Base Color"])
+        b.inputs["Roughness"].default_value = 0.85
+uniform_mat(OB["Officer1.male_elegantsuit01"], (0.30, 0.31, 0.19))
+uniform_mat(OB["Officer2.male_elegantsuit01"], (0.27, 0.29, 0.24))
 for nm in ("Surgeon1", "Surgeon2"):
     tint_mat(OB[f"{nm}.male_worksuit01"], (0.62, 0.72, 0.66))
 tint_mat(OB["Nurse.female_elegantsuit01"], (0.9, 0.9, 0.88))
@@ -106,11 +117,14 @@ def talk(r, f0, f1, amp=9, rate=7):
     for f in range(f0, f1, rate):
         jaw(r, f, amp * (0.3 + 0.7 * random.random())); jaw(r, f + rate // 2, 1.0)
 
-def brows(r, f, up=0.0, frown=0.0):
-    """brow raise (+) / knit (frown) via the oculi bones; lids follow"""
-    for s, sx in (("L", 1), ("R", -1)):
-        r.key_rot("oculi01." + s, f, [("X", -up * 1.0), ("Z", sx * frown)])
-        r.key_rot("oculi02." + s, f, [("X", -up * 0.7)])
+def brows(r, f, up=0.0, frown=0.0, squint=0.0):
+    """face bones verified in close-up: oculi02 +X = brows down/knit (frown), oculi01 -X + orbicularis03 +X = brows up + lids wide,
+    orbicularis04 +X = squint/close"""
+    for sd in "LR":
+        r.key_q("oculi02." + sd, f, Quaternion((1, 0, 0), R_(min(30, frown * 1.6))))
+        r.key_q("oculi01." + sd, f, Quaternion((1, 0, 0), R_(-up * 1.8)))
+        r.key_q("orbicularis03." + sd, f, Quaternion((1, 0, 0), R_(up * 1.6)))
+        r.key_q("orbicularis04." + sd, f, Quaternion((1, 0, 0), R_(squint)))
 
 # hero hand helper (armature space for a given scale)
 HR = HU["Hero"]; HRIG = RIGS["Hero"]
@@ -148,8 +162,8 @@ place("Hero", 2000, SIL, 180 + 8, const=True)
 const_keys(HRIG, {1490, 1491, 1857, 1858, 1999, 2000}, "location"); const_keys(HRIG, {1490, 1491, 1857, 1858, 1999, 2000}, "rotation_euler")
 
 # poses: keys every ~20 frames
-def hero_pose(f, flex=0, twist=0, side=0, head=(0, 0), jaw_deg=1, up=0, frown=0):
-    HR.key_spine(f, flex=flex, twist=twist, side=side, head=head); jaw(HR.r, f, jaw_deg); brows(HR.r, f, up, frown)
+def hero_pose(f, flex=0, twist=0, side=0, head=(0, 0), jaw_deg=1, up=0, frown=0, squint=0):
+    HR.key_spine(f, flex=flex, twist=twist, side=side, head=head); jaw(HR.r, f, jaw_deg); brows(HR.r, f, up, frown, squint)
 for f in range(1, 2341, 20):
     pass
 # beat 1: stands straight at the rod, chin up hopeful -> deflates
@@ -163,7 +177,7 @@ for f, kw in ((372, dict(flex=4, head=(4, 0))), (468, dict(flex=2, head=(0, 0), 
     hero_pose(f, **kw)
 for f in (372, 468, 540, 620): arms_idle(HR, f, 0.09, -0.03)
 # beat 5: left hand flat on the desk, looks at it; right hand at side; then turns to mirror
-DESK_TOP = 0.79
+DESK_TOP = 0.948
 def hand_on_desk(f, s_):
     W = V(0.25, 2.33, DESK_TOP + 0.015); Wl = HRIG.matrix_world.inverted() if False else None
     sc_ = s_; Wa = V((W.x - HPOS.x) / sc_, (W.y - HPOS.y) / sc_, W.z / sc_)
@@ -177,6 +191,7 @@ for f, kw in ((696, dict(flex=22, side=-10, head=(20, 18), frown=12)), (760, dic
 for p in ("tongue00", "tongue01", "tongue02"):
     HR.r.PB[p].scale = (1, 1, 1); HR.r.PB[p].keyframe_insert("scale", frame=800)
     HR.r.PB[p].scale = (1.3, 1.5, 1.3); HR.r.PB[p].keyframe_insert("scale", frame=860)
+    HR.r.PB[p].keyframe_insert("scale", frame=875); HR.r.PB[p].scale = (1.15, 1.0, 1.15); HR.r.PB[p].keyframe_insert("scale", frame=900)
 # enlargement of hands, feet, jaw (acromegaly) through beats 5-6
 for bn, s1 in (("wrist.L", 1.3), ("wrist.R", 1.3), ("foot.L", 1.25), ("foot.R", 1.25), ("jaw", 1.18)):
     pb = HR.r.PB[bn]; pb.scale = (1, 1, 1); pb.keyframe_insert("scale", frame=696)
@@ -191,15 +206,13 @@ for f, kw in ((1074, dict(flex=8, head=(10, 0))), (1150, dict(flex=24, side=12, 
     hero_pose(f, **kw)
 for f in (1074, 1150, 1240): arms_idle(HR, f, 0.1, -0.08)
 # beat 8: squints, then cups left hand to left ear
-for f, kw in ((1250, dict(flex=26, side=12, head=(14, 0), frown=22)), (1330, dict(flex=26, side=10, head=(4, 6), frown=28)),
+for f, kw in ((1250, dict(flex=26, side=12, head=(14, 0), frown=16, squint=12)), (1330, dict(flex=26, side=10, head=(4, 6), frown=18, squint=22)),
               (1400, dict(flex=24, side=10, head=(4, -18), frown=18, jaw_deg=4)), (1470, dict(flex=24, side=10, head=(2, -22), frown=20))):
     hero_pose(f, **kw)
 for f in (1250, 1330, 1370): arms_idle(HR, f, 0.1, -0.08)
 B = HR.r.BN
 EAR = B["head"].head_local + V(0.085, 0.01, 0.06)
-for f in (1400, 1470):
-    HR.key_hand("L", f, EAR + V(0.035, 0.05, -0.04), V(-0.1, -0.35, 1), V(-0.9, 0.1, 0), pole=V(0.5, 0.2, 0.9))
-    hand_rest(HR, "R", f, 0.1, -0.08)
+for f in (1400, 1470): hand_rest(HR, "R", f, 0.1, -0.08)
 # beat 9-10 lying: arms by sides, relaxed; head turned slightly
 for f in (1491, 1600, 1700, 1800, 1857):
     hero_pose(f, flex=0, head=(-4, 6 if f > 1700 else 0), frown=4 if f < 1700 else 0, jaw_deg=2); arms_idle(HR, f, 0.06, 0.02)
@@ -207,6 +220,35 @@ for f in (1491, 1600, 1700, 1800, 1857):
 for f in (1858, 1940, 1999): hero_pose(f, flex=10, side=4, head=(10, -16 if f > 1900 else 0)); arms_idle(HR, f, 0.07, -0.04)
 for f in (2000, 2150, 2340): hero_pose(f, flex=12, side=4, head=(8, 18 if f > 2100 else 6)); arms_idle(HR, f, 0.07, -0.04)
 
+# ---- solve the desk hand numerically (palm down, flat, resting on the top) and the ear cup on the evaluated head
+def bw(n, f=None):
+    if f is not None: sc.frame_set(f)
+    return HRIG.matrix_world @ HRIG.pose.bones[n].head
+def to_arm(Wworld): return HRIG.matrix_world.inverted() @ Wworld
+CANDS = [V(0, 0, -1), V(0, 0, 1), V(1, 0, 0), V(-1, 0, 0), V(0, 1, 0), V(0, -1, 0)]
+best = None
+for f in (696, 740, 790, 840):
+    sc.frame_set(f)
+    Wt = to_arm(V(0.12, 2.36, DESK_TOP + 0.032))
+    best = None
+    for nC in CANDS:
+        HR.key_hand("L", f, Wt, V(0.35, -0.94, 0), nC, pole=V(0.6, 0.4, 0.9)); sc.frame_set(f)
+        along = bw("finger3-3.L") - bw("wrist.L"); across = bw("finger2-1.L") - bw("finger5-1.L")
+        flat = abs(along.normalized().z) + abs(across.normalized().z)
+        thumb_ok = bw("finger1-3.L").x < bw("finger5-3.L").x
+        score = flat + (0 if thumb_ok else 1.5)
+        if best is None or score < best[0]: best = (score, nC)
+    HR.key_hand("L", f, Wt, V(0.35, -0.94, 0), best[1], pole=V(0.6, 0.4, 0.9)); sc.frame_set(f)
+    lo = min(bw(n).z for n in ("finger2-3.L", "finger3-3.L", "finger4-3.L", "finger3-1.L"))
+    Wt2 = to_arm(V(0.12, 2.36, DESK_TOP + 0.032 - (lo - DESK_TOP - 0.008)))
+    HR.key_hand("L", f, Wt2, V(0.35, -0.94, 0), best[1], pole=V(0.6, 0.4, 0.9))
+    print("DESKHAND", f, best, round(lo, 3))
+for f in (1400, 1470):
+    sc.frame_set(f); M = HRIG.matrix_world @ HRIG.pose.bones["head"].matrix @ HR.r.BN["head"].matrix_local.inverted()
+    earw = M @ V(0.085, -0.03, 1.245); upw = (M.to_3x3() @ V(0, 0, 1)).normalized(); fw = (M.to_3x3() @ V(0, -1, 0)).normalized(); sw = (M.to_3x3() @ V(1, 0, 0)).normalized()
+    tgt = to_arm(earw + sw * 0.035 - fw * 0.045 - upw * 0.06)
+    HR.key_hand("L", f, tgt, HRIG.matrix_world.inverted().to_3x3() @ (upw + fw * 0.3), HRIG.matrix_world.inverted().to_3x3() @ (-fw), pole=to_arm(earw + sw * 0.4 - upw * 0.3 + fw * 0.2))
+sc.frame_set(1)
 # ------------------------------------------------------------------ officers (IK feet, step back as he towers)
 O1, O2 = HU["Officer1"], HU["Officer2"]
 P1a, P1b = V(-0.75, 2.12, 0), V(-1.3, 1.05, 0)
@@ -224,7 +266,8 @@ for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
     h.key_root(1476, pb_ + V(0, 0, h.root_head.z - 0.02), yaw=yb)
     h.key_foot("L", 1476, h.foot_xy("L", pb_, yb), yb); h.key_foot("R", 1476, h.foot_xy("R", pb_, yb), yb)
     for f in range(1, 1477, 30):
-        arms_idle(h, f, 0.07, -0.03)
+        if h is O1 and f < 200: hand_rest(h, "L", f, 0.07, -0.03)    # right hand is on the rod slider (keyed below)
+        else: arms_idle(h, f, 0.07, -0.03)
     # head shakes (beat 1), look up (beat 6), talk (beat 8)
     for f in range(1, 180, 12):
         h.key_spine(f, flex=4, head=(6, 14 * (1 if (f // 12) % 2 else -1)))
@@ -234,29 +277,29 @@ for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
     jaw(h.r, 880, 1); jaw(h.r, 930, 10); jaw(h.r, 1000, 6)
 # officer1 lowers the slider onto the hero's head with his right hand (beat 1)
 GAUGE_TOP = V(-0.3, 2.62, 1.40)
-for f, W in ((1, V(-0.12, 2.40, 1.55)), (50, V(-0.18, 2.55, 1.45)), (120, V(-0.2, 2.58, 1.39)), (170, V(-0.15, 2.45, 1.25))):
+for f, W in ((1, V(-0.14, 2.52, 1.62)), (50, V(-0.22, 2.70, 1.52)), (120, V(-0.26, 2.73, 1.47)), (170, V(-0.22, 2.70, 1.50))):   # on the rod slider, above (not on) his head
     yaw = yaw_to(P1a, HPOS)
     Rm = Matrix.Rotation(-R_(yaw), 3, "Z"); Wl = Rm @ (W - P1a)   # into the officer's armature space (object at origin)
     O1.key_hand("R", f, Rm.inverted() @ Wl + P1a if False else W, V(0, 0, -1), V(0, -1, 0), pole=W + V(-0.3, -0.3, -0.4))
 
 # ------------------------------------------------------------------ FK extras (clerk writing, recruits waiting, surgeons, nurse)
-place("Clerk", 1, V(1.38, 1.95, 0), yaw_to(V(1.38, 1.95, 0), V(0.6, 1.95, 0)))
+place("Clerk", 1, V(1.0, 1.6, 0), yaw_to(V(1.0, 1.6, 0), V(0.3, 1.6, 0)))
 place("Recruit1", 1, V(-2.85, 1.55, 0), yaw_to(V(-2.85, 1.55, 0), HPOS))
 place("Recruit2", 1, V(-2.7, 0.35, 0), yaw_to(V(-2.7, 0.35, 0), HPOS))
 for f in range(1, 1500, 16):
-    r = FK["Clerk"]; arms_down_fk(r, f, out=-6, bend=55 + 8 * math.sin(f * 0.4)); body_fk(r, f, flex=28, twist=6 * math.sin(f * 0.13), head=(18, -8))
+    r = FK["Clerk"]; arms_down_fk(r, f, out=4, bend=35 + 8 * math.sin(f * 0.4)); body_fk(r, f, flex=10, twist=6 * math.sin(f * 0.13), head=(22, -8))
     for nm, ph in (("Recruit1", 0.0), ("Recruit2", 1.7)):
         r = FK[nm]; arms_down_fk(r, f, out=8, bend=14, sway=3 * math.sin(f * 0.05 + ph))
         body_fk(r, f, flex=3, side=4 * math.sin(f * 0.03 + ph), twist=8 * math.sin(f * 0.021 + ph), head=(-8 if 880 < f < 1300 else 2, 20 * math.sin(f * 0.017 + ph)))
 talk(FK["Recruit1"].r if hasattr(FK["Recruit1"], "r") else FK["Recruit1"], 300, 700, 7, 10)
 # theatre
-SUR = (("Surgeon1", V(6.25, 1.35, 0)), ("Surgeon2", V(7.55, 1.2, 0)), ("Nurse", V(7.45, -0.35, 0)))
+SUR = (("Surgeon1", V(6.1, 1.45, 0)), ("Surgeon2", V(7.72, 1.45, 0)), ("Nurse", V(7.55, -0.35, 0)))
 for nm, p in SUR:
     place(nm, 1, p, yaw_to(p, V(6.9, 1.0, 0)))
     r = FK[nm]
     for f in range(1, 2341, 18):
         lean = 30 if f < 1720 else 8
-        arms_down_fk(r, f, out=-10 if f < 1720 else 6, bend=70 if f < 1720 else 20, sway=4 * math.sin(f * 0.07))
+        arms_down_fk(r, f, out=-4 if f < 1720 else 6, bend=55 if f < 1720 else 20, sway=4 * math.sin(f * 0.07))
         body_fk(r, f, flex=lean + 4 * math.sin(f * 0.05), twist=6 * math.sin(f * 0.04), head=(25 if f < 1720 else 5, 6 * math.sin(f * 0.03)))
 place("Nurse", 1720, V(7.45, -0.35, 0), yaw_to(V(7.45, -0.35, 0), V(6.9, 1.0, 0)))
 place("Nurse", 1800, V(7.2, -0.95, 0), yaw_to(V(7.2, -0.95, 0), V(6.9, -0.6, 0)))
@@ -369,65 +412,84 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim); aim.hide_render = True
 tt = cam.constraints.new("TRACK_TO"); tt.target = aim; tt.track_axis = "TRACK_NEGATIVE_Z"; tt.up_axis = "UP_Y"
 cam_d.dof.use_dof = True; cam_d.dof.focus_object = aim; cam_d.dof.aperture_fstop = 4.0
-HEAD0 = V(-0.3, 2.37, 1.235)
-def head_at(s): return V(-0.3, 2.45 - 0.05 * s, 1.27 * s)
-PITW = V(-0.3, 2.35, 1.206)
-LH = V(6.9, 1.38 - 0.05, MATT_Z + 0.1)      # lying head (approx)
+# evaluated head / brain helpers (camera keys follow the real animated rig)
+_HB = HR.r.BN["head"]; _HINV = _HB.matrix_local.inverted()
+def head_pt(f, rest_pt):
+    sc.frame_set(f); M = HRIG.matrix_world @ HRIG.pose.bones["head"].matrix @ _HINV
+    return M @ Vector(rest_pt)
+EYES_R = (0.0, -0.13, 1.238); EARL_R = (0.08, -0.03, 1.245); EARR_R = (-0.08, -0.03, 1.245); HC_R = (0.0, -0.03, 1.26); TOP_R = (0, -0.03, 1.36)
+def head_frame(f):
+    c = head_pt(f, HC_R); e = head_pt(f, EYES_R); l = head_pt(f, EARL_R); r_ = head_pt(f, EARR_R); t = head_pt(f, TOP_R)
+    return c, (e - c).normalized(), (l - r_).normalized(), (t - c).normalized(), l, e
+def obj_w(f, o, off=(0, 0, 0)):
+    sc.frame_set(f); return o.matrix_world @ Vector(off)
+TUMO = OB["Tumour"]; BRO = OB["Brain"]
+HEAD0 = obj_w(240, BRO, (0, 0, 0.05)); PITW = obj_w(300, TUMO)
+c8a, f8a, s8a, u8a, ear8a, eye8a = head_frame(1275); c8b, f8b, s8b, u8b, ear8b, eye8b = head_frame(1335)
+c8c, f8c, s8c, u8c, ear8c, eye8c = head_frame(1385); c8d, f8d, s8d, u8d, ear8d, eye8d = head_frame(1445)
+OFFS = V(-1.35, 0.72, 1.62)
+c9, f9, s9, u9, ear9, eye9 = head_frame(1640); c9b, f9b, s9b, u9b, _, _ = head_frame(1668)
+BR9 = obj_w(1690, BRO, (0, 0, 0.05)); TU9 = obj_w(1690, TUMO)
+LH = c9
+c11, f11, s11, u11, _, _ = head_frame(1900)
+DYN = [(1275, eye8a + f8a * 0.10, OFFS, 28), (1335, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30),
+       (1385, ear8c + s8c * 0.32 + f8c * 0.08, ear8c, 38), (1445, ear8d + s8d * 0.55 + f8d * 0.25 + u8d * 0.05, ear8d - u8d * 0.04, 34),
+       (1640, c9 + V(-0.35, -0.2, 0.4), c9, 34), (1662, c9b + s9b * 0.14 + u9b * 0.02, c9b, 40), (1670, c9b + s9b * 0.07, c9b, 40),
+       (1690, BR9 + s9b * 0.16 + f9b * 0.06, TU9, 40), (1708, BR9 + s9b * 0.12 - u9b * 0.05 + f9b * 0.08, TU9, 45)]
+sc.frame_set(1)
 KEYS = [  # frame, cam, aim, lens
     (1, V(1.25, -0.55, 2.75), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
-    (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (140, V(-0.78, 1.72, 1.32), V(-0.3, 2.42, 1.25), 38),
-    (170, V(-0.47, 2.32, 1.29), V(-0.31, 2.41, 1.275), 45), (180, V(-0.385, 2.405, 1.283), V(-0.3, 2.41, 1.272), 45),
-    (190, V(-0.338, 2.408, 1.279), V(-0.3, 2.41, 1.27), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
+    (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (140, V(-0.08, 1.72, 1.32), V(-0.28, 2.4, 1.25), 38),
+    (170, V(-0.17, 2.14, 1.255), V(-0.28, 2.38, 1.225), 45), (180, V(-0.232, 2.29, 1.232), V(-0.29, 2.39, 1.22), 45),
+    (190, V(-0.27, 2.345, 1.232), V(-0.3, 2.40, 1.235), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
     (300, V(-0.36, 2.16, 1.17), PITW, 45), (355, V(-0.29, 2.22, 1.19), PITW, 55),
     (380, V(-0.24, 2.2, 1.2), PITW + V(0, 0, -0.01), 45), (420, V(-0.05, 1.55, 1.05), V(-0.3, 2.45, 0.9), 28),
     (462, V(0.15, 1.1, 0.8), V(-0.3, 2.45, 0.62), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
     (565, V(0.85, 0.25, 1.25), V(-0.85, 2.5, 1.2), 22), (625, V(0.35, 0.15, 1.6), V(-0.6, 2.5, 1.45), 24),
-    (690, V(0.05, 1.05, 1.4), V(0.1, 2.25, 0.95), 30), (740, V(0.0, 1.72, 1.08), V(0.25, 2.33, 0.8), 40),
-    (790, V(-0.15, 1.85, 0.28), V(-0.25, 2.42, 0.07), 38), (815, V(-0.8, 1.85, 1.2), V(0.2, 2.6, 1.4), 30), (845, V(-0.62, 2.64, 1.92), V(1.25, 2.75, 1.4), 40),
+    (690, V(0.05, 1.05, 1.4), V(0.1, 2.25, 0.95), 30), (740, V(0.1, 1.75, 1.22), V(0.12, 2.36, 0.96), 40),
+    (790, V(-0.15, 1.85, 0.28), V(-0.25, 2.42, 0.07), 38), (815, V(-0.8, 1.85, 1.2), V(0.2, 2.6, 1.4), 30), (845, V(-0.22, 2.64, 1.97), V(2.8, 2.98, 1.72), 38),
     (880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
     (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
     (1075, V(-0.75, 0.75, 1.45), V(-0.3, 2.35, 1.4), 26), (1120, V(-0.95, 0.95, 1.3), V(-0.3, 2.45, 1.15), 28),
     (1175, V(-0.45, 1.2, 1.25), V(-0.3, 2.45, 1.1), 30), (1235, V(0.15, 1.35, 1.55), V(-0.3, 2.45, 1.3), 28),
-    (1275, V(-0.05, 1.95, 1.98), V(0.35, 0.95, 1.6), 28), (1335, V(-0.2, 2.15, 2.02), V(0.4, 0.85, 1.5), 30),
-    (1385, V(0.2, 2.25, 2.05), V(-0.18, 2.42, 1.98), 38), (1445, V(0.07, 2.12, 2.02), V(-0.17, 2.4, 1.97), 45),
-    (1488, V(1.9, 1.7, 2.1), V(5.0, 1.2, 1.6), 26), (1502, V(3.3, 1.45, 2.2), V(6.0, 1.0, 1.4), 24),
-    (1512, V(3.75, 1.38, 2.25), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
-    (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26), (1640, V(6.55, 0.95, 1.35), LH, 34),
-    (1666, V(6.84, 1.22, 0.86), LH, 40), (1672, V(6.86, 1.27, 0.80), LH, 40),
-    (1700, V(6.8, 1.15, 0.9), LH, 32), (1735, V(6.3, 1.25, 1.25), V(6.9, 0.8, 0.72), 28),
-    (1790, V(6.2, 0.15, 0.95), V(6.9, -0.05, 0.7), 28), (1845, V(6.3, -1.3, 0.82), V(6.9, -0.75, 0.62), 30),
-    (1868, V(7.0, -1.9, 1.35), V(9.5, -1.1, 1.5), 24), (1930, V(6.9, -0.9, 0.9), V(9.5, -1.0, 1.7), 22),
+            (1488, V(1.9, 1.7, 2.1), V(5.0, 1.2, 1.6), 26), (1503, V(3.42, 1.43, 2.2), V(6.0, 1.0, 1.4), 24),
+    (1508, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
+    (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26),         (1735, V(6.3, 1.25, 1.25), V(6.9, 0.8, 0.72), 28),
+    (1790, V(6.15, 0.35, 1.3), V(6.9, -0.05, 0.7), 26), (1845, V(6.3, -1.3, 0.82), V(6.9, -0.75, 0.62), 30),
+    (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1930, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22),
     (1972, V(7.6, 1.2, 2.25), V(7.15, 3.1, 2.1), 24), (1998, V(7.1, 3.0, 2.45), V(7.3, 6.0, 1.8), 26),
     (2035, V(8.3, 5.2, 3.2), V(8.6, 7.0, 0.1), 28), (2100, V(8.9, 6.1, 2.2), V(10.2, 11.5, 1.2), 30),
     (2180, V(9.25, 6.9, 1.55), V(10.2, 11.6, 1.25), 35), (2260, V(9.6, 7.3, 2.35), V(10.2, 11.6, 1.35), 32),
     (2340, V(9.75, 7.45, 2.8), V(10.2, 11.6, 1.45), 32)]
+KEYS = sorted(KEYS + DYN, key=lambda k: k[0])
 fc_ = catmull([(f, c) for f, c, a_, l in KEYS]); fa_ = catmull([(f, a_) for f, c, a_, l in KEYS]); fl_ = catmull([(f, float(l)) for f, c, a_, l in KEYS])
 for f in list(range(1, 2341, 2)) + [2340]:
     cam.location = fc_(f); cam.keyframe_insert("location", frame=f)
     aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
-# POV blur (beat 8)
-for f, fs in ((1260, 4.0), (1290, 0.9), (1360, 0.9), (1385, 4.0)):
+# POV blur (beat 8): focus empty follows the aim, but sits 0.25 m in front of the lens during the POV
+foc = bpy.data.objects.new("CAM_Focus", None); sc.collection.objects.link(foc); foc.hide_render = True
+cam_d.dof.focus_object = foc
+for f in list(range(1, 2341, 4)) + [2340]:
+    p_ = fa_(f)
+    w = smooth((f - 1268) / 22) * (1 - smooth((f - 1352) / 28))
+    if w > 0:
+        cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
+    foc.location = p_; foc.keyframe_insert("location", frame=f)
+for f, fs in ((1262, 4.0), (1290, 1.2), (1352, 1.2), (1380, 4.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
-cam_d.dof.focus_object = None
-for f, d in ((1, 2.0),):
-    pass
-def focus_driver():
-    cam_d.dof.focus_object = aim
-focus_driver()
-foc = bpy.data.objects.new("POV_Focus", None); sc.collection.objects.link(foc); foc.hide_render = True
-# during the POV the focus sits in front of the officers (blurred)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
 XB = OB["XBack"]; card = XB
 me = bpy.data.meshes.new("CutCard"); bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=1.0); bm.to_mesh(me); bm.free()
 cc = bpy.data.objects.new("CutCard", me); XB.users_collection[0].objects.link(cc); cc.parent = cam
 cm = XB.data.materials[0].copy(); me.materials.append(cm)
+_rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); _rp.color_ramp.elements[1].color = (0.08, 0.55, 0.93, 1); _rp.color_ramp.elements[1].position = 1.0
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
 CARD = [(181, 0.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.2), (462, 1.0, 1.7), (470, 1.0, 1.7), (500, 0.0, 1.7),
-        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1668, 0.0, 0.5), (1672, 1.0, 0.5), (1700, 1.0, 0.5), (1712, 0.0, 0.5)]
+        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1668, 0.0, 0.45), (1672, 1.0, 0.45), (1700, 1.0, 0.45), (1712, 0.0, 0.45)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)
@@ -453,15 +515,41 @@ def sun_dir(az, el):
 for f, az, el, e, colr in ((1, 170, 40, 3.5, (1, 0.93, 0.82)), (468, 170, 40, 3.5, (1, 0.93, 0.82)), (560, 120, 20, 2.0, (1, 0.7, 0.45)),
                            (620, 220, 30, 3.0, (1, 0.9, 0.8)), (696, 170, 42, 3.5, (1, 0.93, 0.82)), (930, 120, 15, 2.0, (1, 0.7, 0.5)),
                            (990, 210, 25, 2.2, (0.85, 0.9, 1.0)), (1050, 170, 40, 3.5, (1, 0.93, 0.82)), (1860, 170, 30, 2.2, (1, 0.85, 0.7)),
-                           (1990, 175, 8, 3.0, (1, 0.55, 0.3)), (2340, 178, 4, 3.0, (1, 0.5, 0.25))):
+                           (1990, 175, 8, 4.5, (1, 0.55, 0.3)), (2340, 178, 4, 4.5, (1, 0.5, 0.25))):
     sun.rotation_euler = sun_dir(az, el); sun.keyframe_insert("rotation_euler", frame=f)
     sun.data.energy = e; sun.data.color = colr; sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
 bg = sc.world.node_tree.nodes["Background"]
-for f, s in ((1, 1.0), (1980, 1.0), (2010, 0.35), (2340, 0.25)):
+dk = sc.world.node_tree.nodes["DUSK"]
+for f, v in ((1, 0.0), (1990, 0.0), (2015, 1.0)):
+    dk.inputs[0].default_value = v; dk.inputs[0].keyframe_insert("default_value", frame=f)
+for f, s in ((1, 1.0), (1980, 1.0), (2015, 0.45), (2340, 0.3)):
     bg.inputs[1].default_value = s; bg.inputs[1].keyframe_insert("default_value", frame=f)
 # office / theatre lights off when not needed (render speed)
-for nm, rng in (("Off_Key", [(1, 1500)]), ("Off_Fill", [(1, 1500)]), ("Th_Key", [(1477, 2010)]), ("Th_Fill", [(1477, 2010)])):
+for nm, rng in (("Off_Sconce", [(1, 1525)]), ("Off_Key", [(1, 1525)]), ("Off_Fill", [(1, 1525)]), ("Th_Key", [(1477, 2010)]), ("Th_Fill", [(1477, 2010)])):
     vis(OB[nm], rng)
+# seasons in the window (beat 4 time-lapse + beat 6): leaves green -> autumn -> bare/frosted -> green
+for m in bpy.data.materials:
+    if "leaves" in m.name.lower() and m.node_tree:
+        nt = m.node_tree; b = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if not b or not b.inputs["Base Color"].links: continue
+        src = b.inputs["Base Color"].links[0].from_socket
+        hs = nt.nodes.new("ShaderNodeHueSaturation"); nt.links.new(src, hs.inputs["Color"]); nt.links.new(hs.outputs[0], b.inputs["Base Color"])
+        for f, hue, sat, val in ((1, 0.5, 1.0, 1.0), (520, 0.5, 1.0, 1.0), (570, 0.42, 1.4, 1.1), (620, 0.5, 0.15, 1.9), (680, 0.5, 1.0, 1.0),
+                                 (900, 0.5, 1.0, 1.0), (940, 0.41, 1.5, 1.1), (985, 0.5, 0.1, 2.2), (1030, 0.52, 1.1, 1.0)):
+            hs.inputs["Hue"].default_value = hue; hs.inputs["Saturation"].default_value = sat; hs.inputs["Value"].default_value = val
+            for k in ("Hue", "Saturation", "Value"): hs.inputs[k].keyframe_insert("default_value", frame=f)
+# dust motes drifting in the window light (office) and theatre
+dm = bpy.data.materials.new("M_Dust"); dm.use_nodes = True; db = dm.node_tree.nodes["Principled BSDF"]
+db.inputs["Base Color"].default_value = (0.9, 0.85, 0.75, 1); db.inputs["Emission Color"].default_value = (1, 0.9, 0.7, 1); db.inputs["Emission Strength"].default_value = 1.5
+dmesh = bpy.data.meshes.new("DustDot"); bm = bmesh.new(); bmesh.ops.create_icosphere(bm, subdivisions=1, radius=0.0025); bm.to_mesh(dmesh); bm.free(); dmesh.materials.append(dm)
+for k in range(160):
+    o = bpy.data.objects.new(f"Dust{k:03d}", dmesh); sc.collection.objects.link(o)
+    room = k % 2
+    base = V(random.uniform(-2.5, 2.5), random.uniform(-0.5, 2.9), random.uniform(0.3, 2.8)) if room == 0 else V(random.uniform(4.5, 9.5), random.uniform(-2.5, 2.8), random.uniform(0.4, 2.8))
+    ph = random.uniform(0, 6.28); sp = random.uniform(0.004, 0.01)
+    for f in range(1, 2341, 60):
+        o.location = base + V(0.25 * math.sin(f * sp + ph), 0.2 * math.cos(f * sp * 0.7 + ph), -0.0004 * f % 0.6 + 0.1 * math.sin(f * sp * 1.3)); o.keyframe_insert("location", frame=f)
+    vis(o, [(1, 1525)] if room == 0 else [(1477, 2000)])
 # hide helper empties from render
 for o in OB:
     if o.type == "EMPTY": o.hide_render = True

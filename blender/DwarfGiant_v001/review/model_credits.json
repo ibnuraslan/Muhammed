@@ -115,5 +115,41 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/0aa0e33c5c854d1bab7bac9e1c7acaec",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tombs": {
+  "uid": "44b8e3ce8d0842b395d80c5b76bd5d7e",
+  "title": "Stylized Tombstones",
+  "author": "George Hager",
+  "author_profile": "https://sketchfab.com/adjective.george",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/44b8e3ce8d0842b395d80c5b76bd5d7e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "celtic": {
+  "uid": "aa984f81b56d4361a1379f46eea61b8e",
+  "title": "headstone_v6_v10",
+  "author": "Isengrim",
+  "author_profile": "https://sketchfab.com/Isengrim",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/aa984f81b56d4361a1379f46eea61b8e",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "ofcap": {
+  "uid": "60abc0f79689415891be128338f811ab",
+  "title": "Officer Hat",
+  "author": "A1",
+  "author_profile": "https://sketchfab.com/MenOfMena",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/60abc0f79689415891be128338f811ab",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "orlamp": {
+  "uid": "04a8ddf6e47141289ce0372e9e842167",
+  "title": "Operating room lamps",
+  "author": "House Doctor",
+  "author_profile": "https://sketchfab.com/chin4grci4",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/04a8ddf6e47141289ce0372e9e842167",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }
