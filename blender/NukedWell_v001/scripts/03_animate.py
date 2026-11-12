@@ -553,8 +553,8 @@ def hose_setup(name, front, back, nmF, nmB, f0, f1):
         ft = stance(nm, pos, yw, front=0.38, width=1.3)
         low = {k: (v[0] * Vector((1, 1, 0)) + Vector((0, 0, v[0].z * 0.06 + 0.03)), v[1], v[2]) for k, v in hw.items()}
         pose(nm, PICK0, pos, yw, "side", "side", feet=ft)
-        pose(nm, PICK0 + 8, pos, yw, crouch=0.42, flex=48, head=(18, 0), feet=ft, hand_world=low, grip=(0.4, 0.4))
-        pose(nm, PICK0 + 14, pos, yw, crouch=0.42, flex=48, head=(18, 0), feet=ft, hand_world=low, grip=(0.85, 0.85))
+        pose(nm, PICK0 + 8, pos, yw, crouch=0.5, flex=32, head=(-14, 0), feet=ft, hand_world=low, grip=(0.4, 0.4))
+        pose(nm, PICK0 + 14, pos, yw, crouch=0.5, flex=32, head=(-14, 0), feet=ft, hand_world=low, grip=(0.85, 0.85))
         f = f0; i = 0
         while f <= f1:
             k = math.sin(i * 1.3)
@@ -593,7 +593,7 @@ for i, o in enumerate(steam):
     K(o, "scale", [(b6 + 26, (0.3,) * 3), (b6 + 60 + i * 10, (1.3,) * 3), (b6 + 140, (1.0,) * 3), (B[7] + 20, (1.6,) * 3)])
 # ---------------- beat 7: crew backs away from the fissures (fire bursts out of the ground around them)
 FF0, FF1 = 1300, 1362      # forward time-lapse (story skip to the test day)
-B8POS = {"SolA": SHAFT + Vector((-0.98, 0.15)), "SolB": SHAFT + Vector((0.98, 0.15)), "EngA": Vector((-8.5, 4.5)),
+B8POS = {"SolA": SHAFT + Vector((-0.82, 0.15)), "SolB": SHAFT + Vector((0.82, 0.15)), "EngA": Vector((-8.5, 4.5)),
          "SolC": Vector((-19.5, 4.0)), "SolD": Vector((-9.5, 8.0)), "EngB": Vector((-21.0, 7.5))}
 for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", H2[0], (-20, 27)), ("SolD", H2[1], (-22, 30)),
                  ("EngA", (34.0, 2.0), (38, 12)), ("EngB", (36.5, 6.0), (41, 15))):
@@ -605,7 +605,7 @@ for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", 
     walk(nm, 1236, 1290, a, b, yaw=yaw_to(a, WELL), stride=0.55, backwards=True)
     idle(nm, 1291, FF0 - 1, b, yaw_to(b, WELL), "shield", "side", every=8)
     walk(nm, FF0, FF1, b, B8POS[nm], stride=3.0)
-    y0 = yaw_to(b, B8POS[nm]); y1 = yaw_to(B8POS[nm], SHAFT + Vector((0, 0.15))) if nm in ("SolA", "SolB") else (yaw_to(B8POS[nm], CB.to_2d()) if nm == "EngA" else yaw_to(B8POS[nm], SHAFT))
+    y0 = yaw_to(b, B8POS[nm]); y1 = yaw_to(B8POS[nm], SHAFT + Vector((0, 0.15))) + (90.0 if nm == "SolB" else -90.0) if nm in ("SolA", "SolB") else (yaw_to(B8POS[nm], CB.to_2d()) if nm == "EngA" else yaw_to(B8POS[nm], SHAFT))
     dy = (y1 - y0 + 180) % 360 - 180
     for ff in range(FF1 + 1, FF1 + 6):   # turn on the spot to face the work, hands travelling with the body
         pose(nm, ff, B8POS[nm], y0 + dy * smooth((ff - FF1) / 5.0), "side", "side")
@@ -613,25 +613,31 @@ for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", 
 T8 = FF1 + 6
 DZ0 = 10.6 - 9.0   # device bottom at the start of beat 8
 def dev_guide(nm, sgn, f0, f1):
-    pos = SHAFT + Vector((sgn * 0.98, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
+    """steady the hanging casing side-on: near hand flat on the casing at chest height, far hand free (signals / rests),
+    upright back, head up toward the crane operator"""
+    pos = SHAFT + Vector((sgn * 0.82, 0.15)); c2 = SHAFT + Vector((0, 0.15))
+    yw = yaw_to(pos, c2) + 90.0 * sgn            # side-on to the device
+    fw, lf = body_frame(yw); d = (c2 - pos).to_3d().normalized()
+    near = "L" if lf.dot(d) > 0 else "R"; far = "R" if near == "L" else "L"
     f = f0
     while f <= f1:
         _, _, zd, _ = dev_state(f); zb = zd - 4.6
-        hz = max(zb + 0.6, 1.15); hz = min(hz, zb + 2.5)
-        cx = SHAFT.x + sgn * 0.445 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1370) / 22.0)) if f < 1460 else 0)
+        hz = max(zb + 0.7, 1.28); hz = min(hz, zb + 2.5, 1.36)
+        sw = (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1370) / 22.0)) if f < 1460 else 0)
         release = smooth((f - 1452) / 14.0)
-        hw = {}
-        for s, dy in (("L", -0.17 * sgn), ("R", 0.17 * sgn)):
-            W = Vector((cx + sgn * 0.1 * release, SHAFT.y + dy * (1 + 0.6 * release), hz + 0.3 * release))
-            hw[s] = (W, Vector((0, 0, 1)), Vector((-sgn, 0, 0)))
-        pose(nm, f, pos, yw, crouch=0.08, flex=30 - 14 * release, head=(-12, 0), hand_world=hw, sway=0.0, grip=(0.32, 0.32))
+        surf = Vector((SHAFT.x + sw, SHAFT.y + 0.15, 0)) + (-d) * 0.425
+        W = Vector((surf.x - d.x * 0.08 * release, surf.y - d.y * 0.08 * release, hz - 0.3 * release))
+        hw = {near: (W, Vector((0, 0, 1)), -d)}
+        far_spec = "wave_a" if (f // 30) % 2 == 0 and nm == "SolA" else "hip"
+        pose(nm, f, pos, yw, near if False else ("side" if near == "L" else far_spec), far_spec if near == "L" else "side",
+             crouch=0.02, flex=4, side=-4 * sgn, head=(-22, 35 * (1 if near == "L" else -1)), hand_world=hw, sway=0.0, grip=(0.3, 0.3))
         f += 6
 for nm, sg in (("SolA", -1), ("SolB", 1)):
-    pp = SHAFT + Vector((sg * 0.98, 0.15)); idle(nm, T8, 1368, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
+    pp = SHAFT + Vector((sg * 0.82, 0.15)); idle(nm, T8, 1368, pp, yaw_to(pp, SHAFT + Vector((0, 0.15))) + 90.0 * sg, "side", "hip", every=20, head=(-24, 0))
 dev_guide("SolA", -1, 1376, 1500)
 dev_guide("SolB", 1, 1376, 1500)
-idle("SolA", 1501, B[9] + 1, SHAFT + Vector((-0.98, 0.15)), yaw_to(SHAFT + Vector((-0.98, 0.15)), SHAFT), "side", "point_down", flex=16)
-idle("SolB", 1501, B[9] + 1, SHAFT + Vector((0.98, 0.15)), yaw_to(SHAFT + Vector((0.98, 0.15)), SHAFT), "side", "side", flex=16)
+idle("SolA", 1501, B[9] + 1, SHAFT + Vector((-0.82, 0.15)), yaw_to(SHAFT + Vector((-0.82, 0.15)), SHAFT + Vector((0, 0.15))) - 90.0, "side", "hip", flex=6, head=(14, 30))
+idle("SolB", 1501, B[9] + 1, SHAFT + Vector((0.82, 0.15)), yaw_to(SHAFT + Vector((0.82, 0.15)), SHAFT + Vector((0, 0.15))) + 90.0, "hip", "side", flex=6, head=(14, -30))
 pE = Vector((-8.5, 4.5)); pose("EngA", T8, pE, yaw_to(pE, CB.to_2d()))
 idle("EngA", T8 + 1, B[9] + 1, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
      gest=[(T8 + 1, "wave_a", "side"), (T8 + 13, "wave_b", "side"), (T8 + 25, "wave_a", "side"), (T8 + 37, "wave_b", "side"), (1440, "up", "point"), (1480, "side", "point_down")], head=(18, 0))
@@ -703,9 +709,9 @@ CAMK = [  # frame, camera, target, lens
     (1760, (-3.0, -30.0, -57.0), (-3.0, -1.6, -59.0), 30),
     (1830, (5.0, -46.0, -50.0), (-5.0, 0.0, -54.0), 28),
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
-    (1925, (2.0, -50.0, 0.5), (0.0, 0.0, 24.0), 24),
-    (1965, (12.0, 14.0, 6.0), (0.0, -1.6, 5.0), 26),
-    (1988, (2.0, 30.0, 7.0), (-10.0, 45.0, 3.0), 26),
+    (1925, (4.0, -30.0, 4.0), (-6.0, 0.0, 4.0), 26),
+    (1958, (12.0, 10.0, 6.0), (0.0, -1.6, 4.0), 26),
+    (1988, (12.0, 36.0, 5.0), (-22.0, 60.0, 1.8), 26),
     (2008, (-15.0, 44.0, 3.0), (-25.0, 62.0, 1.6), 28),
     (2030, (-21.0, 53.0, 2.0), (-25.0, 62.3, 1.6), 30),
     (2065, (-21.0, 67.5, 2.6), (-18.0, 48.0, 1.8), 28),

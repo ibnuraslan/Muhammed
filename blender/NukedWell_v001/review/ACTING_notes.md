@@ -39,3 +39,12 @@
 ## Not changed or open
 - The crew are generic MPFB figures with simple faces. In wide shots their faces are small. Faces are readable on beats 6, 8 and 11, and are not a factor in the cross-section beats.
 - The fire and cross-section looks are unchanged from v003 (approved).
+
+## Round 2 (director review of v004, Nov 12 14:34)
+
+| # | Note | Fix |
+|---|---|---|
+| 14 | 23.5–24.5 s: the soldiers' faces were pressed into the casing, as if hugging it. | They now steady the hanging casing **side-on**, as you would a load on a crane hook. One hand is flat on the casing at chest height, and the other rests on the hip or signals the crane operator. Backs are upright and heads are up, turned toward the crane. Measured at f1420: palm within 1 cm of the casing, head 31 cm off it, chest 36 cm off it. When they let go, the hand drops down beside the casing instead of pulling back through the body. |
+| 15 | The hose pickup crouch had the head buried in the knee and shoulder. | The soldier now bends more at the knees, keeps his back less folded, and holds his **head up, looking at the hose**, with his fingers closing on it. |
+| 16 | 33.0 s: a yellow object at the frame edge (the crane cab), with empty desert behind. | The camera route now passes east of the crane and frames the bunker crew from 1988 on. |
+| 17 | 32.5 s: mostly empty sky with a blurred flame. | Beat 11 opens on the shaft and the wellhead with the dying flame (1925 framing at ground level). |

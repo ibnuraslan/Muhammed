@@ -1,3 +1,3 @@
 HAND AUDIT NukedWell (every 2 frames, crew within 40 m of camera)
-HAND_PENETRATION_COUNT 7
-HAND_BODY  1 frames, e.g. f1361 SolA 7
+HAND_PENETRATION_COUNT 20
+HAND_BODY  1 frames, e.g. f1361 SolA 20

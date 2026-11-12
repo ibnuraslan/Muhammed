@@ -67,10 +67,10 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
                 tree = BVHTree.FromObject(po, dg)
                 tree = BVHTree.FromPolygons([po.matrix_world @ Vector(v) for v in [vv.co for vv in po.data.vertices]], [p.vertices[:] for p in po.data.polygons])
             body = child(nm, "body")
-            for s in "LR":
-                hp = mesh_pts(body, dg, vg=["finger", "metacarpal"] if False else ["wrist." + s, "finger1", "finger2", "finger3"]) if False else None
-                dist = min(tree.find_nearest(rig.matrix_world @ rig.pose.bones[bn + "." + s].head)[3] or 9
-                           for bn in ("finger3-1", "finger2-2", "finger3-2", "finger4-2", "metacarpal2", "metacarpal3"))
+            dists = {s: min(tree.find_nearest(rig.matrix_world @ rig.pose.bones[bn + "." + s].head)[3] or 9
+                            for bn in ("finger3-1", "finger2-2", "finger3-2", "finger4-2", "metacarpal2", "metacarpal3")) for s in "LR"}
+            for s, dist in dists.items():
+                if kind == "device" and dist > min(dists.values()): continue   # one-handed steadying: only the near hand must touch
                 if dist > 0.06 + 0.03: flag("HAND_FAR", f, "%s %s palm %.1f cm from the %s" % (nm, s, dist * 100, kind))
             # finger vertices inside the prop
             body = child(nm, "body")

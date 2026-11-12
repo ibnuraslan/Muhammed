@@ -102,15 +102,15 @@ TELEPORT 255
    f1307 21.77s SolB 0.81
    f1309 21.80s SolA 0.99
    f1309 21.80s SolB 1.04
-   f1311 21.83s SolA 1.20
+   f1311 21.83s SolA 1.19
    f1311 21.83s SolB 1.25
    f1311 21.83s SolC 0.60
    f1311 21.83s SolD 0.66
    f1313 21.87s SolA 1.38
-   f1313 21.87s SolB 1.44
+   f1313 21.87s SolB 1.45
    f1313 21.87s SolC 0.69
    f1313 21.87s SolD 0.76
-   f1315 21.90s SolA 1.55
+   f1315 21.90s SolA 1.54
    f1315 21.90s SolB 1.62
    f1315 21.90s SolC 0.78
    f1315 21.90s SolD 0.86
@@ -119,7 +119,7 @@ TELEPORT 255
    f1317 21.93s SolC 0.85
    f1317 21.93s SolD 0.94
    f1319 21.97s SolA 1.82
-   f1319 21.97s SolB 1.90
+   f1319 21.97s SolB 1.91
    f1319 21.97s SolC 0.92
    f1319 21.97s SolD 1.01
    f1319 21.97s EngA 1.88
@@ -136,50 +136,50 @@ TELEPORT 255
    f1323 22.03s SolD 1.12
    f1323 22.03s EngA 2.09
    f1323 22.03s EngB 2.77
-   f1325 22.07s SolA 2.10
-   f1325 22.07s SolB 2.19
+   f1325 22.07s SolA 2.09
+   f1325 22.07s SolB 2.20
    f1325 22.07s SolC 1.06
    f1325 22.07s SolD 1.16
    f1325 22.07s EngA 2.16
    f1325 22.07s EngB 2.87
    f1327 22.10s SolA 2.15
-   f1327 22.10s SolB 2.25
+   f1327 22.10s SolB 2.26
    f1327 22.10s SolC 1.08
    f1327 22.10s SolD 1.19
    f1327 22.10s EngA 2.22
    f1327 22.10s EngB 2.94
-   f1329 22.13s SolA 2.19
+   f1329 22.13s SolA 2.18
    f1329 22.13s SolB 2.29
    f1329 22.13s SolC 1.10
    f1329 22.13s SolD 1.21
    f1329 22.13s EngA 2.26
    f1329 22.13s EngB 2.99
-   f1331 22.17s SolA 2.21
+   f1331 22.17s SolA 2.20
    f1331 22.17s SolB 2.31
    f1331 22.17s SolC 1.11
    f1331 22.17s SolD 1.22
    f1331 22.17s EngA 2.28
    f1331 22.17s EngB 3.02
-   f1333 22.20s SolA 2.21
+   f1333 22.20s SolA 2.20
    f1333 22.20s SolB 2.31
    f1333 22.20s SolC 1.11
    f1333 22.20s SolD 1.22
    f1333 22.20s EngA 2.28
    f1333 22.20s EngB 3.02
-   f1335 22.23s SolA 2.19
+   f1335 22.23s SolA 2.18
    f1335 22.23s SolB 2.29
    f1335 22.23s SolC 1.10
    f1335 22.23s SolD 1.21
    f1335 22.23s EngA 2.26
    f1335 22.23s EngB 2.99
    f1337 22.27s SolA 2.15
-   f1337 22.27s SolB 2.25
+   f1337 22.27s SolB 2.26
    f1337 22.27s SolC 1.08
    f1337 22.27s SolD 1.19
    f1337 22.27s EngA 2.22
    f1337 22.27s EngB 2.94
-   f1339 22.30s SolA 2.10
-   f1339 22.30s SolB 2.19
+   f1339 22.30s SolA 2.09
+   f1339 22.30s SolB 2.20
    f1339 22.30s SolC 1.06
    f1339 22.30s SolD 1.16
    f1339 22.30s EngA 2.16
@@ -197,7 +197,7 @@ TELEPORT 255
    f1343 22.37s EngA 1.99
    f1343 22.37s EngB 2.64
    f1345 22.40s SolA 1.82
-   f1345 22.40s SolB 1.90
+   f1345 22.40s SolB 1.91
    f1345 22.40s SolC 0.92
    f1345 22.40s SolD 1.01
    f1345 22.40s EngA 1.88
@@ -208,19 +208,19 @@ TELEPORT 255
    f1347 22.43s SolD 0.94
    f1347 22.43s EngA 1.74
    f1347 22.43s EngB 2.31
-   f1349 22.47s SolA 1.55
+   f1349 22.47s SolA 1.54
    f1349 22.47s SolB 1.62
    f1349 22.47s SolC 0.78
    f1349 22.47s SolD 0.86
    f1349 22.47s EngA 1.59
    f1349 22.47s EngB 2.11
    f1351 22.50s SolA 1.38
-   f1351 22.50s SolB 1.44
+   f1351 22.50s SolB 1.45
    f1351 22.50s SolC 0.69
    f1351 22.50s SolD 0.76
    f1351 22.50s EngA 1.42
    f1351 22.50s EngB 1.89
-   f1353 22.53s SolA 1.22
+   f1353 22.53s SolA 1.19
    f1353 22.53s SolB 1.25
    f1353 22.53s SolC 0.60
    f1353 22.53s SolD 0.66
@@ -236,8 +236,8 @@ TELEPORT 255
    f1357 22.60s EngB 1.06
    f1359 22.63s SolB 0.60
    f1359 22.63s EngB 0.73
-   f1587 26.43s SolA 66.39
-   f1587 26.43s SolB 66.72
+   f1587 26.43s SolA 66.43
+   f1587 26.43s SolB 66.69
    f1587 26.43s SolC 58.50
    f1587 26.43s SolD 55.75
    f1587 26.43s EngA 59.98
