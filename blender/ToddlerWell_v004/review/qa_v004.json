@@ -1,11 +1,5 @@
 {
  "frames": {
-  "1": [
-   [
-    "BACKHEAD",
-    "Toddler"
-   ]
-  ],
   "73": [
    [
     "EMPTY",
@@ -15,13 +9,13 @@
   "79": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "85": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "97": [
@@ -219,7 +213,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "229": [
@@ -229,7 +223,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "241": [
@@ -239,10 +233,24 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "247": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only ShaftDust in view"
+   ]
+  ],
+  "253": [
    [
     "INSIDE",
     "camera inside geometry"
@@ -264,28 +272,14 @@
     "no character in view"
    ]
   ],
-  "253": [
-   [
-    "INSIDE",
-    "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only ShaftDust in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "259": [
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "ShaftDust"
    ],
    [
     "EMPTY",
@@ -304,6 +298,10 @@
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "ShaftDust"
    ],
    [
     "EMPTY",
@@ -808,12 +806,6 @@
     "hair / top of head 32%"
    ]
   ],
-  "1303": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 14%"
-   ]
-  ],
   "1351": [
    [
     "EMPTY",
@@ -906,6 +898,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1405": [
@@ -1506,10 +1502,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
    ]
   ],
   "1723": [
@@ -1538,27 +1530,24 @@
   ],
   "1735": [
    [
-    "INSIDE",
-    "camera inside geometry"
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1741": [
    [
     "INSIDE",
     "camera inside geometry"
-   ]
-  ],
-  "1765": [
+   ],
    [
-    "BACKHEAD",
-    "Teen"
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
    ]
   ]
  },
  "counts": {
-  "BACKHEAD": 2,
   "EMPTY": 177,
-  "FILL": 17,
-  "INSIDE": 121
+  "FILL": 19,
+  "INSIDE": 120
  }
 }

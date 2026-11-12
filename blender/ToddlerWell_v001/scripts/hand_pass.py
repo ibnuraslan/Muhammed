@@ -27,6 +27,7 @@ SHOTS = [  # every hand action: name, frame, (char, bone) target, camera offset,
  ("resA_guides_hips", 1792, ("ResA", "wrist.L"), (0.6, -0.6, 0.1), 30),
  ("teen_lifts_toddler", 1840, ("Teen", "wrist.L"), (0.6, -0.6, -0.1), 30),
  ("mother_hug", 1920, ("Mother", "wrist.L"), (0.5, -0.6, 0.1), 30),
+ ("handoff_teen_to_mother", 1884, ("Mother", "wrist.R"), (-0.5, -0.6, 0.1), 30),
  ("cheer_clap", 1880, ("ResA", "wrist.L"), (0.4, -0.6, 0.0), 30),
  ("toddler_arms_up_bottom", 300, ("Toddler", "wrist.R"), (0.1, -0.1, 0.35), 18),
 ]

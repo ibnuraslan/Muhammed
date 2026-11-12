@@ -32,6 +32,12 @@ Every story-beat frame is unchanged in v004: 1, 241, 463, 673, 913, 1135, 1297, 
 | 21 | 1326–1345 (22.2 s) | First v004 pass: the leg holders stood 0.7 m out, the teen's shins went out of reach, and their hands ended at their own hips (clip_scan 546–1076). | The holders stand closer, beside the rim at (±0.55, 0.45). Each hand takes the point on the teen's shin nearest his shoulder, one hand above the other along the leg. They crouch only as far as the leg is low. |
 | 22 | 1630–1772 (27–29.5 s) | First v004 pass: the toddler's hands sat at the same point as the teen's wrists, inside his hands (clip_scan ~270). | The toddler holds the teen's forearms, 7 cm above his wrists, on the near side. |
 | 23 | Whole film | Hands: hand-set finger angles. | Every hand uses `pipeline/hand_poses.py`: `add_hand_limits`, a relaxed hand by default, `wrap_grip` on rope and tools, `cup_hold` where a hand holds a body (shins, forearms, the toddler), and `flat_palm` for Crowd1's hand on the mother's back. Each is keyed in and out, 6 frames either side. |
+| 24 | 1 (beat 1), 1–40 | qa BACKHEAD: the opening wide shot showed the toddler from behind. | The camera starts in front of him, near the well, at his eye height. His face reads on the beat, and the camera moves to a three-quarter view as he walks. |
+| 25 | 1765 (beat 11) | qa BACKHEAD: the camera on the -y side saw the back of the teen's head as he came out. | The camera is on the +y side, the side he faces while head-down and after he is set on his feet. |
+| 26 | 262–292 (4.5 s) | The rise up the shaft was blown out by the shaft fill light and the sky glare. | The camera looks at the shaft wall as it rises, and the shaft fill dips to 60 W for those frames. The wall, the stones and the bright opening read. |
+| 27 | 1864–1900 | Hand-off: the teen's and the mother's hands were on the same points on the toddler. The teen's left and right were mirrored (crossed arms), and the toddler was still above the mother's reach (clip_scan up to 750). | The hand-down is continuous from the hold-up grip. The teen keeps hold under the toddler's arms until halfway. The mother reaches up and only takes him (one hand under, one across his back) once he is in reach. |
+| 28 | 1324 | Crowd1's hand on the mother's upper arm crossed her pleading hand. | Crowd1's hand rests on top of her right shoulder. |
+| 29 | 1762–1786 | ResA's hip-guide hands sank into the teen. | ResA stands 10 cm further back (-0.6, -0.15), with his hands on the front of the teen's hips. |
 | 20 | Whole film | Hand audit: rescuers' fingertips on their own clothes, and Crowd1's cheer in her hair. These were reported at D. | They were handled in v003 and are kept in v004. |
 
 ## Re-check (v004)
@@ -41,12 +47,12 @@ Every story-beat frame is unchanged in v004: 1, 241, 463, 673, 913, 1135, 1297, 
 - `qa_v004.json`: `qa_check.py` (director commit c6240b2) on the packed `ToddlerWell_v004_60fps.blend`, step 6, with `beats.json`.
 
 ## qa_check flags left in, with the reason
+BACKHEAD, HOVER and FACEPRESS are all 0 in v004. These flags stay:
+
 | Flag | Frames | Why it stays |
 |---|---|---|
-| INSIDE "camera inside geometry", EMPTY "wall fills the frame / no character" | 127–289, 403–469 | Intended: the falls down the shaft. The camera travels inside the open 0.3 m steel casing, looking down at the falling toddler or up at the light. The casing is a hollow tube, so the ray test reads it as "inside". The toddler is small in the frame by design: this is the depth shot. |
+| INSIDE "camera inside geometry", EMPTY "wall fills / no character / only ShaftDust" | 127–289, 403–469 | Intended: the falls down the shaft and the rise back up. The camera travels inside the open 0.3 m steel casing, which is a hollow tube, so the ray test reads it as "inside". The toddler is small in the frame by design: this is the depth shot. On the way up the frame shows the shaft wall and the bright opening. |
 | INSIDE / EMPTY | 487–547, 787–871, 1351–1741 | Intended: the cut-away cross-section. The earth block is cut open with backface-transparent faces, so the camera is "inside" the ground mass but looks through the open cut at the pipe, the teen and the toddler. In the time-lapse (793–865) the camera holds on the empty pit for the "days pass" beat. |
-| FILL ShaftDust / ShadowSlab | 139–169, 247, 457, 541, 1363, 1555–1591 | ShaftDust is a thin volume of dust in the light shaft. ShadowSlab is a shadow-only helper that the camera never renders (camera visibility off). Neither is a wall in the image. |
-| FILL "hair / top of head 32 %" | 1015 | One sampled frame in a camera move past the mother's head (14 frames). Not a beat frame. |
-| BACKHEAD Toddler | 1 (beat 1) | **Not fixed in this push.** The opening wide shot shows the toddler walking away from camera toward the well. His face is not on screen. Fix for the next version: start the camera in front of him. |
-| BACKHEAD Teen | 1765 (beat 11) | **Not fixed in this push.** The teen faces into the pipe as he comes out legs-first. Fix for the next version: key the camera at the front of the well 10 frames earlier. |
-| FACEPRESS | — | Fixed: the toddler now holds the teen's forearms 7 cm above his wrists (0 flags). |
+| EMPTY "character only 1–3 %" | 73–103, 1303 | Wide framings of the toddler near the well and the crowd at the rim: the people are small in the frame, but their faces read. |
+| FILL ShaftDust / ShadowSlab | 139–169, 253–265, 457, 541, 1363, 1555–1591 | ShaftDust is a thin volume of dust in the light shaft. ShadowSlab is a shadow-only helper that the camera never renders. Neither is a wall in the image. |
+| FILL "hair / top of head 32 %" | 1015 | One sampled frame in a camera move past the mother's head. Not a beat frame. |
