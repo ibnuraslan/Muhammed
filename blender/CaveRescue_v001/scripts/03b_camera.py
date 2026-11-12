@@ -40,14 +40,15 @@ SEGS = [
 for seg in SEGS:
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl = catmull([(f, float(l)) for f, c, a, l in seg])
     f0, f1 = seg[0][0], seg[-1][0]
-    _pd = None
-    for f in range(f0, f1 + 1):   # every frame; the look direction turns at most 40 deg per frame (qa_check CAMJUMP: no one-frame whips)
-        c_ = fc(f); a_ = fa(f); v_ = a_ - c_; L_ = max(v_.length, 0.5); d_ = v_.normalized()
-        if _pd is not None:
-            ang_ = _pd.angle(d_, 0.0)
-            if ang_ > math.radians(40):
-                d_ = _pd.slerp(d_, math.radians(40) / ang_).normalized() if hasattr(_pd, "slerp") else d_
-        _pd = d_
+    _ph = None
+    for f in range(f0, f1 + 1):   # every frame; heading turns at most 20 deg/frame and pitch stays above -80 deg, so the
+        c_ = fc(f); a_ = fa(f); v_ = a_ - c_; L_ = max(v_.length, 0.5)   # camera never spins when it passes over its aim (qa_check CAMJUMP)
+        h_ = math.atan2(v_.y, v_.x); p_ = max(math.atan2(v_.z, math.hypot(v_.x, v_.y)), math.radians(-80))
+        if _ph is not None:
+            dh_ = (h_ - _ph + math.pi) % (2 * math.pi) - math.pi
+            h_ = _ph + max(-math.radians(20), min(math.radians(20), dh_))
+        _ph = h_
+        d_ = V((math.cos(p_) * math.cos(h_), math.cos(p_) * math.sin(h_), math.sin(p_)))
         cam.location = c_; cam.keyframe_insert("location", frame=f)
         aim.location = c_ + d_ * L_; aim.keyframe_insert("location", frame=f)
         cam_d.lens = fl(f); cam_d.keyframe_insert("lens", frame=f)
