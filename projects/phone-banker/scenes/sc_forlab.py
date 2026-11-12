@@ -427,19 +427,23 @@ def a_specialists(c, sec):
     hide(c["people"]["reporter"], True)
     c["camera_prop"].location = (LT.x + 0.4, LT.y + 0.2, LT.z + 0.02)
     s1, s2 = c["people"]["spec1"], c["people"]["spec2"]
-    seat(s1, (1.9, 1.05, 0), math.radians(180), lean=16)                          # faces +Y
-    seat(s2, (1.9, 2.42, 0.08), 0.0, lean=10)                                           # faces -Y (other side of the bench)
+    seat(s1, (1.9, 1.05, 0.12), math.radians(180), lean=12)                       # faces +Y; seats raised so the forearms rest ON the table
+    seat(s2, (1.9, 2.42, 0.14), 0.0, lean=8)                                           # faces -Y (other side of the bench)
     hide(s2, False)
+
+    def table_pole(h, sd):                                                          # elbows out and back, level: forearms lie ON the top
+        f = fwd(h); sv = Vector((0, 0, 1)).cross(f).normalized() * (1 if sd == "L" else -1)
+        return sv * 0.7 - f * 0.35 + Vector((0, 0, -0.05))
     k = ease(min(1.0, max(0.0, (sec - 1.0) / 2.0)))
     back = ease(min(1.0, max(0.0, (sec - 3.3) / 1.0)))
     pg = c["sheetB"]; pg.location = Vector((1.62, 2.1, 0.868)).lerp(Vector((1.7, 1.9, 0.868)), k)
     # fingertips on the far edge of the page, the forearm low over the table; the hand draws back once it is across
-    tip = pg.location + Vector((-0.02, 0.12, 0.05))
-    hand_to(s2, "R", tip.lerp(tip + Vector((0.05, 0.25, 0.0)), back), hand_dir=Vector((0, -0.35, -0.9)), curl=8)
-    hand_to(s2, "L", Vector((2.12, 2.2, 0.86)), hand_dir=Vector((0, -0.6, -0.7)), curl=25)
+    tip = pg.location + Vector((-0.02, 0.12, 0.095))
+    hand_to(s2, "R", tip.lerp(tip + Vector((0.05, 0.25, 0.0)), back), pole=table_pole(s2, "R"), hand_dir=Vector((0, -0.35, -0.9)), curl=8)
+    hand_to(s2, "L", Vector((2.12, 2.18, 0.955)), pole=table_pole(s2, "L"), hand_dir=Vector((0, -0.6, -0.7)), curl=25)
     nod(s2, "spine04", 8); nod(s2, "head", 14); nod(s1, "head", 16); look(s1, pg.location, 0.5)
-    hand_to(s1, "L", Vector((1.72, 1.5, 0.86)), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
-    hand_to(s1, "R", Vector((2.08, 1.48, 0.86)), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
+    hand_to(s1, "L", Vector((1.72, 1.52, 0.915)), pole=table_pole(s1, "L"), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
+    hand_to(s1, "R", Vector((2.08, 1.5, 0.915)), pole=table_pole(s1, "R"), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
 
 
 def a_photo(c, sec):
