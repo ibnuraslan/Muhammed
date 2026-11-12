@@ -1,0 +1,22 @@
+{
+ "frames": {
+  "1081": {
+   "Owner": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1087": {
+   "Owner": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
