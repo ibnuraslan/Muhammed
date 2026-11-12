@@ -529,9 +529,9 @@ def hose_setup(name, front, back, nmF, nmB, f0, f1):
     tgt = WELL; yawF = yaw_to(front, tgt)
     fw, lf = body_frame(yawF)
     def side_pt(pos, fwd, right, z): return pos.to_3d() + fw * fwd - lf * right + Vector((0, 0, z))
-    nozzle = side_pt(front, 1.0, 0.18, 1.14)
-    fL, fR = side_pt(front, 0.62, 0.22, 1.08), side_pt(front, 0.22, 0.30, 1.0)
-    bL, bR = side_pt(back, 0.62, 0.24, 1.0), side_pt(back, 0.15, 0.32, 0.95)
+    nozzle = side_pt(front, 1.0, 0.24, 1.14)
+    fL, fR = side_pt(front, 0.62, 0.28, 1.08), side_pt(front, 0.24, 0.38, 1.0)
+    bL, bR = side_pt(back, 0.62, 0.3, 1.0), side_pt(back, 0.18, 0.4, 0.95)
     hp = [nozzle, fL, fR, bL, bR, side_pt(back, -0.8, 0.3, 0.25), side_pt(back, -2.0, 0.3, 0.06), back.to_3d() - fw * 6.0 + Vector((0, 0, 0.06))]
     cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.05; cu.bevel_resolution = 2
     sp = cu.splines.new('POLY'); sp.points.add(len(hp) - 1)
@@ -589,11 +589,11 @@ def dev_guide(nm, sgn, f0, f1):
     while f <= f1:
         _, _, zd, _ = dev_state(f); zb = zd - 4.6
         hz = max(zb + 0.6, 1.15); hz = min(hz, zb + 2.5)
-        cx = SHAFT.x + sgn * 0.43 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
+        cx = SHAFT.x + sgn * 0.47 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
         release = smooth((f - 1452) / 14.0)
         hw = {}
         for s, dy in (("L", -0.17 * sgn), ("R", 0.17 * sgn)):
-            W = Vector((cx + sgn * 0.03 + sgn * 0.3 * release, SHAFT.y + dy, hz + 0.0 - 0.3 * release))
+            W = Vector((cx + sgn * 0.03 + sgn * 0.1 * release, SHAFT.y + dy * (1 + 0.6 * release), hz + 0.3 * release))
             hw[s] = (W, Vector((0, 0, 1)), Vector((-sgn, 0, 0)))
         pose(nm, f, pos, yw, crouch=0.08, flex=30 - 14 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1), grip=(0.15, 0.15))
         f += 6
@@ -676,7 +676,8 @@ CAMK = [  # frame, camera, target, lens
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
     (1925, (2.0, -50.0, 0.5), (0.0, 0.0, 24.0), 24),
     (1965, (12.0, 14.0, 6.0), (0.0, -1.6, 5.0), 26),
-    (2000, (-15.0, 42.0, 3.0), (-25.0, 62.0, 1.6), 28),
+    (1988, (2.0, 30.0, 7.0), (-10.0, 45.0, 3.0), 26),
+    (2008, (-15.0, 44.0, 3.0), (-25.0, 62.0, 1.6), 28),
     (2030, (-21.0, 53.0, 2.0), (-25.0, 62.3, 1.6), 30),
     (2065, (-21.0, 67.5, 2.6), (-18.0, 48.0, 1.8), 28),
     (2100, (-28.0, 76.0, 11.0), (-8.0, 0.0, 6.0), 26),

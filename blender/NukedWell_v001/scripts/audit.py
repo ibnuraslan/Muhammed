@@ -26,7 +26,7 @@ issues = {}
 def flag(kind, f, msg): issues.setdefault(kind, []).append((f, msg))
 def ground_z(x, y):
     r = (Vector((x, y)) - SHAFT).length
-    return 0.5 if 2.35 < r < 3.45 else 0.0
+    return 0.4 if 0.72 < r < 1.68 else 0.0
 def jolt(): j = O.get("JoltRoot"); return j.matrix_world.translation.z if j else 0.0
 def mesh_pts(o, dg, every=1, vg=None):
     ev = o.evaluated_get(dg); me = ev.to_mesh(); mw = o.matrix_world

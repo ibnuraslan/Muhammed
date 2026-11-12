@@ -410,6 +410,10 @@ CR = bpy.data.objects.new("Crane_Slew", None); CR.location = CRANE_BASE; link(CR
 M_CRANE = flat("M_CraneYellow", (0.95, 0.62, 0.05), 0.4, 0.2)
 mast = lattice_tower("Crane_Mast", 2.6, 2.0, 34.0, 11, (0, 0, 0), M_CRANE); mast.parent = CR
 cab = box("Crane_Cab", (4.5, 3.2, 3.0), (0, 2.6, 2.0), mat=M_CRANE); cab.parent = CR
+for _o in (cab,):
+    _b = _o.modifiers.new("bv", 'BEVEL'); _b.width = 0.25; _b.segments = 3
+    for _k, (_x, _z) in enumerate(((2.26, 2.5), (-2.26, 2.5))):
+        _w = box("Crane_CabWindow%d" % _k, (0.05, 2.2, 1.0), (_x, 2.6, _z), mat=flat("M_Glass", (0.1, 0.18, 0.25), 0.1, 0.0)); _w.parent = CR
 cw = box("Crane_Counterweight", (3.5, 4, 2.5), (0, 9.0, 33.5), mat=M_CONC); cw.parent = CR
 BOOM_LEN = math.hypot(*(Vector((SHAFT_X, 0)) - CRANE_BASE.to_2d())) + 0.0
 boom = lattice_tower("Crane_Jib", 1.8, 1.4, BOOM_LEN + 9, 14, (0, 0, 0), M_CRANE)

@@ -24,3 +24,17 @@ The assets come from `pipeline/fetch_polyhaven.py`, plus `pipeline/find_models.p
   - Below ground, the 9:16 frame stacks the surface world over the cut rock.
 - **The device is a plain steel cylinder.** It has bolted flanges, welds, lugs and a shackle, and no internals. The explosion is shown only as underground light, the rock squeezing, a surface heave and a dust ring. There is no mushroom cloud.
 - **Rewind (beat 3).** Story elements play backwards, the sun races back and the fire shrinks into the wellhead.
+
+## Look and hands (client rules, Nov 11)
+- **Look:** the bright, animated 3D look (`STYLE_ANIMATED.md`), applied by `pipeline/anim_look.py`. `scripts/03b_look.py` follows it and keys the camera sky gradient to night in beats 3 and 5.
+- **Hands:** every finger and thumb bone has a Limit Rotation constraint (no backward bends). Relaxed hands are curled, and grips curl around the hose.
+  - `scripts/audit_hands.py` runs every 2 frames: hand vs hand, own body and clothes, and other characters.
+  - Final count: **0 hits** (`review/D_hand_audit.txt`).
+
+## Known issues
+- The brightest part of the fire column turns pale peach under AgX Punchy.
+- After the flash, the blast cavity in beat 10 reads as a flat glowing disc.
+- The crane is built here (lattice mast, jib, cab), not a scanned model; no period crane model was available.
+- The fire trucks are a CC-BY Zil-131 model. Its door markings have not been checked at close range. The camera never comes closer than about 15 m.
+- There is no voiceover yet; the timing follows the brief's beat table.
+- Wrists and elbows are driven by IK and pole targets, and have no Limit Rotation constraints.

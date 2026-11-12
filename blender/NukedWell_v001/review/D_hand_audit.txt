@@ -1,0 +1,3 @@
+HAND AUDIT NukedWell (every 2 frames, crew within 40 m of camera)
+HAND_PENETRATION_COUNT 0
+no hand hits
