@@ -64,7 +64,29 @@ def anim(shot):
         else:
             T.type_at(c["tw"], sec, start=0.2, cps=3.0)
         bpy.context.scene.frame_set(int(t * DUR[shot] * FPS) + 1)              # drivers (X-ray fade) follow in stills too
+        if shot == "coil":
+            clear_view(c, MOVES["coil"]["cam"](c, t)[0])
     return f
+
+
+def clear_view(c, eye):
+    """Coil close-up: hide whatever parts of the machine stand between the lens and the switch coils, then light them."""
+    tw = c["tw"]; coils = [o for o in bpy.data.objects if "_Coil" in o.name or "_SwitchBody" in o.name]
+    keep = set(coils)
+    bpy.context.view_layer.update()
+    for tgt in coils:
+        for _ in range(12):
+            p = tgt.matrix_world.translation; d = (p - eye)
+            hit, loc, nrm, idx, ob, mx = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(), eye, d.normalized(), distance=d.length - 0.002)
+            if not hit or ob is None:
+                break
+            ob = bpy.data.objects.get(ob.name)
+            if ob in keep:
+                break
+            ob.hide_render = True; ob.hide_viewport = True; bpy.context.view_layer.update()
+    if "coil_key" not in c:
+        k = area_light((0, 0, 0), (0, 0, 0), 0.08, 1.2, (1.0, 0.86, 0.7)); k.visible_camera = False
+        k.location = coils[0].matrix_world.translation + Vector((0.08, -0.1, 0.1)); point_at(k, coils[0].matrix_world.translation); c["coil_key"] = k
 
 
 W = lambda c, p: T.world(c["tw"], p)

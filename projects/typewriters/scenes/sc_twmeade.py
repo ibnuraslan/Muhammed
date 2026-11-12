@@ -246,6 +246,26 @@ def build(variant=None):
     pcb = pbr("MemPCB", (0.08, 0.16, 0.09), 0.35, 0.0, **{'Coat Weight': 0.8})
     box("MemBoard", (MEM.x, MEM.y, 1.06), (0.28, 0.3, 0.004), pcb)
     c["mem"] = mem
+    # 8B: the board inside the altered bar, a lit green PCB with copper traces (exposed as the lid slides off)
+    import skia
+    pth = os.path.join(T.GEN, "pcb_traces.png"); sf = skia.Surface(1024, 128); cv = sf.getCanvas(); cv.clear(skia.Color4f(0.05, 0.28, 0.12, 1))
+    rng_ = np.random.default_rng(7); cu = skia.Paint(AntiAlias=True, StrokeWidth=3, Style=skia.Paint.kStroke_Style); cu.setColor4f(skia.Color4f(0.85, 0.55, 0.25, 1))
+    for k in range(70):
+        x0 = float(rng_.uniform(0, 1024)); y0 = float(rng_.uniform(8, 120)); x1 = x0 + float(rng_.uniform(-120, 120))
+        cv.drawLine(x0, y0, x1, y0, cu); cv.drawLine(x1, y0, x1, float(rng_.uniform(8, 120)), cu)
+    pad = skia.Paint(AntiAlias=True); pad.setColor4f(skia.Color4f(0.85, 0.75, 0.45, 1))
+    for k in range(40):
+        cv.drawCircle(float(rng_.uniform(0, 1024)), float(rng_.uniform(8, 120)), 4, pad)
+    chip = skia.Paint(); chip.setColor4f(skia.Color4f(0.04, 0.04, 0.05, 1))
+    for k in range(9):
+        cv.drawRect(skia.Rect.MakeXYWH(60 + k * 105, 34, 60, 60), chip)
+    sf.makeImageSnapshot().save(pth, skia.kPNG)
+    pm = bpy.data.materials.new("PCBTraces"); pm.use_nodes = True; tn = pm.node_tree.nodes.new("ShaderNodeTexImage"); tn.image = bpy.data.images.load(pth)
+    pb = pm.node_tree.nodes["Principled BSDF"]; pm.node_tree.links.new(tn.outputs[0], pb.inputs['Base Color']); pb.inputs['Roughness'].default_value = 0.35
+    pb.inputs['Coat Weight'].default_value = 0.6
+    bpy.ops.mesh.primitive_plane_add(size=1); pcb_o = bpy.context.active_object; pcb_o.name = "BarPCB"; pcb_o.scale = (T.BAR_L * 0.92, 0.018, 1)
+    bpy.ops.object.transform_apply(scale=True); pcb_o.data.materials.append(pm); c["bar_pcb"] = pcb_o
+    pk = area_light((0, 0, 0), (0, 0, 0), 0.15, 3.0, (1.0, 0.92, 0.82)); pk.visible_camera = False; c["bar_key"] = pk
     # the two bar versions (Ch3 6B): a mains-wired one and one with a battery pack, on the pair bench's end
     for k, dx in enumerate((-0.12, 0.12)):
         b = box(f"LooseBar{k}", (PAIR.x + 1.25, PAIR.y - 0.2 + dx, PAIR.z + 0.01), (0.36, 0.022, 0.016), bpy.data.materials.get("TW_Alu") or legm)
@@ -419,6 +439,11 @@ def animate(c, sec, shot):
             o.location = c["_rest"][key] + dz
         slide_ = ease(min(1.0, max(0.0, (sec - 1.0) / 2.2))) if (shot == "barlid" and k == 1) else 0.0
         lid.location = base + Vector((0.0, -0.035 * slide_, 0.0085 + 0.01 * slide_)) + Vector((0.2 * slide_, 0, 0))
+        if k == 1:
+            pcb_o = c["bar_pcb"]; pcb_o.hide_render = shot not in ("barlid",)
+            bpy.context.view_layer.update()
+            bw = bar.matrix_world; pcb_o.location = bw @ Vector((0, 0, 0.0075)); pcb_o.rotation_euler = bw.to_euler()
+            c["bar_key"].location = pcb_o.location + Vector((-0.05, -0.12, 0.18)); point_at(c["bar_key"], pcb_o.location)
     bpy.context.view_layer.update()
 
 
@@ -447,7 +472,7 @@ CAMS = {
     "debate": lambda c, t: (V3(LB.x - 0.28, LB.y + 2.4, 1.72).lerp(V3(LB.x - 0.4, LB.y + 2.22, 1.7), ease(t)), V3(LB.x - 1.0, LB.y - 0.75, 1.42), 32),
     "memory": lambda c, t: (MEM + V3(-1.5, -0.9, 0.45).lerp(V3(-1.25, -0.75, 0.38), ease(t)), MEM + V3(0, 0, 0.1), 35),
     "pair": lambda c, t: (PAIR + V3(-1.3, -1.9, 0.65).lerp(V3(-1.1, -1.65, 0.6), ease(t)), PAIR + V3(0.15, -0.1, 0.2), 30),
-    "barlid": lambda c, t: (c["pair"][1]["bar"].matrix_world.translation + V3(-0.1, -0.2, 0.3).lerp(V3(-0.09, -0.17, 0.26), ease(t)), c["pair"][1]["bar"].matrix_world.translation + V3(-0.07, 0.0, 0.0), 50),     # down onto the end the lid slides off
+    "barlid": lambda c, t: (c["pair"][1]["bar"].matrix_world.translation + V3(-0.12, -0.24, 0.24).lerp(V3(-0.11, -0.21, 0.21), ease(t)), c["pair"][1]["bar"].matrix_world.translation + V3(-0.06, 0.0, 0.005), 45),     # 45 deg onto the open bar: the board inside
     "bars": lambda c, t: (PAIR + V3(1.32, -0.78, 0.46).lerp(V3(1.3, -0.68, 0.41), ease(t)), PAIR + V3(1.27, -0.2, 0.0), 40),
     "inspect78": lambda c, t: (XC + V3(0.9, -3.2, 1.6).lerp(V3(0.82, -3.0, 1.57), ease(t)), XC + V3(-0.2, -0.9, 1.0), 26),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
