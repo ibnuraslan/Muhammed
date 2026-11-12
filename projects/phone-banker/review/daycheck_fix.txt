@@ -1,2 +1,3 @@
 ch1_01_bank_traffic fixed 0.492  plain 0.496
 ch1_02_bank_arrive_bank fixed 0.426  plain 0.424
+ch1_07_hospital_gurney fixed 0.557  plain 0.558
