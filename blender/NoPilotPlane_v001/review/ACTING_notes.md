@@ -60,3 +60,12 @@ Build: `hand_poses.py` is now in the packaged file. Every finger pose goes throu
   - At 32.0 s the edge of the first officer's seat still covers about 40 % of the frame; at 33.5 s (the whip to the alarms) about 25 %.
   - At 28.5 s a small black sliver is left in the bottom-right corner.
 - **Close-ups:** the 8.0 s right-hand close-up renders black. The close-up camera is inside the seat; that is the review tool, not the film.
+
+## v007d (director, 19:25 UTC): black shapes in the POV
+- **YOU's own body at the lens:** new step `scripts/06_pov_split.py`, run after `05_look_tune.py`.
+  - YOU's body and shirt are split. Faces on the head, neck, shoulders, upper chest and upper arm (upperarm01) go to `.headpart` objects.
+  - Those objects, plus the eyes, teeth and tongue, have `visible_camera` keyed off until the float-out at 71.4 s. Shadows stay.
+  - Camera `clip_start` is now 8 cm. At 29.0 s YOU's own left forearm crossed 4 cm under the lens while hauling.
+- **Handset, 21.8–25.6 s:** it is held low and forward, shouting down into it. It leaves the lower frame instead of reaching the eye.
+  - Distance from the camera to the handset surface, frames 1290–1570: minimum 22.5 cm (it was 0.3 cm).
+- **Strip:** `review/v007d_black_cells_strip.jpg` (23.0, 23.5, 24.0, 24.5, 25.5 and 29.0 s). No black shapes.

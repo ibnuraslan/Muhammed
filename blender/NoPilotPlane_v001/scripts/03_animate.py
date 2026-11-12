@@ -622,14 +622,14 @@ grip_handset(F(20.9))                                                        # w
 hand("L", F(20.0), (-0.36, 1.10, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 for t_ in (21.0, 22.2, 23.4, 24.6, 25.8): hand("L", F(t_), (-0.37 + 0.01 * (t_ % 2), 1.11, 1.43), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(21.8), POSW, flex=6, sflex=6, head=(0, -5))
-hand("R", F(21.8), (0.14, 1.42, 1.16), d=(-0.3, 0.2, 1), n=(-0.6, -1, 0), curl=80)
+hand("R", F(21.8), (0.16, 1.52, 0.98), d=(-0.3, 0.2, 1), n=(-0.6, -1, 0), curl=80)          # v007d: low and forward, handset >= 15 cm from the eye
 for i, t in enumerate((22.8, 23.4, 23.9, 24.5, 25.0)):
     j = 0.012 * (1 if i % 2 else -1)
-    hand("R", F(t), (0.12 + j, 1.38, 1.20 + j), d=(-0.3, 0.1, 1), n=(-0.8, -1, 0), curl=80)
+    hand("R", F(t), (0.15 + j, 1.50, 1.00 + j), d=(-0.3, 0.1, 1), n=(-0.8, -1, 0), curl=80)
     body(F(t), (POSW[0], POSW[1], POSW[2] - 0.01 * (i % 2)), flex=8 + 3 * (i % 2), sflex=10, head=(5 + 4 * (i % 2), -3))
 # beat 8: silence, lower handset, put it back
 body(F(25.6), POSW, flex=14, sflex=20, head=(30, 0))
-hand("R", F(25.6), (0.10, 1.38, 1.08), d=(0, 0.3, 1), n=(-0.6, -1, 0), curl=78)
+hand("R", F(25.6), (0.14, 1.52, 0.88), d=(0, 0.3, 1), n=(-0.6, -1, 0), curl=78)
 grip_handset(F(26.3))
 hand("R", F(26.6), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=10)
 # beat 9: haul the FO out
