@@ -25,7 +25,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v008/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–2388)** |
 | 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1273)** |
 | 11 | WW1Assassination | `claude/connect11-ww1-assassination` | `blender/WW1Assassination_v005b/` **acting fixed, approved, final commit 4ff1225 (VO sync when your voiceover arrives)** |
-| 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v006/` |
+| 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v007/` **acting fixed, approved, final commit 800e346 (VO sync when your voiceover arrives)** |
 | 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v007/` **acting fixed, approved, final commit 91f7a3d (VO sync when your voiceover arrives)** |
 | 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
