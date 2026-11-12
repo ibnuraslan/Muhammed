@@ -145,7 +145,7 @@ def analyser(loc, rot_z=0.0):
              box("AnPrinter", (0.42, -0.05, 0.12), (0.22, 0.3, 0.24), beige, bevel=0.01),
              box("AnSlot", (0.42, -0.2, 0.2), (0.16, 0.01, 0.01), dark)]
     for k in range(5):
-        parts.append(cyl("AnKnob", (-0.18 + k * 0.09, -0.29, 0.25), 0.015, 0.02, dark, verts=12, rot=(math.radians(90), 0, 0)))
+        parts.append(cyl("AnKnob", (-0.18 + k * 0.09, -0.29, 0.13), 0.015, 0.02, dark, verts=12, rot=(math.radians(90), 0, 0)))
     body = joinm(parts, "Analyser"); body.location = loc; body.rotation_euler = (0, 0, rot_z)
     led = box("AnLED", (-0.2, -0.29, 0.5), (0.03, 0.005, 0.015), None); led.parent = body
     lm = bpy.data.materials.new("AnLED"); lm.use_nodes = True
@@ -281,6 +281,15 @@ def build(variant=None):
         P["exp1"] = medic("Expert1", 1.0, 52, "short04"); P["exp2"] = medic("Expert2", 0.0, 44, "bob02")
         P["analyst"] = medic("Analyst", 0.0, 33, "ponytail01")
     if variant == "evid":
+        # 7B happens at an ordinary office desk, not the light table
+        for o in (lt, top):
+            o.hide_render = True
+        r, dk = ph.model("WoodenTable_03", loc=(LT.x, LT.y, 0), rot_z=0.0)
+        bpy.context.view_layer.update(); lo_, hi_ = ph.bounds(dk); c["desk_z"] = hi_.z
+        print("[forlab] desk top", round(hi_.z, 3), [round(v, 2) for v in lo_], [round(v, 2) for v in hi_])
+        ph.model("SchoolChair_01", loc=(LT.x - 0.05, LT.y - 0.62, 0), rot_z=math.pi)
+        for k in range(2):
+            image_plane(f"DeskPage{k}", pages[(k + 2) % len(pages)], (LT.x - 0.38 + 0.05 * k, LT.y - 0.05 + 0.03 * k, hi_.z + 0.002 + 0.0005 * k), (0.21, 0.28), (0, 0, math.radians(8 - 10 * k)), rough=0.75)
         P["pros"] = person("Prosecutor", 1.0, 50, "male_elegantsuit01", "short04", cval=0.12, hv=0.4, sat=0.2)
         P["coll"] = person("Colleague", 1.0, 38, "male_elegantsuit01", "short02", cval=0.25, hv=0.2, hue=0.6, sat=0.4)
     if y18:
@@ -341,10 +350,11 @@ def a_gc(c, sec):
     for k in ("exp1", "exp2"):
         hide(c["people"][k], True)
     an = c["people"]["analyst"]
-    stand(an, (REC.x + 0.35, REC.y + 0.75, 0), 0.0)                                   # faces -Y, the instrument
-    nod(an, "spine04", 10); nod(an, "head", 14)
+    knob = c["analyser"].matrix_world @ Vector((-0.09, -0.3, 0.13))                 # the second knob on the front panel
+    stand(an, (knob.x + 0.22, knob.y + 0.36, 0), 0.0)                                # faces -Y, close to the instrument
+    nod(an, "spine04", 8); nod(an, "head", 16)
     look(an, c["analyser"].matrix_world @ Vector((0.42, -0.25, 0.15)), 0.6)
-    hand_to(an, "L", Vector((REC.x + 0.1, REC.y + 0.2, 0.84)), hand_dir=Vector((0, -0.6, -0.8)), curl=15)
+    hand_to(an, "R", knob + Vector((0.0, 0.03, 0.0)), hand_dir=Vector((0, -0.9, -0.2)), curl=40)
 
 
 def a_saratov(c, sec):
@@ -373,19 +383,24 @@ def a_ampoules(c, sec):
 
 
 def a_slide(c, sec):
-    """At the bench, the prosecutor slides a file across to his colleague."""
+    """At his desk, the prosecutor slides a file across with his forearm on the desk; his colleague picks it up."""
     p, q = c["people"]["pros"], c["people"]["coll"]
-    stand(p, (-1.6, LT.y - 0.8, 0), math.radians(180))                              # faces +Y
-    stand(q, (-1.6, LT.y + 0.85, 0), 0.0)                                           # faces -Y, across the light table
-    k = ease(min(1.0, max(0.0, (sec - 0.6) / 2.5)))
+    z = c.get("desk_z", LT.z)
+    seat(p, (LT.x - 0.05, LT.y - 0.62, 0), math.radians(180), lean=14)            # faces +Y, the desk
+    stand(q, (LT.x + 0.05, LT.y + 0.62, 0), 0.0)                                    # faces -Y, across the desk
+    k = ease(min(1.0, max(0.0, (sec - 0.5) / 2.2)))
+    lift = ease(min(1.0, max(0.0, (sec - 3.2) / 1.2)))
     f = c["fileA"]; c["fileB"].hide_render = True
-    f.location = Vector((LT.x, LT.y - 0.18, LT.z + 0.012)).lerp(Vector((LT.x, LT.y + 0.22, LT.z + 0.012)), k)
-    nod(p, "spine04", 18 * (1 - 0.5 * k) + 6); nod(p, "head", 14)
-    hand_to(p, "R", f.location + Vector((0.05, -0.12, 0.04)), hand_dir=Vector((0, 0.7, -0.6)), curl=20)
-    hand_to(p, "L", Vector((LT.x - 0.35, LT.y - 0.3, LT.z + 0.04)), hand_dir=Vector((0, 0.7, -0.6)), curl=15)
-    nod(q, "spine04", 12); nod(q, "head", 18)
-    if k > 0.8:
-        hand_to(q, "R", f.location + Vector((-0.05, 0.12, 0.04)), hand_dir=Vector((0, -0.7, -0.6)), curl=20)
+    f.location = Vector((LT.x, LT.y - 0.2, z + 0.004)).lerp(Vector((LT.x + 0.02, LT.y + 0.12, z + 0.004)), k) + Vector((0, 0.06 * lift, 0.18 * lift))
+    f.rotation_euler = (math.radians(-35 * lift), 0, 0)
+    nod(p, "head", 16)
+    if lift <= 0:                                                                   # forearm flat on the desk, fingertips on the file
+        hand_to(p, "R", f.location + Vector((0.04, -0.1, 0.03)), hand_dir=Vector((0, 0.9, -0.3)), curl=10)
+    hand_to(p, "L", Vector((LT.x - 0.28, LT.y - 0.32, z + 0.03)), hand_dir=Vector((0.2, 0.9, -0.3)), curl=25)
+    nod(q, "spine04", 10 + 14 * min(1.0, k * 1.5) * (1 - 0.6 * lift)); nod(q, "head", 18)
+    if k > 0.7:
+        hand_to(q, "R", f.location + Vector((-0.06, 0.12, 0.03)), hand_dir=Vector((0, -0.7, -0.6)), curl=35)
+        hand_to(q, "L", f.location + Vector((0.08, 0.12, 0.03)), hand_dir=Vector((0, -0.7, -0.6)), curl=35)
 
 
 def a_photocopies(c, sec):
