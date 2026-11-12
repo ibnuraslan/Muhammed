@@ -28,3 +28,17 @@ The story-beat frames are unchanged (beats.json). There are no new extras.
   - EMPTY 97 on the hand/prop macro shots: the pour, the casting, the cake, the press, the lock;
   - FILL 2 (frames 331 and 337);
   - BACKHEAD 3 (frames 367, 511 and 1057).
+
+## Update 2 (director review of f689575)
+- Camera fixes:
+  - 19.5 s (1171): his face at the table, not the wall.
+  - 28.5 s (1711): follows him across the yard, not empty cobbles.
+  - 14.5 s (871): the whip into the cell ends earlier, so he is seen through the window bars at the door on the beat-6 frame.
+  - 17.5–18.0 s (1046–1082): the camera is on the door side for beat 7, so his face is in frame as he turns from the door.
+  - 331/337: his face and the key at the table.
+  - 367: in front of the visitor on beat 3.
+- 12.5 s: the ally's key hand goes into the cake low, held just over it.
+- Checks:
+  - camera audit, every frame: 0 bad frames;
+  - qa_check: EMPTY 81 (all hand/prop macros), FILL 1 (319, table edge), BACKHEAD 2 (511 the guard nearer than the acting ally; 871 the prisoner's side or back through the bars at the door);
+  - HOVER, CLAW, FACEPRESS and INSIDE: 0.

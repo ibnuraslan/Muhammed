@@ -1,87 +1,49 @@
 {
  "frames": {
-  "307": [
+  "301": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 11%"
    ]
   ],
-  "313": [
+  "307": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 5%"
    ]
   ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
   "319": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "325": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "331": [
    [
     "FILL",
     "WoodenTable_01"
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
-  "337": [
-   [
-    "FILL",
-    "Cell_WallN_1"
-   ],
+  "325": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only Cell_WallN_1 in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "343": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "349": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "355": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 6%"
-   ]
-  ],
-  "367": [
-   [
-    "BACKHEAD",
-    "Visitor"
    ]
   ],
   "493": [
@@ -283,13 +245,7 @@
   "715": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
-   ]
-  ],
-  "721": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "733": [
@@ -301,13 +257,19 @@
   "739": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "769": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 11%"
    ]
   ],
   "775": [
@@ -320,6 +282,28 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "865": [
@@ -335,39 +319,11 @@
   "871": [
    [
     "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "877": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "wall/prop fills the frame, character only 7%"
    ],
    [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "883": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "889": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ]
-  ],
-  "895": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "BACKHEAD",
+    "Prisoner"
    ]
   ],
   "907": [
@@ -382,72 +338,34 @@
     "wall/prop fills the frame, character only 12%"
    ]
   ],
-  "1057": [
-   [
-    "BACKHEAD",
-    "Prisoner"
-   ]
-  ],
-  "1081": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 9%"
-   ]
-  ],
-  "1087": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ]
-  ],
   "1093": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 10%"
    ]
   ],
-  "1171": [
+  "1105": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1177": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1183": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "1189": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1195": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1201": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1219": [
@@ -459,7 +377,7 @@
   "1225": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1261": [
@@ -543,19 +461,7 @@
   "1687": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
-   ]
-  ],
-  "1723": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1729": [
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "1735": [
@@ -566,8 +472,8 @@
   ]
  },
  "counts": {
-  "EMPTY": 97,
-  "FILL": 2,
-  "BACKHEAD": 3
+  "EMPTY": 81,
+  "FILL": 1,
+  "BACKHEAD": 2
  }
 }

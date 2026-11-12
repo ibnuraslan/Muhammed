@@ -449,7 +449,7 @@ for i, s in enumerate("RL"):
     A.plant(s, 698 + i * 10, 714 + i * 10, A.h.foot_xy(s, AST2 - V(0.25, 0, 0), 180), 180)
 K_CAST = CAST.matrix_world.copy()
 def k1_cake(f):
-    above = mat_from(CAKE1_P + V(0.0, 0.0, 0.2), V(0, 0.1, -1), V(1, 0, 0))
+    above = mat_from(CAKE1_P + V(0.0, 0.0, 0.07), V(0, 0.1, -1), V(1, 0, 0))   # held low over the cake, key visible
     inside = mat_from(CAKE1_P + V(0.0, 0.0, 0.04), V(0, 0.1, -1), V(1, 0, 0))
     if f <= 730: return K_CAST
     if f <= 750: return mlerp(K_CAST, above, ss(f, 730, 750))
