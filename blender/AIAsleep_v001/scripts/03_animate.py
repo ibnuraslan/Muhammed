@@ -82,19 +82,15 @@ def rim_point(ang, r=0.18):
     t = math.radians(WHEEL_TILT); a = math.radians(ang)
     up = Matrix.Rotation(t, 3, 'X') @ Vector((0, -1, 0)); right = Vector((-1, 0, 0))
     return WHEEL_C + up * (r * math.cos(a)) + right * (r * math.sin(a)), up, Matrix.Rotation(t, 3, 'X') @ Vector((0, 0, 1))
+exec(open(os.path.join(HERE, "..", "pipeline", "hand_poses.py")).read())   # shared studio hand library
+add_hand_limits(rig)
+RIM = O["Wheel_Steering_M_Interrior_Dark_0"]
+GRIP_LOG = []
 def hand(s, f, ang, lift=Vector((0, 0, 0)), k=1.0):
-    p, up, nrm = rim_point(ang); rad = (p - WHEEL_C).normalized()
-    W = p + rad * 0.058 + nrm * 0.049 + lift
-    H.key_hand(s, f, W, (-nrm * 0.9 - rad * 0.3).normalized(), -nrm, pole=W + Vector((0.35 if s == "L" else -0.35, 0.4, -0.35)))
-    grip(f, s, k)
-def grip(f, s, k=1.0):
-    for fi in (2, 3, 4, 5):
-        for j, a in ((1, 55), (2, 70), (3, 45)):
-            n = "finger%d-%d.%s" % (fi, j, s); pb = R.PB[n]
-            pb.rotation_quaternion = Quaternion(Vector((1, 0, 0)), math.radians(a * k)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
-    for j, a in ((1, 10), (2, 25), (3, 25)):
-        n = "finger1-%d.%s" % (j, s); pb = R.PB[n]
-        pb.rotation_quaternion = Quaternion(Vector((1, 0, 0)), math.radians(a * k)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+    """grip the steering-wheel rim at clock angle `ang` with the studio grip_object (fingers close onto the rim, thumb opposes)"""
+    p, up, nrm = rim_point(ang, r=0.188); rad = (p - WHEEL_C).normalized()
+    res = grip_object(rig, s, f, RIM, p, -rad, finger_dir=-nrm)
+    GRIP_LOG.append((f, s, res))
 def hands(f, aL=-90, aR=90):
     hand("L", f, aL); hand("R", f, aR)
 # timeline of acting -------------------------------------------------------

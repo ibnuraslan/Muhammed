@@ -64,17 +64,8 @@ except AttributeError: fcs = [fc for ly in act.layers for s in ly.strips for cb 
 for fc in fcs:
     if "fstop" in fc.data_path:
         for kp in fc.keyframe_points: kp.co.y = max(kp.co.y, 5.6)
-# 6. hands: Limit Rotation (local) on fingers, thumb and wrist
+# 6. hands: joint limits come from hand_poses.add_hand_limits (applied in 03)
 rig = O["Driver"]
-def limit(pb, x=(0, 90), y=(-10, 10), z=(-10, 10)):
-    c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
-    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-    c.min_x, c.max_x = map(math.radians, x); c.min_y, c.max_y = map(math.radians, y); c.min_z, c.max_z = map(math.radians, z)
-for pb in rig.pose.bones:
-    n = pb.name
-    if n.startswith("finger1-"): limit(pb, (-20, 60), (-35, 35), (-35, 35))          # thumb: natural cone
-    elif n.startswith("finger"): limit(pb, (0, 90))
-    elif n.startswith("wrist."): limit(pb, (-60, 60), (-30, 30), (-25, 25))
 for s in "LR":   # elbow: IK limits, no hyper-extension
     pb = rig.pose.bones["lowerarm01." + s]
     for ax in ("x", "y", "z"): setattr(pb, "lock_ik_" + ax, False)
