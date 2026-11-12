@@ -277,17 +277,19 @@ def lying_B(f_, roll=0.0, z=0.12, x=None, yaw=-90.0):
     return LB.B(V(xx, HEAD_Y, z), Rbody(yaw=yaw, pitch=-90, roll=roll)), V(xx, HEAD_Y, z)
 # yaw for lying: head toward -X. Rbody(yaw=-90, pitch=-90): rest +Z (head) -> world -X
 for f, z, pi, fl, hd, arms in ((f_sit - 6, 0.36, 10, 30, -5, "out"), (f_sit, SIT_P.z - 0.02, -8, 34, -14, "down"), (f_sit + 5, SIT_P.z + 0.03, -2, 26, 10, "down"),
-                              (f_sit + 12, SIT_P.z, -6, 30, 0, "knees"), (f_sway, SIT_P.z, -14, 22, -20, "knees"), (f_sway + 14, SIT_P.z, -4, 34, 14, "knees")):
+                              (f_sit + 12, SIT_P.z, -6, 30, 0, "knees"), (f_sway, SIT_P.z, -14, 22, -20, "knees"), (f_sway + 14, SIT_P.z, -4, 34, 14, "knees"), (f_sway + 26, SIT_P.z, -10, 26, 0, "lift")):
     Bm = LB.B(V(SIT_P.x, SIT_P.y, z), Rbody(yaw=90, pitch=pi, side=6 * math.sin(f / 6.0)))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=fl, twist=10 * math.sin(f / 8.0), side=8 * math.sin(f / 10.0), head=(hd, 18 * math.sin(f / 11.0)))
     for s in "LR":
         sx = 1 if s == "L" else -1
         # legs forward, knees up (sitting)
-        LB.foot(s, f, Bm, V(sx * 0.17, -0.55, RH.z - 0.07), Matrix.Rotation(R_(-20), 3, 'X'))
+        Wf = Bm @ V(sx * 0.17, -0.55, RH.z - 0.07)
+        LB.foot_world(s, f, V(Wf.x, Wf.y, ground_z(Wf.x, Wf.y) + LB.an[s].z), 90 + sx * 8, -15)     # heels planted on the ballast
         if arms == "out": LB.arm_dir(s, f, Bm, V(sx * 0.6, -0.5, -0.4), 0.93)
-        elif arms == "down": LB.arm_dir(s, f, Bm, V(sx * 0.35, 0.35, -0.9), 0.95, palm=V(0, 0, -1))      # hands slap the ballast behind
-        else: LB.hand(s, f, Bm, V(sx * 0.16, -0.5, RH.z - 0.28), V(0, -0.3, -1), V(-sx, 0, 0))            # forearms draped on knees
+        elif arms == "down": LB.arm_dir(s, f, Bm, V(sx * 0.42, 0.35, -0.85), 0.95, palm=V(0, 0, -1))     # hands catch him on the ballast behind
+        elif arms == "lift": LB.arm_dir(s, f, Bm, V(sx * 0.7, -0.15, -0.45), 0.92)                        # hands come off the knees, out to the sides, before he tips back
+        else: LB.hand(s, f, Bm, V(sx * 0.17, -0.37, RH.z + 0.38), V(0, -0.6, -0.8).normalized(), V(0, 0, -1))   # forearms resting on top of the knees, hands hanging loose
 # flop: the torso falls back; root slides to lying; legs straighten out along +X
 for f, roll_z, prog in ((f_flop, 0.13, 0.0), (f_flop + 4, 0.13, 0.45), (f_land, 0.12, 1.0), (f_land + 4, 0.14, 1.04), (f_land + 9, 0.12, 1.0)):
     pi = -14 + (-90 + 14) * min(1.0, prog)
@@ -310,18 +312,20 @@ for f in list(range(f_lie0, f_lie1 + 1, 3)) + [f_lie1]:
     br = math.sin(2 * math.pi * (f - f_lie0) / 150.0)            # 2.5 s snore cycle
     trem = 0.0 if f < F(7.0) else (f - F(7.0)) / (f_lie1 - F(7.0))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
-    LAD.key_spine(f, flex=6 - 1.5 * br, side=0, twist=0,
-                  head=(5.5 + 0.8 * br + 1.0 * trem * math.sin(f * 2.7), 25 + 2 * math.sin(f / 37.0) + 3 * trem * math.sin(f * 3.1)))
+    tw = lambda c: math.exp(-((f - c) / 7.0) ** 2)                 # sleepy twitch pulses
+    LAD.key_spine(f, flex=6 - 1.5 * br, side=0, twist=3 * math.sin(f / 53.0),
+                  head=(5.5 + 0.8 * br + 1.0 * trem * math.sin(f * 2.7), 25 + 9 * math.sin(f / 41.0) + 3 * trem * math.sin(f * 3.1)))
     for s in "LR":
         sx = 1 if s == "L" else -1
-        LB.foot(s, f, Bm, V(sx * 0.24, LB.an[s].y + 0.1, LB.an[s].z), Matrix.Rotation(R_(sx * 25), 3, 'Z'))
-    LB.arm_dir("L", f, Bm, V(0.85, 0.08, -0.5), 0.95, palm=V(0, 0.3, -1))
+        kick = 0.06 * tw(F(6.2)) if s == "R" else 0.05 * tw(F(7.5))
+        LB.foot(s, f, Bm, V(sx * (0.24 + 0.03 * kick / 0.06), LB.an[s].y + 0.1, LB.an[s].z + 0.12 * kick / 0.06 * 0.3), Matrix.Rotation(R_(sx * 25), 3, 'Z'))
+    LB.hand("L", f, Bm, V(0.06, -0.215 - 0.012 * br, RH.z + 0.2), V(-0.9, -0.1, -0.2).normalized(), V(0, 1, 0))     # left forearm across his belly
     if f < F(4.6):
         LB.hand("R", f, Bm, V(-0.02, -0.16 - 0.012 * br, RH.z + 0.18), V(0.9, -0.1, -0.2), V(0, 1, 0))     # hand resting on his belly
     elif f < F(4.75):
         LB.arm_dir("R", f, Bm, V(-0.55, -0.6, 0.3), 0.9, palm=V(0, 0.4, -1))
     else:
-        LB.arm_dir("R", f, Bm, V(-0.42, -0.18, 0.75), 0.86, palm=V(0, -0.2, 1))                     # flopped over the rail beside his head
+        LB.arm_dir("R", f, Bm, V(-0.62, -0.12 - 0.08 * math.exp(-((f - F(6.9)) / 6.0) ** 2), 0.5), 0.78, palm=V(0, -0.2, 1))   # bent, hand draped over the rail beside his head
 
 # --- impact + rag-doll spin (beat 4) and drag beneath the train (beat 5), come to rest prone (by 14.3 s)
 f_rest = F(14.3)
@@ -420,9 +424,10 @@ sc["lad_rest"] = str(tuple(REST_P))
 # --- lies still (prone) while the train stops and witnesses arrive; faint breathing only
 f_stir = F(19.2)
 REST_B = LB.B(REST_P, REST_R)
-for f in list(range(f_rest + 4, f_stir + 1, 10)) + [f_stir]:
-    LAD.r.key_world("root", f, REST_B @ LAD.r.rest("root"))
-    LAD.key_spine(f, flex=4 + 0.8 * math.sin(f / 30.0), head=(0, -40))
+for f in list(range(f_rest + 4, f_stir + 1, 5)) + [f_stir]:
+    brp = math.sin(2 * math.pi * (f - f_rest) / 140.0)
+    LAD.r.key_world("root", f, Matrix.Translation((0, 0, 0.008 * brp)) @ REST_B @ LAD.r.rest("root"))
+    LAD.key_spine(f, flex=4 + 2.2 * brp, head=(4 * math.exp(-((f - F(18.3)) / 8.0) ** 2), -40 + 6 * math.exp(-((f - F(18.3)) / 8.0) ** 2)))
     for s, key in (("L", "aL"), ("R", "aR")):
         LB.arm_dir(s, f, REST_B, {"aL": V(0.5, 0.1, -0.85), "aR": V(-0.45, -0.1, -0.88)}[key], 0.92)
     for s, key in (("L", "lL"), ("R", "lR")):
@@ -452,7 +457,7 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
     cz = 0.4 + 0.15 * smooth((c.x - 1.4) / 0.4)           # low commando crawl until he clears the loco side
     Bm = LB.B(V(c.x, c.y, cz + 0.03 * math.sin(u * 12)), Rbody(yaw=yaw_c, pitch=84, side=6 * math.sin(u * 12)))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
-    LAD.key_spine(f, flex=-8, twist=8 * math.sin(u * 12), head=(-45, 10 * math.sin(u * 7)))
+    LAD.key_spine(f, flex=-8, twist=8 * math.sin(u * 12), head=(-60, 10 * math.sin(u * 7)))     # head up, looking where he crawls
     ph = u * 4.0
     for k, s in enumerate("LR"):
         sx = 1 if s == "L" else -1
@@ -521,8 +526,8 @@ for f in list(range(f_x0 + 3, f_x1 + 1, 2)) + [f_x1]:
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
     LAD.key_spine(f, flex=10 + 4 * math.sin(t * 1.7), twist=14 * math.sin(t * 2.2 - 0.6), side=9 * sw, head=(12 + 8 * math.sin(t * 2.2 - 1.2), 16 * math.sin(t * 1.1 - 0.8)))
     # pendulum arms lagging the body sway (loose)
-    LB.arm_dir("L", f, Bm, V(0.25 + 0.35 * math.sin(t * 2.2 - 1.4), 0.45 * math.sin(t * 2.2 - 1.9), -1.0), 0.95)
-    LB.arm_dir("R", f, Bm, V(-0.25 + 0.35 * math.sin(t * 2.2 - 1.4), -0.45 * math.sin(t * 2.2 - 2.1), -1.0), 0.95)
+    LB.arm_dir("L", f, Bm, V(0.42 + 0.16 * math.sin(t * 2.2 - 1.4), -0.15 + 0.4 * math.sin(t * 2.2 - 1.9), -1.0), 0.95)
+    LB.arm_dir("R", f, Bm, V(-0.42 + 0.16 * math.sin(t * 2.2 - 1.4), -0.15 - 0.4 * math.sin(t * 2.2 - 2.1), -1.0), 0.95)
     foot_w("L", f, (STAND_XY.x - 0.05, STAND_XY.y + 0.16), 98)
     if t > 1.3:
         sh = min(1.0, (t - 1.3) / 0.3) * (1 - max(0.0, (t - 2.7) / 0.3))
@@ -612,7 +617,7 @@ for k, g_ in (("WitA", V(3.75, STOP_Y + 2.4, 0)), ("WitB", V(4.55, STOP_Y + 0.9,
 BACK = {k: (GOAL[k][0] + (GOAL[k][0] - LAD_REST_XY).normalized() * 0.55, GOAL[k][1]) for k in GOAL}
 f_run0 = {"WitA": F(14.6), "WitB": F(14.8), "Worker": F(14.5)}
 f_run1 = {"WitA": F(17.2), "WitB": F(17.5), "Worker": F(17.0)}
-f_back0, f_back1 = F(20.3), F(20.8)
+f_back0, f_back1 = F(20.3), F(20.75)
 def idle(name, f0, f1, pos, yaw, react=None):
     H = BYS[name]; Bd = BODY[name]
     for f in list(range(f0, f1 + 1, 6)) + [f1]:
@@ -687,10 +692,13 @@ for name in BYS:
         H.r.key_world("root", f, Bm @ H.r.rest("root"))
         H.key_spine(f, flex=-6, head=(-10, 0))
         hang_arms(Bd, f, Bm, swing=(0.6, 0.5), out=(0.4, 0.4), bend=(0.6, 0.6))
-    for s in "LR":
-        xy = H.foot_xy(s, pb_, yb)
-        Bd.foot_world(s, f_back0 + 6, V(xy.x, xy.y, ground_z(xy.x, xy.y) + Bd.an[s].z + 0.1), yb)
-        Bd.foot_world(s, f_back1, V(xy.x, xy.y, ground_z(xy.x, xy.y) + Bd.an[s].z), yb)
+    for k, s in enumerate("LR"):
+        xy0 = H.foot_xy(s, p1, y1); xy = H.foot_xy(s, pb_, yb)
+        fa = f_back0 + 2 + 12 * k; fb = fa + 12
+        mid = (xy0 + xy) / 2
+        Bd.foot_world(s, fa, V(xy0.x, xy0.y, ground_z(xy0.x, xy0.y) + Bd.an[s].z), y1)
+        Bd.foot_world(s, fa + 6, V(mid.x, mid.y, ground_z(mid.x, mid.y) + Bd.an[s].z + 0.09), (y1 + yb) / 2, 15)
+        Bd.foot_world(s, fb, V(xy.x, xy.y, ground_z(xy.x, xy.y) + Bd.an[s].z), yb)
     for f in list(range(F(31.0), sc.frame_end + 1, 5)) + [sc.frame_end]:
         tgt = WK_P(min(f, f_w1)); here = pb_
         look = face(here, tgt)

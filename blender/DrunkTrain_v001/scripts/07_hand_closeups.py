@@ -15,7 +15,8 @@ SHOTS = [(60, "Lad", "wrist.R", "bottle grip while staggering"), (100, "Lad", "w
          (2025, "Lad", "wrist.L", "looks at his palm"), (2060, "Lad", "wrist.L", "palm, final"),
          (1100, "WitA", "wrist.L", "hand over the mouth"), (1100, "WitA", "wrist.R", "hand off the chest"),
          (1120, "WitB", "wrist.L", "hands on the head"), (1100, "Worker", "wrist.L", "steadying arm"),
-         (2000, "Worker", "wrist.R", "scratches his hard hat"), (330, "Lad", "wrist.R", "lying: hand over the rail")]
+         (2000, "Worker", "wrist.R", "scratches his hard hat"), (420, "Lad", "wrist.R", "lying: hand over the rail"),
+         (250, "Lad", "wrist.L", "sitting: forearm on the knee"), (420, "Lad", "wrist.L", "lying: hand on the belly"), (1236, "WitA", "wrist.L", "steps back")]
 for i, (f, rn, bn, what) in enumerate(SHOTS):
     sc.frame_set(f); r = bpy.data.objects[rn]
     w = r.matrix_world @ r.pose.bones[bn].head

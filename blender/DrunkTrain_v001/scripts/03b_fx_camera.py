@@ -5,7 +5,8 @@ LADO = bpy.data.objects["Lad"]
 f_fb0, SWIG_UP, SWIG_HOLD, SWIG_DOWN, f_fb1 = eval(sc["swig"])
 f_r0, R_IMP, SLOW, f_r1 = eval(sc["replay"])
 f_x0 = f_fb1
-STUDIO = (f_x0, f_r1)
+STUDIO = (f_x0, f_r1 - 7)                # world hidden only while the camera is inside the bubble
+BUBBLE = (f_x0 - 16, f_r1 + 10)           # studio bubble visible (grows from his chest / collapses into it)
 
 def set_const(idb):
     ad = idb.animation_data
@@ -46,15 +47,26 @@ for o in list(bpy.data.collections["Set"].all_objects) + [bpy.data.objects["Sun"
 for o in list(bpy.data.collections["Train"].all_objects):
     hide_in(o, [(f_fb0, f_r1)])
 for o in list(bpy.data.collections["Studio"].all_objects):
-    vis(o, [STUDIO])
+    vis(o, [BUBBLE])
 for nm in ("WitA", "WitB", "Worker"):
     for o in [bpy.data.objects[nm]] + list(bpy.data.objects[nm].children):
         hide_in(o, [(f_fb0, f_r1)])
+DOME = bpy.data.objects["StudioCyc"]
+CHEST_IN = V(2.45, -40.1, 1.3); CHEST_OUT = V(2.45, -40.35, 0.95)
+def key_dome(f, s_, chest):
+    s_ = max(0.001, s_)
+    DOME.scale = (s_, s_, s_); DOME.location = V(2.4, -40.0, 0.0).lerp(chest, max(0.0, 1 - s_ / 0.35))
+    DOME.keyframe_insert("scale", frame=f); DOME.keyframe_insert("location", frame=f)
+for k in range(0, 23, 2):
+    u = k / 22.0; key_dome(f_x0 - 16 + k, 0.003 + 0.997 * u ** 3, CHEST_IN)
+for f_, s_ in ((f_r1 - 20, 1.0), (f_r1 - 12, 0.45), (f_r1 - 6, 0.18), (f_r1, 0.105), (f_r1 + 3, 0.1), (f_r1 + 7, 0.035), (f_r1 + 10, 0.002)):
+    key_dome(f_, s_, CHEST_OUT)
 # Lad: clothes/hair/eyes off in the x-ray (the body goes translucent)
 XRAY = (f_x0, f_r1)
 for o in LADO.children:
     if o.type == 'MESH' and not o.name.endswith(".body"):
         hide_in(o, [XRAY])
+hide_in(bpy.data.objects["Lad.body"], [(f_r1 - 18, f_r1)])     # the replay body leaves while the bubble shrinks; he reappears standing inside it
 
 # ------------------------------------------------------------------ helpers: bone attach + bake to a bone
 def bone_world(rig, bn):
@@ -118,6 +130,7 @@ for i, f in enumerate(range(f_drop + 2, f_drop + 60, 2)):
     p = p0 + V(0.9 * t, -0.6 * t, 0); p.z = z
     bot.location = p; bot.rotation_euler = (math.radians(90), 0, e0.z + 3.5 * t)
     bot.keyframe_insert("location", frame=f); bot.keyframe_insert("rotation_euler", frame=f)
+bot.keyframe_insert("location", frame=f_fb0 - 9); bot.keyframe_insert("rotation_euler", frame=f_fb0 - 9)   # it stays where it fell
 for f in list(range(f_fb0 - 8, f_fb1, 2)):
     key_mat(bot, f, hand_bottle_matrix(f))
 vis(bot, [(1, f_fb0 - 9), (f_fb0 - 8, f_fb1 - 1)])
@@ -226,7 +239,7 @@ add = nt.nodes.new('ShaderNodeAddShader'); nt.links.new(xr_tr.outputs[0], add.in
 mixx = nt.nodes.new('ShaderNodeMixShader'); XVAL = nt.nodes.new('ShaderNodeValue'); XVAL.name = "XRAY"; XVAL.label = "XRAY"
 nt.links.new(XVAL.outputs[0], mixx.inputs['Fac']); nt.links.new(srcs, mixx.inputs[1]); nt.links.new(add.outputs[0], mixx.inputs[2])
 nt.links.new(mixx.outputs[0], outn.inputs['Surface'])
-for f, v in ((1, 0.0), (f_x0 - 1, 0.0), (f_x0, 1.0), (f_r1, 1.0), (f_r1 + 1, 0.0)):
+for f, v in ((1, 0.0), (f_x0 - 10, 0.0), (f_x0 + 2, 1.0), (f_r1, 1.0), (f_r1 + 1, 0.0)):
     XVAL.outputs[0].default_value = v; XVAL.outputs[0].keyframe_insert("default_value", frame=f)
 xr_em.inputs['Color'].default_value = (0.3, 0.75, 1.0, 1)
 ad = bm_.node_tree.animation_data
@@ -234,7 +247,7 @@ for layer in getattr(ad.action, "layers", []):
     for strip in layer.strips:
         for cb in strip.channelbags:
             for fc in cb.fcurves:
-                for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
+                for kp in fc.keyframe_points: kp.interpolation = 'LINEAR' if kp.co.x <= f_x0 + 2 else 'CONSTANT'   # fade in, cut out (hidden in the bubble)
 
 def mat_muscle(name, col, stripe=0.6):
     m = bpy.data.materials.new(name); m.use_nodes = True
@@ -354,7 +367,8 @@ XR_OBJS.append(MUS)
 for o in XR_OBJS:
     if o.name.startswith("Mus_"):
         wm = o.modifiers.new("Ripple", 'WAVE'); wm.use_normal = True; wm.height = 0.004; wm.width = 0.06; wm.speed = 0.05; wm.time_offset = random.uniform(0, 30)
-    vis(o, [XRAY])
+    o.animation_data_clear()          # drop the 'Lad children' x-ray keys first: one visibility track only
+    vis(o, [(f_x0 - 6, f_r1 - 19)])
 
 # ------------------------------------------------------------------ ghost replay set: ghost rails + ghost loco front + force arrows
 R_HEAD = V(*eval(sc["replay_head"]))
@@ -586,37 +600,37 @@ CAM = [  # frame, camera, aim, lens
     (548, V(2.85, -3.4, 0.85), lad_p(548), 24),
     (575, V(3.3, -9.5, 1.15), lad_p(575, 0.1), 24),
     (615, V(3.2, y(615) - 3.5, 0.95), lad_p(615), 24),
-    (660, V(1.75, y(660) - 1.3, 0.38), lad_p(660), 22),
+    (660, V(2.7, y(660) - 3.6, 0.36), lad_p(660), 24),
     (700, V(0.3, y(700) - 1.25, 0.34), lad_p(700), 18),
     (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
     (815, V(0.3, y(815) - 1.4, 0.36), lad_p(815), 18),
     (842, V(1.9, y(842) - 1.2, 0.36), lad_p(842), 20),
     (866, V(2.7, -42.8, 0.45), V(0.2, -40.0, 0.25), 24),
     (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
-    (935, V(2.7, -45.0, 1.7), V(0.9, -50.0, 0.8), 23),
+    (935, V(3.5, -46.0, 2.2), V(0.9, -50.0, 0.8), 23),
     (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
-    (1060, V(6.3, -36.4, 2.4), V(3.8, -39.0, 1.35), 26),
-    (1110, V(4.7, -34.7, 1.6), V(3.6, -38.4, 1.45), 32),
-    (1160, V(2.7, -38.3, 0.42), V(0.3, -40.0, 0.2), 26),
-    (1200, V(2.9, -39.1, 0.45), V(1.0, -40.0, 0.35), 26),
-    (1250, V(3.95, -40.7, 1.3), V(2.4, -40.1, 1.4), 28),
+    (1045, V(2.3, -39.3, 1.6), V(3.9, -38.3, 1.35), 26),
+    (1090, V(2.1, -38.6, 1.45), V(3.95, -38.9, 1.35), 28),
+    (1135, V(2.35, -41.0, 1.05), V(3.4, -41.4, 0.85), 28),
+    (1168, V(2.3, -41.0, 0.45), V(0.4, -40.0, 0.3), 24),
+    (1200, V(2.95, -41.0, 0.5), V(1.3, -40.0, 0.45), 24),
+    (1230, V(3.45, -40.95, 0.9), V(2.2, -40.1, 1.05), 26),
+    (1250, V(3.95, -40.6, 1.45), V(2.4, -40.1, 1.45), 28),
     (1275, V(3.1, -41.7, 1.75), V(2.45, -40.1, 1.62), 30),
-    (1322, V(3.25, -40.85, 1.66), V(2.5, -40.25, 1.62), 40),
+    (1322, V(3.25, -39.45, 1.78), V(2.5, -40.05, 1.62), 36),
     (1385, V(3.35, -40.25, 1.5), V(2.45, -40.1, 1.42), 30),
-    (1408, V(2.62, -40.1, 1.32), V(2.2, -40.1, 1.3), 30),
+    (1408, V(3.15, -40.35, 1.4), V(2.45, -40.1, 1.3), 28),
     (1440, V(3.45, -40.1, 1.3), V(2.45, -40.1, 1.15), 26),
     (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
-    (1560, V(2.95, -40.95, 1.15), V(2.45, -40.35, 1.05), 38),
+    (1560, V(3.2, -41.25, 1.2), V(2.45, -40.35, 1.05), 32),
     (1605, V(rp(1605).x + 1.4, rp(1605).y - 1.7, 1.0), rp(1605), 28),
     (1625, V(rp(1625).x + 0.9, rp(1625).y - 1.0, 0.7), rp(1625), 30),
     (1680, V(rp(1680).x + 1.3, rp(1680).y - 1.5, 0.85), rp(1680), 28),
     (1750, V(rp(1750).x - 1.1, rp(1750).y - 1.0, 0.8), rp(1750), 30),
     (1812, V(rp(1812).x + 1.0, rp(1812).y - 1.1, 0.75), rp(1812), 30),
     (1834, V(rp(1834).x + 1.0, rp(1834).y - 1.0, 0.8), rp(1834), 30),
-    (1849, V(rp(1849).x + 0.6, rp(1849).y - 0.45, 0.6), rp(1849), 30),
-    (1855, rp(1855) + V(0.08, -0.06, 0.12), rp(1855) + V(-0.2, 0.2, 0.0), 30),
-    (1858, V(2.4, -40.12, 1.3), V(2.4, -41.5, 1.2), 30),
+    (1846, V(2.7, -38.0, 1.6), V(2.45, -40.3, 1.1), 26),
     (1876, V(2.65, -38.3, 1.65), V(2.4, -41.0, 1.3), 28),
     (1920, V(3.4, -40.0, 1.5), V(2.45, -41.8, 1.2), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
