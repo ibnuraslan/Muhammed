@@ -68,6 +68,7 @@ K = [
     (8.2, SK + V((-0.8, -8.6, 0.8)), SK + V((0, -6, -0.6)), 50, False),
     (8.6, SK + V((0, -1.0, 15)), SK, 50, False),
     (8.6, fill(mole86, moleN86, 0.015), mole86, 50, True),           # back out through the skin
+    (8.78, fill(mole86, moleN86, 0.14), mole86, 50, False),           # straight pull-back off the mole before the swing
     (9.2, V((0.80, -0.30, 1.40)), fanH4, 42, False),
     (10.2, V((0.40, -0.25, 1.22)), fanH4, 45, False),
     (11.2, V((-0.50, -0.22, 1.32)), fanH4, 45, False),
@@ -116,8 +117,8 @@ K = [
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
     (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.72, LAPSCR + ls_n * 0.30 + V((0, 0, 0.06)), LAPSCR, 45, False),
-    (37.9, LAPSCR + ls_n * 0.008, LAPSCR, 45, False),
-    (37.98, LAPSCR + ls_n * 0.006, LAPSCR, 45, False),
+    (37.9, LAPSCR + ls_n * 0.014, LAPSCR, 45, False),
+    (37.98, LAPSCR + ls_n * 0.012, LAPSCR, 45, False),
     (38.0, FIN + V((-0.35, -0.53, 1.03)), FIN + V((-0.35, 0.5, 1.03)), 40, True),   # out of the laptop onto the blank cheque face (covered)
     (38.1, FIN + V((-0.35, -0.95, 1.0)), FIN + V((-0.35, 0.3, 1.05)), 36, False),
     (38.45, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, False),
@@ -169,6 +170,11 @@ for f0, f1, pos, tgt, lens in spans:
         cd.dof.aperture_fstop = 64.0 if p.x > 150 else (32.0 if dist < 0.3 else 8.0)
         cd.dof.keyframe_insert("aperture_fstop", frame=f)
 # jumps must be hard: constant interpolation on the frame before each jump
+for f in range(F(37.6), F(38.0)):
+    sc.frame_set(f); p_ = cam.matrix_world.translation.copy(); d_ = (p_ - LAPSCR).dot(ls_n)
+    if d_ < 0.011:
+        p_ = p_ + ls_n * (0.011 - d_); cam.location = p_
+        cam.rotation_quaternion = (LAPSCR - p_).to_track_quat('-Z', 'Y'); cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
 JUMPS = [sp[1] for sp in spans[:-1]]
 for idb in (cam, cd):
     for fc in _fcurves(idb.animation_data.action):
