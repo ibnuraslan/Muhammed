@@ -106,7 +106,8 @@ K = [
     (32.8, CT + V((-4, -10.0, 13)), CT + V((0, 12, 9)), 26, False),
     (33.8, CT + V((-13, -12.6, 3.2)), CT + V((-17, -4, 1.8)), 28, False),
     (34.8, CT + V((-4.0, -12.6, 2.8)), CT + V((-6, -4, 1.8)), 30, False),  # alongside the bus, riders on phones
-    (35.3, WIN + V((0, -7.0, 0.4)), WIN + V((0, 0, -1.5)), 34, False),
+    (35.5, CT + V((-1.0, -9.5, 2.8)), CT + V((-1.0, 6.0, 2.5)), 30, False),      # hold the street with the walkers
+    (35.75, WIN + V((0, -6.0, 0.2)), WIN, 36, False),
     (35.9, WIN + V((0, -1.25, 0)), WIN, 40, False),
     (35.9, HMv + V((0, -3.0, 1.45)), HMv + V((0, 1.0, 1.0)), 40, True),  # through the curtain into her room
     (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),

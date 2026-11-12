@@ -25,10 +25,11 @@ def dup_rig(src_name, new_name, cl):
     src = bpy.data.objects[src_name]
     r = src.copy(); r.data = src.data.copy(); r.name = new_name; r.animation_data_clear(); r.location = (0, 0, 0); r.rotation_euler = (0, 0, 0)
     r["src"] = src["src"] if "src" in src.keys() else src_name
+    r.hide_render = False
     for pb in r.pose.bones: pb.rotation_mode = 'QUATERNION'
     cl.objects.link(r)
     for ch in src.children:
-        c = ch.copy(); c.name = ch.name.replace(src_name, new_name); c.parent = r; c["src"] = src_name
+        c = ch.copy(); c.name = ch.name.replace(src_name, new_name); c.parent = r; c["src"] = src_name; c.hide_render = False
         for m in c.modifiers:
             if m.type == 'ARMATURE': m.object = r
         cl.objects.link(c)
@@ -334,7 +335,7 @@ def doc_anim():
             if g.weight > 0.3 and (nm.startswith("finger") or nm.startswith("wrist") or nm.startswith("metacarpal")): hand_v.add(v.index)
     for p_ in body.data.polygons:
         if all(i in hand_v for i in p_.vertices): p_.material_index = gi
-    scope = {"R": ((-0.11, -0.58, 1.44), (0.1, -0.6, 0.5), (0, -0.6, -0.2)), "L": ((0.04, -0.52, 1.36), (0, -0.7, 0.3), (0, -0.3, -1))}
+    scope = {"R": ((-0.11, -0.58, 1.44), (0.1, -0.6, 0.5), (0, -0.6, -0.2)), "L": ((0.06, -0.52, 1.39), (0, -1, -0.2), (0, 0, -1))}   # left hand flat on his shoulder
     rest = None
     doc.set_plant(DOCP + Vector((0.04, 0, 0)), 90)
     doc.pose(f(20.0), DOCP, 90, flex=10, head=(16, 0))
@@ -745,7 +746,7 @@ for i_ in range(4):
     r.parent = busO; r.matrix_parent_inverse.identity()
     for f in range(F(30.0), F(37.0), 30):
         seated_fk(r, f, Vector((-3.2 + i_ * 1.9, 0.55 if i_ % 2 else -0.55, 0.55)), 90, phone=True, head=(25, 0), sway=math.sin(f * 0.05 + i_))
-for _i, (_src, _y, _x0, _x1) in enumerate((("Crowd1", -12.2, -15.0, -3.0), ("Crowd5", 12.6, -6.0, 5.0), ("Crowd0", 12.2, 7.0, -3.5))):
+for _i, (_src, _y, _x0, _x1) in enumerate(()):   # city walkers removed: the IK walk collapses on these late duplicates
     _r = dup_rig(_src, f"Walker{_i}", C_CHAR); _a = Actor(_r.name)
     _p = catmull([(F(32.0), CT + Vector((_x0, _y, 0))), (F(36.0), CT + Vector((_x1, _y, 0)))])
     _yw = math.degrees(math.atan2(_x1 - _x0, 0.0001))
