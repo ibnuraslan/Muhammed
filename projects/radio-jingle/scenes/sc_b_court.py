@@ -247,7 +247,7 @@ def turn_page(c, h, sec, at=1.2):
     tip = base + Vector((0.2 * math.cos(math.pi * u), -0.08, 0.04 + 0.12 * math.sin(math.pi * u)))
     reach(h, "R", tip, Vector((0.6, -0.4, -0.6)), Vector((0, 1, -0.6)))
     reach(h, "L", base + Vector((-0.2, -0.1, 0.04)), Vector((-0.6, -0.4, -0.6)), Vector((0, 1, -0.6)))
-    fingers_curl(h, 25, thumb=10)
+    B.curl(h, 25, thumb=10)
     B.nod(h, 14)
 
 
@@ -257,7 +257,7 @@ def desk_hands(h, desk_y, sec, ph_=0.0, top=0.76, spread=0.18):
     base = Vector((sh.x, sh.y, top + 0.04)) + fwd * 0.42
     for sd, sg in (("L", -1), ("R", 1)):
         reach(h, sd, base + side * (spread * sg) + Vector((0, 0, 0.005 * math.sin(sec + ph_))), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.3)))
-    fingers_curl(h, 30, thumb=10)
+    B.curl(h, 30, thumb=10)
 
 
 def idle(c, sec):
@@ -283,7 +283,7 @@ def anim(c, t, move):
         law = P_["lawyer"]
         fwd = B.fwd_of(law)
         reach(law, "R", law.bone_head("spine01") + fwd * 0.38 + Vector((0, 0, 0.12 + 0.05 * math.sin(sec * 1.3))), Vector((0.2, -0.8, -0.6)), fwd)
-        fingers_curl(law, 20, side=("R",)); law.rot("head", (0, 0, 1), 8 * math.sin(sec * 0.5))
+        B.curl(law, 20, side=("R",)); law.rot("head", (0, 0, 1), 8 * math.sin(sec * 0.5))
         dfn = P_["defendant"]; desk_hands(dfn, 0, sec, 0.3); B.nod(dfn, 6)
         w = P_["witness"]
         if move == "witness":
@@ -304,7 +304,7 @@ def anim(c, t, move):
             side = fwd.cross(Vector((0, 0, 1))).normalized()
             for sd, sg in (("L", -1), ("R", 1)):
                 reach(cl, sd, hold + side * 0.12 * sg, Vector((sg * side.x, sg * side.y, -0.7)), fwd)
-            fingers_curl(cl, 35, thumb=20)
+            B.curl(cl, 35, thumb=20)
             ev = c["exhibit"]; ev.location = hold + Vector((0, 0, 0.0)) if u < 0.98 else Vector((2.0, 4.6, 0.8))
             ev.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x) - math.pi / 2)
             if u >= 0.98:
@@ -331,7 +331,7 @@ def anim(c, t, move):
         base = Vector((-3.95, 3.35, 0.8 + 0.06 * abs(math.sin(sec * 1.2))))
         for sd, sg in (("L", -1), ("R", 1)):
             reach(cl, sd, base + side * 0.12 * sg, Vector((sg * side.x, sg * side.y, -0.7)), fwd + Vector((0, 0, -0.4)))
-        fingers_curl(cl, 30); B.nod(cl, 18)
+        B.curl(cl, 30); B.nod(cl, 18)
         if move == "pullback":
             B.hide_person(cl)
     bpy.context.view_layer.update()

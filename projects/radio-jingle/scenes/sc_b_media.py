@@ -157,7 +157,7 @@ def anim(c, t, move):
         pres = c["pres"]; fwd = B.fwd_of(pres); side = fwd.cross(Vector((0, 0, 1))).normalized()
         for sd, sg in (("L", -1), ("R", 1)):
             reach(pres, sd, Vector((0.18 * sg, 2.5, 0.88)), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
-        fingers_curl(pres, 25); pres.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.6)); B.nod(pres, -2)
+        B.curl(pres, 25); pres.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.6)); B.nod(pres, -2)
         c["studiocam"].location = Vector((-3.4 + 1.6 * ease(t), -1.6, 0))
         for k, (h, hs) in enumerate(c["callers"]):
             B.apply_pose(h, c["rest"][f"c{k}"])
@@ -174,7 +174,7 @@ def anim(c, t, move):
                 hs.location = ear + Vector((0, 0, -0.02)); hs.rotation_euler = (math.radians(80), 0, math.atan2(fwd.y, fwd.x))
             slip = h.arm.location + fwd * 0.45 + side * 0.15
             reach(h, "R", Vector((slip.x, slip.y, 0.79)) + Vector((0.01 * math.sin(sec * 6 + k), 0, 0)), Vector((0.4, -0.5, -0.8)), fwd + Vector((0, 0, -0.6)))
-            fingers_curl(h, 35); B.nod(h, 14)
+            B.curl(h, 35); B.nod(h, 14)
     elif v == "office07":
         det = c["det"]; B.apply_pose(det, c["rest"]["det"])
         u = ease(min(1.0, max(0.0, (sec - 0.5) / 1.8)))
@@ -182,7 +182,7 @@ def anim(c, t, move):
         reach(det, "R", f.location + Vector((0.08, -0.08, 0.05)), Vector((0.5, -0.6, -0.6)), Vector((0, 1, 0.3)))
         if sec > 2.6:
             reach(det, "R", Vector((0.55, 2.82, 1.62)), Vector((0.5, -0.6, -0.6)), Vector((0, 1, 0)))
-        fingers_curl(det, 35); B.nod(det, -4)
+        B.curl(det, 35); B.nod(det, -4)
     else:
         for k in ("j1", "j2"):
             B.apply_pose(c[k], c["rest"][k])
@@ -192,7 +192,7 @@ def anim(c, t, move):
             for sd, sg in (("L", -1), ("R", 1)):
                 k_ = h.bone_tail(f"upperleg02.{sd}")
                 reach(h, sd, k_ + Vector((0, 0, 0.06)) + fwd * 0.08, Vector((sg * side.x, sg * side.y, -0.6)), fwd + Vector((0, 0, -0.7)))
-            fingers_curl(h, 30)
+            B.curl(h, 30)
         fwd = B.fwd_of(j2)
         reach(j2, "R", Vector((0.4, 1.38, 0.82)) + Vector((0.012 * math.sin(sec * 2.0), 0, 0)), Vector((0.5, -0.5, -0.8)), fwd + Vector((0, 0, -0.6)))
         j1.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.4)); B.nod(j1, -3)

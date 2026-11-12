@@ -139,7 +139,7 @@ def anim(c, t, move):
             if sec > 3.0:
                 B.stand(cl, (-0.05, c["tray_in"].y - 0.15, 0), -math.pi / 2 + 0.3)
                 reach(cl, "R", tr.location + Vector((0.14, 0, 0.06)), Vector((0.3, -0.6, -0.8)), Vector((-1, 0, 0)))
-                fingers_curl(cl, 40, side=("R",))
+                B.curl(cl, 40, side=("R",))
                 B.nod(cl, 10)
         else:
             B.hide_person(cl)
@@ -149,7 +149,7 @@ def anim(c, t, move):
                 fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
                 for sd, sg in (("L", -1), ("R", 1)):
                     reach(h, sd, Vector((h.arm.location.x, 3.42, 0.95)) + side * (0.14 * sg), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.6)))
-                fingers_curl(h, 30)
+                B.curl(h, 30)
                 B.nod(h, 22)
             # o1 slides one card aside and shakes his head
             u = ease(min(1.0, max(0.0, (sec - 1.5) / 1.0)))
@@ -163,7 +163,7 @@ def anim(c, t, move):
         if move == "twelve":
             reach(cl, "R", dr.location + Vector((0.05, -0.3, 0.06)), Vector((0.4, -0.6, -0.8)), Vector((0, 1, 0)))
             reach(cl, "L", dr.location + Vector((-0.1, -0.3, 0.06)), Vector((-0.4, -0.6, -0.8)), Vector((0, 1, 0)))
-            fingers_curl(cl, 35)
+            B.curl(cl, 35)
             if sec > 2.3:
                 B.apply_pose(cl, c["rest"]["clerk"]); B.arms_down(cl)
         else:

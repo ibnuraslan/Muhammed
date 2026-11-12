@@ -129,7 +129,7 @@ def hands_on_table(h, sec, ph_=0.0, spread=0.16, fwd_d=0.4, lift=0.0):
     base = Vector((sh.x, sh.y, TOP + 0.05 + lift)) + fwd * fwd_d
     for sd, sg in (("L", -1), ("R", 1)):
         reach(h, sd, base + side * (spread * sg) + Vector((0, 0, 0.004 * math.sin(sec + ph_))), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.3)))
-    fingers_curl(h, 30, thumb=10)
+    B.curl(h, 30, thumb=10)
 
 
 def write_hand(c, h, sec):
@@ -138,7 +138,7 @@ def write_hand(c, h, sec):
     tip = pad + Vector((0.03 * math.sin(sec * 5.0), -0.03 + 0.01 * math.sin(sec * 1.3), 0.01))
     reach(h, "R", tip + Vector((0.04, -0.05, 0.06)), Vector((0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.7)))
     reach(h, "L", pad + Vector((-0.2, -0.06, 0.05)), Vector((-0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
-    fingers_curl(h, 40, thumb=25)
+    B.curl(h, 40, thumb=25)
     pen = c["pen"]; w = h.bone_tail("wrist.R")
     pen.location = (w + tip) * 0.5 + Vector((0, 0, 0.02)); d = (tip - w)
     pen.rotation_mode = 'QUATERNION'; pen.rotation_quaternion = d.to_track_quat('Z', 'Y')
@@ -162,7 +162,7 @@ def anim(c, t, move):
             chest = man.bone_head("neck01") + fwd * 0.38 + Vector((0, 0, -0.3 - 0.04 * ease(max(0.0, (sec - 3.6) / 1.0))))
             for sd, sg in (("L", -1), ("R", 1)):
                 reach(man, sd, chest + side * (open_ * sg), Vector((sg * side.x, sg * side.y, -0.6)), Vector((0, 0, 1)) - side * 0.6 * sg)
-            fingers_curl(man, 12, thumb=5)
+            B.curl(man, 12, thumb=5)
             man.rot("head", (0, 0, 1), 5 * math.sin(sec * 0.9))
         else:
             hands_on_table(d2, sec, 1.0, fwd_d=0.4)
@@ -176,7 +176,7 @@ def anim(c, t, move):
         fwd = B.fwd_of(man); side = fwd.cross(Vector((0, 0, 1))).normalized()
         reach(man, "R", st.location + Vector((0.05, 0.12, 0.05)), Vector((0.6, 0.3, -0.7)), fwd + Vector((0, 0, -0.6)))
         reach(man, "L", man.bone_head("spine01") + fwd * 0.35 + side * -0.14 + Vector((0, 0, TOP - man.bone_head("spine01").z + 0.05)), Vector((-0.6, 0.3, -0.7)), fwd + Vector((0, 0, -0.4)))
-        fingers_curl(man, 20, thumb=10)
+        B.curl(man, 20, thumb=10)
         man.rot("head", (0, 0, 1), 15 * math.sin(sec * 3.4) * (1 if sec < 1.6 or sec > 3.3 else 0.3))
     elif move == "leave":
         B.hide_person(d1); B.hide_person(d2)
@@ -188,7 +188,7 @@ def anim(c, t, move):
         sh = man.bone_head("upperarm01.L")
         wr = sh + Vector((0, 0, -0.46)) + fwd * 0.28 + side * -0.12
         reach(man, "L", wr, Vector((0, 0, -1)) - fwd * 0.3, fwd)
-        fingers_curl(man, 40, side=("L",))
+        B.curl(man, 40, side=("L",))
         el = man.bone_tail("upperarm02.L"); w2 = man.bone_tail("lowerarm02.L")
         ax = (w2 - el); ax.z = 0; ax = ax.normalized()
         from mathutils import Matrix

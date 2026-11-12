@@ -126,7 +126,7 @@ def pose_man(c, sec):
     # right hand holds the iron over the board, left steadies the board
     reach(h, "R", tip + Vector((0.12, -0.12, 0.06)), Vector((0.6, -0.2, -0.6)), Vector((-0.6, 0.6, -0.4)))
     reach(h, "L", board + Vector((-0.14, -0.08, 0.03)), Vector((-0.6, -0.2, -0.6)), Vector((0.2, 0.8, -0.5)))
-    fingers_curl(h, 40, thumb=20)
+    B.curl(h, 40, thumb=20)
     h.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.4))
     bpy.context.view_layer.update()
     w = h.bone_tail("wrist.R") if "wrist.R" in h.arm.pose.bones else h.bone_tail("lowerarm02.R")

@@ -265,7 +265,7 @@ def anim(c, t, move):
             for sd, sg in (("L", -1), ("R", 1)):
                 k_ = h.bone_tail(f"upperleg02.{sd}")
                 reach(h, sd, k_ + Vector((0, 0, 0.06)) + fwd * 0.08, Vector((sg * side.x, sg * side.y, -0.6)), fwd + Vector((0, 0, -0.7)))
-            fingers_curl(h, 30)
+            B.curl(h, 30)
             B.nod(h, 22 + 3 * math.sin(sec * 0.5 + k))
         # dice: thrown at 1.0 s from the near edge, tumble across the board, settle
         for k, d in enumerate(c["dice"]):
@@ -282,10 +282,10 @@ def anim(c, t, move):
         cu = c["cushion"]; cu.location = Vector((-0.35, 1.05, 0.48)) + Vector((0, -0.25 * u, 0.35 * u)); cu.rotation_euler = (math.radians(-55 * u), 0, 0)
         for sd, dx in (("L", -0.25), ("R", 0.25)):
             reach(d1, sd, cu.location + Vector((dx, -0.25, 0.0)), Vector((dx * 3, -0.5, -0.8)), Vector((0, 1, -0.3)))
-        fingers_curl(d1, 40); B.nod(d1, 18 * (0.4 + 0.6 * u), "spine03"); B.nod(d1, 20)
+        B.curl(d1, 40); B.nod(d1, 18 * (0.4 + 0.6 * u), "spine03"); B.nod(d1, 20)
         reach(d2, "R", Vector((2.45, 1.85, 0.9)), Vector((0.5, -0.6, -0.6)), Vector((0, 1, 0)))
         reach(d2, "L", Vector((2.1, 1.85, 0.95)), Vector((-0.5, -0.6, -0.6)), Vector((0, 1, 0)))
-        fingers_curl(d2, 35); B.nod(d2, 15)
+        B.curl(d2, 35); B.nod(d2, 15)
     else:
         mo = c["moped"]
         mo.location.z = 0.12 + 0.002 * math.sin(sec * 40)              # idling engine shiver

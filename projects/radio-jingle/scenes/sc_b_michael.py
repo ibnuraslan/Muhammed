@@ -153,7 +153,7 @@ def turn_page(c, h, sec, at=1.4):
     fwd = B.fwd_of(h)
     reach(h, "R", tip, Vector((0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.6)))
     reach(h, "L", base + Vector((-0.2, -0.12, 0.05)), Vector((-0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.6)))
-    fingers_curl(h, 25, thumb=10)
+    B.curl(h, 25, thumb=10)
 
 
 def type_hands(h, sec, kb):
@@ -161,7 +161,7 @@ def type_hands(h, sec, kb):
     for sd, sg in (("L", -1), ("R", 1)):
         tap = 0.006 * max(0.0, math.sin(sec * 18 + (0 if sd == "L" else 1.9)))
         reach(h, sd, kb + side * (0.08 * sg) - fwd * 0.04 + Vector((0, 0, 0.05 - tap)), Vector((sg * side.x, sg * side.y, -0.7)), fwd + Vector((0, 0, -0.4)))
-    fingers_curl(h, 35, thumb=10)
+    B.curl(h, 35, thumb=10)
 
 
 def anim(c, t, move):
@@ -182,7 +182,7 @@ def anim(c, t, move):
             fwd = B.fwd_of(h)
             reach(h, "R", kb + Vector((0.12, -0.02, 0.04)), Vector((0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
             reach(h, "L", kb + Vector((-0.18, -0.08, 0.04)), Vector((-0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
-            fingers_curl(h, 30); B.nod(h, 10 + 4 * math.sin(sec * 0.6))
+            B.curl(h, 30); B.nod(h, 10 + 4 * math.sin(sec * 0.6))
         else:
             type_hands(h, sec, kb); B.nod(h, 12)
         for k, sh in enumerate(c.get("sheets", [])):
@@ -199,7 +199,7 @@ def anim(c, t, move):
             press = 0.012 * max(0.0, math.sin(sec * 7 + sg)) * play
             lift = 0.0 if play else 0.06 * ease(min(1.0, (sec - 2.4) / 0.8))
             reach(h, sd, keys + side * (0.18 * sg + 0.02 * math.sin(sec * 1.5) * play) + Vector((0, 0, -press + lift)), Vector((sg * side.x, sg * side.y, -0.7)), fwd + Vector((0, 0, -0.5)))
-        fingers_curl(h, 25, thumb=10)
+        B.curl(h, 25, thumb=10)
         B.nod(h, 12 + (8 * ease(min(1.0, max(0.0, (sec - 2.6) / 1.5)))))
     elif move == "window":
         fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
@@ -207,7 +207,7 @@ def anim(c, t, move):
         for sd, sg in (("L", -1), ("R", 1)):
             k = h.bone_tail(f"upperleg02.{sd}")
             reach(h, sd, k + Vector((0, 0, 0.05)) + fwd * 0.05, Vector((sg * side.x, sg * side.y, -0.6)), fwd + Vector((0, 0, -0.7)))
-        fingers_curl(h, 30)
+        B.curl(h, 30)
         B.nod(h, 6 + 2 * math.sin(sec * 0.3))
     bpy.context.view_layer.update()
 

@@ -104,7 +104,7 @@ def anim_expert(c, sec):
     kb = Vector((-0.6, 2.06, DESK_TOP + 0.05))
     reach(h, "R", Vector((-0.25, 2.03, DESK_TOP + 0.06)) + Vector((0.004 * math.sin(sec * 2), 0, 0)), Vector((0.7, -0.3, -0.6)), fwd + Vector((0, 0, -0.5)))
     reach(h, "L", kb + side * (-0.12) - fwd * 0.03, Vector((-0.7, -0.3, -0.6)), fwd + Vector((0, 0, -0.5)))
-    fingers_curl(h, 30, thumb=10)
+    B.curl(h, 30, thumb=10)
     h.rot("head", side, 4 + 3 * math.sin(sec * 0.7))       # listening: small slow nods
     h.rot("head", (0, 0, 1), 3 * math.sin(sec * 0.35))
     bpy.context.view_layer.update()

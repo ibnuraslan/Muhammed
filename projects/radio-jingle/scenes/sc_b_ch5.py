@@ -302,7 +302,7 @@ def anim(c, t, move):
         fwd = B.fwd_of(m); side = fwd.cross(Vector((0, 0, 1))).normalized()
         hand = m.bone_head("upperarm01.L") + Vector((0, 0, -0.55)) - side * 0.12 + fwd * 0.05
         reach(m, "L", hand, Vector((0, 0, -1)), fwd)
-        fingers_curl(m, 45, side=("L",))
+        B.curl(m, 45, side=("L",))
         f = c["folder"]; f.location = m.bone_tail("wrist.L") + Vector((0, 0, -0.05)) - side * 0.03
         f.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x) - math.pi / 2)
         if move == "wait":
@@ -313,7 +313,7 @@ def anim(c, t, move):
         knob = Vector((0.15, 1.2, 0.98))
         reach(old, "R", knob + Vector((0.05, -0.05, 0.03)), Vector((0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
         reach(old, "L", Vector((-0.2, 1.1, 0.88)), Vector((-0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
-        fingers_curl(old, 30); B.nod(old, 16 + 3 * math.sin(sec * 0.5))
+        B.curl(old, 30); B.nod(old, 16 + 3 * math.sin(sec * 0.5))
     elif v == "school":
         u = sec / DUR[move]
         c["fogbank"].location.x = -12.0 + 24.0 * u                 # fog drifts past the building; no one on the drive

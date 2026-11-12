@@ -192,8 +192,23 @@ def build(variant=None):
             gabled(f"H{k}", x0, 6.0, 4.6, 8, 7.5 + rng.uniform(-1, 1.5), brick if k % 2 else brick2, roof, lit=(1, 3) if variant == "harbour_dusk" else (),
                    doors=(SHOP_DOOR.x - 1.4, SHOP_DOOR.x))
         # the shop on the corner: a ground-floor window display (fenders, buoys) and a door; no lettering
-        box("ShopWin", (SHOP_DOOR.x - 1.4, 5.98, 1.2), (1.6, 0.02, 1.4), pbr("ShopGlass", (0.05, 0.06, 0.07), 0.03, **{'Coat Weight': 1.0}))
-        box("ShopDisp", (SHOP_DOOR.x - 1.4, 6.3, 1.2), (1.5, 0.02, 1.3), emissive("ShopLit", (1.0, 0.82, 0.6), 1.2 if variant == "harbour_dusk" else 0.4))
+        box("ShopWin", (SHOP_DOOR.x - 1.4, 5.74, 1.2), (1.6, 0.02, 1.4), rj.window_glass())
+        sfm = pbr("ShopFrame", (0.08, 0.16, 0.2), 0.45)       # a shallow shopfront bay: frame, sill, display behind the glass
+        for (dx, dz, sx, sz) in ((0, 0.73, 1.76, 0.08), (0, -0.73, 1.76, 0.08), (0.84, 0, 0.08, 1.54), (-0.84, 0, 0.08, 1.54)):
+            box("ShopFr", (SHOP_DOOR.x - 1.4 + dx, 5.86, 1.2 + dz), (sx, 0.28, sz), sfm, bevel=0.008)
+        box("ShopStall", (SHOP_DOOR.x - 1.4, 5.86, 0.25), (1.76, 0.28, 0.5), sfm, bevel=0.01)
+        dm = [pbr("DispW", (0.85, 0.85, 0.82), 0.4), pbr("DispB", (0.06, 0.13, 0.32), 0.4), pbr("DispO", (0.8, 0.32, 0.04), 0.4)]
+        for j in range(4):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=1, location=(SHOP_DOOR.x - 2.0 + j * 0.4, 5.9, 1.45 - 0.08 * (j % 2)))
+            fo = bpy.context.active_object; fo.scale = (0.08, 0.08, 0.24); fo.data.materials.append(dm[j % 3]); bpy.ops.object.shade_smooth()
+        for j in range(3):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.11, location=(SHOP_DOOR.x - 1.9 + j * 0.5, 5.88, 0.62))
+            bpy.context.active_object.data.materials.append(dm[(j + 2) % 3]); bpy.ops.object.shade_smooth()
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.16, minor_radius=0.035, location=(SHOP_DOOR.x - 1.4, 5.9, 0.98), rotation=(math.radians(90), 0, 0))
+        bpy.context.active_object.data.materials.append(pbr("DispRope", (0.6, 0.52, 0.35), 0.85))
+        box("ShopDisp", (SHOP_DOOR.x - 1.4, 5.995, 1.2), (1.5, 0.004, 1.3), pbr("ShopBackW", (0.5, 0.42, 0.3), 0.8))
+        if variant == "harbour_dusk":                       # the shop still lit inside: a warm lamp in the display bay
+            sl_ = area_light((SHOP_DOOR.x - 1.4, 5.82, 1.9), (0, 0, 0), 1.2, 25, (1.0, 0.72, 0.42)); sl_.visible_camera = False
         c["shop_door"] = box("ShopDoor", (SHOP_DOOR.x, 5.97, 1.05), (0.95, 0.06, 2.1), pbr("ShopDoorM", (0.1, 0.18, 0.22), 0.4))
         box("Awning", (SHOP_DOOR.x - 0.7, 5.5, 2.5), (3.2, 1.0, 0.06), pbr("AwningBlue", (0.08, 0.14, 0.25), 0.6), rot=(math.radians(-12), 0, 0))
         try:
@@ -214,40 +229,20 @@ def build(variant=None):
             c["car"] = vehicles.make("sedan_modern", loc=(1.0, 2.0, 0.0), heading_deg=0, color=(0.14, 0.16, 0.19), lamps=False)
             o1 = B.person("Obs1", 1.0, 40, "male_casualsuit05", "short02", hue=0.6, sat=0.2, val=0.3, hair_val=0.3)
             o2 = B.person("Obs2", 0.0, 34, "female_elegantsuit01", "ponytail01", hue=0.6, sat=0.2, val=0.3, hair_val=0.25)
-            B.seat(o1, (1.0 + 0.05, 2.0 - 0.38, 0.0), -math.pi / 2 + 0.0, lean=-5); B.ground(o1, 0.25)
-            B.seat(o2, (1.0 + 0.05, 2.0 + 0.38, 0.0), -math.pi / 2 + 0.0, lean=-5); B.ground(o2, 0.25)
+            B.seat(o1, (1.0 + 0.05, 2.0 - 0.38, 0.0), math.pi / 2, lean=-5); B.ground(o1, 0.16)
+            B.seat(o2, (1.0 + 0.05, 2.0 + 0.38, 0.0), math.pi / 2, lean=-5); B.ground(o2, 0.16)
             c["obs"] = (o1, o2)
+            # readable car interior at dusk: sodium spill through the side glass, a faint dash glow, cool sky through the roof glass
+            il = area_light((1.2, 2.0, 1.45), (0, 0, 0), 0.9, 22, (0.55, 0.65, 0.95)); il.visible_camera = False; il.visible_transmission = False; il.visible_glossy = False
+            dl = area_light((1.75, 2.0, 0.95), (0, math.radians(-100), 0), 0.6, 10, (1.0, 0.7, 0.45)); dl.visible_camera = False; dl.visible_transmission = False; dl.visible_glossy = False
+            B.key_spot((2.6, 0.4, 2.2), (1.1, 2.0, 1.25), 220, 45, (1.0, 0.68, 0.4), soft=0.5, name="SodiumSpill")
             ph.model("street_lamp_01", loc=(8.0, 5.3, 0.0), rot_z=math.radians(90))
             B.key_spot((8.0, 4.4, 5.2), (5.0, 5.5, 0.5), 2200, 60, (1.0, 0.65, 0.35), soft=0.2, name="Sodium")
         man = B.mazurek("Seller", 2007)
         c["man"] = man
         B.room_haze((0, 0, 4), (80, 40, 8), density=0.004, color=(0.75, 0.78, 0.82))
-        if variant == "shop":                                   # the interior behind the shop front (y 6.0 .. 10)
-            for o in list(bpy.data.objects):
-                if o.name.startswith(("H2", "H3", "H4")) and o.location.y > 5:
-                    o.hide_render = True
-            box("ShopFloor", (2.5, 8.0, 0.0), (6, 4, 0.02), B.tex_mat("ShopFl", "old_wooden_floor_02", scale=0.5, tint=(0.55, 0.5, 0.45)))
-            sw = B.plaster("ShopWall", (0.55, 0.55, 0.5))
-            box("ShopBack", (2.5, 10.0, 1.4), (6, 0.1, 2.8), sw); box("ShopL", (-0.5, 8.0, 1.4), (0.1, 4, 2.8), sw); box("ShopR", (5.5, 8.0, 1.4), (0.1, 4, 2.8), sw)
-            box("ShopCeil", (2.5, 8.0, 2.82), (6, 4, 0.04), sw)
-            rope = pbr("Rope", (0.6, 0.52, 0.35), 0.85); rope2 = pbr("RopeBlue", (0.1, 0.2, 0.4), 0.85)
-            fender_m = [pbr("FenderW", (0.85, 0.85, 0.82), 0.4), pbr("FenderB", (0.08, 0.15, 0.35), 0.4), pbr("FenderO", (0.8, 0.35, 0.05), 0.4)]
-            for k in range(7):                                  # coils hanging on wall hooks
-                bpy.ops.mesh.primitive_torus_add(major_radius=0.16, minor_radius=0.03, location=(0.3 + k * 0.5, 9.88, 1.7), rotation=(math.radians(90), 0, 0))
-                bpy.context.active_object.data.materials.append(rope if k % 2 else rope2)
-                cyl("Hook", (0.3 + k * 0.5, 9.93, 1.86), 0.008, 0.1, pbr("HookS", (0.5, 0.5, 0.5), 0.3, 1.0), verts=8, rot=(math.radians(90), 0, 0))
-            for k in range(9):                                  # fenders hanging from a rail
-                cyl("Fender", (-0.3, 6.6 + k * 0.36, 1.55), 0.09, 0.55, fender_m[k % 3], verts=24)
-            box("Rail", (-0.3, 8.0, 1.86), (0.03, 3.4, 0.03), pbr("RailS", (0.5, 0.5, 0.52), 0.3, 1.0))
-            ph.model("ocean_buoy", loc=(4.6, 9.4, 0.0), rot_z=0.4, scale=0.5)
-            ph.model("life_jacket", loc=(4.9, 8.5, 0.9), rot_z=-1.2) if True else None
-            ph.model("WoodenTable_03", loc=(3.0, 7.2, 0.0), rot_z=0.0)
-            B.key_spot((SHOP_DOOR.x - 1.4, 4.5, 2.2), (2.0, 9.5, 1.2), 900, 45, (0.82, 0.88, 0.98), soft=0.6, name="ShopWinLight")
-            B.practical((2.5, 8.0, 2.6), 40, (1.0, 0.75, 0.48), 0.2, "ShopBulb")
-            c["coil"] = None
-            bpy.ops.mesh.primitive_torus_add(major_radius=0.16, minor_radius=0.03, location=(0, 0, -30), rotation=(math.radians(90), 0, 0))
-            c["coil"] = bpy.context.active_object; c["coil"].data.materials.append(rope)
-            B.stand(man, (3.85, 9.3, 0.0), math.pi)        # faces the back wall (+Y)
+        if variant == "shop":                                   # the interior behind the shop front (x -0.5..5.5, y 6..10)
+            shop_interior(c, man)
         c["rest"] = B.capture(man)
     else:
         # the man's house: detached brick gable house behind a short front garden, a pavement and a road (y < 0)
@@ -303,6 +298,90 @@ def build(variant=None):
     return c
 
 
+def shop_interior(c, man):
+    """A real-scale ship chandler's (6 x 4 m): stocked shelving on the back wall, a pegboard of rope coils and fenders
+    on the left wall, a counter, tube lights; daylight through the front window. No lettering anywhere."""
+    lo, hi = Vector((-0.6, 5.9, -0.05)), Vector((5.6, 10.2, 3.0))
+    for o in list(bpy.data.objects):                    # clear anything of the street set that pokes into the room
+        if o.type != 'MESH' or o.hide_render:
+            continue
+        bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+        mn = Vector((min(v.x for v in bb), min(v.y for v in bb), min(v.z for v in bb))); mx = Vector((max(v.x for v in bb), max(v.y for v in bb), max(v.z for v in bb)))
+        if mx.x > lo.x and mn.x < hi.x and mx.y > lo.y + 0.2 and mn.y < hi.y and mx.z > lo.z and mn.z < hi.z and (mx - mn).length < 30:
+            o.hide_render = True
+    box("ShopFloor", (2.5, 8.0, 0.0), (6, 4, 0.02), B.tex_mat("ShopFl", "old_wooden_floor_02", scale=0.5, tint=(0.55, 0.5, 0.45)))
+    sw = B.plaster("ShopWall", (0.62, 0.62, 0.58))
+    box("ShopBack", (2.5, 10.05, 1.4), (6.2, 0.1, 2.8), sw); box("ShopL", (-0.55, 8.0, 1.4), (0.1, 4.2, 2.8), sw)
+    box("ShopR", (5.55, 8.0, 1.4), (0.1, 4.2, 2.8), sw); box("ShopCeil", (2.5, 8.0, 2.82), (6.2, 4.2, 0.04), sw)
+    wood = pbr("ShelfWood", (0.42, 0.3, 0.18), 0.6)
+    rope_m = [pbr("RopeNat", (0.62, 0.53, 0.36), 0.85), pbr("RopeBlue", (0.08, 0.18, 0.42), 0.85), pbr("RopeRed", (0.45, 0.06, 0.04), 0.85),
+              pbr("RopeWhite", (0.8, 0.8, 0.76), 0.85)]
+    fender_m = [pbr("FenderW", (0.85, 0.85, 0.82), 0.35), pbr("FenderB", (0.06, 0.13, 0.32), 0.35), pbr("FenderO", (0.8, 0.32, 0.04), 0.35)]
+    rng = np.random.default_rng(31)
+
+    def coil(loc, r, m, rot):
+        bpy.ops.mesh.primitive_torus_add(major_radius=r, minor_radius=r * 0.22, major_segments=28, minor_segments=10, location=loc, rotation=rot)
+        o = bpy.context.active_object; o.data.materials.append(m); bpy.ops.object.shade_smooth(); return o
+
+    def fender(loc, m, L=0.5, r=0.085, rot=(0, 0, 0)):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=12, radius=1, location=loc, rotation=rot)
+        o = bpy.context.active_object; o.scale = (r, r, L / 2); o.data.materials.append(m); bpy.ops.object.shade_smooth(); return o
+
+    # back wall: three shelving units, four shelves each, stocked
+    for u in range(3):
+        x0 = 1.0 + u * 1.35
+        for sx in (-0.62, 0.62):
+            box("ShelfSide", (x0 + sx, 9.78, 1.0), (0.03, 0.42, 2.0), wood)
+        for k in range(5):
+            z = 0.12 + k * 0.45
+            box("Shelf", (x0, 9.78, z), (1.27, 0.42, 0.025), wood)
+            if k == 4:
+                continue
+            kind = (u + k) % 3
+            if kind == 0:                                 # coils of rope lying flat, stacked
+                for j in range(4):
+                    for st in range(2):
+                        coil((x0 - 0.45 + j * 0.3, 9.78, z + 0.04 + st * 0.06), 0.11, rope_m[(j + k + st) % 4], (0, 0, 0))
+            elif kind == 1:                               # fenders lying in a row
+                for j in range(5):
+                    fender((x0 - 0.48 + j * 0.24, 9.75, z + 0.1), fender_m[(j + u) % 3], L=0.38, r=0.08, rot=(math.radians(90), 0, 0))
+            else:                                         # plain product boxes and small buoys
+                for j in range(4):
+                    box("Prod", (x0 - 0.45 + j * 0.3, 9.8, z + 0.12), (0.24, 0.3, 0.22), pbr(f"Prod{u}{k}{j}", tuple(rng.uniform(0.15, 0.6, 3)), 0.7))
+                bpy.ops.mesh.primitive_uv_sphere_add(radius=0.1, location=(x0 + 0.5, 9.7, z + 0.11))
+                bpy.context.active_object.data.materials.append(fender_m[2]); bpy.ops.object.shade_smooth()
+    # left wall: pegboard with coils hanging on hooks, and a rail of hanging fenders
+    box("Pegboard", (-0.49, 8.3, 1.45), (0.02, 2.6, 1.5), pbr("Peg", (0.55, 0.45, 0.32), 0.7))
+    hooks = []
+    for j in range(5):
+        for row in range(2):
+            y = 7.2 + j * 0.5; z = 1.95 - row * 0.62
+            cyl("Hook", (-0.44, y, z), 0.008, 0.1, pbr("HookS", (0.55, 0.55, 0.55), 0.3, 1.0), verts=8, rot=(0, math.radians(90), 0))
+            if (j, row) == (2, 0):
+                hooks.append(Vector((-0.4, y, z)))
+                continue                                  # the free hook he hangs the coil on
+            coil((-0.4, y, z - 0.17), 0.15, rope_m[(j + row) % 4], (0, math.radians(90), 0))
+    box("FRail", (1.2, 6.5, 2.3), (2.4, 0.03, 0.03), pbr("RailS", (0.5, 0.5, 0.52), 0.3, 1.0))
+    for k in range(5):
+        fender((0.2 + k * 0.33, 6.5, 1.9), fender_m[k % 3], L=0.52, r=0.09)
+        cyl("FLine", (0.2 + k * 0.33, 6.5, 2.2), 0.004, 0.18, rope_m[3], verts=6)
+    # counter by the right wall, a basket of small buoys, ceiling tubes
+    box("Counter", (4.6, 7.6, 0.48), (1.5, 0.6, 0.96), pbr("CounterW", (0.36, 0.26, 0.16), 0.55))
+    box("CounterTop", (4.6, 7.6, 0.97), (1.6, 0.66, 0.03), pbr("CounterT", (0.2, 0.2, 0.2), 0.4))
+    for j in range(6):
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.09, location=(2.9 + 0.17 * (j % 3), 7.2 + 0.17 * (j // 3), 0.1 + 0.02 * j))
+        bpy.context.active_object.data.materials.append(fender_m[j % 3]); bpy.ops.object.shade_smooth()
+    for x in (1.2, 3.8):
+        box("TubeFix", (x, 8.0, 2.78), (1.3, 0.16, 0.05), pbr("TubeFixM", (0.8, 0.8, 0.8), 0.5))
+        box("Tube", (x, 8.0, 2.745), (1.22, 0.06, 0.02), emissive("TubeE", (0.95, 0.97, 1.0), 2.0))
+        area_light((x, 8.0, 2.7), (0, 0, 0), 1.2, 90, (0.95, 0.96, 1.0)).visible_camera = False
+    B.key_spot((SHOP_DOOR.x - 1.4, 4.5, 2.2), (1.5, 8.5, 1.2), 700, 50, (0.82, 0.88, 0.98), soft=0.6, name="ShopWinLight")
+    c["hook"] = hooks[0]
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.15, minor_radius=0.033, major_segments=28, minor_segments=10, location=(0, 0, -30), rotation=(0, math.radians(90), 0))
+    c["coil"] = bpy.context.active_object; c["coil"].data.materials.append(rope_m[0]); bpy.ops.object.shade_smooth()
+    B.stand(man, (0.12, c["hook"].y + 0.05, 0.0), -math.pi / 2)        # faces the pegboard (-X)
+
+
 def drive(car, x0, x1, u):
     car.location.x = x0 + (x1 - x0) * u
 
@@ -316,13 +395,13 @@ def anim(c, t, move):
         u = ease(min(1.0, max(0.0, (sec - 0.8) / 1.6)))
         tube = Vector((0.1, 0.75 - 0.2 * u, 0.95 - 0.05 * u))
         reach(off, "R", tube + Vector((0.0, 0.08, 0.02)), Vector((0.4, 0.5, -0.8)), Vector((0, -1, 0)))
-        fingers_curl(off, 40, side=("R",)); B.nod(off, 18)
+        B.curl(off, 40, side=("R",)); B.nod(off, 18)
         c["tube"].location = tube; c["tube"].rotation_euler = (math.radians(90), 0, 0)
         fwd = B.fwd_of(man); side = fwd.cross(Vector((0, 0, 1))).normalized()
         for sd, sg in (("L", -1), ("R", 1)):
             reach(man, sd, man.bone_head("spine01") + fwd * 0.42 + side * (0.15 * sg) + Vector((0, 0, 0.8 - man.bone_head("spine01").z + 0.05)),
                   Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
-        fingers_curl(man, 30); B.nod(man, 6)
+        B.curl(man, 30); B.nod(man, 6)
         bpy.context.view_layer.update()
         return
     if v.startswith("harbour"):
@@ -334,7 +413,7 @@ def anim(c, t, move):
             if sec < 2.0:
                 B.stand(man, (SHOP_DOOR.x, SHOP_DOOR.y - 0.45, 0.0), math.pi)
                 reach(man, "R", Vector((SHOP_DOOR.x + 0.3, 5.9, 1.05)), Vector((0.5, -0.4, -0.8)), Vector((0, 1, 0)))
-                fingers_curl(man, 40, side=("R",))
+                B.curl(man, 40, side=("R",))
             else:
                 u = ease(min(1.0, (sec - 2.0) / 3.5))
                 B.walk_to(man, (SHOP_DOOR.x, SHOP_DOOR.y - 0.6, 0), (SHOP_DOOR.x + 6.0, SHOP_DOOR.y - 1.2, 0), u, 5.0 * u + 0.001, stride=22, swing=14)
@@ -342,15 +421,15 @@ def anim(c, t, move):
             B.stand(man, (0, 0, -40), 0)
         if v == "harbour_dusk":
             for h in c["obs"]:
-                h.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.4))
+                h.rot("head", (0, 0, 1), 22 + 4 * math.sin(sec * 0.4))   # eyes on the shop (front-left)
     elif v == "shop":
         man = c["man"]; B.apply_pose(man, c["rest"])
         u = ease(min(1.0, max(0.0, (sec - 0.6) / 2.0)))
-        coil = c["coil"]; hook = Vector((3.8, 9.85, 1.7))
-        coil.location = Vector((3.8, 9.45, 1.25)).lerp(hook, u)
-        for sd, dx in (("L", -0.12), ("R", 0.12)):
-            reach(man, sd, coil.location + Vector((dx, -0.08, 0.05)), Vector((dx * 4, -0.4, -0.8)), Vector((0, 1, 0.3)))
-        fingers_curl(man, 40)
+        coil = c["coil"]; hook = c["hook"]
+        coil.location = Vector((0.0, hook.y, 1.2)).lerp(hook + Vector((0, 0, -0.17)), u)
+        for sd, dy in (("L", -0.11), ("R", 0.11)):        # both hands hold the coil's top, at the sides
+            reach(man, sd, coil.location + Vector((0.14, dy, 0.1)), Vector((0.5, dy * 4, -0.8)), Vector((-1, 0, 0.3)))
+        B.curl(man, 50, thumb=25)
         if sec > 3.0:
             B.apply_pose(man, c["rest"]); B.arms_down(man)
         B.nod(man, -6)
@@ -368,7 +447,7 @@ def anim(c, t, move):
                     bx.location = hold + Vector((0, 0, 0.02)); bx.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x))
                     for sd, sg in (("L", -1), ("R", 1)):
                         reach(h, sd, hold + side * (0.2 * sg), Vector((sg * side.x, sg * side.y, -0.6)), fwd)
-                    fingers_curl(h, 40)
+                    B.curl(h, 40)
                 B.hide_person(offs[2]); c["evbox"].location = (0, 0, -30)
             else:
                 h = offs[2]
@@ -383,7 +462,7 @@ def anim(c, t, move):
                 ev = c["evbox"]; ev.location = hold + Vector((0, 0, -0.15)); ev.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x) + math.pi / 2)
                 for sd, sg in (("L", -1), ("R", 1)):
                     reach(h, sd, hold + side * (0.3 * sg), Vector((sg * side.x, sg * side.y, -0.6)), fwd)
-                fingers_curl(h, 40)
+                B.curl(h, 40)
                 for o_ in offs[:2]:
                     B.hide_person(o_)
                 for bx in c["boxes"]:
@@ -433,11 +512,11 @@ MOVES = {
     "saliva": dict(kind="anim", dof=2.8, cam=cam((-1.5, -2.7, 1.7), (-1.3, -2.4, 1.66), (0.25, 0.9, 1.1), 32),
                    anim=lambda c, t: anim(c, t, "saliva"), focus=lambda c, t: c["off"].bone_head("spine03")),
     "quay": dict(kind="anim", dof=None, cam=cam_quay, anim=lambda c, t: anim(c, t, "quay")),
-    "watch": dict(kind="anim", dof=2.0, cam=cam((0.15, 2.0, 1.25), (0.3, 2.0, 1.24), (6.0, 5.0, 1.2), 32),
+    "watch": dict(kind="anim", dof=3.5, cam=cam((3.4, 0.5, 1.42), (3.25, 0.6, 1.42), (1.7, 3.0, 1.25), 26),
                   anim=lambda c, t: anim(c, t, "watch"), focus=lambda c, t: Vector((SHOP_DOOR.x, 5.8, 1.2))),
     "lock": dict(kind="anim", dof=3.2, cam=cam((-3.5, 1.2, 1.6), (-3.0, 1.4, 1.58), (SHOP_DOOR.x + 1.0, 5.5, 1.2), 35),
                  anim=lambda c, t: anim(c, t, "lock"), focus=lambda c, t: c["man"].bone_head("spine03")),
-    "shop": dict(kind="anim", dof=2.8, cam=cam((0.2, 6.3, 1.7), (0.6, 6.6, 1.65), (3.9, 9.7, 1.35), 28),
+    "shop": dict(kind="anim", dof=2.8, cam=cam((4.9, 6.5, 1.65), (4.5, 6.8, 1.62), (0.2, 8.7, 1.25), 28),
                  anim=lambda c, t: anim(c, t, "shop"), focus=lambda c, t: c["man"].bone_head("spine03")),
     "boxes": dict(kind="anim", dof=4.0, cam=cam((2.6, -1.0, 1.5), (2.3, -0.6, 1.48), (0.0, 4.5, 1.4), 30),
                   anim=lambda c, t: anim(c, t, "boxes"), focus=lambda c, t: c["offs"][0].bone_head("spine03")),

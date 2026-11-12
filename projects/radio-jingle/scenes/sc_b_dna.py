@@ -149,7 +149,7 @@ def anim(c, t, move):
         tip = corner + Vector((0.004, 0.02 * math.sin(sec * 2.5), 0.015 * math.sin(sec * 1.7)))
         reach(tech, "R", tip + Vector((0.12, -0.04, -0.03)), Vector((0.3, -0.5, -1)), Vector((-1, 0.2, 0.2)))
         reach(tech, "L", tech.bone_head("spine02") + B.fwd_of(tech) * 0.2 + Vector((0, 0, -0.1)), Vector((0, -0.5, -1)), B.fwd_of(tech))
-        fingers_curl(tech, 45, side=("R",), thumb=25)
+        B.curl(tech, 45, side=("R",), thumb=25)
         tech.rot("head", (0, 0, 1), 5); B.nod(tech, 8)
         sw = c["swab"]; w = tech.bone_tail("wrist.R"); d = tip - w
         sw.location = w + d * 0.55; sw.rotation_mode = 'QUATERNION'; sw.rotation_quaternion = d.to_track_quat('Z', 'Y')
@@ -165,9 +165,10 @@ def anim(c, t, move):
         else:
             c["bag_screw"].location = Vector((LT.x - 0.18, LT.y - 0.02, 0.912)).lerp(Vector((LT.x - 0.38, LT.y - 0.05, 0.912)), mv)
             hand_t = c["bag_screw"].location
-        reach(ana, "R", hand_t + Vector((0.0, -0.1, 0.05)), Vector((0.4, -0.6, -0.8)), Vector((0, 1, -0.6)))
-        reach(ana, "L", Vector((LT.x + 0.15, LT.y - 0.3, 0.95)), Vector((-0.4, -0.6, -0.8)), Vector((0, 1, -0.6)))
-        fingers_curl(ana, 30); B.nod(ana, 25)
+        # right hand grips the bag's top edge from above (relaxed grip); left hand rests flat on the table edge
+        reach(ana, "R", hand_t + Vector((0.0, -0.09, 0.06)), Vector((0.5, -0.6, -0.6)), Vector((0, 0.7, -0.7)))
+        reach(ana, "L", Vector((LT.x + 0.2, LT.y - 0.34, 0.95)), Vector((-0.5, -0.6, -0.6)), Vector((0, 1, -0.25)))
+        B.curl(ana, 55, side=("R",), thumb=30); B.curl(ana, 25, side=("L",), thumb=10); B.nod(ana, 25)
     else:
         pass
     bpy.context.view_layer.update()

@@ -491,7 +491,7 @@ def michael(name="Michael", years=47):
 
 def pfaffinger(name="Acquaintance"):
     """The acquaintance questioned in 1981 (unnamed on screen): early thirties, longer 80s hair, olive work jacket."""
-    h = person(name, 1.0, 31, "male_casualsuit05", "long01", hair_val=0.2, weight=0.4, height=0.5)
+    h = person(name, 1.0, 31, "male_casualsuit05", "short03", hair_val=0.2, weight=0.4, height=0.5)
     flat_clothes(h, (0.075, 0.065, 0.03))
     return h
 
@@ -525,13 +525,23 @@ def draped_coat(name, color=(0.09, 0.08, 0.065), length=(0.55, 0.42), width=0.4)
         row = []
         for i in range(nx + 1):
             x = (i / nx - 0.5) * width
+            u = i / nx
+            # soft vertical drape folds that deepen toward the hem, plus a gather at the arm
+            def folds(d, L):
+                k = (d / L) ** 0.8
+                return k * (0.03 * math.sin(u * 2 * math.pi * 2.3 + 0.7) + 0.014 * math.sin(u * 2 * math.pi * 5.1 + 1.9))
             if s_ < la:                                   # front panel, hanging (s from the hem up)
-                d = la - s_; y, z = r + 0.01 * math.sin(x * 20), -d
-                y += 0.03 * (d / la) ** 2
+                d = la - s_; y, z = r + folds(d, la), -d
+                y += 0.035 * (d / la) ** 2
+                z -= 0.09 * (d / la) * u ** 1.5           # one corner hangs lower (uneven hem)
+                x *= 1.0 - 0.18 * (d / la)                 # cloth narrows as it falls
             elif s_ < la + math.pi * r:                  # over the roll
                 a = (s_ - la) / r; y, z = r * math.cos(a), r * math.sin(a)
+                z += 0.012 * math.sin(u * 2 * math.pi * 3)  # bunched over the arm
             else:                                         # back panel
-                d = s_ - la - math.pi * r; y, z = -r - 0.03 * (d / lb) ** 2, -d
+                d = s_ - la - math.pi * r; y, z = -r - 0.03 * (d / lb) ** 2 - folds(d, lb), -d
+                z -= 0.06 * (d / lb) * (1 - u) ** 1.5
+                x *= 1.0 - 0.15 * (d / lb)
             if s_ < 0.04 or s_ > total - 0.04:
                 z += 0.02 * math.sin(x * 25 + j)          # wavy hems
             row.append(bm.verts.new((x, y, z)))
@@ -546,6 +556,12 @@ def draped_coat(name, color=(0.09, 0.08, 0.065), length=(0.55, 0.42), width=0.4)
     for p in me.polygons:
         p.use_smooth = True
     o.data.materials.append(fabric(name + "F", color, 0.95, 0.4, 250))
+    # a sleeve hanging from the front panel (a soft tapered tube), so it reads as a coat, not a sheet
+    bpy.ops.mesh.primitive_cone_add(vertices=14, radius1=0.055, radius2=0.075, depth=0.36, location=(width * 0.32, r + 0.045, -0.24))
+    sl = bpy.context.active_object; sl.name = name + "Sleeve"; sl.rotation_euler = (math.radians(4), math.radians(-6), 0)
+    sl.data.materials.append(o.data.materials[0]); bpy.ops.object.shade_smooth()
+    ss = sl.modifiers.new("sub", 'SUBSURF'); ss.levels = 1; ss.render_levels = 2
+    sl.parent = o
     return o
 
 
@@ -577,3 +593,22 @@ def facade_window(x, y, z, w=1.0, h=1.3, lit=False, curtain=(0.42, 0.36, 0.3), f
         parts.append(box(name + "Fr", (x + dx, y - 0.07, z + dz), (sx, 0.14, sz), fm, bevel=0.006))
     parts.append(box(name + "Sill", (x, y - 0.12, z - h / 2 - 0.06), (w + 0.2, 0.24, 0.06), sm, bevel=0.01))
     return parts
+
+
+def curl(h, deg=35, side=("L", "R"), thumb=15, spread=None):
+    """Finger curl about each bone's OWN flex axis (human.fingers_curl turns about the world X axis, which splays
+    the fingers into claws once the hand is rotated). Also closes the finger spread a little so the hand reads relaxed."""
+    from human import rotate_bone
+    for sd in side:
+        for f in range(2, 6):
+            for k in (1, 2, 3):
+                b = f"finger{f}-{k}.{sd}"
+                if b in h.arm.pose.bones:
+                    rotate_bone(h.arm, b, (1, 0, 0), CURL_SIGN * deg * (0.8 if k == 1 else 1.0), space="LOCAL")
+        for k in (2, 3):
+            b = f"finger1-{k}.{sd}"
+            if b in h.arm.pose.bones:
+                rotate_bone(h.arm, b, (0, 0, -1 if sd == "L" else 1), thumb, space="LOCAL")   # tucks the thumb (tested)
+
+
+CURL_SIGN = 1.0     # +1 bends the fingers into the palm (tested; -1 bends them backward)
