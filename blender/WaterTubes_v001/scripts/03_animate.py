@@ -144,6 +144,16 @@ for nd in list(mA.node_tree.nodes):
 CT, HU = {}, {}
 for n, ob in RIG.items():
     CT[n] = make_human_ctrl(ob); HU[n] = Human(CT[n])
+def limit(pb, x, y, z):
+    c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.use_transform_limit = True
+    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+    c.min_x, c.max_x = R_(x[0]), R_(x[1]); c.min_y, c.max_y = R_(y[0]), R_(y[1]); c.min_z, c.max_z = R_(z[0]), R_(z[1])
+for n, ob in RIG.items():
+    for pb in ob.pose.bones:
+        nm = pb.name
+        if nm.startswith("finger1-"): limit(pb, (-30, 60), (-35, 35), (-35, 35))
+        elif nm.startswith("finger"): limit(pb, (-2, 90), (-10, 10), (-10, 10))
+        elif nm.startswith("wrist."): limit(pb, (-60, 60), (-45, 45), (-25, 25))
 def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
     """hand targets relative to the body: hang (with walk swing), hips, chest(crossed), head, up, out"""
     r = h.r; B = r.BN
@@ -153,17 +163,21 @@ def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
         sx = 1 if s == "L" else -1
         sh = B["upperarm01." + s].head_local
         sw = amp * math.sin(2 * math.pi * phase + (0 if s == "L" else math.pi))
-        if mode == "hang":   W = sh + Vector((sx * 0.06, -0.06 + 0.22 * sw, -0.55)); d = Vector((sx * 0.1, -0.15, -1)); nn = Vector((-sx, 0, 0))
-        elif mode == "hips": W = sh + Vector((sx * 0.14, 0.05, -0.38)); d = Vector((-sx * 0.4, -0.3, -0.5)); nn = Vector((-sx, 0.3, 0))
-        elif mode == "chest": W = sh + Vector((-sx * 0.2, -0.3, -0.22)); d = Vector((-sx, 0.1, 0.2)); nn = Vector((0, 1, 0))
-        elif mode == "head": W = sh + Vector((sx * 0.02, -0.1, 0.22)); d = Vector((-sx * 0.6, 0, 0.6)); nn = Vector((-sx, 0.2, -0.3))
-        elif mode == "up":   W = sh + Vector((sx * 0.25, -0.3, 0.1)); d = Vector((sx * 0.3, -0.6, 0.6)); nn = Vector((0, 1, 0))
-        elif mode == "out":  W = sh + Vector((sx * 0.5, -0.2, -0.22)); d = Vector((sx, -0.3, -0.3)); nn = Vector((0, 0, -1))
-        elif mode == "brow": W = (sh + Vector((-sx * 0.12, -0.25, 0.35))) if s == "R" else (sh + Vector((sx * 0.06, -0.06, -0.55))); d = Vector((-sx, -0.2, 0.3)) if s == "R" else Vector((0.1, -0.15, -1)); nn = Vector((0, 1, -0.4)) if s == "R" else Vector((-sx, 0, 0))
+        k = sh.z / 1.433   # body scale
+        wide = {"NeighbourB": 0.06, "NeighbourA": 0.025}.get(n, 0.0)
+        if mode == "hang":   W = sh + k * Vector((sx * 0.085, -0.05 + 0.2 * sw, -0.46)); d = Vector((sx * 0.15, -0.15, -1)); nn = Vector((-sx, 0, 0))
+        elif mode == "hips": W = sh + k * Vector((sx * 0.12, -0.02, -0.36)); d = Vector((-sx * 0.15, -0.3, -0.6)); nn = Vector((-sx, 0.2, 0))
+        elif mode == "chest": W = sh + k * Vector((sx * 0.06, -0.27, -0.4)); d = Vector((sx * 0.05, -0.7, -0.7)); nn = Vector((-sx, 0, 0))
+        elif mode == "head": W = sh + k * Vector((sx * 0.01, 0.0, 0.28)); d = Vector((-sx * 0.3, 0.05, 0.9)); nn = Vector((-sx, 0.1, 0))
+        elif mode == "up":   W = sh + k * Vector((sx * 0.12, -0.38, 0.1)); d = Vector((sx * 0.1, -0.4, 0.9)); nn = Vector((0, 1, 0))
+        elif mode == "out":  W = sh + k * Vector((sx * 0.4, -0.15, -0.25)); d = Vector((sx, -0.3, -0.3)); nn = Vector((0, 0, -1))
+        elif mode == "brow": W = (sh + k * Vector((-sx * 0.1, -0.32, 0.22))) if s == "R" else (sh + k * Vector((sx * 0.085, -0.05, -0.46))); d = Vector((-sx, -0.2, 0.3)) if s == "R" else Vector((sx * 0.1, -0.15, -1)); nn = Vector((0, 1, -0.4)) if s == "R" else Vector((-sx, 0, 0))
+        if mode in ("hang", "hips", "chest", "brow", "head"): W = W + Vector((sx * wide, 0, 0))
         # body space -> world via root transform
-        Wl = W - root
-        Ww = pos + Ry @ Wl
-        h.key_hand(s, f, Ww, Ry @ d, Ry @ nn, pole=pos + Ry @ (B["lowerarm01." + s].head_local - root + Vector((sx * 0.3, 0.4, -0.1))))
+        Wl = W - Vector((root.x, root.y, 0.0))
+        base = Vector((pos.x, pos.y, ground_z(pos.x, pos.y)))
+        Ww = base + Ry @ Wl
+        h.key_hand(s, f, Ww, Ry @ d, Ry @ nn, pole=base + Ry @ (B["lowerarm01." + s].head_local - Vector((root.x, root.y, 0.0)) + (Vector((sx * 0.6, 0.1, 0.45)) if mode in ("head", "up") else Vector((sx * 0.3, 0.4, -0.1)))))
 def stand(h, f, pos, yaw, flex=0.0, crouch=0.0, side=0.0, head=(0, 0), twist=0.0, feet=None):
     gz = ground_z(pos.x, pos.y)
     h.key_root(f, Vector((pos.x, pos.y, gz + h.root_head.z - crouch)), yaw=yaw, flex=flex * 0.4, side=side)
@@ -189,11 +203,14 @@ def grip(rig, s, f, amt):
         for j in range(1, 4):
             pb = P.get(f"finger{fi}-{j}.{s}")
             if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * (48 if j == 1 else 62)), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+    sx = 1 if s == "L" else -1
+    pb = P.get(f"finger1-1.{s}")
+    if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * 20), 0, R_(-sx * amt * 25)); pb.keyframe_insert("rotation_euler", frame=f)
     for j in (2, 3):
         pb = P.get(f"finger1-{j}.{s}")
-        if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * 28), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+        if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * 30), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
 for n in RIG:
-    for s in "LR": grip(RIG[n], s, 1, 0.25)
+    for s in "LR": grip(RIG[n], s, 1, 0.3)
 H = HU["Hero"]; HR = RIG["Hero"]
 VALVE = bpy.data.objects["Valve_0"]
 def valve_pos(f):
@@ -219,7 +236,7 @@ for f in range(F(2.5) + 4, F(3.7), 4):
     v = valve_pos(f); hose_pts[-1].co = v + Vector((0.0, 0.03, 0.17)); hose_pts[-1].keyframe_insert("co", frame=f)
     hose_pts[-2].co = v + Vector((0.32, 0.51, 0.07)); hose_pts[-2].keyframe_insert("co", frame=f)
 f0 = F(2.5)
-for f, cr, fl_, mode in ((f0 + 14, 0.2, 20, "hang"), (f0 + 30, 0.02, 4, "hang"), (f0 + 48, 0.0, 0, "brow"), (F(3.7), 0.0, 2, "brow")):
+for f, cr, fl_, mode in ((f0 + 14, 0.2, 20, "chest"), (f0 + 30, 0.02, 4, "hang"), (f0 + 48, 0.0, 0, "brow"), (F(3.7), 0.0, 2, "brow")):
     stand(H, f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, flex=fl_, crouch=cr, head=(-5, -35))
     arms(H, "Hero", f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, mode)
 for s_ in "LR": grip(HR, s_, 1, 0.85); grip(HR, s_, F(2.5), 0.85); grip(HR, s_, F(2.5) + 12, 0.2)
@@ -251,7 +268,7 @@ for f, dy, mode, fl_ in ((F(21.4), 0, "chest", 2), (F(21.6), 0.12, "up", -12), (
 face(HR, F(21.4), brow=0.2); face(HR, F(21.6), brow=1.0, lids=1.0, jaw=0.5); face(HR, F(22.8), brow=0.7, lids=0.6, jaw=0.25)
 # beat 10: amazed: steps to the porch edge, hands to head, brows up, jaw open
 EDGE = PORCH + Vector((0.1, -0.2, 0))
-for f, pos, mode, fl_, hd in ((F(28.2), PORCH, "hips", 6, (8, 0)), (F(28.7), EDGE, "hang", 2, (10, -20)), (F(29.2), EDGE, "head", -6, (-8, 0)),
+for f, pos, mode, fl_, hd in ((F(28.2), PORCH, "hips", 6, (8, 0)), (F(28.7), EDGE, "hang", 2, (10, -20)), (F(28.95), EDGE, "up", -4, (0, -10)), (F(29.2), EDGE, "head", -6, (-8, 0)),
                               (F(29.9), EDGE, "head", -8, (-10, 15)), (F(30.3), EDGE, "out", 2, (5, -10))):
     stand(H, f, pos, 0, flex=fl_, head=hd); arms(H, "Hero", f, pos, 0, mode)
 face(HR, F(28.2), brow=0.3, lids=0.3); face(HR, F(28.8), brow=1.0, lids=1.0, jaw=0.6); face(HR, F(29.9), brow=0.9, lids=0.8, jaw=0.3, smile=0.4)
@@ -283,25 +300,33 @@ for f in range(F(0.3), F(7.5) + 1, 4):
     for s, dx in (("L", 0.17), ("R", -0.17)):
         NA.key_hand(s, f, W + Vector((-dx, 0, 0)), Vector((0, 1, -0.6)), Vector((0, 0, -1)), pole=p + Vector((dx * 3, 0.4, 1.0)))
 for s_ in "LR": grip(RIG["NeighbourA"], s_, F(0.3), 0.8); grip(RIG["NeighbourA"], s_, F(7.5), 0.8); grip(RIG["NeighbourA"], s_, F(7.8), 0.25)
+for f in (F(7.8), F(8.2)): arms(NA, "NeighbourA", f, pa1, 180, "hang")
 pa2 = Vector((3.2, -31.6, 0))
 NA.walk(lambda f: pa1.lerp(pa2, smooth((f - F(8.4)) / (F(10.2) - F(8.4)))), lambda f: 200, F(8.4), F(10.2), stride=1.1, lift=0.14, lean=14)
-for f in range(F(8.4), F(10.2) + 1, 4): arms(NA, "NeighbourA", f, pa1.lerp(pa2, smooth((f - F(8.4)) / (F(10.2) - F(8.4)))), 200, "hang", phase=f / 25, amp=1.0)
+for f in range(F(8.4), F(10.2) + 1, 4): arms(NA, "NeighbourA", f, pa1.lerp(pa2, smooth((f - F(8.4)) / (F(10.2) - F(8.4)))), 200, "hang", phase=f / 25, amp=0.55)
+arms(NA, "NeighbourA", F(10.25), pa2, 200, "chest")
 for f in range(F(10.4), 2011, 60):
-    s_ = math.sin(f * 0.02); stand(NA, f, pa2, 10 * s_, head=(0, 25 * s_)); arms(NA, "NeighbourA", f, pa2, 10 * s_, "chest" if (f // 60) % 2 else "head")
+    s_ = math.sin(f * 0.02); stand(NA, f, pa2, 190 + 10 * s_, head=(0, 25 * s_)); arms(NA, "NeighbourA", f, pa2, 190 + 10 * s_, "hips" if (f // 60) % 2 else "chest")
 face(RIG["NeighbourA"], F(8.4), brow=1.0, lids=0.9, jaw=0.5)
 
 # NeighbourB (left neighbour, north row): looks at the sky, carries on, then backs away from the water (beat 4), and his wrecked lawn (beat 9)
 NB = HU["NeighbourB"]
 pb0 = Vector((-15.0, -7.0, 0)); pb1 = Vector((-20.5, -4.6, 0))
-for f, hd in ((1, (-25, 10)), (F(1.4), (-30, -15)), (F(2.6), (-10, 0))):
-    stand(NB, f, pb0, 30, head=hd); arms(NB, "NeighbourB", f, pb0, 30, "hips")
+for f, hd, md in ((1, (-25, 10), "hips"), (F(1.4), (-30, -15), "hips"), (F(2.6), (-10, 0), "hang")):
+    stand(NB, f, pb0, 30, head=hd); arms(NB, "NeighbourB", f, pb0, 30, md)
 NB.walk(lambda f: pb0.lerp(pb1, smooth((f - F(2.8)) / (F(6.0) - F(2.8)))), lambda f: 120, F(2.8), F(6.0), stride=0.65)
 for f in range(F(2.8), F(6.0) + 1, 4): arms(NB, "NeighbourB", f, pb0.lerp(pb1, smooth((f - F(2.8)) / (F(6.0) - F(2.8)))), 120, "hang", phase=f / 40, amp=0.5)
-for f, dy, mode in ((F(11.6), 0.0, "hang"), (F(12.2), 0.6, "up"), (F(12.9), 1.0, "head"), (F(13.6), 1.1, "head")):
+for f, dy, mode in ((F(11.6), 0.0, "hang"), (F(12.2), 0.6, "up"), (F(12.9), 1.0, "head"), (F(13.6), 1.1, "head"), (F(14.6), 1.1, "hips")):
     stand(NB, f, pb1 + Vector((0, dy, 0)), 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", f, pb1 + Vector((0, dy, 0)), 0, mode)
 face(RIG["NeighbourB"], F(11.8), brow=1.0, lids=1.0, jaw=0.7)
 pb2 = Vector((-23.6, -8.0, 0))
-for f, yaw, mode, hd in ((F(26.2), 60, "head", (15, 0)), (F(26.9), 30, "head", (20, 20)), (F(27.6), 80, "hips", (10, -25)), (F(28.4), 40, "hang", (25, 0))):
+pbm = pb1 + Vector((0, 1.1, 0))
+for f, md in ((F(16.0), "hips"), (F(20.0), "hips"), (F(23.9), "hips"), (F(24.4), "hang")):
+    stand(NB, f, pbm, 0, flex=-2, head=(5, 0)); arms(NB, "NeighbourB", f, pbm, 0, md)
+wpath = lambda f: pbm.lerp(pb2, smooth((f - F(24.5)) / (F(26.1) - F(24.5))))
+NB.walk(wpath, lambda f: -35, F(24.5), F(26.1), stride=0.7)
+for f in range(F(24.5), F(26.1) + 1, 4): arms(NB, "NeighbourB", f, wpath(f), -35, "hang", phase=f / 40, amp=0.4)
+for f, yaw, mode, hd in ((F(26.2), 60, "hips", (15, 0)), (F(26.55), 45, "out", (18, 10)), (F(26.9), 30, "head", (20, 20)), (F(27.25), 55, "out", (15, 0)), (F(27.6), 80, "hips", (10, -25)), (F(28.4), 40, "hang", (25, 0))):
     stand(NB, f, pb2, yaw, flex=12, head=hd); arms(NB, "NeighbourB", f, pb2, yaw, mode)
 face(RIG["NeighbourB"], F(26.2), brow=-0.6, lids=-0.3, jaw=0.1); face(RIG["NeighbourB"], F(27.6), brow=-0.8, jaw=0.25)
 
