@@ -93,3 +93,5 @@ Remaining flags, all intended:
   - ROLL 113: the approved ranges only.
   - CLAW: 0 (the Anaes R bag hand at 641–661 uses cup_hold between grip keys; follow-up commit).
   - clip_scan: 0 bad ranges.
+
+- **24.5 s monitor (director item 2):** keys 1440/1460/1480/1500 lie on one straight push-in line, aimed at the screen. Before, the spline bowed toward the screen and swung the aim onto the black case side. Strip: `strip_1440-1530_v008d.jpg`.

@@ -1074,52 +1074,76 @@
     "wall/prop fills the frame, character only 9%"
    ]
   ],
-  "1429": [
+  "1411": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 12%"
    ]
   ],
   "1435": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 7%"
    ]
   ],
   "1441": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1447": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1453": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1459": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1465": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1471": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1477": [
@@ -1145,11 +1169,7 @@
   "1489": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1495": [
@@ -1165,17 +1185,13 @@
   "1501": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1537": [
    [
     "FILL",
-    "hair / top of head 31%"
+    "hair / top of head 29%"
    ],
    [
     "EMPTY",
@@ -1209,7 +1225,7 @@
   "1555": [
    [
     "FILL",
-    "hair / top of head 48%"
+    "hair / top of head 50%"
    ],
    [
     "EMPTY",
@@ -1942,7 +1958,7 @@
   ]
  },
  "counts": {
-  "EMPTY": 177,
+  "EMPTY": 181,
   "FILL": 44,
   "BACKHEAD": 1,
   "ROLL": 113,
