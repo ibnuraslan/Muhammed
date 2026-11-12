@@ -41,11 +41,13 @@ for n in cs.nodes:
 for m in M:
     if "elegantsuit" in m.name and m.use_nodes:
         hs = [n for n in m.node_tree.nodes if n.type == 'HUE_SAT']
-        for n in hs: n.inputs["Value"].default_value = 2.2; n.inputs["Saturation"].default_value = 1.6
+        for n in hs: n.inputs["Value"].default_value = 1.5; n.inputs["Saturation"].default_value = 1.3
+        for n in m.node_tree.nodes:
+            if n.type == 'NORMAL_MAP': n.inputs["Strength"].default_value = 1.0          # keep the fabric folds and seams
         p = m.node_tree.nodes.get("Principled BSDF")
         if p and hs:
-            mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs["Factor"].default_value = 0.85
-            m.node_tree.links.new(hs[0].outputs["Color"], mx.inputs["A"]); mx.inputs["B"].default_value = (0.35, 0.5, 1.0, 1)
+            mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs["Factor"].default_value = 0.5
+            m.node_tree.links.new(hs[0].outputs["Color"], mx.inputs["A"]); mx.inputs["B"].default_value = (0.5, 0.62, 1.0, 1)
             m.node_tree.links.new(mx.outputs["Result"], p.inputs["Base Color"])
 # light: high-key soft fill in the cockpit and cabin
 O = bpy.data.objects
@@ -74,7 +76,11 @@ O["L_face_fill"].data.energy = 25
 ld3 = bpy.data.lights.new("L_galley_door_fill", 'AREA'); ld3.size = 0.7; ld3.energy = 70; ld3.color = (1, 0.97, 0.94)
 lo3 = bpy.data.objects.new("L_galley_door_fill", ld3); lo3.location = (0.35, -0.95, 1.95); lo3.rotation_euler = (0.9, 0, 0.5); sc.collection.objects.link(lo3)
 fl = M.get("M_floor_rubber")
-if fl: fl.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.13, 0.15, 0.18, 1)
+if fl: fl.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.32, 0.35, 0.4, 1)
+ld4 = bpy.data.lights.new("L_floor_fill", 'AREA'); ld4.size = 1.0; ld4.energy = 110; ld4.color = (1, 0.98, 0.95)
+lo4 = bpy.data.objects.new("L_floor_fill", ld4); lo4.location = (0.0, 0.45, 1.9); sc.collection.objects.link(lo4)
+for m in M:      # cockpit floor/cabin floor plates: light enough that bodies on them read as resting, not floating
+    if m.name == "M_carpet": m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.2, 0.22, 0.28, 1)
 sc.view_settings.exposure = 0.3
 sc.render.use_motion_blur = False
 sc.frame_set(1)

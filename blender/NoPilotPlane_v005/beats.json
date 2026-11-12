@@ -1,0 +1,116 @@
+[
+ {
+  "beat": 1,
+  "frame": 1,
+  "t": 0.0,
+  "first_words": "Imagine you wake up"
+ },
+ {
+  "beat": 2,
+  "frame": 349,
+  "t": 5.8,
+  "first_words": "But the plane is still flying perfectly level"
+ },
+ {
+  "beat": 3,
+  "frame": 541,
+  "t": 9.0,
+  "first_words": "So the pilots must be fine, right?"
+ },
+ {
+  "beat": 4,
+  "frame": 721,
+  "t": 12.0,
+  "first_words": "You make your way to the cockpit"
+ },
+ {
+  "beat": 5,
+  "frame": 847,
+  "t": 14.1,
+  "first_words": "One pilot has collapsed in the doorway"
+ },
+ {
+  "beat": 6,
+  "frame": 1009,
+  "t": 16.8,
+  "first_words": "The other is slumped over in his seat"
+ },
+ {
+  "beat": 7,
+  "frame": 1183,
+  "t": 19.7,
+  "first_words": "This could be a dream, but you grab the radio"
+ },
+ {
+  "beat": 8,
+  "frame": 1513,
+  "t": 25.2,
+  "first_words": "No one answers"
+ },
+ {
+  "beat": 9,
+  "frame": 1615,
+  "t": 26.9,
+  "first_words": "You decide to pull the pilot out of his seat"
+ },
+ {
+  "beat": 10,
+  "frame": 2023,
+  "t": 33.7,
+  "first_words": "Alarms blare"
+ },
+ {
+  "beat": 11,
+  "frame": 2191,
+  "t": 36.5,
+  "first_words": "The plane is diving fast"
+ },
+ {
+  "beat": 12,
+  "frame": 2329,
+  "t": 38.8,
+  "first_words": "You grab the controls"
+ },
+ {
+  "beat": 13,
+  "frame": 2551,
+  "t": 42.5,
+  "first_words": "But after a few terrifying minutes"
+ },
+ {
+  "beat": 14,
+  "frame": 2827,
+  "t": 47.1,
+  "first_words": "You're keeping the plane roughly level"
+ },
+ {
+  "beat": 15,
+  "frame": 3211,
+  "t": 53.5,
+  "first_words": "Now you're low enough to see"
+ },
+ {
+  "beat": 16,
+  "frame": 3409,
+  "t": 56.8,
+  "first_words": "You could try to land right now"
+ },
+ {
+  "beat": 17,
+  "frame": 3877,
+  "t": 64.6,
+  "first_words": "Or you could keep flying"
+ },
+ {
+  "beat": 18,
+  "frame": 4135,
+  "t": 68.9,
+  "first_words": "But this field might be your only chance"
+ },
+ {
+  "beat": 19,
+  "frame": 4315,
+  "t": 71.9,
+  "first_words": "What do you do?"
+ }
+]

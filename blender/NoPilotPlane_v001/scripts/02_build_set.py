@@ -151,8 +151,8 @@ bk = MB("CABIN_BACKWALL"); bk.box((0, -13.55, 1.0), (3.0, 0.05, 2.2), M_plast); 
 
 # ------------------------------------------------------------------ cabin interior
 mb = MB("CABIN_FIXED")
-mb.box((0, -6.0, -0.01), (2.9, 15.5, 0.02), M_carpet)
-mb.box((0, -6.6, 0.002), (0.56, 14.0, 0.004), M_carpet2)
+mb.box((0, -7.1, -0.01), (2.9, 13.3, 0.02), M_carpet)
+mb.box((0, -7.0, 0.002), (0.56, 13.1, 0.004), M_carpet2)
 for s in (-1, 1):
     # overhead bins (lower face angled) and ceiling light strip
     mb.box((s * 0.99, -7.4, 1.80), (0.56, 12.2, 0.42), M_plast, bevel=0.03)
@@ -401,10 +401,11 @@ cR = coll("RADIO", cSet)
 for i in range(6):
     l = MB("LED_%d" % i); l.cyl((0, 0, 0), 0.007, 0.006, emit_mat("M_led_%d" % i, ((0.2, 1, 0.3), (1, 0.6, 0.1))[i % 2], 0.0))
     lo = l.obj(cR); lo.location = (-0.11 + i * 0.044, 1.35, 0.787)
+M_hs = mat("M_handset", (0.62, 0.64, 0.68), rough=0.4)
 h = MB("HANDSET")
-h.box((0, 0, 0), (0.035, 0.17, 0.03), M_black, bevel=0.01)
-h.box((0, 0.085, -0.012), (0.045, 0.05, 0.045), M_black, bevel=0.012)
-h.box((0, -0.085, -0.012), (0.045, 0.05, 0.045), M_black, bevel=0.012)
+h.box((0, 0, 0), (0.04, 0.19, 0.034), M_hs, bevel=0.012)
+h.box((0, 0.095, -0.014), (0.05, 0.055, 0.05), M_black, bevel=0.014)
+h.box((0, -0.095, -0.014), (0.05, 0.055, 0.05), M_black, bevel=0.014)
 h.box((0.018, 0.0, 0.0), (0.004, 0.02, 0.012), mat("M_ptt", (0.5, 0.05, 0.03), rough=0.4))
 hs = h.obj(cR); hs.location = (0.12, 1.33, 0.81)
 hk = MB("HANDSET_CRADLE"); hk.box((0.12, 1.33, 0.785), (0.06, 0.22, 0.02), M_dark); hk.obj(cR)
