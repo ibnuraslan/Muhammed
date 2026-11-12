@@ -154,6 +154,8 @@ for n, ob in RIG.items():
         if nm.startswith("finger1-"): limit(pb, (-30, 60), (-35, 35), (-35, 35))
         elif nm.startswith("finger"): limit(pb, (-2, 90), (-10, 10), (-10, 10))
         elif nm.startswith("wrist."): limit(pb, (-60, 60), (-45, 45), (-25, 25))
+def HOLD(n, s, f):
+    return (n == "Hero" and s == "R" and f <= F(8.35)) or (n == "NeighbourA" and F(0.3) <= f <= F(7.6))
 def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
     """hand targets relative to the body: hang (with walk swing), hips, chest(crossed), head, up, out"""
     r = h.r; B = r.BN
@@ -168,15 +170,19 @@ def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
         if mode == "hang":   W = sh + k * Vector((sx * 0.085, -0.05 + 0.2 * sw, -0.46)); d = Vector((sx * 0.15, -0.15, -1)); nn = Vector((-sx, 0, 0))
         elif mode == "hips": W = sh + k * Vector((sx * 0.12, -0.02, -0.36)); d = Vector((-sx * 0.15, -0.3, -0.6)); nn = Vector((-sx, 0.2, 0))
         elif mode == "chest": W = sh + k * Vector((sx * 0.06, -0.27, -0.4)); d = Vector((sx * 0.05, -0.7, -0.7)); nn = Vector((-sx, 0, 0))
-        elif mode == "head": W = sh + k * Vector((sx * 0.01, 0.0, 0.28)); d = Vector((-sx * 0.3, 0.05, 0.9)); nn = Vector((-sx, 0.1, 0))
-        elif mode == "up":   W = sh + k * Vector((sx * 0.12, -0.38, 0.1)); d = Vector((sx * 0.1, -0.4, 0.9)); nn = Vector((0, 1, 0))
-        elif mode == "out":  W = sh + k * Vector((sx * 0.4, -0.15, -0.25)); d = Vector((sx, -0.3, -0.3)); nn = Vector((0, 0, -1))
+        elif mode == "head":
+            hc = r.BN["head"].head_local + Vector((0, 0.05, 0.15)) * k         # hands on the top-sides of the head, palms in, behind the face
+            d = Vector((-sx * 0.35, 0.3, 0.9)); nn = Vector((-sx, 0, -0.3))
+            W = hc + Vector((sx * 0.118 * k, 0.0, 0.012)) - d.normalized() * 0.085 * k
+        elif mode == "up":   W = sh + k * Vector((sx * 0.1, -0.36, -0.02)); d = Vector((sx * 0.05, -0.15, 1.0)); nn = Vector((0, -1, 0.1))
+        elif mode == "out":  W = sh + k * Vector((sx * 0.3, -0.22, -0.34)); d = Vector((sx * 0.6, -0.5, -0.5)); nn = Vector((0, 0.3, -1))
         elif mode == "brow": W = (sh + k * Vector((-sx * 0.1, -0.32, 0.22))) if s == "L" else (sh + k * Vector((sx * 0.085, -0.05, -0.46))); d = Vector((-sx, -0.2, 0.3)) if s == "L" else Vector((sx * 0.1, -0.15, -1)); nn = Vector((0, 1, -0.4)) if s == "L" else Vector((-sx, 0, 0))
         if mode in ("hang", "hips", "chest", "brow", "head"): W = W + Vector((sx * wide, 0, 0))
         # body space -> world via root transform
         Wl = W - Vector((root.x, root.y, 0.0))
         base = Vector((pos.x, pos.y, ground_z(pos.x, pos.y)))
         Ww = base + Ry @ Wl
+        if not HOLD(n, s, f): grip(h.r.o, s, f, {"head": 0.3, "up": 0.15, "out": 0.25, "brow": 0.3, "hips": 0.35}.get(mode, 0.3))
         h.key_hand(s, f, Ww, Ry @ d, Ry @ nn, pole=base + Ry @ (B["lowerarm01." + s].head_local - Vector((root.x, root.y, 0.0)) + (Vector((sx * 0.6, 0.1, 0.45)) if mode in ("head", "up") else Vector((sx * 0.3, 0.4, -0.1)))))
 def stand(h, f, pos, yaw, flex=0.0, crouch=0.0, side=0.0, head=(0, 0), twist=0.0, feet=None):
     gz = ground_z(pos.x, pos.y)
@@ -216,16 +222,19 @@ VALVE = bpy.data.objects["Valve_0"]
 def valve_pos(f):
     sc.frame_set(f); return VALVE.matrix_world.translation.copy()
 # beat 1: crouched inside the ring at the fill valve, nozzle in both hands, rising as the tube swells; then stands, wipes brow
+BEAT1R = {}
 K = Vector((-5.3, -8.25, 0)); hose_pts = bpy.data.objects["Hose"].data.splines[0].points
 for f in range(1, F(2.5) + 1, 4):
     v = valve_pos(f); u = (f - 1) / (F(2.5) - 1)
-    cr = 0.64 - 0.34 * smooth(u) + 0.015 * math.sin(f * 0.11)
+    ur = smooth((f - 60) / 26.0)                      # rises with the valve as the tube swells under it
+    cr = 0.64 - 0.38 * ur + 0.015 * math.sin(f * 0.11)
     look = max(0.0, math.sin(f * 0.105)) ** 3          # glances up along the swelling tube about once a second
-    stand(H, f, K, 0, flex=46 - 20 * smooth(u), crouch=cr, head=(18 - 6 * smooth(u) - 30 * look, 12 * math.sin(f * 0.02) + 35 * look),
+    stand(H, f, K, 0, flex=46 - 22 * ur, crouch=cr, head=(18 - 6 * smooth(u) - 30 * look, 12 * math.sin(f * 0.02) + 35 * look),
           feet={"L": Vector((K.x + 0.16, K.y + 0.02)), "R": Vector((K.x - 0.17, K.y + 0.12))})
     noz = v + Vector((0.0, 0.0, 0.21))                 # nozzle centre (stands upright on the valve cap)
     # right fist round the nozzle: palm on it from his side (+Y), fingers wrap toward +X, thumb opposed
-    H.key_hand("R", f, noz + Vector((-0.07, 0.042, 0.0)), Vector((1, 0, 0)), Vector((0, -1, 0)), pole=K + Vector((-0.7, 0.2, 0.5)))
+    BEAT1R[f] = [noz + Vector((-0.07, 0.042, 0.0)), noz]
+    H.key_hand("R", f, BEAT1R[f][0], Vector((1, 0, 0)), Vector((0, -1, 0)), pole=K + Vector((-0.7, 0.2, 0.5)))
     hose_mid = noz + Vector((0.24, 0.2, -0.12))
     dL = Vector((-0.7, -0.4, -0.6)).normalized()
     H.key_hand("L", f, hose_mid - dL * 0.085 + Vector((0, 0, 0.04)), dL, Vector((0.2, 0, -1)), pole=K + Vector((0.7, 0.2, 0.5)))
@@ -239,7 +248,7 @@ for f, cr, fl_, mode in ((f0 + 10, 0.3, 26, "chest"), (f0 + 22, 0.16, 16, "chest
     stand(H, f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, flex=fl_, crouch=cr, head=(-5, -35))
     arms(H, "Hero", f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, mode)
 grip(HR, "L", 1, 0.85); grip(HR, "L", F(2.5), 0.85); grip(HR, "L", F(2.5) + 12, 0.3)
-grip(HR, "R", 1, 0.85); grip(HR, "R", F(8.3), 0.85); grip(HR, "R", F(8.5), 0.3)
+grip(HR, "R", 1, 0.62); grip(HR, "R", F(8.3), 0.62); grip(HR, "R", F(8.5), 0.3)
 face(HR, f0 + 40, brow=0.6, jaw=0.15, lids=0.4); face(HR, F(3.6), brow=0.2, jaw=0.0, lids=0.1, smile=0.6)
 # beat 2: walks inside the ring along the front, checks each tube as it swells, hands on hips
 p0 = K + Vector((0, 0.12, 0)); p1 = Vector((7.2, -7.4, 0))
@@ -319,8 +328,8 @@ for f in range(F(2.8), F(6.0) + 1, 4): arms(NB, "NeighbourB", f, pb0.lerp(pb1, s
 bpath = lambda f: pb1.lerp(pb1 + Vector((0, 1.1, 0)), smooth((f - F(11.8)) / (F(13.4) - F(11.8))))
 stand(NB, F(11.6), pb1, 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", F(11.6), pb1, 0, "hang")
 NB.walk(bpath, lambda f: 0, F(11.8), F(13.4), stride=0.45, lean=-6)
-for f, mode in ((F(12.2), "up"), (F(12.9), "head"), (F(13.4), "head")): arms(NB, "NeighbourB", f, bpath(f), 0, mode)
-for f, mode in ((F(13.6), "head"), (F(14.6), "hips")):
+for f, mode in ((F(12.2), "up"), (F(12.9), "up"), (F(13.4), "chest")): arms(NB, "NeighbourB", f, bpath(f), 0, mode)
+for f, mode in ((F(13.6), "chest"), (F(14.6), "hips")):
     stand(NB, f, pb1 + Vector((0, 1.1, 0)), 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", f, pb1 + Vector((0, 1.1, 0)), 0, mode)
 face(RIG["NeighbourB"], F(11.8), brow=1.0, lids=1.0, jaw=0.7)
 pb2 = Vector((-23.6, -8.0, 0))
@@ -330,7 +339,7 @@ for f, md in ((F(16.0), "hips"), (F(20.0), "hips"), (F(23.9), "hips"), (F(24.4),
 wpath = lambda f: pbm.lerp(pb2, smooth((f - F(24.5)) / (F(26.1) - F(24.5))))
 NB.walk(wpath, lambda f: -35, F(24.5), F(26.1), stride=0.7)
 for f in range(F(24.5), F(26.1) + 1, 4): arms(NB, "NeighbourB", f, wpath(f), -35, "hang", phase=f / 40, amp=0.4)
-for f, yaw, mode, hd in ((F(26.2), 60, "hips", (15, 0)), (F(26.55), 45, "out", (18, 10)), (F(26.9), 30, "head", (20, 20)), (F(27.25), 55, "out", (15, 0)), (F(27.6), 80, "hips", (10, -25)), (F(28.4), 40, "hang", (25, 0))):
+for f, yaw, mode, hd in ((F(26.2), 60, "hips", (15, 0)), (F(26.55), 45, "chest", (18, 10)), (F(26.9), 30, "chest", (20, 20)), (F(27.25), 55, "chest", (15, 0)), (F(27.6), 80, "hips", (10, -25)), (F(28.4), 40, "hang", (25, 0))):
     stand(NB, f, pb2, yaw, flex=12, head=hd); arms(NB, "NeighbourB", f, pb2, yaw, mode)
 face(RIG["NeighbourB"], F(26.2), brow=-0.6, lids=-0.3, jaw=0.1); face(RIG["NeighbourB"], F(27.6), brow=-0.8, jaw=0.25)
 
@@ -382,20 +391,50 @@ for t in [o for o in bpy.data.objects if o.name.startswith("Tree_")]:
         t.rotation_euler.x = R_(2.5 * wnd * math.sin(f * 0.09 + ph)); t.rotation_euler.y = R_(1.8 * wnd * math.sin(f * 0.07 + ph * 2))
         t.keyframe_insert("rotation_euler", frame=f)
 
+def grip_ring(rig, s):
+    """centre and axis of the space enclosed by the curled fingers (where a held cylinder sits)"""
+    P = rig.pose.bones; M = rig.matrix_world
+    pts = []
+    for fi in range(2, 6):
+        pts.append(M @ P[f"finger{fi}-1.{s}"].head); pts.append(M @ P[f"finger{fi}-2.{s}"].tail)
+    c = sum(pts, Vector()) / len(pts)
+    ax = (M @ P[f"finger2-1.{s}"].head) - (M @ P[f"finger5-1.{s}"].head)
+    return c, ax.normalized()
+# beat 1: move the right-hand IK target until the finger ring sits on the nozzle (real contact, no gap)
+for it in range(3):
+    worst = 0.0
+    for f, (W, noz) in sorted(BEAT1R.items()):
+        sc.frame_set(f); c, ax = grip_ring(HR, "R"); e = noz - c
+        wr = HR.matrix_world @ HR.pose.bones["wrist.R"].head; tg = HR.matrix_world @ HR.pose.bones["IK_hand.R"].head
+        if (wr - tg).length > 0.015:        # out of reach: pull the target back toward the wrist instead of pushing further
+            e = (wr - tg) * 0.8
+        else:
+            worst = max(worst, e.length)
+        if e.length > 0.08: e = e.normalized() * 0.08
+        BEAT1R[f][0] = W + e
+        H.key_hand("R", f, BEAT1R[f][0], Vector((1, 0, 0)), Vector((0, -1, 0)), pole=K + Vector((-0.7, 0.2, 0.5)))
+    print("GRIP_SOLVE iter", it, "worst gap %.3f m" % worst)
+    if it == 2:
+        for f, (W, noz) in sorted(BEAT1R.items()):
+            sc.frame_set(f); c, ax = grip_ring(HR, "R"); wr = HR.matrix_world @ HR.pose.bones["wrist.R"].head
+            tg = HR.matrix_world @ HR.pose.bones["IK_hand.R"].head
+            print("GAP", f, round((noz - c).length, 3), "wrist-target", round((wr - tg).length, 3))
 # the nozzle comes off the valve at 2.5 s and stays in his right fist while he walks the ring (hose trailing)
 NOZ = bpy.data.objects["Nozzle"]; cnz = NOZ.constraints[0]
-cnz.influence = 1.0; cnz.keyframe_insert("influence", frame=F(2.5)); cnz.influence = 0.0; cnz.keyframe_insert("influence", frame=F(2.5) + 1)
-for fc in _fcurves(NOZ.animation_data.action):
-    for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
-NOZ.location = (0, 0, 0.21); NOZ.keyframe_insert("location", frame=F(2.5)); NOZ.rotation_euler = (0, 0, 0); NOZ.keyframe_insert("rotation_euler", frame=F(2.5))
-for f in range(F(2.5) + 1, F(8.4), 2):
+cnz.influence = 0.0          # the nozzle sits in his fist's finger ring from the first frame (pressed onto the valve in beat 1)
+for f in range(1, F(8.4), 2):
     sc.frame_set(f)
-    M = HR.matrix_world @ HR.pose.bones["wrist.R"].matrix
-    y = M.to_3x3() @ Vector((0, 1, 0)); x = M.to_3x3() @ Vector((1, 0, 0)); z = M.to_3x3() @ Vector((0, 0, 1))
-    p = M.translation + y.normalized() * 0.075 + z.normalized() * 0.03
-    NOZ.location = p; NOZ.keyframe_insert("location", frame=f)
+    p, x = grip_ring(HR, "R")
+    if f <= F(2.5):
+        # seated on the valve: the nozzle runs from the valve cap up through his fist (never floating, never off the hand)
+        top = VALVE.matrix_world.translation + Vector((0, 0, 0.15))
+        ax = (p - top); ln = max(0.05, ax.length); x = ax.normalized()
+        NOZ.location = top + x * (ln / 2 + 0.02); NOZ.scale = (1, 1, (ln + 0.04) / 0.12)
+    else:
+        NOZ.location = p; NOZ.scale = (1, 1, 1)
+    NOZ.keyframe_insert("location", frame=f); NOZ.keyframe_insert("scale", frame=f)
     NOZ.rotation_euler = x.to_track_quat("Z", "Y").to_euler(); NOZ.keyframe_insert("rotation_euler", frame=f)
-    tip = p + x.normalized() * 0.06
+    tip = NOZ.location + x * (0.06 * NOZ.scale.z)
     hose_pts[-1].co = (*(tip), 1.0); hose_pts[-1].keyframe_insert("co", frame=f)
     hose_pts[-2].co = (*(Vector((p.x + 0.25, p.y + 0.5, 0.03))), 1.0); hose_pts[-2].keyframe_insert("co", frame=f)
     hose_pts[-3].co = (*(Vector(((p.x + hose_pts[1].co[0]) / 2, (p.y + hose_pts[1].co[1]) / 2, 0.02))), 1.0); hose_pts[-3].keyframe_insert("co", frame=f)
@@ -412,7 +451,7 @@ V = Vector
 CAM = [  # (t seconds, position, look-at, lens)
     (0.0, V((-1.4, -9.7, 0.62)), V((-5.0, -8.5, 0.45)), 24),
     (1.0, V((-4.0, -10.2, 2.0)), V((-5.3, -8.4, 0.6)), 30),
-    (2.0, V((-4.8, -10.0, 2.05)), V((-5.3, -8.3, 0.7)), 34),
+    (2.0, V((-4.6, -11.3, 2.35)), V((-5.3, -8.6, 0.6)), 30),
     (3.0, V((-7.9, -10.4, 1.45)), V((-4.4, -8.8, 0.55)), 28),
     (3.7, V((-8.6, -12.3, 2.6)), V((-3.0, -8.6, 0.5)), 24),
     (4.7, V((-6.0, -17.0, 6.0)), V((0.0, -6.5, 0.5)), 22),
@@ -421,8 +460,8 @@ CAM = [  # (t seconds, position, look-at, lens)
     (7.8, V((14.0, 4.0, 11.0)), V((0.0, 0.0, 0.0)), 22),
     (8.5, V((9.0, -9.5, 5.0)), V((38.0, -16.0, 0.3)), 20),
     (9.5, V((12.5, -14.0, 1.7)), V((34.0, -16.0, 0.4)), 22),
-    (10.5, V((6.5, -15.6, 2.0)), V((18.0, -16.0, 0.5)), 20),
-    (11.5, V((-3.0, -18.4, 2.2)), V((5.0, -16.0, 0.4)), 22),
+    (10.5, V((6.5, -11.2, 2.7)), V((18.0, -16.0, 0.4)), 20),
+    (11.5, V((-3.0, -11.0, 2.5)), V((5.0, -16.0, 0.4)), 22),
     (12.3, V((-13.5, -12.0, 1.5)), V((-21.5, -3.6, 0.9)), 24),
     (13.3, V((-15.0, -10.6, 1.3)), V((-11.0, -6.0, 0.6)), 26),
     (14.0, V((-6.5, -14.0, 2.2)), V((1.5, -9.0, 0.4)), 24),
