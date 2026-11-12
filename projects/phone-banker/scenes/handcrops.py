@@ -37,13 +37,16 @@ def main():
             kit.apply_cam(cam, ctx, spec, t)
             bpy.context.view_layer.update()
             arm = bpy.data.objects[rig]
-            w = arm.matrix_world @ arm.pose.bones[f"wrist.{side}"].tail
-            v = world_to_camera_view(s, cam, w)
-            dist = (cam.location - w).length
-            half = min(0.25, max(0.05, 0.22 / max(dist, 0.3) * 35 / cam.data.lens))     # ~22 cm around the hand
+            P = lambda b, tail=False: arm.matrix_world @ (arm.pose.bones[b].tail if tail else arm.pose.bones[b].head)
+            wr = P(f"wrist.{side}"); tip = P(f"finger3-3.{side}", True); mid = P(f"finger3-1.{side}")
+            v = world_to_camera_view(s, cam, mid)
+            a = world_to_camera_view(s, cam, wr); b = world_to_camera_view(s, cam, tip)
+            asp = s.render.resolution_x / s.render.resolution_y
+            span = max(abs(a.x - b.x), abs(a.y - b.y) / asp, 0.006)
+            hx = 1.6 * span; hy = hx * asp                                              # the hand fills about a third
             s.render.use_border = True; s.render.use_crop_to_border = True
-            s.render.border_min_x = max(0.0, v.x - half * 0.55); s.render.border_max_x = min(1.0, v.x + half * 0.55)
-            s.render.border_min_y = max(0.0, v.y - half * 1.3); s.render.border_max_y = min(1.0, v.y + half * 1.3)
+            s.render.border_min_x = max(0.0, v.x - hx); s.render.border_max_x = min(1.0, v.x + hx)
+            s.render.border_min_y = max(0.0, v.y - hy); s.render.border_max_y = min(1.0, v.y + hy)
             s.render.resolution_percentage = 100
             s.render.image_settings.file_format = 'OPEN_EXR'; s.render.image_settings.color_depth = '32'
             s.render.use_compositing = False

@@ -14,9 +14,9 @@ for exr in sorted(glob.glob(os.path.join(src, "*.exr"))):
     meta = json.load(open(base + ".json"))
     dst = os.path.join(tmp, os.path.basename(base) + ".png")
     grade.grade_file(exr, dst, look="cinematic", exposure=meta["exposure"])
-    st, mv, t, rig, side = os.path.basename(base).split("_", 4)[0], *os.path.basename(base).split("_")[1:3], None, None
     parts = os.path.basename(base).split("_")
-    label = f"{parts[0]} {parts[1]} {parts[2]} - {parts[3]} {'left' if parts[-1] == 'L' else 'right'} hand"
+    t_i = next(i for i, p_ in enumerate(parts) if p_.replace(".", "").isdigit())
+    label = f"{parts[0]} {' '.join(parts[1:t_i])} t{parts[t_i]} - {parts[t_i + 1]} {'left' if parts[-1] == 'L' else 'right'} hand"
     cells.append((label, dst))
 
 TW, TH, pad, lab, cols = 420, 420, 12, 30, 4
@@ -28,7 +28,8 @@ d = ImageDraw.Draw(S)
 d.text((pad, 16), "Hand close-ups (full resolution crops, cinematic grade): wrists straight, thumbs on the natural side", font=head, fill=(235, 235, 235))
 for i, (label, p) in enumerate(cells):
     im = Image.open(p).convert("RGB")
-    im.thumbnail((TW, TH))
+    k = min(TW / im.width, TH / im.height)                                        # small (distant) hands are scaled up
+    im = im.resize((max(1, int(im.width * k)), max(1, int(im.height * k))), Image.LANCZOS)
     x = pad + (i % cols) * (TW + pad); y = 60 + (i // cols) * (TH + lab + pad)
     d.text((x, y + 4), label, font=font, fill=(200, 200, 200))
     S.paste(im, (x + (TW - im.width) // 2, y + lab + (TH - im.height) // 2))
