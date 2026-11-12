@@ -23,7 +23,7 @@ Timing: 2.5 s of picture before the first word; each chapter title card holds ab
 | 3 OFFICE | "His brother comes by… need a doctor." | Brother opens the door and stops; banker slumped in the chair. | Brother helps him up and walks him to the door. |
 | 4 HOSPITAL 1 | "By the time he reaches the hospital…" | Gurney pushed down a green-tiled corridor, doors swinging. | Ward: monitor blinking beside a curtained bed, nurse checks the drip. |
 | 5 HOSPITAL 2 | "The next evening… Kivelidi dies the following day." | Ambulance van pulls up at a second hospital at dusk, light turning. | Dawn corridor: wall clock at six, a nurse slowly draws a curtain. |
-| 6 PATHOLOGY LAB | "The pathologist… holds off on the autopsy." | Pathologist opens a file under a desk lamp and reads. | He turns to the radio, sets the file down and switches off the theatre light. |
+| 6 PATHOLOGY LAB | "The pathologist… holds off on the autopsy." | Pathologist opens a file under a desk lamp and reads. | He closes the file and switches off the theatre light. |
 | 7 FORENSIC LAB | "Later, forensic experts compare… almost to zero." | Two experts lay the two hospital files side by side. | Paper chart recorder: the pen line sinks toward zero. |
 | 8 HOSPITAL 1 | "When a nerve tells a muscle… lose the ability to breathe." | Slow track along the night ward, ventilator bellows rising and falling. | Doctor watches the monitor, rests a hand on the bed rail. |
 | 9 OFFICE (sealed) | "Back at the bank… It's Kivelidi's phone." | Investigators in protective suits around the desk; torch on the handset. | One lowers the handset into a clear evidence bag; nameplate in the foreground. |

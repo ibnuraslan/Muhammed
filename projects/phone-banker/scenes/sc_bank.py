@@ -72,6 +72,7 @@ def build(variant=None):
     c = {"variant": variant}
     if variant == "dusk":
         world_sky(sun_elev_deg=-4.0, sun_rot_deg=250, strength=2.6, tint=(0.62, 0.74, 1.0))      # blue hour, just after sunset
+        bpy.context.scene.view_settings.exposure = 1.6                                          # lifted: readable blue hour
     elif variant == "summer":
         world_sky(sun_elev_deg=38, sun_rot_deg=150, strength=0.5, tint=(0.85, 0.9, 1.0)); sun(38, 150, 2.2, (1.0, 0.94, 0.85), 1.5)
         bpy.context.scene.view_settings.exposure = -1.0
