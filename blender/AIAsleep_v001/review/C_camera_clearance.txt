@@ -1,0 +1,6 @@
+camera clearance, every 2 frames: 5 flagged
+(121, 'Body_Door_Front_M_Plastic_0', 0.0049, 'near')
+(123, 'Inner_Raks_M_Interrior_Gray_0', 0.0281, 'INSIDE')
+(1311, 'Inner_AgainsSun_L_M_Interrior_Gray_0', 0.0223, 'near')
+(1803, 'Driver.eyelashes01', 0.0055, 'near')
+(1805, 'Driver.body', 0.0034, 'near')

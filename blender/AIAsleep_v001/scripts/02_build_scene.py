@@ -30,7 +30,11 @@ for o in list(car):
     if o.type == "MESH" and any(k in o.name for k in ("Logo", "Number_Plane")):
         bpy.data.objects.remove(o, do_unlink=True)
 car = [o for o in cc.objects]
-WHEEL_C = Vector((0.0, -0.585, 0.92)); WHEEL_TILT = -66   # car's own wheel (Wheel_Steering_*), rim plane tilt
+bpy.context.view_layer.update()
+for o in car:   # bring the car's own wheel 6 cm toward the driver (telescoping column)
+    if o.name.startswith("Wheel_Steering") and o.type == "MESH":
+        mw = o.matrix_world.copy(); mw.translation.y += 0.06; o.matrix_world = mw
+WHEEL_C = Vector((0.0, -0.525, 0.92)); WHEEL_TILT = -66   # car's own wheel (Wheel_Steering_*), rim plane tilt
 # ---------------- driver
 rig = bpy.data.objects["Driver"]
 R = make_human_ctrl(rig); H = Human(R)
