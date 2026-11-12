@@ -18,24 +18,14 @@
     "surface <12 cm"
    ]
   ],
-  "619": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ],
-   [
-    "PROPMOVE",
-    "Ear_InArm moves 9.8 cm with no hand on it (nearest finger 5 cm)"
-   ]
-  ],
   "625": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 10%"
+    "wall/prop fills the frame, character only 14%"
    ],
    [
     "PROPMOVE",
-    "Ear_InArm moves 6.7 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 6.6 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "631": [
@@ -45,23 +35,17 @@
    ],
    [
     "PROPMOVE",
-    "Ear_InArm moves 7.4 cm with no hand on it (nearest finger 5 cm)"
-   ]
-  ],
-  "877": [
-   [
-    "FILL",
-    "hair / top of head 25%"
+    "Ear_InArm moves 7.5 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1225": [
    [
     "FILL",
-    "hair / top of head 25%"
+    "hair / top of head 27%"
    ],
    [
     "PROPMOVE",
-    "Ear_New moves 2.7 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_New moves 2.8 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1237": [
@@ -97,7 +81,7 @@
   "1267": [
    [
     "FILL",
-    "hair / top of head 29%"
+    "hair / top of head 31%"
    ],
    [
     "PROPMOVE",
@@ -107,11 +91,23 @@
   "1273": [
    [
     "FILL",
-    "hair / top of head 28%"
+    "hair / top of head 31%"
    ],
    [
     "PROPMOVE",
     "Ear_New moves 1.1 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 6.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "271": [
+   [
+    "PROPMOVE",
+    "Chest_Piece_Carry moves 3.7 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "307": [
@@ -129,13 +125,13 @@
   "319": [
    [
     "PROPMOVE",
-    "Chest_Piece_Carry moves 9.4 cm with no hand on it (nearest finger 3 cm)"
+    "Chest_Piece_Carry moves 9.1 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "331": [
    [
     "PROPMOVE",
-    "Chest_Piece_Carry moves 9.7 cm with no hand on it (nearest finger 3 cm)"
+    "Chest_Piece_Carry moves 9.7 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "361": [
@@ -169,19 +165,19 @@
    ],
    [
     "PROPMOVE",
-    "Shaving4 moves 5.3 cm with no hand on it (nearest finger 6 cm)"
+    "Shaving4 moves 5.3 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "391": [
    [
     "PROPMOVE",
-    "Shaving4 moves 4.4 cm with no hand on it (nearest finger 4 cm)"
+    "Shaving4 moves 4.4 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "397": [
    [
     "PROPMOVE",
-    "Shaving4 moves 6.6 cm with no hand on it (nearest finger 6 cm)"
+    "Shaving4 moves 6.6 cm with no hand on it (nearest finger 8 cm)"
    ]
   ],
   "403": [
@@ -214,10 +210,6 @@
    [
     "PROPMOVE",
     "Shaving7 moves 1.8 cm with no hand on it (nearest finger 8 cm)"
-   ],
-   [
-    "PROPMOVE",
-    "Shaving9 moves 4.5 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "427": [
@@ -234,6 +226,10 @@
    [
     "PROPMOVE",
     "Shaving11 moves 4.1 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Shaving9 moves 4.5 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "439": [
@@ -285,7 +281,7 @@
    ],
    [
     "PROPMOVE",
-    "Shaving16 moves 3.2 cm with no hand on it (nearest finger 5 cm)"
+    "Shaving16 moves 3.2 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "475": [
@@ -295,26 +291,20 @@
    ],
    [
     "PROPMOVE",
-    "Shaving16 moves 3.0 cm with no hand on it (nearest finger 3 cm)"
-   ],
-   [
-    "PROPMOVE",
     "Shaving17 moves 2.2 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "481": [
    [
     "PROPMOVE",
-    "Shaving17 moves 2.2 cm with no hand on it (nearest finger 4 cm)"
-   ]
-  ],
-  "487": [
-   [
-    "PROPMOVE",
-    "Shaving17 moves 4.4 cm with no hand on it (nearest finger 3 cm)"
+    "Shaving17 moves 2.2 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "493": [
+   [
+    "PROPMOVE",
+    "Shaving18 moves 8.1 cm with no hand on it (nearest finger 3 cm)"
+   ],
    [
     "PROPMOVE",
     "Shaving19 moves 5.7 cm with no hand on it (nearest finger 4 cm)"
@@ -323,31 +313,27 @@
   "499": [
    [
     "PROPMOVE",
-    "Shaving18 moves 0.8 cm with no hand on it (nearest finger 3 cm)"
+    "Shaving18 moves 0.8 cm with no hand on it (nearest finger 4 cm)"
    ],
    [
     "PROPMOVE",
-    "Shaving19 moves 7.0 cm with no hand on it (nearest finger 8 cm)"
-   ],
-   [
-    "PROPMOVE",
-    "Shaving20 moves 4.5 cm with no hand on it (nearest finger 3 cm)"
+    "Shaving19 moves 7.0 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "505": [
    [
     "PROPMOVE",
-    "Shaving19 moves 2.1 cm with no hand on it (nearest finger 10 cm)"
+    "Shaving19 moves 2.1 cm with no hand on it (nearest finger 8 cm)"
    ],
    [
     "PROPMOVE",
-    "Shaving21 moves 2.2 cm with no hand on it (nearest finger 4 cm)"
+    "Shaving20 moves 5.8 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "511": [
    [
     "PROPMOVE",
-    "Shaving20 moves 4.3 cm with no hand on it (nearest finger 6 cm)"
+    "Shaving20 moves 4.3 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
@@ -361,7 +347,7 @@
   "517": [
    [
     "PROPMOVE",
-    "Shaving21 moves 3.6 cm with no hand on it (nearest finger 5 cm)"
+    "Shaving21 moves 3.6 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
@@ -369,7 +355,7 @@
    ],
    [
     "PROPMOVE",
-    "Shaving23 moves 2.1 cm with no hand on it (nearest finger 6 cm)"
+    "Shaving23 moves 2.1 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "523": [
@@ -379,19 +365,19 @@
    ],
    [
     "PROPMOVE",
-    "Shaving23 moves 1.5 cm with no hand on it (nearest finger 5 cm)"
+    "Shaving23 moves 1.5 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "529": [
    [
     "PROPMOVE",
-    "Shaving24 moves 3.0 cm with no hand on it (nearest finger 6 cm)"
+    "Shaving24 moves 3.0 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "535": [
    [
     "PROPMOVE",
-    "Shaving25 moves 3.0 cm with no hand on it (nearest finger 9 cm)"
+    "Shaving25 moves 3.0 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
   "541": [
@@ -401,17 +387,17 @@
    ],
    [
     "PROPMOVE",
-    "Shaving26 moves 5.9 cm with no hand on it (nearest finger 10 cm)"
+    "Shaving26 moves 5.9 cm with no hand on it (nearest finger 9 cm)"
    ]
   ],
   "547": [
    [
     "PROPMOVE",
-    "Shaving25 moves 2.4 cm with no hand on it (nearest finger 6 cm)"
+    "Shaving25 moves 2.4 cm with no hand on it (nearest finger 7 cm)"
    ],
    [
     "PROPMOVE",
-    "Shaving26 moves 6.9 cm with no hand on it (nearest finger 12 cm)"
+    "Shaving26 moves 6.9 cm with no hand on it (nearest finger 11 cm)"
    ],
    [
     "PROPMOVE",
@@ -437,103 +423,103 @@
   "577": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 19.7 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 19.8 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "583": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 20.0 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 20.0 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "589": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 27.3 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 27.4 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
   "595": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 23.3 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_InArm moves 23.3 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
   "601": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 31.2 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_InArm moves 31.3 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "607": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 17.2 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 17.0 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "613": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 11.4 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 11.8 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "PROPMOVE",
+    "Ear_InArm moves 9.7 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "637": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 15.3 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_InArm moves 14.8 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "643": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 12.0 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 11.3 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "655": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 12.6 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_InArm moves 13.1 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "661": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 2.9 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_InArm moves 2.7 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
-  "667": [
+  "673": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 0.6 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_InArm moves 3.8 cm with no hand on it (nearest finger 7 cm)"
    ]
   ],
   "715": [
    [
     "PROPMOVE",
-    "Ear_InArm moves 5.4 cm with no hand on it (nearest finger 6 cm)"
-   ]
-  ],
-  "1177": [
-   [
-    "PROPMOVE",
-    "Ear_New moves 1.1 cm with no hand on it (nearest finger 3 cm)"
+    "Ear_InArm moves 5.4 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1183": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.4 cm with no hand on it (nearest finger 4 cm)"
+    "Ear_New moves 1.4 cm with no hand on it (nearest finger 3 cm)"
    ]
   ],
   "1189": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.8 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_New moves 1.8 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1195": [
    [
     "PROPMOVE",
-    "Ear_New moves 2.0 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_New moves 2.1 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1201": [
@@ -575,7 +561,7 @@
   "1261": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.7 cm with no hand on it (nearest finger 6 cm)"
+    "Ear_New moves 1.8 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1279": [
@@ -587,43 +573,43 @@
   "1285": [
    [
     "PROPMOVE",
-    "Ear_New moves 0.7 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 0.7 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1291": [
    [
     "PROPMOVE",
-    "Ear_New moves 0.8 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 0.8 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1297": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.2 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 1.2 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1303": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.0 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 1.0 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1309": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.1 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 1.1 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1315": [
    [
     "PROPMOVE",
-    "Ear_New moves 3.0 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 3.0 cm with no hand on it (nearest finger 6 cm)"
    ]
   ],
   "1321": [
    [
     "PROPMOVE",
-    "Ear_New moves 3.1 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 3.2 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1327": [
@@ -635,31 +621,31 @@
   "1333": [
    [
     "PROPMOVE",
-    "Ear_New moves 3.8 cm with no hand on it (nearest finger 5 cm)"
+    "Ear_New moves 3.7 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1363": [
    [
     "PROPMOVE",
-    "Ear_New moves 5.0 cm with no hand on it (nearest finger 4 cm)"
+    "Ear_New moves 5.2 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1369": [
    [
     "PROPMOVE",
-    "Ear_New moves 9.9 cm with no hand on it (nearest finger 4 cm)"
+    "Ear_New moves 10.6 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1375": [
    [
     "PROPMOVE",
-    "Ear_New moves 6.0 cm with no hand on it (nearest finger 4 cm)"
+    "Ear_New moves 5.6 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1381": [
    [
     "PROPMOVE",
-    "Ear_New moves 0.8 cm with no hand on it (nearest finger 4 cm)"
+    "Ear_New moves 0.8 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "1387": [
@@ -671,19 +657,13 @@
   "1393": [
    [
     "PROPMOVE",
-    "Ear_New moves 0.7 cm with no hand on it (nearest finger 4 cm)"
-   ]
-  ],
-  "1399": [
-   [
-    "PROPMOVE",
-    "Ear_New moves 2.3 cm with no hand on it (nearest finger 4 cm)"
+    "Ear_New moves 1.2 cm with no hand on it (nearest finger 4 cm)"
    ]
   ],
   "1663": [
    [
     "PROPMOVE",
-    "Ear_New moves 1.9 cm with no hand on it (nearest finger 23 cm)"
+    "Ear_New moves 1.9 cm with no hand on it (nearest finger 24 cm)"
    ]
   ],
   "1669": [
@@ -701,7 +681,7 @@
   "1681": [
    [
     "PROPMOVE",
-    "Ear_New moves 6.2 cm with no hand on it (nearest finger 54 cm)"
+    "Ear_New moves 6.2 cm with no hand on it (nearest finger 55 cm)"
    ]
   ],
   "1687": [
@@ -755,8 +735,8 @@
  },
  "counts": {
   "BACKHEAD": 1,
-  "FILL": 9,
-  "EMPTY": 3,
-  "PROPMOVE": 123
+  "FILL": 8,
+  "EMPTY": 2,
+  "PROPMOVE": 121
  }
 }

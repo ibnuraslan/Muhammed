@@ -119,11 +119,20 @@ def fcurves_of(obj):
 def clear_fingers(rig):
     fcs = fcurves_of(rig)
     for fc in [fc for fc in fcs if fc.data_path.startswith('pose.bones["finger')]: fcs.remove(fc)
-SCHED = {(SUR, "R"): [(1, "pinch"), (339, "pinch"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed"), (560, "relaxed"), (566, "pinch"),
-                      (1500, "pinch"), (1502, "tripod"), (1685, "tripod"), (1715, "relaxed"), (1770, "relaxed")],
-         (SUR, "L"): [(1, "relaxed"), (96, "relaxed"), (106, "flat_palm"), (278, "flat_palm"), (290, "relaxed"), (337, "relaxed"), (343, "pinch"),
-                      (464, "pinch"), (476, "relaxed"), (1385, "relaxed"), (1392, "flat_palm"), (1498, "flat_palm"), (1508, "relaxed"), (1770, "relaxed")],
-         (NUR, "L"): [(1, "relaxed"), (1770, "relaxed")], (NUR, "R"): [(1, "relaxed"), (1770, "relaxed")]}
+# EarInArm-local pose variants in the hand_poses table: the three back fingers tucked evenly under a pinch, and an even relaxed
+# curl, so the gloved fingers lie together instead of pointing in different directions
+POSES["pinch_tuck"] = dict(curl={2: (40, 45, 25), 3: (45, 55, 30), 4: (52, 62, 36), 5: (58, 68, 40)}, spread=0.0, thumb=("index_tip", 0.004))
+POSES["relaxed_even"] = dict(curl={2: (24, 30, 16), 3: (26, 32, 17), 4: (28, 34, 18), 5: (30, 36, 19)}, spread=0.0, thumb=("beside_index", 0.012))
+# v009c-2: the "starfish" gloves were the GloveThin displace (hand surface pulled in 3.2 mm along its normals): on the subdivided
+# glove it thinned every finger and opened gaps between them. Removed; the bones and skinning were correct.
+for rig in (SUR,):
+    gm = BODY[rig].modifiers.get("GloveThin")
+    if gm: BODY[rig].modifiers.remove(gm)
+SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
+                      (1500, "pinch_tuck"), (1502, "tripod"), (1685, "tripod"), (1715, "relaxed_even"), (1770, "relaxed_even")],
+         (SUR, "L"): [(1, "relaxed_even"), (96, "relaxed_even"), (106, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "pinch_tuck"),
+                      (464, "pinch_tuck"), (476, "relaxed_even"), (1385, "relaxed_even"), (1392, "flat_palm"), (1498, "flat_palm"), (1508, "relaxed_even"), (1770, "relaxed_even")],
+         (NUR, "L"): [(1, "relaxed_even"), (1770, "relaxed_even")], (NUR, "R"): [(1, "relaxed_even"), (1770, "relaxed_even")]}
 for rig in (SUR, NUR): clear_fingers(rig)
 for (rig, s_), sch in SCHED.items():
     for i, (f, pose) in enumerate(sch):
@@ -190,13 +199,14 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(PAT, "R", range(13, 44, 6), lambda: others(PAT) + [lambda: self_bvh(PAT)], 0.03), (SUR, "L", range(1, 50, 3), lambda: [lambda: bvh(BODY[PAT])], 0.06), (SUR, "R", range(1, 50, 3), lambda: [lambda: bvh(BODY[PAT])], 0.06),
+JOBS = [(SUR, "L", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(478, 520, 3), lambda: [lambda: self_bvh(SUR)]),
+        (PAT, "R", range(13, 44, 6), lambda: others(PAT) + [lambda: self_bvh(PAT)], 0.03), (SUR, "L", range(1, 50, 3), lambda: [lambda: bvh(BODY[PAT])], 0.06), (SUR, "R", range(1, 50, 3), lambda: [lambda: bvh(BODY[PAT])], 0.06),
         (SUR, "L", range(265, 300, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(265, 300, 3), lambda: [lambda: self_bvh(SUR)], 0.04),
         (SUR, "L", range(637, 664, 3), lambda: others(SUR)), (SUR, "R", range(637, 664, 3), lambda: others(SUR), 0.04),
         (SUR, "L", range(562, 600, 3), lambda: [lambda: self_bvh(SUR)]), (SUR, "R", range(562, 600, 3), lambda: [lambda: self_bvh(SUR)]),
         (SUR, "L", range(673, 716, 6), lambda: others(SUR)), (SUR, "R", range(673, 716, 6), lambda: others(SUR)),
         (SUR, "L", range(1357, 1397, 3), lambda: [lambda: self_bvh(SUR)] + others(SUR)), (SUR, "R", range(1357, 1397, 3), lambda: [lambda: self_bvh(SUR)]),
-        (SUR, "L", range(1405, 1466, 6), lambda: others(SUR)), (SUR, "R", range(1405, 1466, 6), lambda: others(SUR), 0.035),
+        (SUR, "L", range(1405, 1494, 6), lambda: others(SUR)), (SUR, "R", range(1405, 1494, 3), lambda: others(SUR), 0.035),
         (SUR, "L", range(139, 284, 6), lambda: others(SUR)), (SUR, "R", range(139, 284, 6), lambda: others(SUR), 0.04),
         (PAT, "L", range(1705, 1771, 6), lambda: [lambda: self_bvh(PAT)])]
 for job in JOBS:

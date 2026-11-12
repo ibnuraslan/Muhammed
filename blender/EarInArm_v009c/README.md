@@ -35,7 +35,11 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
 | 8 | 1501 | and the skin is carefully stitched… | Macro: the needle holder travels along the front edge, and nine stitches appear in turn. |
 | 9 | 1645 | giving you a brand new ear | The chair rises and the camera pulls out and orbits to the front. He touches the new ear and smiles; the nurse smiles. |
 
-## v009c vs v009b: no starfish gloves (director review of v009b)
+## v009c vs v009b: no starfish gloves (director reviews of v009b and v009c)
+- **Cause of the starfish gloves:** the `GloveThin` Displace modifier (added in v003) pulled the hand surface in 3.2 mm along its normals. On the subdivided glove it thinned every finger and opened gaps between them, so the long, separate fingers read as splayed.
+  - The bones and the skinning were correct: the evaluated finger curls match the keys, finger vertices sit within about 1 cm of their bones, and the weights sum to 1. A test render changes when the finger bones change.
+  - `GloveThin` is removed in `03b_hands_v009b.py`.
+- **Poses:** the forceps pinch now tucks the middle, ring and little fingers in a gentle gradient under the index (`pinch_tuck`), and relaxed hands use an even curl (`relaxed_even`). Both are added to the `hand_poses` table with spread 0.
 - **Spread 0 everywhere:** every surgeon and nurse finger key is rebuilt from a clean `hand_poses` schedule with `spread=0`. The finger `HandLimit` side range is reset to ±10° (`LIMITS`).
   - Forceps hand: `pinch`. Thumb and index meet on the shafts; the middle, ring and little fingers curl under them.
   - Tray hands: `relaxed`.

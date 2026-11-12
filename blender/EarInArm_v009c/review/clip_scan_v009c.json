@@ -1,64 +1,36 @@
 {
  "frames": {
-  "481": {
+  "277": {
    "Surgeon": {
     "self": 1,
     "clothes": 0,
     "other": 0
    }
   },
-  "487": {
+  "349": {
    "Surgeon": {
-    "self": 4,
+    "self": 1,
     "clothes": 0,
     "other": 0
    }
   },
-  "493": {
+  "535": {
    "Surgeon": {
-    "self": 16,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "499": {
-   "Surgeon": {
-    "self": 16,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "505": {
-   "Surgeon": {
-    "self": 3,
+    "self": 2,
     "clothes": 0,
     "other": 0
    }
   },
   "541": {
    "Surgeon": {
-    "self": 2,
+    "self": 4,
     "clothes": 0,
     "other": 0
    }
   },
   "547": {
    "Surgeon": {
-    "self": 2,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1267": {
-   "Surgeon": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1273": {
-   "Surgeon": {
-    "self": 1,
+    "self": 4,
     "clothes": 0,
     "other": 0
    }
@@ -67,17 +39,24 @@
    "Surgeon": {
     "self": 0,
     "clothes": 0,
-    "other": 4
+    "other": 7
    }
   },
   "1375": {
    "Surgeon": {
     "self": 0,
     "clothes": 0,
-    "other": 4
+    "other": 5
    }
   },
   "1381": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1399": {
    "Surgeon": {
     "self": 0,
     "clothes": 0,
@@ -86,7 +65,7 @@
   },
   "1405": {
    "Surgeon": {
-    "self": 8,
+    "self": 9,
     "clothes": 0,
     "other": 0
    }

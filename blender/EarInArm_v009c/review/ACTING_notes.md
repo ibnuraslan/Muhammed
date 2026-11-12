@@ -59,17 +59,19 @@ See `../README.md` for the full list. Each point from the review:
 6. **Camera:** pulled back 25 cm at 3.0–4.5 s and 20 cm over the x-ray stretch (14.5–17.2 s).
 7. **f25–31:** the surgeon stands 10 cm back from the patient's knee. Moving the patient's hand only sent it into his own thigh.
 
+**Starfish gloves (review of v009c):** the cause was the `GloveThin` Displace modifier, which pulled the hand surface in 3.2 mm. On the subdivided glove it thinned the fingers and opened gaps between them. The bones and skinning were fine. It is removed. The forceps pinch tucks the back three fingers (`pinch_tuck`), and relaxed hands use an even curl (`relaxed_even`).
+
 ## Remaining flags (with reasons)
 Both checks were run on the packed `EarInArm_v009c_60fps.blend`, step 6, with `beats.json`.
 
-**qa_check (e7b25f7):** HOVER 0, CLAW 0, FACEPRESS 0, INSIDE 0, CAMJUMP 0, ROLL 0, **ATTACH 0**, BACKHEAD 1, EMPTY 3, FILL 9, PROPMOVE 123. None of the PROPMOVE flags is a hand tool: forceps, scalpel and needle holder are 0.
+**qa_check (e7b25f7):** HOVER 0, CLAW 0, FACEPRESS 0, INSIDE 0, CAMJUMP 0, ROLL 0, **ATTACH 0**, BACKHEAD 1, EMPTY 2, FILL 8, PROPMOVE 121. None of the PROPMOVE flags is a hand tool: forceps, scalpel and needle holder are 0.
 
 | Frame | Flag | Reason |
 |---|---|---|
 | 1 | BACKHEAD: Surgeon | The wide establishing frame, with the patient as the subject. |
-| 619–631 | EMPTY: characters 10–11 % | The high shot that follows the forceps carrying the ear to the arm. The arm, the gloved hand and the ear are all in frame and read clearly (checked at 607/619/631/643). Floor and cabinets fill the rest. |
+| 625–631 | EMPTY: characters 10–11 % | The high shot that follows the forceps carrying the ear to the arm. The arm, the gloved hand and the ear are all in frame and read clearly (checked at 607/619/631/643). Floor and cabinets fill the rest. |
 | 49, 139 | FILL: surface < 12 cm | The push-ins to the dressing and to the chest. |
-| 877, 1225–1273 | FILL: hair / top of head 25–29 % | The surgeon's cap at the frame edge while the camera follows the forceps. |
+| 1225–1273 | FILL: hair / top of head 25–29 % | The surgeon's cap at the frame edge while the camera follows the forceps. |
 
 | 307–331 | PROPMOVE: Chest_Piece_Carry | The cartilage piece rides in the forceps tips while the surgeon carries it to the tray (nearest finger 3 cm; the forceps tips hold it). |
 | 577–715 | PROPMOVE: Ear_InArm | The carved ear rides in the forceps tips from the tray to the arm (566–712), then slides into the pocket (712–715). |
