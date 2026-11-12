@@ -39,6 +39,7 @@ ROW_Y = -0.6                    # the long typewriter bench
 LB = Vector((6.9, 1.2, 1.55))   # lightbox wall centre (on the +X wall)
 XC = Vector((5.6, 3.1, 0.0))    # X-ray cabinet
 PAIR = Vector((-3.0, 2.4, 0.905))
+MEM = Vector((6.75, -0.9, 1.0))     # the memory typewriter's shelf (on the +X wall, clear of the cabinet)
 
 
 def bench(x, y, L_, top, legm, rot=0.0):
@@ -74,6 +75,27 @@ def build(variant=None):
     box("Floor", (0, 0, -0.01), (14, 8, 0.02), ph.texture("old_linoleum_flooring_01", scale=0.5, name="MeadeFloor", tint=(0.52, 0.58, 0.58)))
     wall = ph.texture("painted_plaster_wall", scale=0.5, name="MeadeWall", tint=(0.74, 0.78, 0.76))
     box("WallBack", (0, 4.05, 1.6), (14, 0.1, 3.2), wall); box("WallR", (7.05, 0, 1.6), (0.1, 8, 3.2), wall)
+    dado = ph.texture("painted_plaster_wall", scale=0.5, name="MeadeDado", tint=(0.36, 0.44, 0.4))       # green-grey lower wall, a wooden rail
+    rail = ph.texture("dark_wood", scale=1.0, name="MeadeRail", tint=(0.7, 0.65, 0.6))
+    for nm, loc, sz in (("DadoB", (0, 3.995, 0.55), (14, 0.01, 1.1)), ("DadoR", (6.995, 0, 0.55), (0.01, 8, 1.1)),
+                        ("DadoF1", (-4.0, -3.995, 0.55), (6.0, 0.01, 1.1)), ("DadoF2", (3.6, -3.995, 0.55), (6.8, 0.01, 1.1)),
+                        ("DadoL", (-6.995, 0, 0.5), (0.01, 8, 1.0))):
+        box(nm, loc, sz, dado)
+    for nm, loc, sz in (("RailB", (0, 3.99, 1.1), (14, 0.025, 0.05)), ("RailR", (6.99, 0, 1.1), (0.025, 8, 0.05)),
+                        ("RailF1", (-4.0, -3.99, 1.1), (6.0, 0.025, 0.05)), ("RailF2", (3.6, -3.99, 1.1), (6.8, 0.025, 0.05))):
+        box(nm, loc, sz, rail)
+    # the corridor beyond the door: a lit wall and floor, so the doorway never opens onto sky
+    box("CorrWall", (-0.4, -5.6, 1.6), (4.0, 0.1, 3.2), wall); box("CorrFloor", (-0.4, -4.85, -0.01), (4.0, 1.6, 0.02), ph.texture("old_linoleum_flooring_01", scale=0.5, name="MeadeFloor2"))
+    box("CorrCeil", (-0.4, -4.85, 3.22), (4.0, 1.6, 0.04), wall)
+    cl = area_light((-0.4, -4.85, 3.1), (0, 0, 0), 0.8, 15, (0.9, 0.95, 1.0)); cl.visible_camera = False
+    ph.model("wall_clock", loc=(2.5, 3.98, 2.35), rot_z=math.pi)
+    ph.model("power_box_01", loc=(6.98, -2.6, 1.6), rot_z=math.pi / 2)
+    ph.model("vintage_telephone_wall_clock", loc=(-6.98, 3.4, 1.6), rot_z=-math.pi / 2)
+    for k, x in enumerate((-2.4, 0.4)):                                   # pinboards of memos beside the calendar
+        box(f"Cork{k}", (x, 3.985, 1.7), (1.0, 0.02, 0.7), ph.texture("oriented_strand_board", scale=0.6, name="Cork", tint=(0.75, 0.6, 0.45)))
+        for j in range(7):
+            box("Memo", (x - 0.38 + (j % 4) * 0.25, 3.97, 1.86 - (j // 4) * 0.3), (0.16, 0.004, 0.21), pbr(f"Memo{j % 3}", ((0.86, 0.85, 0.8), (0.82, 0.8, 0.6), (0.7, 0.78, 0.82))[j % 3], 0.8),
+                rot=(0, math.radians(4 * ((j * 7) % 5 - 2)), 0))
     for x0, x1 in ((-7, -1.0), (0.2, 7)):
         box("WallFront", ((x0 + x1) / 2, -4.05, 1.6), (x1 - x0, 0.1, 3.2), wall)
     box("DoorHead", (-0.4, -4.05, 2.7), (1.2, 0.1, 1.0), wall)
@@ -123,12 +145,18 @@ def build(variant=None):
     c["ciphers"] = []
     for k in range(3):
         r, lamps = MC.cipher(f"MCipher{k}", (2.2 + k * 0.62, 2.45, 0.905), math.pi, height=0.4); c["ciphers"].append(r)
+        if k > 0:
+            twp.hide([r] + list(r.children_recursive), True)
+    for k in range(2):
+        ph.model("vintage_radio_transceiver", loc=(2.85 + k * 0.6, 2.5, 0.905), rot_z=math.pi + 0.05 * k)
+    ph.model("metal_tool_chest", loc=(4.2, 3.6, 0), rot_z=math.pi)
+    ph.model("drawer_cabinet", loc=(-6.5, 1.0, 0), rot_z=-math.pi / 2)
     MC.lamp_blink()
     ph.model("industrial_microscope", loc=(-5.9, -2.7, 0.905), rot_z=0.4)
     ph.model("retro_multimeter", loc=(-5.2, -2.7, 0.905), rot_z=-0.2)
     import sc_twlab
     sc_twlab.oscilloscope("MeadeScope", (-5.6, -3.0, 0.905), math.radians(10))
-    lamp_r, lamp_ms = ph.model("desk_lamp_arm_01", loc=(-4.25, ROW_Y + 0.35, 0.905), rot_z=math.radians(160)); twp.tint_model(lamp_ms, (0.2, 0.22, 0.2), 0.1)
+    lamp_r, lamp_ms = ph.model("desk_lamp_arm_01", loc=(-5.0, ROW_Y + 0.3, 0.905), rot_z=math.radians(200)); twp.tint_model(lamp_ms, (0.2, 0.22, 0.2), 0.1)
     for k in range(6):
         ph.model("steel_frame_shelves_02", loc=(-6.4 + k * 0.62, 3.75, 0), rot_z=math.pi)
     for k in range(12):
@@ -164,7 +192,7 @@ def build(variant=None):
     c["cal"] = hinge
     # ---------------------------------------------------------------- lightbox wall and X-ray films
     import sc_twlab as L_
-    boxes = L_.lightbox_wall(c, LB, math.pi / 2, 3)
+    boxes = L_.lightbox_wall(c, LB, -math.pi / 2, 3)
     films = {}
     for nm in ("altered", "ordinary", "motor"):
         pth = os.path.join(T.GEN, f"xray_{nm}.png")
@@ -186,7 +214,7 @@ def build(variant=None):
         f.parent = lb; f.location = (0, -0.008, 0); f.rotation_euler = (math.radians(90), 0, 0)
         c["film_objs"].append(f)
     # the X-ray cabinet: a steel box with a sliding drawer, a warning lamp, a control panel
-    cab = pbr("XCab", (0.62, 0.64, 0.6), 0.4, 0.3)
+    cab = ph.texture("painted_concrete", scale=1.5, name="XCab", tint=(0.55, 0.6, 0.58))
     box("XCabinet", (XC.x, XC.y, 0.75), (1.2, 1.0, 1.5), cab, bevel=0.02)
     box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.01, 0.01, 0.012), 0.6))
     xl = area_light((XC.x, XC.y - 0.9, 1.3), (0, 0, 0), 0.5, 20, (0.9, 0.95, 1.0)); point_at(xl, (XC.x, XC.y - 0.8, 0.6)); xl.visible_camera = False
@@ -197,16 +225,21 @@ def build(variant=None):
     cyl("XWarnLamp", (XC.x + 0.4, XC.y - 0.3, 1.56), 0.06, 0.1, warn, verts=16)
     c["warn"] = warn.node_tree.nodes["Principled BSDF"]
     box("XPanel", (XC.x - 0.35, XC.y - 0.505, 1.25), (0.35, 0.02, 0.2), pbr("XPanelM", (0.1, 0.1, 0.11), 0.4))
+    for k in range(4):
+        cyl("XKnob", (XC.x - 0.47 + k * 0.08, XC.y - 0.52, 1.22), 0.014, 0.02, pbr("XKnobM", (0.6, 0.6, 0.6), 0.3, 1.0), verts=12, rot=(math.radians(90), 0, 0))
+    box("XStripe", (XC.x, XC.y - 0.502, 1.44), (1.18, 0.01, 0.06), pbr("XStripeM", (0.55, 0.42, 0.08), 0.5))
     c["xtw"] = T.make("XrayTW", loc=(0, 0, 0), color=(0.2, 0.25, 0.3), bugged=True, glyphs=False, legends=False, text=" ", mechanism=True)
     c["xtw"]["paper"].hide_render = True
     # a memory typewriter (an electronic model with a one-line display) on the shelf behind the lightboxes
-    mem = T.make("MemoryTW", loc=(6.75, 2.75, 1.0), rot_z=math.pi / 2, color=(0.52, 0.5, 0.45), glyphs=False, legends=False, text=" ", mechanism=False)
+    mem = T.make("MemoryTW", loc=tuple(MEM), rot_z=math.pi / 2, color=(0.52, 0.5, 0.45), glyphs=False, legends=False, text=" ", mechanism=False)
     mem["paper"].hide_render = True
     T.set_cover(mem, open_deg=-70)
-    box("MemShelf", (6.75, 2.75, 0.98), (0.6, 0.9, 0.03), legm)
-    box("MemDisplay", (6.75 - 0.06, 2.75, 1.115), (0.02, 0.22, 0.03), pbr("MemLCD", (0.1, 0.14, 0.08), 0.2, 0.0, **{'Emission Color': (0.45, 0.6, 0.3, 1), 'Emission Strength': 0.8}))
+    box("MemShelf", (MEM.x, MEM.y, 0.98), (0.6, 0.9, 0.03), legm)
+    for dy in (-0.4, 0.4):
+        box("MemBracket", (MEM.x + 0.2, MEM.y + dy, 0.85), (0.2, 0.02, 0.25), legm)
+    box("MemDisplay", (MEM.x - 0.06, MEM.y, 1.115), (0.02, 0.22, 0.03), pbr("MemLCD", (0.1, 0.14, 0.08), 0.2, 0.0, **{'Emission Color': (0.45, 0.6, 0.3, 1), 'Emission Strength': 0.8}))
     pcb = pbr("MemPCB", (0.08, 0.16, 0.09), 0.35, 0.0, **{'Coat Weight': 0.8})
-    box("MemBoard", (6.75, 2.75, 1.06), (0.28, 0.3, 0.004), pcb)
+    box("MemBoard", (MEM.x, MEM.y, 1.06), (0.28, 0.3, 0.004), pcb)
     c["mem"] = mem
     # the two bar versions (Ch3 6B): a mains-wired one and one with a battery pack, on the pair bench's end
     for k, dx in enumerate((-0.12, 0.12)):
@@ -229,10 +262,12 @@ def build(variant=None):
         P[nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.25)
     c["P"] = P
     if night:
-        lamp = bpy.data.lights.new("MagLamp", 'SPOT'); lamp.energy = 160; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6; lamp.color = (1.0, 0.82, 0.6)
+        lamp = bpy.data.lights.new("MagLamp", 'SPOT'); lamp.energy = 240; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6; lamp.color = (1.0, 0.82, 0.6)
         lo = bpy.data.objects.new("MagLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (-4.45, ROW_Y + 0.15, 1.45)
         point_at(lo, (-4.6, ROW_Y, 0.95))
-        moon = area_light((-6.8, 0, 2.0), (0, 0, 0), 4.0, 12, (0.45, 0.55, 0.85)); point_at(moon, (0, 0, 0.8)); moon.visible_camera = False
+        moon = area_light((-6.8, 0, 2.0), (0, 0, 0), 4.0, 45, (0.45, 0.55, 0.85)); point_at(moon, (0, 0, 0.8)); moon.visible_camera = False
+        far = area_light((4.5, 1.6, 3.12), (0, 0, 0), 0.9, 30, (0.9, 0.96, 1.0)); far.visible_camera = False      # one bank left on at the far end
+        bounce = area_light((-4.6, ROW_Y - 1.5, 2.6), (0, 0, 0), 1.0, 6, (1.0, 0.85, 0.7)); point_at(bounce, (-4.6, ROW_Y - 0.6, 1.1)); bounce.visible_camera = False
         exitlight = area_light((-0.4, -3.9, 2.4), (0, 0, 0), 0.4, 4, (0.3, 0.9, 0.4)); exitlight.visible_camera = False
     animate(c, 0.0, "lone" if night else "team")
     return c
@@ -295,24 +330,25 @@ def animate(c, sec, shot):
     tA, tB, tC, tD, tE, ar = (P[k] for k in ("TechA", "TechB", "TechC", "TechD", "TechE", "Arneson"))
     if shot == "team":
         place(tA, (-3.8, ROW_Y - 0.75, 0), math.pi); place(tB, (-1.4, ROW_Y - 0.75, 0), math.pi)
-        place(tC, (1.6, 1.7, 0), 0.0); place(tD, (2.9, 1.7, 0), 0.0); place(tE, (-3.0, 1.7, 0), 0.0)
-        for h, tgt in ((tA, Vector((-3.8, ROW_Y + 0.05, 1.0))), (tB, Vector((-1.35, ROW_Y + 0.05, 1.0))), (tC, Vector((1.4, 2.3, 1.05))),
-                       (tD, Vector((2.9, 2.3, 1.0))), (tE, Vector((-3.0, 2.3, 1.0)))):
+        place(tA, (-3.8, ROW_Y - 0.62, 0), math.pi); place(tB, (-1.4, ROW_Y - 0.62, 0), math.pi)
+        place(tC, (1.4, 1.75, 0), math.pi); place(tD, (2.9, 1.75, 0), math.pi); place(tE, (-3.0, 1.75, 0), math.pi)
+        for h, tgt in ((tA, Vector((-3.8, ROW_Y - 0.25, 0.98))), (tB, Vector((-1.35, ROW_Y - 0.25, 0.98))), (tC, Vector((1.4, 2.1, 1.0))),
+                       (tD, Vector((2.9, 2.1, 1.0))), (tE, Vector((-3.0, 2.1, 0.98)))):
             for sd, dx in (("L", 0.15), ("R", -0.15)):
-                reach(h, sd, tgt + Vector((dx + 0.03 * math.sin(sec * 2 + dx * 9), 0, 0.02 * math.sin(sec * 3))), Vector((dx * 4, 0, -0.8)), Vector((0, 0, -1)))
+                reach(h, sd, tgt + Vector((dx + 0.03 * math.sin(sec * 2 + dx * 9), 0, 0.02 * math.sin(sec * 3))), Vector((dx, -0.3, -0.9)), Vector((0, 0.3, -1)))
             h.rot("head", (1, 0, 0), 12)
     elif shot == "calendar":
-        twp.walk(tC, (4.0, 0.6), (-2.0, 0.6), sec, speed=0.9)
+        twp.walk(tC, (3.6, 3.25), (-2.6, 3.25), sec, speed=0.9)
         box_ = c["ciphers"][2]; box_.location = tC.bone_head("spine03") + twp.forward(tC) * 0.32 + Vector((0, 0, -0.35))
         box_.rotation_euler = (0, 0, tC.arm.rotation_euler.z + math.pi)
         for sd, sg in (("L", 1), ("R", -1)):
             side = twp.forward(tC).cross(Vector((0, 0, 1)))
             reach(tC, sd, box_.location + Vector((0, 0, 0.12)) + side * 0.28 * -sg, Vector((-sg * side.x, -sg * side.y, -0.8)), twp.forward(tC))
-        place(tB, (-1.6, ROW_Y - 0.75, 0), math.pi)
+        place(tB, (-0.6, 1.4, 0), math.pi * 0.85)
     elif shot == "clear":
-        cp = c["ciphers"][0]; place(tD, (cp.location.x, cp.location.y - 0.75, 0), math.pi)
-        reach(tD, "R", cp.location + Vector((0.05, -0.25, 0.42 + 0.06 * (1 - ease(min(1.0, sec / 1.5))))), Vector((-0.5, -0.4, -0.7)), Vector((0, 1, -0.3)))
-        reach(tD, "L", cp.location + Vector((-0.2, -0.28, 0.3)), Vector((0.5, -0.4, -0.7)), Vector((0, 1, 0)))
+        cp = c["ciphers"][0]; place(tD, (cp.location.x, cp.location.y - 0.62, 0), math.pi)
+        reach(tD, "R", cp.location + Vector((0.08, -0.28, 0.42 + 0.06 * (1 - ease(min(1.0, sec / 1.5))))), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, -0.3)))
+        reach(tD, "L", cp.location + Vector((-0.15, -0.3, 0.3)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, 0)))
         tD.rot("head", (1, 0, 0), 14)
     elif shot == "stack":
         nc = c["new_crate"]; k = ease(min(1.0, max(0.0, (sec - 0.6) / 2.6)))
@@ -324,39 +360,47 @@ def animate(c, sec, shot):
                 reach(h, sd, nc.location + Vector((side * 0.38, -0.05 * dy, 0.0)), Vector((side, 0.4, -0.7)), Vector((-side, -0.3, 0)))
     elif shot in ("row", "covers"):
         x = -4.6 + (n_up - 1) * 0.82 if shot == "covers" else -4.6
-        place(tB, (x, ROW_Y - 0.8, 0), math.pi)
-        lid_pt = T.world(c["row"][max(0, n_up - 1)], (0, 0.14, 0.2))
-        reach(tB, "R", lid_pt + Vector((0.1, -0.12, 0.05)), Vector((-0.5, -0.4, -0.6)), Vector((0, 1, 0.3)))
-        reach(tB, "L", lid_pt + Vector((-0.12, -0.12, 0.05)), Vector((0.5, -0.4, -0.6)), Vector((0, 1, 0.3)))
-        place(tA, (x + 1.8, ROW_Y - 0.8, 0), math.pi + 0.3)
+        place(tB, (x, ROW_Y - 0.58, 0), math.pi)
+        lid_pt = T.world(c["row"][max(0, n_up - 1)], (0, 0.0, 0.16))
+        reach(tB, "R", lid_pt + Vector((0.12, -0.1, 0.05)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, 0.3)))
+        reach(tB, "L", lid_pt + Vector((-0.12, -0.1, 0.05)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, 0.3)))
+        place(tA, (x + 1.8, ROW_Y - 0.62, 0), math.pi + 0.3)
+        reach(tA, "R", Vector((x + 1.75, ROW_Y - 0.25, 0.97)), Vector((-0.3, -0.4, -0.8)), Vector((0, 0.3, -1)))
         if shot == "covers":
-            place(tE, (x - 1.4, ROW_Y - 0.85, 0), math.pi - 0.2)
+            place(tE, (x - 1.4, ROW_Y - 0.62, 0), math.pi - 0.2)
+            reach(tE, "L", Vector((x - 1.35, ROW_Y - 0.25, 0.97)), Vector((0.3, -0.4, -0.8)), Vector((0, 0.3, -1)))
     elif shot == "lone":
         twp.seat(ar, (-4.6, ROW_Y - 0.62, 0), math.pi, lean=24)
-        for sd, dx in (("L", 0.12), ("R", -0.12)):
-            reach(ar, sd, Vector((-4.6 + dx + 0.02 * math.sin(sec), ROW_Y - 0.1, 0.98)), Vector((dx * 5, -0.3, -0.8)), Vector((0, 1, -0.5)))
+        for sd, dx in (("L", 0.14), ("R", -0.14)):
+            reach(ar, sd, Vector((-4.6 + dx + 0.02 * math.sin(sec), ROW_Y - 0.25, 0.96)), Vector((dx * 2, -0.3, -0.9)), Vector((0, 1, -0.5)))
         ar.rot("head", (1, 0, 0), 22)
     elif shot in ("cabinet", "inspect78"):
         h = ar if shot == "cabinet" else tC
-        place(h, (XC.x - 0.3, XC.y - 1.45, 0), math.pi)
-        reach(h, "R", tray.location + Vector((0.2, -0.45, 0.2)), Vector((-0.5, -0.4, -0.6)), Vector((0, 1, 0)))
-        reach(h, "L", tray.location + Vector((-0.2, -0.45, 0.2)), Vector((0.5, -0.4, -0.6)), Vector((0, 1, 0)))
+        front = tray.location.y - 0.42                          # he walks the tray in, then turns to the control panel
+        if slide < 0.98:
+            place(h, (XC.x - 0.05, front - 0.42, 0), math.pi)
+            reach(h, "R", Vector((XC.x + 0.2, front, 0.74)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, 0)))
+            reach(h, "L", Vector((XC.x - 0.2, front, 0.74)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, 0)))
+        else:
+            place(h, (XC.x - 0.4, XC.y - 0.95, 0), math.pi)
+            reach(h, "R", Vector((XC.x - 0.3, XC.y - 0.53, 1.24)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, 0)))
     elif shot == "film":
-        place(ar, (LB.x - 0.85, LB.y - 0.1, 0), math.pi / 2)
         fo = c["film_objs"][1].matrix_world.translation
-        reach(ar, "R", fo + Vector((-0.08, -0.15, 0.17)), Vector((0, -0.6, -0.6)), Vector((1, 0, 0.2)))
+        place(ar, (LB.x - 0.55, fo.y - 0.62, 0), math.pi / 2 + 0.5)          # beside the box, half turned to it
+        reach(ar, "L", fo + Vector((-0.04, -0.2, 0.17)), Vector((-0.3, -0.5, -0.8)), Vector((1, 0, 0.2)))
     elif shot in ("debate", "memory", "motorfilm"):
         fo = c["film_objs"][1 if shot != "motorfilm" else 2].matrix_world.translation
         group = (tA, tC, tD) if shot != "motorfilm" else (tC,)
         for k, h in enumerate(group):
-            pos = Vector((LB.x - 1.0 - 0.15 * (k == 1), fo.y - 0.6 + k * 0.6, 0)); d = fo - pos
+            pos = Vector((LB.x - 0.75 - 0.25 * (k == 1), fo.y - 0.75 + k * 0.75, 0)); d = fo - pos
             place(h, (pos.x, pos.y, 0), math.atan2(d.x, -d.y))
         tap = max(0.0, math.sin(sec * 3.0)) if shot == "debate" else 0.0
-        reach(group[0], "R", fo + Vector((-0.1 - 0.03 * tap, -0.05, 0.0)), Vector((-0.2, -0.6, -0.6)), Vector((1, 0, 0)))
+        reach(group[0], "L", fo + Vector((-0.04 - 0.03 * tap, -0.12, 0.0)), Vector((-0.3, -0.5, -0.8)), Vector((1, 0, 0)))
     elif shot == "pair":
-        place(tE, (PAIR.x, PAIR.y - 0.85, 0), math.pi)
-        for sd, dx in (("L", 0.45), ("R", -0.45)):
-            reach(tE, sd, Vector((PAIR.x + dx, PAIR.y - 0.3, 0.98)), Vector((dx * 2, -0.4, -0.7)), Vector((0, 1, -0.4)))
+        place(tE, (PAIR.x + 1.0, PAIR.y - 0.62, 0), math.pi + 0.7)            # at the end of the pair, bent over the right-hand machine
+        reach(tE, "R", Vector((PAIR.x + 0.62, PAIR.y - 0.28, 0.95)), Vector((-0.3, -0.4, -0.8)), Vector((0, 1, -0.4)))
+        reach(tE, "L", Vector((PAIR.x + 0.85, PAIR.y - 0.3, 0.93)), Vector((0.3, -0.4, -0.8)), Vector((0, 1, -0.4)))
+        tE.rot("head", (1, 0, 0), 18)
     # the pair: both bars lifted out and laid in front; the altered bar's lid slides off in "barlid"
     for k, tw in enumerate(c["pair"]):
         bar, lid = tw["bar"], tw["bar_lid"]
@@ -389,21 +433,21 @@ def V3(*a):
 
 CAMS = {
     "team": lambda c, t: (V3(5.6, -3.4, 2.3).lerp(V3(5.0, -3.0, 2.2), ease(t)), V3(-1.0, 0.6, 0.9), 24),
-    "calendar": lambda c, t: (V3(-0.2, 2.2, 1.65).lerp(V3(-0.5, 2.5, 1.65), ease(t)), V3(-1.2, 3.95, 1.7), 32),
-    "clear": lambda c, t: (V3(3.9, 0.3, 1.6).lerp(V3(3.6, 0.5, 1.58), ease(t)), V3(2.2, 2.2, 1.05), 32),
+    "calendar": lambda c, t: (V3(1.6, 0.9, 1.6).lerp(V3(1.3, 1.2, 1.6), ease(t)), V3(-1.0, 3.8, 1.55), 28),
+    "clear": lambda c, t: (V3(4.6, 0.2, 1.65).lerp(V3(4.3, 0.4, 1.6), ease(t)), V3(2.4, 2.4, 1.05), 30),
     "stack": lambda c, t: (V3(1.6, -0.6, 1.7).lerp(V3(1.3, -0.8, 1.65), ease(t)), V3(-1.5, -3.5, 0.75), 28),
     "row": lambda c, t: (V3(-5.6, ROW_Y - 1.6, 1.45).lerp(V3(-5.3, ROW_Y - 1.4, 1.42), ease(t)), V3(-3.6, ROW_Y + 0.05, 1.0), 32),
     "covers": lambda c, t: (V3(-4.8 + 4.0 * ease(t), ROW_Y + 1.5, 1.55), V3(-3.6 + 4.0 * ease(t), ROW_Y, 1.0), 30),
-    "lone": lambda c, t: (V3(-2.6, ROW_Y - 2.0, 1.55).lerp(V3(-2.9, ROW_Y - 1.8, 1.52), ease(t)), V3(-4.5, ROW_Y - 0.2, 1.0), 32),
-    "coil": lambda c, t: (T.world(c["row"][0], (0.34, -0.3, 0.22)).lerp(T.world(c["row"][0], (0.28, -0.22, 0.16)), ease(t)), T.world(c["row"][0], (0.162, -0.067, 0.04)), 55),
-    "cabinet": lambda c, t: (XC + V3(-2.0, -1.3, 1.45).lerp(V3(-1.8, -1.2, 1.4), ease(t)), XC + V3(0, -0.7, 0.75), 32),
-    "film": lambda c, t: (V3(LB.x - 1.6, LB.y - 0.9, 1.6).lerp(V3(LB.x - 1.3, LB.y - 0.7, 1.58), ease(t)), V3(LB.x, LB.y, 1.55), 35),
-    "debate": lambda c, t: (V3(LB.x - 2.9, LB.y + 0.6, 1.7).lerp(V3(LB.x - 2.6, LB.y + 0.45, 1.65), ease(t)), V3(LB.x - 0.4, LB.y, 1.4), 30),
-    "memory": lambda c, t: (V3(LB.x - 1.6, 2.2, 1.35).lerp(V3(LB.x - 1.3, 2.35, 1.3), ease(t)), V3(6.75, 2.75, 1.1), 40),
-    "pair": lambda c, t: (PAIR + V3(0.4, 1.3, 0.7).lerp(V3(0.3, 1.1, 0.6), ease(t)), PAIR + V3(0, -0.1, 0.03), 34),
+    "lone": lambda c, t: (V3(-2.2, ROW_Y - 2.4, 1.6).lerp(V3(-2.5, ROW_Y - 2.1, 1.55), ease(t)), V3(-4.5, ROW_Y - 0.3, 1.0), 30),
+    "coil": lambda c, t: (T.world(c["row"][0], (0.42, -0.45, 0.34)).lerp(T.world(c["row"][0], (0.34, -0.36, 0.27)), ease(t)), T.world(c["row"][0], (0.12, -0.06, 0.05)), 45),
+    "cabinet": lambda c, t: (XC + V3(-2.6, -2.6, 1.6).lerp(V3(-2.3, -2.3, 1.55), ease(t)), XC + V3(-0.1, -0.8, 0.9), 30),
+    "film": lambda c, t: (V3(LB.x - 2.0, LB.y + 0.9, 1.65).lerp(V3(LB.x - 1.7, LB.y + 0.75, 1.62), ease(t)), V3(LB.x, LB.y - 0.2, 1.5), 32),
+    "debate": lambda c, t: (V3(LB.x - 0.45, LB.y + 1.9, 1.65).lerp(V3(LB.x - 0.6, LB.y + 1.7, 1.62), ease(t)), V3(LB.x - 1.0, LB.y - 0.4, 1.4), 26),
+    "memory": lambda c, t: (MEM + V3(-1.5, -0.9, 0.45).lerp(V3(-1.25, -0.75, 0.38), ease(t)), MEM + V3(0, 0, 0.1), 35),
+    "pair": lambda c, t: (PAIR + V3(-1.3, -1.9, 0.65).lerp(V3(-1.1, -1.65, 0.6), ease(t)), PAIR + V3(0.15, -0.1, 0.2), 30),
     "barlid": lambda c, t: (PAIR + V3(0.95, -0.65, 0.32).lerp(V3(0.85, -0.55, 0.27), ease(t)), PAIR + V3(0.55, -0.16, 0.01), 45),
     "bars": lambda c, t: (PAIR + V3(1.25, -0.6, 0.3).lerp(V3(1.25, -0.5, 0.25), ease(t)), PAIR + V3(1.3, -0.2, 0.0), 45),
-    "inspect78": lambda c, t: (XC + V3(1.6, -2.3, 1.5).lerp(V3(1.35, -2.0, 1.45), ease(t)), XC + V3(0, -0.5, 0.8), 32),
+    "inspect78": lambda c, t: (XC + V3(0.9, -2.5, 1.55).lerp(V3(0.75, -2.2, 1.5), ease(t)), XC + V3(-0.2, -0.6, 0.85), 30),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
 }
 
@@ -411,7 +455,7 @@ MOVES = {k: dict(kind="anim", dof=3.0, cam=fn, anim=anim(k)) for k, fn in CAMS.i
 MOVES["team"]["title"] = ("CHAPTER 2", "THE X-RAY", 10, 130)
 MOVES["team"]["dof"] = None
 for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04))), ("barlid", lambda c, t: PAIR + V3(0.55, -0.12, 0.0)),
-               ("bars", lambda c, t: PAIR + V3(1.3, -0.2, 0.0)), ("film", lambda c, t: V3(LB.x, LB.y, 1.55)), ("memory", lambda c, t: V3(6.75, 2.75, 1.1))):
+               ("bars", lambda c, t: PAIR + V3(1.3, -0.2, 0.0)), ("film", lambda c, t: V3(LB.x, LB.y, 1.55)), ("memory", lambda c, t: MEM + V3(0, 0, 0.1))):
     MOVES[k]["focus"] = foc
     MOVES[k]["dof"] = 4.0
 for k in MOVES:

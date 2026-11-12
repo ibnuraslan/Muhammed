@@ -574,10 +574,11 @@ def xray_shell(c, expr="0", objs=None, tint=(0.55, 0.75, 1.0)):
                 N = x.node_tree.nodes; L = x.node_tree.links
                 out = next(n for n in N if n.type == 'OUTPUT_MATERIAL')
                 src = out.inputs['Surface'].links[0].from_socket
-                lw = N.new("ShaderNodeLayerWeight"); lw.inputs['Blend'].default_value = 0.35
+                lw = N.new("ShaderNodeLayerWeight"); lw.inputs['Blend'].default_value = 0.2
                 em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*tint, 1)
-                ramp = N.new("ShaderNodeMath"); ramp.operation = 'MULTIPLY'; ramp.inputs[1].default_value = 1.2
-                L.new(lw.outputs['Facing'], ramp.inputs[0]); L.new(ramp.outputs[0], em.inputs['Strength'])
+                pw = N.new("ShaderNodeMath"); pw.operation = 'POWER'; pw.inputs[1].default_value = 4.0      # only grazing edges glow: a thin outline
+                ramp = N.new("ShaderNodeMath"); ramp.operation = 'MULTIPLY'; ramp.inputs[1].default_value = 0.35
+                L.new(lw.outputs['Facing'], pw.inputs[0]); L.new(pw.outputs[0], ramp.inputs[0]); L.new(ramp.outputs[0], em.inputs['Strength'])
                 tr = N.new("ShaderNodeBsdfTransparent")
                 ad = N.new("ShaderNodeAddShader"); L.new(tr.outputs[0], ad.inputs[0]); L.new(em.outputs[0], ad.inputs[1])
                 fv = N.new("ShaderNodeValue"); d = fv.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = expr

@@ -18,7 +18,7 @@ DUR = {"tower": 5.0, "antenna": 4.5, "pullback": 6.0}
 TOWER = Vector((0.0, 420.0, 0.0))
 
 
-def win_mat(name, lit=(1.0, 0.75, 0.45), density=0.35, strength=6.0):
+def win_mat(name, lit=(1.0, 0.7, 0.42), density=0.3, strength=1.6):
     return window_material(name, lit=lit, density=density, floor=2.8, bay=1.4, strength=strength, glass_col=(0.02, 0.022, 0.025))
 
 
@@ -130,7 +130,7 @@ def build(variant=None):
     haze((0, 250, 30), (500, 600, 60), density=0.00025, color=(0.65, 0.7, 0.85), anis=0.4)
     # the near rooftop (for the close shots): a pitched roof with a cluster of aerials, a chimney stack
     NR = Vector((6.0, -14.0, 18.0)); c["near"] = NR
-    box("NearBlock", (NR.x, NR.y - 2, NR.z / 2), (22, 14, NR.z), wins[0])
+    box("NearBlock", (NR.x, NR.y - 2, NR.z / 2), (22, 14, NR.z), win_mat("NearWin", lit=(0.85, 0.5, 0.28), density=0.15, strength=0.5))
     box("NearRoof", (NR.x, NR.y - 2, NR.z + 0.3), (22.4, 14.4, 0.6), ph.texture("roof_tiles" if False else "asphalt_02", scale=0.3, name="NearFelt"))
     box("NearParapet", (NR.x, NR.y + 5.1, NR.z + 0.9), (22.4, 0.3, 0.9), plaster[0])
     c["near_aerials"] = []

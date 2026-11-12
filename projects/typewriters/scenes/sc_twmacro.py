@@ -35,9 +35,9 @@ def build(variant=None):
     ph.model("screwdriver", loc=(-0.35, -0.25, 0.0), rot_z=0.4)
     ph.model("circuit_board", loc=(0.4, -0.2, 0.0), rot_z=-0.3)
     r, ms = ph.model("desk_lamp_arm_01", loc=(-0.5, 0.25, 0.0), rot_z=math.radians(-40)); twp.tint_model(ms, (0.2, 0.22, 0.2), 0.1)
-    key = bpy.data.lights.new("Key", 'AREA'); key.energy = 9; key.size = 0.35; key.color = (1.0, 0.86, 0.68)
+    key = bpy.data.lights.new("Key", 'AREA'); key.energy = 3.5; key.size = 0.35; key.color = (1.0, 0.86, 0.68)
     ko = bpy.data.objects.new("Key", key); bpy.context.collection.objects.link(ko); ko.location = (-0.35, -0.2, 0.55); point_at(ko, (0, 0, 0.1))
-    rim = bpy.data.lights.new("Rim", 'AREA'); rim.energy = 6; rim.size = 0.5; rim.color = (0.6, 0.75, 1.0)
+    rim = bpy.data.lights.new("Rim", 'AREA'); rim.energy = 2.5; rim.size = 0.5; rim.color = (0.6, 0.75, 1.0)
     ro = bpy.data.objects.new("Rim", rim); bpy.context.collection.objects.link(ro); ro.location = (0.45, 0.45, 0.4); point_at(ro, (0, 0, 0.1))
     fill = area_light((0.3, -0.7, 0.3), (0, 0, 0), 0.8, 1.5, (0.85, 0.9, 1.0)); point_at(fill, (0, 0, 0.1)); fill.visible_camera = False
     tw = T.make("Hero", loc=(0, 0, 0), color=(0.17, 0.22, 0.28), bugged=True, text=TEXT, dpi=400, seed=5)
@@ -76,13 +76,13 @@ def ball(c):
 
 def cam_strike(c, t):
     e = ease(t); b = ball(c)
-    return (b + Vector((0.11, -0.2, 0.1)).lerp(Vector((0.085, -0.16, 0.08)), e), b + Vector((0, 0.004, -0.004)), 75)
+    return (b + Vector((0.32, -0.5, 0.28)).lerp(Vector((0.26, -0.42, 0.23)), e), b + Vector((-0.02, -0.04, -0.03)), 50)        # medium-close: ball, keys, page
 
 
 def cam_platen(c, t):
     e = ease(t); x0 = T.PAGE_LEFT + T.MARGIN
     a = W(c, (x0 - 0.05, -0.06, T.PLATEN_Z + 0.07)); b = W(c, (x0 + 0.02, -0.055, T.PLATEN_Z + 0.065))
-    return (a.lerp(b, e), W(c, (x0 + 0.05, T.PLATEN_Y - T.PLATEN_R, T.PLATEN_Z + 0.008)), 60)
+    return (a.lerp(b, e) + Vector((0, -0.06, 0.03)), W(c, (x0 + 0.05, T.PLATEN_Y - T.PLATEN_R, T.PLATEN_Z + 0.008)), 50)
 
 
 def cam_sink(c, t):
@@ -94,12 +94,12 @@ def cam_sink(c, t):
 
 def cam_arms(c, t):
     e = ease(t)
-    return (W(c, (0.12, -0.3, 0.1)).lerp(W(c, (0.1, -0.27, 0.095)), e), W(c, (0.0, -0.085, 0.04)), 60)
+    return (W(c, (0.3, -0.42, 0.3)).lerp(W(c, (0.25, -0.36, 0.26)), e), W(c, (0.0, -0.085, 0.04)), 45)
 
 
 def cam_magnets(c, t):
     e = ease(t)
-    return (W(c, (0.07, -0.2, 0.075)).lerp(W(c, (0.055, -0.18, 0.068)), e), W(c, (0.0, T.BAR_Y + 0.004, T.BAR_Z + 0.012)), 85)
+    return (W(c, (0.16, -0.36, 0.2)).lerp(W(c, (0.13, -0.31, 0.17)), e), W(c, (0.0, T.BAR_Y + 0.004, T.BAR_Z + 0.012)), 60)
 
 
 def cam_xray(c, t):
