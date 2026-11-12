@@ -293,9 +293,9 @@ box("ClinicWallN", (6.4, 0.2, 2.8), (-28.1, 1.6, 1.4), M_pl, C_CLIN, bevel=0)
 box("ClinicCeil", (6.4, 4.8, 0.1), (-28.1, -0.75, 2.85), mat("CeilTile", (0.85, 0.85, 0.83), 0.8, noise=0.2, nscale=40), C_CLIN, bevel=0)
 # exam bed: padded top (leather) on a steel frame
 M_leath = pbr("BedLeather", "fabric_leather_02", 0.5, tint=(0.25, 0.45, 0.50))
-box("ExamBedPad", (1.9, 0.7, 0.12), (-28.6, -2.4, 0.76), M_leath, C_CLIN, bevel=0.04)
-box("ExamBedBase", (1.7, 0.6, 0.66), (-28.6, -2.4, 0.35), mat("BedBase", (0.85, 0.86, 0.86), 0.35, noise=0.05), C_CLIN, bevel=0.02)
-box("PaperRoll", (1.8, 0.5, 0.004), (-28.6, -2.4, 0.822), mat("Paper", (0.95, 0.95, 0.93), 0.9, noise=0.3, nscale=200), C_CLIN, bevel=0.001)
+box("ExamBedPad", (1.9, 0.7, 0.12), (-28.0, -2.4, 0.76), M_leath, C_CLIN, bevel=0.04)
+box("ExamBedBase", (1.7, 0.6, 0.66), (-28.0, -2.4, 0.35), mat("BedBase", (0.85, 0.86, 0.86), 0.35, noise=0.05), C_CLIN, bevel=0.02)
+box("PaperRoll", (1.8, 0.5, 0.004), (-28.0, -2.4, 0.822), mat("Paper", (0.95, 0.95, 0.93), 0.9, noise=0.3, nscale=200), C_CLIN, bevel=0.001)
 office = glb(OB + "/office.glb", "OfficeAssets", C_CLIN, height=1.7, loc=(-30.6, 0.4, 0.0), rot_z=math.pi / 2)
 cab, _ = ph_blend("drawer_cabinet", C_CLIN, (-26.2, 1.2, 0), rot_z=math.pi)
 stl, _ = ph_blend("metal_stool_01", C_CLIN, (-28.3, -1.55, 0))
@@ -491,21 +491,28 @@ plane("Street", 200, 200, CT, M_asph, C_CITY)
 bsrc = glb(OB + "/cityblock.glb", "CityBlockSrc", C_CITY, height=26.0)
 bsrc.hide_render = bsrc.hide_viewport = True
 BUILDINGS = []
-for i, (x, y, r) in enumerate(((-30, 25, 0), (0, 25, 0), (30, 25, 0), (-30, -25, math.pi), (0, -25, math.pi), (30, -25, math.pi),
-                               (-60, 25, 0), (60, -25, math.pi), (-60, -25, math.pi), (60, 25, 0))):
-    o = bsrc.copy(); o.hide_render = o.hide_viewport = False; o.location = CT + Vector((x, y, 0)); o.rotation_euler.z = r + math.pi / 2
+for i, (x, y, r) in enumerate([(x_, 25.7, 0.0) for x_ in (-90, -45, 0, 45, 90)] + [(x_, -25.7, math.pi) for x_ in (-90, -45, 0, 45, 90)]):
+    o = bsrc.copy(); o.hide_render = o.hide_viewport = False; o.location = CT + Vector((x, y, 0)); o.rotation_mode = 'XYZ'; o.rotation_euler = (0, 0, r + math.pi / 2)
     C_CITY.objects.link(o); BUILDINGS.append(o)
 # lit windows with phones/screens: emissive cards just in front of the facades
 M_win = mat("WindowGlow", (1, 0.8, 0.5), 0.5, emit=(1.0, 0.75, 0.45), estr=6)
 M_scr = mat("PhoneGlow", (0.6, 0.8, 1.0), 0.5, emit=(0.55, 0.78, 1.0), estr=14)
 WINDOWS = []
 for b in BUILDINGS:
+    north = b.location.y > CT.y
     for k in range(18):
-        u = random.uniform(-10, 10); h = random.choice([4.5, 8, 11.5, 15, 18.5, 22])
-        side = 1 if b.location.y < CT.y else -1
-        loc = Vector((b.location.x + u, CT.y + side * 12.3 * (1 if b.location.y < CT.y else 1) * 0 + b.location.y + side * 11.9, h))
+        u = random.uniform(-19, 19); h = random.choice([4.5, 8, 11.5, 15, 18.5, 22])
+        loc = Vector((b.location.x + u, CT.y + (13.85 if north else -13.85), h))
         w_ = plane(f"Win_{b.name}_{k}", 1.4, 1.6, loc, M_win if random.random() < 0.6 else M_scr, C_CITY, rot=(math.pi / 2, 0, 0))
+        w_.location = loc
         WINDOWS.append(w_)
+# drop window cards that would float in the sky above the lower buildings (no facade behind them)
+bpy.context.view_layer.update(); _dg = bpy.context.evaluated_depsgraph_get()
+for w_ in list(WINDOWS):
+    d_ = Vector((0, 1 if w_.location.y > CT.y else -1, 0))
+    hit = sc.ray_cast(_dg, w_.location + d_ * 0.05, d_, distance=1.5)[0]
+    if not hit:
+        WINDOWS.remove(w_); bpy.data.objects.remove(w_)
 for i in range(6):
     L = bpy.data.lights.new(f"StreetLamp{i}", 'POINT'); L.energy = 3000; L.color = (1.0, 0.7, 0.4); L.shadow_soft_size = 0.5
     lo = bpy.data.objects.new(L.name, L); lo.location = CT + Vector((-50 + i * 20, 9 * (1 if i % 2 else -1), 7)); C_CITY.objects.link(lo)

@@ -35,13 +35,18 @@ if _hit:
 print("PHONE_SIDE", "B" if _hit else "A")
 fphone, fphoneN = at(bpy.data.objects["FanPhone_screen"], F(14.4))
 ls_n = (ls.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+if ls_n.y < 0: ls_n = -ls_n      # approach from her side
+ls.location = ls.location + ls_n * 0.012; LAPSCR = ls.location.copy()      # in front of the laptop's own screen glass
 SK = Vector((200, 0, 0)); CT = Vector((-300, 0, 0)); HMv = Vector((-300, 200, 0))
-win = min((o for o in bpy.data.objects if o.name.startswith("Win_") and o.location.y > CT.y and abs(o.location.x - CT.x) < 15 and 7 < o.location.z < 12),
+win = min((o for o in bpy.data.objects if o.name.startswith("Win_") and o.location.y > CT.y and abs(o.location.x - CT.x) < 20 and 3 < o.location.z < 6),
           key=lambda o: abs(o.location.x - CT.x), default=None)
-WIN = win.location.copy() if win else CT + Vector((0, 13.1, 8))
+_dgw = bpy.context.evaluated_depsgraph_get()
+_h = sc.ray_cast(_dgw, CT + Vector((0, 0, 5.0)), Vector((0, 1, 0)), distance=40)
+WIN = (_h[1] - Vector((0, 0.05, 0))) if _h[0] else CT + Vector((0, 13.9, 5.0))      # a lit window on the real north facade
+print("WIN", WIN, _h[4].name if _h[0] else None)
 if win:
     win.data = win.data.copy(); win.scale = (1, 1, 1)
-    for fc in (win.animation_data.action and []) or []: pass
+    if win.animation_data: win.animation_data_clear()
 V = Vector
 def fill(p, n, d): return p + n * d
 # (seconds, position, target, lens, jump_before)
@@ -50,7 +55,8 @@ K = [
     (1.0, V((2.2, -3.6, 2.6)), V((0.0, 0.6, 1.4)), 28, False),
     (1.7, V((1.2, -1.45, 1.9)), fanH1 + V((0, 0, -0.05)), 38, False),
     (2.2, V((-0.6, -0.75, 1.62)), fanH1, 45, False),
-    (2.8, V((-0.45, 0.30, 2.75)), mole3, 40, False),                 # rises over the glass
+    (2.55, V((-0.55, -0.45, 2.95)), mole3, 40, False),
+    (2.85, V((-0.40, 0.35, 2.80)), mole3, 40, False),                 # rises over the glass
     (3.3, V((-0.20, 1.05, 1.62)), mole3, 70, False),                 # her POV over her shoulder; rack focus
     (3.9, V((-0.05, 0.95, 1.56)), mole3, 85, False),
     (4.5, mole3 + V((0.05, 0.45, 0.35)), mole3, 60, False),
@@ -66,15 +72,15 @@ K = [
     (10.2, V((0.40, -0.25, 1.22)), fanH4, 45, False),
     (11.2, V((-0.50, -0.22, 1.32)), fanH4, 45, False),
     (12.2, V((-0.22, -0.22, 1.30)), fanH4, 50, False),
-    (13.0, V((-0.05, -0.18, 1.30)), fanH4 + V((0, 0, -0.05)), 48, False),
+    (13.0, V((-0.20, -0.45, 1.38)), fanH4 + V((0, 0, 0.02)), 45, False),
     (13.6, V((-0.85, 0.20, 1.50)), fphone, 34, False),                # through the glass to her right side
     (14.3, V((-0.80, 0.30, 1.42)), fphone, 42, False),               # top-down on the thumbs
     (15.2, V((-0.72, 0.08, 1.38)), fphone + V((0, 0, 0.1)), 40, False),
     (15.8, V((-0.70, 0.55, 1.55)), V((0.0, 0.2, 1.4)), 34, False),
     (16.4, V((-0.90, 0.75, 1.80)), V((0.0, 0.05, 1.45)), 30, False),   # the slap, wide
     (17.0, V((-0.30, 0.10, 2.85)), V((0.2, -0.6, 1.55)), 30, False),     # over the glass to his side
-    (17.8, V((0.55, -0.55, 1.75)), V((-0.05, 0.0, 1.5)), 38, False),
-    (18.6, V((0.55, -1.15, 1.80)), V((-0.05, 0.0, 1.5)), 40, False),  # over his shoulder, the phone on the glass
+    (17.8, V((0.75, -0.95, 1.85)), manH + V((-0.1, 0.3, -0.1)), 34, False),
+    (18.6, V((0.95, -1.55, 2.05)), V((-0.05, 0.0, 1.45)), 34, False),  # wide over his shoulder, phone on the glass
     (19.4, V((-0.40, -0.18, 1.62)), manH, 42, False),                 # his puzzled face
     (20.2, V((1.10, -1.00, 1.50)), manH + V((0, 0, -0.2)), 30, False),
     (21.0, V((1.20, -1.35, 1.70)), V((-1.0, -0.8, 1.2)), 32, False),
@@ -85,25 +91,26 @@ K = [
     (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
     (24.3, V((-27.4, -0.95, 1.95)), moleB, 38, False),
     (25.0, fill(moleB, moleBN, 0.14), moleB, 55, False),               # the dermatoscope on the mole
-    (25.8, V((-28.3, -1.6, 1.75)), docH, 55, False),                 # doctor's serious face
+    (25.45, V((-28.85, -2.95, 1.85)), docH, 45, False),
+    (25.8, V((-28.45, -2.88, 1.70)), docH, 42, False),                 # doctor's serious face
     (26.6, V((-27.9, -2.7, 2.1)), moleB, 45, False),               # overhead on the hands
-    (27.4, V((-29.30, -2.85, 1.75)), moleB, 50, False),
-    (28.3, V((-28.95, -2.88, 1.50)), moleB, 50, False),               # side: bandage
+    (27.4, V((-28.95, -1.70, 1.62)), moleB, 40, False),
+    (28.3, V((-28.55, -1.62, 1.48)), moleB, 42, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
     (31.3, V((-27.75, -1.25, 2.15)), V((-27.4, -1.0, 2.79)), 40, False),
     (31.8, V((-27.4, -1.0, 2.70)), V((-27.4, -1.0, 2.79)), 40, False),   # into the light panel
     (31.8, CT + V((-6, -9, 2.2)), CT + V((-6, 13, 8)), 40, True),     # out of the screen glow into the night city
-    (32.8, CT + V((-4, -10, 13)), CT + V((0, 12, 9)), 26, False),
-    (33.8, CT + V((-12, -10, 3.0)), CT + V((-17, -4, 1.8)), 32, False),
-    (34.8, CT + V((-4.5, -8.5, 2.6)), CT + V((-6, -4, 1.8)), 35, False),  # alongside the bus, riders on phones
-    (35.4, WIN + V((0, -2.0, 0.2)), WIN, 40, False),
-    (35.9, WIN + V((0, -0.05, 0)), WIN, 40, False),
+    (32.8, CT + V((-4, -10.0, 13)), CT + V((0, 12, 9)), 26, False),
+    (33.8, CT + V((-13, -12.6, 3.2)), CT + V((-17, -4, 1.8)), 28, False),
+    (34.8, CT + V((-4.0, -12.6, 2.8)), CT + V((-6, -4, 1.8)), 30, False),  # alongside the bus, riders on phones
+    (35.4, WIN + V((0, -7.0, 0.4)), WIN, 40, False),
+    (35.9, WIN + V((0, -1.25, 0)), WIN, 40, False),
     (35.9, HMv + V((0, -3.0, 1.45)), HMv + V((0, 1.0, 1.0)), 40, True),  # through the curtain into her room
     (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
-    (37.6, LAPSCR + ls_n * 0.25 + V((0, 0, 0.05)), LAPSCR, 45, False),
+    (37.6, LAPSCR + ls_n * 0.38 + V((0, 0, 0.06)), LAPSCR, 45, False),
     (37.9, LAPSCR + ls_n * 0.008, LAPSCR, 45, False),
     (37.9, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, True),  # out of the screen onto the ice
     (39.0, FIN + V((-1.5, -2.4, 0.6)), FIN + V((0, 0, 1.0)), 28, False),
@@ -151,7 +158,7 @@ for f0, f1, pos, tgt, lens in spans:
             u = smooth((t - 3.0) / 0.5); dg = (glassP - p).length
             dist = dg + (dist - dg) * u
         cd.dof.focus_distance = max(0.005, dist); cd.dof.keyframe_insert("focus_distance", frame=f)
-        cd.dof.aperture_fstop = 64.0 if p.x > 150 else (max(5.6, min(32.0, 0.5 / max(dist, 0.01))) if dist < 0.25 else 8.0)
+        cd.dof.aperture_fstop = 64.0 if p.x > 150 else (32.0 if dist < 0.3 else 8.0)
         cd.dof.keyframe_insert("aperture_fstop", frame=f)
 # jumps must be hard: constant interpolation on the frame before each jump
 JUMPS = [sp[1] for sp in spans[:-1]]

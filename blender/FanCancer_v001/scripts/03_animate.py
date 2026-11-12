@@ -74,6 +74,9 @@ class Actor:
     def __init__(self, name):
         self.R, self.H = setup(name); self.o = self.R.o
         self.sh = {s: self.R.BN["upperarm01." + s].head_local.copy() for s in "LR"}
+        self.plant = None; self.fov = None
+    def set_plant(self, pos, yaw):
+        self.plant = {s: (self.H.foot_xy(s, Vector(pos), yaw), yaw) for s in "LR"}
     def pose(self, f, pos, yaw=0.0, flex=0.0, side=0.0, twist=0.0, head=(0.0, 0.0), hip=0.0,
              feet=None, hands=None, crouch=0.0, foot_lift=0.0):
         """pos = ground point under the pelvis; feet: {'L': (dx,dy) local}, hands: {'L': (local_pos, local_d, local_n)} body-local"""
@@ -85,6 +88,10 @@ class Actor:
             if feet and s in feet and feet[s] is not None:
                 dx, dy = feet[s][:2]; fy = feet[s][2] if len(feet[s]) > 2 else 0.0
                 xy = W(pos, yaw, (dx, dy, 0)).to_2d(); H.key_foot(s, f, Vector(xy), yaw + fy, lift=pos.z + foot_lift, pitch=-25 if foot_lift else 0)
+            elif self.fov and s in self.fov:
+                xy, fyaw, lf = self.fov[s]; H.key_foot(s, f, Vector(xy), fyaw, lift=pos.z + lf, pitch=12 * (lf > 0))
+            elif self.plant:
+                xy, fyaw = self.plant[s]; H.key_foot(s, f, xy, fyaw, lift=pos.z)
             else:
                 xy = H.foot_xy(s, pos, yaw); H.key_foot(s, f, xy, yaw, lift=pos.z)
         for s in "LR":
@@ -97,6 +104,19 @@ class Actor:
             else:   # relaxed at the side
                 Wp = W(pos, yaw, (sx * 0.31, -0.06, 0.84 - crouch + hip)); H.key_hand(s, f, Wp, Ry(yaw) @ Vector((0.05 * sx, -0.1, -1)),
                                                                             Ry(yaw) @ Vector((-sx, 0, 0)), pole=W(pos, yaw, (sx * 0.55, 0.45, 1.0)))
+
+def arm_swing(A, path, yaw_fn, f0, f1, stride):
+    d = 0.0; prev = path(f0)
+    for f in range(f0, f1 + 1):
+        p = path(f); d += (p - prev).to_2d().length; prev = p
+        if (f - f0) % 4: continue
+        ph = math.sin(2 * math.pi * d / stride)
+        amp = min(1.0, (path(min(f + 6, f1)) - p).to_2d().length / 0.05)
+        yw = yaw_fn(f); pos = Vector((p.x, p.y, 0))
+        for s, sg in (("L", -1), ("R", 1)):
+            sx = 1 if s == "L" else -1; sw = sg * ph * 0.16 * amp
+            A.H.key_hand(s, f, W(pos, yw, (sx * 0.27, -sw, 0.86 - 0.03 * abs(sw))), Ry(yw) @ Vector((0.05 * sx, -0.25 * sw * 4, -1)),
+                         Ry(yw) @ Vector((-sx, 0, 0)), pole=W(pos, yw, (sx * 0.5, 0.5, 1.0)))
 
 def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0, knee=0.42, foot_lift=0.0):
     """seated on a seat of height seat_h, feet on the floor in front"""
@@ -115,6 +135,7 @@ fan = Actor("Fan"); FR = fan.o
 FAN0 = (0.0, 0.62, 0.0)
 def fan_rink():
     f = F
+    fan.set_plant(FAN0, 0)
     fan.pose(f(0.0), FAN0, 0, flex=6, head=(0, 8), hands=HANDS_ON_BOARDS, twist=6)
     face(FR, f(0.0), brow=0.2, smile=0.4)
     fan.pose(f(0.8), FAN0, 0, flex=8, head=(-4, -10), hands=HANDS_ON_BOARDS, twist=-4)
@@ -137,19 +158,22 @@ def fan_rink():
     fan.pose(f(12.2), (0.0, 0.6, 0), 0, flex=6, head=(-16, 0), hands=HANDS_ON_BOARDS)              # nod down
     fan.pose(f(12.6), (0.0, 0.6, 0), 0, flex=8, head=(4, 0), hands=HANDS_ON_BOARDS)
     face(FR, f(12.6), brow=-0.3, frown=0.4, smile=-0.2)
+    fan.pose(f(12.85), (0.0, 0.62, 0), 0, flex=6, head=(6, -12), twist=-6,
+             hands={"R": ((-0.19, -0.05, 0.87), (0, -0.1, -1), (1, 0, 0)), "L": HANDS_ON_BOARDS["L"]})     # draws the phone from her pocket
     # beat 5: typing (thumbs animated below)
-    fan.pose(f(13.4), (0.0, 0.64, 0), 0, flex=14, head=(30, 0), hands=phone_hold())
+    fan.pose(f(13.4), (0.0, 0.64, 0), 0, flex=4, head=(14, 0), hands=phone_hold())
     face(FR, f(13.6), brow=-0.2, frown=0.6, squint=0.4)
-    fan.pose(f(15.4), (0.0, 0.64, 0), 0, flex=16, head=(32, 3), hands=phone_hold(0.02))
+    fan.pose(f(14.4), (0.0, 0.63, 0), 0, flex=5, head=(16, 4), hands=phone_hold(0.01))
+    fan.pose(f(15.4), (0.0, 0.63, 0), 0, flex=5, head=(15, -3), hands=phone_hold(0.02))
     # beat 6: slap phone on the glass, knock with the left
-    glassR = {"R": ((-0.05, -0.60, 1.52), (0, 0, 1), (0, -1, 0))}
-    fan.pose(f(15.9), (0.0, 0.58, 0), 0, flex=10, head=(4, 0), hands={"R": ((-0.08, -0.45, 1.35), (0, -0.4, 1), (0, -1, 0.3)),
+    glassR = {"R": ((-0.05, -0.465, 1.40), (0, 0, 1), (0, -1, 0))}
+    fan.pose(f(15.9), (0.0, 0.58, 0), 0, flex=10, head=(4, 0), hands={"R": ((-0.08, -0.38, 1.30), (0, -0.4, 1), (0, -1, 0.3)),
                                                                      "L": ((0.06, -0.29, 1.07), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))})
     fan.pose(f(16.15), (0.0, 0.5, 0), 0, flex=12, head=(0, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(16.1), brow=0.6, jaw=6, frown=0.3)
-    knock = ((0.30, -0.585, 1.42), (0, -0.2, 1), (1, 0, 0))
+    knock = ((0.30, -0.47, 1.36), (0, -0.2, 1), (1, 0, 0))
     for k, t in enumerate((16.5, 16.65, 16.8, 16.95)):
-        L = knock if k % 2 else ((0.30, -0.50, 1.42), (0, -0.2, 1), (1, 0, 0))
+        L = knock if k % 2 else ((0.30, -0.39, 1.36), (0, -0.2, 1), (1, 0, 0))
         fan.pose(f(t), (0.0, 0.5, 0), 0, flex=12, head=(0, 2), hands={**glassR, "L": L})
     fan.pose(f(17.5), (0.0, 0.5, 0), 0, flex=12, head=(4, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(17.6), brow=0.8, smile=0.2, jaw=4)
@@ -159,6 +183,7 @@ def fan_rink():
     fan.pose(f(23.0), (0.0, 0.6, 0), 0, flex=4, head=(4, 34), twist=16)
     face(FR, f(23.0), brow=0.6, frown=0.8, smile=-0.4)
 fan_rink()
+fan.plant = None
 # HOME: on the sofa at (-300,200) facing -Y (laptop on the coffee table in front)
 HM = Vector((-300, 200, 0))
 def fan_home():
@@ -214,6 +239,7 @@ man = Actor("Manager"); MR = man.o
 MAN0 = Vector((0.25, -0.62, 0.0))
 def man_rink():
     f = F
+    man.set_plant(MAN0, 0)
     cross = {"L": ((-0.12, -0.20, 1.05), (-1, 0, 0.1), (0, 1, 0)), "R": ((0.12, -0.22, 1.0), (1, 0, 0.1), (0, 1, 0))}
     hips = {"L": ((0.22, -0.02, 0.98), (0, 0, -1), (-1, 0, 0)), "R": ((-0.22, -0.02, 0.98), (0, 0, -1), (1, 0, 0))}
     for i, t in enumerate((0.0, 1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0, 16.2)):
@@ -221,8 +247,17 @@ def man_rink():
                  hands=hips if i % 4 < 2 else None, twist=6 * math.sin(i))
         face(MR, f(t), brow=0.1 * (i % 2), frown=0.3)
     # turns to the knock
-    man.pose(f(16.9), MAN0, 40, flex=2, head=(0, 30))
-    man.pose(f(17.5), MAN0 + Vector((0, 0.05, 0)), 120, flex=2, head=(6, 10), feet={"L": (0.18, 0.0), "R": (-0.14, 0.05)})
+    # stepping turn toward the knock: head leads, then R, L, R steps with weight shift
+    P0 = man.plant; C0 = MAN0 + Vector((0, 0.12, 0))
+    endp = {s: (man.H.foot_xy(s, C0, 180), 180) for s in "LR"}
+    midR = (man.H.foot_xy("R", MAN0 + Vector((0.03, 0.06, 0)), 90), 90)
+    man.pose(f(16.4), MAN0, 10, flex=2, head=(2, 45))
+    man.fov = {"R": (P0["R"][0].lerp(midR[0], 0.5), 45, 0.07)}; man.pose(f(16.6), MAN0 + Vector((0.04, 0.02, 0)), 30, flex=2, head=(2, 40), side=-4); man.fov = None
+    man.plant = {"L": P0["L"], "R": midR}; man.pose(f(16.85), MAN0 + Vector((0.0, 0.04, 0)), 60, flex=2, head=(4, 35))
+    man.fov = {"L": (P0["L"][0].lerp(endp["L"][0], 0.5), 120, 0.07)}; man.pose(f(17.1), MAN0 + Vector((-0.03, 0.06, 0)), 100, flex=2, head=(4, 25), side=4); man.fov = None
+    man.plant = {"L": endp["L"], "R": midR}; man.pose(f(17.35), MAN0 + Vector((0, 0.08, 0)), 140, flex=2, head=(6, 15))
+    man.fov = {"R": (midR[0].lerp(endp["R"][0], 0.5), 160, 0.06)}; man.pose(f(17.6), MAN0 + Vector((0.02, 0.10, 0)), 165, flex=3, head=(6, 6), side=-3); man.fov = None
+    man.plant = endp
     man.pose(f(18.0), MAN0 + Vector((0, 0.10, 0)), 180, flex=6, head=(8, 0))
     face(MR, f(18.0), brow=0.5, frown=0.4)
     man.pose(f(18.8), MAN0 + Vector((0, 0.18, 0)), 180, flex=14, head=(10, -6))     # leans in, reads
@@ -240,7 +275,9 @@ def man_rink():
     def yaw_fn(fr):
         a = path(fr); b = path(fr + 2); d = b - a
         return math.degrees(math.atan2(d.x, -d.y)) if d.length > 1e-4 else 90
+    man.plant = None
     man.H.walk(path, yaw_fn, F(20.9), F(28.0), stride=0.72, lift=0.08)
+    arm_swing(man, path, yaw_fn, F(20.9), F(28.0), 0.72)
     face(MR, f(21.4), brow=0.2, frown=0.5)
 man_rink()
 def man_finale():
@@ -269,6 +306,7 @@ def manb_clinic():
     face(MBR, f(28.4), brow=0.4, frown=0.6, lid=0.5)
     sit(manb, f(29.0), BEDP, 180, 0.83, hands=knees, flex=6, head=(4, 0), knee=0.30, foot_lift=0.28)                 # relief: sits up, exhale
     face(MBR, f(29.4), brow=0.5, smile=0.8, lid=0.4, jaw=4)
+    sit(manb, f(29.95), BEDP, 180, 0.83, hands={"R": ((-0.20, -0.12, 0.95), (0, -0.2, -1), (1, 0, 0)), "L": knees["L"]}, flex=6, head=(8, -10), knee=0.30, foot_lift=0.28)   # pocket
     ph = {"R": ((-0.06, -0.42, 1.02), (0, -1, 0.15), (0, 0.25, 1)), "L": ((0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1))}
     sit(manb, f(30.4), BEDP, 180, 0.83, hands=ph, flex=8, head=(16, 4), knee=0.30, foot_lift=0.28)
     face(MBR, f(30.6), brow=0.2, smile=0.4)
@@ -279,7 +317,7 @@ manb_clinic()
 
 # ================================================================== DOCTOR, NURSE
 doc = Actor("Doctor"); DR = doc.o
-DOCP = Vector((-29.0, -2.4, 0.0))
+DOCP = Vector((-29.2, -2.4, 0.0))
 def doc_anim():
     f = F
     # gloves: hand faces get a nitrile material (the MPFB hand mesh)
@@ -298,22 +336,34 @@ def doc_anim():
         if all(i in hand_v for i in p_.vertices): p_.material_index = gi
     scope = {"R": ((-0.15, -0.53, 1.30), (0.2, -0.5, 0.6), (0.8, 0, 0.3)), "L": ((0.16, -0.51, 1.30), (-0.2, -0.6, 0.4), (-0.8, 0, 0.3))}
     rest = None
+    doc.set_plant(DOCP + Vector((0.04, 0, 0)), 90)
     doc.pose(f(20.0), DOCP, 90, flex=10, head=(16, 0))
     doc.pose(f(22.6), DOCP, 90, flex=24, head=(26, -10), hands=scope)
     face(DR, f(22.6), brow=-0.2, frown=0.6, squint=0.6)
     doc.pose(f(23.8), DOCP + Vector((0.05, 0, 0)), 95, flex=30, head=(30, -6), hands=scope)
     doc.pose(f(24.8), DOCP + Vector((0.08, 0, 0)), 95, flex=32, head=(32, -4), hands=scope)
     face(DR, f(25.2), brow=0.4, frown=1.0, smile=-0.4)                         # serious
+    doc.pose(f(25.45), DOCP + Vector((0.04, 0, 0)), 88, flex=12, head=(14, 12), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # scope into her coat pocket
     doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains
     face(DR, f(25.8), brow=0.3, frown=0.5, jaw=8); face(DR, f(26.0), jaw=2, frown=0.5)
+    doc.pose(f(26.0), DOCP, 85, flex=8, head=(4, 20), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps from the pocket
     cut = {"R": ((-0.15, -0.55, 1.27), (0.1, -0.6, 0.3), (0.5, 0, 0.8)), "L": ((0.15, -0.55, 1.28), (-0.1, -0.6, 0.3), (-0.5, 0, 0.8))}
     for i, t in enumerate((26.4, 27.0, 27.6, 28.2)):
         doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=32, head=(34, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
     face(DR, f(26.6), brow=-0.3, frown=0.8, squint=0.7)
+    _c = dict(cut); _c["L"] = ((0.21, -0.03, 0.92), (0, -0.1, -1), (-1, 0, 0))
+    doc.pose(f(27.85), DOCP + Vector((0.06, 0, 0)), 93, flex=26, head=(30, -2), hands=_c)            # left hand fetches the bandage
+    doc.pose(f(28.7), DOCP + Vector((0.04, 0, 0)), 90, flex=14, head=(16, 4), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps back to the pocket
     doc.pose(f(29.2), DOCP, 80, flex=4, head=(0, 20))
+    doc.plant = None
     face(DR, f(29.4), brow=0.5, smile=0.9)
-    doc.pose(f(30.6), DOCP + Vector((1.2, 2.2, 0)), 160, flex=2, head=(0, 10))
-    doc.pose(f(33.0), DOCP + Vector((2.0, 3.2, 0)), 180, flex=12, head=(20, 0))
+    dpts = [(F(29.4), DOCP + Vector((0.0, 0.0, 0))), (F(30.4), DOCP + Vector((0.5, 1.0, 0))), (F(31.6), DOCP + Vector((1.5, 2.6, 0))), (F(32.4), DOCP + Vector((2.2, 3.1, 0)))]
+    dpath = catmull(dpts)
+    def dyaw(fr):
+        a_ = dpath(fr); b_ = dpath(min(fr + 6, F(32.4))); d_ = b_ - a_
+        return math.degrees(math.atan2(d_.x, -d_.y)) if d_.length > 1e-3 else 180
+    doc.H.walk(dpath, dyaw, F(29.6), F(32.4), stride=0.6, lift=0.06)
+    arm_swing(doc, dpath, dyaw, F(29.6), F(32.4), 0.6)
 doc_anim()
 nur = Actor("Nurse"); NR = nur.o
 def nurse_anim():
@@ -324,6 +374,7 @@ def nurse_anim():
         a = path(fr); b = path(fr + 6); d = b - a
         return math.degrees(math.atan2(d.x, -d.y)) if d.length > 1e-3 else 180
     nur.H.walk(path, yaw_fn, F(20.0), F(33.0), stride=0.6, lift=0.06)
+    arm_swing(nur, path, yaw_fn, F(20.0), F(33.0), 0.6)
     face(NR, F(22), brow=0.2); face(NR, F(28), smile=0.5)
 nurse_anim()
 
@@ -332,13 +383,15 @@ def fk(rig, f, n, seq):
     Rg = Rig(rig); Rg.key_rot(n, f, seq)
 def fk_root(rig, f, pos, yaw=0.0):
     H = Human(Rig(rig)); H.key_root(f, Vector(pos) + Vector((0, 0, H.root_head.z)), yaw=yaw)
-def seated_fk(rig, f, pos, yaw, cheer=0.0, sway=0.0, head=(0, 0), phone=False):
+def seated_fk(rig, f, pos, yaw, cheer=0.0, sway=0.0, head=(0, 0), phone=False, relax=False):
     H = Human(Rig(rig)); Rg = H.r
     H.key_root(f, Vector(pos) + Vector((0, 0, 0.55)), yaw=yaw, side=sway * 3)
     H.key_spine(f, flex=6 - 10 * cheer, twist=sway * 8, head=head)
     for s in "LR":
         Rg.key_rot("upperleg01." + s, f, [("X", -88)]); Rg.key_rot("lowerleg01." + s, f, [("X", 92)])
         a = -40 - 120 * cheer if not (phone and s == "R") else -70
+        if relax and cheer < 0.1:
+            Rg.key_rot("upperarm01." + s, f, [("Y", -10 if s == "L" else 10), ("X", -22)]); Rg.key_rot("lowerarm01." + s, f, [("X", -75)]); continue
         Rg.key_rot("upperarm01." + s, f, [("Y", (-15 if s == "L" else 15) * (1 - cheer)), ("X", a)])
         Rg.key_rot("lowerarm01." + s, f, [("X", -50 * (1 - cheer) - (60 if phone and s == "R" else 0))])
 def standing_fk(rig, f, pos, yaw, cheer=0.0, sway=0.0, head=(0, 0), stick=False):
@@ -385,7 +438,7 @@ for i, x in enumerate((-2.6, -1.5, 1.4, 2.5)):
     r = dup_rig(f"Player{i % 2}", f"Bench{i}", C_CHAR)
     for f in range(1, 1500, 40):
         t = f / 60.0
-        seated_fk(r, f, Vector((x, -1.55, 0.0)), 0, cheer=0.0 if (t + i) % 7 > 1 else 0.7, sway=math.sin(t + i), head=(0, 20 * math.sin(t * 0.6 + i)))
+        seated_fk(r, f, Vector((x, -1.55, 0.0)), 0, cheer=0.0 if (t + i) % 9 > 1 else 0.35, sway=0.5 * math.sin(t + i), head=(0, 20 * math.sin(t * 0.6 + i)), relax=True)
     hold = Human(Rig(r));
 SKATE = []
 for i in range(6):
@@ -489,13 +542,13 @@ nd = M_note.node_tree.nodes["Reveal"].outputs[0]
 for t, v in ((13.4, 1.0), (13.6, 0.86), (14.2, 0.72), (14.8, 0.58), (15.2, 0.44), (15.6, 0.30), (15.8, 0.1)):
     nd.default_value = v; nd.keyframe_insert("default_value", frame=F(t))
 ph1.scale = (1, 1, 1)
-for t, v in ((12.6, 0.0), (13.0, 1.0)):   # phone comes out of the pocket at the start of beat 5
+for t, v in ((12.8, 0.0), (12.85, 1.0)):   # drawn from her pocket under her hand
     ph1.scale = (v, v, v) if v else (0.001,) * 3; ph1.keyframe_insert("scale", frame=F(t))
 for t in (34.0,):
     ph1.keyframe_insert("scale", frame=F(t) - 1); ph1.scale = (0.001,) * 3; ph1.keyframe_insert("scale", frame=F(t))
 ph2, ph2s = make_phone("ManPhone", M_share, C_CHAR)
 attach_phone(ph2, MBR, "R")
-ph2.scale = (0.001,) * 3; ph2.keyframe_insert("scale", frame=F(30.0)); ph2.scale = (1, 1, 1); ph2.keyframe_insert("scale", frame=F(30.3))
+ph2.scale = (0.001,) * 3; ph2.keyframe_insert("scale", frame=F(29.93)); ph2.scale = (1, 1, 1); ph2.keyframe_insert("scale", frame=F(29.97))
 
 # beanie + scarf on the fan's head / neck bones
 def fit_to_head(obj, rig, bone, height_frac=0.62, scale_mul=1.0, z_off=0.0, y_off=0.0):
@@ -569,7 +622,14 @@ z = MOLE_N.normalized(); x = Vector((1, 0, 0)); x = (x - z * x.dot(z)).normalize
 M = Matrix((x, y, z)).transposed().to_4x4(); M.translation = MOLE_CO + MOLE_N * 0.0015
 bone_parent(band, MBR, "neck02", MBR.matrix_world @ M)
 bsw = band.modifiers.new("fit", 'SHRINKWRAP'); bsw.target = [c for c in MBR.children if c.name.endswith(".body")][0]; bsw.wrap_mode = 'OUTSIDE'; bsw.offset = 0.0012
-band.scale = (0.001,) * 3; band.keyframe_insert("scale", frame=F(28.2)); band.scale = (1, 1, 1); band.keyframe_insert("scale", frame=F(28.5))
+band.scale = (0.001,) * 3; band.keyframe_insert("scale", frame=F(27.83)); band.scale = (1, 1, 1); band.keyframe_insert("scale", frame=F(27.87))
+# carried in her left hand from the pocket, pressed on at 28.2 (Child Of the hand, then released onto the neck)
+sc.frame_set(F(28.2)); bpy.context.view_layer.update()
+_co = band.constraints.new('CHILD_OF'); _co.target = DR; _co.subtarget = "wrist.L"
+_co.inverse_matrix = (DR.matrix_world @ DR.pose.bones["wrist.L"].matrix).inverted()
+_co.influence = 1.0; _co.keyframe_insert("influence", frame=F(28.2)); _co.influence = 0.0; _co.keyframe_insert("influence", frame=F(28.27))
+for _f, _v in ((1, False), (F(28.27), True)):
+    bsw.show_viewport = bsw.show_render = _v; bsw.keyframe_insert("show_viewport", frame=_f); bsw.keyframe_insert("show_render", frame=_f)
 moleB.keyframe_insert("scale", frame=F(28.2)); moleB.scale = (0.001,) * 3; moleB.keyframe_insert("scale", frame=F(28.3))
 
 # dermatoscope + forceps in the doctor's hands
@@ -580,7 +640,7 @@ scope.data.materials.append(M_blk)
 bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.024, depth=0.03, location=(0, 0, 0.075)); head_ = bpy.context.object
 head_.data.materials.append(M_metal)
 bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.019, depth=0.002, location=(0, 0, 0.091)); lens = bpy.context.object
-lens.data.materials.append(mat("ScopeLens", (0.6, 0.8, 0.9), 0.02, trans=0.9, emit=(0.8, 0.9, 1.0), estr=1.5))
+lens.data.materials.append(mat("ScopeLens", (0.05, 0.07, 0.08), 0.05, metal=0.3))
 for o in (head_, lens): o.select_set(True)
 scope.select_set(True); bpy.context.view_layer.objects.active = scope; bpy.ops.object.join()
 for u in list(scope.users_collection): u.objects.unlink(scope)
@@ -590,7 +650,7 @@ ctr, dd, aa, nn = palm_frame(DR, "R")
 Za = dd; Xa = aa; Ya = Za.cross(Xa)
 M = Matrix((Xa, Ya, Za)).transposed().to_4x4(); M.translation = ctr + nn * 0.022
 bone_parent(scope, DR, "wrist.R", DR.matrix_world @ M)
-scope.keyframe_insert("scale", frame=F(25.4)); scope.scale = (0.001,) * 3; scope.keyframe_insert("scale", frame=F(25.5))
+scope.keyframe_insert("scale", frame=F(25.45)); scope.scale = (0.001,) * 3; scope.keyframe_insert("scale", frame=F(25.5))
 # forceps holding a folded gauze square (no blood detail)
 bm_ = bpy.data.meshes.new("Forceps"); import bmesh as _bm
 bb_ = _bm.new()
@@ -606,8 +666,8 @@ forc = bpy.data.objects.new("Forceps", fc_); forc.data.materials.append(M_metal)
 ctr, dd, aa, nn = palm_frame(DR, "R")
 M = Matrix((aa, dd.cross(aa), dd)).transposed().to_4x4(); M.translation = ctr + nn * 0.015 - dd * 0.03
 bone_parent(forc, DR, "wrist.R", DR.matrix_world @ M)
-forc.scale = (0.001,) * 3; forc.keyframe_insert("scale", frame=F(26.0)); forc.scale = (1, 1, 1); forc.keyframe_insert("scale", frame=F(26.1))
-forc.keyframe_insert("scale", frame=F(28.4)); forc.scale = (0.001,) * 3; forc.keyframe_insert("scale", frame=F(28.5))
+forc.scale = (0.001,) * 3; forc.keyframe_insert("scale", frame=F(25.98)); forc.scale = (1, 1, 1); forc.keyframe_insert("scale", frame=F(26.02))
+forc.keyframe_insert("scale", frame=F(28.68)); forc.scale = (0.001,) * 3; forc.keyframe_insert("scale", frame=F(28.72))
 
 # sticks for the skaters and the finale players
 stick_src = glb(os.path.join(A, "objv", "stick.glb"), "StickSrc", C_CHAR)
