@@ -217,14 +217,16 @@ def c4_7a(c, t):           # two investigators lay the two ledgers side by side 
     k = ease(min(1.0, sec / 1.8))
     c["ledB"].location = REC + Vector((0.45 + 0.5 * (1 - k), 0.02 + 0.3 * (1 - k), 0.78))
     sd = forward(b).cross(Vector((0, 0, 1)))
-    edge = c["ledB"].location + Vector((0, -0.2, 0.04))
-    reach(b, "R", edge + sd * 0.12, Vector((sd.x, sd.y, -1.0)), forward(b)); reach(b, "L", edge - sd * 0.12, Vector((-sd.x, -sd.y, -1.0)), forward(b))
-    fingers_curl(b, 55, thumb=30)                        # fingers together, softly curled on the ledger edge
+    sb = sd.normalized(); rb = b.bone_head("spine02") + forward(b) * 0.42; rb.z = 0.8      # b: hands folded too
+    reach(b, "R", rb + sb * 0.06, Vector((sb.x, sb.y, -1.0)), forward(b) * 0.4 - sb * 0.9)
+    reach(b, "L", rb - sb * 0.06, Vector((-sb.x, -sb.y, -1.0)), forward(b) * 0.4 + sb * 0.9)
+    fingers_curl(b, 65, thumb=35)
     sa = forward(a).cross(Vector((0, 0, 1)))             # a: forearms resting on the table, hands flat, fingers together
     rest = a.bone_head("spine02") + forward(a) * 0.42; rest.z = 0.8
-    reach(a, "R", rest + sa * 0.14, Vector((sa.x, sa.y, -1.0)), forward(a) - sa * 0.2)
-    reach(a, "L", rest - sa * 0.14, Vector((-sa.x, -sa.y, -1.0)), forward(a) + sa * 0.2)
-    fingers_curl(a, 40, side=("L", "R"), thumb=25)
+    # hands folded on the table: wrists close, each hand turned in toward the other, fingers curled over
+    reach(a, "R", rest + sa * 0.06, Vector((sa.x, sa.y, -1.0)), forward(a) * 0.4 - sa * 0.9)
+    reach(a, "L", rest - sa * 0.06, Vector((-sa.x, -sa.y, -1.0)), forward(a) * 0.4 + sa * 0.9)
+    fingers_curl(a, 65, side=("L", "R"), thumb=35)
     a.rot("head", forward(a).cross(Vector((0, 0, 1))), 8); b.rot("head", sd, 6)        # heads up: faces, not crowns
 
 

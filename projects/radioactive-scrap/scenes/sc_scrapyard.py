@@ -663,7 +663,10 @@ def anim_drop(c, t):
     # near (right) hand in the D-grip, knuckles along the shaft; far (left) hand under the shaft, mid-way
     _reach_raw(h2, "R", grip + ax * 0.05, Vector((side.x, side.y, -0.8)), ax + Vector((0, 0, -0.2)))
     mid = grip + ax * 0.5
-    _reach_raw(h2, "L", mid + Vector((0, 0, -0.04)), Vector((-side.x * 0.5, -side.y * 0.5, -1.0)), -across + Vector((0, 0, 0.3)))
+    up_ = across.cross(ax).normalized()                      # shaft-normal pointing up
+    if up_.z < 0: up_ = -up_
+    # overhand grip mid-shaft: wrist just above and behind the shaft, knuckles curling over and around it
+    _reach_raw(h2, "L", mid + up_ * 0.035 - ax * 0.05, Vector((-side.x * 0.5, -side.y * 0.5, -1.0)), ax * 0.6 - up_ * 0.8)
     fingers_curl(h2, 95, thumb=70)
     sp = c["spade"]
     if sp is not None:
