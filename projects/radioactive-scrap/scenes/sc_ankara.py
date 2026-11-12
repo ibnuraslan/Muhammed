@@ -145,8 +145,8 @@ def build(variant=None):
     ph_model("wooden_bookshelf_worn", loc=REC + Vector((1.6, 2.0, 0)), rot_z=math.pi)
     P = {}
     P["clerk"] = person("Clerk", 1.0, 52, "suit_brown", "short03", hv=0.55, moustache=True)
-    P["inv"] = person("InvA", 1.0, 48, "camel", "short03", moustache=True)
-    P["inv2"] = person("InvB", 0.0, 41, "woman_coat", "bob02", hv=0.2)
+    P["inv"] = person("InvA", 1.0, 48, "camel", "short02", moustache=True)      # short cut: the face reads
+    P["inv2"] = person("InvB", 1.0, 41, "wool_grey", "short03", moustache=False)    # second investigator: a man with a short cut, face visible
     c["people"] = P
     for h in P.values():
         place(h, (0, -150, 0), 0)
@@ -219,12 +219,12 @@ def c4_7a(c, t):           # two investigators lay the two ledgers side by side 
     sd = forward(b).cross(Vector((0, 0, 1)))
     edge = c["ledB"].location + Vector((0, -0.2, 0.04))
     reach(b, "R", edge + sd * 0.12, Vector((sd.x, sd.y, -1.0)), forward(b)); reach(b, "L", edge - sd * 0.12, Vector((-sd.x, -sd.y, -1.0)), forward(b))
-    fingers_curl(b, 45, thumb=25)                        # fingers together, softly curled on the ledger edge
+    fingers_curl(b, 55, thumb=30)                        # fingers together, softly curled on the ledger edge
     sa = forward(a).cross(Vector((0, 0, 1)))             # a: forearms resting on the table, hands flat, fingers together
     rest = a.bone_head("spine02") + forward(a) * 0.42; rest.z = 0.8
     reach(a, "R", rest + sa * 0.14, Vector((sa.x, sa.y, -1.0)), forward(a) - sa * 0.2)
     reach(a, "L", rest - sa * 0.14, Vector((-sa.x, -sa.y, -1.0)), forward(a) + sa * 0.2)
-    fingers_curl(a, 25, side=("L", "R"), thumb=15)
+    fingers_curl(a, 40, side=("L", "R"), thumb=25)
     a.rot("head", forward(a).cross(Vector((0, 0, 1))), 8); b.rot("head", sd, 6)        # heads up: faces, not crowns
 
 

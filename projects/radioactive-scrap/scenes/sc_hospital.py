@@ -603,21 +603,47 @@ def c2_5a(c, t):
     c["focus"] = h.bone_head("head")
 
 
-def c2_6a(c, t):          # medium: the doctor lifts the receiver to his ear, his other hand resting on the counter
+def c2_6a(c, t):          # medium: the doctor holds the receiver to his ear, his other hand resting on the counter
     sec = S("ch2_6a", t); hide(c, ("doc",)); leaves(c, 1)
     ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.3, 0.55, 0))
     stand_at(h, loc, ns + Vector((0.3, 0, 0)))
-    sd = forward(h).cross(Vector((0, 0, 1))).normalized()
+    h.rot("head", forward(h).cross(Vector((0, 0, 1))).normalized(), -6)
+    bpy.context.view_layer.update()
+    fw = forward(h); sd = fw.cross(Vector((0, 0, 1))).normalized(); out = -sd          # out = his LEFT, the camera side
     k = ease(min(1.0, sec / 0.9))
-    ear = h.bone_head("head") - sd * 0.085 + Vector((0, 0, 0.09)) + forward(h) * 0.02     # his LEFT ear (head bone starts at the neck)
-    rest = ns + Vector((0.4, 0.05, 1.18))
-    hs_at = rest.lerp(ear, k)                                             # receiver at the ear
-    wr = hs_at + Vector((0, 0, -0.1)) - sd * 0.03                         # the hand wraps the handle below it
-    reach(h, "L", wr, Vector((-sd.x, -sd.y, -1.0)), Vector((0, 0, 1)) - sd * 0.2)
-    reach(h, "R", ns + Vector((0.05, 0.22, 1.15)), Vector((sd.x, sd.y, -1.0)), forward(h))
-    fingers_curl(h, 85, thumb=60)
-    hs = c["handset"]; hs.location = hs_at; hs.rotation_euler = (math.radians(80 * k), 0, math.atan2(sd.y, sd.x))
-    h.rot("head", sd, -6)
+    # handset on the side of the face: earpiece on the left ear, mouthpiece down along the jaw to the mouth
+    E = h.bone_head("temporalis02.L") + out * 0.035 + Vector((0, 0, -0.01))
+    eyes = (h.bone_head("eye.L") + h.bone_head("eye.R")) / 2
+    M = eyes + fw * 0.02 + Vector((0, 0, -0.11)) + out * 0.06
+    X = (M - E).normalized(); Z = (out - X * out.dot(X)).normalized(); Y = Z.cross(X)
+    from mathutils import Matrix
+    R_at = Matrix((X, Y, Z)).transposed()                 # local X: ear -> mouth, local -Z (cups) toward the face
+    ctr = (E + M) / 2
+    rest = ns + Vector((0.4, 0.05, 1.28))
+    hs = c["handset"]; hs.location = rest.lerp(ctr, k); hs.rotation_mode = 'QUATERNION'
+    from mathutils import Quaternion
+    hs.rotation_quaternion = Euler((0, 0, math.pi)).to_quaternion().slerp(R_at.to_quaternion(), k)
+    # hand wrapped round the middle of the handle from below/outside; elbow down and forward
+    wr = hs.location + out * 0.035 + Vector((0, 0, -0.06)) - fw * 0.01
+    from rs_kit import _reach_raw
+    _reach_raw(h, "L", wr, fw * 0.5 + Vector((0, 0, -1.0)) + out * 0.3, (hs.location - wr).normalized() + fw * 0.2)
+    reach(h, "R", ns + Vector((0.05, 0.22, 1.15)), Vector((sd.x, sd.y, -1.0)), fw)
+    fingers_curl(h, 80, thumb=55)
+    # coiled cord from the mouthpiece end down to the desk phone (a helix, redrawn each frame)
+    a = hs.location + (hs.rotation_quaternion @ Vector((0.1, 0, -0.03))); b = c["phone"].location + Vector((0.1, 0.0, 0.05))
+    cord = c.get("cord")
+    if cord is None:
+        cu = bpy.data.curves.new("PhoneCord", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0035
+        sp = cu.splines.new('POLY'); sp.points.add(159)
+        cord = bpy.data.objects.new("PhoneCord", cu); bpy.context.collection.objects.link(cord)
+        cu.materials.append(pbr("CordM", (0.03, 0.03, 0.03), 0.4)); c["cord"] = cord
+    pts = cord.data.splines[0].points; n = len(pts); dv = b - a
+    u = dv.cross(Vector((0, 0, 1))); u = u.normalized() if u.length > 1e-4 else Vector((1, 0, 0)); w = dv.normalized().cross(u)
+    for q in range(n):
+        f = q / (n - 1); sag = Vector((0, 0, -0.18 * math.sin(math.pi * f)))
+        ang = f * 2 * math.pi * 26; r = 0.012
+        pt = a + dv * f + sag + u * (r * math.cos(ang)) + w * (r * math.sin(ang))
+        pts[q].co = (pt.x, pt.y, pt.z, 1)
     c["focus"] = h.bone_head("head")
 
 
