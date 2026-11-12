@@ -517,9 +517,23 @@ for k, (TA, ts, pours, tmpl, b, spos, syaw, liq) in POURS.items():
         else:
             A.stand(f, flex=5, twist=5 * u, head=(5, 10 * u)); A.hand(f, hs, (0.24 * sxh, -0.25, 0.98), d=(0, -1, 0), n=(-sxh, 0, 0), g=0.9)
             A.hand(f, os_, (0.35 * -sxh, -0.11, 0.9), d=(0, 0, -1)); A.face(f, brow=0.5, smile=0.3)
-    sc.frame_set(706); bpy.context.view_layer.update()
-    pot.matrix_world = Matrix.Translation(hand_world(A.a, hs) + V((0, 0, -0.12)))
-    attach(pot, A.a, "wrist." + hs, 706)
+    # v009: the pot is keyed in set-local space with its handle in the hand, spout toward the cup (tilted while pouring),
+    # then grip_object closes the hand on the handle (pot-local handle point / spout direction measured from the models)
+    hl, spl = {0: (V((0, 0.075, 0.17)), V((0, -1, 0))), 1: (V((0, -0.135, 0.12)), V((0, 1, 0)))}[k]
+    Ri = ROOT[3].matrix_world.inverted()
+    for f in keyf:
+        near = min(pours, key=lambda p_: abs(f - p_)); dt = f - near
+        tilt = (1.0 if -4 <= dt <= 10 else 0.3) if -14 <= dt <= 18 else 0.0
+        sc.frame_set(f); bpy.context.view_layer.update(); ht = Ri @ hand_world(A.a, hs)
+        toc = cup_rest - ht if tilt > 0 else (cup_rest - sp3); toc.z = 0; toc.normalize()
+        Rz = Matrix.Rotation(math.atan2(toc.y, toc.x) - math.atan2(spl.y, spl.x), 3, 'Z'); ax_ = (Rz @ spl).cross(V((0, 0, 1))).normalized()
+        Rm = Matrix.Rotation(-R_(55) * tilt, 3, ax_) @ Rz
+        pot.matrix_world = Matrix.Translation(ht - Rm @ hl) @ Rm.to_4x4()
+        pot.keyframe_insert("location", frame=f); pot.keyframe_insert("rotation_euler", frame=f)
+    for f in keyf:
+        sc.frame_set(f); bpy.context.view_layer.update()
+        PM = ROOT[3].matrix_world @ pot.matrix_world
+        grip_object(A.a, hs, f, pot, PM @ hl, PM.to_3x3() @ spl)
     for p_ in pours:   # liquid stream from the spout into the cup during each pour
         bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.006, depth=0.2, location=tuple(cup_rest + V((0, 0, 0.17))))
         st_ = bpy.context.active_object; st_.name = "pourStream%d_%d" % (k, p_); link(st_, c); setmat(st_, liq)
@@ -951,8 +965,17 @@ fp, ft, fl_ = catmull(wp), catmull(wt), pchip(wl)
 camd = bpy.data.cameras.new("Camera"); camo = bpy.data.objects.new("Camera", camd); sc.collection.objects.link(camo); sc.camera = camo
 camd.sensor_width = 36; camd.clip_start = 0.02; camd.clip_end = 400
 prev = None
+# v009 aim fix: Track-To on a head, ramped in and out over 10 frames, world up (no roll): 31.0 s on the king, 41.0 s on the very old twin
+AIM = [(1854, 1892, "King_S6"), (2436, 2484, "TwinA_vold_S7")]
+def aim_w(f, a, b): return max(0.0, min(1.0, (f - a) / 10.0, (b - f) / 10.0))
 for f in range(1, 2671):
     p = fp(f); t = ft(f)
+    for a_, b_, nm_ in AIM:
+        w_ = aim_w(f, a_, b_)
+        if w_ > 0:
+            w_ = w_ * w_ * (3 - 2 * w_); rg_ = bpy.data.objects[nm_]; sc.frame_set(f)
+            hb_ = rg_.pose.bones["head"]; hp_ = rg_.matrix_world @ ((hb_.head + hb_.tail) / 2)
+            d_ = ((t - p).normalized() * (1 - w_) + (hp_ - p).normalized() * w_).normalized(); t = p + d_ * 5
     q = (t - p).to_track_quat('-Z', 'Y'); e = q.to_euler('XYZ', prev) if prev else q.to_euler('XYZ')
     camo.location = p; camo.rotation_euler = e; prev = e
     camo.keyframe_insert("location", frame=f); camo.keyframe_insert("rotation_euler", frame=f)
