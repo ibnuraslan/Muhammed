@@ -442,7 +442,9 @@ def animate(c, sec, shot):
         if k == 1:
             pcb_o = c["bar_pcb"]; pcb_o.hide_render = shot not in ("barlid",)
             bpy.context.view_layer.update()
-            bw = bar.matrix_world; pcb_o.location = bw @ Vector((0, 0, 0.0075)); pcb_o.rotation_euler = bw.to_euler()
+            bw = bar.matrix_world; pcb_o.location = bw @ Vector((0, 0, 0.0083)); pcb_o.rotation_euler = bw.to_euler()     # on the open bar, flush above its top
+            if shot == "barlid":
+                lid.location += Vector((0.22 * slide_, -0.04 * slide_, 0.0))                                           # lid lifted clear
             c["bar_key"].location = pcb_o.location + Vector((-0.05, -0.12, 0.18)); point_at(c["bar_key"], pcb_o.location)
     bpy.context.view_layer.update()
 
