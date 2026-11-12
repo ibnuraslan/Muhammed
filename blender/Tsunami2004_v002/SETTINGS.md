@@ -4,7 +4,7 @@ Values read back from `Tsunami2004_v002_60fps.blend` opened in factory-startup B
 
 | Item | Value |
 |---|---|
-| File | `Tsunami2004_v002_60fps.blend`: __SIZE__ MB, compressed, all images packed. Normal git file (no LFS). |
+| File | `Tsunami2004_v002_60fps.blend`: 85 MB, compressed, all images packed. Normal git file (no LFS). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. Saved as CPU; GPU is fine. No special features. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -22,7 +22,7 @@ Values read back from `Tsunami2004_v002_60fps.blend` opened in factory-startup B
 | Add-ons | None needed. |
 
 ## Measured cost
-__COST__
+Not measured at full resolution (no full renders allowed locally). A 25 % / 4-sample check of frame 1160 from the packed file took 18 s on this 4-core CPU (frame 400: 9 s), including scene sync of 420 building instances. Expect several minutes per full 48-sample frame on CPU; use GPU nodes on the farm and run the test frames below first.
 
 ## Suggested test frames
 - **200** (3.3 s): exposed seabed, flapping fish macro, wet sand.

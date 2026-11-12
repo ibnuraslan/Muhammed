@@ -1,0 +1,48 @@
+Tsunami2004 hand audit, every 2 frames, people in view
+HAND_HAND         0
+HAND_TORSO        0
+HAND_HEAD         0
+HAND_CLOTHES     45
+    f 313 (5.20s) LocalW R LocalW.female_casualsuit02
+    f 315 (5.23s) LocalW R LocalW.female_casualsuit02
+    f 317 (5.27s) LocalW R LocalW.female_casualsuit02
+    f 319 (5.30s) LocalW R LocalW.female_casualsuit02
+    f 321 (5.33s) LocalW R LocalW.female_casualsuit02
+    f 323 (5.37s) LocalW R LocalW.female_casualsuit02
+    f 429 (7.13s) Fisher R Fisher.male_casualsuit03
+    f 431 (7.17s) Fisher R Fisher.male_casualsuit03
+    f 433 (7.20s) Fisher R Fisher.male_casualsuit03
+    f 443 (7.37s) KidB R KidB.female_casualsuit01
+    f 455 (7.57s) KidA R KidA.male_casualsuit01
+    f1227 (20.43s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1229 (20.47s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1231 (20.50s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1233 (20.53s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1235 (20.57s) LocalW R LocalW.female_casualsuit02
+    f1235 (20.57s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1237 (20.60s) LocalW R LocalW.female_casualsuit02
+    f1237 (20.60s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1239 (20.63s) LocalW R LocalW.female_casualsuit02
+    f1239 (20.63s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1241 (20.67s) LocalW R LocalW.female_casualsuit02
+    f1241 (20.67s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1243 (20.70s) LocalW R LocalW.female_casualsuit02
+    f1243 (20.70s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1245 (20.73s) LocalW R LocalW.female_casualsuit02
+    f1245 (20.73s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1247 (20.77s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1249 (20.80s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1251 (20.83s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1253 (20.87s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1255 (20.90s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1257 (20.93s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1259 (20.97s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1261 (21.00s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1263 (21.03s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1265 (21.07s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1267 (21.10s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1269 (21.13s) LocalW_C03 R LocalW_C03.female_casualsuit02
+    f1271 (21.17s) LocalW_C03 R LocalW_C03.female_casualsuit02
+HAND_OTHER        1
+    f 439 (7.30s) KidB R x Fisher
+TOTAL 46

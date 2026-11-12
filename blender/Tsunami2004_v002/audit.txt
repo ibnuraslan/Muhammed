@@ -1,0 +1,17 @@
+Tsunami2004 audit, step 6 frames
+FOOT_HOVER              4
+    f 559 (9.30s) Fisher R 6.9 cm
+    f1249 (20.80s) TouristM L 5.9 cm
+    f1255 (20.90s) TouristM R 3.9 cm
+    f1267 (21.10s) LocalM R 4.9 cm
+FOOT_SINK               0
+FOOT_SLIDE              0
+HAND_BODY               0
+HAND_PROP               0
+PERSON_PERSON           1
+    f 439 (7.30s) Fisher x KidB 41
+HAND_FLOAT              0
+CAMERA_UNDER_GROUND     0
+CAMERA_UNDER_WATER      0
+CAMERA_INSIDE           0
+TOTAL 5
