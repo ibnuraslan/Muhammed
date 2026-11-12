@@ -54,4 +54,4 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     ins = inside(cam.matrix_world.translation)
     if ins: rep["camera"].append((f, ins[:3]))
 for k, v in rep.items():
-    print("AUDIT", k, len(v), v[:40])
+    print("AUDIT", k, len(v), v[:400])

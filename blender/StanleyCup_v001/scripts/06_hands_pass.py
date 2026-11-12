@@ -30,6 +30,18 @@ for rn in ("Woman_rig", "Fiance_rig"):
             n += 1
         elif nm.startswith("lowerarm01"):
             pb.use_ik_limit_x = True; pb.ik_min_x = R(-150); pb.ik_max_x = R(150)   # elbow: no wrap-around; hinge axis locked elsewhere
-bpy.context.scene["hands_pass"] = "v005"
+# v007: delete MPFB helper geometry (never rendered: hidden by the "Hide helpers" mask) so contact scans only see real surfaces
+import bmesh
+for bn in ("Woman.body", "Fiance.body"):
+    ob = bpy.data.objects[bn]; g = ob.vertex_groups.get("body")
+    if g is None: continue
+    keep = {v.index for v in ob.data.vertices if any(x.group == g.index and x.weight > 0.5 for x in v.groups)}
+    bm = bmesh.new(); bm.from_mesh(ob.data)
+    kill = [v for v in bm.verts if v.index not in keep]
+    bmesh.ops.delete(bm, geom=kill, context="VERTS"); bm.to_mesh(ob.data); bm.free(); ob.data.update()
+    for m in list(ob.modifiers):
+        if m.type == "MASK" and m.name == "Hide helpers": ob.modifiers.remove(m)
+    print("HELPERS_REMOVED", bn, len(kill), "kept", len(ob.data.vertices))
+bpy.context.scene["hands_pass"] = "v007"
 print("HAND_LIMITS", n)
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
