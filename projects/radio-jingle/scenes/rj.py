@@ -133,7 +133,7 @@ def mat(key):
         "ivory": lambda: pbr("Ivory", (0.78, 0.75, 0.66), 0.25, 0.0, **{'Coat Weight': 0.5}),
         "glass": lambda: window_glass(),
         "frosted": lambda: frosted_glass(),
-        "phone": lambda: pbr("PhoneBakelite", (0.30, 0.25, 0.17), 0.22, 0.0, **{'Coat Weight': 0.8, 'Coat Roughness': 0.1}),
+        "phone": lambda: pbr("PhonePlastic", (0.30, 0.33, 0.28), 0.3, 0.0, **{'Coat Weight': 0.5, 'Coat Roughness': 0.15}),   # Bundespost grey-green
         "curtain": lambda: fabric("Curtain", (0.42, 0.34, 0.24), 0.85, 0.5),
         "net": lambda: net_curtain(),
         "rug": lambda: fabric("Rug", (0.30, 0.12, 0.08), 0.95, 0.4, 300),
@@ -307,43 +307,50 @@ def finish_scene():
 
 # ============================================================================ people (unnamed; 1981 clothes)
 ROLES = {
+    # 1981 clothes (garment meshes checked in a lineup render): suit+tie = male_elegantsuit01, knit jumper =
+    # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
+    # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 42, "female_casualsuit01", "bob02", 0.35, 0.08, 0.18, 0.55, 0.45, 0.45),
-    "father":     (1.0, 46, "male_casualsuit02", "short02", 0.32, 0.10, 0.12, 0.45, 0.5, 0.5),
-    "brother":    (1.0, 18, "male_casualsuit01", "short04", 0.30, 0.58, 0.20, 0.40, 0.55, 0.38),
-    "sister":     (0.0, 10, "female_casualsuit01", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
-    "uncle":      (1.0, 50, "male_casualsuit04", "short03", 0.45, 0.07, 0.15, 0.40, 0.5, 0.55),
-    "aunt":       (0.0, 45, "female_casualsuit01", "bob01", 0.30, 0.95, 0.15, 0.55, 0.45, 0.5),
-    "neighbour":  (0.0, 58, "female_casualsuit01", "bob01", 0.6, 0.05, 0.12, 0.6, 0.4, 0.55),
-    "officer":    (1.0, 38, "male_casualsuit04", "short01", 0.25, 0.28, 0.35, 0.25, 0.55, 0.5),
-    "officer2":   (1.0, 30, "male_casualsuit04", "short03", 0.30, 0.28, 0.35, 0.25, 0.5, 0.45),
-    "officer3":   (1.0, 45, "male_casualsuit04", "short02", 0.40, 0.28, 0.35, 0.25, 0.5, 0.55),
-    "detective":  (1.0, 44, "male_casualsuit04", "short02", 0.30, 0.09, 0.18, 0.38, 0.5, 0.5),
-    "tech":       (1.0, 34, "male_casualsuit05", "short04", 0.25, 0.55, 0.12, 0.35, 0.5, 0.45),
-    "firefighter":(1.0, 36, "male_casualsuit04", "short01", 0.25, 0.62, 0.40, 0.14, 0.55, 0.55),
-    "diver":      (1.0, 32, "male_casualsuit01", "short01", 0.25, 0.60, 0.05, 0.03, 0.55, 0.45),
-    "postman":    (1.0, 52, "male_casualsuit04", "short02", 0.45, 0.60, 0.22, 0.30, 0.5, 0.5),
+    "mother":     (0.0, 42, "female_elegantsuit01", "long01", 0.22, 0.08, 0.18, 0.55, 0.45, 0.45),
+    "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
+    "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
+    "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
+    "uncle":      (1.0, 50, "male_casualsuit05", "short03", 0.45, 0.07, 0.15, 0.40, 0.5, 0.55),
+    "aunt":       (0.0, 45, "female_elegantsuit01", "bob01", 0.30, 0.95, 0.15, 0.55, 0.45, 0.5),
+    "neighbour":  (0.0, 58, "female_elegantsuit01", "bob01", 0.6, 0.05, 0.12, 0.6, 0.4, 0.55),
+    "officer":    (1.0, 38, "male_casualsuit05", "short01", 0.25, 0.28, 0.35, 0.25, 0.55, 0.5),
+    "officer2":   (1.0, 30, "male_casualsuit05", "short03", 0.30, 0.28, 0.35, 0.25, 0.5, 0.45),
+    "officer3":   (1.0, 45, "male_casualsuit05", "short02", 0.40, 0.28, 0.35, 0.25, 0.5, 0.55),
+    "plainclothes": (1.0, 40, "male_elegantsuit01", "short01", 0.25, 0.09, 0.18, 0.38, 0.55, 0.5),
+    "detective":  (1.0, 44, "male_elegantsuit01", "short02", 0.30, 0.09, 0.18, 0.38, 0.5, 0.5),
+    "tech":       (1.0, 34, "male_casualsuit03", "short04", 0.25, 0.55, 0.12, 0.35, 0.5, 0.45),
+    "firefighter":(1.0, 36, "male_casualsuit05", "short01", 0.25, 0.62, 0.40, 0.14, 0.55, 0.55),
+    "diver":      (1.0, 32, "male_casualsuit02", "short01", 0.25, 0.60, 0.05, 0.03, 0.55, 0.45),
+    "postman":    (1.0, 52, "male_casualsuit05", "short02", 0.45, 0.60, 0.22, 0.30, 0.5, 0.5),
     "expert":     (1.0, 55, "male_elegantsuit01", "short02", 0.55, 0.58, 0.08, 0.30, 0.5, 0.5),
-    "expert2":    (0.0, 47, "female_casualsuit01", "bob02", 0.30, 0.58, 0.10, 0.40, 0.48, 0.45),
+    "expert2":    (0.0, 47, "female_elegantsuit01", "bob02", 0.30, 0.58, 0.10, 0.40, 0.48, 0.45),
 }
 
-# two-tone outfits: top colour above, trousers below a split given as a fraction of the person's height
+# outfits: top colour above, bottom below a split (fraction of the person's height); plain period fabrics
 OUTFITS = {
-    "sister": ((0.30, 0.30, 0.29), (0.035, 0.07, 0.04), 0.53),          # grey cardigan, dark green trousers
-    "officer": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),          # green jacket, beige trousers
+    "sister": ((0.30, 0.30, 0.29), (0.035, 0.07, 0.04), 0.53),          # grey cardigan-jumper, dark green trousers
+    "officer": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),          # green uniform jacket, beige trousers
     "officer2": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),
     "officer3": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),
+    "plainclothes": ((0.16, 0.12, 0.08), (0.14, 0.12, 0.10), 0.50),     # brown sports jacket, light shirt, tie (mesh)
+    "detective": ((0.11, 0.10, 0.09), (0.11, 0.10, 0.09), 0.50),        # grey-brown suit
     "firefighter": ((0.03, 0.04, 0.07), (0.03, 0.04, 0.07), 0.5),
     "diver": ((0.012, 0.012, 0.014), (0.012, 0.012, 0.014), 0.5),
     "postman": ((0.12, 0.16, 0.24), (0.10, 0.12, 0.17), 0.50),
-    "mother": ((0.13, 0.05, 0.05), (0.08, 0.07, 0.07), 0.53),            # dark burgundy knit, dark brown trousers
-    "aunt": ((0.08, 0.10, 0.16), (0.12, 0.12, 0.14), 0.53),
-    "neighbour": ((0.10, 0.14, 0.12), (0.20, 0.17, 0.15), 0.53),
-    "expert2": ((0.07, 0.07, 0.09), (0.10, 0.10, 0.12), 0.53),
-    "father": ((0.22, 0.20, 0.17), (0.11, 0.11, 0.12), 0.53),
-    "brother": ((0.13, 0.17, 0.24), (0.10, 0.12, 0.18), 0.53),           # navy jumper, jeans
-    "detective": ((0.20, 0.15, 0.10), (0.14, 0.12, 0.10), 0.50),
-    "uncle": ((0.15, 0.17, 0.12), (0.12, 0.11, 0.10), 0.50),
+    "mother": ((0.30, 0.26, 0.20), (0.10, 0.08, 0.07), 0.56),           # oatmeal knit blouse, dark brown skirt
+    "aunt": ((0.10, 0.12, 0.18), (0.12, 0.12, 0.14), 0.56),
+    "neighbour": ((0.10, 0.14, 0.12), (0.20, 0.17, 0.15), 0.56),
+    "expert2": ((0.07, 0.07, 0.09), (0.10, 0.10, 0.12), 0.56),
+    "expert": ((0.08, 0.09, 0.11), (0.08, 0.09, 0.11), 0.50),
+    "father": ((0.22, 0.20, 0.17), (0.11, 0.11, 0.12), 0.53),           # check-shirt brown, dark trousers
+    "brother": ((0.05, 0.07, 0.15), (0.10, 0.12, 0.18), 0.53),          # navy knit jumper, jeans
+    "uncle": ((0.15, 0.13, 0.09), (0.12, 0.11, 0.10), 0.50),
+    "tech": ((0.40, 0.45, 0.52), (0.10, 0.10, 0.11), 0.53),
 }
 
 
@@ -358,6 +365,7 @@ def person(role, name=None, cap=True):
         for o in h.parts:
             if o.type == 'MESH' and cloth in o.name:
                 _two_tone_local(o, split, top, bot)
+    hair_matte(h)
     if role in ("officer", "officer2", "officer3") and cap:
         h.cap = police_cap(h)
     if role == "firefighter":
@@ -376,26 +384,51 @@ def rj_height(h):
 
 def _two_tone_local(o, split, top, bottom):
     """Top/trousers split on the garment's REST height (object coordinates follow the rig), so it holds when the
-    person walks, sits or bends. MakeHuman meshes: object z = height above the feet in rest pose."""
+    person walks, sits or bends. Plain fabric: the stock MakeHuman texture (prints, logos) is dropped; a fine knit
+    noise gives the weave. Light collars/shirts keep the mesh's shading."""
     for m in o.data.materials:
         N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
         tc = N.new("ShaderNodeAttribute"); tc.attribute_name = "rest_z"; tc.attribute_type = 'GEOMETRY'
         gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = split; L.new(tc.outputs['Fac'], gt.inputs[0])
         mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(gt.outputs[0], mx.inputs['Factor'])
         mx.inputs[6].default_value = (*bottom, 1); mx.inputs[7].default_value = (*top, 1)
-        src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
-        if src is not None:                                       # keep a little of the weave texture
-            wv = N.new("ShaderNodeMix"); wv.data_type = 'RGBA'; wv.blend_type = 'MULTIPLY'; wv.inputs['Factor'].default_value = 0.35
-            L.new(mx.outputs[2], wv.inputs[6]); L.new(src, wv.inputs[7])
-            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Value'].default_value = 1.6
-            L.new(wv.outputs[2], hs.inputs['Color']); L.new(hs.outputs[0], p.inputs['Base Color'])
-        else:
-            L.new(mx.outputs[2], p.inputs['Base Color'])
-        p.inputs['Roughness'].default_value = 0.8
+        co = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 900; nz.inputs['Detail'].default_value = 2
+        L.new(co.outputs['Object'], nz.inputs['Vector'])
+        wv = N.new("ShaderNodeMapRange"); wv.inputs['To Min'].default_value = 0.85; wv.inputs['To Max'].default_value = 1.1
+        L.new(nz.outputs['Fac'], wv.inputs['Value'])
+        mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
+        L.new(mx.outputs[2], mul.inputs[6]); L.new(wv.outputs[0], mul.inputs[7])
+        out_col = mul.outputs[2]
+        img = next((n for n in N if n.type == 'TEX_IMAGE'), None)
+        if img is not None and "elegantsuit" in o.name:          # keep the light shirt / collar / tie areas of the suit
+            bw = N.new("ShaderNodeRGBToBW"); L.new(img.outputs['Color'], bw.inputs[0])
+            mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.65
+            L.new(bw.outputs[0], mr.inputs['Value'])
+            sh = N.new("ShaderNodeMix"); sh.data_type = 'RGBA'; L.new(mr.outputs[0], sh.inputs['Factor'])
+            L.new(out_col, sh.inputs[6]); sh.inputs[7].default_value = (0.62, 0.60, 0.55, 1)
+            out_col = sh.outputs[2]
+        L.new(out_col, p.inputs['Base Color'])
+        bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.15; L.new(nz.outputs['Fac'], bp.inputs['Height'])
+        if not p.inputs['Normal'].is_linked:
+            L.new(bp.outputs['Normal'], p.inputs['Normal'])
+        p.inputs['Roughness'].default_value = 0.85
+        p.inputs['Sheen Weight'].default_value = 0.4
     me = o.data
     co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co)
     at = me.attributes.get("rest_z") or me.attributes.new("rest_z", 'FLOAT', 'POINT')
     at.data.foreach_set("value", co.reshape(-1, 3)[:, 2].copy())
+
+
+def hair_matte(h):
+    """Matte, softer hair: high roughness, no clear-coat shine (MakeHuman hair reads as a plastic helmet otherwise)."""
+    for o in h.parts:
+        if o.type == 'MESH' and any(k in o.name for k in ("long01", "bob0", "short0", "ponytail", "braid", "afro")):
+            for m in o.data.materials:
+                p = m.node_tree.nodes.get("Principled BSDF")
+                if p:
+                    p.inputs['Roughness'].default_value = 0.82
+                    p.inputs['Specular IOR Level'].default_value = 0.25
+                    p.inputs['Sheen Weight'].default_value = 0.5
 
 
 def _head_hat(h, objs, name):
@@ -484,25 +517,58 @@ def rotary_phone(name="Phone"):
     # handset: lies across the cradles along X
     hs = bpy.data.objects.new(name + "Handset", None); bpy.context.collection.objects.link(hs); hs.parent = r
     hs.location = (0, 0.045, 0.14)
-    hp = [cyl("Grip", (0, 0, 0), 0.017, 0.14, pm, 20, rot=(0, math.radians(90), 0))]
+    hp = [box("Grip", (0, 0, 0.004), (0.15, 0.042, 0.03), pm, bevel=0.012)]
     for sx in (-1, 1):
-        cup = cyl("Cup", (sx * 0.095, 0, -0.012), 0.03, 0.045, pm, 24, rot=(0, 0, 0)); hp.append(cup)
-        hp.append(box("Neck", (sx * 0.075, 0, -0.004), (0.04, 0.03, 0.03), pm, bevel=0.01))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(sx * 0.095, 0, -0.012))
+        cup = bpy.context.active_object; cup.scale = (0.045, 0.04, 0.03); cup.data.materials.append(pm)
+        bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); hp.append(cup)
+        hp.append(cyl("CupFace", (sx * 0.095, 0, -0.038), 0.032, 0.006, pbr("CupGrille", (0.12, 0.13, 0.11), 0.5), 24))
     hj = apply_rot(join(hp, name + "HandsetM")); hj.parent = hs; hj.location = (0, 0, 0)
     bpy.ops.object.shade_smooth()
-    # coiled cord from the body side to the handset end (static coil, slack)
-    cord_pts = []
-    for k in range(120):
-        t = k / 119
-        base = Vector((-0.11 - 0.05 * math.sin(t * math.pi), 0.0 - 0.06 * t, 0.03 + 0.02 * math.sin(t * math.pi * 1.0)))
-        ang = t * 34 * math.pi
-        cord_pts.append(base + Vector((0, 0.007 * math.cos(ang), 0.007 * math.sin(ang))))
-    cu = bpy.data.curves.new(name + "Cord", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0025; cu.bevel_resolution = 2
-    sp = cu.splines.new('POLY'); sp.points.add(len(cord_pts) - 1)
-    for p, q in zip(sp.points, cord_pts):
-        p.co = (*q, 1)
-    co = bpy.data.objects.new(name + "Cord", cu); bpy.context.collection.objects.link(co); co.data.materials.append(pm); co.parent = r
+    # coiled cord from the body's side to the handset's mouth end: 9 hooked points, moved by phone_cord()
+    n = 9
+    cu = bpy.data.curves.new(name + "Cord", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0045; cu.bevel_resolution = 3
+    sp = cu.splines.new('NURBS'); sp.points.add(n - 1); sp.order_u = 3; sp.use_endpoint_u = True
+    cm = pbr("CordCoil", (0.30, 0.33, 0.28), 0.35)
+    N = cm.node_tree.nodes; Lk = cm.node_tree.links; tc = N.new("ShaderNodeTexCoord"); wv = N.new("ShaderNodeTexWave")
+    wv.wave_type = 'RINGS'; wv.inputs['Scale'].default_value = 120.0; Lk.new(tc.outputs['Generated'], wv.inputs['Vector'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.8; Lk.new(wv.outputs['Fac'], bp.inputs['Height']); Lk.new(bp.outputs['Normal'], N["Principled BSDF"].inputs['Normal'])
+    co = bpy.data.objects.new(name + "Cord", cu); bpy.context.collection.objects.link(co); co.data.materials.append(cm)
+    hooks = []
+    for k in range(n):
+        sp.points[k].co = (0, 0, 0, 1)
+        e = bpy.data.objects.new(name + f"CordH{k}", None); bpy.context.collection.objects.link(e)
+        hk = co.modifiers.new(f"h{k}", 'HOOK'); hk.object = e
+        hooks.append(e)
+    co["hooks"] = [e.name for e in hooks]
+    r["cord"] = co.name
+    for k, e in enumerate(hooks):               # point k follows empty k: assign through edit mode
+        pass
+    bpy.context.view_layer.objects.active = co
+    for ob in bpy.context.selected_objects:
+        ob.select_set(False)
+    co.select_set(True)
+    bpy.ops.object.mode_set(mode='EDIT')
+    for k in range(n):
+        for q, pt in enumerate(co.data.splines[0].points):
+            pt.select = (q == k)
+        bpy.ops.object.hook_assign(modifier=f"h{k}")
+        bpy.ops.object.hook_reset(modifier=f"h{k}")
+    bpy.ops.object.mode_set(mode='OBJECT')
     return r, hs, dial
+
+
+def phone_cord(phone_root, handset):
+    """Lay the coiled cord from the phone body's left side to the handset's mouth end, sagging between them."""
+    co = bpy.data.objects[phone_root["cord"]]; hooks = [bpy.data.objects[n] for n in co["hooks"]]
+    bpy.context.view_layer.update()
+    a = phone_root.matrix_world @ Vector((-0.11, 0.0, 0.03))
+    b = handset.matrix_world @ Vector((-0.11, 0, -0.012))
+    n = len(hooks); L_ = (b - a).length
+    for k, e in enumerate(hooks):
+        t = k / (n - 1)
+        sag = 0.25 * math.sin(math.pi * t) * max(0.15, 0.45 - L_ * 0.3) + 0.04 * math.sin(math.pi * t)
+        e.location = a.lerp(b, t) + Vector((0, 0, -sag))
 
 
 def reel_deck(name="Deck", scale=1.0):
@@ -1148,3 +1214,64 @@ def low_instances(key, placements):
         o.location = loc; o.rotation_euler = (0, 0, rz); o.scale = (s, s, s)
         out.append(o)
     return out
+
+
+# ============================================================================ "Court reconstruction" label (chat B's style, shared)
+GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "nvidia_doc", "assets", "generated")
+
+
+def label_image(text, path, W=1920, H=816):
+    import skia
+    from PIL import Image
+    from scipy.ndimage import gaussian_filter
+    s = skia.Surface(W, H); cv = s.getCanvas(); cv.clear(skia.Color4f(0, 0, 0, 0))
+    p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(1, 1, 1, 1))
+    f = skia.Font(skia.Typeface.MakeFromFile("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf"), 34)
+    x, y = 96, H - 84
+    cv.drawRect(skia.Rect.MakeXYWH(x, y - 30, 4, 38), p)                 # a thin bar before the words
+    tx = x + 18
+    for ch in text.upper():                                              # letter-spaced caps
+        cv.drawString(ch, tx, y, f, p); tx += f.measureText(ch) + 4
+    a = s.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType).astype(np.float32) / 255
+    al = a[..., 3]
+    sh = gaussian_filter(al, 4) * 0.6
+    out = np.zeros_like(a); out[..., :3] = 1.0
+    out[..., 3] = np.clip(al * 0.92 + sh * (1 - al), 0, 1)
+    rgb = out[..., :3] * al[..., None] + 0.0 * (1 - al[..., None])     # shadow is black, letters white
+    out[..., :3] = np.where(al[..., None] > 0.01, 1.0, 0.0)
+    Image.fromarray((out * 255).astype(np.uint8), "RGBA").save(path)
+    return path
+
+
+def label(c, text, f_in=6, fade=12):
+    """Camera-parented plane with a small lower-left caption (fades in by frame driver). Idempotent."""
+    if c.get("_label") or "cam" not in c:
+        return
+    cam = c["cam"]
+    path = os.path.join(GEN, "b_label_" + text.lower().replace(" ", "_") + ".png")
+    if not os.path.exists(path):
+        label_image(text, path)
+    m = bpy.data.materials.new("Label"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
+    tex = N.new("ShaderNodeTexImage"); tex.image = bpy.data.images.load(path); tex.image.alpha_mode = 'STRAIGHT'
+    L.new(tc.outputs['UV'], tex.inputs['Vector'])
+    em = N.new("ShaderNodeEmission"); L.new(tex.outputs['Color'], em.inputs['Color']); em.inputs['Strength'].default_value = 0.9
+    tr = N.new("ShaderNodeBsdfTransparent")
+    fv = N.new("ShaderNodeValue")
+    d = fv.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = f"min(1, max(0, (frame - {f_in}) / {fade}))"
+    mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; L.new(tex.outputs['Alpha'], mul.inputs[0]); L.new(fv.outputs[0], mul.inputs[1])
+    mx = N.new("ShaderNodeMixShader"); L.new(mul.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs['Surface'])
+    dist = 0.5; cd = cam.data; sensor = cd.sensor_width
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0)); o = bpy.context.active_object; o.name = "ReconLabel"
+    o.data.materials.append(m); o.parent = cam; o.location = (0, 0, -dist)
+    for axis, k in ((0, 1.0), (1, 816 / 1920)):
+        dd = o.driver_add("scale", axis).driver; dd.type = 'SCRIPTED'
+        v = dd.variables.new(); v.name = "lens"; v.targets[0].id_type = 'CAMERA'; v.targets[0].id = cd; v.targets[0].data_path = "lens"
+        dd.expression = f"{dist} * {sensor} / lens * {k}"
+    o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False; o.visible_transmission = False
+    o.visible_volume_scatter = False
+    c["_label"] = o
+
+

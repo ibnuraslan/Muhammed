@@ -180,7 +180,7 @@ def lane(c):
     box("GardenPath", (GATE.x, -7.5, -0.01), (1.2, 8.4, 0.03), mat("gravel"))
     trees = [((x, y, 0), x * 0.7, s) for (x, y, s) in ((-6, -6, 1.0), (6.5, -7, 1.15), (-13, 6, 1.1), (14, 6, 0.95), (36, -4, 1.1), (-38, 5, 1.2), (3, 8, 0.9))]
     c["trees"] = rj.low_instances("birch", trees)
-    c["trees"] += rj.ph_instances("shrub_02", [((x, -3.9, 0), x, 1.2) for x in (-7, -5.2, 1.0, 3.2, 5.5)])
+    c["trees"] += rj.ph_instances("shrub_02", [((x, -3.9, 0), x, 1.2) for x in (-7.5, 2.0, 5.5)])
     c["flowers"] = c["home"].get("flowers", [])
 
 
@@ -207,8 +207,8 @@ def light(c):
     L = c["light"]
     if look.enabled():
         rj.sky("grey")
-        look.day_light("low_sun", azim=235 if L == "afternoon" else 140, elev=14 if L == "afternoon" else 18, sky="blue",
-                       haze_box=((0, 0, 8), (160, 120, 16)))
+        look.day_light("low_sun", azim=235 if L == "afternoon" else 140, elev=16 if L == "afternoon" else 20, sky="blue",
+                       haze_box=((0, 0, 8), (160, 120, 16)), exposure=0.4)
         return
     from common import sun
     w, s = rj.sky("grey" if L in ("grey", "morning") else "lowsun", rot=0)
@@ -285,7 +285,7 @@ def anim_gate(c, t, shot, dur):
 
 def cam_gate(c, t):
     e = ease(t)
-    a = Vector((GATE.x - 2.2, -8.6, 4.6)); b = Vector((GATE.x - 1.4, -8.2, 1.6))     # crane down from the balcony, behind her
+    a = Vector((GATE.x - 1.6, -6.6, 3.4)); b = Vector((GATE.x - 1.1, -6.2, 1.55))     # crane down in the front garden, behind her
     tgt = Vector((GATE.x + 0.4, -2.0, 1.4)).lerp(Vector((GATE.x + 0.2, -1.0, 0.7)), e)
     return (a.lerp(b, e), tgt, 32)
 
@@ -304,7 +304,7 @@ def anim_lane(c, t, shot, dur):
 
 def cam_lane(c, t):
     e = ease(t)
-    a = Vector((GATE.x - 1.5, -5.2, 1.5)); b = Vector((GATE.x - 1.2, -4.9, 1.45))
+    a = Vector((GATE.x - 0.9, -4.3, 2.0)); b = Vector((GATE.x - 0.7, -4.1, 1.95))
     tgt = c["bike"]["root"].location + Vector((0, 0, 0.8))
     return (a.lerp(b, e), tgt, 85)
 

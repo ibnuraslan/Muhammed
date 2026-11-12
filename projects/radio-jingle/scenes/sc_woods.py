@@ -480,6 +480,8 @@ def cam_cap(c, t):
 # --- 12A / 12B: the five little spruces over the bare earth, the capped tube (dusk) ; 13A/B night ; 14A pull back (grey)
 def anim_spruce(c, t, shot, dur):
     sec = t * dur
+    if shot in ("torch_far", "dark"):
+        rj.label(c, "Court reconstruction")              # the court's inference: same lower-left label as chat B
     for k, s in enumerate(c.get("saplings", [])):
         s.rotation_euler.x = 0.05 * math.sin(sec * 1.6 + k); s.rotation_euler.y = 0.04 * math.sin(sec * 1.2 + k * 1.3)
     if "torch" in c:
@@ -488,6 +490,13 @@ def anim_spruce(c, t, shot, dur):
             p = Vector((-14 + 1.4 * sec, 12 - 1.6 * sec, 1.1 + 0.05 * math.sin(sec * 5)))
         else:
             p = Vector((-8.5, 5.0, 1.0))
+            ld = bpy.data.objects.get(tr.get("light", ""))
+            if ld is not None:                              # the torch goes out (frame-driven, survives the bake)
+                if not ld.data.animation_data:
+                    rj.driven(ld.data, "energy", "45 * (frame < 50)")
+                    for ch in tr.children:
+                        if ch.name.startswith("TLens"):
+                            rj.emission_driven(ch.data.materials[0], "30 * (frame < 50)")
         tr.location = p
         aim = (BOX - p); aim.z = 0; aim.normalize(); aim.z = -0.35
         tr.rotation_euler = aim.normalized().to_track_quat('-Y', 'Z').to_euler()
