@@ -311,7 +311,7 @@ ROLES = {
     # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
     # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 42, "female_elegantsuit01", "long01", 0.22, 0.08, 0.18, 0.55, 0.45, 0.45),
+    "mother":     (0.0, 42, "female_elegantsuit01", "ponytail01", 0.30, 0.08, 0.18, 0.55, 0.45, 0.45),
     "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
     "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
     "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
@@ -417,6 +417,18 @@ def _two_tone_local(o, split, top, bottom):
     co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co)
     at = me.attributes.get("rest_z") or me.attributes.new("rest_z", 'FLOAT', 'POINT')
     at.data.foreach_set("value", co.reshape(-1, 3)[:, 2].copy())
+
+
+def hair_trim(h, frac=0.80):
+    """Cut a long hairstyle to shoulder length: delete hair faces whose rest height is below frac x body height."""
+    import bmesh
+    top = rj_height(h); zc = frac * top
+    for o in h.parts:
+        if o.type == 'MESH' and "long01" in o.name:
+            bm = bmesh.new(); bm.from_mesh(o.data)
+            kill = [f for f in bm.faces if all(v.co.z < zc for v in f.verts)]
+            bmesh.ops.delete(bm, geom=kill, context='FACES')
+            bm.to_mesh(o.data); bm.free(); o.data.update()
 
 
 def hair_matte(h):
