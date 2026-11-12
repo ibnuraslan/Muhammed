@@ -656,12 +656,14 @@ def close_on(H, s, f, obj, grip):
         ok, loc, nrm, idx = obj.closest_point_on_mesh(obj.matrix_world.inverted() @ guess)
         rot.update(HP._solve_thumb(Hh, rot, ("point", 0.010), wr_, d_, n_, a_, target=Mw.inverted() @ (obj.matrix_world @ loc), obj=obj, radius=0.008))
     HP._key(rig, s, rot, f, 1.0); return rep
-for obj_, s_, f0_, f1_, g_ in ((SCN, "R", 528, 744, "wrap"), (PRO, "R", 1509, 1692, "wrap"), (SYR, "L", 1717, 1803, "pinch"), (TWZ, "R", 1807, 1962, "pinch")):
-    miss = []
+# director review: hand placed on the tool (nudge_hand, as grip_object), then a whole library preset keyed (no per-finger
+# closure, which left half-open claws): wrap_grip on the scanner handle, cup_hold under the prosthetic, pinch on syringe/tweezers
+for obj_, s_, f0_, f1_, g_, pz_ in ((SCN, "R", 528, 744, "wrap", "wrap_grip"), (PRO, "R", 1509, 1692, "wrap", "cup_hold"),
+                                    (SYR, "L", 1717, 1803, "pinch", "pinch"), (TWZ, "R", 1807, 1962, "pinch", "pinch")):
     for f_ in sorted(set(list(range(f0_, f1_ + 1, 4)) + [f1_])):
-        rp = close_on(VB, s_, f_, obj_, g_)
-        if sum(1 for v in rp.values() if v is not None) < (2 if g_ == "pinch" else 3): miss.append(f_)
-    print("CLOSE", obj_.name, "frames w/o contact", miss)
+        nudge_hand(VB.r.o, s_, f_, obj_, g_); HP.apply_pose(VB.r.o, s_, pz_, f_)
+hpose(VB, "R", (1968, 1975), "relaxed")               # released after setting the tweezers down
+hpose(VB, "R", (748,), "relaxed")                     # released after setting the scanner down
 ev(1910); print("PIN at 1910", [round(x, 3) for x in PIN.matrix_world.translation], "target", [round(x, 3) for x in pin_in])
 ev(1768); print("SYR tip region at 1768", [round(x, 3) for x in (SYR.matrix_world @ Vector((0, 0, 0.06)))], "dist", round((SYR.matrix_world @ Vector((0, 0, 0.06)) - seam).length, 3), "seam", [round(x, 3) for x in seam])
 

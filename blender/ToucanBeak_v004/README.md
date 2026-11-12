@@ -1,6 +1,6 @@
 # ToucanBeak v004: acting pass (Connect28). Built from v003.
 
-- **File:** `ToucanBeak_v004_60fps.blend`, packed, 94.69 MB, normal git file, no LFS. It opens in factory Blender 5.2.2 with 0 unpacked images and 0 linked libraries. Check still: `package_check_lowres.jpg` (frame 1700, 270×480, 8 samples).
+- **File:** `ToucanBeak_v004_60fps.blend`, packed, 94.67 MB, normal git file, no LFS. It opens in factory Blender 5.2.2 with 0 unpacked images and 0 linked libraries. Check still: `package_check_lowres.jpg` (frame 1700, 270×480, 8 samples).
 - **Format:** same as v003. See `SETTINGS.md`. Story-beat frames (`beats.json`) are unchanged. No voiceover was added.
 - **Fix list:** `review/ACTING_notes.md`.
 - **Sheets:** `review/before_v003_0p5s_0..2.jpg` and `review/after_v004_0p5s_0..2.jpg`.
@@ -16,8 +16,8 @@
 | HOVER | 0 | |
 | FACEPRESS | 0 | |
 | BACKHEAD | 0 | |
-| CLAW | 20 | Open. VetB R: 17 on the scanner hold (529–691), 3 on the tweezers hold (1843, 1903, 1951). The fingers close around the scanner in the close-ups, but the closure test finds no contact on those frames. |
-| EMPTY | 609 | False positive or intended (see below). |
+| CLAW | 0 | Fixed after the director's review: the hand is placed on the tool, then a library preset is keyed (`wrap_grip` scanner, `cup_hold` prosthetic, `pinch` syringe and tweezers, including pick-up and put-down), then `relaxed` after each release. |
+| EMPTY | 611 | False positive or intended (see below). |
 | FILL | 35 | False positive or intended (see below). |
 | INSIDE | 58 | False positive (see below). |
 
@@ -27,7 +27,7 @@ Why the EMPTY, FILL and INSIDE flags are false positives or intended:
 - **Extrude_cutter** is a boolean cutter with `hide_render` on.
 - **Void_front, Wall_patch and Monitor_back** have camera visibility keyed off on the flagged portal frames (745–769, 1501–1537).
 
-## Audit (audit_v004.txt, every 6 frames): open items
+## Audit (audit_v004.txt, every 6 frames, from the build before the director-review hand fix): open items
 - **HAND_IN_BIRD 33 and HAND_IN_PROP 28:** VetB's right hand goes 1–3 vertices into the beak and the prosthetic, 1525–1692. These are new in v004, because the prosthetic now actually reaches the beak (in v003 it was keyed to the scene origin).
 - **HAND_SELF 23:** the assistant's library `relaxed` fingers touch his own thighs, 1–4 vertices.
 - Every other check is 0.
