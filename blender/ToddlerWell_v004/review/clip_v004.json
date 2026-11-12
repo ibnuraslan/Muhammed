@@ -1,5 +1,33 @@
 {
  "frames": {
+  "271": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "295": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "301": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "319": {
+   "Crowd1_dup2": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
   "1027": {
    "Teen": {
     "self": 0,
@@ -75,13 +103,6 @@
     "other": 9
    }
   },
-  "1765": {
-   "Toddler": {
-    "self": 0,
-    "clothes": 0,
-    "other": 3
-   }
-  },
   "1771": {
    "ResA": {
     "self": 6,
@@ -91,7 +112,12 @@
    "Teen": {
     "self": 0,
     "clothes": 0,
-    "other": 5
+    "other": 2
+   },
+   "Toddler": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
    }
   },
   "1777": {
@@ -106,6 +132,13 @@
     "self": 0,
     "clothes": 0,
     "other": 13
+   }
+  },
+  "1801": {
+   "Teen": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
    }
   },
   "1813": {
