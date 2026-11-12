@@ -29,7 +29,7 @@ def build(variant=None):
     mx = N.new("ShaderNodeMixShader"); L.new(lp.outputs['Is Camera Ray'], mx.inputs[0]); L.new(N["Background"].outputs[0], mx.inputs[1])
     L.new(bg2.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], N["World Output"].inputs['Surface'])
     stone = dd.tex_mat("white_sandstone_blocks_02", 0.3, tint=(0.88, 0.86, 0.82), name="CourtStone", sat=0.5)
-    stepm = dd.wet(dd.tex_mat("white_sandstone_blocks_02", 0.8, tint=(1.0, 0.98, 0.94), name="StepStone", sat=0.4), 0.38, ripples=False)
+    stepm = dd.wet(dd.tex_mat("concrete_floor_02", 0.8, tint=(1.08, 1.06, 1.02), name="StepStone", sat=0.3), 0.45, ripples=False)
     B = dd.Builder("Steps")
     for k in range(NST):
         B.box((0, k * RUN + RUN / 2, (k + 1) * RISE / 2), (30, RUN, (k + 1) * RISE), stepm)
@@ -54,10 +54,10 @@ def build(variant=None):
               rot=(-0.3 * math.sin(a_), 0.3 * math.cos(a_), 0))
     T.box((0, 0.05, 1.5), (0.16, 0.45, 0.22), pbr("TVCam", (0.06, 0.06, 0.065), 0.35, 0.3))
     T.cyl((0, -0.22, 1.52), 0.06, 0.12, pbr("TVLens", (0.01, 0.01, 0.01), 0.15, 0.2), verts=16, rot=(math.radians(90), 0, 0))
-    T.done((1.8, -1.6, 0), rot_z=math.radians(160))
+    T.done((2.4, -0.6, 0), rot_z=math.radians(160))
     op = person("TVOp", 1.0, 38, "male_casualsuit03", "short01", cval=0.9)
     from human import pose_walk
-    dd.zero(op); pose_walk(op, 0.0, stride=0.0, arm_swing=0.0); dd.place(op, (1.95, -2.15, 0), math.radians(160)); dd.arms_relaxed(op)
+    dd.zero(op); pose_walk(op, 0.0, stride=0.0, arm_swing=0.0); dd.place(op, (2.6, -1.15, 0), math.radians(160)); dd.arms_relaxed(op)
     c["op"] = op
     rng = np.random.default_rng(3)
     c["people"] = []
@@ -73,7 +73,7 @@ def build(variant=None):
         y0 = TOP_Y + 0.4 + float(rng.uniform(0, 1.8))
         prop = None
         if props[k] == "camera":
-            prop = dd.model_h("Camera_01", (0, 0, 0), 0.12)
+            prop = dd.model_h("Camera_01", (0, 0, 0), 0.16)
         elif props[k] == "mic":
             prop = cyl(f"RepMic{k}", (0, 0, 0), 0.012, 0.2, pbr("RepMicM", (0.03, 0.03, 0.03), 0.4), verts=10)
         c["people"].append((h, Vector((x, y0, 0)), float(rng.uniform(0, 2.0)), prop, float(rng.uniform(-0.6, 0.6))))
@@ -91,5 +91,5 @@ def anim_steps(c, t):
 
 
 MOVES = {"steps": dict(kind="anim", dof=8.0, anim=anim_steps,
-                       cam=lambda c, t: (Vector((4.6, -3.6, 1.55)).lerp(Vector((4.0, -3.1, 1.5)), ease(t)), Vector((-0.6, 4.0, 1.7)), 35),
+                       cam=lambda c, t: (Vector((4.6, -3.6, 1.55)).lerp(Vector((4.0, -3.1, 1.5)), ease(t)), Vector((-0.6, 4.0, 2.5)), 35),
                        focus=lambda c, t: Vector((-0.3, 3.0, 1.2)))}
