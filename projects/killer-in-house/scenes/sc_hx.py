@@ -54,7 +54,7 @@ def build(variant=None):
             c[nm] = H.vehicle(nm, col, kind)
     c["variant"] = vv
     import look                   # house look (cinematic): low sky + one sun key + haze by day
-    if tod == "day":              # LOOK v5: real colours; low sun raking across the street, blue sky; winter grey overcast
+    if tod == "day" and name not in ("rake",):   # (1B rake: grade only: the relight lost Philip's face) LOOK v5: real colours; low sun raking across the street, blue sky; winter grey overcast
         if season == "winter":
             look.day_light("overcast", azim=200)
         else:
