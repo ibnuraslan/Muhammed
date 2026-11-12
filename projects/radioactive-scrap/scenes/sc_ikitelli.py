@@ -221,7 +221,7 @@ def hollow_house(name, loc, w, d, h, plaster, roof, win_at, rng):
     cord = cyl("BulbCord", (k0.x, k0.y, h - 0.5), 0.004, 0.9, pbr("Cord", (0.02, 0.02, 0.02), 0.6), verts=6)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.045, location=(k0.x, k0.y, h - 1.0))
     bulb = bpy.context.active_object; bulb.data.materials.append(pbr("Bulb", (1, 1, 1), 0.2, 0.0, **{'Emission Color': (1.0, 0.75, 0.45, 1), 'Emission Strength': 25.0}))
-    l = bpy.data.lights.new("KitchenBulb", 'POINT'); l.energy = 120; l.color = (1.0, 0.72, 0.42); l.shadow_soft_size = 0.05
+    l = bpy.data.lights.new("KitchenBulb", 'POINT'); l.energy = 450; l.color = (1.0, 0.72, 0.42); l.shadow_soft_size = 0.05
     lo = bpy.data.objects.new("KitchenBulb", l); bpy.context.collection.objects.link(lo); lo.location = (k0.x, k0.y, h - 1.08)
     curtain = box("Curtain", (win_at.x + 0.12, win_at.y + 0.3, win_at.z + 0.1), (0.02, 0.45, 1.25), fabric("CurtainF", (0.6, 0.45, 0.3), 0.9, 0.4, 600))
     return dict(table=k0, bulb=lo, window=win_at)
@@ -594,8 +594,10 @@ def i2b(c, t):          # dusk, low close on the bucket hooking the shell, men s
 
 def i3a(c, t):
     sec = S("intro_3a", t); stage(c, "yard", truck_at=(1.5, 12.8, math.pi), shells=(70, 0), people=("worker",))
-    rail = c["truck"].matrix_world @ Vector((-2.1, -0.6, 1.36))
-    lean_forearm(c, c["people"]["worker"], sec, rail + Vector((-0.55, -0.15, -rail.z)), rail, rail + Vector((1, 0, 0)))
+    M = c["truck"].matrix_world
+    rail = M @ Vector((-0.6, 1.07, 1.36)); out = (M.to_3x3() @ Vector((0, 1, 0))).normalized()
+    st = rail + out * 0.5; st.z = 0
+    lean_forearm(c, c["people"]["worker"], sec, st, rail, rail)
     c["focus"] = c["people"]["worker"].bone_head("spine05")
 
 
@@ -932,12 +934,12 @@ SHOTS = {
     "ch4_5b": ("yard", c4_5b, C((-1.0, 11.0, 1.2), (-1.3, 11.3, 1.2), (-3.6, 14.2, 0.7), 32), 4.0),
     "intro_1a": ("drive", i1a, C((14.0, -2.6, 0.9), (13.0, -2.4, 1.1), (-14, 0.6, 2.0), 40), 4.0),
     "intro_1b": ("drive", i1b, C((-3.6, 1.5, 0.95), (-2.0, 1.55, 1.0), (0.9, 5.0, 1.45), 32), 2.8),
-    "intro_2a": ("yard_dusk", i2a, C((C2.x - 0.3, C2.y - 2.2, 0.45), (C2.x - 0.45, C2.y - 1.8, 0.45), (C2.x - 0.55, C2.y - 0.3, 0.75), 35), 2.0),
-    "intro_2b": ("yard_dusk", i2b, C((-0.8, 5.6, 0.5), (-1.3, 5.9, 0.55), (-2.2, 9.2, 1.0), 30), 2.8),
+    "intro_2a": ("yard_dusk", i2a, C((C2.x + 1.3, C2.y + 1.9, 0.55), (C2.x + 1.0, C2.y + 1.6, 0.6), (C2.x - 0.8, C2.y - 0.4, 0.95), 35), 2.0),
+    "intro_2b": ("yard_dusk", i2b, C((-4.6, 5.4, 0.55), (-4.2, 5.7, 0.6), (-2.4, 9.0, 1.1), 28), 2.8),
     "intro_3a": ("yard", i3a, C((-3.6, 8.0, 1.5), (-3.2, 8.4, 1.55), (-0.8, 11.6, 1.2), 32), 4.0),
     "intro_3b": ("yard", i3b, C((-2.45, 3.75, 1.12), (-2.65, 3.8, 1.12), (-5.3, 3.75, 1.2), 40), 2.0),
     "intro_4a": ("late", i4a, C((-6.5, 11.8, 1.05), (-6.2, 12.1, 1.05), (-2.9, 14.6, 0.55), 32), 3.5),
-    "intro_4b": ("dusk", i4b, C((-5.0, -1.2, 1.6), (-3.8, 2.2, 1.5), (4.0, 12.0, 1.3), 28), 5.6),
+    "intro_4b": ("dusk", i4b, C((-5.5, 1.0, 1.6), (-4.0, 4.0, 1.55), (6.0, 11.5, 1.4), 28), 5.6),
     "ch1_1a": ("drive", c1_1a, C((-18, -16, 12), (-16, -14, 5.5), (-4, -4, 1.2), 28), None),
     "ch1_1b": ("drive", c1_1b, C((-1.5, 1.0, 1.5), (-1.2, 1.4, 1.5), (7.0, 4.6, 1.3), 35), 4.0),
     "ch1_4a": ("lot", c1_4a, C((6.0, -18.0, 4.5), (5.0, -17.0, 4.0), (0.0, -10.0, 0.8), 28), None),
