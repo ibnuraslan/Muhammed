@@ -153,14 +153,89 @@ SEATED_FO = (0.52, 1.57, -0.23)
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)        # face turned toward the cabin, readable
 fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)
 fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30), armR=(55, 0, 15))   # hauled up/back
-fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(30, 40, 20), armR=(60, -10, 15))
-fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(30, 62, 15), armR=(62, -10, 15))  # left arm swings onto yoke
-fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(25, 70, 15), armR=(62, -10, 15))
+fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20), armR=(60, -10, 15))
+fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12), armR=(62, -10, 15))  # left arm swings down onto the yoke
+fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12), armR=(62, -10, 15))
 fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20), armR=(60, -20, 15))
 fo_pose(F(33.4), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20), armR=(58, 0, 15))
 fo_pose(F(38.0), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10), armR=(60, 0, 10))
 for f in range(F(38.0) + 60, 4410, 240):
     fo_pose(f, (0.78, 0.72, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45 + 4 * math.sin(f), hside=35, legs=(80, 20), armL=(55, 5, 10), armR=(60, 0, 10))
+
+# ------------------------------------------------------------------ pilot uniform details (bone-attached; director v006)
+M_gold = mat("M_uniform_gold", (0.95, 0.68, 0.18), rough=0.3, metal=1.0)
+M_navy = mat("M_uniform_navy", (0.0103, 0.0176, 0.0513), rough=0.6)
+M_shirt = mat("M_uniform_shirt", (0.85, 0.87, 0.9), rough=0.5)
+M_tie = mat("M_uniform_tie", (0.012, 0.014, 0.03), rough=0.45)
+M_belt = mat("M_uniform_belt", (0.01, 0.01, 0.01), rough=0.35)
+def attach(ob, arm, bone):
+    pb = arm.pose.bones[bone]
+    c = ob.constraints.new('CHILD_OF'); c.target = arm; c.subtarget = bone
+    c.inverse_matrix = (arm.matrix_world @ pb.matrix).inverted()
+def bone_frame(arm, bone):
+    M = arm.matrix_world @ arm.pose.bones[bone].matrix
+    return M.translation.copy(), M.to_3x3().normalized()
+def uniform(arm, tag):
+    sc.frame_set(1); bpy.context.view_layer.update()
+    cU = coll("UNIFORM")
+    W = arm.matrix_world.to_3x3().normalized()
+    fwd = (W @ Vector((0, -1, 0))).normalized()                      # character forward
+    for s_ in "LR":
+        side = (W @ Vector((1 if s_ == "L" else -1, 0, 0))).normalized()
+        # four gold cuff rings near the wrist
+        h, R = bone_frame(arm, "lowerarm02." + s_); tail = arm.matrix_world @ arm.pose.bones["lowerarm02." + s_].tail
+        ax = (tail - h).normalized()
+        cuff = MB("CUFF_%s_%s" % (tag, s_))
+        for k in range(4):
+            c = tail - ax * (0.035 + k * 0.014)
+            bm_ = cuff; g = bmesh.ops.create_cone(bm_.bm, cap_ends=False, segments=20, radius1=0.047, radius2=0.047, depth=0.006)
+            M_ = Matrix.Translation(c) @ ax.to_track_quat('Z', 'Y').to_matrix().to_4x4()
+            bm_._fin(g["verts"], M_, M_gold)
+        co = cuff.obj(cU); attach(co, arm, "lowerarm02." + s_)
+        # epaulette with four gold bars on the shoulder top
+        h, R = bone_frame(arm, "shoulder01." + s_); tail = arm.matrix_world @ arm.pose.bones["shoulder01." + s_].tail
+        up = (arm.matrix_world.to_3x3() @ arm.pose.bones["spine01"].matrix.to_3x3() @ Vector((0, 1, 0))).normalized()
+        mid = (h + tail) / 2 + up * 0.075; d = (tail - h).normalized()
+        ep = MB("EPAULETTE_%s_%s" % (tag, s_)); rot = Matrix((d, up.cross(d).normalized(), up)).transposed()
+        g = bmesh.ops.create_cube(ep.bm, size=1.0); ep._fin(g["verts"], Matrix.Translation(mid) @ rot.to_4x4() @ Matrix.Diagonal((0.13, 0.055, 0.008, 1)), M_navy)
+        for k in range(4):
+            g = bmesh.ops.create_cube(ep.bm, size=1.0)
+            ep._fin(g["verts"], Matrix.Translation(mid + d * (0.03 - k * 0.016) + up * 0.005) @ rot.to_4x4() @ Matrix.Diagonal((0.006, 0.05, 0.004, 1)), M_gold)
+        eo = ep.obj(cU); attach(eo, arm, "shoulder01." + s_)
+    # collar, tie, wing badge on the chest
+    nh = arm.matrix_world @ arm.pose.bones["neck01"].head
+    sh = arm.matrix_world @ arm.pose.bones["spine01"].head
+    up = (nh - sh).normalized(); side = (W @ Vector((1, 0, 0))).normalized(); f2 = up.cross(side).normalized()
+    if f2.dot(fwd) < 0: f2 = -f2
+    rot = Matrix((side, up, f2)).transposed().to_4x4()
+    ch = MB("CHEST_%s" % tag)
+    def bx(c, sz, m, extra=Matrix.Identity(4)):
+        g = bmesh.ops.create_cube(ch.bm, size=1.0); ch._fin(g["verts"], Matrix.Translation(c) @ rot @ extra @ Matrix.Diagonal((*sz, 1)), m)
+    base = nh + f2 * 0.075 - up * 0.02
+    for sg in (-1, 1):
+        bx(base + side * sg * 0.035, (0.05, 0.035, 0.01), M_shirt, Matrix.Rotation(R_(sg * 25), 4, 'Z'))       # collar points
+        bx(nh + f2 * 0.06 - up * 0.17 + side * sg * 0.075, (0.02, 0.26, 0.008), M_gold if False else M_navy, Matrix.Rotation(R_(-sg * 18), 4, 'Z'))   # lapel edge
+        bx(nh + f2 * 0.064 - up * 0.17 + side * sg * 0.088, (0.004, 0.26, 0.004), M_shirt, Matrix.Rotation(R_(-sg * 18), 4, 'Z'))  # lapel highlight line
+    bx(base - up * 0.03, (0.03, 0.025, 0.012), M_tie)                                                            # knot
+    bx(base - up * 0.15, (0.04, 0.22, 0.006), M_tie)                                                             # tie
+    wc = nh + f2 * 0.08 - up * 0.13 + side * 0.10                                                                # wing badge (shape only)
+    for sg in (-1, 1):
+        bx(wc + side * sg * 0.028, (0.045, 0.012, 0.003), M_gold, Matrix.Rotation(R_(sg * 12), 4, 'Z'))
+    bx(wc, (0.016, 0.016, 0.004), M_gold)
+    # belt line
+    rh = arm.matrix_world @ arm.pose.bones["spine05"].head
+    for sg in (-1, 1):
+        bx(rh + f2 * 0.12 + side * sg * 0.08 + up * 0.04, (0.14, 0.03, 0.006), M_belt)
+    bx(rh + f2 * 0.125 + up * 0.04, (0.035, 0.03, 0.008), M_gold)
+    co = ch.obj(cU); attach(co, arm, "spine01")
+    # trouser creases (thin lighter navy line down the front of each thigh)
+    for s_ in "LR":
+        h = arm.matrix_world @ arm.pose.bones["upperleg01." + s_].head; t = arm.matrix_world @ arm.pose.bones["lowerleg01." + s_].head
+        d = (t - h).normalized(); n = (fwd - d * fwd.dot(d)).normalized()
+        cr = MB("CREASE_%s_%s" % (tag, s_)); g = bmesh.ops.create_cube(cr.bm, size=1.0)
+        r3 = Matrix((n.cross(d).normalized(), d, n)).transposed()
+        cr._fin(g["verts"], Matrix.Translation((h + t) / 2 + n * 0.085) @ r3.to_4x4() @ Matrix.Diagonal((0.004, (t - h).length * 0.8, 0.003, 1)), mat("M_crease", (0.05, 0.07, 0.14), rough=0.5))
+        cro = cr.obj(cU); attach(cro, arm, "upperleg02." + s_)
 
 # ------------------------------------------------------------------ props
 DOOR = OB["DOOR"]
@@ -208,6 +283,8 @@ for k in range(4):   # drips over the tray edge
         d_.location = (x0, y0, max(0.02, TRAY_Z - 0.01 - dz)); d_.keyframe_insert("location", frame=F(t))
     d_.scale = (0, 0, 0); d_.keyframe_insert("scale", frame=F(t0) - 1); d_.scale = (1, 1, 1); d_.keyframe_insert("scale", frame=F(t0))
     d_.keyframe_insert("scale", frame=F(t0 + 1.0)); d_.scale = (0, 0, 0); d_.keyframe_insert("scale", frame=F(t0 + 1.05))
+
+uniform(FO, 'FO'); uniform(CA, 'CAPT')
 
 # radio LEDs blink 19.7 .. 27
 for i in range(6):
@@ -515,10 +592,10 @@ def fo_point(f, bone, off):
 for f in range(F(27.9), F(33.3), 8):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
     hand("L", f, fo_point(f, "neck01", (-0.04, -0.15, 0.05)), d=(0.3, 1, -0.4), n=(0, -0.5, 1), curl=72)
     hand("R", f, fo_point(f, "upperarm01.L", (-0.07, -0.10, 0.21)), d=(0.3, 1, -0.6), n=(0, -0.3, 1), curl=72)          # top of his near shoulder, outside the jacket
-body(F(28.8), (0.04, 0.95, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
-feet(F(29.2), (-0.10, 0.80), (0.14, 0.90)); H.key_foot("L", F(29.0), Vector((0.05, 0.78)), 180, 0.05)
-body(F(29.8), (0.0, 0.74, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
-feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.13, 0.80)), 180, 0.06)
+body(F(28.8), (0.0, 0.84, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
+feet(F(29.2), (-0.14, 0.72), (0.10, 0.80)); H.key_foot("L", F(29.0), Vector((-0.05, 0.76)), 180, 0.05)
+body(F(29.8), (-0.10, 0.64, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
+feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.05, 0.74)), 180, 0.06)
 body(F(30.6), (-0.12, 0.64, STAND_Z - 0.12), flex=8, sflex=8, twist=-5, head=(15, 0))
 body(F(31.4), (-0.10, 0.64, STAND_Z - 0.16), flex=10, sflex=10, twist=-5, head=(20, 0))
 body(F(32.4), (0.18, 0.76, STAND_Z - 0.24), flex=20, sflex=12, twist=-20, head=(25, -10))
@@ -661,7 +738,7 @@ LOOK = [(0.0, 0, -48), (0.6, 4, -38), (1.2, 0, -8), (2.3, -65, -10), (3.4, 53, -
         (11.6, -14, -34), (12.1, -30, -10), (12.8, -40, -14), (13.5, -10, -32), (14.1, 22, -58), (15.1, 5, -66), (16.0, -8, -16),
         (16.8, -45, -14), (17.8, -42, -16), (18.8, -22, -26), (19.7, -14, -58), (20.8, -14, -55), (21.8, -5, -30),
         (22.8, 4, -30), (23.9, -6, -26), (25.2, 0, -52), (26.0, 4, -48), (26.9, -48, -20), (28.0, -42, -26), (29.0, -34, -22),
-        (30.5, -18, -32), (31.8, -22, -36), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
+        (30.5, -16, -30), (31.8, -22, -36), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
         (38.8, 0, -28), (39.8, 0, -48), (40.8, 22, -34), (41.8, 0, -8), (42.5, 0, -5), (43.6, 0, -34), (44.7, 0, -6), (45.8, 4, -4),
         (47.1, -14, -26), (48.0, -16, -30), (48.8, -4, -6), (49.6, 0, -48), (50.4, -55, -18), (51.2, -48, -20), (52.0, -10, -8), (52.9, 60, -34), (53.5, 0, -12), (54.1, -22, -10), (54.8, 14, -20), (55.5, -4, -26), (56.1, 6, -10),
         (56.8, 48, -30), (57.4, 30, -14), (58.0, 0, -8), (58.6, -12, 2), (59.2, 48, -33), (60.4, 5, -44), (61.5, 0, 4), (62.0, 8, -4), (62.6, 72, -12), (63.6, 45, -30),

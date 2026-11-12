@@ -37,18 +37,22 @@ cs = M["M_cockpit_shell"].node_tree
 for n in cs.nodes:
     if n.type == 'TEX_BRICK':
         n.inputs["Color1"].default_value = (0.42, 0.47, 0.53, 1); n.inputs["Color2"].default_value = (0.39, 0.44, 0.5, 1); n.inputs["Mortar"].default_value = (0.3, 0.34, 0.38, 1)
-# pilots' suits: clean navy uniform
+# pilots' suits: dark navy #1A2440 where the MakeHuman texture is dark; shirt/tie areas (bright) keep their texture
 for m in M:
     if "elegantsuit" in m.name and m.use_nodes:
-        hs = [n for n in m.node_tree.nodes if n.type == 'HUE_SAT']
-        for n in hs: n.inputs["Value"].default_value = 1.5; n.inputs["Saturation"].default_value = 1.3
-        for n in m.node_tree.nodes:
-            if n.type == 'NORMAL_MAP': n.inputs["Strength"].default_value = 1.0          # keep the fabric folds and seams
-        p = m.node_tree.nodes.get("Principled BSDF")
-        if p and hs:
-            mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs["Factor"].default_value = 0.5
-            m.node_tree.links.new(hs[0].outputs["Color"], mx.inputs["A"]); mx.inputs["B"].default_value = (0.5, 0.62, 1.0, 1)
-            m.node_tree.links.new(mx.outputs["Result"], p.inputs["Base Color"])
+        nt = m.node_tree; p = nt.nodes.get("Principled BSDF"); tex = [n for n in nt.nodes if n.type == 'TEX_IMAGE' and "diffuse" in (n.image.name.lower() if n.image else "")]
+        if not (p and tex): continue
+        for n in nt.nodes:
+            if n.type == 'NORMAL_MAP': n.inputs["Strength"].default_value = 1.0
+        bw = nt.nodes.new("ShaderNodeRGBToBW"); nt.links.new(tex[0].outputs["Color"], bw.inputs[0])
+        mr = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(bw.outputs[0], mr.inputs["Value"]); mr.inputs["From Min"].default_value = 0.25; mr.inputs["From Max"].default_value = 0.45
+        fold = nt.nodes.new("ShaderNodeMapRange"); nt.links.new(bw.outputs[0], fold.inputs["Value"]); fold.inputs["From Min"].default_value = 0.0; fold.inputs["From Max"].default_value = 0.25
+        fold.inputs["To Min"].default_value = 0.55; fold.inputs["To Max"].default_value = 1.5
+        nv = nt.nodes.new("ShaderNodeMix"); nv.data_type = 'RGBA'; nv.blend_type = 'MULTIPLY'; nv.inputs["Factor"].default_value = 1.0
+        nv.inputs["A"].default_value = (0.0103 * 0.9, 0.0176 * 0.9, 0.0513 * 0.9, 1); nt.links.new(fold.outputs["Result"], nv.inputs["B"])
+        mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; nt.links.new(mr.outputs["Result"], mx.inputs["Factor"])
+        nt.links.new(nv.outputs["Result"], mx.inputs["A"]); nt.links.new(tex[0].outputs["Color"], mx.inputs["B"])
+        nt.links.new(mx.outputs["Result"], p.inputs["Base Color"]); p.inputs["Roughness"].default_value = 0.55
 # light: high-key soft fill in the cockpit and cabin
 O = bpy.data.objects
 for nm, k in (("L_cockpit", 3.0), ("L_door_fill", 2.0), ("L_panel_glow", 2.5)):

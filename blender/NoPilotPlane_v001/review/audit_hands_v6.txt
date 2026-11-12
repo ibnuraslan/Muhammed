@@ -1,0 +1,8 @@
+HAND AUDIT every 2 frames (2205 samples): hand vertices > 3 mm inside another surface
+flagged samples: 137; total vertex hits: 4214
+  hand R vs own clothes                      1859  frames: 0.00-0.07s, 9.03-9.40s, 15.83-16.13s, 16.43-16.50s, 17.57-17.83s, 19.23-19.77s
+  hand L vs own clothes                      1411  frames: 0.00-0.10s, 31.90-32.30s, 32.37-32.37s, 32.43-32.43s, 32.50-32.53s, 32.70-32.70s, 32.77-32.77s, 64.90-66.30s
+  hand L vs hand R                            461  frames: 27.40-27.53s
+  hand R vs FO.body                           296  frames: 30.33-30.50s, 30.60-30.87s
+  hand R vs own body/head                     180  frames: 15.90-16.10s
+  hand R vs hand L                              7  frames: 27.40-27.47s
