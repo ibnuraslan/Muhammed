@@ -746,7 +746,7 @@ dsp = fw.modifiers.new("Chop", "DISPLACE"); tx = bpy.data.textures.new("Chop", "
 # garden hose: reel at the house front wall, hose across the lawn to Valve_0 (end hooked to the valve)
 hose_reel = bpy.data.objects.new("HoseReel", ASSET["hose"].data); link(hose_reel, C_SET); hose_reel.location = (-4.6, -6.15, 0.0); hose_reel.rotation_euler.z = R_(90)
 cu = bpy.data.curves.new("Hose", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = 0.011; cu.bevel_resolution = 3
-spl = cu.splines.new("BEZIER"); P = [(-4.45, -6.2, 0.32), (-4.5, -6.5, 0.02), (-4.9, -7.1, 0.015), (-5.25, -7.6, 0.015), (-5.3, -8.25, 0.05), (-5.3, -8.85, 0.2)]
+spl = cu.splines.new("BEZIER"); P = [(-4.45, -6.2, 0.32), (-4.5, -6.5, 0.02), (-4.75, -7.0, 0.015), (-4.95, -7.45, 0.015), (-5.0, -7.75, 0.03), (-5.3, -8.85, 0.2)]
 spl.bezier_points.add(len(P) - 1)
 for bp_, p in zip(spl.bezier_points, P): bp_.co = p; bp_.handle_left_type = bp_.handle_right_type = "AUTO"
 hose = bpy.data.objects.new("Hose", cu); link(hose, C_SET)

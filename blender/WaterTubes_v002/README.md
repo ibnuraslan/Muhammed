@@ -22,6 +22,6 @@ Animated-CG look per `STYLE_ANIMATED.md` (client, 22:45 UTC):
 - Contact audit samples (every 5th frame) show feet more than 4 cm above the surface mostly mid-swing and on the porch steps. Planted feet look grounded in the close-ups.
 - The rounded start cap of each tube shows a small crease where the end fan closes.
 - In the beat 1 close-up, the right fist sits on the hose at the nozzle rather than visibly wrapping the brass nozzle.
-- Beat 1 opens with a sidewalk slab large in the foreground (a low ground-skim start).
+- The garden hose makes a small loop above the lawn in beat 1.
 - The storm sky is soft grey-blue rather than a clear blue sky until beat 8, because the story needs the storm.
 - No VO yet; beats are built to the brief's target times.

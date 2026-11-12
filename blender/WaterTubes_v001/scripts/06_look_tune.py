@@ -137,7 +137,7 @@ for n in nt.nodes:
     if n.type == "VALTORGB" and len(n.color_ramp.elements) == 2 and n.color_ramp.elements[0].color[0] < 0.03:
         n.color_ramp.elements[0].color = (0.035, 0.04, 0.038, 1); n.color_ramp.elements[1].color = (0.07, 0.078, 0.072, 1)
     if n.type == "MIX" and n.data_type == "RGBA" and not n.inputs["B"].links:
-        n.inputs["B"].default_value = (0.3, 0.2, 0.1, 1)
+        n.inputs["B"].default_value = (0.045, 0.05, 0.047, 1)
     if n.type == "MATH" and n.operation == "MULTIPLY" and n.inputs[1].default_value == 1.8: n.inputs[1].default_value = 0.5
 # lawn: brighter, cleaner green
 for gname in ("Lawn_G",):

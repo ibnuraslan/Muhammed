@@ -230,7 +230,7 @@ for f in range(1, F(2.5) + 1, 4):
     H.key_hand("L", f, hose_mid - dL * 0.085 + Vector((0, 0, 0.04)), dL, Vector((0.2, 0, -1)), pole=K + Vector((0.7, 0.2, 0.5)))
     # hose end tracks the valve and passes through the left hand
     hose_pts[-1].co = noz; hose_pts[-1].keyframe_insert("co", frame=f)
-    hose_pts[-2].co = noz + Vector((0.32, 0.48, -0.1)); hose_pts[-2].keyframe_insert("co", frame=f)
+    hose_pts[-2].co = hose_mid + Vector((0.0, 0.0, -0.02)); hose_pts[-2].keyframe_insert("co", frame=f)
     face(HR, f, brow=0.3, jaw=0.08, lids=0.2)
 for f in range(F(2.5) + 4, F(3.7), 4):
     v = valve_pos(f); hose_pts[-1].co = v + Vector((0.0, 0.03, 0.17)); hose_pts[-1].keyframe_insert("co", frame=f)
@@ -389,7 +389,7 @@ cam.data.sensor_width = 36; cam.data.clip_start = 0.02; cam.data.clip_end = 400
 cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 4.0
 V = Vector
 CAM = [  # (t seconds, position, look-at, lens)
-    (0.0, V((-1.6, -10.4, 0.32)), V((-5.0, -9.0, 0.25)), 24),
+    (0.0, V((-1.4, -9.7, 0.62)), V((-5.0, -8.5, 0.45)), 24),
     (1.0, V((-3.7, -10.9, 0.62)), V((-5.3, -8.85, 0.42)), 30),
     (2.0, V((-4.7, -10.5, 1.15)), V((-5.3, -8.2, 0.85)), 35),
     (3.0, V((-7.9, -10.4, 1.45)), V((-4.4, -8.8, 0.55)), 28),
