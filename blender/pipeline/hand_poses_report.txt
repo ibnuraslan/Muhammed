@@ -1,0 +1,31 @@
+relaxed           L  joint violations: 0    adjacent fingertip gaps mm: [25, 24, 29]  thumb-to-index-tip mm: 62
+relaxed           R  joint violations: 0    adjacent fingertip gaps mm: [25, 24, 29]  thumb-to-index-tip mm: 62
+wrap_grip         L  joint violations: 0    adjacent fingertip gaps mm: [17, 15, 14]  thumb-to-index-tip mm: 51
+wrap_grip         R  joint violations: 0    adjacent fingertip gaps mm: [17, 15, 14]  thumb-to-index-tip mm: 51
+power_fist        L  joint violations: 0    adjacent fingertip gaps mm: [23, 15, 18]  thumb-to-index-tip mm: 45
+power_fist        R  joint violations: 0    adjacent fingertip gaps mm: [23, 15, 18]  thumb-to-index-tip mm: 45
+pinch             L  joint violations: 0    adjacent fingertip gaps mm: [23, 36, 24]  thumb-to-index-tip mm: 4
+pinch             R  joint violations: 0    adjacent fingertip gaps mm: [23, 36, 24]  thumb-to-index-tip mm: 4
+tripod            L  joint violations: 0    adjacent fingertip gaps mm: [17, 56, 19]  thumb-to-index-tip mm: 9
+tripod            R  joint violations: 0    adjacent fingertip gaps mm: [17, 56, 19]  thumb-to-index-tip mm: 15
+flat_palm         L  joint violations: 0    adjacent fingertip gaps mm: [32, 23, 39]  thumb-to-index-tip mm: 87
+flat_palm         R  joint violations: 0    adjacent fingertip gaps mm: [32, 23, 39]  thumb-to-index-tip mm: 87
+point             L  joint violations: 0    adjacent fingertip gaps mm: [116, 15, 17]  thumb-to-index-tip mm: 84
+point             R  joint violations: 0    adjacent fingertip gaps mm: [116, 15, 17]  thumb-to-index-tip mm: 84
+cup_hold          L  joint violations: 0    adjacent fingertip gaps mm: [24, 20, 29]  thumb-to-index-tip mm: 42
+cup_hold          R  joint violations: 0    adjacent fingertip gaps mm: [24, 20, 29]  thumb-to-index-tip mm: 42
+open_alarm        L  joint violations: 0    adjacent fingertip gaps mm: [29, 28, 34]  thumb-to-index-tip mm: 85
+open_alarm        R  joint violations: 0    adjacent fingertip gaps mm: [29, 28, 34]  thumb-to-index-tip mm: 85
+shield            L  joint violations: 0    adjacent fingertip gaps mm: [32, 22, 39]  thumb-to-index-tip mm: 53
+shield            R  joint violations: 0    adjacent fingertip gaps mm: [32, 22, 39]  thumb-to-index-tip mm: 53
+hold_flat_object  L  joint violations: 0    adjacent fingertip gaps mm: [22, 21, 30]  thumb-to-index-tip mm: 62
+hold_flat_object  R  joint violations: 0    adjacent fingertip gaps mm: [22, 21, 30]  thumb-to-index-tip mm: 62
+grip_Cylinder     R  joint violations: 0    adjacent fingertip gaps mm: [21, 15, 16]  thumb-to-index-tip mm: 36
+     grip contacts (closing fraction at first touch, per finger tip bone): {'finger2-3.R': 0.575, 'finger3-3.R': 0.625, 'finger4-3.R': 0.575, 'finger5-3.R': 0.475, 'finger1-3.R': 0.0082}
+     fingertip-bone end distance to surface mm (thumb..little): [18, 10, 8, 11, 10]
+grip_Box          R  joint violations: 0    adjacent fingertip gaps mm: [27, 18, 45]  thumb-to-index-tip mm: 47
+     grip contacts (closing fraction at first touch, per finger tip bone): {'finger2-3.R': 0.35, 'finger3-3.R': 0.325, 'finger4-3.R': 0.3, 'finger5-3.R': 0.0, 'finger1-3.R': 0.0081}
+     fingertip-bone end distance to surface mm (thumb..little): [8, 9, 13, 9, 31]
+grip_Paper        R  joint violations: 0    adjacent fingertip gaps mm: [61, 36, 24]  thumb-to-index-tip mm: 59
+     grip contacts (closing fraction at first touch, per finger tip bone): {'finger2-3.R': 0.1, 'finger1-3.R': 0.625}
+     fingertip-bone end distance to surface mm (thumb..little): [8, 9, 13, 20, 38]
