@@ -275,3 +275,53 @@ def puddles(rng, area, n=12, avoid=(), size=(0.8, 3.0), z=0.004):
         o.data.materials.append(m)
         out.append(o)
     return out
+
+
+# ------------------------------------------------------------------ cinematic house look (look.py, Nov 2026)
+KEY_PREFIXES = ("Daylight", "DoorDay", "DoorShaft", "RoofShaft", "RoofDay", "FurnaceLight", "ORLamp", "LightField")
+NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
+
+
+def cinematic(c, mod_name, mood="overcast", azim=200, keys=KEY_PREFIXES, night=NIGHT_VARIANTS, gain=1.8):
+    """Apply the house look recipe at the end of a set's build(), per shot: the move is read from argv (run.py /
+    bake.py <set> <move>). The camera's start position decides the recipe: a ceiling overhead -> interior by day
+    (the room's window/door/shaft lights become the keys, everything else negative fill, dark walls, warm
+    practicals); open sky -> exterior day_light (low sky, one sun key); night/dusk variants -> night_interior."""
+    import sys
+    import look
+    if not look.enabled():
+        return None
+    mod = sys.modules[mod_name]
+    move = sys.argv[2] if len(sys.argv) > 2 else None
+    spec = getattr(mod, "MOVES", {}).get(move)
+    var = getattr(mod, "VARIANT_FOR", {}).get(move)
+    if var in night:
+        return look.night_interior()
+    camp = None
+    if spec:
+        try:
+            camp = Vector(spec["cam"](c, 0.0)[0])
+        except Exception:
+            try:
+                spec["anim"](c, 0.0); camp = Vector(spec["cam"](c, 0.0)[0])
+            except Exception:
+                camp = None
+    sc = bpy.context.scene; bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+    inside = False
+    if camp is not None:
+        hit, loc, *_ = sc.ray_cast(dg, camp, Vector((0, 0, 1)), distance=8.0)
+        inside = bool(hit)
+    if not inside:
+        return look.day_light(mood, azim=azim)
+    near = [o for o in sc.objects if o.type == 'LIGHT' and o.name.startswith(keys)
+            and (camp is None or (o.location - camp).length < 18.0)]
+    for o in near:
+        o["look_key"] = True
+        if not (o.data.animation_data and o.data.animation_data.drivers):
+            o.data.energy *= gain
+    look.let_light_through()
+    look.negative_fill(0.15 if near else 0.4)
+    look.world_strength(0.35)
+    look.warm_practicals()
+    look.darken_surfaces(0.3)
+    return dict(keys=near)

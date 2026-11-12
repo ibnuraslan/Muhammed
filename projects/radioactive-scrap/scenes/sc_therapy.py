@@ -131,6 +131,8 @@ def build(variant=None):
     for h in P.values():
         place(h, (0, -150, 0), 0)
     c["clip"] = box("Clipboard", (0, -150, 0), (0.24, 0.015, 0.32), pbr("Clip", (0.45, 0.35, 0.2), 0.5))
+    import rs_env as _rs_env
+    _rs_env.cinematic(c, __name__)        # house cinematic look (look.py)
     return c
 
 

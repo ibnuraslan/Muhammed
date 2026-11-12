@@ -434,6 +434,8 @@ def build(variant=None):
     for h in P.values():
         place(h, (0, -150, 0), 0)
     c["variant"] = v
+    import rs_env as _rs_env
+    _rs_env.cinematic(c, __name__)        # house cinematic look (look.py)
     return c
 
 

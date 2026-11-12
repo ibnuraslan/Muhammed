@@ -467,6 +467,8 @@ def build(variant=None):
     if v == "rain":
         precip(c, "rain", (-16.0, -12.0, -8.0, -4.0, 0.0), x0=0.0, width=40, fade_in=20)
     c["variant"] = v
+    import rs_env as _rs_env
+    _rs_env.cinematic(c, __name__)        # house cinematic look (look.py)
     return c
 
 

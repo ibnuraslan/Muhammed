@@ -465,6 +465,8 @@ def build(variant=None):
         for a, b in zip(pts, pts[1:] + pts[:1]):
             tape_between("Cordon", a, b, 0.95, tm2)
             cyl("Stake", (a.x, a.y, 0.5), 0.02, 1.0, post_m, verts=6)
+    import rs_env as _rs_env
+    _rs_env.cinematic(c, __name__)        # house cinematic look (look.py)
     return c
 
 

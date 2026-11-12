@@ -164,6 +164,8 @@ def build(variant=None):
         place(h, (0, -100, 0), 0)
     if v == "cold":
         c["det"] = __import__("sc_scrapyard").detector("SmeltDet")
+    import rs_env as _rs_env
+    _rs_env.cinematic(c, __name__)        # house cinematic look (look.py)
     return c
 
 
