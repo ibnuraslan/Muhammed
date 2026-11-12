@@ -20,6 +20,10 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 200.16 m, 164 deg in one frame (neighbours 0.20 m, 5 deg)"
    ]
   ],
   "307": [
@@ -248,6 +252,10 @@
    [
     "FILL",
     "surface <12 cm"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 200.10 m, 158 deg in one frame (neighbours 0.72 m, 5 deg)"
    ]
   ],
   "1375": [
@@ -262,19 +270,37 @@
     "wall/prop fills the frame, character only 1%"
    ]
   ],
-  "1525": [
+  "1903": [
+   [
+    "FILL",
+    "CityBlockSrc.003"
+   ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
-   ]
-  ],
-  "1903": [
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CityBlockSrc.003 in view"
+   ],
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 273.05 m, 135 deg in one frame (neighbours 0.08 m, 10 deg)"
    ]
   ],
   "1909": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only CityBlockSrc.003 in view"
+   ],
    [
     "EMPTY",
     "no character in view"
@@ -536,6 +562,10 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 183.32 m, 6 deg in one frame (neighbours 0.39 m, 0 deg)"
    ]
   ],
   "2263": [
@@ -569,11 +599,80 @@
     "EMPTY",
     "no character in view"
    ]
+  ],
+  "2275": [
+   [
+    "FILL",
+    "LaptopScreen"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only LaptopScreen in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2281": [
+   [
+    "FILL",
+    "Cheque"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cheque in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 367.62 m, 180 deg in one frame (neighbours 0.06 m, 10 deg)"
+   ]
+  ],
+  "2287": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "518": [
+   [
+    "CAMJUMP",
+    "cut: 0.02 m, 76 deg in one frame (neighbours 0.72 m, 5 deg)"
+   ]
+  ],
+  "2276": [
+   [
+    "CAMJUMP",
+    "cut: 0.01 m, 180 deg in one frame (neighbours 0.02 m, 7 deg)"
+   ]
+  ],
+  "2279": [
+   [
+    "CAMJUMP",
+    "cut: 0.01 m, 180 deg in one frame (neighbours 0.01 m, 16 deg)"
+   ]
   ]
  },
  "counts": {
   "BACKHEAD": 1,
-  "FILL": 5,
-  "EMPTY": 93
+  "FILL": 9,
+  "EMPTY": 103,
+  "CAMJUMP": 8
  }
 }
