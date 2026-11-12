@@ -552,16 +552,10 @@
     "no character in view"
    ]
   ],
-  "445": [
+  "457": [
    [
-    "FILL",
-    "hair / top of head 25%"
-   ]
-  ],
-  "451": [
-   [
-    "FILL",
-    "hair / top of head 31%"
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "691": [
@@ -909,187 +903,103 @@
   "1303": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "1309": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only RoomFloor in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1315": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only RoomFloor in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1321": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1327": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1333": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1339": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1345": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1351": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 7%"
    ]
   ],
   "1357": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 7%"
    ]
   ],
   "1363": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "1369": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "1375": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1381": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1387": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1393": [
    [
-    "FILL",
-    "RoomFloor"
-   ],
-   [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1399": [
    [
-    "FILL",
-    "RoomFloor"
-   ],
-   [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only RoomFloor in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1417": [
@@ -1100,8 +1010,8 @@
   ]
  },
  "counts": {
-  "EMPTY": 166,
-  "FILL": 36,
+  "EMPTY": 148,
+  "FILL": 32,
   "INSIDE": 15,
   "BACKHEAD": 1
  }

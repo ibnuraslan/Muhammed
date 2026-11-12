@@ -57,3 +57,8 @@ f889 and f907 (his right hand, "other"). At those frames none of his finger or w
 4. No empty, blurred or black cells and no back-of-head on beats: checked by eye on the after sheets. The bullet- and cup-only cells and the 1417 foreground head are listed above as intended.
 5. Close-ups show hands: checked (`hand_closeups.jpg`, all aimed at the hand).
 6. hand_poses.py used: checked (all finger poses, limits and table palms come from the library).
+
+## Director review fixes (16:10)
+1. 22.0–23.0 s floor: the camera stays low next to the bullet with the table legs and her legs and shoes behind it (`director_fixes_cells.jpg`, cells 3–5).
+2. 7.5 s: pulled back; her full face reads (cell 1).
+3. Hand close-up 5 (his talking hand, f45): `shield`, open with the fingers together (cell 6; `hand_closeups.jpg` #5).

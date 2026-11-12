@@ -128,7 +128,7 @@ for rig_ in (W_RIG, F_RIG): add_hand_limits(rig_)
 HAND_SCHEDULE = {
     (W_RIG, "R"): [(1, "relaxed"), (600, "relaxed"), (700, "open_alarm"), (1290, "open_alarm"), (1360, "relaxed"), (1440, "relaxed"), (1452, "wrap_grip"), (1530, "wrap_grip")],
     (W_RIG, "L"): [(1, "relaxed"), (40, "relaxed"), (140, "relaxed"), (600, "relaxed"), (700, "open_alarm"), (1285, "open_alarm"), (1305, "flat_palm"), (1530, "flat_palm")],
-    (F_RIG, "R"): [(1, "relaxed"), (260, "relaxed"), (330, "flat_palm"), (450, "flat_palm"), (560, "relaxed"), (700, "open_alarm"), (1298, "open_alarm"), (1340, "flat_palm"), (1385, "relaxed"), (1400, "wrap_grip"), (1530, "wrap_grip")],
+    (F_RIG, "R"): [(1, "shield"), (260, "shield"), (330, "flat_palm"), (450, "flat_palm"), (560, "relaxed"), (700, "open_alarm"), (1298, "open_alarm"), (1340, "flat_palm"), (1385, "relaxed"), (1400, "wrap_grip"), (1530, "wrap_grip")],
     (F_RIG, "L"): [(1, "flat_palm"), (1530, "flat_palm")],
 }
 for (rig_, side_), sched in HAND_SCHEDULE.items():
