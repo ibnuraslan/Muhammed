@@ -280,6 +280,11 @@ def puddles(rng, area, n=12, avoid=(), size=(0.8, 3.0), z=0.004):
 # ------------------------------------------------------------------ cinematic house look (look.py, Nov 2026)
 KEY_PREFIXES = ("Daylight", "DoorDay", "DoorShaft", "RoofShaft", "RoofDay", "FurnaceLight", "ORLamp", "LightField")
 NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
+# Shots that keep their own light and take the cinematic grade only (per-shot review of the v4 sheet):
+# windowless therapy room and smelter went black, the Ankara office and the ward washed out, the hospital front
+# went to silhouette. ("except", moves) = grade only except those moves.
+GRADE_ONLY = {"therapy": "all", "smelter": "all", "ankara": "all",
+              "hospital": ("except", ("ch4_2a", "ch4_2b"))}
 EXT_EXPOSURE = {"mist": -0.2, "dusk": 0.2}
 
 
@@ -298,6 +303,10 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
         return None
     mod = sys.modules[mod_name]
     move = sys.argv[2] if len(sys.argv) > 2 else None
+    setn = mod_name.replace("sc_", "")
+    go = GRADE_ONLY.get(setn)
+    if go == "all" or (go and move not in go[1] if isinstance(go, tuple) else False):
+        return None                     # grade only: the relight killed these shots (look v4 review, Nov 2026)
     spec = getattr(mod, "MOVES", {}).get(move)
     var = getattr(mod, "VARIANT_FOR", {}).get(move)
     if var in night:
