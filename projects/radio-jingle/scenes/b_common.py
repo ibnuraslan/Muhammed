@@ -406,3 +406,21 @@ def label(c, text, f_in=6, fade=12):
     o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False; o.visible_transmission = False
     o.visible_volume_scatter = False
     c["_label"] = o
+
+
+def ph_instances(aid, placements):
+    """Import a Poly Haven model once; linked copies at [(loc, rot_z, scale)]."""
+    root, ms = ph.model(aid)
+    out = []
+    for (loc, rz, sc) in placements:
+        r = bpy.data.objects.new(aid + "_inst", None); bpy.context.collection.objects.link(r)
+        for o in ms:
+            n = o.copy(); bpy.context.collection.objects.link(n); n.parent = r
+            n.matrix_parent_inverse = o.matrix_parent_inverse.copy()
+            n.matrix_world = n.matrix_world  # keep relative transform
+        r.location = loc; r.rotation_euler = (0, 0, rz); r.scale = (sc, sc, sc)
+        out.append(r)
+    root.location = (0, 0, -1000)
+    for o in [root] + ms:
+        o.hide_render = True
+    return out
