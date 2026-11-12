@@ -408,6 +408,12 @@ def _hat(h, kind, col):
         bpy.ops.mesh.primitive_torus_add(major_radius=0.108, minor_radius=0.018, major_segments=28, minor_segments=8, location=crown + up * 0.01 - Vector((0, 0, 0.022)))
         band = bpy.context.active_object; band.scale = (1.0, 1.06, 1.0); bpy.ops.object.shade_smooth()
         parts = [c, band]
+    elif kind == "nurse":   # small starched white cap sitting on the crown, slightly back
+        bpy.ops.mesh.primitive_cube_add(size=1, location=crown + up * 0.035 + Vector((0, 0.03, 0)))
+        c = bpy.context.active_object; c.scale = (0.17, 0.09, 0.05); c.rotation_euler = (math.radians(-15), 0, 0)
+        bv = c.modifiers.new("Bevel", 'BEVEL'); bv.width = 0.012; bv.segments = 3
+        bpy.context.view_layer.objects.active = c; bpy.ops.object.modifier_apply(modifier="Bevel"); bpy.ops.object.shade_smooth()
+        parts = [c]
     else:   # flat cap: low crown + short brim toward the face (-Y in rest pose)
         bpy.ops.mesh.primitive_uv_sphere_add(segments=28, ring_count=14, radius=0.115, location=crown + up * 0.005 + Vector((0, -0.012, 0)))
         c = bpy.context.active_object; c.scale = (1.02, 1.12, 0.48); bpy.ops.object.shade_smooth()

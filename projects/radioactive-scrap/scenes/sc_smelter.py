@@ -7,7 +7,7 @@ import bpy
 from mathutils import Vector, Euler
 from kit import *
 from rs_kit import *
-from rs_env import sky
+from rs_env import sky, smoke
 from human import reset_pose, pose_walk, reach, fingers_curl
 from durs import dur
 
@@ -51,7 +51,14 @@ def build(variant=None):
         box("Rooflight", (-12 + k * 6, 0, H - 0.01), (2.0, 10, 0.02), glass("Rooflight", (0.8, 0.82, 0.8), 0.4))
         l = bpy.data.lights.new("RoofDay", 'AREA'); l.size = 2.0; l.size_y = 10; l.energy = 600 if v == "hot" else 900; l.color = (0.85, 0.9, 1.0)
         o = bpy.data.objects.new("RoofDay", l); bpy.context.collection.objects.link(o); o.location = (-12 + k * 6, 0, H - 0.3)
-    haze((0, 0, 6), (W - 1, D - 1, 12), density=0.004 if v == "hot" else 0.003, color=(0.8, 0.78, 0.75), anis=0.4)
+    haze((0, 0, 6), (W - 1, D - 1, 12), density=0.004 if v == "hot" else 0.011, color=(0.8, 0.78, 0.75), anis=0.55)
+    for k in range(3):                                    # low winter sun through the roof lights: visible shafts in the haze
+        sl_ = bpy.data.lights.new("RoofShaft", 'SPOT'); sl_.energy = 60000; sl_.spot_size = math.radians(9); sl_.spot_blend = 0.3
+        sl_.color = (1.0, 0.9, 0.75); sl_.shadow_soft_size = 0.3
+        so_ = bpy.data.objects.new("RoofShaft", sl_); bpy.context.collection.objects.link(so_)
+        sl_.energy = 45000
+        so_.location = (-7.0 + k * 3.5, -1.0 - k * 1.5, H - 0.4)
+        so_.rotation_euler = (Vector((2.5, 2.5, -H))).to_track_quat('-Z', 'Y').to_euler()
     # the furnace: refractory drum with a door that lifts on the glow
     refr = ph_mat("rough_concrete", 0.6, (0.25, 0.22, 0.2), name="Refractory")
     shell = painted_steel("FurShell", (0.12, 0.12, 0.13), 0.5, 0.7)
@@ -59,18 +66,25 @@ def build(variant=None):
     cyl("FurnaceRim", FUR + Vector((0, 0, 4.05)), 2.5, 0.2, refr, verts=40)
     box("FurHood", FUR + Vector((0, 0, 6.5)), (3.0, 3.0, 2.5), shell)
     cyl("FurStack", FUR + Vector((0, 0, 10.5)), 0.7, 6.0, shell, verts=20)
-    box("MouthFrame", FUR + Vector((0, -2.35, 1.5)), (1.8, 0.4, 1.6), painted_steel("Soot", (0.06, 0.055, 0.05), 0.8, 0.6))
+    soot = painted_steel("Soot", (0.06, 0.055, 0.05), 0.8, 0.6)
+    # a recessed mouth: a deep soot-black frame around an opening, refractory cheeks lit from within, melt glow at the back
+    for (dx, dz, w, h_) in ((0, 0.62, 1.9, 0.5), (0, -0.62, 1.9, 0.5) , (-0.78, 0, 0.35, 1.75), (0.78, 0, 0.35, 1.75)):
+        box("MouthFrame", FUR + Vector((dx, -2.75, 1.45 + dz)), (w, 0.9, h_), soot)
     glow_m = molten("FurnaceGlow", 5.0)
-    box("Mouth", FUR + Vector((0, -2.56, 1.45)), (1.25, 0.02, 1.05), glow_m)
+    cheek = molten("FurnaceCheek", 1.2)
+    box("Mouth", FUR + Vector((0, -2.3, 1.45)), (1.25, 0.02, 0.8), glow_m)
+    for dx in (-0.6, 0.6):
+        box("MouthCheek", FUR + Vector((dx, -2.75, 1.45)), (0.02, 0.85, 0.75), cheek)
+    box("MouthFloor", FUR + Vector((0, -2.75, 1.06)), (1.2, 0.85, 0.02), cheek)
     door = box("FurDoor", (0, 0, 0), (1.5, 0.15, 1.3), painted_steel("FurDoorM", (0.2, 0.18, 0.16), 0.6, 0.5), bevel=0.02)
-    c["door"] = door; c["door_closed"] = FUR + Vector((0, -2.7, 1.45))
+    c["door"] = door; c["door_closed"] = FUR + Vector((0, -3.28, 1.45))
     fl = bpy.data.lights.new("FurnaceLight", 'SPOT'); fl.spot_size = math.radians(120); fl.spot_blend = 0.8; fl.shadow_soft_size = 0.5; fl.color = (1.0, 0.45, 0.12)
-    d = fl.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = "%d * (0.85 + 0.15 * sin(frame * 0.9) * sin(frame * 0.31))" % (1600 if v == "hot" else 0)
-    fo = bpy.data.objects.new("FurnaceLight", fl); bpy.context.collection.objects.link(fo); fo.location = FUR + Vector((0, -3.3, 1.45)); fo.rotation_euler = (math.radians(90), 0, 0)
+    d = fl.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = "%d * (0.85 + 0.15 * sin(frame * 0.9) * sin(frame * 0.31))" % (1600 if v == "hot" else 1100)
+    fo = bpy.data.objects.new("FurnaceLight", fl); bpy.context.collection.objects.link(fo); fo.location = FUR + Vector((0, -3.4, 1.45)); fo.rotation_euler = (math.radians(90), 0, 0)
     fo.visible_camera = False; fo.visible_glossy = False
     c["fur_light"] = fo
     if v != "hot":
-        glow_m.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 1.5
+        glow_m.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 4.0
     # ladle on a crane hook and the mould row
     lad = join([cyl("Ladle", (0, 0, 0.6), 0.7, 1.2, shell, verts=28), cyl("LadleLip", (0.72, 0, 1.15), 0.15, 0.12, shell, verts=10, rot=(0, math.radians(90), 0)),
                 cyl("LadleMelt", (0, 0, 1.12), 0.62, 0.05, molten("LadleMelt", 20.0 if v == "hot" else 0.5), verts=28)], "Ladle")
@@ -89,17 +103,35 @@ def build(variant=None):
         box("MouldBox", p + Vector((0, 0, 0.18)), (0.7, 0.45, 0.36), mould_m, bevel=0.02)
         fillm = box("MouldFill", p + Vector((0, 0, 0.33)), (0.6, 0.35, 0.02), molten(f"Ingot{k}", 12.0 if (v == "hot" and k < 3) else 0.0))
         c["moulds"].append(p)
-    # stacked cold ingots (Ch4)
-    ing = painted_steel("Ingot", (0.12, 0.12, 0.13), 0.45, 0.9)
-    pr = box("IngotP", (0, 0, -40), (0.6, 0.18, 0.12), ing, bevel=0.02)
-    for row in range(6):
-        for k in range(6):
-            instance(pr, (-9.0 + k * 0.62 * (1 if row % 2 else 1), -4.0 + (0.2 * (row % 2)), 0.06 + row * 0.12), rot=(0, 0, (row % 2) * math.pi / 2))
+    # stacked cold ingots (Ch4): cribbed squares, alternate courses turned 90 degrees, oxidised steel
+    ing = ph_mat("rust_coarse_01", 2.0, (0.2, 0.18, 0.17), name="IngotM", tint=(0.2, 0.2, 0.21))
+    pr = box("IngotP", (0, 0, -40), (0.62, 0.14, 0.1), ing, bevel=0.025)
+    for cx, cy, rows in ((-9.0, -4.0, 7), (-8.2, -4.0, 5), (-7.4, -4.0, 6)):
+        for row in range(rows):
+            for k in range(4):
+                o = -0.225 + k * 0.15
+                if row % 2 == 0:
+                    instance(pr, (cx + o, cy, 0.05 + row * 0.1), rot=(0, 0, math.pi / 2))
+                else:
+                    instance(pr, (cx, cy + o, 0.05 + row * 0.1))
+    # scrap bins (open steel skips) with scrap, a second ladle on the floor, steam over the quench tank
+    skip_m = rust_mat("SkipRust")
+    for sx, sy in ((-13.0, 3.0), (-13.0, -1.5)):
+        for (dx, dy, w, d_) in ((0, -1.0, 3.0, 0.08), (0, 1.0, 3.0, 0.08), (-1.5, 0, 0.08, 2.0), (1.5, 0, 0.08, 2.0)):
+            box("SkipWall", (sx + dx, sy + dy, 0.6), (w, d_, 1.2), skip_m)
+        box("SkipFloor", (sx, sy, 0.05), (3.0, 2.0, 0.1), skip_m)
+    cyl("FloorLadle", (-11.0, -6.5, 0.55), 0.65, 1.1, shell, verts=28)
+    box("QuenchTank", (-3.5, -3.5, 0.45), (3.0, 1.6, 0.9), painted_steel("Tank", (0.15, 0.16, 0.16), 0.5, 0.6))
+    smoke((-4.0, -3.5, 0.9), height=7.0, radius=0.7, name="Steam")
     # scrap waiting to be charged, a skip, a shovel
     kit_ = scrap_kit(rng)
     hf = lambda x, y: max(0.0, 1.4 * (1 - math.hypot((x + 4.5) / 3.2, (y - 6.0) / 2.4)))
     L_, R_, S_, I_ = scrap_points(kit_, hf, -4.5, 6.0, 3.0, 220, rng, scl=(0.4, 0.8), exclude=("CarShell", "Fridge", "WashingMachine"))
     gn_instances("ChargeScrap", [p for p, w in kit_], L_, R_, S_, I_)
+    for j, (sx, sy) in enumerate(((-13.0, 3.0), (-13.0, -1.5))):
+        hfs = lambda x, y, sx=sx, sy=sy: 1.1 if abs(x - sx) < 1.35 and abs(y - sy) < 0.85 else 0.0
+        L2, R2, S2, I2 = scrap_points(kit_, hfs, sx, sy, 1.4, 60, rng, scl=(0.3, 0.6), exclude=("CarShell", "Fridge", "WashingMachine"))
+        gn_instances(f"SkipScrap{j}", [p for p, w in kit_], L2, R2, S2, I2)
     c["sparks"] = sparks("Spark", 80, color=(1.0, 0.55, 0.15))
     sp_root, _ = ph_model("rusted_spade_01"); c["spade"] = sp_root
     c["charge"] = join([box("ChPlate", (0, 0, 0), (0.6, 0.4, 0.02), rust_mat("ChRust")), cyl("ChPipe", (0.1, 0, 0.05), 0.04, 0.6, rust_mat("ChRust2"), verts=8, rot=(0, 1.4, 0.3))], "Charge")
@@ -169,9 +201,9 @@ def c1_14b(c, t):          # the ladle tips and pours into the moulds in a sheet
     h = c["people"]["w1"]; stand_pose(h, crossed=True); place(h, MOULDS + Vector((2.5, -2.6, 0)), face_angle(MOULDS + Vector((2.5, -2.6, 0)), target))
 
 
-def c4_6a(c, t):           # cold hall: a specialist walks past the furnaces with a detector
+def c4_6a(c, t):           # the works: a specialist walks past the working furnace with a detector
     sec = t * dur("ch4_6a")
-    door_open(c, 0)
+    door_open(c, 0.8)
     h = c["people"]["spec"]
     walk_to(h, FUR + Vector((-6.0, -5.5, 0)), FUR + Vector((4.0, -5.5, 0)), sec, speed=0.6, stride=1.0)
     from sc_scrapyard import hold_detector
@@ -192,8 +224,8 @@ def c4_6b(c, t):           # his needle rests near zero beside a stack of fresh 
 SHOTS = {
     "ch1_14a": ("hot", c1_14a, C(FUR + Vector((3.2, -9.5, 1.3)), FUR + Vector((2.6, -8.8, 1.4)), FUR + Vector((0, -3.0, 1.4)), 30), None),
     "ch1_14b": ("hot", c1_14b, C(MOULDS + Vector((4.5, -5.0, 1.0)), MOULDS + Vector((3.8, -4.4, 1.1)), MOULDS + Vector((0.5, 0, 0.9)), 32), None),
-    "ch4_6a": ("cold", c4_6a, C(FUR + Vector((5.0, -12.0, 1.5)), FUR + Vector((4.0, -11.5, 1.5)), FUR + Vector((-1.0, -5.5, 1.3)), 30), None),
-    "ch4_6b": ("cold", c4_6b, C(Vector((-5.8, -5.6, 1.4)), Vector((-6.1, -5.3, 1.4)), Vector((-7.6, -3.0, 1.0)), 35), 2.8),
+    "ch4_6a": ("cold", c4_6a, C(FUR + Vector((6.5, -11.5, 1.6)), FUR + Vector((5.6, -11.0, 1.6)), FUR + Vector((-2.0, -4.0, 2.2)), 26), None),
+    "ch4_6b": ("cold", c4_6b, C(Vector((-5.6, -6.3, 1.45)), Vector((-5.9, -6.0, 1.45)), Vector((-8.0, -3.6, 0.9)), 32), 2.8),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
 DUR = {k: dur(k) for k in SHOTS}

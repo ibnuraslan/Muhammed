@@ -180,22 +180,35 @@ def c4_9b(c, t):           # the light over the empty pallets swings in the drau
     c["swing"].rotation_euler = (math.radians(9 * math.sin(sec * 1.7)), math.radians(3 * math.sin(sec * 1.1)), 0)
 
 
+def lap_hands(h, sides=("L", "R")):
+    """Seated, hands resting on the thighs."""
+    f = forward(h); sd = f.cross(Vector((0, 0, 1))).normalized()
+    for S_ in sides:
+        hip = h.bone_head(f"upperleg01.{S_}"); knee = h.bone_head(f"lowerleg01.{S_}")
+        p = hip.lerp(knee, 0.55) + Vector((0, 0, 0.09))
+        sg = 1 if S_ == "R" else -1
+        reach(h, S_, p, Vector((sd.x * sg, sd.y * sg, -0.6)) + f * -0.4, f + Vector((0, 0, -0.3)))
+    fingers_curl(h, 25, thumb=15)
+
+
 def investigators(c, sec, lean_back=0.0):
     a = c["people"]["inv"]; b = c["people"]["inv2"]
     sit_at(a, REC + Vector((-0.5, -0.95, 0.45)), REC + Vector((-0.5, 0, 0)), lean=18 - 30 * lean_back)
     sit_at(b, REC + Vector((0.5, -0.95, 0.45)), REC + Vector((0.5, 0, 0)), lean=20)
+    lap_hands(a); lap_hands(b)
     return a, b
 
 
-def c4_7a(c, t):           # two investigators lay the two ledgers side by side (medium)
+def c4_7a(c, t):           # two investigators lay the two ledgers side by side (medium): one squares a ledger, one waits
     sec = t * dur("ch4_7a"); a, b = investigators(c, sec)
     k = ease(min(1.0, sec / 1.8))
     c["ledB"].location = REC + Vector((0.45 + 0.5 * (1 - k), 0.02 + 0.3 * (1 - k), 0.78))
-    for h, led, sgn in ((a, c["ledA"], -1), (b, c["ledB"], 1)):
-        sd = forward(h).cross(Vector((0, 0, 1)))
-        tgt = led.location + Vector((0, -0.17, 0.03))
-        reach(h, "R", tgt + sd * 0.15, Vector((sd.x, sd.y, -0.7)), forward(h)); reach(h, "L", tgt - sd * 0.15, Vector((-sd.x, -sd.y, -0.7)), forward(h))
-        h.rot("head", sd, -14)
+    sd = forward(b).cross(Vector((0, 0, 1)))
+    edge = c["ledB"].location + Vector((0, -0.2, 0.04))
+    reach(b, "R", edge + sd * 0.12, Vector((sd.x, sd.y, -1.0)), forward(b)); reach(b, "L", edge - sd * 0.12, Vector((-sd.x, -sd.y, -1.0)), forward(b))
+    fingers_curl(b, 30, thumb=20)
+    lap_hands(a)
+    a.rot("head", forward(a).cross(Vector((0, 0, 1))), -16); b.rot("head", sd, -14)
 
 
 def c4_7b(c, t):           # the ledger pages lift in a draught from the window
@@ -204,11 +217,12 @@ def c4_7b(c, t):           # the ledger pages lift in a draught from the window
         lf.rotation_euler = (0, -math.radians(max(0.0, 35 * math.sin(sec * 1.2 + k * 1.3) ** 2)), 0)
 
 
-def c4_8a(c, t):           # one investigator leans back and shakes his head
+def c4_8a(c, t):           # one investigator leans back and shakes his head; the other keeps his hands in his lap
     sec = t * dur("ch4_8a"); a, b = investigators(c, sec, lean_back=ease(min(1.0, sec / 1.2)))
+    arms_crossed(a)
     if sec > 1.2:
         a.rot("head", (0, 0, 1), 14 * math.sin((sec - 1.2) * 5.0) * max(0.0, 1 - (sec - 1.2) / 2.0))
-    arms_crossed(a)
+    lap_hands(b)
 
 
 def c4_8b(c, t):

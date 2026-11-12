@@ -164,14 +164,14 @@ def c4_10a(c, t):          # an inspector with a clipboard enters the room
 
 def c4_10b(c, t):          # the store door is padlocked; a new trefoil sign goes up (medium, people in frame)
     sec = t * dur("ch4_10b"); gantry(c, 0)
-    h = c["people"]["t2"]; st = STORE + Vector((0.35, 0.8, 0)); stand_pose(h); place(h, st, face_angle(st, STORE + Vector((0.4, 0, 0))))
+    h = c["people"]["t2"]; st = STORE + Vector((0.35, 0.5, 0)); stand_pose(h); place(h, st, face_angle(st, STORE + Vector((0.4, 0, 0))))
     sd = forward(h).cross(Vector((0, 0, 1))); k = ease(min(1.0, sec / 1.5))
     lp = (h.bone_head("spine02") + forward(h) * 0.3).lerp(c["lock_at"], k)
-    reach(h, "R", lp + Vector((0, -0.04, 0)), Vector((sd.x, sd.y, -0.7)), forward(h)); c["lock"].location = lp
-    i = c["people"]["insp"]; st2 = STORE + Vector((-0.45, 0.85, 0)); stand_pose(i); place(i, st2, face_angle(st2, STORE))
+    reach(h, "R", lp + Vector((0, -0.04, 0)), Vector((sd.x, sd.y, -1.0)), forward(h)); c["lock"].location = lp; fingers_curl(h, 60, thumb=40)
+    i = c["people"]["insp"]; st2 = STORE + Vector((-0.55, 0.5, 0)); stand_pose(i); place(i, st2, face_angle(st2, STORE))
     s2 = forward(i).cross(Vector((0, 0, 1))); k2 = ease(min(1.0, max(0.0, (sec - 1.0) / 1.6)))
     sg = (i.bone_head("spine02") + forward(i) * 0.35 + Vector((0, 0, 0.1))).lerp(c["new_sign_at"], k2)
-    reach(i, "R", sg + s2 * 0.14, Vector((s2.x, s2.y, -0.7)), forward(i)); reach(i, "L", sg - s2 * 0.14, Vector((-s2.x, -s2.y, -0.7)), forward(i))
+    reach(i, "R", sg + s2 * 0.14, Vector((s2.x, s2.y, -1.0)), forward(i)); reach(i, "L", sg - s2 * 0.14, Vector((-s2.x, -s2.y, -1.0)), forward(i)); fingers_curl(i, 55, thumb=40)
     c["new_sign"].location = sg
 
 
