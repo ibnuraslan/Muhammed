@@ -10,5 +10,6 @@ if DO_ANIM:
     exec(open(os.path.join(D, "..", "..", "pipeline", "anim_look.py")).read())
     sys.argv = _argv
     exec(open(os.path.join(D, "03c_look.py")).read())
+    exec(open(os.path.join(D, "03d_hands.py")).read())
 bpy.ops.wm.save_as_mainfile(filepath=SAVE_PATH, compress=False)
 print("SAVED", SAVE_PATH)

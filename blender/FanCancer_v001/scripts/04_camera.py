@@ -99,9 +99,9 @@ K = [
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
-    (31.3, V((-27.75, -1.25, 2.15)), V((-27.4, -1.0, 2.79)), 40, False),
-    (31.8, V((-27.4, -1.0, 2.70)), V((-27.4, -1.0, 2.79)), 40, False),   # into the light panel
-    (31.8, CT + V((-6, -9, 2.2)), CT + V((-6, 13, 8)), 40, True),     # out of the screen glow into the night city
+    (31.45, V((-27.85, -1.30, 1.70)), ph_p + V((0, 0, 0.1)), 40, False),
+    (31.7, V((-27.4, -1.0, 2.70)), V((-27.4, -1.0, 2.79)), 40, False),   # whip up into the light panel
+    (31.7, CT + V((-6, -9, 2.2)), CT + V((-6, 13, 8)), 40, True),     # out of the panel glow into the city
     (32.8, CT + V((-4, -10.0, 13)), CT + V((0, 12, 9)), 26, False),
     (33.8, CT + V((-13, -12.6, 3.2)), CT + V((-17, -4, 1.8)), 28, False),
     (34.8, CT + V((-4.0, -12.6, 2.8)), CT + V((-6, -4, 1.8)), 30, False),  # alongside the bus, riders on phones
