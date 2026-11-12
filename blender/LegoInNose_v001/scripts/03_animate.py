@@ -445,8 +445,7 @@ for o in bpy.data.objects["Man"].children:
 for ob in [bpy.data.objects["Man_Body"]]:
     for md in ob.modifiers:
         if md.type == "MASK" and md.name.startswith("Delete"):
-            md.show_render = True; md.keyframe_insert("show_render", frame=1); md.show_viewport = True; md.keyframe_insert("show_viewport", frame=1)
-            md.show_render = False; md.keyframe_insert("show_render", frame=1870); md.show_viewport = False; md.keyframe_insert("show_viewport", frame=1870)
+            md.show_render = False; md.show_viewport = False     # permanently off: constant vertex count for clip_scan (full body under his clothes)
             print("MASK_OFF", ob.name, md.name)
 const_at(M.arm, {1468, 1720, 1868})
 
