@@ -102,16 +102,6 @@ for f in range(380, 1201, 2):
     tgt = ch + d * 0.16 + side * 0.04 + Vector((0, 0, 0.1))
     tgt = hn.lerp(tgt, k)
     RN.key_world("IK_hand.R", f, Matrix.Translation(NA_.matrix_world.inverted() @ tgt - RN.BN["IK_hand.R"].head_local) @ RN.rest("IK_hand.R"), rot=False)
-# parasol re-seated so the shaft runs through the closed hand (between the thumb tip and the index root)
-sc.frame_set(1); bpy.context.view_layer.update()
-par = bpy.data.objects["Parasol"]; DU = bpy.data.objects["Duchess"]
-grip = (DU.matrix_world @ DU.pose.bones["finger2-1.L"].head + DU.matrix_world @ DU.pose.bones["finger1-3.L"].tail + DU.matrix_world @ DU.pose.bones["finger5-1.L"].head) / 3
-M = par.matrix_world.copy(); ax = (M.to_3x3() @ Vector((0, 0, 1))).normalized(); o = M.translation
-closest = o + ax * (grip - o).dot(ax)
-delta = grip - closest
-cst = par.constraints["Child Of"]
-par.matrix_basis = Matrix.Translation(cst.inverse_matrix.inverted() @ (M.translation + delta) - cst.inverse_matrix.inverted() @ M.translation) @ par.matrix_basis
-print("PARASOL shifted", round(delta.length, 3))
 # officer's grab: both hands keyed onto the gunman's actual right arm every 2 frames while he holds him
 OFF = bpy.data.objects["Officer"]; GNo = bpy.data.objects["Gunman"]; RO = Rig(OFF)
 grab_frames = [f for f in range(1301, 1781, 2) if sig_f(f) > 27.0]
@@ -142,6 +132,102 @@ for f in targets:
     RO.key_world("IK_hand.R", f, Matrix.Translation(OFF.matrix_world.inverted() @ now.lerp(tgt, k) - RO.BN["IK_hand.R"].head_local) @ RO.rest("IK_hand.R"), rot=False)
 print("OFFICER grab keyed", len(targets))
 print("HANDS curled + limits on", len(humans), "rigs")
+# ================================================================ shared hand-pose library (director, Nov 12): replaces the hand-set curls
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())
+for arm in humans:
+    for s_ in "LR":
+        for n in [f"finger{k}-{j}.{s_}" for k in range(1, 6) for j in (1, 2, 3)] + ["wrist." + s_]:
+            pb = arm.pose.bones.get(n)
+            if pb is None: continue
+            for c in [c for c in pb.constraints if c.name in ("HandLimit", "WristLimit")]: pb.constraints.remove(c)
+            pb.rotation_quaternion = (1, 0, 0, 0)
+    add_hand_limits(arm)
+    if arm.name.startswith("Crowd"):   # the library's elbow IK limit flips the crowd's clapping arms into their torsos; keep the old elbow solve
+        for s_ in "LR":
+            lo = arm.pose.bones.get("lowerarm01." + s_)
+            if lo: lo.use_ik_limit_x = False
+def pose_track(arm, side, chooser, frames):
+    prev = None
+    for f in frames:
+        pz = chooser(sig_f(f))
+        if pz != prev:
+            if prev is not None: apply_pose(arm, side, prev, f - 2)
+            apply_pose(arm, side, pz, f); prev = pz
+STORY = list(range(1, 2131, 2))
+special = {"Archduke", "Duchess", "Driver", "Gunman", "Bomber", "NerveA", "Officer"}
+for arm in humans:
+    if arm.name in special or arm.hide_render: continue
+    for s_ in "LR": apply_pose(arm, s_, "relaxed", 1, amount=0.45)   # half curl: full relaxed curl put fingertips into the thighs/other hand while clapping
+for s_ in "LR": apply_pose(bpy.data.objects["Archduke"], s_, "flat_palm", 1)
+apply_pose(bpy.data.objects["Duchess"], "L", "wrap_grip", 1)
+apply_pose(bpy.data.objects["Duchess"], "R", "flat_palm", 1)
+apply_pose(bpy.data.objects["NerveA"], "R", "flat_palm", 1); apply_pose(bpy.data.objects["NerveA"], "L", "relaxed", 1)
+pose_track(bpy.data.objects["Gunman"], "R", lambda s_: "wrap_grip" if 24.6 <= s_ < 40 else "relaxed", STORY)
+apply_pose(bpy.data.objects["Gunman"], "L", "relaxed", 1)
+pose_track(bpy.data.objects["Bomber"], "R", lambda s_: "wrap_grip" if 1.5 <= s_ < REL_S else "relaxed", list(range(380, 1201, 2)))
+apply_pose(bpy.data.objects["Bomber"], "L", "relaxed", 1)
+pose_track(bpy.data.objects["Officer"], "L", lambda s_: "wrap_grip" if s_ >= 27.0 else "relaxed", STORY)
+apply_pose(bpy.data.objects["Officer"], "R", "relaxed", 1)
+# --- driver: real grips on the steering-wheel rim (contact points from the wheel model's geometry, car-local, held constant)
+DRV = bpy.data.objects["Driver"]; BODY = bpy.data.objects["Car1_Body"]; SW_ = bpy.data.objects["Car1_Sway"]
+WC = Vector((0.178, -0.307, 1.323)); XA = Vector((1, 0, 0)); UP = Vector((0, 0.63, 0.78)).normalized(); NRM = XA.cross(UP).normalized()
+for arm_side in ("L", "R"):
+    n = "IK_hand." + arm_side
+    for l in DRV.animation_data.action.layers:
+        for st in l.strips:
+            for cb in st.channelbags:
+                for fc in list(cb.fcurves):
+                    if fc.data_path in (f'pose.bones["{n}"].location', f'pose.bones["{n}"].rotation_quaternion'): cb.fcurves.remove(fc)
+FREF = 1451; sc.frame_set(FREF)
+Ms = SW_.matrix_world
+for side, th in (("L", math.radians(25)), ("R", math.radians(155))):
+    radial = (XA * math.cos(th) + UP * math.sin(th)).normalized()
+    cp_local = WC + radial * 0.175
+    cpw = Ms @ cp_local; nw = (Ms.to_3x3() @ NRM).normalized()
+    shp = DRV.matrix_world @ DRV.pose.bones["upperarm01." + side].head
+    if nw.dot(cpw - shp) < 0: nw = -nw
+    print("DRIVER", side, "grip", grip_object(DRV, side, FREF, BODY, cpw, nw, finger_dir=(Ms.to_3x3() @ radial).normalized()))
+    n = "IK_hand." + side; pb = DRV.pose.bones[n]
+    loc, q = pb.location.copy(), pb.rotation_quaternion.copy()
+    for f in (1, 2130):
+        pb.location = loc; pb.rotation_quaternion = q
+        pb.keyframe_insert("location", frame=f, group=n); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+    # copy the finger closure (keyed at FREF) to the ends so it holds for the whole drive
+    for k in range(1, 6):
+        for j in (1, 2, 3):
+            fb = DRV.pose.bones.get(f"finger{k}-{j}.{side}")
+            if fb:
+                sc.frame_set(FREF); qq = fb.rotation_quaternion.copy()
+                for f in (1, 2130): fb.rotation_quaternion = qq; fb.keyframe_insert("rotation_quaternion", frame=f, group=fb.name)
+print("DRIVER grips on rim")
+# --- Duchess: inner (R) hand rests flat on the seat cushion beside her (it hovered 3-8 cm over the seat), until the fright at 25.1 s
+DU_ = bpy.data.objects["Duchess"]
+fstar = next(f for f in range(1300, 2131) if sig_f(f) >= 25.1)
+n_ = "IK_hand.R"
+for l in DU_.animation_data.action.layers:
+    for st in l.strips:
+        for cb in st.channelbags:
+            for fc in cb.fcurves:
+                if fc.data_path in (f'pose.bones["{n_}"].location', f'pose.bones["{n_}"].rotation_quaternion'):
+                    for kp in [k for k in fc.keyframe_points if k.co[0] < fstar - 12][::-1]: fc.keyframe_points.remove(kp)
+                    fc.update()
+SEATZ = sc.get("SEAT_R", 0.96)
+sc.frame_set(FREF); Ms = SW_.matrix_world; R3s = Ms.to_3x3()
+for f in (1, fstar - 12):
+    place_hand(DU_, "R", f, Ms @ Vector((0.11, 0.80, SEATZ + 0.005)), (R3s @ Vector((0, 0, -1))).normalized(), (R3s @ Vector((-0.25, -1, 0))).normalized())
+# parasol hand lifted clear of the door top (it hovered 2-5 cm over it)
+shift_hand_world("Duchess", "L", Vector((-0.04, -0.02, 0.1)), f1=fstar)
+# parasol re-seated so the shaft runs through the closed hand (between the thumb tip and the index root)
+sc.frame_set(1); bpy.context.view_layer.update()
+par = bpy.data.objects["Parasol"]; DU = bpy.data.objects["Duchess"]
+grip = (DU.matrix_world @ DU.pose.bones["finger2-1.L"].head + DU.matrix_world @ DU.pose.bones["finger1-3.L"].tail + DU.matrix_world @ DU.pose.bones["finger5-1.L"].head) / 3
+M = par.matrix_world.copy(); ax = (M.to_3x3() @ Vector((0, 0, 1))).normalized(); o = M.translation
+closest = o + ax * (grip - o).dot(ax)
+delta = grip - closest
+cst = par.constraints["Child Of"]
+par.matrix_basis = Matrix.Translation(cst.inverse_matrix.inverted() @ (M.translation + delta) - cst.inverse_matrix.inverted() @ M.translation) @ par.matrix_basis
+print("PARASOL shifted", round(delta.length, 3))
+print("DUCHESS hands placed")
 
 # ---------------------------------------------------------------- faces: couple expressions on the story clock
 def face(arm_name, f, smile, shock, closed):

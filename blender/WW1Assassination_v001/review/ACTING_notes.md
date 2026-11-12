@@ -54,3 +54,28 @@ Sheets: `ACTING_v004_sheet_0-18s.jpg` and `ACTING_v004_sheet_18-36s.jpg` (before
 - **Intended effects, not acting faults:**
   - The rewind (7–10 s) plays the whole world backwards, so people walk backwards.
   - The fast-forward at 19–20 s happens with the camera high overhead.
+
+## Director review of v005 (78978a1) and qa_check flags: fixed in this resubmission
+| # | Time | Problem | Fix |
+|---|---|---|---|
+| 26 | whole drive | The driver's hands hovered near the wheel. | `hand_poses.grip_object` on the wheel rim, at 10 and 2 o'clock. Every finger closes until it touches the rim (contact at 20–75 % closure), held for the whole drive. The steering wobble is removed. |
+| 27 | all | Finger angles were set by hand. | All of them were replaced by `hand_poses.apply_pose` with `add_hand_limits`. Grips (parasol, pistol, bomb, officer's grab) use `wrap_grip`. The Duchess's seat hand and the would-be assassin's coat hand use `flat_palm`. Crowd hands use `relaxed`. |
+| 28 | 0.6–25 s | HOVER: the Duchess's hands hovered 3–8 cm over the seat and the door. | Her inner hand now rests flat on the seat cushion (`place_hand`) until the fright at 25.1 s. Her parasol hand is lifted 10 cm clear of the door top. The parasol is re-seated in the new grip. |
+| 29 | 10.5–12.5 s | Shop walls filled the frame. | New keys at 10.1, 10.55, 11.0, 12.0 and 12.35 s, at face height 1.4–2 m from the conspirators (35–45 mm), then onto the bomber. |
+| 30 | 22.0 s | The car's front filled the frame. | The 21.5 s key is pulled back: high front three-quarter at 28 mm, so the driver and the turn read. |
+| 31 | 6.9 s | BACKHEAD: the gunman's head was seen from behind. | The camera moves ahead of the car, so the gunman is in profile and the Archduke faces the camera. |
+| 32 | 0–1.5 s | EMPTY: the low wheel shot showed only the car body. | The opening is raised to bonnet height, so the driver and the couple are in frame from frame 1. |
+| 33 | 5.5 s | The camera overshot into the café wall (black cell). | An extra key at 5.65 s keeps the path clear. |
+
+## qa_check flags kept on purpose (see `qa_v005.json`)
+- **EMPTY, 14.6–15.6 s:** the falling and rolling bomb is the subject (an insert shot).
+- **EMPTY, 16–19 s:** the explosion and the smoke are the subject, and the car is far away.
+- **EMPTY, about 20.9 s (MapRelief) and 29–35.5 s:** the city-to-map transition and the map itself, which has no characters by design.
+- **EMPTY, CloudLayer frames at 29 s:** the cloud whiteout that hides the swap from city to map.
+- **BACKHEAD, 18.45 s:** a wide chase shot from 22 m behind the car, where the head is under 2 % of the frame.
+- **The rewind, 7–10 s:** everything plays backwards on purpose.
+- **CLAW, Driver.L (91 frames, curl 39):** this hand is closed around the steering-wheel rim by `grip_object`, and every finger touches the rim. The wheel is part of the car-body mesh, not a separate prop, so qa_check cannot see the contact. See the driver close-up (panel 2 of `hand_closeups.jpg`). It is a known false positive, not fixed.
+
+## Result (resubmission)
+- **qa_check** (`qa_v005.json`, packed file, step 6): HOVER 0 (it was 251); BACKHEAD 1 (intended, see above); EMPTY 111 (all in the intended spans listed above); CLAW 91 (the driver's left hand only, explained above).
+- **clip_scan** (`v005_clip_scan.json`): 0 bad ranges.
