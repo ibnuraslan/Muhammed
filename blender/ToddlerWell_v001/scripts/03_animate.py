@@ -195,7 +195,7 @@ for f, dx in ((424, 0.06), (436, -0.08), (448, 0.07), (460, -0.03)):
 toddler_idle(472, 1520)
 
 # ================================================================== CROWD / MOTHER idles (behind the tape)
-CROWD_POS = {"Mother": (-1.3, 6.15), "Crowd1": (-1.85, 6.75), "Crowd2": (1.4, 6.7), "Crowd3": (3.3, 7.2), "Crowd4": (-0.2, 7.6)}
+CROWD_POS = {"Mother": (-1.3, 6.15), "Crowd1": (-1.27, 6.62), "Crowd2": (1.4, 6.7), "Crowd3": (3.3, 7.2), "Crowd4": (-0.2, 7.6)}
 def crowd_idle(c, f0, f1, xy, yaw, mood):
     for i, f in enumerate(range(f0, f1, 18)):
         ph = i * 0.9 + hash(c.name) % 10
@@ -205,11 +205,17 @@ def crowd_idle(c, f0, f1, xy, yaw, mood):
         elif mood == "plead":     # leaning on the tape, reaching toward the well, hands to face, sobbing
             hands = ({"L": ("rel", (0.05, 0.22, 0.14 * c.arm)), "R": ("rel", (0.02, 0.22, 0.12 * c.arm))} if (i % 4) < 2 else
                      {"L": ("rel", (0.12, 0.6 * c.arm, -0.15 * c.arm)), "R": ("rel", (0.1, 0.65 * c.arm, -0.05 * c.arm))})
-        elif mood == "restrain":   # from behind: one hand between the mother's shoulder blades, the other on her lower back
-            mp_ = V(CROWD_POS["Mother"]); my_ = math.degrees(math.atan2(-mp_.x, mp_.y))
-            mb = MO.rot(my_, 14)
-            base = V((mp_.x, mp_.y, MO.root.z))
-            hands = {"R": ("wg", base + mb @ V((0.0, 0.13, 0.45))), "L": ("wg", base + mb @ V((-0.08, 0.13, 0.22)))}
+        elif mood == "restrain":   # from behind: one hand flat between the mother's shoulder blades
+            bpy.context.scene.frame_set(f)     # her real lean this frame (she is keyed first)
+            mw_ = MO.o.matrix_world; pbs = MO.o.pose.bones
+            from mathutils.bvhtree import BVHTree
+            mb_ = bpy.data.objects["Mother.body"]; ev_ = mb_.evaluated_get(bpy.context.evaluated_depsgraph_get()); me_ = ev_.to_mesh()
+            bvh_ = BVHTree.FromPolygons([mb_.matrix_world @ v.co for v in me_.vertices], [tuple(p.vertices) for p in me_.polygons]); ev_.to_mesh_clear()
+            def back_(bn, side):     # the nearest point of her (rendered) back to this spine joint
+                pt = mw_ @ pbs[bn].head + (mw_.to_3x3() @ V((side, 0, 0))); d_ = (V((xy[0], xy[1], pt.z)) - pt); d_.z = 0
+                q = bvh_.find_nearest(pt + d_.normalized() * 0.3)[0]
+                return q + d_.normalized() * 0.01
+            hands = {"R": ("wg", back_("spine01", 0.0)), "L": ("rel", (0.14, 0.12, -0.8 * c.arm))}     # one hand flat on her back, the other relaxed
         elif mood == "point":
             hands = {"R": ("rel", (0.05, 0.75 * c.arm, 0.1 * c.arm))} if (i % 4) < 2 else {}
         elif mood == "cheer":
