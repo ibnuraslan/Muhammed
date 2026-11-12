@@ -79,6 +79,7 @@ def stand(h, loc, face_z, ground=True):
         for b in (f"upperleg01.{sd}", f"lowerleg01.{sd}", f"foot.{sd}"):
             h.arm.pose.bones[b].matrix_basis = Matrix.Identity(4)
     h.rot("spine05", (1, 0, 0), 6)
+    relax_arms(h)
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = loc; bpy.context.view_layer.update()
     if ground:
         _ground(h, loc[2] if len(loc) > 2 else 0.0)
@@ -91,9 +92,24 @@ def seat(h, loc, face_z, lean=12, floor_z=0.0):
     _ground(h, floor_z)
 
 
+def relax_arms(h, swing=0.0, phase=0.0):
+    """Arms hang along the body (the MakeHuman rest is an A-pose), elbows a touch bent, an optional walking swing.
+    Call in the rest orientation (facing -Y): world axes are then the person's axes."""
+    for sd, sg in (("L", 1.0), ("R", -1.0)):
+        ph_ = 2 * math.pi * phase + (0 if sd == "L" else math.pi)
+        fw = -0.12 * swing / 20.0 * math.sin(ph_)                     # forward is -Y in the rest orientation
+        up = Vector((0.13 * sg, fw - 0.02, -1.0))
+        h.aim(f"upperarm01.{sd}", up); h.aim(f"upperarm02.{sd}", up)
+        lo = Vector((0.05 * sg, fw - 0.22, -1.0))
+        h.aim(f"lowerarm01.{sd}", lo); h.aim(f"lowerarm02.{sd}", lo)
+        h.aim(f"wrist.{sd}", Vector((0.04 * sg, -0.12, -1.0)))
+    fingers_curl(h, 22, thumb=12)
+
+
 def walk_at(h, phase, loc, face_z, stride=24, swing=16):
     _rest(h)
     bob = pose_walk(h, phase % 1.0, stride=stride, arm_swing=swing)
+    relax_arms(h, swing, phase % 1.0)
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = (loc[0], loc[1], 0); bpy.context.view_layer.update()
     _ground(h, (loc[2] if len(loc) > 2 else 0.0) + bob * 0.3)
 
@@ -166,37 +182,61 @@ def parent_keep(obj, h, bone):
     bpy.context.view_layer.update(); obj.matrix_world = mw
 
 
-def protective_gear(h, suit=(0.86, 0.87, 0.85)):
-    """A white hood and a half-face respirator with two filter cartridges, following the head.
+def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.35, 0.85)):
+    """Forensic protective kit: a pale Tyvek hood, a full-face respirator with a clear visor (eyes visible) and a
+    filter, blue nitrile gloves (the hand faces of the body mesh are re-materialled), blue overshoes.
     Call right after building the person, while it stands in the rest orientation at the origin."""
-    from kit import box, cyl, pbr
+    from kit import box, cyl, pbr, glass
     from pbkit import joinm
+    import bmesh
     stand(h, (0, 0, 0), 0.0)
     hd = h.bone_head("head"); tl = h.bone_tail("head")
     c = (hd + tl) / 2
-    hood_m = pbr(h.name + "Hood", suit, 0.75, 0.0, **{'Sheen Weight': 0.4})
+    hood_m = pbr(h.name + "Hood", suit, 0.7, 0.0, **{'Sheen Weight': 0.5})
     bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.112, location=(c.x, c.y + 0.02, c.z + 0.01))
-    hood = bpy.context.active_object; hood.name = h.name + "Hood"; hood.scale = (0.9, 1.0, 1.08)
-    kill = [v.index for v in hood.data.vertices if v.co.y < -0.035 and v.co.z < 0.07]      # the face opening
-    import bmesh
+    hood = bpy.context.active_object; hood.name = h.name + "Hood"; hood.scale = (0.92, 1.0, 1.1)
+    kill = [v.index for v in hood.data.vertices if v.co.y < -0.03 and v.co.z < 0.075]
     bm = bmesh.new(); bm.from_mesh(hood.data); bm.verts.ensure_lookup_table()
     bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(hood.data); bm.free()
     so = hood.modifiers.new("t", 'SOLIDIFY'); so.thickness = 0.006
-    # the hood runs down to the shoulders as a collar
+    bpy.ops.object.shade_smooth(); hood.data.materials.append(hood_m)
+    parent_keep(hood, h, "head")
     bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.09, depth=0.12, location=(c.x, c.y + 0.025, c.z - 0.13))
     col = bpy.context.active_object; col.name = h.name + "Collar"; col.data.materials.append(hood_m)
     parent_keep(col, h, "neck01")
-    bpy.ops.object.shade_smooth(); hood.data.materials.append(hood_m)
-    parent_keep(hood, h, "head")
-    rub = pbr(h.name + "Resp", (0.07, 0.075, 0.08), 0.6)
-    face = Vector((c.x, c.y - 0.112, c.z - 0.022))
-    parts = [box("RespBody", tuple(face), (0.075, 0.05, 0.06), rub, bevel=0.018)]
-    for sx in (-1, 1):
-        parts.append(cyl("Cartridge", (face.x + sx * 0.055, face.y + 0.005, face.z - 0.012), 0.03, 0.025, pbr("Filter", (0.2, 0.21, 0.18), 0.5), verts=24,
-                         rot=(math.radians(90), 0, math.radians(sx * 35))))
-    resp = joinm(parts, h.name + "Respirator")
-    parent_keep(resp, h, "head")
-    return hood, resp
+    rub = pbr(h.name + "Resp", (0.05, 0.05, 0.055), 0.55)
+    if full_face:
+        face = Vector((c.x, c.y - 0.1, c.z - 0.01))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=tuple(face))
+        vis = bpy.context.active_object; vis.name = h.name + "Visor"; vis.scale = (0.085, 0.045, 0.1)
+        kill = [v.index for v in vis.data.vertices if v.co.y > -0.1]
+        bm = bmesh.new(); bm.from_mesh(vis.data); bm.verts.ensure_lookup_table()
+        bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(vis.data); bm.free()
+        bpy.ops.object.shade_smooth(); vis.data.materials.append(glass(h.name + "VisorGlass", (0.93, 0.95, 0.96), 0.02))
+        parent_keep(vis, h, "head")
+        rim = joinm([cyl("Rim", (face.x, face.y + 0.012, face.z), 0.098, 0.03, rub, verts=40, rot=(math.radians(90), 0, 0)),
+                     cyl("Filter", (face.x, face.y - 0.035, face.z - 0.08), 0.042, 0.04, pbr("FilterGrey", (0.3, 0.3, 0.3), 0.5), verts=24, rot=(math.radians(70), 0, 0))], h.name + "MaskRim")
+        rim.scale = (0.95, 1, 1.12)
+        parent_keep(rim, h, "head")
+    # blue nitrile gloves: re-material the hand faces of the body mesh (they bend with the fingers)
+    glove_m = pbr(h.name + "Glove", gloves, 0.35, 0.0, **{'Coat Weight': 0.3})
+    body = h.body; body.data.materials.append(glove_m); gi = len(body.data.materials) - 1
+    hand_bones = [b.name for b in h.arm.data.bones if b.name.startswith(("wrist", "finger", "metacarpal"))]
+    region = set(h.vertex_region(hand_bones, 0.5).tolist())
+    for poly in body.data.polygons:
+        if all(v in region for v in poly.vertices):
+            poly.material_index = gi
+    # blue overshoes over the shoes
+    recolor(h, "shoes02", gloves, 0.6)
+    return hood
+
+
+def tyvek(name, gender=1.0, years=38, police_bg=False):
+    """A forensic investigator in a full Tyvek suit (pale, matte), hood up, full-face respirator, gloves, overshoes."""
+    cloth = "male_casualsuit01" if gender > 0.5 else "female_casualsuit01"
+    h = person(name, gender, years, cloth, None, col=(0.9, 0.91, 0.93))
+    protective_gear(h)
+    return h
 
 
 def recolor(h, cloth, col, rough=0.7):

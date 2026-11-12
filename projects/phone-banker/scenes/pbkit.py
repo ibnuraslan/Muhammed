@@ -58,14 +58,30 @@ def masonry_facade(name, plaster=(0.5, 0.44, 0.36), floor=3.3, bay=2.4, win_w=0.
     pl.inputs[6].default_value = (*plaster, 1); L.new(nz.outputs['Color'], pl.inputs[7])
     c1 = N.new("ShaderNodeMix"); c1.data_type = 'RGBA'; L.new(hole.outputs[0], c1.inputs['Factor'])
     L.new(pl.outputs[2], c1.inputs[6]); c1.inputs[7].default_value = (*frame_col, 1)
-    c2 = N.new("ShaderNodeMix"); c2.data_type = 'RGBA'; L.new(pane.outputs[0], c2.inputs['Factor'])
+    # a cross of glazing bars inside every pane
+    vbar = mul(lt(hx, 0.022 / bay), pane); hbar = mul(lt(hz, 0.02 / floor), pane)
+    bars = N.new("ShaderNodeMath"); bars.operation = 'MAXIMUM'; L.new(vbar.outputs[0], bars.inputs[0]); L.new(hbar.outputs[0], bars.inputs[1])
+    glass_only = N.new("ShaderNodeMath"); glass_only.operation = 'SUBTRACT'; L.new(pane.outputs[0], glass_only.inputs[0]); L.new(bars.outputs[0], glass_only.inputs[1])
+    c2 = N.new("ShaderNodeMix"); c2.data_type = 'RGBA'; L.new(glass_only.outputs[0], c2.inputs['Factor'])
     L.new(c1.outputs[2], c2.inputs[6]); L.new(glass_col.outputs[2], c2.inputs[7])
     L.new(c2.outputs[2], p.inputs['Base Color'])
-    r = N.new("ShaderNodeMapRange"); r.inputs['To Min'].default_value = 0.85; r.inputs['To Max'].default_value = 0.12
-    L.new(pane.outputs[0], r.inputs['Value']); L.new(r.outputs[0], p.inputs['Roughness'])
+    r = N.new("ShaderNodeMapRange"); r.inputs['To Min'].default_value = 0.85; r.inputs['To Max'].default_value = 0.08
+    L.new(glass_only.outputs[0], r.inputs['Value']); L.new(r.outputs[0], p.inputs['Roughness'])
+    L.new(glass_only.outputs[0], p.inputs['Coat Weight']); p.inputs['Coat Roughness'].default_value = 0.03     # the glass reflects the street
     if lit_frac > 0:
-        es = N.new("ShaderNodeMath"); es.operation = 'MULTIPLY'; es.inputs[1].default_value = lit_strength; L.new(lit.outputs[0], es.inputs[0])
-        p.inputs['Emission Color'].default_value = (*lit_col, 1); L.new(es.outputs[0], p.inputs['Emission Strength'])
+        # a room behind the glass: curtain folds (vertical bands), the lamp's falloff from the middle, each room its own warmth
+        lit_g = mul(on, glass_only)
+        cx = N.new("ShaderNodeMath"); cx.operation = 'MULTIPLY'; cx.inputs[1].default_value = 40.0; L.new(hmix.outputs[0], cx.inputs[0])
+        folds = N.new("ShaderNodeMath"); folds.operation = 'SINE'; L.new(cx.outputs[0], folds.inputs[0])
+        fold = N.new("ShaderNodeMath"); fold.operation = 'MULTIPLY_ADD'; fold.inputs[1].default_value = 0.25; fold.inputs[2].default_value = 0.75; L.new(folds.outputs[0], fold.inputs[0])
+        fall = N.new("ShaderNodeMapRange"); fall.inputs['From Min'].default_value = 0.0; fall.inputs['From Max'].default_value = win_h / 2 / floor
+        fall.inputs['To Min'].default_value = 1.0; fall.inputs['To Max'].default_value = 0.3; L.new(hz.outputs[0], fall.inputs['Value'])
+        e1 = mul(lit_g, fold)
+        e2 = N.new("ShaderNodeMath"); e2.operation = 'MULTIPLY'; L.new(e1.outputs[0], e2.inputs[0]); L.new(fall.outputs[0], e2.inputs[1])
+        es = N.new("ShaderNodeMath"); es.operation = 'MULTIPLY'; es.inputs[1].default_value = lit_strength; L.new(e2.outputs[0], es.inputs[0])
+        warm = N.new("ShaderNodeMix"); warm.data_type = 'RGBA'; L.new(wn.outputs['Value'], warm.inputs['Factor'])
+        warm.inputs[6].default_value = (*lit_col, 1); warm.inputs[7].default_value = (1.0, 0.86, 0.66, 1)
+        L.new(warm.outputs[2], p.inputs['Emission Color']); L.new(es.outputs[0], p.inputs['Emission Strength'])
     return m
 
 
@@ -254,10 +270,10 @@ def precip_curtains(kind, x_range=(-30, 30), ys=(-14, -9, -5, -1.5), top=12.0, f
     m = bpy.data.materials.new("Precip" + kind); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (900, 180, 1) if snow else (2000, 30, 1)
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (500, 110, 1) if snow else (1600, 26, 1)
     wn = N.new("ShaderNodeTexWhiteNoise"); wn.noise_dimensions = '2D'
     L.new(tc.outputs['Object'], mp.inputs['Vector']); L.new(mp.outputs[0], wn.inputs['Vector'])
-    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.993 if snow else 0.97; L.new(wn.outputs['Value'], gt.inputs[0])
+    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = 0.99 if snow else 0.965; L.new(wn.outputs['Value'], gt.inputs[0])
     sc = N.new("ShaderNodeMath"); sc.operation = 'MULTIPLY'; sc.inputs[1].default_value = 0.9 if snow else 0.45; L.new(gt.outputs[0], sc.inputs[0])
     tr = N.new("ShaderNodeBsdfTransparent"); gl = N.new("ShaderNodeEmission"); gl.inputs['Color'].default_value = (0.95, 0.96, 1.0, 1) if snow else (0.75, 0.8, 0.88, 1)
     gl.inputs['Strength'].default_value = 1.2 if snow else 0.5
@@ -340,3 +356,62 @@ def kit_vehicle(kind, name, color=None, variant=None, lamps=False):
     root = vehicles.make(kind, color=color, variant=variant, lamps=lamps)
     root.name = name
     return root
+
+
+def finish_scene():
+    """House rules for every set: no light is ever visible as a sphere or patch in camera; indirect light is clamped
+    (no fireflies or blotches on clothes and walls)."""
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT':
+            o.visible_camera = False
+            if o.data.type in ('POINT', 'SPOT'):
+                o.visible_glossy = False
+    s = bpy.context.scene
+    s.cycles.sample_clamp_indirect = 3.0
+    s.cycles.blur_glossy = 1.0
+
+
+def wall_chart(path, kind="grid", seed=1):
+    """A generic laboratory wall chart (no words): a grid of tinted cells, or a molecular diagram of rings and bonds."""
+    import os
+    from PIL import Image, ImageDraw
+    if os.path.exists(path):
+        return path
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    r = np.random.default_rng(seed)
+    W, H = 600, 820
+    im = Image.new("RGB", (W, H), (226, 222, 208)); d = ImageDraw.Draw(im)
+    d.rectangle([20, 20, W - 20, 70], fill=(60, 70, 90))
+    if kind == "grid":
+        cols = [(200, 120, 110), (120, 160, 200), (190, 190, 120), (140, 190, 150), (200, 170, 200)]
+        for i in range(10):
+            for j in range(9):
+                if (i == 0 and 0 < j < 8) or (i in (1, 2) and 1 < j < 7):
+                    continue
+                x, y = 40 + j * 58, 110 + i * 64
+                d.rectangle([x, y, x + 52, y + 58], fill=cols[int(r.integers(0, 5))], outline=(80, 80, 80))
+                d.rectangle([x + 8, y + 12, x + 30, y + 16], fill=(50, 50, 50))
+    else:
+        for k in range(6):
+            cx, cy = 120 + (k % 3) * 180, 220 + (k // 3) * 300
+            pts = [(cx + 50 * math.cos(a), cy + 50 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 7)]
+            d.line(pts, fill=(40, 40, 50), width=5)
+            for a in np.linspace(0, 2 * math.pi, 4)[:-1]:
+                d.line([(cx + 50 * math.cos(a), cy + 50 * math.sin(a)), (cx + 95 * math.cos(a), cy + 95 * math.sin(a))], fill=(40, 40, 50), width=4)
+                d.ellipse([cx + 95 * math.cos(a) - 9, cy + 95 * math.sin(a) - 9, cx + 95 * math.cos(a) + 9, cy + 95 * math.sin(a) + 9], fill=(170, 60, 50))
+    im.save(path); return path
+
+
+def fume_hood(loc, rot_z=0.0):
+    """A laboratory fume hood: enamelled cabinet, a glass sash half down, a lit work bay with glassware."""
+    enamel = pbr("HoodEnamel", (0.72, 0.74, 0.7), 0.4, 0.1, **{'Coat Weight': 0.3})
+    parts = [box("HoodBase", (0, 0, 0.45), (1.5, 0.8, 0.9), enamel, bevel=0.01),
+             box("HoodBack", (0, 0.36, 1.55), (1.5, 0.08, 1.3), enamel), box("HoodTop", (0, 0, 2.3), (1.5, 0.8, 0.3), enamel, bevel=0.01),
+             box("HoodSideL", (-0.73, 0, 1.55), (0.04, 0.8, 1.3), enamel), box("HoodSideR", (0.73, 0, 1.55), (0.04, 0.8, 1.3), enamel),
+             box("HoodTile", (0, 0.0, 0.905), (1.42, 0.72, 0.01), pbr("HoodTileM", (0.85, 0.85, 0.82), 0.2))]
+    o = joinm(parts, "FumeHood")
+    sash = box("Sash", (0, -0.38, 1.75), (1.42, 0.015, 0.6), glass("SashGlass", (0.9, 0.93, 0.92), 0.05)); sash.parent = o
+    o.location = loc; o.rotation_euler = (0, 0, rot_z)
+    l = bpy.data.lights.new("HoodLight", 'AREA'); l.energy = 25; l.size = 1.2; l.color = (0.95, 0.98, 1.0)
+    lo = bpy.data.objects.new("HoodLight", l); bpy.context.collection.objects.link(lo); lo.parent = o; lo.location = (0, 0, 2.1)
+    return o

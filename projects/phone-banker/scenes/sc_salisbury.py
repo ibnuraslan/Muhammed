@@ -91,12 +91,21 @@ def build(variant=None):
     for k, x in enumerate((-6.0, 6.0)):
         ph.model("street_lamp_01", loc=(x, -6.6, 0))
     # investigators in protective suits
-    c["suits"] = []
-    for k in range(2):
-        h = person(f"UKSuit{k}", 1.0 if k == 0 else 0.0, 38, "male_casualsuit01" if k == 0 else "female_elegantsuit01", None)
-        recolor(h, "casualsuit01" if k == 0 else "elegantsuit01", (0.84, 0.85, 0.82))
-        protective_gear(h)
-        c["suits"].append(h)
+    from pbpeople import tyvek
+    c["suits"] = [tyvek("UKSuit0", 1.0, 41), tyvek("UKSuit1", 0.0, 35)]
+    # dressing: parked cars along the kerb, a white forensic tent by the next gate, police in hi-vis at the cordon
+    from pbkit import kit_vehicle
+    for k, (x, col) in enumerate(((-9.0, (0.35, 0.36, 0.38)), (5.5, (0.15, 0.2, 0.32)), (12.0, (0.55, 0.1, 0.08)))):
+        car = kit_vehicle("sedan_modern", f"Parked{k}", col); car.location = (x, -7.6, 0); car.rotation_euler = (0, 0, math.radians(180 if k % 2 else 0))
+    tent_m = pbr("TentWhite", (0.88, 0.89, 0.9), 0.75, 0.0, **{'Sheen Weight': 0.3, 'Subsurface Weight': 0.1})
+    box("TentWalls", (-4.2, -2.6, 1.0), (2.6, 2.6, 2.0), tent_m)
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=1.9, radius2=0.05, depth=0.8, location=(-4.2, -2.6, 2.4), rotation=(0, 0, math.radians(45)))
+    tr = bpy.context.active_object; tr.name = "TentRoof"; tr.data.materials.append(tent_m)
+    c["police"] = []
+    for k, (x, rz) in enumerate(((-2.2, 0.0), (3.4, 0.4))):
+        cop = person(f"UKPolice{k}", 1.0, 30 + 8 * k, "male_casualsuit05", "short02", col=(0.62, 0.72, 0.08))      # hi-vis jacket
+        stand(cop, (x, -6.2, 0), math.radians(180 + 20 * (1 if k else -1)))
+        c["police"].append(cop)
     animate(c, 0.0, "street")
     return c
 
@@ -145,3 +154,13 @@ MOVES = {
     "path": dict(kind="anim", dof=5.6, far=40.0, anim=_anim("path"), cam=_push((0.2, -1.6, 1.6), (0.3, -7.2, 1.7), (0.0, 0.0, 1.2), (0.0, -1.0, 1.2), 30),
                  focus=lambda c, t: Vector((0.0, -1.0, 1.2))),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

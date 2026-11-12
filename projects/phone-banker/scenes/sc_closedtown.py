@@ -107,6 +107,24 @@ def build(variant=None):
             if k == 3:                                    # this one flickers (frame driver)
                 d = l.data.driver_add("energy").driver; d.type = 'SCRIPTED'
                 d.expression = "22 * (0.15 if (frame % 37) in (3, 4, 9, 21, 22) else 1)"
+        # dressing: benches, notice boards with pinned sheets, radiators, extinguishers, plants, a window at the far end
+        from pbkit import ph_instances, image_plane
+        import paper_tex
+        pages = paper_tex.make_all()["pages"]
+        ph_instances("painted_wooden_bench", [((sx * (W / 2 - 0.3), y, 0), math.radians(-90 * sx), 1.0) for sx in (-1, 1) for y in (-9.0, 2.5)])
+        ph_instances("korean_fire_extinguisher_01", [((-W / 2 + 0.2, y, 0), math.radians(90), 1.0) for y in (-4.5, 8.0)])
+        ph_instances("potted_plant_02", [((W / 2 - 0.4, y, 0), 0.5, 0.8) for y in (-12.0, 5.0)])
+        cork = pbr("Cork", (0.45, 0.32, 0.2), 0.9)
+        for k, y in enumerate((-6.2, 6.5)):
+            box("NoticeBoard", (-W / 2 + 0.02, y, 1.55), (0.03, 1.2, 0.8), cork)
+            for j in range(5):
+                image_plane("Notice", pages[(j + k) % len(pages)], (-W / 2 + 0.04, y - 0.45 + j * 0.22, 1.5 + 0.1 * (j % 2)), (0.15, 0.2), (math.radians(90), 0, math.radians(-90)), rough=0.8)
+        rad = pbr("Radiator", (0.75, 0.75, 0.7), 0.5)
+        for y in (-10.5, -2.0, 4.0, 11.0):
+            for j in range(10):
+                box("RadFin", (W / 2 - 0.08, y - 0.4 + j * 0.09, 0.45), (0.08, 0.04, 0.6), rad)
+        box("EndWin", (0, L_ / 2 - 0.02, 1.8), (1.4, 0.02, 1.5), glass("EndGlass", (0.9, 0.93, 0.95), 0.03))
+        box("EndSnow", (0, L_ / 2 + 3, 1.0), (10, 0.1, 6), pbr("SnowOutside", (0.85, 0.88, 0.92), 0.8, 0.0, **{'Emission Color': (0.8, 0.85, 0.95, 1), 'Emission Strength': 0.6}))
         c["sci"] = medic("Scientist", 1.0, 40, "short04")
     elif variant == "kitchen":
         world_flat((0.02, 0.03, 0.06), 1.0)
@@ -145,7 +163,17 @@ def build(variant=None):
             box(f"Roof{k}", (x, y, 14.1), (30.2, 12.2, 0.3), pbr("RoofSnow", (0.75, 0.78, 0.82), 0.6)).rotation_euler = (0, 0, rz)
             k += 1
         # the one lit window, warm, on the near block
-        box("LitWindow", (-12.6, 13.98, 7.0), (1.2, 0.02, 1.3), emissive("LitWin", (1.0, 0.75, 0.45), 6.0))
+        # the one lit window: a warm room behind a drawn curtain (lamp light through cloth, not a flat emissive panel)
+        cur = box("LitCurtain", (-12.6, 13.97, 7.0), (1.15, 0.004, 1.25), None)
+        cm = bpy.data.materials.new("CurtainLit"); cm.use_nodes = True
+        Nn = cm.node_tree.nodes; Ll = cm.node_tree.links; Nn.clear(); out = Nn.new("ShaderNodeOutputMaterial")
+        tl = Nn.new("ShaderNodeBsdfTranslucent"); tl.inputs['Color'].default_value = (1.0, 0.72, 0.42, 1)
+        df = Nn.new("ShaderNodeBsdfDiffuse"); df.inputs['Color'].default_value = (0.7, 0.55, 0.38, 1)
+        mx = Nn.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.35; Ll.new(tl.outputs[0], mx.inputs[1]); Ll.new(df.outputs[0], mx.inputs[2]); Ll.new(mx.outputs[0], out.inputs['Surface'])
+        cur.data.materials.append(cm)
+        box("LitHole", (-12.6, 13.955, 7.0), (1.2, 0.004, 1.3), glass("LitGlass", (0.9, 0.92, 0.95), 0.02))
+        rl = bpy.data.lights.new("RoomLamp", 'AREA'); rl.energy = 25; rl.size = 1.0; rl.color = (1.0, 0.75, 0.45)      # lamp light behind the curtain
+        ro = bpy.data.objects.new("RoomLamp", rl); bpy.context.collection.objects.link(ro); ro.location = (-12.6, 13.99, 7.15); ro.rotation_euler = (math.radians(-90), 0, 0)
         forest((-60, 60), (55, 90), 14); forest((-40, -25), (0, 15), 4, seed=6)
         for x in (-8, 8):
             ph.model("street_lamp_01", loc=(x, 8, 0))
@@ -202,3 +230,13 @@ MOVES = {
     "blocks": dict(kind="anim", dof=0.0, far=200.0, anim=_anim("blocks"), cam=_push((-4.0, -12.0, 2.2), (-5.0, -8.0, 2.4), (-12.0, 14.0, 6.5), (-12.6, 14.0, 7.0), 30),
                    focus=lambda c, t: Vector((-12.6, 14.0, 7.0))),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

@@ -394,7 +394,7 @@ def build(variant="empty"):
         fill = area_light((1.5, -2.5, 2.8), (0, 0, 0), 2.5, 90, (1.0, 0.9, 0.8)); point_at(fill, (0, 1, 0.8)); fill.visible_camera = False
         sn = sun(42, 160, 3.0, (1.0, 0.9, 0.76), 0.8)                     # low sun from the window side: shafts and slat light
         c["sun"] = sn
-        haze((0, 0, ROOM_H / 2), (2 * ROOM_X - 0.1, ROOM_Y1 - ROOM_Y0 - 0.1, ROOM_H - 0.05), density=0.005, color=(1.0, 0.96, 0.9), anis=0.6)
+
     # ceiling fixture (off in the search variant: they don't touch the switches)
     box("CeilRose", (0, 0.4, ROOM_H - 0.02), (0.3, 0.3, 0.04), pbr("Rose", (0.7, 0.68, 0.62), 0.6))
     # ---------------------------------------------------------------- furniture (scanned)
@@ -456,7 +456,7 @@ def build(variant="empty"):
     retint(lamp, (0.15, 0.25, 0.18))
     dl = bpy.data.lights.new("DeskLampOn", 'SPOT'); dl.energy = 22; dl.spot_size = math.radians(75); dl.spot_blend = 0.5; dl.color = (1.0, 0.78, 0.5)
     dlo = bpy.data.objects.new("DeskLampOn", dl); bpy.context.collection.objects.link(dlo); dlo.location = (0.62, 1.38, 1.3); point_at(dlo, (0.25, 1.2, TOP_Z))
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.025, location=(0.64, 1.4, 1.33)); bulb = bpy.context.active_object; bulb.data.materials.append(emissive("Bulb", (1.0, 0.85, 0.6), 30))
+
     import paper_tex
     pages = paper_tex.make_all()["pages"]
     from pbkit import image_plane
@@ -663,16 +663,8 @@ def build_people(c, variant):
         bc = briefcase(); c["briefcase"] = bc
     if variant == "sealed":
         for k, (yrs, hair) in enumerate(((40, "short02"), (34, "short04"))):
-            h = person(f"Suit{k}", 1.0, yrs, "male_casualsuit01", None)
-            for o in h.parts:
-                for ms in getattr(o, "material_slots", []):
-                    if ms.material and "casualsuit01" in ms.material.name:
-                        pb = ms.material.node_tree.nodes.get("Principled BSDF")
-                        for l_ in list(pb.inputs['Base Color'].links):
-                            ms.material.node_tree.links.remove(l_)
-                        pb.inputs['Base Color'].default_value = (0.82, 0.83, 0.8, 1); pb.inputs['Roughness'].default_value = 0.7
-                        pb.inputs['Sheen Weight'].default_value = 0.4
-            protective_gear(h)
+            from pbpeople import tyvek
+            h = tyvek(f"Suit{k}", 1.0, yrs)
             P[f"suit{k}"] = h
         bag_m = pbr("EvidenceBag", (0.95, 0.96, 0.97), 0.08, 0.0, **{'Transmission Weight': 0.9, 'Alpha': 0.55})
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=16, y_subdivisions=20, size=1)
@@ -1080,11 +1072,11 @@ def cam_find(c, t):
 
 
 def cam_glance(c, t):
+    """From behind the desk: his glance to the door, then the focus slides to the phone in the foreground."""
     e = ease(t)
-    vis = c["people"]["visitor"]
-    start = Vector((-2.6, 2.45, 1.7)); end = PHONE + Vector((-0.75, 0.55, 0.38))
-    tgt = Vector((-0.95, 0.75, 1.5)).lerp(PHONE + Vector((0, 0, 0.06)), ease(max(0.0, (t - 0.35) / 0.65)))
-    return (start.lerp(end, e), tgt, 32 + 14 * e)
+    start = Vector((0.2, 2.6, 1.5)); end = Vector((0.0, 2.4, 1.42))
+    tgt = Vector((-0.85, 0.85, 1.3)).lerp(Vector((-0.75, 1.0, 1.22)), ease(max(0.0, (t - 0.4) / 0.6)))
+    return (start.lerp(end, e), tgt, 25 + 3 * e)
 
 
 DUR = {"handset": 7.8, "empty": 9.0, "search": 6.5, "find": 5.0,
@@ -1153,3 +1145,13 @@ MOVES = {
     "dust": dict(kind="anim", dof=5.6, far=12.0, anim=_anim("dust"), cam=_push((2.5, -2.6, 1.55), (2.1, -2.5, 1.5), (-0.3, 1.3, 0.9), (-0.5, 1.3, 0.85), 26),
                  focus=lambda c, t: PHONE),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

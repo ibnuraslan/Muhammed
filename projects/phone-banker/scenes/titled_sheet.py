@@ -9,7 +9,15 @@ rows = (len(pairs) + 1) // 2
 S = Image.new("RGB", (W * 2, rows * (H + BAR)), (14, 16, 20)); d = ImageDraw.Draw(S)
 for i, (label, path) in enumerate(pairs):
     x, y = (i % 2) * W, (i // 2) * (H + BAR)
-    im = Image.open(path).convert("RGB").resize((W, H)) if os.path.exists(path) else Image.new("RGB", (W, H), (60, 0, 0))
+    if "," in path:                                   # a strip of frames from one shot, side by side
+        ps = path.split(","); im = Image.new("RGB", (W, H), (0, 0, 0)); w3 = W // len(ps)
+        for j, pp in enumerate(ps):
+            if os.path.exists(pp):
+                src = Image.open(pp).convert("RGB"); sw, sh = src.size
+                crop = src.crop((sw // 2 - int(sh * w3 / H) // 2, 0, sw // 2 + int(sh * w3 / H) // 2, sh)).resize((w3, H))
+                im.paste(crop, (j * w3, 0))
+    else:
+        im = Image.open(path).convert("RGB").resize((W, H)) if os.path.exists(path) else Image.new("RGB", (W, H), (60, 0, 0))
     if "CHAPTER" in label:
         import title_card
         small, big = label.split("+")[1].strip().split(" / ")

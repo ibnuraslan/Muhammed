@@ -9,10 +9,15 @@ i=0
 while IFS='|' read -r label set move t; do
   [ -z "$label" ] && continue
   i=$((i+1)); d=$out/$(printf %02d $i)_${set}_${move}
-  if [ ! -f $d/plate.png ]; then
-    python nvidia_doc/scenes/run.py $set $move --still --t $t --pct ${PCT:-50} --samples ${SAMPLES:-20} --out $d > $d.log 2>&1 || echo "FAIL $set $move"
-  fi
-  args+=("$label" "$d/plate.png")
+  paths=""
+  for tt in ${t//,/ }; do
+    dd=$d; [[ "$t" == *,* ]] && dd=${d}_t$tt
+    if [ ! -f $dd/plate.png ]; then
+      python nvidia_doc/scenes/run.py $set $move --still --t $tt --pct ${PCT:-50} --samples ${SAMPLES:-20} --out $dd > $dd.log 2>&1 || echo "FAIL $set $move"
+    fi
+    paths="$paths${paths:+,}$dd/plate.png"
+  done
+  args+=("$label" "$paths")
 done < $list
 python projects/phone-banker/scenes/titled_sheet.py projects/phone-banker/review/${name}.jpg "${args[@]}"
 echo "SHEET projects/phone-banker/review/${name}.jpg"

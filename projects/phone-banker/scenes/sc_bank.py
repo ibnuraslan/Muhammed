@@ -138,7 +138,9 @@ def build(variant=None):
                     box("BDGlass", (-sx * 0.42, -0.035, 1.75), (0.55, 0.01, 1.0), glass("BDGlassM", (0.75, 0.7, 0.6), 0.1)),
                     cyl("BDHandle", (-sx * 0.75, -0.08, 1.15), 0.015, 0.4, pbr("BDBrass", (0.6, 0.45, 0.2), 0.3, 1.0), verts=12)], "BankDoor")
         lf.location = (sx * 0.86, -0.12, STEP_H * STEP_N - 0.64 + 0.64); c["doors"].append(lf)
-    box("BankLobbyGlow", (0, 0.4, 1.9), (1.8, 0.05, 2.6), emissive("BankLobby", (1.0, 0.86, 0.66), 0.9))
+    box("BankLobbyBack", (0, 3.0, 1.9), (3.0, 0.1, 3.8), pbr("LobbyWood", (0.25, 0.15, 0.08), 0.5))      # a real hall behind the doors
+    box("BankLobbyFloor", (0, 1.5, 0.63), (3.0, 3.0, 0.02), pbr("LobbyStone", (0.45, 0.42, 0.38), 0.3))
+    ll = area_light((0, 1.6, 3.4), (0, 0, 0), 1.5, 60 if variant == "dusk" else 20, (1.0, 0.82, 0.58)); ll.visible_camera = False
     # weather and season dressing
     if variant == "autumn":
         c["rain"] = precip_curtains("rain")
@@ -170,6 +172,31 @@ def build(variant=None):
         d = bg.inputs['Color'].driver_add("default_value", 0).driver; d.type = 'SCRIPTED'; d.expression = "0.6 if frame < 50 else (0.55 if frame < 100 else 0.4)"
         d = bg.inputs['Color'].driver_add("default_value", 1).driver; d.type = 'SCRIPTED'; d.expression = "0.63 if frame < 50 else (0.5 if frame < 100 else 0.44)"
         d = bg.inputs['Color'].driver_add("default_value", 2).driver; d.type = 'SCRIPTED'; d.expression = "0.68 if frame < 50 else (0.42 if frame < 100 else 0.5)"
+        # autumn: trees in yellow leaf (visible only in the autumn third), leaves falling through the air
+        from pbkit import ph_instances
+        trees = ph_instances("tree_small_02", [((x, KERB_Y + 1.1, 0), float(rng.uniform(0, 6.28)), 1.3) for x in (-12.5, -2.0, 9.0, 20.0)])
+        for t_ in trees:
+            for o in [t_] + list(t_.children):
+                d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 50 or frame >= 100"
+                for ms in getattr(o, "material_slots", []):
+                    if ms.material and not ms.material.name.startswith("Autumn"):
+                        m2 = ms.material.copy(); m2.name = "Autumn" + m2.name
+                        pb = m2.node_tree.nodes.get("Principled BSDF")
+                        if pb and pb.inputs['Base Color'].is_linked:
+                            src = pb.inputs['Base Color'].links[0].from_socket
+                            mx = m2.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+                            m2.node_tree.links.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.6, 0.8, 0.25, 1)
+                            m2.node_tree.links.new(mx.outputs[2], pb.inputs['Base Color'])
+                        ms.material = m2
+        c["air_leaves"] = leaves(80, (-14, 14, KERB_Y - 3.0, -0.5), seed=9)
+        for o in c["air_leaves"]:
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 50 or frame >= 100"
+        # rain: the road and pavement turn wet and glossy
+        for nm in ("Road", "Pavement", "FarPave"):
+            o = bpy.data.objects.get(nm)
+            if o:
+                pb = o.data.materials[0].node_tree.nodes["Principled BSDF"]
+                d = pb.inputs['Coat Weight'].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = "0.9 if frame >= 100 else 0.0"
     CAST[variant](c)
     animate(c, 0.0, {"dusk": "pullup", "summer": "traffic", "autumn": "detain", "winter": "doorbell", "seasons": "seasons"}[variant])
     return c
@@ -324,6 +351,7 @@ def animate_dusk(c, sec, shot):
 def pose_walk_at(h, phase, loc, face_z):
     h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); bpy.context.view_layer.update()
     bob = pose_walk(h, phase, stride=24, arm_swing=16)
+    PP.relax_arms(h, 16, phase)
     h.arm.rotation_euler = (0, 0, face_z)
     # stairs: lift the walker with the step under him
     step_k = max(0, min(STEP_N, int((loc.y + STEP_D * STEP_N + 0.05) / STEP_D) + 1)) if loc.y > -STEP_D * STEP_N - 0.05 else 0
@@ -458,6 +486,12 @@ def a_doorbell(c, sec):
 
 def a_seasons(c, sec):
     """Same street, same move: snow, then autumn leaves, then rain; cars pass in each season."""
+    bpy.context.scene.frame_set(int(sec * 24) + 1)              # the season switches are frame drivers: evaluate them
+    r = np.random.default_rng(12)
+    for k, lf in enumerate(c.get("air_leaves", [])):            # leaves drifting down through the frame
+        x0 = r.uniform(-14, 14); y0 = r.uniform(KERB_Y - 3.0, -0.5); z0 = r.uniform(0.5, 7.0); v = r.uniform(0.5, 1.0)
+        z = (z0 - v * sec) % 7.0 + 0.05
+        lf.location = (x0 + 0.6 * math.sin(sec * 1.1 + k), y0, z); lf.rotation_euler = (sec * 2.3 + k, sec * 1.7, k)
     for k, car in enumerate(c["traffic"]):
         drive(car, -40 + k * 25, 11, (sec + k * 2.0) % 7.0, LANE_NEAR if k % 2 == 0 else LANE_FAR, 1 if k % 2 == 0 else -1)
 
@@ -488,3 +522,13 @@ MOVES.update({
     "seasons": dict(kind="anim", dof=8.0, far=80.0, anim=_anim("seasons"), cam=_push((-9.0, FAR - 1.5, 1.7), (-6.0, FAR - 1.6, 1.75), (-3.0, 0.0, 4.0), (0.0, 0.0, 3.8), 26),
                     focus=lambda c, t: Vector((0, -0.2, 3.0))),
 })
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

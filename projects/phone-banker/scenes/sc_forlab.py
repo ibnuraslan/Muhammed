@@ -212,6 +212,19 @@ def build(variant=None):
     for o in c["file_drawers"]:
         o["y0"] = o.location.y
     r, _ = ph.model("vintage_cabinet_01", loc=(-0.6, D / 2 - 0.35, 0))
+    # lab dressing: a fume hood, steel shelving with glassware, wall charts, stools, a sink
+    from pbkit import fume_hood, wall_chart, ph_instances
+    fume_hood((W / 2 - 0.45, 2.1, 0), math.radians(90))
+    ph_instances("Shelf_01", [((x, -D / 2 + 0.2, 0), math.pi, 1.0) for x in (-2.8, -1.7)])
+    ph_instances("chemistry_set", [((x, -D / 2 + 0.3, z), math.pi, 0.9) for x in (-2.8, -1.7) for z in (0.42, 1.12, 1.62)])
+    if not y18:
+        ph_instances("metal_stool_01", [((1.0, 1.3, 0), 0.3, 1.0), ((2.3, 1.25, 0), 1.2, 1.0), ((1.2, -1.3, 0), 0.8, 1.0)])
+    gen = os.path.join(HERE, "..", "assets", "generated")
+    for k, (x, kind) in enumerate(((-2.2, "grid"), (0.3, "mol"), (2.6, "grid"))):
+        image_plane(f"WallChart{k}", wall_chart(os.path.join(gen, f"labchart_{kind}{k}.png"), kind, k), (x, D / 2 - 0.02, 1.9), (0.6, 0.82),
+                    (math.radians(90), 0, 0), rough=0.7)
+    box("Sink", (-W / 2 + 0.45, -2.3, 0.85), (0.6, 0.9, 0.12), pbr("SinkSteel", (0.6, 0.6, 0.62), 0.25, 1.0))
+    box("SinkCab", (-W / 2 + 0.45, -2.3, 0.4), (0.6, 0.9, 0.8), pbr("SinkCabM", (0.6, 0.62, 0.6), 0.5))
     if not y18:
         r, _ = ph.model("chemistry_set", loc=(2.4, 1.85, 0.865), rot_z=math.pi)
         r, _ = ph.model("industrial_microscope", loc=(1.0, 1.85, 0.865), rot_z=math.pi)
@@ -429,7 +442,7 @@ MOVES = {
     "ampoules": dict(kind="anim", dof=1.8, far=6.0, anim=_anim("ampoules"),
                      cam=_push((CASE.x - 0.5, CASE.y - 0.75, Z + 0.42), (CASE.x - 0.32, CASE.y - 0.55, Z + 0.32), (CASE.x, CASE.y - 0.1, Z + 0.05), (CASE.x + 0.03, CASE.y - 0.08, Z + 0.05), 50),
                      focus=lambda c, t: Vector((CASE.x, CASE.y - 0.07, Z + 0.06))),
-    "slide_file": dict(kind="anim", dof=3.2, far=10.0, anim=_anim("slide_file"), cam=_push((-0.2, 0.0, 1.55), (-0.35, 0.15, 1.52), (LT.x, LT.y, 1.15), (LT.x, LT.y + 0.05, 1.1), 30),
+    "slide_file": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("slide_file"), cam=_push((1.3, -1.7, 1.75), (1.05, -1.45, 1.72), (LT.x, LT.y, 1.2), (LT.x, LT.y + 0.05, 1.15), 30),
                        focus=lambda c, t: LT + Vector((0, 0.1, 0.2))),
     "photocopies": dict(kind="anim", dof=3.2, far=10.0, anim=_anim("photocopies"), cam=_push((-0.4, 0.0, 1.6), (-0.55, 0.12, 1.58), (LT.x, LT.y - 0.2, 1.2), (LT.x, LT.y - 0.2, 1.15), 32),
                         focus=lambda c, t: LT + Vector((0, -0.4, 0.5))),
@@ -441,3 +454,13 @@ MOVES = {
                        cam=_push((CASE.x - 0.8, CASE.y - 1.1, Z + 0.6), (CASE.x - 0.6, CASE.y - 0.85, Z + 0.5), (CASE.x, CASE.y - 0.1, Z + 0.05), (CASE.x, CASE.y - 0.1, Z + 0.05), 40),
                        focus=lambda c, t: Vector((CASE.x, CASE.y - 0.1, Z + 0.05))),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

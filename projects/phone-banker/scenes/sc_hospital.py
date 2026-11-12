@@ -349,7 +349,9 @@ def build_exterior(c):
     box("Canopy", (0, -0.8, 3.0), (6, 3.2, 0.25), pbr("CanopyConcrete", (0.55, 0.54, 0.5), 0.8))
     for x in (-2.7, 2.7):
         box("CanopyPost", (x, -2.2, 1.45), (0.25, 0.25, 2.9), pbr("Post", (0.6, 0.58, 0.54), 0.8))
-    box("EntranceGlow", (0, -0.01, 1.3), (2.6, 0.02, 2.4), emissive("EntranceLight", (1.0, 0.86, 0.66), 1.6))
+    box("EntranceDoors", (0, -0.01, 1.3), (2.6, 0.02, 2.4), glass("EntranceGlass", (0.85, 0.88, 0.9), 0.05))
+    box("Vestibule", (0, 2.0, 1.4), (3.0, 0.1, 2.8), pbr("VestWall", (0.6, 0.62, 0.55), 0.8))
+    vl = area_light((0, 1.0, 2.7), (0, 0, 0), 2.0, 80, (1.0, 0.85, 0.62)); vl.visible_camera = False
     l = area_light((0, -1.0, 2.8), (0, 0, 0), 2.0, 200, (1.0, 0.85, 0.65)); l.visible_camera = False
     for x in (-12, 12):
         ph.model("street_lamp_01", loc=(x, -1.5, 0), rot_z=0.0)
@@ -524,3 +526,13 @@ MOVES = {
     "path_light": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("path_light"), cam=_push((-1.9, -2.2, 1.6), (-1.8, -1.9, 1.6), (0.6, 0.5, 1.3), (1.4, 0.6, 1.4), 26),
                        focus=lambda c, t: Vector((0.0, -0.5, 1.3)).lerp(Vector((2.1, 0.2, 1.4)), ease(t))),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

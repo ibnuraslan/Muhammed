@@ -19,10 +19,10 @@ DOOR = Vector((0.0, 0.0, 0.0))     # entrance at the block's foot; the courtyard
 
 def build(variant=None):
     c = {}
-    world_sky(sun_elev_deg=40, sun_rot_deg=120, strength=0.45, tint=(0.88, 0.92, 1.0)); sun(40, 120, 1.3, (1.0, 0.95, 0.88), 1.5)
+    world_sky(sun_elev_deg=40, sun_rot_deg=120, strength=0.45, tint=(0.88, 0.92, 1.0)); sun(40, 120, 0.9, (1.0, 0.95, 0.88), 1.5)
     box("Courtyard", (0, -12, -0.02), (80, 30, 0.04), ph.texture("asphalt_02", scale=0.25))
     box("Walk", (0, -1.5, 0.0), (60, 3.0, 0.08), ph.texture("concrete_pavers", scale=0.8))
-    panel = masonry_facade("PanelBlock", (0.38, 0.38, 0.37), 2.8, 3.0, 1.4, 1.35, 0.0)
+    panel = masonry_facade("PanelBlock", (0.32, 0.32, 0.31), 2.8, 3.0, 1.4, 1.35, 0.0)
     box("Block", (0, 6.0, 12.6), (60, 12, 25.2), panel)
     box("BlockOpp", (0, -34, 12.6), (60, 12, 25.2), panel)
     box("BlockSide", (-34, -12, 12.6), (12, 40, 25.2), panel)
@@ -33,8 +33,42 @@ def build(variant=None):
     box("EntryDark", (0, 0.05, 1.05), (1.0, 0.02, 2.1), pbr("Stairwell", (0.03, 0.03, 0.03), 0.9))
     box("Intercom", (0.75, -0.06, 1.4), (0.12, 0.03, 0.2), pbr("Intercom", (0.4, 0.4, 0.42), 0.4, 0.8))
     for x in (-2.8, 2.8):
-        ph.model("painted_wooden_bench", loc=(x, -2.6, 0), rot_z=math.pi)
+        ph.model("painted_wooden_bench", loc=(x, -2.6, 0), rot_z=0.0)
     ph_instances("tree_small_02", [((-9.0, -6.0, 0), 0.4, 1.6), ((8.5, -7.5, 0), 2.0, 1.5), ((16.0, -5.0, 0), 1.1, 1.7), ((-15.0, -9.0, 0), 3.0, 1.4)])
+    # the panel block's life: balconies with railings, washing on lines, air-conditioners, satellite dishes
+    slab = pbr("BalconySlab", (0.45, 0.45, 0.43), 0.8); rail = pbr("BalconyRail", (0.25, 0.28, 0.3), 0.5, 0.6)
+    laundry = [pbr(f"Wash{k}", col, 0.9) for k, col in enumerate(((0.8, 0.8, 0.78), (0.5, 0.15, 0.12), (0.2, 0.3, 0.5), (0.7, 0.62, 0.3)))]
+    r_ = np.random.default_rng(6)
+    ac = []
+    for fl in range(1, 9):
+        for bx in range(-9, 10):
+            x = bx * 3.0 + 1.5; z = fl * 2.8
+            if (bx + fl) % 3 == 0 or abs(x) < 2.5:
+                continue
+            box("Balcony", (x, -0.55, z), (1.6, 1.1, 0.12), slab)
+            box("BalconyFront", (x, -1.08, z + 0.5), (1.6, 0.04, 0.9), rail if (bx * fl) % 2 else pbr("BalconyGlaze", (0.35, 0.38, 0.4), 0.2, 0.0, **{'Coat Weight': 0.8}))
+            if r_.random() < 0.35:
+                for j in range(int(r_.integers(2, 5))):
+                    box("Washing", (x - 0.55 + j * 0.3, -0.9, z + 1.15), (0.22, 0.01, 0.3 + r_.uniform(0, 0.25)), laundry[int(r_.integers(0, 4))])
+            if r_.random() < 0.2:
+                ac.append(((x + 1.1, -0.15, z + 1.4), 0.0, 0.5))
+    ph_instances("exterior_aircon_unit", ac)
+    # a playground: climbing frame and swings (painted steel tube), a sandpit
+    tube = pbr("PlayTube", (0.55, 0.12, 0.08), 0.45, 0.4)
+    for (x, y) in ((-1.0, -15.0), (1.0, -15.0), (-1.0, -16.6), (1.0, -16.6)):
+        cyl("FramePost", (x, y, 1.0), 0.03, 2.0, tube, verts=10)
+    for z in (0.7, 1.4, 2.0):
+        for (y) in (-15.0, -16.6):
+            cyl("FrameBar", (0, y, z), 0.025, 2.0, tube, verts=10, rot=(0, math.radians(90), 0))
+    for x in (4.0, 6.0):
+        cyl("SwingLeg", (x, -15.8, 1.1), 0.04, 2.3, pbr("SwingBlue", (0.15, 0.3, 0.55), 0.45, 0.4), verts=10, rot=(0, math.radians(8 if x < 5 else -8), 0))
+    cyl("SwingTop", (5.0, -15.8, 2.25), 0.04, 2.0, pbr("SwingBlue2", (0.15, 0.3, 0.55), 0.45, 0.4), verts=10, rot=(0, math.radians(90), 0))
+    c["swing"] = joinm([cyl("Chain", (-0.25, 0, -0.75), 0.008, 1.5, rail, verts=6), cyl("Chain", (0.25, 0, -0.75), 0.008, 1.5, rail, verts=6),
+                        box("Seat", (0, 0, -1.5), (0.55, 0.22, 0.04), pbr("SeatWood2", (0.4, 0.25, 0.12), 0.6))], "Swing")
+    c["swing"].location = (5.0, -15.8, 2.22)
+    box("Sandpit", (-4.5, -15.5, 0.12), (2.4, 2.4, 0.24), pbr("SandFrame", (0.4, 0.3, 0.15), 0.7))
+    box("Sand", (-4.5, -15.5, 0.2), (2.2, 2.2, 0.06), pbr("Sand", (0.62, 0.55, 0.4), 0.95))
+    ph_instances("tree_small_02", [((x, y, 0), float(r_.uniform(0, 6.28)), float(r_.uniform(1.4, 1.9))) for (x, y) in ((-20, -10), (-14, -18), (12, -18), (22, -9), (-26, -4))])
     # parked cars: two unmarked cars of the officers, a few residents' cars
     c["carA"] = soviet_car("UnmarkedA", (0.55, 0.57, 0.6), kind="lada"); c["carA"].location = (4.5, -5.5, 0); c["carA"].rotation_euler = (0, 0, math.radians(180))
     c["carB"] = soviet_car("UnmarkedB", (0.08, 0.09, 0.1), kind="volga"); c["carB"].location = (-5.0, -5.8, 0)
@@ -43,13 +77,24 @@ def build(variant=None):
         car.location = (x, -6.0, 0)
     c["offs"] = [person(f"Plain{k}", 1.0, yrs, cl, hr, cval=v, hv=0.25, sat=0.3)
                  for k, (yrs, cl, hr, v) in enumerate(((38, "male_casualsuit05", "short02", 0.2), (33, "male_casualsuit02", "short04", 0.3), (45, "male_casualsuit03", "short01", 0.25)))]
-    c["man"] = person("Arrested", 1.0, 53, "male_elegantsuit01", "short01", cval=0.25, hv=0.35, hue=0.6, sat=0.4)
+    c["man"] = person("Arrested", 1.0, 53, "male_elegantsuit01", "short01", hv=0.35, col=(0.24, 0.25, 0.28))
+    # two babushkas on the bench by the entrance (they watch)
+    from pbpeople import seat
+    c["babushkas"] = []
+    for k, x in enumerate((-3.15, -2.45)):
+        b = person(f"Babushka{k}", 0.0, 72, "female_elegantsuit01", "bob01", hv=0.7, col=((0.3, 0.18, 0.14), (0.2, 0.22, 0.3))[k], weight=0.7)
+        seat(b, (x, -2.45, 0), 0.0, lean=8)
+        c["babushkas"].append(b)
     animate(c, 0.0, "wait")
     return c
 
 
 def animate(c, sec, move):
     o1, o2, o3 = c["offs"]; m = c["man"]
+    c["swing"].rotation_euler = (math.radians(14 * math.sin(sec * 2.1)), 0, 0)
+    for k, b in enumerate(c["babushkas"]):
+        from pbpeople import look as _look
+        _look(b, m.bone_head("head") if move == "arrest" else Vector((3.2, -4.6, 1.6)), 0.6)
     if move == "wait":
         hide(m, True)
         stand(o1, (3.2, -4.6, 0), math.radians(180 + 20)); nod(o1, "head", 4)              # leaning by the car, eyes on the door
@@ -98,3 +143,13 @@ MOVES = {
                    cam=_push((-6.5, -12.5, 1.65), (-5.8, -11.8, 1.65), (0.5, -1.8, 1.3), (2.4, -3.6, 1.3), 30),
                    focus=lambda c, t: c["man"].bone_head("spine03")),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

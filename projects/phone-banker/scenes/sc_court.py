@@ -14,7 +14,7 @@ from pbpeople import person, stand, seat, walk_at, nod, look, hand_to, hide, fwd
 from sc_bankoffice import retint
 from sc_hospital import two_tone
 
-EXPOSURE = 0.6
+EXPOSURE = 0.4
 BOUNCES = 6
 HERE = os.path.dirname(os.path.abspath(__file__))
 DOORPHOTO = os.path.join(HERE, "..", "assets", "photos", "office_door.jpg")
@@ -45,7 +45,7 @@ def build(variant=None):
 
 
 def build_room(c):
-    oak = wood("CourtOak", (0.14, 0.08, 0.04), (0.28, 0.17, 0.09), scale=(0.3, 6, 6), rough=0.35, coat=0.35)
+    oak = ph.texture("wooden_panels", scale=0.35, name="CourtPanels", tint=(1.15, 0.95, 0.75))     # real panel scan, no procedural moire
     plaster = pbr("CourtWall", (0.66, 0.64, 0.58), 0.85)
     box("Floor", (0, 2, -0.01), (12, 14, 0.02), ph.texture("herringbone_parquet", scale=0.7))
     box("Ceiling", (0, 2, 5.0), (12, 14, 0.1), pbr("CCeil", (0.7, 0.68, 0.64), 0.85))
@@ -56,10 +56,10 @@ def build_room(c):
     for k in range(4):
         box("Pier", (-6.0, -4.0 + k * 3.6, 2.5), (0.2, 1.2, 5.0), plaster)
         box("WinGlassC", (-6.05, -2.2 + k * 3.6, 2.7), (0.02, 2.4, 3.4), glass("CGlass", (0.9, 0.93, 0.95), 0.02))
-        l = area_light((-6.6, -2.2 + k * 3.6, 2.7), (0, math.radians(-90), 0), 2.4, 260, (0.88, 0.93, 1.0))
+        l = area_light((-6.6, -2.2 + k * 3.6, 2.7), (0, math.radians(-90), 0), 2.4, 140, (0.88, 0.93, 1.0))
         l.visible_camera = False; l.visible_glossy = False; l.visible_transmission = False
     box("WinLowC", (-6.0, 2, 0.5), (0.2, 14, 1.0), plaster); box("WinHighC", (-6.0, 2, 4.7), (0.2, 14, 0.6), plaster)
-    box("Outside", (-30, 2, 8), (1, 50, 30), pbr("WinterSky", (0.75, 0.78, 0.82), 0.9, 0.0, **{'Emission Color': (0.8, 0.84, 0.9, 1), 'Emission Strength': 0.8}))
+    box("Outside", (-30, 2, 8), (1, 50, 30), pbr("WinterSky", (0.75, 0.78, 0.82), 0.9, 0.0, **{'Emission Color': (0.8, 0.84, 0.9, 1), 'Emission Strength': 0.25}))
     # the bench on a dais, the judge's high-backed chair
     box("Dais", (0, BENCH.y + 0.6, 0.2), (5.0, 2.6, 0.4), oak)
     box("JudgeBench", (0, BENCH.y, 0.95), (4.4, 0.7, 1.1), oak, bevel=0.02); box("JudgeTop", (0, BENCH.y - 0.05, 1.52), (4.6, 0.85, 0.05), oak)
@@ -185,7 +185,7 @@ def animate(c, sec, move):
     else:
         J, P, D, X = c["judge"], c["pros"], c["def"], c["defendant"]
         g0, g1 = c["guards"]
-        seat(J, (0, BENCH.y + 0.7, 0), 0.0, lean=12, floor_z=0.4)           # faces -Y, into the room
+        seat(J, (0, BENCH.y + 0.7, 0), 0.0, lean=12, floor_z=0.65)           # faces -Y, into the room
         nod(J, "head", 14)
         hand_to(J, "R", Vector((0.25, BENCH.y - 0.05, 1.6)), hand_dir=Vector((0, -0.6, -0.8)), curl=20)
         hand_to(J, "L", Vector((-0.25, BENCH.y - 0.05, 1.6)), hand_dir=Vector((0, -0.6, -0.8)), curl=20)
@@ -207,7 +207,9 @@ def animate(c, sec, move):
             stand(D, (1.9, 3.6, 0), math.radians(180 + 60))
             k = ease(min(1.0, max(0.0, (sec - 0.6) / 1.5)))
             rest = D.bone_head("spine02") + fwd(D) * 0.15 + Vector((0, 0, -0.2))
-            hand_to(D, "R", rest.lerp(Vector((1.25, 4.2, 1.35)), k), curl=20)
+            toward = (Vector((1.25, 4.2, 1.1)) - D.bone_head("spine03")); toward.z = 0; toward.normalize()
+            gesture = D.bone_head("spine03") + toward * 0.38 + Vector((0, 0, -0.18))     # an open hand at waist height, toward the photo
+            hand_to(D, "R", rest.lerp(gesture, k), hand_dir=toward + Vector((0, 0, -0.3)), curl=15)
             look(D, Vector((0, BENCH.y, 1.8)), 0.7)
         elif move in ("verdict", "led_out"):
             for h in (P, D) + tuple(c["public"]):
@@ -253,3 +255,13 @@ MOVES = {
     "archive_dark": dict(kind="anim", dof=5.6, far=20.0, anim=_anim("archive_dark"), cam=_push((1.3, -5.5, 1.7), (1.2, -5.0, 1.68), (-1.2, 3.0, 1.2), (-1.25, 3.0, 1.2), 26),
                          focus=lambda c, t: Vector((-0.6, 0.0, 1.2))),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

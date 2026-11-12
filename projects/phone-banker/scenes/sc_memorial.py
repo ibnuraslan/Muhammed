@@ -137,3 +137,13 @@ MOVES = {
                         cam=_push((0.6, -6.0, 1.7), (0.4, -4.6, 1.7), (0.0, STAND.y, 2.2), (0.0, STAND.y, 2.0), 30),
                         focus=lambda c, t: Vector((0.0, STAND.y - 1.8, 1.4))),
 }
+
+
+_build_set = build
+
+
+def build(variant=None):
+    c = _build_set(variant)
+    from pbkit import finish_scene
+    finish_scene()
+    return c

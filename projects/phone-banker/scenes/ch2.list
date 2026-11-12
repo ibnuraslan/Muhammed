@@ -15,6 +15,6 @@
 8A Banker steps out; visitor stays|bankoffice|steps_out|0.5
 8B He glances at the door; push to the phone|bankoffice|glance|0.6
 9A Snow: nobody answers the door|bank|doorbell|0.4
-9B Same street: snow, leaves, rain|bank|seasons|0.2
+9B Same street: snow, then leaves, then rain (three frames)|bank|seasons|0.15,0.5,0.85
 10A Plain-clothes officers wait|apartment|wait|0.6
 10B He comes out; they walk him to a car|apartment|arrest|0.7
