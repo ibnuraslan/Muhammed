@@ -10,13 +10,13 @@ Values read back from `ToddlerWell_v002_60fps.blend`, opened in factory-startup 
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
 | Frame range | **1–1950**, step 1 (32.5 s) |
-| Camera | One camera, `Cam`, in one continuous move with a Track To on the empty `CamTarget`. No camera cuts or camera markers. Lens animated (14–70 mm), sensor 36 mm (Auto fit), DOF on at f/4, focused on the target. |
+| Camera | One camera, `Cam`, in one continuous move with a Track To on the empty `CamTarget`. No camera cuts or camera markers. Lens animated (14–45 mm), sensor 36 mm (Auto fit), DOF on at f/5.6 (animated look: backgrounds stay readable). |
 | Samples | 48 with adaptive sampling, noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max bounces 8; transparent max 16. The earth uses transparent back faces for the cross-section, so do not lower transparent bounces. |
-| Motion blur | On, shutter 0.5 (180° at 60 fps) |
-| Colour | AgX, look "AgX - Medium High Contrast" |
-| World | Physical sky texture (multiple scattering). Sun elevation and rotation are keyframed for the time-lapse, so do not override them. The sun lamp, cloud offset, cross-section fill, shaft fills and head torch are keyframed too. |
+| Motion blur | Off (animated-CG look, client direction 22:45 UTC) |
+| Colour | AgX, look "AgX - Punchy". The animated-CG look pass (`pipeline/anim_look.py`) is applied: saturation up, bump down, sky-gradient backdrop for camera rays. |
+| World | Camera rays see a sky-blue gradient, with a cloud plane in front of it. Lighting comes from a physical sky texture (multiple scattering). Sun elevation and rotation are keyframed for the time-lapse, so do not override them. The sun lamp, cloud offset, cross-section fill, shaft fills and head torch are keyframed too. |
 | Output | PNG, RGB, 8-bit, `//render/ToddlerWell_v002_####.png` |
 | Audio | None yet. The VO has not arrived. When it does: `pipeline/retime_to_vo.py` with `beats.json` (11 beat start frames) retimes every keyframe and adds the VO strip. |
 | Caches / sims | None: no particle or physics caches, no linked libraries, no drivers. Crowd duplicates use NLA strips with time offsets. |

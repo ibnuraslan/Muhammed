@@ -244,7 +244,7 @@ for i, f in enumerate(range(241, 470, 10)):
     RA.key(f, RA_P, yA, flex=14, spine=8, head=(35, 0), crouch=0.05, hands={"L": ("w", hl), "R": ("w", hr)})
     RB.key(f, RB_P, yaw_to(RB_P, (0, 0)), crouch=0.42, flex=35, spine=10, head=(40, 0),
            feet={"L": ("xy", RB_P + V((0.15, 0.05)), yaw_to(RB_P, (0, 0))), "R": ("xy", RB_P + V((-0.12, 0.25)), yaw_to(RB_P, (0, 0)))},
-           hands={"L": ("w", V((0.35, 0.24, 0.17))), "R": ("rel", (0.3, 0.3, -0.02 * RB.arm))})
+           hands={"L": ("w", V((0.35, 0.24, 0.17))), "R": ("rel", (0.05, 0.45 * RB.arm, -0.35 * RB.arm))})
     RC.key(f, RC_P, yaw_to(RC_P, (0, 0)) + 20 * math.sin(ph), head=(0, 10 * math.sin(ph)),
            hands={"R": ("rel", (0.02, 0.12, 0.18 * RC.arm)), "L": ("rel", (0.2, 0.25, -0.3 * RC.arm)) if i % 4 < 2 else HANG(RC)})
 # beat 3 (463-672): step back as the excavator rolls in; ResC waves it in

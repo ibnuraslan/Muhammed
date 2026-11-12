@@ -15,10 +15,13 @@ The scripts are in `../ToddlerWell_v001/scripts/`. Build order (run from `blende
 2. `02_build_scene.py` builds the set: field, 15 m shaft, cross-section earth, tripod, props, excavator, vegetation, sky, vests, hats and head torch.
 3. `03_animate.py` animates everything: all characters on IK with planted feet and walks between spots, ropes, the excavator and operator, the time-lapse sky, lights and FX, plus the crowd duplicates.
 4. `04_camera.py` keys the one continuous camera: a Catmull-Rom spline through about 75 framings.
-5. `05_package.py` shrinks textures, packs everything and saves the package compressed.
+5. `../pipeline/anim_look.py` applies the animated-CG look (run on the camera output).
+6. `05_package.py` shrinks textures (1K, or 512 for background and normal maps; JPEG), purges orphans, packs everything and saves compressed.
 
 Review tools:
 - `audit.py`: feet, BVH penetration and camera checks.
+- `hand_audit.py`: hand vs hand, hand vs own body and clothes, and hand vs other characters, every 2 frames.
+- `hand_pass.py`: close-ups of every hand action.
 - `contact_pass.py`: close-ups of every contact moment.
 - `stills_range.py`: review stills.
 - `camera_path_plot.py`: the camera path plot.

@@ -35,7 +35,7 @@ bpy.ops.file.pack_all()
 r, cy = sc.render, sc.cycles
 r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100
 r.fps, r.fps_base = 60, 1.0; r.engine = "CYCLES"; cy.samples = 48; cy.adaptive_threshold = 0.05; cy.use_denoising = True
-r.use_motion_blur = True; r.motion_blur_shutter = 0.5
+r.use_motion_blur = False     # animated look: no motion blur
 r.image_settings.file_format = "PNG"; r.image_settings.color_mode = "RGB"; r.image_settings.color_depth = "8"
 r.use_persistent_data = True
 problems = []
