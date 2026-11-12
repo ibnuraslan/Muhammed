@@ -329,9 +329,26 @@ def key_obj(o, f, M):
     o.location = loc; o.rotation_quaternion = q; o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_quaternion", frame=f)
 key_obj(stick, IMP1 - 1, LOCAL); stick.keyframe_insert("location", frame=IMP1 - 2); stick.keyframe_insert("rotation_quaternion", frame=IMP1 - 2)
 key_obj(stick, IMP1, Mdrop)
-land = Matrix.Translation(Vector((1.8, 0.7, 0.05))) @ Matrix.Rotation(R_(35), 4, 'Z')
-mid = Matrix.Translation((Mdrop.translation + land.translation) / 2 + Vector((0.2, 0, 0.6))) @ Matrix.Rotation(R_(110), 4, 'Y')
-key_obj(stick, IMP1 + 20, mid); key_obj(stick, IMP1 + 44, land); key_obj(stick, IMP1 + 50, Matrix.Translation(Vector((1.85, 0.68, 0.05))) @ Matrix.Rotation(R_(40), 4, 'Z'))
+# dropped at the hit: a real fall (gravity) while it tips over flat, lands near his feet, a small bounce, then still
+p0, q0, _ = Mdrop.decompose()
+xa_ = Mdrop.to_3x3() @ Vector((1, 0, 0)); xa_.z = 0
+xa_ = xa_.normalized() if xa_.length > 1e-4 else Vector((1, 0, 0))
+q_flat = Matrix((xa_, Vector((0, 0, 1)).cross(xa_), Vector((0, 0, 1)))).transposed().to_quaternion()
+if q_flat.dot(q0) < 0: q_flat = -q_flat
+ZREST = 0.035
+V0 = 2.0                                        # flung down by the impact
+H_ = max(0.05, p0.z - ZREST); T = (-V0 + math.sqrt(V0 * V0 + 2 * 9.81 * H_)) / 9.81; NF = max(8, int(round(T * 60)))
+drift = Vector((0.25, -0.2, 0))                 # knocked slightly forward-out by the impact
+for i in range(0, NF + 1, 2):
+    t = i / NF; tt = t * T
+    pos = p0 + drift * t; pos.z = max(ZREST, p0.z - V0 * tt - 4.9 * tt * tt)
+    q = q0.slerp(q_flat, t * t)                  # tips over faster as it falls
+    key_obj(stick, IMP1 + i, Matrix.Translation(pos) @ q.to_matrix().to_4x4())
+pL = p0 + drift; pL.z = ZREST
+key_obj(stick, IMP1 + NF, Matrix.Translation(pL) @ q_flat.to_matrix().to_4x4())
+key_obj(stick, IMP1 + NF + 4, Matrix.Translation(pL + Vector((0.03, -0.02, 0.025))) @ (q_flat @ Quaternion((1, 0, 0), R_(4))).to_matrix().to_4x4())
+key_obj(stick, IMP1 + NF + 8, Matrix.Translation(pL + Vector((0.05, -0.03, 0))) @ q_flat.to_matrix().to_4x4())
+print("STICK fall", NF, "frames from z %.2f" % p0.z)
 # fix: before the impact the stick follows the hand with the constant local offset
 key_obj(stick, 1, LOCAL)
 
