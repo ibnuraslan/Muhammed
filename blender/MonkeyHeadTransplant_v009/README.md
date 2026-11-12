@@ -1,4 +1,4 @@
-# MonkeyHeadTransplant_v009: acting fixed and synced to your voiceover (READY TO RENDER)
+# MonkeyHeadTransplant_v009: ON HOLD, DO NOT RENDER (floating pen and mask; fix in progress)
 
 This is Connect02's acting-fix version **MonkeyHeadTransplant_v008c** (branch `claude/connect02-monkey-head-transplant`, commit faa47bf), retimed so each story beat lands on its words in your recording `MonkeyHeadTransplant_v009_VO.mp3`.
 
