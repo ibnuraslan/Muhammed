@@ -31,7 +31,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v004/` |
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v003/` |
-| 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved (VO sync when your voiceover arrives)** |
+| 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved, final commit 284559b (VO sync when your voiceover arrives)** |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v002/` |
 | 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v005/` |
@@ -42,7 +42,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 26 | DwarfGiant | `claude/connect26-dwarf-giant` | `blender/DwarfGiant_v002/` |
 | 27 | SwedishCoffee | `claude/connect27-swedish-coffee` | `blender/SwedishCoffee_v004/` |
 | 28 | ToucanBeak | `claude/connect28-toucan-beak` | `blender/ToucanBeak_v003/` |
-| 29 | AIAsleep | `claude/connect29-ai-asleep` | `blender/AIAsleep_v003/` |
+| 29 | AIAsleep | `claude/connect29-ai-asleep` | `blender/AIAsleep_v004/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 30 | FanCancer | `claude/connect30-fan-cancer` | `blender/FanCancer_v002/` |
 | 31 | PopeShot | `claude/connect31-pope-shot` | `blender/PopeShot_v003/` |
 | 32 | GoatOwner | `claude/beautiful-ptolemy-c5vrcq` | `blender/GoatOwner_v003/` (director fix of v002) |
