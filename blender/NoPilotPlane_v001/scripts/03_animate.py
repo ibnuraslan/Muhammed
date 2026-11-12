@@ -195,8 +195,8 @@ def fo_pose(f, loc, rz=180.0, rx=0.0, ry=0.0, flex=10, side=-30, twist=0, hflex=
     for s in "LR": fingers_curl(RF, f, s, 30)
 SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
-fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armR=(58, 20, 30, 30))        # face turned toward the cabin, readable
-fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(58, 20, 30, 30))
+fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armR=(55, 25, 45, 18))        # face turned toward the cabin, readable
+fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(55, 25, 45, 18))
 fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(62, 5, 15, 30), armR=(58, 20, 30, 30))   # hauled up/back
 fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(60, -10, 15, 32))
 fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(62, -10, 15, 32))  # left arm swings down onto the yoke
