@@ -91,14 +91,14 @@ for f, e_ in ((1, 0.0), (175, 0.0), (240, 60.0), (400, 60.0), (450, 0.0), (END, 
     fl_.energy = e_; fl_.keyframe_insert("energy", frame=f)
 bub = bpy.data.objects["DarkBubble"]
 keyattr(bub, "scale", [(170, Vector((1.6, 1.6, 1.6))), (255, Vector((1.0, 1.0, 1.0))), (400, Vector((1.0, 1.0, 1.0))), (450, Vector((1.25, 1.25, 1.25)))])
-keyattr(bub, "hide_render", [(1, True)])   # no visible sphere: the "trapped" beat is a lighting vignette (room fades, her face keeps a soft key)
+keyattr(bub, "hide_render", [(1, True)]); keyattr(bub, "hide_viewport", [(1, True)])   # also out of the depsgraph (QA ray casts)   # no visible sphere: the "trapped" beat is a lighting vignette (room fades, her face keeps a soft key)
 dome_mix = bpy.data.materials["M_ExplainerDome"].node_tree.nodes["DomeMix"].inputs[0]
 _cr = next(n for n in bpy.data.materials["M_ExplainerDome"].node_tree.nodes if n.type == 'VALTORGB').color_ramp
 _cr.elements[0].position = 0.15; _cr.elements[0].color = (0.80, 0.93, 1.0, 1); _cr.elements[1].position = 0.6; _cr.elements[1].color = (0.08, 0.55, 0.93, 1)
 next(n for n in bpy.data.materials['M_ExplainerDome'].node_tree.nodes if n.type == 'EMISSION').inputs['Strength'].default_value = 1.5
 keyseq(dome_mix, [(1, 0.0), (700, 0.0), (740, 1.0), (1058, 1.0), (1100, 0.0), (END, 0.0)])
 dome = bpy.data.objects["ExplainerDome"]
-keyattr(dome, "hide_render", [(1, True), (698, False), (1102, True)])
+keyattr(dome, "hide_render", [(1, True), (698, False), (1102, True)]); keyattr(dome, "hide_viewport", [(1, True), (698, False), (1102, True)])
 ev(800); mid = (G.bone_world("head") + T.bone_world("head")) / 2
 dome.location = V(mid.x, mid.y, 0.9); dome.scale = (0.56, 0.56, 0.56)   # 1.7 m: every wall stays outside, no visible edge
 # ---------------------------------------------- x-ray portholes: teacher's throat, girl's hand and forearm
@@ -308,7 +308,7 @@ def pair(f): ev(f); return (G.bone_world("head") + T.bone_world("head")) / 2 - V
 def dogh(f): ev(f); return dog.matrix_world @ dog.pose.bones["head"].head
 TFw, TRw = fdir(T_YAW), rdir(T_YAW)
 SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
-    (1, V(-2.65, -2.3, 2.55), V(0.2, 0.7, 0.75), 16), (60, V(-1.9, -2.25, 1.7), V(0.2, 0.5, 0.75), 18),
+    (1, V(-1.2, -2.4, 2.3), V(0.2, 0.7, 0.75), 16), (60, V(-1.9, -2.25, 1.7), V(0.2, 0.5, 0.75), 18),
     (120, V(1.55, -1.55, 0.32), lambda f: dogh(f).lerp(gface(f), 0.4), 20),
     (163, V(0.95, -1.25, 0.95), gface, 24), (225, lambda f: gface(f) + V(0.32, -0.62, 0.02), gface, 35),
     (290, lambda f: gface(f) + V(0.16, -0.34, 0.0), gface, 45), (350, V(0.95, -1.6, 1.3), V(0.2, 0.4, 0.9), 24),
@@ -317,8 +317,8 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (595, lambda f: tthroat(f) + TRw * 0.46 - TFw * 0.12 + V(0, 0, -0.12), tmouth, 30),
     (655, lambda f: tmouth(f) + TRw * 0.48 - TFw * 0.06 + V(0, 0, -0.02), tmouth, 40),
     (697, lambda f: tthroat(f) + TRw * 0.4 - TFw * 0.05 + V(0, 0, -0.03), tthroat, 45),
-    (760, lambda f: gtip(f) + TRw * 0.38 - TFw * 0.08 + V(0, 0, 0.02), gtip, 50),
-    (830, lambda f: gelbow(f).lerp(gtip(f), 0.5) + TRw * 0.42 - TFw * 0.12 + V(0, 0, -0.04), lambda f: gelbow(f).lerp(gtip(f), 0.45), 38),
+    (760, lambda f: tthroat(f).lerp(gtip(f), 0.4) + TRw * 0.75 - TFw * 0.25 + V(0, 0, 0.04), lambda f: tthroat(f).lerp(gtip(f), 0.4), 32),   # pulled back: throat + x-ray hand read together
+    (830, lambda f: tthroat(f).lerp(gelbow(f), 0.35) + TRw * 0.8 - TFw * 0.2 + V(0, 0, 0.02), lambda f: tthroat(f).lerp(gelbow(f), 0.3), 30),   # throat, hand and forearm in one frame
     (895, lambda f: pair(f) + V(0.25, -0.95, 0.15), lambda f: tthroat(f).lerp(gtip(f), 0.5), 28),
     (960, lambda f: gface(f) + V(0.42, -0.5, 0.02), gface, 35), (1020, lambda f: tthroat(f) + TRw * 0.5 - TFw * 0.15 + V(0.0, 0, 0.0), lambda f: tthroat(f).lerp(gtip(f), 0.5), 40),
     (1063, lambda f: tmouth(f) + TRw * 0.46 - TFw * 0.1 + V(0, 0, 0.02), tmouth, 35),
@@ -327,7 +327,7 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
     (1320, lambda f: tmouth(f) + TRw * 0.28 - TFw * 0.12 + V(0, 0, 0.0), tmouth, 60),
     (1385, lambda f: tmouth(f) + TRw * 0.3 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 55),
-    (1420, lambda f: tmouth(f) + TRw * 0.6 - TFw * 0.3 + V(0, 0, 0.08), tmouth, 32), (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
+    (1420, lambda f: tmouth(f) + TRw * 0.6 - TFw * 0.3 + V(0, 0, 0.08), tmouth, 32), (1453, lambda f: pair(f) + V(0.9, -0.6, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
     (1590, lambda f: gmouth(f) + V(0.3, -0.45, 0.06), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them
 for k, f in enumerate((1723, 1763, 1803)):
@@ -338,6 +338,7 @@ SHOTS += [(1825, lambda f: pair(f) + V(0.35, -1.15, 0.1), pair, 26), (1843, lamb
 res = []
 for f, cp, ap, ln in SHOTS:
     c_ = cp(f) if callable(cp) else cp; a_ = ap(f) if callable(ap) else ap
+    if ln >= 30 and ap in (gface, gmouth): c_ = c_ - V(0, 0, 0.09); a_ = a_ - V(0, 0, 0.02)   # close-ups from just below eye level: faces, not the tops of heads (QA FILL hair)
     res.append((f, c_, a_, float(ln)))
 fc = catmull([(f, c_) for f, c_, a_, l_ in res]); fa = catmull([(f, a_) for f, c_, a_, l_ in res]); fl_ = catmull([(f, l_) for f, c_, a_, l_ in res])
 # clearance: keep the lens >= 15 cm from the two characters' skin, clothes and hair (smoothed so the move stays fluid)

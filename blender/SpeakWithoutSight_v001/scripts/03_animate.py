@@ -289,6 +289,12 @@ def g_throat_along(f, tp):
     ev(f); sh = G.bone_world("upperarm01.R"); F_ = fdir(T_YAW)
     lat = (tp - sh); lat = lat - F_ * lat.dot(F_)
     return (lat.normalized() + UP * 0.1).normalized()      # around the neck: clear of the chin above and the collar below
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())   # shared director hand-pose library (7155c8d)
+def g_throat_pad(f, tp, press=0.0):
+    """girl's right palm flat on the teacher's larynx (hand_poses: place_hand + flat_palm), light touch"""
+    F_ = fdir(T_YAW); along = g_throat_along(f, tp); along = (along - F_ * along.dot(F_)).normalized()
+    g_hand_on("R", f, tp, F_, along, press=press, curl=[2, 2, 2, 3], tilt=0.5, pad=0.012)   # reach-checked placement (place_hand's IK frame does not match this rig's controls)
+    apply_pose(G.o, "R", "shield", f)       # hand_poses.py: flat fingers, thumb tucked beside the index (flat_palm thumb sticks out into the neck)
 def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.005, tilt=0.0):
     """middle fingertip pad at 'tip' (world), palm towards -normal, fingers pointing 'along'; two correction passes"""
     along = (along - normal * along.dot(normal)).normalized()
@@ -332,7 +338,7 @@ for f in (480, 500, 516):
     u = smooth((f - 462) / 68.0)
     tp = t_throat(f); W0, d0, n0, _ = g_lap_R(f)
     tipT = tp + fdir(T_YAW) * 0.03
-    tip = (W0 + d0.normalized() * G_HL).lerp(tipT, u) + V(0, 0, 0.06 * math.sin(math.pi * u))
+    tip = (W0 + d0.normalized() * G_HL).lerp(tipT, u) + (UP * 0.02 - fdir(T_YAW) * 0.05) * math.sin(math.pi * u)   # arc out toward the teacher, clear of her own face
     nrm = n0.lerp(-fdir(T_YAW) * -1, u).normalized()
     g_hand_on("R", f, tip, nrm, d0.lerp(UP * 0.6 + T_R * -0.8, u), curl=20 - 14 * u)
     ev(f); Wg = G.bone_world("wrist.R"); t_grip_wrist(f, Wg, d0.lerp(UP, u), nrm)
@@ -340,7 +346,7 @@ for f in throat_keys:
     # beat 6: press harder when loud, relax when soft
     press = 0.004 if 895 <= f < 990 else (0.0 if f >= 990 else 0.002)
     tp = t_throat(f)
-    g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), press=press, curl=[12, 12, 10, 8] if press < 0.004 else [16, 16, 14, 10], tilt=0.2, pad=0.008)
+    g_throat_pad(f, tp, press)
 # teacher's right hand lets go and rests on the girl's forearm, then gestures softly
 def t_thigh_R(f, lift=0.0, sd="R"):
     """hand rests on the FRONT of her (vertical, kneeling) thigh, on the skirt surface"""
@@ -442,8 +448,8 @@ for f in keys_every(450, 1470, 60):
 def g_left_on(f, what, dz=0.0):
     p, ff = g_own_mouth(f) if what == "lips" else g_own_throat(f)
     side = ff.cross(UP).normalized()   # points to her left
-    along = (-side + UP * (0.2 if what == "lips" else 0.5)).normalized()
-    g_hand_on("L", f, p + UP * dz, ff, along, curl=10)
+    along = (-side + UP * (0.2 if what == "lips" else 0.0)).normalized()
+    g_hand_on("L", f, p + UP * (dz - (0.02 if what == "throat" else 0.0)), ff, along, curl=10)
 for f in range(1490, 1601, 10):
     g_left_on(f, "lips")
 for f in range(1615, 1723, 10):
@@ -453,7 +459,7 @@ for i, f in enumerate(range(1735, 1843, 18)):
     g_left_on(f, "lips" if i % 2 == 0 else "throat")
     if i % 2 == 0: lip_key(f)
     else:
-        tp = t_throat(f); g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), curl=[12, 12, 10, 8], tilt=0.2, pad=0.008)
+        tp = t_throat(f); g_throat_pad(f, tp)
     # lift off between touches so the hand never slides through the face
     if f + 9 < 1843:
         fm = f + 9; mp_, ff_ = t_mouth(fm); tp_ = t_throat(fm)
@@ -502,6 +508,12 @@ for f in (1932, 1955, END):
     hit, nrm = T.surface(f, ch + TFn * 0.3 - T_R * 0.06 + UP * 0.05, -TFn, "female_elegantsuit01")
     heart = (hit if hit else ch + TFn * 0.12)
     t_hand_on("R", f, heart + UP * 0.04, nrm if hit else TFn, -T_R * 0.6 + UP * 0.8, curl=14, pad=0.035)
+# 1905 -> 1932 the hands come down from the mouth in front of her own chest (never through the girl's arm)
+for f in (1912, 1920):
+    ev(f); ch = T.bone_world("spine03"); TFn = fdir(T_YAW)
+    for sd, sx in (("L", -1), ("R", 1)):
+        tip = ch + TFn * 0.3 + T_R * sx * 0.11 + UP * 0.06
+        T.hand(sd, f, tip - UP * T_HL * 0.9, UP, TFn, T_KNEEL + T_R * sx * 0.4 + UP * 0.2); T.fingers(sd, f, 18, 15)
 # girl leans in to the hug
 for f in (1930, END):
     fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl, twist=-14, head=(hp - 4, -22))
@@ -688,6 +700,12 @@ from mathutils.bvhtree import BVHTree
 def _nomask(ob, on):
     for m in ob.modifiers:
         if m.type in ('MASK', 'SUBSURF'): m.show_viewport = on
+_HELPERC = {}
+def _helper_verts(o):
+    if o.name not in _HELPERC:
+        hg = {g.index for g in o.vertex_groups if g.name.lower().startswith(("helper", "joint")) or g.name in ("HelperGeometry", "JointCubes")}
+        _HELPERC[o.name] = {v.index for v in o.data.vertices if any(x.group in hg and x.weight > 0.5 for x in v.groups)} if hg else set()
+    return _HELPERC[o.name]
 _HANDCACHE = {}
 def hand_vidx(P, sd):
     key = (P.name, sd)
@@ -730,7 +748,7 @@ def deintersect(P, sd, f0, f1, targets, allow=0.008, iters=5, away=None):
             worst = (0.0, None)
             for o in tobs:
                 eo = o.evaluated_get(dg); mo = eo.to_mesh()
-                polys = self_polys if (o is body and self_polys is not None) else [tuple(p.vertices) for p in mo.polygons]
+                polys = self_polys if (o is body and self_polys is not None) else [tuple(p.vertices) for p in mo.polygons if not any(i in _helper_verts(o) for i in p.vertices)]   # hidden MPFB helper shells are not skin
                 tr = BVHTree.FromPolygons([eo.matrix_world @ v.co for v in mo.vertices], polys); eo.to_mesh_clear()
                 for p in pts:
                     loc, nrm, i_, d = tr.find_nearest(p, 0.12)
@@ -749,7 +767,7 @@ def bake_ik(P, sd, f0, f1, step=3):
     for f in range(f0, f1 + 1, step):
         ev(f); mats.append((f, P.o.pose.bones["IK_hand." + sd].matrix.copy()))
     for f, M in mats: P.r.key_world("IK_hand." + sd, f, M)
-bake_ik(TEACH, "R", 425, 530); bake_ik(TEACH, "R", 440, 470, 1); bake_ik(GIRL, "R", 425, 530); bake_ik(TEACH, "L", 425, 460); bake_ik(GIRL, "L", 425, 470)
+bake_ik(TEACH, "R", 425, 530); bake_ik(TEACH, "R", 440, 470, 1); bake_ik(GIRL, "R", 425, 530); bake_ik(TEACH, "L", 425, 460); bake_ik(GIRL, "L", 425, 470); bake_ik(TEACH, "R", 1600, 1690); bake_ik(GIRL, "R", 1310, 1360, 1); bake_ik(GIRL, "R", 1612, 1630, 1); bake_ik(TEACH, "R", 1890, 1945); bake_ik(TEACH, "L", 1890, 1945); bake_ik(TEACH, "R", 1908, 1922, 1); bake_ik(TEACH, "L", 1908, 1922, 1)
 TCL = ["Teacher.body", "Teacher.female_elegantsuit01", "Teacher.long_skirt"]
 GCL = ["Girl.body", "Girl.female_elegantsuit01", "Girl.long_skirt"]
 def _away_from_teacher(f, pts):
@@ -759,16 +777,22 @@ def _away_from_teacher(f, pts):
 _up = lambda f, pts: UP.copy()
 deintersect(TEACH, "R", 430, 530, ["Teacher.body", "Teacher.long_skirt"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("spine03")))
 deintersect(TEACH, "L", 430, 530, ["Teacher.body", "Teacher.long_skirt"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("spine03")))
-deintersect(GIRL, "R", 400, 690, TCL, away=_away_from_teacher)
+deintersect(GIRL, "R", 400, 529, TCL, away=_away_from_teacher)
+deintersect(GIRL, "R", 530, 1066, ["Teacher.body"], allow=0.012, away=_away_from_teacher)   # throat pad: skin only
 deintersect(GIRL, "R", 1066, END, TCL, away=_away_from_teacher)
-deintersect(GIRL, "R", 690, 1066, TCL, allow=0.013, iters=6, away=_away_from_teacher)   # throat: keep the pad on the skin, only lift what would clip (>1.6 cm)
 deintersect(GIRL, "L", 400, 520, TCL, away=_away_from_teacher)
 deintersect(TEACH, "R", 425, END, GCL, away=_up, iters=8)
 deintersect(TEACH, "L", 425, END, GCL, away=_up)
 deintersect(GIRL, "L", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
 deintersect(GIRL, "R", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
-deintersect(GIRL, "R", 1060, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")))
+deintersect(GIRL, "R", 1300, 1460, ["Teacher.body"], iters=8, away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("head")))   # fingers on her lips: on the skin, not through it
+deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")))
 deintersect(GIRL, "R", 1580, 1610, TCL, away=_away_from_teacher, allow=0.004)
+_from_neck = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("neck01"))
+_from_girl = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("spine03"))
+deintersect(TEACH, "R", 1880, END, GCL, away=_from_girl, iters=8)   # hug: hands rest on her back/shoulder, outside the jacket
+deintersect(TEACH, "L", 1880, END, GCL, away=_from_girl, iters=8)
+deintersect(GIRL, "L", 1600, END, ["Girl.body", "Girl.female_elegantsuit01"], away=_from_neck)   # own-throat touch stays on the skin, not inside the collar
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())
 if OUT:
     bpy.ops.wm.save_as_mainfile(filepath=OUT)

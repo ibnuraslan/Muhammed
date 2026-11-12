@@ -28,8 +28,8 @@ SELF_T = ("head", "neck", "jaw", "spine", "pelvis", "upperleg", "lowerleg", "thi
 def chars():
     out = []
     for r in bpy.data.objects:
-        if r.type != 'ARMATURE' or not r.visible_get(): continue
-        kids = [c for c in r.children_recursive if c.type == 'MESH' and c.visible_get() and not c.hide_render]
+        if r.type != 'ARMATURE': continue      # visibility is checked per frame (characters can appear later)
+        kids = [c for c in r.children_recursive if c.type == 'MESH']
         body = [c for c in kids if c.name.endswith(".body") or "body" in c.name.lower() and len(c.data.vertices) > 8000]
         if not body: continue
         body = max(body, key=lambda c: len(c.data.vertices))
@@ -47,16 +47,17 @@ for r, body, _ in CH:
     bones = {b.name for b in r.data.bones}
     gi = {g.index: g.name for g in body.vertex_groups}
     helper = {i for i, n in gi.items() if n.lower().startswith(("helper", "joint")) or n in ("HelperGeometry", "JointCubes")}
-    probe, selft = [], []
+    probe, selft, skin = [], [], set()
     for v in body.data.vertices:
         if any(g.group in helper and g.weight > 0.5 for g in v.groups): continue
+        skin.add(v.index)
         dg_ = [g for g in v.groups if gi.get(g.group) in bones]
         if not dg_: continue
         g = max(dg_, key=lambda x: x.weight); n = gi[g.group].lower()
         if any(k in n for k in SKIP): continue
         if any(k in n for k in ARM): probe.append(v.index)
         elif any(k in n for k in SELF_T): selft.append(v.index)
-    cls[body.name] = (probe, set(selft))
+    cls[body.name] = (probe, set(selft), skin)
     print("CLASS", body.name, "probes", len(probe), "self-targets", len(selft))
 
 def bvh_of(obj, dg, keep=None):
@@ -81,12 +82,15 @@ dg = bpy.context.evaluated_depsgraph_get()
 for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     cpos = cam.matrix_world.translation
-    near = [c for c in CH if (c[0].matrix_world.translation - cpos).length < CAMR]
+    def where(r):     # rigs often stay at the origin and move by the root bone
+        pb = r.pose.bones.get("root") or r.pose.bones[0]
+        return r.matrix_world @ pb.head
+    near = [c for c in CH if not c[1].hide_render and not c[0].hide_render and (where(c[0]) - cpos).length < CAMR]
     if not near: continue
     built = {}
     for r, body, cloth in near:
-        probe, selft = cls[body.name]
-        bb, verts = bvh_of(body, dg)
+        probe, selft, _skin = cls[body.name]
+        bb, verts = bvh_of(body, dg, keep=cls[body.name][2])  # skin only: hidden MPFB helper shells / joint cubes are never rendered (Connect19)
         sb, _ = bvh_of(body, dg, keep=selft)
         cb = []
         pts = []
