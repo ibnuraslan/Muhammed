@@ -31,6 +31,9 @@ def kit_facade(x0, bays, top_bay="centered_large", door_bays=(), tint=(0.66, 0.6
     by = {}
     for o in ms:
         by.setdefault(o.name.split(".")[0], o)
+    for o in ms:                                    # the kit's meshes are shared: tint per object, not per mesh
+        for slot in getattr(o, "material_slots", []):
+            m = slot.material; slot.link = 'OBJECT'; slot.material = m
     retint(ms, tint)
     out = []
 
@@ -103,10 +106,13 @@ def build(variant=None):
     box("BankPlate", (1.4, -0.12, 2.0), (0.7, 0.02, 0.45), plate, bevel=0.005)
     text_obj("BankPlateText", "БАНК", (1.4, -0.135, 2.03), 0.12, pbr("PlateInk", (0.05, 0.04, 0.03), 0.4), rot=(math.radians(90), 0, 0), extrude=0.001)
     # neighbours (CG stucco, punched windows) to close the street
-    kit_facade(-22.5, 4, tint=(0.62, 0.58, 0.5), top_bay="centered_small")          # left: warm grey stone
-    kit_facade(10.5, 5, tint=(0.7, 0.62, 0.48), top_bay="centered_large")          # right: ochre
-    for x, w, h, col in ((32.0, 12.0, 17.0, (0.58, 0.5, 0.4)), (50.0, 24.0, 20.0, (0.5, 0.47, 0.42)), (76.0, 28.0, 16.0, (0.6, 0.55, 0.46)),
-                         (-30.0, 15.0, 18.0, (0.52, 0.48, 0.42)), (-51.5, 28.0, 21.0, (0.58, 0.53, 0.45)), (-79.5, 28.0, 16.0, (0.5, 0.46, 0.4))):
+    kit_facade(-22.5, 4, tint=(0.78, 0.82, 0.86), top_bay="centered_small")          # left: warm grey stone
+    kit_facade(10.5, 5, tint=(1.05, 0.82, 0.38), top_bay="centered_large")          # right: ochre
+    kit_facade(25.5, 4, tint=(0.62, 0.72, 0.82), top_bay="centered_double")        # further along: pale blue-grey, then sage
+    kit_facade(37.5, 5, tint=(0.72, 0.84, 0.62), top_bay="offset_small")
+    kit_facade(-34.5, 4, tint=(1.0, 0.9, 0.62), top_bay="centered_double")         # and the other way: cream
+    for x, w, h, col in ((66.0, 27.0, 17.0, (0.42, 0.33, 0.24)), (94.0, 28.0, 20.0, (0.36, 0.38, 0.4)),
+                         (-48.5, 28.0, 18.0, (0.4, 0.36, 0.32)), (-76.5, 28.0, 21.0, (0.46, 0.4, 0.3)), (-96.0, 10.0, 16.0, (0.5, 0.46, 0.4))):
         box("Neighbour", (x, 6.0, h / 2), (w, 12.0, h), masonry_facade(f"N{x}", col, 3.2, 2.6, 1.2, 1.7, 0.1, lit_col=(1.0, 0.72, 0.45), lit_strength=0.25))
     if variant == "dusk":                                                           # soft warm rooms behind some windows
         for k in range(10):
@@ -222,6 +228,29 @@ def cast_summer(c):
     c["doorman"] = person("Doorman", 1.0, 58, "male_elegantsuit01", "short04", cval=0.25, hv=0.6, hue=0.6, sat=0.6)
     c["walkers"] = [person("Passer1", 0.0, 40, "female_elegantsuit01", "bob01", cval=0.4, hv=0.3), person("Passer2", 1.0, 30, "male_casualsuit02", "short01", cval=0.5)]
     c["briefcase"] = joinm([box("BCase", (0, 0, 0), (0.42, 0.1, 0.3), pbr("BCaseL", (0.08, 0.045, 0.025), 0.45), bevel=0.02)], "BankerCase")
+    # street life: shop signs (generic Cyrillic) over the neighbours' ground floors, a news kiosk, lime trees, pedestrians
+    for k, (x, word, bg) in enumerate(((-19.5, "ПРОДУКТЫ", (0.12, 0.3, 0.55)), (-13.5, "АПТЕКА", (0.15, 0.42, 0.25)), (13.5, "ХЛЕБ", (0.55, 0.22, 0.1)),
+                                       (19.5, "ОПТИКА", (0.2, 0.22, 0.25)), (24.0, "ОБУВЬ", (0.45, 0.12, 0.12)))):
+        box(f"ShopSign{k}", (x, -0.5, 3.7), (2.4, 0.08, 0.55), pbr(f"SignBoard{k}", bg, 0.5), bevel=0.01)
+        text_obj(f"ShopWord{k}", word, (x, -0.55, 3.59), 0.3, pbr(f"SignInk{k}", (0.92, 0.9, 0.82), 0.4), extrude=0.004)
+    kiosk_m = pbr("KioskBody", (0.62, 0.7, 0.72), 0.45, 0.2)
+    kx, ky = 7.5, KERB_Y + 1.6
+    box("Kiosk", (kx, ky, 1.15), (2.2, 1.6, 2.3), kiosk_m, bevel=0.03)
+    box("KioskRoof", (kx, ky, 2.38), (2.5, 1.9, 0.12), pbr("KioskRoofM", (0.25, 0.3, 0.32), 0.5))
+    box("KioskGlass", (kx, ky - 0.81, 1.45), (1.9, 0.02, 0.9), glass("KioskGlassM", (0.8, 0.85, 0.85), 0.05))
+    from pbkit import image_plane
+    import paper_tex
+    pgs = paper_tex.make_all()["pages"]
+    for j in range(4):                                                              # papers and magazines behind the glass
+        image_plane(f"KioskPaper{j}", pgs[j % len(pgs)], (kx - 0.7 + j * 0.45, ky - 0.7, 1.4 + 0.12 * (j % 2)), (0.3, 0.4), (math.radians(80), 0, 0), rough=0.8)
+    box("KioskSign", (kx, ky - 0.86, 2.1), (1.9, 0.04, 0.3), pbr("KioskSignM", (0.6, 0.12, 0.08), 0.5))
+    text_obj("KioskWord", "ГАЗЕТЫ", (kx, -0.04 + ky - 0.84, 2.02), 0.2, pbr("KioskInk", (0.95, 0.92, 0.85), 0.4), extrude=0.003)
+    from pbkit import ph_instances
+    ph_instances("tree_small_02", [((x, KERB_Y + 1.1, 0), float(rng.uniform(0, 6.28)), 1.2) for x in (-24.0, -6.0, 3.0, 18.0, 33.0)])
+    ph_instances("tree_small_02", [((x, FAR_KERB + 1.2, 0), float(rng.uniform(0, 6.28)), 1.15) for x in (-20.0, -8.0, 4.0, 16.0, 28.0)])
+    c["near_walkers"] = [person("Passer3", 0.0, 62, "female_casualsuit01", "bob02", cval=0.35, hv=0.4),
+                         person("Passer4", 1.0, 24, "male_casualsuit03", "short02", cval=0.55, hv=0.2),
+                         person("Passer5", 0.0, 33, "female_elegantsuit01", "long01", cval=0.3, hv=0.25)]
     # overhead trolleybus wires along the street
     for y in (KERB_Y - 2.5, KERB_Y - 3.3):
         cyl("Wire", (0, y, 6.2), 0.008, 90, pbr("WireM", (0.05, 0.05, 0.05), 0.5), verts=6, rot=(0, math.radians(90), 0))
@@ -390,6 +419,7 @@ DUR.update({"traffic": 6.5, "arrive_bank": 6.0, "detain": 5.5, "release": 5.5, "
 VARIANT_FOR = {"pullup": "dusk", "steps": "dusk", "traffic": "summer", "arrive_bank": "summer", "detain": "autumn", "release": "autumn",
                "doorbell": "winter", "seasons": "seasons"}
 LANE_NEAR, LANE_FAR = KERB_Y - 1.8, KERB_Y - ROAD_W + 2.2
+FAR_KERB = KERB_Y - ROAD_W - 6.0
 
 
 def drive(car, x0, v, sec, y, d=1):
@@ -410,6 +440,9 @@ def a_traffic(c, sec):
     drive(c["trolley"], 30, 6.5, sec, KERB_Y - 2.9, -1)
     for k, w in enumerate(c["walkers"]):
         PP.walk_at(w, sec * 0.9 + k * 0.4, (-6 + k * 9 + (1.3 if k == 0 else -1.3) * sec, KERB_Y - ROAD_W - 1.5, 0), math.radians(90 if k == 0 else -90), stride=22, swing=14)
+    for k, w in enumerate(c.get("near_walkers", [])):                              # the near pavement
+        d = 1 if k % 2 == 0 else -1
+        PP.walk_at(w, sec * 0.85 + k * 0.33, (-8 + k * 7 + d * 1.2 * sec, KERB_Y + 1.2 + 1.3 * (k % 2), 0), math.radians(90 * d), stride=20, swing=12)
     for h in (c["banker"], c["doorman"]):
         PP.hide(h, True)
     c["briefcase"].hide_render = True
@@ -422,7 +455,7 @@ def a_arrive_bank(c, sec):
         car.location = (60, 0, -10)
     drive(c["traffic"][0], -30, 10, sec, LANE_FAR + 2, 1)
     c["trolley"].location = (60, 0, -10)
-    for w in c["walkers"]:
+    for w in c["walkers"] + c.get("near_walkers", []):
         PP.hide(w, True)
     b = c["banker"]; PP.hide(b, False); PP.hide(c["doorman"], False); c["briefcase"].hide_render = False
     y = KERB_Y + 1.0 + 0.85 * sec
@@ -507,8 +540,8 @@ def _push(a, b, ta, tb, lens):
 
 FAR = KERB_Y - ROAD_W
 MOVES.update({
-    "traffic": dict(kind="anim", dof=8.0, far=80.0, anim=_anim("traffic"), cam=_push((-9.0, FAR - 1.5, 1.7), (-6.0, FAR - 1.6, 1.75), (-3.0, 0.0, 5.0), (0.0, 0.0, 4.6), 26),
-                    focus=lambda c, t: Vector((0, -0.2, 3.0)), title=("CHAPTER 1", "TWO HOSPITALS", 12, 120)),
+    "traffic": dict(kind="anim", dof=11.0, far=80.0, anim=_anim("traffic"), cam=_push((-16.0, FAR - 2.0, 2.3), (-14.5, FAR - 1.9, 2.35), (8.0, -1.0, 3.2), (10.0, -1.0, 3.0), 26),
+                    focus=lambda c, t: Vector((0.0, KERB_Y, 2.0)), title=("CHAPTER 1", "TWO HOSPITALS", 12, 120)),
     "arrive_bank": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("arrive_bank"), cam=_push((-4.5, KERB_Y - 2.4, 1.6), (-4.0, KERB_Y - 2.0, 1.62), (0.0, -1.2, 1.6), (0.1, -0.8, 1.7), 30),
                         focus=lambda c, t: c["banker"].bone_head("spine03")),
     "detain": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("detain"), cam=_push((-5.5, KERB_Y - 2.5, 1.5), (-5.0, KERB_Y - 2.2, 1.52), (1.0, -3.0, 1.3), (1.5, -4.2, 1.2), 30),

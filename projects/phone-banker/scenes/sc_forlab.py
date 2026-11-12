@@ -239,6 +239,25 @@ def build(variant=None):
     pages = paper_tex.make_all()["pages"]
     c["fileA"] = manila_file("HospFileA"); c["fileB"] = manila_file("HospFileB")
     c["fileA"].location = (LT.x - 0.28, LT.y - 0.05, LT.z + 0.012); c["fileB"].location = (LT.x + 0.3, LT.y - 0.05, LT.z + 0.012)
+    if variant == "lab95":
+        # 1995: the table is a work surface (glow off); the two hospital files lie open with their pages, printouts and
+        # recorder traces spread between them, under a desk lamp
+        ltp.inputs['Emission Strength'].default_value = 0.0; ltp.inputs['Base Color'].default_value = (0.32, 0.34, 0.35, 1)
+        for f_, k0 in ((c["fileA"], 1), (c["fileB"], 3)):
+            for j in range(2):
+                pg = image_plane(f_.name + f"Page{j}", pages[(k0 + j) % len(pages)], (0, 0, 0), (0.21, 0.28), (0, 0, 0), rough=0.75)
+                pg.parent = f_; pg.location = (0.008 * j - 0.004, 0.01 * j, 0.0035 + 0.0006 * j); pg.rotation_euler = (0, 0, math.radians(3 * j - 2))
+        gen = os.path.join(HERE, "..", "assets", "generated")
+        for k, (img, x, y, rz, size) in enumerate((("chart_paper.png", -0.02, 0.2, 4, (0.3, 0.13)), ("ecg_trace.png", 0.02, -0.2, -3, (0.32, 0.1)),
+                                                   (None, -0.47, 0.2, 12, (0.21, 0.28)), (None, 0.49, 0.18, -9, (0.21, 0.28)))):
+            path = os.path.join(gen, img) if img else pages[(5 + k) % len(pages)]
+            if img and not os.path.exists(path):
+                continue
+            image_plane(f"Printout{k}", path, (LT.x + x, LT.y + y, LT.z + 0.013 + 0.0004 * k), size, (0, 0, math.radians(rz)), rough=0.75)
+        box("Pen", (LT.x + 0.12, LT.y - 0.24, LT.z + 0.016), (0.14, 0.009, 0.009), pbr("PenM", (0.05, 0.08, 0.25), 0.3), rot=(0, 0, math.radians(30)))
+        r, lmp = ph.model("desk_lamp_arm_01", loc=(LT.x - 0.5, LT.y + 0.3, LT.z + 0.01), rot_z=math.radians(150))
+        ll = bpy.data.lights.new("CompareLamp", 'SPOT'); ll.energy = 40; ll.spot_size = math.radians(80); ll.spot_blend = 0.6; ll.color = (1.0, 0.85, 0.65)
+        lo = bpy.data.objects.new("CompareLamp", ll); bpy.context.collection.objects.link(lo); lo.location = (LT.x - 0.25, LT.y + 0.2, LT.z + 0.7); point_at(lo, (LT.x, LT.y - 0.05, LT.z))
     c["saratov"] = manila_file("SaratovFile", label="САРАТОВ")
     c["saratov"].hide_render = True
     # the ampoule case on the side bench (evid / end variants); the evidence photo
