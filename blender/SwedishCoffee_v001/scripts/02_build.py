@@ -167,12 +167,12 @@ def crowd_idle(A, f0, f1, pos, yaw, mode="jeer", seed=0, phase=0.0):
             up = (u > 0.2)
             A.hand(f, "R", (-0.25, -0.2, 1.75 + 0.15 * u) if up else (-0.22, -0.05, 0.9), d=(0, -0.2, 1) if up else (0, -0.1, -1),
                    n=(0, -1, 0) if up else (1, 0, 0), pole=(-0.6, 0.3, 1.3))
-            A.hand(f, "L", (0.22, -0.02, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
+            A.hand(f, "L", (0.31, -0.07, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
             A.face(f, brow=-1.5, jaw=10 * max(0, u), frown=1)
         elif mode == "toast":
             up = u > -0.3
             A.hand(f, "R", (-0.2, -0.32, 1.55 + 0.25 * u) if up else (-0.2, -0.3, 1.2), d=(0, -0.3, 1), n=(1, 0, 0), pole=(-0.5, 0.4, 1.2))
-            A.hand(f, "L", (0.22, -0.02, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
+            A.hand(f, "L", (0.31, -0.07, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
             A.face(f, brow=1.2, smile=1.5, jaw=8 * max(0, u)); grip(A.R, f, "R", 0.8)
         elif mode == "watch":
             A.arms_down(f, sway=0.02 * u); A.face(f, brow=0.5 * u, lids=0.1)
@@ -185,6 +185,34 @@ def walker(base, nm, c, p0, p1, f0, f1, stride=0.7):
     for f in range(f0, f1 + 1, 30):
         A.pos = p0.lerp(p1, (f - f0) / (f1 - f0)).to_2d(); A.yaw = yw; A.arms_down(f, sway=0.04 * math.sin(f / 9)); A.face(f, brow=0.4)
     return A
+
+TAPI = _img(sorted(glob.glob(PH + "/fabric_pattern_07/textures/*col_1*"))[0])
+def tapestry(c, loc, rz, w=1.6, h=2.4, tint=(0.75, 0.2, 0.15)):
+    nm_ = "m_tap%.2f" % tint[0]
+    m = bpy.data.materials.get(nm_)
+    if not m:
+        m = bpy.data.materials.new(nm_); m.use_nodes = True; N_, L_ = m.node_tree.nodes, m.node_tree.links
+        t_ = N_.new("ShaderNodeTexImage"); t_.image = TAPI; mp_ = N_.new("ShaderNodeMapping"); mp_.inputs["Scale"].default_value = (1.5, 2.2, 1); tc_ = N_.new("ShaderNodeTexCoord")
+        L_.new(tc_.outputs["UV"], mp_.inputs[0]); L_.new(mp_.outputs[0], t_.inputs[0])
+        mx_ = N_.new("ShaderNodeMix"); mx_.data_type = 'RGBA'; mx_.blend_type = 'MULTIPLY'; mx_.inputs[0].default_value = 1; mx_.inputs["B"].default_value = (*tint, 1)
+        L_.new(t_.outputs[0], mx_.inputs["A"]); L_.new(mx_.outputs["Result"], N_["Principled BSDF"].inputs["Base Color"]); N_["Principled BSDF"].inputs["Roughness"].default_value = 0.8
+    o = plane("tapestry", c, (w, h), loc, m, (90, 0, rz))
+    for i, (u, v) in enumerate([(0, 0), (1, 0), (1, 1), (0, 1)]): o.data.uv_layers[0].data[i].uv = (u, v)
+    box("rod", c, (w + 0.2, 0.05, 0.05) if rz in (0, 180) else (0.05, w + 0.2, 0.05), (loc[0], loc[1], loc[2] + h / 2 + 0.03), M["gold"])
+    return o
+def picture(c, loc, rz, s_=1.0):
+    if "hanging_picture_frame_01" not in A_:
+        try: A_["hanging_picture_frame_01"] = ph_model("hanging_picture_frame_01")
+        except Exception as e: print("PHFAIL frame", e); return None
+    return inst(A_["hanging_picture_frame_01"], c, loc, rz=rz, s=s_)
+def candelabra(c, loc, h=1.4):
+    box("candStand", c, (0.06, 0.06, h), (loc[0], loc[1], h / 2), M["gold"])
+    box("candBase", c, (0.35, 0.35, 0.05), (loc[0], loc[1], 0.025), M["gold"])
+    for dx in (-0.12, 0.0, 0.12): candle(c, (loc[0] + dx, loc[1], h), h=0.18)
+def rug(c, loc, size, rz=0):
+    r_ = box("rug", c, (size[0], size[1], 0.012), (loc[0], loc[1], loc[2] + 0.006), M["velvet"], rz=rz)
+    box("rugBorder", c, (size[0] + 0.12, size[1] + 0.12, 0.008), (loc[0], loc[1], loc[2] + 0.004), M["gold"], rz=rz)
+    return r_
 
 # ================================================================== S1 Courtyard (b1)
 c = S(0)
@@ -253,7 +281,7 @@ setmat(stm, steam_mat("m_steamK", 3.5))
 sk = inst(A_["skull"], c, (-1.0, 5.0, 1.16), rz=180, name="SteamSkull"); sk.scale = (0.9, 0.9, 0.9)
 skm = steam_mat("m_skull", 0.0, (0.95, 0.95, 0.97)); setmat(sk, skm)
 dn = skm.node_tree.nodes["Dens"]
-for f, v in ((470, 0.0), (500, 14.0), (560, 20.0), (588, 8.0)):
+for f, v in ((470, 0.0), (500, 30.0), (560, 40.0), (588, 16.0)):
     dn.outputs[0].default_value = v; dn.outputs[0].keyframe_insert("default_value", frame=f)
 for f, z in ((470, 1.08), (588, 1.26)):
     sk.location.z = z; sk.keyframe_insert("location", index=2, frame=f)
@@ -261,12 +289,11 @@ K = human("King", "King_S2", c); K.z = 0.4; GZ[0] = 0.4; K.pos = V((0, 6.45)); K
 for f, hand_up, lean, br in ((175, 0, 0, -0.5), (185, 0.5, 4, -1.5), (200, 1, 8, -2.5), (240, 1, 6, -2.5), (285, 0.3, 2, -2), (300, 0, 14, -2.5), (360, 0, 20, -2.8), (420, 0, 22, -3), (590, 0, 22, -3)):
     K.sit(f, seat_z=0.48, flex=lean, twist=-18 if f >= 300 else 0, head=(10 if f >= 300 else -5, -25 if f >= 300 else 0))
     if hand_up:
-        K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2))
+        K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2), g=0.6)
     else:
         K.hand(f, "R", (-0.30, -0.25, 0.70), d=(0, -1, -0.2), n=(0, 0, -1), pole=(-0.6, 0.4, 0.9))
     K.hand(f, "L", (0.30, -0.25, 0.70), d=(0, -1, -0.2), n=(0, 0, -1), pole=(0.6, 0.4, 0.9))
     K.face(f, brow=br, frown=1.2 if f >= 185 else 0.3, jaw=14 if 185 <= f <= 240 else 0, lids=-0.2)
-hat(K.a, A_["wig"], c, dz=-0.07, dy=0.03)
 GZ[0] = 0.0
 G = human("Guard", "Guard_S2", c); hat(G.a, A_["tricorn"], c)
 G.stand(175, pos=(1.8, 4.2), yaw=200); G.arms_down(175); G.face(175, brow=1.5)
@@ -277,6 +304,16 @@ for x in (-3.5, 3.5):
     W_ = human("Guard", "Guard_S2b_%d" % (x > 0), c); hat(W_.a, A_["tricorn"], c)
     crowd_idle(W_, 175, 590, (x, 1.0), 90 if x > 0 else -90, "watch", seed=int(x))
 ch = inst(A_["Chandelier_01"] if "Chandelier_01" in A_ else A_["chandelier"], c, (0, 1.5, 5.2), s=1.0)
+for y_ in (-4.0, 2.5):
+    tapestry(c, (-5.95, y_, 3.2), 90, tint=(0.8, 0.25, 0.15)); tapestry(c, (5.95, y_, 3.2), -90, tint=(0.25, 0.35, 0.8))
+tapestry(c, (0, 7.95, 4.2), 180, w=3.0, h=3.0, tint=(0.25, 0.3, 0.85))
+box("wainscotN", c, (11.9, 0.08, 1.2), (0, 7.95, 0.6), M["oak"]); box("wainscotW2", c, (0.08, 15.9, 1.2), (-5.95, 0, 0.6), M["oak"]); box("wainscotE2", c, (0.08, 15.9, 1.2), (5.95, 0, 0.6), M["oak"])
+for x_ in (-1.8, 1.8): candelabra(c, (x_, 6.0), 1.5)
+inst(A_["GothicCabinet_01"], c, (4.8, 6.6, 0), rz=-90, s=0.9); inst(A_["ArmChair_01"], c, (-3.0, 5.5, 0), rz=200)
+for x_, y_ in ((-2.2, 7.4), (2.2, 7.4)):
+    Gx = human("Guard", "Guard_S2c_%d" % (x_ > 0), c); hat(Gx.a, A_["tricorn"], c)
+    crowd_idle(Gx, 175, 590, (x_, y_), 0, "watch", seed=int(x_ * 10))
+for y_ in (-2.0, 3.0): picture(c, (-5.9, y_, 1.9), -90, 1.2)
 light(c, 'AREA', (3, -1, 6), 900, (1, 0.85, 0.7), 5, rot=(40, 0, 30), name="key")
 light(c, 'AREA', (-4, 4, 3), 500, (0.9, 0.95, 1.0), 3, rot=(70, 0, -120), name="fill")
 light(c, 'AREA', (0, 0, 6.8), 2500, (1.0, 0.95, 0.88), 8, rot=(0, 0, 0), name="ceilSoft")
@@ -447,7 +484,7 @@ for k, (b, x, yaw, tmpl, f0, f1) in enumerate((("Woman", -1.45, -60, "silverpot"
         A.stand(f, pos=(x, 1.05), yaw=yaw, flex=18 if pour else 6, twist=6 * u)
         sx = -1 if k == 0 else 1
         A.hand(f, "R" if k == 0 else "L", (-0.18 * sx * -1, -0.48, 1.12 if pour else 0.95), d=(0, -1, -0.5 if pour else 0), n=(0, 0, 1))
-        A.hand(f, "L" if k == 0 else "R", (0.22 * -sx, -0.02, 0.88), d=(0, 0, -1))
+        A.hand(f, "L" if k == 0 else "R", (0.31 * -sx, -0.07, 0.88), d=(0, 0, -1))
         A.face(f, brow=0.5, smile=0.3); grip(A.R, f, "R" if k == 0 else "L", 0.9)
         f += 30
     sc.frame_set(726); bpy.context.view_layer.update()
@@ -458,6 +495,13 @@ for k, x in enumerate((-1.4, 1.4)):
     crowd_idle(A, 725, 1650, (x, 3.4), 0, "watch", seed=40 + k)
 # doctors at their desk, observing, writing
 desk = inst(A_["table"], c, (3.0, -2.45, 0), rz=90); desk.scale = (0.75, 0.8, 1.0)
+inst(A_["GothicCabinet_01"], c, (4.3, -4.4, 0), rz=0, s=0.9); inst(A_["GothicCabinet_01"], c, (-4.3, 3.0, 0), rz=-90, s=0.9)
+tapestry(c, (-4.95, -1.5, 2.4), 90, w=1.8, h=2.0, tint=(0.3, 0.45, 0.85)); tapestry(c, (0.0, 4.95, 2.6), 180, w=2.2, h=1.8, tint=(0.85, 0.3, 0.2))
+picture(c, (2.6, -4.93, 2.2), 0, 1.1); picture(c, (-2.5, 4.93, 2.3), 180, 1.0)
+rug(c, (0, 1.2, 0), (4.0, 2.6)); rug(c, (3.0, -2.6, 0), (2.4, 1.8))
+candelabra(c, (-3.8, -3.8), 1.3); candelabra(c, (1.8, 3.9), 1.3)
+for k_, (x_, y_) in enumerate(((-3.8, 0.5), (4.2, 1.8))):
+    Gy = human("Guard", "Guard_S4b_%d" % k_, c); hat(Gy.a, A_["tricorn"], c); crowd_idle(Gy, 725, 1650, (x_, y_), 90 if x_ < 0 else -90, "watch", seed=60 + k_)
 for k, (b, x) in enumerate((("Doctor1", 2.6), ("Doctor2", 3.4))):
     A = human(b, b + "_S4", c); A.pos = V((x, -3.05)); A.yaw = 180 - 15 + 30 * k
     inst(A_["chair"], c, (x, -3.15, 0), rz=180)
@@ -508,12 +552,13 @@ for m in A_["church"].data.materials:   # brighten the dark scan materials (clea
     bs_ = next((n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED'), None)
     if not bs_: continue
     lk = bs_.inputs["Base Color"].links
-    hs = m.node_tree.nodes.new("ShaderNodeHueSaturation"); hs.inputs["Value"].default_value = 2.2; hs.inputs["Saturation"].default_value = 1.1
+    hs = m.node_tree.nodes.new("ShaderNodeHueSaturation"); hs.inputs["Value"].default_value = 2.4; hs.inputs["Saturation"].default_value = 1.1
+    lift = m.node_tree.nodes.new("ShaderNodeMix"); lift.data_type = 'RGBA'; lift.inputs[0].default_value = 0.3; lift.inputs["B"].default_value = (0.55, 0.5, 0.45, 1)
     if lk:
         src_ = lk[0].from_socket; m.node_tree.links.new(src_, hs.inputs["Color"])
     else:
         hs.inputs["Color"].default_value = bs_.inputs["Base Color"].default_value
-    m.node_tree.links.new(hs.outputs[0], bs_.inputs["Base Color"])
+    m.node_tree.links.new(hs.outputs[0], lift.inputs["A"]); m.node_tree.links.new(lift.outputs["Result"], bs_.inputs["Base Color"])
 for t, p, rz in (("house3", (-16, 4, 0), 90), ("htb1", (16, 2, 0), -90)): inst(A_[t], c, p, rz=rz)
 # coffins: hexagonal box built procedurally with dark wood + bevel
 def coffin(name):
@@ -542,8 +587,8 @@ for ci, x in enumerate((-1.3, 1.3)):
             yy = path(f).y + dy
             A.pos = V((x + dx, yy)); A.yaw = 0
             sx = 1 if s_in == "L" else -1
-            A.hand(f, s_in, (0.12 * sx, -0.05, 1.42), d=(-sx, 0, 0.3), n=(0, 0, 1), pole=(0.5 * sx, 0.2, 1.0))
-            A.hand(f, s_out, (-0.24 * sx, -0.02, 0.88), d=(0, 0, -1), n=(sx, 0, 0), pole=(-0.3 * sx, 0.6, 1.1))
+            A.hand(f, s_in, (0.22 * sx, -0.06, 1.5), d=(-sx, 0, 0.4), n=(0, 0, 1), pole=(0.55 * sx, 0.2, 1.0))
+            A.hand(f, s_out, (-0.31 * sx, -0.07, 0.88), d=(0, 0, -1), n=(sx, 0, 0), pole=(-0.3 * sx, 0.6, 1.1))
             A.face(f, brow=0.8, lids=0.35, frown=0.6); grip(A.R, f, s_in, 0.9)
 for k, b in enumerate(("TwinA_old", "TwinB_old")):
     A = human(b, b + "_S5", c)
@@ -554,6 +599,9 @@ for k, b in enumerate(("TwinA_old", "TwinB_old")):
 bpy.ops.mesh.primitive_ico_sphere_add(radius=0.012, subdivisions=1); flake = bpy.context.active_object; flake.name = "flake"; link(flake, LIBC); setmat(flake, simple("m_flake", (1, 1, 1), rough=0.6))
 sn = gn_fall("SnowEmit", c, [(random.uniform(-12, 12), random.uniform(-18, 12), random.uniform(0, 14)) for _ in range(7000)], flake, "snow", H=14.0, speed=0.02)
 light(c, 'SUN', (0, 0, 20), 2.2, (0.85, 0.9, 1.0), rot=(55, 0, 20), name="sun")
+for x_ in (-9, -4, 4, 9):
+    light(c, 'POINT', (x_, 11.0, 4.0), 900, (1.0, 0.65, 0.3), 1.0, name="churchWin")
+aim(light(c, 'AREA', (0, -2, 14), 4000, (0.7, 0.8, 1.0), 12, name="moonFill"), (0, 12, 6))
 cam(1650, (0, -15.5, 2.5), (0, 4.0, 1.6), 26)
 cam(1700, (-3.0, -8.0, 2.2), (-0.5, 2.0, 1.4), 30)
 cam(1760, (-3.2, -2.5, 1.6), (0.0, 0.5, 1.4), 32)
@@ -576,7 +624,7 @@ for y in (-5, 1, 7):
 for x in (-7.5, 7.5):
     for y in (-7, -2, 3, 8):
         box("pillar", c, (0.8, 0.8, 8), (x, y, 4), M["marble"])
-K = human("King", "King_S6", c); hat(K.a, A_["wig"], c, dz=-0.07, dy=0.03)
+K = human("King", "King_S6", c)
 MF = human("Doctor1", "Masked_S6", c)
 mk = hat(MF.a, A_["mask"], c, dz=-0.05, dy=-0.1)
 K.pos = V((0.5, 2.5)); K.yaw = 10
@@ -603,8 +651,8 @@ for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 1.5), (1925, 2), (1936, 2.
 MF.pos = V((1.2, 4.2)); MF.yaw = 180 + 15
 for f, ph in ((1872, 0), (1895, 1), (1905, 1), (1925, 0), (2004, 0)):
     MF.stand(f, flex=4 if ph else 0)
-    MF.hand(f, "R", (-0.15, -0.55, 1.35) if ph else (-0.22, -0.02, 0.88), d=(0, -1, 0) if ph else (0, 0, -1), n=(1, 0, 0))
-    MF.hand(f, "L", (0.22, -0.02, 0.88), d=(0, 0, -1))
+    MF.hand(f, "R", (-0.15, -0.55, 1.35) if ph else (-0.31, -0.07, 0.88), d=(0, -1, 0) if ph else (0, 0, -1), n=(1, 0, 0), g=0.95 if ph else 0.35)
+    MF.hand(f, "L", (0.31, -0.07, 0.88), d=(0, 0, -1))
 # muzzle flash at 1907 (light + glow puff) from in front of the masked figure's hand; no weapon detail
 fl = light(c, 'POINT', MF.W((-0.15, -0.75, 1.36)), 0, (1, 0.75, 0.4), 0.05, name="flash")
 for f, e in ((1904, 0), (1907, 6000), (1910, 800), (1916, 0)):
@@ -673,7 +721,7 @@ for f in (2004, 2120, 2240):
     B.H.key_spine(f, flex=-3, head=(-12, 8)); B.face(f, lids=1.0, smile=0.25)
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
-        B.H.key_hand(s_, f, V((0.2 * sx, 0.12, 0.95)), V((0, 0.05, -1)).normalized(), V((-sx, 0, 0)), pole=V((0.4 * sx, 0.6, 1.1)))
+        B.H.key_hand(s_, f, V((0.33 * sx, 0.06, 0.95)), V((0, 0.05, -1)).normalized(), V((-sx, 0, 0)), pole=V((0.4 * sx, 0.6, 1.1)))
 blanket = box("blanket", c, (1.15, 1.45, 0.18), (0, 2.2, BZ + 0.2), pbr("m_blanket", "velour_velvet", 3.0, coord="Object", tint=(0.35, 0.05, 0.06), bump=0.8))
 bl = blanket.modifiers.new("sub", 'SUBSURF'); bl.levels = bl.render_levels = 2
 dsp = blanket.modifiers.new("dsp", 'DISPLACE'); tx = bpy.data.textures.new("folds", 'CLOUDS'); tx.noise_scale = 0.3; dsp.texture = tx; dsp.strength = 0.05
@@ -686,6 +734,14 @@ for o in [OA.a] + list(OA.a.children):
     for f, h in ((2004, False), (2230, True)):
         REKEY.append((o, f, h))
 candle(c, (-1.6, 3.5, 0.75));
+for x_ in (-0.78, 0.78):
+    box("bedCurtain", c, (0.06, 0.5, 1.9), (x_, 3.45, 1.15), M["velvet"]); box("bedCurtainF", c, (0.06, 0.4, 1.9), (x_, 1.75, 1.15), M["velvet"])
+box("canopy", c, (1.65, 2.15, 0.08), (0, 2.6, 2.15), M["velvet"]); box("canopyTrim", c, (1.72, 2.22, 0.03), (0, 2.6, 2.1), M["gold"])
+rug(c, (0, 0.5, 0), (2.8, 1.8)); picture(c, (-4.45, 0.5, 1.7), 90, 1.0); picture(c, (1.8, 4.45, 1.8), 180, 0.9)
+tapestry(c, (-4.45, -2.5, 1.8), 90, w=1.4, h=1.8, tint=(0.3, 0.5, 0.8))
+candelabra(c, (1.4, 3.9), 1.2); inst(A_["GothicCabinet_01"], c, (2.9, 4.0, 0), rz=180, s=0.8)
+DR = human("Doctor2", "Doctor_S7", c); crowd_idle(DR, 2004, 2240, (1.3, 0.9), 135, "watch", seed=91)
+
 nst = inst(A_["GothicCabinet_01"] if "GothicCabinet_01" in A_ else A_["table"], c, (-1.6, 3.6, 0), rz=180, s=0.5)
 # window seat + very old twin A with coffee
 VA = human("TwinA_vold", "TwinA_vold_S7", c); VA.pos = V((3.3, -1.6)); VA.yaw = -125
@@ -765,7 +821,7 @@ for i in range(len(SETDEF) - 1):
     else:
         o = plane("portal%d" % i, PC, (6, 6), (0, 0, 0), M["plaster"] if i not in (3, 6) else M["oak"])
         o.matrix_world = Mx @ Matrix.Rotation(R_(90), 4, 'X')
-    for ff, h in ((1, True), (f - 8, False), (f + 8, True)):
+    for ff, h in ((1, True), (f - 3, False), (f + 3, True)):
         o.hide_render = h; o.keyframe_insert("hide_render", frame=ff)
 
 # ------------------------------------------------------------------ one camera: Catmull-Rom through the framings, baked per frame

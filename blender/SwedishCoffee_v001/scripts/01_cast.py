@@ -27,7 +27,7 @@ human("TwinB", age=0.5, hair=H("short02"), clothes=[H("male_casualsuit01"), H("s
 human("TwinA_old", age=0.82, hair=H("short02"), clothes=[H("male_elegantsuit01"), H("shoes02")], skin="middleage_caucasian_male/middleage_caucasian_male.mhmat", x=2, **TW)
 human("TwinB_old", age=0.82, hair=H("short02"), clothes=[H("male_elegantsuit01"), H("shoes02")], skin="middleage_caucasian_male/middleage_caucasian_male.mhmat", x=3, **TW)
 human("TwinA_vold", age=1.0, hair=H("short02"), clothes=[H("male_elegantsuit01"), H("shoes02")], skin="old_caucasian_male/old_caucasian_male.mhmat", x=4, **TW)
-human("King", 1.0, 0.68, "", [H("male_elegantsuit01"), H("shoes06")], "middleage_caucasian_male/middleage_caucasian_male.mhmat", 5, weight=0.7, brow="eyebrow004")
+human("King", 1.0, 0.68, H("long01"), [H("male_elegantsuit01"), H("shoes06")], "middleage_caucasian_male/middleage_caucasian_male.mhmat", 5, weight=0.7, brow="eyebrow004")
 human("Guard", 1.0, 0.45, H("short04"), [H("male_worksuit01"), H("shoes03")], "young_caucasian_male2/young_caucasian_male2.mhmat", 6, muscle=0.7, height=0.6)
 human("Doctor1", 1.0, 0.92, H("short03"), [H("male_elegantsuit01"), H("shoes06")], "old_caucasian_male/old_caucasian_male.mhmat", 7, weight=0.6, brow="eyebrow003")
 human("Doctor2", 1.0, 0.88, "", [H("male_elegantsuit01"), H("shoes06")], "old_caucasian_male/old_caucasian_male.mhmat", 8, weight=0.4, brow="eyebrow005")

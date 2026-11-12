@@ -78,5 +78,5 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
 lines = ["SwedishCoffee hand audit: every %d frames (%d frames sampled), characters with a hand in camera view" % (STEP, nframes)]
 for k in ("HAND_HAND", "HAND_TORSO", "HAND_OTHER", "JOINT_BACK"):
     v = issues.get(k, []); lines.append("%-11s %4d" % (k, len(v)))
-    for fr, m in v[:60]: lines.append("    f%04d %s" % (fr, m))
+    for fr, m in v[:4000]: lines.append("    f%04d %s" % (fr, m))
 open(OUT, "w").write("\n".join(lines) + "\n"); print("\n".join(lines))

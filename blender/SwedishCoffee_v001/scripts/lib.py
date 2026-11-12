@@ -261,6 +261,14 @@ def restyle(arm):
         tag = ch.name.split(".")[-1]
         if any(k in tag for k in CLOTH_KEYS):
             setmat(ch, costume_mat(st[0], st[1], st[2], st[3], st[4], st[5], st[6], skirt=arm.name.startswith(("Woman", "Townsw"))))
+        if arm.name == "King" and tag.startswith("long"):   # powdered periwig: desaturate + lighten the hair texture
+            for m in ch.data.materials:
+                nt = m.node_tree; bs_ = next((n for n in nt.nodes if n.type == 'BSDF_PRINCIPLED'), None)
+                if bs_ and bs_.inputs["Base Color"].links:
+                    src_ = bs_.inputs["Base Color"].links[0].from_socket
+                    hs = nt.nodes.new("ShaderNodeHueSaturation"); hs.inputs["Saturation"].default_value = 0.0; hs.inputs["Value"].default_value = 4.0
+                    nt.links.new(src_, hs.inputs["Color"]); nt.links.new(hs.outputs[0], bs_.inputs["Base Color"])
+                elif bs_: bs_.inputs["Base Color"].default_value = (0.85, 0.84, 0.8, 1)
         if tag.startswith("shoes"):
             setmat(ch, pbr("shoe_leather", "brown_leather", 3, tint=(0.25, 0.2, 0.17), rough_mul=0.7))
 
@@ -310,7 +318,7 @@ class Actor:
     def arms_down(self, f, sway=0.0):
         for s in "LR":
             sx = 1 if s == "L" else -1
-            self.hand(f, s, (0.24 * sx, -0.02 + sway * sx, 0.86), d=(0.05 * sx, -0.05, -1), n=(-sx, 0, 0), pole=(0.3 * sx, 0.6, 1.1))
+            self.hand(f, s, (0.31 * sx, -0.07 + sway * sx, 0.88), d=(0.12 * sx, -0.08, -1), n=(-sx, 0, 0), pole=(0.35 * sx, 0.6, 1.1))
     def face(self, f, **k): face(self.R, f, **k)
     def sit(self, f, seat_z=0.47, knee_fwd=0.48, flex=8.0, twist=0.0, head=(0, 0)):
         """seated on a chair whose seat front is ~0.1 in front of root; feet on floor in front"""

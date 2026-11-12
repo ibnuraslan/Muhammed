@@ -1,5 +1,7 @@
 # SwedishCoffee (Connect27)
 
+Current package: `blender/SwedishCoffee_v003/SwedishCoffee_v003_60fps.blend` (72 MB, normal git). v002 is kept as the 01:00 deliverable.
+
 A 44.5 s vertical true-story short: the 18th-century Swedish king who "tested" coffee on twin prisoners. One continuous camera, 1080×1920, 60 fps, frames 1–2670.
 
 ## Files
@@ -27,13 +29,17 @@ The bright animated-3D look follows `blender/STYLE_ANIMATED.md`: `pipeline/anim_
 - Idle hands carry a relaxed curl.
 - Cups are held beside the index knuckle with curled fingers. The cup follows a hold point computed from the knuckles every 5–6 frames.
 - Close-ups of all 18 hand actions: `SwedishCoffee_v001/review/D_hand_closeups.jpg`.
-- Hand audit (BVH, every 2 frames): `SwedishCoffee_v001/review/D_hand_audit.txt`.
+- Hand audit (BVH, every 2 frames), v003: `SwedishCoffee_v001/review/D3_v003_hand_audit.txt`. HAND_OTHER 0 and JOINT_BACK 0.
+  - HAND_HAND 10: the soldier's two hands meet on the coffee pot he smashes (intended two-handed grip).
+  - HAND_TORSO 402 (down from 2176): idle hands of background characters touching the coat skirt at the hip, mostly the two scaffold guards (S1) and the coffin bearers' outer hands. These are fingertip contacts with the coat, not hands through the body. Each one needs the hand moved ~3 cm out.
 
 ## Known issues
-- The skull in the steam (b3, 7.8–9.6 s) is faint after the look pass halves volume density; it reads as a pale skull in mist.
-- The churchyard (b9) uses the Sketchfab cathedral, whose roof material stays very dark, so the area above the roofline reads near-black at 28–31 s.
+- The skull in the steam (b3, 7.8–9.6 s) reads as a pale skull in mist; density is doubled to survive the look pass.
+- The churchyard (b9): the cathedral walls are lifted and lit with warm windows and moonlight, but the eaves/roof band of the Sketchfab model still renders near-black at 28–31 s.
+- The bed curtains and canopy (b11) are simple velvet panels, not cloth-simulated drapes.
+- The tapestries use a woven-check fabric scan, so they read as plaid rather than pictorial.
 - Set changes are passes through a façade, wall or steam. The wall fills the frame for about 5–6 frames at 2.8 s, 12.0 s and 31.0 s (the 12.0 s still lands on one of them).
-- MPFB garments are recoloured as period coats; collars and cuffs still have a modern cut up close. There's no ermine on the king (the capelet test read as white patches and was removed).
+- MPFB garments are recoloured as period coats; collars and cuffs still have a modern cut up close. The king now has powdered long hair (MPFB long01, desaturated and lightened) instead of the cap-like wig model; there's no ermine (the capelet test read as white patches and was removed).
 - The king's collapse (b10) is keyframed: an eased knee buckle, then a fold to the floor. It isn't a physics fall.
 - The servant's hand rests on top of the pouring pot (the pot hangs from the wrist) rather than wrapping its handle. The toast cups in the square sit at a tilt in the hand.
 - Cups: the handle of the cup model doesn't point into the fingers; the cup is held by the body and saucer.
