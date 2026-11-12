@@ -175,7 +175,7 @@ STOOL.location = (SIT.x - _c.x - 0.04, SIT.y - _c.y, 0)
 SIT.z = max(c.z for c in _bb) + 0.11
 P.k(1240, root=STA + V(-0.25, -0.05, -0.05), yaw=150, flex=10, sp_flex=14, h_pitch=15)
 P.k(1258, root=SIT, yaw=110, flex=-2, sp_flex=38, h_pitch=35, h_yaw=10,
-    hL=B((0.18, -0.36, -0.12), (-0.2, -0.3, -1), (-1, 0, 0)), hR=B((-0.18, -0.36, -0.12), (0.2, -0.3, -1), (1, 0, 0)), cL=35, cR=35)
+    hL=B((0.15, -0.3, 0.0), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.15, -0.3, 0.0), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
 P.k(1285, root=SIT + V(0, 0, 0.0), sp_flex=42, h_pitch=45, h_yaw=-8)
 for s, o_ in (("L", 0.13), ("R", -0.13)):
     P.plant(s, 1232 + (s == "R") * 8, 1248 + (s == "R") * 8, P.h.foot_xy(s, V(0.42, 0.72, 0), 110) , 110)
@@ -272,7 +272,7 @@ VST = V(0.9, 3.05, 0.99)
 Vi.stand(1, VST, 120)
 def mold_v(f):
     hand = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.05, -0.32, 0.12)) @ Matrix.Rotation(R_(80), 4, 'X') @ Matrix.Rotation(R_(30), 4, 'Z')
-    pocket = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.19, -0.13, -0.12)) @ Matrix.Rotation(R_(95), 4, 'X') @ Matrix.Rotation(R_(120), 4, 'Z')
+    pocket = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.23, -0.13, -0.1)) @ Matrix.Rotation(R_(95), 4, 'X') @ Matrix.Rotation(R_(120), 4, 'Z')
     if f <= 372: return hand
     return mlerp(hand, pocket, ss(f, 372, 402))
 bake_obj(WAXM, 330, 412, mold_v)
@@ -321,7 +321,7 @@ for i, s in enumerate("LR"):
 GS = V(6.12, -0.62, 0.70)
 G.k(1290, root=V(13.9, 6.15, 0.99), yaw=90, hL=HANG["L"], hR=HANG["R"])
 G.k(1300, root=GS, yaw=180, flex=-12, sp_flex=-4, h_pitch=40, h_yaw=15, side=4,
-    hL=B((0.16, -0.36, -0.16), (0.1, -0.5, -1), (-1, 0, 0)), hR=B((-0.16, -0.36, -0.16), (-0.1, -0.5, -1), (1, 0, 0)), cL=35, cR=35)
+    hL=B((0.15, -0.3, 0.0), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.15, -0.3, 0.0), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
 for i, s in enumerate("LR"):
     G.plant(s, 1294, 1300, G.h.foot_xy(s, V(6.12, -0.2, 0), 180), 180, 0.0)
 G.k(1560, h_pitch=34, h_yaw=-5)     # stirs as the gate clangs

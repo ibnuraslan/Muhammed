@@ -212,7 +212,7 @@ def grip_hand(G, d, n):
 def B(W, d, n):
     return ('B', Vector(W), Vector(d), Vector(n))
 
-HANG = {"L": B((0.24, 0.0, -0.04), (0.05, -0.1, -1), (-1, 0, 0)), "R": B((-0.24, 0.0, -0.04), (-0.05, -0.1, -1), (1, 0, 0))}
+HANG = {"L": B((0.275, 0.0, -0.03), (0.12, -0.1, -1), (-1, 0, 0)), "R": B((-0.275, 0.0, -0.03), (-0.12, -0.1, -1), (1, 0, 0))}
 
 def arm_swing(actor, f0, f1, path, amp=0.11):
     """body-relative hand keys every 6 frames, opposite to the legs"""
@@ -221,5 +221,5 @@ def arm_swing(actor, f0, f1, path, amp=0.11):
         p = path(f); dist += (p - prev).to_2d().length; prev = p
         c = math.sin(2 * math.pi * dist / (2 * stride) * 2)
         for s, sg in (("L", 1), ("R", -1)):
-            x = 0.24 if s == "L" else -0.24
+            x = 0.275 if s == "L" else -0.275
             actor.k(f, **{"h" + s: B((x, 0.0 - amp * sg * c, -0.05 + 0.03 * abs(c)), (0, -0.25 * sg * c, -1), (-1 if s == "L" else 1, 0, 0))})
