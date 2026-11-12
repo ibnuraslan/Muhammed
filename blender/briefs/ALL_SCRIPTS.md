@@ -1,203 +1,215 @@
-# Voiceover scripts: all 35 films
+# Voiceover scripts v2: all 35 films (punchier rewrite)
 
-Record each one as its own file, named with its number, for example `01_EarInArm.mp3`, and send them to me before rendering so I can sync each film to its recording. Aim for about 2.8 words per second. The target length is listed for each; staying close to it keeps the animation in sync, but small differences are fine because I re-sync to your recording.
+Record each one as its own file, named with its number, for example `01_EarInArm.mp3`, and send them to me before rendering so I can sync each film to its recording.
 
-
-## Connect01: EarInArm
-*Target about 29.5 s, 90 words*
-
-Lose an ear in an accident, and doctors can actually grow you a new one. A surgeon takes some cartilage from your rib cage and carves it into the shape of an ear. Then it's slipped into a pocket of skin on your forearm. Inside your arm, it grows new blood vessels and skin. Once it's fully developed, the new ear is removed from your arm. The blood vessels are connected beside your ear canal, and the skin is carefully stitched to your head, giving you a brand new ear.
+Read with energy and keep a quick pace (about 3 words per second). Hit the first line hard, and land the last line. The target length is a guide only: I sync each film to your actual recording.
 
 
-## Connect02: MonkeyHeadTransplant
-*Target about 29.5 s, 80 words*
+## 01. EarInArm
+*Target about 29.5 s, 88 words*
 
-In 1970, a surgeon removed the head of a monkey and attached it to the body of another one. He spent hours carefully joining the tissue in the neck to the new head. And incredibly, the monkey survived. It woke up, and it could still see and hear. But the spinal cord couldn't be reconnected, so the monkey couldn't move its body at all. The operation was technically a success, but the monkey only lived for a few more days.
-
-
-## Connect03: LegoInNose
-*Target about 38.5 s, 97 words*
-
-He pushed a Lego piece up his nose, and it got stuck. So he pushed a second piece into the same nostril, hoping the two would click together so he could pull them both out. It seemed like a clever plan. But instead, both pieces got stuck. His mom pulled out the bigger one, never realizing the smaller piece was still lodged deep inside. For 26 years, he battled congestion, asthma and sleep apnea, without knowing why. Then one day, while blowing his nose in the shower, the tiny Lego piece suddenly shot out, 26 years later.
+Your ear gets torn clean off. So a surgeon cuts cartilage out of your rib cage and carves it into the shape of a brand new ear. Then he hides it in a pocket of skin on your forearm. And inside your arm, it starts growing its own blood vessels and skin. Once it's ready, the ear is cut out of your arm. The vessels are hooked up beside your ear canal, the skin is stitched to your head, and just like that, you've got a new ear.
 
 
-## Connect04: StanleyCup
+## 02. MonkeyHeadTransplant
+*Target about 29.5 s, 71 words*
+
+In 1970, a surgeon cut the head off a monkey and attached it to another monkey's body. For hours, he stitched the neck tissue to the new head. And incredibly, the monkey woke up. It could see. It could hear. But the spinal cord couldn't be reconnected, so it couldn't move a single muscle below the neck. The surgery technically worked, but the monkey only lived for a few more days.
+
+
+## 03. LegoInNose
+*Target about 38.5 s, 90 words*
+
+He shoved a Lego up his nose, and it got stuck. So he had a genius idea: push a second piece in after it, click them together, and pull them both out. It did not work. Now both pieces were stuck. His mom yanked out the big one, never knowing the small one was still hiding deep inside. For 26 years, he suffered congestion, asthma and sleep apnea, and nobody knew why. Then one day, he blew his nose in the shower, and out shot the Lego, 26 years later.
+
+
+## 04. StanleyCup
 *Target about 25.5 s, 68 words*
 
-A bullet was fired at the house and tore straight through the wall. Inside, a woman and her fiancé froze as the stray bullet raced straight toward her. But sitting on the table between them was her trusty tumbler, full of ice water. And instead of hitting her, the bullet slammed into the cup. It sparked off the metal and dropped harmlessly to the floor, saving her life.
+A stray bullet ripped straight through the wall of the house. Inside, a woman and her fiancé froze as it flew right at her. But sitting on the table between them was her tumbler, full of ice water. And instead of hitting her, the bullet slammed into the cup. Sparks flew off the metal, and the bullet dropped harmlessly to the floor. That tumbler just saved her life.
 
 
-## Connect05: SurgeonBrandsLivers
-*Target about 28.5 s, 76 words*
+## 05. SurgeonBrandsLivers
+*Target about 28.5 s, 66 words*
 
-During a transplant, a surgeon used a high-powered laser to burn his initials into the patient's new liver. Then he stitched her up and acted like nothing had happened. But a week later, the new liver started to fail. She went back into surgery, but this time with a different doctor, who soon found the initials inside. The surgeon admitted it wasn't the first time he'd branded a patient, and he eventually lost his medical license.
-
-
-## Connect06: PrisonKeyCake
-*Target about 31.5 s, 98 words*
-
-He got hold of the prison's master key and pressed it into melted candle wax, making a perfect impression. The mold was smuggled out of the prison, and his allies used it to cast a metal copy. They hid the key inside a cake and sent it back to him. But when he tried the key, it didn't fit. So he sent out another wax impression and waited for the next cake. And this time, the key worked. He passed through every locked gate and simply walked out of the prison. Years later, he became president of Ireland.
+He used a high-powered laser to burn his own initials into a patient's new liver. Then he stitched her up like nothing had happened. But a week later, that liver started failing. She went back into surgery, this time with a different doctor, and he found the initials burned inside. The surgeon admitted she wasn't the first patient he'd branded. And he lost his medical license.
 
 
-## Connect07: ShoeBomber
-*Target about 27.0 s, 80 words*
+## 06. PrisonKeyCake
+*Target about 31.5 s, 90 words*
 
-In the middle of a flight, he tried to set his shoe on fire. But a flight attendant smelled burning matches and caught him in the act. Passengers and crew tackled him to the floor, and he was finally sedated. When they checked his shoes, they found a fuse sticking out of each one. Both shoes were packed with enough explosives to bring down the entire plane. And that's why you have to take your shoes off at the airport.
-
-
-## Connect08: BeethovenDeaf
-*Target about 26.5 s, 69 words*
-
-He would bite down on a metal rod attached to his piano as he played. The piano's vibrations traveled up the rod, into his jawbone, and on to his inner ear. This sent the sound straight through the bones of his skull, completely skipping his damaged eardrums, so he could still hear. And by using this trick, Beethoven was able to keep composing music, even after he went deaf.
+He pressed the prison's master key into soft candle wax and made a perfect copy of its shape. The wax was smuggled out, and his friends cast a metal key from it. Then they baked it inside a cake and sent it back in. But when he tried it, the key didn't fit. So he made another wax mold and waited for the next cake. This time, the key turned. He unlocked every gate and walked right out of the prison. And years later, he became the president of Ireland.
 
 
-## Connect09: DonationBin
-*Target about 41.5 s, 108 words*
+## 07. ShoeBomber
+*Target about 27.0 s, 78 words*
 
-She was reaching into a clothing donation bin when someone shoved her from behind. The heavy door slammed shut as she tumbled inside. These bins are built with one-way flaps that only swing inward. Once you drop through, the door locks behind you. There's no handle, no latch, just smooth metal walls too high to climb. She screamed for help, but nobody heard her. For three days, she lay curled up on a pile of old clothes, with no food or water. Finally, someone heard her cries, and firefighters cut her free. But this wasn't the first time. She'd already been rescued from a donation bin twice before.
-
-
-## Connect10: BellyFat
-*Target about 21.5 s, 67 words*
-
-A stray bullet struck her right in the stomach. It pierced her skin, but started to slow down as it pushed into her body fat. Layer by layer, the fat absorbed more of the bullet's energy, like a cushion. And by the time it reached deeper tissue, the bullet had lost most of its force, coming to a stop before it hit any organs, saving her life.
+Halfway through the flight, he tried to set his own shoe on fire. But a flight attendant smelled the burning matches and caught him. Passengers piled on and pinned him to the floor until he was sedated. Then they checked his shoes, and found a fuse sticking out of each one. They were packed with enough explosives to blow the plane out of the sky. And that's why you have to take your shoes off at the airport.
 
 
-## Connect11: WW1Assassination
-*Target about 35.5 s, 91 words*
+## 08. BeethovenDeaf
+*Target about 26.5 s, 61 words*
 
-He fired at the car as it turned the corner, aiming at the Archduke and Duchess of Austria-Hungary. But he wasn't the first assassin to try. Earlier, two would-be assassins lost their nerve. Then a third threw a bomb at the couple, but it bounced off and exploded under the car behind them. Later, their driver turned onto the wrong street, right where another assassin was waiting. He fired twice, killing the Archduke and his wife. Their country declared war, dragging in its allies, and that's how World War One began.
-
-
-## Connect12: NoPilotPlane
-*Target about 72.5 s, 183 words*
-
-Imagine you wake up and everyone on your flight is unconscious. But the plane is still flying perfectly level. So the pilots must be fine, right? You make your way to the cockpit. One pilot has collapsed in the doorway. The other is slumped over in his seat. This could be a dream, but you grab the radio and scream for help anyway. No one answers. You decide to pull the pilot out of his seat, but his arm catches the controls and jerks them. Alarms blare. Lights flash. The plane is diving fast. You grab the controls. They're heavy and confusing. But after a few terrifying minutes, you sort of figure it out. You're keeping the plane roughly level, but it's still slowly losing height. Now you're low enough to see a long stretch of open field. You could try to land right now. You've got a feel for the controls, and you think you could work out the throttle. Or you could keep flying and hope someone wakes up. But this field might be your only chance. What do you do?
+He bit down on a metal rod attached to his piano while he played. The vibrations traveled up the rod, into his jaw, and straight to his inner ear. The sound went right through the bones of his skull, skipping his broken eardrums completely. So he could hear again. And that's how Beethoven kept writing music, even after he went deaf.
 
 
-## Connect13: FrozenTearsGun
-*Target about 35.0 s, 99 words*
+## 09. DonationBin
+*Target about 41.5 s, 96 words*
 
-As she cries, her tears roll down into a tube and drop into the gun. When she turns the valve, a CO2 canister releases gas, freezing the tears into tiny balls of ice. And when the trigger is pulled, a spring fires the frozen tears just like a real gun. You see, a while back, she had a stressful meeting with her mentor and burst into tears. She was so upset, she wished she could shoot him with her tears. So she designed this tear gun. And when it was finished, her mentor agreed to let her shoot him.
-
-
-## Connect14: ElectricianPolice
-*Target about 26.0 s, 73 words*
-
-He was riding his motorcycle without a helmet, and the police gave him a fine. But he was an electrician with access to the power grid. So he checked the records and found that the police station hadn't paid its electricity bill in three years. And that bill was huge, so he cut off their power. For five hours, the police station sat in the dark, all because they fined the wrong guy.
+She was digging through a donation bin when someone shoved her from behind. The heavy door slammed shut as she fell inside. These bins have one-way flaps that only swing in. Once you're in, there's no way back out. No handle, no latch, just smooth metal walls too tall to climb. She screamed, but no one came. For three days, she lay curled up on old clothes with no food or water. Finally, someone heard her, and firefighters cut her out. But get this: it was the third time she'd been rescued from a donation bin.
 
 
-## Connect15: GameBoxBullet
+## 10. BellyFat
+*Target about 21.5 s, 65 words*
+
+A stray bullet hit her right in the stomach. It punched through her skin, but the moment it hit her belly fat, it started slowing down. Layer by layer, the fat soaked up its energy like a cushion. By the time it reached deeper tissue, the bullet had almost nothing left. It stopped before it touched a single organ. Her belly fat saved her life.
+
+
+## 11. WW1Assassination
+*Target about 35.5 s, 92 words*
+
+He fired at the car as it rounded the corner, aiming at the Archduke and Duchess of Austria-Hungary. But he wasn't the first one to try. Two assassins had already lost their nerve. A third threw a bomb, but it bounced off and blew up under the car behind. Then the driver took one wrong turn, right onto the street where another assassin was waiting. Two shots, and the Archduke and his wife were dead. Their country declared war, the allies piled in, and that one wrong turn started World War One.
+
+
+## 12. NoPilotPlane
+*Target about 72.5 s, 176 words*
+
+Imagine you wake up, and everyone on your flight is unconscious. But the plane is still flying perfectly level. So the pilots must be fine, right? You stumble to the cockpit. One pilot has collapsed in the doorway. The other is slumped over in his seat. This has to be a dream. But you grab the radio and scream for help anyway. Nothing. You try to drag the pilot out of his seat, but his arm catches the controls and yanks them. Alarms blare. Lights flash. The plane is diving. You grab the controls. They're heavy and confusing. But after a few terrifying minutes, you sort of figure it out. You're holding the plane roughly level, but it's still slowly sinking. Now you're low enough to see a long, open field. You could try to land right now. You've got a feel for the controls, and you think you could work out the throttle. Or you could keep flying and pray someone wakes up. But this field might be your only chance. What do you do?
+
+
+## 13. FrozenTearsGun
+*Target about 35.0 s, 88 words*
+
+As she cries, her tears drip into a tube and fall into the gun. She turns the valve, and a CO2 canister blasts them with gas, freezing them into tiny balls of ice. Pull the trigger, and a spring fires them out like real bullets. You see, she once had a meeting with her mentor that left her in tears. She was so upset, she wished she could shoot him with them. So she built this. And when it was finished, her mentor actually let her shoot him.
+
+
+## 14. ElectricianPolice
+*Target about 26.0 s, 70 words*
+
+He got fined by the police for riding his motorcycle without a helmet. Big mistake, because he was an electrician with access to the power grid. So he dug through the records and found the police station hadn't paid its electricity bill in three years. The bill was huge, so he cut their power. For five hours, the station sat in total darkness, all because they fined the wrong guy.
+
+
+## 15. GameBoxBullet
+*Target about 25.0 s, 62 words*
+
+A stray bullet ripped through the wall of his house, flying straight for his chest. But he was holding his brand new video game collector's box. The bullet slammed into it. The case cracked, the discs shattered, and layer by layer, they ate up the bullet's energy. It stopped halfway through, buried inside the box. His game collection just saved his life.
+
+
+## 16. DrunkTrain
+*Target about 34.5 s, 90 words*
+
+He was so drunk, he passed out on the train tracks, with his head right on the rail. Seconds later, a cargo train came roaring toward him. It hit him in the head, spun him around and dragged him under the train. When it screeched to a stop, everyone was sure he was dead. But then, he stood up. Being that drunk had left his whole body completely loose, so instead of fighting the impact, he moved with it. He walked away with just a few cuts on his hand.
+
+
+## 17. ToddlerWell
+*Target about 32.5 s, 90 words*
+
+A toddler fell 50 feet down a narrow well. Rescuers dropped ropes, trying to loop them around him. They brought in heavy machines to dig the pipe out, but after 11 hours, they'd only gotten a few feet down. Then a teenager walking by offered to go in himself. They tied a rope around his waist and lowered him in head first. With a flashlight strapped to his head, he reached down and grabbed the boy. And when they hauled him back up, he came out holding the toddler, alive.
+
+
+## 18. NukedWell
+*Target about 36.0 s, 76 words*
+
+A nuclear bomb was lowered down the shaft, and concrete was poured on top. You see, three years earlier, a gas well had burst into flames, and a fireball over 400 feet tall had been burning ever since. Water did nothing. Capping it just pushed the gas out somewhere else. So they went nuclear. When the bomb went off, the blast crushed the earth around the well, squeezing the pipe shut and finally killing the fire.
+
+
+## 19. SpeakWithoutSight
+*Target about 33.0 s, 82 words*
+
+She was blind and deaf, trapped inside her own head, with no way to talk to anyone. So her teacher pressed the girl's hand to her throat and started to speak. The vibrations told her when a sound was made, and how loud or soft it was. Then she moved her fingers to her teacher's lips and nose, feeling the shape of every word. She copied those movements on her own face, over and over and over, until one day, she spoke.
+
+
+## 20. HeadsetBullet
 *Target about 25.0 s, 65 words*
 
-A stray bullet was fired toward his house and tore straight through the wall, heading right for his chest. But it slammed into his brand new video game collector's box set. The thick case cracked, the discs shattered, and layer by layer they soaked up the bullet's energy. By the time it was halfway through, the bullet had stopped, buried deep inside, saving his life.
+A bullet smashed through the window, flying straight at his head. But he was gaming at his desk with his headset on. And instead of going through his skull, the bullet hit the headset. The thick padding and the metal frame knocked it off course and sent it flying away. Shocked, he pulled off the broken headset and realized it had just saved his life.
 
 
-## Connect16: DrunkTrain
-*Target about 34.5 s, 96 words*
-
-He stumbled drunk across the train tracks and passed out with his head resting on the rail. Within seconds, a cargo train came rushing toward him. It slammed into his head, spinning him around and dragging him beneath the train. When it finally screeched to a stop, witnesses were sure he was dead. But then, he stood up. Because he was so drunk, his muscles were completely relaxed and his limbs were loose, so his body moved with the train's force instead of fighting it. He walked away with only a few cuts on his hand.
-
-
-## Connect17: ToddlerWell
-*Target about 32.5 s, 98 words*
-
-The toddler fell 50 feet down a narrow well. Rescuers lowered ropes, trying to loop them around the little boy. They even brought in heavy machinery to dig the pipe out. But after 11 hours, they had only dug a few feet down. Finally, a teenager passing by offered to go in himself. A rope was tied around his waist, and he was lowered in head first. With a flashlight strapped to his forehead, he reached out his arms and grabbed the child. And when they pulled him back to the surface, he brought the toddler up alive.
-
-
-## Connect18: NukedWell
-*Target about 36.0 s, 95 words*
-
-The massive nuclear device was lowered down the shaft, and then concrete was poured on top. You see, three years earlier, a gas well had erupted into flames, and a fireball over 400 feet tall had been burning nonstop. Engineers tried to put it out with water, but it did nothing. And capping it with a lid only forced the gas to escape somewhere else. So finally, they sent down a nuclear bomb. When it detonated, the enormous blast squeezed the earth around the well, sealing the pipe shut and finally putting out the fire.
-
-
-## Connect19: SpeakWithoutSight
-*Target about 33.0 s, 93 words*
-
-She lost her sight and hearing as a baby, leaving her trapped inside her own head, with no way to communicate. So her teacher placed the girl's hand on her throat and began to speak. The vibrations told her when a sound was being made, and how strong or soft it was. Then she moved her fingers to her teacher's lips and nose, feeling the different shapes they made for each word. And she practiced those same movements on her own face, over and over again, until she was finally able to speak.
-
-
-## Connect20: HeadsetBullet
-*Target about 25.0 s, 69 words*
-
-A bullet was fired toward the house, smashed through the window, and headed straight for his head. But he was gaming at his desk, wearing a headset. And instead of piercing his skull, the bullet hit the headset first. The thick padding and the metal frame inside deflected the bullet, sending it safely away. Shocked, he pulled off the broken headset and realized it had just saved his life.
-
-
-## Connect21: RingBullet
+## 21. RingBullet
 *Target about 23.5 s, 75 words*
 
-The robber fired the gun straight at his head, but at that exact moment, the man threw his hands up to cover his face. And instead of going through his skull, the bullet hit his wedding ring. It glanced off the metal and split into two pieces. One piece lodged in his finger, and the other went into his neck. But apart from some minor injuries and a dented ring, the man walked away okay.
+The robber fired straight at his head, but at that exact moment, the man threw his hands up over his face. And instead of going into his skull, the bullet hit his wedding ring. It bounced off the metal and split in two. One piece got stuck in his finger, the other in his neck. But apart from a few small wounds and a dented ring, he walked away. His wedding ring saved his life.
 
 
-## Connect22: BelugaRescue
-*Target about 36.5 s, 104 words*
+## 22. BelugaRescue
+*Target about 36.5 s, 90 words*
 
-She dove into an Arctic whale tank, but as she sank to the bottom, the freezing water sent her legs into crippling cramps, making it impossible to swim back up. But as she started to drown, a beluga whale noticed her panicking. These whales are known for being intelligent and playful with humans, and it could tell something was wrong. It swam over to the struggling woman, gently took her leg in its mouth, and began pushing her upward. And just as she was about to run out of breath, the beluga lifted her above the surface, where she could finally gasp for air.
-
-
-## Connect23: CaveRescue
-*Target about 51.5 s, 114 words*
-
-In 2018, a group of boys and their soccer coach were exploring a cave in Thailand when heavy rain suddenly flooded the tunnels, trapping them inside. They were more than two miles in, and the narrow passages leading out were now completely underwater. After 10 days, divers finally found them, but the flooded tunnels were so dangerous that even a skilled diver died during the operation. Swimming the boys out themselves seemed impossible. So rescuers chose a last resort. They sedated the boys, fitted them with full-face diving masks, and carried their unconscious bodies through the tunnels, one by one. All 12 boys and their coach made it out alive, after 18 days underground.
+She dove into a freezing Arctic whale tank, but as she sank to the bottom, the cold sent her legs into crippling cramps. She couldn't swim back up. And as she started to drown, a beluga whale noticed her panicking. These whales are smart and playful with humans, and it could tell something was wrong. It swam over, took her leg gently in its mouth, and started pushing her up. And just as she ran out of breath, the beluga lifted her to the surface, where she could finally breathe.
 
 
-## Connect24: RooseveltSpeech
-*Target about 25.0 s, 68 words*
+## 23. CaveRescue
+*Target about 51.5 s, 108 words*
 
-The bullet hit him in what should have been a deadly spot, but somehow, he stayed on his feet. So how was that possible? Well, Roosevelt had a thick, folded-up speech in his coat pocket, along with a metal glasses case. The bullet tore through both, which slowed it down and kept it from reaching his lungs. And despite the wound, he insisted on finishing his 90-minute speech.
+In 2018, a group of boys and their soccer coach went exploring in a cave in Thailand. Then heavy rain flooded the tunnels and trapped them inside. They were over two miles in, and every passage out was completely underwater. After 10 days, divers finally found them, but the tunnels were so dangerous that even a skilled diver died. Swimming the boys out was impossible. So rescuers tried something crazy. They knocked the boys out with sedatives, strapped diving masks to their faces, and carried them through the flooded tunnels, one by one. And after 18 days underground, all 12 boys and their coach made it out alive.
 
 
-## Connect25: Tsunami2004
-*Target about 40.0 s, 88 words*
+## 24. RooseveltSpeech
+*Target about 25.0 s, 70 words*
 
-The sea began pulling back fast, exposing the ocean floor. People on the beach were confused, and then they noticed a wave coming toward the shore. This was a massive tsunami, triggered by an undersea earthquake. As the wave got closer, it grew taller, reaching up to 100 feet in some places. It slammed into the coast with unimaginable force, destroying everything in its path. The wave swept entire neighbourhoods away, leaving nothing behind but rubble. And in this region alone, more than 167,000 people lost their lives.
+The bullet hit him in a spot that should have killed him, but he stayed standing. So how did he survive? Well, Roosevelt had a thick, folded-up speech in his coat pocket, along with a metal glasses case. The bullet tore through both, and they slowed it down just enough to protect his lungs. And with a bullet still in his chest, he went on to finish his 90-minute speech.
 
-## Connect26: DwarfGiant
-*Target about 39.0 s, 113 words*
 
-He was far too short to join the army, but a tumor was quietly growing in his brain. It flooded his body with growth hormone, and suddenly, the four-foot-six man started to grow. His hands, feet and even his tongue got bigger, and he shot up more than two feet in just a few years. But as he grew, his spine began to curve. His vision blurred, and eventually, he struggled to hear. Doctors finally removed the tumor, which slowed his growth, but didn't stop it completely. By the time he died, he was seven foot eight, making him the only man in history to live as both a dwarf and a giant.
+## 25. Tsunami2004
+*Target about 40.0 s, 86 words*
 
-## Connect27: SwedishCoffee
-*Target about 44.5 s, 109 words*
+The sea suddenly pulled back, leaving the ocean floor bare. People walked out, confused, and then they saw it: a wave, heading for the shore. It was a massive tsunami, set off by an earthquake under the sea. As it got closer, it grew, reaching up to 100 feet high in some places. It hit the coast with unimaginable force, flattening everything in its way. Whole neighborhoods were swept away, leaving nothing but rubble. And in this region alone, more than 167,000 people lost their lives.
 
-The twins were about to be executed, but the king suddenly stopped it. You see, the king hated coffee and was convinced it was poison. He'd even banned it across his kingdom. So instead of killing them, he ordered one twin to drink three pots of coffee every day, while the other drank three pots of tea. Two doctors watched them for years, expecting the coffee drinker to die early. But as time passed, both doctors died first, and then the king was assassinated. Finally, the tea-drinking twin died, leaving the coffee drinker as the last survivor of the experiment. And years later, the ban on coffee was lifted.
 
-## Connect28: ToucanBeak
-*Target about 37.5 s, 111 words*
+## 26. DwarfGiant
+*Target about 39.0 s, 103 words*
 
-A stick swung down and smashed right into the toucan's upper beak. Now, every time it tried to eat, the fruit just slipped away. So rescuers scanned the broken stump, then compared it to another toucan's beak, using its shape to rebuild the missing half on a computer. But the new beak couldn't be too heavy, or it would pull the bird's head forward. So they made it full-size, but almost hollow. Once it was ready, rescuers lined it up with the broken stump, glued the base into place, and fixed the rest with a pin. And for the first time since the attack, the toucan could pick up fruit again.
+He was way too short to join the army, but a tumor was secretly growing in his brain. It flooded his body with growth hormone, and suddenly, the four-foot-six man started growing. His hands, his feet, even his tongue got bigger, and he shot up over two feet in just a few years. But his spine began to curve. His vision blurred. Then his hearing started to go. Doctors removed the tumor, which slowed his growth, but couldn't stop it. By the time he died, he was seven foot eight, the only man in history to be both a dwarf and a giant.
 
-## Connect29: AIAsleep
-*Target about 43.5 s, 107 words*
 
-As he drove, the car's AI scanned his face and flashed red, warning him to wake up. He was confused, because he wasn't sleeping, so he sat up straighter to look more alert. But nothing worked until he forced his eyes wide open. The moment they relaxed, the alarm went off again, twenty times on a single trip. You see, the AI was designed to beep whenever it couldn't see the iris. But the man naturally had epicanthic folds, where the skin of the upper eyelid overlaps near the nose, forming a smooth flap that covers part of the iris, making the AI think he was asleep.
+## 27. SwedishCoffee
+*Target about 44.5 s, 96 words*
 
-## Connect30: FanCancer
-*Target about 44.0 s, 131 words*
+The twins were about to be executed, but the king suddenly stopped it. You see, the king hated coffee. He was convinced it was poison, and he'd banned it across his kingdom. So instead of killing them, he made one twin drink three pots of coffee every day, and the other three pots of tea. Two doctors watched them for years, waiting for the coffee drinker to die. But the doctors died first. Then the king was assassinated. Then the tea drinker died. The coffee drinker outlived them all. And years later, coffee was legal again.
 
-At a hockey game, she spotted a strange mole on the back of a man's neck. It was an odd color, and she thought it could be cancer. She was nervous about upsetting a stranger, but someone had to warn him. So she typed a note in big letters on her phone and pressed it against the glass. The team's equipment manager read the message, but walked away without saying a word. Still, he went to a doctor just in case, and when they checked the mole, they found cancer, which they quickly removed. He asked people to help him find the woman. Strangers shared the story, and when she was finally identified, both teams surprised her with a ten thousand dollar scholarship as a thank you for saving his life.
 
-## Connect31: PopeShot
+## 28. ToucanBeak
+*Target about 37.5 s, 104 words*
+
+A stick swung down and smashed off the top half of the toucan's beak. Now, every time it tried to eat, the fruit just slipped away. So rescuers scanned the broken stump and matched it to another toucan's beak, rebuilding the missing half on a computer. But if the new beak was too heavy, it would drag the bird's head down. So they printed it full size, but almost completely hollow. Then they lined it up with the stump, glued the base on, and pinned the rest in place. And for the first time since the attack, the toucan could pick up fruit again.
+
+
+## 29. AIAsleep
+*Target about 43.5 s, 100 words*
+
+As he drove, the car's AI scanned his face, flashed red, and told him to wake up. He was confused, because he wasn't asleep. So he sat up straighter and tried to look more alert. Nothing worked, until he forced his eyes wide open. The second he relaxed, the alarm went off again. Twenty times, on a single trip. You see, the AI beeps whenever it can't see your iris. But he had natural eye folds, where the skin of the eyelid overlaps near the nose and covers part of the iris. So the AI thought he was falling asleep.
+
+
+## 30. FanCancer
+*Target about 44.0 s, 118 words*
+
+At a hockey game, she spotted a strange mole on the back of a man's neck. It was an odd color, and she was worried it was cancer. She didn't want to upset a stranger, but someone had to tell him. So she typed a note in big letters on her phone and pressed it against the glass. He read it, and walked away without a word. But he went to a doctor anyway, and when they checked the mole, it was cancer. They removed it in time. Then he asked the internet to help find her. The story spread, she was found, and both teams surprised her with a ten thousand dollar scholarship for saving his life.
+
+
+## 31. PopeShot
 *Target about 27.0 s, 81 words*
 
-He fired straight at the Pope in the middle of a crowded square. Two bullets tore through, hitting him in the stomach and hand. He collapsed, badly wounded, but survived after emergency surgery. And years later, the Pope publicly forgave the man who shot him, and even met him face to face in his prison cell. He later had one of the bullets placed in the crown of a statue, believing that God had guided it away from his vital organs.
+He fired straight at the Pope in the middle of a packed square. Two bullets hit him, one in the stomach and one in the hand. He collapsed, badly hurt, but emergency surgery saved him. And years later, the Pope forgave the man who shot him, and even visited him face to face in his prison cell. Then he had one of the bullets set into the crown of a statue, believing God had guided it away from his vital organs.
 
-## Connect32: GoatOwner
-*Target about 36.5 s, 95 words*
 
-The owner would beat his goat with sticks, trying to make it aggressive toward people so it would guard his property. And this went on for a long time. But one day, the goat had enough. It charged forward and rammed its sharp horns straight into the man. Twice. As he stumbled away, the goat chased him onto the porch and knocked him off. He hit the ground hard and died within minutes. When his body was found, the goat was captured. But instead of being put down, it was taken in by animal rescuers.
+## 32. GoatOwner
+*Target about 36.5 s, 91 words*
 
-## Connect33: WaterTubes
-*Target about 33.5 s, 87 words*
+The owner beat his goat with sticks, trying to make it aggressive so it would guard his property. This went on for a long time. But one day, the goat had had enough. It charged and rammed its sharp horns straight into him. Twice. He stumbled away, but the goat chased him onto the porch and knocked him off. He hit the ground hard and died within minutes. When his body was found, the goat was captured. But instead of being put down, it was rescued and given a new home.
 
-He filled a long tube with water in his front yard, then added more tubes until his entire house was surrounded. Then floodwater began rushing into the neighbourhood. Other homes were damaged, but at his house, the thousands of gallons of water inside the tubes made them incredibly heavy, too heavy for the flood to push through. The water hit the barrier and flowed around it instead. When it was finally over, nearby homes were wrecked, but his house stood dry, saved by water holding back water.
 
-## Connect34: EscapeArtist
-*Target about 62.5 s, 170 words*
+## 33. WaterTubes
+*Target about 33.5 s, 85 words*
 
-He would glance at a guard's key and instantly memorize its pattern. Then he'd file a piece of scrap metal into the exact same shape and let himself out of prison. You see, as an autistic child, he had a special talent for mechanics, and when his father died, he left his tools to him. But his stepmother called the police, since the will hadn't been read yet. He was sentenced to four years, but after just one month, he climbed over the razor wire fence and ran. That added more time to his sentence, plus solitary confinement. But once he was back in his cell, he used a makeshift saw to cut through the bars. Another time, he shaped a toothpaste tube to look like a gun and pointed it at the guards as he ran. And after 13 escape attempts, his sentence had stretched to 34 years, with 27 of those spent in solitary confinement. And even though people have protested, he's still in prison to this day.
+He filled a long tube with water in his front yard, then added more tubes until his whole house was surrounded. Then the flood hit. Water rushed through the neighborhood, smashing into homes. But the tubes around his house were holding thousands of gallons, making them far too heavy for the flood to move. The water hit the barrier and flowed right around it. When it was over, the homes nearby were wrecked, but his house was completely dry. He used water to stop water.
 
-## Connect35: TitanicIceberg
-*Target about 30.5 s, 90 words*
 
-He took a photo of an iceberg, claiming it was the exact one that sank the Titanic. You see, it was streaked with red, with one big smear along the ice, and his ship was sailing near where the Titanic had gone down just the day before. So it was most likely the same iceberg. When the film was developed, experts studied the image carefully. The red streaks lined up with the height of the Titanic's hull paint, leading many to believe this was the iceberg that sank the Titanic.
+## 34. EscapeArtist
+*Target about 62.5 s, 149 words*
+
+He'd glance at a guard's key once and memorize every notch. Then he'd file a scrap of metal into the exact same shape and let himself out of prison. You see, he was autistic, with a rare gift for mechanics, and when his father died, he left him his tools. But his stepmother called the police, because the will hadn't been read yet. He got four years. One month in, he climbed over the razor wire fence and ran. That earned him more time, and solitary confinement. So he made a saw and cut through the bars of his cell. Another time, he shaped a toothpaste tube to look like a gun and pointed it at the guards as he escaped. After 13 escape attempts, his sentence had grown to 34 years, 27 of them in solitary. And even after protests to free him, he's still locked up today.
+
+
+## 35. TitanicIceberg
+*Target about 30.5 s, 79 words*
+
+He took a photo of an iceberg, and claimed it was the one that sank the Titanic. You see, it had a streak of red paint smeared along the ice, and his ship was passing the exact spot where the Titanic had gone down just the day before. When the film was developed, experts studied it closely. The red streak matched the height of the Titanic's painted hull. Which means this could be the iceberg that sank the Titanic.
