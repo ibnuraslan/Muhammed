@@ -67,12 +67,37 @@ def build(variant=None):
             x = -19.6 + k * 2.8
             box("Bay", (x, 3.98, 6.9), (1.6, 0.06, 10.0), pbr("BayGlass", (0.02, 0.025, 0.03), 0.06, **{'Coat Weight': 1.0}))
         box("Canopy", (0, 3.0, 4.5), (12, 2.5, 0.3), stone)
+        # depth: stone piers proud of the glass bays, floor bands, a cornice, canopy columns and a glazed entrance
+        for k in range(16):
+            box("Pier", (-21.0 + k * 2.8, 3.62, 6.5), (1.0, 0.75, 13.0), stone)
+        for z in (4.25, 7.6, 10.9):
+            box("Band", (0, 3.72, z), (44.2, 0.55, 0.45), stone)
+        box("Cornice", (0, 3.5, 13.2), (45.0, 1.1, 0.55), stone)
+        metal = pbr("DoorMetal", (0.1, 0.1, 0.11), 0.35, 0.9)
+        try:
+            import rj
+            eg = rj.window_glass()
+        except Exception:
+            eg = pbr("EntGlass", (0.02, 0.025, 0.03), 0.04, **{'Coat Weight': 1.0})
+        box("EntGlass", (0, 3.92, 2.8), (6.0, 0.04, 2.9), eg)
+        for x in (-3.0, -1.5, 0.0, 1.5, 3.0):
+            box("EntMull", (x, 3.88, 2.8), (0.08, 0.1, 2.9), metal)
+        box("EntHead", (0, 3.88, 4.2), (6.1, 0.12, 0.12), metal)
+        for x in (-5.5, -2.0, 2.0, 5.5):
+            cyl("CanCol", (x, 2.0, 2.85), 0.16, 3.2, stone, verts=20)
+        for k in range(2):                                    # low planters either side of the steps
+            box("Planter", ((-1 if k else 1) * 13.5, 0.2, 0.4), (3.0, 1.6, 0.8), stone)
+        try:
+            import rj
+            rj.low_instances("birch", [((sx * (12.5 + 4.2 * j), -5.0 - 2.5 * (j % 2), 0), 0.7 * j + sx, 1.0 + 0.1 * j) for sx in (-1, 1) for j in range(3)])
+        except Exception as e:
+            print("[fedcourt] trees", e)
         c["flags"] = []
         for x in (-8, -6, 6, 8):
             cyl("Pole", (x, -1.5, 4.5), 0.05, 9.0, pbr("PoleS", (0.8, 0.8, 0.82), 0.25, 1.0), verts=12)
             bpy.ops.mesh.primitive_grid_add(x_subdivisions=30, y_subdivisions=20, size=1, location=(x + 0.8, -1.5, 8.0), rotation=(math.radians(90), 0, 0))
-            f = bpy.context.active_object; f.scale = (1.5, 1.0, 1); f.data.materials.append(pbr("FlagPlain", (0.12, 0.13, 0.15), 0.8) if x < 0 else pbr("FlagBlue", (0.08, 0.12, 0.3), 0.8))
-            wv = f.modifiers.new("wave", 'WAVE'); wv.height = 0.12; wv.width = 0.6; wv.speed = 0.15
+            f = bpy.context.active_object; f.scale = (1.5, 1.0, 1); f.data.materials.append(fabric("FlagCloth" + str(x), (0.22, 0.05, 0.04) if x < 0 else (0.05, 0.08, 0.2), 0.9, 0.4, 260))
+            f["base"] = [tuple(v.co) for v in f.data.vertices]
             c["flags"].append(f)
         B.key_sun(18, 200, 3.0, color=(1.0, 0.85, 0.7), angle=3.0)
         people = []
@@ -176,12 +201,45 @@ def build(variant=None):
     else:   # prison
         sky("mist")
         box("Ground", (0, 0, -0.05), (200, 200, 0.1), B.tex_mat("Tarmac", "asphalt_02", scale=0.2, tint=(0.45, 0.45, 0.45)))
-        box("Verge", (0, -8, 0.0), (200, 6, 0.04), B.tex_mat("VergeG", "leafy_grass", scale=0.2, tint=(0.4, 0.45, 0.38)))
+        box("Verge", (0, -40.0, 0.0), (200, 64, 0.04), B.tex_mat("VergeG", "leafy_grass", scale=0.2, tint=(0.4, 0.45, 0.38)))
         concrete = B.tex_mat("WallConc", "concrete_wall_008", scale=0.2, tint=(0.62, 0.62, 0.6))
         box("PWallA", (-26.0, 4.0, 3.0), (48, 0.6, 6.0), concrete); box("PWallB", (26.0, 4.0, 3.0), (48, 0.6, 6.0), concrete)
         box("GatePier", (-2.4, 4.0, 3.4), (0.8, 1.0, 6.8), concrete); box("GatePier2", (2.4, 4.0, 3.4), (0.8, 1.0, 6.8), concrete)
-        for x in np.arange(-50, 50, 3.0):
-            cyl("WireRoll", (x, 4.0, 6.35), 0.25, 3.0, pbr("Razor", (0.4, 0.4, 0.42), 0.3, 0.9), verts=10, rot=(0, math.radians(90), 0))
+        box("CopingA", (-26.0, 4.0, 6.1), (48.2, 0.95, 0.22), concrete); box("CopingB", (26.0, 4.0, 6.1), (48.2, 0.95, 0.22), concrete)
+        razor = pbr("Razor", (0.55, 0.56, 0.58), 0.25, 1.0)
+        brk = pbr("Bracket", (0.2, 0.21, 0.22), 0.5, 0.8)
+        for (x0, x1) in ((-50.0, -2.0), (2.0, 50.0)):
+            for x in np.arange(x0, x1, 3.0):                  # cranked steel brackets carrying the coil
+                box("Brk", (x, 4.0, 6.55), (0.05, 0.05, 0.7), brk)
+            cu = bpy.data.curves.new("RazorC", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006; cu.bevel_resolution = 1
+            sp = cu.splines.new('POLY'); n = int((x1 - x0) / 0.12) * 10
+            sp.points.add(n - 1)
+            for i in range(n):
+                a_ = i / 10 * 2 * math.pi; xx = x0 + i / 10 * 0.12
+                sp.points[i].co = (xx, 4.0 + 0.32 * math.cos(a_), 6.62 + 0.32 * math.sin(a_), 1)
+            ob = bpy.data.objects.new("RazorWire", cu); bpy.context.collection.objects.link(ob); ob.data.materials.append(razor)
+        # a watchtower on the wall line, a lamp post by the road, the road with its markings, verge, distant trees
+        box("TowerShaft", (-16.0, 4.6, 5.0), (2.4, 2.4, 10.0), concrete)
+        box("TowerCab", (-16.0, 4.6, 11.2), (3.6, 3.6, 2.4), concrete)
+        box("TowerGlass", (-16.0, 4.6, 11.4), (3.65, 3.65, 1.1), pbr("TowerG", (0.03, 0.035, 0.04), 0.05, **{'Coat Weight': 1.0}))
+        box("TowerRoof", (-16.0, 4.6, 12.55), (4.4, 4.4, 0.3), pbr("TowerRoofM", (0.2, 0.2, 0.21), 0.6))
+        cyl("TowerLight", (-14.0, 2.8, 12.0), 0.18, 0.3, pbr("TL", (0.3, 0.3, 0.3), 0.3, 0.9), verts=16, rot=(math.radians(90), 0, 0))
+        try:
+            B.ph_instances("street_lamp_01", [((7.0, -1.6, 0.0), math.radians(90), 1.0), ((-9.0, -1.6, 0.0), math.radians(90), 1.0)])
+        except Exception as e:
+            print("[prison] lamp", e)
+        white = pbr("RoadLine", (0.75, 0.75, 0.72), 0.6)
+        for x in np.arange(-60, 60, 6.0):
+            box("Dash", (x, -4.5, 0.002), (3.0, 0.12, 0.004), white)
+        box("EdgeLine", (0, -7.6, 0.002), (200, 0.12, 0.004), white)
+        box("KerbP", (0, 2.6, 0.07), (200, 0.2, 0.14), pbr("KerbPM", (0.45, 0.45, 0.44), 0.7))
+        box("WallVerge", (0, 3.2, 0.03), (200, 1.0, 0.04), B.tex_mat("VergeW", "leafy_grass", scale=0.2, tint=(0.42, 0.48, 0.38)))
+        try:
+            import rj
+            rj.low_instances("fir_a", [((x, 26.0 + 5 * ((k * 7) % 3), 0), k * 0.9, 1.4 + 0.2 * (k % 3)) for k, x in enumerate(np.arange(-60, 60, 7.0))])
+            rj.low_instances("fir_a", [((x + 2.0 * (j % 2), -62.0 - 6.0 * j, 0), k * 1.3 + j, 1.3 + 0.15 * ((k + j) % 3)) for k, x in enumerate(np.arange(-70, 70, 5.0)) for j in range(2)])
+        except Exception as e:
+            print("[prison] trees", e)
         steel = pbr("GateSteel", (0.22, 0.24, 0.26), 0.45, 0.8)
         gate = join([box("GateLeaf", (0, 0, 2.6), (4.0, 0.12, 5.2), steel)] + [box("GateRib", (-1.8 + k * 0.45, -0.07, 2.6), (0.06, 0.04, 5.2), steel) for k in range(9)], "Gate")
         gate.location = (0, 3.55, 0); c["gate"] = gate
@@ -192,11 +250,12 @@ def build(variant=None):
         yl = area_light((0.0, 8.0, 5.5), (0, 0, 0), 4.0, 120, (0.75, 0.8, 0.9)); yl.visible_camera = False   # soft yard skylight
         c["man"] = man
         c["bag"] = box("Holdall", (0, 0, -30), (0.5, 0.25, 0.28), pbr("Holdall", (0.08, 0.08, 0.09), 0.6), bevel=0.06)
-        B.room_haze((0, 0, 4), (120, 60, 8), density=0.02, color=(0.85, 0.82, 0.8))
+        B.room_haze((0, 0, 4), (120, 60, 8), density=0.01, color=(0.85, 0.82, 0.8))
     if variant in ("fedcourt",):
         B.finish_exterior(azim=323, elev=18, sun_energy=8.0, exposure=0.4)
     elif variant == "prison":
-        B.finish_exterior(azim=72, elev=4, sun_energy=6.0, exposure=0.6)                 # low warm dawn sun along the wall
+        B.finish_exterior(azim=72, elev=4, sun_energy=6.0, exposure=0.6,
+                          sky=dict(horizon=(0.62, 0.48, 0.38), zenith=(0.03, 0.07, 0.22), ground=(0.05, 0.05, 0.05), mid=(0.14, 0.18, 0.34)))   # dawn: warm horizon, blue above                 # low warm dawn sun along the wall
     elif variant in ("corridor", "physicist"):
         B.finish_interior(lift=0.0)
     else:
@@ -215,6 +274,11 @@ def anim(c, t, move):
     sec = t * DUR[move]
     v = c["variant"]
     if v == "fedcourt":
+        for k, f in enumerate(c["flags"]):                    # cloth: travelling ripples that grow away from the pole, a slight droop
+            for vt, (bx, by, bz) in zip(f.data.vertices, f["base"]):
+                d = bx + 0.5                                  # 0 at the pole edge .. 1 at the fly end
+                vt.co = (bx - 0.03 * d * d, by - 0.06 * d * d, 0.16 * d * math.sin(7.0 * d - 3.2 * sec - k) + 0.05 * d * math.sin(15.0 * d + 0.9 * by * 6 - 5.0 * sec))
+            f.data.update()
         for k, h in enumerate(c["people"]):
             u = ((sec * 0.18 + k * 0.17) % 1.0)
             x0 = -9 + k * 3.2; up = k % 2 == 0
@@ -262,7 +326,7 @@ def anim(c, t, move):
             B.walk_to(man, (0.0, 6.6, 0), (0.6, -3.5, 0), u, 6.0 * u + 0.001, stride=20, swing=10)
         else:
             u = sec / DUR[move]
-            B.walk_to(man, (1.5, -2.2, 0), (-14.0, -2.6, 0), u, 9.0 * u, stride=20, swing=10)
+            B.walk_to(man, (1.5, 3.0, 0), (-14.0, 3.0, 0), u, 9.0 * u, stride=20, swing=10)
         carry_bag(c, man)
     bpy.context.view_layer.update()
 
@@ -286,5 +350,5 @@ MOVES = {
     "fog": dict(kind="anim", dof=None, cam=cam((1.8, -16.0, 1.7), (1.4, -13.5, 1.75), (0.0, 25.0, 6.0), 32), anim=lambda c, t: anim(c, t, "fog")),
     "gate": dict(kind="anim", dof=4.0, cam=cam((0.5, 10.5, 1.7), (0.4, 9.6, 1.68), (0.0, -6.0, 1.5), 32),
                  anim=lambda c, t: anim(c, t, "gate"), focus=lambda c, t: c["man"].bone_head("spine03")),
-    "wall": dict(kind="anim", dof=None, cam=cam((8.0, -6.0, 2.0), (7.0, -5.8, 2.0), (-12.0, 0.0, 2.0), 28), anim=lambda c, t: anim(c, t, "wall")),
+    "wall": dict(kind="anim", dof=None, cam=cam((10.0, -12.0, 1.8), (9.0, -11.6, 1.8), (-14.0, 2.0, 4.2), 30), anim=lambda c, t: anim(c, t, "wall")),
 }
