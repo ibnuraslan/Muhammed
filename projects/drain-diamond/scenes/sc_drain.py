@@ -136,7 +136,7 @@ def umbrella(name, radius=0.47):
         tip = Vector((radius * 1.01 * math.cos(a), radius * 1.01 * math.sin(a), -0.52 * radius - 0.01))
         B.cyl(tip, 0.005, 0.025, metal, verts=6)
     B.cyl((0, 0, 0.03), 0.004, 0.06, metal, verts=6)
-    B.cyl((0, 0, -0.42), 0.006, 0.84, metal, verts=8)
+    B.cyl((0, 0, -0.42), 0.01, 0.84, metal, verts=8)
     B.cyl((0, 0, -0.88), 0.013, 0.1, grip, verts=10)
     for k in range(9):                                   # the hooked J handle
         a0 = math.pi * k / 8; a1 = math.pi * (k + 1) / 8
@@ -380,7 +380,7 @@ def anim_gate(c, t):
             M = h.arm.matrix_world.to_3x3()
             hd = h.bone_head("head")
             grip = hd + M @ Vector((-0.16, -0.22, -0.3))            # the hand at shoulder height, in front of the right shoulder
-            tipp = grip + Vector((0.02, 0.02, 0.9))                   # the shaft shows between hand and canopy; rim just above the head
+            tipp = grip + Vector((0.02, 0.02, 0.72))                  # the shaft shows between hand and canopy; rim just above the head
             u.location = tipp
             d = (tipp - grip).normalized(); u.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
             reach(h, "R", grip + Vector((0, 0, -0.02)), M @ Vector((-1, 0.4, -0.8)))
