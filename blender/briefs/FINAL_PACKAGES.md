@@ -43,7 +43,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 29 | AIAsleep | `claude/connect29-ai-asleep` | `blender/AIAsleep_v003/` |
 | 30 | FanCancer | `claude/connect30-fan-cancer` | `blender/FanCancer_v002/` |
 | 31 | PopeShot | `claude/connect31-pope-shot` | `blender/PopeShot_v003/` |
-| 32 | GoatOwner | `claude/connect32-goat-owner` | `blender/GoatOwner_v003/` |
+| 32 | GoatOwner | `claude/beautiful-ptolemy-c5vrcq` | `blender/GoatOwner_v003/` (director fix of v002) |
 | 33 | WaterTubes | `claude/connect33-water-tubes` | `blender/WaterTubes_v002/` |
 | 34 | EscapeArtist | `claude/connect34-escape-artist` | `blender/EscapeArtist_v003/` |
 | 35 | TitanicIceberg | `claude/connect35-titanic-iceberg` | `blender/TitanicIceberg_v003/` |
