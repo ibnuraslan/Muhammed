@@ -57,9 +57,11 @@ def _math(nt, op, a, b=None, bv=None):
 CINE = dict(exposure=-0.35,      # stops; the darker mood comes mostly from the lighting recipe (look.py)
             contrast=1.18,       # power around mid-grey 0.18: deeper shadows, firmer mids
             knee=0.55, span=1.4,  # luminance shoulder: highlights roll off towards knee+span (AgX then soft-clips)
-            black=(0.0016, 0.0006, 0.0),   # subtracted in linear: rich blacks, shadows lean teal
-            warm=(1.06, 1.0, 0.9),         # multiplied: highlights and skin lean amber
-            sat=0.8)
+            black=(0.0011, 0.001, 0.0009),  # subtracted in linear: rich blacks, a whisper cool (no teal wash)
+            warm=(1.012, 1.0, 0.988),       # multiplied: a whisper warm (no amber cast)
+            sat=0.9)                         # natural colours: only slightly muted
+# v4 rule (the person): cinematic = deeper shadows, contrast, soft directional light, NATURAL colours, readable faces.
+# No colour casts. The mood comes from light, shadow and contrast, not from tinting.
 
 
 def _cinematic(nt, src, k=None):
@@ -180,8 +182,10 @@ def add_grade(scene, bloom=0.35, vignette=None, look="cinematic", image=None, ci
     cb = nt.nodes.new("CompositorNodeColorBalance")
     # Lift acts as an offset in linear light (~+0.02 blue here): fine at normal exposure, but it turns very dark sets
     # that are exposed up (forest, dusk) navy, so moods can override it via cine={"lift": (r, g, b)}.
-    lift = tuple((cine or {}).get("lift", (0.985, 1.0, 1.02)))
-    for name, val in (("Lift", (*lift, 1)), ("Gain", (1.03, 1.0, 0.97, 1))):
+    # cinematic: neutral balance (natural colours); plain keeps the original teal/warm balance
+    lift = tuple((cine or {}).get("lift", (1.0, 1.0, 1.0) if look == "cinematic" else (0.985, 1.0, 1.02)))
+    gain = (1.0, 1.0, 1.0) if look == "cinematic" else (1.03, 1.0, 0.97)
+    for name, val in (("Lift", (*lift, 1)), ("Gain", (*gain, 1))):
         sk = _sock(cb, name, 'RGBA') or _sock(cb, name)
         try:
             sk.default_value = val
