@@ -115,6 +115,9 @@ def add_grade(scene, bloom=0.35, vignette=None, look="cinematic", image=None, ci
     image: a bpy Image to grade instead of the render (for look tests on stills).
     vignette: None = 0.55 plain / 0.68 cinematic. cine: overrides for grade.CINE (per-shot tweaks).
     The grade cannot make shadows: light the set with look.py (one key, negative fill, dark walls)."""
+    if cine is None and scene.get("look_cine"):
+        import json
+        cine = json.loads(scene["look_cine"])
     if vignette is None:
         vignette = 0.68 if look == "cinematic" else 0.55
     nt = bpy.data.node_groups.new("HouseGrade", "CompositorNodeTree")

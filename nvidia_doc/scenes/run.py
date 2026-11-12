@@ -58,7 +58,7 @@ else:
         import json
         s.render.image_settings.file_format = 'OPEN_EXR'; s.render.image_settings.color_depth = '32'
         s.render.use_compositing = False
-        json.dump(dict(exposure=s.view_settings.exposure, look=s.view_settings.look), open(os.path.join(OUT, "plate.json"), "w"))
+        json.dump(dict(exposure=s.view_settings.exposure, look=s.view_settings.look, cine=json.loads(s.get("look_cine", "{}"))), open(os.path.join(OUT, "plate.json"), "w"))
         s.render.filepath = os.path.join(OUT, "plate.exr")
     else:
         s.render.filepath = os.path.join(OUT, "plate.png")

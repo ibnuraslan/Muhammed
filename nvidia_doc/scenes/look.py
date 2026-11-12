@@ -8,7 +8,8 @@ how the set is lit:
   * Practicals (lamps, downlights you see) warm.
   * A little haze / volumetrics in exteriors and forests, so the key reads as light in the air.
 
-Moods:  "overcast" - moody grey day, soft cool key from one side, deep falloff, cool shadows.
+Moods:  "overcast" - moody grey day: dark slate sky gradient, soft side key (shadow side ~2 stops down), firmer mids.
+        "mist"     - woods: cool mist, low sun shafts through the trunks, dark understory (look.forest).
         "low_sun"  - late sun: warm, low, hard key raking across the set; cool sky fill very low.
         "night"    - keep the set's own night lights, just warm the practicals and darken the walls.
 
@@ -27,12 +28,25 @@ from mathutils import Vector
 MOODS = {
         # key: key-light colour, gain: key energy factor, sky: world strength (no sun disc), elev/angle: sun height and
     # softness (deg), sun: sun-lamp energy, haze: volume colour, exposure: scene exposure for exteriors
-    "overcast": dict(key=(0.86, 0.9, 1.0), gain=1.0, sky=0.12, tint=(0.95, 0.95, 0.98), elev=22, angle=18.0,
-                     sun=3.6, haze=(0.62, 0.68, 0.76), exposure=-1.3),
+    "overcast": dict(key=(0.88, 0.91, 1.0), gain=1.0, sky=1.0, tint=(0.95, 0.95, 0.98), elev=24, angle=16.0,
+                     sun=3.4, haze=(0.55, 0.6, 0.66), exposure=-0.45,
+                     horizon=(0.115, 0.125, 0.14), zenith=(0.03, 0.04, 0.055), ground=(0.02, 0.02, 0.022),
+                     cine=dict(contrast=1.32)),
+    "mist":     dict(key=(0.86, 0.92, 1.0), gain=1.0, sky=2.0, tint=(0.9, 0.95, 1.0), elev=13, angle=3.0,
+                     sun=7.0, haze=(0.62, 0.72, 0.82), exposure=0.5,
+                     horizon=(0.24, 0.28, 0.32), zenith=(0.08, 0.1, 0.13), ground=(0.03, 0.033, 0.036),
+                     cine=dict(contrast=1.25)),
     "low_sun":  dict(key=(1.0, 0.66, 0.40), gain=1.35, sky=0.14, tint=(0.62, 0.72, 0.95), elev=7, angle=1.2,
                      sun=4.2, haze=(1.0, 0.80, 0.62), exposure=-0.6),
 }
 WARM = (1.0, 0.72, 0.46)          # practicals: tungsten-ish
+
+
+def set_grade(**cine):
+    """Per-shot overrides for grade.CINE, stored on the scene; add_grade picks them up (and bakes keep them)."""
+    import json
+    s = bpy.context.scene
+    cur = json.loads(s.get("look_cine", "{}")); cur.update(cine); s["look_cine"] = json.dumps(cur)
 
 
 def enabled():
@@ -156,6 +170,16 @@ def sky(mood="overcast", azim=200, elev=None, strength=None):
     md = MOODS[mood]
     w = bpy.data.worlds.new("LookSky"); bpy.context.scene.world = w; w.use_nodes = True
     N = w.node_tree.nodes; L = w.node_tree.links; N.clear()
+    if "zenith" in md:                          # overcast / mist: a slate gradient, dark at the top, pale low down
+        tc = N.new("ShaderNodeTexCoord"); sp = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sp.inputs[0])
+        rp = N.new("ShaderNodeValToRGB"); el = rp.color_ramp.elements
+        el[0].position = 0.0; el[0].color = (*md["ground"], 1); el[1].position = 0.55; el[1].color = (*md["zenith"], 1)
+        e2 = el.new(0.03); e2.color = (*md["horizon"], 1)          # direction z: below horizon dark, pale band, dark top
+        bias = N.new("ShaderNodeMath"); bias.operation = 'ADD'; bias.inputs[1].default_value = 0.02
+        L.new(sp.outputs['Z'], bias.inputs[0]); L.new(bias.outputs[0], rp.inputs['Fac'])
+        bg = N.new("ShaderNodeBackground"); bg.inputs['Strength'].default_value = md["sky"] if strength is None else strength
+        out = N.new("ShaderNodeOutputWorld"); L.new(rp.outputs['Color'], bg.inputs['Color']); L.new(bg.outputs[0], out.inputs['Surface'])
+        return w
     sk = N.new("ShaderNodeTexSky")
     try:
         sk.sky_type = 'MULTIPLE_SCATTERING'
@@ -230,7 +254,38 @@ def day_light(mood="overcast", azim=200, elev=None, sun_energy=None, sky_strengt
     if haze_box is not None:
         haze(haze_box[0], haze_box[1], mood, haze_density)
     s.view_settings.exposure = MOODS[mood]["exposure"] if exposure is None else exposure
+    if MOODS[mood].get("cine"):
+        set_grade(**MOODS[mood]["cine"])
     return k
+
+
+def ground_haze(center, size, mood="overcast", height=4.0, density=0.006):
+    """Haze that hugs the ground only (a thin low slab), so the sky and the top of the frame stay clean and dark."""
+    return haze((center[0], center[1], height / 2), (size[0], size[1], height), mood, density)
+
+
+def forest(scene=None, mood="mist", azim=160, elev=None, area=((0, 0), (80, 80)), canopy=18.0, density=None,
+           sun_energy=None, darken=0.75, exposure=None):
+    """Woods / lakeside path. One low sun behind or beside the trees throws shafts through a volume of mist that
+    fills the wood up to the canopy; the understory stays dark (textured ground and foliage x `darken`), the sky
+    is a dark slate gradient ("mist") or a low warm sun ("low_sun").
+    area = ((cx, cy), (sx, sy)): the wooded patch to fill with mist. Place the camera looking towards the sun
+    (azim) through the trunks for shafts."""
+    if not enabled():
+        return None
+    s = scene or bpy.context.scene
+    for o in [o for o in s.objects if o.type == 'LIGHT' and o.data.type == 'SUN']:
+        bpy.data.objects.remove(o)
+    sky(mood, azim, elev)
+    k = sun_key(mood, azim, elev, sun_energy)
+    (cx, cy), (sx, sy) = area
+    dens = density if density is not None else (0.010 if mood == "mist" else 0.006)
+    hz = haze((cx, cy, canopy / 2), (sx, sy, canopy), mood, dens)
+    darken_surfaces(cap=0.25, tex_scale=darken, objects=[o for o in bpy.data.objects if o.type == 'MESH'])  # incl. instanced
+    s.view_settings.exposure = MOODS[mood]["exposure"] if exposure is None else exposure
+    if MOODS[mood].get("cine"):
+        set_grade(**MOODS[mood]["cine"])
+    return dict(sun=k, haze=hz)
 
 
 def interior_day(window, mood="overcast", key_energy=None, key_size=2.5, fill=0.15, sky_factor=0.35, darken=0.3,
