@@ -74,12 +74,12 @@ K = [
     (12.2, V((-0.22, -0.22, 1.30)), fanH4, 50, False),
     (13.0, V((-0.20, -0.45, 1.38)), fanH4 + V((0, 0, 0.02)), 45, False),
     (13.6, V((-0.85, 0.20, 1.50)), fphone, 34, False),                # through the glass to her right side
-    (14.3, V((-0.80, 0.30, 1.42)), fphone, 42, False),               # top-down on the thumbs
-    (15.2, V((-0.72, 0.08, 1.38)), fphone + V((0, 0, 0.1)), 40, False),
+    (14.3, V((-1.00, 0.22, 1.55)), (fphone + fanH4) / 2, 32, False),               # top-down on the thumbs
+    (15.2, V((-0.95, 0.05, 1.50)), (fphone + fanH4) / 2, 32, False),
     (15.8, V((-0.70, 0.55, 1.55)), V((0.0, 0.2, 1.4)), 34, False),
     (16.4, V((-0.90, 0.75, 1.80)), V((0.0, 0.05, 1.45)), 30, False),   # the slap, wide
-    (17.0, V((-0.30, 0.10, 2.85)), V((0.2, -0.6, 1.55)), 30, False),     # over the glass to his side
-    (17.8, V((0.75, -0.95, 1.85)), manH + V((-0.1, 0.3, -0.1)), 34, False),
+    (17.0, V((0.90, 0.10, 2.85)), V((0.2, -0.6, 1.55)), 30, False),     # over the glass to his side
+    (17.8, V((1.10, -1.05, 1.85)), manH + V((-0.1, 0.3, -0.1)), 32, False),
     (18.6, V((0.95, -1.55, 2.05)), V((-0.05, 0.0, 1.45)), 34, False),  # wide over his shoulder, phone on the glass
     (19.4, V((-0.40, -0.18, 1.62)), manH, 42, False),                 # his puzzled face
     (20.2, V((1.10, -1.00, 1.50)), manH + V((0, 0, -0.2)), 30, False),
@@ -94,8 +94,8 @@ K = [
     (25.45, V((-28.85, -2.95, 1.85)), docH, 45, False),
     (25.8, V((-28.45, -2.88, 1.70)), docH, 42, False),                 # doctor's serious face
     (26.6, V((-27.9, -2.7, 2.1)), moleB, 45, False),               # overhead on the hands
-    (27.4, V((-28.95, -1.70, 1.62)), moleB, 40, False),
-    (28.3, V((-28.55, -1.62, 1.48)), moleB, 42, False),               # front-left: the bandage pressed on
+    (27.4, V((-29.10, -1.45, 1.75)), moleB, 34, False),
+    (28.3, V((-28.60, -1.35, 1.60)), moleB, 35, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),

@@ -241,7 +241,7 @@ def man_rink():
     f = F
     man.set_plant(MAN0, 0)
     cross = {"L": ((-0.12, -0.20, 1.05), (-1, 0, 0.1), (0, 1, 0)), "R": ((0.12, -0.22, 1.0), (1, 0, 0.1), (0, 1, 0))}
-    hips = {"L": ((0.22, -0.02, 0.98), (0, 0, -1), (-1, 0, 0)), "R": ((-0.22, -0.02, 0.98), (0, 0, -1), (1, 0, 0))}
+    hips = {"L": ((0.28, -0.03, 0.99), (0, 0, -1), (-1, 0, 0)), "R": ((-0.28, -0.03, 0.99), (0, 0, -1), (1, 0, 0))}
     for i, t in enumerate((0.0, 1.5, 3.0, 4.5, 6.0, 7.5, 9.0, 10.5, 12.0, 13.5, 15.0, 16.2)):
         man.pose(f(t), MAN0, 6 * math.sin(i), flex=4, head=(-4 + 6 * math.sin(i * 0.7), 18 * math.sin(i * 1.1)),
                  hands=hips if i % 4 < 2 else None, twist=6 * math.sin(i))
@@ -392,16 +392,17 @@ def seated_fk(rig, f, pos, yaw, cheer=0.0, sway=0.0, head=(0, 0), phone=False, r
         a = -40 - 120 * cheer if not (phone and s == "R") else -70
         if relax and cheer < 0.1:
             Rg.key_rot("upperarm01." + s, f, [("Y", -10 if s == "L" else 10), ("X", -22)]); Rg.key_rot("lowerarm01." + s, f, [("X", -75)]); continue
-        Rg.key_rot("upperarm01." + s, f, [("Y", (-15 if s == "L" else 15) * (1 - cheer)), ("X", a)])
-        Rg.key_rot("lowerarm01." + s, f, [("X", -50 * (1 - cheer) - (60 if phone and s == "R" else 0))])
+        a = max(a, -145)
+        Rg.key_rot("upperarm01." + s, f, [("Y", (-1 if s == "L" else 1) * (15 * (1 - cheer) - 28 * cheer)), ("X", a)])   # V-shaped cheer, clear of neighbours
+        Rg.key_rot("lowerarm01." + s, f, [("X", -50 * (1 - cheer) - 15 * cheer - (60 if phone and s == "R" else 0))])
 def standing_fk(rig, f, pos, yaw, cheer=0.0, sway=0.0, head=(0, 0), stick=False):
     H = Human(Rig(rig)); Rg = H.r
     H.key_root(f, Vector(pos) + Vector((0, 0, H.root_head.z - 0.01)), yaw=yaw, side=sway * 2)
     H.key_spine(f, flex=-6 * cheer, twist=sway * 8, head=head)
     for s in "LR":
         Rg.key_rot("upperleg01." + s, f, [("X", 0)]); Rg.key_rot("lowerleg01." + s, f, [("X", 0)])
-        Rg.key_rot("upperarm01." + s, f, [("Y", (-15 if s == "L" else 15) * (1 - cheer)), ("X", -10 - 150 * cheer)])
-        Rg.key_rot("lowerarm01." + s, f, [("X", -20 - 30 * cheer)])
+        Rg.key_rot("upperarm01." + s, f, [("Y", (-1 if s == "L" else 1) * (15 * (1 - cheer) - 28 * cheer)), ("X", -10 - 135 * cheer)])
+        Rg.key_rot("lowerarm01." + s, f, [("X", -20 - 15 * cheer)])
 
 CROWD = []
 k = 0
