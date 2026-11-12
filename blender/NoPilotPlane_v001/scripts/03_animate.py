@@ -114,7 +114,8 @@ def pose_passenger(arm, row, side, k, x, y, f):
             fk_arm(R, s, f, down=62, fwd=rnd.uniform(-5, 10), elbow=rnd.uniform(5, 20), out=rnd.uniform(0, 10))
         else:
             dn, fw, el = rnd.uniform(36, 46), rnd.uniform(18, 32), rnd.uniform(48, 68)
-            fk_arm(R, s, f, down=dn, fwd=fw, elbow=ELB.get(s, el), out=0)
+            inner = (s == "L") if (aisle == (side == "L")) else (s == "R")      # the arm next to the seatmate
+            fk_arm(R, s, f, down=dn - (8 if inner else 0), fwd=fw + (8 if inner else 0), elbow=ELB.get(s, el), out=-10 if inner else 0)
         fingers_curl(R, f, s, 25)
     eyes_closed(R, f, 1.0)
     R.key_rot("jaw", f, [("X", rnd.uniform(2, 9))])
@@ -186,13 +187,13 @@ def fo_pose(f, loc, rz=180.0, rx=0.0, ry=0.0, flex=10, side=-30, twist=0, hflex=
 SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)        # face turned toward the cabin, readable
-fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)
-fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30, 32), armR=(55, 0, 15, 32))   # hauled up/back
+fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(64, 0, 10, 28))
+fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(62, 5, 15, 30), armR=(62, 0, 12, 30))   # hauled up/back
 fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(60, -10, 15, 32))
 fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(62, -10, 15, 32))  # left arm swings down onto the yoke
 fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12, 32), armR=(62, -10, 15, 32))
-fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20, 32), armR=(60, -20, 15, 32))
-fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20, 32), armR=(58, 0, 15, 32))
+fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(72, 0, 8, 28), armR=(72, 0, 8, 28))
+fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(72, 0, 8, 28), armR=(72, 0, 8, 28))
 fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
 for f in range(F(38.0) + 40, 4410, 40):
     fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
