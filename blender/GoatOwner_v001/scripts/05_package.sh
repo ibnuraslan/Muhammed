@@ -11,5 +11,7 @@ $B -b --factory-startup --python "$HERE/rig_quadruped.py" -- "$A/objv/goat.glb" 
 $B -b --python "$HERE/01_build_humans.py" -- "$W/humans.blend"
 $B -b "$W/humans.blend" --python "$HERE/02_build_scene.py" -- "$A" "$W" "$W/scene.blend"
 $B -b "$W/scene.blend" --python "$HERE/03_animate.py" -- "$W/anim.blend"
-$B -b "$W/anim.blend" --python "$HERE/04_shrink.py" -- "$W/tex_small" "$W/shrunk.blend"
+# studio look pass (STYLE_ANIMATED.md): AgX Punchy, softer bump, saturation up, f-stop >= 5.6, motion blur off; keep our real sky
+$B -b "$W/anim.blend" --python "$HERE/../../pipeline/anim_look.py" -- "$W/animL.blend" --no-sky --exposure 0.15
+$B -b "$W/animL.blend" --python "$HERE/04_shrink.py" -- "$W/tex_small" "$W/shrunk.blend"
 $B -b "$W/shrunk.blend" --python "$HERE/../../pipeline/package_for_farm.py" -- "$OUT/GoatOwner_v002_60fps.blend"

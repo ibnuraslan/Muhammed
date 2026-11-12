@@ -63,7 +63,7 @@ class H:
         self.h.key_hand(s, f, M @ W, R3 @ d, R3 @ n, pole)
     def arm(self, s, f, M, fwd=10, out=8, L=0.5):
         sx = 1 if s == "L" else -1
-        Rr = Matrix.Rotation(R_(-fwd), 3, 'X') @ Matrix.Rotation(R_(sx * out), 3, 'Y')
+        Rr = Matrix.Rotation(R_(-fwd), 3, 'X') @ Matrix.Rotation(R_(-sx * out), 3, 'Y')     # out > 0 = away from the body
         W = self.SH[s] + Vector((sx * 0.04, -0.02, 0)) + Rr @ Vector((0, 0, -L))
         d = Rr @ Vector((sx * 0.05, -0.15, -1.0)); n = Rr @ Vector((-sx * 0.9, 0.35, 0.0))
         self.hand_local(s, f, M, W, d, n)
@@ -129,13 +129,21 @@ for h_ in (OW, PS, OA, OB_, RS):
 # hand contact presets in rest-body coordinates (sx mirrors)
 def HP(name, s):
     sx = 1 if s == "L" else -1
-    return {"belly": (Vector((sx * 0.06, -0.16, 1.0)), Vector((-sx * 0.7, -0.1, -0.6)), Vector((0, 1, 0))),
-            "belly2": (Vector((sx * 0.1, -0.15, 1.06)), Vector((-sx * 0.8, 0, -0.4)), Vector((0, 1, 0))),
-            "overhead": (Vector((sx * 0.16, -0.12, 1.98)), Vector((0, -0.25, 1.0)), Vector((-sx, 0, 0))),
-            "raised": (Vector((sx * 0.22, -0.28, 1.78)), Vector((0, -0.6, 0.8)), Vector((-sx, 0, 0))),
-            "front": (Vector((sx * 0.2, -0.4, 1.2)), Vector((0, -1, -0.2)), Vector((-sx, 0, 0))),
-            "low": (Vector((sx * 0.22, -0.35, 0.95)), Vector((0, -0.9, -0.5)), Vector((-sx, 0, 0))),
+    return {"belly": (Vector((sx * 0.14, -0.42, 1.06)), Vector((-sx * 0.7, -0.15, -0.6)), Vector((0, 1, 0))),
+            "belly2": (Vector((sx * 0.15, -0.42, 1.2)), Vector((-sx * 0.8, -0.1, -0.4)), Vector((0, 1, 0))),
+            "overhead": (Vector((sx * 0.3, -0.16, 1.96)), Vector((0, -0.25, 1.0)), Vector((-sx, 0, 0))),
+            "raised": (Vector((sx * 0.32, -0.3, 1.76)), Vector((0, -0.6, 0.8)), Vector((-sx, 0, 0))),
+            "front": (Vector((sx * 0.3, -0.45, 1.25)), Vector((0, -1, -0.2)), Vector((-sx, 0, 0))),
+            "low": (Vector((sx * 0.3, -0.45, 1.0)), Vector((0, -0.9, -0.5)), Vector((-sx, 0, 0))),
             }[name]
+
+def clutch(f, s, kind):
+    ev(f)
+    D = OW.o.matrix_world @ OW.R.delta("spine02"); R3 = D.to_3x3()
+    W, d, n = HP(kind, s); sx = 1 if s == "L" else -1
+    pole = D @ (OW.SH[s] + Vector((0.35 * sx, 0.45, -0.25)))
+    OW.h.key_hand(s, f, D @ W, R3 @ d, R3 @ n, pole)
+
 
 # ================================================================= goat
 G = Rig(bpy.data.objects["Goat_rig"])
@@ -196,7 +204,7 @@ def ow_hit(f, pos, lean, spine, head, jaw, hands="belly", brow=4, lid=3, crouch=
     M = OW.stand(f, pos, yaw_c, lean=lean, roll=roll, spine=(spine, 0, 0), head=(head, 0), crouch=crouch, feet=feet)
     for s in "LR":
         if hands == "belly":
-            W, d, n = HP("belly" if s == "L" else "belly2", s); OW.hand_local(s, f, M, W, d, n); OW.fingers(s, f, 30, 20)
+            clutch(f, s, "belly" if s == "L" else "belly2"); OW.fingers(s, f, 30, 20)
         else:
             OW.arm(s, f, M, fwd=hands[0], out=hands[1], L=0.48); OW.fingers(s, f, 20, 15)
     OW.face(f, jaw=jaw, brow=brow, lid=lid, smile=-3)
@@ -207,14 +215,14 @@ OW.face(930, jaw=18, brow=6, lid=4, smile=-3)
 FEET_C = {"L": (OC + Vector((0.1, -0.12)), yaw_c), "R": (OC + Vector((0.08, 0.2)), yaw_c + 15)}
 ow_hit(955, OC, 16, 14, -6, 20, hands=(80, 30), feet=FEET_C, crouch=0.1)
 OC2 = OC + Vector((0.25, -0.1))
-ow_hit(985, OC2, 28, 38, 22, 34, crouch=0.12, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.22, 0.2)), yaw_c + 15, 0.05)})
-ow_hit(1040, OC2 + Vector((0.12, -0.04)), 34, 44, 26, 30, crouch=0.16, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
-ow_hit(1100, OC2 + Vector((0.15, -0.05)), 24, 30, 14, 24, crouch=0.10, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
+ow_hit(985, OC2, 28, 38, 22, 34, hands=(55, 40), crouch=0.12, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.22, 0.2)), yaw_c + 15, 0.05)})
+ow_hit(1040, OC2 + Vector((0.12, -0.04)), 34, 44, 26, 30, hands=(75, 22), crouch=0.16, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
+ow_hit(1100, OC2 + Vector((0.15, -0.05)), 24, 30, 14, 24, hands=(65, 22), crouch=0.10, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
 # beat 6: second hit (fast) at 1145
 OC3 = OC2 + Vector((0.55, -0.1))
-ow_hit(1138, OC2 + Vector((0.15, -0.05)), 14, 18, 6, 20, crouch=0.06, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
-ow_hit(1152, OC3, 36, 46, 28, 36, crouch=0.18, roll=-6, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
-ow_hit(1180, OC3 + Vector((0.05, 0.05)), 26, 34, 16, 26, crouch=0.10, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
+ow_hit(1138, OC2 + Vector((0.15, -0.05)), 14, 18, 6, 20, hands=(50, 25), crouch=0.06, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
+ow_hit(1152, OC3, 36, 46, 28, 36, hands=(55, 40), crouch=0.18, roll=-6, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
+ow_hit(1180, OC3 + Vector((0.05, 0.05)), 26, 34, 16, 26, hands=(40, 30), crouch=0.10, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
 # beat 7: staggers to the porch, up the steps, along the deck to the south edge
 p_ow3 = catmull([(1182, V(OC3.x + 0.05, OC3.y + 0.05, 0)), (1240, V(2.7, 3.4, 0)), (1300, V(3.7, 5.4, 0)), (1330, V(4.2, 6.0, 0)),
                  (1365, V(5.3, 6.0, 0)), (1395, V(6.0, 5.0, 0)), (1416, V(6.15, 4.1, 0)), (1430, V(6.2, 3.7, 0))])
@@ -226,8 +234,8 @@ for f in range(1182, 1431, 8):
         # left hand grips the stair rail post side
         OW.arm("L", f, M, fwd=30, out=35, L=0.45)
     else:
-        W, d, n = HP("belly", "L"); OW.hand_local("L", f, M, W, d, n)
-    W, d, n = HP("belly2", "R"); OW.hand_local("R", f, M, W, d, n)
+        OW.arm("L", f, M, fwd=38, out=14, L=0.46)      # left arm hangs forward for balance; right hand clutches the stomach
+    clutch(f, "R", "belly2")
     OW.fingers("L", f, 35, 20); OW.fingers("R", f, 30, 20)
     OW.face(f, jaw=22 + 8 * math.sin(f / 7.0), brow=5, lid=3, smile=-4)
 # beat 8: butted at 1440 off the south edge (y = 3), falls, lands at 1478
@@ -331,7 +339,7 @@ for f, s_ in ((463, 0.0), (630, -0.012), (1905, -0.012), (1990, -0.006)):
 G4 = GB + Vector((0.25, -0.1)); h4 = math.degrees(math.atan2((OC - G4).x, -(OC - G4).y))
 for f in (631, 660, 700, 740, 780, 816):
     ghold(f, G4, h4, dz=-0.05, pitch=-6)
-    gneck(f, 26, 10, 22, turn=0, tail=-25)
+    gneck(f, 16, 8, 12, turn=0, tail=-25)
 for i, f in enumerate(range(650, 820, 34)):           # FL stamps
     for df, lz in ((0, 0.0), (8, 0.09), (14, 0.0)):
         n = "IK_hoof.FL"; o = Matrix.Rotation(R_(h4), 3, 'Z') @ (G.BN[n].head_local - G.rest("torso").translation)
@@ -400,7 +408,7 @@ PS.h.walk(pp, lambda f: 90 - 2 if f < 300 else 90, 1, 463, stride=0.75)
 for f in range(1, 464, 14):
     p = pp(f); M = PS.M(Vector((p.x, p.y, PS.RH.z)), 90)
     sw = 15 * math.sin(f / 22.0)
-    PS.arm("R", f, M, fwd=10 + sw, out=8); PS.arm("L", f, M, fwd=10 - sw, out=8)
+    PS.arm("R", f, M, fwd=10 + sw, out=10); PS.arm("L", f, M, fwd=10 - sw, out=10)
     PS.face(f, jaw=2, brow=3 if 220 < f < 320 else 0, lid=2 if 220 < f < 320 else 0)
 for f in (230, 300): PS.h.key_spine(f, flex=0, twist=-10, head=(0, -50))     # looks at the snorting goat
 PS.vis(1, True); PS.vis(470, False)
@@ -415,16 +423,24 @@ def _cl(p):
 pa = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((-1.0, -1.55)))        # ahead-left of the goat, pole length
 pb_ = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((1.0, 0.5)))           # beside its flank
 for h_, fn in ((OA, pa), (OB_, pb_)):
-    path = catmull([(1600, V(-3.5, 11.0, 0)), (1700, V(*fn(1700), 0))] + [(f, V(*fn(f), 0)) for f in range(1735, 1906, 20)])
+    st_ = V(-3.5, 11.0, 0) if h_ is OA else V(-2.3, 11.8, 0)
+    path = catmull([(1600, st_), (1700, V(*fn(1700), 0))] + [(f, V(*fn(f), 0)) for f in range(1735, 1906, 20)])
     h_.h.walk(path, lambda f, path=path: yaw_to(path(f - 4), path(f + 4)), 1600, 1905, stride=0.72)
     h_.vis(1, False); h_.vis(1600, True); h_.vis(1910, False)
 for f in range(1600, 1906, 10):
+    for h_, fn in ((OA, pa), (OB_, pb_)):
+        p_ = fn(f); M_ = h_.M(Vector((p_.x, p_.y, h_.RH.z)), gh(f)); sw = 14 * math.sin(f / 20.0)
+        pre = h_ is OA and 1680 <= f < 1700
+        if f < 1700 or h_ is OB_:
+            h_.arm("R", f, M_, fwd=(45 if pre else 10 + sw), out=18, L=0.5)
+        if f < (1700 if h_ is OA else 1735):
+            h_.arm("L", f, M_, fwd=(45 if pre else 10 - sw), out=18, L=0.5)
+        h_.fingers("L", f, 20, 15); h_.fingers("R", f, 20, 15)
     ev(f)
     # OffA holds the catch pole in both hands, loop end at the goat's neck
     neck = G.o.matrix_world @ G.PB["neck2"].head
     pA = pa(f); MA = OA.M(Vector((pA.x, pA.y, OA.RH.z)), yaw_to(pA, gpos(f)))
-    gripR = MA @ Vector((-0.15, -0.38, 1.05)); gripL = MA @ Vector((0.02, -0.25, 1.12))
-    dirp = (neck - gripR).normalized()
+    gripL = MA @ Vector((0.0, -0.42, 1.1)); dirp = (neck - gripL).normalized(); gripR = gripL + dirp * 0.32
     if f >= 1700:
         OA.h.key_hand("R", f, gripR, dirp.cross(Vector((0, 0, 1))), Vector((0, 0, -1)), MA @ Vector((-0.5, 0.4, 1.1)))
         OA.h.key_hand("L", f, gripL, dirp.cross(Vector((0, 0, 1))), Vector((0, 0, -1)), MA @ Vector((0.5, 0.4, 1.1)))
@@ -454,12 +470,12 @@ for i, f in enumerate(range(1906, 2191, 30)):
     hh_ = G.o.matrix_world @ G.PB["head"].head; fw_ = (G.o.matrix_world @ G.PB["neck1"].head) - (G.o.matrix_world @ G.PB["hips"].head); fw_.z = 0; fw_.normalize()
     pts_ = [gbody.matrix_world @ v.co for v in gm.vertices]; ge.to_mesh_clear()
     near = [p for p in pts_ if (p - hh_).length < 0.4]
-    mouth = max(near, key=lambda p: (p - hh_).dot(fw_) - 0.5 * p.z) if near else G.o.matrix_world @ G.PB["head"].tail
+    mouth = max(near, key=lambda p: 0.3 * (p - hh_).dot(fw_) - p.z) if near else G.o.matrix_world @ G.PB["head"].tail
     RS.h.key_hand("R", f, mouth + Vector((0.0, 0.0, -0.04)) + fw_ * 0.06,
                   Matrix.Rotation(R_(ry), 3, 'Z') @ Vector((0, -1, 0.1)), Vector((0, 0, 1)), M @ Vector((-0.5, 0.2, 0.9)))
     neck = G.o.matrix_world @ G.PB["neck1"].head.lerp(G.PB["chest"].head, 0.3 + 0.4 * st)
-    RS.h.key_hand("L", f, neck + Vector((0, 0, 0.2)), Vector((0, 0, -1)).cross(Vector((1, 0, 0))), Vector((0, 0, -1)), M @ Vector((0.5, 0.2, 0.9)))
-    RS.fingers("R", f, 12, 10); RS.fingers("L", f, 22, 15)
+    RS.h.key_hand("L", f, neck + Vector((0, 0, 0.2)), -fw_, Vector((0, 0, -1)), M @ Vector((0.5, 0.2, 0.9)))
+    RS.fingers("R", f, 6, 4); RS.fingers("L", f, 4, 2)
     RS.face(f, jaw=3, brow=2, lid=0.5, smile=3)
 
 # ================================================================= DUST + CLODS
@@ -506,6 +522,23 @@ for i in range(4):
     t.hide_render = True; t.keyframe_insert("hide_render", frame=1); t.hide_render = False; t.keyframe_insert("hide_render", frame=1600)
 bpy.data.textures["T_Warp"]  # (static)
 
+# ================================================================= HAND JOINT LIMITS (client rule, Nov 11 23:00): local-space Limit Rotation
+def limit(pb, x, y, z):
+    c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "JointLimit"
+    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+    c.min_x, c.max_x = R_(x[0]), R_(x[1]); c.min_y, c.max_y = R_(y[0]), R_(y[1]); c.min_z, c.max_z = R_(z[0]), R_(z[1])
+    for pb_ in (pb,): pb_.rotation_mode = 'QUATERNION'
+N_LIM = 0
+for h_ in (OW, PS, OA, OB_, RS):
+    for s in "LR":
+        for k in range(2, 6):
+            for j in (1, 2, 3):
+                limit(h_.R.PB["finger%d-%d.%s" % (k, j, s)], (0, 90), (-10, 10), (-10, 10) if j == 1 else (-5, 5)); N_LIM += 1
+        for j in (1, 2, 3):
+            limit(h_.R.PB["finger1-%d.%s" % (j, s)], (-30, 60), (-40, 40), (-40, 40)); N_LIM += 1
+        limit(h_.R.PB["wrist." + s], (-60, 60), (-40, 40), (-25, 25)); N_LIM += 1
+print("LIMITS", N_LIM)
+
 # ================================================================= AMBIENT LIFE
 def fcurves(o, data=False):
     ad = (o.data if data else o).animation_data; out = []
@@ -532,7 +565,7 @@ pp2 = catmull([(600, V(-13.0, -4.0, 0)), (1100, V(-13.5, 8.0, 0)), (1520, V(-12.
 PS.h.walk(pp2, lambda f: 180, 600, 1520, stride=0.7)
 for f in range(600, 1521, 14):
     p = pp2(f); M = PS.M(Vector((p.x, p.y, PS.RH.z)), 180); sw = 15 * math.sin(f / 22.0)
-    PS.arm("R", f, M, fwd=10 + sw, out=8); PS.arm("L", f, M, fwd=10 - sw, out=8)
+    PS.arm("R", f, M, fwd=10 + sw, out=10); PS.arm("L", f, M, fwd=10 - sw, out=10)
 PS.vis(590, True); PS.vis(1525, False)
 # ================================================================= WORLD: time-lapse in beat 3, golden pasture in beat 11
 sun = bpy.data.objects["Key_Sun"]; wt = sc.world.node_tree
@@ -569,6 +602,7 @@ def TR(name):
     if name == "ps": return PS.o.matrix_world @ PS.R.PB["spine03"].head
     if name == "mid": return (TR("gh") + TR("oc")) / 2
     if name == "gp": return TR("gh") * 0.6 + TR("ps") * 0.4
+    if name == "fm": return TR("gh") * 0.45 + TR("oh") * 0.55 + Vector((0, 0, -0.1))
     raise KeyError(name)
 def GROT():
     A = G.o.matrix_world
@@ -592,17 +626,17 @@ CAMK = [
  (462,  ("gn", (0.7, -0.6, 0.1), "g"), ("gn",), 38),     # tense neck
  (540,  (1.6, 5.0, 1.6), ("gb", (0.6, -0.4, 0.2)), 20),                    # time-lapse push along the shed wall
  (630,  ("gb", (1.1, -1.3, 0.3), "g"), ("gh",), 32),
- (690,  ("ge", (0.34, -0.06, 0.09), "g"), ("ge",), 55),    # eye macro
- (740,  ("gh", (0.35, -0.42, 0.14), "g"), ("gh",), 45),    # horns
+ (690,  ("gh", (1.0, -0.55, 0.3), "g"), ("gh", (0, 0, 0.05)), 38),    # eye macro
+ (740,  ("gh", (0.8, -0.9, 0.15), "g"), ("gh",), 34),    # horns
  (790,  ("gf", (0.5, -0.55, 0.15), "g"), ("gf", (0, 0, 0.12)), 40),   # stamping hoof
  (816,  ("gb", (1.3, -0.3, -0.1), "g"), ("mid",), 30),
  (880,  ("gb", (1.3, 0.3, -0.25), "g"), ("gh",), 28),     # skimming beside the charge
  (960,  (OC.x - 0.2, OC.y - 1.7, 0.7), ("ob", (0, 0, -0.15)), 30),   # impact, side-on
- (1000, (OC.x - 0.6, OC.y - 1.5, 0.95), ("ob",), 30),        # orbit around the doubled-over man
- (1040, (OC.x - 1.3, OC.y - 1.0, 1.1), ("ob",), 32),
- (1085, (OC.x - 1.6, OC.y - 0.1, 1.3), ("oh", (0, 0, -0.2)), 30),
- (1128, (OC.x - 1.2, OC.y + 0.9, 1.2), ("ob",), 30),
- (1150, (OC.x + 0.2, OC.y + 1.7, 1.0), ("ob",), 28),        # whip orbit, "twice"
+ (1000, (OC.x - 0.5, OC.y - 1.7, 1.05), ("fm",), 30),        # orbit around the doubled-over man
+ (1040, (OC.x - 1.4, OC.y - 1.3, 1.1), ("fm",), 30),
+ (1085, (OC.x - 2.0, OC.y - 0.5, 1.2), ("fm",), 30),
+ (1128, (OC.x - 1.6, OC.y + 1.0, 1.15), ("fm",), 30),
+ (1150, (OC.x - 0.2, OC.y + 1.8, 1.0), ("fm",), 28),        # whip orbit, "twice"
  (1182, (OC.x + 1.6, OC.y + 0.8, 1.1), ("oc",), 28),
  (1250, ("gb", (0.2, 1.7, 0.7), "g"), ("oc",), 26),      # chase cam behind the goat
  (1310, ("gb", (0.4, 1.9, 1.0), "g"), ("oh",), 26),

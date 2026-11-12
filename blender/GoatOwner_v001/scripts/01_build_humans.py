@@ -32,7 +32,8 @@ human("Owner", 1.0, 0.62, CA, "short02/short02.mhclo", ["male_worksuit01/male_wo
       "middleage_caucasian_male/middleage_caucasian_male.mhmat", 0, muscle=0.6, weight=0.62, height=0.6,
       tints=[("male_worksuit01/x", (0.62, 0.55, 0.45))])
 human("Passer", 1.0, 0.5, {"asian": 0.1, "caucasian": 0.2, "african": 0.7}, "short01/short01.mhclo",
-      ["male_casualsuit03/male_casualsuit03.mhclo", "shoes01/shoes01.mhclo"], "young_african_male/young_african_male.mhmat", 2)
+      ["male_casualsuit01/male_casualsuit01.mhclo", "shoes01/shoes01.mhclo"], "young_african_male/young_african_male.mhmat", 2,
+      tints=[("male_casualsuit01/x", (0.35, 0.45, 0.32))])   # short jacket: the long casualsuit03 coat swallowed his hanging hands
 khaki = (0.55, 0.5, 0.36)
 human("OffA", 1.0, 0.5, {"asian": 0.3, "caucasian": 0.6, "african": 0.1}, "short03/short03.mhclo",
       ["male_casualsuit01/male_casualsuit01.mhclo", "shoes03/shoes03.mhclo"], "young_caucasian_male/young_caucasian_male.mhmat", 4,
