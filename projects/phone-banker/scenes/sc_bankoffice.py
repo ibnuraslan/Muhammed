@@ -531,18 +531,18 @@ def build_anteroom(c, floor_m, paper_m, panel_m):
     r, _ = ph.model("dining_chair_02", loc=(AX0 + 2.45, -0.35, 0), rot_z=math.radians(90))
     tz = 0.83
     tw = typewriter()
-    tw.location = (AX0 + 1.95, -0.2, tz); tw.rotation_euler = (0, 0, math.radians(-90))           # keys toward her chair (+X)
+    tw.location = (AX0 + 1.9, 0.12, tz); tw.rotation_euler = (0, 0, math.radians(-90))           # keys toward her chair (+X)
     cloth = folded_cloth()
     cloth.location = (AX0 + 1.85, -0.72, tz + 0.001); cloth.rotation_euler = (0, 0, 0.3)
     c["cloth"] = cloth
     import paper_tex
     pages = paper_tex.make_all()["pages"]
     from pbkit import image_plane
-    image_plane("AntePage", pages[2], (AX0 + 2.0, 0.12, tz + 0.002), (0.21, 0.28), (0, 0, math.radians(95)), rough=0.75)
+    image_plane("AntePage", pages[2], (AX0 + 1.75, -0.95, tz + 0.002), (0.21, 0.28), (0, 0, math.radians(95)), rough=0.75)
     # visitor ledger (opened on the desk in the ledger variant)
     c["ledger"] = ledger(pages)
-    c["ledger"]["root"].location = (AX0 + 1.75, -0.45, tz + 0.001); c["ledger"]["root"].rotation_euler = (0, 0, math.radians(-90))
-    ph.model("standing_picture_frame_01", loc=(AX0 + 1.75, 0.18, tz), rot_z=math.radians(-110))
+    c["ledger"]["root"].location = (AX0 + 1.85, -0.38, tz + 0.001); c["ledger"]["root"].rotation_euler = (0, 0, math.radians(-90))
+    ph.model("standing_picture_frame_01", loc=(AX0 + 1.7, 0.42, tz), rot_z=math.radians(-110))
     r, _ = ph.model("potted_plant_02", loc=(AX1 - 0.4, AY1 - 0.4, 0), rot_z=1.0)
     r, cl = ph.model("wall_clock", loc=(AX0 + 2.0, AY1 + 0.0, 2.1), rot_z=math.pi)
     # coat stand corner and a row of chairs for visitors along the near wall
@@ -951,7 +951,7 @@ def a_ante(c, sec):
 def a_ledger(c, sec):
     """Ch1 12A: an investigator at the secretary's desk turns the pages of the visitor ledger."""
     inv = c["people"]["inv"]
-    seat(inv, (AX0 + 2.45, -0.35, 0), math.radians(90), lean=16)            # faces -X, the desk
+    seat(inv, (AX0 + 2.45, -0.35, 0), math.radians(-90), lean=16)            # faces -X, the desk
     nod(inv, "neck01", 10); nod(inv, "head", 18)
     L = c["ledger"]; root = L["root"]
     period = 2.4; ph_ = (sec % period) / period
