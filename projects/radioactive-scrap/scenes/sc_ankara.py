@@ -145,7 +145,7 @@ def build(variant=None):
     ph_model("wooden_bookshelf_worn", loc=REC + Vector((1.6, 2.0, 0)), rot_z=math.pi)
     P = {}
     P["clerk"] = person("Clerk", 1.0, 52, "suit_brown", "short03", hv=0.55, moustache=True)
-    P["inv"] = person("InvA", 1.0, 48, "camel", "short02", moustache=True)      # short cut: the face reads
+    P["inv"] = person("InvA", 1.0, 52, "suit_brown", "short01", hv=0.55, weight=0.75, moustache=True)      # older, heavier, brown suit and tie: not a twin of InvB
     P["inv2"] = person("InvB", 1.0, 41, "wool_grey", "short04", hv=0.3, moustache=False)    # second investigator: a man with a short cut, face visible
     c["people"] = P
     for h in P.values():
