@@ -428,13 +428,18 @@ def a_specialists(c, sec):
     c["camera_prop"].location = (LT.x + 0.4, LT.y + 0.2, LT.z + 0.02)
     s1, s2 = c["people"]["spec1"], c["people"]["spec2"]
     seat(s1, (1.9, 1.05, 0), math.radians(180), lean=16)                          # faces +Y
-    seat(s2, (1.9, 2.55, 0), 0.0, lean=14)                                          # faces -Y (other side of the bench)
+    seat(s2, (1.9, 2.42, 0.08), 0.0, lean=10)                                           # faces -Y (other side of the bench)
     hide(s2, False)
     k = ease(min(1.0, max(0.0, (sec - 1.0) / 2.0)))
-    pg = c["sheetB"]; pg.location = Vector((1.9, 1.95, 0.868)).lerp(Vector((1.9, 1.55, 0.868)), k)
-    hand_to(s2, "R", pg.location + Vector((0.04, 0.12, 0.04)), hand_dir=Vector((0, -0.7, -0.6)), curl=20)
-    nod(s2, "head", 12); nod(s1, "head", 14); look(s1, pg.location, 0.5)
-    hand_to(s1, "L", Vector((1.75, 1.45, 0.82)), hand_dir=Vector((0, 0.7, -0.6)), curl=20)
+    back = ease(min(1.0, max(0.0, (sec - 3.3) / 1.0)))
+    pg = c["sheetB"]; pg.location = Vector((1.62, 2.1, 0.868)).lerp(Vector((1.7, 1.9, 0.868)), k)
+    # fingertips on the far edge of the page, the forearm low over the table; the hand draws back once it is across
+    tip = pg.location + Vector((-0.02, 0.12, 0.05))
+    hand_to(s2, "R", tip.lerp(tip + Vector((0.05, 0.25, 0.0)), back), hand_dir=Vector((0, -0.35, -0.9)), curl=8)
+    hand_to(s2, "L", Vector((2.12, 2.2, 0.86)), hand_dir=Vector((0, -0.6, -0.7)), curl=25)
+    nod(s2, "spine04", 8); nod(s2, "head", 14); nod(s1, "head", 16); look(s1, pg.location, 0.5)
+    hand_to(s1, "L", Vector((1.72, 1.5, 0.86)), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
+    hand_to(s1, "R", Vector((2.08, 1.48, 0.86)), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
 
 
 def a_photo(c, sec):
@@ -480,8 +485,8 @@ MOVES = {
                        focus=lambda c, t: LT + Vector((0, 0.1, 0.2))),
     "photocopies": dict(kind="anim", dof=3.2, far=10.0, anim=_anim("photocopies"), cam=_push((-0.3, 1.55, 1.75), (-0.42, 1.42, 1.7), (LT.x, LT.y - 0.4, 1.25), (LT.x, LT.y - 0.35, 1.2), 30),
                         focus=lambda c, t: LT + Vector((0, -0.4, 0.5))),
-    "specialists": dict(kind="anim", dof=3.6, far=10.0, anim=_anim("specialists"), cam=_push((-0.2, 1.8, 1.4), (0.0, 1.85, 1.38), (1.9, 1.8, 1.1), (1.9, 1.8, 1.1), 30),
-                        focus=lambda c, t: Vector((1.9, 1.8, 1.1))),
+    "specialists": dict(kind="anim", dof=3.6, far=10.0, anim=_anim("specialists"), cam=_push((0.25, 2.05, 1.02), (0.4, 2.0, 0.98), (1.95, 1.85, 1.0), (1.95, 1.85, 0.98), 34),
+                        focus=lambda c, t: Vector((1.92, 1.9, 0.9))),
     "photo": dict(kind="anim", dof=2.0, far=6.0, anim=_anim("photo"), cam=_push((LT.x - 0.35, LT.y - 0.7, 1.55), (LT.x - 0.1, LT.y - 0.28, 1.25), (LT.x + 0.05, LT.y + 0.05, LT.z), (LT.x + 0.05, LT.y + 0.05, LT.z), 40),
                   focus=lambda c, t: LT + Vector((0.05, 0.05, 0.01))),
     "case_close": dict(kind="anim", dof=2.8, far=10.0, anim=_anim("case_close"),
