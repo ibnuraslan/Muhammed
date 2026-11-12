@@ -141,13 +141,13 @@ for sgn in (1, -1):
         P2.append(c + d * (CR + 0.6)); D2.append(d)
     for i in range(50):
         y = RC.y - HY + CR + (2 * HY - 2 * CR) * i / 49; P2.append(Vector((sgn * (HX + 0.6), y))); D2.append(Vector((sgn, 0)))
-slam = spray("SlamSpray", strip("SlamStrip", P2, D2, 0.45), 21.3, 24.2, 60, 6.5, 2.4, 1.0, 0.03, 33, MS)
+slam = spray("SlamSpray", strip("SlamStrip", P2, D2, 0.45), 21.3, 24.2, 90, 6.5, 2.4, 1.0, 0.011, 33, MS)
 # surge-front spray along the street, x driven by the flood FrontX value
 SP, SD = [Vector((0, -20 + 9 * i / 59)) for i in range(60)], [Vector((-1, 0)) for i in range(60)]
-surge = spray("SurgeSpray", strip("SurgeStrip", SP, SD, 0.5), 8.3, 15.0, 45, 3.5, 2.6, 0.8, 0.028, 44, MS)
+surge = spray("SurgeSpray", strip("SurgeStrip", SP, SD, 0.5), 8.3, 15.0, 70, 3.5, 2.6, 0.8, 0.009, 44, MS)
 dr = surge.driver_add("location", 0).driver; dr.type = "SCRIPTED"
 var = dr.variables.new(); var.name = "fx"; var.targets[0].id_type = "NODETREE"; var.targets[0].id = bpy.data.node_groups["FloodSurface"]
-var.targets[0].data_path = 'nodes["FrontX"].outputs[0].default_value'; dr.expression = "fx + 1.0"
+var.targets[0].data_path = 'nodes["FrontX"].outputs[0].default_value'; dr.expression = "fx - 0.5"
 # ring spill spray (beat 7 water curling around corners): use the slam object timing (already covers corners)
 
 # ------------------------------------------------------------------ licence plate: plain stamped metal, no characters

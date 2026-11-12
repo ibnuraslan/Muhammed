@@ -309,7 +309,7 @@ bpy.context.collection.objects.unlink(TREE)
 SHR = ph_objs("shrub_02", ["shrub_02_a_LOD1", "shrub_02_b_LOD1", "shrub_02_c_LOD1"])
 LAMP = ph_objs("street_lamp_01", ["street_lamp_01"])["street_lamp_01"]
 TREES = []
-for i, (x, y) in enumerate([(-12.8, -6.5), (13.5, -10.0), (-30, -10.5), (31, -10.5), (-14, -26), (8, -26.5), (30, -26), (-36, -26.5), (52, -10.3), (-52, -26)] + [(random.uniform(-85, 85), random.choice((18, 22, -50, -55))) for _ in range(30)] + [(random.choice((-84, 84)), random.uniform(-60, 60)) for _ in range(12)]):
+for i, (x, y) in enumerate([(-12.8, -6.5), (16.5, -6.6), (-30, -10.5), (31, -10.5), (-14, -26), (8, -26.5), (30, -26), (-36, -26.5), (52, -10.3), (-52, -26)] + [(random.uniform(-85, 85), random.choice((18, 22, -50, -55))) for _ in range(30)] + [(random.choice((-84, 84)), random.uniform(-60, 60)) for _ in range(12)]):
     t = bpy.data.objects.new(f"Tree_{i}", TREE.data); link(t, C_VEG); t.location = (x, y, 0); t.rotation_euler.z = random.uniform(0, 6.28)
     t.scale = [random.uniform(1.25, 1.6)] * 3; TREES.append(t)
 for i in range(40):
@@ -746,9 +746,9 @@ dsp = fw.modifiers.new("Chop", "DISPLACE"); tx = bpy.data.textures.new("Chop", "
 # garden hose: reel at the house front wall, hose across the lawn to Valve_0 (end hooked to the valve)
 hose_reel = bpy.data.objects.new("HoseReel", ASSET["hose"].data); link(hose_reel, C_SET); hose_reel.location = (-4.6, -6.15, 0.0); hose_reel.rotation_euler.z = R_(90)
 cu = bpy.data.curves.new("Hose", "CURVE"); cu.dimensions = "3D"; cu.bevel_depth = 0.011; cu.bevel_resolution = 3
-spl = cu.splines.new("BEZIER"); P = [(-4.45, -6.2, 0.32), (-4.5, -6.5, 0.02), (-4.75, -7.0, 0.015), (-4.95, -7.45, 0.015), (-5.0, -7.75, 0.03), (-5.3, -8.85, 0.2)]
-spl.bezier_points.add(len(P) - 1)
-for bp_, p in zip(spl.bezier_points, P): bp_.co = p; bp_.handle_left_type = bp_.handle_right_type = "AUTO"
+spl = cu.splines.new("NURBS"); P = [(-4.45, -6.2, 0.32), (-4.5, -6.5, 0.02), (-4.75, -7.0, 0.015), (-4.95, -7.45, 0.015), (-5.0, -7.75, 0.03), (-5.3, -8.85, 0.2)]
+spl.points.add(len(P) - 1); spl.order_u = 3; spl.use_endpoint_u = True; spl.resolution_u = 12
+for pt, p in zip(spl.points, P): pt.co = (*p, 1.0)
 hose = bpy.data.objects.new("Hose", cu); link(hose, C_SET)
 mh = bpy.data.materials.new("HoseRubber"); mh.use_nodes = True; hb = mh.node_tree.nodes["Principled BSDF"]
 hb.inputs["Base Color"].default_value = (0.05, 0.22, 0.06, 1); hb.inputs["Roughness"].default_value = 0.4
@@ -762,7 +762,7 @@ bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=0.018, radius2=0.0
 mn = bpy.data.materials.new("Brass"); mn.use_nodes = True; nb = mn.node_tree.nodes["Principled BSDF"]
 nb.inputs["Base Color"].default_value = (0.75, 0.55, 0.25, 1); nb.inputs["Metallic"].default_value = 1; nb.inputs["Roughness"].default_value = 0.3
 me.materials.append(mn); noz = bpy.data.objects.new("Nozzle", me); link(noz, C_SET)
-cn2 = noz.constraints.new("COPY_LOCATION"); cn2.target = bpy.data.objects["Valve_0"]; cn2.use_offset = True; noz.location = (0.0, 0.03, 0.17); noz.rotation_euler = (R_(-30), 0, R_(-33))
+cn2 = noz.constraints.new("COPY_LOCATION"); cn2.target = bpy.data.objects["Valve_0"]; cn2.use_offset = True; noz.location = (0.0, 0.0, 0.21); noz.rotation_euler = (0, 0, 0)
 print("RING_SEGMENTS", [round(o["length"], 1) for o in TUBES if "length" in o])
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)

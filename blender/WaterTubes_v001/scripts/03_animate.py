@@ -91,12 +91,12 @@ sh_mix = bpy.data.materials["CutBackdrop"].node_tree.nodes["ShellFade"].inputs["
 for f, v in ((1, 0), (F(14.6) - 6, 0), (F(14.6) + 8, 1), (F(20.6), 1), (F(20.95), 0)): ksock(sh_mix, f, v)
 CUT_IN, CUT_OUT = F(14.6), F(20.85)
 khide(bpy.data.objects["CutShell"], [(F(14.6) - 8, F(21.0))])
-for n in ("Tube_0", "Valve_0", "Nozzle", "Hose"):
+for n in ("Tube_0", "Valve_0"):
     khide(bpy.data.objects[n], [(1, CUT_IN), (CUT_OUT, 2011)])
 for n in ["CutTube", "CutWater", "CutKey", "CutRim"] + [o.name for o in bpy.data.objects if o.name.startswith("Bubble_")]:
     khide(bpy.data.objects[n], [(CUT_IN, CUT_OUT)])
 # the hose is removed once the tube is full (he unscrews it and coils it at the reel) -> keep it only in beats 1-2
-khide(bpy.data.objects["Hose"], [(1, F(6.0))]); khide(bpy.data.objects["Nozzle"], [(1, F(6.0))])
+khide(bpy.data.objects["Hose"], [(1, F(8.4))]); khide(bpy.data.objects["Nozzle"], [(1, F(8.4))])
 # water in the section sags and settles (weight)
 cw, ct = bpy.data.objects["CutWater"], bpy.data.objects["CutTube"]
 # scale about the tube axis: parent both to an empty at the tube centre line
@@ -171,7 +171,7 @@ def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
         elif mode == "head": W = sh + k * Vector((sx * 0.01, 0.0, 0.28)); d = Vector((-sx * 0.3, 0.05, 0.9)); nn = Vector((-sx, 0.1, 0))
         elif mode == "up":   W = sh + k * Vector((sx * 0.12, -0.38, 0.1)); d = Vector((sx * 0.1, -0.4, 0.9)); nn = Vector((0, 1, 0))
         elif mode == "out":  W = sh + k * Vector((sx * 0.4, -0.15, -0.25)); d = Vector((sx, -0.3, -0.3)); nn = Vector((0, 0, -1))
-        elif mode == "brow": W = (sh + k * Vector((-sx * 0.1, -0.32, 0.22))) if s == "R" else (sh + k * Vector((sx * 0.085, -0.05, -0.46))); d = Vector((-sx, -0.2, 0.3)) if s == "R" else Vector((sx * 0.1, -0.15, -1)); nn = Vector((0, 1, -0.4)) if s == "R" else Vector((-sx, 0, 0))
+        elif mode == "brow": W = (sh + k * Vector((-sx * 0.1, -0.32, 0.22))) if s == "L" else (sh + k * Vector((sx * 0.085, -0.05, -0.46))); d = Vector((-sx, -0.2, 0.3)) if s == "L" else Vector((sx * 0.1, -0.15, -1)); nn = Vector((0, 1, -0.4)) if s == "L" else Vector((-sx, 0, 0))
         if mode in ("hang", "hips", "chest", "brow", "head"): W = W + Vector((sx * wide, 0, 0))
         # body space -> world via root transform
         Wl = W - Vector((root.x, root.y, 0.0))
@@ -216,30 +216,30 @@ VALVE = bpy.data.objects["Valve_0"]
 def valve_pos(f):
     sc.frame_set(f); return VALVE.matrix_world.translation.copy()
 # beat 1: crouched inside the ring at the fill valve, nozzle in both hands, rising as the tube swells; then stands, wipes brow
-K = Vector((-5.3, -8.05, 0)); hose_pts = bpy.data.objects["Hose"].data.splines[0].bezier_points
+K = Vector((-5.3, -8.25, 0)); hose_pts = bpy.data.objects["Hose"].data.splines[0].points
 for f in range(1, F(2.5) + 1, 4):
     v = valve_pos(f); u = (f - 1) / (F(2.5) - 1)
-    cr = 0.5 - 0.22 * smooth(u) + 0.015 * math.sin(f * 0.11)
-    stand(H, f, K, 0, flex=34 - 10 * smooth(u), crouch=cr, head=(18 - 6 * smooth(u), 12 * math.sin(f * 0.02)),
+    cr = 0.64 - 0.34 * smooth(u) + 0.015 * math.sin(f * 0.11)
+    look = max(0.0, math.sin(f * 0.105)) ** 3          # glances up along the swelling tube about once a second
+    stand(H, f, K, 0, flex=46 - 20 * smooth(u), crouch=cr, head=(18 - 6 * smooth(u) - 30 * look, 12 * math.sin(f * 0.02) + 35 * look),
           feet={"L": Vector((K.x + 0.16, K.y + 0.02)), "R": Vector((K.x - 0.17, K.y + 0.12))})
-    noz = v + Vector((0.0, 0.03, 0.17))
-    dR = Vector((0.0, -0.75, -0.65)).normalized()
-    H.key_hand("R", f, noz - dR * 0.085 + Vector((0, 0, 0.035)), dR, Vector((0, -0.4, -1)), pole=K + Vector((-0.7, 0.2, 0.5)))
-    hose_mid = noz + Vector((0.16, 0.24, -0.04))
+    noz = v + Vector((0.0, 0.0, 0.21))                 # nozzle centre (stands upright on the valve cap)
+    # right fist round the nozzle: palm on it from his side (+Y), fingers wrap toward +X, thumb opposed
+    H.key_hand("R", f, noz + Vector((-0.07, 0.042, 0.0)), Vector((1, 0, 0)), Vector((0, -1, 0)), pole=K + Vector((-0.7, 0.2, 0.5)))
+    hose_mid = noz + Vector((0.24, 0.2, -0.12))
     dL = Vector((-0.7, -0.4, -0.6)).normalized()
     H.key_hand("L", f, hose_mid - dL * 0.085 + Vector((0, 0, 0.04)), dL, Vector((0.2, 0, -1)), pole=K + Vector((0.7, 0.2, 0.5)))
     # hose end tracks the valve and passes through the left hand
-    hose_pts[-1].co = noz; hose_pts[-1].keyframe_insert("co", frame=f)
-    hose_pts[-2].co = hose_mid + Vector((0.0, 0.0, -0.02)); hose_pts[-2].keyframe_insert("co", frame=f)
+    hose_pts[-1].co = (*(noz + Vector((0, 0, 0.06))), 1.0); hose_pts[-1].keyframe_insert("co", frame=f)
+    hose_pts[-2].co = (*(hose_mid + Vector((0.0, 0.0, -0.02))), 1.0); hose_pts[-2].keyframe_insert("co", frame=f)
     face(HR, f, brow=0.3, jaw=0.08, lids=0.2)
-for f in range(F(2.5) + 4, F(3.7), 4):
-    v = valve_pos(f); hose_pts[-1].co = v + Vector((0.0, 0.03, 0.17)); hose_pts[-1].keyframe_insert("co", frame=f)
-    hose_pts[-2].co = v + Vector((0.32, 0.51, 0.07)); hose_pts[-2].keyframe_insert("co", frame=f)
+
 f0 = F(2.5)
-for f, cr, fl_, mode in ((f0 + 14, 0.2, 20, "chest"), (f0 + 30, 0.02, 4, "hang"), (f0 + 48, 0.0, 0, "brow"), (F(3.7), 0.0, 2, "brow")):
+for f, cr, fl_, mode in ((f0 + 10, 0.3, 26, "chest"), (f0 + 22, 0.16, 16, "chest"), (f0 + 34, 0.02, 4, "hang"), (f0 + 41, 0.0, 2, "up"), (f0 + 48, 0.0, 0, "brow"), (F(3.7), 0.0, 2, "brow")):
     stand(H, f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, flex=fl_, crouch=cr, head=(-5, -35))
     arms(H, "Hero", f, K + Vector((0, 0.12, 0)), -25 if f > f0 + 30 else -10, mode)
-for s_ in "LR": grip(HR, s_, 1, 0.85); grip(HR, s_, F(2.5), 0.85); grip(HR, s_, F(2.5) + 12, 0.2)
+grip(HR, "L", 1, 0.85); grip(HR, "L", F(2.5), 0.85); grip(HR, "L", F(2.5) + 12, 0.3)
+grip(HR, "R", 1, 0.85); grip(HR, "R", F(8.3), 0.85); grip(HR, "R", F(8.5), 0.3)
 face(HR, f0 + 40, brow=0.6, jaw=0.15, lids=0.4); face(HR, F(3.6), brow=0.2, jaw=0.0, lids=0.1, smile=0.6)
 # beat 2: walks inside the ring along the front, checks each tube as it swells, hands on hips
 p0 = K + Vector((0, 0.12, 0)); p1 = Vector((7.2, -7.4, 0))
@@ -316,8 +316,12 @@ for f, hd, md in ((1, (-25, 10), "hips"), (F(1.4), (-30, -15), "hips"), (F(2.6),
     stand(NB, f, pb0, 30, head=hd); arms(NB, "NeighbourB", f, pb0, 30, md)
 NB.walk(lambda f: pb0.lerp(pb1, smooth((f - F(2.8)) / (F(6.0) - F(2.8)))), lambda f: 120, F(2.8), F(6.0), stride=0.65)
 for f in range(F(2.8), F(6.0) + 1, 4): arms(NB, "NeighbourB", f, pb0.lerp(pb1, smooth((f - F(2.8)) / (F(6.0) - F(2.8)))), 120, "hang", phase=f / 40, amp=0.5)
-for f, dy, mode in ((F(11.6), 0.0, "hang"), (F(12.2), 0.6, "up"), (F(12.9), 1.0, "head"), (F(13.6), 1.1, "head"), (F(14.6), 1.1, "hips")):
-    stand(NB, f, pb1 + Vector((0, dy, 0)), 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", f, pb1 + Vector((0, dy, 0)), 0, mode)
+bpath = lambda f: pb1.lerp(pb1 + Vector((0, 1.1, 0)), smooth((f - F(11.8)) / (F(13.4) - F(11.8))))
+stand(NB, F(11.6), pb1, 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", F(11.6), pb1, 0, "hang")
+NB.walk(bpath, lambda f: 0, F(11.8), F(13.4), stride=0.45, lean=-6)
+for f, mode in ((F(12.2), "up"), (F(12.9), "head"), (F(13.4), "head")): arms(NB, "NeighbourB", f, bpath(f), 0, mode)
+for f, mode in ((F(13.6), "head"), (F(14.6), "hips")):
+    stand(NB, f, pb1 + Vector((0, 1.1, 0)), 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", f, pb1 + Vector((0, 1.1, 0)), 0, mode)
 face(RIG["NeighbourB"], F(11.8), brow=1.0, lids=1.0, jaw=0.7)
 pb2 = Vector((-23.6, -8.0, 0))
 pbm = pb1 + Vector((0, 1.1, 0))
@@ -378,6 +382,23 @@ for t in [o for o in bpy.data.objects if o.name.startswith("Tree_")]:
         t.rotation_euler.x = R_(2.5 * wnd * math.sin(f * 0.09 + ph)); t.rotation_euler.y = R_(1.8 * wnd * math.sin(f * 0.07 + ph * 2))
         t.keyframe_insert("rotation_euler", frame=f)
 
+# the nozzle comes off the valve at 2.5 s and stays in his right fist while he walks the ring (hose trailing)
+NOZ = bpy.data.objects["Nozzle"]; cnz = NOZ.constraints[0]
+cnz.influence = 1.0; cnz.keyframe_insert("influence", frame=F(2.5)); cnz.influence = 0.0; cnz.keyframe_insert("influence", frame=F(2.5) + 1)
+for fc in _fcurves(NOZ.animation_data.action):
+    for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
+NOZ.location = (0, 0, 0.21); NOZ.keyframe_insert("location", frame=F(2.5)); NOZ.rotation_euler = (0, 0, 0); NOZ.keyframe_insert("rotation_euler", frame=F(2.5))
+for f in range(F(2.5) + 1, F(8.4), 2):
+    sc.frame_set(f)
+    M = HR.matrix_world @ HR.pose.bones["wrist.R"].matrix
+    y = M.to_3x3() @ Vector((0, 1, 0)); x = M.to_3x3() @ Vector((1, 0, 0)); z = M.to_3x3() @ Vector((0, 0, 1))
+    p = M.translation + y.normalized() * 0.075 + z.normalized() * 0.03
+    NOZ.location = p; NOZ.keyframe_insert("location", frame=f)
+    NOZ.rotation_euler = x.to_track_quat("Z", "Y").to_euler(); NOZ.keyframe_insert("rotation_euler", frame=f)
+    tip = p + x.normalized() * 0.06
+    hose_pts[-1].co = (*(tip), 1.0); hose_pts[-1].keyframe_insert("co", frame=f)
+    hose_pts[-2].co = (*(Vector((p.x + 0.25, p.y + 0.5, 0.03))), 1.0); hose_pts[-2].keyframe_insert("co", frame=f)
+    hose_pts[-3].co = (*(Vector(((p.x + hose_pts[1].co[0]) / 2, (p.y + hose_pts[1].co[1]) / 2, 0.02))), 1.0); hose_pts[-3].keyframe_insert("co", frame=f)
 # hide the library source objects
 for n in ("house_a", "house_b", "house_c", "house_d", "house_e", "hero_house", "car", "bin", "fence", "sofa", "hose"):
     o = bpy.data.objects.get(n)
@@ -390,8 +411,8 @@ cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 4.0
 V = Vector
 CAM = [  # (t seconds, position, look-at, lens)
     (0.0, V((-1.4, -9.7, 0.62)), V((-5.0, -8.5, 0.45)), 24),
-    (1.0, V((-3.7, -10.9, 0.62)), V((-5.3, -8.85, 0.42)), 30),
-    (2.0, V((-4.7, -10.5, 1.15)), V((-5.3, -8.2, 0.85)), 35),
+    (1.0, V((-4.0, -10.2, 2.0)), V((-5.3, -8.4, 0.6)), 30),
+    (2.0, V((-4.8, -10.0, 2.05)), V((-5.3, -8.3, 0.7)), 34),
     (3.0, V((-7.9, -10.4, 1.45)), V((-4.4, -8.8, 0.55)), 28),
     (3.7, V((-8.6, -12.3, 2.6)), V((-3.0, -8.6, 0.5)), 24),
     (4.7, V((-6.0, -17.0, 6.0)), V((0.0, -6.5, 0.5)), 22),
@@ -400,8 +421,8 @@ CAM = [  # (t seconds, position, look-at, lens)
     (7.8, V((14.0, 4.0, 11.0)), V((0.0, 0.0, 0.0)), 22),
     (8.5, V((9.0, -9.5, 5.0)), V((38.0, -16.0, 0.3)), 20),
     (9.5, V((12.5, -14.0, 1.7)), V((34.0, -16.0, 0.4)), 22),
-    (10.5, V((6.5, -15.2, 0.95)), V((18.0, -16.0, 0.45)), 20),
-    (11.5, V((-3.0, -18.2, 1.6)), V((5.0, -16.0, 0.4)), 22),
+    (10.5, V((6.5, -15.6, 2.0)), V((18.0, -16.0, 0.5)), 20),
+    (11.5, V((-3.0, -18.4, 2.2)), V((5.0, -16.0, 0.4)), 22),
     (12.3, V((-13.5, -12.0, 1.5)), V((-21.5, -3.6, 0.9)), 24),
     (13.3, V((-15.0, -10.6, 1.3)), V((-11.0, -6.0, 0.6)), 26),
     (14.0, V((-6.5, -14.0, 2.2)), V((1.5, -9.0, 0.4)), 24),
@@ -413,17 +434,17 @@ CAM = [  # (t seconds, position, look-at, lens)
     (18.2, V((4.8, -9.3, 0.7)), V((2.0, -9.6, 0.5)), 24),
     (19.2, V((4.3, -11.0, 0.75)), V((2.0, -9.4, 0.6)), 24),
     (20.2, V((3.6, -9.7, 0.2)), V((2.1, -9.0, 1.0)), 22),
-    (21.0, V((3.6, -6.6, 2.3)), V((2.8, -10.5, 0.4)), 22),
-    (21.4, V((3.0, -6.2, 2.1)), V((3.0, -12.5, 0.3)), 22),
-    (22.4, V((8.0, -6.8, 2.6)), V((11.5, -10.5, 0.4)), 22),
+    (21.0, V((3.4, -6.0, 3.0)), V((2.8, -14.0, 0.2)), 22),
+    (21.4, V((3.0, -5.6, 2.9)), V((3.0, -16.0, 0.2)), 22),
+    (22.4, V((8.5, -5.5, 3.3)), V((12.5, -14.0, 0.2)), 22),
     (23.5, V((14.0, -18.5, 9.0)), V((0.0, 0.0, 0.0)), 20),
     (24.5, V((-4.0, -24.0, 6.0)), V((-3.0, -16.0, 0.0)), 22),
     (25.6, V((-12.5, -15.5, 1.0)), V((-18.0, -12.5, 0.2)), 24),
-    (26.4, V((-15.0, -10.5, 1.7)), V((-21.0, -3.6, 0.9)), 24),
-    (27.5, V((-27.0, -12.5, 2.0)), V((-21.5, -5.5, 0.7)), 24),
+    (26.4, V((-13.0, -14.0, 2.2)), V((-21.5, -5.0, 0.8)), 24),
+    (27.5, V((-28.0, -15.0, 2.4)), V((-22.0, -6.5, 0.6)), 24),
     (28.2, V((-10.0, -11.5, 1.6)), V((-2.0, -6.0, 1.2)), 24),
-    (29.2, V((0.4, -7.6, 1.9)), V((2.4, -4.4, 2.0)), 32),
-    (30.3, V((1.8, -6.2, 2.3)), V((2.4, -4.4, 2.15)), 35),
+    (29.2, V((0.6, -8.4, 2.4)), V((2.4, -4.3, 2.6)), 30),
+    (30.3, V((3.4, -7.1, 2.7)), V((2.4, -4.3, 2.75)), 38),
     (31.3, V((1.8, -5.6, 3.4)), V((0.6, -7.8, 0.9)), 26),
     (32.3, V((1.0, -10.0, 16.0)), V((0.4, -2.0, 0.0)), 28),
     (33.5, V((0.5, -3.5, 42.0)), V((0.2, -0.8, 0.0)), 28),

@@ -110,7 +110,7 @@ for n in nt.nodes:
 mw = bpy.data.materials["FloodWater"]; nt = mw.node_tree
 for n in nt.nodes:
     if n.type == "MIX" and n.data_type == "RGBA" and not n.inputs["A"].links:
-        n.inputs["A"].default_value = (0.2, 0.125, 0.06, 1); n.inputs["B"].default_value = (0.92, 0.88, 0.8, 1)
+        n.inputs["A"].default_value = (0.2, 0.125, 0.06, 1); n.inputs["B"].default_value = (0.6, 0.48, 0.33, 1)
     if n.type == "BUMP": n.inputs["Strength"].default_value = 0.08
 b = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"); b.inputs["Coat Weight"].default_value = 0.6; b.inputs["Coat Roughness"].default_value = 0.05
 fg = bpy.data.node_groups["FloodSurface"]
