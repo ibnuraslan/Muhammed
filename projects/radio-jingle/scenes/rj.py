@@ -147,6 +147,15 @@ def mat(key):
     return _MAT[key]
 
 
+def apply_rot(o):
+    """kit.join keeps the first part's rotation as the object's own: bake it into the mesh so local axes are world axes."""
+    for ob in bpy.context.selected_objects:
+        ob.select_set(False)
+    o.select_set(True); bpy.context.view_layer.objects.active = o
+    bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+    return o
+
+
 def driven(idblock, path, expr, index=-1):
     """Frame-driven property: plays in any render of the .blend (simple expression, no Python)."""
     fc = idblock.driver_add(path, index) if index >= 0 else idblock.driver_add(path)
@@ -479,7 +488,7 @@ def rotary_phone(name="Phone"):
     for sx in (-1, 1):
         cup = cyl("Cup", (sx * 0.095, 0, -0.012), 0.03, 0.045, pm, 24, rot=(0, 0, 0)); hp.append(cup)
         hp.append(box("Neck", (sx * 0.075, 0, -0.004), (0.04, 0.03, 0.03), pm, bevel=0.01))
-    hj = join(hp, name + "HandsetM"); hj.parent = hs; hj.location = (0, 0, 0)
+    hj = apply_rot(join(hp, name + "HandsetM")); hj.parent = hs; hj.location = (0, 0, 0)
     bpy.ops.object.shade_smooth()
     # coiled cord from the body side to the handset end (static coil, slack)
     cord_pts = []
@@ -560,7 +569,7 @@ def headphones(name="Headphones"):
     for sx in (-1, 1):
         parts.append(cyl("Cup", (sx * 0.098, 0, -0.105), 0.048, 0.04, pbr("HPCup", (0.16, 0.16, 0.17), 0.35, 0.3), 24, rot=(0, math.radians(90), 0)))
         parts.append(cyl("Pad", (sx * 0.07, 0, -0.105), 0.042, 0.012, pad, 24, rot=(0, math.radians(90), 0)))
-    return join(parts, name)
+    return apply_rot(join(parts, name))
 
 
 def head_top(h):
@@ -580,16 +589,21 @@ def head_top(h):
 def wear_headphones(h, hp):
     """Set the headphones on the head for the current pose (call every frame after posing): cups over the ears,
     band over the crown, following the head's tilt."""
-    hd = h.bone_head("head"); tl = h.bone_tail("head"); up = (tl - hd).normalized()
+    hd = h.bone_head("head"); tl = h.bone_tail("head"); bone_up = (tl - hd).normalized()
+    bpy.context.view_layer.update()
+    Mb = h.arm.matrix_world @ h.arm.pose.bones["head"].matrix
+    top = Mb @ h.hp_off if hasattr(h, "hp_off") else hd + bone_up * 0.2   # the crown, carried by the head bone
+    up = (bone_up + Vector((0, 0, 1))).normalized()                 # the band sits level on the crown
     right = forward(h).cross(Vector((0, 0, 1))).normalized()
     right = (right - up * right.dot(up)).normalized(); Y = up.cross(right)
-    top = hd + up * (h.head_len if hasattr(h, "head_len") else 0.2)
     M = Matrix((right, Y, up)).transposed().to_4x4(); M.translation = top
     hp.matrix_world = M
 
 
 def put_headphones(h, hp):
-    t = head_top(h); h.head_len = (t - h.bone_head("head")).length + 0.01
+    t = head_top(h) + Vector((0, 0, 0.012)); h.head_len = (t - h.bone_head("head")).length
+    bpy.context.view_layer.update()
+    h.hp_off = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix).inverted() @ t
     h.parts.append(hp)
     return hp
 

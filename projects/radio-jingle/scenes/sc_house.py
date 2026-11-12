@@ -224,7 +224,7 @@ def piano_room(c):
     rj.model_fit("CoffeeTable_01", (-3.9, -1.1, 0), rot_z=0.0, width=1.1)
     box("RugLiv", (-3.9, -1.0, 0.004), (2.8, 2.0, 0.008), mat("rug"))
     try:
-        rj.model_fit("wooden_bookshelf_worn", (-1.55, 1.6, 0), rot_z=math.pi / 2, height=1.9)
+        rj.model_fit("painted_wooden_cabinet", (-1.5, 1.7, 0), rot_z=-math.pi / 2, height=1.25)
     except Exception:
         pass
     try:
@@ -388,11 +388,12 @@ def need(c, role):
 
 # ============================================================================ actions
 def phone_to_ear(c, h, sec, side="L", talk=0.0):
+    sgn = 1.0 if side == "L" else -1.0
     """Standing at the phone: the handset along the left cheek (earpiece at the ear, mouthpiece at the mouth),
     held at the grip, elbow down and forward."""
     from mathutils import Matrix
     hs = c["handset"]
-    fwd = forward(h); left = -fwd.cross(Vector((0, 0, 1))).normalized()
+    fwd = forward(h); left = -fwd.cross(Vector((0, 0, 1))).normalized() * sgn     # "left" = the holding side
     head = h.bone_head("head"); tail = h.bone_tail("head"); up = (tail - head).normalized()
     E = head + up * 0.06 + left * 0.075 + fwd * 0.0             # ear
     Mo = head - up * 0.035 + fwd * 0.085 + left * 0.035         # mouth corner
@@ -402,7 +403,7 @@ def phone_to_ear(c, h, sec, side="L", talk=0.0):
     hs.matrix_world = M
     wrist_t = C + Z * 0.035 - X * 0.02 - up * 0.07
     reach(h, side, wrist_t, Vector((0, 0, -1.0)) + fwd * 0.55 + left * 0.35, X + Z * 0.3)
-    fingers_curl(h, 55, side=(side,), thumb=30)
+    fingers_curl(h, 82, side=(side,), thumb=45)            # a closed grip round the handset
     return E
 
 
@@ -418,15 +419,18 @@ def breathe(h, sec, amt=1.0):
     h.rot("neck01", side, amt * 0.8 * math.sin(sec * 1.6 + 0.6))
 
 
-def place_mother_phone(c, sec, yaw=0.0, talk=0.4, look=0.0):
+def place_mother_phone(c, sec, yaw=0.0, talk=0.4, look=0.0, hand="L"):
     m = need(c, "mother")
     stand(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12, 0.0), math.pi / 2 + yaw)       # faces the table (+X)
     breathe(m, sec)
     side = forward(m).cross(Vector((0, 0, 1))).normalized()
     m.rot("head", side, -8 - 2 * math.sin(sec * 0.5)); m.rot("head", (0, 0, 1), look)
-    phone_to_ear(c, m, sec)
-    # free hand rests on the table edge
-    reach(m, "R", Vector((PHONE_T.x - 0.24, PHONE_T.y - 0.33, 0.8)), Vector((0.2, -0.6, -1)), forward(m) + Vector((0, 0, -0.8)))
+    phone_to_ear(c, m, sec, side=hand)
+    # the free hand rests on the table edge
+    free = "R" if hand == "L" else "L"
+    reach(m, free, Vector((PHONE_T.x - 0.24, PHONE_T.y + (-0.33 if free == "R" else 0.05), 0.8)), Vector((0.2, -0.6 if free == "R" else 0.6, -1)),
+          forward(m) + Vector((0, 0, -0.8)))
+    fingers_curl(m, 20, side=(free,))
     return m
 
 
@@ -440,11 +444,12 @@ def place_officer(c, sec, press=0.0, write=0.0):
     o.rot("head", side, -14 - 3 * math.sin(sec * 0.4))
     rj.wear_headphones(o, c["hp"])
     # left hand on the headphone cup (press = pulls it tighter), right hand on his knee or on the notebook
-    hd = o.bone_head("head"); tl = o.bone_tail("head"); left = -side
-    cup = hd + (tl - hd) * 0.5 + left * 0.1
-    lt = cup + Vector((0, 0, -0.06)) + left * 0.03 - fwd * 0.01 + left * 0.02 * (1 - press)
+    left = -side
+    cup = c["hp"].matrix_world @ Vector((-0.12, 0, -0.105))         # outside of the left ear cup
+    lt = cup + left * 0.03 * (1 - press) + Vector((0, 0, -0.04))
     if press > 0.01:
-        reach(o, "L", lt, left * 0.5 + Vector((0, 0, -1)), Vector((0, 0, 1)) - left * 0.6)
+        reach(o, "L", lt, left * 0.5 + Vector((0, 0, -1)) - fwd * 0.3, Vector((0, 0, 1)) - left * 0.35)
+        fingers_curl(o, 25, side=("L",))
     knee = o.bone_tail("upperleg02.R") + Vector((0, 0, 0.1))
     reach(o, "R", knee.lerp(Vector((PHONE_T.x - 0.06, PHONE_T.y + 0.42, 0.8)), write), side * 0.4 + Vector((0, 0, -1)), fwd + Vector((0, 0, -0.8)))
     fingers_curl(o, 30)
@@ -473,7 +478,7 @@ def anim_co(c, t, shot, dur):
     sec = t * dur
     _reels(c, sec); _clock(c, sec)
     if shot in ("co_push", "co_profile", "co_officer", "co_meter", "co_tape", "co_top"):
-        place_mother_phone(c, sec, talk=0.6)
+        place_mother_phone(c, sec, talk=0.6, hand="R" if shot == "co_officer" else "L")
         place_officer(c, sec, press=ease(min(1, max(0, (sec - 0.6) / 1.5))) if shot == "co_officer" else 0.0)
 
 

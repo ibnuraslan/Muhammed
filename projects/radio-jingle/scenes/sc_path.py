@@ -847,7 +847,8 @@ def build(variant=None):                      # noqa: F811
         c["boat"] = vehicles.make("boat_police", loc=(-9, 21, -0.38), heading_deg=170)
     import look
     if light in ("lowsun", "mist", "grey"):
-        look.forest(mood="mist", azim={"lowsun": 285, "mist": 110, "grey": 200}[light], area=((-5, 0), (110, 70)), canopy=16.0)
+        look.forest(mood="mist", azim={"lowsun": 5, "mist": 110, "grey": 200}[light], area=((-5, 0), (110, 70)), canopy=16.0,
+                    exposure={"lowsun": 0.9, "mist": 1.2, "grey": 1.0}[light])
     elif light in ("dusk", "bluehour"):
         look.forest(mood="dusk", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
     else:
