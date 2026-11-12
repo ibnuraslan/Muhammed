@@ -4,14 +4,16 @@ blender -b in.blend --python 12_depenetrate.py -- out.blend"""
 import bpy, sys, os
 from mathutils import Vector as V
 from mathutils.bvhtree import BVHTree
-OUT = sys.argv[sys.argv.index("--") + 1]
+_a = sys.argv[sys.argv.index("--") + 1:]; OUT = _a[0]
 sc = bpy.context.scene
 ARM = ("hand", "finger", "metacarpal", "thumb", "palm")
 SKIP = ("lowerarm", "wrist", "upperarm", "clavicle", "shoulder", "deltoid", "breast", "pectoral", "scapula")
 SELF_T = ("head", "neck", "jaw", "spine", "pelvis", "upperleg", "lowerleg", "thigh", "calf", "foot", "toe", "root", "eye", "ear", "nose", "lip", "oris", "brow", "cheek", "temporal", "tongue", "levator", "risorius", "special", "orbicularis", "glute")
 # (character, frame range) from clip_scan 40c131b on v006c; both hands are tested, only penetrating ones move
-JOBS = [("Boy4", 232, 250), ("Boy2", 2128, 2146), ("DiverB", 2194, 2308), ("DiverA", 2326, 2350), ("DiverB", 2362, 2416), ("DiverB", 2548, 2566)]
+JOBS = [("Boy4", 232, 250), ("Boy2", 2128, 2146), ("DiverB", 2194, 2308), ("DiverB", 2320, 2340), ("DiverA", 2326, 2350), ("DiverB", 2362, 2416), ("DiverB", 2548, 2566)]
 CLEAR = 0.04
+if len(_a) > 1: JOBS = [(j.split(":")[0], int(j.split(":")[1]), int(j.split(":")[2])) for j in _a[1].split(",")]   # extra pass on given ranges
+ITERS = int(_a[2]) if len(_a) > 2 else 8
 CH = {}; RESTORE = []
 for r in bpy.data.objects:
     if r.type != 'ARMATURE' or "IK_hand.L" not in r.pose.bones: continue
@@ -51,7 +53,7 @@ for name, a, b in JOBS:
     r = CH[name][0]
     others = [o for o in CH if o != name]
     frames = list(range(a, b + 1, 3))
-    for it in range(8):
+    for it in range(ITERS):
         offs = {}
         for f in frames:
             sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
