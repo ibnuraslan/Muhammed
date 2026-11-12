@@ -1,0 +1,13 @@
+{
+ "bank/traffic": 1.01,
+ "bank/arrive_bank": 1.5,
+ "hospital/gurney": 0.73,
+ "hospital/dawn": 0.47,
+ "bank/release": 1.5,
+ "closedtown/checkpoint": 0.81,
+ "closedtown/institute": 0.61,
+ "forlab/ampoules": 0.35,
+ "bank/seasons": 1.5,
+ "apartment/wait": 0.57,
+ "apartment/arrest": 0.58
+}

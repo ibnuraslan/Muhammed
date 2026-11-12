@@ -1,0 +1,58 @@
+intro_01_bankoffice_handset          int   look 0.242  plain 0.193  
+intro_02_bankoffice_empty            int   look 0.318  plain 0.254  
+intro_05_bankoffice_search           int   look 0.450  plain 0.229  
+intro_06_bankoffice_find             int   look 0.439  plain 0.221  
+ch1_01_bank_traffic                  ext   look 0.361  plain 0.496   DARKER
+ch1_02_bank_arrive_bank              ext   look 0.249  plain 0.424   DARKER
+ch1_03_bankoffice_dial               int   look 0.342  plain 0.184  
+ch1_04_bankoffice_note               int   look 0.303  plain 0.243  
+ch1_05_bankoffice_brother_in         int   look 0.454  plain 0.288  
+ch1_06_bankoffice_brother_help       int   look 0.397  plain 0.248  
+ch1_07_hospital_gurney               int   look 0.443  plain 0.558   DARKER
+ch1_08_hospital_ward                 int   look 0.717  plain 0.573  
+ch1_10_hospital_dawn                 int   look 0.339  plain 0.393   DARKER
+ch1_11_hospital_path_read            int   look 0.572  plain 0.180  
+ch1_12_hospital_path_light           int   look 0.596  plain 0.132  
+ch1_13_forlab_compare                int   look 0.652  plain 0.536  
+ch1_14_forlab_recorder               int   look 0.655  plain 0.615  
+ch1_17_bankoffice_sealed             int   look 0.428  plain 0.205  
+ch1_18_bankoffice_bag                int   look 0.454  plain 0.255  
+ch1_19_bankoffice_ante_desk          int   look 0.693  plain 0.533  
+ch1_20_bankoffice_ante_trolley       int   look 0.689  plain 0.547  
+ch1_21_memorial_mourners             keep  look 0.394  plain 0.394  
+ch1_22_memorial_dignitaries          keep  look 0.541  plain 0.541  
+ch1_23_bankoffice_ledger             int   look 0.618  plain 0.546  
+ch1_24_bankoffice_door_push          int   look 0.250  plain 0.204  
+ch2_01_bankoffice_visitor_in         int   look 0.458  plain 0.278  
+ch2_02_bankoffice_across             int   look 0.372  plain 0.141  
+ch2_03_bankoffice_alone              int   look 0.400  plain 0.271  
+ch2_04_bankoffice_reads              int   look 0.426  plain 0.250  
+ch2_05_bank_detain                   keep  look 0.207  plain 0.207  
+ch2_06_bank_release                  keep  look 0.087  plain 0.087  LOW
+ch2_07_forlab_gc_print               int   look 0.622  plain 0.507  
+ch2_08_forlab_saratov                int   look 0.605  plain 0.382  
+ch2_09_closedtown_checkpoint         ext   look 0.374  plain 0.483   DARKER
+ch2_10_closedtown_institute          int   look 0.430  plain 0.521   DARKER
+ch2_13_forlab_ampoules               int   look 0.294  plain 0.328   DARKER
+ch2_14_forlab_slide_file             int   look 0.523  plain 0.386  
+ch2_15_bankoffice_steps_out          int   look 0.480  plain 0.271  
+ch2_16_bankoffice_glance             int   look 0.448  plain 0.253  
+ch2_17_bank_doorbell                 keep  look 0.214  plain 0.214  
+ch2_18_bank_seasons                  keep  look 0.099  plain 0.099  LOW
+ch2_19_apartment_wait                ext   look 0.497  plain 0.595   DARKER
+ch2_20_apartment_arrest              ext   look 0.475  plain 0.570   DARKER
+ch3_01_court_doors                   int   look 0.510  plain 0.214  
+ch3_02_court_prosecutor              int   look 0.331  plain 0.180  
+ch3_03_court_dock                    int   look 0.351  plain 0.314  
+ch3_04_court_defence                 int   look 0.305  plain 0.171  
+ch3_05_court_verdict                 int   look 0.310  plain 0.211  
+ch3_06_court_led_out                 int   look 0.330  plain 0.241  
+ch3_09_salisbury_street              ext   look 0.438  plain 0.351  
+ch3_10_salisbury_suits               ext   look 0.546  plain 0.204  
+ch3_11_salisbury_handle              ext   look 0.547  plain 0.163  
+ch3_12_salisbury_path                ext   look 0.530  plain 0.208  
+ch3_13_bankoffice_match              int   look 0.249  plain 0.195  
+ch3_14_bankoffice_dust               int   look 0.327  plain 0.327  
+ch3_15_forlab_photocopies            int   look 0.559  plain 0.429  
+ch3_16_forlab_specialists            int   look 0.515  plain 0.426  
+ch3_18_closedtown_blocks             keep  look 0.344  plain 0.343  
