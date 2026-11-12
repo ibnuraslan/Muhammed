@@ -366,8 +366,9 @@ def _tea_pose(c, sec):
         lift = sip if k_ == 0 else 0.35 * max(0.0, math.sin(2 * math.pi * (sec - 0.2) / 4.0))
         cup.location = base.lerp(hd + Vector((side * 0.11, 0, -0.07)), lift)
         # both hands around the cup, elbows in
-        reach(h, "R" if side > 0 else "L", cup.location + Vector((-side * 0.015, -0.045, 0.01)), Vector((0, 0, -1)), Vector((side, 0, 0)))
-        reach(h, "L" if side > 0 else "R", cup.location + Vector((-side * 0.015, 0.045, 0.01)), Vector((0, 0, -1)), Vector((side, 0, 0)))
+        # thumbs up, palms facing the cup from either side (fingers forward and a little down: no rolled wrist)
+        reach(h, "R" if side > 0 else "L", cup.location + Vector((-side * 0.015, -0.045, 0.01)), Vector((0, 0, -1)), Vector((side * 0.7, 0.3, -0.5)))
+        reach(h, "L" if side > 0 else "R", cup.location + Vector((-side * 0.015, 0.045, 0.01)), Vector((0, 0, -1)), Vector((side * 0.7, -0.3, -0.5)))
     H.look(hl, 0, 6); H.look(f, 0, 10)
 
 
@@ -859,7 +860,7 @@ def _():
         reset_pose(h)
         for sd, sg in (("L", 1), ("R", -1)):          # knees drawn up, curled on his side
             H.rotl(h, f"upperleg01.{sd}", (1, 0, 0), -70); H.rotl(h, f"lowerleg01.{sd}", (1, 0, 0), 95)
-            h.aim(f"upperarm01.{sd}", (0, -0.6, -0.8)); h.aim(f"lowerarm01.{sd}", (sg * -0.6, -0.8, 0.2))
+            h.aim(f"upperarm01.{sd}", (0, -0.6, -0.8)); h.aim(f"lowerarm01.{sd}", (sg * 0.25, -0.85, 0.15))   # hands by his own side, not crossed
         H.rotl(h, "spine03", (1, 0, 0), 20); H.rotl(h, "head", (1, 0, 0), 20)
         h.arm.rotation_euler = (0, math.radians(90), math.radians(-20)); h.arm.location = (HATCH[0] - 0.1, HATCH[1] + 1.6, EAVE + 0.25)
         bpy.context.view_layer.update()

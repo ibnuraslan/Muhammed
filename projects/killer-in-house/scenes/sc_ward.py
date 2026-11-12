@@ -65,6 +65,9 @@ def build(variant=None):
     w = H.np.concatenate([H._world_verts(o) for o in hl.parts if o.type == 'MESH'])
     hl.arm.location.z += 0.63 - w[:, 2].min(); bpy.context.view_layer.update()
     H.rotl(hl, "head", (1, 0, 0), -15)
+    for sd, sg in (("L", 1), ("R", -1)):            # arms down along her sides, under the blanket (no hand poking up)
+        hl.aim(f"upperarm01.{sd}", (sg * 0.12, 1.0, -0.08)); hl.aim(f"lowerarm01.{sd}", (sg * 0.05, 1.0, -0.05))
+    bpy.context.view_layer.update()
     c["helen"] = hl
     # under the blanket, propped on two pillows
     blanket.hide_render = True
