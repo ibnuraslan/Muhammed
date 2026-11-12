@@ -42,7 +42,7 @@ def build(variant=None):
     brick = ph.texture("red_brick_03", scale=1.0)
     stone = pbr("Portland", (0.7, 0.68, 0.62), 0.7)
     house_row(-1.2, 1, brick=brick, stone=stone)                       # our house: door at x = 0
-    house_row(-12.2, 2, brick=brick, stone=stone); house_row(4.3, 3, brick=brick, stone=stone)
+    house_row(-34.2, 6, brick=brick, stone=stone); house_row(4.3, 5, brick=brick, stone=stone)
     # the front door: painted, a brass lever handle, a fanlight and a step
     door_m = pbr("FrontDoor", (0.12, 0.18, 0.22), 0.35, 0.0, **{'Coat Weight': 0.6})
     box("DoorLeafF", (0.0, -0.04, 1.05), (0.95, 0.06, 2.1), door_m, bevel=0.01)
@@ -60,17 +60,22 @@ def build(variant=None):
     box("Number", (0, -0.075, 1.75), (0.12, 0.005, 0.12), brass)
     # front garden: low brick wall, gate gap, path, hedges and shrubs (scanned)
     box("Path", (0, -2.5, 0.01), (1.1, 4.6, 0.02), ph.texture("concrete_pavers", scale=0.8))
-    box("Garden", (0, -2.5, 0.0), (16, 4.6, 0.02), ph.texture("forest_floor" if False else "gravel_floor", scale=0.6))
-    for (x0, x1) in ((-8.0, -0.7), (0.7, 8.0)):
+    box("Garden", (-6, -2.5, 0.0), (60, 4.6, 0.02), ph.texture("gravel_floor", scale=0.6))
+    for (x0, x1) in ((-36.0, -0.7), (0.7, 30.0)):
         box("GardenWall", ((x0 + x1) / 2, -4.85, 0.45), (x1 - x0, 0.3, 0.9), brick)
+    # every house has its front garden: a privet hedge behind the wall, a path, shrubs
+    ph_instances("shrub_02", [((x + dx, -4.25, 0), float(rng.uniform(0, 6.28)), float(rng.uniform(0.9, 1.2))) for x in [-34.2 + 5.5 * k for k in range(6)] + [4.3 + 5.5 * k for k in range(5)] for dx in (-1.6, 1.4)])
+    for x in [-34.2 + 5.5 * k for k in range(6)] + [4.3 + 5.5 * k for k in range(5)]:
+        box("GPath", (x, -2.5, 0.012), (0.9, 4.6, 0.02), ph.texture("concrete_pavers", scale=0.8))
     ph_instances("shrub_02", [((-2.2, -3.2, 0), 0.4, 1.0), ((2.4, -3.0, 0), 2.0, 1.1), ((-4.5, -1.5, 0), 1.0, 0.9), ((4.2, -1.8, 0), 3.0, 1.0)])
     ph_instances("shrub_04", [((-1.5, -1.0, 0), 0.0, 0.8), ((1.6, -1.2, 0), 1.0, 0.8)])
     # pavement, road, the far side; a spire beyond the roofs
-    box("Pave", (0, -6.0, -0.01), (60, 2.0, 0.12), ph.texture("concrete_pavers", scale=0.8))
-    box("Road", (0, -10.0, -0.08), (60, 6.0, 0.1), ph.texture("asphalt_02", scale=0.25))
+    box("Pave", (0, -6.0, -0.01), (90, 2.0, 0.12), ph.texture("concrete_pavers", scale=0.8))
+    box("Road", (0, -10.0, -0.08), (90, 6.0, 0.1), ph.texture("asphalt_02", scale=0.25))
+    box("FarPave", (0, -14.0, -0.01), (90, 2.0, 0.12), ph.texture("concrete_pavers", scale=0.8))
     from pbkit import masonry_facade                                       # the houses across the road
-    box("OppositeRow", (0, -18.0, 3.3), (60, 8, 6.6), masonry_facade("OppBrick", (0.45, 0.24, 0.17), 3.2, 2.75, 1.1, 1.5, 0.0, frame_col=(0.85, 0.85, 0.82)))
-    box("OppRoofs", (0, -18.0, 7.3), (60, 8.4, 1.6), pbr("Slate2", (0.18, 0.19, 0.21), 0.6))
+    box("OppositeRow", (0, -19.0, 3.3), (90, 8, 6.6), masonry_facade("OppBrick", (0.45, 0.24, 0.17), 3.2, 2.75, 1.1, 1.5, 0.0, frame_col=(0.85, 0.85, 0.82)))
+    box("OppRoofs", (0, -19.0, 7.3), (90, 8.4, 1.6), pbr("Slate2", (0.18, 0.19, 0.21), 0.6))
     tower = pbr("CathedralStone", (0.62, 0.6, 0.55), 0.8)
     box("Tower", (-30.0, 80.0, 25.0), (8, 8, 50), tower)
     bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=4.5, radius2=0.1, depth=52, location=(-30.0, 80.0, 76.0))
@@ -88,18 +93,25 @@ def build(variant=None):
         wv = t.modifiers.new("flutter", 'WAVE'); wv.use_normal = True; wv.height = 0.03; wv.width = 0.6; wv.speed = 0.04
         for x in (x0, x1):
             cyl("TapePost", (x, y, 0.5), 0.02, 1.0, pbr("PostM", (0.3, 0.3, 0.3), 0.5), verts=8)
+    for x in (-12.0, 9.0):                                                  # and right across the road at both ends of the cordon
+        bpy.ops.mesh.primitive_grid_add(x_subdivisions=120, y_subdivisions=2, size=1, location=(x, -10.0, 1.0), rotation=(math.radians(90), 0, math.radians(90)))
+        t = bpy.context.active_object; t.name = "RoadTape"; t.scale = (9.0, 0.06, 1); t.data.materials.append(tm)
+        wv = t.modifiers.new("flutter", 'WAVE'); wv.use_normal = True; wv.height = 0.04; wv.width = 0.8; wv.speed = 0.04
+        for y in (-5.5, -14.5):
+            cyl("TapePost", (x, y, 0.5), 0.02, 1.0, pbr("PostM2", (0.3, 0.3, 0.3), 0.5), verts=8)
     for k, x in enumerate((-6.0, 6.0)):
         ph.model("street_lamp_01", loc=(x, -6.6, 0))
     # investigators in protective suits
     from pbpeople import tyvek
-    c["suits"] = [tyvek("UKSuit0", 1.0, 41), tyvek("UKSuit1", 0.0, 35)]
+    c["suits"] = [tyvek("UKSuit0", 1.0, 41, mask="visor"), tyvek("UKSuit1", 0.0, 35, mask="visor")]
     # dressing: parked cars along the kerb, a white forensic tent by the next gate, police in hi-vis at the cordon
     from pbkit import kit_vehicle
-    for k, (x, col) in enumerate(((-9.0, (0.35, 0.36, 0.38)), (5.5, (0.15, 0.2, 0.32)), (12.0, (0.55, 0.1, 0.08)))):
-        car = kit_vehicle("sedan_modern", f"Parked{k}", col); car.location = (x, -7.6, 0); car.rotation_euler = (0, 0, math.radians(180 if k % 2 else 0))
+    for k, (x, y, col) in enumerate(((-9.0, -7.6, (0.35, 0.36, 0.38)), (5.5, -7.6, (0.15, 0.2, 0.32)), (12.0, -7.6, (0.55, 0.1, 0.08)),
+                                     (-17.0, -7.6, (0.7, 0.7, 0.68)), (-24.0, -7.6, (0.1, 0.12, 0.14)), (-6.0, -12.4, (0.42, 0.45, 0.4)), (-20.0, -12.4, (0.25, 0.08, 0.06)))):
+        car = kit_vehicle("sedan_modern", f"Parked{k}", col); car.location = (x, y, 0); car.rotation_euler = (0, 0, math.radians(180 if k % 2 else 0))
     tent_m = pbr("TentWhite", (0.88, 0.89, 0.9), 0.75, 0.0, **{'Sheen Weight': 0.3, 'Subsurface Weight': 0.1})
-    box("TentWalls", (-4.2, -2.6, 1.0), (2.6, 2.6, 2.0), tent_m)
-    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=1.9, radius2=0.05, depth=0.8, location=(-4.2, -2.6, 2.4), rotation=(0, 0, math.radians(45)))
+    box("TentWalls", (-9.7, -2.6, 1.0), (2.6, 2.6, 2.0), tent_m)
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=1.9, radius2=0.05, depth=0.8, location=(-9.7, -2.6, 2.4), rotation=(0, 0, math.radians(45)))
     tr = bpy.context.active_object; tr.name = "TentRoof"; tr.data.materials.append(tent_m)
     c["police"] = []
     for k, (x, rz) in enumerate(((-2.2, 0.0), (3.4, 0.4))):
@@ -126,12 +138,17 @@ def animate(c, sec, move):
             for o in bpy.data.objects:
                 if o.parent == h.arm:
                     o.hide_render = False
-        stand(s0, (0.45, -0.75, 0.16), math.radians(180 - 10))           # at the door, facing it (+Y)
-        nod(s0, "spine04", 16); nod(s0, "head", 16)
-        hand_to(s0, "R", c["handle"] + Vector((0.0, -0.12, -0.02)), curl=30)
-        stand(s1, (-0.55, -1.6, 0.0), math.radians(180 + 20))
-        hand_to(s1, "L", s1.bone_head("spine03") + Vector((0.15, -0.3, -0.1)), curl=40)
-        look(s1, c["handle"], 0.8)
+        if move == "suits":
+            stand(s0, (0.45, -0.75, 0.16), math.radians(180 - 35))                   # at the door, half turned to his colleague
+            nod(s0, "head", 10); look(s0, s1.bone_head("head") if s1.arm.location.length else Vector((-0.6, -1.7, 1.6)), 0.5)
+            hand_to(s0, "R", c["handle"] + Vector((0.0, -0.12, -0.02)), curl=30)
+            stand(s1, (-0.6, -1.75, 0.0), math.radians(25))                         # on the path, facing down it toward the street
+            look(s1, s0.bone_head("head"), 0.7); nod(s1, "head", 6)
+            hand_to(s1, "L", s1.bone_head("spine03") + Vector((0.12, -0.25, -0.15)), curl=40)
+            hand_to(s1, "R", s1.bone_head("spine03") + Vector((-0.1, -0.22, -0.12)), curl=40)
+        else:                                                                       # 6B: they come back down the path toward us
+            stand(s0, (0.35, -1.0 - 0.35 * sec, 0.0), 0.0); nod(s0, "head", 12)
+            stand(s1, (-0.5, -1.7 - 0.3 * sec, 0.0), math.radians(10)); look(s1, s0.bone_head("head"), 0.4)
     bpy.context.view_layer.update()
 
 
@@ -145,13 +162,13 @@ def _anim(move):
 
 H = Vector((0.36, -0.1, 1.0))
 MOVES = {
-    "street": dict(kind="anim", dof=8.0, far=200.0, anim=_anim("street"), cam=_push((4.0, -13.5, 1.8), (2.5, -13.0, 1.85), (-10.0, 10.0, 7.0), (-9.0, 10.0, 7.5), 26),
-                   focus=lambda c, t: Vector((0, -4.9, 1.0))),
-    "suits": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("suits"), cam=_push((2.6, -5.6, 1.6), (2.2, -5.0, 1.6), (0.0, -0.5, 1.3), (0.0, -0.4, 1.3), 32),
+    "street": dict(kind="anim", dof=8.0, far=200.0, anim=_anim("street"), cam=_push((8.5, -13.6, 1.65), (7.5, -13.4, 1.65), (-8.0, -5.0, 1.8), (-9.0, -4.6, 1.8), 30),
+                   focus=lambda c, t: Vector((-4.0, -6.0, 1.2))),
+    "suits": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("suits"), cam=_push((2.4, -4.6, 1.6), (2.1, -4.2, 1.6), (-0.1, -1.0, 1.4), (-0.1, -0.9, 1.4), 30),
                   focus=lambda c, t: Vector((0.2, -0.8, 1.3))),
     "handle": dict(kind="anim", dof=1.4, far=6.0, anim=_anim("handle"), cam=_push((H.x - 0.6, H.y - 1.3, H.z + 0.25), (H.x - 0.22, H.y - 0.5, H.z + 0.08), tuple(H), tuple(H), 50),
                    focus=lambda c, t: H),
-    "path": dict(kind="anim", dof=5.6, far=40.0, anim=_anim("path"), cam=_push((0.2, -1.6, 1.6), (0.3, -7.2, 1.7), (0.0, 0.0, 1.2), (0.0, -1.0, 1.2), 30),
+    "path": dict(kind="anim", dof=5.6, far=40.0, anim=_anim("path"), cam=_push((0.3, -4.2, 1.6), (0.4, -8.2, 1.7), (0.0, -0.8, 1.35), (0.0, -1.6, 1.3), 30),
                  focus=lambda c, t: Vector((0.0, -1.0, 1.2))),
 }
 

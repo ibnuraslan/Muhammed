@@ -182,7 +182,7 @@ def parent_keep(obj, h, bone):
     bpy.context.view_layer.update(); obj.matrix_world = mw
 
 
-def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.35, 0.85)):
+def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.35, 0.85), mask="gp5"):
     """Forensic protective kit: a pale Tyvek hood, a full-face rubber gas mask (two eyepieces, one front filter canister), blue nitrile gloves (the hand faces of the body mesh are re-materialled), blue overshoes.
     Call right after building the person, while it stands in the rest orientation at the origin."""
     from kit import box, cyl, pbr, glass
@@ -204,7 +204,9 @@ def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.3
     col = bpy.context.active_object; col.name = h.name + "Collar"; col.data.materials.append(hood_m)
     parent_keep(col, h, "neck01")
     rub = pbr(h.name + "Resp", (0.05, 0.05, 0.055), 0.55)
-    if full_face:
+    if full_face and mask == "visor":
+        _visor_mask(h, c)
+    elif full_face:
         # 1990s full-face gas mask (GP-5 style): a grey rubber face piece, two round eyepieces, one front filter canister
         rub = pbr(h.name + "MaskRubber", (0.16, 0.17, 0.16), 0.6, 0.0, **{'Sheen Weight': 0.2})
         o_ = Vector((c.x, c.y - 0.055, c.z - 0.008))
@@ -235,16 +237,64 @@ def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.3
     for poly in body.data.polygons:
         if all(v in region for v in poly.vertices):
             poly.material_index = gi
-    # blue overshoes over the shoes
+    # blue overshoes over the shoes; grey tape sealing the cuffs at the wrists and ankles
     recolor(h, "shoes02", gloves, 0.6)
+    tape = pbr(h.name + "Tape", (0.55, 0.56, 0.58), 0.45, 0.3)
+    for side in ("L", "R"):
+        for (b0, b1, r_, bone) in ((f"lowerarm02.{side}", f"wrist.{side}", 0.042, f"lowerarm02.{side}"), (f"lowerleg02.{side}", f"foot.{side}", 0.06, f"lowerleg02.{side}")):
+            if b0 not in h.arm.data.bones or b1 not in h.arm.data.bones:
+                continue
+            p0 = h.bone_head(b0); p1 = h.bone_head(b1); d = (p1 - p0).normalized()
+            q = d.to_track_quat('Z', 'Y')
+            ring = cyl(h.name + "TapeRing", tuple(p1 - d * 0.04), r_, 0.05, tape, verts=20)
+            ring.rotation_mode = 'QUATERNION'; ring.rotation_quaternion = q
+            parent_keep(ring, h, bone)
     return hood
 
 
-def tyvek(name, gender=1.0, years=38, police_bg=False):
+def _visor_mask(h, c):
+    """A modern full-face respirator: a clear visor over the whole face (the face shows through), a black rubber
+    seal around it, an inner nose cup and one filter on the chin."""
+    import bmesh
+    from kit import cyl, pbr, glass
+    from pbkit import joinm
+    rub = pbr(h.name + "SealRubber", (0.04, 0.04, 0.045), 0.55)
+    o_ = Vector((c.x, c.y - 0.045, c.z - 0.012))
+
+    def cap(name, keep, scale, mat, thick):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=40, ring_count=20, radius=1.0, location=tuple(o_))
+        o = bpy.context.active_object; o.name = name
+        kill = [v.index for v in o.data.vertices if not keep(v.co)]
+        bm = bmesh.new(); bm.from_mesh(o.data); bm.verts.ensure_lookup_table()
+        bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(o.data); bm.free()
+        o.scale = scale
+        if thick:
+            so = o.modifiers.new("t", 'SOLIDIFY'); so.thickness = thick
+        bpy.ops.object.shade_smooth(); o.data.materials.append(mat)
+        parent_keep(o, h, "head")
+        return o
+    vm = bpy.data.materials.get("ClearVisor")
+    if vm is None:                                                                # thin clear plastic: no refraction, a faint reflection
+        vm = bpy.data.materials.new("ClearVisor"); vm.use_nodes = True
+        N = vm.node_tree.nodes; L = vm.node_tree.links; N.clear()
+        tr = N.new("ShaderNodeBsdfTransparent"); gl = N.new("ShaderNodeBsdfGlossy"); gl.inputs['Roughness'].default_value = 0.03
+        fr = N.new("ShaderNodeFresnel"); fr.inputs['IOR'].default_value = 1.5
+        mx = N.new("ShaderNodeMixShader"); L.new(fr.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(gl.outputs[0], mx.inputs[2])
+        out = N.new("ShaderNodeOutputMaterial"); L.new(mx.outputs[0], out.inputs['Surface'])
+    vz = cap(h.name + "Visor", lambda v: v.y < -0.55, (0.088, 0.09, 0.118), vm, 0.0)
+    vz.visible_shadow = False                                                     # clear plastic: the face behind it stays lit
+    cap(h.name + "Seal", lambda v: -0.62 < v.y < -0.4, (0.094, 0.092, 0.124), rub, 0.08)
+    fy = o_.y - 0.09 * math.sqrt(1 - (0.075 / 0.118) ** 2)
+    f = joinm([cyl("NoseCup", (c.x, fy + 0.03, c.z - 0.06), 0.03, 0.03, rub, verts=20, rot=(math.radians(80), 0, 0)),
+               cyl("ChinFilter", (c.x, fy - 0.02, c.z - 0.095), 0.035, 0.035, pbr(h.name + "FilterM", (0.12, 0.12, 0.13), 0.5), verts=24, rot=(math.radians(70), 0, 0))], h.name + "MaskFront")
+    parent_keep(f, h, "head")
+
+
+def tyvek(name, gender=1.0, years=38, police_bg=False, mask="gp5"):
     """A forensic investigator in a full Tyvek suit (pale, matte), hood up, full-face respirator, gloves, overshoes."""
     cloth = "male_casualsuit01"                                                    # the full coverall on everyone: no bare arms or legs
     h = person(name, gender, years, cloth, None, col=(0.9, 0.91, 0.93))
-    protective_gear(h)
+    protective_gear(h, mask=mask)
     return h
 
 
