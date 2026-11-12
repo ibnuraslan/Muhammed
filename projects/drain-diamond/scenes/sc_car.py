@@ -46,7 +46,7 @@ def interior(c, day=False):
     box("RearGlass", (-1.25, 0, 1.1), (0.02, 1.35, 0.45), rain_glass("CarRainR", 90, 0.6), rot=(0, math.radians(50), 0))
     # outside: a wet street of blocks with lit windows and warm street lamps (soft bokeh)
     for k, (a, b) in enumerate(((-40, -10), (-10, 20), (20, 50))):
-        haussmann(a, b, seed=70 + k, rot_z=math.radians(-90) if not day else math.radians(-90), origin=(0, 9.0, 0), lit_frac=0.35 if not day else 0.05)
+        haussmann(a, b, seed=70 + k, rot_z=0.0, origin=(0, 9.0, 0), lit_frac=0.35 if not day else 0.05)   # a block face along the kerb, 9 m away
     road = dd.wet(dd.tex_mat("asphalt_02", 0.4, tint=(0.5, 0.5, 0.52), name="NightRoad", sat=0.4), 0.9, 0.3)
     box("Road", (0, 0, -0.06), (80, 30, 0.1), road)
     if day:
