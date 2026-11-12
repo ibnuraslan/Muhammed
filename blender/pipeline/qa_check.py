@@ -16,6 +16,7 @@ Per sampled frame it reports:
              3 cm of a prop surface
   CAMJUMP    (every frame) a camera switch, or the camera teleports >0.25 m in one frame (or turns >60 deg): a hard cut.
              The film is ONE continuous camera; only a fully covered wipe may hide a jump.
+  ROLL       the horizon is tilted more than ~20 deg (upside-down / sideways frame from an aim constraint).
 A clean film reports 0 for every category except intended, listed exceptions.
 Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
 a deliberate point / trigger finger / writing grip is not a CLAW.
@@ -214,6 +215,14 @@ for k in range(1, len(P)):
     d, ang = D[k]
     if (d > 0.25 and d > 3 * vd + 0.02) or (ang > 60 and ang > 3 * va + 1):
         flag(f, "CAMJUMP", "cut: %.2f m, %.0f deg in one frame (neighbours %.2f m, %.0f deg)" % (d, ang, vd, va))
+
+# ROLL: the horizon must stay level (no upside-down / sideways frames from Damped Track or aim flips). The camera's
+# world X axis must stay near horizontal: |x.z| > 0.34 (about 20 deg of roll) is flagged; a deliberate dutch angle
+# must be listed. Skipped while the camera looks almost straight up/down (the horizon is not in frame then).
+for (f, c, m) in P[::max(1, STEP // 2)]:
+    x = m.col[0].xyz.normalized(); fwd = (-m.col[2].xyz).normalized()
+    if abs(fwd.z) < 0.85 and abs(x.z) > 0.34:
+        flag(f, "ROLL", "horizon tilted %.0f deg" % math.degrees(math.asin(min(1.0, abs(x.z)))))
 
 json.dump(res, open(OUT, "w"), indent=1)
 print("QA_COUNTS", res["counts"])

@@ -91,6 +91,7 @@ It flags:
 - **HOVER:** a hand within 12 cm of a prop with no fingertip touching it.
 - **CLAW:** fingers curled in the air touching nothing, or bent with a straight base joint.
 - **FACEPRESS:** a hand on the face.
+- **ROLL** (added 18:25 UTC): the horizon is tilted more than about 20°. This usually comes from a Damped Track aim. Use Track To with world up, or list a deliberate dutch angle.
 - **CAMJUMP** (added 17:25 UTC): a hard cut, meaning a camera switch, or a teleport over 0.25 m in one frame (well above the neighbouring frames' speed), or a turn over 60° in one frame. A whip pan of up to 60° per frame is fine. The film is **one continuous camera**. Join framings with real eased moves (about 40 frames) through free space. Only a fully covered wipe (black or cloud frame) may hide a jump, and you list it.
 
 Fix every flag. A flag may stay only if it is intended: a wide establishing shot, a fist that is meant, or contact you meant. List each one that stays, with its reason, in ACTING_notes.md. Attach the JSON with your submission. Submissions without it come straight back.
