@@ -320,3 +320,33 @@ def smoke(loc, name="Smoke", density=0.4, size=(0.25, 0.25, 0.8)):
     L.new(m2.outputs[0], v.inputs['Density']); L.new(v.outputs[0], out.inputs['Volume'])
     o.data.materials.append(m); o.visible_shadow = False
     return o
+
+
+# ============================================================================ pose capture / blend (sit -> stand etc.)
+def capture(h):
+    bpy.context.view_layer.update()
+    return dict(loc=h.arm.location.copy(), rot=h.arm.rotation_euler.copy(),
+                bones={pb.name: pb.rotation_quaternion.copy() for pb in h.arm.pose.bones},
+                blocs={pb.name: pb.location.copy() for pb in h.arm.pose.bones})
+
+
+def apply_pose(h, P):
+    h.arm.location = P["loc"]; h.arm.rotation_euler = P["rot"]
+    for pb in h.arm.pose.bones:
+        pb.rotation_quaternion = P["bones"][pb.name]; pb.location = P["blocs"][pb.name]
+    bpy.context.view_layer.update()
+
+
+def blend_pose(h, A, Bp, u):
+    u = min(max(u, 0.0), 1.0)
+    h.arm.location = A["loc"].lerp(Bp["loc"], u)
+    for pb in h.arm.pose.bones:
+        pb.rotation_quaternion = A["bones"][pb.name].slerp(Bp["bones"][pb.name], u)
+        pb.location = A["blocs"][pb.name].lerp(Bp["blocs"][pb.name], u)
+    bpy.context.view_layer.update()
+
+
+def shrug(h, amt):
+    """Shoulders up (amt 0..1)."""
+    for sd, sg in (("L", 1), ("R", -1)):
+        h.rot(f"clavicle.{sd}", (0, 1, 0), -sg * 14 * amt)
