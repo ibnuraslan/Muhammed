@@ -54,3 +54,47 @@ Re-check:
 - `after_v004_0.5s_sheet.jpg` and `v004_hand_closeups.jpg` were re-rendered.
 - `clip_scan.py`: 0 bad ranges, both as saved and at frame 1250 with all 5 characters.
 - Own audit: float 0, hand–hand 0, hand-in-clothes 0, penetration 7, hover/sink 0, camera-in-geometry 0.
+
+## Round 3: director hand library + QA (v004 rev 3)
+Every hand contact now uses `blender/pipeline/hand_poses.py`:
+- `add_hand_limits` on all 5 rigs, replacing my own limits.
+- `apply_pose` presets replace every hand-set finger angle:
+  - `wrap_grip`: the coil and the magnifier handle
+  - `cup_hold`: the steward's camera hands and the deckhand's rope end
+  - `pinch`: the tongs and the print corners
+  - `flat_palm`: Expert A on the desk
+- `place_hand`: the steward's left palm on the camera's side.
+- `grip_object`: the tech's left hand on the tray rim.
+
+On the camera body, the magnifier, the tongs and the print corners, `grip_object` either landed short or crossed the arms under the library's wrist limits. There, the hand keeps its acting-pass IK placement plus the preset, and **the held prop follows the hand's real, limit-clamped palm**: the camera rests on the steward's right palm, the magnifier handle sits in Expert A's palm, and the tongs sit in the tech's thumb–index pinch. That way contact holds on every frame.
+
+Beat framings fixed for BACKHEAD:
+- 120: the steward is now seen in three-quarter profile over his camera.
+- 1092: the camera is over the bench facing the tech.
+- 1200: the camera is behind the desk facing Expert A.
+
+### qa_check.py (`review/qa_v004.json`): HOVER 0, CLAW 0, FACEPRESS 0, BACKHEAD 0
+These flags stay, all intended:
+| Flag | Frames | Why it stays |
+|---|---|---|
+| EMPTY "no character in view" | 126–150, 174–726, 882–1074, 1332–1830 | Character-free story beats by design: the iceberg and the ghost liner (beat 2), the paint-scrape glide (3), the debris aerial (4), the night ghost scrape (5), the explainer cyc (8) and the lone berg in the fog (9). Each frame shows the berg, liner, ship, debris or photo; none is a bare wall. |
+| EMPTY | 1170 | A 2-frame pan from the tech to the darkroom door, with the door and the office visible through it. |
+| INSIDE | 306–336, 390–438, 1764 | The camera is inside the volumetric mist box (an invisible volume container, not a surface). |
+| INSIDE | 1422–1428 | The camera is inside the explainer cyc dome (its gradient backdrop). |
+| INSIDE | 1554–1572 | The camera is passing through the berg's interior (the berg is `hide_render`) after flying through the giant photo, then out to the floes. |
+| FILL | 234 (Mist_Bank), 1074 (Darkroom_WallFront), 1338 (Office_WallBack) | The mist volume at 234. At 1074 and 1338, single sampled frames of the two fly-throughs: the surface is crossed and hidden within the next 1–2 frames. |
+
+`clip_scan.py` reports 0 bad ranges, both as saved and at frame 1250 (all 5 characters).
+
+### Mandatory 6-point self-check (looked at `after_v004_0.5s_sheet.jpg` and `v004_hand_closeups.jpg` myself)
+1. Hands touch what they hold: **checked**
+   - deckhand: wraps the coil
+   - tech: pinches the tongs, left hand on the tray rim
+   - Expert A: palm flat on the desk, hand round the magnifier handle
+   - Expert B: pinches both top corners of the print, arms uncrossed
+   - steward: the camera rests on his right palm and his left palm is on its side and top
+2. No claws: **checked**. There are no curled fingers in the air, and QA reports CLAW 0.
+3. Nothing pressed into a face: **checked**. QA reports FACEPRESS 0, and the steward's camera stays at chest height, clear of his face.
+4. No empty, blurred or black cells, and no back of the head on beats: **checked**. Empty cells only appear on the character-free story beats listed above, each showing the berg, ship or photo. QA reports BACKHEAD 0.
+5. The close-ups show hands: **checked**. All 10 close-ups are aimed at the hand and lit.
+6. `hand_poses.py` is used: **checked**. Presets and limits are used on all rigs, with no hand-set finger angles left. See above for where the props follow the hands instead of `grip_object`.

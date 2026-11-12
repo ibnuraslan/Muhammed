@@ -13,6 +13,11 @@
   - The tech's face reads in the darkroom (camera over the bench, face fill, earlier reaction).
   - Grips: the steward holds the front standard, the tech's hand is flat on the bench, and Expert A's hand is flat on the desk.
   - The tech's shirt print is removed.
+- Rev 3:
+  - Every hand now uses the director's `pipeline/hand_poses.py` (limits plus presets).
+  - Held props (camera, magnifier, tongs) follow the real, limit-clamped palm.
+  - The beat framings have no back-of-head shots.
+  - `qa_check.py` reports HOVER, CLAW, FACEPRESS and BACKHEAD all 0. The intended EMPTY, INSIDE and FILL exceptions are listed in `review/ACTING_notes.md`.
 - Checks: `clip_scan.py` reports 0 bad ranges in both runs, as saved (2 characters) and at frame 1250 (all 5 characters). Own audit: float 0, hand–hand 0, hand-in-clothes 0, penetration 7, hover/sink 0, camera-in-geometry 0. Hand close-ups are in `review/v004_hand_closeups.jpg`.
 
 **v003 changes from v002** (director notes, 00:53 UTC):

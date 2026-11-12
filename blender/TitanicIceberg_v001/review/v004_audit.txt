@@ -1,9 +1,53 @@
-HAND_PEN Steward R bcamera 90 11
+HAND_PEN Steward R bcamera 42 11
+HAND_PEN Steward L bcamera 54 28
+HAND_PEN Steward R bcamera 66 11
+HAND_PEN Steward R bcamera 72 11
+HAND_PEN Steward R bcamera 78 12
+HAND_PEN Steward R bcamera 84 12
+HAND_PEN Steward L bcamera 90 41
+HAND_PEN Steward R bcamera 90 12
 HAND_PEN Steward R bcamera 96 12
-HAND_PEN Steward R bcamera 108 11
+HAND_PEN Steward R bcamera 102 12
+HAND_PEN Steward R bcamera 108 12
+HAND_PEN Steward R bcamera 114 12
+HAND_PEN Steward R bcamera 120 11
+HAND_PEN Steward R bcamera 126 11
+HAND_PEN Steward R bcamera 132 12
 HAND_PEN Steward R bcamera 138 12
-HAND_PEN Steward R bcamera 150 12
-HAND_PEN ExpertA R magnifier 1218 12
-HAND_PEN ExpertA R magnifier 1242 12
+HAND_PEN Steward R bcamera 144 11
+HAND_PEN Steward R bcamera 150 11
+HAND_FLOAT Steward L bcamera 162 0.041
+HAND_PEN Steward R bcamera 186 12
+HAND_PEN ExpertA R magnifier 1200 72
+HAND_PEN ExpertA R magnifier 1206 71
+HAND_PEN ExpertA R magnifier 1212 71
+HAND_PEN ExpertA R magnifier 1218 70
+HAND_PEN ExpertA R magnifier 1224 70
+HAND_PEN ExpertA R magnifier 1230 74
+HAND_PEN ExpertA R magnifier 1236 76
+HAND_PEN ExpertA R magnifier 1242 90
+HAND_PEN ExpertA R magnifier 1248 87
+HAND_PEN ExpertA R magnifier 1254 94
+HAND_PEN ExpertA R magnifier 1260 95
+HAND_PEN ExpertA R magnifier 1266 94
+HAND_PEN ExpertA R magnifier 1272 91
+HAND_PEN ExpertA R magnifier 1278 88
+HAND_PEN ExpertA R magnifier 1284 88
+HAND_PEN ExpertA R magnifier 1290 94
+HAND_PEN ExpertA R magnifier 1296 94
+HAND_PEN ExpertA R magnifier 1302 94
+HAND_PEN ExpertA R magnifier 1308 94
+HAND_PEN ExpertA R magnifier 1314 95
+HAND_PEN ExpertA R magnifier 1320 87
+HAND_PEN ExpertA R magnifier 1326 90
+HAND_PEN ExpertB R Print_Office 1200 12
+HAND_PEN ExpertB R Print_Office 1206 11
+HAND_PEN ExpertB R Print_Office 1212 12
+HAND_PEN ExpertB R Print_Office 1218 12
+HAND_PEN ExpertB R Print_Office 1224 12
+HAND_PEN ExpertB R Print_Office 1230 11
+HAND_IN_CLOTHES Steward R 158 4
+HAND_IN_CLOTHES Steward R 164 5
+HAND_HAND Steward 236 0.0007
 HAT_POKE_THROUGH_VERTS 4
-TOTALS {'hover': 0, 'sink': 0, 'float': 0, 'pen': 7, 'cam': 0, 'hand_hand': 0, 'hand_body': 0}
+TOTALS {'hover': 0, 'sink': 0, 'float': 1, 'pen': 47, 'cam': 0, 'hand_hand': 1, 'hand_body': 2}

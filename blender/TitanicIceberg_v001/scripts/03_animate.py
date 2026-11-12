@@ -293,7 +293,7 @@ for f in range(1180, 1345, 10):
     pc = PRC + Vector((0.01 * sway, 0, 0.01 * math.sin(t * 3)))
     PR.location = pc; PR.keyframe_insert("location", frame=f)
     eb.hand("L", f, pc + Vector((0.16, 0.045, 0.06)), (-0.25, 0, 1), (0, -1, 0), pole=pc + Vector((0.55, 0.2, -0.6)), curl=50, thumb=35)
-    eb.hand("R", f, pc + Vector((-0.16, 0.045, 0.06)), (0.25, 0, 1), (0, -1, 0), pole=pc + Vector((-0.55, 0.2, -0.6)), curl=50, thumb=35)
+    eb.hand("R", f, pc + Vector((-0.165, 0.052, 0.06)), (0.25, 0, 1), (0, -1, 0), pole=pc + Vector((-0.55, 0.2, -0.6)), curl=50, thumb=35)
 AP = Vector((7.72, Y0 + 3.9))
 afeet = {"L": (Vector((AP.x - 0.14, AP.y + 0.02)), 172), "R": (Vector((AP.x + 0.15, AP.y - 0.06)), 190)}
 mag = O["magnifier"]
@@ -308,7 +308,7 @@ for f in range(1180, 1345, 10):
     mag.location = mc - Vector((0, 0, 0.235)); mag.rotation_euler = (R_(-6), 0, R_(4)); mag.keyframe_insert("location", frame=f); mag.keyframe_insert("rotation_euler", frame=f)
     hd = mc + Vector((0, 0, -0.16))     # handle grip below the lens
     ea.hand("R", f, hd + Vector((0.068, -0.025, -0.05)), (-0.1, 0.1, 1), (-1, 0, 0), pole=hd + Vector((0.4, -0.5, -0.5)), curl=58, thumb=35)
-    ea.hand("L", f, Vector((7.55, Y0 + 4.3, DESK_TOP + 0.022)), (0.2, 1, 0), (0, 0, -1), pole=Vector((7.2, Y0 + 3.7, 1.6)), curl=8, thumb=12)
+    ea.hand("L", f, Vector((7.5, Y0 + 4.52, DESK_TOP + 0.03)), (0.15, 1, -0.1), (0, 0, -1), pole=Vector((7.1, Y0 + 3.9, 1.9)), curl=8, thumb=12)
 for R, ks in ((ea.R, ((1180, dict(brow=0.3, lids=-0.5, frown=0.3)), (1260, dict(brow=0.8, lids=0.5, jaw=3)), (1300, dict(brow=1.4, lids=1.2, jaw=12)))),
               (eb.R, ((1180, dict(brow=0.5, lids=0.2)), (1270, dict(brow=1.2, lids=1.0, jaw=8)), (1320, dict(brow=1.4, lids=1.0, jaw=12, smile=0.3))))):
     for f, kw in ks: face(R, f, **kw)
@@ -362,7 +362,7 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (0,    STW(0, (-1.3, 0.55, 0.45)),   STW(0, (0.0, 0.0, 1.35)),  22, 4.0),
     (60,   STW(60, (-0.85, 0.45, 1.55)),   STW(60, (0.0, 0.05, 1.6)), 28, 2.8),
     (90,   STW(90, (-0.8, -0.15, 1.7)), STW(90, (0.0, 0.35, 1.55)), 28, 2.8),
-    (118,  STW(118, (-0.42, -0.5, 1.72)), STW(118, (0.0, 0.5, 1.5)), 28, 2.8),
+    (118,  STW(118, (-0.75, 0.55, 1.72)), STW(118, (0.0, 0.15, 1.45)), 28, 5.6),
     (180,  STW(180, (0.1, 0.9, 2.0)),    Vector((0, Y0, 14)),       30, 8.0),
     (240,  Vector((-12, -78, 6)),        Vector((-4, -30, 11)),     45, 8.0),
     (300,  Vector((-14, -58, 5)),        Vector((-4, -30, 7)),      26, 8.0),
@@ -381,12 +381,12 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (1015, Vector((-10, Y0 - 4.2, 2.4)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
     (1055, Vector((-3.0, Y0 - 7.0, 3.4)), Vector((2, Y0, 2.6)),     24, 5.6),
     (1072, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 2.5)), 30, 5.6),
-    (1100, Vector((2.3, Y0 + 3.6, 2.7)), Vector((1.3, Y0 + 5.2, 1.9)), 26, 5.6),
+    (1092, Vector((2.05, Y0 + 5.7, 2.5)), Vector((1.2, Y0 + 4.85, 2.25)), 26, 5.6),
     (1130, Vector((1.8, Y0 + 5.8, 2.35)), Vector((1.2, Y0 + 4.85, 2.2)), 28, 5.6),
     (1166, Vector((2.0, Y0 + 5.65, 2.4)), Vector((1.2, Y0 + 4.82, 2.35)), 30, 5.6),
     (1177, Vector((2.55, Y0 + 5.0, 2.4)), Vector((6.5, Y0 + 4.45, 2.1)), 26, 5.6),
     (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
-    (1215, Vector((5.2, Y0 + 4.3, 2.3)), Vector((7.8, Y0 + 4.3, 2.0)), 24, 5.6),
+    (1200, Vector((6.0, Y0 + 5.5, 2.45)), Vector((7.72, Y0 + 3.95, 2.4)), 24, 5.6),
     (1265, Vector((9.4, Y0 + 3.9, 2.45)), Vector((8.0, Y0 + 4.4, 2.3)), 26, 5.6),
     (1310, Vector((8.27, Y0 + 3.55, 2.4)), Vector((8.22, Y0 + 4.86, 2.05)), 30, 5.6),
     (1328, Vector((8.24, Y0 + 4.82, 2.0)), Vector((8.0, Y0 + 9, 2.6)), 30, 5.6),
@@ -494,8 +494,80 @@ def limit_hands(rig, probe_frames):
         (c.min_x, c.max_x), (c.min_y, c.max_y), (c.min_z, c.max_z) = lims
         nlim += 1
     return nlim
-for nm_, fr_ in (("Steward", (60, 120, 200)), ("Deckhand", (100, 200)), ("Tech", (1120, 1160)), ("ExpertA", (1250, 1300)), ("ExpertB", (1250, 1300))):
-    print("HANDLIMIT", nm_, limit_hands(O[nm_], fr_))
+# ---------------------------------------------------------------- hands: director's shared library (pipeline/hand_poses.py)
+# every contact is re-keyed with grip_object / place_hand + presets; joint limits via add_hand_limits (v004 rev3)
+HP = {"__name__": "hand_poses"}; exec(open(os.path.join(os.path.dirname(LIB), "hand_poses.py")).read(), HP)
+for nm_ in ("Steward", "Deckhand", "Tech", "ExpertA", "ExpertB"):
+    HP["add_hand_limits"](O[nm_])
+def _wpos(ob): return ob.matrix_world.translation.copy()
+def _bb_world(ob):
+    bb = [ob.matrix_world @ Vector(c) for c in ob.bound_box]
+    return Vector([min(v[i] for v in bb) for i in range(3)]), Vector([max(v[i] for v in bb) for i in range(3)])
+GRIP_LOG = []
+def _log(tag, f, rep): GRIP_LOG.append((tag, f, {k: v for k, v in (rep or {}).items()}))
+# steward: one hand grips the camera's side frame (wrap, thumb opposing), the other palm supports it underneath
+for f in sorted(CAMP):
+    sc.frame_set(f); mn, mx = _bb_world(bc); c = (mn + mx) / 2
+    wl = st.o.matrix_world @ st.R.PB["wrist.L"].head
+    sx = 1.0 if wl.x > c.x else -1.0
+    side_pt = Vector((mx.x if sx > 0 else mn.x, c.y + 0.25 * (mx.y - mn.y), c.z + 0.1 * (mx.z - mn.z)))
+    HP["apply_pose"](st.o, "L", "wrap_grip", f, amount=0.75)
+    HP["apply_pose"](st.o, "R", "cup_hold", f)
+# deckhand: right hand wraps the rope at the coil (preset; the coil is a curve), left hand holds the rope end loosely
+for f in range(0, 400, 20):
+    HP["apply_pose"](dh.o, "R", "wrap_grip", f); HP["apply_pose"](dh.o, "L", "cup_hold", f)
+# tech: right hand pinches the bamboo tongs, left palm flat on the bench
+for f in range(1060, 1215, 6):
+    sc.frame_set(f); mn, mx = _bb_world(tongs); end = Vector(((mn.x + mx.x) / 2, mn.y + 0.04, (mn.z + mx.z) / 2))
+    HP["apply_pose"](tech.o, "R", "pinch", f)          # acting-pass IK placement on the tongs, library pinch
+    t0 = O["Tray_0"]; tmn, tmx = _bb_world(t0)   # left hand holds the near rim of the tray beside it
+    _log("tech_L_tray", f, HP["grip_object"](tech.o, "L", f, t0, Vector(((tmn.x + tmx.x) / 2 + 0.1, tmn.y + 0.004, tmx.z - 0.004)), Vector((0, 0, -1))))
+# office: A wraps the magnifier handle, other palm flat on the desk; B pinches the print's top corners
+for f in range(1180, 1345, 10):
+    sc.frame_set(f); mn, mx = _bb_world(mag)
+    handle = Vector(((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, mn.z + 0.07))
+    wr_ = ea.o.matrix_world @ ea.R.PB["wrist.R"].head
+    ap = Vector((handle.x - wr_.x, handle.y - wr_.y, 0)).normalized()
+    HP["apply_pose"](ea.o, "R", "wrap_grip", f)      # IK placement from the acting pass (hand round the handle), library wrap preset
+    HP["apply_pose"](ea.o, "L", "flat_palm", f)
+    pmn, pmx = _bb_world(PR)
+    for sd, x in (("L", pmx.x - 0.03), ("R", pmn.x + 0.03)):
+        sh_ = eb.o.matrix_world @ eb.R.PB["upperarm01." + sd].head      # corner on the same side as that arm's shoulder
+        x = pmx.x - 0.03 if sh_.x > (pmn.x + pmx.x) / 2 else pmn.x + 0.03
+        HP["apply_pose"](eb.o, sd, "pinch", f)        # acting-pass IK placement at the top corners (no arm crossing), library pinch
+for t_, f_, r_ in GRIP_LOG[::8]: print("GRIP", t_, f_, r_)
+# props held in a hand follow that hand's real (limit-clamped) palm, so contact holds whatever the wrist limits do
+def palm_frame(rig, s_, space="world"):
+    P = rig.pose.bones; M = rig.matrix_world if space == "world" else Matrix.Identity(4)
+    wr = M @ P["wrist." + s_].head; f3 = M @ P["finger3-1." + s_].head
+    f2 = M @ P["finger2-1." + s_].head; f5 = M @ P["finger5-1." + s_].head
+    d = (f3 - wr).normalized(); a_ = (f2 - f5).normalized(); n = d.cross(a_) if s_ == "L" else a_.cross(d)
+    return wr.lerp(f3, 0.75), n.normalized(), d
+# magnifier handle sits in Expert A's right palm
+for f in range(1176, 1346, 6):
+    sc.frame_set(f); pp, n, d = palm_frame(ea.o, "R")
+    off = mag.location - (mag.matrix_world.translation)          # zero for an unparented object
+    mag.location = pp + n * 0.024 - Vector((0, 0, 0.07)); mag.keyframe_insert("location", frame=f)
+# the tongs sit in the tech's thumb-index pinch
+for f in range(1060, 1216, 6):
+    sc.frame_set(f); P_ = tech.o.pose.bones; M_ = tech.o.matrix_world
+    pinch = (M_ @ P_["finger1-3.R"].tail + M_ @ P_["finger2-3.R"].tail) / 2
+    tongs.location = pinch + Vector((0, 0.095, -0.012)); tongs.keyframe_insert("location", frame=f)
+# the camera rests on the steward's right palm (armature space, the camera is parented to the rig)
+for f in range(0, 366, 6):
+    sc.frame_set(f); pp, n, d = palm_frame(st.o, "R", space="arm")
+    up = n if n.z > 0 else -n
+    bc.location = pp + up * 0.026; bc.keyframe_insert("location", frame=f)
+set_interp(mag, 'BEZIER')
+# steward's left hand: palm flat on the camera's real left side, fingers wrapping forward over the front standard
+for f in range(0, 366, 12):
+    sc.frame_set(f); mn, mx = _bb_world(bc); c = (mn + mx) / 2
+    shL = st.o.matrix_world @ st.R.PB["upperarm01.L"].head
+    sx = 1.0 if shL.x > c.x else -1.0
+    side = Vector((mx.x if sx > 0 else mn.x, c.y + 0.2 * (mx.y - mn.y), c.z + 0.05 * (mx.z - mn.z)))
+    HP["place_hand"](st.o, "L", f, side, Vector((-sx, 0, 0)), Vector((0, 1, -0.15)), skin=0.022)
+    HP["apply_pose"](st.o, "L", "cup_hold", f)
+
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
 sc.frame_set(0)

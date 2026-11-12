@@ -1,0 +1,1489 @@
+{
+ "frames": {
+  "126": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "132": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "138": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "144": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "150": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "174": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "180": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "186": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "192": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "198": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "204": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "210": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "216": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "222": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "228": [
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "234": [
+   [
+    "FILL",
+    "Mist_Bank"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "240": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "246": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "252": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "258": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "264": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "270": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "276": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "282": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "288": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "294": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "300": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "306": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "312": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "318": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "324": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "330": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "336": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "342": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "348": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "354": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "360": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "366": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "372": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "378": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "384": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "390": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "396": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "402": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "408": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "414": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "420": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "426": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "432": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "438": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "444": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "450": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "456": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "462": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "468": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "474": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "480": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "486": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "492": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "498": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "504": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "510": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "516": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "522": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "528": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "534": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "540": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "546": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "552": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "558": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "564": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "570": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "576": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "582": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "588": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "594": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "600": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "606": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "612": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "618": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "624": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "630": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "636": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "642": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "648": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "654": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "660": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "666": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "672": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "678": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "684": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "690": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "696": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "702": [
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "708": [
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "714": [
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "720": [
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "726": [
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "882": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "888": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "894": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "900": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "906": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "912": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "918": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "924": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "930": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "936": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "942": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "948": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "954": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "960": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "966": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "972": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "978": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "984": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "990": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "996": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1002": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1008": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1014": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1020": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1026": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1032": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1038": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1044": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1050": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1056": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1062": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1068": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Iceberg in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1074": [
+   [
+    "FILL",
+    "Darkroom_WallFront"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Darkroom_WallFront in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1170": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1332": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Office_WallBack in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1338": [
+   [
+    "FILL",
+    "Office_WallBack"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Office_WallBack in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1344": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1350": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1356": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1362": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1368": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1374": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1380": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1386": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1392": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1398": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1404": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1410": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1416": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1422": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1428": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1434": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1440": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1446": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1452": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1458": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1464": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1470": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1476": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1482": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1488": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1494": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1500": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1506": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1512": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1518": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1524": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1530": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1536": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1542": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1548": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Print_Giant in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1554": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1560": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1566": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1572": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only Mist_Bank in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1578": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1584": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1590": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1596": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1602": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1608": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1614": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1620": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1626": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1632": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1638": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1644": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1650": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1656": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1662": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1668": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1674": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1680": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1686": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1692": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1698": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1704": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1710": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1716": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1722": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1728": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1734": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1740": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1746": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1752": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1758": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1764": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1770": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1776": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1782": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1788": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1794": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1800": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1806": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1812": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1818": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1824": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1830": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 237,
+  "FILL": 3,
+  "INSIDE": 22
+ }
+}
