@@ -95,7 +95,7 @@ class Actor:
                 pole = W(pos, yaw, (sx * 0.55, 0.45, 0.85))
                 H.key_hand(s, f, Wp, d, n, pole=pole)
             else:   # relaxed at the side
-                Wp = W(pos, yaw, (sx * 0.24, -0.02, 0.83 - crouch + hip)); H.key_hand(s, f, Wp, Ry(yaw) @ Vector((0.05 * sx, -0.1, -1)),
+                Wp = W(pos, yaw, (sx * 0.31, -0.06, 0.84 - crouch + hip)); H.key_hand(s, f, Wp, Ry(yaw) @ Vector((0.05 * sx, -0.1, -1)),
                                                                             Ry(yaw) @ Vector((-sx, 0, 0)), pole=W(pos, yaw, (sx * 0.55, 0.45, 1.0)))
 
 def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0, knee=0.42, foot_lift=0.0):
@@ -106,8 +106,8 @@ def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0
 # palm helpers (body-local, character faces -Y): d = finger direction, n = palm normal
 HANDS_ON_BOARDS = {"L": ((0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1)), "R": ((-0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1))}
 def phone_hold(dz=0.0, both=True, spread=0.0):
-    hd = {"R": ((-0.03, -0.32, 1.17 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
-    if both: hd["L"] = ((0.06 + spread, -0.31, 1.16 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
+    hd = {"R": ((-0.05, -0.42, 1.17 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
+    if both: hd["L"] = ((0.10 + spread, -0.41, 1.16 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
     return hd
 
 # ================================================================== FAN
@@ -155,7 +155,7 @@ def fan_rink():
     face(FR, f(17.6), brow=0.8, smile=0.2, jaw=4)
     fan.pose(f(19.6), (0.0, 0.5, 0), 0, flex=12, head=(10, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(20.4), brow=0.9, frown=0.5, jaw=8)     # he walks away
-    fan.pose(f(20.6), (0.0, 0.56, 0), 0, flex=6, head=(6, 28), twist=14, hands={"R": ((-0.12, -0.35, 1.25), (0, -0.4, 1), (0, -1, 0.3))})
+    fan.pose(f(20.6), (0.0, 0.56, 0), 0, flex=6, head=(6, 28), twist=14, hands={"R": ((-0.16, -0.46, 1.25), (0, -0.4, 1), (0, -1, 0.3))})
     fan.pose(f(23.0), (0.0, 0.6, 0), 0, flex=4, head=(4, 34), twist=16)
     face(FR, f(23.0), brow=0.6, frown=0.8, smile=-0.4)
 fan_rink()
@@ -167,10 +167,10 @@ def fan_home():
     sit(fan, f(34.0), p, 0, 0.45, hands=lap, flex=12, head=(14, 0))
     sit(fan, f(35.4), p, 0, 0.45, hands=lap, flex=14, head=(16, 0))
     face(FR, f(35.4), brow=0.0, smile=0.0)
-    mouth = {"R": ((-0.02, -0.22, 1.06), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
+    mouth = {"R": ((-0.02, -0.27, 1.06), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
     sit(fan, f(36.4), p, 0, 0.45, hands=mouth, flex=-6, head=(-6, 0))
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
-    both = {"R": ((-0.05, -0.21, 1.05), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.06, -0.21, 1.02), (-0.2, 0.3, 1), (0, 1, 0))}
+    both = {"R": ((-0.06, -0.26, 1.05), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.07, -0.26, 1.02), (-0.2, 0.3, 1), (0, 1, 0))}
     sit(fan, f(37.2), p, 0, 0.45, hands=both, flex=-8, head=(-4, 6))
     face(FR, f(37.2), brow=1.0, lid=-0.3, jaw=10, smile=0.5)
     sit(fan, f(37.8), p, 0, 0.45, hands=both, flex=-4, head=(0, -4))
@@ -245,8 +245,8 @@ def man_rink():
 man_rink()
 def man_finale():
     f = F; p = FIN + Vector((0.45, 0.05, 0))
-    clap_o = {"L": ((0.02, -0.33, 1.15), (0, -0.3, 1), (-1, 0, 0)), "R": ((-0.02, -0.33, 1.15), (0, -0.3, 1), (1, 0, 0))}
-    clap_c = {"L": ((0.12, -0.33, 1.12), (0, -0.3, 1), (-1, 0, 0)), "R": ((-0.12, -0.33, 1.12), (0, -0.3, 1), (1, 0, 0))}
+    clap_o = {"L": ((0.025, -0.44, 1.15), (0, -0.3, 1), (-1, 0, 0)), "R": ((-0.025, -0.44, 1.15), (0, -0.3, 1), (1, 0, 0))}
+    clap_c = {"L": ((0.13, -0.44, 1.12), (0, -0.3, 1), (-1, 0, 0)), "R": ((-0.13, -0.44, 1.12), (0, -0.3, 1), (1, 0, 0))}
     for i in range(24):
         t = 38.0 + i * 0.25
         man.pose(f(t), p, -15, flex=2, head=(-4, -14), hands=clap_o if i % 2 else clap_c)
@@ -259,7 +259,7 @@ manb = Actor("ManagerB"); MBR = manb.o
 BEDP = Vector((-28.5, -2.34, 0.0))
 def manb_clinic():
     f = F
-    knees = {"L": ((0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1)), "R": ((-0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1))}
+    knees = {"L": ((0.17, -0.30, 1.03), (0, -1, -0.4), (0, 0, -1)), "R": ((-0.17, -0.30, 1.03), (0, -1, -0.4), (0, 0, -1))}
     for i, t in enumerate((20.0, 22.4, 23.4, 24.4)):
         sit(manb, f(t), BEDP, 180, 0.83, hands=knees, flex=18, head=(30, -24 + 4 * i), knee=0.30, foot_lift=0.28)      # head bowed + turned right, neck exposed
     face(MBR, f(22.4), brow=0.2, frown=0.4)
@@ -296,7 +296,7 @@ def doc_anim():
             if g.weight > 0.3 and (nm.startswith("finger") or nm.startswith("wrist") or nm.startswith("metacarpal")): hand_v.add(v.index)
     for p_ in body.data.polygons:
         if all(i in hand_v for i in p_.vertices): p_.material_index = gi
-    scope = {"R": ((-0.10, -0.42, 1.30), (0.2, -0.5, 0.6), (0.8, 0, 0.3)), "L": ((0.12, -0.40, 1.30), (-0.2, -0.6, 0.4), (-0.8, 0, 0.3))}
+    scope = {"R": ((-0.15, -0.53, 1.30), (0.2, -0.5, 0.6), (0.8, 0, 0.3)), "L": ((0.16, -0.51, 1.30), (-0.2, -0.6, 0.4), (-0.8, 0, 0.3))}
     rest = None
     doc.pose(f(20.0), DOCP, 90, flex=10, head=(16, 0))
     doc.pose(f(22.6), DOCP, 90, flex=24, head=(26, -10), hands=scope)
@@ -306,7 +306,7 @@ def doc_anim():
     face(DR, f(25.2), brow=0.4, frown=1.0, smile=-0.4)                         # serious
     doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains
     face(DR, f(25.8), brow=0.3, frown=0.5, jaw=8); face(DR, f(26.0), jaw=2, frown=0.5)
-    cut = {"R": ((-0.12, -0.44, 1.27), (0.1, -0.6, 0.3), (0.5, 0, 0.8)), "L": ((0.10, -0.44, 1.28), (-0.1, -0.6, 0.3), (-0.5, 0, 0.8))}
+    cut = {"R": ((-0.15, -0.55, 1.27), (0.1, -0.6, 0.3), (0.5, 0, 0.8)), "L": ((0.15, -0.55, 1.28), (-0.1, -0.6, 0.3), (-0.5, 0, 0.8))}
     for i, t in enumerate((26.4, 27.0, 27.6, 28.2)):
         doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=32, head=(34, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
     face(DR, f(26.6), brow=-0.3, frown=0.8, squint=0.7)

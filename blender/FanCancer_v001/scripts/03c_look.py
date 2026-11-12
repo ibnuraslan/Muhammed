@@ -115,3 +115,8 @@ br = nt_.nodes.new('ShaderNodeTexBrick'); br.inputs['Scale'].default_value = 40;
 br.inputs['Color1'].default_value = (1, 0.98, 0.95, 1); br.inputs['Color2'].default_value = (0.85, 0.92, 1.0, 1); br.inputs['Mortar'].default_value = (0.35, 0.4, 0.45, 1)
 tcx = nt_.nodes.new('ShaderNodeTexCoord'); nt_.links.new(tcx.outputs['UV'], br.inputs['Vector'])
 nt_.links.new(br.outputs['Color'], pp_.inputs['Emission Color']); pp_.inputs['Emission Strength'].default_value = 2.5
+# rink glass: crystal clear (no frosting veil), faint reflections only
+g = bpy.data.materials["Glass"]; gn = g.node_tree.nodes; gp = gn["Principled BSDF"]
+for lk in list(gp.inputs['Roughness'].links): g.node_tree.links.remove(lk)
+gp.inputs['Roughness'].default_value = 0.0; gp.inputs['IOR'].default_value = 1.02; gp.inputs['Transmission Weight'].default_value = 1.0
+gp.inputs['Base Color'].default_value = (1, 1, 1, 1)
