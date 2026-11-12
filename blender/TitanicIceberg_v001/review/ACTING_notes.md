@@ -37,3 +37,20 @@ Not changed (checked):
   - 0 for: hover, sink, hand float, hand–hand, hand inside own clothes, camera inside geometry
   - finger penetration 7: fingers around the 1.5 cm magnifier handle, and the steward's supporting palm under the camera body
 - Expert B's hold went through three passes, because the experts' wrist limits clamp the hand orientation. The final is a top-corner pinch: fingers over the top edge, image visible.
+
+## Round 2: director review of v004 (4e27dd5), fixes in v004 rev 2
+| # | Director note | Cause found | Fix |
+|---|---|---|---|
+| R1 | 22 s: Expert B's legs disappear into the desk | **Both desks stood side-on.** The object rotation was not applied to the desk mesh, so the office desk ran front to back and Expert B stood *inside* it. The darkroom bench had the same bug, so the tech stood inside the bench. The table-top heights were also read from stale dimensions, so the lamp and books floated 9 cm above the desk and beside it. | The desk mesh data is rotated now. The table tops are measured from the mesh (office 1.607 m, bench 1.719 m). Expert B now stands 0.24 m behind the office desk, the tech in front of the bench, and the lamp and books sit on the desk top. The camera at 21.8 s is raised so the desk top reads in front of him. |
+| R2 | 17.5–18.0 s: near-blank pale ice frames | The approach was too close and the dive was slow. | The approach is from wider (berg form, scrape and water in frame). The dive key moved from 1080 to 1072, so the skin is crossed at 1074, and 18.0 s is already the darkroom wide shot. Beat 6 stays at 1092. |
+| R3 | Darkroom: dark, and the tech's face is turned away | The camera was at his side, his head yawed away, and the reaction was late. | The camera is over the bench looking back at his face from 1100, with a red face-fill light (safelight bounce). The reaction (head lift, brows, jaw) is now at 1125–1180, so it reads in the 19.0 s cell. The print develops from 1092 to 1145. The darkroom front wall is shown to the camera again 10 frames after the dive, because it showed the sea behind the tech. |
+| R4a | Steward: fingers flat and splayed on the bellows | The left hand was on the bellows. | The left hand grips the front standard (fingers round, thumb in front), and the right palm supports the camera underneath. |
+| R4b | Tech: a claw at the tray edge | The hand was not on anything. The tray also rocked by itself. | The left hand rests flat on the bench beside the tray. The tray no longer moves (the tongs agitate the print). |
+| R4c | Expert A: hand hovering off the desk | The hand was out of reach, and the desk height was wrong. | He stands 18 cm closer. His hand is flat on the real desk top, and the magnifier moves with him. |
+| extra | Tech's MakeHuman shirt has a chest print/logo | — | The print is patched out (solid navy fabric, `06_look_fix.py`). |
+| extra | 19.7 s: the pan to the door dipped to a full-frame floor | The target spline passed under the camera. | The pan now aims straight at the door. |
+
+Re-check:
+- `after_v004_0.5s_sheet.jpg` and `v004_hand_closeups.jpg` were re-rendered.
+- `clip_scan.py`: 0 bad ranges, both as saved and at frame 1250 with all 5 characters.
+- Own audit: float 0, hand–hand 0, hand-in-clothes 0, penetration 7, hover/sink 0, camera-in-geometry 0.

@@ -560,10 +560,14 @@ redL = bpy.data.objects.new("Safelight", bpy.data.lights.new("Safelight", 'AREA'
 redL.data.size = 0.4; redL.location = (1.2, Y0 + 5.0, RZ1 - 0.25); C_ROOMS.objects.link(redL)
 redL2 = bpy.data.objects.new("Safelight_Fill", bpy.data.lights.new("Safelight_Fill", 'POINT')); redL2.data.energy = 70; redL2.data.color = (1.0, 0.12, 0.05)
 redL2.location = (-1.0, Y0 + 2.0, RZ1 - 0.5); C_ROOMS.objects.link(redL2)
+faceL = bpy.data.objects.new("Darkroom_Face_Fill", bpy.data.lights.new("Darkroom_Face_Fill", 'AREA')); faceL.data.energy = 35; faceL.data.size = 0.5
+faceL.data.color = (1.0, 0.3, 0.2); faceL.location = (2.1, Y0 + 5.2, 2.0); faceL.rotation_euler = (R_(70), 0, R_(125)); C_ROOMS.objects.link(faceL)
 lampbox = box("Safelight_Housing", (0.45, 0.25, 0.3), (1.2, Y0 + 5.1, RZ1 - 0.12), mat_simple("M_SafelightBox", (0.05, 0.04, 0.035), 0.4, 0.6), C_ROOMS, bevel=0.02)
 lampglass = box("Safelight_Glass", (0.36, 0.02, 0.2), (1.2, Y0 + 4.97, RZ1 - 0.15), mat_simple("M_SafelightGlass", (0.3, 0.0, 0.0), 0.2, 0, (1, 0.05, 0.02), 25), C_ROOMS)
-bench = import_glb("desk", length=2.2, col=C_ROOMS); bench.rotation_euler.z = R_(90); bench.location = (1.2, Y0 + 5.6, RZ0)
-dims_b = bench.dimensions.copy(); BENCH_TOP = RZ0 + dims_b.z
+# v004 fix: the object rotation did not stick, so the desks stood side-on (the tech and expert B stood inside them); rotate the mesh data instead
+bench = import_glb("desk", length=2.2, col=C_ROOMS); bench.data.transform(Matrix.Rotation(R_(90), 4, 'Z')); bench.location = (1.2, Y0 + 5.6, RZ0)
+BENCH_TOP = RZ0 + max(v.co.z for v in bench.data.vertices)
+print("BENCH extent x", min(v.co.x for v in bench.data.vertices), max(v.co.x for v in bench.data.vertices), "y", min(v.co.y for v in bench.data.vertices), max(v.co.y for v in bench.data.vertices))
 enamel = mat_simple("M_Enamel", (0.85, 0.84, 0.8), 0.15)
 liquid = mat_simple("M_Developer", (0.7, 0.62, 0.5), 0.02)
 liquid.node_tree.nodes["Principled BSDF"].inputs['Transmission Weight'].default_value = 1.0
@@ -585,8 +589,8 @@ for i in range(5):
     HANG.append(hp)
 tongs = box("Tongs", (0.22, 0.012, 0.01), (1.2, Y0 + 5.3, BENCH_TOP + 0.1), mat_simple("M_Bamboo", (0.55, 0.42, 0.25), 0.5), C_ROOMS, bevel=0.004)
 # ---------------------------------------------------------------- office dressing
-desk = import_glb("desk", length=1.9, col=C_ROOMS); desk.rotation_euler.z = R_(90); desk.location = (8.2, Y0 + 4.6, RZ0)
-DESK_TOP = RZ0 + desk.dimensions.z
+desk = import_glb("desk", length=1.9, col=C_ROOMS); desk.data.transform(Matrix.Rotation(R_(90), 4, 'Z')); desk.location = (8.2, Y0 + 4.6, RZ0)
+DESK_TOP = RZ0 + max(v.co.z for v in desk.data.vertices)
 lamp = import_glb("lamp", height=0.5, col=C_ROOMS); lamp.location = (7.6, Y0 + 4.85, DESK_TOP)
 lampL = bpy.data.objects.new("Desk_Lamp_Light", bpy.data.lights.new("Desk_Lamp_Light", 'POINT')); lampL.data.energy = 60; lampL.data.color = (1.0, 0.75, 0.45)
 lampL.location = (7.62, Y0 + 4.75, DESK_TOP + 0.38); lampL.data.shadow_soft_size = 0.08; C_ROOMS.objects.link(lampL)

@@ -7,6 +7,12 @@
 - Expert A: his head tracks the magnifier. The camera orbit swings to the desk side, so both faces show.
 - Deckhand: he looks up at the berg once while coiling.
 - 11 s crane: the berg and the scrape stay in frame (it was blank sea).
+- Rev 2, from the director review:
+  - The desks no longer stand side-on. Expert B and the tech were standing inside them, and the lamp and books were floating.
+  - The approach to the dive is wider, and the skin is crossed at 1074, so there are no blank ice frames.
+  - The tech's face reads in the darkroom (camera over the bench, face fill, earlier reaction).
+  - Grips: the steward holds the front standard, the tech's hand is flat on the bench, and Expert A's hand is flat on the desk.
+  - The tech's shirt print is removed.
 - Checks: `clip_scan.py` reports 0 bad ranges in both runs, as saved (2 characters) and at frame 1250 (all 5 characters). Own audit: float 0, hand–hand 0, hand-in-clothes 0, penetration 7, hover/sink 0, camera-in-geometry 0. Hand close-ups are in `review/v004_hand_closeups.jpg`.
 
 **v003 changes from v002** (director notes, 00:53 UTC):
