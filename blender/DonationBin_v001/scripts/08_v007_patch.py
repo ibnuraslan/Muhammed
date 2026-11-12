@@ -32,13 +32,13 @@ def air(c, r=0.14):
 def sees(c, p):
     v = p - c; h = ray(c, v, v.length)
     return h is None or (h[1] - c).length > v.length - 0.12 or h[4].name in WMESH
-def front34(f, dists=(0.62, 0.56, 0.50, 0.45, 0.40), angs=(35, -35, 28, -28, 42, -42, 20, -20, 50, -50)):
+def front34(f, dists=(0.62, 0.56, 0.50, 0.45, 0.40), angs=(35, -35, 28, -28, 42, -42, 20, -20, 50, -50), ylo=-0.47, ra=0.14):
     fc, fw = face(f); fh = Vector((fw.x, fw.y, 0)).normalized()
     for d in dists:
         for a in angs:
             for up in (-0.05, 0.03, -0.12, 0.10):
                 c = fc + (Matrix.Rotation(math.radians(a), 3, 'Z') @ fh) * d + Vector((0, 0, up))
-                if -0.62 < c.x < 0.62 and -0.47 < c.y < 0.48 and 0.8 < c.z < 2.25 and air(c) and sees(c, fc):
+                if -0.62 < c.x < 0.62 and ylo < c.y < 0.48 and 0.8 < c.z < 2.25 and air(c, ra) and sees(c, fc):
                     return [f, list(c), list(fc - Vector((0, 0, 0.02))), 22]
     print("NO34", f); return None
 
@@ -51,7 +51,8 @@ for f in (950, 965):
     k = front34(f)
     if k: NEW.append(k)
 for f in (1322, 1336, 1350, 1366, 1384):
-    k = front34(f) or front34(f, dists=(0.50, 0.44, 0.38, 0.32), angs=(35, -35, 45, -45, 55, -55, 65, -65, 25, -25))
+    k = front34(f) or front34(f, dists=(0.50, 0.44, 0.38, 0.32), angs=(35, -35, 45, -45, 55, -55, 65, -65, 25, -25)) or \
+        front34(f, dists=(0.45, 0.38, 0.32, 0.27), angs=(30, -30, 45, -45, 60, -60, 75, -75), ylo=-0.55, ra=0.06)
     if k: NEW.append(k)
 # 1. covered wall pushes (inner and outer faces of the front wall, found by ray cast)
 def hit(o, d): h = ray(o, d); return h[1] if h else None
@@ -114,11 +115,22 @@ for l in cd.animation_data.action.layers:
     for st in l.strips:
         for cb in st.channelbags:
             for fcv in cb.fcurves: fcv.keyframe_points.clear()
+QS = {}
+qprev = None
+for f in range(1, sc.frame_end + 1):
+    q = (POS[f][1] - POS[f][0]).to_track_quat('-Z', 'Y')
+    if qprev is not None and q.dot(qprev) < 0: q = -q
+    QS[f] = q; qprev = q
+# pans next to the pushes: slerp the rotation (smoothstep) so the look-at never swings past the lens
+for a_, b_ in ((1559, 1582), (1845, 1865), (1871, 1886)):
+    qa, qb = QS[a_], QS[b_]
+    for f in range(a_ + 1, b_):
+        t_ = (f - a_) / (b_ - a_); t_ = t_ * t_ * (3 - 2 * t_); QS[f] = qa.slerp(qb, t_)
 qprev = None
 for f in range(1, sc.frame_end + 1):
     p, t, ln = POS[f]
     cam.location = p; cam.keyframe_insert("location", frame=f)
-    q = (t - p).to_track_quat('-Z', 'Y'); cam.rotation_mode = 'QUATERNION'
+    q = QS[f].copy(); cam.rotation_mode = 'QUATERNION'
     if qprev is not None and q.dot(qprev) < 0: q = -q
     qprev = q.copy(); cam.rotation_quaternion = q; cam.keyframe_insert("rotation_quaternion", frame=f)
     cd.lens = ln; cd.keyframe_insert("lens", frame=f)
@@ -137,7 +149,7 @@ def cloth_z(x, y):
         if h:
             wz = (o.matrix_world @ loc).z; z = wz if z is None else max(z, wz)
     return z
-for s, f0, f1 in (("R", 425, 468), ("L", 606, 650)):
+for s, f0, f1 in (("R", 425, 468),):
     names = ["IK_hand." + s] + _chain(s)
     for g in (f0 - 6, f1 + 6):                       # anchors
         sc.frame_set(g)
@@ -155,6 +167,8 @@ for s, f0, f1 in (("R", 425, 468), ("L", 606, 650)):
             apply_pose(WO, s, "flat_palm", f)
         else:
             apply_pose(WO, s, "relaxed", f)
+for s in "LR":                                         # f628: kneel-to-stand, both hands relaxed (not splayed)
+    for f in range(604, 653, 6): apply_pose(WO, s, "relaxed", f)
 sc["director_fix"] = "v007: one continuous camera (covered wall pushes), front 3/4 on beat 6 and scream, hands flat on clothes"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("V007_DONE", len(CAMK))
