@@ -11,8 +11,8 @@ OUT = a[0]
 sc = bpy.context.scene
 R_ = math.radians
 humans = [o for o in bpy.data.objects if o.type == 'ARMATURE' and "finger1-1.L" in o.pose.bones]
-GRIP = {("Archduke", "L"): 6, ("Archduke", "R"): 6, ("Duchess", "R"): 10, ("Duchess", "L"): 62, ("Gunman", "R"): 70, ("Driver", "L"): 55, ("Driver", "R"): 55, ("Bomber", "R"): 60,
-        ("Officer", "L"): 45, ("Officer", "R"): 45}
+GRIP = {("NerveA", "R"): 22, ("Officer", "L"): 62, ("Officer", "R"): 16, ("Archduke", "L"): 6, ("Archduke", "R"): 6, ("Duchess", "R"): 10, ("Duchess", "L"): 62, ("Gunman", "R"): 70, ("Driver", "L"): 55, ("Driver", "R"): 55, ("Bomber", "R"): 60,
+        }
 
 def palm_frame(arm, s):
     B = arm.data.bones
@@ -75,6 +75,72 @@ lift_hand("Duchess", "R", 0.03)
 # slumped (story 26.75+ = film 1583+): hands fall beside the thighs onto the seat, not into them
 lift_hand("Archduke", "R", 0.03, dx=-0.09, fmin=1561)   # outer hand drops beside his thigh onto the seat
 lift_hand("Archduke", "L", 0.04, fmin=1561)            # inner hand stays on his thigh (moving it inward would hit the Duchess)
+# would-be assassin: flat palm resting ON the coat (it floated 3-4 cm in front of the chest)
+def shift_hand_world(name, side, v, f0=0, f1=10**9):
+    arm = bpy.data.objects[name]; n = "IK_hand." + side
+    dl = arm.data.bones[n].matrix_local.to_3x3().inverted() @ v
+    for l in arm.animation_data.action.layers:
+        for st in l.strips:
+            for cb in st.channelbags:
+                for fc in cb.fcurves:
+                    if fc.data_path == f'pose.bones["{n}"].location':
+                        for kp in fc.keyframe_points:
+                            if f0 <= kp.co[0] <= f1:
+                                kp.co[1] += dl[fc.array_index]; kp.handle_left[1] += dl[fc.array_index]; kp.handle_right[1] += dl[fc.array_index]
+                        fc.update()
+# palm keyed onto the chest surface while the hand is "in the coat" (story 0.7-2.2 s)
+NA_ = bpy.data.objects["NerveA"]; RN = Rig(NA_)
+for f in range(380, 1201, 2):
+    s_ = sig_f(f)
+    k = smooth((s_ - 0.7) / 0.4) * (1 - smooth((s_ - 2.0) / 0.3))
+    if k < 0.02: continue
+    sc.frame_set(f)
+    ch = NA_.matrix_world @ NA_.pose.bones["spine03"].head
+    hn = NA_.matrix_world @ RN.PB["IK_hand.R"].head
+    d = hn - ch; d.z = 0; d = d.normalized()
+    side = Vector((0, 0, 1)).cross(d).normalized()
+    tgt = ch + d * 0.16 + side * 0.04 + Vector((0, 0, 0.1))
+    tgt = hn.lerp(tgt, k)
+    RN.key_world("IK_hand.R", f, Matrix.Translation(NA_.matrix_world.inverted() @ tgt - RN.BN["IK_hand.R"].head_local) @ RN.rest("IK_hand.R"), rot=False)
+# parasol re-seated so the shaft runs through the closed hand (between the thumb tip and the index root)
+sc.frame_set(1); bpy.context.view_layer.update()
+par = bpy.data.objects["Parasol"]; DU = bpy.data.objects["Duchess"]
+grip = (DU.matrix_world @ DU.pose.bones["finger2-1.L"].head + DU.matrix_world @ DU.pose.bones["finger1-3.L"].tail + DU.matrix_world @ DU.pose.bones["finger5-1.L"].head) / 3
+M = par.matrix_world.copy(); ax = (M.to_3x3() @ Vector((0, 0, 1))).normalized(); o = M.translation
+closest = o + ax * (grip - o).dot(ax)
+delta = grip - closest
+cst = par.constraints["Child Of"]
+par.matrix_basis = Matrix.Translation(cst.inverse_matrix.inverted() @ (M.translation + delta) - cst.inverse_matrix.inverted() @ M.translation) @ par.matrix_basis
+print("PARASOL shifted", round(delta.length, 3))
+# officer's grab: both hands keyed onto the gunman's actual right arm every 2 frames while he holds him
+OFF = bpy.data.objects["Officer"]; GNo = bpy.data.objects["Gunman"]; RO = Rig(OFF)
+grab_frames = [f for f in range(1301, 1781, 2) if sig_f(f) > 27.0]
+targets = {}
+for f in grab_frames:
+    sc.frame_set(f)
+    up = GNo.matrix_world @ GNo.pose.bones["upperarm02.R"].head.lerp(GNo.pose.bones["upperarm02.R"].tail, 0.4)
+    fo = GNo.matrix_world @ GNo.pose.bones["upperarm02.R"].head.lerp(GNo.pose.bones["upperarm02.R"].tail, 0.9)   # second hand near his elbow
+    osh = OFF.matrix_world @ OFF.pose.bones["spine03"].head
+    targets[f] = (up, fo, osh)
+for f, (up, fo, osh) in targets.items():
+    k = min(1.0, (sig_f(f) - 27.0) / 0.3)
+    for side, pt in (("L", up),):   # one-handed grab: the far hand cannot reach across, it stays relaxed at his side
+        n = "IK_hand." + side
+        cur = RO.PB[n]; sc.frame_set(f)
+        now = OFF.matrix_world @ cur.head
+        toward = (osh - pt); toward.z = 0; toward = toward.normalized() * 0.055     # palm on the sleeve surface, on the officer's side
+        tgt = now.lerp(pt + toward, k)
+        RO.key_world(n, f, Matrix.Translation(OFF.matrix_world.inverted() @ tgt - RO.BN[n].head_local) @ RO.rest(n), rot=False)
+for f in targets:
+    sc.frame_set(f)
+    k = min(1.0, (sig_f(f) - 27.0) / 0.3)
+    hip = OFF.matrix_world @ OFF.pose.bones["upperleg01.R"].head
+    pel = OFF.matrix_world @ OFF.pose.bones["root"].head
+    out = hip - pel; out.z = 0; out = out.normalized() if out.length > 1e-4 else Vector((0, 0, 0))
+    tgt = hip + out * 0.1 + Vector((0, 0, -0.08))
+    now = OFF.matrix_world @ RO.PB["IK_hand.R"].head
+    RO.key_world("IK_hand.R", f, Matrix.Translation(OFF.matrix_world.inverted() @ now.lerp(tgt, k) - RO.BN["IK_hand.R"].head_local) @ RO.rest("IK_hand.R"), rot=False)
+print("OFFICER grab keyed", len(targets))
 print("HANDS curled + limits on", len(humans), "rigs")
 
 # ---------------------------------------------------------------- faces: couple expressions on the story clock

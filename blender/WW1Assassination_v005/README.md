@@ -1,9 +1,9 @@
 # WW1Assassination_v005: farm package (acting pass)
 
 **v005 = v004 plus the client's acting pass** (`briefs/ACTING_FIX_04-10.md`). Every story-beat frame is unchanged, so `beats.json` is the same.
-- The full problem list, with times, is in `../WW1Assassination_v001/review/ACTING_notes.md`: 17 items, from the half-second sheet review plus `clip_scan.py`.
+- The full problem list, with times, is in `../WW1Assassination_v001/review/ACTING_notes.md`: 25 items, from the half-second sheet review, `clip_scan.py` and the mandatory 6-point self-check.
 - Before and after half-second sheets: `../WW1Assassination_v001/review/ACTING_v004_sheet_*.jpg` and `ACTING_v005_sheet_*.jpg`.
-- `pipeline/clip_scan.py` reports **0 bad ranges** (v004 had 6). The hand audit reports 10: 5 intended hand-in-coat, plus 5 brushes between distant extras.
+- `pipeline/clip_scan.py` reports **0 bad ranges** (v004 had 6). The hand audit reports 14: 7 intended palm-on-coat, plus 7 brushes between distant extras.
 
 
 v005 = v003 plus one change: the cloud wipe now holds a near-white card for 6 frames or fewer (1743–1751) over thinner clouds, so 29.0 s shows rooftops and 29.1 s shows the map coming through.

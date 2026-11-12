@@ -1,25 +1,5 @@
 {
- "frames": {
-  "1555": {
-   "Archduke": {
-    "self": 0,
-    "clothes": 0,
-    "other": 2
-   }
-  },
-  "1561": {
-   "Archduke": {
-    "self": 0,
-    "clothes": 0,
-    "other": 1
-   },
-   "Duchess": {
-    "self": 0,
-    "clothes": 0,
-    "other": 7
-   }
-  }
- },
+ "frames": {},
  "step": 6,
  "depth_cm": 2.0,
  "bad_ranges": [],

@@ -26,11 +26,23 @@ Sheets: `ACTING_v004_sheet_0-18s.jpg` and `ACTING_v004_sheet_18-36s.jpg` (before
 | 17 | 25.0–26.5 s | Re-check after fix #5: the side framing lost the pistol, and the slump framing sat behind the Duchess (hat brim and folded roof filled the frame). The Archduke's slumping hands and the Duchess's inner hand also touched each other (26.0–26.4 s). | A higher over-the-shoulder lines up the pistol hand with the Archduke, and the flash lights the couple. The slump is framed front-left, three-quarter. His inner hand stays on his thigh and his outer hand drops onto the seat. |
 | 16 | 14.5 s | Re-check after fix #4: the camera aim drifted between keys, so the bomb was still out of frame. | Two aim keys lock onto the falling object (14.4 s, 14.85 s): it hits the roof, drops, and rolls toward car 2, all in frame. |
 
+## Mandatory self-check (director, 14:40 UTC): problems found by looking at the images, fixed in v005
+| # | Time | Problem | Fix |
+|---|---|---|---|
+| 18 | 12.5 s (beat 5) | The cell is mostly a bare shop wall. | A new key lands on the bomber at 12.35 s. |
+| 19 | 18.5 s (beat 7) | The cell is mostly empty cobbles. | A new key swoops onto the car as it leaves along the quay. |
+| 20 | 25.0 s (beat 9) | The back of the gunman's head fills the foreground. | A front three-quarter on his face and the extended pistol arm; the flash lights him. |
+| 21 | 29.5 s | Cloud blur. | The clouds are fully clear by 29.4 s, so the cell is the crisp map. |
+| 22 | 11 s | The would-be assassin's hand floats as a claw 3–4 cm in front of his chest. | His palm is keyed onto the coat surface every frame, with a relaxed curl. |
+| 23 | 27–29 s | The officer's fists hover beside the gunman's arm without touching it; the far hand floats in the air. | One-handed grab: his near hand is keyed onto the gunman's actual upper arm every frame; the far hand hangs relaxed at his hip. |
+| 24 | parasol | The shaft ran beside the Duchess's hand, not through it. | The parasol is re-seated so the shaft passes through her closed hand, between thumb and index finger. |
+| 25 | close-ups | Three close-ups were blocked or black: the camera was inside the car or a wall. | The close-ups are now aimed at each wrist (`hand_closeups.jpg`, 8 hands). |
+
 ## Result
 - **clip_scan** (`v005_clip_scan.json`, step 6): **0 bad ranges** (v004: 6, in `v004_clip_scan.json`).
-- **Hand audit** (`v005_hand_audit.txt`): 10, all of them:
-  - 5 hand-in-coat at the would-be assassin's chest, which is intended;
-  - 5 fleeting fingertip brushes between fleeing extras, seen at more than 40 m.
+- **Hand audit** (`v005_hand_audit.txt`): 14, all of them:
+  - 7 palm-on-coat at the would-be assassin's chest, which is intended contact;
+  - 7 fleeting fingertip brushes between fleeing extras, seen at more than 40 m.
 - **Hand close-ups:** `../../WW1Assassination_v005/hand_closeups.jpg`.
 
 ## Checked and fine
