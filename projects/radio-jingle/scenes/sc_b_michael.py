@@ -162,11 +162,11 @@ def anim(c, t, move):
     sec = t * DUR[move]
     h = c["m"]; B.apply_pose(h, c["rest"])
     if move == "read":
-        turn_page(c, h, sec); h.rot("head", (1, 0, 0), 20)
+        turn_page(c, h, sec); B.nod(h, 20)
     elif move == "lookup":
         turn_page(c, h, 0.0, at=99)
         u = ease(min(1.0, max(0.0, (sec - 1.0) / 1.6)))
-        h.rot("head", (1, 0, 0), 20 * (1 - u)); h.rot("neck01", (0, 0, 1), 30 * u); h.rot("head", (0, 0, 1), 25 * u)
+        B.nod(h, 20 * (1 - u)); h.rot("neck01", (0, 0, 1), 30 * u); h.rot("head", (0, 0, 1), 25 * u)
         h.rot("spine03", (0, 0, 1), 10 * u)
     elif move in ("replay", "objection"):
         kb = Vector((DESK.x, DESK.y - 0.2, TOP + 0.03))
@@ -174,9 +174,9 @@ def anim(c, t, move):
             fwd = B.fwd_of(h)
             reach(h, "R", kb + Vector((0.12, -0.02, 0.04)), Vector((0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
             reach(h, "L", kb + Vector((-0.18, -0.08, 0.04)), Vector((-0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))
-            fingers_curl(h, 30); h.rot("head", (1, 0, 0), 10 + 4 * math.sin(sec * 0.6))
+            fingers_curl(h, 30); B.nod(h, 10 + 4 * math.sin(sec * 0.6))
         else:
-            type_hands(h, sec, kb); h.rot("head", (1, 0, 0), 12)
+            type_hands(h, sec, kb); B.nod(h, 12)
         for k, sh in enumerate(c.get("sheets", [])):
             ph_ = ((sec + k * 2.0) % 6.0) / 2.0                        # each sheet: 2 s feeding out, then rests
             u = min(1.0, ph_)
@@ -192,7 +192,7 @@ def anim(c, t, move):
             lift = 0.0 if play else 0.06 * ease(min(1.0, (sec - 2.4) / 0.8))
             reach(h, sd, keys + side * (0.18 * sg + 0.02 * math.sin(sec * 1.5) * play) + Vector((0, 0, -press + lift)), Vector((sg * side.x, sg * side.y, -0.7)), fwd + Vector((0, 0, -0.5)))
         fingers_curl(h, 25, thumb=10)
-        h.rot("head", (1, 0, 0), 12 + (8 * ease(min(1.0, max(0.0, (sec - 2.6) / 1.5)))))
+        B.nod(h, 12 + (8 * ease(min(1.0, max(0.0, (sec - 2.6) / 1.5)))))
     elif move == "window":
         fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
         knee = h.bone_tail("upperleg02.L")
@@ -200,7 +200,7 @@ def anim(c, t, move):
             k = h.bone_tail(f"upperleg02.{sd}")
             reach(h, sd, k + Vector((0, 0, 0.05)) + fwd * 0.05, Vector((sg * side.x, sg * side.y, -0.6)), fwd + Vector((0, 0, -0.7)))
         fingers_curl(h, 30)
-        h.rot("head", (1, 0, 0), 6 + 2 * math.sin(sec * 0.3))
+        B.nod(h, 6 + 2 * math.sin(sec * 0.3))
     bpy.context.view_layer.update()
 
 

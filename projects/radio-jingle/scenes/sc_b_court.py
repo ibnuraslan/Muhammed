@@ -235,7 +235,7 @@ def turn_page(c, h, sec, at=1.2):
     reach(h, "R", tip, Vector((0.6, -0.4, -0.6)), Vector((0, 1, -0.6)))
     reach(h, "L", base + Vector((-0.2, -0.1, 0.04)), Vector((-0.6, -0.4, -0.6)), Vector((0, 1, -0.6)))
     fingers_curl(h, 25, thumb=10)
-    h.rot("head", (1, 0, 0), 14)
+    B.nod(h, 14)
 
 
 def desk_hands(h, desk_y, sec, ph_=0.0, top=0.76, spread=0.18):
@@ -255,7 +255,7 @@ def idle(c, sec):
             B.arms_down(h) if False else None
         elif nm in ("JudgeL", "JudgeR", "LayL", "LayR", "prosecutor"):
             desk_hands(h, 0, sec, k, top=BENCH_TOP if nm != "prosecutor" else 0.76)
-            h.rot("head", (1, 0, 0), 10 + 2 * math.sin(sec * 0.5 + k))
+            B.nod(h, 10 + 2 * math.sin(sec * 0.5 + k))
 
 
 def anim(c, t, move):
@@ -271,7 +271,7 @@ def anim(c, t, move):
         fwd = B.fwd_of(law)
         reach(law, "R", law.bone_head("spine01") + fwd * 0.38 + Vector((0, 0, 0.12 + 0.05 * math.sin(sec * 1.3))), Vector((0.2, -0.8, -0.6)), fwd)
         fingers_curl(law, 20, side=("R",)); law.rot("head", (0, 0, 1), 8 * math.sin(sec * 0.5))
-        dfn = P_["defendant"]; desk_hands(dfn, 0, sec, 0.3); dfn.rot("head", (1, 0, 0), 6)
+        dfn = P_["defendant"]; desk_hands(dfn, 0, sec, 0.3); B.nod(dfn, 6)
         w = P_["witness"]
         if move == "witness":
             desk_hands(w, 0, sec, 0.0, spread=0.16)
@@ -311,14 +311,14 @@ def anim(c, t, move):
     if v == "civil":
         for k in ("claimant", "civlaw"):
             desk_hands(P_[k], 0, sec, 0.5 if k == "civlaw" else 0.0, spread=0.15)
-        P_["claimant"].rot("head", (1, 0, 0), 6)
+        B.nod(P_["claimant"], 6)
     if v == "empty":
         cl = P_["clerk"]
         fwd = B.fwd_of(cl); side = fwd.cross(Vector((0, 0, 1))).normalized()
         base = Vector((-3.95, 3.35, 0.8 + 0.06 * abs(math.sin(sec * 1.2))))
         for sd, sg in (("L", -1), ("R", 1)):
             reach(cl, sd, base + side * 0.12 * sg, Vector((sg * side.x, sg * side.y, -0.7)), fwd + Vector((0, 0, -0.4)))
-        fingers_curl(cl, 30); cl.rot("head", (1, 0, 0), 18)
+        fingers_curl(cl, 30); B.nod(cl, 18)
         if move == "pullback":
             B.hide_person(cl)
     bpy.context.view_layer.update()

@@ -118,7 +118,7 @@ def build(variant=None):
 
 def pose_man(c, sec):
     h = c["man"]; fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
-    h.rot("spine03", (1, 0, 0), 9); h.rot("spine02", (1, 0, 0), 7); h.rot("neck01", (1, 0, 0), 10); h.rot("head", (1, 0, 0), 16)
+    B.nod(h, 9, "spine03"); B.nod(h, 7, "spine02"); B.nod(h, 10, "neck01"); B.nod(h, 16)
     bpy.context.view_layer.update()
     board = Vector((-0.22, BENCH_Y - 0.12, TOP + 0.08))
     tip = board + Vector((0.03 * math.sin(sec * 0.9), 0.02 * math.sin(sec * 0.6), 0.012 * abs(math.sin(sec * 1.7))))
@@ -137,7 +137,7 @@ def anim(c, t, dur):
     if c.get("variant") == "away":
         h = c["man"]; sec = t * dur
         B.arms_down(h)
-        h.rot("head", (-1, 0, 0), 8); h.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.5))
+        B.nod(h, 8); h.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.5))
         h.rot("spine03", (0, 1, 0), 2 * math.sin(sec * 0.4))
         bpy.context.view_layer.update()
         return

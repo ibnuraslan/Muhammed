@@ -139,7 +139,7 @@ def anim(c, t, move):
                 B.stand(cl, (-0.05, c["tray_in"].y - 0.15, 0), -math.pi / 2 + 0.3)
                 reach(cl, "R", tr.location + Vector((0.14, 0, 0.06)), Vector((0.3, -0.6, -0.8)), Vector((-1, 0, 0)))
                 fingers_curl(cl, 40, side=("R",))
-                cl.rot("head", (1, 0, 0), 10)
+                B.nod(cl, 10)
         else:
             B.hide_person(cl)
             c["tray"].location = (0, 0, -30)
@@ -149,7 +149,7 @@ def anim(c, t, move):
                 for sd, sg in (("L", -1), ("R", 1)):
                     reach(h, sd, Vector((h.arm.location.x, 3.42, 0.95)) + side * (0.14 * sg), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.6)))
                 fingers_curl(h, 30)
-                h.rot("spine03", (1, 0, 0), 0); h.rot("head", (-1, 0, 0), 22)
+                B.nod(h, 22)
             # o1 slides one card aside and shakes his head
             u = ease(min(1.0, max(0.0, (sec - 1.5) / 1.0)))
             c["cards"][1].location = Vector((-0.12, 3.6, 0.913)).lerp(Vector((-0.55, 3.38, 0.913)), u)

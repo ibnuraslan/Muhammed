@@ -224,7 +224,7 @@ def anim(c, t, move):
         reach(fig, "R", hs.location + side * 0.06, Vector((0.2, -0.3, -1)), fwd)
         reach(fig, "L", pl.location - side * 0.04, Vector((-0.2, -0.3, -1)), fwd)
         fingers_curl(fig, 50, thumb=30)
-        fig.rot("head", (1, 0, 0), 14)
+        B.nod(fig, 14)
     elif move == "poles":
         for k, w in enumerate(c["wires"]):
             w.rotation_euler = (0.004 * math.sin(sec * 1.3 + k), 0, 0)

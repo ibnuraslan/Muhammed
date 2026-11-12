@@ -127,7 +127,7 @@ def write_hand(c, h, sec):
     pen = c["pen"]; w = h.bone_tail("wrist.R")
     pen.location = (w + tip) * 0.5 + Vector((0, 0, 0.02)); d = (tip - w)
     pen.rotation_mode = 'QUATERNION'; pen.rotation_quaternion = d.to_track_quat('Z', 'Y')
-    h.rot("head", (1, 0, 0), 18)
+    B.nod(h, 18)
 
 
 def anim(c, t, move):
@@ -152,10 +152,10 @@ def anim(c, t, move):
         else:
             hands_on_table(d2, sec, 1.0, fwd_d=0.4)
             hands_on_table(man, sec, 2.0, fwd_d=0.36, spread=0.12)
-            man.rot("head", (1, 0, 0), 8 + 3 * math.sin(sec * 0.8))
+            B.nod(man, 8 + 3 * math.sin(sec * 0.8))
     elif move == "retract":
         hands_on_table(d1, sec, 0.0, fwd_d=0.42); hands_on_table(d2, sec, 1.0, fwd_d=0.4)
-        d1.rot("head", (1, 0, 0), 6)
+        B.nod(d1, 6)
         u = ease(min(1.0, max(0.0, (sec - 1.6) / 1.4)))
         st = c["statement"]; st.location = Vector((0.03, 0.6, TOP + 0.003)).lerp(Vector((0.05, 0.12, TOP + 0.003)), u)
         fwd = B.fwd_of(man); side = fwd.cross(Vector((0, 0, 1))).normalized()
@@ -169,7 +169,7 @@ def anim(c, t, move):
         u = ease(min(1.0, max(0.0, (sec - 0.6) / (DUR["leave"] - 0.6))))
         B.walk_to(man, (2.55, 0.0, 0), (5.6, 0.05, 0), u, 4.2 * u, stride=22, swing=6)
         fwd = B.fwd_of(man)
-        man.rot("head", (1, 0, 0), 10)
+        B.nod(man, 10)
     bpy.context.view_layer.update()
 
 

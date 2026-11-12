@@ -424,3 +424,21 @@ def ph_instances(aid, placements):
     for o in [root] + ms:
         o.hide_render = True
     return out
+
+
+def preview_cap():
+    """Preview renders only (env B_PREVIEW=1): cap subdivision so heavy shared sets fit in memory.
+    Baked deliveries keep full detail (the variable is not set there)."""
+    if os.environ.get("B_PREVIEW") != "1":
+        return
+    n = 0
+    for o in bpy.data.objects:
+        for m in o.modifiers:
+            if m.type == 'SUBSURF' and m.render_levels > 1:
+                m.render_levels = 1; n += 1
+    print("[b_common] preview: capped subsurf on", n, "objects")
+
+
+def nod(h, deg, bone="head"):
+    """Tilt a bone forward (positive = looking down) whatever way the person faces."""
+    h.rot(bone, Vector((0, 0, 1)).cross(fwd_of(h)).normalized(), deg)

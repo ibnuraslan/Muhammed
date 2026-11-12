@@ -60,12 +60,12 @@ def anim(c, t, move):
         pass
     if move == "lift":                                   # she has stepped back; only the strip and the hanging powder
         h.arm.location = h.arm.location + Vector((0.55, 0.35, 0)); bpy.context.view_layer.update()
-        B.arms_down(h); h.rot("head", (1, 0, 0), 10)
+        B.arms_down(h); B.nod(h, 10)
         c["brush"].location = (0, 0, -30)
         bpy.context.view_layer.update()
         return
     fwd = B.fwd_of(h)
-    h.rot("spine03", (0, 1, 0), 0); h.rot("head", (0, 0, 1), -6); h.rot("head", (1, 0, 0), 4)
+    h.rot("spine03", (0, 1, 0), 0); h.rot("head", (0, 0, 1), -6); B.nod(h, 4)
     bpy.context.view_layer.update()
     stroke = Vector((0, 0.07 * math.sin(sec * 3.0), 0.012 * math.sin(sec * 6.0)))
     tip = TAPE + Vector((0.025, 0, 0)) + stroke
