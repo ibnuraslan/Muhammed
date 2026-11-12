@@ -9,7 +9,7 @@ These values were read back from `MonkeyHeadTransplant_v009_60fps.blend`, opened
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1770**, step 1 (29.5 s) |
+| Frame range | **1–1656**, step 1 (27.6 s at 60 fps) |
 | Camera | One camera, `CAM_Film`, keyed on every frame from one spline. There are no cuts, camera switches or markers. The lens and focus distance are animated. DOF is on at f/5.6 minimum. |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
