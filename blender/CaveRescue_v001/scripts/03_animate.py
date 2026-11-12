@@ -320,8 +320,8 @@ for n, lane, s0 in WALK:
         hh = {}
         for s in "LR":
             sw = math.sin(ph + (0 if s == "L" else math.pi))
-            W, d, nn = relaxed_hand(n, P, Rb, s, fwd=(0.18 if not run else 0.3) * sw + (0.12 if run else 0.0), up=0.18 if run else 0.0)
-            hh[s] = (W, d, nn)
+            W, d, nn = relaxed_hand(n, P, Rb, s, fwd=(0.18 if not run else 0.28) * sw + (0.1 if run else 0.0), up=0.18 if run else 0.0, out=-0.02 if run else 0.0)
+            hh[s] = (W, d, nn, elbow_pole(n, P, Rb, s, out=0.08 if run else 0.18))
         key_hands(n, f, P, Rb, hh)
         if run:
             H.key_spine(f, flex=16, twist=-8 * math.sin(ph), head=(8 * math.sin(f * 0.11), 25 * math.sin(f * 0.045) if n in ("Boy3", "Boy5") else 10 * math.sin(f * 0.07)))
@@ -419,8 +419,8 @@ for n, x, y, yaw in HUDDLE:
     look_pool = math.degrees(math.atan2(CX + 0.2 - X, -(-1.8 - y))) - yaw   # head yaw toward the diver
     look_pool = max(-60, min(60, look_pool))
     br = random.uniform(0, 6.3)
-    for f in (F_CH0 - 12, F_CH0 + 30, F_CH0 + 60):
-        seated(n, f, X, y, yaw, lean=24 + 4 * math.sin(f * 0.05 + br), head=(25 + 6 * math.sin(f * 0.04 + br), 0))
+    for f in (F_CH0 - 12, F_CH0 + 15, F_CH0 + 45, F_CH0 + 72):     # breathing, shifting, glancing around (not frozen)
+        seated(n, f, X, y, yaw, lean=20 + 5 * math.sin(f * 0.05 + br), head=(12 + 9 * math.sin(f * 0.04 + br), 22 * math.sin(f * 0.031 + 2 * br)))
     shield = n in ("Boy1", "Boy4", "HB3")
     for f in (F_SURF, F_SURF + 18, F_SURF + 45, 1160, 1212):
         hov = None
@@ -487,26 +487,29 @@ for f, v in ((1, 0.4), (1213, 0.5), (1300, 1.4), (1488, 1.2), (1700, 0.35), (245
 
 # beat 8: Boy3 kneels at the water's edge, staring at the black water (1711-2016)
 B3 = "Boy3"; EDGE = V((CX + 0.3, -0.45, 0))
-for f, hd in ((1705, (35, 0)), (1760, (40, 8)), (1830, (42, -6)), (1900, (38, 4)), (1960, (44, 0)), (2016, (40, 0))):
+for f, hd in ((1705, (22, 0)), (1760, (18, 10)), (1800, (24, -8)), (1850, (16, 5)), (1900, (20, -4)), (1950, (14, 8)), (1990, (18, 0)), (2016, (20, -6))):
     g = ground_z(EDGE.x, EDGE.y)
     hh = {}
     for s in "LR":
         sx = 1 if s == "L" else -1
         hp = V((EDGE.x + 0.18 * sx, EDGE.y - 0.32, 0)); hh[s] = (V((hp.x, hp.y, ground_z(hp.x, hp.y) + 0.04)), V((0, -1, -0.3)).normalized(), V((0, 0, -1)))
-    kneel(B3, f, EDGE.x, EDGE.y, 0.0, lean=38, head=hd, hands=hh)
+    kneel(B3, f, EDGE.x, EDGE.y, 0.0, lean=30 + 4 * math.sin(f * 0.06), head=hd, hands=hh)
 TELE[B3].add(1704)
 # beats 9-11: team kneels around Boy2 (medic = DiverA, mask = DiverB), coach keeps a hand on the boy
 P2 = V((CX + 0.8, 1.25, 0))
 DIVERS_IN = 1715
-for f in (DIVERS_IN, 2017, 2060, 2110, 2154):
-    kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=25, head=(25, 0))
-    kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=30, head=(30, 0))
+for f in (DIVERS_IN, 1800, 1900, 1990, 2017, 2060, 2110, 2154):    # leaning in, nodding, looking at each other and the boy
+    kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=24 + 6 * math.sin(f * 0.045), head=(22 + 8 * math.sin(f * 0.05), 14 * math.sin(f * 0.03)))
+    kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=28 + 5 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
 TELE["DiverB"].add(DIVERS_IN - 1); TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue
     X = CX + x
-    for f in (1245, DIVERS_IN, 2017, 2120, 2240, 2406):
-        seated(n, f, X, y, yaw, lean=22, head=(15, 0) if n != "Boy2" else (5, 10))
+    ph = (hash(n) % 100) / 16.0
+    for f in (1245, DIVERS_IN, 1800, 1890, 1980, 2017, 2070, 2120, 2180, 2240, 2300, 2360, 2406):
+        if n == "Boy2" and f >= 2155: continue
+        seated(n, f, X, y, yaw, lean=21 + 4 * math.sin(f * 0.05 + ph),
+               head=(10 + 8 * math.sin(f * 0.04 + ph), 20 * math.sin(f * 0.025 + ph)) if n != "Boy2" else (5, 10))
 # beat 10: sedation (2155-2328): medic's right hand with the syringe at Boy2's left upper arm, left hand steadies; boy's eyes close
 ev(2155)
 def bone_w(n, b, t=0.0):
@@ -581,9 +584,12 @@ for f in (2329, 2345, 2365, 2385, 2406):
             HUM["DiverB"].key_hand(s, f, W, (fwd2 * -1 + V((0, 0, 0.3))).normalized(), side * sx, W + fwd2 * 0.6 + side * 0.4 * -sx)
 # =============================================================== BEAT 12: tow through the flooded passage (2407-2570)
 # DiverB swims, Boy2 lies face-up in the harness beside him (head first), the mask stays on the boy's head
-TOW0, TOW1 = 2440, 2570
+# hold seated / kneeling until the camera dives through the water surface (2421), then the tow is under way
+kneel("DiverB", 2415, P2.x - 0.45, P2.y - 0.45, 135, lean=30, head=(25, 0))
+seated("Boy2", 2415, P2.x, P2.y, -10, lean=14, head=(28, 20), hug=False)
+TOW0, TOW1 = 2421, 2570
 for f in range(TOW0, TOW1 + 1, 10):
-    u = (f - TOW0) / (TOW1 - TOW0); y = -2.4 - 9.5 * u
+    u = (f - TOW0) / (TOW1 - TOW0); y = -1.6 - 10.3 * u      # starts behind the diving camera, swims into frame
     sq = math.exp(-((y + 13.0) ** 2) / 4.0)
     P = pas_mid(y, 0.85 - 0.2 * sq, 0.3)
     swim("DiverB", f, P, 0.0, phase=f * 0.25, kick=0.9)
