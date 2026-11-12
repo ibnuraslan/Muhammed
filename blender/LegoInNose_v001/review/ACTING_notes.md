@@ -85,3 +85,16 @@ Package: `../../LegoInNose_v008b/LegoInNose_v008b_60fps.blend`. Sheets: `v008b_h
 | Resting hand at the thigh | `place_hand` + `flat_palm` on the thigh top. `leg_fix.py` then lifts every boy hand that is more than 1.5 cm inside his legs, pelvis or belly. `hand_fix.py` never tested legs. Hits went from 281 to 14 frames (11 rounds). |
 | clip_scan | The official `pipeline/clip_scan.py` (3cfc53c) runs unmodified, skin only, no masks-off copy. It used to crash because the man's Delete clothing masks switched off in the shower and changed his vertex count. Those masks are now off for the whole film, so the count is constant. The shirts cover his body. |
 | Close-ups | The 4.0 s tunnel cell is replaced by f700 (the brick at the nostril). Mom's chin-hand shot looks at her left wrist from 0.5 m, from the side with a clear line of sight. |
+
+### v008b results (final package)
+- **clip_scan, official 3cfc53c, unmodified, step 6:** `bad_ranges` `[[973, 973]]`. That is 16.2 s, one sample, inside the accepted 15.9–16.6 s window (0.3 s or less).
+  - Before the leg and Mom passes, the scan also flagged 0.1–0.3 s, 4.4 s, 6.1 s and 22.7–23.0 s (the boy's hands in his legs) and 17.8–17.9 s (his hand inside Mom).
+  - The Mom range was fixed with `leg_fix.py … Boy other=Mom 1055-1090`.
+- **QA, 771d2da, with beats.json:** `{'EMPTY': 139, 'FILL': 9, 'INSIDE': 1}`. CAMJUMP, ROLL, CLAW, HOVER and FACEPRESS are 0.
+  - EMPTY, intended (same as section 2): the tub, the dream bricks, the cross-section studio and the tunnels.
+  - EMPTY, new: 1723–1837, the bedroom. The man lies on the mattress and covers 10–14 % (the bed fills the rest).
+  - FILL: the nostril entries and exits, plus the bedroom/bathroom wall pass at 1873–1879.
+  - INSIDE: f727, the nostril opening, as before.
+- **Hand audit:** 10 hits. Mom's shirt 1. The man's own shirt 7, sitting up in bed, which is intended. The man's own body 2.
+- **Grips:** the bricks 4–6 mm. The tweezers are still at 95 mm max and 10 mm mean. **Open.**
+- **Half-second sheet:** 6.0, 26.5–28.5 and 30.5 s are fixed. The tunnel cells at 12.0, 14.5, 18.5 and 22.0 s are pink, as accepted.
