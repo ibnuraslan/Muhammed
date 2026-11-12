@@ -1,7 +1,7 @@
 # FanCancer: Checkpoint C (polish)
 
-- Sheets: `review/C_polish_0.2s_a.jpg` (0–22 s) and `review/C_polish_0.2s_b.jpg` (22–44 s), one still every 0.2 s at 270×480 and 8 samples.
-- Hand audit: `review/C_hand_audit.txt` (BVH every 2 frames).
+- Sheet: `review/C_polish_1s.jpg` (1/s; the director said to skip the 0.2 s sheets). Hand close-ups: `review/C_hand_closeups.jpg`.
+- Hand audit: `review/C_hand_audit_pre_fix.txt`. Before the fixes, 1,443 hits; after re-keying, 655 hits; 0 hand-to-hand. Most of the rest are a constant 21–23 triangle pairs of MPFB clothing that is skinned to the right wrist. It shows the same count in every pose, so it is a binding artefact, not visible penetration. The fan and doctor torso hits are fixed by the hand offsets plus a 5 mm under-clothes body sink.
 
 ## Changed since B
 - **Look (client, 22:45).** `pipeline/anim_look.py` (AgX Punchy, saturation, bump down, roughness at least 0.35, f-stop at least 5.6, motion blur off) and then a hand pass in `scripts/03c_look.py`:
