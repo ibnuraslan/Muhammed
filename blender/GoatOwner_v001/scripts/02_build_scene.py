@@ -353,6 +353,23 @@ for o in bpy.data.objects:
     if o.type == 'ARMATURE' or (o.parent and o.parent.type == 'ARMATURE'):
         if o.name not in ANIM.objects: link(o, ANIM)
 goat = bpy.data.objects["Goat_rig"]
+# the goat model's mouth interior is saturated red and reads as blood near the attack: pull strong reds to a dark neutral brown
+for c_ in goat.children:
+    for m in (c_.data.materials if c_.type == 'MESH' else []):
+        if not m or not m.use_nodes: continue
+        nt = m.node_tree
+        for nd in list(nt.nodes):
+            if nd.type == 'BSDF_PRINCIPLED' and nd.inputs['Base Color'].links:
+                src = nd.inputs['Base Color'].links[0].from_socket
+                sep = nt.nodes.new('ShaderNodeSeparateColor')
+                mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'
+                sub = nt.nodes.new('ShaderNodeMath'); sub.operation = 'SUBTRACT'
+                mr_ = nt.nodes.new('ShaderNodeMapRange'); mr_.inputs['From Min'].default_value = 0.12; mr_.inputs['From Max'].default_value = 0.3
+                mix_ = nt.nodes.new('ShaderNodeMix'); mix_.data_type = 'RGBA'; mix_.inputs['B'].default_value = (0.11, 0.075, 0.06, 1)
+                nt.links.new(src, sep.inputs[0]); nt.links.new(sep.outputs[1], mx.inputs[0]); nt.links.new(sep.outputs[2], mx.inputs[1])
+                nt.links.new(sep.outputs[0], sub.inputs[0]); nt.links.new(mx.outputs[0], sub.inputs[1]); nt.links.new(sub.outputs[0], mr_.inputs['Value'])
+                nt.links.new(mr_.outputs['Result'], mix_.inputs['Factor']); nt.links.new(src, mix_.inputs['A']); nt.links.new(mix_.outputs['Result'], nd.inputs['Base Color'])
+                print("GOAT red suppressed in", m.name)
 # pasture goats: copies with their own armatures (body data shared)
 gbody = [o for o in goat.children if o.type == 'MESH'][0]
 for i in range(3):
