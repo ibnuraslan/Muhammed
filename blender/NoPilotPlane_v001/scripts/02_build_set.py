@@ -251,14 +251,14 @@ if os.path.exists(SEAT_GLB):
 # ------------------------------------------------------------------ door
 M_door = mat("M_door", (0.40, 0.40, 0.38), rough=0.5, noise=0.35, nscale=25, bump=0.4)
 M_doorp = mat("M_door_panel", (0.55, 0.55, 0.52), rough=0.45, noise=0.3, nscale=18, bump=0.3)
-d = MB("DOOR"); d.box((0.36, 0.0, 0.965), (0.72, 0.045, 1.93), M_door, bevel=0.008)
+d = MB("DOOR"); d.box((-0.36, 0.0, 0.965), (0.72, 0.045, 1.93), M_door, bevel=0.008)
 for zc, hh in ((1.42, 0.62), (0.82, 0.42)):
-    d.box((0.36, -0.024, zc), (0.56, 0.004, hh), M_doorp, bevel=0.004)
-d.box((0.36, -0.027, 1.82), (0.2, 0.003, 0.05), M_steel)
-d.cyl((0.62, -0.05, 1.0), 0.012, 0.12, M_steel, rot=(0, 90, 0)); d.cyl((0.62, -0.035, 1.0), 0.012, 0.03, M_steel, rot=(90, 0, 0))
-d.cyl((0.36, -0.024, 1.55), 0.012, 0.006, M_steel, rot=(90, 0, 0))
-d.box((0.36, -0.024, 0.35), (0.6, 0.004, 0.25), M_steel)                     # kick plate                      # peephole plate (no text)
-door = d.obj(cSet); door.location = (-0.36, -0.5, 0.0)
+    d.box((-0.36, -0.024, zc), (0.56, 0.004, hh), M_doorp, bevel=0.004)
+d.box((-0.36, -0.027, 1.82), (0.2, 0.003, 0.05), M_steel)
+d.cyl((-0.62, -0.05, 1.0), 0.012, 0.12, M_steel, rot=(0, 90, 0)); d.cyl((-0.62, -0.035, 1.0), 0.012, 0.03, M_steel, rot=(90, 0, 0))
+d.cyl((-0.36, -0.024, 1.55), 0.012, 0.006, M_steel, rot=(90, 0, 0))
+d.box((-0.36, -0.024, 0.35), (0.6, 0.004, 0.25), M_steel)                     # kick plate                      # peephole plate (no text)
+door = d.obj(cSet); door.location = (0.36, -0.5, 0.0)   # hinged on the right: it folds back along the right wall, clear of the captain
 
 # ------------------------------------------------------------------ cockpit
 ck = MB("COCKPIT_FIXED")

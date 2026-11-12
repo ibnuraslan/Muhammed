@@ -100,6 +100,7 @@ def pose_passenger(arm, row, side, k, x, y, f):
     fk_leg(R, "L", f, hip=86 + rnd.uniform(-6, 4), knee=78 + rnd.uniform(-8, 8), splay=rnd.uniform(2, 9))
     fk_leg(R, "R", f, hip=86 + rnd.uniform(-6, 4), knee=78 + rnd.uniform(-8, 8), splay=rnd.uniform(2, 9))
     sidelean = rnd.choice([-1, 1]) * rnd.uniform(4, 14)
+    if aisle: sidelean = -to_aisle * rnd.uniform(4, 12)      # v007: lean toward the aisle, away from the seatmate
     if not aisle: sidelean = -to_aisle * rnd.uniform(6, 16) * (-1)   # window seat: lean toward the window
     SP = dict(flex=rnd.uniform(-4, 14), side=sidelean, twist=rnd.uniform(-10, 10),
               hflex=rnd.choice([rnd.uniform(25, 50), rnd.uniform(-35, -20)]), hside=sidelean * 2.2 + rnd.uniform(-10, 10), htwist=rnd.uniform(-25, 25))
@@ -186,15 +187,15 @@ SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)        # face turned toward the cabin, readable
 fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)
-fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30), armR=(55, 0, 15))   # hauled up/back
-fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20), armR=(60, -10, 15))
-fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12), armR=(62, -10, 15))  # left arm swings down onto the yoke
-fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12), armR=(62, -10, 15))
-fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20), armR=(60, -20, 15))
-fo_pose(F(33.4), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20), armR=(58, 0, 15))
-fo_pose(F(38.0), (0.78, 0.72, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
+fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30, 15), armR=(55, 0, 15, 15))   # hauled up/back
+fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 15), armR=(60, -10, 15, 15))
+fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 15), armR=(62, -10, 15, 15))  # left arm swings down onto the yoke
+fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12, 15), armR=(62, -10, 15, 15))
+fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20, 15), armR=(60, -20, 15, 15))
+fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20, 15), armR=(58, 0, 15, 15))
+fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
 for f in range(F(38.0) + 40, 4410, 40):
-    fo_pose(f, (0.78, 0.72, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
+    fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
 
 # ------------------------------------------------------------------ pilot uniform details (bone-attached; director v006)
 M_gold = mat("M_uniform_gold", (0.95, 0.68, 0.18), rough=0.3, metal=1.0)
@@ -275,8 +276,8 @@ def uniform(arm, tag):
 DOOR = OB["DOOR"]
 def keyrot(o, f, e):
     o.rotation_euler = [R_(a) for a in e]; o.keyframe_insert("rotation_euler", frame=f)
-keyrot(DOOR, 1, (0, 0, 28)); keyrot(DOOR, F(11.72), (0, 0, 28));   # ajar: the captain fell against it keyrot(DOOR, F(11.98), (0, 0, 88)); keyrot(DOOR, F(12.2), (0, 0, 82))
-keyrot(DOOR, F(15.2), (0, 0, 86)); keyrot(DOOR, F(16.5), (0, 0, 87))
+keyrot(DOOR, 1, (0, 0, -28)); keyrot(DOOR, F(11.72), (0, 0, -28)); keyrot(DOOR, F(11.98), (0, 0, -88)); keyrot(DOOR, F(12.2), (0, 0, -82))   # ajar, then pushed flat
+keyrot(DOOR, F(15.2), (0, 0, -86)); keyrot(DOOR, F(16.5), (0, 0, -87))
 YR, YL = OB["YOKE_R"], OB["YOKE_L"]
 yoke_keys = [(1, 0), (F(30.8), 0), (F(31.1), -6), (F(31.5), -16), (F(33.7), -15), (F(38.8), -14), (F(39.8), -10), (F(40.8), -12),
              (F(41.8), -6), (F(42.5), -5), (F(44.0), 4), (F(45.8), 3), (F(47.1), 1), (F(56.8), 2), (F(64.6), 1.5), (F(72.5), 1)]
@@ -516,7 +517,7 @@ hand("L", F(1.6), (sx_ - 0.08, sy_ + 0.25, 0.92), d=(0.3, 1, 0.3), n=(0, 0.2, 1)
 hand("R", F(1.6), (sx_ + 0.12, sy_ + 0.25, 0.90), d=(-0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
 body(F(1.6), SIT, flex=-8, sflex=4, head=(0, 0))
 body(F(2.4), SIT, flex=-8, sflex=4, twist=-25, head=(5, -35))
-hand("L", F(2.4), (sx_ - 0.235, sy_ + 0.08, 0.66), d=(0, 1, -0.2), n=(0, 0, 1), curl=45)          # grips armrests
+hand("L", F(2.4), (sx_ - 0.10, sy_ + 0.28, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=45)          # grips own thigh (the shared armrest is the neighbour's)
 hand("R", F(2.4), (sx_ + 0.235, sy_ + 0.08, 0.66), d=(0, 1, -0.2), n=(0, 0, 1), curl=45)
 body(F(3.4), SIT, flex=-6, sflex=10, twist=15, head=(30, 20))
 hand("L", F(3.6), (sx_ - 0.30, sy_ + 0.35, 0.80), d=(-0.4, 1, 0), n=(0, 0, 1), curl=15)            # reaches toward the tipping cup
@@ -562,13 +563,13 @@ for f, x, y, z in ((F(10.6), 0.30, -2.42, 1.08), (F(11.3), 0.36, -1.55, 1.0)):
 def door_pt(f, local):
     sc.frame_set(f); return DOOR.matrix_world @ Vector(local)
 STAND_Z = H.root_head.z - 0.03
-body(F(11.7), (0.12, -1.30, STAND_Z), flex=6, sflex=4, head=(0, 0)); feet(F(11.7), (0.02, -1.36), (0.22, -1.22))
-hand("R", F(11.6), (0.25, -0.70, 1.12), d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
+body(F(11.7), (-0.06, -1.30, STAND_Z), flex=6, sflex=4, head=(0, 0)); feet(F(11.7), (-0.16, -1.36), (0.04, -1.22))
+hand("R", F(11.6), (0.10, -0.70, 1.12), d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
 for f in (F(11.74), F(11.82), F(11.9), F(11.98)):
-    W = door_pt(f, (0.45, -0.07, 1.12)); hand("R", f, W, d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
+    W = door_pt(f, (-0.45, -0.07, 1.12)); hand("R", f, W, d=(0, 0.3, 1), n=(0, -1, 0), curl=5)
 hand("L", F(11.9), (-0.44, -0.62, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=40)                          # left hand on the frame
-body(F(12.5), (0.14, -0.80, STAND_Z - 0.02), flex=12, sflex=8, head=(10, 0)); feet(F(12.5), (0.04, -0.92), (0.24, -0.66))
-H.key_foot("R", F(12.2), Vector((0.22, -0.77)), 180, 0.06)
+body(F(12.5), (-0.04, -0.80, STAND_Z - 0.02), flex=12, sflex=8, head=(10, 0)); feet(F(12.5), (-0.14, -0.92), (0.06, -0.66))
+H.key_foot("R", F(12.2), Vector((0.04, -0.77)), 180, 0.06)
 # beat 5: look down at the captain, step over him
 body(F(14.1), (0.02, -0.66, STAND_Z - 0.02), flex=14, sflex=20, head=(35, 0))
 hand("L", F(14.1), (-0.44, -0.60, 1.25), d=(0, 0, 1), n=(1, 0, 0), curl=50)
@@ -635,9 +636,9 @@ body(F(29.8), (-0.10, 0.64, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(
 feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.05, 0.74)), 180, 0.06)
 body(F(30.6), (-0.12, 0.64, STAND_Z - 0.12), flex=8, sflex=8, twist=-5, head=(15, 0))
 body(F(31.4), (-0.10, 0.64, STAND_Z - 0.16), flex=10, sflex=10, twist=-5, head=(20, 0))
-body(F(32.4), (0.16, 0.70, STAND_Z - 0.18), flex=14, sflex=8, twist=-20, head=(25, -10))
-feet(F(32.4), (0.12, 0.72), (0.42, 0.78))
-body(F(33.2), (0.20, 0.66, STAND_Z - 0.18), flex=14, sflex=8, twist=-25, head=(30, -15))
+body(F(32.4), (0.12, 0.62, STAND_Z - 0.16), flex=10, sflex=10, twist=-20, head=(25, -10))
+feet(F(32.4), (0.04, 0.62), (0.30, 0.68))
+body(F(33.2), (0.16, 0.62, STAND_Z - 0.16), flex=10, sflex=10, twist=-25, head=(30, -15))
 # beat 10-11: alarms, jolt, stagger forward to the windscreen
 body(F(33.7), (0.18, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
 hand("L", F(33.9), (-0.30, 0.98, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
@@ -772,10 +773,10 @@ camd = bpy.data.cameras.new("CAM_Film"); camd.lens = 14; camd.clip_start = 0.03;
 CAM = bpy.data.objects.new("CAM_Film", camd); sc.collection.objects.link(CAM); sc.camera = CAM
 LOOK = [(0.0, 0, -48), (0.6, 4, -38), (1.2, 0, -8), (2.3, -65, -10), (3.4, 53, -40), (4.6, 62, -14),
         (5.8, 85, -6), (6.4, 94, -2), (7.1, 104, -30), (7.8, 82, 6), (8.4, 96, -18), (9.0, 30, -32), (9.6, -15, -14), (10.2, 0, -6), (10.8, -32, -14), (11.2, -4, -12),
-        (11.6, -14, -34), (12.1, -30, -10), (12.8, -40, -14), (13.5, -10, -32), (14.1, 22, -58), (15.1, 5, -66), (15.8, 118, -42), (16.4, 112, -40),
+        (11.6, -14, -34), (12.1, -30, -10), (12.8, -40, -14), (13.5, 10, -32), (14.1, 42, -42), (14.6, 38, -50), (15.1, 5, -66), (15.8, -5, -25), (16.4, -25, -18),
         (17.2, -45, -14), (17.8, -42, -16), (18.8, -22, -26), (19.7, -14, -58), (20.8, -14, -55), (21.8, -5, -30),
         (22.8, 4, -30), (23.9, -6, -26), (25.2, 0, -52), (26.0, 4, -48), (26.9, -48, -20), (28.0, -42, -26), (29.0, -34, -22),
-        (30.5, -16, -30), (31.8, -30, -38), (32.5, -58, -46), (33.2, -80, -55), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
+        (30.5, -16, -30), (31.8, -30, -38), (32.5, -78, -58), (33.2, -88, -55), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
         (38.8, 0, -28), (39.8, 0, -48), (40.8, 22, -34), (41.8, 0, -8), (42.5, 0, -5), (43.6, 0, -34), (44.7, 0, -6), (45.8, 4, -4),
         (47.1, -14, -26), (48.0, -16, -30), (48.8, -4, -6), (49.6, 0, -48), (50.4, -38, -14), (51.2, -34, -16), (52.0, -10, -8), (52.9, 60, -34), (53.5, 0, -12), (54.1, -22, -10), (54.8, 14, -20), (55.5, -4, -26), (56.1, 6, -10),
         (56.8, 48, -30), (57.4, 30, -14), (58.0, 0, -8), (58.6, -12, 2), (59.2, 48, -33), (60.4, 5, -44), (61.5, 0, 4), (62.0, 8, -4), (62.6, 72, -12), (63.6, 45, -30),
