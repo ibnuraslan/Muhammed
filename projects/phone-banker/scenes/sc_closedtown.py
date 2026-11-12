@@ -83,7 +83,8 @@ def build(variant=None):
         from pbkit import ph_instances
         ph_instances("modular_chainlink_fence", [((-8 - k * 8.1, 6.0, 0), 0.0, 1.0) for k in range(5)] + [((10 + k * 8.1, 6.0, 0), 0.0, 1.0) for k in range(5)])
         ph.model("security_light", loc=(2.0, 4.2, 2.5), rot_z=0.0)
-        c["bus"] = bus()
+        from pbkit import kit_vehicle
+        c["bus"] = kit_vehicle("bus_city", "TownBus", (0.72, 0.66, 0.5), lamps=True)
         c["guard"] = person("Guard", 1.0, 30, "male_casualsuit05", "short02", cval=0.25, hue=0.3, sat=0.6)
         recolor(c["guard"], "casualsuit05", (0.2, 0.24, 0.16))
         c["snowfall"] = precip_curtains("snow", x_range=(-30, 30), ys=(-12, -6, -1, 3, 8))

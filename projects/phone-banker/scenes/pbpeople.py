@@ -13,7 +13,14 @@ SKIN = {("m", "mid"): "middleage_lightskinned_male_diffuse.png", ("m", "old"): "
         ("f", "mid"): "middleage_lightskinned_female_diffuse.png", ("f", "young"): "young_lightskinned_female_diffuse.png"}
 
 
-def person(name, gender, years, cloth, hair, cval=0.25, hv=0.3, hue=0.5, sat=1.0, skin=None, weight=0.5, height=0.5):
+PALETTE = [(0.16, 0.16, 0.17), (0.3, 0.3, 0.31), (0.22, 0.14, 0.08), (0.42, 0.3, 0.17), (0.08, 0.1, 0.17),
+           (0.19, 0.2, 0.13), (0.2, 0.25, 0.32), (0.35, 0.28, 0.22), (0.26, 0.24, 0.27)]
+DARK_CLOTHES = ("male_elegantsuit01", "female_elegantsuit01", "male_casualsuit05", "male_casualsuit01")
+
+
+def person(name, gender, years, cloth, hair, cval=0.25, hv=0.3, hue=0.5, sat=1.0, skin=None, weight=0.5, height=0.5, col=None):
+    """A MakeHuman figure. Dark suits and jackets get a muted period colour (charcoal, grey, brown, camel, navy...)
+    chosen from the name unless `col` is given, so nobody reads as an all-black silhouette."""
     if skin is None:
         skin = SKIN[("f", "mid")] if gender < 0.5 else (SKIN[("m", "old")] if years > 55 else SKIN[("m", "mid")])
     h = Human(name, gender=gender, years=years, muscle=0.5, weight=weight, height=height, eyelashes="eyelashes01", skin=skin)
@@ -21,7 +28,38 @@ def person(name, gender, years, cloth, hair, cval=0.25, hv=0.3, hue=0.5, sat=1.0
     add_asset(h, "clothes", "shoes02", val=0.15, rough=0.4)
     if hair:
         add_asset(h, "hair", hair, val=hv, rough=0.45)
+    if col is None and cloth in DARK_CLOTHES:
+        import zlib
+        col = PALETTE[zlib.crc32(name.encode()) % len(PALETTE)]
+    if col is not None:
+        recolor(h, cloth, col, 0.75)
     return h
+
+
+def militia(name, years, hv=0.25):
+    """1995 militia officer: a grey-blue uniform jacket and trousers, a peaked cap."""
+    h = person(name, 1.0, years, "male_casualsuit05", "short02", hv=hv, col=(0.3, 0.35, 0.43))
+    militia_cap(h)
+    return h
+
+
+def militia_cap(h):
+    from kit import cyl, box, pbr
+    from pbkit import joinm
+    stand(h, (0, 0, 0), 0.0)
+    tl = h.bone_tail("head"); hd = h.bone_head("head")
+    up = (tl - hd).normalized()
+    c = tl - up * 0.045 + Vector((0, 0.005, 0))
+    cloth = pbr(h.name + "CapCloth", (0.28, 0.33, 0.41), 0.75); band = pbr(h.name + "CapBand", (0.45, 0.06, 0.06), 0.6)
+    visor = pbr(h.name + "Visor", (0.02, 0.02, 0.02), 0.25, 0.0, **{'Coat Weight': 0.8})
+    parts = [cyl("CapCrown", (c.x, c.y, c.z + 0.035), 0.118, 0.03, cloth, verts=32),
+             cyl("CapBody", (c.x, c.y, c.z + 0.0), 0.098, 0.05, cloth, verts=32),
+             cyl("CapBand", (c.x, c.y, c.z - 0.012), 0.1, 0.022, band, verts=32),
+             box("CapVisor", (c.x, c.y - 0.11, c.z - 0.022), (0.15, 0.07, 0.008), visor, rot=(math.radians(-12), 0, 0)),
+             cyl("CapBadge", (c.x, c.y - 0.1, c.z + 0.0), 0.012, 0.004, pbr("Badge", (0.7, 0.55, 0.2), 0.3, 1.0), verts=12, rot=(math.radians(90), 0, 0))]
+    cap = joinm(parts, h.name + "Cap")
+    parent_keep(cap, h, "head")
+    return cap
 
 
 def _rest(h):

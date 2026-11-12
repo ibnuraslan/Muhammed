@@ -43,14 +43,14 @@ def handset_material():
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
     # distance from the stain centre (on the ear cup, upper face), squashed into an ellipse
-    mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (0.0, -0.0616, -0.0165); mp.inputs['Scale'].default_value = (1.3, 0.8, 1.6)
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (0.0, -0.0234, -0.0174); mp.inputs['Scale'].default_value = (1.2, 0.9, 1.2)
     L.new(tc.outputs['Object'], mp.inputs['Vector'])
     wob = N.new("ShaderNodeTexNoise"); wob.inputs['Scale'].default_value = 60; wob.inputs['Detail'].default_value = 4
     L.new(tc.outputs['Object'], wob.inputs['Vector'])
     ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(mp.outputs[0], ln.inputs[0])
     jit = N.new("ShaderNodeMath"); jit.operation = 'MULTIPLY_ADD'; jit.inputs[1].default_value = 0.014
     L.new(wob.outputs['Fac'], jit.inputs[0]); L.new(ln.outputs['Value'], jit.inputs[2])
-    mask = N.new("ShaderNodeMapRange"); mask.inputs['From Min'].default_value = 0.034; mask.inputs['From Max'].default_value = 0.014
+    mask = N.new("ShaderNodeMapRange"); mask.inputs['From Min'].default_value = 0.05; mask.inputs['From Max'].default_value = 0.02
     L.new(jit.outputs[0], mask.inputs['Value'])
     # fine mottling inside the patch (a dried film, not a blot)
     mot = N.new("ShaderNodeTexNoise"); mot.inputs['Scale'].default_value = 420; mot.inputs['Detail'].default_value = 3
@@ -59,9 +59,9 @@ def handset_material():
     mk = N.new("ShaderNodeMath"); mk.operation = 'MULTIPLY'; mk.inputs[1].default_value = 2.2; mk.use_clamp = True
     L.new(mm.outputs[0], mk.inputs[0])
     col = N.new("ShaderNodeMix"); col.data_type = 'RGBA'
-    col.inputs[6].default_value = (0.80, 0.78, 0.72, 1); col.inputs[7].default_value = (0.47, 0.39, 0.25, 1)
+    col.inputs[6].default_value = (0.80, 0.78, 0.72, 1); col.inputs[7].default_value = (0.42, 0.34, 0.2, 1)
     L.new(mk.outputs[0], col.inputs['Factor']); L.new(col.outputs[2], p.inputs['Base Color'])
-    rg = N.new("ShaderNodeMix"); rg.data_type = 'FLOAT'; rg.inputs[2].default_value = 0.36; rg.inputs[3].default_value = 0.16
+    rg = N.new("ShaderNodeMix"); rg.data_type = 'FLOAT'; rg.inputs[2].default_value = 0.3; rg.inputs[3].default_value = 0.07
     L.new(mask.outputs[0], rg.inputs['Factor']); L.new(rg.outputs[0], p.inputs['Roughness'])
     p.inputs['Coat Weight'].default_value = 0.15; p.inputs['Subsurface Weight'].default_value = 0.05
     return m
@@ -174,7 +174,7 @@ def telephone():
     """A 1990s office push-button phone: soft beige wedge base with the white handset lying lengthwise on the
     left and a 4 x 3 keypad on the right. Keypad toward -Y, base on z = 0. The handset's earpiece is at the back (+Y).
     Returns (root, handset, base)."""
-    beige = plastic("PhoneBeige", (0.56, 0.51, 0.42), 0.45)
+    beige = plastic("PhoneBeige", (0.7, 0.64, 0.5), 0.28, coat=0.35)
     dark = plastic("PhoneDark", (0.09, 0.085, 0.08), 0.45)
     keycap = plastic("KeyCap", (0.74, 0.71, 0.64), 0.35)
     ink = pbr("KeyInk", (0.05, 0.05, 0.05), 0.5)
@@ -202,7 +202,9 @@ def telephone():
     for r in range(3):
         y = 0.0 - r * 0.024
         parts.append(box("FnKey", (0.06 + 0.035, y, topz(y) + 0.003), (0.008, 0.016, 0.005), dark, bevel=0.002, rot=(slope, 0, 0)))
-    parts.append(box("Display", (0.048, 0.045, topz(0.045) + 0.0012), (0.07, 0.028, 0.002), dark, rot=(slope, 0, 0)))
+    lcd = pbr("PhoneLCD", (0.3, 0.34, 0.27), 0.15, 0.0, **{'Emission Color': (0.35, 0.45, 0.3, 1), 'Emission Strength': 0.06, 'Coat Weight': 1.0})
+    parts.append(box("DisplayBezel", (0.048, 0.045, topz(0.045) + 0.001), (0.078, 0.034, 0.002), dark, rot=(slope, 0, 0)))
+    parts.append(box("Display", (0.048, 0.045, topz(0.045) + 0.0022), (0.066, 0.022, 0.001), lcd, rot=(slope, 0, 0)))
     parts.append(box("Speaker", (0.048, 0.082, topz(0.082) + 0.0008), (0.07, 0.02, 0.0015), dark, rot=(slope, 0, 0)))
     for sx in (-0.08, 0.08):
         for sy in (-0.09, 0.09):
@@ -348,7 +350,11 @@ def build(variant="empty"):
     # net curtains: one long sheer per window, stirring (wave modifier, time-driven so it bakes)
     nm = net_curtain("Net")
     c["nets"] = []
-    for y in win_y:
+    slat_m = pbr("BlindSlat", (0.78, 0.76, 0.7), 0.45, 0.2)
+    for k in range(34):                                                # venetian blind on the window behind the desk
+        box("BlindSlat", (-ROOM_X + 0.1, win_y[1], 0.95 + k * 0.05), (0.05, 1.42, 0.004), slat_m, rot=(0, math.radians(-35), 0))
+    box("BlindRail", (-ROOM_X + 0.1, win_y[1], 2.66), (0.06, 1.46, 0.04), slat_m)
+    for y in win_y[:1]:
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=50, size=1, location=(-ROOM_X + 0.14, y, 1.6), rotation=(math.radians(90), 0, math.radians(90)))
         o = bpy.context.active_object; o.name = "NetCurtain"; o.scale = (1.5, 2.95, 1); o.data.materials.append(nm)
         # gathered folds: sine displacement along the width
@@ -370,7 +376,7 @@ def build(variant="empty"):
     from pbkit import masonry_facade
     fac = masonry_facade("OppFacade", plaster=(0.55, 0.47, 0.36), floor=3.3, bay=2.6, win_w=1.3, win_h=1.7,
                          lit_frac=0.35 if night else 0.0, lit_strength=1.5)
-    box("Opposite", (-ROOM_X - 24, 0, 13), (1.0, 80, 30), fac)
+    box("Opposite", (-ROOM_X - 30, 0, 5), (1.0, 80, 22), fac)
     c["opp_mat"] = fac
     build_anteroom(c, floor, paper, panel)
     box("Street", (-ROOM_X - 12, 0, -4.0), (24, 80, 0.2), pbr("StreetAsphalt", (0.08, 0.08, 0.085), 0.8))
@@ -386,19 +392,26 @@ def build(variant="empty"):
             pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 1.4; pt.size_y = 1.75; pt.cycles.is_portal = True
             po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (-ROOM_X - 0.08, y, 1.73); po.rotation_euler = (0, math.radians(-90), 0)
         fill = area_light((1.5, -2.5, 2.8), (0, 0, 0), 2.5, 90, (1.0, 0.9, 0.8)); point_at(fill, (0, 1, 0.8)); fill.visible_camera = False
+        sn = sun(42, 160, 3.0, (1.0, 0.9, 0.76), 0.8)                     # low sun from the window side: shafts and slat light
+        c["sun"] = sn
+        haze((0, 0, ROOM_H / 2), (2 * ROOM_X - 0.1, ROOM_Y1 - ROOM_Y0 - 0.1, ROOM_H - 0.05), density=0.005, color=(1.0, 0.96, 0.9), anis=0.6)
     # ceiling fixture (off in the search variant: they don't touch the switches)
     box("CeilRose", (0, 0.4, ROOM_H - 0.02), (0.3, 0.3, 0.04), pbr("Rose", (0.7, 0.68, 0.62), 0.6))
     # ---------------------------------------------------------------- furniture (scanned)
     r, desk = ph.model("metal_office_desk", loc=tuple(DESK), rot_z=math.pi)
-    retint(desk, (0.95, 0.9, 0.8))
+    walnut = ph.texture("dark_wood", scale=1.6, name="Walnut")
+    pw = walnut.node_tree.nodes["Principled BSDF"]; pw.inputs['Coat Weight'].default_value = 0.5; pw.inputs['Coat Roughness'].default_value = 0.15
+    for o in desk:
+        for i in range(len(o.material_slots)):
+            o.material_slots[i].material = walnut
     c["desk_drawers"] = {o.name: o for o in desk if "drawer" in o.name}
     for o in desk:
         if "drawer" in o.name:
             o["y0"] = o.location.y
     blot = pbr("Blotter", (0.03, 0.1, 0.06), 0.6, 0.0, **{'Sheen Weight': 0.3})
-    box("Blotter", (-0.02, 1.25, TOP_Z + 0.003), (0.62, 0.46, 0.006), blot, bevel=0.002)
+    box("Blotter", (-0.02, 1.2, TOP_Z + 0.003), (1.2, 0.62, 0.006), blot, bevel=0.002)
     for sx in (-1, 1):
-        box("BlotterCorner", (-0.02 + sx * 0.3, 1.25, TOP_Z + 0.005), (0.05, 0.48, 0.008), pbr("BlotLeather", (0.08, 0.04, 0.02), 0.45))
+        box("BlotterCorner", (-0.02 + sx * 0.59, 1.2, TOP_Z + 0.005), (0.03, 0.64, 0.008), pbr("BlotLeather", (0.25, 0.18, 0.08), 0.3, 0.8))
     r, chair = ph.model("GreenChair_01", loc=(1.15, 1.95, 0), rot_z=math.pi + math.radians(55))     # pushed back from the desk, turned
     c["chair"] = r
     r, cab = ph.model("vintage_cabinet_01", loc=(1.75, ROOM_Y1 - 0.3, 0), rot_z=0.0)
@@ -409,7 +422,23 @@ def build(variant="empty"):
     c["file_drawers"] = sorted([o for o in fc if "_drawer_" in o.name], key=lambda o: o.name)
     for o in c["file_drawers"]:
         o["y0"] = o.location.y
-    r, _ = ph.model("potted_plant_02", loc=(-ROOM_X + 0.45, 2.55, 0), rot_z=0.6)
+    r, _ = ph.model("potted_plant_02", loc=(-ROOM_X + 0.5, -2.45, 0), rot_z=0.6)
+    r, bs = ph.model("wooden_bookshelf_worn", loc=(-ROOM_X + 0.75, ROOM_Y1 - 0.32, 0), rot_z=0.0)
+    retint(bs, (0.55, 0.35, 0.2))
+    vol_ms = [pbr(f"Book{k}", col, 0.6) for k, col in enumerate(((0.3, 0.08, 0.06), (0.08, 0.15, 0.1), (0.12, 0.1, 0.2), (0.4, 0.3, 0.15), (0.2, 0.18, 0.15)))]
+    for sh in range(5):
+        x = -ROOM_X + 0.2
+        while x < -ROOM_X + 1.3:
+            w = rng.uniform(0.025, 0.05); hgt = rng.uniform(0.2, 0.3)
+            box("Book", (x + w / 2, ROOM_Y1 - 0.34, 0.12 + sh * 0.39 + hgt / 2), (w, 0.2, hgt), vol_ms[int(rng.integers(0, 5))])
+            x += w + 0.003
+    gl = glass("Crystal", (0.97, 0.96, 0.92), 0.0)
+    dec = cyl("Decanter", (1.45, ROOM_Y1 - 0.45, 0.98), 0.07, 0.2, gl, verts=24); cyl("DecNeck", (1.45, ROOM_Y1 - 0.45, 1.13), 0.022, 0.1, gl, verts=16)
+    cyl("DecStopper", (1.45, ROOM_Y1 - 0.45, 1.2), 0.03, 0.04, gl, verts=16)
+    cyl("Cognac", (1.45, ROOM_Y1 - 0.45, 0.94), 0.066, 0.1, pbr("Cognac", (0.5, 0.22, 0.05), 0.05, 0.0, **{'Transmission Weight': 1.0}), verts=24)
+    for dx in (-0.16, -0.25):
+        cyl("Tumbler", (1.45 + dx, ROOM_Y1 - 0.42, 0.93), 0.03, 0.07, gl, verts=16)
+    box("Tray", (1.38, ROOM_Y1 - 0.44, 0.882), (0.42, 0.24, 0.008), pbr("TrayBrass", (0.55, 0.42, 0.2), 0.3, 1.0))
     r, clk = ph.model("wall_clock", loc=(-0.9, ROOM_Y1 - 0.0, 2.15), rot_z=0.0)
     c["clock_hands"] = {k: o for o in clk for k in ("second", "minute", "hours") if k in o.name}
     r, _ = ph.model("hanging_picture_frame_01", loc=(0.3, ROOM_Y1 - 0.0, 1.95), rot_z=0.0)
@@ -425,6 +454,9 @@ def build(variant="empty"):
     box("Keyboard", (0.5, 1.2, TOP_Z + 0.015), (0.4, 0.14, 0.03), kb_m, bevel=0.006, rot=(0, 0, math.radians(-32)))
     r, lamp = ph.model("desk_lamp_arm_01", loc=(0.88, 1.62, TOP_Z), rot_z=math.radians(215))
     retint(lamp, (0.15, 0.25, 0.18))
+    dl = bpy.data.lights.new("DeskLampOn", 'SPOT'); dl.energy = 22; dl.spot_size = math.radians(75); dl.spot_blend = 0.5; dl.color = (1.0, 0.78, 0.5)
+    dlo = bpy.data.objects.new("DeskLampOn", dl); bpy.context.collection.objects.link(dlo); dlo.location = (0.62, 1.38, 1.3); point_at(dlo, (0.25, 1.2, TOP_Z))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.025, location=(0.64, 1.4, 1.33)); bulb = bpy.context.active_object; bulb.data.materials.append(emissive("Bulb", (1.0, 0.85, 0.6), 30))
     import paper_tex
     pages = paper_tex.make_all()["pages"]
     from pbkit import image_plane
@@ -619,8 +651,8 @@ def officer_shirt(name, years, hv=0.3):
 def build_people(c, variant):
     P = {}
     if variant == "search":
-        P["A"] = person("InvA", 1.0, 46, "male_casualsuit05", "short02", cval=0.14, hv=0.3, sat=0.2)
-        P["B"] = person("InvB", 1.0, 38, "male_casualsuit03", "short04", cval=0.22, hv=0.2, sat=0.4)
+        P["A"] = person("InvA", 1.0, 46, "male_casualsuit05", "short02", hv=0.3, col=(0.42, 0.3, 0.17))       # camel
+        P["B"] = person("InvB", 1.0, 38, "male_casualsuit05", "short04", hv=0.2, col=(0.3, 0.3, 0.31))        # grey
     if variant in ("day", "brother", "visit", "leave"):
         P["banker"] = person("Banker", 1.0, 52, "male_elegantsuit01", "short04", cval=0.1, hv=0.45, sat=0.2)
     if variant == "brother":
@@ -733,6 +765,10 @@ def animate(c, sec, move):
 
 
 # ---------------------------------------------------------------- intro
+def win_y_blind():
+    return 1.4
+
+
 def a_search(c, sec, turn=0.0, drawer=None, fileo=None):
     a, b = c["people"]["A"], c["people"]["B"]
     stand(a, (-0.72, 2.1, 0), 0.0)
@@ -746,7 +782,7 @@ def a_search(c, sec, turn=0.0, drawer=None, fileo=None):
         from pbkit import image_plane
         pg = image_plane("FolderPage", paper_tex.make_all()["pages"][1], (0.0, 0.0, 0.0025), (0.29, 0.215), (0, 0, math.radians(90)), rough=0.75)
         pg.parent = c["folder"]
-    hold_flat(a, c["folder"], dist=0.33 - 0.06 * lower, drop=0.06 + 0.25 * lower, tilt_deg=55 - 45 * lower, wobble=0.008 * math.sin(sec * 0.8))
+    hold_flat(a, c["folder"], dist=0.3 - 0.05 * lower, drop=0.12 + 0.22 * lower, tilt_deg=38 - 28 * lower, spread=0.13, wobble=0.006 * math.sin(sec * 0.8))
     look(a, PHONE, turn)
     stand(b, (FILE_X - 0.9, FILE_Y, 0), math.radians(90))
     fdr = c["file_drawers"][0]
@@ -760,6 +796,12 @@ def a_search(c, sec, turn=0.0, drawer=None, fileo=None):
 
 def a_find(c, sec):
     a_search(c, DUR["search"] + sec, turn=ease(min(1.0, max(0.0, (sec - 0.3) / 2.0))), drawer=1.0, fileo=1.0)
+    if "beam" not in c:                                         # a shaft of daylight between the slats, sliding onto the phone
+        l = bpy.data.lights.new("SunPatch", 'SPOT'); l.energy = 60; l.spot_size = math.radians(9); l.spot_blend = 0.3; l.color = (1.0, 0.9, 0.75)
+        o = bpy.data.objects.new("SunPatch", l); bpy.context.collection.objects.link(o); c["beam"] = o
+    k = ease(min(1.0, sec / DUR["find"]))
+    tgt = (PHONE + Vector((0.45, -0.25, 0.0))).lerp(PHONE + Vector((0.0, 0.0, 0.08)), k)
+    c["beam"].location = Vector((-ROOM_X + 0.2, win_y_blind(), 2.2)); point_at(c["beam"], tuple(tgt))
 
 
 # ---------------------------------------------------------------- chapter 1
@@ -1032,8 +1074,8 @@ def cam_bag(c, t):
 
 def cam_find(c, t):
     e = ease(t)
-    tgt0 = Vector((-0.6, 1.6, 1.15)); tgt1 = PHONE + Vector((0.0, 0.03, 0.06))
-    return (Vector((-1.7, -0.6, 1.45)).lerp(PHONE + Vector((-0.55, -0.8, 0.38)), e), tgt0.lerp(tgt1, ease(min(1.0, t * 1.25))), 32 + 18 * e)
+    tgt = PHONE + Vector((0.0, 0.0, 0.05))
+    return (Vector((-1.55, 2.7, 2.05)).lerp(Vector((-1.25, 2.3, 1.7)), e), tgt, 38 + 10 * e)
 
 
 def cam_glance(c, t):
@@ -1068,8 +1110,7 @@ MOVES = {
                   focus=lambda c, t: DESK + Vector((0, 0, 0.9))),
     "search": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("search"), cam=_push((-2.3, -2.2, 1.62), (-2.0, -1.85, 1.6), (0.9, 1.3, 1.1), (0.8, 1.35, 1.1), 24),
                    focus=lambda c, t: Vector((-0.7, 1.9, 1.3))),
-    "find": dict(kind="anim", dof=2.8, far=10.0, cam=cam_find, anim=_anim("find"),
-                 focus=lambda c, t: Vector((-0.65, 1.9, 1.5)).lerp(PHONE + Vector((0, 0.03, 0.06)), ease(min(1.0, t * 1.25)))),
+    "find": dict(kind="anim", dof=2.4, far=10.0, cam=cam_find, anim=_anim("find"), focus=lambda c, t: PHONE + Vector((0, 0, 0.05))),
     # chapter 1
     "dial": dict(kind="anim", dof=3.2, far=12.0, anim=_anim("dial"), cam=_push((-2.0, 0.1, 1.45), (-1.75, 0.35, 1.42), (-0.1, 1.85, 1.1), (-0.05, 1.9, 1.12), 35),
                  focus=lambda c, t: Vector((0.0, 1.95, 1.2))),

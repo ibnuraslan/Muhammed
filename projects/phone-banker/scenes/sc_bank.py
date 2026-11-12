@@ -102,9 +102,15 @@ def build(variant=None):
     box("BankPlate", (1.4, -0.12, 2.0), (0.7, 0.02, 0.45), plate, bevel=0.005)
     text_obj("BankPlateText", "БАНК", (1.4, -0.135, 2.03), 0.12, pbr("PlateInk", (0.05, 0.04, 0.03), 0.4), rot=(math.radians(90), 0, 0), extrude=0.001)
     # neighbours (CG stucco, punched windows) to close the street
-    for x, w, h, col in ((-25.0, 9.0, 18.0, (0.6, 0.55, 0.45)), (17.5, 14.0, 21.0, (0.5, 0.44, 0.38)), (32.0, 12.0, 17.0, (0.58, 0.5, 0.4))):
-        box("Neighbour", (x, 6.0, h / 2), (w, 12.0, h), masonry_facade(f"N{x}", col, 3.2, 2.6, 1.2, 1.7, 0.18, lit_strength=0.5))
-    box("OppositeRow", (0, KERB_Y - ROAD_W - 12, 10), (90, 12, 20), masonry_facade("Opp", (0.55, 0.5, 0.42), 3.2, 2.6, 1.2, 1.7, 0.2, lit_strength=0.5))
+    kit_facade(-22.5, 4, tint=(0.62, 0.58, 0.5), top_bay="centered_small")          # left: warm grey stone
+    kit_facade(10.5, 5, tint=(0.7, 0.62, 0.48), top_bay="centered_large")          # right: ochre
+    for x, w, h, col in ((32.0, 12.0, 17.0, (0.58, 0.5, 0.4)),):
+        box("Neighbour", (x, 6.0, h / 2), (w, 12.0, h), masonry_facade(f"N{x}", col, 3.2, 2.6, 1.2, 1.7, 0.1, lit_col=(1.0, 0.72, 0.45), lit_strength=0.25))
+    if variant == "dusk":                                                           # soft warm rooms behind some windows
+        for k in range(10):
+            x = float(rng.uniform(-22, 25)); z = float(rng.choice([4.3, 7.3, 10.3]))
+            l = area_light((x, 0.9, z), (math.radians(90), 0, 0), 1.2, 12, (1.0, 0.75, 0.45)); l.visible_camera = False
+    box("OppositeRow", (0, KERB_Y - ROAD_W - 12, 10), (90, 12, 20), masonry_facade("Opp", (0.55, 0.5, 0.42), 3.2, 2.6, 1.2, 1.7, 0.12, lit_col=(1.0, 0.72, 0.45), lit_strength=0.3))
     # street lamps (scanned) along the kerb, lit; linden-like small trees
     for x in (-16.0, -4.0, 8.0, 20.0):
         r, lm = ph.model("street_lamp_01", loc=(x, KERB_Y + 0.5, 0), rot_z=math.radians(180))
@@ -171,17 +177,16 @@ def build(variant=None):
 
 def cast_dusk(c):
     blue = (0.05, 0.12, 0.42)
-    c["cars"] = [soviet_car(f"Militia{k}", (0.7, 0.7, 0.72) if k == 0 else (0.72, 0.6, 0.22), kind="lada", stripe=blue, beacon=True, label="МИЛИЦИЯ")
-                 for k in range(2)]
+    c["cars"] = [soviet_car(f"Militia{k}", None, kind="lada", beacon=True, lamps=True) for k in range(2)]
     parked = soviet_car("ParkedVolga", (0.16, 0.18, 0.2), kind="volga"); parked.location = (14.0, KERB_Y - 1.1, 0.0)
-    off = lambda n, y, hv: person(n, 1.0, y, "male_casualsuit01", "short02", cval=0.75, hv=hv, hue=0.58, sat=0.3)
-    c["people"] = {"sit": off("OffSit", 44, 0.25), "help": off("OffHelp", 31, 0.2), "walk": off("OffWalk", 38, 0.3)}
+    c["people"] = {"sit": PP.militia("OffSit", 44), "help": PP.militia("OffHelp", 31), "walk": PP.militia("OffWalk", 38)}
 
 
 def cast_summer(c):
     cols = [(0.15, 0.17, 0.2), (0.62, 0.6, 0.55), (0.35, 0.08, 0.06), (0.22, 0.3, 0.24), (0.7, 0.66, 0.5)]
     c["traffic"] = [soviet_car(f"Traffic{k}", cols[k], kind="volga" if k % 2 == 0 else "lada") for k in range(5)]
-    c["trolley"] = trolleybus()
+    from pbkit import kit_vehicle
+    c["trolley"] = kit_vehicle("bus_city", "CityBus", (0.75, 0.68, 0.45))
     c["banker"] = person("Banker", 1.0, 52, "male_elegantsuit01", "short04", cval=0.1, hv=0.45, sat=0.2)
     c["doorman"] = person("Doorman", 1.0, 58, "male_elegantsuit01", "short04", cval=0.25, hv=0.6, hue=0.6, sat=0.6)
     c["walkers"] = [person("Passer1", 0.0, 40, "female_elegantsuit01", "bob01", cval=0.4, hv=0.3), person("Passer2", 1.0, 30, "male_casualsuit02", "short01", cval=0.5)]
@@ -193,8 +198,7 @@ def cast_summer(c):
 
 def cast_autumn(c):
     c["car"] = soviet_car("MilitiaVolga", (0.42, 0.48, 0.55), kind="volga", stripe=(0.05, 0.12, 0.42), beacon=True)
-    off = lambda n, y, hv: person(n, 1.0, y, "male_casualsuit05", "short02", cval=0.2, hv=hv, sat=0.3)
-    c["offA"] = off("DetA", 40, 0.3); c["offB"] = off("DetB", 33, 0.2)
+    c["offA"] = PP.militia("DetA", 40); c["offB"] = PP.militia("DetB", 33)
     c["man"] = person("Detained", 1.0, 42, "male_elegantsuit01", "short01", cval=0.2, hv=0.15, hue=0.62, sat=0.5)
     c["umbrella"] = None
 
@@ -275,7 +279,7 @@ def animate_dusk(c, sec, shot):
         if shot == "pullup":
             x, v = car_x(max(0.0, sec - 0.9 * k), -3.5 - 5.2 * k, arrive=3.2, start=-34.0 - 6 * k)
         else:
-            x, v = -3.5 - 5.2 * k, 0.0
+            x, v = -8.0 - 5.2 * k, 0.0                                   # parked further down for the steps shot
         car.location = (x, y_lane, 0.0); car.rotation_euler = (0, 0, 0)
     a, b, w = c["people"]["sit"], c["people"]["help"], c["people"]["walk"]
     # walker: an officer climbing toward the door (2A); out of the way in 2B
@@ -294,10 +298,10 @@ def animate_dusk(c, sec, shot):
     glass_pos = None
     # helper crouches on the step below, to the seated man's left, holding out a glass
     stand(b, (-0.05, -STEP_D * STEP_N - 0.35, 0), math.radians(-50))       # on the pavement, angled toward him
-    nod(b, "spine04", 16); nod(b, "spine03", 8); nod(b, "head", 8)
+    nod(b, "spine04", 26); nod(b, "spine03", 14); nod(b, "head", 6)
     bpy.context.view_layer.update()
-    gp0 = b.bone_head("spine03") + _fwd(b) * 0.25 + Vector((0, 0, -0.15))
-    gp1 = knees + fwd * 0.18 + Vector((0.12, 0, 0.18))
+    gp0 = b.bone_head("spine03") + _fwd(b) * 0.2 + Vector((0, 0, -0.35))
+    gp1 = knees + fwd * 0.22 + Vector((0.1, 0, 0.05))
     glass_pos = gp0.lerp(gp1, hand_out)
     reach(b, "R", glass_pos + Vector((0, 0, -0.03)), Vector((0.5, 0.3, -0.7)), Vector((0, 0, 1)))
     fingers_curl(b, 45, side=("R",), thumb=25)
@@ -346,7 +350,7 @@ def cam_steps(c, t):
     e = ease(t)
     a = c["people"]["sit"]
     tgt = Vector((-0.55, -1.0, 0.85))
-    return (tgt + Vector((-2.9, -4.6, 0.75)).lerp(Vector((-2.5, -4.0, 0.68)), e), tgt + Vector((0.3, 0, 0.25)), 35)
+    return (tgt + Vector((3.4, -5.8, 0.9)).lerp(Vector((3.0, -5.2, 0.85)), e), tgt + Vector((0.3, 0, 0.3)), 30)
 
 
 MOVES = {

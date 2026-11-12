@@ -89,7 +89,7 @@ def _shell(name, L_, W_, prof, mat, bevel=0.05):
     return o
 
 
-def soviet_car(name, paint_col, kind="lada", stripe=None, beacon=False, label=None):
+def soviet_car_box(name, paint_col, kind="lada", stripe=None, beacon=False, label=None):
     """Boxy late-Soviet sedans: 'lada' (2105/2107 style, 4.13 m) or 'volga' (GAZ-24/31 style, 4.75 m).
     Origin between the wheels on the ground, front toward +X. Returns the joined body (children: lights)."""
     if kind == "volga":
@@ -323,3 +323,20 @@ def ph_instances(aid, placements, pick=None, decimate=None):
     for o in ms:
         o.hide_render = True
     return out
+
+
+def soviet_car(name, paint_col, kind="lada", stripe=None, beacon=False, label=None, lamps=False):
+    """Shared realistic vehicle kit (nvidia_doc/scenes/vehicles.py): a late-Soviet sedan, militia variant with the
+    rotating light bar and livery. Front is +X, origin on the ground (same convention as the old placeholder)."""
+    import vehicles
+    root = vehicles.make("sedan_1990s_soviet", color=None if beacon else paint_col, variant="militia" if beacon else None,
+                         lamps=lamps, dirt=0.15)
+    root.name = name
+    return root
+
+
+def kit_vehicle(kind, name, color=None, variant=None, lamps=False):
+    import vehicles
+    root = vehicles.make(kind, color=color, variant=variant, lamps=lamps)
+    root.name = name
+    return root

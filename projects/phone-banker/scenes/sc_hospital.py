@@ -365,34 +365,18 @@ def build_exterior(c):
 
 def ambulance_van():
     """A late-Soviet ambulance van (UAZ-452 type): rounded box, white with a red band and a turning blue beacon."""
-    white = pbr("VanWhite", (0.78, 0.78, 0.76), 0.35, 0.1, **{'Coat Weight': 0.6})
-    red = pbr("VanRed", (0.55, 0.05, 0.04), 0.4)
-    glass_m = pbr("VanGlass", (0.02, 0.025, 0.03), 0.05, 0.0, **{'Coat Weight': 1.0})
-    tyre = pbr("VanTyre", (0.02, 0.02, 0.02), 0.85)
-    parts = [box("VanBody", (0, 0, 1.25), (4.4, 1.94, 1.75), white, bevel=0.22),
-             box("VanBand", (0, 0, 1.15), (4.42, 1.96, 0.12), red),
-             box("VanWind", (2.15, 0, 1.65), (0.16, 1.7, 0.55), glass_m, bevel=0.06)]
-    for sy in (-1, 1):
-        for x in (1.45, 0.3, -0.85, -1.9):
-            parts.append(box("VanWin", (x, sy * 0.975, 1.68), (0.75 if x > 1 else 0.7, 0.02, 0.45), glass_m, bevel=0.03))
-        parts.append(cyl("Cross", (-0.3, sy * 0.98, 1.0), 0.001, 0.01, red, verts=4))
-        parts.append(box("CrossH", (-0.3, sy * 0.982, 0.88), (0.3, 0.01, 0.09), red)); parts.append(box("CrossV", (-0.3, sy * 0.982, 0.88), (0.09, 0.01, 0.3), red))
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            parts.append(cyl("VanTyre", (sx * 1.15, sy * 0.85, 0.38), 0.38, 0.22, tyre, verts=24, rot=(math.radians(90), 0, 0)))
-    parts.append(box("VanBumper", (2.22, 0, 0.45), (0.1, 1.9, 0.15), pbr("VanBlack", (0.03, 0.03, 0.03), 0.6)))
-    for sy in (-1, 1):
-        parts.append(cyl("VanHead", (2.2, sy * 0.65, 0.75), 0.09, 0.03, emissive("VanHeadOn", (1.0, 0.92, 0.8), 6), verts=20, rot=(0, math.radians(90), 0)))
-    van = joinm(parts, "Ambulance")
+    from pbkit import kit_vehicle
+    van = kit_vehicle("van_1990s", "Ambulance", (0.82, 0.82, 0.8), lamps=True)
+    top = van.dimensions.z
     bm = bpy.data.materials.new("VanBeacon"); bm.use_nodes = True
     N = bm.node_tree.nodes; L = bm.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (0.15, 0.35, 1.0, 1)
     v = N.new("ShaderNodeValue"); d = v.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = "12 * (1 if (frame % 14) < 7 else 0.1)"
     L.new(v.outputs[0], em.inputs['Strength']); L.new(em.outputs[0], out.inputs['Surface'])
-    bc = cyl("VanBeacon", (0, 0, 0), 0.08, 0.14, bm, verts=20); bc.parent = van; bc.location = (1.6, 0, 2.2)
+    bc = cyl("VanBeacon", (0, 0, 0), 0.08, 0.14, bm, verts=20); bc.parent = van; bc.location = (1.2, 0, top + 0.07)
     l = bpy.data.lights.new("VanBeaconL", 'POINT'); l.color = (0.2, 0.4, 1.0)
     dl = l.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = "150 * (1 if (frame % 14) < 7 else 0.02)"
-    lo = bpy.data.objects.new("VanBeaconL", l); bpy.context.collection.objects.link(lo); lo.parent = van; lo.location = (1.6, 0, 2.45)
+    lo = bpy.data.objects.new("VanBeaconL", l); bpy.context.collection.objects.link(lo); lo.parent = van; lo.location = (1.2, 0, top + 0.3)
     return van
 
 
