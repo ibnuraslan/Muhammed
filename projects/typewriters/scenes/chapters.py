@@ -4,6 +4,8 @@ shot gives the title ~2 s before the narration.
 
   python chapters.py            # prints the table and per-chapter totals
 """
+# MASTER RULE (Nov 2026): every chapter gets >= 3.0 s of picture under its title card before the voice starts;
+# the intro keeps a 2.5 s lead-in. Apply when building the masters after the voiceover arrives.
 LEAD = 2.5
 
 CHAPTERS = {
