@@ -22,3 +22,11 @@ Story-beat frames are unchanged (`beats.json`).
 | 15 | 46.5–47.5 s / 2791–2851 | The back carrier's tanks fill the centre of the frame. | Camera moved to the side of the stretcher; the boy and both carriers read. |
 
 Checked and fine: beats 1, 3–4 (cross-section), 7 (lone light), 10–11 (hands, grips, mask), 13–14 (carry-out, crowd, crane). The feet audit gives 0 hover/sink. Hands are as in v004 (the hand audit is clean apart from intended contacts).
+
+## Re-check (v005)
+- **Half-second sheet after:** `ACTING_v005_after_halfsec_a.jpg`/`_b.jpg` (rendered before the last lane tweak; the run beat was re-checked separately afterwards).
+- **clip_scan:** 0 bad ranges. The only sub-threshold hit is 6 probe vertices of the back carrier's hand against the stretcher boy at f2773.
+- **Extra fixes found by clip_scan:**
+  - The running boys' pumping hands dipped into their own hips (7.9 s, 9.0 s), so the arm path moved out.
+  - Runners' hands touched the boy beside them (8.2 s), so the lanes are wider (±0.7 m) with more spacing.
+- **Hand close-ups:** `ACTING_v005_hand_closeups.jpg`. Grips and contacts are as in v004.

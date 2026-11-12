@@ -1,0 +1,22 @@
+{
+ "frames": {
+  "2773": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "2779": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
