@@ -5,6 +5,19 @@ Every camera moves slowly and something in frame moves. Ursula is never shown; t
 The convicted man appears only as an unnamed figure, from behind or at medium distance, never committing any act.
 Reused from chat A (new angles): Herrmann hallway, lakeside path bend, forest.
 
+## CAST (fixed looks, all film long; unnamed MakeHuman figures, no likenesses) — `b_common.py`
+
+| Person (never named on screen) | Era | Look | Helper |
+|---|---|---|---|
+| Michael, the brother | 2008–2013 | ~47, slim, short greying hair, dark plain navy sweater | `B.michael()` |
+| The acquaintance questioned (Ch3) | 1981 | ~31, slim, longer dark 80s hair, olive work jacket | `B.pfaffinger()` |
+| The convicted man | 1981 | 44, heavier and shorter, dark hair, dark brown work shirt; only in his workshop | `B.mazurek(era=1981)` |
+| The convicted man | 2007–2010 | 58, heavier, grey hair, grey-green jacket; only at his shop, searched, arrested, in court (behind / medium) | `B.mazurek(era=2007)` |
+| The convicted man | 2023 | 72, white hair, same jacket, a holdall; only leaving prison, from behind | `B.mazurek(era=2023)` |
+| Detectives 1981 | 1981 | grey suit (older) and brown suit (younger) | interrogation set |
+| Judges / prosecutor / counsel | 2009–10 | black robes; the two lay judges in plain civilian clothes | courtroom set |
+| Forensic staff | 2000s | plain pale lab gowns (no logos) | DNA lab, phonetics |
+
 ## Chapter Three · The Man with the Spade — 339 words ≈ 1 min 51 s (+3 s title lead)
 
 | Set | Script line | Shot A | Shot B |
@@ -53,7 +66,7 @@ Reused from chat A (new angles): Herrmann hallway, lakeside path bend, forest.
 | Civil court corridor 2013 | "In 2013, he sues Mazurek for twenty thousand euros." | Michael walks down a long corridor carrying a folder, footsteps echoing. | He sits on a bench outside a courtroom door and waits, slow push. |
 | Michael's music room | "Michael has developed tinnitus..." | He plays a few notes on the piano and stops; the room goes still, slow push. | Night: he sits on the piano bench facing the dark window, the camera creeping in. |
 | Physicist's home workbench | "...spends about a year testing it against the call recordings." | An older man in headphones listens at a cluttered workbench, the borrowed recorder's reels turning. | Calendar pages fall away as the window light swings from summer to winter across the bench. |
-| Civil courtroom | "The civil court initially awards Michael seven thousand euros." | A small civil courtroom, a single judge reads the ruling, Michael seen from behind. | Boarding school in fog: an old school building beyond the woods, a figure walks the drive. |
+| Civil courtroom | "The civil court initially awards Michael seven thousand euros." | A small civil courtroom, a single judge reads the ruling, Michael seen from behind. | Boarding school in fog: an old school building beyond the woods, fog drifting past, no figure. |
 | Civil courtroom (empty) | "The award is overturned on appeal in 2020." | The emptied courtroom, a clerk stacks files and switches off a light. | Slow pull back as the last ceiling light goes out over the empty bench. |
 | Prison gate, dawn 2023 | "In June 2023... Mazurek is released on probation." | The steel gate slides open at dawn and a man walks out, seen from behind. | Wide: he walks away along the long prison wall into the haze. |
 | TV edit suite 2024 | "In 2024, German public broadcasters revisit the case..." | Two journalists watch archive footage on monitors in a dark edit suite, scrubbing it. | A reel-to-reel image paused on screen, the camera drifting past their silhouettes. |
