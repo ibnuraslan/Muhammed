@@ -151,7 +151,7 @@ def foot_mask(rig_name, s_, on_until):
     vg = body.vertex_groups.new(name="ShoeHide_" + s_)
     idx = {g.index for g in body.vertex_groups if g.name == "foot." + s_ or g.name.startswith("toe") and g.name.endswith("." + s_)}
     sel = [v.index for v in body.data.vertices if sum(g.weight for g in v.groups if g.group in idx) > 0.5]
-    vg.add(sel, 1.0, 'REPLACE')
+    vg.add(sel, 0.9, 'REPLACE')
     # socks: the masked foot faces get a knit sock material (seen once the sneaker is off)
     sock = bpy.data.materials.get("Sock") or L.mat("Sock", (0.06, 0.06, 0.07), 0.9)
     if sock.name not in [m.name for m in body.data.materials if m]: body.data.materials.append(sock)
@@ -162,8 +162,11 @@ def foot_mask(rig_name, s_, on_until):
     m = body.modifiers.new("ShoeHide_" + s_, 'MASK'); m.vertex_group = vg.name; m.invert_vertex_group = True
     while body.modifiers[0] != m and body.modifiers.find(m.name) > 0:
         bpy.ops.object.modifier_move_up({"object": body}, modifier=m.name) if False else None; break
+    # toggled by threshold (0.5 = feet hidden, 0.95 = shown), not show_viewport, so a scan that disables masks keeps stable topology
     for f, on in ((1, True), (on_until, True), (on_until + 1, False)):
-        m.show_render = m.show_viewport = on; m.keyframe_insert("show_render", frame=f); m.keyframe_insert("show_viewport", frame=f)
+        m.threshold = 0.5 if on else 0.95; m.keyframe_insert("threshold", frame=f)
+    constant_at(body, set(range(0, 2000)), "ShoeHide")
+
     print("MASK", rig_name, s_, len(sel))
 for s_ in "LR":
     foot_mask("Bomber", s_, 877)
@@ -174,12 +177,15 @@ pants = O.get("Bomber.male_casualsuit04")
 # ------------------------------------------------------------------ match + matchbox (bomber's hands), drops in the tackle
 match = O["Match"]; mbox = O["Matchbox"]
 cm = Carry(match)
-sc.frame_set(12)
-fw = bone_w(bom, "finger2-3.R", 12); tip = fw.translation
+sc.frame_set(30)
+fw = bone_w(bom, "finger2-3.R", 30); th = bone_w(bom, "finger1-3.R", 30)
+tip = (fw @ V((0, bom.data.bones["finger2-3.R"].length * 0.8, 0)) + th @ V((0, bom.data.bones["finger1-3.R"].length * 0.8, 0))) / 2   # pinched between thumb and index
 sh = bone_w(bom, "foot.R", 12).translation
 d = (sh + V((0, 0, 0.05)) - tip).normalized()
 Rm = d.to_track_quat('Z', 'Y').to_matrix().to_4x4()
-cm.hold(bom, "finger2-3.R", 1, Matrix.Translation(tip + d * 0.012) @ Rm)
+_Mm = Matrix.Translation(tip - d * 0.012) @ Rm
+cm.hold(bom, "wrist.R", 1, _Mm)
+cm.cons[-1].inverse_matrix = bone_w(bom, "wrist.R", 30).inverted() @ _Mm
 cm.free(486)                                  # knocked out of his fingers: falls to the floor
 cm.done()
 # fall: park target animated down to the carpet
@@ -214,19 +220,19 @@ for f in range(1, END + 1, 3):
 # ------------------------------------------------------------------ syringe (steward's right hand, beat 5)
 sy = O["Syringe"]
 cs = Carry(sy)
-sc.frame_set(575)
-wr = bone_w(stw, "wrist.R", 575)
+sc.frame_set(640)
+wr = bone_w(stw, "wrist.R", 640)
 vs = [v.co for v in sy.data.vertices]
 ext = [max(v[i] for v in vs) - min(v[i] for v in vs) for i in range(3)]
 ax = max(range(3), key=lambda i: ext[i])          # long axis
 # syringe long axis -> pointing down/inward (-Z world) from the palm
 long_axis = [V((1, 0, 0)), V((0, 1, 0)), V((0, 0, 1))][ax]
 Rq = long_axis.rotation_difference(V((-0.5, 0, -0.85)).normalized()).to_matrix().to_4x4()
-pos = (bone_w(stw, "finger3-1.R", 575).translation + wr.translation) / 2
+pos = (bone_w(stw, "finger3-1.R", 640).translation + wr.translation) / 2
 hide_before = 560
-cs.hold(stw, "wrist.R", 575, Matrix.Translation(pos) @ Rq)
+cs.hold(stw, "wrist.R", 640, Matrix.Translation(pos) @ Rq)
 cs.done()
-for f, h in ((1, True), (574, True), (575, False), (900, False), (901, True)):
+for f, h in ((1, True), (639, True), (640, False), (900, False), (901, True)):
     sy.hide_render = h; sy.keyframe_insert("hide_render", frame=f)
 constant_at(sy, set(range(0, END + 1)), "hide_render")
 
@@ -402,8 +408,8 @@ def op(name, f, off=(0, 0, 0)):
 SEG = [
     # beat 1: over the seatbacks in front, down into his lap -> push to his lit face -> macro on match + shoe -> rise out to the aisle
     (1,   V((-1.12, 0.50, 0.34)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 20),
-    (45,  V((-1.06, 0.49, 0.42)), (op("Match_Flame", 45) + bp("Bomber", "head", 45)) / 2, 22),
-    (100, V((-1.05, 0.48, 0.44)), op("Match_Flame", 100, (0, 0, 0.03)), 26),
+    (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
+    (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.45 + bp("Bomber", "head", 100) * 0.55), 24),
     (150, V((-1.00, 0.47, 0.66)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
     (198, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
     # beat 2: swing round down the aisle toward the trolley, low dolly back, crane up, whip to her face, push on eyes
@@ -417,21 +423,23 @@ SEG = [
     (440, V((0.20, 0.82, 1.48)), (op("Match_Flame", 440) + bp("Bomber", "head", 440)) / 2, 45),
     (480, V((0.10, 0.95, 1.55)), bp("Bomber", "head", 480), 40),
     # beat 4: wide from the aisle ahead -> crane to near top-down over the pile -> drop to carpet level for the pin
-    (515, V((0.10, 3.10, 1.65)), bp("Bomber", "spine01", 515), 22),
-    (555, V((0.00, 1.60, 1.95)), bp("Bomber", "spine01", 555, (0, 0, -0.1)), 22),
+    (515, V((0.70, 3.00, 1.55)), bp("Bomber", "spine01", 515), 22),
+    (555, V((0.42, 1.90, 1.95)), bp("Bomber", "spine01", 555, (0, 0, -0.1)), 22),
     (600, V((0.25, 2.30, 1.55)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
     (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
     (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
     (697, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 697), 32),
-    (712, V((0.08, 1.02, 0.88)), bp("Bomber", "upperarm02.R", 712), 40),
-    (748, V((0.10, 0.90, 1.50)), bp("Bomber", "head", 748), 30),
+    (712, V((0.32, 1.00, 0.50)), bp("Bomber", "upperarm02.R", 712), 34),
+    (736, V((-0.22, 1.30, 0.62)), bp("Bomber", "head", 736), 26),
+    (756, V((-0.24, 1.32, 0.60)), bp("Bomber", "head", 756), 26),
+    (774, V((0.10, 1.10, 1.05)), bp("Bomber", "head", 774), 26),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
-    (800, V((0.15, 1.35, 1.65)), bp("Bomber", "foot.L", 800), 26),
-    (860, V((0.10, 0.45, 1.10)), op("Shoe_L", 860, (0, 0, 0.08)), 30),
-    (920, V((0.12, 0.55, 1.35)), (op("Shoe_L", 920) + op("Shoe_R", 920)) / 2, 30),
-    (965, V((-0.02, 0.42, 1.38)), fuse_tip("L", 965), 42),
-    (1015, V((0.10, 0.42, 1.40)), fuse_tip("R", 1015), 45),
+    (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
+    (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
+    (920, V((0.12, 0.55, 1.35)), ((op("Shoe_L", 920) + op("Shoe_R", 920)) / 2 * 0.5 + bp("Attendant", "head", 920) * 0.5), 26),
+    (965, V((0.14, 0.40, 1.38)), (fuse_tip("L", 965) * 0.5 + bp("Attendant", "head", 965) * 0.5), 28),
+    (1015, V((0.16, 0.40, 1.40)), (fuse_tip("R", 1015) * 0.5 + bp("Attendant", "head", 1015) * 0.5), 30),
     (1062, fuse_tip("L", 1062) + V((0, 0.03, 0.03)), op("Shoe_L", 1062, (0, 0, 0.05)), 40),
 ]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
@@ -454,8 +462,10 @@ SEG3 = [
 # airport: dropping through the skylight -> crane to belt level -> dolly with the tray -> settle on the traveller in socks
 SEG4 = [
     (1393, AX + V((-0.6, -0.4, 6.4)), AX + V((-0.9, -0.5, 0.0)), 22),
-    (1440, AX + V((-2.2, -2.6, 2.4)), bp("Traveller", "spine01", 1440, (0, 0, -0.3)), 26),
-    (1490, AX + V((-1.6, -2.3, 1.15)), op("Tray_1", 1490, (0, 0, 0.1)), 30),
+    (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
+    (1470, AX + V((-1.25, 0.40, 0.98)), bp("Traveller", "head", 1470), 26),
+    (1490, AX + V((-1.30, 0.35, 1.10)), bp("Traveller", "head", 1490, (0, 0, -0.1)), 28),
+    (1508, AX + V((-0.85, 0.30, 1.40)), bp("Traveller", "head", 1508, (0, 0, -0.2)), 28),
     (1540, AX + V((-0.2, -1.9, 1.05)), op("Tray_1", 1540, (0, 0, 0.1)), 32),
     (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
     (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
@@ -510,5 +520,14 @@ B = {1: (1, "In the middle of a flight"), 2: (199, "But a flight attendant"), 3:
      5: (655, "and he was finally sedated"), 6: (769, "When they checked his shoes"), 7: (1069, "Both shoes were packed"),
      8: (1249, "to bring down the entire plane"), 9: (1393, "And that's why you have to take your shoes off")}
 json.dump([{"beat": k, "frame": v[0], "first_words": v[1]} for k, v in B.items()], open(os.path.join(HERE, "..", "beats.json"), "w"), indent=1)
+# strip MPFB helper geometry (always masked out of the render) so it can never act as a collision target
+import bmesh
+for ob in [o for o in O if o.type == 'MESH' and o.name.endswith(".body")]:
+    gi = {g.index for g in ob.vertex_groups if g.name.lower().startswith(("helper", "joint")) or g.name in ("HelperGeometry", "JointCubes")}
+    if not gi: continue
+    bm = bmesh.new(); bm.from_mesh(ob.data); dl = bm.verts.layers.deform.verify()
+    kill = [v for v in bm.verts if any(k in gi and w > 0.5 for k, w in v[dl].items())]
+    bmesh.ops.delete(bm, geom=kill, context='VERTS'); bm.to_mesh(ob.data); bm.free(); ob.data.update()
+    print("HELPERS_STRIPPED", ob.name, len(kill))
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FILM_SAVED", OUT)

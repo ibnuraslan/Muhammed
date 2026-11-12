@@ -100,12 +100,19 @@ BX, BY = SX["A"], ROW(3)
 
 # ---------------------------------------------------------------- BOMBER
 # beat 1: hunched, right foot pulled up onto the seat edge, shoe in left hand, right hand strikes + holds match
+def set_pole(h, s, f, P):
+    n = "Pole_knee." + s; pb_ = h.r.PB[n]
+    pb_.location = h.r.rest(n).to_3x3().inverted() @ (V(P) - h.r.BN[n].head_local)
+    pb_.keyframe_insert("location", frame=f, group=n)
 def bomber_hunch(f, lean=38, head=(28, 0), foot_up=0.42, twist=-8, hx=0.0):
-    lean = lean * 0.6
-    bom.key_root(f, V((BX + 0.02, BY - 0.03, 0.56)), yaw=FWD, flex=10, side=-3)
-    bom.key_spine(f, flex=lean, twist=twist, side=4, head=head)
+    """v006: right heel up on the seat edge, knee out to his right, foot well clear of his body; a shallower lean
+    (head stays off the seat in front)"""
+    lean = lean * 0.3
+    bom.key_root(f, V((BX + 0.02, BY - 0.08, 0.56)), yaw=FWD, flex=6, side=-3)
+    bom.key_spine(f, flex=lean, twist=twist * 0.7, side=3, head=(head[0] * 0.9, head[1]))
     bom.key_foot("L", f, V((BX - 0.12, BY + 0.44)), FWD, 0, 0)
-    bom.key_foot("R", f, V((BX + 0.19, BY + 0.30)), FWD + 15, foot_up, 15)   # heel up near the cushion edge, knee out of the arms' way
+    bom.key_foot("R", f, V((BX + 0.22, BY + 0.32)), FWD + 15, foot_up, 15)
+    set_pole(bom, "R", f, (BX + 0.75, BY + 0.55, 0.85))     # knee out to his right, away from his arms
 
 for f, lean, hd, tw in ((1, 36, (26, -4), -8), (40, 40, (30, 2), -10), (90, 42, (34, -2), -12), (150, 40, (30, 4), -9), (200, 38, (26, 0), -8)):
     bomber_hunch(f, lean, hd, twist=tw)
@@ -114,11 +121,11 @@ def shoe_pt(f, dx=0.0, dy=0.0, dz=0.0):
     a = wpos(bom, "foot.R", f); return a + V((dx, dy, dz))
 for f in (1, 40, 90, 150, 200, 260, 330, 372):
     a = shoe_pt(f)
-    hand(bom, "L", f, a + V((-0.13, 0.02, 0.07)), (0.3, 0.6, -0.6), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.65)
+    hand(bom, "L", f, a + V((-0.03, 0.17, 0.07)), (0.2, 0.8, -0.5), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.55)   # holds the toe, in front of the shin
 # right hand: strike (f10-28 swipe along the box held in the left hand), then hold the match flame to the tongue
 strike = [(1, V((0.10, 0.02, 0.16))), (14, V((0.06, 0.06, 0.14))), (22, V((0.13, -0.04, 0.12))), (30, V((0.07, 0.10, 0.13))),
-          (60, V((0.06, 0.06, 0.17))), (90, V((0.05, 0.07, 0.15))), (120, V((0.07, 0.05, 0.16))), (150, V((0.05, 0.08, 0.15))),
-          (200, V((0.06, 0.06, 0.16))), (260, V((0.06, 0.07, 0.15))), (330, V((0.05, 0.07, 0.16))), (372, V((0.06, 0.06, 0.15))),
+          (60, V((0.03, 0.07, 0.20))), (90, V((0.02, 0.08, 0.18))), (120, V((0.04, 0.06, 0.19))), (150, V((0.02, 0.09, 0.18))),
+          (200, V((0.03, 0.07, 0.19))), (260, V((0.03, 0.08, 0.18))), (330, V((0.02, 0.08, 0.19))), (372, V((0.03, 0.07, 0.18))),
           (400, V((0.06, 0.02, 0.20)))]
 for f, o in strike:
     a = shoe_pt(f)
@@ -130,7 +137,7 @@ for f, lean, hd, tw in ((260, 40, (32, -5), -10), (300, 34, (12, 10), -6), (330,
 bomber_hunch(395, 22, (-8, 35), twist=10)
 bomber_hunch(420, 18, (-10, 40), twist=14)
 hand(bom, "R", 420, shoe_pt(420) + V((0.08, 0.0, 0.25)), (0, 0.4, 0.6), (0, -1, 0), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8)
-hand(bom, "L", 420, shoe_pt(420) + V((-0.09, 0.08, 0.05)), (0.3, 0.6, -0.6), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.65)
+hand(bom, "L", 420, shoe_pt(420) + V((-0.03, 0.17, 0.07)), (0.2, 0.8, -0.5), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.55)
 # beat 4 (481-654): lunges up, grabbed, dragged out into the aisle, pinned face-down (head toward +Y)
 bom.key_root(450, V((BX + 0.05, BY - 0.02, 0.57)), yaw=FWD, flex=8, side=0); bom.key_spine(450, flex=20, twist=15, head=(-5, 30))
 bom.key_foot("R", 450, V((BX + 0.13, BY + 0.42)), FWD, 0, 0); bom.key_foot("L", 450, V((BX - 0.12, BY + 0.44)), FWD, 0, 0)
@@ -145,16 +152,21 @@ bom.key_foot("L", 525, V((-1.0, BY + 0.38)), FWD - 60, 0.12, 0); bom.key_foot("R
 # 555: falling into the aisle, body pitching forward toward +Y
 bom.key_root(555, V((-0.15, BY + 0.55, 0.55)), yaw=FWD - 10, flex=65, side=15); bom.key_spine(555, flex=20, twist=10, head=(-20, 10))
 bom.key_foot("L", 555, V((-0.30, BY + 0.10)), FWD, 0.15, -30); bom.key_foot("R", 555, V((-0.05, BY + 0.05)), FWD, 0.25, -40)
+for f, hr_, hl_ in ((495, (BX + 0.62, BY + 0.38, 1.02), (BX + 0.05, BY + 0.58, 0.92)),
+                  (525, (-0.22, BY + 0.72, 0.98), (-0.52, BY + 0.82, 0.72)),
+                  (555, (0.10, BY + 1.30, 0.50), (-0.26, BY + 1.22, 0.32))):
+    hand(bom, "R", f, hr_, (0.3, 1, -0.2), (0, 0, -1), grip=0.4)
+    hand(bom, "L", f, hl_, (0, 1, -0.6), (0, 0, -1), grip=0.25)
 # 580: hits the floor (impact, slight bounce at 590), pinned at 600+
 for f, z, fl in ((578, 0.27, 92), (586, 0.31, 90), (596, 0.27, 91), (654, 0.27, 91), (700, 0.265, 91), (768, 0.265, 91)):
     bom.key_root(f, V((0.0, BY + 0.75, z)), yaw=FWD, flex=fl, side=0)
-    bom.key_spine(f, flex=-2, twist=-5, head=(-18, 32) if f < 700 else (-15, 38))
+    bom.key_spine(f, flex=-2, twist=-5, head=(-18, 32) if f < 700 else ((-19.3, 41) if f == 700 else (-22, 58)))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 # struggle wiggle while pinned (beat 4 end, beat 5 start), then limp (sedated ~ 720)
 for f in range(600, 721, 12):
     w = 1.0 if f < 690 else max(0.0, (720 - f) / 30)
     bom.key_root(f, V((0.0 + 0.03 * w * math.sin(f), BY + 0.75, 0.27 + 0.02 * w * abs(math.sin(f * 0.7)))), yaw=FWD + 4 * w * math.sin(f * 0.5), flex=91, side=6 * w * math.sin(f * 0.9))
-    bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-18 + 3 * (1 - w), 32 + 6 * (1 - w)))
+    bom.key_spine(f, flex=-2 + 4 * w * math.sin(f * 0.3), twist=-5 + 8 * w * math.sin(f * 0.6), head=(-18 - 4 * (1 - w), 32 + (58 - 32) * (1 - w)))
 # arms when pinned: left arm twisted behind his back (held by PaxB), right arm out forward on the floor (held by attendant / injected)
 for f in (582, 654, 720, 768, 830, 1068):
     hand(bom, "L", f, V((-0.30, BY + 0.55, 0.08)), (0, -1, 0), (0, 0, -1), pole=(-0.6, BY + 0.9, 0.4), grip=0.3)
@@ -162,7 +174,7 @@ for f in (582, 654, 720, 768, 830, 1068):
 # after sedation he lies still; tiny breathing
 for f in range(780, 1069, 30):
     bom.key_root(f, V((0.0, BY + 0.75, 0.265 + 0.004 * math.sin(f * 0.1))), yaw=FWD, flex=91, side=0)
-    bom.key_spine(f, flex=-2, twist=-5, head=(-15, 38))
+    bom.key_spine(f, flex=-2, twist=-5, head=(-22, 58))
     bom.key_foot("L", f, V((-0.11, BY - 0.25)), FWD, 0.03, -75); bom.key_foot("R", f, V((0.11, BY - 0.27)), FWD, 0.03, -75)
 print("BOMBER_DONE")
 
@@ -170,64 +182,75 @@ print("BOMBER_DONE")
 # beat 2: walks behind the trolley (y 7.6 -> 2.3), stops ~ f300, sniffs (head up, turns left toward row 3 at f330)
 apath = catmull([(170, V((0.0, 7.9, 0))), (230, V((0.0, 5.6, 0))), (300, V((0.0, 3.0, 0))), (318, V((0.0, 2.85, 0)))])
 att.walk(apath, lambda f: 0.0, 170, 318, stride=0.62, lift=0.06, lean=8)
-for s in "LR":    # hands on the trolley handle while walking
-    sg = 1 if s == "L" else -1     # facing -Y: her left is +X
-    for f in range(170, 319, 10):
-        p = apath(f)
-        hand(att, s, f, V((p.x + sg * 0.16, p.y - 0.36, 0.98)), (0, -1, -0.2), (0, 0, -1), grip=0.7)
+def swing(h, path, f0, f1, facing_y=-1, step=10, amp=0.11, period=36):
+    """relaxed arm swing while walking (hands opposite to the legs)"""
+    for f in range(f0, f1 + 1, step):
+        p = path(f); ph = math.sin((f - f0) / period * 2 * math.pi)
+        for s_, sg in (("L", 1), ("R", -1)):
+            side = sg * (1 if facing_y < 0 else -1) * 0.24
+            hand(h, s_, f, V((p.x + side, p.y + facing_y * sg * ph * amp, 0.86)), (0, facing_y * 0.2, -1), (-side, 0, 0), grip=0.3)
 TROLLEY = bpy.data.objects["Trolley"]
-for f in range(170, 319, 6):
-    p = apath(f); TROLLEY.location = V((0, p.y - 0.75, 0.52)); TROLLEY.keyframe_insert("location", frame=f)
-for f in (1,):
-    TROLLEY.location = V((0, 7.9 - 0.75, 0.52)); TROLLEY.keyframe_insert("location", frame=f)
-for f, y in ((372, 2.10), (470, 2.10), (500, 2.9), (530, 3.35), (560, 3.45)):
-    TROLLEY.location = V((0.02 * (f > 470), y, 0.52)); TROLLEY.keyframe_insert("location", frame=f)
+TROLLEY.location = V((0, 8.55, 0.52)); TROLLEY.keyframe_insert("location", frame=1)      # parked in the forward galley
+swing(att, apath, 170, 318)
 # stop + sniff + turn
 stand(att, 330, apath(318), 0, spine=(-6, 0, 0), head=(-14, 0))           # nose up, sniff
 stand(att, 350, apath(318), 0, spine=(-4, 0, 0), head=(-10, -20))
 stand(att, 372, V((0.0, 2.8, 0)), -25, spine=(4, -20, 0), head=(6, -25))   # turns toward row 3 (to her right)
-for s in "LR":
-    sg = 1 if s == "L" else -1
-    hand(att, s, 330, V((sg * 0.16, 2.85 - 0.36, 0.98)), (0, -1, -0.2), (0, 0, -1), grip=0.7)
-hand(att, "R", 372, V((-0.25, 2.55, 1.05)), (0, -1, 0), (1, 0, 0), grip=0.3)
-hand(att, "L", 372, V((0.2, 2.6, 0.95)), (0, -1, -0.2), (0, 0, -1), grip=0.7)
+hand(att, "L", 330, V((0.22, 2.85, 0.88)), (0, 0, -1), (-1, 0, 0), grip=0.3)
+hand(att, "R", 330, V((-0.24, 2.80, 0.90)), (0, 0, -1), (1, 0, 0), grip=0.3)
+hand(att, "R", 350, V((-0.22, 2.85, 0.88)), (0, 0, -1), (1, 0, 0), grip=0.3)
+hand(att, "L", 372, V((0.22, 2.8, 0.88)), (0, 0, -1), (-1, 0, 0), grip=0.3)
+hand(att, "R", 372, V((-0.22, 2.75, 0.9)), (0, 0, -1), (1, 0, 0), grip=0.3)
 # beat 3 (373-480): she steps to row 3, leans over seat C looking at him: "caught"
-for f, y, yaw, sp, hd in ((400, 1.3, -50, (18, -15, 0), (10, -20)), (430, 0.55, -80, (25, -15, 5), (14, -15)), (470, 0.45, -85, (30, -10, 5), (16, -10))):
-    stand(att, f, V((0.1, y, 0)), yaw, spine=sp, head=hd, stance=0.12)
-hand(att, "L", 430, V((-0.45, 0.25, 1.1)), (-1, 0, -0.3), (0, 0, -1), grip=0.6)       # left hand on the seat-back top (seat 3C headrest)
-hand(att, "R", 430, V((-0.6, 0.5, 1.0)), (-1, 0, 0.2), (0, 0, -1), grip=0.2)
-hand(att, "L", 470, V((-0.45, 0.25, 1.1)), (-1, 0, -0.3), (0, 0, -1), grip=0.6)
-hand(att, "R", 470, V((-0.7, 0.45, 0.95)), (-1, 0, 0.1), (0, 0, -1), grip=0.2)
+apath2 = catmull([(376, V((0.0, 2.8, 0))), (400, V((0.05, 1.6, 0))), (424, V((0.1, 0.62, 0)))])
+att.walk(apath2, lambda f: -70.0 * smooth((f - 404) / 20.0), 376, 424, stride=0.6, lift=0.06, lean=10)
+swing(att, apath2, 376, 412, step=12)
+for f, yaw, sp, hd in ((432, -78, (22, -12, 4), (14, -15)), (470, -84, (28, -10, 5), (16, -10))):
+    stand(att, f, V((0.1, 0.62, 0)), yaw, spine=sp, head=hd, stance=0.12)
+for f in (430, 470):
+    hand(att, "L", f, V((-0.30, 0.63, 1.15)), (-1, 0, -0.3), (0, 0, -1), grip=0.5)       # left hand on the seat-back top (row 4)
+    hand(att, "R", f, V((-0.05, 0.48, 1.05)), (0, -1, 0.2), (0, 0, -1), grip=0.35)
 # beat 4: grabs his right wrist (f490), pulls into the aisle, kneels at his head pinning the right arm
 ev(495); wr = wpos(bom, "wrist.R", 495)
-hand(att, "R", 492, wr + V((0.03, 0, 0.03)), (-1, 0, -0.2), (0, 0, -1), grip=0.85)
-hand(att, "L", 492, wr + V((0.10, 0.04, 0.02)), (-1, 0.2, 0), (0, 0, -1), grip=0.85)
-stand(att, 492, V((0.15, 0.45, 0)), -90, spine=(25, 0, 0), head=(10, 0), crouch=0.1, stance=0.18)
+hand(att, "R", 492, wr + V((0.03, 0, 0.07)), (-1, 0, -0.2), (0, 0, -1), grip=0.6)
+hand(att, "L", 492, wr + V((0.10, 0.04, 0.06)), (-1, 0.2, 0), (0, 0, -1), grip=0.6)
+stand(att, 492, V((0.12, 0.55, 0)), -90, spine=(25, 0, 0), head=(10, 0), crouch=0.1, stance=0.18)
 stand(att, 525, V((0.12, 0.75, 0)), -60, spine=(30, 15, 0), head=(15, 0), crouch=0.15, stance=0.2)
+for f in range(500, 541, 10):
+    ev(f); w_ = wpos(bom, "wrist.R", f)
+    hand(att, "R", f, w_ + V((0.04, -0.03, 0.10)), (-0.5, 0.5, -0.4), (0, 0, -1), grip=0.5)
+    hand(att, "L", f, w_ + V((0.10, -0.10, 0.10)), (-0.5, 0.5, -0.4), (0, 0, -1), grip=0.5)
+# follows him as he goes down: steps up beside him to his head, then kneels (real in-betweens)
+apath3 = catmull([(540, V((0.12, 0.78, 0))), (562, V((0.0, 1.45, 0))), (582, V((-0.16, 2.0, 0)))])
+att.walk(apath3, lambda f: -60 + 40 * smooth((f - 540) / 42.0), 540, 582, stride=0.45, lift=0.05, lean=18)
+swing(att, apath3, 548, 580, facing_y=1, step=8, amp=0.08, period=26)   # lets go of his wrist as he drops and steps up to his head
+stand(att, 597, V((-0.17, 2.02, 0)), -20, spine=(45, 10, 0), head=(15, 10), crouch=0.35)
 # kneel at his head (y ~ BY+2.0), facing -Y, holding his outstretched right forearm
-for f in (590, 654, 720, 760):
+for f in (612, 654, 720, 760):
     att.key_root(f, V((-0.18, BY + 2.0, 0.47)), yaw=-20, flex=15)
     att.key_spine(f, flex=62, twist=10, head=(12, 10))
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
-    hand(att, "R", f, V((0.15, BY + 1.58, 0.43)), (0, -1, -0.4), (0, 0, -1), grip=0.6)
-    hand(att, "L", f, V((0.21, BY + 1.36, 0.42)), (0, -1, -0.4), (0, 0, -1), grip=0.6)
+    hand(att, "R", f, V((0.15, BY + 1.58, 0.47)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
+    hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
 # beat 6 (769-1068): goes to his feet, kneels, pulls both sneakers off and lifts them under the reading light
 stand(att, 785, V((-0.1, BY + 2.05, 0)), 0, spine=(20, 0, 0), head=(15, 0), crouch=0.05)
-awp = catmull([(790, V((0.18, BY + 2.0, 0))), (815, V((0.21, BY + 1.0, 0))), (840, V((0.18, BY - 0.6, 0)))])
-att.walk(awp, lambda f: 0.0, 790, 840, stride=0.6, lift=0.07, lean=10)
-for f in (790, 815, 840):
-    p_ = awp(f)
-    hand(att, "R", f, V((p_.x - 0.22, p_.y, 0.85)), (0, 0, -1), (1, 0, 0), grip=0.3)
-    hand(att, "L", f, V((p_.x + 0.22, p_.y, 0.85)), (0, 0, -1), (-1, 0, 0), grip=0.3)
+awp = catmull([(790, V((0.18, BY + 2.0, 0))), (812, V((0.21, BY + 1.0, 0))), (835, V((0.19, BY - 0.45, 0))), (848, V((0.14, BY - 1.02, 0)))])
+att.walk(awp, lambda f: 0.0, 790, 848, stride=0.6, lift=0.07, lean=10)
+swing(att, awp, 790, 845, step=11)
+stand(att, 856, V((0.12, BY - 1.0, 0)), 90, spine=(10, 0, 0), head=(20, 20), stance=0.08)            # turns round at his feet
+stand(att, 864, V((0.08, BY - 0.96, 0)), 170, spine=(30, 0, 0), head=(25, 0), crouch=0.22, stance=0.1)
+for s_, sg in (("L", -1), ("R", 1)):
+    hand(att, s_, 856, V((0.12 + sg * 0.25, BY - 1.0, 0.88)), (0, 0, -1), (-sg, 0, 0), grip=0.3)
+    hand(att, s_, 866, V((0.08 + sg * 0.18, BY - 0.72, 0.62)), (0, 1, -0.6), (0, 0, -1), grip=0.3)
 KN = V((0.05, BY - 0.62, 0))          # kneeling spot behind his feet, facing +Y
-for f in (850, 880, 940, 1000, 1068):
+for f in (874, 880, 940, 1000, 1068):
     att.key_root(f, V((KN.x, KN.y, 0.47 if f < 900 else 0.58)), yaw=FWD, flex=15 if f < 900 else 5)
     att.key_spine(f, flex=50 if f < 900 else 5, twist=0, head=(20, 0) if f < 900 else (5, 0))
     att.key_foot("L", f, V((KN.x - 0.12, KN.y - 0.35)), FWD, 0.02, -65); att.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.33)), FWD, 0.02, -65)
 # grasp the heels (870), pull off (880-900), lift up together (900-960), turn the soles to the light (960-1068)
-ev(870); hl = wpos(bom, "foot.L", 870); hr = wpos(bom, "foot.R", 870)
-hand(att, "L", 870, hl + V((-0.06, -0.05, 0.08)), (0.2, 1, -0.3), (1, 0, 0), grip=0.75)
-hand(att, "R", 870, hr + V((0.06, -0.05, 0.08)), (-0.2, 1, -0.3), (-1, 0, 0), grip=0.75)
+ev(876); hl = wpos(bom, "foot.L", 876); hr = wpos(bom, "foot.R", 876)
+hand(att, "L", 876, hl + V((-0.06, -0.05, 0.10)), (0.2, 1, -0.3), (1, 0, 0), grip=0.7)
+hand(att, "R", 876, hr + V((0.06, -0.05, 0.10)), (-0.2, 1, -0.3), (-1, 0, 0), grip=0.7)
 hand(att, "L", 900, V((KN.x - 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (1, 0, 0), grip=0.75)
 hand(att, "R", 900, V((KN.x + 0.2, KN.y + 0.45, 0.35)), (0, 1, 0.2), (-1, 0, 0), grip=0.75)
 for f, z, rot in ((950, 1.05, 0), (1000, 1.15, 25), (1068, 1.2, 35)):
@@ -242,8 +265,8 @@ for s in "LR": rest_arm(pa, s, 1, V((SX["C"], BY, 0.56)), grip=0.25)
 for s in "LR": rest_arm(pa, s, 400, V((SX["C"], BY, 0.56)), grip=0.25)
 sit(pa, 420, SX["C"], BY, flex=4, spine=(4, -20, 0), head=(0, -40))      # wakes, looks at the bomber
 sit(pa, 470, SX["C"], BY, flex=4, spine=(12, -30, 0), head=(5, -35))
-hand(pa, "R", 470, V((SX["C"] - 0.55, BY + 0.25, 0.95)), (-1, 0, 0), (0, 0, -1), grip=0.8)    # grabs the bomber's shoulder/arm
-hand(pa, "L", 470, V((SX["C"] - 0.5, BY + 0.10, 0.78)), (-1, 0, -0.2), (0, 0, -1), grip=0.8)
+hand(pa, "R", 470, V((SX["C"] - 0.50, BY + 0.20, 1.04)), (-1, 0, 0), (0, 0, -1), grip=0.5)    # grabs the top of the bomber's shoulder
+hand(pa, "L", 470, V((SX["C"] - 0.42, BY + 0.05, 0.86)), (-1, 0, -0.2), (0, 0, -1), grip=0.5)
 # stands half up, pushes him into the aisle (follows the bomber's back)
 stand(pa, 525, V((-0.25, BY + 0.30, 0)), FWD - 40, flex=10, spine=(35, -10, 0), head=(20, -10), crouch=0.35)
 hand(pa, "R", 525, V((-0.65, BY + 0.30, 1.0)), (1, 0.4, 0), (0, 0, -1), grip=0.8)
@@ -253,8 +276,8 @@ for f in (585, 654, 720, 768):
     pa.key_root(f, V((-0.05, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
     pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(20, 0) if f < 720 else (10, 20))
     pa.key_foot("L", f, V((-0.25, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12, BY - 0.40)), FWD + 20, 0.02, -65)
-    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.51)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
-    hand(pa, "R", f, V((0.12, BY + 1.0, 0.51)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.55)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "R", f, V((0.12, BY + 1.0, 0.55)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
 
 # ---------------------------------------------------------------- PAX B (2C behind, aisle seat; stands, pins the left arm / legs)
 for f in range(1, 470, 20):
@@ -262,21 +285,25 @@ for f in range(1, 470, 20):
 for s in "LR": rest_arm(pb, s, 1, V((SX["C"], ROW(2), 0.56)), fwd=0.38, z=0.2, grip=0.6)     # phone in hands
 for s in "LR": rest_arm(pb, s, 400, V((SX["C"], ROW(2), 0.56)), fwd=0.38, z=0.2, grip=0.6)
 sit(pb, 440, SX["C"], ROW(2), spine=(2, 15, 0), head=(-5, 20))      # looks up at the commotion
-stand(pb, 500, V((0.0, ROW(2) + 0.1, 0)), FWD, spine=(10, 0, 0), head=(5, 0))
+stand(pb, 470, V((SX["C"] + 0.08, ROW(2) + 0.05, 0)), FWD, spine=(25, 0, 0), head=(10, 0), crouch=0.3)
+pbo = catmull([(474, V((SX["C"] + 0.08, ROW(2) + 0.05, 0))), (500, V((0.0, ROW(2) + 0.1, 0)))])
+pb.walk(pbo, lambda f: FWD, 474, 500, stride=0.35, lift=0.05, lean=8)
 stand(pb, 545, V((0.0, ROW(2) + 0.3, 0)), FWD, spine=(30, 0, 0), head=(20, 0), crouch=0.15, stance=0.15)
 for f in (590, 654, 720, 768):     # kneels on his legs side, holds the twisted left arm behind his back
     pb.key_root(f, V((0.10, BY - 0.80, 0.55)), yaw=FWD, flex=12)
     pb.key_spine(f, flex=62 if f < 720 else 50, twist=-8, head=(20, 0) if f < 720 else (10, -10))
     pb.key_foot("L", f, V((-0.02, BY - 1.18)), FWD, 0.02, -65); pb.key_foot("R", f, V((0.22, BY - 1.18)), FWD, 0.02, -65)
-    hand(pb, "L", f, V((-0.08, BY - 0.10, 0.45)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on the back of his calves
-    hand(pb, "R", f, V((0.12, BY - 0.12, 0.45)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
+    hand(pb, "L", f, V((-0.08, BY - 0.10, 0.49)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on the back of his calves
+    hand(pb, "R", f, V((0.12, BY - 0.12, 0.49)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 
-stand(pa, 800, V((-0.70, BY + 0.38, 0)), 70, spine=(10, 0, 0), head=(15, -20), crouch=0.25)
+stand(pa, 790, V((-0.12, BY + 0.12, 0)), 70, spine=(30, 0, 0), head=(20, -20), crouch=0.4)
+pap = catmull([(796, V((-0.14, BY + 0.14, 0))), (825, V((-0.58, BY + 0.38, 0)))])
+pa.walk(pap, lambda f: 70.0, 796, 825, stride=0.4, lift=0.05, lean=6)
 for f in (850, 950, 1068):
-    stand(pa, f, V((-0.72, BY + 0.38, 0)), 70, spine=(12, 5, 0), head=(18, -10 + 10 * math.sin(f)), crouch=0.25)
-for f in (800, 1068):
-    hand(pa, "R", f, V((-0.55, BY + 0.62, 1.05)), (0.3, 0, -1), (0, 1, 0), grip=0.7)   # hand on the seat-back top
-    hand(pa, "L", f, V((-0.80, BY + 0.10, 0.85)), (0, 0, -1), (1, 0, 0), grip=0.3)
+    stand(pa, f, V((-0.58, BY + 0.38, 0)), 70, spine=(12, 5, 0), head=(18, -10 + 10 * math.sin(f)), crouch=0.25)
+for f in (826, 1068):
+    hand(pa, "R", f, V((-0.62, BY + 0.64, 1.14)), (0.3, 0, -1), (0, 1, 0), grip=0.6)   # hand on the seat-back top (row 4)
+    hand(pa, "L", f, V((-0.80, BY + 0.10, 0.88)), (0, 0, -1), (1, 0, 0), grip=0.3)
 stand(pb, 790, V((0.08, BY - 1.0, 0)), FWD, spine=(15, 0, 0), head=(20, 0), crouch=0.1)
 pbp = catmull([(795, V((0.08, BY - 1.0, 0))), (860, V((0.05, BY - 2.6, 0)))])
 pb.walk(pbp, lambda f: FWD, 795, 860, stride=0.5, lean=-4)
@@ -285,28 +312,36 @@ for f in (900, 1068):
 for f in (800, 860, 1068):
     for s_ in "LR":
         sg = -1 if s_ == "L" else 1
-        hand(pb, s_, f, V((sg * 0.22, (BY - 1.0) if f == 800 else (BY - 2.6), 0.85)), (0, 0, -1), (-sg, 0, 0), grip=0.3)
+        hand(pb, s_, f, V((sg * 0.27, (BY - 1.0) if f == 800 else (BY - 2.6), 0.98)), (0, 0, -1), (-sg, 0, 0), grip=0.3)
 # ---------------------------------------------------------------- STEWARD (runs up the aisle from the aft galley, pins, injects)
-spath = catmull([(440, V((0.0, -3.6, 0))), (480, V((0.0, -2.6, 0))), (530, V((0.0, -1.6, 0)))])
-stw.walk(spath, lambda f: 180.0, 440, 530, stride=1.0, lift=0.1, lean=14, bob=0.035)
+spath = catmull([(440, V((0.05, 8.0, 0))), (480, V((0.05, 5.4, 0))), (520, V((0.08, 3.0, 0))), (532, V((0.10, 2.80, 0)))])
+stw.walk(spath, lambda f: 0.0, 440, 532, stride=0.95, lift=0.1, lean=14, bob=0.035)
+swing(stw, spath, 440, 528, step=9, amp=0.16, period=30)
+# holds two rows back while the attendant steps up to the bomber's head, then comes round her on the +x side
+for f in (540, 560, 582):
+    stand(stw, f, V((0.10, 2.80, 0)), 0, spine=(10, 0, 0), head=(15, 8 * math.sin(f * 0.05)), stance=0.14)
+    for s_, sg in (("L", 1), ("R", -1)):
+        hand(stw, s_, f, V((0.10 + sg * 0.26, 2.74, 0.90)), (0, -0.3, -1), (-sg, 0, 0), grip=0.3)
+spath2 = catmull([(586, V((0.10, 2.80, 0))), (600, V((0.42, 2.15, 0))), (616, V((0.66, 1.62, 0)))])
+stw.walk(spath2, lambda f: -80.0 * smooth((f - 590) / 26.0), 586, 616, stride=0.5, lift=0.06, lean=12)
+swing(stw, spath2, 586, 612, step=8, amp=0.10, period=28)
 for f in range(1, 441, 40):
-    stand(stw, f, V((0.0, -3.6, 0)), 180, spine=(5, 0, 0), head=(5, 10 * math.sin(f * 0.02)))
-for s in "LR":
-    for f in (1, 440, 530):
-        p = spath(f); sg = -1 if s == "L" else 1
-        hand(stw, s, f, V((p.x + sg * 0.25, p.y + 0.12, 0.95)), (0, 0.3, -1), (sg, 0, 0), grip=0.4)
+    stand(stw, f, V((0.05, 8.0, 0)), 0, spine=(5, 0, 0), head=(5, 10 * math.sin(f * 0.02)))
+    for s_, sg in (("L", 1), ("R", -1)):
+        hand(stw, s_, f, V((0.05 + sg * 0.24, 8.0, 0.86)), (0, -0.2, -1), (-sg, 0, 0), grip=0.3)
+stand(stw, 624, V((0.68, 1.45, 0)), -90, spine=(25, 0, 0), head=(20, 0), crouch=0.3, stance=0.14)   # stops beside his arm and lowers to a kneel
 # kneels at the bomber's right side by his upper arm (beat 5) and injects
 SK = V((0.68, BY + 1.28, 0))
-for f in (575, 640, 700, 768, 900, 1068):
+for f in (640, 700, 768, 900, 1068):
     stw.key_root(f, V((SK.x, SK.y, 0.56)), yaw=-90, flex=10)
     stw.key_spine(f, flex=55, twist=0, head=(15, 0))
     stw.key_foot("L", f, V((SK.x + 0.38, SK.y + 0.14)), -90, 0.02, -65); stw.key_foot("R", f, V((SK.x + 0.40, SK.y - 0.16)), -90, 0.02, -65)
 # upper-arm injection: left hand steadies the arm, right hand holds the syringe (thumb on plunger)
 ev(700); UA = (bom.r.o.matrix_world @ bom.r.PB['upperarm02.R'].matrix).translation.copy() + V((0.0, 0.0, 0.05))   # bomber's right upper arm (evaluated)
 print('UA', UA)
-for f, dz in ((575, 0.25), (640, 0.18), (660, 0.09), (690, 0.07), (720, 0.07), (745, 0.2), (768, 0.3)):
-    hand(stw, "R", f, UA + V((0.05, 0.0, dz + 0.06)), (-0.6, 0, -0.8), (0, 1, 0), grip=0.75)
-    hand(stw, "L", f, UA + V((0.02, 0.22, 0.08)), (-1, 0, -0.3), (0, 0, -1), grip=0.6)
+for f, dz in ((640, 0.25), (652, 0.18), (664, 0.09), (690, 0.07), (720, 0.07), (745, 0.2), (768, 0.3)):
+    hand(stw, "R", f, UA + V((0.05, 0.0, dz + 0.10)), (-0.6, 0, -0.8), (0, 1, 0), grip=0.6)
+    hand(stw, "L", f, UA + V((0.02, 0.22, 0.13)), (-1, 0, -0.3), (0, 0, -1), grip=0.45)
 for f in (900, 1068):
     hand(stw, "R", f, V((SK.x - 0.12, SK.y + 0.22, 0.92)), (-0.2, 0, -1), (0, 1, 0), grip=0.4)
     hand(stw, "L", f, V((SK.x - 0.30, SK.y - 0.18, 0.62)), (-1, 0, -0.5), (0, 0, -1), grip=0.4)
@@ -324,21 +359,29 @@ for f in range(1, 1069, 20):
 for f in (1, 380):
     for s in "LR": rest_arm(pc, s, f, V((SX["D"], BY, 0.56)), grip=0.3)
 hand(pc, "R", 470, V((SX["D"] - 0.15, BY + 0.6, 0.95)), (0, 0, 1), (0, -1, 0), grip=0.9)   # hand over her mouth-ish reaction
-hand(pc, "L", 470, V((SX["D"] - 0.30, BY + 0.2, 0.62)), (-1, 0, -0.2), (0, 0, -1), grip=0.8)  # grips the armrest
+hand(pc, "L", 470, V((SX["D"] - 0.20, BY + 0.2, 0.66)), (-1, 0, -0.2), (0, 0, -1), grip=0.6)  # grips the armrest
+for f in (770,):
+    hand(pc, "R", f, V((SX["D"] + 0.08, BY + 0.30, 0.74)), (0, 1, -0.3), (0, 0, -1), grip=0.3)
+    hand(pc, "L", f, V((SX["D"] - 0.10, BY + 0.30, 0.74)), (0, 1, -0.3), (0, 0, -1), grip=0.3)
+for f in (500, 520):   # PaxC: right hand braced on her armrest while she leans out to watch
+    hand(pc, "R", f, V((SX["D"] + 0.26, BY + 0.30, 0.80)), (0, 1, -0.3), (0, 0, -1), grip=0.35)
 for f in range(1, 1069, 20):
     if f < 420:
         sit(pd, f, SX["A"], ROW(4), spine=(12, 0, 0), head=(25, 0))
     else:
         sit(pd, f, SX["A"], ROW(4), z=0.6, spine=(5, 60, 0), head=(5, 60))      # twists round over her shoulder
 for f in (1, 420):
-    hand(pd, "L", f, V((SX["A"] - 0.1, ROW(4) + 0.33, 0.85)), (0, 0.3, 1), (1, 0, 0), grip=0.5)   # holding a book
-    hand(pd, "R", f, V((SX["A"] + 0.1, ROW(4) + 0.33, 0.85)), (0, 0.3, 1), (-1, 0, 0), grip=0.5)
+    hand(pd, "L", f, V((SX["A"] - 0.13, ROW(4) + 0.38, 0.86)), (0, 0.3, 1), (1, 0, 0), grip=0.5)   # holding a book
+    hand(pd, "R", f, V((SX["A"] + 0.13, ROW(4) + 0.38, 0.86)), (0, 0.3, 1), (-1, 0, 0), grip=0.5)
+for f in (446, 1068):   # book lowered to her lap as she twists round to look
+    hand(pd, "L", f, V((SX["A"] - 0.12, ROW(4) + 0.24, 0.70)), (0, 1, -0.3), (0, 0, -1), grip=0.4)
+    hand(pd, "R", f, V((SX["A"] + 0.06, ROW(4) + 0.26, 0.70)), (0, 1, -0.3), (0, 0, -1), grip=0.4)
 for f in (1068, 1380):
-    hand(pc, "R", f, V((SX["D"] - 0.15, BY + 0.6, 0.95)), (0, 0, 1), (0, -1, 0), grip=0.9)
-    hand(pc, "L", f, V((SX["D"] - 0.30, BY + 0.2, 0.62)), (-1, 0, -0.2), (0, 0, -1), grip=0.8)
+    hand(pc, "R", f, V((SX["D"] + 0.08, BY + 0.30, 0.74)), (0, 1, -0.3), (0, 0, -1), grip=0.3)
+    hand(pc, "L", f, V((SX["D"] - 0.10, BY + 0.30, 0.74)), (0, 1, -0.3), (0, 0, -1), grip=0.3)
     sit(pd, f, SX["A"], ROW(4), z=0.6, spine=(5, 60, 0), head=(5, 60))
-    hand(pd, "L", f, V((SX["A"] - 0.1, ROW(4) + 0.33, 0.85)), (0, 0.3, 1), (1, 0, 0), grip=0.5)
-    hand(pd, "R", f, V((SX["A"] + 0.1, ROW(4) + 0.33, 0.85)), (0, 0.3, 1), (-1, 0, 0), grip=0.5)
+    hand(pd, "L", f, V((SX["A"] - 0.12, ROW(4) + 0.24, 0.70)), (0, 1, -0.3), (0, 0, -1), grip=0.4)
+    hand(pd, "R", f, V((SX["A"] + 0.06, ROW(4) + 0.26, 0.70)), (0, 1, -0.3), (0, 0, -1), grip=0.4)
 print("PAX_DONE")
 
 # ================================================================== AIRPORT (beat 9). Traveller + officer + walkers
@@ -347,7 +390,7 @@ TP = AX + V((-1.2, -0.75, 0))
 for f in range(1, 1380, 60):
     stand(trav, f, TP, FWD, spine=(5, 0, 0))
 for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 20, 0.04, (35, 0)), (1455, 5, 30, 0.15, (30, 0)),
-                               (1468, 15, 62, 0.50, (10, 0)), (1480, 15, 66, 0.52, (10, 0)), (1500, 5, 20, 0.12, (20, 0))):
+                               (1468, 15, 62, 0.50, (-25, 0)), (1480, 15, 66, 0.52, (-30, 5)), (1500, 5, 20, 0.12, (20, 0))):
     trav.key_root(f, V((TP.x, TP.y + (0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)
     trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)

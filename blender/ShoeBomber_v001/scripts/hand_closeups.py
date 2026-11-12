@@ -12,7 +12,12 @@ SHOTS = [(60, "Bomber", "wrist.R", (0.35, 0.25, 0.25)), (60, "Bomber", "wrist.L"
          (600, "PaxA", "wrist.L", (0.3, 0.3, 0.4)), (600, "PaxB", "wrist.R", (0.35, 0.2, 0.35)), (640, "Attendant", "wrist.R", (0.35, 0.2, 0.3)),
          (712, "Steward", "wrist.R", (0.1, -0.4, 0.3)), (880, "Attendant", "wrist.L", (-0.35, 0.3, 0.3)), (960, "Attendant", "wrist.R", (0.3, 0.45, 0.1)),
          (1478, "Traveller", "wrist.R", (0.4, -0.3, 0.2)), (1515, "Traveller", "wrist.R", (0.3, -0.4, 0.3)), (1500, "Officer", "wrist.L", (0.0, -0.45, 0.3)),
-         (300, "Attendant", "wrist.L", (0.3, -0.35, 0.3)), (900, "Sleeper1", "wrist.L", (0.3, 0.4, 0.3))]
+         (300, "Attendant", "wrist.L", (0.3, -0.35, 0.3)), (900, "Sleeper1", "wrist.L", (0.3, 0.4, 0.3)),
+         # v006 contacts
+         (30, "Bomber", "wrist.R", (-0.3, 0.1, 0.25)), (150, "Bomber", "wrist.L", (-0.35, 0.15, 0.2)), (450, "Attendant", "wrist.L", (0.3, -0.3, 0.3)),
+         (480, "PaxA", "wrist.R", (0.3, 0.3, 0.3)), (500, "Attendant", "wrist.R", (0.3, -0.3, 0.3)), (600, "PaxC", "wrist.R", (-0.3, 0.3, 0.3)),
+         (600, "PaxD", "wrist.R", (0.3, 0.35, 0.3)), (690, "Steward", "wrist.R", (0.35, 0.1, 0.3)), (690, "Steward", "wrist.L", (0.35, 0.2, 0.3)),
+         (720, "Attendant", "wrist.R", (0.3, 0.3, 0.3)), (876, "Attendant", "wrist.R", (0.3, 0.3, 0.3)), (900, "PaxA", "wrist.L", (0.3, 0.3, 0.3))]
 for i, (f, rig, bone, off) in enumerate(SHOTS):
     sc.frame_set(f); r = O[rig]; p = (r.matrix_world @ r.pose.bones[bone].matrix).translation
     cam.location = p + Vector(off); cam.rotation_euler = (p - cam.location).to_track_quat('-Z', 'Y').to_euler()
