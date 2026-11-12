@@ -21,7 +21,7 @@ SECONDS = arg('--seconds', 3.0)
 OUTDIR = os.path.abspath(arg('--out', os.path.join(HERE, "..", "out", "blend")))
 SAMPLES = arg('--samples', 128)
 os.makedirs(OUTDIR, exist_ok=True)
-name = f"{scene_name}_{move}"
+name = arg('--name', f"{scene_name}_{move}")
 
 mod = importlib.import_module("sc_" + scene_name)
 s = reset(res=kit.RES, samples=SAMPLES, exposure=getattr(mod, "EXPOSURE", 0.0))
@@ -72,7 +72,7 @@ if "screen_mat" in ctx:
 
 def state(o):
     return (tuple(round(v, 6) for v in o.location), tuple(round(v, 6) for v in o.rotation_euler),
-            tuple(round(v, 6) for v in o.rotation_quaternion), tuple(round(v, 6) for v in o.scale))
+            tuple(round(v, 6) for v in o.rotation_quaternion))
 # find what moves: compare three sample times, then key only those objects every frame
 snap = []
 for t in (0.0, 0.5, 1.0):
@@ -82,7 +82,12 @@ movers = [o for o in movers if len({sn[o.name] for sn in snap}) > 1]
 print("[bake] moving objects:", [o.name for o in movers][:20], len(movers), flush=True)
 
 prev_q, prev_e = {}, {}
-for f in range(1, n + 1):
+# key every STEP frames (Blender interpolates between keys); per-frame UI image sequences need every frame
+STEP = 1 if screen_tex is not None else int(os.environ.get("BAKE_STEP", arg('--step', 2)))
+key_frames = list(range(1, n + 1, STEP))
+if key_frames[-1] != n:
+    key_frames.append(n)
+for f in key_frames:
     t = (f - 1) / max(n - 1, 1)
     restore_pose(); kit.apply_cam(cam, ctx, spec, t)
     bpy.context.view_layer.update()
@@ -117,8 +122,6 @@ for f in range(1, n + 1):
             prev_e[o.name] = o.rotation_euler.copy()
         o.keyframe_insert("location", frame=f)
         o.keyframe_insert("rotation_quaternion" if o.rotation_mode == 'QUATERNION' else "rotation_euler", frame=f)
-        if len({sn[o.name][3] for sn in snap}) > 1:     # animated scale (tape unrolling, telescoping booms, steam)
-            o.keyframe_insert("scale", frame=f)
     if screen_tex is not None and screen_tex.image is not None and screen_tex.image.filepath:
         shutil.copyfile(bpy.path.abspath(screen_tex.image.filepath), os.path.join(ui_dir, f"f{f:04d}.png"))
     print(f"[bake] {name} frame {f}/{n}", flush=True)

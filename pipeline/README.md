@@ -19,10 +19,25 @@ first use through `nvidia_doc/scenes/ph.py`. Cycles renders on the CPU.
 The look is the Iceman film and the fern-channel documentaries: CG that feels cinematic and real, never cartoon and
 never photos.
 
-- **Light.** Soft natural light, low-contrast and readable: dawn, overcast day, clean interiors, blue-hour dusk.
+- **Cinematic look (Nov 2026, every film).** A day must never look like a plain bright camera day. Tone a little
+  dark, moody, filmic. Light every set with `look.py`, at the end of `build()`:
+  - **One strong directional key**: a window or the sun, from the side or behind, never from the camera.
+    - Exteriors: `look.day_light("overcast" | "low_sun", azim=..., haze_box=...)` (low sky, one sun lamp, haze).
+    - Interiors by day: `look.interior_day(window=(point, target), mood=...)`, plus `look.gobo(...)` for window
+      bars or blinds, so the sun lands in patches.
+    - Night: `look.night_interior()`.
+  - **Negative fill**: other lights cut to ~10–15%, low world strength, no flat ambient.
+  - **Dark walls and floors**: plain albedo capped at ~0.3, no white rooms.
+  - **Warm practicals**, and light haze in exteriors and forests.
+  - **Grade**: `grade.add_grade` defaults to `look="cinematic"`: contrast around mid-grey, rolled-off highlights,
+    teal blacks / amber highlights, saturation 0.8, stronger vignette. It runs on scene-linear light before AgX.
+  - Night stays readable, never crushed.
+  - `run.py --plain` renders the old look, and `--exr` + `look_sheet.py` make before/after sheets.
+  - Reference: `nvidia_doc/review/cinematic_look_v1.jpg`.
+- **Light.** Within that look: dawn, overcast day, low late sun, blue-hour dusk, readable night.
   Night only where the story is at night. Avoid neon glitter: no fields of "glimmering lights", no random glowing
   boxes, no flat emissive rectangles standing in for signs or screens.
-- **Palette.** Cool and desaturated (steel, slate, warm skin and practical lamps). One accent color at most.
+- **Palette.** Cool and desaturated (steel, slate, warm skin and practical lamps), darker overall. One accent color at most.
 - **Assets.** Use real scanned assets from Poly Haven for furniture, plants, props and floors (`ph.model`,
   `ph.texture`). Never build trees or furniture from primitive cones and boxes. Cities and skylines are CG in the
   house style (`sc_home.facade`, `sc_city.py`), not HDRI photos.
@@ -41,7 +56,7 @@ never photos.
   screens) and the camera moves. Everything is keyframed or frame-driven so it plays in any external render (see §5).
 - **Text.** Chapter cards are "CHAPTER N" small over a bold Roboto Slab title with a glow, over the live first shot
   of the chapter (`title_card.add_title`). Use no other graphics unless the person asks. The intro has no title.
-- **Grade.** Soft bloom, slight lens dispersion, a vignette and a gentle teal-and-warm balance (`grade.add_grade`).
+- **Grade.** Soft bloom, slight lens dispersion, a vignette and the cinematic tone above (`grade.add_grade`).
   Add grain in the edit.
 
 ## 3. Planning (do this first, and get it approved)
