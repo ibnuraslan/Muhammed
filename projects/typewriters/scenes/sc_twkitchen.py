@@ -95,7 +95,7 @@ def build(variant="home"):
         bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.22, radius2=0.06, depth=0.18, location=(TABLE.x, TABLE.y, 1.8))
         shade = bpy.context.active_object; shade.data.materials.append(pbr("Shade", (0.55, 0.45, 0.3), 0.6, 0.0, **{'Emission Color': (1, 0.7, 0.4, 1), 'Emission Strength': 0.6}))
         cyl("Cord", (TABLE.x, TABLE.y, 2.2), 0.004, 0.6, pbr("CordM", (0.05, 0.05, 0.05), 0.5), verts=6)
-        pl = bpy.data.lights.new("Pendant", 'SPOT'); pl.energy = 120; pl.spot_size = math.radians(120); pl.spot_blend = 0.8; pl.color = (1.0, 0.72, 0.42)
+        pl = bpy.data.lights.new("Pendant", 'SPOT'); pl.energy = 320; pl.spot_size = math.radians(120); pl.spot_blend = 0.8; pl.color = (1.0, 0.72, 0.42)
         po = bpy.data.objects.new("Pendant", pl); bpy.context.collection.objects.link(po); po.location = (TABLE.x, TABLE.y, 1.72)
         amb = area_light((0, 0, 2.4), (0, 0, 0), 3.0, 10, (1.0, 0.75, 0.5)); amb.visible_camera = False
         nightw = area_light((0, 3.4, 1.5), (math.radians(90), 0, 0), 2.0, 6, (0.3, 0.4, 0.8)); point_at(nightw, (0, 0, 0.8)); nightw.visible_camera = False

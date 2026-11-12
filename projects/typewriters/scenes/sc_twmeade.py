@@ -183,12 +183,13 @@ def build(variant=None):
         bpy.ops.object.transform_apply(scale=True)
         nm = ("ordinary", "altered", "motor")[k]
         f.data.materials.append(films[nm][0])
-        f.parent = lb; f.location = (0, -0.008, 0); f.rotation_euler = (math.radians(90), 0, math.pi)
+        f.parent = lb; f.location = (0, -0.008, 0); f.rotation_euler = (math.radians(90), 0, 0)
         c["film_objs"].append(f)
     # the X-ray cabinet: a steel box with a sliding drawer, a warning lamp, a control panel
     cab = pbr("XCab", (0.62, 0.64, 0.6), 0.4, 0.3)
     box("XCabinet", (XC.x, XC.y, 0.75), (1.2, 1.0, 1.5), cab, bevel=0.02)
-    box("XCabDoorFrame", (XC.x, XC.y - 0.505, 0.75), (0.9, 0.02, 0.45), pbr("XCabDark", (0.05, 0.05, 0.06), 0.4))
+    box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.01, 0.01, 0.012), 0.6))
+    xl = area_light((XC.x, XC.y - 0.9, 1.3), (0, 0, 0), 0.5, 20, (0.9, 0.95, 1.0)); point_at(xl, (XC.x, XC.y - 0.8, 0.6)); xl.visible_camera = False
     tray = join([box("Tray", (0, 0, 0), (0.85, 0.8, 0.03), pbr("TrayM", (0.55, 0.56, 0.57), 0.3, 0.9)),
                  box("TrayFront", (0, -0.41, 0.15), (0.9, 0.03, 0.42), cab)], "XTray")
     tray.location = (XC.x, XC.y, 0.56); c["tray"] = tray
@@ -228,7 +229,7 @@ def build(variant=None):
         P[nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.25)
     c["P"] = P
     if night:
-        lamp = bpy.data.lights.new("MagLamp", 'SPOT'); lamp.energy = 60; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6; lamp.color = (1.0, 0.82, 0.6)
+        lamp = bpy.data.lights.new("MagLamp", 'SPOT'); lamp.energy = 160; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6; lamp.color = (1.0, 0.82, 0.6)
         lo = bpy.data.objects.new("MagLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (-4.45, ROW_Y + 0.15, 1.45)
         point_at(lo, (-4.6, ROW_Y, 0.95))
         moon = area_light((-6.8, 0, 2.0), (0, 0, 0), 4.0, 12, (0.45, 0.55, 0.85)); point_at(moon, (0, 0, 0.8)); moon.visible_camera = False
@@ -264,9 +265,7 @@ def animate(c, sec, shot):
             lift = 1.0 if k == 0 else 0.0
         T.set_cover(tw, open_deg=-95 * lift)
         if shot in ("lone", "coil") and k == 0:
-            for o in tw["shell"]:
-                if "_Lower" in o.name:
-                    o.hide_render = True                           # the machine opened up on the bench
+            T.set_cover(tw, hide=True)                              # the machine opened up on the bench, its housing off
     tw0 = c["row"][0]
     # the calendar page
     c["cal"].rotation_euler = (math.radians(-170) * ease(min(1.0, max(0.0, (sec - 1.0) / 1.4))) if shot == "calendar" else 0, 0, 0)
@@ -319,10 +318,10 @@ def animate(c, sec, shot):
         nc = c["new_crate"]; k = ease(min(1.0, max(0.0, (sec - 0.6) / 2.6)))
         tgt = Vector((-1.55, -3.55, 0.28 + 0.56)); start = tgt + Vector((0.2, 1.4, 0.35))
         nc.location = start.lerp(tgt, k) + Vector((0, 0, 0.15 * math.sin(math.pi * k)))
-        for h, side in ((tC, -1), (tA, 1)):
-            pos = nc.location + Vector((side * 0.75, 0.0, 0)); place(h, (pos.x, pos.y, 0), -side * math.pi / 2)
-            for sd, dy in (("L", 0.2), ("R", -0.2)):
-                reach(h, sd, nc.location + Vector((side * 0.4, dy * side, 0.05)), Vector((side, dy * 3, -0.6)), Vector((-side, 0, 0)))
+        for h, side in ((tC, -1), (tA, 1)):                    # both in front of the stack, lifting from the sides
+            pos = Vector((nc.location.x + side * 0.42, nc.location.y + 0.62, 0)); place(h, (pos.x, pos.y, 0), side * 0.35)
+            for sd, dy in (("L", 1), ("R", -1)):
+                reach(h, sd, nc.location + Vector((side * 0.38, -0.05 * dy, 0.0)), Vector((side, 0.4, -0.7)), Vector((-side, -0.3, 0)))
     elif shot in ("row", "covers"):
         x = -4.6 + (n_up - 1) * 0.82 if shot == "covers" else -4.6
         place(tB, (x, ROW_Y - 0.8, 0), math.pi)
@@ -390,19 +389,19 @@ def V3(*a):
 
 CAMS = {
     "team": lambda c, t: (V3(5.6, -3.4, 2.3).lerp(V3(5.0, -3.0, 2.2), ease(t)), V3(-1.0, 0.6, 0.9), 24),
-    "calendar": lambda c, t: (V3(0.4, 0.2, 1.65).lerp(V3(0.1, 0.5, 1.65), ease(t)), V3(-1.2, 3.9, 1.6), 30),
-    "clear": lambda c, t: (V3(2.9, 1.2, 1.5).lerp(V3(2.7, 1.35, 1.48), ease(t)), V3(2.2, 2.45, 1.05), 35),
-    "stack": lambda c, t: (V3(0.6, -1.4, 1.7).lerp(V3(0.3, -1.6, 1.65), ease(t)), V3(-1.6, -3.5, 0.8), 30),
+    "calendar": lambda c, t: (V3(-0.2, 2.2, 1.65).lerp(V3(-0.5, 2.5, 1.65), ease(t)), V3(-1.2, 3.95, 1.7), 32),
+    "clear": lambda c, t: (V3(3.9, 0.3, 1.6).lerp(V3(3.6, 0.5, 1.58), ease(t)), V3(2.2, 2.2, 1.05), 32),
+    "stack": lambda c, t: (V3(1.6, -0.6, 1.7).lerp(V3(1.3, -0.8, 1.65), ease(t)), V3(-1.5, -3.5, 0.75), 28),
     "row": lambda c, t: (V3(-5.6, ROW_Y - 1.6, 1.45).lerp(V3(-5.3, ROW_Y - 1.4, 1.42), ease(t)), V3(-3.6, ROW_Y + 0.05, 1.0), 32),
-    "covers": lambda c, t: (V3(-4.6 + 4.0 * ease(t), ROW_Y - 1.25, 1.35), V3(-3.6 + 4.0 * ease(t), ROW_Y + 0.05, 1.0), 30),
-    "lone": lambda c, t: (V3(-1.4, ROW_Y - 2.6, 1.6).lerp(V3(-1.9, ROW_Y - 2.3, 1.55), ease(t)), V3(-4.5, ROW_Y, 1.0), 30),
-    "coil": lambda c, t: (T.world(c["row"][0], (0.3, -0.25, 0.22)).lerp(T.world(c["row"][0], (0.24, -0.16, 0.15)), ease(t)), T.world(c["row"][0], (0.162, -0.07, 0.04)), 50),
-    "cabinet": lambda c, t: (XC + V3(-1.9, -2.4, 1.5).lerp(V3(-1.6, -2.1, 1.45), ease(t)), XC + V3(0, -0.5, 0.8), 32),
+    "covers": lambda c, t: (V3(-4.8 + 4.0 * ease(t), ROW_Y + 1.5, 1.55), V3(-3.6 + 4.0 * ease(t), ROW_Y, 1.0), 30),
+    "lone": lambda c, t: (V3(-2.6, ROW_Y - 2.0, 1.55).lerp(V3(-2.9, ROW_Y - 1.8, 1.52), ease(t)), V3(-4.5, ROW_Y - 0.2, 1.0), 32),
+    "coil": lambda c, t: (T.world(c["row"][0], (0.34, -0.3, 0.22)).lerp(T.world(c["row"][0], (0.28, -0.22, 0.16)), ease(t)), T.world(c["row"][0], (0.162, -0.067, 0.04)), 55),
+    "cabinet": lambda c, t: (XC + V3(-2.0, -1.3, 1.45).lerp(V3(-1.8, -1.2, 1.4), ease(t)), XC + V3(0, -0.7, 0.75), 32),
     "film": lambda c, t: (V3(LB.x - 1.6, LB.y - 0.9, 1.6).lerp(V3(LB.x - 1.3, LB.y - 0.7, 1.58), ease(t)), V3(LB.x, LB.y, 1.55), 35),
     "debate": lambda c, t: (V3(LB.x - 2.9, LB.y + 0.6, 1.7).lerp(V3(LB.x - 2.6, LB.y + 0.45, 1.65), ease(t)), V3(LB.x - 0.4, LB.y, 1.4), 30),
     "memory": lambda c, t: (V3(LB.x - 1.6, 2.2, 1.35).lerp(V3(LB.x - 1.3, 2.35, 1.3), ease(t)), V3(6.75, 2.75, 1.1), 40),
-    "pair": lambda c, t: (PAIR + V3(0.3, -1.4, 0.75).lerp(V3(0.2, -1.2, 0.65), ease(t)), PAIR + V3(0, -0.05, 0.05), 32),
-    "barlid": lambda c, t: (PAIR + V3(0.85, -0.42, 0.2).lerp(V3(0.75, -0.36, 0.16), ease(t)), PAIR + V3(0.55, -0.12, 0.0), 50),
+    "pair": lambda c, t: (PAIR + V3(0.4, 1.3, 0.7).lerp(V3(0.3, 1.1, 0.6), ease(t)), PAIR + V3(0, -0.1, 0.03), 34),
+    "barlid": lambda c, t: (PAIR + V3(0.95, -0.65, 0.32).lerp(V3(0.85, -0.55, 0.27), ease(t)), PAIR + V3(0.55, -0.16, 0.01), 45),
     "bars": lambda c, t: (PAIR + V3(1.25, -0.6, 0.3).lerp(V3(1.25, -0.5, 0.25), ease(t)), PAIR + V3(1.3, -0.2, 0.0), 45),
     "inspect78": lambda c, t: (XC + V3(1.6, -2.3, 1.5).lerp(V3(1.35, -2.0, 1.45), ease(t)), XC + V3(0, -0.5, 0.8), 32),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
