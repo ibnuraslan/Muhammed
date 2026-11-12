@@ -1,10 +1,10 @@
-# MonkeyHeadTransplant_v007: farm render sheet
+# MonkeyHeadTransplant_v009: farm render sheet
 
-These values were read back from `MonkeyHeadTransplant_v007_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
+These values were read back from `MonkeyHeadTransplant_v009_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `MonkeyHeadTransplant_v007_60fps.blend`: 72 MB, compressed. All images are packed; there are no linked libraries. Stored as a normal git file (no LFS, per studio policy). |
+| File | `MonkeyHeadTransplant_v009_60fps.blend`: 72 MB, compressed. All images are packed; there are no linked libraries. Stored as a normal git file (no LFS, per studio policy). |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -16,7 +16,7 @@ These values were read back from `MonkeyHeadTransplant_v007_60fps.blend`, opened
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 12. Caustics off. Persistent data on. |
 | Motion blur | Off (animated look) |
 | Colour | AgX with the look "AgX - Punchy". The exposure is keyframed (it dims at the end), so do not override it. |
-| Output | PNG, RGB, 8-bit, written to `//render/MonkeyHeadTransplant_v007_####.png` |
+| Output | PNG, RGB, 8-bit, written to `//render/MonkeyHeadTransplant_v009_####.png` |
 | Audio | None yet. The voiceover is still to come. When it arrives, retime with `pipeline/retime_to_vo.py` using `beats.json`, which also adds the VO strip. |
 | Sims / caches | None |
 | Add-ons | None needed. |

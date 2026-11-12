@@ -15,7 +15,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | # | Film | Branch | Package folder |
 |---|---|---|---|
 | 01 | EarInArm | `claude/beautiful-ptolemy-c5vrcq` | `blender/EarInArm_v008/` **ON HOLD: acting fix in progress (render stopped), do not render** |
-| 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v007/` **ON HOLD: acting fix in progress (render stopped), do not render** |
+| 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v009/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1656)** |
 | 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v007/` **ON HOLD: acting fix in progress (render stopped), do not render** |
 | 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v008/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1386)** |
 | 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v009/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1644)** |
