@@ -71,8 +71,12 @@ def face(f, lid=0.0, brow_knit=0.0, brow_up=0.0, jaw=0.0):
         for n, ax, a in (("orbicularis03." + s, 'X', lid), ("orbicularis04." + s, 'X', -lid * 0.25), ("oculi02." + s, 'X', brow_knit), ("oculi01." + s, 'X', -brow_up)):
             pb = R.PB[n]; pb.rotation_mode = "QUATERNION"; pb.rotation_quaternion = Quaternion(Vector((1, 0, 0)), math.radians(a)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
     pb = R.PB["jaw"]; pb.rotation_quaternion = Quaternion(Vector((1, 0, 0)), math.radians(jaw)); pb.keyframe_insert("rotation_quaternion", frame=f, group="jaw")
-def blink(f):
-    face(f - 3, 0); face(f, -32); face(f + 4, 0)
+def blink(f, base=0.0):
+    for s_ in "LR":
+        for n, k in (("orbicularis03." + s_, 1.0), ("orbicularis04." + s_, -0.25)):
+            pb = R.PB[n]; pb.rotation_mode = "QUATERNION"
+            for ff, a in ((f - 3, base), (f, -32), (f + 4, base)):
+                pb.rotation_quaternion = Quaternion(Vector((1, 0, 0)), math.radians(a * k)); pb.keyframe_insert("rotation_quaternion", frame=ff, group=n)
 WHEEL_C = Vector((0.0, -0.525, 0.92)); WHEEL_TILT = -66
 def rim_point(ang, r=0.18):
     t = math.radians(WHEEL_TILT); a = math.radians(ang)
@@ -107,13 +111,13 @@ seat(414, flex=-14, head=(4, -10)); face(414, brow_knit=10)
 seat(460, flex=-14, side=6, head=(6, -24)); face(460, brow_knit=16, jaw=2)
 seat(520, flex=-14, side=-4, head=(-2, 6)); face(520, brow_knit=12, brow_up=6)
 seat(575, flex=-14, side=5, head=(8, -28)); face(575, brow_knit=18, jaw=3)
-blink(540); seat(606, flex=-14, side=2, head=(2, -8)); face(606, brow_knit=10)
+blink(395); seat(606, flex=-14, side=2, head=(2, -8)); face(606, brow_knit=10)
 # beat 4: sits up straighter: spine extends, rises 3 cm, head shake, re-grip
 seat(640, flex=-6, spine=0, dz=0.03, dy=-0.02, head=(-4, 0)); face(640, lid=6, brow_up=8)
-for i, f in enumerate(range(660, 720, 10)):
-    seat(f, flex=-6, spine=0, dz=0.03, dy=-0.02, head=(-2, 14 * (1 if i % 2 else -1)))
+for i, f in enumerate(range(655, 720, 20)):
+    seat(f, flex=-6, spine=0, dz=0.03, dy=-0.02, head=(-2, 11 * (1 if i % 2 else -1)))
 seat(720, flex=-5, spine=-2, dz=0.035, dy=-0.03, head=(-3, 0))
-hand("L", 690, -92, Vector((0, 0.02, 0.05)), 0.3); hand("R", 690, 92, Vector((0, 0.02, 0.05)), 0.3)
+hand("L", 700, -92, Vector((0, 0.01, 0.025)), 0.6); hand("R", 700, 92, Vector((0, 0.01, 0.025)), 0.6)
 hands(712, -88, 88); seat(780, flex=-5, spine=-2, dz=0.035, dy=-0.03, head=(-2, -4)); face(780, lid=4)
 # beat 5: tries: nod, hard blink, then forced wide eyes; screen goes green ~f960
 seat(820, flex=-5, spine=-2, dz=0.035, dy=-0.03, head=(10, 0)); face(820, lid=-10)
@@ -125,8 +129,8 @@ seat(1000, flex=-6, spine=-3, dz=0.04, dy=-0.05, head=(-6, -14)); seat(1080, fle
 hands(1000, -90, 90)
 # beat 6: eyes relax -> red again; slump, frustrated exhale, right hand gesture off the wheel
 face(1100, lid=0, brow_up=0); seat(1110, flex=-14, spine=8, head=(0, -6))
-face(1150, brow_knit=20, jaw=8); seat(1160, flex=-18, spine=12, dz=-0.015, head=(-10, 0), side=-3)
-hand("R", 1180, 90); hand("R", 1205, 70, Vector((-0.10, 0.14, 0.12)), 0.2); hand("R", 1240, 70, Vector((-0.08, 0.12, 0.10)), 0.25); hand("R", 1265, 90)
+face(1150, brow_knit=20, jaw=2); seat(1160, flex=-18, spine=12, dz=-0.015, head=(-10, 0), side=-3)
+hand("R", 1180, 90); hand("R", 1205, 85, Vector((-0.02, 0.07, 0.07)), 0.35); hand("R", 1240, 85, Vector((-0.02, 0.06, 0.06)), 0.4); hand("R", 1265, 90)
 face(1215, brow_knit=18, jaw=3); seat(1230, flex=-16, spine=10, head=(4, -20)); seat(1302, flex=-15, spine=8, head=(0, 0)); face(1302, brow_knit=12)
 hand("L", 1265, -90)
 # beat 7..: steady driving with breathing and occasional blinks
@@ -134,9 +138,16 @@ for f in (1380, 1464, 1560, 1650, 1729, 1900, 2100, 2300, 2449): seat(f, head=(0
 hands(1380); hands(1729); hands(2449)
 blink(1420); blink(1655)
 # beat 11: sigh, slow head shake
-seat(2500, flex=-17, spine=11, head=(-8, 0), dz=-0.01); face(2500, brow_knit=14, jaw=6)
+seat(2500, flex=-17, spine=11, head=(-8, 0), dz=-0.01); face(2500, brow_knit=14, jaw=2)
 seat(2545, flex=-16, spine=10, head=(2, 10)); seat(2580, flex=-16, spine=10, head=(2, -10)); seat(2610, flex=-15, spine=9, head=(0, 0)); face(2610, brow_knit=8)
 for s in "LR": pass
+for i, f in enumerate(range(1, 2611, 60)):
+    for s_ in "LR":
+        pb = R.PB["clavicle." + s_]; pb.rotation_mode = "QUATERNION"
+        pb.rotation_quaternion = Quaternion(Vector((1, 0, 0)), math.radians(1.6 if i % 2 else -0.4)); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
+for f in (1440, 1560, 1640, 2300, 2380):
+    hands(f, -90 + (3 if f % 2 else -3), 90 + (3 if f % 2 else -3))
+seat(150, head=(-3, -14)); seat(185, head=(0, 0))   # quick glance at the rear-view mirror while driving
 # feet planted all film
 def feet(f):
     for s, x in (("L", 0.13), ("R", -0.13)):
@@ -201,7 +212,7 @@ lensm = bpy.data.materials["LensGlass"].node_tree.nodes["Principled BSDF"].input
 nkey(lensm, 1, 0.0); nkey(lensm, 20, 3.0); nkey(lensm, 234, 3.0); nkey(lensm, 250, 0.5)
 for o in O:
     if o.type == "MESH" and o.name.startswith(("Body_Roof", "Glass_Top", "Inner_AgainsSun")) and o.parent is not None and "Traffic" not in o.name:
-        for f, h in ((1, False), (1305, True), (1318, False)):
+        for f, h in ((1, False), (1305, True), (1330, False)):
             o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
 # side window rolled down (the camera enters through it)
 for o in O:
@@ -222,23 +233,24 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (60,   V((1.15, -0.35, 1.10)), FACE, 26),
  (120,  V((0.32, -0.42, 1.20)), FACE, 28),
  (180,  V((0.08, -0.72, 1.14)), FACE, 24),
- (234,  V((-0.06, -0.42, 1.22)), FACE, 35),
- (270,  V((-0.26, -0.44, 1.17)), SCR, 30),
+ (234,  V((-0.06, -0.44, 1.27)), FACE, 35),
+ (270,  V((-0.24, -0.46, 1.24)), SCR, 30),
  (335,  V((-0.36, -0.50, 1.10)), SCR, 32),
  (414,  V((-0.76, -0.08, 1.24)), V((0, -0.3, 1.0)), 18),
  (480,  V((-0.50, -0.34, 1.15)), FACE, 40),
  (545,  V((-0.24, -0.52, 1.26)), FACE, 45),
  (606,  V((-0.10, -0.50, 1.26)), EYE, 50),
- (660,  V((-0.38, 0.75, 1.30)), V((0, -0.4, 1.1)), 24),
- (720,  V((-0.72, -0.15, 1.24)), V((0, 0.0, 1.1)), 22),
+ (635,  V((-0.55, -0.33, 1.18)), FACE, 26),
+ (680,  V((-0.40, 0.75, 1.30)), V((0, -0.4, 1.1)), 24),
+ (730,  V((-0.70, -0.42, 1.24)), FACE, 24),
  (780,  V((-0.26, -0.50, 1.12)), FACE, 26),
  (840,  V((-0.22, -0.50, 1.18)), FACE, 30),
  (930,  V((-0.17, -0.46, 1.23)), EYE, 50),
  (980,  V((-0.26, -0.47, 1.25)), SCR, 30),
  (1080, V((-0.45, -0.62, 1.13)), FACE, 42),
- (1140, V((0.34, -0.20, 1.25)), FACE, 38),
+ (1140, V((-0.30, -0.34, 1.19)), FACE, 36),
  (1220, V((-0.42, 0.30, 1.28)), SCR, 26),
- (1302, V((-0.32, -0.04, 1.31)), V((0, -0.3, 0.9)), 20),
+ (1302, V((-0.42, -0.18, 1.32)), V((0, -0.3, 0.9)), 20),
  (1318, V((-0.36, -0.02, 1.66)), CAR, 20),
  (1340, V((-0.40, 0.4, 2.4)), CAR, 20),
  (1400, V((-1.6, 9.5, 4.2)), CAR, 24),
@@ -247,8 +259,8 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (1528, V((0.0, -0.86, 1.10)), FACE, 30),
  (1550, V((0.0, -0.70, 1.11)), FACE, 32),
  (1620, V((0.0, -0.36, 1.27)), FACE, 40),
- (1680, V((-0.03, -0.16, 1.29)), EYE, 60),
- (1728, V((0.01, -0.13, 1.30)), EYE, 55),
+ (1680, EYE + V((-0.004, -0.115, 0.0)), EYE + V((0, 0, 0)), 50),
+ (1728, EYE + V((0.008, -0.095, 0.002)), EYE + V((0, 0, 0)), 55),
  (1770, EYE + V((0.0, -0.17, 0.004)), EYE, 40),
  (1782, EYE + V((0.002, -0.075, 0.004)), EYE + V((0.004, 0, 0)), 40),
  (1830, EYE + V((0.000, -0.050, 0.002)), INNER, 40),
@@ -260,7 +272,9 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (2260, EYE + V((-0.006, -0.080, 0.003)), EYE, 40),
  (2350, EYE + V((-0.002, -0.070, 0.000)), EYE, 40),
  (2448, EYE + V((-0.030, -0.075, 0.006)), EYE + V((0.002, 0, 0)), 35),
+ (2470, EYE + V((-0.02, -0.16, 0.01)), EYE, 40),
  (2510, V((-0.12, -0.46, 1.22)), FACE, 35),
+ (2535, V((-0.52, -0.12, 1.26)), FACE, 26),
  (2560, V((-0.32, 0.55, 1.28)), FACE, 24),
  (2610, V((-0.40, 6.5, 2.3)), CAR, 28),
 ]
@@ -279,7 +293,7 @@ for idb in (cam, aim, camd):
 for fc in fcs(mover):
     for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 camd.dof.use_dof = True; camd.dof.focus_object = aim; camd.dof.aperture_fstop = 4.0
-for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1700, 4.0), (1760, 18.0), (2448, 18.0), (2500, 4.0)): K(camd.dof, "aperture_fstop", f, v)
+for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 16.0), (1760, 18.0), (2448, 18.0), (2500, 4.0)): K(camd.dof, "aperture_fstop", f, v)
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 # ---------------- look fixes: dark brown irises, black hair, warmer skin
 eg = next(n for n in bpy.data.materials["Driver.high-poly"].node_tree.nodes if n.type == "GROUP")

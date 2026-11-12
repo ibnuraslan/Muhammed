@@ -81,4 +81,5 @@ for s in "LR":   # elbow: IK limits, no hyper-extension
 for o in O:
     if o.type == 'LIGHT': o.visible_camera = False   # light panels never show up in frame
 sc.render.use_motion_blur = False
+sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT_PATH, compress=True); print("SAVED", OUT_PATH)
