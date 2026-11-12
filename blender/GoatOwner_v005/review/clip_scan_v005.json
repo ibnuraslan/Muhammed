@@ -1,0 +1,27 @@
+{
+ "frames": {
+  "1867": {
+   "OffB": {
+    "self": 208,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1873": {
+   "OffB": {
+    "self": 132,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1867,
+   1873
+  ]
+ ],
+ "fps": 60
+}

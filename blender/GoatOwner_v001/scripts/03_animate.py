@@ -219,7 +219,7 @@ def ow_hit(f, pos, lean, spine, head, jaw, hands="belly", brow=4, lid=3, crouch=
         if hands == "belly":
             clutch(f, s, "belly" if s == "L" else "belly2"); OW.fingers(s, f, 30, 20)
         else:
-            OW.arm(s, f, M, fwd=hands[0], out=hands[1], L=0.48); OW.fingers(s, f, 20, 15)
+            OW.arm(s, f, M, fwd=hands[0], out=hands[1], L=0.48); OW.fingers(s, f, 10, 8)      # relaxed, no claws
     OW.face(f, jaw=jaw, brow=brow, lid=lid, smile=-3)
 ow_hit(850, OC, -6, -4, 6, 8, hands=(15, 10), brow=-4, lid=-1)
 OW.hand_local("R", 850, OW.M(Vector((OC.x, OC.y, OW.RH.z)), yaw_c, -6), *HP("raised", "R"))
@@ -227,6 +227,7 @@ OW.hand_local("R", 930, OW.M(Vector((OC.x, OC.y, OW.RH.z)), yaw_c, -8), *HP("ove
 OW.face(930, jaw=18, brow=6, lid=4, smile=-3)
 FEET_C = {"L": (OC + Vector((0.1, -0.12)), yaw_c), "R": (OC + Vector((0.08, 0.2)), yaw_c + 15)}
 ow_hit(955, OC, 16, 14, -6, 20, hands=(35, 12), feet=FEET_C, crouch=0.1)
+OW.hand_local("R", 955, OW.M(Vector((OC.x, OC.y, OW.RH.z - 0.1)), yaw_c, 16), *HP("raised", "R"))
 OC2 = OC + Vector((0.25, -0.1))
 ow_hit(985, OC2, 28, 38, 22, 34, hands=(40, 14), crouch=0.12, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.22, 0.2)), yaw_c + 15, 0.05)})
 ow_hit(1040, OC2 + Vector((0.12, -0.04)), 34, 44, 26, 30, hands=(75, 22), crouch=0.16, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
@@ -444,10 +445,9 @@ for h_, fn in ((OA, pa), (OB_, pb_)):
 for f in range(1600, 1906, 10):
     for h_, fn in ((OA, pa), (OB_, pb_)):
         pth = OFF_PATH[h_.o.name]; p_ = pth(f); M_ = h_.M(Vector((p_.x, p_.y, h_.RH.z)), yaw_to(pth(f - 4), pth(f + 4))); sw = 14 * math.sin(f / 20.0)
-        if f < 1700 or h_ is OB_:
+        if f < 1700 or (h_ is OB_ and f < 1735):
             h_.arm("R", f, M_, fwd=10 + sw, out=24, L=0.5)
-        if h_ is OA or f < 1735:
-            h_.arm("L", f, M_, fwd=10 - sw, out=24, L=0.5)      # OffA holds the catch pole one-handed
+        h_.arm("L", f, M_, fwd=10 - sw, out=24, L=0.5)      # OffA holds the catch pole one-handed
         h_.fingers("L", f, 20, 15); h_.fingers("R", f, 20, 15)
     ev(f)
     # OffA holds the catch pole in both hands, loop end at the goat's neck
@@ -462,7 +462,7 @@ for f in range(1600, 1906, 10):
     pB = OFF_PATH['OffB'](f).to_2d(); MB = OB_.M(Vector((pB.x, pB.y, OB_.RH.z)), yaw_to(OFF_PATH['OffB'](f - 4), OFF_PATH['OffB'](f + 4)))
     back = G.o.matrix_world @ G.PB["spine2"].head + Vector((0, 0, 0.12))
     if f >= 1735:
-        OB_.h.key_hand("L", f, back, Vector((0, 0, -1)).cross(Vector((1, 0, 0))), Vector((0, 0, -1)), MB @ Vector((0.5, 0.4, 1.1)))
+        OB_.h.key_hand("R", f, back, Vector((0, 0, -1)).cross(Vector((1, 0, 0))), Vector((0, 0, -1)), MB @ Vector((0.5, 0.4, 1.1)))
     OB_.face(f, jaw=2, brow=2, smile=-1)
 pole.hide_render = True; pole.keyframe_insert("hide_render", frame=1); pole.hide_render = False; pole.keyframe_insert("hide_render", frame=1700)
 pole.hide_render = True; pole.keyframe_insert("hide_render", frame=1910)
@@ -619,13 +619,13 @@ CAMK = [
  (250,  ("gb", (1.5, 0.2, 0.1), "g"), ("gh",), 38),      # orbit around
  (320,  (-1.3, 4.2, 1.0), (-0.6, -1.5, 0.55), 26),   # behind the goat, the passer-by beyond the fence    # behind the goat; passer-by beyond the fence
  (390,  (-2.7, 2.7, 0.75), ("gh",), 36),
- (462,  ("gn", (0.7, -0.6, 0.1), "g"), ("gn",), 38),     # tense neck
- (540,  (1.4, 5.0, 1.9), ("gb",), 18),                    # time-lapse push along the shed wall
+ (462,  (0.6, 0.4, 0.95), ("gh",), 32),    # tense goat, whole head and neck in frame
+ (540,  (0.4, 3.9, 1.3), ("gb",), 26),
  (630,  ("gb", (1.1, -1.3, 0.3), "g"), ("gh",), 32),
  (690,  ("gh", (1.0, -0.55, 0.3), "g"), ("gh", (0, 0, 0.05)), 38),    # eye macro
  (740,  ("gh", (0.8, -0.9, 0.15), "g"), ("gh",), 34),    # horns
- (790,  ("gf", (0.5, -0.55, 0.15), "g"), ("gf", (0, 0, 0.12)), 40),   # stamping hoof
- (816,  ("gb", (1.3, -0.3, -0.1), "g"), ("mid",), 30),
+ (790,  ("gf", (0.9, -0.9, 0.4), "g"), ("gh", (0, 0, -0.25)), 30),   # stamping hoof, head in frame
+ (816,  (OC.x - 1.7, OC.y - 1.7, 0.85), ("mid",), 28),
  (880,  (OC.x - 1.0, OC.y - 2.1, 0.55), ("gh",), 28),     # skimming beside the charge
  (960,  (OC.x - 0.2, OC.y - 1.7, 0.7), ("ob", (0, 0, -0.15)), 30),   # impact, side-on
  (1000, (OC.x - 0.5, OC.y - 1.7, 1.05), ("fm",), 30),        # orbit around the doubled-over man
@@ -647,9 +647,9 @@ CAMK = [
  (1735, (0.6, 1.0, 4.0), ("gb",), 24),
  (1800, (1.8, 5.6, 1.5), ("gb",), 28),
  (1860, (1.8, 8.0, 1.9), ("gb",), 28),                     # beside the ramp, clear of the officials
- (1905, (0.5, 9.5, 3.5), (1.0, 30.0, 6.0), 22),
- (1940, (0.5, 22.0, 9.0), (1.5, 40.0, 4.0), 22),           # over the tree line
- (1975, (2.5, 50.0, 5.0), (2.0, 61.5, 0.5), 26),
+ (1905, (0.5, 9.0, 2.6), ("gb",), 24),
+ (1928, (2.2, 56.0, 2.0), (2.0, 62.1, 0.55), 28),           # fast fly-over the tree line onto the goat at the sanctuary
+ (1970, (3.2, 58.8, 1.3), (1.9, 62.2, 0.55), 30),
  (2020, (4.6, 58.6, 2.2), (1.9, 62.3, 0.5), 28),           # down into the pasture
  (2080, (2.6, 59.6, 1.3), (1.6, 62.2, 0.55), 32),
  (2140, (1.3, 60.3, 0.9), (1.5, 62.15, 0.5), 40),          # settle in front: goat's face at her palm, her face
