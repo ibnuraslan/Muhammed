@@ -55,3 +55,25 @@ Checked and fine: beats 1, 3–4 (cross-section), 7 (lone light), 10–11 (hands
   - The cutaway ranges are the camera inside the studio dome.
   - The tunnel and passage ranges are the camera inside the rock tubes, which are seen from inside by design. Flipping their normals made the count worse (216), so they were left as built.
   - FILL 577, 1009 and 1219 are the 4-frame rock-wipe entries and the water-line crossing.
+
+## Round 3 (director review of v006b) → v006c
+| Item | Change |
+|---|---|
+| 36.0–39.5 s injection framing | Low frontal medium from the boy's front-right (cam ≈ CX+0.48, −0.59, z 0.8, lens 36), 1.6 m from the group. A ray-cast sweep (24 angles × 3 distances × 8 heights) found this the only clear line to the boy's face; over-the-shoulder views from either side are blocked by tanks. Eases in over 30 frames (from 2130) and out over 20 (2370→2390). |
+| Medic's head | Pitched back 15° over 2170–2371, eased over 15 frames each way (head-bone keys only), so he looks down at the arm. DiverB's staging is unchanged. |
+| Syringe close-up | **Dropped** from the close-up sheet. The medic's hand is hidden under his chest by the kept staging; contact verified numerically at 0 cm. |
+| Camera CAMJUMP | Camera now keyed every frame. Heading turns ≤ 20°/frame and pitch stays above −80°, so it no longer spins when it passes over its aim point (was 288, 396–397, 2110, 2428). |
+
+### qa_check (771d2da) on the v006c package (`qa_v006c.json`)
+- **ROLL 0.**
+- **CAMJUMP 4:** f583, f1009, f2566 and f2727 are the cutaway entries and exits, each hidden by a fully covered 4-frame rock wipe (J = 582, 1008, 2565, 2726). These are the listed exceptions.
+- The other categories are as listed for v006 (BACKHEAD 4, EMPTY 271, INSIDE 125, FILL 3, CLAW 93).
+
+### clip_scan (3cfc53c, skin only) on v006c (`clip_v006c.json`): open, needs a staging decision
+- Bad ranges: 241, 2137, 2203–2299, 2335–2341, 2371–2407, 2557.
+- The 2203–2407 ranges are both divers' hands inside their own bodies during the injection and mask fit. DiverB over 2371–2389 also goes into another character.
+- These were not restaged because this round was limited to the camera and the medic's head bone.
+
+### Still open
+- With the 15° pitch, the medic's head still covers most of the boy's face over 2221–2311. The face reads at 36.0 s and from 39.0 s.
+- Options: a 25° head pitch, or a lower camera at about 0.6 m.

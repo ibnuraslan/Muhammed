@@ -1,0 +1,570 @@
+{
+ "frames": {
+  "241": {
+   "Boy4": {
+    "self": 302,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1009": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1135": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1141": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1147": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1153": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1159": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1165": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1171": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1177": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1183": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1189": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1195": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1201": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1207": {
+   "Boy1": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1813": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1819": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1825": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1831": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1837": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1843": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1849": {
+   "Coach": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1855": {
+   "Coach": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1861": {
+   "Coach": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1867": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1873": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1879": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1885": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1891": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1897": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1903": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1909": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1915": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1921": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2137": {
+   "Boy2": {
+    "self": 553,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2197": {
+   "DiverB": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2203": {
+   "DiverB": {
+    "self": 258,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2209": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 672,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2215": {
+   "DiverA": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 447,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2221": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 573,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2227": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 733,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2233": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 890,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2239": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 1034,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2245": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 1277,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2251": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 1353,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2257": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 1200,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2263": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 986,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2269": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 775,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2275": {
+   "DiverA": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 639,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2281": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 521,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2287": {
+   "DiverB": {
+    "self": 416,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2293": {
+   "DiverB": {
+    "self": 258,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2299": {
+   "DiverB": {
+    "self": 107,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2329": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "2335": {
+   "DiverA": {
+    "self": 625,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2341": {
+   "DiverA": {
+    "self": 103,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2371": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1555
+   }
+  },
+  "2377": {
+   "DiverB": {
+    "self": 315,
+    "clothes": 0,
+    "other": 1454
+   }
+  },
+  "2383": {
+   "DiverB": {
+    "self": 407,
+    "clothes": 0,
+    "other": 1021
+   }
+  },
+  "2389": {
+   "DiverB": {
+    "self": 385,
+    "clothes": 0,
+    "other": 314
+   }
+  },
+  "2395": {
+   "Coach": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 389,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "2401": {
+   "Coach": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "DiverB": {
+    "self": 399,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2407": {
+   "DiverB": {
+    "self": 261,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2443": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2557": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1480
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   241,
+   241
+  ],
+  [
+   2137,
+   2137
+  ],
+  [
+   2203,
+   2299
+  ],
+  [
+   2335,
+   2341
+  ],
+  [
+   2371,
+   2407
+  ],
+  [
+   2557,
+   2557
+  ]
+ ],
+ "fps": 60
+}
