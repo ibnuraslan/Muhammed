@@ -524,7 +524,7 @@ TELE["DiverB"].add(1995)
 for f in (2005, 2017, 2060, 2110, 2154):
     kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=24 + 6 * math.sin(f * 0.045), head=(22 + 8 * math.sin(f * 0.05), 14 * math.sin(f * 0.03)))
 for f in (DIVERS_IN, 1800, 1900, 1990, 2017, 2060, 2110, 2154):    # leaning in, nodding, looking at each other and the boy
-    kneel(DA, f, P2.x + 0.36, P2.y + 0.02, -82, lean=42 + 3 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
+    kneel(DA, f, P2.x + 0.42, P2.y + (-0.3 if f >= 2110 else 0.02), -82, lean=(52 if f >= 2110 else 40) + 3 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
 TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue
@@ -564,7 +564,7 @@ for f, a in ((2155, 0), (2280, 0), (2320, 1)):
     for s in "LR":
         RIG["Boy2"].key_rot("orbicularis03." + s, f, [("X", 28 * a)])
 for f in (2345, 2406):
-    kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=20, head=(20, 0))
+    kneel(DA, f, P2.x + 0.42, P2.y + (-0.3 if f < 2400 else 0.05), -82, lean=(48 if f < 2400 else 24), head=(20, 0))
 for f, hd in ((2155, (5, 10)), (2290, (5, 10)), (2328, (25, 18)), (2406, (28, 20))):
     seated("Boy2", f, P2.x, P2.y, -10, lean=14, head=hd, hug=False)
 # beat 11: full-face mask fitted (2329-2406) by DiverB, then lift (2380+)
