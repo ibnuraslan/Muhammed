@@ -43,12 +43,12 @@ def build(variant=None):
     rng = np.random.default_rng(84)
     world_flat((0.004, 0.005, 0.007), 1.0)
     if variant == "studio81":
-        box("Floor", (0, 0, -0.01), (16, 12, 0.02), pbr("StudioFloor", (0.08, 0.08, 0.085), 0.3, **{'Coat Weight': 0.3}))
+        box("Floor", (0, 0, -0.01), (16, 12, 0.02), pbr("StudioFloor", (0.12, 0.12, 0.13), 0.3, **{'Coat Weight': 0.3}))
         # the set: a curved blue backdrop with soft abstract panels (no text), a plain desk
         for k in range(9):
             a = math.radians(-40 + k * 10)
             box("Backdrop", (6.0 * math.sin(a), 4.5 + 6.0 * (1 - math.cos(a)) * 0.0 + 1.2 * (1 - math.cos(a)), 1.6), (1.1, 0.06, 3.2),
-                pbr("BackBlue", (0.06, 0.12, 0.3) if k % 2 else (0.1, 0.16, 0.32), 0.6), rot=(0, 0, a))
+                pbr("BackBlue", (0.07, 0.14, 0.36) if k % 2 else (0.11, 0.19, 0.4), 0.6), rot=(0, 0, a))
         box("Desk", (0, 2.6, 0.4), (2.2, 0.7, 0.8), pbr("DeskGrey", (0.35, 0.36, 0.4), 0.4), bevel=0.02)
         box("DeskTop", (0, 2.6, 0.81), (2.3, 0.75, 0.03), pbr("DeskTopW", (0.6, 0.6, 0.62), 0.3))
         B.sheet("Notes", (0.15, 2.6, 0.83), (0.21, 0.297), B.paper_mat("PrNotes", (0.88, 0.87, 0.82)), rot=(0, 0, 0.1))
@@ -81,8 +81,13 @@ def build(variant=None):
             h = B.person(f"Caller{k}", 1.0 if k % 2 == 0 else 0.0, 30 + 7 * k, "male_casualsuit05" if k % 2 == 0 else "female_elegantsuit01",
                          ["short03", "bob01", "short01", "ponytail01"][k], hue=0.5 + 0.03 * k, sat=0.3, val=0.35, hair_val=0.3)
             B.seat(h, (x, y - 0.45, 0), math.pi, lean=12)
+            ph.model("dining_chair_02", loc=(x, y - 0.5, 0), rot_z=math.pi)     # they sit on chairs
             c["callers"].append((h, hs))
             B.key_spot((x, y - 0.3, 2.4), (x, y, 0.75), 160, 50, (1.0, 0.75, 0.5), soft=0.1, name="PLamp")
+            ow = area_light((x, y - 0.4, 2.8), (0, 0, 0), 1.6, 160, (0.95, 0.96, 1.0)); ow.visible_camera = False   # office strip light over each desk
+        # a TV studio is brightly lit: big soft front fill from the grid and a ceiling wash over the phone desks
+        sf = area_light((0.0, -1.5, 4.0), (0, 0, 0), 4.0, 280, (1.0, 0.95, 0.88)); point_at(sf, (0, 2.8, 1.0)); sf.visible_camera = False
+        cw = area_light((2.0, 1.0, 4.4), (0, 0, 0), 8.0, 700, (0.95, 0.97, 1.0)); cw.visible_camera = False
         c["rest"] = {"pres": B.capture(pres), **{f"c{k}": B.capture(h) for k, (h, _) in enumerate(c["callers"])}}
         B.room_haze((2, 1, 2.5), (16, 12, 5), density=0.012)
     elif variant == "office07":
@@ -145,7 +150,7 @@ def build(variant=None):
         c["j1"], c["j2"] = j1, j2
         c["rest"] = {"j1": B.capture(j1), "j2": B.capture(j2)}
         B.room_haze((0, 0, 1.4), (5.8, 4.8, 2.8), density=0.015)
-    B.finish_interior(lift=0.0)
+    B.finish_interior(lift={"studio81": 0.15, "edit24": 0.6}.get(variant, 0.0))
     return c
 
 
@@ -156,7 +161,7 @@ def anim(c, t, move):
         B.apply_pose(c["pres"], c["rest"]["pres"])
         pres = c["pres"]; fwd = B.fwd_of(pres); side = fwd.cross(Vector((0, 0, 1))).normalized()
         for sd, sg in (("L", -1), ("R", 1)):
-            reach(pres, sd, Vector((0.18 * sg, 2.5, 0.88)), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
+            reach(pres, sd, Vector((-0.18 * sg, 2.5, 0.88)), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
         B.curl(pres, 25); pres.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.6)); B.nod(pres, -2)
         c["studiocam"].location = Vector((-3.4 + 1.6 * ease(t), -1.6, 0))
         for k, (h, hs) in enumerate(c["callers"]):

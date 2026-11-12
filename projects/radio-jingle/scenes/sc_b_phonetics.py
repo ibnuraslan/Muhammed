@@ -95,7 +95,7 @@ def build(variant=None):
     for y in (-2.2, -0.2, 1.8):
         B.key_spot((1.6, y - 0.6, 2.6), (BENCH_X, y + 0.3, DESK_TOP), 380, 45, (1.0, 0.8, 0.58), soft=0.08, blend=0.6, name="BenchKey")
     B.key_spot((0.6, 3.0, 2.4), (-0.6, 1.6, 1.3), 90, 25, (0.55, 0.7, 0.95), soft=0.1, name="Rim")
-    B.finish_interior(lift=-0.2)
+    B.finish_interior(lift=0.25)
     return c
 
 

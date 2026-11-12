@@ -128,13 +128,16 @@ def build(variant=None):
         B.room_haze((0, 0, 1.5), (8.8, 6.8, 3.0), density=0.008)
     else:
         box("Floor", (0, 0, -0.01), (8, 8, 0.02), B.tex_mat("EvFl", "concrete_floor_02", scale=0.5, tint=(0.4, 0.4, 0.4)))
-        bench = box("EvBench", (0, 0, 0.45), (1.6, 0.9, 0.9), pbr("EvBlack", (0.015, 0.015, 0.017), 0.35, **{'Coat Weight': 0.4}), bevel=0.01)
+        bench = box("EvBench", (0, 0, 0.45), (1.6, 0.9, 0.9), pbr("EvBlack", (0.05, 0.05, 0.055), 0.35, **{'Coat Weight': 0.4}), bevel=0.01)
         c["rec"] = P.reel_recorder("Seized", (0, 0, 0.9), rot_z=0.0, spin=0.4, start_frame=24)
         box("EvTag", (0.3, -0.2, 0.902), (0.07, 0.12, 0.002), pbr("EvTagW", (0.88, 0.85, 0.75), 0.7), rot=(0, 0, 0.3))
         B.key_spot((0.0, 0.0, 3.0), (0, 0, 0.9), 900, 22, (1.0, 0.86, 0.68), soft=0.08, blend=0.25, name="TopKey")
-        B.fill((-2.5, -2.5, 1.5), (0, 0, 1.0), 6, 2.0, (0.4, 0.5, 0.75))
+        B.fill((-2.5, -2.5, 1.5), (0, 0, 1.0), 40, 2.0, (0.6, 0.66, 0.8))
+        ew = B.plaster("EvWall", (0.45, 0.46, 0.47))           # an evidence room, not a black void: walls catch the spill
+        box("EvWallB", (0, 3.0, 1.5), (8, 0.1, 3.0), ew); box("EvWallL", (-3.5, 0, 1.5), (0.1, 8, 3.0), ew); box("EvWallR", (3.5, 0, 1.5), (0.1, 8, 3.0), ew)
+        wl = area_light((0, 0.5, 2.9), (0, 0, 0), 3.0, 160, (0.9, 0.94, 1.0)); wl.visible_camera = False
         B.room_haze((0, 0, 1.5), (6, 6, 3), density=0.02)
-    B.finish_interior(lift=-0.2)
+    B.finish_interior(lift=0.5 if variant == "evid" else -0.2)
     return c
 
 

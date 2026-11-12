@@ -120,7 +120,7 @@ def build(variant=None):
         c["clerk"] = clerk
         c["rest"] = {"clerk": B.capture(clerk)}
     B.room_haze((0, 0, 1.5), (13.8, 11.8, 3.0), density=0.01)
-    B.finish_interior(lift=0.0)
+    B.finish_interior(lift=0.4)
     return c
 
 

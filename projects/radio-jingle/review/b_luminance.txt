@@ -1,0 +1,78 @@
+3-1A Wire through the trees + title            day   0.219 ok
+3-1B Second lookout                            day   0.401 ok
+3-2A Print dusted on the box tape              day   0.200 ok
+3-2B Powder on the strip                       day   0.263 ok
+3-3A Card archive aisle                        day   0.230 ok
+3-3B No match at the light table               day   0.200 ok
+3-4A TV repair bench                           night 0.113 ok
+3-4B Unopened final notices                    night 0.220 ok
+3-5A Board game evening                        night 0.287 ok
+3-5B Next day: search finds nothing            day   0.257 ok
+3-6A Moped with a spade                        night 0.284 ok
+3-6B Landlord at the curtain                   night 0.270 ok
+3-7A Questioning                               day   0.185 ok
+3-7B He shows a size                           day   0.244 ok
+3-8A Walked through the woods                  day   0.413 ok
+3-8B He cannot find the spot                   day   0.550 ok
+3-9A Statement pushed back                     night 0.279 ok
+3-9B He walks out                              night 0.350 ok
+3-10A TV appeal                                day   0.411 ok
+3-10B Tips by phone                            day   0.264 ok
+3-11A Twelve cabinets                          day   0.224 ok
+3-11B The tapes, the light dims                night 0.186 ok
+4-1A DNA swab + title                          day   0.298 ok
+4-1B Sequencer peaks                           day   0.246 ok
+4-2A Screw and glass                           day   0.213 ok
+4-2B The bags slid apart                       day   0.339 ok
+4-3A Northern harbour                          day   0.447 ok
+4-3B The shop                                  day   0.435 ok
+4-4A The deadline file                         day   0.235 ok
+4-4B The clock                                 day   0.228 ok
+4-5A Surveillance                              night 0.097 ok
+4-5B He locks up                               night 0.123 ok
+4-6A House search                              day   0.431 ok
+4-6B Saliva sample                             day   0.247 ok
+4-7A Recorder carried out                      day   0.402 ok
+4-7B Flea-market memory                        day   0.325 ok
+4-8A The recorder                              day   0.440 ok
+4-8B Keys and meter                            day   0.388 ok
+4-9A Phonetics expert                          day   0.204 ok
+4-9B Three calls                               day   0.224 ok
+4-10A Eleven recorders                         day   0.217 ok
+4-10B The pause key                            day   0.284 ok
+4-11A Arrest at dawn                           night 0.351 ok
+4-11B Driven away                              night 0.311 ok
+4-12A In court                                 day   0.221 ok
+4-12B The market seller                        day   0.357 ok
+4-13A Michael reads the files                  day   0.222 ok
+4-13B He looks up                              day   0.415 ok
+4-14A Recon: radio to recorder                 day   0.204 ok
+4-14B Recon: copied to cassette                day   0.250 ok
+4-15A Recon: the phone booth                   night 0.050 ok
+4-15B Recon: player to mouthpiece              night 0.304 ok
+4-16A Recon: down the line                     night 0.157 ok
+4-16B Recon: police recorder                   night 0.128 ok
+4-17A He replays the tape                      night 0.150 ok
+4-17B His objections                           night 0.134 ok
+5-1A The bench + title                         day   0.400 ok
+5-1B The binoculars                            day   0.287 ok
+5-2A All rise                                  day   0.331 ok
+5-2B The verdict                               day   0.353 ok
+5-3A Federal court                             day   0.273 ok
+5-3B Past the press                            day   0.232 ok
+5-4A Michael, 2013                             day   0.404 ok
+5-4B Waiting                                   day   0.403 ok
+5-5A A few notes                               day   0.187 ok
+5-5B Night                                     night 0.137 ok
+5-6A The physicist                             day   0.230 ok
+5-6B A year passes                             day   0.253 ok
+5-7A Civil court                               day   0.330 ok
+5-7B Boarding school in fog                    day   0.232 ok
+5-8A Overturned                                night 0.161 ok
+5-8B Lights out                                night 0.163 ok
+5-9A Released, 2023                            night 0.249 ok
+5-9B Along the wall                            night 0.330 ok
+5-10A Broadcasters revisit                     night 0.043 ok
+5-10B Paused                                   night 0.066 ok
+5-11 Nobody answered                           night 0.086 ok
+FAILS 0

@@ -49,7 +49,7 @@ def build(variant=None):
     B.flat_clothes(h, (0.78, 0.78, 0.75))                                # pale lab coat (CAST: forensic staff)
     B.stand(h, (TAPE.x + 0.48, TAPE.y + 0.3, 0), -math.pi / 2 - 0.35)     # faces -X, the box wall
     c["rest"] = B.capture(h)
-    B.finish_interior(lift=-0.3)
+    B.finish_interior(lift=0.2)
     return c
 
 
