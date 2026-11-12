@@ -14,10 +14,14 @@ for i, (label, path) in enumerate(pairs):
     x, y = (i % 2) * (W + 12), (i // 2) * (H + BAR)
     if label == "-":
         continue
-    crop = None
+    crop = None; lab = None
+    if path.endswith("+label"):          # stills render frame 1, before the label fades in: show it as it will play
+        path = path[:-6]; lab = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "nvidia_doc", "assets", "generated", "b_label_court_reconstruction.png")
     if "#" in path:
         path, c = path.split("#"); crop = [float(v) for v in c.split(",")]
     im = Image.open(path).convert("RGB")
+    if lab and os.path.exists(lab):
+        L = Image.open(lab).convert("RGBA").resize(im.size, Image.LANCZOS); im = im.convert("RGBA"); im.alpha_composite(L); im = im.convert("RGB")
     if crop:
         w, h = im.size
         im = im.crop((int(crop[0] * w), int(crop[1] * h), int(crop[2] * w), int(crop[3] * h)))

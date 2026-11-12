@@ -311,7 +311,7 @@ ROLES = {
     # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
     # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 42, "female_elegantsuit01", "ponytail01", 0.30, 0.08, 0.18, 0.55, 0.45, 0.45),
+    "mother":     (0.0, 47, "female_elegantsuit01", "ponytail01", 0.40, 0.08, 0.18, 0.55, 0.45, 0.58),
     "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
     "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
     "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
@@ -366,6 +366,8 @@ def person(role, name=None, cap=True):
             if o.type == 'MESH' and cloth in o.name:
                 _two_tone_local(o, split, top, bot)
     hair_matte(h)
+    if role in ("mother", "father", "uncle", "neighbour", "expert", "aunt"):
+        hair_grey(h, 0.35 if role == "mother" else 0.5)
     if role in ("officer", "officer2", "officer3") and cap:
         h.cap = police_cap(h)
     if role == "firefighter":
@@ -429,6 +431,25 @@ def hair_trim(h, frac=0.80):
             kill = [f for f in bm.faces if all(v.co.z < zc for v in f.verts)]
             bmesh.ops.delete(bm, geom=kill, context='FACES')
             bm.to_mesh(o.data); bm.free(); o.data.update()
+
+
+def hair_grey(h, amount=0.35):
+    """A few grey strands: mix a light grey into the hair colour by a fine streaky noise."""
+    for o in h.parts:
+        if o.type == 'MESH' and any(k in o.name for k in ("long01", "bob0", "short0", "ponytail", "braid", "afro")):
+            for m in o.data.materials:
+                N = m.node_tree.nodes; L = m.node_tree.links; p = N.get("Principled BSDF")
+                if not p or not p.inputs['Base Color'].is_linked:
+                    continue
+                src = p.inputs['Base Color'].links[0].from_socket
+                tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (60, 60, 4)
+                L.new(tc.outputs['Object'], mp.inputs['Vector'])
+                nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3; L.new(mp.outputs[0], nz.inputs['Vector'])
+                mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.55; mr.inputs['From Max'].default_value = 0.7
+                mr.inputs['To Max'].default_value = amount; L.new(nz.outputs['Fac'], mr.inputs['Value'])
+                mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(mr.outputs[0], mx.inputs['Factor'])
+                L.new(src, mx.inputs[6]); mx.inputs[7].default_value = (0.42, 0.41, 0.4, 1)
+                L.new(mx.outputs[2], p.inputs['Base Color'])
 
 
 def hair_matte(h):

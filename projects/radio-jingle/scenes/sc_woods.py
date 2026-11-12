@@ -64,7 +64,7 @@ def build_woods(c, seed=4, n_trees=180):
                 out.append((Vector((x, y, gz(x, y))), rr.uniform(0, 6.28), rr.uniform(0.8, 1.3)))
         return out
     c["ferns"] = rj.ph_instances("fern_02", sc(220, 3.8, 30, 1))
-    c["moss"] = rj.ph_instances("moss_01", sc(90, 2.5, 25, 2))
+    c["moss"] = []                                             # (moss_01 reads as flat grey squares from above)
     rj.ph_instances("dry_branches_medium_01", sc(40, 3.0, 25, 3))
     rj.ph_instances("tree_stump_01", sc(8, 5, 25, 4))
     rj.ph_instances("fir_sapling", sc(25, 4.5, 25, 5))
@@ -84,8 +84,8 @@ def box_top(c, state):
     planks = mat("planks"); steel = pbr("BoltSteel", (0.28, 0.27, 0.25), 0.45, 0.9)
     W, D = 1.05, 0.85
     if state in ("cover", "lid", "open"):
-        pit = box("Pit", (BOX.x, BOX.y, -0.08), (W + 1.0, D + 1.0, 0.16), mat("soil"))
-        pit.location.z = -0.081
+        for (dx, dy, sx, sy) in ((0, D / 2 + 0.3, W + 1.0, 0.5), (0, -D / 2 - 0.3, W + 1.0, 0.5), (W / 2 + 0.3, 0, 0.5, D + 0.1), (-W / 2 - 0.3, 0, 0.5, D + 0.1)):
+            box("PitRim", (BOX.x + dx, BOX.y + dy, -0.02), (sx, sy, 0.06), mat("soil"))
     if state == "cover":
         parts = [box("Cover", (BOX.x, BOX.y + (k - 3) * 0.13, -0.02), (W + 0.12, 0.125, 0.035), planks) for k in range(7)]
         c["cover"] = join(parts, "WoodenCover")
@@ -99,7 +99,7 @@ def box_top(c, state):
     if state in ("lid", "open"):
         hinge = bpy.data.objects.new("LidHinge", None); bpy.context.collection.objects.link(hinge)
         hinge.location = (BOX.x - W / 2, BOX.y, -0.04)
-        lid = box("Lid", (BOX.x, BOX.y, -0.02), (W, D, 0.04), mat("pine"), bevel=0.004)
+        lid = box("Lid", (BOX.x, BOX.y, 0.0), (W, D, 0.04), rj.mat("planks"), bevel=0.004)
         parts = [lid]
         for k in range(7):                                       # seven sliding bolts along the free edges
             if k < 3:
@@ -125,7 +125,15 @@ def box_top(c, state):
         except Exception:
             pass
     if state == "spruces":
-        bare = box("BareEarth", (BOX.x, BOX.y, 0.0), (W + 0.6, D + 0.6, 0.03), mat("soil"))
+        bpy.ops.mesh.primitive_circle_add(vertices=48, radius=1.0, fill_type='NGON', location=(BOX.x, BOX.y, 0.012))
+        bare = bpy.context.active_object; bare.name = "BareEarth"; bare.scale = (0.95, 0.8, 1); bare.data.materials.append(mat("soil"))
+        bpy.ops.object.transform_apply(scale=True)
+        import bmesh
+        bm = bmesh.new(); bm.from_mesh(bare.data)
+        for v in bm.verts:
+            if v.co.length > 0.2:
+                a_ = math.atan2(v.co.y, v.co.x); v.co *= 1.0 + 0.12 * math.sin(a_ * 5) + 0.07 * math.sin(a_ * 11 + 1)
+        bm.to_mesh(bare.data); bm.free()
         c["saplings"] = rj.ph_instances("fir_sapling", [(Vector((BOX.x + dx, BOX.y + dy, 0.0)), rz, 0.55)
                                                         for (dx, dy, rz) in ((-0.35, -0.25, 0.3), (0.35, -0.3, 1.4), (0.0, 0.05, 2.2), (-0.3, 0.32, 3.1), (0.38, 0.3, 4.4))])
         tube = cyl("TalkTube", (BOX.x + 0.12, BOX.y - 0.05, 0.06), 0.03, 0.12, pbr("PVC", (0.45, 0.45, 0.43), 0.4), 20)
@@ -150,7 +158,7 @@ def lighting(c):
 def probe_rod(name="Rod"):
     """A 1.6 m metal probing rod with a T handle. Origin at the tip; the rod runs along local +Z."""
     st = pbr("RodSteel", (0.5, 0.5, 0.52), 0.35, 1.0)
-    parts = [cyl("RodShaft", (0, 0, 0.8), 0.007, 1.6, st, 10), cyl("RodT", (0, 0, 1.6), 0.012, 0.28, st, 10, rot=(0, math.radians(90), 0))]
+    parts = [cyl("RodShaft", (0, 0, 0.65), 0.011, 1.3, st, 10), cyl("RodT", (0, 0, 1.3), 0.016, 0.3, st, 10, rot=(0, math.radians(90), 0))]
     return join(parts, name)
 
 
@@ -178,6 +186,7 @@ def build(variant=None):
         t = rj.torch("LoneTorch", energy=45, cone=26)
         c["torch"] = t
     if "tape" in extras:
+        rj.low_instances("birch", [(Vector((-6.0, -2.3, ground_z(c, -6.0, -2.3) - 0.05)), 0.4, 2.4), (Vector((-1.9, -6.1, ground_z(c, -1.9, -6.1) - 0.05)), 1.3, 2.6)])
         cu = bpy.data.curves.new("MarkerTape", 'CURVE'); cu.dimensions = '3D'; cu.extrude = 0.025
         sp = cu.splines.new('POLY'); sp.points.add(11)
         tm = bpy.data.materials.new("Tape"); tm.use_nodes = True
@@ -215,16 +224,17 @@ def probe(c, h, rod, sec, ph=0.0, stuck=False):
     fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
     cyc = (sec * 0.8 + ph) % 1.0
     depth = 0.25 * math.sin(math.pi * min(1.0, cyc / 0.6)) if not stuck else 0.12
-    tip = Vector(h.arm.location) + fwd * 0.55
+    tip = Vector(h.arm.location) + fwd * 0.45
     tip.z = ground_z(c, tip.x, tip.y) - depth
     rod.location = tip; rod.rotation_euler = ((-fwd).to_track_quat('Z', 'Y').to_euler()) if False else (0, 0, math.atan2(fwd.y, fwd.x))
     rod.rotation_euler.y = 0.0
     lean = Matrix.Rotation(math.radians(-12), 4, right)
     rod.matrix_world = Matrix.Translation(tip) @ lean @ Matrix.Rotation(math.atan2(fwd.y, fwd.x), 4, 'Z')
-    top = tip + (lean.to_3x3() @ Vector((0, 0, 1.6)))
-    for sd, sg in SIDE.items():
-        reach(h, sd, top + right * sg * 0.09 * (1 if sd == "R" else -1) * -1 + Vector((0, 0, 0.0)), Vector((0, 0, -1)) + right * (0.6 if sd == "R" else -0.6), fwd + Vector((0, 0, -0.5)))
-    fingers_curl(h, 60)
+    top = tip + (lean.to_3x3() @ Vector((0, 0, 1.3)))
+    for sd in ("L", "R"):
+        grip = top + right * (0.11 if sd == "R" else -0.11)
+        reach(h, sd, grip, Vector((0, 0, -1)) + right * (0.7 if sd == "R" else -0.7) - fwd * 0.3, right * (1 if sd == "R" else -1) + Vector((0, 0, -0.3)))
+    fingers_curl(h, 65, thumb=30)
     side = fwd.cross(Vector((0, 0, 1))).normalized()
     h.rot("head", side, -18)
 
@@ -233,8 +243,14 @@ def probe(c, h, rod, sec, ph=0.0, stuck=False):
 LINE = ["officer", "officer2", "officer3", "officer4", "officer5"]
 
 
+def _park_rods(c):
+    for r in c.get("rods", {}).values():
+        r.location = (0, 0, -60)
+
+
 def anim_line(c, t, shot, dur):
     sec = t * dur
+    _park_rods(c)
     roles = [r for r in LINE if r in c["P"]]
     for k, r in enumerate(roles):
         h = c["P"][r]; x0 = -10 + k * 2.6; y0 = -9 + (k % 2) * 0.5
@@ -245,8 +261,8 @@ def anim_line(c, t, shot, dur):
             probe(c, h, c["rods"][r], sec, ph=k * 0.37)
     if shot == "tape":
         h = c["P"]["officer"]
-        stand_on(c, h, (-6.8, -2.0), math.radians(95))
-        a = Vector((-6.15, -2.25, 1.15)); b = Vector((-2.0, -6.0, 1.05))
+        stand_on(c, h, (-6.55, -2.05), math.radians(105))
+        a = Vector((-6.08, -2.3, 1.15)); b = Vector((-1.98, -6.05, 1.05))
         k = ease(min(1.0, sec / (dur * 0.7)))
         fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
         knot = a + Vector((0, 0, 0.02 * math.sin(sec * 6) * (1 - k)))
@@ -269,13 +285,14 @@ def cam_line(c, t):
 
 def cam_tape(c, t):
     e = ease(t)
-    a = Vector((-8.6, -4.0, 1.5)); b = Vector((-8.9, -3.4, 1.45))
-    return (a.lerp(b, e), Vector((-6.0, -2.4, 1.1)), 38)
+    a = Vector((-9.6, -4.6, 1.6)); b = Vector((-9.9, -4.0, 1.55))
+    return (a.lerp(b, e), Vector((-5.2, -3.2, 1.1)), 30)
 
 
 # --- 2A: low over the moss, a row of officers probing ; 2B: handler and dog through the ferns past the line
 def anim_rods(c, t, shot, dur):
     sec = t * dur
+    _park_rods(c)
     roles = [r for r in LINE if r in c["P"]]
     for k, r in enumerate(roles):
         h = c["P"][r]; x0 = -6 + k * 1.6
@@ -309,6 +326,7 @@ def cam_rods_dog(c, t):
 # --- 3A: a rod stops, the officer straightens and waves the others over ; 3B: they converge on the clearing
 def anim_hit(c, t, shot, dur):
     sec = t * dur
+    _park_rods(c)
     h = c["P"]["officer"]
     stand_on(c, h, (BOX.x - 0.75, BOX.y - 0.2), math.radians(-90 - 5))      # faces +X toward the box spot
     if shot == "hit":
@@ -379,14 +397,14 @@ def anim_dig(c, t, shot, dur):
 
 def cam_dig(c, t):
     e = ease(t)
-    a = BOX + Vector((-3.2, -2.6, 1.7)); b = BOX + Vector((-2.8, -2.2, 1.6))
-    return (a.lerp(b, e), BOX + Vector((0, 0, 0.3)), 32)
+    a = BOX + Vector((-4.4, -3.4, 2.3)); b = BOX + Vector((-4.0, -3.0, 2.1))
+    return (a.lerp(b, e), BOX + Vector((0, 0, 0.5)), 30)
 
 
 def cam_sweep(c, t):
     e = ease(t)
-    a = BOX + Vector((2.6, 1.6, 0.4)); b = BOX + Vector((2.2, 1.9, 0.45))
-    return (a.lerp(b, e), BOX + Vector((0, 0, 0.15)), 35)
+    a = BOX + Vector((3.6, 2.2, 1.35)); b = BOX + Vector((3.2, 2.5, 1.3))
+    return (a.lerp(b, e), BOX + Vector((0, 0, 0.45)), 30)
 
 
 # --- 5A: track along the lid and its seven bolts ; 5B: an officer works a bolt with a crowbar (from behind)
@@ -396,15 +414,13 @@ def anim_lid(c, t, shot, dur):
         h = c["P"]["officer"]
         stand_on(c, h, (BOX.x + 1.05, BOX.y - 0.15), math.radians(90))         # faces -X toward the lid edge
         fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
-        rj.rjp.bend_to(h, BOX + Vector((0.45, -0.1, 0.25)), frac=0.7, max_deg=40)
-        bar = c["crowbar"]; tip = BOX + Vector((0.47, -0.28 + 0.0, 0.03))
-        pry = 0.15 * math.sin(sec * 2.2)
-        top = tip + Vector((0.35, 0.05, 0.55 + pry)).normalized() * 0.75
-        axis = (top - tip).normalized()
-        bar.matrix_world = Matrix.Translation(tip) @ axis.to_track_quat('Z', 'Y').to_matrix().to_4x4()
-        reach(h, "R", tip.lerp(top, 0.9), Vector((0, 0, -1)) + right * 0.5, axis)
-        reach(h, "L", tip.lerp(top, 0.55), Vector((0, 0, -1)) - right * 0.5, axis)
-        fingers_curl(h, 60)
+        rj.rjp.bend_to(h, BOX + Vector((0.45, -0.1, 0.2)), frac=0.62, max_deg=55)
+        c["crowbar"].location = (0, 0, -60)
+        bolt = BOX + Vector((0.47, -0.28, 0.035))
+        pull = 0.04 * ease(min(1.0, sec / 2.0))                    # the bolt slides back
+        reach(h, "R", bolt + Vector((0.03 + pull, 0, 0.04)), Vector((0, 0, -1)) + right * 0.5, Vector((0, 0, -1)) + fwd * 0.3)
+        reach(h, "L", BOX + Vector((0.55, 0.05, 0.12)), Vector((0, 0, -1)) - right * 0.5, Vector((0, 0, -1)) + fwd * 0.3)
+        fingers_curl(h, 45)
     for r in [r for r in ("officer2", "officer3") if r in c["P"]]:
         hh = c["P"][r]; k = 1 if r == "officer2" else -1
         stand_on(c, hh, (BOX.x - 0.4 + 0.3 * k, BOX.y + 1.4 * k), 0.0)
@@ -421,8 +437,8 @@ def cam_lid(c, t):
 
 def cam_bolt(c, t):
     e = ease(t)
-    a = BOX + Vector((2.8, -0.9, 1.45)); b = BOX + Vector((2.5, -0.7, 1.4))
-    return (a.lerp(b, e), BOX + Vector((0.6, -0.15, 0.4)), 40)
+    a = BOX + Vector((2.6, -2.6, 1.45)); b = BOX + Vector((2.3, -2.3, 1.4))
+    return (a.lerp(b, e), BOX + Vector((0.5, -0.2, 0.45)), 32)
 
 
 # --- 6A: from far behind the trees, officers lift the lid; the camera stops at the treeline
@@ -587,7 +603,9 @@ def build(variant=None):                      # noqa: F811
     if L == "grey":
         look.forest(mood="mist", azim=150, area=((0, 0), (70, 70)), canopy=16.0)
     elif L == "dusk":
-        look.forest(mood="dusk", azim=250, area=((0, 0), (70, 70)), canopy=16.0)
+        look.forest(mood="dusk", azim=250, area=((0, 0), (70, 70)), canopy=16.0, exposure=2.8)
+    else:
+        look.forest(mood="dusk", azim=200, area=((0, 0), (70, 70)), canopy=16.0, exposure=1.2)
     return c
 
 

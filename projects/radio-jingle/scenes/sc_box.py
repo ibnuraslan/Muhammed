@@ -73,7 +73,7 @@ def build_box(c):
     bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=0.025, location=(0, 0, Z0 + H - T - 0.075))
     bulb = bpy.context.active_object; bulb.data.materials.append(bulb_m)
     c["bulb_mat"] = bulb_m
-    bl = bpy.data.lights.new("BulbL", 'POINT'); bl.energy = 6; bl.color = (1.0, 0.72, 0.42); bl.shadow_soft_size = 0.02
+    bl = bpy.data.lights.new("BulbL", 'POINT'); bl.energy = 22; bl.color = (1.0, 0.72, 0.42); bl.shadow_soft_size = 0.02
     bo = bpy.data.objects.new("BulbL", bl); bpy.context.collection.objects.link(bo); bo.location = (0, 0, Z0 + H - T - 0.075)
     batt = Vector((W / 2 + 0.85, 0.35, 0.0))
     bat = join([box("Battery", (batt.x, batt.y, 0.1), (0.3, 0.18, 0.2), pbr("BattCase", (0.04, 0.04, 0.045), 0.5), bevel=0.01),
@@ -131,7 +131,10 @@ def hall(c):
     # the work lamp over the box (a hanging enamel shade) and a dim warm practical over the experts' table
     lamp = cyl("WorkShade", (0, -0.1, 2.6), 0.22, 0.14, pbr("Enamel", (0.18, 0.2, 0.18), 0.4), 32)
     cyl("WorkCord", (0, -0.1, 3.8), 0.005, 2.4, mat("black"), 6)
-    sp = bpy.data.lights.new("WorkL", 'SPOT'); sp.energy = 600; sp.spot_size = math.radians(70); sp.spot_blend = 0.5; sp.color = (1.0, 0.86, 0.7)
+    top = area_light((0, -0.4, 2.3), (0, 0, 0), 1.2, 260, (1.0, 0.88, 0.72)); top.visible_camera = False; point_at(top, (0, 0.0, 0.6)); top.name = "TopSoft"
+    insp = area_light((0.15, -1.3, 1.5), (0, 0, 0), 0.5, 60, (1.0, 0.9, 0.78)); insp.visible_camera = False; point_at(insp, (0, 0.15, 0.9))
+    insp.name = "InspLamp"                                   # the investigators' lamp into the open side
+    sp = bpy.data.lights.new("WorkL", 'SPOT'); sp.energy = 900; sp.spot_size = math.radians(70); sp.spot_blend = 0.5; sp.color = (1.0, 0.86, 0.7)
     so = bpy.data.objects.new("WorkL", sp); bpy.context.collection.objects.link(so); so.location = (0, -0.1, 2.5)
     fill = area_light((2.5, -4.0, 2.5), (0, 0, 0), 2.0, 40, (0.7, 0.8, 1.0)); point_at(fill, (0, 0, 0.8)); fill.visible_camera = False
     # experts' table with files and a desk lamp
@@ -169,7 +172,8 @@ def build(variant=None):
     if "smoke" in v:
         smoke(c)
     import look
-    look.interior_day(window=((-0.5, 7.5, 4.0), (0.0, 0.0, 0.7)), mood="overcast", key_size=3.0, keep=tuple(bpy.data.objects[n] for n in ("WorkL", "BulbL")))
+    look.interior_day(window=((-0.5, 7.5, 4.0), (0.0, 0.0, 0.7)), mood="overcast", key_size=3.0, keep=tuple(bpy.data.objects[n] for n in ("WorkL", "BulbL", "TopSoft", "InspLamp")))
+    bpy.context.scene.view_settings.exposure += 1.0
     rj.finish_scene()
     return c
 
@@ -241,16 +245,16 @@ def anim_box(c, t, shot, dur):
 
 def cam_crane(c, t):
     e = ease(t)
-    a = Vector((0.15, -1.2, 2.6)); b = Vector((0.1, -0.85, 1.25))
-    return (a.lerp(b, e), Vector((0, 0.15, Z0 + 0.7)), 30)
+    a = Vector((0.15, -1.6, 2.4)); b = Vector((0.08, -1.05, 1.15))
+    return (a.lerp(b, e), Vector((0, 0.15, Z0 + 0.75)), 28)
 
 
 def cam_cable(c, t):
     e = ease(t)
     p0 = c["cable_pts"]
-    a = Vector((W / 2 + 0.25, -0.75, 1.3)); b = Vector((W / 2 + 0.95, -0.45, 0.45))
-    tgt = Vector((W / 2 + 0.05, 0.15, Z0 + H - 0.1)).lerp(Vector(c["battery"]) + Vector((0, 0, 0.15)), e)
-    return (a.lerp(b, e), tgt, 40)
+    a = Vector((W / 2 + 0.9, -1.4, 1.65)); b = Vector((W / 2 + 1.5, -1.1, 0.75))
+    tgt = Vector((W / 2 + 0.05, 0.15, Z0 + H - 0.15)).lerp(Vector(c["battery"]) + Vector((0, 0, 0.12)), e)
+    return (a.lerp(b, e), tgt, 32)
 
 
 def cam_shelf(c, t):
@@ -261,8 +265,8 @@ def cam_shelf(c, t):
 
 def cam_radio(c, t):
     e = ease(t)
-    a = Vector((-0.95, -1.25, 1.5)); b = Vector((-0.85, -1.1, 1.45))
-    return (a.lerp(b, e), Vector((-0.12, D / 2 - 0.14, Z0 + 1.08)), 38)
+    a = Vector((-1.6, -1.8, 1.7)); b = Vector((-1.45, -1.6, 1.65))
+    return (a.lerp(b, e), Vector((-0.1, 0.0, Z0 + 0.95)), 28)
 
 
 def cam_pipe(c, t):
@@ -274,8 +278,8 @@ def cam_pipe(c, t):
 
 def cam_smoke(c, t):
     e = ease(t)
-    a = Vector((W / 2 + 0.9, -1.5, 1.1)); b = Vector((W / 2 + 0.75, -1.3, 1.0))
-    return (a.lerp(b, e), Vector((W / 2 - 0.05, -D / 2 - 0.1, Z0 + 0.62)), 40)
+    a = Vector((W / 2 + 2.0, -2.2, 1.35)); b = Vector((W / 2 + 1.8, -2.0, 1.3))
+    return (a.lerp(b, e), Vector((W / 2 - 0.15, -D / 2 - 0.2, Z0 + 0.75)), 30)
 
 
 def cam_experts(c, t):

@@ -208,7 +208,7 @@ def light(c):
     if look.enabled():
         rj.sky("grey")
         look.day_light("low_sun", azim=235 if L == "afternoon" else 140, elev=16 if L == "afternoon" else 20, sky="blue",
-                       haze_box=((0, 0, 8), (160, 120, 16)), exposure=0.4)
+                       haze_box=((0, 0, 8), (160, 120, 16)), exposure=1.3)
         return
     from common import sun
     w, s = rj.sky("grey" if L in ("grey", "morning") else "lowsun", rot=0)
@@ -285,9 +285,9 @@ def anim_gate(c, t, shot, dur):
 
 def cam_gate(c, t):
     e = ease(t)
-    a = Vector((GATE.x - 1.6, -6.6, 3.4)); b = Vector((GATE.x - 1.1, -6.2, 1.55))     # crane down in the front garden, behind her
-    tgt = Vector((GATE.x + 0.4, -2.0, 1.4)).lerp(Vector((GATE.x + 0.2, -1.0, 0.7)), e)
-    return (a.lerp(b, e), tgt, 32)
+    a = Vector((GATE.x - 2.6, -7.1, 3.0)); b = Vector((GATE.x - 2.0, -6.7, 1.5))     # crane down in the front garden, behind her (house wall at y -7.5)
+    g = c["P"]["sister"].bone_head("spine05")
+    return (a.lerp(b, e), g + Vector((0.2, 1.8, -0.2)), 32)
 
 
 def anim_lane(c, t, shot, dur):

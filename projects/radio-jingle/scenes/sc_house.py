@@ -147,7 +147,7 @@ def hall_props(c):
     lamp_parts = [cyl("LBase", (0, 0, 0.012), 0.065, 0.024, pbr("BrassL", (0.6, 0.45, 0.2), 0.3, 1.0), 24),
                   cyl("LStem", (0, 0, 0.18), 0.009, 0.33, pbr("BrassL2", (0.6, 0.45, 0.2), 0.3, 1.0), 12)]
     bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.15, radius2=0.09, depth=0.17, location=(0, 0, 0.37))
-    sh = bpy.context.active_object; sh.data.materials.append(pbr("LampShade", (0.7, 0.55, 0.34), 0.7, 0.0, **{'Transmission Weight': 0.12,
+    sh = bpy.context.active_object; sh.data.materials.append(pbr("LampShade", (0.7, 0.55, 0.34), 0.7, 0.0, **{'Transmission Weight': 0.0,
                                                                     'Emission Color': (1.0, 0.65, 0.35, 1), 'Emission Strength': 0.0}))
     sol = sh.modifiers.new("s", 'SOLIDIFY'); sol.thickness = 0.003
     c["shade_mat"] = sh.data.materials[0]
@@ -157,8 +157,8 @@ def hall_props(c):
     # hall chair with the two stuffed toys
     ch_r, _ = rj.model_fit("WoodenChair_01", (0.72, -2.45, 0.0), rot_z=-math.pi / 2, height=0.9)
     c["chair"] = ch_r
-    bear = rj.teddy("Bear"); bear.location = (0.78, -2.5, 0.47); bear.rotation_euler = (0, 0, math.pi / 2 + 0.25)
-    rab = rj.plush_rabbit("Rabbit"); rab.location = (0.76, -2.25, 0.47); rab.rotation_euler = (0, 0.12, math.pi / 2 - 0.3)
+    bear = rj.teddy("Bear"); bear.location = (0.78, -2.5, 0.47); bear.rotation_euler = (0, 0, -math.pi / 2 + 0.25)
+    rab = rj.plush_rabbit("Rabbit"); rab.location = (0.76, -2.25, 0.47); rab.rotation_euler = (0, 0.12, -math.pi / 2 - 0.3)
     c["toys"] = [bear, rab]
     # wall clock above the table, a mirror and coat hooks on the west wall
     ck, hands, pend = rj.wall_clock("HallClock")
@@ -210,7 +210,7 @@ def piano_room(c):
     lamp_parts = [cyl("PLBase", (0, 0, 0.01), 0.06, 0.02, pbr("BrassP", (0.55, 0.42, 0.2), 0.3, 1.0), 24),
                   cyl("PLStem", (0, 0, 0.17), 0.008, 0.32, pbr("BrassP2", (0.55, 0.42, 0.2), 0.3, 1.0), 12)]
     bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.13, radius2=0.08, depth=0.15, location=(0, 0, 0.36))
-    sh = bpy.context.active_object; sh.data.materials.append(pbr("PShade", (0.72, 0.6, 0.4), 0.7, 0.0, **{'Transmission Weight': 0.12,
+    sh = bpy.context.active_object; sh.data.materials.append(pbr("PShade", (0.72, 0.6, 0.4), 0.7, 0.0, **{'Transmission Weight': 0.0,
                                                                  'Emission Color': (1.0, 0.68, 0.38, 1), 'Emission Strength': 0.0}))
     c["pshade_mat"] = sh.data.materials[0]
     lamp_parts.append(sh)
@@ -335,14 +335,16 @@ def lighting(c):
         rj.sky("night")
         mo = area_light((-10, 4, 6), (0, 0, 0), 6.0, 60, (0.4, 0.5, 0.9)); point_at(mo, (-4, 0, 0)); mo.visible_camera = False
     if lamps_on or L == "night":
-        st.inputs['Emission Strength'].default_value = 0.9          # the shade glows as fabric, never pure white
+        st.inputs['Emission Strength'].default_value = 0.35         # the shade glows as fabric, never pure white
         hl = bpy.data.lights.new("HallLampL", 'POINT'); hl.energy = 45; hl.color = (1.0, 0.62, 0.32); hl.shadow_soft_size = 0.06
         ho = bpy.data.objects.new("HallLampL", hl); bpy.context.collection.objects.link(ho)
         ho.location = c["hall_lamp"].location + Vector((0, 0, 0.36))
-        ps.inputs['Emission Strength'].default_value = 0.9
+        ps.inputs['Emission Strength'].default_value = 0.35
         # a soft bounce off the music sheet onto the player's face (Michael alone at night)
         fb = area_light(PIANO + Vector((0.55, -0.25, 1.15)), (0, 0, 0), 0.35, 9, (1.0, 0.72, 0.45)); fb.visible_camera = False
         point_at(fb, PIANO + Vector((0.0, -0.8, 1.15)))
+        sp = area_light(PIANO + Vector((0.3, -0.6, 2.2)), (0, 0, 0), 0.8, 14, (1.0, 0.68, 0.4)); sp.visible_camera = False   # lamp spill on the bench
+        point_at(sp, PIANO + Vector((0.0, -0.75, 0.5)))
         pl = bpy.data.lights.new("PianoLampL", 'POINT'); pl.energy = 70; pl.color = (1.0, 0.62, 0.32); pl.shadow_soft_size = 0.05
         po = bpy.data.objects.new("PianoLampL", pl); bpy.context.collection.objects.link(po)
         po.location = c["piano_lamp"].location + Vector((0, 0, 0.35))
@@ -376,6 +378,10 @@ def apply_look(c):
         for o in [o for o in bpy.data.objects if o.type == 'LIGHT' and o.data.type == 'SUN']:
             bpy.data.objects.remove(o)
         look.interior_day(window=ROOM_WINDOWS[room], mood=mood, key_energy={"piano": None, "hall": 520.0, "kitchen": 380.0}[room])
+        if room == "kitchen":
+            bpy.context.scene.view_settings.exposure -= 0.3
+        if room == "piano":
+            bpy.context.scene.view_settings.exposure += 1.3       # day must read (mean luminance >= 0.18)
 
 
 def cast(c):
@@ -713,14 +719,16 @@ def anim_dial(c, t, shot, dur):
     _clock(c, sec)
     m = c["P"]["mother"]
     if shot == "dial":
-        stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2)
+        stand_at(m, (PHONE_T.x - 0.46, PHONE_T.y - 0.12), math.pi / 2)
+        rj.rjp.bend_to(m, c["dial"].matrix_world.translation, frac=0.7, max_deg=14)
         breathe(m, sec)
         side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -16)
         phone_to_ear(c, m, sec)
         d = c["dial"].matrix_world
         k = (sec * 0.8) % 1.0
         c["dial"].rotation_euler.z = math.radians(-120 * math.sin(math.pi * k))
-        reach(m, "R", d @ Vector((0.03, 0.0, 0.05)), Vector((0, -0.4, -1)), forward(m) + Vector((0, 0, -1)))
+        reach(m, "R", d @ Vector((0.03, 0.0, 0.06)), Vector((0, -0.6, -1)) - forward(m) * 0.3, forward(m) + Vector((0, 0, -1.2)))
+        fingers_curl(m, 35, side=("R",), thumb=20)
     else:
         put = ease(min(1.0, sec / 1.2))
         stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2 + math.radians(28) * ease(max(0.0, (sec - 1.4) / 1.2)))
@@ -750,7 +758,7 @@ def cam_hangup(c, t):
 def anim_empty_piano(c, t, shot, dur):
     sec = t * dur
     for k, tr in enumerate(c.get("out_torches", [])):
-        tr.location = (-9.0 - 1.2 * k + 0.8 * math.sin(sec * 0.3 + k), 0.2 + k * 1.6 - 0.5 * sec, 1.1 + 0.05 * math.sin(sec * 4 + k))
+        tr.location = (-7.7 - 0.8 * k + 0.3 * math.sin(sec * 0.3 + k), 0.5 + k * 1.1 - 0.35 * sec, 1.1 + 0.05 * math.sin(sec * 4 + k))
         aim = Vector((0.8 + 0.4 * math.sin(sec * 0.9 + k * 2), 0.35 * math.cos(sec * 0.7 + k), -0.3)).normalized()
         tr.rotation_euler = aim.to_track_quat('-Y', 'Z').to_euler()
     rj.sway(c["trees"], sec, 0.01, 0.25)
@@ -863,8 +871,8 @@ def cam_letter(c, t):
 
 def cam_read(c, t):
     e = ease(t)
-    a = Vector((KTABLE.x - 0.35, KTABLE.y + 0.75, 0.98)); b = Vector((KTABLE.x - 0.25, KTABLE.y + 0.6, 0.96))
-    return (a.lerp(b, e), Vector((KTABLE.x + 0.25, KTABLE.y - 0.75, 1.25)), 30)
+    a = Vector((KTABLE.x - 0.25, KTABLE.y + 1.3, 1.02)); b = Vector((KTABLE.x - 0.15, KTABLE.y + 1.15, 1.0))
+    return (a.lerp(b, e), Vector((KTABLE.x + 0.25, KTABLE.y - 0.7, 1.2)), 22)
 
 
 # --- 18A/B: the police arrive: a technician threads the recorder ; the officer pulls on his headphones
@@ -896,8 +904,8 @@ def anim_police_day(c, t, shot, dur):
 
 def cam_thread(c, t):
     e = ease(t)
-    a = Vector((-0.75, -2.35, 1.6)); b = Vector((-0.65, -2.1, 1.55))
-    return (a.lerp(b, e), PHONE_T + Vector((-0.1, 0.1, 0.95)), 38)
+    a = Vector((-0.85, -2.95, 1.6)); b = Vector((-0.8, -2.7, 1.58))
+    return (a.lerp(b, e), PHONE_T + Vector((-0.35, 0.2, 1.15)), 30)
 
 
 def cam_door(c, t):
@@ -912,7 +920,7 @@ def anim_call(c, t, shot, dur):
     _reels(c, sec, on=shot not in ("silent", "stairs"))
     _clock(c, sec)
     if shot in ("call_left", "toys", "co2_back", "co2_toy"):
-        place_mother_phone(c, sec, talk=0.6)
+        place_mother_phone(c, sec, talk=0.6, hand="R" if shot == "co2_back" else "L")
         if "officer" in c["P"]:
             place_officer(c, sec)
     if shot == "stairs":

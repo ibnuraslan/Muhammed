@@ -28,6 +28,7 @@ BRUSH = Vector((-10.0, -17.0, 0.0))          # the red bicycle in the brush, ~19
 LAKE_Y = 9.0                                 # water line north of the bend (shore follows the path ~8 m out)
 DUR = {}
 rng = np.random.default_rng(11)
+GAP = (-13.6, -11.6)                         # x range of the gap in the reeds (a bathing / landing spot)
 
 
 def _cum():
@@ -251,7 +252,8 @@ def vegetation(c, density=1.0):
     for cl in clumps:
         cl.hide_render = True; cl.location.z = -500
     pts = scatter(c, (-70, 60, -20, 30), int(1300 * density),
-                  lambda x, y: lake_side(x, y) and D(x, y) > 1.9 and y < _shore_y(x) + 2.5 and y > _shore_y(x) - 6.5, 3)
+                  lambda x, y: lake_side(x, y) and D(x, y) > 1.9 and y < _shore_y(x) + 2.5 and y > _shore_y(x) - 6.5
+                  and not (GAP[0] < x < GAP[1]), 3)                                  # a small landing gap in the reeds
     c["reeds"] = []
     for k, (x, y, rz, s) in enumerate(pts):
         o = bpy.data.objects.new("Reed", clumps[k % 4].data); bpy.context.collection.objects.link(o)
@@ -463,10 +465,10 @@ def cam_ride_track(c, t):
 
 def cam_ride_reeds(c, t):
     e = ease(t)
-    x = -22 + 3 * e
-    a = Vector((x, _shore_y(x) + 4.0, 2.05))
-    tgt = c["bike"]["root"].location + Vector((0, 0, 0.8))
-    return (a, tgt, 70)
+    x = -12.9 + 0.5 * e
+    a = Vector((x, _shore_y(-12.6) + 3.0, 0.45))                   # low over the water, looking through the gap
+    tgt = Vector((-12.4, np.interp(-12.4, [p.x for p in PTS], [p.y for p in PTS]), 0.85))
+    return (a, tgt, 55)
 
 
 # 5A / 5B: the empty bend at dusk
@@ -515,7 +517,7 @@ def anim_uncle(c, t, shot, dur):
 def cam_uncle(c, t):
     e = ease(t)
     h = c["P"]["uncle"]; p = Vector(h.arm.location)
-    a = Vector((-3.5, 6.0, 0.9)); b = Vector((-4.5, 5.6, 1.0))
+    a = P(D_BEND - 6.5, 1.5); b = P(D_BEND - 7.5, 1.5); a.z = 1.1; b.z = 1.15     # on the lake-side verge, looking up the path
     return (a.lerp(b, e), p + Vector((0, 0, 1.2)), 40)
 
 
@@ -851,6 +853,6 @@ def build(variant=None):                      # noqa: F811
                     exposure={"lowsun": 0.9, "mist": 1.2, "grey": 1.0}[light])
     elif light in ("dusk", "bluehour"):
         look.forest(mood="dusk", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
-    else:
-        haze((-12, -5, 3), (50, 40, 6), density=0.016, color=(0.75, 0.8, 0.9), anis=0.6)
+    else:                                   # night: a moonlit version of the dusk look (readable deep blue) + torches
+        look.forest(mood="dusk", azim=200, area=((-5, -5), (110, 70)), canopy=16.0, exposure=1.0)
     return c
