@@ -1,0 +1,50 @@
+{
+ "frames": {
+  "19": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "25": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "37": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "409": {
+   "Patient": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1255": {
+   "PanelB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1261": {
+   "PanelB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

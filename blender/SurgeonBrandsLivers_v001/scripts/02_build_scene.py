@@ -349,7 +349,7 @@ WIN_HALF = Vector((0.15, 0.11))
 def body_h(x, y):
     """drape surface height above the table top: torso bump + sloping sides"""
     u = (x + 0.15) / 0.75; v = y / 0.36
-    torso = 0.21 * max(0.0, 1 - u * u) ** 0.5 * max(0.0, 1 - v ** 4) if abs(u) < 1 else 0.0
+    torso = 0.27 * max(0.0, 1 - u * u) ** 0.5 * max(0.0, 1 - v ** 4) if abs(u) < 1 else 0.0
     legs = 0.14 * max(0.0, 1 - (y / 0.3) ** 2) if 0.4 < x < 1.15 else 0.0
     return max(torso, legs)
 bm = bmesh.new(); NX, NY = 120, 70

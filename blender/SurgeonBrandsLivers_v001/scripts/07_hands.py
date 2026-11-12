@@ -133,6 +133,8 @@ def arm_caps(rig):
 def palm_seg(rig, s):
     return P(rig, "wrist." + s), P(rig, "finger3-1." + s)
 
+# intended contacts the re-key must not undo (the hand is ON a prop worn at the face)
+KEEP = {("Surgeon1", "R"): (462, 512)}      # pinching the mask's lower edge and pulling it down onto the chin
 def audit(step=2, fix=False):
     hits = []; fixes = {}
     for f in range(1, sc.frame_end + 1, step):
@@ -158,6 +160,9 @@ def audit(step=2, fix=False):
                     d, c_ = seg_dist(p, a2, b2)
                     if d < 0.022:
                         kinds.add("other hand"); push += (p - c_).normalized() * (0.03 - d) if d > 1e-5 else Vector((0.02, 0, 0))
+                kr = KEEP.get((rig.name, s))
+                if kinds and kr and kr[0] <= f <= kr[1] and kinds <= {"own body"}:
+                    continue
                 if kinds:
                     hits.append((f, rig.name, s, sorted(kinds), push.length))
                     fixes[(rig.name, s, f)] = push

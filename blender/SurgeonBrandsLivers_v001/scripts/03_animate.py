@@ -23,7 +23,7 @@ def ground_z(x, y):
 
 def body_h(x, y):
     u = (x + 0.15) / 0.75; v = y / 0.36
-    torso = 0.21 * max(0.0, 1 - u * u) ** 0.5 * max(0.0, 1 - v ** 4) if abs(u) < 1 else 0.0
+    torso = 0.27 * max(0.0, 1 - u * u) ** 0.5 * max(0.0, 1 - v ** 4) if abs(u) < 1 else 0.0
     legs = 0.14 * max(0.0, 1 - (y / 0.3) ** 2) if 0.4 < x < 1.15 else 0.0
     return max(torso, legs)
 def skin_z(x, y):
@@ -60,7 +60,9 @@ class Actor:
         return Matrix.Translation(W) @ Rm.to_4x4() @ Matrix.Translation(-wr) @ self.R.rest("IK_hand." + s)
     def arm_rest(self, s, fwd=0.0, out=8.0, L=0.47, bend=0.0):
         sx = 1 if s == "L" else -1
-        R = Matrix.Rotation(R_(-fwd), 3, 'X') @ Matrix.Rotation(R_(sx * out), 3, 'Y')
+        # v007 fix: rotating (0,0,-L) about +Y by +a swings it toward -X, i.e. INWARD for the left arm. The old sign
+        # adducted every 'rest' arm into the thighs / pelvis; abduct outward instead (out = degrees away from the body).
+        R = Matrix.Rotation(R_(-fwd), 3, 'X') @ Matrix.Rotation(R_(-sx * (out + 2.0)), 3, 'Y')
         W = self.SH[s] + V(sx * 0.04, -0.02, 0) + R @ V(0, 0, -L * (1 - bend))
         if bend:
             W += V(0, -L * bend * 0.9, L * bend * 0.4)
@@ -68,9 +70,9 @@ class Actor:
         n = R @ V(-sx * 0.9, 0.35, 0.0)
         return W, d, n
     # P(frame, pos, yaw, ...) collects a pose; bake() keys them all (body first, then hands relative to the body)
-    def P(self, f, pos, yaw=0.0, pitch=0.0, roll=0.0, spine=(0, 0, 0), head=(0, 0, 0), feet=None, hands=None, curl=None, face=None, legs_fk=None):
+    def P(self, f, pos, yaw=0.0, pitch=0.0, roll=0.0, spine=(0, 0, 0), head=(0, 0, 0), feet=None, hands=None, curl=None, face=None, legs_fk=None, poles=None):
         self.poses.append((f, dict(pos=Vector(pos), yaw=yaw, pitch=pitch, roll=roll, spine=spine, head=head,
-                                   feet=feet, hands=hands or {}, curl=curl or {}, face=face or {}, legs_fk=legs_fk)))
+                                   feet=feet, hands=hands or {}, curl=curl or {}, face=face or {}, legs_fk=legs_fk, poles=poles or {})))
     def stance(self, pos, yaw, width=1.0):
         return {s: (self.H.foot_xy(s, Vector(pos), yaw) - Vector(pos).to_2d()) * width + Vector(pos).to_2d() for s in "LR"}
     def key_body(self, f, p):
@@ -149,7 +151,8 @@ class Actor:
             else:
                 W, d, n = self.arm_rest(s, **prm)
                 self.R.key_world("IK_hand." + s, f, self.hand_matrix(s, M @ W, R3 @ d, R3 @ n))
-            pole = M @ (self.SH[s] + V(0.35 * sx, 0.45, -0.25))
+            off = p.get("poles", {}).get(s)
+            pole = M @ (self.SH[s] + (off if off is not None else V(0.35 * sx, 0.45, -0.25)))
             pn = "Pole_elbow." + s; pb = self.R.PB[pn]
             pb.location = self.R.rest(pn).to_3x3().inverted() @ (pole - self.R.BN[pn].head_local)
             pb.keyframe_insert("location", frame=f, group=pn)
@@ -363,7 +366,7 @@ S1.P(318, s1_or + V(0.08, 0.0, -0.02), Y1 + 20, spine=(18, 0, 18), head=(20, 10,
      hands={"R": ("fn", tool_hand(drv, 0.115)), "L": ("world", (V(-0.50, -0.34, skin_z(-0.50, -0.3) + 0.03), V(0.2, 1, -0.6), V(0, 0, -1)))}, curl={"R": (60, 45)})
 for f in range(332, 430, 16):
     S1.P(f, s1_or + V(0.01, 0.04, -0.03), Y1, spine=(28, 0, -2), head=(26, -4, 0), feet=F1,
-         hands={"R": ("fn", tool_hand(drv, 0.115)), "L": ("world", (V(WIN.x - 0.04, WIN.y - 0.1, skin_w + 0.03), V(0.4, 1, -0.5), V(0, 0, -1)))},
+         hands={"R": ("fn", tool_hand(drv, 0.115)), "L": ("world", (V(WIN.x - 0.04, WIN.y - 0.12, skin_w + 0.035), V(0.4, 1, -0.08), V(0, 0, -1)))},
          curl={"R": (60, 45), "L": (30, 25)})
 S1.P(432, s1_or + V(0.05, 0.01, -0.02), Y1 + 12, spine=(22, 0, 10), head=(22, 8, 0), feet=F1,
      hands={"R": ("fn", tool_hand(drv, 0.115))}, curl={"R": (60, 45)})
@@ -373,21 +376,39 @@ S1.P(446, s1_or + V(0.08, 0.0, -0.02), Y1 + 22, spine=(16, 0, 20), head=(18, 14,
      hands={"R": ("fn", tool_hand(drv, 0.115))}, curl={"R": (60, 45)})
 S1.P(458, s1_or + V(0.08, 0.0, -0.02), Y1 + 22, spine=(16, 0, 20), head=(18, 14, 0), feet=F1,
      hands={"R": ("fn", tool_hand(drv, 0.115))}, curl={"R": (30, 20)})
+# --- mask off (v007 acting fix): the right hand comes up IN FRONT of the face, pinches the mask's lower edge and pulls it
+# down onto the chin; the elbow stays low and in front (pole forward/down), the left arm stays low; the mask only moves
+# while the hand holds it.
+ELBOW_FRONT = {"R": V(-0.22, -0.40, -0.45)}
+LOW_L = ("rest", dict(fwd=6, out=7, bend=0.1))
 def mask_edge_hand(f):
+    """wrist tracks the mask's lower front edge; the hand itself stays upright (fingers up, palm to the face) so the
+    wrist never has to bend backwards as the mask rotates down"""
     ev(f); M = mask1.matrix_world
-    W = M @ V(0, -0.11, -0.06)          # chin edge of the mask, in front
-    return W, (M.to_3x3() @ V(0, 0.2, 1)).normalized(), (M.to_3x3() @ V(0, 1, 0)).normalized()
-S1.P(478, s1_or + V(0.02, -0.02, 0.0), Y1 + 6, spine=(6, 0, 4), head=(4, 4, 0), feet=F1,
-     hands={"R": ("fn", mask_edge_hand)}, curl={"R": (45, 35)})
-S1.P(500, s1_or + V(0.0, -0.03, 0.01), Y1 + 4, spine=(2, 0, 2), head=(-4, 6, 4), feet=F1,
-     hands={"R": ("fn", mask_edge_hand)}, curl={"R": (45, 35)}, face={"smile": 0.3})
-S1.P(520, s1_or + V(0.0, -0.03, 0.01), Y1 + 4, spine=(0, -3, 2), head=(-8, 8, 6), feet=F1,
-     hands={"R": ("rest", dict(fwd=12, out=12, bend=0.2))}, face={"smile": 1.2, "brow": -0.2, "wide": 0.1, "close": 0.2})
+    grip = M @ V(0, -0.128, -0.088)                          # front of the mask's lower edge
+    fwd = (S1.o.matrix_world.to_3x3() @ S1.R.PB["head"].matrix.to_3x3() @ V(0, -1, 0)).normalized()   # out of his face
+    fwd.z = 0; fwd.normalize()
+    W = grip + fwd * (0.03 + 0.03 * max(0.0, min(1.0, (f - 486) / 14.0))) + V(0, 0, -0.075)   # ease forward as the edge reaches the chin
+    return W, (V(0, 0, 1) - fwd * 0.15).normalized(), -fwd
+S1.P(466, s1_or + V(0.04, -0.01, -0.01), Y1 + 10, spine=(8, 0, 6), head=(8, 4, 0), feet=F1,
+     hands={"R": ("fn", lambda f: (lambda W, d, n: (W + V(0, 0, -0.13) + n * -0.03, d, n))(*mask_edge_hand(f))), "L": LOW_L},
+     curl={"R": (25, 20), "L": (22, 18)}, poles=ELBOW_FRONT)
+for f in (474, 478, 482, 486, 490, 494, 498, 502):
+    S1.P(f, s1_or + V(0.02, -0.02, 0.0), Y1 + 6, spine=(5 - 3 * (f - 474) / 28, 0, 4), head=(6 - 10 * (f - 474) / 28, 4, 0), feet=F1,
+         hands={"R": ("fn", mask_edge_hand), "L": LOW_L}, curl={"R": (58, 46), "L": (22, 18)}, poles=ELBOW_FRONT,
+         face={"smile": 0.3 * max(0, (f - 486) / 16)})
+S1.P(508, s1_or + V(0.0, -0.03, 0.01), Y1 + 4, spine=(1, -2, 2), head=(-6, 6, 4), feet=F1,
+     hands={"R": ("body", (V(-0.13, -0.34, 1.24), V(0.1, -0.3, 1), V(0.2, 1, 0))), "L": LOW_L}, curl={"R": (22, 16), "L": (22, 18)},
+     poles=ELBOW_FRONT, face={"smile": 0.7})
+S1.P(522, s1_or + V(0.0, -0.03, 0.01), Y1 + 4, spine=(0, -3, 2), head=(-8, 8, 6), feet=F1,
+     hands={"R": ("rest", dict(fwd=12, out=12, bend=0.2)), "L": LOW_L}, face={"smile": 1.2, "brow": -0.2, "wide": 0.1, "close": 0.2})
 for f, hd in ((545, (-6, 5, 8)), (575, (-9, 2, 4)), (600, (-7, 4, 6))):
     S1.P(f, s1_or + V(0.0, -0.03, 0.01), Y1 + 4, spine=(0, -3, 2), head=hd, feet=F1,
          hands={"R": ("rest", dict(fwd=8, out=10, bend=0.15)), "L": ("rest", dict(fwd=6, out=8))}, face={"smile": 1.3, "brow": -0.35, "wide": 0.05, "close": 0.3})
-mask1.rotation_euler = (0, 0, 0); mask1.keyframe_insert("rotation_euler", frame=478)
-mask1.rotation_euler = (R_(80), 0, 0); mask1.keyframe_insert("rotation_euler", frame=500)
+mask1.rotation_euler = (0, 0, 0); mask1.keyframe_insert("rotation_euler", frame=1); mask1.keyframe_insert("rotation_euler", frame=478)
+mask1.rotation_euler = (R_(80), 0, 0); mask1.keyframe_insert("rotation_euler", frame=502)
+for fc in fcurves(mask1):
+    for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 # hearing room: in a suit at the lectern, facing the panel (-X)
 s1_h = V(-6.72, 0.0, S1.ROOT.z - 0.02); YH = -90
 STH = S1.stance(s1_h, YH, 1.1); FH = {s: (STH[s], YH) for s in "LR"}
@@ -417,10 +438,10 @@ vis(part("Surgeon1", "male_elegantsuit01") + part("Surgeon1", "short02"), [(1101
 
 # ================================================================== PATIENT
 pt_lie_on_table = None
-def lie(act, f, pos, yaw, arms=8.0, curl=(20, 15)):
+def lie(act, f, pos, yaw, arms=4.0, curl=(20, 15)):
     act.P(f, pos, yaw, pitch=-90, feet="body", hands={"L": ("rest", dict(out=arms)), "R": ("rest", dict(out=arms))}, curl={"L": curl, "R": curl})
 # find the root position that puts her head beyond the ether screen
-pt_pos = V(-0.25, 0.0, TABLE_TOP + 0.10)
+pt_pos = V(-0.25, 0.0, TABLE_TOP + 0.05)   # her hidden torso sits under the drape surface (no hands inside it)
 lie(PT, 1, pt_pos, 90); lie(PT, 600, pt_pos, 90)
 # home: standing with a mug, the pain hits, she doubles over
 hp = V(5.95, -0.3, PT.ROOT.z - 0.02); YP = -58
@@ -430,22 +451,29 @@ mug = bpy.data.objects["Mug"]
 def mug_hand(f):
     ev(f); M = mug.matrix_world; c_ = M @ V(0, 0, 0.05); out = (M.to_3x3() @ V(0, -1, 0)).normalized()
     return c_ + out * 0.048 + V(0, 0, -0.01), (M.to_3x3() @ V(0.0, 1, 0.3)).normalized(), (M.to_3x3() @ V(0, 1, 0)).normalized()
-SIDE_R = ("body", (V(-0.185, -0.135, 1.07), V(0.45, -0.35, -0.75), V(0.85, 0.55, 0)))   # palm flat on the outside of her top
+SIDE_R = ("body", (V(-0.215, -0.175, 1.13), V(0.55, -0.65, -0.15), V(0.85, 0.55, 0)))   # palm flat on the outside of her top
+def knee_hand(f):
+    """left palm resting on top of her left knee (world-anchored to the knee joint, so it stays on it as she bends)"""
+    ev(f); kn = PT.o.matrix_world @ PT.R.PB["lowerleg01.L"].head
+    fw = (Matrix.Rotation(R_(YP), 3, 'Z') @ V(0, -1, 0)).normalized()
+    return kn + fw * -0.015 + V(0, 0, 0.075), (fw + V(0, 0, -0.25)).normalized(), V(0, 0, -1)
+KNEE_L = ("fn", knee_hand)
+ELBOW_SIDE_R = {"R": V(-0.32, -0.22, -0.32)}
 PT.P(605, hp, YP, spine=(2, 0, 0), head=(-4, 0, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": ("rest", dict(out=8, fwd=4))}, curl={"L": (55, 40)})
 PT.P(640, hp, YP, spine=(0, 0, -4), head=(-8, 6, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": ("rest", dict(out=8, fwd=6))}, curl={"L": (55, 40)}, face={"smile": 0.2})
-PT.P(662, hp + V(0, 0, -0.01), YP, spine=(14, 4, 0), head=(6, 0, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": SIDE_R}, curl={"L": (55, 40), "R": (14, 12)}, face={"brow": 0.8, "close": 0.5, "jaw": 4})
-PT.P(685, hp + V(0.02, 0, -0.06), YP, pitch=12, spine=(42, 6, 0), head=(14, 0, 0), feet=FP, hands={"L": ("body", (V(0.16, -0.36, 0.72), V(0.1, -0.4, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (15, 12), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 7})
-PT.P(700, hp + V(0.03, -0.02, -0.09), YP - 4, pitch=12, spine=(44, 8, 0), head=(10, 0, 0), feet=FP,
-     hands={"L": ("body", (V(0.12, -0.32, 0.62), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (10, 10), "R": (14, 12)}, face={"brow": 1.0, "close": 0.8, "jaw": 9})
+PT.P(662, hp + V(0, 0, -0.01), YP, spine=(14, 4, 0), head=(6, 0, 0), feet=FP, hands={"L": ("fn", mug_hand), "R": SIDE_R}, curl={"L": (55, 40), "R": (14, 12)}, face={"brow": 0.8, "close": 0.5, "jaw": 4}, poles=ELBOW_SIDE_R)
+PT.P(685, hp + V(0.02, 0, -0.04), YP, pitch=7, spine=(28, 6, 0), head=(-6, 0, 0), feet=FP, hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (15, 12), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 7}, poles=ELBOW_SIDE_R)
+PT.P(700, hp + V(0.03, -0.02, -0.06), YP - 4, pitch=8, spine=(32, 8, 0), head=(-10, 0, 0), feet=FP,
+     hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (10, 10), "R": (14, 12)}, face={"brow": 1.0, "close": 0.8, "jaw": 9}, poles=ELBOW_SIDE_R)
 FPm = {"L": (STP["L"], YP), "R": (STP["R"].lerp(STP2["R"], 0.5), YP - 8, 0.06, 10)}
-PT.P(714, hp + V(0.045, -0.04, -0.11), YP - 6, pitch=13, spine=(45, 9, 0), head=(6, -2, 0), feet=FPm,
-     hands={"L": ("body", (V(0.13, -0.31, 0.58), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (20, 15), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 9})
-PT.P(728, hp + V(0.06, -0.06, -0.12), YP - 8, pitch=15, spine=(46, 10, 0), head=(0, -4, 0), feet=FP2,
-     hands={"L": ("body", (V(0.14, -0.30, 0.55), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.6, "jaw": 10})
-PT.P(760, hp + V(0.06, -0.06, -0.15), YP - 8, pitch=16, spine=(40, 12, 0), head=(-14, -4, 0), feet=FP2,
-     hands={"L": ("body", (V(0.14, -0.30, 0.52), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.4, "jaw": 12})
-PT.P(790, hp + V(0.06, -0.06, -0.17), YP - 8, pitch=17, spine=(44, 12, 0), head=(-10, -4, 0), feet=FP2,
-     hands={"L": ("body", (V(0.14, -0.30, 0.50), V(0.1, -0.3, -1), V(0, 1, 0))), "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 8})
+PT.P(714, hp + V(0.045, -0.04, -0.07), YP - 6, pitch=8, spine=(33, 9, 0), head=(-14, -2, 0), feet=FPm,
+     hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (20, 15), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 9}, poles=ELBOW_SIDE_R)
+PT.P(728, hp + V(0.06, -0.06, -0.08), YP - 8, pitch=9, spine=(34, 10, 0), head=(-18, -4, 0), feet=FP2,
+     hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.6, "jaw": 10}, poles=ELBOW_SIDE_R)
+PT.P(760, hp + V(0.06, -0.06, -0.09), YP - 8, pitch=9, spine=(30, 12, 0), head=(-22, -6, 0), feet=FP2,
+     hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.4, "jaw": 12}, poles=ELBOW_SIDE_R)
+PT.P(790, hp + V(0.06, -0.06, -0.10), YP - 8, pitch=10, spine=(33, 12, 0), head=(-18, -4, 0), feet=FP2,
+     hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 8}, poles=ELBOW_SIDE_R)
 # mug: in her hand (keys derived from her hand), slips at 690, falls, bounces
 def mug_key(f, loc, rot):
     mug.location = loc; mug.rotation_euler = rot; mug.keyframe_insert("location", frame=f); mug.keyframe_insert("rotation_euler", frame=f)
@@ -475,7 +503,7 @@ for f in list(range(766, 991, 4)) + [990]:
 bed_root.location = V(1.75, 5.6, 0); bed_root.keyframe_insert("location", frame=1)
 bed_root.location = V(1.72, 2.15, 0); bed_root.keyframe_insert("location", frame=1710)
 for f in list(range(792, 1000, 8)) + [1000, 1060]:
-    lie(PT, f, V(bpx(min(f, 990)), bpy_(min(f, 990)) + 0.1, BED_TOP + 0.10), 0, arms=4)
+    lie(PT, f, V(bpx(min(f, 990)), bpy_(min(f, 990)) + 0.1, BED_TOP + 0.10), 0, arms=8)
 lie(PT, 1066, pt_pos, 90); lie(PT, 1710, pt_pos, 90)
 PT.bake()
 stepped(PT.o, {600, 790, 1060})
