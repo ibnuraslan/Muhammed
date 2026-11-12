@@ -17,7 +17,8 @@ for k, (label, pd, cd) in enumerate(rows):
     for tag, d, lk in (("plain", pd, "plain"), ("grade only", pd, "cinematic"), ("cinematic", cd, "cinematic")):
         meta = json.load(open(os.path.join(d, "plate.json")))
         dst = os.path.join(tmp, f"{k}_{lk}_{os.path.basename(d.rstrip('/'))}.png")
-        grade.grade_file(os.path.join(d, "plate.exr"), dst, look=lk, exposure=meta["exposure"])
+        grade.grade_file(os.path.join(d, "plate.exr"), dst, look=lk, exposure=meta["exposure"],
+                         cine=meta.get("cine") if d == cd else None)
         row.append((tag, dst))
     cells.append((label, row))
 
