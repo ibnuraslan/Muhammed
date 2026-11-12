@@ -340,6 +340,7 @@ def a_recorder(c, sec):
     for k in ("exp1", "exp2"):
         hide(c["people"][k], True)
     an = c["people"]["analyst"]
+    hide(an, False)
     seat(an, (REC.x + 0.95, REC.y + 0.8, 0), math.radians(180 + 70), lean=16)
     nod(an, "head", 16)
     hand_to(an, "R", an.bone_head("spine03") + fwd(an) * 0.35 + Vector((0, 0, -0.3)), curl=40)
@@ -363,6 +364,7 @@ def a_saratov(c, sec):
     for k in ("exp1", "exp2"):
         hide(c["people"][k], True)
     an = c["people"]["analyst"]
+    hide(an, False)
     stand(an, (W / 2 - 1.2, -0.3, 0), math.radians(90))                            # faces +X, the cabinet
     dr = c["file_drawers"][1]; dr.location.y = dr["y0"] - 0.34
     bpy.context.view_layer.update()
@@ -409,6 +411,7 @@ def a_photocopies(c, sec):
     for k in ("spec1", "spec2"):
         hide(c["people"][k], True)
     rp = c["people"]["reporter"]
+    hide(rp, False)
     stand(rp, (LT.x - 0.05, LT.y - 0.62, 0), math.radians(180))
     nod(rp, "spine04", 14); nod(rp, "spine03", 6); nod(rp, "head", 22)
     cam = c["camera_prop"]
