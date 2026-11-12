@@ -9,13 +9,14 @@ import bpy
 from mathutils import Vector, Matrix
 from kit import *
 import ph
-from pbkit import joinm, masonry_facade, precip_curtains, soviet_car
+from pbkit import joinm, masonry_facade, precip_curtains, soviet_car, glazed_window
 from pbpeople import person, stand, walk_at, nod, look, hand_to, hide, fwd, recolor, medic
 from sc_bankoffice import retint, plastic, telephone, coiled_cord, handset_at_ear, place_handset
 from sc_hospital import two_tone, fluorescents
 
 EXPOSURE = 0.8
 BOUNCES = 6
+LIT_WIN = (-11.2, 14.0, 7.0)                                                  # the lit window (grid cell on Block0)
 DUR = {"checkpoint": 6.0, "institute": 6.0, "kitchen": 6.5, "blocks": 6.5}
 VARIANT_FOR = {k: k for k in DUR}
 rng = np.random.default_rng(31)
@@ -186,23 +187,52 @@ def build(variant=None):
         snow_ground("BSnow", (200, 200))
         k = 0
         for (x, y, rz) in ((-18, 20, 0.0), (18, 22, 0.0), (0, 48, 0.0), (-40, 40, 0.3), (38, 42, -0.3)):
-            lit = 0.0 if k else 0.0
-            fac = masonry_facade(f"Block{k}", (0.55, 0.55, 0.52), 2.8, 3.2, 1.3, 1.4, 0.02, lit_strength=1.4)
+            fac = masonry_facade(f"Block{k}", (0.55, 0.55, 0.52), 2.8, 3.2, 1.3, 1.4, 0.05, lit_strength=0.5)      # a few faint flats
             o = box(f"Block{k}", (x, y, 7.0), (30, 12, 14), fac); o.rotation_euler = (0, 0, rz)
             box(f"Roof{k}", (x, y, 14.1), (30.2, 12.2, 0.3), pbr("RoofSnow", (0.75, 0.78, 0.82), 0.6)).rotation_euler = (0, 0, rz)
             k += 1
-        # the one lit window, warm, on the near block
-        # the one lit window: a warm room behind a drawn curtain (lamp light through cloth, not a flat emissive panel)
-        cur = box("LitCurtain", (-12.6, 13.97, 7.0), (1.15, 0.004, 1.25), None)
+        # the one lit window is a REAL window in the facade grid (cell x=-11.2, z=7.0 on the near block): the opening and
+        # a room behind it are cut out of the block, lined with warm walls, lit by a table lamp inside, a curtain drawn
+        # to one side; frame and mullions like the neighbours. A few other flats are faintly lit by the facade shader.
+        WX, WY, WZ = LIT_WIN
+        cut = box("LitCut", (WX, WY + 0.15, WZ), (1.3, 0.5, 1.4))
+        room = box("LitRoomCut", (WX, WY + 2.0, WZ), (4.0, 3.4, 2.7))
+        blk = bpy.data.objects["Block0"]
+        for cu in (cut, room):
+            md = blk.modifiers.new(cu.name, 'BOOLEAN'); md.operation = 'DIFFERENCE'; md.object = cu; md.solver = 'EXACT'
+            cu.hide_render = True; cu.hide_viewport = True
+        plaster = pbr("RevealPlaster", (0.5, 0.5, 0.47), 0.8)
+        for dx, dz, sx, sz in ((-0.66, 0, 0.03, 1.42), (0.66, 0, 0.03, 1.42), (0, -0.71, 1.34, 0.03), (0, 0.71, 1.34, 0.03)):
+            box("LitReveal", (WX + dx, WY + 0.15, WZ + dz), (sx, 0.32, sz), plaster)                       # window reveals
+        box("LitSill", (WX, WY - 0.06, WZ - 0.74), (1.45, 0.14, 0.04), pbr("LitSillM", (0.72, 0.74, 0.76), 0.5))
+        paper = pbr("LitWallpaper", (0.5, 0.36, 0.24), 0.8)
+        y0, y1, z0, z1 = WY + 0.32, WY + 3.65, WZ - 1.33, WZ + 1.33
+        box("LitBack", (WX, y1, WZ), (3.95, 0.04, 2.66), paper)
+        box("LitSideL", (WX - 1.97, (y0 + y1) / 2, WZ), (0.04, y1 - y0, 2.66), paper)
+        box("LitSideR", (WX + 1.97, (y0 + y1) / 2, WZ), (0.04, y1 - y0, 2.66), paper)
+        box("LitInnerWall", (WX, y0, WZ), (3.95, 0.04, 2.66), paper)                                       # wall inside, around the window
+        box("LitFloor", (WX, (y0 + y1) / 2, z0), (3.95, y1 - y0, 0.04), pbr("LitFloorM", (0.2, 0.12, 0.07), 0.6))
+        box("LitCeil", (WX, (y0 + y1) / 2, z1), (3.95, y1 - y0, 0.04), pbr("LitCeilM", (0.75, 0.72, 0.66), 0.9))
+        box("LitShelf", (WX + 1.2, y1 - 0.25, z0 + 0.9), (1.1, 0.4, 1.8), pbr("LitShelfM", (0.18, 0.1, 0.06), 0.5))
+        # table lamp on a side table, back left: a warm shade that glows, the room falls off into shadow
+        box("LitTable", (WX - 0.9, y0 + 1.6, z0 + 0.35), (0.6, 0.6, 0.7), pbr("LitTableM", (0.16, 0.09, 0.05), 0.5))
+        shade = cyl("LitShade", (WX - 0.9, y0 + 1.6, z0 + 0.95), 0.18, 0.26, emissive("LitShadeM", (1.0, 0.68, 0.38), 3.0), verts=20)
+        ll = bpy.data.lights.new("LitLamp", 'POINT'); ll.energy = 60; ll.color = (1.0, 0.66, 0.36); ll.shadow_soft_size = 0.15
+        lo = bpy.data.objects.new("LitLamp", ll); bpy.context.collection.objects.link(lo); lo.location = (WX - 0.9, y0 + 1.6, z0 + 0.95)
+        # curtain drawn to the right, just inside the glass: a soft folded cloth the lamp light shows through
         cm = bpy.data.materials.new("CurtainLit"); cm.use_nodes = True
         Nn = cm.node_tree.nodes; Ll = cm.node_tree.links; Nn.clear(); out = Nn.new("ShaderNodeOutputMaterial")
-        tl = Nn.new("ShaderNodeBsdfTranslucent"); tl.inputs['Color'].default_value = (1.0, 0.72, 0.42, 1)
-        df = Nn.new("ShaderNodeBsdfDiffuse"); df.inputs['Color'].default_value = (0.7, 0.55, 0.38, 1)
-        mx = Nn.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.35; Ll.new(tl.outputs[0], mx.inputs[1]); Ll.new(df.outputs[0], mx.inputs[2]); Ll.new(mx.outputs[0], out.inputs['Surface'])
+        tl = Nn.new("ShaderNodeBsdfTranslucent"); tl.inputs['Color'].default_value = (0.95, 0.62, 0.35, 1)
+        df = Nn.new("ShaderNodeBsdfDiffuse"); df.inputs['Color'].default_value = (0.55, 0.3, 0.18, 1)
+        mx = Nn.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.4; Ll.new(tl.outputs[0], mx.inputs[1]); Ll.new(df.outputs[0], mx.inputs[2]); Ll.new(mx.outputs[0], out.inputs['Surface'])
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(WX + 0.42, y0 + 0.08, WZ)); cur = bpy.context.active_object; cur.name = "LitCurtain"
+        cur.rotation_euler = (math.radians(90), 0, 0); cur.scale = (0.5, 1.5, 1)
+        bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+        cur.modifiers.new("sub", 'SUBSURF').levels = 3
+        wv = cur.modifiers.new("folds", 'WAVE'); wv.use_x = True; wv.use_y = False; wv.height = 0.03; wv.width = 0.08; wv.narrowness = 1.0; wv.speed = 0.0
         cur.data.materials.append(cm)
-        box("LitHole", (-12.6, 13.955, 7.0), (1.2, 0.004, 1.3), glass("LitGlass", (0.9, 0.92, 0.95), 0.02))
-        rl = bpy.data.lights.new("RoomLamp", 'AREA'); rl.energy = 25; rl.size = 1.0; rl.color = (1.0, 0.75, 0.45)      # lamp light behind the curtain
-        ro = bpy.data.objects.new("RoomLamp", rl); bpy.context.collection.objects.link(ro); ro.location = (-12.6, 13.99, 7.15); ro.rotation_euler = (math.radians(-90), 0, 0)
+        for part in glazed_window("LitWin", (WX, WY + 0.12, WZ), 1.3, 1.4, normal="y", cols=2, rows=2, frame_col=(0.75, 0.73, 0.68), depth=0.06):
+            pass
         forest((-60, 60), (55, 90), 14); forest((-40, -25), (0, 15), 4, seed=6)
         for x in (-8, 8):
             ph.model("street_lamp_01", loc=(x, 8, 0))
@@ -256,7 +286,7 @@ MOVES = {
                       focus=lambda c, t: Vector((0.2, -6.0 + DUR["institute"] * t, 1.3))),
     "kitchen": dict(kind="anim", dof=3.2, far=30.0, anim=_anim("kitchen"), cam=_push((-1.1, -1.0, 1.55), (-0.95, -0.75, 1.55), (0.2, 1.3, 1.45), (0.15, 1.4, 1.45), 30),
                     focus=lambda c, t: Vector((0.15, 0.85, 1.5))),
-    "blocks": dict(kind="anim", dof=0.0, far=200.0, anim=_anim("blocks"), cam=_push((-4.0, -12.0, 2.2), (-5.0, -8.0, 2.4), (-12.0, 14.0, 6.5), (-12.6, 14.0, 7.0), 30),
+    "blocks": dict(kind="anim", dof=0.0, far=200.0, anim=_anim("blocks"), cam=_push((-4.0, -12.0, 2.2), (-5.0, -8.0, 2.4), (-10.8, 14.0, 6.5), (-11.2, 14.0, 7.0), 30),
                    focus=lambda c, t: Vector((-12.6, 14.0, 7.0))),
 }
 

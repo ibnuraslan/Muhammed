@@ -804,18 +804,44 @@ def seat_banker(c, slump=0.0, lean=14):
     return b
 
 
+def point_hand(h, sd, index=8, others=78, thumb=35):
+    """A relaxed pointing hand: index nearly straight, the other fingers folded into the palm, thumb tucked along them.
+    Bends about each finger bone's own axis (like curl_local), so a hand turned sideways stays a hand, not a claw."""
+    for f in range(2, 6):
+        deg = index if f == 2 else others
+        for k in (1, 2, 3):
+            pb = h.arm.pose.bones.get(f"finger{f}-{k}.{sd}")
+            if pb is None:
+                continue
+            ax = (h.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()) @ Vector((1, 0, 0))
+            h.rot(pb.name, ax, deg * (0.8 if k == 1 else 1.0)); bpy.context.view_layer.update()
+    for k in (2, 3):
+        pb = h.arm.pose.bones.get(f"finger1-{k}.{sd}")
+        if pb is not None:
+            ax = (h.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()) @ Vector((1, 0, 0))
+            h.rot(pb.name, ax, thumb); bpy.context.view_layer.update()
+
+
 def a_dial(c, sec):
-    """Ch1 2A: he lifts the handset to his ear and dials with his left hand."""
+    """Ch1 2A: on the phone already, handset in his left hand at his ear, cord hanging to the base; head a little
+    bowed toward the phone, his right index finger presses the keys one after another. Shoulders relaxed."""
     b = seat_banker(c)
-    k = ease(min(1.0, max(0.0, (sec - 0.4) / 1.2)))
-    nod(b, "neck01", 6); nod(b, "head", 10)
-    place_handset(c, handset_at_ear(c, b, k))
+    nod(b, "neck01", 8); nod(b, "head", 14)
+    place_handset(c, handset_at_ear(c, b, 1.0))
     hs = c["handset"].matrix_world
-    hand_to(b, "L", hs @ Vector((0.0, -0.01, -0.02)), hand_dir=None, curl=55)
-    keys = c["phone"].matrix_world @ Vector((0.05, -0.03, 0.06))
-    tap = 0.012 * max(0.0, math.sin(sec * 9.0)) if sec > 1.8 else 0.0
-    hand_to(b, "R", keys + Vector((0.0, 0.06, 0.06 + tap)), hand_dir=Vector((0.2, -0.6, -0.8)), curl=40)
-    look(b, PHONE, 0.5)
+    hand_to(b, "L", hs @ Vector((0.0, -0.01, -0.02)), curl=55)
+    # keys: a slow sequence across the keypad, the fingertip dips onto each key and lifts a little between them
+    seq = [(1, 0), (0, 1), (2, 2), (1, 1), (0, 3), (2, 1), (1, 2)]
+    i = int(sec / 0.42) % len(seq); ph_ = (sec / 0.42) % 1.0
+    col, row = seq[i]
+    key = c["phone"].matrix_world @ Vector((0.022 + 0.026 * col, -0.024 * row, 0.06))       # top of that key
+    dip = 0.018 * (1 - math.sin(math.pi * min(1.0, ph_ / 0.6))) if ph_ < 0.6 else 0.018
+    d = Vector((0.12, -0.62, -0.78)).normalized()                         # the hand points away from him and down
+    wrist = key - d * 0.165 + Vector((0, 0, dip))                         # wrist one hand-length behind the fingertip
+    s = Vector((0, 0, 1)).cross(fwd_of(b)).normalized() * -1             # his right
+    hand_to(b, "R", wrist, pole=s * 0.5 + Vector((0, 0, -0.9)), hand_dir=d, curl=0)
+    point_hand(b, "R")
+    look(b, key, 0.45)
 
 
 def a_note(c, sec):
