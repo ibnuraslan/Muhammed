@@ -19,3 +19,21 @@ The rest was checked and kept:
 - The wake-up (0–3 s), the stand-up and walk (9–11.6 s), the door push (11.6–12.2 s), the step over the captain (14–15.5 s) and the grab of the radio handset and its return to the cradle (19.7–26.6 s).
 - The haul grip at the collar and shoulder (27.9–31.4 s), the yoke grips and the fight with the controls (38.8–56.5 s), the throttle hover and touch (56.8–64 s), the look-back (64.6–68 s) and the float-out (71.4 s).
 - Loose items floating in the dive move by physics (negative g), not by themselves. They rise only while the aircraft pitches down and drop when it pulls out.
+
+## v007 result
+**clip_scan.py** (director branch), sampled every 6 frames, on the packaged v007 build. v006 had 9 bad ranges, an intermediate v007 build 14, and the packaged build has 3:
+- 28.3–29.0 s: the first officer's hands against his own thighs as he is lifted from the seat.
+- 33.2–33.4 s: the same, as he lands on the floor.
+- 72.4 s: one sample, with the first officer seen through the cockpit at the face reveal.
+
+
+**Remaining issues (honest list, from the hand close-ups):**
+- 9.4 s: the right hand is open and curled in the air as YOU rises from the seat. This reads as a claw.
+- 6.5 s: the left-hand brace on the knee is curled, with partial contact.
+- 28.4 s: YOU's right hand on the first officer's near shoulder touches his hair as his head tips toward YOU.
+- 20.9 s: the grab on the handset in its cradle reads as the hand over it, not wrapped around it.
+- Finger poses in this build are still the film's own curl presets. `hand_poses.py` was wired into `03_animate.py`, but the rebuild with it did not finish before the 16:20 deadline. The packaged file does not use the library yet.
+- **After-sheet cells still weak:**
+  - 12.5 s: the door is close and fills most of the frame.
+  - 32.0–33.5 s: the side of the first officer's seat fills a third to most of the frame while the look follows him to the floor. 33.5 s is almost all seat.
+  - 27.5–28.0 s: YOU's forearm crosses close to the lens, with a black corner.
