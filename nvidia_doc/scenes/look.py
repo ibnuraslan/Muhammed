@@ -6,6 +6,8 @@ how the set is lit:
   * Negative fill: the other lights cut way down, no flat ambient, low sky/world strength.
   * Darker walls, floors and ceilings (no white rooms): constant-colour surfaces are capped at ~0.3 albedo.
   * Practicals (lamps, downlights you see) warm.
+  * Faces stay readable (face_fill: a soft warm bounce per person), never silhouettes unless the shot asks for it.
+  * Natural colours: the mood is light, shadow and contrast, never a colour cast (no blue/teal wash).
   * A little haze / volumetrics in exteriors and forests, so the key reads as light in the air.
 
 Moods:  "overcast" - moody grey day: dark slate sky gradient, soft side key (shadow side ~2 stops down), firmer mids.
@@ -29,9 +31,9 @@ from mathutils import Vector
 MOODS = {
         # key: key-light colour, gain: key energy factor, sky: world strength (no sun disc), elev/angle: sun height and
     # softness (deg), sun: sun-lamp energy, haze: volume colour, exposure: scene exposure for exteriors
-    "overcast": dict(key=(0.88, 0.91, 1.0), gain=1.0, sky=1.0, tint=(0.95, 0.95, 0.98), elev=24, angle=16.0,
+    "overcast": dict(key=(0.97, 0.97, 1.0), gain=1.0, sky=1.0, tint=(0.95, 0.95, 0.98), elev=24, angle=16.0,
                      sun=3.4, haze=(0.55, 0.6, 0.66), exposure=-0.45,
-                     horizon=(0.115, 0.125, 0.14), zenith=(0.03, 0.04, 0.055), ground=(0.02, 0.02, 0.022),
+                     horizon=(0.125, 0.127, 0.132), zenith=(0.04, 0.043, 0.05), ground=(0.02, 0.02, 0.021),
                      cine=dict(contrast=1.32)),
     "mist":     dict(key=(1.0, 0.88, 0.72), gain=1.0, sky=2.0, tint=(1.0, 1.0, 1.0), elev=13, angle=3.0,
                      sun=7.0, haze=(0.78, 0.79, 0.76), exposure=1.9,
@@ -41,7 +43,7 @@ MOODS = {
                      sun=1.4, haze=(0.5, 0.6, 0.82), exposure=2.0,
                      horizon=(0.17, 0.16, 0.22), zenith=(0.03, 0.055, 0.12), ground=(0.025, 0.027, 0.035),
                      cine=dict(contrast=1.15, sat=0.9, black=(0.0004, 0.0002, 0.0), warm=(0.97, 1.0, 1.07), lift=(0.992, 1.0, 1.014))),
-    "low_sun":  dict(key=(1.0, 0.66, 0.40), gain=1.35, sky=0.14, tint=(0.62, 0.72, 0.95), elev=7, angle=1.2,
+    "low_sun":  dict(key=(1.0, 0.76, 0.56), gain=1.35, sky=0.14, tint=(0.85, 0.88, 0.95), elev=7, angle=1.2,
                      sun=4.2, haze=(1.0, 0.80, 0.62), exposure=-0.6),
 }
 WARM = (1.0, 0.72, 0.46)          # practicals: tungsten-ish
@@ -165,7 +167,9 @@ def _light(kind, name, energy, color, loc=None, target=None, size=None, angle=No
     if target is not None:
         z = (Vector(loc) - Vector(target)).normalized()
         o.rotation_euler = z.to_track_quat('Z', 'Y').to_euler()
-    o.visible_camera = False
+    o.visible_camera = False; o.visible_transmission = False     # never seen, not even through glass
+    if kind == 'AREA':
+        o.visible_glossy = False                                  # no white panels in glass or polished floors
     o["look_key"] = True
     return o
 
@@ -242,6 +246,30 @@ def gobo(center, size, axis="x", bars=6, bar=0.22, kind="mullions"):
     return obs
 
 
+def face_fill(energy=30.0, color=(1.0, 0.86, 0.72), dist=1.3, size=0.9, side=0.6, people=None):
+    """Face floor: faces must stay readable mid-tones, never silhouettes (unless the shot asks for it).
+    For every rigged person (armature with a 'head' bone) a small soft warm bounce sits in front of the face,
+    off to one side and a little above, like light coming back off a desk, a page or a nearby wall.
+    Faces turn with rotation z = th towards (sin th, -cos th) (pipeline README). people: armature objects (default all).
+    Returns the lights. Call after the people are posed (at the end of build())."""
+    if not enabled():
+        return []
+    out = []
+    arms = people if people is not None else [o for o in bpy.context.scene.objects
+                                              if o.type == 'ARMATURE' and "head" in o.pose.bones]
+    bpy.context.view_layer.update()
+    for a in arms:
+        a = getattr(a, "arm", a)                                # accepts human.Human too
+        head = a.matrix_world @ a.pose.bones["head"].head + Vector((0, 0, 0.08))
+        th = a.matrix_world.to_euler().z
+        fwd = Vector((math.sin(th), -math.cos(th), 0)); sd = fwd.cross(Vector((0, 0, 1)))
+        loc = head + fwd * dist + sd * side + Vector((0, 0, 0.25))
+        o = _light('AREA', "LookFaceFill", energy, color, loc=loc, target=head, size=size)
+        o.visible_glossy = False                                # no tell-tale highlight in eyes / glass
+        out.append(o)
+    return out
+
+
 # ----------------------------------------------------------------------------------------------- recipes
 def day_light(mood="overcast", azim=200, elev=None, sun_energy=None, sky_strength=None, haze_box=None,
               haze_density=None, replace=True, exposure=None):
@@ -294,11 +322,12 @@ def forest(scene=None, mood="mist", azim=160, elev=None, area=((0, 0), (80, 80))
 
 
 def interior_day(window, mood="overcast", key_energy=None, key_size=2.5, fill=0.15, sky_factor=0.35, darken=0.3,
-                 tex_scale=1.0, keep=(), sun_through=None, warm=True):
+                 tex_scale=1.0, keep=(), sun_through=None, warm=True, faces=30.0):
     """Interior by day: one strong window key, everything else cut back, dark walls, warm practicals.
     window = (window_point, target): an area key at the window aimed into the room. For "low_sun" a hard sun lamp
     along the same direction also throws window patches across the floor (sun_through=False to skip).
-    key_energy defaults to a strong value for an area of key_size (scale it per set)."""
+    key_energy defaults to a strong value for an area of key_size (scale it per set).
+    faces: energy of the face floor (face_fill) for every person in the set; 0 to skip (a deliberate silhouette)."""
     if not enabled():
         return None
     md = MOODS[mood]
@@ -319,10 +348,12 @@ def interior_day(window, mood="overcast", key_energy=None, key_size=2.5, fill=0.
         d = (loc - tgt).normalized()
         sn = _light('SUN', "LookSunThrough", md["sun"] * 2.6, md["key"], loc=tgt + d * 10, target=tgt, angle=md["angle"])
         out["sun"] = sn
+    if faces:
+        out["faces"] = face_fill(faces)
     return out
 
 
-def night_interior(darken=0.28, fill=0.8, warm=0.6, lift=0.4):
+def night_interior(darken=0.28, fill=0.8, warm=0.6, lift=0.4, faces=12.0):
     """Night: keep the set's own lights (it is already dark), deepen walls, warm the practicals a touch.
     Stays readable: no crushing, the grade's exposure is mild."""
     if not enabled():
@@ -331,4 +362,6 @@ def night_interior(darken=0.28, fill=0.8, warm=0.6, lift=0.4):
     negative_fill(fill)
     warm_practicals(amount=warm)
     bpy.context.scene.view_settings.exposure += lift      # keeps faces and desks readable under the cinematic grade
+    if faces:
+        face_fill(faces, color=(1.0, 0.82, 0.62))           # like a desk lamp / screen bounce
     return True
