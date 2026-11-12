@@ -1,0 +1,7 @@
+HAND AUDIT GoatOwner (every 4 frames)
+flagged samples (over tolerance): 4
+  f353 (5.87s) Passer L hand vs own body: 7 polygon pairs
+  f1705 (28.40s) OffA R hand vs own clothes: 72 polygon pairs
+  f1705 (28.40s) OffB L hand vs own clothes: 82 polygon pairs
+  f1865 (31.07s) OffA R hand vs own clothes: 30 polygon pairs
+contacts within tolerance (samples): OffA L hand vs own body 60, OffA L hand vs own clothes 9, OffA R hand vs own body 25, OffA R hand vs own clothes 12, OffB L hand vs own body 39, OffB L hand vs own clothes 1, OffB R hand vs own body 35, Owner L hand vs own body 356, Owner R hand vs own body 153, Passer L hand vs own body 213, Passer L hand vs own clothes 162, Passer R hand vs own body 173, Rescuer L hand vs own body 48, Rescuer R hand vs own body 29

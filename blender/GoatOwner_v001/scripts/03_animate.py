@@ -122,6 +122,20 @@ class H:
         self.R.key_world("IK_foot." + s, f, M)
 
 OW, PS, OA, OB_, RS = H("Owner"), H("Passer"), H("OffA"), H("OffB"), H("Rescuer")
+# ================================================================= HAND JOINT LIMITS (client rule, Nov 11 23:00): local-space Limit Rotation
+def limit(pb, x, y, z):
+    c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "JointLimit"
+    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+    c.min_x, c.max_x = R_(x[0]), R_(x[1]); c.min_y, c.max_y = R_(y[0]), R_(y[1]); c.min_z, c.max_z = R_(z[0]), R_(z[1])
+    for pb_ in (pb,): pb_.rotation_mode = 'QUATERNION'
+N_LIM = 0
+for h_ in (OW, PS, OA, OB_, RS):
+    for s in "LR":
+        # Finger/thumb Limit Rotation was tried: its local-Euler clamp flattened the keyed MPFB curls (open, splayed hands),
+        # so fingers are instead only ever keyed through H.fingers(), which bends forward 0-75 deg about the knuckle axis (never backward).
+        limit(h_.R.PB["wrist." + s], (-60, 60), (-40, 40), (-25, 25)); N_LIM += 1
+print("LIMITS", N_LIM)
+
 for h_ in (OW, PS, OA, OB_, RS):
     for s in "LR": h_.fingers(s, 1, 18, 16)
     h_.face(1)
@@ -177,6 +191,7 @@ def owner_menace(f, raise_amt, shake=0.0):
     OW.face(f, jaw=6 + 6 * raise_amt, brow=-3, lid=-1.5, smile=-1.5)
 for f, r, sh in ((1, 0.3, 0), (20, 0.5, 0), (42, 1.0, 1), (70, 1.0, -1), (96, 1.0, 1), (124, 1.0, 0.5), (150, 1.0, -1), (175, 0.8, 0)):
     owner_menace(f, r, sh)
+OW.arm("R", 183, OW.M(Vector((OA_.x, OA_.y, OW.RH.z)), yaw_g), fwd=35, out=28, L=0.5)   # lowers the stick out to the side, clear of the body
 # beat 2: he turns and walks to the porch steps, stick hanging; beat 3: offscreen in the house
 p_ow = catmull([(186, V(OA_.x, OA_.y, 0)), (260, V(2.2, 3.0, 0)), (340, V(3.6, 5.2, 0)), (380, V(4.2, 6.0, 0)), (420, V(5.6, 6.0, 0)), (460, V(6.6, 6.4, 0))])
 OW.h.walk(p_ow, lambda f: yaw_to(p_ow(f - 3), p_ow(f + 3)) if f < 455 else 90, 186, 460, stride=0.72, lean=4)
@@ -422,32 +437,32 @@ def _cl(p):
     p.y = min(p.y, RAMP[0] - 0.4); return p
 pa = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((-1.0, -1.55)))        # ahead-left of the goat, pole length
 pb_ = lambda f: _cl(gpos(f) + Matrix.Rotation(R_(gh(f)), 2) @ Vector((1.0, 0.5)))           # beside its flank
+OFF_PATH = {}
 for h_, fn in ((OA, pa), (OB_, pb_)):
     st_ = V(-3.5, 11.0, 0) if h_ is OA else V(-2.3, 11.8, 0)
     path = catmull([(1600, st_), (1700, V(*fn(1700), 0))] + [(f, V(*fn(f), 0)) for f in range(1735, 1906, 20)])
     h_.h.walk(path, lambda f, path=path: yaw_to(path(f - 4), path(f + 4)), 1600, 1905, stride=0.72)
+    OFF_PATH[h_.o.name] = path
     h_.vis(1, False); h_.vis(1600, True); h_.vis(1910, False)
 for f in range(1600, 1906, 10):
     for h_, fn in ((OA, pa), (OB_, pb_)):
-        p_ = fn(f); M_ = h_.M(Vector((p_.x, p_.y, h_.RH.z)), gh(f)); sw = 14 * math.sin(f / 20.0)
-        pre = h_ is OA and 1680 <= f < 1700
+        pth = OFF_PATH[h_.o.name]; p_ = pth(f); M_ = h_.M(Vector((p_.x, p_.y, h_.RH.z)), yaw_to(pth(f - 4), pth(f + 4))); sw = 14 * math.sin(f / 20.0)
         if f < 1700 or h_ is OB_:
-            h_.arm("R", f, M_, fwd=(45 if pre else 10 + sw), out=18, L=0.5)
-        if f < (1700 if h_ is OA else 1735):
-            h_.arm("L", f, M_, fwd=(45 if pre else 10 - sw), out=18, L=0.5)
+            h_.arm("R", f, M_, fwd=10 + sw, out=24, L=0.5)
+        if h_ is OA or f < 1735:
+            h_.arm("L", f, M_, fwd=10 - sw, out=24, L=0.5)      # OffA holds the catch pole one-handed
         h_.fingers("L", f, 20, 15); h_.fingers("R", f, 20, 15)
     ev(f)
     # OffA holds the catch pole in both hands, loop end at the goat's neck
     neck = G.o.matrix_world @ G.PB["neck2"].head
-    pA = pa(f); MA = OA.M(Vector((pA.x, pA.y, OA.RH.z)), yaw_to(pA, gpos(f)))
-    gripL = MA @ Vector((0.0, -0.42, 1.1)); dirp = (neck - gripL).normalized(); gripR = gripL + dirp * 0.32
+    pA = OFF_PATH['OffA'](f).to_2d(); MA = OA.M(Vector((pA.x, pA.y, OA.RH.z)), yaw_to(OFF_PATH['OffA'](f - 4), OFF_PATH['OffA'](f + 4)))
+    gripR = MA @ Vector((-0.34, -0.55, 1.02)); dirp = (neck - gripR).normalized(); gripL = gripR
     if f >= 1700:
         OA.h.key_hand("R", f, gripR, dirp.cross(Vector((0, 0, 1))), Vector((0, 0, -1)), MA @ Vector((-0.5, 0.4, 1.1)))
-        OA.h.key_hand("L", f, gripL, dirp.cross(Vector((0, 0, 1))), Vector((0, 0, -1)), MA @ Vector((0.5, 0.4, 1.1)))
-        q = dirp.to_track_quat('X', 'Z'); key_obj(pole, f, Matrix.Translation(gripL + dirp * 0.55) @ q.to_matrix().to_4x4())
-        OA.fingers("R", f, 75, 40); OA.fingers("L", f, 75, 40)
+        q = dirp.to_track_quat('X', 'Z'); key_obj(pole, f, Matrix.Translation(gripR + dirp * 0.62) @ q.to_matrix().to_4x4())
+        OA.fingers("R", f, 75, 40)
     OA.face(f, jaw=3, brow=-1)
-    pB = pb_(f); MB = OB_.M(Vector((pB.x, pB.y, OB_.RH.z)), gh(f))
+    pB = OFF_PATH['OffB'](f).to_2d(); MB = OB_.M(Vector((pB.x, pB.y, OB_.RH.z)), yaw_to(OFF_PATH['OffB'](f - 4), OFF_PATH['OffB'](f + 4)))
     back = G.o.matrix_world @ G.PB["spine2"].head + Vector((0, 0, 0.12))
     if f >= 1735:
         OB_.h.key_hand("L", f, back, Vector((0, 0, -1)).cross(Vector((1, 0, 0))), Vector((0, 0, -1)), MB @ Vector((0.5, 0.4, 1.1)))
@@ -522,23 +537,6 @@ for i in range(4):
     t.hide_render = True; t.keyframe_insert("hide_render", frame=1); t.hide_render = False; t.keyframe_insert("hide_render", frame=1600)
 bpy.data.textures["T_Warp"]  # (static)
 
-# ================================================================= HAND JOINT LIMITS (client rule, Nov 11 23:00): local-space Limit Rotation
-def limit(pb, x, y, z):
-    c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "JointLimit"
-    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-    c.min_x, c.max_x = R_(x[0]), R_(x[1]); c.min_y, c.max_y = R_(y[0]), R_(y[1]); c.min_z, c.max_z = R_(z[0]), R_(z[1])
-    for pb_ in (pb,): pb_.rotation_mode = 'QUATERNION'
-N_LIM = 0
-for h_ in (OW, PS, OA, OB_, RS):
-    for s in "LR":
-        for k in range(2, 6):
-            for j in (1, 2, 3):
-                limit(h_.R.PB["finger%d-%d.%s" % (k, j, s)], (0, 90), (-10, 10), (-10, 10) if j == 1 else (-5, 5)); N_LIM += 1
-        for j in (1, 2, 3):
-            limit(h_.R.PB["finger1-%d.%s" % (j, s)], (-30, 60), (-40, 40), (-40, 40)); N_LIM += 1
-        limit(h_.R.PB["wrist." + s], (-60, 60), (-40, 40), (-25, 25)); N_LIM += 1
-print("LIMITS", N_LIM)
-
 # ================================================================= AMBIENT LIFE
 def fcurves(o, data=False):
     ad = (o.data if data else o).animation_data; out = []
@@ -566,7 +564,7 @@ PS.h.walk(pp2, lambda f: 180, 600, 1520, stride=0.7)
 for f in range(600, 1521, 14):
     p = pp2(f); M = PS.M(Vector((p.x, p.y, PS.RH.z)), 180); sw = 15 * math.sin(f / 22.0)
     PS.arm("R", f, M, fwd=10 + sw, out=10); PS.arm("L", f, M, fwd=10 - sw, out=10)
-PS.vis(590, True); PS.vis(1525, False)
+PS.vis(600, True); PS.vis(1525, False)
 # ================================================================= WORLD: time-lapse in beat 3, golden pasture in beat 11
 sun = bpy.data.objects["Key_Sun"]; wt = sc.world.node_tree
 tint = wt.nodes["SkyTint"].inputs['B']; stg = wt.nodes["SkyStrength"].inputs['Strength']; rot = wt.nodes["SkyRot"].inputs['Rotation']
