@@ -18,147 +18,23 @@
     "surface <12 cm"
    ]
   ],
-  "271": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "277": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "301": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "307": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "313": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "331": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "343": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "349": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "355": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "361": [
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "367": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (2.0 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "373": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (2.0 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "379": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (1.9 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "385": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (2.0 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "391": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (1.9 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
-   ]
-  ],
-  "397": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (1.6 cm)"
-   ]
-  ],
-  "403": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (1.6 cm)"
-   ]
-  ],
-  "409": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (1.2 cm)"
-   ]
-  ],
-  "445": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ]
-  ],
   "451": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "457": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 12%"
@@ -167,13 +43,13 @@
   "517": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 9%"
    ]
   ],
   "523": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "529": [
@@ -191,13 +67,25 @@
   "541": [
    [
     "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
     "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "589": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "595": [
@@ -242,26 +130,26 @@
     "no character in view"
    ]
   ],
-  "631": [
+  "625": [
    [
-    "CLAW",
-    "Inventor.R curl 45"
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "637": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
    ]
   ],
   "643": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "649": [
@@ -274,280 +162,138 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 14%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.7 cm)"
    ]
   ],
   "661": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 10%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.4 cm)"
-   ]
-  ],
-  "667": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.6 cm)"
    ]
   ],
   "673": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.6 cm)"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "685": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 10%"
+    "wall/prop fills the frame, character only 7%"
    ]
   ],
   "691": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "wall/prop fills the frame, character only 9%"
    ]
   ],
   "697": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "703": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "709": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "715": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 12%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
    ]
   ],
   "721": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 9%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.7 cm)"
    ]
   ],
   "727": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 9%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
    ]
   ],
   "733": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 5%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
    ]
   ],
   "739": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 2%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.7 cm)"
    ]
   ],
   "745": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "751": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "757": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
-   ]
-  ],
-  "793": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "799": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "805": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.6 cm)"
-   ]
-  ],
-  "811": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.4 cm)"
-   ]
-  ],
-  "817": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "823": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "829": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.3 cm)"
-   ]
-  ],
-  "835": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "841": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "847": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.4 cm)"
-   ]
-  ],
-  "853": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
-   ]
-  ],
-  "859": [
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.4 cm)"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "883": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "889": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "895": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "901": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.5 cm)"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "907": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 1%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Gas_0 (2.7 cm)"
    ]
   ],
   "913": [
    [
-    "HOVER",
-    "Inventor.L near Gas_0 (1.5 cm)"
-   ]
-  ],
-  "919": [
-   [
-    "HOVER",
-    "Inventor.L near Gas_0 (2.1 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 46"
-   ]
-  ],
-  "925": [
-   [
-    "HOVER",
-    "Inventor.L near Gas_0 (2.6 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 45"
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
    ]
   ],
   "931": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ],
-   [
-    "HOVER",
-    "Inventor.L near Frost (5.4 cm)"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "937": [
@@ -865,115 +611,7 @@
   "1153": [
    [
     "CLAW",
-    "Mentor.R curl 28"
-   ]
-  ],
-  "1159": [
-   [
-    "CLAW",
-    "Mentor.R curl 37"
-   ]
-  ],
-  "1165": [
-   [
-    "CLAW",
-    "Mentor.R curl 46"
-   ]
-  ],
-  "1171": [
-   [
-    "CLAW",
-    "Mentor.R curl 54"
-   ]
-  ],
-  "1177": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1183": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1189": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1195": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1201": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1207": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1213": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1219": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1225": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1231": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1237": [
-   [
-    "CLAW",
-    "Mentor.R curl 51"
-   ]
-  ],
-  "1279": [
-   [
-    "CLAW",
-    "Mentor.R curl 41"
-   ]
-  ],
-  "1285": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1291": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
-   ]
-  ],
-  "1297": [
-   [
-    "CLAW",
-    "Mentor.R curl 56"
+    "Mentor.R curl 29"
    ]
   ],
   "1303": [
@@ -1040,10 +678,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near Tear_11 (900.0 cm)"
    ]
   ],
   "1621": [
@@ -1092,10 +726,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near TearR_05 (10.6 cm)"
    ]
   ],
   "1693": [
@@ -1116,44 +746,20 @@
   ],
   "1705": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (14.0 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (12.4 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1711": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (13.9 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (11.7 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1717": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (13.7 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (11.6 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1723": [
@@ -1162,16 +768,8 @@
     "wall/prop fills the frame, character only 9%"
    ],
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (13.5 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (12.0 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1729": [
@@ -1180,418 +778,45 @@
     "wall/prop fills the frame, character only 14%"
    ],
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (13.6 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (12.0 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1735": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (13.7 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (11.7 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1741": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (14.0 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (11.7 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1747": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (14.0 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (12.4 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1753": [
    [
-    "HOVER",
-    "Inventor.L near Gun_Body (13.9 cm)"
-   ],
-   [
     "CLAW",
-    "Inventor.R curl 52"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (12.2 cm)"
-   ]
-  ],
-  "1759": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (3.7 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 60"
-   ]
-  ],
-  "1765": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (12.8 cm)"
-   ]
-  ],
-  "1771": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.3 cm)"
-   ]
-  ],
-  "1777": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.9 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.2 cm)"
-   ]
-  ],
-  "1783": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.6 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.4 cm)"
-   ]
-  ],
-  "1789": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.8 cm)"
-   ]
-  ],
-  "1795": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.5 cm)"
-   ]
-  ],
-  "1801": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.8 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.2 cm)"
-   ]
-  ],
-  "1807": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (13.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.4 cm)"
-   ]
-  ],
-  "1813": [
-   [
-    "HOVER",
-    "Inventor.L near bench_vice_bar (12.9 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (8.9 cm)"
-   ]
-  ],
-  "1819": [
-   [
-    "HOVER",
-    "Inventor.L near Gas_0 (12.0 cm)"
-   ]
-  ],
-  "1837": [
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (9.5 cm)"
-   ]
-  ],
-  "1843": [
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (9.2 cm)"
-   ]
-  ],
-  "1849": [
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (1.5 cm)"
-   ]
-  ],
-  "1861": [
-   [
-    "HOVER",
-    "Inventor.R near Gun_Body (2.3 cm)"
-   ]
-  ],
-  "1867": [
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_clamp (9.1 cm)"
-   ]
-  ],
-  "1873": [
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_bar (2.9 cm)"
-   ]
-  ],
-  "1879": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (2.9 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_bar (4.1 cm)"
-   ]
-  ],
-  "1885": [
-   [
-    "HOVER",
-    "Inventor.L near Gun_Body (2.9 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near bench_vice_bar (3.6 cm)"
-   ]
-  ],
-  "1921": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gas_0 (3.9 cm)"
-   ]
-  ],
-  "1927": [
-   [
-    "HOVER",
-    "Inventor.L near Gas_2 (1.4 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gas_4 (3.6 cm)"
-   ]
-  ],
-  "1933": [
-   [
-    "HOVER",
-    "Inventor.L near Gas_0 (1.5 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gas_4 (3.8 cm)"
-   ]
-  ],
-  "1939": [
-   [
-    "HOVER",
-    "Inventor.L near Gas_0 (1.5 cm)"
-   ],
-   [
-    "CLAW",
-    "Inventor.R curl 49"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gas_4 (3.8 cm)"
+    "Inventor.R curl 45"
    ]
   ],
   "1945": [
    [
-    "HOVER",
-    "Inventor.L near Gas_0 (1.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Inventor.R near Gas_4 (3.8 cm)"
-   ]
-  ],
-  "2011": [
-   [
-    "HOVER",
-    "Mentor.L near Spark_09 (3.0 cm)"
-   ]
-  ],
-  "2017": [
-   [
-    "HOVER",
-    "Mentor.L near ImpactPuff (2.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (2.6 cm)"
-   ]
-  ],
-  "2023": [
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (4.4 cm)"
-   ]
-  ],
-  "2029": [
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (5.8 cm)"
-   ]
-  ],
-  "2035": [
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (7.1 cm)"
-   ]
-  ],
-  "2041": [
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (6.5 cm)"
-   ]
-  ],
-  "2047": [
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (5.5 cm)"
-   ]
-  ],
-  "2053": [
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (4.7 cm)"
-   ]
-  ],
-  "2059": [
-   [
     "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (4.4 cm)"
-   ]
-  ],
-  "2065": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (2.9 cm)"
-   ]
-  ],
-  "2071": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (3.3 cm)"
-   ]
-  ],
-  "2077": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (2.7 cm)"
-   ]
-  ],
-  "2083": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (2.9 cm)"
-   ]
-  ],
-  "2089": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (2.5 cm)"
-   ]
-  ],
-  "2095": [
-   [
-    "CLAW",
-    "Inventor.R curl 47"
-   ],
-   [
-    "HOVER",
-    "Mentor.R near ImpactPuff (3.2 cm)"
+    "Inventor.R curl 60"
    ]
   ]
  },
  "counts": {
   "FILL": 4,
-  "CLAW": 59,
-  "HOVER": 108,
-  "EMPTY": 109,
+  "EMPTY": 115,
+  "CLAW": 11,
   "INSIDE": 18
  }
 }

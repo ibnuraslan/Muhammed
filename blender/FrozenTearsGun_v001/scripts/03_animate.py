@@ -107,16 +107,35 @@ class Body:
         return self.head_M() @ (self.R.rest("head").inverted() @ Vector(rest_pt))
 
 W, M = Body(WR, WH), Body(MR, MH)
-# named hand shapes: (index, middle, ring, pinky curl), thumb curl, thumb adduction/opposition
-SHAPE = {"flat": ([4, 4, 5, 6], 6, 6, -7), "relaxed": ([16, 20, 24, 28], 14, 18, -3), "palm_eyes": ([10, 11, 12, 14], 8, 4, -8),
-         "wrap": ([72, 76, 80, 82], 42, 48, -5), "pinch": ([62, 70, 74, 78], 10, 0, -5), "write": ([34, 50, 72, 84], 36, 46, -4),
-         "fist_loose": ([62, 78, 84, 88], 30, 30, -6), "cradle": ([30, 33, 35, 37], 18, 26, -5)}
+# finger poses come from the studio library (blender/pipeline/hand_poses.py): each shape is a weighted blend of named
+# library poses; rotations are cached per rig/side/pose and blended with quaternion slerp
+exec(open(os.path.join(ROOT, "..", "pipeline", "hand_poses.py")).read())
+ALIAS = {"flat": "flat_palm", "relaxed": "relaxed", "palm_eyes": "shield", "wrap": "wrap_grip", "pinch": "power_fist",   # valve: four fingers hooked over the rim, thumb tucked
+         "write": "tripod", "fist_loose": "power_fist", "cradle": "cup_hold", "point": "point", "shield": "shield",
+         "index_wipe": "pinch", "trigger": "point"}
+_LIB = {}
+def lib_rots(B, s, name):
+    k = (B.R.o.name, s, name)
+    if k not in _LIB:
+        _LIB[k] = _pose_rots(B.R.o, s, ALIAS.get(name, name))
+    return _LIB[k]
 def mix_shape(a, b, u):
-    A, B = SHAPE[a] if isinstance(a, str) else a, SHAPE[b] if isinstance(b, str) else b
-    A = tuple(A) + (0.0,) * (4 - len(A)); B = tuple(B) + (0.0,) * (4 - len(B))
-    return ([x + (y - x) * u for x, y in zip(A[0], B[0])], A[1] + (B[1] - A[1]) * u, A[2] + (B[2] - A[2]) * u, A[3] + (B[3] - A[3]) * u)
+    A = [(a, 1.0)] if isinstance(a, str) else a; Bm = [(b, 1.0)] if isinstance(b, str) else b
+    out = {}
+    for n_, w_ in A: out[n_] = out.get(n_, 0.0) + w_ * (1 - u)
+    for n_, w_ in Bm: out[n_] = out.get(n_, 0.0) + w_ * u
+    return [(n_, w_) for n_, w_ in out.items() if w_ > 1e-4]
 def key_shape(B, s, f, sh):
-    B.key_fingers(s, f, sh[0], thumb=sh[1], thumb_in=sh[2], spread=sh[3] if len(sh) > 3 else 0.0)
+    sh = [(sh, 1.0)] if isinstance(sh, str) else sh
+    rot = None; acc = 0.0
+    for n_, w_ in sh:
+        r_ = lib_rots(B, s, n_)
+        if rot is None: rot = dict(r_); acc = w_; continue
+        acc += w_; u = w_ / acc
+        for b_, q_ in r_.items():
+            q0 = rot[b_]; q1 = q_ if q0.dot(q_) >= 0 else -q_
+            rot[b_] = q0.slerp(q1, u)
+    _key(B.R.o, s, rot, f, 1.0)
 ROOT_Z_W, ROOT_Z_M = W.root_head.z, M.root_head.z
 print("ROOT Z", ROOT_Z_W, ROOT_Z_M)
 
@@ -145,7 +164,7 @@ GUN_AIM = Matrix.Translation((0.03, -0.365, 1.155)) @ Matrix.Rotation(R_(2), 4, 
 # hand grips in gun-local coordinates: (wrist, finger direction, palm normal)
 GRIP_R = (Vector((-0.03, 0.085, -0.03)), Vector((0.12, -1.0, -0.22)), Vector((1.0, 0.0, 0.0)))   # palm on the grip's right side, fingers wrap its front
 SUPPORT_L = (Vector((0.05, -0.118, -0.068)), Vector((-0.85, -0.65, 0.1)), Vector((0.0, 0.0, 1.0)))   # palm cradles the canister from below
-VALVE_L = (Vector((0.104, -0.025, 0.13)), Vector((-0.25, -0.6, -0.75)), Vector((-1.0, 0.0, 0.2)))
+VALVE_L = (Vector((0.072, -0.088, 0.0)), Vector((0.0, 0.08, 1.0)), Vector((-1.0, 0.0, 0.0)))   # from below: fingers up and hooked over the rim, thumb behind the wheel
 inv_f = sorted(set(list(range(1, 2101, 4)) + list(range(F(28.3), F(31.2), 2)) + [T_OFFICE_IN, T_OFFICE_IN + 1, T_OFFICE_OUT, T_OFFICE_OUT + 1]))
 inv_f = sorted(set(inv_f))
 SOB_W = track([(1, 1.0), (F(4), 0.8), (F(6), 0.35), (F(15), 0.3), (F(18.7), 0.2)])
@@ -245,7 +264,7 @@ for f in inv_f:
         Wg, dg, ng = GRIP_R
         W.key_hand("R", f, G @ Wg, G3 @ dg, G3 @ ng, pole=G @ Vector((-0.35, 0.25, -0.25)))
         trig = 26 + 30 * smooth((t - 13.5) / 0.4) * (1 - smooth((t - 15.15) / 0.2))
-        W.key_fingers("R", f, [trig, 60, 62, 64], thumb=34)
+        key_shape(W, "R", f, mix_shape("trigger", "wrap", (trig - 26) / 30 * 0.6))
         v = smooth((t - 5.6) / 0.35) * (1 - smooth((t - 7.4) / 0.4))
         g = lerp_grip(SUPPORT_L, VALVE_L, v)
         g = (g[0] + Vector((0.085 * math.sin(math.pi * v) ** 0.5, 0.0, -0.02 * math.sin(math.pi * v))), g[1], g[2])   # swing out around the gun body
@@ -266,7 +285,8 @@ for f in inv_f:
             # wrist below the cheek, fingers up over the eyes, palm towards the face (rest-body coords mapped by the head delta)
             wipe = math.sin(math.pi * min(1, max(0, (t - 24.1) / 0.7)))          # knuckles wipe across the eye once
             palm_eyes = (Dh @ Vector((sx * 0.045, -0.23, hz + 0.035)), Dh3 @ Vector((-sx * 0.6, 0.05, 0.8)), Dh3 @ Vector((0.0, 1.0, 0.05)))
-            knuckle = (Dh @ Vector((sx * 0.075 - 0.02 * math.sin(math.pi * wipe), -0.228, hz - 0.01)), Dh3 @ Vector((-sx * 0.8, 0.1, 0.55)), Dh3 @ Vector((-sx * 0.3, 0.2, -1.0)))
+            # hand turned sideways: the bent index finger's side brushes along under her lower lashes, wrist out by the cheekbone
+            knuckle = (Dh @ Vector((sx * (0.115 - 0.02 * math.sin(math.pi * wipe)), -0.175, hz + 0.0)), Dh3 @ Vector((-sx * 0.9, -0.15, 0.35)), Dh3 @ Vector((0.0, 0.25, 1.0)))
             fc = lerp_grip(palm_eyes, knuckle, wipe)   # palms on the cheeks, hands apart
             g = lerp_grip(lap, fc, fs if s == "R" else 0.25 * fs)   # right hand over her eyes, left hand stays near her lap (no hand-on-hand)
             fw_ = fs if s == "R" else 0.25 * fs
@@ -274,7 +294,7 @@ for f in inv_f:
             fist = smooth((t - 26.0) / 0.4)
             W.key_hand(s, f, g[0], g[1], g[2], pole=g[0] + Vector((sx * 0.4, 0.3, -0.3)))
             if s == "R":
-                sh = mix_shape("relaxed", "palm_eyes", fs); sh = mix_shape(sh, "fist_loose", wipe); sh = mix_shape(sh, "fist_loose", fist)
+                sh = mix_shape("relaxed", "palm_eyes", fs); sh = mix_shape(sh, "index_wipe", wipe); sh = mix_shape(sh, "fist_loose", fist)
             else:
                 sh = mix_shape("relaxed", "fist_loose", fist)
             key_shape(W, s, f, sh)
@@ -314,7 +334,7 @@ for f in inv_f:
         trig = 26 + 30 * smooth((t - 32.25) / 0.15) * (1 - smooth((t - 32.7) / 0.2))
         grab = smooth((t - 31.3) / 0.2)
         lifted = smooth((t - 31.55) / 0.25)
-        key_shape(W, "R", f, mix_shape(mix_shape("relaxed", ([70, 84, 88, 90], 46, 56, -5), grab), ([trig, 62, 64, 66], 52, 62, -4), lifted))   # closes round the grip on the bench, settles to the firing grip as it lifts
+        key_shape(W, "R", f, mix_shape(mix_shape("relaxed", "wrap", grab), mix_shape("trigger", "wrap", (trig - 26) / 30 * 0.6), lifted))   # closes round the grip on the bench, settles to the firing grip as it lifts
         restL = (Vector((0.22, 0.1, BT + 0.05)), Vector((-0.2, -1, -0.6)), Vector((0, 0, -1)))
         if t < 31.8:
             gl = restL
@@ -372,7 +392,7 @@ for f in men_f:
         # left hand planted on the desk
         Wl = Vector((POS_MO.x - 0.28, desk_y, DT + 0.035))
         M.key_hand("L", f, Wl, Vector((0.2, 1, -0.2)), Vector((0, 0, -1)), pole=Wl + Vector((-0.4, -0.3, 0.3)))
-        M.key_fingers("L", f, 10, thumb=10)
+        key_shape(M, "L", f, mix_shape("flat", "shield", PELT(f)))
         # right hand: rest on desk -> jabbing finger -> neck rub; pelting: both arms shield the face
         rest = (Vector((POS_MO.x + 0.25, desk_y, DT + 0.035)), Vector((-0.2, 1, -0.2)), Vector((0, 0, -1)))
         jabW = D @ Vector((-0.12, -0.55 - 0.06 * talk, 1.36 + 0.04 * talk))
@@ -392,8 +412,7 @@ for f in men_f:
             gl = lerp_grip((Wl, Vector((0.2, 1, -0.2)), Vector((0, 0, -1))), shieldL, pelt)
             M.key_hand("L", f, gl[0], gl[1], gl[2], pole=gl[0] + Vector((0.45, -0.25, -0.2)))
         pointing = jab * (1 - awk) * (1 - pelt)
-        point_sh = ([4, 80, 85, 90], 40, 40)
-        sh = mix_shape("relaxed", point_sh, pointing); sh = mix_shape(sh, "flat", min(1.0, SLAP(f) * 1.5)); sh = mix_shape(sh, ([8, 9, 10, 12], 10, 6), pelt)
+        sh = mix_shape("relaxed", "point", pointing); sh = mix_shape(sh, "flat", min(1.0, SLAP(f) * 1.5)); sh = mix_shape(sh, "shield", pelt)
         key_shape(M, "R", f, sh)
     else:
         arms = smooth((t - 31.3) / 0.6); hit = math.sin(math.pi * min(1, max(0, (t - 32.9) / 0.45))) if t >= 32.9 else 0.0
@@ -410,7 +429,7 @@ for f in men_f:
             g = lerp_grip(g, chest if s == "R" else belly, laugh)
             Wp = D @ g[0]
             M.key_hand(s, f, Wp, D3 @ g[1], D3 @ g[2], pole=D @ (g[0] + Vector((sx * 0.35, 0.35, -0.25))))
-            M.key_fingers(s, f, [12, 15, 18, 22] if laugh < 0.5 else 30, thumb=12)
+            key_shape(M, s, f, mix_shape(mix_shape("relaxed", "open_alarm", arms * (1 - laugh)), "cup_hold" if s == "R" else "relaxed", laugh))
 
 # ------------------------------------------------------------------ tube points + hero tear path
 anchors = [bpy.data.objects["TubeH%d" % i] for i in range(5)]
@@ -821,7 +840,7 @@ for f in range(1, 2101):
     cam_d.dof.focus_distance = max(0.02, (tg - p).length); cam_d.dof.keyframe_insert("focus_distance", frame=f)
     cam_d.dof.aperture_fstop = cfs(f); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
     if F(4.2) <= f <= F(15.9):
-        dgun = (gun_mat(f).translation - p).length + 0.3
+        dgun = (gun_mat(f).translation - p).length + 0.13
         h = 2 * dgun * 18 / cam_d.lens * 1.25
         card.location = (0, 0, -dgun); card.scale = (h * 0.75, h, 1)
         card.keyframe_insert("location", frame=f); card.keyframe_insert("scale", frame=f)

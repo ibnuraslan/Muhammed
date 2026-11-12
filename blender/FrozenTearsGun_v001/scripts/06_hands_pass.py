@@ -23,11 +23,11 @@ for rig in ("Inventor", "Mentor"):
         for k in range(2, 6):
             for j in range(1, 4):
                 pb = o.pose.bones["finger%d-%d.%s" % (k, j, s)]
-                limit(pb, x=(6, 90), y=(-15, 15) if j == 1 else (-8, 8), z=(-12, 12)); n += 1
+                limit(pb, x=(0, 90), y=(-10, 10), z=(-10, 10)); n += 1   # = pipeline/hand_poses.py LIMITS['finger']
         # thumb: natural cone around its rest
         for j in range(1, 4):
             pb = o.pose.bones["finger1-%d.%s" % (j, s)]
-            limit(pb, x=(-35, 25), y=(-40, 40), z=(-45, 45)); n += 1
+            limit(pb, x=(-30, 45), y=(-30, 30), z=(-40, 40)); n += 1   # = pipeline/hand_poses.py LIMITS['thumb']
         # wrist (after the IK copy-rotation): flex +-60, side +-25, twist +-45
         pb = o.pose.bones["wrist." + s]
         limit(pb, x=(-70, 70), y=(-90, 90), z=(-30, 30)); n += 1   # y = pronation proxy (forearm twist is locked in the IK)

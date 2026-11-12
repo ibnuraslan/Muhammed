@@ -50,50 +50,29 @@ The director's `clip_scan.py` on v005 found 0 bad ranges. The problems below are
   - `acting_before_v005_0.5s.jpg` vs `acting_after_v006_0.5s.jpg`
   - `hand_closeups_v006.jpg`: 15 close-ups at 270×480 of every hand contact (grip, canister, valve, trigger, two-hand aim, lap, nose, eye wipe, desk slap, shield, pencil, file, pick-up, fire, chest pat)
 
-## QA flags that stay (`qa_v006.json`, every 6 frames, on the packed file)
+## Round 3: director review of b70952a
+- **24.5 s wipe:** it read as a fist on her nose. Now the hand is turned sideways and the side of the bent index finger (library pose `pinch`) brushes along under her lower lashes, wrist out by her cheekbone.
+- **6–7 s valve:** a digit lay straight across the lid. That was her thumb. The hand now comes from below the wheel with the four fingers hooked over the rim and the thumb behind the wheel.
+  - My earlier joint limits capped thumb flex at 25°, which kept the thumb straight. They are now the library's ranges (`hand_poses.LIMITS`).
+- **All finger posing** now comes from `blender/pipeline/hand_poses.py` (commit 7155c8d). Each contact is a slerp blend of library poses: `relaxed`, `wrap_grip`, `power_fist`, `pinch`, `tripod`, `flat_palm`, `point`, `cup_hold`, `open_alarm` and `shield`. There are no hand-set finger angles left.
 
-Totals: FILL 4, CLAW 59, HOVER 108, EMPTY 109, INSIDE 18.
-
-Fixed before this run:
-- The `INSIDE` flags from back-facing wall planes: all room planes now face into their room.
-- `HOVER` flags from the explainer card (it is now hidden and parked away outside the cutaway).
-- Frost and gas parked outside their beats.
-- The static gun parts merged into `Gun_Body`.
+## QA flags that stay (`qa_v006.json`: qa_check.py at commit c6240b2, every 6 frames, on the packed file)
+Totals: FILL 4, EMPTY 115, CLAW 11, INSIDE 18, HOVER 0, FACEPRESS 0, BACKHEAD 0.
 
 | Flag | Frames | Why it stays |
 |---|---|---|
-| CLAW Inventor.R | 271–277 (4.5–4.6 s), 301–313 (5.0–5.2 s), 331 (5.5 s), 343–391 (5.7–6.5 s), 631–637 (10.5–10.6 s), 919–925 (15.3–15.4 s), 1705–1759 (28.4–29.3 s), 1921–1939 (32.0–32.3 s), 2059–2095 (34.3–34.9 s) | Intended. The right hand holds the gun with the index finger extended on the trigger, so the fan test trips. The same goes for the writing grip at 28.4–29.3 s (index and thumb pinch the pencil while the other fingers curl). |
-| CLAW Mentor.R | 1153–1237 (19.2–20.6 s), 1279–1297 (21.3–21.6 s) | Intended. His lecture point (index straight, other fingers curled) at 19.2–21.6 s. |
-| EMPTY | 445–457 (7.4–7.6 s), 517–541 (8.6–9.0 s), 589–619 (9.8–10.3 s), 637–661 (10.6–11.0 s), 673 (11.2 s), 685–757 (11.4–12.6 s), 883–907 (14.7–15.1 s), 931–943 (15.5–15.7 s), 955–1129 (15.9–18.8 s), 1303 (21.7 s), 1567 (26.1 s), 1699 (28.3 s), 1723–1729 (28.7–28.8 s) | Device macro and explainer beats (7.4–15.7 s): the device itself is the subject, as the reference's cutaway grammar does. Pellet flight (15.9–18.8 s): the pellets and the photo they fly into are the subject. 21.7, 26.1, 28.3 and 28.7 s are single transition frames inside the white flash or the arc. |
-| FILL | 19 (0.3 s), 133–139 (2.2–2.3 s), 1543 (25.7 s) | 0.3 s: her hair at the top of the opening face close-up. 2.2 s: macro of the funnel, the subject of the line. 25.7 s: her hair passes the frame edge as the camera orbits her into beat 11. |
-| HOVER Inventor.L near Frost | 655–673 (10.9–11.2 s), 715–739 (11.9–12.3 s), 793–859 (13.2–14.3 s), 901 (15.0 s), 931 (15.5 s) | False positive. `Frost` is the frost-crystal layer inside the glass chamber, and the QA checks the first prop within 12 cm alphabetically. The left hand is on the canister or valve outside the glass. |
-| HOVER Inventor.L near Gas_0 | 907–925 (15.1–15.4 s), 1819 (30.3 s), 1933–1945 (32.2–32.4 s) | False positive. The volume gas belongs to the chamber (hidden outside 7.3–12.7 s; see-through FX). The hand is on the canister or grip. |
-| HOVER Inventor.L near Gas_2 | 1927 (32.1 s) | Same as above. |
-| HOVER Inventor.L near Gun_Body | 367–409 (6.1–6.8 s), 1705–1753 (28.4–29.2 s), 1879–1885 (31.3–31.4 s) | 6.1–6.8 s: the left hand holds the valve wheel rim (`Gun_ValveRim`, a separate moving part) next to the merged body (close-up `valve_pinch`). 28.4–29.2 s and 31.3 s: the gun is hidden or lying on the bench while she sketches beside it; the QA also counts hidden objects. |
-| HOVER Inventor.L near bench_vice_bar | 1759–1813 (29.3–30.2 s) | Time-lapse filing: her hands hold the file (`TL_File`) across the vice jaws, so they sit beside the vice bar. |
-| HOVER Inventor.R near Gas_0 | 1921 (32.0 s) | Same as above. |
-| HOVER Inventor.R near Gas_4 | 1927–1945 (32.1–32.4 s) | Same as above. |
-| HOVER Inventor.R near Gun_Body | 1705–1753 (28.4–29.2 s), 1849 (30.8 s), 1861 (31.0 s) | 28.4–29.2 s: the gun is still hidden (not built yet) next to her sketching hand; the QA counts hidden objects. 30.8–31.0 s: her hand passes the finished gun on the bench just before the pick-up. |
-| HOVER Inventor.R near bench_vice_bar | 1873–1885 (31.2–31.4 s) | Same as above. |
-| HOVER Inventor.R near bench_vice_clamp | 1777–1813 (29.6–30.2 s), 1837–1843 (30.6–30.7 s), 1867 (31.1 s) | Same as above. |
-| HOVER Mentor.L near ImpactPuff | 2017 (33.6 s) | Same as above. |
-| HOVER Mentor.L near Spark_09 | 2011 (33.5 s) | Single frame: the tear projectile or spark passes his hand during the pelting (not a held prop). |
-| HOVER Mentor.R near ImpactPuff | 2017–2095 (33.6–34.9 s) | False positive. `ImpactPuff` is the frost-puff volume on his chest; his hand pats his shirt (close-up `mentor_chest_pat`). |
-| HOVER Mentor.R near TearR_05 | 1675 (27.9 s) | Single frame: the tear projectile or spark passes his hand during the pelting (not a held prop). |
-| HOVER Mentor.R near Tear_11 | 1615 (26.9 s) | Single frame: the tear projectile or spark passes his hand during the pelting (not a held prop). |
-| INSIDE | 1573–1645 (26.2–27.4 s), 1663–1675 (27.7–27.9 s), 1693–1699 (28.2–28.3 s) | The camera is inside the thought bubble (26.2–28.2 s, intended: a translucent see-through shell), and the 28.3 s white flash as the camera passes into the workshop. |
+| EMPTY | 451–943 (7.5–15.7 s) | Device macro and explainer beats on the cyan backdrop. The mechanism is the subject of these lines (valve, CO2, freezing, spring, trigger). |
+| EMPTY | 955–1129 (15.9–18.8 s) | The pellet flight. The pellets and the framed photo they fly into are the subject; the director asked for "pellets flying with the photo in focus". |
+| EMPTY | 1303, 1567, 1699, 1723–1729 | Single in-between frames of camera arcs (21.7, 26.1, 28.7 s) and the 28.3 s white flash. |
+| FILL | 19, 133–139, 1543 | 0.3 s: her hair at the top of the opening face close-up. 2.2 s: the funnel macro (the subject of the line). 25.7 s: her hair at the frame edge while the camera orbits her. |
+| INSIDE | 1573–1699 (26.2–28.3 s) | The camera is inside the translucent thought bubble (intended), then the 28.3 s white flash. |
+| CLAW | 1705–1753 (28.4–29.2 s) | Intended: the library `tripod` writing grip holding the pencil. |
+| CLAW | 1153, 1945 | Single frames: the mentor's `point` starting (19.2 s), and the trigger squeeze (32.4 s). |
 
-## Six-point self-check (I looked at my own after-sheet and close-ups)
-1. **Hands visibly touch what they hold:** checked. These all show contact:
-   - grip, canister, valve rim, trigger and two-hand aim
-   - the lap, and her palm on her eyes
-   - desk slap, chest pat and gun pick-up
-   - pencil and file are in the hands, but small in the close-ups
-2. **No claws:** checked. Every hand uses a named shape (flat, relaxed, wrap, writing, hook, loose fist). The remaining open hands are the mentor's palms-out "stop" shield.
-3. **Nothing pressed into a face:** checked. The only face contact is her palm resting over her eyes and the knuckle wipe (intended, under 1.5 cm). The mentor's shielding hand stays in front of his face.
-4. **No empty, blurred or black cells, and no back of the head on beats:** checked.
-   - Beat 11 opens on her face.
-   - The pellet-flight cells show the pellets and the photo.
-   - The only head-from-behind cell is 26.0 s, inside beat 11's bubble move, as an over-the-shoulder towards the mentor.
-5. **Close-ups show hands:** checked. All 15 close-ups are aimed at a hand and lit. The trigger close-up is re-aimed.
-6. **hand_poses.py:** checked. Not on `claude/beautiful-ptolemy-c5vrcq` yet (fetched at submission). The named shape library in `03_animate.py` (`SHAPE`, `mix_shape`) is used meanwhile.
+## Six-point self-check (done on my own after-sheet and close-ups)
+1. Hands visibly touch what they hold: **checked**
+2. No claws: **checked**
+3. Nothing pressed into a face: **checked** (only her palm resting over her eyes, and the index-side wipe under the eye)
+4. No empty, blurred or black cells, and no back of the head on beats: **checked** (the macro and pellet cells are listed above)
+5. Close-ups show hands: **checked**
+6. `hand_poses.py` used: **checked**
