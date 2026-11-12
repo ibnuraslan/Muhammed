@@ -33,3 +33,18 @@ Review tools:
 - Crowd duplicates are time-offset copies of four MPFB villagers, with tinted clothes.
 - The excavator is a rigid-part rig. Its tracks do not scroll.
 - The toddler cries with an open jaw and head tipped back. There are no tear streaks.
+
+## Hand audit (scripts/hand_audit.py, every 2 frames, 8 main characters; `hand_audit.json`)
+Final count: 13 hand–hand, 548 hand–self, 268 hand–other. Each hit is one frame for one hand against one target.
+- **Intended contact (about 350):**
+  - The teen gripping and carrying the toddler: 127.
+  - ResB's hands at the teen's waist while knotting: 91.
+  - The mother's hug and the toddler on her: 95.
+  - The toddler's hands at his own head while hanging with arms up: 40.
+- **Remaining, not intended:**
+  - ResA, ResB and ResC fingertips grazing their own dungarees or vest: about 350 frames.
+    - Concentrated in beat 2: kneeling at the rim and feeding rope.
+    - Also in beats 6–10: the hold and the haul.
+  - Crowd1's cheering hands against her own hair: 94.
+  - ResB's hands touching while knotting: 12.
+- These were reduced from 862 hand–self in the first run by re-keying three poses: haulers' hands moved off their bellies, ResA's feeding lean, and ResB's kneeling hand. They are the next fix if there is time.
