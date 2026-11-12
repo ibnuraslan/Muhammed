@@ -26,19 +26,19 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1273)** |
 | 11 | WW1Assassination | `claude/connect11-ww1-assassination` | `blender/WW1Assassination_v004/` |
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v006/` |
-| 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v005/` |
+| 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v005/` |
 | 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v004/` |
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v003/` |
-| 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v003/` |
+| 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v002/` |
 | 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v005/` |
 | 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v004/` |
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v004/` |
 | 24 | RooseveltSpeech | `claude/connect24-roosevelt-speech` | `blender/RooseveltSpeech_v006/` |
-| 25 | Tsunami2004 | `claude/connect25-tsunami-2004` | `blender/Tsunami2004_v004/` |
+| 25 | Tsunami2004 | `claude/connect25-tsunami-2004` | `blender/Tsunami2004_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 26 | DwarfGiant | `claude/connect26-dwarf-giant` | `blender/DwarfGiant_v002/` |
 | 27 | SwedishCoffee | `claude/connect27-swedish-coffee` | `blender/SwedishCoffee_v004/` |
 | 28 | ToucanBeak | `claude/connect28-toucan-beak` | `blender/ToucanBeak_v003/` |
