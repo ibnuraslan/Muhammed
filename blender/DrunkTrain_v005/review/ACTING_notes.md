@@ -33,3 +33,18 @@ Source: `BEFORE_v004_sheet_0.5s.jpg` (every 30 frames, 270×480, 8 samples) and 
 **About the `clip_scan` wrapper.** `clip_scan` keeps a character only when its armature object is within 7 m of the camera. It also lists characters by visibility on the frame the file opens at. In this film all four rigs keep their object at the world origin and move through their root bone. So I ran it unchanged via a wrapper that sets frame 1000, when all four are visible, with `cam_radius_m=200`:
 
 `blender -b DrunkTrain_v005_60fps.blend --python clip_wrap.py -- out.json 6 2.0 200`
+
+## Self-check pass (director rule, Nov 12 14:40)
+| # | Where | Fault found on my own images | Fix |
+|---|---|---|---|
+| 20 | Hand close-ups h04, h05, h11, h14, h15 | Close-ups showed legs, stones or a dark blur, not the hand. | `07_hand_closeups.py` aims at the palm centre and picks the first view angle that ray-casts clear to the hand. |
+| 21 | 19.5–20.3 s crawl | Palms sunk into the ballast. | Hands planted 5 cm higher (on the stone tops), with `flat_palm`. |
+| 22 | 33.5–34.5 s palm look | Clawed fingers. | `cup_hold` (open palm). |
+| 23 | 17–20.7 s WitA | Palm on her nose. | The hand is lower, at the mouth and chin, angled across, with `open_alarm`. |
+| 24 | All idle hands | The default curl (20/26/32°) read as claws. | `hand_poses.py` `relaxed` plus `add_hand_limits` on all four rigs. Bottle: `wrap_grip`. Worker hat: `cup_hold`. |
+| 25 | 15.5 s | Empty track cell. | The camera aims at the braking train. |
+| 26 | 19.5 s (beat 8) | He was hidden under the loco. | Lower camera, under the skirt line. |
+| 27 | 31.0–32.5 s (beat 12) | Back of his head at the beat start. | The camera is in front of him, walking back as he walks. |
+| 28 | 26.5 s (beat 11) | Torso-only macro. | Wider and higher, so his head is in frame. |
+
+QA: `review/qa_v005.json` (`blender/pipeline/qa_check.py` @ c6240b2, step 6, beats.json), run on the packed file.

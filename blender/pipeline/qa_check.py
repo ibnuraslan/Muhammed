@@ -15,6 +15,8 @@ Per sampled frame it reports:
   FACEPRESS  a fingertip or palm vertex inside 1 cm of the same character's face region, or the head within
              3 cm of a prop surface
 A clean film reports 0 for every category except intended, listed exceptions.
+Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
+a deliberate point / trigger finger / writing grip is not a CLAW.
 """
 import bpy, sys, json, math
 from mathutils import Vector
@@ -99,8 +101,10 @@ def claw(r, s):
         if (b2 + b3) / 2 > 35 and b1 < 10: bad += 1
         tips.append((wpos(r, "finger%d-3.%s" % (i, s), True) - wpos(r, "finger%d-1.%s" % (i, s))).normalized())
     fan = max(math.degrees(tips[k].angle(tips[k + 1], 0)) for k in range(3))
-    curled = sum(bend(r, "finger%d-2.%s" % (i, s)) for i in range(2, 6)) / 4 > 30
-    return bad >= 2 or (fan > 30 and curled)
+    mids = [bend(r, "finger%d-2.%s" % (i, s)) for i in range(2, 6)]
+    curled = sum(mids) / 4 > 30
+    pointing = sum(1 for m in mids if m < 15) in (1, 2) and sum(1 for m in mids if m > 40) >= 2   # point / trigger / tripod
+    return (bad >= 2 or (fan > 30 and curled)) and not pointing
 
 prop_bvh_cache = {}
 def prop_bvh(o, dg, f):
@@ -173,15 +177,20 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
                         touching = True; break
                 if touching: break
             if claw(r, s) or (curl > 40 and not touching): flag(f, "CLAW", "%s.%s curl %d%s" % (r.name, s, curl, "" if touching else " in air"))
+            # nearest VISIBLE, opaque prop to the wrist (hidden / see-through FX and parked props are ignored)
+            best = None
             for o in PROPS:
+                if o.hide_render or not o.visible_get() or see_through(o): continue
                 if (o.matrix_world.translation - w).length > 3.0: continue
                 bvh = prop_bvh(o, dg, f)
                 if bvh is None: continue
                 d_wrist = bvh.find_nearest(w, 0.12)
                 if d_wrist[0] is None: continue
+                if best is None or d_wrist[3] < best[2]: best = (o, bvh, d_wrist[3])
+            if best:
+                o, bvh, _ = best
                 dmin = min((bvh.find_nearest(t, 0.2)[3] or 9) for t in tips)
-                if dmin > 0.012: flag(f, "HOVER", "%s.%s near %s (%.1f cm)" % (r.name, s, o.name, dmin * 100))
-                break
+                if dmin > 0.012 and not touching: flag(f, "HOVER", "%s.%s near %s (%.1f cm)" % (r.name, s, o.name, dmin * 100))
             hd = wpos(r, "head");
             if min((t - hd).length for t in tips) < 0.07: flag(f, "FACEPRESS", "%s.%s hand on face" % (r.name, s))
     if f % 120 == 1: print("QA", f, res["frames"].get(str(f)))
