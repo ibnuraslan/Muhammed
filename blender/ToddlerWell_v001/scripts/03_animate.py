@@ -198,12 +198,12 @@ toddler_idle(472, 1520)
 CROWD_POS = {"Mother": (-1.3, 6.15), "Crowd1": (-1.27, 6.62), "Crowd2": (1.4, 6.7), "Crowd3": (3.3, 7.2), "Crowd4": (-0.2, 7.6)}
 def crowd_idle(c, f0, f1, xy, yaw, mood):
     for i, f in enumerate(range(f0, f1, 18)):
-        ph = i * 0.9 + hash(c.name) % 10
+        ph = i * 0.9 + sum(map(ord, c.name)) % 10
         if mood == "worry":
             hands = {"L": ("rel", (0.02, 0.22, 0.12 * c.arm)), "R": ("rel", (0.02, 0.2, 0.1 * c.arm))} if (i // 3) % 2 == 0 else \
                     {"L": ("rel", (0.0, 0.2, -0.35 * c.arm)), "R": ("rel", (-0.02, 0.22, -0.3 * c.arm))}
         elif mood == "plead":     # leaning on the tape, reaching toward the well, hands to face, sobbing
-            hands = ({"L": ("rel", (0.05, 0.22, 0.14 * c.arm)), "R": ("rel", (0.02, 0.22, 0.12 * c.arm))} if (i % 4) < 2 else
+            hands = ({"L": ("rel", (0.05, 0.42, 0.1 * c.arm)), "R": ("rel", (0.02, 0.42, 0.08 * c.arm))} if (i % 4) < 2 else
                      {"L": ("rel", (0.12, 0.6 * c.arm, -0.15 * c.arm)), "R": ("rel", (0.1, 0.65 * c.arm, -0.05 * c.arm))})
         elif mood == "restrain":   # from behind: one hand flat between the mother's shoulder blades
             bpy.context.scene.frame_set(f)     # her real lean this frame (she is keyed first)
@@ -214,8 +214,8 @@ def crowd_idle(c, f0, f1, xy, yaw, mood):
             def back_(bn, side):     # the nearest point of her (rendered) back to this spine joint
                 pt = mw_ @ pbs[bn].head + (mw_.to_3x3() @ V((side, 0, 0))); d_ = (V((xy[0], xy[1], pt.z)) - pt); d_.z = 0
                 q = bvh_.find_nearest(pt + d_.normalized() * 0.3)[0]
-                return q + d_.normalized() * 0.01
-            hands = {"R": ("wg", back_("spine01", 0.0)), "L": ("rel", (0.14, 0.12, -0.8 * c.arm))}     # one hand flat on her back, the other relaxed
+                return q + d_.normalized() * 0.08
+            hands = {"R": ("wg", back_("spine01", 0.0)), "L": ("rel", (0.2, -0.02, -0.8 * c.arm))}     # one hand flat on her back, the other relaxed at her side
         elif mood == "point":
             hands = {"R": ("rel", (0.05, 0.75 * c.arm, 0.1 * c.arm))} if (i % 4) < 2 else {}
         elif mood == "cheer":
@@ -228,8 +228,8 @@ def crowd_idle(c, f0, f1, xy, yaw, mood):
 for n, xy in CROWD_POS.items():
     c = CH[n]; yaw = math.degrees(math.atan2(0 - xy[0], -(0 - xy[1])))
     if n != "Mother":
-        crowd_idle(c, 1, 470, xy, yaw, "idle")
-        crowd_idle(c, 470, 1760, xy, yaw, "restrain" if n == "Crowd1" else ("point" if n in ("Crowd2", "Crowd4") else "worry"))
+        crowd_idle(c, 1, 475, xy, yaw, "idle")     # 475 = 241 + 13*18: on the mother's key frames, so the hand on her back moves with her
+        crowd_idle(c, 475, 1760, xy, yaw, "restrain" if n == "Crowd1" else ("point" if n in ("Crowd2", "Crowd4") else "worry"))
         crowd_idle(c, 1776, END + 20, xy, yaw, "cheer")
     else:
         crowd_idle(c, 1, 241, xy, yaw, "idle"); crowd_idle(c, 241, 1800, xy, yaw, "plead")
@@ -315,7 +315,7 @@ for i, f in enumerate(range(1028, 1130, 14)):
     TE.key(f, V((-1.12, 2.0)), yaw_to((-1.12, 2.0), (-0.9, 0.9)) + 6 * math.sin(ph), head=(-4 + 6 * math.sin(ph * 2), 6 * math.sin(ph)), twist=5 * math.sin(ph), hands=hands)
 # beat 6 (1135-1296): rope tied around his waist by ResB; arms lifted out of the way; ResA checks the line
 TPOS = V((-1.45, 1.25)); TYAW = yaw_to(TPOS, (-0.9, 0.42))
-TE.walk([V((-1.12, 2.0)), V((-1.3, 1.6)), TPOS], 1130, 1160, stride=0.5)
+TE.walk([V((-1.12, 2.0)), V((-1.3, 1.6)), TPOS], 1130, 1160, stride=0.5, arm_swing=0.08)     # small swing: ResB is arriving beside him
 WAIST = TPOS.to_3d() + V((0, 0, TE.root.z + 0.08))
 for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
@@ -439,12 +439,14 @@ for f in range(1314, 1420, 4):
         else:
             hipw = rp + Rb @ (V((TE.ankle[s_].x * 0.6, 0.0, 0.0)) + V((0, 0, -0.08)))
             ank = teen_ank(rp, Rb, s_, flex)
-        if f > 1350 and ank.z < 0.55: break
+        if f >= 1342:     # he hangs on the rope now: they let go of his legs and keep their hands ready
+            c.key(f, pos, yaw_to(pos, (0, 0.25)), flex=15, head=(30, 0), hands={"L": ("rel", (0.15, 0.3, -0.35 * c.arm)), "R": ("rel", (0.15, 0.3, -0.35 * c.arm))})
+            continue
         sh = V((pos.x, pos.y, 1.38)) - V((sx * 0.15, 0, 0))          # his shoulder on the pipe side
         axis = ank - hipw; t = max(0.45, min(0.9, (sh - hipw).dot(axis) / max(1e-4, axis.length_squared)))
         if f <= 1326: t = 0.0      # his belt at the back of the hips
         leg = hipw + axis * t; adir = axis.normalized()
-        leg = leg + (sh - leg).normalized() * (0.12 if f > 1326 else 0.1)     # on the surface of his leg, not its axis
+        leg = leg + (sh - leg).normalized() * (0.12 if f > 1326 else 0.13)     # on the surface of his leg, not its axis
         hy = yaw_to(pos, (0, 0.25))
         low = 0.0 if f <= 1326 else max(0.0, min(1.0, (1.25 - leg.z) / 0.8))                 # crouch only as far as the leg is low
         c.key(f, pos, hy, flex=10 + 25 * low, crouch=0.08 * low, head=(20, 0),

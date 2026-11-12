@@ -688,10 +688,11 @@ def head_info(rig):
     mx = Vector((max(v.x for v in vs), max(v.y for v in vs), max(v.z for v in vs)))
     return mn, mx
 def parent_bone(o, rig, bone):
-    """Child Of the head bone, inverse set at the rest pose (moves with the head)"""
+    """Parent to the head bone, keeping its rest-pose placement (moves with the head)"""
     bpy.context.view_layer.update()
-    c = o.constraints.new("CHILD_OF"); c.target = rig; c.subtarget = bone
-    c.inverse_matrix = (rig.matrix_world @ rig.pose.bones[bone].matrix).inverted()
+    mw = o.matrix_world.copy()
+    o.parent = rig; o.parent_type = "BONE"; o.parent_bone = bone     # a real child of the head bone: worn, not a loose prop
+    bpy.context.view_layer.update(); o.matrix_world = mw
 HAT_SRC = None
 before = set(bpy.data.objects)
 bpy.ops.import_scene.gltf(filepath=os.path.join(A, "models/hardhat.glb"))
