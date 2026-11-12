@@ -52,7 +52,7 @@ MC = lambda i: f"male_casualsuit0{i}/male_casualsuit0{i}.mhclo"
 SH = lambda i: f"shoes0{i}/shoes0{i}.mhclo"
 H = lambda h: f"{h}/{h}.mhclo"
 
-human("Fan", 0.0, 0.42, W, H("bob01"), [FC2, SH(2)], "young_caucasian_female/young_caucasian_female.mhmat", 0,
+human("Fan", 0.0, 0.42, W, H("ponytail01"), [FC2, SH(2)], "young_caucasian_female/young_caucasian_female.mhmat", 0,
       tints=[(FC2, (0.30, 0.36, 0.28))])
 human("Manager", 1.0, 0.72, W, H("short02"), [MC(4), SH(3)], "middleage_caucasian_male/middleage_caucasian_male.mhmat", 2,
       weight=0.6, tints=[(MC(4), (0.10, 0.13, 0.22))])

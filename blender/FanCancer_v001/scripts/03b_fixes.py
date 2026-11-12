@@ -58,7 +58,7 @@ for o in bpy.data.objects:
     for m in done[key]: o.data.materials.append(m)
 # ---- beanie: ribbed knit dome over the hair, parented to the head bone
 old = bpy.data.objects["Beanie"]; anim_old = old.animation_data.action if old.animation_data else None
-hair = bpy.data.objects["Fan.bob01"]
+hair = bpy.data.objects["Fan.ponytail01"]
 FR.data.pose_position = 'REST'; bpy.context.view_layer.update()
 hv = [hair.matrix_world @ v.co for v in hair.data.vertices]
 htop = max(v.z for v in hv)
@@ -66,23 +66,23 @@ eyez = FR.data.bones["eye.L"].head_local.z
 top_v = [v for v in hv if v.z > eyez + 0.03]
 cx = (max(v.x for v in top_v) + min(v.x for v in top_v)) / 2; cy = (max(v.y for v in top_v) + min(v.y for v in top_v)) / 2
 rx = (max(v.x for v in top_v) - min(v.x for v in top_v)) / 2 + 0.008; ry = (max(v.y for v in top_v) - min(v.y for v in top_v)) / 2 + 0.008
-bot = eyez + 0.07
+bot = eyez + 0.062
 bpy.ops.mesh.primitive_uv_sphere_add(segments=96, ring_count=48, radius=1.0)
 bn = bpy.context.object; bn.name = "BeanieKnitMesh"
 import bmesh as _bm2
 bm = _bm2.new(); bm.from_mesh(bn.data)
 _bm2.ops.delete(bm, geom=[v for v in bm.verts if v.co.z < -0.05], context='VERTS')
 bm.to_mesh(bn.data); bm.free()
-hz = htop + 0.05 - bot
+hz = htop + 0.035 - bot
 for v in bn.data.vertices:
     v.co = Vector((cx + v.co.x * rx, cy + v.co.y * ry * 1.04, bot + (v.co.z + 0.05) / 1.05 * hz))
-    if v.co.z < bot + 0.035:      # folded cuff, a little thicker
-        d = Vector((v.co.x - cx, v.co.y - cy, 0)); v.co += d.normalized() * 0.003
+    if v.co.z < bot + 0.03:      # folded cuff, thicker
+        d = Vector((v.co.x - cx, v.co.y - cy, 0)); v.co += d.normalized() * 0.005
 for u in list(bn.users_collection): u.objects.unlink(bn)
 C_CHAR.objects.link(bn)
 bpy.ops.object.shade_smooth()
 rib = bpy.data.textures.new("Rib", 'WOOD'); rib.wood_type = 'BANDS'; rib.noise_basis_2 = 'SIN'
-rd = bn.modifiers.new("rib", 'DISPLACE'); rd.texture = rib; rd.strength = 0.004; rib.noise_scale = 0.004; rd.texture_coords = 'LOCAL'
+rd = bn.modifiers.new("rib", 'DISPLACE'); rd.texture = rib; rd.strength = 0.0045; rd.texture_coords = 'LOCAL'
 bn.data.materials.append(bpy.data.materials["BeanieKnit"])
 uvbox(bn, 0.08)
 FR.data.pose_position = 'POSE'
@@ -105,7 +105,7 @@ kl.new(kv.outputs['Distance'], kad.inputs[0]); kl.new(kw.outputs['Fac'], kad.inp
 kbp = kn.new('ShaderNodeBump'); kbp.inputs['Strength'].default_value = 0.8; kbp.inputs['Distance'].default_value = 0.002
 kl.new(kad.outputs[0], kbp.inputs['Height']); kl.new(kbp.outputs['Normal'], kp.inputs['Normal'])
 bn.data.materials.clear(); bn.data.materials.append(km)
-rib.noise_scale = 0.0035
+rib.noise_scale = 0.006
 sw = bpy.data.objects["Scarf"].modifiers["fit"]; sw.offset = 0.03
 # ---- melanoma cells grow during beat 3
 for o in CELLS:
@@ -160,3 +160,16 @@ for an in ("Fan", "Manager", "Doctor", "Nurse"):
     bpy.context.view_layer.objects.active = b
     while b.modifiers.find("UnderShirt") > 0:
         bpy.ops.object.modifier_move_up(modifier="UnderShirt")
+
+# pompom on the crown + ribs strong
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=4, radius=0.032, location=(cx, cy, bot + hz + 0.018))
+pp = bpy.context.object; pp.name = "BeaniePompom"
+for u in list(pp.users_collection): u.objects.unlink(pp)
+C_CHAR.objects.link(pp)
+ptx = bpy.data.textures.new("Fluff", 'CLOUDS'); ptx.noise_scale = 0.004
+pd = pp.modifiers.new("fluff", 'DISPLACE'); pd.texture = ptx; pd.strength = 0.012
+bpy.ops.object.shade_smooth(); pp.data.materials.append(km)
+FR.data.pose_position = 'REST'; bpy.context.view_layer.update()
+bone_parent(pp, FR, "head", pp.matrix_world.copy())
+for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(37.9), 0.001), (F(37.9) + 1, 1)):
+    pp.scale = (_v,) * 3; pp.keyframe_insert("scale", frame=_f)

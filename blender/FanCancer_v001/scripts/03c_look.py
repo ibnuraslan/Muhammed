@@ -101,6 +101,7 @@ for n in km.node_tree.nodes:
     if n.type == 'TEX_WAVE': n.inputs['Scale'].default_value = 45
     if n.type == 'BUMP': n.inputs['Strength'].default_value = 0.6
 bpy.data.objects["BeanieKnitMesh"].modifiers["rib"].strength = 0.006
+bpy.data.objects["BeanieKnitMesh"].modifiers["rib"].texture.noise_scale = 0.006
 
 for i in range(5):
     L = bpy.data.lights.new(f"FacadeWash{i}", 'AREA'); L.energy = 0; L.size = 12; L.color = (1.0, 0.85, 0.65)
@@ -120,3 +121,10 @@ g = bpy.data.materials["Glass"]; gn = g.node_tree.nodes; gp = gn["Principled BSD
 for lk in list(gp.inputs['Roughness'].links): g.node_tree.links.remove(lk)
 gp.inputs['Roughness'].default_value = 0.0; gp.inputs['IOR'].default_value = 1.02; gp.inputs['Transmission Weight'].default_value = 1.0
 gp.inputs['Base Color'].default_value = (1, 1, 1, 1)
+
+# clinic dressing in the 23-24 s view: cabinet + lamp + poster on the south wall, plant
+C_CL = bpy.data.collections["CLINIC"]
+ph_blend("drawer_cabinet", C_CL, (-30.5, -2.55, 0), rot_z=0.0)
+ph_blend("desk_lamp_arm_01", C_CL, (-30.5, -2.55, 0.84), rot_z=math.radians(40), scale=1.3)
+ph_blend("potted_plant_04", C_CL, (-26.2, -2.7, 0), scale=1.3)
+plane("Poster3", 0.6, 0.84, (-27.0, -2.99, 1.6), pm, C_CL, rot=(math.pi / 2, 0, 0))

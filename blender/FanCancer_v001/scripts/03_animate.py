@@ -106,8 +106,8 @@ def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0
 # palm helpers (body-local, character faces -Y): d = finger direction, n = palm normal
 HANDS_ON_BOARDS = {"L": ((0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1)), "R": ((-0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1))}
 def phone_hold(dz=0.0, both=True, spread=0.0):
-    hd = {"R": ((-0.05, -0.42, 1.17 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
-    if both: hd["L"] = ((0.10 + spread, -0.41, 1.16 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
+    hd = {"R": ((-0.05, -0.44, 1.10 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
+    if both: hd["L"] = ((0.10 + spread, -0.43, 1.09 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
     return hd
 
 # ================================================================== FAN
