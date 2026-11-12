@@ -340,8 +340,8 @@ def doc_anim():
     doc.pose(f(20.0), DOCP, 90, flex=10, head=(16, 0))
     doc.pose(f(22.6), DOCP, 90, flex=24, head=(26, -10), hands=scope)
     face(DR, f(22.6), brow=-0.2, frown=0.6, squint=0.6)
-    doc.pose(f(23.8), DOCP + Vector((0.05, 0, 0)), 95, flex=30, head=(30, -6), hands=scope)
-    doc.pose(f(24.8), DOCP + Vector((0.08, 0, 0)), 95, flex=32, head=(32, -4), hands=scope)
+    doc.pose(f(23.8), DOCP + Vector((0.05, 0, 0)), 95, flex=24, head=(20, -6), hands=scope)
+    doc.pose(f(24.8), DOCP + Vector((0.08, 0, 0)), 95, flex=24, head=(20, -4), hands=scope)
     face(DR, f(25.2), brow=0.4, frown=1.0, smile=-0.4)                         # serious
     doc.pose(f(25.45), DOCP + Vector((0.04, 0, 0)), 88, flex=12, head=(14, 12), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # scope into her coat pocket
     doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains

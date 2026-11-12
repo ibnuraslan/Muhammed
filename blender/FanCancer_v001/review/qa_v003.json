@@ -262,28 +262,62 @@
     "wall/prop fills the frame, character only 1%"
    ]
   ],
-  "1489": [
-   [
-    "FILL",
-    "hair / top of head 38%"
-   ]
-  ],
-  "1495": [
-   [
-    "FILL",
-    "hair / top of head 29%"
-   ]
-  ],
   "1501": [
    [
-    "BACKHEAD",
-    "ManagerB"
+    "FACEPRESS",
+    "Doctor.L hand on face"
    ]
   ],
-  "1519": [
+  "1531": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
    [
     "FILL",
-    "hair / top of head 33%"
+    "ClinicWallS"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only ClinicWallS in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1537": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "ClinicWallS"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only ClinicWallS in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1903": [
@@ -568,6 +602,16 @@
     "no character in view"
    ]
   ],
+  "2245": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
   "2257": [
    [
     "EMPTY",
@@ -603,13 +647,19 @@
    ],
    [
     "EMPTY",
+    "only LaptopScreen in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ]
  },
  "counts": {
-  "BACKHEAD": 2,
-  "FILL": 8,
-  "EMPTY": 96
+  "BACKHEAD": 1,
+  "FILL": 9,
+  "EMPTY": 105,
+  "FACEPRESS": 1,
+  "INSIDE": 2
  }
 }
