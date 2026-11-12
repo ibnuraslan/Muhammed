@@ -475,7 +475,7 @@ def vitrine(name, loc, size=(1.4, 0.6), rot_z=0.0, rng=None, lit=True):
 
 def build_salon(c, night=False):
     if night:
-        world_sky(sun_elev_deg=-2, sun_rot_deg=95, strength=1.6, tint=(0.55, 0.68, 1.0))
+        world_sky(sun_elev_deg=-2, sun_rot_deg=95, strength=4.0, tint=(0.55, 0.68, 1.0))
     else:
         world_sky(sun_elev_deg=4, sun_rot_deg=95, strength=0.5, tint=(0.85, 0.9, 1.0))
         sun(4, 95, energy=1.0, color=(1.0, 0.75, 0.55), angle_deg=1.5)
@@ -787,7 +787,7 @@ MOVES = {
                        cam=lambda c, t: (Vector((-2.8, -6.0, 1.8)).lerp(Vector((-2.4, -4.8, 1.75)), ease(t)), Vector((2.6, 8.0, 1.3)), 30),
                        focus=lambda c, t: Vector((2.5, 8.0, 1.2))),
     "night_wait": dict(kind="anim", dof=4.0, anim=anim_night_wait,
-                       cam=lambda c, t: (Vector((1.5, 2.0, 1.5)).lerp(Vector((0.9, 2.3, 1.45)), ease(t)), Vector((-4.0, 7.2, 0.6)), 28),
+                       cam=lambda c, t: (Vector((-2.0, 2.2, 1.7)).lerp(Vector((-2.6, 2.6, 1.65)), ease(t)), Vector((-5.6, 6.2, 0.6)), 26),
                        focus=lambda c, t: Vector((-5.6, 6.0, 0.6))),
     "corridor": dict(kind="anim", dof=4.0, cam=cam_corridor, anim=anim_corridor, focus=lambda c, t: Vector((0, 6.0, 1.4))),
     "chair": dict(kind="anim", dof=2.8, cam=cam_chair, anim=lambda c, t: None, focus=lambda c, t: Vector((0.55, 8.6, 0.6))),

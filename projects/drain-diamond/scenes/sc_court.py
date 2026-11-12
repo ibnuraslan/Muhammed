@@ -18,7 +18,7 @@ import dd
 from dd import person, place, face_to, walk_to, arms_relaxed, zero, ground
 from human import pose_sit, pose_walk, reach, fingers_curl
 
-EXPOSURE = 0.2
+EXPOSURE = -0.3
 DUR = {k: 9.0 for k in ("aisle", "dock", "prosecutor", "file", "ashamed", "reverse", "judges")}
 VARIANT_FOR = {k: k for k in DUR}
 BENCH_Y = 17.0
@@ -44,7 +44,7 @@ def room():
     B.box((0, BENCH_Y + 1.0, 0.25), (9, 3.0, 0.5), oak)
     B.box((0, BENCH_Y, 1.05), (7.5, 0.9, 1.1), dark).box((0, BENCH_Y, 1.62), (7.7, 1.0, 0.05), oak)
     for x in (-1.6, 0, 1.6):
-        B.box((x, BENCH_Y + 0.9, 1.35), (0.7, 0.6, 1.7), dd.tex_mat("leather_red_02", 1.0, tint=(0.6, 0.5, 0.5), name="JudgeLeather"))
+        B.box((x, BENCH_Y + 0.9, 1.35), (0.7, 0.6, 1.7), pbr("JudgeLeather", (0.16, 0.035, 0.03), 0.4, 0.0, **{"Coat Weight": 0.3}))
     B.box((-2.8, BENCH_Y - 2.0, 0.55), (2.6, 0.8, 1.1), dark)          # clerk
     B.box((-5.3, 13.5, 0.2), (2.4, 3.0, 0.4), oak).box((-4.6, 13.5, 0.95), (0.8, 2.6, 1.1), dark)   # prosecutor
     # the glass dock: oak base, glass walls
@@ -73,6 +73,31 @@ def room():
     for x in (-3, 0, 3):
         for y in (4, 10, 16):
             l = area_light((x, y, 7.9), (0, 0, 0), 1.5, 90, (1.0, 0.9, 0.78)); l.visible_camera = False
+    # dressing: brass pendant lamps, curtains half-drawn on the tall windows, microphones on the bench and desks,
+    # stacked case files, leather chairs for counsel, a wall clock, two framed paintings (generic landscapes)
+    for x in (-3.5, 0.0, 3.5):
+        for y in (4.0, 11.0, 17.0):
+            dd.model_h("Chandelier_02", (x, y, 6.4), 1.1)
+            pl = bpy.data.lights.new("Pendant", 'POINT'); pl.energy = 120; pl.color = (1.0, 0.78, 0.5); pl.shadow_soft_size = 0.4
+            po = bpy.data.objects.new("Pendant", pl); bpy.context.collection.objects.link(po); po.location = (x, y, 6.6)
+    curtain = fabric("Curtain", (0.32, 0.06, 0.06), 0.9, 0.6, 300)
+    for k in range(6):
+        for sy in (-1, 1):
+            box("Curtain", (7.0, 1.6 + k * 3.6 + sy * 0.85, 4.1), (0.06, 0.75, 4.8), curtain)
+    mic_m = pbr("MicM", (0.03, 0.03, 0.03), 0.4, 0.6)
+    for x in (-1.6, 0.0, 1.6):
+        cyl("Mic", (x, BENCH_Y - 0.25, 1.82), 0.006, 0.3, mic_m, verts=8, rot=(math.radians(-25), 0, 0))
+        cyl("MicHead", (x, BENCH_Y - 0.33, 1.95), 0.014, 0.04, mic_m, verts=10, rot=(math.radians(-25), 0, 0))
+    for x in (1.2, 2.4, 3.6):
+        cyl("Mic", (x, 9.3, 0.9), 0.006, 0.3, mic_m, verts=8, rot=(math.radians(-25), 0, 0))
+    for k in range(6):
+        box("CaseFiles", (-2.6 + 0.02 * k, BENCH_Y - 2.0, 1.12 + 0.03 * k), (0.3, 0.38, 0.028),
+            pbr("CF", ((0.55, 0.42, 0.25), (0.82, 0.8, 0.74))[k % 2], 0.8), rot=(0, 0, 0.08 * k))
+    for k in range(4):
+        dd.model_h("dining_chair_02", (1.3 + k * 1.0, 8.85, 0), 0.95, rot_z=0.0)
+    dd.model_h("wall_clock", (0, 20.45, 6.2), 0.5, rot_z=math.pi)
+    for x in (-5.0, 5.0):
+        dd.model_h("fancy_picture_frame_01", (x, 20.45, 3.0), 1.4, rot_z=math.pi)
     # papers on the bench
     for k in range(4):
         box("Paper", (-2.0 + k * 1.3, BENCH_Y - 0.1, 1.655), (0.21, 0.3, 0.003), pbr("Paper", (0.85, 0.84, 0.8), 0.8), rot=(0, 0, 0.1 * k))
@@ -139,14 +164,14 @@ def build(variant=None):
                        ("short02", "short04", "short01", "short03")[k % 4], cval=0.2)
             c["accused"].append(h)
         if v in ("dock", "ashamed"):
-            standing(c["accused"][0], (x0 + 0.55, (y0 + y1) / 2, 0.3), math.radians(90), z=0.3)    # facing -X (toward the room)
+            standing(c["accused"][0], (x0 + 0.55, (y0 + y1) / 2, 0.3), math.radians(-90), z=0.3)    # facing -X (toward the room)
             if v == "ashamed":
                 c["accused"][0].rot("neck01", (0, 1, 0), 0)
             for k, h in enumerate(c["accused"][1:]):
-                seated(h, (x0 + 1.3, y0 + 0.7 + k * 1.3, 0.3), math.radians(90), seat_z=0.67)
+                seated(h, (x0 + 1.3, y0 + 0.7 + k * 1.3, 0.3), math.radians(-90), seat_z=0.67)
         else:
             for k, h in enumerate(c["accused"]):
-                seated(h, (x0 + 1.3, y0 + 0.6 + k * 1.1, 0.3), math.radians(90), seat_z=0.67)
+                seated(h, (x0 + 1.3, y0 + 0.6 + k * 1.1, 0.3), math.radians(-90), seat_z=0.67)
     if v == "dock":
         clerk = robed("Clerk", 0.0, 44, "bob01"); standing(clerk, (-2.8, BENCH_Y - 1.4, 0), math.pi)
         c["clerk"] = clerk
@@ -212,7 +237,7 @@ def anim_file(c, t):
 
 def anim_ashamed(c, t):
     h = c["accused"][0]; x0, x1, y0, y1 = DOCK
-    standing(h, (x0 + 0.55, (y0 + y1) / 2, 0.3), math.radians(90), z=0.3)
+    standing(h, (x0 + 0.55, (y0 + y1) / 2, 0.3), math.radians(-90), z=0.3)
     h.rot("neck01", (0, 1, 0), 12 + 3 * t); h.rot("head", (0, 1, 0), 14 + 4 * t)     # bowed toward -X (forward)
 
 
@@ -245,14 +270,14 @@ MOVES = {
     "dock": dict(kind="anim", dof=4.0, anim=anim_dock,
                  cam=lambda c, t: (Vector((5.6, 17.5, 1.9)).lerp(Vector((5.2, 17.2, 1.85)), ease(t)), Vector((5.0, 11.0, 1.55)), 40),
                  focus=lambda c, t: Vector((5.15, 11.25, 1.9))),
-    "prosecutor": dict(kind="anim", dof=5.6, anim=anim_prosecutor,
-                       cam=lambda c, t: (Vector((3.6, 6.2, 1.7)).lerp(Vector((3.2, 6.6, 1.7)), ease(t)), Vector((-5.4, 13.4, 1.8)), 40),
+    "prosecutor": dict(kind="anim", dof=4.0, anim=anim_prosecutor,
+                       cam=lambda c, t: (Vector((-1.6, 10.2, 1.75)).lerp(Vector((-2.0, 10.6, 1.72)), ease(t)), Vector((-5.4, 13.4, 1.75)), 45),
                        focus=lambda c, t: Vector((-5.4, 13.4, 1.9))),
     "file": dict(kind="anim", dof=5.6, anim=anim_file,
                  cam=lambda c, t: (Vector((-1.6, 13.5, 2.6)).lerp(Vector((-1.2, 13.8, 2.55)), ease(t)), Vector((3.2, 9.6, 0.9)), 30),
                  focus=lambda c, t: Vector((2.4, 9.4, 1.0))),
     "ashamed": dict(kind="anim", dof=2.8, anim=anim_ashamed,
-                    cam=lambda c, t: (Vector((1.6, 12.6, 1.75)).lerp(Vector((2.6, 12.0, 1.8)), ease(t)), Vector((5.15, 11.25, 1.75)), 45),
+                    cam=lambda c, t: (Vector((1.4, 10.0, 1.75)).lerp(Vector((2.4, 10.5, 1.78)), ease(t)), Vector((5.15, 11.25, 1.7)), 45),
                     focus=lambda c, t: Vector((5.15, 11.25, 1.8))),
     "reverse": dict(kind="anim", dof=4.0, anim=anim_reverse,
                     cam=lambda c, t: (Vector((6.3, 12.6, 2.1)).lerp(Vector((6.3, 12.0, 2.05)), ease(t)), Vector((-1.5, 3.5, 1.0)), 28),
