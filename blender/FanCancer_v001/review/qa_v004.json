@@ -304,6 +304,12 @@
     "no character in view"
    ]
   ],
+  "1939": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
   "1945": [
    [
     "EMPTY",
@@ -311,6 +317,12 @@
    ]
   ],
   "1951": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1957": [
    [
     "EMPTY",
     "no character in view"
@@ -424,6 +436,18 @@
     "no character in view"
    ]
   ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
   "2083": [
    [
     "EMPTY",
@@ -443,6 +467,18 @@
    ]
   ],
   "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
    [
     "EMPTY",
     "no character in view"
@@ -469,36 +505,16 @@
   "2137": [
    [
     "EMPTY",
-    "only CityBlockSrc.003 in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
   "2143": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only CityBlockSrc.003 in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
   "2149": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only CityBlockSrc.003 in view"
-   ],
    [
     "EMPTY",
     "no character in view"
@@ -558,6 +574,6 @@
  "counts": {
   "BACKHEAD": 1,
   "FILL": 5,
-  "EMPTY": 92
+  "EMPTY": 93
  }
 }
