@@ -547,3 +547,33 @@ def draped_coat(name, color=(0.09, 0.08, 0.065), length=(0.55, 0.42), width=0.4)
         p.use_smooth = True
     o.data.materials.append(fabric(name + "F", color, 0.95, 0.4, 250))
     return o
+
+
+def facade_window(x, y, z, w=1.0, h=1.3, lit=False, curtain=(0.42, 0.36, 0.3), frame=(0.85, 0.85, 0.82), sill=(0.6, 0.58, 0.55),
+                  lace=False, name="FW"):
+    """A real-looking window on a wall whose front face is the plane y (facing -Y): a proud frame and sill
+    (they throw shadows, so it reads with depth), a mullion cross, curtains and a dark (or lit) room behind
+    reflective glass. Returns the parts."""
+    try:
+        import rj
+        gl = rj.window_glass()
+    except Exception:
+        gl = pbr("WGlass", (0.02, 0.025, 0.03), 0.03, **{'Coat Weight': 1.0})
+    fm = pbr(name + "Frame", frame, 0.45); sm = pbr(name + "Sill", sill, 0.6)
+    parts = []
+    room = emissive(name + "Lit", (1.0, 0.68, 0.4), 0.9) if lit else pbr(name + "Room", (0.012, 0.011, 0.01), 0.9)
+    parts.append(box(name + "Room", (x, y - 0.006, z), (w, 0.004, h), room))
+    if curtain:
+        cm = fabric(name + "Curt", curtain, 0.92, 0.3, 220)
+        for sx in (-1, 1):
+            parts.append(box(name + "Curt", (x + sx * (w / 2 - 0.13), y - 0.02, z + 0.02), (0.24, 0.02, h - 0.06), cm, bevel=0.008))
+    if lace:
+        parts.append(box(name + "Lace", (x, y - 0.03, z - h * 0.15), (w - 0.08, 0.004, h * 0.6),
+                         pbr(name + "LaceM", (0.85, 0.84, 0.8), 0.8, **{'Alpha': 0.55})))
+    parts.append(box(name + "Glass", (x, y - 0.05, z), (w - 0.04, 0.006, h - 0.04), gl))
+    t = 0.07
+    for (dx, dz, sx, sz) in ((0, h / 2, w + 2 * t, t), (0, -h / 2, w + 2 * t, t), (w / 2, 0, t, h), (-w / 2, 0, t, h),
+                             (0, 0, 0.045, h), (0, h * 0.18, w, 0.045)):
+        parts.append(box(name + "Fr", (x + dx, y - 0.07, z + dz), (sx, 0.14, sz), fm, bevel=0.006))
+    parts.append(box(name + "Sill", (x, y - 0.12, z - h / 2 - 0.06), (w + 0.2, 0.24, 0.06), sm, bevel=0.01))
+    return parts

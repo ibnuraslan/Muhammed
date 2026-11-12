@@ -49,37 +49,77 @@ def board_image(path, W=1400, H=1000):
 
 
 def moped(name, loc, rot_z):
-    """A small 1970s moped (two spoked wheels, tube frame, tank, saddle) with a spade strapped along its side."""
-    tube = pbr("MopedRed", (0.35, 0.05, 0.04), 0.35, 0.3, **{'Coat Weight': 0.6})
-    chrome = pbr("MChrome", (0.8, 0.8, 0.82), 0.15, 1.0); rub = pbr("MRubber", (0.02, 0.02, 0.02), 0.7)
-    parts = [box("Tank", (0.12, 0, 0.72), (0.32, 0.18, 0.16), tube, bevel=0.05)]     # unrotated first: join keeps its transform
-    for x in (-0.55, 0.55):                                # wheels (along local X), axle along Y
-        bpy.ops.mesh.primitive_torus_add(major_radius=0.25, minor_radius=0.055, location=(x, 0, 0.31), rotation=(math.radians(90), 0, 0))
-        t = bpy.context.active_object; t.data.materials.append(rub); parts.append(t)
-        parts.append(cyl("Rim", (x, 0, 0.31), 0.2, 0.02, chrome, verts=32, rot=(math.radians(90), 0, 0)))
-        parts.append(cyl("Hub", (x, 0, 0.31), 0.05, 0.08, chrome, verts=16, rot=(math.radians(90), 0, 0)))
-    def bar(a, b, r, m):
+    """A 1981-style 50 cc moped: spoked 17-inch wheels with mudguards, a step-through frame with a teardrop tank,
+    a finned engine, exhaust, saddle, rear rack, headlamp, handlebars with grips and mirror, a kickstand.
+    A spade is strapped along the left side (blade by the rear wheel, handle forward), two straps.
+    Local frame: +X forward, the wheels on the X axis."""
+    paint = pbr("MopedRed", (0.32, 0.04, 0.03), 0.3, 0.2, **{'Coat Weight': 0.8, 'Coat Roughness': 0.08})
+    chrome = pbr("MChrome", (0.82, 0.82, 0.84), 0.12, 1.0); rub = pbr("MRubber", (0.015, 0.015, 0.015), 0.75)
+    blk = pbr("MBlack", (0.02, 0.02, 0.022), 0.4); alu = pbr("MAlu", (0.55, 0.56, 0.58), 0.35, 0.9)
+    R = 0.29
+    parts = [box("Anchor", (0, 0, 0.5), (0.01, 0.01, 0.01), blk)]
+    def bar(a, b, r, m, verts=12):
         a = Vector(a); b = Vector(b); d = b - a
-        o = cyl("Bar", (a + b) / 2, r, d.length, m, verts=12)
+        o = cyl("Bar", (a + b) / 2, r, d.length, m, verts=verts)
         o.rotation_mode = 'QUATERNION'; o.rotation_quaternion = d.to_track_quat('Z', 'Y'); return o
-    parts += [bar((0.55, 0, 0.31), (0.42, 0, 0.95), 0.02, chrome),       # fork
-              bar((0.42, 0, 0.92), (-0.1, 0, 0.55), 0.03, tube),          # down tube
-              bar((-0.1, 0, 0.55), (-0.55, 0, 0.31), 0.022, tube),        # chain stay
-              bar((-0.1, 0, 0.55), (-0.25, 0, 0.78), 0.022, tube),        # seat post
-              bar((0.38, -0.3, 1.02), (0.38, 0.3, 1.02), 0.012, chrome)]  # handlebar
-    parts.append(box("Engine", (0.0, 0, 0.4), (0.25, 0.16, 0.2), pbr("Engine", (0.18, 0.18, 0.19), 0.5, 0.6), bevel=0.02))
-    parts.append(box("Saddle", (-0.28, 0, 0.82), (0.32, 0.17, 0.07), pbr("Saddle", (0.03, 0.03, 0.03), 0.5), bevel=0.03))
-    parts.append(box("Carrier", (-0.52, 0, 0.72), (0.3, 0.2, 0.02), chrome))
-    parts.append(bar((-0.35, 0.08, 0.35), (-0.75, 0.08, 0.42), 0.02, chrome))  # exhaust
-    parts.append(cyl("Lamp", (0.47, 0, 1.0), 0.07, 0.08, chrome, verts=24, rot=(0, math.radians(90), 0)))
+    for x in (-0.58, 0.6):                                   # wheels: tyre, rim, hub, 18 spokes
+        bpy.ops.mesh.primitive_torus_add(major_radius=R - 0.03, minor_radius=0.034, major_segments=48, minor_segments=12,
+                                         location=(x, 0, R), rotation=(math.radians(90), 0, 0))
+        t = bpy.context.active_object; t.data.materials.append(rub); bpy.ops.object.shade_smooth(); parts.append(t)
+        bpy.ops.mesh.primitive_torus_add(major_radius=R - 0.065, minor_radius=0.008, major_segments=48, minor_segments=6,
+                                         location=(x, 0, R), rotation=(math.radians(90), 0, 0))
+        rm = bpy.context.active_object; rm.data.materials.append(chrome); parts.append(rm)
+        parts.append(cyl("Hub", (x, 0, R), 0.045, 0.1, alu, verts=20, rot=(math.radians(90), 0, 0)))
+        for k in range(18):
+            a = k / 18 * 2 * math.pi
+            parts.append(bar((x, 0.03 * (1 if k % 2 else -1), R), (x + (R - 0.07) * math.cos(a), 0, R + (R - 0.07) * math.sin(a)), 0.0018, chrome, 6))
+        for k in range(9):                                  # mudguard: an arc of short curved segments over the wheel
+            a0 = math.radians(20 + k * 16); a1 = math.radians(20 + (k + 1) * 16)
+            sgn = 1 if x > 0 else -1
+            p0 = (x + sgn * (R + 0.03) * math.cos(a0) * (1 if sgn > 0 else 1), 0, R + (R + 0.03) * math.sin(a0))
+            p0 = (x - (R + 0.03) * math.cos(a0) if x < 0 else x + (R + 0.03) * math.cos(math.pi - a0) * -1, 0, R + (R + 0.03) * math.sin(a0))
+            a_ = math.radians(10 + k * 18); b_ = math.radians(10 + (k + 1) * 18)
+            q0 = (x + (R + 0.03) * math.cos(a_), 0, R + (R + 0.03) * math.sin(a_)); q1 = (x + (R + 0.03) * math.cos(b_), 0, R + (R + 0.03) * math.sin(b_))
+            seg = bar(q0, q1, 0.001, paint)
+            seg.scale = (45.0, 1.0, 1.0)                     # flat strip ~9 cm wide
+            parts.append(seg)
+    parts += [bar((0.6, 0.06, R), (0.47, 0.06, 0.95), 0.018, chrome), bar((0.6, -0.06, R), (0.47, -0.06, 0.95), 0.018, chrome),   # fork
+              bar((0.47, 0, 0.98), (0.42, 0, 1.08), 0.025, blk),                                        # steering head
+              bar((0.42, 0, 0.95), (-0.02, 0, 0.42), 0.032, paint),                                      # down tube (step-through)
+              bar((-0.02, 0, 0.42), (-0.22, 0, 0.75), 0.026, paint),                                     # seat tube
+              bar((-0.22, 0.07, 0.72), (-0.58, 0.07, R), 0.014, paint), bar((-0.22, -0.07, 0.72), (-0.58, -0.07, R), 0.014, paint),   # rear stays
+              bar((-0.05, 0.08, 0.38), (-0.58, 0.06, R), 0.014, paint), bar((-0.05, -0.08, 0.38), (-0.58, -0.06, R), 0.014, paint),
+              bar((0.42, -0.33, 1.1), (0.42, 0.33, 1.1), 0.011, chrome),                                 # handlebar
+              bar((0.42, 0.33, 1.1), (0.4, 0.43, 1.1), 0.016, blk), bar((0.42, -0.33, 1.1), (0.4, -0.43, 1.1), 0.016, blk),   # grips
+              bar((0.42, 0.28, 1.1), (0.42, 0.3, 1.28), 0.005, chrome)]                                  # mirror stem
+    parts.append(cyl("Mirror", (0.42, 0.3, 1.3), 0.045, 0.012, chrome, verts=20, rot=(0, math.radians(90), 0)))
+    parts.append(cyl("Headlamp", (0.5, 0, 1.0), 0.075, 0.1, chrome, verts=24, rot=(0, math.radians(90), 0)))
+    parts.append(cyl("Lens", (0.555, 0, 1.0), 0.066, 0.01, pbr("LampLens", (0.9, 0.88, 0.8), 0.05, **{'Transmission Weight': 0.6}), verts=24, rot=(0, math.radians(90), 0)))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(0.2, 0, 0.78))
+    tank = bpy.context.active_object; tank.scale = (0.2, 0.11, 0.085); tank.rotation_euler = (0, math.radians(-30), 0)
+    tank.data.materials.append(paint); bpy.ops.object.shade_smooth(); parts.append(tank)
+    eng = box("Engine", (-0.03, 0, 0.36), (0.26, 0.16, 0.18), pbr("EngCase", (0.18, 0.18, 0.19), 0.45, 0.7), bevel=0.04); parts.append(eng)
+    for k in range(6):                                      # cylinder fins
+        parts.append(box("Fin", (0.1, 0, 0.47 + k * 0.022), (0.13, 0.15, 0.008), pbr("FinC", (0.3, 0.3, 0.31), 0.5, 0.8)))
+    parts += [bar((0.05, -0.1, 0.33), (-0.45, -0.12, 0.35), 0.022, chrome), bar((-0.45, -0.12, 0.35), (-0.78, -0.12, 0.42), 0.032, chrome)]   # exhaust
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(-0.3, 0, 0.78))
+    sad = bpy.context.active_object; sad.scale = (0.24, 0.1, 0.045); sad.data.materials.append(pbr("SaddleVinyl", (0.03, 0.025, 0.02), 0.45, **{'Coat Weight': 0.3}))
+    bpy.ops.object.shade_smooth(); parts.append(sad)
+    for dy in (-0.09, 0.09):
+        parts.append(bar((-0.48, dy, 0.8), (-0.86, dy, 0.8), 0.008, chrome))                         # rack rails
+    for dx in (-0.55, -0.7, -0.84):
+        parts.append(bar((dx, -0.09, 0.8), (dx, 0.09, 0.8), 0.006, chrome))
+    parts.append(bar((-0.05, -0.12, 0.3), (-0.15, -0.28, 0.02), 0.01, blk))                        # kickstand
     o = join(parts, name)
-    # the spade, strapped along the left side, blade down by the rear wheel, a strap round the carrier
+    # the spade, strapped along the left (-Y, camera) side: blade down by the rear wheel, handle forward along the frame
     try:
         sp, ms = ph.model("rusted_spade_01", loc=(0, 0, 0))
-        sp.parent = o; sp.location = (-0.2, -0.19, 0.62); sp.rotation_euler = (0, math.radians(68), 0); sp.scale = (0.95, 0.95, 0.95)
+        sp.parent = o; sp.location = (-0.62, -0.2, 0.42); sp.rotation_euler = (0, math.radians(62), 0)
     except Exception as e:
         print("[home81] spade:", e)
-    box("Strap", (-0.48, -0.14, 0.74), (0.04, 0.12, 0.03), pbr("Strap", (0.05, 0.04, 0.03), 0.8)).parent = o
+    strap = pbr("Strap", (0.12, 0.08, 0.04), 0.8)
+    for (x, z) in ((-0.42, 0.53), (-0.02, 0.75)):
+        box("Strap", (x, -0.17, z), (0.04, 0.12, 0.06), strap).parent = o
     o.location = loc; o.rotation_euler = (0, 0, rot_z)
     return o
 
@@ -106,21 +146,22 @@ def facade(c, night_windows):
     for fl in range(3):
         for k in range(8):
             x = -9.0 + k * 2.6; z = 1.4 + fl * 2.8
-            if abs(x + 1.2) < 0.1 and fl == 1:               # the landlord's real window: a hollow frame only
-                for (dx, dz, sx, sz) in ((0, 0.68, 1.3, 0.06), (0, -0.68, 1.3, 0.06), (0.62, 0, 0.06, 1.4), (-0.62, 0, 0.06, 1.4)):
-                    box("FrameRing", (x + dx, y0 - 0.005, z + dz), (sx, 0.06, sz), fr)
+            if fl == 0 and abs(x - 1.4) < 1.2:
+                continue                                      # the front door
+            if abs(x + 1.2) < 0.1 and fl == 1:               # the landlord's real window: frame, sill and lace only
+                fm = pbr("LLFrame", (0.8, 0.79, 0.75), 0.45)
+                for (dx, dz, sx, sz) in ((0, 0.7, 1.44, 0.07), (0, -0.7, 1.44, 0.07), (0.66, 0, 0.07, 1.4), (-0.66, 0, 0.07, 1.4)):
+                    box("FrameRing", (x + dx, y0 - 0.07, z + dz), (sx, 0.14, sz), fm, bevel=0.006)
+                box("LLGlass", (x, y0 - 0.05, z), (1.26, 0.006, 1.36), wg)
+                box("LLSill", (x, y0 - 0.12, z - 0.76), (1.5, 0.24, 0.06), pbr("SillC", (0.6, 0.58, 0.55), 0.6), bevel=0.01)
                 continue
-            box("Frame", (x, y0 - 0.005, z), (1.3, 0.06, 1.4), fr)
-            if abs(x + 1.2) < 0.1 and fl == 1:
-                continue                                      # the real window (opening) is built separately
             lit_ = (k * 3 + fl) % 5 in night_windows
-            box("Pane", (x, y0 - 0.035, z), (1.18, 0.01, 1.28),
-                emissive("RoomLit", (1.0, 0.66, 0.38), 1.1) if lit_ else pbr("DarkPane", (0.004, 0.0045, 0.005), 0.3))
-            box("Curt", (x - 0.4, y0 - 0.04, z), (0.3, 0.01, 1.22), fabric("CurtF", (0.3, 0.26, 0.2) if not lit_ else (0.55, 0.38, 0.2), 0.9, 0.3, 200))
+            B.facade_window(x, y0, z, 1.2, 1.3, lit=lit_, curtain=(0.36, 0.28, 0.2) if not lit_ else (0.55, 0.38, 0.2),
+                            lace=(k % 3 == 0), name=f"BW{fl}{k}")
             c["windows"].append((x, z))
     # the landlord's window (first floor, left of the door) gets a lace curtain
     x, z = -1.2, 1.4 + 2.8
-    lace = pbr("LaceB", (0.85, 0.83, 0.78), 0.8, **{'Alpha': 0.45, 'Transmission Weight': 0.3})
+    lace = pbr("LaceB", (0.6, 0.58, 0.54), 0.8, **{'Alpha': 0.22})
     cur = box("Lace", (x, y0 + 0.1, z), (1.15, 0.01, 1.25), lace)
     c["lace"] = cur; c["lwin"] = Vector((x, y0, z))
     box("Door", (1.4, y0 - 0.02, 1.1), (1.1, 0.06, 2.2), pbr("BlockDoor", (0.2, 0.15, 0.1), 0.5))
@@ -203,7 +244,7 @@ def build(variant=None):
         B.stand(land, (lw.x + 0.15, lw.y + 0.75, 0), 0.0, z=2.8 + 0.0)
         c["landlord"] = land
         box("UpFloor", (lw.x, lw.y + 1.0, 2.79), (3, 2, 0.02), pbr("UpF", (0.2, 0.15, 0.1), 0.8))
-        B.practical((lw.x + 0.4, lw.y + 2.2, 4.9), 160, (1.0, 0.68, 0.38), 0.3, "LandlordLamp")
+        B.practical((lw.x + 0.4, lw.y + 2.2, 4.9), 50, (1.0, 0.68, 0.38), 0.3, "LandlordLamp")
         B.room_haze((0, -2, 3), (30, 14, 6), density=0.004, color=(0.75, 0.78, 0.9))
     if variant in ("evening", "nextday"):
         B.finish_interior(lift=0.0)
@@ -251,8 +292,8 @@ def anim(c, t, move):
         land = c["landlord"]
         land.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.4)); B.nod(land, 12)
         lc = c["lace"]; op = ease(min(1.0, max(0.0, (sec - 1.0) / 1.5)))
-        lc.location.x = c["lwin"].x - 0.38 * op
-        lc.scale.x = 1.0 - 0.62 * op
+        lc.location.x = c["lwin"].x - 0.3 * op
+        lc.scale.x = 1.0 - 0.5 * op
     bpy.context.view_layer.update()
 
 

@@ -45,47 +45,101 @@ def water_mat():
     return m
 
 
-def gabled(name, x, y, w, d, h, brick, roof, face_y=-1, lit=(), rng=None):
-    """A brick gabled house facing -Y: walls, a pitched roof, white-framed windows (some lit), a door."""
+def gabled(name, x, y, w, d, h, brick, roof, face_y=-1, lit=(), rng=None, stepped=True, doors=()):
+    """A North German brick gable house facing -Y: walls, a pitched roof, a stepped brick gable on the street
+    side (the gable faces the street), framed windows with sills and curtains, a door with a step."""
     box(name, (x, y + d / 2, h / 2), (w, d, h), brick)
-    bpy.ops.mesh.primitive_cylinder_add(vertices=3, radius=w / 2 / math.cos(math.radians(30)) * 0.98, depth=d + 0.3,
-                                        location=(x, y + d / 2, h + w * 0.29), rotation=(math.radians(90), 0, 0))
-    r = bpy.context.active_object; r.name = name + "Roof"; r.rotation_euler = (math.radians(90), math.radians(90), 0)
-    r.scale = (0.9, 1.0, 1.0); r.data.materials.append(roof)
-    fr = pbr("WinWhite", (0.85, 0.85, 0.83), 0.4)
+    # pitched roof, ridge running back from the street so the gable faces the street
+    import bmesh
+    rh = w * 0.62
+    bm = bmesh.new()
+    vs = [bm.verts.new(v) for v in ((-w / 2 - 0.15, -0.15, 0), (w / 2 + 0.15, -0.15, 0), (0, -0.15, rh),
+                                    (-w / 2 - 0.15, d + 0.15, 0), (w / 2 + 0.15, d + 0.15, 0), (0, d + 0.15, rh))]
+    for f in ((0, 2, 5, 3), (1, 4, 5, 2), (0, 3, 4, 1), (0, 1, 2), (3, 5, 4)):
+        bm.faces.new([vs[i] for i in f])
+    me = bpy.data.meshes.new(name + "Roof"); bm.to_mesh(me); bm.free()
+    r = bpy.data.objects.new(name + "Roof", me); bpy.context.collection.objects.link(r); r.location = (x, y, h)
+    me.materials.append(roof)
+    # the street gable: brick triangle, stepped at the edges (Treppengiebel)
+    steps = 5
+    for k in range(steps):
+        sw = w * (1 - k / steps); sh = rh / steps
+        box(name + "Gable", (x, y + 0.12, h + sh * (k + 0.5)), (sw + 0.1, 0.36, sh), brick)
+    box(name + "Plinth", (x, y - 0.03, 0.25), (w + 0.06, 0.08, 0.5), pbr("Plinth", (0.18, 0.17, 0.16), 0.8))
+    box(name + "Cornice", (x, y - 0.06, h - 0.1), (w + 0.1, 0.14, 0.12), pbr("Cornice", (0.75, 0.74, 0.7), 0.6))
     k = 0
     for fl in range(int(h // 2.8)):
         for j in range(max(1, int(w // 2.0))):
-            wx = x - w / 2 + 1.0 + j * 2.0; wz = 1.5 + fl * 2.8
-            if wx > x + w / 2 - 0.6:
+            wx = x - w / 2 + 1.0 + j * 2.0; wz = 1.6 + fl * 2.8
+            if wx > x + w / 2 - 0.6 or (fl == 0 and any(abs(wx - dx) < 1.3 for dx in doors)):
                 continue
-            box(name + "WF", (wx, y - 0.01, wz), (0.95, 0.06, 1.25), fr)
-            lit_ = k in lit
-            box(name + "WP", (wx, y - 0.035, wz), (0.82, 0.01, 1.1), emissive("WinLit", (1.0, 0.7, 0.42), 1.4) if lit_ else pbr("WinDark", (0.004, 0.0045, 0.005), 0.3))
-            box(name + "WC", (wx - 0.33, y - 0.04, wz), (0.14, 0.01, 1.05), fabric("NetC", (0.16, 0.14, 0.12), 0.9, 0.2, 200))
-            box(name + "WM", (wx, y - 0.045, wz), (0.04, 0.01, 1.1), fr); box(name + "WT", (wx, y - 0.045, wz + 0.15), (0.82, 0.01, 0.04), fr)
+            B.facade_window(wx, y, wz, 0.9, 1.25, lit=(k in lit), name=name + f"W{k}")
+            box(name + "Lintel", (wx, y - 0.02, wz + 0.72), (1.1, 0.06, 0.12), pbr("Lintel", (0.42, 0.18, 0.12), 0.8))
             k += 1
+    # an attic window in the gable
+    B.facade_window(x, y - 0.06, h + rh * 0.35, 0.6, 0.7, name=name + "WA")
 
 
 def motorboat(name, loc, rz, col):
-    """A small harbour motor boat: tapered hull, a white wheelhouse, a short mast (no lettering)."""
+    """A small harbour motor boat (about 7 m): a lofted round-bilge hull with a raked bow and sheer, a white
+    wheelhouse with windows, a mast with a crossbar and rigging lines, fenders on the side. No lettering."""
     import bmesh
-    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
-    for v in bm.verts:
-        v.co.x *= 6.0; v.co.y *= 2.2; v.co.z *= 1.0
-        if v.co.x > 0:                                   # bow: pinch and lift
-            v.co.y *= 0.15; v.co.z += 0.25 if v.co.z > 0 else 0.15
-        if v.co.z < 0:
-            v.co.y *= 0.55
+    L, Bm, D = 7.0, 2.4, 1.1
+    n_st, n_sec = 18, 10
+    bm = bmesh.new(); rings = []
+    for i in range(n_st + 1):
+        u = i / n_st; xx = -L / 2 + u * L
+        bow = max(0.0, (u - 0.6) / 0.4)
+        half = Bm / 2 * (1 - bow ** 1.6) * (0.92 + 0.08 * math.sin(math.pi * min(u * 1.6, 1.0))) + 0.02
+        depth = D * (1 - 0.35 * bow) ; sheer = 0.15 * (u - 0.5) ** 2 * 4 + 0.35 * bow ** 2
+        ring = []
+        for j in range(n_sec + 1):
+            a = math.pi * j / n_sec                         # from the port gunwale down round the keel to starboard
+            yy = -math.cos(a) * half
+            zz = -math.sin(a) ** 0.8 * depth + sheer
+            ring.append(bm.verts.new((xx, yy, zz)))
+        rings.append(ring)
+    for i in range(n_st):
+        for j in range(n_sec):
+            bm.faces.new((rings[i][j], rings[i + 1][j], rings[i + 1][j + 1], rings[i][j + 1]))
+    bm.faces.new(list(reversed(rings[0])))                  # transom
+    deck = [r[0] for r in rings] + [r[-1] for r in reversed(rings)]
+    bm.faces.new(deck[:-1] if deck[0] == deck[-1] else deck)
     me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for pz in me.polygons:
+        pz.use_smooth = True
     hull = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(hull)
-    me.materials.append(pbr(name + "Hull", col, 0.35, **{'Coat Weight': 0.5}))
-    bv = hull.modifiers.new("bv", 'BEVEL'); bv.width = 0.12; bv.segments = 3
-    cab = box(name + "Cab", (-0.6, 0, 0.95), (1.8, 1.4, 1.0), pbr("CabW", (0.85, 0.85, 0.83), 0.4), bevel=0.05)
-    win = box(name + "CabWin", (0.31, 0, 1.1), (0.02, 1.2, 0.4), pbr("CabGlass", (0.02, 0.03, 0.035), 0.05, **{'Coat Weight': 1.0}))
-    mast = cyl(name + "Mast", (-0.9, 0, 2.2), 0.04, 1.8, pbr("MastM", (0.75, 0.75, 0.75), 0.3, 0.8), verts=8)
-    for o in (cab, win, mast):
+    hm = pbr(name + "Hull", col, 0.3, **{'Coat Weight': 0.6})
+    N = hm.node_tree.nodes; Lk = hm.node_tree.links; tc = N.new("ShaderNodeTexCoord"); sp = N.new("ShaderNodeSeparateXYZ")
+    Lk.new(tc.outputs['Object'], sp.inputs[0])
+    gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = -0.28; Lk.new(sp.outputs['Z'], gt.inputs[0])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; Lk.new(gt.outputs[0], mx.inputs['Factor'])
+    mx.inputs[6].default_value = (0.12, 0.03, 0.025, 1); mx.inputs[7].default_value = (*col, 1)      # antifouling below the waterline
+    Lk.new(mx.outputs[2], N["Principled BSDF"].inputs['Base Color'])
+    me.materials.append(hm)
+    sub = hull.modifiers.new("sub", 'SUBSURF'); sub.levels = 1; sub.render_levels = 2
+    white = pbr("CabWhite", (0.82, 0.82, 0.8), 0.35); dark = pbr("CabGlass", (0.02, 0.03, 0.035), 0.04, **{'Coat Weight': 1.0})
+    teak = pbr("Teak", (0.3, 0.18, 0.09), 0.6)
+    parts = [box(name + "Cab", (-0.6, 0, 0.62), (2.0, 1.6, 1.0), white, bevel=0.08),
+             box(name + "CabRoof", (-0.6, 0, 1.33), (2.3, 1.8, 0.08), white, bevel=0.03),
+             box(name + "WinF", (0.41, 0, 0.95), (0.02, 1.4, 0.38), dark),
+             box(name + "WinS1", (-0.6, 0.805, 0.95), (1.6, 0.02, 0.32), dark),
+             box(name + "WinS2", (-0.6, -0.805, 0.95), (1.6, 0.02, 0.32), dark),
+             box(name + "Rail1", (0.6, 0.98, 0.45), (3.4, 0.03, 0.03), pbr("RailSteel", (0.75, 0.75, 0.77), 0.2, 1.0)),
+             box(name + "Rail2", (0.6, -0.98, 0.45), (3.4, 0.03, 0.03), pbr("RailSteel", (0.75, 0.75, 0.77), 0.2, 1.0))]
+    mast = cyl(name + "Mast", (-0.9, 0, 2.6), 0.045, 2.6, pbr("MastAlu", (0.75, 0.75, 0.75), 0.25, 1.0), verts=12)
+    yard = cyl(name + "Yard", (-0.9, 0, 3.4), 0.025, 1.4, pbr("MastAlu", (0.75, 0.75, 0.75), 0.25, 1.0), verts=8, rot=(math.radians(90), 0, 0))
+    parts += [mast, yard]
+    for k in range(3):                                       # fenders hanging on the quay side
+        parts.append(cyl(name + "Fender", (-1.6 + k * 1.4, -1.22, 0.05), 0.11, 0.5, pbr("FenderW", (0.85, 0.85, 0.82), 0.4), verts=16))
+    for o in parts:
         o.parent = hull
+    rig = pbr("Rigging", (0.08, 0.08, 0.08), 0.6)
+    for end in ((L / 2 - 0.2, 0, 0.5), (-L / 2 + 0.2, 0, 0.3), (-0.9, 0.95, 0.4), (-0.9, -0.95, 0.4)):
+        cu = bpy.data.curves.new(name + "Rig", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006
+        spl = cu.splines.new('POLY'); spl.points.add(1)
+        spl.points[0].co = (-0.9, 0, 3.85, 1); spl.points[1].co = (*end, 1)
+        ro = bpy.data.objects.new(name + "Rig", cu); bpy.context.collection.objects.link(ro); ro.data.materials.append(rig); ro.parent = hull
     hull.location = loc; hull.rotation_euler = (0, 0, rz)
     return hull
 
@@ -135,7 +189,8 @@ def build(variant=None):
         wat = box("Water", (0, -30, -1.2), (120, 60, 0.02), water_mat())
         for k in range(8):
             x0 = -18 + k * 5.0
-            gabled(f"H{k}", x0, 6.0, 4.6, 8, 7.5 + rng.uniform(-1, 1.5), brick if k % 2 else brick2, roof, lit=(1, 3) if variant == "harbour_dusk" else ())
+            gabled(f"H{k}", x0, 6.0, 4.6, 8, 7.5 + rng.uniform(-1, 1.5), brick if k % 2 else brick2, roof, lit=(1, 3) if variant == "harbour_dusk" else (),
+                   doors=(SHOP_DOOR.x - 1.4, SHOP_DOOR.x))
         # the shop on the corner: a ground-floor window display (fenders, buoys) and a door; no lettering
         box("ShopWin", (SHOP_DOOR.x - 1.4, 5.98, 1.2), (1.6, 0.02, 1.4), pbr("ShopGlass", (0.05, 0.06, 0.07), 0.03, **{'Coat Weight': 1.0}))
         box("ShopDisp", (SHOP_DOOR.x - 1.4, 6.3, 1.2), (1.5, 0.02, 1.3), emissive("ShopLit", (1.0, 0.82, 0.6), 1.2 if variant == "harbour_dusk" else 0.4))
@@ -147,7 +202,7 @@ def build(variant=None):
             pass
         # boats bobbing at the quay
         cols = [(0.12, 0.18, 0.3), (0.7, 0.7, 0.68), (0.35, 0.08, 0.06), (0.1, 0.25, 0.2)]
-        c["boats"] = [motorboat(f"Boat{k}", (-16 + k * 4.2, -3.6 - (k % 2) * 0.6, -1.0), math.radians(90 + rng.uniform(-5, 5)), cols[k % 4]) for k in range(7)]
+        c["boats"] = [motorboat(f"Boat{k}", (-11 + k * 3.4, -4.6 - (k % 2) * 0.5, -0.65), math.radians(90 + rng.uniform(-6, 6)), cols[k % 4]) for k in range(4)]
         # a flag on a short mast at the quay
         mast = cyl("Mast", (-4.0, 0.8, 2.5), 0.04, 5.0, pbr("MastW", (0.85, 0.85, 0.85), 0.4), verts=12)
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=16, size=1, location=(-3.55, 0.8, 4.6), rotation=(math.radians(90), 0, 0))
@@ -200,7 +255,7 @@ def build(variant=None):
         box("Pave", (0, 0.5, 0.06), (80, 3.0, 0.12), B.tex_mat("Pave", "concrete_pavers", scale=0.5, tint=(0.55, 0.55, 0.55)))
         box("Garden", (0, 4.0, 0.03), (80, 4.0, 0.06), B.tex_mat("Lawn", "grass_path_2" if False else "leafy_grass", scale=0.3, tint=(0.5, 0.55, 0.45)))
         box("GPath", (0, 4.0, 0.07), (1.2, 4.0, 0.03), B.tex_mat("GPathM", "concrete_pavers", scale=0.6, tint=(0.6, 0.6, 0.6)))
-        gabled("House", 0.0, 6.0, 9.0, 9.0, 5.8, brick, roof, lit=(0, 2) if variant == "house_dawn" else ())
+        gabled("House", 0.0, 6.0, 9.0, 9.0, 5.8, brick, roof, lit=(0, 2) if variant == "house_dawn" else (), doors=(0.0,))
         for k in range(3):                                  # front steps up to the door
             box("Step", (0, 5.6 - k * 0.32, 0.1 + k * 0.2 - 0.0), (1.6, 0.36, 0.2 + 0.0), pbr("StepC", (0.5, 0.5, 0.49), 0.7)) if False else box("Step", (0, 5.84 - k * 0.32, (3 - k) * 0.2 / 2), (1.6, 0.34, (3 - k) * 0.2), pbr("StepC", (0.5, 0.5, 0.49), 0.7))
         c["door"] = box("HouseDoor", (0, 5.98, 0.6 + 1.05), (1.0, 0.06, 2.1), pbr("HouseDoorM", (0.25, 0.08, 0.05), 0.4))
@@ -272,7 +327,7 @@ def anim(c, t, move):
         return
     if v.startswith("harbour"):
         for k, b in enumerate(c["boats"]):
-            b.location.z = -1.0 + 0.05 * math.sin(sec * 1.1 + k * 1.3)
+            b.location.z = -0.65 + 0.05 * math.sin(sec * 1.1 + k * 1.3)
             b.rotation_euler = (0.03 * math.sin(sec * 0.9 + k), 0.02 * math.sin(sec * 1.3 + k * 2), b.rotation_euler.z)
         man = c["man"]
         if move == "lock":
@@ -371,7 +426,7 @@ def cam(a, b, tgt, lens):
 
 def cam_quay(c, t):
     e = ease(t)
-    return (Vector((-24.0, -19.0, 4.5)), Vector((-8.0 + 8.0 * e, 3.0, 2.5)), 30)
+    return (Vector((-21.0 + 1.5 * e, -12.0, 0.6)), Vector((-5.0, -1.5, 1.4)), 32)
 
 
 MOVES = {
