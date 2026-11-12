@@ -2,6 +2,7 @@ set -e
 cd /home/user/Muhammed/blender
 B=/opt/blender/blender-5.2.2-linux-x64/blender; S=/tmp/claude-0/-home-user-Muhammed/60302108-5c41-54cc-ade1-198d9ab30d69/scratchpad
 V=ElectricianPolice_v001
+$B -b $V/build/scene.blend --python $V/scripts/03_animate.py -- $V/build/film.blend > $V/build/anim.log 2>&1
 $B -b $V/build/film.blend --python $V/scripts/05_hands.py -- $V/build/film_hands.blend $V/review/v007_hand_audit.txt > $V/build/hands.log 2>&1
 $B -b $V/build/film_hands.blend --python pipeline/anim_look.py -- $V/build/film_hands_anim.blend > /dev/null 2>&1
 $B -b $V/build/film_hands_anim.blend --python $V/scripts/04_anim_tune.py -- $V/build/film_v7.blend > /dev/null 2>&1
@@ -20,3 +21,5 @@ $B -b --factory-startup ElectricianPolice_v007/ElectricianPolice_v007_60fps.blen
 rm -rf $V/build/pk; $B -b --factory-startup ElectricianPolice_v007/ElectricianPolice_v007_60fps.blend --python $V/scripts/frames.py -- $V/build/pk 262 > /dev/null 2>&1
 cp $V/build/pk/f0262.jpg ElectricianPolice_v007/package_check_f0262_lowres.jpg
 echo CHAIN_DONE >> $V/build/pkg7.txt
+$B -b ElectricianPolice_v007/ElectricianPolice_v007_60fps.blend --python pipeline/qa_check.py -- $V/review/qa_v007.json 6 ElectricianPolice_v007/beats.json 2>&1 | grep QA_COUNTS >> $V/build/pkg7.txt
+echo QA_DONE >> $V/build/pkg7.txt

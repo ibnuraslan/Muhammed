@@ -117,10 +117,20 @@ kb_ = bmesh.ops.create_cube(bm_, size=1.0)
 for v in kb_["verts"]: v.co = Vector((v.co.x * 0.012, v.co.y * 0.05 - 0.045, v.co.z * 0.003))
 bm_.to_mesh(keyring.data); bm_.free(); keyring.data.materials.append(bpy.data.materials["Steel"])
 loc_, f3_, n_ = palm_pose(CH["ManW"], "R", 340, 0.07, -0.02)
-attach_seq(keyring, [(1, CH["ManW"], "wrist.R", frame_from(loc_, f3_, -n_), 340)])
-key_vis(keyring, [(318, 430)])
 loc, f3, n = palm_pose(CH["OfficerA"], "R", 268, 0.09, -0.02)
 loc2, f32, n2 = palm_pose(CH["Man"], "R", TICKET_F, 0.09, -0.02)
+def snap_W(o, W, rig, s, f, want=0.003):
+    """shift a prop's desired world matrix so the nearest of the thumb/index/middle tips sits `want` inside its surface"""
+    from mathutils.bvhtree import BVHTree
+    ev(f); mw = rig.matrix_world
+    t = BVHTree.FromPolygons([W @ v.co for v in o.data.vertices], [tuple(p.vertices) for p in o.data.polygons])
+    best = None
+    for k in (1, 2, 3):
+        p_ = mw @ rig.pose.bones["finger%d-3.%s" % (k, s)].tail; loc, nrm, _i, d = t.find_nearest(p_, 1.0)
+        if loc is not None and (best is None or d < best[0]): best = (d, p_, loc, nrm)
+    if best is None: return W
+    d, p_, loc, nrm = best; nrm = nrm if (p_ - loc).dot(nrm) >= 0 else -nrm
+    return Matrix.Translation(p_ - (loc - nrm * want)) @ W
 def pinch_frame(rig, s, f, half=0.07, bite=0.018, thin="Z", zoff=0.0, lift=0.0, mid=False):
     """object frame for a flat prop held between thumb tip and index (or middle) tip: its near edge sits in the pinch.
     thin: the prop's thin local axis (Z for paper/pad, X for the phone). zoff: local offset of the mid-plane along that axis."""
@@ -134,12 +144,16 @@ def pinch_frame(rig, s, f, half=0.07, bite=0.018, thin="Z", zoff=0.0, lift=0.0, 
         return frame_from(pc + fwd * (half - bite) - p_ * zoff, fwd, p_)
     up = p_.cross(fwd)            # object X = p_ (thin), -Y = fwd (width), +Z = up (height)
     return frame_from(pc + fwd * (half - bite) - up * lift - p_ * zoff, fwd, up)
-attach_seq(slip, [(1, CH["OfficerA"], "wrist.R", pinch_frame(CH["OfficerA"], "R", 268), 268), (TICKET_F, CH["Man"], "wrist.R", pinch_frame(CH["Man"], "R", TICKET_F))])
+attach_seq(slip, [(1, desk_o, None, Matrix.Translation((0, 0, -50)), 1), (261, CH["OfficerA"], "wrist.R", snap_W(slip, pinch_frame(CH["OfficerA"], "R", 268), CH["OfficerA"], "R", 268, want=0.006), 268), (TICKET_F, CH["Man"], "wrist.R", snap_W(slip, pinch_frame(CH["Man"], "R", TICKET_F), CH["Man"], "R", TICKET_F)), (346, desk_o, None, Matrix.Translation((0, 0, -50)), 346)])
 key_vis(slip, [(262, 345)])
-attach_seq(pad, [(1, CH["OfficerA"], "wrist.L", pinch_frame(CH["OfficerA"], "L", 255, half=0.1685, bite=0.03, zoff=0.021), 255)])
+attach_seq(keyring, [(1, CH["ManW"], "wrist.R", snap_W(keyring, frame_from(loc_, f3_, -n_), CH["ManW"], "R", 340, want=0.009), 340), (431, desk_o, None, Matrix.Translation((0, 0, -50)), 431)])
+key_vis(keyring, [(318, 430)])
+attach_seq(pad, [(1, CH["OfficerA"], "wrist.L", snap_W(pad, pinch_frame(CH["OfficerA"], "L", 255, half=0.1685, bite=0.03, zoff=0.021), CH["OfficerA"], "L", 255), 255)])
+touch_fix(RIG["OfficerA"], "R", 236, 272, pad)
+touch_fix(RIG["Man"], "L", 314, 332, hatR, tips=(1, 2))
 phone = ob("St_Phone")
 loc, f3, n = palm_pose(CH["OfficerC"], "R", 1200, 0.075, -0.045)
-attach_seq(phone, [(1, CH["OfficerC"], "wrist.R", pinch_frame(CH["OfficerC"], "R", 1330, half=0.035, bite=0.014, thin="X", lift=0.045, mid=True), 1330)])
+attach_seq(phone, [(1, CH["OfficerC"], "wrist.R", snap_W(phone, pinch_frame(CH["OfficerC"], "R", 1330, half=0.035, bite=0.014, thin="X", lift=0.045), CH["OfficerC"], "R", 1330), 1330)])
 torch = bpy.data.lights.new("PhoneTorch", "SPOT"); torch.energy = 160; torch.spot_size = R_(70); torch.spot_blend = 0.6; torch.shadow_soft_size = 0.01
 torch.color = (1.0, 0.97, 0.92)
 to = bpy.data.objects.new("PhoneTorch", torch); C("Station").objects.link(to)
@@ -155,7 +169,7 @@ beam.parent = to; beam.location = (0, 0, -0.8); beam.rotation_euler = (0, 0, 0)
 key_vis(beam, [])   # beam read as an opaque disc at review res; the spot light alone carries the torch
 fp = ob("FanPaper_0")
 loc, f3, n = palm_pose(CH["OfficerB"], "R", 1200, 0.07, -0.02)
-attach_seq(fp, [(1, CH["OfficerB"], "wrist.R", pinch_frame(CH["OfficerB"], "R", 1300, half=0.145, bite=0.02), 1300)])
+attach_seq(fp, [(1, CH["OfficerB"], "wrist.R", snap_W(fp, pinch_frame(CH["OfficerB"], "R", 1300, half=0.145, bite=0.02), CH["OfficerB"], "R", 1300), 1300)])
 for nm, p_ in (("A", A_SEAT), ("B", OB_SEAT)):
     inst(bpy.data.objects["SRC_plastic_monobloc_chair_01"], "St_Chair_" + nm, (p_.x - 0.12, p_.y, 0.0), rotz=R_(90), c="Station")
 inst(bpy.data.objects["SRC_plastic_monobloc_chair_01"], "St_Chair_C", (-16.4, 57.0, 0.0), rotz=R_(-90), c="Station")
@@ -338,9 +352,9 @@ spin(ob("StationFan_ceiling_fan_blades"), 1, 1560, 180, decel_from=1200, decel_t
 for nm_ in ("StationFan_ceiling_fan_blades", "StationFan_ceiling_fan"): ob(nm_).location.z = 3.4 - 0.92
 ob("StationFan_ceiling_fan").location = ob("StationFan_ceiling_fan_blades").location
 fp2 = ob("FanPaper_1"); loc, f3, n = palm_pose(CH["OfficerE"], "R", 1200, 0.07, -0.02)
-attach_seq(fp2, [(1, CH["OfficerE"], "wrist.R", pinch_frame(CH["OfficerE"], "R", 1340, half=0.145, bite=0.02), 1340)])
+attach_seq(fp2, [(1, CH["OfficerE"], "wrist.R", snap_W(fp2, pinch_frame(CH["OfficerE"], "R", 1340, half=0.145, bite=0.02), CH["OfficerE"], "R", 1340), 1340)])
 fp3 = inst(bpy.data.objects["SRC_a4"], "TapFile", (0, 0, 0), c="Station")   # plain paper: the clipboard clip carries printed text; loc, f3, n = palm_pose(CH["OfficerD"], "R", 1200, 0.06, -0.02)
-attach_seq(fp3, [(1, CH["OfficerD"], "wrist.R", pinch_frame(CH["OfficerD"], "R", 1306, half=0.145, bite=0.02), 1306)])
+attach_seq(fp3, [(1, CH["OfficerD"], "wrist.R", snap_W(fp3, pinch_frame(CH["OfficerD"], "R", 1306, half=0.145, bite=0.02), CH["OfficerD"], "R", 1306), 1306)])
 ob("OfficeFan_ceiling_fan").location = ob("OfficeFan_ceiling_fan_blades").location
 # wall clock: find its thin axis and face it +X on the back wall; hands spin 5 hours (f1290 -> 1381)
 cparts = {n: ob("St_" + n) for n in ("wall_clock", "wall_clock_hours_hand", "wall_clock_minute_hand", "wall_clock_second_hand")}
@@ -534,61 +548,65 @@ CAMK = [
     (75, V(-1.5, by(75) + 1.95, 1.65), V(-2.6, by(75) - 0.05, 1.6), 30),
     (110, V(-1.9, by(110) + 2.6, 1.85), V(-2.6, by(110) - 0.2, 1.5), 28),
     (140, V(-3.75, by(140) + 3.4, 1.35), V(-2.6, by(140), 1.3), 26),
-    (170, V(-1.7, 17.6, 1.7), V(-4.2, 23.0, 1.6), 28),
+    (170, V(0.6, 21.3, 1.65), V(-3.4, 20.8, 1.45), 16),
     (200, V(-0.8, 18.9, 1.8), V(-3.9, 22.7, 1.5), 28),
     (235, V(-0.85, 23.7, 1.8), V(-3.35, 21.55, 1.35), 24),
     (262, V(-1.25, 23.3, 1.68), V(-3.35, 21.6, 1.25), 26),
     (290, V(-1.5, 22.5, 1.55), V(-2.6, 20.95, 1.55), 32),
     (312, V(-1.3, 22.9, 1.75), V(-2.6, 20.9, 1.82), 30),
-    (322, V(-1.05, 22.85, 1.75), V(-1.2, 25.6, 1.8), 30),
-    (330, V(0.0, 22.9, 1.72), V(3.2, 26.0, 1.8), 30),
+    (322, V(-1.05, 22.85, 1.75), V(-2.4, 21.2, 1.7), 30),
+    (330, V(0.0, 22.9, 1.72), V(7.2, 24.35, 1.6), 30),
     (340, V(1.4, 23.0, 1.7), V(7.3, 24.6, 1.7), 30),
     (370, V(4.5, 23.55, 1.7), V(7.3, 24.35, 1.68), 34),
     (397, V(5.9, 23.85, 1.72), V(7.3, 24.35, 1.66), 40),
-    (430, V(5.8, 24.9, 2.4), V(9.5, 26.0, 2.0), 26),
+    (430, V(5.4, 23.6, 1.8), V(8.2, 25.2, 1.9), 24),
     (460, V(6.4, 22.7, 1.9), V(9.2, 25.9, 2.5), 24),
     (490, V(7.4, 22.5, 1.8), V(10.3, 26.4, 3.0), 22),
     (515, V(8.3, 22.7, 1.75), V(10.7, 26.8, 3.3), 22),
     (538, V(9.0, 23.2, 1.9), V(10.5, 26.4, 2.6), 24),
     (562, V(21.5, 35.4, 2.2), V(21.5, 42.0, 1.3), 24),
     (578, V(21.55, 38.0, 1.62), V(21.5, 43.0, 1.15), 24),
-    (600, V(21.95, 41.7, 1.55), SCRN, 28),
-    (619, V(22.1, 42.25, 1.42), SCRN, 30),
-    (660, V(22.35, 42.95, 1.4), V(21.6, 43.5, 1.1), 26),
-    (710, V(22.4, 43.25, 1.25), V(21.6, 43.52, 1.08), 28),
+    (600, V(22.1, 42.5, 1.45), V(21.55, 43.32, 1.13), 26),
+    (619, V(22.45, 43.05, 1.38), V(21.55, 43.32, 1.13), 26),
+    (660, V(22.3, 43.1, 1.32), V(21.55, 43.32, 1.13), 26),
+    (710, V(22.5, 43.2, 1.3), V(21.55, 43.32, 1.13), 26),
     (735, V(22.5, 43.4, 1.14), FACEP(735), 30),
     (770, V(22.45, 43.5, 1.1), FACEP(770), 30),
-    (805, V(22.35, 43.35, 1.15), scr(0.45, pr_v + 0.1), 30),
+    (805, V(22.15, 43.05, 1.26), V(21.58, 43.35, 1.12), 26),
     (835, V(22.5, 43.35, 1.15), FACEP(835), 30),
     (865, V(22.42, 43.5, 1.1), FACEP(865), 32),
     (895, V(22.32, 43.36, 1.17), HW[895] + V(0, 0.1, -0.04), 36),
-    (925, V(22.6, 43.05, 1.15), V(21.6, 43.3, 1.0), 24),
-    (960, V(23.4, 43.0, 1.12), V(22.0, 43.4, 1.0), 24),
-    (995, V(24.05, 42.85, 1.14), V(22.2, 43.3, 1.15), 26),
+    (925, V(22.6, 43.05, 1.3), V(21.6, 43.2, 1.35), 24),
+    (960, V(23.4, 43.0, 1.3), V(21.8, 43.2, 1.35), 24),
+    (995, V(24.05, 42.85, 1.14), V(21.7, 42.85, 1.2), 26),
+    (1008, V(24.0, 42.8, 1.18), V(21.65, 42.78, 1.25), 26),
+    (1016, V(23.97, 42.6, 1.28), V(24.9, 43.3, 1.45), 28),
     (1025, V(23.95, 42.5, 1.35), V(24.7, 43.3, 1.3), 28),
     (1050, V(25.25, 42.45, 1.55), V(24.9, 43.28, 1.45), 26),
-    (1075, V(24.85, 42.72, 1.32), V(LEVER_PIVOT.x - 0.05, LEVER_PIVOT.y, 1.28), 38),
-    (1100, V(23.6, 41.4, 1.7), V(25.0, 43.2, 1.35), 26),
+    (1075, V(24.35, 42.25, 1.45), V(25.0, 43.3, 1.38), 28),
+    (1100, V(24.0, 42.0, 1.6), V(25.0, 43.2, 1.35), 28),
     (1128, V(21.5, 39.3, 1.6), V(22.5, 42.5, 1.3), 24),
     (1142, V(21.5, 37.3, 1.62), V(21.6, 41.0, 1.5), 24),
     (1156, V(18.0, 34.0, 2.4), V(3.9, 40.6, 1.5), 24),
     (1167, V(12.5, 37.0, 2.6), V(3.8, 41.2, 1.5), 24),
     (1176, V(7.6, 37.6, 2.2), V(3.4, 42.6, 1.5), 24),
     (1196, V(5.2, 39.6, 2.4), V(1.0, 47.5, 1.9), 24),
-    (1215, V(-1.0, 52.5, 5.5), V(-7.2, 55.0, 3.6), 26),
-    (1232, V(-5.3, 53.9, 1.75), V(-9.0, 53.9, 1.6), 26),
-    (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 24),
+    (1215, V(-1.0, 52.5, 4.0), V(-6.2, 59.5, 2.0), 26),
+    (1232, V(-5.3, 53.9, 1.75), V(-11.2, 53.9, 1.25), 55),
+    (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 30),
     (1290, V(-9.2, 55.2, 1.5), V(-11.4, 53.6, 1.25), 28),
     (1306, V(-10.0, 56.5, 1.45), V(-12.1, 57.8, 1.95), 28),
     (1324, V(-11.2, 57.1, 1.6), V(-14.3, 56.4, 1.45), 30),
+    (1334, V(-11.0, 57.0, 1.7), V(-15.8, 58.3, 1.45), 20),
     (1344, V(-14.4, 59.3, 1.7), V(-17.3, 62.2, 1.45), 30),
     (1354, V(-14.8, 59.0, 1.78), V(-17.3, 62.2, 1.5), 32),
-    (1370, V(-15.9, 57.4, 2.2), CLOCK_POS, 44),
-    (1381, V(-17.5, 57.1, 2.32), CLOCK_POS, 45),
+    (1370, V(-13.6, 59.2, 1.8), V(-17.15, 62.1, 1.5), 26),
+    (1381, V(-13.0, 59.0, 1.7), V(-16.6, 61.6, 1.55), 24),
     (1406, V(-10.1, 59.1, 1.55), V(-11.35, 60.5, 1.12), 30),
     (1416, V(-9.6, 58.95, 1.53), V(-11.3, 60.5, 1.12), 30),
-    (1430, V(-8.6, 57.3, 1.6), V(-4.0, 56.4, 1.45), 26),
-    (1440, V(-7.6, 57.0, 1.6), V(-3.6, 55.2, 1.4), 26),
+    (1424, V(-9.0, 58.0, 1.55), V(-3.6, 54.1, 1.5), 36),
+    (1432, V(-8.4, 57.6, 1.6), V(-3.6, 54.2, 1.5), 48),
+    (1440, V(-7.6, 57.0, 1.6), V(-3.6, 55.2, 1.4), 34),
     (1470, V(-5.6, 57.8, 1.55), V(-3.6, 55.6, 1.5), 28),
     (1515, V(-4.5, 58.9, 1.58), V(-3.6, 56.5, 1.6), 32),
     (1560, V(-4.25, 58.25, 1.6), V(-3.63, 56.8, 1.63), 40)]
@@ -597,6 +615,8 @@ for f in list(range(1, FRAME_END + 1, 2)) + [FRAME_END]:
     cam.location = fc_(f); cam.keyframe_insert("location", frame=f)
     aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
+_dh = bpy.data.objects.get("DustHaze")
+if _dh: _dh.hide_viewport = True     # still renders (hide_render stays False); a volume fog is not an occluder
 sc.frame_set(1)
 import json
 json.dump([{"beat": b, "frame": F(t), "first_words": w} for b, t, w in BEATS], open(os.path.join(HERE, "..", "beats.json"), "w"), indent=1)
