@@ -357,8 +357,8 @@ for f in list(range(1, 640, 3)):
             # Pope armpit (upperarm01 head) in the aide's local space
             side = "R" if sx < 0 else "L"
             Aw = bone_w(pope, "upperarm01." + side); Cw = bone_w(pope, "spine02")
-            W = r.matrix_world.inverted() @ (Aw + (Aw - Cw).normalized() * 0.11)
-            Bk = Cw + (pope.matrix_world.to_3x3() @ Vector((0, 0.21, 0)))      # flat on his back
+            W = r.matrix_world.inverted() @ (Aw + (Aw - Cw).normalized() * 0.15)
+            Bk = Cw + (pope.matrix_world.to_3x3() @ Vector((0, 0.25, 0)))      # flat on his back
             W2 = r.matrix_world.inverted() @ Bk
             u = smooth((f - 505) / 18)
             stand(h, f, flex=10 + 25 * u, head=(20 * u, 0), crouch=0.25 * u)
