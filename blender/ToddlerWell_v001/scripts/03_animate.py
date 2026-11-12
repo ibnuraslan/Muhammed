@@ -75,7 +75,7 @@ class Char:
         # hands
         for s in "LR":
             sx = 1 if s == "L" else -1
-            spec = (hands or {}).get(s, ("rel", (0.06, 0.04, -0.93 * self.arm)))
+            spec = (hands or {}).get(s, ("rel", (0.13, 0.07, -0.88 * self.arm)))
             S = self.shoulder(s, rp, yaw, flex + spine, side)
             if spec[0] == "rel":
                 o, fw, up = spec[1]
@@ -143,7 +143,7 @@ def jaw(c, f, deg):
     c.r.key_rot("jaw", f, [("X", deg)])
 CH = {n: Char(n) for n in ("Toddler", "Teen", "ResA", "ResB", "ResC", "Mother", "Crowd1", "Crowd2", "Crowd3", "Crowd4")}
 T, TE, RA, RB, RC, MO = (CH[n] for n in ("Toddler", "Teen", "ResA", "ResB", "ResC", "Mother"))
-HANG = lambda c: ("rel", (0.06, 0.04, -0.93 * c.arm))
+HANG = lambda c: ("rel", (0.13, 0.07, -0.88 * c.arm))
 UP = lambda c, o=0.08, fw=0.05: ("rel", (o, fw, 0.92 * c.arm))
 
 # ================================================================== TODDLER
@@ -165,7 +165,7 @@ for f in range(F0, F1 + 1, 4):
     T.key(f, xy, yaw_in + 40 * u, root_world=V((xy.x, xy.y, zr)), flex=-8 + 10 * math.sin(u * 7), side=6 * math.sin(u * 9),
           feet={s: ("w", V((xy.x + (0.07 if s == "L" else -0.07), xy.y, zr - T.root.z + T.ankle[s].z + 0.02 * math.sin(u * 20 + (s == "L") * 2))), Rz(yaw_in + 40 * u))
                 for s in "LR"},
-          hands={"L": UP(T, 0.02 + 0.03 * math.sin(u * 13), 0.0), "R": UP(T, 0.03, 0.02 * math.sin(u * 11))}, head=(-30, 0))
+          hands={"L": UP(T, 0.09 + 0.03 * math.sin(u * 13), 0.04), "R": UP(T, 0.09, 0.04 + 0.02 * math.sin(u * 11))}, head=(-30, 0))
 yb = yaw_in + 40
 # land: squash, settle, stand and cry with arms up
 FZ = FLOOR_Z + 0.03
@@ -207,9 +207,9 @@ def crowd_idle(c, f0, f1, xy, yaw, mood):
         elif mood == "point":
             hands = {"R": ("rel", (0.05, 0.75 * c.arm, 0.1 * c.arm))} if (i % 4) < 2 else {}
         elif mood == "cheer":
-            hands = {"L": UP(c, 0.18 + 0.08 * math.sin(ph * 3), 0.05), "R": UP(c, 0.18 + 0.08 * math.cos(ph * 3), 0.05)}
+            hands = {"L": UP(c, 0.3 + 0.08 * math.sin(ph * 3), 0.1), "R": UP(c, 0.3 + 0.08 * math.cos(ph * 3), 0.1)}
         else:
-            hands = {"L": ("rel", (0.08, 0.08 + 0.05 * math.sin(ph), -0.85 * c.arm))}
+            hands = {"L": ("rel", (0.14, 0.1 + 0.05 * math.sin(ph), -0.82 * c.arm))}
         c.key(f, V((xy[0] + 0.03 * math.sin(ph * 0.7), xy[1])), yaw + 6 * math.sin(ph * 0.5), flex=(14 + 6 * math.sin(ph * 1.7)) if mood == "plead" else 3 + 3 * math.sin(ph),
               twist=8 * math.sin(ph * 0.6), head=(5 * math.sin(ph * 1.3) + (20 if mood == "worry" else 0), 15 * math.sin(ph * 0.8)),
               hands=hands, crouch=(0.05 * abs(math.sin(ph * 2)) if mood == "cheer" else 0.0))
@@ -241,10 +241,10 @@ for i, f in enumerate(range(241, 470, 10)):
     hy = 0.15 * math.sin(i * math.pi / 2)
     # hand over hand: hands alternate on the rope, just above the opening
     hl = V((-0.26, 0.2, 1.05 + 0.18 * math.sin(i * math.pi / 2))); hr = V((-0.22, 0.15, 1.05 - 0.18 * math.sin(i * math.pi / 2)))
-    RA.key(f, RA_P, yA, flex=30, spine=15, head=(30, 0), crouch=0.05, hands={"L": ("w", hl), "R": ("w", hr)})
+    RA.key(f, RA_P, yA, flex=14, spine=8, head=(35, 0), crouch=0.05, hands={"L": ("w", hl), "R": ("w", hr)})
     RB.key(f, RB_P, yaw_to(RB_P, (0, 0)), crouch=0.42, flex=35, spine=10, head=(40, 0),
            feet={"L": ("xy", RB_P + V((0.15, 0.05)), yaw_to(RB_P, (0, 0))), "R": ("xy", RB_P + V((-0.12, 0.25)), yaw_to(RB_P, (0, 0)))},
-           hands={"L": ("w", V((0.35, 0.24, 0.17))), "R": ("rel", (0.1, 0.3, -0.25 * RB.arm))})
+           hands={"L": ("w", V((0.35, 0.24, 0.17))), "R": ("rel", (0.3, 0.3, -0.02 * RB.arm))})
     RC.key(f, RC_P, yaw_to(RC_P, (0, 0)) + 20 * math.sin(ph), head=(0, 10 * math.sin(ph)),
            hands={"R": ("rel", (0.02, 0.12, 0.18 * RC.arm)), "L": ("rel", (0.2, 0.25, -0.3 * RC.arm)) if i % 4 < 2 else HANG(RC)})
 # beat 3 (463-672): step back as the excavator rolls in; ResC waves it in
@@ -296,7 +296,7 @@ TE.key(1016, V((-1.12, 2.0)), yaw_to((-1.12, 2.0), (-0.9, 0.9)), head=(-5, 0))
 for i, f in enumerate(range(1028, 1130, 14)):
     ph = i * 1.1
     who = "self" if 1070 < f < 1100 else "talk"
-    hands = {"R": ("rel", (-0.18, 0.2, -0.05)), "L": ("rel", (-0.16, 0.22, -0.02))} if who == "self" else \
+    hands = {"R": ("rel", (-0.12, 0.24, -0.06)), "L": HANG(TE)} if who == "self" else \
             {"R": ("rel", (0.2, 0.35, -0.2 * TE.arm + 0.1 * math.sin(ph * 2))), "L": ("rel", (0.15, 0.3, -0.35 * TE.arm))}
     TE.key(f, V((-1.12, 2.0)), yaw_to((-1.12, 2.0), (-0.9, 0.9)) + 6 * math.sin(ph), head=(-4 + 6 * math.sin(ph * 2), 6 * math.sin(ph)), twist=5 * math.sin(ph), hands=hands)
 # beat 6 (1135-1296): rope tied around his waist by ResB; arms lifted out of the way; ResA checks the line
@@ -318,7 +318,7 @@ for i, f in enumerate(range(1164, 1300, 6)):
     if f < 1170:
         hl, hr = WAIST + V((0.35, 0.3, 0.0)) * (1 - u * 5), WAIST + V((-0.35, 0.3, 0.0)) * (1 - u * 5)
     elif f < 1250:
-        hl = knot + Rz(TYAW) @ (circ + V((0.05, -0.03, 0))); hr = knot + Rz(TYAW) @ (-circ + V((-0.05, -0.03, 0)))
+        hl = knot + Rz(TYAW) @ (circ * 0.6 + V((0.09, -0.05, 0))); hr = knot + Rz(TYAW) @ (-circ * 0.6 + V((-0.09, -0.05, 0)))
     else:   # pull the knot tight: hands apart and back
         k = ease((f - 1250) / 25); hl = knot + Rz(TYAW) @ V((0.06 + 0.1 * k, -0.08 - 0.08 * k, 0)); hr = knot + Rz(TYAW) @ V((-0.06 - 0.1 * k, -0.08 - 0.08 * k, 0))
     RB.key(f, RBT, yaw_to(RBT, TPOS), flex=22, crouch=0.28, head=(25, 0), hands={"L": ("w", hl), "R": ("w", hr)})
@@ -416,9 +416,9 @@ for f in range(1314, 1420, 4):
         break
     for c, s_, pos in ((RB, "L", V((-0.6, -0.25))), (RA, "R", V((0.6, -0.25)))):
         a = ank[s_]
-        c.key(f, pos, yaw_to(pos, (0, 0)), flex=max(0, min(60, 50 - 25 * (a.z - 0.8))), crouch=max(0, min(0.22, 0.3 - 0.25 * (a.z - 0.6))), head=(35, 0),
+        c.key(f, pos, yaw_to(pos, (0, 0)), flex=max(0, min(35, 40 - 25 * (a.z - 0.8))), crouch=max(0, min(0.22, 0.3 - 0.25 * (a.z - 0.6))), head=(35, 0),
               hands={"L": ("w", a + V((0.05, -0.02, 0.06))), "R": ("w", a + V((-0.05, -0.02, -0.06)))})
-HAUL = {RA: V((0.0, 1.55)), RB: V((0.05, 2.35)), RC: V((0.1, 3.15))}
+HAUL = {RA: V((-0.24, 1.6)), RB: V((-0.21, 2.4)), RC: V((-0.18, 3.2))}     # rope runs past their right side
 HAUL_FROM = {RA: 1502, RB: 1492, RC: 1324}
 def rope_haul_line(f):
     """haul line from the pulley out to +y, through the three haulers' hands"""
@@ -431,12 +431,11 @@ def on_line(y):
 for c in (RA, RB, RC):
     for f in range(HAUL_FROM[c], 1630, 10):     # paying out: hands slide along the rope
         p = HAUL[c]; ph = (f - 1420) / 10
-        hy = p.y - 0.25
         c.key(f, p, 0, flex=-8, head=(10, 0), feet={"L": ("xy", p + V((0.15, -0.25)), -10), "R": ("xy", p + V((-0.15, 0.15)), 10)},
-              hands={"L": ("w", on_line(hy - 0.12 + 0.05 * math.sin(ph))), "R": ("w", on_line(hy + 0.25 + 0.05 * math.sin(ph)))})
+              hands={"L": ("w", on_line(p.y - 0.62 + 0.05 * math.sin(ph))), "R": ("w", on_line(p.y - 0.36 + 0.05 * math.sin(ph)))})
     for k, f in enumerate(range(1630, 1770, 8)):     # haul: lean back, hand over hand
         p = HAUL[c]; a = (k % 2)
-        hl = on_line(p.y - 0.45 + 0.35 * a); hr = on_line(p.y - 0.1 - 0.35 * a)
+        hl = on_line(p.y - 0.68 + 0.22 * a); hr = on_line(p.y - 0.36 - 0.22 * a)
         c.key(f, p + V((0, 0.08 * math.sin(k * math.pi / 2))), 0, flex=-18 + 6 * a, crouch=0.12, head=(15, 0),
               feet={"L": ("xy", p + V((0.15, -0.25)), -10), "R": ("xy", p + V((-0.15, 0.15)), 10)},
               hands={"L": ("w", hl), "R": ("w", hr)})
@@ -492,7 +491,7 @@ for c, p in ((RA, V((1.5, 0.6))), (RB, V((-1.45, 1.55))), (RC, V((1.0, 2.9)))):
         ph = i * 1.4
         c.key(f, p, yaw_to(p, OUTP), crouch=0.04 * abs(math.sin(ph)), head=(-10, 0),
               hands={"L": UP(c, 0.2 + 0.1 * math.sin(ph * 2), 0.05), "R": UP(c, 0.2 + 0.1 * math.cos(ph * 2), 0.05)} if i % 6 < 4 else
-                    {"L": ("rel", (-0.12, 0.35, -0.05 + 0.08 * (i % 2))), "R": ("rel", (-0.12, 0.35, -0.05 + 0.08 * (i % 2)))})
+                    {"L": ("rel", (-0.04, 0.35, -0.05 + 0.08 * (i % 2))), "R": ("rel", (-0.04, 0.35, -0.05 + 0.08 * (i % 2)))})
 
 
 # ================================================================== WALKS between standing spots (no sliding feet)
@@ -508,14 +507,14 @@ def clear_keys(c, f0, f1):
 MOVES = [
  (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
  (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1296, 1310, [(0.75, -0.3), (0.6, -0.25)]),
- (RA, 1430, 1500, [(0.6, -0.25), (0.3, -0.45), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (0.0, 1.55)]), (RA, 1770, 1804, [(0.0, 1.55), (0.6, 2.0), (1.6, 1.6), (1.5, 0.6)]),
+ (RA, 1430, 1500, [(0.6, -0.25), (0.3, -0.45), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1770, 1804, [(-0.24, 1.6), (0.6, 2.0), (1.6, 1.6), (1.5, 0.6)]),
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
  (RB, 905, 925, [(0.4, 2.6), (0.1, 1.9)]), (RB, 1130, 1162, [(0.1, 1.9), (-0.45, 0.9), tuple(RBT)]),
- (RB, 1276, 1302, [tuple(RBT), (-0.5, 0.45), (-0.6, -0.25)]), (RB, 1430, 1490, [(-0.6, -0.25), (-0.75, 0.5), (-0.45, 1.6), (0.05, 2.35)]),
- (RB, 1770, 1800, [(0.05, 2.35), (-0.8, 2.2), (-1.45, 1.55)]),
+ (RB, 1276, 1302, [tuple(RBT), (-0.5, 0.45), (-0.6, -0.25)]), (RB, 1430, 1490, [(-0.6, -0.25), (-0.75, 0.5), (-0.45, 1.6), (-0.21, 2.4)]),
+ (RB, 1770, 1800, [(-0.21, 2.4), (-0.8, 2.2), (-1.45, 1.55)]),
  (RC, 463, 560, [RC_P, (-1.4, -0.9), (0.3, -2.4), (1.9, -2.8)]), (RC, 674, 702, [(1.9, -2.8), (0.5, -2.4), (-1.7, -1.2), (-2.4, 1.2)]),
  (RC, 905, 920, [(-2.4, 1.2), (-1.9, 0.2)]), (RC, 1130, 1170, [(-1.9, 0.2), (-2.3, 1.4), (-1.6, 2.7), (-0.2, 2.6)]),
- (RC, 1300, 1322, [(-0.2, 2.6), (0.1, 3.15)]), (RC, 1770, 1795, [(0.1, 3.15), (1.0, 2.9)]),
+ (RC, 1300, 1322, [(-0.2, 2.6), (-0.18, 3.2)]), (RC, 1770, 1795, [(-0.18, 3.2), (1.0, 2.9)]),
 ]
 for c, f0, f1, pts in MOVES:
     clear_keys(c, f0, f1)
@@ -589,7 +588,7 @@ def key_sun(f, elev, rot, energy, col):
     sun.rotation_euler = (R_(90 - elev), 0, R_(rot - 90)); sun.keyframe_insert("rotation_euler", frame=f)
     sun.data.energy = energy; sun.data.color = col; sun.data.keyframe_insert("energy", frame=f); sun.data.keyframe_insert("color", frame=f)
 key_sun(1, 52, 130, 3.2, (1.0, 0.96, 0.9)); key_sun(680, 56, 145, 3.2, (1.0, 0.96, 0.9))
-key_sun(790, 40, 215, 3.0, (1.0, 0.9, 0.78)); key_sun(905, 14, 268, 2.6, (1.0, 0.72, 0.5)); key_sun(END, 11, 272, 2.4, (1.0, 0.68, 0.45))
+key_sun(790, 42, 215, 3.0, (1.0, 0.93, 0.84)); key_sun(905, 24, 262, 2.8, (1.0, 0.86, 0.7)); key_sun(END, 22, 266, 2.8, (1.0, 0.85, 0.7))
 cm = bpy.data.materials["M_Clouds"].node_tree.nodes["CloudMap"]
 for f, x in ((1, 0), (673, 40), (905, 900), (END, 1000)):
     cm.inputs["Location"].default_value = (x, x * 0.3, 0); cm.inputs["Location"].keyframe_insert("default_value", frame=f)
@@ -598,7 +597,7 @@ XL = bpy.data.lights["XsecFill"]; SFL = bpy.data.lights["ShaftFill"]; HT = bpy.d
 def key_light(l, pts):
     for f, e in pts: l.energy = e; l.keyframe_insert("energy", frame=f)
 key_light(XL, [(1, 0), (455, 0), (470, 11000), (545, 11000), (560, 0), (770, 0), (785, 11000), (860, 11000), (875, 0), (1610, 0), (1635, 11000), (1745, 11000), (1765, 0)])
-key_light(SFL, [(1, 0), (110, 0), (140, 110), (1300, 110), (1340, 60), (1770, 60)])
+key_light(SFL, [(1, 0), (110, 0), (140, 300), (1300, 300), (1340, 140), (1770, 140)])
 key_light(HT, [(1, 0), (1320, 0), (1335, 90), (1780, 90), (1800, 0)])
 for n_ in ("Teen.torch_strap", "Teen.torch_lamp", "Teen.torch_lens"): key_vis(bpy.data.objects[n_], [(1240, END + 10)])
 lens = bpy.data.materials["M_TorchLens"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
@@ -633,7 +632,7 @@ for i, f in enumerate(range(1, END + 10, 22)):
     ph = i * 1.7
     OP.key(f, V((0, 0)), 0, root_world=V((0, 0, 0.45)), flex=-4 + 6 * math.sin(ph), head=(8, 18 * math.sin(ph * 0.6)),
            feet={"L": ("w", V((0.12, -0.42, 0.08)), Rz(0)), "R": ("w", V((-0.12, -0.38, 0.08)), Rz(0))},
-           hands={"L": ("w", V((0.22, -0.36, 0.66 + 0.05 * math.sin(ph)))), "R": ("w", V((-0.22, -0.36, 0.66 + 0.05 * math.cos(ph))))})
+           hands={"L": ("w", V((0.26, -0.5, 0.8 + 0.05 * math.sin(ph)))), "R": ("w", V((-0.26, -0.5, 0.8 + 0.05 * math.cos(ph))))})
 bpy.context.scene.frame_set(600)
 chair = bpy.data.objects["Body_GEO_Chair_MAT_0"]; bb = [chair.matrix_world @ V(c_) for c_ in chair.bound_box]
 seat = V((sum(v.x for v in bb) / 8, sum(v.y for v in bb) / 8, min(v.z for v in bb) + 0.42 * (max(v.z for v in bb) - min(v.z for v in bb))))
@@ -737,6 +736,36 @@ for k, (dx, dy, rz, toff) in enumerate(SPOTS):
                 for slot in cc.material_slots:
                     base = slot.material
                     if base: slot.link = "OBJECT"; slot.material = tinted(base, COLS[(k + j) % len(COLS)])
+# ================================================================== HANDS: relaxed curl, real grips, joint limits
+from mathutils import Euler
+GRIPS = {"ResA": [(241, 470), (1190, 1290), (1314, 1420), (1502, 1770)], "ResB": [(1164, 1280), (1314, 1420), (1492, 1770)],
+         "ResC": [(1324, 1770)], "Teen": [(1530, 1880)], "Toddler": [(1530, 1770)], "Mother": [(1872, END + 10)],
+         "Crowd1": [(470, 1760)], "Operator": [(1, END + 10)]}
+def finger_pose(rig, f, amt):
+    """amt 0 = relaxed curl, 1 = closed grip (thumb opposes)"""
+    for pb in rig.pose.bones:
+        n = pb.name
+        if not n.startswith("finger"): continue
+        j = int(n.split("-")[1][0])
+        if n.startswith("finger1"):
+            ang = (10 + 25 * amt) if j > 1 else (5 + 15 * amt)
+        else:
+            ang = [0, 18 + 45 * amt, 26 + 50 * amt, 20 + 40 * amt][j]
+        pb.rotation_mode = "QUATERNION"; pb.rotation_quaternion = Euler((R_(ang), 0, 0)).to_quaternion()
+        pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+def limit(pb, x, y, z):
+    c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
+    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+    c.min_x, c.max_x = R_(x[0]), R_(x[1]); c.min_y, c.max_y = R_(y[0]), R_(y[1]); c.min_z, c.max_z = R_(z[0]), R_(z[1])
+for o in [o for o in bpy.data.objects if o.type == "ARMATURE" and "_dup" not in o.name and o.name in CH or o.name == "Operator"]:
+    finger_pose(o, 1, 0.0)
+    for a_, b_ in GRIPS.get(o.name, []):
+        finger_pose(o, max(1, a_ - 6), 0.0); finger_pose(o, a_, 1.0); finger_pose(o, b_, 1.0); finger_pose(o, b_ + 6, 0.0)
+    for pb in o.pose.bones:
+        if pb.name.startswith("finger1"): limit(pb, (-5, 60), (-25, 25), (-30, 30))
+        elif pb.name.startswith("finger"): limit(pb, (0, 95), (-3, 3), (-10, 10))
+        elif pb.name.startswith("wrist."): limit(pb, (-60, 60), (-45, 45), (-25, 25))
+
 # beats.json
 first = {1: "The toddler fell", 2: "Rescuers lowered ropes", 3: "They even brought in heavy machinery", 4: "But after 11 hours",
          5: "Finally, a teenager", 6: "A rope was tied", 7: "and he was lowered", 8: "With a flashlight", 9: "he reached out his arms",

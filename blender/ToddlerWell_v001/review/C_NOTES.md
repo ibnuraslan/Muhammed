@@ -79,3 +79,22 @@ The remaining overlaps are intended contact:
 - The crowd duplicates reuse four villagers' motion, time-offset by 0–2 s.
 - The excavator is a rigid-part rig. The bucket comes near the pit but doesn't visibly scoop soil; the dirt clods sell the dig.
 - No VO yet. Everything is built to the brief's target times, and `beats.json` is ready for `retime_to_vo.py`.
+
+## Look change and hands (director, 22:45 and 23:00 UTC)
+- **New look:** `pipeline/anim_look.py` applied as the last build step:
+  - AgX Punchy, saturation up, bump down, roughness ≥ 0.35, f-stop ≥ 5.6, no motion blur.
+  - A sky-gradient backdrop with soft clouds, and brighter shaft fill lights.
+  - The sun stays day-bright through the time-lapse, with no golden-hour grade.
+  - `C_1s_animlook.jpg` is the 1/s sheet in this look. The director dropped the 0.2 s sheets.
+- **Hands:**
+  - Relaxed curled fingers on everyone, and real grips while holding: rope, ankles, wrists, knot, tripod leg, levers, hug.
+  - Limit Rotation (local) on every finger, thumb and wrist bone.
+  - `C_hand_closeups.jpg`: 16 close-ups of every hand action.
+- **Hand audit** (`scripts/hand_audit.py`, every 2 frames, 8 main characters; `C_hand_audit.json`):
+  - The C run counted 4 hand–hand, 862 hand–self and 267 hand–other hits.
+  - Most hand–self hits came from three poses, now re-keyed for D:
+    - the haulers' hands on a rope line that ran through their own belly
+    - ResA's rope-feeding lean
+    - ResB's kneeling hand, and the cheering hands in the hair
+  - The hand–other hits are intended grips: the teen holding the toddler, the mother's hug, and ResB knotting at the teen's waist.
+  - D reports the re-run count.
