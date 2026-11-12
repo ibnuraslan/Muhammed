@@ -151,17 +151,21 @@ def drape(name, targets, margin=0.25, res=0.03, floor=0.0, lift=0.015, seed=0):
             ok, loc, nrm, idx, ob, M = sc.ray_cast(dg, o, Vector((0, 0, -1)))
             if ok and ob.name in tset:
                 Hh[j, i] = loc.z; hitm[j, i] = True
+    from scipy.ndimage import grey_dilation
+    Hh = np.where(hitm, grey_dilation(Hh, size=(9, 9)), Hh)                    # cloth bridges thin rails and gaps
+    hitm = grey_dilation(hitm.astype(np.uint8), size=(5, 5)).astype(bool)
+    Hh = np.where(hitm, grey_dilation(np.where(hitm, Hh, floor), size=(5, 5)), floor)
     dist = distance_transform_edt(~hitm) * res
-    top = gaussian_filter(np.where(hitm, Hh, 0), 2) / np.maximum(gaussian_filter(hitm.astype(float), 2), 1e-3)
-    edge = np.where(hitm, Hh, np.maximum(floor, top - dist * 6.0))           # cloth falls steeply off the edges
-    Hs = gaussian_filter(edge, 1.6) + lift
+    top = gaussian_filter(np.where(hitm, Hh, 0), 3) / np.maximum(gaussian_filter(hitm.astype(float), 3), 1e-3)
+    edge = np.where(hitm, gaussian_filter(Hh, 3), np.maximum(floor, top - dist * 5.0))   # falls steeply off the edges
+    Hs = gaussian_filter(edge, 2.5) + lift
     rng = np.random.default_rng(seed)
     yy, xx = np.mgrid[0:ny, 0:nx]
     folds = 0.012 * np.sin(xx * 0.9 + rng.uniform(0, 6)) * np.sin(yy * 0.35) + 0.008 * gaussian_filter(rng.standard_normal((ny, nx)), 2)
     Hs = np.maximum(Hs + folds * (Hs > floor + 0.05), floor + 0.004)
     from common import grid_mesh
     o = grid_mesh(name, Hs.astype(np.float32), x1 - x0, y1 - y0, 1.0, origin=((x0 + x1) / 2, (y0 + y1) / 2, 0))
-    o.data.materials.append(fabric("DustSheet", (0.78, 0.76, 0.7), 0.95, 0.5, 350))
+    o.data.materials.append(fabric("DustSheet", (0.62, 0.6, 0.55), 0.95, 0.5, 350))
     for t in targets:
         for ob in [t] + list(t.children_recursive):
             ob.hide_render = True if False else ob.hide_render

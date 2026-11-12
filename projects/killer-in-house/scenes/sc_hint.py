@@ -52,7 +52,7 @@ def build(variant=None):
             H.day_fill((x, -D2 + 0.45, z), 1.2, 30, (0.55, 0.68, 1.0), rot=(math.radians(65), 0, 0))
         H.day_fill((1.1, D2 - 0.45, 1.7), 1.0, 15, (0.55, 0.68, 1.0), rot=(math.radians(-65), 0, 0))
         if "moonspot" in c:
-            c["moonspot"].data.energy = 900
+            c["moonspot"].data.energy = 160
     c["tod"] = tod
     c["cast"] = {}
     for k in cast:
