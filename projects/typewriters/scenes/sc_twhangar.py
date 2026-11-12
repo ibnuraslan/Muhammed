@@ -23,7 +23,7 @@ EXPOSURE = 0.0
 DUR = {"wrap": 5.0, "seal": 4.5, "sensor": 4.5, "apron": 5.0, "load": 5.0, "slats": 5.0,
        "customs_torch": 5.0, "customs_clock": 4.5, "dock_xray": 5.0, "dock_seal": 4.5}
 VARIANT_FOR = {"load": "night", "slats": "night", "customs_torch": "customs", "customs_clock": "customs", "dock_xray": "dock", "dock_seal": "dock"}
-CUSTOMS = Vector((-6.0, 3.0, 0.0))
+CUSTOMS = Vector((0.0, 11.5, 0.0))
 DOCK = Vector((2.0, -4.0, 0.0))
 HX, HY, HZ = 18.0, 14.0, 11.0          # hangar half-length (x), half-depth (y), eave height; doors open on -Y
 PLANE = Vector((4.0, -62.0, 0.0))            # the kit's cargo plane, tail toward the hangar, ramp down at PLANE.y + 8..13.7
@@ -144,7 +144,7 @@ def build(variant=None):
     for x in np.arange(-HX + 4, HX, 6.0):
         for y in (-6.0, 4.0):
             ph.model("hanging_industrial_lamp", loc=(x, y, HZ - 0.1))
-            if customs and not (x < -6 and y > 0):
+            if customs and not (abs(x - CUSTOMS.x) < 4 and y > 0):
                 continue                                # a Soviet customs shed at night: one lamp left burning
             pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = (1500 if customs else 1200) if night else 1400; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
             pl.color = (1.0, 0.85, 0.65)
@@ -476,7 +476,7 @@ def cam_customs_torch(c, t):
 
 def cam_customs_clock(c, t):
     e = ease(t)
-    return (CUSTOMS + Vector((-0.3, -1.6, 0.75)).lerp(Vector((-0.2, -1.2, 0.85)), e), CUSTOMS + Vector((0.4, 3.0, 2.0)), 30)
+    return (CUSTOMS + Vector((-1.1, -1.5, 1.05)).lerp(Vector((-0.9, -1.2, 0.95)), e), CUSTOMS + Vector((0.0, 0.0, 0.3)), 32)
 
 
 def cam_dock_xray(c, t):

@@ -118,6 +118,7 @@ def animate(c, sec, shot):
     op.rot("head", (1, 0, 0), 6)
     MC.run_teletype(c["wire"], sec, rate=9.0)
     w = P["writer"]
+    twp.hide(twp.person_objs(w), shot == "wire")            # the wire teletype chattering on its own in the empty newsroom
     tty = c["wire_root"]
     front = tty.matrix_world @ Vector((0, -0.62, 0))
     twp.stand(w, (front.x, front.y, 0), tty.rotation_euler.z + math.pi)          # facing the machine
