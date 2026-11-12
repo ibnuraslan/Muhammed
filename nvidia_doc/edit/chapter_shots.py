@@ -1,6 +1,6 @@
 """Chapters 1-3: shot list (set, move, label) with the script phrase each shot starts on.
 Timing comes from the recorded voiceover (vo/ch*_vo.mp3 -> vo/ch_words.json); see edit/time_chapters.py."""
-LEAD = 3.0      # seconds of picture (with the chapter title) before the first word of each chapter
+LEAD = 2.0      # seconds of picture (with the chapter title) before the first word of each chapter
 
 CH = {
  1: [("capitol", "dawn_push", "1A Capitol at dawn + CHAPTER 1 title", "In October 2022"),

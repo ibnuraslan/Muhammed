@@ -5,7 +5,7 @@
    "move": "dawn_push",
    "label": "1A Capitol at dawn + CHAPTER 1 title",
    "name": "c1_01_capitol_dawn_push",
-   "frames": 217
+   "frames": 193
   },
   {
    "set": "signing",
@@ -161,7 +161,7 @@
    "move": "crowd",
    "label": "1A Trade-show party + CHAPTER 2 title",
    "name": "c2_01_computex_crowd",
-   "frames": 383
+   "frames": 359
   },
   {
    "set": "computex",
@@ -268,7 +268,7 @@
    "move": "ch3_push",
    "label": "1A Capitol by day + CHAPTER 3 title",
    "name": "c3_01_capitol_ch3_push",
-   "frames": 171
+   "frames": 147
   },
   {
    "set": "signing",

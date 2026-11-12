@@ -13,7 +13,24 @@ ND = os.path.abspath(os.path.join(HERE, ".."))
 SR = 48000
 FPS = 24
 rng = np.random.default_rng(42)
-EDL = json.load(open(os.path.join(HERE, "film_edl.json")))
+def build_edl():
+    """The exact timeline of the film uploaded to the farm (exported from nvidia_film.blend)."""
+    old = json.load(open(os.path.join(HERE, "film_edl.json")))
+    if os.environ.get("FROM_EDL", "1") == "1":
+        return old
+    shots = [s for s in old["shots"] if not s[2].startswith("c1_") and not s[2].startswith("c2_") and not s[2].startswith("c3_")]
+    vo = [v for v in old["vo"] if v[0] in ("VO intro", "VO sting")]
+    from chapter_shots import LEAD
+    tim = json.load(open(os.path.join(ND, "vo", "ch_timing.json")))
+    f = shots[-1][1]
+    for c in ("1", "2", "3"):
+        start = f
+        for sh in tim[c]:
+            shots.append([f, f + sh["frames"], sh["name"]]); f += sh["frames"]
+        vo.append([f"VO chapter{c}", start + int(round(LEAD * FPS)), f])
+    return dict(shots=shots, vo=vo, end=f - 1)
+import sys; sys.path.insert(0, HERE)
+EDL = build_edl()
 N = int(round(EDL["end"] / FPS * SR)) + SR
 T = lambda f: (f - 1) / FPS                      # timeline frame -> seconds
 
@@ -279,8 +296,185 @@ for f0, f1, name in EDL["shots"]:
         th = np.sin(2 * np.pi * 70 * x) * env_ad(n, 0.004, 0.18) + filt(rng.standard_normal(n), "lowpass", 400) * env_ad(n, 0.003, 0.05) * 0.4
         place(fx, reverb(th, 0.45) * db(-16), t0)
 
+
+class Snd(np.ndarray):
+    """Audio snippets that can be added even when their lengths differ (shorter one is zero-padded)."""
+    __array_priority__ = 1000
+    def _pad(a, b):
+        a = np.asarray(a); b = np.asarray(b)
+        if a.ndim == 0 or b.ndim == 0 or len(a) == len(b): return a, b
+        n = max(len(a), len(b)); A = np.zeros(n); B = np.zeros(n); A[:len(a)] = a; B[:len(b)] = b; return A, B
+    def __add__(self, o):
+        a, b = Snd._pad(self, o); return (a + b).view(Snd)
+    __radd__ = __add__
+def S_(x): return np.asarray(x).view(Snd)
+
+# ---------------------------------------------------------------------------------------------------- spot effects
+# all smooth: raised-cosine attacks (no clicks), filtered noise only in short soft bursts, tonal where possible
+def _n(d): return int(d * SR)
+def soft_env(n, a=0.004, d=0.05):
+    return env_ad(n, a, d)
+def _thump(f=60, d=0.6, decay=0.12, glide=0.25):
+    n = _n(d); t = np.arange(n) / SR
+    ph = 2 * np.pi * np.cumsum(f * np.exp(-t * glide)) / SR
+    return np.sin(ph) * soft_env(n, 0.005, decay)
+def _tap(d=0.12, lo=900, hi=3200, decay=0.025):
+    n = _n(d); return filt(rng.standard_normal(n), "bandpass", [lo, hi]) * soft_env(n, 0.002, decay)
+def _paper(d=0.45, decay=0.14):
+    n = _n(d); return filt(filt(rng.standard_normal(n), "bandpass", [1400, 6500]), "lowpass", 7000) * soft_env(n, 0.02, decay)
+def _slide(d=0.8, lo=250, hi=1800):
+    n = _n(d); return filt(pink(n), "bandpass", [lo, hi]) * np.sin(np.linspace(0, np.pi, n)) ** 2
+def _clank(f0=170, d=1.6):
+    n = _n(d); t = np.arange(n) / SR; y = np.zeros(n)
+    for r, a, dec in ((1, 1, 0.5), (2.76, 0.5, 0.3), (5.4, 0.25, 0.18), (8.9, 0.1, 0.1)):
+        y += a * np.sin(2 * np.pi * f0 * r * t) * np.exp(-t / dec)
+    return y * soft_env(n, 0.003, 3.0) * 0.5
+def _horn(f=98, d=3.2):
+    n = _n(d); t = np.arange(n) / SR; y = sum(np.sin(2 * np.pi * f * h * t) / h for h in range(1, 7))
+    return filt(y, "lowpass", 800) * fade_edges(np.ones(n), 0.6, 1.2) * 0.4
+def _beep(f=1000, d=0.22):
+    n = _n(d); t = np.arange(n) / SR; return np.sin(2 * np.pi * f * t) * fade_edges(np.ones(n), 0.012, 0.05) * 0.5
+def _glass(f=2400, d=1.2):
+    n = _n(d); t = np.arange(n) / SR
+    return (np.sin(2 * np.pi * f * t) + 0.5 * np.sin(2 * np.pi * f * 2.32 * t)) * soft_env(n, 0.002, 0.35) * 0.4
+def _car_pass(d=3.0, peak=0.5):
+    n = _n(d); t = np.arange(n) / SR
+    bell_ = np.exp(-((t / d - peak) / 0.18) ** 2)
+    y = filt(pink(n), "lowpass", 2200) * bell_ + filt(pink(n), "bandpass", [80, 400]) * bell_ * 0.8
+    return y
+def _chirp(d=0.09, f1=3600, f2=4400):
+    n = _n(d); t = np.arange(n) / SR; f = np.linspace(f1, f2, n)
+    return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.linspace(0, np.pi, n)) ** 2 * 0.4
+def _steps(d, every=0.55, f=95, lvl=1.0):
+    out = np.zeros(_n(d))
+    for k, tt in enumerate(np.arange(0.1, d - 0.2, every)):
+        x = thump(f + 8 * (k % 2), 0.18, 0.04, 0) * 0.8 + tap(0.1, 700, 2600, 0.02) * 0.35
+        i = _n(tt); out[i:i + len(x)] += x[:len(out) - i]
+    return out * lvl
+def _club(d, bpm=118):
+    out = np.zeros(_n(d)); beat = 60 / bpm
+    for tt in np.arange(0, d - 0.3, beat):
+        x = thump(55, 0.3, 0.09, 0.4); i = _n(tt); out[i:i + len(x)] += x[:len(out) - i]
+    return filt(out, "lowpass", 140)
+
+thump = lambda *a, **k: S_(_thump(*a, **k))
+tap = lambda *a, **k: S_(_tap(*a, **k))
+paper = lambda *a, **k: S_(_paper(*a, **k))
+slide = lambda *a, **k: S_(_slide(*a, **k))
+clank = lambda *a, **k: S_(_clank(*a, **k))
+horn = lambda *a, **k: S_(_horn(*a, **k))
+beep = lambda *a, **k: S_(_beep(*a, **k))
+glass = lambda *a, **k: S_(_glass(*a, **k))
+car_pass = lambda *a, **k: S_(_car_pass(*a, **k))
+chirp = lambda *a, **k: S_(_chirp(*a, **k))
+steps = lambda *a, **k: S_(_steps(*a, **k))
+club = lambda *a, **k: S_(_club(*a, **k))
+
+def spot_events(name, d):
+    """(time in seconds within the shot, sound, level dB) for what we see happen on screen."""
+    ev = []
+    at = lambda frac: frac * d
+    if name == "invest_drawer":
+        ev += [(0.0, slide(0.9, 200, 1400) + thump(80, 0.4, 0.06) * 0.4, -26), (at(0.68), paper(0.5), -27)]
+    elif name == "invest_reveal":
+        ev += [(0.15, paper(0.6, 0.2), -30)]
+    elif name == "street_bus_reveal":
+        ev += [(0.0, car_pass(min(3.2, d + 0.2), 0.45) + thump(45, 2.5, 0.8, 0) * 0.3, -21)]
+    elif name == "street_walk_track":
+        ev += [(at(0.25), car_pass(2.6, 0.5), -27)]
+    elif name.endswith("cafe_title_push") or name == "cafe_title_push":
+        ev += [(at(0.55), glass(2600), -30), (at(0.8), glass(3100), -33)]
+    elif "capitol_dawn_push" in name:
+        for k, tt in enumerate((1.2, 1.35, 3.0, 3.12, 3.26, 5.6, 5.72)):
+            if tt < d: ev += [(tt, chirp(0.08, 3400 + 300 * (k % 3), 4300), -38)]
+    elif "capitol_night_push" in name or "capitol_slow_push" in name:
+        ev += [(at(0.3), horn(130, 2.2), -40)]
+    elif "signing_sign" in name:
+        for tt in (0.42, 0.5, 0.58):
+            ev += [(at(tt), filt(rng.standard_normal(_n(0.35)), "bandpass", [2000, 6000]) * np.sin(np.linspace(0, np.pi, _n(0.35))) ** 2, -36)]
+    elif "signing_transfer" in name:
+        ev += [(at(0.55), thump(110, 0.5, 0.05, 0) + tap(0.12, 400, 1600, 0.03) * 0.6, -20), (at(0.62), paper(0.4), -30)]
+    elif "signing_memo_pass" in name:
+        ev += [(at(0.35), slide(0.7, 900, 4500), -30)]
+    elif "signing_memo_read" in name:
+        ev += [(at(0.5), paper(0.5, 0.16), -29)]
+    elif "signing_letter_seal" in name:
+        ev += [(at(0.45), paper(0.5), -29), (at(0.7), slide(0.35, 1500, 5000), -31)]
+    elif "dchall_tray" in name:
+        ev += [(at(0.15), slide(1.0, 300, 2500) * 0.8, -25), (at(0.55), clank(900, 0.4) * 0.7 + tap(0.1) * 0.5, -25)]
+    elif "dchall_install" in name:
+        ev += [(at(0.6), thump(90, 0.5, 0.07) + clank(600, 0.6) * 0.4, -22)]
+    elif "dchall_wake" in name:
+        ev += [(at(0.35), beep(880, 0.18), -30), (at(0.35) + 0.2, beep(1320, 0.25), -30),
+               (at(0.35), filt(pink(_n(2.5)), "bandpass", [300, 2500]) * np.linspace(0, 1, _n(2.5)) ** 2, -32)]
+    elif "dchall_ripple" in name:
+        for k in range(5):
+            ev += [(0.3 + k * 0.45, beep(1046 * 2 ** (k / 12 * 3), 0.16), -36)]
+    elif "remote_enter" in name:
+        ev += [((40 - 3) / FPS, tap(0.1, 1200, 4000, 0.02) * 0.8 + thump(180, 0.12, 0.02, 0) * 0.4, -24), (40 / FPS + 0.05, beep(1500, 0.12), -36)]
+    elif "port_ship_lift" in name:
+        ev += [(0.2, horn(98, 3.4), -27), (at(0.25), filt(np.sin(2 * np.pi * 90 * np.arange(_n(d * 0.6)) / SR), "lowpass", 400) * fade_edges(np.ones(_n(d * 0.6)), 0.5, 0.5) * 0.4, -30),
+               (at(0.8), clank(160, 1.8), -22)]
+    elif "port_tropical_dock" in name:
+        ev += [(at(0.3), horn(87, 3.6), -31)]
+    elif "port_scan_gate" in name:
+        ev += [(at(0.5), beep(1000, 0.25), -28), (at(0.5) + 0.35, beep(1000, 0.25), -28), (0.0, thump(40, d, 3.0, 0) * 0.3, -26)]
+    elif "corp_lobby_walk" in name:
+        ev += [(0.0, steps(d, 0.55, 110, 1.0), -26)]
+    elif "invest_filing" in name:
+        ev += [(at(0.3), paper(0.6, 0.2), -29)]
+    elif "invest_chart" in name:                  # the 2024 stack drops onto the desk
+        t0 = 1.0 / 4.0 * d
+        ev += [(t0, thump(65, 1.2, 0.18, 0.2) + paper(0.4, 0.06) * 0.7, -15), (t0 + 0.16, thump(80, 0.4, 0.05, 0) * 0.35, -20),
+               (t0 + 0.3, thump(80, 0.3, 0.04, 0) * 0.2, -22)]
+    elif "invest_pinning" in name:
+        ev += [(at(0.45), tap(0.1, 800, 2500, 0.02) + thump(160, 0.15, 0.03, 0) * 0.4, -26)]
+    elif "police_pull_up" in name:
+        ev += [(0.0, car_pass(min(d, 0.42 * d + 1.0), 0.75) * 0.9, -22), (0.42 * d, tap(0.15, 500, 2000, 0.04) * 0.6, -28),
+               (0.74 * d, thump(75, 0.7, 0.09) + tap(0.15, 300, 1500, 0.05) * 0.5, -18), (0.5 * d, steps(d * 0.5, 0.5, 120, 0.8), -30)]
+    elif "office_door_door_push" in name:
+        ev += [(at(0.35), clank(520, 0.4) * 0.6 + tap(0.1, 500, 2000, 0.03), -27), (at(0.35) + 0.18, clank(520, 0.4) * 0.5, -29)]
+    elif "computex_crowd" in name:
+        ev += [(0.0, club(d), -30)]
+        for tt in np.arange(1.5, d - 1, 3.1):
+            ev += [(tt, glass(2300 + 400 * ((int(tt) % 3)), 1.0), -38)]
+    elif "computex_flash" in name:
+        ev += [(0.0, club(d) * 0.7, -32), (70 / FPS - 0.06, tap(0.06, 1500, 5000, 0.01), -30), (70 / FPS, tap(0.09, 800, 3500, 0.02), -28)]
+    elif "restaurant" in name:
+        for tt in np.arange(0.8, d - 0.5, 1.7):
+            ev += [(tt, glass(2000 + 500 * (int(tt * 3) % 3), 0.9), -37)]
+    elif "warehouse_lights_off" in name:
+        for r in range(6):
+            fr = 30 + (5 - r) * 14
+            if fr / FPS < d: ev += [(fr / FPS, thump(55, 1.4, 0.25, 0.1) + clank(140, 1.2) * 0.25, -20)]
+    elif "press_press_run" in name:
+        pass                                       # the press ambience already carries the rhythm
+    elif "invest_shelving" in name:
+        ev += [(at(0.5), thump(85, 0.5, 0.08) + slide(0.4, 300, 1500) * 0.5, -24)]
+    elif "courthouse_lawyer_climb" in name:
+        ev += [(0.0, steps(d, 0.5, 100, 0.9), -27)]
+    elif "courtroom_clerk" in name:
+        for k in range(5):
+            tt = 0.8 * k / 4.5 * d
+            if tt < d - 0.3: ev += [(tt + 0.6, thump(120, 0.3, 0.04, 0) * 0.6 + paper(0.25, 0.05), -28)]
+    elif "invest_lights_out" in name:
+        for fr in (30, 39, 48, 57, 66):
+            if fr / FPS < d: ev += [(fr / FPS, tap(0.08, 600, 2200, 0.015) + thump(140, 0.2, 0.03, 0) * 0.5, -27)]
+    elif "invest_drawer_close" in name:
+        ev += [(0.15 * d, slide(0.6 * d, 200, 1500), -27), (0.75 * d, thump(70, 0.9, 0.12) + clank(260, 1.0) * 0.4, -18)]
+    elif "street_walk_away" in name:
+        ev += [(0.0, steps(d, 0.6, 105, 0.6), -31)]
+    return ev
+
+spot = np.zeros(N)
+for f0, f1, name in EDL["shots"]:
+    d = T(f1) - T(f0)
+    for tt, x, lvl in spot_events(name, d):
+        if tt < d:
+            place(spot, reverb(x, 0.22) * db(lvl), T(f0) + tt)
+
 # intro tail: everything fades with the picture into the sting; music/ambience silent under the sting
-for buf in (music, ambb):
+for buf in (music, ambb, spot):
     a, b = int((sec["sting"][0] - 1.0) * SR), int(sec["sting"][0] * SR)
     buf[a:b] *= np.cos(np.linspace(0, np.pi / 2, b - a)) ** 2
     buf[b:int((sec["c1"][0] + 0.3) * SR)] = 0
@@ -292,27 +486,35 @@ for buf in (music, ambb):
 # duck the bed under the voice (about 7 dB), smooth attack/release
 env = np.abs(vo); env = signal.sosfiltfilt(sos("lowpass", 3), env); env = env / (env.max() + 1e-9)
 duck = 1 - 0.6 * np.clip(env * 4, 0, 1)
-music *= duck; ambb *= 0.5 + 0.5 * duck
+music *= duck; ambb *= 0.5 + 0.5 * duck; spot *= 0.75 + 0.25 * duck
 
-mix = vo + music + ambb * db(2) + fx
-st = np.stack([mix + 0.0 * mix, mix], 1)
-# a little width for the bed: delay the right channel of music/ambience slightly
-wide = np.roll(music * 0.5 + ambb * 0.5, int(0.011 * SR))
-st[:, 1] = vo + fx + (music + ambb * db(2)) * 0.5 + wide
-st[:, 0] = vo + fx + (music + ambb * db(2))
-st = np.tanh(st * 1.1) / np.tanh(1.1)
-st = st[:int(round(EDL["end"] / FPS * SR))]
+def stereo(with_vo):
+    bed = music + ambb * db(2)
+    wide = np.roll(music * 0.5 + ambb * 0.5, int(0.011 * SR))
+    v = vo if with_vo else 0.0
+    L = v + fx + spot + bed
+    R = v + fx + np.roll(spot, int(0.004 * SR)) + bed * 0.5 + wide
+    return np.stack([L, R], 1)[:int(round(EDL["end"] / FPS * SR))]
 
 outdir = os.path.join(ND, "out", "deliver"); os.makedirs(outdir, exist_ok=True)
-raw = os.path.join(outdir, "_mix_raw.wav")
-import wave
-pk = np.abs(st).max(); st = st / pk * 0.95
-with wave.open(raw, "wb") as w:
-    w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((st * 32767).astype(np.int16).tobytes())
-final = os.path.join(outdir, "nvidia_film_AUDIO_v2.wav")
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", raw, "-af", "loudnorm=I=-14:TP=-1.5:LRA=11", "-ar", str(SR), final], check=True)
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", final, "-b:a", "256k", os.path.join(outdir, "nvidia_film_AUDIO_v2.mp3")], check=True)
-os.remove(raw)
+import wave, re
+full = stereo(True); pk = np.abs(full).max() / 0.95
+def write(path, st):
+    st = np.tanh(st / pk * 1.05) / np.tanh(1.05)
+    with wave.open(path, "wb") as w:
+        w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((np.clip(st, -1, 1) * 32767).astype(np.int16).tobytes())
+raw_v, raw_n = os.path.join(outdir, "_v.wav"), os.path.join(outdir, "_n.wav")
+write(raw_v, full); write(raw_n, stereo(False))
+# one loudness gain for both (measured on the version with voice -> -14 LUFS), same gain on the no-voice version
+m = subprocess.run(["ffmpeg", "-hide_banner", "-i", raw_v, "-af", "ebur128", "-f", "null", "-"], capture_output=True, text=True).stderr
+I = float(re.findall(r"I:\s+(-?[0-9.]+) LUFS", m)[-1]); g = -14.0 - I
+for src, dst in ((raw_v, "nvidia_film_AUDIO_v3_with_voice"), (raw_n, "nvidia_film_AUDIO_v3_no_voice")):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-af", f"volume={g:.2f}dB,alimiter=limit=0.89:level=false", "-ar", str(SR),
+                    os.path.join(outdir, dst + ".wav")], check=True)
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", os.path.join(outdir, dst + ".wav"), "-b:a", "256k", os.path.join(outdir, dst + ".mp3")], check=True)
+    os.remove(src)
+final = os.path.join(outdir, "nvidia_film_AUDIO_v3_with_voice.wav")
+st = full
 # the new sting sound on its own as well
 sti = sting(); sti = sti / np.abs(sti).max() * 0.9
 with wave.open(os.path.join(ND, "..", "brand", "seldom_sting_sfx.wav"), "wb") as w:
