@@ -966,7 +966,7 @@ camd = bpy.data.cameras.new("Camera"); camo = bpy.data.objects.new("Camera", cam
 camd.sensor_width = 36; camd.clip_start = 0.02; camd.clip_end = 400
 prev = None
 # v009 aim fix: Track-To on a head, ramped in and out over 10 frames, world up (no roll): 31.0 s on the king, 41.0 s on the very old twin
-AIM = [(1854, 1892, "King_S6"), (2436, 2484, "TwinA_vold_S7")]
+AIM = []   # director: v008 framing approved; v009 changes only the pot handles
 def aim_w(f, a, b): return max(0.0, min(1.0, (f - a) / 10.0, (b - f) / 10.0))
 for f in range(1, 2671):
     p = fp(f); t = ft(f)
