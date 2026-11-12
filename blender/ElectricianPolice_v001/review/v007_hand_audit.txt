@@ -1,7 +1,8 @@
-pass 1: 23 hits
-pass 2: 8 hits
+pass 1: 14 hits
+pass 2: 5 hits
 FINAL hand-audit hits (every 2 frames): 3
-  OfficerE L hand-torso: 3 frames
-  f1263 OfficerE L hand-torso
+  OfficerE L hand-torso: 2 frames
+  OfficerE L hand-head: 1 frames
   f1265 OfficerE L hand-torso
+  f1315 OfficerE L hand-head
   f1317 OfficerE L hand-torso
