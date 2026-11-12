@@ -25,15 +25,18 @@ def win_mat(name, lit=(1.0, 0.7, 0.42), density=0.3, strength=0.7):
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     es = p.inputs['Emission Strength'].links[0].from_socket
     geo = next(n for n in N if n.bl_idname == "ShaderNodeNewGeometry")
-    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.9; nz.inputs['Detail'].default_value = 4.0
-    L.new(geo.outputs['Position'], nz.inputs['Vector'])
-    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].position = 0.38; cr.color_ramp.elements[0].color = (0.08, 0.08, 0.08, 1)
-    cr.color_ramp.elements[1].position = 0.62; cr.color_ramp.elements[1].color = (1, 1, 1, 1); L.new(nz.outputs['Fac'], cr.inputs[0])
+    sp0 = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sp0.inputs[0])
+    uu = N.new("ShaderNodeMath"); uu.operation = 'ADD'; L.new(sp0.outputs[0], uu.inputs[0]); L.new(sp0.outputs[1], uu.inputs[1])
+    uf = N.new("ShaderNodeMath"); uf.operation = 'WRAP'; uf.inputs[1].default_value = 1.4; uf.inputs[2].default_value = 0.0; L.new(uu.outputs[0], uf.inputs[0])
+    ud = N.new("ShaderNodeMath"); ud.operation = 'SUBTRACT'; ud.inputs[1].default_value = 0.7; L.new(uf.outputs[0], ud.inputs[0])
+    ua = N.new("ShaderNodeMath"); ua.operation = 'ABSOLUTE'; L.new(ud.outputs[0], ua.inputs[0])
+    cr = N.new("ShaderNodeMapRange"); cr.inputs['From Min'].default_value = 0.18; cr.inputs['From Max'].default_value = 0.42   # drawn curtains each side, a lit gap
+    cr.inputs['To Min'].default_value = 1.0; cr.inputs['To Max'].default_value = 0.3; L.new(ua.outputs[0], cr.inputs['Value'])
     sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sep.inputs[0])
     fz = N.new("ShaderNodeMath"); fz.operation = 'WRAP'; fz.inputs[1].default_value = 2.8; fz.inputs[2].default_value = 0.0; L.new(sep.outputs[2], fz.inputs[0])
     gz = N.new("ShaderNodeMapRange"); gz.inputs['From Min'].default_value = 0.4; gz.inputs['From Max'].default_value = 2.6
     gz.inputs['To Min'].default_value = 1.0; gz.inputs['To Max'].default_value = 0.35; L.new(fz.outputs[0], gz.inputs['Value'])
-    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(es, m1.inputs[0]); L.new(cr.outputs[0], m1.inputs[1])
+    m1 = N.new("ShaderNodeMath"); m1.operation = 'MULTIPLY'; L.new(es, m1.inputs[0]); L.new(cr.outputs['Result'], m1.inputs[1])
     m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; L.new(m1.outputs[0], m2.inputs[0]); L.new(gz.outputs[0], m2.inputs[1])
     L.new(m2.outputs[0], p.inputs['Emission Strength'])
     hue = N.new("ShaderNodeTexNoise"); hue.inputs['Scale'].default_value = 0.35; L.new(geo.outputs['Position'], hue.inputs['Vector'])
@@ -87,9 +90,9 @@ def night_gradient(world):
     tc = N.new("ShaderNodeTexCoord"); sp = N.new("ShaderNodeSeparateXYZ"); ramp = N.new("ShaderNodeValToRGB")
     nt.links.new(tc.outputs["Generated"], sp.inputs[0]); nt.links.new(sp.outputs["Z"], ramp.inputs[0])
     el = ramp.color_ramp.elements
-    el[0].position = 0.0; el[0].color = (0.05, 0.035, 0.03, 1)        # sodium glow sitting on the horizon
-    el[1].position = 0.35; el[1].color = (0.004, 0.006, 0.014, 1)     # deep night overhead
-    m = el.new(0.06); m.color = (0.025, 0.025, 0.04, 1)
+    el[0].position = 0.0; el[0].color = (0.03, 0.022, 0.02, 1)        # sodium glow sitting on the horizon
+    el[1].position = 0.3; el[1].color = (0.002, 0.003, 0.008, 1)     # deep night overhead
+    m = el.new(0.06); m.color = (0.012, 0.013, 0.024, 1)
     nt.links.new(ramp.outputs["Color"], bg.inputs["Color"]); bg.inputs["Strength"].default_value = 1.0
 
 

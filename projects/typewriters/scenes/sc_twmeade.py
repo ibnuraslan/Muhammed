@@ -217,7 +217,11 @@ def build(variant=None):
     # the X-ray cabinet: a steel box with a sliding drawer, a warning lamp, a control panel
     cab = ph.texture("metal_plate_02", scale=2.0, name="XCab", tint=(0.5, 0.56, 0.52))
     box("XCabinet", (XC.x, XC.y, 0.75), (1.2, 1.0, 1.5), cab, bevel=0.02)
-    box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.03, 0.035, 0.03), 0.12, 0.0, **{"Coat Weight": 1.0, "Coat Roughness": 0.05}))
+    box("XCabOpening", (XC.x, XC.y - 0.49, 0.75), (0.92, 0.02, 0.5), pbr("XCabDark", (0.18, 0.19, 0.19), 0.5, 0.6))         # the lead-lined chamber face
+    dh = bpy.data.objects.new("XDoorHinge", None); bpy.context.collection.objects.link(dh); dh.location = (XC.x - 0.5, XC.y - 0.52, 0.75)
+    xd = box("XCabDoor", (0.5, -0.03, 0.0), (1.0, 0.05, 0.6), cab, bevel=0.01); xd.parent = dh; c["xdoor"] = dh
+    il = bpy.data.lights.new("XCabLamp", 'POINT'); il.energy = 25; il.color = (0.95, 0.97, 1.0); il.shadow_soft_size = 0.2
+    io = bpy.data.objects.new("XCabLamp", il); bpy.context.collection.objects.link(io); io.location = (XC.x, XC.y - 0.9, 1.2)
     xl = area_light((XC.x, XC.y - 0.9, 1.3), (0, 0, 0), 0.5, 20, (0.9, 0.95, 1.0)); point_at(xl, (XC.x, XC.y - 0.8, 0.6)); xl.visible_camera = False
     tray = join([box("Tray", (0, 0, 0), (0.85, 0.8, 0.03), pbr("TrayM", (0.55, 0.56, 0.57), 0.3, 0.9)),
                  box("TrayFront", (0, -0.41, 0.15), (0.9, 0.03, 0.42), cab)], "XTray")
@@ -264,7 +268,7 @@ def build(variant=None):
     c["P"] = P
     if night:
         lamp = bpy.data.lights.new("MagLamp", 'SPOT'); lamp.energy = 240; lamp.spot_size = math.radians(70); lamp.spot_blend = 0.6; lamp.color = (1.0, 0.82, 0.6)
-        lo = bpy.data.objects.new("MagLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (-4.45, ROW_Y + 0.15, 1.45)
+        lo = bpy.data.objects.new("MagLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (-4.45, ROW_Y + 0.15, 1.45); c["maglamp"] = lamp
         point_at(lo, (-4.6, ROW_Y, 0.95))
         moon = area_light((-6.8, 0, 2.0), (0, 0, 0), 4.0, 45, (0.45, 0.55, 0.85)); point_at(moon, (0, 0, 0.8)); moon.visible_camera = False
         far = area_light((4.5, 1.6, 3.12), (0, 0, 0), 0.9, 30, (0.9, 0.96, 1.0)); far.visible_camera = False      # one bank left on at the far end
@@ -307,7 +311,10 @@ def animate(c, sec, shot):
     c["cal"].rotation_euler = (math.radians(-170) * ease(min(1.0, max(0.0, (sec - 1.0) / 1.4))) if shot == "calendar" else 0, 0, 0)
     # X-ray cabinet tray, the typewriter on it, the warning lamp, lightboxes
     xtw = c["xtw"]; tray = c["tray"]
-    slide = ease(min(1.0, max(0.0, (sec - 0.8) / 2.0))) if shot in ("cabinet", "inspect78") else 1.0
+    slide = ease(min(1.0, max(0.0, (sec - 0.8) / 2.0))) if shot == "cabinet" else (0.45 if shot == "inspect78" else 1.0)
+    c["xdoor"].rotation_euler.z = math.radians(-105) if shot in ("inspect78", "cabinet") else 0.0
+    if "maglamp" in c:
+        c["maglamp"].energy = 60 if shot == "coil" else 240
     tray.location = Vector((XC.x, XC.y - 0.9 * (1 - slide), 0.56))
     xtw["root"].location = tray.location + Vector((0, 0.02, 0.02))
     on = (shot in ("cabinet", "inspect78") and sec > 3.0)
@@ -389,7 +396,7 @@ def animate(c, sec, shot):
         fo = c["film_objs"][1 if shot != "motorfilm" else 2].matrix_world.translation
         group = (tA, tC, tD) if shot != "motorfilm" else (tC,)
         for k, h in enumerate(group):
-            pos = Vector((LB.x - 0.75 - 0.25 * (k == 1), fo.y - 0.75 + k * 0.75, 0)); d = fo - pos
+            pos = Vector((LB.x - 0.8 - 0.3 * (k == 1), fo.y - 1.15 + k * 0.6, 0)) if shot == "debate" else Vector((LB.x - 0.75 - 0.25 * (k == 1), fo.y - 0.75 + k * 0.75, 0)); d = fo - pos
             place(h, (pos.x, pos.y, 0), math.atan2(d.x, -d.y))
         tap = max(0.0, math.sin(sec * 3.0)) if shot == "debate" else 0.0
         reach(group[0], "L", fo + Vector((-0.04 - 0.03 * tap, -0.12, 0.0)), Vector((-0.3, -0.5, -0.8)), Vector((1, 0, 0)))
@@ -434,25 +441,25 @@ CAMS = {
     "row": lambda c, t: (V3(-5.6, ROW_Y - 1.6, 1.45).lerp(V3(-5.3, ROW_Y - 1.4, 1.42), ease(t)), V3(-3.6, ROW_Y + 0.05, 1.0), 32),
     "covers": lambda c, t: (V3(-4.8 + 4.0 * ease(t), ROW_Y + 1.5, 1.55), V3(-3.6 + 4.0 * ease(t), ROW_Y, 1.0), 30),
     "lone": lambda c, t: (V3(-2.2, ROW_Y - 2.4, 1.6).lerp(V3(-2.5, ROW_Y - 2.1, 1.55), ease(t)), V3(-4.5, ROW_Y - 0.3, 1.0), 30),
-    "coil": lambda c, t: (T.world(c["row"][0], (0.36, -0.3, 0.24)).lerp(T.world(c["row"][0], (0.3, -0.25, 0.2)), ease(t)), T.world(c["row"][0], (0.162, -0.068, 0.035)), 55),
+    "coil": lambda c, t: (T.world(c["row"][0], (0.28, -0.21, 0.17)).lerp(T.world(c["row"][0], (0.25, -0.18, 0.15)), ease(t)), T.world(c["row"][0], (0.162, -0.066, 0.036)), 70),
     "cabinet": lambda c, t: (XC + V3(-2.6, -2.6, 1.6).lerp(V3(-2.3, -2.3, 1.55), ease(t)), XC + V3(-0.1, -0.8, 0.9), 30),
     "film": lambda c, t: (V3(LB.x - 2.0, LB.y + 0.9, 1.65).lerp(V3(LB.x - 1.7, LB.y + 0.75, 1.62), ease(t)), V3(LB.x, LB.y - 0.2, 1.5), 32),
-    "debate": lambda c, t: (V3(LB.x - 0.3, LB.y + 2.45, 1.72).lerp(V3(LB.x - 0.45, LB.y + 2.25, 1.7), ease(t)), V3(LB.x - 0.95, LB.y - 0.45, 1.4), 30),
+    "debate": lambda c, t: (V3(LB.x - 0.28, LB.y + 2.4, 1.72).lerp(V3(LB.x - 0.4, LB.y + 2.22, 1.7), ease(t)), V3(LB.x - 1.0, LB.y - 0.75, 1.42), 32),
     "memory": lambda c, t: (MEM + V3(-1.5, -0.9, 0.45).lerp(V3(-1.25, -0.75, 0.38), ease(t)), MEM + V3(0, 0, 0.1), 35),
     "pair": lambda c, t: (PAIR + V3(-1.3, -1.9, 0.65).lerp(V3(-1.1, -1.65, 0.6), ease(t)), PAIR + V3(0.15, -0.1, 0.2), 30),
-    "barlid": lambda c, t: (PAIR + V3(0.95, -0.65, 0.32).lerp(V3(0.85, -0.55, 0.27), ease(t)), PAIR + V3(0.55, -0.16, 0.01), 45),
+    "barlid": lambda c, t: (c["pair"][1]["bar"].matrix_world.translation + V3(0.06, -0.4, 0.27).lerp(V3(0.05, -0.34, 0.23), ease(t)), c["pair"][1]["bar"].matrix_world.translation + V3(0.0, 0.0, 0.0), 50),
     "bars": lambda c, t: (PAIR + V3(1.32, -0.78, 0.46).lerp(V3(1.3, -0.68, 0.41), ease(t)), PAIR + V3(1.27, -0.2, 0.0), 40),
-    "inspect78": lambda c, t: (XC + V3(1.5, -3.3, 1.8).lerp(V3(1.3, -3.0, 1.75), ease(t)), XC + V3(-0.15, -0.5, 1.0), 28),
+    "inspect78": lambda c, t: (XC + V3(1.15, -1.95, 1.45).lerp(V3(1.05, -1.8, 1.42), ease(t)), XC + V3(-0.15, -0.72, 0.85), 28),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
 }
 
 MOVES = {k: dict(kind="anim", dof=3.0, cam=fn, anim=anim(k)) for k, fn in CAMS.items()}
 MOVES["team"]["title"] = ("CHAPTER 2", "THE X-RAY", 10, 130)
 MOVES["team"]["dof"] = None
-for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04))), ("barlid", lambda c, t: PAIR + V3(0.55, -0.12, 0.0)),
+for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04))), ("barlid", lambda c, t: c["pair"][1]["bar"].matrix_world.translation),
                ("bars", lambda c, t: PAIR + V3(1.27, -0.2, 0.01)), ("film", lambda c, t: V3(LB.x, LB.y, 1.55)), ("memory", lambda c, t: MEM + V3(0, 0, 0.1))):
     MOVES[k]["focus"] = foc
-    MOVES[k]["dof"] = 4.0
+    MOVES[k]["dof"] = 4.0 if k not in ("barlid", "coil") else 11.0
 for k in MOVES:
     if "focus" not in MOVES[k]:
         MOVES[k]["dof"] = None

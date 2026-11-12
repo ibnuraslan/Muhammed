@@ -263,15 +263,13 @@ def animate(c, sec, shot):
     lift = ease(min(1.0, max(0.0, (sec - 1.8) / 1.6))) if shot == "cover" else 1.0
     c["hood"].rotation_euler = (math.radians(-50) * lift, 0, 0)
     t_ = P["tech"]
-    twp.stand(t_, (-1.4, -1.35, 0), math.pi)                                # faces +Y, the bench
+    twp.stand(t_, (-0.72, -0.98, 0), -2.12)                                 # at the machine's right-hand end, turned to it and to us
     hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    reach(t_, "R", hp + Vector((-0.05, -0.1, -0.03)), Vector((-0.3, -0.6, -0.9)), Vector((0, 1, 0.0)))     # one hand lifts the hood
-    reach(t_, "L", Vector((-1.25, -0.75, 0.93)), Vector((0.4, -0.5, -0.8)), Vector((0, 1, -0.6)))          # the other rests on the bench
+    twp.work(t_, {"R": hp + Vector((0.06, -0.08, -0.03))}, head=6)             # one hand lifts the hood
     fingers_curl(t_, 45, thumb=25)
-    t_.rot("head", (1, 0, 0), -12)
     a, b = P["usA"], P["usB"]
-    twp.stand(a, (-0.3, -1.3, 0), math.radians(150)); twp.stand(b, (-2.4, -1.2, 0), math.radians(-150))
-    a.rot("head", (1, 0, 0), -14); b.rot("head", (1, 0, 0), -10 - 4 * lift)
+    twp.stand(a, (-0.25, -1.38, 0), -2.18); twp.stand(b, (0.28, -1.88, 0), -2.24)  # the two Americans beside him, watching
+    a.rot("head", (1, 0, 0), 8); b.rot("head", (1, 0, 0), 6 + 4 * lift)
     for h in (a, b):
         h.rot("head", (0, 0, 1), 3 * math.sin(sec * 0.6))
     bpy.context.view_layer.update()
@@ -286,7 +284,7 @@ def anim(shot):
 
 def cam_cover(c, t):
     e = ease(t)
-    return (Vector((-3.2, -2.6, 1.7)).lerp(Vector((-2.9, -2.3, 1.62)), e), Vector((-1.2, -0.55, 1.08)), 32)
+    return (Vector((-3.9, -2.55, 1.66)).lerp(Vector((-3.6, -2.32, 1.62)), e), Vector((-0.85, -0.95, 1.28)), 30)
 
 
 def cam_scope(c, t):
@@ -308,7 +306,7 @@ MOVES = {
     "sixteen": dict(kind="anim", dof=4.0, cam=cam_sixteen, focus=lambda c, t: Vector((1.5, -0.6, 1.0)), anim=anim("sixteen"),
                     title=("CHAPTER 4", "WHAT MOSCOW READ", 10, 130)),
     "tags": dict(kind="anim", dof=1.2, cam=cam_tags, focus=lambda c, t: Vector((-2.6 + 1.2 * ease(t) + 0.25, -0.76, 0.96)), anim=anim("tags")),
-    "cover": dict(kind="anim", dof=3.0, cam=cam_cover, focus=lambda c, t: Vector((-1.4, -0.5, 1.1)), anim=anim("cover"),
+    "cover": dict(kind="anim", dof=5.0, cam=cam_cover, focus=lambda c, t: Vector((-0.8, -1.05, 1.4)), anim=anim("cover"),
                   title=("CHAPTER 1", "THE SWAP", 10, 130)),
     "scope": dict(kind="anim", dof=1.4, cam=cam_scope, focus=lambda c, t: c["scope"].matrix_world @ Vector((-0.07, -0.22, 0.19)), anim=anim("scope")),
 }

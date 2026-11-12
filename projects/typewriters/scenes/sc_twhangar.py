@@ -231,6 +231,9 @@ def build(variant=None):
             fo = bpy.data.objects.new("Flood", fl); bpy.context.collection.objects.link(fo); fo.location = (x, PLANE.y + 23.2, 13.2); point_at(fo, (PLANE.x, PLANE.y + 12, 0.5))
             box("FloodHead", (x, PLANE.y + 24, 14.1), (1.2, 0.4, 0.8), pbr("FloodHousing", (0.1, 0.1, 0.1), 0.4))
         haze((PLANE.x, PLANE.y + 15, 6), (60, 50, 12), density=0.004, color=(0.8, 0.85, 0.95), anis=0.6)
+        for dy in (3.0, 8.0):                                  # the hold lit from inside: a warm glow up the ramp
+            hl = bpy.data.lights.new("HoldLamp", 'POINT'); hl.energy = 900; hl.color = (1.0, 0.8, 0.55); hl.shadow_soft_size = 0.6
+            ho = bpy.data.objects.new("HoldLamp", hl); bpy.context.collection.objects.link(ho); ho.location = (PLANE.x, PLANE.y + dy, 2.6)
         ramp_end = PLANE + Vector((0, 15 + 5, 0))
         for k in range(11):                               # a low roller bed leading to the foot of the ramp
             cyl("Roller", (PLANE.x, PLANE.y + 19.2 - k * 0.5, 0.06), 0.04, 0.9, steel, verts=12, rot=(0, math.radians(90), 0))
@@ -434,7 +437,7 @@ def animate(c, sec, shot):
         a, b = P["load1"], P["wA"]
         twp.stand(a, (PLANE.x + 0.95, PLANE.y + 16.5 - 0.3 * sec, 0), math.radians(160))
         twp.stand(b, (PLANE.x - 1.1, PLANE.y + 17.5, 0), math.radians(-150))
-        reach(a, "L", c["roll_crates"][1].location + Vector((0.45, 0.0, 0.1)), Vector((0.6, 0, -0.7)), Vector((-1, 0, 0)))
+        twp.work(a, {"L": c["roll_crates"][1].location + Vector((0.42, 0.1, 0.1)), "R": c["roll_crates"][1].location + Vector((0.42, -0.15, 0.1))}, head=8)
     bpy.context.view_layer.update()
 
 
@@ -464,7 +467,7 @@ def cam_apron(c, t):
 
 def cam_load(c, t):
     e = ease(t)
-    return (Vector((PLANE.x + 3.0, PLANE.y + 22.5, 1.4)).lerp(Vector((PLANE.x + 2.5, PLANE.y + 21.2, 1.3)), e), Vector((PLANE.x - 0.2, PLANE.y + 10.5, 2.0)), 30)
+    return (Vector((PLANE.x + 9.5, PLANE.y + 31.0, 3.6)).lerp(Vector((PLANE.x + 8.6, PLANE.y + 29.4, 3.4)), e), Vector((PLANE.x - 0.5, PLANE.y + 9.5, 2.6)), 28)     # wide: the whole tail, ramp and lit hold
 
 
 def cam_slats(c, t):

@@ -309,6 +309,8 @@ def build(variant=None):
     c["cable"] = cable
     crate = burlap_crate("BurlapCrate")
     c["crate"] = crate
+    bl = area_light((0, 0, 0), (0, 0, 0), 2.5, 260, (1.0, 0.94, 0.86)); bl.visible_camera = False; bl.visible_glossy = False   # daylight bounce off the street
+    c["bounce"] = bl
     hook = join([cyl("HookBlock", (0, 0, 0.12), 0.08, 0.2, post_m, verts=16), box("Sling", (0, 0, -0.25), (0.02, 0.6, 0.5), pbr("Sling", (0.4, 0.3, 0.12), 0.8))], "HookBlock")
     c["hook"] = hook
     workers = []
@@ -369,6 +371,8 @@ def hoist(c, sec, lift):
     sway = 0.04 * math.sin(sec * 1.7)
     hook.location = top + Vector((sway, 0, 0)); crate.location = top + Vector((sway, 0, -1.1))
     crate.rotation_euler = (0, 0, 0.05 * math.sin(sec * 0.9))
+    if "bounce" in c:
+        c["bounce"].location = crate.location + Vector((-2.0, -3.2, -1.2)); point_at(c["bounce"], crate.location)
     cab = c["cable"]; cab.location = sheave; L = max(0.05, sheave.z - hook.location.z - 0.22)
     d = (hook.location + Vector((0, 0, 0.22))) - sheave
     cab.scale = (1, 1, d.length); cab.rotation_euler = (0, 0, 0)
@@ -466,8 +470,8 @@ def cam_crane(c, t):
 def cam_hoist(c, t):
     e = ease(t)
     cr = c["crate"].location
-    a = Vector((JIB.x - 5.0, -7.0, 5.0)); b = Vector((JIB.x - 4.6, -6.6, 6.0))
-    return (a.lerp(b, e), Vector((JIB.x - 1.0, -2.0, cr.z + 1.0)), 30)
+    a = Vector((-5.2, -6.8, -1.6)); b = Vector((-4.7, -6.2, -1.0))             # tracks the crate, a little below it: its lit side, the rope, the facade
+    return (cr + a.lerp(b, e), cr + Vector((0.4, 0.8, 0.6)), 32)
 
 
 def cam_roof(c, t):

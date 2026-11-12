@@ -146,8 +146,8 @@ def animate(c, sec, shot="push"):
 
 
 MOVES = {
-    "tape": dict(kind="anim", dof=1.2, anim=lambda c, t: animate(c, t * DUR["tape"], "tape"),
-                 cam=lambda c, t: (TAPE_AT + Vector((0.55, -0.35, 0.32)).lerp(Vector((0.42, -0.28, 0.26)), ease(t)), TAPE_AT + Vector((-0.05, 0, 0.0)), 45),
+    "tape": dict(kind="anim", dof=8.0, anim=lambda c, t: animate(c, t * DUR["tape"], "tape"),
+                 cam=lambda c, t: (TAPE_AT + Vector((0.78, -0.95, 0.42)).lerp(Vector((0.68, -0.82, 0.38)), ease(t)), TAPE_AT + Vector((-0.08, 0.05, -0.1)), 40),     # 3/4: keys, reader and tape
                  focus=lambda c, t: TAPE_AT + Vector((0.05, 0, 0))),
     "pouch": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["pouch"], "pouch"),
                   cam=lambda c, t: (DESK2 + Vector((-2.0, 1.1, 1.65)).lerp(Vector((-1.8, 1.0, 1.6)), ease(t)), DESK2 + Vector((-0.4, -0.25, 1.1)), 30),

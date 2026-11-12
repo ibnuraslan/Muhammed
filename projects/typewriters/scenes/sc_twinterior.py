@@ -111,7 +111,7 @@ def build(variant=None):
     marine = twp.person("MarineP", 1.0, 23, "male_elegantsuit01", "short01", hv=0.2, cval=0.55, hue=0.12, sat=0.35)
     for o in marine.parts:
         if "elegantsuit" in o.name:
-            twp.two_tone(o, 0.74, (0.62, 0.52, 0.32), (0.03, 0.04, 0.09))         # khaki shirt over blue trousers (seated)
+            twp.two_tone(o, 0.74, (0.40, 0.34, 0.21), (0.03, 0.04, 0.09))         # khaki shirt over blue trousers (seated)
     c["cap"] = twp.marine_cap((-9.85, -0.1, 0.555), 2.0)
     c["marine"] = marine
     twp.model_fit("SchoolChair_01", (-10.75, -0.55, 0), rot_z=math.pi / 2, height=0.92)
@@ -231,9 +231,8 @@ def animate(c, sec, shot):
         a.rot("head", (0, 0, 1), 20 * turn)
     elif shot == "marine":
         m = c["marine"]
-        twp.seat(m, (-10.7, -0.55, 0), math.pi / 2, lean=6)                   # faces +X down the corridor, desk in front
+        twp.seat(m, (-10.7, -0.55, 0), math.pi / 2, lean=2)                   # faces +X down the corridor, desk in front, sitting up straight
         alarm = ease(min(1.0, max(0.0, (sec - 1.5) / 0.6)))
-        twp.work(m, {"R": Vector((-10.3, -0.72, 0.6)), "L": Vector((-10.3, -0.36, 0.6))}, head=0)
         m.rot("spine03", (0, 0, 1), 18 * alarm); m.rot("neck01", (0, 0, 1), 20 * alarm); m.rot("head", (0, 0, 1), 30 * alarm)   # turns to the panel behind him
         fw = twp.forward(m); sd_ = fw.cross(Vector((0, 0, 1))).normalized(); nk = m.bone_head("neck01")
         for k, sg in enumerate((-1, 1)):                                        # collar insignia
@@ -281,7 +280,7 @@ def cam_lift(c, t):
 
 def cam_marine(c, t):
     e = ease(t)
-    return (Vector((-8.2, 0.75, 1.5)).lerp(Vector((-8.5, 0.6, 1.47)), e), Vector((-10.65, -0.5, 1.05)), 32)
+    return (Vector((-7.9, 0.85, 1.3)).lerp(Vector((-8.15, 0.72, 1.28)), e), Vector((-10.4, -0.45, 0.88)), 28)
 
 
 def cam_landing(c, t):
@@ -300,7 +299,7 @@ MOVES = {
     "doors": dict(kind="anim", dof=None, cam=cam_doors, anim=anim("doors")),
     "chat": dict(kind="anim", dof=3.0, cam=cam_chat, focus=lambda c, t: Vector((1.1, 0.2, 1.5)), anim=anim("chat")),
     "lift": dict(kind="anim", dof=3.5, cam=cam_lift, focus=lambda c, t: Vector((-11.5, 0.2, 1.2)), anim=anim("lift")),
-    "marine": dict(kind="anim", dof=2.5, cam=cam_marine, focus=lambda c, t: Vector((-11.0, -0.55, 1.2)), anim=anim("marine")),
+    "marine": dict(kind="anim", dof=5.0, cam=cam_marine, focus=lambda c, t: Vector((-10.4, -0.45, 0.9)), anim=anim("marine")),
     "landing": dict(kind="anim", dof=None, cam=cam_landing, anim=anim("landing")),
     "stairs": dict(kind="anim", dof=None, cam=cam_stairs, anim=anim("stairs")),
 }

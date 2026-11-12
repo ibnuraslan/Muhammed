@@ -81,7 +81,7 @@ def build(variant="home"):
     # the table and chairs
     tr, _ = ph.model("dining_table", loc=TABLE, rot_z=0.0, scale=0.55); tr.scale = (0.55, 0.55, 0.85)     # a kitchen-height top (0.74 m)
     for k, (dx, dy, rz) in enumerate(((0, -0.62, 0.0), (0, 0.62, math.pi), (-0.85, 0, -math.pi / 2), (0.85, 0, math.pi / 2))):
-        ph.model("dining_chair_02", loc=(TABLE.x + dx, TABLE.y + dy, 0), rot_z=rz)
+        ph.model("dining_chair_02", loc=(TABLE.x + dx, TABLE.y + dy, 0), rot_z=rz + math.pi)          # seats face the table
     for k in range(2):
         ph.model("tea_set_01", loc=(TABLE.x - 0.15 + 0.3 * k, TABLE.y + 0.05, 0.74), rot_z=k, scale=0.45) if k == 0 else None
     mug_m = pbr("Mug", (0.75, 0.72, 0.65), 0.25)
@@ -180,19 +180,19 @@ def animate(c, sec, shot):
         return
     if c["variant"] == "home":
         m, w = P["man"], P["wife"]
-        twp.seat(m, (TABLE.x, TABLE.y - 0.66, 0), math.pi, lean=22)            # faces +Y over the table, head low
-        reach(m, "L", TABLE + Vector((-0.08, -0.22, 0.78)), Vector((-0.6, -0.4, -0.6)), Vector((0.3, 1, -0.2)))
-        reach(m, "R", TABLE + Vector((0.12, -0.25, 0.78)), Vector((0.6, -0.4, -0.6)), Vector((-0.2, 1, -0.2)))
+        twp.seat(m, (TABLE.x, TABLE.y - 0.62, 0), math.pi, lean=10)            # at the table, facing +Y, hands round his cup
+        mug = c["mugs"][0]; mug.location = TABLE + Vector((0.0, -0.24, 0.79))
+        twp.work(m, {"L": mug.location + Vector((-0.06, -0.03, -0.01)), "R": mug.location + Vector((0.06, -0.03, -0.01))}, head=14)
         fingers_curl(m, 40, thumb=20)
-        m.rot("head", (1, 0, 0), 18 + 2 * math.sin(sec * 0.5))
-        twp.stand(w, (1.3, 1.55, 0), math.radians(160))                         # at the counter, turning to the table with the pot
+        m.rot("head", (0, 0, 1), 2 * math.sin(sec * 0.5))
+        twp.stand(w, (TABLE.x + 0.58, TABLE.y - 0.5, 0), -1.97)                 # beside him, pouring into his cup
         pour = ease(min(1.0, max(0.0, (sec - 1.2) / 1.2)))
         pot = c["pot"]
-        tgt = c["mugs"][1].location + Vector((0.1, 0.05, 0.2))
-        hold = w.bone_head("upperarm01.R") + Vector((-0.1, -0.3, -0.35))
+        tgt = mug.location + Vector((0.1, 0.0, 0.2))
+        hold = twp.chest_point(w, 0.25, 0.3)
         pot.location = hold.lerp(tgt, pour) if shot == "silent" else hold
         pot.rotation_euler = (0, math.radians(-45) * pour * (shot == "silent"), math.radians(200))
-        reach(w, "R", pot.location + Vector((0.09, 0, 0.1)), Vector((0.5, 0.3, -0.7)), Vector((0, -1, 0)))
+        twp.work(w, {"R": pot.location + Vector((0.09, 0, 0.1))}, head=12)
         fingers_curl(w, 50, thumb=25)
         w.rot("head", (1, 0, 0), 10)
     else:
@@ -201,10 +201,9 @@ def animate(c, sec, shot):
         twp.seat(a, (TABLE.x - 0.9, TABLE.y, 0), math.pi / 2, lean=10)
         twp.seat(b, (TABLE.x + 0.9, TABLE.y, 0), -math.pi / 2, lean=14)
         g = math.sin(sec * 1.3)
-        reach(d, "R", TABLE + Vector((0.18 + 0.02 * g, 0.28, 0.78)), Vector((0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
-        reach(d, "L", TABLE + Vector((-0.2, 0.32, 0.78)), Vector((-0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
+        twp.work(d, {"R": TABLE + Vector((-0.18 + 0.02 * g, 0.3, 0.78)), "L": TABLE + Vector((0.2, 0.32, 0.78))}, head=0)
         d.rot("head", (0, 0, 1), 12 * math.sin(sec * 0.7))
-        reach(b, "L", TABLE + Vector((0.5, -0.12, 0.78)), Vector((0.3, -0.6, -0.8)), Vector((-1, 0, -0.3)))
+        twp.work(b, {"L": TABLE + Vector((0.52, -0.12, 0.78))}, head=0)
         for h in (a, b):
             h.rot("head", (1, 0, 0), 6)
         for k, r in enumerate(c["reels"]):
@@ -233,7 +232,7 @@ def cam_talk(c, t):
 
 def cam_reels(c, t):
     e = ease(t); r = c["reels"][0].matrix_world.translation
-    return (r + Vector((0.3, -2.1, 0.6)).lerp(Vector((0.25, -1.85, 0.55)), e), r + Vector((0.0, 0.3, 0.2)), 32)        # medium-wide: the deck between them
+    return (TABLE + Vector((-1.6, -0.42, 1.32)).lerp(Vector((-1.5, -0.36, 1.3)), e), TABLE + Vector((0.0, 0.62, 1.12)), 35)     # over officer A's shoulder: the KGB man talking, the reels between them
 
 
 MOVES = {
@@ -244,5 +243,5 @@ MOVES = {
     "silent": dict(kind="anim", dof=2.4, cam=cam_silent, focus=lambda c, t: c["P"]["man"].bone_head("head"), anim=anim("silent")),
     "wide": dict(kind="anim", dof=None, cam=cam_wide, anim=anim("wide")),
     "talk": dict(kind="anim", dof=2.8, cam=cam_talk, focus=lambda c, t: c["P"]["defector"].bone_head("head"), anim=anim("talk")),
-    "reels": dict(kind="anim", dof=1.6, cam=cam_reels, focus=lambda c, t: c["reels"][0].matrix_world.translation, anim=anim("reels")),
+    "reels": dict(kind="anim", dof=4.0, cam=cam_reels, focus=lambda c, t: c["P"]["defector"].bone_head("head"), anim=anim("reels")),
 }

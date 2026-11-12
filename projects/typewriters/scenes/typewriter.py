@@ -445,7 +445,7 @@ def _mechanism(name, c, M, root, bugged):
     c["arms"] = arms
     # the power switch: a small block with a coil (the altered machine carries one more coil)
     P(box(name + "_SwitchBody", (0.162, -0.07, 0.05), (0.018, 0.02, 0.018), M["dark"], bevel=0.001))
-    coils = [cyl(name + "_Coil", (0.162, -0.07 + dy, 0.035), 0.004, 0.009, M["copper"], verts=16) for dy in ((-0.004,) if not bugged else (-0.004, 0.006))]
+    coils = [cyl(name + "_Coil", (0.162, -0.07 + dy, 0.035), 0.0055, 0.012, M["copper"], verts=20) for dy in ((-0.005,) if not bugged else (-0.005, 0.009))]
     for o in coils:
         P(o)
     c["coil_extra"] = coils[-1] if bugged else None

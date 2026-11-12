@@ -314,8 +314,7 @@ def animate(c, sec, shot=None):
         bpy.context.view_layer.update()
         twp.stand(ag, (2.38 + 0.1, 1.45, 0), math.pi)
         hp = d.matrix_world @ Vector((0.0, 0.1 + 0.25 * ease(min(1.0, max(0.0, (sec - 1.5) / 2.5))), 0.16))
-        reach(ag, "R", hp + Vector((0, -0.05, 0.05)), Vector((0.8, -0.2, -0.8)), Vector((0, 0.35, -1)))
-        reach(ag, "L", d.matrix_world @ Vector((-0.17, -0.04, 0.13)), Vector((-0.8, -0.2, -0.8)), Vector((0.1, 0.5, -0.85)))
+        twp.work(ag, {"R": hp + Vector((0, -0.05, 0.05)), "L": d.matrix_world @ Vector((-0.17, -0.04, 0.13))}, head=0)
         fingers_curl(ag, 30, thumb=15); ag.rot("head", (1, 0, 0), 14)
         cl = P["clerkR"]; bag = c["bag"]; bx = c["rbox"]
         twp.stand(cl, (bag.location.x + 0.75, bag.location.y - 0.1, 0), math.radians(-95))
@@ -327,8 +326,7 @@ def animate(c, sec, shot=None):
             sh.rotation_euler = (0.3 * k, 0.9 * f + 0.2 * k, 0.1 * k)
             sh.hide_render = shot != "records_burn"
         twp.hide([bx] + list(bx.children_recursive) + [bag], shot != "records_burn")
-        for sd, dy in (("L", 0.2), ("R", -0.2)):
-            reach(cl, sd, bx.location + Vector((0.1, dy, -0.1)), Vector((0.3, dy * 3, -0.7)), Vector((-1, 0, 0)))
+        twp.work(cl, {"L": bx.location + Vector((0.1, 0.2, -0.1)), "R": bx.location + Vector((0.1, -0.2, -0.1))}, head=8)
         fingers_curl(cl, 40, thumb=20)
         bpy.context.view_layer.update()
         return
@@ -360,6 +358,7 @@ def animate(c, sec, shot=None):
                 reach(h, sd, edge + side * 0.14 * sg + Vector((0, 0, 0.05)), Vector((sg * side.x, sg * side.y, -1.0)), d + Vector((0, 0, -1.5)))
             from human import fingers_curl as _fc
             _fc(h, 10, thumb=5)
+            twp.hide(twp.person_objs(h), shot == "nsa_desk")              # 2A: Deeley alone at his desk, nobody in the foreground
         bpy.context.view_layer.update()
         return
     if night and shot == "page_out":
@@ -489,7 +488,7 @@ def plans_image(path):
 
 def cam_nsa_desk(c, t):
     e = ease(t)
-    return (Vector((DESK_A.x - 1.3, DESK_A.y - 0.6, 1.55)).lerp(Vector((DESK_A.x - 1.1, DESK_A.y - 0.45, 1.5)), e), Vector((DESK_A.x - 0.15, DESK_A.y + 0.45, 1.0)), 38)
+    return (Vector((DESK_A.x - 1.6, DESK_A.y - 0.95, 1.55)).lerp(Vector((DESK_A.x - 1.42, DESK_A.y - 0.8, 1.52)), e), Vector((DESK_A.x - 0.12, DESK_A.y + 0.5, 1.08)), 32)
 
 
 def cam_nsa_plans(c, t):
@@ -499,12 +498,12 @@ def cam_nsa_plans(c, t):
 
 def cam_records_drawer(c, t):
     e = ease(t)
-    return (Vector((3.55, 0.7, 1.65)).lerp(Vector((3.45, 0.85, 1.62)), e), Vector((2.35, 1.95, 1.0)), 30)
+    return (Vector((3.85, -0.65, 1.45)).lerp(Vector((3.72, -0.5, 1.42)), e), Vector((2.4, 1.6, 1.1)), 24)          # the agent whole, side-on, drawer open
 
 
 def cam_records_burn(c, t):
     e = ease(t); b = c["bag"].location
-    return (b + Vector((-1.7, 0.75, 1.5)).lerp(Vector((-1.5, 0.65, 1.45)), e), b + Vector((0.4, -0.1, 0.75)), 30)
+    return (b + Vector((-2.6, 0.6, 1.35)).lerp(Vector((-2.4, 0.55, 1.32)), e), b + Vector((0.45, -0.05, 0.95)), 26)
 
 
 def cam_attache(c, t):
@@ -536,11 +535,11 @@ MOVES = {
                                                          Vector((DESK_A.x - 0.15, DESK_A.y + 0.35, 0.95)), 35),
                     focus=lambda c, t: c["printout"].location, anim=anim("analyst")),
     "page_out": dict(kind="anim", dof=1.8, cam=cam_page_out, focus=lambda c, t: _tw(c, (0.0, 0.05, 0.22)), anim=anim("page_out")),
-    "records_drawer": dict(kind="anim", dof=2.2, cam=cam_records_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0, 0.3, 0.1)), anim=anim("records_drawer")),
-    "records_burn": dict(kind="anim", dof=2.6, cam=cam_records_burn, focus=lambda c, t: c["bag"].location + Vector((0.2, 0, 0.7)), anim=anim("records_burn")),
+    "records_drawer": dict(kind="anim", dof=5.0, cam=cam_records_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0, 0.3, 0.1)), anim=anim("records_drawer")),
+    "records_burn": dict(kind="anim", dof=5.0, cam=cam_records_burn, focus=lambda c, t: c["bag"].location + Vector((0.2, 0, 0.7)), anim=anim("records_burn")),
     "attache": dict(kind="anim", dof=2.6, cam=cam_attache, focus=lambda c, t: _tw(c, (0.0, 0.0, 0.13)), anim=anim("attache")),
     "platen": dict(kind="anim", dof=5.6, cam=cam_platen, focus=lambda c, t: _tw(c, (-0.03, 0.06, 0.2)), anim=anim("platen")),
-    "nsa_desk": dict(kind="anim", dof=2.4, cam=cam_nsa_desk, focus=lambda c, t: c["pad"].location, anim=anim("nsa_desk")),
+    "nsa_desk": dict(kind="anim", dof=4.0, cam=cam_nsa_desk, focus=lambda c, t: c["pad"].location, anim=anim("nsa_desk")),
     "nsa_plans": dict(kind="anim", dof=3.0, cam=cam_nsa_plans, focus=lambda c, t: c["plans"].location, anim=anim("nsa_plans")),
     "typing": dict(kind="anim", dof=2.6, cam=cam_typing, focus=lambda c, t: _tw(c, (0.0, 0.03, 0.13)), anim=anim("typing")),
     "notice": dict(kind="anim", dof=3.2, cam=cam_notice, focus=lambda c, t: c["notice"].location, anim=anim("notice")),

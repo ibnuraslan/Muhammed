@@ -127,6 +127,7 @@ def build(variant=None):
             ph.model("jug_01", loc=(x, TALK.y, 0.96), scale=0.8)
     elif oval:                                   # a Washington office: the desk in front of the window, the figure backlit
         fill.data.energy = 14
+        rf = area_light((OVAL_DESK.x + 0.6, -2.2, 2.6), (0, 0, 0), 3.0, 140, (1.0, 0.9, 0.78)); point_at(rf, (OVAL_DESK.x - 0.8, 2.6, 1.4)); rf.visible_camera = False   # lifts the room and the flag, not his face
         ph.model("painted_wooden_table", loc=OVAL_DESK, rot_z=0.0, scale=0.78)
         ph.model("ArmChair_01", loc=(0.3, 0.6, 0.0), rot_z=0.4)
         ph.model("Sofa_01", loc=(1.6, -1.6, 0.0), rot_z=math.pi / 2) if False else None
@@ -210,9 +211,10 @@ def build(variant=None):
         rp = skia.Paint(AntiAlias=True, Style=skia.Paint.kStroke_Style, StrokeWidth=34); rp.setColor4f(skia.Color4f(0.62, 0.08, 0.06, 1))
         cv.drawRect(skia.Rect.MakeXYWH(40, 40, 820, 1080), rp)                                                    # red border
         pp = skia.Paint(AntiAlias=True); pp.setColor4f(skia.Color4f(0.95, 0.94, 0.9, 1))
-        cv.drawRect(skia.Rect.MakeXYWH(170, 420, 560, 170), pp)
-        pp.setColor4f(skia.Color4f(0.08, 0.08, 0.1, 1)); f = skia.Font(skia.Typeface.MakeFromFile(T.MONO_B), 64)
-        cv.drawString("PROJECT GUNMAN", 450 - f.measureText("PROJECT GUNMAN") / 2, 525, f, pp)
+        cv.drawRect(skia.Rect.MakeXYWH(110, 330, 680, 380), pp)
+        pp.setColor4f(skia.Color4f(0.08, 0.08, 0.1, 1)); f = skia.Font(skia.Typeface.MakeFromFile(T.MONO_B), 120)
+        for k_, wd in enumerate(("PROJECT", "GUNMAN")):
+            cv.drawString(wd, 450 - f.measureText(wd) / 2, 490 + k_ * 160, f, pp)
         sf.makeImageSnapshot().save(path, skia.kPNG)
         fm = tex_mat("FolderLabel", path, 0.7)
         bpy.ops.mesh.primitive_plane_add(size=1); fo = bpy.context.active_object; fo.name = "Folder"
@@ -228,7 +230,7 @@ def build(variant=None):
         lp = bpy.data.objects.new("CaseLidHinge", None); bpy.context.collection.objects.link(lp); lp.location = case.location + Vector((0, 0.165, 0.09))
         lid.parent = lp; lid.location = (0, 0.165, 0.0); lp.rotation_euler = (math.radians(-100), 0, 0)
         c["case"] = case; c["case_lid"] = lp
-        pool = bpy.data.lights.new("CasePool", 'SPOT'); pool.energy = 90; pool.spot_size = math.radians(55); pool.spot_blend = 0.6; pool.color = (1.0, 0.76, 0.5)
+        pool = bpy.data.lights.new("CasePool", 'SPOT'); pool.energy = 150; pool.spot_size = math.radians(55); pool.spot_blend = 0.6; pool.color = (1.0, 0.76, 0.5)
         po = bpy.data.objects.new("CasePool", pool); bpy.context.collection.objects.link(po); po.location = case.location + Vector((0.05, -0.1, 0.7)); point_at(po, case.location)
         fo.modifiers.new("thick", 'SOLIDIFY').thickness = 0.006
         c["folder"] = fo
@@ -258,6 +260,9 @@ def animate(c, sec, shot):
                 continue
             twp.seat(h, (x, TALK.y + side * 0.62, 0), 0.0 if side > 0 else math.pi, lean=12)
             h.rot("head", (0, 0, 1), 8 * math.sin(sec * 0.6 + k))
+        for k, h in enumerate(dele):
+            if k >= 3:
+                twp.hide(twp.person_objs(h), shot == "talks_read")          # 6B: across the table, nobody between us and him
         sa = dele[0]; pg = c["page"]                                    # the lead Soviet negotiator reads a page, then looks up
         look = ease(min(1.0, max(0.0, (sec - 2.6) / 0.8))) if shot == "talks_read" else 0.0
         chest = sa.bone_head("spine03")
@@ -293,40 +298,44 @@ def animate(c, sec, shot):
             fo.location = aide.bone_head("spine03") + Vector((-0.1, -0.2, -0.15)); fo.rotation_euler = (math.radians(85), 0, math.radians(135))
             reach(aide, "L", fo.location + Vector((0.05, 0.1, 0.12)), Vector((-0.5, 0.4, -0.7)))
         fingers_curl(aide, 45, thumb=20)
+        twp.hide(twp.person_objs(aide), shot == "sign")                    # nobody between the lens and the desk
+        twp.hide(twp.person_objs(amb), shot == "folder")
         bpy.context.view_layer.update()
         return
-    if shot == "handover":
+    if shot == "handover":                                                     # across the partner desk, seen from the side
         twp.hide(twp.person_objs(cou), False)
-        twp.stand(amb, (0.55, 0.15, 0.0), -math.pi / 2 + 0.35)              # beside the desk, turned toward the door
-        moving = twp.walk(cou, (-2.9, -1.4), (-0.35, -0.2), sec, speed=1.05)
-        give = ease(min(1.0, max(0.0, (sec - 2.8) / 0.8)))
+        twp.stand(amb, (0.3, 1.55, 0.0), 0.0)                                  # behind the desk, facing the room
+        moving = twp.walk(cou, (-1.6, -0.5), (0.3, 0.45), sec, speed=1.05)
+        mid = Vector((0.3, 1.0, 1.02))
         if not moving:
-            d = amb.arm.location - cou.arm.location; twp.face(cou, math.atan2(d.x, -d.y))
-            mid = (cou.bone_head("upperarm01.R") + amb.bone_head("upperarm01.R")) / 2 + Vector((0, 0, -0.22))
-            reach(cou, "R", hand(cou).lerp(mid, give) if give < 1 else mid, Vector((0.3, -0.5, -0.8)), (amb.arm.location - cou.arm.location))
-            take = ease(min(1.0, max(0.0, (sec - 3.3) / 0.7)))
+            twp.face(cou, math.pi)
+            give = ease(min(1.0, max(0.0, (sec - 2.1) / 0.7)))
+            take = ease(min(1.0, max(0.0, (sec - 2.6) / 0.6)))
+            if give > 0:
+                twp.work(cou, {"R": cou.bone_head("upperarm01.R").lerp(mid + Vector((0.07, -0.1, 0)), give) + Vector((0, 0, -0.25 * (1 - give)))}, head=8)
             if take > 0:
-                reach(amb, "R", amb.bone_head("upperarm01.R").lerp(mid, 0.0) + (mid - amb.bone_head("upperarm01.R")) * take + Vector((0, 0, -0.25 * (1 - take))),
-                      Vector((0.3, 0.5, -0.8)), (cou.arm.location - amb.arm.location))
-            fingers_curl(cou, 40, thumb=25)
-            env.location = hand(cou) + (cou.arm.location - amb.arm.location).normalized() * -0.08
+                twp.work(amb, {"R": amb.bone_head("upperarm01.R").lerp(mid + Vector((-0.07, 0.1, 0)), take) + Vector((0, 0, -0.25 * (1 - take)))}, head=8)
+            env.location = (hand(cou) + Vector((-0.06, 0.04, 0))) if take < 0.9 else (hand(amb) + Vector((0.06, -0.04, 0)))
         else:
             env.location = hand(cou) + Vector((0, 0, -0.02))
-        env.rotation_euler = (math.radians(70), 0, cou.arm.rotation_euler.z)
+        env.rotation_euler = (0, 0, 0)
         note.hide_render = True
     else:
         twp.hide(twp.person_objs(cou), True); env.hide_render = True; note.hide_render = False
-        twp.stand(amb, (1.75, 2.35, 0.0), math.pi if shot == "note" else -0.45)    # at the window (8A: turned three-quarter into the room)
+        twp.stand(amb, (1.85, 2.45, 0.0) if shot == "note" else (1.75, 2.35, 0.0), math.pi / 2 if shot == "note" else -0.45)   # 2B: profile against the sheer
         unfold = ease(min(1.0, max(0.0, (sec - 0.6) / 1.4))) if shot == "note" else 1.0
         fold = ease(min(1.0, max(0.0, (sec - 2.4) / 1.0))) if shot == "pocket" else 0.0
-        chest = amb.bone_head("spine03") + twp.forward(amb) * 0.36 + Vector((0, 0, 0.08))
+        chest = twp.chest_point(amb, 0.26, 0.22) if shot == "note" else amb.bone_head("spine03") + twp.forward(amb) * 0.36 + Vector((0, 0, 0.08))
         nloc = chest + Vector((0, 0, 0.02 * math.sin(sec)))
         if shot == "pocket" and sec > 3.3:
             nloc = amb.bone_head("spine03").lerp(nloc, 1 - ease(min(1.0, (sec - 3.3) / 0.9))) + Vector((0.1, 0.06, -0.05))
         note.location = nloc
         note.rotation_euler = (math.radians(70), 0, amb.arm.rotation_euler.z - math.pi)
         note.scale = (1, max(0.35, unfold * (1 - 0.6 * fold)), 1)
-        for sd, sg in (("L", -1), ("R", 1)):
+        if shot == "note":
+            sv = twp.forward(amb).cross(Vector((0, 0, 1))).normalized()
+            twp.work(amb, {"L": nloc - sv * 0.09, "R": nloc + sv * 0.09}, head=0)
+        for sd, sg in ((("L", -1), ("R", 1)) if shot != "note" else ()):
             fw = twp.forward(amb); sd_v = fw.cross(Vector((0, 0, 1))) * -1
             reach(amb, sd, nloc + sd_v * (sg * 0.15) - fw * 0.09 + Vector((0, 0, -0.05)), sd_v * sg + Vector((0, 0, -0.7)) - fw * 0.3, fw + sd_v * (-sg * 0.6) + Vector((0, 0, 0.3)))
         fingers_curl(amb, 60, thumb=40)
@@ -340,25 +349,25 @@ def anim(shot):
 
 def cam_handover(c, t):
     e = ease(t)
-    return (Vector((2.05, 1.05, 1.62)).lerp(Vector((1.85, 0.9, 1.6)), e), Vector((-0.45, -0.3, 1.3)), 32)
+    return (Vector((3.1, 0.75, 1.55)).lerp(Vector((2.85, 0.85, 1.52)), e), Vector((0.3, 1.0, 1.25)), 32)
 
 
 def cam_note(c, t):
     e = ease(t); a = c["amb"]
     sh = a.bone_head("upperarm01.R")
     n = c["note"].location; base = Vector(a.arm.location)
-    return (base + Vector((-0.75, -2.4, 1.5)).lerp(Vector((-0.6, -2.05, 1.48)), e), n + Vector((0, 0.2, 0.15)), 35)
+    return (base + Vector((-0.55, -2.5, 1.5)).lerp(Vector((-0.45, -2.25, 1.48)), e), base + Vector((0.05, 0.15, 1.45)), 40)
 
 
 def cam_sign(c, t):
     e = ease(t); d = OVAL_DESK
-    return (d + Vector((0.9, -3.2, 1.05)).lerp(Vector((0.7, -2.7, 1.08)), e), d + Vector((0.0, 0.6, 1.05)), 35)
+    return (d + Vector((-0.55, -3.1, 1.1)).lerp(Vector((-0.45, -2.65, 1.12)), e), d + Vector((0.05, 0.6, 1.05)), 35)
 
 
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
     cl = c["case"].location
-    return (cl + Vector((-0.5, -1.7, 0.95)).lerp(Vector((-0.42, -1.5, 0.9)), e), cl + Vector((0.05, -0.15, 0.1)), 36)
+    return (cl + Vector((0.1, -0.72, 0.7)).lerp(Vector((0.08, -0.64, 0.64)), e), cl + Vector((0.0, -0.06, 0.08)), 50)
 
 
 def cam_talks_wide(c, t):
@@ -368,15 +377,15 @@ def cam_talks_wide(c, t):
 
 def cam_talks_read(c, t):
     e = ease(t); x = c["seats"][0][0]
-    return (Vector((x + 1.0, TALK.y + 0.25, 1.42)).lerp(Vector((x + 0.85, TALK.y + 0.15, 1.4)), e), Vector((x, TALK.y - 0.55, 1.12)), 40)
+    return (Vector((x + 0.72, TALK.y + 1.75, 1.5)).lerp(Vector((x + 0.68, TALK.y + 1.6, 1.48)), e), Vector((x, TALK.y - 0.6, 1.15)), 45)
 
 
 MOVES = {
     "talks_wide": dict(kind="anim", dof=None, cam=cam_talks_wide, anim=anim("talks_wide")),
-    "talks_read": dict(kind="anim", dof=2.0, cam=cam_talks_read, focus=lambda c, t: c["dele"][0].bone_head("head"), anim=anim("talks_read")),
+    "talks_read": dict(kind="anim", dof=4.0, cam=cam_talks_read, focus=lambda c, t: c["dele"][0].bone_head("head"), anim=anim("talks_read")),
     "sign": dict(kind="anim", dof=3.0, cam=cam_sign, focus=lambda c, t: OVAL_DESK + Vector((0, 0.5, 1.0)), anim=anim("sign")),
     "folder": dict(kind="anim", dof=2.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
-    "handover": dict(kind="anim", dof=3.0, cam=cam_handover, focus=lambda c, t: c["env"].location, anim=anim("handover")),
-    "note": dict(kind="anim", dof=2.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
+    "handover": dict(kind="anim", dof=4.0, cam=cam_handover, focus=lambda c, t: Vector((0.3, 1.0, 1.1)), anim=anim("handover")),
+    "note": dict(kind="anim", dof=4.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
     "pocket": dict(kind="anim", dof=3.0, cam=lambda c, t: (Vector((2.6, -0.5, 1.65)).lerp(Vector((2.4, -0.25, 1.62)), ease(t)), Vector((0.6, 2.4, 1.35)), 28), focus=lambda c, t: c["note"].location, anim=anim("pocket")),
 }
