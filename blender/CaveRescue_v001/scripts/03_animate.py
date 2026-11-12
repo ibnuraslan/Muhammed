@@ -494,6 +494,7 @@ for f, hd in ((1705, (22, 0)), (1760, (18, 10)), (1800, (24, -8)), (1850, (16, 5
         sx = 1 if s == "L" else -1
         hp = V((EDGE.x + 0.18 * sx, EDGE.y - 0.32, 0)); hh[s] = (V((hp.x, hp.y, ground_z(hp.x, hp.y) + 0.04)), V((0, -1, -0.3)).normalized(), V((0, 0, -1)))
     kneel(B3, f, EDGE.x, EDGE.y, 0.0, lean=30 + 4 * math.sin(f * 0.06), head=hd, hands=hh)
+    for s in "LR": key_fingers(B3, s, f, 12)       # palms flat on the rock, fingers relaxed (no claw)
 TELE[B3].add(1704)
 # beats 9-11: team kneels around Boy2 (medic = DiverA, mask = DiverB), coach keeps a hand on the boy
 P2 = V((CX + 0.8, 1.25, 0))
@@ -693,8 +694,14 @@ for n, x, y, yaw in CR:
         for s in "LR":
             sx = 1 if s == "L" else -1
             sh = bw(n, P, Rb, rest_head(n, "upperarm01." + s))
-            if n.startswith("Crowd") or s == "R":
-                W = sh + Rb @ V((0.15 * sx, -0.05, 0.45 + 0.12 * cheer)); hh[s] = (W, Rb @ V((0.2 * sx, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.5 * sx, 0.3, 0.0)))
+            if n.startswith("Crowd"):          # clapping in front of the chest
+                gap = 0.05 if cheer else 0.2
+                W = bw(n, P, Rb, rest_head(n, "spine02")) + Rb @ V((gap / 2 * sx, -0.32, 0.12))
+                hh[s] = (W, Rb @ V((-0.2 * sx, -0.3, 1)).normalized(), Rb @ V((-sx, 0, 0)), sh + Rb @ V((0.45 * sx, 0.2, -0.35)))
+                key_fingers(n, s, f, 8)
+            elif s == "R":                         # rescued boys / coach: an open-palm wave at head height
+                W = sh + Rb @ V((0.22 * sx + 0.06 * (cheer - 0.5), -0.12, 0.3)); hh[s] = (W, Rb @ V((0.1 * sx, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.5 * sx, 0.3, -0.2)))
+                key_fingers(n, s, f, 5)
         key_hands(n, f, P, Rb, hh)
     TELE[n].add(OUT0 - 1)
 heli = bpy.data.objects["S1_Heli"]; rotor = bpy.data.objects["S1_Heli_Rotor"]

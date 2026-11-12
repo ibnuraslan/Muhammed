@@ -17,6 +17,13 @@ for o in bpy.data.objects:
         o.data.energy *= 2.5; scale_keys(o.data, 2.5); o.data.spot_size = R_(70)
 f4 = bpy.data.objects["S4_Fill"].data; f4.animation_data_clear(); f4.energy = 700      # cavern normals fixed: fill can stay on underwater
 scale_keys(bpy.data.objects["CAM_Fill"].data, 1.5)
+# underwater: the camera fill (no volume scatter) and lighter murk on the rise back to the chamber, so divers and boys stay readable
+cfd = bpy.data.objects["CAM_Fill"].data
+for f, e in ((1215, 160), (1820, 160), (2440, 160), (2565, 160)):
+    cfd.energy = e; cfd.keyframe_insert("energy", frame=f)
+mv = bpy.data.materials["M_Murk"].node_tree.nodes["MurkVol"].inputs['Density']
+for f, d in ((1, mv.default_value), (1700, mv.default_value), (1715, mv.default_value * 0.35), (1830, mv.default_value * 0.35), (1860, mv.default_value)):
+    mv.default_value = d; mv.keyframe_insert("default_value", frame=f)
 for o in bpy.data.objects:
     if o.name.startswith("S5_Ambient_"): o.data.energy = 90
 for n in ("DiverA", "DiverB", "DiverC"):
@@ -26,7 +33,7 @@ for n in ("DiverA", "DiverB", "DiverC"):
     L.location = hb.head_local + V((0.25, 0.55, 0.25))
     c = L.constraints.new('CHILD_OF'); c.target = rig; c.subtarget = "head"; c.inverse_matrix = hb.matrix_local.inverted()
 ex = sc.view_settings
-for f, e in ((1009, 1.7), (1212, 1.7), (1240, 1.9), (1700, 1.9), (1760, 2.0), (1850, 2.2), (1890, 1.7)):
+for f, e in ((1009, 1.7), (1212, 1.7), (1240, 2.1), (1700, 2.1), (1760, 2.2), (1850, 2.2), (1890, 1.7)):
     ex.exposure = e; ex.keyframe_insert("exposure", frame=f)
 # ---------- 2. cutaway: clean colour strata bands, hollow tunnel, clear blue sumps, tiny figures, sky gradient
 ms = bpy.data.materials["M_Strata"]; nt = ms.node_tree; p = P(ms)
