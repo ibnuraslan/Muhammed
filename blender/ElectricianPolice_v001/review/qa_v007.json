@@ -188,6 +188,12 @@
     "wall/prop fills the frame, character only 10%"
    ]
   ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
   "1147": [
    [
     "EMPTY",
@@ -227,10 +233,24 @@
     "EMPTY",
     "no character in view"
    ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Station_floor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
   ]
  },
  "counts": {
-  "EMPTY": 37,
+  "EMPTY": 41,
   "INSIDE": 4,
   "FILL": 2
  }

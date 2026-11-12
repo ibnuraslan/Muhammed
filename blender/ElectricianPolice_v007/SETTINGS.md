@@ -4,7 +4,7 @@ These values were read back from `ElectricianPolice_v007_60fps.blend`, opened in
 
 | Item | Value |
 |---|---|
-| File | `ElectricianPolice_v007_60fps.blend`: 45.0 MB (42.9 MiB), compressed, md5 `1cd44af51a176da1696faee082d275a4`. Every image is packed: 256 images, mostly ≤512 px JPEG and ≤1K for large surfaces, with the hero's skin and shirt at 2K and two 1K HDRIs. Committed as a normal git file, with no LFS. |
+| File | `ElectricianPolice_v007_60fps.blend`: 45.1 MB (43.0 MiB), compressed, md5 `8eedff9d31dcafa867039073252cdca0`. Every image is packed: 256 images, mostly ≤512 px JPEG and ≤1K for large surfaces, with the hero's skin and shirt at 2K and two 1K HDRIs. Committed as a normal git file, with no LFS. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
