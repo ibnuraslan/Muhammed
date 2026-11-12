@@ -7,6 +7,7 @@ from mathutils import Vector, Matrix, Quaternion, Euler, noise
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "lib.py")).read())
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())     # director's shared hand-pose library
 OUT = sys.argv[sys.argv.index("--") + 1]
 random.seed(11)
 V = lambda *a: Vector(a)
@@ -87,7 +88,7 @@ class Actor:
             self.R.key_rot(n, f, [("X", hp * w), ("Y", hr * w), ("Z", ht * w)])
         for s in "LR":
             c = p["curl"].get(s, (22, 18))
-            self.key_fingers(s, f, c[0], c[1], *c[2:])
+            hp_key(self.o, s, pose_name(self.o.name, s, f, p), f)
         self.key_face(f, p["face"])
     def key_fingers(self, s, f, curl, thumb=18, abd=22):
         Rh = self.REST_HAND[s]; d, a = Rh.col[0].copy(), Rh.col[1].copy(); sign = 1 if s == "R" else -1
@@ -186,6 +187,38 @@ def vis(names_or_obs, ranges):
 def part(rig, suffix):
     return [c for c in bpy.data.objects[rig].children if c.name.split(".")[-1] == suffix]
 
+# v007b: every hand uses a preset from pipeline/hand_poses.py (no hand-set finger angles). The pose is chosen per
+# character / hand / frame range by what the hand is doing; the old per-pose curl numbers are no longer used.
+_HP = {}
+def hp_key(rig, s, name, f):
+    k = (rig.name, s, name)
+    if k not in _HP:
+        _HP[k] = _pose_rots(rig, s, name)
+    _key(rig, s, _HP[k], f, 1.0)
+HAND_POSE_RULES = [  # actor, side (None = both), first, last frame, pose
+    ("Surgeon1", "R", 1, 460, "tripod"),          # argon pen, then the needle driver
+    ("Surgeon1", "L", 1, 460, "flat_palm"),       # flat on the drape / beside the window
+    ("Surgeon1", "R", 461, 472, "relaxed"),       # rises relaxed in front of the face
+    ("Surgeon1", "R", 473, 503, "pinch"),         # pinches the mask's lower edge and pulls it down
+    ("Surgeon1", None, 504, 1710, "relaxed"),
+    ("Patient", "L", 600, 663, "wrap_grip"),      # the mug
+    ("Patient", "L", 664, 684, "open_alarm"),     # drops it
+    ("Patient", None, 685, 775, "flat_palm"),     # palm on the knee, palm on her side
+    ("Patient", "R", 662, 684, "flat_palm"),
+    ("Surgeon2", "L", 990, 1016, "pinch"),        # glove cuff
+    ("GloveHands", "R", 1, 300, "tripod"),        # studio pen
+    ("GloveHands", "L", 1, 300, "flat_palm"),     # steadying the liver
+    ("GloveHands", None, 1030, 1710, "cup_hold"), # lifting the liver
+    ("PanelA", "R", 1470, 1710, "power_fist"),    # gavel, thumb over the fingers
+    ("PanelB", "R", 1555, 1630, "wrap_grip"),     # stamp handle
+    ("PanelC", "R", 1, 1710, "tripod"),           # writing
+    ("PanelA", None, 1, 1710, "flat_palm"), ("PanelB", None, 1, 1710, "flat_palm"), ("PanelC", None, 1, 1710, "flat_palm"),
+]
+def pose_name(actor, s, f, p):
+    for a_, s_, f0, f1, nm in HAND_POSE_RULES:
+        if a_ == actor and (s_ is None or s_ == s) and f0 <= f <= f1:
+            return nm
+    return "relaxed"
 S1, PT, S2, NU, GH = Actor("Surgeon1"), Actor("Patient"), Actor("Surgeon2"), Actor("Nurse"), Actor("GloveHands")
 AN = Actor("Anaesth")
 PA, PBn, PC = Actor("PanelA"), Actor("PanelB"), Actor("PanelC")
@@ -583,9 +616,9 @@ for f in list(range(766, 991, 6)) + [990, 1100]:
         W, d, n = bed_grip(s, f)
         NU.R.key_world("IK_hand." + s, f, NU.hand_matrix(s, W, d, n))
 for s in "LR":
-    NU.key_fingers(s, 760, 22, 18)
+    hp_key(NU.o, s, "relaxed", 760)
     for f in (772, 990, 1100):
-        NU.key_fingers(s, f, (70, 74, 76, 78), 60, -50)
+        hp_key(NU.o, s, "wrap_grip", f)      # over the head-board edge
 stepped(NU.o, {600})
 vis([NU.o.name + "." + x for x in ("body",)] + [c for c in NU.o.children], [(0, 1300)])
 
@@ -690,7 +723,7 @@ def gavel_hand(f):
     Y = (R3 @ V(0, 1, 0)).normalized(); Z = (R3 @ V(0, 0, 1)).normalized(); X = (R3 @ V(1, 0, 0)).normalized()
     n = -X                                                         # palm faces the stick from his right side
     d = (Y * 0.42 - Z * 0.90).normalized()                         # knuckles forward-down, stick across the palm
-    return G - d * 0.072 - n * 0.030, d, n
+    return G - d * 0.085 - n * 0.018, d, n                         # stick pressed into the palm, inside the fist
 gkey(1500, V(-9.95, -0.04, DAIS_H + 0.97), R_(GZ), R_(15))
 gkey(1525, V(-9.98, -0.06, DAIS_H + 1.22), R_(GZ), R_(55))       # raised: head up and back over his fist
 gkey(1534, V(-9.90, -0.09, DAIS_H + 1.02), R_(GZ), R_(20))
@@ -727,7 +760,7 @@ def stamp_hand(f):
     n = H.cross(fw).normalized()                              # palm faces his left (medial for the right hand)
     d = (fw * 0.97 + H * 0.2).normalized()                    # knuckles forward and slightly up
     C = M @ V(0, 0, 0.085)                                     # middle of the handle
-    return C - d * 0.07 - n * 0.032, d, n
+    return C - d * 0.085 - n * 0.020, d, n                    # handle pressed into the palm, inside the fist
 key_vis([bpy.data.objects["StampMark"]] + list(bpy.data.objects["StampMark"].children), [(1596, 1710)])
 for f in (1200, 1300, 1400, 1500):
     PBn.P(f, pos, YW, spine=(16, 0, 4), head=(18 if f % 200 else 4, 8, 0), feet=feet, hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": desk(PBn, "R", -1.2, dx=0.05 * (f % 300 == 0))}, face={"brow": 0.3})

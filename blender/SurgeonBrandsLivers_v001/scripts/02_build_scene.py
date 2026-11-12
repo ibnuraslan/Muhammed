@@ -175,6 +175,7 @@ cyl("LampMount", 0.12, 0.08, (0, 0, 2.96), M_LAMPSHELL, ORC)
 # ------------------------------------------------------------------ studio dome under the OR (explainer look)
 SZ = -6.0
 bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=64, v_segments=32, radius=4.5)
+bmesh.ops.reverse_faces(bm, faces=bm.faces)     # v007b: normals face the inside (the camera works inside the studio)
 me = bpy.data.meshes.new("StudioDome"); bm.to_mesh(me); bm.free()
 for p in me.polygons: p.use_smooth = True
 dome = bpy.data.objects.new("StudioDome", me); STU.objects.link(dome); dome.location = (0, 0, SZ)

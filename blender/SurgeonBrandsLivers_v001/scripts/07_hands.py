@@ -42,41 +42,14 @@ def add_limit(pb, rng, name="HandLimit"):
         setattr(c, "min_" + ax, R_(lo)); setattr(c, "max_" + ax, R_(hi))
     return c
 
+exec(open(__import__("os").path.join(__import__("os").path.dirname(__import__("os").path.abspath(__file__)), "..", "..", "pipeline", "hand_poses.py")).read())
 n_lim = 0
-for rig in ACTORS:
-    for s in "LR":
-        # fingers: find the curl axis (X or Z) and its forward sign from this character's own keys
-        signs = {}
-        for b in FING:
-            qs = keyed_quats(rig, b + "." + s)
-            if not qs:
-                continue
-            ex = [q.to_euler('XYZ') for q in qs]
-            rx = max(abs(e.x) for e in ex); rz = max(abs(e.z) for e in ex)
-            ax = 0 if rx >= rz else 2
-            mean = sum(e[ax] for e in ex) / len(ex)
-            signs[b] = (ax, 1 if mean >= 0 else -1)
-        if not signs:
-            continue
-        # majority axis/sign for this hand (all fingers curl the same way)
-        votes = {}
-        for v in signs.values():
-            votes[v] = votes.get(v, 0) + 1
-        ax, sg = max(votes, key=votes.get)
-        for b in FING:
-            pb = rig.pose.bones.get(b + "." + s)
-            if not pb:
-                continue
-            rng = [(-10, 10), (-8, 8), (-10, 10)]
-            rng[ax] = (0, 95) if sg > 0 else (-95, 0)
-            add_limit(pb, rng); n_lim += 1
-        for b in THUMB:
-            pb = rig.pose.bones.get(b + "." + s)
-            if pb:
-                add_limit(pb, [(-50, 50), (-35, 35), (-50, 50)]); n_lim += 1
-        # wrist: after its Copy Rotation from the IK control
-        pb = rig.pose.bones["wrist." + s]
-        add_limit(pb, [(-60, 60), (-40, 40), (-25, 25)]); n_lim += 1
+for rig in ACTORS:      # v007b: the director's STYLE_ANIMATED limits (pipeline/hand_poses.py add_hand_limits)
+    for pb in rig.pose.bones:
+        for c in [c for c in pb.constraints if c.name == "HandLimit"]:
+            pb.constraints.remove(c)
+    add_hand_limits(rig)
+    n_lim += sum(1 for pb in rig.pose.bones for c in pb.constraints if c.name == "HandLimit")
 print("LIMITS", n_lim)
 
 # elbow: IK limits on lowerarm01 (hinge about local X). Pick the bend side that reaches the targets best.
@@ -192,7 +165,7 @@ h2 = audit(fix=False)
 print("AUDIT final", len(h2))
 with open(REP, "w") as fh:
     fh.write("Hand audit (every 2 frames, frames 1-%d)\n" % sc.frame_end)
-    fh.write("Limit Rotation constraints added: %d (fingers 0..95 deg forward only, +-10 spread; thumb cone; wrist +-60 flex / +-25 side)\n" % n_lim)
+    fh.write("Limit Rotation constraints added: %d (pipeline/hand_poses.py add_hand_limits: fingers 0..90 forward, +-10; thumb cone; wrist +-60 / +-30 / +-25)\n" % n_lim)
     fh.write("Elbow IK limits: one-sided 0..145 deg on every lowerarm01 (side chosen per arm by best target reach)\n\n")
     fh.write("pass 1 (before re-key): %d hits\npass 2 (after 1st re-key): %d hits\nfinal: %d hits\n\n" % (len(h0), len(h1), len(h2)))
     by = {}
