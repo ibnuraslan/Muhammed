@@ -14,7 +14,7 @@ from human import reach, pose_walk, pose_sit, reset_pose, fingers_curl
 from sc_invest import office_chair
 from sc_boutique import haussmann
 
-EXPOSURE = -0.4
+EXPOSURE = -0.8
 DUR = {"pin": 9.0, "read": 9.0, "listen": 9.0}
 
 
