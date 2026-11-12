@@ -47,16 +47,17 @@ for r, body, _ in CH:
     bones = {b.name for b in r.data.bones}
     gi = {g.index: g.name for g in body.vertex_groups}
     helper = {i for i, n in gi.items() if n.lower().startswith(("helper", "joint")) or n in ("HelperGeometry", "JointCubes")}
-    probe, selft = [], []
+    probe, selft, skin = [], [], set()
     for v in body.data.vertices:
         if any(g.group in helper and g.weight > 0.5 for g in v.groups): continue
+        skin.add(v.index)
         dg_ = [g for g in v.groups if gi.get(g.group) in bones]
         if not dg_: continue
         g = max(dg_, key=lambda x: x.weight); n = gi[g.group].lower()
         if any(k in n for k in SKIP): continue
         if any(k in n for k in ARM): probe.append(v.index)
         elif any(k in n for k in SELF_T): selft.append(v.index)
-    cls[body.name] = (probe, set(selft))
+    cls[body.name] = (probe, set(selft), skin)
     print("CLASS", body.name, "probes", len(probe), "self-targets", len(selft))
 
 def bvh_of(obj, dg, keep=None):
@@ -88,8 +89,8 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     if not near: continue
     built = {}
     for r, body, cloth in near:
-        probe, selft = cls[body.name]
-        bb, verts = bvh_of(body, dg)
+        probe, selft, _skin = cls[body.name]
+        bb, verts = bvh_of(body, dg, keep=cls[body.name][2])  # skin only: hidden MPFB helper shells / joint cubes are never rendered (Connect19)
         sb, _ = bvh_of(body, dg, keep=selft)
         cb = []
         pts = []
