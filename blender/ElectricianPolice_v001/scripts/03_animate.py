@@ -445,7 +445,8 @@ HAT_SEAT = (0.0, -0.62, 0.86)
 M.hand("L", 296, bike_pt(296, -0.25, -0.5, 1.0)[0], M.dirv(296, -0.2, -0.6, -0.8), M.dirv(296, -0.8, 0, -0.3)); M.fingers("L", 296, 25, 20)
 hs, _ = bike_pt(302, *HAT_SEAT)
 M.hand("L", 302, hs + Vector((-0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0)); M.fingers("L", 302, 55, 40)
-M.hand_b("L", 310, 0.25, 0.22, 1.55, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0)); M.fingers("L", 310, 55, 40)
+M.hand_b("L", 306, 0.48, 0.05, 1.2, d=(0.1, -0.3, 0.9), n=(-1, 0, 0), pole=M.pt(306, 0.8, -0.2, 1.1))   # hat swings out wide, not through his chest
+M.hand_b("L", 310, 0.38, 0.18, 1.6, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0), pole=M.pt(310, 0.8, 0.0, 1.3)); M.fingers("L", 310, 55, 40)
 M.hand_b("L", 318, 0.06, 0.0, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(318, 0.7, 0.2, 1.7)); M.fingers("L", 318, 28, 20)
 M.hand_b("L", 330, 0.06, 0.02, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(330, 0.7, 0.2, 1.7)); M.fingers("L", 330, 30, 20)
 M.hand_b("R", 318, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1))
@@ -457,17 +458,17 @@ for o in meshes(CH["Man"]):
 OA_POS = OFFICER_SPOT + Vector((0, 0, OA.ROOT.z))
 oa_yaw = 30                                   # faces the oncoming bike (towards -Y, slightly +X)
 OA.body(1, OA_POS, yaw=oa_yaw - 20, spine=(2, 0, 0), head=(0, -20)); OA.stand_feet(1)
-OA.hang("L", 1); OA.hang("R", 1, swing=0.05)
+OA.hang("L", 1, out=0.15); OA.hang("R", 1, swing=0.05)
 OA.body(150, OA_POS, yaw=oa_yaw, spine=(-2, 0, 0), head=(0, 10)); OA.stand_feet(150)
-OA.hang("L", 150); OA.hang("R", 150)
+OA.hang("L", 150, out=0.15); OA.hang("R", 150)
 # raises the right arm, palm out (stop), then waves him over to the side
 OA.body(170, OA_POS, yaw=oa_yaw, spine=(-4, -6, -4), head=(-4, 6), jaw=6)
 OA.hand_b("R", 170, -0.34, 0.25, 1.75, d=(0, 0.2, 1), n=(0, 1, 0)); OA.fingers("R", 170, 0, 0)
 for i, f in enumerate(range(182, 232, 10)):
     OA.body(f, OA_POS + Vector((0, 0, -0.01 * (i % 2))), yaw=oa_yaw + 4 * (i % 2), spine=(-2, -10 + 8 * (i % 2), -4), head=(-4, 4))
-    OA.hand_b("R", f, -0.55 + 0.25 * (i % 2), 0.35 - 0.15 * (i % 2), 1.4, d=(-0.6 + 0.6 * (i % 2), 0.6, 0.3), n=(0, 0.3, -1))
+    OA.hand_b("R", f, -0.62 + 0.18 * (i % 2), 0.48 - 0.08 * (i % 2), 1.42, d=(-0.6 + 0.6 * (i % 2), 0.6, 0.3), n=(0, 0.3, -1), pole=OA.pt(f, -0.7, -0.2, 1.1))
     OA.fingers("R", f, 10, 10)
-OA.stand_feet(170); OA.hang("L", 170)
+OA.stand_feet(170); OA.hang("L", 170, out=0.15)
 # steps up to the bike (f224 -> 250) and writes on the pad held in the left hand
 OA_W = Vector((STOP.x - 1.35, STOP.y + 1.05, OA.ROOT.z))
 OA.walk(lambda f: OA_POS.lerp(OA_W, smooth((f - 222) / 24)), lambda f: oa_yaw + 10 * smooth((f - 222) / 24), 222, 246, stride=0.6, step=2)
@@ -517,12 +518,23 @@ W.body(320, WG, yaw=-70, spine=(-4, 0, 0), head=(-6, 8)); W.stand_feet(320)
 W.hang("L", 320); W.hand_b("R", 320, -0.12, 0.2, 1.08, d=(0.6, 0.5, -0.3), n=(0, 0, 1)); W.fingers("R", 320, 50, 30)   # holding the key
 W.body(360, WG, yaw=-66, spine=(-6, -4, 0), head=(-10, 0), jaw=2); W.stand_feet(360); W.hang("L", 360, swing=0.03)
 W.hand_b("R", 360, -0.14, 0.22, 1.12, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
+W.body(340, WG + Vector((0.02, 0, -0.005)), yaw=-68, spine=(-3, 3, 2), head=(-2, 10)); W.stand_feet(340); W.hang("L", 340, swing=0.04)
+W.hand_b("R", 340, -0.15, 0.24, 1.1, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
+W.body(376, WG + Vector((-0.02, 0, 0.0)), yaw=-70, spine=(-5, -2, -2), head=(4, 4)); W.stand_feet(376); W.hang("L", 376, swing=-0.03)   # small nod
+W.hand_b("R", 376, -0.16, 0.27, 1.12, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
 W.body(392, WG, yaw=-74, spine=(-8, 2, 0), head=(-12, -6)); W.stand_feet(392); W.hang("L", 392)
 W.hand_b("R", 392, -0.17, 0.3, 1.1, d=(0.6, 0.5, -0.2), n=(0, 0, 1))
+# turn to the gate in two steps (left foot, then right), not a spin on planted feet
+fa = {s_: W.H.foot_xy(s_, WG, -74) for s_ in "LR"}; fb = {s_: W.H.foot_xy(s_, WG, 90) for s_ in "LR"}
+W.body(401, WG + Vector((0, 0, -0.01)), yaw=10, spine=(2, 6, 0), head=(4, 18))
+W.hand_b("R", 401, -0.22, 0.38, 1.12, d=(0.5, 0.6, -0.1), n=(0, 0, 1)); W.hang("L", 401, swing=0.05, out=0.05)
+W.foot("L", 397, fa["L"], -74, lift=0.05, pitch=10); W.foot("L", 400, fa["L"].lerp(fb["L"], 0.5), 8, lift=0.08, pitch=15); W.foot("L", 403, fb["L"], 90)
+W.foot("R", 397, fa["R"], -74); W.foot("R", 403, fa["R"], -74); W.foot("R", 406, fa["R"].lerp(fb["R"], 0.5), 8, lift=0.08, pitch=15)
+W.foot("L", 406, fb["L"], 90)
 # turns to the gate, unlocks (right hand to the latch), pushes it open with the left, walks in
 GATE_O = ob("Gate"); GY = GATE_O.location.y
 LATCH = Vector((GATE.x - 0.06, GY - 0.40, 1.05))
-W.body(410, WG, yaw=90, spine=(8, 0, 0), head=(10, 0)); W.stand_feet(410)
+W.body(410, WG, yaw=90, spine=(8, 0, 0), head=(10, 0)); W.foot("R", 410, fb["R"], 90); W.foot("L", 410, fb["L"], 90)
 W.hand("R", 410, LATCH, Vector((1, 0, -0.2)), Vector((0, 1, 0))); W.fingers("R", 410, 55, 30)
 W.hand("L", 410, Vector((GATE.x - 0.08, GY - 0.15, 1.15)), Vector((1, 0, 0.3)), Vector((1, 0, 0)))
 W.hand("L", 432, Vector((GATE.x + 0.15, GY - 0.25, 1.15)), Vector((1, 0, 0.2)), Vector((1, 0, 0))); W.fingers("L", 410, 10, 10)
@@ -600,9 +612,10 @@ W.walk(lambda f: SA.lerp(SB, smooth((f - 1380) / 135) * 0.6 + 0.4 * (f - 1380) /
 for f in range(1380, 1516, 10):   # chin up, shoulders rolling: a swagger
     ph = math.sin((f - 1380) / 135 * 2 * math.pi * 2.3)
     W.H.key_spine(f, flex=-3, twist=10 * ph, side=3 * ph, head=(-8, -6 * ph))
-for f in range(1380, 1561, 12):
+for f in range(1380, 1561, 10):
+    ph = (f - 1380) / 135 * 2 * math.pi * 2.3 if f <= 1515 else 0.0
     for s, sx in (("L", 1), ("R", -1)):
-        W.hand_b(s, f, sx * 0.19, -0.02, W.ROOT.z - 0.07, d=(sx * 0.15, 0.15, -1), n=(-sx * 0.3, -1, 0)); W.fingers(s, f, 45, 30)
+        W.hang(s, f, swing=0.2 * math.sin(ph + (0 if s == "L" else math.pi)) * (1.0 if f <= 1515 else 0.0), out=0.02); W.fingers(s, f, 32, 22)
 for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1560, (-9, 14), 1.6)):
     W.body(f, SB, yaw=195, spine=(-4, 6, 0), head=hd); W.stand_feet(f); W.smile(f, sm, smirk=0.6)
 # teleports between segments are constant (keys exist at both ends)
@@ -667,7 +680,7 @@ for i, f in enumerate(range(1160, 1561, 30)):
     yw = 70 + 25 * math.sin(f / 50)
     OC.body(f, OC_POS, yaw=yw, spine=(2, 8 * math.sin(f / 40), 0), head=(-4, -10 * math.sin(f / 50))); OC.stand_feet(f, width=1.1)
     OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, [70, 74, 78, 82], 62)
-    OC.hand_b("L", f, 0.2, 0.05, 0.92, d=(0.1, 0.2, -1), n=(-1, 0, 0))
+    OC.hand_b("L", f, 0.3, 0.04, 0.9, d=(0.15, 0.2, -1), n=(-1, 0, 0))
 OD, OE = RIG["OfficerD"], RIG["OfficerE"]
 OD_POS = Vector((-11.95, 58.05, OD.ROOT.z)); FAN_TIP = Vector((-12.25, 57.45, 2.47))
 for i, f in enumerate(range(1160, 1561, 8)):
@@ -683,7 +696,7 @@ for i, f in enumerate(range(1160, 1561, 9)):
     OE.stand_feet(f)
     OE.hand_b("R", f, -0.2 - 0.1 * up, 0.44, 1.42 + 0.05 * up, d=(0.3, 0.2, 1), n=(0.3, 1, 0)); OE.fingers("R", f, 48, 55)
     if wipe: OE.hand_b("L", f, 0.02, 0.24, 1.66, d=(-1, 0.1, 0.3), n=(0, 1, 0.4), pole=OE.pt(f, 0.6, 0.1, 1.5))
-    else: OE.hang("L", f, swing=0.05)
+    else: OE.hang("L", f, swing=0.05, out=0.07)
 for nm in ("OfficerB", "OfficerC", "OfficerD", "OfficerE"):
     for o in meshes(CH[nm]): key_vis(o, [(1150, 1560)])
 for o in meshes(CH["OfficerA"]): key_vis(o, [(1, 420), (1171, 1560)])
