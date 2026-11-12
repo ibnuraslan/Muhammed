@@ -23,6 +23,10 @@ CHAPTERS = {
 
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
 chapter, folder, vo = args[:3]
+if chapter not in CHAPTERS and chapter.startswith("chapter"):      # chapter1..3: shot list cut to the voiceover
+    import json
+    tim = json.load(open(os.path.join(HERE, "..", "vo", "ch_timing.json")))[chapter[len("chapter"):]]
+    CHAPTERS[chapter] = [(s["name"], s["label"]) for s in tim]
 LEAD = float(args[3]) if len(args) > 3 else (2.5 if chapter == "intro" else 0.0)   # seconds of picture before the first word
 folder = os.path.abspath(folder)
 shots = CHAPTERS[chapter]

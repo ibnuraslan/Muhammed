@@ -21,7 +21,7 @@ SECONDS = arg('--seconds', 3.0)
 OUTDIR = os.path.abspath(arg('--out', os.path.join(HERE, "..", "out", "blend")))
 SAMPLES = arg('--samples', 128)
 os.makedirs(OUTDIR, exist_ok=True)
-name = f"{scene_name}_{move}"
+name = arg('--name', f"{scene_name}_{move}")
 
 mod = importlib.import_module("sc_" + scene_name)
 s = reset(res=kit.RES, samples=SAMPLES, exposure=getattr(mod, "EXPOSURE", 0.0))
