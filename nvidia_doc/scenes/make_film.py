@@ -12,6 +12,7 @@ import grade
 ND = os.path.abspath(os.path.join(HERE, ".."))
 BL = os.path.join(ND, "out", "blend")
 FPS = 24
+SAMPLES = int(os.environ.get("FILM_SAMPLES", 32))
 INTRO = ["home_behind", "home_front", "invest_drawer", "invest_reveal", "street_bus_reveal", "street_walk_track",
          "cafe_title_push", "cafe_pull_back"]
 tim = json.load(open(os.path.join(ND, "vo", "ch_timing.json")))
@@ -28,6 +29,11 @@ for folder, shots, _, _ in parts:
         if sc.compositing_node_group is None or not sc.compositing_node_group.name.startswith("HouseGrade"):
             grade.add_grade(sc)
         sc.name = name
+        # fast final settings: denoised Cycles at low samples (the house look holds; ~4x faster than 128)
+        sc.cycles.samples = SAMPLES
+        sc.cycles.use_adaptive_sampling = True
+        sc.cycles.adaptive_threshold = 0.05
+        sc.cycles.use_denoising = True
         bpy.ops.wm.save_mainfile(filepath=path, compress=True)
         b1 = path + "1"
         if os.path.exists(b1):
