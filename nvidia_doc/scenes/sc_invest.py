@@ -318,6 +318,11 @@ def build(variant=None):
     stand(pinner, (-5.35, 0.4, 0), -math.pi / 2)                  # faces -X, the wall
     c["people"]["pinner"] = pinner
     c["pin_page"] = sheet("PinPage", (-5.6, 0.45, 1.5), (0.2, 0.26), page_m[2], rot=(math.radians(90), 0, math.radians(90)))
+    # CH1 8B props, built here so a bake keys them; parked out of sight (beam off, haze hidden) until 8B places them
+    build_filings(c)
+    for k in ("stack", "thin", "motes"):
+        c[k].location = (0, 0, -50)
+    c["beam"].data.energy = 0.0; c["haze"].hide_render = True
     animate(c, 0.0, {})
     if variant == "night":                          # after hours: everyone has gone home, the papers stay
         for h in c["people"].values():
@@ -464,17 +469,62 @@ def anim_filing(c, t):
                 p = o.matrix_world.translation
                 if (Vector((p.x, p.y)) - Vector((hd.x, hd.y))).length < 1.6:
                     o.hide_render = True; o.hide_viewport = True
+        # she sits back from the table edge a little (her torso grazed the desk edge), chair with her
+        hb = c["people"]["ReaderB"].arm; fw = _forward(c["people"]["ReaderB"])
+        for o in bpy.data.objects:
+            if o.name.startswith("Chair") and (o.location - hb.location).length < 0.3:
+                o.location -= fw * 0.07
+        hb.location -= fw * 0.07; bpy.context.view_layer.update()
         c["_cleared"] = True
     animate(c, t * DUR["filing"], {"lift": 0.0})
+    pose_desk_reader(c, "ReaderB", t * DUR["filing"])
+
+
+DESK_TOP = 0.76
+
+
+def pose_desk_reader(c, nm, sec):
+    """Seated at the table, elbows resting ON the desk top, forearms raised, the filing held up at reading height.
+    The elbow is placed exactly one upper-arm length from the shoulder on the desk plane (never below it)."""
+    h = c["people"][nm]; fwd = _forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
+    up = Vector((0, 0, 1))
+    b = h.arm.data.bones
+    ps = c["held"][nm]
+    wr = {}
+    for sd, sg in (("L", -1), ("R", 1)):
+        a = b[f"upperarm01.{sd}"].length + b[f"upperarm02.{sd}"].length
+        fl = b[f"lowerarm01.{sd}"].length + b[f"lowerarm02.{sd}"].length
+        S = h.bone_head(f"upperarm01.{sd}")
+        ez = DESK_TOP + 0.045                                   # elbow centre: forearm radius above the surface
+        dz = S.z - ez
+        r = math.sqrt(max(a * a - dz * dz, 0.0004))
+        hd = (fwd * 0.93 + side * (0.37 * sg)).normalized()     # elbows forward and a little out
+        E = Vector((S.x, S.y, ez)) + hd * r
+        h.aim(f"upperarm01.{sd}", E - S); h.aim(f"upperarm02.{sd}", E - S)
+        E = h.bone_tail(f"upperarm02.{sd}")
+        # forearm rises ~52 degrees toward the midline, the hands meet in front of the chest
+        fd = (fwd * 0.55 - side * (0.46 * sg) + up * (0.62 + 0.012 * math.sin(sec * 0.8))).normalized()
+        h.aim(f"lowerarm01.{sd}", fd); h.aim(f"lowerarm02.{sd}", fd)
+        W = h.bone_tail(f"lowerarm02.{sd}")
+        h.aim(f"wrist.{sd}", (fd + up * 0.3 - side * (0.5 * sg)).normalized())
+        wr[sd] = W
+    fingers_curl(h, 38, thumb=25)
+    h.rot("head", side, 8 + 2 * math.sin(sec * 0.6))
+    mid = (wr["L"] + wr["R"]) * 0.5
+    ps.location = mid + fwd * 0.03 + Vector((0, 0, 0.085)); bpy.context.view_layer.update()
+    z = (h.bone_head("head") - ps.location).normalized()          # page faces her eyes, edges level
+    x = (side - z * side.dot(z)).normalized(); y = z.cross(x)
+    ps.rotation_mode = 'QUATERNION'; ps.rotation_quaternion = Matrix((x, y, z)).transposed().to_quaternion()
+    bpy.context.view_layer.update()
 
 
 def cam_filing(c, t):
     h = c["people"]["ReaderB"]; e = ease(t)
     fwd = _forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
     hd = h.bone_head("head")
-    off0 = fwd * 1.2 - side * 0.85 + Vector((0, 0, 0.35)); off1 = fwd * 1.05 - side * 0.75 + Vector((0, 0, 0.32))
-    tgt = hd + fwd * 0.25 + Vector((0, 0, -0.08))
-    return (hd + off0.lerp(off1, e), tgt, 35)     # three-quarter front: her face over the filing she is reading
+    off0 = fwd * 1.75 - side * 1.05 + Vector((0, 0, 0.32)); off1 = fwd * 1.5 - side * 0.9 + Vector((0, 0, 0.3))
+    tgt = hd + fwd * 0.2 + Vector((0, 0, -0.17))
+    return (hd + off0.lerp(off1, e), tgt, 40)     # three-quarter front: her face over the filing she is reading
 
 
 def anim_compare(c, t):
@@ -493,9 +543,150 @@ def cam_compare(c, t):
     return (m + Vector((-0.95, -0.5, 0.15)).lerp(Vector((-0.8, -0.42, 0.12)), e), m, 40)
 
 
+# ============================================================================ CH1 8B: the thin 2023 filing and the towering 2024 one
+STACK_AT = Vector((1.5, 0.93, DESK_TOP))       # on the window-side table, near its far end (y = 1.2)
+THIN_AT = Vector((1.45, -0.12, DESK_TOP))
+
+
+def _edge_mat():
+    """Page edges of a paper block: fine cream striations (object space, so every block reads as many sheets)."""
+    m = bpy.data.materials.get("PageEdges")
+    if m:
+        return m
+    m = bpy.data.materials.new("PageEdges"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    wv = N.new("ShaderNodeTexWave"); wv.wave_type = 'BANDS'; wv.bands_direction = 'Z'
+    wv.inputs['Scale'].default_value = 260; wv.inputs['Distortion'].default_value = 1.5; wv.inputs['Detail'].default_value = 3
+    L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    rp = N.new("ShaderNodeValToRGB"); rp.color_ramp.elements[0].color = (0.55, 0.54, 0.5, 1); rp.color_ramp.elements[1].color = (0.86, 0.85, 0.81, 1)
+    rp.color_ramp.elements[0].position = 0.25
+    L.new(wv.outputs['Fac'], rp.inputs['Fac']); L.new(rp.outputs['Color'], p.inputs['Base Color'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.25; L.new(wv.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    p.inputs['Roughness'].default_value = 0.85
+    return m
+
+
+def _tab(name, label, loc, rot_z, col, parent):
+    """A paper index tab with a printed year, sticking out of a filing."""
+    tm = pbr(name + "Card", col, 0.7)
+    t = box(name, (0, 0, 0), (0.075, 0.045, 0.0012), tm)
+    txt = text_obj(name + "Txt", label, (0.006, -0.007, 0.0008), 0.024, pbr(name + "Ink", (0.05, 0.05, 0.06), 0.6),
+                   rot=(0, 0, 0), extrude=0.0, font_path=paper_tex.SANS_SB)
+    txt.parent = t
+    t.parent = parent; t.location = loc; t.rotation_euler = (0, 0, rot_z)
+    return t
+
+
+def build_filings(c):
+    """Thin 2023 annual filing (a few stapled pages) and a towering 2024 filing (bound volumes), made once for 8B."""
+    rng = np.random.default_rng(2024)
+    pages = [m for m in bpy.data.materials if m.name.startswith("Page")]
+    edge = _edge_mat()
+    cover = pbr("FilingCover", (0.05, 0.08, 0.13), 0.55, **{'Coat Weight': 0.2})
+    clipm = pbr("BinderClip", (0.02, 0.02, 0.02), 0.3, 0.6)
+    # -- 2023: four stapled sheets, slightly fanned
+    thin = bpy.data.objects.new("Filing2023", None); bpy.context.collection.objects.link(thin)
+    thin.location = THIN_AT; thin.rotation_euler = (0, 0, math.radians(-8))
+    for k in range(4):
+        sh = sheet("F23Page", (0, 0, 0), (0.21, 0.297), pages[k % len(pages)])
+        sh.parent = thin; sh.location = (0.002 * k, -0.002 * k, 0.0008 + 0.0006 * (3 - k)); sh.rotation_euler = (0, 0, math.radians(1.2 * k))
+    box("Staple", (0, 0, 0), (0.012, 0.0012, 0.0008), pbr("StapleSteel", (0.75, 0.75, 0.77), 0.25, 1.0)).parent = thin
+    bpy.data.objects["Staple"].location = (-0.085, 0.13, 0.0035); bpy.data.objects["Staple"].rotation_euler = (0, 0, math.radians(35))
+    _tab("Tab2023", "2023", (0.105 + 0.022, 0.09, 0.0015), 0.0, (0.82, 0.76, 0.42), thin)
+    # -- 2024: six thick bound volumes, stacked a little askew
+    stack = bpy.data.objects.new("Filing2024", None); bpy.context.collection.objects.link(stack)
+    z = 0.0
+    for k in range(6):
+        th = rng.uniform(0.072, 0.095)
+        vol = bpy.data.objects.new(f"Vol{k}", None); bpy.context.collection.objects.link(vol)
+        vol.parent = stack; vol.location = (rng.uniform(-0.008, 0.008), rng.uniform(-0.008, 0.008), z)
+        vol.rotation_euler = (0, 0, rng.uniform(-0.05, 0.05))
+        for side_z, cz in ((0.0015, 0.0), (th - 0.0015, 1.0)):                 # card covers top and bottom
+            cv = box("VolCover", (0, 0, 0), (0.228, 0.31, 0.003), cover, bevel=0.0012); cv.parent = vol; cv.location = (0, 0, side_z)
+        nb = 3                                                                  # the text block, in slightly offset bundles
+        for j in range(nb):
+            hb = (th - 0.006) / nb
+            pb = box("VolPages", (0, 0, 0), (0.212 + rng.uniform(-0.003, 0.003), 0.297 + rng.uniform(-0.003, 0.003), hb * 0.995), edge, bevel=0.0015)
+            pb.parent = vol; pb.location = (rng.uniform(-0.0025, 0.0025) - 0.006, rng.uniform(-0.002, 0.002), 0.003 + hb * (j + 0.5))
+        for sy in (-0.09, 0.09):                                                # black binder clips on the bound edge
+            cl = box("Clip", (0, 0, 0), (0.03, 0.05, th + 0.004), clipm, bevel=0.003); cl.parent = vol; cl.location = (-0.105, sy, th / 2)
+        if k == 5:
+            _tab("Tab2024", "2024", (0.114 + 0.022, -0.06, th * 0.5), 0.0, (0.86, 0.45, 0.3), vol)
+            top = sheet("VolTopPage", (0, 0, 0), (0.205, 0.29), pages[1 % len(pages)]); top.parent = vol; top.location = (0.004, 0, th + 0.0006)
+        z += th
+    c["stack_h"] = z
+    c["stack"] = stack; c["thin"] = thin
+    # -- dust motes drifting in the window light: one small mesh of specks that swirls slowly
+    import bmesh
+    bm = bmesh.new()
+    for k in range(500):
+        cpos = Vector((rng.uniform(-0.6, 1.0), rng.uniform(-1.0, 1.0), rng.uniform(-0.15, 0.95)))
+        r = rng.uniform(0.0012, 0.0024)
+        bmesh.ops.create_icosphere(bm, subdivisions=1, radius=r, matrix=Matrix.Translation(cpos))
+    me = bpy.data.meshes.new("Motes"); bm.to_mesh(me); bm.free()
+    mo = bpy.data.objects.new("DustMotes", me); bpy.context.collection.objects.link(mo)
+    mm = pbr("Mote", (0.9, 0.88, 0.82), 0.6, **{'Transmission Weight': 0.3, 'Emission Color': (1.0, 0.95, 0.85, 1), 'Emission Strength': 0.0})
+    mo.data.materials.append(mm); mo.visible_shadow = False
+    c["motes"] = mo; c["motes_c"] = STACK_AT + Vector((0.15, -0.3, 0.45))
+    # -- a soft raking beam of window daylight across the table, and a faint haze for it to show in
+    bl = bpy.data.lights.new("WindowBeam", 'SPOT'); bl.energy = 9000; bl.spot_size = math.radians(22); bl.spot_blend = 0.6
+    bl.color = (1.0, 0.88, 0.72); bl.shadow_soft_size = 0.25
+    bo = bpy.data.objects.new("WindowBeam", bl); bpy.context.collection.objects.link(bo); bo.location = (5.6, 0.9, 2.3); c["beam"] = bo
+    point_at(bo, STACK_AT + Vector((0.05, -0.1, 0.3)))
+    hz = haze(STACK_AT + Vector((0.4, -0.3, 0.55)), (1.8, 2.2, 1.3), density=0.01, color=(1.0, 0.97, 0.92), anis=0.6)
+    c["haze"] = hz
+
+
+def anim_chart(c, t):
+    """8B: the investigator sets the massive 2024 filing down beside the thin 2023 one; dust turns in the light."""
+    s_ = t * DUR["chart"]
+    if not c.get("_filings"):
+        ctr = Vector((1.5, 0.6))
+        for o in bpy.data.objects:                       # clear this corner of the table for the two filings
+            p = o.matrix_world.translation
+            nm = o.name if o.parent is None else o.parent.name
+            if nm.startswith(("cardboard_box", "Paper", "binder_notebook")) and (0.9 < p.x < 2.5 and -1.9 < p.y < 1.4):
+                o.hide_render = True; o.hide_viewport = True
+                for ch in o.children_recursive:
+                    ch.hide_render = True; ch.hide_viewport = True
+        c["thin"].location = THIN_AT; c["beam"].data.energy = 9000; c["haze"].hide_render = False
+        c["_filings"] = True
+    animate(c, s_, {"lift": 0.0})
+    h = c["people"]["woman"]
+    stand(h, (STACK_AT.x + 0.02, 1.47, 0), 0.0)               # past the end of the table, facing -Y (toward camera)
+    fwd = _forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
+    land = ease(min(1.0, max(0.0, (s_ - 0.15) / 1.35)))
+    settle = 0.004 * math.sin(min(1.0, max(0.0, (s_ - 1.5) / 0.35)) * math.pi)
+    st = c["stack"]; st.location = STACK_AT + Vector((-0.02 * (1 - land), 0, 0.16 * (1 - land) + settle))
+    st.rotation_euler = (0, 0, math.radians(4) * (1 - land))
+    bpy.context.view_layer.update()
+    lean = 16 + 8 * land - 14 * ease(min(1.0, max(0.0, (s_ - 2.1) / 1.4)))
+    h.rot("spine03", side, -lean * 0.55); h.rot("spine05", side, -lean * 0.45)
+    release = ease(min(1.0, max(0.0, (s_ - 1.75) / 1.1)))
+    mid_z = st.location.z + c["stack_h"] * 0.62
+    for sd, sg in (("L", -1), ("R", 1)):
+        grip = Vector((st.location.x, st.location.y + 0.04, mid_z)) + side * (0.17 * sg)
+        rest = h.bone_head(f"upperarm01.{sd}") + fwd * 0.12 + side * (0.08 * sg) + Vector((0, 0, -0.5))
+        tgt = grip.lerp(rest, release) + side * (0.04 * sg * release)
+        reach(h, sd, tgt, side * sg + Vector((0, 0, -0.6)), (fwd * 0.75 - side * (0.3 * sg) + Vector((0, 0, -0.3))).normalized().lerp(Vector((0, 0, -1)), release))
+    fingers_curl(h, 18 + 10 * release, thumb=10)
+    h.rot("head", side, -14)
+    mo = c["motes"]                                       # slow swirl and drift (stirred a little by the landing)
+    mo.rotation_euler = (0, 0, 0.05 * s_ + 0.03 * land)
+    mo.location = Vector((STACK_AT.x, STACK_AT.y, DESK_TOP)) + Vector((0.01 * s_, -0.008 * s_, 0.006 * math.sin(s_ * 0.7) - 0.004 * s_))
+    bpy.context.view_layer.update()
+
+
 def cam_chart(c, t):
-    e = ease(t); m = c["mon"]
-    return (m + Vector((-0.75, -0.7, 0.12)).lerp(Vector((-0.62, -0.6, 0.1)), e), m + Vector((0, 0.02, 0.0)), 40)      # beside the analyst, not over his head
+    e = ease(t)
+    start = Vector((1.3, -0.95, 0.99)); end = Vector((1.33, -0.32, 0.86))
+    tgt = (THIN_AT + Vector((0.05, 0.45, 0.06))).lerp(STACK_AT + Vector((0, 0, 0.27)), ease(min(1.0, t * 1.1)))
+    return (start.lerp(end, e), tgt, 35)
+
+
+def focus_chart(c, t):
+    return (THIN_AT + Vector((0, 0, 0.02))).lerp(STACK_AT + Vector((0, -0.15, 0.3)), ease(min(1.0, t * 1.3)))
 
 
 def cam_pinning(c, t):
@@ -515,8 +706,7 @@ MOVES = {
                          focus=lambda c, t: c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))),
     "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location, anim=lambda c, t: anim_filing(c, t)),
     "compare": dict(kind="anim", dof=2.8, far=10.0, cam=cam_compare, focus=lambda c, t: c["mon"] + Vector((0, -0.32, 0)), anim=anim_compare),
-    "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=lambda c, t: c["mon"],
-                  anim=lambda c, t: animate(c, t * DUR["chart"], {"lift": 0.0})),
+    "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=focus_chart, anim=anim_chart),
     "pinning": dict(kind="anim", dof=3.2, far=20.0, cam=cam_pinning, focus=lambda c, t: Vector((-5.8, 0.42, 1.6)), anim=anim_pinning),
     "drawer": dict(kind="anim", dof=2.4, far=10.0, cam=cam_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0.02, 0.35, 0.1)), anim=anim_drawer),
     "reveal": dict(kind="anim", dof=4.0, far=20.0, cam=cam_reveal,
