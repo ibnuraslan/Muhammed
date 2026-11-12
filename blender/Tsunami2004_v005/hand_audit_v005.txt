@@ -1,21 +1,76 @@
 Tsunami2004 hand audit, every 2 frames, people in view
 HAND_HAND         0
-HAND_TORSO       11
-    f1103 (18.37s) TouristW R
-    f1105 (18.40s) TouristW R
-    f1107 (18.43s) TouristW R
-    f1111 (18.50s) TouristW R
-    f1113 (18.53s) TouristW R
-    f1119 (18.63s) TouristW R
-    f1121 (18.67s) TouristW R
-    f1127 (18.77s) TouristW R
-    f1273 (21.20s) TouristW R
-    f1275 (21.23s) TouristW R
-    f1277 (21.27s) TouristW R
-HAND_HEAD         1
+HAND_TORSO      456
+    f  15 (0.23s) TouristM R
+    f  17 (0.27s) TouristM R
+    f  19 (0.30s) TouristM R
+    f  21 (0.33s) TouristM R
+    f  23 (0.37s) TouristM R
+    f  25 (0.40s) TouristM R
+    f  27 (0.43s) TouristM R
+    f  29 (0.47s) TouristM R
+    f  31 (0.50s) TouristM R
+    f  33 (0.53s) TouristM R
+    f  35 (0.57s) TouristM R
+    f  37 (0.60s) TouristM R
+    f  39 (0.63s) TouristM R
+    f  41 (0.67s) TouristM R
+    f  43 (0.70s) TouristM R
+    f  45 (0.73s) TouristM R
+    f  47 (0.77s) TouristM R
+    f  49 (0.80s) TouristM R
+    f  51 (0.83s) TouristM R
+    f  53 (0.87s) TouristM R
+    f  55 (0.90s) KidB R
+    f  55 (0.90s) TouristM R
+    f  57 (0.93s) KidB R
+    f  57 (0.93s) TouristM R
+    f  59 (0.97s) TouristM R
+    f  61 (1.00s) TouristM R
+    f  63 (1.03s) KidB R
+    f  63 (1.03s) TouristM R
+    f  65 (1.07s) KidB R
+    f  65 (1.07s) TouristM R
+    f  67 (1.10s) TouristM R
+    f  69 (1.13s) KidB R
+    f  69 (1.13s) TouristM R
+    f  71 (1.17s) KidB R
+    f  71 (1.17s) TouristM R
+    f  73 (1.20s) TouristM R
+    f  75 (1.23s) TouristM R
+    f  77 (1.27s) KidB R
+    f  77 (1.27s) TouristM R
+    f  79 (1.30s) KidB R
+HAND_HEAD         4
+    f 409 (6.80s) OldM R
+    f 411 (6.83s) OldM R
+    f 413 (6.87s) OldM R
     f 653 (10.87s) OldM R
-HAND_CLOTHES    264
-    f  29 (0.47s) LocalW_C09 R LocalW_C09.female_casualsuit02
+HAND_CLOTHES    231
+    f   1 (0.00s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f   3 (0.03s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f   5 (0.07s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f   7 (0.10s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f   7 (0.10s) TouristW R TouristW.female_sportsuit01
+    f   9 (0.13s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f   9 (0.13s) TouristW R TouristW.female_sportsuit01
+    f  11 (0.17s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  11 (0.17s) TouristW R TouristW.female_sportsuit01
+    f  13 (0.20s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  13 (0.20s) TouristW R TouristW.female_sportsuit01
+    f  15 (0.23s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  15 (0.23s) TouristW R TouristW.female_sportsuit01
+    f  17 (0.27s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  17 (0.27s) TouristW R TouristW.female_sportsuit01
+    f  19 (0.30s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  19 (0.30s) TouristW R TouristW.female_sportsuit01
+    f  21 (0.33s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  21 (0.33s) TouristW R TouristW.female_sportsuit01
+    f  23 (0.37s) LocalW_C09 R LocalW_C09.female_casualsuit02
+    f  23 (0.37s) TouristW R TouristW.female_sportsuit01
+    f  25 (0.40s) TouristW R TouristW.female_sportsuit01
+    f  27 (0.43s) TouristW R TouristW.female_sportsuit01
+    f  29 (0.47s) TouristW R TouristW.female_sportsuit01
     f  31 (0.50s) TouristW R TouristW.female_sportsuit01
     f  33 (0.53s) TouristW R TouristW.female_sportsuit01
     f  35 (0.57s) TouristW R TouristW.female_sportsuit01
@@ -32,28 +87,5 @@ HAND_CLOTHES    264
     f  57 (0.93s) TouristW R TouristW.female_sportsuit01
     f  59 (0.97s) TouristW R TouristW.female_sportsuit01
     f  61 (1.00s) TouristW R TouristW.female_sportsuit01
-    f  63 (1.03s) TouristW R TouristW.female_sportsuit01
-    f  65 (1.07s) TouristW R TouristW.female_sportsuit01
-    f  67 (1.10s) TouristW R TouristW.female_sportsuit01
-    f  69 (1.13s) TouristW R TouristW.female_sportsuit01
-    f  71 (1.17s) TouristW R TouristW.female_sportsuit01
-    f  73 (1.20s) TouristW R TouristW.female_sportsuit01
-    f  75 (1.23s) TouristW R TouristW.female_sportsuit01
-    f  77 (1.27s) TouristW R TouristW.female_sportsuit01
-    f  79 (1.30s) TouristW R TouristW.female_sportsuit01
-    f  81 (1.33s) TouristW R TouristW.female_sportsuit01
-    f  83 (1.37s) LocalW R LocalW.female_casualsuit02
-    f  83 (1.37s) TouristW R TouristW.female_sportsuit01
-    f  85 (1.40s) LocalW R LocalW.female_casualsuit02
-    f  85 (1.40s) TouristW R TouristW.female_sportsuit01
-    f  87 (1.43s) LocalW R LocalW.female_casualsuit02
-    f  87 (1.43s) TouristW R TouristW.female_sportsuit01
-    f  89 (1.47s) LocalW R LocalW.female_casualsuit02
-    f  89 (1.47s) TouristW R TouristW.female_sportsuit01
-    f  91 (1.50s) LocalW R LocalW.female_casualsuit02
-    f  91 (1.50s) TouristW R TouristW.female_sportsuit01
-    f  93 (1.53s) LocalW R LocalW.female_casualsuit02
-    f  93 (1.53s) TouristW R TouristW.female_sportsuit01
-    f  95 (1.57s) LocalW R LocalW.female_casualsuit02
 HAND_OTHER        0
-TOTAL 276
+TOTAL 691

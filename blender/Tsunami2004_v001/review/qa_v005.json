@@ -1,0 +1,1810 @@
+{
+ "frames": {
+  "145": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "only Terrain in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "only Terrain in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "only Terrain in view"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "only Terrain in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Terrain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "793": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "799": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "811": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "823": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "829": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "841": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "847": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "853": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "919": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "943": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1501": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "only Wave in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1819": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1843": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1849": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1855": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1861": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1873": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1879": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1885": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1891": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1897": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1921": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1927": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1933": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1939": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1945": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1951": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1957": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1963": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1969": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1975": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1981": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1987": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1993": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2155": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2161": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2167": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2179": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2185": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2191": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2197": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2203": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2209": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2215": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2221": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2227": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2233": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2239": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2245": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2251": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2257": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2263": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2269": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2275": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2281": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2287": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2293": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2299": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2305": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2311": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2317": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2323": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2329": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2335": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2341": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2347": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2353": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2359": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2365": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2371": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2377": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2383": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2389": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2395": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 295,
+  "INSIDE": 15
+ }
+}

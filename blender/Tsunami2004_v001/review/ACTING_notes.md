@@ -41,3 +41,6 @@ Story-beat frames (beats.json) are unchanged in v005.
 | EMPTY | 0.3–0.4 s, 2.4–3.6 s, 7.8 s, 10.3 s, 11.1–11.4 s, 12.5–18.1 s, 19.0–21.0 s, 21.7–39.9 s | No character in view by design: stranded-fish macro, the horizon push-in, aerial crane, the earthquake cross-section, the approaching wave, the impact, flood and aftermath. Everyone leaves frame before the wave hits (client rule: never show people being hit), so the second half of the film has no characters. Each of these frames shows its narration subject (fish, seabed, wave, town, mosque). |
 | INSIDE | 13.2–14.2 s, 15.2–15.5 s | The camera is inside the studio backdrop sphere of the earthquake cross-section (the cyan-to-white explainer bowl); rays hit its inner faces by design. |
 | CLAW | TouristW.R / TouristM.R / KidB.L / clone pointing windows (6.1–7.4 s, 10.6–12.3 s) | The `point` preset from hand_poses.py (index straight, other three curled into the palm) is detected as "curled fingers touching nothing". It is the intended pointing hand, checked in close-up. |
+
+### Final qa_check (c6240b2) on the packed v005 file
+`qa_v005.json` counts: EMPTY 295, INSIDE 15 (both intended, above). CLAW 0, HOVER 0, FACEPRESS 0, BACKHEAD 0, FILL 0. clip_scan: 0 bad ranges. Package 85 MB, nothing unpacked, one camera.

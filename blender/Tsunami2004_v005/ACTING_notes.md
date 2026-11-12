@@ -18,3 +18,29 @@ Story-beat frames (beats.json) are unchanged in v005.
 | 11 | 33.0–33.5 s (1981–2011) | Camera skims the mosque: facade/minaret fills most of the frame | Path moved out: mosque stays whole in frame |
 | 12 | Crowd clones (0–21 s) | Same gestures repeated by copies at a distance | Clones are time-shifted 3–15 frames and use the new idle; acceptable at their distance (noted) |
 | 13 | Fisher fish (6.45–9.25 s) | Hand grip OK (accepted) — fish dropped at 9.0 s falls straight with the hand opening | Kept |
+
+## Director review of v005 (32ce79b) — second round, fixed in the same v005 folder
+| # | Time | Problem | Fix |
+|---|---|---|---|
+| 14 | 6.7, 8.6, 9.5, 10.6–12.3 s | Pointing hands were a limp wrist or a flat open hand | Index finger straight, middle/ring/little curled into the palm, thumb tucked; wrist straight along the arm, which aims at the sea |
+| 15 | 0.5 s, 4.0 s (kids jogging) | Arms spread at chest height | Running arms pump front-to-back close to the ribs (6 cm out from the shoulder line) |
+| 16 | 17.4–21.4 s and the kids | Limp, dangling wrists on runners | Loose fists, wrist continues the forearm |
+| 17 | 15.5 s | Flat brown/teal frame on the seabed exit | Sea surface transparent from below and the sea-floor underside shows the textured sand, so the exit reads as passing up through the sea floor |
+| 18 | 10.5–11.0 s | Blown-out sun highlight on the wet sand | Wet-sand roughness 0.18 → 0.42 |
+| 19 | 22–29.5 s | Flood read as smooth grey clay | Glossy water (roughness 0.09) reflecting the sky, murky brown-teal tint, stronger foam lines along the current and white water at the front, Ocean-modifier ripples, floating debris bobbing |
+| 20 | close-up 08.40 | Close-up showed only his back | Re-aimed from the front: fist on the tail and the hanging fish visible |
+
+## Round 3 (director rules 14:40–15:00 UTC): hand_poses.py, 6-point self-check, qa_check.py
+- All finger poses now come from `blender/pipeline/hand_poses.py`: `add_hand_limits` on every rig, `relaxed` default, `point` for the pointing tourists/kids, `power_fist` at 0.65 (loose fist) for runners, `flat_palm` for shading the eyes, `open_alarm` for the waving fisher, `wrap_grip` on the fish tail (6.75–9.0 s). No hand-set finger angles remain.
+- Sheet cells fixed for the self-check: 13.0 s now looks ahead to the horizon (not bare seabed), 15.5 s shows the cross-section from above (diorama kept visible until 15.56 s), beat 1 (frame 1) is a side view of the kids (no back of heads), crowd clones are hidden by 21.40 s (none on the beat-9 frame).
+- qa_check fixes: hidden face-debris and library source objects were left at the world origin with stale transforms and read as "props" next to a tourist's hand (HOVER); they now rest far away / are removed from the package.
+
+### qa_check flags kept as intended (with reasons)
+| Flag | Frames | Why it stays |
+|---|---|---|
+| EMPTY | 0.3–0.4 s, 2.4–3.6 s, 7.8 s, 10.3 s, 11.1–11.4 s, 12.5–18.1 s, 19.0–21.0 s, 21.7–39.9 s | No character in view by design: stranded-fish macro, the horizon push-in, aerial crane, the earthquake cross-section, the approaching wave, the impact, flood and aftermath. Everyone leaves frame before the wave hits (client rule: never show people being hit), so the second half of the film has no characters. Each of these frames shows its narration subject (fish, seabed, wave, town, mosque). |
+| INSIDE | 13.2–14.2 s, 15.2–15.5 s | The camera is inside the studio backdrop sphere of the earthquake cross-section (the cyan-to-white explainer bowl); rays hit its inner faces by design. |
+| CLAW | TouristW.R / TouristM.R / KidB.L / clone pointing windows (6.1–7.4 s, 10.6–12.3 s) | The `point` preset from hand_poses.py (index straight, other three curled into the palm) is detected as "curled fingers touching nothing". It is the intended pointing hand, checked in close-up. |
+
+### Final qa_check (c6240b2) on the packed v005 file
+`qa_v005.json` counts: EMPTY 295, INSIDE 15 (both intended, above). CLAW 0, HOVER 0, FACEPRESS 0, BACKHEAD 0, FILL 0. clip_scan: 0 bad ranges. Package 85 MB, nothing unpacked, one camera.
