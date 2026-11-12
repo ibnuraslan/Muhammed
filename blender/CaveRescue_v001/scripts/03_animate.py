@@ -551,9 +551,12 @@ for f in (2155, 2190, 2230, 2270, 2300, 2328):
     tip = inj + outw * (0.03 if 2190 <= f <= 2270 else 0.12)
     W = tip + outw * 0.09 + V((0, 0, 0.02))
     HUM[DA].key_hand("R", f, W, -outw, V((0, 0, 1)), W + V((0.3, 0.3, -0.4)))
-    key_fingers(DA, "R", f, "tripod"); key_fingers(DA, "L", f, "cup_hold")
-    sh_b = bone_w("Boy2", "upperarm02.L", 0.05)          # steadying hand higher up the arm, near the shoulder, clear of the needle
-    HUM[DA].key_hand("L", f, sh_b + V((0, 0, 0.08)) + outw * 0.02, V((0, -1, -0.4)).normalized(), V((0, 0, -1)), sh_b + V((0.4, 0.4, 0.0)))
+    key_fingers(DA, "L", f, "relaxed")
+    # medic's free (left) hand: relaxed at his side, outside the thigh (it could not reach the boy's shoulder)
+    rpb = RIG[DA].PB["root"]; Pm = RIG[DA].o.matrix_world @ rpb.head
+    Rm = (rpb.matrix.to_3x3() @ RIG[DA].rest("root").to_3x3().inverted()).normalized()
+    Wl, dl, nl = relaxed_hand(DA, Pm, Rm, "L", out=0.16, up=0.12)
+    HUM[DA].key_hand("L", f, Wl, dl, nl, elbow_pole(DA, Pm, Rm, "L", out=0.35))
     # syringe in the medic's right hand (shared grip_object: pinches the thin barrel, thumb opposing)
     syr.location = tip + outw * 0.055; syr.rotation_euler = (-outw).to_track_quat('-Z', 'Y').to_euler()
     syr.keyframe_insert("location", frame=f); syr.keyframe_insert("rotation_euler", frame=f)
@@ -735,8 +738,8 @@ for n, x, y, yaw in CR:
                 hh[s] = (W, Rb @ V((-0.2 * sx, -0.3, 1)).normalized(), Rb @ V((-sx, 0, 0)), sh + Rb @ V((0.45 * sx, 0.2, -0.35)))
                 key_fingers(n, s, f, "flat_palm")
             elif s == "R":                         # rescued boys / coach: an open-palm wave at head height
-                W = sh + Rb @ V((0.22 * sx + 0.06 * (cheer - 0.5), -0.12, 0.3)); hh[s] = (W, Rb @ V((0.1 * sx, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.5 * sx, 0.3, -0.2)))
-                key_fingers(n, s, f, "flat_palm")
+                W = sh + Rb @ V((0.34 * sx + 0.06 * (cheer - 0.5), -0.22, 0.22)); hh[s] = (W, Rb @ V((0.15 * sx, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.55 * sx, 0.3, -0.25)))   # wave out to the side, well clear of the face
+                key_fingers(n, s, f, "relaxed")
         key_hands(n, f, P, Rb, hh)
     TELE[n].add(OUT0 - 1)
 heli = bpy.data.objects["S1_Heli"]; rotor = bpy.data.objects["S1_Heli_Rotor"]

@@ -12,7 +12,7 @@ wipe = bpy.data.objects.get("CAM_RockWipe")
 if wipe: wipe.hide_render = True
 sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 8; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = 'JPEG'
-OVR = {"diver_treading_water": ((0.0, 0.7, 0.45), 8), "medic_syringe_grip": ((-0.25, -0.5, 0.12), 8), "medic_steadying_hand": ((-0.25, -0.45, 0.15), 8), "mask_fit_L": ((-0.3, -0.45, 0.15), 10), "mask_fit_R": ((-0.3, -0.45, 0.15), 10), "mask_straps": ((-0.4, 0.1, 0.35), 10)}   # label: (camera offset from the hand, light W)
+OVR = {"diver_treading_water": ((0.0, 0.7, 0.45), 8), "medic_syringe_grip": (None, 8), "medic_steadying_hand": ((-0.25, -0.45, 0.15), 8), "mask_fit_L": ((-0.3, -0.45, 0.15), 10), "mask_fit_R": ((-0.3, -0.45, 0.15), 10), "mask_straps": ((-0.4, 0.1, 0.35), 10)}   # label: (camera offset from the hand, light W)
 SHOTS = [  # label, frame, rig, hand bone, extra up
     ("walk_hand", 200, "Boy2", "wrist.L", 0.1), ("run_hand", 480, "Boy5", "wrist.R", 0.1),
     ("huddle_hands_on_knees", 1050, "HB2", "wrist.L", 0.15), ("huddle_hands_boy1", 1050, "Boy1", "wrist.R", 0.15),
@@ -33,7 +33,12 @@ for i, (lab, f, rn, bn, up) in enumerate(SHOTS):
     cam.location = h + side * 0.38 + V((0, 0, 0.12 + up))
     lt.data.energy = 25
     if lab in OVR:
-        cam.location = h + V(OVR[lab][0]); lt.data.energy = OVR[lab][1]
+        if OVR[lab][0] is None:        # 0.5 m from the hand on the open side (away from the owner's body), looking at the bone
+            away = (h - root); away.z = 0; away = away.normalized() if away.length > 1e-3 else V((1, 0, 0))
+            cam.location = h + (away + V((0, 0, 0.45))).normalized() * 0.5
+        else:
+            cam.location = h + V(OVR[lab][0])
+        lt.data.energy = OVR[lab][1]
     cam.rotation_euler = (h - cam.location).to_track_quat('-Z', 'Y').to_euler()
     lt.location = cam.location + V((0, 0, 0.25)); lt.rotation_euler = (h - lt.location).to_track_quat('-Z', 'Y').to_euler()
     sc.render.filepath = os.path.join(OUT, "c%02d_f%04d_%s.jpg" % (i, f, lab)); bpy.ops.render.render(write_still=True)
