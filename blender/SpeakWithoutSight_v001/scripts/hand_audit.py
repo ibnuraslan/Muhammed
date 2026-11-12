@@ -36,7 +36,8 @@ def inside(tr, pts):
         if loc is not None and (v - loc).dot(nrm) < 0 and dist > DEPTH: n += 1
     return n
 hits = {}; lines = []
-for f in range(sc.frame_start, sc.frame_end + 1, STEP):
+FR = [int(x) for x in a[3].split(',')] if len(a) > 3 else list(range(sc.frame_start, sc.frame_end + 1, STEP))
+for f in FR:
     sc.frame_set(f)
     M = {}
     for c in CH:
@@ -63,6 +64,7 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             if not pts: continue
             o = "R" if s == "L" else "L"
             t_hh = BVHTree.FromPolygons(D["bv"], D["hand_polys"][o]) if D["hand_polys"][o] else None
+            if len(a) > 3: print("DBG", f, c, s, "pts", len(pts), "otherpolys", len(D["hand_polys"][o]), "wr", tuple(round(x, 2) for x in pts[0]))
             res = {"own_body_or_clothes": inside(t_own, pts) if t_own else 0, "other_hand": inside(t_hh, pts) if t_hh else 0, "other_character": 0}
             for c2 in CH:
                 if c2 == c: continue

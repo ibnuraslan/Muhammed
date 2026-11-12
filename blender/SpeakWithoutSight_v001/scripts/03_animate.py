@@ -200,12 +200,12 @@ for f in keys_every(1, END, 40):
 # lap hands (beats 1-2): fingers rubbing, "only touch"
 def lap(s, f):
     sx = 1 if s == "L" else -1
-    return V(CHAIR.x + sx * 0.095, CHAIR.y - 0.22, 0.70), V(-sx * 0.1, -1, -0.25), V(0, 0.1, 1), V(CHAIR.x + sx * 0.4, CHAIR.y + 0.2, 0.75)
+    return V(CHAIR.x + sx * 0.1, CHAIR.y - 0.22, 0.715), V(-sx * 0.1, -1, -0.25), V(0, 0.1, 1), V(CHAIR.x + sx * 0.4, CHAIR.y + 0.2, 0.75)
 for f in keys_every(1, 450, 20):
     for s in "LR":
         W, d, n, pole = lap(s, f)
         if f > 163 and s == "R":
-            W = W + V(0.03 * math.sin(f / 23.0), 0.015 * math.cos(f / 31.0), 0.01)   # right hand strokes the back of the left
+            W = W + V(0.03 * math.sin(f / 23.0), 0.015 * math.cos(f / 31.0), 0.012)  # right hand strokes the lap beside the left (no overlap)
         G.hand(s, f, W, d, n, pole); G.fingers(s, f, 25 + 15 * math.sin(f / 17.0 + (s == "L")), 12)
 
 # ================================================================== TEACHER
@@ -335,7 +335,7 @@ for f in throat_keys:
 # teacher's right hand lets go and rests on the girl's forearm, then gestures softly
 def t_thigh_R(f, lift=0.0):
     ev(f); kn = T.bone_world("lowerleg01.R"); hp = T.bone_world("upperleg01.R")
-    p = hp.lerp(kn, 0.55) + V(0, 0, 0.125 + lift) + T_F * 0.02
+    p = hp.lerp(kn, 0.55) + V(0, 0, 0.14 + lift) + T_F * 0.04
     T.hand("R", f, p, T_F * 0.8 - UP * 0.3 - T_R * 0.2, UP + T_F * 0.1, p + T_R * 0.35 + UP * 0.25)
     T.fingers("R", f, 28, 18)
 for f in (548, 600, 700, 820, 900, 1000, 1040):
@@ -456,7 +456,7 @@ for f in (1932, 1955, END):
     ev(f); ch = T.bone_world("spine02"); TFn = fdir(T_YAW)
     hit, nrm = T.surface(f, ch + TFn * 0.3 - T_R * 0.06 + UP * 0.05, -TFn, "female_elegantsuit01")
     heart = (hit if hit else ch + TFn * 0.12)
-    t_hand_on("R", f, heart + UP * 0.04, nrm if hit else TFn, -T_R * 0.6 + UP * 0.8, curl=14, pad=0.012)
+    t_hand_on("R", f, heart + UP * 0.04, nrm if hit else TFn, -T_R * 0.6 + UP * 0.8, curl=14, pad=0.022)
 # girl leans in to the hug
 for f in (1930, END):
     fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl, twist=-14, head=(hp - 4, -22))
@@ -534,8 +534,8 @@ for f in keys_every(1, END, 12):
     # stitching: left hand holds the hoop, right hand pulls the thread up and pushes it back down
     if u < 0.5:
         ph = (f % 72) / 72.0; up_ = math.sin(math.pi * min(1, ph * 1.6)) if ph < 0.62 else 0.0
-        Mo.hand("L", f, LAP - MO_R * 0.1 + V(0, 0, 0.045), MO_F * 0.6 + MO_R * 0.5, UP, LAP - MO_R * 0.45 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 40, 30)
-        Mo.hand("R", f, LAP + MO_R * 0.08 + MO_F * 0.03 + V(0, 0, 0.075 + 0.16 * up_), MO_F * 0.4 - MO_R * 0.4 - UP * 0.3, UP + MO_F * 0.3, LAP + MO_R * 0.45 - MO_F * 0.2)
+        Mo.hand("L", f, LAP - MO_R * 0.13 + V(0, 0, 0.05), MO_F * 1.0 + MO_R * 0.1, UP, LAP - MO_R * 0.45 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 35, 25)
+        Mo.hand("R", f, LAP + MO_R * 0.12 + MO_F * 0.03 + V(0, 0, 0.085 + 0.16 * up_), MO_F * 0.9 - MO_R * 0.1 - UP * 0.25, UP + MO_F * 0.3, LAP + MO_R * 0.45 - MO_F * 0.2)
         Mo.fingers("R", f, [40, 55, 65, 70], 30)
     else:
         ev(f); ch = Mo.bone_world("spine02") + MO_F * 0.17 + V(0, 0, 0.05)
