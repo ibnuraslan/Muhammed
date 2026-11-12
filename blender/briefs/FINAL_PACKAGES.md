@@ -19,7 +19,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v007/` **synced to your voiceover** |
 | 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v006/` **ON HOLD: acting fix in progress, do not render** |
 | 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v009/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1644)** |
-| 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v006/` **ON HOLD: acting fix in progress, do not render** |
+| 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v008/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1836)** |
 | 07 | ShoeBomber | `claude/beautiful-ptolemy-c5vrcq` | `blender/ShoeBomber_v005/` **ON HOLD: acting fix in progress, do not render** |
 | 08 | BeethovenDeaf | `claude/beautiful-ptolemy-c5vrcq` | `blender/BeethovenDeaf_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1435)** |
 | 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v005/` **ON HOLD: acting fix in progress, do not render** |
@@ -34,7 +34,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved, final commit 284559b (VO sync when your voiceover arrives)** |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v002/` |
 | 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
-| 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v005/` |
+| 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v004/` |
 | 24 | RooseveltSpeech | `claude/connect24-roosevelt-speech` | `blender/RooseveltSpeech_v007/` **acting fixed, approved (VO sync when your voiceover arrives)** |

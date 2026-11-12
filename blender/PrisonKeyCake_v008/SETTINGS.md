@@ -1,10 +1,10 @@
-# PrisonKeyCake_v006: farm render sheet
+# PrisonKeyCake_v008: farm render sheet
 
-These values were read back from `PrisonKeyCake_v006_60fps.blend` opened in factory-startup Blender 5.2.2 with no add-ons.
+These values were read back from `PrisonKeyCake_v008_60fps.blend` opened in factory-startup Blender 5.2.2 with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `PrisonKeyCake_v006_60fps.blend`: 67 MB, compressed, committed as a normal git file (no LFS). All images are packed as JPEG: 1K textures, with the prisoner's skin at 2K. The HDRIs are packed at 1K. MPFB body shape keys are baked. |
+| File | `PrisonKeyCake_v008_60fps.blend`: 67 MB, compressed, committed as a normal git file (no LFS). All images are packed as JPEG: 1K textures, with the prisoner's skin at 2K. The HDRIs are packed at 1K. MPFB body shape keys are baked. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -16,7 +16,7 @@ These values were read back from `PrisonKeyCake_v006_60fps.blend` opened in fact
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
 | Motion blur | Off (animated look). |
 | Colour | Display sRGB. View AgX with the look "AgX - Punchy". The scene exposure is keyframed (day 0.55, night 0.9, final day 0.25), so do not override it. The world shows a sky gradient to camera rays only; lighting comes from the HDRIs. |
-| Output | PNG, RGB, 8-bit, written to `//render/PrisonKeyCake_v006_####.png` |
+| Output | PNG, RGB, 8-bit, written to `//render/PrisonKeyCake_v008_####.png` |
 | Audio | None yet. When the VO arrives, the director retimes with `pipeline/retime_to_vo.py` using `beats.json`. |
 | Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. Sparks, pour, smoke density, flags (Wave modifier) and birds are keyframed or time-based. |
 | Volumes | There are two thin volumes. Foundry smoke (`Smoke`) is visible for frames 515–830. Cell dust (`CellDust`) is visible for frames 1–1459 and does not cast shadows. |
