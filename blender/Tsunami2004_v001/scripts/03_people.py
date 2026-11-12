@@ -32,10 +32,14 @@ class Person:
                 H.key_foot(s, f, H.foot_xy(s, pos, yaw), yaw)
             gz = ground_z(pos.x, pos.y)
             hd = head(f) if callable(head) else head
+            sd = (sum(map(ord, self.name)) % 97) / 97.0 * 6.28
+            hd = (hd[0] + 3.0 * math.sin(ph * 1.1 + sd), hd[1] + 14.0 * math.sin(ph * 0.7 + sd) + 6.0 * math.sin(ph * 1.9 + 2 * sd))
             fl = flex(f) if callable(flex) else flex
             cr = crouch(f) if callable(crouch) else crouch
-            H.key_root(f, Vector((pos.x, pos.y, gz + H.root_head.z - 0.02 - cr - 0.008 * math.sin(ph * 2.6))), yaw=yaw,
-                       flex=fl * 0.4, side=sway * 1.5 * math.sin(ph * 1.3))
+            sh_ = 0.025 * math.sin(ph * 0.9 + (sum(map(ord, self.name)) % 13))
+            lat = Matrix.Rotation(math.radians(yaw), 3, 'Z') @ Vector((sh_, 0, 0))
+            H.key_root(f, Vector((pos.x + lat.x, pos.y + lat.y, gz + H.root_head.z - 0.02 - cr - 0.008 * math.sin(ph * 2.6))), yaw=yaw,
+                       flex=fl * 0.4, side=sway * 2.5 * math.sin(ph * 0.9 + (sum(map(ord, self.name)) % 13)))
             H.key_spine(f, flex=fl, twist=sway * 3 * math.sin(ph * 0.9), head=hd)
             self.st[f] = (pos.copy(), yaw, "stand", 0.0)
         return pos
@@ -110,7 +114,7 @@ class Person:
                     W = shw + side * 0.23 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
                     pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
                 elif nm == "point":
-                    W = shw + fw * 0.93 * L + up * 0.2 * L + side * 0.05; d = (fw + up * 0.2).normalized(); n = -up
+                    W = shw + fw * 0.93 * L + up * (0.2 + 0.05 * math.sin(f * 0.13)) * L + side * (0.05 + 0.04 * math.sin(f * 0.07)); d = (fw + up * 0.2).normalized(); n = -up
                     pole = shw + side * 0.4 - up * 0.3
                 elif nm == "shade":
                     W = shw + fw * 0.5 * L + up * 0.55 * L - side * 0.06; d = (-side + up * 0.2).normalized(); n = -up
@@ -162,39 +166,43 @@ for p in P.values():
 k = P["KidA"]
 k.go([(3.5, 10), (4.5, 30), (5.0, 48)], T(0), T(3.4), run=True, kid=True)
 k.go([(5.0, 48), (8, 56), (4, 64), (-1, 57), (2, 50)], T(3.4), T(7.6), run=True, kid=True)
-k.stand(T(7.6), T(12.4), (2, 50), 180, head=(-8, 0))
-k.go([(2, 50), (2, 44)], T(12.4), T(12.95), run=True, kid=True)
-P["KidA"].key_arms(T(0), T(12.8), lambda f: "run")
+k.stand(T(7.6), T(8.6), (2, 50), 180, head=(-8, 0))
+k.go([(2, 50), (0, 47.5), (-3.5, 44.8)], T(8.6), T(10.4), kid=True)
+k.stand(T(10.4), T(12.4), (-3.5, 44.8), 180, head=(-10, 0))
+k.go([(-3.5, 44.8), (-3.7, 42.3)], T(12.4), T(12.95), run=True, kid=True)
+P["KidA"].key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(10.9) <= f <= T(12.2) else ("swing" if T(8.6) <= f <= T(10.4) else "run"))
 k = P["KidB"]
 k.go([(6.0, 8), (6.5, 28), (7.5, 44)], T(0.1), T(3.6), run=True, kid=True)
 k.go([(7.5, 44), (11, 52), (8, 60), (4, 54)], T(3.6), T(7.4), run=True, kid=True)
-k.stand(T(7.4), T(12.4), (4, 54), 190, head=(-10, 0))
-k.go([(4, 54), (4, 48)], T(12.4), T(12.95), run=True, kid=True)
-k.key_arms(T(0), T(12.8), lambda f: "run")
+k.stand(T(7.4), T(8.8), (4, 54), 190, head=(-10, 0))
+k.go([(4, 54), (6, 50), (8.5, 47)], T(8.8), T(10.6), kid=True)
+k.stand(T(10.6), T(12.4), (8.5, 47), 185, head=(-10, 0))
+k.go([(8.5, 47), (8.6, 44.5)], T(12.4), T(12.95), run=True, kid=True)
+k.key_arms(T(0), T(12.8), lambda f: {"L": "point"} if T(11.2) <= f <= T(12.3) else ("swing" if T(8.8) <= f <= T(10.6) else "run"))
 # adults walk out onto the wet sand, point, pick up a fish, look; one man shouts
 q = P["TouristW"]
 q.stand(T(0), T(4.6), (-4, 3), 175, head=lambda f: (-5, 15 * math.sin(f / 50)))
 q.go([(-4, 3), (-4.5, 22), (-5.5, 39)], T(4.6), T(8.2))
 q.stand(T(8.2), T(12.4), (-5.5, 39), 180, head=(-8, 0))
-q.go([(-5.5, 39), (-6, 33)], T(12.4), T(12.95), run=True)
+q.go([(-5.5, 39), (-5.7, 36.5)], T(12.4), T(12.95), run=True)
 q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(6.0) <= f <= T(7.4) else ({"L": "shade"} if T(8.4) <= f <= T(10.0) else {"R": "point"} if T(10.6) <= f <= T(12.3) else {"L": "swing", "R": "swing"}) if f < T(12.4) else "run")
 q = P["TouristM"]
 q.stand(T(0), T(5.0), (-1.5, 1), 180)
 q.go([(-1.5, 1), (-2, 20), (-1.5, 42)], T(5.0), T(8.6))
 q.stand(T(8.6), T(12.4), (-1.5, 42), 182, head=(-6, 0))
-q.go([(-1.5, 42), (-2, 36)], T(12.4), T(12.95), run=True)
+q.go([(-1.5, 42), (-1.7, 39.5)], T(12.4), T(12.95), run=True)
 q.key_arms(T(0), T(12.8), lambda f: {"L": "shade"} if T(8.0) <= f <= T(10.2) else {"R": "point"} if T(10.8) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
 q = P["LocalW"]
 q.stand(T(0), T(5.4), (9, 6), 190)
 q.go([(9, 6), (10, 25), (10.5, 46)], T(5.4), T(8.8))
 q.stand(T(8.8), T(12.4), (10.5, 46), 185, head=(-5, 5))
-q.go([(10.5, 46), (10, 40)], T(12.4), T(12.95), run=True)
+q.go([(10.5, 46), (10.3, 43.5)], T(12.4), T(12.95), run=True)
 q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(7.6) <= f <= T(9.6) or T(11.2) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
 q = P["LocalM"]
 q.stand(T(0), T(5.2), (16, 10), 185)
 q.go([(16, 10), (17, 28), (17.5, 44)], T(5.2), T(8.6))
 q.stand(T(8.6), T(12.4), (17.5, 44), 175)
-q.go([(17.5, 44), (17, 38)], T(12.4), T(12.95), run=True)
+q.go([(17.5, 44), (17.3, 41.5)], T(12.4), T(12.95), run=True)
 q.key_arms(T(0), T(12.8), lambda f: {"L": "point"} if T(9.0) <= f <= T(10.0) or T(10.9) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
 q = P["OldM"]
 q.stand(T(0), T(10.6), (-11, -3), 170, head=lambda f: (-6, 0))
@@ -218,7 +226,7 @@ for f_, u_ in ((T(9.1), 0.0), (T(9.33), 0.55), (T(9.55), 1.0)):
     H_.key_root(f_, Vector((pp.x, pp.y, ground_z(pp.x, pp.y) + H_.root_head.z - 0.04)), yaw=yw, flex=3)
     q.st[f_] = (pp.copy(), yw, "stand", 0.0)
 q.stand(T(9.6), T(12.4), (FP.x + 0.1, FP.y - 0.7), 8, head=(-12, 0), flex=8)
-q.go([(FP.x + 0.1, FP.y - 0.7), (5, 48)], T(12.4), T(12.95), run=True)
+q.go([(FP.x + 0.1, FP.y - 0.7), (4.8, 51.3)], T(12.4), T(12.95), run=True)
 fish_pick = bpy.data.objects["Fish_00"]
 fish_pick.scale = (1.15,) * 3
 fish_pick.location = (FISHPICK.x, FISHPICK.y, ground_z(FISHPICK.x, FISHPICK.y) + 0.07); fish_pick.rotation_euler = (0, math.radians(90), math.radians(80))
