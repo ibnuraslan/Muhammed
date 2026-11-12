@@ -18,7 +18,7 @@ import dd
 from dd import person, place, face_to, walk_to, arms_relaxed, zero, ground
 from human import pose_sit, pose_walk, reach, fingers_curl
 
-EXPOSURE = -1.0
+EXPOSURE = -0.7
 DUR = {k: 9.0 for k in ("aisle", "dock", "prosecutor", "file", "ashamed", "reverse", "judges")}
 VARIANT_FOR = {k: k for k in DUR}
 BENCH_Y = 17.0
