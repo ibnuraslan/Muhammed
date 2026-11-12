@@ -208,8 +208,8 @@ for f, what in ((1, "chest"), (60, "chest_up"), (110, "near_nose"), (128, "at_no
     hand_keys_R.append((f, what, tip.copy()))
     boyR(f, tip, d, n, pole=sh + V(-0.35, 0.15, -0.25))
 # left hand: on the floor (support) / on the knee, flaps in the panic, chin during the tweezers
-for f, what in ((1, "floor"), (230, "floor"), (275, "knee"), (420, "knee"), (640, "chest"), (700, "knee"), (880, "knee"), (895, "flapB"), (910, "flapA"),
-                (925, "flapB"), (940, "flapA"), (960, "flapB"), (990, "floor"), (1360, "floor")):
+for f, what in ((1, "knee"), (230, "knee"), (275, "knee"), (420, "knee"), (640, "chest"), (700, "knee"), (880, "knee"), (895, "flapB"), (910, "flapA"),
+                (925, "flapB"), (940, "flapA"), (960, "flapB"), (990, "knee"), (1360, "knee")):
     ev(f)
     sh = b.bone_world("upperarm01.L")
     if what == "floor": W_ = BOYP + V(0.24, 0.12, 0.062); b.h.key_hand("L", f, W_, V(0.3, -0.85, -0.22).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
@@ -331,9 +331,9 @@ for f, what in ((1470, "lap"), (1495, "sniff"), (1515, "tissue_box"), (1535, "bl
     shR = M.bone_world("upperarm01.R"); shL = M.bone_world("upperarm01.L")
     lap = BENCH + V(0, -0.3, SEATZ + 0.16)
     if what == "lap": tR = lap + V(-0.1, -0.05, 0); tL = lap + V(0.1, -0.05, 0)
-    elif what == "sniff": tR = nt + fw * 0.04 - up * 0.02 + V(-0.03, 0, 0); tL = lap + V(0.1, -0.05, 0)
+    elif what == "sniff": tR = nt + fw * 0.075 - up * 0.03 + V(-0.035, 0, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "tissue_box": tR = BENCH + V(-0.38, -0.05, SEATZ + 0.12); tL = lap + V(0.1, -0.05, 0)
-    elif what in ("blow", "blow2"): tR = nt + fw * 0.03 - up * 0.01 + V(-0.02, 0, 0); tL = nt + fw * 0.03 - up * 0.01 + V(0.02, 0, 0)
+    elif what in ("blow", "blow2"): tR = nt + fw * 0.055 - up * 0.01 + V(-0.03, 0, 0); tL = nt + fw * 0.055 - up * 0.01 + V(0.03, 0, 0)
     elif what == "toss": tR = BENCH + V(-0.3, -0.6, 0.55); tL = lap + V(0.1, -0.05, 0)
     elif what in ("shake1", "shake2"): tR = shR + V(0.1, -0.35, -0.05 if what == "shake1" else 0.08); tL = lap + V(0.1, -0.05, 0)
     elif what == "mouth": tR = nt + fw * 0.05 - up * 0.06; tL = lap + V(0.1, -0.05, 0)
@@ -399,7 +399,7 @@ for f, what in ((1870, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press")
         dR, nR, dL, nL = V(0, 0, 1), -rt, V(0, 0, 1), rt
     elif what == "press":
         tR = nt + rt * 0.012 + fw * 0.004; dR, nR = (up + rt * 0.3).normalized(), -rt
-        tL = shL + fw * 0.25 - up * 0.3; dL, nL = fw, up
+        tL = shL + fw * 0.38 - up * 0.22 - rt * 0.08; dL, nL = fw, up
     else:
         tR = shR + rt * 0.1 + fw * 0.02 - up * 0.5; dR, nR = (-up + fw * 0.2).normalized(), rt
         cup = nt + fw * (0.2 if what == "palm" else 0.24) - up * (0.2 if what == "palm" else 0.12)
