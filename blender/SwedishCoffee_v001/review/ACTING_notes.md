@@ -99,6 +99,7 @@ Not changed (checked, plausible): soldier smashing the pot (both hands on it, sh
 
 ## v009 (optional polish after v008 approval: servants' pot handles only)
 - v008 (334d1cc) is the approved package. v009 changes only the two pouring servants; framing, camera and everything else are the same as v008.
+- Half-second sheets: `v009_half_A.jpg`, `v009_half_B.jpg` (same framing as v008).
 - Each servant's pot is no longer parented to the wrist. It is keyed in the chamber with its handle in the hand, spout toward the drinker's cup, tilted 55° while pouring and 16° on the approach. `grip_object` closes the hand on the handle at every key. The handle point and spout direction were measured from the two models.
 - Close-ups (`v009_hand_closeups.jpg`), seen from the film-camera side:
   - Cell 3.0 s (silver pot): the red servant's fist is closed over the small handle on top of the tilted pot. The hand is now visible, not behind the pot.
