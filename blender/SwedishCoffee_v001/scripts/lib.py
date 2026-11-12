@@ -3,6 +3,7 @@ import bpy, math, os, glob, random
 from mathutils import Vector, Matrix, Euler, Quaternion
 PIPE = "/home/user/Muhammed/blender/pipeline/anim_lib.py"
 exec(open(PIPE).read())
+exec(open("/home/user/Muhammed/blender/pipeline/hand_poses.py").read())
 R_ = math.radians
 sc = bpy.context.scene
 SCR = "/tmp/claude-0/-home-user-Muhammed/cfa42660-5965-5bab-81cb-f3c15671f0c9/scratchpad"
@@ -178,7 +179,7 @@ def base_human(name):
             for kb in list(ch.data.shape_keys.key_blocks)[:-1]: ch.shape_key_remove(kb)
             ch.shape_key_remove(ch.data.shape_keys.key_blocks[0])
     R = make_human_ctrl(arm)
-    limits(arm)
+    add_hand_limits(arm)   # pipeline/hand_poses.py limits (fingers, thumbs, wrists, elbow IK)
     hc.hide_viewport = True
     BASE[name] = arm; return arm
 
@@ -528,3 +529,13 @@ def hand_at(A, f, s, P, d=(0, 0, -1), n=None, pole=None, g=0.32):
     """hand target given in set-local coordinates (converted to the actor's body frame)"""
     A.hand(f, s, _to_body(A, P), d=_dir_body(A, d), n=_dir_body(A, n) if n is not None else None,
            pole=_to_body(A, pole) if pole is not None else None, g=g)
+
+
+# ---- grips via pipeline/hand_poses.py (cached per armature + side + pose; keyed without a scene re-evaluation)
+_POSEC = {}
+def grip(R, f, s, amt=1.0, thumb=0.6, pose=None):
+    if pose is None:
+        pose = "relaxed" if amt < 0.45 else ("cup_hold" if amt < 0.75 else "wrap_grip")
+    k = (R.o.data.name, s, pose)
+    if k not in _POSEC: _POSEC[k] = _pose_rots(R.o, s, pose)
+    _key(R.o, s, _POSEC[k], f, 1.0)

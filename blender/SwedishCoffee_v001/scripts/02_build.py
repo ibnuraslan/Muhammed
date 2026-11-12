@@ -91,7 +91,7 @@ SETDEF = [  # name, frames [on, off), entry portal, exit portal (local pos, yaw 
     ("S5_Church", 1630, 1850, ((0, -16, 2.5), 0), ((0, 2.0, 3.2), 0)),
     ("S6_Ballroom", 1850, 1985, ((0, -6.0, 3.2), 0), ((-2.5, 2.0, 1.5), 135)),
     ("S7_Bedroom", 1985, 2490, ((0, -2.6, 2.4), 0), ((4.7, -1.0, 1.7), -90)),
-    ("S8_Square", 2490, 2671, ((0, -13, 3.0), 0), None),
+    ("S8_Square", 2490, 2671, ((0, -8.0, 2.2), 0), None),
 ]
 ROOT = []; SETC = []
 Mw = Matrix.Identity(4)
@@ -240,7 +240,7 @@ for k, (b, x) in enumerate((("TwinA", -0.45), ("TwinB", 0.45))):
         A.stand(f, pos=(x, 0.2), yaw=8 * (1 if k else -1), flex=10 + 3 * u, head=(12 + 4 * u, 6 * u))
         for s in "LR":
             sx = 1 if s == "L" else -1
-            A.hand(f, s, (0.075 * sx, -0.22, 1.0), d=(-0.1 * sx, -1, 0.0), n=(-sx, 0, 0), pole=(0.4 * sx, 0.3, 1.0), g=0.5)
+            A.hand(f, s, (0.075 * sx, -0.22, 1.0), d=(-0.1 * sx, -1, 0.0), n=(-sx, 0, 0), pole=(0.4 * sx, 0.3, 1.0)); grip(A.R, f, s, pose="relaxed")
         A.face(f, brow=2.2, lids=-0.3, jaw=6 + 4 * u, frown=0.6)
     sh = inst(A_["shackles"], c, A.W((0, -0.22, 1.0)), rz=0, name="shackle_" + b); sh.rotation_euler.x = R_(90)
     attach(sh, A.a, "wrist.R", 1, local=True)
@@ -294,7 +294,7 @@ K = human("King", "King_S2", c); K.z = 0.4; GZ[0] = 0.4; K.pos = V((0, 6.45)); K
 for f, hand_up, lean, br in ((175, 0, 0, -0.5), (185, 0.5, 4, -1.5), (200, 1, 8, -2.5), (240, 1, 6, -2.5), (285, 0.3, 2, -2), (300, 0, 14, -2.5), (360, 0, 20, -2.8), (420, 0, 22, -3), (590, 0, 22, -3)):
     K.sit(f, seat_z=0.48, flex=lean, twist=-18 if f >= 300 else 0, head=(10 if f >= 300 else -5, -25 if f >= 300 else 0))
     if hand_up:
-        K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2), g=0.6)
+        K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2)); grip(K.R, f, "R", pose="flat_palm")
     else:
         K.hand(f, "R", (-0.30, -0.25, 0.70), d=(0, -1, -0.2), n=(0, 0, -1), pole=(-0.6, 0.4, 0.9))
     K.hand(f, "L", (0.30, -0.25, 0.70), d=(0, -1, -0.2), n=(0, 0, -1), pole=(0.6, 0.4, 0.9))
@@ -331,8 +331,8 @@ cam(260, (1.2, 2.2, 1.7), (0, 6.4, 1.55), 35)
 cam(300, (0.6, 4.4, 1.55), (-0.05, 6.35, 1.55), 45)
 cam(360, (-0.6, 4.6, 1.5), (-0.2, 6.3, 1.5), 50)
 cam(420, (-0.25, 4.3, 1.55), (-0.8, 5.35, 1.0), 40)
-cam(480, (-0.8, 4.35, 1.0), (-1.0, 5.0, 0.92), 55)
-cam(540, (-0.95, 4.35, 1.12), (-1.0, 5.0, 1.17), 50)
+cam(480, (-1.65, 3.85, 1.25), (-0.55, 5.4, 1.2), 45)
+cam(540, (-1.55, 4.05, 1.3), (-0.6, 5.45, 1.3), 45)
 cam(586, (-1.0, 4.58, 1.21), (-1.0, 5.4, 1.23), 40)
 finish_set(1)
 
@@ -354,13 +354,14 @@ for f, up, fl in ((588, 0.0, 0), (612, 1.0, -8), (632, 1.0, -12), (645, -0.4, 35
     hz = 1.05 + 1.0 * up if up >= 0 else 0.75
     for s in "LR":
         sx = 1 if s == "L" else -1
-        grip(S1_.R, f, s, 0.9); S1_.hand(f, s, (0.1 * sx, -0.35, hz), d=(-0.3 * sx, -0.6, 0.6 if up > 0 else -0.3), n=(-sx, 0, 0), pole=(0.5 * sx, 0.3, 1.2))
+        S1_.hand(f, s, (0.1 * sx, -0.35, hz), d=(-0.3 * sx, -0.6, 0.6 if up > 0 else -0.3), n=(-sx, 0, 0), pole=(0.5 * sx, 0.3, 1.2))
     S1_.face(f, brow=-2.5, jaw=10 if up < 0 else 4, frown=1.2)
+    for s in "LR": grip(S1_.R, f, s, pose="wrap_grip")
 # pot keyed in world: in hands until 645 then smash on cobbles with shards
 sc.frame_set(588); bpy.context.view_layer.update()
 for f in (588, 600, 612, 624, 632, 640, 645):
     sc.frame_set(f); hw = (hand_world(S1_.a, "L") + hand_world(S1_.a, "R")) / 2
-    pot.matrix_world = Matrix.Translation(ROOT[2].matrix_world.inverted() @ hw + V((0, 0, -0.1)))
+    pot.matrix_world = Matrix.Translation(ROOT[2].matrix_world.inverted() @ hw + V((0, 0, -0.12)))
     pot.keyframe_insert("location", frame=f)
 pot.hide_render = False; pot.keyframe_insert("hide_render", frame=648); pot.hide_render = True; pot.keyframe_insert("hide_render", frame=649)
 ip = pot.location.copy(); ip.z = 0.0
@@ -538,6 +539,7 @@ for k, (b, x) in enumerate((("Doctor1", 2.35), ("Doctor2", 3.65))):
     q = inst(A_["quill"], c, (x - 0.12, -2.7, TZ + 0.1), name="quill%d" % k); q.rotation_euler = (R_(60), 0, R_(20))
     attach(q, A.a, "wrist.R", 725, local=True)
     bk = inst(A_["book"], c, (x, -2.6, TZ), rz=180, name="ledger%d" % k)
+    bk.data = bk.data.copy(); setmat(bk, pbr("m_ledger", "brown_leather", 4, tint=(0.45, 0.22, 0.12), rough_mul=0.8))   # plain cover: the model's spine has lettering
 # visibility of young/old twins inside the chamber
 for nm, A in TW.items():
     old = "old" in nm
@@ -563,7 +565,7 @@ cam(1440, (3.4, -0.9, 1.7), (3.0, -2.8, 1.2), 32)
 cam(1462, (3.8, -1.3, 1.7), (2.4, -2.2, 1.25), 30)
 cam(1480, (4.2, -1.8, 1.8), (2.5, 0.2, 1.2), 28)
 cam(1545, (2.6, 0.2, 1.5), (0.0, 1.6, 1.2), 30)
-cam(1600, (3.4, -0.4, 1.8), (8.0, -1.0, 1.6), 28)
+cam(1600, (3.5, -0.6, 1.7), (2.8, -2.8, 1.2), 30)
 cam(1648, (5.15, -1.0, 1.9), (8.0, -1.0, 1.9), 28)
 finish_set(3)
 
@@ -571,6 +573,12 @@ finish_set(3)
 c = S(4)
 plane("ground", c, 80, (0, 0, 0), M["snow"])
 chg = inst(A_["church"], c, (0, 22, 0), rz=180)
+_cm = A_["church"].data
+_cm.materials.append(M["roof"]); _cm.materials.append(M["castle"]); _iroof, _istone = len(_cm.materials) - 2, len(_cm.materials) - 1
+for _p in _cm.polygons:
+    _mn = _cm.materials[_p.material_index].name if _cm.materials[_p.material_index] else ""
+    if "Roof" in _mn: _p.material_index = _iroof
+    elif "BrickOldRounded" in _mn or "concrete" in _mn: _p.material_index = _istone
 for m in A_["church"].data.materials:   # brighten the dark scan materials (clean animated look)
     if not m or not m.node_tree: continue
     bs_ = next((n for n in m.node_tree.nodes if n.type == 'BSDF_PRINCIPLED'), None)
@@ -696,12 +704,12 @@ for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 1.5), (1925, 2), (1936, 2.
         for s_, sh, sg in (("R", shR, 1), ("L", shL, -1)):   # palms flat on the floor beside the shoulders, arms out from the body
             hp = V((sh.x, sh.y, 0.05)) + lat * sg * 0.42 - ax * 0.15
             K.H.key_hand(s_, f, hp, (lat * sg - ax * 0.3).normalized(), V((0, 0, -1)), pole=V((sh.x, sh.y, 0.6)) + lat * sg * 0.3)
-            grip(K.R, f, s_, 0.3)
+            grip(K.R, f, s_, pose="flat_palm")
         K.face(f, lids=1.0, jaw=6)
 MF.pos = V((1.2, 4.2)); MF.yaw = 180 + 15
 for f, ph in ((1872, 0), (1895, 1), (1905, 1), (1925, 0), (2004, 0)):
     MF.stand(f, flex=4 if ph else 0)
-    MF.hand(f, "R", (-0.15, -0.55, 1.35) if ph else (-0.35, -0.11, 0.9), d=(0, -1, 0) if ph else (0, 0, -1), n=(1, 0, 0), g=0.95 if ph else 0.35)
+    MF.hand(f, "R", (-0.15, -0.55, 1.35) if ph else (-0.35, -0.11, 0.9), d=(0, -1, 0) if ph else (0, 0, -1), n=(1, 0, 0)); grip(MF.R, f, "R", pose="power_fist" if ph else "relaxed")
     MF.hand(f, "L", (0.35, -0.11, 0.9), d=(0, 0, -1))
 # muzzle flash at 1907 (light + glow puff) from in front of the masked figure's hand; no weapon detail
 fl = light(c, 'POINT', MF.W((-0.15, -0.75, 1.36)), 0, (1, 0.75, 0.4), 0.05, name="flash")
@@ -713,7 +721,7 @@ for f, v, s in ((1905, 0, 0.2), (1908, 3, 0.35), (1940, 0.8, 1.2), (1990, 0, 1.8
     pdn.outputs[0].default_value = v; pdn.outputs[0].keyframe_insert("default_value", frame=f); puff.scale = (s,) * 3; puff.keyframe_insert("scale", frame=f)
 # dancers: three couples turning slowly, facing each other with joined raised hands; they scatter at the shot
 SHOT = 1912
-for pi, (cx, cy0) in enumerate(((-3.4, -2.4), (3.6, -1.8), (-2.6, 5.2))):
+for pi, (cx, cy0) in enumerate(((-1.5, -3.2), (1.7, -2.6), (-1.6, 0.6))):
     for side in (0, 1):
         k = pi * 2 + side
         b = ("Townsman", "Woman", "Guard", "Townswoman", "Townsman", "Woman")[k]
@@ -737,7 +745,7 @@ for pi, (cx, cy0) in enumerate(((-3.4, -2.4), (3.6, -1.8), (-2.6, 5.2))):
                 a = ang0 + (f - 1850) / 70.0; c_ = V((cx, cy0, 0))
                 hs = "R" if side == 0 else "L"; os_ = "L" if side == 0 else "R"; sxh = -1 if hs == "R" else 1
                 mid = c_ + V((0, 0, 1.42)) + V((math.cos(a + math.pi / 2), math.sin(a + math.pi / 2), 0)) * 0.12 * (1 if side == 0 else -1) * -1
-                hand_at(A, f, hs, mid, d=(0, 0, 1), n=tuple((c_ - pos_(f)).normalized()), g=0.7)
+                hand_at(A, f, hs, mid, d=(0, 0, 1), n=tuple((c_ - pos_(f)).normalized())); grip(A.R, f, hs, pose="wrap_grip")
                 A.hand(f, os_, (0.18 * -sxh, -0.18, 1.05), d=(0.3 * sxh, -1, 0.1), n=(0, 0, -1), g=0.4)
                 A.face(f, smile=0.9, brow=0.5)
             else:
@@ -748,7 +756,7 @@ light(c, 'AREA', (4, -4, 7), 1400, (1, 0.8, 0.6), 6, rot=(35, 0, 40), name="key"
 light(c, 'AREA', (-5, 6, 4), 400, (0.8, 0.85, 1.0), 4, rot=(70, 0, -140), name="rim")
 light(c, 'AREA', (0, 0, 7.8), 3000, (1.0, 0.93, 0.85), 10, rot=(0, 0, 0), name="ceilSoft")
 cam(1872, (0, -9.8, 5.2), (0, 2.0, 3.0), 28)
-cam(1890, (0.6, -2.0, 4.2), (0.8, 3.0, 1.6), 30)
+cam(1890, (0.3, -1.4, 2.0), (0.6, 2.8, 1.5), 32)
 cam(1905, (2.2, 6.0, 1.75), (0.5, 2.4, 1.5), 32)
 cam(1930, (2.6, 4.8, 1.1), (0.5, 2.6, 0.7), 30)
 cam(1960, (-1.7, 4.4, 0.9), (0.5, 2.9, 0.3), 28)
@@ -841,7 +849,7 @@ cam(2225, (1.2, 0.3, 1.55), (3.3, -1.6, 1.15), 30)
 cam(2250, (1.6, 0.6, 1.4), (3.3, -1.6, 1.1), 32)
 cam(2320, (2.3, -0.4, 1.35), (3.25, -1.55, 1.15), 45)
 cam(2400, (2.0, -2.4, 1.3), (3.2, -1.5, 1.15), 40)
-cam(2448, (2.4, -0.2, 1.65), (6.0, -1.0, 1.7), 30)
+cam(2448, (2.4, -0.2, 1.65), (3.3, -1.6, 1.15), 34)
 cam(2470, (2.6, -0.4, 1.5), (3.25, -1.6, 1.15), 34)
 cam(2506, (4.65, -1.0, 1.7), (8.0, -1.0, 1.7), 28)
 finish_set(6)

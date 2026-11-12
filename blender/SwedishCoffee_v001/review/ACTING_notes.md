@@ -43,3 +43,12 @@ Not changed (checked, plausible): soldier smashing the pot (both hands on it, sh
   - All 206 EMPTY are "no character in view" from f169 on, because qa_check builds its character list at frame 1 (only the courtyard cast renders then). They are not empty frames: see the after sheets.
   - BACKHEAD 1 is f1: the camera starts behind the crowd facing the scaffold.
 - `scripts/cam_proximity.py` (camera within 0.35 m of any character's bone axis, every 3 frames): 1 borderline sample (f1939, the masked figure's forearm at 0.30 m as he turns away).
+
+
+## v006 (director review of v005)
+- **Hands:** all hands use `pipeline/hand_poses.py` (add_hand_limits plus the pose table): relaxed idle hands, wrap grips on the pots and the couple's joined hands, flat palms for the king (raised hand and on the floor), a fist for the masked man. Close-ups: `v006_hand_closeups.jpg`. Two close-ups (3: sack pour, 13: coffin grip) still render black from every tested camera position; not resolved.
+- **Empty cells:** 7.5–9 s now holds the king behind the cup and the steam; 31–33 s couples are closer to the camera; 40.5 s holds on the old twin; the square starts closer.
+  - Still weak: 9.5 s (table and cup), 26.5–27 s (wall, then house façades through the window), 41.0 s (façade through the window).
+- **Cathedral roof:** roof faces reassigned to our roof material, but the band still renders black at 27.5–30 s. Not resolved.
+- **QA:** `v006_qa_check_director.json` (unchanged script) and `v006_qa_check_setaware.json` (viewport synced to render each frame): INSIDE 0, FILL 0. EMPTY are all "no character in view" (character list built at frame 1). BACKHEAD 1 is f1 (intended).
+- Ledger cover changed to plain leather (the model's spine had lettering).

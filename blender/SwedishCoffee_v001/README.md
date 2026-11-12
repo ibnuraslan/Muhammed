@@ -1,15 +1,12 @@
 # SwedishCoffee (Connect27)
 
-Current package: `blender/SwedishCoffee_v005/SwedishCoffee_v005_60fps.blend` (72 MB, normal git): the acting pass on v004 (approved). Every story-beat frame in `beats.json` is unchanged. The full list of fixes, with frames, is in `SwedishCoffee_v001/review/ACTING_notes.md`. In short:
-- the three wall fly-throughs and the doorway pass are now open-air whip-pans, and set swaps happen earlier so every beat frame shows its subject
-- servants really pour into the resting cup between sips
-- coffins are hand-carried at hip height
-- the ball has dancing couples hand in hand
-- at the bedside twin A's hand rests on his brother's hand
-- the king's fall reaches out with both hands and lands with his hands flat on the floor
-- idle hands sit clear of hips and coats
+Current package: `blender/SwedishCoffee_v006/SwedishCoffee_v006_60fps.blend` (75 MB, normal git). This is v005 plus the director's v005 review fixes; beats.json is unchanged.
+- All hands use `pipeline/hand_poses.py`: its `add_hand_limits` and its pose table for every grip (relaxed idle hands, wrap grips on the pots and the dancers' joined hands, a flat palm for the king's raised hand and his hands on the floor, a fist for the masked man).
+- Empty cells reworked: 7.5–9 s keeps the king behind the cup and steam, the ball's couples are closer to the camera, 40.5 s holds on the old twin, and the square starts closer.
+- The ledger cover is plain (the model's spine had lettering).
+- The cathedral roof faces were reassigned to our roof material.
 
-v002–v004 are kept.
+v002–v005 are kept. Acting notes: `SwedishCoffee_v001/review/ACTING_notes.md`.
 
 ## Files
 - `SwedishCoffee_v00N_60fps.blend`: packed farm file (see `SETTINGS.md`). Opens in factory Blender 5.2.2.
