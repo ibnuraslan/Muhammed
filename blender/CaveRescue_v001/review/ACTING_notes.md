@@ -77,3 +77,22 @@ Checked and fine: beats 1, 3–4 (cross-section), 7 (lone light), 10–11 (hands
 ### Still open
 - With the 15° pitch, the medic's head still covers most of the boy's face over 2221–2311. The face reads at 36.0 s and from 39.0 s.
 - Options: a 25° head pitch, or a lower camera at about 0.6 m.
+
+## Round 4 (director review of v006c) → v006d
+| Item | Change |
+|---|---|
+| Boy's face over 36–39.5 s | The medic's head is pitched back 25° (was 15°), with the same keys and eases. |
+| Hands in bodies | New `12_depenetrate.py`. Wherever clip_scan finds hand or finger skin inside a body, that hand's IK target moves off the surface along the surface normal to 4 cm clearance. Elbow poles are unchanged. It iterates per range until clean. Ranges: 232–250 (Boy4), 2128–2146 (Boy2), 2194–2308, 2320–2340 and 2362–2416 (DiverB), 2326–2350 (DiverA), 2548–2566 (DiverB tow). |
+| Props moving by themselves / worn items off the skin | New `13_props.py`. Every worn or carried item that followed a bone through Child Of is now a true bone child: head torches, dive masks, tanks, the tow harness, and the boy's full-face mask (baked per frame, so its world motion is unchanged). Masks are shrinkwrapped 6 mm onto the wearer's skin; on the full-face mask (rim, visor, regulator) this switches on at 2366, once the fitting is done. |
+
+### clip_scan (40c131b) on v006d (`clip_v006d.json`)
+- **0 bad ranges.**
+
+### qa_check (e7b25f7) on v006d (`qa_v006d.json`): flags that stay, all intended
+- **ROLL 0.**
+- **CAMJUMP 4:** f583, 1009, 2566 and 2727 are hidden by the fully covered 4-frame rock wipes (as in v006c).
+- **ATTACH 6:** `Prop_FullFaceMask`, `Prop_MaskVisor` and `Prop_MaskRegulator` at f2329 and 2353. The mask is still in DiverB's hands on its way to the boy's face (the fitting runs 2329–2365), so it is not worn yet. From 2366 it sits on the skin.
+- **PROPMOVE 507, none of them hand props:**
+  - `FX_Bubble_00–15` (2377–2575): exhaled bubbles rising from the regulator, a particle-style effect.
+  - `S3_Dot_00–04` (2599–2713): the glowing route dots travelling along the line in the mountain cutaway map.
+- The other categories are as in v006c (BACKHEAD 4, EMPTY 264, INSIDE 125, FILL 3, CLAW 101).

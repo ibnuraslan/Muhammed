@@ -1,0 +1,4700 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Boy5"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "295": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "301": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "307": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "313": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "319": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "325": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "331": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "337": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "397": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "517": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "523": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "577": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "S2_Tunnel"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S2_Tunnel in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 396.91 m, 17 deg in one frame (neighbours 0.31 m, 1 deg)"
+   ]
+  ],
+  "589": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "595": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "601": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "607": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "613": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "619": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "625": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "631": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "637": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "649": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "793": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "799": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "811": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "823": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "829": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "841": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "847": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "853": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "877": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "889": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "895": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "901": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "907": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "913": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "919": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "925": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "931": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "937": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "943": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "949": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "955": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "961": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "967": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "FILL",
+    "S4_Ledge"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 793.05 m, 16 deg in one frame (neighbours 0.20 m, 1 deg)"
+   ]
+  ],
+  "1015": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S4_Ledge in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "BACKHEAD",
+    "DiverA"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "S5_Passage"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1237": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1243": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1249": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1315": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1369": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1381": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1417": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1423": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "BACKHEAD",
+    "DiverC"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1501": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1633": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1639": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1645": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1651": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1657": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1663": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1669": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1675": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1693": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1705": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ],
+   [
+    "BACKHEAD",
+    "DiverC"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S5_Passage in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1747": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1753": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1759": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1765": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1771": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1795": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1801": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1807": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1813": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1819": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1825": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1831": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1837": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1843": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1849": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1855": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "2161": [
+   [
+    "CLAW",
+    "DiverA.R curl 62"
+   ]
+  ],
+  "2167": [
+   [
+    "CLAW",
+    "DiverA.R curl 66"
+   ]
+  ],
+  "2173": [
+   [
+    "CLAW",
+    "DiverA.R curl 70"
+   ]
+  ],
+  "2179": [
+   [
+    "CLAW",
+    "DiverA.R curl 75"
+   ]
+  ],
+  "2281": [
+   [
+    "CLAW",
+    "DiverA.R curl 74"
+   ]
+  ],
+  "2287": [
+   [
+    "CLAW",
+    "DiverA.R curl 68"
+   ]
+  ],
+  "2293": [
+   [
+    "CLAW",
+    "DiverA.R curl 63"
+   ]
+  ],
+  "2335": [
+   [
+    "CLAW",
+    "DiverA.R curl 35"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 66"
+   ]
+  ],
+  "2359": [
+   [
+    "CLAW",
+    "DiverB.L curl 43"
+   ]
+  ],
+  "2365": [
+   [
+    "CLAW",
+    "DiverB.L curl 33"
+   ]
+  ],
+  "2413": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2419": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2425": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S4_Cavern in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 247.9 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 219.3 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 248.8 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 215.8 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 249.8 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "2431": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "2437": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 25.4 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 26.0 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 24.8 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 31.2 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 27.6 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 26.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 23.0 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 27.3 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 25.3 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 24.6 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 32.8 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 26.1 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 22.9 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 24.8 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 25.9 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 24.3 cm with no hand on it (nearest finger 31 cm)"
+   ]
+  ],
+  "2443": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 52.1 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 55.2 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 50.5 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 65.9 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 55.3 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 50.7 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 50.5 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 55.3 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 51.9 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 50.2 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 68.7 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 52.3 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 49.4 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 54.5 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 53.5 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 49.6 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "2449": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 43.3 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 40.8 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 37.9 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 42.7 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 65.9 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 37.5 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 42.2 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 42.4 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 37.8 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 41.3 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 42.7 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 37.8 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 40.5 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 43.4 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 38.5 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 39.7 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "2455": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 42.9 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 37.6 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 39.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 42.8 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 38.2 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 39.0 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 43.5 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 39.0 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 38.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 42.9 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 39.5 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 37.7 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 43.1 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 40.7 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 55.4 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 42.0 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "2461": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 41.9 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 39.5 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 44.3 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 42.7 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 39.5 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 44.0 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 43.5 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 39.2 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 46.9 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 44.1 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 39.5 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 46.4 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 44.6 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 39.8 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 45.4 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 44.9 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "2467": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 39.3 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 41.4 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 44.4 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 39.8 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 40.6 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 44.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 40.4 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 40.0 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 59.4 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 41.1 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 39.4 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 59.1 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 41.9 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 39.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 43.7 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 42.7 cm with no hand on it (nearest finger 57 cm)"
+   ]
+  ],
+  "2473": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 39.1 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 68.0 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 66.9 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 38.6 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 43.2 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 43.1 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 38.8 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 42.5 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 43.5 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 64.8 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 41.7 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 44.2 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 39.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 40.9 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 44.3 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 39.7 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "2479": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 41.6 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 44.3 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 39.6 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 40.9 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 45.2 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 40.9 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 40.2 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 44.4 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 40.8 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 39.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 44.7 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 42.5 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 39.3 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 60.1 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 42.4 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 38.8 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "2485": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 44.2 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 42.6 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 40.1 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 45.2 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 44.2 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 39.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 47.1 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 43.9 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 39.9 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 43.6 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 45.6 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 40.0 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 45.7 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 48.6 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 40.6 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 41.9 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "2491": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 45.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 41.4 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 43.0 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 46.0 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 41.0 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 40.6 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 61.1 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 42.5 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 41.7 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 46.0 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 42.7 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 39.6 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 60.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 43.8 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 40.9 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 45.2 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "2497": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 59"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 44.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 41.7 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 45.4 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 43.9 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 39.6 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 44.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 45.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 69.2 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 44.3 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 45.3 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 40.0 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 42.4 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 46.3 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 42.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 43.0 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 71.9 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "2503": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 51"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 56.8 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 41.7 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 44.7 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 40.2 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 40.8 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 60.3 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 42.2 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 40.5 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 44.6 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 41.7 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 55.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 44.9 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 43.8 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 40.0 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 43.8 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 43.2 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "2509": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 42.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 43.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 42.7 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 42.6 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 43.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 47.3 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 39.3 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 42.3 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 44.0 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 39.3 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 45.3 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 45.1 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 40.2 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 40.7 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 44.5 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 40.4 cm with no hand on it (nearest finger 38 cm)"
+   ]
+  ],
+  "2515": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 41.1 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 44.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 40.5 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 56.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 45.5 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 41.1 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 39.7 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 44.4 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 41.8 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 40.2 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 45.0 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 42.9 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 39.0 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 43.4 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 43.3 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 39.6 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "2521": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 44.0 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 43.4 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 40.1 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 44.2 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 69.8 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 38.8 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 42.5 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 44.5 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 40.3 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 42.8 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 45.0 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 39.7 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 40.8 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 45.0 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 41.3 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 41.4 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "2551": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 47.0 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 50.6 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 46.3 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 45.8 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 50.4 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 47.4 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 46.0 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 50.2 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 47.7 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 45.0 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 49.5 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 48.9 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 45.6 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 63.5 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 49.3 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 44.9 cm with no hand on it (nearest finger 62 cm)"
+   ]
+  ],
+  "2557": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 49.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 48.7 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 44.1 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 48.6 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 50.5 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 45.5 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 50.6 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 50.2 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 45.1 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 46.3 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 51.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 46.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 48.9 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 54.1 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 46.2 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 44.6 cm with no hand on it (nearest finger 66 cm)"
+   ]
+  ],
+  "2563": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2569": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 6.0 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 6.3 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 6.2 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 5.6 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 6.0 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 48.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 6.4 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 48.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 6.0 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 6.2 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 6.0 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 6.2 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 6.8 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 5.2 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 6.2 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 48.7 cm with no hand on it (nearest finger 33 cm)"
+   ]
+  ],
+  "2575": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 36.3 cm with no hand on it (nearest finger 35443 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 7.5 cm with no hand on it (nearest finger 35444 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 7.3 cm with no hand on it (nearest finger 35446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 7.2 cm with no hand on it (nearest finger 35452 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 7.8 cm with no hand on it (nearest finger 35446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 3.8 cm with no hand on it (nearest finger 35439 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 7.2 cm with no hand on it (nearest finger 35443 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 5.1 cm with no hand on it (nearest finger 35437 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 7.1 cm with no hand on it (nearest finger 35446 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 6.9 cm with no hand on it (nearest finger 35447 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 36.4 cm with no hand on it (nearest finger 35440 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 7.2 cm with no hand on it (nearest finger 35445 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 7.1 cm with no hand on it (nearest finger 35443 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 7.9 cm with no hand on it (nearest finger 35442 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 7.1 cm with no hand on it (nearest finger 35448 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 3.1 cm with no hand on it (nearest finger 35443 cm)"
+   ]
+  ],
+  "2581": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2587": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2593": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2599": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 197.5 cm with no hand on it (nearest finger 70834 cm)"
+   ]
+  ],
+  "2605": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 190.7 cm with no hand on it (nearest finger 70891 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 197.3 cm with no hand on it (nearest finger 70809 cm)"
+   ]
+  ],
+  "2611": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 196.7 cm with no hand on it (nearest finger 70967 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 201.9 cm with no hand on it (nearest finger 70861 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 196.7 cm with no hand on it (nearest finger 70781 cm)"
+   ]
+  ],
+  "2617": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 196.1 cm with no hand on it (nearest finger 71043 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 171.6 cm with no hand on it (nearest finger 70928 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 197.5 cm with no hand on it (nearest finger 70834 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 181.8 cm with no hand on it (nearest finger 70749 cm)"
+   ]
+  ],
+  "2623": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 196.9 cm with no hand on it (nearest finger 71122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 209.6 cm with no hand on it (nearest finger 71005 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 190.7 cm with no hand on it (nearest finger 70891 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 199.0 cm with no hand on it (nearest finger 70809 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 197.5 cm with no hand on it (nearest finger 70717 cm)"
+   ]
+  ],
+  "2629": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 197.4 cm with no hand on it (nearest finger 71198 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 190.7 cm with no hand on it (nearest finger 71083 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 196.7 cm with no hand on it (nearest finger 70967 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 201.5 cm with no hand on it (nearest finger 70861 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 196.7 cm with no hand on it (nearest finger 70781 cm)"
+   ]
+  ],
+  "2635": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 197.3 cm with no hand on it (nearest finger 71268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 199.0 cm with no hand on it (nearest finger 71160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 196.1 cm with no hand on it (nearest finger 71043 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 171.7 cm with no hand on it (nearest finger 70928 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 197.5 cm with no hand on it (nearest finger 70834 cm)"
+   ]
+  ],
+  "2641": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 196.2 cm with no hand on it (nearest finger 71321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 197.7 cm with no hand on it (nearest finger 71235 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 196.9 cm with no hand on it (nearest finger 71122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 209.5 cm with no hand on it (nearest finger 71005 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 190.7 cm with no hand on it (nearest finger 70891 cm)"
+   ]
+  ],
+  "2647": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 179.7 cm with no hand on it (nearest finger 71395 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 204.8 cm with no hand on it (nearest finger 71294 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 197.4 cm with no hand on it (nearest finger 71198 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 190.7 cm with no hand on it (nearest finger 71083 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 196.7 cm with no hand on it (nearest finger 70967 cm)"
+   ]
+  ],
+  "2653": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 193.2 cm with no hand on it (nearest finger 71475 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 163.2 cm with no hand on it (nearest finger 71356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 197.3 cm with no hand on it (nearest finger 71268 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 199.0 cm with no hand on it (nearest finger 71160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 196.1 cm with no hand on it (nearest finger 71043 cm)"
+   ]
+  ],
+  "2659": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 197.3 cm with no hand on it (nearest finger 71554 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 195.9 cm with no hand on it (nearest finger 71435 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 196.2 cm with no hand on it (nearest finger 71321 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 197.7 cm with no hand on it (nearest finger 71235 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 196.9 cm with no hand on it (nearest finger 71122 cm)"
+   ]
+  ],
+  "2665": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 196.9 cm with no hand on it (nearest finger 71627 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 191.1 cm with no hand on it (nearest finger 71514 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 179.7 cm with no hand on it (nearest finger 71395 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 204.8 cm with no hand on it (nearest finger 71294 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 197.4 cm with no hand on it (nearest finger 71198 cm)"
+   ]
+  ],
+  "2671": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 195.0 cm with no hand on it (nearest finger 71680 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 199.0 cm with no hand on it (nearest finger 71593 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 193.2 cm with no hand on it (nearest finger 71475 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 163.2 cm with no hand on it (nearest finger 71356 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_04 moves 197.3 cm with no hand on it (nearest finger 71268 cm)"
+   ]
+  ],
+  "2677": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 167.8 cm with no hand on it (nearest finger 71750 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 206.2 cm with no hand on it (nearest finger 71653 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 197.3 cm with no hand on it (nearest finger 71554 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 195.9 cm with no hand on it (nearest finger 71435 cm)"
+   ]
+  ],
+  "2683": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 194.3 cm with no hand on it (nearest finger 71833 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 153.2 cm with no hand on it (nearest finger 71713 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 196.9 cm with no hand on it (nearest finger 71627 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_03 moves 191.1 cm with no hand on it (nearest finger 71514 cm)"
+   ]
+  ],
+  "2689": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 197.4 cm with no hand on it (nearest finger 71916 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 189.2 cm with no hand on it (nearest finger 71792 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 195.0 cm with no hand on it (nearest finger 71680 cm)"
+   ]
+  ],
+  "2695": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_00 moves 197.5 cm with no hand on it (nearest finger 71998 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 186.1 cm with no hand on it (nearest finger 71871 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 167.8 cm with no hand on it (nearest finger 71750 cm)"
+   ]
+  ],
+  "2701": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 237.5 cm with no hand on it (nearest finger 71970 cm)"
+   ]
+  ],
+  "2707": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_01 moves 67.4 cm with no hand on it (nearest finger 71998 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 197.4 cm with no hand on it (nearest finger 71916 cm)"
+   ]
+  ],
+  "2713": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only S3_Mountain in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "S3_Dot_02 moves 197.5 cm with no hand on it (nearest finger 71998 cm)"
+   ]
+  ],
+  "2719": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2725": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2731": [
+   [
+    "CLAW",
+    "DiverB.L curl 56"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 53"
+   ]
+  ],
+  "2737": [
+   [
+    "CLAW",
+    "DiverA.R curl 73"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 62"
+   ]
+  ],
+  "2743": [
+   [
+    "CLAW",
+    "DiverA.L curl 71"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 62"
+   ]
+  ],
+  "2749": [
+   [
+    "CLAW",
+    "DiverA.R curl 71"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 58"
+   ]
+  ],
+  "2755": [
+   [
+    "CLAW",
+    "DiverA.L curl 71"
+   ]
+  ],
+  "2761": [
+   [
+    "CLAW",
+    "DiverA.R curl 71"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 49"
+   ]
+  ],
+  "2767": [
+   [
+    "CLAW",
+    "DiverA.L curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 49"
+   ]
+  ],
+  "2773": [
+   [
+    "CLAW",
+    "DiverB.R curl 58"
+   ]
+  ],
+  "2779": [
+   [
+    "CLAW",
+    "DiverB.L curl 55"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 44"
+   ]
+  ],
+  "2785": [
+   [
+    "CLAW",
+    "DiverB.L curl 54"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 54"
+   ]
+  ],
+  "2791": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 46"
+   ]
+  ],
+  "2797": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "2803": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "2809": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "2815": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "2857": [
+   [
+    "CLAW",
+    "DiverB.R curl 54"
+   ]
+  ],
+  "2869": [
+   [
+    "CLAW",
+    "DiverA.R curl 71"
+   ]
+  ],
+  "2875": [
+   [
+    "CLAW",
+    "DiverA.L curl 71"
+   ]
+  ],
+  "2881": [
+   [
+    "CLAW",
+    "DiverA.R curl 71"
+   ]
+  ],
+  "2887": [
+   [
+    "CLAW",
+    "DiverA.L curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 53"
+   ]
+  ],
+  "2893": [
+   [
+    "CLAW",
+    "DiverB.R curl 48"
+   ]
+  ],
+  "2899": [
+   [
+    "CLAW",
+    "DiverB.L curl 52"
+   ]
+  ],
+  "2905": [
+   [
+    "CLAW",
+    "DiverB.L curl 46"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 51"
+   ]
+  ],
+  "2911": [
+   [
+    "CLAW",
+    "DiverB.L curl 47"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 53"
+   ]
+  ],
+  "2917": [
+   [
+    "CLAW",
+    "DiverB.L curl 54"
+   ]
+  ],
+  "2923": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2929": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2935": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2941": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2947": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2953": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2959": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2965": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2971": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2977": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2983": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2989": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2995": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3001": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3007": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3013": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3019": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3025": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3031": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3037": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3043": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3049": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3055": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3061": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3067": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3073": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3079": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "3085": [
+   [
+    "CLAW",
+    "DiverA.R curl 72"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 52"
+   ]
+  ],
+  "2566": [
+   [
+    "CAMJUMP",
+    "cut: 797.32 m, 21 deg in one frame (neighbours 0.30 m, 5 deg)"
+   ]
+  ],
+  "2727": [
+   [
+    "CAMJUMP",
+    "cut: 400.29 m, 96 deg in one frame (neighbours 0.22 m, 1 deg)"
+   ]
+  ],
+  "2329": [
+   [
+    "ATTACH",
+    "Prop_FullFaceMask is 27.0 cm off Boy2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Prop_MaskRegulator is 21.5 cm off Boy2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Prop_MaskVisor is 26.9 cm off Boy2's skin (median)"
+   ]
+  ],
+  "2353": [
+   [
+    "ATTACH",
+    "Prop_FullFaceMask is 7.9 cm off Boy2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Prop_MaskRegulator is 14.4 cm off Boy2's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Prop_MaskVisor is 9.2 cm off Boy2's skin (median)"
+   ]
+  ],
+  "2377": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 7.3 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 5.6 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 6.7 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 48.8 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 6.3 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 6.7 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 7.1 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 5.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 6.7 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 7.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 6.2 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 6.4 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 6.7 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 6.6 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 6.9 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 6.6 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "2383": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 5.9 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 6.7 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 6.0 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 2.6 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 36.2 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 6.4 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 6.3 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 6.2 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 6.3 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 6.2 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 6.0 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 7.8 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 6.4 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 5.9 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 36.3 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 6.2 cm with no hand on it (nearest finger 15 cm)"
+   ]
+  ],
+  "2389": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 5.8 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 6.4 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 6.7 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 7.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 15.8 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 5.3 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 5.4 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 6.5 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 6.1 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 6.2 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 6.6 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 15.6 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 5.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 6.3 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 15.4 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 5.7 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "2395": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 6.3 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 1.2 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 3.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 5.8 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 6.4 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 6.4 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 6.1 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 5.2 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 4.4 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 3.3 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 5.3 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 36.4 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 6.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 6.1 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 7.2 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 6.1 cm with no hand on it (nearest finger 21 cm)"
+   ]
+  ],
+  "2401": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 5.7 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 48.8 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 48.6 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 5.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 6.7 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 5.6 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 5.9 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 6.4 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 48.7 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 48.7 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 6.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 6.5 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 5.8 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 6.3 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 6.5 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 5.6 cm with no hand on it (nearest finger 16 cm)"
+   ]
+  ],
+  "2407": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 6.6 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 2.7 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 4.4 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 7.4 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 6.6 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 6.9 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 6.6 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 6.7 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 3.6 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 4.1 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 7.0 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 7.0 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 6.9 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 23.8 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 6.5 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 7.6 cm with no hand on it (nearest finger 21 cm)"
+   ]
+  ],
+  "2527": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 44.2 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 40.1 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 44.0 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 40.0 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 39.2 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 44.1 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 41.4 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 43.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 41.6 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 43.1 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 42.9 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 55.5 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 42.3 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "2545": [
+   [
+    "PROPMOVE",
+    "FX_Bubble_00 moves 35.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_01 moves 40.1 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_02 moves 64.9 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_03 moves 35.3 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_04 moves 39.1 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_05 moves 40.3 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_06 moves 35.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_07 moves 38.6 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_08 moves 40.9 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_09 moves 62.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_10 moves 37.5 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_11 moves 41.1 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_12 moves 36.6 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_13 moves 37.1 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_14 moves 41.3 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "FX_Bubble_15 moves 37.2 cm with no hand on it (nearest finger 62 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 4,
+  "EMPTY": 264,
+  "INSIDE": 125,
+  "FILL": 3,
+  "CLAW": 101,
+  "CAMJUMP": 4,
+  "ATTACH": 6,
+  "PROPMOVE": 507
+ }
+}

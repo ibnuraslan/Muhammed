@@ -1,0 +1,113 @@
+{
+ "frames": {
+  "2209": {
+   "DiverA": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2215": {
+   "DiverA": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2221": {
+   "DiverA": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2227": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2233": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2239": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2245": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2251": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2257": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2263": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2269": {
+   "DiverA": {
+    "self": 7,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2275": {
+   "DiverA": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2281": {
+   "DiverA": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2401": {
+   "Coach": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "2443": {
+   "DiverB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
