@@ -1,0 +1,157 @@
+HeadsetBullet audit (step 10)
+TOTALS body x headset=3418, foot hover=5, grasp contact (hands on cups)=11180, hair x headset=93, hands x keyboard/mouse=1049
+MAX PENETRATION DEPTH hands into desk/keyboard/mouse (m)=0.0028, hands into headset (m)=0.0029, head into headset (m)=0.0000
+
+f0001  ok
+f0011  hands x keyboard/mouse 28 tris
+f0021  ok
+f0031  hands x keyboard/mouse 42 tris
+f0041  hands x keyboard/mouse 53 tris
+f0051  ok
+f0061  ok
+f0071  ok
+f0081  hands x keyboard/mouse 29 tris
+f0091  ok
+f0101  ok
+f0111  hands x keyboard/mouse 29 tris
+f0121  ok
+f0131  ok
+f0141  hands x keyboard/mouse 32 tris
+f0151  hands x keyboard/mouse 23 tris
+f0161  ok
+f0171  ok
+f0181  hands x keyboard/mouse 33 tris
+f0191  ok
+f0201  ok
+f0211  hands x keyboard/mouse 58 tris
+f0221  footL hover 0.025
+f0231  footL hover 0.031
+f0241  footL hover 0.022
+f0251  hands x keyboard/mouse 41 tris
+f0261  ok
+f0271  ok
+f0281  hands x keyboard/mouse 58 tris
+f0291  ok
+f0301  ok
+f0311  ok
+f0321  hands x keyboard/mouse 20 tris
+f0331  ok
+f0341  ok
+f0351  hands x keyboard/mouse 34 tris
+f0361  ok
+f0371  ok
+f0381  hands x keyboard/mouse 40 tris
+f0391  hands x keyboard/mouse 33 tris
+f0401  hands x keyboard/mouse 16 tris
+f0411  ok
+f0421  hands x keyboard/mouse 56 tris
+f0431  ok
+f0441  ok
+f0451  hands x keyboard/mouse 26 tris
+f0461  ok
+f0471  ok
+f0481  ok
+f0491  hands x keyboard/mouse 44 tris
+f0501  hands x keyboard/mouse 28 tris
+f0511  ok
+f0521  hands x keyboard/mouse 28 tris
+f0531  ok
+f0541  ok
+f0551  ok
+f0561  hands x keyboard/mouse 27 tris
+f0571  hands x keyboard/mouse 33 tris
+f0581  ok
+f0591  hands x keyboard/mouse 37 tris
+f0601  hands x keyboard/mouse 38 tris
+f0611  ok
+f0621  ok
+f0631  ok
+f0641  hands x keyboard/mouse 22 tris
+f0651  ok
+f0661  hands x keyboard/mouse 50 tris
+f0671  hands x keyboard/mouse 91 tris
+f0681  ok
+f0691  ok
+f0701  ok
+f0711  footR hover 0.026
+f0721  footR hover 0.020
+f0731  ok
+f0741  ok
+f0751  ok
+f0761  ok
+f0771  ok
+f0781  ok
+f0791  ok
+f0801  ok
+f0811  ok
+f0821  ok
+f0831  ok
+f0841  ok
+f0851  ok
+f0861  ok
+f0871  ok
+f0881  ok
+f0891  ok
+f0901  ok
+f0911  ok
+f0921  ok
+f0931  ok
+f0941  ok
+f0951  ok
+f0961  ok
+f0971  ok
+f0981  ok
+f0991  ok
+f1001  ok
+f1011  ok
+f1021  ok
+f1031  ok
+f1041  ok
+f1051  ok
+f1061  ok
+f1071  ok
+f1081  ok
+f1091  ok
+f1101  ok
+f1111  ok
+f1121  ok
+f1131  ok
+f1141  ok
+f1151  ok
+f1161  ok
+f1171  ok
+f1181  ok
+f1191  ok
+f1201  ok
+f1211  hand-cup grasp contact 330 tris; body x headset 52 tris
+f1221  hand-cup grasp contact 1496 tris; body x headset 372 tris
+f1231  hand-cup grasp contact 1168 tris; body x headset 436 tris; hair x headset 93 tris
+f1241  hand-cup grasp contact 1137 tris; body x headset 215 tris
+f1251  hand-cup grasp contact 1146 tris; body x headset 402 tris
+f1261  hand-cup grasp contact 1568 tris; body x headset 371 tris
+f1271  hand-cup grasp contact 1202 tris; body x headset 665 tris
+f1281  ok
+f1291  hand-cup grasp contact 37 tris; body x headset 17 tris
+f1301  hand-cup grasp contact 34 tris; body x headset 14 tris
+f1311  ok
+f1321  ok
+f1331  hand-cup grasp contact 11 tris; body x headset 9 tris
+f1341  ok
+f1351  ok
+f1361  hand-cup grasp contact 5 tris; body x headset 17 tris
+f1371  ok
+f1381  ok
+f1391  hand-cup grasp contact 25 tris; body x headset 25 tris
+f1401  ok
+f1411  ok
+f1421  hand-cup grasp contact 35 tris; body x headset 27 tris
+f1431  ok
+f1441  ok
+f1451  hand-cup grasp contact 9 tris; body x headset 19 tris
+f1461  ok
+f1471  ok
+f1481  hand-cup grasp contact 10 tris; body x headset 10 tris
+f1491  ok
+f0700  ok
+f1222  hand-cup grasp contact 1575 tris; body x headset 346 tris
+f1252  hand-cup grasp contact 1392 tris; body x headset 421 tris

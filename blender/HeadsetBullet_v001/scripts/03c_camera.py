@@ -21,14 +21,14 @@ K = [  # frame, camera, aim, lens, f-stop
     (420,  headc(420) + V(0.55, -0.35, 0.32), V(0.18, 3.40, 0.82), 30, 4.0),
     (480,  V(0.48, 3.60, 1.06), headc(480), 28, 2.8),
     (530,  headc(530) + V(-0.62, 0.42, 0.04), headc(530), 32, 2.8),
-    (571,  PI + V(-0.40, -0.22, 0.05), B(571) * 0.75 + PI * 0.25, 40, 2.8),
-    (640,  PI + V(-0.15, -0.09, 0.03), B(640) * 0.7 + PI * 0.3, 50, 4.0),
-    (697,  PI + V(-0.12, -0.045, 0.015), PI, 55, 2.8),
+    (571,  PI + V(-0.36, 0.30, 0.17), B(571) * 0.5 + PI * 0.5, 38, 2.8),
+    (640,  PI + V(-0.22, 0.16, 0.10), B(640) * 0.5 + PI * 0.5, 45, 4.0),
+    (697,  PI + V(-0.16, 0.02, 0.03), PI, 50, 2.8),
     (722,  pi_w(722) + V(-0.22, -0.10, 0.06), pi_w(722) * 0.7 + headc(722) * 0.3, 45, 2.8),
     (772,  pi_w(772) + V(-0.20, 0.26, 0.16), pi_w(772) * 0.6 + headc(772) * 0.4, 40, 4.0),
-    (835,  pi_w(835) + V(-0.10, -0.06, 0.22), hsc(835) * 0.3 + pi_w(835) * 0.7, 45, 5.6),
-    (885,  pi_w(885) + V(-0.14, -0.10, 0.17), pi_w(885), 50, 5.6),
-    (930,  pi_w(930) + V(-0.16, -0.02, 0.14), pi_w(930), 55, 5.6),
+    (835,  pi_w(835) + V(-0.17, 0.02, 0.14), hsc(835) * 0.3 + pi_w(835) * 0.7, 45, 5.6),
+    (885,  pi_w(885) + V(-0.17, -0.05, 0.12), pi_w(885), 50, 5.6),
+    (930,  pi_w(930) + V(-0.18, 0.04, 0.11), pi_w(930), 55, 5.6),
     (955,  pi_w(955) + V(-0.22, 0.05, 0.12), pi_w(955) + DR * 0.10, 40, 4.0),
     (990,  B(990) + V(-0.10, -0.26, 0.07), B(990) - DR * 0.02, 35, 5.6),
     (1008, B(1008) - DR * 0.06 + V(0, -0.16, 0.05), B(1008) - DR * 0.01, 35, 5.6),
@@ -43,7 +43,7 @@ K = [  # frame, camera, aim, lens, f-stop
     (1300, hsc(1300) + V(-0.26, 0.26, 0.06), hsc(1300), 40, 2.8),
     (1335, headc(1335) + V(-0.12, 0.55, 0.0), headc(1335), 45, 2.8),
     (1390, headc(1390) + V(-0.26, 0.47, 0.03), headc(1390), 50, 2.8),
-    (1418, headc(1418) + V(0.45, 0.32, 0.06), headc(1418), 35, 2.8),
+    (1418, headc(1418) + V(0.30, 0.38, 0.10), headc(1418), 35, 4.0),
     (1445, headc(1445) + V(0.50, -0.16, 0.13), HOLEv, 32, 4.0),
     (1500, headc(1500) + V(0.40, -0.12, 0.10), HOLEv, 55, 5.6)]
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.004; cam_d.clip_end = 300
@@ -54,7 +54,9 @@ tt = cam.constraints.new('TRACK_TO'); tt.target = aim; tt.track_axis = 'TRACK_NE
 foc = bpy.data.objects.new("CAM_Film_Focus", None); link(foc, "Camera"); cam_d.dof.focus_object = foc
 FOCUS = {640: B(640), 1: B(1), 40: B(40), 80: B(80), 115: B(115), 133: G, 165: B(165), 205: B(205), 241: B(241), 300: B(300),
          990: B(990), 1030: B(1030), 1445: HOLEv, 1500: HOLEv}
-fc_ = catmull([(k[0], k[1]) for k in K]); fa_ = catmull([(k[0], k[2]) for k in K])
+fc_ = catmull([(k[0], k[1]) for k in K])
+_fa = [pchip([(k[0], k[2][i]) for k in K]) for i in range(3)]      # monotone aim: no overshoot toward far targets
+fa_ = lambda f: Vector([g(f) for g in _fa])
 ff_ = catmull([(k[0], FOCUS.get(k[0], k[2])) for k in K])
 fl_ = catmull([(k[0], float(k[3])) for k in K]); fs_ = catmull([(k[0], float(k[4])) for k in K])
 # chase segments: interpolate the camera/aim OFFSET from the bullet (the bullet is too fast for absolute keys), blend out

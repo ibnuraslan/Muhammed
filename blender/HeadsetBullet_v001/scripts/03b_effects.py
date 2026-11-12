@@ -393,7 +393,7 @@ PRF.rotation_euler = (0, 0, 0); PRF.keyframe_insert("rotation_euler", frame=1); 
 CAN = bpy.data.objects["Can_Tip"]; CAN.rotation_mode = 'QUATERNION'
 c0 = CAN.location.copy(); tipd = Vector((0.55, -0.83, 0)).normalized(); P0 = c0 + tipd * 0.033 - Vector((0, 0, 0.06))
 axis = Vector((0, 0, 1)).cross(tipd).normalized()
-for f in list(range(1, 1501, 2)):
+for f in []:   # v006: the can no longer tips on its own (props only move by a hand)
     if f < 712: th, roll = 0.0, 0.0
     else:
         u = min(1.0, (f - 712) / 20.0); th = R_(90) * u * u

@@ -13,6 +13,9 @@ names = [("finger%d-%d.%s" % (k, j, s)) for s in "LR" for k in range(1, 6) for j
 def localrot(n):
     pb = P[n]; rest = B[n].matrix_local; prest = B[n].parent.matrix_local
     return ((pb.parent.matrix @ (prest.inverted() @ rest)).inverted() @ pb.matrix).to_euler('XYZ')
+# wrists: the natural range measured on the approved v005 (good phases +-10 deg); pinned so the v006 shock-hover pose
+# doesn't widen the range and change how the grab is clamped
+WRIST_FIXED = {"wrist.L": ((-78.5, 55.4), (-129.6, 49.7), (-61.2, 31.1)), "wrist.R": ((-34.1, 45.3), (-41.3, 138.3), (-49.8, 31.0))}
 obs = {n: [[1e9, -1e9] for _ in range(3)] for n in names}
 for f in range(1, 1501, 3):
     sc.frame_set(f)
@@ -33,6 +36,7 @@ for n in names:
             lo, hi = max(lo, spec[i][0]), min(hi, spec[i][1])
             if lo > hi: lo = hi = (spec[i][0] + spec[i][1]) / 2
         lim.append((lo, hi))
+    if n in WRIST_FIXED: lim = WRIST_FIXED[n]
     c = P[n].constraints.new('LIMIT_ROTATION'); c.name = "HandLimit"; c.owner_space = 'LOCAL'
     c.use_limit_x = c.use_limit_y = c.use_limit_z = True
     (c.min_x, c.max_x), (c.min_y, c.max_y), (c.min_z, c.max_z) = [(R(a), R(b)) for a, b in lim]
