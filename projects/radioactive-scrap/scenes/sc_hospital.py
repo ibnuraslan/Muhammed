@@ -241,7 +241,7 @@ def build(variant=None):
     # ---------------- people
     P = {}
     P["m1"] = person("ManA", 1.0, 38, "wool_brown", "short02", moustache=True)
-    P["m2"] = person("ManB", 1.0, 45, "charcoal", "short03", hat="flat", hat_col=(0.24, 0.2, 0.15), moustache=True)
+    P["m2"] = person("ManB", 1.0, 45, "charcoal", "short02", hat="flat", hat_col=(0.24, 0.2, 0.15), moustache=True)
     P["doc"] = person("Doctor", 1.0, 46, "doctor", "short03", hv=0.4)
     P["nurse"] = person("Nurse", 0.0, 32, "nurse", "bob02", hv=0.1)
     P["son"] = person("Son", 1.0, 19, "navy", "short04")
@@ -421,7 +421,7 @@ def c2_5a(c, t):
 
 def c2_6a(c, t):          # medium: the doctor at the counter dialling, whole upper body in frame
     sec = S("ch2_6a", t); hide(c, ("doc",)); leaves(c, 1)
-    ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.4, 0.75, 0))
+    ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.4, 0.5, 0))
     stand_at(h, loc, ns + Vector((0.4, 0, 0)))
     sd = forward(h).cross(Vector((0, 0, 1)))
     dial = ns + Vector((0.4, 0.0, 1.22))
@@ -602,7 +602,7 @@ SHOTS = {
     "ch2_4a": ("day", c2_4a, C(WARD + Vector((2.2, 2.6, 1.6)), WARD + Vector((1.8, 2.3, 1.6)), WARD + Vector((0.2, -3.2, 1.5)), 35), 4.0),
     "ch2_4b": ("day", c2_4b, C(WARD + Vector((-1.8, 1.8, 1.6)), WARD + Vector((-1.2, 0.8, 1.6)), WARD + Vector((0.2, -3.2, 1.55)), 40), 2.8),
     "ch2_5a": ("day", c2_5a, C(BEDS[2] + Vector((-2.2, -2.4, 1.5)), BEDS[2] + Vector((-2.0, -2.2, 1.5)), BEDS[2] + Vector((0.9, -0.6, 1.5)), 38), 2.8),
-    "ch2_6a": ("day", c2_6a, C(COR + Vector((3.6, -0.6, 1.55)), COR + Vector((3.4, -0.5, 1.55)), COR + Vector((1.4, -0.25, 1.4)), 35), 2.8),
+    "ch2_6a": ("day", c2_6a, C(COR + Vector((4.2, -0.9, 1.55)), COR + Vector((4.0, -0.8, 1.55)), COR + Vector((1.4, -0.25, 1.4)), 32), 2.8),
     "ch2_6b": ("day", c2_6b, C(COR + Vector((-2.8, 0.9, 1.55)), COR + Vector((-2.6, 0.8, 1.55)), COR + Vector((1.4, -0.2, 1.4)), 35), 4.0),
     "ch4_1a": ("day", c4_1a, C(WARD + Vector((-6.0, -2.6, 1.7)), WARD + Vector((5.0, -2.6, 1.7)), WARD + Vector((-4.0, 2.2, 0.8)), 28, WARD + Vector((5.0, 2.2, 0.8))), 4.0),
     "ch4_1b": ("day", c4_1b, C(BEDS[2] + Vector((1.6, -3.4, 1.5)), BEDS[2] + Vector((1.4, -3.1, 1.5)), BEDS[2] + Vector((0.1, -1.5, 1.3)), 35), 2.8),
