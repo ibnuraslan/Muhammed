@@ -77,3 +77,19 @@ Most first submissions came back with the same faults, so a chat may only submit
 6. **Use `blender/pipeline/hand_poses.py`** once it lands on this branch (pose presets plus `grip_object`). Don't hand-set finger angles.
 
 In your submission message, list each of the 6 points with "checked".
+
+## Automatic QA script (mandatory, Nov 12 15:00 UTC)
+`blender/pipeline/qa_check.py` checks the scene geometry for exactly the faults that keep getting rejected. Run it on your packed file:
+```
+blender -b YourFilm_vNNN_60fps.blend --python blender/pipeline/qa_check.py -- review/qa_vNNN.json 6 beats.json
+```
+It flags:
+- **EMPTY:** no character in view, or walls or props fill the frame while characters cover under 15 %.
+- **FILL:** one prop or surface fills the frame, or hair or the top of a head covers over 25 %.
+- **INSIDE:** the camera is inside geometry.
+- **BACKHEAD:** the back of a head on a story beat.
+- **HOVER:** a hand within 12 cm of a prop with no fingertip touching it.
+- **CLAW:** fingers curled in the air touching nothing, or bent with a straight base joint.
+- **FACEPRESS:** a hand on the face.
+
+Fix every flag. A flag may stay only if it is intended: a wide establishing shot, a fist that is meant, or contact you meant. List each one that stays, with its reason, in ACTING_notes.md. Attach the JSON with your submission. Submissions without it come straight back.
