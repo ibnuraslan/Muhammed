@@ -1,0 +1,4 @@
+HAND AUDIT: 795 frames checked (every 2nd frame); BVH overlap on the cage mesh
+  overlaps: 0
+  total overlap frames: 0
+JOINT RANGE (every 10th frame): 0 violations []

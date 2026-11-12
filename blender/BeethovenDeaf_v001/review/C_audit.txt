@@ -7,4 +7,4 @@ FEET shoe sole lowest z (0 = floor): [(1, -0.0001), (41, -0.0001), (81, -0.0001)
 ROD tip-to-bite distance after the clamp: max 0.00000 m
 PAGES on floor, origin z range: 0.0015 0.0054 (page thickness 0.8 mm; floor at 0)
 CAMERA inside solid geometry (>=4/6 back-face hits): none
-CAMERA closest clearance to a solid surface: [(0.017, 1105), (0.018, 1109), (0.018, 1101), (0.019, 1097), (0.02, 1113), (0.022, 1093)]
+CAMERA closest clearance to a solid surface: [(0.021, 1105), (0.021, 1109), (0.021, 1101), (0.023, 1113), (0.023, 1097), (0.025, 1093)]

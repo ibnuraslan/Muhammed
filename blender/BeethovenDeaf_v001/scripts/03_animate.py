@@ -274,7 +274,7 @@ for i, dx in enumerate((-0.14, 0.12, -0.02, 0.2, -0.22)):
 sc["desk_pages"] = [p.name for p in DESK_PAGES]
 
 # ---------------------------------------------------------------- pages fly off the desk in beat 8 and land flat on the floor
-for i, p in enumerate(DESK_PAGES[2:]):
+for i, p in enumerate([] if os.environ.get('PAGES_FLY') != '1' else DESK_PAGES[2:]):   # v009: pages stay on the desk (no prop moves without a hand)
     f0 = BEAT[7] + 30 + i * 55
     L0, R0 = p.location.copy(), p.rotation_euler.copy()
     land = Vector((RND.choice((-1, 1)) * RND.uniform(0.9, 1.6), RND.uniform(-1.4, 0.3), 0.0016 + 0.0004 * i))
