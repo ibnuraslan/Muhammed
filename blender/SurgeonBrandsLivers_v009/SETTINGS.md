@@ -1,10 +1,10 @@
-# SurgeonBrandsLivers_v008 — farm render sheet
+# SurgeonBrandsLivers_v009 — farm render sheet
 
-These values were read back from `SurgeonBrandsLivers_v008_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
+These values were read back from `SurgeonBrandsLivers_v009_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `SurgeonBrandsLivers_v008_60fps.blend`: 65 MB, compressed, normal git file. All 92 images are packed: 1K JPEG/PNG, 2K only for the three hero faces and the liver, 1K HDRI. The hospital bed is decimated to 20k faces. There are no linked libraries. |
+| File | `SurgeonBrandsLivers_v009_60fps.blend`: 65 MB, compressed, normal git file. All 92 images are packed: 1K JPEG/PNG, 2K only for the three hero faces and the liver, 1K HDRI. The hospital bed is decimated to 20k faces. There are no linked libraries. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -16,7 +16,7 @@ These values were read back from `SurgeonBrandsLivers_v008_60fps.blend`, opened 
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
 | Motion blur | **Off** (animated-look rule: no heavy motion blur). If you turn it on, use position Start on Frame: the camera jumps across wall and floor slabs between two textured transit frames. |
 | Colour | Display sRGB. View AgX with the look "AgX - Punchy" (animated look). Exposure 0, gamma 1. |
-| Output | PNG, RGB, 8-bit, compression 15, written to `//render/SurgeonBrandsLivers_v008_####.png` |
+| Output | PNG, RGB, 8-bit, compression 15, written to `//render/SurgeonBrandsLivers_v009_####.png` |
 | Audio | None yet. There is no voiceover. The film is built to the beat-table target times; see `beats.json`. When the VO arrives, retime with `pipeline/retime_to_vo.py`, which swaps in the VO strip. |
 | Caches / sims | None: no simulations, particles, Alembic or drivers. Sparks and smoke are keyframed objects. The smoke is six tiny volume puffs (frames 168–324 only). |
 | Add-ons | None needed. MPFB2 only built the people. |
