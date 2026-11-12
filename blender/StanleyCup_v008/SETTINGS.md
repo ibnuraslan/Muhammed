@@ -1,10 +1,10 @@
-# StanleyCup_v006 — farm render sheet
+# StanleyCup_v008 — farm render sheet
 
-Values read back from `StanleyCup_v006_60fps.blend` opened in factory-startup Blender 5.2.2 with no add-ons.
+Values read back from `StanleyCup_v008_60fps.blend` opened in factory-startup Blender 5.2.2 with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `StanleyCup_v006_60fps.blend`: 67 MB, compressed. All images packed: characters, floor and wall colour at 2K; props, set dressing and all normal/roughness maps at 1K (JPEG q90, alpha masks PNG). Stored as a normal Git file (under 100 MB; the LFS upload was refused tonight). |
+| File | `StanleyCup_v008_60fps.blend`: 67 MB, compressed. All images packed: characters, floor and wall colour at 2K; props, set dressing and all normal/roughness maps at 1K (JPEG q90, alpha masks PNG). Stored as a normal Git file (under 100 MB; the LFS upload was refused tonight). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. Device saved as CPU; GPU is fine. No special features. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -16,7 +16,7 @@ Values read back from `StanleyCup_v006_60fps.blend` opened in factory-startup Bl
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
 | Motion blur | Off (animated look, per STYLE_ANIMATED.md) |
 | Colour | Display sRGB. View AgX, look "AgX - Punchy". Exposure keyed: +0.25 on the street, −0.05 in the room (ramp f160–240). Gamma 1.0. |
-| Output | PNG, RGB, 8-bit, compression 15, written to `//render/StanleyCup_v006_####.png` |
+| Output | PNG, RGB, 8-bit, compression 15, written to `//render/StanleyCup_v008_####.png` |
 | Audio | None yet (VO not supplied). |
 | Caches / sims | None. The lawn grass is a hair particle system (no cache needed). Booleans (bullet holes) and the Wave modifier (ripples) evaluate per frame. No Alembic, linked libraries or drivers. |
 | Add-ons | None needed. MPFB2 only built the characters. |
