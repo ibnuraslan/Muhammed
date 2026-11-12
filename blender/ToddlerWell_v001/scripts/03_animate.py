@@ -209,7 +209,7 @@ def crowd_idle(c, f0, f1, xy, yaw, mood):
             mp_ = V(CROWD_POS["Mother"]); my_ = math.degrees(math.atan2(-mp_.x, mp_.y))
             mb = MO.rot(my_, 14)
             base = V((mp_.x, mp_.y, MO.root.z))
-            hands = {"R": ("w", base + mb @ V((0.0, 0.2, 0.45))), "L": ("w", base + mb @ V((-0.08, 0.2, 0.22)))}
+            hands = {"R": ("wg", base + mb @ V((0.0, 0.13, 0.45))), "L": ("wg", base + mb @ V((-0.08, 0.13, 0.22)))}
         elif mood == "point":
             hands = {"R": ("rel", (0.05, 0.75 * c.arm, 0.1 * c.arm))} if (i % 4) < 2 else {}
         elif mood == "cheer":
@@ -383,9 +383,9 @@ for f, zr, flex, xy_ in LOWER:
 # beat 9: at the bottom: reach, grip the toddler's upper arms (toddler arms up)
 BOT = LOWER[-1][1]
 TD_ROOT = V((0, 0, FZ + T.root.z))
-grip_pts = {"L": TD_ROOT + V((0.07, 0.0, 0.42)), "R": TD_ROOT + V((-0.07, 0.0, 0.42))}
+grip_pts = {"L": TD_ROOT + V((0.07, 0.0, 0.44)), "R": TD_ROOT + V((-0.07, 0.0, 0.44))}     # where his reach (root - 0.97) meets the toddler's forearms
 for f, k in ((1504, 0.0), (1520, 0.5), (1536, 1.0), (1552, 1.0), (1580, 1.0), (1610, 1.0), (1626, 1.0)):
-    zr = BOT - 0.1 * ease(k)
+    zr = BOT - 0.27 * ease(k)
     rp = V((0, 0, zr)); Rb = Rx(180)
     hl = (rp + Rb @ V((0.12, 0.05, 0.75))).lerp(grip_pts["L"] + V((0, 0, 0.02)), ease(k))
     hr = (rp + Rb @ V((-0.12, 0.05, 0.75))).lerp(grip_pts["R"] + V((0, 0, 0.02)), ease(k))
@@ -397,17 +397,17 @@ for f in range(1500, 1628, 8):
     k = ease((f - 1500) / 40)
     jaw(T, f, JAW)
     T.key(f, V((0, 0)), yb, z=FZ, flex=-12, head=(LOOK, 0),
-          hands={"L": ("w", (TD_ROOT + V((0.1, -0.02, 0.38))).lerp(grip_pts["L"] + V((0.0, 0.0, 0.03)), k)),
-                 "R": ("w", (TD_ROOT + V((-0.1, -0.02, 0.38))).lerp(grip_pts["R"] + V((0.0, 0.0, 0.03)), k))})
+          hands={"L": ("w", (TD_ROOT + V((0.1, -0.02, 0.38))).lerp(grip_pts["L"] + V((0.0, -0.03, 0.12)), k)),
+                 "R": ("w", (TD_ROOT + V((-0.1, -0.02, 0.38))).lerp(grip_pts["R"] + V((0.0, -0.03, 0.12)), k))})
 # beat 10 (1627-1764): rise together; the toddler hangs from the teen's grip
 RISE0, RISE1 = 1630, 1772
 rise_z = {}
 for f in range(RISE0, RISE1 + 1, 2):
     u = (f - RISE0) / (RISE1 - RISE0)
-    rise_z[f] = (BOT - 0.1) + ((0.5 + TE.root.z * 0.0 + 1.0) - (BOT - 0.1)) * (0.15 * u + 0.85 * ease(u))
+    rise_z[f] = (BOT - 0.27) + ((0.5 + TE.root.z * 0.0 + 1.0) - (BOT - 0.27)) * (0.15 * u + 0.85 * ease(u))
 for f in range(RISE0, RISE1 + 1, 4):
     zr = rise_z[f]; rp = V((0, 0, zr)); Rb = Rx(180)
-    dz = zr - (BOT - 0.1)
+    dz = zr - (BOT - 0.27)
     gl = grip_pts["L"] + V((0, 0, 0.02 + dz)); gr = grip_pts["R"] + V((0, 0, 0.02 + dz))
     TE.key(f, V((0, 0)), 0, root_world=rp, flex=180, head=(-35, 0), side=3 * math.sin(f * 0.2),
            feet={s: teen_foot(rp, Rb, s) for s in "LR"},
@@ -416,7 +416,7 @@ for f in range(RISE0, RISE1 + 1, 4):
     tr = TD_ROOT + V((0, 0, dz))
     T.key(f, V((0, 0)), yb, root_world=tr, flex=-4, head=(-35, 10 * math.sin(f * 0.1)),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, -0.02, -T.root.z + T.ankle[s].z + 0.03 * math.sin(f * 0.2 + (s == "L") * 3))), Rz(yb)) for s in "LR"},
-          hands={"L": ("w", gl + V((0.0, 0, 0.07)) - (Rz(yb) @ V((0, -1, 0))) * 0.055), "R": ("w", gr + V((0.0, 0, 0.07)) - (Rz(yb) @ V((0, -1, 0))) * 0.055)})   # on his forearms, above his hands
+          hands={"L": ("w", gl + V((0.0, -0.03, 0.10))), "R": ("w", gr + V((0.0, -0.03, 0.10)))})   # on his forearms, above his hands
 HOLD = {RB: V((-0.55, 0.45)), RA: V((0.55, 0.45))}     # beside the rim, close enough to reach his shins
 # rescuers: hold his legs while he goes in (1312-1400), then haul line; haul hand over hand in beat 10
 for f in range(1314, 1420, 4):

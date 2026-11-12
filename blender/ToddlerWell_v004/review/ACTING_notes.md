@@ -56,3 +56,16 @@ BACKHEAD, HOVER and FACEPRESS are all 0 in v004. These flags stay:
 | EMPTY "character only 1–3 %" | 73–103, 1303 | Wide framings of the toddler near the well and the crowd at the rim: the people are small in the frame, but their faces read. |
 | FILL ShaftDust / ShadowSlab | 139–169, 253–265, 457, 541, 1363, 1555–1591 | ShaftDust is a thin volume of dust in the light shaft. ShadowSlab is a shadow-only helper that the camera never renders. Neither is a wall in the image. |
 | FILL "hair / top of head 32 %" | 1015 | One sampled frame in a camera move past the mother's head. Not a beat frame. |
+
+## Still open (this push, 18:20)
+I checked these myself on the sheet and the close-ups. They are not fixed yet; a fix is in progress for each.
+- **Sheet incomplete:** 52 of 65 cells. From s0039 on only the even cells rendered, because a render worker was killed for lack of memory. The cell labels after 19.5 s are therefore shifted: those cells are 1 s apart.
+- **Frame 271 (4.5 s):** still a near-empty frame of the orange shaft wall with a pink light glow.
+- **Frames 1681 and 1741 (the cells labelled 24.0 and 24.5 s):** the casing tube, the tripod leg and the winch plate fill the frame during the rise.
+- **Hand close-ups that fail:**
+  - Teen grabs toddler (1580) and toddler clings (1700): there is a 20–26 cm gap between their hands. The teen's arms can't reach the grip point inside the pipe. In progress: the teen goes 17 cm lower and they hold each other's forearms at a reachable height.
+  - Crowd1 restraining the mother (900): her hand is not visibly on the mother's back. In progress: the hand moves onto the back surface, with a grip.
+  - The operator's levers (640) and holders 1336: the close-up camera is blocked by the cab or a tripod leg, so the hands don't show.
+  - Hand-off (1884): shot in the moment the mother is still reaching. The shot moves to 1900, when she holds him.
+- **qa_check fc62c27:** CAMJUMP 0, BACKHEAD 0, HOVER 0, FACEPRESS 0. EMPTY 177, INSIDE 120 and FILL 19 are the intended shaft and cross-section shots in the table above, except 271, 1681 and 1741 (listed here as open).
+- **clip_scan:** 0 bad ranges on this package (`clip_v004.json`).
