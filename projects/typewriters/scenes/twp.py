@@ -246,7 +246,7 @@ def arm_len(h, side="R"):
     return sum(b[f"{n}.{side}"].length for n in ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02"))
 
 
-def bend_to(h, target, frac=0.8, max_deg=40, step=3.0):
+def bend_to(h, target, frac=0.8, max_deg=36, step=3.0):
     """Lean the upper body forward (spine and a little hip) until `target` is within a relaxed reach of the
     shoulders, so a reach ends in bent elbows instead of stiff outstretched arms."""
     target = Vector(target); L = arm_len(h)
@@ -278,10 +278,20 @@ def work(h, targets, poles=None, hand_dir=None, head=10):
     targets = dict(targets)
     if "L" in targets and "R" in targets and (Vector(targets["L"]) - Vector(targets["R"])).dot(side) > 0:
         targets["L"], targets["R"] = targets["R"], targets["L"]                # never cross the arms
+    L = arm_len(h)
     for sd, t in targets.items():
         sg = SIDE[sd]                                    # character's left is -side
+        sh = h.bone_head(f"upperarm01.{sd}"); t = Vector(t)
+        if (t - sh).length > 0.92 * L:                   # never a locked, straight arm
+            t = sh + (t - sh).normalized() * 0.92 * L
         pole = (poles or {}).get(sd) or (-side * sg * 0.35 + Vector((0, 0, -1)) - fwd * 0.2)
         reach(h, sd, Vector(t), pole, hand_dir if hand_dir is not None else fwd + Vector((0, 0, -0.6)))
     fingers_curl(h, 30)
     if head:
         h.rot("head", side, head)
+
+
+def chest_point(h, fwd_d=0.24, down=0.3):
+    """A point in front of the chest, from the shoulders (for things held in both hands)."""
+    m = (h.bone_head("upperarm01.L") + h.bone_head("upperarm01.R")) * 0.5
+    return m + forward(h) * fwd_d + Vector((0, 0, -down))

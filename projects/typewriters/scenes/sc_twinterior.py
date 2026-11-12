@@ -196,7 +196,7 @@ def animate(c, sec, shot):
         h.rot("head", (0, 0, 1), 35 * k)                                   # glancing into the rooms either side
         cb = c["clipboard"]; twp.hide([cb] + list(cb.children_recursive), False)
         fwd = twp.forward(h); chest = h.bone_head("spine03")
-        cb.location = chest + fwd * 0.3 + Vector((0, 0, -0.12)); cb.rotation_euler = (math.radians(-50), 0, math.atan2(fwd.x, -fwd.y))
+        cb.location = twp.chest_point(h, 0.24, 0.3); cb.rotation_euler = (math.radians(-50), 0, math.atan2(fwd.x, -fwd.y))
         for sd, sg in (("L", 1), ("R", -1)):
             side = fwd.cross(Vector((0, 0, 1)))
             reach(h, sd, cb.location - side * 0.1 * sg + Vector((0, 0, -0.03)), Vector((-sg * side.x, -sg * side.y, -0.8)), fwd)
@@ -207,7 +207,7 @@ def animate(c, sec, shot):
         a, b = P["staffA"], P["staffB"]
         twp.stand(a, (0.75, 0.15, 0), math.pi); twp.stand(b, (1.75, -0.1, 0), math.radians(-130))      # A in profile at the notice, B turned to her and to us
         cb = c["clipboard"]; twp.hide([cb] + list(cb.children_recursive), False)          # she holds a folder at her chest
-        fa = twp.forward(a); cb.location = a.bone_head("spine03") + fa * 0.25 + Vector((0, 0, -0.1)); cb.rotation_euler = (math.radians(-60), 0, math.atan2(fa.x, -fa.y))
+        fa = twp.forward(a); cb.location = twp.chest_point(a, 0.22, 0.28); cb.rotation_euler = (math.radians(-60), 0, math.atan2(fa.x, -fa.y))
         sa = fa.cross(Vector((0, 0, 1)))
         for sd, sg in (("L", 1), ("R", -1)):
             reach(a, sd, cb.location - sa * 0.08 * sg + Vector((0, 0, -0.04)), Vector((-sg * sa.x, -sg * sa.y, -0.8)), fa)

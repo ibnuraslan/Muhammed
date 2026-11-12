@@ -339,11 +339,11 @@ def animate(c, sec, shot):
             twp.work(h, {"L": tgt + Vector((0.13 + w, -0.05, 0.02 * math.sin(sec * 3))), "R": tgt + Vector((-0.13 + w, -0.05, 0))}, head=16)
     elif shot == "calendar":
         twp.walk(tC, (3.6, 3.25), (-2.6, 3.25), sec, speed=0.9)
-        box_ = c["carry"]; box_.location = tC.bone_head("spine03") + twp.forward(tC) * 0.32 + Vector((0, 0, -0.35))
+        box_ = c["carry"]; box_.location = twp.chest_point(tC, 0.3, 0.42)
         box_.rotation_euler = (0, 0, tC.arm.rotation_euler.z + math.pi)
         for sd, sg in (("L", 1), ("R", -1)):
             side = twp.forward(tC).cross(Vector((0, 0, 1)))
-            reach(tC, sd, box_.location + Vector((0, 0, 0.12)) + side * 0.28 * -sg, Vector((-sg * side.x, -sg * side.y, -0.8)), twp.forward(tC))
+            reach(tC, sd, box_.location + Vector((0, 0, 0.02)) + side * 0.23 * -sg, Vector((-sg * side.x, -sg * side.y, -0.8)), twp.forward(tC))
         place(tB, (-0.6, 1.4, 0), math.pi * 0.85)
     elif shot == "clear":
         cp = c["ciphers"][0]; place(tD, (cp.location.x, cp.location.y - 0.62, 0), math.pi)
@@ -361,7 +361,7 @@ def animate(c, sec, shot):
         x = -4.6 + (n_up - 1) * 0.82 if shot == "covers" else -4.6
         place(tB, (x, ROW_Y - 0.58, 0), math.pi)
         lid_pt = T.world(c["row"][max(0, n_up - 1)], (0, 0.0, 0.16))
-        twp.work(tB, {"R": lid_pt + Vector((-0.12, -0.1, 0.05)), "L": lid_pt + Vector((0.12, -0.1, 0.05))}, head=14)
+        twp.work(tB, {"R": lid_pt + Vector((-0.13, -0.2, 0.0)), "L": lid_pt + Vector((0.13, -0.2, 0.0))}, head=14)
         place(tA, (x + 1.8, ROW_Y - 0.62, 0), math.pi + 0.3)
         twp.work(tA, {"R": Vector((x + 1.68, ROW_Y - 0.22, 0.97)), "L": Vector((x + 1.92, ROW_Y - 0.22, 0.97))}, head=14)
         if shot == "covers":
