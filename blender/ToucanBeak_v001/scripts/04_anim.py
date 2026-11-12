@@ -259,7 +259,7 @@ VA, VB, AS = people["VetA"], people["VetB"], people["Assist"]
 for nm in ("VetA", "VetB", "Assist"):
     for s_ in "LR":
         for c in OB[nm].pose.bones["wrist." + s_].constraints:
-            if c.type == 'COPY_ROTATION': c.influence = 0.35
+            if c.type == 'COPY_ROTATION': c.influence = 1.0   # full hand orientation; hand_poses.add_hand_limits clamps the wrist (director, Nov 12 16:18)
 for nm in ("VetA", "VetB", "Assist"):
     for pb in OB[nm].pose.bones:
         n = pb.name
@@ -303,7 +303,7 @@ for f, dx in ((528, 0.06), (540, 0.06), (575, -0.04), (610, 0.05), (645, -0.05),
     VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.02)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 VB.key_hand("R", 696, Vector((6.86, 0.12, TZ + 0.46)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.2, 0.9, 1.2)))
 VB.key_hand("R", 712, Vector((6.62, 0.22, TZ + 0.2)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((6.3, 0.9, 1.2)))
-SCN_REST = Vector((6.5, 0.3, TZ + 0.0335))      # put down on VetB's right, standing on its grip end (hand-driven below)
+SCN_REST = Vector((6.38, 0.2, TZ + 0.0335))   # clear of the tweezers/pin resting at (6.52, 0.3)      # put down on VetB's right, standing on its grip end (hand-driven below)
 for f in (760, 1500):
     VB.key_hand("R", f, Vector((6.6, 0.16, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.3, 0.8, 1.0)))
     VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
@@ -661,7 +661,13 @@ def close_on(H, s, f, obj, grip):
 for obj_, s_, f0_, f1_, g_, pz_ in ((SCN, "R", 528, 744, "wrap", "wrap_grip"), (PRO, "R", 1509, 1692, "wrap", "cup_hold"),
                                     (SYR, "L", 1717, 1803, "pinch", "pinch"), (TWZ, "R", 1807, 1962, "pinch", "pinch")):
     for f_ in sorted(set(list(range(f0_, f1_ + 1, 4)) + [f1_])):
-        nudge_hand(VB.r.o, s_, f_, obj_, g_); HP.apply_pose(VB.r.o, s_, pz_, f_)
+        ev(f_); Mo = obj_.matrix_world
+        if obj_ is SCN:   C_ = Mo @ Vector((0, -0.02, -0.11)); ap_ = Mo.to_3x3() @ Vector((0, 1, 0))     # handle, palm side
+        elif obj_ is PRO: C_ = Mo @ (LB_base + (LB_tip - LB_base) * 0.5 + Vector((0, 0, 0.012))); ap_ = Vector((0, 0, -1))
+        else:
+            C_ = Mo.translation.copy(); sh_ = VB.r.o.matrix_world @ VB.r.o.pose.bones["upperarm01." + s_].head
+            ap_ = (C_ - sh_).normalized() + Vector((0, 0, -0.5))
+        HP.grip_object(VB.r.o, s_, f_, obj_, C_, ap_.normalized(), grip=("pinch" if g_ == "pinch" else "wrap"))
 hpose(VB, "R", (1968, 1975), "relaxed")               # released after setting the tweezers down
 hpose(VB, "R", (748,), "relaxed")                     # released after setting the scanner down
 ev(1910); print("PIN at 1910", [round(x, 3) for x in PIN.matrix_world.translation], "target", [round(x, 3) for x in pin_in])

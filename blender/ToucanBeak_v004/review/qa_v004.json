@@ -1022,82 +1022,130 @@
     "wall/prop fills the frame, character only 0%"
    ]
   ],
+  "541": [
+   [
+    "CLAW",
+    "VetB.R curl 71"
+   ]
+  ],
+  "547": [
+   [
+    "CLAW",
+    "VetB.R curl 26"
+   ]
+  ],
+  "559": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "565": [
+   [
+    "CLAW",
+    "VetB.R curl 63"
+   ]
+  ],
+  "571": [
+   [
+    "CLAW",
+    "VetB.R curl 70"
+   ]
+  ],
+  "577": [
+   [
+    "CLAW",
+    "VetB.R curl 70"
+   ]
+  ],
+  "583": [
+   [
+    "CLAW",
+    "VetB.R curl 64"
+   ]
+  ],
+  "589": [
+   [
+    "CLAW",
+    "VetB.R curl 60"
+   ]
+  ],
   "613": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 11%"
    ]
   ],
   "619": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "625": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "631": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "637": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 10%"
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "643": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 14%"
+    "wall/prop fills the frame, character only 12%"
    ]
   ],
   "649": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "655": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 11%"
    ]
   ],
   "661": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 9%"
    ]
   ],
   "667": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "673": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 7%"
    ]
   ],
   "679": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "685": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "697": [
@@ -2882,22 +2930,170 @@
     "no character in view"
    ]
   ],
+  "1543": [
+   [
+    "CLAW",
+    "VetB.R curl 64"
+   ]
+  ],
+  "1549": [
+   [
+    "CLAW",
+    "VetB.R curl 64"
+   ]
+  ],
+  "1555": [
+   [
+    "CLAW",
+    "VetB.R curl 56"
+   ]
+  ],
+  "1561": [
+   [
+    "CLAW",
+    "VetB.R curl 56"
+   ]
+  ],
+  "1567": [
+   [
+    "CLAW",
+    "VetB.R curl 56"
+   ]
+  ],
   "1573": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "VetB.R curl 56"
+   ]
+  ],
+  "1579": [
+   [
+    "CLAW",
+    "VetB.R curl 56"
+   ]
+  ],
+  "1585": [
+   [
+    "CLAW",
+    "VetB.R curl 56"
+   ]
+  ],
+  "1591": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1597": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1603": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1609": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1615": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1621": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1627": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1639": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1651": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1663": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1675": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1687": [
+   [
+    "CLAW",
+    "VetB.R curl 55"
+   ]
+  ],
+  "1693": [
+   [
+    "CLAW",
+    "VetB.R curl 54"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1753": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 10%"
    ]
   ],
-  "1579": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 12%"
-   ]
-  ],
   "1795": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1819": [
+   [
+    "CLAW",
+    "VetB.R curl 36"
+   ]
+  ],
+  "1879": [
+   [
+    "CLAW",
+    "VetB.R curl 35"
    ]
   ],
   "1969": [
@@ -3404,8 +3600,9 @@
   ]
  },
  "counts": {
-  "EMPTY": 611,
+  "EMPTY": 613,
   "INSIDE": 58,
-  "FILL": 35
+  "FILL": 35,
+  "CLAW": 31
  }
 }
