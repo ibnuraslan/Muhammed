@@ -72,3 +72,44 @@ The old `fingers()` turned all the finger bones about one shared palm axis, and 
 | 19.1–20.0 s (f1146–1201) | It flew over an empty rooftop. | It leaves through the office door at street level. A pedestrian walks up the street toward the dark station, and the camera follows him into the station shot. The path was checked with ray casts for walls. |
 
 The beat frames are unchanged and beats.json is identical. Everything kept from v006 is unchanged: the 3–4 s framings, the key ring, the two-step turn, the brow wipe and the final stroll.
+
+## v007: shared hand library and the QA gate (director, 14:40–15:40 UTC)
+- **Hand library:** every finger pose now comes from `../pipeline/hand_poses.py` (`apply_pose`), with the library's joint limits (`add_hand_limits`). There are no hand-set finger angles; the legacy curl numbers map to the nearest library pose. The explicit poses are:
+  - **pinch:** the card, the papers, the tapped file, the writing hand, the phone and the hat brim
+  - **hold_flat_object:** the board
+  - **wrap_grip:** the grips and the lever
+  - **relaxed:** idle hands
+- **Contact solvers:**
+  - `grip_fix`: the object runs through the fist.
+  - `touch_fix`: the fingertips rest on the surface. This covers the writing hand on the pad and the fingers on the hat brim.
+  - `snap_W`: the nearest fingertip sits on the prop. This covers the slip, the board, the papers, the file, the phone and the key ring.
+  - Hidden props (the slip before 261 and after 345, the key ring after 430) are parked off-set, so they don't float beside a hand.
+- **Re-staged for QA:**
+
+  | Frames | Change |
+  |---|---|
+  | 169 (beat 2) | Rider and officer side-on; no back of head. |
+  | 330 | A quick whip onto the worker at the gate. |
+  | 430 | Him low in frame at the gate. |
+  | 600–805 | The office camera at his side: face, hands and screen together. |
+  | 619 (beat 6) | Profile, no back of head. |
+  | 925–960 | The celebration framed at his chest and head. |
+  | 1004–1016 | Hold on him at the desk, then a whip to the cabinet. The switch between his two rigs happens off screen (ManW ends at 1012). |
+  | 1075, 1100 | The lever with his face. |
+  | 1215 | The station with the pedestrian. |
+  | 1232 (beat 10) | Through the window onto the fanning officer. |
+  | 1334 | A wide shot of two officers. |
+  | 1370–1381 (beat 11) | The sweating officer instead of a bare clock. |
+  | 1424–1440 | Out through the real doorway onto the final stroll; no black frames. |
+- **DustHaze:** a render-only fog volume. It is excluded from the viewport depsgraph (`hide_viewport`) so that scene ray casts don't treat it as a wall. It still renders, because `hide_render` stays False.
+
+### qa_check.py flags kept as intended (reasons)
+| Frames | Flag | Reason |
+|---|---|---|
+| 1–13 | EMPTY (rider 7–9 %) | The opening establishing shot: the rider rides toward the camera along the street and is clearly in frame. |
+| 487–529, 1147–1171 | EMPTY, INSIDE, FILL Fence_8_* | The subject is seen through a chain-link fence: the worker at the substation line, and the pedestrian on the street. The fence is a see-through alpha-mapped mesh, but the QA ray cast treats it as opaque. The renders show the character clearly. |
+| 547–565 | EMPTY | A 0.2 s whip pan from the substation to the office in the one continuous camera. |
+| 607–817 (some) | EMPTY (character 10–14 %) | The office: his face and hands share the frame with the laptop screen, which must stay readable (beats 5–7). |
+| 937, 1087–1093 | EMPTY (7–9 %) | Short pull-backs between close framings. He is in frame. |
+| 1093 | HOVER LeverGrip | The hand opening off the lever, 5 frames after the throw. |
+| 1099 | HOVER Spark_* | Sparks fly past his hands. |

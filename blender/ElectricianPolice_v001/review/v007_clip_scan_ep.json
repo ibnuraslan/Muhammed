@@ -1,0 +1,381 @@
+{
+ "frames": {
+  "337": {
+   "ManW": {
+    "self": 641,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "343": {
+   "ManW": {
+    "self": 693,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "349": {
+   "ManW": {
+    "self": 717,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "355": {
+   "ManW": {
+    "self": 714,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "361": {
+   "ManW": {
+    "self": 649,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "367": {
+   "ManW": {
+    "self": 449,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "373": {
+   "ManW": {
+    "self": 200,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "379": {
+   "ManW": {
+    "self": 106,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "385": {
+   "ManW": {
+    "self": 217,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "445": {
+   "ManW": {
+    "self": 519,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "451": {
+   "ManW": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "457": {
+   "ManW": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "481": {
+   "ManW": {
+    "self": 842,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "487": {
+   "ManW": {
+    "self": 916,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "493": {
+   "ManW": {
+    "self": 794,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "499": {
+   "ManW": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "523": {
+   "ManW": {
+    "self": 766,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "529": {
+   "ManW": {
+    "self": 561,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "535": {
+   "ManW": {
+    "self": 552,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Man": {
+    "self": 181,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1021": {
+   "Man": {
+    "self": 181,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1027": {
+   "Man": {
+    "self": 181,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1033": {
+   "Man": {
+    "self": 181,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1039": {
+   "Man": {
+    "self": 181,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1045": {
+   "Man": {
+    "self": 159,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1081": {
+   "Man": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1087": {
+   "Man": {
+    "self": 223,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1093": {
+   "Man": {
+    "self": 535,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1099": {
+   "Man": {
+    "self": 676,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1105": {
+   "Man": {
+    "self": 607,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1111": {
+   "Man": {
+    "self": 527,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1117": {
+   "Man": {
+    "self": 527,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1123": {
+   "Man": {
+    "self": 527,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1129": {
+   "Man": {
+    "self": 527,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1135": {
+   "Man": {
+    "self": 527,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1141": {
+   "Man": {
+    "self": 527,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1435": {
+   "ManW": {
+    "self": 168,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1441": {
+   "ManW": {
+    "self": 129,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1465": {
+   "ManW": {
+    "self": 196,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1471": {
+   "ManW": {
+    "self": 134,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1495": {
+   "ManW": {
+    "self": 18,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1501": {
+   "ManW": {
+    "self": 40,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1513": {
+   "ManW": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1525": {
+   "ManW": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1531": {
+   "ManW": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1537": {
+   "ManW": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1543": {
+   "ManW": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1549": {
+   "ManW": {
+    "self": 23,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   337,
+   385
+  ],
+  [
+   445,
+   445
+  ],
+  [
+   481,
+   493
+  ],
+  [
+   523,
+   535
+  ],
+  [
+   1015,
+   1045
+  ],
+  [
+   1087,
+   1141
+  ],
+  [
+   1435,
+   1441
+  ],
+  [
+   1465,
+   1471
+  ],
+  [
+   1501,
+   1501
+  ]
+ ],
+ "fps": 60
+}
