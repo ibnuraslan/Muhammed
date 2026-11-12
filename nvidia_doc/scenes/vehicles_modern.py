@@ -12,12 +12,8 @@ def fender_loft(name, keys, m, y, arch=None):
         x, z, r = arch
         c = V.cylinder("Cut", (x, 0, z), r, 1.2, V.liner(), axis='Y', verts=48)
         f.data.materials.append(V.liner())
-        b = f.modifiers.new("arch", 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = c; b.solver = 'EXACT'
-        try:
-            b.material_mode = 'TRANSFER'
-        except Exception:
-            pass
-        V.bake(f); import bpy; bpy.data.objects.remove(c)
+        V.boolean_cut(f, c)
+        import bpy; bpy.data.objects.remove(c)
         f.data.shade_smooth(); f.data.set_sharp_from_angle(angle=math.radians(40))
     f.data.transform(Matrix.Translation((0, y, 0)))
     return f
@@ -106,6 +102,7 @@ def sedan_1940s_us(variant=None):
     parts.append(V.plate("PlateF", (2.56, 0, 0.36), size=(0.30, 0.15)))
     parts.append(V.plate("PlateR", (-2.30, 0, 0.72), facing=-1, size=(0.30, 0.15)))
     parts.append(V.underbody("Floor", -1.9, 1.9, 0.6, 0.30, 0.50))
+    V.cabin_interior(parts, [-0.05, -0.95], 0.36, 0.66, 0.62, 1.0, 0.70)
     body = V.join(parts, "Sedan1940s")
     me = V.wheel_mesh("us40", R, 0.17, RIM, "black" if police else "cream", whitewall=not police)
     wheels4(body, me, XF, XR, TR, R, RIM)
@@ -120,7 +117,7 @@ def sedan_1940s_us(variant=None):
 
 
 # ============================================================================ 7. modern European saloon (+ police, unmarked, taxi)
-def sedan_modern(variant=None):
+def _modern_saloon(variant=None):
     XF, XR, R, RIM, TR = 1.40, -1.30, 0.316, 0.203, 0.77
     keys = [S(2.33, 0.36, 0.62, 0.66, 0.74, 0.64, rb=0.08, rs=0.08, crown=0.02, bul=0.0),
             S(2.28, 0.30, 0.70, 0.76, 0.82, 0.72, rb=0.08, rs=0.09, crown=0.03, bul=0.01),
@@ -183,6 +180,7 @@ def sedan_modern(variant=None):
     parts.append(V.plate("PlateR", (-2.25, 0, 0.62), facing=-1))
     parts.append(V.rbox("Antenna", (-0.95, 0, 1.47), (0.12, 0.03, 0.05), 0.015, bp, sub=1))
     parts.append(V.underbody("Floor", -1.9, 1.9, 0.7, 0.16, 0.30))
+    V.cabin_interior(parts, [-0.12, -1.0], 0.38, 0.50, 0.60, 0.86, 0.78)
     body = V.join(parts, "SedanModern")
     me = V.wheel_mesh("modern", R, 0.205, RIM, "alloy5")
     wheels4(body, me, XF, XR, TR, R, RIM)
@@ -213,7 +211,95 @@ def sedan_modern(variant=None):
 
 
 def taxi(variant=None):
-    return sedan_modern("taxi")
+    return _modern_saloon("taxi")
+
+
+def sedan_modern(variant=None):
+    """2007-2011 European 5-door hatchback (default, police_fr, police_fr_blue, unmarked); 'saloon' / 'taxi' give
+    the 4-door saloon body."""
+    if variant in ("saloon", "taxi"):
+        return _modern_saloon(None if variant == "saloon" else "taxi")
+    return _modern_hatch(variant)
+
+
+def _modern_hatch(variant=None):
+    XF, XR, R, RIM, TR = 1.27, -1.34, 0.316, 0.203, 0.77
+    keys = [S(2.14, 0.34, 0.64, 0.70, 0.76, 0.66, rb=0.1, rs=0.12, crown=0.02, bul=0.0),
+            S(2.08, 0.29, 0.72, 0.78, 0.84, 0.74, rb=0.1, rs=0.1, crown=0.03, bul=0.01),
+            S(1.85, 0.28, 0.80, 0.86, 0.88, 0.78, rb=0.09, rs=0.08, crown=0.04, bul=0.015, soft=True),
+            S(1.18, 0.29, 0.92, 0.98, 0.90, 0.79, rb=0.09, rs=0.06, crown=0.04, bul=0.02),
+            S(0.15, 0.30, 0.95, 1.48, 0.90, 0.67, rb=0.09, rs=0.06, rt=0.12, crown=0.05, bul=0.025),
+            S(-1.42, 0.31, 0.99, 1.45, 0.90, 0.67, rb=0.09, rs=0.06, rt=0.13, crown=0.05, bul=0.025, soft=True),
+            S(-1.96, 0.33, 1.0, 1.09, 0.87, 0.73, rb=0.1, rs=0.07, crown=0.04, bul=0.015),
+            S(-2.09, 0.36, 0.97, 1.03, 0.82, 0.70, rb=0.1, rs=0.1, crown=0.03, bul=0.0),
+            S(-2.14, 0.42, 0.92, 0.96, 0.74, 0.62, rb=0.08, rs=0.08, crown=0.02, bul=0.0)]
+    tag = "V_Paint_Hatch_" + (variant or "plain")
+
+    def masks(g):
+        M = V.window_masks(g, [[(-0.45, 0.99), (0.92, 0.99), (0.20, 1.405), (-0.45, 1.405)],
+                               [(-1.18, 1.0), (-0.53, 1.0), (-0.53, 1.405), (-1.10, 1.405)],
+                               [(-1.62, 1.03), (-1.27, 1.03), (-1.27, 1.38), (-1.40, 1.38)]],
+                           front=[(-0.74, 1.0), (0.74, 1.0), (0.58, 1.43), (-0.58, 1.43)],
+                           rear=[(-0.64, 1.12), (0.64, 1.12), (0.57, 1.40), (-0.57, 1.40)], seal=0.012)
+        side = g.ss(0.55, 0.7, g.any); fr = g.ss(0.15, 0.35, g.nx); rr = g.ss(0.15, 0.35, -g.nx)
+        bpil = side * g.inside(g.x, -0.53, -0.45, 0.003) * g.inside(g.z, 1.0, 1.4)
+        cpil = side * g.inside(g.x, -1.27, -1.18, 0.003) * g.inside(g.z, 1.0, 1.4)
+        M['black'] = g.mx(bpil, cpil)
+        M['head'] = g.ss(0.0, 0.004, g.poly(g.ay, g.z, [(0.42, 0.70), (0.86, 0.72), (0.83, 0.85), (0.47, 0.81)])) * g.ss(0.05, 0.2, g.nx) * g.ss(1.75, 1.85, g.x)
+        M['tail'] = g.ss(0.0, 0.004, g.poly(g.ay, g.z, [(0.52, 0.93), (0.87, 0.93), (0.85, 1.10), (0.60, 1.10)])) * g.ss(0.05, 0.2, -g.nx) * g.ss(-1.85, -1.95, g.x)
+        grille = g.ss(0.0, 0.004, g.poly(g.ay, g.z, [(0.0, 0.66), (0.40, 0.68), (0.38, 0.73), (0.0, 0.73)])) * fr
+        lower = g.ss(0.0, 0.004, g.poly(g.ay, g.z, [(0.0, 0.34), (0.58, 0.35), (0.54, 0.52), (0.0, 0.52)])) * fr
+        hc = V.E(g, g.math('FRACT', g.z / 0.03).s); hc2 = V.E(g, g.math('FRACT', g.y / 0.03).s)
+        mesh = g.mx(g.ss(0.2, 0.1, hc), g.ss(0.2, 0.1, hc2))
+        diff = g.ss(0.0, 0.004, g.poly(g.ay, g.z, [(0.0, 0.38), (0.65, 0.40), (0.65, 0.46), (0.0, 0.46)])) * rr
+        M['black'] = g.mx(M['black'], g.mx(g.mx(grille, lower) * (0.85 + mesh * 0.15), diff))
+        M['rubber'] = g.mx(M['rubber'], side * g.inside(g.z, 0.30, 0.36, 0.004) * g.inside(g.x, -0.95, 0.88))
+        M['gap'] = V.gaps(g, [('x', 0.90, 0.37, 0.93), ('x', -0.49, 0.37, 0.98), ('x', -1.20, 0.76, 1.0),
+                              ('arc', XR, 0.33, 0.45, -1.21, -0.88, 0.35, 0.77), ('z', 0.37, -0.89, 0.90),
+                              ('top_x', 1.20, 0.8), ('top_y', 0.80, 1.2, 2.1), ('top_x', -1.43, 0.75),
+                              ('end_z', -1, 0.80, 0.62), ('end_y', -1, 0.62, 0.80, 1.1), ('end_z', 1, 0.58, 0.82),
+                              ('end_z', -1, 0.58, 0.85)])
+        liv = []
+        if variant == "police_fr":
+            liv = [(side * g.inside(g.z, 0.38, 0.68, 0.002), (0.02, 0.05, 0.25)),
+                   (side * g.inside(g.z, 0.70, 0.725, 0.002), (0.55, 0.02, 0.02))]
+        elif variant == "police_fr_blue":
+            liv = [(side * g.inside(g.z, 0.60, 0.64, 0.002), (0.8, 0.8, 0.8))]
+        M['livery'] = liv
+        return M
+    paint = V.paint_shader(tag, masks, rough=0.3, metallic=0.25)
+    body = V.loft_body("HatchBody", keys, paint, step=0.10)
+    V.cut_arches(body, [(XF, 0.325, 0.37, 0.58, 1.2), (XR, 0.325, 0.37, 0.58, 1.2)], V.liner())
+    parts = [body]
+    bp = V.black_plastic()
+    for s in (-1, 1):
+        parts.append(V.mirror(f"Mirror{s}", (0.98, s * 0.85, 1.03), s, bp, size=(0.10, 0.20, 0.13), arm=0.07))
+        for x in (0.30, -0.80):
+            parts.append(V.rbox("Handle", (x, s * 0.885, 0.90), (0.15, 0.03, 0.03), 0.012, bp))
+    parts.append(V.plate("PlateF", (2.14, 0, 0.44)))
+    parts.append(V.plate("PlateR", (-2.135, 0, 0.70), facing=-1))
+    parts.append(V.rbox("Spoiler", (-1.47, 0, 1.465), (0.16, 1.15, 0.035), 0.012, V.black_plastic(), rot=(0, math.radians(8), 0)))
+    parts.append(V.rbox("Antenna", (-1.2, 0, 1.49), (0.12, 0.03, 0.05), 0.015, bp, sub=1))
+    parts.append(V.underbody("Floor", -1.8, 1.8, 0.7, 0.16, 0.30))
+    V.cabin_interior(parts, [-0.15, -1.02], 0.38, 0.52, 0.80, 0.88, 0.78)
+    parts.append(V.rbox("Parcel", (-1.62, 0, 1.0), (0.4, 1.4, 0.02), 0.01, V.interior()))
+    body = V.join(parts, "Hatch")
+    me = V.wheel_mesh("modern", R, 0.205, RIM, "alloy5")
+    wheels4(body, me, XF, XR, TR, R, RIM)
+    col = (0.55, 0.57, 0.6)
+    white = V.simple("V_White", (0.85, 0.86, 0.86), 0.35)
+    if variant in ("police_fr", "police_fr_blue"):
+        V.add_lightbar(body, (-0.45, 0, 1.50), length=1.15)
+        for s in (-1, 1):
+            t = V.side_text("Txt", "POLICE", -0.35, 0.53 if variant == "police_fr" else 0.76, 0.905, 0.17, white, s)
+            sw = t.modifiers.new("sw", 'SHRINKWRAP'); sw.target = body; sw.offset = 0.002; sw.wrap_mode = 'OUTSIDE_SURFACE'
+            V.bake(t); t.parent = body
+        col = (0.88, 0.89, 0.9) if variant == "police_fr" else (0.02, 0.05, 0.22)
+    elif variant == "unmarked":
+        V.add_rotating_beacon(body, (-0.25, 0.38, 1.49), (0.1, 0.25, 1.0), rate=1.6, rad=0.075, height=0.10)
+        col = (0.13, 0.14, 0.15)
+    return V._finish(body, "Hatch" + (variant or "").title().replace("_", ""), col,
+                     heads=[(2.05, s * 0.64, 0.77) for s in (-1, 1)])
 
 
 # ============================================================================ 8. city bus
@@ -274,6 +360,27 @@ def bus_city(variant=None):
     parts.append(V.rbox("Wiper", (6.02, 0.5, 1.25), (0.02, 0.02, 0.9), 0.005, bp, rot=(math.radians(-30), 0, 0)))
     parts.append(V.rbox("EngineGrille", (-5.3, -1.271, 1.5), (0.9, 0.01, 0.6), 0.01, bp))
     parts.append(V.underbody("Floor", -5.5, 5.5, 1.1, 0.25, 0.40))
+    fab = V.simple("V_BusSeat", (0.05, 0.08, 0.14), 0.85)
+    for k in range(9):
+        x = 4.4 - k * 1.05
+        for s in (-1, 1):
+            if s < 0 and k in (0, 4, 8):
+                continue
+            parts.append(V.rbox("BusSeat", (x, s * 0.75, 0.88), (0.45, 0.85, 0.12), 0.04, fab))
+            parts.append(V.rbox("BusSeatB", (x - 0.24, s * 0.75, 1.2), (0.1, 0.85, 0.62), 0.04, fab))
+    parts.append(V.rbox("Grabrail", (0, 0, 2.3), (11.0, 0.04, 0.04), 0.015, V.alu()))
+    for x in (4.85, 3.0, 1.15, -0.7, -2.4, -4.1):
+        for s in (-1, 1):
+            parts.append(V.cylinder("Pole", (x, s * 0.32, 1.45), 0.018, 1.9, V.simple("V_PoleYellow", (0.75, 0.55, 0.05), 0.35), axis='Z', verts=10))
+    led = V.simple("V_Dest", (0.02, 0.015, 0.0), 0.4, 0.0, **{'Emission Color': (1.0, 0.55, 0.12, 1), 'Emission Strength': 2.5})
+    for txt, y0, sz in (("12", 0.78, 0.17), ("CENTRE", -0.12, 0.15)):
+        t = V.text_mesh("Dest", txt, sz, led)
+        t.data.transform(Matrix.Rotation(math.pi / 2, 4, 'X')); t.data.transform(Matrix.Rotation(math.pi / 2, 4, 'Z'))
+        t.data.transform(Matrix.Translation((6.005, y0, 2.77))); parts.append(t)
+    rk = V.paint_shader("V_Paint_BusPod", lambda g: {}, rough=0.35)
+    for x, sx in ((4.2, 0.8), (2.6, 0.6), (-4.6, 1.4)):
+        parts.append(V.rbox("RoofHatch", (x, 0.3, H + 0.04), (sx, 0.8, 0.1), 0.03, rk))
+    V.cabin_interior(parts, [5.0], 0.75, 0.85, 5.6, 1.15, 1.1, bench_rear=False, wheel_r=0.24)
     body = V.join(parts, "BusCity")
     mf = V.wheel_mesh("bus_f", R, 0.28, RIM, "alloy7")
     md = V.wheel_mesh("bus_d", R, 0.28, RIM, "alloy7", dual=True)

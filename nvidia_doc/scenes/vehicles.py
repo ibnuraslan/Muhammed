@@ -24,6 +24,8 @@ import bpy, bmesh
 from mathutils import Vector, Matrix
 
 KINDS = {}            # kind -> builder(variant) -> root object (template)
+DEFAULT_DIRT = dict(excavator=0.45, grab_crane=0.55, boom_truck=0.35, flatbed_truck_1990s=0.35, delivery_truck=0.2,
+                    forklift=0.3, van_1990s=0.15, bus_city=0.1)
 _TEMPLATES = {}       # (kind, variant) -> template root, kept outside the scene
 _MATS = {}
 
@@ -113,6 +115,15 @@ class G:
         self.L.new(vec if vec is not None else self.tc.outputs['Object'], n.inputs['Vector'])
         return E(self, n.outputs['Fac'])
 
+    def noise_s(self, scale, sx, sy, sz, detail=4.0):
+        mp = self.N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (sx, sy, sz)
+        self.L.new(self.tc.outputs['Object'], mp.inputs['Vector'])
+        return self.noise(scale, detail, 0.6, vec=mp.outputs[0])
+
+    def backfacing(self):
+        n = self.N.new("ShaderNodeNewGeometry")
+        return E(self, n.outputs['Backfacing'])
+
     def bsdf(self, color, rough=0.5, metal=0.0, **kw):
         p = self.N.new("ShaderNodeBsdfPrincipled")
         self.link(color, p.inputs['Base Color']) if isinstance(color, E) else None
@@ -186,26 +197,29 @@ def glass():
 
 
 def lens(name, color=(1, 1, 1), em_col=(1.0, 0.9, 0.75), fluted=True):
-    """Clear or coloured lamp lens: refractive, faint fluting, emission switched by the object property 'lamps'."""
+    """Lamp lens: thin clear (or tinted) glass with faint fluting, over a reflector; it glows when the object's
+    'lamps' property is 1."""
     def f():
         m, g = _newmat(name)
         h = (g.math('SINE', g.y * 260.0) * 0.5 + 0.5) if fluted else 0.0
         on = g.attr("lamps")
-        cl = tuple(c * 0.55 for c in color) if max(color) > 0.9 and min(color) > 0.9 else color
-        p = g.bsdf(cl, 0.12, 0.55 if min(color) > 0.9 else 0.0, **{'Coat Weight': 1.0, 'Coat Roughness': 0.02,
-                                                                     'Emission Color': (*em_col, 1)})
-        g.link(on * 6.0, p.inputs['Emission Strength'])
+        tint = color if min(color) < 0.9 else (0.97, 0.98, 0.99)
+        p = g.bsdf(tint, 0.02, 0.0, **{'Transmission Weight': 1.0, 'IOR': 1.49, 'Emission Color': (*em_col, 1)})
+        p.inputs['Thin Wall'].default_value = True
+        g.link(on * 4.0, p.inputs['Emission Strength'])
         if fluted:
-            g.L.new(g.bump(h, 0.25, 0.002), p.inputs['Normal'])
+            g.L.new(g.bump(h, 0.35, 0.002), p.inputs['Normal'])
         g.out(p); return m
     return mat(name, f)
 
 
 def lamp_core(name, em_col, strength):
-    """Reflector/bulb behind a lens: chrome when off, glowing when the object's 'lamps' property is 1."""
+    """Chrome reflector behind a lens (faceted, so it sparkles through the glass); glows when 'lamps' is 1."""
     def f():
         m, g = _newmat(name)
-        p = g.bsdf((0.8, 0.8, 0.8), 0.3, 0.55, **{'Emission Color': (*em_col, 1)})
+        p = g.bsdf((0.95, 0.95, 0.96), 0.26, 0.85, **{'Emission Color': (*em_col, 1)})
+        fac = (g.math('SINE', g.y * 140.0) * g.math('SINE', g.z * 140.0)) * 0.5 + 0.5
+        g.L.new(g.bump(fac, 0.6, 0.003), p.inputs['Normal'])
         g.link(g.attr("lamps") * strength, p.inputs['Emission Strength'])
         g.out(p); return m
     return mat(name, f)
@@ -439,8 +453,10 @@ def section(st):
     zb, belt, top, w, wt = st['zb'], st['belt'], st['top'], st['w'], st['wt']
     crown = st.get('crown', 0.025); bul = st.get('bul', 0.012); rb = st.get('rb', 0.08); rs = st.get('rs', 0.05)
     rt = st.get('rt', 0.07)
+    # keep every corner radius inside the section, or the loft folds through its centreline on narrow parts
+    rt = min(rt, wt * 0.6); rb = min(rb, w * 0.5); rs = min(rs, w * 0.4)
     h_g = max(top - belt, 0.0)
-    pts = [(0.0, zb), (w * 0.55, zb), (w - rb * 1.2, zb + 0.004), (w - rb * 0.35, zb + rb * 0.35), (w, zb + rb * 1.1),
+    pts = [(0.0, zb), (min(w * 0.55, w - rb * 1.45), zb), (w - rb * 1.2, zb + 0.004), (w - rb * 0.35, zb + rb * 0.35), (w, zb + rb * 1.1),
            (w + bul, _lerp(zb, belt, 0.55)), (w + bul * 0.6, belt - rs * 1.4), (w - rs * 0.25, belt - rs * 0.25),
            (w - rs, belt + 0.004)]
     # greenhouse: lean in from the shoulder to the roof edge
@@ -498,10 +514,32 @@ def loft_body(name, keys, m_paint, step=0.11, levels=2, extra=0.035, sharp=None)
             j2 = (j + 1) % ring
             fs.append((i * ring + j2, i * ring + j, ci) if sgn > 0 else (i * ring + j, i * ring + j2, ci))
     o = mesh_obj(name, vs, fs, [m_paint])
+    bm = bmesh.new(); bm.from_mesh(o.data)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)       # consistent winding (end caps included) ...
+    if bm.calc_volume(signed=True) < 0:                       # ... and facing outward          # make the shell face outward (end-cap winding varies)
+        bmesh.ops.reverse_faces(bm, faces=bm.faces)
+    bm.to_mesh(o.data); bm.free()
     subdivide(o, levels)
     if sharp:
         o.data.set_sharp_from_angle(angle=math.radians(sharp))
     return o
+
+
+def boolean_cut(obj, cutter, solver='EXACT'):
+    """Difference with a safety net: if a solver unions instead of cutting (the bounds grow), try the next one."""
+    dims = obj.dimensions.copy(); orig = obj.data.copy()
+    for sv in [solver] + [x for x in ('MANIFOLD', 'EXACT', 'FLOAT') if x != solver]:
+        b = obj.modifiers.new("cut", 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = cutter; b.solver = sv
+        try:
+            b.material_mode = 'TRANSFER'
+        except Exception:
+            pass
+        bake(obj); bpy.context.view_layer.update()
+        if all(obj.dimensions[i] <= dims[i] + 1e-3 for i in range(3)):
+            break
+        obj.data = orig.copy()
+    bpy.data.meshes.remove(orig)
+    return obj
 
 
 def cut_arches(body, arches, m_liner, solver='EXACT'):
@@ -513,19 +551,14 @@ def cut_arches(body, arches, m_liner, solver='EXACT'):
             cutters.append(c)
     cu = join(cutters, "ArchCutters")
     body.data.materials.append(m_liner)
-    b = body.modifiers.new("arch", 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = cu; b.solver = solver
-    try:
-        b.material_mode = 'TRANSFER'
-    except Exception:
-        pass
-    bake(body)
+    boolean_cut(body, cu, solver)
     bpy.data.objects.remove(cu)
     body.data.shade_smooth(); body.data.set_sharp_from_angle(angle=math.radians(40))
     return body
 
 
 # ============================================================================ paint with masks
-def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, fixed_color=None):
+def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=True, fixed_color=None):
     """Clear-coat paint whose base colour comes from the object colour (so one material serves a whole fleet) and
     whose glass, seals, chrome, gaps and livery come from object-space masks.
     build_masks(g) -> dict with optional keys: glass, rubber, chrome, black, gap, livery=[(mask, colour)],
@@ -540,6 +573,11 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, 
         dn = g.noise(3.5, 6.0, 0.65)
         dmask = g.clamp(dirt * (g.ss(0.9, 0.15, g.z) * 1.1 + (dn - 0.45) * 2.2))
         streak = g.noise(18.0, 3.0)
+        # wear: sun-faded paint, rust streaks running down from seams, mud on the lower body
+        fade = g.clamp(dirt * (g.noise(0.8, 2.0) * 1.2 - 0.1))
+        base = g.mix_col(fade * 0.4, base, (0.46, 0.45, 0.42))
+        rust = g.clamp(g.ss(0.6, 0.74, g.noise_s(4.0, 7.0, 7.0, 0.5)) * g.clamp(dirt * 2.0 - 0.3))
+        base = g.mix_col(rust * 0.75, base, (0.20, 0.085, 0.03))
         base = g.mix_col(dmask * 0.85, base, (0.16, 0.13, 0.095))
         gap = M.get('gap', 0.0)
         if isinstance(gap, E):
@@ -556,7 +594,7 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, 
             layers.append((M['black'], (0.02, 0.02, 0.022), 0.5, 0.0, 0.0, 0.0, None, 0.0))
         if 'glass' in M:
             if glass_thin:
-                layers.append((M['glass'], (0.75, 0.8, 0.8), 0.02 + dirt * 0.2, 0.0, 0.0, 1.0, None, 0.0))
+                layers.append((M['glass'], (0.62, 0.68, 0.68), 0.0 + dirt * 0.12, 0.0, 0.0, 1.0, None, 0.0))
             else:
                 layers.append((M['glass'], (0.004, 0.005, 0.006), 0.015 + dirt * 0.25, 0.0, 0.0, 0.0, None, 0.0))
         if 'rubber' in M:
@@ -568,6 +606,10 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, 
                                 ('ind', (0.6, 0.26, 0.01), (1.0, 0.45, 0.02), 0.0), ('drl', (0.7, 0.72, 0.75), (0.9, 0.95, 1.0), 12.0)):
             if key in M:
                 layers.append((M[key], lc, 0.08, 0.6 if key in ('head', 'drl') else 0.1, 1.0, 0.0, ec, st))
+        # inside of the shell (seen through the glass): dark trim / headliner, never paint
+        if 'glass' in M:
+            back = g.backfacing() * (1.0 - M['glass'])
+            layers.append((back, (0.035, 0.035, 0.037), 0.8, 0.0, 0.0, 0.0, None, 0.0))
         for (mk, lc, lr, lm, lco, lt, ec, st) in layers:
             col = g.mix_col(mk, col, lc)
             rgh = lerp(rgh, lr, mk); met = lerp(met, lm, mk); coat = lerp(coat, lco, mk); trn = lerp(trn, lt, mk)
@@ -578,11 +620,11 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=False, 
         g.L.new(col, p.inputs['Base Color']) if not isinstance(col, E) else g.link(col, p.inputs['Base Color'])
         g.link(rgh, p.inputs['Roughness']); g.link(met, p.inputs['Metallic']); g.link(coat, p.inputs['Coat Weight'])
         g.link(trn, p.inputs['Transmission Weight'])
-        if glass_thin:
-            p.inputs['Thin Wall'].default_value = True
+        p.inputs['Thin Wall'].default_value = bool(glass_thin)
         if ecol is not None:
             g.L.new(ecol, p.inputs['Emission Color']); g.link(estr, p.inputs['Emission Strength'])
-        nrm = g.bump(gap * -1.0 if isinstance(gap, E) else 0.0, 0.8, 0.004)
+        dent = g.noise(1.3, 2.0) * g.clamp(dirt * 1.5 - 0.15) * 0.6
+        nrm = g.bump((gap * -1.0 if isinstance(gap, E) else 0.0) + dent, 0.8, 0.004)
         g.L.new(nrm, p.inputs['Normal'])
         sh = p
         g.out(sh); return m
@@ -662,9 +704,9 @@ def wheel_mesh(key, R, W, rim_r, style="steel", segs=56, dual=False, whitewall=F
         return bpy.data.meshes[nm]
     h = W / 2
     sw = R - rim_r
-    tp = [(rim_r - 0.004, -h * 0.80), (rim_r + 0.012, -h * 0.94), (rim_r + sw * 0.35, -h * 1.0), (rim_r + sw * 0.7, -h * 0.99),
-          (R - 0.022, -h * 0.92), (R - 0.006, -h * 0.80), (R, -h * 0.62), (R, -h * 0.2), (R, h * 0.2), (R, h * 0.62),
-          (R - 0.006, h * 0.80), (R - 0.022, h * 0.92), (rim_r + sw * 0.7, h * 0.99), (rim_r + sw * 0.35, h * 1.0),
+    tp = [(rim_r - 0.004, -h * 0.80), (rim_r + 0.012, -h * 0.94), (rim_r + sw * 0.3, -h * 1.04), (rim_r + sw * 0.62, -h * 1.07),
+          (R - sw * 0.16, -h * 1.0), (R - 0.008, -h * 0.84), (R, -h * 0.64), (R, -h * 0.2), (R, h * 0.2), (R, h * 0.64),
+          (R - 0.008, h * 0.84), (R - sw * 0.16, h * 1.0), (rim_r + sw * 0.62, h * 1.07), (rim_r + sw * 0.3, h * 1.04),
           (rim_r + 0.012, h * 0.94), (rim_r - 0.004, h * 0.80)]
     tyre = lathe("Tyre", tp, tyre_mat(whitewall), segs)
     rr = rim_r
@@ -673,9 +715,9 @@ def wheel_mesh(key, R, W, rim_r, style="steel", segs=56, dual=False, whitewall=F
               (rr * 0.93, h * 0.80), (rr * 0.80, h * 0.86), (rr * 0.45, h * 0.82), (rr * 0.30, h * 0.9), (rr * 0.18, h * 0.92),
               (rr * 0.17, h * 0.97), (0.0, h * 0.98)]
     else:
-        rp = [(rr - 0.01, -h * 0.75), (rr - 0.008, h * 0.62), (rr + 0.010, h * 0.74), (rr + 0.007, h * 0.84), (rr - 0.004, h * 0.80),
-              (rr * 0.92, h * 0.55), (rr * 0.78, h * 0.42), (rr * 0.62, h * 0.50), (rr * 0.48, h * 0.42), (rr * 0.40, h * 0.62),
-              (rr * 0.34, h * 0.78), (rr * 0.2, h * 0.86), (0.0, h * 0.88)]
+        rp = [(rr - 0.01, -h * 0.75), (rr - 0.008, h * 0.62), (rr + 0.012, h * 0.76), (rr + 0.009, h * 0.86), (rr - 0.006, h * 0.80),
+              (rr * 0.93, h * 0.40), (rr * 0.80, h * 0.10), (rr * 0.62, h * 0.18), (rr * 0.48, h * 0.08), (rr * 0.40, h * 0.40),
+              (rr * 0.34, h * 0.66), (rr * 0.2, h * 0.76), (0.0, h * 0.80)]
     rim = lathe("Rim", rp, rim_mat(style), segs)
     disc = cylinder("Disc", (0, -h * 0.2, 0), rr * 0.8, 0.02, steel_dark(), axis='Y', verts=32)
     parts = [tyre, rim, disc]
@@ -777,6 +819,27 @@ def side_text(name, s, x, z, y, size, m, side):
     return o
 
 
+def cabin_interior(parts, rows, y_off, z_seat, x_dash, z_dash, w_in, driver=1, bench_rear=True, wheel_r=0.19, rear_headrests=False):
+    """Seats with headrests, a dashboard and a steering wheel, so the cabin reads through real glass.
+    rows: seat-cushion centre x per row (front first). driver: +1 = left-hand drive (wheel at +y)."""
+    it = interior(); fab = simple("V_SeatFabric", (0.055, 0.055, 0.06), 0.9)
+    for k, x in enumerate(rows):
+        ys = (0.0,) if (k > 0 and bench_rear) else (-y_off, y_off)
+        wd = 2 * y_off + 0.46 if (k > 0 and bench_rear) else 0.48
+        for y in ys:
+            parts.append(rbox("Cushion", (x, y, z_seat), (0.5, wd, 0.13), 0.05, fab, sub=1))
+            parts.append(rbox("SeatBack", (x - 0.27, y, z_seat + 0.33), (0.13, wd, 0.58), 0.05, fab, rot=(0, math.radians(-12), 0), sub=1))
+            for yh in ((y,) if wd < 1 else ((y - y_off, y + y_off) if rear_headrests else ())):
+                parts.append(rbox("Headrest", (x - 0.36, yh, z_seat + 0.72), (0.09, 0.26, 0.17), 0.04, fab, sub=1))
+    parts.append(rbox("Dash", (x_dash, 0, z_dash), (0.38, 2 * w_in, 0.2), 0.06, it, sub=1))
+    yw = driver * y_off
+    ring = lathe("Steer", [(wheel_r, 0.0), (wheel_r + 0.015, 0.012), (wheel_r + 0.03, 0.0), (wheel_r + 0.015, -0.012)], it, 24, axis='X')
+    ring.data.polygons.foreach_set("use_smooth", [True] * len(ring.data.polygons))
+    ring.data.transform(Matrix.Translation((x_dash - 0.3, yw, z_dash + 0.02)) @ Matrix.Rotation(math.radians(-25), 4, 'Y'))
+    parts.append(ring)
+    parts.append(cylinder("Column", (x_dash - 0.2, yw, z_dash - 0.02), 0.025, 0.25, it, axis='X', verts=10))
+
+
 def underbody(name, x0, x1, w, z0, z1):
     """A dark floor pan / chassis under the body so the gap under the car reads with depth."""
     return rbox(name, ((x0 + x1) / 2, 0, (z0 + z1) / 2), (x1 - x0, 2 * w, z1 - z0), 0.03, liner())
@@ -864,7 +927,7 @@ def _clone(root):
     return r
 
 
-def make(kind, loc=(0, 0, 0), heading_deg=0.0, color=None, variant=None, dirt=0.0, lamps=False, real_lights=False):
+def make(kind, loc=(0, 0, 0), heading_deg=0.0, color=None, variant=None, dirt=None, lamps=False, real_lights=False):
     """Return the root object of a new vehicle of `kind` placed at loc, facing heading_deg (0 = +X)."""
     if kind not in KINDS:
         raise KeyError(f"unknown vehicle kind {kind!r}; have {sorted(KINDS)}")
@@ -876,6 +939,8 @@ def make(kind, loc=(0, 0, 0), heading_deg=0.0, color=None, variant=None, dirt=0.
     root = _clone(_TEMPLATES[key])
     root.location = loc; root.rotation_euler = (0, 0, math.radians(heading_deg))
     col = color or tuple(root.get("default_color", (0.5, 0.5, 0.5)))
+    if dirt is None:          # working machines and trucks come worn by default, cars clean
+        dirt = DEFAULT_DIRT.get(kind, 0.0)
     for o in [root] + list(root.children_recursive):
         o.color = (*col[:3], 1.0)
         o["dirt"] = float(dirt); o["lamps"] = 1.0 if lamps else 0.0
