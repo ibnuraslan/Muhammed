@@ -7,10 +7,12 @@ sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 8
 sc.render.image_settings.file_format = 'JPEG'
 cam = bpy.data.objects.new('HandCam', bpy.data.cameras.new('HandCam')); sc.collection.objects.link(cam); sc.camera = cam
 cam.data.lens = 50
-SHOTS = [(560, "VetB", "R", (-0.3, -0.25, 0.15)), (640, "VetB", "R", (-0.25, 0.3, 0.2)), (600, "VetA", "R", (0.35, -0.3, 0.15)),
-         (600, "VetA", "L", (-0.35, -0.3, 0.15)), (1580, "VetB", "R", (-0.3, 0.2, 0.15)), (1660, "VetB", "R", (-0.3, -0.2, 0.15)),
-         (1750, "VetB", "L", (-0.3, 0.25, 0.15)), (1780, "VetB", "L", (0.3, 0.3, 0.2)), (1860, "VetB", "R", (-0.3, 0.25, 0.15)),
-         (1900, "VetB", "R", (-0.25, -0.2, 0.2)), (1720, "VetB", "R", (-0.3, -0.3, 0.2)), (1900, "VetA", "L", (-0.35, -0.25, 0.15))]
+SHOTS = [(560, "VetB", "R", (-0.3, -0.25, 0.15)), (640, "VetB", "R", (-0.25, 0.3, 0.2)), (600, "VetA", "R", (0.3, -0.35, 0.2)),
+         (600, "VetA", "L", (-0.35, -0.3, 0.15)), (700, "Assist", "R", (-0.3, -0.3, 0.2)), (1509, "VetB", "R", (-0.3, -0.3, 0.2)),
+         (1580, "VetB", "R", (-0.3, 0.2, 0.15)), (1660, "VetB", "R", (-0.3, -0.2, 0.15)), (1717, "VetB", "L", (0.3, -0.3, 0.2)),
+         (1750, "VetB", "L", (-0.3, -0.25, 0.15)), (1803, "VetB", "L", (0.3, -0.3, 0.2)), (1807, "VetB", "R", (-0.3, -0.3, 0.2)),
+         (1860, "VetB", "R", (-0.3, -0.25, 0.15)), (1905, "VetB", "R", (-0.25, -0.2, 0.2)), (1962, "VetB", "R", (-0.3, -0.3, 0.2)),
+         (1900, "VetA", "R", (0.3, -0.35, 0.2)), (1900, "VetA", "L", (-0.35, -0.25, 0.15)), (1700, "Assist", "R", (-0.25, -0.55, 0.45))]
 for i, (f, nm, s, off) in enumerate(SHOTS):
     sc.frame_set(f); rg = OB[nm]; w = rg.matrix_world @ rg.pose.bones["wrist." + s].tail
     cam.location = w + Vector(off); cam.rotation_euler = (w - cam.location).to_track_quat('-Z', 'Y').to_euler()

@@ -1,4 +1,5 @@
-"""Contact / penetration audit for ToucanBeak.   blender -b film.blend -P audit.py -- <report.txt> [step]
+"""Contact / penetration audit for ToucanBeak. (v004: hand-in-bird / held-prop use a depth test like pipeline/clip_scan.py:
+glove vertices deeper than 1.2 cm under the bird surface or 0.6 cm under the beak; surface contact is allowed and expected.)   blender -b film.blend -P audit.py -- <report.txt> [step]
 BIRD_HOVER / BIRD_SINK   toucan toes vs the support it stands on (perch / towel / platform)
 HAND_IN_BIRD             glove (hand) vertices inside the toucan body/beak (BVH overlap pairs)
 HAND_FLOAT               VetA's cradling hands more than 2.5 cm from the bird while holding
@@ -13,6 +14,19 @@ a = sys.argv[sys.argv.index("--") + 1:]; OUT = a[0]; STEP = int(a[1]) if len(a) 
 sc = bpy.context.scene; OB = bpy.data.objects
 issues = {}; counts = {}
 def flag(k, f, m): issues.setdefault(k, []).append((f, m))
+def deep(points, bvh, depth, maxd=0.06):
+    """points between depth and maxd under the surface (scanned meshes have inconsistent normals far away)"""
+    n = 0
+    for q in points:
+        loc, nrm, _, d = bvh.find_nearest(q, maxd)
+        if loc is not None and depth < d < maxd and (q - loc).dot(nrm) < 0: n += 1
+    return n
+def glove_pts(o, dg):
+    gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
+    ev = o.evaluated_get(dg); me = ev.to_mesh(); mw = o.matrix_world; vids = set()
+    for p in me.polygons:
+        if p.material_index in gi: vids.update(p.vertices)
+    pts = [mw @ me.vertices[i].co for i in vids]; ev.to_mesh_clear(); return pts
 def tree(o, dg, sel=None):
     ev = o.evaluated_get(dg); me = ev.to_mesh(); mw = o.matrix_world
     vs = [mw @ v.co for v in me.vertices]
@@ -54,13 +68,13 @@ for f in frames:
         beak = OB["Prosthetic_beak"] if f >= 1692 else OB["Toucan_beak_upper_broken"]
         kt, _ = tree(beak, dg)
         if 1515 <= f < 1692:     # held prosthetic: light finger contact only
-            pt_, _ = tree(OB["Prosthetic_beak"], dg); gt_, _ = tree(gloveB, dg, glove_sel(gloveB))
-            n_ = len(gt_.overlap(pt_))
-            if n_ > 40: flag("HAND_IN_PROP", f, "VetB glove into held prosthetic %d" % n_)
+            pt_, _ = tree(OB["Prosthetic_beak"], dg)
+            n_ = deep(glove_pts(gloveB, dg), pt_, 0.006, 0.02)
+            if n_ > 0: flag("HAND_IN_PROP", f, "VetB glove vertices inside the held prosthetic %d" % n_)
         for nm, g in (("VetA", gloveA), ("VetB", gloveB)):
-            ht, hv = tree(g, dg, glove_sel(g))
-            n = len(ht.overlap(bt)) + len(ht.overlap(kt))
-            if n > 0: flag("HAND_IN_BIRD", f, "%s glove/bird triangle overlaps: %d" % (nm, n))
+            gp = glove_pts(g, dg)
+            n = deep(gp, bt, 0.012) + deep(gp, kt, 0.006, 0.02)          # fingertips may touch the feathers/beak, never sink in
+            if n > 0: flag("HAND_IN_BIRD", f, "%s glove vertices inside the bird/beak: %d" % (nm, n))
             counts["hand_checks"] = counts.get("hand_checks", 0) + 1
         # VetA cradling distance
         gi = [i for i, m in enumerate(gloveA.data.materials) if m and m.name.startswith("Nitrile")]
@@ -76,7 +90,7 @@ for f in frames:
             ev = bo.evaluated_get(dg); me = ev.to_mesh(); mw = bo.matrix_world; vs = [mw @ v.co for v in me.vertices]
             wr = {s_: rg.matrix_world @ rg.pose.bones["wrist." + s_].head for s_ in "LR"}
             ch = rg.matrix_world @ rg.pose.bones["spine03"].head; hd = rg.matrix_world @ rg.pose.bones["head"].head
-            hand = {s_: [tuple(p.vertices) for p in me.polygons if (mw @ p.center - wr[s_]).length < 0.11] for s_ in "LR"}
+            hand = {s_: [tuple(p.vertices) for p in me.polygons if (mw @ p.center - wr[s_]).length < 0.11 and (mw @ p.center - wr[s_]).length < (mw @ p.center - wr["R" if s_ == "L" else "L"]).length] for s_ in "LR"}
             torso = [tuple(p.vertices) for p in me.polygons if (mw @ p.center - ch).length < 0.22 or (mw @ p.center - hd).length < 0.12]
             ev.to_mesh_clear()
             cl = [c for c in rg.children if c.type == 'MESH' and ("suit" in c.name)]

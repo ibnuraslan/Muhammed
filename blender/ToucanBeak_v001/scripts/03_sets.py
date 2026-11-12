@@ -148,7 +148,7 @@ def trunk(name, loc, r, h, mat, lean=(0, 0)):
     bpy.ops.uv.cylinder_project(scale_to_bounds=False); bpy.ops.object.mode_set(mode='OBJECT')
     for l in t.data.uv_layers.active.data: l.uv = (l.uv[0] * 2 * math.pi * r, l.uv[1] * h)
     t.data.materials.append(mat); return t
-trunk("Trunk_hero", (-0.62, 0.05), 0.2, 9, M_bark2, (2, -3))
+trunk("Trunk_hero", (-0.77, 0.05), 0.155, 9, M_bark2, (2, -3))
 for i, (x, y, r) in enumerate([(-3.5, -2.5, 0.35), (-6, 2.5, 0.5), (-2.2, 4.2, 0.28), (-8, -5, 0.6), (-4.5, 6.5, 0.4),
                                 (1.5, -6.5, 0.3), (-10, 1, 0.7), (0.5, 6.0, 0.25), (-1.8, -5.5, 0.32), (2.5, 4.5, 0.22)]):
     trunk("Trunk_%d" % i, (x, y), r, 24, M_bark if i % 2 else M_bark2, (random.uniform(-4, 4), random.uniform(-4, 4)))
@@ -201,12 +201,12 @@ if ax == 0: twig.data.transform(Matrix.Rotation(R_(90), 4, 'Y'))
 if ax == 1: twig.data.transform(Matrix.Rotation(R_(90), 4, 'X'))
 twig.data.transform(Matrix.Diagonal((0.4, 0.4, 1.0, 1.0)))
 # the stick that strikes (scanned wood)
-weapon = imp("stick", C_P, size=0.95, base=False); weapon.name = "Strike_stick"
+weapon = imp("stick", C_P, size=1.7, base=False); weapon.name = "Strike_stick"
 V = np.array([v.co[:] for v in weapon.data.vertices]); ax = int(np.argmax(V.max(0) - V.min(0)))
 if ax == 0: weapon.data.transform(Matrix.Rotation(R_(90), 4, 'Y'))
 if ax == 1: weapon.data.transform(Matrix.Rotation(R_(90), 4, 'X'))
-weapon.data.transform(Matrix.Diagonal((0.38, 0.38, 1.0, 1.0)))   # slimmer: a swung branch, not a log
-weapon.data.transform(Matrix.Translation(Vector((0, 0, 0.42))))   # pivot near one end (z from -0.05 to 0.9)
+weapon.data.transform(Matrix.Diagonal((0.24, 0.24, 1.0, 1.0)))   # slimmer: a long swung branch, held far outside the frame
+weapon.data.transform(Matrix.Translation(Vector((0, 0, 0.8))))   # pivot at the held end (z from -0.05 to 1.65)
 
 # dust motes in the light (background life)
 bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.0012, location=(0, 0, -60)); mote = bpy.context.active_object; mote.name = "Mote"; link(mote, C_P)

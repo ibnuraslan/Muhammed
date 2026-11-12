@@ -85,7 +85,7 @@ for nd in pm.node_tree.nodes:
     if nd.type == 'BSDF_PRINCIPLED': nd.inputs["Roughness"].default_value = 0.22; nd.inputs["Coat Weight"].default_value = 0.8
 PRO.data.materials[0] = pm
 axis_r = (LB_tip - LB_base).normalized()
-key_vis(PRO, [(1, False), (1515, True), (1976, False)])
+key_vis(PRO, [(1, False), (528, True), (1976, False)])
 
 def beak_point(frac, f=None, obj=None):
     if f is not None: ev(f)
@@ -135,17 +135,32 @@ pose(2175, head=(2, 0, 10), tail=(10, 0, 0)); pose(2215, head=(-4, 0, -14)); pos
 # ---- prosthetic: follows the (hidden) intact upper beak's head-bone pose, slid out along the beak axis until seated at 1692
 pro_off = pchip([(1515, 0.09), (1560, 0.09), (1600, 0.05), (1660, 0.008), (1692, 0.0), (1980, 0.0)])
 PRO.rotation_mode = 'QUATERNION'
-for f in list(range(1513, 1980, 2)):
+# table rest pose: upright on its cutting edge on the exam table, at VetB's right hand
+_R = Matrix.Rotation(R_(70), 4, 'Z') @ Matrix.Translation(-(LB_base + LB_tip) / 2)
+_zmin = min((_R @ v.co).z for v in UP.data.vertices)
+PRO_TABLE = Matrix.Translation(Vector((6.70, 0.30, sc["TABLE_Z"] - _zmin + 0.001))) @ _R
+def pro_seat(f):
     ev(f); M = UP.matrix_world.copy(); axw = (M.to_3x3() @ axis_r).normalized()
-    o_ = pro_off(f); M = Matrix.Translation(axw * o_ + Vector((0, 0, 0.004 if o_ > 0 else 0))) @ M
-    loc, q, sc_ = M.decompose(); PRO.location = loc; PRO.rotation_quaternion = q; PRO.scale = sc_
-    PRO.keyframe_insert("location", frame=f); PRO.keyframe_insert("rotation_quaternion", frame=f); PRO.keyframe_insert("scale", frame=f)
+    o_ = pro_off(f); return Matrix.Translation(axw * o_ + Vector((0, 0, 0.004 if o_ > 0 else 0))) @ M
+def mlerp(A, B, t):
+    la, qa, sa = A.decompose(); lb, qb, sb = B.decompose()
+    return Matrix.LocRotScale(la.lerp(lb, t), qa.slerp(qb, t), sa.lerp(sb, t))
+for f in [528, 1508] + list(range(1510, 1980, 2)):
+    if f <= 1510: M = PRO_TABLE
+    elif f < 1560:
+        t = smooth((f - 1510) / 50.0); lift = Matrix.Translation(Vector((0, 0, 0.12 * math.sin(math.pi * t))))
+        M = lift @ mlerp(PRO_TABLE, pro_seat(1560), t)
+    else:
+        M = pro_seat(f)
+    if True:
+        loc, q, sc_ = M.decompose(); PRO.location = loc; PRO.rotation_quaternion = q; PRO.scale = sc_
+        PRO.keyframe_insert("location", frame=f); PRO.keyframe_insert("rotation_quaternion", frame=f); PRO.keyframe_insert("scale", frame=f)
 
 # ---- the stick (swing plane = bird's side; contact on the upper beak at frame 102)
 stick = OB["Strike_stick"]; pivot = bpy.data.objects.new("Stick_pivot", None); C_ANIM.objects.link(pivot)
 ev(100)
 HIT = beak_point(0.45)
-PV = HIT + Vector((0.0, -0.18, 0.66))        # pivot above/behind (out of frame)
+PV = HIT + Vector((0.0, -0.26, 0.97)).normalized() * 1.42   # held end far above/behind, always outside the frame
 pivot.location = PV; stick.parent = pivot; stick.location = (0, 0, 0)
 d0 = (HIT - PV).normalized()
 base_q = Vector((0, 0, -1)).rotation_difference(d0)    # stick local +z points from pivot outward? our mesh runs z -0.05..0.9 -> use -z? fix below
@@ -271,12 +286,12 @@ for f in (530, 700, 1500, 1960):
     stand(VB, f, B_POS, 0, flex=8, head=(18, 0), spine_flex=10)
 # VetA cradles the bird the whole clinic stay
 for f in (530, 1000, 1500, 1960):
-    VA.key_hand("R", f, bw((-0.11, -0.06, 0.035)), Vector((0, 1, -0.1)), Vector((0, 0, -1)), pole=Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0)))
-    VA.key_hand("L", f, bw((0.0, 0.085, 0.115)), Vector((0, 1, 0.25)), Vector((1, 0, 0)), pole=Vector((A_POS[0] - 0.45, A_POS[1] - 0.15, 1.0)))
+    pass
+    pass
 # scanner sweeping (VetB right hand), beat 4
 SCN = OB["Scanner"]; SCN.rotation_mode = 'QUATERNION'
 stub_mid = bw(LB_base + (LB_tip - LB_base) * 0.25)
-for f, dx in ((540, 0.06), (575, -0.04), (610, 0.05), (645, -0.05), (680, 0.02)):
+for f, dx in ((528, 0.06), (540, 0.06), (575, -0.04), (610, 0.05), (645, -0.05), (680, 0.02)):
     S = stub_mid + Vector((dx - 0.1, 0.12, 0.13))
     q = (stub_mid - S).to_track_quat('Y', 'Z')
     key_loc(SCN, f, S); SCN.rotation_quaternion = q; SCN.keyframe_insert("rotation_quaternion", frame=f)
@@ -284,11 +299,10 @@ for f, dx in ((540, 0.06), (575, -0.04), (610, 0.05), (645, -0.05), (680, 0.02))
     grip_key(VB, "R", f, G, q @ Vector((-1, 0, 0)), q @ Vector((0, 1, 0)), pole=G + Vector((0.35, 0.35, -0.25)), reach=0.06, palm=0.035)
     VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.02)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 VB.key_hand("R", 696, Vector((6.86, 0.12, TZ + 0.46)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.2, 0.9, 1.2)))
-VB.key_hand("R", 712, Vector((7.15, 0.04, TZ + 0.45)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.5, 0.9, 1.2)))
-key_loc(SCN, 696, Vector((6.86, 0.14, TZ + 0.5))); key_loc(SCN, 712, Vector((7.12, 0.16, TZ + 0.56)))
-key_loc(SCN, 760, Vector((7.45, 0.25, TZ + 0.03))); SCN.rotation_quaternion = Quaternion((1, 0, 0, 0)); SCN.keyframe_insert("rotation_quaternion", frame=760)
+VB.key_hand("R", 712, Vector((6.62, 0.22, TZ + 0.2)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((6.3, 0.9, 1.2)))
+SCN_REST = Vector((6.5, 0.3, TZ + 0.0335))      # put down on VetB's right, standing on its grip end (hand-driven below)
 for f in (760, 1500):
-    VB.key_hand("R", f, Vector((7.45, 0.1, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
+    VB.key_hand("R", f, Vector((6.6, 0.16, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.3, 0.8, 1.0)))
     VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 # laser line: narrow red spot projected from the scanner lens onto the stump
 las = bpy.data.objects.new("Laser_spot", bpy.data.lights.new("Laser_spot", 'SPOT')); C_ANIM.objects.link(las)
@@ -297,39 +311,49 @@ las.parent = SCN; las.location = (0, 0.03, 0); las.rotation_euler = (R_(-90), 0,
 OB["Laser_line"].hide_render = True
 key_vis(las, [(1, False), (538, True), (690, False)])
 # prosthetic in VetB's hand (1515-1692): hand follows the prosthetic
-VB.key_hand("R", 1507, Vector((7.3, 0.2, TZ + 0.42)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.6, 0.9, 1.2)))
-PRO_D = (Euler(ROT_C).to_matrix() @ axis_r) + Vector((0, 0.25, 0)); PRO_N = Vector((0.15, -0.35, -1))   # fingers laid along the culmen, palm down, thumb on the near flank
+VB.key_hand("R", 1503, Vector((6.68, 0.24, TZ + 0.12)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((6.3, 0.9, 1.2)))
+PRO_D = Vector((0, -1, -0.6)).normalized(); PRO_N = Vector((0, 0, -1))   # pinch over the top: fingers wrap the far flank, thumb on the near flank
 def pro_grip_pt(f):
     ev(f); return PRO.matrix_world @ (LB_base + (LB_tip - LB_base) * 0.5 + Vector((0, 0, 0.012)))
-for f in range(1515, 1693, 6):
+for f in list(range(1508, 1693, 6)):
     pw = pro_grip_pt(f)
-    grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=0.016)
+    grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.05, palm=0.016)
 # glue syringe (left hand) 1704-1800, tweezers + pin (right) 1810-1950
 SYR, TWZ, PIN = OB["Glue_syringe"], OB["Tweezers"], OB["Pin"]
 seam = bw(LB_base + (LB_tip - LB_base) * 0.42 + Vector((0, 0.012, 0.02)))
 _pw = pro_grip_pt(1692)
-grip_key(VB, "R", 1693, _pw, PRO_D, PRO_N, pole=_pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=0.016)
+grip_key(VB, "R", 1693, _pw, PRO_D, PRO_N, pole=_pw + Vector((0.35, 0.35, -0.15)), reach=0.05, palm=0.016)
 VB.key_hand("R", 1702, _pw + Vector((0.14, 0.04, 0.22)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=_pw + Vector((0.3, 0.5, 0.0)))
 VB.key_hand("L", 1712, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
-VB.key_hand("L", 1719, Vector((7.18, 0.12, TZ + 0.24)), Vector((-1, -0.3, -0.4)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.2)))
+SYR.rotation_mode = 'QUATERNION'
+SYR_AX = Vector((0, -1, -0.02)).normalized(); SYR_C = Vector((7.36, 0.18, TZ + 0.0095))
+def syr_grip(f, C, ax, palm=0.03):
+    grip_key(VB, "L", f, C, ax + Vector((0, 0, -0.35)), Vector((-0.3, 0, -1)), pole=C + Vector((0.3, 0.4, -0.2)), reach=0.07, palm=palm)   # pen grip from above: fingers along the barrel, thumb on its side
+syr_grip(1717, SYR_C, SYR_AX, 0.065)                    # picks the syringe up off the table
+VB.key_hand("L", 1721, Vector((7.3, -0.04, TZ + 0.36)), Vector((-0.2, -1, -0.6)), Vector((0, 0, -1)), pole=Vector((7.7, 0.7, 1.3)))
 for f, s_ in ((1726, 0.1), (1744, 0.0), (1768, 0.0), (1792, 0.08)):
     p_ = seam + Vector((0.0, 0.04 + s_, 0.06)); q = (seam - p_).to_track_quat('Z', 'Y')
-    SYR.rotation_mode = 'QUATERNION'; key_loc(SYR, f, p_ + (p_ - seam).normalized() * 0.06); SYR.rotation_quaternion = q; SYR.keyframe_insert("rotation_quaternion", frame=f)
     ax_s = (seam - p_).normalized(); Gs = p_ - ax_s * 0.06
-    grip_key(VB, "L", f, Gs, Vector((0, 0, -1)).cross(ax_s) * -1, Vector((0, 0.3, -1)), pole=Gs + Vector((-0.3, 0.4, -0.2)), reach=0.065, palm=0.03)
-key_vis(SYR, [(1, False), (1690, True), (1810, False)])
+    grip_key(VB, "L", f, Gs, ax_s, Vector((-0.5, 0, -0.85)), pole=Gs + Vector((0.3, 0.4, -0.2)), reach=0.07, palm=0.03)   # pen grip, needle along the fingers
+key_vis(SYR, [(1, False), (528, True), (1976, False)])
 for f in (1712, 1800):
-    VB.key_hand("R", f, Vector((6.55, 0.12, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.3, 0.8, 1.0)))
-VB.key_hand("L", 1799, seam + Vector((0.18, 0.12, 0.28)), Vector((1, -0.3, -0.4)), Vector((0, 0, -1)), pole=Vector((7.6, 0.9, 1.3)))
-for f in (1806, 1950):
+    VB.key_hand("R", f, Vector((6.62, 0.16, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.3, 0.8, 1.0)))
+VB.key_hand("L", 1797, Vector((7.3, 0.02, TZ + 0.34)), Vector((-0.2, -1, -0.6)), Vector((0, 0, -1)), pole=Vector((7.7, 0.7, 1.3)))
+syr_grip(1803, SYR_C, SYR_AX, 0.065)                    # puts it back down where it was
+for f in (1810, 1950):
     VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 pin_in = bw(LB_base + (LB_tip - LB_base) * 0.36 + Vector((0, 0.0, 0.03)))
+PIN_REST = Vector((6.52, 0.3, TZ + 0.006))
+def twz_grip(f, p_):
+    grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)), reach=0.055, palm=0.022)
+twz_grip(1807, PIN_REST)                           # picks up the tweezers (pin held in the tips)
 for f, d_ in ((1810, 0.08), (1850, 0.02), (1880, 0.008), (1910, 0.0), (1945, 0.0)):
     p_ = pin_in + Vector((0, d_, 0.01 + d_ * 0.5))
-    PIN.rotation_mode = 'XYZ'; key_loc(PIN, f, p_, (R_(90), 0, 0))
-    TWZ.rotation_mode = 'XYZ'; key_loc(TWZ, f, p_ + Vector((0, 0.065, 0.004)), (0, 0, R_(90)))
     grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)), reach=0.055, palm=0.022)
-key_vis(PIN, [(1, False), (1800, True), (1976, False)]); key_vis(TWZ, [(1, False), (1800, True), (1950, False)])
+key_vis(PIN, [(1, False), (528, True), (1976, False)]); key_vis(TWZ, [(1, False), (528, True), (1976, False)])
+VB.key_hand("R", 1950, pin_in + Vector((-0.14, 0.05, 0.16)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=pin_in + Vector((0.3, 0.5, 0.0)))
+twz_grip(1962, PIN_REST)                           # tweezers back on the table
+VB.key_hand("R", 1972, Vector((6.6, 0.16, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.3, 0.8, 1.0)))
 # glue bead along the seam (grows)
 st_a = (LB_tip - LB_base).length * 0.42
 VV = [v.co for o_ in (UPB, LOW) for v in o_.data.vertices]
@@ -350,13 +374,14 @@ gm = bpy.data.materials.new("Glue"); gm.use_nodes = True; gb = gm.node_tree.node
 gb.inputs["Base Color"].default_value = (0.9, 0.88, 0.8, 1); gb.inputs["Roughness"].default_value = 0.05; gb.inputs["Transmission Weight"].default_value = 0.7
 glue.data.materials.append(gm)
 gm.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = 1.0
-key_vis(glue, [(1, False), (1725, True), (1976, False)])
+key_vis(glue, [(1, False), (1736, True), (1976, False)])
+bld = glue.modifiers.new("grow", 'BUILD'); bld.frame_start = 1736; bld.frame_duration = 34
 # assistant: background walk (life)
 # the assistant walks to the desk and works the mouse while the monitor shows the 3D beak (director note, 12 s)
 AS_DESK = Vector((9.0, 1.95, 0))
 AS.walk(lambda f: Vector((5.0, 2.15, 0)).lerp(AS_DESK, smooth((f - 560) / 100)), lambda f: yaw_of_xy(AS_DESK - Vector((5.0, 2.15, 0))) if f < 655 else 90, 560, 660, stride=0.72)
-stand(AS, 672, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0)); stand(AS, 1505, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0))
-stand(AS, 1515, (8.6, 2.15), 90, head=(10, 0))
+stand(AS, 672, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0)); stand(AS, 1505, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0)); stand(AS, 1520, (AS_DESK.x, AS_DESK.y), 90, head=(12, 0))
+stand(AS, 1560, (AS_DESK.x, AS_DESK.y), 90, head=(18, 0))
 _md = OB["desk"]; DESK_TOP = max((_md.matrix_world @ v.co).z for v in _md.data.vertices)
 mouse = bpy.data.objects.new("Mouse", bpy.data.meshes.new("Mouse")); C_ANIM.objects.link(mouse)
 bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(mouse.data); bm.free()
@@ -372,7 +397,17 @@ for f, dx in ((662, -0.15), (676, 0.0), (700, 0.012), (730, -0.01), (760, 0.008)
     grip_key(AS, "R", f, MTOP + Vector((dx, 0, 0.0 if dx > -0.1 else 0.08)), Vector((1, 0, -0.25)), Vector((0, 0, -1)), pole=Vector((AS_DESK.x - 0.1, AS_DESK.y - 0.5, 1.0)), reach=0.06, palm=0.025)
     if dx > -0.1: key_loc(mouse, f, Vector((9.45 + dx, 1.58, DESK_TOP + 0.017)))
 AS.key_hand("L", 676, Vector((9.3, 2.1, DESK_TOP + 0.02)), Vector((1, 0, 0)), Vector((0, 0, -1)), pole=Vector((AS_DESK.x - 0.1, AS_DESK.y + 0.5, 1.0)))
-AS.walk(lambda f: Vector((8.6 - 3.4 * smooth((f - 1520) / 300), 2.15, 0)), lambda f: 90, 1520, 1820, stride=0.72)
+# leaves the desk on a curved path: turns while stepping (no spin on the spot)
+_P0, _C, _P2 = AS_DESK.copy(), Vector((8.55, 1.15, 0)), Vector((5.2, 2.15, 0))
+def as_t(f): return smooth((f - 1566) / 254.0)
+def as_path(f):
+    t = as_t(f); return _P0 * (1 - t) ** 2 + _C * (2 * (1 - t) * t) + _P2 * t * t
+def as_yaw(f):
+    t = max(as_t(f), 0.02); tg = (_C - _P0) * (2 * (1 - t)) + (_P2 - _C) * (2 * t); y_ = yaw_of_xy(tg)
+    k = smooth((f - 1566) / 30.0); y0 = 90.0
+    d = ((y_ - y0 + 180) % 360) - 180
+    return y0 + d * k
+AS.walk(as_path, as_yaw, 1566, 1820, stride=0.68)
 stand(AS, 1840, (5.2, 2.15), 180, head=(20, 0)); stand(AS, 1960, (5.2, 2.15), 180, head=(25, 10))
 for nm in ("VetA", "VetB", "Assist"):
     o = OB[nm]
@@ -392,12 +427,29 @@ for f in (530, 1960):
 for f in (530, 690): curl(VB, "R", f, 78, 0.7)
 for f in (712, 1500): curl(VB, "R", f, 25, 0.5)
 for f in (530, 1500, 1712, 1806, 1960): curl(VB, "L", f, 22, 0.5)
-for f in (1515, 1692): curl(VB, "R", f, 16, 1.0)
+for f in (1506, 1692): curl(VB, "R", f, 46, 1.0)
 for f in (1712, 1800): curl(VB, "R", f, 22, 0.5)
-for f in (1724, 1792): curl(VB, "L", f, 70, 0.8)
-for f in (1810, 1945): curl(VB, "R", f, 62, 1.0, spread=-4)
+for f in (1715, 1805): curl(VB, "L", f, 44, 1.0, spread=-4)   # pinch / pen grip on the syringe barrel
+for f in (1810, 1945): curl(VB, "R", f, 38, 1.0, spread=-4)
 for f in (560, 1960): curl(AS, "L", f, 20); curl(AS, "R", f, 20)
 for f in (676, 1505): curl(AS, "R", f, 28, 0.6)
+
+# relaxed arms while walking / standing idle: hands hang at the thighs with a small counter-swing (no IK target left at the origin)
+def arms_relaxed(H, f0, f1, step=4, swing=0.07, period=48.0):
+    rig_ = H.r.o
+    for f in list(range(f0, f1, step)) + [f1]:
+        ev(f); M = rig_.matrix_world
+        shL = M @ H.r.PB["upperarm01.L"].head; shR = M @ H.r.PB["upperarm01.R"].head
+        side = (shL - shR); side.z = 0; side.normalize()          # points to the character's left
+        fwd = Vector((0, 0, 1)).cross(side).normalized() * -1
+        ph = math.sin(2 * math.pi * (f - f0) / period)
+        for s_, sh, sgn in (("L", shL, 1), ("R", shR, -1)):
+            W = sh + Vector((0, 0, -0.56)) + side * (0.05 * sgn) + fwd * (0.04 + swing * ph * sgn)
+            H.key_hand(s_, f, W, Vector((0, 0, -1)) + fwd * 0.15, -side * sgn, pole=sh + Vector((0, 0, -0.3)) - fwd * 0.4)
+arms_relaxed(AS, 556, 660)
+AS.key_hand("L", 662, None, None, None) if False else None
+arms_relaxed(AS, 1522, 1840)
+arms_relaxed(AS, 1844, 1980, step=20, swing=0.0)
 
 # faces (MPFB face bones): focused concentration while working, blinks, relief when the pin is in
 def face(H, f, brow=-0.006, lid=-14, jaw=0.0, brow_y=0.0):
@@ -415,6 +467,23 @@ for H, ofs in ((VA, 0), (VB, 23), (AS, 41)):
         if 760 < fb < 1500: continue
         face(H, fb, -0.006, -14); face(H, fb + 3, -0.006, -55); face(H, fb + 7, -0.006, -14)
 
+# ---- props are moved only by hands: from pick-up to put-down each tool rides on the wrist bone that holds it
+def follow(prop, rig_, side, f0, f1, rest_before=True, extra=()):
+    bone = rig_.pose.bones["wrist." + side]; prop.rotation_mode = 'QUATERNION'
+    ev(f0); Wm0 = rig_.matrix_world @ bone.matrix; P0 = prop.matrix_world.copy(); OFF = Wm0.inverted() @ P0
+    xo = [(o, P0.inverted() @ o.matrix_world) for o in extra]
+    for f in range(f0, f1 + 1, 2):
+        ev(f); M = rig_.matrix_world @ bone.matrix @ OFF
+        loc, q, sc_ = M.decompose(); prop.location = loc; prop.rotation_quaternion = q
+        prop.keyframe_insert("location", frame=f); prop.keyframe_insert("rotation_quaternion", frame=f)
+        for o, rel in xo:
+            if f <= o["_until"]:
+                Mo = M @ rel; lo, qo, _ = Mo.decompose(); o.rotation_mode = 'QUATERNION'; o.location = lo; o.rotation_quaternion = qo
+                o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_quaternion", frame=f)
+def rest_key(o, f, loc, q):
+    o.rotation_mode = 'QUATERNION'; o.location = loc; o.rotation_quaternion = q
+    o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_quaternion", frame=f)
+
 # ---- settle VetA's cradling hands: push each wrist target away from the bird until the glove only touches (few overlaps)
 from mathutils.bvhtree import BVHTree
 def side_polys(o, side):
@@ -428,22 +497,47 @@ def tri_tree(o, side=None):
     if side is not None:
         gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
         wr = OB["VetA"].matrix_world @ OB["VetA"].pose.bones["wrist." + side].head
-        ps_ = [tuple(p.vertices) for p in me_.polygons if p.material_index in gi and (mw_ @ p.center - wr).length < 0.16]
+        wo = OB["VetA"].matrix_world @ OB["VetA"].pose.bones["wrist." + ("L" if side == "R" else "R")].head
+        ps_ = [tuple(p.vertices) for p in me_.polygons if p.material_index in gi and (mw_ @ p.center - wr).length < 0.16 and (mw_ @ p.center - wr).length < (mw_ @ p.center - wo).length]
     else: ps_ = [tuple(p.vertices) for p in me_.polygons]
     ev_.to_mesh_clear(); return BVHTree.FromPolygons(vs_, ps_)
 GA = OB["VetA.body"]
+def deep_count(o, rig_, side, target, depth=0.012):
+    """glove vertices of one hand deeper than `depth` inside `target` (nearest point + normal test)"""
+    dg_ = bpy.context.evaluated_depsgraph_get(); ev_ = o.evaluated_get(dg_); me_ = ev_.to_mesh(); mw_ = o.matrix_world
+    gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
+    wr = rig_.matrix_world @ rig_.pose.bones["wrist." + side].head; wo = rig_.matrix_world @ rig_.pose.bones["wrist." + ("L" if side == "R" else "R")].head
+    vids = set()
+    for p in me_.polygons:
+        if p.material_index in gi: vids.update(p.vertices)
+    pts = [mw_ @ me_.vertices[i].co for i in vids]
+    ev_.to_mesh_clear()
+    pts = [q for q in pts if (q - wr).length < 0.16 and (q - wr).length < (q - wo).length]
+    n = 0
+    for q in pts:
+        loc, nrm, _, d = target.find_nearest(q, 0.06)
+        if loc is not None and depth < d < 0.06 and (q - loc).dot(nrm) < 0: n += 1
+    return n
 BODY_C = bw((0, -0.03, 0.14))
-HANDA = {"R": (lambda: bw((-0.11, -0.06, 0.035)), Vector((0, 1, -0.1)), Vector((0, 0, -1)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0))),
-         "L": (lambda: bw((0.0, 0.085, 0.115)), Vector((0, 1, 0.25)), Vector((1, 0, 0)), Vector((A_POS[0] - 0.45, A_POS[1] - 0.15, 1.0)))}
+ev(600); _bt = tri_tree(OB["Toucan_body"]); _h = _bt.ray_cast(Vector((7.15, -0.055, 1.6)), Vector((0, 0, -1)), 0.8)
+BACK = _h[0] if _h[0] is not None else Vector((7.08, -0.06, 1.12)); print("BACK", BACK)
+_dB = Vector((0.5, 1, -0.45)).normalized()
+_h2 = _bt.ray_cast(Vector((6.95, -0.4, TZ + 0.08)), Vector((0, 1, 0)), 0.6)
+CHEST = _h2[0] if _h2[0] is not None else Vector((6.98, -0.07, TZ + 0.11)); print("CHEST", CHEST)
+_dC = Vector((-0.75, 0.25, -0.6)).normalized()
+HANDA = {"R": (lambda: BACK + Vector((0, 0, 0.024)) - _dB * 0.07, _dB, Vector((0, 0, -1)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.2))),
+         "L": (lambda: Vector((6.78, -0.27, TZ + 0.03)), Vector((0.2, 1, -0.05)), Vector((0, 0, -1)), Vector((A_POS[0] - 0.5, A_POS[1] + 0.05, 0.85)))}   # steadying hand on the towel in front of the chest
 for f in (530, 1000, 1500, 1960):
     for s_ in "LR":
         Wf, d_, n_, pole_ = HANDA[s_]; W = Wf()
+        VA.key_hand(s_, f, W, d_, n_, pole=pole_)
         away = (W - BODY_C); away.normalize()
-        for it in range(26):
-            ev(f); bt_ = tri_tree(OB["Toucan_body"]); ht_ = tri_tree(GA, s_)
-            n = len(ht_.overlap(bt_))
+        if s_ == "R": away = Vector((0, -0.3, 1)).normalized()
+        else: away = Vector((0, -1, 0.15)).normalized()
+        for it in range(40):
+            ev(f); bt_ = tri_tree(OB["Toucan_body"]); n = deep_count(GA, OB["VetA"], s_, bt_, depth=0.007)
             if n == 0: break
-            W = W + away * 0.004
+            W = W + away * 0.002
             VA.key_hand(s_, f, W, d_, n_, pole=pole_)
         print("SETTLE VetA", s_, f, "iters", it, "overlaps", n)
 
@@ -454,16 +548,61 @@ def glove_tree_side(o, rig, side):
     vs_ = [mw_ @ v.co for v in me_.vertices]
     gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
     wr = rig.matrix_world @ rig.pose.bones["wrist." + side].head
-    ps_ = [tuple(p.vertices) for p in me_.polygons if p.material_index in gi and (mw_ @ p.center - wr).length < 0.16]
+    wo = rig.matrix_world @ rig.pose.bones["wrist." + ("L" if side == "R" else "R")].head
+    ps_ = [tuple(p.vertices) for p in me_.polygons if p.material_index in gi and (mw_ @ p.center - wr).length < 0.16 and (mw_ @ p.center - wr).length < (mw_ @ p.center - wo).length]
     ev_.to_mesh_clear(); return BVHTree.FromPolygons(vs_, ps_)
-for f in list(range(1515, 1693, 6)) + [1693]:
+for f in list(range(1508, 1540, 2)) + list(range(1540, 1693, 6)) + [1693]:
     pw = pro_grip_pt(min(f, 1692)); palm = 0.016
     for it in range(14):
-        ev(f); n = len(glove_tree_side(GB, OB["VetB"], "R").overlap(tri_tree(PRO)))
-        if n <= 30: break
+        ev(f); n = deep_count(GB, OB["VetB"], "R", tri_tree(PRO), depth=0.006)
+        if n == 0: break
         palm += 0.004
-        grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=palm)
+        grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.05, palm=palm)
     if f % 30 == 3: print("SETTLE VetB prosthetic", f, "palm", round(palm, 3), "overlaps", n)
+
+# ---- tools ride on the hand that holds them (after all hand keys are final)
+q_syr = SYR_AX.to_track_quat('Z', 'Y')
+rest_key(SYR, 528, SYR_C + (-SYR_AX) * 0.0, q_syr); rest_key(SYR, 1717, SYR_C, q_syr)
+SYR_ACT = [(f_, seam + Vector((0.0, 0.04 + s_, 0.06))) for f_, s_ in ((1726, 0.1), (1744, 0.0), (1768, 0.0), (1792, 0.08))]
+adj = {f_: Vector() for f_, _ in SYR_ACT}
+for it in range(4):
+    for f_, p_ in SYR_ACT:
+        ax_s = (seam - p_).normalized(); syr_grip(f_, seam - ax_s * 0.072 + adj[f_], ax_s)
+    follow(SYR, OB["VetB"], "L", 1717, 1803)
+    errs = []
+    for f_, p_ in SYR_ACT:
+        ev(f_); want = seam - (seam - p_).normalized() * 0.072; e = want - SYR.matrix_world.translation; adj[f_] += e; errs.append(e.length)
+    print("SYR correction", it, [round(x, 3) for x in errs])
+# finger regrip: the barrel rolls in the fingers about its grip point into a pen angle (needle tip on the seam), and back before the put-down
+_bn = OB["VetB"].pose.bones["wrist.L"]
+ev(1717); _OFF = (OB["VetB"].matrix_world @ _bn.matrix).inverted() @ SYR.matrix_world; _t0 = _OFF.translation.copy(); _q0 = _OFF.to_quaternion()
+ev(1744); _qact = (OB["VetB"].matrix_world @ _bn.matrix).to_quaternion().inverted() @ (seam - SYR_ACT[1][1]).normalized().to_track_quat('Z', 'Y')
+def _ss(x): x = min(max(x, 0.0), 1.0); return x * x * (3 - 2 * x)
+for f in range(1717, 1804, 2):
+    t = _ss((f - 1717) / 13) * (1 - _ss((f - 1790) / 13)); ev(f); W = OB["VetB"].matrix_world @ _bn.matrix
+    SYR.location = W @ _t0; SYR.rotation_quaternion = W.to_quaternion() @ _q0.slerp(_qact, t)
+    SYR.keyframe_insert("location", frame=f); SYR.keyframe_insert("rotation_quaternion", frame=f)
+q_twz = Euler((0, 0, R_(90))).to_quaternion(); q_pin = Euler((R_(90), 0, 0)).to_quaternion()
+TWZ_REST = PIN_REST + Vector((0, 0.065, 0.004))
+rest_key(TWZ, 528, TWZ_REST, q_twz); rest_key(TWZ, 1807, TWZ_REST, q_twz)
+rest_key(PIN, 528, PIN_REST, q_pin); rest_key(PIN, 1807, PIN_REST, q_pin)
+PIN["_until"] = 1910
+TWZ_ACT = [(f_, pin_in + Vector((0, d_, 0.01 + d_ * 0.5))) for f_, d_ in ((1810, 0.08), (1850, 0.02), (1880, 0.008), (1910, 0.0), (1944, 0.0))]
+adj = {f_: Vector() for f_, _ in TWZ_ACT}
+for it in range(4):
+    for f_, p_ in TWZ_ACT: twz_grip(f_, p_ + adj[f_])
+    rest_key(PIN, 1807, PIN_REST, q_pin)
+    follow(TWZ, OB["VetB"], "R", 1807, 1962, extra=(PIN,))
+    errs = []
+    for f_, p_ in TWZ_ACT:
+        ev(min(f_, 1910)); e = p_ - PIN.matrix_world.translation; adj[f_] += e; errs.append(e.length)
+    print("PIN correction", it, [round(x, 3) for x in errs])
+follow(SCN, OB["VetB"], "R", 680, 744)
+rest_key(SCN, 746, SCN_REST + Vector((0, 0, 0.0)), Vector((0, 0, 1)).to_track_quat('Z', 'Y'))   # set down upright on the table (camera is inside the void)
+for o_ in (SYR, TWZ, PIN, SCN):
+    ev(1000 if o_ is SCN else 1975); print("TOOL", o_.name, [round(x, 3) for x in o_.matrix_world.translation])
+ev(1910); print("PIN at 1910", [round(x, 3) for x in PIN.matrix_world.translation], "target", [round(x, 3) for x in pin_in])
+ev(1768); print("SYR tip region at 1768", [round(x, 3) for x in (SYR.matrix_world @ Vector((0, 0, 0.06)))], "dist", round((SYR.matrix_world @ Vector((0, 0, 0.06)) - seam).length, 3), "seam", [round(x, 3) for x in seam])
 
 # ================================================================== VOID (beats 5-8)
 V1 = Vector((11.7, 1.65, 0.75)); V2 = Vector((14.2, 3.0, -0.2)); V3 = Vector((13.6, -1.0, 0.95)); P3 = Vector((15.4, -2.4, -0.7))
@@ -680,7 +819,7 @@ ev(1)
 def bwj(local, f=None):          # jungle bird space -> world
     return BIRD_J + Vector(local)
 HEADJ = BIRD_J + Vector((0, 0.03, 0.25)); BEAKJ = BIRD_J + (LB_base + LB_tip) / 2
-STK = lambda a: PV + (Quaternion(Vector((1, 0, 0)), R_(a)) @ base_q) @ Vector((0, 0, 0.55))
+STK = lambda a: PV + (Quaternion(Vector((1, 0, 0)), R_(a)) @ base_q) @ Vector((0, 0, 1.12))
 BC = BIRD_C; HEADC = bw((0, 0.03, 0.25)); BEAKC = bw((LB_base + LB_tip) / 2); SEAM = seam
 SCREEN = Vector(sc["SCREEN"]) + Vector((0.0, 0, 0.06))
 ENC = BIRD_E; HEADE = BIRD_E + Vector((0, 0.03, 0.25))
@@ -696,7 +835,7 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (255, BIRD_J + Vector((-0.45, 0.9, 0.18)), HEADJ + Vector((0, 0, -0.04)), 30),
  (300, HEADJ + Vector((0.28, 0.36, -0.16)), FIG0, 32),
  (345, BIRD_J + Vector((0.78, 0.18, 0.26)), (HEADJ + FIG0) / 2, 36),
- (395, FIG0 + Vector((0.12, 0.06, 0.62)), FIG0 + Vector((0, 0.05, -0.35)), 24),
+ (395, FIG0 + Vector((0.42, 0.34, 0.36)), (FIG0 + HEADJ) / 2 + Vector((0, 0.04, -0.22)), 26),
  (445, BIRD_J + Vector((0.55, 0.62, 0.32)), HEADJ, 40),
  (495, BIRD_J + Vector((1.0, 0.25, 0.25)), HEADJ, 34),
  (528, Vector((2.3, 0.0, 1.62)), Vector((4.6, 0, 1.5)), 22),
@@ -704,7 +843,7 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (592, Vector((5.55, -0.45, 1.45)), BC + Vector((0, 0, 0.15)), 28),
  (636, BEAKC + Vector((-0.14, 0.06, 0.5)), BEAKC, 34),
  (672, BEAKC + Vector((-0.2, -0.04, 0.42)), BEAKC, 40),
- (689, Vector((7.3, 0.0, 1.62)), Vector((8.4, 0.75, 1.15)), 30),
+ (689, Vector((7.45, 0.1, 1.85)), BEAKC, 30),
  (708, Vector((7.95, 0.9, 1.45)), SCREEN, 28),
  (738, SCREEN + Vector((-0.42, 0, 0.0)), SCREEN + Vector((1, 0, 0)), 30),
  (756, SCREEN + Vector((0.12, 0, 0.0)), SCREEN + Vector((1.5, 0, 0)), 30),
@@ -725,11 +864,13 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (1500, SCREEN + Vector((0.95, -0.05, 0.05)), SCREEN, 30),
  (1530, SCREEN + Vector((0.45, 0, 0.0)), SCREEN + Vector((-1, 0, 0)), 30),
  (1552, SCREEN + Vector((-0.5, -0.1, 0.05)), BEAKC, 30),
- (1600, BEAKC + Vector((-0.2, -0.16, 0.1)), SEAM, 48),
+ (1575, Vector((7.25, 0.05, 1.78)), SEAM, 36),
+ (1600, BEAKC + Vector((-0.3, -0.22, 0.16)), SEAM, 42),
  (1650, BEAKC + Vector((-0.26, 0.02, 0.05)), SEAM, 55),
  (1700, BEAKC + Vector((-0.18, -0.2, 0.12)), SEAM, 52),
  (1750, SEAM + Vector((-0.1, -0.1, 0.08)), SEAM, 62),
  (1800, SEAM + Vector((-0.26, -0.16, 0.18)), SEAM + Vector((0, 0.04, 0.01)), 45),
+ (1836, SEAM + Vector((-0.34, -0.3, 0.24)), SEAM + Vector((0, 0.04, 0.0)), 40),
  (1870, BC + Vector((-0.95, -0.25, 0.62)), BC + Vector((0, 0.1, 0.35)), 28),
  (1925, Vector((4.9, -0.25, 1.5)), BC + Vector((0, 0, 0.3)), 24),
  (1957, Vector((3.65, -0.1, 1.55)), BC + Vector((0, 0, 0.3)), 22),

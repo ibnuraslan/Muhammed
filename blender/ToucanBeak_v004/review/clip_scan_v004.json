@@ -1,0 +1,92 @@
+{
+ "frames": {
+  "1849": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1861": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1879": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1885": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1897": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1909": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1915": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1921": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1927": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1933": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1939": {
+   "VetA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1945": {
+   "VetB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
