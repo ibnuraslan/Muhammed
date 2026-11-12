@@ -573,8 +573,10 @@ def _():
         c["hatch"].location = c["hatch_home"] + Vector((0.32, 0, 0.02))
         legs_in_hatch(c, 1.25 - 0.75 * ease(min(1.0, sec / 3.6)) + 0.015 * math.sin(9 * sec))
         closet_dust(c, sec)
-        bm = beams(c, 1, 350)
+        bm = beams(c, 1, 200)
         H.aim_obj(bm[0], Vector((-0.8, -1.9, F2 + 0.9)), Vector((HATCH[0], HATCH[1], C2 - 0.35)))
+        if c.get("haze"):          # thin haze: the trousers must read dark in the beam
+            c["haze"].data.materials[0].node_tree.nodes["Principled Volume"].inputs['Density'].default_value = 0.006
     def cam(c, t):
         e = ease(t)
         return (Vector((-1.15, -3.3, F2 + 0.45)).lerp(Vector((-1.13, -3.1, F2 + 0.5)), e), Vector((HATCH[0], HATCH[1], C2 - 0.55)), 40)
@@ -668,7 +670,12 @@ def zarnow(c, sec, head_up):
         c["cfill"] = H.point((-1.1, -1.6, F2 + 1.0), 22, (0.55, 0.68, 1.0), 0.3)
     h = P(c, "z")
     base = F2 + 0.83
-    H.stand_at(h, (HATCH[0], HATCH[1] - 0.04, base), math.radians(90), z=base - 0.25 + 0.25 * head_up)
+    H.stand_at(h, (HATCH[0], HATCH[1] - 0.06, base), math.radians(90), z=base)
+    top = h.bone_tail("head").z
+    dz = (C2 - 0.32 + (EAVE + 0.16 - C2 + 0.32) * head_up) - top
+    h.arm.location.z += dz; bpy.context.view_layer.update()
+    seat = F2 + 0.47; ht = max(0.06, base + dz - seat)            # the crate he stands on sized to his feet
+    c["crate"].scale.z = ht / 0.36; c["crate"].location.z = seat + ht / 2
     return h
 
 
@@ -679,13 +686,19 @@ def _():
         u = ease(min(1.0, sec / 2.2))
         h = zarnow(c, sec, u)
         H.look(h, 0, -10)
-        hand = Vector((HATCH[0] + 0.04, HATCH[1] + 0.1, C2 + 0.12 * ease(min(1.0, max(0.0, (sec - 1.5) / 1.5)))))
-        reach(h, "R", hand, Vector((0, 0, -1)), Vector((0, 0, 1)))
+        hand = Vector((HATCH[0] + 0.03, HATCH[1] + 0.12, EAVE + 0.04 + 0.1 * ease(min(1.0, max(0.0, (sec - 1.0) / 1.5)))))
+        reach(h, "R", hand, Vector((0, 0, -1)), Vector((-1, 0.6, 0.2)))
+        if "torch_body" not in c:
+            c["torch_body"] = cyl("TorchBody", (0, 0, 0), 0.02, 0.2, H.mat("chrome"), 16)
+        tb = c["torch_body"]; d_ = (Vector((HATCH[0] - 1.2, HATCH[1] + 1.6, EAVE + 0.2)) - hand).normalized()
+        tb.location = hand + d_ * 0.06; tb.rotation_euler = d_.to_track_quat('Z', 'Y').to_euler()
         reach(h, "L", Vector((HATCH[0] - 0.2, HATCH[1] + 0.3, F2 + 1.78)), Vector((0, 0, -1)), Vector((0, 1, 0)))
-        H.aim_obj(c["torch"], hand + Vector((0, 0, 0.1)), Vector((HATCH[0] + 1.5, HATCH[1] + 1.5, EAVE + 0.3)))
+        H.aim_obj(c["torch"], hand + Vector((0, 0, 0.1)), Vector((HATCH[0] - 1.2, HATCH[1] + 1.6, EAVE + 0.2)))
+        c["attic_fill"].data.energy = 4.0; c["attic_fill2"].data.energy = 20.0
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.05, -2.15, F2 + 0.55)).lerp(Vector((-1.08, -1.95, F2 + 0.6)), e), Vector((HATCH[0], HATCH[1], C2 - 0.35)), 22)
+        hx, hy = HATCH        # from inside the crawl space: his head and torch arm come up through the slot
+        return (Vector((hx + 1.0, hy + 0.9, EAVE + 0.45)).lerp(Vector((hx + 0.9, hy + 0.8, EAVE + 0.42)), e), Vector((hx, hy, EAVE + 0.12)), 28)
     return cam, anim
 
 
@@ -716,6 +729,7 @@ def _():
     def anim(c, t):
         sec = t * DUR["attic_track"]
         c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
+        attic_light(c, hot=0.25); c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
         bm = beams(c, 1, 400); hx, hy = HATCH
         H.aim_obj(bm[0], Vector((hx, hy, EAVE + 0.2)), Vector((hx + 0.2 + 0.8 * math.sin(0.5 * sec), hy + 2.0, EAVE + 0.1)))
     def cam(c, t):
@@ -729,6 +743,7 @@ def _():
     def anim(c, t):
         sec = t * DUR["attic_finds"]
         c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
+        attic_light(c, hot=0.25); c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
         bm = beams(c, 1, 400); hx, hy = HATCH
         tgt = Vector((hx + 0.5, hy + 0.8, EAVE + 0.1)).lerp(Vector((hx + 0.95, hy + 0.75, EAVE + 0.1)), ease(t))
         bm[0].data.energy = 120; bm[0].data.spot_size = math.radians(45)
@@ -745,7 +760,6 @@ def _():
         sec = t * DUR["recoil"]
         down = ease(min(1.0, max(0.0, (sec - 0.4) / 0.8)))
         h = zarnow(c, sec, 1.0 - down)
-        h.arm.location.z -= 0.35 * down; bpy.context.view_layer.update()
         H.rotl(h, "spine03", (1, 0, 0), 20 * down); H.rotl(h, "head", (0, 0, 1), -35 * down); H.rotl(h, "head", (1, 0, 0), 20 * down)
         hd = h.bone_head("head")
         reach(h, "R", hd + Vector((0.06, -0.12, -0.1)), Vector((1, 0, -1)), Vector((0, 1, 0.3)))

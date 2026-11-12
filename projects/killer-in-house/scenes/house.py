@@ -664,23 +664,54 @@ def upstairs_set(c):
 def attic_set(c):
     """The crawl space beside the hatch: a hot plate, a 1940s radio, a bare wire to the outlet, a thin blanket."""
     hx, hy = HATCH; z = EAVE
-    hp = join([box("HotPlate", (0, 0, 0.04), (0.28, 0.22, 0.07), pbr("HPEnamel", (0.35, 0.34, 0.3), 0.4, 0.3), bevel=0.01),
-               cyl("HPCoil", (0, 0, 0.08), 0.085, 0.01, emissive("Coil", (1.0, 0.25, 0.05), 0.0), 24)], "HotPlate")
+    # single-coil electric hot plate: black enamel drum on three stubby feet, an open spiral coil on top
+    blk = pbr("HPBlack", (0.03, 0.03, 0.03), 0.35, 0.2)
+    coil = emissive("Coil", (1.0, 0.28, 0.05), 0.0)
+    cpb = coil.node_tree.nodes.get("Principled BSDF")
+    if cpb: cpb.inputs['Base Color'].default_value = (0.08, 0.06, 0.05, 1); cpb.inputs['Roughness'].default_value = 0.5
+    parts = [cyl("HPBody", (0, 0, 0.055), 0.11, 0.07, blk, 40), cyl("HPRim", (0, 0, 0.092), 0.105, 0.008, pbr("HPChrome", (0.6, 0.6, 0.6), 0.25, 1.0), 40)]
+    for k in range(3):
+        a_ = k * 2.094
+        parts.append(cyl("HPFoot", (0.08 * math.cos(a_), 0.08 * math.sin(a_), 0.01), 0.012, 0.02, blk, 10))
+    cu = bpy.data.curves.new("HPSpiral", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004; cu.bevel_resolution = 2
+    sp = cu.splines.new('POLY'); n = 140; sp.points.add(n - 1)
+    for i in range(n):
+        th = i / n * 5 * 2 * math.pi; r = 0.012 + 0.075 * i / n
+        sp.points[i].co = (r * math.cos(th), r * math.sin(th), 0.1, 1)
+    so = bpy.data.objects.new("HPSpiral", cu); bpy.context.collection.objects.link(so); so.data.materials.append(coil)
+    hp = join(parts, "HotPlate")
     hp.location = (hx + 0.85, hy + 0.55, z); c["hotplate"] = hp
-    coil = [m for m in hp.data.materials if m.name.startswith("Coil")][0]; c["coil_mat"] = coil
-    rad = join([box("Radio", (0, 0, 0.17), (0.36, 0.2, 0.34), wood("RadioWood", (0.08, 0.04, 0.02), (0.22, 0.12, 0.06), scale=(0.3, 6, 6)), bevel=0.04),
-                box("RadioCloth", (0, -0.101, 0.2), (0.24, 0.004, 0.16), fabric("Grille", (0.5, 0.42, 0.3), 0.9, 0.2, 800)),
-                box("RadioDial", (0, -0.101, 0.07), (0.2, 0.004, 0.05), emissive("Dial", (1.0, 0.7, 0.35), 0.6))], "Radio")
+    so.location = hp.location
+    c["coil_mat"] = coil
+    # 1930s tombstone radio: walnut cabinet with an arched top, cloth grille with fretwork bars, round dial, two knobs
+    wd = wood("RadioWood", (0.09, 0.045, 0.02), (0.25, 0.13, 0.06), scale=(0.3, 6, 6))
+    grille = fabric("Grille", (0.55, 0.45, 0.3), 0.9, 0.2, 800); bake = pbr("Knob", (0.06, 0.035, 0.02), 0.3)
+    rp = [box("RadioBody", (0, 0, 0.15), (0.3, 0.2, 0.3), wd, bevel=0.012),
+          cyl("RadioArch", (0, 0, 0.3), 0.15, 0.2, wd, 40, rot=(math.radians(90), 0, 0)),
+          box("RadioGrille", (0, -0.101, 0.27), (0.17, 0.004, 0.17), grille),
+          cyl("RadioGrilleTop", (0, -0.101, 0.355), 0.085, 0.004, grille, 32, rot=(math.radians(90), 0, 0)),
+          cyl("RadioDial", (0, -0.103, 0.09), 0.032, 0.006, emissive("Dial", (1.0, 0.72, 0.38), 0.5), 24, rot=(math.radians(90), 0, 0))]
+    for k in range(3):
+        rp.append(box("Fret", (-0.05 + 0.05 * k, -0.105, 0.3), (0.012, 0.006, 0.2), wd))
+    for sx in (-1, 1):
+        rp.append(cyl("RKnob", (sx * 0.09, -0.108, 0.07), 0.018, 0.02, bake, 16, rot=(math.radians(90), 0, 0)))
+    rad = join(rp, "Radio")
     rad.location = (hx + 0.35, hy + 0.85, z); rad.rotation_euler = (0, 0, math.radians(-10)); c["radio"] = rad
-    # the bare wire: a thin curve from the radio and hot plate to an outlet rigged on a rafter
-    cu = bpy.data.curves.new("Wire", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004
-    sp = cu.splines.new('BEZIER'); pts = [(hx + 0.4, hy + 0.95, z + 0.02), (hx + 0.85, hy + 0.75, z + 0.01), (hx + 1.15, hy + 0.9, z + 0.02), (hx + 1.3, hy + 1.05, z + 0.28)]
-    sp.bezier_points.add(len(pts) - 1)
-    for bp, p in zip(sp.bezier_points, pts):
-        bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
-    w = bpy.data.objects.new("Wire", cu); bpy.context.collection.objects.link(w); w.data.materials.append(mat("black"))
+    # cloth-covered cords along the joist to a crude splice into the house wiring on a post
+    cord = fabric("ClothCord", (0.22, 0.16, 0.1), 0.95, 0.3, 2000)
+    def wire(nm, pts, d=0.0045):
+        cu = bpy.data.curves.new(nm, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = d
+        sp = cu.splines.new('BEZIER'); sp.bezier_points.add(len(pts) - 1)
+        for bp, p_ in zip(sp.bezier_points, pts):
+            bp.co = p_; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+        o = bpy.data.objects.new(nm, cu); bpy.context.collection.objects.link(o); o.data.materials.append(cord); return o
+    wire("Wire", [(hx + 0.4, hy + 0.97, z + 0.06), (hx + 0.7, hy + 1.0, z + 0.015), (hx + 1.1, hy + 1.02, z + 0.015), (hx + 1.27, hy + 1.06, z + 0.28)])
+    wire("Wire2", [(hx + 0.96, hy + 0.55, z + 0.05), (hx + 1.05, hy + 0.8, z + 0.015), (hx + 1.2, hy + 1.0, z + 0.02), (hx + 1.28, hy + 1.06, z + 0.27)])
+    wire("HouseWire", [(hx + 1.3, hy + 1.06, z + 0.3), (hx + 1.32, hy + 1.07, z + 0.6), (hx + 1.33, hy + 1.08, z + 0.95)], d=0.005)
     box("Post", (hx + 1.3, hy + 1.12, z + 0.45), (0.08, 0.08, 0.9), mat("raw"))
-    box("Outlet", (hx + 1.3, hy + 1.07, z + 0.32), (0.07, 0.03, 0.1), pbr("Bakelite", (0.1, 0.06, 0.03), 0.3))
+    tape = pbr("Tape", (0.02, 0.02, 0.02), 0.6)
+    cyl("Splice", (hx + 1.29, hy + 1.06, z + 0.3), 0.012, 0.07, tape, 12)                   # a lump of black friction tape
+    cyl("SpliceTwist", (hx + 1.29, hy + 1.06, z + 0.355), 0.004, 0.04, pbr("Copper", (0.7, 0.4, 0.25), 0.3, 1.0), 8)
     bl = box("Blanket", (hx + 0.1, hy + 1.9, z + 0.02), (0.8, 1.7, 0.03), fabric("Blanket", (0.32, 0.3, 0.24), 0.95, 0.4, 250), bevel=0.012)
     bl.rotation_euler = (0, 0, math.radians(8)); c["blanket"] = bl
     # a few cans and a jar
@@ -882,7 +913,7 @@ def person(name, kind):
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
-        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.32), hair="short02", hv=0.2, hat=False),
+        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.2, val=0.55), hair="bob01", hv=0.15, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]
@@ -913,15 +944,28 @@ def ragged(h):
                 tc = N.new("ShaderNodeTexCoord")
                 n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 9; n.inputs['Detail'].default_value = 8; L.new(tc.outputs['Object'], n.inputs['Vector'])
                 v = N.new("ShaderNodeTexVoronoi"); v.inputs['Scale'].default_value = 7; L.new(tc.outputs['Object'], v.inputs['Vector'])
-                tear = N.new("ShaderNodeMath"); tear.operation = 'LESS_THAN'; tear.inputs[1].default_value = 0.07; L.new(v.outputs['Distance'], tear.inputs[0])
+                tear = N.new("ShaderNodeMath"); tear.operation = 'LESS_THAN'; tear.inputs[1].default_value = 0.12; L.new(v.outputs['Distance'], tear.inputs[0])
                 src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
                 grime = N.new("ShaderNodeMix"); grime.data_type = 'RGBA'; grime.blend_type = 'MULTIPLY'
                 L.new(n.outputs['Fac'], grime.inputs['Factor'])
                 if src: L.new(src, grime.inputs[6])
-                grime.inputs[7].default_value = (0.35, 0.28, 0.2, 1)
+                grime.inputs[7].default_value = (0.25, 0.2, 0.14, 1)
                 holes = N.new("ShaderNodeMix"); holes.data_type = 'RGBA'; L.new(tear.outputs[0], holes.inputs['Factor'])
                 L.new(grime.outputs[2], holes.inputs[6]); holes.inputs[7].default_value = (0.03, 0.025, 0.02, 1)
-                L.new(holes.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.95
+                if "casualsuit" in m.name:
+                    me_ = o.data; zz = np.array([v.co.z for v in me_.vertices]); cut = zz.min() + 0.52 * (zz.max() - zz.min())
+                    la = me_.color_attributes.new("legs", 'FLOAT_COLOR', 'POINT')
+                    for i, z_ in enumerate(zz):
+                        f_ = 1.0 if z_ < cut else 0.0; la.data[i].color = (f_, f_, f_, 1)
+                    at = N.new("ShaderNodeAttribute"); at.attribute_name = "legs"; at.attribute_type = 'GEOMETRY'
+                    dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; L.new(at.outputs['Fac'], dk.inputs['Factor'])
+                    L.new(holes.outputs[2], dk.inputs[6]); dk.inputs[7].default_value = (0.1, 0.085, 0.07, 1)
+                    L.new(dk.outputs[2], p.inputs['Base Color'])
+                else:
+                    L.new(holes.outputs[2], p.inputs['Base Color'])
+                p.inputs['Roughness'].default_value = 0.95
+                for k_ in ('Sheen Weight', 'Specular IOR Level', 'Coat Weight'):
+                    if k_ in p.inputs: p.inputs[k_].default_value = 0.0 if k_ != 'Specular IOR Level' else 0.15
     # beard + sunken cheeks: a vertex colour on the body, darkening the lower face (follows the rig)
     me = h.body.data
     co = np.array([v.co[:] for v in me.vertices])
@@ -931,7 +975,7 @@ def ragged(h):
         hc = co[hv]; zmin = hc[:, 2].min(); zmax = hc[:, 2].max(); ymin = hc[:, 1].min()
         for i in hv:
             x, y, z = co[i]
-            beard = max(0.0, 1.0 - (z - zmin) / 0.085) * (1.0 if y < ymin + 0.11 else 0.4)
+            beard = max(0.0, 1.0 - (z - zmin) / 0.11) * (1.0 if y < ymin + 0.11 else 0.4)
             cheek = 0.5 * max(0.0, 1.0 - abs(z - (zmin + 0.1)) / 0.03) * (1.0 if abs(x) > 0.035 and y < ymin + 0.07 else 0.0)
             face[i] = min(1.0, beard + cheek)
     attr = me.color_attributes.new("beard", 'FLOAT_COLOR', 'POINT')
@@ -947,10 +991,24 @@ def ragged(h):
     if src: L.new(src, mx.inputs[6])
     mx.inputs[7].default_value = (0.09, 0.07, 0.055, 1)
     L.new(mx.outputs[2], p.inputs['Base Color'])
+    vg = h.body.vertex_groups.new(name="beardvg")
+    if len(hv):
+        hc_ = co[hv]; z0_ = hc_[:, 2].min(); y0_ = hc_[:, 1].min()
+        sel = [int(i) for i in hv if z0_ + 0.012 < co[i, 2] < z0_ + 0.1 and co[i, 1] < y0_ + 0.12 and not (co[i, 2] > z0_ + 0.075 and abs(co[i, 0]) < 0.012 and co[i, 1] < y0_ + 0.03)]
+        vg.add(sel, 1.0, 'REPLACE')
+    bd = h.body.copy(); bd.name = h.name + "_beard"; bpy.context.collection.objects.link(bd)
+    mk = bd.modifiers.new("beardmask", 'MASK'); mk.vertex_group = "beardvg"
+    tx = bpy.data.textures.new(h.name + "_beardtx", 'CLOUDS'); tx.noise_scale = 0.004
+    dsp = bd.modifiers.new("beardfuzz", 'DISPLACE'); dsp.texture = tx; dsp.strength = 0.012; dsp.mid_level = 0.0
+    bm_ = bpy.data.materials.new("BeardHair"); bm_.use_nodes = True; bp_ = bm_.node_tree.nodes["Principled BSDF"]
+    bp_.inputs['Base Color'].default_value = (0.05, 0.04, 0.03, 1); bp_.inputs['Roughness'].default_value = 0.9
+    for sl in bd.material_slots:
+        sl.link = 'OBJECT'; sl.material = bm_
+    h.parts.append(bd)
     for o in h.parts:            # hair: bigger, matted
         if "bob01" in o.name or "short02" in o.name:
-            tx = bpy.data.textures.new(o.name + "_mat", 'CLOUDS'); tx.noise_scale = 0.03
-            dm = o.modifiers.new("matted", 'DISPLACE'); dm.texture = tx; dm.strength = 0.03; dm.mid_level = 0.3
+            tx = bpy.data.textures.new(o.name + "_mat", 'CLOUDS'); tx.noise_scale = 0.015
+            dm = o.modifiers.new("matted", 'DISPLACE'); dm.texture = tx; dm.strength = 0.014; dm.mid_level = 0.4
             for m in o.data.materials:
                 if m and m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
                     m.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.9
