@@ -57,3 +57,18 @@ Recurring sets: **DRAIN** (yard of the suburban house), **BOUTIQUE** (nameless A
 | COURT | "Before the court deliberates … 'I'm ashamed every day,' he says." | Slow push on a man standing alone in the dock, head bowed. | Reverse from behind the dock: the public benches, faces turned toward him. |
 | COURT | "On February twenty-seventh … three of them suspended." | The judges file in and sit as the room rises. | Generic Paris law-court steps under a grey sky, reporters walking down. |
 | TABLE | "Police can account for the thirty-one-carat diamond … still missing." | The big diamond alone on its stand, the camera pulling back. | Pull back wider: the table full of empty stands for the missing pieces. |
+
+## Cinematic look: per-shot choices (Nov 2026)
+
+The person's rule: cinematic must not change the colours (no blue/teal wash). Mood comes from shadow and contrast,
+with natural colours and readable faces. If a relight kills the soul of a shot, keep the grade only.
+
+| Set / shot | Choice | Note |
+|---|---|---|
+| Boutique salon (floor, painters' room) | full look (relight + grade) | approved: low sun through the windows |
+| Court (all) | full look | approved: window key, room cut back |
+| Steps (ch4 5B) | grade only | "has more soul"; set keeps its grey-sky light |
+| Unit office (read, pin, listen) | grade only | relight lost her face; set keeps its sun through the blinds |
+| Drain yard / gate, raid street, dawn facade, lane | mist relight, under review | check for blue cast |
+| December street (ch2 xmas, door, getaway) | dusk relight, under review | check for blue cast |
+| Night / windowless sets | night_interior (darker walls, warm practicals) | own lights kept |
