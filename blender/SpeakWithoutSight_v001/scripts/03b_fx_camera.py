@@ -312,7 +312,7 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (120, V(1.55, -1.55, 0.32), lambda f: dogh(f).lerp(gface(f), 0.4), 20),
     (163, V(0.95, -1.25, 0.95), gface, 24), (225, lambda f: gface(f) + V(0.32, -0.62, 0.02), gface, 35),
     (290, lambda f: gface(f) + V(0.16, -0.34, 0.0), gface, 45), (350, V(0.95, -1.6, 1.3), V(0.2, 0.4, 0.9), 24),
-    (397, V(0.65, -2.1, 1.45), V(-0.35, 0.1, 0.85), 22), (460, lambda f: pair(f) + V(0.05, -1.15, 0.0), pair, 26),
+    (397, V(0.65, -2.1, 1.45), V(-0.35, 0.1, 0.85), 22), (460, lambda f: pair(f) + V(0.45, -1.0, 0.25), pair, 26),
     (530, lambda f: tthroat(f) + V(0.32, -0.38, -0.05), tthroat, 40),
     (595, lambda f: tthroat(f) + TRw * 0.46 - TFw * 0.12 + V(0, 0, -0.12), tmouth, 30),
     (655, lambda f: tmouth(f) + TRw * 0.48 - TFw * 0.06 + V(0, 0, -0.02), tmouth, 40),
@@ -328,12 +328,12 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (1320, lambda f: tmouth(f) + TRw * 0.28 - TFw * 0.12 + V(0, 0, 0.0), tmouth, 60),
     (1385, lambda f: tmouth(f) + TRw * 0.3 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 55),
     (1420, lambda f: tmouth(f) + TRw * 0.6 - TFw * 0.3 + V(0, 0, 0.08), tmouth, 32), (1453, lambda f: pair(f) + V(0.0, -1.35, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
-    (1590, lambda f: gmouth(f) + V(0.22, -0.36, 0.03), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
+    (1590, lambda f: gmouth(f) + V(0.3, -0.45, 0.06), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them
 for k, f in enumerate((1723, 1763, 1803)):
-    a = R_(65 - 55 * k)
+    a = R_(65 - 25 * k)
     SHOTS.append((f, (lambda a_: (lambda f_: pair(f_) + V(1.55 * math.sin(a_), -1.55 * math.cos(a_), 0.15)))(a), pair, 24))
-SHOTS += [(1825, lambda f: pair(f) + V(-0.15, -1.15, 0.1), pair, 26), (1843, lambda f: gmouth(f) + V(0.15, -0.55, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
+SHOTS += [(1825, lambda f: pair(f) + V(0.35, -1.15, 0.1), pair, 26), (1843, lambda f: gmouth(f) + V(0.15, -0.55, 0.05), gface, 40), (1900, lambda f: pair(f) + V(0.55, -1.3, 0.4), pair, 28),
           (END, lambda f: pair(f) + V(0.35, -1.9, 1.1), pair, 22)]
 res = []
 for f, cp, ap, ln in SHOTS:

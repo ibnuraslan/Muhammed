@@ -184,7 +184,7 @@ def g_posture(f):
     """hunched and closed (beats 1-9) -> upright and open (beats 10-11)"""
     u = smooth((f - 1723) / 140.0)
     lean_to_teacher = smooth((f - 470) / 80.0) * (1 - 0.5 * smooth((f - 1723) / 120))
-    flex = 14 * (1 - u) + 3 * u + wave(f, 240, 1.2) + 10 * lean_to_teacher
+    flex = 14 * (1 - u) + 3 * u + wave(f, 230, 2.2) + 10 * lean_to_teacher
     twist = -16 * lean_to_teacher
     head_p = 12 * (1 - u) - 4 * u
     head_y = -18 * lean_to_teacher
@@ -192,6 +192,7 @@ def g_posture(f):
 for f in keys_every(1, END, 10):
     fl, tw, hp, hy = g_posture(f)
     hp -= 9 * smooth((f - 1440) / 40.0)   # lifts her face when she starts to practise
+    hp -= 18 * smooth((f - 500) / 70.0) * (1 - smooth((f - 1075) / 45.0))   # face up towards the voice under her hand (beats 4-6)
     G.root(f, G_HIP + V(0, -0.05 * smooth((f - 460) / 60.0) * (1 - smooth((f - 1900) / 60.0)), 0), G_YAW, flex=-8 + fl * 0.3)
     G.spine(f, flex=fl, twist=tw, head=(hp, hy))
 # eyes unfocused: slightly divergent, slow drift, never tracking (until the last beat where they still don't track but she smiles)
@@ -211,7 +212,7 @@ for f in keys_every(1, 450, 20):
 # ================================================================== TEACHER
 T = TEACH
 T_YAW = 141.0; T_F, T_R = fdir(T_YAW), rdir(T_YAW)
-T_KNEEL = V(-0.24, 0.09, 0.50) - fdir(141.0) * 0.15
+T_KNEEL = V(-0.24, 0.09, 0.50) - fdir(141.0) * 0.12
 def t_kneel_keys(f, root, yaw, flex=12.0, twist=0.0, head=(0.0, 0.0), sit=0.0):
     F_, R__ = fdir(yaw), rdir(yaw)
     T.root(f, root - V(0, 0, sit), yaw, flex=flex * 0.3)
@@ -246,8 +247,15 @@ T.foot("L", 418, F0["L"], 115); T.foot("L", 428, ((F0["L"] + (rb - T_R * 0.12).t
 T.foot("L", 440, (rb - T_R * 0.12).to_2d(), T_YAW, lift=0.055, pitch=-72)
 t_kneel_feet(END, T_KNEEL, T_YAW)
 # kneeling body over the rest of the film (posture keyed sparsely; speech adds small head moves)
-T_BODY = [(442, 14, 0, (6, 0)), (600, 17, 0, (2, 0)), (895, 15, 0, (-6, 0)), (980, 17, 0, (4, 0)), (1063, 16, -6, (2, -6)),
-          (1261, 16, 0, (0, 0)), (1453, 12, 8, (6, 10)), (1600, 14, 8, (8, 12)), (1723, 10, 0, (0, 0)), (1843, 8, 0, (-2, 0))]
+T_BODY = [(442, 14, 0, (6, 0)), (462, 36, -8, (16, -8)), (505, 24, -4, (8, 0)), (600, 17, 0, (2, 0)), (895, 15, 0, (-6, 0)), (980, 17, 0, (4, 0)), (1063, 16, -6, (2, -6)),
+          (1261, 16, 0, (0, 0)), (1453, 12, 8, (6, 10)), (1600, 14, 8, (8, 12)), (1723, 4, 0, (0, 0)), (1843, 4, 0, (-2, 0))]
+_tb = [(f_, fl_, tw_, hd_[0], hd_[1]) for f_, fl_, tw_, hd_ in T_BODY]
+_fl = pchip([(x[0], x[1]) for x in _tb]); _tw = pchip([(x[0], x[2]) for x in _tb]); _hp = pchip([(x[0], x[3]) for x in _tb]); _hy = pchip([(x[0], x[4]) for x in _tb])
+for f in range(472, 1900, 30):
+    if any(abs(f - x[0]) < 12 for x in _tb): continue
+    chin = -22 if f < 1063 else -4
+    t_kneel_keys(f, T_KNEEL, T_YAW, _fl(f) + (0 if f < 1063 else 5) + wave(f, 250, 1.5), _tw(f) + wave(f, 410, 2.0),
+                 (_hp(f) + chin + wave(f, 95, 1.2), _hy(f) + wave(f, 330, 3.0)))
 for f, fl, tw, hd in T_BODY:
     chin = -22 if f < 1063 else -4      # chin up while the hand is on her throat, back down to offer her lips
     t_kneel_keys(f, T_KNEEL, T_YAW, fl + (0 if f < 1063 else 5), tw, (hd[0] + chin, hd[1]))
@@ -256,7 +264,7 @@ for f in keys_every(250, 392, 12):
     ph = math.sin((f - 250) / 15.0)
     for s, sx in (("L", -1), ("R", 1)):
         ev(f); sh = T.bone_world("upperarm01." + s); yw = tyaw(f); F_, R__ = fdir(yw), rdir(yw)
-        W = sh + R__ * sx * 0.04 - UP * 0.44 + F_ * 0.08 * ph * (1 if s == "L" else -1)
+        W = sh + R__ * sx * 0.1 - UP * 0.42 + F_ * 0.08 * ph * (1 if s == "L" else -1)
         T.hand(s, f, W, -UP + F_ * 0.15, R__ * sx, sh + R__ * sx * 0.3 - F_ * 0.3)
         T.fingers(s, f, 20, 15)
 for f in (1, 249):
@@ -265,8 +273,8 @@ for f in (1, 249):
         T.hand(s, f, sh + rdir(90) * sx * 0.04 - UP * 0.44, -UP, rdir(90) * sx, sh + rdir(90) * sx * 0.3 - fdir(90) * 0.3); T.fingers(s, f, 20, 15)
 
 # ---------------------------------------------- contact helpers
-def t_throat(f, up=0.0):
-    return T.throat_point(f, fdir(T_YAW), up)
+def t_throat(f, up=-0.015):
+    return T.throat_point(f, fdir(T_YAW), up)      # over the larynx, well below the jaw
 def t_mouth(f):
     ev(f); hm = T.bone_mat("head"); hd = T.bone_world("head")
     fwd = (hm.to_3x3() @ V(0, 1, 0)).normalized()   # head bone y axis points up the head; mouth faces the head's -Y in rest
@@ -280,16 +288,17 @@ def g_throat_along(f, tp):
     """fingers lie on the throat pointing away from the girl's shoulder, so the wrist stays on her side (shortest reach)"""
     ev(f); sh = G.bone_world("upperarm01.R"); F_ = fdir(T_YAW)
     lat = (tp - sh); lat = lat - F_ * lat.dot(F_)
-    return (lat.normalized() + UP * 0.35).normalized()
-def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.005):
+    return (lat.normalized() + UP * 0.1).normalized()      # around the neck: clear of the chin above and the collar below
+def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.005, tilt=0.0):
     """middle fingertip pad at 'tip' (world), palm towards -normal, fingers pointing 'along'; two correction passes"""
     along = (along - normal * along.dot(normal)).normalized()
+    if tilt: along = (along * (1 - tilt) - normal * tilt).normalized()     # fingers angled in: only the pads touch, palm stays off
     goal = tip + normal * (pad - press)
     W = goal - along * (G_HL * 0.95)
     sh = G.bone_world("upperarm01." + s, f)
     pole = sh + (W - sh) * 0.5 + V(0, 0.25, -0.35) + (V(-0.3, 0, 0) if s == "R" else V(0.3, 0, 0))
     for it in range(3):
-        G.hand(s, f, W, along, normal, pole); G.fingers(s, f, curl, 10, spread=1)
+        G.hand(s, f, W, along, normal, pole); G.fingers(s, f, curl if isinstance(curl, list) else max(curl, 14), 14, spread=0)
         if it == 2: break
         ev(f); err = goal - G.bone_world("finger3-3." + s, tail=True)
         if err.length < 1e-3: break
@@ -309,9 +318,9 @@ def t_grip_wrist(f, W, d, n):
     n = Vector(n).normalized(); d = Vector(d).normalized()
     across = n.cross(d).normalized()
     if across.dot(T_F) < 0: across = -across          # fingers point away from the teacher, over the far side of the wrist
-    top = W + n * 0.045 - across * 0.05
+    top = W + n * 0.085 - across * 0.03
     T.hand("R", f, top, across, n, T_KNEEL + T_R * 0.45 + UP * 0.45)
-    T.fingers("R", f, 28, 20)
+    T.fingers("R", f, 3, 12)      # flat hand laid over the back of her wrist: guides without digging in
 # reach
 ev(442); sh = T.bone_world("upperarm01.R")
 for f in (442,):
@@ -331,17 +340,53 @@ for f in throat_keys:
     # beat 6: press harder when loud, relax when soft
     press = 0.004 if 895 <= f < 990 else (0.0 if f >= 990 else 0.002)
     tp = t_throat(f)
-    g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), press=press, curl=8 if press < 0.004 else 14)
+    g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), press=press, curl=[12, 12, 10, 8] if press < 0.004 else [16, 16, 14, 10], tilt=0.2, pad=0.008)
 # teacher's right hand lets go and rests on the girl's forearm, then gestures softly
-def t_thigh_R(f, lift=0.0):
-    ev(f); kn = T.bone_world("lowerleg01.R"); hp = T.bone_world("upperleg01.R")
-    p = hp.lerp(kn, 0.55) + V(0, 0, 0.14 + lift) + T_F * 0.04
-    T.hand("R", f, p, T_F * 0.8 - UP * 0.3 - T_R * 0.2, UP + T_F * 0.1, p + T_R * 0.35 + UP * 0.25)
+def t_thigh_R(f, lift=0.0, sd="R"):
+    """hand rests on the FRONT of her (vertical, kneeling) thigh, on the skirt surface"""
+    ev(f); kn = T.bone_world("lowerleg01." + sd); hp = T.bone_world("upperleg01." + sd); mid = hp.lerp(kn, 0.82)
+    sk = bpy.data.objects.get("Teacher.long_skirt")
+    hit = None
+    if sk:
+        dg_ = bpy.context.evaluated_depsgraph_get(); es = sk.evaluated_get(dg_); mi = es.matrix_world.inverted()
+        o_ = mid + T_F * 0.35; ok, loc, nrm, idx = es.ray_cast(mi @ o_, (mi.to_3x3() @ (-T_F)).normalized())
+        if ok: hit = es.matrix_world @ loc
+    p = (hit if hit else mid + T_F * 0.12) + T_F * 0.045 + V(0, 0, lift)
+    sx_ = 1 if sd == "R" else -1
+    T.hand(sd, f, p, -UP * 0.9 + T_F * 0.2, T_F, p + T_R * 0.35 * sx_ + UP * 0.25)
+    T.fingers(sd, f, 22, 15)
     T.fingers("R", f, 28, 18)
-for f in (548, 600, 700, 820, 900, 1000, 1040):
-    t_thigh_R(f)
+def t_rest(f, sd):
+    """reachable resting spots while she kneels upright: L on the armchair arm (away from her hip), R on the girl's knee"""
+    ev(f); dg_ = bpy.context.evaluated_depsgraph_get()
+    sh = T.bone_world("upperarm01." + sd); hip = T.bone_world("upperleg01." + sd)
+    if sd == "L":
+        chair = bpy.data.objects["ArmChair_01"]; ec = chair.evaluated_get(dg_); mi = ec.matrix_world.inverted(); best = None
+        for k in range(0, 8):
+            probe = T_KNEEL + T_F * 0.4 - T_R * 0.06 + V(0, 0.04 * k, 0.6)
+            ok, loc, nrm, idx = ec.ray_cast(mi @ probe, (mi.to_3x3() @ V(0, 0, -1)).normalized())
+            if not ok: continue
+            w = ec.matrix_world @ loc
+            if w.z > 0.6 and (w - hip).length > 0.24 and (w - sh).length < 0.5: best = w; break
+        top = best if best else T_KNEEL + T_F * 0.42 + V(0, 0.1, 0.16)
+        p = top + V(0, 0, 0.03)
+        T.hand("L", f, p, (T_F + V(0, 0.4, 0)).normalized() * 0.8 - UP * 0.3, UP, p - T_R * 0.35 - T_F * 0.15 + UP * 0.1); T.fingers("L", f, 30, 18)
+    else:
+        kn = G.bone_world("lowerleg01.R") + V(-0.055, 0.05, 0)     # outer side of her knee, clear of her own forearm above it
+        sk = bpy.data.objects["Girl.long_skirt"]; es = sk.evaluated_get(dg_); mi = es.matrix_world.inverted()
+        ok, loc, nrm, idx = es.ray_cast(mi @ (kn + UP * 0.3), (mi.to_3x3() @ V(0, 0, -1)).normalized())
+        top = (es.matrix_world @ loc) if ok else kn + UP * 0.07
+        p = top + V(0, 0, 0.028) - T_F * 0.05
+        p = p + V(0, 0, 0.032)
+        T.hand("R", f, p, T_F, UP, T_KNEEL + T_R * 0.45 + UP * 0.35); T.fingers("R", f, 2, 12)
+for f in list(range(548, 1041, 30)) + [1040]:
+    t_rest(f, "R")
 # teacher's left hand: on her own thigh, then on the girl's knee
-for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee"), (1925, "knee"), (END, "knee")):
+for f in (412, 430, 445):     # left hand stays down at her side while she kneels (no sweep past the girl's lap)
+    ev(f); sh_ = T.bone_world("upperarm01.L"); yw_ = T_YAW if f >= 430 else 130
+    T.hand("L", f, sh_ - rdir(yw_) * 0.1 - UP * 0.4 - fdir(yw_) * 0.03, -UP + fdir(yw_) * 0.15, -rdir(yw_), sh_ - rdir(yw_) * 0.3 - fdir(yw_) * 0.3)
+    T.fingers("L", f, 22, 15)
+for f, where in ((458, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee"), (1925, "knee"), (END, "knee")):
     ev(f)
     if True:
         # left hand steadies her on the armchair's arm in front of her (clear of her skirt)
@@ -351,7 +396,7 @@ for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee")
         top = (ec.matrix_world @ loc) if hit else (T_KNEEL + T_F * 0.4 + V(0, 0, 0.15))
         if f == 442: print("ARMREST", tuple(round(x, 3) for x in top), hit)
         p = top + V(0, 0, 0.03) - T_F * 0.07
-        T.hand("L", f, p, T_F + UP * -0.35, UP, p - T_R * 0.35 - T_F * 0.15 + UP * 0.1)
+        t_rest(f, "L")
     else:
         kn = G.bone_world("lowerleg01.L")
         T.hand("L", f, kn + V(0, 0, 0.07) - T_F * 0.05, T_F * 0.5 + UP * -0.6 + T_R * 0.3, UP, T_KNEEL - T_R * 0.45 + UP * 0.3)
@@ -378,8 +423,8 @@ for f, dx, dz in LIP_KEYS:
     else:
         lip_key(f, dx, dz)
 # teacher's right hand releases after guiding (1110) and rests on the girl's forearm again
-for f in (1128, 1300, 1453, 1600, 1722, 1850):
-    t_thigh_R(f)
+for f in list(range(1128, 1851, 30)) + [1850]:
+    t_rest(f, "R")
 # girl's left hand: lap (to 1470), own lips (1490-1600), own throat (1615-1722)
 def g_own_mouth(f):
     ev(f); hm = G.o.pose.bones["head"]
@@ -408,7 +453,7 @@ for i, f in enumerate(range(1735, 1843, 18)):
     g_left_on(f, "lips" if i % 2 == 0 else "throat")
     if i % 2 == 0: lip_key(f)
     else:
-        tp = t_throat(f); g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), curl=8)
+        tp = t_throat(f); g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), curl=[12, 12, 10, 8], tilt=0.2, pad=0.008)
     # lift off between touches so the hand never slides through the face
     if f + 9 < 1843:
         fm = f + 9; mp_, ff_ = t_mouth(fm); tp_ = t_throat(fm)
@@ -456,7 +501,7 @@ for f in (1932, 1955, END):
     ev(f); ch = T.bone_world("spine02"); TFn = fdir(T_YAW)
     hit, nrm = T.surface(f, ch + TFn * 0.3 - T_R * 0.06 + UP * 0.05, -TFn, "female_elegantsuit01")
     heart = (hit if hit else ch + TFn * 0.12)
-    t_hand_on("R", f, heart + UP * 0.04, nrm if hit else TFn, -T_R * 0.6 + UP * 0.8, curl=14, pad=0.022)
+    t_hand_on("R", f, heart + UP * 0.04, nrm if hit else TFn, -T_R * 0.6 + UP * 0.8, curl=14, pad=0.035)
 # girl leans in to the hug
 for f in (1930, END):
     fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl, twist=-14, head=(hp - 4, -22))
@@ -598,8 +643,13 @@ dpath = catmull([(1, V(2.4, -1.9, 0)), (40, V(1.8, -1.0, 0)), (80, DOG_END)])
 dog_head = math.degrees(math.atan2((CHAIR - DOG_END.to_2d()).x, -(CHAIR - DOG_END.to_2d()).y))
 hd_fn = quad_move(DR, dpath, 1, 80, 0.32, gait="trot")
 hstop = hd_fn(80)
-for f in (90, END):
+DOG_END2 = V(0.55, -0.75, 0)
+for f in (90, 690):
     quad_hold(DR, f, DOG_END, hstop)
+dpath2 = catmull([(690, DOG_END), (735, V(0.85, -0.55, 0)), (780, DOG_END2)])
+hd2 = quad_move(DR, dpath2, 690, 780, 0.32, gait="walk")
+for f in (790, END):
+    quad_hold(DR, f, DOG_END2, hd2(780))
 for f in keys_every(80, END, 6):
     bark = max([math.exp(-((f - b) / 5.0) ** 2) for b in (95, 118, 142, 1880, 1900)])
     look = 0.0 if f < 300 else (-25 if f < 1840 else 10)
@@ -633,6 +683,92 @@ for k, (sx, rz) in enumerate(()):   # ribbon removed: sphere-built bow read as a
     c_ = o.constraints.new('CHILD_OF'); c_.target = GIRL.o; c_.subtarget = "head"
     c_.inverse_matrix = (GIRL.o.matrix_world @ hb.matrix).inverted()
 print("FAMILY_DOG_DONE")
+# ================================================================== de-intersection pass (acting fix, Nov 12)
+from mathutils.bvhtree import BVHTree
+def _nomask(ob, on):
+    for m in ob.modifiers:
+        if m.type in ('MASK', 'SUBSURF'): m.show_viewport = on
+_HANDCACHE = {}
+def hand_vidx(P, sd):
+    key = (P.name, sd)
+    if key not in _HANDCACHE:
+        body = bpy.data.objects[P.name + ".body"]; bones = set(P.o.data.bones.keys())
+        names = {g.index: g.name for g in body.vertex_groups if g.name in bones}; out = []
+        for v in body.data.vertices:
+            gs = [x for x in v.groups if x.group in names]
+            if not gs: continue
+            g = max(gs, key=lambda x: x.weight); n = names[g.group]
+            if n.endswith("." + sd) and any(k in n for k in ("finger", "metacarpal", "wrist")): out.append(v.index)
+        _HANDCACHE[key] = out
+    return _HANDCACHE[key]
+def ik_keyframes(P, sd, f0, f1):
+    ad = P.o.animation_data; out = set()
+    for layer in ad.action.layers:
+        for strip in layer.strips:
+            for cb in strip.channelbags:
+                for fc in cb.fcurves:
+                    if fc.data_path == 'pose.bones["IK_hand.%s"].location' % sd:
+                        out |= {int(round(k.co.x)) for k in fc.keyframe_points if f0 <= k.co.x <= f1}
+    return sorted(out)
+def deintersect(P, sd, f0, f1, targets, allow=0.008, iters=5, away=None):
+    body = bpy.data.objects[P.name + ".body"]; idx = hand_vidx(P, sd); fixed = 0
+    tobs = [bpy.data.objects[t] for t in targets if t in bpy.data.objects]
+    self_polys = None
+    if body in tobs:      # own body as target: only polygons away from the arms
+        bones = set(P.o.data.bones.keys()); nm = {g.index: g.name for g in body.vertex_groups if g.name in bones}
+        def dom(v):
+            gs = [x for x in body.data.vertices[v].groups if x.group in nm]
+            return nm[max(gs, key=lambda x: x.weight).group] if gs else ""
+        arm = ("finger", "metacarpal", "wrist", "lowerarm", "upperarm", "shoulder", "clavicle")
+        self_polys = [tuple(p.vertices) for p in body.data.polygons if not any(any(k in dom(v) for k in arm) for v in p.vertices)]
+    for o in [body] + tobs: _nomask(o, False)
+    total_ = {}
+    for f in ik_keyframes(P, sd, f0, f1):
+        for it in range(iters):
+            ev(f); dg = bpy.context.evaluated_depsgraph_get()
+            eb = body.evaluated_get(dg); mb = eb.to_mesh(); pts = [eb.matrix_world @ mb.vertices[i].co for i in idx if i < len(mb.vertices)]; eb.to_mesh_clear()
+            worst = (0.0, None)
+            for o in tobs:
+                eo = o.evaluated_get(dg); mo = eo.to_mesh()
+                polys = self_polys if (o is body and self_polys is not None) else [tuple(p.vertices) for p in mo.polygons]
+                tr = BVHTree.FromPolygons([eo.matrix_world @ v.co for v in mo.vertices], polys); eo.to_mesh_clear()
+                for p in pts:
+                    loc, nrm, i_, d = tr.find_nearest(p, 0.12)
+                    if loc is not None and (p - loc).dot(nrm) < 0 and d > worst[0]: worst = (d, nrm.normalized())
+            if worst[0] <= allow: break
+            dirv = away(f, pts) if away else worst[1]            # escape direction known per contact (nearest-normal fails when deep)
+            step_ = worst[0] - allow + 0.004
+            push = dirv.normalized() * step_
+            M = P.o.pose.bones["IK_hand." + sd].matrix.copy()
+            P.r.key_world("IK_hand." + sd, f, Matrix.Translation(push) @ M); fixed += 1
+    for o in [body] + tobs: _nomask(o, True)
+    print("DEINTERSECT", P.name, sd, f0, f1, "pushes", fixed)
+def bake_ik(P, sd, f0, f1, step=3):
+    """densify IK hand keys (re-key the evaluated pose) so the de-intersection checks every few frames"""
+    mats = []
+    for f in range(f0, f1 + 1, step):
+        ev(f); mats.append((f, P.o.pose.bones["IK_hand." + sd].matrix.copy()))
+    for f, M in mats: P.r.key_world("IK_hand." + sd, f, M)
+bake_ik(TEACH, "R", 425, 530); bake_ik(TEACH, "R", 440, 470, 1); bake_ik(GIRL, "R", 425, 530); bake_ik(TEACH, "L", 425, 460); bake_ik(GIRL, "L", 425, 470)
+TCL = ["Teacher.body", "Teacher.female_elegantsuit01", "Teacher.long_skirt"]
+GCL = ["Girl.body", "Girl.female_elegantsuit01", "Girl.long_skirt"]
+def _away_from_teacher(f, pts):
+    c = sum(pts, Vector()) / len(pts)
+    nk = T.bone_world("neck01").lerp(T.bone_world("head"), 0.5)
+    return (c - nk)
+_up = lambda f, pts: UP.copy()
+deintersect(TEACH, "R", 430, 530, ["Teacher.body", "Teacher.long_skirt"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("spine03")))
+deintersect(TEACH, "L", 430, 530, ["Teacher.body", "Teacher.long_skirt"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("spine03")))
+deintersect(GIRL, "R", 400, 690, TCL, away=_away_from_teacher)
+deintersect(GIRL, "R", 1066, END, TCL, away=_away_from_teacher)
+deintersect(GIRL, "R", 690, 1066, TCL, allow=0.013, iters=6, away=_away_from_teacher)   # throat: keep the pad on the skin, only lift what would clip (>1.6 cm)
+deintersect(GIRL, "L", 400, 520, TCL, away=_away_from_teacher)
+deintersect(TEACH, "R", 425, END, GCL, away=_up, iters=8)
+deintersect(TEACH, "L", 425, END, GCL, away=_up)
+deintersect(GIRL, "L", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
+deintersect(GIRL, "R", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
+deintersect(GIRL, "R", 1060, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")))
+deintersect(GIRL, "R", 1580, 1610, TCL, away=_away_from_teacher, allow=0.004)
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())
 if OUT:
     bpy.ops.wm.save_as_mainfile(filepath=OUT)

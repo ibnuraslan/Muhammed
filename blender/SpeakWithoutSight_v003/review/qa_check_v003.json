@@ -1,0 +1,1421 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Mother"
+   ]
+  ],
+  "169": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "175": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "181": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "187": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "193": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "199": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "205": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "211": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "217": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "223": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "229": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "235": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "241": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "247": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "253": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "259": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "265": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "271": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "277": [
+   [
+    "FILL",
+    "hair / top of head 44%"
+   ]
+  ],
+  "283": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "289": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "295": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "313": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "319": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "325": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "331": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "385": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "451": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "457": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "463": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "469": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "487": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "493": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "499": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "505": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "511": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "517": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "529": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "535": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "541": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "547": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "553": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "565": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "589": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "595": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "601": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "607": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "613": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "619": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "625": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "631": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "637": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "643": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "649": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "655": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "661": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "667": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "673": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "679": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "691": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "697": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "715": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "721": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "727": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "733": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "739": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "745": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "751": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "757": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "763": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "769": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "775": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "781": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "787": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "793": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "799": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "805": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "811": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "817": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "823": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "829": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "835": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "841": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "847": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "883": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "925": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "931": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "937": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "949": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "955": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "967": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "973": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "979": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "985": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "991": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "997": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1003": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1009": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1015": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1021": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1027": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1033": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1039": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1045": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1051": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1057": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1093": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1099": [
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1111": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1117": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "1123": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1129": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1135": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1141": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1147": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "1153": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1159": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1165": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1171": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ]
+  ],
+  "1177": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "1183": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1189": [
+   [
+    "FILL",
+    "hair / top of head 36%"
+   ]
+  ],
+  "1195": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1201": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1207": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1213": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1231": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1237": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1243": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1255": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1261": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1267": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1339": [
+   [
+    "FILL",
+    "hair / top of head 48%"
+   ]
+  ],
+  "1345": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1405": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1411": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1417": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "1423": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1429": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1453": [
+   [
+    "BACKHEAD",
+    "Teacher"
+   ]
+  ],
+  "1483": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1489": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1495": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1501": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1507": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1513": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1519": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1525": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1543": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1549": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1555": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "1561": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1567": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1573": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1579": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "1585": [
+   [
+    "FILL",
+    "hair / top of head 44%"
+   ]
+  ],
+  "1591": [
+   [
+    "FILL",
+    "hair / top of head 50%"
+   ]
+  ],
+  "1597": [
+   [
+    "FILL",
+    "hair / top of head 44%"
+   ]
+  ],
+  "1603": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1609": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1615": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1621": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1627": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1633": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1639": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1657": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1681": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1687": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1693": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1699": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1705": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1711": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1717": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1723": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1729": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1735": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1741": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1777": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1783": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1789": [
+   [
+    "FACEPRESS",
+    "Girl.L hand on face"
+   ]
+  ],
+  "1825": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1831": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1855": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1861": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1879": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1885": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1891": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ],
+   [
+    "FACEPRESS",
+    "Girl.L hand on face"
+   ]
+  ],
+  "1897": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1909": [
+   [
+    "FACEPRESS",
+    "Girl.L hand on face"
+   ]
+  ],
+  "1915": [
+   [
+    "FACEPRESS",
+    "Girl.L hand on face"
+   ]
+  ],
+  "1921": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 2,
+  "INSIDE": 101,
+  "FILL": 141,
+  "EMPTY": 7,
+  "FACEPRESS": 4
+ }
+}

@@ -1,0 +1,398 @@
+{
+ "frames": {
+  "487": {
+   "Girl": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "493": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "499": {
+   "Girl": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "721": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "973": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "979": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1057": {
+   "Girl": {
+    "self": 53,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1219": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "1249": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1261": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "1267": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1363": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "1381": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "1387": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1423": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 15
+   }
+  },
+  "1429": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 23
+   }
+  },
+  "1435": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "1441": {
+   "Girl": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1447": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 21
+   }
+  },
+  "1453": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1459": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 16
+   }
+  },
+  "1465": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 16
+   }
+  },
+  "1471": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 18
+   }
+  },
+  "1477": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1483": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 9
+   }
+  },
+  "1489": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "1495": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1507": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 8
+   }
+  },
+  "1513": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1519": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1525": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "1531": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1537": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1555": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1561": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1567": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1573": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1579": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1597": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 22
+   }
+  },
+  "1603": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1609": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1615": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 11
+   }
+  },
+  "1621": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 15
+   }
+  },
+  "1639": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 13
+   }
+  },
+  "1645": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1651": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 18
+   }
+  },
+  "1657": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "1675": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 6
+   }
+  },
+  "1681": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1687": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1699": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1855": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1927": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1939": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 12
+   }
+  },
+  "1969": {
+   "Girl": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1057,
+   1057
+  ]
+ ],
+ "fps": 60
+}
