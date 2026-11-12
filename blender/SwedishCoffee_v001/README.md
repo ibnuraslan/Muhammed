@@ -1,14 +1,15 @@
 # SwedishCoffee (Connect27)
 
-Current package: `blender/SwedishCoffee_v004/SwedishCoffee_v004_60fps.blend` (72 MB, normal git). v002 (01:00 deliverable) and v003 are kept.
+Current package: `blender/SwedishCoffee_v005/SwedishCoffee_v005_60fps.blend` (72 MB, normal git): the acting pass on v004 (approved). Every story-beat frame in `beats.json` is unchanged. The full list of fixes, with frames, is in `SwedishCoffee_v001/review/ACTING_notes.md`. In short:
+- the three wall fly-throughs and the doorway pass are now open-air whip-pans, and set swaps happen earlier so every beat frame shows its subject
+- servants really pour into the resting cup between sips
+- coffins are hand-carried at hip height
+- the ball has dancing couples hand in hand
+- at the bedside twin A's hand rests on his brother's hand
+- the king's fall reaches out with both hands and lands with his hands flat on the floor
+- idle hands sit clear of hips and coats
 
-v004 adds:
-- dressing in the ballroom doorway wall and the bedroom window wall (wainscot, paintings, damask hangings, candelabras, window curtains on a rod, a side table with a candle, rugs)
-- solid deep-red / blue damask hangings instead of the check scan
-- the street-to-chamber transition moved to f716, so the 12 s sample shows the twins at the table
-- a brighter cathedral (sun, moon and façade fill, warm windows, lifted stone)
-
-A 44.5 s vertical true-story short: the 18th-century Swedish king who "tested" coffee on twin prisoners. One continuous camera, 1080×1920, 60 fps, frames 1–2670.
+v002–v004 are kept.
 
 ## Files
 - `SwedishCoffee_v00N_60fps.blend`: packed farm file (see `SETTINGS.md`). Opens in factory Blender 5.2.2.

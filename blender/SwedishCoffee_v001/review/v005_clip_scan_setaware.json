@@ -1,0 +1,523 @@
+{
+ "frames": {
+  "709": {
+   "TwinA_S4": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "715": {
+   "TwinA_S4": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   },
+   "TwinB_S4": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "721": {
+   "TwinA_S4": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   },
+   "TwinB_S4": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1741": {
+   "Bearer_S5_0_0": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_1": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1747": {
+   "Bearer_S5_0_1": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_3": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1753": {
+   "Bearer_S5_0_1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1759": {
+   "Bearer_S5_0_1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_0": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1765": {
+   "Bearer_S5_0_1": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_0": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_1": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_2": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1771": {
+   "Bearer_S5_0_0": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_0": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_2": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_3": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1777": {
+   "Bearer_S5_0_0": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_3": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_0": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_1": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_2": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_3": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1783": {
+   "Bearer_S5_0_0": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_1": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_3": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_0": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_1": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_2": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_3": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1789": {
+   "Bearer_S5_0_2": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_3": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_0": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_2": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_3": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1795": {
+   "Bearer_S5_0_2": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_0_3": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_2": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Bearer_S5_1_3": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1807": {
+   "TwinB_old_S5": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1915": {
+   "King_S6": {
+    "self": 43,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1993": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1999": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2005": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2011": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2017": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2023": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2029": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2035": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2041": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2047": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2053": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2059": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2065": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2071": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2077": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2083": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2089": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2095": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2101": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2107": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2113": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2119": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2125": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2131": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2137": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2143": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2149": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2155": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2161": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2167": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2173": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2179": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2185": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2191": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "2197": {
+   "TwinA_bed_S7": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1915,
+   1915
+  ]
+ ],
+ "fps": 60
+}

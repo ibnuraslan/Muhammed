@@ -318,7 +318,7 @@ class Actor:
     def arms_down(self, f, sway=0.0):
         for s in "LR":
             sx = 1 if s == "L" else -1
-            self.hand(f, s, (0.31 * sx, -0.07 + sway * sx, 0.88), d=(0.12 * sx, -0.08, -1), n=(-sx, 0, 0), pole=(0.35 * sx, 0.6, 1.1))
+            self.hand(f, s, (0.35 * sx, -0.11 + sway * sx, 0.9), d=(0.15 * sx, -0.1, -1), n=(-sx, 0, 0), pole=(0.4 * sx, 0.6, 1.1))
     def face(self, f, **k): face(self.R, f, **k)
     def sit(self, f, seat_z=0.47, knee_fwd=0.48, flex=8.0, twist=0.0, head=(0, 0)):
         """seated on a chair whose seat front is ~0.1 in front of root; feet on floor in front"""
@@ -518,3 +518,13 @@ def hold_point(arm, s, f=None):
     k2 = M @ P["finger2-1." + s].head; k5 = M @ P["finger5-1." + s].head; w = M @ P["wrist." + s].head
     across = (k2 - k5).normalized(); fwd = (k2 - w).normalized()
     return k2 + across * 0.05 + fwd * 0.01 + V((0, 0, -0.04))
+
+def _to_body(A, P):
+    q = V(P) - V((A.pos[0], A.pos[1], A.z))
+    return tuple(Matrix.Rotation(R_(-A.yaw), 3, 'Z') @ q)
+def _dir_body(A, d):
+    return tuple(Matrix.Rotation(R_(-A.yaw), 3, 'Z') @ V(d))
+def hand_at(A, f, s, P, d=(0, 0, -1), n=None, pole=None, g=0.32):
+    """hand target given in set-local coordinates (converted to the actor's body frame)"""
+    A.hand(f, s, _to_body(A, P), d=_dir_body(A, d), n=_dir_body(A, n) if n is not None else None,
+           pole=_to_body(A, pole) if pole is not None else None, g=g)

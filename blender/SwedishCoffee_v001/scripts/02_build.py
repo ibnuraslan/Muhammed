@@ -84,14 +84,14 @@ for b in ("TwinA", "TwinB", "TwinA_old", "TwinB_old", "TwinA_vold", "King", "Gua
 # ------------------------------------------------------------------ set chain
 def P(pos, yaw): return Matrix.Translation(V(pos)) @ Matrix.Rotation(R_(yaw), 4, 'Z')
 SETDEF = [  # name, frames [on, off), entry portal, exit portal (local pos, yaw of travel)
-    ("S1_Courtyard", 1, 175, ((0, -14, 4), 0), ((3.0, 9.0, 6.0), 0)),
-    ("S2_ThroneHall", 175, 588, ((0, -8.2, 4.0), 0), ((-1.0, 4.62, 1.22), 0)),
-    ("S3_Street", 588, 716, ((0, -9, 3.0), 0), ((-5.7, 6.0, 2.5), 90)),
-    ("S4_Chamber", 716, 1650, ((0, -5.2, 2.0), 0), ((5.2, -1.0, 1.9), -90)),
-    ("S5_Church", 1650, 1872, ((0, -16, 2.5), 0), ((0, 7.5, 7.0), 0)),
-    ("S6_Ballroom", 1872, 2004, ((0, -10.2, 5.2), 0), ((-8.2, 0.0, 1.8), 90)),
-    ("S7_Bedroom", 2004, 2508, ((0, -4.7, 1.7), 0), ((4.7, -1.0, 1.7), -90)),
-    ("S8_Square", 2508, 2671, ((0, -13, 3.0), 0), None),
+    ("S1_Courtyard", 1, 158, ((0, -14, 4), 0), ((4.6, -1.2, 4.2), 0)),
+    ("S2_ThroneHall", 158, 575, ((0, -3.5, 2.6), 0), ((-1.0, 4.62, 1.22), 0)),
+    ("S3_Street", 575, 705, ((0, -9, 3.0), 0), ((-2.2, 6.0, 1.9), 90)),
+    ("S4_Chamber", 705, 1630, ((0, -3.2, 1.8), 0), ((5.2, -1.0, 1.9), -90)),
+    ("S5_Church", 1630, 1850, ((0, -16, 2.5), 0), ((0, 2.0, 3.2), 0)),
+    ("S6_Ballroom", 1850, 1985, ((0, -6.0, 3.2), 0), ((-2.5, 2.0, 1.5), 135)),
+    ("S7_Bedroom", 1985, 2490, ((0, -2.6, 2.4), 0), ((4.7, -1.0, 1.7), -90)),
+    ("S8_Square", 2490, 2671, ((0, -13, 3.0), 0), None),
 ]
 ROOT = []; SETC = []
 Mw = Matrix.Identity(4)
@@ -165,14 +165,14 @@ def crowd_idle(A, f0, f1, pos, yaw, mode="jeer", seed=0, phase=0.0):
         A.stand(f, flex=4 + 3 * u, twist=8 * u, side=3 * u, head=(-5 + 6 * u, 10 * math.sin(f / per * 3.1)), lean=2 * u)
         if mode == "jeer":
             up = (u > 0.2)
-            A.hand(f, "R", (-0.25, -0.2, 1.75 + 0.15 * u) if up else (-0.22, -0.05, 0.9), d=(0, -0.2, 1) if up else (0, -0.1, -1),
+            A.hand(f, "R", (-0.25, -0.2, 1.75 + 0.15 * u) if up else (-0.38, -0.2, 0.95), d=(0, -0.2, 1) if up else (-0.15, -0.2, -1),
                    n=(0, -1, 0) if up else (1, 0, 0), pole=(-0.6, 0.3, 1.3))
-            A.hand(f, "L", (0.31, -0.07, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
+            A.hand(f, "L", (0.35, -0.11, 0.9), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
             A.face(f, brow=-1.5, jaw=10 * max(0, u), frown=1)
         elif mode == "toast":
             up = u > -0.3
             A.hand(f, "R", (-0.2, -0.32, 1.55 + 0.25 * u) if up else (-0.2, -0.3, 1.2), d=(0, -0.3, 1), n=(1, 0, 0), pole=(-0.5, 0.4, 1.2))
-            A.hand(f, "L", (0.31, -0.07, 0.88), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
+            A.hand(f, "L", (0.35, -0.11, 0.9), d=(0.05, -0.05, -1), n=(-1, 0, 0), pole=(0.3, 0.6, 1.1))
             A.face(f, brow=1.2, smile=1.5, jaw=8 * max(0, u)); grip(A.R, f, "R", 0.8)
         elif mode == "watch":
             A.arms_down(f, sway=0.02 * u); A.face(f, brow=0.5 * u, lids=0.1)
@@ -249,7 +249,7 @@ for k, x in enumerate((-1.3, 1.3)):
     for f in range(1, 176, 40):
         A.stand(f, pos=(x, 0.9), yaw=-25 * (1 if k else -1), head=(5, 0), flex=3)
         A.hand(f, "L" if k == 0 else "R", ((0.5 if k == 0 else -0.5), -0.5, 1.4), d=(0, -1, 0), n=(0, 0, -1))
-        A.hand(f, "R" if k == 0 else "L", ((-0.22 if k == 0 else 0.22), -0.02, 0.88), d=(0, 0, -1))
+        A.hand(f, "R" if k == 0 else "L", ((-0.35 if k == 0 else 0.35), -0.11, 0.9), d=((-0.15 if k == 0 else 0.15), -0.1, -1))
         A.face(f, brow=-1.5, frown=0.8)
     hat(A.a, A_["tricorn"], c)
 GZ[0] = 0.0
@@ -325,7 +325,7 @@ light(c, 'AREA', (0, 0, 6.8), 2500, (1.0, 0.95, 0.88), 8, rot=(0, 0, 0), name="c
 aim(light(c, 'SPOT', (0, 2, 6.5), 1500, (1, 0.8, 0.6), 0.3, rot=(-20, 0, 0), name="throneSpot"), (0, 6.5, 1.2))
 
 for p in ((-5.4, -2.5, 2.0), (5.4, -2.5, 2.0), (-5.4, 2.5, 2.0), (5.4, 2.5, 2.0)): candle(c, p)
-cam(175, (0, -7.5, 3.9), (0, 6.0, 1.6), 30)
+cam(185, (0.3, -1.5, 2.3), (0, 6.3, 1.6), 30)
 cam(215, (0.4, -2.5, 2.4), (0, 6.3, 1.5), 32)
 cam(260, (1.2, 2.2, 1.7), (0, 6.4, 1.55), 35)
 cam(300, (0.6, 4.4, 1.55), (-0.05, 6.35, 1.55), 45)
@@ -445,6 +445,7 @@ def drink(A, s, cup, f0, f1, per=80, old=False):
     while f < f1:
         A.sit(f, flex=12, head=(8, 0)); A.hand(f, s, (0.09 * sx, -0.6, TZ + 0.08), d=(0, -1, 0.1), n=(-sx, 0, 0), g=0.8)
         A.face(f, brow=0.3, smile=0.4 if not old else 0.0)
+        A.sit(f + per * 0.22, flex=12, head=(8, 0)); A.hand(f + per * 0.22, s, (0.09 * sx, -0.6, TZ + 0.08), d=(0, -1, 0.1), n=(-sx, 0, 0), g=0.8)
         A.sit(f + per * 0.35, flex=4, head=(-12, 0)); A.hand(f + per * 0.35, s, (0.04 * sx, -0.27, 1.04), d=(-0.25 * sx, -0.3, 1.0), n=(-sx, 0, 0), pole=(0.45 * sx, 0.1, 0.9), g=0.8)
         A.face(f + per * 0.35, lids=0.6, jaw=4)
         A.sit(f + per * 0.65, flex=4, head=(-14, 0)); A.hand(f + per * 0.65, s, (0.04 * sx, -0.26, 1.05), d=(-0.25 * sx, -0.3, 1.0), n=(-sx, 0, 0), pole=(0.45 * sx, 0.1, 0.9), g=0.8)
@@ -478,23 +479,40 @@ for cup, A, s, f0, f1 in ((cupA, TW["TwinA"], "R", 830, 1290), (cupB, TW["TwinB"
         hw = inv @ hold_point(A.a, s, f)
         cup.location = hw; cup.keyframe_insert("location", frame=f)
     sc.frame_set(f1 + 6); cup.location = V((A.pos.x, 1.05, TZ)); cup.keyframe_insert("location", frame=f1 + 8)
-# servants pouring from silver pot / porcelain pot (pot in hand, tilt)
-for k, (b, x, yaw, tmpl, f0, f1) in enumerate((("Woman", -1.45, -60, "silverpot", 760, 1110), ("Townswoman", 1.45, 60, "teapot", 1040, 1300))):
-    A = human(b, "Servant_S4_%d" % k, c)
+# servants pour into the resting cup between sips (hand over the cup, pot tipped, coffee/tea stream)
+POURS = {0: (TW["TwinA"], "R", [830, 1014, 1198], "silverpot", "Woman", (-1.40, 1.30), -70, M["coffee"]),
+         1: (TW["TwinB"], "L", [1105, 1201], "teapot", "Townswoman", (1.40, 1.30), 70, M["tea"])}
+for k, (TA, ts, pours, tmpl, b, spos, syaw, liq) in POURS.items():
+    A = human(b, "Servant_S4_%d" % k, c); hs = "R" if k == 0 else "L"; os_ = "L" if k == 0 else "R"; sxh = -1 if hs == "R" else 1
     pot = inst(A_[tmpl], c, (0, 0, 0), name="ServPot%d" % k)
-    f = 725
-    while f <= 1650:
+    A.pos = V(spos); A.yaw = syaw
+    cup_rest = TA.W((0.09 * (1 if ts == "L" else -1), -0.6, 0.0)); cup_rest = V((cup_rest.x, cup_rest.y, TZ))
+    sp3 = V((spos[0], spos[1], TZ))
+    keyf = sorted(set(list(range(705, 1631, 30)) + [p_ + o_ for p_ in pours for o_ in (-34, -14, -4, 10, 18, 40)]))
+    for f in keyf:
+        near = min(pours, key=lambda p_: abs(f - p_)); dt = f - near
         u = math.sin(f / 45 + k)
-        pour = f0 <= f <= f1 and (f // 60) % 2 == 0
-        A.stand(f, pos=(x, 1.05), yaw=yaw, flex=18 if pour else 6, twist=6 * u)
-        sx = -1 if k == 0 else 1
-        A.hand(f, "R" if k == 0 else "L", (-0.18 * sx * -1, -0.48, 1.12 if pour else 0.95), d=(0, -1, -0.5 if pour else 0), n=(0, 0, 1))
-        A.hand(f, "L" if k == 0 else "R", (0.31 * -sx, -0.07, 0.88), d=(0, 0, -1))
-        A.face(f, brow=0.5, smile=0.3); grip(A.R, f, "R" if k == 0 else "L", 0.9)
-        f += 30
-    sc.frame_set(726); bpy.context.view_layer.update()
-    pot.matrix_world = Matrix.Translation(hand_world(A.a, "R" if k == 0 else "L") + V((0, 0, -0.12)))
-    attach(pot, A.a, "wrist.R" if k == 0 else "wrist.L", 726)
+        if -14 <= dt <= 18:
+            tip = 1.0 if -4 <= dt <= 10 else 0.3
+            A.stand(f, flex=22, twist=-8 * sxh, head=(22, 0))
+            PP = cup_rest + (sp3 - cup_rest).normalized() * 0.10 + V((0, 0, 0.30))
+            dd = (cup_rest - sp3).normalized() + V((0, 0, -0.35 - 0.6 * tip))
+            hand_at(A, f, hs, PP, d=tuple(dd), n=(0, 0, 1), g=0.9)
+            A.hand(f, os_, (0.35 * -sxh, -0.11, 0.9), d=(0, 0, -1)); A.face(f, brow=0.8, smile=0.4, lids=0.2)
+        elif -34 <= dt < -14 or 18 < dt <= 40:
+            A.stand(f, flex=12, head=(12, 0)); A.hand(f, hs, (0.2 * sxh, -0.4, 1.05), d=(0, -1, 0), n=(-sxh, 0, 0), g=0.9)
+            A.hand(f, os_, (0.35 * -sxh, -0.11, 0.9), d=(0, 0, -1)); A.face(f, brow=0.5, smile=0.3)
+        else:
+            A.stand(f, flex=5, twist=5 * u, head=(5, 10 * u)); A.hand(f, hs, (0.24 * sxh, -0.25, 0.98), d=(0, -1, 0), n=(-sxh, 0, 0), g=0.9)
+            A.hand(f, os_, (0.35 * -sxh, -0.11, 0.9), d=(0, 0, -1)); A.face(f, brow=0.5, smile=0.3)
+    sc.frame_set(706); bpy.context.view_layer.update()
+    pot.matrix_world = Matrix.Translation(hand_world(A.a, hs) + V((0, 0, -0.12)))
+    attach(pot, A.a, "wrist." + hs, 706)
+    for p_ in pours:   # liquid stream from the spout into the cup during each pour
+        bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.006, depth=0.2, location=tuple(cup_rest + V((0, 0, 0.17))))
+        st_ = bpy.context.active_object; st_.name = "pourStream%d_%d" % (k, p_); link(st_, c); setmat(st_, liq)
+        for ff, h in ((1, True), (p_ - 2, False), (p_ + 12, True)):
+            REKEY.append((st_, ff, h))
 for k, x in enumerate((-1.4, 1.4)):
     A = human("Guard", "Guard_S4_%d" % k, c); hat(A.a, A_["tricorn"], c)
     crowd_idle(A, 725, 1650, (x, 3.4), 0, "watch", seed=40 + k)
@@ -507,7 +525,7 @@ rug(c, (0, 1.2, 0), (4.0, 2.6)); rug(c, (3.0, -2.6, 0), (2.4, 1.8))
 candelabra(c, (-3.8, -3.8), 1.3); candelabra(c, (1.8, 3.9), 1.3)
 for k_, (x_, y_) in enumerate(((-3.8, 0.5), (4.2, 1.8))):
     Gy = human("Guard", "Guard_S4b_%d" % k_, c); hat(Gy.a, A_["tricorn"], c); crowd_idle(Gy, 725, 1650, (x_, y_), 90 if x_ < 0 else -90, "watch", seed=60 + k_)
-for k, (b, x) in enumerate((("Doctor1", 2.6), ("Doctor2", 3.4))):
+for k, (b, x) in enumerate((("Doctor1", 2.35), ("Doctor2", 3.65))):
     A = human(b, b + "_S4", c); A.pos = V((x, -3.05)); A.yaw = 180 - 15 + 30 * k
     inst(A_["chair"], c, (x, -3.15, 0), rz=180)
     f = 725; i = 0
@@ -541,7 +559,8 @@ cam(1275, (1.8, -0.3, 1.6), (2.6, -2.6, 1.15), 32)
 cam(1297, (1.6, -0.9, 1.6), (3.0, -2.7, 1.2), 32)
 cam(1360, (1.6, -1.6, 1.9), (3.0, -2.8, 1.0), 32)
 cam(1420, (3.0, -0.7, 1.7), (3.0, -2.7, 1.25), 34)
-cam(1452, (3.8, -1.2, 1.7), (2.2, -1.8, 1.3), 30)
+cam(1440, (3.4, -0.9, 1.7), (3.0, -2.8, 1.2), 32)
+cam(1462, (3.8, -1.3, 1.7), (2.4, -2.2, 1.25), 30)
 cam(1480, (4.2, -1.8, 1.8), (2.5, 0.2, 1.2), 28)
 cam(1545, (2.6, 0.2, 1.5), (0.0, 1.6, 1.2), 30)
 cam(1600, (3.4, -0.4, 1.8), (8.0, -1.0, 1.6), 28)
@@ -593,7 +612,7 @@ for ci, x in enumerate((-1.3, 1.3)):
     y0, y1 = 9.0 + ci * 1.5, -6.0 + ci * 1.5
     path = lambda f, y0=y0, y1=y1: V((0, y0 + (y1 - y0) * (f - 1650) / 222, 0))
     for f in range(1650, 1873, 6):
-        p = path(f); cf.location = V((x, p.y + 0.0, 1.38)); cf.rotation_euler = (0, 0, R_(90)); cf.keyframe_insert("location", frame=f)
+        p = path(f); cf.location = V((x, p.y + 0.0, 0.72)); cf.rotation_euler = (0, 0, R_(90)); cf.keyframe_insert("location", frame=f)
     for k, (dx, dy) in enumerate(((-0.42, -0.6), (0.42, -0.6), (-0.42, 0.6), (0.42, 0.6))):
         A = human(("Townsman", "Guard", "Townsman", "Guard")[k], "Bearer_S5_%d_%d" % (ci, k), c)
         A.H.walk(lambda f, x=x, dx=dx, dy=dy, path=path: V((x + dx, path(f).y + dy, 0)), lambda f: 0, 1650, 1872, stride=0.6, duty=0.6, lift=0.06, lean=3)
@@ -602,8 +621,8 @@ for ci, x in enumerate((-1.3, 1.3)):
             yy = path(f).y + dy
             A.pos = V((x + dx, yy)); A.yaw = 0
             sx = 1 if s_in == "L" else -1
-            A.hand(f, s_in, (0.22 * sx, -0.06, 1.5), d=(-sx, 0, 0.4), n=(0, 0, 1), pole=(0.55 * sx, 0.2, 1.0))
-            A.hand(f, s_out, (-0.31 * sx, -0.07, 0.88), d=(0, 0, -1), n=(sx, 0, 0), pole=(-0.3 * sx, 0.6, 1.1))
+            A.hand(f, s_in, (0.13 * sx, -0.04, 0.88), d=(0.25 * sx, -0.1, -1), n=(sx, 0, 0), pole=(-0.15 * sx, 0.45, 1.0))
+            A.hand(f, s_out, (-0.35 * sx, -0.11, 0.9), d=(0, 0, -1), n=(sx, 0, 0), pole=(-0.3 * sx, 0.6, 1.1))
             A.face(f, brow=0.8, lids=0.35, frown=0.6); grip(A.R, f, s_in, 0.9)
 for k, b in enumerate(("TwinA_old", "TwinB_old")):
     A = human(b, b + "_S5", c)
@@ -655,28 +674,35 @@ K.pos = V((0.5, 2.5)); K.yaw = 10
 for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 1.5), (1925, 2), (1936, 2.5), (1948, 3), (2004, 3)):
     if ph == 1.5:   # knees give way
         K.stand(f, crouch=0.18, flex=14, side=6, lean=8, head=(10, 5)); K.face(f, brow=2.5, lids=0.3, jaw=16)
-        K.hand(f, "R", (-0.12, -0.18, 1.25), d=(0.4, -0.2, 0.5), n=(0, 1, 0)); K.hand(f, "L", (0.3, -0.1, 0.8), d=(0, 0, -1))
+        K.hand(f, "R", (-0.1, -0.38, 1.28), d=(0.5, 0.1, 0.3), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.36, -0.12, 0.85), d=(0.15, -0.1, -1), g=0.4)
     elif ph == 2.5:  # on one knee, folding sideways
         K.stand(f, crouch=0.62, flex=40, side=25, lean=35, head=(25, 15)); K.face(f, brow=2.0, lids=0.7, jaw=10)
-        K.hand(f, "R", (-0.35, -0.2, 0.3), d=(0, -0.3, -1)); K.hand(f, "L", (0.35, 0.0, 0.25), d=(0, 0, -1))
+        K.hand(f, "R", (-0.45, -0.3, 0.25), d=(-0.2, -0.4, -1), n=(0, 0, -1), g=0.25); K.hand(f, "L", (0.45, -0.15, 0.22), d=(0.2, -0.3, -1), n=(0, 0, -1), g=0.25)
     elif ph < 2:
         K.stand(f, flex=3, head=(0, -10)); K.arms_down(f); K.face(f, smile=0.6 if ph == 0 else 0, brow=2.5 if ph else 0, jaw=14 if ph else 0)
     elif ph == 2:
         K.stand(f, crouch=0.45, flex=35, side=15, lean=20, head=(20, 10)); K.face(f, brow=2.5, lids=0.5, jaw=16)
-        K.hand(f, "R", (-0.25, 0.1, 0.55), d=(0, 0, -1)); K.hand(f, "L", (0.3, 0.1, 0.5), d=(0, 0, -1))
+        K.hand(f, "R", (-0.42, -0.28, 0.5), d=(-0.2, -0.4, -1), n=(0, 0, -1), g=0.25); K.hand(f, "L", (0.42, -0.24, 0.45), d=(0.2, -0.4, -1), n=(0, 0, -1), g=0.25)   # reaching out to break the fall
     else:   # collapsed: lying on the floor on his side
         K.H.key_root(f, V((0.5, 2.5 + 0.6, 0.17)), yaw=10, flex=-85, side=10)
         K.H.key_spine(f, flex=-6, head=(-10, 20))
         for s in "LR":
             sx = 1 if s == "L" else -1
             K.H.key_foot(s, f, K.W((0.15 * sx, 1.0 + 0.6, 0)).to_2d(), 10, lift=-0.02, pitch=-80)
-        K.hand(f, "R", (-0.4, 0.4, 0.05), d=(0, -1, 0), n=(0, 0, -1)); K.hand(f, "L", (0.4, 0.2, 0.05), d=(0, -1, 0), n=(0, 0, -1))
+        sc.frame_set(f); bpy.context.view_layer.update()
+        shR, shL = K.a.pose.bones["upperarm01.R"].head.copy(), K.a.pose.bones["upperarm01.L"].head.copy()
+        ax = (K.a.pose.bones["head"].head - K.a.pose.bones["root"].head); ax.z = 0; ax.normalize()
+        lat = (shR - shL); lat.z = 0; lat.normalize()
+        for s_, sh, sg in (("R", shR, 1), ("L", shL, -1)):   # palms flat on the floor beside the shoulders, arms out from the body
+            hp = V((sh.x, sh.y, 0.05)) + lat * sg * 0.42 - ax * 0.15
+            K.H.key_hand(s_, f, hp, (lat * sg - ax * 0.3).normalized(), V((0, 0, -1)), pole=V((sh.x, sh.y, 0.6)) + lat * sg * 0.3)
+            grip(K.R, f, s_, 0.3)
         K.face(f, lids=1.0, jaw=6)
 MF.pos = V((1.2, 4.2)); MF.yaw = 180 + 15
 for f, ph in ((1872, 0), (1895, 1), (1905, 1), (1925, 0), (2004, 0)):
     MF.stand(f, flex=4 if ph else 0)
-    MF.hand(f, "R", (-0.15, -0.55, 1.35) if ph else (-0.31, -0.07, 0.88), d=(0, -1, 0) if ph else (0, 0, -1), n=(1, 0, 0), g=0.95 if ph else 0.35)
-    MF.hand(f, "L", (0.31, -0.07, 0.88), d=(0, 0, -1))
+    MF.hand(f, "R", (-0.15, -0.55, 1.35) if ph else (-0.35, -0.11, 0.9), d=(0, -1, 0) if ph else (0, 0, -1), n=(1, 0, 0), g=0.95 if ph else 0.35)
+    MF.hand(f, "L", (0.35, -0.11, 0.9), d=(0, 0, -1))
 # muzzle flash at 1907 (light + glow puff) from in front of the masked figure's hand; no weapon detail
 fl = light(c, 'POINT', MF.W((-0.15, -0.75, 1.36)), 0, (1, 0.75, 0.4), 0.05, name="flash")
 for f, e in ((1904, 0), (1907, 6000), (1910, 800), (1916, 0)):
@@ -685,32 +711,39 @@ bpy.ops.mesh.primitive_uv_sphere_add(radius=0.25, location=tuple(MF.W((-0.15, -0
 pm = steam_mat("m_puff", 0.0, (0.6, 0.6, 0.62)); setmat(puff, pm); pdn = pm.node_tree.nodes["Dens"]
 for f, v, s in ((1905, 0, 0.2), (1908, 3, 0.35), (1940, 0.8, 1.2), (1990, 0, 1.8)):
     pdn.outputs[0].default_value = v; pdn.outputs[0].keyframe_insert("default_value", frame=f); puff.scale = (s,) * 3; puff.keyframe_insert("scale", frame=f)
-# dancers: pairs turning, then scatter
-for k in range(6):
-    b = ("Woman", "Townsman", "Townswoman", "Guard", "Woman", "Townsman")[k]
-    A = human(b, "Dancer_S6_%d" % k, c)
-    cx, cy0 = (-3.2 + (k % 3) * 3.2, -3.0 + (k // 3) * 3.5)
-    ang0 = k * 1.1
-    def dpath(f, cx=cx, cy0=cy0, ang0=ang0, k=k):
-        if f < 1912:
-            a = ang0 + (f - 1872) / 50.0
-            return V((cx + 0.5 * math.cos(a), cy0 + 0.5 * math.sin(a), 0))
-        a = ang0 + 40 / 50.0
-        p0 = V((cx + 0.5 * math.cos(a), cy0 + 0.5 * math.sin(a), 0)); dirv = (p0 - V((0.5, 2.5, 0))).normalized()
-        return p0 + dirv * 2.6 * smooth((f - 1912) / 70)
-    def dyaw(f, cx=cx, cy0=cy0, ang0=ang0):
-        if f < 1912: return math.degrees(ang0 + (f - 1872) / 50.0) + 180
-        a = ang0 + 40 / 50.0; p0 = V((cx + 0.5 * math.cos(a), cy0 + 0.5 * math.sin(a))); d = p0 - V((0.5, 2.5))
-        return math.degrees(math.atan2(-d.x, d.y)) + 180
-    A.H.walk(dpath, dyaw, 1872, 2004, stride=0.55, duty=0.6, lift=0.07, lean=3)
-    for f in range(1872, 2005, 16):
-        if f < 1915:
-            A.hand(f, "R", (-0.3, -0.25, 1.35), d=(-0.3, -0.5, 0.6), n=(0, -1, 0)); A.hand(f, "L", (0.25, -0.2, 1.05), d=(0, -1, 0), n=(0, 0, -1))
-            A.face(f, smile=0.8)
-        else:
-            A.hand(f, "R", (-0.2, -0.3, 1.5), d=(0, -0.2, 1), n=(0, -1, 0)); A.hand(f, "L", (0.2, -0.3, 1.45), d=(0, -0.2, 1), n=(0, -1, 0))
-            A.face(f, brow=2.5, jaw=16, lids=-0.3)
-    hat(A.a, A_["mask"], c, dz=-0.05, dy=-0.1)
+# dancers: three couples turning slowly, facing each other with joined raised hands; they scatter at the shot
+SHOT = 1912
+for pi, (cx, cy0) in enumerate(((-3.4, -2.4), (3.6, -1.8), (-2.6, 5.2))):
+    for side in (0, 1):
+        k = pi * 2 + side
+        b = ("Townsman", "Woman", "Guard", "Townswoman", "Townsman", "Woman")[k]
+        A = human(b, "Dancer_S6_%d" % k, c)
+        ang0 = pi * 1.3 + side * math.pi
+        def pos_(f, cx=cx, cy0=cy0, ang0=ang0):
+            a = ang0 + (min(f, SHOT) - 1850) / 70.0
+            return V((cx + 0.38 * math.cos(a), cy0 + 0.38 * math.sin(a), 0))
+        def dpath(f, pos_=pos_):
+            if f <= SHOT: return pos_(f)
+            p0 = pos_(SHOT); dirv = (p0 - V((0.5, 2.5, 0))); dirv.z = 0; dirv.normalize()
+            return p0 + dirv * 1.7 * smooth((f - SHOT - 4) / 70)
+        def dyaw(f, cx=cx, cy0=cy0, pos_=pos_):
+            p = pos_(min(f, SHOT))
+            d = (V((cx, cy0, 0)) - p) if f <= SHOT + 4 else (p - V((0.5, 2.5, 0)))
+            return math.degrees(math.atan2(-d.x, d.y))
+        A.H.walk(dpath, dyaw, 1850, 1985, stride=0.5, duty=0.62, lift=0.06, lean=3)
+        for f in range(1850, 1986, 8):
+            A.pos = dpath(f).to_2d(); A.yaw = dyaw(f)
+            if f < SHOT + 3:
+                a = ang0 + (f - 1850) / 70.0; c_ = V((cx, cy0, 0))
+                hs = "R" if side == 0 else "L"; os_ = "L" if side == 0 else "R"; sxh = -1 if hs == "R" else 1
+                mid = c_ + V((0, 0, 1.42)) + V((math.cos(a + math.pi / 2), math.sin(a + math.pi / 2), 0)) * 0.12 * (1 if side == 0 else -1) * -1
+                hand_at(A, f, hs, mid, d=(0, 0, 1), n=tuple((c_ - pos_(f)).normalized()), g=0.7)
+                A.hand(f, os_, (0.18 * -sxh, -0.18, 1.05), d=(0.3 * sxh, -1, 0.1), n=(0, 0, -1), g=0.4)
+                A.face(f, smile=0.9, brow=0.5)
+            else:
+                A.hand(f, "R", (-0.22, -0.25, 1.45), d=(0, -0.2, 1), n=(0, -1, 0), g=0.4); A.hand(f, "L", (0.22, -0.25, 1.4), d=(0, -0.2, 1), n=(0, -1, 0), g=0.4)
+                A.face(f, brow=2.5, jaw=16, lids=-0.3)
+        hat(A.a, A_["mask"], c, dz=-0.05, dy=-0.1)
 light(c, 'AREA', (4, -4, 7), 1400, (1, 0.8, 0.6), 6, rot=(35, 0, 40), name="key")
 light(c, 'AREA', (-5, 6, 4), 400, (0.8, 0.85, 1.0), 4, rot=(70, 0, -140), name="rim")
 light(c, 'AREA', (0, 0, 7.8), 3000, (1.0, 0.93, 0.85), 10, rot=(0, 0, 0), name="ceilSoft")
@@ -743,17 +776,20 @@ B = human("TwinB_old", "TwinB_bed_S7", c)
 B.a.rotation_euler = (R_(-90), 0, 0); B.a.location = (0, 1.5, BZ + 0.13)
 for f in (2004, 2120, 2240):
     B.H.key_spine(f, flex=-3, head=(-12, 8)); B.face(f, lids=1.0, smile=0.25)
-    for s_ in "LR":
-        sx = 1 if s_ == "L" else -1
-        B.H.key_hand(s_, f, V((0.33 * sx, 0.06, 0.95)), V((0, 0.05, -1)).normalized(), V((-sx, 0, 0)), pole=V((0.4 * sx, 0.6, 1.1)))
+    B.H.key_hand("L", f, V((0.33, 0.06, 0.95)), V((0, 0.05, -1)).normalized(), V((-1, 0, 0)), pole=V((0.4, 0.6, 1.1)))
+    B.H.key_hand("R", f, V((-0.40, -0.22, 1.02)), V((0.15, 0, -1)).normalized(), V((0, 1, 0)), pole=V((-0.45, 0.2, 1.25)))
+    grip(B.R, f, "R", 0.35); grip(B.R, f, "L", 0.3)
 blanket = box("blanket", c, (1.15, 1.45, 0.18), (0, 2.2, BZ + 0.2), pbr("m_blanket", "velour_velvet", 3.0, coord="Object", tint=(0.35, 0.05, 0.06), bump=0.8))
 bl = blanket.modifiers.new("sub", 'SUBSURF'); bl.levels = bl.render_levels = 2
 dsp = blanket.modifiers.new("dsp", 'DISPLACE'); tx = bpy.data.textures.new("folds", 'CLOUDS'); tx.noise_scale = 0.3; dsp.texture = tx; dsp.strength = 0.05
-OA = human("TwinA_old", "TwinA_bed_S7", c); OA.pos = V((-1.5, 1.9)); OA.yaw = -90 + 180
-inst(A_["chair"], c, (-1.6, 1.9, 0), rz=-90)
+OA = human("TwinA_old", "TwinA_bed_S7", c); OA.pos = V((-1.22, 2.45)); OA.yaw = -90 + 180
+inst(A_["chair"], c, (-1.32, 2.45, 0), rz=-90)
 for f in range(2004, 2240, 40):
-    OA.sit(f, flex=26, knee_fwd=0.38, head=(18, 0)); OA.face(f, brow=1.8, lids=0.45, frown=1.0)
-    OA.hand(f, "R", (-0.1, -0.75, BZ + 0.24), d=(0, -1, -0.2), n=(0, 0, -1)); OA.hand(f, "L", (0.2, -0.45, 0.62), d=(0, -1, 0), n=(0, 0, -1))
+    OA.sit(f, flex=30, knee_fwd=0.26, head=(22, 0)); OA.face(f, brow=1.8, lids=0.45, frown=1.0)
+    sc.frame_set(f); bpy.context.view_layer.update()
+    bh = ROOT[6].matrix_world.inverted() @ (B.a.matrix_world @ B.a.pose.bones["finger3-1.R"].head)
+    hand_at(OA, f, "L", bh + V((0.0, 0.0, 0.035)), d=(1, 0.15, -0.25), n=(0, 0, -1), g=0.45)
+    OA.hand(f, "R", (-0.2, -0.32, 0.64), d=(0, -1, 0), n=(0, 0, -1), g=0.5)
 for o in [OA.a] + list(OA.a.children):
     for f, h in ((2004, False), (2230, True)):
         REKEY.append((o, f, h))
@@ -764,7 +800,7 @@ box("canopy", c, (1.65, 2.15, 0.08), (0, 2.6, 2.15), M["velvet"]); box("canopyTr
 rug(c, (0, 0.5, 0), (2.8, 1.8)); picture(c, (-4.45, 0.5, 1.7), 90, 1.0); picture(c, (1.8, 4.45, 1.8), 180, 0.9)
 tapestry(c, (-4.45, -2.5, 1.8), 90, w=1.4, h=1.8, tint=(0.04, 0.10, 0.45))
 candelabra(c, (1.4, 3.9), 1.2); inst(A_["GothicCabinet_01"], c, (2.9, 4.0, 0), rz=180, s=0.8)
-DR = human("Doctor2", "Doctor_S7", c); crowd_idle(DR, 2004, 2240, (1.3, 0.9), 135, "watch", seed=91)
+DR = human("Doctor2", "Doctor_S7", c); crowd_idle(DR, 1985, 2240, (1.25, 3.0), -90, "watch", seed=91)
 
 nst = inst(A_["GothicCabinet_01"] if "GothicCabinet_01" in A_ else A_["table"], c, (-1.6, 3.6, 0), rz=180, s=0.5)
 # window seat + very old twin A with coffee
@@ -801,10 +837,11 @@ cam(2004, (0, -4.3, 1.7), (0, 2.5, 0.9), 28)
 cam(2070, (-2.2, -0.8, 1.9), (0, 2.6, 0.9), 30)
 cam(2140, (-0.2, 0.6, 2.2), (-0.4, 2.0, 0.8), 34)
 cam(2200, (-0.95, 0.5, 1.5), (-0.5, 1.9, 0.8), 40)
-cam(2225, (0.6, 0.4, 1.6), (4.5, -1.0, 1.6), 30)
+cam(2225, (1.2, 0.3, 1.55), (3.3, -1.6, 1.15), 30)
 cam(2250, (1.6, 0.6, 1.4), (3.3, -1.6, 1.1), 32)
 cam(2320, (2.3, -0.4, 1.35), (3.25, -1.55, 1.15), 45)
 cam(2400, (2.0, -2.4, 1.3), (3.2, -1.5, 1.15), 40)
+cam(2448, (2.4, -0.2, 1.65), (6.0, -1.0, 1.7), 30)
 cam(2470, (2.6, -0.4, 1.5), (3.25, -1.6, 1.15), 34)
 cam(2506, (4.65, -1.0, 1.7), (8.0, -1.0, 1.7), 28)
 finish_set(6)
@@ -841,14 +878,14 @@ for i, (nm, on, off, *_r) in enumerate(SETDEF):
     vis(SETC[i], on, off)
 for o, f, h in REKEY:   # per-character swaps inside a set, applied after the set keys
     o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
-world_keys([(1, 1.0), (174, 1.0), (175, 0.12), (587, 0.12), (588, 1.0), (715, 1.0), (716, 0.35), (1649, 0.35), (1650, 1.4), (1871, 1.4), (1872, 0.2), (2003, 0.2), (2004, 0.35), (2507, 0.35), (2508, 1.0)])
+world_keys([(1, 1.0), (157, 1.0), (158, 0.12), (574, 0.12), (575, 1.0), (704, 1.0), (705, 0.35), (1629, 0.35), (1630, 1.4), (1849, 1.4), (1850, 0.2), (1984, 0.2), (1985, 0.35), (2489, 0.35), (2490, 1.0)])
 for fc in (W.node_tree.animation_data.action.fcurves if W.node_tree.animation_data and hasattr(W.node_tree.animation_data.action, "fcurves") else []):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
 
 # ------------------------------------------------------------------ portal pass-throughs (textured surfaces the camera flies through, <= 6 frames)
 PC = coll("PORTALS")
 for i in range(len(SETDEF) - 1):
-    if i in (3, 5, 6): continue
+    if i != 1: continue   # only the steam pass has a pass-through volume; windows/doorways are openings, the rest are whip-pans
     ex = SETDEF[i][4]; Mx = ROOT[i].matrix_world @ P(*ex)
     f = SETDEF[i][2]
     if i == 1:   # steam
@@ -865,9 +902,15 @@ CK[:] = [k for k in CK if all(abs(k[0] - f) > 20 for f, i in TR)]
 for f, i in TR:
     ex = SETDEF[i][4]; Mx = ROOT[i].matrix_world @ P(*ex); d = (Mx.to_3x3() @ V((0, 1, 0))).normalized(); p0 = Mx.translation
     li = ROOT[i].matrix_world.inverted(); li2 = ROOT[i + 1].matrix_world.inverted()
-    CK.append((f - 5, i, li @ (p0 - d * 0.7), li @ (p0 + d * 4), 26))
-    CK.append((f, i, li @ p0, li @ (p0 + d * 6), 26))
-    CK.append((f + 18, i + 1, li2 @ (p0 + d * 2.2), li2 @ (p0 + d * 8), 26))
+    if i in (0, 2, 4, 5):   # whip-pan in open air: fast 110 deg pan, set swaps mid-whip, camera position continuous
+        r70 = Matrix.Rotation(R_(70), 3, 'Z'); r35 = Matrix.Rotation(R_(35), 3, 'Z')
+        CK.append((f - 12, i, li @ (p0 - d * 0.9), li @ (p0 + (r70 @ d) * 5), 28))
+        CK.append((f, i, li @ p0, li @ (p0 + (r35 @ d) * 5), 28))
+        CK.append((f + 12, i + 1, li2 @ (p0 + d * 0.9), li2 @ (p0 + d * 7 + V((0, 0, -2.2 if i == 5 else 0.0))), 28))   # whip ends facing forward, onto the next beat (down onto the bed for the bedroom)
+    else:
+        CK.append((f - 5, i, li @ (p0 - d * 0.7), li @ (p0 + d * 4), 26))
+        CK.append((f, i, li @ p0, li @ (p0 + d * 6), 26))
+        CK.append((f + 18, i + 1, li2 @ (p0 + d * 2.2), li2 @ (p0 + d * 8), 26))
 CK.sort(key=lambda k: k[0])
 wp = [(k[0], toW(k[1], k[2])) for k in CK]; wt = [(k[0], toW(k[1], k[3])) for k in CK]; wl = [(k[0], float(k[4])) for k in CK]
 fp, ft, fl_ = catmull(wp), catmull(wt), pchip(wl)
