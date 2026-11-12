@@ -35,7 +35,7 @@ def build(variant=None):
     B.box((0, 0, -0.05), (16, 10, 0.1), dd.tex_mat("concrete_floor_02", 0.6, tint=(0.5, 0.5, 0.5), name="ERFloor", sat=0.3))
     wall = pbr("ERWall", (0.42, 0.44, 0.44), 0.8)
     B.box((0, 4.0, 1.5), (16, 0.1, 3.0), wall).box((-7.5, 0, 1.5), (0.1, 10, 3.0), wall)
-    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), dd.tex_mat("velour_velvet", 2.5, tint=(0.07, 0.07, 0.08), name="TableCloth", sat=0.2))
+    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), dd.tex_mat("velour_velvet", 2.5, tint=(0.025, 0.025, 0.03), name="TableCloth", sat=0.2))
     for sx in (-1, 1):
         for sy in (-1, 1):
             B.box((sx * TL / 2, sy * TW / 2, TZ / 2), (0.05, 0.05, TZ), pbr("Leg", (0.3, 0.3, 0.32), 0.4, 0.8))
@@ -143,7 +143,7 @@ MOVES = {
                    cam=lambda c, t: (Vector((-TL / 2 - 0.4 + 1.4 * ease(t), -0.9, 1.35)), Vector((-TL / 2 + 1.4 + 1.4 * ease(t), 0.05, TZ)), 40),
                    focus=lambda c, t: Vector((-TL / 2 + 1.0 + 1.4 * ease(t), 0.0, TZ))),
     "tags": dict(kind="anim", dof=5.6, anim=anim_tags,
-                 cam=lambda c, t: (Vector((-2.5 + 2.0 * ease(t), 2.8, 2.6)), Vector((0.0 + 2.0 * ease(t), -0.6, 0.6)), 28),
+                 cam=lambda c, t: (Vector((-1.0 + 1.5 * ease(t), 3.4, 2.9)), Vector((0.2 + 1.5 * ease(t), -0.9, 0.7)), 26),
                  focus=lambda c, t: c["counter"].arm.location + Vector((0, 0, 1.0))),
     "alone": dict(kind="anim", dof=2.0, anim=anim_final,
                   cam=lambda c, t: (c["hero_at"] + Vector((0.0, -0.12, 0.09)).lerp(Vector((0.0, -0.55, 0.32)), ease(t)), c["hero_at"] + Vector((0, 0, 0.05)), 60),

@@ -140,6 +140,6 @@ MOVES = {
                    cam=lambda c, t: (Vector((14.0, -6.5, 2.4)).lerp(Vector((12.0, -6.0, 2.2)), ease(t)), Vector((-1.0, 6.0, 1.0)), 30),
                    focus=lambda c, t: Vector((-1.0, 5.0, 1.0))),
     "stairs": dict(kind="anim", dof=2.8, anim=anim_stairs,
-                   cam=lambda c, t: (Vector((-0.2, -0.45, 0.95)).lerp(Vector((0.0, -0.2, 0.85)), ease(t)), Vector((0.6, 2.05, 0.3)), 30),
+                   cam=lambda c, t: (Vector((0.25, 0.55, 0.75)).lerp(Vector((0.35, 0.8, 0.68)), ease(t)), Vector((0.6, 2.15, 0.22)), 32),
                    focus=lambda c, t: Vector((0.6, 2.0, 0.25))),
 }

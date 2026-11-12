@@ -139,13 +139,19 @@ def build_upstairs(c, after=False):
         N_.box((-6.85, y, 1.5), (0.28, 0.04, 1.34), pm)                       # sides
     N_.box((-6.85, 6.0, 1.45), (0.24, 1.5, 0.02), vel)                        # a velvet shelf
     N_.done()
-    stand = pbr("NicheStand", (0.88, 0.86, 0.82), 0.45)
+    nv = dd.tex_mat("velour_velvet", 3.0, tint=(0.05, 0.05, 0.06), name="NicheCone", sat=0.2)
     for k in range(4):
         for row, z in enumerate((0.9, 1.48)):
             y = 5.5 + k * 0.33
-            cyl("NStand", (-6.86, y, z + 0.05), 0.03, 0.1, stand, verts=16)
-            dd.ring(f"NicheRing{k}{row}", (-6.86, y, z + 0.13), stone_r=0.005 + 0.001 * ((k + row) % 2),
-                    band="plat" if (k + row) % 2 else "gold", stone=("diamond", "sapphire", "diamond", "ruby")[k])
+            if (k + row) % 2:                              # a black velvet ring cone
+                bpy.ops.mesh.primitive_cone_add(vertices=20, radius1=0.025, radius2=0.008, depth=0.08, location=(-6.86, y, z + 0.04))
+                bpy.context.active_object.data.materials.append(nv)
+                dd.ring(f"NicheRing{k}{row}", (-6.86, y, z + 0.05), stone_r=0.006, band="plat" if k % 2 else "gold",
+                        stone=("diamond", "sapphire", "diamond", "ruby")[k], upright=True, rot=(0, 0, math.radians(90)))
+            else:                                          # a small velvet necklace bust
+                bpy.ops.mesh.primitive_cone_add(vertices=20, radius1=0.07, radius2=0.025, depth=0.22, location=(-6.86, y, z + 0.11))
+                b_ = bpy.context.active_object; b_.data.materials.append(nv); b_.scale = (0.55, 1.0, 1.0)
+                dd.earring(f"NichePend{k}{row}", (-6.82, y, z + 0.12), 0.008, ("diamond", "sapphire", "emerald", "ruby")[k])
     nl = bpy.data.lights.new("NicheL", 'AREA'); nl.shape = 'RECTANGLE'; nl.size = 1.4; nl.size_y = 0.2; nl.energy = 30; nl.color = WARM
     no = bpy.data.objects.new("NicheL", nl); bpy.context.collection.objects.link(no); no.location = (-6.82, 6.0, 2.1)
     nl2 = bpy.data.lights.new("NicheL2", 'AREA'); nl2.shape = 'RECTANGLE'; nl2.size = 1.4; nl2.size_y = 0.15; nl2.energy = 20; nl2.color = WARM

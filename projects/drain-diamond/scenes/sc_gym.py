@@ -108,7 +108,7 @@ def anim_trainees(c, sec):
             h.arm.location.z += 0.06 * abs(math.sin(sec * 7.0)); arms_relaxed(h)
         else:                                                 # stretching on the mat
             from dd import pose_kneel
-            pose_kneel(h, lean=10 + 8 * math.sin(sec * 0.8)); place(h, (-0.6, 0.3, 0.025), math.radians(140), z=0.025)
+            pose_kneel(h, lean=10 + 8 * math.sin(sec * 0.8)); place(h, (-4.6, 0.8, 0.025), math.radians(100), z=0.025)
 
 
 def anim_bag(c, t):

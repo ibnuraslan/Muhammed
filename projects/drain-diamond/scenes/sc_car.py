@@ -178,7 +178,7 @@ def anim_reels(c, t):
 
 MOVES = {
     "mic": dict(kind="anim", dof=4.0, anim=anim_mic_out,
-                cam=lambda c, t: (Vector((-2.6, 5.4, 1.5)).lerp(Vector((-2.2, 5.0, 1.45)), ease(t)), Vector((0.3, 1.6, 0.8)), 30),
+                cam=lambda c, t: (Vector((-3.4, 4.3, 1.45)).lerp(Vector((-3.0, 4.1, 1.4)), ease(t)), Vector((0.3, 1.7, 0.8)), 30),
                 focus=lambda c, t: Vector((0.25, 2.0, 0.9))),
     "mic_old": dict(kind="anim", dof=2.8, anim=anim_mic,
                 cam=lambda c, t: (Vector((-0.85, -0.1, 1.28)).lerp(Vector((-0.75, -0.05, 1.26)), ease(t)), Vector((0.95, 0.35, 0.62)), 20),
