@@ -133,6 +133,11 @@ def build(variant=None):
     c["m"] = h
     if variant == "night":
         c["phones"] = P.headphones(h)
+        # lamp bounce off the wall onto his face and greying hair (continuity: he must read grey at night too)
+        B.key_spot((DESK.x - 0.9, DESK.y + 0.6, 1.9), (DESK.x, DESK.y - 0.68, 1.25), 170, 60, (1.0, 0.8, 0.6), soft=0.5, name="HairBounce")
+        B.key_spot((DESK.x + 1.3, DESK.y - 0.2, 2.0), (DESK.x, DESK.y - 0.68, 1.3), 110, 50, (1.0, 0.82, 0.62), soft=0.6, name="HairBounceR")
+    if variant == "day":                                      # soft room-side fill so his greying hair reads against the window
+        B.key_spot((DESK.x - 1.8, DESK.y - 0.9, 2.1), (DESK.x, DESK.y - 0.68, 1.3), 120, 50, (0.95, 0.92, 0.88), soft=0.6, name="HairFill")
     c["rest"] = B.capture(h)
     B.finish_interior(lift=0.0)
     return c
@@ -162,6 +167,8 @@ def type_hands(h, sec, kb):
 def anim(c, t, move):
     sec = t * DUR[move]
     h = c["m"]; B.apply_pose(h, c["rest"])
+    for o in c.get("phones", []):
+        o.hide_render = (move == "objection")                 # typing: headphones off, his grey hair visible
     if move == "read":
         turn_page(c, h, sec); B.nod(h, 20)
     elif move == "lookup":

@@ -484,14 +484,14 @@ def finish_exterior(azim, elev=8, mood="low_sun", sky="blue", sun_energy=None, e
 # ============================================================================ CAST (fixed looks, all film long; see PLAN_B.md)
 def michael(name="Michael", years=47):
     """The brother, a music teacher in his forties: short greying hair, dark plain navy sweater, slim."""
-    h = person(name, 1.0, years, "male_casualsuit03", "short02", hair_val=1.35, hair_sat=0.12, weight=0.42, height=0.56)
+    h = person(name, 1.0, years, "male_casualsuit03", "short02", hair_val=3.0, hair_sat=0.05, weight=0.42, height=0.56)
     flat_clothes(h, (0.03, 0.04, 0.08))
     return h
 
 
 def pfaffinger(name="Acquaintance"):
     """The acquaintance questioned in 1981 (unnamed on screen): early thirties, longer 80s hair, olive work jacket."""
-    h = person(name, 1.0, 31, "male_casualsuit05", "bob01", hair_val=0.16, weight=0.4, height=0.5)
+    h = person(name, 1.0, 31, "male_casualsuit05", "long01", hair_val=0.2, weight=0.4, height=0.5)
     flat_clothes(h, (0.075, 0.065, 0.03))
     return h
 
