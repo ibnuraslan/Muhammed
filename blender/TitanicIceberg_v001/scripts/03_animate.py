@@ -224,21 +224,23 @@ def cam_xf(f, M):
     loc, q, _ = M.decompose(); bc.location = loc; bc.rotation_mode = 'QUATERNION'; bc.rotation_quaternion = q
     bc.keyframe_insert("location", frame=f); bc.keyframe_insert("rotation_quaternion", frame=f)
 # camera held at chest -> raised to the eye -> shutter -> lowered and looking
-CAMP = {0: (Vector((SP.x, SP.y + 0.32, DK.z + 1.12)), -15), 50: (Vector((SP.x, SP.y + 0.34, DK.z + 1.25)), -5),
-        95: (Vector((SP.x + 0.02, SP.y + 0.40, DK.z + 1.5)), 4), 160: (Vector((SP.x + 0.02, SP.y + 0.40, DK.z + 1.51)), 5),
-        230: (Vector((SP.x, SP.y + 0.33, DK.z + 1.2)), -10), 360: (Vector((SP.x - 0.02, SP.y + 0.33, DK.z + 1.18)), -12)}
+CAMP = {0: (Vector((SP.x, SP.y + 0.30, DK.z + 1.08)), -12), 50: (Vector((SP.x, SP.y + 0.32, DK.z + 1.14)), 2),
+        95: (Vector((SP.x + 0.01, SP.y + 0.33, DK.z + 1.16)), 4), 160: (Vector((SP.x + 0.01, SP.y + 0.33, DK.z + 1.15)), 3),
+        230: (Vector((SP.x, SP.y + 0.31, DK.z + 1.1)), -8), 360: (Vector((SP.x - 0.02, SP.y + 0.31, DK.z + 1.08)), -10)}
 for f, (cp, pitch) in CAMP.items():
     Rm = Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pitch), 4, 'X')   # model lens points -Y; turn it to +Y
     cam_xf(f, Matrix.Translation(cp) @ Rm)
     # hands on the camera body sides, palms in
     st.hand("L", f, cp + Vector((0.172, 0.0, 0.05)), (0, 1, 0.1), (-1, 0, 0), pole=cp + Vector((0.6, -0.4, -0.5)), curl=16, thumb=22)
     st.hand("R", f, cp + Vector((-0.06, 0.02, -0.035)), (0.15, 1, 0.0), (0, 0, 1), pole=cp + Vector((-0.6, -0.4, -0.5)), curl=22, thumb=25)
-STP = [(0, (0, 0, 0), (-6, 0), 0.0), (50, (4, 0, 0), (2, 0), 0.0), (95, (8, 0, 0), (6, 0), 0.02), (115, (9, -2, 0), (6, 0), 0.03),
-       (125, (6, 0, 0), (4, 0), 0.02), (160, (5, 0, 0), (4, 0), 0.02), (230, (0, 5, 0), (-6, 8), 0.0), (360, (2, 3, 0), (-4, 4), 0.0)]
-for f, sp_, hd, cr in STP:
-    st.pose(f, (SP.x, SP.y), YAW, flex=sp_[0] * 0.5, spine=sp_, head=hd, feet=FEET, crouch=cr)
-for f, kw in ((0, dict(brow=0.2, lids=0.2)), (60, dict(brow=0.8, lids=0.6, jaw=4)), (110, dict(brow=0.4, lids=-0.4, jaw=2)),
-              (130, dict(brow=1.0, lids=1.0, jaw=8, smile=0.3)), (200, dict(brow=1.2, lids=1.0, jaw=10)), (360, dict(brow=0.8, lids=0.6, jaw=5))):
+STP = [(0, (2, 0, 0), (-2, 6), 0.0), (25, (3, 1, 0), (6, 3), 0.005), (50, (6, 0, 0), (24, 0), 0.01), (80, (7, -1, 0), (28, -2), 0.015),
+       (100, (8, 0, 0), (30, 0), 0.02), (112, (9, 0, 0), (31, 0), 0.025), (125, (6, 0, 0), (12, 0), 0.015), (145, (3, 0, 0), (-4, 2), 0.0),
+       (175, (4, 2, 0), (-6, 6), 0.0), (230, (2, 5, 0), (-3, 9), 0.0), (300, (3, 3, 0), (-4, 5), 0.0), (360, (2, 3, 0), (-4, 4), 0.0)]
+for f, sp_, hd, cr in STP:   # breathing + a small weight shift side to side over planted feet
+    sh = 0.015 * math.sin(f / 60 * 1.3)
+    st.pose(f, (SP.x + sh, SP.y), YAW, flex=sp_[0] * 0.5, spine=(sp_[0] + 1.2 * math.sin(f / 60 * 2.2), sp_[1], sp_[2]), head=hd, feet=FEET, crouch=cr)
+for f, kw in ((0, dict(brow=0.6, lids=0.5, jaw=3)), (50, dict(brow=0.1, lids=-0.3)), (110, dict(brow=-0.2, lids=-0.5, jaw=1)),
+              (145, dict(brow=1.2, lids=1.0, jaw=9)), (200, dict(brow=1.3, lids=1.0, jaw=10, smile=0.2)), (360, dict(brow=0.8, lids=0.6, jaw=5))):
     face(st.R, f, **kw)
 # shutter click: right index finger pushes at 112
 
@@ -249,7 +251,8 @@ DP = DK + Vector((1.5, -1.0 + 0.78, 0))  # beside the coil, facing it (-Y)
 dfeet = {"L": (Vector((DP.x + 0.22, DP.y + 0.08)), 10), "R": (Vector((DP.x - 0.24, DP.y + 0.02)), -12)}
 for f in range(0, 400, 20):
     a = f / 60 * 3.5
-    dh.pose(f, (DP.x, DP.y), 0.0, flex=34, spine=(55, 8 * math.sin(a), 0), head=(5, 5 * math.sin(a)), feet=dfeet, crouch=0.36)
+    up = max(0.0, 1 - abs(f - 170) / 50)
+    dh.pose(f, (DP.x, DP.y), 0.0, flex=34, spine=(55 - 12 * up, 8 * math.sin(a), 0), head=(5 - 40 * up, 5 * math.sin(a) + 25 * up), feet=dfeet, crouch=0.36)
     c = DK + Vector((1.5, -1.0, 0.3)) + Vector((0.16 * math.cos(a), 0.1 * math.sin(a) - 0.05, 0.05 * math.sin(a * 2)))
     dh.hand("R", f, c, (0, -0.3, -1), (0, 1, 0), pole=c + Vector((-0.5, 0.6, 0.2)), curl=70, thumb=40)
     dh.hand("L", f, DK + Vector((1.9, -0.85, 0.75)), (0.2, -0.5, -1), (-1, 0, 0), pole=DK + Vector((2.4, -0.3, 1.0)), curl=65)
@@ -262,14 +265,15 @@ tfeet = {"L": (Vector((TP.x + 0.15, TP.y - 0.05)), 172), "R": (Vector((TP.x - 0.
 tongs = O["Tongs"]
 for f in range(1060, 1215, 6):
     t = (f - 1060) / 60; rock = math.sin(t * 5.0)
-    tech.pose(f, TP, 180.0, flex=10, spine=(26, 3 * rock, 0), head=(26, 2), feet=tfeet, crouch=0.04)
+    lean = smooth((f - 1110) / 30) * (1 - smooth((f - 1150) / 15)); lift = smooth((f - 1150) / 14) * (1 - smooth((f - 1185) / 20))
+    tech.pose(f, TP, 180.0, flex=10 + 2 * lean, spine=(26 + 3 * lean - 10 * lift + 1.0 * math.sin(t * 2.4), 3 * rock, 0), head=(26 + 4 * lean - 22 * lift, 2 - 6 * lift), feet=tfeet, crouch=0.04)
     tip = Vector((1.25 + 0.05 * rock, Y0 + 5.35, BENCH_TOP + 0.06 + 0.012 * rock))
     tongs.location = tip + Vector((0, -0.12, 0.04)); tongs.rotation_euler = (R_(-20), 0, R_(90)); tongs.keyframe_insert("location", frame=f); tongs.keyframe_insert("rotation_euler", frame=f)
-    tech.hand("R", f, tip + Vector((0, -0.27, 0.11)), (0, 1, -0.35), (0, 0, -1), pole=tip + Vector((-0.6, -0.6, 0)), curl=62, thumb=40)
+    tech.hand("R", f, tip + Vector((0, -0.245, 0.11)), (0, 1, -0.35), (0, 0, -1), pole=tip + Vector((-0.6, -0.6, 0)), curl=62, thumb=40)
     # left hand tilts the tray edge
     tech.hand("L", f, Vector((0.5, Y0 + 5.2, BENCH_TOP + 0.065 + 0.01 * rock)), (0, 1, -0.2), (0, 0, -1), pole=Vector((0.0, Y0 + 4.6, 1.5)), curl=30)
     tray = O["Tray_1"]; tray.rotation_euler = (R_(1.2 * rock), 0, 0); tray.keyframe_insert("rotation_euler", frame=f)
-for f, kw in ((1060, dict(brow=-0.2, lids=-0.4, frown=0.3)), (1130, dict(brow=0.6, lids=0.4, jaw=4)), (1180, dict(brow=1.3, lids=1.0, jaw=10))):
+for f, kw in ((1060, dict(brow=-0.2, lids=-0.4, frown=0.3)), (1130, dict(brow=0.4, lids=0.2, jaw=2)), (1160, dict(brow=1.4, lids=1.1, jaw=11)), (1190, dict(brow=1.0, lids=0.8, jaw=6, smile=0.3))):
     face(tech.R, f, **kw)
 pd = D.materials["M_Print_Dev"]
 for f, v in ((0, 0.0), (1105, 0.0), (1185, 1.0)): node_key(pd, "Develop", f, v)
@@ -280,22 +284,23 @@ for i in range(5):
 
 # --- office: Expert B holds the print up, Expert A brings the magnifier in
 eb = Actor("ExpertB", RZ0); ea = Actor("ExpertA", RZ0)
-PR = O["Print_Office"]; PRC = Vector((8.2, Y0 + 5.0, 1.99)); PR.location = PRC; PR.rotation_euler = (R_(-8), 0, 0)
+PR = O["Print_Office"]; PRC = Vector((8.2, Y0 + 4.86, 2.0)); PR.location = PRC; PR.rotation_euler = (R_(-8), 0, 0)
 BP = Vector((8.25, Y0 + 5.25))
-bfeet = {"L": (Vector((BP.x - 0.14, BP.y + 0.02)), 175), "R": (Vector((BP.x + 0.16, BP.y - 0.02)), 185)}
+bfeet = {"L": (Vector((BP.x + 0.14, BP.y - 0.02)), -5), "R": (Vector((BP.x - 0.16, BP.y + 0.02)), 5)}
 for f in range(1180, 1345, 10):
     t = (f - 1180) / 60; sway = math.sin(t * 2)
-    eb.pose(f, BP, 180.0 + 3 * sway, flex=8, spine=(14, 2 * sway, 0), head=(18, 3 * sway), feet=bfeet, crouch=0.02)
+    look = smooth((f - 1250) / 20) * (1 - smooth((f - 1290) / 15))
+    eb.pose(f, BP, 0.0 + 3 * sway, flex=4, spine=(6 + 1.0 * math.sin(t * 2.3), 2 * sway, 0), head=(4 + 12 * look, -14 + 10 * look), feet=bfeet, crouch=0.01)
     pc = PRC + Vector((0.01 * sway, 0, 0.01 * math.sin(t * 3)))
     PR.location = pc; PR.keyframe_insert("location", frame=f)
-    eb.hand("L", f, pc + Vector((0.185, 0.04, -0.02)), (-0.3, 0, 1), (0, -1, 0), pole=pc + Vector((0.6, 0.4, -0.5)), curl=45, thumb=35)
-    eb.hand("R", f, pc + Vector((-0.15, 0.025, -0.02)), (0.3, 0, 1), (0, -1, 0), pole=pc + Vector((-0.6, 0.4, -0.5)), curl=45, thumb=35)
+    eb.hand("L", f, pc + Vector((0.16, 0.045, 0.06)), (-0.25, 0, 1), (0, -1, 0), pole=pc + Vector((0.55, 0.2, -0.6)), curl=50, thumb=35)
+    eb.hand("R", f, pc + Vector((-0.16, 0.045, 0.06)), (0.25, 0, 1), (0, -1, 0), pole=pc + Vector((-0.55, 0.2, -0.6)), curl=50, thumb=35)
 AP = Vector((7.72, Y0 + 3.72))
 afeet = {"L": (Vector((AP.x - 0.14, AP.y + 0.02)), 172), "R": (Vector((AP.x + 0.15, AP.y - 0.06)), 190)}
 mag = O["magnifier"]
 for f in range(1180, 1345, 10):
     t = (f - 1180) / 60; k = smooth((f - 1190) / 70)
-    ea.pose(f, AP, 180.0, flex=6 + 8 * k, spine=(8 + 12 * k, -6, 0), head=(12 + 8 * k, -8), feet=afeet, crouch=0.02 + 0.04 * k)
+    ea.pose(f, AP, 180.0, flex=6 + 8 * k, spine=(8 + 12 * k + 1.0 * math.sin(t * 2.1), -6, 0), head=(8 + 6 * k, -12 + 4 * k), feet=afeet, crouch=0.02 + 0.04 * k)
     mc = Vector((7.98 + 0.03 * k, Y0 + 4.25 + 0.1 * k, 2.08 + 0.06 * k)) + Vector((0.008 * math.sin(t * 4), 0, 0))
     mag.location = mc - Vector((0, 0, 0.235)); mag.rotation_euler = (R_(-6), 0, R_(4)); mag.keyframe_insert("location", frame=f); mag.keyframe_insert("rotation_euler", frame=f)
     hd = mc + Vector((0, 0, -0.16))     # handle grip below the lens
@@ -364,7 +369,7 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (530,  Vector((1.5, Y0 - 4.2, 2.2)), Vector((3.2, Y0, 1.6)),    35, 5.6),
     (580,  Vector((6, Y0 - 7.5, 2.4)),   Vector((7.5, Y0, 1.6)),    32, 5.6),
     (625,  Vector((10, Y0 - 12.0, 4.5)), Vector((6, Y0, 2.0)),      30, 5.6),
-    (680,  Vector((6, Y0 - 13, 11)),     Vector((0, -45, 0)),       26, 8.0),
+    (680,  Vector((8, Y0 - 16, 10)),     Vector((0, Y0 + 2, 6)),    26, 8.0),
     (740,  Vector((-2, -36, 30)),        Vector((-6, -62, 0)),      24, 8.0),
     (800,  Vector((-8, -62, 38)),        Vector((-14, -84, 0)),     24, 8.0),
     (860,  Vector((-42, -90, 20)),       ship_pos(860) + Vector((0, 4, 6)), 26, 8.0),
@@ -374,12 +379,13 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (1055, Vector((0.5, Y0 - 3.4, 2.6)), Vector((2, Y0, 2.5)),      30, 5.6),
     (1080, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 2.5)), 30, 5.6),
     (1105, Vector((1.8, Y0 + 1.4, 2.85)), Vector((1.2, Y0 + 5.45, 1.7)), 26, 5.6),
-    (1150, Vector((2.0, Y0 + 4.95, 2.35)), Vector((1.2, Y0 + 5.45, 1.72)), 35, 2.8),
+    (1148, Vector((2.05, Y0 + 5.45, 2.3)), Vector((1.3, Y0 + 5.05, 1.95)), 30, 5.6),
+    (1168, Vector((2.3, Y0 + 5.15, 2.4)), Vector((1.25, Y0 + 4.85, 2.35)), 30, 5.6),
     (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
     (1215, Vector((5.2, Y0 + 4.3, 2.3)), Vector((7.8, Y0 + 4.3, 2.0)), 24, 5.6),
-    (1265, Vector((8.9, Y0 + 2.5, 2.55)), Vector((8.1, Y0 + 4.6, 2.1)), 26, 4.0),
-    (1310, Vector((8.27, Y0 + 3.75, 2.05)), Vector((8.22, Y0 + 5.0, 1.99)), 30, 4.0),
-    (1328, Vector((8.24, Y0 + 4.96, 1.99)), Vector((8.0, Y0 + 9, 2.6)), 30, 5.6),
+    (1265, Vector((9.4, Y0 + 3.9, 2.45)), Vector((8.0, Y0 + 4.4, 2.3)), 26, 5.6),
+    (1310, Vector((8.27, Y0 + 3.7, 2.05)), Vector((8.22, Y0 + 4.86, 2.0)), 30, 4.0),
+    (1328, Vector((8.24, Y0 + 4.82, 2.0)), Vector((8.0, Y0 + 9, 2.6)), 30, 5.6),
     (1350, Vector((7.8, Y0 + 9.6, 2.6)), Vector((6.5, Y0 + 18.7, 3.3)), 24, 8.0),
     (1405, Vector((10.0, Y0 + 11.0, 2.7)), Vector((9.2, Y0 + 18.4, 2.6)), 22, 8.0),
     (1465, Vector((9.6, Y0 + 14.2, 2.5)), Vector((9.3, Y0 + 18.5, 2.45)), 26, 5.6),
@@ -440,7 +446,7 @@ for n in ("Iceberg", "Mist_Bank"):
     ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_skin)
     ob.hide_render = False; ob.keyframe_insert("hide_render", frame=back_on)
     set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
-cross_print = next(f for f in range(1310, 1345) if fpos(f).y > Y0 + 5.0)
+cross_print = next(f for f in range(1310, 1345) if fpos(f).y > Y0 + 4.86)
 vis(["Print_Office", "ExpertB", "Office_WallBack", "Darkroom_WallRight", "Office_WallLeft"], cross_print)
 cross_giant = next(f for f in range(1530, 1600) if fpos(f).y > GP.y - 0.02)
 vis(["Print_Giant", "Liner_Explainer", "Explainer_Stage", "Match_Line"], cross_giant)
