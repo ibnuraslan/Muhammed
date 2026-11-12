@@ -25,6 +25,7 @@ SKIES = {
 
 
 def sky(kind="overcast"):
+    bpy.context.scene.cycles.sample_clamp_indirect = 3.0      # no fireflies / speckle in sheets or film
     hor, zen, ccol, cover, el, az, scol, en, ang, strength, expo = SKIES[kind]
     w = bpy.data.worlds.new("Sky"); bpy.context.scene.world = w; w.use_nodes = True
     N = w.node_tree.nodes; L = w.node_tree.links; N.clear()

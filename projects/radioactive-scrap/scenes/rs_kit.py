@@ -866,11 +866,11 @@ def two_tone(name, low=(0.32, 0.42, 0.36), high=(0.78, 0.74, 0.64), split=1.2):
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sep.inputs[0])
     gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = split; L.new(sep.outputs['Z'], gt.inputs[0])
-    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 1.5; nz.inputs['Detail'].default_value = 8
-    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.35; nz.inputs['Detail'].default_value = 2
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])     # broad, soft mottling only (no fine speckle)
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(gt.outputs[0], mx.inputs['Factor'])
     mx.inputs[6].default_value = (*low, 1); mx.inputs[7].default_value = (*high, 1)
-    st = N.new("ShaderNodeMix"); st.data_type = 'RGBA'; st.blend_type = 'MULTIPLY'; st.inputs['Factor'].default_value = 0.25
+    st = N.new("ShaderNodeMix"); st.data_type = 'RGBA'; st.blend_type = 'MULTIPLY'; st.inputs['Factor'].default_value = 0.12
     L.new(mx.outputs[2], st.inputs[6]); L.new(nz.outputs['Color'], st.inputs[7]); L.new(st.outputs[2], p.inputs['Base Color'])
     rr = N.new("ShaderNodeMapRange"); L.new(gt.outputs[0], rr.inputs['Value']); rr.inputs['To Min'].default_value = 0.35; rr.inputs['To Max'].default_value = 0.85
     L.new(rr.outputs[0], p.inputs['Roughness'])
@@ -967,3 +967,27 @@ def filing_cabinet(loc, rz, col=(0.42, 0.45, 0.42), name="FilingCabinet"):
         parts += [box("FCDrawer", (0, -0.315, 0.17 + j * 0.32), (0.43, 0.012, 0.29), m, bevel=0.004), box("FCPull", (0, -0.33, 0.25 + j * 0.32), (0.12, 0.02, 0.02), k_)]
     o = join(parts, name); o.location = loc; o.rotation_euler = (0, 0, rz)
     return o
+
+
+# ---------------------------------------------------------------------------- arms: elbows always bent
+import human as _human
+_reach_raw = _human.reach
+
+
+def reach(h, side, target, pole=None, hand_dir=None, *a, **kw):
+    """human.reach with the target pulled toward the shoulder so the elbow keeps at least ~45 degrees of bend
+    (no puppet arms). Every set script imports reach after rs_kit, so they all get this version."""
+    from mathutils import Vector as _V
+    try:
+        sh = h.bone_head(f"upperarm01.{side}"); el = h.bone_head(f"lowerarm01.{side}"); wr = h.bone_head(f"wrist.{side}")
+        L = (el - sh).length + (wr - el).length
+        t = _V(target); d = t - sh
+        if d.length > 0.9 * L:
+            t = sh + d.normalized() * 0.9 * L
+        target = t
+    except Exception:
+        pass
+    return _reach_raw(h, side, target, pole, hand_dir, *a, **kw)
+
+
+_human.reach = reach

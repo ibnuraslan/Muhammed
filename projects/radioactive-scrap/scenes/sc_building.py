@@ -44,7 +44,7 @@ def build(variant=None):
     puddles(rng, ((-20, -16), (20, -8)), 10, size=(0.5, 1.5), z=0.01)
     # the warehouse room: brick walls, concrete floor, steel roof trusses, high windows, big front doors
     brick = ph_mat("brick_wall_02", 0.5, (0.4, 0.25, 0.2), name="WHBrick")
-    floor = ph_mat("concrete_floor_worn_001", 0.45, (0.36, 0.35, 0.33), name="WHFloor", tint=(0.72, 0.7, 0.66))
+    floor = ph_mat("concrete_floor_worn_001", 0.08, (0.36, 0.35, 0.33), name="WHFloor", tint=(0.72, 0.7, 0.66))
     room("WH", Vector((0, 2.0, 0)), 18, 16, 6.0, floor, brick, ceil_m=ph_mat("rusty_corrugated_iron", 0.4, (0.3, 0.3, 0.3), name="WHRoof"),
          windows=[("N", -5.0, 3.6, 2.4, 1.6), ("N", 0.0, 3.6, 2.4, 1.6), ("N", 5.0, 3.6, 2.4, 1.6)],
          doors=[("S", -0.6, 0, 4.0, 3.6), ("E", -1.0, 0, 2.0, 2.6)])
@@ -87,8 +87,8 @@ def build(variant=None):
     for k in range(3):
         ph_model("wooden_crate_01", loc=(rng.uniform(3.5, 7.5), rng.uniform(5, 8), 0.0), rot_z=rng.uniform(0, 3))
     for aid, loc, rz in (("metal_office_desk", (5.5, -1.5, 0), 0.3), ("metal_office_desk", (4.6, 6.4, 0), 1.4), ("metal_office_desk", (-5.2, 4.6, 0), -0.2),
-                         ("WoodenChair_01", (-4.4, 3.2, 0), 0.8), ("WoodenChair_01", (4.0, 4.9, 0.78), 2.6), ("WoodenChair_01", (5.0, -0.6, 0), 2.0),
-                         ("vintage_cabinet_01", (7.2, 6.5, 0), 3.1), ("wooden_bookshelf_worn", (-8.2, 4.0, 0), 1.57), ("binder_notebook", (5.4, -1.4, 0.76), 0.4)):
+                         ("plastic_monobloc_chair_01", (-4.4, 3.2, 0), 0.8), ("metal_stool_01", (4.0, 4.9, 0.78), 2.6), ("plastic_monobloc_chair_01", (5.0, -0.6, 0), 2.0),
+                         ("steel_frame_shelves_01", (7.4, 6.8, 0), 3.14), ("wooden_bookshelf_worn", (-8.2, 4.0, 0), 1.57), ("binder_notebook", (5.4, -1.4, 0.76), 0.4)):
         ph_model(aid, loc=loc, rot_z=rz)
     cyl("Carpet", (-5.6, 1.2, 0.18), 0.18, 2.4, fabric("Carpet", (0.4, 0.12, 0.1), 0.9, 0.4, 200), verts=16, rot=(0, math.radians(90), 0.3))
     # paper litter on the floor

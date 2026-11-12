@@ -71,6 +71,60 @@ def rotary_phone(loc, rot_z=0.0):
     return base, hs
 
 
+def cloth_blanket(name, ctr, col, rot_z=0.0, w=1.12, l=1.42, foot=-1.0, nx=24, ny=34):
+    """A thin wool blanket as a dense grid; drape_blankets() lays it over whatever lies in the bed (ray-cast),
+    so the body shape shows through, the sides fall over the mattress edge, with a turned-down sheet at the chest."""
+    import bmesh
+    bm = bmesh.new(); vs = []
+    for j in range(ny + 1):
+        row = []
+        for i in range(nx + 1):
+            row.append(bm.verts.new((-w / 2 + w * i / nx, foot + l * j / ny, 0.0)))
+        vs.append(row)
+    for j in range(ny):
+        for i in range(nx):
+            bm.faces.new((vs[j][i], vs[j][i + 1], vs[j + 1][i + 1], vs[j + 1][i]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for p_ in me.polygons:
+        p_.use_smooth = True
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    o.location = (ctr[0], ctr[1], 0.0); o.rotation_euler = (0, 0, rot_z)
+    me.materials.append(fabric(name + "W", col, 0.95, 0.5, 300))
+    o.modifiers.new("Thick", 'SOLIDIFY').thickness = 0.012
+    # turned-down white sheet band along the top edge
+    sheet = box(name + "Sheet", (0, 0, 0), (w + 0.02, 0.22, 0.01), fabric(name + "SheetW", (0.86, 0.86, 0.82), 0.9, 0.3, 500), bevel=0.004)
+    sheet.parent = o; sheet.location = (0, foot + l - 0.06, 0)
+    return dict(obj=o, sheet=sheet, nx=nx, ny=ny, w=w, l=l, foot=foot)
+
+
+def drape_blankets(c):
+    """Lay every cloth blanket over its bed's contents: ray-cast each vertex straight down, 1.2 cm above the hit;
+    beyond the mattress the cloth hangs ~25 cm; two smoothing passes; small folds."""
+    dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene
+    for B in c.get("blankets", []):
+        o = B["obj"]; home = o.location.copy(); o.location = (0, -400, 0); B["sheet"].location.z = -400
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+        M = __import__("mathutils").Matrix.Translation(home) @ __import__("mathutils").Matrix.Rotation(o.rotation_euler.z, 4, 'Z')
+        nx, ny = B["nx"], B["ny"]; H = [[0.0] * (nx + 1) for _ in range(ny + 1)]
+        for j in range(ny + 1):
+            for i in range(nx + 1):
+                v = o.data.vertices[j * (nx + 1) + i].co
+                wp = M @ Vector((v.x, v.y, 2.2))
+                hit, loc, n, idx, ob, _ = sc.ray_cast(dg, wp, Vector((0, 0, -1)))
+                z = loc.z + 0.012 if hit else 0.4
+                H[j][i] = max(z, 0.42)
+        for _ in range(2):
+            H = [[(H[j][i] * 2 + H[max(0, j - 1)][i] + H[min(ny, j + 1)][i] + H[j][max(0, i - 1)] + H[j][min(nx, i + 1)]) / 6
+                  for i in range(nx + 1)] for j in range(ny + 1)]
+        for j in range(ny + 1):
+            for i in range(nx + 1):
+                v = o.data.vertices[j * (nx + 1) + i]
+                v.co.z = H[j][i] + 0.006 * math.sin(i * 1.7 + j * 0.9) * math.sin(j * 0.6)
+        o.data.update(); o.location = home
+        B["sheet"].location.z = H[ny - 1][nx // 2] + 0.008
+    bpy.context.view_layer.update()
+
+
 def curtain(name, x, y0, y1, col=(0.62, 0.72, 0.7)):
     """Ward cubicle curtain: a rail at 2.15 m and a gathered fabric panel hanging from it (partly drawn)."""
     import bmesh
@@ -248,11 +302,10 @@ def build(variant=None):
     for k in (0, 2, 3):
         drip_stand(f"Drip{k}", BEDS[k] + Vector((-0.65, 0.6, 0)))
     c["drip3"], c["platelet"] = drip_stand("DripP", BEDS[1] + Vector((-0.65, 0.6, 0)), bag_col=(0.95, 0.8, 0.35))
-    for k, b in enumerate(BEDS):            # occupied beds: the blanket is drawn up over the patient to the chest
-        occ = k != 1
-        blanket(f"Blanket{k}", b + Vector((0, -0.31 if occ else -0.25, 0)), col=[(0.22, 0.24, 0.3), (0.32, 0.22, 0.18), (0.24, 0.28, 0.24)][k % 3],
-                length=1.38 if occ else 1.4, z=0.84 if occ else 0.72, thick=0.32 if occ else 0.12)
-        box(f"Pillow{k}", b + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"Pillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
+    c["blankets"] = []
+    for k, b in enumerate(BEDS):            # thin wool blankets, draped over whoever lies there (drape_blankets per shot)
+        c["blankets"].append(cloth_blanket(f"Blanket{k}", b, [(0.22, 0.24, 0.3), (0.32, 0.22, 0.18), (0.24, 0.28, 0.24)][k % 3]))
+        box(f"Pillow{k}", b + Vector((0, 0.8, 0.72)), (0.6, 0.32, 0.09), fabric(f"Pillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
     for k in range(4):                     # cubicle curtains between beds, partly drawn back to the wall
         curtain(f"Curtain{k}", BEDS[k].x + 1.3, 3.75, 3.75 - (1.2 + 0.5 * (k % 2)))
     ph_model("industrial_storage_cart", loc=BEDS[3] + Vector((1.3, -2.2, 0)), rot_z=0.2)       # nurses' trolley
@@ -337,17 +390,23 @@ def build(variant=None):
         cc = CLINIC + Vector((-2.4 + k * 2.0, 1.3, 0))
         iron_bed(f"Cot{k}", cc)
         drip_stand(f"CDrip{k}", cc + Vector((-0.6, 0.7, 0)), fill=0.6)
-        blanket(f"CBlanket{k}", cc + Vector((0, -0.31, 0)), col=[(0.32, 0.22, 0.18), (0.22, 0.24, 0.3), (0.3, 0.28, 0.2)][k], length=1.38, z=0.84, thick=0.32)
-        box(f"CPillow{k}", cc + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"CPillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
+        c["blankets"].append(cloth_blanket(f"CBlanket{k}", cc, [(0.32, 0.22, 0.18), (0.22, 0.24, 0.3), (0.3, 0.28, 0.2)][k]))
+        box(f"CPillow{k}", cc + Vector((0, 0.8, 0.72)), (0.6, 0.32, 0.09), fabric(f"CPillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
         c["cots"].append(cc)
     # small 1998 clinic: a glass-fronted cabinet, a sink with a mirror, a chair, a calendar, a window onto the dark street
-    ph_model("vintage_cabinet_01", loc=CLINIC + Vector((3.1, 1.6, 0)), rot_z=-math.pi / 2)
+    mc = painted_steel("MedCab", (0.86, 0.86, 0.83), 0.35, 0.2)          # white steel medicine cabinet with glass doors
+    box("MedCabinet", CLINIC + Vector((3.2, 1.6, 0.9)), (0.4, 0.9, 1.8), mc, bevel=0.01)
+    box("MedCabGlass", CLINIC + Vector((2.995, 1.6, 1.3)), (0.01, 0.82, 0.9), glass("MedGlass", (0.85, 0.9, 0.9), 0.05))
+    for k in range(3):
+        box("MedShelf", CLINIC + Vector((3.15, 1.6, 0.95 + 0.3 * k)), (0.3, 0.84, 0.015), mc)
+        for j in range(5):
+            cyl("MedBottle", CLINIC + Vector((3.15, 1.3 + 0.14 * j, 1.02 + 0.3 * k)), 0.03, 0.12, glass(f"Bottle{(j + k) % 3}", [(0.5, 0.3, 0.1), (0.85, 0.9, 0.9), (0.3, 0.45, 0.6)][(j + k) % 3], 0.1), verts=10)
     porcelain = pbr("Porcelain", (0.88, 0.88, 0.85), 0.15, 0.0, **{'Coat Weight': 0.5})
     box("Sink", CLINIC + Vector((3.2, -0.9, 0.85)), (0.4, 0.55, 0.18), porcelain, bevel=0.04)
     cyl("SinkPedestal", CLINIC + Vector((3.25, -0.9, 0.4)), 0.09, 0.8, porcelain, verts=14)
     cyl("Tap", CLINIC + Vector((3.4, -0.9, 1.02)), 0.012, 0.14, pbr("Chrome", (0.8, 0.8, 0.8), 0.1, 1.0), verts=8)
     box("Mirror", CLINIC + Vector((3.48, -0.9, 1.5)), (0.02, 0.45, 0.55), pbr("MirrorM", (0.9, 0.9, 0.9), 0.02, 1.0))
-    ph_model("WoodenChair_01", loc=CLINIC + Vector((1.6, 0.4, 0)), rot_z=2.4)
+    ph_model("plastic_monobloc_chair_01", loc=CLINIC + Vector((1.6, 0.4, 0)), rot_z=2.4)
     box("Calendar", CLINIC + Vector((-3.48, 0.5, 1.6)), (0.02, 0.35, 0.5), pbr("CalendarM", (0.85, 0.82, 0.75), 0.7))
     window_view(CLINIC + Vector((-1.5, -2.5, 1.6)), "S", seed=41, dmin=14, n_blocks=3)
     # night street outside the clinic door
@@ -418,11 +477,12 @@ def sit_up_in_bed(h, bed, k=1.0):
     place(h, bed + Vector((0, 0.35, 0.62)), 0.0)
 
 def ward_patients(c, sec, upright=None):
-    lie_in_bed(c["people"]["pat2"], BEDS[3] + Vector((0, 0.9, 0)), (0, -1), 0.74)
+    lie_in_bed(c["people"]["pat2"], BEDS[3] + Vector((0, 0.9, 0)), (0, -1), 0.69)
     if upright is None:
-        lie_in_bed(c["people"]["pat1"], BEDS[2] + Vector((0, 0.9, 0)), (0, -1), 0.74)
+        lie_in_bed(c["people"]["pat1"], BEDS[2] + Vector((0, 0.9, 0)), (0, -1), 0.69)
     else:
         sit_up_in_bed(c["people"]["pat1"], BEDS[2], upright)
+    drape_blankets(c)
 
 
 def S(name, t):
@@ -572,15 +632,16 @@ def c2_6b(c, t):
 def c4_1a(c, t):
     sec = S("ch4_1a", t); hide(c, ("pat1", "pat2", "m1", "m2"))
     ward_patients(c, sec)
-    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.74)
-    lie_in_bed(c["people"]["m2"], BEDS[4] + Vector((0, 0.9, 0)), (0, -1), 0.74)
+    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.69)
+    lie_in_bed(c["people"]["m2"], BEDS[4] + Vector((0, 0.9, 0)), (0, -1), 0.69)
+    drape_blankets(c)
     c["focus"] = BEDS[2] + Vector((0, 0, 0.8))
 
 
 def c4_1b(c, t):
     sec = S("ch4_1b", t); hide(c, ("pat1", "pat2", "doc", "m1"))
     ward_patients(c, sec)
-    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.74)
+    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.69)
     h = c["people"]["doc"]; loc = BEDS[2] + Vector((0.1, -1.6, 0))
     stand_at(h, loc, BEDS[2])
     sd = forward(h).cross(Vector((0, 0, 1)))
@@ -589,6 +650,7 @@ def c4_1b(c, t):
     reach(h, "R", board + sd * (0.04 + 0.03 * math.sin(sec * 5)) + Vector((0, 0, 0.02)), Vector((sd.x, sd.y, -0.7)), forward(h))
     c["chart"].location = board + forward(h) * 0.03; c["chart"].rotation_euler = (math.radians(-50), 0, math.atan2(-forward(h).x, forward(h).y))
     h.rot("head", sd, -14)
+    drape_blankets(c)
     c["focus"] = h.bone_head("head")
 
 
@@ -707,7 +769,7 @@ def c4_13b(c, t):
 def c1_11a(c, t):         # local clinic, evening: a nurse adjusts the drip line at shoulder height beside the beds (medium)
     sec = S("ch1_11a", t); hide(c, ("nurse", "m1", "m2", "pat2"))
     for nm, cc in (("m1", c["cots"][0]), ("m2", c["cots"][1]), ("pat2", c["cots"][2])):
-        lie_in_bed(c["people"][nm], cc + Vector((0, 0.9, 0)), (0, -1), 0.74)
+        lie_in_bed(c["people"][nm], cc + Vector((0, 0.9, 0)), (0, -1), 0.69)
     h = c["people"]["nurse"]; pole = c["cots"][1] + Vector((-0.6, 0.7, 0)); loc = pole + Vector((-0.25, -0.5, 0))
     stand_at(h, loc, pole + Vector((0.12, 0, 0)))
     sd = forward(h).cross(Vector((0, 0, 1)))
@@ -715,6 +777,7 @@ def c1_11a(c, t):         # local clinic, evening: a nurse adjusts the drip line
     reach(h, "R", pole + Vector((0.12, -0.04, sh - 0.05 + 0.02 * math.sin(sec * 2))), Vector((sd.x, sd.y, -1.0)), forward(h))
     fingers_curl(h, 60, thumb=40)
     h.rot("head", sd, -4)
+    drape_blankets(c)
     c["focus"] = h.bone_head("head")
 
 

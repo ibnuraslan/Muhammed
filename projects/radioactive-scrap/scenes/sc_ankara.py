@@ -67,7 +67,7 @@ def build(variant=None):
     v = variant or "office"
     sky("overcast")
     parq = ph_mat("herringbone_parquet", 0.8, (0.4, 0.28, 0.18), name="Parquet")
-    conc = ph_mat("concrete_floor_worn_001", 0.4, (0.4, 0.4, 0.38), name="StoreFloor")
+    conc = ph_mat("concrete_floor_worn_001", 0.08, (0.4, 0.4, 0.38), name="StoreFloor")
     # ---------------- Ankara office
     room("Office", OFF, 5.5, 4.5, 3.0, parq, two_tone("OffWall", (0.5, 0.45, 0.36), (0.8, 0.76, 0.66)), windows=[("N", 0.8, 1.0, 1.6, 1.5)])
     daylight_window(OFF + Vector((0.8, 2.35, 1.75)), "N", (1.6, 1.5), energy=650)
@@ -83,7 +83,7 @@ def build(variant=None):
                        cyl("StampHandle", (0, 0, 0.08), 0.015, 0.09, wood("StampWood", (0.15, 0.08, 0.04), (0.35, 0.2, 0.1)), verts=12)], "Stamp")
     c["stamp_rest"] = OFF + Vector((0.3, 0.25, 0.775))
     box("InkPad", OFF + Vector((0.32, 0.12, 0.785)), (0.1, 0.07, 0.015), pbr("InkPad", (0.1, 0.1, 0.25), 0.4))
-    ph_model("vintage_cabinet_01", loc=OFF + Vector((2.3, -1.7, 0)), rot_z=math.pi / 2)
+    filing_cabinet(OFF + Vector((2.4, -1.4, 0)), math.pi / 2, (0.5, 0.48, 0.42), name="OffFCside")
     for k in range(3):                                   # a row of steel filing cabinets on the back wall
         filing_cabinet(OFF + Vector((-2.2 + 0.5 * k, -1.88, 0)), 0.0, (0.42, 0.45, 0.42) if k != 1 else (0.5, 0.48, 0.42), name=f"OffFC{k}")
     for k in range(3):

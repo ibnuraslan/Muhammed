@@ -864,9 +864,8 @@ def c1_9a(c, t):           # relatives watch from by the house wall: arms crosse
     sec = S("ch1_9a", t); stage(c, "yard", shells=(70, 78), people=("rel1", "rel2", "rel3"))
     for k, (nm, p) in enumerate((("rel1", (-5.6, 3.7)), ("rel2", (-4.8, 3.5)), ("rel3", (-3.7, 3.9)))):
         h = c["people"][nm]
-        stand_at(h, Vector((*p, 0)), C2, crossed=(k != 1))
-        if k == 1:
-            arms_relaxed(h)
+        stand_at(h, Vector((*p, 0)), C2)
+        arms_relaxed(h)                       # just watching, arms down
         h.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.7 + k))
     c["focus"] = Vector((-4.5, 3.7, 1.5))
 
