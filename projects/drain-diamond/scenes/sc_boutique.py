@@ -497,6 +497,9 @@ def build_salon(c, night=False):
             h = person(f"Waiter{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01", "short03")[k], cval=0.85)
             pose_floor_sit(h, hunch=10, hands_back=False); place(h, (x, y, 0), face_to((x, y), (0.0, y)))
             c["seated"].append(h)
+        if k == 3:                                    # a faint cool spill from the street windows over the wall where they sit
+            ml = bpy.data.lights.new("MoonFill", 'AREA'); ml.size = 3.0; ml.energy = 45; ml.color = (0.6, 0.72, 1.0)
+            mo = bpy.data.objects.new("MoonFill", ml); bpy.context.collection.objects.link(mo); mo.location = (-3.5, 6.1, 3.2); point_at(mo, (-5.9, 6.1, 0.5))
         for k, (x, y) in enumerate(((-3.0, 3.2), (0.4, 3.6), (3.5, 3.2), (-2.4, 6.6), (3.5, 6.4))):
             vitrine(f"Vit{k}", (x, y, 0), rng=np.random.default_rng(9), lit=False)
         haussmann(-30, 30, seed=30, rot_z=math.pi, origin=(0, -14, 0), lit_frac=0.05)
@@ -787,7 +790,7 @@ MOVES = {
                        cam=lambda c, t: (Vector((-2.8, -6.0, 1.8)).lerp(Vector((-2.4, -4.8, 1.75)), ease(t)), Vector((2.6, 8.0, 1.3)), 30),
                        focus=lambda c, t: Vector((2.5, 8.0, 1.2))),
     "night_wait": dict(kind="anim", dof=4.0, anim=anim_night_wait,
-                       cam=lambda c, t: (Vector((-2.0, 2.2, 1.7)).lerp(Vector((-2.6, 2.6, 1.65)), ease(t)), Vector((-5.6, 6.2, 0.6)), 26),
+                       cam=lambda c, t: (Vector((-1.2, 4.6, 1.9)).lerp(Vector((-1.6, 5.0, 1.85)), ease(t)), Vector((-5.6, 6.1, 0.6)), 28),
                        focus=lambda c, t: Vector((-5.6, 6.0, 0.6))),
     "corridor": dict(kind="anim", dof=4.0, cam=cam_corridor, anim=anim_corridor, focus=lambda c, t: Vector((0, 6.0, 1.4))),
     "chair": dict(kind="anim", dof=2.8, cam=cam_chair, anim=lambda c, t: None, focus=lambda c, t: Vector((0.55, 8.6, 0.6))),

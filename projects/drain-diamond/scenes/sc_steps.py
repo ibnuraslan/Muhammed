@@ -29,7 +29,7 @@ def build(variant=None):
     mx = N.new("ShaderNodeMixShader"); L.new(lp.outputs['Is Camera Ray'], mx.inputs[0]); L.new(N["Background"].outputs[0], mx.inputs[1])
     L.new(bg2.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], N["World Output"].inputs['Surface'])
     stone = dd.tex_mat("white_sandstone_blocks_02", 0.3, tint=(0.88, 0.86, 0.82), name="CourtStone", sat=0.5)
-    stepm = dd.wet(dd.tex_mat("concrete_floor_02", 0.8, tint=(0.75, 0.74, 0.71), name="StepStone", sat=0.3), 0.3, ripples=False)
+    stepm = dd.wet(dd.tex_mat("white_sandstone_blocks_02", 0.8, tint=(1.0, 0.98, 0.94), name="StepStone", sat=0.4), 0.12, ripples=False)
     B = dd.Builder("Steps")
     for k in range(NST):
         B.box((0, k * RUN + RUN / 2, (k + 1) * RISE / 2), (30, RUN, (k + 1) * RISE), stepm)

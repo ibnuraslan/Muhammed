@@ -44,7 +44,7 @@ def room():
     B.box((0, BENCH_Y + 1.0, 0.25), (9, 3.0, 0.5), oak)
     B.box((0, BENCH_Y, 1.05), (7.5, 0.9, 1.1), dark).box((0, BENCH_Y, 1.62), (7.7, 1.0, 0.05), oak)
     for x in (-1.6, 0, 1.6):
-        B.box((x, BENCH_Y + 0.9, 1.35), (0.7, 0.6, 1.7), pbr("JudgeLeather", (0.16, 0.035, 0.03), 0.4, 0.0, **{"Coat Weight": 0.3}))
+        B.box((x, BENCH_Y + 1.2, 1.35), (0.7, 0.6, 1.7), pbr("JudgeLeather", (0.16, 0.035, 0.03), 0.4, 0.0, **{"Coat Weight": 0.3}))
     B.box((-2.8, BENCH_Y - 2.0, 0.55), (2.6, 0.8, 1.1), dark)          # clerk
     B.box((-5.3, 13.5, 0.2), (2.4, 3.0, 0.4), oak).box((-4.6, 13.5, 0.95), (0.8, 2.6, 1.1), dark)   # prosecutor
     # the glass dock: oak base, glass walls
@@ -180,10 +180,10 @@ def build(variant=None):
         c["judges"] = [robed(f"Judge{k}", (1.0, 0.0, 1.0)[k], (58, 52, 47)[k], ("short02", "bob02", "short04")[k]) for k in range(3)]
         if v != "judges":
             for k, h in enumerate(c["judges"]):
-                seated(h, ((-1.6, 0, 1.6)[k], BENCH_Y + 0.75, 0.5), 0.0, seat_z=1.02)
+                seated(h, ((-1.6, 0, 1.6)[k], BENCH_Y + 1.05, 0.5), 0.0, seat_z=1.02)
     if v in ("prosecutor", "file"):
         pr = robed("Prosecutor", 0.0, 50, "bob01"); c["prosecutor"] = pr
-        standing(pr, (-5.4, 13.4, 0.4), math.radians(-120), z=0.4)
+        standing(pr, (-5.4, 13.4, 0.4), math.radians(124), z=0.4)
     if v == "file":
         c["lawyers"] = []
         for k in range(3):
@@ -215,7 +215,7 @@ def anim_dock(c, t):
 
 def anim_prosecutor(c, t):
     sec = t * DUR["prosecutor"]
-    pr = c["prosecutor"]; standing(pr, (-5.4, 13.4, 0.4), math.radians(-120), z=0.4)
+    pr = c["prosecutor"]; standing(pr, (-5.4, 13.4, 0.4), math.radians(124), z=0.4)
     M = pr.arm.matrix_world.to_3x3(); sh = pr.bone_head("upperarm01.R")
     g = 0.5 + 0.5 * math.sin(sec * 1.1)
     reach(pr, "R", sh + M @ Vector((-0.15, -0.45 - 0.1 * g, -0.15 + 0.2 * g)), M @ Vector((-0.6, 0.2, -0.7)))
@@ -238,14 +238,14 @@ def anim_file(c, t):
 def anim_ashamed(c, t):
     h = c["accused"][0]; x0, x1, y0, y1 = DOCK
     standing(h, (x0 + 0.55, (y0 + y1) / 2, 0.3), math.radians(-90), z=0.3)
-    h.rot("neck01", (0, 1, 0), 12 + 3 * t); h.rot("head", (0, 1, 0), 14 + 4 * t)     # bowed toward -X (forward)
+    h.rot("neck01", (0, 1, 0), -(12 + 3 * t)); h.rot("head", (0, 1, 0), -(16 + 4 * t))     # bowed forward
 
 
 def anim_judges(c, t):
     sec = t * DUR["judges"]
     for k, h in enumerate(c["judges"]):
         x = (-1.6, 0, 1.6)[k]
-        a = Vector((-4.2, BENCH_Y + 1.3, 0.5)); b = Vector((x, BENCH_Y + 1.3, 0.5))
+        a = Vector((-4.2, BENCH_Y + 0.68, 0.5)); b = Vector((x, BENCH_Y + 0.68, 0.5))
         walk_to(h, a, b, max(0.0, sec - 1.2 * k), speed=0.8)
         h.arm.rotation_euler.z = math.radians(90) if h.arm.location.x < x - 0.05 else 0.0
         ground(h, 0.5)
