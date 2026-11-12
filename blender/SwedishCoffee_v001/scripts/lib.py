@@ -178,6 +178,7 @@ def base_human(name):
             for kb in list(ch.data.shape_keys.key_blocks)[:-1]: ch.shape_key_remove(kb)
             ch.shape_key_remove(ch.data.shape_keys.key_blocks[0])
     R = make_human_ctrl(arm)
+    limits(arm)
     hc.hide_viewport = True
     BASE[name] = arm; return arm
 
@@ -234,24 +235,24 @@ def costume_mat(key, coat, breech, stock=(0.85, 0.83, 0.78), coat_tex="wool_bouc
         mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(fac, mx.inputs[0]); L.new(a, mx.inputs["A"]); L.new(b, mx.inputs["B"]); return mx.outputs["Result"]
     full = step(waist, lower, c_coat, True) if not skirt else step(knee * 0.4, c_st, c_coat, True)
     L.new(full, bs.inputs["Base Color"]); bs.inputs["Roughness"].default_value = 0.85
-    bs.inputs["Sheen Weight"].default_value = 0.4
-    n = tex("wool_boucle", 6, "nor_gl"); nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = 0.5
+    bs.inputs["Sheen Weight"].default_value = 0.2
+    n = tex("wool_boucle", 6, "nor_gl"); nm = N.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = 0.25
     L.new(n.outputs[0], nm.inputs["Color"]); L.new(nm.outputs[0], bs.inputs["Normal"])
     return m
 
 STYLE = {
  "TwinA": ("prisoner", (0.62, 0.55, 0.44), (0.62, 0.55, 0.44), (0.40, 0.33, 0.25), "rough_linen", 0.30, 0.62),
  "TwinB": ("prisoner", (0.62, 0.55, 0.44), (0.62, 0.55, 0.44), (0.40, 0.33, 0.25), "rough_linen", 0.30, 0.62),
- "TwinA_old": ("twinold", (0.16, 0.20, 0.30), (0.16, 0.20, 0.30), (0.80, 0.78, 0.72), "wool_boucle", 0.30, 0.62),
- "TwinB_old": ("twinoldB", (0.30, 0.18, 0.12), (0.30, 0.18, 0.12), (0.80, 0.78, 0.72), "wool_boucle", 0.30, 0.62),
- "TwinA_vold": ("twinvold", (0.20, 0.17, 0.13), (0.20, 0.17, 0.13), (0.80, 0.78, 0.72), "wool_boucle", 0.30, 0.62),
- "King": ("king", (0.08, 0.12, 0.35), (0.08, 0.12, 0.35), (0.92, 0.90, 0.86), "velour_velvet", 0.30, 0.60),
- "Guard": ("guard", (0.08, 0.16, 0.42), (0.08, 0.16, 0.42), (0.75, 0.70, 0.55), "wool_boucle", 0.32, 0.62),
+ "TwinA_old": ("twinold", (0.08, 0.22, 0.60), (0.08, 0.22, 0.60), (0.80, 0.78, 0.72), "wool_boucle", 0.30, 0.62),
+ "TwinB_old": ("twinoldB", (0.55, 0.10, 0.10), (0.55, 0.10, 0.10), (0.80, 0.78, 0.72), "wool_boucle", 0.30, 0.62),
+ "TwinA_vold": ("twinvold", (0.10, 0.30, 0.55), (0.10, 0.30, 0.55), (0.80, 0.78, 0.72), "wool_boucle", 0.30, 0.62),
+ "King": ("king", (0.05, 0.10, 0.55), (0.05, 0.10, 0.55), (0.92, 0.90, 0.86), "velour_velvet", 0.30, 0.60),
+ "Guard": ("guard", (0.03, 0.14, 0.62), (0.03, 0.14, 0.62), (0.95, 0.72, 0.18), "wool_boucle", 0.32, 0.62),
  "Doctor1": ("doc", (0.07, 0.06, 0.06), (0.07, 0.06, 0.06), (0.75, 0.73, 0.70), "wool_boucle", 0.30, 0.60),
- "Doctor2": ("doc2", (0.18, 0.12, 0.08), (0.18, 0.12, 0.08), (0.75, 0.73, 0.70), "wool_boucle", 0.30, 0.60),
- "Woman": ("woman", (0.35, 0.10, 0.12), (0.35, 0.10, 0.12), (0.8, 0.78, 0.74), "velour_velvet", 0.30, 0.62),
- "Townsman": ("towns", (0.28, 0.22, 0.14), (0.28, 0.22, 0.14), (0.65, 0.62, 0.55), "wool_boucle", 0.30, 0.62),
- "Townswoman": ("townsw", (0.22, 0.28, 0.20), (0.22, 0.28, 0.20), (0.7, 0.68, 0.62), "rough_linen", 0.30, 0.62),
+ "Doctor2": ("doc2", (0.30, 0.16, 0.06), (0.30, 0.16, 0.06), (0.75, 0.73, 0.70), "wool_boucle", 0.30, 0.60),
+ "Woman": ("woman", (0.65, 0.08, 0.12), (0.65, 0.08, 0.12), (0.8, 0.78, 0.74), "velour_velvet", 0.30, 0.62),
+ "Townsman": ("towns", (0.55, 0.30, 0.08), (0.55, 0.30, 0.08), (0.65, 0.62, 0.55), "wool_boucle", 0.30, 0.62),
+ "Townswoman": ("townsw", (0.12, 0.45, 0.22), (0.12, 0.45, 0.22), (0.7, 0.68, 0.62), "rough_linen", 0.30, 0.62),
 }
 CLOTH_KEYS = ("suit", "casual", "worksuit", "elegant")
 def restyle(arm):
@@ -300,11 +301,12 @@ class Actor:
                 if feetpos and s in feetpos: xy = self.W(feetpos[s]).to_2d()
                 else: xy = self.H.foot_xy(s, self.pos, self.yaw)
                 self.H.key_foot(s, f, xy, self.yaw)
-    def hand(self, f, s, p, d=(0, 0, -1), n=None, pole=None):
+    def hand(self, f, s, p, d=(0, 0, -1), n=None, pole=None, g=0.32):
         sx = 1 if s == "L" else -1
         if n is None: n = (-sx, 0, 0)
         if pole is None: pole = (0.45 * sx, 0.5, 1.0)
         self.H.key_hand(s, f, self.W(p), self.Wd(d).normalized(), self.Wd(n).normalized(), pole=self.W(pole))
+        grip(self.R, f, s, g, 0.3 + 0.4 * g)
     def arms_down(self, f, sway=0.0):
         for s in "LR":
             sx = 1 if s == "L" else -1
@@ -454,9 +456,9 @@ def ermine_mat():
     m = bpy.data.materials.get("m_ermine")
     if m: return m
     m = bpy.data.materials.new("m_ermine"); m.use_nodes = True; N, L = m.node_tree.nodes, m.node_tree.links; bs = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord"); vor = N.new("ShaderNodeTexVoronoi"); vor.inputs["Scale"].default_value = 9.0
+    tc = N.new("ShaderNodeTexCoord"); vor = N.new("ShaderNodeTexVoronoi"); vor.inputs["Scale"].default_value = 22.0
     L.new(tc.outputs["Object"], vor.inputs[0])
-    mr = N.new("ShaderNodeMapRange"); mr.inputs[1].default_value = 0.06; mr.inputs[2].default_value = 0.09; L.new(vor.outputs["Distance"], mr.inputs[0])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs[1].default_value = 0.10; mr.inputs[2].default_value = 0.13; L.new(vor.outputs["Distance"], mr.inputs[0])
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(mr.outputs[0], mx.inputs[0])
     mx.inputs["A"].default_value = (0.02, 0.02, 0.02, 1); mx.inputs["B"].default_value = (0.92, 0.9, 0.85, 1)
     L.new(mx.outputs["Result"], bs.inputs["Base Color"]); bs.inputs["Roughness"].default_value = 0.9
@@ -470,16 +472,41 @@ def capelet(arm, c):
     sc.frame_set(1); bpy.context.view_layer.update()
     pb = arm.pose.bones["spine01"]; nk = arm.pose.bones["neck01"]
     top = arm.matrix_world @ nk.head
-    bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.34, radius2=0.12, depth=0.32, end_fill_type='NOTHING', location=(0, 0, 0))
+    bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.27, radius2=0.11, depth=0.2, end_fill_type='NOTHING', location=(0, 0, 0))
     o = bpy.context.active_object; o.name = arm.name + "_ermine"; link(o, c)
     bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT'); bpy.ops.uv.cylinder_project(); bpy.ops.object.mode_set(mode='OBJECT')
     me = o.data
     for v in me.vertices:   # flatten front/back to the torso, push the hem out
         v.co.y *= 0.72
-    me.transform(Matrix.Translation(V((0, 0.0, -0.16))))
+    me.transform(Matrix.Translation(V((0, 0.02, -0.1))))
     sol = o.modifiers.new("sol", 'SOLIDIFY'); sol.thickness = 0.025
     sub = o.modifiers.new("sub", 'SUBSURF'); sub.levels = sub.render_levels = 2
     setmat(o, ermine_mat())
     o.matrix_world = Matrix.Translation(top + V((0, 0.01, 0.02)))
     attach(o, arm, "spine01")
     return o
+
+def limits(arm):
+    """Limit Rotation (local) on fingers, thumbs and wrists: no backward bends, small spread, sane wrist range"""
+    for pb in arm.pose.bones:
+        n = pb.name
+        if n.startswith("finger") and not n.startswith("finger1"):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            c.min_z, c.max_z = R_(-90), R_(0); c.min_x, c.max_x = R_(-10), R_(10); c.min_y, c.max_y = R_(-5), R_(5)
+        elif n.startswith("finger1"):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            c.min_z, c.max_z = R_(-60), R_(10); c.min_x, c.max_x = R_(-30), R_(30); c.min_y, c.max_y = R_(-20), R_(20)
+        elif n.startswith("wrist"):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            c.min_x, c.max_x = R_(-60), R_(60); c.min_z, c.max_z = R_(-60), R_(60); c.min_y, c.max_y = R_(-25), R_(25)
+
+def hold_point(arm, s, f=None):
+    """world point for a held cup: beside the index knuckle on the thumb side, slightly below"""
+    if f is not None: sc.frame_set(f)
+    P = arm.pose.bones; M = arm.matrix_world
+    k2 = M @ P["finger2-1." + s].head; k5 = M @ P["finger5-1." + s].head; w = M @ P["wrist." + s].head
+    across = (k2 - k5).normalized(); fwd = (k2 - w).normalized()
+    return k2 + across * 0.05 + fwd * 0.01 + V((0, 0, -0.04))

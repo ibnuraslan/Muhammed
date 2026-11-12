@@ -19,5 +19,22 @@ The film is eight sets (courtyard → throne hall → street → castle chamber 
 
 The sets are shown and hidden with `hide_render` keys at those frames.
 
+## Look
+The bright animated-3D look follows `blender/STYLE_ANIMATED.md`: `pipeline/anim_look.py` is applied on top of the build (AgX Punchy, sky gradient for camera rays, saturation up, bump down, roughness ≥ 0.35, f-stop ≥ 5.6, motion blur off). Interiors are clean cream / pale-blue plaster with soft ceiling area lights. Costumes are saturated period colours (blue-and-gold guards, a royal-blue king, coloured townsfolk).
+
+## Hands
+- Every character has Limit Rotation (local) on the fingers (0–90° forward curl, no backward bend, ±10° spread), the thumbs and the wrists (±60° flex, ±25° twist).
+- Idle hands carry a relaxed curl.
+- Cups are held beside the index knuckle with curled fingers. The cup follows a hold point computed from the knuckles every 5–6 frames.
+- Close-ups of all 18 hand actions: `SwedishCoffee_v001/review/D_hand_closeups.jpg`.
+- Hand audit (BVH, every 2 frames): `SwedishCoffee_v001/review/D_hand_audit.txt`.
+
 ## Known issues
-See the checkpoint messages; the current list is kept at the bottom of this file at packaging time.
+- The skull in the steam (b3, 7.8–9.6 s) is faint after the look pass halves volume density; it reads as a pale skull in mist.
+- The churchyard (b9) uses the Sketchfab cathedral, whose roof material stays very dark, so the area above the roofline reads near-black at 28–31 s.
+- Set changes are passes through a façade, wall or steam. The wall fills the frame for about 5–6 frames at 2.8 s, 12.0 s and 31.0 s (the 12.0 s still lands on one of them).
+- MPFB garments are recoloured as period coats; collars and cuffs still have a modern cut up close. There's no ermine on the king (the capelet test read as white patches and was removed).
+- The king's collapse (b10) is keyframed: an eased knee buckle, then a fold to the floor. It isn't a physics fall.
+- The servant's hand rests on top of the pouring pot (the pot hangs from the wrist) rather than wrapping its handle. The toast cups in the square sit at a tilt in the hand.
+- Cups: the handle of the cup model doesn't point into the fingers; the cup is held by the body and saucer.
+- No VO yet. `beats.json` is at the brief's target times; retime with `pipeline/retime_to_vo.py`.
