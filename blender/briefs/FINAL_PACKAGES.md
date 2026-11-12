@@ -10,18 +10,20 @@ git clone --single-branch -b <branch> https://github.com/ibnuraslan/Muhammed
 
 Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `retime_to_vo.py` with the film's `beats.json`, or send it to me and I'll do it.
 
+**Synced to voiceover:** 01–10 (render these versions; the mp3 is in each folder).
+
 | # | Film | Branch | Package folder |
 |---|---|---|---|
-| 01 | EarInArm | `claude/connect01-ear-in-arm` | `blender/EarInArm_v007/` |
-| 02 | MonkeyHeadTransplant | `claude/connect02-monkey-head-transplant` | `blender/MonkeyHeadTransplant_v006/` |
-| 03 | LegoInNose | `claude/connect03-lego-in-nose` | `blender/LegoInNose_v006/` |
-| 04 | StanleyCup | `claude/connect04-tumbler-saves-life` | `blender/StanleyCup_v005/` |
-| 05 | SurgeonBrandsLivers | `claude/connect05-surgeon-brands-liver` | `blender/SurgeonBrandsLivers_v006/` |
-| 06 | PrisonKeyCake | `claude/connect06-prison-key-cake` | `blender/PrisonKeyCake_v005/` |
-| 07 | ShoeBomber | `claude/connect07-shoe-bomber` | `blender/ShoeBomber_v004/` |
-| 08 | BeethovenDeaf | `claude/connect08-beethoven-deaf` | `blender/BeethovenDeaf_v007/` |
-| 09 | DonationBin | `claude/connect09-donation-bin` | `blender/DonationBin_v004/` |
-| 10 | BellyFat | `claude/connect10-belly-fat` | `blender/BellyFat_v006/` |
+| 01 | EarInArm | `claude/beautiful-ptolemy-c5vrcq` | `blender/EarInArm_v008/` **synced to your voiceover** |
+| 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v007/` **synced to your voiceover** |
+| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v007/` **synced to your voiceover** |
+| 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v006/` **synced to your voiceover** |
+| 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v007/` **synced to your voiceover** |
+| 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v006/` **synced to your voiceover** |
+| 07 | ShoeBomber | `claude/beautiful-ptolemy-c5vrcq` | `blender/ShoeBomber_v005/` **synced to your voiceover** |
+| 08 | BeethovenDeaf | `claude/beautiful-ptolemy-c5vrcq` | `blender/BeethovenDeaf_v008/` **synced to your voiceover** |
+| 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v005/` **synced to your voiceover** |
+| 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v007/` **synced to your voiceover** |
 | 11 | WW1Assassination | `claude/connect11-ww1-assassination` | `blender/WW1Assassination_v004/` |
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v006/` |
 | 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v005/` |
