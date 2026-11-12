@@ -666,7 +666,7 @@ def c4_2a(c, t):          # the technician holds a sample tube up to the window 
     sd = forward(h).cross(Vector((0, 0, 1)))
     k = ease(min(1.0, sec / 1.4))
     tube = h.bone_head("head") + forward(h) * 0.24 + sd * 0.06 + Vector((0, 0, -0.42 + 0.16 * k))      # lifts only to chin height
-    reach(h, "R", tube, Vector((sd.x * 0.3, sd.y * 0.3, -1.0)), Vector((0, 0, 1)))
+    reach(h, "R", tube, Vector((sd.x * 0.3, sd.y * 0.3, -1.0)), forward(h) + Vector((0, 0, 0.4)))
     fingers_curl(h, 70, thumb=50)
     c["tube"].location = tube + Vector((0, 0, 0.06)); c["tube_blood"].location = tube + Vector((0, 0, 0.045))
     c["focus"] = h.bone_head("head")
