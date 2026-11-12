@@ -1,0 +1,22 @@
+{
+ "frames": {
+  "961": {
+   "WitA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1117": {
+   "WitB": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

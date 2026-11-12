@@ -1,0 +1,130 @@
+{
+ "frames": {
+  "235": {
+   "Lad": {
+    "self": 946,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "241": {
+   "Lad": {
+    "self": 763,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "247": {
+   "Lad": {
+    "self": 618,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "253": {
+   "Lad": {
+    "self": 576,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "259": {
+   "Lad": {
+    "self": 525,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "265": {
+   "Lad": {
+    "self": 661,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "271": {
+   "Lad": {
+    "self": 290,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "961": {
+   "WitA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1465": {
+   "Lad": {
+    "self": 34,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1471": {
+   "Lad": {
+    "self": 560,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1477": {
+   "Lad": {
+    "self": 446,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1507": {
+   "Lad": {
+    "self": 61,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1513": {
+   "Lad": {
+    "self": 337,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1519": {
+   "Lad": {
+    "self": 177,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1555": {
+   "Lad": {
+    "self": 63,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   235,
+   271
+  ],
+  [
+   1465,
+   1477
+  ],
+  [
+   1507,
+   1519
+  ],
+  [
+   1555,
+   1555
+  ]
+ ],
+ "fps": 60
+}

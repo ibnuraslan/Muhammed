@@ -20,3 +20,16 @@ Source: `BEFORE_v004_sheet_0.5s.jpg` (every 30 frames, 270×480, 8 samples) and 
 | 14 | 30.85–30.95 s (1852–1858) | The camera dives inside the x-ray body, then out of his back (camera inside a body twice). | Reverse bubble: the camera pulls back, the studio bubble collapses into his chest, and the real scene is around him. |
 | 15 | 20.3–20.8 s (1219–1249) | The witnesses "stagger back" with both feet sliding at once. | Two real steps back, one foot after the other, with a weight shift. |
 | 16 | 4.0–4.5 s | Landing in the sit: both feet sit 4–10 cm above the ballast for a moment. | The feet are planted on the ballast throughout the sit. |
+| 17 | 4.4–4.8 s (266–286) | Going from the sit to the flop back, his hands pass through his legs (frame 271, `clip_scan`). | An in-between: his hands come off the knees out to the sides before he tips back. |
+| 18 | 3.0–21.0 s (179–1252) | The dropped bottle slowly drifts along the track toward where the flash-back starts (a prop moving by itself). | It stays where it fell until it is hidden; the flash-back bottle is in his hand from the first frame it is seen. |
+| 19 | 18.5 s (1111) | The camera pans across an empty ramp between the witnesses. | It holds WitA and WitB together, then turns to a close front view of the worker's face as he peers under the train. |
+
+## Result in v005
+- `clip_scan.py` (director branch; run through a wrapper because this film's rigs sit at the world origin, see below): **0 bad ranges**. v004 had 4: 3.9–4.5 s, 24.4–24.6 s, 25.1–25.3 s and 25.9 s.
+- Hand audit (`scripts/06_hand_audit.py`, every 2 frames): **2 single-frame brushes**. Lad's right hand touches his shorts at frame 231, as he lands in the sit. WitB's left hand touches her jacket hem at frame 1059, as she raises her hands. v004 had 1.
+- Close-ups of all 17 hand contacts: `v005_hand_closeups.jpg`.
+- Story-beat start frames are unchanged from v004 (`beats.json`).
+
+**About the `clip_scan` wrapper.** `clip_scan` keeps a character only when its armature object is within 7 m of the camera. It also lists characters by visibility on the frame the file opens at. In this film all four rigs keep their object at the world origin and move through their root bone. So I ran it unchanged via a wrapper that sets frame 1000, when all four are visible, with `cam_radius_m=200`:
+
+`blender -b DrunkTrain_v005_60fps.blend --python clip_wrap.py -- out.json 6 2.0 200`
