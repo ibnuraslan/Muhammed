@@ -19,6 +19,7 @@ DUR = {"pullup": 4.8, "steps": 4.8}
 FRONT_Y = 0.0                # facade plane; the street is toward -Y
 KERB_Y = -5.0                # pavement 5 m deep
 ROAD_W = 12.0
+DOOR2_X = 15.0               # a door bay of the ochre neighbour (Ch2 9A)
 STEP_N, STEP_H, STEP_D = 4, 0.16, 0.36
 rng = np.random.default_rng(8)
 
@@ -83,10 +84,10 @@ def build(variant=None):
     # ground: pavement, kerb, road
     pave = ph.texture("concrete_pavers", scale=0.8)
     road = ph.texture("asphalt_02", scale=0.25)
-    box("Pavement", (0, KERB_Y / 2, -0.01), (90, -KERB_Y, 0.16), pave)
-    box("Kerb", (0, KERB_Y, 0.0), (90, 0.25, 0.18), pbr("Granite", (0.32, 0.31, 0.3), 0.55))
-    box("Road", (0, KERB_Y - ROAD_W / 2, -0.12), (90, ROAD_W, 0.1), road)
-    box("FarPave", (0, KERB_Y - ROAD_W - 3, -0.01), (90, 6, 0.16), pave)
+    box("Pavement", (0, KERB_Y / 2, -0.01), (220, -KERB_Y, 0.16), pave)
+    box("Kerb", (0, KERB_Y, 0.0), (220, 0.25, 0.18), pbr("Granite", (0.32, 0.31, 0.3), 0.55))
+    box("Road", (0, KERB_Y - ROAD_W / 2, -0.12), (220, ROAD_W, 0.1), road)
+    box("FarPave", (0, KERB_Y - ROAD_W - 3, -0.01), (220, 6, 0.16), pave)
     # the bank: 7 bays, entrance in the middle bay (x = 0)
     kit_facade(-10.5, 7, door_bays=(3,))
     # granite steps up to the entrance, with a low parapet each side
@@ -104,13 +105,14 @@ def build(variant=None):
     # neighbours (CG stucco, punched windows) to close the street
     kit_facade(-22.5, 4, tint=(0.62, 0.58, 0.5), top_bay="centered_small")          # left: warm grey stone
     kit_facade(10.5, 5, tint=(0.7, 0.62, 0.48), top_bay="centered_large")          # right: ochre
-    for x, w, h, col in ((32.0, 12.0, 17.0, (0.58, 0.5, 0.4)),):
+    for x, w, h, col in ((32.0, 12.0, 17.0, (0.58, 0.5, 0.4)), (50.0, 24.0, 20.0, (0.5, 0.47, 0.42)), (76.0, 28.0, 16.0, (0.6, 0.55, 0.46)),
+                         (-30.0, 15.0, 18.0, (0.52, 0.48, 0.42)), (-51.5, 28.0, 21.0, (0.58, 0.53, 0.45)), (-79.5, 28.0, 16.0, (0.5, 0.46, 0.4))):
         box("Neighbour", (x, 6.0, h / 2), (w, 12.0, h), masonry_facade(f"N{x}", col, 3.2, 2.6, 1.2, 1.7, 0.1, lit_col=(1.0, 0.72, 0.45), lit_strength=0.25))
     if variant == "dusk":                                                           # soft warm rooms behind some windows
         for k in range(10):
             x = float(rng.uniform(-22, 25)); z = float(rng.choice([4.3, 7.3, 10.3]))
             l = area_light((x, 0.9, z), (math.radians(90), 0, 0), 1.2, 12, (1.0, 0.75, 0.45)); l.visible_camera = False
-    box("OppositeRow", (0, KERB_Y - ROAD_W - 12, 10), (90, 12, 20), masonry_facade("Opp", (0.55, 0.5, 0.42), 3.2, 2.6, 1.2, 1.7, 0.12, lit_col=(1.0, 0.72, 0.45), lit_strength=0.3))
+    box("OppositeRow", (0, KERB_Y - ROAD_W - 12, 10), (220, 12, 20), masonry_facade("Opp", (0.55, 0.5, 0.42), 3.2, 2.6, 1.2, 1.7, 0.12, lit_col=(1.0, 0.72, 0.45), lit_strength=0.3))
     # street lamps (scanned) along the kerb, lit; linden-like small trees
     for x in (-16.0, -4.0, 8.0, 20.0):
         r, lm = ph.model("street_lamp_01", loc=(x, KERB_Y + 0.5, 0), rot_z=math.radians(180))
@@ -143,7 +145,7 @@ def build(variant=None):
     ll = area_light((0, 1.6, 3.4), (0, 0, 0), 1.5, 60 if variant == "dusk" else 20, (1.0, 0.82, 0.58)); ll.visible_camera = False
     # weather and season dressing
     if variant == "autumn":
-        c["rain"] = precip_curtains("rain")
+        c["rain"] = precip_curtains("rain", x_range=(-9, 9), ys=(-5.5, -3.0, -1.0))          # short curtains: seen along the street they stack into a white wall
         c["leaves"] = leaves(160, (-14, 14, KERB_Y - 1.0, -0.2))
         for nm in ("Road", "Pavement", "FarPave"):
             o = bpy.data.objects.get(nm)
@@ -151,8 +153,8 @@ def build(variant=None):
                 o.data.materials[0].node_tree.nodes["Principled BSDF"].inputs['Coat Weight'].default_value = 0.8
     if variant in ("winter", "seasons"):
         snow_m = pbr("SnowCover", (0.85, 0.87, 0.9), 0.6, 0.0, **{'Subsurface Weight': 0.3})
-        cover = [box("SnowPave", (0, KERB_Y / 2, 0.075), (90, -KERB_Y, 0.03), snow_m), box("SnowFar", (0, KERB_Y - ROAD_W - 3, 0.075), (90, 6, 0.03), snow_m),
-                 box("SnowRoadEdge", (0, KERB_Y - 0.8, -0.05), (90, 1.4, 0.03), snow_m)]
+        cover = [box("SnowPave", (0, KERB_Y / 2, 0.075), (220, -KERB_Y, 0.03), snow_m), box("SnowFar", (0, KERB_Y - ROAD_W - 3, 0.075), (220, 6, 0.03), snow_m),
+                 box("SnowRoadEdge", (0, KERB_Y - 0.8, -0.05), (220, 1.4, 0.03), snow_m)]
         for k in range(STEP_N):
             d = STEP_D * (STEP_N - k)
             cover.append(box("SnowStep", (0, -d / 2 - 0.05, STEP_H * (k + 1) + 0.012), (4.0, d - 0.04, 0.025), snow_m))
@@ -232,13 +234,8 @@ def cast_autumn(c):
 
 def cast_winter(c):
     c["inv"] = person("InvWinter", 1.0, 46, "male_casualsuit05", "short02", cval=0.14, hv=0.3, sat=0.2)
-    # an apartment entrance in the neighbouring building, with a buzzer panel
-    dm = pbr("FlatDoor", (0.2, 0.17, 0.14), 0.5)
-    box("FlatDoor", (13.5, -0.05, 1.05), (1.0, 0.08, 2.1), dm, bevel=0.01)
-    box("FlatDoorFrame", (13.5, -0.02, 1.1), (1.2, 0.04, 2.25), pbr("FlatFrame", (0.4, 0.38, 0.34), 0.6))
-    box("Buzzer", (14.25, -0.1, 1.35), (0.1, 0.03, 0.16), pbr("BuzzerM", (0.3, 0.3, 0.3), 0.4, 0.8))
-    box("FlatCanopy", (13.5, -0.45, 2.45), (1.6, 0.9, 0.1), pbr("CanopyC", (0.5, 0.5, 0.48), 0.8))
-    l = area_light((13.5, -0.5, 2.35), (0, 0, 0), 0.5, 15, (1.0, 0.85, 0.6)); l.visible_camera = False
+    # rings at an ordinary entrance of the ochre neighbour (a kit facade door); a buzzer panel beside it
+    box("Buzzer", (DOOR2_X + 0.95, -0.12, 1.35), (0.1, 0.03, 0.16), pbr("BuzzerM", (0.3, 0.3, 0.3), 0.4, 0.8))
 
 
 def cast_seasons(c):
@@ -477,9 +474,9 @@ def a_doorbell(c, sec):
     """Winter, snow falling: an investigator rings at an apartment entrance; no answer. He steps back and looks up."""
     inv = c["inv"]
     back = ease(min(1.0, max(0.0, (sec - 3.5) / 1.5)))
-    PP.stand(inv, (13.9, -0.8 - 0.6 * back, 0.08), 0.0 + math.pi)                   # faces +Y (the door)
+    PP.stand(inv, (DOOR2_X + 0.4, -0.8 - 0.6 * back, 0.08), 0.0 + math.pi)                   # faces +Y (the door)
     if sec < 3.0:
-        PP.hand_to(inv, "R", Vector((14.25, -0.14, 1.35)) + Vector((0, -0.03 * (1 if (sec % 1.2) < 0.4 else 0), 0)), curl=60)
+        PP.hand_to(inv, "R", Vector((DOOR2_X + 0.95, -0.15, 1.35)) + Vector((0, -0.03 * (1 if (sec % 1.2) < 0.4 else 0), 0)), curl=60)
     PP.nod(inv, "head", -14 * back)
 
 
@@ -516,7 +513,7 @@ MOVES.update({
                    focus=lambda c, t: c["man"].bone_head("spine03")),
     "release": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("release"), cam=_push((-1.0, KERB_Y - 3.0, 1.5), (0.0, KERB_Y - 3.0, 1.5), (-4.0, KERB_Y + 1.6, 1.2), (-0.5, KERB_Y + 1.6, 1.2), 30),
                     focus=lambda c, t: c["man"].bone_head("spine03")),
-    "doorbell": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("doorbell"), cam=_push((10.5, KERB_Y + 0.2, 1.6), (11.0, KERB_Y + 0.4, 1.6), (13.7, -0.5, 1.5), (13.8, -0.4, 1.7), 32),
+    "doorbell": dict(kind="anim", dof=4.0, far=40.0, anim=_anim("doorbell"), cam=_push((DOOR2_X - 3.0, KERB_Y + 0.2, 1.6), (DOOR2_X - 2.5, KERB_Y + 0.4, 1.6), (DOOR2_X + 0.2, -0.5, 1.5), (DOOR2_X + 0.3, -0.4, 1.7), 32),
                      focus=lambda c, t: c["inv"].bone_head("head")),
     "seasons": dict(kind="anim", dof=8.0, far=80.0, anim=_anim("seasons"), cam=_push((-9.0, FAR - 1.5, 1.7), (-6.0, FAR - 1.6, 1.75), (-3.0, 0.0, 4.0), (0.0, 0.0, 3.8), 26),
                     focus=lambda c, t: Vector((0, -0.2, 3.0))),
