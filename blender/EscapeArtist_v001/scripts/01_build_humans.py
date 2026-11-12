@@ -8,7 +8,7 @@ CAST = {
                      clothes=["male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo"]),
  "PrisonerOld": dict(g=1.0, age=0.85, mus=0.45, w=0.5,  h=0.53, skin="old_caucasian_male", hair="short02/short02.mhclo", brow="eyebrow001",
                      clothes=["male_worksuit01/male_worksuit01.mhclo", "shoes03/shoes03.mhclo"]),
- "Boy":         dict(g=1.0, age=0.2,  mus=0.5,  w=0.45, h=0.5, skin="young_caucasian_male", hair="short04/short04.mhclo", brow="eyebrow002",
+ "Boy":         dict(g=1.0, age=0.12, mus=0.45, w=0.45, h=0.45, skin="young_caucasian_male", hair="short04/short04.mhclo", brow="eyebrow002",
                      clothes=["male_casualsuit03/male_casualsuit03.mhclo", "shoes05/shoes05.mhclo"]),
  "Father":      dict(g=1.0, age=0.9,  mus=0.5,  w=0.6,  h=0.55, skin="old_caucasian_male", hair="short01/short01.mhclo", brow="eyebrow003",
                      clothes=["male_casualsuit03/male_casualsuit03.mhclo", "shoes01/shoes01.mhclo"]),

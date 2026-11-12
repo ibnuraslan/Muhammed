@@ -132,7 +132,11 @@ def glb(fname, name, size, axis, loc, rotz=0.0, coll="PROPS", rot=(0, 0, 0), flo
 CX = [-6.0, -3.0, 0.0, 3.0, 6.0]
 wall("Corridor_Floor", -11, 13, -3.4, 3.3, -0.2, 0.0, M_FLOOR, rough=0.004)
 wall("Corridor_Ceiling", -11, 13, -3.4, 3.3, 3.0, 3.2, M_CONC, rough=0.0)
-wall("Corridor_FarWall", -11, 13, 3.0, 3.3, 0.0, 3.0, M_CONC)             # camera flies through this into memory house
+wall("Corridor_FarWall", -11, 9.4, 3.0, 3.3, 0.0, 3.0, M_CONC)             # camera flies through this into memory house
+wall("Corridor_FarWall_E", 10.8, 13, 3.0, 3.3, 0.0, 3.0, M_CONC)
+wall("Corridor_FarWall_Lintel", 9.4, 10.8, 3.0, 3.3, 2.5, 3.0, M_CONC)
+box("CourtDoor_Frame_L", None, (9.43, 3.15, 1.25), (0.06, 0.34, 2.5), M_WOOD_DARK, coll="COURT")
+box("CourtDoor_Frame_R", None, (10.77, 3.15, 1.25), (0.06, 0.34, 2.5), M_WOOD_DARK, coll="COURT")
 for i, x in enumerate([-7.5, -4.5, -1.5, 1.5, 4.5, 7.5]):
     wall("Cell_Divider_%d" % i, x - 0.12, x + 0.12, -3.0, 0.0, 0.0, 3.0, M_CONC_DIRTY)
 wall("Cell_Divider_End_W", -11, -7.62, -3.0, 0.0, 0.0, 3.0, M_CONC_DIRTY)

@@ -50,7 +50,7 @@ Z = {n: HS[n].root_head.z for n in CAST}
 
 # visibility per character
 VIS = {
-    "Prisoner": [(0, 3110)],
+    "Prisoner": [(0, 705), (1548, 3110)],
     "PrisonerOld": [(3100, END)],
     "Boy": [(678, 1421)],
     "Father": [(678, 1040)],
@@ -68,7 +68,7 @@ g1_pts = [(0, (4.0, 1.15)), (110, (1.6, 1.15)), (200, (-1.2, 1.2)), (380, (-6.0,
 walk(G1, g1_pts, 0, 557)
 face(G1, 0, brow=-0.3); face(G1, 557, brow=-0.3)
 PR = Vector((0.4, -0.38, Z["Prisoner"]))
-bars = {"L": Vector((0.23, -0.045, 1.32)), "R": Vector((0.575, -0.045, 1.32))}
+bars = {"L": Vector((0.23, -0.07, 1.32)), "R": Vector((0.575, -0.07, 1.32))}
 for f, hd, br, ld in ((0, (5, -35), -0.2, 0.0), (60, (0, -25), -0.6, 0.2), (130, (8, 5), -0.9, 0.35), (200, (5, 35), -1.0, 0.4), (232, (0, 30), -0.8, 0.3)):
     dL, nL = hand_dirs(180, (0, 0.3, 1), (1, 0, 0)); dR, nR = hand_dirs(180, (0, 0.3, 1), (-1, 0, 0))
     pose(P_, f, PR + Vector((0, 0, -0.01 * (f % 2))), yaw=180, spine=(4, hd[1] * 0.3, 0), head=hd,
@@ -84,8 +84,8 @@ for f in range(0, 558, 2):
     key_obj(ring, f, loc=hip, rot=(R_(90) + sw * 0.4, sw, 0))
 # memory overlay: glowing key outline floats beside his eyes, then grows and flips
 kg = O["KeyGlow"]
-vis_key([kg], [(150, 300)])
-for f, loc, sc_, rz in ((150, (0.05, 0.12, 1.62), 0.2, 0), (200, (0.15, 0.1, 1.66), 3.2, 0.3), (250, (0.25, 0.05, 1.7), 4.2, 0.6), (300, (0.35, -1.0, 0.9), 2.0, 1.2)):
+vis_key([kg], [(150, 252)])
+for f, loc, sc_, rz in ((150, (0.05, 0.12, 1.62), 0.2, 0), (200, (0.15, 0.1, 1.66), 3.2, 0.3), (250, (0.25, 0.05, 1.7), 4.2, 0.6), (300, (0.3, 0.1, 1.75), 0.5, 1.2)):
     key_obj(kg, f, loc=loc, rot=(R_(90), rz, 0), scale=(sc_,) * 3)
 
 # ================================================================ BEAT 2 (276-558): night, sits on the bunk filing scrap into a key
@@ -319,13 +319,13 @@ walk(P_, [(2160, (0.3, -1.85)), (2185, (0.05, -2.5))], 2160, 2185)
 SWR = Vector((0.05, -2.55, Z["Prisoner"] + 0.03))
 for f in range(2186, 2484, 3):
     st = math.sin((f - 2186) * 2 * math.pi / 26)
-    sp = barp + Vector((-0.05 + 0.11 * st, 0.03, 0.0))
+    sp = barp + Vector((0.08 * st, 0.03, 0.0))
     key_obj(saw, f, loc=sp, rot=(0, 0, R_(90)))
-    handle = sp + Vector((-0.17, 0, 0.0)); tip = sp + Vector((0.17, 0, 0))
+    handle = sp + Vector((-0.15, 0, 0.0)); tip = sp + Vector((0.14, 0, 0))
     glance = 1 if 2330 < f < 2380 else 0
     dR, nR = hand_dirs(0, (0.3, 1, 0.3), (0, 0, -1)); dL, nL = hand_dirs(0, (-0.2, 1, 0.1), (0, 0, -1))
     pose(P_, f, SWR + Vector((0.03 * st, 0, 0)), yaw=0, spine=(6, 6 * st, 0), head=(-12, 70 * glance),
-         hands={"R": (handle + Vector((0, 0.07, 0.02)), dR, nR, None), "L": (tip + Vector((-0.02, 0.07, 0.02)), dL, nL, None)},
+         hands={"R": (handle + Vector((0, 0.1, 0.02)), dR, nR, None), "L": (tip + Vector((-0.02, 0.1, 0.02)), dL, nL, None)},
          fingers={"R": 0.95, "L": 0.85})
     face(P_, f, brow=-1.0 if not glance else 0.7, lid=0.4 if not glance else 0.0, jaw=4, frown=0.7)
 key_obj(saw, 0, loc=(0.9, -2.7, 0.49), rot=(0, 0, R_(30))); key_obj(saw, 2150, loc=(0.9, -2.7, 0.49), rot=(0, 0, R_(30)))
@@ -408,7 +408,7 @@ for i, (f, kind) in enumerate(TL):
             elif kind == "window":
                 r = Vector((0.0, -2.62, z)); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
                 pose(H, ff, r, yaw=0, spine=(-4, 0, 0), head=(-12, 0),
-                     hands={"L": (Vector((-0.16, -3.16, 1.6)), dd, nn_, None), "R": (Vector((0.16, -3.16, 1.6)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
+                     hands={"L": (Vector((0.16, -3.16, 1.6)), dd, nn_, None), "R": (Vector((-0.16, -3.16, 1.6)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
             elif kind == "scratch":
                 r = Vector((-0.85, -1.6 - w * 2, z)); dd, nn_ = hand_dirs(90, (0, 1, 0.2), (0, 0, -1))
                 pose(H, ff, r, yaw=90, spine=(4, 0, 0), head=(5, 0), hands={"R": (Vector((-1.33, -1.4 - w * 4, 1.9 - w * 6)), dd, nn_, None)}, fingers={"R": 0.9})
@@ -484,7 +484,7 @@ for f in range(3498, END + 1, 8):
     t = (f - 3498) / 252
     r = Vector((0.0, -2.62, Z["PrisonerOld"])); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
     pose(PO, f, r + Vector((0, 0, -0.005 * math.sin(f / 20))), yaw=0, spine=(-2, 0, 0), head=(-10, 4 * math.sin(f / 50)),
-         hands={"L": (Vector((-0.16, -3.16, 1.62)), dd, nn_, None), "R": (Vector((0.16, -3.16, 1.62)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
+         hands={"L": (Vector((0.16, -3.16, 1.62)), dd, nn_, None), "R": (Vector((-0.16, -3.16, 1.62)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
     face(PO, f, brow=0.4, lid=0.15, smile=0.2 * t)
 
 # ================================================================ corridor/inmate life: neighbour inmate paces in cell x=3; second guard at the far end
@@ -536,12 +536,14 @@ def hue_shift(mat, hue, sat=1.0, val=1.0):
 done = set()
 for n in ("Prisoner", "PrisonerOld"):
     for m in O[n + ".male_worksuit01"].data.materials:
-        if m and m.name not in done: hue_shift(m, 0.98, 1.25, 0.9); done.add(m.name)
+        if m and m.name not in done: hue_shift(m, 0.92, 1.3, 0.85); done.add(m.name)
 for m in O["Boy.male_casualsuit03"].data.materials:
     if m and m.name not in done:
         if m.users > 1:
             m2 = m.copy(); O["Boy.male_casualsuit03"].data.materials[0] = m2; m = m2
         hue_shift(m, 0.3, 1.0, 1.1); done.add(m.name)
+for m in O["Boy.short04"].data.materials:
+    if m: hue_shift(m, 0.5, 1.0, 0.55)
 # old man: grey hair
 for m in O["PrisonerOld.short02"].data.materials:
     if m: hue_shift(m, 0.5, 0.05, 1.8)
@@ -586,8 +588,10 @@ CK = [
  # beat 7: through the window to the gavel, whip back through the wall to the gate slam
  (1422, (9.4, 6.3, 1.3), (10.1, 7.3, 1.2), 35, 0),
  (1445, (9.85, 6.8, 1.25), (10.1, 7.3, 1.2), 50, 0),
- (1470, (10.2, 4.2, 1.6), (9.4, 1.5, 1.4), 28, 15),
- (1500, (10.4, 2.0, 1.5), (8.7, 1.3, 1.4), 30, 0),
+ (1466, (10.1, 4.6, 1.5), (10.0, 1.0, 1.4), 26, 12),
+ (1486, (10.1, 2.4, 1.5), (8.7, 1.3, 1.4), 28, 0),
+ (1504, (9.3, 1.6, 1.6), (8.7, 1.0, 1.5), 30, 0),
+ (1514, (6.6, 0.7, 1.7), (6.0, -3.0, 1.7), 26, 0),
  # beat 8: through cell x=6 and its window into the night yard; crane up the fence with him, over, chase
  (1525, (6.1, -1.2, 1.7), (6.0, -4.0, 1.7), 26, 0),
  (1548, (6.05, -3.6, 1.72), (6.6, -8.0, 1.2), 24, 0),
@@ -614,9 +618,9 @@ CK = [
  (2450, (0.24, -3.55, 1.97), (0.24, -2.0, 1.8), 28, 0),
  # beat 11: out to the corridor: silhouette profile, swing to frozen guards, chase dolly
  (2490, (0.3, -1.6, 1.75), (-0.5, 0.6, 1.1), 26, 0),
- (2545, (-1.2, 2.7, 1.25), (-1.5, 1.2, 1.5), 28, 0),
- (2600, (-1.4, 2.8, 1.3), (-4.0, 1.3, 1.5), 30, 0),
- (2650, (-2.6, 2.6, 1.6), (-4.8, 1.4, 1.5), 34, 0),
+ (2545, (-1.0, 2.35, 1.25), (-1.6, 1.2, 1.5), 26, 0),
+ (2600, (-1.5, 2.45, 1.3), (-4.0, 1.3, 1.5), 30, 0),
+ (2650, (-2.6, 2.4, 1.6), (-4.8, 1.4, 1.5), 34, 0),
  (2700, (1.5, 2.2, 1.3), (-1.0, 1.4, 1.2), 24, 0),
  (2760, (4.8, 2.2, 1.2), (2.0, 1.4, 1.2), 24, 0),
  (2820, (5.5, 2.4, 1.6), (3.5, 1.4, 1.1), 26, 0),
@@ -632,13 +636,13 @@ CK = [
  (3370, (-0.3, -2.7, 1.35), (0.55, -1.85, 1.05), 32, 0),
  (3440, (-0.4, -2.6, 1.6), (0.4, -2.0, 1.3), 28, 0),
  # beat 14: past him, out through the window, over the fence to the protesters
- (3498, (0.0, -2.2, 1.85), (0.0, -3.5, 1.75), 26, 0),
- (3525, (0.0, -3.5, 1.72), (0.0, -10.0, 2.0), 24, 0),
+ (3498, (0.08, -2.2, 1.95), (0.08, -3.5, 1.8), 26, 0),
+ (3525, (0.08, -3.5, 1.8), (0.0, -10.0, 2.0), 24, 0),
  (3570, (0.2, -11.0, 4.6), (0.4, -17.5, 1.5), 24, 0),
  (3618, (0.8, -15.2, 1.3), (0.3, -17.6, 1.4), 28, 0),
  # beat 15: swing back to the building, push to his face at the window, then pull back away from the bars and settle
  (3655, (0.5, -10.0, 2.6), (0.0, -3.2, 1.75), 30, 0),
- (3700, (0.0, -3.62, 1.74), (0.0, -2.6, 1.68), 40, 0),
+ (3700, (0.04, -3.62, 1.74), (0.0, -2.6, 1.68), 40, 0),
  (3750, (0.0, -5.0, 1.95), (0.0, -2.8, 1.65), 32, 0),
 ]
 build_camera(cam, CK)

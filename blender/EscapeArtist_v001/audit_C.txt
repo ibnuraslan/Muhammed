@@ -1,0 +1,43 @@
+00:00.749  blend            | Read blend: "/tmp/claude-0/-home-user-Muhammed/4889b52d-5a91-5629-8ee4-09eaf9bf4d43/scratchpad/film.blend"
+[INFO ] services.locationservice ...............: Not adding link to MakeHuman user data, since neither explicit path nor auto-discovery is set in preferences.
+[INFO ] mpfb.init ..............................: Build info 20261010
+[INFO ] mpfb.init ..............................: Online access preference is not enabled. Not checking if MakeHuman is online.
+[INFO ] mpfb.init ..............................: MPFB initialization has finished.
+PEN 0 Prisoner 56
+PEN 30 Prisoner 56
+PEN 60 Prisoner 56
+PEN 90 Prisoner 56
+PEN 120 Prisoner 56
+PEN 150 Prisoner 56
+PEN 180 Prisoner 56
+PEN 210 Prisoner 56
+PEN 1110 Stepmother 13
+PEN 2190 Prisoner 80
+PEN 2220 Prisoner 101
+PEN 2250 Prisoner 104
+PEN 2280 Prisoner 123
+PEN 2310 Prisoner 208
+PEN 2340 Prisoner 92
+PEN 2370 Prisoner 175
+PEN 2400 Prisoner 101
+PEN 2430 Prisoner 214
+PEN 2520 Prisoner 32
+BEAT 1 {'hover': 0, 'sink': 0, 'pen': 8, 'cam': 0, 'n': 40}
+BEAT 2 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 36}
+BEAT 3 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 16}
+BEAT 4 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 28}
+BEAT 5 {'hover': 0, 'sink': 0, 'pen': 1, 'cam': 0, 'n': 21}
+BEAT 6 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 32}
+BEAT 7 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 8}
+BEAT 8 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 10}
+BEAT 9 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 22}
+BEAT 10 {'hover': 0, 'sink': 0, 'pen': 9, 'cam': 0, 'n': 40}
+BEAT 11 {'hover': 0, 'sink': 0, 'pen': 1, 'cam': 0, 'n': 56}
+BEAT 12 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 33}
+BEAT 13 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 13}
+BEAT 14 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 20}
+BEAT 15 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 25}
+TOTAL {'hover': 0, 'sink': 0, 'pen': 19, 'cam': 0, 'n': 400}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:34:58)
+
+Blender quit
