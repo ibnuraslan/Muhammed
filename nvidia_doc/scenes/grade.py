@@ -59,7 +59,7 @@ CINE = dict(exposure=-0.35,      # stops; the darker mood comes mostly from the 
             knee=0.55, span=1.4,  # luminance shoulder: highlights roll off towards knee+span (AgX then soft-clips)
             black=(0.0011, 0.001, 0.0009),  # subtracted in linear: rich blacks, a whisper cool (no teal wash)
             warm=(1.012, 1.0, 0.988),       # multiplied: a whisper warm (no amber cast)
-            sat=0.9)                         # natural colours: only slightly muted
+            sat=0.95)                        # natural colours: never drain colour (exteriors use 1.0)
 # v4 rule (the person): cinematic = deeper shadows, contrast, soft directional light, NATURAL colours, readable faces.
 # No colour casts. The mood comes from light, shadow and contrast, not from tinting.
 
