@@ -63,6 +63,12 @@ def build(variant=None):
     hl.arm.location.z += 0.63 - w[:, 2].min(); bpy.context.view_layer.update()
     H.rotl(hl, "head", (1, 0, 0), -15)
     c["helen"] = hl
+    # under the blanket, propped on two pillows
+    blanket.hide_render = True
+    hd = hl.bone_head("head")
+    box("PillowUp", (hd.x, hd.y, 0.72), (0.6, 0.35, 0.16), fabric("Pillow2", (0.9, 0.9, 0.88), 0.9, 0.3, 600), bevel=0.06)
+    c["blanket"] = H.blanket_over(hl, fabric("WardBlanket2", (0.62, 0.6, 0.52), 0.9, 0.4, 300), 0.62)
+    c["blanket"]["home"] = tuple(c["blanket"].location)
     if variant == "nurse":
         c["nurse"] = H.person("Nurse", "nurse")
     else:
@@ -77,7 +83,7 @@ def anim_nurse(c, t):
     n = c["nurse"]
     H.stand_at(n, (-1.65, 1.0, 0), math.radians(-90))
     tug = 0.06 * math.sin(2 * math.pi * 0.5 * sec)
-    c["blanket"].location = Vector((-2.4, 1.1 + tug * 0.3, 0.68))
+    c["blanket"].location = Vector(c["blanket"]["home"]) + Vector((0, tug * 0.15, 0))
     reach(n, "R", Vector((-2.0, 0.7 + tug, 0.78)), Vector((0, 0, -1)), Vector((-1, 0, -0.3)))
     reach(n, "L", Vector((-2.0, 1.3 + tug, 0.78)), Vector((0, 0, -1)), Vector((-1, 0, -0.3)))
     H.rotl(n, "spine03", (1, 0, 0), 18); H.look(n, 0, 20)

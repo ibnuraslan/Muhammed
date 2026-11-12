@@ -165,6 +165,13 @@ def _():
             b = c["bed_bulb_obj"]; c["swing"] = b
             c["bulb_light"] = H.point((-2.4, -2.4, C1 - 0.6), 45, (1.0, 0.7, 0.42), 0.03)
             cord = box("Cord", (-2.4, -2.4, C1 - 0.25), (0.008, 0.008, 0.5), H.mat("black")); c["cord"] = cord
+            bpy.ops.mesh.primitive_grid_add(x_subdivisions=60, y_subdivisions=40, size=1, location=(-2.2, -2.5, 0.012))
+            rug = bpy.context.active_object; rug.name = "Rug"; rug.scale = (1.6, 1.1, 1)
+            rug.data.materials.append(fabric("RugWool", (0.42, 0.16, 0.12), 0.95, 0.4, 120))
+            wv = rug.modifiers.new("ruck", 'WAVE'); wv.use_normal = False; wv.use_x = True; wv.use_y = False; wv.height = 0.045; wv.width = 0.18; wv.narrowness = 1.6; wv.start_position_x = -0.3; wv.falloff_radius = 0.5; wv.speed = 0.0
+            rug.rotation_euler = (0, 0, math.radians(14))
+            box("Quilt7", (-3.4, -1.95, 0.6), (0.98, 1.5, 0.06), fabric("Quilt7", (0.42, 0.2, 0.15), 0.9, 0.5, 300), bevel=0.03)
+            box("Pillow7", (-3.4, -2.95, 0.63), (0.7, 0.3, 0.12), fabric("Pillow7", (0.85, 0.84, 0.8), 0.9, 0.3, 600), bevel=0.05)
         a = math.radians(9) * math.cos(1.9 * sec) * math.exp(-0.05 * sec)
         piv = Vector((-2.4, -2.4, C1))
         off = Vector((0.0, math.sin(a), -math.cos(a))) * 0.6
@@ -173,7 +180,7 @@ def _():
         c["swing"].location = piv + off + Vector((0, 0, 0.12)); c["swing"].rotation_euler = (a, 0, 0)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.8, -1.05, 1.6)).lerp(Vector((-1.15, -1.3, 1.55)), e), Vector((-2.6, -2.7, 0.9)).lerp(Vector((-2.8, -2.8, 1.0)), e), 24)
+        return (Vector((-0.75, -0.95, 1.7)).lerp(Vector((-1.0, -1.2, 1.65)), e), Vector((-2.5, -2.7, 0.45)).lerp(Vector((-2.7, -2.8, 0.55)), e), 22)
     return cam, anim
 
 
@@ -193,7 +200,7 @@ def _():
         H.look(h, math.degrees(shake), 8)
     def cam(c, t):
         e = ease(t)
-        return (Vector((3.95, 3.0, 1.65)).lerp(Vector((3.9, 3.25, 1.6)), e), Vector((3.2, 4.7, 1.05)), 26)
+        return (Vector((0.9, 3.2, 1.55)).lerp(Vector((1.1, 3.35, 1.55)), e), Vector((3.2, 4.45, 1.1)), 26)
     return cam, anim
 
 
@@ -237,7 +244,7 @@ def _():
             reach(w, "R", m.bone_head("upperarm01.L") + Vector((0.05, 0.05, -0.15)), Vector((0, 0, -1)), Vector((-1, 0, 0)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-2.7, -2.5, 1.6)).lerp(Vector((-2.5, -2.4, 1.6)), e), Vector((-0.5, -1.15, 1.45)), 30)   # from inside the room: they stop in the doorway
+        return (Vector((-2.7, -2.5, 1.6)).lerp(Vector((-2.5, -2.4, 1.6)), e), Vector((-0.5, -1.15, 1.45)), 30)   # from inside the room (the stair blocks a view from behind)
     return cam, anim
 
 
@@ -336,13 +343,26 @@ def _tea_pose(c, sec):
         reset_pose(h); pose_sit(h, lean=6)
         h.arm.rotation_euler = (0, 0, rz); h.arm.location = (x, y, 0); bpy.context.view_layer.update(); H.ground_to(h, 0.0)
     if "cups" not in c:
-        c["cups"] = [cyl("Cup", (0.95, 1.95, 0.80), 0.04, 0.07, H.mat("enamel"), 20), cyl("Cup", (1.45, 1.85, 0.80), 0.04, 0.07, H.mat("enamel"), 20)]
+        c["cups"] = [cyl("Cup", (0.84, 1.92, 0.80), 0.04, 0.07, H.mat("enamel"), 20), cyl("Cup", (1.56, 1.88, 0.80), 0.04, 0.07, H.mat("enamel"), 20)]
         cyl("Pot", (1.2, 2.15, 0.84), 0.08, 0.15, H.mat("enamel"), 24)
+        box("TeaTop", (1.2, 1.9, 0.74), (1.0, 0.8, 0.04), H.mat("oak"), bevel=0.01)
+        box("TeaCloth", (1.2, 1.9, 0.765), (0.9, 0.7, 0.008), fabric("TeaCloth", (0.85, 0.82, 0.74), 0.9, 0.3, 400))
+        for sx in (-1, 1):
+            for sy in (-1, 1):
+                box("TeaLeg", (1.2 + sx * 0.44, 1.9 + sy * 0.34, 0.37), (0.05, 0.05, 0.72), H.mat("oak"))
+        # Helen's cane hooked over the back of her chair
+        cane = cyl("Cane", (0.0, 0.0, 0.0), 0.011, 0.86, H.mat("oak"), 12)
+        cane.location = (0.3, 1.62, 0.43); cane.rotation_euler = (math.radians(12), math.radians(-8), 0)
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.05, minor_radius=0.011, location=(0.3, 1.71, 0.88), rotation=(0, math.radians(90), 0))
+        hk = bpy.context.active_object; hk.name = "CaneHook"; hk.data.materials.append(H.mat("oak"))
     sip = max(0.0, math.sin(2 * math.pi * (sec - 1.0) / 3.5)) if sec > 1.0 else 0.0
-    cup = c["cups"][0]; hd = hl.bone_head("head")
-    cup.location = Vector((0.95, 1.95, 0.80)).lerp(hd + Vector((0.12, 0, -0.08)), sip)
-    reach(hl, "R", cup.location + Vector((-0.02, -0.06, 0.0)), Vector((0, 0, -1)), Vector((1, 0, 0)))
-    reach(f, "L", c["cups"][1].location + Vector((0.04, 0.05, 0.0)), Vector((0, 0, -1)), Vector((-1, 0, 0)))
+    for k_, (h, side, base) in enumerate(((hl, 1, Vector((0.84, 1.92, 0.80))), (f, -1, Vector((1.56, 1.88, 0.80))))):
+        cup = c["cups"][k_]; hd = h.bone_head("head")
+        lift = sip if k_ == 0 else 0.35 * max(0.0, math.sin(2 * math.pi * (sec - 0.2) / 4.0))
+        cup.location = base.lerp(hd + Vector((side * 0.11, 0, -0.07)), lift)
+        # both hands around the cup, elbows in
+        reach(h, "R" if side > 0 else "L", cup.location + Vector((-side * 0.015, -0.045, 0.01)), Vector((0, 0, -1)), Vector((side, 0, 0)))
+        reach(h, "L" if side > 0 else "R", cup.location + Vector((-side * 0.015, 0.045, 0.01)), Vector((0, 0, -1)), Vector((side, 0, 0)))
     H.look(hl, 0, 6); H.look(f, 0, 10)
 
 
@@ -373,7 +393,7 @@ def _():
     def anim(c, t):
         sec = t * DUR["icebox_open"]
         h = P(c, "f")
-        H.stand_at(h, (-0.6, 3.4, 0), math.radians(170))
+        H.stand_at(h, (-0.15, 3.75, 0), math.radians(150))
         op = ease(min(1.0, sec / 1.3))
         c["ice_door"].rotation_euler = (0, 0, math.radians(-100) * op)
         if "food" not in c:
@@ -382,11 +402,11 @@ def _():
             cyl("IcePlate", (-0.95, 4.2, 0.45), 0.1, 0.015, H.mat("enamel"), 24)
             cyl("Bottle", (-0.65, 4.2, 0.55), 0.03, 0.2, pbr("Milk", (0.85, 0.85, 0.82), 0.2, 0.0, **{'Transmission Weight': 0.6}), 16)
             c["food"] = True
-        reach(h, "L", Vector((-1.15, 4.0, 0.62)) if op < 0.9 else Vector((-1.25, 3.9, 0.75)), Vector((0, 0, -1)), Vector((0, 1, 0)))
+        reach(h, "R", Vector((-0.45, 3.95, 0.95)) if op < 0.9 else Vector((-0.5, 3.9, 1.0)), Vector((0, 0, -1)), Vector((0, 1, 0)))
         H.rotl(h, "spine03", (1, 0, 0), 14); H.look(h, -6 if sec > 2.4 else 0, 22)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.9, 2.3, 1.45)).lerp(Vector((0.7, 2.6, 1.45)), e), Vector((-0.8, 4.0, 0.8)), 30)
+        return (Vector((1.3, 2.3, 1.55)).lerp(Vector((1.1, 2.55, 1.52)), e), Vector((-0.7, 4.15, 0.75)), 24)
     return cam, anim
 
 
@@ -394,13 +414,13 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["chair_moved"]
-        ch = c["k_chairs"][2]; ch.location = (3.0, 1.6, 0); ch.rotation_euler = (0, 0, math.radians(110))
+        ch = c["k_chairs"][2]; ch.location = (3.05, 0.75, 0); ch.rotation_euler = (0, 0, math.radians(147))
         h = P(c, "f")
         H.stand_at(h, (0.6, 0.6, 0), math.radians(-120) + math.radians(8) * ease(min(1.0, sec / 3.0)))
         H.look(h, 0, 4)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.6, 0.2, 1.5)).lerp(Vector((-0.4, 0.35, 1.48)), e), Vector((3.0, 1.6, 0.6)).lerp(Vector((2.2, 1.3, 0.9)), e), 30)
+        return (Vector((0.2, -0.05, 1.5)).lerp(Vector((0.45, 0.05, 1.48)), e), Vector((3.4, 1.25, 0.7)), 28)
     return cam, anim
 
 
@@ -410,14 +430,25 @@ def _():
         sec = t * DUR["bed_listen"]
         h = P(c, "hl")
         reset_pose(h); pose_sit(h, lean=4)
-        h.arm.rotation_euler = (0, 0, math.radians(-90)); h.arm.location = (-3.0, -2.1, 0); bpy.context.view_layer.update(); H.ground_to(h, 0.0)
+        h.arm.rotation_euler = (0, 0, math.radians(180)); h.arm.location = (-3.4, -2.8, 0.0); bpy.context.view_layer.update()
+        hip = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) / 2
+        h.arm.location.z += 0.6 - hip.z; bpy.context.view_layer.update()      # sitting up on the mattress; shins hidden by the valance
+        if "inbed" not in c:
+            c["inbed"] = True
+            for o in bpy.data.objects:
+                if o.name.startswith("Quilt1"): o.hide_render = True
+            q = fabric("Quilt2", (0.5, 0.25, 0.18), 0.9, 0.5, 300)
+            box("BedPillow", (-3.4, -3.0, 0.72), (0.72, 0.22, 0.3), fabric("BPillow", (0.85, 0.84, 0.8), 0.9, 0.3, 600), bevel=0.08)
+            box("Valance", (-3.4, -2.2, 0.3), (0.92, 1.92, 0.5), q, bevel=0.02)
+            box("Quilt2", (-3.4, -1.95, 0.66), (0.98, 1.55, 0.16), q, bevel=0.06)
         up = ease(min(1.0, max(0.0, (sec - 1.2) / 1.5)))
         H.look(h, -10 * up, -28 * up)
         if "moonbed" not in c:
-            c["moonbed"] = H.day_fill((-2.4, -D2 + 0.4, 1.6), 1.0, 25, (0.55, 0.68, 1.0), rot=(math.radians(60), 0, 0))
+            c["moonbed"] = H.day_fill((-3.0, -D2 + 0.4, 1.7), 1.0, 30, (0.55, 0.68, 1.0), rot=(math.radians(55), 0, 0))
+            bpy.context.scene.view_settings.exposure = 0.4
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.0, -3.6, 1.2)).lerp(Vector((-1.3, -3.3, 1.25)), e), Vector((-3.0, -2.1, 1.1)), 34)
+        return (Vector((-1.3, -0.7, 1.55)).lerp(Vector((-1.5, -0.9, 1.52)), e), Vector((-3.4, -2.55, 0.95)), 28)
     return cam, anim
 
 

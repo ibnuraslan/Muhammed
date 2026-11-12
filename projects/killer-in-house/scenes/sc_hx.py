@@ -252,6 +252,8 @@ def _():
     def anim(c, t):
         sec = tick(c, t, "porch_knock")
         m, w = P(c, "m"), P(c, "w")
+        if "porchlight" not in c:
+            c["porchlight"] = H.point((0.2, -D2 - 0.7, 2.35), 45, (1.0, 0.75, 0.45), 0.08)
         H.stand_at(m, (0.15, -D2 - 0.55, -0.06), 0.0 + math.pi)
         H.stand_at(w, (-0.6, -D2 - 2.3, G + 0.36), math.pi + math.radians(15))
         knock = max(0.0, math.sin(2 * math.pi * 2.2 * sec)) if sec < 1.6 else 0.0
@@ -263,7 +265,7 @@ def _():
         H.look(w, 10, 4)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-2.4, -D2 - 4.6, 1.3)).lerp(Vector((-2.0, -D2 - 4.0, 1.35)), e), Vector((0.1, -D2 - 0.5, 1.3)), 32)
+        return (Vector((-2.2, -D2 - 3.6, 1.45)).lerp(Vector((-1.9, -D2 - 3.2, 1.45)), e), Vector((0.0, -D2 - 0.8, 1.3)), 30)
     return cam, anim
 
 
@@ -317,7 +319,7 @@ def _():
         c["up_light"].data.energy = 160 * on * (0.4 + 0.6 * f)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-6.0, ROAD_Y - 1.0, 1.7)).lerp(Vector((-4.6, ROAD_Y + 2.0, 1.8)), e), Vector((-1.5, -D2, 3.4)), 34)
+        return (Vector((-7.0, ROAD_Y - 2.0, 1.6)).lerp(Vector((-5.8, ROAD_Y + 0.8, 1.7)), e), Vector((-1.5, -D2, 2.9)), 28)
     return cam, anim
 
 
@@ -352,10 +354,12 @@ def _():
         if "beams" not in c:
             c["beams"] = [H.flashlight("T1"), H.flashlight("T2")]
             for b in c["beams"]:
-                b.data.energy = 120
+                b.data.energy = 900; b.data.spot_size = math.radians(30)
+            c["torch_heads"] = [H.point((0, 0, 0), 3.0, (0.95, 0.95, 1.0), 0.03) for _ in range(2)]
         # two beams inside: ground floor front room, then upstairs bedroom
         p1 = Vector((1.2 + 2.0 * t, -2.0, 1.5)); H.aim_obj(c["beams"][0], p1, Vector((3.0 + 1.2 * math.sin(1.6 * sec), -D2, 1.2)))
         p2 = Vector((-1.4 - 1.6 * t, -1.6, F2 + 1.5)); H.aim_obj(c["beams"][1], p2, Vector((-2.4 + 1.0 * math.sin(1.2 * sec + 1), -D2, F2 + 1.0)))
+        c["torch_heads"][0].location = p1; c["torch_heads"][1].location = p2
     def cam(c, t):
         e = ease(t)
         return (Vector((5.0, ROAD_Y - 1.0, 1.6)).lerp(Vector((3.5, ROAD_Y + 1.2, 1.6)), e), Vector((0.0, -D2, 2.6)), 30)
@@ -373,12 +377,16 @@ def _sedan_cast(c, t, sec, smoke=True):
         H.look(h, 25 if k == 0 else 15, 0)
     if smoke and "cig" not in c:
         c["cig"] = H.point((0, 0, 0), 0.0, (1.0, 0.35, 0.1), 0.01)
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.007, location=(0, 0, 0)); c["ember"] = bpy.context.active_object
+        c["ember"].data.materials.append(emissive("EmberM", (1.0, 0.3, 0.05), 0.0))
     if smoke:
         h = P(c, "d1"); puff = max(0.0, math.sin(2 * math.pi * sec / 3.0))
         hd = h.bone_head("head"); M = h.arm.matrix_world.to_3x3(); fwd = M @ Vector((0, -1, 0))
         tip = hd + fwd * (0.12 + 0.12 * (1 - puff)) + Vector((0, 0, -0.08 - 0.2 * (1 - puff)))
         reach(h, "R", tip + Vector((0, 0, -0.03)), Vector((0, -0.3, -1)), fwd)
-        c["cig"].location = tip; c["cig"].data.energy = 0.2 + 0.6 * puff
+        c["cig"].location = tip; c["cig"].data.energy = 0.4 + 1.2 * puff
+        if c.get("ember"):
+            c["ember"].location = tip; c["ember"].active_material.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 8 + 30 * puff
 
 
 @move("sedan_watch", "winter_night", 5.0, cast=("d1:detective", "d2:detective2"), extra=("dcar:car:black:sedan",))
@@ -388,7 +396,7 @@ def _():
         _sedan_cast(c, t, sec)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-8.8, ROAD_Y - 4.2, 1.5)).lerp(Vector((-8.4, ROAD_Y - 3.9, 1.5)), e), Vector((-4.0, -D2, 1.6)), 28)
+        return (Vector((-9.6, ROAD_Y - 3.7, 1.4)).lerp(Vector((-9.3, ROAD_Y - 3.4, 1.42)), e), Vector((-2.6, ROAD_Y + 2.5, 1.3)), 24)
     return cam, anim
 
 
