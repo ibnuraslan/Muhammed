@@ -87,9 +87,9 @@ class Actor:
             self.R.key_rot(n, f, [("X", hp * w), ("Y", hr * w), ("Z", ht * w)])
         for s in "LR":
             c = p["curl"].get(s, (22, 18))
-            self.key_fingers(s, f, c[0], c[1])
+            self.key_fingers(s, f, c[0], c[1], *c[2:])
         self.key_face(f, p["face"])
-    def key_fingers(self, s, f, curl, thumb=18):
+    def key_fingers(self, s, f, curl, thumb=18, abd=22):
         Rh = self.REST_HAND[s]; d, a = Rh.col[0].copy(), Rh.col[1].copy(); sign = 1 if s == "R" else -1
         JW = (0.8, 1.1, 0.8)
         for k in range(2, 6):
@@ -99,7 +99,7 @@ class Actor:
                 self.R.key_q(b, f, self.R.local_q(b, Matrix.Rotation(R_(c * JW[j - 1] * sign), 3, a)))
         for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
             b = "finger1-%d.%s" % (j, s)
-            self.R.key_q(b, f, self.R.local_q(b, Matrix.Rotation(R_(fl * sign), 3, a) @ Matrix.Rotation(R_(22 * sign), 3, d)))
+            self.R.key_q(b, f, self.R.local_q(b, Matrix.Rotation(R_(fl * sign), 3, a) @ Matrix.Rotation(R_(abd * sign), 3, d)))
     def key_face(self, f, fc):
         PB = self.R.PB
         sm, wide, brow, jaw, close = fc.get("smile", 0), fc.get("wide", 0.3), fc.get("brow", 0), fc.get("jaw", 0), fc.get("close", 0)
@@ -392,10 +392,13 @@ def mask_edge_hand(f):
     return W, (V(0, 0, 1) - fwd * 0.15).normalized(), -fwd
 S1.P(466, s1_or + V(0.04, -0.01, -0.01), Y1 + 10, spine=(8, 0, 6), head=(8, 4, 0), feet=F1,
      hands={"R": ("fn", lambda f: (lambda W, d, n: (W + V(0, 0, -0.13) + n * -0.03, d, n))(*mask_edge_hand(f))), "L": LOW_L},
-     curl={"R": (25, 20), "L": (22, 18)}, poles=ELBOW_FRONT)
+     curl={"R": ((10, 12, 14, 16), 8, 6), "L": (22, 18)}, poles=ELBOW_FRONT)
+S1.P(471, s1_or + V(0.03, -0.015, -0.005), Y1 + 8, spine=(6, 0, 5), head=(7, 4, 0), feet=F1,
+     hands={"R": ("fn", lambda f: (lambda W, d, n: (W + V(0, 0, -0.03) + n * -0.015, d, n))(*mask_edge_hand(f))), "L": LOW_L},
+     curl={"R": ((14, 16, 18, 20), 12, 6), "L": (22, 18)}, poles=ELBOW_FRONT)
 for f in (474, 478, 482, 486, 490, 494, 498, 502):
     S1.P(f, s1_or + V(0.02, -0.02, 0.0), Y1 + 6, spine=(5 - 3 * (f - 474) / 28, 0, 4), head=(6 - 10 * (f - 474) / 28, 4, 0), feet=F1,
-         hands={"R": ("fn", mask_edge_hand), "L": LOW_L}, curl={"R": (58, 46), "L": (22, 18)}, poles=ELBOW_FRONT,
+         hands={"R": ("fn", mask_edge_hand), "L": LOW_L}, curl={"R": ((50, 54, 58, 62), 40, 10), "L": (22, 18)}, poles=ELBOW_FRONT,
          face={"smile": 0.3 * max(0, (f - 486) / 16)})
 S1.P(508, s1_or + V(0.0, -0.03, 0.01), Y1 + 4, spine=(1, -2, 2), head=(-6, 6, 4), feet=F1,
      hands={"R": ("body", (V(-0.13, -0.34, 1.24), V(0.1, -0.3, 1), V(0.2, 1, 0))), "L": LOW_L}, curl={"R": (22, 16), "L": (22, 18)},
@@ -557,11 +560,12 @@ for f in (250, 380, 470):
 NU.P(530, nu_or, YN - 30, spine=(2, 0, -10), head=(0, -30, 0), feet=FN, hands={"L": ("rest", dict(fwd=20, out=6, bend=0.3)), "R": ("rest", dict(fwd=20, out=6, bend=0.3))})
 NU.P(600, nu_or, YN - 30, spine=(2, 0, -10), head=(4, -34, 0), feet=FN, hands={"L": ("rest", dict(fwd=20, out=6, bend=0.3)), "R": ("rest", dict(fwd=20, out=6, bend=0.3))})
 # pushes the bed: walks behind its head end, hands on the head-board rail
-HB = V(0.0, 1.12, 0.95)       # head-board grab bar, bed local
+HB = V(0.0, 0.985, 0.85)      # v007b: top edge of the head-board panel (bed local); was 7 cm off the bed in the air
 def bed_grip(s, f):
     p = V(bpx(min(f, 990)), bpy_(min(f, 990)), 0) + HB + V(0.22 if s == "R" else -0.22, 0, 0)
-    return p, V(0, -1, -0.3), V(0, 0, -1)
-nu_path = lambda f: V(bpx(min(f, 990)), bpy_(min(f, 990)) + 1.6, 0)
+    d = V(0, -1, -0.35).normalized()
+    return p - d * 0.075 + V(0, 0, 0.032), d, V(0, -0.3, -1).normalized()
+nu_path = lambda f: V(bpx(min(f, 990)), bpy_(min(f, 990)) + 1.30, 0)   # v007b: close enough to reach the head-board
 NU.H.walk(nu_path, lambda f: 0.0, 766, 990, stride=0.72, lean=12, crouch=0.05)
 for f in range(780, 991, 10):
     pass
@@ -571,6 +575,10 @@ for f in list(range(766, 991, 6)) + [990, 1100]:
     for s in "LR":
         W, d, n = bed_grip(s, f)
         NU.R.key_world("IK_hand." + s, f, NU.hand_matrix(s, W, d, n))
+for s in "LR":
+    NU.key_fingers(s, 760, 22, 18)
+    for f in (772, 990, 1100):
+        NU.key_fingers(s, f, (70, 74, 76, 78), 60, -50)
 stepped(NU.o, {600})
 vis([NU.o.name + "." + x for x in ("body",)] + [c for c in NU.o.children], [(0, 1300)])
 
@@ -602,7 +610,7 @@ yaw2 = lambda f: 160 + (Y2 - 160) * smooth((f - 878) / 40.0)
 S2.H.walk(walk2, yaw2, 878, 990, stride=0.7, lean=8)
 S2.poses = []
 S2.P(1000, s2_end, Y2, spine=(4, 0, 0), head=(6, 0, 0), feet=F2, hands=glove_pull(1000))
-S2.P(1016, s2_end, Y2, spine=(4, 0, 0), head=(4, 0, 0), feet=F2, hands={"L": ("body", (V(-0.02, -0.40, 1.16), V(-1, -0.2, 0.1), V(0, 0, -1))), "R": ("body", (V(-0.16, -0.34, 1.22), V(-0.2, -0.3, 1), V(1, 0, 0)))}, curl={"L": (55, 40)})
+S2.P(1016, s2_end, Y2, spine=(4, 0, 0), head=(4, 0, 0), feet=F2, hands={"L": ("body", (V(-0.02, -0.28, 1.24), V(-1, -0.2, 0.1), V(0, 0, -1))), "R": ("body", (V(-0.16, -0.24, 1.30), V(-0.2, -0.3, 1), V(1, 0, 0)))}, curl={"L": (55, 40)})
 S2.P(1030, s2_end + V(0, -0.02, 0), Y2, spine=(12, 0, 0), head=(18, 0, 0), feet=F2, hands={"L": ("rest", dict(fwd=30, out=6, bend=0.4)), "R": ("rest", dict(fwd=30, out=6, bend=0.4))})
 HW = lambda dx: ("world", (V(WIN.x + dx, WIN.y + 0.12, skin_w + 0.02), V(0, -1, -0.6), V(0, 0, -1)))
 S2.P(1050, s2_end + V(0, -0.04, -0.02), Y2, spine=(26, 0, 0), head=(26, 0, 0), feet=F2, hands={"L": HW(0.07), "R": HW(-0.07)})
@@ -638,33 +646,58 @@ stand = gav_mats.get("stand"); head_parts = [gav_mats.get(k) for k in ("body", "
 # rescale the gavel to real size: stick 0.26 m
 for o in gavel:
     o.data.transform(Matrix.Scale(0.36 / 1.292, 4))
+# v007b: re-frame the gavel so its local frame is clean: origin on the stick axis at the head, stick along -Y,
+# head (striking faces) along Z. The source mesh had the stick tilted ~18 deg inside its own frame.
+import numpy as _np
+_st = gav_mats["stick"]
+_P = _np.array([tuple(v.co) for v in _st.data.vertices]); _c = _P.mean(0); _u, _s, _vt = _np.linalg.svd(_P - _c)
+_ax = V(*_vt[0]);
+_hc = sum((o.data.vertices[i].co for o in head_parts if o is not _st for i in range(len(o.data.vertices))), V(0, 0, 0)) / sum(len(o.data.vertices) for o in head_parts if o is not _st)
+if (_hc - V(*_c)).dot(_ax) < 0: _ax = -_ax                         # end -> head
+_org = V(*_c) + _ax * (_hc - V(*_c)).dot(_ax)                     # on the stick axis, level with the head
+_s1, _s2 = gav_mats["side1"], gav_mats["side2"]
+_cen = lambda o: sum((v.co for v in o.data.vertices), V(0, 0, 0)) / len(o.data.vertices)
+_hz = (_cen(_s2) - _cen(_s1)); _hz = (_hz - _ax * _hz.dot(_ax)).normalized()
+_hx = _ax.cross(_hz)
+_F = Matrix((_hx, _ax, _hz)).transposed().to_4x4(); _F.translation = _org
+for o in head_parts:
+    o.data.transform(_F.inverted())
+GSTICK = 0.262 + (_org - V(*_c)).dot(_ax)                          # head -> stick end
 gav = bpy.data.objects.new("Gavel", None); bpy.data.collections["Hearing_Set"].objects.link(gav)
 for o in head_parts:
-    o.parent = gav; o.location = (0, 0, 0)
-stand.location = V(-10.02, 0.12, DAIS_H + 0.785)
-GAV_REST = V(-10.12, 0.42, DAIS_H + 0.80)
-def gkey(f, loc, rz, rx=0.0):
-    gav.location = loc; gav.rotation_euler = (rx, 0, rz); gav.keyframe_insert("location", frame=f); gav.keyframe_insert("rotation_euler", frame=f)
-gkey(1, GAV_REST, R_(10)); gkey(1480, GAV_REST, R_(10))
-GH_LOC = lambda f: gav.matrix_world @ V(0.0, -0.15, 0.03)
+    o.parent = gav; o.location = (0, 0, 0); o.rotation_euler = (0, 0, 0)
+# sound block moved forward and to his right so the stick (0.4 m) can point forward from the fist
+stand.location = V(-9.85, -0.262, DAIS_H + 0.785)
+BLOCK = V(-9.85, -0.10, DAIS_H + 0.848)                            # top centre of the block
+GZ = -69.0                                                         # head forward, handle back toward his right hand
+GAV_REST = V(-9.93, 0.06, DAIS_H + 0.825)
+def gkey(f, loc, rz, rx=0.0, ry=0.0):
+    gav.location = loc; gav.rotation_euler = (rx, ry, rz); gav.keyframe_insert("location", frame=f); gav.keyframe_insert("rotation_euler", frame=f)
+gkey(1, GAV_REST, R_(GZ), 0, R_(90)); gkey(1484, GAV_REST, R_(GZ), 0, R_(90))      # lying on its side on the desk
+GH_LOC = lambda f: gav.matrix_world @ V(0.0, -(GSTICK - 0.07), 0.0)
 def gavel_hand(f):
-    """hammer grip: palm over the handle, fingers wrap across it, thumb on the far side"""
+    """hammer grip: the stick runs across the palm near its end, fingers wrapped round it, thumb over the fingers,
+    knuckles forward-down, head out in front"""
     ev(f); M = gav.matrix_world; R3 = M.to_3x3()
-    grip = M @ V(0.0, -0.20, 0.0)
-    return grip + R3 @ V(-0.045, 0.0, 0.035), (R3 @ V(1, 0, -0.35)).normalized(), (R3 @ V(0, 0, -1)).normalized()
-gkey(1500, GAV_REST + V(0.02, -0.05, 0.12), R_(5), R_(-20))
-gkey(1525, V(-10.14, 0.30, DAIS_H + 1.04), R_(0), R_(-55))
-gkey(1538, V(-10.03, 0.28, DAIS_H + 0.86), R_(0), R_(8))
-gkey(1546, V(-10.04, 0.29, DAIS_H + 0.92), R_(0), R_(-10))
-gkey(1570, V(-10.08, 0.32, DAIS_H + 0.90), R_(0), R_(-5))
-gkey(1710, V(-10.08, 0.32, DAIS_H + 0.90), R_(0), R_(-5))
+    G = M @ V(0.0, -(GSTICK - 0.075), 0.0)
+    Y = (R3 @ V(0, 1, 0)).normalized(); Z = (R3 @ V(0, 0, 1)).normalized(); X = (R3 @ V(1, 0, 0)).normalized()
+    n = -X                                                         # palm faces the stick from his right side
+    d = (Y * 0.42 - Z * 0.90).normalized()                         # knuckles forward-down, stick across the palm
+    return G - d * 0.072 - n * 0.030, d, n
+gkey(1500, V(-9.95, -0.04, DAIS_H + 0.97), R_(GZ), R_(15))
+gkey(1525, V(-9.98, -0.06, DAIS_H + 1.22), R_(GZ), R_(55))       # raised: head up and back over his fist
+gkey(1534, V(-9.90, -0.09, DAIS_H + 1.02), R_(GZ), R_(20))
+gkey(1538, BLOCK + V(0, 0, 0.069), R_(GZ), R_(-5))               # strike: head face flat on the block
+gkey(1546, BLOCK + V(-0.01, 0, 0.12), R_(GZ), R_(8))
+gkey(1560, BLOCK + V(-0.005, 0, 0.069), R_(GZ), R_(-4))      # settles back on the block and he holds it there
+gkey(1710, BLOCK + V(-0.005, 0, 0.069), R_(GZ), R_(-4))
 pos, YW, feet = seated(PA, 0.0)
 for f in (1200, 1300, 1420):
     PA.P(f, pos + V(0.02 * (f % 3), 0, 0), YW, spine=(14, 0, 0), head=(6, 0, 0), feet=feet, hands={"L": desk(PA, "L", 0.0), "R": desk(PA, "R", 0.0)}, face={"brow": 0.4})
-PA.P(1480, pos, YW, spine=(14, 0, -6), head=(10, -10, 0), feet=feet, hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": (78, 45)}, face={"brow": 0.6})
-for f in (1500, 1525, 1538, 1546, 1570, 1710):
+PA.P(1480, pos, YW, spine=(14, 0, -6), head=(10, -10, 0), feet=feet, hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": ((78, 82, 84, 86), 60, -50)}, face={"brow": 0.6})
+for f in (1500, 1525, 1534, 1538, 1546, 1560, 1710):
     PA.P(f, pos + V(0.03 if f == 1538 else 0, 0, 0), YW, spine=(10 if f != 1538 else 20, 0, -8), head=(4 if f != 1538 else 12, -6, 0), feet=feet,
-         hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": (78, 45)}, face={"brow": 0.8})
+         hands={"L": desk(PA, "L", 0.0), "R": ("fn", gavel_hand)}, curl={"R": ((78, 82, 84, 86), 60, -50)}, face={"brow": 0.8})
 PA.bake()
 pos, YW, feet = seated(PBn, -1.2)
 stamp = bpy.data.objects["Stamp"]
@@ -675,19 +708,25 @@ for o in bpy.data.objects:
         o.location = o.location + (CERT - V(-9.8, -0.75, DAIS_H + 0.79))
 def skey(f, loc, rx=0.0):
     stamp.location = loc; stamp.rotation_euler = (rx, 0, R_(35)); stamp.keyframe_insert("location", frame=f); stamp.keyframe_insert("rotation_euler", frame=f)
-ST_REST = V(-10.2, -1.38, DAIS_H + 0.785)
+ST_REST = V(-10.0, -1.42, DAIS_H + 0.785)       # v007b: out of his lap, within an easy reach
 skey(1, ST_REST); skey(1560, ST_REST); skey(1578, ST_REST + V(0.06, 0.1, 0.16), R_(-10)); skey(1592, CERT + V(0, 0, 0.004 + 0.02), R_(0))
 skey(1596, CERT + V(0, 0, 0.004)); skey(1606, CERT + V(0, 0, 0.004)); skey(1625, CERT + V(-0.1, -0.15, 0.10)); skey(1710, CERT + V(-0.12, -0.2, 0.08))
 def stamp_hand(f):
-    """palm on the knob, fingers wrapped over it"""
+    """power grip round the handle: hand upright on his right of it, palm toward the handle, fingers wrapped round
+    the front, thumb opposed over the top of the fingers; he presses down through the fist"""
     ev(f); M = stamp.matrix_world; R3 = M.to_3x3()
-    return M @ V(-0.05, 0.0, 0.15), (R3 @ V(1, 0, -0.45)).normalized(), (R3 @ V(0, 0, -1)).normalized()
+    H = (R3 @ V(0, 0, 1)).normalized()
+    fw = V(1, 0, 0) - H * H.x; fw.normalize()                 # his forward, square to the handle
+    n = H.cross(fw).normalized()                              # palm faces his left (medial for the right hand)
+    d = (fw * 0.97 + H * 0.2).normalized()                    # knuckles forward and slightly up
+    C = M @ V(0, 0, 0.085)                                     # middle of the handle
+    return C - d * 0.07 - n * 0.032, d, n
 key_vis([bpy.data.objects["StampMark"]] + list(bpy.data.objects["StampMark"].children), [(1596, 1710)])
 for f in (1200, 1300, 1400, 1500):
     PBn.P(f, pos, YW, spine=(16, 0, 4), head=(18 if f % 200 else 4, 8, 0), feet=feet, hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": desk(PBn, "R", -1.2, dx=0.05 * (f % 300 == 0))}, face={"brow": 0.3})
 for f in (1560, 1578, 1592, 1596, 1606, 1625):
     PBn.P(f, pos + V(0.04 if f in (1592, 1596) else 0, 0, 0), YW, spine=(18 if f in (1592, 1596) else 10, 0, 4), head=(16, 8, 0), feet=feet,
-          hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": ("fn", stamp_hand)}, curl={"R": (72, 42)}, face={"brow": 0.6})
+          hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": ("fn", stamp_hand)}, curl={"R": ((76, 80, 82, 84), 60, -50)}, face={"brow": 0.6})
 PBn.P(1710, pos, YW, spine=(10, 0, 2), head=(6, 12, 0), feet=feet, hands={"L": desk(PBn, "L", -1.2, dy=0.2), "R": desk(PBn, "R", -1.2)})
 PBn.bake()
 pos, YW, feet = seated(PC, 1.2)
