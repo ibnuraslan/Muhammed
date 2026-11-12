@@ -27,7 +27,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 11 | WW1Assassination | `claude/connect11-ww1-assassination` | `blender/WW1Assassination_v005/` **acting fixed, approved, commit cb6942e (VO sync when your voiceover arrives)** |
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v006/` |
 | 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
-| 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v005/` |
+| 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v007/` **acting fixed, approved, final commit 91f7a3d (VO sync when your voiceover arrives)** |
 | 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v005/` **acting fixed, approved, final commit 66c7cc0 (VO sync when your voiceover arrives)** |
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v003/` |
