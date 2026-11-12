@@ -354,7 +354,8 @@ def a_gc(c, sec):
     stand(an, (knob.x + 0.22, knob.y + 0.36, 0), 0.0)                                # faces -Y, close to the instrument
     nod(an, "spine04", 8); nod(an, "head", 16)
     look(an, c["analyser"].matrix_world @ Vector((0.42, -0.25, 0.15)), 0.6)
-    hand_to(an, "R", knob + Vector((0.0, 0.03, 0.0)), hand_dir=Vector((0, -0.9, -0.2)), curl=40)
+    # the wrist sits a hand's length in front of the knob, so the fingertips rest on it instead of in the panel
+    hand_to(an, "R", knob + Vector((0.0, 0.12, 0.02)), hand_dir=Vector((0, -0.95, -0.15)), curl=30)
 
 
 def a_saratov(c, sec):
@@ -439,7 +440,7 @@ def a_specialists(c, sec):
     pg = c["sheetB"]; pg.location = Vector((1.62, 2.1, 0.868)).lerp(Vector((1.7, 1.9, 0.868)), k)
     # fingertips on the far edge of the page, the forearm low over the table; the hand draws back once it is across
     tip = pg.location + Vector((-0.02, 0.12, 0.095))
-    hand_to(s2, "R", tip.lerp(tip + Vector((0.05, 0.25, 0.0)), back), pole=table_pole(s2, "R"), hand_dir=Vector((0, -0.35, -0.9)), curl=8)
+    hand_to(s2, "R", tip.lerp(tip + Vector((0.05, 0.25, 0.0)), back), pole=table_pole(s2, "R"), hand_dir=Vector((0, -0.9, -0.3)), curl=8)                     # fingers along the page, not down into it
     hand_to(s2, "L", Vector((2.12, 2.18, 0.955)), pole=table_pole(s2, "L"), hand_dir=Vector((0, -0.6, -0.7)), curl=25)
     nod(s2, "spine04", 8); nod(s2, "head", 14); nod(s1, "head", 16); look(s1, pg.location, 0.5)
     hand_to(s1, "L", Vector((1.72, 1.52, 0.915)), pole=table_pole(s1, "L"), hand_dir=Vector((0, 0.7, -0.6)), curl=25)
