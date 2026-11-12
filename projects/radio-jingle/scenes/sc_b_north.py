@@ -61,8 +61,32 @@ def gabled(name, x, y, w, d, h, brick, roof, face_y=-1, lit=(), rng=None):
                 continue
             box(name + "WF", (wx, y - 0.01, wz), (0.95, 0.06, 1.25), fr)
             lit_ = k in lit
-            box(name + "WP", (wx, y - 0.035, wz), (0.82, 0.01, 1.1), emissive("WinLit", (1.0, 0.7, 0.42), 1.4) if lit_ else pbr("WinDark", (0.02, 0.025, 0.03), 0.05, **{'Coat Weight': 1.0}))
+            box(name + "WP", (wx, y - 0.035, wz), (0.82, 0.01, 1.1), emissive("WinLit", (1.0, 0.7, 0.42), 1.4) if lit_ else pbr("WinDark", (0.006, 0.007, 0.008), 0.15, **{'Coat Weight': 0.35}))
+            box(name + "WC", (wx - 0.3, y - 0.04, wz), (0.22, 0.01, 1.05), fabric("NetC", (0.5, 0.48, 0.44), 0.9, 0.2, 200))
             k += 1
+
+
+def motorboat(name, loc, rz, col):
+    """A small harbour motor boat: tapered hull, a white wheelhouse, a short mast (no lettering)."""
+    import bmesh
+    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
+    for v in bm.verts:
+        v.co.x *= 6.0; v.co.y *= 2.2; v.co.z *= 1.0
+        if v.co.x > 0:                                   # bow: pinch and lift
+            v.co.y *= 0.15; v.co.z += 0.25 if v.co.z > 0 else 0.15
+        if v.co.z < 0:
+            v.co.y *= 0.55
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    hull = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(hull)
+    me.materials.append(pbr(name + "Hull", col, 0.35, **{'Coat Weight': 0.5}))
+    bv = hull.modifiers.new("bv", 'BEVEL'); bv.width = 0.12; bv.segments = 3
+    cab = box(name + "Cab", (-0.6, 0, 0.95), (1.8, 1.4, 1.0), pbr("CabW", (0.85, 0.85, 0.83), 0.4), bevel=0.05)
+    win = box(name + "CabWin", (0.31, 0, 1.1), (0.02, 1.2, 0.4), pbr("CabGlass", (0.02, 0.03, 0.035), 0.05, **{'Coat Weight': 1.0}))
+    mast = cyl(name + "Mast", (-0.9, 0, 2.2), 0.04, 1.8, pbr("MastM", (0.75, 0.75, 0.75), 0.3, 0.8), verts=8)
+    for o in (cab, win, mast):
+        o.parent = hull
+    hull.location = loc; hull.rotation_euler = (0, 0, rz)
+    return hull
 
 
 def build(variant=None):
@@ -96,7 +120,8 @@ def build(variant=None):
         except Exception:
             pass
         # boats bobbing at the quay
-        c["boats"] = B.ph_instances("ship_pinnace", [((-14 + k * 6.5, -2.6 - (k % 2) * 1.6, -1.2), math.radians(90 + rng.uniform(-8, 8)), 0.8) for k in range(6)])
+        cols = [(0.12, 0.18, 0.3), (0.7, 0.7, 0.68), (0.35, 0.08, 0.06), (0.1, 0.25, 0.2)]
+        c["boats"] = [motorboat(f"Boat{k}", (-16 + k * 4.2, -3.6 - (k % 2) * 0.6, -1.0), math.radians(90 + rng.uniform(-5, 5)), cols[k % 4]) for k in range(7)]
         # a flag on a short mast at the quay
         mast = cyl("Mast", (-4.0, 0.8, 2.5), 0.04, 5.0, pbr("MastW", (0.85, 0.85, 0.85), 0.4), verts=12)
         bpy.ops.mesh.primitive_grid_add(x_subdivisions=24, y_subdivisions=16, size=1, location=(-3.55, 0.8, 4.6), rotation=(math.radians(90), 0, 0))
@@ -131,8 +156,8 @@ def build(variant=None):
                 bpy.context.active_object.data.materials.append(rope if k % 2 else rope2)
                 cyl("Hook", (0.3 + k * 0.5, 9.93, 1.86), 0.008, 0.1, pbr("HookS", (0.5, 0.5, 0.5), 0.3, 1.0), verts=8, rot=(math.radians(90), 0, 0))
             for k in range(9):                                  # fenders hanging from a rail
-                cyl("Fender", (0.0 + k * 0.38, 8.6, 1.55), 0.09, 0.55, fender_m[k % 3], verts=24)
-            box("Rail", (1.5, 8.6, 1.86), (3.6, 0.03, 0.03), pbr("RailS", (0.5, 0.5, 0.52), 0.3, 1.0))
+                cyl("Fender", (-0.3, 6.6 + k * 0.36, 1.55), 0.09, 0.55, fender_m[k % 3], verts=24)
+            box("Rail", (-0.3, 8.0, 1.86), (0.03, 3.4, 0.03), pbr("RailS", (0.5, 0.5, 0.52), 0.3, 1.0))
             ph.model("ocean_buoy", loc=(4.6, 9.4, 0.0), rot_z=0.4, scale=0.5)
             ph.model("life_jacket", loc=(4.9, 8.5, 0.9), rot_z=-1.2) if True else None
             ph.model("WoodenTable_03", loc=(3.0, 7.2, 0.0), rot_z=0.0)
@@ -195,7 +220,7 @@ def anim(c, t, move):
     v = c["variant"]
     if v.startswith("harbour"):
         for k, b in enumerate(c["boats"]):
-            b.location.z = -1.2 + 0.06 * math.sin(sec * 1.1 + k * 1.3)
+            b.location.z = -1.0 + 0.05 * math.sin(sec * 1.1 + k * 1.3)
             b.rotation_euler = (0.03 * math.sin(sec * 0.9 + k), 0.02 * math.sin(sec * 1.3 + k * 2), b.rotation_euler.z)
         man = c["man"]
         if move == "lock":
@@ -279,7 +304,7 @@ def anim(c, t, move):
                     h = offs[k]
                     B.walk_to(h, p0 + Vector((sx, 0.1, 0)), p1 + Vector((sx, 0.1, 0)), u, 3.0 * u + 0.001, stride=18, swing=8); B.ground(h, 0.06)
                 for h in offs[2:]:
-                    B.stand(h, (-4.0 + 1.0 * offs.index(h), -1.2, 0), math.radians(160)); B.ground(h, 0.06)
+                    B.stand(h, (-4.0 + 1.0 * offs.index(h), -1.2, 0), math.radians(10)); B.ground(h, 0.06)
                 if sec > 3.6:                                  # in the car: he is out of sight, the car pulls away
                     B.stand(man, (0, 0, 0), 0, z=-40)
                     for h in offs[:2]:
@@ -294,7 +319,7 @@ def cam(a, b, tgt, lens):
 
 def cam_quay(c, t):
     e = ease(t)
-    return (Vector((-14.0, -9.0, 3.2)), Vector((-8.0 + 10.0 * e, 3.0, 2.0)), 28)
+    return (Vector((-24.0, -19.0, 4.5)), Vector((-8.0 + 8.0 * e, 3.0, 2.5)), 30)
 
 
 MOVES = {
@@ -303,7 +328,7 @@ MOVES = {
                   anim=lambda c, t: anim(c, t, "watch"), focus=lambda c, t: Vector((SHOP_DOOR.x, 5.8, 1.2))),
     "lock": dict(kind="anim", dof=3.2, cam=cam((-3.5, 1.2, 1.6), (-3.0, 1.4, 1.58), (SHOP_DOOR.x + 1.0, 5.5, 1.2), 35),
                  anim=lambda c, t: anim(c, t, "lock"), focus=lambda c, t: c["man"].bone_head("spine03")),
-    "shop": dict(kind="anim", dof=2.8, cam=cam((2.0, 6.7, 1.6), (2.4, 7.2, 1.55), (3.9, 9.7, 1.35), 32),
+    "shop": dict(kind="anim", dof=2.8, cam=cam((0.2, 6.3, 1.7), (0.6, 6.6, 1.65), (3.9, 9.7, 1.35), 28),
                  anim=lambda c, t: anim(c, t, "shop"), focus=lambda c, t: c["man"].bone_head("spine03")),
     "boxes": dict(kind="anim", dof=4.0, cam=cam((2.6, -1.0, 1.5), (2.3, -0.6, 1.48), (0.0, 4.5, 1.4), 30),
                   anim=lambda c, t: anim(c, t, "boxes"), focus=lambda c, t: c["offs"][0].bone_head("spine03")),
