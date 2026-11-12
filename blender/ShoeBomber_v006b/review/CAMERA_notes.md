@@ -1,0 +1,12 @@
+# ShoeBomber v006b: camera only (the director approved v006's acting and hands)
+- The client's spec is one continuous camera. v006's hard cuts (213, 377, 389, 403, 437, 479, 521, 546, 575, 649, 775) are now real moves.
+- The `cam_search.py` framings stay as key poses. Moves between them run 13–40 frames with Catmull ease:
+  - 199→232: up the aisle at z 1.7 to the attendant.
+  - 455→481 and 508→534: over the seat backs at z 1.68.
+  - 566→594: out toward the aisle, then up (it was clipping an overhead bin lip).
+  - 625→655: down to the steward's face.
+- Each beat framing is reached by its beat frame (199, 373, 481, 655, 769). No beat frame moved.
+- Checks:
+  - `scripts/cam_speed_check.py`, the director's acceptance check: no frame-to-frame move over 0.25 m in 1–1060.
+  - `scripts/cam_inside_check.py` (wipe card hidden): the camera is inside geometry only at the cloud wipe, 1253.
+- Hands and acting are the same as v006 (60a59c2). The contact snap and push-out passes were re-run because the snap depends on what the camera sees.

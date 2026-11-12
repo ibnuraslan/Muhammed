@@ -410,60 +410,55 @@ def op(name, f, off=(0, 0, 0)):
 # v006: cabin camera as shots joined by cuts (CUTS); every static shot was chosen with qa_check's own criteria (face readable,
 # character fills the frame, nothing in front of the lens) by scripts/cam_search.py
 P = lambda x, y, z: V((x, y, z))
-CAB = [
-  [  # beat 1: his face over the shoe and the match
+CAB = [[
+    # ONE continuous camera (client spec). The cam_search framings are key poses; holds are repeated keys and
+    # moves between them are 20-40 f with Catmull ease, routed over the seat backs (z >= 1.6) where a straight move would cross a row.
+    # beat 1: his face over the shoe and the match
     (1,   V((-0.86, 0.44, 1.32)), (op("Shoe_R", 1, (0, 0, 0.1)) * 0.5 + bp("Bomber", "head", 1) * 0.5), 26),
     (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
     (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.45 + bp("Bomber", "head", 100) * 0.55), 24),
     (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
-    (198, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
-    (212, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 212, (0, 0.2, -0.3)), 26),
-  ], [  # beat 2: CUT to the attendant walking down the aisle, dolly back ahead of her, push to her eyes (sniff)
-    (213, P(0.068, 5.165, 1.121), bp("Attendant", "head", 213, (0, 0, -0.1)), 28),
-    (222, P(0.068, 5.165, 1.121), bp("Attendant", "head", 222, (0, 0, -0.1)), 28),
+    (182, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 182, (0, 0.2, -0.3)), 26),
+    (199, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 199, (0, 0.2, -0.3)), 26),
+    # beat 2: travel up the aisle above head height to the attendant walking down it, dolly back ahead of her, push to her eyes
+    (216, V((0.02, 2.40, 1.70)), bp("Attendant", "head", 216, (0, 0, -0.1)), 26),
     (232, P(0.064, 4.198, 1.041), bp("Attendant", "head", 232, (0, 0, -0.1)), 28),
     (244, P(0.064, 4.198, 1.041), bp("Attendant", "head", 244, (0, 0, -0.1)), 28),
     (265, bp("Attendant", "spine03", 265, (0.04, -1.5, 0.15)), bp("Attendant", "head", 265, (0, 0, -0.25)), 28),
     (300, bp("Attendant", "spine03", 300, (0.05, -1.3, 0.35)), bp("Attendant", "head", 300, (0, 0, -0.1)), 30),
     (330, V((0.16, 1.80, 1.50)), bp("Attendant", "head", 330, (0, 0, -0.05)), 42),
-    (376, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 376, (0, -0.02, -0.02)), 52),
-  ], [  # beat 3: CUT low from the row-3 aisle seat: she comes down the aisle at us and stops at his row
-    (377, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 377, (0, 0, -0.1)), 28),
-    (388, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 388, (0, 0, -0.1)), 28),
-  ], [
-    (389, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 389, (0, 0, -0.1)), 28),
-    (402, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 402, (0, 0, -0.1)), 28),
-  ], [  # CUT: from the seat row as she reaches his row
-    (403, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 403, (0, 0, -0.1)), 28),
-    (436, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 436, (0, 0, -0.1)), 28),
-  ], [  # CUT: reverse from row 4: her face as she catches him
-    (437, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 437, (0, 0, -0.1)), 28),
-    (478, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 478, (0, 0, -0.1)), 28),
-  ], [  # beat 4: CUT: PaxA lunges in
-    (479, P(0.154, -0.254, 1.057), bp("PaxA", "head", 479), 28),
-    (520, P(0.154, -0.254, 1.057), bp("PaxA", "head", 520), 28),
-  ], [  # CUT: the attendant hauling him into the aisle
-    (521, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
-    (545, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 545, (0, 0, -0.1)), 28),
-  ], [  # CUT: from row 4 as she steps up to his head
-    (546, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 546, (0, 0, -0.1)), 28),
-    (574, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 574, (0, 0, -0.1)), 28),
-  ], [  # CUT: high over the pin
-    (575, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 575, (0, 0.3, 0)), 22),
-    (600, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
-    (648, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 648, (0, 0.2, 0)), 22),
-  ], [  # beat 5: CUT low to the steward's face as he injects, push to the arm, two-shot on "finally sedated"
-    (649, P(-0.192, -0.419, 0.593), bp("Steward", "head", 649), 28),
+    (373, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 373, (0, -0.02, -0.02)), 52),
+    # beat 3: dolly back down the aisle ahead of her, drift over to the seat row as she reaches his row and catches him
+    (386, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 386, (0, 0, -0.1)), 34),
+    (398, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 398, (0, 0, -0.1)), 28),
+    (418, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 418, (0, 0, -0.1)), 28),
+    (428, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 428, (0, 0, -0.1)), 28),
+    (446, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 446, (0, 0, -0.1)), 28),
+    (455, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 455, (0, 0, -0.1)), 28),
+    # beat 4: up over the seat backs and down into the aisle on PaxA as he lunges (reached by 481)
+    (468, V((-0.33, 0.47, 1.68)), bp("PaxA", "head", 468), 26),
+    (481, P(0.154, -0.254, 1.057), bp("PaxA", "head", 481), 28),
+    (508, P(0.154, -0.254, 1.057), bp("PaxA", "head", 508), 28),
+    (521, V((-0.37, 0.39, 1.68)), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
+    (534, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 534, (0, 0, -0.1)), 28),
+    (540, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 540, (0, 0, -0.1)), 28),
+    (556, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 556, (0, 0, -0.1)), 28),
+    (566, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 566, (0, 0, -0.1)), 28),
+    (580, V((-0.30, 1.45, 1.65)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),
+    (594, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),
+    (606, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
+    (625, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),
+    # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
+    (640, V((-0.12, 0.45, 1.15)), bp("Steward", "head", 640), 26),
+    (655, P(-0.192, -0.419, 0.593), bp("Steward", "head", 655), 28),
     (668, P(-0.192, -0.419, 0.593), bp("Steward", "head", 668), 28),
     (690, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 690), 32),
     (712, V((0.30, 0.95, 0.80)), bp("Bomber", "upperarm02.R", 712), 32),
     (736, V((-0.02, 0.80, 1.20)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
-    (756, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 756) + bp("Attendant", "head", 756)) / 2 + V((0, 0, -0.08)), 20),
-    (772, P(0.168, 0.702, 1.191), bp("Attendant", "head", 772, (0, 0, -0.1)), 28),
-    (774, P(0.168, 0.702, 1.191), bp("Attendant", "head", 774, (0, 0, -0.1)), 28),
-  ], [  # beat 6 continues: CUT to his feet
-    (775, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 775), 26),
-    # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
+    (752, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 752) + bp("Attendant", "head", 752)) / 2 + V((0, 0, -0.08)), 20),
+    (769, P(0.168, 0.702, 1.191), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
+    (776, P(0.168, 0.702, 1.191), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
+    # beat 6: rise to his feet -> kneeling level -> with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
     (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
     (920, V((0.12, 0.55, 1.35)), ((op("Shoe_L", 920) + op("Shoe_R", 920)) / 2 * 0.5 + bp("Attendant", "head", 920) * 0.5), 26),
