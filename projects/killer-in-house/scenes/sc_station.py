@@ -41,7 +41,7 @@ def build(variant=None):
     c["typer"].location = (2.0, 1.6, 0.77)
     H.point((2.0, 1.4, 1.6), 8, (1.0, 0.8, 0.6), 0.2)
     c["file"] = box("FilePhoto", (0, 0, -20), (0.18, 0.006, 0.24), pbr("Photo", (0.55, 0.53, 0.5), 0.4))
-    ph.model("dining_chair_02", loc=(0, -0.75, 0), rot_z=math.pi)
+    ph.model("dining_chair_02", loc=(0, -1.0, 0), rot_z=math.pi)
     ph.model("dining_chair_02", loc=(0, 0.75, 0), rot_z=0.0)
     ph.model("dining_chair_02", loc=(2.0, 2.2, 0), rot_z=0.0)
     c["thin"] = H.person("Thin", "thin"); c["cap"] = H.person("Captain", "captain")
@@ -56,8 +56,10 @@ def seat(h, loc, rz, lean=8):
 
 
 def anim_common(c, sec, lean_in=0.0):
-    seat(c["thin"], Vector((0, -0.75, 0)), math.pi, lean=24)
+    seat(c["thin"], Vector((0, -1.0, 0)), math.pi, lean=18)
     H.rotl(c["thin"], "head", (1, 0, 0), 28)
+    for sd, sg in (("L", 1), ("R", -1)):          # hands in his lap, below the table edge
+        c["thin"].aim(f"upperarm01.{sd}", (sg * 0.1, 0.2, -1)); c["thin"].aim(f"lowerarm01.{sd}", (sg * -0.25, 0.8, -0.35))
     seat(c["cap"], Vector((0, 0.75, 0)), 0.0, lean=10 + 20 * lean_in)
     # his hands stay in his lap (pose_sit), out of sight under the table edge
 

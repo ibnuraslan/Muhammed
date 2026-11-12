@@ -882,7 +882,7 @@ def person(name, kind):
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
-        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.32), hair="long01", hv=0.3, hat=False),
+        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.32), hair="short02", hv=0.2, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]
@@ -941,15 +941,19 @@ def ragged(h):
     a = N.new("ShaderNodeAttribute"); a.attribute_name = "beard"; a.attribute_type = 'GEOMETRY'
     tc = N.new("ShaderNodeTexCoord"); n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 900; L.new(tc.outputs['Object'], n.inputs['Vector'])
     f = N.new("ShaderNodeMath"); f.operation = 'MULTIPLY'; L.new(a.outputs['Fac'], f.inputs[0]); L.new(n.outputs['Fac'], f.inputs[1])
-    f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; f2.inputs[1].default_value = 1.6; f2.use_clamp = True; L.new(f.outputs[0], f2.inputs[0])
+    f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; f2.inputs[1].default_value = 2.4; f2.use_clamp = True; L.new(f.outputs[0], f2.inputs[0])
     src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(f2.outputs[0], mx.inputs['Factor'])
     if src: L.new(src, mx.inputs[6])
     mx.inputs[7].default_value = (0.09, 0.07, 0.055, 1)
     L.new(mx.outputs[2], p.inputs['Base Color'])
     for o in h.parts:            # hair: bigger, matted
-        if "short02" in o.name:
-            o.modifiers.new("matted", 'DISPLACE').strength = 0.012
+        if "bob01" in o.name or "short02" in o.name:
+            tx = bpy.data.textures.new(o.name + "_mat", 'CLOUDS'); tx.noise_scale = 0.03
+            dm = o.modifiers.new("matted", 'DISPLACE'); dm.texture = tx; dm.strength = 0.03; dm.mid_level = 0.3
+            for m in o.data.materials:
+                if m and m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
+                    m.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.9
     return h
 
 

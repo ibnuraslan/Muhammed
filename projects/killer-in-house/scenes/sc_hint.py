@@ -624,6 +624,14 @@ def _():
     return cam, anim
 
 
+def thin_on_bed(c, sec):
+    h = thin_man(c)
+    reset_pose(h); pose_sit(h, lean=22)
+    h.arm.rotation_euler = (0, 0, math.radians(0)); h.arm.location = (-3.2, -3.5, F2); bpy.context.view_layer.update(); H.ground_to(h, F2)
+    H.rotl(h, "head", (1, 0, 0), 30 + 2 * math.sin(sec))
+    return h
+
+
 @move("gaunt_bed", "night", 4.5, cast=("d1:detective",), rooms=("upstairs", "attic"))
 def _():
     def anim(c, t):
@@ -657,7 +665,7 @@ def zarnow(c, sec, head_up):
         ch, _ = ph.model("dining_chair_02", loc=(HATCH[0], HATCH[1] - 0.05, F2), rot_z=math.pi); c["stool"] = ch
         c["crate"] = box("Crate", (HATCH[0], HATCH[1] - 0.05, F2 + 0.47 + 0.18), (0.42, 0.36, 0.36), H.mat("raw"), bevel=0.01)
         c["torch"] = H.flashlight("ZTorch"); c["torch"].data.energy = 260
-        c["cfill"] = H.point((-1.1, -1.6, F2 + 1.0), 4, (0.55, 0.68, 1.0), 0.3)
+        c["cfill"] = H.point((-1.1, -1.6, F2 + 1.0), 22, (0.55, 0.68, 1.0), 0.3)
     h = P(c, "z")
     base = F2 + 0.83
     H.stand_at(h, (HATCH[0], HATCH[1] - 0.04, base), math.radians(90), z=base - 0.25 + 0.25 * head_up)
@@ -677,7 +685,7 @@ def _():
         H.aim_obj(c["torch"], hand + Vector((0, 0, 0.1)), Vector((HATCH[0] + 1.5, HATCH[1] + 1.5, EAVE + 0.3)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.75, -0.33, F2 + 0.35)).lerp(Vector((-0.77, -0.35, F2 + 0.45)), e), Vector((HATCH[0], HATCH[1], C2 - 0.25)), 20, (0, -1, 0))
+        return (Vector((-1.05, -2.15, F2 + 0.55)).lerp(Vector((-1.08, -1.95, F2 + 0.6)), e), Vector((HATCH[0], HATCH[1], C2 - 0.35)), 22)
     return cam, anim
 
 
@@ -737,14 +745,15 @@ def _():
         sec = t * DUR["recoil"]
         down = ease(min(1.0, max(0.0, (sec - 0.4) / 0.8)))
         h = zarnow(c, sec, 1.0 - down)
+        h.arm.location.z -= 0.35 * down; bpy.context.view_layer.update()
         H.rotl(h, "spine03", (1, 0, 0), 20 * down); H.rotl(h, "head", (0, 0, 1), -35 * down); H.rotl(h, "head", (1, 0, 0), 20 * down)
         hd = h.bone_head("head")
-        reach(h, "R", hd + Vector((0.12, -0.15, -0.08)), Vector((1, 0, -1)), Vector((0, 1, 0.3)))
+        reach(h, "R", hd + Vector((0.06, -0.12, -0.1)), Vector((1, 0, -1)), Vector((0, 1, 0.3)))
         reach(h, "L", Vector((HATCH[0] - 0.3, HATCH[1] - 0.3, F2 + 1.4)), Vector((0, 0, -1)), Vector((-1, 0, 0)))
         H.aim_obj(c["torch"], h.bone_tail("wrist.L"), Vector((HATCH[0] + 0.5, HATCH[1] - 1.5, F2)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.15, -3.1, F2 + 1.25)).lerp(Vector((-1.12, -2.85, F2 + 1.25)), e), Vector((-1.1, -0.95, F2 + 1.75)), 28)
+        return (Vector((-1.15, -3.3, F2 + 1.3)).lerp(Vector((-1.12, -3.1, F2 + 1.3)), e), Vector((-1.1, -1.0, F2 + 1.55)), 24)
     return cam, anim
 
 
@@ -802,7 +811,7 @@ def _():
         H.rotl(h, "spine05", (0, 0, 1), 3 * math.sin(0.8 * sec))
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
-        return (Vector((hx + 2.4, hy + 0.1, EAVE + 0.5)).lerp(Vector((hx + 2.1, hy + 0.3, EAVE + 0.5)), e), Vector((hx + 0.2, hy + 1.3, EAVE + 0.25)), 30)
+        return (Vector((hx + 3.1, hy - 0.3, EAVE + 0.6)).lerp(Vector((hx + 2.8, hy - 0.1, EAVE + 0.6)), e), Vector((hx + 0.1, hy + 1.5, EAVE + 0.2)), 24)
     return cam, anim
 
 

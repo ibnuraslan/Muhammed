@@ -138,7 +138,7 @@ def _():
         H.look(h, 6, -4)
     def cam(c, t):
         e = ease(t); y = ROAD_Y - 8.0
-        return (Vector((-6.95, y - 1.65, G + 1.72)).lerp(Vector((-6.9, y - 1.45, G + 1.7)), e), Vector((-2.0, -D2, 1.6)), 32)
+        return (Vector((-7.2, y - 1.95, G + 1.9)).lerp(Vector((-7.1, y - 1.7, G + 1.88)), e), Vector((-6.4, y, G + 1.75)), 28)
     return cam, anim
 
 
