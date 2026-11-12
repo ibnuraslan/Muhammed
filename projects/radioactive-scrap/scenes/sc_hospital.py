@@ -324,11 +324,21 @@ def build(variant=None):
     c["cots"] = []
     for k in range(3):
         cc = CLINIC + Vector((-2.4 + k * 2.0, 1.3, 0))
-        join([box("CotBed", (0, 0, 0.45), (0.75, 1.9, 0.12), fabric(f"CotSheet{k}", (0.8, 0.8, 0.76), 0.9, 0.3, 400), bevel=0.03),
-              box("CotFrame", (0, 0, 0.36), (0.78, 1.92, 0.04), painted_steel("CotFrame", (0.6, 0.62, 0.6), 0.5, 0.4))], f"Cot{k}").location = cc
-        drip_stand(f"CDrip{k}", cc + Vector((-0.55, 0.7, 0)))
-        blanket(f"CBlanket{k}", cc + Vector((0, -0.25, 0)), col=(0.45, 0.35, 0.3), z=0.55)
+        iron_bed(f"Cot{k}", cc)
+        drip_stand(f"CDrip{k}", cc + Vector((-0.6, 0.7, 0)), fill=0.6)
+        blanket(f"CBlanket{k}", cc + Vector((0, -0.27, 0)), col=[(0.45, 0.35, 0.3), (0.36, 0.38, 0.42), (0.42, 0.4, 0.3)][k], length=1.48, z=0.8, thick=0.22)
+        box(f"CPillow{k}", cc + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"CPillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
         c["cots"].append(cc)
+    # small 1998 clinic: a glass-fronted cabinet, a sink with a mirror, a chair, a calendar, a window onto the dark street
+    ph_model("vintage_cabinet_01", loc=CLINIC + Vector((3.1, 1.6, 0)), rot_z=-math.pi / 2)
+    porcelain = pbr("Porcelain", (0.88, 0.88, 0.85), 0.15, 0.0, **{'Coat Weight': 0.5})
+    box("Sink", CLINIC + Vector((3.2, -0.9, 0.85)), (0.4, 0.55, 0.18), porcelain, bevel=0.04)
+    cyl("SinkPedestal", CLINIC + Vector((3.25, -0.9, 0.4)), 0.09, 0.8, porcelain, verts=14)
+    cyl("Tap", CLINIC + Vector((3.4, -0.9, 1.02)), 0.012, 0.14, pbr("Chrome", (0.8, 0.8, 0.8), 0.1, 1.0), verts=8)
+    box("Mirror", CLINIC + Vector((3.48, -0.9, 1.5)), (0.02, 0.45, 0.55), pbr("MirrorM", (0.9, 0.9, 0.9), 0.02, 1.0))
+    ph_model("WoodenChair_01", loc=CLINIC + Vector((1.6, 0.4, 0)), rot_z=2.4)
+    box("Calendar", CLINIC + Vector((-3.48, 0.5, 1.6)), (0.02, 0.35, 0.5), pbr("CalendarM", (0.85, 0.82, 0.75), 0.7))
+    window_view(CLINIC + Vector((-1.5, -2.5, 1.6)), "S", seed=41, dmin=14, n_blocks=3)
     # night street outside the clinic door
     box("ClinicFacade", CLINIC + Vector((0, -2.62, 1.4)), (12, 0.02, 2.8), ph_mat("plastered_wall_04", 0.4, (0.6, 0.55, 0.47), name="ClinicPlaster", tint=(0.9, 0.85, 0.75))).hide_render = True
     lamp = bpy.data.lights.new("ClinicStreetLamp", 'SPOT'); lamp.energy = 700; lamp.color = (1.0, 0.68, 0.38); lamp.spot_size = math.radians(100)
@@ -681,16 +691,17 @@ def c4_13b(c, t):
     c["focus"] = COR + Vector((14.0, 0, 1.3))
 
 
-def c1_11a(c, t):         # local clinic, evening: a nurse adjusts a drip above the cots (medium)
+def c1_11a(c, t):         # local clinic, evening: a nurse adjusts the drip line at shoulder height beside the beds (medium)
     sec = S("ch1_11a", t); hide(c, ("nurse", "m1", "m2", "pat2"))
     for nm, cc in (("m1", c["cots"][0]), ("m2", c["cots"][1]), ("pat2", c["cots"][2])):
-        lie_in_bed(c["people"][nm], cc + Vector((0, 0.85, 0)), (0, -1), 0.51)
-    h = c["people"]["nurse"]; pole = c["cots"][1] + Vector((-0.55, 0.7, 0)); loc = pole + Vector((-0.3, -0.75, 0))
-    stand_at(h, loc, pole)
+        lie_in_bed(c["people"][nm], cc + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    h = c["people"]["nurse"]; pole = c["cots"][1] + Vector((-0.6, 0.7, 0)); loc = pole + Vector((-0.25, -0.5, 0))
+    stand_at(h, loc, pole + Vector((0.12, 0, 0)))
     sd = forward(h).cross(Vector((0, 0, 1)))
-    reach(h, "R", pole + Vector((0.1, -0.05, 1.42 + 0.03 * math.sin(sec * 2))), Vector((sd.x, sd.y, -1.0)), forward(h))
+    sh = h.bone_head("upperarm01.R").z
+    reach(h, "R", pole + Vector((0.12, -0.04, sh - 0.05 + 0.02 * math.sin(sec * 2))), Vector((sd.x, sd.y, -1.0)), forward(h))
     fingers_curl(h, 60, thumb=40)
-    h.rot("head", sd, 10)
+    h.rot("head", sd, -4)
     c["focus"] = h.bone_head("head")
 
 

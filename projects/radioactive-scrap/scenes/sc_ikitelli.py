@@ -740,6 +740,7 @@ def c1_4a(c, t):
     for k, (nm, off) in enumerate((("bro1", (-2.4, 0.6)), ("bro2", (0.2, 1.5)), ("worker", (2.6, -0.2)), ("rel1", (-0.8, -1.8)), ("rel3", (1.6, -1.9)))):
         p = L0 + Vector((*off, 0)); stand_at(c["people"][nm], p, L0, crossed=(k == 3), hands_pockets=(k == 4))
     c["crate"].location = c["cont2"].location; c["crate"].rotation_euler = (0, 0, -0.2)
+    c["cam"].data.shift_y = -0.28                  # level camera + lens shift: verticals stay vertical
     c["focus"] = L0 + Vector((0, 0, 1))
 
 
@@ -859,11 +860,14 @@ def c1_8b(c, t):          # wide morning, from the street side: bucket peels the
     c["focus"] = edge
 
 
-def c1_9a(c, t):
-    sec = S("ch1_9a", t); stage(c, "yard", shells=(70, 78), people=("rel1", "rel2", "rel3", "kid1"))
-    for k, (nm, p) in enumerate((("rel1", (-5.6, 3.7)), ("rel2", (-4.8, 3.5)), ("rel3", (-3.6, 3.9)), ("kid1", (-2.9, 3.6)))):
-        stand_at(c["people"][nm], Vector((*p, 0)), C2, hands_pockets=(k != 1), crossed=(k == 1))
-        c["people"][nm].rot("head", (0, 0, 1), 4 * math.sin(sec * 0.7 + k))
+def c1_9a(c, t):           # relatives watch from by the house wall: arms crossed, coat pockets, one arm folded
+    sec = S("ch1_9a", t); stage(c, "yard", shells=(70, 78), people=("rel1", "rel2", "rel3"))
+    for k, (nm, p) in enumerate((("rel1", (-5.6, 3.7)), ("rel2", (-4.8, 3.5)), ("rel3", (-3.7, 3.9)))):
+        h = c["people"][nm]
+        stand_at(h, Vector((*p, 0)), C2, crossed=(k != 1))
+        if k == 1:
+            arms_relaxed(h)
+        h.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.7 + k))
     c["focus"] = Vector((-4.5, 3.7, 1.5))
 
 
@@ -1006,7 +1010,7 @@ SHOTS = {
     "intro_4b": ("dusk", i4b, C((-5.5, 1.0, 1.6), (-4.0, 4.0, 1.55), (6.0, 11.5, 1.4), 28), 5.6),
     "ch1_1a": ("drive", c1_1a, C((-26, -0.8, 13), (-22, -0.8, 4.5), (-4, -4, 1.2), 28), None),
     "ch1_1b": ("drive", c1_1b, C((-0.5, -1.8, 1.5), (-0.2, -1.5, 1.5), (6.0, 4.2, 1.2), 35), 4.0),
-    "ch1_4a": ("lot", c1_4a, C((6.0, -18.0, 4.5), (5.0, -17.0, 4.0), (0.0, -10.0, 0.8), 28), None),
+    "ch1_4a": ("lot", c1_4a, C((6.0, -18.0, 4.2), (5.0, -17.0, 4.2), (0.0, -10.0, 4.2), 28), None),
     "ch1_4b": ("lot", c1_4b, C((LOT.x + 3.2, LOT.y - 3.4, 1.3), (LOT.x + 2.9, LOT.y - 3.0, 1.3), (LOT.x + 0.4, LOT.y - 0.8, 0.9), 35), 2.8),
     "ch1_5a": ("lot", c1_5a, C((LOT.x + 2.8, LOT.y - 2.5, 1.1), (LOT.x + 2.5, LOT.y - 2.9, 1.1), (LOT.x - 1.2, LOT.y - 1.6, 0.8), 32), 4.0),
     "ch1_5b": ("lot", c1_5b, C((LOT.x - 1.2, LOT.y - 4.5, 1.6), (LOT.x - 1.2, LOT.y - 3.9, 1.6), (LOT.x - 1.2, LOT.y + 0.5, 0.9), 32), 2.8),

@@ -70,7 +70,7 @@ def build(variant=None):
     # a recessed mouth: a deep soot-black frame around an opening, refractory cheeks lit from within, melt glow at the back
     for (dx, dz, w, h_) in ((0, 0.62, 1.9, 0.5), (0, -0.62, 1.9, 0.5) , (-0.78, 0, 0.35, 1.75), (0.78, 0, 0.35, 1.75)):
         box("MouthFrame", FUR + Vector((dx, -2.75, 1.45 + dz)), (w, 0.9, h_), soot)
-    glow_m = molten("FurnaceGlow", 5.0)
+    glow_m = molten("FurnaceGlow", 9.0 if v == "hot" else 5.0)     # white-hot at the back, orange cheeks
     cheek = molten("FurnaceCheek", 1.2)
     box("Mouth", FUR + Vector((0, -2.3, 1.45)), (1.25, 0.02, 0.8), glow_m)
     for dx in (-0.6, 0.6):

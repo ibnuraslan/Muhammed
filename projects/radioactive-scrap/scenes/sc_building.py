@@ -44,7 +44,7 @@ def build(variant=None):
     puddles(rng, ((-20, -16), (20, -8)), 10, size=(0.5, 1.5), z=0.01)
     # the warehouse room: brick walls, concrete floor, steel roof trusses, high windows, big front doors
     brick = ph_mat("brick_wall_02", 0.5, (0.4, 0.25, 0.2), name="WHBrick")
-    floor = ph_mat("concrete_floor_worn_001", 0.3, (0.38, 0.37, 0.35), name="WHFloor")
+    floor = ph_mat("concrete_floor_damaged_01", 0.12, (0.36, 0.35, 0.33), name="WHFloor", tint=(0.62, 0.6, 0.57))
     room("WH", Vector((0, 2.0, 0)), 18, 16, 6.0, floor, brick, ceil_m=ph_mat("rusty_corrugated_iron", 0.4, (0.3, 0.3, 0.3), name="WHRoof"),
          windows=[("N", -5.0, 3.6, 2.4, 1.6), ("N", 0.0, 3.6, 2.4, 1.6), ("N", 5.0, 3.6, 2.4, 1.6)],
          doors=[("S", -0.6, 0, 4.0, 3.6), ("E", -1.0, 0, 2.0, 2.6)])
@@ -70,16 +70,37 @@ def build(variant=None):
     daylight_window(Vector((14.0, 5.2, 2.3)), "N", (1.6, 1.6), energy=200)
     for k in range(3):
         tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=110 if v != "dim" else 90)
-    # rubbish being cleared: crates, boxes, broken chairs, a desk, rolled carpet, an old cabinet
-    for k in range(10):
-        ph_model("cardboard_box_01", loc=(rng.uniform(-7.5, -3.5), rng.uniform(2, 8), 0.0), rot_z=rng.uniform(0, 3))
-    for k in range(4):
-        ph_model("wooden_crate_01", loc=(rng.uniform(3, 7.5), rng.uniform(3, 8), 0.0), rot_z=rng.uniform(0, 3))
-    for aid, loc, rz in (("SchoolChair_01", (-4.0, -1.0, 0), 0.8), ("SchoolChair_01", (-3.3, -1.6, 0), 2.1), ("metal_office_desk", (5.5, -1.5, 0), 0.3),
-                         ("vintage_cabinet_01", (7.2, 6.5, 0), 3.1), ("old_bed_frame", (-6.5, 7.6, 0), 0.0), ("wooden_bookshelf_worn", (-8.2, 4.0, 0), 1.57)):
+    # a half-cleared office floor: piles of old office furniture, filing cabinets, boxes, a rolled carpet
+    def filing_cabinet(loc, rz, col):
+        m = painted_steel(f"FC{loc[0]:.0f}{loc[1]:.0f}", col, 0.45, 0.45); k_ = pbr("FCHandle", (0.55, 0.55, 0.55), 0.3, 0.9)
+        parts = [box("FCBody", (0, 0, 0.66), (0.47, 0.62, 1.32), m, bevel=0.01)]
+        for j in range(4):
+            parts += [box("FCDrawer", (0, -0.315, 0.17 + j * 0.32), (0.43, 0.012, 0.29), m, bevel=0.004), box("FCPull", (0, -0.33, 0.25 + j * 0.32), (0.12, 0.02, 0.02), k_)]
+        o = join(parts, "FilingCabinet"); o.location = loc; o.rotation_euler = (0, 0, rz)
+        return o
+    for (x, y, rz, col) in ((-7.6, 6.6, 0.0, (0.42, 0.45, 0.42)), (-7.0, 6.6, 0.05, (0.5, 0.48, 0.42)), (-6.4, 6.65, -0.04, (0.42, 0.45, 0.42)),
+                            (6.8, 1.5, 1.6, (0.38, 0.4, 0.44)), (-3.2, 7.6, 0.4, (0.5, 0.48, 0.42))):
+        filing_cabinet((x, y, 0), rz, col)
+    fc = filing_cabinet((6.2, 3.4, 0.0), 0, (0.42, 0.45, 0.42)); fc.rotation_euler = (math.radians(90), 0, 0.3); fc.location = (6.2, 3.4, 0.24)   # one lying on its back
+    for k in range(14):
+        ph_model("cardboard_box_01", loc=(rng.uniform(-7.5, -3.5), rng.uniform(2.5, 8), 0.0 if k < 10 else 0.42), rot_z=rng.uniform(0, 3))
+    for k in range(3):
+        ph_model("wooden_crate_01", loc=(rng.uniform(3.5, 7.5), rng.uniform(5, 8), 0.0), rot_z=rng.uniform(0, 3))
+    for aid, loc, rz in (("metal_office_desk", (5.5, -1.5, 0), 0.3), ("metal_office_desk", (4.6, 6.4, 0), 1.4), ("metal_office_desk", (-5.2, 4.6, 0), -0.2),
+                         ("WoodenChair_01", (-4.4, 3.2, 0), 0.8), ("WoodenChair_01", (4.0, 4.9, 0.78), 2.6), ("WoodenChair_01", (5.0, -0.6, 0), 2.0),
+                         ("vintage_cabinet_01", (7.2, 6.5, 0), 3.1), ("wooden_bookshelf_worn", (-8.2, 4.0, 0), 1.57), ("binder_notebook", (5.4, -1.4, 0.76), 0.4)):
         ph_model(aid, loc=loc, rot_z=rz)
     cyl("Carpet", (-5.6, 1.2, 0.18), 0.18, 2.4, fabric("Carpet", (0.4, 0.12, 0.1), 0.9, 0.4, 200), verts=16, rot=(0, math.radians(90), 0.3))
-    haze((0, 2, 3), (17.8, 15.8, 5.8), density=0.008, color=(0.85, 0.82, 0.76), anis=0.5)
+    # paper litter on the floor
+    paper = pbr("Paper", (0.75, 0.73, 0.68), 0.8)
+    for k in range(40):
+        box("Paper", (rng.uniform(-7, 7), rng.uniform(-4, 8), 0.003), (0.21, 0.3, 0.002), paper, rot=(0, 0, rng.uniform(0, 3)))
+    # winter sun through the open front doors: a light shaft in the dust
+    shaft = bpy.data.lights.new("DoorShaft", 'SPOT'); shaft.energy = 30000; shaft.spot_size = math.radians(16); shaft.spot_blend = 0.4
+    shaft.color = (1.0, 0.92, 0.8); shaft.shadow_soft_size = 0.2
+    so = bpy.data.objects.new("DoorShaft", shaft); bpy.context.collection.objects.link(so); so.location = (-0.6 - 3.0, FRONT - 9.0, 7.5)
+    so.rotation_euler = (Vector((3.4, 12.0, -7.5))).to_track_quat('-Z', 'Y').to_euler()
+    haze((0, 2, 3), (17.8, 15.8, 5.8), density=0.014, color=(0.85, 0.82, 0.76), anis=0.6)
     # the two packages near the front
     c["pk"] = []
     for k, p in enumerate(PKG):
@@ -94,7 +115,7 @@ def build(variant=None):
         box("Adj", (x, 2.0, 7.0), (12, 16, 14), fac)
     from rs_vehicles import car
     c["traffic"] = [car(f"Traffic{k}", col, kind) for k, (col, kind) in enumerate((((0.6, 0.6, 0.58), "sedan_1990s_soviet"), ((0.45, 0.1, 0.08), "sedan_1990s_soviet"),
-                                                                                    ((0.75, 0.6, 0.05), "taxi"), ((0.15, 0.2, 0.3), "van_1990s")))]
+                                                                                    ((0.58, 0.53, 0.44), "sedan_1990s_soviet"), ((0.75, 0.75, 0.72), "van_1990s")))]
     for k, t in enumerate(c["traffic"]):
         t.location = (-60, -16, 0)
     tk, wheels, bed_z, _ = truck("Truck", (0.12, 0.2, 0.3))
@@ -106,7 +127,7 @@ def build(variant=None):
     c["fk"] = _V.make("forklift"); c["fk_car"] = _V.part(c["fk"], "forks"); c["fk_z0"] = c["fk_car"].location.z if c["fk_car"] else 0.0
     c["fk"].location = (0, -150, 0)
     ht, _ = ph_model("hand_truck", loc=(7.5, 8.0, 0)); c["handtruck"] = ht
-    c["table"], _ = ph_model("WoodenTable_01", loc=(6.0, 7.5, 0))
+    c["table"], _ = ph_model("metal_office_desk", loc=(6.0, 7.5, 0))
     P = {}
     P["a"] = person("ClearA", 1.0, 35, "parka_green", "short02", hat="knit", hat_col=(0.15, 0.15, 0.18))
     P["b"] = person("ClearB", 1.0, 48, "wool_grey", "short03", moustache=True)
@@ -139,15 +160,17 @@ def C(p0, p1, tgt, lens):
 
 
 def carry_pair(c, h1, h2, obj, a, b, sec, speed=0.7):
-    """Two men carrying a piece of furniture between them, walking toward b."""
-    p = walk_to(h1, a, b, sec, speed=speed, swing=0)
+    """Two men carry a desk between them toward b: the front man walks backwards facing it, each grips his own end."""
     d = (Vector(b) - Vector(a)).normalized()
-    walk_to(h2, Vector(a) - d * 1.6, Vector(b) - d * 1.6, sec, speed=speed, swing=0)
-    mid = p - d * 0.8 + Vector((0, 0, 0.75))
-    obj.location = mid + Vector((0, 0, -0.4)); obj.rotation_euler = (0, 0, math.atan2(d.y, d.x))
-    for h, off in ((h1, -0.45), (h2, 0.45)):
-        sd = forward(h).cross(Vector((0, 0, 1))); g = mid + d * off
-        reach(h, "R", g + sd * 0.3, Vector((sd.x, sd.y, -0.7)), Vector((0, 0, -1))); reach(h, "L", g - sd * 0.3, Vector((-sd.x, -sd.y, -0.7)), Vector((0, 0, -1)))
+    p = walk_to(h1, a, b, sec, speed=speed, swing=0)
+    place(h1, (p.x, p.y, 0), face_angle(p, p - d))                  # front man faces back along the desk
+    q = walk_to(h2, Vector(a) - d * 2.3, Vector(b) - d * 2.3, sec, speed=speed, swing=0)
+    mid = p - d * 1.15 + Vector((0, 0, 0.62))
+    obj.location = mid + Vector((0, 0, -0.74)); obj.rotation_euler = (0, 0, math.atan2(d.y, d.x))   # desk long axis is local X
+    for h, end in ((h1, mid + d * 0.62), (h2, mid - d * 0.62)):
+        sd = forward(h).cross(Vector((0, 0, 1))).normalized()
+        reach(h, "R", end + sd * 0.32, Vector((sd.x, sd.y, -1.0)), forward(h)); reach(h, "L", end - sd * 0.32, Vector((-sd.x, -sd.y, -1.0)), forward(h))
+        h.rot("spine03", sd, -12); fingers_curl(h, 70, thumb=40)
 
 
 def c1_2a(c, t):
