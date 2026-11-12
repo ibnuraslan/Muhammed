@@ -694,6 +694,34 @@ for f in range(320, 400):     # rack focus to the passer-by
     w = smooth((f - 320) / 30) * (1 - smooth((f - 370) / 30))
     cam.data.dof.focus_distance = lerp((ft(f) - fp(f)).length, (Vector(pp(f)) + Vector((0, 0, 1.4)) - fp(f)).length, w)
     cam.data.dof.keyframe_insert("focus_distance", frame=f)
+# ---- ease any too-fast camera turn into a whip (qa_check CAMJUMP: <= 20 deg per frame, same start/end framings)
+def cam_q(f):
+    sc.frame_set(f); return cam.matrix_world.to_3x3().to_quaternion()
+def cam_fw(f):
+    sc.frame_set(f); return -(cam.matrix_world.to_3x3().col[2])
+def whip_ease(fa, fb, limit=18.0):
+    lo, hi = fa, fb
+    while True:
+        tot = math.degrees(cam_fw(lo).angle(cam_fw(hi))); peak = tot * 1.5 / (hi - lo)
+        if peak <= limit or hi - lo >= 24: break
+        lo -= 1; hi += 1
+    qa_, qb_ = cam_q(lo), cam_q(hi)
+    if qa_.dot(qb_) < 0: qb_ = -qb_
+    for f in range(lo, hi + 1):
+        q = qa_.slerp(qb_, smooth((f - lo) / (hi - lo)))
+        cam.rotation_mode = 'XYZ'; cam.rotation_euler = q.to_euler('XYZ', cam.rotation_euler)
+        cam.keyframe_insert("rotation_euler", frame=f)
+    print("WHIP eased", lo, hi, "total %.0f deg, peak %.1f deg/frame" % (tot, peak))
+prev = None; spikes = []
+for f in range(1, 2191):
+    v = cam_fw(f)
+    if prev is not None and math.degrees(prev.angle(v)) > 20: spikes.append(f)
+    prev = v
+groups = []
+for f in spikes:
+    if groups and f - groups[-1][1] <= 3: groups[-1][1] = f
+    else: groups.append([f, f])
+for fa, fb in groups: whip_ease(fa - 2, fb + 2)
 sc["beats"] = [B[k] for k in sorted(B)]
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
