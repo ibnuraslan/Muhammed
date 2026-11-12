@@ -4,6 +4,7 @@ import numpy as np
 import bpy
 from mathutils import Vector
 from kit import *
+import look
 
 EXPOSURE = -4.2
 
@@ -40,6 +41,10 @@ def build(variant=None):
     add_asset(h, "clothes", "male_elegantsuit01", val=0.12, rough=0.55); add_asset(h, "clothes", "shoes02", val=0.1); add_asset(h, "hair", "short04", val=0.25)
     bc = box("Briefcase", (0, 0, -30), (0.42, 0.1, 0.32), pbr("Briefcase", (0.06, 0.035, 0.02), 0.4, 0.0, **{'Coat Weight': 0.5}), bevel=0.01)
     ctx.update(lawyer=h, briefcase=bc)
+    # house look: low late sun from the front-left rakes the columns (their shadows fall across the facade),
+    # deep blue sky, cream stone keeps its colour; a touch of warm haze at ground level
+    look.day_light("low_sun", azim=296, elev=20, sky="blue", sun_energy=9.0, exposure=-1.3)
+    look.ground_haze((0, -30), (200, 110), mood="low_sun", height=3.0, density=0.006)
     return ctx
 
 
