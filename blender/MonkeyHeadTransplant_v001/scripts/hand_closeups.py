@@ -28,6 +28,9 @@ for i, (f, rig, s, label) in enumerate(CONTACTS):
         free = (hit[1] - p).length if hit[0] else 0.4
         if best is None or free > best[0]: best = (free, d)
     dist = min(0.3, best[0] - 0.04); d = best[1]
+    if "knob" in label:     # aim at the hand-on-knob contact from 0.5 m
+        g_ = bpy.data.objects["Anaes_Gauge1_Face"].matrix_world.translation
+        p = (r.matrix_world @ r.pose.bones["finger2-3." + s].tail).lerp(g_, 0.5); d = Vector((0.15, -1, 0.45)).normalized(); dist = 0.5
     cam.location = p + d * dist; cam.rotation_euler = (p - cam.location).to_track_quat("-Z", "Y").to_euler()
     lo.location = cam.location + Vector((0, 0, 0.15)); lo.rotation_euler = cam.rotation_euler
     sc.render.filepath = os.path.join(OUT, "c%02d.jpg" % i); bpy.ops.render.render(write_still=True); done.append((i, f, rig, s, label))

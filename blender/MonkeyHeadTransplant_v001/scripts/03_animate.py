@@ -312,6 +312,9 @@ _bA = D["MK_BodyA"]
 _sv = max((v.co for v in _bA.data.vertices if abs(v.co.z - 0.30) < 0.02 and abs(v.co.y + 0.28) < 0.03), key=lambda c: c.x)
 SHOULDER_W = M_LIE1 @ _sv
 # beat 1: marker drawing 40-200, left hand steadies the head
+def AWAY(p):   # horizontal unit vector from the surgeon's chest toward p (keeps hands off his own torso)
+    d = (p - V(S0.x, S0.y, p.z)); d.z = 0
+    return d.normalized() if d.length > 1e-4 else V(0, 1, 0)
 for f in list(range(1, 212, 6)) + [211]:
     sw = 0.5 + 0.5 * math.sin(f / 24.0)
     pose(SURG, f, S0, Y0, flex=26 + 3 * sw, twist=-6, headr=(18, 4))
@@ -319,9 +322,10 @@ for f in list(range(1, 212, 6)) + [211]:
     tip = neck_ring(M_LIE1, a, 0.081) if f > 40 else neck_ring(M_LIE1, A0, 0.11) + V(0, -0.05, 0.08)
     if f > 205: tip = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10 * smooth((f - 205) / 20))
     Wp = tip + V(0, -0.04, 0.13); Wp.z = max(Wp.z, NA.z + 0.13)
+    Wp = Wp + AWAY(Wp) * 0.10 * smooth((f - 195) / 15.0)
     hand(SURG, "R", f, Wp, V(0.1, 0.3, -1), V(1, 0, 0.2), 0.35, Y0)
     pose_hand(SURG, "R", f, "pinch" if f <= 205 else "relaxed")
-    hand(SURG, "L", f, SHOULDER_W + V(0, 0, 0.07), V(0.4, 1, 0.18), V(0, 0, -1), 0.4, Y0)
+    place_hand(SURG.r.o, "L", f, SHOULDER_W + V(0, 0, 0.004), V(0, 0, -1), V(0.35, 1, 0)); pose_hand(SURG, "L", f, "flat_palm")
 # pen: in the right hand until put down on the drape at ~232
 def wrist_M(f, s):
     ev(f); pb = SURG.r.PB["wrist." + s]
@@ -368,12 +372,13 @@ def beat2_keys(frames):
             W, d_, n_ = grip(ff, S_, N_, D_, s)
             Nw = ((head_world(ff) if ff < 376 else M_root(ff)).to_3x3() @ N_).normalized()
             if f < 250 and s == "L":
-                W = (SHOULDER_W + V(0, 0, 0.07)).lerp(W, smooth((f - 212) / 38.0))
+                kL = smooth((f - 212) / 38.0); W = (SHOULDER_W + V(0, 0, 0.07)).lerp(W, kL); W = W + AWAY(W) * 0.06 * math.sin(math.pi * kL)
+                d_ = V(0.4, 1, 0.18).normalized().lerp(d_, kL).normalized(); n_ = V(0, 0, -1).lerp(n_, kL).normalized()
             elif f < 250:
                 tip0 = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10)
                 R0 = tip0 + V(0, -0.04, 0.13); R0.z = max(R0.z, NA.z + 0.13)
                 k_ = smooth((f - 226) / 30.0)
-                W = R0.lerp(W, k_) + V(0, 0.12, 0.02) * math.sin(math.pi * k_)
+                W = R0.lerp(W, k_) + V(0, 0.12, 0.02) * math.sin(math.pi * k_) + AWAY(R0) * 0.10 * (1 - k_)
                 kd = smooth((f - 226) / 26.0)
                 d_ = V(0.1, 0.3, -1).normalized().lerp(d_, kd).normalized(); n_ = V(1, 0, 0.2).normalized().lerp(n_, kd).normalized()
             else:
@@ -463,6 +468,7 @@ for f in list(range(1190, 1771, 3)):
         wv = math.sin((f - 1230) / 7.0) if 1225 < f < 1310 else 0.0
         Rz = Matrix.Rotation(math.radians(Y3), 3, "Z")
         hand(SURG, "R", f, face_w + (S3 - face_w).normalized() * 0.16 + V(0, 0, 0.05) + Rz @ V(0.06 * wv, 0, 0), V(0, 0, 1), Rz @ V(0, 1, 0), 0.35, Y3)
+        _key(SURG.r.o, "R", _pose_rots(SURG.r.o, "R", "relaxed", spread=5.0), f, 1.0)
         if True:
             hang(SURG, "L", f, S3, Y3, 0.05)
         else:   # lifts the clipboard up before stepping to the monitor
@@ -610,11 +616,11 @@ for f in list(range(1, 1771, 6)):
 for ob in [D["Anaes"]] + [c for c in D["Anaes"].children]:
     hide_keys(ob, [(1, False), (1036, True), (1187, False)])
 bag.keyframe_insert("scale", frame=1)
-for f in range(1, 1771, 30):
-    sc.frame_set(f); bw = bag.matrix_world.translation; r_ = bag.dimensions.x / 2
+for f in range(1, 1771, 10):
+    sc.frame_set(f); bw = bag.matrix_world.translation; r_ = bag.dimensions.x / 2 * 0.92
     toward = V(AP.x, AP.y, bw.z) - bw; toward.z = 0; toward.normalize()
     C = bw + toward * r_ + V(0, 0, 0.02)
-    try: grip_object(D["Anaes"], "R", f, bag, C, -toward)
+    try: grip_object(D["Anaes"], "R", f, bag, C, -toward, finger_dir=V(0, 0, 1).cross(-toward).normalized(), grip="wrap")
     except Exception as e: print("BAGFAIL", f, e)
 # dust motes drift (and hide before the void fades in)
 dr_ = D["Dust_Root"]
@@ -642,11 +648,11 @@ for f in list(range(400, 672, 6)):
     up_ = V(0, -0.55, 0.85).normalized()                        # tools lean back toward the surgeon
     for tool, s_, off_a, arc_ in ((nh, "R", 0.0, 0.012 * math.sin(2 * math.pi * ph)), (fcp, "L", -0.6, 0.0)):
         sp_ = neck_ring(M_LIE2, a + off_a, 0.078) + V(0, 0, arc_)
-        dir_ = (up_ + V(0.15 if s_ == "R" else -0.15, 0, 0)).normalized()
+        dir_ = (up_ + V(0.15, 0, 0)).normalized() if s_ == "R" else V(-0.55, -0.65, 0.5).normalized()
         tool.location = sp_ + dir_ * 0.075
         tool.rotation_quaternion = dir_.to_track_quat("Z", "Y"); tool.keyframe_insert("location", frame=f); tool.keyframe_insert("rotation_quaternion", frame=f)
         bpy.context.view_layer.update()
-        C = sp_ + dir_ * 0.12; side_ = dir_.cross(V(0, 0, 1)).normalized()
+        C = sp_ + dir_ * (0.12 if s_ == "R" else 0.09); side_ = dir_.cross(V(0, 0, 1)).normalized()
         try: TOOL_LOG.append(grip_object(SURG.r.o, s_, f, tool, C, -side_ if s_ == "R" else side_))
         except Exception as e: print("TOOLFAIL", f, s_, e)
 print("TOOLGRIPS", len(TOOL_LOG))
@@ -669,14 +675,14 @@ UPW = V(0, 0, 1)
 K = [
  (1,    V(0.35, 0.95, 1.5), V(-0.3, -0.35, 1.12), 24, UPW, "W"),
  (61,   V(0.45, 0.25, 1.38), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
- (121,  V(0.18, -0.38, 1.32), NA, 38, UPW, "W"),
+ (121,  V(0.48, -0.3, 1.55), NA, 38, UPW, "W"),
  (181,  NA + V(0.26, -0.04, 0.17), NA, 50, UPW, "W"),
- (241,  V(0.16, -0.42, 1.52), V(-0.12, -0.05, 1.02), 30, UPW, "W"),
+ (241,  V(0.42, -0.18, 1.74), V(-0.18, -0.05, 1.02), 28, UPW, "W"),
  (290,  V(0.0, 1.05, 1.56), V(-0.05, -0.05, 1.12), 32, UPW, "W"),
  (330,  V(0.3, 1.0, 1.54), V(0.25, -0.05, 1.12), 32, UPW, "W"),
  (365,  V(0.95, 0.15, 1.45), NBp, 30, UPW, "W"),
- (420,  NBp + V(0.42, -0.05, 0.38), NBp, 75, UPW, "W"),
- (480,  NBp + V(0.42, -0.06, 0.2), NBp, 75, UPW, "W"),
+ (420,  NBp + V(0.5, 0.1, 0.55), NBp, 75, UPW, "W"),
+ (480,  NBp + V(0.52, 0.06, 0.38), NBp, 75, UPW, "W"),
  (540,  NBp + V(0.32, 0.18, 0.32), NBp, 75, UPW, "W"),
  (600,  NBp + V(0.42, 0.06, 0.06), NBp + V(0, 0, 0.03), 70, UPW, "W"),
  (650,  NBp + V(0.36, -0.16, 0.12), NBp + V(0.02, -0.02, 0.0), 60, UPW, "W"),
@@ -697,7 +703,7 @@ K = [
  (1380, V(2.85, -0.42, 1.08), V(2.95, 0.7, 0.95), 30, UPW, "W"),
  (1440, SCR + V(-0.06, -0.42, 0.05), SCR, 45, UPW, "W"),
  (1500, SCR + V(0.04, -0.24, 0.02), SCR, 50, UPW, "W"),
- (1560, SCR + V(0.24, -0.30, 0.09), SCR + V(-0.02, 0, 0), 40, UPW, "W"),
+ (1560, V(2.92, 0.18, 1.02), M_CHAIR @ EYEMID, 36, UPW, "W"),
  (1620, V(3.45, -0.5, 1.4), V(2.5, 0.9, 0.75), 30, UPW, "W"),
  (1700, V(1.8, -2.1, 1.8), V(2.3, 0.9, 0.9), 24, UPW, "W"),
  (1770, V(1.6, -2.5, 1.95), V(2.2, 0.85, 0.9), 24, UPW, "W"),
