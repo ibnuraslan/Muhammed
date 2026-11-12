@@ -41,14 +41,16 @@ Assets are not in git. Fetch them with `pipeline/fetch_polyhaven.py` and `pipeli
   - Tighter real grips on the parasol, pistol, steering wheel, bomb and the officer's grab.
   - Limit Rotation constraints (local space) on every finger and thumb (0–90° forward on the bend axis, ±10° spread) and on the wrists (±60°, ±35° side, ±70° twist).
   - Clapping hands keep a gap, and the officer grabs the gunman's upper arm instead of his chest.
+- **Seating:** the couple's legs stay inside the car, with feet forward under the front seat, knees straight ahead and hips settled into the cushion. Their knees no longer ride over the door at 3–7 s and 25–26 s.
+- **Blinks:** the Archduke, Duchess and gunman blink every 2.4–3.6 s, and the gunman flinches at each shot.
 - **Faces:** the Archduke and Duchess smile while waving. Their eyes widen, brows go up and jaws drop at the thrown object and at the gun, and their eyes close after the slump. This uses the MPFB face bones (risorius, oris, levator, orbicularis, oculi, jaw).
 - **Shots:** muzzle flashes from behind the gunman and the couple's reactions only, with no blood.
 
 ## Hand audit
-`HAND AUDIT (every 2 frames, frames 1-1748; skeleton capsules: torso r=8.5 cm, head r=7 cm, fingertip/wrist points): {'hand_hand': 2, 'hand_own_torso': 8, 'hand_own_head': 0, 'hand_other_char': 16}`. Full list: `../WW1Assassination_v001/review/v003_hand_audit.txt`. It was about 1,100 hits before the fixes.
+`HAND AUDIT (every 2 frames, frames 1-1748; skeleton capsules: torso r=8.5 cm, head r=7 cm, fingertip/wrist points): {'hand_hand': 2, 'hand_own_torso': 8, 'hand_own_head': 0, 'hand_other_char': 12}`. Full list: `../WW1Assassination_v001/review/v003_hand_audit.txt`. It was about 1,100 hits before the fixes.
 - **Hand-in-coat (8, intended):** the would-be assassin's hand slipping into his coat at the chest (7), and the bomber reaching into his coat for the bomb (1).
 - **The struggle (4):** the gunman's hand at the officer while the officer pulls him back.
-- **Scattered crowd (12):** bomb-site crowd brushing neighbours in the post-blast scatter, seen only at a distance.
+- **Scattered crowd (8):** bomb-site crowd brushing neighbours in the post-blast scatter, seen only at a distance.
 - **Clap contacts (2):** palms touching.
 - **Head:** no hand enters a head anywhere.
 - **Method:** fingertip and wrist points tested every 2 frames against skeleton capsules (torso radius 8.5 cm, head radius 7 cm); this is not a full mesh BVH.

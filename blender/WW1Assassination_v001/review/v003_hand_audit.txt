@@ -1,7 +1,6 @@
-HAND AUDIT (every 2 frames, frames 1-1748; skeleton capsules: torso r=8.5 cm, head r=7 cm, fingertip/wrist points): {'hand_hand': 2, 'hand_own_torso': 8, 'hand_own_head': 0, 'hand_other_char': 16}
+HAND AUDIT (every 2 frames, frames 1-1748; skeleton capsules: torso r=8.5 cm, head r=7 cm, fingertip/wrist points): {'hand_hand': 2, 'hand_own_torso': 8, 'hand_own_head': 0, 'hand_other_char': 12}
 By character/pair:
       7  NerveA R inside own torso
-      4  Crowd_bomb_42 L into Crowd_bomb_55
       4  Gunman R into Officer
       3  Crowd_bomb_48 L into Crowd_bomb_55
       2  Crowd_bomb_73 R into Crowd_bomb_69
@@ -12,11 +11,11 @@ By character/pair:
       1  Crowd_corner_20 hand-hand
 
 All hits:
-f589 NerveA R inside own torso 0.084
-f591 NerveA R inside own torso 0.065
-f645 NerveA R inside own torso 0.052
+f589 NerveA R inside own torso 0.082
+f591 NerveA R inside own torso 0.069
+f645 NerveA R inside own torso 0.057
 f647 NerveA R inside own torso 0.055
-f649 NerveA R inside own torso 0.084
+f649 NerveA R inside own torso 0.082
 f695 Bomber R inside own torso 0.085
 f713 NerveA R inside own torso 0.072
 f715 NerveA R inside own torso 0.067
@@ -28,10 +27,6 @@ f1043 Crowd_bomb_73 R into Crowd_bomb_69
 f1061 Crowd_bomb_66 R into Crowd_bomb_73
 f1069 Crowd_bomb_66 L into Crowd_bomb_69
 f1071 Crowd_bomb_66 L into Crowd_bomb_69
-f1087 Crowd_bomb_42 L into Crowd_bomb_55
-f1089 Crowd_bomb_42 L into Crowd_bomb_55
-f1091 Crowd_bomb_42 L into Crowd_bomb_55
-f1093 Crowd_bomb_42 L into Crowd_bomb_55
 f1567 Crowd_corner_21 hand-hand
 f1571 Crowd_corner_20 hand-hand
 f1615 Gunman R into Officer

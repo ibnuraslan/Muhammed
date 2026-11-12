@@ -74,6 +74,13 @@ def face(arm_name, f, smile, shock, closed):
         off("oculi02." + s, Vector((0, 0, 0.007 * shock)))
         off("temporalis01." + s, Vector((0, 0, 0.004 * shock)))
     R.key_rot("jaw", f, [("X", 13 * shock + 4 * closed + 2 * smile)])
+import random as _r
+_r.seed(11)
+def _blinker():
+    bl = []; t = _r.uniform(0.5, 1.5)
+    while t < 30.0: bl.append(1 + round(t * 60)); t += _r.uniform(2.4, 3.6)
+    return lambda f: max([0.0] + [max(0.0, 1 - abs(f - b0 - 2) / 3.0) for b0 in bl if abs(f - b0 - 2) < 3])
+BL = {n: _blinker() for n in ("Archduke", "Duchess", "Gunman")}
 FR2 = list(range(1, 1781, 2))
 def sm(x): return max(0.0, min(1.0, x)) ** 2 * (3 - 2 * max(0.0, min(1.0, x)))
 for f in FR2:
@@ -85,8 +92,12 @@ for f in FR2:
     d_smile = (1 - sm((s - 3.4) / 0.2)) if s < 4 else (1 - sm((s - 25.1) / 0.3)) * sm((s - 7.0) / 1.0)
     d_shock = max(sm((s - 3.45) / 0.2) * (1 - sm((s - 5.6) / 0.8)), sm((s - 25.2) / 0.3))
     d_closed = sm((s - 26.3) / 0.5)
-    face("Archduke", f, a_smile * (1 - a_shock), a_shock * (1 - a_closed), a_closed)
-    face("Duchess", f, d_smile * (1 - d_shock), d_shock * (1 - d_closed), d_closed)
+    face("Archduke", f, a_smile * (1 - a_shock), a_shock * (1 - a_closed), max(a_closed, BL["Archduke"](f)))
+    face("Duchess", f, d_smile * (1 - d_shock), d_shock * (1 - d_closed), max(d_closed, BL["Duchess"](f)))
+for f in range(1301, 1781, 2):
+    s = sig_f(f)
+    flinch = max((1 - min(1.0, abs(s - st) / 0.12)) for st in SHOT_S)
+    face("Gunman", f, 0.0, flinch * 0.6, BL["Gunman"](f))
 print("FACES keyed")
 
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

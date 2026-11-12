@@ -305,13 +305,13 @@ def seat(H, f, base, flex=-6.0, side=0.0, twist=0.0, fwd=0.0, drop=0.0, head=(0.
     H.key_spine(f, flex=flex, twist=twist, side=side, head=head)
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
-        fx, fy, fz = legs if legs else (0.0, 0.0, FLOOR_R if base.y > 0.4 else FLOOR_F)
+        fx, fy, fz = legs if legs else (0.0, -0.42 if base.y > 0.4 else 0.0, FLOOR_R if base.y > 0.4 else FLOOR_F)   # rear seat: feet forward in the footwell, knees below the door line
         a = H.ankle[s_]
-        xy = Vector((base.x + sx * 0.12, base.y - 0.48 + fy))
+        xy = Vector((base.x + sx * 0.12 + (0.06 if base.x < 0 else -0.06), base.y - 0.48 + fy))   # feet a little inboard of the door
         M = Matrix.Translation(Vector((xy.x, xy.y, fz + a.z * 0.6))) @ Matrix.Rotation(R_(-15), 4, 'X') @ \
             Matrix.Translation(-a) @ H.r.rest("IK_foot." + s_)
         H.r.key_world("IK_foot." + s_, f, M)
-        pole = Vector((xy.x + sx * 0.05, xy.y - 0.6, fz + 1.0))
+        pole = Vector((xy.x, xy.y - 0.8, fz + 0.6))   # knees straight ahead, inside the car
         pb = H.r.PB["Pole_knee." + s_]; n = "Pole_knee." + s_
         pb.location = H.r.rest(n).to_3x3().inverted() @ (pole - H.r.BN[n].head_local)
         pb.keyframe_insert("location", frame=f, group=n)
@@ -324,7 +324,7 @@ def parent_to(arm, parent):
 
 ARCH, DUCH, DRV = HUM["Archduke"], HUM["Duchess"], HUM["Driver"]
 for H in (ARCH, DUCH, DRV): parent_to(H.r.o, C1S)
-A_BASE = Vector((-0.33, 0.92, SEAT_R - 0.07)); D_BASE = Vector((0.31, 0.92, SEAT_R - 0.09)); V_BASE = Vector((0.2, 0.08, SEAT_F + 0.1))
+A_BASE = Vector((-0.31, 0.92, SEAT_R - 0.05)); D_BASE = Vector((0.31, 0.92, SEAT_R - 0.06)); V_BASE = Vector((0.2, 0.08, SEAT_F + 0.1))
 GUN_LOCAL = None
 def world_to_car_local(s, pw):
     p, h = car1(s); M = Matrix.Translation(Vector((p.x, p.y, 0))) @ Matrix.Rotation(h, 4, 'Z')
