@@ -121,14 +121,13 @@ def park(n, f):
     key_hands(n, f, P, Rb, {})
 
 TELE = {n: set() for n in ALL}
-def key_fingers(n, s, f, curl):
-    """curl all fingers (local X is the flexion axis on the MPFB default rig; thumb at 40 %)"""
-    for k in range(1, 6):
-        for j, w in ((1, 0.8), (2, 1.0), (3, 0.7)):
-            nm = "finger%d-%d.%s" % (k, j, s); pb = RIG[n].PB.get(nm)
-            if pb is None: continue
-            pb.rotation_quaternion = Quaternion((1, 0, 0), R_(curl * w * (0.4 if k == 1 else 1.0)))
-            pb.keyframe_insert("rotation_quaternion", frame=f, group=nm)     # frames after which the next key is a jump (CONSTANT)
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())     # shared presets: relaxed, wrap_grip, pinch, tripod ...
+for _n in RIG: add_hand_limits(RIG[_n].o)
+def key_fingers(n, s, f, pose):
+    """key a shared hand_poses preset; numbers map to the nearest preset (no hand-set finger angles)"""
+    if not isinstance(pose, str):
+        pose = "flat_palm" if pose <= 10 else "relaxed" if pose <= 25 else "cup_hold" if pose <= 45 else "wrap_grip"
+    apply_pose(RIG[n].o, s, pose, f)
 
 # ---------------------------------------------------------------- seated huddle / kneel / swim poses
 def seated(n, f, x, y, yaw, lean=22.0, head=(-10.0, 0.0), hug=True, hand_over=None, knee=0.0):
@@ -146,7 +145,7 @@ def seated(n, f, x, y, yaw, lean=22.0, head=(-10.0, 0.0), hug=True, hand_over=No
         pole = V((xy.x, xy.y, g + 1.2)) + fw * 0.3
         pb.location = H.r.rest(nm).to_3x3().inverted() @ (pole - H.r.BN[nm].head_local); pb.keyframe_insert("location", frame=f, group=nm)
     hands = {}
-    for s in "LR": key_fingers(n, s, f, 40 if hug else 15)
+    for s in "LR": key_fingers(n, s, f, ("shield" if (hand_over and s in hand_over) else "cup_hold") if hug else "relaxed")
     if hug:
         for s in "LR":
             sx = 1 if s == "L" else -1
@@ -442,6 +441,7 @@ for f, z, pit in ((F_CH0 - 12, -1.6, 60), (F_SURF - 20, -1.25, 40), (F_SURF, -0.
         sx = 1 if s == "L" else -1
         key_foot_free(DA, s, f, bw(DA, P, Rb, H.ankle[s] + V((0, 0.15 * math.sin(f * 0.1 + sx), 0.05))), Rb @ Rx(-50))
     hh = {}
+    for s_ in "LR": key_fingers(DA, s_, f, "cup_hold" if f >= F_SURF else "relaxed")
     if f >= F_SURF:
         for s in "LR":
             sx = 1 if s == "L" else -1
@@ -464,9 +464,9 @@ for n, y0, y1, f0, f1, up in (("DiverB", -6.0, -18.0, 1213, 1480, 0.7), ("DiverC
         if n == "DiverB" and -13.5 < y < -8.5:     # hand over hand on the guide rope
             rp = pas_mid(y - 0.35, 0.35, -0.55 * (1 - 0.6 * math.exp(-((y + 13) ** 2) / 6)))
             hands = {"R": (rp, V((0, -1, 0)), V((1, 0, 0.3)).normalized())}
-            key_fingers(n, "R", f, 70)
+            key_fingers(n, "R", f, "wrap_grip")
         elif n == "DiverB":
-            key_fingers(n, "R", f, 20)
+            key_fingers(n, "R", f, "relaxed")
         swim(n, f, P, 0.0, pitch=-6 * sq, roll=10 * sq * (1 if n == "DiverB" else -1), phase=f * 0.25, kick=1.0 - 0.6 * sq, hands=hands)
     TELE[n].add(f0 - 1)
 DC = "DiverC"
@@ -494,7 +494,7 @@ for f, hd in ((1705, (22, 0)), (1760, (18, 10)), (1800, (24, -8)), (1850, (16, 5
         sx = 1 if s == "L" else -1
         hp = V((EDGE.x + 0.18 * sx, EDGE.y - 0.32, 0)); hh[s] = (V((hp.x, hp.y, ground_z(hp.x, hp.y) + 0.04)), V((0, -1, -0.3)).normalized(), V((0, 0, -1)))
     kneel(B3, f, EDGE.x, EDGE.y, 0.0, lean=30 + 4 * math.sin(f * 0.06), head=hd, hands=hh)
-    for s in "LR": key_fingers(B3, s, f, 12)       # palms flat on the rock, fingers relaxed (no claw)
+    for s in "LR": key_fingers(B3, s, f, "flat_palm")       # palms flat on the rock, fingers relaxed (no claw)
 TELE[B3].add(1704)
 # beats 9-11: team kneels around Boy2 (medic = DiverA, mask = DiverB), coach keeps a hand on the boy
 P2 = V((CX + 0.8, 1.25, 0))
@@ -513,7 +513,7 @@ for f in (1850, 1900, 1950, 1995):
         sx = 1 if s == "L" else -1
         ex = V((P.x + 0.28 * sx, P.y + 0.72, 0)); g = ground_z(ex.x, ex.y)
         hh[s] = (V((ex.x, ex.y, g + 0.045)), V((0, 1, -0.2)).normalized(), V((0, 0, -1)), V((ex.x + 0.6 * sx, P.y + 0.3, g - 0.4)))
-        key_fingers("DiverB", s, f, 50)
+        key_fingers("DiverB", s, f, "cup_hold")
     key_hands("DiverB", f, P, Rb, hh)
 TELE["DiverB"].add(1995)
 for f in (2005, 2017, 2060, 2110, 2154):
@@ -546,7 +546,7 @@ for f in (2155, 2190, 2230, 2270, 2300, 2328):
     tip = inj + outw * (0.03 if 2190 <= f <= 2270 else 0.12)
     W = tip + outw * 0.09 + V((0, 0, 0.02))
     HUM[DA].key_hand("R", f, W, -outw, V((0, 0, 1)), W + V((0.3, 0.3, -0.4)))
-    key_fingers(DA, "R", f, 60); key_fingers(DA, "L", f, 35)
+    key_fingers(DA, "R", f, "tripod"); key_fingers(DA, "L", f, "cup_hold")
     HUM[DA].key_hand("L", f, arm + V((0, 0, 0.09)) + outw * 0.02, V((0, -1, -0.4)).normalized(), V((0, 0, -1)), arm + V((0.4, 0.4, 0.0)))
     # syringe follows the right hand (palm side) along -outw
     syr.location = tip + outw * 0.055; syr.rotation_euler = (-outw).to_track_quat('-Z', 'Y').to_euler()
@@ -594,7 +594,7 @@ for f in (2329, 2345, 2365, 2385, 2406):
     c_ = fm_.matrix_world.translation; side = (HM.to_3x3() @ _sl).normalized()
     for s in "LR":
         sx = 1 if s == "L" else -1
-        key_fingers("DiverB", s, f, 50)
+        key_fingers("DiverB", s, f, "pinch")
         if f < 2380:
             W = c_ + side * (0.11 * -sx) + fwd2 * 0.02 + V((0, 0, -0.02))
             HUM["DiverB"].key_hand(s, f, W, (-side * -sx + fwd2 * 0.2).normalized(), -fwd2, W + fwd2 * 0.5 + side * 0.4 * -sx + V((0, 0, -0.3)))
@@ -620,7 +620,7 @@ for f in range(TOW0, TOW1 + 1, 10):
     key_hands("Boy2", f, Pb, Rb, {s: relaxed_hand("Boy2", Pb, Rb, s, out=0.02) for s in "LR"})
     # diver's left hand on the harness at the boy's chest
     ch_ = bw("Boy2", Pb, Rb, rest_head("Boy2", "spine02")) + V((0, 0, 0.12))
-    key_fingers("DiverB", "L", f, 75)
+    key_fingers("DiverB", "L", f, "wrap_grip")
     HUM["DiverB"].key_hand("L", f, ch_ + V((0.08, 0, 0.05)), V((-1, 0, -0.3)).normalized(), V((0, 0, -1)), ch_ + V((0.5, 0.3, 0.4)))
 for n in ("DiverB", "Boy2"): TELE[n].add(TOW0 - 1)
 # mask: Child Of Boy2's head from the fitting onward
@@ -681,7 +681,7 @@ for f in range(OUT0, OUT1 + 1, 6):
             grip = end + sdv * (0.29 * (1 if (s == "L") == (n == "DiverB") else -1)) + V((0, 0, 0.025))   # on the pole, palm over it
             W = grip - inward * 0.0 + V((0, 0, 0.03))
             HUM[n].key_hand(s, f, W, inward, V((0, 0, -1)), W + V((0.0, 0.0, 0.5)) - inward * 0.3)
-            key_fingers(n, s, f, 80)
+            key_fingers(n, s, f, "wrap_grip")
     # Boy4 lies on the stretcher (face up, head toward the front carrier)
     H = HUM["Boy4"]; Rb = body_R(0, -88) ; Pboy = mid + V((0, 0.15, 0.0))
     H.key_root(f, Pboy, yaw=0, flex=-88); H.key_spine(f, head=(-5, 0))
@@ -716,10 +716,10 @@ for n, x, y, yaw in CR:
                 gap = 0.05 if cheer else 0.2
                 W = bw(n, P, Rb, rest_head(n, "spine02")) + Rb @ V((gap / 2 * sx, -0.32, 0.12))
                 hh[s] = (W, Rb @ V((-0.2 * sx, -0.3, 1)).normalized(), Rb @ V((-sx, 0, 0)), sh + Rb @ V((0.45 * sx, 0.2, -0.35)))
-                key_fingers(n, s, f, 8)
+                key_fingers(n, s, f, "flat_palm")
             elif s == "R":                         # rescued boys / coach: an open-palm wave at head height
                 W = sh + Rb @ V((0.22 * sx + 0.06 * (cheer - 0.5), -0.12, 0.3)); hh[s] = (W, Rb @ V((0.1 * sx, 0, 1)).normalized(), Rb @ V((0, -1, 0)), sh + Rb @ V((0.5 * sx, 0.3, -0.2)))
-                key_fingers(n, s, f, 5)
+                key_fingers(n, s, f, "flat_palm")
         key_hands(n, f, P, Rb, hh)
     TELE[n].add(OUT0 - 1)
 heli = bpy.data.objects["S1_Heli"]; rotor = bpy.data.objects["S1_Heli_Rotor"]

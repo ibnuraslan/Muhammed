@@ -50,6 +50,10 @@ for r in [o for o in bpy.data.objects if o.type == 'ARMATURE']:
         '"finger' in fc.data_path for fc in r.animation_data.action.layers[0].strips[0].channelbags[0].fcurves)
     for pb in r.pose.bones:
         n = pb.name
+        if n.startswith("finger") and any(c_.name == "HandLimit" for c_ in pb.constraints):
+            continue                       # shared hand_poses limits already on this rig
+        if n.startswith("wrist.") and any(c_.name == "HandLimit" for c_ in pb.constraints):
+            continue
         if n.startswith("finger"):
             thumb = n.startswith("finger1")
             c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
