@@ -365,7 +365,11 @@ def neutral_daylight(warm=(1.0, 0.93, 0.84)):
         for n in w.node_tree.nodes:
             if n.bl_idname == "ShaderNodeBackground":
                 col = n.inputs['Color']
-                if not col.is_linked:
+                if col.is_linked:                       # a blue sky texture seen only through the windows: a neutral warm day
+                    for l in list(col.links):
+                        w.node_tree.links.remove(l)
+                    col.default_value = (0.42, 0.4, 0.37, 1)
+                else:
                     r, g, b, a = col.default_value
                     if b > r + 0.04:
                         col.default_value = (*warm, 1)

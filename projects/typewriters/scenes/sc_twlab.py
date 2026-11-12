@@ -260,14 +260,14 @@ def animate(c, sec, shot):
     from human import reach, fingers_curl
     P = c["P"]
     tty = c["tty"]
-    lift = ease(min(1.0, max(0.0, (sec - 1.8) / 1.6))) if shot == "cover" else 1.0
+    lift = 1.0                                                              # the cover is already up
     c["hood"].rotation_euler = (math.radians(-50) * lift, 0, 0)
     t_ = P["tech"]
-    twp.stand(t_, (-0.72, -0.98, 0), -2.12)                                 # at the machine's right-hand end, turned to it and to us
+    twp.stand(t_, (-0.88, -1.05, 0), -0.88)                                 # facing us, the machine at his right hand, the visitors on his left
     hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    side_ = c["hood"].matrix_world.to_3x3() @ Vector((1, 0, 0))                # both hands grip the hood's front edge and lift it
-    twp.work(t_, {"L": hp + side_ * 0.16 + Vector((0, 0, -0.02)), "R": hp - side_ * 0.16 + Vector((0, 0, -0.02))}, head=10)
-    fingers_curl(t_, 30, thumb=20)
+    base = tty.matrix_world @ Vector((0.28, -0.22, 0.2))                        # one hand flat on the machine's casing,
+    twp.work(t_, {"R": base}, head=0)                                          # the other at his side;
+    t_.rot("neck01", (0, 0, 1), 18); t_.rot("head", (0, 0, 1), 26 + 4 * math.sin(sec * 0.6))     # he turns to the visitors
     a, b = P["usA"], P["usB"]
     twp.stand(a, (-0.25, -1.38, 0), -2.18); twp.stand(b, (0.28, -1.88, 0), -2.24)  # the two Americans beside him, watching
     a.rot("head", (1, 0, 0), 8); b.rot("head", (1, 0, 0), 6 + 4 * lift)
