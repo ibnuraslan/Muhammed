@@ -913,7 +913,7 @@ def person(name, kind):
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
-        "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="long01", hv=0.28, hat=False),
+        "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="short02", hv=0.12, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit01", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]
@@ -927,7 +927,7 @@ def person(name, kind):
     else:
         add_asset(h, "hair", spec["hair"], sat=0.1 if spec["hv"] > 0.6 else 0.5, val=spec["hv"], rough=0.45)
     if kind == "thin":
-        ragged(h)
+        ragged(h); coneys_hair(h)
     h.kind = kind
     return h
 
@@ -1285,3 +1285,108 @@ def porch_swing(c, a=0.0):
         e = bpy.data.objects.new("SwingPivot", None); bpy.context.collection.objects.link(e); e.location = piv
         sw.parent = e; c["pswing"] = e
     c["pswing"].rotation_euler = (a, 0, 0)
+
+
+# ----------------------------------------------------------------------------- strand hair (Coneys)
+def hair_mat(name, melanin=0.6, grey=0.3, rough=0.5):
+    """Principled Hair BSDF (melanin), a share of strands grey (per-strand random)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial")
+    def hb(mel):
+        b = N.new("ShaderNodeBsdfHairPrincipled"); b.parametrization = 'MELANIN'
+        b.inputs['Melanin'].default_value = mel; b.inputs['Melanin Redness'].default_value = 0.12
+        b.inputs['Roughness'].default_value = rough; b.inputs['Radial Roughness'].default_value = 0.6
+        if 'Random Roughness' in b.inputs: b.inputs['Random Roughness'].default_value = 0.3
+        if 'Random Color' in b.inputs: b.inputs['Random Color'].default_value = 0.2
+        return b
+    dark, light = hb(melanin), hb(0.12)
+    hi = N.new("ShaderNodeHairInfo")
+    lt = N.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; lt.inputs[1].default_value = grey; L.new(hi.outputs['Random'], lt.inputs[0])
+    mix = N.new("ShaderNodeMixShader"); L.new(lt.outputs[0], mix.inputs[0]); L.new(dark.outputs[0], mix.inputs[1]); L.new(light.outputs[0], mix.inputs[2])
+    L.new(mix.outputs[0], out.inputs['Surface'])
+    return m
+
+
+def strand_hair(h, name, roots, normals, center, n_pts, length, gravity, radius, mat, rng, clump=0.0, frizz=0.002, min_r=None):
+    """Grow one strand per root: out along the normal, bending down under gravity, kept outside a head sphere;
+    pulled toward a few guide strands (matted clumps); jittered (frizz). Parented to the head bone."""
+    n = len(roots)
+    P = np.zeros((n, n_pts, 3))
+    pos = roots.copy(); d = normals.copy()
+    lens = length * (0.7 + 0.6 * rng.random(n))
+    step = (lens / (n_pts - 1))[:, None]
+    for k in range(n_pts):
+        P[:, k] = pos
+        d = d + gravity * np.array([0, 0, -1.0]) + 0.15 * rng.normal(size=(n, 3))
+        d /= np.linalg.norm(d, axis=1, keepdims=True)
+        pos = pos + d * step
+        if min_r is not None:                       # keep strands outside the skull, and off the face
+            v = pos - center; r = np.linalg.norm(v, axis=1, keepdims=True)
+            pos = np.where(r < min_r, center + v / np.maximum(r, 1e-6) * min_r, pos)
+            face = (pos[:, 1] < center[1] - 0.03) & (pos[:, 2] < center[2] + 0.05)
+            d[:, 1] = np.where(face, np.abs(d[:, 1]) + 0.3, d[:, 1])     # steer back off the face
+    if clump > 0:
+        g = rng.choice(n, size=max(8, n // 60), replace=False)
+        nearest = g[np.argmin(((roots[:, None, :] - roots[g][None, :, :]) ** 2).sum(-1), axis=1)]
+        w = (np.linspace(0, 1, n_pts) ** 1.5 * clump)[None, :, None]
+        P = P * (1 - w) + (P[nearest] - roots[nearest][:, None, :] + roots[:, None, :]) * w * 0.4 + P[nearest] * w * 0.6
+    P += frizz * rng.normal(size=P.shape) * np.linspace(0, 1, n_pts)[None, :, None]
+    if min_r is not None:                           # clumping can drag strands back across the face: clear it again
+        face = (P[..., 1] < center[1] - 0.025) & (P[..., 2] < center[2] + 0.06) & (np.abs(P[..., 0]) < 0.075)
+        first = np.where(face.any(1), face.argmax(1), n_pts)       # cut each strand where it would enter the face
+        for i in np.where(first < n_pts)[0]:
+            f_ = max(1, first[i]); P[i, f_:] = P[i, f_ - 1]
+    cv = bpy.data.hair_curves.new(name)
+    cv.add_curves([n_pts] * n)
+    cv.position_data.foreach_set('vector', P.reshape(-1).astype(np.float32))
+    ra = cv.attributes.get('radius') or cv.attributes.new('radius', 'FLOAT', 'POINT')
+    rr = (radius * np.linspace(1.0, 0.35, n_pts))[None, :].repeat(n, 0).reshape(-1)
+    ra.data.foreach_set('value', rr.astype(np.float32))
+    cv.materials.append(mat)
+    o = bpy.data.objects.new(name, cv); bpy.context.collection.objects.link(o)
+    bpy.context.view_layer.update()
+    mw = o.matrix_world.copy()
+    o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = "head"
+    bpy.context.view_layer.update(); o.matrix_world = mw
+    h.parts.append(o)
+    return o
+
+
+def coneys_hair(h):
+    """Collar-length matted hair and a full scraggly beard as strands on the head (rest pose)."""
+    rng = np.random.default_rng(11)
+    me = h.body.data; M = h.body.matrix_world
+    co = np.array([M @ v.co for v in me.vertices]); nr = np.array([(M.to_3x3() @ v.normal).normalized() for v in me.vertices])
+    hv = h.vertex_region(["head"], 0.5)
+    hc = co[hv]; zmin, ztop, ymin = hc[:, 2].min(), hc[:, 2].max(), hc[:, 1].min()
+    center = np.array([0.0, hc[:, 1].mean() + 0.01, ztop - 0.11])
+    # scalp: above the brow at the front, above the ears at the sides, down to the nape at the back
+    allv = np.where(co[:, 2] > zmin)[0]
+    cy = center[1]
+    def scalp(i):
+        x, y, z = co[i]
+        if y < cy - 0.02: return z > ztop - 0.05                # front: above the hairline only
+        if y < cy + 0.03: return z > center[2] + 0.0            # sides: above the ears
+        return z > zmin + 0.05                                  # back: down to the nape
+    sc = np.array([i for i in allv if abs(co[i, 0]) < 0.11 and scalp(i)])
+    k = 16000; pick = rng.choice(sc, size=k)
+    roots = co[pick] + 0.002 * rng.normal(size=(k, 3)); nrm = nr[pick]
+    nrm = nrm + np.where((co[pick][:, 1] < center[1] - 0.02)[:, None], np.array([0, 0.9, 0.2]), 0.0)   # combed back off the brow
+    rmin = np.linalg.norm(co[sc] - center, axis=1).mean() + 0.006
+    hm = hair_mat("ConeysHair", 0.62, 0.3, 0.55)
+    strand_hair(h, h.name + "_hair", roots, nrm * 0.25 + np.array([0, 0.4, 0.1]), center, 12, 0.19, 0.8, 0.00045, hm, rng,
+                clump=0.6, frizz=0.0025, min_r=rmin)
+    # beard: jaw, chin, cheeks below the cheekbone, moustache
+    def bz(i):
+        x, y, z = co[i]
+        top = zmin + (0.074 if abs(x) < 0.03 else 0.068 if abs(x) < 0.055 else 0.09)
+        if y > ymin + 0.12 or z > top or z < zmin - 0.01: return False
+        if zmin + 0.058 < z < zmin + 0.071 and abs(x) < 0.02 and y < ymin + 0.04: return False    # lips
+        return True
+    bvs = np.array([i for i in np.where((co[:, 2] > zmin - 0.03) & (np.abs(co[:, 0]) < 0.1))[0] if bz(i)])
+    kb = 9000; pb = rng.choice(bvs, size=kb)
+    broots = co[pb] + 0.001 * rng.normal(size=(kb, 3))
+    strand_hair(h, h.name + "_beard", broots, nr[pb] * 0.4 + np.array([0, -0.1, -0.8]), center, 6, 0.035, 0.6, 0.00035,
+                hair_mat("ConeysBeard", 0.5, 0.35, 0.6), rng, clump=0.3, frizz=0.003)
+    return h
