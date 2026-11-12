@@ -453,8 +453,10 @@ def section(st):
     zb, belt, top, w, wt = st['zb'], st['belt'], st['top'], st['w'], st['wt']
     crown = st.get('crown', 0.025); bul = st.get('bul', 0.012); rb = st.get('rb', 0.08); rs = st.get('rs', 0.05)
     rt = st.get('rt', 0.07)
+    # keep every corner radius inside the section, or the loft folds through its centreline on narrow parts
+    rt = min(rt, wt * 0.6); rb = min(rb, w * 0.5); rs = min(rs, w * 0.4)
     h_g = max(top - belt, 0.0)
-    pts = [(0.0, zb), (w * 0.55, zb), (w - rb * 1.2, zb + 0.004), (w - rb * 0.35, zb + rb * 0.35), (w, zb + rb * 1.1),
+    pts = [(0.0, zb), (min(w * 0.55, w - rb * 1.45), zb), (w - rb * 1.2, zb + 0.004), (w - rb * 0.35, zb + rb * 0.35), (w, zb + rb * 1.1),
            (w + bul, _lerp(zb, belt, 0.55)), (w + bul * 0.6, belt - rs * 1.4), (w - rs * 0.25, belt - rs * 0.25),
            (w - rs, belt + 0.004)]
     # greenhouse: lean in from the shoulder to the roof edge
@@ -513,11 +515,31 @@ def loft_body(name, keys, m_paint, step=0.11, levels=2, extra=0.035, sharp=None)
             fs.append((i * ring + j2, i * ring + j, ci) if sgn > 0 else (i * ring + j, i * ring + j2, ci))
     o = mesh_obj(name, vs, fs, [m_paint])
     bm = bmesh.new(); bm.from_mesh(o.data)
-    bmesh.ops.recalc_face_normals(bm, faces=bm.faces); bm.to_mesh(o.data); bm.free()
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)       # consistent winding (end caps included) ...
+    if bm.calc_volume(signed=True) < 0:                       # ... and facing outward          # make the shell face outward (end-cap winding varies)
+        bmesh.ops.reverse_faces(bm, faces=bm.faces)
+    bm.to_mesh(o.data); bm.free()
     subdivide(o, levels)
     if sharp:
         o.data.set_sharp_from_angle(angle=math.radians(sharp))
     return o
+
+
+def boolean_cut(obj, cutter, solver='EXACT'):
+    """Difference with a safety net: if a solver unions instead of cutting (the bounds grow), try the next one."""
+    dims = obj.dimensions.copy(); orig = obj.data.copy()
+    for sv in [solver] + [x for x in ('MANIFOLD', 'EXACT', 'FLOAT') if x != solver]:
+        b = obj.modifiers.new("cut", 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = cutter; b.solver = sv
+        try:
+            b.material_mode = 'TRANSFER'
+        except Exception:
+            pass
+        bake(obj); bpy.context.view_layer.update()
+        if all(obj.dimensions[i] <= dims[i] + 1e-3 for i in range(3)):
+            break
+        obj.data = orig.copy()
+    bpy.data.meshes.remove(orig)
+    return obj
 
 
 def cut_arches(body, arches, m_liner, solver='EXACT'):
@@ -529,12 +551,7 @@ def cut_arches(body, arches, m_liner, solver='EXACT'):
             cutters.append(c)
     cu = join(cutters, "ArchCutters")
     body.data.materials.append(m_liner)
-    b = body.modifiers.new("arch", 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = cu; b.solver = solver
-    try:
-        b.material_mode = 'TRANSFER'
-    except Exception:
-        pass
-    bake(body)
+    boolean_cut(body, cu, solver)
     bpy.data.objects.remove(cu)
     body.data.shade_smooth(); body.data.set_sharp_from_angle(angle=math.radians(40))
     return body

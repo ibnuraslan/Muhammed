@@ -62,7 +62,7 @@ def street(kind, variant, out, pct, samples):
     L = max(p.x for p in pts) - min(p.x for p in pts); H = max(p.z for p in pts)
     d = max(L, H * 2.2) * 1.05 + 3.0
     cam = camera((0, 0, 0), (0, 1, 0), lens=40)
-    cam.location = (-d * 0.9, -1.9 - d * 0.43, 1.45)
+    cam.location = (-d * 0.92, min(-1.9 + d * 0.40, 3.6), 1.45)        # from the far lane: no pillars or poles in between
     tgt = Vector((0, -1.9, H * 0.4))
     cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
     s.render.filepath = os.path.join(out, f"street_{kind}{'_' + variant if variant else ''}.png")
