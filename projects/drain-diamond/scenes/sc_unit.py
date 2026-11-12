@@ -55,7 +55,10 @@ def build(variant=None):
     fab = fabric("ChairFab", (0.05, 0.05, 0.06), 0.9, 0.3, 400); met = pbr("ChairMetal", (0.25, 0.25, 0.27), 0.35, 0.9)
     for k, (x, y, rz) in enumerate(((-2.5, 2.2, 0), (0.5, 2.2, 0), (-2.5, 5.0, math.pi), (0.5, 5.0, math.pi), (3.3, 3.6, -math.pi / 2))):
         dd.model_h("metal_office_desk", (x, y, 0), 0.76, rot_z=rz)
-        office_chair((x, y - 0.75 if rz == 0 else y + 0.75, 0), rz, fab, met)
+        if k < 4:
+            office_chair((x, y - 0.75 if rz == 0 else y + 0.75, 0), rz, fab, met)
+        else:
+            office_chair((x + 0.8, y, 0), math.pi / 2, fab, met)      # the reader's chair, between desk and window
         dd.model_h("binder_notebook", (x - 0.4, y, 0.76), 0.05, rot_z=0.3 * k)
         if k % 2 == 0:
             dd.model_h("desk_lamp_arm_01", (x + 0.5, y + 0.1, 0.76), 0.45, rot_z=2.5)
@@ -71,7 +74,7 @@ def build(variant=None):
         yc = 2.1 + k * 3.0
         for j in range(22):
             box("Blind", (4.98, yc, 0.85 + j * 0.085), (0.012, 2.2, 0.05), slat, rot=(0, math.radians(-20), 0))
-    sn = sun(18, 0, energy=3.0, color=(1.0, 0.9, 0.78), angle_deg=1.0)
+    sn = sun(18, 0, energy=1.4, color=(1.0, 0.9, 0.78), angle_deg=1.0)
     sn.rotation_euler = (math.radians(72), 0, math.radians(90 + 20))       # low sun through the blinds onto the floor
     plastic = pbr("Beige", (0.62, 0.6, 0.55), 0.5)
     for k, (x, y, rz) in enumerate(((-2.5, 2.2, 0), (0.5, 2.2, 0), (-2.5, 5.0, math.pi), (0.5, 5.0, math.pi))):
@@ -118,10 +121,10 @@ def build(variant=None):
     zero(reader); reset_pose(reader); pose_sit(reader, lean=14)
     for sd, sg in (("L", 1), ("R", -1)):
         reach(reader, sd, Vector((-0.12 * sg, -0.42, 0.72)), Vector((sg * 0.6, 0.2, -0.6)))
-    place(reader, (3.3 + 0.75, 3.6, 0), math.radians(90))
+    place(reader, (3.3 + 0.8, 3.6, 0), math.radians(-90))      # facing -X: the room, the desk in front of her
     hip = (reader.bone_head("upperleg01.L") + reader.bone_head("upperleg01.R")) / 2
     reader.arm.location.z += 0.52 - hip.z; bpy.context.view_layer.update()
-    c["file"] = box("OpenFile", (3.35, 3.6, 0.775), (0.33, 0.45, 0.01), pbr("FilePaper", (0.88, 0.87, 0.82), 0.7))
+    c["file"] = box("OpenFile", (3.55, 3.5, 0.775), (0.33, 0.45, 0.01), pbr("FilePaper", (0.88, 0.87, 0.82), 0.7))
     l = bpy.data.lights.new("DeskLampL", 'SPOT'); l.energy = 40; l.spot_size = math.radians(70); l.color = (1.0, 0.85, 0.6)
     lo = bpy.data.objects.new("DeskLampL", l); bpy.context.collection.objects.link(lo); lo.location = (3.3, 3.2, 1.2); point_at(lo, (3.3, 3.6, 0.77))
     # the listening post on the reader's desk: a reel-to-reel deck (two spools, tape across the heads, two VU meters)
@@ -150,9 +153,14 @@ def build(variant=None):
         nd = box(f"Needle{k}", vp + Vector((-0.004, 0, -0.022)), (0.002, 0.003, 0.045), pbr("NeedleM", (0.05, 0.05, 0.05), 0.5))
         c.setdefault("needles", []).append(nd)
     hp = pbr("Headphones", (0.04, 0.04, 0.045), 0.5)
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.008, location=(0, 0, 0))
-    band = bpy.context.active_object; band.data.materials.append(hp); band.name = "HeadBand"
-    c["headband"] = band
+    H = dd.Builder("HeadPhones")                     # a padded band over the crown and two big ear cups
+    for q in range(13):
+        a_ = math.pi * q / 12
+        H.box((0.095 * math.cos(a_), 0, 0.1 * math.sin(a_)), (0.03, 0.035, 0.03), hp, rot=(0, -a_ + math.pi / 2, 0))
+    for sx in (-1, 1):
+        H.cyl((sx * 0.1, 0, -0.01), 0.045, 0.035, hp, verts=24, rot=(0, math.radians(90), 0))
+        H.cyl((sx * 0.08, 0, -0.01), 0.04, 0.012, pbr("EarPad", (0.12, 0.12, 0.13), 0.8), verts=24, rot=(0, math.radians(90), 0))
+    c["headband"] = H.done((0, 0, -20))
     return c
 
 
@@ -165,7 +173,7 @@ def anim_listen(c, t):
     r = c["reader"]
     r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
-    c["headband"].location = hd + Vector((0, 0, 0.09)); c["headband"].rotation_euler = (math.radians(90), 0, r.arm.rotation_euler.z)
+    c["headband"].location = hd + Vector((0, 0, 0.07)); c["headband"].rotation_euler = (0, 0, r.arm.rotation_euler.z)
 
 
 def anim_pin(c, t):
@@ -195,11 +203,11 @@ def anim_read(c, t):
 
 MOVES = {
     "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
-                   cam=lambda c, t: (Vector((1.6, 5.3, 1.55)).lerp(Vector((1.8, 5.05, 1.5)), ease(t)), Vector((3.7, 3.75, 1.0)), 32),
+                   cam=lambda c, t: (Vector((2.3, 4.9, 1.45)).lerp(Vector((2.55, 4.7, 1.42)), ease(t)), Vector((3.8, 3.7, 1.05)), 32),
                    focus=lambda c, t: Vector((3.6, 3.8, 1.0))),
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
     "read": dict(kind="anim", dof=2.8, anim=anim_read,
-                 cam=lambda c, t: (Vector((1.3, 6.0, 1.75)).lerp(Vector((1.6, 5.7, 1.7)), ease(t)), Vector((4.0, 3.6, 1.0)), 30),
+                 cam=lambda c, t: (Vector((2.2, 2.0, 1.6)).lerp(Vector((2.45, 2.25, 1.55)), ease(t)), Vector((3.9, 3.6, 1.0)), 32),
                  focus=lambda c, t: Vector((4.0, 3.6, 1.2))),
 }
