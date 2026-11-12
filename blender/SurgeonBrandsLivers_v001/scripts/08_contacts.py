@@ -69,7 +69,7 @@ def hover(r, s, f, dg):
     return None
 
 # --- tool holds: thumb and index tips close on the tool (tripod grip), every 2 frames
-TOOL_HOLDS = [("Surgeon1", "R", 1, 300, "ArgonPen_OR"), ("Surgeon1", "R", 318, 458, "ND_"), ("GloveHands", "R", 1, 300, "ArgonPen_Studio")]
+TOOL_HOLDS = [("Surgeon1", "R", 1, 300, "ArgonPen_OR"), ("Surgeon1", "R", 318, 420, "ND_"), ("GloveHands", "R", 1, 300, "ArgonPen_Studio")]
 def ik_keys_remove(r, s, a0, b0):
     ad = r.animation_data
     for fc in [fc for L in ad.action.layers for st in L.strips for cb in st.channelbags for fc in cb.fcurves
@@ -101,6 +101,8 @@ for name, s, f0, f1, pre in TOOL_HOLDS:
         pb.keyframe_insert("location", frame=f, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name); n_tool += 1
     report.append("  tool hold %s.%s %d-%d on %s* (max shift %.1f cm)" % (name, s, f0, f1, pre, 100 * max(v.length for M, v in plan.values())))
 print("TOOL_KEYS", n_tool)
+# grips placed by hand in 03 (fist round the stamp handle): never pulled toward a neighbouring prop
+KEEP_GRIPS = [("PanelB", "R", 1555, 1650, "Stamp")]
 todo = {}
 for f in range(1, sc.frame_end + 1, 2):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
@@ -111,7 +113,7 @@ for f in range(1, sc.frame_end + 1, 2):
             if h is None: continue
             if h[0] in ("held", "far"):
                 report.append("  %5d %s.%s near %s, %s %s - left" % (f, r.name, s, h[1], "holding" if h[0] == "held" else "gap", h[2])); continue
-            if any(n_ == r.name and s_ == s and f0 <= f <= f1 for n_, s_, f0, f1, _ in TOOL_HOLDS): continue
+            if any(n_ == r.name and s_ == s and f0 <= f <= f1 for n_, s_, f0, f1, _ in TOOL_HOLDS + KEEP_GRIPS): continue
             todo.setdefault((r.name, s), {})[f] = h
 print("HOVER_FRAMES", sum(len(v) for v in todo.values()))
 

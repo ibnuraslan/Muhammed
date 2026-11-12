@@ -1,26 +1,41 @@
-# SurgeonBrandsLivers v007: acting review and fixes
+# SurgeonBrandsLivers v008: director notes on v007 (5700c40) and qa_check fixes
 
-Brief: `blender/briefs/ACTING_FIX_04-10.md` (director branch `claude/beautiful-ptolemy-c5vrcq`).
-Method: half-second review sheet of v006 (`before_v006_half_second.jpg`, 270×480, 8 samples, every 30 frames), fix, re-render the same sheet for v007 (`after_v007_half_second.jpg`).
-Story-beat frames are unchanged: 1 / 301 / 565 / 637 / 781 / 1045 / 1231 / 1501, end 1710. No VO added.
+Beat frames are unchanged: 1 / 301 / 565 / 637 / 781 / 1045 / 1231 / 1501, end 1710. No VO was added.
+The v007 fixes are kept (one-hand mask-off, home pose, rest arms, lectern hands).
 
-## Problems found in v006, with the fix in v007
+## The director's 7 notes
+| # | Note | v008 fix |
+|---|---|---|
+| 1 | Empty frames at 9.5, 10.0, 10.5, 20.5 and 21.5 s | 9.5–10.5 s: whip to the nurse, then over her shoulder onto the calendar, then one push through it (~6 frames). 20.5 s: the camera holds on Surgeon2 at the beat, then whips. 21.5 s: the camera swings round in front of the surgeon, so the SB wall reads behind him. Also: 13.0 s (beat 5) the bed bursts through the doors with the patient on it; 26–28 s the judge stays in frame over the licence; 24.2 s the pan crosses the panel, not the side wall. |
+| 2 | Opening 0–1.5 s: his back and the top of his cap | The camera is low, across the table and in front. His eyes and mask read with the pen and the skin. His working elbows now hang down and out (IK poles); before, the one-sided elbow limit flipped his right forearm up across his face. |
+| 3 | Gavel: splayed fingers, held sideways | The gavel was re-framed (its stick was tilted inside its own mesh). The block moved forward. It is held in a fist (`power_fist`, thumb over the fingers) with the stick across the palm, head forward. Raised at 1525, strikes down flat on the block at 1538, then rests there. |
+| 4 | Stamp: one fingertip on the knob | Fist round the handle (`wrap_grip`, thumb wrapped), hand upright beside it, pressing down. The stamp starts within easy reach. |
+| 5 | Nurse: claw by the rail | The head-board grab point was 7 cm off the bed in the air. The hands now grip the top edge of the head-board (`wrap_grip`). The nurse walks close enough to reach. |
+| 6 | Mask hand comes up as a claw | It rises `relaxed`, then `pinch` on the lower edge, then pulls down. The mask still only moves while the hand holds it. |
+| 7 | Close-up 9.0 nearly black | The glove snap was inside the drape. Surgeon2's hands are now in front of his chest and the close-up is re-aimed. The nurse close-up is also re-aimed onto her hands. |
 
-| # | v006 frames (time) | What a real surgeon or person wouldn't do | v007 fix |
-|---|---|---|---|
-| 1 | 451–541 (7.5–9.0 s) | **Mask-off.** Both arms swung up behind and over the head; the elbows rose above the shoulders; the mask moved on its own before any hand reached it. | One hand only (right). It rises upright in front of the face from 466, pinches the mask's lower edge at 474, and pulls it down onto the chin from 478 to 502. The mask moves only while the hand holds it. It is released at 508, and the hand returns to rest at 522. The elbow is kept low and in front with a forward IK pole. The left arm stays low at the side the whole time. Close-ups: `v007_mask_off_450-522.jpg`. |
-| 2 | 499 | Fingertips poked into the chin during the pull. | The hand eases forward 3 cm as the pull ends. |
-| 3 | 1–90 (0–1.5 s) | Beat 1 showed only the surgeon's back, and at 1.5 s the top of his head filled the frame, so there was no read of who is operating. | The opening camera was re-staged. His masked face and the marker pen are in frame from frame 1, and the move ends on the window at 115. |
-| 4 | 120 (2.0 s) | Shoulder fill: the surgeon's shoulder blocked the whole frame. | Covered by the same re-staged opening keys. |
-| 5 | 55–127, 331–427 | The surgeon's hands went inside the patient's torso, which is hidden under the drape (clip_scan). | The drape torso was raised to match a real body, and the patient was lowered 5 cm onto the table top. The hands now work on the drape surface. |
-| 6 | 607–643, 769, 1177; patient on table/bed | "Rest" arms were driven into the thighs and pelvis. A sign bug in the rest pose adducted the arms inward instead of letting them hang. The lying patient's hands were inside her pelvis. | `arm_rest` sign fixed, so arms hang naturally outside the body. Lying arms are slightly apart. |
-| 7 | 660–760 (11.0–12.5 s) | **Home:** she folded over almost double, with her face hidden by her hair. Her left hand sank into her thigh. The fingers of the hand on her side were in her belly. | She bends less (spine 28–34°, head up), so her face reads. The left palm is anchored to the knee joint. The right hand lies flat on the outside of her side with the elbow out. Close-ups: `v007_home_hands_697-740.jpg`. |
-| 8 | 860–880 (14.5 s) | The bed filled the frame during the push. | The camera key at 870 moved out (2.95, 1.45, 0.85). |
-| 9 | 1228–1242 (20.5 s) | The whip pan went through the anaesthetist's blue drape at close range, so the frame was a solid blue fill. | The camera rises over the screen bar (keys 1228/1231/1235/1242) and the whip reads as a move, not a fill. |
-| 10 | 1273–1285, 1291–1419 | The surgeon's hands passed through each other at the lectern; the anaesthetist's hand was inside his own torso (hand audit pass 1). | Re-keyed by the hand audit: 0 hits at the end (`v007_hand_audit.txt`). |
-| 11 | 270 (4.5 s), 630 (10.5 s), 1170 (19.5 s) | Not an acting problem: these are the intended 6-frame texture-wipe transits. | No change; noted so they are not read as errors. |
+## Hand system
+- Every hand uses a preset from `pipeline/hand_poses.py` (`HAND_POSE_RULES` in `03_animate.py`). There are no hand-set finger angles.
+- `add_hand_limits` is applied to all 9 rigs (`07_hands.py`).
+- Contact pass `08_contacts.py`:
+  - It applies qa_check's own HOVER rule.
+  - A hovering visible hand is moved so a fingertip rests on the surface.
+  - On the pen and the needle driver, the thumb and index tips are closed onto the tool.
+- `07_hands.py` capsule audit: final 0. `clip_scan.py`: see the submission message.
 
-## Checks
-- `pipeline/clip_scan.py` (director's, depth 6 mm, on camera): **v006 = 9 bad ranges** `[1-127, 277-433, 487, 607-643, 679-685, 769, 793-913, 1177, 1273-1285]` → **v007 = 0 bad ranges** (`clip_scan_v006_before.json`, `clip_scan_v007_after.json`).
-- Hand audit (every 2 frames): pass 1 found 31 hits, final 0.
-- Close-up of every hand contact (pen, needle driver, drape, mask pull, lamp, mug, side, knee, bed push, glove snap, liver lift, lectern, spread hands, gavel raised/strike, stamp, writing): `v007_hand_contact_closeups.jpg`.
+## qa_check.py (`qa_v008.json`): remaining flags, all intended
+- **HOVER 4** (1309, 1411–1423): the patient's left hand is under the drape on the OR table while the camera is in the hearing room. It is not visible.
+- **INSIDE 2** (277, 1177): the single frame where the camera crosses the studio membrane between the OR window and the studio. These are the approved texture wipes of 6 frames or fewer.
+- **EMPTY / FILL (one sample per wipe)**: 133–139 and 1057 (dive into the window), 277–289 and 1177–1189 (rise out), 637 (through the calendar), 775 (through the home wall), 1237 (through the west wall). These are texture wipes of 6 frames or fewer.
+- **EMPTY / FILL (studio macro)**:
+  - 163–247: the gloved hand burns S, then B, into the liver.
+  - 1087–1159: the gloved hands lift the liver with the SB burn.
+  - The liver and the gloved hands are the subject; the characters' bodies are not in this set.
+- **EMPTY (wide)**: 835–889 is the establishing wide of the bed rolling in through the doors (patient on the bed, nurse behind).
+- **EMPTY (prop in hand)**: 1507–1519 is the gavel in the judge's fist; 1567–1627 is the stamp in her fist on the licence. Both are hands-on-prop close-ups.
+- CLAW, FACEPRESS and BACKHEAD: 0.
+
+## Checks on the packed file
+- `clip_scan.py` (director, step 6): **0 bad ranges** (`clip_scan_v008.json`).
+- `qa_check.py` (director c6240b2, step 6, beats.json): `qa_v008.json`. CLAW 0, FACEPRESS 0, BACKHEAD 0, HOVER 4 (hidden hand, listed above), INSIDE 2 plus EMPTY/FILL (intended wipes, studio macro, wide shot and prop-in-hand close-ups, listed above).
+- Known weak spot: the stamp close-up at 1596. The fist sits low on the handle, near the base.

@@ -11,7 +11,7 @@ SHOTS = [  # frame, actor, side, camera offset from the hand, label
     (380, "Surgeon1", "L", Vector((-0.2, 0.3, 0.2)), "hand on drape"),
     (470, "Surgeon1", "R", Vector((0.15, 0.35, 0.05)), "mask reach"),
     (490, "Surgeon1", "R", Vector((0.15, 0.35, 0.05)), "mask pull"),
-    (60, "Nurse", "R", Vector((0.3, -0.3, 0.0)), "lamp handle"),
+    (60, "Nurse", "R", Vector((0.15, 0.30, 0.30)), "hands on drape"),
     (620, "Patient", "L", Vector((-0.3, -0.3, 0.1)), "mug"),
     (720, "Patient", "R", Vector((-0.35, -0.25, 0.05)), "clutch side"),
     (720, "Patient", "L", Vector((-0.3, -0.35, 0.1)), "hand on knee"),

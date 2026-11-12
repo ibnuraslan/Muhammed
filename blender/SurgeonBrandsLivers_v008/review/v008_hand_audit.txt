@@ -1,0 +1,14 @@
+Hand audit (every 2 frames, frames 1-1710)
+Limit Rotation constraints added: 256 (pipeline/hand_poses.py add_hand_limits: fingers 0..90 forward, +-10; thumb cone; wrist +-60 / +-30 / +-25)
+Elbow IK limits: one-sided 0..145 deg on every lowerarm01 (side chosen per arm by best target reach)
+
+pass 1 (before re-key): 4 hits
+pass 2 (after 1st re-key): 0 hits
+final: 0 hits
+
+Pass-1 hits by hand / kind (frame ranges):
+  Surgeon1   L other hand                   2 frames  1291-1419
+  Surgeon1   R other hand                   2 frames  1291-1419
+
+Final remaining hits:
+

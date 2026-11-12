@@ -1,0 +1,133 @@
+Contact pass (qa_check HOVER rule): 766 hovering hand-frames moved onto the surface, 1036 IK keys
+  tool hold Surgeon1.R 1-300 on ArgonPen_OR* (max shift 7.9 cm)
+  tool hold Surgeon1.R 318-420 on ND_* (max shift 29.4 cm)
+  tool hold GloveHands.R 1-300 on ArgonPen_Studio* (max shift 4.5 cm)
+    261 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    263 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    265 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    267 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    269 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    271 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    287 GloveHands.L near ArgonPen_Studio_Body, holding Liver - left
+    385 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    387 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    389 Surgeon1.R near ND_Jaw, holding ND_Jaw.001 - left
+    391 Surgeon1.R near ND_Jaw, holding ND_Jaw.001 - left
+    395 Surgeon1.R near ND_Ring, holding ND_Jaw.001 - left
+    397 Surgeon1.R near ND_Ring, holding ND_Jaw.001 - left
+    399 Surgeon1.R near ND_Jaw, holding ND_Jaw.001 - left
+    407 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    409 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    411 Surgeon1.R near ND_Ring, holding ND_Jaw.001 - left
+    413 Surgeon1.R near ND_Jaw, holding ND_Jaw.001 - left
+    415 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    417 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    419 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    421 Surgeon1.R near ND_Ring, holding ND_Ring.001 - left
+    427 Surgeon1.R near ND_Jaw, gap 13.6 cm - left
+   1003 Anaesth.L near AnesthesiaCart, gap 12.7 cm - left
+   1005 Anaesth.L near AnesthesiaCart, gap 14.0 cm - left
+   1007 Anaesth.L near AnesthesiaCart, gap 15.4 cm - left
+   1037 Surgeon2.R near Drape, gap 14.8 cm - left
+   1041 Surgeon2.L near AbdomenSkin, gap 16.0 cm - left
+   1041 Surgeon2.R near AbdomenSkin, gap 15.2 cm - left
+   1043 Surgeon2.L near AbdomenSkin, gap 12.4 cm - left
+   1177 Anaesth.R near ORTable_Pad, gap 18.1 cm - left
+   1283 Surgeon1.L near HEAR_LecternTop, gap 12.6 cm - left
+   1285 Surgeon1.L near HEAR_LecternTop, gap 12.8 cm - left
+   1287 Surgeon1.L near HEAR_LecternTop, gap 13.7 cm - left
+   1303 Surgeon1.L near HEAR_LecternTop, gap 19.5 cm - left
+   1305 Surgeon1.L near HEAR_LecternTop, gap 17.5 cm - left
+   1307 Surgeon1.L near HEAR_LecternTop, gap 16.1 cm - left
+   1309 Surgeon1.L near HEAR_LecternTop, gap 15.6 cm - left
+   1313 Surgeon1.R near HEAR_LecternTop, gap 14.5 cm - left
+   1315 Surgeon1.R near HEAR_LecternTop, gap 15.3 cm - left
+   1363 Surgeon1.L near HEAR_LecternTop, gap 16.9 cm - left
+   1363 Surgeon1.R near HEAR_LecternTop, gap 15.1 cm - left
+   1365 Surgeon1.L near HEAR_LecternTop, gap 16.0 cm - left
+   1365 Surgeon1.R near HEAR_LecternTop, gap 13.9 cm - left
+   1367 Surgeon1.L near HEAR_LecternTop, gap 15.1 cm - left
+   1367 Surgeon1.R near HEAR_LecternTop, gap 12.7 cm - left
+   1369 Surgeon1.L near HEAR_LecternTop, gap 14.3 cm - left
+   1369 Surgeon1.R near HEAR_Lectern, gap 14.2 cm - left
+   1371 Surgeon1.L near HEAR_Lectern, gap 16.2 cm - left
+   1371 Surgeon1.R near HEAR_Lectern, gap 13.1 cm - left
+   1373 Surgeon1.L near HEAR_Lectern, gap 15.1 cm - left
+   1373 Surgeon1.R near HEAR_Lectern, gap 12.0 cm - left
+   1375 Surgeon1.L near HEAR_Lectern, gap 14.0 cm - left
+   1377 Surgeon1.L near HEAR_Lectern, gap 13.1 cm - left
+   1379 Surgeon1.L near HEAR_Lectern, gap 12.2 cm - left
+   1423 Surgeon1.L near HEAR_LecternTop, gap 12.9 cm - left
+   1621 PanelB.R near StampBase, holding StampHandle - left
+   1623 PanelB.R near StampBase, holding StampHandle - left
+   1625 PanelB.R near StampBase, holding StampHandle - left
+   1627 PanelB.R near StampBase, holding StampHandle - left
+   1629 PanelB.R near StampBase, holding StampHandle - left
+   1631 PanelB.R near StampBase, holding StampHandle - left
+   1633 PanelB.R near StampBase, holding StampHandle - left
+   1635 PanelB.R near StampBase, holding StampHandle - left
+  Patient.R 1-131 onto AbdomenSkin (max 7.7 cm)
+  Patient.R 275-277 onto AbdomenSkin (max 7.7 cm)
+  Patient.R 289-339 onto AbdomenSkin (max 7.7 cm)
+  Patient.R 375-435 onto AbdomenSkin (max 7.7 cm)
+  Patient.R 779-783 onto Blanket (max 1.0 cm)
+  Patient.R 793-919 onto Blanket (max 0.6 cm)
+  Patient.R 1177-1181 onto AbdomenSkin (max 7.7 cm)
+  Patient.R 1299-1313 onto AbdomenSkin (max 7.7 cm)
+  Patient.R 1407-1425 onto AbdomenSkin (max 7.7 cm)
+  Surgeon1.L 1-109 onto Drape (max 5.6 cm)
+  Surgeon1.L 275-277 onto Drape (max 5.6 cm)
+  Surgeon1.L 287-319 onto Drape (max 5.7 cm)
+  Surgeon1.L 429-429 onto AbdomenSkin (max 0.9 cm)
+  Surgeon1.L 1281-1281 onto HEAR_LecternTop (max 4.0 cm)
+  Surgeon1.L 1289-1293 onto HEAR_LecternTop (max 10.9 cm)
+  Surgeon1.L 1381-1385 onto HEAR_Lectern (max 11.1 cm)
+  Surgeon1.L 1419-1425 onto HEAR_Lectern (max 9.2 cm)
+  Anaesth.L 275-277 onto AnesthesiaCart (max 7.7 cm)
+  Anaesth.L 941-1001 onto AnesthesiaCart (max 11.0 cm)
+  Nurse.L 275-277 onto Drape (max 1.1 cm)
+  Nurse.L 577-629 onto Drape (max 10.6 cm)
+  Nurse.R 275-277 onto Drape (max 3.4 cm)
+  Patient.L 275-277 onto Drape (max 5.0 cm)
+  Patient.L 289-289 onto Drape (max 5.0 cm)
+  Patient.L 667-667 onto Mug (max 4.5 cm)
+  Patient.L 779-911 onto Blanket (max 0.5 cm)
+  Patient.L 1177-1181 onto Drape (max 5.0 cm)
+  Patient.L 1191-1193 onto Drape (max 5.0 cm)
+  Patient.L 1297-1313 onto Drape (max 5.0 cm)
+  Patient.L 1409-1427 onto Drape (max 5.0 cm)
+  Surgeon1.R 423-425 onto ND_Jaw (max 5.5 cm)
+  Surgeon1.R 775-775 onto Drape (max 1.1 cm)
+  Surgeon1.R 1177-1181 onto Drape (max 1.1 cm)
+  Surgeon1.R 1233-1275 onto HEAR_LecternTop (max 2.4 cm)
+  Surgeon1.R 1283-1291 onto HEAR_LecternTop (max 3.7 cm)
+  Surgeon1.R 1299-1301 onto HEAR_Lectern (max 7.0 cm)
+  Surgeon1.R 1375-1379 onto HEAR_Lectern (max 10.6 cm)
+  Surgeon1.R 1419-1441 onto HEAR_Lectern (max 4.8 cm)
+  Anaesth.R 939-973 onto Monitor_B_Case (max 5.8 cm)
+  Surgeon2.R 941-941 onto AnesthesiaCart (max 10.5 cm)
+  Surgeon2.R 963-967 onto Drape (max 2.0 cm)
+  Surgeon2.R 993-999 onto Drape (max 5.5 cm)
+  Surgeon2.R 1031-1055 onto Drape (max 11.1 cm)
+  Surgeon2.R 1177-1179 onto AbdomenSkin (max 4.9 cm)
+  Surgeon2.R 1297-1299 onto Drape (max 2.5 cm)
+  Surgeon2.L 971-971 onto Drape (max 4.7 cm)
+  Surgeon2.L 1015-1055 onto Drape (max 11.3 cm)
+  Surgeon2.L 1177-1177 onto AbdomenSkin (max 5.8 cm)
+  Surgeon2.L 1297-1299 onto Drape (max 3.1 cm)
+  GloveHands.L 1071-1075 onto Liver (max 0.9 cm)
+  GloveHands.L 1167-1173 onto Liver (max 0.8 cm)
+  PanelA.L 1233-1271 onto HEAR_DeskTop (max 0.7 cm)
+  PanelA.L 1455-1491 onto HEAR_DeskTop (max 0.7 cm)
+  PanelA.L 1535-1543 onto HEAR_DeskTop (max 0.7 cm)
+  PanelA.R 1233-1269 onto HEAR_DeskTop (max 0.7 cm)
+  PanelA.R 1463-1475 onto Gavel_src_3 (max 7.4 cm)
+  PanelA.R 1483-1497 onto Gavel_src_3 (max 5.6 cm)
+  PanelA.R 1535-1577 onto Gavel_src_3 (max 6.1 cm)
+  PanelB.L 1233-1263 onto Certificate (max 4.6 cm)
+  PanelB.L 1475-1485 onto Certificate (max 4.6 cm)
+  PanelB.L 1571-1667 onto CertBorder (max 5.5 cm)
+  PanelC.L 1233-1245 onto HEAR_DeskTop (max 0.9 cm)
+  PanelC.L 1449-1471 onto HEAR_DeskTop (max 0.9 cm)
+  PanelC.R 1451-1453 onto HEAR_DeskTop (max 0.5 cm)
+  PanelC.R 1467-1475 onto HEAR_DeskTop (max 0.6 cm)

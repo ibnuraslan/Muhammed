@@ -196,7 +196,7 @@ def hp_key(rig, s, name, f):
         _HP[k] = _pose_rots(rig, s, name)
     _key(rig, s, _HP[k], f, 1.0)
 HAND_POSE_RULES = [  # actor, side (None = both), first, last frame, pose
-    ("Surgeon1", "R", 1, 460, "tripod"),          # argon pen, then the needle driver
+    ("Surgeon1", "R", 1, 460, "pinch"),           # argon pen, then the needle driver (thumb + index on the tool)
     ("Surgeon1", "L", 1, 460, "flat_palm"),       # flat on the drape / beside the window
     ("Surgeon1", "R", 461, 472, "relaxed"),       # rises relaxed in front of the face
     ("Surgeon1", "R", 473, 503, "pinch"),         # pinches the mask's lower edge and pulls it down
@@ -206,7 +206,7 @@ HAND_POSE_RULES = [  # actor, side (None = both), first, last frame, pose
     ("Patient", None, 685, 775, "flat_palm"),     # palm on the knee, palm on her side
     ("Patient", "R", 662, 684, "flat_palm"),
     ("Surgeon2", "L", 990, 1016, "pinch"),        # glove cuff
-    ("GloveHands", "R", 1, 300, "tripod"),        # studio pen
+    ("GloveHands", "R", 1, 300, "pinch"),         # studio pen
     ("GloveHands", "L", 1, 300, "flat_palm"),     # steadying the liver
     ("GloveHands", None, 1030, 1710, "cup_hold"), # lifting the liver
     ("PanelA", "R", 1470, 1710, "power_fist"),    # gavel, thumb over the fingers
