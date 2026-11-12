@@ -57,7 +57,11 @@ def fk_leg(rig, s, f, hip=88, knee=80, splay=4, ankle=0):
 def fingers_curl(rig, f, s, amt):
     """v007: all finger posing goes through pipeline/hand_poses.py (no hand-set finger angles)"""
     pose = "flat_palm" if amt <= 10 else ("relaxed" if amt <= 40 else "wrap_grip")
-    apply_pose(rig.o if hasattr(rig, "o") else rig, s, pose, f)
+    ro = rig.o if hasattr(rig, "o") else rig
+    k = (ro.data.name, s, pose)          # finger rotations are local to the hand: solve once per rig data / side / pose
+    if k not in _POSE_CACHE: bpy.context.scene.frame_set(1); _POSE_CACHE[k] = _pose_rots(ro, s, pose)
+    _key(ro, s, _POSE_CACHE[k], f, 1.0)
+_POSE_CACHE = {}
 def _old_fingers_curl(rig, f, s, amt):
     for k in range(1, 6):
         for j in (1, 2, 3):
@@ -192,16 +196,16 @@ def fo_pose(f, loc, rz=180.0, rx=0.0, ry=0.0, flex=10, side=-30, twist=0, hflex=
 SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)        # face turned toward the cabin, readable
-fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(64, 0, 10, 28))
-fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(62, 5, 15, 30), armR=(62, 0, 12, 30))   # hauled up/back
+fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(58, 20, 30, 30))
+fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(62, 5, 15, 30), armR=(58, 20, 30, 30))   # hauled up/back
 fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(60, -10, 15, 32))
 fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(62, -10, 15, 32))  # left arm swings down onto the yoke
 fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12, 32), armR=(62, -10, 15, 32))
-fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(72, 0, 8, 28), armR=(72, 0, 8, 28))
-fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(72, 0, 8, 28), armR=(72, 0, 8, 28))
-fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
+fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
+fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
+fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
 for f in range(F(38.0) + 40, 4410, 40):
-    fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
+    fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
 
 # ------------------------------------------------------------------ pilot uniform details (bone-attached; director v006)
 M_gold = mat("M_uniform_gold", (0.95, 0.68, 0.18), rough=0.3, metal=1.0)
@@ -533,10 +537,10 @@ hand("R", F(4.6), (sx_ + 0.235, sy_ + 0.08, 0.66), d=(0, 1, -0.2), n=(0, 0, 1), 
 # beat 2: lean over neighbour to the window
 LEAN = (sx_ - 0.20, sy_ - 0.1, 0.59)
 body(F(5.8), LEAN, flex=-2, side=-6, sflex=12, twist=40, sside=-20, head=(0, 40))
-hand("L", F(5.8), (sx_ - 0.10, sy_ + 0.30, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=45)             # braces on own knee (the armrest is the neighbour's)
+hand("L", F(5.8), (sx_ - 0.10, sy_ + 0.30, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=5)             # braces on own knee (the armrest is the neighbour's)
 body(F(6.9), LEAN, flex=0, side=-8, sflex=14, twist=50, sside=-26, head=(0, 40))
-hand("L", F(6.9), (sx_ - 0.11, sy_ + 0.31, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=48)
-hand("L", F(8.0), (sx_ - 0.10, sy_ + 0.30, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=45)
+hand("L", F(6.9), (sx_ - 0.11, sy_ + 0.31, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=5)
+hand("L", F(8.0), (sx_ - 0.10, sy_ + 0.30, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=5)
 body(F(8.0), LEAN, flex=0, side=-8, sflex=18, twist=50, sside=-24, head=(20, 40))
 hand("R", F(8.0), (sx_ + 0.235, sy_ + 0.08, 0.66), d=(0, 1, -0.2), n=(0, 0, 1), curl=45)
 feet(F(8.6), FL_, FR_)
@@ -545,8 +549,9 @@ body(F(8.6), SIT, flex=4, sflex=10, twist=10, head=(20, 10))
 hand("L", F(8.6), (sx_ - 0.235, sy_ + 0.08, 0.66), d=(0, 1, -0.2), n=(0, 0, 1), curl=45)
 hand("R", F(8.6), (sx_ + 0.235, sy_ + 0.08, 0.66), d=(0, 1, -0.2), n=(0, 0, 1), curl=45)
 body(F(9.2), (sx_ + 0.08, sy_ - 0.02, 0.70), flex=14, sflex=8, head=(10, 0))
-hand("L", F(9.2), (sx_ - 0.235, sy_ + 0.12, 0.64), d=(0, 1, -0.3), n=(0, 0, 1), curl=45)
-hand("R", F(9.2), (sx_ + 0.235, sy_ + 0.12, 0.64), d=(0, 1, -0.3), n=(0, 0, 1), curl=45)
+hand("L", F(9.2), (sx_ - 0.235, sy_ + 0.12, 0.64), d=(0, 1, -0.3), n=(0, 0, 1), curl=30)
+hand("R", F(9.2), (sx_ + 0.235, sy_ + 0.12, 0.64), d=(0, 1, -0.3), n=(0, 0, 1), curl=30)
+for s_ in "LR": fingers_curl(RY, F(9.5), s_, 30)
 feet(F(9.2), FL_, FR_)
 feet(F(9.6), FL_, (0.05, sy_ + 0.30), liftR=0.0)
 H.key_foot("R", F(9.4), Vector(((FR_[0] + 0.05) / 2, sy_ + 0.37)), 180, 0.12)
@@ -607,7 +612,13 @@ body(F(19.7), (0.05, 0.92, STAND_Z - 0.05), flex=18, sflex=26, twist=-8, head=(3
 hand("R", F(19.7), (0.14, 1.24, 0.95), d=(0, 1, -1), n=(0, 0.6, 1), curl=10)
 GRIP = (0.12, 1.33, 0.835)
 hand("R", F(20.6), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=15)
-hand("R", F(20.9), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=55)            # closed on it
+def grip_handset(f):
+    sc.frame_set(f); bpy.context.view_layer.update()
+    bb = [HS.matrix_world @ Vector(c) for c in HS.bound_box]
+    top = Vector((sum(v.x for v in bb) / 8, sum(v.y for v in bb) / 8, max(v.z for v in bb)))
+    rep_ = grip_object(YOU, "R", f, HS, top, (0, 0.25, -1))
+    print("GRIP_HANDSET", f, rep_)
+grip_handset(F(20.9))                                                        # wrapped round it (hand_poses.grip_object)
 hand("L", F(20.0), (-0.36, 1.10, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 for t_ in (21.0, 22.2, 23.4, 24.6, 25.8): hand("L", F(t_), (-0.37 + 0.01 * (t_ % 2), 1.11, 1.43), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(21.8), POSW, flex=6, sflex=6, head=(0, -5))
@@ -619,12 +630,12 @@ for i, t in enumerate((22.8, 23.4, 23.9, 24.5, 25.0)):
 # beat 8: silence, lower handset, put it back
 body(F(25.6), POSW, flex=14, sflex=20, head=(30, 0))
 hand("R", F(25.6), (0.10, 1.38, 1.08), d=(0, 0.3, 1), n=(-0.6, -1, 0), curl=78)
-hand("R", F(26.3), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=55)
+grip_handset(F(26.3))
 hand("R", F(26.6), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=10)
 # beat 9: haul the FO out
 body(F(26.9), (0.04, 0.84, STAND_Z), flex=10, sflex=10, twist=-25, head=(15, -20))
 feet(F(27.2), (-0.08, 0.95), (0.14, 0.98))
-body(F(27.8), (0.04, 0.9, STAND_Z - 0.06), flex=10, sflex=10, twist=-15, head=(20, -15))
+body(F(27.8), (0.02, 0.85, STAND_Z - 0.03), flex=6, sflex=6, twist=-15, head=(20, -15))
 feet(F(27.8), (-0.08, 0.98), (0.14, 1.02))
 def fo_shoulders(f, s):
     sc.frame_set(f); nm = "upperarm01." + s
@@ -633,18 +644,36 @@ def fo_point(f, bone, off):
     sc.frame_set(f); return FO.matrix_world @ FO.pose.bones[bone].head + Vector(off)
 hand("L", F(27.3), (-0.04, 1.08, 1.02), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)      # low approach under the eye line
 hand("R", F(27.3), (0.16, 1.10, 1.02), d=(0.3, 1, 0), n=(0, 0, 1), curl=40)
-for f in range(F(27.9), F(33.3), 8):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
-    hand("L", f, fo_point(f, "neck01", (-0.04, -0.15, 0.05)), d=(0.3, 1, -0.4), n=(0, -0.5, 1), curl=72)
-    hand("R", f, fo_point(f, "upperarm01.L", (-0.07, -0.10, 0.21)), d=(0.3, 1, -0.6), n=(0, -0.3, 1), curl=72)          # top of his near shoulder, outside the jacket
+from mathutils.bvhtree import BVHTree
+def jacket_pt(f, guess):
+    """nearest point + outward normal on the FO jacket surface (evaluated) to a guess point"""
+    sc.frame_set(f); dg_ = bpy.context.evaluated_depsgraph_get(); suit = OB["FO.male_elegantsuit01"]
+    ev = suit.evaluated_get(dg_); me = ev.to_mesh(); mw = suit.matrix_world
+    bv = BVHTree.FromPolygons([mw @ v.co for v in me.vertices], [tuple(p.vertices) for p in me.polygons]); ev.to_mesh_clear()
+    loc, nrm, _, _ = bv.find_nearest(guess)
+    if nrm.dot(loc - (FO.matrix_world @ FO.pose.bones["spine03"].head)) < 0: nrm = -nrm
+    return loc, nrm
+for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
+    wl = fo_point(f, "neck01", (-0.04, -0.15, 0.05))
+    hand("L", f, wl, d=(0.3, 1, -0.4), n=(0, -0.5, 1), curl=72, pole=wl + Vector((-0.45, -0.30, -0.25)))     # elbows out, not under the eye
+    p_, n_ = jacket_pt(f, fo_point(f, "neck01", (-0.02, -0.10, 0.0)))
+    place_hand(YOU, "L", f, p_, -n_, (0.2, 1, -0.5))                                  # palm on the jacket collar surface
+    wr_ = fo_point(f, "upperarm01.L", (-0.10, -0.12, 0.06))
+    hand("R", f, wr_, d=(0.3, 1, -0.6), n=(-0.3, -0.3, 1), curl=72, pole=wr_ + Vector((0.45, -0.30, -0.25)))
+    p_, n_ = jacket_pt(f, fo_point(f, "upperarm01.L", (-0.05, -0.08, 0.12)))
+    place_hand(YOU, "R", f, p_, -n_, (0.2, 1, -0.6))                                  # palm on top of his near shoulder          # top of his near shoulder, outside the jacket
+for s_, sx in (("L", -1), ("R", 1)):          # he is on the floor, out of reach: let go, hands back at the sides
+    hand(s_, F(32.6), (sx * 0.22, 0.66, 0.86), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
+    hand(s_, F(33.3), (sx * 0.22 + 0.02, 0.66, 0.86), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
 body(F(28.8), (0.0, 0.84, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.14, 0.72), (0.10, 0.80)); H.key_foot("L", F(29.0), Vector((-0.05, 0.76)), 180, 0.05)
 body(F(29.8), (-0.10, 0.64, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
 feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.05, 0.74)), 180, 0.06)
 body(F(30.6), (-0.12, 0.64, STAND_Z - 0.12), flex=8, sflex=8, twist=-5, head=(15, 0))
 body(F(31.4), (-0.10, 0.64, STAND_Z - 0.16), flex=10, sflex=10, twist=-5, head=(20, 0))
-body(F(32.4), (0.12, 0.62, STAND_Z - 0.16), flex=10, sflex=10, twist=-20, head=(25, -10))
-feet(F(32.4), (0.04, 0.62), (0.30, 0.68))
-body(F(33.2), (0.16, 0.62, STAND_Z - 0.16), flex=10, sflex=10, twist=-25, head=(30, -15))
+body(F(32.4), (-0.02, 0.62, STAND_Z - 0.12), flex=2, sflex=4, twist=-20, head=(20, -25))       # upright, back from the seat, looking right down at him on the floor
+feet(F(32.4), (-0.10, 0.62), (0.10, 0.66))
+body(F(33.2), (0.0, 0.62, STAND_Z - 0.12), flex=2, sflex=4, twist=-25, head=(20, -25))
 # beat 10-11: alarms, jolt, stagger forward to the windscreen
 body(F(33.7), (0.18, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
 hand("L", F(33.9), (-0.30, 0.98, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
@@ -782,10 +811,10 @@ camd = bpy.data.cameras.new("CAM_Film"); camd.lens = 14; camd.clip_start = 0.03;
 CAM = bpy.data.objects.new("CAM_Film", camd); sc.collection.objects.link(CAM); sc.camera = CAM
 LOOK = [(0.0, 0, -48), (0.6, 4, -38), (1.2, 0, -8), (2.3, -65, -10), (3.4, 53, -40), (4.6, 62, -14),
         (5.8, 85, -6), (6.4, 94, -2), (7.1, 104, -30), (7.8, 82, 6), (8.4, 96, -18), (9.0, 30, -32), (9.6, -15, -14), (10.2, 0, -6), (10.8, -32, -14), (11.2, -4, -12),
-        (11.6, -14, -34), (12.1, -30, -10), (12.8, -40, -14), (13.5, 10, -32), (14.1, 42, -42), (14.6, 38, -50), (15.1, 5, -66), (15.8, -5, -25), (16.4, -25, -18),
+        (11.6, -14, -34), (12.1, -12, -10), (12.8, -4, -16), (13.5, 10, -32), (14.1, 42, -42), (14.6, 38, -50), (15.1, 5, -66), (15.8, -5, -25), (16.4, -25, -18),
         (17.2, -45, -14), (17.8, -42, -16), (18.8, -22, -26), (19.7, -14, -58), (20.8, -14, -55), (21.8, -5, -30),
-        (22.8, 4, -30), (23.9, -6, -26), (25.2, 0, -52), (26.0, 4, -48), (26.9, -48, -20), (28.0, -42, -26), (29.0, -34, -22),
-        (30.5, -16, -30), (31.8, -30, -38), (32.5, -78, -58), (33.2, -88, -55), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
+        (22.8, 4, -30), (23.9, -6, -26), (25.2, 0, -52), (26.0, 4, -48), (26.9, -48, -20), (28.0, -32, -28), (29.0, -28, -24),
+        (30.5, -16, -30), (31.8, -30, -38), (32.1, -74, -44), (32.5, -80, -45), (33.2, -85, -42), (33.5, -12, -12), (33.7, -8, -8), (34.6, -4, -4), (35.5, 6, -2), (36.5, 0, -10), (37.6, -10, -22),
         (38.8, 0, -28), (39.8, 0, -48), (40.8, 22, -34), (41.8, 0, -8), (42.5, 0, -5), (43.6, 0, -34), (44.7, 0, -6), (45.8, 4, -4),
         (47.1, -14, -26), (48.0, -16, -30), (48.8, -4, -6), (49.6, 0, -48), (50.4, -38, -14), (51.2, -34, -16), (52.0, -10, -8), (52.9, 60, -34), (53.5, 0, -12), (54.1, -22, -10), (54.8, 14, -20), (55.5, -4, -26), (56.1, 6, -10),
         (56.8, 48, -30), (57.4, 30, -14), (58.0, 0, -8), (58.6, -12, 2), (59.2, 48, -33), (60.4, 5, -44), (61.5, 0, 4), (62.0, 8, -4), (62.6, 72, -12), (63.6, 45, -30),
