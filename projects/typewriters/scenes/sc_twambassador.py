@@ -402,5 +402,5 @@ def build(variant=None):
         look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.3, 0.9)), mood="overcast")
     else:
         look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.5, 0.9)), mood="low_sun")
-        look.gobo((0.3, 3.25, 1.8), (4.0, 0.05, 2.0), axis="x", bars=6)
+        look.gobo((0.3, 3.25, 1.8), (4.0, 2.0), axis="y", bars=6)
     return c

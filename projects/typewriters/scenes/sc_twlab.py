@@ -320,5 +320,5 @@ _build_raw = build
 def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     look.interior_day(window=((-6.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="overcast", key_size=3.0)
-    look.gobo((-6.2, 0.0, 1.85), (0.05, 6.0, 1.8), axis="y", bars=7)
+    look.gobo((-6.2, 0.0, 1.85), (6.0, 1.8), axis="x", bars=7, kind="blinds")
     return c
