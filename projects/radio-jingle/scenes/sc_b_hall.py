@@ -2,7 +2,7 @@
 Night, police gear on the phone table, no people in frame.
   line_end (CH4 chain, last link, label "Court reconstruction"): from halfway up the stairs, looking down
            over the banister at the police reel recorder turning beside the rotary phone
-  offhook  (CH5 final): floor level from the far end of the hall, slow push toward the phone table;
+  offhook  (CH5 final): a slow side push onto the phone table at table height;
            the receiver lies off the hook, the reels slow and stop; silence
 """
 import math
@@ -26,11 +26,14 @@ def build(variant=None):
     # cap the practicals (the shade clipped to white on sheet 1)
     for k in ("shade_mat", "pshade_mat"):
         if c.get(k):
-            c[k].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.7
+            bs = c[k].node_tree.nodes["Principled BSDF"]
+            bs.inputs['Emission Strength'].default_value = 0.3
+            bs.inputs['Transmission Weight'].default_value = 0.0         # the bulb behind the shade blew it out to white
+            bs.inputs['Base Color'].default_value = (0.5, 0.38, 0.24, 1)
     for nm in ("HallLampL", "PianoLampL"):
         o = bpy.data.objects.get(nm)
         if o:
-            o.data.energy *= 0.55
+            o.data.energy *= 0.35
     B.finish_interior(lift=0.1, faces=0)
     return c
 
@@ -56,8 +59,12 @@ def anim(c, t, move):
             c["deck"]["needle"].rotation_euler.z = math.radians(-35 + 20 * (0.5 + 0.5 * math.sin(sec * 9.0)) * (0.6 + 0.4 * math.sin(sec * 2.3)))
     else:
         hs = c["handset"]
-        hs.matrix_parent_inverse.identity()
-        hs.location = Vector((T.x - 0.08, T.y - 0.42, 0.80)); hs.rotation_euler = (math.radians(90), 0, math.radians(15))
+        if hs.parent is not None:                                    # unparent: it lies on the table, off the hook
+            ph_loc = hs.parent.matrix_world.translation.copy()
+            hs.parent = None; c["ph_loc"] = ph_loc
+        ph_loc = c["ph_loc"]
+        hs.rotation_mode = 'XYZ'
+        hs.location = Vector((ph_loc.x - 0.24, ph_loc.y - 0.06, 0.815)); hs.rotation_euler = (math.radians(90), 0, math.radians(-70))
         # reels slow to a stop by ~4.5 s: angle = integral of a linearly falling rate
         stop = 5.0; r0 = 0.9
         s_ = min(sec, stop); revs = r0 * s_ - 0.5 * (r0 / stop) * s_ * s_
@@ -74,6 +81,6 @@ def cam(a, b, tgt, lens):
 MOVES = {
     "line_end": dict(kind="anim", dof=None, cam=cam((-0.55, -0.05, 1.72), (-0.42, -0.45, 1.62), (T.x - 0.02, T.y + 0.13, 0.82), 40),
                      anim=lambda c, t: anim(c, t, "line_end"), focus=lambda c, t: Vector((T.x - 0.02, T.y + 0.13, 0.85))),
-    "offhook": dict(kind="anim", dof=2.0, cam=cam((-0.9, 2.2, 0.3), (-0.45, -0.2, 0.5), (T.x - 0.05, T.y - 0.2, 0.75), 35),
-                    anim=lambda c, t: anim(c, t, "offhook"), focus=lambda c, t: Vector((T.x - 0.08, T.y - 0.42, 0.8))),
+    "offhook": dict(kind="anim", dof=2.4, cam=cam((T.x - 1.3, T.y - 0.7, 1.42), (T.x - 0.95, T.y - 0.55, 1.3), (T.x - 0.1, T.y - 0.1, 0.8), 32),
+                    anim=lambda c, t: anim(c, t, "offhook"), focus=lambda c, t: Vector((T.x - 0.06, T.y - 0.25, 0.82))),
 }
