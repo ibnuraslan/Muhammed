@@ -162,40 +162,40 @@ for p in P.values():
 k = P["KidA"]
 k.go([(3.5, 10), (4.5, 30), (5.0, 48)], T(0), T(3.4), run=True, kid=True)
 k.go([(5.0, 48), (8, 56), (4, 64), (-1, 57), (2, 50)], T(3.4), T(7.6), run=True, kid=True)
-k.stand(T(7.6), T(10.0), (2, 50), 180, head=(-8, 0))
-k.go([(2, 50), (2, 30), (1, 0)], T(10.0), T(12.8), run=True, kid=True)
+k.stand(T(7.6), T(12.4), (2, 50), 180, head=(-8, 0))
+k.go([(2, 50), (2, 44)], T(12.4), T(12.95), run=True, kid=True)
 P["KidA"].key_arms(T(0), T(12.8), lambda f: "run")
 k = P["KidB"]
 k.go([(6.0, 8), (6.5, 28), (7.5, 44)], T(0.1), T(3.6), run=True, kid=True)
 k.go([(7.5, 44), (11, 52), (8, 60), (4, 54)], T(3.6), T(7.4), run=True, kid=True)
-k.stand(T(7.4), T(10.0), (4, 54), 190, head=(-10, 0))
-k.go([(4, 54), (4, 30), (3, 0)], T(10.0), T(12.8), run=True, kid=True)
+k.stand(T(7.4), T(12.4), (4, 54), 190, head=(-10, 0))
+k.go([(4, 54), (4, 48)], T(12.4), T(12.95), run=True, kid=True)
 k.key_arms(T(0), T(12.8), lambda f: "run")
 # adults walk out onto the wet sand, point, pick up a fish, look; one man shouts
 q = P["TouristW"]
 q.stand(T(0), T(4.6), (-4, 3), 175, head=lambda f: (-5, 15 * math.sin(f / 50)))
 q.go([(-4, 3), (-4.5, 22), (-5.5, 39)], T(4.6), T(8.2))
-q.stand(T(8.2), T(10.2), (-5.5, 39), 180, head=(-8, 0))
-q.go([(-5.5, 39), (-6, 20), (-6, 0)], T(10.2), T(12.8), run=True)
-q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(6.0) <= f <= T(7.4) else ({"L": "shade"} if T(8.4) <= f <= T(10.0) else {"L": "swing", "R": "swing"}) if f < T(10.2) else "run")
+q.stand(T(8.2), T(12.4), (-5.5, 39), 180, head=(-8, 0))
+q.go([(-5.5, 39), (-6, 33)], T(12.4), T(12.95), run=True)
+q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(6.0) <= f <= T(7.4) else ({"L": "shade"} if T(8.4) <= f <= T(10.0) else {"R": "point"} if T(10.6) <= f <= T(12.3) else {"L": "swing", "R": "swing"}) if f < T(12.4) else "run")
 q = P["TouristM"]
 q.stand(T(0), T(5.0), (-1.5, 1), 180)
 q.go([(-1.5, 1), (-2, 20), (-1.5, 42)], T(5.0), T(8.6))
-q.stand(T(8.6), T(10.3), (-1.5, 42), 182, head=(-6, 0))
-q.go([(-1.5, 42), (-2, 20), (-3, 0)], T(10.3), T(12.8), run=True)
-q.key_arms(T(0), T(12.8), lambda f: {"L": "shade"} if T(8.0) <= f <= T(10.2) else ("run" if f > T(10.3) else "swing"))
+q.stand(T(8.6), T(12.4), (-1.5, 42), 182, head=(-6, 0))
+q.go([(-1.5, 42), (-2, 36)], T(12.4), T(12.95), run=True)
+q.key_arms(T(0), T(12.8), lambda f: {"L": "shade"} if T(8.0) <= f <= T(10.2) else {"R": "point"} if T(10.8) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
 q = P["LocalW"]
 q.stand(T(0), T(5.4), (9, 6), 190)
 q.go([(9, 6), (10, 25), (10.5, 46)], T(5.4), T(8.8))
-q.stand(T(8.8), T(10.4), (10.5, 46), 185, head=(-5, 5))
-q.go([(10.5, 46), (10, 20), (9, 0)], T(10.4), T(12.8), run=True)
-q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(7.6) <= f <= T(9.6) else ("run" if f > T(10.4) else "swing"))
+q.stand(T(8.8), T(12.4), (10.5, 46), 185, head=(-5, 5))
+q.go([(10.5, 46), (10, 40)], T(12.4), T(12.95), run=True)
+q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(7.6) <= f <= T(9.6) or T(11.2) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
 q = P["LocalM"]
 q.stand(T(0), T(5.2), (16, 10), 185)
 q.go([(16, 10), (17, 28), (17.5, 44)], T(5.2), T(8.6))
-q.stand(T(8.6), T(10.2), (17.5, 44), 175)
-q.go([(17.5, 44), (16, 20), (15, 0)], T(10.2), T(12.8), run=True)
-q.key_arms(T(0), T(12.8), lambda f: {"L": "point"} if T(9.0) <= f <= T(10.0) else ("run" if f > T(10.2) else "swing"))
+q.stand(T(8.6), T(12.4), (17.5, 44), 175)
+q.go([(17.5, 44), (17, 38)], T(12.4), T(12.95), run=True)
+q.key_arms(T(0), T(12.8), lambda f: {"L": "point"} if T(9.0) <= f <= T(10.0) or T(10.9) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
 q = P["OldM"]
 q.stand(T(0), T(10.6), (-11, -3), 170, head=lambda f: (-6, 0))
 q.go([(-11, -3), (-12, -18)], T(10.6), T(12.8), run=False)
@@ -217,14 +217,14 @@ for f_, u_ in ((T(9.1), 0.0), (T(9.33), 0.55), (T(9.55), 1.0)):
     pp = p0.lerp(P1, u_); yw = 180 + (8 - 180) * u_
     H_.key_root(f_, Vector((pp.x, pp.y, ground_z(pp.x, pp.y) + H_.root_head.z - 0.04)), yaw=yw, flex=3)
     q.st[f_] = (pp.copy(), yw, "stand", 0.0)
-q.stand(T(9.6), T(10.3), (FP.x + 0.1, FP.y - 0.7), 8, head=(-12, 0), flex=8)
-q.go([(FP.x + 0.1, FP.y - 0.7), (5, 30), (5, 2)], T(10.3), T(12.8), run=True)
+q.stand(T(9.6), T(12.4), (FP.x + 0.1, FP.y - 0.7), 8, head=(-12, 0), flex=8)
+q.go([(FP.x + 0.1, FP.y - 0.7), (5, 48)], T(12.4), T(12.95), run=True)
 fish_pick = bpy.data.objects["Fish_00"]
 fish_pick.scale = (1.15,) * 3
 fish_pick.location = (FISHPICK.x, FISHPICK.y, ground_z(FISHPICK.x, FISHPICK.y) + 0.07); fish_pick.rotation_euler = (0, math.radians(90), math.radians(80))
 q.reach_target = Vector((FISHPICK.x - 0.1, FISHPICK.y - 0.08, ground_z(FISHPICK.x, FISHPICK.y) + 0.05))
 q.key_arms(T(0), T(12.8), lambda f: ({"R": "reach"} if T(6.45) <= f <= T(6.95) else {"R": "hold", "L": "hang"} if T(6.95) < f <= T(9.0)
-                                       else {"L": "wave"} if T(9.5) <= f <= T(10.25) else ("run" if f > T(10.3) else "swing")), step=2)
+                                       else {"L": "wave"} if T(9.5) <= f <= T(11.5) else ("run" if f > T(12.4) else "swing")), step=2)
 # jaw open for the shout
 jaw = q.H.r
 for f, a in ((T(9.4), 0), (T(9.55), 18), (T(9.9), 14), (T(10.1), 20), (T(10.35), 0)):

@@ -110,7 +110,10 @@ for t, wv in ((0, 0), (40, 8)):
 for fc in _fcurves(wave.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 ch = wave.modifiers["churn"]
-for t, v in ((0, 0.0), (20.8, 0.0), (21.8, 1.9), (29.8, 1.6), (31.6, 0.05), (40, 0.05)):
+ocm = wave.modifiers["ocean"]
+for t, ws_, tm in ((0, 0.0, 0.0), (21.3, 0.0, 21.3), (22.0, 0.9, 22.0), (29.8, 0.8, 29.8), (31.6, 0.08, 31.6), (40, 0.05, 40.0)):
+    ocm.wave_scale = ws_; ocm.keyframe_insert("wave_scale", frame=F(t)); ocm.time = tm; ocm.keyframe_insert("time", frame=F(t))
+for t, v in ((0, 0.0), (20.8, 0.0), (21.8, 0.6), (29.8, 0.5), (31.6, 0.05), (40, 0.05)):
     ch.strength = v; ch.keyframe_insert("strength", frame=F(t))
 wn = bpy.data.objects["WaveNoiseEmpty"]
 for t in (0, 40):
@@ -120,11 +123,11 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.11, 0.1, 0.06), 0.36),
-                          (30.0, (0.11, 0.11, 0.07), 0.32), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.07, 0.065, 0.04), 0.2),
+                          (30.0, (0.075, 0.07, 0.045), 0.18), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
-    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.3), (31.0, 0.3), (32.0, 0.05)):
+    for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.4), (31.0, 0.4), (32.0, 0.05)):
         b.inputs["Roughness"].default_value = rg; b.inputs["Roughness"].keyframe_insert("default_value", frame=F(t))
     for t, wv in ((0, 0), (40, 6)):
         nz.inputs["W"].default_value = wv; nz.inputs["W"].keyframe_insert("default_value", frame=F(t))
@@ -145,19 +148,34 @@ for i, (lib, x, frac, rot) in enumerate([(lt, -9, 0.42, (0.4, 0.9, 1.2)), (pb_, 
 NXW_, NUW_ = 900, 170
 xs_ = np.linspace(-1500, 1500, NXW_)
 for o, x, frac, rot in FACE:
-    col = int(np.argmin(np.abs(xs_ - x)))
-    key_hide(o, [(1, True), (F(16.3), False)])
-    for f in range(F(16.3), F(21.05), 3):
-        sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); ev = wave.evaluated_get(dg); me = ev.to_mesh()
-        co = np.array([me.vertices[j * NXW_ + col].co[:] for j in range(NUW_)]); ev.to_mesh_clear()
-        jc = int(np.argmax(co[:, 2])); zc = co[jc, 2]; z0 = -1.0
-        tgt = z0 + frac * (zc - z0)
-        jj = min(range(0, jc + 1), key=lambda j: abs(co[j, 2] - tgt))
-        P_ = wave.matrix_world @ Vector(co[jj]) + Vector((0, -1.2, 0))
-        tt = (f - F(16.3)) / 60.0
-        key_tr(o, f, loc=tuple(P_), rot=(rot[0] * tt * 1.5, rot[1] * tt * 1.5, rot[2] * tt))
-    sweep(o, 21.05, random.uniform(60, 120), (2, 3, 1), (0, 2.6, 0), rise=4.0) if False else None
+    key_hide(o, [(1, True), (F(15.8), False)])
+    for f in range(F(15.8), F(21.05), 6):
+        t = (f - 1) / 60.0; u = frac
+        yf = wave_y(t) + (8 * u - 8 * u ** 3) - 1.6 + 3 * math.sin(x / 61.0); zf = (-5 + 18 * u ** 1.6) * 1.6
+        tt = t - 15.8
+        key_tr(o, f, loc=(x, yf, zf), rot=(rot[0] * tt * 1.5, rot[1] * tt * 1.5, rot[2] * tt))
     o["face"] = 1
+# hero wave: replaces the GN sheet 15.62 - 21.05 s
+hero = bpy.data.objects["HeroWave"]
+for t in list(np.arange(15.6, 21.06, 0.25)) + [21.05]:
+    hero.location = (0, wave_y(t), 0); hero.keyframe_insert("location", frame=F(t))
+for fc in _fcurves(hero.animation_data.action):
+    for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
+key_hide(hero, [(1, True), (F(15.62), False), (F(21.06), True)])
+for nm_ in ("Wave", "WaveSpray"):
+    key_hide(bpy.data.objects[nm_], [(F(15.62), True), (F(21.06), False)])
+hn = bpy.data.materials["M_HeroWave"].node_tree.nodes["HN"].inputs["W"]
+for t, w_ in ((15.6, 0), (21.1, 4)):
+    hn.default_value = w_; hn.keyframe_insert("default_value", frame=F(t))
+rs = random.Random(5)
+for o in [o for o in bpy.data.objects if o.name.startswith("HeroSpray_")]:
+    x = rs.uniform(-70, 70); ly = rs.uniform(-9, -2); ph = rs.uniform(0, 1)
+    key_hide(o, [(1, True), (F(15.7), False), (F(21.06), True)])
+    for f in range(F(15.7), F(21.06), 9):
+        t = (f - 1) / 60.0; c = ((t * 1.3 + ph) % 1.0)
+        o.location = (x + rs.uniform(-1, 1), wave_y(t) + ly * 1.3 - 4 * c + 3 * math.sin(x / 61.0), 18.0 + 6.0 * c + rs.uniform(-0.8, 0.8))
+        o.keyframe_insert("location", frame=f)
+        o.scale = (1.4 - 1.0 * c,) * 3; o.keyframe_insert("scale", frame=f)
 # ---------------------------------------------------------------- moored boats settle on the sand, rowboats/fish on the seabed
 def flood_z(t, y):
     """water surface height at y at time t once the wave has passed (for floating debris)"""
@@ -398,7 +416,7 @@ for o in bowl_hide:
         continue
     key_hide(o, [(1, True), (F(12.4), False), (F(15.45), True)])
 for o in bpy.data.objects:   # clear the camera's path through the beach furniture at 18-20 s
-    if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 5) < 6:
+    if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 15) < 2.5:
         bpy.data.objects.remove(o, do_unlink=True)
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)

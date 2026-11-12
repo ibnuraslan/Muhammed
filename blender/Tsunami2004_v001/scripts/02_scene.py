@@ -118,7 +118,7 @@ def water_mat(name, foam_steep=True):
     lipm = NN.new("ShaderNodeMapRange"); lipm.inputs["From Min"].default_value = 0.15; lipm.inputs["From Max"].default_value = -0.25; LL.new(sz.outputs["Z"], lipm.inputs["Value"])
     fn = NN.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 0.22; fn.inputs["Detail"].default_value = 12; fn.inputs["Roughness"].default_value = 0.7
     fn.noise_dimensions = '4D'; fn.name = "FN"
-    mp = NN.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (0.3, 1.0, 0.5); LL.new(tc.outputs["Object"], mp.inputs["Vector"]); LL.new(mp.outputs["Vector"], fn.inputs["Vector"])
+    mp = NN.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1.0, 0.08, 0.5); LL.new(tc.outputs["Object"], mp.inputs["Vector"]); LL.new(mp.outputs["Vector"], fn.inputs["Vector"])
     fr = NN.new("ShaderNodeMapRange"); fr.inputs["From Min"].default_value = 0.5; fr.inputs["From Max"].default_value = 0.72; LL.new(fn.outputs["Fac"], fr.inputs["Value"])
     fv = NN.new("ShaderNodeValue"); fv.name = "FOAM_BASE"; fv.outputs[0].default_value = 0.0
     a1 = NN.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; a1.inputs[1].default_value = 0.4 if foam_steep else 0.0
@@ -187,6 +187,8 @@ dm.strength = 1.2; dm.mid_level = 0.5
 tx2 = bpy.data.textures.new("WaveChurnTex", 'CLOUDS'); tx2.noise_scale = 1.6; tx2.noise_depth = 3
 dm2 = wave.modifiers.new("churn", 'DISPLACE'); dm2.texture = tx2; dm2.texture_coords = 'OBJECT'; dm2.texture_coords_object = wn
 dm2.strength = 0.0; dm2.mid_level = 0.5
+oc = wave.modifiers.new("ocean", 'OCEAN'); oc.geometry_mode = 'DISPLACE'; oc.resolution = 8; oc.spatial_size = 40; oc.wave_scale = 0.0
+oc.choppiness = 1.2; oc.wind_velocity = 12; oc.use_normals = False
 
 NSR = 8
 def spray_profile(st, k):
@@ -218,6 +220,55 @@ sso = spray.modifiers.new("shell", 'SOLIDIFY'); sso.thickness = 4.5; sso.offset 
 spray.parent = wave
 
 
+# ================================================================== hero wave (16-21 s): curling profile extruded along the shore
+prof = []   # (y, z) local, front at y=0, toe at z=-5, crest ~13, lip overhanging toward -y (shore)
+for i in range(26):          # face: concave rise
+    u = i / 25; prof.append((-0.0 + 14 * (1 - u) ** 1.0 * 0 + 8 * u - 8 * u ** 3, -5 + 18 * u ** 1.6))
+lip = [(0.0, 13.0), (-2.5, 13.6), (-5.0, 13.0), (-6.6, 11.4), (-6.9, 9.6), (-6.1, 8.6), (-5.0, 8.9)]
+for y_, z_ in lip: prof.append((y_ + prof[-1][0] * 0 + 0.0, z_))
+prof = prof[:-len(lip)] + [(p_[0] + 0.0, p_[1]) for p_ in lip]
+back = [(10 + 25 * k, 13.0 - 11.5 * (1 - math.exp(-k / 2.0))) for k in range(1, 30)]
+prof = prof + []                   # face + lip
+# back of the wave: from the crest top going seaward
+ring = [prof[i] for i in range(len(prof))]
+NXH = 220; XS = np.linspace(-160, 160, NXH)
+rows = [(y, z) for y, z in prof[:-len(lip)]] + lip[::-1][:0] + lip + [(4.0, 13.4), (10.0, 12.5)] + back
+hv = []; hf = []
+for j, (y, z) in enumerate(rows):
+    for i, x in enumerate(XS):
+        a = 1 + 0.08 * math.sin(x / 37.0) + 0.05 * math.sin(x / 13.0 + 1)
+        hv.append((x, y * a + 3 * math.sin(x / 61.0), -5 + (z + 5) * a))
+for j in range(len(rows) - 1):
+    for i in range(NXH - 1):
+        hf.append((j * NXH + i, j * NXH + i + 1, (j + 1) * NXH + i + 1, (j + 1) * NXH + i))
+hm, nt = node_mat("M_HeroWave")
+NN, LL = nt.nodes, nt.links; b_ = NN["Principled BSDF"]
+b_.inputs["Base Color"].default_value = (0.02, 0.3, 0.38, 1); b_.inputs["Roughness"].default_value = 0.08
+b_.inputs["Transmission Weight"].default_value = 0.25; b_.inputs["Emission Color"].default_value = (0.05, 0.5, 0.5, 1); b_.inputs["Emission Strength"].default_value = 0.35
+tc_ = NN.new("ShaderNodeTexCoord"); sp_ = NN.new("ShaderNodeSeparateXYZ"); LL.new(tc_.outputs["Object"], sp_.inputs["Vector"])
+zr = NN.new("ShaderNodeMapRange"); zr.inputs["From Min"].default_value = 8.5; zr.inputs["From Max"].default_value = 12.0; LL.new(sp_.outputs["Z"], zr.inputs["Value"])
+fz = NN.new("ShaderNodeTexNoise"); fz.inputs["Scale"].default_value = 0.35; fz.inputs["Detail"].default_value = 8; fz.noise_dimensions = '4D'; fz.name = "HN"
+mpz = NN.new("ShaderNodeMapping"); mpz.inputs["Scale"].default_value = (1.0, 1.0, 0.3); LL.new(tc_.outputs["Object"], mpz.inputs["Vector"]); LL.new(mpz.outputs["Vector"], fz.inputs["Vector"])
+fzr = NN.new("ShaderNodeMapRange"); fzr.inputs["From Min"].default_value = 0.45; fzr.inputs["From Max"].default_value = 0.6; LL.new(fz.outputs["Fac"], fzr.inputs["Value"])
+streak = NN.new("ShaderNodeMath"); streak.operation = 'MULTIPLY'; streak.inputs[1].default_value = 0.45; LL.new(fzr.outputs["Result"], streak.inputs[0])
+fsum = NN.new("ShaderNodeMath"); fsum.operation = 'ADD'; fsum.use_clamp = True; LL.new(zr.outputs["Result"], fsum.inputs[0]); LL.new(streak.outputs[0], fsum.inputs[1])
+fmask = NN.new("ShaderNodeMath"); fmask.operation = 'MULTIPLY'; fmask.use_clamp = True; LL.new(fsum.outputs[0], fmask.inputs[0]); LL.new(fzr.outputs["Result"], fmask.inputs[1])
+fmx = NN.new("ShaderNodeMath"); fmx.operation = 'MAXIMUM'; LL.new(fmask.outputs[0], fmx.inputs[0]); LL.new(zr.outputs["Result"], fmx.inputs[1])
+fw_ = NN.new("ShaderNodeBsdfPrincipled"); fw_.inputs["Base Color"].default_value = (0.97, 0.98, 1.0, 1); fw_.inputs["Roughness"].default_value = 0.6
+fw_.inputs["Emission Color"].default_value = (1, 1, 1, 1); fw_.inputs["Emission Strength"].default_value = 0.25
+mxs = NN.new("ShaderNodeMixShader"); LL.new(fmx.outputs[0], mxs.inputs["Fac"]); LL.new(b_.outputs[0], mxs.inputs[1]); LL.new(fw_.outputs[0], mxs.inputs[2])
+LL.new(mxs.outputs[0], NN["Material Output"].inputs["Surface"])
+bpn = NN.new("ShaderNodeBump"); bpn.inputs["Strength"].default_value = 0.3; LL.new(fz.outputs["Fac"], bpn.inputs["Height"]); LL.new(bpn.outputs["Normal"], b_.inputs["Normal"])
+hero = mesh_obj("HeroWave", hv, hf, C_W, [hm])
+for p_ in hero.data.polygons: p_.use_smooth = True
+htx = bpy.data.textures.new("HeroNoise", 'CLOUDS'); htx.noise_scale = 3.0; htx.noise_depth = 2
+hd = hero.modifiers.new("disp", 'DISPLACE'); hd.texture = htx; hd.strength = 0.9; hd.texture_coords = 'OBJECT'
+hero.location = (0, 2000, 0); hero.scale = (1.0, 1.0, 1.6)
+spray_hm = simple_mat("M_HeroSpray", (0.97, 0.98, 1.0), 0.7, emit=((1, 1, 1), 0.4))
+for i in range(400):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=random.uniform(0.12, 0.4), location=(0, 0, -50))
+    o_ = bpy.context.active_object; o_.name = "HeroSpray_%03d" % i; link(o_, C_W); o_.data.materials.append(spray_hm)
+    o_.scale = (1.0, 1.0, random.uniform(0.6, 1.3))
 # ================================================================== beach set
 C_LIB = LIB
 palmA = import_glb("palm_a", 11.0, "z", C_LIB); palmB = import_glb("palm_b", 12.5, "z", C_LIB)
@@ -498,7 +549,7 @@ for i in range(120):
     box("Sheet_%02d" % i, C_TOWN, (2.4, 1.0, 0.03), (x, y, ground(x, y) - 2.0), iron, rot=(random.uniform(-0.4, 0.4), random.uniform(-0.4, 0.4), random.uniform(0, 6.28)))
 
 # ================================================================== diorama under the sea (explainer bowl)
-DC = Vector((0, 470, -36))
+DC = Vector((0, 100, -36))   # under the exposed seabed near the people: the camera dives through the sea floor
 bpy.ops.mesh.primitive_uv_sphere_add(segments=64, ring_count=32, radius=25, location=DC)
 bowl = bpy.context.active_object; bowl.name = "StudioBowl"; link(bowl, C_D)
 for p in bowl.data.polygons: p.use_smooth = True
@@ -611,7 +662,7 @@ for i in range(12):
     o_.data.materials[0] = con
 
 # little seabed props on the cross-section (rocks) and studio lights
-for nm, loc, en, sz in (("D_Key", (-14, 460, -24), 9000, 8), ("D_Fill", (-10, 486, -32), 3000, 8), ("D_Top", (0, 470, -16), 4000, 10)):
+for nm, loc, en, sz in (("D_Key", tuple(DC + Vector((-14, -10, 12))), 9000, 8), ("D_Fill", tuple(DC + Vector((-10, 16, 4))), 3000, 8), ("D_Top", tuple(DC + Vector((0, 0, 20))), 4000, 10)):
     ld = bpy.data.lights.new(nm, 'AREA'); ld.energy = en; ld.size = sz; ld.color = (1, 0.98, 0.95)
     lo = bpy.data.objects.new(nm, ld); C_D.objects.link(lo); lo.location = loc
     dirv = (DC - Vector(loc)); lo.rotation_euler = dirv.to_track_quat('-Z', 'Y').to_euler()
