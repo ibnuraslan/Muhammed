@@ -83,6 +83,11 @@ def build(variant=None):
                 if o.parent is None and o.type in ('MESH', 'EMPTY', 'CURVE', 'LIGHT') and not o.name.startswith(("Floor", "Lab")):
                     o.location += BOX_AT + Vector((0, 0, 0.12))
             c["boxctx"] = cx
+            # evidence only: the box stands closed and empty here (contents and the leaning cut-away panel removed)
+            for o in bpy.data.objects:
+                if o.name.startswith(("Bottle", "BoxRadio", "PR", "Choc", "Book", "Blanket", "FrontPanel", "Muffle", "BulbL", "BulbHolder", "Sphere")):
+                    o.hide_render = True; o.hide_viewport = True
+            box("FrontClosed", (BOX_AT.x, BOX_AT.y - X.D / 2 + X.T / 2, 0.12 + X.Z0 + X.H / 2), (X.W, X.T, X.H), X.mat("pine") if hasattr(X, "mat") else pbr("Pine", (0.5, 0.38, 0.22), 0.7))
             c["box_w"] = X.W
         except Exception as e:
             print("[dna] box unavailable:", e); c["box_w"] = 0.72
@@ -116,6 +121,7 @@ def build(variant=None):
         bw = c["box_w"]
         B.stand(tech, (BOX_AT.x + bw / 2 + 0.45, BOX_AT.y - 0.35, 0), -math.pi / 2 + 0.4)      # at the box's +X corner
         B.stand(ana, (LT.x, LT.y - 0.65, 0), math.pi)                                         # at the light table
+        B.flat_clothes(tech, (0.62, 0.7, 0.74)); B.flat_clothes(ana, (0.85, 0.86, 0.86))
         c["tech"], c["ana"] = tech, ana
         c["rest"] = {"tech": B.capture(tech), "ana": B.capture(ana)}
         c["swab"] = cyl("Swab", (0, 0, 0), 0.0025, 0.15, pbr("SwabStick", (0.92, 0.92, 0.9), 0.6), verts=8)
@@ -180,11 +186,11 @@ MOVES = {
                  anim=lambda c, t: anim(c, t, "swab"), focus=lambda c, t: c["tech"].bone_head("head")),
     "seq": dict(kind="anim", dof=2.8, cam=cam((1.4, 0.2, 1.55), (1.1, 0.6, 1.5), (0.0, 2.6, 1.1), 32),
                 anim=lambda c, t: anim(c, t, "seq"), focus=lambda c, t: SEQ + Vector((0, -0.3, 0.3))),
-    "bags": dict(kind="anim", dof=2.4, cam=cam((2.9, -0.4, 1.7), (2.6, -0.1, 1.65), (LT.x, LT.y, 0.95), 35),
+    "bags": dict(kind="anim", dof=2.4, cam=cam((3.4, -0.9, 1.8), (3.1, -0.6, 1.75), (LT.x, LT.y, 0.95), 32),
                  anim=lambda c, t: anim(c, t, "bags"), focus=lambda c, t: LT + Vector((0, 0, 0.92))),
     "print": dict(kind="anim", dof=2.4, cam=cam((0.4, 0.0, 1.6), (0.7, 0.3, 1.55), (2.0, 2.0, 0.95), 32),
                   anim=lambda c, t: anim(c, t, "print"), focus=lambda c, t: Vector((2.2, 2.3, 0.95))),
     "orbit": dict(kind="anim", dof=2.0, cam=cam_orbit, anim=lambda c, t: anim(c, t, "orbit"), focus=lambda c, t: Vector((0, 0.04, 1.0))),
-    "keys": dict(kind="anim", dof=1.6, cam=cam((-0.5, -0.55, 1.08), (-0.25, -0.45, 1.05), (0.12, -0.12, 1.06), 50),
+    "keys": dict(kind="anim", dof=1.6, cam=cam((-0.65, -0.75, 1.3), (-0.45, -0.6, 1.24), (0.08, -0.08, 0.98), 45),
                  anim=lambda c, t: anim(c, t, "keys"), focus=lambda c, t: Vector((0.0, -0.13, 1.07))),
 }

@@ -442,3 +442,21 @@ def preview_cap():
 def nod(h, deg, bone="head"):
     """Tilt a bone forward (positive = looking down) whatever way the person faces."""
     h.rot(bone, Vector((0, 0, 1)).cross(fwd_of(h)).normalized(), deg)
+
+
+def flat_clothes(h, color, rough=0.75):
+    """Repaint every garment of h in one flat colour (lab gowns, robes) - hides printed patterns and logos."""
+    for o in h.parts:
+        if o.type != 'MESH' or o is h.body:
+            continue
+        for m in o.data.materials:
+            if not m or "hair" in m.name.lower() or "eye" in m.name.lower() or "brow" in m.name.lower() or "lash" in m.name.lower():
+                continue
+            if any(k in o.name for k in ("hair", "short", "bob", "long", "ponytail", "afro", "braid", "brows", "lashes", "eye")):
+                continue
+            p = m.node_tree.nodes.get("Principled BSDF")
+            if p is None:
+                continue
+            for l in list(p.inputs['Base Color'].links):
+                m.node_tree.links.remove(l)
+            p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = rough
