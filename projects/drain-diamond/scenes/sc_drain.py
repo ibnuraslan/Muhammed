@@ -351,8 +351,7 @@ def build(variant=None):
         tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.01
         to = bpy.data.objects.new("TorchBeam", tl); bpy.context.collection.objects.link(to); c["torch"] = to
         h = officer("Torch", 41, seed=2); c["torcher"] = h
-    import look                                   # LOOK v5: rain, so overcast (allowed for rain), no haze; colours kept
-    look.day_light("overcast", azim=230)
+    # LOOK: grade only (approved): rain; the set keeps its own soft grey-morning light
     return c
 
 
