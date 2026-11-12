@@ -35,7 +35,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v002/` |
 | 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v005/` |
-| 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v004/` |
+| 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v004/` |
 | 24 | RooseveltSpeech | `claude/connect24-roosevelt-speech` | `blender/RooseveltSpeech_v006/` |
 | 25 | Tsunami2004 | `claude/connect25-tsunami-2004` | `blender/Tsunami2004_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
