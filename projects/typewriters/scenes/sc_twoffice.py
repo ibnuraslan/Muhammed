@@ -351,7 +351,7 @@ def animate(c, sec, shot=None):
             d = Vector((math.sin(ang), -math.cos(ang), 0))
             pos = pl - d * (0.85 if k < 2 else 1.25)
             twp.stand(h, (pos.x, pos.y, 0), ang)
-            h.rot("spine03", Vector((-d.y, d.x, 0)) * -1, 18); h.rot("head", Vector((-d.y, d.x, 0)) * -1, 18)
+            h.rot("spine03", Vector((-d.y, d.x, 0)), 20); h.rot("head", Vector((-d.y, d.x, 0)), 14)          # leaning in over the plans
             side = d.cross(Vector((0, 0, 1)))
             edge = pl - d * (0.38 if k < 2 else 0.5)                      # hands flat on the desk edge, leaning in
             for sd, sg in (("L", -1), ("R", 1)):

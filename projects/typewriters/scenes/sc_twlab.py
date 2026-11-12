@@ -249,8 +249,8 @@ def animate(c, sec, shot):
     t_ = P["tech"]
     twp.stand(t_, (-1.4, -1.35, 0), math.pi)                                # faces +Y, the bench
     hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    for sd, dx in (("L", 0.15), ("R", -0.15)):
-        reach(t_, sd, hp + Vector((dx * 0.8, -0.1, -0.03)), Vector((dx * 2, -0.6, -0.9)), Vector((0, 1, 0.0)))
+    reach(t_, "R", hp + Vector((-0.05, -0.1, -0.03)), Vector((-0.3, -0.6, -0.9)), Vector((0, 1, 0.0)))     # one hand lifts the hood
+    reach(t_, "L", Vector((-1.25, -0.75, 0.93)), Vector((0.4, -0.5, -0.8)), Vector((0, 1, -0.6)))          # the other rests on the bench
     fingers_curl(t_, 45, thumb=25)
     t_.rot("head", (1, 0, 0), -12)
     a, b = P["usA"], P["usB"]

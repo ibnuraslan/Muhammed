@@ -89,8 +89,9 @@ def slatted_crate(name, with_tw=True):
         for sy in (-1, 1):
             box("Corner", (sx * (W_ / 2 - 0.02), sy * (D_ / 2 - 0.02), H_ / 2), (0.05, 0.05, H_), wood).parent = r
     box("Bottom", (0, 0, 0.01), (W_, D_, 0.02), wood).parent = r
-    for k in range(5):
+    for k in (0, 3, 4):                                    # two top slats pried off: the typewriter shows through
         box("TopSlat", (-W_ / 2 + 0.06 + k * 0.125, 0, H_), (0.08, D_, 0.02), wood).parent = r
+    box("PriedSlat", (W_ / 2 + 0.12, -0.1, 0.02), (0.08, D_, 0.02), wood, rot=(0, 0, 0.4)).parent = r
     tw = None
     if with_tw:
         tw = T.make(name + "_TW", loc=(0, 0, 0.03), color=(0.2, 0.25, 0.3), mechanism=False, glyphs=True, legends=True, text=" ")
@@ -170,11 +171,11 @@ def build(variant=None):
     # ---------------------------------------------------------------- the wrapping station: one crate being wrapped and sealed
     wood = ph.texture("brown_planks_03", scale=1.5, name="CrateWood")
     crate = box("WrapCrate", (WORK.x, WORK.y, 0.48), (1.0, 0.8, 0.9), wood, bevel=0.01)
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.9, name="BurlapBig", tint=(0.8, 0.68, 0.5))
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.35, name="BurlapBig", tint=(0.72, 0.6, 0.42))
     wrap = box("Wrapping", (0, 0, 0), (1.03, 0.83, 0.93), hes, bevel=0.03)
     sub = wrap.modifiers.new("sub", 'SUBSURF'); sub.levels = 3; sub.render_levels = 3; sub.subdivision_type = 'SIMPLE'
     dsp = wrap.modifiers.new("folds", 'DISPLACE'); tx = bpy.data.textures.new("Folds", 'CLOUDS'); tx.noise_scale = 0.18
-    dsp.texture = tx; dsp.strength = 0.012; dsp.mid_level = 0.5
+    dsp.texture = tx; dsp.strength = 0.03; dsp.mid_level = 0.5
     wrap.data.transform(Matrix.Translation((0, 0, 0.465)))                         # origin at the bottom: scale z = how far it is wrapped
     wrap.location = (WORK.x, WORK.y, 0.015)
     c["wrap"] = wrap
@@ -239,7 +240,7 @@ def build(variant=None):
             o = MC.burlap_crate(f"Roll{k}", size=(0.8, 0.7, 0.7), tag=False); c["roll_crates"].append(o)
         sc, stw = slatted_crate("SlatCrate"); sc.location = (PLANE.x - 2.4, PLANE.y + 23.5, 0.0); sc.rotation_euler = (0, 0, 0.2)
         c["slat"] = sc
-        ss = bpy.data.lights.new("SlatSun", 'SPOT'); ss.energy = 350; ss.spot_size = math.radians(30); ss.spot_blend = 0.2; ss.shadow_soft_size = 0.02
+        ss = bpy.data.lights.new("SlatSun", 'SPOT'); ss.energy = 1200; ss.spot_size = math.radians(30); ss.spot_blend = 0.2; ss.shadow_soft_size = 0.02
         ss.color = (1.0, 0.82, 0.6)
         so_ = bpy.data.objects.new("SlatSun", ss); bpy.context.collection.objects.link(so_)
         so_.location = Vector(sc.location) + Vector((-0.9, 0.6, 1.8)); point_at(so_, Vector(sc.location) + Vector((0, 0, 0.12)))   # light raking through the slats

@@ -357,7 +357,7 @@ def cam_sign(c, t):
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
     cl = c["case"].location
-    return (cl + Vector((0.35, -0.95, 0.75)).lerp(Vector((0.28, -0.8, 0.68)), e), cl + Vector((-0.02, -0.12, 0.08)), 40)
+    return (cl + Vector((-0.5, -1.7, 0.95)).lerp(Vector((-0.42, -1.5, 0.9)), e), cl + Vector((0.05, -0.15, 0.1)), 36)
 
 
 def cam_talks_wide(c, t):

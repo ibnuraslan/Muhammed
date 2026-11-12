@@ -129,11 +129,15 @@ def lamp_blink(mat_names=("LampRed", "LampGreen"), period=24, strength=6.0):
 
 def burlap_crate(name, size=(0.95, 0.75, 0.85), tag=True):
     """A crate sewn into coarse burlap: weave texture, rope lashing both ways, staples along the top seam, a tag."""
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.9, name="BurlapBig", tint=(0.8, 0.68, 0.5))
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.35, name="BurlapBig", tint=(0.72, 0.6, 0.42))
     rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
     stm = bpy.data.materials.get("StapleE") or pbr("StapleE", (0.7, 0.7, 0.72), 0.25, 1.0)
     sx, sy, sz = size
-    parts = [box("Crate", (0, 0, 0), size, hes, bevel=0.04)]
+    body = box("Crate", (0, 0, 0), size, hes, bevel=0.04)
+    sub = body.modifiers.new("sub", 'SUBSURF'); sub.levels = 2; sub.render_levels = 2; sub.subdivision_type = 'SIMPLE'
+    dsp = body.modifiers.new("folds", 'DISPLACE'); tx = bpy.data.textures.get("BurlapFolds") or bpy.data.textures.new("BurlapFolds", 'CLOUDS')
+    tx.noise_scale = 0.12; dsp.texture = tx; dsp.strength = 0.02; dsp.mid_level = 0.5
+    parts = [body]
     for dx in (-sx * 0.3, sx * 0.3):
         parts.append(cyl("RopeV", (dx, -sy / 2 - 0.008, 0), 0.01, sz + 0.02, rope, verts=8))
         parts.append(cyl("RopeV", (dx, sy / 2 + 0.008, 0), 0.01, sz + 0.02, rope, verts=8))
