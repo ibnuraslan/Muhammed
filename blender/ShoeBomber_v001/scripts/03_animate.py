@@ -5,6 +5,7 @@ import bpy
 from mathutils import Vector, Matrix, Quaternion, Euler
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "../../pipeline/anim_lib.py")).read())
+exec(open(os.path.join(HERE, "../../pipeline/hand_poses.py")).read())   # shared hand-pose library (director, Nov 12)
 OUT = sys.argv[sys.argv.index("--") + 1:][0]
 def ground_z(x, y):          # MPFB shoe soles sit ~2.5 cm below the rest foot: lift every foot target
     return 0.024
@@ -31,8 +32,16 @@ print("RIGS_READY")
 
 # ------------------------------------------------------------------ pose helpers
 FINGERS = [("finger%d-%d" % (k, j)) for k in range(2, 6) for j in range(1, 4)]
-def curl(h, s, f, amt, thumb=None):
-    """amt 0 open .. 1 fist (local X bend); never flatter than a relaxed curl"""
+_POSE_CACHE = {}
+def curl(h, s, f, amt, thumb=None, pose=None):
+    """fingers from the shared hand_poses library: grip amount -> pose (relaxed / cup_hold / wrap_grip), or an explicit pose"""
+    if pose is None:
+        pose = "relaxed" if amt <= 0.32 else "cup_hold" if amt < 0.5 else "wrap_grip"
+    k = (h.r.o.name, s, pose)
+    if k not in _POSE_CACHE: _POSE_CACHE[k] = _pose_rots(h.r.o, s, pose)
+    _key(h.r.o, s, _POSE_CACHE[k], f, 1.0)
+    return
+def _old_curl(h, s, f, amt, thumb=None):
     amt = max(amt, 0.25)
     thumb = amt * 0.6 if thumb is None else thumb
     for k in range(1, 6):
@@ -52,9 +61,9 @@ def sit(h, f, x, y, flex=8.0, spine=(5, 0, 0), head=(0, 0), yaw=FWD, z=0.56, sid
     h.key_spine(f, flex=spine[0], twist=spine[1], side=spine[2], head=head)
     seat_feet(h, f, x, y, spread, fwd, yaw, lift)
 
-def hand(h, s, f, W, d, n, pole=None, grip=0.0):
+def hand(h, s, f, W, d, n, pole=None, grip=0.0, pose=None):
     h.key_hand(s, f, V(W), V(d), V(n), pole=V(pole) if pole else None)
-    curl(h, s, f, grip)
+    curl(h, s, f, grip, pose=pose)
 
 def rest_arm(h, s, f, root, yaw=FWD, out=0.26, fwd=0.28, z=0.17, grip=0.3):
     """hand resting on the thigh/armrest, relative to the root position"""
@@ -129,19 +138,19 @@ strike = [(1, V((0.10, 0.02, 0.16))), (14, V((0.06, 0.06, 0.14))), (22, V((0.13,
           (400, V((0.06, 0.02, 0.20)))]
 for f, o in strike:
     a = shoe_pt(f)
-    hand(bom, "R", f, a + o, (-0.5, 0.5, -0.4), (0, 0, -1), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8)
+    hand(bom, "R", f, a + o, (-0.5, 0.5, -0.4), (0, 0, -1), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8, pose="pinch")
 # beat 2 (199-372): keeps trying, glances up once (~300), back down
 for f, lean, hd, tw in ((260, 40, (32, -5), -10), (300, 34, (12, 10), -6), (330, 40, (30, 0), -10), (372, 39, (28, 2), -9)):
     bomber_hunch(f, lean, hd, twist=tw)
 # beat 3 (373-480): caught: freezes, head snaps up toward the attendant in the aisle (to his right, +X)
 bomber_hunch(395, 22, (-8, 35), twist=10)
 bomber_hunch(420, 18, (-10, 40), twist=14)
-hand(bom, "R", 420, shoe_pt(420) + V((0.08, 0.0, 0.25)), (0, 0.4, 0.6), (0, -1, 0), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8)
+hand(bom, "R", 420, shoe_pt(420) + V((0.08, 0.0, 0.25)), (0, 0.4, 0.6), (0, -1, 0), pole=(BX + 0.6, BY - 0.3, 0.7), grip=0.8, pose="pinch")
 hand(bom, "L", 420, shoe_pt(420) + V((-0.03, 0.17, 0.07)), (0.2, 0.8, -0.5), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.55)
 # beat 4 (481-654): lunges up, grabbed, dragged out into the aisle, pinned face-down (head toward +Y)
 bom.key_root(450, V((BX + 0.05, BY - 0.02, 0.57)), yaw=FWD, flex=8, side=0); bom.key_spine(450, flex=20, twist=15, head=(-5, 30))
 bom.key_foot("R", 450, V((BX + 0.13, BY + 0.42)), FWD, 0, 0); bom.key_foot("L", 450, V((BX - 0.12, BY + 0.44)), FWD, 0, 0)
-hand(bom, "R", 450, V((BX + 0.25, BY + 0.30, 0.95)), (0.5, 0.5, 0.2), (0, 0, -1), grip=0.8)
+hand(bom, "R", 450, V((BX + 0.25, BY + 0.30, 0.95)), (0.5, 0.5, 0.2), (0, 0, -1), grip=0.8, pose="pinch")
 hand(bom, "L", 450, V((BX - 0.2, BY + 0.35, 0.75)), (0, 1, 0), (0, 0, -1), grip=0.5)
 # 490: rises, hunched under the bins, attendant has his right wrist
 bom.key_root(495, V((BX + 0.25, BY + 0.12, 0.92)), yaw=FWD - 40, flex=30, side=-5); bom.key_spine(495, flex=30, twist=-10, head=(10, -10))
@@ -547,22 +556,9 @@ for h in (pa, pb, stw, att):
                     fc.update()
 print("REACH_FIXED")
 
-# ================================================================== hand limits (client, Nov 11 23:00): no backward or over-range bends
-import math as _m
+# ================================================================== hand limits: shared library (STYLE_ANIMATED limits)
 for h in HS.values():
-    for s_ in "LR":
-        for k in range(1, 6):
-            for j in range(1, 4):
-                pbn = h.r.PB["finger%d-%d.%s" % (k, j, s_)]
-                c = pbn.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
-                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-                if k == 1:
-                    c.min_x, c.max_x = _m.radians(-30), _m.radians(60); c.min_y, c.max_y = _m.radians(-40), _m.radians(40); c.min_z, c.max_z = _m.radians(-60), _m.radians(60)
-                else:
-                    c.min_x, c.max_x = 0.0, _m.radians(100); c.min_y, c.max_y = _m.radians(-10), _m.radians(10); c.min_z, c.max_z = _m.radians(-10), _m.radians(10)
-        wb = h.r.PB["wrist." + s_]
-        c = wb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.use_limit_x = c.use_limit_z = True
-        c.min_x, c.max_x = _m.radians(-60), _m.radians(60); c.min_z, c.max_z = _m.radians(-25), _m.radians(25)
+    add_hand_limits(h.r.o)
 print("HAND_LIMITS")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM_SAVED", OUT)
