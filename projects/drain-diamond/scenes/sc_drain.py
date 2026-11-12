@@ -98,7 +98,7 @@ def dust_volume(loc, r=0.28):
 def umbrella(name, radius=0.47):
     """A black umbrella: a deep domed canopy in 8 gores (each sagging between its ribs), visible ribs ending in tips,
     a shaft, and a hooked J handle. Modelled with the canopy tip at the origin; the shaft runs down -Z."""
-    fabric_m = pbr(name + "Canopy", (0.006, 0.006, 0.007), 0.55, 0.0, **{'Coat Weight': 0.15, 'Coat Roughness': 0.2})
+    fabric_m = pbr(name + "Canopy", (0.012, 0.012, 0.014), 0.4, 0.0, **{'Coat Weight': 0.8, 'Coat Roughness': 0.12, 'Sheen Weight': 0.4})
     metal = pbr(name + "Metal", (0.35, 0.35, 0.37), 0.3, 0.9)
     grip = pbr(name + "Grip", (0.07, 0.04, 0.02), 0.35)
     bm = bmesh.new()
@@ -135,7 +135,7 @@ def umbrella(name, radius=0.47):
             B.cyl(mid, 0.003, d.length, metal, verts=6, rot=d.to_track_quat('Z', 'Y').to_euler())
         tip = Vector((radius * 1.01 * math.cos(a), radius * 1.01 * math.sin(a), -0.52 * radius - 0.01))
         B.cyl(tip, 0.005, 0.025, metal, verts=6)
-    B.cyl((0, 0, 0.03), 0.004, 0.06, metal, verts=6)
+    B.cyl((0, 0, 0.045), 0.006, 0.09, metal, verts=8)                     # ferrule tip on top
     B.cyl((0, 0, -0.42), 0.01, 0.84, metal, verts=8)
     B.cyl((0, 0, -0.88), 0.013, 0.1, grip, verts=10)
     for k in range(9):                                   # the hooked J handle
@@ -296,6 +296,9 @@ def build(variant=None):
     if v == "yard":
         c["searcher"] = officer("Searcher", 44, seed=4)
     if v == "gate":
+        sh = bpy.data.lights.new("SheenKey", 'AREA'); sh.size = 6.0; sh.energy = 900; sh.color = (0.85, 0.9, 1.0)
+        so = bpy.data.objects.new("SheenKey", sh); bpy.context.collection.objects.link(so); so.location = (1.5, -9.0, 6.0)
+        point_at(so, (1.5, -2.5, 2.0)); so.visible_camera = False          # bright sky behind them: a sheen on the canopies
         c["walkers"] = []
         for k in range(3):
             h = officer(f"Ret{k}", 36 + 6 * k, seed=k + 2)
@@ -379,8 +382,8 @@ def anim_gate(c, t):
         if u is not None:
             M = h.arm.matrix_world.to_3x3()
             hd = h.bone_head("head")
-            grip = hd + M @ Vector((-0.16, -0.22, -0.3))            # the hand at shoulder height, in front of the right shoulder
-            tipp = grip + Vector((0.02, 0.02, 0.72))                  # the shaft shows between hand and canopy; rim just above the head
+            grip = hd + M @ Vector((-0.12, -0.24, -0.42))           # the handle in the hand at chest height
+            tipp = grip + Vector((0.02, 0.02, 0.86))                  # the shaft shows between hand and canopy; rim just above the head
             u.location = tipp
             d = (tipp - grip).normalized(); u.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
             reach(h, "R", grip + Vector((0, 0, -0.02)), M @ Vector((-1, 0.4, -0.8)))

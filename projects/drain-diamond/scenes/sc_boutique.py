@@ -414,7 +414,7 @@ def salon_room(c, w=14.0, d=10.0, hgt=4.6, carpet=False, night=False):
     box("FrontHead", (0, 0.0, 4.3), (w, 0.3, 0.6), panel)
     if not night:
         for x in (-3.5, 3.5):
-            f_ = bpy.data.lights.new("CeilFill", 'AREA'); f_.size = 4.0; f_.energy = 140; f_.color = (1.0, 0.8, 0.6)
+            f_ = bpy.data.lights.new("CeilFill", 'AREA'); f_.size = 4.0; f_.energy = 60; f_.color = (1.0, 0.8, 0.6)
             fo = bpy.data.objects.new("CeilFill", f_); bpy.context.collection.objects.link(fo); fo.location = (x, d / 2, hgt - 0.05); fo.visible_camera = False
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = w; pt.size_y = 4.0; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, -0.1, 2.0); po.rotation_euler = (math.radians(-90), 0, 0)

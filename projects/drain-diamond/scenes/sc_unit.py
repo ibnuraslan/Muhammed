@@ -14,7 +14,7 @@ from human import reach, pose_walk, pose_sit, reset_pose, fingers_curl
 from sc_invest import office_chair
 from sc_boutique import haussmann
 
-EXPOSURE = 0.0
+EXPOSURE = -0.4
 DUR = {"pin": 9.0, "read": 9.0, "listen": 9.0}
 
 
@@ -64,6 +64,41 @@ def build(variant=None):
     for k in range(4):
         dd.model_h("drawer_cabinet", (-4.7, 6.2 + k * 0.55, 0), 1.3, rot_z=math.radians(90))
     dd.model_h("potted_plant_01", (4.5, 7.8, 0), 1.0)
+    # 2009 office dressing: venetian blinds (light bars on the floor), CRT monitors, desk phones, piled files, coffee cups,
+    # a coat stand, a generic map of the region (shapes only, no text)
+    slat = pbr("Slat", (0.85, 0.84, 0.8), 0.45, 0.2)
+    for k in range(3):
+        yc = 2.1 + k * 3.0
+        for j in range(22):
+            box("Blind", (4.98, yc, 0.85 + j * 0.085), (0.012, 2.2, 0.05), slat, rot=(0, math.radians(-20), 0))
+    sn = sun(18, 0, energy=3.0, color=(1.0, 0.9, 0.78), angle_deg=1.0)
+    sn.rotation_euler = (math.radians(72), 0, math.radians(90 + 20))       # low sun through the blinds onto the floor
+    plastic = pbr("Beige", (0.62, 0.6, 0.55), 0.5)
+    for k, (x, y, rz) in enumerate(((-2.5, 2.2, 0), (0.5, 2.2, 0), (-2.5, 5.0, math.pi), (0.5, 5.0, math.pi))):
+        dd.model_h("television_02", (x - 0.1, y + (0.15 if rz == 0 else -0.15), 0.76), 0.36, rot_z=rz)
+        ph_ = Vector((x + 0.45, y + (0.1 if rz == 0 else -0.1), 0.76))
+        box("Phone", ph_ + Vector((0, 0, 0.03)), (0.18, 0.2, 0.06), plastic, bevel=0.01)
+        box("Handset", ph_ + Vector((0, 0, 0.075)), (0.05, 0.2, 0.035), plastic, bevel=0.012)
+        for j in range(5):
+            box("FilePile", (x - 0.65, y + 0.1 * (j % 2), 0.77 + 0.025 * j), (0.25, 0.33, 0.022),
+                pbr("Pile", ((0.55, 0.42, 0.25), (0.75, 0.73, 0.68), (0.2, 0.3, 0.5))[j % 3], 0.8), rot=(0, 0, 0.12 * (j - 2)))
+        cyl("Mug", (x + 0.25, y - 0.15 if rz == 0 else y + 0.15, 0.815), 0.04, 0.1, pbr("MugM", ((0.85, 0.85, 0.82), (0.15, 0.2, 0.4))[k % 2], 0.3), verts=16)
+    cyl("CoatStand", (-4.5, 0.6, 0.9), 0.025, 1.8, pbr("StandW", (0.25, 0.16, 0.1), 0.4), verts=12)
+    for k in range(4):
+        a_ = k * math.pi / 2
+        box("CoatHook", (-4.5 + 0.1 * math.cos(a_), 0.6 + 0.1 * math.sin(a_), 1.72), (0.14, 0.02, 0.02), pbr("StandW", (0.25, 0.16, 0.1), 0.4), rot=(0, 0, a_))
+    box("Coat", (-4.4, 0.6, 1.3), (0.12, 0.45, 0.8), fabric("CoatF", (0.3, 0.27, 0.22), 0.9, 0.4, 300), bevel=0.05)
+    # the map: soft-coloured region shapes in a frame, no text
+    mm = bpy.data.materials.new("Map"); mm.use_nodes = True
+    N = mm.node_tree.nodes; L = mm.node_tree.links; p_ = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); vo = N.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 6
+    L.new(tc.outputs['UV'], vo.inputs['Vector'])
+    ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (0.85, 0.82, 0.7, 1); ramp.color_ramp.elements[1].color = (0.6, 0.72, 0.55, 1)
+    sep = N.new("ShaderNodeSeparateColor"); L.new(vo.outputs['Color'], sep.inputs[0]); L.new(sep.outputs[0], ramp.inputs['Fac'])
+    L.new(ramp.outputs['Color'], p_.inputs['Base Color']); p_.inputs['Roughness'].default_value = 0.5
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(-4.97, 4.0, 1.7), rotation=(math.radians(90), 0, math.radians(-90)))
+    mp = bpy.context.active_object; mp.scale = (1.6, 1.1, 1); mp.data.materials.append(mm)
+    box("MapFrame", (-5.0, 4.0, 1.7), (0.02, 1.68, 1.18), pbr("MapFrameM", (0.1, 0.1, 0.1), 0.5))
     cork = dd.tex_mat("concrete_floor_02", 1.0, tint=(0.62, 0.45, 0.28), name="Cork", sat=0.9)
     box("Corkboard", (-1.0, 8.47, 1.65), (3.0, 0.03, 1.4), cork)
     box("CorkFrame", (-1.0, 8.49, 1.65), (3.1, 0.02, 1.5), pbr("CorkFrameM", (0.35, 0.25, 0.15), 0.5))
@@ -89,18 +124,31 @@ def build(variant=None):
     c["file"] = box("OpenFile", (3.35, 3.6, 0.775), (0.33, 0.45, 0.01), pbr("FilePaper", (0.88, 0.87, 0.82), 0.7))
     l = bpy.data.lights.new("DeskLampL", 'SPOT'); l.energy = 40; l.spot_size = math.radians(70); l.color = (1.0, 0.85, 0.6)
     lo = bpy.data.objects.new("DeskLampL", l); bpy.context.collection.objects.link(lo); lo.location = (3.3, 3.2, 1.2); point_at(lo, (3.3, 3.6, 0.77))
-    # the listening post on the reader's desk: a recorder with two turning spools, headphones on her head
-    dd.model_h("vintage_radio_transceiver", (3.25, 3.15, 0.76), 0.18, rot_z=math.radians(-90))
-    rec = Vector((3.25, 3.95, 0.76))
-    box("Recorder", rec + Vector((0, 0, 0.05)), (0.3, 0.42, 0.1), pbr("RecBody", (0.05, 0.05, 0.055), 0.35, 0.4), bevel=0.01)
-    box("RecWindow", rec + Vector((-0.151, 0, 0.07)), (0.004, 0.3, 0.05), pbr("RecGlass", (0.02, 0.02, 0.02), 0.05))
+    # the listening post on the reader's desk: a reel-to-reel deck (two spools, tape across the heads, two VU meters)
+    rec = Vector((3.2, 3.95, 0.76))
+    body = pbr("DeckBody", (0.05, 0.05, 0.055), 0.4, 0.3)
+    plate = brushed_metal("DeckPlate", (0.7, 0.7, 0.72))
+    box("Deck", rec + Vector((0, 0, 0.07)), (0.36, 0.46, 0.14), body, bevel=0.01)
+    box("DeckPlate", rec + Vector((0.02, 0, 0.142)), (0.3, 0.44, 0.004), plate)
+    box("HeadBlock", rec + Vector((-0.1, 0, 0.155)), (0.05, 0.08, 0.025), body)
     c["spools"] = []
+    reel_m = pbr("Reel", (0.75, 0.75, 0.78), 0.25, 1.0)
+    tape_m = pbr("TapeM", (0.14, 0.08, 0.04), 0.45)
     for k in range(2):
-        sp = cyl(f"Spool{k}", rec + Vector((0.0, -0.09 + 0.18 * k, 0.106)), 0.07, 0.008, pbr("SpoolM", (0.7, 0.7, 0.72), 0.3, 1.0), verts=6)
-        hub = cyl(f"Hub{k}", rec + Vector((0.0, -0.09 + 0.18 * k, 0.112)), 0.025, 0.01, pbr("HubM", (0.05, 0.05, 0.05), 0.5), verts=6)
-        hub.parent = sp; hub.location = (0, 0, 0.006)
-        c["spools"].append(sp)
-    box("Tape", rec + Vector((0.06, 0, 0.108)), (0.004, 0.18, 0.004), pbr("TapeM", (0.12, 0.07, 0.04), 0.5))
+        cpos = rec + Vector((0.05, -0.12 + 0.24 * k, 0.15))
+        R = dd.Builder(f"Reel{k}")
+        R.cyl((0, 0, 0.002), 0.095, 0.003, reel_m, verts=32).cyl((0, 0, 0.012), 0.095, 0.003, reel_m, verts=32)
+        R.cyl((0, 0, 0.007), 0.05 + 0.02 * k, 0.008, tape_m, verts=32)            # the wound tape
+        for q in range(3):
+            a_ = q * 2 * math.pi / 3
+            R.cyl((0.055 * math.cos(a_), 0.055 * math.sin(a_), 0.0135), 0.022, 0.002, pbr("ReelHole", (0.02, 0.02, 0.02), 0.6), verts=12)
+        sp = R.done(cpos); c["spools"].append(sp)
+    box("TapeRun", rec + Vector((-0.07, 0, 0.162)), (0.004, 0.3, 0.006), tape_m)
+    for k in range(2):                                     # VU meters with a needle each
+        vp = rec + Vector((-0.181, -0.08 + 0.16 * k, 0.08))
+        box(f"VU{k}", vp, (0.004, 0.11, 0.06), emissive(f"VUE{k}", (1.0, 0.8, 0.45), 3.0))
+        nd = box(f"Needle{k}", vp + Vector((-0.004, 0, -0.022)), (0.002, 0.003, 0.045), pbr("NeedleM", (0.05, 0.05, 0.05), 0.5))
+        c.setdefault("needles", []).append(nd)
     hp = pbr("Headphones", (0.04, 0.04, 0.045), 0.5)
     bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.008, location=(0, 0, 0))
     band = bpy.context.active_object; band.data.materials.append(hp); band.name = "HeadBand"
@@ -111,7 +159,9 @@ def build(variant=None):
 def anim_listen(c, t):
     sec = t * DUR["listen"]
     for k, sp in enumerate(c["spools"]):
-        sp.rotation_euler = (0, 0, sec * (2.2 if k else 1.6))
+        sp.rotation_euler = (0, 0, -sec * (2.2 if k else 1.6))
+    for k, nd in enumerate(c.get("needles", [])):
+        nd.rotation_euler = (math.radians(35 * (0.4 + 0.3 * math.sin(sec * 7.0 + k) + 0.2 * math.sin(sec * 13.0 + 2 * k))), 0, 0)
     r = c["reader"]
     r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
@@ -145,8 +195,8 @@ def anim_read(c, t):
 
 MOVES = {
     "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
-                   cam=lambda c, t: (Vector((2.55, 4.6, 1.08)).lerp(Vector((2.65, 4.45, 1.05)), ease(t)), Vector((3.3, 3.85, 0.86)), 40),
-                   focus=lambda c, t: Vector((3.25, 3.95, 0.86))),
+                   cam=lambda c, t: (Vector((1.6, 5.3, 1.55)).lerp(Vector((1.8, 5.05, 1.5)), ease(t)), Vector((3.7, 3.75, 1.0)), 32),
+                   focus=lambda c, t: Vector((3.6, 3.8, 1.0))),
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
     "read": dict(kind="anim", dof=2.8, anim=anim_read,

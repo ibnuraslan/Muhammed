@@ -65,14 +65,34 @@ def build_hall(c):
     B.box((0.6, 2.52, 0.6), (1.0, 0.04, 1.15), cav).box((0.6, 2.1, 0.01), (1.0, 0.8, 0.02), cav)        # back, floor
     B.box((0.1, 2.1, 0.6), (0.04, 0.8, 1.15), cav).box((1.1, 2.1, 0.6), (0.04, 0.8, 1.15), cav)          # sides
     B.done()
-    # inside: small display stands with jewels
-    stand = pbr("DispStand", (0.85, 0.84, 0.8), 0.5)
-    for k in range(5):
-        p = Vector((0.25 + k * 0.17, 1.95 + 0.08 * (k % 2), 0.05))
-        cyl("Stand", p + Vector((0, 0, 0.06)), 0.035, 0.12, stand, verts=20)
-        dd.ring(f"HidRing{k}", p + Vector((0, 0, 0.14)), stone_r=0.0045, band="plat" if k % 2 else "gold", stone=("diamond", "sapphire", "diamond", "ruby", "diamond")[k])
-    for k in range(3):
-        box("NeckBust", (0.35 + k * 0.3, 2.3, 0.2), (0.12, 0.08, 0.3), fabric("BustVel", (0.08, 0.08, 0.1), 0.9, 0.6, 300))
+    # inside: jewellery display stands: black velvet necklace busts, ring cones, earring trees, open presentation boxes
+    vel = dd.tex_mat("velour_velvet", 3.0, tint=(0.05, 0.05, 0.06), name="DispVel", sat=0.2)
+    M = dd.jewel_mats()
+    for k, x in enumerate((0.32, 0.88)):                       # necklace busts with a necklace and pendant
+        bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.09, radius2=0.035, depth=0.28, location=(x, 2.3, 0.16))
+        b_ = bpy.context.active_object; b_.data.materials.append(vel); b_.scale = (1.0, 0.55, 1.0)
+        cyl("BustNeck", (x, 2.3, 0.34), 0.03, 0.1, vel, verts=16)
+        for q in range(22):
+            a_ = math.pi * (0.15 + 0.7 * q / 21)
+            cyl("Necklace", (x + 0.065 * math.cos(a_), 2.3 - 0.035 * math.sin(a_) - 0.005, 0.25 - 0.06 * math.sin(a_)), 0.004, 0.005,
+                M["plat"] if k else M["gold"], verts=8, rot=(math.radians(90), 0, 0))
+        dd.earring(f"Pendant{k}", (x, 2.255, 0.19), 0.009, ("diamond", "sapphire")[k])
+    for k, x in enumerate((0.45, 0.6, 0.75)):                  # ring cones along the front
+        bpy.ops.mesh.primitive_cone_add(vertices=20, radius1=0.02, radius2=0.007, depth=0.06, location=(x, 1.95, 0.05))
+        bpy.context.active_object.data.materials.append(vel)
+        dd.ring(f"HidRing{k}", (x, 1.95, 0.058), stone_r=0.0055, band="plat" if k % 2 else "gold", stone=("diamond", "ruby", "diamond")[k], upright=True)
+    for k, x in enumerate((0.22, 0.98)):                       # earring trees
+        cyl("TreeStem", (x, 2.05, 0.1), 0.006, 0.18, vel, verts=10)
+        box("TreeBar", (x, 2.05, 0.18), (0.12, 0.012, 0.012), vel)
+        for sx in (-0.05, 0.05):
+            dd.earring(f"TreeEar{k}{sx}", (x + sx, 2.045, 0.165), 0.0045, ("diamond", "emerald")[k])
+    box_m = pbr("PresBox", (0.03, 0.035, 0.07), 0.45, 0.0, **{'Coat Weight': 0.4})
+    sat_m = pbr("PresSatin", (0.85, 0.83, 0.78), 0.35, 0.0, **{'Sheen Weight': 0.6})
+    for k, (x, rz) in enumerate(((0.3, 0.3), (0.95, -0.4))):  # open presentation boxes (generic, no logo)
+        bx = box("PresBoxBase", (x, 1.86, 0.025), (0.07, 0.07, 0.04), box_m, bevel=0.006, rot=(0, 0, rz))
+        box("PresBoxSatin", (x, 1.86, 0.046), (0.06, 0.06, 0.004), sat_m, rot=(0, 0, rz))
+        lid = box("PresBoxLid", (x - 0.03 * math.sin(rz), 1.86 + 0.035, 0.07), (0.07, 0.012, 0.06), box_m, bevel=0.006, rot=(math.radians(-15), 0, rz))
+        dd.ring(f"BoxRing{k}", (x, 1.86, 0.05), stone_r=0.005, band="plat", upright=True, rot=(0, 0, rz))
     il = bpy.data.lights.new("CavityGlow", 'POINT'); il.energy = 6; il.color = (1.0, 0.85, 0.65); il.shadow_soft_size = 0.1
     io = bpy.data.objects.new("CavityGlow", il); bpy.context.collection.objects.link(io); io.location = (0.6, 2.2, 0.9)
     pnl = dd.Builder("HiddenPanel"); pnl.box((0, 0, 0), (0.95, 0.04, 1.1), dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="HidPanel", sat=0.8))

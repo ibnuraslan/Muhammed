@@ -235,7 +235,7 @@ def build_upstairs(c, after=False):
             c["floor"].append(h); k += 1
     c["robbers"] = []
     for k in range(3):
-        h = person(f"Rob{k}", 1.0, 30 + 7 * k, ("male_casualsuit05", "male_casualsuit01", "male_casualsuit03")[k], ("short02", "short04", "short01")[k],
+        h = person(f"Rob{k}", 1.0, 30 + 7 * k, ("male_casualsuit05", "male_casualsuit01", "male_casualsuit03")[k], ("short02", "short03", "short01")[k],
                    cval=1.0)
         c["robbers"].append(h)
     w = person("WigMan", 1.0, 35, "female_elegantsuit01", "long01", cval=1.3, tint=(0.5, 0.42, 0.36), hv=0.5, sat=0.4)

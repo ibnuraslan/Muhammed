@@ -15,7 +15,7 @@ from sc_boutique import haussmann
 
 EXPOSURE = 0.6
 DUR = {"mic": 9.0, "envelope": 9.0, "reels": 9.0}
-VARIANT_FOR = {"mic": "interior", "envelope": "street", "reels": "interior_day"}
+VARIANT_FOR = {"mic": "mic_out", "envelope": "street", "reels": "interior_day"}
 
 
 def interior(c, day=False):
@@ -80,6 +80,28 @@ def build(variant=None):
                 r = cyl(f"Reel{k}", (0.33, -0.42 + 0.05 * k, 0.575), 0.015, 0.004, pbr("ReelM", (0.75, 0.75, 0.77), 0.3, 1.0), verts=6)
                 c["reels"].append(r)
             c["rec"] = rec
+    elif v == "mic_out":
+        # night, from outside: the driver's door open, a technician leaning into the footwell (back and legs only)
+        world_flat((0.02, 0.025, 0.04), 1.0)
+        road = dd.wet(dd.tex_mat("asphalt_02", 0.4, tint=(0.5, 0.5, 0.52), name="NightRoad", sat=0.4), 0.9, 0.3)
+        box("Road", (0, 0, -0.06), (80, 30, 0.1), road)
+        box("Pave", (0, 3.6, 0.05), (80, 2.4, 0.12), dd.wet(dd.tex_mat("concrete_floor_02", 0.5, tint=(0.5, 0.5, 0.5), name="NightPave", sat=0.3), 0.8, 0.4))
+        for k, (a, b) in enumerate(((-40, -10), (-10, 20), (20, 50))):
+            haussmann(a, b, seed=90 + k, origin=(0, 4.8, 0), lit_frac=0.3)
+        car_ = dd.sedan("BugCar", (0.1, 0.11, 0.13), lights=False); car_.location = (0, 1.1, 0)
+        # the open driver's door (left side = +Y): a door-coloured panel swung out on its front hinge
+        door = dd.Builder("OpenDoor"); dm = pbr("DoorPaint", (0.1, 0.11, 0.13), 0.25, 0.7, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
+        door.box((-0.5, 0.0, 0.75), (1.0, 0.06, 0.62), dm).box((-0.55, 0.0, 1.2), (0.85, 0.04, 0.32), pbr("DoorGlassD", (0.02, 0.025, 0.03), 0.05, 0.0, **{'Coat Weight': 1.0}))
+        door.box((-0.5, -0.04, 0.75), (0.95, 0.02, 0.55), pbr("DoorTrim", (0.06, 0.06, 0.065), 0.6))
+        dobj = door.done((0.55, 2.0, 0.0)); dobj.rotation_euler = (0, 0, math.radians(-60))
+        lamp = dd.model_h("street_lamp_02", (-3.0, 3.3, 0.1), 5.0)
+        sl = bpy.data.lights.new("StreetLamp", 'POINT'); sl.energy = 900; sl.color = (1.0, 0.68, 0.38); sl.shadow_soft_size = 0.2
+        so = bpy.data.objects.new("StreetLamp", sl); bpy.context.collection.objects.link(so); so.location = (-3.0, 3.0, 4.7)
+        h = person("Tech", 1.0, 36, "male_casualsuit05", "short02", cval=1.1); c["tech"] = h
+        tl = bpy.data.lights.new("TechTorch", 'POINT'); tl.energy = 15; tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.03
+        to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); to.location = (0.3, 1.3, 0.55)
+        c["rain_ys"] = (4.5, 6.0)
+        rain(c, 0, c["rain_ys"], width=30, height=8, strength=1.2, density=0.985)
     else:
         world_flat((0.02, 0.025, 0.04), 1.0)
         road = dd.wet(dd.tex_mat("asphalt_02", 0.4, tint=(0.5, 0.5, 0.52), name="NightRoad", sat=0.4), 0.9, 0.3)
@@ -101,8 +123,25 @@ def build(variant=None):
             hip = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) / 2; h.arm.location.z += 0.5 - hip.z
             c[name] = h
         c["rain_ys"] = (-6.0, -3.0, -1.6)
-        rain(c, 0, c["rain_ys"], width=30, height=8, strength=1.6, density=0.985)
+        rain(c, 0, c["rain_ys"], width=30, height=8, strength=0.8, density=0.985)
     return c
+
+
+def anim_mic_out(c, t):
+    sec = t * DUR["mic"]
+    rain_fall(c, sec)
+    h = c["tech"]; zero(h); from human import pose_walk
+    pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
+    for b, a in (("spine01", 18), ("spine02", 18), ("spine03", 16), ("spine04", 12), ("neck01", 10)):
+        h.rot(b, (1, 0, 0), a)                                 # bent forward into the car
+    for sd in ("L", "R"):
+        h.rot(f"upperleg01.{sd}", (1, 0, 0), -14)
+        h.rot(f"lowerleg01.{sd}", (1, 0, 0), 20)
+    place(h, (0.25, 2.25 + 0.01 * math.sin(sec * 1.2), 0.06), math.radians(180), z=0.06)    # facing +Y? no: facing the car (-Y)
+    h.arm.rotation_euler.z = 0.0; dd.ground(h, 0.06)
+    from human import reach
+    reach(h, "R", Vector((0.35, 1.45, 0.55 + 0.03 * math.sin(sec * 1.5))), Vector((0, -1, -0.5)))
+    reach(h, "L", Vector((0.15, 1.5, 0.6)), Vector((0, -1, -0.5)))
 
 
 def anim_mic(c, t):
@@ -138,7 +177,10 @@ def anim_reels(c, t):
 
 
 MOVES = {
-    "mic": dict(kind="anim", dof=2.8, anim=anim_mic,
+    "mic": dict(kind="anim", dof=4.0, anim=anim_mic_out,
+                cam=lambda c, t: (Vector((-2.6, 5.4, 1.5)).lerp(Vector((-2.2, 5.0, 1.45)), ease(t)), Vector((0.3, 1.6, 0.8)), 30),
+                focus=lambda c, t: Vector((0.25, 2.0, 0.9))),
+    "mic_old": dict(kind="anim", dof=2.8, anim=anim_mic,
                 cam=lambda c, t: (Vector((-0.85, -0.1, 1.28)).lerp(Vector((-0.75, -0.05, 1.26)), ease(t)), Vector((0.95, 0.35, 0.62)), 20),
                 focus=lambda c, t: Vector((0.8, 0.35, 0.8))),
     "envelope": dict(kind="anim", dof=5.6, anim=anim_envelope,
