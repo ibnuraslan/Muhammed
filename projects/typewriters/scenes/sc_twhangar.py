@@ -517,6 +517,5 @@ def build(variant=None):
     if variant in ("night", "customs"):
         look.night_interior()
     else:
-        look.day_light("mist", azim=200)
-        look.ground_haze((0, -30), (160, 140), mood="mist", height=10.0, density=0.004)
+        pass          # exterior day: held on the set's own light (real colours) until LOOK v5
     return c
