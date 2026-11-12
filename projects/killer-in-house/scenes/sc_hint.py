@@ -49,10 +49,10 @@ def build(variant=None):
                 c[k].data.energy = 0.0
         # cool moonlight through the windows (soft, hidden)
         for (x, z) in ((-2.4, 1.6), (2.6, 1.6), (-2.4, F2 + 1.5), (2.6, F2 + 1.5)):
-            H.day_fill((x, -D2 + 0.45, z), 1.2, 30, (0.55, 0.68, 1.0), rot=(math.radians(65), 0, 0))
+            H.day_fill((x, -D2 + 0.45, z), 1.2, 10, (0.5, 0.64, 1.0), rot=(math.radians(65), 0, 0))
         H.day_fill((1.1, D2 - 0.45, 1.7), 1.0, 15, (0.55, 0.68, 1.0), rot=(math.radians(-65), 0, 0))
         if "moonspot" in c:
-            c["moonspot"].data.energy = 160
+            c["moonspot"].data.energy = 70
     c["tod"] = tod
     c["cast"] = {}
     for k in cast:
@@ -102,7 +102,7 @@ def _():
 def _():
     def anim(c, t):
         if "moonwin" not in c:
-            c["moonwin"] = H.day_fill((-2.4, -D2 + 0.35, F2 + 1.6), 1.0, 40, (0.55, 0.68, 1.0), rot=(math.radians(70), 0, 0))
+            c["moonwin"] = H.day_fill((-2.4, -D2 + 0.35, F2 + 1.6), 1.0, 8, (0.55, 0.68, 1.0), rot=(math.radians(70), 0, 0))
             for k, key in enumerate(("up_cab", "up_chair")):
                 H.drape("USheet%d" % k, [c[key]], seed=3 + k, floor=F2)
                 for ob in [c[key]] + list(c[key].children_recursive):
