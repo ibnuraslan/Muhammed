@@ -95,3 +95,8 @@ Three ranges: f1507–1513, f1987–1993 and f2029–2035. All three are off cam
 - **Accepted earlier:** f1–31, f151, f253, f799 and f1105.
 
 Clip scan: f613 (one frame, mid kneel-to-stand, after the f628 hand change), plus f1507, f1987 and f2029, which are off camera.
+
+## v007b (director review of 81a806f): two fixes only
+1. **Look-at snaps:** the rotation is slerped (smoothstep) across f1559–1582, f1845–1865 and f1871–1886. QA now flags CAMJUMP **only** at the three covered push frames, **f1403, f1556 and f1869**.
+2. **f628:** both hands keyed `relaxed` (hand_poses) every 6 frames from f604 to f652, so they are no longer splayed.
+QA after v007b: EMPTY 17, FILL 4, BACKHEAD 2, CAMJUMP 3 (the covered ones). Every remaining flag is in the lists above (accepted or intended). Clip scan: f1507, f1987 and f2029, all off camera. The f613 hit is gone.

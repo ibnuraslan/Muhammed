@@ -2,7 +2,7 @@
  "frames": {
   "613": {
    "Woman": {
-    "self": 82,
+    "self": 11,
     "clothes": 0,
     "other": 0
    }
@@ -67,10 +67,6 @@
  "step": 6,
  "depth_cm": 2.0,
  "bad_ranges": [
-  [
-   613,
-   613
-  ],
   [
    1507,
    1513
