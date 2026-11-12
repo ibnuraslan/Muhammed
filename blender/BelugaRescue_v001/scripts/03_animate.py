@@ -194,7 +194,8 @@ for k, f in enumerate(range(276, 520, 16)):
     kn_r = 22 if j else 4; kn_l = 14 if (k % 3 == 0) else 4
     DV.P(f, (SIT[0], SIT[1] + 0.02 * j, SIT[2] + 0.01 * j), yaw=180, pitch=-6 + 6 * j, roll=3 * (j * 2 - 1), spine=(34 + 10 * j, 4 * (j * 2 - 1), 0),
          head=(18, 6 * (j * 2 - 1), 0), legs=legs((92 + 0.5 * kn_l, 8, kn_l, -82), (92 + 0.6 * kn_r, 10, kn_r, -84)), jaw=4 + 4 * j,
-         arms={"L": ("calf", dict(s="L", t=0.45)), "R": ("calf", dict(s="R", t=0.6))}, curl={"L": (62, 40), "R": (62, 40)})
+         arms={"L": ("calf", dict(s="L", t=0.45)), "R": (("fin", dict(p=min(1.0, max(0.0, (f - 484) / 32.0)))) if f >= 484 else ("calf", dict(s="R", t=0.6)))},
+         curl={"L": (62, 40), "R": ((70, 45) if f >= 484 else (62, 40))})
 # --- beat 4: claws upward, legs locked, rises, sinks back
 DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((86, 8, 10, -72)), arms=arms(fwd=120, out=30))
 for k, f in enumerate(range(535, 610, 15)):
@@ -253,6 +254,13 @@ def diver_hands(f, p):
             out = (k1 - k0).cross(Vector((0, 0, 1))).normalized() * sx
             W = c + out * 0.16 + Vector((0, 0, 0.1))
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.85 + Vector((0, 0, -1)) * 0.15, n=-out * 0.6 + Vector((0, 0, -0.8)), pole=W + Vector((sx * 0.3, 0, 0.5))))
+        elif kind == "fin":      # grip the fin blade just past the toes and pull it off along the foot
+            ev(f)
+            hd = DV.world("foot.R", f); tl = DV.world("foot.R", f, "tail")
+            fwd_ = (tl - hd).normalized()
+            up_ = Vector((0, 0, 1)) - fwd_ * fwd_.z; up_.normalize()
+            W = tl + fwd_ * (0.06 + 0.22 * prm["p"]) + up_ * 0.035
+            a[s] = ("world", dict(W=W, d=fwd_, n=-up_, pole=W + Vector((-0.3, 0.2, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1
             W = Vector((XY1.x + sx * 0.24, COP_Y + 0.1, COP_Z + 0.062))
@@ -286,28 +294,30 @@ print("DIVER keyed", len(DV.keys))
 
 # right fin comes off during the struggle (beat 4) and sinks to the tiles; the left stays on
 finR = bpy.data.objects["Diver.FinBlade_R"]
-ev(588)
-mw = finR.matrix_world.copy()
-# rebuild as a separate world-space duplicate that takes over at frame 589
+G0, G1 = 486, 516                       # grip frame, release frame
+def hand_M(f):
+    ev(f); pb = DV.o.pose.bones["wrist.R"]; return DV.o.matrix_world @ pb.matrix
+ev(G0)
+off = hand_M(G0).inverted() @ finR.matrix_world
 finR2 = finR.copy(); finR2.data = finR.data; finR2.name = "Diver.FinBlade_R_loose"; sc.collection.objects.link(finR2)
-finR2.parent = None; finR2.matrix_world = mw
-for f_, h in ((1, True), (589, False)):
+finR2.parent = None; finR2.constraints.clear() if hasattr(finR2, "constraints") else None
+finR2.rotation_mode = 'QUATERNION'
+for f_, h in ((1, True), (G0, False)):
     finR2.hide_render = h; finR2.hide_viewport = h; finR2.keyframe_insert("hide_render", frame=f_); finR2.keyframe_insert("hide_viewport", frame=f_)
-for f_, h in ((1, False), (589, True)):
+for f_, h in ((1, False), (G0, True)):
     finR.hide_render = h; finR.keyframe_insert("hide_render", frame=f_)
-loc0 = mw.translation.copy(); q0 = mw.to_quaternion()
-for f_, dz, ang in ((589, 0, 0), (610, -0.25, 25), (640, -0.55, 60), (680, -0.85, 85)):
+for f_ in range(G0, G1 + 1, 2):        # held: rigidly in the hand
+    M_ = hand_M(f_) @ off
+    finR2.matrix_world = M_; finR2.keyframe_insert("location", frame=f_); finR2.keyframe_insert("rotation_quaternion", frame=f_)
+M_rel = finR2.matrix_world.copy(); loc0 = M_rel.translation.copy(); q0 = M_rel.to_quaternion()
+for f_, dz, ang in ((G1 + 14, -0.06, 20), (G1 + 34, -0.16, 55), (G1 + 60, -0.3, 80)):     # released: sinks, tips flat, settles
     q = Quaternion(Vector((1, 0.3, 0)).normalized(), R_(ang)) @ q0
-    finR2.location = loc0 + Vector((0.12 * ang / 85, 0.25 * ang / 85, dz)); finR2.rotation_mode = 'QUATERNION'; finR2.rotation_quaternion = q
+    finR2.location = loc0 + Vector((0.05 * ang / 80, 0.12 * ang / 80, dz)); finR2.rotation_quaternion = q
     finR2.keyframe_insert("location", frame=f_); finR2.keyframe_insert("rotation_quaternion", frame=f_)
     ev(f_); mz_ = min((finR2.matrix_world @ v.co).z for v in finR2.data.vertices)
-    if mz_ < 0.004:
-        finR2.location.z += 0.004 - mz_; finR2.keyframe_insert("location", frame=f_)
-# settle exactly on the floor: lowest vertex at z = 0.003
-ev(680)
-mz = min((finR2.matrix_world @ v.co).z for v in finR2.data.vertices)
-finR2.location.z -= mz - 0.004; finR2.keyframe_insert("location", frame=680)
-for f_ in (681, END): finR2.keyframe_insert("location", frame=f_); finR2.keyframe_insert("rotation_quaternion", frame=f_)
+    finR2.location.z += 0.004 - mz_ if (mz_ < 0.004 or f_ == G1 + 60) else 0.0
+    finR2.keyframe_insert("location", frame=f_)
+for f_ in (G1 + 61, END): finR2.keyframe_insert("location", frame=f_); finR2.keyframe_insert("rotation_quaternion", frame=f_)
 
 # =============================================================== BELUGA
 BR = bpy.data.objects["Beluga_Rig"]; BRR = Rig(BR)
@@ -561,7 +571,7 @@ for nm, x, y in GAL:
             elif happy:
                 stand(h, f, (x, y), 180, spine=(0, 0, 0), head=(-15, 0, 0), arms_=clap(h, j))
             else:
-                stand(h, f, (x, y), 180 + 5 * math.sin(k), spine=(4, 0, 2 * j), head=(5, 10 * math.sin(k * 0.7), 0), arms_=arms(fwd=12, out=10))
+                stand(h, f, (x, y), 180, spine=(4, 0, 2 * j), head=(5, 18 * math.sin(k * 0.7), 0), arms_=arms(fwd=12, out=10))
             continue
         if happy:
             stand(h, f, (x, y), 180, spine=(-4, 0, 0), head=(-12, 6 * math.sin(k), 0), knee=4 + 3 * j, arms_=clap(h, j), curl={"L": (12, 15), "R": (12, 15)})
@@ -569,11 +579,11 @@ for nm, x, y in GAL:
             stand(h, f, (x, y), 180, spine=(10, 0, 0), head=(12, 8 * math.sin(k), 0),
                   arms_={"L": glass_hand(h, "L", x - 0.24, 1.5 + 0.05 * j), "R": glass_hand(h, "R", x + 0.24, 1.45)}, curl={"L": (8, 10), "R": (8, 10)})
         elif alarmed and nm == "SpecB":
-            stand(h, f, (x, y), 180 - 12, spine=(8, 0, 0), head=(5, 10, 0), arms_=arms(l=dict(fwd=100 + 8 * j, out=12), r=dict(fwd=15, out=12)), curl={"L": (POINT, 45)})
+            stand(h, f, (x, y), 180, spine=(8, 0, -8), head=(5, 10, 0), arms_=arms(l=dict(fwd=100 + 8 * j, out=12), r=dict(fwd=15, out=12)), curl={"L": (POINT, 45)})
         elif alarmed and nm == "SpecD":
             stand(h, f, (x, y), 180, spine=(12, 0, 0), head=(8, 0, 0), arms_={"R": mouth_hand(h, "R"), "L": ("rest", dict(fwd=40 + 15 * j, out=15))})
         else:
-            stand(h, f, (x, y), 180 + 8 * math.sin(k + x), spine=(3, 0, 0), head=(4 * j, 12 * math.sin(k * 0.5 + x), 0), arms_=arms(fwd=10 + 20 * j, out=12))
+            stand(h, f, (x, y), 180, spine=(3, 0, 4 * math.sin(k + x)), head=(4 * j, 18 * math.sin(k * 0.5 + x), 0), arms_=arms(fwd=10 + 20 * j, out=12))
 for nm, x, y in DECK:
     h = PEOPLE[nm]
     for k, f in enumerate(range(1, END + 1, 12)):
