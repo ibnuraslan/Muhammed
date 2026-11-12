@@ -198,6 +198,8 @@ cb_ = Carry(mbox)
 lw = bone_w(bom, "wrist.L", 1)
 cb_.hold(bom, "wrist.L", 1, lw @ Matrix.Translation(V((0.0, -0.06, -0.03))))
 cb_.done()
+# v006: the matchbox floated beside his busy left hand (HOVER); removed, he strikes the match on the sole
+for c_ in list(mbox.children_recursive) + [mbox]: bpy.data.objects.remove(c_, do_unlink=True)
 # flame: lights on the strike (f28), flickers, a second wobble, out when knocked away (486)
 fl = O["Match_Flame"]; flight = O["Match_Light"]
 # flame burns upward from the match head in world space (not along the stick)
@@ -410,30 +412,32 @@ SEG = [
     (1,   V((-1.12, 0.50, 0.34)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 20),
     (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
     (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.45 + bp("Bomber", "head", 100) * 0.55), 24),
-    (150, V((-1.00, 0.47, 0.66)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
+    (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
     (198, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
     # beat 2: swing round down the aisle toward the trolley, low dolly back, crane up, whip to her face, push on eyes
-    (225, V((0.02, 1.05, 1.05)), V((0.0, 5.0, 1.1)), 26),
-    (265, V((0.0, 1.35, 0.70)), bp("Attendant", "head", 265, (0, 0, -0.35)), 30),
-    (300, V((0.05, 1.55, 1.45)), bp("Attendant", "head", 300), 35),
+    # dolly back down the aisle just ahead of her, so she stays big in frame
+    (225, bp("Attendant", "spine03", 225, (0.05, -1.7, 0.35)), bp("Attendant", "head", 225, (0, 0, -0.25)), 26),
+    (265, bp("Attendant", "spine03", 265, (0.04, -1.5, 0.15)), bp("Attendant", "head", 265, (0, 0, -0.25)), 28),
+    (300, bp("Attendant", "spine03", 300, (0.05, -1.3, 0.35)), bp("Attendant", "head", 300, (0, 0, -0.1)), 30),
     (330, V((0.16, 1.80, 1.50)), bp("Attendant", "head", 330, (0, 0, -0.05)), 42),
     (372, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 372, (0, -0.02, -0.02)), 52),
     # beat 3: over her shoulder, pushing over the seatback to the flame and his startled face
-    (400, V((0.22, 1.15, 1.62)), op("Match_Flame", 400), 35),
-    (440, V((0.20, 0.82, 1.48)), (op("Match_Flame", 440) + bp("Bomber", "head", 440)) / 2, 45),
-    (480, V((0.10, 0.95, 1.55)), bp("Bomber", "head", 480), 40),
+    (400, V((0.38, 1.25, 1.70)), (bp("Attendant", "head", 400) + bp("Bomber", "head", 400)) / 2, 24),
+    (440, V((0.30, 0.95, 1.55)), (op("Match_Flame", 440) + bp("Bomber", "head", 440)) / 2, 28),
+    (480, V((0.15, 1.10, 1.60)), bp("Bomber", "head", 480), 26),
     # beat 4: wide from the aisle ahead -> crane to near top-down over the pile -> drop to carpet level for the pin
-    (515, V((0.70, 3.00, 1.55)), bp("Bomber", "spine01", 515), 22),
-    (555, V((0.42, 1.90, 1.95)), bp("Bomber", "spine01", 555, (0, 0, -0.1)), 22),
-    (600, V((0.25, 2.30, 1.55)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
+    (515, V((0.05, 2.45, 1.75)), bp("Bomber", "spine01", 515), 22),
+    (555, V((0.10, 2.10, 1.95)), bp("Bomber", "spine01", 555, (0, 0, -0.1)), 22),
+    (600, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
     (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
+    (655, V((0.00, 1.25, 1.25)), bp("Steward", "head", 655, (0, 0, -0.2)), 24),
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
-    (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
+    (680, V((0.05, 1.05, 1.65)), bp("Bomber", "upperarm02.R", 680), 28),
     (697, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 697), 32),
     (712, V((0.30, 0.95, 0.80)), bp("Bomber", "upperarm02.R", 712), 32),
     # "finally sedated": two-shot of the steward's and the attendant's faces over his limp body (his face is to the carpet)
-    (736, V((0.10, 1.05, 0.95)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 22),
-    (760, V((0.08, 1.12, 0.92)), (bp("Steward", "head", 760) + bp("Attendant", "head", 760)) / 2 + V((0, 0, -0.08)), 22),
+    (736, V((-0.02, 0.80, 1.20)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
+    (760, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 760) + bp("Attendant", "head", 760)) / 2 + V((0, 0, -0.08)), 20),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
     (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
@@ -461,7 +465,7 @@ SEG3 = [
 ]
 # airport: dropping through the skylight -> crane to belt level -> dolly with the tray -> settle on the traveller in socks
 SEG4 = [
-    (1393, AX + V((-0.6, -0.4, 6.4)), AX + V((-0.9, -0.5, 0.0)), 22),
+    (1393, AX + V((-1.15, 1.25, 2.55)), bp("Traveller", "head", 1393, (0, 0, -0.3)), 24),
     (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
     (1470, AX + V((-1.25, 0.40, 0.98)), bp("Traveller", "head", 1470), 26),
     (1490, AX + V((-1.30, 0.35, 1.10)), bp("Traveller", "head", 1490, (0, 0, -0.1)), 28),
