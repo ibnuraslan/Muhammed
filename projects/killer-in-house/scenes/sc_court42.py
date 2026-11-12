@@ -22,12 +22,13 @@ JURY = [(x, y) for y in (1.2, 2.1) for x in (-5.2, -4.6, -4.0, -3.4, -2.8, -2.2)
 
 def build(variant=None):
     c = {"variant": variant}
-    world_sky(sun_elev_deg=24, sun_rot_deg=100, strength=0.4, tint=(1.0, 0.95, 0.88))
-    sun(24, 30, energy=2.6, color=(1.0, 0.86, 0.66), angle_deg=1.2)
-    bpy.context.scene.view_settings.exposure = -0.1
-    oak = H.mat("oak"); dark = wood("CDark", (0.06, 0.035, 0.02), (0.14, 0.08, 0.04), scale=(0.3, 6, 6), rough=0.35, coat=0.4)
-    pl = pbr("CPlaster", (0.62, 0.58, 0.5), 0.85)
-    box("Floor", (0, 2, -0.02), (14, 18, 0.04), H.mat("floor"))
+    # winter afternoon: soft cool window light, warm pendant fill; plain (non-noisy) panelling, no moire
+    world_sky(sun_elev_deg=18, sun_rot_deg=100, strength=0.5, tint=(0.88, 0.93, 1.0))
+    sun(18, 20, energy=1.8, color=(0.92, 0.95, 1.0), angle_deg=3.0)
+    bpy.context.scene.view_settings.exposure = 0.35
+    oak = pbr("COak", (0.2, 0.12, 0.065), 0.42, 0.0, **{'Coat Weight': 0.25}); dark = pbr("CDark", (0.075, 0.045, 0.026), 0.4, 0.0, **{'Coat Weight': 0.3})
+    pl = pbr("CPlaster", (0.66, 0.63, 0.56), 0.9)
+    box("Floor", (0, 2, -0.02), (14, 18, 0.04), fabric("CourtCarpet", (0.2, 0.08, 0.06), 0.95, 0.2, 500))
     box("WallBack", (0, 9.5, 3.5), (14, 0.2, 7), dark)
     box("WallL", (-7, 2, 3.5), (0.2, 18, 7), pl); box("PanelL", (-6.88, 2, 1.1), (0.04, 18, 2.2), dark)
     box("Ceil", (0, 2, 7), (14, 18, 0.2), pbr("CCeil", (0.6, 0.57, 0.52), 0.85))
@@ -55,14 +56,30 @@ def build(variant=None):
     for k in range(4):
         for x in (-2.6, 2.6):
             box("Pew", (x, -1.2 - k * 1.2, 0.45), (4.2, 0.45, 0.9), oak, bevel=0.03)
+    # US flag on a pole beside the bench (generated image, as the shared courtroom set)
+    import os, sys
+    gen = os.path.join("/home/user/Muhammed/nvidia_doc/assets", "generated"); fimg = os.path.join(gen, "us_flag.png")
+    if not os.path.exists(fimg):
+        import sc_capitol; sc_capitol.flag_image(fimg)
+    fm = bpy.data.materials.new("Flag"); fm.use_nodes = True
+    N = fm.node_tree.nodes; L = fm.node_tree.links; tx = N.new("ShaderNodeTexImage"); tx.image = bpy.data.images.load(fimg)
+    tc = N.new("ShaderNodeTexCoord"); L.new(tc.outputs['UV'], tx.inputs['Vector']); L.new(tx.outputs['Color'], N["Principled BSDF"].inputs['Base Color'])
+    gold = pbr("PoleGold", (0.7, 0.52, 0.22), 0.3, 1.0)
+    cyl("FlagPole", (-2.9, 8.6, 1.6), 0.03, 3.2, gold, 12)
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=30, y_subdivisions=20, size=1, location=(-2.5, 8.6, 2.65), rotation=(math.radians(90), 0, 0))
+    f = bpy.context.active_object; f.scale = (0.8, 1.2, 1); f.data.materials.append(fm)
+    wv = f.modifiers.new("wave", 'WAVE'); wv.height = 0.04; wv.width = 0.4; wv.speed = 0.0
     c["gavel"] = join([cyl("GavelHead", (0, 0, 0), 0.035, 0.12, dark, 24, rot=(0, math.radians(90), 0)),
                        cyl("GavelHandle", (0, -0.13, 0), 0.012, 0.25, dark, 12, rot=(math.radians(90), 0, 0))], "Gavel")
     c["slip"] = box("Slip", (0, 0, -20), (0.1, 0.004, 0.14), pbr("SlipPaper", (0.9, 0.88, 0.82), 0.8))
     # cast per variant
-    kinds = {"prosecutor": {"pr": "detective2", "j1": "neighbour_m", "j2": "neighbour_w", "j3": "captain", "j4": "friend", "j5": "son", "j6": "neighbour_m"},
-             "stand": {"def": "thin_court", "judge": "captain"},
-             "jury_in": {"j1": "neighbour_m", "j2": "neighbour_w", "j3": "captain", "j4": "friend", "j5": "son"},
-             "gavel": {"def": "thin_court", "judge": "captain", "law": "detective2"}}[variant]
+    jk = ["neighbour_m", "captain", "son", "detective2", "neighbour_m", "captain", "son", "neighbour_m", "detective2", "captain", "son", "neighbour_m"]
+    jury = {"j%d" % (k + 1): jk[k] for k in range(12)}
+    gallery = {"g%d" % (k + 1): ("detective", "detective2", "officer", "son")[k % 4] for k in range(8)}
+    kinds = {"prosecutor": dict(pr="detective2", **jury, **gallery),
+             "stand": {"def": "thin_court", "judge": "judge"},
+             "jury_in": dict(jury),
+             "gavel": {"def": "thin_court", "judge": "judge", "law": "detective2"}}[variant]
     c["cast"] = {k: H.person(v.capitalize() + k, v) for k, v in kinds.items()}
     return c
 
@@ -77,12 +94,17 @@ def judge(c, sec):
     H.look(j, 0, 15)
 
 
+GALLERY = [(x, -1.2 - k * 1.2) for k in range(2) for x in (-3.8, -2.0, 1.9, 3.6)]
+
+
 def anim_prosecutor(c, t):
     sec = t * DUR["prosecutor"]
-    for k, key in enumerate(("j1", "j2", "j3", "j4", "j5", "j6")):
-        x, y = JURY[k + 6 if k % 2 else k]
+    for k in range(12):
+        x, y = JURY[k]; key = "j%d" % (k + 1)
         seat(c["cast"][key], Vector((x, y, 0)), math.radians(-90), 6, floor=0.24 if y > 2 else 0.0)
         H.look(c["cast"][key], 10, 0)
+    for k, (x, y) in enumerate(GALLERY):
+        seat(c["cast"]["g%d" % (k + 1)], Vector((x, y + 0.05, 0)), math.pi, 4)
     pr = c["cast"]["pr"]
     H.walk_to(pr, (-0.6, 0.6, 0), (-0.9, 0.9, 0), 0.5 + 0.3 * math.sin(0.5 * sec), swing=4, face=math.radians(90))
     reach(pr, "R", pr.bone_head("head") + Vector((-0.45, 0.15 * math.sin(1.4 * sec), -0.25)), Vector((0, -1, -1)), Vector((-1, 0, 0.2)))
@@ -97,10 +119,10 @@ def anim_stand(c, t):
 
 def anim_jury(c, t):
     sec = t * DUR["jury_in"]
-    keys = ("j1", "j2", "j3", "j4", "j5")
+    keys = tuple("j%d" % (k + 1) for k in range(12))
     for k, key in enumerate(keys):
         h = c["cast"][key]; x, y = JURY[k]
-        u = min(1.0, max(0.0, (sec - 0.5 * k) / 2.2))
+        u = min(1.0, max(0.0, (sec + 2.6 - 0.35 * k) / 2.2))
         if u < 1.0:
             H.walk_to(h, (-6.4, y - 0.2, 0), (x, y - 0.2, 0), u, swing=8, stride=0.8)
         else:
@@ -125,7 +147,7 @@ def anim_gavel(c, t):
 
 MOVES = {
     "prosecutor": dict(kind="anim", dof=None, far=30, anim=anim_prosecutor,
-                       cam=lambda c, t: (Vector((1.6, -0.6, 1.6)).lerp(Vector((1.2, 0.2, 1.6)), ease(t)), Vector((-2.4, 1.4, 1.2)), 28)),
+                       cam=lambda c, t: (Vector((5.6, -5.2, 2.5)).lerp(Vector((5.2, -4.6, 2.45)), ease(t)), Vector((-2.2, 2.2, 1.0)), 24)),
     "stand": dict(kind="anim", dof=None, far=30, anim=anim_stand,
                   cam=lambda c, t: (Vector((1.6, 3.6, 1.45)).lerp(Vector((1.9, 4.2, 1.45)), ease(t)), Vector((3.2, 6.85, 1.3)), 36)),
     "jury_in": dict(kind="anim", dof=None, far=30, anim=anim_jury,

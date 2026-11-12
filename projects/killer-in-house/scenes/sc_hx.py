@@ -554,24 +554,28 @@ def _():
     return cam, anim
 
 
-@move("newsboy", "summer_day", 4.5, cast=("b:son", "c1:detective2", "c2:neighbour_m", "c3:captain"))
+@move("newsboy", "summer_day", 4.5, cast=("b:son", "c1:detective2", "c2:detective", "c3:detective2", "c4:detective"), extra=("pc:car:maroon:sedan",))
 def _():
+    """A street corner across town: the newsboy holds up the paper, commuters in hats pass, a parked sedan."""
+    WY = 2 * ROAD_Y - WALK_Y                                     # the far-side sidewalk, looking down the street
     def anim(c, t):
         sec = tick(c, t, "newsboy")
         if "paper" not in c:
             import sc_press42 as sc_press
             bpy.ops.mesh.primitive_plane_add(size=1); o = bpy.context.active_object; o.scale = (0.3, 0.43, 1)
             bpy.ops.object.transform_apply(scale=True); o.data.materials.append(sc_press.paper_mat()); c["paper"] = o
-            c["bundle"] = box("Bundle", (-1.6, WALK_Y + 0.3, G + 0.2), (0.45, 0.32, 0.4), pbr("Bundle", (0.82, 0.8, 0.74), 0.85))
-        b = P(c, "b"); H.stand_at(b, (-1.2, WALK_Y + 0.2, G), math.radians(-160))
+            c["bundle"] = box("Bundle", (-1.6, WY - 0.3, G + 0.2), (0.45, 0.32, 0.4), pbr("Bundle", (0.82, 0.8, 0.74), 0.85))
+            H.drive(c["pc"], (3.5, ROAD_Y - 2.1, G - 0.05), (3.5001, ROAD_Y - 2.1, G - 0.05), 0.0, heading=0.0)
+        b = P(c, "b"); H.stand_at(b, (-1.2, WY - 0.2, G), math.radians(20))
         wave = math.sin(2 * math.pi * 0.9 * sec)
-        hand = b.bone_head("head") + Vector((0.3, -0.25, 0.05 + 0.12 * wave))
-        reach(b, "R", hand, Vector((1, 0, -1)), Vector((0, 0, 1)))
-        c["paper"].location = hand + Vector((0.0, -0.05, 0.22)); c["paper"].rotation_euler = (math.radians(95), 0, math.radians(20 * wave))
-        for k, key in enumerate(("c1", "c2", "c3")):
+        M = b.arm.matrix_world.to_3x3(); fwd = M @ Vector((0, -1, 0))
+        hand = b.bone_head("head") + fwd * 0.3 + Vector((0, 0, 0.08 + 0.1 * wave))
+        reach(b, "R", hand, Vector((0, 0, -1)), fwd)
+        c["paper"].location = hand + Vector((0, 0, 0.22)); c["paper"].rotation_euler = (math.radians(90), 0, b.arm.rotation_euler.z + math.radians(8 * wave))
+        for k, key in enumerate(("c1", "c2", "c3", "c4")):
             d = 1 if k % 2 else -1
-            H.walk_to(P(c, key), (-8.0 * d, WALK_Y - 0.4 + 0.5 * k, G), (8.0 * d, WALK_Y - 0.4 + 0.5 * k, G), (0.15 + 0.3 * k + 0.5 * t) % 1.0, swing=12, stride=1.3)
+            H.walk_to(P(c, key), (-9.0 * d, WY - 0.7 + 0.45 * k, G), (9.0 * d, WY - 0.7 + 0.45 * k, G), (0.1 + 0.27 * k + 0.45 * t) % 1.0, swing=12, stride=1.3)
     def cam(c, t):
         e = ease(t)
-        return (Vector((2.6, WALK_Y - 4.0, 1.4)).lerp(Vector((2.0, WALK_Y - 3.6, 1.4)), e), Vector((-1.2, WALK_Y + 0.3, 1.4)), 34)
+        return (Vector((5.5, WY - 3.2, 1.5)).lerp(Vector((4.6, WY - 2.9, 1.5)), e), Vector((-2.0, WY + 0.2, 1.45)), 30)
     return cam, anim

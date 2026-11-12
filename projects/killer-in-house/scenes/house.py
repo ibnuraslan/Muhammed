@@ -915,6 +915,7 @@ def person(name, kind):
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=1.6, hat=False),
         "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="short02", hv=0.12, hat=False),
         "thin_court": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.1, val=0.35), hair="short02", hv=0.12, hat=False),
+        "judge": dict(gender=1.0, years=64, weight=0.55, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.05), hair="short02", hv=2.2, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=2.2), hair="roll", roll=(0.5, 0.0), hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit01", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]

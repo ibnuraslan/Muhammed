@@ -874,7 +874,7 @@ def _():
 
 
 # =========================================================================== CH3: five weeks earlier
-@move("club_title", "dusk", 6.0, cast=("p:philip", "hl:helen", "g1:neighbour_m", "g2:friend"), rooms=("front", "kitchen"),
+@move("club_title", "dusk", 6.0, cast=("p:philip", "hl:helen", "g1:neighbour_m", "g2:friend", "g3:neighbour_w", "g4:captain"), rooms=("front", "kitchen"),
       title=("CHAPTER 3", "Five Weeks Earlier", 12, 132))
 def _():
     def anim(c, t):
@@ -882,29 +882,32 @@ def _():
         _club(c, sec, with_guest=False)
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.3, -0.6, 1.7)).lerp(Vector((1.6, -1.0, 1.6)), e), Vector((3.0, -3.0, 0.9)), 28)
+        return (Vector((1.0, -0.45, 2.05)).lerp(Vector((1.25, -0.75, 1.95)), e), Vector((2.75, -2.8, 0.75)), 24)
     return cam, anim
 
 
-@move("club_guest", "dusk", 4.5, cast=("p:philip", "hl:helen", "g1:neighbour_m", "g2:friend", "y:thin"), rooms=("front", "kitchen"))
+@move("club_guest", "dusk", 4.5, cast=("p:philip", "hl:helen", "g1:neighbour_m", "g2:friend", "g3:neighbour_w", "g4:captain", "y:thin_court"), rooms=("front", "kitchen"))
 def _():
     def anim(c, t):
         _club(c, t * DUR["club_guest"], with_guest=True)
     def cam(c, t):
         e = ease(t)
-        return (Vector((3.6, -4.1, 1.5)).lerp(Vector((3.45, -3.95, 1.48)), e), Vector((1.7, -2.85, 1.25)), 42)   # the guest, listening
+        return (Vector((0.65, -2.35, 1.45)).lerp(Vector((0.85, -2.6, 1.42)), e), Vector((1.25, -3.3, 1.1)), 40)   # push in behind the guest to his profile
     return cam, anim
 
 
 def _club(c, sec, with_guest):
     import ph
     if "gtrs" not in c:
-        c["gtrs"] = [ph.model("Ukulele_01", scale=1.9)[0] for _ in range(5)]
-        c["lamp"].data.energy = 70
+        c["gtrs"] = [ph.model("Ukulele_01", scale=1.9)[0] for _ in range(7)]
+        c["lamp"].data.energy = 140
+        H.point((2.7, -2.8, 2.2), 60, (1.0, 0.72, 0.45), 0.4)                 # warm lamplight over the circle
+        H.point((1.4, -1.0, 1.4), 25, (1.0, 0.75, 0.5), 0.3)
         c["chairs_c"] = []
-    ring = [("p", (3.2, -2.0), -60), ("hl", (2.2, -3.6), 20), ("g1", (3.4, -3.6), -20), ("g2", (2.0, -2.0), -130)]
+    ring = [("p", (3.2, -2.0), -60), ("hl", (2.2, -3.6), 20), ("g1", (3.4, -3.6), -20), ("g2", (2.0, -2.0), -130),
+            ("g3", (3.75, -2.8), -90), ("g4", (2.65, -1.65), 180)]
     if with_guest:
-        ring.append(("y", (1.7, -2.9), -100))
+        ring.append(("y", (1.15, -3.25), 70))                          # the younger, thinner guest at the edge
     for k, (key, (x, y), deg) in enumerate(ring):
         h = P(c, key); fz = math.radians(deg)
         reset_pose(h); pose_sit(h, lean=8)
@@ -1084,8 +1087,18 @@ def _():
         sec = t * DUR["doorway_stop"]
         c["bed_door"].rotation_euler = (0, 0, math.radians(-80))
         y, d1, d2 = P(c, "y"), P(c, "d1"), P(c, "d2")
-        H.stand_at(y, (-0.5, -1.2, 0), math.radians(90))
+        H.stand_at(y, (-0.5, -1.2, 0), math.radians(-90))                     # facing into the bedroom
         H.rotl(y, "head", (1, 0, 0), 30 * ease(min(1.0, max(0.0, (sec - 1.0) / 1.5))))
+        M = y.arm.matrix_world.to_3x3(); fwd = M @ Vector((0, -1, 0)); left = M @ Vector((1, 0, 0))
+        waist = y.bone_head("spine01") + fwd * 0.2 + Vector((0, 0, -0.05))
+        reach(y, "R", waist - left * 0.04, Vector((0, 0, -1)), fwd); reach(y, "L", waist + left * 0.04, Vector((0, 0, -1)), fwd)
+        if "cuffs" not in c:                                                       # handcuffs at the waist
+            st_ = pbr("CuffSteel", (0.55, 0.56, 0.58), 0.25, 1.0); c["cuffs"] = []
+            for k in range(2):
+                bpy.ops.mesh.primitive_torus_add(major_radius=0.04, minor_radius=0.008); o = bpy.context.active_object; o.data.materials.append(st_); c["cuffs"].append(o)
+        for k, sd in enumerate(("R", "L")):
+            w_ = y.bone_tail("lowerarm02." + sd) if "lowerarm02." + sd in y.arm.pose.bones else y.bone_head("wrist." + sd)
+            c["cuffs"][k].location = w_; c["cuffs"][k].rotation_euler = (0, math.radians(90), y.arm.rotation_euler.z)
         H.stand_at(d1, (0.25, -0.7, 0), math.radians(120)); H.stand_at(d2, (0.3, -1.7, 0), math.radians(60))
         H.look(d1, 0, 5); H.look(d2, 0, 5)
     def cam(c, t):

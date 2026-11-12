@@ -28,12 +28,12 @@ def mountains():
     ridge = np.clip((Y + 0.2) * 1.4, 0, 1)
     h = (h * 0.5 + 0.6) * ridge
     o = grid_mesh("Mountains", h.astype(np.float32), 2400, 1200, 420, origin=(0, 900, -20))
-    o.data.materials.append(H.ph.texture("rock_face", 0.004, name="MtnRock", tint=(0.85, 0.75, 0.62)))
+    o.data.materials.append(H.ph.texture("rock_face", 0.004, name="MtnRock", tint=(0.78, 0.5, 0.38)))       # red-rock foothills (Royal Gorge)
     return o
 
 
 def stone():
-    return H.ph.texture("stone_wall", 0.45, name="PenStone", tint=(0.92, 0.84, 0.72))
+    return H.ph.texture("stone_wall", 0.45, name="PenStone", tint=(0.66, 0.66, 0.66))                     # grey granite
 
 
 def build(variant=None):
@@ -61,18 +61,41 @@ def build(variant=None):
         H.point((0, -2.5, 2.6), 20, (1.0, 0.8, 0.55), 0.2)
         c["man"] = H.person("Thin", "thin_court")
         return c
-    world_sky(sun_elev_deg=26, sun_rot_deg=120, strength=0.55, tint=(1.0, 0.96, 0.9))
-    sun(26, -30, energy=3.2, color=(1.0, 0.9, 0.75), angle_deg=1.2)
-    bpy.context.scene.view_settings.exposure = -0.5
+    world_sky(sun_elev_deg=20, sun_rot_deg=120, strength=0.6, tint=(0.85, 0.92, 1.0))            # cold clear winter sky
+    sun(20, -30, energy=3.0, color=(1.0, 0.95, 0.88), angle_deg=1.0)
+    bpy.context.scene.view_settings.exposure = -0.4
     mountains()
-    box("Ground", (0, 0, -0.05), (400, 400, 0.1), H.ph.texture("dry_ground_rocks", 0.2, name="DryGround"))
+    box("Ground", (0, 0, -0.05), (400, 400, 0.1), H.ph.texture("dry_ground_rocks", 0.2, name="DryGround", tint=(0.8, 0.72, 0.62)))
+    # pines dotting the foothills, and the nearer slopes
+    rng = np.random.default_rng(4); pine = pbr("Pine", (0.04, 0.08, 0.05), 0.85); trunk = pbr("PTrunk", (0.12, 0.08, 0.05), 0.9)
+    for k in range(260):
+        x = rng.uniform(-260, 260); y = rng.uniform(70, 420)
+        if abs(x) < 70 and y < 120: continue
+        sc_ = rng.uniform(3.0, 7.0)
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.35 * sc_, radius2=0.0, depth=sc_ * 1.6, location=(x, y, sc_ * 0.8 + 0.02 * y))
+        bpy.context.active_object.data.materials.append(pine)
+    for k in range(40):
+        x = rng.uniform(-60, 60); y = rng.uniform(-60, -20)
+        if abs(x) < 8: continue
+        sc_ = rng.uniform(1.8, 3.2)
+        bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.42 * sc_, radius2=0.0, depth=sc_ * 2.0, location=(x, y, sc_ * 1.0 + 0.5))
+        bpy.context.active_object.data.materials.append(pine)
+        cyl("PTrunkC", (x, y, 0.3), 0.08 * sc_, 0.6, trunk, 8)
+    snow = pbr("Snow", (0.85, 0.87, 0.9), 0.6)
+    for k in range(22):                                                     # a little snow in the shadow of the wall
+        box("SnowPatch", (rng.uniform(-55, 55), rng.uniform(0.9, 2.2), 0.0), (rng.uniform(2, 7), rng.uniform(0.6, 1.4), 0.06), snow, bevel=0.03)
     box("Road", (0, -30, -0.02), (7, 60, 0.05), H.mat("asphalt"))
     st = stone()
     H.wall_x("PenWall", -60, 60, 0, 0, 8, 1.4, st, [(-3.0, 3.0, 0, 5.0)])
     box("Parapet", (0, 0, 8.3), (120, 1.6, 0.6), st)
+    for k in range(80):                                                      # castellations
+        box("Merlon", (-59.25 + k * 1.5, 0, 8.95), (0.8, 1.6, 0.7), st)
     for x in (-6.0, 6.0):
         box("Tower", (x, 0, 6.0), (4.0, 4.0, 12), st)
         box("TowerCap", (x, 0, 12.3), (4.6, 4.6, 0.6), st)
+        for k in range(4):
+            for (dx, dy) in ((-1.95 + k * 1.3, -2.0), (-1.95 + k * 1.3, 2.0), (-2.0, -1.95 + k * 1.3), (2.0, -1.95 + k * 1.3)):
+                box("TMerlon", (x + dx, dy, 12.95), (0.6, 0.6, 0.7), st)
         box("TowerWin", (x, -2.02, 10.0), (1.2, 0.05, 1.0), pbr("TWin", (0.02, 0.02, 0.03), 0.1))
     c["gate"] = box("Gate", (0, -0.2, 2.5), (5.8, 0.15, 5.0), H.mat("iron"))
     for k in range(10):
@@ -81,7 +104,7 @@ def build(variant=None):
     for k in range(3):
         box("CellBlock", (-20 + k * 20, 35, 7), (14, 10, 14), st)
     if variant == "gate":
-        c["van"] = H.vehicle("PVan", (0.1, 0.11, 0.1))
+        c["van"] = H.vehicle("PVan", (0.18, 0.19, 0.2))
     else:
         c["guards"] = [H.person("Guard%d" % k, "officer") for k in range(2)]
     return c

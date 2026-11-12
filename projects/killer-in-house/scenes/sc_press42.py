@@ -50,6 +50,12 @@ def paper_mat():
 
 
 def build(variant=None):
+    if variant == "presses":                 # the shared press hall (nvidia_doc sc_press), with our generic SPIDER MAN page
+        import sc_press as NP
+        NP.newsprint = lambda path, W=1024, H=1400: front_page(path)
+        c = NP.build(); c["np"] = NP
+        bpy.context.scene.view_settings.exposure = 0.3
+        return c
     c = {}
     world_flat((0.02, 0.022, 0.025), 1.0)
     bpy.context.scene.view_settings.exposure = 0.4
@@ -94,8 +100,7 @@ def anim_common(c, sec):
 
 
 def anim_presses(c, t):
-    sec = t * DUR["presses"]; anim_common(c, sec)
-    H.stand_at(c["man"], (4.2, -2.4, 0), math.radians(-30))
+    c["np"].anim_press(c, t)
 
 
 def anim_stacks(c, t):
@@ -107,8 +112,9 @@ def anim_stacks(c, t):
 
 
 MOVES = {
-    "presses": dict(kind="anim", dof=None, far=40, anim=anim_presses,
-                    cam=lambda c, t: (Vector((-8.0, -5.2, 2.0)).lerp(Vector((-4.0, -5.0, 2.1)), ease(t)), Vector((-3.5, 0.0, 1.5)).lerp(Vector((0.5, 0.0, 1.6)), ease(t)), 24)),
+    "presses": dict(kind="anim", dof=4.0, far=40, anim=anim_presses,
+                    cam=lambda c, t: (Vector((-9.0 + 8.0 * ease(t), -7.5, 2.0)), Vector((-3.0 + 8.0 * ease(t), 0.0, 2.3)), 28),
+                    focus=lambda c, t: Vector((-4.0 + 9.0 * ease(t), 0.0, 2.2))),
     "stacks": dict(kind="anim", dof=2.8, far=20, anim=anim_stacks,
                    cam=lambda c, t: (Vector((1.2, -4.6, 1.45)).lerp(Vector((1.6, -4.5, 1.4)), ease(t)), Vector((2.4, -3.4, 0.95)), 32),
                    focus=lambda c, t: Vector((2.4, -3.4, 0.95))),
