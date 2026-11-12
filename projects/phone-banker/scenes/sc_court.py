@@ -281,8 +281,9 @@ def animate(c, sec, move):
         hand_to(cl, "R", Vector((2.45, -0.88 + 0.06 * tie, 1.32)), curl=40); hand_to(cl, "L", Vector((2.45, -1.12 - 0.06 * tie, 1.32)), curl=40)
         if move == "archive_dark":
             hide(cl, True)
+            n = len(c["lights"]); D = DUR["archive_dark"]                         # row by row, spread over the cut
             for k, l in enumerate(c["lights"]):
-                l.data.energy = 30 if sec < 1.5 + 1.0 * k else 0
+                l.data.energy = 30 if sec < D * (0.22 + 0.6 * k / max(1, n - 1)) else 0
     else:
         J, P, D, X = c["judge"], c["pros"], c["def"], c["defendant"]
         g0, g1 = c["guards"]

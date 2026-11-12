@@ -1,0 +1,730 @@
+{
+ "intro": {
+  "shots": [
+   {
+    "name": "intro_01_bankoffice_handset",
+    "set": "bankoffice",
+    "move": "handset",
+    "label": "1A Stained handset (2.5 s hold, then push)",
+    "start": 0.0,
+    "frames": 168,
+    "seconds": 7.0,
+    "anchor": null
+   },
+   {
+    "name": "intro_02_bankoffice_empty",
+    "set": "bankoffice",
+    "move": "empty",
+    "label": "1B The empty office",
+    "start": 7.0,
+    "frames": 159,
+    "seconds": 6.625,
+    "anchor": "the phone belongs"
+   },
+   {
+    "name": "intro_03_bank_pullup",
+    "set": "bank",
+    "move": "pullup",
+    "label": "2A Militia Ladas pull up at the bank",
+    "start": 13.625,
+    "frames": 95,
+    "seconds": 3.958,
+    "anchor": "the substance on the handset"
+   },
+   {
+    "name": "intro_04_bank_steps",
+    "set": "bank",
+    "move": "steps",
+    "label": "2B Officer on the steps, handed water",
+    "start": 17.583333333333332,
+    "frames": 56,
+    "seconds": 2.333,
+    "anchor": "among them are eight"
+   },
+   {
+    "name": "intro_05_bankoffice_search",
+    "set": "bankoffice",
+    "move": "search",
+    "label": "3A Investigators search drawers and files",
+    "start": 19.916666666666668,
+    "frames": 60,
+    "seconds": 2.5,
+    "anchor": "when investigators search"
+   },
+   {
+    "name": "intro_06_bankoffice_find",
+    "set": "bankoffice",
+    "move": "find",
+    "label": "3B He looks at the phone; push in",
+    "start": 22.416666666666668,
+    "frames": 130,
+    "seconds": 5.417,
+    "anchor": "on the one thing"
+   }
+  ],
+  "vo_offset": 2.5,
+  "vo_dur": 24.529,
+  "frames": 668
+ },
+ "ch1": {
+  "shots": [
+   {
+    "name": "ch1_01_bank_traffic",
+    "set": "bank",
+    "move": "traffic",
+    "label": "1A Summer street, bank + CHAPTER 1 / TWO HOSPITALS",
+    "start": 0.0,
+    "frames": 150,
+    "seconds": 6.25,
+    "anchor": null
+   },
+   {
+    "name": "ch1_02_bank_arrive_bank",
+    "set": "bank",
+    "move": "arrive_bank",
+    "label": "1B Banker up the steps, doorman",
+    "start": 6.25,
+    "frames": 90,
+    "seconds": 3.75,
+    "anchor": "is at work in moscow"
+   },
+   {
+    "name": "ch1_03_bankoffice_dial",
+    "set": "bankoffice",
+    "move": "dial",
+    "label": "2A He dials the white phone",
+    "start": 10.0,
+    "frames": 51,
+    "seconds": 2.125,
+    "anchor": "that afternoon he makes"
+   },
+   {
+    "name": "ch1_04_bankoffice_note",
+    "set": "bankoffice",
+    "move": "note",
+    "label": "2B On the phone, a note",
+    "start": 12.125,
+    "frames": 65,
+    "seconds": 2.708,
+    "anchor": "from the office according"
+   },
+   {
+    "name": "ch1_05_bankoffice_brother_in",
+    "set": "bankoffice",
+    "move": "brother_in",
+    "label": "3A Brother at the door; he's slumped",
+    "start": 14.833333333333334,
+    "frames": 128,
+    "seconds": 5.333,
+    "anchor": "his brother comes by"
+   },
+   {
+    "name": "ch1_06_bankoffice_brother_help",
+    "set": "bankoffice",
+    "move": "brother_help",
+    "label": "3B Brother walks him out",
+    "start": 20.166666666666668,
+    "frames": 98,
+    "seconds": 4.083,
+    "anchor": "there's already a familiar"
+   },
+   {
+    "name": "ch1_07_hospital_gurney",
+    "set": "hospital",
+    "move": "gurney",
+    "label": "4A Bed wheeled down the corridor",
+    "start": 24.25,
+    "frames": 70,
+    "seconds": 2.917,
+    "anchor": "by the time he reaches"
+   },
+   {
+    "name": "ch1_08_hospital_ward",
+    "set": "hospital",
+    "move": "ward",
+    "label": "4B Ward: monitor, nurse at the drip",
+    "start": 27.166666666666668,
+    "frames": 84,
+    "seconds": 3.5,
+    "anchor": "the next evening"
+   },
+   {
+    "name": "ch1_09_hospital_arrive",
+    "set": "hospital",
+    "move": "arrive",
+    "label": "5A Ambulance at the second hospital",
+    "start": 30.666666666666668,
+    "frames": 125,
+    "seconds": 5.208,
+    "anchor": "to a different hospital"
+   },
+   {
+    "name": "ch1_10_hospital_dawn",
+    "set": "hospital",
+    "move": "dawn",
+    "label": "5B Dawn, clock at six, curtain drawn",
+    "start": 35.875,
+    "frames": 150,
+    "seconds": 6.25,
+    "anchor": "she's unconscious when"
+   },
+   {
+    "name": "ch1_11_hospital_path_read",
+    "set": "hospital",
+    "move": "path_read",
+    "label": "6A Pathologist reads the file",
+    "start": 42.125,
+    "frames": 318,
+    "seconds": 13.25,
+    "anchor": "the pathologist assigned"
+   },
+   {
+    "name": "ch1_12_hospital_path_light",
+    "set": "hospital",
+    "move": "path_light",
+    "label": "6B Closes it, switches off the lamp",
+    "start": 55.375,
+    "frames": 196,
+    "seconds": 8.167,
+    "anchor": "neither he says fits"
+   },
+   {
+    "name": "ch1_13_forlab_compare",
+    "set": "forlab",
+    "move": "compare",
+    "label": "7A Two experts compare the files",
+    "start": 63.541666666666664,
+    "frames": 143,
+    "seconds": 5.958,
+    "anchor": "later forensic experts"
+   },
+   {
+    "name": "ch1_14_forlab_recorder",
+    "set": "forlab",
+    "move": "recorder",
+    "label": "7B Chart recorder sinks toward zero",
+    "start": 69.5,
+    "frames": 147,
+    "seconds": 6.125,
+    "anchor": "and in blood samples"
+   },
+   {
+    "name": "ch1_15_hospital_nightward",
+    "set": "hospital",
+    "move": "nightward",
+    "label": "8A Night ward, ventilator bellows",
+    "start": 75.625,
+    "frames": 228,
+    "seconds": 9.5,
+    "anchor": "when a nerve tells"
+   },
+   {
+    "name": "ch1_16_hospital_doctor",
+    "set": "hospital",
+    "move": "doctor",
+    "label": "8B Doctor at the monitor",
+    "start": 85.125,
+    "frames": 113,
+    "seconds": 4.708,
+    "anchor": "muscles can twitch"
+   },
+   {
+    "name": "ch1_17_bankoffice_sealed",
+    "set": "bankoffice",
+    "move": "sealed",
+    "label": "9A Investigators in suits at the desk",
+    "start": 89.83333333333333,
+    "frames": 132,
+    "seconds": 5.5,
+    "anchor": "back at the bank investigators"
+   },
+   {
+    "name": "ch1_18_bankoffice_bag",
+    "set": "bankoffice",
+    "move": "bag",
+    "label": "9B Handset lowered into the bag",
+    "start": 95.33333333333333,
+    "frames": 133,
+    "seconds": 5.542,
+    "anchor": "the case files describe"
+   },
+   {
+    "name": "ch1_19_bankoffice_ante_desk",
+    "set": "bankoffice",
+    "move": "ante_desk",
+    "label": "10A Secretary's desk, door ajar",
+    "start": 100.875,
+    "frames": 197,
+    "seconds": 8.208,
+    "anchor": "how zara came"
+   },
+   {
+    "name": "ch1_20_bankoffice_ante_trolley",
+    "set": "bankoffice",
+    "move": "ante_trolley",
+    "label": "10B Sealed door, bucket, officer unwell",
+    "start": 109.08333333333333,
+    "frames": 160,
+    "seconds": 6.667,
+    "anchor": "but the phone is still"
+   },
+   {
+    "name": "ch1_21_memorial_mourners",
+    "set": "memorial",
+    "move": "mourners",
+    "label": "11A Mourners lay carnations",
+    "start": 115.75,
+    "frames": 109,
+    "seconds": 4.542,
+    "anchor": "at kivalidi's memorial"
+   },
+   {
+    "name": "ch1_22_memorial_dignitaries",
+    "set": "memorial",
+    "move": "dignitaries",
+    "label": "11B Two dignitaries, heads bowed",
+    "start": 120.29166666666667,
+    "frames": 74,
+    "seconds": 3.083,
+    "anchor": "include mikhail gorbachev"
+   },
+   {
+    "name": "ch1_23_bankoffice_ledger",
+    "set": "bankoffice",
+    "move": "ledger",
+    "label": "12A Visitor ledger, pages turned",
+    "start": 123.375,
+    "frames": 87,
+    "seconds": 3.625,
+    "anchor": "at the bank the investigation"
+   },
+   {
+    "name": "ch1_24_bankoffice_door_push",
+    "set": "bankoffice",
+    "move": "door_push",
+    "label": "12B Push from the door to the phone",
+    "start": 127.0,
+    "frames": 113,
+    "seconds": 4.708,
+    "anchor": "who had been inside"
+   }
+  ],
+  "vo_offset": 3.0,
+  "vo_dur": 127.556,
+  "frames": 3161
+ },
+ "ch2": {
+  "shots": [
+   {
+    "name": "ch2_01_bankoffice_visitor_in",
+    "set": "bankoffice",
+    "move": "visitor_in",
+    "label": "1A Board member walks in + CHAPTER 2 / THE MAN IN THE OFFICE",
+    "start": 0.0,
+    "frames": 239,
+    "seconds": 9.958,
+    "anchor": null
+   },
+   {
+    "name": "ch2_02_bankoffice_across",
+    "set": "bankoffice",
+    "move": "across",
+    "label": "1B Two men across the desk",
+    "start": 9.958333333333334,
+    "frames": 57,
+    "seconds": 2.375,
+    "anchor": "he visits the office"
+   },
+   {
+    "name": "ch2_03_bankoffice_alone",
+    "set": "bankoffice",
+    "move": "alone",
+    "label": "2A Visitor alone, chair empty",
+    "start": 12.333333333333334,
+    "frames": 63,
+    "seconds": 2.625,
+    "anchor": "investigators believe he spends"
+   },
+   {
+    "name": "ch2_04_bankoffice_reads",
+    "set": "bankoffice",
+    "move": "reads",
+    "label": "2B He reads the share papers",
+    "start": 14.958333333333334,
+    "frames": 185,
+    "seconds": 7.708,
+    "anchor": "they also find a potential"
+   },
+   {
+    "name": "ch2_05_bank_detain",
+    "set": "bank",
+    "move": "detain",
+    "label": "3A Autumn rain: detained",
+    "start": 22.666666666666668,
+    "frames": 95,
+    "seconds": 3.958,
+    "anchor": "police detain him"
+   },
+   {
+    "name": "ch2_06_bank_release",
+    "set": "bank",
+    "move": "release",
+    "label": "3B Thirty days later, alone",
+    "start": 26.625,
+    "frames": 143,
+    "seconds": 5.958,
+    "anchor": "they have a visitor"
+   },
+   {
+    "name": "ch2_07_forlab_gc_print",
+    "set": "forlab",
+    "move": "gc_print",
+    "label": "4A Analyser prints a trace",
+    "start": 32.583333333333336,
+    "frames": 209,
+    "seconds": 8.708,
+    "anchor": "the lab work points"
+   },
+   {
+    "name": "ch2_08_forlab_saratov",
+    "set": "forlab",
+    "move": "saratov",
+    "label": "4B File marked SARATOV",
+    "start": 41.291666666666664,
+    "frames": 91,
+    "seconds": 3.792,
+    "anchor": "the trail leads to a closed"
+   },
+   {
+    "name": "ch2_09_closedtown_checkpoint",
+    "set": "closedtown",
+    "move": "checkpoint",
+    "label": "5A Closed-town checkpoint, bus",
+    "start": 45.083333333333336,
+    "frames": 86,
+    "seconds": 3.583,
+    "anchor": "in shihani leonid rink"
+   },
+   {
+    "name": "ch2_10_closedtown_institute",
+    "set": "closedtown",
+    "move": "institute",
+    "label": "5B Institute corridor, a tube flickers",
+    "start": 48.666666666666664,
+    "frames": 159,
+    "seconds": 6.625,
+    "anchor": "that develops chemical weapons"
+   },
+   {
+    "name": "ch2_11_station_handover",
+    "set": "station",
+    "move": "handover",
+    "label": "6A Night rain: the parcel handover",
+    "start": 55.291666666666664,
+    "frames": 268,
+    "seconds": 11.167,
+    "anchor": "rink describes a handover"
+   },
+   {
+    "name": "ch2_12_station_platform",
+    "set": "station",
+    "move": "platform",
+    "label": "6B Alone on the platform, train leaves",
+    "start": 66.45833333333333,
+    "frames": 260,
+    "seconds": 10.833,
+    "anchor": "and was paid for it"
+   },
+   {
+    "name": "ch2_13_forlab_ampoules",
+    "set": "forlab",
+    "move": "ampoules",
+    "label": "7A Sealed glass ampoules in the case",
+    "start": 77.29166666666667,
+    "frames": 113,
+    "seconds": 4.708,
+    "anchor": "investigators believe that a batch"
+   },
+   {
+    "name": "ch2_14_forlab_slide_file",
+    "set": "forlab",
+    "move": "slide_file",
+    "label": "7B Prosecutor slides the file across",
+    "start": 82.0,
+    "frames": 76,
+    "seconds": 3.167,
+    "anchor": "prosecutors trace an ampoule"
+   },
+   {
+    "name": "ch2_15_bankoffice_steps_out",
+    "set": "bankoffice",
+    "move": "steps_out",
+    "label": "8A Banker steps out; visitor stays",
+    "start": 85.16666666666667,
+    "frames": 55,
+    "seconds": 2.292,
+    "anchor": "in their account he takes"
+   },
+   {
+    "name": "ch2_16_bankoffice_glance",
+    "set": "bankoffice",
+    "move": "glance",
+    "label": "8B He glances at the door; push to the phone",
+    "start": 87.45833333333333,
+    "frames": 93,
+    "seconds": 3.875,
+    "anchor": "and puts the poison on"
+   },
+   {
+    "name": "ch2_17_bank_doorbell",
+    "set": "bank",
+    "move": "doorbell",
+    "label": "9A Snow: nobody answers the door",
+    "start": 91.33333333333333,
+    "frames": 159,
+    "seconds": 6.625,
+    "anchor": "by december 1999"
+   },
+   {
+    "name": "ch2_18_bank_seasons",
+    "set": "bank",
+    "move": "seasons",
+    "label": "9B Same street: snow, then leaves, then rain (three frames)",
+    "start": 97.95833333333333,
+    "frames": 76,
+    "seconds": 3.167,
+    "anchor": "nearly seven years"
+   },
+   {
+    "name": "ch2_19_apartment_wait",
+    "set": "apartment",
+    "move": "wait",
+    "label": "10A Plain-clothes officers wait",
+    "start": 101.125,
+    "frames": 60,
+    "seconds": 2.5,
+    "anchor": "in june 2006"
+   },
+   {
+    "name": "ch2_20_apartment_arrest",
+    "set": "apartment",
+    "move": "arrest",
+    "label": "10B He comes out; they walk him to a car",
+    "start": 103.625,
+    "frames": 99,
+    "seconds": 4.125,
+    "anchor": "outside an apartment building"
+   }
+  ],
+  "vo_offset": 3.0,
+  "vo_dur": 103.549,
+  "frames": 2586
+ },
+ "ch3": {
+  "shots": [
+   {
+    "name": "ch3_01_court_doors",
+    "set": "court",
+    "move": "doors",
+    "label": "1A Doors closed on the press + CHAPTER 3 / THE POISON WITHOUT A NAME",
+    "start": 0.0,
+    "frames": 185,
+    "seconds": 7.708,
+    "anchor": null
+   },
+   {
+    "name": "ch3_02_court_prosecutor",
+    "set": "court",
+    "move": "prosecutor",
+    "label": "1B Prosecutor before the bench",
+    "start": 7.708333333333333,
+    "frames": 109,
+    "seconds": 4.542,
+    "anchor": "prosecutors argue the evidence"
+   },
+   {
+    "name": "ch3_03_court_dock",
+    "set": "court",
+    "move": "dock",
+    "label": "2A Defendant in the dock",
+    "start": 12.25,
+    "frames": 53,
+    "seconds": 2.208,
+    "anchor": "khutashwili denies"
+   },
+   {
+    "name": "ch3_04_court_defence",
+    "set": "court",
+    "move": "defence",
+    "label": "2B Defence and the door photograph",
+    "start": 14.458333333333334,
+    "frames": 196,
+    "seconds": 8.167,
+    "anchor": "his defense says"
+   },
+   {
+    "name": "ch3_05_court_verdict",
+    "set": "court",
+    "move": "verdict",
+    "label": "3A The verdict, all standing",
+    "start": 22.625,
+    "frames": 111,
+    "seconds": 4.625,
+    "anchor": "on december 24th 2007"
+   },
+   {
+    "name": "ch3_06_court_led_out",
+    "set": "court",
+    "move": "led_out",
+    "label": "3B Led out through the side door",
+    "start": 27.25,
+    "frames": 162,
+    "seconds": 6.75,
+    "anchor": "it finds him guilty"
+   },
+   {
+    "name": "ch3_07_court_volumes",
+    "set": "court",
+    "move": "volumes",
+    "label": "4A Clerk ties the case volumes",
+    "start": 34.0,
+    "frames": 84,
+    "seconds": 3.5,
+    "anchor": "he later wins early release"
+   },
+   {
+    "name": "ch3_08_court_archive_dark",
+    "set": "court",
+    "move": "archive_dark",
+    "label": "4B Archive lights go out",
+    "start": 37.5,
+    "frames": 90,
+    "seconds": 3.75,
+    "anchor": "the court reaches a verdict"
+   },
+   {
+    "name": "ch3_09_salisbury_street",
+    "set": "salisbury",
+    "move": "street",
+    "label": "5A English street, spire, police tape",
+    "start": 41.25,
+    "frames": 229,
+    "seconds": 9.542,
+    "anchor": "then in 2018"
+   },
+   {
+    "name": "ch3_10_salisbury_suits",
+    "set": "salisbury",
+    "move": "suits",
+    "label": "5B Suits at the front door",
+    "start": 50.791666666666664,
+    "frames": 61,
+    "seconds": 2.542,
+    "anchor": "the attack on sergei"
+   },
+   {
+    "name": "ch3_11_salisbury_handle",
+    "set": "salisbury",
+    "move": "handle",
+    "label": "6A Push to the door handle",
+    "start": 53.333333333333336,
+    "frames": 87,
+    "seconds": 3.625,
+    "anchor": "the british public inquiry"
+   },
+   {
+    "name": "ch3_12_salisbury_path",
+    "set": "salisbury",
+    "move": "path",
+    "label": "6B Pull back down the path",
+    "start": 56.958333333333336,
+    "frames": 68,
+    "seconds": 2.833,
+    "anchor": "placed on the handle"
+   },
+   {
+    "name": "ch3_13_bankoffice_match",
+    "set": "bankoffice",
+    "move": "match",
+    "label": "7A Match push to the white handset",
+    "start": 59.791666666666664,
+    "frames": 71,
+    "seconds": 2.958,
+    "anchor": "in moscow the object"
+   },
+   {
+    "name": "ch3_14_bankoffice_dust",
+    "set": "bankoffice",
+    "move": "dust",
+    "label": "7B Years later: dust sheets",
+    "start": 62.75,
+    "frames": 114,
+    "seconds": 4.75,
+    "anchor": "novaya gazeta publishes"
+   },
+   {
+    "name": "ch3_15_forlab_photocopies",
+    "set": "forlab",
+    "move": "photocopies",
+    "label": "8A Reporter photographs the copies",
+    "start": 67.5,
+    "frames": 206,
+    "seconds": 8.583,
+    "anchor": "residue from the handset"
+   },
+   {
+    "name": "ch3_16_forlab_specialists",
+    "set": "forlab",
+    "move": "specialists",
+    "label": "8B Two specialists; a page pushed back",
+    "start": 76.08333333333333,
+    "frames": 84,
+    "seconds": 3.5,
+    "anchor": "other specialists dispute"
+   },
+   {
+    "name": "ch3_17_closedtown_kitchen",
+    "set": "closedtown",
+    "move": "kitchen",
+    "label": "9A On the phone at the kitchen window",
+    "start": 79.58333333333333,
+    "frames": 208,
+    "seconds": 8.667,
+    "anchor": "rink gives a new account"
+   },
+   {
+    "name": "ch3_18_closedtown_blocks",
+    "set": "closedtown",
+    "move": "blocks",
+    "label": "9B Snow over the blocks, one lit window",
+    "start": 88.25,
+    "frames": 72,
+    "seconds": 3.0,
+    "anchor": "that account conflicts"
+   },
+   {
+    "name": "ch3_19_forlab_photo",
+    "set": "forlab",
+    "move": "photo",
+    "label": "10A The evidence photograph",
+    "start": 91.25,
+    "frames": 196,
+    "seconds": 8.167,
+    "anchor": "the evidence photograph"
+   },
+   {
+    "name": "ch3_20_forlab_case_close",
+    "set": "forlab",
+    "move": "case_close",
+    "label": "10B The case closes; lights go out",
+    "start": 99.41666666666667,
+    "frames": 302,
+    "seconds": 12.583,
+    "anchor": "the files that later"
+   }
+  ],
+  "vo_offset": 3.0,
+  "vo_dur": 106.449,
+  "frames": 2688
+ }
+}

@@ -171,23 +171,24 @@ def build(variant=None):
     if variant == "seasons":
         c["leaves"] = leaves(160, (-14, 14, KERB_Y - 1.0, -0.2))
         c["rain"] = precip_curtains("rain")
-        # one shot, three seasons: snow (frames < 50), autumn leaves (50-100), rain (> 100)
+        # one shot, three seasons: snow, autumn leaves, rain, a third of the shot each (PB_SHOT_FRAMES = the cut, at bake time)
+        nf = int(os.environ.get("PB_SHOT_FRAMES", 150)); F1, F2 = nf // 3, 2 * nf // 3
         for o in c["snow_cover"] + c["snow"]:
-            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame >= 50"
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = f"frame >= {F1}"
         for o in c["leaves"]:
-            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 50 or frame >= 100"
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = f"frame < {F1} or frame >= {F2}"
         for o in c["rain"]:
-            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 100"
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = f"frame < {F2}"
         bg = bpy.context.scene.world.node_tree.nodes["Background"]
-        d = bg.inputs['Color'].driver_add("default_value", 0).driver; d.type = 'SCRIPTED'; d.expression = "0.6 if frame < 50 else (0.55 if frame < 100 else 0.4)"
-        d = bg.inputs['Color'].driver_add("default_value", 1).driver; d.type = 'SCRIPTED'; d.expression = "0.63 if frame < 50 else (0.5 if frame < 100 else 0.44)"
-        d = bg.inputs['Color'].driver_add("default_value", 2).driver; d.type = 'SCRIPTED'; d.expression = "0.68 if frame < 50 else (0.42 if frame < 100 else 0.5)"
+        d = bg.inputs['Color'].driver_add("default_value", 0).driver; d.type = 'SCRIPTED'; d.expression = f"0.6 if frame < {F1} else (0.55 if frame < {F2} else 0.4)"
+        d = bg.inputs['Color'].driver_add("default_value", 1).driver; d.type = 'SCRIPTED'; d.expression = f"0.63 if frame < {F1} else (0.5 if frame < {F2} else 0.44)"
+        d = bg.inputs['Color'].driver_add("default_value", 2).driver; d.type = 'SCRIPTED'; d.expression = f"0.68 if frame < {F1} else (0.42 if frame < {F2} else 0.5)"
         # autumn: trees in yellow leaf (visible only in the autumn third), leaves falling through the air
         from pbkit import ph_instances
         trees = ph_instances("tree_small_02", [((x, KERB_Y + 1.1, 0), float(rng.uniform(0, 6.28)), 1.3) for x in (-12.5, -2.0, 9.0, 20.0)])
         for t_ in trees:
             for o in [t_] + list(t_.children):
-                d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 50 or frame >= 100"
+                d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = f"frame < {F1} or frame >= {F2}"
                 for ms in getattr(o, "material_slots", []):
                     if ms.material and not ms.material.name.startswith("Autumn"):
                         m2 = ms.material.copy(); m2.name = "Autumn" + m2.name
@@ -200,13 +201,13 @@ def build(variant=None):
                         ms.material = m2
         c["air_leaves"] = leaves(80, (-14, 14, KERB_Y - 3.0, -0.5), seed=9)
         for o in c["air_leaves"]:
-            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = "frame < 50 or frame >= 100"
+            d = o.driver_add("hide_render").driver; d.type = 'SCRIPTED'; d.expression = f"frame < {F1} or frame >= {F2}"
         # rain: the road and pavement turn wet and glossy
         for nm in ("Road", "Pavement", "FarPave"):
             o = bpy.data.objects.get(nm)
             if o:
                 pb = o.data.materials[0].node_tree.nodes["Principled BSDF"]
-                d = pb.inputs['Coat Weight'].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = "0.9 if frame >= 100 else 0.0"
+                d = pb.inputs['Coat Weight'].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = f"0.9 if frame >= {F2} else 0.0"
     CAST[variant](c)
     animate(c, 0.0, {"dusk": "pullup", "summer": "traffic", "autumn": "detain", "winter": "doorbell", "seasons": "seasons"}[variant])
     return c

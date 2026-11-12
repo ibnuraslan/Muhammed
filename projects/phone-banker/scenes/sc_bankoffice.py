@@ -972,7 +972,10 @@ def a_visitor_in(c, sec):
     p0, p1 = Vector((ROOM_X + 0.4, DOOR_Y, 0)), Vector((0.9, 0.0, 0))
     k = min(1.0, sec / 4.5)
     d = p1 - p0; face = math.atan2(d.x, -d.y)
-    walk_at(vis, sec * 0.95, p0.lerp(p1, ease(k) * 0.3 + k * 0.7), face, stride=22, swing=10)
+    if k < 1.0:
+        walk_at(vis, sec * 0.95, p0.lerp(p1, ease(k) * 0.3 + k * 0.7), face, stride=22, swing=10)
+    else:                                                                       # arrived: he stops (no walking on the spot)
+        stand(vis, p1, face); look(vis, b.bone_head("head"), 0.6)
     c["briefcase"].location = vis.bone_tail("wrist.R") + Vector((0, 0, -0.22)); c["briefcase"].rotation_euler = (0, 0, face)
     nod(b, "head", 8); look(b, vis.bone_head("head"), 0.7)
     hand_to(b, "L", Vector((0.15, 1.5, TOP_Z + 0.05)), hand_dir=Vector((0, -0.7, -0.6)), curl=20)
