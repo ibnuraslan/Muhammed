@@ -524,7 +524,7 @@ TELE["DiverB"].add(1995)
 for f in (2005, 2017, 2060, 2110, 2154):
     kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=24 + 6 * math.sin(f * 0.045), head=(22 + 8 * math.sin(f * 0.05), 14 * math.sin(f * 0.03)))
 for f in (DIVERS_IN, 1800, 1900, 1990, 2017, 2060, 2110, 2154):    # leaning in, nodding, looking at each other and the boy
-    kneel(DA, f, P2.x + 0.42, P2.y + 0.05, -82, lean=36 + 4 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
+    kneel(DA, f, P2.x + 0.36, P2.y + 0.02, -82, lean=42 + 3 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
 TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue
@@ -679,19 +679,19 @@ OUT0, OUT1 = 2725, 2928
 def carry_path(f, off):
     u = (f - OUT0) / (OUT1 - OUT0); y = 3.0 - 13.0 * u + off; x = 0.2 * math.sin(u * 3)
     return V((x, y, 0))
-for n, off in (("DiverA", -1.55), ("DiverB", 1.55)):
+for n, off in (("DiverA", -1.36), ("DiverB", 1.36)):
     H = HUM[n]
     H.walk(lambda f, off=off: carry_path(f, off), lambda f: 0.0, OUT0, OUT1, stride=0.7, lift=0.07, lean=4, step=2)
     TELE[n].add(OUT0 - 1)
 for f in range(OUT0, OUT1 + 1, 6):
-    a = carry_path(f, -1.55); b = carry_path(f, 1.55)
+    a = carry_path(f, -1.36); b = carry_path(f, 1.36)
     ga, gb = ground_z(a.x, a.y), ground_z(b.x, b.y)
-    pa = V((a.x, a.y, ga + 0.9)); pb_ = V((b.x, b.y, gb + 0.9)); mid = (pa + pb_) / 2
+    pa = V((a.x, a.y, ga + 1.0)); pb_ = V((b.x, b.y, gb + 1.0)); mid = (pa + pb_) / 2
     d_ = (pa - pb_).normalized()
     stre.location = mid; stre.rotation_euler = V((0, -1, 0)).rotation_difference(d_).to_euler()
     stre.keyframe_insert("location", frame=f); stre.keyframe_insert("rotation_euler", frame=f)
     sdv = d_.cross(V((0, 0, 1))).normalized()
-    for n, end, inward in (("DiverA", mid + d_ * 1.2, -d_), ("DiverB", mid - d_ * 1.2, d_)):
+    for n, end, inward in (("DiverA", mid + d_ * 1.22, -d_), ("DiverB", mid - d_ * 1.22, d_)):
         for s in "LR":
             sx = 1 if s == "L" else -1
             pole_pt = end + sdv * (0.29 * (1 if (s == "L") == (n == "DiverB") else -1))       # centre of the pole

@@ -60,16 +60,34 @@
     "wall/prop fills the frame, character only 7%"
    ]
   ],
+  "427": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
   "517": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 7%"
    ]
   ],
   "523": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "577": [
@@ -823,7 +841,11 @@
   "1213": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 10%"
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "BACKHEAD",
+    "DiverA"
    ]
   ],
   "1219": [
@@ -1566,6 +1588,10 @@
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "2437": [
@@ -1575,7 +1601,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 9%"
    ]
   ],
   "2443": [
@@ -1595,7 +1621,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "2455": [
@@ -1605,7 +1631,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "2461": [
@@ -1661,7 +1687,7 @@
   "2491": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "2497": [
@@ -1672,6 +1698,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 59"
    ]
   ],
   "2503": [
@@ -1682,6 +1712,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CLAW",
+    "DiverB.L curl 51"
    ]
   ],
   "2509": [
@@ -1691,7 +1725,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "2515": [
@@ -1713,25 +1747,25 @@
   "2527": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "wall/prop fills the frame, character only 12%"
    ]
   ],
   "2545": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "2551": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 9%"
    ]
   ],
   "2557": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "2563": [
@@ -2053,103 +2087,51 @@
   "2737": [
    [
     "CLAW",
-    "DiverA.L curl 62"
-   ],
-   [
-    "CLAW",
-    "DiverB.R curl 60"
+    "DiverA.R curl 75"
    ]
   ],
   "2749": [
    [
     "CLAW",
-    "DiverB.L curl 68"
-   ]
-  ],
-  "2755": [
-   [
-    "CLAW",
-    "DiverA.L curl 74"
-   ]
-  ],
-  "2761": [
-   [
-    "CLAW",
-    "DiverB.L curl 74"
-   ]
-  ],
-  "2767": [
-   [
-    "CLAW",
-    "DiverA.L curl 67"
-   ],
-   [
-    "CLAW",
-    "DiverA.R curl 66"
-   ]
-  ],
-  "2773": [
-   [
-    "CLAW",
-    "DiverA.R curl 68"
-   ],
-   [
-    "CLAW",
-    "DiverB.R curl 70"
-   ]
-  ],
-  "2779": [
-   [
-    "CLAW",
-    "DiverA.L curl 65"
-   ]
-  ],
-  "2785": [
-   [
-    "CLAW",
-    "DiverA.R curl 72"
+    "DiverA.L curl 66"
    ]
   ],
   "2791": [
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "CLAW",
-    "DiverB.R curl 63"
    ]
   ],
   "2797": [
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "CLAW",
+    "DiverB.R curl 74"
    ]
   ],
   "2803": [
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "CLAW",
-    "DiverA.L curl 61"
    ]
   ],
   "2809": [
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "CLAW",
+    "DiverA.R curl 74"
    ]
   ],
   "2815": [
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "CLAW",
-    "DiverA.R curl 76"
    ]
   ],
   "2821": [
@@ -2161,19 +2143,7 @@
   "2869": [
    [
     "CLAW",
-    "DiverA.L curl 66"
-   ]
-  ],
-  "2875": [
-   [
-    "CLAW",
-    "DiverA.L curl 64"
-   ]
-  ],
-  "2893": [
-   [
-    "CLAW",
-    "DiverB.L curl 63"
+    "DiverA.R curl 73"
    ]
   ],
   "2899": [
@@ -2182,312 +2152,302 @@
     "DiverA.L curl 75"
    ]
   ],
-  "2911": [
+  "2905": [
    [
     "CLAW",
-    "DiverB.L curl 65"
-   ]
-  ],
-  "2917": [
-   [
-    "CLAW",
-    "DiverA.L curl 70"
+    "DiverA.L curl 73"
    ],
    [
     "CLAW",
-    "DiverA.R curl 48"
-   ],
-   [
-    "CLAW",
-    "DiverB.R curl 67"
+    "DiverA.R curl 65"
    ]
   ],
   "2923": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2929": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2935": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2941": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2947": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2953": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2959": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2965": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2971": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2977": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2983": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2989": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "2995": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3001": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3007": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3013": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3019": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3025": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3031": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3037": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3043": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3049": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3055": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3061": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3067": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3073": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3079": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ],
   "3085": [
    [
     "CLAW",
-    "DiverB.L curl 64"
+    "DiverA.L curl 74"
    ],
    [
     "CLAW",
-    "DiverB.R curl 75"
+    "DiverA.R curl 74"
    ]
   ]
  },
  "counts": {
-  "BACKHEAD": 3,
+  "BACKHEAD": 4,
   "INSIDE": 126,
-  "EMPTY": 262,
+  "EMPTY": 266,
   "FILL": 3,
-  "CLAW": 81
+  "CLAW": 69
  }
 }
