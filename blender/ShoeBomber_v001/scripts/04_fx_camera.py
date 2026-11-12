@@ -407,37 +407,51 @@ def op(name, f, off=(0, 0, 0)):
     sc.frame_set(f); return O[name].matrix_world.translation + V(off)
 
 # framings: (frame, camera, aim, lens). Aims follow the action (evaluated bone / prop positions).
-SEG = [
-    # beat 1: over the seatbacks in front, down into his lap -> push to his lit face -> macro on match + shoe -> rise out to the aisle
-    (1,   V((-1.12, 0.50, 0.34)), (op("Shoe_R", 1, (0, 0, 0.1)) + bp("Bomber", "head", 1)) / 2, 20),
+# v006: cabin camera as shots joined by cuts (CUTS); every static shot was chosen with qa_check's own criteria (face readable,
+# character fills the frame, nothing in front of the lens) by scripts/cam_search.py
+P = lambda x, y, z: V((x, y, z))
+CAB = [
+  [  # beat 1: his face over the shoe and the match
+    (1,   P(-0.092, 0.214, 0.986), bp("Bomber", "head", 1, (0, 0, -0.05)), 28),
     (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
     (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.45 + bp("Bomber", "head", 100) * 0.55), 24),
     (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
     (198, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
-    # beat 2: swing round down the aisle toward the trolley, low dolly back, crane up, whip to her face, push on eyes
-    # dolly back down the aisle just ahead of her, so she stays big in frame
+    (212, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 212, (0, 0.2, -0.3)), 26),
+  ], [  # beat 2: CUT to the attendant walking down the aisle, dolly back ahead of her, push to her eyes (sniff)
+    (213, P(-0.109, 5.08, 1.052), bp("Attendant", "head", 213, (0, 0, -0.1)), 28),
     (225, bp("Attendant", "spine03", 225, (0.05, -1.7, 0.35)), bp("Attendant", "head", 225, (0, 0, -0.25)), 26),
     (265, bp("Attendant", "spine03", 265, (0.04, -1.5, 0.15)), bp("Attendant", "head", 265, (0, 0, -0.25)), 28),
     (300, bp("Attendant", "spine03", 300, (0.05, -1.3, 0.35)), bp("Attendant", "head", 300, (0, 0, -0.1)), 30),
     (330, V((0.16, 1.80, 1.50)), bp("Attendant", "head", 330, (0, 0, -0.05)), 42),
-    (372, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 372, (0, -0.02, -0.02)), 52),
-    # beat 3: over her shoulder, pushing over the seatback to the flame and his startled face
-    (400, V((0.38, 1.25, 1.70)), (bp("Attendant", "head", 400) + bp("Bomber", "head", 400)) / 2, 24),
-    (440, V((0.30, 0.95, 1.55)), (op("Match_Flame", 440) + bp("Bomber", "head", 440)) / 2, 28),
-    (480, V((0.15, 1.10, 1.60)), bp("Bomber", "head", 480), 26),
-    # beat 4: wide from the aisle ahead -> crane to near top-down over the pile -> drop to carpet level for the pin
-    (515, V((0.05, 2.45, 1.75)), bp("Bomber", "spine01", 515), 22),
-    (555, V((0.10, 2.10, 1.95)), bp("Bomber", "spine01", 555, (0, 0, -0.1)), 22),
+    (376, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 376, (0, -0.02, -0.02)), 52),
+  ], [  # beat 3: CUT low from the row-3 aisle seat: she comes down the aisle at us and stops at his row
+    (377, P(-0.207, 0.022, 0.852), bp("Attendant", "head", 377, (0, 0, -0.1)), 28),
+    (436, P(-0.207, 0.022, 0.852), bp("Attendant", "head", 436, (0, 0, -0.1)), 28),
+  ], [  # CUT: reverse from row 4: her face as she catches him
+    (437, P(-0.81, 1.206, 1.074), bp("Attendant", "head", 437, (0, 0, -0.1)), 28),
+    (478, P(-0.81, 1.206, 1.074), bp("Attendant", "head", 478, (0, 0, -0.1)), 28),
+  ], [  # beat 4: CUT: PaxA lunges in
+    (479, P(0.163, -0.253, 1.054), bp("PaxA", "head", 479), 22),
+    (520, P(0.163, -0.253, 1.054), bp("PaxA", "head", 520), 22),
+  ], [  # CUT: the attendant hauling him into the aisle
+    (521, P(0.404, -0.153, 0.906), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
+    (545, P(0.404, -0.153, 0.906), bp("Attendant", "head", 545, (0, 0, -0.1)), 28),
+  ], [  # CUT: from row 4 as she steps up to his head
+    (546, P(-1.018, 0.596, 1.305), bp("Attendant", "head", 546, (0, 0, -0.1)), 28),
+    (574, P(-1.018, 0.596, 1.305), bp("Attendant", "head", 574, (0, 0, -0.1)), 28),
+  ], [  # CUT: high over the pin
+    (575, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 575, (0, 0.3, 0)), 22),
     (600, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
-    (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
-    (655, V((0.00, 1.25, 1.25)), bp("Steward", "head", 655, (0, 0, -0.2)), 24),
-    # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
-    (680, V((0.05, 1.05, 1.65)), bp("Bomber", "upperarm02.R", 680), 28),
-    (697, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 697), 32),
+    (648, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 648, (0, 0.2, 0)), 22),
+  ], [  # beat 5: CUT low to the steward's face as he injects, push to the arm, two-shot on "finally sedated"
+    (649, P(-0.038, 0.44, 0.75), bp("Steward", "head", 649), 28),
+    (668, P(-0.038, 0.44, 0.75), bp("Steward", "head", 668), 28),
+    (690, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 690), 32),
     (712, V((0.30, 0.95, 0.80)), bp("Bomber", "upperarm02.R", 712), 32),
-    # "finally sedated": two-shot of the steward's and the attendant's faces over his limp body (his face is to the carpet)
     (736, V((-0.02, 0.80, 1.20)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
-    (760, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 760) + bp("Attendant", "head", 760)) / 2 + V((0, 0, -0.08)), 20),
+    (756, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 756) + bp("Attendant", "head", 756)) / 2 + V((0, 0, -0.08)), 20),
+    (772, P(0.122, 0.678, 0.757), bp("Attendant", "head", 772, (0, 0, -0.1)), 28),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
     (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
@@ -445,7 +459,8 @@ SEG = [
     (965, V((0.14, 0.40, 1.38)), (fuse_tip("L", 965) * 0.5 + bp("Attendant", "head", 965) * 0.5), 28),
     (1015, V((0.16, 0.40, 1.40)), (fuse_tip("R", 1015) * 0.5 + bp("Attendant", "head", 1015) * 0.5), 30),
     (1062, fuse_tip("L", 1062) + V((0, 0.03, 0.03)), op("Shoe_L", 1062, (0, 0, 0.05)), 40),
-]
+    (1068, fuse_tip("L", 1068) + V((0, 0.025, 0.025)), op("Shoe_L", 1068, (0, 0, 0.05)), 40),
+  ]]
 # studio: out of the black, pulling back from shoe L; orbit as they split; low 3/4; pull back into the cloud wipe
 SEG2 = [
     (1069, SXS + V((-0.12, 0.05, 1.30)), SXS + V((-0.12, 0.0, 1.17)), 30),
@@ -467,23 +482,27 @@ SEG3 = [
 SEG4 = [
     (1393, AX + V((-1.15, 1.25, 2.55)), bp("Traveller", "head", 1393, (0, 0, -0.3)), 24),
     (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
-    (1470, AX + V((-1.25, 0.40, 0.98)), bp("Traveller", "head", 1470), 26),
+    (1459, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1459), 28),
+    (1477, AX + V((-0.631, 0.306, 1.315)), bp("Traveller", "head", 1477), 28),
     (1490, AX + V((-1.30, 0.35, 1.10)), bp("Traveller", "head", 1490, (0, 0, -0.1)), 28),
     (1508, AX + V((-1.60, 0.45, 1.45)), bp("Traveller", "head", 1508, (0, 0, -0.2)), 28),
-    (1525, AX + V((-2.00, -0.60, 1.40)), bp("Traveller", "head", 1525, (0, 0, -0.2)), 30),
-    (1540, AX + V((-0.2, -1.9, 1.05)), op("Tray_1", 1540, (0, 0, 0.1)), 32),
+    (1525, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1525), 28),
+    (1537, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1537), 28),
+    (1550, AX + V((-0.2, -1.9, 1.05)), op("Tray_1", 1550, (0, 0, 0.1)), 32),
     (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
     (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
     (END, AX + V((-1.35, 0.05, 1.50)), bp("Traveller", "head", END, (0, 0, -0.15)), 40),
 ]
-for seg in (SEG, SEG2, SEG3, SEG4):
+CUTS = {seg[-1][0] for seg in CAB}
+for seg in CAB + [SEG2, SEG3, SEG4]:
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl_ = catmull([(f, float(l)) for f, c, a, l in seg])
     f0, f1 = seg[0][0], seg[-1][0]
     for f in list(range(f0, f1 + 1, 2)) + [f1]:
         cam.location = fc(f); cam.keyframe_insert("location", frame=f)
         aim.location = fa(f); aim.keyframe_insert("location", frame=f)
         cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
-constant_at(cam, {1068, 1248, 1392}); constant_at(aim, {1068, 1248, 1392}); constant_at(cam_d, {1068, 1248, 1392})
+CUTS |= {1068, 1248, 1392}
+constant_at(cam, CUTS); constant_at(aim, CUTS); constant_at(cam_d, CUTS)
 
 # wipes: a card in front of the lens (black into the shoe; white cloud out of the studio, white cloud dive into the airport)
 bpy.ops.mesh.primitive_plane_add(size=1.0)

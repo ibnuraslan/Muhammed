@@ -9,7 +9,7 @@ from mathutils.bvhtree import BVHTree
 from bpy_extras.object_utils import world_to_camera_view
 a = sys.argv[sys.argv.index("--") + 1:]
 OUT = a[0]; F0 = int(a[1]) if len(a) > 1 else 1; F1 = int(a[2]) if len(a) > 2 else bpy.context.scene.frame_end
-STEP = int(a[3]) if len(a) > 3 else 3
+STEP = int(a[3]) if len(a) > 3 else 6
 sc = bpy.context.scene; O = bpy.data.objects
 RIGS = [o for o in O if o.type == 'ARMATURE' and "head" in o.pose.bones and "finger2-1.L" in o.pose.bones and "IK_hand.L" in o.pose.bones]
 CHAR = {c.name for r in RIGS for c in r.children_recursive}
@@ -26,16 +26,23 @@ def visible(p, m=0.05):
 def tips(r, s):
     return [r.matrix_world @ r.pose.bones["finger%d-3.%s" % (i, s)].tail for i in range(1, 6)]
 cache = {}
+def static(o):
+    while o is not None:
+        if o.animation_data or o.constraints: return False
+        o = o.parent
+    return True
+STATIC = {o.name for o in PROPS if static(o)}
 def bvh(o, dg, f):
-    k = (o.name, f)
+    k = o.name if o.name in STATIC else (o.name, f)
     if k not in cache:
-        if len(cache) > 400: cache.clear()
+        if len(cache) > 4000:
+            for kk in [kk for kk in cache if not isinstance(kk, str)]: del cache[kk]
         ev = o.evaluated_get(dg); me = ev.to_mesh(); mw = o.matrix_world
         cache[k] = BVHTree.FromPolygons([mw @ v.co for v in me.vertices], [tuple(p.vertices) for p in me.polygons]) if me.polygons else None
         ev.to_mesh_clear()
     return cache[k]
 n_snap = n_clear = 0
-for it in range(2):
+for it in range(1):
     for f in range(F0, F1 + 1, STEP):
         sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
         for r in RIGS:
