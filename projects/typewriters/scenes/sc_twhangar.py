@@ -208,7 +208,7 @@ def build(variant=None):
     if night:
         for x in (-14.0, 22.0):
             cyl("FloodMast", (x, PLANE.y + 22, 7.0), 0.15, 14, steel, verts=12)
-            fl = bpy.data.lights.new("Flood", 'SPOT'); fl.energy = 60000; fl.spot_size = math.radians(55); fl.spot_blend = 0.4; fl.color = (1.0, 0.82, 0.6)
+            fl = bpy.data.lights.new("Flood", 'SPOT'); fl.energy = 25000; fl.spot_size = math.radians(55); fl.spot_blend = 0.4; fl.color = (1.0, 0.82, 0.6)
             fo = bpy.data.objects.new("Flood", fl); bpy.context.collection.objects.link(fo); fo.location = (x, PLANE.y + 21.2, 13.2); point_at(fo, (PLANE.x, PLANE.y + 16, 0.5))
             box("FloodHead", (x, PLANE.y + 22, 14.1), (1.2, 0.4, 0.8), pbr("FloodHousing", (0.1, 0.1, 0.1), 0.4))
         haze((PLANE.x, PLANE.y + 15, 6), (60, 50, 12), density=0.004, color=(0.8, 0.85, 0.95), anis=0.6)
