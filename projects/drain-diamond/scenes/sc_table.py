@@ -21,6 +21,29 @@ TL, TW, TZ = 7.0, 1.4, 0.78           # table length (along x), width, top heigh
 NX, NY = 22, 4                         # stand grid
 
 
+def velvet_cloth(name="VelvetCloth"):
+    """Black velvet over the table: a softly rippled top and a skirt hanging on all four sides in loose folds."""
+    import bmesh
+    bm = bmesh.new()
+    def patch(fn, nu, nv):
+        vs = [[bm.verts.new(fn(u / nu, v / nv)) for v in range(nv + 1)] for u in range(nu + 1)]
+        for u in range(nu):
+            for v in range(nv):
+                bm.faces.new((vs[u][v], vs[u + 1][v], vs[u + 1][v + 1], vs[u][v + 1]))
+    X, Y, drop = TL / 2 + 0.1, TW / 2 + 0.1, 0.62
+    patch(lambda u, v: Vector((-X + 2 * X * u, -Y + 2 * Y * v, TZ + 0.002 * math.sin(u * 37) * math.sin(v * 11))), 140, 30)
+    for sy in (-1, 1):                       # long sides
+        patch(lambda u, v, sy=sy: Vector((-X + 2 * X * u, sy * (Y + 0.01 + v * 0.03 + 0.03 * v * math.sin(u * 2 * X * 9 + sy)), TZ - drop * v)), 160, 10)
+    for sx in (-1, 1):                       # ends
+        patch(lambda u, v, sx=sx: Vector((sx * (X + 0.01 + v * 0.03 + 0.03 * v * math.sin(u * 2 * Y * 9 + sx)), -Y + 2 * Y * u, TZ - drop * v)), 40, 10)
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for f in me.polygons:
+        f.use_smooth = True
+    me.materials.append(dd.black_velvet())
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    return o
+
+
 def stand_obj(name, loc, mat):
     o = cyl(name, loc + Vector((0, 0, 0.015)), 0.022, 0.03, mat, verts=20)
     return o
@@ -36,11 +59,12 @@ def build(variant=None):
     wall = pbr("ERWall", (0.16, 0.17, 0.18), 0.8)
     B.box((0, 4.0, 1.5), (16, 0.1, 3.0), wall).box((-7.5, 0, 1.5), (0.1, 10, 3.0), wall)
     B.box((0, -4.6, 1.5), (16, 0.1, 3.0), wall).box((7.5, 0, 1.5), (0.1, 10, 3.0), wall).box((0, 0, 3.05), (16, 10, 0.1), wall)
-    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), dd.black_velvet())
+    B.box((0, 0, TZ - 0.025), (TL, TW, 0.04), pbr("TableTop", (0.1, 0.08, 0.06), 0.6))
     for sx in (-1, 1):
         for sy in (-1, 1):
             B.box((sx * TL / 2, sy * TW / 2, TZ / 2), (0.05, 0.05, TZ), pbr("Leg", (0.3, 0.3, 0.32), 0.4, 0.8))
     B.done()
+    velvet_cloth()
     for k in range(5):                         # evidence shelving with boxes along the back wall
         x = -6.0 + k * 2.6
         dd.model_h("steel_frame_shelves_01", (x, 3.5, 0), 2.1)
@@ -96,31 +120,35 @@ def build(variant=None):
                 p = grid[i * NY + j]
                 if (i, j) == (mid_i, mid_j):
                     continue
-                kind = (i * 3 + j) % 4
-                recovered = i >= NX - 3 and j < 3
-                if kind in (0, 1):                                   # ring cone
-                    D.cone(p + Vector((0, 0, 0.025)), 0.018, 0.006, 0.05, vel)
+                kind = (i + 2 * j) % 3
+                recovered = i <= 1
+                if kind == 0:                                        # ring cone (rounded tip)
+                    D.cone(p + Vector((0, 0, 0.022)), 0.022, 0.01, 0.044, vel, verts=24)
+                    D.cyl(p + Vector((0, 0, 0.046)), 0.01, 0.004, vel, verts=16)
                     if recovered:
-                        dd.ring(f"Rec{i}_{j}", p + Vector((0, 0, 0.0565)), stone_r=float(rng.uniform(0.004, 0.006)),
-                                band="gold" if j % 2 else "plat", stone=("sapphire", "diamond", "ruby")[j % 3])
-                elif kind == 2:                                      # necklace bust
-                    D.cone(p + Vector((0, 0, 0.09)), 0.06, 0.022, 0.18, vel, scale=(0.6, 1.0, 1.0))
-                    D.cyl(p + Vector((0, 0, 0.19)), 0.02, 0.02, vel, verts=16)
+                        dd.ring(f"Rec{i}_{j}", p + Vector((0, 0, 0.0565)), stone_r=float(rng.uniform(0.005, 0.007)),
+                                band="gold" if j % 2 else "plat", stone=("sapphire", "diamond", "ruby", "diamond")[j % 4])
+                elif kind == 1:                                      # necklace bust
+                    D.cone(p + Vector((0, 0, 0.09)), 0.065, 0.024, 0.18, vel, verts=24, scale=(0.6, 1.0, 1.0))
+                    D.cyl(p + Vector((0, 0, 0.19)), 0.022, 0.025, vel, verts=16)
                     if recovered:
-                        for q in range(18):
-                            a_ = math.pi * q / 17
-                            cyl(f"RecN{i}{j}", p + Vector((0.034 * math.cos(a_), -0.012 - 0.03 * math.sin(a_), 0.15 - 0.05 * math.sin(a_))),
-                                0.0028, 0.004, M["gold"], verts=8)
-                else:                                                # earring T-bar
-                    D.cyl(p + Vector((0, 0, 0.003)), 0.025, 0.006, vel, verts=20)
-                    D.cyl(p + Vector((0, 0, 0.06)), 0.003, 0.11, rod, verts=8)
-                    D.box(p + Vector((0, 0, 0.115)), (0.07, 0.005, 0.005), rod)
+                        for q in range(22):
+                            a_ = math.pi * q / 21
+                            cyl(f"RecN{i}{j}", p + Vector((0.036 * math.cos(a_), -0.014 - 0.032 * math.sin(a_), 0.16 - 0.055 * math.sin(a_))),
+                                0.003, 0.004, M["plat"], verts=8)
+                        dd.earring(f"RecP{i}{j}", p + Vector((0, -0.05, 0.1)), 0.007, "diamond")
+                else:                                                # earring tree: rod, two crossbars
+                    D.cyl(p + Vector((0, 0, 0.003)), 0.026, 0.006, vel, verts=20)
+                    D.cyl(p + Vector((0, 0, 0.075)), 0.003, 0.14, rod, verts=8)
+                    for zb, wb in ((0.145, 0.08), (0.1, 0.06)):
+                        D.box(p + Vector((0, 0, zb)), (wb, 0.005, 0.005), rod)
                     if recovered:
-                        for sx in (-0.028, 0.028):
-                            dd.earring(f"RecE{i}{j}{sx}", p + Vector((sx, 0, 0.1)), 0.005, "diamond")
-                if recovered or (rng.uniform() < 0.18 and abs(i - mid_i) > 2):                # a paper tag on a string
-                    D.box(p + Vector((0.0, -0.1, 0.002)), (0.05, 0.032, 0.002), tagm, rot=(0, 0, 0.06 * float(rng.uniform(-1, 1))))
-                    D.box(p + Vector((0.0, -0.06, 0.002)), (0.002, 0.06, 0.001), pbr("String", (0.75, 0.7, 0.6), 0.8))
+                        for zb, wb in ((0.13, 0.035), (0.085, 0.026)):
+                            for sx in (-wb, wb):
+                                dd.earring(f"RecE{i}{j}{sx}{zb}", p + Vector((sx, 0, zb)), 0.005, ("diamond", "sapphire")[j % 2])
+                if abs(i - mid_i) > 1 or abs(j - mid_j) > 1:          # a small paper tag on a string for each stand
+                    D.box(p + Vector((0.02, -0.1, 0.002)), (0.045, 0.028, 0.002), tagm, rot=(0, 0, 0.1 * float(rng.uniform(-1, 1))))
+                    D.box(p + Vector((0.01, -0.06, 0.002)), (0.002, 0.05, 0.001), pbr("String", (0.75, 0.7, 0.6), 0.8), rot=(0, 0, 0.3))
         D.done()
         mid = grid[mid_i * NY + mid_j]
         c["hero_at"] = mid
@@ -136,9 +164,13 @@ def build(variant=None):
         out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled"); vol.inputs['Density'].default_value = 0.02
         L.new(vol.outputs[0], out.inputs['Volume']); hz.data.materials.append(m); hz.visible_shadow = False
     # lighting: a long softbox over the table and two practical lamp pools
-    a = bpy.data.lights.new("Soft", 'AREA'); a.shape = 'RECTANGLE'; a.size = TL; a.size_y = 1.2; a.energy = 420 if v == "count" else 220; a.color = (0.82, 0.9, 1.0)
+    a = bpy.data.lights.new("Soft", 'AREA'); a.shape = 'RECTANGLE'; a.size = TL; a.size_y = 1.2; a.energy = 420 if v == "count" else 50; a.color = (0.82, 0.9, 1.0)
     ao = bpy.data.objects.new("Soft", a); bpy.context.collection.objects.link(ao); ao.location = (0, 0, 2.8)
     box("Tube", (0, 0, 2.9), (TL, 0.15, 0.04), emissive("TubeE", (0.9, 0.95, 1.0), 6))
+    if v != "count":
+        ct = bpy.data.lights.new("CoolTop", 'SPOT'); ct.energy = 1600; ct.spot_size = math.radians(110); ct.spot_blend = 1.0
+        ct.color = (0.8, 0.88, 1.0); ct.shadow_soft_size = 0.6
+        cto = bpy.data.objects.new("CoolTop", ct); bpy.context.collection.objects.link(cto); cto.location = (-2.2, 0, 2.7); point_at(cto, (-0.5, 0, TZ))
     k = bpy.data.lights.new("Key", 'SPOT'); k.energy = 260; k.spot_size = math.radians(40); k.spot_blend = 0.6; k.color = (1.0, 0.9, 0.75)
     ko = bpy.data.objects.new("Key", k); bpy.context.collection.objects.link(ko); c["key"] = ko
     return c
@@ -189,7 +221,7 @@ MOVES = {
     "alone": dict(kind="anim", dof=2.0, anim=anim_final,
                   cam=lambda c, t: (c["hero_at"] + Vector((0.0, -0.16, 0.12)).lerp(Vector((0.0, -0.55, 0.3)), ease(t)), c["hero_at"] + Vector((0, 0, 0.085)), 70),
                   focus=lambda c, t: c["hero_at"] + Vector((0, 0, 0.09))),
-    "empty": dict(kind="anim", dof=4.0, anim=anim_final,
-                  cam=lambda c, t: (c["hero_at"] + Vector((0.3, -1.0, 0.55)).lerp(Vector((1.4, -3.6, 2.6)), ease(t)), c["hero_at"] + Vector((-0.2, 0.2, 0.0)), 35),
-                  focus=lambda c, t: c["hero_at"]),
+    "empty": dict(kind="anim", dof=5.6, anim=anim_final,
+                  cam=lambda c, t: (Vector((-TL / 2 - 0.35, -0.08, TZ + 0.16)).lerp(Vector((-TL / 2 - 1.7, -0.2, TZ + 0.42)), ease(t)), Vector((TL / 2, 0.1, TZ + 0.02)), 40),
+                  focus=lambda c, t: Vector((-TL / 2 + 0.45, 0.0, TZ + 0.06))),
 }

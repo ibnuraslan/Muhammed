@@ -18,7 +18,7 @@ import dd
 from dd import person, place, face_to, walk_to, arms_relaxed, zero, ground
 from human import pose_sit, pose_walk, reach, fingers_curl
 
-EXPOSURE = -0.3
+EXPOSURE = -1.0
 DUR = {k: 9.0 for k in ("aisle", "dock", "prosecutor", "file", "ashamed", "reverse", "judges")}
 VARIANT_FOR = {k: k for k in DUR}
 BENCH_Y = 17.0
@@ -72,13 +72,13 @@ def room():
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (7.3, 10, 4.1); po.rotation_euler = (0, math.radians(-90), 0)
     for x in (-3, 0, 3):
         for y in (4, 10, 16):
-            l = area_light((x, y, 7.9), (0, 0, 0), 1.5, 90, (1.0, 0.9, 0.78)); l.visible_camera = False
+            l = area_light((x, y, 7.6), (0, 0, 0), 1.5, 230, (1.0, 0.9, 0.78)); l.visible_camera = False
     # dressing: brass pendant lamps, curtains half-drawn on the tall windows, microphones on the bench and desks,
     # stacked case files, leather chairs for counsel, a wall clock, two framed paintings (generic landscapes)
     for x in (-3.5, 0.0, 3.5):
         for y in (4.0, 11.0, 17.0):
             dd.model_h("Chandelier_02", (x, y, 6.4), 1.1)
-            pl = bpy.data.lights.new("Pendant", 'POINT'); pl.energy = 120; pl.color = (1.0, 0.78, 0.5); pl.shadow_soft_size = 0.4
+            pl = bpy.data.lights.new("Pendant", 'POINT'); pl.energy = 300; pl.color = (1.0, 0.78, 0.5); pl.shadow_soft_size = 0.4
             po = bpy.data.objects.new("Pendant", pl); bpy.context.collection.objects.link(po); po.location = (x, y, 6.6)
     C = dd.Builder("Cornice")                     # a moulded plaster cornice round the high ceiling
     cm = pbr("CorniceM", (0.78, 0.76, 0.7), 0.7)
@@ -97,10 +97,51 @@ def room():
         box("CaseFiles", (-2.6 + 0.02 * k, BENCH_Y - 2.0, 1.12 + 0.03 * k), (0.3, 0.38, 0.028),
             pbr("CF", ((0.55, 0.42, 0.25), (0.82, 0.8, 0.74))[k % 2], 0.8), rot=(0, 0, 0.08 * k))
     for k in range(4):
-        dd.model_h("dining_chair_02", (1.3 + k * 1.0, 8.85, 0), 0.95, rot_z=0.0)
+        dd.model_h("dining_chair_02", (1.3 + k * 1.0, 8.15, 0), 0.95, rot_z=0.0)
     dd.model_h("wall_clock", (0, 20.45, 6.2), 0.5, rot_z=math.pi)
-    for x in (-5.0, 5.0):
-        dd.model_h("fancy_picture_frame_01", (x, 20.45, 3.0), 1.4, rot_z=math.pi)
+    # carved panelling with pilasters on the walls, a coffered ceiling, brass lamps on the bench, and a large framed
+    # painting behind the judges (a generic allegory: warm umber figures-and-sky impression, no text)
+    P = dd.Builder("Pilasters")
+    carved = dd.tex_mat("wooden_panels", 0.4, tint=(0.62, 0.5, 0.38), name="CarvedPanel", sat=0.8, coat=0.2)
+    P.box((-7.02, 10, 2.5), (0.04, 22, 5.0), carved)
+    for y in np.arange(0.4, 20.5, 3.2):
+        P.box((-6.92, y, 2.5), (0.16, 0.5, 5.0), dark).box((-6.88, y, 5.1), (0.25, 0.7, 0.25), dark).box((-6.88, y, 0.12), (0.25, 0.66, 0.24), dark)
+    for x in (-6.2, -3.4, 3.4, 6.2):
+        P.box((x, 20.4, 2.6), (0.5, 0.16, 5.2), dark).box((x, 20.35, 5.3), (0.7, 0.25, 0.25), dark)
+    P.box((0, 20.42, 5.5), (14, 0.2, 0.3), dark)
+    cof = pbr("Coffer", (0.74, 0.7, 0.62), 0.75)
+    for y in np.arange(-0.5, 21, 2.3):
+        P.box((0, y, 7.83), (14, 0.28, 0.4), cof)
+    for x in np.arange(-7, 7.1, 2.33):
+        P.box((x, 10, 7.83), (0.28, 22, 0.4), cof)
+    P.done()
+    brass = pbr("Brass", (0.72, 0.52, 0.25), 0.3, 1.0)
+    for x in (-0.8, 0.8, -2.6, 2.6):
+        bl = dd.Builder("BenchLamp")
+        bl.cyl((x, BENCH_Y - 0.15, 1.66), 0.06, 0.02, brass, verts=20).cyl((x, BENCH_Y - 0.15, 1.82), 0.01, 0.32, brass, verts=10)
+        bl.cone((x, BENCH_Y - 0.15, 2.0), 0.1, 0.05, 0.1, brass, verts=24)
+        bl.done()
+        ll = bpy.data.lights.new("BenchLampL", 'POINT'); ll.energy = 25; ll.color = (1.0, 0.75, 0.45); ll.shadow_soft_size = 0.03
+        llo = bpy.data.objects.new("BenchLampL", ll); bpy.context.collection.objects.link(llo); llo.location = (x, BENCH_Y - 0.15, 1.93)
+    # the painting
+    pm = bpy.data.materials.new("Allegory"); pm.use_nodes = True
+    N = pm.node_tree.nodes; L = pm.node_tree.links; bsdf = N["Principled BSDF"]; bsdf.inputs['Roughness'].default_value = 0.55
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 8
+    L.new(tc.outputs['Generated'], nz.inputs['Vector'])
+    gr = N.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'
+    mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (-0.5, -0.5, -0.5); mp.inputs['Scale'].default_value = (1.3, 1.3, 1.3)
+    L.new(tc.outputs['Generated'], mp.inputs['Vector']); L.new(mp.outputs[0], gr.inputs['Vector'])
+    ramp = N.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (0.05, 0.03, 0.02, 1); ramp.color_ramp.elements[1].color = (0.75, 0.55, 0.3, 1)
+    e = ramp.color_ramp.elements.new(0.5); e.color = (0.32, 0.18, 0.08, 1)
+    mx = N.new("ShaderNodeMath"); mx.operation = 'ADD'; L.new(nz.outputs['Fac'], mx.inputs[0]); L.new(gr.outputs['Fac'], mx.inputs[1])
+    mm = N.new("ShaderNodeMath"); mm.operation = 'MULTIPLY'; mm.inputs[1].default_value = 0.6; L.new(mx.outputs[0], mm.inputs[0])
+    L.new(mm.outputs[0], ramp.inputs['Fac']); L.new(ramp.outputs['Color'], bsdf.inputs['Base Color'])
+    box("Painting", (0, 20.38, 3.4), (3.2, 0.02, 2.0), pm)
+    gilt = pbr("Gilt", (0.75, 0.56, 0.28), 0.35, 1.0)
+    F = dd.Builder("PaintingFrame")
+    F.box((0, 20.34, 4.47), (3.5, 0.08, 0.16), gilt).box((0, 20.34, 2.33), (3.5, 0.08, 0.16), gilt)
+    F.box((-1.67, 20.34, 3.4), (0.16, 0.08, 2.3), gilt).box((1.67, 20.34, 3.4), (0.16, 0.08, 2.3), gilt)
+    F.done()
     # papers on the bench
     for k in range(4):
         box("Paper", (-2.0 + k * 1.3, BENCH_Y - 0.1, 1.655), (0.21, 0.3, 0.003), pbr("Paper", (0.85, 0.84, 0.8), 0.8), rot=(0, 0, 0.1 * k))
@@ -113,27 +154,68 @@ def _to_bone(o, h, bone):
     bpy.context.view_layer.update(); o.matrix_world = mw
 
 
+def _gown_mesh(name, nk, length, mat):
+    """A long gown from the neck to mid-shin: shoulders, a flared skirt with soft vertical folds deepening downward."""
+    import bmesh
+    prof = [(0.0, 0.085), (0.05, 0.2), (0.1, 0.245), (0.25, 0.23), (0.45, 0.24), (0.7, 0.29), (1.0, 0.37)]
+    def rad(f):
+        for (f0, r0), (f1, r1) in zip(prof, prof[1:]):
+            if f <= f1:
+                return r0 + (r1 - r0) * (f - f0) / (f1 - f0)
+        return prof[-1][1]
+    bm = bmesh.new(); NS, NR = 56, 22
+    rings = []
+    for k in range(NR + 1):
+        f = k / NR; r = rad(f); amp = 0.1 * max(0.0, f - 0.15)
+        ring = []
+        for q in range(NS):
+            th = 2 * math.pi * q / NS
+            rr = r * (1 + amp * math.sin(11 * th) + 0.4 * amp * math.sin(23 * th + 1.3))
+            ring.append(bm.verts.new(nk + Vector((1.2 * rr * math.sin(th), -0.8 * rr * math.cos(th) + 0.01, -0.02 - length * f))))
+        rings.append(ring)
+    for k in range(NR):
+        for q in range(NS):
+            bm.faces.new((rings[k][q], rings[k][(q + 1) % NS], rings[k + 1][(q + 1) % NS], rings[k + 1][q]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for f_ in me.polygons:
+        f_.use_smooth = True
+    me.materials.append(mat)
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    return o
+
+
+def _sleeve(name, h, b0, b1, r0, r1, mat, parent_bone):
+    a, b = h.bone_head(b0), h.bone_tail(b1)
+    d = b - a
+    R = dd.Builder(name)
+    R.cone((a + b) / 2, r0, r1, d.length * 1.05, mat, verts=20, rot=Vector((0, 0, 1)).rotation_difference(d.normalized()).to_euler())
+    o = R.done(); _to_bone(o, h, parent_bone)
+    return o
+
+
 def robe(h, judge=False):
-    """French court robe over the rest pose: a black gown shell with wide shoulders (follows the spine), white jabot
-    bands at the throat, and for the judges a white ermine-edged epitoge over the left shoulder."""
-    from mathutils import Matrix
+    """French court robe over the rest pose: a long black gown to mid-shin with folds (follows the spine), wide bell
+    sleeves on the arms, white jabot bands at the throat; for the judges an ermine-edged epitoge visible on the chest."""
     zero(h); from human import reset_pose
     reset_pose(h); h.arm.location = (0, 0, 0); h.arm.rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
     nk = h.bone_head("neck01")
-    gown = pbr("Gown", (0.012, 0.012, 0.014), 0.6, 0.0, **{"Sheen Weight": 0.4})
-    R = dd.Builder(h.name + "_gown")
-    R.cone(nk + Vector((0, 0.01, -0.36)), 0.26, 0.15, 0.72, gown, verts=24, scale=(1.25, 0.8, 1.0))
-    for sd in (-1, 1):                                                # wide sleeves over the upper arms
-        R.cone(nk + Vector((sd * 0.24, 0.0, -0.2)), 0.075, 0.06, 0.32, gown, verts=16, rot=(0, math.radians(sd * 12), 0))
-    g = R.done(); _to_bone(g, h, "spine02")
+    gown = pbr("Gown", (0.012, 0.012, 0.014), 0.55, 0.0, **{"Sheen Weight": 0.5, "Sheen Roughness": 0.4})
+    length = max(0.9, nk.z - 0.38)
+    g = _gown_mesh(h.name + "_gown", nk, length, gown); _to_bone(g, h, "spine03")
+    for sd in ("L", "R"):
+        _sleeve(f"{h.name}_upslv{sd}", h, f"upperarm01.{sd}", f"upperarm02.{sd}", 0.075, 0.095, gown, f"upperarm01.{sd}")
+        _sleeve(f"{h.name}_loslv{sd}", h, f"lowerarm01.{sd}", f"lowerarm02.{sd}", 0.095, 0.15, gown, f"lowerarm01.{sd}")
     J = dd.Builder(h.name + "_jabot")
-    white = pbr("Jabot", (0.9, 0.9, 0.88), 0.7)
-    for sx in (-0.018, 0.018):
-        J.box(nk + Vector((sx, -0.135, -0.08)), (0.035, 0.008, 0.12), white, rot=(math.radians(-8), 0, 0))
-    if judge:                                                         # epitoge: black band edged with white fur
-        J.box(nk + Vector((0.12, -0.11, -0.2)), (0.07, 0.02, 0.32), pbr("Ermine", (0.92, 0.91, 0.88), 0.95))
-        J.box(nk + Vector((0.12, 0.1, -0.2)), (0.07, 0.02, 0.32), pbr("Ermine", (0.92, 0.91, 0.88), 0.95))
-        J.box(nk + Vector((0.12, -0.005, 0.0)), (0.08, 0.22, 0.03), pbr("Ermine", (0.92, 0.91, 0.88), 0.95))
+    white = pbr("Jabot", (0.92, 0.92, 0.9), 0.7)
+    for sx in (-0.02, 0.02):
+        J.box(nk + Vector((sx, -0.165, -0.12)), (0.04, 0.008, 0.13), white, rot=(math.radians(-6), 0, 0))
+    if judge:                                                         # epitoge on the left shoulder: ermine edge on the chest
+        erm = pbr("Ermine", (0.93, 0.92, 0.89), 0.95, 0.0, **{"Sheen Weight": 0.6})
+        J.box(nk + Vector((0.13, -0.2, -0.3)), (0.1, 0.025, 0.42), erm)
+        J.box(nk + Vector((0.13, 0.18, -0.3)), (0.1, 0.025, 0.42), erm)
+        J.box(nk + Vector((0.14, -0.01, 0.02)), (0.1, 0.36, 0.035), erm)
+        for q in range(5):                                            # ermine tail spots
+            J.box(nk + Vector((0.13, -0.214, -0.14 - 0.07 * q)), (0.012, 0.004, 0.025), pbr("ErmSpot", (0.02, 0.02, 0.02), 0.8))
     j = J.done(); _to_bone(j, h, "spine02")
     return h
 
@@ -240,12 +322,12 @@ def build(variant=None):
                 seated(h, ((-1.6, 0, 1.6)[k], BENCH_Y + 1.05, 0.5), 0.0, seat_z=1.02)
     if v in ("prosecutor", "file"):
         pr = robed("Prosecutor", 0.0, 50, "bob01"); c["prosecutor"] = pr
-        standing(pr, (-5.4, 13.4, 0.4), math.radians(80), z=0.4)
+        standing(pr, (-4.5, 11.5, 0.0), math.radians(95))
     if v == "file":
         c["lawyers"] = []
         for k in range(3):
             lw = robed(f"Lawyer{k}", (1.0, 0.0, 1.0)[k], (40, 36, 55)[k], ("short01", "ponytail01", "short03")[k])
-            seated(lw, (1.3 + k * 1.1, 8.95, 0), math.pi, seat_z=0.48)
+            standing(lw, (1.3 + k * 1.1, 8.72, 0), math.pi)
             c["lawyers"].append(lw)
         c["folder"] = box("Folder", (0, 0, 0), (0.24, 0.32, 0.02), pbr("FolderM", (0.55, 0.42, 0.25), 0.7))
     return c
@@ -272,7 +354,7 @@ def anim_dock(c, t):
 
 def anim_prosecutor(c, t):
     sec = t * DUR["prosecutor"]
-    pr = c["prosecutor"]; standing(pr, (-5.4, 13.4, 0.4), math.radians(80), z=0.4)
+    pr = c["prosecutor"]; standing(pr, (-4.5, 11.5, 0.0), math.radians(95))
     M = pr.arm.matrix_world.to_3x3(); sh = pr.bone_head("upperarm01.R")
     g = 0.5 + 0.5 * math.sin(sec * 1.1)
     reach(pr, "R", sh + M @ Vector((-0.05, -0.32 - 0.04 * g, -0.3 + 0.07 * g)), M @ Vector((-0.6, 0.2, -0.7)))
@@ -328,8 +410,8 @@ MOVES = {
                  cam=lambda c, t: (Vector((5.6, 17.5, 1.9)).lerp(Vector((5.2, 17.2, 1.85)), ease(t)), Vector((5.0, 11.0, 1.55)), 40),
                  focus=lambda c, t: Vector((5.15, 11.25, 1.9))),
     "prosecutor": dict(kind="anim", dof=4.0, anim=anim_prosecutor,
-                       cam=lambda c, t: (Vector((-1.6, 10.2, 1.75)).lerp(Vector((-2.0, 10.6, 1.72)), ease(t)), Vector((-5.4, 13.4, 1.75)), 45),
-                       focus=lambda c, t: Vector((-5.4, 13.4, 1.9))),
+                       cam=lambda c, t: (Vector((0.6, 8.3, 1.45)).lerp(Vector((0.2, 8.6, 1.42)), ease(t)), Vector((-4.5, 11.6, 1.0)), 40),
+                       focus=lambda c, t: Vector((-4.5, 11.5, 1.3))),
     "file": dict(kind="anim", dof=5.6, anim=anim_file,
                  cam=lambda c, t: (Vector((-1.6, 13.5, 2.6)).lerp(Vector((-1.2, 13.8, 2.55)), ease(t)), Vector((3.2, 9.6, 0.9)), 30),
                  focus=lambda c, t: Vector((2.4, 9.4, 1.0))),
