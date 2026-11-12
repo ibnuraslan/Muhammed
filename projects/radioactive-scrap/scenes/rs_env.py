@@ -284,8 +284,8 @@ NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
 # windowless therapy room and smelter went black, the Ankara office and the ward washed out, the hospital front
 # went to silhouette. ("except", moves) = grade only except those moves.
 GRADE_ONLY = {"therapy": "all", "smelter": "all", "ankara": "all",
-              "hospital": ("except", ("ch4_2a", "ch4_2b"))}
-EXTERIOR_RELIGHT = False      # wait for LOOK v5 (real colours: blue sky, white stone, warm sun)
+              "hospital": ("except", ("ch4_2a", "ch4_2b", "ch2_1a", "ch4_11a", "ch4_11b"))}
+EXTERIOR_RELIGHT = True       # LOOK v5: low sun + blue sky, real colours, mood from shadows only
 EXT_EXPOSURE = {"mist": -0.2, "dusk": 0.2}
 
 
@@ -331,21 +331,18 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
     if not inside:
         if not EXTERIOR_RELIGHT:
             return None                 # held: v4's grey sky/stone rejected; exteriors keep their own light until v5
-        md = "dusk" if var in dusk else mood
+        md = "dusk" if var in dusk else ("overcast" if var in ("rain",) else "low_sun")
         azim = 200.0
         if camp is not None:
             v = tgt - camp
-            azim = math.degrees(math.atan2(v.x, -v.y)) + 60.0       # sun ahead of the camera and to one side: backlit rims, faces/facades not black
-        for o in sc.objects:                       # the set's own haze would double the new ground haze
+            azim = math.degrees(math.atan2(v.x, -v.y)) + 60.0       # low sun ahead and to one side: long shadows, rims
+        for o in sc.objects:                       # thin the set's own haze a little; no extra haze (keeps colour)
             if o.name.startswith("Haze") and o.data.materials:
                 for n in o.data.materials[0].node_tree.nodes:
                     if n.type == 'PRINCIPLED_VOLUME':
-                        n.inputs['Density'].default_value *= 0.4
-        look.negative_fill(0.2)                    # no flat fill outdoors: the sun is the key
-        k = look.day_light(md, azim=azim, exposure=EXT_EXPOSURE[md])   # open yards: the forest exposure would blow out
-        ctr = camp if camp is not None else Vector((0, 0, 0))
-        look.ground_haze((ctr.x, ctr.y), (320.0, 320.0), md, height=7.0, density=0.004)
-        look.darken_surfaces(0.25, 0.85)
+                        n.inputs['Density'].default_value *= 0.6
+        look.negative_fill(0.3)                    # the sun is the key; no flat fill
+        k = look.day_light(md, azim=azim, sky="blue" if md == "low_sun" else None)
         _faces(c, spec, camp, 18.0)
         return k
     near = [o for o in sc.objects if o.type == 'LIGHT' and o.name.startswith(keys)
