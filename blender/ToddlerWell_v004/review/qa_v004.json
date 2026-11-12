@@ -3,7 +3,7 @@
   "73": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "79": [
@@ -15,7 +15,7 @@
   "85": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "97": [
@@ -315,7 +315,7 @@
   "289": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "391": [
@@ -600,6 +600,126 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 8.2 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 14.5 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 12.5 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 11.1 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 7.4 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 8.5 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 11.6 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 10.0 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 9.6 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 8.4 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 3.8 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 2.7 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 2.3 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 1.3 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 3.7 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 4.8 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 2.8 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 1.3 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 3.3 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 2.2 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 5.5 cm with no hand on it (nearest finger 123 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 3.0 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 5.3 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 4.0 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 4.9 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 5.5 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 4.3 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 3.8 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 6.3 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 6.2 cm with no hand on it (nearest finger 147 cm)"
    ]
   ],
   "793": [
@@ -610,6 +730,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.3 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 11.7 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 10.4 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 9.4 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 5.8 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 6.9 cm with no hand on it (nearest finger 186 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 9.6 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.6 cm with no hand on it (nearest finger 190 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 7.5 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 6.8 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 8.0 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 6.4 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 6.5 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 4.3 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 7.8 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 9.3 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 4.9 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 6.9 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 6.9 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 5.4 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 5.7 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 3.1 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 4.5 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 3.8 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 4.5 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 5.4 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 4.4 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 4.0 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 6.1 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 6.7 cm with no hand on it (nearest finger 146 cm)"
    ]
   ],
   "799": [
@@ -620,6 +860,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 3.3 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.8 cm with no hand on it (nearest finger 186 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 6.5 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 6.3 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 3.0 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 4.0 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 6.0 cm with no hand on it (nearest finger 194 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 5.8 cm with no hand on it (nearest finger 196 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 3.9 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 3.9 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 10.7 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 9.1 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 9.5 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 6.7 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 10.5 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 12.7 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 6.9 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 10.9 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 9.3 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 7.7 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 5.0 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 3.1 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 4.8 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 4.2 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 4.5 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 5.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 4.0 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 3.4 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 6.1 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 6.9 cm with no hand on it (nearest finger 143 cm)"
    ]
   ],
   "805": [
@@ -630,6 +990,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 40.8 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 40.5 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 40.4 cm with no hand on it (nearest finger 126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 39.7 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 40.7 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 40.5 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 40.2 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 39.8 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 41.0 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 40.5 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 11.8 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 10.3 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 11.2 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 8.1 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 11.6 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 14.3 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 7.9 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 13.1 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 10.3 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 8.7 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 5.5 cm with no hand on it (nearest finger 114 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 3.0 cm with no hand on it (nearest finger 128 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 4.2 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 4.0 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 5.3 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 5.8 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 4.1 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 2.8 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 6.7 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 7.5 cm with no hand on it (nearest finger 140 cm)"
    ]
   ],
   "811": [
@@ -640,6 +1120,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.5 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.5 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 2.5 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.4 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 6.9 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 2.3 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 3.8 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 4.5 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 4.3 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 7.0 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 11.4 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 10.2 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 11.3 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 8.3 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 11.2 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 14.1 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 7.9 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 13.6 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 9.9 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 8.6 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 1.7 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 3.0 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 2.4 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 3.6 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 3.1 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 1.2 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 2.2 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 2.9 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 1.7 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 3.7 cm with no hand on it (nearest finger 161 cm)"
    ]
   ],
   "817": [
@@ -650,6 +1250,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.7 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 5.9 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 2.8 cm with no hand on it (nearest finger 123 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.5 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 6.8 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 2.3 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 3.3 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 4.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 3.8 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 6.8 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 9.4 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 8.7 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 9.9 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 7.5 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 9.3 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 12.0 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 7.0 cm with no hand on it (nearest finger 186 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 12.2 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 8.3 cm with no hand on it (nearest finger 189 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 7.4 cm with no hand on it (nearest finger 193 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 6.0 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 5.4 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 5.1 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 4.5 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 6.1 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 6.5 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 3.5 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 3.5 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 5.8 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 7.4 cm with no hand on it (nearest finger 163 cm)"
    ]
   ],
   "823": [
@@ -660,6 +1380,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.4 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.6 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 2.6 cm with no hand on it (nearest finger 123 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 4.8 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 6.5 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 2.0 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 2.8 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 4.3 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 3.5 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 6.4 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.0 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 5.9 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 7.0 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 5.6 cm with no hand on it (nearest finger 192 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 5.9 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 8.1 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 4.9 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 9.1 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 5.2 cm with no hand on it (nearest finger 194 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 5.0 cm with no hand on it (nearest finger 198 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 8.8 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 7.7 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 8.7 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 6.6 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 8.4 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 10.2 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 6.0 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 6.1 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 8.6 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 10.9 cm with no hand on it (nearest finger 165 cm)"
    ]
   ],
   "829": [
@@ -670,6 +1510,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.3 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 5.9 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 2.4 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.1 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 6.2 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 1.8 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 3.1 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 4.0 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 4.2 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 6.0 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 40.2 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 39.7 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 2.7 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 2.6 cm with no hand on it (nearest finger 195 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 40.1 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 39.7 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 1.9 cm with no hand on it (nearest finger 193 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 4.2 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 40.3 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 39.7 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 10.3 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 9.0 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 10.8 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 8.1 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 9.5 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 12.3 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 7.5 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 7.8 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 10.0 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 12.9 cm with no hand on it (nearest finger 169 cm)"
    ]
   ],
   "835": [
@@ -680,6 +1640,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 2.7 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 4.3 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 2.4 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 3.0 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 2.2 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 2.9 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 3.9 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 1.5 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 4.2 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 8.0 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.5 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 40.9 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 41.1 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 5.5 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 3.5 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 40.9 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 41.1 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 7.0 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 6.0 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 10.4 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 9.1 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 11.4 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 8.6 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 9.5 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 12.8 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 7.9 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 8.4 cm with no hand on it (nearest finger 184 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 10.2 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 13.2 cm with no hand on it (nearest finger 174 cm)"
    ]
   ],
   "841": [
@@ -690,12 +1770,252 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.2 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 3.2 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 3.5 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 2.8 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 5.8 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 4.1 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 3.3 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 3.3 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 5.7 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 6.3 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.9 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.0 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 4.5 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 5.7 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 5.4 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 3.4 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 4.6 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 2.9 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 6.5 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 6.0 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 9.1 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 8.2 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 10.6 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 8.0 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 8.3 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 11.5 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 7.3 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 8.0 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 8.9 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 11.9 cm with no hand on it (nearest finger 178 cm)"
    ]
   ],
   "847": [
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 10.7 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.1 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 7.4 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 6.7 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 10.0 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 6.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 6.8 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.6 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 9.7 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 11.9 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.9 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.3 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 4.5 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 5.1 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 4.6 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 3.2 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 4.1 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 2.6 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 6.1 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 5.9 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 6.5 cm with no hand on it (nearest finger 189 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 6.1 cm with no hand on it (nearest finger 184 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 8.2 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 6.4 cm with no hand on it (nearest finger 180 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 5.8 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 8.6 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 5.7 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 6.4 cm with no hand on it (nearest finger 195 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 6.3 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 8.8 cm with no hand on it (nearest finger 180 cm)"
    ]
   ],
   "853": [
@@ -706,6 +2026,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 13.3 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 7.9 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 9.9 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 9.5 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 12.4 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 8.1 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 9.1 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 12.2 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 12.1 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 15.4 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.8 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.0 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 4.4 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 6.0 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 5.1 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 3.2 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 4.1 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 3.4 cm with no hand on it (nearest finger 127 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 5.7 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 5.9 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 2.5 cm with no hand on it (nearest finger 189 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 2.8 cm with no hand on it (nearest finger 184 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 4.3 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 3.7 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 2.2 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 3.9 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 3.0 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 3.7 cm with no hand on it (nearest finger 196 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 2.4 cm with no hand on it (nearest finger 184 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 4.0 cm with no hand on it (nearest finger 180 cm)"
    ]
   ],
   "859": [
@@ -716,6 +2156,126 @@
    [
     "EMPTY",
     "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod00 moves 14.1 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 8.6 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 11.0 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 10.8 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 13.1 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 8.6 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 10.1 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 13.8 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 12.8 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 16.6 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.8 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.5 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 4.5 cm with no hand on it (nearest finger 115 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 6.1 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 4.8 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 3.6 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 4.0 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 3.7 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 5.1 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 6.0 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 41.5 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 41.2 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 40.9 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 40.5 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 41.3 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 41.3 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 40.8 cm with no hand on it (nearest finger 126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 40.8 cm with no hand on it (nearest finger 143 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 41.1 cm with no hand on it (nearest finger 137 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 40.8 cm with no hand on it (nearest finger 126 cm)"
    ]
   ],
   "865": [
@@ -734,22 +2294,6 @@
    [
     "FILL",
     "hair / top of head 32%"
-   ]
-  ],
-  "1357": [
-   [
-    "BACKHEAD",
-    "Teen"
-   ]
-  ],
-  "1363": [
-   [
-    "INSIDE",
-    "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "1369": [
@@ -785,11 +2329,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1393": [
@@ -814,6 +2354,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1405": [
@@ -1356,10 +2900,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
    ]
   ],
   "1681": [
@@ -1457,12 +2997,822 @@
     "INSIDE",
     "camera inside geometry"
    ]
+  ],
+  "661": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 1.5 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 0.9 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 0.9 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 2.9 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 3.7 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 0.8 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 1.0 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 2.3 cm with no hand on it (nearest finger 147 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 1.1 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 1.0 cm with no hand on it (nearest finger 179 cm)"
+   ]
+  ],
+  "667": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 3.5 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 2.7 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 2.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 1.8 cm with no hand on it (nearest finger 148 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 4.5 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 2.4 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 2.0 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 3.0 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 2.9 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 2.5 cm with no hand on it (nearest finger 182 cm)"
+   ]
+  ],
+  "679": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.4 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 5.5 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 5.3 cm with no hand on it (nearest finger 149 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 4.8 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.0 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 7.1 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 7.2 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 3.3 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 2.1 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 5.6 cm with no hand on it (nearest finger 125 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 5.4 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 4.8 cm with no hand on it (nearest finger 158 cm)"
+   ]
+  ],
+  "685": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 7.2 cm with no hand on it (nearest finger 186 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.3 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 6.5 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.0 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 7.2 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 5.4 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 5.1 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.1 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 6.0 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 5.5 cm with no hand on it (nearest finger 189 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.4 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 6.5 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 5.6 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 7.4 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 3.4 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 2.0 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 1.7 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 5.9 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 5.2 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 4.8 cm with no hand on it (nearest finger 159 cm)"
+   ]
+  ],
+  "691": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 7.5 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.6 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 6.9 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.4 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 7.4 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 5.7 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 5.5 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.7 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 6.3 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 5.8 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.4 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 6.5 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 5.9 cm with no hand on it (nearest finger 119 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 7.3 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 3.2 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 1.5 cm with no hand on it (nearest finger 168 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 1.4 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 5.8 cm with no hand on it (nearest finger 114 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 4.9 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 4.3 cm with no hand on it (nearest finger 161 cm)"
+   ]
+  ],
+  "697": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 7.4 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.5 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 6.9 cm with no hand on it (nearest finger 181 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.5 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 7.2 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 5.6 cm with no hand on it (nearest finger 185 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 5.5 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.8 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 6.1 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 5.7 cm with no hand on it (nearest finger 192 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.3 cm with no hand on it (nearest finger 150 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 6.7 cm with no hand on it (nearest finger 165 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 5.9 cm with no hand on it (nearest finger 117 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 6.8 cm with no hand on it (nearest finger 128 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 3.5 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 2.0 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 1.3 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 5.2 cm with no hand on it (nearest finger 113 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 4.8 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 4.3 cm with no hand on it (nearest finger 159 cm)"
+   ]
+  ],
+  "703": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.8 cm with no hand on it (nearest finger 188 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 6.1 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 6.5 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 5.2 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 6.5 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 5.2 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 5.1 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.3 cm with no hand on it (nearest finger 183 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 5.6 cm with no hand on it (nearest finger 169 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 5.3 cm with no hand on it (nearest finger 191 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 3.7 cm with no hand on it (nearest finger 157 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 3.3 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 6.4 cm with no hand on it (nearest finger 133 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 1.0 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 1.1 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 5.4 cm with no hand on it (nearest finger 120 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 1.3 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 2.0 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 41.2 cm with no hand on it (nearest finger 146 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 41.3 cm with no hand on it (nearest finger 142 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 41.3 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 41.0 cm with no hand on it (nearest finger 154 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 41.6 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 41.3 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 41.0 cm with no hand on it (nearest finger 134 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 41.3 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 40.8 cm with no hand on it (nearest finger 146 cm)"
+   ]
+  ],
+  "709": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 5.7 cm with no hand on it (nearest finger 189 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 5.6 cm with no hand on it (nearest finger 186 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 5.4 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 7.3 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 4.7 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 6.4 cm with no hand on it (nearest finger 155 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 4.7 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 3.1 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 5.1 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod19 moves 4.8 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 5.5 cm with no hand on it (nearest finger 144 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 5.6 cm with no hand on it (nearest finger 141 cm)"
+   ]
+  ],
+  "769": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 6.7 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 8.7 cm with no hand on it (nearest finger 177 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 6.3 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 6.4 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 3.6 cm with no hand on it (nearest finger 160 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 6.7 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 8.0 cm with no hand on it (nearest finger 187 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 6.3 cm with no hand on it (nearest finger 199 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 4.8 cm with no hand on it (nearest finger 183 cm)"
+   ]
+  ],
+  "775": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 8.4 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 14.2 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 11.6 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 10.0 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 7.6 cm with no hand on it (nearest finger 156 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 8.3 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 11.0 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 8.9 cm with no hand on it (nearest finger 167 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 9.9 cm with no hand on it (nearest finger 162 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 8.2 cm with no hand on it (nearest finger 166 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 4.5 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.0 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 6.5 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 4.9 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 5.6 cm with no hand on it (nearest finger 158 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 5.2 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 2.0 cm with no hand on it (nearest finger 136 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 3.1 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 3.0 cm with no hand on it (nearest finger 186 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 3.3 cm with no hand on it (nearest finger 175 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 3.6 cm with no hand on it (nearest finger 198 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 3.7 cm with no hand on it (nearest finger 198 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 1.8 cm with no hand on it (nearest finger 182 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 4.8 cm with no hand on it (nearest finger 197 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 3.5 cm with no hand on it (nearest finger 178 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 4.7 cm with no hand on it (nearest finger 195 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 3.1 cm with no hand on it (nearest finger 189 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 2.5 cm with no hand on it (nearest finger 199 cm)"
+   ]
+  ],
+  "781": [
+   [
+    "PROPMOVE",
+    "Clod00 moves 8.9 cm with no hand on it (nearest finger 176 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod01 moves 15.4 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod02 moves 12.9 cm with no hand on it (nearest finger 172 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod03 moves 11.3 cm with no hand on it (nearest finger 159 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod04 moves 8.0 cm with no hand on it (nearest finger 163 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod05 moves 9.0 cm with no hand on it (nearest finger 179 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod06 moves 12.1 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod07 moves 10.1 cm with no hand on it (nearest finger 174 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod08 moves 10.4 cm with no hand on it (nearest finger 171 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod09 moves 8.9 cm with no hand on it (nearest finger 173 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod10 moves 3.5 cm with no hand on it (nearest finger 124 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod11 moves 4.2 cm with no hand on it (nearest finger 161 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod12 moves 6.8 cm with no hand on it (nearest finger 126 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod13 moves 5.9 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod14 moves 5.1 cm with no hand on it (nearest finger 164 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod15 moves 5.6 cm with no hand on it (nearest finger 170 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod16 moves 1.6 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod17 moves 3.8 cm with no hand on it (nearest finger 151 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod18 moves 2.8 cm with no hand on it (nearest finger 135 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod20 moves 41.2 cm with no hand on it (nearest finger 129 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod21 moves 41.2 cm with no hand on it (nearest finger 131 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod22 moves 41.0 cm with no hand on it (nearest finger 141 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod23 moves 40.5 cm with no hand on it (nearest finger 152 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod24 moves 41.3 cm with no hand on it (nearest finger 138 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod25 moves 41.3 cm with no hand on it (nearest finger 153 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod26 moves 40.8 cm with no hand on it (nearest finger 130 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod27 moves 40.8 cm with no hand on it (nearest finger 139 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod28 moves 41.4 cm with no hand on it (nearest finger 145 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod29 moves 41.0 cm with no hand on it (nearest finger 147 cm)"
+   ]
   ]
  },
  "counts": {
-  "EMPTY": 164,
+  "EMPTY": 162,
   "FILL": 16,
-  "INSIDE": 116,
-  "BACKHEAD": 1
+  "INSIDE": 115,
+  "PROPMOVE": 587
  }
 }
