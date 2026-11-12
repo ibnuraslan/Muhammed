@@ -175,7 +175,7 @@ def anim_listen(c, t):
     for k, nd in enumerate(c.get("needles", [])):
         nd.rotation_euler = (math.radians(35 * (0.4 + 0.3 * math.sin(sec * 7.0 + k) + 0.2 * math.sin(sec * 13.0 + 2 * k))), 0, 0)
     r = c["reader"]
-    r.rot("neck01", (1, 0, 0), -14); r.rot("head", (1, 0, 0), -10)       # head up, listening, not reading
+    r.rot("neck01", (1, 0, 0), 12); r.rot("head", (1, 0, 0), 8)       # head up, listening, not reading
     r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
     c["headband"].location = hd + Vector((0, 0, 0.07)); c["headband"].rotation_euler = (0, 0, r.arm.rotation_euler.z)

@@ -149,7 +149,7 @@ def anim_layout(c, t):
     h = c["counter"]
     walk_to(h, Vector((-TL / 2 - 0.3, -TW / 2 - 0.32, 0)), Vector((TL / 2, -TW / 2 - 0.32, 0)), sec, speed=0.5, cadence=1.1)
     arms_relaxed(h)
-    h.rot("neck01", (1, 0, 0), 10); h.rot("head", (1, 0, 0), 16)
+    h.rot("neck01", (1, 0, 0), -12); h.rot("head", (1, 0, 0), -16)
     from human import reach
     beat = (sec % 2.2) / 2.2                                   # every 2.2 s a tag goes down on the cloth
     down = math.sin(math.pi * min(1.0, beat / 0.5)) if beat < 0.5 else 0.0
