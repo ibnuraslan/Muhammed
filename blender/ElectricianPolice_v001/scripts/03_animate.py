@@ -1,7 +1,7 @@
 """Characters, props and acting for ElectricianPolice. Runs 03b (UI, FX, lights, camera) at the end.
 blender -b build/scene.blend --python 03_animate.py -- <out_film.blend>"""
 import bpy, bmesh, math, os, sys, random
-from mathutils import Vector, Matrix, Quaternion
+from mathutils import Vector, Matrix, Quaternion, Euler
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "common.py")).read())
 _al = open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read()
@@ -283,18 +283,33 @@ class Char:
     def hang(self, s, f, swing=0.0, out=0.0):
         """relaxed arm by the side; swing>0 forward"""
         sx = 1 if s == "L" else -1
-        self.hand_b(s, f, sx * (0.22 + out), 0.02 + swing, self.frame_of(f)[0].z - 0.12 + abs(swing) * 0.25, d=(sx * 0.1, 0.25 * (1 if swing >= 0 else -1) * min(1, abs(swing) * 4), -1), n=(-sx, 0.1, 0))
+        self.hand_b(s, f, sx * (0.27 + out), 0.03 + swing, self.frame_of(f)[0].z - 0.12 + abs(swing) * 0.25, d=(sx * 0.06, 0.25 * (1 if swing >= 0 else -1) * min(1, abs(swing) * 4), -1), n=(-sx, 0.1, 0))
+        self.fingers(s, f, 22, 26)
     def fingers(self, s, f, curl, thumb=18):
-        Rh = self.REST_HAND[s]; d, a = Rh.col[0].copy(), Rh.col[1].copy(); sign = 1 if s == "R" else -1
-        JW = (0.8, 1.1, 0.8)
+        """hinge each finger joint about its own local X (no shared palm axis, so fingers stay together and never twist).
+        curl: degrees at the knuckle (one value or [index, middle, ring, pinky]); thumb: degrees of tuck/opposition."""
+        if not hasattr(self, "_fsign"):
+            self._fsign = {}
+            for s_ in "LR":
+                Rh = self.REST_HAND[s_]; a_ = Rh.col[1].copy(); sg_ = 1 if s_ == "R" else -1
+                for k in range(1, 6):
+                    for j in range(1, 4):
+                        bn = "finger%d-%d.%s" % (k, j, s_)
+                        if bn not in self.R.PB: continue
+                        e = self.R.local_q(bn, Matrix.Rotation(R_(60 * sg_), 3, a_)).to_euler()
+                        self._fsign[bn] = 1 if e[0] >= 0 else -1
+        JW = (1.0, 1.15, 0.75)
         for k in range(2, 6):
             c = curl[k - 2] if isinstance(curl, (list, tuple)) else curl
+            c = max(0.0, min(85.0, c))
             for j in range(1, 4):
                 bn = "finger%d-%d.%s" % (k, j, s)
-                self.R.key_q(bn, f, self.R.local_q(bn, Matrix.Rotation(R_(c * JW[j - 1] * sign), 3, a)))
-        for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
+                q = Euler((R_(c * JW[j - 1] * self._fsign[bn]), 0, 0)).to_quaternion()
+                self.R.key_q(bn, f, q)
+        t = max(0.0, min(60.0, thumb))
+        for j, w_ in ((1, 0.5), (2, 0.6), (3, 0.5)):
             bn = "finger1-%d.%s" % (j, s)
-            self.R.key_q(bn, f, self.R.local_q(bn, Matrix.Rotation(R_(fl * sign), 3, a) @ Matrix.Rotation(R_(22 * sign), 3, d)))
+            self.R.key_q(bn, f, Euler((R_(t * w_), 0, 0)).to_quaternion())   # +X tucks the thumb toward the palm on both sides (tested)
     def smile(self, f, amt, smirk=0.0):
         """mouth corners up/out with the MPFB face bones (oris03/04 = lip corners, risorius = cheeks); smirk>0 favours the left corner"""
         for s, sx in (("L", 1), ("R", -1)):
@@ -394,7 +409,7 @@ def ride_pose(f, look=0.0, hair=0.0):
     M.body(f, p + Vector((0, 0, 0.12)), yaw=yaw, flex=10, spine=(30 + 2 * math.sin(f * 0.21), look * 0.3, 0), head=(-22, look))
     for s in "LR":
         g, _ = bike_pt(f, *GRIP[s]); M.hand(s, f, g + Vector((0, 0, 0.03)), (bike_pt(f, GRIP[s][0] * 1.6, GRIP[s][1] + 0.05, GRIP[s][2])[0] - g).normalized() if False else M.dirv(f, (1 if s == "L" else -1) * 0.7, 0.4, -0.2), M.dirv(f, 0, 0.2, -1))
-        M.fingers(s, f, 62, 40)
+        M.fingers(s, f, 72, 50)
         if f < FS - 14:
             pg, _ = bike_pt(f, *PEG[s]); M.foot(s, f, pg.to_2d(), yaw, lift=pg.z, pitch=-5)
 for f in range(1, FS - 10, 6):
@@ -433,22 +448,22 @@ M.body(304, SP, yaw=178, spine=(14, 20, 4), head=(10, 22))              # turns 
 M.body(316, SP, yaw=176, spine=(4, 6, 0), head=(-10, 0))
 M.body(330, SP, yaw=176, spine=(2, 0, 0), head=(-6, -8))
 for f in (FS + 12, FS + 30, 250):
-    M.hand("L", f, bike_pt(f, *GRIP["L"])[0] + Vector((0, 0, 0.03)), M.dirv(f, 0.7, 0.4, -0.2), M.dirv(f, 0, 0.2, -1)); M.fingers("L", f, 62, 40)
+    M.hand("L", f, bike_pt(f, *GRIP["L"])[0] + Vector((0, 0, 0.03)), M.dirv(f, 0.7, 0.4, -0.2), M.dirv(f, 0, 0.2, -1)); M.fingers("L", f, 72, 50)
 # right hand off the grip, reaches for the slip (officer is to his left/front)
 M.hand("R", FS + 12, bike_pt(FS + 12, *GRIP["R"])[0] + Vector((0, 0, 0.03)), M.dirv(FS + 12, -0.7, 0.4, -0.2), M.dirv(FS + 12, 0, 0.2, -1))
 M.hand_b("R", 250, -0.25, 0.25, 1.05, d=(0.2, 0.9, 0.1), n=(-0.9, 0, -0.3)); M.fingers("R", 250, 20, 20)
 SLIP_HAND = Vector((OFFICER_SPOT.x + 1.15, OFFICER_SPOT.y - 1.55, 1.18))
-M.hand("R", TICKET_F, SLIP_HAND + Vector((0.07, -0.05, -0.02)), (SLIP_HAND - M.pt(TICKET_F, -0.2, 0, 1.3)).normalized(), Vector((0, 0, -1))); M.fingers("R", TICKET_F, 55, 45)
-M.hand_b("R", 292, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1)); M.fingers("R", 292, 55, 45)      # holds the slip, looks at it
+M.hand("R", TICKET_F, SLIP_HAND + Vector((0.07, -0.05, -0.02)), (SLIP_HAND - M.pt(TICKET_F, -0.2, 0, 1.3)).normalized(), Vector((0, 0, -1))); M.fingers("R", TICKET_F, [30, 38, 62, 68], 42)
+M.hand_b("R", 292, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1)); M.fingers("R", 292, [30, 38, 62, 68], 42)      # holds the slip, looks at it
 # left hand grabs the hard hat off the rear seat, swings it onto his head
 HAT_SEAT = (0.0, -0.62, 0.86)
 M.hand("L", 296, bike_pt(296, -0.25, -0.5, 1.0)[0], M.dirv(296, -0.2, -0.6, -0.8), M.dirv(296, -0.8, 0, -0.3)); M.fingers("L", 296, 25, 20)
 hs, _ = bike_pt(302, *HAT_SEAT)
-M.hand("L", 302, hs + Vector((-0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0)); M.fingers("L", 302, 55, 40)
+M.hand("L", 302, hs + Vector((-0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0)); M.fingers("L", 302, 45, 38)
 M.hand_b("L", 306, 0.48, 0.05, 1.2, d=(0.1, -0.3, 0.9), n=(-1, 0, 0), pole=M.pt(306, 0.8, -0.2, 1.1))   # hat swings out wide, not through his chest
-M.hand_b("L", 310, 0.38, 0.18, 1.6, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0), pole=M.pt(310, 0.8, 0.0, 1.3)); M.fingers("L", 310, 55, 40)
-M.hand_b("L", 318, 0.06, 0.0, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(318, 0.7, 0.2, 1.7)); M.fingers("L", 318, 28, 20)
-M.hand_b("L", 330, 0.06, 0.02, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(330, 0.7, 0.2, 1.7)); M.fingers("L", 330, 30, 20)
+M.hand_b("L", 310, 0.38, 0.18, 1.6, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0), pole=M.pt(310, 0.8, 0.0, 1.3)); M.fingers("L", 310, 45, 38)
+M.hand_b("L", 318, 0.06, 0.0, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(318, 0.7, 0.2, 1.7)); M.fingers("L", 318, 40, 34)
+M.hand_b("L", 330, 0.06, 0.02, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(330, 0.7, 0.2, 1.7)); M.fingers("L", 330, 40, 34)
 M.hand_b("R", 318, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1))
 M.smile(1, 0.0); M.smile(240, 0.0); M.smile(260, -0.8); M.smile(300, -0.6); M.smile(325, 0.4)
 for o in meshes(CH["Man"]):
@@ -474,16 +489,16 @@ OA_W = Vector((STOP.x - 1.35, STOP.y + 1.05, OA.ROOT.z))
 OA.walk(lambda f: OA_POS.lerp(OA_W, smooth((f - 222) / 24)), lambda f: oa_yaw + 10 * smooth((f - 222) / 24), 222, 246, stride=0.6, step=2)
 for f in (250, 258, 266):
     OA.body(f, OA_W - Vector((0, 0, 0.01)), yaw=oa_yaw + 10, spine=(16, 0, 0), head=(20, 0))
-    OA.hand_b("L", f, 0.05, 0.33, 1.12, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 30, 25)
-    OA.hand_b("R", f, -0.06 + 0.03 * ((f // 8) % 2), 0.38, 1.21, d=(0.5, 0.8, -0.3), n=(0, 0, -1)); OA.fingers("R", f, [60, 75, 80, 80], 40)
+    OA.hand_b("L", f, 0.05, 0.33, 1.12, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 58, 30)
+    OA.hand_b("R", f, -0.06 + 0.03 * ((f // 8) % 2), 0.38, 1.21, d=(0.5, 0.8, -0.3), n=(0, 0, -1)); OA.fingers("R", f, [40, 50, 66, 70], 40)
 OA.stand_feet(250)
 # tears the slip and holds it out to the man
 OA.body(270, OA_W, yaw=oa_yaw + 14, spine=(10, 8, 0), head=(10, 10))
-OA.hand_b("R", 270, -0.15, 0.45, 1.2, d=(0.2, 1, 0.1), n=(0, 0, -1)); OA.fingers("R", 270, 30, 40)
-OA.hand("R", TICKET_F, SLIP_HAND, (SLIP_HAND - OA.pt(TICKET_F, -0.2, 0, 1.35)).normalized(), Vector((0, 0, -1))); OA.fingers("R", TICKET_F, 40, 45)
+OA.hand_b("R", 270, -0.15, 0.45, 1.2, d=(0.2, 1, 0.1), n=(0, 0, -1)); OA.fingers("R", 270, [30, 38, 62, 68], 42)
+OA.hand("R", TICKET_F, SLIP_HAND, (SLIP_HAND - OA.pt(TICKET_F, -0.2, 0, 1.35)).normalized(), Vector((0, 0, -1))); OA.fingers("R", TICKET_F, [30, 38, 62, 68], 42)
 OA.body(TICKET_F, OA_W, yaw=oa_yaw + 16, spine=(12, 10, 0), head=(8, 14))
 for f in (270, TICKET_F):
-    OA.hand_b("L", f, 0.08, 0.3, 1.1, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 30, 25)
+    OA.hand_b("L", f, 0.08, 0.3, 1.1, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 58, 30)
 OA.body(296, OA_W, yaw=oa_yaw + 10, spine=(-2, 0, 0), head=(-6, 0), jaw=4)
 OA.hang("R", 296, swing=0.1); OA.hand_b("L", 296, 0.12, 0.25, 1.05, d=(-0.6, 0.3, -0.4), n=(0, 0, 1))
 OA.body(400, OA_W, yaw=oa_yaw + 10, spine=(0, 0, 0), head=(0, 0)); OA.hang("R", 400); OA.hand_b("L", 400, 0.15, 0.2, 1.0, d=(-0.5, 0.2, -0.6), n=(0, 0, 1))
@@ -539,13 +554,16 @@ W.hand("R", 410, LATCH, Vector((1, 0, -0.2)), Vector((0, 1, 0))); W.fingers("R",
 W.hand("L", 410, Vector((GATE.x - 0.08, GY - 0.15, 1.15)), Vector((1, 0, 0.3)), Vector((1, 0, 0)))
 W.hand("L", 432, Vector((GATE.x + 0.15, GY - 0.25, 1.15)), Vector((1, 0, 0.2)), Vector((1, 0, 0))); W.fingers("L", 410, 10, 10)
 W.hand("R", 422, LATCH + Vector((0, 0, 0.03)), Vector((1, 0, -0.2)), Vector((0, 1, 0)))
-WIN_A = WG + Vector((0, 0, 0)); WIN_B = Vector((12.5, 26.5, W.ROOT.z))
+WIN_A = WG + Vector((0, 0, 0)); WIN_B = Vector((10.2, 25.7, W.ROOT.z))
 def wpath(f):
-    u = smooth((f - 436) / 70)
+    u = smooth((f - 436) / 84)
     a = WIN_A.lerp(Vector((GATE.x + 1.0, GY, W.ROOT.z)), min(1, u * 2))
     return a.lerp(WIN_B, max(0, u * 2 - 1))
-W.walk(wpath, lambda f: 90 - 25 * smooth((f - 470) / 30), 436, 506, stride=0.72, step=2)
-for f in range(428, 507, 16):
+W.walk(wpath, lambda f: 90 - 30 * smooth((f - 480) / 40), 436, 520, stride=0.66, step=2)
+for f, hp in ((530, -20), (545, -28)):     # stops, looks up at the pylon and lines
+    W.body(f, WIN_B, yaw=60, spine=(-6, 0, 0), head=(hp, 8)); W.stand_feet(f, pos=WIN_B, yaw=60)
+    W.hang("L", f); W.hang("R", f)
+for f in range(428, 521, 16):
     for s, ph in (("L", 0), ("R", math.pi)):
         W.hang(s, f, swing=0.2 * math.sin(f / 13 + ph))
 # office: seated at the laptop from f508
@@ -555,24 +573,24 @@ def seated(f, lean=18, twist=0, head=(-8, 0), jaw=0.0, dz=0.0, dy=0.0):
     W.body(f, SEAT_P + Vector((0, dy, dz)), yaw=180, flex=lean * 0.4, spine=(lean, twist, 0), head=head, jaw=jaw)
     for s, sx in (("L", 1), ("R", -1)):
         W.foot(s, f, Vector((CHAIR.x - sx * 0.14, CHAIR.y + 0.42)), 180 + sx * 6)
-for f in range(508, 640, 8):          # typing / scrolling, head bobbing over the screen
+for f in range(548, 640, 8):          # typing / scrolling, head bobbing over the screen
     seated(f, lean=20 + 2 * math.sin(f / 9), head=(-6 + 3 * math.sin(f / 11), 4 * math.sin(f / 23)))
     for s, sx in (("L", 1), ("R", -1)):
         tap = 0.012 * (((f // 8) + (0 if s == "L" else 1)) % 2)
         W.hand(s, f, KB + Vector((-sx * 0.11 * 1.0, -0.06, 0.035 + tap)), Vector((0, 1, -0.25)), Vector((0, 0, -1)))
-        W.fingers(s, f, 28, 20)
+        W.fingers(s, f, 30, 16)
 # leans in to the red row, slow grin
 for f, ln, hd, sm in ((660, 22, (-6, 0), 0.2), (700, 25, (-6, 0), 0.5), (760, 26, (-8, -4), 0.9), (820, 27, (-6, 4), 1.2), (880, 27, (-8, 0), 1.4)):
     seated(f, lean=ln, head=hd, dy=0.02 * (ln - 20) / 24); W.smile(f, sm)
     for s, sx in (("L", 1), ("R", -1)):
         W.hand(s, f, KB + Vector((-sx * 0.14, -0.1, 0.03)), Vector((0, 1, -0.25)), Vector((0, 0, -1))); W.fingers(s, f, 30, 20)
-W.smile(508, 0.0); W.smile(640, 0.0)
+W.smile(548, 0.0); W.smile(640, 0.0)
 # bill grows: sits back, arms flung out in delight
 for f, ln, arm in ((905, 26, 0.0), (925, -6, 1.0), (950, -12, 1.0), (980, -8, 0.8), (1000, -10, 0.9)):
     seated(f, lean=ln, head=(-10 if arm else 0, 0), jaw=8 * arm, dz=-0.01); W.smile(f, 1.6)
     for s, sx in (("L", 1), ("R", -1)):
         if arm:
-            W.hand_b(s, f, sx * 0.62, 0.05, 1.6 + 0.05 * math.sin(f / 7), d=(sx * 0.5, 0, 1), n=(0, 1, 0)); W.fingers(s, f, 38, 25)
+            W.hand_b(s, f, sx * 0.62, 0.05, 1.6 + 0.05 * math.sin(f / 7), d=(sx * 0.5, 0, 1), n=(0, 1, 0)); W.fingers(s, f, 20, 12)
         else:
             W.hand(s, f, KB + Vector((-sx * 0.14, -0.1, 0.03)), Vector((0, 1, -0.25)), Vector((0, 0, -1)))
 # cabinet: stands facing +X, right glove on the lever handle, throws it down (lever keyed in 03b)
@@ -595,7 +613,7 @@ M.hand("R", 1010, lever_tip(0) + Vector((-0.12, -0.06, -0.12)), Vector((1, 0, 0.
 M.hand("R", 1030, lever_tip(0) + Vector((-0.07, -0.02, -0.05)), Vector((0.6, 0, 0.8)), Vector((0.2, 1, 0))); M.fingers("R", 1030, 30, 20)
 for f in (1044, 1048, 1056, 1062, 1066, 1070, 1076, 1088):
     a = lever_a(f); tp = lever_tip(a)
-    M.hand("R", f, tp + Vector((-0.055, 0.0, -0.02)), Vector((0.55, 0, 0.5)) if a < 0.5 else Vector((0.7, 0, -0.4)), Vector((0, 1, 0))); M.fingers("R", f, 72, 50)
+    M.hand("R", f, tp + Vector((-0.055, 0.0, -0.02)), Vector((0.55, 0, 0.5)) if a < 0.5 else Vector((0.7, 0, -0.4)), Vector((0, 1, 0))); M.fingers("R", f, 74, 52)
 M.body(1056, CAB_STAND + Vector((0.02, 0, 0.01)), yaw=88, spine=(-4, 6, 0), head=(-8, 0)); M.stand_feet(1056, width=1.2, stagger=0.06)
 M.body(1068, CAB_STAND + Vector((0.06, 0, -0.06)), yaw=86, spine=(22, -8, 4), head=(16, 0), jaw=4); M.stand_feet(1068, width=1.2, stagger=0.06)
 M.body(1080, CAB_STAND + Vector((0.04, 0, -0.05)), yaw=88, spine=(18, -8, 2), head=(8, -6))
@@ -605,7 +623,7 @@ M.body(1110, CAB_STAND + Vector((-0.08, 0, 0)), yaw=60, spine=(-4, -20, 0), head
 M.hand_b("R", 1110, -0.25, 0.25, 1.05, d=(0, 1, 0), n=(1, 0, 0)); M.hang("L", 1110)
 M.smile(1010, 0.6); M.smile(1080, 1.3)
 for o in meshes(CH["ManW"]):
-    if o is not GLOVES: key_vis(o, [(318, 506), (508, 1019), (1380, 1560)])
+    if o is not GLOVES: key_vis(o, [(318, 546), (548, 1019), (1380, 1560)])
 # final stroll in front of the dark station at dusk, hands in pockets, smirk to camera
 SA, SB = Vector((-3.6, 52.6, W.ROOT.z)), Vector((-3.6, 56.8, W.ROOT.z))
 W.walk(lambda f: SA.lerp(SB, smooth((f - 1380) / 135) * 0.6 + 0.4 * (f - 1380) / 135), lambda f: 180 + 15 * smooth((f - 1490) / 25), 1380, 1515, stride=0.85, lift=0.08, bob=0.035, crouch=0.0, lean=-3.0, step=2)
@@ -615,7 +633,7 @@ for f in range(1380, 1516, 10):   # chin up, shoulders rolling: a swagger
 for f in range(1380, 1561, 10):
     ph = (f - 1380) / 135 * 2 * math.pi * 2.3 if f <= 1515 else 0.0
     for s, sx in (("L", 1), ("R", -1)):
-        W.hang(s, f, swing=0.2 * math.sin(ph + (0 if s == "L" else math.pi)) * (1.0 if f <= 1515 else 0.0), out=0.02); W.fingers(s, f, 32, 22)
+        W.hang(s, f, swing=0.2 * math.sin(ph + (0 if s == "L" else math.pi)) * (1.0 if f <= 1515 else 0.0), out=0.04)
 for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1560, (-9, 14), 1.6)):
     W.body(f, SB, yaw=195, spine=(-4, 6, 0), head=hd); W.stand_feet(f); W.smile(f, sm, smirk=0.6)
 # teleports between segments are constant (keys exist at both ends)
@@ -637,7 +655,7 @@ def idle(ch, pos, yaw, f0, f1, talk=False):
         ch.body(f, pos + Vector((0, 0, -0.01 * (i % 2))), yaw=yaw + 8 * math.sin(f / 50), spine=(4, 6 * math.sin(f / 33), 0), head=(-4, 18 * math.sin(f / 41)), jaw=4 * (i % 2) if talk else 0)
         ch.stand_feet(f)
         sx = 1
-        (ch.hand_b("R", f, -0.2, 0.3 + 0.1 * (i % 2), 1.1 + 0.15 * (i % 2), d=(0.2, 1, 0.3), n=(0, 0, 1)), ch.fingers("R", f, 32, 22)) if talk else ch.hang("R", f)
+        (ch.hand_b("R", f, -0.2, 0.3 + 0.1 * (i % 2), 1.1 + 0.15 * (i % 2), d=(0.2, 1, 0.3), n=(0, 0, 1)), ch.fingers("R", f, 34, 30)) if talk else ch.hang("R", f)
         ch.hang("L", f, swing=0.05)
 EX = {k: RIG[k] for k in ("ExA", "ExB", "Vendor", "ExC", "ExD", "ExE")}
 stroll(EX["ExA"], (-6.6, 4.0, 0), (-6.6, 22.0, 0), 1, 420, 0.6)
@@ -647,11 +665,11 @@ stroll(EX["ExC"], (6.1, -2.0, 0), (6.1, 16.0, 0), 1, 420, 0.6)
 stroll(EX["ExD"], (-4.6, 36.5, 0), (4.4, 37.5, 0), 40, 420, 0.62)
 idle(EX["ExE"], (-4.9, 30.6), 90, 1, 420)
 # dusk: two of them walk past the dark station at the end
-stroll(EX["ExA"], (-5.9, 63.0, 0), (-5.9, 52.0, 0), 1381, 1560, 0.6)
-stroll(EX["ExB"], (2.4, 50.0, 0), (2.4, 64.0, 0), 1381, 1560, 0.62)
+stroll(EX["ExA"], (-5.9, 66.0, 0), (-5.9, 52.0, 0), 1165, 1560, 0.6)
+stroll(EX["ExB"], (4.0, 40.0, 0), (2.4, 64.0, 0), 1140, 1560, 0.62)
 for nm in ("ExA", "ExB"): teleport_constant(RIG[nm].o, [1000])
 for nm, ch in EX.items():
-    for o in meshes(CH[nm]): key_vis(o, [(1, 420), (1381, 1560)] if nm in ("ExA", "ExB") else [(1, 420)])
+    for o in meshes(CH[nm]): key_vis(o, [(1, 420), (1140, 1560)] if nm in ("ExA", "ExB") else [(1, 420)])
 
 # ------------------------------------------------------------------ station interior: OfficerA slumped, OfficerB fanning, OfficerC phone torch
 def sit(ch, f, base, yaw, lean=0, twist=0, head=(0, 0), seat_z=0.56, jaw=0.0, slide=0.0):
@@ -673,13 +691,13 @@ OB_SEAT = Vector((-11.4, 53.5, 0.0))
 for i, f in enumerate(range(1160, 1561, 9)):
     sit(OB, f, OB_SEAT, 90 + 6 * math.sin(f / 37), lean=6, head=(-6, 10 * math.sin(f / 31)), jaw=3)
     up = i % 2
-    OB.hand_b("R", f, -0.2 - 0.1 * up, 0.46, 1.42 + 0.05 * up, d=(0.3, 0.2, 1), n=(0.3, 1, 0)); OB.fingers("R", f, 48, 55)
+    OB.hand_b("R", f, -0.2 - 0.1 * up, 0.46, 1.42 + 0.05 * up, d=(0.3, 0.2, 1), n=(0.3, 1, 0)); OB.fingers("R", f, [26, 32, 46, 52], 46)
     OB.hand_b("L", f, 0.22, 0.4, 0.83, d=(0, 1, -0.2), n=(0, 0, -1)); OB.fingers("L", f, 15, 10)
 OC_POS = Vector((-14.3, 56.4, OC.ROOT.z))
 for i, f in enumerate(range(1160, 1561, 30)):
     yw = 70 + 25 * math.sin(f / 50)
     OC.body(f, OC_POS, yaw=yw, spine=(2, 8 * math.sin(f / 40), 0), head=(-4, -10 * math.sin(f / 50))); OC.stand_feet(f, width=1.1)
-    OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, [70, 74, 78, 82], 62)
+    OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, [46, 50, 54, 58], 24)
     OC.hand_b("L", f, 0.3, 0.04, 0.9, d=(0.15, 0.2, -1), n=(-1, 0, 0))
 OD, OE = RIG["OfficerD"], RIG["OfficerE"]
 OD_POS = Vector((-11.95, 58.05, OD.ROOT.z)); FAN_TIP = Vector((-12.25, 57.45, 2.47))
@@ -687,14 +705,14 @@ for i, f in enumerate(range(1160, 1561, 8)):
     tap = i % 2
     OD.body(f, OD_POS + Vector((0, 0, 0.02 * tap)), yaw=-150, spine=(-14, 0, -4), head=(-38, 0), jaw=6 if tap else 0)
     OD.stand_feet(f)
-    OD.hand("R", f, FAN_TIP + Vector((0.1, 0.12, -0.28 - 0.08 * tap)), (FAN_TIP - OD.pt(f, -0.2, 0, 1.4)).normalized(), Vector((0, 0, -1))); OD.fingers("R", f, 70, 45)
+    OD.hand("R", f, FAN_TIP + Vector((0.1, 0.12, -0.28 - 0.08 * tap)), (FAN_TIP - OD.pt(f, -0.2, 0, 1.4)).normalized(), Vector((0, 0, -1))); OD.fingers("R", f, [24, 30, 44, 50], 48)
     OD.hand_b("L", f, 0.24, 0.05, 0.95 + 0.05 * tap, d=(0.2, 0.3, -1), n=(-1, 0, 0))
 OE_POS = Vector((-17.3, 62.2, OE.ROOT.z))
 for i, f in enumerate(range(1160, 1561, 9)):
     up = i % 2; wipe = (i // 6) % 3 == 2
     OE.body(f, OE_POS, yaw=60, spine=(8, 6 * up, 0), head=(-10, 8), jaw=4)
     OE.stand_feet(f)
-    OE.hand_b("R", f, -0.2 - 0.1 * up, 0.44, 1.42 + 0.05 * up, d=(0.3, 0.2, 1), n=(0.3, 1, 0)); OE.fingers("R", f, 48, 55)
+    OE.hand_b("R", f, -0.2 - 0.1 * up, 0.44, 1.42 + 0.05 * up, d=(0.3, 0.2, 1), n=(0.3, 1, 0)); OE.fingers("R", f, [26, 32, 46, 52], 46)
     if wipe: OE.hand_b("L", f, 0.02, 0.24, 1.66, d=(-1, 0.1, 0.3), n=(0, 1, 0.4), pole=OE.pt(f, 0.6, 0.1, 1.5))
     else: OE.hang("L", f, swing=0.05, out=0.07)
 for nm in ("OfficerB", "OfficerC", "OfficerD", "OfficerE"):
@@ -728,7 +746,7 @@ for nm, ch in RIG.items():
     fk = [fc for fc in fcurves(ch.o) if '"finger' in fc.data_path]
     first = min((k.co.x for fc in fk for k in fc.keyframe_points), default=10 ** 6)
     if first > 1:
-        for s_ in "LR": ch.fingers(s_, 1, 34, 20)        # relaxed, curled until the first acted key
+        for s_ in "LR": ch.fingers(s_, 1, 22, 26)        # relaxed, gently curled until the first acted key
 print("HAND_LIMITS_DONE")
 print("ANIM_CHARS_DONE")
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())

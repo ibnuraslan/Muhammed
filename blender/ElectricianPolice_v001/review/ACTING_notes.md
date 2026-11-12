@@ -36,3 +36,28 @@ They are a half-second sheet at 270×480, 8 samples, every 30 frames. Frames are
 - Hand close-ups: `v006_hand_closeups.jpg`.
 - After-sheets: `ACTING_after_v006_0.5s_a.jpg` and `ACTING_after_v006_0.5s_b.jpg`.
 - Story-beat frames are unchanged; `beats.json` is identical to v005.
+
+# v007: the director's review of v006 (hands and frames with no subject)
+
+## Hands
+The old `fingers()` turned all the finger bones about one shared palm axis, and that gave twisted claws. v007 bends each finger joint about the bone's own local X axis, so it works like a hinge. The sign is measured per bone. The distal joint is weighted 0.75, and the curl is capped at 85°. That stays inside the Limit Rotation rules in STYLE_ANIMATED.md: no backward bends and no spread, so the fingers stay together. The thumb tucks toward the palm and opposes it.
+
+| Shot | Grip in v007 |
+|---|---|
+| Handlebars (0–2.5 s) | All four fingers wrap the grip (72°). The thumb sits under it, opposed (50°). The wrist is straight. |
+| Card (2.0 s, both) | A pinch: index and middle are lightly curled, ring and pinky curled in, the thumb opposed onto the card. |
+| Board (3–4 s) | The officer's left hand curls over the board's top edge, with the thumb on the front. |
+| 8.0 s raised hand | Relaxed (20°), the fingers loosely curved and together. |
+| Hat on and off (5 s) | The fingertips are on the brim, with the thumb under it. |
+| 10–11 s fanning and tap file | A light pinch (24–52°) with the thumb opposed. It is no longer a clenched claw over the head. |
+| 12 s phone | The palm is under the phone and the fingers are on its back. The thumb tucks onto the front edge. |
+| 13–15 s idle hands | They hang beside the leg, 27 cm out to the side, with the fingers gently curled (22°) and the thumb relaxed. |
+
+## Frames with no subject
+| Time | v006 | v007 |
+|---|---|---|
+| 7.5–9.0 s (f451–541) | The camera craned up the pylon with no one in frame. | It follows him low from behind as he walks through the yard. He then stops at the line and looks up at the pylon, which is above him in the frame. He stays in frame to f538, then the camera whips to the office. |
+| 10.5–11.5 s, 13.5 s | The screen filled the frame. | The camera pulls back, so his head, shoulder and hands at the keyboard are in frame with the screen. |
+| 19.1–20.0 s (f1146–1201) | It flew over an empty rooftop. | It leaves through the office door at street level. A pedestrian walks up the street toward the dark station, and the camera follows him into the station shot. The path was checked with ray casts for walls. |
+
+The beat frames are unchanged and beats.json is identical. Everything kept from v006 is unchanged: the 3–4 s framings, the key ring, the two-step turn, the brow wipe and the final stroll.
