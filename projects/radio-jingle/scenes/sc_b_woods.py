@@ -26,12 +26,20 @@ WIRE_XY = [(-9.0, -3.6), (-6.5, -4.6), (-4.0, -5.0), (-1.5, -5.6), (0.5, -6.4), 
 LOOK1 = Vector((-9.4, -3.2, 0)); LOOK2 = Vector((8.6, -12.4, 0))
 
 
+def suit_detective(name, col, years):
+    """The same two 1981 detectives as the interrogation room (grey suit, brown suit)."""
+    h = B.person(name, 1.0, years, "male_elegantsuit01", "short02" if years > 40 else "short04", hair_val=0.9 if years > 40 else 0.3, hair_sat=0.3)
+    B.flat_clothes(h, col)
+    return h
+
+
 def build(variant=None):
     variant = variant or "wire"
     c = {"set": variant}
     if variant == "wire":
         import sc_path as S
-        c.update(S.build("lowsun|detective,officer"))
+        c.update(S.build("lowsun|officer"))
+        c["P"]["detective"] = suit_detective("Det1", (0.06, 0.06, 0.065), 48)
         c["S"] = S
         gz = lambda x, y: S.ground_z(c, x, y)
         rng = np.random.default_rng(140)
@@ -56,7 +64,10 @@ def build(variant=None):
             cyl("Stake", (p.x, p.y, p.z / 2 + gz(p.x, p.y) / 2), 0.015, p.z - gz(p.x, p.y) + 0.05, pbr("StakeW", (0.18, 0.13, 0.08), 0.9), verts=8)
     if variant != "wire":
         import sc_woods as F
-        c.update(F.build("grey|detective,detective2"))
+        c.update(F.build("grey"))
+        c.setdefault("P", {})
+        c["P"]["detective"] = suit_detective("Det1", (0.06, 0.06, 0.065), 48)
+        c["P"]["detective2"] = suit_detective("Det2", (0.075, 0.045, 0.025), 36)
         c["F"] = F
         man = B.pfaffinger("Guide")
         c["P"]["man"] = man
