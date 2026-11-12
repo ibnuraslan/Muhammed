@@ -62,3 +62,18 @@ Use it as a starting point if it helps. Verify everything in renders. Feet yaw, 
 
 ### 04 StanleyCup, 06 PrisonKeyCake, 07 ShoeBomber, 08 BeethovenDeaf, 10 BellyFat
 - No director list yet. Do the full review in step 1. The client says every film has problems, so expect a real list, not "none".
+
+## Self-check before you submit (mandatory, Nov 12 14:40 UTC)
+Most first submissions came back with the same faults, so a chat may only submit when every box below is true. Look at the images yourself. The numeric audits do not catch these:
+1. **Hands touch what they hold, every time.** In every hand close-up, the fingers are visibly wrapped on or pressed against the object, with no gap. No fist floating beside a nozzle, a box, a gavel, a stamp or a paper.
+2. **No claws.** No stiff, bent, splayed fingers in the air, on a thigh or on a face. Idle hands are relaxed. Alarm hands are open and relaxed, or on the head.
+3. **No face pushed into anything.** No palm pressed into a nose or eye, and no forehead against an object.
+4. **No empty or unreadable frames.** No cell of the half-second sheet may be:
+   - a bare wall, sky, floor or prop surface
+   - a blur
+   - black
+   - hair or the back of the head on a story beat
+5. **Close-ups show hands.** Every close-up is aimed at the hand and lit. Replace any close-up that shows feet, a blur or black.
+6. **Use `blender/pipeline/hand_poses.py`** once it lands on this branch (pose presets plus `grip_object`). Don't hand-set finger angles.
+
+In your submission message, list each of the 6 points with "checked".
