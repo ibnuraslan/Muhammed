@@ -113,3 +113,19 @@ Package: `../../LegoInNose_v008b/LegoInNose_v008b_60fps.blend`. Sheets: `v008b_h
   - **Brick_Small, 2095–2149:** the yellow brick shooting out of the man's nostril into his palm. It's in flight, like "a brick falling".
   - **Dream_Red / Dream_Yellow, 481–583, and FX_Sparkle03/04/11, 523–541:** the floating dream macro, two bricks clicking together, with sparkles.
   - **XS_Brick_Big / XS_Brick_Small, 757–847:** the bricks inside the 6× cross-section head model in the studio. That's a diagram, with no character.
+
+## 6. v008c: director's v008b review
+Package: `../../LegoInNose_v008c/LegoInNose_v008c_60fps.blend`. It's v008b plus three post-passes: `mom_arm.py`, then `fix_v8c.py`, then `chin_ease.py`. Strip: `v008c_director_strip.jpg`, with frames 944, 950, 955, 979 (film camera and a tweezers close-up), 1087 and 1867.
+
+| Note | Fix |
+|---|---|
+| f944–955: Mom's left forearm went through her chest and belly | The walk-in had no left-hand keys, so the IK target held the 965 chin-reach offset across her body. Now the hand is low at her left side, with a small swing, and the elbow points out to the side. Every frame 870–1145 was tested (her forearm, wrist and hand against her own torso): 0 frames inside. I checked the frames by eye at 944, 950, 955, 958, 968, 975 and 1066. |
+| f1087, beat 6: empty sofa | The aim holds the boy's nose 1082–1092 and blends back by 1098. His face is in frame. QA adds FILL "hair / top of head 31 %" at 1087, because his hair takes the top third of the frame. |
+| f1867, beat 9: blank wall | The camera holds the man's face 1856–1867, then makes one eased move to the shower framing at 1882. The wall crossing happens inside the 1871–1892 wall-hide window. CAMJUMP is 0. |
+| Tweezers grip | Keyed every frame from 960 to 1145, with the origin in Mom's right pinch: worst 0.0 mm, mean 0.0 mm (it was 100 mm at f979). The brick in the tips moves with them. |
+| clip_scan 16.9–17.0 s | This appeared after the elbow change: Mom's chin-cradle fingers were counted inside the boy's jaw. `chin_ease.py` keeps her hand 1.5 cm further off his chin over 1005–1031. |
+
+**Final checks on v008c:**
+- **qa_check e7b25f7:** `{'EMPTY': 138, 'FILL': 9, 'INSIDE': 1, 'PROPMOVE': 114}`. ATTACH, CAMJUMP, ROLL, CLAW, HOVER and FACEPRESS are 0. PROPMOVE is the intended list from section 5, and the tweezer-tip range now starts at 1057.
+- **clip_scan 3cfc53c:** `[[991, 997]]`. That's 16.5–16.6 s, inside the accepted window, and 0.1 s long.
+- **Open:** INSIDE f727, the nostril opening.
