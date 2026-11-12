@@ -48,11 +48,6 @@ def hand(s, t, p, d, n, pole):
     WH.key_hand(s, F(t), wpt(*p), Vector(d), Vector(n), wpt(*pole))
 shelf_item = (0.32, 0.53, 1.30)          # front face of a box on the 4th shelf (y = 1.0 shelf front, she is at y 0.45)
 hand("L", 0.0, (0.18, 0.40, 1.12), (0.4, 0.6, 0.2), (0, 0, 1), (-0.2, 0.7, 1.0))
-hand("L", 0.5, (0.30, 0.37, 1.39), (0.05, 0.7, 0.7), (0, 1, 0), (-0.2, 0.6, 0.95))
-hand("L", 0.7, (0.30, 0.385, 1.39), (0.05, 0.7, 0.7), (0, 1, 0), (-0.2, 0.6, 0.95))
-hand("L", 1.0, (0.35, 0.24, 1.32), (0.35, 0.55, 0.7), (0, 1, 0), (-0.2, 0.6, 0.92))
-hand("L", 1.35, (0.38, 0.10, 1.25), (0.5, 0.45, 0.6), (0, 1, 0), (-0.2, 0.6, 0.9))
-hand("L", 1.95, (0.385, 0.095, 1.245), (0.5, 0.45, 0.6), (0, 1, 0), (-0.2, 0.6, 0.9))
 hand("L", 2.15, (0.22, 0.42, 1.18), (0.3, 0.6, -0.4), (0, 0, 1), (-0.2, 0.8, 1.0))
 hand("L", 2.55, (0.14, 0.30, 1.0), (0.4, -0.4, -0.5), (0, 1, 0), (-0.2, 0.7, 1.0))
 hand("L", 4.0, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
@@ -110,15 +105,39 @@ _bmx.ops.bevel(_b, geom=list(_b.edges) + list(_b.verts), offset=0.003, segments=
 pme = bpy.data.meshes.new("PickBox"); _b.to_mesh(pme); _b.free()
 pme.uv_layers.new(name="UVMap"); pme.materials.append(bpy.data.materials["M_pack08"])
 pbox = bpy.data.objects.new("PickBox", pme); bpy.data.collections["REAL"].objects.link(pbox)
-SHELF_AT = Matrix.Translation(wpt(0.30, 0.52, 1.3725))
-def lwrist(f):
-    sc.frame_set(f); return W.matrix_world @ W.pose.bones["wrist.L"].matrix
-for f in (1, F(0.7)):
-    pbox.matrix_world = SHELF_AT; pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
-OFFB = lwrist(F(0.7)).inverted() @ SHELF_AT
-for f in list(range(F(0.7) + 2, F(2.05), 2)) + [F(2.05)]:
-    M_ = lwrist(f) @ OFFB; pbox.location = M_.translation; pbox.rotation_euler = M_.to_euler()
-    pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
+# the box moves on its own keyed path; her left hand is placed RELATIVE to the box each frame so the contact is real:
+#   hook  - fingers over the top edge, thumb on the front face (lift it off the shelf)
+#   front - palm on the front face while she tips it back toward her
+#   cup   - palm under the box, fingers curling up its far side (holding it to read)
+from mathutils import Euler as _Eu
+BOXK = [(0.0, wpt(0.30, 0.52, 1.3725), (0, 0, 0)), (0.75, wpt(0.30, 0.52, 1.3725), (0, 0, 0)), (1.05, wpt(0.31, 0.39, 1.40), (0, 0, 0.05)),
+        (1.3, wpt(0.36, 0.25, 1.24), (0.35, 0, 0.2)), (1.6, wpt(0.365, 0.24, 1.245), (0.4, 0, 0.25)), (1.95, wpt(0.36, 0.245, 1.24), (0.38, 0, 0.22)),
+        (2.05, wpt(0.36, 0.245, 1.24), (0.38, 0, 0.22))]
+for t_, p_, r_ in BOXK:
+    pbox.location = p_; pbox.rotation_euler = r_; pbox.keyframe_insert("location", frame=F(t_)); pbox.keyframe_insert("rotation_euler", frame=F(t_))
+POSES = {"hook": (Vector((-0.118, -0.005, 0.01)), Vector((0.0, 1.0, 0.05)), Vector((1.0, 0.0, 0.0))),   # palm on the near side face, fingers round its back edge, thumb on the front
+         "front": (Vector((0.0, -0.095, 0.0)), Vector((0.0, 0.15, 1.0)), Vector((0.0, 1.0, 0.0))),
+         "cup": (Vector((0.0, -0.1, -0.115)), Vector((0.0, 1.0, 0.35)), Vector((0.0, 0.2, 1.0)))}
+PHASE = [(0.45, "hook", 1.0), (1.05, "hook", 0.0), (1.3, "cup", 0.0), (2.05, "cup", 0.0)]   # (t, pose, approach-lift)
+def pose_at(t):
+    for (ta, pa, la), (tb, pb_, lb) in zip(PHASE, PHASE[1:]):
+        if ta <= t <= tb:
+            u = smooth((t - ta) / (tb - ta)); A = POSES[pa]; Bp = POSES[pb_]
+            lift = la + (lb - la) * u
+            return [A[i].lerp(Bp[i], u) for i in range(3)], lift
+    return list(POSES["cup"]), 0.0
+NW = {}
+for f in list(range(F(0.45), F(2.05), 2)) + [F(2.05)]:
+    sc.frame_set(f); M_ = pbox.matrix_world.copy(); Rbx = M_.to_3x3().normalized()
+    (wl, dl, nl), lift = pose_at(T(f))
+    wl = wl + Vector((-0.07 * lift, -0.03 * lift, 0.0))
+    Wp = M_ @ wl
+    sh = W.matrix_world @ W.pose.bones["upperarm01.L"].head
+    dw = (Rbx @ dl).normalized(); arm = (Wp - sh).normalized()
+    k = 0.9 * smooth((T(f) - 0.8) / 0.3)      # keep the hand in line with the arm as she draws the box in and cups it
+    dw = (arm * k + dw * (1 - k)).normalized()
+    WH.key_hand("L", f, Wp, dw, (Rbx @ nl).normalized(), wpt(-0.2, 0.6, 0.95))
+    NW[f] = ((Rbx @ nl).normalized(), dw)
 p0 = pbox.location.copy(); r0 = pbox.rotation_euler.copy()
 for t_, p_, r_ in ((2.35, (p0.x + 0.06, p0.y + 0.05, 0.10), (r0.x + 0.9, r0.y, r0.z + 0.3)), (2.45, (p0.x + 0.09, p0.y + 0.07, 0.16), (r0.x + 1.3, r0.y, r0.z + 0.4)),
                    (2.55, (p0.x + 0.11, p0.y + 0.08, 0.075), (1.5708, 0, r0.z + 0.5)), (21.5, (p0.x + 0.11, p0.y + 0.08, 0.075), (1.5708, 0, r0.z + 0.5))):
@@ -256,7 +275,7 @@ def key_hand_pose(rig, s, f, kind, axes):
             bn = "finger%d-%d.%s" % (k, j, s); pb = rig.pose.bones[bn]; pb.rotation_mode = 'QUATERNION'
             pb.rotation_quaternion = Quaternion(axes[bn], math.radians(angs[j - 1] * (1.0 + 0.06 * (k - 3) if k > 1 else 1.0)))
             pb.keyframe_insert("rotation_quaternion", frame=f, group=bn)
-HANDS = {"Woman": {"L": [(0.0, "relax"), (0.45, "open"), (0.7, "grip"), (2.0, "grip"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (20.82, "grip"), (20.92, "relax"), (21.05, "flat"), (21.5, "flat")],
+HANDS = {"Woman": {"L": [(0.0, "relax"), (0.4, "open"), (0.62, "grip"), (1.05, "grip"), (1.18, "relax"), (1.32, "grip"), (2.0, "grip"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (20.82, "grip"), (20.92, "relax"), (21.05, "flat"), (21.5, "flat")],
                    "R": [(0.0, "grip"), (2.22, "grip"), (2.4, "relax"), (3.0, "press"), (21.5, "press")]},
          "ShopperA": {"L": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")],
                       "R": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")]},
@@ -268,6 +287,21 @@ for who, sides in HANDS.items():
     for s_, sched in sides.items():
         axes = curl_axes(rig, s_)
         for t_, kind in sched: key_hand_pose(rig, s_, F(t_), kind, axes)
+# the held box rests ON her palm (cup): baked from the evaluated hand, blended in from the keyed path during 1.05-1.3 s
+_bkeys = []
+for f in sorted(k for k in NW if k >= F(1.05)):
+    sc.frame_set(f); pbm = W.pose.bones
+    wr = W.matrix_world @ pbm["wrist.L"].head; k3 = W.matrix_world @ pbm["finger3-1.L"].head
+    n_ = NW[f][0]; d_ = (k3 - wr); d_ = (d_ - n_ * d_.dot(n_)).normalized()
+    palm = wr.lerp(k3, 1.15) + n_ * 0.018 - d_ * 0.0
+    zb = n_; yb = d_; xb = yb.cross(zb).normalized(); yb = zb.cross(xb)
+    Mh = Matrix((xb, yb, zb)).transposed().to_4x4(); Mh.translation = palm + zb * 0.1
+    u = smooth((T(f) - 1.05) / 0.25)
+    Mk = pbox.matrix_world.copy()
+    loc = Mk.translation.lerp(Mh.translation, u); q = Mk.to_quaternion().slerp(Mh.to_quaternion(), u)
+    _bkeys.append((f, loc, q.to_euler('XYZ', pbox.rotation_euler)))
+for f, loc, e in _bkeys:
+    pbox.location = loc; pbox.rotation_euler = e; pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
 # settle the wound-press hand only now that the finger curls are keyed
 for t_ in (4.0, 20.4, 20.75):
     settle_palm(t_, (0.05, 0.28, 0.98) if t_ < 20.7 else (0.07, 0.26, 0.98), (0.6, -0.3 if t_ < 20.7 else -0.4, -0.6 if t_ < 20.7 else -0.5), (0, -1, 0), (-0.25, 0.7, 1.0), out=(0, 0.01, 0))
@@ -465,7 +499,7 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (1.9, "hole", (-1.2, 0, 0), 110, 3, 3.5, 40),
       (2.05, "hole", (0.0, 0, 0), 95, 2, 2.4, 50),
       (2.3, "hole", (0, -0.2, 0.05), 135, 8, 1.5, 50),
-      (2.55, "hole", (0, -0.55, 0.1), 160, 5, 0.72, 50),
+      (2.55, "hole", (0, -0.45, 0.05), 158, 6, 1.6, 50),
       (2.8, "hole", (0.4, -0.3, 0), 125, 30, 2.6, 45),
       (3.1, "tip", (0.3, 0, 0), 96, 10, 4.0, 40),
       (4.0, "tip", (0.3, 0, -0.2), 70, -12, 3.2, 40),
@@ -490,7 +524,7 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (19.8, "tip", (-0.8, 0, 0), 98, 8, 6.0, 32),
       (20.1, "hole", (1.2, -0.2, 0), 105, 15, 4.2, 40),
       (20.27, "hole", (0.0, -0.35, 0.1), 132, 28, 1.7, 48),
-      (20.4, "hole", (0, -0.55, 0.1), 160, 5, 0.72, 50),
+      (20.4, "hole", (0, -0.45, 0.05), 158, 6, 1.6, 50),
       (20.6, "hole", (-3.0, 0, 2.0), 158, 6, 6.0, 45),
       (20.8, "face", (-2, 0, -6), 152, 6, 28, 40),
       (21.5, "face", (-2, 0, -8), 138, 9, 48, 35)]

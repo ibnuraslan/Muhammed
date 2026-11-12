@@ -73,6 +73,15 @@ if ad and ad.action:
                     if fc.data_path == "dof.aperture_fstop":
                         for k in fc.keyframe_points: k.co.y = max(5.6, k.co.y)
                         fc.update()
+# keep the shirt weave readable at the dive (both fabrics): stronger weave bump + contrast than the global bump cut
+for mname in [m.name for m in bpy.data.objects["Woman.female_casualsuit01"].data.materials] + ["M_fabric_macro"]:
+    mm = M.get(mname)
+    if not mm: continue
+    for n in mm.node_tree.nodes:
+        if n.type == 'BUMP' and abs(n.inputs["Distance"].default_value - 0.004) < 1e-6 or (mname == "M_fabric_macro" and n.type == 'BUMP' and abs(n.inputs["Distance"].default_value - 0.0005) < 1e-6):
+            n.inputs["Strength"].default_value = 1.0
+        if n.type == 'MIX' and n.data_type == 'RGBA' and n.blend_type == 'MULTIPLY' and abs(n.inputs["Factor"].default_value - 0.35) < 1e-6:
+            n.inputs["Factor"].default_value = 0.7
 sc = bpy.context.scene
 sc.view_settings.exposure = -0.3
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=True)

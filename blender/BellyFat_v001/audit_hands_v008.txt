@@ -4,13 +4,14 @@ HAND_IN_HAND        0
 HAND_IN_BODY        0
 HAND_IN_CLOTHES     0
 HAND_IN_OTHER       0
-WRIST_BEND          0
+WRIST_BEND          1   e.g. f69 Woman L wrist 77 deg
+                 frames [69]
 
 by character:
-  Woman     {}
-  ShopperA  {}
-  ShopperB  {}
-  Stocker   {}
-  ShopperC  {}
+  Woman     {'WRIST_BEND': 1}
+  ShopperA  {'WRIST_BEND': 0}
+  ShopperB  {'WRIST_BEND': 0}
+  Stocker   {'WRIST_BEND': 0}
+  ShopperC  {'WRIST_BEND': 0}
 
-TOTAL 0
+TOTAL 1

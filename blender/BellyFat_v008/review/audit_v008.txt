@@ -26,4 +26,4 @@ stats
   cart_grip_cm     min 2.061  max 2.062
   lobule_overlap   min 0.000  max 0.000
   gut_gap_mm       min 52.019  max 147.940
-  cam_y_local      min -0.305  max 8.475
+  cam_y_local      min 0.146  max 8.475

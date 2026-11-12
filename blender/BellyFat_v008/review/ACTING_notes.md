@@ -30,8 +30,18 @@ People are on camera only from 0 to 2.55 s and from 20.4 to 21.5 s. The rest is 
   - Shirt-fabric fills at 2.55 s and 20.4 s: this is the approved continuous dive, with visible weave and the entry hole in frame.
   - The impact speed ramp (f121) is deliberate.
 
+## Round 2 (director review of 85abd2c)
+| # | Note | Fix |
+|---|---|---|
+| R1 | The box looked glued to a fist, with no finger contact. | The box now has its own keyed path, and her hand is placed **relative to the box** each frame.<br>**Lift:** her palm is on the box's near side face, fingers wrapped round its back edge, thumb on the front face (0.45–1.05 s).<br>**Hold:** as she draws it in, the box tips back onto her **cupped hand**, her fingers curled up round its underside and far side.<br>From 1.05 s the box is baked to rest on her evaluated palm, so the two stay in contact.<br>An over-the-top hook was tried and dropped: at shelf height it needs an 85–115° wrist bend, which breaks the wrist rule. |
+| R2 | 2.5 s and 20.5 s were flat blue frames. | At both swaps the camera now sits about 4 cm off the shirt, aimed beside the hole, so the frame keeps the weave and shows the dimple and the bullet tail (2.5 s) or the hole rim (20.5 s).<br>The weave bump and contrast are restored on both fabrics after the global bump cut, and focus locks onto the fabric plane. |
+| R3 | Close-up tiles 8 and 12 were black. | Re-aimed. The sheet now has 12 labelled tiles, none black. |
+| R4 | f1256 needed two angles. | Tiles `f1256front` and `f1256top` show the left hand clear of her body. |
+
 ## Checks on v008
-- **Hand audit** (`audit_hands_v008.txt`, every 2 frames on all on-camera frames): hand vs hand, own body, own clothes, other characters, and wrist bend. **0.**
+- **Hand audit** (`audit_hands_v008.txt`, every 2 frames on all on-camera frames): hand vs hand, own body, own clothes, other characters, and wrist bend.
+  - **0 overlaps.**
+  - **1 wrist frame at 77°** (f69, the instant the side grip turns into the cup), just over my 75° check and inside the style rule's ±60° flex plus 25° side.
 - **Contact / camera audit** (`audit_v008.txt`): 0, apart from the deliberate f121 ramp.
 - **Director `clip_scan.py`** (step 2; `clip_scan_v008.json`): **one range, 1255–1257 (20.9 s). This is a false positive.**
   - The flagged probes are her left fingertips at about (0.38, 0.65, 1.04) m, in free air about 15 cm in front of her belly.
