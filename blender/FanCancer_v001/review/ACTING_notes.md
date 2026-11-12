@@ -28,3 +28,24 @@ Frames are v002 frames (frame = 1 + 60·t). Every story-beat start frame in `bea
 | 22 | 34.5 / 2071 | A **black frame**: the camera clips geometry in the city. | Camera path re-routed down the middle of the street. |
 | 23 | 35.0–35.5 / 2101–2131 | The camera **enters the building facade** (dark wall fill) before the window pass. | It stops 2.6 m in front of the lit window and passes through it while the window fills the frame. |
 | 24 | 37.5 / 2251 | A blurred orange frame: the camera approaches the laptop screen **from behind** (the normal sign was wrong). | It approaches from her side; the screen fills the frame. |
+
+## Also fixed in v003 (found by `clip_scan.py` / `qa_check.py` and on the sheets)
+| # | Problem | Fix |
+|---|---|---|
+| 25 | MPFB helper geometry (skirt, tights, joint cubes) became live when the scanners switch off the MASK modifier, so neighbouring fans' hands read as "inside" each other. | The helper geometry is deleted from every body mesh (it is never rendered). |
+| 26 | Crowd fans' cheering arms swung forward into the row in front, and their resting hands hovered over the seat backs. | The cheer is a V shape, capped at 145°; resting hands lie on the thighs. |
+| 27 | The manager's hands on his hips sank into his hips. | The hands sit on the hip surface. |
+| 28 | The doctor stood inside the exam-bed footprint, and her hands at his neck went through his torso. | The bed moved +0.6 m; her hands work at the back of his neck from outside. |
+| 29 | The city had a 5 m street, the bus drove inside a building, and window cards floated in the sky (glTF quaternion rotation ignored). | A real 28 m street with buildings rotated, and only window cards that have a facade behind them. |
+| 30 | The tunnel run (21.8–23 s, beat 8) had no one in frame. | Two staff walk up the tunnel toward the camera. |
+| 31 | Beats 5–7: the camera passed through the glass. | The camera stays on the ice side; the double-sided phone screen shows the blurred note from the front. |
+| 32 | Hands: hand-set finger angles. | `hand_poses.py`: `add_hand_limits` on all 96 rigs, `apply_pose` for every action (flat palms on the boards, phone hold, fist knock, wrap on the dermatoscope, pinch on the forceps and bandage, open shrug, flat-palm clap), and `grip_object` on both cheque edges. |
+
+## qa_check.py flags kept on purpose (reason)
+- **EMPTY 301–516 (5.0–8.6 s):** the skin cutaway. The beat is the mole and the cells, so no character is in view by design.
+- **EMPTY 1903–2140 (31.7–35.6 s):** city establishing shots and the bus. The riders are small inside the bus.
+- **EMPTY/FILL 1381 (23.0 s), 2143–2155 (35.7–35.9 s), 2251–2269 (37.5–37.8 s):** surface passes through the clinic door, the lit window and curtain, and the laptop screen. Each is under 0.4 s and shows macro detail.
+- **FILL 271 (4.5 s), 517 (8.6 s):** the dive into and out of the skin at the mole.
+- **BACKHEAD 235 (beat 3, 3.9 s):** her POV of the mole on the back of his neck, which is the story point.
+- **HOVER Fan.L near the glass 991–1033 (16.5–17.2 s):** the knock. Between knuckle strikes the fist pulls back from the glass.
+- **HOVER near confetti (finale):** confetti falling past hands.

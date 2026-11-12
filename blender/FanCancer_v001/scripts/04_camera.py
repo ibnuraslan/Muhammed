@@ -81,7 +81,7 @@ K = [
     (17.0, V((0.30, -1.35, 2.25)), V((0.1, -0.2, 1.55)), 30, False),     # over the glass to his side
     (17.8, V((0.80, -0.22, 1.72)), manH, 34, False),          # his face as he reads
     (18.6, V((0.95, -1.55, 2.05)), V((-0.05, 0.0, 1.45)), 34, False),  # wide over his shoulder, phone on the glass
-    (19.4, V((-0.40, -0.18, 1.62)), manH, 42, False),                 # his puzzled face
+    (19.4, V((-0.40, -0.20, 1.50)), manH, 40, False),                 # his puzzled face
     (20.2, V((1.10, -1.00, 1.50)), manH + V((0, 0, -0.2)), 30, False),
     (21.0, V((1.20, -1.35, 1.70)), V((-1.0, -0.8, 1.2)), 32, False),
     (21.6, V((-0.6, -1.55, 1.95)), V((-4.0, -1.0, 1.2)), 30, False),
@@ -90,12 +90,12 @@ K = [
     (23.1, V((-24.7, -0.60, 1.50)), V((-28.5, -2.2, 1.2)), 30, False),  # through the door
     (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
     (24.3, V((-27.4, -0.95, 1.95)), moleB, 38, False),
-    (25.0, fill(moleB, moleBN, 0.24) + V((0, 0, -0.06)), moleB, 50, False),               # the dermatoscope on the mole
+    (25.0, V((-28.85, -1.85, 1.62)), moleB + V((0, 0, -0.05)), 40, False),   # front-left: the scope at his neck, his face               # the dermatoscope on the mole
     (25.45, V((-28.85, -2.95, 1.85)), docH, 45, False),
     (25.8, V((-28.45, -2.88, 1.70)), docH, 42, False),                 # doctor's serious face
     (26.6, V((-27.8, -2.75, 2.2)), moleB, 40, False),               # overhead on the hands
     (27.4, V((-29.10, -1.45, 1.75)), moleB, 34, False),
-    (28.3, V((-28.80, -1.75, 1.55)), moleB, 36, False),               # front-left: the bandage pressed on
+    (28.3, V((-28.80, -1.75, 1.40)), moleB, 36, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),

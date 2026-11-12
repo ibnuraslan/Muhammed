@@ -37,7 +37,7 @@ print("HANDS_OK", len(rigs), "rigs", n, "pose keys")
 
 # cheque held at its edges: grip_object for both hands at each finale key
 cq = bpy.data.objects["Cheque"]
-for t in (38.0, 39.0, 40.0, 41.0, 42.0, 43.0, 44.0):
+for t in (38.0, 39.0, 40.0, 40.5, 41.5, 42.0, 43.0, 44.0):
     f = F(t); sc.frame_set(f)
     M = cq.matrix_world; xa = (M.to_3x3() @ Vector((1, 0, 0))).normalized(); c0 = M.translation
     for s_, sg in (("L", 1), ("R", -1)):

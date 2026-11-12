@@ -347,7 +347,7 @@ def doc_anim():
     doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains
     face(DR, f(25.8), brow=0.3, frown=0.5, jaw=8); face(DR, f(26.0), jaw=2, frown=0.5)
     doc.pose(f(26.0), DOCP, 85, flex=8, head=(4, 20), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps from the pocket
-    cut = {"R": ((-0.12, -0.60, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.01, -0.58, 1.40), (0, -0.7, 0.2), (0, -0.5, -0.8))}
+    cut = {"R": ((-0.12, -0.60, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.02, -0.60, 1.36), (0, -0.7, 0.2), (0, -0.5, -0.8))}
     for i, t in enumerate((26.4, 27.0, 27.6, 28.2)):
         doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=26, head=(18, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
     face(DR, f(26.6), brow=-0.3, frown=0.8, squint=0.7)
@@ -440,7 +440,7 @@ for item in CROWD:
         if 38.4 < t:      # the finale: everyone up and cheering
             standing_fk(r, f, p + Vector((0, -0.25 if yaw == 0 else 0.25, 0)), yaw, cheer=ch, sway=math.sin(t * 3 + ph), head=(0, 10 * math.sin(t + ph)))
         else:
-            seated_fk(r, f, p, yaw, cheer=ch, sway=math.sin(t * 1.3 + ph), head=(5 * math.sin(t * 0.9 + ph), 25 * math.sin(t * 0.5 + ph)), phone=phone)
+            seated_fk(r, f, p, yaw, cheer=ch, sway=math.sin(t * 1.3 + ph), head=(5 * math.sin(t * 0.9 + ph), 25 * math.sin(t * 0.5 + ph)), phone=phone, relax=True)
     face(r, 1, smile=0.5, brow=0.3); face(r, F(38.5), smile=1.0, brow=0.8, jaw=10)
 
 # bench players (sitting, watching), skaters on the ice, players at the finale

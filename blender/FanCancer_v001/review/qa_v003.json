@@ -92,12 +92,6 @@
     "Fanc2_7.R near SeatsSrc.004 (15.2 cm)"
    ]
   ],
-  "145": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ]
-  ],
   "235": [
    [
     "BACKHEAD",
@@ -488,17 +482,9 @@
    [
     "HOVER",
     "Fanc2_7.R near SeatsSrc.004 (15.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fanc3_7.R near SeatsSrc.005 (2.2 cm)"
    ]
   ],
   "793": [
-   [
-    "HOVER",
-    "Fan.R near CellSrc (10.7 cm)"
-   ],
    [
     "HOVER",
     "Fanc2_7.R near SeatsSrc.004 (14.1 cm)"
@@ -511,203 +497,299 @@
   "799": [
    [
     "HOVER",
-    "Fan.R near CellSrc (17.6 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (13.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.6 cm)"
    ]
   ],
   "805": [
    [
-    "INSIDE",
-    "camera inside geometry"
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (12.3 cm)"
    ],
    [
     "HOVER",
-    "Fan.R near CellSrc (19.9 cm)"
+    "Fanc3_7.R near SeatsSrc.005 (1.6 cm)"
    ]
   ],
   "811": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (12.8 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (11.6 cm)"
    ]
   ],
   "817": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (12.7 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (11.1 cm)"
    ]
   ],
   "823": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (12.8 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.6 cm)"
    ]
   ],
   "829": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (12.8 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.3 cm)"
    ]
   ],
   "835": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (12.9 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.0 cm)"
    ]
   ],
   "841": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (13.0 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.0 cm)"
    ]
   ],
   "847": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (13.0 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.0 cm)"
    ]
   ],
   "853": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (13.1 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.0 cm)"
    ]
   ],
   "859": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (13.1 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.0 cm)"
    ]
   ],
   "865": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (13.1 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.1 cm)"
    ]
   ],
   "871": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.5 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.3 cm)"
    ],
    [
     "HOVER",
-    "Fan.R near BoardsCap (13.1 cm)"
+    "Fanc3_7.R near SeatsSrc.005 (1.2 cm)"
    ]
   ],
   "877": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.1 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.5 cm)"
    ]
   ],
   "883": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.1 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (10.8 cm)"
    ]
   ],
   "889": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.6 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.2 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (11.3 cm)"
    ]
   ],
   "895": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.6 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.2 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (11.8 cm)"
    ]
   ],
   "901": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.7 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.3 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (12.4 cm)"
    ]
   ],
   "907": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.8 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.4 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (13.1 cm)"
    ]
   ],
   "913": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (13.9 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.6 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (13.8 cm)"
    ]
   ],
   "919": [
    [
     "HOVER",
-    "Fan.L near BoardsCap (14.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near BoardsCap (13.8 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (14.5 cm)"
    ]
   ],
   "925": [
    [
     "HOVER",
-    "Fan.R near BoardsCap (14.0 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (15.1 cm)"
+   ]
+  ],
+  "931": [
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (15.8 cm)"
+   ]
+  ],
+  "937": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (16.5 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.6 cm)"
    ]
   ],
   "943": [
    [
     "HOVER",
-    "Fan.L near CellSrc (17.8 cm)"
+    "Fanc1_7.R near SeatsSrc.003 (1.6 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (17.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.5 cm)"
    ]
   ],
   "949": [
    [
     "HOVER",
-    "Fan.L near CellSrc (17.2 cm)"
+    "Fanc1_7.R near SeatsSrc.003 (1.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (17.8 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (3.2 cm)"
    ]
   ],
   "955": [
    [
     "HOVER",
-    "Fan.L near CellSrc (17.1 cm)"
+    "Fanc1_7.R near SeatsSrc.003 (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (2.5 cm)"
+   ]
+  ],
+  "961": [
+   [
+    "HOVER",
+    "Fan.R near GlassPane0 (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc3_7.R near SeatsSrc.005 (1.3 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.4 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
    ]
   ],
   "991": [
    [
     "HOVER",
     "Fan.L near GlassPane0 (4.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (1.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
    ]
   ],
   "997": [
    [
     "HOVER",
-    "Manager.R near SeatsSrc (1.6 cm)"
+    "Fanc1_7.R near SeatsSrc.003 (2.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "HOVER",
+    "Fanc1_7.R near SeatsSrc.003 (2.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
    ]
   ],
   "1009": [
@@ -717,103 +799,25 @@
    ],
    [
     "HOVER",
-    "Manager.R near SeatsSrc (4.0 cm)"
-   ]
-  ],
-  "1021": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (1.9 cm)"
-   ]
-  ],
-  "1027": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (7.0 cm)"
+    "Fanc2_7.R near SeatsSrc.004 (18.2 cm)"
    ]
   ],
   "1033": [
    [
     "HOVER",
-    "Manager.L near CellSrc (11.0 cm)"
+    "Fan.L near GlassPane0 (1.7 cm)"
    ]
   ],
-  "1039": [
+  "1075": [
    [
     "HOVER",
-    "Manager.L near CellSrc (8.5 cm)"
+    "Nurse.R near drawer_cabinet (7.9 cm)"
    ]
   ],
-  "1045": [
+  "1153": [
    [
-    "HOVER",
-    "Manager.L near CellSrc (6.0 cm)"
-   ]
-  ],
-  "1051": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (3.8 cm)"
-   ]
-  ],
-  "1057": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (2.2 cm)"
-   ]
-  ],
-  "1063": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (1.4 cm)"
-   ]
-  ],
-  "1069": [
-   [
-    "BACKHEAD",
-    "Manager"
-   ]
-  ],
-  "1093": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (1.5 cm)"
-   ]
-  ],
-  "1099": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (2.5 cm)"
-   ]
-  ],
-  "1105": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (3.7 cm)"
-   ]
-  ],
-  "1111": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (4.8 cm)"
-   ]
-  ],
-  "1117": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (5.6 cm)"
-   ]
-  ],
-  "1123": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (6.0 cm)"
-   ]
-  ],
-  "1129": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (6.2 cm)"
+    "FILL",
+    "hair / top of head 27%"
    ]
   ],
   "1177": [
@@ -834,106 +838,6 @@
     "Fanc2_7.R near SeatsSrc.004 (12.3 cm)"
    ]
   ],
-  "1207": [
-   [
-    "HOVER",
-    "Fan.L near CellSrc (1.6 cm)"
-   ]
-  ],
-  "1219": [
-   [
-    "HOVER",
-    "Fan.L near CellSrc (6.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.L near CellSrc (2.7 cm)"
-   ]
-  ],
-  "1231": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (3.2 cm)"
-   ]
-  ],
-  "1243": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (6.1 cm)"
-   ]
-  ],
-  "1249": [
-   [
-    "HOVER",
-    "Manager.L near CellSrc (6.4 cm)"
-   ]
-  ],
-  "1309": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1315": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1321": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1327": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1333": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1339": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1345": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1351": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1357": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1363": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1369": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "1375": [
    [
     "EMPTY",
@@ -943,25 +847,25 @@
   "1381": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1483": [
    [
     "FILL",
-    "hair / top of head 29%"
+    "hair / top of head 28%"
    ]
   ],
   "1489": [
    [
     "FILL",
-    "hair / top of head 53%"
+    "hair / top of head 59%"
    ]
   ],
   "1495": [
    [
     "FILL",
-    "hair / top of head 68%"
+    "hair / top of head 29%"
    ]
   ],
   "1501": [
@@ -973,53 +877,43 @@
   "1513": [
    [
     "FILL",
-    "hair / top of head 28%"
+    "hair / top of head 37%"
    ]
   ],
   "1519": [
    [
     "FILL",
-    "hair / top of head 33%"
+    "hair / top of head 32%"
    ]
   ],
-  "1621": [
-   [
-    "FILL",
-    "hair / top of head 37%"
-   ]
-  ],
-  "1699": [
-   [
-    "HOVER",
-    "Nurse.L near drawer_cabinet (11.4 cm)"
-   ]
-  ],
-  "1705": [
+  "1663": [
    [
     "FACEPRESS",
     "Doctor.L hand on face"
    ]
   ],
-  "1723": [
+  "1699": [
    [
-    "FILL",
-    "hair / top of head 46%"
+    "HOVER",
+    "FarFan2_4.L near SeatsSrc.011 (14.2 cm)"
    ]
   ],
-  "1729": [
+  "1705": [
    [
-    "FILL",
-    "surface <12 cm"
-   ],
-   [
-    "FILL",
-    "hair / top of head 88%"
+    "HOVER",
+    "FarFan2_4.L near SeatsSrc.011 (13.8 cm)"
    ]
   ],
-  "1735": [
+  "1711": [
    [
     "FILL",
-    "hair / top of head 35%"
+    "hair / top of head 25%"
+   ]
+  ],
+  "1717": [
+   [
+    "FILL",
+    "hair / top of head 27%"
    ]
   ],
   "1903": [
@@ -1304,16 +1198,6 @@
     "no character in view"
    ]
   ],
-  "2251": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "2257": [
    [
     "EMPTY",
@@ -1349,64 +1233,22 @@
    ],
    [
     "EMPTY",
-    "only LaptopScreen in view"
-   ],
-   [
-    "EMPTY",
     "no character in view"
    ]
   ],
   "2281": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc2_7.R near SeatsSrc.004 (10.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (8.4 cm)"
    ]
   ],
   "2287": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc2_7.R near SeatsSrc.004 (14.0 cm)"
    ]
   ],
-  "2293": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (1.9 cm)"
-   ]
-  ],
   "2299": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (1.8 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (6.5 cm)"
@@ -1416,22 +1258,6 @@
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (15.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (10.2 cm)"
-   ]
-  ],
-  "2311": [
-   [
-    "HOVER",
-    "Manager.R near Cheque (7.7 cm)"
-   ]
-  ],
-  "2317": [
-   [
-    "HOVER",
-    "Manager.R near Cheque (10.8 cm)"
    ]
   ],
   "2323": [
@@ -1450,207 +1276,21 @@
    [
     "HOVER",
     "Fanc1_7.R near SeatsSrc.003 (8.5 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (11.7 cm)"
    ]
   ],
   "2341": [
    [
     "HOVER",
     "Fanc1_7.R near SeatsSrc.003 (9.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (9.6 cm)"
-   ]
-  ],
-  "2347": [
-   [
-    "HOVER",
-    "Manager.R near Cheque (12.0 cm)"
-   ]
-  ],
-  "2365": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (12.4 cm)"
-   ]
-  ],
-  "2371": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (10.4 cm)"
-   ]
-  ],
-  "2377": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (12.6 cm)"
-   ]
-  ],
-  "2383": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.3 cm)"
-   ]
-  ],
-  "2389": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ]
-  ],
-  "2395": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (13.0 cm)"
-   ]
-  ],
-  "2401": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (10.7 cm)"
-   ]
-  ],
-  "2407": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (12.9 cm)"
-   ]
-  ],
-  "2413": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ]
-  ],
-  "2419": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ]
-  ],
-  "2425": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (11.7 cm)"
-   ]
-  ],
-  "2431": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (8.4 cm)"
    ]
   ],
   "2437": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc1_7.R near SeatsSrc.003 (3.8 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (10.9 cm)"
    ]
   ],
   "2443": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ],
    [
     "HOVER",
     "Fanc1_7.R near SeatsSrc.003 (9.9 cm)"
@@ -1662,12 +1302,12 @@
   ],
   "2449": [
    [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
+    "CLAW",
+    "Fan.L curl 31"
    ],
    [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.R curl 31"
    ],
    [
     "HOVER",
@@ -1676,58 +1316,46 @@
   ],
   "2455": [
    [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.L curl 33"
    ],
    [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.R curl 33"
    ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (11.0 cm)"
    ]
   ],
   "2461": [
    [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.L curl 34"
    ],
    [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (7.7 cm)"
+    "CLAW",
+    "Fan.R curl 34"
    ]
   ],
   "2467": [
    [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.L curl 33"
    ],
    [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near Cheque (11.6 cm)"
+    "CLAW",
+    "Fan.R curl 33"
    ]
   ],
   "2473": [
    [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.L curl 31"
    ],
    [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
+    "CLAW",
+    "Fan.R curl 31"
    ],
    [
     "HOVER",
@@ -1737,26 +1365,10 @@
   "2479": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (3.7 cm)"
    ]
   ],
   "2485": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (6.7 cm)"
@@ -1765,30 +1377,10 @@
   "2491": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (9.7 cm)"
-   ],
-   [
-    "HOVER",
-    "Manager.R near ChequeBorder (8.8 cm)"
    ]
   ],
   "2497": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (12.3 cm)"
@@ -1797,26 +1389,10 @@
   "2503": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (14.2 cm)"
    ]
   ],
   "2509": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.5 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (15.6 cm)"
@@ -1825,36 +1401,10 @@
   "2515": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.5 cm)"
-   ],
-   [
-    "HOVER",
     "Skater1.L near Conf237 (10.5 cm)"
    ]
   ],
-  "2521": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ]
-  ],
   "2527": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (15.4 cm)"
@@ -1863,26 +1413,10 @@
   "2533": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (11.6 cm)"
    ]
   ],
   "2539": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
    [
     "HOVER",
     "Fanc1_7.R near SeatsSrc.003 (8.0 cm)"
@@ -1895,46 +1429,10 @@
   "2545": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (2.0 cm)"
    ]
   ],
-  "2551": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ]
-  ],
-  "2557": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ]
-  ],
   "2563": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ],
    [
     "HOVER",
     "Fanc1_7.R near SeatsSrc.003 (5.7 cm)"
@@ -1947,56 +1445,10 @@
   "2569": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (14.3 cm)"
    ]
   ],
-  "2575": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ]
-  ],
-  "2581": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ]
-  ],
-  "2587": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ]
-  ],
   "2593": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (14.0 cm)"
@@ -2005,26 +1457,10 @@
   "2599": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.0 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (3.5 cm)"
    ]
   ],
   "2605": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.1 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.1 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
@@ -2037,30 +1473,14 @@
   "2611": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
    ],
    [
     "HOVER",
-    "Manager.R near Conf257 (15.2 cm)"
+    "Manager.R near Conf257 (14.5 cm)"
    ]
   ],
   "2617": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.2 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.2 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
@@ -2069,26 +1489,10 @@
   "2623": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.3 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
    ]
   ],
   "2629": [
-   [
-    "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
    [
     "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
@@ -2097,24 +1501,16 @@
   "2635": [
    [
     "HOVER",
-    "Fan.L near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
-    "Fan.R near Cheque (2.4 cm)"
-   ],
-   [
-    "HOVER",
     "Fanc3_7.R near SeatsSrc.005 (1.9 cm)"
    ]
   ]
  },
  "counts": {
-  "HOVER": 269,
-  "EMPTY": 111,
-  "BACKHEAD": 3,
-  "FILL": 17,
-  "INSIDE": 1,
-  "FACEPRESS": 1
+  "HOVER": 150,
+  "BACKHEAD": 2,
+  "FILL": 15,
+  "EMPTY": 96,
+  "FACEPRESS": 1,
+  "CLAW": 10
  }
 }
