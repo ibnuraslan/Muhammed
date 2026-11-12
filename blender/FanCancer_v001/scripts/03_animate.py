@@ -126,8 +126,8 @@ def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0
 # palm helpers (body-local, character faces -Y): d = finger direction, n = palm normal
 HANDS_ON_BOARDS = {"L": ((0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1)), "R": ((-0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1))}
 def phone_hold(dz=0.0, both=True, spread=0.0):
-    hd = {"R": ((-0.05, -0.36, 1.17 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
-    if both: hd["L"] = ((0.10 + spread, -0.35, 1.16 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
+    hd = {"R": ((-0.05, -0.40, 1.06 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
+    if both: hd["L"] = ((0.10 + spread, -0.39, 1.05 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
     return hd
 
 # ================================================================== FAN
@@ -161,10 +161,10 @@ def fan_rink():
     fan.pose(f(12.85), (0.0, 0.62, 0), 0, flex=6, head=(6, -12), twist=-6,
              hands={"R": ((-0.19, -0.05, 0.87), (0, -0.1, -1), (1, 0, 0)), "L": HANDS_ON_BOARDS["L"]})     # draws the phone from her pocket
     # beat 5: typing (thumbs animated below)
-    fan.pose(f(13.4), (0.0, 0.64, 0), 0, flex=4, head=(14, 0), hands=phone_hold())
+    fan.pose(f(13.4), (0.0, 0.64, 0), 0, flex=5, head=(20, 0), hands=phone_hold())
     face(FR, f(13.6), brow=-0.2, frown=0.6, squint=0.4)
-    fan.pose(f(14.4), (0.0, 0.63, 0), 0, flex=5, head=(16, 4), hands=phone_hold(0.01))
-    fan.pose(f(15.4), (0.0, 0.63, 0), 0, flex=5, head=(15, -3), hands=phone_hold(0.02))
+    fan.pose(f(14.4), (0.0, 0.63, 0), 0, flex=6, head=(22, 4), hands=phone_hold(0.01))
+    fan.pose(f(15.4), (0.0, 0.63, 0), 0, flex=6, head=(21, -3), hands=phone_hold(0.02))
     # beat 6: slap phone on the glass, knock with the left
     glassR = {"R": ((-0.05, -0.465, 1.40), (0, 0, 1), (0, -1, 0))}
     fan.pose(f(15.9), (0.0, 0.58, 0), 0, flex=10, head=(4, 0), hands={"R": ((-0.08, -0.38, 1.30), (0, -0.4, 1), (0, -1, 0.3)),
@@ -192,7 +192,7 @@ def fan_home():
     sit(fan, f(34.0), p, 0, 0.45, hands=lap, flex=12, head=(14, 0))
     sit(fan, f(35.4), p, 0, 0.45, hands=lap, flex=14, head=(16, 0))
     face(FR, f(35.4), brow=0.0, smile=0.0)
-    mouth = {"R": ((-0.03, -0.33, 1.02), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
+    mouth = {"R": ((-0.03, -0.29, 1.10), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
     sit(fan, f(36.4), p, 0, 0.45, hands=mouth, flex=-6, head=(-6, 0))
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
     both = {"R": ((-0.05, -0.33, 1.02), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.07, -0.32, 0.97), (-0.2, 0.3, 1), (0, 1, 0))}

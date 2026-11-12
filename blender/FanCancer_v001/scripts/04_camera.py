@@ -90,10 +90,11 @@ K = [
     (23.1, V((-24.7, -0.60, 1.50)), V((-28.5, -2.2, 1.2)), 30, False),  # through the door
     (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
     (24.3, V((-27.4, -0.95, 1.95)), moleB, 38, False),
-    (25.0, V((-28.85, -1.85, 1.62)), moleB + V((0, 0, -0.05)), 40, False),   # front-left: the scope at his neck, his face               # the dermatoscope on the mole
+    (25.0, V((-29.35, -1.35, 1.80)), moleB + V((0, 0.12, -0.08)), 34, False),   # front-left, wide: the doctor's scope at his neck and his face               # the dermatoscope on the mole
     (25.45, V((-28.85, -2.95, 1.85)), docH, 45, False),
     (25.8, V((-28.45, -2.88, 1.70)), docH, 42, False),                 # doctor's serious face
     (26.6, V((-27.8, -2.75, 2.2)), moleB, 40, False),               # overhead on the hands
+    (27.0, V((-28.2, -1.55, 1.85)), moleB, 36, False),
     (27.4, V((-29.10, -1.45, 1.75)), moleB, 34, False),
     (28.3, V((-28.80, -1.75, 1.40)), moleB, 36, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
@@ -110,6 +111,7 @@ K = [
     (35.9, HMv + V((0, -3.0, 1.45)), HMv + V((0, 1.0, 1.0)), 40, True),  # through the curtain into her room
     (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
+    (37.5, LAPSCR + ls_n * 0.75 + V((0, 0, 0.30)), LAPSCR + V((0, 0, -0.05)), 38, False),   # her laptop, the call on screen
     (37.72, LAPSCR + ls_n * 0.30 + V((0, 0, 0.06)), LAPSCR, 45, False),
     (37.9, LAPSCR + ls_n * 0.008, LAPSCR, 45, False),
     (37.9, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, True),  # out of the screen onto the ice

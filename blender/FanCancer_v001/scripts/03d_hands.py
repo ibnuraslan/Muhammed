@@ -41,8 +41,8 @@ for t in (38.0, 39.0, 40.0, 40.5, 41.5, 42.0, 43.0, 44.0):
     f = F(t); sc.frame_set(f)
     M = cq.matrix_world; xa = (M.to_3x3() @ Vector((1, 0, 0))).normalized(); c0 = M.translation
     for s_, sg in (("L", 1), ("R", -1)):
-        edge = c0 + xa * sg * 0.46 + Vector((0, 0, 0.05))
-        try: grip_object(FR, s_, f, cq, edge, -xa * sg)
+        edge = c0 + xa * sg * 0.475 + Vector((0, 0, 0.06))
+        try: grip_object(FR, s_, f, cq, edge, -xa * sg, grip='pinch')
         except Exception as e: print("GRIPFAIL", t, s_, e)
 # hidden source meshes left at the origin confuse the QA (and add size): remove them; their copies keep the data
 for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.hide_render and o.name.endswith("Src")]:
