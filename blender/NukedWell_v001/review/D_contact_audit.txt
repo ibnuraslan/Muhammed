@@ -1,0 +1,16 @@
+AUDIT NukedWell (step 10 frames, 60 fps)
+PENETRATION_COUNT 30944
+FOOT_SINK         3 samples | ranges (s): 21.2-21.2
+      e.g. f1271 (21.17s): SolA L sole 3.5 cm into the ground
+      e.g. f1271 (21.17s): SolC R sole 3.5 cm into the ground
+      e.g. f1271 (21.17s): EngA L sole 3.8 cm into the ground
+HAND_FAR         52 samples | ranges (s): 15.0-18.7, 23.3-23.8
+      e.g. f901 (15.00s): SolB L palm 10.6 cm from the hose
+      e.g. f901 (15.00s): SolD L palm 10.5 cm from the hose
+      e.g. f911 (15.17s): SolB L palm 11.5 cm from the hose
+      e.g. f911 (15.17s): SolD L palm 11.1 cm from the hose
+HAND_IN_PROP     96 samples | ranges (s): 15.0-18.7, 23.0-23.0, 23.3-23.7
+      e.g. f901 (15.00s): SolA: 306 body samples inside the hose
+      e.g. f901 (15.00s): SolB: 338 body samples inside the hose
+      e.g. f901 (15.00s): SolC: 301 body samples inside the hose
+      e.g. f901 (15.00s): SolD: 367 body samples inside the hose
