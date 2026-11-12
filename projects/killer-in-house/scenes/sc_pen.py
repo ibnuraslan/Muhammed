@@ -59,7 +59,7 @@ def build(variant=None):
         for sy in (-1, 1):
             box("CotLeg", (-0.55, 0.9 + sy * 0.9, 0.19), (0.66, 0.04, 0.38), H.mat("iron"))
         H.point((0, -2.5, 2.6), 20, (1.0, 0.8, 0.55), 0.2)
-        c["man"] = H.person("Thin", "thin")
+        c["man"] = H.person("Thin", "thin_court")
         return c
     world_sky(sun_elev_deg=26, sun_rot_deg=120, strength=0.55, tint=(1.0, 0.96, 0.9))
     sun(26, -30, energy=3.2, color=(1.0, 0.9, 0.75), angle_deg=1.2)

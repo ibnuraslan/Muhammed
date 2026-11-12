@@ -60,9 +60,9 @@ def build(variant=None):
     c["slip"] = box("Slip", (0, 0, -20), (0.1, 0.004, 0.14), pbr("SlipPaper", (0.9, 0.88, 0.82), 0.8))
     # cast per variant
     kinds = {"prosecutor": {"pr": "detective2", "j1": "neighbour_m", "j2": "neighbour_w", "j3": "captain", "j4": "friend", "j5": "son", "j6": "neighbour_m"},
-             "stand": {"def": "thin", "judge": "captain"},
+             "stand": {"def": "thin_court", "judge": "captain"},
              "jury_in": {"j1": "neighbour_m", "j2": "neighbour_w", "j3": "captain", "j4": "friend", "j5": "son"},
-             "gavel": {"def": "thin", "judge": "captain", "law": "detective2"}}[variant]
+             "gavel": {"def": "thin_court", "judge": "captain", "law": "detective2"}}[variant]
     c["cast"] = {k: H.person(v.capitalize() + k, v) for k, v in kinds.items()}
     return c
 
