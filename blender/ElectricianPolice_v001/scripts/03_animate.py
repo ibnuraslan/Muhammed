@@ -284,7 +284,7 @@ class Char:
     def hang(self, s, f, swing=0.0, out=0.0):
         """relaxed arm by the side; swing>0 forward"""
         sx = 1 if s == "L" else -1
-        self.hand_b(s, f, sx * (0.27 + out), 0.03 + swing, self.frame_of(f)[0].z - 0.12 + abs(swing) * 0.25, d=(sx * 0.06, 0.25 * (1 if swing >= 0 else -1) * min(1, abs(swing) * 4), -1), n=(-sx, 0.1, 0))
+        self.hand_b(s, f, sx * (0.33 + out), 0.03 + swing, self.frame_of(f)[0].z - 0.12 + abs(swing) * 0.25, d=(sx * 0.06, 0.25 * (1 if swing >= 0 else -1) * min(1, abs(swing) * 4), -1), n=(-sx, 0.1, 0))
         self.fingers(s, f, 22, 26)
     def fingers(self, s, f, curl, thumb=18, pose=None):
         """finger + thumb pose via the shared library (blender/pipeline/hand_poses.py). Explicit `pose` wins;
@@ -442,9 +442,9 @@ M.hand_b("R", 292, -0.2, 0.2, 1.22, d=(0.1, 1, 0.2), n=(0, 0, 1)); M.fingers("R"
 HAT_SEAT = (0.0, -0.62, 0.86)
 M.hand("L", 296, bike_pt(296, -0.25, -0.5, 1.0)[0], M.dirv(296, -0.2, -0.6, -0.8), M.dirv(296, -0.8, 0, -0.3)); M.fingers("L", 296, 25, 20)
 hs, _ = bike_pt(302, *HAT_SEAT)
-M.hand("L", 302, hs + Vector((-0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0)); M.fingers("L", 302, 0, pose="pinch")
+M.hand("L", 302, hs + Vector((-0.11, 0.02, 0.06)), M.dirv(302, -0.3, -0.4, -0.8), M.dirv(302, -1, 0, 0))
 M.hand_b("L", 306, 0.48, 0.05, 1.2, d=(0.1, -0.3, 0.9), n=(-1, 0, 0), pole=M.pt(306, 0.8, -0.2, 1.1))   # hat swings out wide, not through his chest
-M.hand_b("L", 310, 0.38, 0.18, 1.6, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0), pole=M.pt(310, 0.8, 0.0, 1.3)); M.fingers("L", 310, 0, pose="pinch")
+M.hand_b("L", 310, 0.38, 0.18, 1.6, d=(-0.3, 0.3, 0.8), n=(-1, 0, 0), pole=M.pt(310, 0.8, 0.0, 1.3))      # fingers keep the brim grip from 302
 M.hand_b("L", 318, 0.06, 0.0, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(318, 0.7, 0.2, 1.7)); M.fingers("L", 318, 0, pose="pinch")
 M.hand_b("L", 330, 0.06, 0.02, 1.9, d=(-0.5, 0.6, -0.15), n=(0, 0, -1), pole=M.pt(330, 0.7, 0.2, 1.7)); M.fingers("L", 330, 0, pose="pinch")
 M.hand_b("R", 318, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1))
@@ -546,7 +546,7 @@ W.walk(wpath, lambda f: 90 - 30 * smooth((f - 480) / 40), 436, 520, stride=0.66,
 for f, hp in ((530, -20), (545, -28)):     # stops, looks up at the pylon and lines
     W.body(f, WIN_B, yaw=60, spine=(-6, 0, 0), head=(hp, 8)); W.stand_feet(f, pos=WIN_B, yaw=60)
     W.hang("L", f); W.hang("R", f)
-for f in range(428, 521, 16):
+for f in range(428, 521, 8):
     for s, ph in (("L", 0), ("R", math.pi)):
         W.hang(s, f, swing=0.2 * math.sin(f / 13 + ph))
 # office: seated at the laptop from f508
@@ -573,7 +573,7 @@ for f, ln, arm in ((905, 26, 0.0), (925, -6, 1.0), (950, -12, 1.0), (980, -8, 0.
     seated(f, lean=ln, head=(-10 if arm else 0, 0), jaw=8 * arm, dz=-0.01); W.smile(f, 1.6)
     for s, sx in (("L", 1), ("R", -1)):
         if arm:
-            W.hand_b(s, f, sx * 0.62, 0.05, 1.6 + 0.05 * math.sin(f / 7), d=(sx * 0.5, 0, 1), n=(0, 1, 0)); W.fingers(s, f, 20, 12)
+            W.hand_b(s, f, sx * 0.5, -0.02, 1.72 + 0.04 * math.sin(f / 7), d=(sx * 0.3, 0, 1), n=(0, 1, 0))     # hands up above the head, face clear; W.fingers(s, f, 20, 12)
         else:
             W.hand(s, f, KB + Vector((-sx * 0.14, -0.1, 0.03)), Vector((0, 1, -0.25)), Vector((0, 0, -1)))
 # cabinet: stands facing +X, right glove on the lever handle, throws it down (lever keyed in 03b)
@@ -601,7 +601,7 @@ M.body(1056, CAB_STAND + Vector((0.02, 0, 0.01)), yaw=88, spine=(-4, 6, 0), head
 M.body(1068, CAB_STAND + Vector((0.06, 0, -0.06)), yaw=86, spine=(22, -8, 4), head=(16, 0), jaw=4); M.stand_feet(1068, width=1.2, stagger=0.06)
 M.body(1080, CAB_STAND + Vector((0.04, 0, -0.05)), yaw=88, spine=(18, -8, 2), head=(8, -6))
 M.body(1092, CAB_STAND + Vector((0.0, 0, -0.03)), yaw=90, spine=(12, -10, 0), head=(0, -10)); M.stand_feet(1080, width=1.2, stagger=0.06)
-M.hang("L", 1056, swing=-0.15, out=0.05); M.hang("L", 1068, swing=0.1, out=0.12); M.hang("L", 1080, out=0.04)
+M.hang("L", 1056, swing=-0.15, out=0.05); M.hang("L", 1068, swing=0.1, out=0.12); M.hang("L", 1080, out=0.04); M.hang("L", 1092, out=0.06); M.hang("L", 1100, out=0.06)
 M.body(1110, CAB_STAND + Vector((-0.08, 0, 0)), yaw=60, spine=(-4, -20, 0), head=(-6, -30)); M.stand_feet(1110, width=1.2)
 M.hand_b("R", 1110, -0.25, 0.25, 1.05, d=(0, 1, 0), n=(1, 0, 0)); M.hang("L", 1110)
 M.smile(1010, 0.6); M.smile(1080, 1.3)
@@ -616,7 +616,7 @@ for f in range(1380, 1516, 10):   # chin up, shoulders rolling: a swagger
 for f in range(1380, 1561, 10):
     ph = (f - 1380) / 135 * 2 * math.pi * 2.3 if f <= 1515 else 0.0
     for s, sx in (("L", 1), ("R", -1)):
-        W.hang(s, f, swing=0.2 * math.sin(ph + (0 if s == "L" else math.pi)) * (1.0 if f <= 1515 else 0.0), out=0.04)
+        W.hang(s, f, swing=0.2 * math.sin(ph + (0 if s == "L" else math.pi)) * (1.0 if f <= 1515 else 0.0), out=0.05)
 for f, hd, sm in ((1515, (-4, 4), 0.5), (1535, (-8, 12), 1.4), (1560, (-9, 14), 1.6)):
     W.body(f, SB, yaw=195, spine=(-4, 6, 0), head=hd); W.stand_feet(f); W.smile(f, sm, smirk=0.6)
 # teleports between segments are constant (keys exist at both ends)
@@ -648,7 +648,7 @@ stroll(EX["ExC"], (6.1, -2.0, 0), (6.1, 16.0, 0), 1, 420, 0.6)
 stroll(EX["ExD"], (-4.6, 36.5, 0), (4.4, 37.5, 0), 40, 420, 0.62)
 idle(EX["ExE"], (-4.9, 30.6), 90, 1, 420)
 # dusk: two of them walk past the dark station at the end
-stroll(EX["ExA"], (-5.9, 66.0, 0), (-5.9, 52.0, 0), 1165, 1560, 0.6)
+stroll(EX["ExA"], (-5.4, 60.0, 0), (-5.4, 47.0, 0), 1165, 1560, 0.6)     # passes the dark station front on beat 10
 stroll(EX["ExB"], (4.0, 40.0, 0), (2.4, 64.0, 0), 1140, 1560, 0.62)
 for nm in ("ExA", "ExB"): teleport_constant(RIG[nm].o, [1000])
 for nm, ch in EX.items():
@@ -726,6 +726,14 @@ def hand_limits(ch):
         w.min_x, w.max_x = -R_(60), R_(60); w.min_z, w.max_z = -R_(35), R_(35); w.min_y, w.max_y = -R_(50), R_(50)
 for nm, ch in RIG.items():
     add_hand_limits(ch.o)
+    # the library's wrist cone (+-25 deg side) clamps hanging hands so the palm turns into the thigh (clip scan, v007).
+    # Keep its finger/thumb limits; use the v006 wrist limit (STYLE_ANIMATED: +-60 flex, +-35 side, +-50 twist).
+    for s_ in "LR":
+        pbw = ch.R.PB["wrist." + s_]
+        for c_ in [c for c in pbw.constraints if c.name == "HandLimit"]: pbw.constraints.remove(c_)
+        w = pbw.constraints.new("LIMIT_ROTATION"); w.name = "hand_limit"; w.owner_space = "LOCAL"
+        w.use_limit_x = w.use_limit_y = w.use_limit_z = True
+        w.min_x, w.max_x = -R_(60), R_(60); w.min_z, w.max_z = -R_(35), R_(35); w.min_y, w.max_y = -R_(50), R_(50)
     fk = [fc for fc in fcurves(ch.o) if '"finger' in fc.data_path]
     first = min((k.co.x for fc in fk for k in fc.keyframe_points), default=10 ** 6)
     if first > 1:

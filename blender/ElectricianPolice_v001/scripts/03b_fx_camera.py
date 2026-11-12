@@ -87,11 +87,32 @@ def hand_frame(rig, s, f, off=(0, 0, 0), fwd_axis="fingers"):
     Mw = bone_world(rig, "wrist." + s, f); R3 = Mw.to_3x3()
     return Mw @ Matrix.Translation(Vector(off))
 
+def snap_W(o, W, rig, s, f, want=0.003):
+    """shift a prop's desired world matrix so the nearest of the thumb/index/middle tips sits `want` inside its surface"""
+    from mathutils.bvhtree import BVHTree
+    ev(f); mw = rig.matrix_world
+    t = BVHTree.FromPolygons([W @ v.co for v in o.data.vertices], [tuple(p.vertices) for p in o.data.polygons])
+    best = None
+    for k in (1, 2, 3):
+        p_ = mw @ rig.pose.bones["finger%d-3.%s" % (k, s)].tail; loc, nrm, _i, d = t.find_nearest(p_, 1.0)
+        if loc is not None and (best is None or d < best[0]): best = (d, p_, loc, nrm)
+    if best is None: return W
+    d, p_, loc, nrm = best; nrm = nrm if (p_ - loc).dot(nrm) >= 0 else -nrm
+    return Matrix.Translation(p_ - (loc - nrm * want)) @ W
 # hard hats
 hatR = ob("HardHat_Road"); hatW = ob("HardHat_Work")
 ev(296); Mb = bike.matrix_world.copy()
 seat_pose = Mb @ Matrix.Translation(Vector(HAT_SEAT) + Vector((0, 0, 0.005)))
-attach_seq(hatR, [(1, bike, None, seat_pose, 296), (302, CH["Man"], "wrist.L", seat_pose),
+# grab the hat by its brim (shared library grip_object, pinch: fingers on top, thumb under), before it is parented to the hand
+hatR.constraints.clear(); hatR.matrix_world = seat_pose; bpy.context.view_layer.update()
+ev(302); _wl = CH["Man"].matrix_world @ CH["Man"].pose.bones["wrist.L"].head
+_bv = [seat_pose @ v.co for v in hatR.data.vertices]; _zmin = min(v.z for v in _bv)
+_rim = [v for v in _bv if v.z < _zmin + 0.012]
+_cp = min(_rim, key=lambda v: (v - _wl).length); _ctr = sum(_rim, Vector()) / len(_rim)
+_app = (_ctr - _cp); _app.z = 0; _app.normalize()
+print("HAT_GRIP", grip_object(CH["Man"], "L", 302, hatR, _cp, _app, grip="pinch"))
+apply_pose(CH["Man"], "L", "pinch", 302)     # same pinch shape held through the carry (no in-between claw)
+attach_seq(hatR, [(1, bike, None, seat_pose, 296), (302, CH["Man"], "wrist.L", snap_W(hatR, seat_pose, CH["Man"], "L", 302, want=0.004)),
                   (318, CH["Man"], "head", head_frame(CH["Man"], 318))])
 desk_o = ob("Office_Desk")
 hat_desk = Matrix.Translation(Vector((DESK.x - 0.82, DESK.y + 0.22, 0.795))) @ Matrix.Rotation(R_(35), 4, "Z")
@@ -119,18 +140,6 @@ bm_.to_mesh(keyring.data); bm_.free(); keyring.data.materials.append(bpy.data.ma
 loc_, f3_, n_ = palm_pose(CH["ManW"], "R", 340, 0.07, -0.02)
 loc, f3, n = palm_pose(CH["OfficerA"], "R", 268, 0.09, -0.02)
 loc2, f32, n2 = palm_pose(CH["Man"], "R", TICKET_F, 0.09, -0.02)
-def snap_W(o, W, rig, s, f, want=0.003):
-    """shift a prop's desired world matrix so the nearest of the thumb/index/middle tips sits `want` inside its surface"""
-    from mathutils.bvhtree import BVHTree
-    ev(f); mw = rig.matrix_world
-    t = BVHTree.FromPolygons([W @ v.co for v in o.data.vertices], [tuple(p.vertices) for p in o.data.polygons])
-    best = None
-    for k in (1, 2, 3):
-        p_ = mw @ rig.pose.bones["finger%d-3.%s" % (k, s)].tail; loc, nrm, _i, d = t.find_nearest(p_, 1.0)
-        if loc is not None and (best is None or d < best[0]): best = (d, p_, loc, nrm)
-    if best is None: return W
-    d, p_, loc, nrm = best; nrm = nrm if (p_ - loc).dot(nrm) >= 0 else -nrm
-    return Matrix.Translation(p_ - (loc - nrm * want)) @ W
 def pinch_frame(rig, s, f, half=0.07, bite=0.018, thin="Z", zoff=0.0, lift=0.0, mid=False):
     """object frame for a flat prop held between thumb tip and index (or middle) tip: its near edge sits in the pinch.
     thin: the prop's thin local axis (Z for paper/pad, X for the phone). zoff: local offset of the mid-plane along that axis."""
@@ -591,8 +600,9 @@ CAMK = [
     (1167, V(12.5, 37.0, 2.6), V(3.8, 41.2, 1.5), 24),
     (1176, V(7.6, 37.6, 2.2), V(3.4, 42.6, 1.5), 24),
     (1196, V(5.2, 39.6, 2.4), V(1.0, 47.5, 1.9), 24),
-    (1215, V(-1.0, 52.5, 4.0), V(-6.2, 59.5, 2.0), 26),
-    (1232, V(-5.3, 53.9, 1.75), V(-11.2, 53.9, 1.25), 55),
+    (1206, V(4.6, 41.0, 2.2), V(3.4, 44.2, 1.45), 26),
+    (1222, V(3.6, 42.3, 2.05), V(3.3, 44.7, 1.45), 26),
+    (1236, V(-0.8, 51.0, 1.9), V(-5.4, 57.6, 1.35), 26),
     (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 30),
     (1290, V(-9.2, 55.2, 1.5), V(-11.4, 53.6, 1.25), 28),
     (1306, V(-10.0, 56.5, 1.45), V(-12.1, 57.8, 1.95), 28),

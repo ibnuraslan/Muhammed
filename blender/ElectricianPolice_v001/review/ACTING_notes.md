@@ -113,3 +113,13 @@ The beat frames are unchanged and beats.json is identical. Everything kept from 
 | 937, 1087–1093 | EMPTY (7–9 %) | Short pull-backs between close framings. He is in frame. |
 | 1093 | HOVER LeverGrip | The hand opening off the lever, 5 frames after the throw. |
 | 1099 | HOVER Spark_* | Sparks fly past his hands. |
+
+## v007 rev 2: the director's review of 3dddeab (16:11 UTC)
+| Note | Fix |
+|---|---|
+| 9 clip ranges | **Cause:** the library's wrist cone (±25° side) clamped hanging hands, so the palm turned into the thigh. Muting it moved the fingertips 12–14 cm. **Fix:** keep the library's finger and thumb limits, and use the v006 wrist limit (±60° flex, ±35° side, ±50° twist, per STYLE_ANIMATED). All hanging hands sit 6 cm further out (lateral 0.33 m), because the relaxed curl faces the thigh. The arm-swing keys during the gate walk are now every 8 frames instead of 16; the body turns while he walks. Two hang keys were added after the lever (1092, 1100). |
+| 5.0 s hat | At 302, `grip_object(..., grip="pinch")` grips the brim edge nearest the hand, before the hat is parented to the hand. The hat is then snapped onto the fingertips (`snap_W`). The same pinch is held through the carry, so there is no in-between claw. |
+| 20.0 s, f1225 | The camera follows the pedestrian until 1222. On beat 10 (1231), the dark station front is in frame with a second pedestrian walking past it. The camera then enters through the centre of the window. |
+| 940 celebration | The hands are above his head (z 1.72, lateral 0.5), so his face reads. |
+
+Kept as intended, in addition to the table above: f1243, one 0.1 s sample as the camera passes through the station window frame.
