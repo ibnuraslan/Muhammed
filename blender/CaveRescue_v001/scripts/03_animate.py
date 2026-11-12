@@ -809,7 +809,7 @@ for f, e in ((1, 150), (1212, 150), (1218, 0), (1878, 0), (1886, 150), (2430, 15
 for f, v in EXPO:
     sc.view_settings.exposure = v; sc.view_settings.keyframe_insert("exposure", frame=f)
 
-# v006c: medic head pitched back ~15 deg over 2170-2371 (eased over 15 frames) so he looks at the syringe/arm, not over the boy's face
+# v006c: medic head pitched back ~25 deg over 2170-2371 (eased over 15 frames) so he looks at the syringe/arm, not over the boy's face
 from mathutils import Quaternion as _Q
 import math as _m
 _ro = RIG["DiverA"].o; _hp = _ro.pose.bones["head"]; _hp.rotation_mode = 'QUATERNION'
@@ -824,7 +824,7 @@ def _base(f):
                         if _fc.data_path == 'pose.bones["head"].rotation_quaternion': q[_fc.array_index] = _fc.evaluate(f)
     return _Q(q)
 def _tz(sign, f):
-    sc.frame_set(f); _hp.rotation_quaternion = _base(f) @ _Q((1, 0, 0), sign * _m.radians(15)); bpy.context.view_layer.update()
+    sc.frame_set(f); _hp.rotation_quaternion = _base(f) @ _Q((1, 0, 0), sign * _m.radians(25)); bpy.context.view_layer.update()
     return (_ro.matrix_world @ _hp.tail).z
 _sg = 1.0 if _tz(1.0, 2251) > _tz(-1.0, 2251) else -1.0
 def _ss(t): t = max(0.0, min(1.0, t)); return t * t * (3 - 2 * t)
@@ -832,7 +832,7 @@ _fr = sorted(set(list(range(2155, 2172, 2)) + list(range(2172, 2370, 6)) + list(
 _vals = []
 for f in _fr:
     w = _ss((f - 2155) / 15.0) if f < 2170 else (_ss((2386 - f) / 15.0) if f > 2371 else 1.0)
-    _vals.append((f, _base(f) @ _Q((1, 0, 0), _sg * _m.radians(15) * w)))
+    _vals.append((f, _base(f) @ _Q((1, 0, 0), _sg * _m.radians(25) * w)))
 for f, q in _vals:
     _hp.rotation_quaternion = q; _hp.keyframe_insert("rotation_quaternion", frame=f)
 print("MEDIC_HEAD_PITCH sign", _sg, "keys", len(_vals))
