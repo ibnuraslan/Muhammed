@@ -5,6 +5,7 @@ import numpy as np
 import bpy
 from mathutils import Vector
 from kit import *
+import look
 
 EXPOSURE = 0.9
 DOOR_Y = 0.0          # glass line; corridor is y < 0, reception y > 0
@@ -270,6 +271,13 @@ def build_day():
     for o in bpy.data.objects:
         if o.type == 'LIGHT' and o.data.type == 'AREA':
             o.visible_camera = False; o.visible_glossy = False; o.visible_transmission = False
+    # house look: late sun rakes down the corridor from the end window; the reception beyond stays cool and dim
+    if look.enabled():
+        look.interior_day(window=((5.5, 4.2, 3.0), (0.0, 2.4, 0.3)), mood="low_sun", key_size=2.0, fill=0.1,
+                          keep=(ro, so), sky_factor=0.2)
+        look.gobo((4.2, 2.6, 1.5), (5.0, 3.0), axis="x", bars=7, bar=0.32)  # window bars: sun stripes on floor and slats
+        ro.data.energy *= 0.25; ro.data.color = (0.8, 0.87, 1.0)          # cool bounce from the far side
+        so.data.energy *= 1.4; so.data.color = (1.0, 0.7, 0.45)          # warm rim on the reporters from the corridor window
     c.update(chairs=Vector((-2.4, 2.35, 0.5)), name=Vector((0.3, 4.9, 1.95)), glass=Vector((-0.1, 0.0, 1.35)))
     return c
 

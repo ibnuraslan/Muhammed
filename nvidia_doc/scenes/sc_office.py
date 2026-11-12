@@ -6,6 +6,7 @@ import numpy as np
 import bpy
 from mathutils import Vector
 from kit import *
+import look
 from human import Human, add_asset, pose_sit, aim_bone, fingers_curl, rotate_bone, _world_verts
 
 EXPOSURE = 0.6
@@ -91,6 +92,7 @@ def build(variant=None):
         w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
         h.arm.location.z -= w[:, 2].min(); bpy.context.view_layer.update()
         people.append(h)
+    look.night_interior()                           # house look: darker walls, warm practicals; night stays readable
     return dict(screens=screens, mat=smat)
 
 

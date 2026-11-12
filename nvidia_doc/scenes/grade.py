@@ -1,5 +1,8 @@
 """The house look, as a compositor tree stored in each shot (so an external render comes out graded):
-soft bloom, slight lens dispersion, vignette, gentle teal-shadow / warm-highlight balance. Film grain is added in the edit."""
+soft bloom, slight lens dispersion, vignette, gentle teal-shadow / warm-highlight balance. Film grain is added in the edit.
+Default look="cinematic" (Nov 2026): darker, contrasty, rolled-off highlights, teal blacks / amber highlights.
+Pair it with the lighting recipe in look.py: the grade alone cannot put shadows into an evenly lit set."""
+import math
 import bpy
 
 
@@ -19,26 +22,73 @@ def _set(n, name, val):
             pass
 
 
-def _cinematic(nt, src):
-    """Darker, denser, filmic day: exposure down, S-curve with rolled-off highlights (no white walls),
-    saturation down, teal shadows / amber highlights."""
+def _sock(n, name, kind=None):
+    """Input socket by name; Blender 5 nodes carry a float and a colour socket with the same name (ColorBalance
+    'Lift', 'Gain', ...): kind='RGBA' picks the colour one."""
+    for i in n.inputs:
+        if i.name == name and (kind is None or i.type == kind):
+            return i
+    return None
+
+
+def _mix(nt, blend, a, b_val=None, b_sock=None, fac=1.0):
+    m = nt.nodes.new("ShaderNodeMix"); m.data_type = 'RGBA'; m.blend_type = blend; m.clamp_result = False
+    m.inputs['Factor'].default_value = fac
+    nt.links.new(a, m.inputs[6])
+    if b_sock is not None:
+        nt.links.new(b_sock, m.inputs[7])
+    else:
+        m.inputs[7].default_value = (*b_val, 1)
+    return m.outputs[2]
+
+
+def _math(nt, op, a, b=None, bv=None):
+    m = nt.nodes.new("ShaderNodeMath"); m.operation = op; m.use_clamp = False
+    nt.links.new(a, m.inputs[0])
+    if b is not None:
+        nt.links.new(b, m.inputs[1])
+    elif bv is not None:
+        m.inputs[1].default_value = bv
+    return m.outputs[0]
+
+
+# The cinematic look (Nov 2026). Every op works on scene-linear light, BEFORE the AgX view transform, so it holds
+# for values above 1 (no clipping at 0.84 linear, which is what made the first test flat and grey).
+CINE = dict(exposure=-0.35,      # stops; the darker mood comes mostly from the lighting recipe (look.py)
+            contrast=1.18,       # power around mid-grey 0.18: deeper shadows, firmer mids
+            knee=0.55, span=1.4,  # luminance shoulder: highlights roll off towards knee+span (AgX then soft-clips)
+            black=(0.0011, 0.001, 0.0009),  # subtracted in linear: rich blacks, a whisper cool (no teal wash)
+            warm=(1.012, 1.0, 0.988),       # multiplied: a whisper warm (no amber cast)
+            sat=0.95)                        # natural colours: never drain colour (exteriors use 1.0)
+# v4 rule (the person): cinematic = deeper shadows, contrast, soft directional light, NATURAL colours, readable faces.
+# No colour casts. The mood comes from light, shadow and contrast, not from tinting.
+
+
+def _cinematic(nt, src, k=None):
+    """Darker, denser, filmic: exposure down, contrast around mid-grey, rolled-off highlights, rich teal blacks,
+    amber highlights, saturation down. Linear-light safe."""
+    k = dict(CINE, **{a: b for a, b in (k or {}).items() if a in CINE})
     L = nt.links
-    ex = nt.nodes.new("CompositorNodeExposure"); _set(ex, "Exposure", -0.8)
-    L.new(src, ex.inputs["Image"])
-    cv = nt.nodes.new("CompositorNodeCurveRGB")
-    c = cv.mapping.curves[3]
-    for (x, y), pt in zip([(0.0, 0.0), (1.0, 0.84)], c.points):
-        pt.location = (x, y)
-    for x, y in [(0.12, 0.035), (0.30, 0.15), (0.55, 0.38), (0.85, 0.71)]:
-        c.points.new(x, y)
-    cv.mapping.update()
-    L.new(ex.outputs["Image"], cv.inputs["Image"])
-    hs = nt.nodes.new("CompositorNodeHueSat"); _set(hs, "Saturation", 0.78)
-    L.new(cv.outputs["Image"], hs.inputs["Image"])
-    cb = nt.nodes.new("CompositorNodeColorBalance")
-    _set(cb, "Lift", (0.92, 0.955, 1.0, 1)); _set(cb, "Gamma", (1.0, 0.99, 0.97, 1)); _set(cb, "Gain", (1.05, 1.0, 0.92, 1))
-    L.new(hs.outputs["Image"], cb.inputs["Image"])
-    return cb.outputs["Image"]
+    ex = nt.nodes.new("CompositorNodeExposure")
+    # contrast c around pivot p: p * (x/p)^c = x^c * p^(1-c) -> fold p^(1-c) into the exposure
+    ex.inputs['Exposure'].default_value = (k["exposure"] + (1 - k["contrast"]) * math.log2(0.18)) / k["contrast"]
+    L.new(src, ex.inputs['Image'])
+    g = nt.nodes.new("ShaderNodeGamma"); g.inputs['Gamma'].default_value = k["contrast"]
+    L.new(ex.outputs['Image'], g.inputs['Color'])
+    img = g.outputs['Color']
+    # luminance shoulder: Y' = Y below the knee, knee + d/(1 + d/span) above it; scale RGB by Y'/Y (hue kept)
+    bw = nt.nodes.new("CompositorNodeRGBToBW"); L.new(img, bw.inputs['Image'])
+    y = bw.outputs['Val']
+    d = _math(nt, 'MAXIMUM', _math(nt, 'SUBTRACT', y, bv=k["knee"]), bv=0.0)
+    soft = _math(nt, 'DIVIDE', d, _math(nt, 'ADD', _math(nt, 'DIVIDE', d, bv=k["span"]), bv=1.0))
+    y2 = _math(nt, 'ADD', _math(nt, 'MINIMUM', y, bv=k["knee"]), soft)
+    ratio = _math(nt, 'DIVIDE', y2, _math(nt, 'MAXIMUM', y, bv=1e-5))
+    img = _mix(nt, 'MULTIPLY', img, b_sock=ratio)
+    img = _mix(nt, 'SUBTRACT', img, b_val=k["black"])
+    img = _mix(nt, 'MULTIPLY', img, b_val=k["warm"])
+    hs = nt.nodes.new("CompositorNodeHueSat"); hs.inputs['Saturation'].default_value = k["sat"]
+    L.new(img, hs.inputs['Image'])
+    return hs.outputs['Image']
 
 
 def grade_file(src, dst, look="cinematic", **kw):
@@ -48,18 +98,30 @@ def grade_file(src, dst, look="cinematic", **kw):
     img = bpy.data.images.load(src)
     sc.render.resolution_x, sc.render.resolution_y = img.size
     sc.render.resolution_percentage = 100
-    sc.view_settings.view_transform = 'Standard'
+    if src.lower().endswith(".exr"):         # scene-linear render: grade then AgX, exactly as in a real render
+        sc.view_settings.view_transform = 'AgX'; sc.view_settings.look = 'AgX - Medium High Contrast'
+        sc.view_settings.exposure = kw.pop("exposure", 0.0)
+    else:                                    # an already display-referred PNG (rough preview only)
+        sc.view_settings.view_transform = 'Standard'
+    sc.render.image_settings.file_format = 'JPEG' if dst.lower().endswith((".jpg", ".jpeg")) else 'PNG'
     add_grade(sc, look=look, image=img, **kw)
     sc.render.filepath = dst
     bpy.ops.render.render(write_still=True)
     return dst
 
 
-def add_grade(scene, bloom=0.35, vignette=0.55, look="cinematic", image=None):
+def add_grade(scene, bloom=0.35, vignette=None, look="cinematic", image=None, cine=None):
     """look="cinematic" (default from Nov 2026): the person wants every scene, day included, moody and filmic,
     never a bright plain 'normal camera' day: about half a stop darker, firmer contrast, less saturation,
     cooler shadows and warm highlights. look="plain" gives the original house grade.
-    image: a bpy Image to grade instead of the render (for look tests on stills)."""
+    image: a bpy Image to grade instead of the render (for look tests on stills).
+    vignette: None = 0.55 plain / 0.68 cinematic. cine: overrides for grade.CINE (per-shot tweaks).
+    The grade cannot make shadows: light the set with look.py (one key, negative fill, dark walls)."""
+    if cine is None and scene.get("look_cine"):
+        import json
+        cine = json.loads(scene["look_cine"])
+    if vignette is None:
+        vignette = 0.68 if look == "cinematic" else 0.55
     nt = bpy.data.node_groups.new("HouseGrade", "CompositorNodeTree")
     if hasattr(nt, "interface"):
         nt.interface.new_socket("Image", in_out='OUTPUT', socket_type='NodeSocketColor')
@@ -118,16 +180,21 @@ def add_grade(scene, bloom=0.35, vignette=0.55, look="cinematic", image=None):
         links.new(lens.outputs["Image"], vig.inputs[1]); links.new(ell.outputs[0], blur.inputs[0])
         links.new(blur.outputs[0], vig.inputs[2]); vig_out = vig.outputs[0]
     cb = nt.nodes.new("CompositorNodeColorBalance")
-    for name, val in (("Lift", (0.985, 1.0, 1.02, 1)), ("Gain", (1.03, 1.0, 0.97, 1))):
-        if name in cb.inputs:
-            try:
-                cb.inputs[name].default_value = val
-            except Exception:
-                pass
+    # Lift acts as an offset in linear light (~+0.02 blue here): fine at normal exposure, but it turns very dark sets
+    # that are exposed up (forest, dusk) navy, so moods can override it via cine={"lift": (r, g, b)}.
+    # cinematic: neutral balance (natural colours); plain keeps the original teal/warm balance
+    lift = tuple((cine or {}).get("lift", (1.0, 1.0, 1.0) if look == "cinematic" else (0.985, 1.0, 1.02)))
+    gain = (1.0, 1.0, 1.0) if look == "cinematic" else (1.03, 1.0, 0.97)
+    for name, val in (("Lift", (*lift, 1)), ("Gain", (*gain, 1))):
+        sk = _sock(cb, name, 'RGBA') or _sock(cb, name)
+        try:
+            sk.default_value = val
+        except Exception:
+            pass
     links.new(vig_out, cb.inputs["Image"])
     last = cb.outputs["Image"]
     if look == "cinematic":
-        last = _cinematic(nt, last)
+        last = _cinematic(nt, last, cine)
     links.new(last, out.inputs[0])
     scene.compositing_node_group = nt
     scene.render.use_compositing = True
