@@ -117,13 +117,13 @@ def stand_feet(x, y, yaw, lift=0.0, pitch=0.0, spread=1.0):
     return out
 # --- beat 1 (1-150): on tiptoe reaching into the chute, the other hand on the sill
 TIP_PITCH = float(os.environ.get("TIP_PITCH", "40"))
-SILL = Vector((-0.27, FY - 0.03, sc["chute_z"][0] + 0.02))
+SILL = Vector((-0.34, FY - 0.05, sc["chute_z"][0] + 0.03))
 def reach(f, depth, tip, wob=0.0):
     y = -1.02 + 0.06 * depth
     WO.pose(f, (0.0, y, RH - 0.02 + 0.07 * tip), yaw=180, flex=18 + 14 * depth, sp=(10 + 10 * depth, 6 * wob, 0), head=(-8, 10 * wob),
-            hands={"L": ("w", SILL + Vector((0, 0, 0.0)), (0, 1, -0.2), (0, 0, 1)),
-                   "R": ("w", Vector((0.12 + 0.06 * wob, FY + 0.15 + 0.2 * depth, 1.24 + 0.05 * wob)), (0, 1, -0.5), (0, 0, 1))},
-            feet=stand_feet(0.0, -1.05, 180, lift=0.075 * tip, pitch=TIP_PITCH * tip), curl={"L": 0.7, "R": 0.3 + 0.4 * depth})
+            hands={"L": ("w", SILL + Vector((0, 0, 0.0)), (0.2, 1, -0.15), (0, 0, -1)),
+                   "R": ("w", Vector((0.14 + 0.06 * wob, FY + 0.15 + 0.2 * depth, 1.24 + 0.05 * wob)), (0, 1, -0.5), (0, 0, -1))},
+            feet=stand_feet(0.0, -1.05, 180, lift=0.075 * tip, pitch=TIP_PITCH * tip), curl={"L": 0.2, "R": 0.3 + 0.3 * depth})
 reach(1, 0.0, 0.3, 0.0); reach(35, 0.4, 0.8, 0.5); reach(70, 0.8, 1.0, -0.6); reach(105, 1.0, 1.0, 0.8); reach(135, 0.9, 1.0, -0.4); reach(155, 1.0, 1.0, 0.0)
 # --- beat 2 (151-294): shoved, pitches forward head-first through the chute, somersault inside
 FALL = [  # f, pos, yaw, flex, side, spine, feet-delta, hand-delta L, R
