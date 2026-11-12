@@ -198,7 +198,7 @@ for nm, s, l in (("WS_WinFrameTop", (0.08, 1.2, 0.06), (2.4, -0.4, 1.98)), ("WS_
 bench = ph_model("WoodenTable_03", (0, 0, 0), 0, C_WS, name="WS_Bench")
 bench_top = bench["size"][2]
 sc["bench_top"] = bench_top
-ph_model("bench_vice_01", (-0.5, 0.05, bench_top), 90, C_WS, name="WS_Vice")
+ph_model("bench_vice_01", (-0.34, 0.08, bench_top), 90, C_WS, name="WS_Vice")
 ph_model("desk_lamp_arm_01", (0.52, 0.15, bench_top), -140, C_WS, name="WS_Lamp", scale=0.8)
 ph_model("hand_plane_no4", (-0.15, -0.22, bench_top), 20, C_WS)
 ph_model("small_oil_can_01", (0.62, -0.15, bench_top), -30, C_WS)
@@ -631,6 +631,13 @@ for m in bpy.data.objects["Inventor.female_casualsuit01"].data.materials:
     for nd in m.node_tree.nodes:
         if nd.type == 'TEX_IMAGE' and nd.image and "diffuse" in nd.image.name.lower():
             nd.image = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "inventor_top_clean.jpg"))
+        if nd.type == 'TEX_IMAGE' and nd.image and "normal" in nd.image.name.lower():
+            nd.image = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "inventor_suit_normal_soft.jpg")); nd.image.colorspace_settings.name = 'Non-Color'   # embossed lettering blurred out
+chest_img = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "tool_chest_diff_clean.jpg"))
+for m in bpy.data.materials:      # tool chest: printed badge / small print removed
+    if m.name.startswith("metal_tool_chest") and m.node_tree:
+        for nd in m.node_tree.nodes:
+            if nd.type == 'TEX_IMAGE' and nd.image and "diff" in nd.image.name: nd.image = chest_img
 art = bpy.data.images.load(os.path.join(ROOT, "assets", "tex", "frame_artwork.jpg"))
 for m in bpy.data.materials:
     if m.name.startswith("hanging_picture_frame_01_artwork"):
@@ -646,6 +653,9 @@ for o in bpy.data.objects:
             b_ = o.modifiers.new("bev", 'BEVEL'); b_.width = 0.004 if not o.name.startswith("OF_Blind") else 0.002; b_.segments = 2; b_.limit_method = 'ANGLE'
             for pl in o.data.polygons: pl.use_smooth = True
             o.data.shade_auto_smooth(angle=R_(35)) if hasattr(o.data, "shade_auto_smooth") else None
+for o in bpy.data.objects:       # rig control widgets that came inside rigged Poly Haven models must never render
+    if o.name.lower().startswith(("wdg", "wgt", "widget", "cs_")):
+        o.hide_render = True; o.hide_viewport = True
 bpy.ops.file.make_paths_absolute()
 # de-duplicate images loaded more than once (props appended twice)
 seen = {}
