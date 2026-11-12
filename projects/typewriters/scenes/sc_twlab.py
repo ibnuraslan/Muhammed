@@ -218,7 +218,7 @@ def evidence_row(c, bench):
         ph.model("cardboard_box_01", loc=(-5.3 + k * 0.5, 2.0 - 3.8, 0), rot_z=0.1 * k, scale=0.8)
     for x in (-3.0, 0.0, 3.0):                              # an evidence hall under bright fluorescent light
         l = area_light((x, -0.6, 3.0), (0, 0, 0), 1.2, 140, (0.9, 0.96, 1.0)); l.visible_camera = False
-    twp.venetian(-5.95, -2.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind", (0.72, 0.71, 0.66), 0.5), tilt=-45)
+    twp.venetian(-5.95, -2.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind", (0.42, 0.41, 0.38), 0.5), tilt=-45)
     twp.venetian(-5.95, 0.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind2", (0.72, 0.71, 0.66), 0.5), tilt=-45)
     twp.venetian(-5.95, 2.4, 1.0, 2.7, 0.6, "y", pbr("EvBlind3", (0.72, 0.71, 0.66), 0.5), tilt=-45)
     dado = ph.texture("painted_plaster_wall", scale=0.5, name="EvDado", tint=(0.38, 0.45, 0.48))      # two-tone walls, a rail, shelving, clock
@@ -321,5 +321,6 @@ def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     look.interior_day(window=((-6.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="low_sun", key_size=3.0)
     look.haze((0, 0, 1.5), (12, 8, 3.0), "low_sun", 0.025)
+    twp.window_plate((-6.6, 0.0, 1.85), (9.0, 2.6), axis="x")
     look.gobo((-6.2, 0.0, 1.85), (6.0, 1.8), axis="x", bars=7, kind="blinds")
     return c

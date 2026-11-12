@@ -296,3 +296,20 @@ def chest_point(h, fwd_d=0.24, down=0.3):
     """A point in front of the chest, from the shoulders (for things held in both hands)."""
     m = (h.bone_head("upperarm01.L") + h.bone_head("upperarm01.R")) * 0.5
     return m + forward(h) * fwd_d + Vector((0, 0, -down))
+
+
+def window_plate(center, size, axis="x", top=(0.5, 0.55, 0.6), bottom=(0.26, 0.28, 0.29), strength=1.0, name="WinPlate"):
+    """What a window shows: a dim, softly graded exterior just outside the glass (never a flat white square). It casts
+    no shadow, so a key light set outside the window still comes through. axis: the wall normal."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); em = N.new("ShaderNodeEmission"); tc = N.new("ShaderNodeTexCoord")
+    sp = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sp.inputs[0])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (*bottom, 1); cr.color_ramp.elements[1].color = (*top, 1)
+    L.new(sp.outputs[2], cr.inputs[0]); L.new(cr.outputs[0], em.inputs['Color']); em.inputs['Strength'].default_value = strength
+    L.new(em.outputs[0], out.inputs['Surface'])
+    w, h = size
+    dims = (0.02, w, h) if axis == "x" else (w, 0.02, h)
+    o = box(name, center, dims, m)
+    o.visible_shadow = False; o.visible_diffuse = False
+    return o

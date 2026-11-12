@@ -106,7 +106,7 @@ def build(variant=None):
         box("WinPierL", (-7.05, y, 1.85), (0.1, 0.6, 1.7), wall)
     for yc in (-2.55, -0.05, 2.5):
         box("MeadeGlass", (-7.04, yc, 1.85), (0.01, 1.9, 1.7), glass("MeadeGlassM", (0.9, 0.93, 0.95)))
-        twp.venetian(-6.95, yc, 1.0, 2.68, 1.9, "y", pbr("MeadeBlind", (0.72, 0.71, 0.66), 0.5), tilt=-50 if not night else -10)
+        twp.venetian(-6.95, yc, 1.0, 2.68, 1.9, "y", pbr("MeadeBlind", (0.42, 0.41, 0.38), 0.5), tilt=-50 if not night else -10)
     box("MeadeOutside", (-30, 0, 6), (1, 60, 16), ph.texture("concrete_wall_008", scale=0.2, name="MeadeOut"))
     if not night:
         sn = bpy.data.lights.new("Sun", 'SUN'); sn.energy = 2.0; sn.angle = math.radians(2); sn.color = (1.0, 0.95, 0.88)
@@ -505,4 +505,5 @@ def build(variant=None):
         look.interior_day(window=((-7.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="low_sun", key_size=3.0)
         look.gobo((-7.2, 0.0, 1.85), (8.0, 1.7), axis="x", bars=8, kind="blinds")
         look.haze((0, 0, 1.6), (14, 8, 3.2), "low_sun", 0.025)
+        twp.window_plate((-7.6, 0.0, 1.85), (9.0, 2.6), axis="x")
     return c

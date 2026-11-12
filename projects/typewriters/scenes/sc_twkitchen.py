@@ -61,7 +61,7 @@ def build(variant="home"):
     box("KWallBlow", (0, 2.55, 0.5), (2.0, 0.1, 1.0), wall); box("KWallBhigh", (0, 2.55, 2.25), (2.0, 0.1, 0.5), wall)
     box("KGlass", (0, 2.57, 1.5), (2.0, 0.01, 1.0), glass("KGlassM", (0.9, 0.93, 0.95)))
     box("KSash", (0, 2.55, 1.5), (0.04, 0.06, 1.0), pbr("KSashM", (0.85, 0.83, 0.78), 0.5))
-    twp.venetian(0, 2.48, 1.02, 1.95, 2.0, "x", pbr("KBlind", (0.8, 0.78, 0.72), 0.5), tilt=-65 if not home else -20)
+    twp.venetian(0, 2.48, 1.02, 1.95, 2.0, "x", pbr("KBlind", (0.45, 0.43, 0.4), 0.5), tilt=-65 if not home else -20)
     # counters with cabinet fronts (scanned wood textures), sink, kettle, coffee pot
     wood = ph.texture("kitchen_wood", scale=1.0, name="KitWood", tint=(0.9, 0.85, 0.78))
     top = ph.texture("marble_01", scale=0.8, name="KitTop", tint=(0.8, 0.8, 0.78))
@@ -257,6 +257,7 @@ def build(variant=None):
     if variant == "safe":
         look.interior_day(window=((0.0, 2.9, 1.5), (0.0, 0.0, 0.8)), mood="low_sun", key_size=1.8)
         look.haze((0, 0, 1.3), (5, 5, 2.6), "low_sun", 0.03)
+        twp.window_plate((0.0, 2.85, 1.5), (3.0, 1.6), axis="y", strength=0.8)
     else:
         look.night_interior()
     return c

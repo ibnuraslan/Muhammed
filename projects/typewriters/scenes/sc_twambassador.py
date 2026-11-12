@@ -405,4 +405,11 @@ def build(variant=None):
         look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.5, 0.9)), mood="low_sun")
         look.gobo((0.3, 3.25, 1.8), (4.0, 2.0), axis="y", bars=6)
         look.haze((0, 0, 1.6), (7, 6, 3.2), "low_sun", 0.03)
+        # warm bounce from the desk lamp and desk onto faces and hands (added after the look's negative fill)
+        if variant == "oval":
+            b = area_light((OVAL_DESK.x + 0.35, OVAL_DESK.y - 0.45, 1.05), (0, 0, 0), 0.6, 30, (1.0, 0.74, 0.48))
+            point_at(b, (OVAL_DESK.x, OVAL_DESK.y + 0.62, 1.2)); b.visible_camera = False
+        else:
+            for tgt in ((0.3, 1.55, 1.55), (0.3, 0.45, 1.55)):
+                b = area_light((0.05, 1.0, 1.0), (0, 0, 0), 0.5, 22, (1.0, 0.74, 0.48)); point_at(b, tgt); b.visible_camera = False
     return c

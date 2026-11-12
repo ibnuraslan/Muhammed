@@ -364,11 +364,9 @@ def animate(c, sec, shot):
         c["fork_load"].location = Vector((x + 1.4, 7.0, 0.6)); twp.hide([c["fork_load"]], False)
         twp.stand(P["driver"], (x - 0.25, 7.0, 0.85), math.pi / 2)
         from human import pose_sit
-    elif shot == "apron":
-        x = -20.0 + 2.6 * sec
-        fk.location = (x, -HY - 6.0, 0); fk.rotation_euler = (0, 0, 0); V.roll(c["fork_w"], 2.6 * sec, 0.3)
-        c["fork_load"].location = Vector((x + 1.4, -HY - 6.0, 0.6)); twp.hide([c["fork_load"]], False)
-        twp.stand(P["driver"], (x - 0.25, -HY - 6.0, 0.85), math.pi / 2)
+    elif shot == "apron":                                         # no forklift here: a loader walks across the apron
+        fk.location = (30, 30, -20); twp.hide([c["fork_load"]], True)
+        twp.walk(P["driver"], (-14.0, -HY - 6.0), (-2.0, -HY - 6.0), sec, speed=1.2)
     else:
         fk.location = (30, 30, -20); twp.hide([c["fork_load"]], True)
     # wrapping station
