@@ -53,6 +53,17 @@ The old `fingers()` turned all the finger bones about one shared palm axis, and 
 | 12 s phone | The palm is under the phone and the fingers are on its back. The thumb tucks onto the front edge. |
 | 13–15 s idle hands | They hang beside the leg, 27 cm out to the side, with the fingers gently curled (22°) and the thumb relaxed. |
 
+### Contact: the hands touch what they hold (director's self-check, 14:40 UTC)
+- **Grip solver** (`grip_fix` in `03_animate.py`): after the fist is posed, it measures the centre of the curled fist's hole (the finger joints) and moves the hand's IK target so the object runs through it. This covers the bike grips (1–250) and the lever (1044–1088); the residual error is 1.5 cm or less.
+  - The bike grip target had been 4 cm past the real bar end, so the left hand gripped air. It now sits on the measured grip (bar tip at ±0.253 m, grip centre at ±0.205 m).
+- **Pinch placement** (`pinch_frame` in `03b_fx_camera.py`): flat props now sit with their edge in the actual pinch between the thumb tip and the index (or middle) tip, measured on the posed hand. This covers:
+  - the ticket slip (officer, then rider)
+  - the board (fingers over its top edge, thumb on the front)
+  - the fanning papers and the tapped file
+  - the phone (thumb on the front, fingers on the back)
+- After the hand-over, the officer's hand opens (relaxed) instead of pinching air.
+- **Close-up camera** (`hand_closeups.py`): it aims at the centre of the hand, not the wrist. It tries several directions and takes the first with a clear ray-cast to the hand, then adds a small review-only fill light so dark sets read. Two shots moved to a frame where the hand is holding: the officer at 268 (holding the slip) and the key hand at 360 (key ring in the fist).
+
 ## Frames with no subject
 | Time | v006 | v007 |
 |---|---|---|

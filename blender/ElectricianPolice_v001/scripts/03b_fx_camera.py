@@ -119,15 +119,27 @@ bm_.to_mesh(keyring.data); bm_.free(); keyring.data.materials.append(bpy.data.ma
 loc_, f3_, n_ = palm_pose(CH["ManW"], "R", 340, 0.07, -0.02)
 attach_seq(keyring, [(1, CH["ManW"], "wrist.R", frame_from(loc_, f3_, -n_), 340)])
 key_vis(keyring, [(318, 430)])
-loc, f3, n = palm_pose(CH["OfficerA"], "L", 250, 0.07, -0.03)
-attach_seq(pad, [(1, CH["OfficerA"], "wrist.L", frame_from(loc, f3, -n), 250)])
 loc, f3, n = palm_pose(CH["OfficerA"], "R", 268, 0.09, -0.02)
 loc2, f32, n2 = palm_pose(CH["Man"], "R", TICKET_F, 0.09, -0.02)
-attach_seq(slip, [(1, CH["OfficerA"], "wrist.R", frame_from(loc, f3, -n), 268), (TICKET_F, CH["Man"], "wrist.R", frame_from(loc2, f32, -n2))])
+def pinch_frame(rig, s, f, half=0.07, bite=0.018, thin="Z", zoff=0.0, lift=0.0, mid=False):
+    """object frame for a flat prop held between thumb tip and index (or middle) tip: its near edge sits in the pinch.
+    thin: the prop's thin local axis (Z for paper/pad, X for the phone). zoff: local offset of the mid-plane along that axis."""
+    ev(f); mw = rig.matrix_world
+    t = mw @ rig.pose.bones["finger1-3." + s].tail
+    i_ = mw @ rig.pose.bones[("finger3-3." if mid else "finger2-3.") + s].tail
+    w = mw @ rig.pose.bones["wrist." + s].head
+    pc = (t + i_) * 0.5; p_ = (i_ - t).normalized()
+    fwd = (pc - w); fwd = (fwd - p_ * fwd.dot(p_)).normalized()
+    if thin == "Z":
+        return frame_from(pc + fwd * (half - bite) - p_ * zoff, fwd, p_)
+    up = p_.cross(fwd)            # object X = p_ (thin), -Y = fwd (width), +Z = up (height)
+    return frame_from(pc + fwd * (half - bite) - up * lift - p_ * zoff, fwd, up)
+attach_seq(slip, [(1, CH["OfficerA"], "wrist.R", pinch_frame(CH["OfficerA"], "R", 268), 268), (TICKET_F, CH["Man"], "wrist.R", pinch_frame(CH["Man"], "R", TICKET_F))])
 key_vis(slip, [(262, 345)])
+attach_seq(pad, [(1, CH["OfficerA"], "wrist.L", pinch_frame(CH["OfficerA"], "L", 255, half=0.1685, bite=0.03, zoff=0.021), 255)])
 phone = ob("St_Phone")
 loc, f3, n = palm_pose(CH["OfficerC"], "R", 1200, 0.075, -0.045)
-attach_seq(phone, [(1, CH["OfficerC"], "wrist.R", frame_from(loc, -n, f3), 1200)])
+attach_seq(phone, [(1, CH["OfficerC"], "wrist.R", pinch_frame(CH["OfficerC"], "R", 1330, half=0.035, bite=0.014, thin="X", lift=0.045, mid=True), 1330)])
 torch = bpy.data.lights.new("PhoneTorch", "SPOT"); torch.energy = 160; torch.spot_size = R_(70); torch.spot_blend = 0.6; torch.shadow_soft_size = 0.01
 torch.color = (1.0, 0.97, 0.92)
 to = bpy.data.objects.new("PhoneTorch", torch); C("Station").objects.link(to)
@@ -143,7 +155,7 @@ beam.parent = to; beam.location = (0, 0, -0.8); beam.rotation_euler = (0, 0, 0)
 key_vis(beam, [])   # beam read as an opaque disc at review res; the spot light alone carries the torch
 fp = ob("FanPaper_0")
 loc, f3, n = palm_pose(CH["OfficerB"], "R", 1200, 0.07, -0.02)
-attach_seq(fp, [(1, CH["OfficerB"], "wrist.R", frame_from(loc + f3 * 0.1, f3, -n), 1200)])
+attach_seq(fp, [(1, CH["OfficerB"], "wrist.R", pinch_frame(CH["OfficerB"], "R", 1300, half=0.145, bite=0.02), 1300)])
 for nm, p_ in (("A", A_SEAT), ("B", OB_SEAT)):
     inst(bpy.data.objects["SRC_plastic_monobloc_chair_01"], "St_Chair_" + nm, (p_.x - 0.12, p_.y, 0.0), rotz=R_(90), c="Station")
 inst(bpy.data.objects["SRC_plastic_monobloc_chair_01"], "St_Chair_C", (-16.4, 57.0, 0.0), rotz=R_(-90), c="Station")
@@ -326,9 +338,9 @@ spin(ob("StationFan_ceiling_fan_blades"), 1, 1560, 180, decel_from=1200, decel_t
 for nm_ in ("StationFan_ceiling_fan_blades", "StationFan_ceiling_fan"): ob(nm_).location.z = 3.4 - 0.92
 ob("StationFan_ceiling_fan").location = ob("StationFan_ceiling_fan_blades").location
 fp2 = ob("FanPaper_1"); loc, f3, n = palm_pose(CH["OfficerE"], "R", 1200, 0.07, -0.02)
-attach_seq(fp2, [(1, CH["OfficerE"], "wrist.R", frame_from(loc + f3 * 0.1, f3, -n), 1200)])
+attach_seq(fp2, [(1, CH["OfficerE"], "wrist.R", pinch_frame(CH["OfficerE"], "R", 1340, half=0.145, bite=0.02), 1340)])
 fp3 = inst(bpy.data.objects["SRC_a4"], "TapFile", (0, 0, 0), c="Station")   # plain paper: the clipboard clip carries printed text; loc, f3, n = palm_pose(CH["OfficerD"], "R", 1200, 0.06, -0.02)
-attach_seq(fp3, [(1, CH["OfficerD"], "wrist.R", frame_from(loc + f3 * 0.12, f3, -n), 1200)])
+attach_seq(fp3, [(1, CH["OfficerD"], "wrist.R", pinch_frame(CH["OfficerD"], "R", 1306, half=0.145, bite=0.02), 1306)])
 ob("OfficeFan_ceiling_fan").location = ob("OfficeFan_ceiling_fan_blades").location
 # wall clock: find its thin axis and face it +X on the back wall; hands spin 5 hours (f1290 -> 1381)
 cparts = {n: ob("St_" + n) for n in ("wall_clock", "wall_clock_hours_hand", "wall_clock_minute_hand", "wall_clock_second_hand")}

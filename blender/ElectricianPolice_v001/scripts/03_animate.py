@@ -401,7 +401,7 @@ def bike_pt(f, lx, ly, lz):
     lean = -head * 1.6 + R_(-7) * smooth((f - FS + 6) / 12)
     Mb = Matrix.Translation((x, y, 0)) @ Matrix.Rotation(head, 4, "Z") @ Matrix.Rotation(lean, 4, "Y")
     return Mb @ Vector((lx, ly, lz)), head
-SEAT = (0.0, -0.22, 0.80); GRIP = {"L": (-0.29, 0.27, 0.99), "R": (0.29, 0.27, 0.99)}; PEG = {"L": (-0.2, 0.02, 0.30), "R": (0.2, 0.02, 0.30)}   # bike faces +Y: rider's left = -X
+SEAT = (0.0, -0.22, 0.80); GRIP = {"L": (-0.205, 0.245, 0.99), "R": (0.205, 0.245, 0.99)}; PEG = {"L": (-0.2, 0.02, 0.30), "R": (0.2, 0.02, 0.30)}   # bike faces +Y: rider's left = -X
 
 # ------------------------------------------------------------------ Man (road): ride, stop, ticket, hard hat
 def ride_pose(f, look=0.0, hair=0.0):
@@ -453,8 +453,8 @@ for f in (FS + 12, FS + 30, 250):
 M.hand("R", FS + 12, bike_pt(FS + 12, *GRIP["R"])[0] + Vector((0, 0, 0.03)), M.dirv(FS + 12, -0.7, 0.4, -0.2), M.dirv(FS + 12, 0, 0.2, -1))
 M.hand_b("R", 250, -0.25, 0.25, 1.05, d=(0.2, 0.9, 0.1), n=(-0.9, 0, -0.3)); M.fingers("R", 250, 20, 20)
 SLIP_HAND = Vector((OFFICER_SPOT.x + 1.15, OFFICER_SPOT.y - 1.55, 1.18))
-M.hand("R", TICKET_F, SLIP_HAND + Vector((0.07, -0.05, -0.02)), (SLIP_HAND - M.pt(TICKET_F, -0.2, 0, 1.3)).normalized(), Vector((0, 0, -1))); M.fingers("R", TICKET_F, [30, 38, 62, 68], 42)
-M.hand_b("R", 292, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1)); M.fingers("R", 292, [30, 38, 62, 68], 42)      # holds the slip, looks at it
+M.hand("R", TICKET_F, SLIP_HAND + Vector((0.07, -0.05, -0.02)), (SLIP_HAND - M.pt(TICKET_F, -0.2, 0, 1.3)).normalized(), Vector((0, 0, -1))); M.fingers("R", TICKET_F, [40, 42, 64, 70], 55)
+M.hand_b("R", 292, -0.22, 0.32, 1.12, d=(0.1, 1, 0.2), n=(0, 0, 1)); M.fingers("R", 292, [40, 42, 64, 70], 55)      # holds the slip, looks at it
 # left hand grabs the hard hat off the rear seat, swings it onto his head
 HAT_SEAT = (0.0, -0.62, 0.86)
 M.hand("L", 296, bike_pt(296, -0.25, -0.5, 1.0)[0], M.dirv(296, -0.2, -0.6, -0.8), M.dirv(296, -0.8, 0, -0.3)); M.fingers("L", 296, 25, 20)
@@ -489,16 +489,16 @@ OA_W = Vector((STOP.x - 1.35, STOP.y + 1.05, OA.ROOT.z))
 OA.walk(lambda f: OA_POS.lerp(OA_W, smooth((f - 222) / 24)), lambda f: oa_yaw + 10 * smooth((f - 222) / 24), 222, 246, stride=0.6, step=2)
 for f in (250, 258, 266):
     OA.body(f, OA_W - Vector((0, 0, 0.01)), yaw=oa_yaw + 10, spine=(16, 0, 0), head=(20, 0))
-    OA.hand_b("L", f, 0.05, 0.33, 1.12, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 58, 30)
+    OA.hand_b("L", f, 0.05, 0.33, 1.12, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, [34, 42, 56, 62], 26)
     OA.hand_b("R", f, -0.06 + 0.03 * ((f // 8) % 2), 0.38, 1.21, d=(0.5, 0.8, -0.3), n=(0, 0, -1)); OA.fingers("R", f, [40, 50, 66, 70], 40)
 OA.stand_feet(250)
 # tears the slip and holds it out to the man
 OA.body(270, OA_W, yaw=oa_yaw + 14, spine=(10, 8, 0), head=(10, 10))
-OA.hand_b("R", 270, -0.15, 0.45, 1.2, d=(0.2, 1, 0.1), n=(0, 0, -1)); OA.fingers("R", 270, [30, 38, 62, 68], 42)
-OA.hand("R", TICKET_F, SLIP_HAND, (SLIP_HAND - OA.pt(TICKET_F, -0.2, 0, 1.35)).normalized(), Vector((0, 0, -1))); OA.fingers("R", TICKET_F, [30, 38, 62, 68], 42)
+OA.hand_b("R", 270, -0.15, 0.45, 1.2, d=(0.2, 1, 0.1), n=(0, 0, -1)); OA.fingers("R", 270, [40, 42, 64, 70], 55)
+OA.hand("R", TICKET_F, SLIP_HAND, (SLIP_HAND - OA.pt(TICKET_F, -0.2, 0, 1.35)).normalized(), Vector((0, 0, -1))); OA.fingers("R", TICKET_F, 22, 20)
 OA.body(TICKET_F, OA_W, yaw=oa_yaw + 16, spine=(12, 10, 0), head=(8, 14))
 for f in (270, TICKET_F):
-    OA.hand_b("L", f, 0.08, 0.3, 1.1, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, 58, 30)
+    OA.hand_b("L", f, 0.08, 0.3, 1.1, d=(-0.8, 0.4, 0), n=(0, 0, 1)); OA.fingers("L", f, [34, 42, 56, 62], 26)
 OA.body(296, OA_W, yaw=oa_yaw + 10, spine=(-2, 0, 0), head=(-6, 0), jaw=4)
 OA.hang("R", 296, swing=0.1); OA.hand_b("L", 296, 0.12, 0.25, 1.05, d=(-0.6, 0.3, -0.4), n=(0, 0, 1))
 OA.body(400, OA_W, yaw=oa_yaw + 10, spine=(0, 0, 0), head=(0, 0)); OA.hang("R", 400); OA.hand_b("L", 400, 0.15, 0.2, 1.0, d=(-0.5, 0.2, -0.6), n=(0, 0, 1))
@@ -697,7 +697,7 @@ OC_POS = Vector((-14.3, 56.4, OC.ROOT.z))
 for i, f in enumerate(range(1160, 1561, 30)):
     yw = 70 + 25 * math.sin(f / 50)
     OC.body(f, OC_POS, yaw=yw, spine=(2, 8 * math.sin(f / 40), 0), head=(-4, -10 * math.sin(f / 50))); OC.stand_feet(f, width=1.1)
-    OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, [46, 50, 54, 58], 24)
+    OC.hand_b("R", f, -0.16, 0.42, 1.22, d=(0.25, 0.6, 0.75), n=(0.2, -1, 0.3)); OC.fingers("R", f, [36, 42, 52, 58], 46)
     OC.hand_b("L", f, 0.3, 0.04, 0.9, d=(0.15, 0.2, -1), n=(-1, 0, 0))
 OD, OE = RIG["OfficerD"], RIG["OfficerE"]
 OD_POS = Vector((-11.95, 58.05, OD.ROOT.z)); FAN_TIP = Vector((-12.25, 57.45, 2.47))
@@ -749,6 +749,34 @@ for nm, ch in RIG.items():
         for s_ in "LR": ch.fingers(s_, 1, 22, 26)        # relaxed, gently curled until the first acted key
 print("HAND_LIMITS_DONE")
 print("ANIM_CHARS_DONE")
+# ---- grip solver: move each grasping hand so the object runs through the hole of the curled fist
+def fist_hole(rig, s):
+    mw = rig.matrix_world; pts = []
+    for k in range(2, 6):
+        for bn, tl in (("finger%d-1." % k, False), ("finger%d-2." % k, False), ("finger%d-3." % k, True)):
+            pb_ = rig.pose.bones[bn + s]; pts.append(mw @ (pb_.tail if tl else pb_.head))
+    return sum(pts, Vector()) / len(pts)
+def grip_fix(ch, s, f0, f1, target_fn, iters=2):
+    rig = ch.o; nm = "IK_hand." + s; dp = 'pose.bones["%s"].location' % nm
+    fc = [c for c in rig.animation_data.action.fcurves if c.data_path == dp] if hasattr(rig.animation_data.action, "fcurves") else []
+    if not fc:
+        from bpy_extras import anim_utils
+        cb = anim_utils.action_get_channelbag_for_slot(rig.animation_data.action, rig.animation_data.action_slot)
+        fc = [c for c in cb.fcurves if c.data_path == dp]
+    frames = sorted({int(round(k.co.x)) for c in fc for k in c.keyframe_points if f0 <= k.co.x <= f1})
+    worst = 0.0
+    for f in frames:
+        for _ in range(iters):
+            bpy.context.scene.frame_set(f)
+            d = target_fn(f) - fist_hole(rig, s)
+            pb_ = rig.pose.bones[nm]
+            ch.R.key_world(nm, f, Matrix.Translation(d) @ pb_.matrix)
+        bpy.context.scene.frame_set(f); worst = max(worst, (target_fn(f) - fist_hole(rig, s)).length)
+    print("GRIPFIX", ch.o.name, s, f0, f1, len(frames), "worst %.3f m" % worst)
+for s_ in "LR":
+    grip_fix(M, s_, 1, FS - 1, lambda f, s_=s_: bike_pt(f, *GRIP[s_])[0])
+grip_fix(M, "L", FS, 250, lambda f: bike_pt(f, *GRIP["L"])[0])
+grip_fix(M, "R", 1044, 1088, lambda f: lever_tip(lever_a(f)))
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SAVED", OUT)
