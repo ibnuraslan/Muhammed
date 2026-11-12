@@ -15,7 +15,7 @@ from sc_invest import office_chair
 from sc_boutique import haussmann
 
 EXPOSURE = 0.0
-DUR = {"pin": 9.0, "read": 9.0}
+DUR = {"pin": 9.0, "read": 9.0, "listen": 9.0}
 
 
 def blank_print(name, loc, size, seed):
@@ -89,7 +89,33 @@ def build(variant=None):
     c["file"] = box("OpenFile", (3.35, 3.6, 0.775), (0.33, 0.45, 0.01), pbr("FilePaper", (0.88, 0.87, 0.82), 0.7))
     l = bpy.data.lights.new("DeskLampL", 'SPOT'); l.energy = 40; l.spot_size = math.radians(70); l.color = (1.0, 0.85, 0.6)
     lo = bpy.data.objects.new("DeskLampL", l); bpy.context.collection.objects.link(lo); lo.location = (3.3, 3.2, 1.2); point_at(lo, (3.3, 3.6, 0.77))
+    # the listening post on the reader's desk: a recorder with two turning spools, headphones on her head
+    dd.model_h("vintage_radio_transceiver", (3.25, 3.15, 0.76), 0.18, rot_z=math.radians(-90))
+    rec = Vector((3.25, 3.95, 0.76))
+    box("Recorder", rec + Vector((0, 0, 0.05)), (0.3, 0.42, 0.1), pbr("RecBody", (0.18, 0.18, 0.19), 0.4, 0.3), bevel=0.01)
+    box("RecWindow", rec + Vector((-0.151, 0, 0.07)), (0.004, 0.3, 0.05), pbr("RecGlass", (0.02, 0.02, 0.02), 0.05))
+    c["spools"] = []
+    for k in range(2):
+        sp = cyl(f"Spool{k}", rec + Vector((0.0, -0.09 + 0.18 * k, 0.106)), 0.07, 0.008, pbr("SpoolM", (0.7, 0.7, 0.72), 0.3, 1.0), verts=6)
+        hub = cyl(f"Hub{k}", rec + Vector((0.0, -0.09 + 0.18 * k, 0.112)), 0.025, 0.01, pbr("HubM", (0.05, 0.05, 0.05), 0.5), verts=6)
+        hub.parent = sp; hub.location = (0, 0, 0.006)
+        c["spools"].append(sp)
+    box("Tape", rec + Vector((0.06, 0, 0.108)), (0.004, 0.18, 0.004), pbr("TapeM", (0.12, 0.07, 0.04), 0.5))
+    hp = pbr("Headphones", (0.04, 0.04, 0.045), 0.5)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.1, minor_radius=0.008, location=(0, 0, 0))
+    band = bpy.context.active_object; band.data.materials.append(hp); band.name = "HeadBand"
+    c["headband"] = band
     return c
+
+
+def anim_listen(c, t):
+    sec = t * DUR["listen"]
+    for k, sp in enumerate(c["spools"]):
+        sp.rotation_euler = (0, 0, sec * (2.2 if k else 1.6))
+    r = c["reader"]
+    r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
+    hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
+    c["headband"].location = hd + Vector((0, 0, 0.09)); c["headband"].rotation_euler = (math.radians(90), 0, r.arm.rotation_euler.z)
 
 
 def anim_pin(c, t):
@@ -118,6 +144,9 @@ def anim_read(c, t):
 
 
 MOVES = {
+    "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
+                   cam=lambda c, t: (Vector((2.55, 4.6, 1.08)).lerp(Vector((2.65, 4.45, 1.05)), ease(t)), Vector((3.3, 3.85, 0.86)), 40),
+                   focus=lambda c, t: Vector((3.25, 3.95, 0.86))),
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
     "read": dict(kind="anim", dof=2.8, anim=anim_read,

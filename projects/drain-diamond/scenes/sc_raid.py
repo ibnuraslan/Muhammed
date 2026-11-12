@@ -58,7 +58,9 @@ def build_hall(c):
     for k in range(12):
         B.box((-1.4 + k * 0.28, 1.64, 0.55 + k * 0.205 + 0.45), (0.035, 0.035, 0.9), oak)
     # the closed side under the stairs: panelled; one panel is the hidden door
-    B.box((0.6, 1.66, 0.6), (2.6, 0.04, 1.2), dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="UnderPanel", sat=0.8))
+    up_m = dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="UnderPanel", sat=0.8)
+    B.box((-0.29, 1.66, 0.6), (0.82, 0.04, 1.2), up_m).box((1.49, 1.66, 0.6), (0.82, 0.04, 1.2), up_m)   # the opening is x 0.12..1.08
+    B.box((0.6, 1.66, 1.18), (0.96, 0.04, 0.04), up_m)
     B.box((0.6, 2.1, 0.6), (1.0, 0.8, 1.15), pbr("Cavity", (0.03, 0.025, 0.02), 0.8))
     B.done()
     # inside: small display stands with jewels

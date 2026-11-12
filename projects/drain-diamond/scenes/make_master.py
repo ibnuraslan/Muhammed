@@ -33,7 +33,7 @@ CHAPTERS = {
             ("gym_bag", "Gym A  'A link between the two men runs through a gym.'"), ("gym_lockers", "Gym B  'Chiniah puts them in touch.'"),
             ("car_mic", "Car A  'Detectives put microphones in Yahiaoui's car.'"), ("car_envelope", "Car B  'envelopes change hands through car windows'"),
             ("raid_arrive", "Raid A  'In June 2009, police move in'"), ("raid_stairs", "Raid B  'a hidden compartment beneath a staircase'"),
-            ("drain_yard", "House A  'It's Yahiaoui's house.'"), ("car_reels", "House B  'the big stone that keeps coming up on the recordings'"),
+            ("drain_yard", "House A  'It's Yahiaoui's house.'"), ("unit_listen", "House B  'the big stone that keeps coming up on the recordings'"),
             ("drain_gate", "Drain A  'They keep coming back to the house.'"), ("drain_torch", "Drain B  'the lighter patch in the drain'"),
             ("drain_circle", "Tub A  'The container holds nineteen rings'"), ("drain_bag", "Tub B  'roughly twenty-five million dollars'"),
             ("table_layout", "Table A  'a haul they can lay out and count'"), ("table_tags", "Table B  'a guard who was supposed to protect the shop'")],
