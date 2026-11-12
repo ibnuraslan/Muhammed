@@ -477,8 +477,9 @@ def c4_2a(c, t):          # nurse holds a sample tube up to the window light (me
     loc = LAB + Vector((-0.9, -1.3, 0)); stand_at(h, loc, win)
     sd = forward(h).cross(Vector((0, 0, 1)))
     k = ease(min(1.0, sec / 1.5))
-    tube = h.bone_head("head") + forward(h) * 0.35 + Vector((0, 0, -0.35 + 0.35 * k))
-    reach(h, "R", tube, Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    tube = h.bone_head("head") + forward(h) * 0.32 - sd * 0.08 + Vector((0, 0, -0.4 + 0.3 * k))
+    reach(h, "R", tube, Vector((sd.x, sd.y, -1.0)), forward(h))
+    fingers_curl(h, 65, thumb=45)
     c["tube"].location = tube + Vector((0, 0, 0.06)); c["tube_blood"].location = tube + Vector((0, 0, 0.045))
     c["focus"] = h.bone_head("head")
 
@@ -502,7 +503,8 @@ def c4_3a(c, t):          # a nurse hangs the pale yellow platelet bag (medium, 
     k = ease(min(1.0, sec / 1.8))
     hook = pole + Vector((0.12, 0, 1.72))
     bag = (h.bone_head("spine02") + forward(h) * 0.3).lerp(hook, k)
-    reach(h, "R", bag + Vector((0, 0, 0.1)), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    reach(h, "R", bag + Vector((0, 0, 0.1)), Vector((sd.x, sd.y, -1.0)), forward(h))
+    fingers_curl(h, 65, thumb=45)
     c["platelet"].location = bag
     c["focus"] = h.bone_head("head")
 
@@ -534,29 +536,30 @@ def c4_11b(c, t):
 
 def c4_12a(c, t):         # the doctor clips the film to the lightbox (medium, from the side)
     sec = S("ch4_12a", t); hide(c, ("doc",))
-    h = c["people"]["doc"]; lb = c["lightbox"]; loc = lb + Vector((0.2, -0.75, -lb.z))
+    h = c["people"]["doc"]; lb = c["lightbox"]; loc = lb + Vector((0.2, -0.5, -lb.z))
     stand_at(h, loc, lb + Vector((0, 0, -lb.z)))
     sd = forward(h).cross(Vector((0, 0, 1))); k = ease(min(1.0, sec / 1.6))
     clip = lb + Vector((0.0, -0.02, 0.1))
     f_ = (h.bone_head("spine02") + forward(h) * 0.35 + Vector((0, 0, 0.1))).lerp(clip, k)
-    reach(h, "R", f_ + sd * 0.12, Vector((sd.x, sd.y, -0.7)), forward(h)); reach(h, "L", f_ - sd * 0.12, Vector((-sd.x, -sd.y, -0.7)), forward(h))
+    reach(h, "R", f_ + sd * 0.12, Vector((sd.x, sd.y, -1.0)), forward(h)); reach(h, "L", f_ - sd * 0.12, Vector((-sd.x, -sd.y, -1.0)), forward(h))
+    fingers_curl(h, 60, thumb=40)
     c["film"].location = f_ + Vector((0, -0.0, -0.05)); c["film"].rotation_euler = (0, 0, 0)
     c["focus"] = h.bone_head("head")
 
 
 def c4_12b(c, t):         # studies it, then switches the lightbox off (driver at frame 60)
     sec = S("ch4_12b", t); hide(c, ("doc",))
-    h = c["people"]["doc"]; lb = c["lightbox"]; loc = lb + Vector((0.3, -0.85, -lb.z))
+    h = c["people"]["doc"]; lb = c["lightbox"]; loc = lb + Vector((0.4, -0.55, -lb.z))
     c["film"].location = lb + Vector((0, -0.02, 0.0))
     stand_at(h, loc, lb + Vector((0, 0, -lb.z)), crossed=sec < 2.0)
     if sec >= 2.0:
         sd = forward(h).cross(Vector((0, 0, 1)))
-        reach(h, "R", lb + Vector((0.55, -0.05, -0.2)), Vector((sd.x, sd.y, -0.7)), forward(h))
+        reach(h, "R", lb + Vector((0.55, -0.08, -0.25)), Vector((sd.x, sd.y, -1.0)), forward(h))
     c["focus"] = h.bone_head("head")
 
 
 def c4_13a(c, t):
-    hide(c, ())
+    S("ch4_13a", t); hide(c, ())
     c["focus"] = OR_ + Vector((0, 0, 0.9))
 
 

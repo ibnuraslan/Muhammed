@@ -381,8 +381,8 @@ OUTFITS = {
     "doctor":     ("male_elegantsuit01", (1.0, 1.0, 1.0), 5.0),      # white coat
     "nurse":      ("female_elegantsuit01", (1.0, 1.0, 1.0), 4.5),
     "woman_coat": ("male_casualsuit05", (0.55, 0.38, 0.36), 1.2),
-    "overall_white": ("male_casualsuit05", (1.0, 1.0, 0.98), 3.2),     # coverall look: whole suit tinted
-    "overall_orange": ("male_casualsuit05", (1.0, 0.38, 0.06), 3.4),
+    "overall_white": ("male_worksuit01", (1.0, 1.0, 0.98), 3.2),     # coverall look: whole suit tinted
+    "overall_orange": ("male_worksuit01", (1.0, 0.38, 0.06), 3.4),
     "police":     ("male_elegantsuit01", (0.35, 0.42, 0.55), 1.8),
 }
 
@@ -450,6 +450,45 @@ def _moustache(h, col=(0.03, 0.022, 0.018)):
     return o
 
 
+def coverall_material(name, col):
+    """Cotton drill: matte, fine weave bump, soft fold shading, grime toward the hems and knees."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); geo = N.new("ShaderNodeNewGeometry")
+    weave = N.new("ShaderNodeTexWave"); weave.inputs['Scale'].default_value = 900; weave.inputs['Distortion'].default_value = 2
+    L.new(tc.outputs['Object'], weave.inputs['Vector'])
+    folds = N.new("ShaderNodeTexNoise"); folds.inputs['Scale'].default_value = 9; folds.inputs['Detail'].default_value = 4
+    L.new(tc.outputs['Object'], folds.inputs['Vector'])
+    dirt = N.new("ShaderNodeTexNoise"); dirt.inputs['Scale'].default_value = 5; dirt.inputs['Detail'].default_value = 10
+    L.new(tc.outputs['Object'], dirt.inputs['Vector'])
+    sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Position'], sep.inputs[0])
+    low = N.new("ShaderNodeMapRange"); low.inputs['From Min'].default_value = 0.9; low.inputs['From Max'].default_value = 0.0
+    L.new(sep.outputs['Z'], low.inputs['Value'])
+    dm = N.new("ShaderNodeMath"); dm.operation = 'MULTIPLY'; L.new(dirt.outputs['Fac'], dm.inputs[0]); L.new(low.outputs[0], dm.inputs[1])
+    base = N.new("ShaderNodeMix"); base.data_type = 'RGBA'; L.new(dm.outputs[0], base.inputs['Factor'])
+    base.inputs[6].default_value = (*col, 1); base.inputs[7].default_value = (col[0] * 0.45, col[1] * 0.42, col[2] * 0.38, 1)
+    fd = N.new("ShaderNodeMix"); fd.data_type = 'RGBA'; fd.blend_type = 'MULTIPLY'; fd.inputs['Factor'].default_value = 0.35
+    L.new(base.outputs[2], fd.inputs[6]); L.new(folds.outputs['Color'], fd.inputs[7]); L.new(fd.outputs[2], p.inputs['Base Color'])
+    p.inputs['Roughness'].default_value = 0.97; p.inputs['Specular IOR Level'].default_value = 0.2
+    p.inputs['Sheen Weight'].default_value = 0.25
+    h = N.new("ShaderNodeMath"); h.operation = 'MULTIPLY_ADD'; h.inputs[1].default_value = 0.15
+    L.new(weave.outputs['Fac'], h.inputs[0]); L.new(folds.outputs['Fac'], h.inputs[2])
+    b = N.new("ShaderNodeBump"); b.inputs['Strength'].default_value = 0.35; b.inputs['Distance'].default_value = 0.02
+    L.new(h.outputs[0], b.inputs['Height']); L.new(b.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def gloves(h, col=(0.16, 0.12, 0.08)):
+    """Work gloves: hand faces of the body re-materialled (leather / rubberised cotton)."""
+    idx = set(h.vertex_region([b for b in h.rig.bones if b.startswith(("finger", "metacarpal", "wrist"))], 0.5).tolist())
+    me = h.body.data
+    me.materials.append(pbr(h.name + "Glove", col, 0.8))
+    gi = len(me.materials) - 1
+    for p in me.polygons:
+        if all(v in idx for v in p.vertices):
+            p.material_index = gi
+
+
 def person(name, gender=1.0, years=40, outfit="wool_brown", hair="short02", hv=0.15, weight=0.5, height=0.5, skin=None,
            hat=None, hat_col=(0.18, 0.06, 0.05), moustache=False, dosimeter=False, base_layer=False, **_):
     from human import Human, add_asset
@@ -467,9 +506,11 @@ def person(name, gender=1.0, years=40, outfit="wool_brown", hair="short02", hv=0
     PLAIN = {"doctor": (0.82, 0.83, 0.82), "nurse": (0.8, 0.82, 0.82), "overall_white": (0.75, 0.76, 0.74), "overall_orange": (0.7, 0.26, 0.05)}
     if outfit in PLAIN:                                  # cotton coats / coveralls: plain cloth, not the suit texture
         from kit import fabric as _fab
-        cl = [o for o in h.parts if o.name.endswith(asset)]
-        if cl:
-            cl[0].data.materials.clear(); cl[0].data.materials.append(_fab(name + "Cloth", PLAIN[outfit], 0.9, 0.3, 700))
+        cm = coverall_material(name + "Cloth", PLAIN[outfit])
+        names = (asset, "male_casualsuit01") if outfit.startswith("overall") else (asset,)   # one-piece coverall: shirt layer too
+        for o in h.parts:
+            if o.name.endswith(names):
+                o.data.materials.clear(); o.data.materials.append(cm)
     add_asset(h, "clothes", "shoes02", val=0.15, rough=0.5)
     if hair:
         add_asset(h, "hair", hair, val=hv, rough=0.5)
@@ -479,6 +520,8 @@ def person(name, gender=1.0, years=40, outfit="wool_brown", hair="short02", hv=0
         _hat(h, hat, hat_col)
     if moustache and gender > 0.5:
         _moustache(h)
+    if outfit.startswith("overall"):
+        gloves(h, (0.22, 0.17, 0.1) if outfit == "overall_white" else (0.12, 0.1, 0.08))
     if dosimeter:                                       # film-badge dosimeter clipped on the chest pocket
         bpy.context.view_layer.update()
         ch = h.bone_head("spine02")

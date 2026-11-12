@@ -88,8 +88,8 @@ def build(variant=None):
     tube_light(OFF + Vector((0, 0, 2.95)), energy=80)
     # ---------------- storeroom (dusty): steel shelving, boxes, pallets with grey packages, a swinging lamp
     room("Store", STO, 6, 14, 3.4, conc, two_tone("StoreWall", (0.45, 0.45, 0.42), (0.62, 0.6, 0.55), split=1.0), windows=[("E", 3.5, 2.2, 1.2, 0.6)])
-    daylight_window(STO + Vector((3.1, 3.5, 2.5)), "E", (1.2, 0.6), energy=500)
-    tube_light(STO + Vector((0, -3.5, 3.35)), energy=60)
+    daylight_window(STO + Vector((3.1, 3.5, 2.5)), "E", (1.2, 0.6), energy=1500)
+    tube_light(STO + Vector((0, -3.5, 3.35)), energy=160)
     for k in range(4):
         ph_model("steel_frame_shelves_01", loc=STO + Vector((-2.4, -5.0 + k * 2.6, 0)), rot_z=math.radians(90))
     for k in range(10):
@@ -109,13 +109,14 @@ def build(variant=None):
     shade = join([cyl("Shade", (0, 0, 0), 0.18, 0.12, painted_steel("ShadeM", (0.25, 0.3, 0.28), 0.4, 0.5), verts=20)], "LampShade"); shade.parent = swing; shade.location = (0, 0, -1.15)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.04, location=(0, 0, 0))
     bulb = bpy.context.active_object; bulb.data.materials.append(pbr("SBulb", (1, 1, 1), 0.2, 0.0, **{'Emission Color': (1.0, 0.78, 0.5, 1), 'Emission Strength': 18.0})); bulb.parent = swing; bulb.location = (0, 0, -1.22)
-    sl = bpy.data.lights.new("StoreBulb", 'SPOT'); sl.energy = 700; sl.color = (1.0, 0.78, 0.5); sl.spot_size = math.radians(110); sl.spot_blend = 0.7
+    sl = bpy.data.lights.new("StoreBulb", 'SPOT'); sl.energy = 1400; sl.color = (1.0, 0.78, 0.5); sl.spot_size = math.radians(110); sl.spot_blend = 0.7
     so = bpy.data.objects.new("StoreBulb", sl); bpy.context.collection.objects.link(so); so.parent = swing; so.location = (0, 0, -1.25)
     c["swing"] = swing
-    haze(STO + Vector((0, 0, 1.7)), (5.8, 13.8, 3.3), density=0.06, color=(0.85, 0.8, 0.72), anis=0.5)
+    haze(STO + Vector((0, 0, 1.7)), (5.8, 13.8, 3.3), density=0.012, color=(0.85, 0.8, 0.72), anis=0.5)
     # ---------------- records room: two ledgers side by side under a lamp, a window draught
     room("Records", REC, 5.0, 4.5, 3.0, parq, two_tone("RecWall", (0.35, 0.42, 0.45), (0.78, 0.76, 0.7)), windows=[("W", 0.0, 1.0, 1.4, 1.5)])
-    daylight_window(REC + Vector((-2.6, 0, 1.75)), "W", (1.4, 1.5), energy=600)
+    daylight_window(REC + Vector((-2.6, 0, 1.75)), "W", (1.4, 1.5), energy=1800)
+    tube_light(REC + Vector((0.8, 1.2, 2.95)), energy=90)
     tab = wood("RecTable", (0.1, 0.06, 0.035), (0.28, 0.16, 0.09), rough=0.5, coat=0.3)
     box("RecTableTop", REC + Vector((0, 0, 0.76)), (1.8, 1.0, 0.04), tab)
     for dx in (-0.85, 0.85):
@@ -125,7 +126,7 @@ def build(variant=None):
     c["ledB"], c["leafB"] = ledger("LedgerB", REC + Vector((0.45, 0.02, 0.78)), -0.02)
     for k in range(2):
         ph_model("SchoolChair_01", loc=REC + Vector((-0.5 + k * 1.0, -0.95, 0)), rot_z=0.0)
-    pend = bpy.data.lights.new("RecLamp", 'SPOT'); pend.energy = 150; pend.color = (1.0, 0.85, 0.65); pend.spot_size = math.radians(80); pend.spot_blend = 0.6
+    pend = bpy.data.lights.new("RecLamp", 'SPOT'); pend.energy = 380; pend.color = (1.0, 0.85, 0.65); pend.spot_size = math.radians(80); pend.spot_blend = 0.6
     po = bpy.data.objects.new("RecLamp", pend); bpy.context.collection.objects.link(po); po.location = REC + Vector((0, 0, 2.2))
     cone = bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.25, radius2=0.04, depth=0.2, location=REC + Vector((0, 0, 2.3)))
     bpy.context.active_object.data.materials.append(painted_steel("RecShade", (0.2, 0.28, 0.25), 0.4, 0.5))

@@ -118,7 +118,18 @@ def detector(name="Detector"):
     ne = box(name + "Needle", (0, 0, 0.025), (0.003, 0.002, 0.05), pbr(name + "NeedleM", (0.6, 0.05, 0.03), 0.4)); ne.parent = nd; ne.location = (0, 0, 0.025)
     hd = box(name + "Handle", (0, 0, 0.09), (0.16, 0.03, 0.03), pbr(name + "HandleM", (0.05, 0.05, 0.05), 0.6)); hd.parent = body; hd.location = (0, 0, 0.09)
     probe = cyl(name + "Probe", (0, 0, 0), 0.025, 0.3, pbr(name + "ProbeM", (0.12, 0.12, 0.12), 0.4, 0.6), verts=12)
-    return dict(body=body, needle=nd, probe=probe)
+    # coiled cable from the meter to the probe: two points hooked to each end, auto handles make it sag
+    cu = bpy.data.curves.new(name + "Cable", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004; cu.bevel_resolution = 2
+    sp = cu.splines.new('BEZIER'); sp.bezier_points.add(3)
+    pts = [(0.11, 0.0, -0.02), (0.2, 0.0, -0.25), (0.0, 0.0, 0.35), (0.0, 0.0, 0.15)]
+    for bp, p in zip(sp.bezier_points, pts):
+        bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    cab = bpy.data.objects.new(name + "Cable", cu); bpy.context.collection.objects.link(cab)
+    cu.materials.append(pbr(name + "CableM", (0.03, 0.03, 0.03), 0.5))
+    for k, (ob, ids) in enumerate(((body, (0, 1)), (probe, (2, 3)))):
+        md = cab.modifiers.new(f"Hook{k}", 'HOOK'); md.object = ob
+        md.vertex_indices_set([i * 3 + j for i in ids for j in range(3)])
+    return dict(body=body, needle=nd, probe=probe, cable=cab)
 
 
 def lead_drum(name="LeadDrum"):
@@ -171,6 +182,43 @@ def boom_truck(name="BoomTruck"):
     bt["det"] = det
     return bt
 
+def source_holder(name="SourceHolder"):
+    """Heavy steel source holder (~100 kg): dark scuffed grey paint, rust on the chamfered edges, a machined lip
+    and a bright machined bore, a bolt circle and a weathered trefoil label patch. Axis = local Z, centred."""
+    paint = painted_steel(name + "Paint", (0.2, 0.21, 0.21), 0.6, 0.6)
+    rust = rust_mat(name + "Rust", (0.2, 0.08, 0.035), 9.0)
+    machined = brushed_metal(name + "Machined", (0.7, 0.7, 0.72), (0.12, 0.25), 0.4, axis=(1, 1, 300))
+    dark = pbr(name + "BoreFloor", (0.03, 0.03, 0.03), 0.6, 0.8)
+    R, H, r = 0.21, 0.72, 0.07
+    prof = [(0.0, -H / 2 + 0.07), (r, -H / 2 + 0.07), (r, H / 2 - 0.015), (r + 0.015, H / 2), (R - 0.025, H / 2),
+            (R, H / 2 - 0.025), (R, -H / 2 + 0.025), (R - 0.025, -H / 2), (0.0, -H / 2)]
+    seg_mat = [3, 2, 2, 0, 1, 0, 1, 0]          # floor, bore wall, lip, top, chamfer, side, chamfer, bottom
+    bm = bmesh.new(); segs = 48; rings = []
+    for k in range(segs):
+        a = k / segs * 2 * math.pi
+        rings.append([bm.verts.new((rr * math.cos(a), rr * math.sin(a), z)) for rr, z in prof])
+    for k in range(segs):
+        A, B = rings[k], rings[(k + 1) % segs]
+        for j in range(len(prof) - 1):
+            f = bm.faces.new((A[j], A[j + 1], B[j + 1], B[j]))
+            f.material_index = seg_mat[j]; f.smooth = j in (1, 5)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for m in (paint, rust, machined, dark):
+        me.materials.append(m)
+    body = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(body)
+    hole = pbr("HoleDark", (0.01, 0.01, 0.01), 0.7)
+    for k in range(8):
+        a = k / 8 * 2 * math.pi + 0.2
+        hb = cyl("BoltHole", (0.145 * math.cos(a), 0.145 * math.sin(a), H / 2 + 0.0015), 0.011, 0.002, hole, verts=10)
+        hb.parent = body
+    bpy.ops.mesh.primitive_plane_add(size=0.13, location=(0, -R - 0.002, 0.04), rotation=(math.radians(90), 0, 0))
+    lab = bpy.context.active_object; lab.name = name + "Label"
+    lab.data.materials.append(trefoil_material(name + "Label", fade=0.35)); lab.parent = body
+    return body
+
+
 def block_wall(loc, rot_z, mat, w=4.0, h=1.8):
     rng = np.random.default_rng(5)
     proto = box("BlockP", (0, 0, -90), (0.6, 0.4, 0.4), mat, bevel=0.01)
@@ -178,7 +226,8 @@ def block_wall(loc, rot_z, mat, w=4.0, h=1.8):
     for row in range(int(h / 0.4)):
         off = 0.3 * (row % 2)
         for k in range(int(w / 0.6)):
-            o = instance(proto, (-w / 2 + off + k * 0.6 + rng.uniform(-0.01, 0.01), 0, 0.2 + row * 0.4), rot=(0, 0, rng.uniform(-0.03, 0.03)))
+            o = instance(proto, (-w / 2 + off + k * 0.6 + rng.uniform(-0.03, 0.03), rng.uniform(-0.04, 0.04), 0.2 + row * 0.405),
+                         rot=(rng.uniform(-0.015, 0.015), rng.uniform(-0.015, 0.015), rng.uniform(-0.06, 0.06)))
             o.parent = e
     e.location = loc; e.rotation_euler = (0, 0, rot_z)
     return e
@@ -287,8 +336,7 @@ def build(variant=None):
     pose_arm(gc, 0, math.radians(35), math.radians(70), 0); hang_tool_level(gc); set_grab(gc, 0.6)
     c["grab"] = gc
     # the cylinder (part of a container) on the heap; the lead-brick box near the crane
-    grey = painted_steel("CylGrey", (0.32, 0.33, 0.33), 0.55, 0.5)
-    c["cyl"] = join([cyl("CylBody", (0, 0, 0), 0.22, 0.75, grey, verts=28), cyl("CylBore", (0, 0, 0.376), 0.08, 0.004, pbr("Bore", (0.01, 0.01, 0.01), 0.9), verts=20)], "Cylinder")
+    c["cyl"] = source_holder()
     c["cyl_rest"] = HC + Vector((-2.4, -2.9, hfc(HC.x - 2.4, HC.y - 2.9) + 0.12))
     c["cyl"].location = c["cyl_rest"]; c["cyl"].rotation_euler = (math.radians(80), 0, math.radians(30))
     lead = pbr("LeadBrick", (0.22, 0.225, 0.24), 0.45, 0.6)
@@ -339,13 +387,20 @@ def build(variant=None):
         bt = boom_truck(); bt["body"].location = HC + Vector((8.0, 2.0, 0)); bt["body"].rotation_euler = (0, 0, 0)
         c["bt"] = bt
         blocks = ph_mat("concrete_block_wall", 0.8, (0.45, 0.45, 0.43), name="CBlock")
-        block_wall(HC + Vector((5.5, -9.0, 0)), math.radians(20), pbr("CBlockM", (0.5, 0.5, 0.48), 0.85))
+        block_wall(HC + Vector((5.5, -9.0, 0)), math.radians(20), ph_mat("rough_concrete", 1.5, (0.4, 0.4, 0.38), name="BreezeBlock", tint=(0.6, 0.6, 0.58)))
         cr = mobile_crane(); cr["body"].location = HC + Vector((-7.5, -10.0, 0)); cr["body"].rotation_euler = (0, 0, math.radians(30))
         c["crane"] = cr
         dr, lid = lead_drum(); c["drum"] = dr; c["lid"] = lid
-        steel = brushed_metal("Capsule", (0.7, 0.7, 0.72), (0.15, 0.3), 0.3)
-        c["capsule"] = join([cyl("Cap", (0, 0, 0), 0.012, 0.03, steel, verts=16), cyl("CapEnd", (0, 0, 0.016), 0.009, 0.004, steel, verts=16)], "Capsule")
+        steel = brushed_metal("Capsule", (0.78, 0.78, 0.8), (0.08, 0.18), 0.3)     # plain steel, soft glint
+        c["capsule"] = join([cyl("Cap", (0, 0, 0), 0.0095, 0.05, steel, verts=20), cyl("CapEnd", (0, 0, 0.026), 0.007, 0.004, steel, verts=20)], "Capsule")
         c["capsule"].location = (0, -150, 0)
+        dm = pbr("Dust", (0.42, 0.39, 0.34), 1.0)
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=1.0, location=(0, -150, 0))
+        dsrc = bpy.context.active_object; dsrc.name = "DustSrc"; dsrc.data.materials.append(dm)
+        drng = np.random.default_rng(11)
+        c["dust"] = [dict(o=instance(dsrc, (0, -150, 0), name=f"Dust{k}"), r=float(drng.uniform(0.0015, 0.005)),
+                          off=Vector((drng.normal(0, 0.03), drng.normal(0, 0.03), 0)), t0=float(drng.uniform(0.9, 2.4)),
+                          v=float(drng.uniform(0.25, 0.6))) for k in range(70)]
         ctl = box("ControlBox", (0, 0, 0), (0.4, 0.3, 0.25), painted_steel("Ctl", (0.4, 0.42, 0.4), 0.5, 0.4), bevel=0.02)
         ctl.location = HC + Vector((5.0, -10.2, 1.0))
         pole_m = pbr("Pole", (0.55, 0.5, 0.35), 0.7)
@@ -369,14 +424,22 @@ def build(variant=None):
         bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=2.3, depth=0.9, location=(tent_c.x, tent_c.y, 2.6), rotation=(0, 0, math.radians(45)))
         bpy.context.active_object.data.materials.append(canvas)
         box("TentBack", (tent_c.x, tent_c.y + 1.5, 1.1), (3.0, 0.02, 2.2), canvas)
+        for sx in (-1, 1):
+            box("TentSide", (tent_c.x + sx * 1.5, tent_c.y, 1.1), (0.02, 3.0, 2.2), canvas)
+        flap = box("TentFlap", (0, 0, 0), (1.3, 0.02, 2.0), canvas); flap.location = (tent_c.x - 1.05, tent_c.y - 1.85, 1.05); flap.rotation_euler = (0, 0, math.radians(-55))
+        box("TentFront", (tent_c.x + 1.0, tent_c.y - 1.5, 1.1), (1.0, 0.02, 2.2), canvas)
+        box("TentLintel", (tent_c.x - 0.5, tent_c.y - 1.5, 2.1), (2.0, 0.02, 0.25), canvas)
+        tl = bpy.data.lights.new("TentLamp", 'POINT'); tl.energy = 60; tl.color = (1.0, 0.85, 0.65)
+        tlo = bpy.data.objects.new("TentLamp", tl); bpy.context.collection.objects.link(tlo); tlo.location = tent_c + Vector((0, 0.3, 1.9))
+        box("BadgeTray", (tent_c.x - 0.1, tent_c.y + 0.45, 0.77), (0.66, 0.22, 0.02), pbr("Tray", (0.3, 0.3, 0.32), 0.4, 0.7))
         tab = box("Table", (tent_c.x, tent_c.y + 0.6, 0.74), (1.6, 0.8, 0.04), noisy("TableTop", (0.45, 0.35, 0.22), 0.7))
         for dx in (-0.7, 0.7):
             for dy in (-0.3, 0.3):
                 cyl("TableLeg", (tent_c.x + dx, tent_c.y + 0.6 + dy, 0.36), 0.02, 0.72, post_m, verts=6)
         for k in range(8):
-            box("Badge", (tent_c.x - 0.5 + k * 0.12, tent_c.y + 0.45, 0.765), (0.035, 0.045, 0.008), pbr("BadgeM", (0.85, 0.82, 0.7), 0.4))
+            box("Badge", (tent_c.x - 0.33 + (k % 4) * 0.15, tent_c.y + 0.41 + (k // 4) * 0.09, 0.785), (0.035, 0.045, 0.008), pbr("BadgeM", (0.85, 0.82, 0.7), 0.4))
         box("Logbook", (tent_c.x + 0.4, tent_c.y + 0.6, 0.765), (0.3, 0.22, 0.015), pbr("Logbook", (0.15, 0.2, 0.35), 0.6))
-        P["tentman"] = person("TentMan", 1.0, 52, "suit_grey", "short03", moustache=True, hv=0.5)
+        P["tentman"] = person("TentMan", 1.0, 52, "overall_white", "short02", moustache=True, hv=0.5, dosimeter=True)
         stool = cyl("Stool", (tent_c.x, tent_c.y + 1.15, 0.22), 0.18, 0.44, post_m, verts=12)
         mx_tk, mx_wh, _, _ = truck("Mixer", (0.55, 0.55, 0.52), bed_len=4.6)
         mx_tk.location = (-14.0, -36.5, 0)
@@ -578,52 +641,56 @@ def cam_boom(c, t):
 
 
 def anim_drop(c, t):
-    sec = t * dur("ch3_17b")
+    """HERO beat: low by the drum; a responder tips the shovel; the finger-sized capsule slides off into the drum; dust falls."""
+    sec = sec_of("ch3_17b", t)
     grab_idle_swing(c, 0)
     boom_parked(c)
-    cr = c["crane"]
-    drum_on_crane(c, HC + Vector((-1.0, -5.0, 0.0)), 0.25)
+    drum_on_crane(c, HC + Vector((-1.0, -5.0, 0.0)), 0.02)       # drum set down, still on the hook
     drum = c["drum"]; c["lid"].location = (0, -150, 0)
     mouth = drum.location + Vector((0, 0, 0.92))
-    # responder with the shovel tips it over the drum; the capsule slides off and drops in
-    h2 = c["people"]["r2"]; stance = mouth + Vector((0.2, -1.25, 0)); stance.z = 0
-    reset_pose(h2); stand_pose(h2); place(h2, stance, face_angle(stance, mouth)); attach_cap(h2)
+    h2 = c["people"]["r2"]; stance = mouth + Vector((0.15, -1.3, 0)); stance.z = 0
+    reset_pose(h2); stand_pose(h2, head_down=22); place(h2, stance, face_angle(stance, mouth)); attach_cap(h2)
     fwd = forward(h2); side = fwd.cross(Vector((0, 0, 1))).normalized()
-    tip_k = ease(min(1.0, max(0.0, (sec - 0.6) / 1.2)))
-    blade = mouth + Vector((0, 0, 0.18)) - fwd * 0.18
-    handle = blade - fwd * 0.92 + Vector((0, 0, 0.05 + 0.18 * tip_k))
-    h2.rot("spine03", side, -14)
-    reach(h2, "R", handle, Vector((side.x, side.y, -0.7)), blade - handle)
-    reach(h2, "L", handle.lerp(blade, 0.45), Vector((-side.x, -side.y, -0.7)), blade - handle)
+    tip_k = ease(min(1.0, max(0.0, (sec - 0.3) / 1.1)))
+    blade = mouth + Vector((0, 0, 0.12)) - fwd * 0.12
+    handle = blade - fwd * 0.95 + Vector((0, 0, -0.1 + 0.12 * tip_k))
+    h2.rot("spine03", side, -10); h2.rot("spine05", side, -6)
+    reach(h2, "R", handle, Vector((side.x * 0.6, side.y * 0.6, -1.0)), blade - handle)
+    reach(h2, "L", handle.lerp(blade, 0.35), Vector((-side.x * 0.6, -side.y * 0.6, -1.0)), blade - handle)
     fingers_curl(h2, 70, thumb=40)
     sp = c["spade"]
     if sp is not None:
-        sp.location = blade + (handle - blade).normalized() * 0.5; sp.rotation_mode = 'QUATERNION'
-        sp.rotation_quaternion = (blade - handle).to_track_quat('Z', 'Y') @ Quaternion((0, 0, 1), tip_k * 1.2)
-    cap = c["capsule"]
-    fall = max(0.0, sec - 1.9)
+        d_ = (handle - blade).normalized()       # model: blade toward -Z, grip toward +Z
+        sp.location = blade + d_ * 0.35; sp.rotation_mode = 'QUATERNION'
+        sp.rotation_quaternion = d_.to_track_quat('Z', 'Y') @ Quaternion((0, 0, 1), tip_k * 0.9)
+    cap = c["capsule"]; lip = blade + fwd * 0.1
+    slide = ease(min(1.0, max(0.0, (sec - 0.6) / 0.8)))
+    fall = max(0.0, sec - 1.4)
     if fall <= 0:
-        cap.location = blade + Vector((0, 0, 0.03))
+        cap.location = blade.lerp(lip, slide) + Vector((0, 0, 0.012))
+        cap.rotation_euler = (math.radians(90), 0, math.atan2(fwd.y, fwd.x) + math.pi / 2)
     else:
-        cap.location = blade + Vector((0, 0.0, 0.03 - 4.9 * fall * fall))
-        if cap.location.z < mouth.z - 0.5:
+        cap.location = lip + fwd * 0.08 * fall + Vector((0, 0, 0.012 - 4.9 * fall * fall))
+        cap.rotation_euler = (math.radians(90) + fall * 6.0, fall * 2.0, math.atan2(fwd.y, fwd.x) + math.pi / 2)
+        if cap.location.z < mouth.z - 0.45:
             cap.location = (0, -150, 0)
-    cap.rotation_euler = (sec * 3.0, sec * 1.3, 0)
-    # partner with the long pole stands back
-    h1 = c["people"]["r1"]; st1 = HC + Vector((3.6, -2.4, 0))
-    reset_pose(h1); stand_pose(h1); place(h1, st1, face_angle(st1, HC)); attach_cap(h1)
-    pl = c["pole"]; f1 = forward(h1); s1 = f1.cross(Vector((0, 0, 1)))
-    grip = h1.bone_head("upperarm01.R") + f1 * 0.35 + Vector((0, 0, -0.35))
-    end = grip + f1 * 2.4 + Vector((0, 0, -1.0))
-    reach(h1, "R", grip, Vector((s1.x, s1.y, -0.7)), end - grip); reach(h1, "L", grip.lerp(end, 0.25), Vector((-s1.x, -s1.y, -0.7)), end - grip)
-    pl.location = grip.lerp(end, 0.4); pl.rotation_mode = 'QUATERNION'; pl.rotation_quaternion = (end - grip).to_track_quat('Z', 'Y')
-    c["focus"] = mouth
+    for d in c["dust"]:
+        age = sec - d["t0"]
+        if age < 0 or age > 2.2:
+            d["o"].location = (0, -150, 0); continue
+        d["o"].location = lip + d["off"] + d["off"] * age * 2 + Vector((0, 0, -d["v"] * age - 0.3 * age * age))
+        d["o"].scale = (d["r"],) * 3
+    h1 = c["people"]["r1"]; st1 = mouth + Vector((-1.5, 1.2, 0)); st1.z = 0
+    reset_pose(h1); stand_pose(h1, head_down=12); place(h1, st1, face_angle(st1, mouth)); attach_cap(h1)
+    hold_detector(c, h1, sec, 0.2)
+    c["pole"].location = (0, -150, 0)
+    c["focus"] = lip
 
 
 def cam_drop(c, t):
     e = ease(t)
     m = c["drum"].location + Vector((0, 0, 0.95))
-    return (m + Vector((4.4, -1.4, 0.35)).lerp(Vector((4.0, -1.3, 0.35)), e), m + Vector((0.0, -0.7, -0.35)), 28)
+    return (m + Vector((2.4, -0.35, -0.3)).lerp(Vector((2.2, -0.4, -0.3)), e), m + Vector((0.0, -0.6, 0.05)), 35)
 
 
 def _focus(c, t):
@@ -677,7 +744,8 @@ def pair_pole_shovel(c, sec, at, drum_pos=None, scoop=True):
     fingers_curl(h1, 70, thumb=40); fingers_curl(h2, 70, thumb=40)
     sp = c["spade"]
     if sp is not None:
-        sp.location = blade + (handle - blade).normalized() * 0.5; sp.rotation_mode = 'QUATERNION'; sp.rotation_quaternion = (blade - handle).to_track_quat('Z', 'Y')
+        d_ = (handle - blade).normalized()       # model: blade toward -Z, grip toward +Z
+        sp.location = blade + d_ * 0.35; sp.rotation_mode = 'QUATERNION'; sp.rotation_quaternion = d_.to_track_quat('Z', 'Y')
 
 
 def drum_on_crane(c, at, height):
@@ -1055,8 +1123,8 @@ SHOTS = {
     "ch3_14b": ("recovery", a_tip, C((0.5, -10.5, 1.0), (0.1, -10.0, 1.05), (-2.5, -5.5, 1.3), 28), 4.0),
     "ch3_15a": ("recovery", a_mixer, C((-5.0, -41.5, 1.4), (-5.6, -41.0, 1.45), (-14.0, -36.5, 1.8), 32, rel=False), 4.0),
     "ch3_15b": ("recovery", a_heap_sky, C((2.0, -6.5, 0.4), (1.4, -5.6, 0.45), (-0.5, 1.0, 2.2), 24), None),
-    "ch3_16a": ("recovery", a_tent, C((15.6, -18.6, 1.4), (15.3, -18.3, 1.4), (14.0, -15.0, 1.0), 35), 2.8),
-    "ch3_16b": ("recovery", lambda c, t: a_tent(c, t, nod=True), C((12.6, -18.0, 1.3), (12.8, -17.7, 1.3), (14.0, -15.0, 1.1), 40), 2.8),
+    "ch3_16a": ("recovery", a_tent, C((13.8, -18.7, 1.3), (13.85, -18.45, 1.3), (14.0, -15.0, 1.0), 35), 2.8),
+    "ch3_16b": ("recovery", lambda c, t: a_tent(c, t, nod=True), C((12.9, -17.0, 1.25), (12.95, -16.9, 1.25), (14.0, -14.9, 1.15), 40), 2.8),
     "ch3_17a": ("recovery", a_pair_works, C((2.8, -9.8, 1.8), (2.3, -9.3, 1.8), (-0.8, -3.8, 1.0), 28), 5.6),
     "ch3_17b": ("recovery", anim_drop, cam_drop, 2.8),
     "ch3_18a": ("recovery", a_lid_lift, C((2.8, -8.8, 1.3), (2.4, -8.4, 1.5), (-1.0, -5.0, 1.6), 30), 4.0),
