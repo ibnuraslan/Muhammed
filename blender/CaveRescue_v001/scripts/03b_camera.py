@@ -1,3 +1,4 @@
+import math
 # Part 2 of 03_animate.py: the one continuous camera + rock blackout card for the scale moves.
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.lens = 24; cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.02; cam_d.clip_end = 400
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 4.0
@@ -39,9 +40,16 @@ SEGS = [
 for seg in SEGS:
     fc = catmull([(f, c) for f, c, a, l in seg]); fa = catmull([(f, a) for f, c, a, l in seg]); fl = catmull([(f, float(l)) for f, c, a, l in seg])
     f0, f1 = seg[0][0], seg[-1][0]
-    for f in list(range(f0, f1 + 1, 3)) + [f1]:
-        cam.location = fc(f); cam.keyframe_insert("location", frame=f)
-        aim.location = fa(f); aim.keyframe_insert("location", frame=f)
+    _pd = None
+    for f in range(f0, f1 + 1):   # every frame; the look direction turns at most 40 deg per frame (qa_check CAMJUMP: no one-frame whips)
+        c_ = fc(f); a_ = fa(f); v_ = a_ - c_; L_ = max(v_.length, 0.5); d_ = v_.normalized()
+        if _pd is not None:
+            ang_ = _pd.angle(d_, 0.0)
+            if ang_ > math.radians(40):
+                d_ = _pd.slerp(d_, math.radians(40) / ang_).normalized() if hasattr(_pd, "slerp") else d_
+        _pd = d_
+        cam.location = c_; cam.keyframe_insert("location", frame=f)
+        aim.location = c_ + d_ * L_; aim.keyframe_insert("location", frame=f)
         cam_d.lens = fl(f); cam_d.keyframe_insert("lens", frame=f)
 JUMPS = {582, 1008, 2565, 2726}
 stepped(cam, JUMPS); stepped(aim, JUMPS)
