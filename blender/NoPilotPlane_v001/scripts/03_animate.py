@@ -7,6 +7,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 WORK = os.path.join(HERE, "..", "work")
 exec(open(os.path.join(HERE, "lib.py")).read())
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())   # shared hand-pose library (director)
 def ground_z(x, y): return (0.206 if (1.86 < y < 2.08 and 0.31 < abs(x) < 0.73) else 0.0) + 0.012   # soles sit on, not in, the floor
 ARGS = sys.argv[sys.argv.index("--") + 1:]
 OUT = ARGS[0]; NOBAKE = "nobake" in ARGS
@@ -54,6 +55,10 @@ def fk_leg(rig, s, f, hip=88, knee=80, splay=4, ankle=0):
     rig.key_rot("lowerleg01." + s, f, [("X", knee)])
     rig.key_rot("foot." + s, f, [("X", ankle)])
 def fingers_curl(rig, f, s, amt):
+    """v007: all finger posing goes through pipeline/hand_poses.py (no hand-set finger angles)"""
+    pose = "flat_palm" if amt <= 10 else ("relaxed" if amt <= 40 else "wrap_grip")
+    apply_pose(rig.o if hasattr(rig, "o") else rig, s, pose, f)
+def _old_fingers_curl(rig, f, s, amt):
     for k in range(1, 6):
         for j in (1, 2, 3):
             n = "finger%d-%d.%s" % (k, j, s)
@@ -765,8 +770,11 @@ def add_joint_limits(arm, f_ref):
         elif nm.startswith("lowerarm01."):
             pb.use_ik_limit_x = True; pb.ik_min_x = R_(-145); pb.ik_max_x = R_(145)
     return n
-nl = add_joint_limits(YOU, F(40.2)) + add_joint_limits(FO, 1) + add_joint_limits(CA, 1)
-for (arm_, *_r) in PASS: nl += add_joint_limits(arm_, 1)
+for rig_ in [YOU, FO, CA] + [p_[0] for p_ in PASS]: add_hand_limits(rig_)
+nl = 0
+for rig_ in [YOU, FO, CA]:
+    for pb_ in rig_.pose.bones:
+        if pb_.name.startswith('lowerarm01.'): pb_.use_ik_limit_x = True; pb_.ik_min_x = R_(-145); pb_.ik_max_x = R_(145)
 print("JOINT LIMITS", nl)
 
 # ------------------------------------------------------------------ camera (head-cam baked from the eyes, authored look)
