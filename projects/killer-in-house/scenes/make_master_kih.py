@@ -23,6 +23,16 @@ for name, _ in shot_list:
     if sc.compositing_node_group is None or not sc.compositing_node_group.name.startswith("HouseGrade"):
         grade.add_grade(sc)
     sc.name = name
+    # farm-ready (shared 027e0aa): denoised Cycles at 32 samples, adaptive 0.05, fonts packed, no transparent film
+    sc.cycles.samples = int(os.environ.get("FILM_SAMPLES", 32))
+    sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
+    sc.render.film_transparent = False
+    for fo in bpy.data.fonts:
+        if fo.filepath and fo.filepath != "<builtin>" and not fo.packed_file:
+            try:
+                fo.pack()
+            except Exception as e:
+                print("[master] could not pack font", fo.filepath, e)
     bpy.ops.wm.save_mainfile(filepath=path, compress=True)
     print("[master] graded", name, sc.frame_end, "frames", flush=True)
 
@@ -54,6 +64,11 @@ if vo and os.path.exists(vo):
         print("[master] could not pack sound:", e)
 else:
     print("[master] no voiceover yet: picture-only master (VO strip goes on channel 2 from frame", 1 + int(round(LEAD * 24)), ")")
+cam = bpy.data.objects.new("FilmCam", bpy.data.cameras.new("FilmCam"))        # farms refuse a file without a scene camera
+master.collection.objects.link(cam); master.camera = cam
+master.render.engine = 'CYCLES'
+master.cycles.samples = int(os.environ.get("FILM_SAMPLES", 32)); master.cycles.adaptive_threshold = 0.05
+master.render.film_transparent = False
 master.render.use_sequencer = True
 master.render.use_compositing = False
 master.render.filepath = f"//render/{chapter}_"
