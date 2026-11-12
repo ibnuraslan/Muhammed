@@ -24,13 +24,19 @@ never photos.
   - **The rule:** cinematic = deeper shadows, contrast, soft directional light, natural colours, readable faces.
     No colour casts (no blue or teal wash). If relighting kills the soul of a shot, use the grade only: leave out
     the `look.*` call and keep the set's own light.
+  - **Keep the colours of the plain render.** A blue sky stays a deep rich blue, and white or cream stone stays
+    cream. Never grey everything out: that reads as black and white, not cinematic. The mood comes from contrast,
+    shadow shape, highlight roll-off and vignette, never from desaturation. Grade saturation is 0.95, and 1.0 on
+    exteriors.
   - Light every set with `look.py`, at the end of `build()`:
     - **One strong directional key**: a window or the sun, from the side or behind, never from the camera.
-      - Exteriors: `look.day_light("overcast" | "low_sun", azim=..., haze_box=...)` (low sky, one sun lamp, haze).
+      - Exteriors (stone, buildings, streets): `look.day_light("low_sun", azim=..., elev=..., sky="blue")`.
+        This gives a deep blue sky gradient and one warm low sun from the front-side, so columns and edges throw
+        shadows across the façade. Example: `sc_courthouse.py`.
+      - `"overcast"` only when the script says rain or fog.
       - Interiors by day: `look.interior_day(window=(point, target), mood=...)`, plus `look.gobo(...)` for window
         bars or blinds, so the sun lands in patches.
-      - Overcast exteriors get a dark slate sky gradient and a soft side key, so the shadow side sits ~2 stops down.
-        Use `look.ground_haze(...)` for haze only at the bottom of frame.
+      - `look.ground_haze(...)` adds haze only at the bottom of frame.
       - Woods and lakeside paths: `look.forest(mood="mist" | "low_sun" | "dusk", azim=..., area=...)`.
         A low sun behind the trees gives shafts through mist and a dark understory. Point the camera towards
         the sun through the trunks.
@@ -43,13 +49,15 @@ never photos.
       `night_interior` add `look.face_fill()`, a soft warm bounce in front of each person. Pass `faces=0` for a
       deliberate silhouette.
   - **Grade**: `grade.add_grade` defaults to `look="cinematic"`: contrast around mid-grey, rolled-off highlights,
-    neutral colour (only a whisper of cool blacks and warm highlights), saturation 0.9, stronger vignette.
+    neutral colour (only a whisper of cool blacks and warm highlights), saturation 0.95 (1.0 on exteriors),
+    stronger vignette.
     It runs on scene-linear light before AgX.
     Moods store per-shot tweaks such as extra contrast on the scene (`look.set_grade`), and `add_grade` reads them.
   - Night stays readable, never crushed.
   - `run.py --plain` renders the old look, and `--exr` + `look_sheet.py` make before/after sheets.
   - Reference: `nvidia_doc/review/cinematic_look_v1.jpg` (all moods), `cinematic_look_v2.jpg` (overcast),
-    `cinematic_look_v3.jpg` (forest misty day, dusk), `cinematic_look_v4.jpg` (natural colours, readable faces).
+    `cinematic_look_v3.jpg` (forest misty day, dusk), `cinematic_look_v4.jpg` (faces),
+    `cinematic_look_v5.jpg` (colours kept: blue sky, cream stone).
   - Never add a colour lift to the cinematic grade. In linear light it acts as an offset, and it turned dark,
     exposed-up sets navy.
 - **Light.** Within that look: dawn, overcast day, low late sun, blue-hour dusk, readable night.
