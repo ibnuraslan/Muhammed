@@ -211,7 +211,7 @@ def hollow_house(name, loc, w, d, h, plaster, roof, win_at, rng):
         for dy in (-0.6, 0.6):
             box("KTableLeg", k0 + Vector((dx, dy, 0.37)), (0.04, 0.04, 0.74), wood_m)
     box("Oilcloth", k0 + Vector((0, 0, 0.762)), (0.95, 1.35, 0.004), noisy("Oilcloth", (0.6, 0.55, 0.45), 0.4, dirt=0.4, scale=8))
-    ph_model("WoodenChair_01", loc=(k0.x + 0.75, k0.y + 0.1, 0), rot_z=math.radians(90))
+    ph_model("SchoolChair_01", loc=(k0.x + 0.75, k0.y + 0.1, 0), rot_z=math.radians(90))
     stove = join([box("Stove", (k0.x + 1.7, k0.y + 1.4, 0.45), (0.5, 0.5, 0.9), painted_steel("Stove", (0.2, 0.2, 0.2), 0.5, 0.5)),
                   cyl("StovePipe", (k0.x + 1.7, k0.y + 1.4, 1.9), 0.06, 2.0, pbr("StovePipe", (0.08, 0.08, 0.08), 0.5, 0.6), verts=12)], "Stove")
     box("Shelf", (k0.x + 1.9, k0.y - 1.0, 1.6), (0.25, 1.2, 0.03), wood_m)
@@ -278,10 +278,10 @@ def build(variant=None):
         o = bpy.context.active_object; o.scale = (rng.uniform(0.1, 0.35), rng.uniform(0.1, 0.3), rng.uniform(0.05, 0.12)); o.data.materials.append(plasters[1])
     wall("LotWall", (-9.5, -15.5), (-3.0, -15.5), 0.8, 0.2, brick)
     # Istanbul periphery: hills of apartment blocks, minarets, a smoking factory stack
-    periphery(rng, center=(0, 0), r_min=90, r_max=460, n_blocks=380, hill_h=38, minarets=2, smokes=1)
+    periphery(rng, center=(0, 0), r_min=190, r_max=560, n_blocks=320, hill_h=34, minarets=2, smokes=1)
     for (hx, hy) in ((-36, 13), (24, 13), (-40, -12), (32, -12), (FAM.x + 2.1, FAM.y + 1.2)):
         smoke((hx + 2, hy, 6.5 if (hx, hy) != (FAM.x + 2.1, FAM.y + 1.2) else 4.6), height=8, radius=0.35, density=0.5)
-    haze((0, 150, 30), (900, 300, 80), density=0.0012 if day != "rain" else 0.003, color=(0.85, 0.88, 0.92) if day not in ("dusk",) else (0.5, 0.55, 0.72), anis=0.3)
+    haze((0, 150, 30), (1400, 700, 80), density=0.0024 if day != "rain" else 0.004, color=(0.85, 0.88, 0.92) if day not in ("dusk",) else (0.5, 0.55, 0.72), anis=0.3)
     haze((0, 5, 6), (90, 60, 14), density=0.0008, color=(0.86, 0.88, 0.92), anis=0.3)
     # electricity poles and sagging wires along the street
     pole_m = pbr("PoleWood", (0.22, 0.18, 0.14), 0.85)
@@ -353,7 +353,7 @@ def build(variant=None):
     c.update(tc1=tc1, tc2=tc2)
     load = []
     for k in range(18):
-        p, w = kit_[[i for i, (pp, ww) in enumerate(kit_) if pp.name.startswith(("Plate", "Pipe", "Bonnet", "IBeam", "Bar", "Angle"))][k % 12]]
+        p, w = kit_[[i for i, (pp, ww) in enumerate(kit_) if any(w_ in pp.name for w_ in ("Plate", "Pipe", "Bonnet", "IBeam", "Bar", "Angle"))][k % 12]]
         o = instance(p, (rng.uniform(-1.8, 1.8), rng.uniform(-0.8, 0.8), bed_z + 0.1 + rng.uniform(0, 0.4)), rot=(rng.normal(0, 0.3), rng.normal(0, 0.3), rng.uniform(0, 6.28)), scale=(0.6,) * 3)
         o.parent = tk; o.hide_render = v != "scrapload"; load.append(o)
     c["load"] = load
@@ -662,7 +662,7 @@ def c1_1a(c, t):
 
 
 def c1_1b(c, t):
-    sec = S("ch1_1b", t); stage(c, "none", truck_at=(1.0, 2.0, 0.0), people=("bro1", "bro2"))
+    sec = S("ch1_1b", t); stage(c, "none", truck_at=(-5.5, -1.4, 0.0), people=("bro1", "bro2"))
     walk_to(c["people"]["bro1"], (10.0, 5.2, 0), (3.6, 3.6, 0), sec, speed=1.1)
     walk_to(c["people"]["bro2"], (11.0, 5.8, 0), (4.6, 3.8, 0), sec - 0.4, speed=1.1)
     c["focus"] = c["people"]["bro1"].arm.location + Vector((0, 0, 1.3))
@@ -692,7 +692,7 @@ def c1_4b(c, t):
     cb = c["crowbar"]
     if cb is not None:
         cb.location = grip.lerp(tip, 0.5); cb.rotation_mode = 'QUATERNION'; cb.rotation_quaternion = (tip - grip).to_track_quat('Z', 'Y')
-    stand_at(c["people"]["bro2"], c["cont2"].location + Vector((1.2, -1.4, 0)), c["cont2"].location, hands_pockets=True)
+    stand_at(c["people"]["bro2"], c["cont2"].location + Vector((0.6, 1.4, 0)), c["cont2"].location, hands_pockets=True)
     c["focus"] = h.bone_head("spine03")
 
 
@@ -757,9 +757,9 @@ def c1_6b(c, t):
 
 def c1_7a(c, t):
     sec = S("ch1_7a", t); stage(c, "yard", shells=(70, 0), people=("kid1", "kid2", "rel2"))
-    walk_to(c["people"]["kid1"], (-12, 2.6, 0), (6, 2.6, 0), sec, speed=1.0, stride=0.8)
-    walk_to(c["people"]["kid2"], (-13, 2.2, 0), (5, 2.2, 0), sec, speed=1.0, stride=0.8)
-    walk_to(c["people"]["rel2"], (-15, 2.0, 0), (3, 2.0, 0), sec, speed=0.9)
+    walk_to(c["people"]["kid1"], (-5.5, 2.6, 0), (8, 2.6, 0), sec, speed=1.0, stride=0.8)
+    walk_to(c["people"]["kid2"], (-6.3, 2.2, 0), (7, 2.2, 0), sec, speed=1.0, stride=0.8)
+    walk_to(c["people"]["rel2"], (-8.0, 2.0, 0), (5, 2.0, 0), sec, speed=0.9)
     laundry_sway(c, sec)
     c["focus"] = c["people"]["kid1"].arm.location + Vector((0, 0, 0.8))
 
@@ -816,7 +816,7 @@ def c1_10a(c, t):
         stand_pose(h, head_down=10 * k); place(h, st + Vector((0.0, -0.35, 0)), face_angle(st, C2))
     else:
         reset_pose(h); h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); pose_sit(h, lean=20 + 10 * k)
-        place(h, st + Vector((0, 0, 0.47)), face_angle(st, C2) + math.pi * 0.1)
+        place(h, st, face_angle(st, C2) + math.pi * 0.1)
         h.rot("neck01", forward(h).cross(Vector((0, 0, 1))), -12); h.rot("head", forward(h).cross(Vector((0, 0, 1))), -10)
     c["focus"] = h.bone_head("spine05")
 
@@ -839,7 +839,7 @@ def c1_12a(c, t):         # night kitchen: a man alone at the table under a bare
     sec = S("ch1_12a", t); stage(c, "yard", shells=(70, 78), people=("worker",))
     h = c["people"]["worker"]; k0 = c["fam"]["table"]
     reset_pose(h); h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); pose_sit(h, lean=24, hands="knees")
-    place(h, k0 + Vector((0.8, 0.1, 0.45)), face_angle(k0 + Vector((0.8, 0.1, 0)), k0))
+    place(h, k0 + Vector((0.8, 0.1, 0.0)), face_angle(k0 + Vector((0.8, 0.1, 0)), k0))
     sd = forward(h).cross(Vector((0, 0, 1)))
     h.rot("neck01", sd, -10); h.rot("head", sd, -14 - 2 * math.sin(sec * 0.5))
     c["focus"] = h.bone_head("head")
@@ -967,4 +967,5 @@ def _focus(c, t):
     return c.get("focus", Vector((0, 10, 1)))
 
 
-MOVES = {k: dict(kind="anim", far=300.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus) for k, v in SHOTS.items()}
+from durs import title_for
+MOVES = {k: {**dict(kind="anim", far=300.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus), **({'title': title_for(k), 'dof': None} if title_for(k) else {})} for k, v in SHOTS.items()}

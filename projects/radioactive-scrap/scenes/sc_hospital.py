@@ -97,9 +97,9 @@ def build(variant=None):
     sign = text_obj("HospSign", "DEVLET HASTANESİ", EXT + Vector((0, -8.1, 4.4)), 0.55, pbr("SignLetters", (0.15, 0.25, 0.45), 0.5),
                     font_path="/usr/share/fonts/opentype/inter/Inter-Bold.otf", extrude=0.03)
     from sc_street import car
-    c["car"] = car("FamilyCar", (0.55, 0.12, 0.08)); c["car"].location = EXT + Vector((5.0, -19.0, 0)); c["car"].rotation_euler = (0, 0, 0)
+    c["car"] = car("FamilyCar", (0.55, 0.12, 0.08)); c["car"].location = EXT + Vector((11.0, -19.0, 0)); c["car"].rotation_euler = (0, 0, 0)
     car("ParkedA", (0.7, 0.7, 0.68)).location = EXT + Vector((-6.0, -19.5, 0))
-    car("ParkedB", (0.15, 0.2, 0.3)).location = EXT + Vector((12.0, -19.0, 0))
+    car("ParkedB", (0.15, 0.2, 0.3)).location = EXT + Vector((17.0, -19.0, 0))
     # ---------------- corridor
     floor_m = ph_mat("large_grey_tiles", 0.5, (0.5, 0.5, 0.48), name="CorFloor")
     wall_m = two_tone("CorWall")
@@ -159,7 +159,7 @@ def build(variant=None):
         blanket(f"Blanket{k}", b + Vector((0, -0.25, 0)), col=[(0.38, 0.38, 0.4), (0.42, 0.36, 0.32), (0.36, 0.4, 0.42)][k % 3])
     chart = box("Chart", BEDS[2] + Vector((0, -1.03, 0.68)), (0.24, 0.015, 0.32), pbr("ChartBoard", (0.45, 0.35, 0.2), 0.5))
     c["chart"] = chart
-    c["visitor_chair"] = ph_model("WoodenChair_01", loc=BEDS[2] + Vector((-0.9, -0.3, 0)), rot_z=math.radians(-90))
+    c["visitor_chair"] = ph_model("SchoolChair_01", loc=BEDS[2] + Vector((-0.9, -0.3, 0)), rot_z=math.radians(-90))
     # ---------------- lab
     lr = room("Lab", LAB, 6, 5, 3.0, wf, two_tone("LabWall", (0.75, 0.75, 0.72), (0.88, 0.87, 0.83)), windows=[("S", 0.0, 1.0, 2.4, 1.5)])
     for kind, ctr, side in lr["openings"]:
@@ -218,7 +218,7 @@ def build(variant=None):
     ds = sl.driver_add("energy").driver; ds.type = 'SCRIPTED'; ds.expression = "1500 * min(1, max(0, (frame - 36) / 3))"
     so = bpy.data.objects.new("ORLamp", sl); bpy.context.collection.objects.link(so); so.location = OR_ + Vector((0, 0, 2.1))
     tube_light(OR_ + Vector((1.8, 1.8, 3.15)), energy=12); tube_light(OR_ + Vector((-1.8, -1.8, 3.15)), energy=12)
-    ph_model("industrial_storage_cart", loc=OR_ + Vector((1.6, -1.2, 0)), rot_z=0.4)
+    ph_model("industrial_storage_cart", loc=OR_ + Vector((-2.0, 1.6, 0)), rot_z=0.4)
     # ---------------- local clinic (December, evening)
     cf = ph_mat("worn_brick_floor", 0.6, (0.4, 0.3, 0.25), name="ClinicFloor")
     cl = room("Clinic", CLINIC, 7, 5, 2.8, cf, two_tone("ClinicWall", (0.4, 0.5, 0.55), (0.8, 0.78, 0.7)), doors=[("S", 2.4, 0, 1.0, 2.1)],
@@ -280,7 +280,7 @@ def stand_at(h, loc, look, **kw):
 
 def sit_at(h, loc, look, lean=10):
     h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h); pose_sit(h, lean=lean)
-    place(h, loc, face_angle(loc, look))
+    place(h, Vector((loc[0], loc[1], 0.0)), face_angle(loc, look))
 
 
 def sit_up_in_bed(h, bed, k=1.0):
@@ -608,7 +608,7 @@ SHOTS = {
     "ch4_3a": ("day", c4_3a, C(BEDS[1] + Vector((1.2, -2.4, 1.5)), BEDS[1] + Vector((1.0, -2.2, 1.55)), BEDS[1] + Vector((-0.75, 0.0, 1.5)), 35), 2.8),
     "ch4_3b": ("morning", c4_3b, C(WARD + Vector((-4.5, -2.8, 1.4)), WARD + Vector((-4.0, -2.6, 1.4)), BEDS[2] + Vector((0, 0.5, 1.0)), 32), 4.0),
     "ch4_11a": ("morning", c4_11a, C(EXT + Vector((-6.0, -22.0, 1.4)), EXT + Vector((-5.5, -21.0, 1.4)), EXT + Vector((0, -9.0, 1.8)), 30), 5.6),
-    "ch4_11b": ("morning", c4_11b, C(EXT + Vector((0.0, -25.0, 1.5)), EXT + Vector((0.6, -24.5, 1.5)), EXT + Vector((4.6, -20.0, 1.2)), 32), 4.0),
+    "ch4_11b": ("morning", c4_11b, C(EXT + Vector((5.0, -26.0, 1.5)), EXT + Vector((5.6, -25.5, 1.5)), EXT + Vector((10.6, -20.0, 1.2)), 32), 4.0),
     "ch4_12a": ("day", c4_12a, C(OFFICE + Vector((-1.5, -0.4, 1.6)), OFFICE + Vector((-1.3, -0.2, 1.6)), OFFICE + Vector((0.1, 1.5, 1.5)), 32), 2.8),
     "ch4_12b": ("day", c4_12b, C(OFFICE + Vector((1.6, -0.8, 1.6)), OFFICE + Vector((1.4, -0.6, 1.6)), OFFICE + Vector((0.1, 1.5, 1.5)), 32), 2.8),
     "ch4_13a": ("day", c4_13a, C(OR_ + Vector((2.2, -2.4, 1.2)), OR_ + Vector((1.9, -2.1, 1.25)), OR_ + Vector((0, 0, 1.6)), 28), None),
@@ -622,4 +622,5 @@ def _focus(c, t):
     return c.get("focus", WARD + Vector((0, 0, 1)))
 
 
-MOVES = {k: dict(kind="anim", far=200.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus) for k, v in SHOTS.items()}
+from durs import title_for
+MOVES = {k: {**dict(kind="anim", far=200.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus), **({'title': title_for(k), 'dof': None} if title_for(k) else {})} for k, v in SHOTS.items()}

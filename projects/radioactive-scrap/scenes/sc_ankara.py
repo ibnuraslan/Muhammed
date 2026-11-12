@@ -123,7 +123,7 @@ def build(variant=None):
     c["ledA"], c["leafA"] = ledger("LedgerA", REC + Vector((-0.45, 0.0, 0.78)), 0.03)
     c["ledB"], c["leafB"] = ledger("LedgerB", REC + Vector((0.45, 0.02, 0.78)), -0.02)
     for k in range(2):
-        ph_model("WoodenChair_01", loc=REC + Vector((-0.5 + k * 1.0, -0.95, 0)), rot_z=0.0)
+        ph_model("SchoolChair_01", loc=REC + Vector((-0.5 + k * 1.0, -0.95, 0)), rot_z=0.0)
     pend = bpy.data.lights.new("RecLamp", 'SPOT'); pend.energy = 150; pend.color = (1.0, 0.85, 0.65); pend.spot_size = math.radians(80); pend.spot_blend = 0.6
     po = bpy.data.objects.new("RecLamp", pend); bpy.context.collection.objects.link(po); po.location = REC + Vector((0, 0, 2.2))
     cone = bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.25, radius2=0.04, depth=0.2, location=REC + Vector((0, 0, 2.3)))
@@ -146,7 +146,7 @@ def C(p0, p1, tgt, lens):
 
 def sit_at(h, loc, look, lean=10):
     h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h); pose_sit(h, lean=lean)
-    place(h, loc, face_angle(loc, look))
+    place(h, Vector((loc[0], loc[1], 0.0)), face_angle(loc, look))
 
 
 def c2_12a(c, t):          # the clerk stamps a document under the desk lamp (medium, person in frame)

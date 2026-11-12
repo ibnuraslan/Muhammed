@@ -39,7 +39,7 @@ def build(variant=None):
     v = variant or "clear"
     rng = np.random.default_rng(21)
     sky("overcast")
-    bpy.context.scene.view_settings.exposure = 0.5
+    bpy.context.scene.view_settings.exposure = 0.9
     box("Ground", (0, 0, -0.06), (400, 400, 0.1), ph_mat("road_damaged", 0.15, (0.2, 0.2, 0.2), name="StreetAsphalt"))
     puddles(rng, ((-20, -16), (20, -8)), 10, size=(0.5, 1.5), z=0.01)
     # the warehouse room: brick walls, concrete floor, steel roof trusses, high windows, big front doors
@@ -49,7 +49,10 @@ def build(variant=None):
          windows=[("N", -5.0, 3.6, 2.4, 1.6), ("N", 0.0, 3.6, 2.4, 1.6), ("N", 5.0, 3.6, 2.4, 1.6)],
          doors=[("S", -0.6, 0, 4.0, 3.6), ("E", -1.0, 0, 2.0, 2.6)])
     for x in (-5.0, 0.0, 5.0):
-        daylight_window(Vector((x, 10.2, 4.4)), "N", (2.4, 1.6), energy=240)
+        daylight_window(Vector((x, 10.2, 4.4)), "N", (2.4, 1.6), energy=900)
+    dl = bpy.data.lights.new("DoorDay", 'AREA'); dl.size = 4.0; dl.size_y = 3.6; dl.energy = 2500; dl.color = (0.88, 0.92, 1.0)
+    do = bpy.data.objects.new("DoorDay", dl); bpy.context.collection.objects.link(do); do.location = (-0.6, FRONT - 1.0, 1.8)
+    do.rotation_euler = (math.radians(-90), 0, 0); do.visible_camera = False
     steel = painted_steel("Truss", (0.2, 0.22, 0.24), 0.5, 0.6)
     for x in np.arange(-8, 9, 4):
         box("Truss", (x, 2.0, 5.6), (0.25, 16, 0.4), steel)
@@ -66,7 +69,7 @@ def build(variant=None):
          windows=[("N", 0.0, 1.5, 1.6, 1.6)], doors=[("W", 0.0, 0, 2.0, 2.6)])
     daylight_window(Vector((14.0, 5.2, 2.3)), "N", (1.6, 1.6), energy=200)
     for k in range(3):
-        tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=20 if v != "dim" else 6)
+        tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=110 if v != "dim" else 50)
     # rubbish being cleared: crates, boxes, broken chairs, a desk, rolled carpet, an old cabinet
     for k in range(10):
         ph_model("cardboard_box_01", loc=(rng.uniform(-7.5, -3.5), rng.uniform(2, 8), 0.0), rot_z=rng.uniform(0, 3))
@@ -76,7 +79,7 @@ def build(variant=None):
                          ("vintage_cabinet_01", (7.2, 6.5, 0), 3.1), ("old_bed_frame", (-6.5, 7.6, 0), 0.0), ("wooden_bookshelf_worn", (-8.2, 4.0, 0), 1.57)):
         ph_model(aid, loc=loc, rot_z=rz)
     cyl("Carpet", (-5.6, 1.2, 0.18), 0.18, 2.4, fabric("Carpet", (0.4, 0.12, 0.1), 0.9, 0.4, 200), verts=16, rot=(0, math.radians(90), 0.3))
-    haze((0, 2, 3), (17.8, 15.8, 5.8), density=0.03, color=(0.85, 0.82, 0.76), anis=0.5)
+    haze((0, 2, 3), (17.8, 15.8, 5.8), density=0.008, color=(0.85, 0.82, 0.76), anis=0.5)
     # the two packages near the front
     c["pk"] = []
     for k, p in enumerate(PKG):
@@ -86,7 +89,7 @@ def build(variant=None):
     fac = facade_material("StreetFacade", (0.7, 0.66, 0.58), floor=2.9, bay=3.2)
     for k in range(6):
         h = 12 + 3 * (k % 3)
-        box("Opp", (-25 + k * 10, -24.0, h / 2), (9.6, 10, h), fac)
+        box("Opp", (-25 + k * 10, -31.0, h / 2), (9.6, 10, h), fac)
     for x in (-16.0, 24.0):
         box("Adj", (x, 2.0, 7.0), (12, 16, 14), fac)
     from sc_street import car
@@ -100,8 +103,8 @@ def build(variant=None):
     c["roller"] = cyl("RollerPipe", (0, -150, 0), 0.05, 1.2, rust_mat("RollerRust"), verts=12, rot=(0, math.radians(90), 0))
     c["fk"], c["fk_car"] = forklift()
     c["fk"].location = (0, -150, 0)
-    ht, _ = ph_model("hand_truck"); c["handtruck"] = ht
-    c["table"], _ = ph_model("WoodenTable_01")
+    ht, _ = ph_model("hand_truck", loc=(7.5, 8.0, 0)); c["handtruck"] = ht
+    c["table"], _ = ph_model("WoodenTable_01", loc=(6.0, 7.5, 0))
     P = {}
     P["a"] = person("ClearA", 1.0, 35, "parka_green", "short02", hat="knit", hat_col=(0.15, 0.15, 0.18))
     P["b"] = person("ClearB", 1.0, 48, "wool_grey", "short03", moustache=True)
@@ -226,8 +229,8 @@ def c2_14b(c, t):          # a buyer and an agent walk past the packages without
 SHOTS = {
     "ch1_2a": ("clear", c1_2a, C(Vector((3.0, 8.5, 1.6)), Vector((2.6, 8.0, 1.6)), Vector((0.0, -7.0, 1.5)), 26), None),
     "ch1_2b": ("clear", c1_2b, C(Vector((-6.5, 5.5, 1.3)), Vector((-2.8, -1.8, 1.0)), Vector((-0.6, -4.3, 0.6)), 30), 4.0),
-    "ch1_3a": ("clear", c1_3a, C(Vector((3.6, -5.0, 1.3)), Vector((3.2, -5.4, 1.35)), Vector((-0.6, -8.6, 1.0)), 30), 4.0),
-    "ch1_3b": ("clear", c1_3b, C(Vector((6.0, -21.0, 1.6)), Vector((5.0, -21.0, 1.6)), Vector((-4.0, -12.0, 1.5)), 30), None),
+    "ch1_3a": ("clear", c1_3a, C(Vector((4.6, -7.6, 1.4)), Vector((4.2, -8.0, 1.4)), Vector((-0.6, -9.0, 1.0)), 30), 4.0),
+    "ch1_3b": ("clear", c1_3b, C(Vector((7.0, -22.0, 1.6)), Vector((6.0, -22.0, 1.6)), Vector((-4.0, -12.0, 1.5)), 30), None),
     "ch2_13a": ("dim", c2_13a, C(Vector((-3.5, -2.0, 1.4)), Vector((-3.0, -2.6, 1.45)), Vector((2.0, -1.0, 0.9)), 30), 4.0),
     "ch2_13b": ("dim", c2_13b, C(Vector((6.0, -4.5, 1.5)), Vector((6.6, -4.2, 1.5)), Vector((9.5, -1.0, 1.2)), 32), 4.0),
     "ch2_14a": ("dim", c2_14a, C(Vector((-2.0, 4.0, 1.2)), Vector((-1.8, 3.2, 1.2)), Vector((-0.8, -4.6, 0.8)), 32), 4.0),

@@ -43,3 +43,15 @@ if __name__ == "__main__":
     for k, v in _D.items():
         tot[k.split("_")[0]] = tot.get(k.split("_")[0], 0) + v
     print(tot, sum(tot.values()))
+
+
+TITLES = {"ch1_1a": ("CHAPTER 1", "ACROSS THE STREET"), "ch2_1a": ("CHAPTER 2", "THE MARK ON THE CONTAINER"),
+          "ch3_1a": ("CHAPTER 3", "THE PILE"), "ch4_1a": ("CHAPTER 4", "THE SECOND CONTAINER")}
+
+
+def title_for(shot):
+    """(small, big, frame_in, frame_out) for make-time title cards; fades out ~0.5 s before the shot ends."""
+    if shot not in TITLES:
+        return None
+    n = int(round(dur(shot) * 24))
+    return (*TITLES[shot], 8, max(40, n - 12))

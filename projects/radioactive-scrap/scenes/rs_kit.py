@@ -464,6 +464,12 @@ def person(name, gender=1.0, years=40, outfit="wool_brown", hair="short02", hv=0
     if asset == "male_worksuit01" or base_layer:        # long-sleeved shirt and trousers under overalls (winter)
         add_asset(h, "clothes", "male_casualsuit01", tint=(0.55, 0.55, 0.58), val=0.8, rough=0.85)
     add_asset(h, "clothes", asset, tint=tint, sat=0.0 if outfit.startswith(("overall", "doctor", "nurse")) else 0.35, val=val, rough=0.85, sheen=0.3)
+    PLAIN = {"doctor": (0.82, 0.83, 0.82), "nurse": (0.8, 0.82, 0.82), "overall_white": (0.75, 0.76, 0.74), "overall_orange": (0.7, 0.26, 0.05)}
+    if outfit in PLAIN:                                  # cotton coats / coveralls: plain cloth, not the suit texture
+        from kit import fabric as _fab
+        cl = [o for o in h.parts if o.name.endswith(asset)]
+        if cl:
+            cl[0].data.materials.clear(); cl[0].data.materials.append(_fab(name + "Cloth", PLAIN[outfit], 0.9, 0.3, 700))
     add_asset(h, "clothes", "shoes02", val=0.15, rough=0.5)
     if hair:
         add_asset(h, "hair", hair, val=hv, rough=0.5)
@@ -868,6 +874,7 @@ def tube_light(loc, length=1.2, energy=60, color=(0.95, 0.97, 1.0), on_expr=None
     if on_expr:
         d = l.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = on_expr
     o = bpy.data.objects.new("Tube", l); bpy.context.collection.objects.link(o); o.location = (loc[0], loc[1], loc[2] - 0.12)
+    o.visible_camera = False
     return o
 
 
@@ -878,6 +885,7 @@ def daylight_window(centre, side, size=(1.6, 1.6), energy=250, color=(0.85, 0.9,
     n = {"N": Vector((0, 1, 0)), "S": Vector((0, -1, 0)), "E": Vector((1, 0, 0)), "W": Vector((-1, 0, 0))}[side]
     o.location = Vector(centre) + n * 0.6
     o.rotation_euler = (-n).to_track_quat('-Z', 'Y').to_euler()
+    o.visible_camera = False
     return o
 
 

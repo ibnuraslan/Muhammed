@@ -34,8 +34,8 @@ def build(variant=None):
     v = variant or "hot"
     rng = np.random.default_rng(8)
     sky("overcast")
-    bpy.context.scene.view_settings.exposure = 0.6 if v == "hot" else 0.8
-    floor = ph_mat("concrete_floor_damaged_01", 0.3, (0.25, 0.24, 0.22), name="SmeltFloor")
+    bpy.context.scene.view_settings.exposure = 0.4 if v == "hot" else 0.3
+    floor = ph_mat("concrete_floor_damaged_01", 0.3, (0.25, 0.24, 0.22), name="SmeltFloor", tint=(0.45, 0.42, 0.4))
     box("Floor", (0, 0, -0.05), (60, 60, 0.1), floor)
     iron = ph_mat("rusty_corrugated_iron", 0.4, (0.3, 0.25, 0.2), name="ShedWall", tint=(0.55, 0.55, 0.58))
     W, D, H = 36, 30, 14
@@ -49,9 +49,9 @@ def build(variant=None):
         box("Truss", (x, 0, H - 0.6), (0.3, D, 0.6), col_m)
     for k in range(5):                                    # roof lights: grey daylight through dirty panels
         box("Rooflight", (-12 + k * 6, 0, H - 0.01), (2.0, 10, 0.02), glass("Rooflight", (0.8, 0.82, 0.8), 0.4))
-        l = bpy.data.lights.new("RoofDay", 'AREA'); l.size = 2.0; l.size_y = 10; l.energy = 1500 if v == "hot" else 2600; l.color = (0.85, 0.9, 1.0)
+        l = bpy.data.lights.new("RoofDay", 'AREA'); l.size = 2.0; l.size_y = 10; l.energy = 600 if v == "hot" else 900; l.color = (0.85, 0.9, 1.0)
         o = bpy.data.objects.new("RoofDay", l); bpy.context.collection.objects.link(o); o.location = (-12 + k * 6, 0, H - 0.3)
-    haze((0, 0, 6), (W - 1, D - 1, 12), density=0.02 if v == "hot" else 0.012, color=(0.8, 0.78, 0.75), anis=0.4)
+    haze((0, 0, 6), (W - 1, D - 1, 12), density=0.004 if v == "hot" else 0.003, color=(0.8, 0.78, 0.75), anis=0.4)
     # the furnace: refractory drum with a door that lifts on the glow
     refr = ph_mat("rough_concrete", 0.6, (0.25, 0.22, 0.2), name="Refractory")
     shell = painted_steel("FurShell", (0.12, 0.12, 0.13), 0.5, 0.7)
@@ -59,14 +59,15 @@ def build(variant=None):
     cyl("FurnaceRim", FUR + Vector((0, 0, 4.05)), 2.5, 0.2, refr, verts=40)
     box("FurHood", FUR + Vector((0, 0, 6.5)), (3.0, 3.0, 2.5), shell)
     cyl("FurStack", FUR + Vector((0, 0, 10.5)), 0.7, 6.0, shell, verts=20)
-    box("MouthFrame", FUR + Vector((0, -2.35, 1.5)), (1.8, 0.4, 1.6), refr)
-    glow_m = molten("FurnaceGlow", 25.0)
-    box("Mouth", FUR + Vector((0, -2.2, 1.45)), (1.3, 0.2, 1.1), glow_m)
+    box("MouthFrame", FUR + Vector((0, -2.35, 1.5)), (1.8, 0.4, 1.6), painted_steel("Soot", (0.06, 0.055, 0.05), 0.8, 0.6))
+    glow_m = molten("FurnaceGlow", 5.0)
+    box("Mouth", FUR + Vector((0, -2.56, 1.45)), (1.25, 0.02, 1.05), glow_m)
     door = box("FurDoor", (0, 0, 0), (1.5, 0.15, 1.3), painted_steel("FurDoorM", (0.2, 0.18, 0.16), 0.6, 0.5), bevel=0.02)
-    c["door"] = door; c["door_closed"] = FUR + Vector((0, -2.6, 1.45))
-    fl = bpy.data.lights.new("FurnaceLight", 'AREA'); fl.size = 1.3; fl.size_y = 1.1; fl.color = (1.0, 0.45, 0.12)
-    d = fl.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = "%d * (0.85 + 0.15 * sin(frame * 0.9) * sin(frame * 0.31))" % (900 if v == "hot" else 0)
-    fo = bpy.data.objects.new("FurnaceLight", fl); bpy.context.collection.objects.link(fo); fo.location = FUR + Vector((0, -2.45, 1.45)); fo.rotation_euler = (math.radians(90), 0, 0)
+    c["door"] = door; c["door_closed"] = FUR + Vector((0, -2.7, 1.45))
+    fl = bpy.data.lights.new("FurnaceLight", 'SPOT'); fl.spot_size = math.radians(120); fl.spot_blend = 0.8; fl.shadow_soft_size = 0.5; fl.color = (1.0, 0.45, 0.12)
+    d = fl.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = "%d * (0.85 + 0.15 * sin(frame * 0.9) * sin(frame * 0.31))" % (1600 if v == "hot" else 0)
+    fo = bpy.data.objects.new("FurnaceLight", fl); bpy.context.collection.objects.link(fo); fo.location = FUR + Vector((0, -3.3, 1.45)); fo.rotation_euler = (math.radians(90), 0, 0)
+    fo.visible_camera = False; fo.visible_glossy = False
     c["fur_light"] = fo
     if v != "hot":
         glow_m.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 1.5
@@ -89,7 +90,7 @@ def build(variant=None):
         fillm = box("MouldFill", p + Vector((0, 0, 0.33)), (0.6, 0.35, 0.02), molten(f"Ingot{k}", 12.0 if (v == "hot" and k < 3) else 0.0))
         c["moulds"].append(p)
     # stacked cold ingots (Ch4)
-    ing = painted_steel("Ingot", (0.3, 0.3, 0.32), 0.45, 0.9)
+    ing = painted_steel("Ingot", (0.12, 0.12, 0.13), 0.45, 0.9)
     pr = box("IngotP", (0, 0, -40), (0.6, 0.18, 0.12), ing, bevel=0.02)
     for row in range(6):
         for k in range(6):

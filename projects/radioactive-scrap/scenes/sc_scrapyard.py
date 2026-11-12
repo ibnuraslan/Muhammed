@@ -300,7 +300,7 @@ def build(variant=None):
     small = [i for i, (p, w) in enumerate(kit_) if not p.name.startswith(("CarShell", "Fridge", "WashingMachine"))]
     for k in range(320):
         x, y = rng.uniform(-44, 44), rng.uniform(-28, 44)
-        if math.hypot(x - HC.x, y - HC.y) < 6 or abs(x) < 7 and y < -16:
+        if math.hypot(x - HC.x, y - HC.y) < 13 or abs(x) < 7 and y < -16 or math.hypot(x - HC.x - 14, y - HC.y + 16) < 4:
             continue
         PL.append((x, y, 0.02)); PR.append((rng.normal(0, 0.1), rng.normal(0, 0.1), rng.uniform(0, 6.28)))
         PS.append(rng.uniform(0.6, 1.0)); PI.append(small[rng.integers(len(small))])
@@ -428,8 +428,10 @@ def build(variant=None):
         stool = cyl("Stool", (tent_c.x, tent_c.y + 1.15, 0.22), 0.18, 0.44, post_m, verts=12)
         mx_tk, mx_wh, _, _ = truck("Mixer", (0.55, 0.55, 0.52), bed_len=4.6)
         mx_tk.location = (-14.0, -36.5, 0)
-        drum = cyl("MixerDrum", (0, 0, 0), 1.0, 3.6, painted_steel("MixDrum", (0.75, 0.7, 0.55), 0.5, 0.6), verts=24, rot=(0, math.radians(75), 0))
-        drum.parent = mx_tk; drum.location = (-0.3, 0, 2.2)
+        tilt = bpy.data.objects.new("MixerTilt", None); bpy.context.collection.objects.link(tilt); tilt.parent = mx_tk
+        tilt.location = (-0.3, 0, 2.0); tilt.rotation_euler = (0, math.radians(-78), 0)
+        drum = cyl("MixerDrum", (0, 0, 0), 0.95, 3.4, painted_steel("MixDrum", (0.75, 0.7, 0.55), 0.5, 0.6), verts=24)
+        drum.parent = tilt; drum.location = (0, 0, 0)
         for k in range(6):
             fin = box("MixerFin", (0, 0, 0), (0.06, 0.12, 2.0), painted_steel("MixFin", (0.6, 0.55, 0.42), 0.5, 0.6)); fin.parent = drum
             a = k / 6 * 2 * math.pi; fin.location = (1.0 * math.cos(a), 1.0 * math.sin(a), 0); fin.rotation_euler = (0, 0, a)
@@ -840,7 +842,7 @@ def a_lower(c, t):
     if k > 0.97:
         set_grab(c["grab"], 0.5)
     c["cyl"].rotation_euler = (0, 0, 0)
-    stand(c["people"]["spec1"], c["box_pos"] + Vector((1.6, -1.6, 0)), c["box_pos"])
+    stand(c["people"]["spec1"], c["box_pos"] + Vector((-1.8, -1.2, 0)), c["box_pos"])
     c["focus"] = c["box_pos"] + Vector((0, 0, 0.8))
 
 
@@ -1020,7 +1022,7 @@ def a_tent(c, t, nod=False):
     h = c["people"]["tentman"]; tc_ = c["tent"]
     from human import pose_sit
     reset_pose(h); h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); pose_sit(h, lean=14)
-    place(h, tc_ + Vector((0, 1.15, 0.44)), math.pi)
+    place(h, tc_ + Vector((0, 1.15, 0.0)), 0.0)
     f = forward(h); sd = f.cross(Vector((0, 0, 1)))
     b = tc_ + Vector((-0.1 + 0.05 * math.sin(sec * 0.7), 0.45, 0.8))
     reach(h, "R", b + sd * 0.05, Vector((sd.x, sd.y, -0.7)), f); reach(h, "L", tc_ + Vector((0.35, 0.6, 0.8)), Vector((-sd.x, -sd.y, -0.7)), f)
@@ -1086,35 +1088,35 @@ SHOTS = {
     "ch3_1b": ("search", anim_sweep, cam_sweep, 2.8),
     "ch3_2a": ("search", a_point, C((-4.8, -9.2, 1.6), (-4.4, -8.8, 1.6), (-2.0, -3.4, 1.0), 35), 4.0),
     "ch3_2b": ("search", a_cyl_push, C((-3.4, -6.6, 1.0), (-2.9, -5.1, 0.85), (-2.4, -2.9, 0.55), 45), 2.8),
-    "ch3_3a": ("search", a_bricks, C((-0.8, -9.5, 1.5), (-1.2, -9.2, 1.45), (-3.5, -6.8, 0.6), 35), 4.0),
+    "ch3_3a": ("search", a_bricks, C((0.2, -10.8, 1.7), (-0.2, -10.4, 1.7), (-3.5, -7.0, 0.7), 32), 4.0),
     "ch3_3b": ("search", a_practice, C((4.5, -14.0, 1.4), (3.8, -13.4, 1.6), (-2.5, -3.5, 2.6), 28), None),
     "ch3_4a": ("search", a_carry, cam_grab, None),
     "ch3_4b": ("search", a_lower, C((-0.2, -10.5, 2.2), (-0.6, -10.0, 2.1), (-3.5, -6.8, 1.0), 35), 5.6),
     "ch3_5a": ("search", a_needle_high, C((0.2, -10.2, 1.5), (0.0, -9.8, 1.45), (-1.3, -7.8, 1.1), 40), 2.8),
     "ch3_5b": ("search", a_bore, C((-2.4, -8.2, 1.9), (-3.0, -7.4, 1.6), (-3.5, -6.8, 0.75), 45), 2.0),
-    "ch3_6a": ("search", a_follow, C((-8.0, -5.0, 1.5), (-5.0, -4.0, 1.5), (-6.0, 2.0, 1.1), 32), 4.0),
-    "ch3_6b": ("search", a_raise_hand, C((-6.8, -3.5, 1.4), (-6.4, -3.2, 1.4), (-3.5, 0.5, 1.4), 38), 4.0),
+    "ch3_6a": ("search", a_follow, C((-10.0, 10.0, 1.5), (-8.0, 9.0, 1.5), (-6.0, 2.0, 1.1), 32), 4.0),
+    "ch3_6b": ("search", a_raise_hand, C((-3.0, -4.2, 1.4), (-3.1, -3.7, 1.4), (-3.5, 0.5, 1.4), 38), 4.0),
     "ch3_7a": ("search", a_tear, C((5.5, -9.0, 1.3), (5.0, -8.6, 1.5), (-1.5, 0.5, 2.5), 28), None),
     "ch3_7b": ("search", a_needle_climb, C((0.4, -8.4, 1.5), (0.1, -8.0, 1.45), (-1.4, -4.0, 1.4), 35), 2.8),
-    "ch3_8a": ("search", a_heap_wide, C((7.0, -12.0, 0.5), (6.0, -12.5, 0.6), (-1.0, 0.0, 2.0), 24), None),
-    "ch3_8b": ("search", a_step_back, C((0.0, -1.8, 1.5), (0.0, -2.2, 1.5), (0.0, -6.5, 1.4), 32), 4.0),
+    "ch3_8a": ("search", a_heap_wide, C((8.0, -9.5, 0.9), (7.2, -10.0, 1.0), (-1.0, 0.0, 2.0), 24), None),
+    "ch3_8b": ("search", a_step_back, C((1.6, -10.5, 1.5), (1.3, -10.0, 1.5), (0.0, -5.0, 1.3), 32), 4.0),
     "ch3_9a": ("dusk", a_grab_stop, C((-1.0, -14.0, 1.3), (-1.6, -13.5, 1.4), (-6.5, -3.0, 2.8), 30), None),
     "ch3_9b": ("dusk", a_walk_out, C((2.5, -26.0, 1.5), (2.2, -25.0, 1.5), (-0.5, -12.0, 1.3), 30), 5.6),
     "ch3_10a": ("recovery", anim_boom, cam_boom, None),
-    "ch3_10b": ("recovery", a_boom_head, C((1.2, -3.0, 1.4), (0.6, -2.6, 1.5), (-1.0, 3.0, 2.0), 35), 4.0),
+    "ch3_10b": ("recovery", a_boom_head, C((4.0, -6.5, 1.8), (3.4, -6.0, 2.0), (-0.5, 2.5, 1.8), 35), 4.0),
     "ch3_11a": ("recovery", a_operator, C((7.5, -12.8, 1.6), (7.1, -12.5, 1.6), (5.0, -10.4, 1.3), 35), 2.8),
     "ch3_11b": ("recovery", a_drum_lower, C((3.0, -11.0, 1.2), (2.6, -10.5, 1.4), (-1.0, -5.0, 1.6), 30), 5.6),
     "ch3_12a": ("recovery", a_pair_out, C((7.5, -6.0, 1.4), (7.0, -6.4, 1.4), (3.2, -7.5, 1.2), 30), 4.0),
-    "ch3_12b": ("recovery", a_pole, C((-5.0, -6.0, 1.3), (-4.6, -5.6, 1.35), (-1.6, -3.4, 0.7), 32), 4.0),
+    "ch3_12b": ("recovery", a_pole, C((-5.6, -6.8, 1.7), (-5.2, -6.4, 1.7), (-1.8, -3.6, 0.8), 30), 4.0),
     "ch3_13a": ("recovery", a_shovel, C((3.6, -5.6, 1.3), (3.2, -5.3, 1.35), (-0.2, -3.6, 0.8), 32), 4.0),
     "ch3_13b": ("recovery", a_hoist, C((2.5, -11.0, 0.9), (2.2, -10.4, 1.1), (-1.0, -5.0, 2.2), 28), 5.6),
     "ch3_14a": ("recovery", a_swap, C((8.0, -2.0, 1.6), (7.4, -2.4, 1.6), (3.0, -7.5, 1.2), 30), 5.6),
-    "ch3_14b": ("recovery", a_tip, C((-0.2, -9.5, 0.8), (-0.6, -9.0, 0.9), (-2.5, -5.5, 0.9), 32), 4.0),
+    "ch3_14b": ("recovery", a_tip, C((0.5, -10.5, 1.0), (0.1, -10.0, 1.05), (-2.5, -5.5, 1.3), 28), 4.0),
     "ch3_15a": ("recovery", a_mixer, C((-5.0, -41.5, 1.4), (-5.6, -41.0, 1.45), (-14.0, -36.5, 1.8), 32, rel=False), 4.0),
     "ch3_15b": ("recovery", a_heap_sky, C((2.0, -6.5, 0.4), (1.4, -5.6, 0.45), (-0.5, 1.0, 2.2), 24), None),
     "ch3_16a": ("recovery", a_tent, C((15.6, -18.6, 1.4), (15.3, -18.3, 1.4), (14.0, -15.0, 1.0), 35), 2.8),
     "ch3_16b": ("recovery", lambda c, t: a_tent(c, t, nod=True), C((12.6, -18.0, 1.3), (12.8, -17.7, 1.3), (14.0, -15.0, 1.1), 40), 2.8),
-    "ch3_17a": ("recovery", a_pair_works, C((-5.5, -8.0, 1.6), (-5.0, -7.4, 1.6), (-0.5, -3.6, 1.0), 28), 5.6),
+    "ch3_17a": ("recovery", a_pair_works, C((2.8, -9.8, 1.8), (2.3, -9.3, 1.8), (-0.8, -3.8, 1.0), 28), 5.6),
     "ch3_17b": ("recovery", anim_drop, cam_drop, 2.8),
     "ch3_18a": ("recovery", a_lid_lift, C((2.8, -8.8, 1.3), (2.4, -8.4, 1.5), (-1.0, -5.0, 1.6), 30), 4.0),
     "ch3_18b": ("recovery", a_gather, C((-6.0, -22.0, 5.0), (-5.0, -20.0, 6.0), (3.0, -3.0, 1.0), 26), None),
@@ -1123,4 +1125,5 @@ SHOTS = {
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
 DUR = {k: dur(k) for k in SHOTS}
-MOVES = {k: dict(kind="anim", far=500.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus) for k, v in SHOTS.items()}
+from durs import title_for
+MOVES = {k: {**dict(kind="anim", far=500.0, anim=v[1], cam=v[2], dof=v[3], focus=_focus), **({'title': title_for(k), 'dof': None} if title_for(k) else {})} for k, v in SHOTS.items()}

@@ -15,7 +15,7 @@ EXPOSURE = 0.0
 BOUNCES = 8
 ISO = Vector((0.0, 0.0, 1.25))       # isocentre above the couch
 DOOR = Vector((-4.5, -3.2, 0))       # treatment-room doorway (west end of the south wall)
-STORE = Vector((-10.0, -6.56, 0))     # store-room door in the corridor outside
+STORE = Vector((-10.0, -6.76, 0))     # store-room door in the corridor outside
 
 
 def sign_plate(name, loc, rot_z, size=0.3):
@@ -35,9 +35,9 @@ def build(variant=None):
     for k in range(3):
         tube_light(Vector((-3 + 3 * k, 0.6, 3.15)), energy=55)
     # corridor outside (south) with the store-room door
-    room("TherCor", Vector((-4.0, -5.0, 0)), 14, 3.2, 3.0, floor, two_tone("TherCorWall"), windows=[("S", 3.0, 1.0, 1.6, 1.4)], doors=[("N", 0.4, 0, 1.4, 2.2)])
-    daylight_window(Vector((-1.0, -6.75, 1.7)), "S", (1.6, 1.4), energy=220)
-    tube_light(Vector((-8.0, -5.0, 2.95)), energy=45); tube_light(Vector((0.0, -5.0, 2.95)), energy=45)
+    room("TherCor", Vector((-4.0, -5.2, 0)), 14, 3.2, 3.0, floor, two_tone("TherCorWall"), windows=[("S", 3.0, 1.0, 1.6, 1.4)], doors=[("N", 0.4, 0, 1.4, 2.2)])
+    daylight_window(Vector((-1.0, -6.95, 1.7)), "S", (1.6, 1.4), energy=220)
+    tube_light(Vector((-8.0, -5.2, 2.95)), energy=45); tube_light(Vector((0.0, -5.2, 2.95)), energy=45)
     heavy = painted_steel("HeavyDoor", (0.55, 0.58, 0.6), 0.45, 0.4)
     hinge = bpy.data.objects.new("TDoorHinge", None); bpy.context.collection.objects.link(hinge); hinge.location = Vector((-4.5 + 0.2, -3.2, 0))
     dl = box("TDoorLeaf", (0, 0, 0), (1.35, 0.25, 2.15), heavy, bevel=0.02); dl.parent = hinge; dl.location = (0.68, -0.15, 1.08)
@@ -110,11 +110,11 @@ def C(p0, p1, tgt, lens):
 
 
 def c2_9a(c, t):
-    sec = t * dur("ch2_9a"); gantry(c, 20 + 2 * sec); c["tdoor"].rotation_euler = (0, 0, math.radians(-80))
+    sec = t * dur("ch2_9a"); gantry(c, 20 + 2 * sec); c["tdoor"].rotation_euler = (0, 0, math.radians(80))
 
 
 def c2_9b(c, t):           # the radiographer settles a pillow on the couch (medium)
-    sec = t * dur("ch2_9b"); gantry(c, 22); c["tdoor"].rotation_euler = (0, 0, math.radians(-80))
+    sec = t * dur("ch2_9b"); gantry(c, 22); c["tdoor"].rotation_euler = (0, 0, math.radians(80))
     h = c["people"]["rad"]; st = Vector((0.75, 0.55, 0)); stand_pose(h); place(h, st, face_angle(st, Vector((0, 0.55, 0))))
     k = ease(min(1.0, sec / 1.8)); sd = forward(h).cross(Vector((0, 0, 1)))
     pil = (h.bone_head("spine02") + forward(h) * 0.35).lerp(c["pillow_at"], k)
@@ -132,7 +132,7 @@ def c2_10b(c, t):          # push in on the thick head as its collimator opens
 
 
 def c2_11a(c, t):          # technicians wheel a grey shielded container out on a trolley
-    sec = t * dur("ch2_11a"); gantry(c, 0); c["tdoor"].rotation_euler = (0, 0, math.radians(-85))
+    sec = t * dur("ch2_11a"); gantry(c, 0); c["tdoor"].rotation_euler = (0, 0, math.radians(85))
     p0 = Vector((-1.5, -0.5, 0)); p1 = Vector((-3.6, -4.2, 0)); k = min(1.0, sec / dur("ch2_11a"))
     p = p0.lerp(p1, ease(k)); c["trolley"].location = p; c["trolley"].rotation_euler = (0, 0, math.atan2(p1.y - p0.y, p1.x - p0.x))
     d = (p1 - p0).normalized()
@@ -144,7 +144,7 @@ def c2_11a(c, t):          # technicians wheel a grey shielded container out on 
 
 
 def c2_11b(c, t):          # the container rolls past the trefoil sign on the door
-    sec = t * dur("ch2_11b"); gantry(c, 0); c["tdoor"].rotation_euler = (0, 0, math.radians(-85))
+    sec = t * dur("ch2_11b"); gantry(c, 0); c["tdoor"].rotation_euler = (0, 0, math.radians(85))
     p0 = Vector((-3.6, -4.2, 0)); p1 = Vector((-9.0, -5.0, 0)); p = p0.lerp(p1, ease(min(1.0, sec / dur("ch2_11b"))))
     c["trolley"].location = p; c["trolley"].rotation_euler = (0, 0, math.pi)
     walk_to(c["people"]["t1"], p0 + Vector((1.0, 0, 0)), p1 + Vector((1.0, 0, 0)), sec, speed=(p1 - p0).length / dur("ch2_11b"))
@@ -153,7 +153,7 @@ def c2_11b(c, t):          # the container rolls past the trefoil sign on the do
 
 def c4_10a(c, t):          # an inspector with a clipboard enters the room
     sec = t * dur("ch4_10a"); gantry(c, 0); c["pillow"].location = c["pillow_at"]
-    c["tdoor"].rotation_euler = (0, 0, math.radians(-85 * ease(min(1.0, sec / 1.2))))
+    c["tdoor"].rotation_euler = (0, 0, math.radians(85 * ease(min(1.0, sec / 1.2))))
     h = c["people"]["insp"]; p = walk_to(h, Vector((-3.6, -4.6, 0)), Vector((-2.0, 0.2, 0)), sec - 0.6, speed=0.9)
     sd = forward(h).cross(Vector((0, 0, 1)))
     board = h.bone_head("spine02") + forward(h) * 0.25 + Vector((0, 0, -0.12))
@@ -164,11 +164,11 @@ def c4_10a(c, t):          # an inspector with a clipboard enters the room
 
 def c4_10b(c, t):          # the store door is padlocked; a new trefoil sign goes up (medium, people in frame)
     sec = t * dur("ch4_10b"); gantry(c, 0)
-    h = c["people"]["t2"]; st = STORE + Vector((0.35, -0.75, 0)); stand_pose(h); place(h, st, face_angle(st, STORE + Vector((0.4, 0, 0))))
+    h = c["people"]["t2"]; st = STORE + Vector((0.35, 0.8, 0)); stand_pose(h); place(h, st, face_angle(st, STORE + Vector((0.4, 0, 0))))
     sd = forward(h).cross(Vector((0, 0, 1))); k = ease(min(1.0, sec / 1.5))
     lp = (h.bone_head("spine02") + forward(h) * 0.3).lerp(c["lock_at"], k)
     reach(h, "R", lp + Vector((0, -0.04, 0)), Vector((sd.x, sd.y, -0.7)), forward(h)); c["lock"].location = lp
-    i = c["people"]["insp"]; st2 = STORE + Vector((-0.4, -0.7, 0)); stand_pose(i); place(i, st2, face_angle(st2, STORE))
+    i = c["people"]["insp"]; st2 = STORE + Vector((-0.45, 0.85, 0)); stand_pose(i); place(i, st2, face_angle(st2, STORE))
     s2 = forward(i).cross(Vector((0, 0, 1))); k2 = ease(min(1.0, max(0.0, (sec - 1.0) / 1.6)))
     sg = (i.bone_head("spine02") + forward(i) * 0.35 + Vector((0, 0, 0.1))).lerp(c["new_sign_at"], k2)
     reach(i, "R", sg + s2 * 0.14, Vector((s2.x, s2.y, -0.7)), forward(i)); reach(i, "L", sg - s2 * 0.14, Vector((-s2.x, -s2.y, -0.7)), forward(i))
@@ -176,14 +176,14 @@ def c4_10b(c, t):          # the store door is padlocked; a new trefoil sign goe
 
 
 SHOTS = {
-    "ch2_9a": ("room", c2_9a, C(Vector((-4.0, -2.4, 1.6)), Vector((-2.2, -2.2, 1.6)), Vector((0.0, 1.4, 1.5)), 26), None),
+    "ch2_9a": ("room", c2_9a, C(Vector((-4.1, -2.9, 1.7)), Vector((-3.0, -2.9, 1.7)), Vector((0.0, 1.0, 1.6)), 20), None),
     "ch2_9b": ("room", c2_9b, C(Vector((2.6, -1.6, 1.5)), Vector((2.3, -1.3, 1.5)), Vector((0.4, 0.55, 1.1)), 35), 2.8),
-    "ch2_10a": ("room", c2_10a, C(Vector((3.4, -1.0, 1.3)), Vector((3.0, -0.6, 1.4)), Vector((0.0, 0.5, 1.6)), 28), None),
+    "ch2_10a": ("room", c2_10a, C(Vector((4.2, -2.6, 1.4)), Vector((4.0, -2.2, 1.5)), Vector((0.0, 0.8, 1.7)), 22), None),
     "ch2_10b": ("room", c2_10b, C(Vector((1.6, -1.8, 0.7)), Vector((0.9, -0.9, 0.8)), Vector((0.0, 0.0, 1.9)), 35), 4.0),
-    "ch2_11a": ("room", c2_11a, C(Vector((1.8, -1.2, 1.5)), Vector((1.4, -1.6, 1.5)), Vector((-2.4, -2.5, 0.9)), 28), 4.0),
-    "ch2_11b": ("room", c2_11b, C(Vector((-12.5, -6.2, 1.3)), Vector((-12.0, -6.0, 1.3)), Vector((-4.0, -3.6, 1.3)), 32), 4.0),
-    "ch4_10a": ("room", c4_10a, C(Vector((2.8, 1.2, 1.6)), Vector((2.5, 0.9, 1.6)), Vector((-2.5, -2.0, 1.4)), 28), 4.0),
-    "ch4_10b": ("room", c4_10b, C(Vector((STORE.x + 1.6, STORE.y + 1.6, 1.5)), Vector((STORE.x + 1.4, STORE.y + 1.4, 1.5)), Vector((STORE.x, STORE.y, 1.3)), 32), 2.8),
+    "ch2_11a": ("room", c2_11a, C(Vector((3.0, 1.0, 1.7)), Vector((2.6, 0.6, 1.7)), Vector((-2.4, -2.5, 0.9)), 24), 4.0),
+    "ch2_11b": ("room", c2_11b, C(Vector((-10.5, -6.0, 1.4)), Vector((-10.2, -5.9, 1.4)), Vector((-3.6, -3.6, 1.3)), 28), 4.0),
+    "ch4_10a": ("room", c4_10a, C(Vector((3.6, 1.6, 1.7)), Vector((3.3, 1.3, 1.7)), Vector((-2.5, -2.0, 1.4)), 24), 4.0),
+    "ch4_10b": ("room", c4_10b, C(Vector((STORE.x + 2.6, STORE.y + 2.6, 1.6)), Vector((STORE.x + 2.3, STORE.y + 2.5, 1.6)), Vector((STORE.x, STORE.y + 0.5, 1.3)), 28), 2.8),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
 DUR = {k: dur(k) for k in SHOTS}
