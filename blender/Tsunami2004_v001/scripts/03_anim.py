@@ -72,8 +72,8 @@ for t in np.arange(0, 6.01, 0.25):
 
 # ---------------------------------------------------------------- the wave: position, stage blend, chop
 WK = [  # t, front y, (S1, S2, S2b, S3) weights, z offset
-    (0.0, 2600, (0, 0, 0, 0), 0), (5.0, 2050, (0, 0, 0, 0), 0), (7.2, 1750, (0.5, 0, 0, 0), 0), (10.8, 1250, (0.7, 0, 0, 0), 0),
-    (13.1, 950, (0.8, 0, 0, 0), 0), (15.6, 500, (1.0, 0, 0, 0), 0), (16.6, 330, (0.5, 0.5, 0, 0), 0), (17.5, 180, (0.15, 0.85, 0, 0), 0),
+    (0.0, 2600, (0, 0, 0, 0), 0), (5.0, 2050, (0, 0, 0, 0), 0), (7.2, 1750, (0.5, 0, 0, 0), 0), (10.8, 1250, (0.85, 0, 0, 0), 0),
+    (13.1, 950, (0.9, 0, 0, 0), 0), (15.6, 500, (1.0, 0, 0, 0), 0), (16.6, 330, (0.5, 0.5, 0, 0), 0), (17.5, 180, (0.15, 0.85, 0, 0), 0),
     (18.3, 80, (0, 1, 0, 0), 0), (19.3, 40, (0, 1, 0, 0), 0), (20.3, 12, (0, 0.6, 0.4, 0), 0), (21.0, -8, (0, 0, 1, 0), 0),
     (21.6, -30, (0, 0, 0.3, 0.7), 0), (22.3, -62, (0, 0, 0, 1), 0), (25.7, -160, (0, 0, 0, 1), 0), (28.0, -235, (0, 0, 0, 1), 0),
     (30.0, -310, (0, 0, 0, 1), 0), (31.6, -380, (0, 0, 0, 1), -2.0), (40.0, -480, (0, 0, 0, 1), -2.05)]
@@ -110,7 +110,7 @@ for t, wv in ((0, 0), (40, 8)):
 for fc in _fcurves(wave.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
 ch = wave.modifiers["churn"]
-for t, v in ((0, 0.0), (20.8, 0.0), (21.8, 1.1), (29.8, 0.9), (31.6, 0.05), (40, 0.05)):
+for t, v in ((0, 0.0), (20.8, 0.0), (21.8, 1.9), (29.8, 1.6), (31.6, 0.05), (40, 0.05)):
     ch.strength = v; ch.keyframe_insert("strength", frame=F(t))
 wn = bpy.data.objects["WaveNoiseEmpty"]
 for t in (0, 40):
@@ -120,8 +120,8 @@ for fc in _fcurves(wn.animation_data.action):
 # water colour turns muddy once it is over land, foam churn on the flood
 for mname in ("M_Wave",):
     nt = bpy.data.materials[mname].node_tree; b = nt.nodes["Principled BSDF"]; fv = nt.nodes["FOAM_BASE"]; nz = nt.nodes["NZ"]
-    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.08, 0.12, 0.09), 0.3),
-                          (30.0, (0.09, 0.13, 0.1), 0.26), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
+    for t, colr, foam in ((0, (0.02, 0.2, 0.28), 0.0), (20.6, (0.02, 0.2, 0.28), 0.15), (22.0, (0.11, 0.1, 0.06), 0.36),
+                          (30.0, (0.11, 0.11, 0.07), 0.32), (31.6, (0.12, 0.2, 0.2), 0.08), (40, (0.12, 0.22, 0.24), 0.05)):
         b.inputs["Base Color"].default_value = (*colr, 1); b.inputs["Base Color"].keyframe_insert("default_value", frame=F(t))
         fv.outputs[0].default_value = foam; fv.outputs[0].keyframe_insert("default_value", frame=F(t))
     for t, rg in ((0, 0.07), (20.8, 0.07), (22.0, 0.3), (31.0, 0.3), (32.0, 0.05)):
@@ -211,6 +211,8 @@ for o in bpy.data.objects:
         for t in np.arange(0, min(t0, 40), 1.1):
             o.rotation_euler.x = math.radians(2.0 * math.sin(t * 1.7 + x)); o.keyframe_insert("rotation_euler", index=0, frame=F(t))
         if t0 > 40: continue
+        o.rotation_euler.x = 0.0; o.keyframe_insert("rotation_euler", index=0, frame=F(max(0.1, t0 - 1.6)))
+        o.rotation_euler.x = math.radians(-22); o.keyframe_insert("rotation_euler", index=0, frame=F(t0 - 0.05))
         if random.random() < 0.35 and nm.startswith("TPalm_"):
             continue  # some palms survive
         fall = math.radians(random.uniform(70, 88))
@@ -254,6 +256,12 @@ for o in bpy.data.objects:
         key_tr(o, F(t0), loc=tuple(l), scale=0.3)
         key_tr(o, F(t0 + 0.5), loc=(l.x, l.y + 2, l.z + 5), scale=(4, 3, 6))
         key_tr(o, F(t0 + 1.5), loc=(l.x, l.y - 4, l.z + 7), scale=(6, 5, 7))
+CT = bpy.data.collections["Town"]
+for i in range(30):
+    lib = [bpy.data.objects[n] for n in ("LIB_car", "LIB_car2", "LIB_umbrella", "LIB_rowboat", "LIB_longtail", "LIB_umbrella2")][i % 6]
+    x = random.uniform(24, 44); y = random.uniform(-70, -235)
+    o = bpy.data.objects.new("Debris_S%02d" % i, lib.data); CT.objects.link(o)
+    o.location = (x, y, terrain_h(x, y) - 4.0); o.rotation_euler = (random.uniform(-0.6, 0.6), random.uniform(-0.6, 0.6), random.uniform(0, 6.28))
 # ---------------------------------------------------------------- town: houses come apart, tilt and slide into the flood; rubble remains
 houses = [o for o in bpy.data.objects if o.name.startswith("House_") and "_" not in o.name[6:]]
 survivors = set(random.sample(range(len(houses)), 8))
@@ -311,6 +319,13 @@ key_tr(tip, F(14.4), rot=(math.radians(5), 0, 0)); key_tr(tip, F(14.7), rot=(mat
 l0 = tip.location.copy()
 key_tr(tip, F(14.2), loc=tuple(l0)); key_tr(tip, F(14.4), loc=(l0.x, l0.y, l0.z + 0.9)); key_tr(tip, F(14.8), loc=(l0.x, l0.y, l0.z + 0.75))
 kbw = wtop.data.shape_keys.key_blocks
+for t, tr in ((13.0, 0), (14.3, 0), (14.5, 1.0), (15.0, 0.6), (15.6, 0.3)):
+    kbw["Trough"].value = tr; kbw["Trough"].keyframe_insert("value", frame=F(t))
+op_ = bpy.data.objects["D_OceanPlate"]; os_ = bpy.data.objects["D_OceanSed"]
+for o_ in (op_, os_):
+    l_ = o_.location.copy(); key_tr(o_, F(14.35), loc=tuple(l_)); key_tr(o_, F(14.55), loc=(l_.x, l_.y + 0.4, l_.z - 0.35)); key_tr(o_, F(15.6), loc=(l_.x, l_.y + 0.45, l_.z - 0.35))
+for nm_ in ("D_PulseSea", "D_PulseShore"):
+    key_hide(bpy.data.objects[nm_], [(1, True), (F(14.55), False), (F(15.45), True)])
 for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (15.6, 0.0, 1.0)):
     kbw["Bulge"].value = bu; kbw["Bulge"].keyframe_insert("value", frame=F(t))
     for k in ("SplitA", "SplitB"):
@@ -378,7 +393,7 @@ for t, v in ((0, 0), (30.5, 0), (32.0, 0.0004), (40, 0.0003)):
 dust = bpy.data.objects["DustVolume"]; key_hide(dust, [(1, True), (F(30.4), False)])
 bowl_hide = [o for o in bpy.data.collections["Diorama"].objects]
 for o in bowl_hide:
-    if o.name.startswith(("D_Chunk_1", "D_ShockRing")):
+    if o.name.startswith(("D_Chunk_1", "D_ShockRing", "D_Pulse")):
         if o.name.startswith("D_Chunk_1"): key_hide(o, [(F(15.45), True)])
         continue
     key_hide(o, [(1, True), (F(12.4), False), (F(15.45), True)])

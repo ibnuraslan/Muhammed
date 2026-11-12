@@ -118,7 +118,7 @@ def water_mat(name, foam_steep=True):
     lipm = NN.new("ShaderNodeMapRange"); lipm.inputs["From Min"].default_value = 0.15; lipm.inputs["From Max"].default_value = -0.25; LL.new(sz.outputs["Z"], lipm.inputs["Value"])
     fn = NN.new("ShaderNodeTexNoise"); fn.inputs["Scale"].default_value = 0.22; fn.inputs["Detail"].default_value = 12; fn.inputs["Roughness"].default_value = 0.7
     fn.noise_dimensions = '4D'; fn.name = "FN"
-    mp = NN.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1.0, 1.0, 0.5); LL.new(tc.outputs["Object"], mp.inputs["Vector"]); LL.new(mp.outputs["Vector"], fn.inputs["Vector"])
+    mp = NN.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (0.3, 1.0, 0.5); LL.new(tc.outputs["Object"], mp.inputs["Vector"]); LL.new(mp.outputs["Vector"], fn.inputs["Vector"])
     fr = NN.new("ShaderNodeMapRange"); fr.inputs["From Min"].default_value = 0.5; fr.inputs["From Max"].default_value = 0.72; LL.new(fn.outputs["Fac"], fr.inputs["Value"])
     fv = NN.new("ShaderNodeValue"); fv.name = "FOAM_BASE"; fv.outputs[0].default_value = 0.0
     a1 = NN.new("ShaderNodeMath"); a1.operation = 'MULTIPLY'; a1.inputs[1].default_value = 0.4 if foam_steep else 0.0
@@ -324,7 +324,7 @@ def make_fish_mesh():
     return me
 fme = make_fish_mesh()
 FISH = []
-fish_spots = [(2, 86), (-1.5, 90), (4, 93), (-3, 84), (-0.5, 90.9), (-2.4, 89.1), (-1.0, 91.8)] + [(random.uniform(-30, 30), random.uniform(45, 200)) for _ in range(40)]
+fish_spots = [(2, 86), (-1.5, 90), (4, 93), (-3, 84), (-0.5, 90.9), (-2.4, 89.1), (-1.0, 91.8), (5, 38), (7.5, 44), (6, 50), (2.5, 46), (8.5, 52), (1.5, 40), (9, 36), (3.5, 57), (10, 60)] + [(random.uniform(-30, 30), random.uniform(45, 200)) for _ in range(40)]
 for i, (x, y) in enumerate(fish_spots):
     o = bpy.data.objects.new("Fish_%02d" % i, fme); C_SEA.objects.link(o)
     sc_ = random.uniform(1.0, 1.7) if i > 6 else 1.9
@@ -489,6 +489,9 @@ for i in range(220):  # extra scattered debris (planks / iron sheets) for the af
     x = random.uniform(-200, 200); y = random.uniform(-330, -20)
     lib = (rub_wood, rub_brick)[i % 2]
     inst(lib, "Debris_%02d" % i, C_TOWN, (x, y, ground(x, y) - 2.5), (0, 0, random.uniform(0, 6.28)), random.uniform(0.6, 1.2))
+for i in range(45):   # extra debris around the mosque for the aftermath
+    a_ = random.uniform(0, 6.28); r_ = random.uniform(14, 45); x = -44 + r_ * math.cos(a_); y = -162 + r_ * math.sin(a_)
+    inst((rub_wood, rub_brick, rub_roof)[i % 3], "Debris_M%02d" % i, C_TOWN, (x, y, ground(x, y) - 2.5), (0, 0, random.uniform(0, 6.28)), random.uniform(0.7, 1.3))
 iron = bpy.data.materials["M_RoofIronRust"]
 for i in range(120):
     x = random.uniform(-200, 200); y = random.uniform(-330, -20)
@@ -537,10 +540,23 @@ def prism(name, poly, mat, x0=-3.0, x1=3.0, c=C_D, ny=1):
     o = mesh_obj(name, vs, fs, c, [mat]); return o
 def plate_top(dy):   # top of the oceanic plate
     return -2.6 - 0.32 * max(0, 2 - dy) - 0.05 * max(0, dy - 2) if dy < 10 else -2.2
-mantle = prism("D_Mantle", [(-10, -11), (10, -11), (10, -7.0), (-10, -7.0)], mant)
-op = [(dy, plate_top(dy)) for dy in np.linspace(10, -10, 21)]
-ocean_plate = prism("D_OceanPlate", op + [(dy, z - 1.8) for dy, z in op[::-1]], oce)
-cont = prism("D_ContPlate", [(-10, -0.8), (-3, -0.8), (-3, plate_top(-3)), (-10, plate_top(-10))], con)
+# colour-coded clean strata (explainer look): wavy layer boundaries, glossy solid colours
+def wav(dy, a=0.18, k=1.3, ph=0.0): return a * math.sin(dy * k + ph) + 0.5 * a * math.sin(dy * 2.7 + ph * 1.7)
+mant = simple_mat("M_Mantle", (0.85, 0.18, 0.05), 0.45, emit=((1.0, 0.3, 0.05), 1.2))
+oce = simple_mat("M_OceanCrust", (0.28, 0.33, 0.45), 0.5)
+osed = simple_mat("M_OceanSed", (0.95, 0.82, 0.45), 0.55)
+con = simple_mat("M_ContCrust", (0.85, 0.48, 0.2), 0.5)
+csed = simple_mat("M_ContSed", (0.98, 0.85, 0.5), 0.55)
+clow = simple_mat("M_ContLower", (0.55, 0.3, 0.16), 0.5)
+DY = np.linspace(-10, 10, 41)
+mantle = prism("D_Mantle", [(-10, -11)] + [(10, -11)] + [(dy, -7.0 + wav(dy, 0.25, 0.9)) for dy in DY[::-1]], mant)
+op = [(dy, plate_top(dy)) for dy in np.linspace(10, -10, 41)]
+ocean_plate = prism("D_OceanPlate", op + [(dy, z - 1.8 + wav(dy, 0.12, 2.0)) for dy, z in op[::-1]], oce)
+ocean_sed = prism("D_OceanSed", [(dy, plate_top(dy) + 0.35 + wav(dy, 0.06, 3.0)) for dy in np.linspace(10, 2.2, 17)] + [(dy, plate_top(dy) + 0.02) for dy in np.linspace(2.2, 10, 17)], osed)
+cdy = np.linspace(-10, -3, 15)
+cont = prism("D_ContPlate", [(dy, -1.6 + wav(dy, 0.15, 1.7)) for dy in cdy] + [(dy, -3.2 + wav(dy, 0.15, 1.1, 1)) for dy in cdy[::-1]], con)
+csed_o = prism("D_ContSed", [(dy, -0.8 + wav(dy, 0.08, 2.2)) for dy in cdy] + [(dy, -1.6 + wav(dy, 0.15, 1.7) + 0.01) for dy in cdy[::-1]], csed)
+clow_o = prism("D_ContLower", [(dy, -3.2 + wav(dy, 0.15, 1.1, 1) - 0.01) for dy in cdy] + [(dy, plate_top(dy) + 0.02) for dy in cdy[::-1]], clow)
 tip_poly = [(-3, -0.8 - 0.0), (-3, plate_top(-3))] + [(dy, plate_top(dy)) for dy in np.linspace(-2.5, 2.0, 6)] + [(2.0, plate_top(2.0) + 0.3), (0.0, -1.3), (-1.5, -1.0)]
 tip = prism("D_Tip", [(dy + 3.0, z + 0.8) for dy, z in tip_poly], con)    # local coords relative to the hinge at dy -3, z -0.8
 tip.location = (0, -3.0, -0.8)
@@ -555,11 +571,11 @@ bpy.ops.object.transform_apply(scale=True)
 wtop.data.materials.append(simple_mat("M_WaterTopSurf2", (0.04, 0.14, 0.22), 0.03, trans=0.9))
 wbody = prism("D_WaterBody", [(10, 2.58), (-10, 2.58)] + [(dy, z + 0.3) for dy, z in seab[::-1]][::-1][::-1], wcol)
 wtop.shape_key_add(name="Basis")
-for nm, cen in (("Bulge", [0.0]), ("SplitA", [-6.0]), ("SplitB", [6.0])):
+for nm, cen in (("Bulge", [0.0]), ("SplitA", [-6.0]), ("SplitB", [6.0]), ("Trough", [-3.0])):
     k = wtop.shape_key_add(name=nm, from_mix=False)
     co = np.zeros(len(wtop.data.vertices) * 3); k.data.foreach_get("co", co); co = co.reshape(-1, 3)
     for c0 in cen:
-        co[:, 2] += 1.6 * np.exp(-((co[:, 1] - c0) / 2.2) ** 2) * (1.0 if nm == "Bulge" else 0.75)
+        co[:, 2] += 1.6 * np.exp(-((co[:, 1] - c0) / 2.2) ** 2) * (1.0 if nm == "Bulge" else -0.9 if nm == "Trough" else 0.75)
     k.data.foreach_set("co", co.ravel())
 for p in wtop.data.polygons: p.use_smooth = True
 # arrows on the section face: oceanic plate pushing under the continent
@@ -570,12 +586,18 @@ def arrow(name, a, b_, w=0.35):
     vs = [(-3.08, D.y + p_.x, D.z + p_.y) for p_ in pts]
     return mesh_obj(name, vs, [tuple(range(len(vs)))], C_D, [arrow_m])
 arrow("D_ArrowOcean", (8.5, -3.8), (3.5, -4.9)); arrow("D_ArrowCont", (-8.5, -2.2), (-5.0, -2.2), 0.3)
-for nm_ in ("D_Mantle", "D_OceanPlate", "D_ContPlate", "D_Tip"):
+pulse_m = simple_mat("M_Pulse", (1.0, 0.85, 0.2), 0.4, emit=((1.0, 0.8, 0.15), 3.0))
+for side_, nm_ in ((1, "D_PulseSea"), (-1, "D_PulseShore")):
+    a_ = arrow(nm_, (0.5 * side_, 4.6), (7.0 * side_, 4.6), 0.45); a_.data.materials[0] = pulse_m
+    for v_ in a_.data.vertices: v_.co.x = -1.0
+    a_.data.update()
+for nm_ in ():
     o_ = bpy.data.objects[nm_]
     sb = o_.modifiers.new("sub", 'SUBSURF'); sb.subdivision_type = 'SIMPLE'; sb.levels = sb.render_levels = 5
     tx_ = bpy.data.textures.get("RockDisp") or bpy.data.textures.new("RockDisp", 'CLOUDS'); tx_.noise_scale = 0.35; tx_.noise_depth = 4
     dp = o_.modifiers.new("disp", 'DISPLACE'); dp.texture = tx_; dp.strength = 0.08; dp.mid_level = 0.5; dp.texture_coords = 'GLOBAL'
     for p_ in o_.data.polygons: p_.use_smooth = True
+tx_ = bpy.data.textures.get("RockDisp") or bpy.data.textures.new("RockDisp", 'CLOUDS'); tx_.noise_scale = 0.35; tx_.noise_depth = 4
 ring_m = simple_mat("M_Shock", (1.0, 0.5, 0.15), 0.5, emit=((1.0, 0.45, 0.1), 0.0))
 bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.025, major_segments=64, minor_segments=8, location=(D.x - 3.15, D.y + 0.3, D.z - 2.8), rotation=(0, math.radians(90), 0))
 ring = bpy.context.active_object; ring.name = "D_ShockRing"
