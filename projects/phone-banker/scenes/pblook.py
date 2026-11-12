@@ -20,17 +20,17 @@ PLAN = {
     },
     "sc_bank": {
         "dusk": (KEEP, {}),
-        "summer": (EXT, dict(mood="overcast", azim=115, haze_box=((0, -10, 12), (220, 60, 24)))),
-        "autumn": (EXT, dict(mood="overcast", azim=150, haze_box=((0, -10, 12), (220, 60, 24)))),
-        "winter": (EXT, dict(mood="overcast", azim=150, haze_box=((0, -10, 12), (220, 60, 24)))),
-        "seasons": (EXT, dict(mood="overcast", azim=150, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "summer": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "autumn": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "winter": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "seasons": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
     },
     "sc_hospital": {
         None: (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "corridor": (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "dawn": (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "ward": (INT, dict(window=((-3.9, 0.15, 1.8), (0.5, 1.0, 0.6)), mood="overcast", key_size=1.6, fill=0.35, sky_factor=0.6)),
-        "path": (INT, dict(window=((-2.9, 0.0, 1.75), (-0.8, -1.0, 0.7)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
+        "path": (INT, dict(window=((-2.9, 0.0, 1.75), (-0.8, -1.0, 0.7)), mood="overcast", key_size=1.4, key_energy=160, fill=0.35, sky_factor=0.6)),
         "night": (NIGHT, {}),
         "arrive": (KEEP, {}),
     },
@@ -38,7 +38,7 @@ PLAN = {
         **{v: (INT, dict(window=((-4.4, 0.2, 1.8), (0.0, 0.4, 0.7)), mood="overcast", key_size=1.6, fill=0.35, sky_factor=0.6)) for v in ("lab95", "evid", "y2018", None)},
         "end": (NIGHT, {}),
     },
-    "sc_memorial": {None: (INT, dict(window=((0.0, 11.4, 3.6), (0.0, 4.0, 0.8)), mood="low_sun", key_size=2.4))},
+    "sc_memorial": {None: (KEEP, {}), "_relit": (INT, dict(window=((0.0, 11.4, 3.6), (0.0, 4.0, 0.8)), mood="low_sun", key_size=2.4))},
     "sc_court": {
         "room": (INT, dict(window=((-6.5, 2.0, 2.7), (0.5, 3.0, 0.7)), mood="overcast", key_size=2.4, fill=0.35, sky_factor=0.6)),
         None: (INT, dict(window=((-6.5, 2.0, 2.7), (0.5, 3.0, 0.7)), mood="overcast", key_size=2.4, fill=0.35, sky_factor=0.6)),
@@ -51,8 +51,8 @@ PLAN = {
         "institute": (INT, dict(window=((0.0, 15.4, 1.8), (0.0, 8.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "kitchen": (NIGHT, {}), "blocks": (KEEP, {}),
     },
-    "sc_apartment": {None: (EXT, dict(mood="overcast", azim=105, haze_box=((0, -12, 12), (90, 50, 26))))},
-    "sc_salisbury": {None: (EXT, dict(mood="overcast", azim=140, haze_box=((-10, 0, 10), (120, 60, 22))))},
+    "sc_apartment": {None: (EXT, dict(mood="overcast", azim=-55, haze_box=((0, -12, 12), (90, 50, 26))))},
+    "sc_salisbury": {None: (EXT, dict(mood="overcast", azim=50, haze_box=((-10, 0, 10), (120, 60, 22))))},
     "sc_station": {None: (NIGHT, {})},
 }
 
