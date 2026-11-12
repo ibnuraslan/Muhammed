@@ -47,5 +47,5 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 31 | PopeShot | `claude/connect31-pope-shot` | `blender/PopeShot_v004b/` **acting fixed, approved, final commit d77ad0f (VO sync when your voiceover arrives)** |
 | 32 | GoatOwner | `claude/connect32-goat-owner` | `blender/GoatOwner_v006b/` **acting fixed, approved, final commit d05f079 (VO sync when your voiceover arrives)** |
 | 33 | WaterTubes | `claude/connect33-water-tubes` | `blender/WaterTubes_v003/` **acting fixed, approved, commit 2209ad0 (VO sync when your voiceover arrives)** |
-| 34 | EscapeArtist | `claude/connect34-escape-artist` | `blender/EscapeArtist_v003/` |
+| 34 | EscapeArtist | `claude/connect34-escape-artist` | `blender/EscapeArtist_v006b/` **acting fixed, approved, final commit 031e503 (VO sync when your voiceover arrives)** |
 | 35 | TitanicIceberg | `claude/connect35-titanic-iceberg` | `blender/TitanicIceberg_v004/` **acting fixed, approved, final commit 1d960f3 (VO sync when your voiceover arrives)** |
