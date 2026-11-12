@@ -88,9 +88,9 @@ SETDEF = [  # name, frames [on, off), entry portal, exit portal (local pos, yaw 
     ("S2_ThroneHall", 158, 575, ((0, -3.5, 2.6), 0), ((-1.0, 4.62, 1.22), -29)),
     ("S3_Street", 575, 705, ((0, -9, 3.0), 0), ((-2.2, 6.0, 1.9), 90)),
     ("S4_Chamber", 705, 1630, ((0, -3.2, 1.8), 0), ((5.2, -1.0, 1.9), -90)),
-    ("S5_Church", 1630, 1850, ((0, -16, 2.5), 0), ((0, 2.0, 3.2), 0)),
-    ("S6_Ballroom", 1850, 1985, ((0, -6.0, 3.2), 0), ((-2.5, 2.0, 1.5), 135)),
-    ("S7_Bedroom", 1985, 2490, ((0, -2.6, 2.4), 0), ((4.7, -1.0, 1.7), -90)),
+    ("S5_Church", 1630, 1850, ((0, -16, 2.5), 0), ((0, -3.0, 2.3), 0)),
+    ("S6_Ballroom", 1850, 1985, ((0, -6.6, 2.1), 0), ((-2.5, 2.0, 1.5), 135)),
+    ("S7_Bedroom", 1985, 2490, ((0, -2.6, 1.9), 0), ((4.7, -1.0, 1.7), -90)),
     ("S8_Square", 2490, 2671, ((0, -8.0, 2.2), 0), None),
 ]
 ROOT = []; SETC = []
@@ -126,8 +126,9 @@ def aim(o, tgt):
 
 def room(c, x0, x1, y0, y1, h, floor, wall, ceil=None, skip=()):
     plane("floor", c, (x1 - x0, y1 - y0), ((x0 + x1) / 2, (y0 + y1) / 2, 0), floor)
-    for nm, sz, loc, rot in (("wN", (x1 - x0, h), ((x0 + x1) / 2, y1, h / 2), (90, 0, 180)), ("wS", (x1 - x0, h), ((x0 + x1) / 2, y0, h / 2), (90, 0, 0)),
-                             ("wE", (y1 - y0, h), (x1, (y0 + y1) / 2, h / 2), (90, 0, 90)), ("wW", (y1 - y0, h), (x0, (y0 + y1) / 2, h / 2), (90, 0, -90))):
+    # wall normals face INTO the room (a camera inside sees front faces)
+    for nm, sz, loc, rot in (("wN", (x1 - x0, h), ((x0 + x1) / 2, y1, h / 2), (90, 0, 0)), ("wS", (x1 - x0, h), ((x0 + x1) / 2, y0, h / 2), (90, 0, 180)),
+                             ("wE", (y1 - y0, h), (x1, (y0 + y1) / 2, h / 2), (90, 0, -90)), ("wW", (y1 - y0, h), (x0, (y0 + y1) / 2, h / 2), (90, 0, 90))):
         if nm not in skip: plane(nm, c, sz, loc, wall, rot)
     if ceil: plane("ceil", c, (x1 - x0, y1 - y0), ((x0 + x1) / 2, (y0 + y1) / 2, h), ceil, (180, 0, 0))
 
@@ -294,7 +295,7 @@ K = human("King", "King_S2", c); K.z = 0.4; GZ[0] = 0.4; K.pos = V((0, 6.45)); K
 for f, hand_up, lean, br in ((175, 0, 0, -0.5), (185, 0.5, 4, -1.5), (200, 1, 8, -2.5), (240, 1, 6, -2.5), (285, 0.3, 2, -2), (300, 0, 14, -2.5), (360, 0, 20, -2.8), (420, 0, 22, -3), (590, 0, 22, -3)):
     K.sit(f, seat_z=0.48, flex=lean, twist=-18 if f >= 300 else 0, head=(10 if f >= 300 else -5, -25 if f >= 300 else 0))
     if hand_up:
-        K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2)); grip(K.R, f, "R", pose="flat_palm")
+        K.hand(f, "R", (-0.35, -0.35, 1.0 + 0.75 * hand_up), d=(0, -0.3, 1), n=(0, -1, 0), pole=(-0.7, 0.2, 1.2)); grip(K.R, f, "R", pose="relaxed")
     else:
         K.hand(f, "R", (-0.30, -0.25, 0.70), d=(0, -1, -0.2), n=(0, 0, -1), pole=(-0.6, 0.4, 0.9))
     K.hand(f, "L", (0.30, -0.25, 0.70), d=(0, -1, -0.2), n=(0, 0, -1), pole=(0.6, 0.4, 0.9))
@@ -333,7 +334,7 @@ cam(215, (0.4, -2.5, 2.4), (0, 6.3, 1.5), 32)
 cam(260, (1.2, 2.2, 1.7), (0, 6.4, 1.55), 35)
 cam(300, (0.6, 4.4, 1.55), (-0.05, 6.35, 1.55), 45)
 cam(360, (-0.6, 4.6, 1.5), (-0.2, 6.3, 1.5), 50)
-cam(420, (-0.25, 4.3, 1.55), (-0.8, 5.35, 1.0), 40)
+cam(420, (-1.9, 3.6, 1.45), (-0.5, 5.6, 1.3), 38)
 cam(480, (-1.65, 3.85, 1.25), (-0.55, 5.4, 1.2), 45)
 cam(540, (-1.55, 4.05, 1.3), (-0.6, 5.45, 1.3), 45)
 cam(586, (-1.0, 4.58, 1.21), (-1.0, 5.4, 1.23), 40)
@@ -402,7 +403,7 @@ light(c, 'SUN', (0, 0, 20), 3.0, (1.0, 0.92, 0.8), rot=(45, 0, -30), name="sun")
 walker("Townswoman", "Walk_S3_0", c, (-1, 16, 0), (0.5, 8, 0), 588, 725, 0.6); walker("Townsman", "Walk_S3_1", c, (4.5, 14, 0), (5.0, 5, 0), 588, 725)
 cam(588, (0, -8.7, 3.0), (1.2, 2.0, 1.2), 28)
 cam(625, (1.6, -3.0, 1.4), (1.2, 1.5, 0.8), 30)
-cam(655, (1.9, 0.6, 0.35), (2.0, 4.0, 0.4), 26)
+cam(655, (1.6, -0.6, 0.9), (2.0, 3.6, 0.9), 26)
 cam(690, (-1.0, 2.5, 1.7), (-3.0, 3.5, 1.6), 28)
 cam(722, (-5.3, 6.0, 2.5), (-9.0, 6.0, 2.5), 28)
 finish_set(2)
@@ -819,7 +820,7 @@ for o in [OA.a] + list(OA.a.children):
         REKEY.append((o, f, h))
 candle(c, (-1.6, 3.5, 0.75));
 for x_ in (-0.78, 0.78):
-    box("bedCurtain", c, (0.06, 0.5, 1.9), (x_, 3.45, 1.15), M["velvet"]); box("bedCurtainF", c, (0.06, 0.4, 1.9), (x_, 1.75, 1.15), M["velvet"])
+    box("bedCurtain", c, (0.06, 0.5, 1.9), (x_, 3.45, 1.15), M["velvet"])
 box("canopy", c, (1.65, 2.15, 0.08), (0, 2.6, 2.15), M["velvet"]); box("canopyTrim", c, (1.72, 2.22, 0.03), (0, 2.6, 2.1), M["gold"])
 rug(c, (0, 0.5, 0), (2.8, 1.8)); picture(c, (-4.45, 0.5, 1.7), 90, 1.0); picture(c, (1.8, 4.45, 1.8), 180, 0.9)
 tapestry(c, (-4.45, -2.5, 1.8), 90, w=1.4, h=1.8, tint=(0.04, 0.10, 0.45))
@@ -859,7 +860,7 @@ light(c, 'AREA', (0, -1, 3.4), 900, (1.0, 0.95, 0.88), 4, rot=(0, 0, 0), name="c
 light(c, 'AREA', (-2, -3, 3.3), 900, (0.7, 0.75, 1.0), 2.5, rot=(40, 0, -140), name="fill")
 cam(2004, (0, -4.3, 1.7), (0, 2.5, 0.9), 28)
 cam(2070, (-2.2, -0.8, 1.9), (0, 2.6, 0.9), 30)
-cam(2140, (-0.2, 0.6, 2.2), (-0.4, 2.0, 0.8), 34)
+cam(2140, (-0.3, 0.5, 1.8), (-0.4, 2.2, 0.8), 34)
 cam(2200, (-0.95, 0.5, 1.5), (-0.5, 1.9, 0.8), 40)
 cam(2225, (1.2, 0.3, 1.55), (3.3, -1.6, 1.15), 30)
 cam(2250, (1.6, 0.6, 1.4), (3.3, -1.6, 1.1), 32)
@@ -903,6 +904,7 @@ for i, (nm, on, off, *_r) in enumerate(SETDEF):
     vis(SETC[i], on, off)
 for o, f, h in REKEY:   # per-character swaps inside a set, applied after the set keys
     o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
+    o.hide_viewport = h; o.keyframe_insert("hide_viewport", frame=f)
 world_keys([(1, 1.0), (157, 1.0), (158, 0.12), (574, 0.12), (575, 1.0), (704, 1.0), (705, 0.35), (1629, 0.35), (1630, 1.4), (1849, 1.4), (1850, 0.2), (1984, 0.2), (1985, 0.35), (2489, 0.35), (2490, 1.0)])
 for fc in (W.node_tree.animation_data.action.fcurves if W.node_tree.animation_data and hasattr(W.node_tree.animation_data.action, "fcurves") else []):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
@@ -920,6 +922,7 @@ for i in range(len(SETDEF) - 1):
         o.matrix_world = Mx @ Matrix.Rotation(R_(90), 4, 'X')
     for ff, h in ((1, True), (f - 3, False), (f + 3, True)):
         o.hide_render = h; o.keyframe_insert("hide_render", frame=ff)
+        o.hide_viewport = h; o.keyframe_insert("hide_viewport", frame=ff)
 
 # ------------------------------------------------------------------ one camera: Catmull-Rom through the framings, baked per frame
 TR = [(SETDEF[i][2], i) for i in range(len(SETDEF) - 1)]
@@ -927,14 +930,15 @@ CK[:] = [k for k in CK if all(abs(k[0] - f) > 20 for f, i in TR)]
 for f, i in TR:
     ex = SETDEF[i][4]; Mx = ROOT[i].matrix_world @ P(*ex); d = (Mx.to_3x3() @ V((0, 1, 0))).normalized(); p0 = Mx.translation
     li = ROOT[i].matrix_world.inverted(); li2 = ROOT[i + 1].matrix_world.inverted()
-    if i in (0, 2, 4, 5):   # whip-pan in open air: fast 110 deg pan, set swaps mid-whip, camera position continuous
+    if i in (0, 2, 4, 5):   # whip-pan
+        wf = 6 if i == 4 else 12   # churchyard: hold on the mourners longer, shorter whip in open air: fast 110 deg pan, set swaps mid-whip, camera position continuous
         r70 = Matrix.Rotation(R_(70), 3, 'Z'); r35 = Matrix.Rotation(R_(35), 3, 'Z')
-        CK.append((f - 12, i, li @ (p0 - d * 0.9), li @ (p0 + (r70 @ d) * 5), 28))
+        CK.append((f - wf, i, li @ (p0 - d * 0.9), li @ (p0 + (r70 @ d) * 5), 28))
         CK.append((f, i, li @ p0, li @ (p0 + (r35 @ d) * 5), 28))
-        CK.append((f + 12, i + 1, li2 @ (p0 + d * 0.9), li2 @ (p0 + d * 7 + V((0, 0, -2.2 if i == 5 else 0.0))), 28))   # whip ends facing forward, onto the next beat (down onto the bed for the bedroom)
+        CK.append((f + wf, i + 1, li2 @ (p0 + d * 0.9), li2 @ (p0 + d * 7 + V((0, 0, {5: -1.3, 4: -1.2}.get(i, 0.0)))), 28))   # whip ends facing forward, onto the next beat (down onto the bed for the bedroom)
     elif i in (3, 6):   # window exits: keep the room's characters until the last frames, whip out through the window
         back = {3: V((0.3, 1.6, 1.2)), 6: V((3.3, -1.6, 1.15))}[i]
-        CK.append((f - 8, i, li @ (p0 - d * 0.8), back, 30))
+        CK.append((f - 8, i, (V((4.0, -0.2, 1.6)) if i == 6 else li @ (p0 - d * 0.8)), back, 26 if i == 6 else 30))
         CK.append((f, i, li @ p0, li @ (p0 + d * 6), 26))
         CK.append((f + 18, i + 1, li2 @ (p0 + d * 2.2), li2 @ (p0 + d * 8), 26))
     else:

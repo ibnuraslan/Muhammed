@@ -71,3 +71,27 @@ Not changed (checked, plausible): soldier smashing the pot (both hands on it, sh
   - qa_check set-aware: INSIDE 0, FILL 0, BACKHEAD 1 (f1, intended), EMPTY 413 (all "no character in view", character list built at frame 1).
   - qa_check unchanged: INSIDE 74, FILL 42, EMPTY 525, BACKHEAD 2 (hidden sets).
   - Close-ups 3 and 13 are still black review images; the film frames at those moments are fine (see the sheets).
+
+
+## v008 (director review of v007/v006, 7 items)
+1. **Cathedral roof band:** the roof faces use our slate material, the recessed band our stone; both self-lit at 0.6 of their own texture. At 28.5 s it reads as dark slate over light stone, with no black band (see `v008_half_B.jpg`, 27.5–30 s, and `v008_f1711_28p5s.jpg`). The upper roof is still very dark (textured dark slate, not flat black). If it should be lighter, the plain slab at base 0.35/0.33/0.30 is a one-line change.
+2. **Close-ups 3 (sack pour) and 13 (coffin grip): dropped.** In the film both contacts are hidden behind the bodies from the film camera. A camera placed 0.5–0.8 m from the hand on the film-camera side with line of sight to the wrist doesn't exist: every candidate direction hits the character's own torso or the sack/coffin first. They aren't seen in any frame of the film, so the close-up sheet has 18 shots instead of 20.
+3. **Close-up 1 (blue twin's shackled hand):** now `relaxed` from hand_poses (no splay).
+4–5. **Servants' pots (red silver pot, green porcelain pot): NOT fixed in v008.** I applied `wrap_grip` on the pot body, not `grip_object` on the handle. In `v008_hand_closeups.jpg` (cells 3.0 s and 4.0 s) the hand is still hidden behind the pot; only the sleeve shows. Next: `grip_object` on each pot's handle at every pour key (v009).
+6. **Empty cells:**
+   - 26.5 and 27.0 s: the camera holds on the twins and the green servant until 8 frames before the window.
+   - 31.0 s: the ball opens on the couples (closer to the camera).
+   - 41.0 s: the old twin stays in frame until the window whip.
+   - 9.5 s is the coffee-cup-and-steam beat (kept on purpose).
+7. **qa_check EMPTY:** the toggle was **viewport visibility**. Sets were swapped only with `hide_render` keys. qa_check's scene ray casts use the viewport depsgraph, so every hidden set was still there and blocked the rays (example: f900, the ray hit `house3_i.001` from the street set inside the chamber).
+   - v008 keys `hide_viewport` together with `hide_render` on every set, portal plane and swap. qa_check now runs unchanged and no wrapper is needed.
+   - Room walls also faced outward (normals), which gave the INSIDE flags; they now face inward.
+   - Result with the unchanged `pipeline/qa_check.py` → `v008_qa_check_director.json`: **BACKHEAD 2, EMPTY 24, INSIDE 1, FILL 2** (was INSIDE 74, FILL 42, EMPTY 525 on v007).
+   - INSIDE 1 and FILL 2 are f577, the steam pass: the camera passes through the steam volume on purpose.
+   - BACKHEAD: f1 is the opening behind the crowd; f169 is the guard nearest the camera while the king (the subject) faces it.
+   - EMPTY 24 are frames where the characters are small or partly framed, which the script counts as no character:
+     - 8.6–9.5 s: the cup-and-steam beat;
+     - 10.7–11 s: street soldiers far off;
+     - ~35–36.8 s: the dying twin under the blanket;
+     - single whip frames at 20.8, 27.1, 30.4–30.6 and 41.4 s.
+- Found on review and fixed: the king's raised hand is `relaxed` (it read as splayed); the front bed curtains were removed (they filled the frame at 34–36 s).

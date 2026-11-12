@@ -155,6 +155,7 @@ def vis(c, on, off):
         for f, h in ((1, on > 1), (on, False), (off, True)):
             if f < 1: continue
             o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
+            o.hide_viewport = h; o.keyframe_insert("hide_viewport", frame=f)   # viewport follows render, so scene ray casts (qa_check) see only the current set
         if o.animation_data and o.animation_data.action:
             for fc in o.animation_data.action.fcurves if hasattr(o.animation_data.action, "fcurves") else []:
                 pass
@@ -399,7 +400,7 @@ def wall_opening(c, axis, at, span, h, mat, oc, ow, oz0, oz1, frame_mat=None):
     for cpos, w, z0, z1 in parts:
         if w <= 0.01 or z1 - z0 <= 0.01: continue
         if axis == "x":
-            o = plane("wallO", c, (w, z1 - z0), (at, cpos, (z0 + z1) / 2), mat, (90, 0, 90))
+            o = plane("wallO", c, (w, z1 - z0), (at, cpos, (z0 + z1) / 2), mat, (90, 0, 90 if at < 0 else -90))   # normal into the room
         else:
             o = plane("wallO", c, (w, z1 - z0), (cpos, at, (z0 + z1) / 2), mat, (90, 0, 0))
         out.append(o)
