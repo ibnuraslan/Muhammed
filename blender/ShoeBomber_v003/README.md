@@ -52,12 +52,33 @@ The scripts are in `../ShoeBomber_v001/scripts/`. Build order:
 | 8 | 1249 | …bring down the entire plane | Out of a cloud bank beside the fuselage, past the engine (with exhaust glow) and the wing, to a wide pull-out over a dusk cloud deck. |
 | 9 | 1393 | And that's why you have to take your shoes off… | The airport security lane, with dusk light through the glass wall, a queue of travellers, an officer at the monitor and pictogram signs. The traveller steps out of his sneakers, picks one up and drops it in the grey tray, which rolls into the X-ray. The camera settles on him in dark socks. |
 
+
+## Hand audit (`review/hand_audit.txt`, BVH, every 2 frames)
+**1,529 flagged character-frames, down from 4,479 before the hands pass.** Of these:
+- **hand vs hand: 5.** The attendant's two hands touch while grabbing his wrist (f487–491) and while lifting the shoes (f857–859).
+- **hand vs another character: 650.** Almost all are intended grips that sit slightly deep:
+  - the attendant holding his raised wrist (f573–685);
+  - the steward's hands on his upper arm with the syringe (f643–737);
+  - PaxA and PaxB's hands on his back and calves in the pin (f555–775);
+  - the brief grab in the lunge (f459–559).
+- **hand vs own body: 874.** Mostly:
+  - the bomber's hands working on the shoe raised against his own shin (f1–549);
+  - the traveller's hand on his knee in the squat (f1417–1495);
+  - two sleepers' hands resting on their laps (shallow, ≤ 9 mm).
+
+Limits:
+- Finger, thumb and wrist Limit Rotation constraints are on all 13 characters.
+- The minimum curl is relaxed (0.25).
+
+`review/hand_closeups.jpg` is the 270×480 close-up pass of the main hand actions.
+
 ## Known open items
 Audit: `review/D_audit.txt` (run on this packed file).
 - **Camera inside geometry:** none, apart from the intended passes through the smoke wisp (f161–211) and the cloud bank (f1261).
 - **Penetration (BVH):** 87 flagged samples (4,630 hand and foot vertices in total, cabin only, sampled every 30 frames). They are almost all in the tackle pile, f481–760: hands pressing into the bomber's back and arm, and the kneelers' feet overlapping. From the high camera this reads as gripping and pinning, but the meshes do intersect slightly.
 - **Reach:** the remaining misses are in fast transitions: the running steward (f451–521), PaxB getting up (f461–581) and the attendant's grab (f501–561). In holds, the bomber's own left hand behind his back misses by up to 0.18 m and the officer's hands on the desk by about 0.17 m.
 - **Hover/sink:** the bomber is up to 0.19 m off the floor during the fall itself (f531–571); the kneeling attendant's knees sit about 4.5 cm up; the running steward dips 10 cm (f541–561).
+- **12 s:** the injection close-up is dim, framed past the steward's dark jacket.
 - **Shirt:** a corrective smooth is applied for the face-down pose, but some bunching remains.
 - **Clouds:** the sky uses the dusk cloud deck plus volumetric banks for the crossings. Volumetric cumulus puffs cost about 140 s per preview still and the surface version looked like craters, so the puffs are hidden.
 - **Realism replacements:**

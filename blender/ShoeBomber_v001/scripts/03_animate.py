@@ -56,7 +56,7 @@ def hand(h, s, f, W, d, n, pole=None, grip=0.0):
     h.key_hand(s, f, V(W), V(d), V(n), pole=V(pole) if pole else None)
     curl(h, s, f, grip)
 
-def rest_arm(h, s, f, root, yaw=FWD, out=0.22, fwd=0.28, z=0.12, grip=0.3):
+def rest_arm(h, s, f, root, yaw=FWD, out=0.26, fwd=0.28, z=0.17, grip=0.3):
     """hand resting on the thigh/armrest, relative to the root position"""
     sg = -1 if s == "L" else 1
     if yaw == FWD:
@@ -105,7 +105,7 @@ def bomber_hunch(f, lean=38, head=(28, 0), foot_up=0.42, twist=-8, hx=0.0):
     bom.key_root(f, V((BX + 0.02, BY - 0.03, 0.56)), yaw=FWD, flex=10, side=-3)
     bom.key_spine(f, flex=lean, twist=twist, side=4, head=head)
     bom.key_foot("L", f, V((BX - 0.12, BY + 0.44)), FWD, 0, 0)
-    bom.key_foot("R", f, V((BX + 0.13, BY + 0.30)), FWD + 10, foot_up, 15)   # heel up near the cushion edge
+    bom.key_foot("R", f, V((BX + 0.19, BY + 0.30)), FWD + 15, foot_up, 15)   # heel up near the cushion edge, knee out of the arms' way
 
 for f, lean, hd, tw in ((1, 36, (26, -4), -8), (40, 40, (30, 2), -10), (90, 42, (34, -2), -12), (150, 40, (30, 4), -9), (200, 38, (26, 0), -8)):
     bomber_hunch(f, lean, hd, twist=tw)
@@ -114,7 +114,7 @@ def shoe_pt(f, dx=0.0, dy=0.0, dz=0.0):
     a = wpos(bom, "foot.R", f); return a + V((dx, dy, dz))
 for f in (1, 40, 90, 150, 200, 260, 330, 372):
     a = shoe_pt(f)
-    hand(bom, "L", f, a + V((-0.09, 0.08, 0.05)), (0.3, 0.6, -0.6), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.65)
+    hand(bom, "L", f, a + V((-0.13, 0.02, 0.07)), (0.3, 0.6, -0.6), (1, 0, 0), pole=(BX - 0.6, BY - 0.2, 0.6), grip=0.65)
 # right hand: strike (f10-28 swipe along the box held in the left hand), then hold the match flame to the tongue
 strike = [(1, V((0.10, 0.02, 0.16))), (14, V((0.06, 0.06, 0.14))), (22, V((0.13, -0.04, 0.12))), (30, V((0.07, 0.10, 0.13))),
           (60, V((0.06, 0.06, 0.17))), (90, V((0.05, 0.07, 0.15))), (120, V((0.07, 0.05, 0.16))), (150, V((0.05, 0.08, 0.15))),
@@ -209,8 +209,8 @@ for f in (590, 654, 720, 760):
     att.key_root(f, V((-0.18, BY + 2.0, 0.47)), yaw=-20, flex=15)
     att.key_spine(f, flex=62, twist=10, head=(12, 10))
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
-    hand(att, "R", f, V((0.15, BY + 1.56, 0.38)), (0, -1, -0.4), (0, 0, -1), grip=0.8)
-    hand(att, "L", f, V((0.19, BY + 1.38, 0.37)), (0, -1, -0.4), (0, 0, -1), grip=0.8)
+    hand(att, "R", f, V((0.15, BY + 1.58, 0.43)), (0, -1, -0.4), (0, 0, -1), grip=0.6)
+    hand(att, "L", f, V((0.21, BY + 1.36, 0.42)), (0, -1, -0.4), (0, 0, -1), grip=0.6)
 # beat 6 (769-1068): goes to his feet, kneels, pulls both sneakers off and lifts them under the reading light
 stand(att, 785, V((-0.1, BY + 2.05, 0)), 0, spine=(20, 0, 0), head=(15, 0), crouch=0.05)
 awp = catmull([(790, V((0.18, BY + 2.0, 0))), (815, V((0.21, BY + 1.0, 0))), (840, V((0.18, BY - 0.6, 0)))])
@@ -253,8 +253,8 @@ for f in (585, 654, 720, 768):
     pa.key_root(f, V((-0.05, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
     pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(20, 0) if f < 720 else (10, 20))
     pa.key_foot("L", f, V((-0.25, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12, BY - 0.40)), FWD + 20, 0.02, -65)
-    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.46)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
-    hand(pa, "R", f, V((0.12, BY + 1.0, 0.46)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "L", f, V((-0.10, BY + 1.05, 0.51)), (0.1, 1, -0.4), (0, 0, -1), grip=0.25)
+    hand(pa, "R", f, V((0.12, BY + 1.0, 0.51)), (-0.1, 1, -0.4), (0, 0, -1), grip=0.25)
 
 # ---------------------------------------------------------------- PAX B (2C behind, aisle seat; stands, pins the left arm / legs)
 for f in range(1, 470, 20):
@@ -268,8 +268,8 @@ for f in (590, 654, 720, 768):     # kneels on his legs side, holds the twisted 
     pb.key_root(f, V((0.10, BY - 0.80, 0.55)), yaw=FWD, flex=12)
     pb.key_spine(f, flex=62 if f < 720 else 50, twist=-8, head=(20, 0) if f < 720 else (10, -10))
     pb.key_foot("L", f, V((-0.02, BY - 1.18)), FWD, 0.02, -65); pb.key_foot("R", f, V((0.22, BY - 1.18)), FWD, 0.02, -65)
-    hand(pb, "L", f, V((-0.08, BY - 0.10, 0.31)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on the back of his calves
-    hand(pb, "R", f, V((0.12, BY - 0.12, 0.31)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
+    hand(pb, "L", f, V((-0.08, BY - 0.10, 0.45)), (0, 1, -0.5), (0, 0, -1), grip=0.3)     # on the back of his calves
+    hand(pb, "R", f, V((0.12, BY - 0.12, 0.45)), (0, 1, -0.5), (0, 0, -1), grip=0.3)
 
 stand(pa, 800, V((-0.70, BY + 0.38, 0)), 70, spine=(10, 0, 0), head=(15, -20), crouch=0.25)
 for f in (850, 950, 1068):
@@ -308,8 +308,8 @@ for f, dz in ((575, 0.25), (640, 0.18), (660, 0.09), (690, 0.07), (720, 0.07), (
     hand(stw, "R", f, UA + V((0.05, 0.0, dz + 0.06)), (-0.6, 0, -0.8), (0, 1, 0), grip=0.75)
     hand(stw, "L", f, UA + V((0.02, 0.22, 0.08)), (-1, 0, -0.3), (0, 0, -1), grip=0.6)
 for f in (900, 1068):
-    hand(stw, "R", f, V((SK.x - 0.05, SK.y, 0.75)), (-0.2, 0, -1), (0, 1, 0), grip=0.6)
-    hand(stw, "L", f, V((SK.x - 0.25, SK.y - 0.1, 0.32)), (-1, 0, -0.5), (0, 0, -1), grip=0.5)
+    hand(stw, "R", f, V((SK.x - 0.12, SK.y + 0.22, 0.92)), (-0.2, 0, -1), (0, 1, 0), grip=0.4)
+    hand(stw, "L", f, V((SK.x - 0.30, SK.y - 0.18, 0.62)), (-1, 0, -0.5), (0, 0, -1), grip=0.4)
 
 # ---------------------------------------------------------------- PAX C (3D across the aisle) and PAX D (4A in front, reading)
 for f in range(1, 1069, 20):
@@ -359,8 +359,8 @@ for f, dy, lift, pitch in ((1393, 0, 0, 0), (1425, 0, 0, 0), (1435, -0.10, 0.04,
 TRAY = bpy.data.objects["Tray_1"]
 ev(1430); trf = wpos(trav, "foot.R", 1430)
 SHOE_PICK = V((trf.x + 0.02, trf.y - 0.04, 0.19))
-hand(trav, "R", 1393, TP + V((0.25, 0.0, 0.95)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
-hand(trav, "L", 1393, TP + V((-0.25, 0.0, 0.95)), (0, 0.3, -1), (1, 0, 0), grip=0.3)
+hand(trav, "R", 1393, TP + V((0.29, 0.10, 0.95)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
+hand(trav, "L", 1393, TP + V((-0.29, 0.10, 0.95)), (0, 0.3, -1), (1, 0, 0), grip=0.3)
 hand(trav, "L", 1440, TP + V((-0.12, 0.42, 0.82)), (0, 1, -0.5), (0, 0, -1), grip=0.3)          # steadies on the belt edge
 hand(trav, "L", 1480, TP + V((-0.22, 0.30, 0.55)), (0, 1, -0.5), (0, 0, -1), grip=0.3)         # on his knee in the squat
 hand(trav, "R", 1455, SHOE_PICK + V((0, 0, 0.18)), (0, 0.3, -1), (-1, 0, 0), grip=0.3)
@@ -372,8 +372,8 @@ print("SHOE_PICK", SHOE_PICK)
 # straightens in socks, watches the tray roll into the X-ray, small shrug (1560-1620)
 for f, sp, hd in ((1560, 5, (5, 10)), (1590, 0, (0, 30)), (1620, -2, (-3, 35))):
     stand(trav, f, TP, FWD, spine=(sp, 0, 0), head=hd)
-    hand(trav, "R", f, TP + V((0.24, 0.05, 0.93)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
-    hand(trav, "L", f, TP + V((-0.24, 0.05, 0.93)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
+    hand(trav, "R", f, TP + V((0.29, 0.10, 0.95)), (0, 0.2, -1), (-1, 0, 0), grip=0.3)
+    hand(trav, "L", f, TP + V((-0.29, 0.10, 0.95)), (0, 0.2, -1), (1, 0, 0), grip=0.3)
 # tray rides the belt into the tunnel
 for f, x in ((1, -0.85), (1500, -0.85), (1530, -0.85), (1620, 1.4)):
     TRAY.location = AX + V((x, 0.0, 0.80)); TRAY.keyframe_insert("location", frame=f)
@@ -385,8 +385,8 @@ for o in bpy.data.objects:
 # officer at the monitor, leaning, head moving
 for f in range(1, END + 1, 40):
     stand(off, f, AX + V((4.5, 2.05, 0)), 0, spine=(18 + 3 * math.sin(f * 0.05), 0, 0), head=(15, 8 * math.sin(f * 0.03)))
-    hand(off, "R", f, AX + V((4.6, 1.75, 0.83)), (0, -1, -0.3), (0, 0, -1), grip=0.4)
-    hand(off, "L", f, AX + V((4.3, 1.75, 0.83)), (0, -1, -0.3), (0, 0, -1), grip=0.4)
+    hand(off, "R", f, AX + V((4.72, 1.66, 0.85)), (0, -1, -0.3), (0, 0, -1), grip=0.4)
+    hand(off, "L", f, AX + V((4.22, 1.66, 0.85)), (0, -1, -0.3), (0, 0, -1), grip=0.4)
 # PaxC and PaxD become airport extras after the cabin is gone: queue + walk-by (teleport at 1380, hidden by the cloud dive)
 def teleport_keys(h, f):
     """make every key on this rig at f constant so the jump at f+1 is instant"""
@@ -411,8 +411,8 @@ sit(pd, 1380, SX["A"], ROW(4), z=0.6, spine=(5, 60, 0), head=(5, 60))
 QP = AX + V((-3.0, -1.3, 0))
 for f in range(1381, END + 1, 40):
     stand(pd, f, QP, FWD - 90 + 10 * math.sin(f * 0.02), spine=(3, 0, 0), head=(5, 20 * math.sin(f * 0.03)))
-    hand(pd, "R", f, QP + V((0.0, -0.25, 0.82)), (0, 0, -1), (1, 0, 0), grip=0.3)
-    hand(pd, "L", f, QP + V((0.0, 0.25, 0.82)), (0, 0, -1), (-1, 0, 0), grip=0.3)
+    hand(pd, "R", f, QP + V((0.0, -0.31, 0.86)), (0, 0, -1), (1, 0, 0), grip=0.3)
+    hand(pd, "L", f, QP + V((0.0, 0.31, 0.86)), (0, 0, -1), (-1, 0, 0), grip=0.3)
 for h in (pa, pb, stw, att):
     for b_ in ("root", "IK_foot.L", "IK_foot.R", "IK_hand.L", "IK_hand.R", "Pole_knee.L", "Pole_knee.R"):
         pass
@@ -430,7 +430,7 @@ for nm, ri, k, bl, lean in SLEEP:
         t = f / 60.0
         sit(h, f, x, y, flex=-4, spine=(-4 + 1.2 * math.sin(t * 1.3 + ph), 0, 6 * lean), head=(25 + 3 * math.sin(t * 0.9 + ph), 25 * lean))
     for f in (1, END):
-        for s_ in "LR": rest_arm(h, s_, f, V((x, y, 0.56)), out=0.12, fwd=0.32, z=0.08, grip=0.2)
+        for s_ in "LR": rest_arm(h, s_, f, V((x, y, 0.56)), out=0.18, fwd=0.32, z=0.24, grip=0.25)
     b = bpy.data.objects[bl]; b.location = V((x, y + 0.22, 0.66)); b.rotation_euler = (math.radians(-6), 0, math.radians(random.uniform(-8, 8)))
     b.scale = (1.0, 1.25, 1.0)
 bpy.data.objects["Blanket_2C"].location = V((SX["C"], ROW(9) + 0.05, 0.52))
@@ -447,7 +447,7 @@ for h, qp, yaw in QUEUE:
         stand(h, f, qp + V(((f - 1381) * 0.0012, 0, 0)), yaw + 6 * math.sin(f * 0.02), spine=(4, 0, 0), head=(5, 25 * math.sin(f * 0.015 + qp.x)))
         for s_ in "LR":
             sg = -1 if s_ == "L" else 1
-            hand(h, s_, f, qp + V((sg * 0.05, sg * -0.24, 0.84)), (0, 0, -1), (0, sg, 0), grip=0.35)
+            hand(h, s_, f, qp + V((sg * 0.05, sg * -0.31, 0.88)), (0, 0, -1), (0, sg, 0), grip=0.35)
 # ================================================================== reach fix: slide bodies so keyed hand targets are actually reached
 def key_frames(h, bone):
     ad = h.r.o.animation_data; out = set()
