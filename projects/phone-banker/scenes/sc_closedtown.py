@@ -30,11 +30,24 @@ def snow_ground(name, size, loc=(0, 0, 0)):
     return o
 
 
+def world_gradient(horizon, zenith, strength=1.0):
+    """A sky that fades from the horizon colour to the zenith colour (overcast, no sun disc)."""
+    w = bpy.context.scene.world or bpy.data.worlds.new("World"); bpy.context.scene.world = w; w.use_nodes = True
+    N = w.node_tree.nodes; L = w.node_tree.links; N.clear()
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Generated'], sep.inputs[0])
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.0; mr.inputs['From Max'].default_value = 0.6
+    L.new(sep.outputs['Z'], mr.inputs['Value'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(mr.outputs[0], mx.inputs['Factor'])
+    mx.inputs[6].default_value = (*horizon, 1); mx.inputs[7].default_value = (*zenith, 1)
+    bg = N.new("ShaderNodeBackground"); bg.inputs['Strength'].default_value = strength; L.new(mx.outputs[2], bg.inputs['Color'])
+    out = N.new("ShaderNodeOutputWorld"); L.new(bg.outputs[0], out.inputs['Surface'])
+
+
 def forest(xr, yr, n, seed=2):
     from pbkit import ph_instances
     r = np.random.default_rng(seed)
     pl = [((r.uniform(*xr), r.uniform(*yr), 0), r.uniform(0, 6.28), r.uniform(0.6, 0.9)) for _ in range(n)]
-    ph_instances("fir_tree_01", pl, pick="_a_", decimate=0.05)
+    ph_instances("fir_tree_01", pl, pick="_a_", decimate=0.18)
 
 
 def bus():
@@ -59,10 +72,13 @@ def build(variant=None):
     variant = variant or "checkpoint"
     c = {"variant": variant}
     if variant == "checkpoint":
-        world_flat((0.62, 0.66, 0.72), 0.55)
-        snow_ground("Snow", (200, 200))
-        road = pbr("SnowRoad", (0.3, 0.3, 0.32), 0.6); box("Road", (0, 0, 0.03), (200, 7, 0.06), road)
-        forest((-60, 60), (14, 50), 18); forest((-60, 60), (-50, -16), 10, seed=4)
+        world_gradient((0.78, 0.8, 0.83), (0.42, 0.48, 0.58), 0.6)                    # winter overcast: pale at the horizon, grey-blue above
+        snow_ground("Snow", (260, 260))
+        road = pbr("SnowRoad", (0.3, 0.3, 0.32), 0.6); box("Road", (0, 0, 0.03), (260, 7, 0.06), road)
+        # the forest edge: a dense wall of firs behind the fence, more rows receding into the fog, and the far side of the road
+        forest((-90, 40), (10, 16), 70, seed=2); forest((-110, 60), (16, 34), 90, seed=7); forest((-130, 80), (34, 70), 80, seed=9)
+        forest((-60, 60), (-50, -16), 18, seed=4)
+        haze((-20, 30, 10), (220, 90, 20), density=0.006, color=(0.86, 0.88, 0.9), anis=0.2)
         # guard booth, barrier, fence, concrete blocks
         booth = joinm([box("Booth", (0, 0, 1.25), (2.2, 2.0, 2.5), pbr("BoothPaint", (0.45, 0.5, 0.42), 0.6), bevel=0.02),
                        box("BoothRoof", (0, 0, 2.6), (2.6, 2.4, 0.2), pbr("BoothRoofM", (0.25, 0.25, 0.25), 0.7))], "Booth")
@@ -82,6 +98,19 @@ def build(variant=None):
             ph.model("concrete_road_barrier", loc=(-2.5 - k * 1.6, 4.5, 0), rot_z=0.0)
         from pbkit import ph_instances
         ph_instances("modular_chainlink_fence", [((-8 - k * 8.1, 6.0, 0), 0.0, 1.0) for k in range(5)] + [((10 + k * 8.1, 6.0, 0), 0.0, 1.0) for k in range(5)])
+        # barbed wire: three strands on cranked arms along the top of the fence, barbs every 25 cm
+        bpy.context.view_layer.update()
+        fz = max((o.matrix_world @ v.co).z for o in bpy.data.objects if o.name.startswith("modular_chainlink_fence") and o.type == 'MESH' for v in o.data.vertices[:400])
+        wire = pbr("BarbWire", (0.22, 0.21, 0.2), 0.45, 0.8)
+        for (x0, x1) in ((-50.0, -4.0), (6.0, 52.0)):
+            Lx = x1 - x0
+            for j, (dy, dz) in enumerate(((0.0, 0.12), (-0.12, 0.27), (-0.24, 0.42))):
+                cyl("BarbStrand", ((x0 + x1) / 2, 6.0 + dy, fz + dz), 0.004, Lx, wire, verts=6, rot=(0, math.radians(90), 0))
+                b = joinm([box("Barb", (x0, 6.0 + dy, fz + dz), (0.006, 0.05, 0.006), wire, rot=(math.radians(45), 0, 0)),
+                           box("Barb", (x0, 6.0 + dy, fz + dz), (0.006, 0.05, 0.006), wire, rot=(math.radians(-45), 0, 0))], "Barbs")
+                ar = b.modifiers.new("a", 'ARRAY'); ar.count = int(Lx / 0.25); ar.use_relative_offset = False; ar.use_constant_offset = True; ar.constant_offset_displace = (0.25, 0, 0)
+            for k in range(int(Lx / 3.0) + 1):
+                box("BarbArm", (x0 + k * 3.0, 5.88, fz + 0.25), (0.04, 0.04, 0.55), wire, rot=(math.radians(-30), 0, 0))
         ph.model("security_light", loc=(2.0, 4.2, 2.5), rot_z=0.0)
         from pbkit import kit_vehicle
         c["bus"] = kit_vehicle("bus_city", "TownBus", (0.72, 0.66, 0.5), lamps=True)
