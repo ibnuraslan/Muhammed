@@ -91,7 +91,7 @@ K = [
     (23.6, V((-26.3, -0.75, 1.70)), V((-28.6, -2.2, 1.25)), 30, False),
     (24.3, V((-27.4, -0.95, 1.95)), moleB, 38, False),
     (25.0, V((-29.35, -1.35, 1.80)), moleB + V((0, 0.12, -0.08)), 34, False),   # front-left, wide: the doctor's scope at his neck and his face               # the dermatoscope on the mole
-    (25.45, V((-28.45, -2.70, 2.05)), docH, 36, False),
+    (25.45, V((-28.05, -1.95, 2.05)), docH, 36, False),
     (25.8, V((-28.15, -2.65, 1.85)), docH, 36, False),                 # doctor's serious face
     (26.6, V((-27.8, -2.75, 2.2)), moleB, 40, False),               # overhead on the hands
     (27.0, V((-27.95, -1.20, 1.70)), (moleB + manBH) / 2, 32, False),
@@ -102,7 +102,9 @@ K = [
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
     (31.45, V((-27.85, -1.30, 1.70)), ph_p + V((0, 0, 0.1)), 40, False),
     (31.7, V((-27.4, -1.0, 2.70)), V((-27.4, -1.0, 2.79)), 40, False),   # whip up into the light panel
-    (31.7, CT + V((-6, -9, 2.2)), CT + V((-6, 13, 8)), 40, True),     # out of the panel glow into the city
+    (31.7, WIN + V((0, -0.35, 0)), WIN, 40, True),     # out of the panel glow into a lit window (covered both sides)
+    (31.8, WIN + V((0, -1.2, 0.1)), WIN, 40, False),
+    (32.25, CT + V((-6, -9, 2.6)), CT + V((-6, 13, 8)), 34, False),
     (32.8, CT + V((-4, -10.0, 13)), CT + V((0, 12, 9)), 26, False),
     (33.8, CT + V((-13, -12.6, 3.2)), CT + V((-17, -4, 1.8)), 28, False),
     (34.8, CT + V((-4.0, -12.6, 2.8)), CT + V((-6, -4, 1.8)), 30, False),  # alongside the bus, riders on phones
@@ -115,7 +117,10 @@ K = [
     (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.72, LAPSCR + ls_n * 0.30 + V((0, 0, 0.06)), LAPSCR, 45, False),
     (37.9, LAPSCR + ls_n * 0.008, LAPSCR, 45, False),
-    (37.9, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, True),  # out of the screen onto the ice
+    (37.98, LAPSCR + ls_n * 0.006, LAPSCR, 45, False),
+    (38.0, FIN + V((-0.35, -0.53, 1.03)), FIN + V((-0.35, 0.5, 1.03)), 40, True),   # out of the laptop onto the blank cheque face (covered)
+    (38.1, FIN + V((-0.35, -0.95, 1.0)), FIN + V((-0.35, 0.3, 1.05)), 36, False),
+    (38.45, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, False),
     (39.0, FIN + V((-1.5, -2.4, 0.6)), FIN + V((0, 0, 1.0)), 28, False),
     (40.0, FIN + V((-2.9, -0.6, 1.2)), FIN + V((0, 0.3, 1.1)), 26, False),
     (41.0, FIN + V((-1.0, -3.6, 2.5)), FIN + V((0, 0.5, 1.0)), 26, False),

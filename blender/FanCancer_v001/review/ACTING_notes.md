@@ -49,3 +49,16 @@ Frames are v002 frames (frame = 1 + 60·t). Every story-beat start frame in `bea
 - **BACKHEAD 235 (beat 3, 3.9 s):** her POV of the mole on the back of his neck, which is the story point.
 - **HOVER Fan.L near the glass 991–1033 (16.5–17.2 s):** the knock. Between knuckle strikes the fist pulls back from the glass.
 - **HOVER near confetti (finale):** confetti falling past hands.
+
+## Camera cuts (v004c, director's cut/roll check): every one-frame jump is covered on both sides
+Strips: `review/CAMCUT_strips.jpg` (F−1 and F at each cut, rendered from the package). Roll is 0.
+
+| Cut (F−1 → F) | F−1 | F |
+|---|---|---|
+| 300 → 301 | macro of the mole on his neck | skin-macro mole (cutaway) |
+| 516 → 517 | skin-macro mole | mole decal on his neck at 1.5 cm |
+| 1902 → 1903 | clinic ceiling diffuser grid | lit city window at 35 cm (new covered pull-back to the street by 32.25 s) |
+| 2154 → 2155 | lit facade window | curtain knit |
+| 2280 → 2281 | laptop-screen pixel grid | blank cheque face at 12 cm (new: the cut moved from 37.9 s to 38.0 s, when the cheque exists on the ice; beat 13's frame is unchanged) |
+
+Fixed: f1519, a 161° aim flip with 8 cm of movement during the move around the bed. The 25.45 s key now stays on the front side of the bed, so the look vector never reverses.
