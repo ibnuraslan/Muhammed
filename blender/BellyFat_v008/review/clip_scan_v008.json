@@ -1,0 +1,27 @@
+{
+ "frames": {
+  "1255": {
+   "Woman": {
+    "self": 118,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1257": {
+   "Woman": {
+    "self": 43,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 2,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1255,
+   1257
+  ]
+ ],
+ "fps": 60
+}

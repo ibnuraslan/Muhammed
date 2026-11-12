@@ -28,7 +28,7 @@ for s in "LR":
         WH.key_foot(s, f, xy, YAW + (8 if s == "L" else -8))
 rh = WH.root_head.z
 # root / spine keys: (t, dx, dz, flex, twist, side, head pitch, head yaw)
-BODY = [(0.0, 0.0, 0.0, 4, 14, 2, 4, 28), (0.9, 0.0, 0.0, 6, 18, 3, 8, 34), (1.95, 0.01, 0.0, 6, 18, 3, 10, 34),
+BODY = [(0.0, 0.0, 0.0, 4, 14, 2, 4, 28), (0.6, 0.0, 0.0, 6, 18, 3, 6, 34), (1.3, 0.0, 0.0, 8, 12, 2, 18, 22), (1.95, 0.01, 0.0, 8, 10, 2, 22, 18),
         (2.05, -0.035, -0.015, 20, 8, -2, 24, 10), (2.25, -0.05, -0.03, 26, 2, -4, 30, 0), (2.55, -0.03, -0.02, 22, 0, -2, 26, 0),
         (4.0, -0.02, -0.04, 22, -4, 0, 28, -4), (19.9, -0.02, -0.04, 24, -4, 0, 32, -6), (20.5, -0.02, -0.045, 20, -2, 0, 20, -4),
         (20.9, -0.02, -0.04, 16, 0, 1, 6, 4), (21.5, -0.02, -0.035, 14, 0, 1, 2, 6)]
@@ -39,7 +39,7 @@ for i, (t, dx, dz, fl, tw, sd, hp, hy) in enumerate(BODY):
 # breathing in the visible ending (heavy, shocked)
 for f in range(F(20.0), FEND + 1, 6):
     t = T(f); b = math.sin(2 * math.pi * (t - 20.0) / 0.9)
-    WH.key_spine(f, flex=16 + 3 * b - 2.0 * min(1, (t - 20.0) / 1.5), twist=0, side=1, head=(8 - 6 * min(1, (t - 20.2) / 1.0) + 2 * b, 5))
+    WH.key_spine(f, flex=16 + 3 * b - 2.0 * min(1, (t - 20.0) / 1.5), twist=0, side=1, head=(28 - 26 * smooth((t - 20.75) / 0.55) + 2 * b, 5 + 4 * smooth((t - 20.8) / 0.6)))
 jaw = WR.PB["jaw"]
 for t, a in ((0, 0), (2.0, 0), (2.15, 14), (2.5, 10), (20.4, 12), (20.9, 16), (21.5, 13)):
     WR.key_rot("jaw", F(t), [("X", a)])
@@ -48,13 +48,17 @@ def hand(s, t, p, d, n, pole):
     WH.key_hand(s, F(t), wpt(*p), Vector(d), Vector(n), wpt(*pole))
 shelf_item = (0.32, 0.53, 1.30)          # front face of a box on the 4th shelf (y = 1.0 shelf front, she is at y 0.45)
 hand("L", 0.0, (0.18, 0.40, 1.12), (0.4, 0.6, 0.2), (0, 0, 1), (-0.2, 0.7, 1.0))
-hand("L", 0.9, (0.30, 0.50, 1.28), (0.2, 1.0, 0.0), (0, 0, 1), (-0.2, 0.7, 1.1))
-hand("L", 1.95, (0.31, 0.51, 1.29), (0.2, 1.0, 0.0), (0, 0, 1), (-0.2, 0.7, 1.1))
+hand("L", 0.5, (0.30, 0.37, 1.39), (0.05, 0.7, 0.7), (0, 1, 0), (-0.2, 0.6, 0.95))
+hand("L", 0.7, (0.30, 0.385, 1.39), (0.05, 0.7, 0.7), (0, 1, 0), (-0.2, 0.6, 0.95))
+hand("L", 1.0, (0.35, 0.24, 1.32), (0.35, 0.55, 0.7), (0, 1, 0), (-0.2, 0.6, 0.92))
+hand("L", 1.35, (0.38, 0.10, 1.25), (0.5, 0.45, 0.6), (0, 1, 0), (-0.2, 0.6, 0.9))
+hand("L", 1.95, (0.385, 0.095, 1.245), (0.5, 0.45, 0.6), (0, 1, 0), (-0.2, 0.6, 0.9))
 hand("L", 2.15, (0.22, 0.42, 1.18), (0.3, 0.6, -0.4), (0, 0, 1), (-0.2, 0.8, 1.0))
 hand("L", 2.55, (0.14, 0.30, 1.0), (0.4, -0.4, -0.5), (0, 1, 0), (-0.2, 0.7, 1.0))
 hand("L", 4.0, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
 hand("L", 20.4, (0.05, 0.28, 0.98), (0.6, -0.3, -0.6), (0, -1, 0), (-0.25, 0.7, 1.0))
 hand("L", 20.75, (0.07, 0.26, 0.98), (0.6, -0.4, -0.5), (0, -1, 0), (-0.25, 0.7, 1.0))
+hand("L", 20.84, (0.31, 0.50, 1.17), (0.8, -0.4, -0.3), (-0.3, -0.9, 0), (-0.1, 0.9, 1.0))   # arc out round her side, not through it
 hand("L", 20.92, (0.36, 0.26, 0.97), (0.3, -0.8, 0.2), (-1, 0, 0), (0.1, 0.75, 1.0))
 hand("L", 21.05, (0.40, 0.11, 0.93), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
 hand("L", 21.5, (0.40, 0.115, 0.935), (0.05, -1.0, 0.35), (-1, 0, 0), (0.1, 0.75, 1.0))
@@ -62,22 +66,22 @@ hand("R", 0.0, (0.06, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 1.95, (0.07, -0.24, 0.80), (0.1, 0, -1), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 2.2, (0.16, -0.22, 0.92), (0.4, 0, -0.8), (0, -1, 0), (-0.3, -0.6, 1.0))
 hand("R", 2.55, (0.40, -0.2, 1.1), (0.5, 0.3, -0.3), (0, -1, 0), (-0.3, -0.6, 1.0))
-hand("R", 4.0, (0.36, -0.07, 1.06), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
-hand("R", 20.4, (0.36, -0.07, 1.06), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
-hand("R", 21.0, (0.35, -0.06, 1.10), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
-hand("R", 21.5, (0.35, -0.06, 1.09), (0.3, 0.3, 1.0), (1, 0, 0), (0.0, -0.6, 0.9))
+hand("R", 4.0, (0.36, -0.05, 1.02), (0.05, 0.35, 1.0), (-1, 0, 0), (0.1, -0.6, 0.75))
+hand("R", 20.4, (0.36, -0.05, 1.02), (0.05, 0.35, 1.0), (-1, 0, 0), (0.1, -0.6, 0.75))
+hand("R", 21.0, (0.355, -0.04, 1.04), (0.05, 0.35, 1.0), (-1, 0, 0), (0.1, -0.6, 0.75))
+hand("R", 21.5, (0.35, -0.04, 1.035), (0.05, 0.35, 1.0), (-1, 0, 0), (0.1, -0.6, 0.75))
 
 from mathutils.bvhtree import BVHTree as _BVH
 _body = bpy.data.objects["Woman.body"]; _tee = bpy.data.objects["Woman.female_casualsuit01"]
 _gi = {g.index: g.name for g in _body.vertex_groups if g.name in W.data.bones}
-_handL = set(); _armv = set()
+_handL = set(); _handR = set(); _armv = set()
 for v in _body.data.vertices:
     bg = max([g for g in v.groups if g.group in _gi], key=lambda g: g.weight, default=None)
     if bg is None: continue
     nm_ = _gi[bg.group]
     if nm_.startswith(("upperarm", "lowerarm", "wrist", "finger", "metacarpal", "shoulder", "clavicle")): _armv.add(v.index)
-    if bg.weight > 0.5 and nm_.endswith(".L") and nm_.startswith(("finger", "metacarpal")): _handL.add(v.index)
-def _hits(f):
+    if bg.weight > 0.5 and nm_.startswith(("finger", "metacarpal")): (_handL if nm_.endswith(".L") else _handR).add(v.index)
+def _hits(f, side="L"):
     saved = [(m, m.show_viewport) for o in (_body, _tee) for m in o.modifiers if m.type != 'ARMATURE']
     for m, _ in saved: m.show_viewport = False
     sc.frame_set(f); dg_ = bpy.context.evaluated_depsgraph_get()
@@ -87,18 +91,38 @@ def _hits(f):
     for m, sv in saved: m.show_viewport = sv
     trees = [_BVH.FromPolygons(V, [p for p in P if not any(i in _armv for i in p)]), _BVH.FromPolygons(TV, TP)]
     n = 0
-    for i in _handL:
+    for i in (_handL if side == "L" else _handR):
         for tr in trees:
             loc, nrm, idx, d = tr.find_nearest(V[i])
             if loc is not None and 0.002 < d < 0.05 and (V[i] - loc).dot(nrm) < 0: n += 1; break
     return n
-def settle_palm(t_, base, d, n, pole, out=(0.01, 0, 0)):
-    """push the left hand out (default +X) until no palm/finger vertex is inside her body or tee"""
+def settle_palm(t_, base, d, n, pole, out=(0.01, 0, 0), side="L"):
+    """push the hand out (default +X) until no palm/finger vertex is inside her body or tee"""
     for step in range(15):
-        h = _hits(F(t_))
+        h = _hits(F(t_), side)
         if h == 0: break
-        base = (base[0] + out[0], base[1] + out[1], base[2] + out[2]); hand("L", t_, base, d, n, pole)
+        base = (base[0] + out[0], base[1] + out[1], base[2] + out[2]); hand(side, t_, base, d, n, pole)
     print("PALM", t_, h, base)
+import bmesh as _bmx
+_b = _bmx.new(); _bmx.ops.create_cube(_b, size=1.0)
+for v in _b.verts: v.co = Vector((v.co.x * 0.15, v.co.y * 0.06, v.co.z * 0.2))
+_bmx.ops.bevel(_b, geom=list(_b.edges) + list(_b.verts), offset=0.003, segments=1, affect='EDGES')
+pme = bpy.data.meshes.new("PickBox"); _b.to_mesh(pme); _b.free()
+pme.uv_layers.new(name="UVMap"); pme.materials.append(bpy.data.materials["M_pack08"])
+pbox = bpy.data.objects.new("PickBox", pme); bpy.data.collections["REAL"].objects.link(pbox)
+SHELF_AT = Matrix.Translation(wpt(0.30, 0.52, 1.3725))
+def lwrist(f):
+    sc.frame_set(f); return W.matrix_world @ W.pose.bones["wrist.L"].matrix
+for f in (1, F(0.7)):
+    pbox.matrix_world = SHELF_AT; pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
+OFFB = lwrist(F(0.7)).inverted() @ SHELF_AT
+for f in list(range(F(0.7) + 2, F(2.05), 2)) + [F(2.05)]:
+    M_ = lwrist(f) @ OFFB; pbox.location = M_.translation; pbox.rotation_euler = M_.to_euler()
+    pbox.keyframe_insert("location", frame=f); pbox.keyframe_insert("rotation_euler", frame=f)
+p0 = pbox.location.copy(); r0 = pbox.rotation_euler.copy()
+for t_, p_, r_ in ((2.35, (p0.x + 0.06, p0.y + 0.05, 0.10), (r0.x + 0.9, r0.y, r0.z + 0.3)), (2.45, (p0.x + 0.09, p0.y + 0.07, 0.16), (r0.x + 1.3, r0.y, r0.z + 0.4)),
+                   (2.55, (p0.x + 0.11, p0.y + 0.08, 0.075), (1.5708, 0, r0.z + 0.5)), (21.5, (p0.x + 0.11, p0.y + 0.08, 0.075), (1.5708, 0, r0.z + 0.5))):
+    pbox.location = p_; pbox.rotation_euler = r_; pbox.keyframe_insert("location", frame=F(t_)); pbox.keyframe_insert("rotation_euler", frame=F(t_))
 # basket: rides on the right wrist until the hit (baked), then drops to the floor
 bk = bpy.data.objects["Basket"]
 sc.frame_set(1); bpy.context.view_layer.update()
@@ -232,8 +256,8 @@ def key_hand_pose(rig, s, f, kind, axes):
             bn = "finger%d-%d.%s" % (k, j, s); pb = rig.pose.bones[bn]; pb.rotation_mode = 'QUATERNION'
             pb.rotation_quaternion = Quaternion(axes[bn], math.radians(angs[j - 1] * (1.0 + 0.06 * (k - 3) if k > 1 else 1.0)))
             pb.keyframe_insert("rotation_quaternion", frame=f, group=bn)
-HANDS = {"Woman": {"L": [(0.0, "touch"), (1.95, "touch"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (21.05, "flat"), (21.5, "flat")],
-                   "R": [(0.0, "grip"), (2.22, "grip"), (2.4, "relax"), (3.0, "open"), (21.5, "open")]},
+HANDS = {"Woman": {"L": [(0.0, "relax"), (0.45, "open"), (0.7, "grip"), (2.0, "grip"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (20.82, "grip"), (20.92, "relax"), (21.05, "flat"), (21.5, "flat")],
+                   "R": [(0.0, "grip"), (2.22, "grip"), (2.4, "relax"), (3.0, "press"), (21.5, "press")]},
          "ShopperA": {"L": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")],
                       "R": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")]},
          "ShopperB": {"L": [(0.0, "relax"), (21.5, "relax")], "R": [(0.0, "relax"), (21.5, "relax")]},
