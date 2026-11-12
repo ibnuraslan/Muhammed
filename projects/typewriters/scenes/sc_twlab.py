@@ -265,8 +265,9 @@ def animate(c, sec, shot):
     t_ = P["tech"]
     twp.stand(t_, (-0.72, -0.98, 0), -2.12)                                 # at the machine's right-hand end, turned to it and to us
     hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    twp.work(t_, {"R": hp + Vector((0.06, -0.08, -0.03))}, head=6)             # one hand lifts the hood
-    fingers_curl(t_, 45, thumb=25)
+    twp.work(t_, {"R": hp + Vector((0.06, -0.08, -0.03))}, head=6,              # an open, presenting palm: up and inward,
+             hand_dir=twp.forward(t_) + Vector((0, 0, -0.1)),                    # wrist straight, thumb up and away
+             palm=lambda sd, right: Vector((0, 0, 0.85)) - right * 0.45)
     a, b = P["usA"], P["usB"]
     twp.stand(a, (-0.25, -1.38, 0), -2.18); twp.stand(b, (0.28, -1.88, 0), -2.24)  # the two Americans beside him, watching
     a.rot("head", (1, 0, 0), 8); b.rot("head", (1, 0, 0), 6 + 4 * lift)

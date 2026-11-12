@@ -269,7 +269,7 @@ def bend_to(h, target, frac=0.8, max_deg=36, step=3.0):
     return done
 
 
-def work(h, targets, poles=None, hand_dir=None, head=10):
+def work(h, targets, poles=None, hand_dir=None, head=10, palm=None):
     """Both (or one) hands on something in front: lean in as needed, then IK each arm with the elbows down
     and slightly out. targets: {"L": vec, "R": vec}."""
     from human import SIDE
@@ -286,7 +286,8 @@ def work(h, targets, poles=None, hand_dir=None, head=10):
         if (t - sh).length > 0.92 * L:                   # never a locked, straight arm
             t = sh + (t - sh).normalized() * 0.92 * L
         pole = (poles or {}).get(sd) or (-side * sg * 0.35 + Vector((0, 0, -1)) - fwd * 0.2)
-        reach(h, sd, Vector(t), pole, hand_dir if hand_dir is not None else fwd + Vector((0, 0, -0.6)))
+        reach(h, sd, Vector(t), pole, hand_dir if hand_dir is not None else fwd + Vector((0, 0, -0.6)),
+              palm=(palm(sd, side) if callable(palm) else palm))
     fingers_curl(h, 30)
     if head:
         h.rot("head", side, head)
@@ -313,3 +314,38 @@ def window_plate(center, size, axis="x", top=(0.5, 0.55, 0.6), bottom=(0.26, 0.2
     o = box(name, center, dims, m)
     o.visible_shadow = False; o.visible_diffuse = False
     return o
+
+
+def roll_palm(h, side, palm_dir):
+    """Roll the hand about the wrist bone so the palm faces palm_dir (world). aim() sets only the wrist's direction,
+    so without this a reached hand can end up rolled 180 deg (thumb on the wrong side, inside-out). Measured on the
+    MakeHuman rig: the palm normal is the wrist bone's local -X (left) / +X (right)."""
+    import math as _m
+    pb = h.arm.pose.bones[f"wrist.{side}"]; bpy.context.view_layer.update()
+    M = (h.arm.matrix_world @ pb.matrix).to_3x3()
+    y = M.col[1].normalized(); ax = M.col[0] * (-1.0 if side == "L" else 1.0)
+    p = Vector(palm_dir); p = p - y * p.dot(y)
+    a = ax - y * ax.dot(y)
+    if p.length < 1e-4 or a.length < 1e-4:
+        return
+    p.normalize(); a.normalize()
+    ang = _m.atan2(a.cross(p).dot(y), a.dot(p))
+    h.rot(f"wrist.{side}", y, _m.degrees(ang))
+
+
+# every reach in the film ends with the palm rolled the right way up (palm down and a little inward on whatever the
+# hand rests on, unless a gesture asks for another palm): patch human.reach once, here
+import human as _hm
+_reach_raw = getattr(_hm, "_reach_raw", _hm.reach)
+_hm._reach_raw = _reach_raw
+
+
+def _reach_rolled(h, side, wrist_target, pole, hand_dir=None, palm=None):
+    _reach_raw(h, side, wrist_target, pole, hand_dir)
+    fw = forward(h); right = fw.cross(Vector((0, 0, 1))).normalized()
+    inward = right * (-1.0 if side == "R" else 1.0)
+    roll_palm(h, side, palm if palm is not None else Vector((0, 0, -1)) + inward * 0.35)
+
+
+_hm.reach = _reach_rolled
+reach = _reach_rolled
