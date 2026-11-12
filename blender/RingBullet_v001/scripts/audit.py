@@ -67,13 +67,16 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             if d > 0.003: flag("dressing_gap", f, "%s %.4f" % (nm, d))
     # camera inside geometry: nearest-surface distance and an odd-hit ray test against static meshes
     cp = cam.matrix_world.translation
-    for n, t in SB.items():
-        hits = 0; p = cp.copy()
-        for _ in range(6):
-            h = t.ray_cast(p, Vector((0.01, 0.02, 1)).normalized())
+    def parity(t, d):
+        hits = 0; p = cp.copy(); d = d.normalized()
+        for _ in range(8):
+            h = t.ray_cast(p, d)
             if h[0] is None: break
-            hits += 1; p = h[0] + Vector((0, 0, 1e-4))
-        if hits % 2 == 1 and not n.startswith(("Floor", "Ceiling", "Street", "Yard", "Sidewalk", "Night", "Facade")):
+            hits += 1; p = h[0] + d * 1e-4
+        return hits % 2
+    for n, t in SB.items():
+        # inside only if two independent ray directions both see an odd number of crossings (a grazing ray on a bevel can't fake it)
+        if parity(t, Vector((0.01, 0.02, 1))) and parity(t, Vector((0.7, -0.3, 0.2))) and not n.startswith(("Floor", "Ceiling", "Street", "Yard", "Sidewalk", "Night", "Facade")):
             flag("cam_inside", f, n)
     nb = bb.find_nearest(cp)
     if nb[3] is not None and nb[3] < 0.004: flag("cam_in_body", f, "%.4f" % nb[3])

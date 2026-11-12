@@ -1,29 +1,29 @@
 {
  "frames": {
-  "1009": {
-   "Owner": {
-    "self": 1,
-    "clothes": 0,
-    "other": 0
-   }
-  },
   "1015": {
    "Owner": {
-    "self": 3,
+    "self": 4,
     "clothes": 0,
     "other": 0
    }
   },
   "1021": {
    "Owner": {
-    "self": 5,
+    "self": 6,
     "clothes": 0,
     "other": 0
    }
   },
   "1027": {
    "Owner": {
-    "self": 3,
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1033": {
+   "Owner": {
+    "self": 2,
     "clothes": 0,
     "other": 0
    }

@@ -282,7 +282,7 @@ def ride(f):
     b = bpos(f); off = (up * math.cos(ang) + sd * math.sin(ang)) * rad - DIR * back
     tgt = b + (face(f) - b).normalized() * 0.012 + up * 0.006
     tgt = tgt.lerp(face(f), 0.85 * smooth((u - 0.6) / 0.4))   # v006: swing to his face for the peel-off (no blank wall frame)
-    return b + off, tgt, b
+    return b + off, tgt, b.lerp(face(f), smooth((u - 0.55) / 0.45))   # v006b: focus follows the aim to his face (no fully soft frames)
 LOCKS = [  # (f0, f1, ramp, offset fn(f)->(loc, target, focus))
     (F(1.25), F(2.95), 14, lambda f: ride(f)),
     (F(6.4), F(7.4), 14, lambda f: (bpos(f) - DIR * 0.07 + Vector((0.006 + 0.03 * (f - F(6.6)) / 48, 0.0, 0.012)), bpos(f).lerp(ringp(f), 0.25 + 0.4 * smooth((f - F(6.6)) / 48)), bpos(f).lerp(ringp(f), smooth((f - F(6.8)) / 40)))),

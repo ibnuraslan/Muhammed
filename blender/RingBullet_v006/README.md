@@ -25,6 +25,15 @@ The full list of problems and fixes is in `../RingBullet_v001/review/ACTING_note
    - the 15 s framing is lowered (no head-top fill)
    - the 18.5–19.5 s orbit is wider (no blurred-hand fill, and his face reads)
 
+**Round 2** (director review of 40b7da8):
+- shield hand about 16 cm in front of the face with the fingers together
+- relaxed hands, the wince hand resting on his chest
+- neck-cup contact
+- focus follows to his face at 2.5–3 s
+- re-aimed close-ups
+
+Details are in `ACTING_notes.md`.
+
 Checks:
 - `pipeline/clip_scan.py`: **0 bad ranges**
 - hand audit (every 2 frames): **0**
