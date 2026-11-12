@@ -116,6 +116,7 @@ def _():
             shade = cyl("LampShade", (-8.9, y - 0.45, G + 1.0), 0.17, 0.24, H.mat("shade"), 32)
             cyl("LampBase", (-8.9, y - 0.45, G + 0.72), 0.05, 0.32, H.mat("chrome"), 16)
             H.point((-8.9, y - 0.45, G + 0.98), 25, (1.0, 0.68, 0.38), 0.05)
+            H.point((-7.6, y - 1.2, G + 1.3), 6, (1.0, 0.68, 0.38), 0.15)
             radio = join([box("RadioCab", (0, 0, 0.5), (0.7, 0.4, 1.0), H.mat("oak"), bevel=0.03),
                           box("RadioGrille", (0, -0.201, 0.62), (0.5, 0.005, 0.4), fabric("RGrille", (0.55, 0.45, 0.32), 0.9, 0.2, 800)),
                           box("RadioDial", (0, -0.201, 0.9), (0.3, 0.005, 0.07), pbr("RDial", (0.8, 0.7, 0.45), 0.3))], "RadioCabinet")
@@ -137,7 +138,7 @@ def _():
         H.look(h, 6, -4)
     def cam(c, t):
         e = ease(t); y = ROAD_Y - 8.0
-        return (Vector((-8.2, y - 3.6, G + 1.6)).lerp(Vector((-7.9, y - 3.2, G + 1.6)), e), Vector((-5.0, -D2, 2.0)), 28)
+        return (Vector((-6.95, y - 1.65, G + 1.72)).lerp(Vector((-6.9, y - 1.45, G + 1.7)), e), Vector((-2.0, -D2, 1.6)), 32)
     return cam, anim
 
 
