@@ -71,3 +71,5 @@ No CLAW, FACEPRESS, INSIDE or EMPTY flags.
 - The neck palm was nudged out with a mid key at f1012. `clip_scan` reports 0 bad ranges.
 - `qa_check` on the package: only BACKHEAD Robber at f1 and FILL during the bullet ride (about f67–73), both intended (see the table above). The HOVER flags are gone with the updated script.
 - Hand audit: 1 frame (f1271). A single triangle pair touches as the walk begins: a fingertip of the far-side hand brushing the jacket hem. It isn't visible and is under the 2 cm clip_scan threshold.
+- Final fix before submitting: the right hand now comes off the neck straight down to his side (keys f1078 and f1092, fingers leading out and down). It no longer rises toward his mouth under the library's ±25° wrist limit. `clip_scan`: 0.
+- After sheet: cells 33–39 (16.5–19.5 s) were re-rendered from the final build. The other cells are unchanged by the final key edits.
