@@ -2,7 +2,7 @@
 
 The client reviewed the films and rejected the acting: **"most of these are nonsense... very weird actions, not real actions. Everything has a problem."** Clipping-free is not enough. Every beat must look like what a real person physically does.
 
-Films 01–03 are already rendering. **Do not touch 01, 02 or 03.**
+**Update 18:40 UTC:** the client stopped the 01–03 renders because of mistakes. Films **01 EarInArm, 02 MonkeyHeadTransplant and 03 LegoInNose now get the same full acting fix**, following every rule in this brief.
 
 ## What each chat does (04–10)
 1. **Review every beat yourself.**
