@@ -241,7 +241,7 @@ def build(variant=None):
             p_ = Vector((-BW / 2 + (col + 0.5) * BW / COLS, 1.2, fl_ * FH + FH / 2))
             l = area_light(p_.to_tuple(), (math.radians(90), 0, 0), 1.6, 60, (1.0, 0.78, 0.5)); l.visible_camera = False
         l = area_light((LIT.x, 1.3, LIT.z + 0.6), (math.radians(110), 0, 0), 1.2, 90, (1.0, 0.8, 0.55)); l.visible_camera = False
-        ty = twp.person("NightTypist", 0.0, 40, "female_casualsuit01", "ponytail01", hv=0.3, cval=0.55, hue=0.55, sat=0.2)
+        ty = twp.person("NightTypist", 0.0, 40, "female_elegantsuit01", "ponytail01", hv=0.3, cval=0.55, hue=0.55, sat=0.2)
         twp.seat(ty, (LIT.x + 0.2, 1.15, LIT.z - FH / 2), math.pi / 2, lean=14)
         twp.ground(ty, LIT.z - FH / 2 + 0.02)
         c["night_typist"] = ty
@@ -258,8 +258,8 @@ def build(variant=None):
             cyl("Bar", (x, -1.6, 0.9), 0.012, 1.8, rail, verts=6)
         box("RailTop", (sx * 6.9, -1.6, 1.8), (8.8, 0.05, 0.05), rail)
     peds = []
-    for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PedA", 0.0, 55, "female_casualsuit01", "bob01", 0.55, 0.08), ("PedB", 1.0, 40, "male_worksuit01", "short04", 0.45, 0.6),
-                                                      ("PedC", 1.0, 62, "male_casualsuit04", "short02", 0.5, 0.1), ("PedD", 0.0, 30, "female_casualsuit01", "long01", 0.6, 0.55))):
+    for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PedA", 0.0, 55, "female_elegantsuit01", "bob01", 0.55, 0.08), ("PedB", 1.0, 40, "male_worksuit01", "short04", 0.45, 0.6),
+                                                      ("PedC", 1.0, 62, "male_casualsuit04", "short02", 0.5, 0.1), ("PedD", 0.0, 30, "female_elegantsuit01", "long01", 0.6, 0.55))):
         peds.append(dict(h=twp.person(nm, g, yrs, cl, hr, hv=0.35, cval=cv, hue=hu, sat=0.25), x0=-34 + k * 9.0, y=-2.6 - 3.2 * (k % 2), d=1 if k % 2 else -1, v=1.1 + 0.1 * k))
     c["peds"] = peds
     militia = twp.person("Militia", 1.0, 30, "male_worksuit01", "short01", hv=0.25, cval=0.4, hue=0.3, sat=0.3)

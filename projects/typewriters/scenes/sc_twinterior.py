@@ -152,7 +152,7 @@ def build(variant=None):
     # people
     P = {}
     P["counter"] = twp.person("Counter", 1.0, 44, "male_casualsuit01", "short02", hv=0.35, cval=0.5, hue=0.1, sat=0.2)
-    P["clerk"] = twp.person("Clerk2", 0.0, 29, "female_casualsuit01", "long01", hv=0.3, cval=0.55, hue=0.55, sat=0.25)
+    P["clerk"] = twp.person("Clerk2", 0.0, 29, "female_elegantsuit01", "long01", hv=0.3, cval=0.55, hue=0.55, sat=0.25)
     P["staffA"] = twp.person("StaffA", 0.0, 48, "female_elegantsuit01", "bob01", hv=0.5, cval=0.55, hue=0.08, sat=0.25)
     P["staffB"] = twp.person("StaffB", 1.0, 36, "male_casualsuit03", "short03", hv=0.25, cval=0.5, hue=0.58, sat=0.2)
     P["workA"] = twp.person("WorkA", 1.0, 31, "male_worksuit01", "short01", hv=0.25, cval=0.5, hue=0.58, sat=0.15)

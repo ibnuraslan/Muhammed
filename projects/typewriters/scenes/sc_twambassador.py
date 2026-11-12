@@ -198,7 +198,7 @@ def build(variant=None):
         pg.data.materials.append(tex_mat("ReadPageM", paper_tex.page(77), 0.8)); c["page"] = pg
         specs = [("SovA", 1.0, 56, "male_elegantsuit01", "short04", 0.45, 0.6), ("SovB", 1.0, 47, "male_casualsuit02", "short02", 0.5, 0.08),
                  ("SovC", 0.0, 44, "female_elegantsuit01", "bob01", 0.55, 0.6), ("UsA", 1.0, 52, "male_casualsuit04", "short03", 0.55, 0.1),
-                 ("UsB", 1.0, 39, "male_elegantsuit01", "short01", 0.5, 0.58), ("UsC", 0.0, 35, "female_casualsuit01", "long01", 0.6, 0.55)]
+                 ("UsB", 1.0, 39, "male_elegantsuit01", "short01", 0.5, 0.58), ("UsC", 0.0, 35, "female_elegantsuit01", "long01", 0.6, 0.55)]
         c["dele"] = [twp.person(nm, g, yrs, cl, hr, hv=0.35 if g < 0.5 else 0.5, cval=cv, hue=hu, sat=0.2) for nm, g, yrs, cl, hr, cv, hu in specs]
         for o in [c["note"], c["env"]] + twp.person_objs(cou) + twp.person_objs(amb):
             o.hide_render = True

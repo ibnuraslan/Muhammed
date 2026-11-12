@@ -221,9 +221,9 @@ def build(variant=None):
             cyl("MainsLead", (PAIR.x + 1.6, PAIR.y - 0.2 + dx, PAIR.z + 0.01), 0.003, 0.2, pbr("LeadB", (0.03, 0.03, 0.03), 0.5), verts=6, rot=(0, math.radians(90), 0))
     # ---------------------------------------------------------------- people
     P = {}
-    specs = [("TechA", 1.0, 34, "male_casualsuit02", "short03", 0.6, 0.55), ("TechB", 0.0, 29, "female_casualsuit01", "ponytail01", 0.6, 0.1),
+    specs = [("TechA", 1.0, 34, "male_casualsuit02", "short03", 0.6, 0.55), ("TechB", 0.0, 29, "female_elegantsuit01", "ponytail01", 0.6, 0.1),
              ("TechC", 1.0, 47, "male_worksuit01", "short04", 0.5, 0.58), ("TechD", 1.0, 38, "male_casualsuit04", "short01", 0.55, 0.08),
-             ("TechE", 0.0, 41, "female_casualsuit01", "bob01", 0.6, 0.6), ("Arneson", 1.0, 36, "male_casualsuit03", "short02", 0.55, 0.35)]
+             ("TechE", 0.0, 41, "female_elegantsuit01", "bob01", 0.6, 0.6), ("Arneson", 1.0, 36, "male_casualsuit03", "short02", 0.55, 0.35)]
     for nm, g, yrs, cl, hr, cv, hu in specs:
         P[nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.25)
     c["P"] = P

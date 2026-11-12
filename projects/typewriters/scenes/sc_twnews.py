@@ -97,7 +97,7 @@ def build(variant=None):
     P = {}
     P["anchor"] = twp.person("Anchor", 1.0, 50, "male_elegantsuit01", "short02", hv=0.55, cval=0.5, hue=0.6, sat=0.2)
     P["op"] = twp.person("CamOp", 1.0, 30, "male_casualsuit02", "short03", hv=0.25, cval=0.55, hue=0.1, sat=0.2)
-    P["writer"] = twp.person("Writer", 0.0, 34, "female_casualsuit01", "long01", hv=0.3, cval=0.6, hue=0.55, sat=0.25)
+    P["writer"] = twp.person("Writer", 0.0, 34, "female_elegantsuit01", "long01", hv=0.3, cval=0.6, hue=0.55, sat=0.25)
     c["P"] = P
     animate(c, 0.0, "roll")
     return c

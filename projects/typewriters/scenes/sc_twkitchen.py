@@ -134,18 +134,18 @@ def build(variant="home"):
         tvl = area_light((-1.8, 0.3, 1.15), (0, math.radians(90), 0), 0.35, 8, (0.6, 0.7, 0.9)); tvl.visible_camera = False
         d2 = tvl.data.driver_add("energy").driver; d2.type = 'SCRIPTED'; d2.expression = "8 + 2 * sin(frame * 0.7) - (6 if 60 < frame < 66 else 0)"
         P["dad"] = twp.person("Dad", 1.0, 45, "male_casualsuit05", "short04", hv=0.4, cval=0.5, hue=0.1, sat=0.2)
-        P["mum"] = twp.person("Mum", 0.0, 42, "female_casualsuit01", "bob02", hv=0.35, cval=0.6, hue=0.0, sat=0.3)
+        P["mum"] = twp.person("Mum", 0.0, 42, "female_elegantsuit01", "bob02", hv=0.35, cval=0.6, hue=0.0, sat=0.3)
         P["kid"] = twp.person("Kid", 1.0, 13, "male_casualsuit02", "short01", hv=0.3, cval=0.55, hue=0.6, sat=0.3, height=0.2)
         c["P"] = P
         animate(c, 0.0, "family")
         return c
     if home:
         P["man"] = twp.person("Husband", 1.0, 40, "male_casualsuit02", "short02", hv=0.3, cval=0.55, hue=0.55, sat=0.2)
-        P["wife"] = twp.person("Wife", 0.0, 38, "female_casualsuit01", "long01", hv=0.3, cval=0.6, hue=0.08, sat=0.3)
+        P["wife"] = twp.person("Wife", 0.0, 38, "female_elegantsuit01", "long01", hv=0.3, cval=0.6, hue=0.08, sat=0.3)
     else:
         P["defector"] = twp.person("Defector", 1.0, 50, "male_casualsuit04", "short04", hv=0.55, cval=0.45, hue=0.1, sat=0.2)
         P["offA"] = twp.person("OfficerA", 1.0, 42, "male_elegantsuit01", "short03", hv=0.25, cval=0.45, hue=0.6, sat=0.15)
-        P["offB"] = twp.person("OfficerB", 0.0, 36, "female_casualsuit01", "bob01", hv=0.3, cval=0.55, hue=0.55, sat=0.25)
+        P["offB"] = twp.person("OfficerB", 0.0, 36, "female_elegantsuit01", "bob01", hv=0.3, cval=0.55, hue=0.55, sat=0.25)
     c["P"] = P
     animate(c, 0.0, "silent" if home else "talk")
     return c

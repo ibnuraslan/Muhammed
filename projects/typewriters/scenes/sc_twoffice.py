@@ -217,7 +217,7 @@ def build(variant=None):
         c["people"]["an"] = an
     if variant == "records":
         c["people"]["agent"] = twp.person("Agent", 1.0, 44, "male_elegantsuit01", "short03", hv=0.3, cval=0.5, hue=0.6, sat=0.15)
-        c["people"]["clerkR"] = twp.person("ClerkR", 0.0, 50, "female_casualsuit01", "bob01", hv=0.55, cval=0.6, hue=0.1, sat=0.2)
+        c["people"]["clerkR"] = twp.person("ClerkR", 0.0, 50, "female_elegantsuit01", "bob01", hv=0.55, cval=0.6, hue=0.1, sat=0.2)
         bag_m = pbr("BurnBag", (0.62, 0.52, 0.38), 0.85)
         bag = join([cyl("Bag", (0, 0, 0.35), 0.24, 0.7, bag_m, verts=24)] +
                    [box("BagStripe", (0, 0, 0.2 + k * 0.18), (0.49, 0.49, 0.03), pbr("BagRed", (0.45, 0.06, 0.05), 0.8)) for k in range(3)], "BurnBagObj")
@@ -242,13 +242,13 @@ def build(variant=None):
         c["people"]["off"] = off
         for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PlanA", 1.0, 45, "male_casualsuit02", "short03", 0.55, 0.1),
                                                           ("PlanB", 1.0, 38, "male_casualsuit04", "short01", 0.5, 0.6),
-                                                          ("PlanC", 0.0, 41, "female_casualsuit01", "bob01", 0.55, 0.08))):
+                                                          ("PlanC", 0.0, 41, "female_elegantsuit01", "bob01", 0.55, 0.08))):
             c["people"][nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.2)
     if variant in (None, "day"):
         sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "ponytail01", hv=0.22, cval=0.55, hue=0.58, sat=0.3)
         twp.seat(sec, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=12)
         c["people"]["sec"] = sec
-        sec2 = twp.person("Secretary2", 0.0, 45, "female_casualsuit01", "bob01", hv=0.4, cval=0.6, hue=0.1, sat=0.25)
+        sec2 = twp.person("Secretary2", 0.0, 45, "female_elegantsuit01", "bob01", hv=0.4, cval=0.6, hue=0.1, sat=0.25)
         twp.seat(sec2, (-1.65, 1.06, 0), 0.0, lean=12)
         c["people"]["sec2"] = sec2
         clerk = twp.person("Clerk", 1.0, 40, "male_casualsuit03", "short02", hv=0.25, cval=0.5, hue=0.6, sat=0.2)

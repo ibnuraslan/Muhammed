@@ -97,9 +97,9 @@ def build(variant=None):
     fk, fw = sc_twhangar.forklift("PlantFork"); fk.location = (16.6, 1.6, 0); fk.rotation_euler = (0, 0, math.pi); c["fork"] = fk
     # people
     P = {}
-    P["fitter"] = twp.person("Fitter", 0.0, 42, "female_casualsuit01", "bob02", hv=0.35, cval=0.6, hue=0.55, sat=0.25)
+    P["fitter"] = twp.person("Fitter", 0.0, 42, "female_elegantsuit01", "bob02", hv=0.35, cval=0.6, hue=0.55, sat=0.25)
     P["fitter2"] = twp.person("Fitter2", 1.0, 30, "male_worksuit01", "short01", hv=0.25, cval=0.55, hue=0.58, sat=0.2)
-    P["fitter3"] = twp.person("Fitter3", 0.0, 55, "female_casualsuit01", "ponytail01", hv=0.55, cval=0.55, hue=0.08, sat=0.25)
+    P["fitter3"] = twp.person("Fitter3", 0.0, 55, "female_elegantsuit01", "ponytail01", hv=0.55, cval=0.55, hue=0.08, sat=0.25)
     P["stacker"] = twp.person("Stacker", 1.0, 36, "male_worksuit01", "short03", hv=0.25, cval=0.5, hue=0.1, sat=0.2)
     c["P"] = P
     animate(c, 0.0, "line")
