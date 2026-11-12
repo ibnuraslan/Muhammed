@@ -18,7 +18,9 @@ while True:
     if f > sc.frame_end or i * STEP > T1 + 1e-6: break
     t = (f - 1) / fps
     lc.exclude = (16.6 < t < 64.0) or (69.6 < t)
-    sc.cycles.samples = 32 if t > 71.8 else 8          # the procedural eyes need samples, else they render black
+    face = t > 71.8
+    sc.cycles.samples = 32 if face else 8
+    sc.cycles.max_bounces, sc.cycles.glossy_bounces, sc.cycles.transmission_bounces = (12, 4, 12) if face else (4, 4, 4)   # procedural eyes need the farm depth
     sc.frame_set(f); sc.render.filepath = os.path.join(OUT, "s%04d.jpg" % i)
     bpy.ops.render.render(write_still=True); i += 1
 print("STILLS", i, OUT)
