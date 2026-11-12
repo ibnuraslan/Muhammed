@@ -64,7 +64,8 @@ def emit_mat(name, color, strength):
     bs.inputs["Base Color"].default_value = color + (1,)
     return m
 
-M_CONC = tex_mat("Painted_Wall", "concrete_wall_008", 0.6, tint=(1.0, 0.97, 0.9), bump=0.15)
+M_CONC = tex_mat("Painted_Wall", "concrete_wall_008", 0.6, tint=(0.95, 0.96, 0.97), bump=0.15)
+M_CONC_HALL = None
 M_CONC_DIRTY = tex_mat("Painted_Wall_Cell", "concrete_wall_008", 0.9, tint=(0.82, 0.9, 0.98), bump=0.15)
 M_FLOOR = tex_mat("Concrete_Floor", "concrete_floor_02", 0.5, tint=(0.85, 0.88, 0.9), bump=0.2, rough_mul=0.8)
 M_RUST = bpy.data.materials.new("Painted_Steel_Bars"); M_RUST.use_nodes = True
@@ -74,7 +75,14 @@ M_STEEL = bpy.data.materials.new("Painted_Steel"); M_STEEL.use_nodes = True
 _ps = M_STEEL.node_tree.nodes["Principled BSDF"]; _ps.inputs["Base Color"].default_value = (0.32, 0.42, 0.5, 1)
 _ps.inputs["Metallic"].default_value = 0.5; _ps.inputs["Roughness"].default_value = 0.4
 M_GROUND = tex_mat("Yard_Ground", "dry_ground_rocks", 0.35, bump=1.0)
-M_BRICK = tex_mat("Plaster_Cream", "concrete_wall_008", 1.6, tint=(1.0, 0.9, 0.72), bump=0.1)
+def plaster(name, col):
+    m = bpy.data.materials.new(name); m.use_nodes = True; N, L = m.node_tree.nodes, m.node_tree.links
+    bs = N["Principled BSDF"]; nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 18; nz.inputs["Detail"].default_value = 6
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = tuple(c * 0.93 for c in col) + (1,); cr.color_ramp.elements[1].color = col + (1,)
+    L.new(nz.outputs["Fac"], cr.inputs["Fac"]); L.new(cr.outputs["Color"], bs.inputs["Base Color"])
+    bp = N.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.05; L.new(nz.outputs["Fac"], bp.inputs["Height"]); L.new(bp.outputs["Normal"], bs.inputs["Normal"])
+    bs.inputs["Roughness"].default_value = 0.6; return m
+M_BRICK = plaster("Plaster_Cream", (0.86, 0.8, 0.68))
 M_BRICK_OUT = tex_mat("Brick_Outer", "brick_wall_001", 0.5, tint=(1.0, 0.95, 0.9), bump=0.3)
 M_WOOD = tex_mat("Wood", "wood_table_001", 1.0, bump=0.3)
 M_WOOD_DARK = tex_mat("Wood_Floor", "wood_table_001", 1.4, tint=(1.0, 0.92, 0.8), bump=0.15)
@@ -308,11 +316,14 @@ for i in range(1400):
     o.scale = (1, 1, random.uniform(0.6, 2.2)); col("YARD").objects.link(o); blades.append(o)
 grass = join(blades, "FieldGrass")
 bpy.data.objects.remove(tuft)
+# readable blue moonlight over the yard (night exteriors)
+bpy.ops.object.light_add(type="SUN", location=(0, -15, 10)); _mo = bpy.context.object; _mo.name = "YardMoon"
+_mo.data.energy = 1.4; _mo.data.color = (0.5, 0.66, 1.0); _mo.data.angle = R_(3); _mo.rotation_euler = (R_(50), 0, R_(200)); link(_mo, "LIGHTS")
 # sky / night HDRI
 w = bpy.data.worlds.new("Night"); sc.world = w; w.use_nodes = True
 en = w.node_tree.nodes.new("ShaderNodeTexEnvironment")
 en.image = bpy.data.images.load(os.path.join(PH, "hdri", "moonless_golf_1k.hdr"))
-bg = w.node_tree.nodes["Background"]; bg.inputs["Strength"].default_value = 1.6
+bg = w.node_tree.nodes["Background"]; bg.inputs["Strength"].default_value = 2.6
 _mxw = w.node_tree.nodes.new("ShaderNodeMix"); _mxw.data_type = "RGBA"; _mxw.blend_type = "MULTIPLY"; _mxw.inputs["Factor"].default_value = 1.0
 _mxw.inputs[7].default_value = (0.55, 0.75, 1.0, 1)
 w.node_tree.links.new(en.outputs["Color"], _mxw.inputs[6]); w.node_tree.links.new(_mxw.outputs[2], bg.inputs["Color"])
