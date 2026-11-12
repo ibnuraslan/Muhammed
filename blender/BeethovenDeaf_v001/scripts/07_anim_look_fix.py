@@ -54,4 +54,24 @@ for mat in bpy.data.materials:
             if n.type in ('NORMAL_MAP', 'BUMP'): n.inputs['Strength'].default_value *= 0.5
 # 5. anatomy colour coding: cream bone, colour-coded clean parts
 P = next(n for n in bpy.data.materials["M_EardrumTorn"].node_tree.nodes if n.type == 'BSDF_PRINCIPLED'); P.inputs['Roughness'].default_value = 0.45
+# 6. eyes: MPFB's procedural eye group renders black with this light-path setup -> clean animated eye shader
+#    (sclera / brown iris / pupil from a baked 'faces forward' attribute on the rest-pose eyeballs; glossy coat for life)
+eye = bpy.data.objects["Composer.high-poly"]; me = eye.data
+cent = {}
+for side in (1, -1):
+    vs = [v.co for v in me.vertices if v.co.x * side > 0]; cent[side] = sum(vs, Vector()) / len(vs)
+at = me.attributes.get("EyeFront") or me.attributes.new("EyeFront", 'FLOAT', 'POINT')
+for v in me.vertices:
+    c = cent[1 if v.co.x > 0 else -1]; at.data[v.index].value = (v.co - c).normalized().dot(Vector((0, -1, 0)))
+em = me.materials[0]; nt = em.node_tree; outn = next(n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL')
+mix = outn.inputs['Surface'].links[0].from_node      # x-ray ghost mix: replace its 'opaque' input
+an = nt.nodes.new('ShaderNodeAttribute'); an.attribute_name = "EyeFront"
+cr = nt.nodes.new('ShaderNodeValToRGB'); e = cr.color_ramp.elements
+e[0].position = 0.80; e[0].color = (0.80, 0.77, 0.72, 1); e[1].position = 0.975; e[1].color = (0.01, 0.008, 0.006, 1)
+e.new(0.83).color = (0.26, 0.14, 0.06, 1); e.new(0.955).color = (0.12, 0.06, 0.025, 1)
+nt.links.new(an.outputs['Fac'], cr.inputs['Fac'])
+pb = nt.nodes.new('ShaderNodeBsdfPrincipled'); pb.inputs['Roughness'].default_value = 0.35; pb.inputs['Coat Weight'].default_value = 1.0; pb.inputs['Coat Roughness'].default_value = 0.03
+nt.links.new(cr.outputs['Color'], pb.inputs['Base Color'])
+nt.links.new(pb.outputs[0], mix.inputs[1])
+eye.visible_shadow = False
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True); print("LOOKFIX_DONE")

@@ -24,3 +24,25 @@ Frames are v007 timeline frames (frame = 1 + 60 × t). All story-beat start fram
   - 3.9 s profile at the keys.
   - 18.4–20.1 s eyes close in bliss.
   - Beats 4–7 are inside the head by design: the x-ray dive.
+
+## Round 2: director review of v009 (0ead4ad), all eight items fixed
+| # | Director note | Fix |
+|---|---|---|
+| 1 | 0.0 s opened on a half-face crop of the nose and open mouth | Opens at eye height on a front-3/4 of the face: both eyes, the mouth opening for the rod, the rod in frame, and the bookcase behind him. |
+| 2 | 1.5–2.5 s hair filled the top of the frame (camera close and above him) | The camera pulled back and dropped to eye level for the profile and pull-back. |
+| 3 | 5.0 s hair blob on the right edge | The keys/rod framing is lower and farther left, clear of his head. |
+| 4 | 7.0 s camera clips his hair; 8.0–9.0 s forehead and hair | The rod-ride end is lower, beside the rod. 8.0–9.0 s is a front-3/4 at eye height on the eyes, teeth and rod. |
+| 5 | 19.5–20.5 s beat 8 opened on the top of his head | Face-height framings: front-3/4 at 20 s, then 3/4 from his left side, eyes visible (closed in bliss). |
+| 6 | 21–23.5 s camera high over his head, and the lid filled the frame | A low orbit at his left side at body height (21–22.5 s), then the crane up to the overhead from 23 s. He stays readable, and the lid never fills the frame. |
+| 7 | **Body acting:** hunched, head hanging over the keys | His spine is now **natural, leaning in** (spine flex 15° instead of 25°, root 5° instead of 8°), and his **head is up** (pitched −14° instead of −3°) so the eyes look forward. **Shoulders work** with the phrasing (clavicles rise and roll, L/R out of phase), and the sway is larger (±5° yaw, ±3 cm). The rod still follows his teeth (0 mm). |
+| 8 | Hand close-ups showed a sleeve or knee; flat fingers | **Pianist hands:** the fingers curve (42–55° curl at the strike, 30–40° lifted, chords 44–52°) with the wrist level, and the fingertips strike. The close-up camera is now aimed at each hand's own knuckles from outside the hand (`v009_hand_closeups.jpg`). |
+| + | Found while checking: **the eyes rendered as black holes** in frontal views (MPFB's procedural eye group goes black with this light-path setup) | A clean animated eye shader: sclera, brown iris and pupil from a baked forward-facing attribute on the eyeballs, with a glossy coat. |
+
+**Re-checked:**
+- Beat frames are unchanged.
+- `clip_scan.py`: BAD_RANGES [] (`v009_clip_scan.json`).
+- Hand audit: 0 overlaps and 0 joint violations.
+- Strikes: 256 on keys that go down; worst 9 mm, 0 dips over 8 mm.
+- Rod: 0 mm from the teeth.
+- Seat: +0–5 mm on the cushion.
+- Camera: never inside geometry.

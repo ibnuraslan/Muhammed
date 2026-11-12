@@ -62,12 +62,17 @@ for f in range(1, END + 1, step):
     sway = math.sin(t * 2 * math.pi * 0.31 + 0.7) * I
     pump = math.sin(t * 2 * math.pi * 1.6) * I
     side = 3.5 * sway
-    H.key_root(f, ROOT_P + Vector((0.025 * sway, 0.012 * rock, 0)), yaw=180 + 4 * sway, flex=8 + 3 * rock, side=side)
+    H.key_root(f, ROOT_P + Vector((0.03 * sway, 0.015 * rock, 0)), yaw=180 + 5 * sway, flex=5 + 3 * rock, side=side)
     if f < 32:   # hook: head back, jaw open, then lunges forward onto the rod
-        u = smooth((f - 1) / 30.0); flex = 16 + 10 * u; hp = -12 + 10 * u
+        u = smooth((f - 1) / 30.0); flex = 9 + 6 * u; hp = -20 + 6 * u
     else:
-        flex = 25 + 3 * rock + 1.2 * pump; hp = -3 - 2 * rock
+        flex = 15 + 3 * rock + 1.5 * pump; hp = -14 - 3 * rock   # leaning in to the rod with a natural curve, head up, eyes forward
     H.key_spine(f, flex=flex, twist=-6 * sway, side=-side * 0.8, head=(hp, 2 * sway))
+for f in range(1, END + 1, 4):   # shoulders rise and roll with the phrasing (opposite phase L/R)
+    I = intensity(f); t = f / FPS
+    for s in "LR":
+        ph = 0 if s == "L" else math.pi
+        CR.key_rot("clavicle." + s, f, [("X", 3.5 * I * math.sin(t * 2 * math.pi * 0.9 + ph)), ("Y", (1 if s == "L" else -1) * 2.5 * I * math.sin(t * 2 * math.pi * 0.45 + ph))])
 for s in "LR":
     sx = 1 if s == "L" else -1
     for f in (1, END):
@@ -82,8 +87,8 @@ SH = {s: CR.BN["upperarm01." + s].head_local.copy() for s in "LR"}
 DOWN = []   # (side, frame, x) frames where fingertips touch the keys
 def hand_pose(s, f, x, lift, yaw=0.0, wrist_up=0.0):
     sx = 1 if s == "L" else -1
-    W = Vector((x, KEY_Y - 0.172, key_z(x) + 0.055 + lift))   # fingertips on the front of the white keys, clear of the black keys
-    d = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((-0.12 * sx * 0, 1.0, -0.42 + wrist_up)).normalized()
+    W = Vector((x, KEY_Y - 0.15, key_z(x) + 0.07 + lift))   # fingertips on the front of the white keys, clear of the black keys
+    d = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((0.0, 1.0, -0.12 + wrist_up)).normalized()
     nrm = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((0.18 * sx, 0.0, -1.0))
     pole = W + Vector((-sx * 0.45, -0.35, -0.15))   # his left is world -X (rig yawed 180)
     H.key_hand(s, f, W, d, nrm, pole)
@@ -105,10 +110,10 @@ def phrase(s, f0, f1, centre_fn, every, lift, span=0.12, accent=None):
         x = min(x, -0.11) if s == "L" else max(x, 0.11)   # each hand keeps its own side: no hand-through-hand
         hit = f; up = f + every // 2
         hand_pose(s, hit, x, 0.0, yaw=RND.uniform(-6, 6)); DOWN.append((s, hit, x))
-        c = [RND.uniform(14, 32) for _ in range(4)]; fingers(s, hit, c, spread=4)
+        c = [RND.uniform(42, 55) for _ in range(4)]; fingers(s, hit, c, spread=3)
         L_ = lift * (accent(f) if accent else 1.0)
         hand_pose(s, up, x + RND.uniform(-0.03, 0.03), L_, yaw=RND.uniform(-6, 6), wrist_up=0.15 * L_ / max(lift, 1e-3))
-        fingers(s, up, [RND.uniform(4, 12) for _ in range(4)], spread=8)
+        fingers(s, up, [RND.uniform(30, 40) for _ in range(4)], spread=5)
         f += every; i += 1
 # beat 1: gentle, he is mid-piece as he bites
 phrase("L", 1, BEAT[1] - 6, lambda f: -0.28 + 0.04 * math.sin(f / 40), 18, 0.03)
@@ -116,10 +121,10 @@ phrase("R", 10, BEAT[1] - 6, lambda f: 0.16 + 0.06 * math.sin(f / 33), 14, 0.035
 # beat 2: wind up, both hands high, then CRASH, then sweep outward across the keys
 for s, x0 in (("L", -0.2), ("R", 0.12)):
     sx = 1 if s == "L" else -1
-    hand_pose(s, BEAT[1] - 2, x0, 0.05); fingers(s, BEAT[1] - 2, 20)
-    hand_pose(s, BEAT[1] + 10, x0 - sx * 0.02, 0.17, wrist_up=0.1); fingers(s, BEAT[1] + 10, 5, spread=14)
-    hand_pose(s, BEAT[1] + 17, x0 - sx * 0.03, 0.0); fingers(s, BEAT[1] + 17, [30, 34, 30, 26], spread=12); DOWN.append((s, BEAT[1] + 17, x0 - sx * 0.03))
-    hand_pose(s, BEAT[1] + 21, x0 - sx * 0.03, 0.0); DOWN.append((s, BEAT[1] + 21, x0 - sx * 0.03)); fingers(s, BEAT[1] + 21, [30, 34, 30, 26], spread=12)
+    hand_pose(s, BEAT[1] - 2, x0, 0.05); fingers(s, BEAT[1] - 2, 35)
+    hand_pose(s, BEAT[1] + 10, x0 - sx * 0.02, 0.17, wrist_up=0.1); fingers(s, BEAT[1] + 10, 25, spread=10)
+    hand_pose(s, BEAT[1] + 17, x0 - sx * 0.03, 0.0); fingers(s, BEAT[1] + 17, [48, 52, 48, 44], spread=12); DOWN.append((s, BEAT[1] + 17, x0 - sx * 0.03))
+    hand_pose(s, BEAT[1] + 21, x0 - sx * 0.03, 0.0); DOWN.append((s, BEAT[1] + 21, x0 - sx * 0.03)); fingers(s, BEAT[1] + 21, [48, 52, 48, 44], spread=12)
 phrase("L", BEAT[1] + 30, BEAT[2] + 10, lambda f: -0.23 - 0.30 * smooth((f - BEAT[1] - 30) / 60), 8, 0.09)
 phrase("R", BEAT[1] + 30, BEAT[2] + 10, lambda f: 0.15 + 0.32 * smooth((f - BEAT[1] - 30) / 60), 8, 0.09)
 # beats 3-7: steady, expressive playing (mostly seen from inside his head, but always moving)
@@ -129,9 +134,9 @@ phrase("R", BEAT[2] + 20, BEAT[7] - 4, lambda f: 0.18 + 0.14 * math.sin(f / 55 +
 phrase("L", BEAT[7], 1380, lambda f: -0.35 + 0.18 * math.sin((f - BEAT[7]) / 30), 10, 0.13, span=0.2)
 phrase("R", BEAT[7] + 4, 1380, lambda f: 0.25 + 0.2 * math.sin((f - BEAT[7]) / 26 + 2), 9, 0.13, span=0.2)
 for s, x0 in (("L", -0.3), ("R", 0.3)):   # arms fly up and slam a big chord
-    hand_pose(s, 1392, x0, 0.2, wrist_up=0.12); fingers(s, 1392, 5, spread=15)
-    hand_pose(s, 1402, x0 * 1.1, 0.0); fingers(s, 1402, [30, 34, 30, 26], spread=12); DOWN.append((s, 1402, x0 * 1.1))
-    hand_pose(s, 1406, x0 * 1.1, 0.0); fingers(s, 1406, [30, 34, 30, 26], spread=12); DOWN.append((s, 1406, x0 * 1.1))
+    hand_pose(s, 1392, x0, 0.2, wrist_up=0.12); fingers(s, 1392, 25, spread=10)
+    hand_pose(s, 1402, x0 * 1.1, 0.0); fingers(s, 1402, [48, 52, 48, 44], spread=12); DOWN.append((s, 1402, x0 * 1.1))
+    hand_pose(s, 1406, x0 * 1.1, 0.0); fingers(s, 1406, [48, 52, 48, 44], spread=12); DOWN.append((s, 1406, x0 * 1.1))
 phrase("L", 1414, END, lambda f: -0.42 + 0.25 * smooth((f - 1414) / 170), 10, 0.12, span=0.22)
 phrase("R", 1418, END, lambda f: 0.42 - 0.2 * smooth((f - 1418) / 170), 9, 0.12, span=0.22)
 

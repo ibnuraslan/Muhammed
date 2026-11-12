@@ -2,13 +2,15 @@
 
 ## Changes from v007 (client acting rejection, Nov 12; brief `briefs/ACTING_FIX_04-10.md`)
 Every story-beat frame is unchanged (1, 235, 313, 517, 715, 985, 1105, 1207), so the director can re-sync to the VO. The full list is in `../BeethovenDeaf_v001/review/ACTING_notes.md`.
+- **Body acting:** he leans in to the rod with a natural curved back and his head up. His shoulders work with the phrasing and the sway is larger. The fingers are curved like a pianist's and strike with the fingertips.
+- **Eyes:** a clean animated eye shader. The MPFB procedural eyes rendered black.
 - **Pages:** the manuscript pages no longer fly off the music desk by themselves; no hand ever touched them. They stay on the desk, and the floor has its scattered manuscripts from the start.
 - **Camera, face readable on the beats:**
   - 1.5–2.5 s no longer swings behind his head.
-  - 3.0–3.5 s is a lower, side-profile room wide, clear of the candelabra.
-  - 7.5–8.5 s pulls back so the eyes are in frame.
+  - Every framing with his face is at eye height, front-3/4 or side: the opening, 1.5–2.5 s, 7–9 s and 19.5–20.5 s.
+  - 3.0–3.5 s is a side-profile room wide.
   - 19 s stays on the cochlea.
-  - Beat 8 opens on his face from his left side, not on the top of his head.
+  - Beat 8 is a low orbit at his side before the crane up.
 - **Checks:**
   - `clip_scan.py`: 0 bad ranges (`review/v009_clip_scan.json`).
   - Hand audit: 0 overlaps and 0 joint violations.
