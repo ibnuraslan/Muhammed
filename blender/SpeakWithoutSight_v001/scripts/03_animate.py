@@ -341,7 +341,7 @@ def t_thigh_R(f, lift=0.0):
 for f in (548, 600, 700, 820, 900, 1000, 1040):
     t_thigh_R(f)
 # teacher's left hand: on her own thigh, then on the girl's knee
-for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee")):
+for f, where in ((442, "thigh"), (700, "thigh"), (1063, "thigh"), (1453, "knee"), (1700, "knee"), (1843, "knee"), (1925, "knee"), (END, "knee")):
     ev(f)
     if True:
         # left hand steadies her on the armchair's arm in front of her (clear of her skirt)
@@ -363,7 +363,8 @@ def lip_key(f, dx=0.0, dz=0.0, press=0.0):
         hit, nrm = T.surface(f, mp + UP * dz + ff * 0.12, -ff)
         if hit: mp = hit - UP * dz
     side = ff.cross(UP).normalized()
-    g_hand_on("R", f, mp + side * dx + UP * dz + ff * 0.002, ff, side * -1 - UP * 0.35, press=press, curl=8)
+    # Tadoma hold: fingers upright across the mouth, middle fingertip on the upper lip by the nose, palm on the face
+    g_hand_on("R", f, mp + side * dx * 0.5 + UP * (0.03 + dz * 0.6) + ff * 0.001, ff, UP * 0.92 - side * 0.38, press=press, curl=4, pad=0.004)
 LIP_KEYS = [(1063, None, None), (1085, None, None)]
 for f in range(1110, 1723, 6):
     nose = math.exp(-((f - 1215) / 18.0) ** 2)          # fingertips slide up to the nose and back
@@ -408,6 +409,11 @@ for i, f in enumerate(range(1735, 1843, 18)):
     if i % 2 == 0: lip_key(f)
     else:
         tp = t_throat(f); g_hand_on("R", f, tp, fdir(T_YAW), g_throat_along(f, tp), curl=8)
+    # lift off between touches so the hand never slides through the face
+    if f + 9 < 1843:
+        fm = f + 9; mp_, ff_ = t_mouth(fm); tp_ = t_throat(fm)
+        g_hand_on("R", fm, mp_.lerp(tp_, 0.5) + ff_ * 0.06, ff_, UP, curl=15, pad=0.02)
+        p_, gf_ = g_own_mouth(fm); g_hand_on("L", fm, p_ + gf_ * 0.06 - UP * 0.03, gf_, UP, curl=15, pad=0.02)
 # ---------------------------------------------- beat 11: she speaks (left hand on her own throat), teacher gasps then hugs
 for f in range(1843, END + 1, 8):
     g_left_on(f, "throat")
@@ -416,9 +422,8 @@ for f in (1843, 1858):
 # girl's right hand comes down to the teacher's shoulder for the hug
 for f in (1872, 1915):
     W, d, n, pole = lap("R", f); G.hand("R", f, W, d, n, pole); G.fingers("R", f, 25, 12)
-for f in (1950, END):
-    ev(f); shT = T.surface(f, T.bone_world("upperarm01.L") + UP * 0.3, -UP, "female_elegantsuit01")[0] or (T.bone_world("upperarm01.L") + UP * 0.07)
-    g_hand_on("R", f, shT + T_F * -0.02, UP, T_R * -1 + T_F * -0.3, curl=12, pad=0.008)
+for f in (1955, END):
+    W, d, n, pole = lap("R", f); G.hand("R", f, W, d, n, pole); G.fingers("R", f, 25, 12)
 # teacher gasp: both hands to her mouth (no contact), 1866-1905
 for f in (1866, 1885, 1905):
     mp, ff = t_mouth(f); side = ff.cross(UP).normalized()
@@ -434,21 +439,27 @@ for mn in ("DrapeOnLegs", "DrapeIn", "Bridge"):
         md.show_render = v; md.show_viewport = v; md.keyframe_insert("show_render", frame=f); md.keyframe_insert("show_viewport", frame=f)
         T.fingers(s, f, 15, 15)
 # hug (1925-END): teacher rises to a high kneel and wraps both arms round the girl's shoulders
-T_HUG = T_KNEEL + T_F * 0.03 + V(0, 0, 0.1)
+T_HUG = T_KNEEL + V(0, 0, 0.06)
 t_kneel_keys(1905, T_KNEEL, T_YAW, 8, 0, (-6, 0)); t_kneel_keys(1930, T_HUG, T_YAW, 22, 0, (10, -12)); t_kneel_keys(END, T_HUG + V(0, 0, -0.01), T_YAW, 23, 0, (11, -12))
-for f in (1930, 1955, END):
-    ev(f)
-    back = G.bone_world("spine02") + V(0, 0, 0.06)
-    for s, sx, side_pt in (("L", 1, "upperarm01.L"), ("R", -1, "upperarm01.R")):
-        sp = G.bone_world(side_pt)
-        hit, nrm = G.surface(f, sp + V(0, 0.35, 0.02), V(0, -1, 0), "female_elegantsuit01")
-        p = (hit if hit else sp + V(0, 0.12, 0))
-        d = V(sx * -0.6, -0.2, -0.6) if s == "L" else V(0.5, -0.3, -0.6)
-        T.hand(s, f, p + V(0, 0.03, 0.04) - d.normalized() * 0.07, d, V(0, 1, 0.2), T_HUG + T_R * -sx * 0.5 + UP * 0.4)
-        T.fingers(s, f, 30, 20)
+def t_hand_on(sd, f, tip, normal, along, curl=10, pad=0.006):
+    """teacher fingertip (middle) on a surface point, palm towards -normal, two correction passes (reach-capped in hand())"""
+    along = (along - normal * along.dot(normal)).normalized(); goal = tip + normal * pad
+    W = goal - along * (T_HL * 0.95)
+    for it in range(3):
+        T.hand(sd, f, W, along, normal, T_HUG + T_R * (-0.45 if sd == "L" else 0.45) + UP * 0.2); T.fingers(sd, f, curl, 20)
+        if it == 2: break
+        ev(f); err = goal - T.bone_world("finger3-3." + sd, tail=True)
+        if err.length < 1e-3: break
+        W = W + err
+# joy: the teacher lays her right hand on her own heart (left hand steadies her on the armrest); no body-to-body contact
+for f in (1932, 1955, END):
+    ev(f); ch = T.bone_world("spine02"); TFn = fdir(T_YAW)
+    hit, nrm = T.surface(f, ch + TFn * 0.3 - T_R * 0.06 + UP * 0.05, -TFn, "female_elegantsuit01")
+    heart = (hit if hit else ch + TFn * 0.12)
+    t_hand_on("R", f, heart + UP * 0.04, nrm if hit else TFn, -T_R * 0.6 + UP * 0.8, curl=14, pad=0.012)
 # girl leans in to the hug
 for f in (1930, END):
-    fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl + 3, twist=-22, head=(hp + 4, -28))
+    fl, tw, hp, hy = g_posture(f); G.spine(f, flex=fl, twist=-14, head=(hp - 4, -22))
 
 # ---------------------------------------------- speech (teacher), mouth shapes
 def mouth(P, f, shape, k=1.0):

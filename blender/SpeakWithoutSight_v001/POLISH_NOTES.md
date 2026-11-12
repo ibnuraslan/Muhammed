@@ -31,3 +31,16 @@
   - The clearance pass uses unsigned distance for hair and caps its push at 0.3 m. Before this it threw the camera 3.6 m at frames 250–290, which read as a cut.
   - The audit now reports the largest per-frame camera move.
 - **Time-lapse.** Day/night cycles every 0.5 s, the lamp lights at night, the leaves go from green to orange to bare to green, snow comes and goes, the clock spins, and the girl goes from hunched to upright.
+
+## Look change and hands pass (client, 22:45 and 23:00)
+- **Animated look.** `anim_look.py` now runs after 03 (AgX Punchy, saturation up, bump down, sky gradient for camera rays, no motion blur, f/5.6 minimum). Hand-tuning: a high-key room, a readable blue-tinted dim beat, the sky-blue explainer dome, and clean cream and pink anatomy.
+- **Hands.**
+  - Limit Rotation in local space on all 30 finger, thumb and wrist bones per character; no IK stretch on the elbows.
+  - Fixed: the father's and mother's hands were crossed (left on right).
+  - The girl's lap hands point forward, and the resting hands sit on top of the skirts, not inside them.
+  - The teacher's left hand grips the armrest, with the thumb opposing the fingers.
+  - Lips use a Tadoma hold: fingers upright over the lips, index finger by the nose.
+  - The hands lift off between the time-lapse touches.
+  - The hug is replaced by the teacher's hand on her heart, with no body-to-body overlap.
+  - The stockings material is applied by leg weights, so no more grey fingertips.
+- **Review.** `review/C_1s_animated_look.jpg`, `review/C_hand_closeups.jpg` (19 hand contacts), `review/C_audit.txt`, and `review/C_hand_audit.txt` once it finishes.
