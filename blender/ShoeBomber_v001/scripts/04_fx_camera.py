@@ -347,6 +347,13 @@ for i, y in enumerate((-2.5, 0.0, 2.5, 5.0, 7.5)):
 spot = bpy.data.lights.new("ReadingSpot_3A", 'SPOT'); spot.energy = 3; spot.spot_size = math.radians(45); spot.spot_blend = 0.6; spot.color = (1.0, 0.85, 0.65); spot.shadow_soft_size = 0.03
 so = bpy.data.objects.new("ReadingSpot_3A", spot); sc.collection.objects.link(so); so.location = (-0.98 - 0.25 * 0 - 0.4, -0.05, 1.6)
 so.rotation_euler = (V((-1.35, 0.2, 0.6)) - so.location).to_track_quat('-Z', 'Y').to_euler()
+_fills = []
+for nm_, loc_, aim_, en_, f0_, f1_ in (("FillOpening", (-0.95, 0.55, 0.55), (-1.35, 0.25, 0.75), 25, 1, 200),
+                                      ("FillInjection", (0.05, 1.05, 1.15), (0.26, 1.38, 0.25), 20, 670, 770)):
+    lo_ = area(nm_, loc_, aim_, en_, 0.35, (0.85, 0.9, 1.0))
+    for f_, e_ in ((1, 0.0), (max(1, f0_ - 1), 0.0), (f0_, en_), (f1_, en_), (f1_ + 1, 0.0)):
+        if f_ == 1 and f0_ == 1: e_ = en_
+        lo_.data.energy = e_; lo_.data.keyframe_insert("energy", frame=f_)
 area("GalleyWarm", (0, 9.2, 1.6), (0, 4, 0.8), 15, 0.8, (1.0, 0.8, 0.6))
 area("KeyFaceAisle", (0.4, 1.5, 1.9), (-1.2, 0.0, 0.8), 4, 0.4, (0.6, 0.7, 1.0))
 for i, (sx_, sy_) in enumerate(((0.94, 2.58), (-0.94, 3.44), (1.42, -1.72), (0.94, 6.88), (-1.42, 5.16))):
@@ -416,9 +423,9 @@ SEG = [
     (640, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 640, (0, 0.2, 0)), 22),
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
     (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
-    (697, V((0.62, 0.55, 1.42)), bp("Bomber", "upperarm02.R", 697), 34),
-    (712, V((0.45, 0.92, 0.80)), bp("Bomber", "upperarm02.R", 712), 36),
-    (748, V((0.45, 0.85, 1.58)), bp("Bomber", "head", 748), 30),
+    (697, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 697), 32),
+    (712, V((0.08, 1.02, 0.88)), bp("Bomber", "upperarm02.R", 712), 40),
+    (748, V((0.10, 0.90, 1.50)), bp("Bomber", "head", 748), 30),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.15, 1.35, 1.65)), bp("Bomber", "foot.L", 800), 26),
     (860, V((0.10, 0.45, 1.10)), op("Shoe_L", 860, (0, 0, 0.08)), 30),

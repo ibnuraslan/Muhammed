@@ -445,7 +445,7 @@ def bank(name, loc, size):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=loc)
     o = bpy.context.active_object; o.name = name; o.scale = size; L.set_mat(o, cm_near); L.link(o, L.coll(K if name.startswith("Sky") else S)); return o
 bank("StudioCloudBank", SX + V((0.0, -4.4, 1.45)), (2.5, 1.6, 1.6))
-bank("SkyCloudEntry", KX + V((11.5, 6.8, 1.8)), (3.0, 2.0, 1.6))
+bank("SkyCloudEntry", KX + V((11.2, 5.0, 1.6)), (1.6, 1.0, 1.0))
 bank("SkyCloudExit", KX + V((-60.0, 84.0, -6.0)), (14.0, 14.0, 8.0))
 # puffs stay surface clouds (volume puffs cost ~140 s per preview still); soft translucent SSS with a noise-bumped surface
 pz = bpy.data.materials["CloudPuff"]; nt = pz.node_tree; bsdf = nt.nodes["Principled BSDF"]
