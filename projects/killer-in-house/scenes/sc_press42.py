@@ -108,7 +108,7 @@ def anim_stacks(c, t):
 
 MOVES = {
     "presses": dict(kind="anim", dof=None, far=40, anim=anim_presses,
-                    cam=lambda c, t: (Vector((-7.5, -3.0, 1.2)).lerp(Vector((-2.5, -2.8, 1.4)), ease(t)), Vector((-4.0, 0.0, 1.5)).lerp(Vector((1.0, 0.0, 1.6)), ease(t)), 26)),
+                    cam=lambda c, t: (Vector((-8.0, -5.2, 2.0)).lerp(Vector((-4.0, -5.0, 2.1)), ease(t)), Vector((-3.5, 0.0, 1.5)).lerp(Vector((0.5, 0.0, 1.6)), ease(t)), 24)),
     "stacks": dict(kind="anim", dof=2.8, far=20, anim=anim_stacks,
                    cam=lambda c, t: (Vector((1.2, -4.6, 1.45)).lerp(Vector((1.6, -4.5, 1.4)), ease(t)), Vector((2.4, -3.4, 0.95)), 32),
                    focus=lambda c, t: Vector((2.4, -3.4, 0.95))),

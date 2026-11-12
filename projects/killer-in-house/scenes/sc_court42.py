@@ -90,9 +90,9 @@ def anim_prosecutor(c, t):
 
 def anim_stand(c, t):
     sec = t * DUR["stand"]; judge(c, sec)
-    d = c["cast"]["def"]; seat(d, Vector((3.2, 6.9, 0.25)), math.radians(180), 10, floor=0.25)
+    d = c["cast"]["def"]; seat(d, Vector((3.2, 6.9, 0.25)), 0.0, 10, floor=0.25)          # faces the court
     H.look(d, 10 * math.sin(0.8 * sec), 8)
-    reach(d, "R", Vector((3.0, 6.25, 1.1)), Vector((0, 0, -1)), Vector((0, -1, 0)))
+    reach(d, "R", Vector((3.05, 6.55, 0.95)), Vector((0, 0, -1)), Vector((0, -1, 0)))
 
 
 def anim_jury(c, t):
@@ -114,9 +114,9 @@ def anim_jury(c, t):
 
 def anim_gavel(c, t):
     sec = t * DUR["gavel"]; judge(c, sec)
-    d = c["cast"]["def"]; seat(d, Vector((1.6, 2.4, 0)), 0.0, 10)
+    d = c["cast"]["def"]; seat(d, Vector((1.6, 2.4, 0)), math.pi, 10)             # facing the bench
     H.rotl(d, "head", (1, 0, 0), 18)
-    l = c["cast"]["law"]; seat(l, Vector((2.4, 2.4, 0)), 0.0, 10)
+    l = c["cast"]["law"]; seat(l, Vector((2.4, 2.4, 0)), math.pi, 10)
     hit = 1.0 - max(0.0, math.sin(math.pi * min(1.0, max(0.0, (sec - 2.0) / 0.6))))
     gz = 1.98 + 0.25 * (1 - hit) if sec < 2.6 else 1.98
     c["gavel"].location = (0.4, 7.2, gz)
@@ -127,10 +127,10 @@ MOVES = {
     "prosecutor": dict(kind="anim", dof=None, far=30, anim=anim_prosecutor,
                        cam=lambda c, t: (Vector((1.6, -0.6, 1.6)).lerp(Vector((1.2, 0.2, 1.6)), ease(t)), Vector((-2.4, 1.4, 1.2)), 28)),
     "stand": dict(kind="anim", dof=None, far=30, anim=anim_stand,
-                  cam=lambda c, t: (Vector((1.0, 2.0, 1.5)).lerp(Vector((1.6, 3.2, 1.55)), ease(t)), Vector((2.0, 7.2, 1.7)), 30)),
+                  cam=lambda c, t: (Vector((1.6, 3.6, 1.45)).lerp(Vector((1.9, 4.2, 1.45)), ease(t)), Vector((3.2, 6.85, 1.3)), 36)),
     "jury_in": dict(kind="anim", dof=None, far=30, anim=anim_jury,
                     cam=lambda c, t: (Vector((-0.4, -0.4, 1.5)).lerp(Vector((-0.6, 0.0, 1.5)), ease(t)), Vector((-4.0, 1.7, 1.1)), 28)),
-    "gavel": dict(kind="anim", dof=2.0, far=30, anim=anim_gavel,
-                  cam=lambda c, t: (Vector((1.6, 0.4, 1.3)).lerp(Vector((1.6, 1.1, 1.3)), ease(t)), Vector((1.4, 4.0, 1.4)), 45),
-                  focus=lambda c, t: Vector((1.6, 2.4, 1.2))),
+    "gavel": dict(kind="anim", dof=4.0, far=30, anim=anim_gavel,
+                  cam=lambda c, t: (Vector((2.3, 0.7, 1.45)).lerp(Vector((2.2, 1.1, 1.45)), ease(t)), Vector((0.6, 7.2, 1.8)), 40),
+                  focus=lambda c, t: Vector((0.4, 7.2, 2.0))),
 }

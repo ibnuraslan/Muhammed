@@ -892,7 +892,7 @@ def _():
         _club(c, t * DUR["club_guest"], with_guest=True)
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.4, -0.7, 1.45)).lerp(Vector((1.55, -0.85, 1.45)), e), Vector((2.6, -2.6, 0.9)), 34)
+        return (Vector((3.6, -4.1, 1.5)).lerp(Vector((3.45, -3.95, 1.48)), e), Vector((1.7, -2.85, 1.25)), 42)   # the guest, listening
     return cam, anim
 
 
@@ -932,7 +932,7 @@ def _():
         c["sunin"].data.energy = 300 * ease(min(1.0, max(0.0, (sec - 0.6) / 3.0)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.2, 0.6, 1.4)).lerp(Vector((1.6, 1.2, 1.35)), e), Vector((3.05, D2, 1.1)), 30)
+        return (Vector((1.9, 2.3, 1.5)).lerp(Vector((2.1, 2.7, 1.48)), e), Vector((3.35, D2, 1.05)), 28)
     return cam, anim
 
 
@@ -953,6 +953,8 @@ def _():
 @move("hatch_slide", "day", 4.5, rooms=("upstairs", "attic"), dof=4.0)
 def _():
     def anim(c, t):
+        if "hs_fill" not in c:
+            c["hs_fill"] = H.point((-1.1, -1.5, F2 + 1.4), 25, (1.0, 0.9, 0.78), 0.3)
         sec = t * DUR["hatch_slide"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
         c["hatch"].location = c["hatch_home"] + Vector((0.32 * ease(min(1.0, max(0.0, (sec - 0.8) / 2.5))), 0, 0.02))
@@ -1037,7 +1039,7 @@ def _():
         H.look(p, 15, 10)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.6, 3.2, 1.3)).lerp(Vector((0.4, 3.0, 1.35)), e), Vector((-0.25, -0.4, 1.3)), 34)
+        return (Vector((-0.25, 3.95, 1.55)).lerp(Vector((-0.2, 3.85, 1.55)), e), Vector((-0.3, -0.35, 1.35)), 30)   # over Coneys at the icebox to Philip in the doorway
     return cam, anim
 
 
@@ -1072,7 +1074,7 @@ def _():
         H.walk_to(d2, (0.4, 1.4, 0), (0.35, 0.1, 0), t, swing=8, stride=0.8)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.6, 1.6, 1.6)).lerp(Vector((0.5, 0.3, 1.6)), e), Vector((-0.3, -1.2, 1.2)).lerp(Vector((-1.4, -1.8, 1.1)), e), 26)
+        return (Vector((1.6, 1.3, 1.65)).lerp(Vector((1.4, 0.4, 1.65)), e), Vector((-0.3, -1.2, 1.2)).lerp(Vector((-1.4, -1.8, 1.1)), e), 24)
     return cam, anim
 
 
@@ -1105,7 +1107,7 @@ def _():
         c["bed_door"].rotation_euler = (0, 0, math.radians(-80) * (1 - ease(min(1.0, sec / 4.6))))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-3.9, -4.4, 1.9)).lerp(Vector((-3.8, -4.2, 1.8)), e), Vector((-1.2, -1.4, 1.0)), 24)
+        return (Vector((-3.9, -4.4, 1.9)).lerp(Vector((-3.8, -4.2, 1.8)), e), Vector((-1.4, -1.6, 0.55)), 22)
     return cam, anim
 
 
@@ -1161,7 +1163,7 @@ def _():
             reach(h, sd, c["flying"].location + Vector((-0.6, 0.35 * (1 if sd == "L" else -1), 0.0)), Vector((0, 0, -1)), Vector((1, -1, -0.5)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.0, -0.6, 1.6)).lerp(Vector((1.3, -0.8, 1.55)), e), Vector((3.0, -2.2, 0.9)), 28)
+        return (Vector((1.1, -4.3, 1.6)).lerp(Vector((1.35, -4.2, 1.58)), e), Vector((2.6, -1.5, 0.9)), 26)
     return cam, anim
 
 
@@ -1178,6 +1180,8 @@ def _():
 @move("candle_steps", "night", 5.0, cast=("y:thin",), rooms=("kitchen", "cellar"))
 def _():
     def anim(c, t):
+        if "cs_fill" not in c:
+            c["cs_fill"] = H.point((-1.2, 2.6, -1.0), 30, (1.0, 0.72, 0.42), 0.2)
         sec = t * DUR["candle_steps"]
         c["cellar_light"].data.energy = 0
         h = P(c, "y")
