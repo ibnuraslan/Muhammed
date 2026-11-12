@@ -1,6 +1,6 @@
-# Voiceover scripts: all 25 films
+# Voiceover scripts: all 35 films
 
-Record each one as its own file, named with its number, for example `01_EarInArm.mp3`. Aim for about 2.8 words per second. The target length is listed for each; staying close to it keeps the animation in sync, but small differences are fine because I re-sync to your recording.
+Record each one as its own file, named with its number, for example `01_EarInArm.mp3`, and send them to me before rendering so I can sync each film to its recording. Aim for about 2.8 words per second. The target length is listed for each; staying close to it keeps the animation in sync, but small differences are fine because I re-sync to your recording.
 
 
 ## Connect01: EarInArm
