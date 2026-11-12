@@ -595,5 +595,6 @@ lamp = bpy.data.objects.new("BR_NightLamp", bpy.data.lights.new("BR_NightLamp", 
 lamp.location = (6.0, 2.05, 0.95); lamp.data.energy = 12; lamp.data.color = (1.0, 0.62, 0.32); lamp.data.shadow_soft_size = 0.08
 area("BA_Ceil", BATH, (7.7, 1.1, 2.62), 90, 1.6, (1.0, 0.97, 0.92))
 area("BA_ShowerLight", BATH, (8.35, 1.8, 2.6), 45, 0.8, (1.0, 0.97, 0.92))
+_IN_BUILD_SETS = True; exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "split_walls.py")).read())   # v008b: no shared-wall z-fighting
 print("SETS_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)

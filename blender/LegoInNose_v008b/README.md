@@ -2,7 +2,7 @@
 
 This is the full 38.5 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
 
-- `LegoInNose_v008b_60fps.blend`: the self-contained scene, with every texture packed inside (56 MB). It's a normal git file, with no LFS.
+- `LegoInNose_v008b_60fps.blend`: the self-contained scene, with every texture packed inside (59 MB). It's a normal git file, with no LFS.
 - `beats.json`: start frame and first words for each of the 11 beats (target timing). Use it with `blender/pipeline/retime_to_vo.py` once the voiceover exists.
 - `SETTINGS.md`: render settings and suggested test frames.
 - `CREDITS.md`: the CC-BY credit block for the video description (one model: the sleeping cat), plus provenance for the CC0 assets.
@@ -38,10 +38,10 @@ The tunnel visibility windows and the teleports are keyframes too, so they warp 
 v008 with only these changes. The beat frames are unchanged and no VO was added. Details are in `../LegoInNose_v001/review/ACTING_notes.md`, section 5.
 - 6.0 s: the camera is moved off the boy's knee and onto his pinch and face.
 - 26.5–28.5 s: the camera tracks the man's `head` bone (Track To, −Z / up Y, influence ramped over 10 frames at 1585–1595 and 1716–1726). The sofa pan key is removed.
-- 30.5 s: an upward ceiling-bounce light fills the dark top of the bedroom frame.
+- 30.5 s: the black top half was z-fighting. The bedroom's east wall and the bathroom's west wall were the same 12 cm slab, and the dark back of the bathroom tiles won. `scripts/split_walls.py` (run from `02_build_sets.py`) gives each room its own 6 cm half. The same fix applies to the living room / bedroom wall. A small ceiling-bounce light was also added in `anim_fix.py`.
 - Tunnels: each dive and return is shorter, so every flat pink stretch is 15 frames or less.
 - Shower (33–34.5 s): the thumb pinches the side of one nostril (the "pinch" pose) instead of the index on the nose. This is intended contact.
-- The boy's resting hand lies flat on the top of his thigh (`place_hand` + `flat_palm`) at 0–0.2 s, 4.4 s and 22.7 s.
+- The boy's resting hand lies flat on the top of his thigh (`place_hand` + `flat_palm`) at 0–0.2 s, 4.4 s and 22.7 s. Then `scripts/leg_fix.py` lifts any hand that is still more than 1.5 cm inside his own legs, pelvis or belly. `hand_fix.py` only tests the torso. It ran 3 + 8 rounds on the boy: 281 → 14 frames.
 - The man's MPFB "Delete" clothing masks are off for the whole film, so his vertex count is constant and the official `clip_scan.py` (3cfc53c) runs unmodified. His body under the shirt is hidden by the clothes.
 
 ## v008: acting fix (client, Nov 12)
@@ -115,7 +115,7 @@ The source is `../LegoInNose_v001/scripts`:
 2. `02_build_sets.py <assets_dir>`
 3. `03_animate.py`, which also runs `03b_props_fx_camera.py`
    - then run `pipeline/anim_look.py --no-sky` and then `anim_fix.py` (from v004)
-   - then `hands_pass.py`, then `hand_fix.py` (v008)
+   - then `hand_fix.py` (v008), then slim + package, then `leg_fix.py -- out.blend 3 Boy` and `leg_fix.py -- out.blend 8 Boy` on the packed file (v008b)
 4. `audit.py`
 5. `campath.py`
 

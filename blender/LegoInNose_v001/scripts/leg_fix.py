@@ -18,6 +18,8 @@ for nm in (a[2].split(",") if len(a) > 2 else ("Boy", "Teen", "Man", "Mom")):
     for v in body.data.vertices:
         g = max((g for g in v.groups if g.group in gi), key=lambda g: g.weight, default=None); dom.append(gi[g.group] if g else "")
     INFO[nm] = (arm, body, dom)
+MASKS = [(m, m.show_viewport) for nm, (arm, body, dom) in INFO.items() for m in body.modifiers if m.type in ("MASK", "SUBSURF", "MULTIRES")]
+for m, _ in MASKS: m.show_viewport = False          # base topology while testing (as clip_scan.py does)
 def push(arm, s, f, delta):
     n = "IK_hand." + s; pb = arm.pose.bones[n]
     d = arm.data.bones[n].matrix_local.to_3x3().inverted() @ (arm.matrix_world.to_3x3().inverted() @ delta)
@@ -48,5 +50,6 @@ for rnd in range(ROUNDS):
         for arm, s, dv in todo: push(arm, s, f, dv); n_hit += 1
     print("LEGFIX round", rnd, "hits", n_hit)
     if n_hit == 0: break
+for m, v in MASKS: m.show_viewport = v
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("LEGFIX saved", OUT)

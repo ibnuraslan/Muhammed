@@ -4,7 +4,7 @@ These values were read back from `LegoInNose_v008b_60fps.blend` opened in factor
 
 | Item | Value |
 |---|---|
-| File | `LegoInNose_v008b_60fps.blend`, 56 MB, compressed. All images are packed: no unpacked files, no linked libraries. It's a normal git file (no LFS). Textures are 1K, and the hero male skin is 2K. Images are JPEG q90, except PNG where alpha matters (hair, brows, lashes, leaves). The HDRIs are 1K. |
+| File | `LegoInNose_v008b_60fps.blend`, 59 MB, compressed. All images are packed: no unpacked files, no linked libraries. It's a normal git file (no LFS). Textures are 1K, and the hero male skin is 2K. Images are JPEG q90, except PNG where alpha matters (hair, brows, lashes, leaves). The HDRIs are 1K. |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU; GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |

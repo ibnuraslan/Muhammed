@@ -71,3 +71,17 @@ QA is run on the packed v008 file at step 6 with `beats.json`. Final counts are 
   - The Mom left-hand (chin) close-up shows her back.
   - The shower palm close-up is partly behind the frosted-glass rail.
 - **Tweezers grip:** mean 10 mm, with one frame at 95 mm after the hand re-key pass.
+
+## 5. v008b: director's v008 review
+Package: `../../LegoInNose_v008b/LegoInNose_v008b_60fps.blend`. Sheets: `v008b_halfsec.jpg` (every 30 frames) and `v008b_hand_closeups.jpg`. Both are 270×480 at 8 samples. The beat frames are unchanged and there's no VO.
+
+| Note | Fix |
+|---|---|
+| 6.0 s: a knee fills the frame | The camera key at 378 sits between the boy's pinch and his face, at nose height. |
+| 26.5–28.5 s: keep the man in frame | Track To on Man's `head` bone (−Z, up Y, world up). Influence 0→1 over 1585–1595, held, then 1→0 over 1716–1726. The sofa pan key (1713) is removed. |
+| 30.5 s: top half black | It was z-fighting, not missing geometry. The bedroom's east wall and the bathroom's west wall were the same 12 cm slab, and the dark back of the bathroom tiles won. `split_walls.py` gives each room its own 6 cm half, and does the same for the living room / bedroom wall. |
+| Flat tunnel cells | The dives and returns are shorter, so each flat pink stretch is 15 frames or less: in 722–740, 854–872, 1100–1119, 1309–1327. |
+| Shower: index on the nose reads as "shush" | The right thumb presses the side of one nostril (the "pinch" pose at 1958–2077). **This is intended contact.** |
+| Resting hand at the thigh | `place_hand` + `flat_palm` on the thigh top. `leg_fix.py` then lifts every boy hand that is more than 1.5 cm inside his legs, pelvis or belly. `hand_fix.py` never tested legs. Hits went from 281 to 14 frames (11 rounds). |
+| clip_scan | The official `pipeline/clip_scan.py` (3cfc53c) runs unmodified, skin only, no masks-off copy. It used to crash because the man's Delete clothing masks switched off in the shower and changed his vertex count. Those masks are now off for the whole film, so the count is constant. The shirts cover his body. |
+| Close-ups | The 4.0 s tunnel cell is replaced by f700 (the brick at the nostril). Mom's chin-hand shot looks at her left wrist from 0.5 m, from the side with a clear line of sight. |
