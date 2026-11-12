@@ -33,12 +33,19 @@ The director's `clip_scan.py` on v005 found 0 bad ranges. The problems below are
 - Items 1–13 and 15–18 are fixed. Item 14 needed no change.
 - Every story-beat frame is unchanged (`beats.json` is identical).
 
-## Checks
+## Round 2: director review of 606981f
+| # | Problem | Fix |
+|---|---|---|
+| R1 | Grips that didn't grip: pencil, file, gun pick-up and desk slap. | A hand-shape library (flat, relaxed, wrap, writing, loose fist, cradle, hook), with a finger-spread control so the fingers close together. Each action now uses one: <ul><li>**Pencil:** writing grip, hand on its side, pencil between thumb and index.</li><li>**File:** right hand wraps the handle, left palm flat on the tip.</li><li>**Gun pick-up:** the gun lies with its grip towards her right hand; she closes her fingers round the grip block, and the grip blends into the firing grip as it lifts, thumb wrapped.</li><li>**Desk slap:** flat palm, fingers together.</li></ul> The trigger close-up is re-aimed on the index finger. |
+| R2 | 6.0–7.0 s: the valve hand made an L shape (thumb straight out). | The thumb was hitting its joint limit. Now the fingers hook over the wheel rim with the thumb tucked, and the hand stays on the rim while the wheel turns. |
+| R3 | 15.5–19.0 s: near-empty, out-of-focus frames. | The camera rides 0.42 m behind the pellets looking at the framed photo they fly into. The photo is in focus and the pellets are larger. |
+| R4 | 23–25.5 s: thumb jutting out, and a claw on her forehead. | Her palm is over her eyes with the fingers together and relaxed. At 24.1–24.8 s her loose-fist knuckles wipe under her eye, then the palm returns. |
+
 - **Director `clip_scan.py`** (every 6 frames): **0 bad ranges**.
-- **Hand audit** (`hand_audit_v006.txt`, every 2 frames): 12 samples.
-  - 9 are her right hand resting on the bridge of her nose and her forehead while she cries (4–15 mm skin contact).
-  - 3 are mid-blend frames of the time-lapse pose change at 29.3 s.
-- **Contact audit** (`audit_v006.txt`): feet and camera clean; one fingertip-on-gun frame (826).
+- **Hand audit** (`hand_audit_v006.txt`, every 2 frames): 13 samples.
+  - 11 are her palm or knuckles resting on her face while she cries (4–15 mm skin contact).
+  - 2 are mid-blend frames of the time-lapse pose change at 29.3 s.
+- **Contact audit** (`audit_v006.txt`): no contact problems.
 - **Sheets and close-ups:**
   - `acting_before_v005_0.5s.jpg` vs `acting_after_v006_0.5s.jpg`
   - `hand_closeups_v006.jpg`: 15 close-ups at 270×480 of every hand contact (grip, canister, valve, trigger, two-hand aim, lap, nose, eye wipe, desk slap, shield, pencil, file, pick-up, fire, chest pat)

@@ -46,10 +46,18 @@ The full list, with frames, is in `../FrozenTearsGun_v001/review/ACTING_notes.md
 - **Cleanup.**
   - Rig-widget meshes from the rigged Poly Haven props (including a "KEY" text widget) no longer render.
   - The lettering in her jeans' normal map and on the tool-chest badge is removed.
+- **Round 2 (director review):** real hand shapes for every contact.
+  - writing grip on the pencil
+  - one hand wraps the file, the other is flat on it
+  - she grips the gun on the bench and carries that grip as it lifts
+  - flat-palm desk slap
+  - hooked valve grip with no splayed thumb
+  - palm over the eyes, then a knuckle wipe
+  - the pellet flight keeps the photo in frame and in focus
 - **Checks:**
   - director `clip_scan.py`: 0 bad ranges
-  - hand audit: 12 samples, all contact while touching her own face or mid-blend, explained in the notes
-  - contact audit: 1 fingertip-on-gun frame
+  - hand audit: 13 samples, all contact while touching her own face or mid-blend, explained in the notes
+  - contact audit: no problems
 - **Sheets:** `review/acting_before_v005_0.5s.jpg` and `review/acting_after_v006_0.5s.jpg`. Close-ups: `review/hand_closeups_v006.jpg`.
 
 ## Changes in v005 (hands only)

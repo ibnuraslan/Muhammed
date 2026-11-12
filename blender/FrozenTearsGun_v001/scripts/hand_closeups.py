@@ -11,7 +11,7 @@ SHOTS = [  # (label, frame, rig, bone, camera offset)
     ("grip_R_rest", 300, "Inventor", "wrist.R", (-0.30, -0.12, 0.02)),
     ("support_L_canister", 300, "Inventor", "wrist.L", (0.10, -0.35, -0.12)),
     ("valve_pinch", 400, "Inventor", "wrist.L", (0.32, -0.18, 0.08)),
-    ("trigger_pull", 840, "Inventor", "wrist.R", (-0.30, -0.15, 0.0)),
+    ("trigger_pull", 840, "Inventor", "finger2-2.R", (-0.22, -0.10, -0.06)),
     ("aim_two_hands", 980, "Inventor", "wrist.R", (-0.25, -0.30, 0.05)),
     ("lap_hands", 1250, "Inventor", "wrist.L", (0.05, -0.45, 0.15)),
     ("hand_to_face", 1420, "Inventor", "head", (0.15, -0.45, 0.0)),

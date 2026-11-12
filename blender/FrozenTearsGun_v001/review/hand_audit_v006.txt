@@ -1,4 +1,4 @@
 Hand audit every 2 frames (penetration 4-15 mm; open sub-mesh test)
-Inventor hand.L inside hand.R                     3 frames: 1757 1759 1761
-Inventor hand.R inside own torso/head             9 frames: 1389 1391 1401 1403 1405 1449 1517 1531 1533
-TOTAL flagged samples: 12
+Inventor hand.L inside hand.R                     2 frames: 1757 1759
+Inventor hand.R inside own torso/head            11 frames: 1433 1449 1459 1463 1465 1467 1469 1471 1473 1477 1487
+TOTAL flagged samples: 13

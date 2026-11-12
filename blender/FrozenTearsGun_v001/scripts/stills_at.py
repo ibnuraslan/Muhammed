@@ -2,7 +2,7 @@
 import sys, os, bpy
 a = sys.argv[sys.argv.index("--") + 1:]; OUT = a[0]; os.makedirs(OUT, exist_ok=True)
 sc = bpy.context.scene
-sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 270, 480, 100
+W_ = int(os.environ.get("SW", "270")); sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = W_, W_ * 16 // 9, 100
 sc.cycles.samples = 8; sc.render.use_motion_blur = False; sc.cycles.texture_limit_render = "1024"
 sc.render.image_settings.file_format = "JPEG"
 for i, t in enumerate(a[1:]):
