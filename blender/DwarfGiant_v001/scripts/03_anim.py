@@ -147,10 +147,10 @@ SCALE = [(1, 1.0), (500, 1.0), (560, 1.07), (640, 1.18), (696, 1.26), (800, 1.34
          (1476, 1.62), (1700, 1.64), (1860, 1.72), (2340, 1.72)]
 for f, s in SCALE:
     HRIG.scale = (s,) * 3; HRIG.keyframe_insert("scale", frame=f)
-place("Hero", 1, HPOS, 0); place("Hero", 1490, HPOS, 0, const=True)
+place("Hero", 1, HPOS, 0); place("Hero", 1481, HPOS, 0, const=True)
 # beat 9-10: lying on the bed (head toward +Y end), feet past the foot rail
 BED = V(6.9, 0.6, 0.0); MATT_Z = 0.62
-place("Hero", 1491, V(BED.x, 1.38 - 1.36 * 1.62, MATT_Z), 0, rx=-90, const=True)
+place("Hero", 1482, V(BED.x, 1.38 - 1.36 * 1.62, MATT_Z), 0, rx=-90, const=True)
 place("Hero", 1857, V(BED.x, 1.38 - 1.36 * 1.64, MATT_Z), 0, rx=-90, const=True)
 # beat 11: standing by the theatre door, facing -X
 place("Hero", 1858, V(9.45, -0.15, 0.0), -90, const=True)
@@ -158,7 +158,7 @@ place("Hero", 1999, V(9.45, -0.15, 0.0), -90, const=True)
 # beat 12: dusk field
 SIL = V(10.6, 11.6, 0.0)
 place("Hero", 2000, SIL, 180 + 8, const=True)
-const_keys(HRIG, {1490, 1491, 1857, 1858, 1999, 2000}, "location"); const_keys(HRIG, {1490, 1491, 1857, 1858, 1999, 2000}, "rotation_euler")
+const_keys(HRIG, {1481, 1482, 1857, 1858, 1999, 2000}, "location"); const_keys(HRIG, {1481, 1482, 1857, 1858, 1999, 2000}, "rotation_euler")
 
 # poses: keys every ~20 frames
 def hero_pose(f, flex=0, twist=0, side=0, head=(0, 0), jaw_deg=1, up=0, frown=0, squint=0):
@@ -213,7 +213,7 @@ B = HR.r.BN
 EAR = B["head"].head_local + V(0.085, 0.01, 0.06)
 for f in (1400, 1470): hand_rest(HR, "R", f, 0.1, -0.08)
 # beat 9-10 lying: arms by sides, relaxed; head turned slightly
-for f in (1491, 1600, 1700, 1800, 1857):
+for f in (1482, 1600, 1700, 1800, 1857):
     hero_pose(f, flex=0, head=(-4, 6 if f > 1700 else 0), frown=4 if f < 1700 else 0, jaw_deg=2); arms_idle(HR, f, 0.06, 0.02)
 # beat 11 standing tall, slight stoop, calm; beat 12 calm
 for f in (1858, 1940, 1999): hero_pose(f, flex=10, side=4, head=(10, -16 if f > 1900 else 0)); arms_idle(HR, f, 0.07, -0.04)
@@ -451,8 +451,8 @@ KEYS = [  # frame, cam, aim, lens
     (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
     (1075, V(-0.75, 0.75, 1.45), V(-0.3, 2.35, 1.4), 26), (1120, V(-0.95, 0.95, 1.3), V(-0.3, 2.45, 1.15), 28),
     (1175, V(-0.45, 1.2, 1.25), V(-0.3, 2.45, 1.1), 30), (1235, V(0.15, 1.35, 1.55), V(-0.3, 2.45, 1.3), 28),
-            (1488, V(1.9, 1.7, 2.1), V(5.0, 1.2, 1.6), 26), (1503, V(3.42, 1.43, 2.2), V(6.0, 1.0, 1.4), 24),
-    (1508, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
+            (1488, V(2.45, 1.62, 2.13), V(5.0, 1.2, 1.6), 26), (1494, V(3.44, 1.44, 2.2), V(6.0, 1.0, 1.4), 24),
+    (1498, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
     (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26),         (1735, V(6.3, 1.25, 1.25), V(6.9, 0.8, 0.72), 28),
     (1790, V(6.15, 0.35, 1.3), V(6.9, -0.05, 0.7), 26), (1845, V(6.3, -1.3, 0.82), V(6.9, -0.75, 0.62), 30),
     (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1930, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22),
@@ -549,6 +549,9 @@ for k in range(160):
     for f in range(1, 2341, 60):
         o.location = base + V(0.25 * math.sin(f * sp + ph), 0.2 * math.cos(f * sp * 0.7 + ph), -0.0004 * f % 0.6 + 0.1 * math.sin(f * sp * 1.3)); o.keyframe_insert("location", frame=f)
     vis(o, [(1, 1525)] if room == 0 else [(1477, 2000)])
+# fly-through: the shared office/theatre wall is not rendered while the camera passes it (no blank plaster frames)
+for nm in ("Off_WallR", "Off_WainR", "Off_RailR", "Th_WallL"):
+    hide_ranges(OB[nm], [(1484, 1497)])
 # hide helper empties from render
 for o in OB:
     if o.type == "EMPTY": o.hide_render = True

@@ -90,7 +90,7 @@ DRAPE = cloth("M_Drape", (0.42, 0.62, 0.55)); BLANKET = cloth("M_Blanket", (0.82
 dr = shell("Hero", "Hero_Drape", lambda co, B: ank_z + 0.05 < co.z < sh_z - 0.06 and abs(co.x) < 0.22 + (0.1 if co.z < 0.5 else 0), 0.035, DRAPE, 0.004)
 bl = shell("Hero", "Hero_Blanket", lambda co, B: knee_z - 0.02 < co.z < sh_z - 0.1 and abs(co.x) < 0.24, 0.04, BLANKET, 0.006)
 for o in (dr, bl): o.animation_data_clear()
-vis(dr, [(1491, 1712)]); vis(bl, [(1713, 1857)])
+vis(dr, [(1482, 1712)]); vis(bl, [(1713, 1857)])
 # ---------------------------------------------------------------- officer peaked caps (CC-BY) on the head bone
 def imp(path):
     before = set(OB); bpy.ops.import_scene.gltf(filepath=path); return [o for o in OB if o not in before]
