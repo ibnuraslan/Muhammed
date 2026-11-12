@@ -210,7 +210,9 @@ def build(variant=None):
         box("LitBack", (WX, y1, WZ), (3.95, 0.04, 2.66), paper)
         box("LitSideL", (WX - 1.97, (y0 + y1) / 2, WZ), (0.04, y1 - y0, 2.66), paper)
         box("LitSideR", (WX + 1.97, (y0 + y1) / 2, WZ), (0.04, y1 - y0, 2.66), paper)
-        box("LitInnerWall", (WX, y0, WZ), (3.95, 0.04, 2.66), paper)                                       # wall inside, around the window
+        for cx_, cz_, sx_, sz_ in ((WX - 1.31, WZ, 1.33, 2.66), (WX + 1.31, WZ, 1.33, 2.66),          # inner wall AROUND the opening
+                                   (WX, WZ - 1.03, 1.3, 0.6), (WX, WZ + 1.03, 1.3, 0.6)):
+            box("LitInnerWall", (cx_, y0, cz_), (sx_, 0.04, sz_), paper)
         box("LitFloor", (WX, (y0 + y1) / 2, z0), (3.95, y1 - y0, 0.04), pbr("LitFloorM", (0.2, 0.12, 0.07), 0.6))
         box("LitCeil", (WX, (y0 + y1) / 2, z1), (3.95, y1 - y0, 0.04), pbr("LitCeilM", (0.75, 0.72, 0.66), 0.9))
         box("LitShelf", (WX + 1.2, y1 - 0.25, z0 + 0.9), (1.1, 0.4, 1.8), pbr("LitShelfM", (0.18, 0.1, 0.06), 0.5))
