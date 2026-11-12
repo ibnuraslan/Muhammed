@@ -15,7 +15,8 @@ CHAIN = ["upperarm01", "upperarm02", "lowerarm01", "lowerarm02", "wrist"]
 
 def twist(parent, child):
     q = parent.matrix.to_quaternion().inverted() @ child.matrix.to_quaternion()
-    return math.degrees(2 * math.atan2(q.y, q.w))
+    d = math.degrees(2 * math.atan2(q.y, q.w))
+    return (d + 180.0) % 360.0 - 180.0             # wrap: 350 deg is really -10
 
 
 def rigs():

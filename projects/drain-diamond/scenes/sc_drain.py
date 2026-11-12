@@ -351,8 +351,7 @@ def build(variant=None):
         tl.color = (1.0, 0.95, 0.85); tl.shadow_soft_size = 0.01
         to = bpy.data.objects.new("TorchBeam", tl); bpy.context.collection.objects.link(to); c["torch"] = to
         h = officer("Torch", 41, seed=2); c["torcher"] = h
-    import look                                   # wet grey morning: one soft cool key from the side, haze in the air
-    look.day_light("mist", azim=230, haze_box=((0, 0, 6), (70, 70, 12)), haze_density=0.0022, exposure=0.9)      # misty wet morning
+    # LOOK: grade only: the mist relight went milky and flat here; the set keeps its own soft grey-morning light
     return c
 
 
