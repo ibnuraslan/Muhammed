@@ -218,10 +218,10 @@ def build_day():
     box("CounterTop", (1.25, 3.58, 1.1), (2.5, 0.8, 0.04), top_m, bevel=0.012)
     box("CounterKick", (1.25, 3.6, 0.05), (2.3, 0.6, 0.1), pbr("Kick", (0.12, 0.12, 0.12), 0.4))
     # two gray armchairs (scanned), a low table, a plant
-    for (x, y, rz) in ((-1.85, 1.75, 90 - 15), (-1.8, 3.0, 90 + 15)):
+    for (x, y, rz) in ((-1.5, 1.75, 90 - 15), (-1.45, 3.0, 90 + 15)):
         root, ms = ph.model("modern_arm_chair_01", loc=(x, y, 0), rot_z=math.radians(rz))
-        _grey(ms, 0.3)
-    ph.model("modern_coffee_table_01", loc=(-1.65, 2.38, 0), rot_z=math.radians(90))
+        _grey(ms, 0.42)
+    ph.model("modern_coffee_table_01", loc=(-1.3, 2.38, 0), rot_z=math.radians(90))
     ph.model("potted_plant_02", loc=(-3.1, 4.5, 0), scale=1.4)
     # reception window wall on the left lets daylight in; soft ceiling fill
     rs = bpy.data.lights.new("RecDay", 'AREA'); rs.energy = 600; rs.size = 4.5; rs.color = (0.95, 0.97, 1.0)
@@ -291,7 +291,7 @@ def animate_day(c, t):
     nb = c["nb"]; nb.location = padc; nb.rotation_euler = (math.radians(-35), 0, 0)
     # --- him: left hand to the handle (x = -0.07, corridor side), two short pulls, then lets go
     h_at = Vector((-0.07, DOOR_Y - 0.06 - 0.025, 1.05))
-    reach_k = ease(min(1.0, max(0.0, (t - 0.08) / 0.2))) * (1 - ease(min(1.0, max(0.0, (t - 0.78) / 0.18))))
+    reach_k = ease(min(1.0, max(0.0, (t - 0.08) / 0.2))) * (1 - ease(min(1.0, max(0.0, (t - 0.66) / 0.16))))
     pull = 0.03 * (max(0.0, math.sin(min(1.0, max(0.0, (t - 0.32) / 0.12)) * math.pi)) +
                    max(0.0, math.sin(min(1.0, max(0.0, (t - 0.52) / 0.1)) * math.pi)))
     rest = m.bone_head("upperarm01.L") + Vector((0.02, 0.05, -0.55))
@@ -313,9 +313,10 @@ def animate_day(c, t):
 
 def cam_day(c, t):
     e = ease(t)
-    loc = Vector((0.75, -3.45, 1.6)).lerp(Vector((-0.25, -1.6, 1.52)), e)
-    tgt = Vector((-0.6, 2.4, 1.2)).lerp(Vector((-0.75, 3.0, 1.0)), e)
-    return (loc, tgt, 28 + 8 * e)
+    # from behind their shoulders, then on between them (his hand is back at his side by then) to the glass
+    loc = Vector((0.45, -3.45, 1.6)).lerp(Vector((-0.42, -0.32, 1.48)), e)
+    tgt = Vector((-0.5, 2.4, 1.2)).lerp(Vector((-0.78, 3.0, 1.22)), e)
+    return (loc, tgt, 28 - 2 * e)
 
 
 MOVES = {

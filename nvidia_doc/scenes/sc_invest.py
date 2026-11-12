@@ -320,7 +320,7 @@ def build(variant=None):
     c["pin_page"] = sheet("PinPage", (-5.6, 0.45, 1.5), (0.2, 0.26), page_m[2], rot=(math.radians(90), 0, math.radians(90)))
     # CH1 8B props, built here so a bake keys them; parked out of sight (beam off, haze hidden) until 8B places them
     build_filings(c)
-    for k in ("stack", "thin", "motes"):
+    for k in ("stack", "thin", "motes", "puff"):
         c[k].location = (0, 0, -50)
     c["beam"].data.energy = 0.0; c["haze"].hide_render = True
     animate(c, 0.0, {})
@@ -475,6 +475,12 @@ def anim_filing(c, t):
             if o.name.startswith("Chair") and (o.location - hb.location).length < 0.3:
                 o.location -= fw * 0.07
         hb.location -= fw * 0.07; bpy.context.view_layer.update()
+        # her bob fell over one eye: for this close shot her hair is pulled back (ponytail, same colour)
+        rb = c["people"]["ReaderB"]
+        for o in rb.parts:
+            if o.name.endswith("_bob02"):
+                o.hide_render = True; o.hide_viewport = True
+        add_asset(rb, "hair", "ponytail01", sat=0.05, val=0.75, rough=0.45)
         c["_cleared"] = True
     animate(c, t * DUR["filing"], {"lift": 0.0})
     pose_desk_reader(c, "ReaderB", t * DUR["filing"])
@@ -503,15 +509,15 @@ def pose_desk_reader(c, nm, sec):
         h.aim(f"upperarm01.{sd}", E - S); h.aim(f"upperarm02.{sd}", E - S)
         E = h.bone_tail(f"upperarm02.{sd}")
         # forearm rises ~52 degrees toward the midline, the hands meet in front of the chest
-        fd = (fwd * 0.55 - side * (0.46 * sg) + up * (0.62 + 0.012 * math.sin(sec * 0.8))).normalized()
+        fd = (fwd * 0.62 - side * (0.42 * sg) + up * (0.40 + 0.012 * math.sin(sec * 0.8))).normalized()
         h.aim(f"lowerarm01.{sd}", fd); h.aim(f"lowerarm02.{sd}", fd)
         W = h.bone_tail(f"lowerarm02.{sd}")
-        h.aim(f"wrist.{sd}", (fd + up * 0.3 - side * (0.5 * sg)).normalized())
+        h.aim(f"wrist.{sd}", (fd * 0.5 + up * 0.8 - side * (0.15 * sg)).normalized())   # hands upright, palms in
         wr[sd] = W
-    fingers_curl(h, 38, thumb=25)
+    fingers_curl(h, 48, thumb=8)                                  # fingers closed on the page edge, thumb in front
     h.rot("head", side, 8 + 2 * math.sin(sec * 0.6))
     mid = (wr["L"] + wr["R"]) * 0.5
-    ps.location = mid + fwd * 0.03 + Vector((0, 0, 0.085)); bpy.context.view_layer.update()
+    ps.location = mid + fwd * 0.045 + Vector((0, 0, 0.1)); bpy.context.view_layer.update()
     z = (h.bone_head("head") - ps.location).normalized()          # page faces her eyes, edges level
     x = (side - z * side.dot(z)).normalized(); y = z.cross(x)
     ps.rotation_mode = 'QUATERNION'; ps.rotation_quaternion = Matrix((x, y, z)).transposed().to_quaternion()
@@ -522,9 +528,9 @@ def cam_filing(c, t):
     h = c["people"]["ReaderB"]; e = ease(t)
     fwd = _forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
     hd = h.bone_head("head")
-    off0 = fwd * 1.75 - side * 1.05 + Vector((0, 0, 0.32)); off1 = fwd * 1.5 - side * 0.9 + Vector((0, 0, 0.3))
-    tgt = hd + fwd * 0.2 + Vector((0, 0, -0.17))
-    return (hd + off0.lerp(off1, e), tgt, 40)     # three-quarter front: her face over the filing she is reading
+    off0 = fwd * 2.25 - side * 1.3 + Vector((0, 0, 0.3)); off1 = fwd * 1.95 - side * 1.12 + Vector((0, 0, 0.28))
+    tgt = hd + fwd * 0.2 + Vector((0, 0, -0.22))
+    return (hd + off0.lerp(off1, e), tgt, 38)     # three-quarter front: her face over the filing she is reading
 
 
 def anim_compare(c, t):
@@ -629,6 +635,16 @@ def build_filings(c):
     mm = pbr("Mote", (0.9, 0.88, 0.82), 0.6, **{'Transmission Weight': 0.3, 'Emission Color': (1.0, 0.95, 0.85, 1), 'Emission Strength': 0.0})
     mo.data.materials.append(mm); mo.visible_shadow = False
     c["motes"] = mo; c["motes_c"] = STACK_AT + Vector((0.15, -0.3, 0.45))
+    # the puff of paper dust the landing knocks out from under the stack (scaled out and lifted when it lands)
+    bm = bmesh.new()
+    for k in range(260):
+        a_ = rng.uniform(0, 2 * math.pi); r_ = rng.uniform(0.12, 0.2)
+        cpos = Vector((math.cos(a_) * r_ * 1.1, math.sin(a_) * r_ * 1.3, rng.uniform(0.0, 0.05)))
+        bmesh.ops.create_icosphere(bm, subdivisions=1, radius=rng.uniform(0.0005, 0.001), matrix=Matrix.Translation(cpos))
+    me = bpy.data.meshes.new("Puff"); bm.to_mesh(me); bm.free()
+    pf = bpy.data.objects.new("DustPuff", me); bpy.context.collection.objects.link(pf)
+    pf.data.materials.append(mm); pf.visible_shadow = False
+    c["puff"] = pf
     # -- a soft raking beam of window daylight across the table, and a faint haze for it to show in
     bl = bpy.data.lights.new("WindowBeam", 'SPOT'); bl.energy = 9000; bl.spot_size = math.radians(22); bl.spot_blend = 0.6
     bl.color = (1.0, 0.88, 0.72); bl.shadow_soft_size = 0.25
@@ -639,7 +655,7 @@ def build_filings(c):
 
 
 def anim_chart(c, t):
-    """8B: the investigator sets the massive 2024 filing down beside the thin 2023 one; dust turns in the light."""
+    """8B: the massive 2024 filing drops in beside the thin 2023 one, lands with a settle and a puff of dust in the beam."""
     s_ = t * DUR["chart"]
     if not c.get("_filings"):
         ctr = Vector((1.5, 0.6))
@@ -653,27 +669,31 @@ def anim_chart(c, t):
         c["thin"].location = THIN_AT; c["beam"].data.energy = 9000; c["haze"].hide_render = False
         c["_filings"] = True
     animate(c, s_, {"lift": 0.0})
-    h = c["people"]["woman"]
-    stand(h, (STACK_AT.x + 0.02, 1.47, 0), 0.0)               # past the end of the table, facing -Y (toward camera)
-    fwd = _forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
-    land = ease(min(1.0, max(0.0, (s_ - 0.15) / 1.35)))
-    settle = 0.004 * math.sin(min(1.0, max(0.0, (s_ - 1.5) / 0.35)) * math.pi)
-    st = c["stack"]; st.location = STACK_AT + Vector((-0.02 * (1 - land), 0, 0.16 * (1 - land) + settle))
-    st.rotation_euler = (0, 0, math.radians(4) * (1 - land))
-    bpy.context.view_layer.update()
-    lean = 16 + 8 * land - 14 * ease(min(1.0, max(0.0, (s_ - 2.1) / 1.4)))
-    h.rot("spine03", side, -lean * 0.55); h.rot("spine05", side, -lean * 0.45)
-    release = ease(min(1.0, max(0.0, (s_ - 1.75) / 1.1)))
-    mid_z = st.location.z + c["stack_h"] * 0.62
-    for sd, sg in (("L", -1), ("R", 1)):
-        grip = Vector((st.location.x, st.location.y + 0.04, mid_z)) + side * (0.17 * sg)
-        rest = h.bone_head(f"upperarm01.{sd}") + fwd * 0.12 + side * (0.08 * sg) + Vector((0, 0, -0.5))
-        tgt = grip.lerp(rest, release) + side * (0.04 * sg * release)
-        reach(h, sd, tgt, side * sg + Vector((0, 0, -0.6)), (fwd * 0.75 - side * (0.3 * sg) + Vector((0, 0, -0.3))).normalized().lerp(Vector((0, 0, -1)), release))
-    fingers_curl(h, 18 + 10 * release, thumb=10)
-    h.rot("head", side, -14)
-    mo = c["motes"]                                       # slow swirl and drift (stirred a little by the landing)
-    mo.rotation_euler = (0, 0, 0.05 * s_ + 0.03 * land)
+    w_ = c["people"]["woman"]                             # nobody in this shot: the stack arrives on its own
+    w_.arm.location = (0, 0, -60)
+    # the 2024 filing drops in from just above frame (free fall), lands, gives two small settle bounces
+    T_DROP, H0 = 1.0, 0.9
+    t_land = T_DROP + math.sqrt(2 * H0 / 9.81)
+    if s_ < T_DROP:
+        z = H0
+    elif s_ < t_land:
+        z = H0 - 0.5 * 9.81 * (s_ - T_DROP) ** 2
+    else:
+        u = s_ - t_land
+        z = 0.012 * abs(math.sin(u / 0.09 * math.pi)) if u < 0.09 else (0.004 * abs(math.sin((u - 0.09) / 0.06 * math.pi)) if u < 0.15 else 0.0)
+    st = c["stack"]; st.location = STACK_AT + Vector((0, 0, z))
+    st.rotation_euler = (0, 0, math.radians(3) * (1.0 if s_ < t_land else max(0.0, 1 - (s_ - t_land) / 0.1) * 0.3))
+    # dust: the puff spreads and rises from the foot of the stack after the landing; the room's motes turn slowly
+    pf = c["puff"]
+    if s_ < t_land:
+        pf.location = (0, 0, -50)
+    else:
+        k = 1 - math.exp(-(s_ - t_land) / 0.6)
+        pf.location = STACK_AT + Vector((0.0, 0.0, 0.005 + 0.1 * k * math.exp(-(s_ - t_land) / 1.6)))
+        sc_ = 0.7 + 0.6 * k; pf.scale = (sc_, sc_, 1 + 1.2 * k)
+        pf.rotation_euler = (0, 0, 0.4 * k)
+    mo = c["motes"]
+    mo.rotation_euler = (0, 0, 0.05 * s_)
     mo.location = Vector((STACK_AT.x, STACK_AT.y, DESK_TOP)) + Vector((0.01 * s_, -0.008 * s_, 0.006 * math.sin(s_ * 0.7) - 0.004 * s_))
     bpy.context.view_layer.update()
 

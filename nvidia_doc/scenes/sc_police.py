@@ -12,7 +12,7 @@ from mathutils import Vector, Matrix
 from kit import *
 from sc_home import facade
 from sc_street import wet_asphalt
-from human import Human, add_asset, pose_walk, fingers_curl, _world_verts
+from human import Human, add_asset, pose_walk, fingers_curl, _world_verts, reach
 import vehicles
 import ph
 
@@ -270,11 +270,25 @@ def _pave_z(y):
     return PAVE_Z * min(1.0, max(0.0, (y - KERB_Y) / 0.25))
 
 
-def _officer(h, sec, appear, rise_from, out_to, walk_pts, face0, speed=1.3):
-    """Rise out of the car beside its door (hidden by the door / body), then walk the path."""
+def _arms(h, phase, swing=1.0, skip=()):
+    """Arms hang at the sides with a slight natural swing (IK, elbows back), opposite to the legs."""
+    f = h.arm.rotation_euler.z
+    fwd = Vector((math.sin(f), -math.cos(f), 0)); left = Vector((math.cos(f), math.sin(f), 0))
+    for sd, sg in (("L", 1), ("R", -1)):
+        if sd in skip:
+            continue
+        sw = 0.11 * swing * math.sin(2 * math.pi * (phase or 0.0) + (math.pi if sd == "L" else 0.0))
+        sh = h.bone_head(f"upperarm01.{sd}")
+        tgt = sh + Vector((0, 0, -0.55 + 0.03 * abs(sw))) + left * (0.07 * sg) + fwd * (0.02 + sw)
+        reach(h, sd, tgt, -fwd + Vector((0, 0, -0.3)) + left * (0.2 * sg), (fwd * 0.25 + Vector((0, 0, -1))).normalized())
+    fingers_curl(h, 22, thumb=12)
+
+
+def _officer(h, sec, appear, rise_from, out_to, walk_pts, face0, speed=1.3, skip=lambda d: ()):
+    """Rise out of the car beside its door (hidden by the door / body), then walk the path. Returns walked distance."""
     t_up = appear + 0.75
     if sec < appear:
-        h.arm.location = (0, 0, -60); bpy.context.view_layer.update(); return
+        h.arm.location = (0, 0, -60); bpy.context.view_layer.update(); return -1
     if sec < t_up:
         u = (sec - appear) / 0.75; e = ease(u)
         p = Vector(rise_from).lerp(Vector(out_to), e)
@@ -282,11 +296,22 @@ def _officer(h, sec, appear, rise_from, out_to, walk_pts, face0, speed=1.3):
         f = face0 + (_face(d0) - face0) * ease(max(0.0, (u - 0.4) / 0.6))
         place(h, p, f, z=-0.55 * (1 - e) ** 1.5 + _pave_z(p.y), phase=None)
         h.rot("spine03", (math.cos(f), math.sin(f), 0), 18 * (1 - e))         # leaning forward as he gets up
-        return
+        _arms(h, 0.0, 0.0)
+        return 0.0
     d = speed * (sec - t_up)
     p, dv = _path(walk_pts, d)
-    place(h, p, _face(dv), z=_pave_z(p.y), phase=(d / 1.35) % 1.0)
-    fingers_curl(h, 20)
+    ph_ = (d / 1.35) % 1.0
+    place(h, p, _face(dv), z=_pave_z(p.y), phase=ph_)
+    _arms(h, ph_, min(1.0, d / 0.6), skip=skip(d))
+    return d
+
+
+def _door_point(c, ang, along=1.1, z=0.95):
+    """World point on the driver's door outer face, `along` metres back from the hinge, at door angle ang (deg)."""
+    car = c["car"]; hg = c["door_r"]
+    local_h = Vector(hg.location); a = math.radians(ang)
+    q = Vector((-along * math.cos(a), -along * math.sin(a) - 0.05, z - local_h.z))
+    return car.matrix_world @ (local_h + q)
 
 
 def anim_pull(c, t):
@@ -299,13 +324,25 @@ def anim_pull(c, t):
     car.location = (x, y, 0); car.rotation_euler = (0, 0, math.atan(dydx))
     car.rotation_euler[1] = math.radians(-0.6) * max(0.0, 1 - abs(sec - STOP_T) / 0.35) if sec > STOP_T - 0.35 else 0.0   # nose dip
     vehicles.spin_wheels(car, x - START_X)
-    # doors: driver's opens toward the camera, the passenger's on the kerb side a beat earlier
-    c["door_r"].rotation_euler = (0, 0, math.radians(64) * ease(min(1.0, max(0.0, (sec - 2.55) / 0.75))))
+    # doors: driver's opens toward the camera (and he pushes it shut behind him), the passenger's on the kerb side
+    T_SHUT, D_SHUT = 4.15, 0.55
+    ang = 64 * ease(min(1.0, max(0.0, (sec - 2.55) / 0.75))) * (1 - ease(min(1.0, max(0.0, (sec - T_SHUT) / D_SHUT))))
+    c["door_r"].rotation_euler = (0, 0, math.radians(ang))
     c["door_l"].rotation_euler = (0, 0, -math.radians(60) * ease(min(1.0, max(0.0, (sec - 2.5) / 0.7))))
     bpy.context.view_layer.update()
-    # driver: out beside his door, then along the car toward its front (and on round to the lobby)
-    _officer(c["offA"], sec, 2.95, (0.1, CAR_Y - 1.05), (0.15, CAR_Y - 1.5),
-             [(0.15, CAR_Y - 1.5), (2.75, CAR_Y - 1.4), (3.25, CAR_Y - 0.4), (3.3, GLASS_Y - 1.0)], 0.0)
+    # driver: out behind his door, steps round its edge, pushes it shut with his left hand, walks on toward the front
+    pushing = lambda d: ("L",) if T_SHUT - 0.3 < sec < T_SHUT + D_SHUT + 0.1 else ()
+    _officer(c["offA"], sec, 2.95, (0.1, CAR_Y - 1.05), (0.1, CAR_Y - 1.5),
+             [(0.1, CAR_Y - 1.5), (-0.05, CAR_Y - 2.4), (2.8, CAR_Y - 2.3), (3.4, CAR_Y - 0.5), (3.45, GLASS_Y - 1.0)], 0.0,
+             skip=pushing)
+    if pushing(0):
+        h = c["offA"]
+        k = ease(min(1.0, (sec - (T_SHUT - 0.3)) / 0.3)) * (1 - ease(min(1.0, max(0.0, (sec - T_SHUT - D_SHUT + 0.15) / 0.25))))
+        f = h.arm.rotation_euler.z; fwd = Vector((math.sin(f), -math.cos(f), 0))
+        rest = h.bone_head("upperarm01.L") + Vector((0, 0, -0.55))
+        hand = rest.lerp(_door_point(c, ang, 1.05, 1.0), k)
+        reach(h, "L", hand, -fwd + Vector((0, 0, -0.4)), (Vector((0, 1, 0)) - fwd * 0.3).normalized())
+        fingers_curl(h, 10, side=("L",), thumb=5)
     # passenger: out on the kerb side and straight across the pavement to the lobby doors
     _officer(c["offB"], sec, 2.8, (0.25, CAR_Y + 1.05), (0.3, CAR_Y + 1.45),
              [(0.3, CAR_Y + 1.45), (0.9, KERB_Y + 0.6), (1.6, GLASS_Y - 0.6)], math.pi)
