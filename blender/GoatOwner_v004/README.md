@@ -29,6 +29,14 @@ It is built on v003. The director's mouth fix is kept: strong reds on `M_Goat` a
   - f1849 (30.8 s): official B's free hand crosses her own body while she walks beside the goat.
 
   Both are one sample long and not yet fixed.
-- **qa_check:** `review/qa_check_v004.json`, added once the scan finishes.
+- **qa_check** (`review/qa_check_v004.json`, step 6): BACKHEAD 3, EMPTY 264, FILL 5, INSIDE 3.
+  - **EMPTY 264:** mostly goat-only framings. The check counts only MPFB humans as characters, so shots of the goat alone (beats 2–4, the charge, the porch chase) register as empty.
+  - **FILL / INSIDE, f439–445:** the camera is in the goat's neck at the end of beat 2. A real fault, not yet fixed.
+  - **INSIDE / FILL, f1291:** the camera passes through a dust volume.
+  - **INSIDE, f1999:** a single sample during the pasture descent.
+  - **BACKHEAD:**
+    - f1: the owner is seen from behind the fence.
+    - f1519: he lies face down.
+    - f1735: an official is seen from behind as the team arrives.
 
 The source is `../GoatOwner_v001/scripts/` (01–05). The look pass uses `pipeline/anim_look.py --no-sky --exposure 0.15` from the director branch.
