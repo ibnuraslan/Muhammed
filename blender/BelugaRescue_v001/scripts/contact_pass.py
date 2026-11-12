@@ -22,6 +22,12 @@ SHOTS = [
     ("coping_hands", 2130, lambda f: (bw(D, "wrist.L", f) + bw(D, "wrist.R", f)) / 2, Vector((0.3, 0.6, 0.35)), 35),
     ("glass_hands", 1100, lambda f: bw(bpy.data.objects["Keeper"], "wrist.L", f), Vector((0.4, -0.5, 0.1)), 35),
     ("glass_spec", 800, lambda f: bw(bpy.data.objects["SpecA"], "wrist.L", f), Vector((0.4, -0.5, 0.1)), 35),
+    ("clap_gallery", 2020, lambda f: bw(bpy.data.objects["SpecA"], "wrist.L", f).lerp(bw(bpy.data.objects["SpecA"], "wrist.R", f), 0.5), Vector((0.1, 0.55, 0.15)), 35),
+    ("mouth_hand", 800, lambda f: bw(bpy.data.objects["SpecD"], "wrist.R", f), Vector((0.2, 0.5, 0.1)), 40),
+    ("point_specB", 800, lambda f: bw(bpy.data.objects["SpecB"], "wrist.L", f), Vector((0.3, 0.5, 0.1)), 40),
+    ("buoy_grip", 2120, lambda f: bw(bpy.data.objects["SpecF"], "wrist.L", f), Vector((0.5, 0.5, 0.25)), 35),
+    ("clap_deck", 2050, lambda f: bw(bpy.data.objects["SpecE"], "wrist.L", f), Vector((0.2, 0.7, 0.2)), 35),
+    ("stream_dive", 120, lambda f: bw(D, "wrist.L", f), Vector((0.4, 0.3, 0.3)), 35),
     ("deck_feet", 2150, lambda f: bw(bpy.data.objects["SpecF"], "foot.L", f), Vector((0.6, 0.8, 0.3)), 35),
 ]
 cd = bpy.data.cameras.new("QC"); cam = bpy.data.objects.new("QC", cd); sc.collection.objects.link(cam); cd.clip_start = 0.01

@@ -651,6 +651,16 @@ for f in list(range(1, END + 1, 6)) + [END]:
         W = c + side * sx * 0.37                     # grip on the outer edge of the ring, each side (palm outside the tube)
         K2H.key_hand(s_, f, W + Vector((0, 0, 0.03)), Vector((0, 0, -1)), -side * sx, pole=W + side * sx * 0.4 - fwd * 0.4 + Vector((0, 0, -0.3)))
         K2F.key_fingers(s_, f, 45, 40)
+# the buoy follows the hands the IK actually reached: rim between the two palms
+for f in list(range(1, END + 1, 6)) + [END]:
+    ev(f)
+    wl = K2.matrix_world @ K2R.PB["wrist.L"].head; wr = K2.matrix_world @ K2R.PB["wrist.R"].head
+    yw = R_(k2_yaw(f)); fwd = Vector((math.sin(yw), -math.cos(yw), 0))
+    c = (wl + wr) / 2 + fwd * 0.05 + Vector((0, 0, -0.07))
+    axis = (wr - wl).normalized().cross(Vector((0, 0, 1))).normalized()
+    if axis.dot(fwd) < 0: axis = -axis
+    buoy.location = c; buoy.rotation_quaternion = Vector((0, 0, 1)).rotation_difference(axis)
+    buoy.keyframe_insert("location", frame=f); buoy.keyframe_insert("rotation_quaternion", frame=f)
 print("DECK KEEPER keyed")
 for nm, h in PEOPLE.items():
     h.bake()

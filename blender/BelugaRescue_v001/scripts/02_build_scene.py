@@ -177,8 +177,8 @@ for i, (x, y, s) in enumerate([(-5.0, 3.8, 1.3), (-3.6, 4.4, 0.9), (4.8, 3.6, 1.
 # front wall (concrete) with the viewing window; gallery behind
 WIN = (-3.6, 3.6, 0.35, 3.15)        # x0, x1, z0, z1
 WY0, WY1 = -TY - 0.45, -TY           # wall thickness in y
-for nm, a in (("FrontWall_L", (-TX - 1, WIN[0], WY0, WY1, 0, DECK_Z)), ("FrontWall_R", (WIN[1], TX + 1, WY0, WY1, 0, DECK_Z)),
-              ("FrontWall_Bot", (WIN[0], WIN[1], WY0, WY1, 0, WIN[2])), ("FrontWall_Top", (WIN[0], WIN[1], WY0, WY1, WIN[3], DECK_Z))):
+for nm, a in (("FrontWall_L", (-TX - 1, WIN[0], WY0, WY1, 0, DECK_Z - 0.3)), ("FrontWall_R", (WIN[1], TX + 1, WY0, WY1, 0, DECK_Z - 0.3)),
+              ("FrontWall_Bot", (WIN[0], WIN[1], WY0, WY1, 0, WIN[2])), ("FrontWall_Top", (WIN[0], WIN[1], WY0, WY1, WIN[3], DECK_Z - 0.3))):
     mv(box(nm, *a, mat=M_CONC))
 acr = mv(box("Acrylic_Window", WIN[0], WIN[1], WY0 + 0.1, WY1 - 0.1, WIN[2], WIN[3], M_ACRYL))
 # steel frame around the window

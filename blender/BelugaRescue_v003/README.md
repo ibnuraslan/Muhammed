@@ -27,9 +27,11 @@ Source: `../BelugaRescue_v001/scripts/` — build order `01_build_people.py`, `0
 Review: `../BelugaRescue_v001/review/` (B blocking sheets, C 0.2 s polish sheets, contact close-ups, audits).
 
 ## Known issues
-- Hand audit (every 2 frames diver / 6 frames others, > 4 mm): 11 544 samples in 736 frame-checks, all contact rather than wrong poses:
-  her hands pressed on her calves while seated (6 035), fingers wrapped round the buoy tube (1 815), a resting hand at the hip pocket of two
-  spectators (≈2 600), clapping palms meeting (≈250), the whale's lip brushing her hand on 2 approach frames (422). No backward bends (limits).
+- Hand audit (every 2 frames diver / 6 frames others, > 4 mm): 26 631 samples in 587 frame-checks (from 571 045 before the pass), all contact rather than wrong poses:
+  the keeper's palms and fingers wrapped round the ring-buoy tube at 33–36 s (16 902 — the buoy is now carried by his actual hands), her hands pressed on her
+  calves while seated (6 035), two spectators' resting hands at the hip pocket (2 644), whale lip brushing her hand on 2 approach frames (422),
+  clapping palms meeting / her hands touching at the coping (585). No backward bends (Limit Rotation on all finger, thumb and wrist bones).
+- Also fixed in v003: the black strip on the deck edge (coplanar wall top), the buoy floating below the keeper's hands.
 - Audit (BVH, every 10 frames): the palms sit 1–2 cm into the coping top at 34.8–36.3 s (raised slightly after the audit, not re-measured); a few stray whale-vs-diver samples during the push-up (24–33 s), not visible in the sheets; one frame (28.3 s) where the fluke tip dips ~7 cm into the tiles; fin tip into the tiles on 2 frames (9.0 s, 22.8 s); mask rim touches the face on 2 frames.
 - The held foot is inside the beluga's mouth by design (lips within ~1–7 mm of the ankle).
 - The beluga is our own sculpt (no usable CC-BY/CC0 beluga exists); close-ups at 20–23 s are its weakest angle.

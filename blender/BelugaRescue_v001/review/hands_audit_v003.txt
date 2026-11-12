@@ -7,6 +7,6 @@ HAND_HAND   Diver                    346 samples in    2 frames, frames 273-2085
 HAND_HAND   Keeper                   136 samples in    9 frames, frames 1975-2185
 HAND_HAND   SpecB                    103 samples in    9 frames, frames 1975-2185
 HAND_OTHER  Diver/Beluga             422 samples in    2 frames, frames 1381-1387
-HAND_OTHER  SpecF/RingBuoy          1815 samples in  181 frames, frames 1-2005
+HAND_OTHER  SpecF/RingBuoy         16902 samples in   32 frames, frames 1993-2185
 HAND_TORSO  Diver                   6035 samples in   81 frames, frames 269-2083
-HAND AUDIT TOTAL: 11544 samples in 736 flagged frame-checks
+HAND AUDIT TOTAL: 26631 samples in 587 flagged frame-checks
