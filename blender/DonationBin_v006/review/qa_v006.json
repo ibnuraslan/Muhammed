@@ -1,0 +1,91 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "BACKHEAD",
+    "Shover"
+   ]
+  ],
+  "7": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "25": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "31": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "151": [
+   [
+    "BACKHEAD",
+    "Woman"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "961": [
+   [
+    "BACKHEAD",
+    "Woman"
+   ]
+  ],
+  "1021": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 9,
+  "BACKHEAD": 3,
+  "FILL": 2
+ }
+}
