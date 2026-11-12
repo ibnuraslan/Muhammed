@@ -577,5 +577,5 @@ def _():
             H.walk_to(P(c, key), (-9.0 * d, WY - 0.7 + 0.45 * k, G), (9.0 * d, WY - 0.7 + 0.45 * k, G), (0.1 + 0.27 * k + 0.45 * t) % 1.0, swing=12, stride=1.3)
     def cam(c, t):
         e = ease(t)
-        return (Vector((5.5, WY - 3.2, 1.5)).lerp(Vector((4.6, WY - 2.9, 1.5)), e), Vector((-2.0, WY + 0.2, 1.45)), 30)
+        return (Vector((5.0, WY + 2.2, 1.5)).lerp(Vector((4.2, WY + 2.0, 1.5)), e), Vector((-1.6, WY - 0.2, 1.4)), 30)
     return cam, anim
