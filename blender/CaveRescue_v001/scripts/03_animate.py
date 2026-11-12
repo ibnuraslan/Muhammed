@@ -320,7 +320,7 @@ for n, lane, s0 in WALK:
         hh = {}
         for s in "LR":
             sw = math.sin(ph + (0 if s == "L" else math.pi))
-            W, d, nn = relaxed_hand(n, P, Rb, s, fwd=(0.18 if not run else 0.28) * sw + (0.1 if run else 0.0), up=0.18 if run else 0.0, out=-0.02 if run else 0.0)
+            W, d, nn = relaxed_hand(n, P, Rb, s, fwd=(0.18 if not run else 0.28) * sw + (0.1 if run else 0.0), up=0.18 if run else 0.0, out=0.06 if run else 0.0)
             hh[s] = (W, d, nn, elbow_pole(n, P, Rb, s, out=0.08 if run else 0.18))
         key_hands(n, f, P, Rb, hh)
         if run:
