@@ -673,7 +673,7 @@ def build(variant=None):
      "lane_night": lambda c: build_lane(c, True), "salon_night": lambda c: build_salon(c, True)}[v](c)
     import look                                   # house cinematic lighting (look.py), at the end of the build
     if v == "dawn":
-        look.day_light("low_sun", azim=70, elev=10, haze_box=((0, -8, 6), (70, 30, 14)))
+        look.day_light("low_sun", azim=70, elev=14, haze_box=((0, -8, 6), (70, 30, 14)), exposure=0.1)
     elif v == "lane":
         look.day_light("overcast", azim=150, haze_box=((0, 4, 6), (10, 60, 14)))
     elif v == "salon":

@@ -352,7 +352,7 @@ def build(variant=None):
         to = bpy.data.objects.new("TorchBeam", tl); bpy.context.collection.objects.link(to); c["torch"] = to
         h = officer("Torch", 41, seed=2); c["torcher"] = h
     import look                                   # wet grey morning: one soft cool key from the side, haze in the air
-    look.day_light("overcast", azim=230, haze_box=((0, 0, 4), (60, 60, 10)))
+    look.day_light("overcast", azim=230, haze_box=((0, 0, 4), (60, 60, 10)), exposure=-0.8)
     return c
 
 
