@@ -30,3 +30,28 @@ Checked and fine: beats 1, 3–4 (cross-section), 7 (lone light), 10–11 (hands
   - The running boys' pumping hands dipped into their own hips (7.9 s, 9.0 s), so the arm path moved out.
   - Runners' hands touched the boy beside them (8.2 s), so the lanes are wider (±0.7 m) with more spacing.
 - **Hand close-ups:** `ACTING_v005_hand_closeups.jpg`. Grips and contacts are as in v004.
+
+## Round 2 (director review of v005) → v006
+| Item | Fix |
+|---|---|
+| Hand close-ups showed feet, blurs and black | `05_closeups.py` rewritten: a lit camera 0.4 m from the **hand** (wrist tail) for every hand action (19 shots). |
+| Claw hand on the edge boy (10 s close-up) | Palms flat on the rock (`hand_poses` flat_palm). |
+| Hand reaching into empty air (crowd) | The crowd now claps in front of the chest. The rescued boys and coach give an open-palm wave at head height. |
+| 22–23 s murky water | Camera fill (no volume scatter) at 160 W underwater, with exposure lifted. |
+| 29–30.5 s dark and blurred, then grey | A diver swims back up the passage ahead of the rising camera and surfaces beside the edge boy. The murk thins on the rise. |
+| 18 s and 42.5 s rock fills the frame | Waterline key moved to the pool side, facing the boys. Tow exit re-keyed so the pair stays in frame until the wall entry (4-frame wipe). |
+| 40.5 s tow with no one in frame | The camera turns back after the dive to find the pair swimming in. |
+| Hand contacts | Every finger key now uses the shared `hand_poses.py` presets (relaxed, cup_hold, flat_palm, wrap_grip, pinch, tripod, shield) plus `add_hand_limits`. The mask fit and syringe use `grip_object`. |
+| Printed logo on MPFB `male_casualsuit02` / `female_casualsuit02` / `female_casualsuit01` | Clothes swapped or flat-tinted (no logos). |
+
+### qa_check (c6240b2) on the v006 package: remaining flags and why they stay
+- **HOVER 0.**
+- **CLAW 3** (DiverB, f2335–2365): in-between frames while his hands close on the mask rim between `grip_object` keys. The hands are on the mask; see `mask_fit_L/R` in the close-ups.
+- **BACKHEAD 3:** f1 is the opening wide crane (the boys walk into the cave). f1489 and f1711 are beats 7 and 8 starting on the lone diver swimming away into the dark. The diver who died is deliberately never shown facing the camera.
+- **EMPTY 262:**
+  - 577–1015 and 2545–2725 are the mountain cutaway, which has no characters by design (route line, sumps, tiny figures).
+  - The underwater ranges (1207–1513, 1555–1783, 2413–2527) show the divers in frame on the sheets, but the check's head/hand visibility rays are blocked in the narrow passage. Verified on the half-second sheet.
+- **INSIDE 126 and FILL 3:**
+  - The cutaway ranges are the camera inside the studio dome.
+  - The tunnel and passage ranges are the camera inside the rock tubes, which are seen from inside by design. Flipping their normals made the count worse (216), so they were left as built.
+  - FILL 577, 1009 and 1219 are the 4-frame rock-wipe entries and the water-line crossing.

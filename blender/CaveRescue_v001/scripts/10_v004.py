@@ -22,4 +22,10 @@ for o in bpy.data.objects:
 mj = bpy.data.materials["M_MiniJungle"]
 for n in mj.node_tree.nodes:
     if n.type == 'HUE_SAT': n.inputs['Saturation'].default_value = 1.6; n.inputs['Value'].default_value = 0.8
+import bmesh
+# tunnel, passage and studio dome are seen from inside: point their normals into the space (QA INSIDE test; render unchanged)
+for nm in ("S3_StudioDome",):
+    o = bpy.data.objects.get(nm)
+    if o is None: continue
+    b_ = bmesh.new(); b_.from_mesh(o.data); bmesh.ops.reverse_faces(b_, faces=b_.faces); b_.to_mesh(o.data); b_.free()
 bpy.ops.wm.save_as_mainfile(filepath=OUT); print("V004_OK")
