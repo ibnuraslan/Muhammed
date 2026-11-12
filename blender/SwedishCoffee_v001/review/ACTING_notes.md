@@ -29,3 +29,17 @@ Reviewed `review/v004_half_A.jpg` + `review/v004_half_B.jpg`: every 30 frames, 2
 | 23 | 37.3–40.9 s (v005 draft) | Camera brushed the doctor beside the bed and the very old twin's head (camera-proximity check). | Doctor moved to the far side of the bed; a camera key at 2448 passes clear of the old twin. |
 
 Not changed (checked, plausible): soldier smashing the pot (both hands on it, shards on impact); the sack pour (beans from the sack mouth); crowd jeering/toasting with planted feet and weight shifts; doctors writing and looking up; the old twin's sips by the window (cup in a curled hand, to the lips and back).
+
+
+## Re-check (v005 package)
+- Half-second sheets: before `v004_half_A/B.jpg`, after `v005_half_A/B.jpg`. Hand close-ups (20 hand contacts): `v005_hand_closeups.jpg`.
+- `pipeline/clip_scan.py` (director, unchanged): **bad ranges []** → `v005_clip_scan_director.json`.
+  - This film swaps sets with `hide_render` keys and moves characters by their root bone. The unchanged script therefore only sees the 14 courtyard characters (it collects characters by visibility at frame 1).
+  - `scripts/clip_scan_setaware.py` is the same scan with per-frame visibility and the root-bone position, covering all 73 characters: **bad ranges [[1915, 1915]]** → `v005_clip_scan_setaware.json`.
+  - The one remaining frame is f1915 (31.9 s): the king's hand on his chest during the first frames of the knee buckle, a single 6-frame sample below the 25-point range threshold elsewhere.
+- `pipeline/qa_check.py` (c6240b2), unchanged → `v005_qa_check_director.json`: BACKHEAD 2, EMPTY 241, FILL 19, INSIDE 34.
+  - Almost all of these come from hidden sets: the script ray-casts the viewport, where every set is present at once. For example, it reports the church in the ballroom and in the square.
+- Re-run with viewport visibility synced to render visibility each frame (`scripts/qa_setaware.py`, qa_check itself unchanged) → `v005_qa_check_setaware.json`: **INSIDE 0, FILL 0**, BACKHEAD 1, EMPTY 206.
+  - All 206 EMPTY are "no character in view" from f169 on, because qa_check builds its character list at frame 1 (only the courtyard cast renders then). They are not empty frames: see the after sheets.
+  - BACKHEAD 1 is f1: the camera starts behind the crowd facing the scaffold.
+- `scripts/cam_proximity.py` (camera within 0.35 m of any character's bone axis, every 3 frames): 1 borderline sample (f1939, the masked figure's forearm at 0.30 m as he turns away).
