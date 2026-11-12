@@ -119,7 +119,9 @@ def join(objs, name):
     bpy.ops.object.select_all(action="DESELECT")
     for o in objs: o.select_set(True)
     bpy.context.view_layer.objects.active = objs[0]; bpy.ops.object.join()
-    o = bpy.context.object; o.name = name; return o
+    o = bpy.context.object; o.name = name
+    o.data.transform(o.matrix_world); o.matrix_world = Matrix.Identity(4)     # mesh in world space, origin at 0 (so hinge offsets are exact)
+    return o
 
 def glb(fname, name, size, axis, loc, rotz=0.0, coll="PROPS", rot=(0, 0, 0), floor=True):
     before = set(bpy.data.objects)
@@ -192,7 +194,21 @@ for k in range(7):
     door_parts.append(cyl("DBar", (bx, 0, 0.03), (bx, 0, 2.85), 0.016, M_RUST))
 for z in (0.08, 1.05, 2.1, 2.82):
     door_parts.append(box("DStrap", None, (-0.5, 0, z), (0.9, 0.05, 0.05), M_RUST, bevel=0.005))
-lock = box("Lock", None, (-0.15, 0.0, 1.05), (0.16, 0.1, 0.22), M_STEEL, bevel=0.01); door_parts.append(lock)
+M_LOCK = bpy.data.materials.new("Lock_Steel"); M_LOCK.use_nodes = True
+_lk = M_LOCK.node_tree.nodes["Principled BSDF"]; _lk.inputs["Base Color"].default_value = (0.16, 0.18, 0.2, 1); _lk.inputs["Metallic"].default_value = 0.9; _lk.inputs["Roughness"].default_value = 0.35
+M_HOLE = bpy.data.materials.new("Keyhole"); M_HOLE.use_nodes = True; M_HOLE.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.01, 0.01, 0.01, 1)
+M_BRASSL = bpy.data.materials.new("Lock_Brass"); M_BRASSL.use_nodes = True
+_bl = M_BRASSL.node_tree.nodes["Principled BSDF"]; _bl.inputs["Base Color"].default_value = (0.72, 0.55, 0.28, 1); _bl.inputs["Metallic"].default_value = 1.0; _bl.inputs["Roughness"].default_value = 0.3
+lock = box("Lock", None, (-0.15, 0.0, 1.05), (0.16, 0.1, 0.22), M_LOCK, bevel=0.012); door_parts.append(lock)
+for sy in (1, -1):
+    door_parts.append(cyl("Escutcheon", (-0.15, sy * 0.05, 1.0), (-0.15, sy * 0.056, 1.0), 0.022, M_BRASSL, verts=20))
+    door_parts.append(cyl("Keyhole", (-0.15, sy * 0.055, 1.0), (-0.15, sy * 0.058, 1.0), 0.006, M_HOLE, verts=12))
+    door_parts.append(box("KeySlot", None, (-0.15, sy * 0.0575, 0.988), (0.005, 0.004, 0.016), M_HOLE, bevel=0.0))
+    door_parts.append(box("Handle", None, (-0.15, sy * 0.075, 1.12), (0.03, 0.05, 0.03), M_LOCK, bevel=0.006))
+    door_parts.append(cyl("HandleBar", (-0.15, sy * 0.1, 1.12), (-0.04, sy * 0.1, 1.12), 0.012, M_LOCK, verts=12))
+for z in (0.97, 1.13):
+    door_parts.append(cyl("Rivet", (-0.21, 0.05, z), (-0.21, 0.056, z), 0.006, M_LOCK, verts=8))
+    door_parts.append(cyl("Rivet", (-0.09, 0.05, z), (-0.09, 0.056, z), 0.006, M_LOCK, verts=8))
 door = join(door_parts, "HeroDoor")
 door.data.transform(Matrix.Translation((0.95, 0, 0)))           # origin to hinge
 door.location = (-0.95, 0, 0)

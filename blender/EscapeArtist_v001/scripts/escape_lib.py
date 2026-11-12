@@ -26,15 +26,20 @@ globals()["ground_z"] = ground_z
 def vis_key(objs, ranges, f_end=3750):
     """ranges: list of (f0, f1) visible. Constant interpolation."""
     for o in objs:
+        vp = o.type == "MESH"          # meshes also hide in the viewport (so scans skip them); armatures keep evaluating
         o.hide_render = True; o.keyframe_insert("hide_render", frame=-1)
+        if vp: o.hide_viewport = True; o.keyframe_insert("hide_viewport", frame=-1)
         for f0, f1 in ranges:
             o.hide_render = False; o.keyframe_insert("hide_render", frame=f0)
             o.hide_render = True; o.keyframe_insert("hide_render", frame=f1 + 1)
+            if vp:
+                o.hide_viewport = False; o.keyframe_insert("hide_viewport", frame=f0)
+                o.hide_viewport = True; o.keyframe_insert("hide_viewport", frame=f1 + 1)
         o.hide_render = not any(f0 <= 0 <= f1 for f0, f1 in ranges)
         if o.animation_data and o.animation_data.action:
             for fc in fcurves_of(o):
                 for k in fc.keyframe_points: k.interpolation = "CONSTANT"
-        o.hide_viewport = False
+        if vp: o.hide_viewport = o.hide_render
 
 def fcurves_of(idb):
     ad = idb.animation_data
@@ -97,7 +102,7 @@ def pose(H, f, root, yaw=0.0, flex=0.0, side=0.0, feet=None, spine=(0, 0, 0), he
             H.key_hand(s, f, Vector(W), Vector(d), Vector(n), Vector(pl))
         else:
             # relaxed arm hanging at the side, elbow pole behind
-            W = rel(root, yaw + spine[1], ((1 if s == "R" else -1) * 0.24, 0.02, -0.1)); d, n = hand_dirs(yaw, (0, 0.1, -1), ((1 if s == "R" else -1) * -1, 0, 0))
+            W = rel(root, yaw + spine[1], ((1 if s == "R" else -1) * 0.31, 0.04, -0.06)); d, n = hand_dirs(yaw, (0, 0.15, -1), ((1 if s == "R" else -1) * -1, 0, 0))
             H.key_hand(s, f, W, d, n, rel(root, yaw, ((1 if s == "R" else -1) * 0.5, -0.45, 0.25)))
             if not (fingers and s in fingers): grip(H, s, f, 0.3, 0.3)
         if fingers and s in fingers:
@@ -157,3 +162,68 @@ def emit_mat(name, color, strength):
     bs.inputs["Emission Color"].default_value = color + (1,); bs.inputs["Emission Strength"].default_value = strength
     bs.inputs["Base Color"].default_value = color + (1,)
     return m
+
+# ---------------------------------------------------------------- acting helpers (v004 acting pass)
+def clear_keys(idb, f0, f1, prefix=None):
+    """remove keyframes in [f0, f1] (optionally only on data paths containing prefix)"""
+    for fc in fcurves_of(idb):
+        if prefix and prefix not in fc.data_path: continue
+        for k in [k for k in fc.keyframe_points if f0 <= k.co.x <= f1][::-1]:
+            fc.keyframe_points.remove(k)
+
+def _feet_keys(H, f, feet, yaw):
+    for s in "LR":
+        xy, fy = feet[s][0], feet[s][1]
+        H.key_foot(s, f, Vector(xy), fy)
+
+def sit_down(H, f0, f1, sit_root, yaw, feet, z_stand, end_spine=(20, 0, 0), end_head=(15, 0), hands_end=None):
+    """stand -> sit with real in-betweens: hips go back and down while the chest leans forward,
+    hands slide onto the thighs, feet stay planted."""
+    fx = (Vector(feet["L"][0]) + Vector(feet["R"][0])) / 2
+    stand = Vector((fx.x, fx.y, z_stand)) + (Vector((sit_root.x, sit_root.y, 0)) - Vector((fx.x, fx.y, 0))) * 0.25
+    stand.z = z_stand
+    for u, lean, hd in ((0.0, 4, 5), (0.35, 30, 18), (0.7, 34, 20), (1.0, end_spine[0], end_head[0])):
+        f = round(f0 + (f1 - f0) * u)
+        uu = smooth(min(1.0, u / 0.85))
+        r = stand.lerp(Vector(sit_root), uu)
+        r.z = z_stand + (sit_root.z - z_stand) * smooth(min(1.0, max(0.0, (u - 0.15) / 0.75)))
+        knee = rel(r, yaw, (0, 0.36, 0.13))
+        hands = {"L": (knee + rel(Vector(), yaw, (-0.12, 0.0, 0.0)), *hand_dirs(yaw, (0, 1, -0.3), (0, 0, -1)), None),
+                 "R": (knee + rel(Vector(), yaw, (0.12, 0.0, 0.0)), *hand_dirs(yaw, (0, 1, -0.3), (0, 0, -1)), None)}
+        if u == 1.0 and hands_end: hands = hands_end
+        pose(H, f, r, yaw=yaw, flex=-4 * uu, feet=feet, spine=(lean, 0, 0), head=(hd, end_head[1] * u), hands=hands, fingers={"L": 0.4, "R": 0.4})
+
+def stand_up(H, f0, f1, sit_root, yaw, feet, z_stand, push=True):
+    """sit -> stand: lean forward over the feet, push on the thighs, rise, straighten."""
+    fx = (Vector(feet["L"][0]) + Vector(feet["R"][0])) / 2
+    top = Vector((fx.x, fx.y, z_stand)) + (Vector((sit_root.x, sit_root.y, 0)) - Vector((fx.x, fx.y, 0))) * 0.15
+    top.z = z_stand
+    for u, lean, hd in ((0.0, 24, 15), (0.3, 40, 10), (0.45, 32, 6), (0.6, 22, 0), (1.0, 2, 0)):
+        f = round(f0 + (f1 - f0) * u)
+        r = Vector(sit_root).lerp(top, smooth(min(1.0, u / 0.7)))
+        r.z = sit_root.z + (z_stand - sit_root.z) * smooth(min(1.0, max(0.0, (u - 0.2) / 0.8)))
+        knee = rel(r, yaw, (0, 0.34, 0.18)) if u < 0.4 else None
+        hands = {s: (knee + rel(Vector(), yaw, ((1 if s == "R" else -1) * 0.12, 0, 0)), *hand_dirs(yaw, (0, 1, -0.3), (0, 0, -1)), None) for s in "LR"} if knee is not None else None
+        if 0.4 < u < 0.5:
+            hands = {s: (rel(r, yaw, ((1 if s == "R" else -1) * 0.34, 0.22, 0.05)), *hand_dirs(yaw, (0, 0.5, -1), ((1 if s == "R" else -1) * -1, 0, 0)), None) for s in "LR"}
+        pose(H, f, r, yaw=yaw, feet=feet, spine=(lean, 0, 0), head=(hd, 0), hands=hands, fingers={"L": 0.5, "R": 0.5})
+    return top
+
+def turn_steps(H, f0, f1, pos, yaw0, yaw1, z):
+    """turn on the spot in two real steps (left foot, then right), hips rotating between them"""
+    pos = Vector((pos[0], pos[1], z)); fm = round((f0 + f1) / 2)
+    for s in "LR":
+        H.key_foot(s, f0, H.foot_xy(s, pos, yaw0), yaw0)
+    ym = (yaw0 + yaw1) / 2
+    # left step
+    H.key_foot("L", round(f0 + (fm - f0) * 0.5), H.foot_xy("L", pos, ym).lerp(H.foot_xy("L", pos, yaw0), 0.5), ym, 0.07)
+    H.key_foot("L", fm, H.foot_xy("L", pos, yaw1), yaw1); H.key_foot("R", fm, H.foot_xy("R", pos, yaw0), yaw0)
+    H.key_foot("R", round(fm + (f1 - fm) * 0.5), H.foot_xy("R", pos, ym).lerp(H.foot_xy("R", pos, yaw1), 0.5), ym + 10, 0.07)
+    for s in "LR": H.key_foot(s, f1, H.foot_xy(s, pos, yaw1), yaw1)
+    for f in range(f0, f1 + 1, 2):
+        u = smooth((f - f0) / max(1, f1 - f0)); y = yaw0 + (yaw1 - yaw0) * u
+        H.key_root(f, pos + Vector((0, 0, -0.01 - 0.015 * math.sin(math.pi * u))), yaw=y)
+        H.key_spine(f, flex=3, twist=(yaw1 - yaw0) * 0.1 * (1 - u), head=(0, (yaw1 - yaw0) * 0.12 * (1 - u)))
+        for s, sg in (("L", -1), ("R", 1)):
+            W = rel(pos, y, (sg * 0.36, 0.06, -0.02)); d, n = hand_dirs(y, (0, 0.15, -1), (-sg, 0, 0))
+            H.key_hand(s, f, W, d, n, rel(pos, y, (sg * 0.5, -0.45, 0.25)))

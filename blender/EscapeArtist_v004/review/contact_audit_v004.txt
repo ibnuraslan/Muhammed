@@ -1,0 +1,49 @@
+00:00.638  blend            | Read blend: "/tmp/claude-0/-home-user-Muhammed/4889b52d-5a91-5629-8ee4-09eaf9bf4d43/scratchpad/film_look7.blend"
+[INFO ] services.locationservice ...............: Not adding link to MakeHuman user data, since neither explicit path nor auto-discovery is set in preferences.
+[INFO ] mpfb.init ..............................: Build info 20261010
+[INFO ] mpfb.init ..............................: Online access preference is not enabled. Not checking if MakeHuman is online.
+[INFO ] mpfb.init ..............................: MPFB initialization has finished.
+PEN 0 Prisoner 50
+PEN 30 Prisoner 50
+PEN 60 Prisoner 50
+PEN 90 Prisoner 50
+PEN 120 Prisoner 50
+PEN 150 Prisoner 50
+PEN 180 Prisoner 50
+PEN 210 Prisoner 50
+PEN 660 Prisoner 12
+PEN 1080 Stepmother 422
+PEN 2250 Prisoner 14
+PEN 2370 Prisoner 41
+PEN 2430 Prisoner 33
+PEN 2910 Prisoner 1201
+PEN 2940 Prisoner 1210
+PEN 2970 Prisoner 1206
+PEN 3510 PrisonerOld 92
+PEN 3540 PrisonerOld 92
+PEN 3570 PrisonerOld 92
+PEN 3600 PrisonerOld 92
+PEN 3630 PrisonerOld 92
+PEN 3660 PrisonerOld 92
+PEN 3690 PrisonerOld 92
+PEN 3720 PrisonerOld 92
+PEN 3750 PrisonerOld 92
+BEAT 1 {'hover': 0, 'sink': 0, 'pen': 8, 'cam': 0, 'n': 40}
+BEAT 2 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 36}
+BEAT 3 {'hover': 0, 'sink': 0, 'pen': 1, 'cam': 0, 'n': 14}
+BEAT 4 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 19}
+BEAT 5 {'hover': 0, 'sink': 0, 'pen': 1, 'cam': 0, 'n': 15}
+BEAT 6 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 22}
+BEAT 7 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 8}
+BEAT 8 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 10}
+BEAT 9 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 11}
+BEAT 10 {'hover': 0, 'sink': 0, 'pen': 3, 'cam': 0, 'n': 20}
+BEAT 11 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 56}
+BEAT 12 {'hover': 0, 'sink': 0, 'pen': 3, 'cam': 0, 'n': 22}
+BEAT 13 {'hover': 0, 'sink': 0, 'pen': 0, 'cam': 0, 'n': 13}
+BEAT 14 {'hover': 0, 'sink': 0, 'pen': 4, 'cam': 0, 'n': 20}
+BEAT 15 {'hover': 0, 'sink': 0, 'pen': 5, 'cam': 0, 'n': 25}
+TOTAL {'hover': 0, 'sink': 0, 'pen': 25, 'cam': 0, 'n': 331}
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:34:58)
+
+Blender quit
