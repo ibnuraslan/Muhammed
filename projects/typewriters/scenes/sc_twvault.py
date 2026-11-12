@@ -158,3 +158,14 @@ MOVES = {
     "sweep": dict(kind="anim", dof=None, anim=lambda c, t: animate(c, t * DUR["sweep"], "sweep"),
                   cam=lambda c, t: (Vector((2.2, -2.6, 1.6)).lerp(Vector((1.9, -2.45, 1.6)), ease(t)), Vector((-1.6, 0.4, 1.1)), 28)),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    look.night_interior()
+    return c

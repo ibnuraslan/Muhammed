@@ -507,3 +507,17 @@ MOVES = {
     "load": dict(kind="anim", dof=None, cam=cam_load, anim=anim("load")),
     "slats": dict(kind="anim", dof=5.6, cam=cam_slats, focus=lambda c, t: c["slat"].location + Vector((-0.08, 0.0, 0.16)), anim=anim("slats")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    if variant in ("night", "customs"):
+        look.night_interior()
+    else:
+        look.day_light("overcast", azim=200, haze_box=((0, -30, 8), (140, 120, 16)))
+    return c

@@ -511,3 +511,17 @@ MOVES = {
     "hoist_rise": dict(kind="anim", dof=None, cam=cam_hoist, anim=anim("hoist_rise")),
     "roof_swing": dict(kind="anim", dof=4.0, cam=cam_roof, focus=lambda c, t: c["crate"].location, anim=anim("roof_swing")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    if variant == "night":
+        look.night_interior()
+    else:
+        look.day_light("overcast", azim=210, haze_box=((0, 0, 15), (120, 120, 30)))
+    return c

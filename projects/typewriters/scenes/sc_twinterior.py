@@ -303,3 +303,14 @@ MOVES = {
     "landing": dict(kind="anim", dof=None, cam=cam_landing, anim=anim("landing")),
     "stairs": dict(kind="anim", dof=None, cam=cam_stairs, anim=anim("stairs")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    look.night_interior(lift=0.15)          # windowless corridor and lobby under fluorescents
+    return c

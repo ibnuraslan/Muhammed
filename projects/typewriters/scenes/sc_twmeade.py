@@ -490,3 +490,17 @@ for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04)))
 for k in MOVES:
     if "focus" not in MOVES[k]:
         MOVES[k]["dof"] = None
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    if variant == "night":
+        look.night_interior()
+    else:
+        look.interior_day(window=((-7.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="overcast", key_size=3.0)
+    return c

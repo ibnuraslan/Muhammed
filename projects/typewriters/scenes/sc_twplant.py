@@ -182,3 +182,14 @@ MOVES = {
     "line": dict(kind="anim", dof=3.5, cam=cam_line, focus=lambda c, t: Vector((-2.2, LINE_Y, 1.0)), anim=anim("line")),
     "pallet": dict(kind="anim", dof=3.5, cam=cam_pallet, focus=lambda c, t: c["pallet"].location + Vector((-0.6, 0, 0.6)), anim=anim("pallet")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    look.interior_day(window=((-2.0, 8.4, 5.5), (0.0, 0.0, 0.8)), mood="overcast", key_size=4.0, key_energy=9000)
+    return c

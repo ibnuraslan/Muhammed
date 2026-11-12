@@ -310,3 +310,15 @@ MOVES = {
                   title=("CHAPTER 1", "THE SWAP", 10, 130)),
     "scope": dict(kind="anim", dof=1.4, cam=cam_scope, focus=lambda c, t: c["scope"].matrix_world @ Vector((-0.07, -0.22, 0.19)), anim=anim("scope")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    look.interior_day(window=((-6.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="overcast", key_size=3.0)
+    look.gobo((-6.2, 0.0, 1.85), (0.05, 6.0, 1.8), axis="y", bars=7)
+    return c

@@ -193,3 +193,14 @@ MOVES = {
     "track": dict(kind="anim", dof=3.5, cam=cam_track, focus=lambda c, t: Vector((-3.0 + 3.5 * ease(t), -1.0, 0.9)), anim=anim("track")),
     "staple": dict(kind="anim", dof=2.4, cam=cam_staple, focus=lambda c, t: c["stapler"].location, anim=anim("staple")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    look.interior_day(window=((-0.5, -LY * 0.75, 2.1), (0.5, 0.8, 0.3)), mood="overcast", key_size=1.5)
+    return c

@@ -546,3 +546,17 @@ MOVES = {
     "night_push": dict(kind="anim", dof=2.0, cam=cam_night_push, focus=lambda c, t: _tw(c, (0, 0, 0.12)), anim=anim("night_push")),
     "night_type": dict(kind="anim", dof=6.3, cam=cam_night_type, focus=lambda c, t: T.world(c["tw"], (c["tw"]["carrier"].location.x, T.BALL_Y, T.BALL_Z)), anim=anim("night_type")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    if variant in ("night", "nsa", "analyst"):
+        look.night_interior()
+    else:
+        look.interior_day(window=((4.5, 0.0, 1.7), (0.0, 0.0, 0.8)), mood="low_sun", key_size=2.5)
+    return c

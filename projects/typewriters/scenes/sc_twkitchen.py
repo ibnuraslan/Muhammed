@@ -245,3 +245,17 @@ MOVES = {
     "talk": dict(kind="anim", dof=2.8, cam=cam_talk, focus=lambda c, t: c["P"]["defector"].bone_head("head"), anim=anim("talk")),
     "reels": dict(kind="anim", dof=4.0, cam=cam_reels, focus=lambda c, t: c["P"]["defector"].bone_head("head"), anim=anim("reels")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    if variant == "safe":
+        look.interior_day(window=((0.0, 2.9, 1.5), (0.0, 0.0, 0.8)), mood="overcast", key_size=1.8)
+    else:
+        look.night_interior()
+    return c

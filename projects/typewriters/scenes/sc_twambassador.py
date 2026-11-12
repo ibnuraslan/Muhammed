@@ -389,3 +389,18 @@ MOVES = {
     "note": dict(kind="anim", dof=4.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
     "pocket": dict(kind="anim", dof=3.0, cam=lambda c, t: (Vector((2.6, -0.5, 1.65)).lerp(Vector((2.4, -0.25, 1.62)), ease(t)), Vector((0.6, 2.4, 1.35)), 28), focus=lambda c, t: c["note"].location, anim=anim("pocket")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    if variant == "talks":
+        look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.3, 0.9)), mood="overcast")
+    else:
+        look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.5, 0.9)), mood="low_sun")
+        look.gobo((0.3, 3.25, 1.8), (4.0, 0.05, 2.0), axis="x", bars=6)
+    return c

@@ -159,3 +159,14 @@ MOVES = {
     "roll": dict(kind="anim", dof=3.5, cam=cam_roll, focus=lambda c, t: Vector(c["cams"][0].location) + Vector((0, 0, 1.4)), anim=anim("roll")),
     "wire": dict(kind="anim", dof=2.2, cam=cam_wire, focus=lambda c, t: c["wire_root"].matrix_world @ Vector((0, 0.1, 1.2)), anim=anim("wire")),
 }
+
+
+# ---------------------------------------------------------------- the cinematic look (house style, Nov 2026)
+import look
+_build_raw = build
+
+
+def build(variant=None):
+    c = _build_raw(variant) if variant is not None else _build_raw()
+    look.night_interior(lift=0.15)          # a studio: its own lamps are the light
+    return c
