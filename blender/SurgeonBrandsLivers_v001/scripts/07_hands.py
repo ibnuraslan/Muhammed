@@ -106,7 +106,7 @@ HAND_PTS = ["wrist", "metacarpal1", "metacarpal2", "metacarpal3", "metacarpal4"]
 def visible(rig):
     body = bpy.data.objects.get(rig.name + ".body")
     if rig.name == "Patient":       # on the table / bed her body is masked to the head (drape and blanket stand in), so only home counts
-        return 601 <= sc.frame_current <= 791
+        return 601 <= sc.frame_current <= 775
     return body is not None and not body.hide_render
 def P(rig, b, tail=False):
     pb = rig.pose.bones[b]; return rig.matrix_world @ (pb.tail if tail else pb.head)

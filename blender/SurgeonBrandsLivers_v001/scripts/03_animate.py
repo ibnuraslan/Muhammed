@@ -376,6 +376,12 @@ S1.P(446, s1_or + V(0.08, 0.0, -0.02), Y1 + 22, spine=(16, 0, 20), head=(18, 14,
      hands={"R": ("fn", tool_hand(drv, 0.115))}, curl={"R": (60, 45)})
 S1.P(458, s1_or + V(0.08, 0.0, -0.02), Y1 + 22, spine=(16, 0, 20), head=(18, 14, 0), feet=F1,
      hands={"R": ("fn", tool_hand(drv, 0.115))}, curl={"R": (30, 20)})
+# v007b: working elbows hang down and out to the side (the one-sided IK elbow limit otherwise flips the right elbow up
+# across his face in the low opening shot)
+WORK_POLES = {"R": V(-0.40, -0.10, -0.42), "L": V(0.40, -0.10, -0.42)}
+for _f, _p in S1.poses:
+    if _f <= 458 and not _p["poles"]:
+        _p["poles"] = WORK_POLES
 # --- mask off (v007 acting fix): the right hand comes up IN FRONT of the face, pinches the mask's lower edge and pulls it
 # down onto the chin; the elbow stays low and in front (pole forward/down), the left arm stays low; the mask only moves
 # while the hand holds it.
@@ -475,7 +481,7 @@ PT.P(728, hp + V(0.06, -0.06, -0.08), YP - 8, pitch=9, spine=(34, 10, 0), head=(
      hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.6, "jaw": 10}, poles=ELBOW_SIDE_R)
 PT.P(760, hp + V(0.06, -0.06, -0.09), YP - 8, pitch=9, spine=(30, 12, 0), head=(-22, -6, 0), feet=FP2,
      hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.4, "jaw": 12}, poles=ELBOW_SIDE_R)
-PT.P(790, hp + V(0.06, -0.06, -0.10), YP - 8, pitch=10, spine=(33, 12, 0), head=(-18, -4, 0), feet=FP2,
+PT.P(774, hp + V(0.06, -0.06, -0.10), YP - 8, pitch=10, spine=(33, 12, 0), head=(-18, -4, 0), feet=FP2,
      hands={"L": KNEE_L, "R": SIDE_R}, curl={"L": (30, 20), "R": (14, 12)}, face={"brow": 1.0, "close": 0.7, "jaw": 8}, poles=ELBOW_SIDE_R)
 # mug: in her hand (keys derived from her hand), slips at 690, falls, bounces
 def mug_key(f, loc, rot):
@@ -498,18 +504,19 @@ bed.parent = bed_root
 BED_TOP = 0.62
 blanket = box("Blanket", (0.82, 1.35, 0.06), (0, -0.25, BED_TOP + 0.12), mat("Blanket", (0.82, 0.86, 0.9), 0.85), bpy.data.collections["OR_Set"], bevel=0.03)
 blanket.parent = bed_root
-BED_PATH = [(766, V(1.75, 5.6, 0)), (784, V(1.75, 4.9, 0)), (860, V(1.75, 3.0, 0)), (940, V(1.72, 2.25, 0)), (990, V(1.72, 2.15, 0))]
+BED_PATH = [(758, V(1.75, 5.9, 0)), (781, V(1.75, 4.3, 0)),   # v007b: through the doors on beat 5 (781)
+            (860, V(1.75, 3.0, 0)), (940, V(1.72, 2.25, 0)), (990, V(1.72, 2.15, 0))]
 bp_ = pchip([(f, p) for f, p in BED_PATH]) if False else None
 bpx = pchip([(f, p.x) for f, p in BED_PATH]); bpy_ = pchip([(f, p.y) for f, p in BED_PATH])
-for f in list(range(766, 991, 4)) + [990]:
+for f in list(range(758, 991, 4)) + [990]:
     bed_root.location = V(bpx(f), bpy_(f), 0); bed_root.keyframe_insert("location", frame=f)
 bed_root.location = V(1.75, 5.6, 0); bed_root.keyframe_insert("location", frame=1)
 bed_root.location = V(1.72, 2.15, 0); bed_root.keyframe_insert("location", frame=1710)
-for f in list(range(792, 1000, 8)) + [1000, 1060]:
+for f in list(range(776, 1000, 8)) + [1000, 1060]:
     lie(PT, f, V(bpx(min(f, 990)), bpy_(min(f, 990)) + 0.1, BED_TOP + 0.10), 0, arms=8)
 lie(PT, 1066, pt_pos, 90); lie(PT, 1710, pt_pos, 90)
 PT.bake()
-stepped(PT.o, {600, 790, 1060})
+stepped(PT.o, {600, 774, 1060})
 pt_body = bpy.data.objects["Patient.body"]
 gi = pt_body.vertex_groups
 hv = pt_body.vertex_groups.new(name="head_only")
@@ -526,8 +533,8 @@ for f, on in ((0, True), (601, False), (1062, True)):
     mk.show_render = on; mk.show_viewport = on; pt_body.keyframe_insert('modifiers["head_only"].show_render', frame=f)
 for fc in fcurves(pt_body):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
-vis(part("Patient", "female_casualsuit02") + part("Patient", "shoes01"), [(601, 791)])
-vis(part("Patient", "male_casualsuit06"), [(792, 1061)])
+vis(part("Patient", "female_casualsuit02") + part("Patient", "shoes01"), [(601, 775)])
+vis(part("Patient", "male_casualsuit06"), [(776, 1061)])
 def mod_vis(body_name, mod, ranges):
     ob = bpy.data.objects[body_name]; m = ob.modifiers[mod]
     m.show_render = False; ob.keyframe_insert('modifiers["%s"].show_render' % mod, frame=0)
@@ -536,8 +543,8 @@ def mod_vis(body_name, mod, ranges):
         m.show_render = False; ob.keyframe_insert('modifiers["%s"].show_render' % mod, frame=f1 + 1)
     for fc in fcurves(ob):
         for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
-mod_vis("Patient.body", "Delete.male_casualsuit06", [(792, 1061)])
-mod_vis("Patient.body", "Delete.female_casualsuit02", [(601, 791)])
+mod_vis("Patient.body", "Delete.male_casualsuit06", [(776, 1061)])
+mod_vis("Patient.body", "Delete.female_casualsuit02", [(601, 775)])
 mod_vis("Surgeon1.body", "Delete.male_casualsuit01", [(0, 1100)])
 mod_vis("Surgeon1.body", "Delete.male_elegantsuit01", [(1101, 1710)])
 vis([blanket], [(0, 1061)])
@@ -945,7 +952,7 @@ for i, g in enumerate(o for o in bpy.data.objects if o.name.startswith("GhostLiv
 # doors swing open as the bed arrives, swing back
 for side, sg in (("L", -1), ("R", 1)):
     h = bpy.data.objects["DoorHinge_" + side]
-    for f, a in ((1, 0), (770, 0), (790, 82), (905, 82), (940, -8), (955, 3), (970, 0), (1710, 0)):
+    for f, a in ((1, 0), (760, 0), (777, 82), (905, 82), (940, -8), (955, 3), (970, 0), (1710, 0)):
         h.rotation_euler = (0, 0, R_(a * sg)); h.keyframe_insert("rotation_euler", frame=f)
 # calendar pages flip up and over (one day each, fast)
 for k, pg in enumerate(o for o in bpy.data.objects if o.name.startswith("CalPage_")):
