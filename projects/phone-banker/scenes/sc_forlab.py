@@ -375,12 +375,12 @@ def a_photocopies(c, sec):
         hide(c["people"][k], True)
     rp = c["people"]["reporter"]
     stand(rp, (LT.x - 0.05, LT.y - 0.62, 0), math.radians(180))
-    nod(rp, "spine04", 24); nod(rp, "spine03", 10); nod(rp, "head", 16)
+    nod(rp, "spine04", 14); nod(rp, "spine03", 6); nod(rp, "head", 22)
     cam = c["camera_prop"]
     shot = 1.0 if (sec % 1.8) < 0.15 else 0.0
-    p = rp.bone_head("head") + fwd(rp) * 0.14 + Vector((0, 0, -0.04 - 0.01 * shot))
+    p = rp.bone_head("head") + fwd(rp) * 0.17 + Vector((0, 0, -0.07 - 0.01 * shot))
     cam.location = p; cam.rotation_euler = (math.radians(-60), 0, 0)
-    hand_to(rp, "R", p + Vector((0.07, 0.0, -0.03)), curl=50); hand_to(rp, "L", p + Vector((-0.07, 0.0, -0.03)), curl=50)
+    hand_to(rp, "R", p + Vector((0.075, -0.02, -0.04)), curl=50); hand_to(rp, "L", p + Vector((-0.075, -0.02, -0.05)), curl=40)
     # she slides the next page under the lamp now and then
     pg = bpy.data.objects.get("Copy2")
     if pg:
@@ -444,7 +444,7 @@ MOVES = {
                      focus=lambda c, t: Vector((CASE.x, CASE.y - 0.07, Z + 0.06))),
     "slide_file": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("slide_file"), cam=_push((1.3, -1.7, 1.75), (1.05, -1.45, 1.72), (LT.x, LT.y, 1.2), (LT.x, LT.y + 0.05, 1.15), 30),
                        focus=lambda c, t: LT + Vector((0, 0.1, 0.2))),
-    "photocopies": dict(kind="anim", dof=3.2, far=10.0, anim=_anim("photocopies"), cam=_push((-0.4, 0.0, 1.6), (-0.55, 0.12, 1.58), (LT.x, LT.y - 0.2, 1.2), (LT.x, LT.y - 0.2, 1.15), 32),
+    "photocopies": dict(kind="anim", dof=3.2, far=10.0, anim=_anim("photocopies"), cam=_push((-0.3, 1.55, 1.75), (-0.42, 1.42, 1.7), (LT.x, LT.y - 0.4, 1.25), (LT.x, LT.y - 0.35, 1.2), 30),
                         focus=lambda c, t: LT + Vector((0, -0.4, 0.5))),
     "specialists": dict(kind="anim", dof=3.6, far=10.0, anim=_anim("specialists"), cam=_push((-0.2, 1.8, 1.4), (0.0, 1.85, 1.38), (1.9, 1.8, 1.1), (1.9, 1.8, 1.1), 30),
                         focus=lambda c, t: Vector((1.9, 1.8, 1.1))),

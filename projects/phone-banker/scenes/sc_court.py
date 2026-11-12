@@ -59,7 +59,17 @@ def build_room(c):
         l = area_light((-6.6, -2.2 + k * 3.6, 2.7), (0, math.radians(-90), 0), 2.4, 140, (0.88, 0.93, 1.0))
         l.visible_camera = False; l.visible_glossy = False; l.visible_transmission = False
     box("WinLowC", (-6.0, 2, 0.5), (0.2, 14, 1.0), plaster); box("WinHighC", (-6.0, 2, 4.7), (0.2, 14, 0.6), plaster)
-    box("Outside", (-30, 2, 8), (1, 50, 30), pbr("WinterSky", (0.75, 0.78, 0.82), 0.9, 0.0, **{'Emission Color': (0.8, 0.84, 0.9, 1), 'Emission Strength': 0.25}))
+    # painted window frames with glazing bars, and the building across the street instead of a flat white sky
+    bar_m = pbr("CWinBar", (0.62, 0.6, 0.55), 0.5)
+    for k in range(4):
+        y = -2.2 + k * 3.6
+        for dy in (-1.17, 0.0, 1.17):
+            box("WinMullion", (-6.04, y + dy, 2.7), (0.08, 0.07 if dy == 0 else 0.08, 3.4), bar_m)
+        for z in (1.03, 2.15, 3.3, 4.37):
+            box("WinTransom", (-6.04, y, z), (0.08, 2.4, 0.06 if z not in (1.03, 4.37) else 0.08), bar_m)
+    from pbkit import masonry_facade
+    box("Outside", (-22, 2, 10), (1, 60, 30), masonry_facade("CourtOpp", (0.62, 0.6, 0.57), 3.4, 2.8, 1.3, 1.8, 0.0, lit_strength=0.0))
+    box("OutsideStreet", (-14, 2, -0.5), (16, 60, 0.2), pbr("OutStreet", (0.55, 0.57, 0.6), 0.9))
     # the bench on a dais, the judge's high-backed chair
     box("Dais", (0, BENCH.y + 0.6, 0.2), (5.0, 2.6, 0.4), oak)
     box("JudgeBench", (0, BENCH.y, 0.95), (4.4, 0.7, 1.1), oak, bevel=0.02); box("JudgeTop", (0, BENCH.y - 0.05, 1.52), (4.6, 0.85, 0.05), oak)
@@ -113,6 +123,20 @@ def build_hall(c):
         box("HWallR", (2.05, (y0 + y1) / 2, 1.7), (0.1, y1 - y0, 3.4), walls)
     box("HWallROver", (2.05, 5.5, 3.0), (0.1, 1.8, 0.8), walls)
     box("CourtroomGlow", (3.5, 5.5, 1.3), (0.05, 1.8, 2.6), emissive("CourtInside", (0.9, 0.92, 0.95), 1.3))
+    # far end of the corridor: a wall with a tall window (glazing bars, winter light); a plain wall behind the camera
+    box("HEndBack", (0, -8.05, 1.7), (4.2, 0.1, 3.4), walls)
+    for (x0, x1, z0, z1) in ((-2.05, -0.65, 0, 3.4), (0.65, 2.05, 0, 3.4), (-0.65, 0.65, 0, 0.9), (-0.65, 0.65, 2.8, 3.4)):
+        box("HEnd", ((x0 + x1) / 2, 8.05, (z0 + z1) / 2), (x1 - x0, 0.1, z1 - z0), walls)
+    hbar = pbr("HWinBar", (0.6, 0.58, 0.52), 0.5)
+    for x in (-0.62, 0.0, 0.62):
+        box("HMullion", (x, 8.03, 1.85), (0.07, 0.08, 1.9), hbar)
+    for z in (0.92, 1.55, 2.2, 2.78):
+        box("HTransom", (0, 8.03, z), (1.3, 0.08, 0.06), hbar)
+    box("HWinGlass", (0, 8.06, 1.85), (1.3, 0.01, 1.9), glass("HGlass", (0.9, 0.93, 0.95), 0.02))
+    from pbkit import masonry_facade
+    box("HOutside", (0, 20, 8), (40, 1, 30), masonry_facade("HallOpp", (0.6, 0.58, 0.55), 3.3, 2.6, 1.2, 1.7, 0.0, lit_strength=0.0))
+    hl = area_light((0, 8.6, 1.85), (math.radians(-90), 0, 0), 1.3, 60, (0.88, 0.93, 1.0))
+    hl.visible_camera = False; hl.visible_glossy = False; hl.visible_transmission = False
     leaves = []
     for sy in (-1, 1):
         lf = joinm([box("CDoor", (0, -sy * 0.45, 1.3), (0.06, 0.88, 2.6), pbr("CDoorM", (0.3, 0.18, 0.09), 0.4, 0.0, **{'Coat Weight': 0.3}), bevel=0.01),
