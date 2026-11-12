@@ -228,7 +228,7 @@ stand(att, 597, V((-0.17, 2.02, 0)), -20, spine=(45, 10, 0), head=(15, 10), crou
 # kneel at his head (y ~ BY+2.0), facing -Y, holding his outstretched right forearm
 for f in (612, 654, 720, 760):
     att.key_root(f, V((-0.18, BY + 2.0, 0.47)), yaw=-20, flex=15)
-    att.key_spine(f, flex=62, twist=10, head=(12, 10))
+    att.key_spine(f, flex=62 if f < 720 else 28, twist=10 if f < 720 else 25, head=(12, 10) if f < 720 else (-8, 30))
     att.key_foot("L", f, V((-0.02, BY + 2.38)), -20, 0.02, -65); att.key_foot("R", f, V((-0.30, BY + 2.30)), -20, 0.02, -65)
     hand(att, "R", f, V((0.15, BY + 1.58, 0.47)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
     hand(att, "L", f, V((0.21, BY + 1.36, 0.46)), (0, -1, -0.4), (0, 0, -1), grip=0.5)
@@ -336,10 +336,14 @@ for f in (640, 700, 768, 900, 1068):
     stw.key_root(f, V((SK.x, SK.y, 0.56)), yaw=-90, flex=10)
     stw.key_spine(f, flex=55, twist=0, head=(15, 0))
     stw.key_foot("L", f, V((SK.x + 0.38, SK.y + 0.14)), -90, 0.02, -65); stw.key_foot("R", f, V((SK.x + 0.40, SK.y - 0.16)), -90, 0.02, -65)
+# "finally sedated": he sits back on his heels and looks up across at the attendant (relief)
+for f in (730, 768):
+    stw.key_root(f, V((SK.x + 0.04, SK.y, 0.60)), yaw=-90, flex=4)
+    stw.key_spine(f, flex=16, twist=-8, head=(-6, -22))
 # upper-arm injection: left hand steadies the arm, right hand holds the syringe (thumb on plunger)
 ev(700); UA = (bom.r.o.matrix_world @ bom.r.PB['upperarm02.R'].matrix).translation.copy() + V((0.0, 0.0, 0.05))   # bomber's right upper arm (evaluated)
 print('UA', UA)
-for f, dz in ((640, 0.25), (652, 0.18), (664, 0.09), (690, 0.07), (720, 0.07), (745, 0.2), (768, 0.3)):
+for f, dz in ((640, 0.25), (652, 0.18), (664, 0.09), (690, 0.07), (720, 0.07), (745, 0.24), (768, 0.34)):
     hand(stw, "R", f, UA + V((0.05, 0.0, dz + 0.10)), (-0.6, 0, -0.8), (0, 1, 0), grip=0.6)
     hand(stw, "L", f, UA + V((0.02, 0.22, 0.13)), (-1, 0, -0.3), (0, 0, -1), grip=0.45)
 for f in (900, 1068):

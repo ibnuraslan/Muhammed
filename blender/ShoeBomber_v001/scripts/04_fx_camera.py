@@ -432,8 +432,8 @@ SEG = [
     (697, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 697), 32),
     (712, V((0.30, 0.95, 0.80)), bp("Bomber", "upperarm02.R", 712), 32),
     # "finally sedated": two-shot of the steward's and the attendant's faces over his limp body (his face is to the carpet)
-    (736, V((0.12, 1.02, 1.05)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.15)), 22),
-    (760, V((0.10, 1.10, 1.00)), (bp("Steward", "head", 760) + bp("Attendant", "head", 760)) / 2 + V((0, 0, -0.18)), 22),
+    (736, V((0.10, 1.05, 0.95)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 22),
+    (760, V((0.08, 1.12, 0.92)), (bp("Steward", "head", 760) + bp("Attendant", "head", 760)) / 2 + V((0, 0, -0.08)), 22),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
     (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
