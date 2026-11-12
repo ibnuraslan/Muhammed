@@ -89,6 +89,8 @@ def build(variant=None):
     for k, (cl, hr, tn) in enumerate((("male_casualsuit01", "short04", (0.5, 0.5, 0.5)), ("male_casualsuit03", "short01", (0.8, 0.8, 0.85)),
                                       ("female_elegantsuit01", "ponytail01", (0.25, 0.25, 0.28)), ("male_casualsuit03", "short02", (1, 1, 1)))):
         c["trainees"].append(person(f"Train{k}", 0.0 if k == 2 else 1.0, 24 + 5 * k, cl, hr, cval=1.1, tint=tn, sat=0.4))
+    import look                                   # artificial light only: keep the set's lights, darker walls, warm practicals
+    look.night_interior()
     return c
 
 

@@ -177,6 +177,8 @@ def build(variant=None):
             go = bpy.data.objects.new("Glint", gl_); bpy.context.collection.objects.link(go); go.location = (-3.0 + q * 2.0, 0.9, 1.6)
     k = bpy.data.lights.new("Key", 'SPOT'); k.energy = 260; k.spot_size = math.radians(40); k.spot_blend = 0.6; k.color = (1.0, 0.9, 0.75)
     ko = bpy.data.objects.new("Key", k); bpy.context.collection.objects.link(ko); c["key"] = ko
+    import look                                   # artificial light only: keep the set's lights, darker walls, warm practicals
+    look.night_interior()
     return c
 
 

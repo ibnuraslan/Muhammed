@@ -109,6 +109,11 @@ def build_hall(c):
 def build(variant=None):
     c = {}
     {"street": build_street, "hall": build_hall}[variant or "street"](c)
+    import look
+    if (variant or "street") == "street":         # June dawn: a low raking sun down the suburban street
+        look.day_light("low_sun", azim=80, elev=6, haze_box=((0, 0, 6), (80, 60, 14)))
+    else:
+        look.night_interior()
     return c
 
 

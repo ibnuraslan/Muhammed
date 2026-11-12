@@ -351,6 +351,8 @@ def build(variant=None):
             standing(lw, (1.3 + k * 1.1, 8.72, 0), math.pi)
             c["lawyers"].append(lw)
         c["folder"] = box("Folder", (0, 0, 0), (0.24, 0.32, 0.02), pbr("FolderM", (0.55, 0.42, 0.25), 0.7))
+    import look                                   # one soft window key from the tall windows, the rest cut back
+    look.interior_day(window=((7.9, 10.0, 4.5), (0.0, 10.0, 0.8)), mood="overcast", key_size=4.0)
     return c
 
 

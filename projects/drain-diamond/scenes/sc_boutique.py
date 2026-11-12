@@ -671,6 +671,15 @@ def build(variant=None):
     {"dawn": build_dawn, "lane": build_lane, "salon": build_salon, "safe": build_safe,
      "corridor": build_corridor, "corridor_empty": lambda c: build_corridor(c, True),
      "lane_night": lambda c: build_lane(c, True), "salon_night": lambda c: build_salon(c, True)}[v](c)
+    import look                                   # house cinematic lighting (look.py), at the end of the build
+    if v == "dawn":
+        look.day_light("low_sun", azim=70, elev=10, haze_box=((0, -8, 6), (70, 30, 14)))
+    elif v == "lane":
+        look.day_light("overcast", azim=150, haze_box=((0, 4, 6), (10, 60, 14)))
+    elif v == "salon":
+        look.interior_day(window=((0, -1.2, 2.6), (-0.5, 5.0, 0.4)), mood="low_sun", key_size=3.0)
+    else:                                         # safe, corridors, the night lane and the dark salon
+        look.night_interior()
     return c
 
 

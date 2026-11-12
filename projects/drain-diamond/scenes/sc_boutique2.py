@@ -261,6 +261,8 @@ def build(variant=None):
     c = {}
     v = variant or "xmas"
     {"xmas": build_xmas, "upstairs": build_upstairs, "after": lambda c: build_upstairs(c, True)}[v](c)
+    import look                                   # December dusk: keep the set's own blue-hour light, warm practicals
+    look.night_interior()
     return c
 
 

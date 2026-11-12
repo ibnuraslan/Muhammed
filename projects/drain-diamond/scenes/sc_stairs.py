@@ -169,6 +169,8 @@ def build(variant=None):
         for k in range(2):
             h = painter(f"Run{k}", 30 + 8 * k, k + 1)
             c["men"].append(h)
+    import look                                   # artificial light only: keep the set's lights, darker walls, warm practicals
+    look.night_interior()
     return c
 
 

@@ -124,6 +124,8 @@ def build(variant=None):
             c[name] = h
         c["rain_ys"] = (-6.0, -3.0, -1.6)
         rain(c, 0, c["rain_ys"], width=30, height=8, strength=0.8, density=0.985)
+    import look                                   # artificial light only: keep the set's lights, darker walls, warm practicals
+    look.night_interior()
     return c
 
 

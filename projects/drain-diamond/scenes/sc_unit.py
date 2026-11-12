@@ -184,6 +184,8 @@ def build(variant=None):
         H.cyl((sx * 0.1, 0, -0.01), 0.045, 0.035, hp, verts=24, rot=(0, math.radians(90), 0))
         H.cyl((sx * 0.08, 0, -0.01), 0.04, 0.012, pbr("EarPad", (0.12, 0.12, 0.13), 0.8), verts=24, rot=(0, math.radians(90), 0))
     c["headband"] = H.done((0, 0, -20))
+    import look                                   # low sun through the blinds on the right-hand windows
+    look.interior_day(window=((5.7, 4.0, 2.0), (2.0, 4.0, 0.6)), mood="low_sun", key_size=2.5)
     return c
 
 

@@ -77,6 +77,8 @@ def build(variant=None):
         elif props[k] == "mic":
             prop = cyl(f"RepMic{k}", (0, 0, 0), 0.012, 0.2, pbr("RepMicM", (0.03, 0.03, 0.03), 0.4), verts=10)
         c["people"].append((h, Vector((x, y0, 0)), float(rng.uniform(0, 2.0)), prop, float(rng.uniform(-0.6, 0.6))))
+    import look                                   # grey February sky
+    look.day_light("overcast", azim=200, haze_box=((0, 0, 6), (80, 60, 14)))
     return c
 
 
