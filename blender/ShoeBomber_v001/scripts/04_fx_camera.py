@@ -447,7 +447,7 @@ CAB = [[
     (580, V((-0.30, 1.45, 1.65)), bp("Bomber", "spine01", 580, (0, 0.3, 0)), 24),
     (594, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 594, (0, 0.3, 0)), 22),
     (606, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
-    (625, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),
+    (625, V((0.05, 2.25, 1.95)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),   # v006c: off vertical (no track-to flip)
     # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
     (640, V((-0.12, 0.45, 1.15)), bp("Steward", "head", 640), 26),
     (655, P(-0.192, -0.419, 0.593), bp("Steward", "head", 655), 28),
