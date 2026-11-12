@@ -115,9 +115,9 @@ for f in range(316, 533, 4):
     pose(P_, f, sit_root + Vector((0, 0, 0.004 * stroke)), yaw=SY, flex=-8, feet=feet_sit, spine=(28, 4 * stroke, 0), head=(26, hdx),
          hands={"L": (sp + rel(Vector(), SY, (-0.11, -0.02, -0.01)), dL, nL, None),
                 "R": (fp + rel(Vector(), SY, (0.17, -0.03, 0.04)), dR, nR, None)},
-         fingers={"L": 0.85, "R": 0.9})
+         )
     face(P_, f, brow=-0.9, lid=0.35, jaw=1)
-    if f % 8 == 4:
+    if True:
         sc.frame_set(f); fh = O["File_Handle"]
         gripo(P_, "R", f, fh, fh.matrix_world.translation, (0, 0, -1))
         gripo(P_, "L", f, scrap, scrap.matrix_world.translation + rel(Vector(), SY, (-0.02, 0, 0)), (0, 0, -1))
@@ -144,23 +144,30 @@ for f in range(604, 627, 2):
     turn = min(1, max(0, (f - 606) / 14))
     dR, nR = hand_dirs(D_YAW, (0, 1, 0), (-1 + turn * 1.0, 0, -turn))
     pose(P_, f, D_ST, yaw=D_YAW, spine=(10, 0, 0), head=(18, 0),
-         hands={"R": (lockp + Vector((0.0, -0.2, 0.0)), dR, nR, None)}, fingers={"R": 0.9})
+         hands={"R": (lockp + Vector((0.0, -0.2, 0.0)), dR, nR, None)}, fingers={"R": "pinch"})
     face(P_, f, brow=-0.6, lid=0.25)
 door = O["HeroDoor"]
-DOOR_ANG = catmull([(626, 0.0), (640, -38.0), (646, -58.0), (652, -72.0)])
-def door_grip(f):
-    th = R_(DOOR_ANG(f)); return Vector((-0.95 + 0.73 * math.cos(th), 0.73 * math.sin(th) - 0.04, 1.2))
-for f in range(626, 648, 2):
-    u = (f - 626) / 20.0
-    dR, nR = hand_dirs(D_YAW, (0, 0.2, 1), (-1, 0, 0))
-    pose(P_, f, D_ST + Vector((0.05 * u, -0.18 * u, 0)), yaw=D_YAW + 15 * u, spine=(6 - 10 * u, -8 * u, 0), head=(10, 10 * u),
-         hands={"R": (door_grip(f) + Vector((0, -0.05, -0.05)), dR, nR, None)}, fingers={"R": 0.9})
-    face(P_, f, brow=0.3, lid=0.1)
 key_obj(door, 0, rot=(0, 0, 0)); key_obj(door, 626, rot=(0, 0, 0)); key_obj(door, 640, rot=(0, 0, R_(-38))); key_obj(door, 646, rot=(0, 0, R_(-58)))
 key_obj(door, 652, rot=(0, 0, R_(-72))); key_obj(door, 1859, rot=(0, 0, R_(-72)))
 key_obj(door, 1860, rot=(0, 0, 0)); key_obj(door, 2508, rot=(0, 0, 0)); key_obj(door, 2520, rot=(0, 0, R_(-36))); key_obj(door, 2532, rot=(0, 0, R_(-72)))
 key_obj(door, 3227, rot=(0, 0, R_(-72))); key_obj(door, 3228, rot=(0, 0, 0))
-walk(P_, [(648, (0.15, -0.6)), (664, (-0.4, 0.1)), (684, (-0.9, 1.1)), (705, (-1.6, 1.3))], 648, 705, yaw_fn=blend_yaw(wpath([(648, (0.15, -0.6)), (664, (-0.4, 0.1)), (684, (-0.9, 1.1)), (705, (-1.6, 1.3))])[1], D_YAW + 15, 648))
+_dfc = [fc for fc in fcurves_of(door) if fc.data_path == "rotation_euler" and fc.array_index == 2][0]
+def door_bar(f, r=0.59, z=1.28):
+    th = _dfc.evaluate(f); return Vector((-0.95 + r * math.cos(th), r * math.sin(th), z))
+DOOR_OFF = Vector((0.42, -0.3, 0))
+def door_pull(f0, f1, yaw0):
+    """left hand wraps a door bar and pulls; he steps back with the swing (feet stepping), right hand keeps the key"""
+    pts = [(f, tuple((door_bar(f) + DOOR_OFF).to_2d())) for f in range(f0, f1 + 1, 6)]
+    if pts[-1][0] != f1: pts.append((f1, tuple((door_bar(f1) + DOOR_OFF).to_2d())))
+    walk(P_, pts, f0, f1, yaw_fn=lambda f: yaw0 + (-125 - yaw0) * min(1, (f - f0) / 8), hands={"L": 1})
+    for f in range(f0, f1 + 1, 2):
+        bar = door_bar(f); sc.frame_set(f); root = bone_world(O["Prisoner"], "root").translation
+        ap = (bar - Vector((root.x, root.y, bar.z))); ap.z = 0; ap.normalize()
+        gripo(P_, "L", f, door, bar - ap * 0.016, ap, finger_dir=(0, 0, -1))
+    for f in (f0, (f0 + f1) // 2, f1): face(P_, f, brow=-0.3, lid=0.1, jaw=3)
+door_pull(626, 646, D_YAW)
+_P3o = [(648, tuple((door_bar(646) + DOOR_OFF).to_2d())), (664, (-0.4, 0.1)), (684, (-0.9, 1.1)), (705, (-1.6, 1.3))]
+walk(P_, _P3o, 648, 705, yaw_fn=blend_yaw(wpath(_P3o)[1], -125, 648))
 face(P_, 664, brow=0.4, lid=0.0); face(P_, 700, brow=0.4)
 # the filed key rides in his right hand from the moment he stands until he is out
 scrap.parent = None
@@ -196,7 +203,10 @@ tbx = O["Toolbox"]
 # father walks to the toolbox, lifts it, carries to the boy; boy turns and takes it
 walk(FA, [(942, (-0.6, 7.2)), (970, (0.6, 7.3)), (990, (1.75, 7.55))], 942, 990)
 H_TB = 0.43
-tb_path = [(990, Vector((2.2, 7.6, 0.0))), (1004, Vector((2.15, 7.55, 0.0))), (1030, Vector((1.6, 7.75, 0.35))), (1060, Vector((1.0, 7.9, 0.37))), (1128, Vector((0.86, 8.06, 0.3))), (1421, Vector((0.86, 8.06, 0.3)))]
+BRb = BR + Vector((0.15, -0.1, -0.02)); BYb = 120
+_side = rel(BRb, BYb, (0.3, 0.03, 0)); _hz = 0.56
+TB_SIDE = Vector((_side.x, _side.y, _hz - (H_TB + 0.03) - 0.04))
+tb_path = [(990, Vector((2.2, 7.6, 0.0))), (1004, Vector((2.15, 7.55, 0.0))), (1030, Vector((1.6, 7.75, 0.35))), (1060, Vector((1.0, 7.9, 0.37))), (1096, TB_SIDE + Vector((0.02, 0.0, 0.04))), (1128, TB_SIDE), (1421, TB_SIDE)]
 TBP = catmull(tb_path)
 for f in range(990, 1128, 2):
     p = TBP(f); key_obj(tbx, f, loc=p, rot=(0, 0, R_(-15 + (f - 990) * 0.4 if f < 1060 else 13)))
@@ -213,16 +223,18 @@ for f in range(992, 1041, 4):
         tm_ = mesh_of("Toolbox"); gripo(FA, "R", f, tm_, handle + Vector((0.05, 0, 0)), (0, 0, -1)); gripo(FA, "L", f, tm_, handle + Vector((-0.06, 0, 0)), (0, 0, -1))
 for f in range(942, 1128, 4):
     t = (f - 942)
-    yb = 180 if f < 1000 else 180 - min(70, (f - 1000) * 1.5)
+    yb = 180 if f < 1000 else 180 - min(60, (f - 1000) * 1.5)
     if f < 1036:
         pose(BOY, f, BR, yaw=yb, spine=(8, 0, 0), head=(5, 20 if f > 990 else 0))
     else:
         handle = TBP(f) + Vector((0, 0, H_TB + 0.03))
         dR, nR = hand_dirs(yb, (0, 0.3, -1), (0, 0, -1))
-        pose(BOY, f, BR + Vector((0.15, -0.1, -0.02)), yaw=yb, spine=(12, 0, 0), head=(20, 0),
-             hands={"R": (handle + Vector((0.04, 0, 0.07)), dR, nR, None), "L": (handle + Vector((-0.04, 0, 0.07)), dR, nR, None)}, fingers={"R": 0.95, "L": 0.95})
-        if f % 8 == 0:
-            tm_ = mesh_of("Toolbox"); gripo(BOY, "R", f, tm_, handle + Vector((0.04, 0, 0)), (0, 0, -1)); gripo(BOY, "L", f, tm_, handle + Vector((-0.04, 0, 0)), (0, 0, -1))
+        two = f < 1080
+        hd_ = {"R": (handle + Vector((0.04, 0, 0.07)), dR, nR, None)}
+        if two: hd_["L"] = (handle + Vector((-0.04, 0, 0.07)), dR, nR, None)
+        pose(BOY, f, BRb, yaw=yb, spine=(12 if two else 4, 0, 0), head=(20 if two else 5, 0), hands=hd_)
+        tm_ = mesh_of("Toolbox"); gripo(BOY, "R", f, tm_, handle + Vector((0.04 if two else 0.0, 0, 0)), (0, 0, -1))
+        if two: gripo(BOY, "L", f, tm_, handle + Vector((-0.04, 0, 0)), (0, 0, -1))
     face(BOY, f, smile=0.9 if f < 1070 else 0.0, frown=0.0 if f < 1070 else 0.6, brow=0.6 if f < 1070 else -0.2)
 chair = O["Armchair"]
 for f in range(1040, 1422, 10):
@@ -234,37 +246,39 @@ SR = Vector((7.2, 8.3, Z["Stepmother"])); SYw = -35          # behind the side t
 walk(SM, [(942, (7.5, 4.0)), (1020, (7.65, 6.6)), (1100, (7.2, 8.3))], 942, 1100)
 phone = O["Phone_Phone_0"]
 while phone.parent: phone = phone.parent          # the glTF has an inner node called "Phone"; animate the import root
-key_obj(phone, 0, loc=(6.9, 7.8, 0.435), rot=(0, 0, R_(200))); key_obj(phone, 1140, loc=(6.9, 7.8, 0.435), rot=(0, 0, R_(200)))
+key_obj(phone, 0, loc=(6.9, 7.8, 0.55), rot=(0, 0, R_(200))); key_obj(phone, 1140, loc=(6.9, 7.8, 0.55), rot=(0, 0, R_(200)))
 pose(SM, 1118, SR, yaw=SYw, spine=(8, 0, 0), head=(12, 0), hands={"R": (Vector((6.95, 7.92, 1.0)), *hand_dirs(SYw, (0, 1, -0.5), (0, 0, -1)), None)}, fingers={"R": 0.5})
 face(SM, 1118, brow=-0.6, frown=0.6)
 for f in range(1140, 1422, 4):
     t = (f - 1140) / 60
     lift = min(1, (f - 1140) / 30)
     pt = 0.5 + 0.5 * math.sin(t * 5)
-    wr = rel(SR, SYw, (0.1, 0.3, 0.2))                   # holds the desk phone in front of her chest, talking into it
-    pp = Vector((6.9, 7.8, 0.435)).lerp(wr + Vector((0, 0, -0.1)), lift)
+    wr = rel(SR, SYw, (0.1, 0.3, 0.3))                   # holds the phone in front of her chest, talking into it
+    pp = Vector((6.9, 7.8, 0.55)).lerp(wr + Vector((0, 0, -0.2)), lift)
     key_obj(phone, f, loc=pp, rot=(0, 0, R_(200 - 60 * lift)))
     dR, nR = hand_dirs(SYw, (-0.3, 1, 0.1), (0, 0, 1))      # palm up under the phone
     hR = Vector((6.92, 7.86, 0.9)).lerp(wr + Vector((0, 0, -0.12)), lift)
     dL, nL = hand_dirs(SYw, (-0.4, 1, 0.1), (0, 0, -1))
     pose(SM, f, SR + Vector((0, 0, -0.01 * pt)), yaw=SYw, side=-3, spine=(-4, 6 * pt, 0), head=(4 + 4 * pt, 10),
          hands={"R": (hR, dR, nR, rel(SR, SYw, (0.55, -0.1, 0.1))), "L": (rel(SR, SYw, (-0.38, 0.5 + 0.05 * pt, 0.42)), dL, nL, rel(SR, SYw, (-0.6, -0.2, 0.2)))},
-         fingers={"R": 0.9, "L": 0.35})
+         )
     face(SM, f, brow=-1.0, lid=0.25, jaw=6 + 10 * pt, frown=1.0)
     grip(SM, "L", f, pose_name="point")
-    if f % 8 == 0 and lift >= 1:
+    if True:
         sc.frame_set(f); ph_ = mesh_of("Phone_Phone_0") if O["Phone_Phone_0"].type == "MESH" else mesh_of(phone.name)
-        gripo(SM, "R", f, ph_, ph_.matrix_world.translation, (0, 0, 1))
+        _bb = [ph_.matrix_world @ Vector(c) for c in ph_.bound_box]
+        _pc = Vector((sum(v.x for v in _bb) / 8, sum(v.y for v in _bb) / 8, min(v.z for v in _bb)))
+        gripo(SM, "R", f, ph_, _pc, (0, 0, 1))
 # the boy reacts: clutches the toolbox, steps back toward the chair
 for f in range(1132, 1422, 6):
-    yb = 110 + 20 * min(1, (f - 1132) / 60)
-    handle = Vector((0.86, 8.06, 0.3 + H_TB + 0.03))
-    dB, nB = hand_dirs(yb, (0, 0.3, -1), (0, 0, -1))
-    pose(BOY, f, BR + Vector((0.15, -0.1, -0.02)), yaw=yb, spine=(8, 0, 0), head=(-5, 15 * math.sin(f / 30)),
-         hands={"R": (handle + Vector((0.04, 0, 0.07)), dB, nB, None), "L": (handle + Vector((-0.04, 0, 0.07)), dB, nB, None)}, fingers={"R": 0.95, "L": 0.95})
+    yb = BYb
+    handle = TB_SIDE + Vector((0, 0, H_TB + 0.03))
+    dB, nB = hand_dirs(yb, (0, 0.2, -1), (-1, 0, 0))
+    pose(BOY, f, BRb, yaw=yb, spine=(4, 0, 0), head=(-5, 25 * math.sin(f / 30)),
+         hands={"R": (handle + Vector((0.0, 0, 0.07)), dB, nB, None)})
     face(BOY, f, brow=0.9, lid=0.0, jaw=6, frown=0.7)
     if f % 12 == 0:
-        tm_ = mesh_of("Toolbox"); gripo(BOY, "R", f, tm_, handle + Vector((0.04, 0, 0)), (0, 0, -1)); gripo(BOY, "L", f, tm_, handle + Vector((-0.04, 0, 0)), (0, 0, -1))
+        tm_ = mesh_of("Toolbox"); gripo(BOY, "R", f, tm_, handle, (0, 0, -1))
 for nm in ("PoliceRed", "PoliceBlue"):
     L = O[nm]; ph = 0 if nm == "PoliceRed" else 1
     L.data.energy = 0; L.data.keyframe_insert("energy", frame=0); L.data.keyframe_insert("energy", frame=1240)
@@ -345,11 +359,12 @@ for f in range(1600, 1790, 4):
     P_.key_spine(f, flex=fl, head=(-20, 0))
     for s, W, F in (("L", hL, fL), ("R", hR, fR)):
         P_.key_hand(s, f, W, dd, nn, root + Vector((-0.5 if s == "L" else 0.5, 0.3, 0.2)))
-        grip(P_, s, f, 0.9, 0.8)
         P_.r.key_world("IK_foot." + s, f, Matrix.Translation(F) @ Matrix.Rotation(R_(-30), 4, "X") @ Matrix.Translation(-P_.ankle[s]) @ P_.r.rest("IK_foot." + s))
         pb = P_.r.PB["Pole_knee." + s]; pn = "Pole_knee." + s
         pb.location = P_.r.rest(pn).to_3x3().inverted() @ (root + Vector((0, -0.7, -0.4)) - P_.r.BN[pn].head_local); pb.keyframe_insert("location", frame=f)
     face(P_, f, brow=-1.0, lid=0.45, jaw=10, frown=0.6)
+    for s_, W_ in (("L", hL), ("R", hR)):
+        gripo(P_, s_, f, O["Object_8"], Vector((W_.x, MESH_Y, W_.z)), (0, -1, 0), finger_dir=(0, 0, -1))
 # drop and land (crouch), then sprint into the dark field
 gz = ground_z(FX, MESH_Y - 0.6)
 pose(P_, 1792, Vector((FX, MESH_Y - 0.6, gz + Z["Prisoner"] - 0.38)), yaw=0, flex=25, spine=(25, 0, 0), head=(-10, 0))
@@ -379,7 +394,7 @@ for f in range(1972, 2141, 8):
     pose(P_, f, sit_root + Vector((0, 0, -0.02 + 0.004 * math.sin(t * 6))), yaw=SY, flex=-4, feet=feet_sit, spine=(34 - 6 * math.sin(t) - 12 * look, 0, 0), head=(30 - 15 * min(1, t / 3) - 30 * look, 6 * math.sin(t) + 40 * look),
          hands={"L": (rel(sit_root, SY, (-0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (1, 0, 0)), None),
                 "R": (rel(sit_root, SY, (0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (-1, 0, 0)), None)},
-         fingers={"L": 0.6, "R": 0.6})
+         fingers={"L": "flat_palm", "R": "flat_palm"})
     face(P_, f, brow=-0.7 + 0.3 * math.sin(t), lid=0.35, frown=0.8)
 
 # ================================================================ BEAT 10 (2172-2484): saws through a window bar
@@ -387,11 +402,13 @@ saw = O["Hacksaw"]; barp = Vector((0.0, -3.2, 1.62))
 stand_up(P_, 2148, 2170, sit_root, SY, feet_sit, Z["Prisoner"])
 SAW0 = Vector((0.55, -2.28, 0.5))
 dS, nS = hand_dirs(SY, (0.3, 0.2, -1), (0, 0, -1))
-P_.key_hand("L", 2150, SAW0 + Vector((0, 0.0, 0.07)), dS, nS, rel(sit_root, SY, (-0.5, -0.3, 0.2))); grip(P_, "L", 2150, 0.3)
-P_.key_hand("L", 2156, SAW0 + Vector((0, 0.0, 0.06)), dS, nS, rel(sit_root, SY, (-0.5, -0.3, 0.2))); grip(P_, "L", 2156, 0.95)
+P_.key_hand("L", 2150, SAW0 + Vector((0, 0.0, 0.1)), dS, nS, rel(sit_root, SY, (-0.5, -0.3, 0.2))); grip(P_, "L", 2150, pose_name="relaxed")
 _P10 = [(2170, STAND), (2186, (0.05, -2.52))]
 walk(P_, _P10, 2170, 2186, yaw_fn=blend_yaw(wpath(_P10)[1], -90, 2170, 8), hands={"L": 1})
-clear_keys(O["Prisoner"], 2151, 2155, 'IK_hand.L')
+clear_keys(O["Prisoner"], 2151, 2185, 'IK_hand.L')
+for _bn in [b.name for b in O["Prisoner"].pose.bones if b.name.startswith("finger") and b.name.endswith(".L")]:
+    clear_keys(O["Prisoner"], 2151, 2185, 'bones["%s"]' % _bn)
+SAW_H = SAW0 + Vector((-math.sin(R_(30)) * 0.15, math.cos(R_(30)) * 0.15, 0.03))       # the handle end of the saw on the mattress
 SWR = Vector((0.05, -2.55, Z["Prisoner"] + 0.03))
 for f in range(2186, 2441, 3):
     st = math.sin((f - 2186) * 2 * math.pi / 26)
@@ -408,9 +425,11 @@ for f in range(2186, 2441, 3):
         sm_ = mesh_of("Hacksaw")
         gripo(P_, "R", f, sm_, handle, (0, -1, 0)); gripo(P_, "L", f, sm_, tip, (0, -1, 0))
 key_obj(saw, 0, loc=SAW0, rot=(0, 0, R_(30))); key_obj(saw, 2156, loc=SAW0, rot=(0, 0, R_(30)))
+sc.frame_set(2156); gripo(P_, "L", 2156, mesh_of("Hacksaw"), SAW_H, (0, 0, -1))
+sc.frame_set(2156); _SOFF = bone_world(O["Prisoner"], "wrist.L").inverted() @ saw.matrix_world
 for f in range(2158, 2186, 2):
     sc.frame_set(f); M = bone_world(O["Prisoner"], "wrist.L")
-    saw.matrix_world = M @ Matrix.Translation((0.0, 0.08, 0.0)) @ Matrix.Rotation(R_(90), 4, "X")
+    saw.matrix_world = M @ _SOFF
     saw.keyframe_insert("location", frame=f); saw.rotation_mode = "XYZ"; saw.keyframe_insert("rotation_euler", frame=f)
 key_obj(saw, 2898, loc=barp + Vector((0.08 * math.sin((2439 - 2186) * 2 * math.pi / 26), 0.03, 0.0)), rot=(0, 0, R_(90)))
 vis_key([saw] + saw.children_recursive, [(2150, 2898)])
@@ -438,15 +457,9 @@ for f in (2444, 2450):
     pose(P_, f, SWR, yaw=0, spine=(2, 0, 0), head=(-5, 40 if f == 2450 else 0))
 _P11 = [(2452, (0.05, -2.55)), (2478, (0.25, -1.35)), (2506, (0.1, -0.45))]
 walk(P_, _P11, 2452, 2506, yaw_fn=blend_yaw(wpath(_P11)[1], 0, 2452, 10))
-for f in range(2508, 2532, 2):
-    u = (f - 2508) / 22.0
-    dR, nR = hand_dirs(D_YAW, (0, 0.2, 1), (-1, 0, 0))
-    th = R_(-72 * smooth(u))
-    pose(P_, f, D_ST + Vector((0.05 * u, -0.18 * u, 0)), yaw=D_YAW + 15 * u, spine=(6 - 10 * u, -8 * u, 0), head=(10, 10 * u),
-         hands={"R": (Vector((-0.95 + 0.73 * math.cos(th), 0.73 * math.sin(th) - 0.09, 1.15)), dR, nR, None)}, fingers={"R": 0.9})
-    face(P_, f, brow=-0.5, lid=0.2)
-_P11b = [(2532, (0.15, -0.6)), (2548, (-0.4, 0.1)), (2566, (-1.0, 1.1)), (2582, (-1.3, 1.35))]
-walk(P_, _P11b, 2532, 2582, yaw_fn=blend_yaw(wpath(_P11b)[1], D_YAW + 15, 2532), hands={"R": 1})
+door_pull(2508, 2528, D_YAW)
+_P11b = [(2532, tuple((door_bar(2528) + DOOR_OFF).to_2d())), (2548, (-0.4, 0.1)), (2566, (-1.0, 1.1)), (2582, (-1.3, 1.35))]
+walk(P_, _P11b, 2532, 2582, yaw_fn=blend_yaw(wpath(_P11b)[1], -125, 2532), hands={"R": 1})
 for f in (2532, 2550, 2566):
     sc.frame_set(f)
 for f, off in ((2566, (0.27, -0.16, 0.02)), (2574, (0.26, -0.19, 0.02)), (2582, (0.24, 0.3, 0.35))):
@@ -503,11 +516,21 @@ for f, v in ((0, 0.02), (2898, 0.05), (2990, 0.5), (3166, 0.78), (3228, 0.85), (
     tal.default_value = v; tal.keyframe_insert("default_value", frame=f)
 # young prisoner scratches the tally wall (facing -x), then walks back and sits; old man takes over off camera at 3166
 TR = Vector((-0.95, -1.5, Z["Prisoner"])); TY = -90
+bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.003, depth=0.07); nail = bpy.context.object; nail.name = "Nail"
+nail.data.materials.append(bpy.data.materials["Painted_Steel"]); nail.rotation_euler = (0, R_(90), 0)
+vis_key([nail], [(2896, 2992)])
 for f in range(2898, 2991, 3):
     t = (f - 2898) / 60.0; stroke = math.sin(f * 0.9)
     W = Vector((-1.31, -1.35 - 0.04 * (f - 2898) / 92 + 0.012 * stroke, 1.62 - 0.03 * stroke))
     dR, nR = hand_dirs(TY, (0.2, 1, 0.3), (0, 0, -1))
-    pose(P_, f, TR + Vector((0, 0, -0.005 * stroke)), yaw=TY, spine=(4, -6, 0), head=(8, -8), hands={"R": (W, dR, nR, None)}, fingers={"R": 0.95})
+    pose(P_, f, TR + Vector((0, 0, -0.005 * stroke)), yaw=TY, spine=(4, -6, 0), head=(8, -8), hands={"R": (W + Vector((0.07, 0, 0)), dR, nR, None)})
+    grip(P_, "R", f, pose_name="pinch")
+# the nail sits in the pinch (thumb + index tips), point to the wall
+for f in range(2898, 2991, 3):
+    sc.frame_set(f); A = O["Prisoner"]; PB = A.pose.bones
+    pp = (A.matrix_world @ PB["finger1-3.R"].tail + A.matrix_world @ PB["finger2-3.R"].tail) / 2
+    nail.matrix_world = Matrix.Translation(pp + Vector((-0.03, 0, 0))) @ Matrix.Rotation(R_(90), 4, "Y")
+    nail.keyframe_insert("location", frame=f); nail.keyframe_insert("rotation_euler", frame=f)
     face(P_, f, brow=-0.6, lid=0.3, frown=0.4)
 _P12 = [(2992, (-0.95, -1.5)), (3012, (-0.4, -1.75)), (3030, (0.2, -1.8))]
 walk(P_, _P12, 2992, 3030, yaw_fn=blend_yaw(wpath(_P12)[1], TY, 2992, 10))
@@ -518,7 +541,7 @@ for H, nm, f0, f1 in ((P_, "Prisoner", 3078, 3166), (PO, "PrisonerOld", 3166, 32
         t = (f - 3078) / 60.0; up = 1.0 if 0.6 < t < 1.6 else 0.0
         pose(H, f, sit_root + Vector((0, 0, -0.02 + 0.004 * math.sin(t * 5))), yaw=SY, flex=-4, feet=feet_sit, spine=(24 - 8 * up, 0, 0), head=(10 - 30 * up, 30 * up - 10 * math.sin(t)),
              hands={"L": (rel(sit_root, SY, (-0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (1, 0, 0)), None),
-                    "R": (rel(sit_root, SY, (0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (-1, 0, 0)), None)}, fingers={"L": 0.5, "R": 0.5})
+                    "R": (rel(sit_root, SY, (0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (-1, 0, 0)), None)}, fingers={"L": "flat_palm", "R": "flat_palm"})
         face(H, f, brow=-0.3 + 0.5 * up, lid=0.3, frown=0.5)
 # day/night strobe through the window
 bpy.ops.object.light_add(type="SUN", location=(0, -6, 4)); sun = bpy.context.object; sun.name = "TimeLapseSun"
@@ -538,7 +561,7 @@ for f in range(3228, 3446, 10):
     lu = min(1.0, t * 2.5)
     pose(PO, f, sit_root + Vector((0, 0, -0.02 + 0.004 * math.sin(f / 9))), yaw=SY, flex=-4, feet=feet_sit, spine=(26 - 12 * lu, 0, 0), head=(15 - 30 * lu, 28 * lu + 10 * math.sin(t * 4)),
          hands={"L": (rel(sit_root, SY, (-0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (1, 0, 0)), None),
-                "R": (rel(sit_root, SY, (0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (-1, 0, 0)), None)}, fingers={"L": 0.5, "R": 0.5})
+                "R": (rel(sit_root, SY, (0.13, 0.4, 0.18)), *hand_dirs(SY, (0, 1, -0.3), (-1, 0, 0)), None)}, fingers={"L": "flat_palm", "R": "flat_palm"})
     face(PO, f, brow=-0.2 + 0.6 * t, lid=0.5 - 0.4 * t, frown=0.4)
 for f in range(3228, 3500, 6):
     slot.data.color = (1.0, 0.9 - 0.3 * ((f - 3228) / 270), 0.7 - 0.2 * ((f - 3228) / 270)); slot.data.keyframe_insert("color", frame=f)
@@ -569,9 +592,9 @@ for i, (H, nm, xy, yw) in enumerate(PROT):
         sp_ = cp + Vector((0, 0, -0.45))
         dd, nn_ = hand_dirs(yw, (0.0, 0.2, 1), (0, 1, 0))
         pose(H, f, root + Vector((0, 0, -0.01 * bob)), yaw=yw + 180 if False else yw + 180, spine=(-3, 5 * math.sin(f / 20 + i), 0), head=(-10, 0),
-             hands={"L": (sp_ + Vector((-0.02, 0.05, -0.05)), dd, nn_, None), "R": (sp_ + Vector((0.02, 0.05, -0.2)), dd, nn_, None)}, fingers={"L": 0.95, "R": 0.95})
+             hands={"L": (sp_ + Vector((-0.02, 0.05, -0.05)), dd, nn_, None), "R": (sp_ + Vector((0.02, 0.05, -0.2)), dd, nn_, None)})
         face(H, f, brow=0.2, jaw=4 + 8 * max(0, math.sin(f / 7 + i)), frown=0.3)
-        if f % 12 == 0:
+        if True:
             sc.frame_set(f); st_ = stick
             gripo(H, "L", f, st_, sp_ + Vector((0, 0, 0.0)), (0, 1, 0)); gripo(H, "R", f, st_, sp_ + Vector((0, 0, -0.15)), (0, 1, 0))
 # candles flicker

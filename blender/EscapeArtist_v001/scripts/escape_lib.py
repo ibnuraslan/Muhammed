@@ -116,7 +116,9 @@ def pose(H, f, root, yaw=0.0, flex=0.0, side=0.0, feet=None, spine=(0, 0, 0), he
             H.key_hand(s, f, W, d, n, rel(root, yaw, ((1 if s == "R" else -1) * 0.5, -0.45, 0.25)))
             if not (fingers and s in fingers): grip(H, s, f, 0.3, 0.3)
         if fingers and s in fingers:
-            grip(H, s, f, fingers[s])
+            v = fingers[s]
+            if isinstance(v, str): grip(H, s, f, pose_name=v)
+            else: grip(H, s, f, v)
 
 def yawv(deg):
     """unit facing vector for yaw deg (MPFB faces -Y at yaw 0)"""
@@ -201,7 +203,7 @@ def sit_down(H, f0, f1, sit_root, yaw, feet, z_stand, end_spine=(20, 0, 0), end_
         hands = {"L": (knee + rel(Vector(), yaw, (-0.12, 0.0, 0.0)), *hand_dirs(yaw, (0, 1, -0.3), (0, 0, -1)), None),
                  "R": (knee + rel(Vector(), yaw, (0.12, 0.0, 0.0)), *hand_dirs(yaw, (0, 1, -0.3), (0, 0, -1)), None)}
         if u == 1.0 and hands_end: hands = hands_end
-        pose(H, f, r, yaw=yaw, flex=-4 * uu, feet=feet, spine=(lean, 0, 0), head=(hd, end_head[1] * u), hands=hands, fingers={"L": 0.4, "R": 0.4})
+        pose(H, f, r, yaw=yaw, flex=-4 * uu, feet=feet, spine=(lean, 0, 0), head=(hd, end_head[1] * u), hands=hands, fingers={"L": "flat_palm", "R": "flat_palm"} if hands else None)
 
 def stand_up(H, f0, f1, sit_root, yaw, feet, z_stand, push=True):
     """sit -> stand: lean forward over the feet, push on the thighs, rise, straighten."""
@@ -216,7 +218,7 @@ def stand_up(H, f0, f1, sit_root, yaw, feet, z_stand, push=True):
         hands = {s: (knee + rel(Vector(), yaw, ((1 if s == "R" else -1) * 0.12, 0, 0)), *hand_dirs(yaw, (0, 1, -0.3), (0, 0, -1)), None) for s in "LR"} if knee is not None else None
         if 0.4 < u < 0.5:
             hands = {s: (rel(r, yaw, ((1 if s == "R" else -1) * 0.34, 0.22, 0.05)), *hand_dirs(yaw, (0, 0.5, -1), ((1 if s == "R" else -1) * -1, 0, 0)), None) for s in "LR"}
-        pose(H, f, r, yaw=yaw, feet=feet, spine=(lean, 0, 0), head=(hd, 0), hands=hands, fingers={"L": 0.5, "R": 0.5})
+        pose(H, f, r, yaw=yaw, feet=feet, spine=(lean, 0, 0), head=(hd, 0), hands=hands, fingers={"L": "flat_palm", "R": "flat_palm"} if hands else None)
     return top
 
 def turn_steps(H, f0, f1, pos, yaw0, yaw1, z):

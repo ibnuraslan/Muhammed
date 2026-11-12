@@ -362,9 +362,9 @@ watch, _ = glb("watch", "ClockWork", 0.16, 0, (0.45, 8.52, 0.755), rotz=R_(20), 
 tb, _ = glb("toolbox", "Toolbox", 0.55, 0, (2.2, 7.6, 0.0), rotz=R_(-15), coll="HOUSE")
 chair, _ = glb("armchair", "Armchair", 0.9, 0, (4.4, 7.4, 0.0), rotz=R_(200), coll="HOUSE")
 box("SideTable", None, (6.9, 7.8, 0.36), (0.55, 0.55, 0.72), M_WOOD, coll="HOUSE", bevel=0.02)
-phone, pm = glb("phone", "Phone", 0.5, 2, (6.9, 7.8, 0.435), rotz=R_(200), coll="HOUSE")
+phone, pm = glb("phone", "Phone", 0.3, 2, (6.9, 7.8, 0.55), rotz=R_(200), coll="HOUSE")
 for o in pm:
-    if "Dial Numbers" in o.name: bpy.data.objects.remove(o)          # no text on screen
+    if any(k in o.name for k in ("Dial Numbers", "Wood_Wood", "Feet_Feet", "Cable_Cable")): bpy.data.objects.remove(o)   # no text; drop the stand so she holds just the phone
 # loose gears on the bench (small toothed discs)
 def gear(name, r, teeth, th, loc, mat):
     bm = bmesh.new(); pts = []

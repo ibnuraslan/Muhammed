@@ -85,51 +85,73 @@
   "306": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 12%"
+    "wall/prop fills the frame, character only 11%"
    ]
   ],
   "312": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 11%"
-   ],
-   [
-    "CLAW",
-    "Prisoner.R curl 38"
    ]
   ],
   "318": [
    [
     "CLAW",
-    "Prisoner.L curl 50"
-   ],
+    "Prisoner.R curl 75"
+   ]
+  ],
+  "342": [
    [
     "CLAW",
-    "Prisoner.R curl 65"
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "360": [
+   [
+    "CLAW",
+    "Prisoner.R curl 68"
    ]
   ],
   "378": [
    [
     "CLAW",
-    "Prisoner.R curl 60"
+    "Prisoner.R curl 71"
    ]
   ],
   "390": [
    [
     "CLAW",
-    "Prisoner.R curl 64"
+    "Prisoner.R curl 74"
    ]
   ],
   "402": [
    [
     "CLAW",
-    "Prisoner.R curl 64"
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "426": [
+   [
+    "CLAW",
+    "Prisoner.R curl 71"
+   ]
+  ],
+  "432": [
+   [
+    "CLAW",
+    "Prisoner.R curl 69"
+   ]
+  ],
+  "450": [
+   [
+    "CLAW",
+    "Prisoner.R curl 74"
    ]
   ],
   "474": [
    [
     "CLAW",
-    "Prisoner.R curl 65"
+    "Prisoner.R curl 74"
    ]
   ],
   "540": [
@@ -224,12 +246,20 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 36"
    ]
   ],
   "636": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 2%"
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 61"
    ]
   ],
   "678": [
@@ -388,6 +418,12 @@
     "Boy"
    ]
   ],
+  "1044": [
+   [
+    "CLAW",
+    "Boy.R curl 56"
+   ]
+  ],
   "1062": [
    [
     "EMPTY",
@@ -427,131 +463,99 @@
   "1164": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 14%"
    ]
   ],
   "1170": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ]
-  ],
-  "1176": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 10%"
-   ]
-  ],
-  "1182": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 9%"
-   ],
-   [
-    "CLAW",
-    "Stepmother.R curl 61"
-   ]
-  ],
-  "1188": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 7%"
-   ]
-  ],
-  "1194": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 7%"
-   ],
-   [
-    "CLAW",
-    "Stepmother.R curl 43"
-   ]
-  ],
-  "1200": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 7%"
-   ],
-   [
-    "CLAW",
-    "Stepmother.R curl 46"
-   ]
-  ],
-  "1206": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 7%"
-   ],
-   [
-    "CLAW",
-    "Stepmother.R curl 63"
-   ]
-  ],
-  "1212": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 10%"
-   ]
-  ],
-  "1218": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ]
-  ],
-  "1224": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 9%"
-   ],
    [
     "CLAW",
     "Stepmother.R curl 69"
    ]
   ],
-  "1230": [
+  "1176": [
+   [
+    "CLAW",
+    "Stepmother.R curl 74"
+   ]
+  ],
+  "1182": [
+   [
+    "CLAW",
+    "Stepmother.R curl 64"
+   ]
+  ],
+  "1206": [
+   [
+    "CLAW",
+    "Stepmother.R curl 71"
+   ]
+  ],
+  "1218": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "wall/prop fills the frame, character only 14%"
    ],
    [
     "CLAW",
-    "Stepmother.R curl 60"
+    "Stepmother.R curl 68"
+   ]
+  ],
+  "1224": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1230": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 68"
    ]
   ],
   "1236": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "1242": [
    [
     "CLAW",
-    "Stepmother.R curl 61"
+    "Stepmother.R curl 50"
+   ]
+  ],
+  "1248": [
+   [
+    "CLAW",
+    "Stepmother.R curl 64"
    ]
   ],
   "1254": [
    [
     "CLAW",
-    "Stepmother.R curl 61"
+    "Stepmother.R curl 54"
+   ]
+  ],
+  "1260": [
+   [
+    "CLAW",
+    "Stepmother.R curl 60"
    ]
   ],
   "1266": [
    [
     "CLAW",
-    "Stepmother.R curl 62"
+    "Stepmother.R curl 63"
    ]
   ],
   "1272": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 1%"
-   ],
-   [
-    "CLAW",
-    "Stepmother.R curl 46"
+    "wall/prop fills the frame, character only 2%"
    ]
   ],
   "1278": [
@@ -846,72 +850,136 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
    ]
   ],
   "1608": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
    ]
   ],
   "1614": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
    ]
   ],
   "1620": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 52"
    ]
   ],
   "1626": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 7%"
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 52"
    ]
   ],
   "1632": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 52"
    ]
   ],
   "1638": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 66"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 66"
    ]
   ],
   "1644": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
    ]
   ],
   "1650": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
    ]
   ],
   "1656": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
    ]
   ],
   "1662": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 54"
    ]
   ],
   "1668": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 60"
+   ]
+  ],
+  "1674": [
+   [
+    "CLAW",
+    "Prisoner.R curl 69"
+   ]
+  ],
+  "1722": [
+   [
+    "CLAW",
+    "Prisoner.L curl 75"
    ]
   ],
   "1740": [
@@ -923,13 +991,21 @@
   "1746": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 11%"
+    "wall/prop fills the frame, character only 10%"
    ]
   ],
   "1770": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 60"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 60"
    ]
   ],
   "1776": [
@@ -1081,7 +1157,11 @@
   "2184": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 14%"
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 37"
    ]
   ],
   "2190": [
@@ -1150,10 +1230,16 @@
     "Prisoner"
    ]
   ],
+  "2508": [
+   [
+    "CLAW",
+    "Prisoner.L curl 33"
+   ]
+  ],
   "2514": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 9%"
+    "wall/prop fills the frame, character only 11%"
    ]
   ],
   "2628": [
@@ -1201,7 +1287,7 @@
   "2898": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 6%"
+    "wall/prop fills the frame, character only 5%"
    ],
    [
     "BACKHEAD",
@@ -1417,7 +1503,7 @@
   "3204": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 5%"
    ]
   ],
   "3498": [
@@ -1504,6 +1590,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "CLAW",
+    "Protester1.R curl 75"
    ]
   ],
   "3588": [
@@ -1552,10 +1642,22 @@
     "Protester2.R curl 27"
    ]
   ],
+  "3606": [
+   [
+    "CLAW",
+    "Protester2.L curl 51"
+   ]
+  ],
   "3612": [
    [
     "CLAW",
     "Protester2.R curl 36"
+   ]
+  ],
+  "3618": [
+   [
+    "CLAW",
+    "Protester2.R curl 45"
    ]
   ],
   "3624": [
@@ -1615,8 +1717,8 @@
  },
  "counts": {
   "BACKHEAD": 7,
-  "EMPTY": 257,
+  "EMPTY": 249,
   "FILL": 7,
-  "CLAW": 25
+  "CLAW": 54
  }
 }

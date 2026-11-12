@@ -80,3 +80,36 @@ See `review/clip_scan_v004.json`.
 4. No empty, blurred or black cells: **not fully.** There are no black cells, but QA flags EMPTY on wide and transition frames (257).
 5. Close-ups show hands: **checked for the targeted set.** Some generic close-ups (fence top, tally) show the body rather than the hand.
 6. `hand_poses.py` used: **checked.**
+
+## Round 3 (director's v004 hand notes, 16:20–17:00 UTC)
+| Director note | Fix |
+|---|---|
+| 1. Door pulls (f620/636/2520/2524): hand hangs beside the bars | **Left hand** (the door is on his left) wraps a door bar with `grip_object` every 2 frames while he steps back with the swing: wrist 1–3 cm and fingertips 1–5 cm from the bar, measured. The right hand holds the key in a `pinch` at the lock. |
+| 2. Saw pick-up (f2153/2154) | `grip_object` wrap on the handle end at 2156. The saw is carried in that grip (offset taken from the grip, not a guessed one). |
+| 3. Boy and toolbox (f1300): box inside his legs | He carries it by the handle at his right side, arm down, box clear of the legs: `grip_object` every 6–12 frames. |
+| 4. Stepmother (f1250): phone on the table / table floats | The phone model's wooden stand, base and cable are removed (they were the floating "table"). The phone is scaled to handheld size, lifted from the side table to chest height, and held with `grip_object`. The other arm points (`point` pose). |
+| 5. Tally (f2940): fist on the wall | A nail is held in a `pinch` between thumb and index (baked to the pinch point), its point on the wall. |
+| 6. Claws at f3062 / f3456 | `flat_palm` on the thighs while sitting and standing, `relaxed` when hanging. |
+| 7. Fence top (f1750) close-up showed legs | `grip_object` on the chain-link every 4 frames during the climb. The close-up at 1680 shows both hands on the mesh. The 1750 angle still frames his legs (open). |
+| CLAW on file and phone grips | Fingers on held props now come only from `grip_object` (wrap, or auto-pinch for thin objects), with no preset curl in between. |
+
+**`qa_check.py` on the packed v004 (`review/qa_v004.json`):** BACKHEAD 7, EMPTY 249, FILL 7, CLAW 54, and HOVER, INSIDE and FACEPRESS all 0.
+
+The remaining **CLAW 54** are all on held objects, where `grip_object` closes the fingers onto a thin surface. The base joints stay almost straight while the tips curl, which matches QA's claw pattern:
+
+| Held object | Who | Frames |
+|---|---|---|
+| File handle | Prisoner.R | 318–474 |
+| Chain-link wire | Prisoner | 1602–1674 |
+| Phone | Stepmother.R | 1170–1266 |
+| Door bar | Prisoner.L | 630, 636, 2508 |
+| Saw (carried) | Prisoner.L | 2184 |
+| Placard sticks | protesters | 3504–3618 |
+
+Listed as intended contact. The close-ups show these hands on the objects.
+
+**Still open:**
+- **EMPTY 249:** wide and transition framings with the character under 15 % of frame.
+- **BACKHEAD 7:** beat frames 0, 276, 942, 1548, 2484, 2898 and 3498.
+- **Key at the lock (f620):** the key isn't visible in the close-up; the right hand pinches about 15 cm inside the lock.
+- **Fence-top close-up angle (f1750).**
