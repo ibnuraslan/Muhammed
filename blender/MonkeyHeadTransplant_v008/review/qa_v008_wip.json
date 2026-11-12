@@ -1,0 +1,2126 @@
+{
+ "frames": {
+  "1": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "7": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "13": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "19": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "25": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "31": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "37": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "43": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "49": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "55": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "61": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "67": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "73": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "79": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "85": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "91": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "97": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "103": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "109": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "115": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "121": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "127": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "133": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "139": [
+   [
+    "CLAW",
+    "Surgeon.R curl 45"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "241": [
+   [
+    "FACEPRESS",
+    "Surgeon.R hand on face"
+   ]
+  ],
+  "391": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "397": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "403": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "415": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "445": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "523": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 22 deg"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 26 deg"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 30 deg"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 33 deg"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 37 deg"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 42 deg"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 47 deg"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 53 deg"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 59 deg"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 30 deg"
+   ]
+  ],
+  "961": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 24 deg"
+   ]
+  ],
+  "967": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 20 deg"
+   ]
+  ],
+  "973": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only T2_Drape in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only T2_Drape in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only T2_Drape in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only T2_Drape in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "FILL",
+    "T2_Drape"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 33 deg"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 42 deg"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 49 deg"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 51 deg"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 50 deg"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 45 deg"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 38 deg"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 30 deg"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ROLL",
+    "horizon tilted 22 deg"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "FILL",
+    "hair / top of head 48%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "FILL",
+    "hair / top of head 48%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "FILL",
+    "hair / top of head 49%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 44%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "hair / top of head 46%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1219": [
+   [
+    "FILL",
+    "hair / top of head 45%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "hair / top of head 40%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1231": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1243": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1261": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1291": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1297": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1315": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1321": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1327": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1333": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1339": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1351": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1375": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1429": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1435": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1477": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1489": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1495": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1501": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1513": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1519": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1525": [
+   [
+    "FILL",
+    "ECG_Trace"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "682": [
+   [
+    "ROLL",
+    "horizon tilted 20 deg"
+   ]
+  ],
+  "688": [
+   [
+    "ROLL",
+    "horizon tilted 24 deg"
+   ]
+  ],
+  "694": [
+   [
+    "ROLL",
+    "horizon tilted 28 deg"
+   ]
+  ],
+  "700": [
+   [
+    "ROLL",
+    "horizon tilted 31 deg"
+   ]
+  ],
+  "706": [
+   [
+    "ROLL",
+    "horizon tilted 35 deg"
+   ]
+  ],
+  "712": [
+   [
+    "ROLL",
+    "horizon tilted 40 deg"
+   ]
+  ],
+  "718": [
+   [
+    "ROLL",
+    "horizon tilted 45 deg"
+   ]
+  ],
+  "724": [
+   [
+    "ROLL",
+    "horizon tilted 50 deg"
+   ]
+  ],
+  "730": [
+   [
+    "ROLL",
+    "horizon tilted 56 deg"
+   ]
+  ],
+  "736": [
+   [
+    "ROLL",
+    "horizon tilted 62 deg"
+   ]
+  ],
+  "739": [
+   [
+    "ROLL",
+    "horizon tilted 65 deg"
+   ]
+  ],
+  "742": [
+   [
+    "ROLL",
+    "horizon tilted 68 deg"
+   ]
+  ],
+  "745": [
+   [
+    "ROLL",
+    "horizon tilted 70 deg"
+   ]
+  ],
+  "748": [
+   [
+    "ROLL",
+    "horizon tilted 73 deg"
+   ]
+  ],
+  "751": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "754": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "757": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "760": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "763": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "766": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "769": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "772": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "775": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "778": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "781": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "784": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "787": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "790": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "793": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "796": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "799": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "802": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "805": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "808": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "811": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "814": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "817": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "820": [
+   [
+    "ROLL",
+    "horizon tilted 75 deg"
+   ]
+  ],
+  "826": [
+   [
+    "ROLL",
+    "horizon tilted 76 deg"
+   ]
+  ],
+  "832": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "835": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "838": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "841": [
+   [
+    "ROLL",
+    "horizon tilted 78 deg"
+   ]
+  ],
+  "844": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "847": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "850": [
+   [
+    "ROLL",
+    "horizon tilted 80 deg"
+   ]
+  ],
+  "853": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "856": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "859": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "862": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "865": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "868": [
+   [
+    "ROLL",
+    "horizon tilted 84 deg"
+   ]
+  ],
+  "871": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "874": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "877": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "880": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "883": [
+   [
+    "ROLL",
+    "horizon tilted 87 deg"
+   ]
+  ],
+  "886": [
+   [
+    "ROLL",
+    "horizon tilted 87 deg"
+   ]
+  ],
+  "889": [
+   [
+    "ROLL",
+    "horizon tilted 87 deg"
+   ]
+  ],
+  "892": [
+   [
+    "ROLL",
+    "horizon tilted 87 deg"
+   ]
+  ],
+  "895": [
+   [
+    "ROLL",
+    "horizon tilted 87 deg"
+   ]
+  ],
+  "898": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "901": [
+   [
+    "ROLL",
+    "horizon tilted 86 deg"
+   ]
+  ],
+  "904": [
+   [
+    "ROLL",
+    "horizon tilted 85 deg"
+   ]
+  ],
+  "907": [
+   [
+    "ROLL",
+    "horizon tilted 83 deg"
+   ]
+  ],
+  "910": [
+   [
+    "ROLL",
+    "horizon tilted 82 deg"
+   ]
+  ],
+  "913": [
+   [
+    "ROLL",
+    "horizon tilted 81 deg"
+   ]
+  ],
+  "916": [
+   [
+    "ROLL",
+    "horizon tilted 79 deg"
+   ]
+  ],
+  "919": [
+   [
+    "ROLL",
+    "horizon tilted 77 deg"
+   ]
+  ],
+  "922": [
+   [
+    "ROLL",
+    "horizon tilted 74 deg"
+   ]
+  ],
+  "925": [
+   [
+    "ROLL",
+    "horizon tilted 71 deg"
+   ]
+  ],
+  "928": [
+   [
+    "ROLL",
+    "horizon tilted 68 deg"
+   ]
+  ],
+  "931": [
+   [
+    "ROLL",
+    "horizon tilted 64 deg"
+   ]
+  ],
+  "934": [
+   [
+    "ROLL",
+    "horizon tilted 60 deg"
+   ]
+  ],
+  "937": [
+   [
+    "ROLL",
+    "horizon tilted 56 deg"
+   ]
+  ],
+  "940": [
+   [
+    "ROLL",
+    "horizon tilted 51 deg"
+   ]
+  ],
+  "943": [
+   [
+    "ROLL",
+    "horizon tilted 46 deg"
+   ]
+  ],
+  "946": [
+   [
+    "ROLL",
+    "horizon tilted 41 deg"
+   ]
+  ],
+  "949": [
+   [
+    "ROLL",
+    "horizon tilted 37 deg"
+   ]
+  ],
+  "952": [
+   [
+    "ROLL",
+    "horizon tilted 33 deg"
+   ]
+  ],
+  "958": [
+   [
+    "ROLL",
+    "horizon tilted 27 deg"
+   ]
+  ],
+  "964": [
+   [
+    "ROLL",
+    "horizon tilted 22 deg"
+   ]
+  ],
+  "1090": [
+   [
+    "ROLL",
+    "horizon tilted 38 deg"
+   ]
+  ],
+  "1096": [
+   [
+    "ROLL",
+    "horizon tilted 46 deg"
+   ]
+  ],
+  "1102": [
+   [
+    "ROLL",
+    "horizon tilted 51 deg"
+   ]
+  ],
+  "1108": [
+   [
+    "ROLL",
+    "horizon tilted 51 deg"
+   ]
+  ],
+  "1114": [
+   [
+    "ROLL",
+    "horizon tilted 48 deg"
+   ]
+  ],
+  "1120": [
+   [
+    "ROLL",
+    "horizon tilted 42 deg"
+   ]
+  ],
+  "1126": [
+   [
+    "ROLL",
+    "horizon tilted 35 deg"
+   ]
+  ],
+  "1132": [
+   [
+    "ROLL",
+    "horizon tilted 26 deg"
+   ]
+  ]
+ },
+ "counts": {
+  "CLAW": 24,
+  "EMPTY": 214,
+  "FACEPRESS": 1,
+  "FILL": 38,
+  "INSIDE": 5,
+  "ROLL": 113
+ }
+}

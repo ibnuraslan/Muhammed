@@ -1,0 +1,101 @@
+{
+ "frames": {
+  "235": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "259": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "1417": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 45
+   }
+  },
+  "1429": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 110
+   }
+  },
+  "1441": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 82
+   }
+  },
+  "1453": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 71
+   }
+  },
+  "1471": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 78
+   }
+  },
+  "1477": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 75
+   }
+  },
+  "1483": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 107
+   }
+  },
+  "1489": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 86
+   }
+  },
+  "1495": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1501": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1417,
+   1453
+  ],
+  [
+   1471,
+   1489
+  ]
+ ],
+ "fps": 60
+}

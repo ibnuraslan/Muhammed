@@ -267,6 +267,14 @@ for o in D:
 
 # ------------------------------------------------------------------ people
 SURG = Human(make_human_ctrl(D["Surgeon"])); NURSE = Human(make_human_ctrl(D["Nurse"]))
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())
+_POSE_CACHE = {}
+def pose_hand(H, s, f, name):
+    rig = H.r.o; key = (rig.name, s, name)
+    if key not in _POSE_CACHE: _POSE_CACHE[key] = _pose_rots(rig, s, name)
+    _key(rig, s, _POSE_CACHE[key], f, 1.0)
+def fingertip(H, s, k):   # world tip of finger k (1 = thumb) of side s
+    return H.r.o.matrix_world @ H.r.PB["finger%d-3.%s" % (k, s)].tail
 def yaw_to(p, q): v = q - p; return math.degrees(math.atan2(v.x, -v.y))
 def pose(H, f, pos, yaw, flex=0.0, twist=0.0, side=0.0, headr=(0.0, 0.0), crouch=0.0, feet=None, step=None):
     H.key_root(f, V(pos.x, pos.y, H.root_head.z - crouch), yaw=yaw, flex=flex * 0.4, side=side)
@@ -281,16 +289,9 @@ def pose(H, f, pos, yaw, flex=0.0, twist=0.0, side=0.0, headr=(0.0, 0.0), crouch
         for s in "LR": H.key_foot(s, f, H.foot_xy(s, V(pos.x, pos.y, 0), yaw), yaw)
     else:
         for s, (xy, yw) in feet.items(): H.key_foot(s, f, xy, yw)
-CURL_SIGN = float(os.environ.get("CURL_SIGN", "1"))
 def curl(H, s, f, k, base=8.0):
-    for fi in range(1, 6):
-        for seg, w in ((1, 0.6), (2, 1.0), (3, 0.8)):
-            n = f"finger{fi}-{seg}.{s}"
-            if n not in H.r.PB or (fi == 1 and seg == 1): continue
-            pb = H.r.PB[n]; pb.rotation_mode = "QUATERNION"
-            sg = 1.0 if s == "L" else -1.0
-            ang = math.radians(sg * (base + (38 if s == "L" else 55) * k) * w * (0.5 if fi == 1 else 1.0))
-            pb.rotation_quaternion = Quaternion((1, 0, 0), ang); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
+    """legacy call sites -> shared hand_poses presets"""
+    pose_hand(H, s, f, "relaxed" if k < 0.4 else ("cup_hold" if k < 0.7 else "wrap_grip"))
 def hand(H, s, f, W, d, n, elbow_out=0.35, yaw=0.0):
     sx = 1 if s == "L" else -1
     side = Matrix.Rotation(math.radians(yaw), 3, "Z") @ V(sx, 0, 0)
@@ -319,6 +320,7 @@ for f in list(range(1, 212, 6)) + [211]:
     if f > 205: tip = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10 * smooth((f - 205) / 20))
     Wp = tip + V(0, -0.04, 0.13); Wp.z = max(Wp.z, NA.z + 0.13)
     hand(SURG, "R", f, Wp, V(0.1, 0.3, -1), V(1, 0, 0.2), 0.35, Y0)
+    pose_hand(SURG, "R", f, "pinch" if f <= 205 else "relaxed")
     hand(SURG, "L", f, SHOULDER_W + V(0, 0, 0.07), V(0.4, 1, 0.18), V(0, 0, -1), 0.4, Y0)
 # pen: in the right hand until put down on the drape at ~232
 def wrist_M(f, s):
@@ -326,7 +328,7 @@ def wrist_M(f, s):
     return srig.matrix_world @ pb.matrix
 for f in range(1, 240, 3):
     M = wrist_M(f, "R")
-    p = M @ V(0, 0.09, 0.02)
+    p = (fingertip(SURG, "R", 1) + fingertip(SURG, "R", 2)) / 2.0
     pen.location = p; pen.keyframe_insert("location", frame=f)
     pen.rotation_mode = "QUATERNION"; pen.rotation_quaternion = (M.to_quaternion() @ Quaternion((1, 0, 0), math.radians(90))); pen.keyframe_insert("rotation_quaternion", frame=f)
 pen.location = V(-0.2, -0.16, 0.925); pen.keyframe_insert("location", frame=246)
@@ -369,13 +371,13 @@ def beat2_keys(frames):
                 tip0 = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10)
                 R0 = tip0 + V(0, -0.04, 0.13); R0.z = max(R0.z, NA.z + 0.13)
                 k_ = smooth((f - 226) / 30.0)
-                W = R0.lerp(W, k_) + V(0, 0.10, 0.08) * math.sin(math.pi * k_)
+                W = R0.lerp(W, k_) + V(0, 0.12, 0.02) * math.sin(math.pi * k_)
                 kd = smooth((f - 226) / 26.0)
                 d_ = V(0.1, 0.3, -1).normalized().lerp(d_, kd).normalized(); n_ = V(1, 0, 0.2).normalized().lerp(n_, kd).normalized()
             else:
                 W = W + Nw * 0.09 * rel + V(0, -0.05, 0.04) * rel
             hand(SURG, s, f, W, d_, n_, 0.4, yw)
-            curl(SURG, s, f, min(GRIP_CURL[s], 0.0 if s == "L" else 0.5) * (1.0 - max(app, rel)))
+            pose_hand(SURG, s, f, "cup_hold" if max(app, rel) < 0.5 else "relaxed")
 
 beat2_keys(list(range(214, 400, 3)) + [400])
 # numeric grip search: back each hand off the head surface until the glove sits on the fur (no verts inside)
@@ -422,7 +424,7 @@ for f in list(range(403, 672, 3)):
     arc = V(0.0, -0.03 * math.cos(2 * math.pi * ph), 0.03 * math.sin(2 * math.pi * ph))
     hand(SURG, "R", f, seam_pt + V(0.03, -0.13, 0.15) + arc, V(0.2, 0.6, -0.6), V(1, 0, 0.4), 0.35, Y1)
     hand(SURG, "L", f, neck_ring(M_LIE2, A_UP + 0.9, 0.09) + V(-0.07, -0.11, 0.15) + V(0, 0, 0.01 * math.sin(f / 9.0)), V(-0.1, 0.6, -0.6), V(-1, 0, 0.3), 0.35, Y1)
-    curl(SURG, "R", f, 0.55); curl(SURG, "L", f, 0.5)
+    pose_hand(SURG, "R", f, "pinch"); pose_hand(SURG, "L", f, "pinch")
 # beats 4-5: steps back, watches; snaps fingers near the ear at 920 (the "hear" cue together with the bowl)
 S2 = V(0.25, -0.95, 0)
 for f in list(range(672, 1040, 6)):
@@ -486,7 +488,7 @@ for f in list(range(1, 161, 4)) + [160]:
     for s in "LR":
         Rz = Matrix.Rotation(math.radians(ny), 3, "Z")
         hand(NURSE, s, f, p + Rz @ V((0.16 if s == "L" else -0.16), -0.38, 0) + V(0, 0, 0.88), Rz @ V(0, -1, -0.3), V(0, 0, 1), 0.3, ny)
-        curl(NURSE, s, f, 0.8)
+        pose_hand(NURSE, s, f, "wrap_grip")
 NP2 = V(-1.05, -0.62, 0); ny2 = yaw_to(NP2, V(0.0, 0.05, 0))
 NP2b = V(-0.82, 1.15, 0); ny2b = yaw_to(NP2b, V(-1.35, 1.25, 0))
 WALKS = [(300, 400, NP2, NP2b), (560, 680, NP2b, NP2)]
@@ -536,11 +538,13 @@ for f in [162, 164] + list(range(166, 1040, 3)):
     else:
         hang(NURSE, "R", f, p, yw, 0.05)
     hand(NURSE, "L", f, p + Rz @ V(0.12, -0.3, 0) + V(0, 0, 0.95), Rz @ V(-1, -0.4, 0), V(0, 0, 1), 0.3, yw)
+    if f >= 196: pose_hand(NURSE, "L", f, "pinch")
 # bowl: on the tray -> in the nurse's left hand (from 200) -> slips at 918, hits the floor 940, bounces, rattles
 for f in range(1, 918, 6):
     if f < 200: continue
     ev(f); M = D["Nurse"].matrix_world @ NURSE.r.PB["wrist.L"].matrix
-    bowl.location = M @ V(0, 0.08, 0.04); bowl.keyframe_insert("location", frame=f)
+    pp = (fingertip(NURSE, "L", 1) + fingertip(NURSE, "L", 2)) / 2.0; out_ = pp - M.translation; out_.z = 0
+    bowl.location = pp + out_.normalized() * 0.072 + V(0, 0, -0.012); bowl.keyframe_insert("location", frame=f)
 p0 = bowl.location.copy()
 for df, dz, dx in ((0, 0, 0), (10, -0.35, 0.05), (22, -(p0.z - 0.02), 0.1), (28, -(p0.z - 0.02) + 0.09, 0.14), (34, -(p0.z - 0.02), 0.17), (38, -(p0.z - 0.02) + 0.03, 0.18), (42, -(p0.z - 0.02), 0.19)):
     bowl.location = p0 + V(dx, -dx * 0.5, dz); bowl.keyframe_insert("location", frame=918 + df)
@@ -548,7 +552,7 @@ bowl.rotation_mode = "XYZ"
 for df, rx in ((0, 0), (22, 70), (28, 140), (34, 175), (42, 180)):
     bowl.rotation_euler.x = math.radians(rx); bowl.keyframe_insert("rotation_euler", frame=918 + df, index=0)
 # nurse at the monitor (beats 7-9)
-NP3 = V(3.5, 0.55, 0); ny3 = yaw_to(NP3, V(3.05, 0.95, 0))
+NP3 = V(3.62, 1.05, 0); ny3 = yaw_to(NP3, V(3.05, 0.95, 0))
 NDOOR = V(4.12, 2.75, 0)
 NURSE.walk(lambda f: NP3.lerp(NDOOR, smooth((f - 1610) / 150.0)).to_3d(), lambda f: yaw_to(NP3, NDOOR), 1610, 1770, stride=0.6, duty=0.6, lift=0.07, bob=0.018, crouch=0.03, lean=5)
 dpv = D["Door_Pivot"]; dpv.rotation_mode = "XYZ"
@@ -560,8 +564,8 @@ for f in list(range(1190, 1771, 6)):
         hang(NURSE, "R", f, pN, yN, 0.08); hang(NURSE, "L", f, pN, yN, 0.08); continue
     pose(NURSE, f, NP3, ny3, flex=14, headr=(16 + 10 * smooth((f - 1620) / 60.0), 6 * math.sin(f / 40.0)))
     Rz = Matrix.Rotation(math.radians(ny3), 3, "Z")
-    if 1330 < f < 1400:
-        k = math.sin(math.pi * (f - 1330) / 70.0)
+    if False:
+        k = 0.0
         hand(NURSE, "R", f, (NP3 + Rz @ V(-0.15, -0.3, 0) + V(0, 0, 0.9)).lerp(V(3.13, 0.6, 1.0), k), Rz @ V(0, -1, 0), V(0, 0, 1), 0.3, ny3)
     else:
         hang(NURSE, "R", f, NP3, ny3, 0.08)
@@ -578,7 +582,7 @@ for f in list(range(1, 1771, 6)):
     for s in "LR":
         ANA.key_foot(s, f, ANA.foot_xy(s, V(AP.x, AP.y, 0), AY) + (RzA @ V(0, -0.42, 0)).to_2d(), AY + (10 if s == "L" else -10))
     hand(ANA, "R", f, bag_c + RzA @ V(-0.06, -0.09 + 0.02 * br, 0.0), RzA @ V(0.2, 1, 0), RzA @ V(-1, 0, 0), 0.3, AY)
-    curl(ANA, "R", f, 0.4 + 0.5 * (1 - br))
+    pose_hand(ANA, "R", f, "cup_hold")
     hand(ANA, "L", f, V(-1.30, 1.0, 0.93) + V(0, 0, 0.01 * math.sin(f / 30.0)), RzA @ V(0, 1, -0.4), V(0, 0, 1), 0.3, AY)
     bag.scale = (1.0 + 0.12 * br, 1.0 + 0.12 * br, 1.0 - 0.05 * br); bag.keyframe_insert("scale", frame=f)
 for ob in [D["Anaes"]] + [c for c in D["Anaes"].children]:
@@ -624,8 +628,8 @@ FWW = M_LIE2.to_3x3() @ V(-0.385, -0.923, 0)       # monkey B face direction in 
 UPW = V(0, 0, 1)
 # (frame, pos, aim, lens, up, space)   space 'W' world, 'B' monkey-B model space
 K = [
- (1,    V(0.95, -1.65, 0.48), V(-0.35, 0.1, 0.95), 22, UPW, "W"),
- (61,   V(0.6, -0.95, 1.15), NA + V(0, 0.05, 0), 28, UPW, "W"),
+ (1,    V(0.35, 0.95, 1.5), V(-0.3, -0.35, 1.12), 24, UPW, "W"),
+ (61,   V(0.45, 0.25, 1.38), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
  (121,  V(0.18, -0.38, 1.32), NA, 38, UPW, "W"),
  (181,  NA + V(0.26, -0.04, 0.17), NA, 50, UPW, "W"),
  (241,  V(0.16, -0.42, 1.52), V(-0.12, -0.05, 1.02), 30, UPW, "W"),
@@ -683,21 +687,11 @@ for f in range(1, 1771):
     cam_d.dof.focus_distance = (a - p).length; cam_d.dof.keyframe_insert("focus_distance", frame=f)
     CAMLOG.append((f, tuple(round(x, 3) for x in p), tuple(round(x, 3) for x in a), round(fl(f), 1)))
 json.dump(CAMLOG[::30], open(os.path.join(HERE, "..", "camera_path.json"), "w"))
-# ---- hand limits (client rule, 23:00): no backward finger bends, natural wrist range, elbow no hyper-extension
-def add_limit(pb, xr, yr, zr):
-    c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
-    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-    c.min_x, c.max_x = [math.radians(v) for v in xr]; c.min_y, c.max_y = [math.radians(v) for v in yr]; c.min_z, c.max_z = [math.radians(v) for v in zr]
-    c.name = "HandLimit"
-for nm_ in ("Surgeon", "Nurse", "Anaes"):
-    rg = D[nm_]
-    for pb in rg.pose.bones:
-        n = pb.name; side = n[-1]
-        sg = 1 if side == "L" else -1
-        if n.startswith("finger1-"):        # thumb: a natural cone
-            add_limit(pb, (-45, 60) if sg > 0 else (-60, 45), (-30, 30), (-35, 35))
-        elif n.startswith("finger"):        # fingers: forward 0..90, no backward bend, small spread
-            add_limit(pb, (-3, 90) if sg > 0 else (-90, 3), (-8, 8), (-10, 10))
+for nm_ in ("Surgeon", "Nurse", "Anaes"): add_hand_limits(D[nm_])
+# x-ray void sphere only exists while it is on (QA: camera is not inside a transparent sphere)
+hide_keys(D["XR_Void"], [(1, True), (1016, False), (1212, True)])
+import bmesh as _bm
+_m = D["XR_Void"].data; _b = _bm.new(); _b.from_mesh(_m); _bm.ops.reverse_faces(_b, faces=_b.faces[:]); _b.to_mesh(_m); _b.free()   # normals face inward: the camera sees front faces
 for o in D:
     set_const(o)
     if o.type == "LIGHT": o.visible_camera = False; o.visible_glossy = False
