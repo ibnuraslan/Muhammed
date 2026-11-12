@@ -438,7 +438,8 @@ bn, bl = bm_.node_tree.nodes, bm_.node_tree.links
 bp = bn["Principled BSDF"]
 bp.inputs['Roughness'].default_value = 0.42; bp.inputs['Subsurface Weight'].default_value = 0.5
 bp.inputs['Subsurface Radius'].default_value = (0.4, 0.3, 0.25); bp.inputs['Subsurface Scale'].default_value = 0.05
-bp.inputs['Coat Weight'].default_value = 0.25; bp.inputs['Coat Roughness'].default_value = 0.08
+bp.inputs['Coat Weight'].default_value = 0.55; bp.inputs['Coat Roughness'].default_value = 0.1
+bp.inputs['Sheen Weight'].default_value = 0.5; bp.inputs['Sheen Tint'].default_value = (0.92, 0.96, 1.0, 1); bp.inputs['Sheen Roughness'].default_value = 0.35
 btc = bn.new('ShaderNodeTexCoord')
 bnz = bn.new('ShaderNodeTexNoise'); bnz.inputs['Scale'].default_value = 1.6; bnz.inputs['Detail'].default_value = 6
 bramp = bn.new('ShaderNodeValToRGB'); bramp.color_ramp.elements[0].color = (0.86, 0.88, 0.9, 1); bramp.color_ramp.elements[1].color = (0.97, 0.97, 0.95, 1)
@@ -463,7 +464,7 @@ mouth = mnode('MULTIPLY', yfront, zline)
 bmix = bn.new('ShaderNodeMix'); bmix.data_type = 'RGBA'; bmix.inputs['B'].default_value = (0.32, 0.33, 0.35, 1)
 mouth = mnode('MULTIPLY', mouth, 0.0)
 bl.new(mouth, bmix.inputs['Factor']); bl.new(bramp.outputs['Color'], bmix.inputs['A']); bl.new(bmix.outputs['Result'], bp.inputs['Base Color'])
-bbump = bn.new('ShaderNodeBump'); bbump.inputs['Strength'].default_value = 0.18; bbump.inputs['Distance'].default_value = 0.01
+bbump = bn.new('ShaderNodeBump'); bbump.inputs['Strength'].default_value = 0.55; bbump.inputs['Distance'].default_value = 0.012
 bnz2 = bn.new('ShaderNodeTexNoise'); bnz2.inputs['Scale'].default_value = 40.0
 bl.new(btc.outputs['Object'], bnz2.inputs['Vector'])
 # fine wrinkles (crackle voronoi) + neck creases (bands across the body between s 0.17 and 0.30)
@@ -498,8 +499,17 @@ hgt = mnode('ADD', mnode('ADD', hgt, mnode('MULTIPLY', scar, -0.4)), mnode('MULT
 bl.new(hgt, bbump.inputs['Height'])
 # darker grey in the creases
 cmx = bn.new('ShaderNodeMix'); cmx.data_type = 'RGBA'; cmx.inputs['B'].default_value = (0.62, 0.64, 0.66, 1)
-bl.new(mnode('MINIMUM', mnode('ADD', mnode('ADD', mnode('MULTIPLY', crease, 0.35), mnode('MULTIPLY', scar, 0.5)), mnode('MULTIPLY', lid, 0.7)), 1.0), cmx.inputs['Factor'])
-bl.new(bmix.outputs['Result'], cmx.inputs['A']); bl.new(cmx.outputs['Result'], bp.inputs['Base Color'])
+bl.new(mnode('MINIMUM', mnode('ADD', mnode('ADD', mnode('MULTIPLY', crease, 0.6), mnode('MULTIPLY', scar, 0.5)), mnode('MULTIPLY', lid, 0.7)), 1.0), cmx.inputs['Factor'])
+bl.new(bmix.outputs['Result'], cmx.inputs['A'])
+# soft grey in the folds and around the melon: ambient occlusion
+bao = bn.new('ShaderNodeAmbientOcclusion'); bao.inputs['Distance'].default_value = 0.12; bao.samples = 8
+aomr = bn.new('ShaderNodeMapRange'); aomr.inputs['To Min'].default_value = 0.62; aomr.inputs['To Max'].default_value = 1.0
+bl.new(bao.outputs['AO'], aomr.inputs['Value'])
+aomul = bn.new('ShaderNodeMix'); aomul.data_type = 'RGBA'; aomul.blend_type = 'MULTIPLY'; aomul.inputs['Factor'].default_value = 1.0
+bl.new(cmx.outputs['Result'], aomul.inputs['A']); bl.new(aomr.outputs['Result'], aomul.inputs['B'])
+aocol = bn.new('ShaderNodeMix'); aocol.data_type = 'RGBA'; aocol.inputs['B'].default_value = (0.6, 0.66, 0.74, 1)
+inv = mnode('SUBTRACT', 1.0, aomr.outputs['Result']); bl.new(mnode('MULTIPLY', inv, 1.6), aocol.inputs['Factor'])
+bl.new(aomul.outputs['Result'], aocol.inputs['A']); bl.new(aocol.outputs['Result'], bp.inputs['Base Color'])
 bel.data.materials.append(bm_)
 jawo.data.materials.append(bm_)
 # mouth interior (dark, wet) seen through the open slit; rides on the head bone
@@ -508,11 +518,12 @@ mi = bpy.context.active_object; mi.name = "Beluga_MouthInterior"; mi.scale = (0.
 mim = simple_mat("M_BelugaMouth", (0.22, 0.09, 0.1), rough=0.25, sss=0.3); mi.data.materials.append(mim)
 [setattr(f_, 'use_smooth', True) for f_ in mi.data.polygons]
 # eyes
-M_EYE = simple_mat("M_BelugaEye", (0.02, 0.02, 0.025), rough=0.05)
+M_EYE = simple_mat("M_BelugaEye", (0.01, 0.01, 0.012), rough=0.5)
+M_EYE.node_tree.nodes["Principled BSDF"].inputs["Coat Weight"].default_value = 1.0; M_EYE.node_tree.nodes["Principled BSDF"].inputs["Coat Roughness"].default_value = 0.02
 EYE_Y = -L_W * 0.42 + 0.155 * L_W
 for side in (-1, 1):
     wv, top, bot, cz = prof(0.155)
-    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.017, location=(side * (wv - 0.01), EYE_Y, cz - 0.02))
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.024, location=(side * (wv - 0.008), EYE_Y, cz - 0.02))
     e = bpy.context.active_object; e.name = "Beluga_Eye_" + ("L" if side > 0 else "R"); e.data.materials.append(M_EYE)
     e.scale = (0.7, 1.0, 0.8)
 
@@ -793,9 +804,26 @@ strap.scale = (0.86, 1.15, 1.0)
 strap.data.materials.append(M_MASKSKIRT)
 sws = strap.modifiers.new("Wrap", 'SHRINKWRAP'); sws.target = DB; sws.offset = 0.018; sws.wrap_method = 'NEAREST_SURFACEPOINT'
 strap.modifiers.new("Smooth", 'SMOOTH').iterations = 6; strap.modifiers.new("Sub", 'SUBSURF').levels = 1
+# the mask deforms exactly like the face: copy the bone weights of the nearest face vertex, armature modifier first
+from mathutils.kdtree import KDTree
+_gn = {g.index: g.name for g in DB.vertex_groups}
+_kd = KDTree(len(DB.data.vertices))
+for v in DB.data.vertices:
+    if not is_helper(v): _kd.insert(v.co, v.index)
+_kd.balance()
 for o in (mask, lens, fr, strap):
-    parent_to_bone(o, D, "head")
+    bpy.context.view_layer.update()
+    mw_ = o.matrix_world.copy(); o.parent = D; o.parent_type = 'OBJECT'; o.matrix_parent_inverse = D.matrix_world.inverted(); o.matrix_world = mw_
     o.visible_shadow = False
+    M_ = o.matrix_world
+    for v in o.data.vertices:
+        co, idx, d = _kd.find(D.matrix_world.inverted() @ (M_ @ v.co))
+        for g in DB.data.vertices[idx].groups:
+            nm = _gn[g.group]
+            if nm in D.data.bones and g.weight > 0.01:
+                (o.vertex_groups.get(nm) or o.vertex_groups.new(name=nm)).add([v.index], g.weight, 'REPLACE')
+    am_ = o.modifiers.new("Armature", 'ARMATURE'); am_.object = D
+    o.modifiers.move(o.modifiers.find("Armature"), 0)
 for o in (mask, fr, lens):
     for f_ in o.data.polygons: f_.use_smooth = True
 

@@ -390,8 +390,8 @@ def solve_whale(f, blend_from=None, tb=0.0):
     X = shin; Yl = -fwd; Z = X.cross(Yl).normalized(); X = Yl.cross(Z).normalized()
     Rm = Matrix((X, Yl, Z)).transposed().to_4x4()
     return Matrix.Translation(an) @ Rm @ Matrix.Translation(-SOCK_LOCAL)
-jaw(1, 0.0); jaw(1380, 0.0); jaw(1405, 1.0); jaw(1436, 0.6); jaw(F_REL - 10, 0.6); jaw(F_REL + 10, 1.0); jaw(F_REL + 40, 0.1)
-for f, v in ((1000, 0.0), (1012, 0.3), (1030, 0.0)):
+jaw(1, 0.18); jaw(1380, 0.18); jaw(1405, 1.0); jaw(1436, 0.6); jaw(F_REL - 10, 0.6); jaw(F_REL + 10, 1.0); jaw(F_REL + 40, 0.18)
+for f, v in ((1000, 0.18), (1012, 0.45), (1030, 0.18)):
     jaw(f, v)
 from mathutils.bvhtree import BVHTree
 ev(1440); _dg = bpy.context.evaluated_depsgraph_get()

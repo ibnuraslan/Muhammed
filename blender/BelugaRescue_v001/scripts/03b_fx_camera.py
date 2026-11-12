@@ -109,8 +109,8 @@ K(748, H_(748) + V(-0.6, 0.6, 0.45), H_(748), 42)
 # beat 6 — rack focus from her face to the whale, orbit the whale's head
 def behind_face(f, wf):
     h = H_(f); d = (h - wh(wf)); d.z = 0; d.normalize(); d = Matrix.Rotation(R_(115), 3, 'Z') @ d; return h + d * 0.8 + V(0, 0, 0.2)
-K(792, behind_face(792, 792), H_(792), 40)
-K(835, behind_face(835, 835) + V(0.1, 0, 0.05), wh(835), 40)
+K(792, H_(792) + V(0.85, 0.75, 0.2), H_(792), 40)
+K(835, H_(835) + V(0.95, 0.55, 0.3), wh(835), 36)
 K(872, wh(872) + V(1.4, -1.1, 0.4), wh(872), 32)
 K(910, wh(910) + V(0.2, -1.6, 0.5), wh(910), 30)
 # beat 7 — beside the whale to the window, ring play, keeper nod, whip pan back
