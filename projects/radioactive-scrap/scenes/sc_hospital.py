@@ -576,7 +576,8 @@ def c1_11a(c, t):         # local clinic, evening: a nurse adjusts a drip above 
     h = c["people"]["nurse"]; pole = c["cots"][1] + Vector((-0.55, 0.7, 0)); loc = pole + Vector((-0.3, -0.75, 0))
     stand_at(h, loc, pole)
     sd = forward(h).cross(Vector((0, 0, 1)))
-    reach(h, "R", pole + Vector((0.1, 0, 1.55 + 0.03 * math.sin(sec * 2))), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, 1)))
+    reach(h, "R", pole + Vector((0.1, -0.05, 1.42 + 0.03 * math.sin(sec * 2))), Vector((sd.x, sd.y, -1.0)), forward(h))
+    fingers_curl(h, 60, thumb=40)
     h.rot("head", sd, 10)
     c["focus"] = h.bone_head("head")
 

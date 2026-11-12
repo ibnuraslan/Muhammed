@@ -256,7 +256,7 @@ def build(variant=None):
     if v == "late":
         sun_.rotation_euler = (math.radians(90 - 5), 0, math.radians(250)); sun_.data.energy = 2.6; sun_.data.color = (1.0, 0.78, 0.55)
     if v == "night":
-        bg = w_.node_tree.nodes["Background"]; bg.inputs['Strength'].default_value = 0.25; sun_.data.energy = 0.0
+        bg = w_.node_tree.nodes["Background"]; bg.inputs['Strength'].default_value = 0.6; sun_.data.energy = 0.35; sun_.data.color = (0.6, 0.7, 1.0)   # cold night fill so the yard reads
         bpy.context.scene.view_settings.exposure = 0.3
     if v in ("dusk", "yard_dusk"):
         bpy.context.scene.view_settings.exposure = 1.4
@@ -424,7 +424,7 @@ def build(variant=None):
     crow, _ = ph_model("crowbar_01"); c["crowbar"] = crow
     # sparks + torch flame light
     c["sparks"] = sparks("Spark", 150, color=(1.0, 0.5, 0.12), strength=45)
-    c["torch_light"] = flicker_light("TorchLight", (0, 0, -20), color=(1.0, 0.62, 0.32), energy=260, radius=0.02)
+    c["torch_light"] = flicker_light("TorchLight", (0, 0, -20), color=(1.0, 0.62, 0.32), energy=150, radius=0.02)
     bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.014, radius2=0.002, depth=0.09, location=(0, 0, -30))
     c["flame"] = bpy.context.active_object; c["flame"].name = "Flame"
     c["flame"].data.materials.append(emissive("FlameBlue", (0.55, 0.75, 1.0), 60)); c["flame"].visible_shadow = False
@@ -574,7 +574,7 @@ def torch_man(c, h, sec, target, stance):
     tt = c["torch_tool"]; tt.location = grip.lerp(tip, 0.5)
     tt.rotation_mode = 'QUATERNION'; tt.rotation_quaternion = (tip - grip).to_track_quat('Z', 'Y')
     c["flame"].location = tip + (tip - grip).normalized() * 0.04; c["flame"].rotation_mode = 'QUATERNION'; c["flame"].rotation_quaternion = (grip - tip).to_track_quat('Z', 'Y')
-    c["torch_light"].location = Vector(target) + Vector((0, 0, 0.08)) - fwd * 0.22
+    c["torch_light"].location = Vector(target) + Vector((0, 0, -0.02)) - fwd * 0.06   # at the cut, not in front of the face
     c["cutline"].location = Vector(target) + Vector((0, 0, -0.03)); c["cutline"].rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x))
     pose_sparks(c["sparks"], target, sec, direction=Vector((side.x, side.y, 0.2)) * 0.5 + Vector((0, 0, -0.4)), spread=1.3)
     attach_cap(h)
@@ -610,13 +610,13 @@ def i1a(c, t):
 
 def i1b(c, t):
     sec = S("intro_1b", t); stage(c, "truck", truck_at=(1.0, 5.2, 0.0), people=("bro1", "bro2"))
-    h = c["people"]["bro1"]; stand_pose(h); place(h, (0.15, 3.45, 0), face_angle((0.15, 3.45), (0.1, 6)))
+    h = c["people"]["bro1"]; stand_pose(h); place(h, (-0.5, 3.05, 0), face_angle((-0.5, 3.05), (-0.6, 6)))
     pull = math.sin(min(1.0, sec / 2.4) * math.pi / 2)
     M = c["truck"].matrix_world; top = M @ Vector((-1.6, -1.15, c["bed_z"] + 0.5))
     hand = top + Vector((0.0, -0.42, -0.05 - 0.35 * pull))
     c["rope_spline"].points[4].co = (*(M.inverted() @ (hand + Vector((0, 0, -0.25)))), 1)
-    reach(h, "R", hand + Vector((0.05, 0, 0)), Vector((0.6, -0.3, -0.6)), Vector((0, 0.4, -1)))
-    reach(h, "L", hand + Vector((-0.08, 0, 0.18)), Vector((-0.6, -0.3, -0.6)), Vector((0, 0.4, -1)))
+    reach(h, "R", hand + Vector((0.05, 0, 0)), Vector((0.6, -0.3, -1.0)), Vector((0, 0.4, -1)))
+    reach(h, "L", hand + Vector((-0.08, 0, 0.18)), Vector((-0.6, -0.3, -1.0)), Vector((0, 0.4, -1)))
     fingers_curl(h, 70, thumb=40); h.rot("spine03", (1, 0, 0), -8 * pull)
     stand_at(c["people"]["bro2"], (3.6, 3.0, 0), (1.0, 5.2), crossed=True)
     c["focus"] = h.bone_head("spine05")
