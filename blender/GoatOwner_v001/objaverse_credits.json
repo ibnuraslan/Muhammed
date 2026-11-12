@@ -1,0 +1,74 @@
+{
+ "goat": {
+  "uid": "2624ac2ce2364930ba2d5f70eb7aa1ea",
+  "title": "Goat",
+  "author": "hendrikReyneke",
+  "author_profile": "https://sketchfab.com/hendrikReyneke",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2624ac2ce2364930ba2d5f70eb7aa1ea",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "house": {
+  "uid": "6b456f3c136a462ba1b4147dde93df2a",
+  "title": "Countryside Home in USA",
+  "author": "deerdesign.vn",
+  "author_profile": "https://sketchfab.com/deerdesign.vn",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/6b456f3c136a462ba1b4147dde93df2a",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "shed2": {
+  "uid": "70154ba65c7d4ba0b5f081fd0eb35f68",
+  "title": "Backyard Utility Shed",
+  "author": "jimbogies",
+  "author_profile": "https://sketchfab.com/jimbogies",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/70154ba65c7d4ba0b5f081fd0eb35f68",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "tires_shed": {
+  "uid": "2a28b29867b24980b19aa6b97defc3b2",
+  "title": "Pile of Old Tires and Abandoned Storage Shed",
+  "author": "Abandoned Scans",
+  "author_profile": "https://sketchfab.com/realMrAnderson",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/2a28b29867b24980b19aa6b97defc3b2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "truck": {
+  "uid": "3bbd05212b314aca83e96158280a6b26",
+  "title": "Funny pickup",
+  "author": "kreems",
+  "author_profile": "https://sketchfab.com/kreems",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3bbd05212b314aca83e96158280a6b26",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "fence": {
+  "uid": "8fa9a06380df4268b549e345cf103696",
+  "title": "woodfence",
+  "author": "pasquill",
+  "author_profile": "https://sketchfab.com/pasquill",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8fa9a06380df4268b549e345cf103696",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "crate": {
+  "uid": "e12fde1101b84b6da40056336a7b309d",
+  "title": "Wooden Crate",
+  "author": "YadroGames",
+  "author_profile": "https://sketchfab.com/yadrogames",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e12fde1101b84b6da40056336a7b309d",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "stick2": {
+  "uid": "b7fe8a4a3c2f4f038662ae47cfbfa6a7",
+  "title": "Wood Stick 04",
+  "author": "3dhdscan",
+  "author_profile": "https://sketchfab.com/3dhdscan",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/b7fe8a4a3c2f4f038662ae47cfbfa6a7",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ }
+}

@@ -95,7 +95,11 @@ def import_glb(name, height=None, length=None, loc=(0, 0, 0), rot_z=0.0, col=Non
     return ob
 
 def inst(src, name, loc, rot_z=0.0, scale=1.0, col=None):
-    o = bpy.data.objects.new(name, src.data); o.location = loc; o.rotation_euler = (0, 0, rot_z); o.scale = (scale,) * 3
+    if src.modifiers:
+        o = src.copy(); o.name = name
+    else:
+        o = bpy.data.objects.new(name, src.data)
+    o.location = loc; o.rotation_euler = (0, 0, rot_z); o.scale = (scale,) * 3
     (col or SET).objects.link(o); return o
 
 # ------------------------------------------------------------------ world (keyable sky)
@@ -161,14 +165,28 @@ mixs = gn.new('ShaderNodeMixShader'); gl.new(mr.outputs['Result'], mixs.inputs['
 gl.new(sh_d.outputs[0], mixs.inputs[1]); gl.new(sh_g.outputs[0], mixs.inputs[2]); gl.new(mixs.outputs[0], o_.inputs['Surface'])
 ground.data.materials.append(m_g)
 
+# MakeHuman female_casualsuit01 has a chest emblem: swap in the cleaned copy (tools/clean_suit_tex.py)
+for im_ in bpy.data.images:
+    if im_.name.startswith("female_casualsuit01_diffuse"):
+        im_.filepath = os.path.join(OB, "female_casualsuit01_diffuse_clean.png"); im_.reload(); print("SUIT texture cleaned")
 # ------------------------------------------------------------------ buildings and props (real models)
 house = import_glb("house", height=8.5, loc=(10.6, 6.0, 0), rot_z=math.radians(-90), col=SET)
 shed = import_glb("shed2", height=3.2, loc=(-4.4, 5.0, 0), rot_z=math.radians(90), col=SET); shed.name = "Shed"
 junk = import_glb("tires_shed", length=9.0, loc=(-11.0, 13.0, 0), rot_z=math.radians(140), col=SET)
 truck = import_glb("truck", length=5.4, loc=(-1.5, 13.6, 0), rot_z=0.0, col=PROPS)
 truck.data.transform(Matrix.Rotation(math.pi, 4, "Z"))
-crate = import_glb("crate", height=0.55, loc=(-2.6, 2.6, 0), rot_z=0.3, col=SET)
-inst(crate, "Crate_2", (-2.9, 3.4, 0), 1.2); inst(crate, "Crate_3", (8.9, 9.6, 0), 0.5)
+# the source texture carries a joke logo, a plate word and cartoon eyes: use the cleaned copy (patched in tools/clean_truck_tex.py)
+for m in [m_ for m_ in truck.data.materials if m_]:
+    for nd in m.node_tree.nodes:
+        if nd.type == 'BSDF_PRINCIPLED' and nd.inputs['Base Color'].links and m.name.startswith("pickup1"):
+            tn = nd.inputs['Base Color'].links[0].from_node
+            while tn.type != 'TEX_IMAGE' and tn.inputs and tn.inputs[0].links: tn = tn.inputs[0].links[0].from_node
+            if tn.type == 'TEX_IMAGE': tn.image = img(os.path.join(OB, "truck_base_clean.png")); print("TRUCK texture cleaned")
+        if nd.type == 'NORMAL_MAP' and nd.inputs['Color'].links and m.name.startswith("pickup1"):
+            tn = nd.inputs['Color'].links[0].from_node
+            if tn.type == 'TEX_IMAGE': tn.image = img(os.path.join(OB, "truck_normal_clean.png"), True); print("TRUCK normal cleaned")
+crate = import_glb("crate", height=0.55, loc=(-3.0, 3.5, 0), rot_z=0.3, col=SET)
+inst(crate, "Crate_2", (-3.3, 4.6, 0), 1.2); inst(crate, "Crate_3", (8.9, 9.6, 0), 0.5)
 fence = import_glb("fence", length=4.2, loc=(0, -6.0, 0), col=SET)
 for i, (x, y, r) in enumerate([(-4.2, -6.1, 0.03), (4.3, -5.9, -0.04), (8.4, -5.6, -0.12), (-8.3, -6.0, 0.05),
                               (-10.6, -2.0, 1.57), (-10.6, 2.2, 1.6), (-10.5, 6.4, 1.55)]):
@@ -185,7 +203,14 @@ def ph_blend(aid):
     with bpy.data.libraries.load(fs[0], link=False) as (src, dst):
         dst.objects = list(src.objects)
     return [o for o in dst.objects if o and o.type == 'MESH']
-trees = [o for o in ph_blend("tree_small_02") if o.name.endswith("LOD0") and "leaves" not in o.name]
+_tall = ph_blend_all = None
+def ph_blend_any(aid):
+    fs = glob.glob(os.path.join(PH, aid, "*.blend"))
+    with bpy.data.libraries.load(fs[0], link=False) as (src, dst):
+        dst.objects = list(src.objects); dst.collections = list(src.collections)
+    return [o for o in dst.objects if o]
+_t = ph_blend_any("tree_small_02")
+trees = [o for o in _t if o.name == "tree_small_02_LOD1"]     # LOD1 (626k verts) shared by every tree instance; GN leaves blew memory
 grass = [o for o in ph_blend("grass_medium_01") if o.name.endswith("LOD1") and "tiny" not in o.name]
 branches = ph_blend("dry_branches_medium_01")
 rocks = [o for o in ph_blend("rock_moss_set_01") if "LOD1" not in o.name and "LOD2" not in o.name]
@@ -246,6 +271,8 @@ for o in list(trees) + list(branches) + list(rocks):
 
 # ------------------------------------------------------------------ porch: individual weathered boards on posts (x 5..7, y 3..9, deck z 0.75)
 m_plank = pbr("M_Planks", "wood_planks_grey", 1.2, sat=0.8, val=0.85, bump=1.5)
+for sl in truck.material_slots:      # cargo boxes carried printed letters: plain weathered boards instead
+    if sl.material and sl.material.name.startswith(("boxes", "bricks")): sl.material = m_plank
 PORCH = dict(x0=5.0, x1=7.2, y0=3.0, y1=9.0, z=0.75)
 sc["porch"] = [PORCH[k] for k in ("x0", "x1", "y0", "y1", "z")]
 def board(name, c_, size, rot=(0, 0, 0)):
@@ -281,8 +308,8 @@ for k in range(3):      # three steps going down toward -X, between y 5.2 and 6.
     board("Riser_%d" % k, (xs + 0.14, 6.0, zt - 0.14), (0.03, 1.5, 0.22))
     STEPS.append([xs - 0.15, xs + 0.15, zt])
 sc["steps"] = STEPS
-board("Stringer_L", (4.55, 5.27, 0.37), (1.05, 0.05, 0.22), (0, math.radians(35), 0))
-board("Stringer_R", (4.55, 6.73, 0.37), (1.05, 0.05, 0.22), (0, math.radians(35), 0))
+board("Stringer_L", (4.6, 5.27, 0.3), (1.15, 0.05, 0.2), (0, math.radians(-40), 0))
+board("Stringer_R", (4.6, 6.73, 0.3), (1.15, 0.05, 0.2), (0, math.radians(-40), 0))
 board("PorchSkirt", (5.03, 6.0, 0.36), (0.03, 6.0, 0.7))
 board("PorchSkirt_S", (6.1, 3.03, 0.36), (2.2, 0.03, 0.7))
 board("PorchRoof", (6.1, 6.0, 3.25), (2.6, 6.4, 0.08), (0, math.radians(-8), 0))
@@ -365,8 +392,8 @@ dl_.new(tcd.outputs['Object'], nzd.inputs['Vector']); dl_.new(tcd.outputs['Objec
 dl_.new(nzd.outputs['Fac'], mrd.inputs['Value']); dl_.new(mrd.outputs['Result'], mul.inputs[0]); dl_.new(gr.outputs['Fac'], mul.inputs[1])
 dl_.new(mul.outputs[0], mul2.inputs[0]); dl_.new(dens.outputs[0], mul2.inputs[1]); dl_.new(mul2.outputs[0], vol.inputs['Density'])
 dl_.new(vol.outputs[0], dn["Material Output"].inputs['Volume'])
-sc["n_puffs"] = 10
-for i in range(10):
+sc["n_puffs"] = 18
+for i in range(18):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(0, 0, -20))
     o = bpy.context.active_object; o.name = "DustPuff_%d" % i; link(o, FX)
     md = m_dust.copy(); md.name = "M_DustPuff_%d" % i; o.data.materials.append(md)

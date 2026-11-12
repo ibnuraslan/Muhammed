@@ -1,0 +1,21 @@
+AUDIT GoatOwner (step 10 frames, 60 fps)
+Penetration polygon pairs summed over samples: OffA-goat 0, OffB-goat 0, Rescuer-goat 118, owner-goat 183, owner-porch 0
+BODY_OVERLAP      5 samples | ranges (s): 16.2-16.2, 19.2-19.2, 32.7-32.7, 33.7-33.8
+      e.g. f971 (16.17s): owner/goat 59 polygon pairs
+      e.g. f1151 (19.17s): owner/goat 124 polygon pairs
+      e.g. f1961 (32.67s): Rescuer/goat 31 polygon pairs
+CAMERA_INSIDE     1 samples | ranges (s): 16.3-16.3
+      e.g. f981 (16.33s): within 3 cm of Owner
+FOOT_FLOAT        4 samples | ranges (s): 31.2-31.7
+      e.g. f1871 (31.17s): OffA L 6.5 cm above the surface while planted
+      e.g. f1881 (31.33s): OffA L 7.0 cm above the surface while planted
+      e.g. f1891 (31.50s): OffA L 7.9 cm above the surface while planted
+FOOT_SINK         2 samples | ranges (s): 6.2-6.2, 22.2-22.2
+      e.g. f371 (6.17s): Owner L ankle 4.9 cm low
+      e.g. f1331 (22.17s): Owner L ankle 5.1 cm low
+HOOF_FLOAT       40 samples | ranges (s): 12.0-12.0, 13.7-14.0, 16.0-16.0, 16.7-18.8, 19.3-19.3
+      e.g. f721 (12.00s): FL 3.3 cm above the surface while planted
+      e.g. f821 (13.67s): FL 4.0 cm above the surface while planted
+      e.g. f821 (13.67s): FR 3.5 cm above the surface while planted
+HOOF_SINK         1 samples | ranges (s): 27.7-27.7
+      e.g. f1661 (27.67s): FR 3.5 cm into the surface
