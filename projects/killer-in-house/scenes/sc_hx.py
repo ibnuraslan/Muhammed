@@ -400,20 +400,34 @@ def _():
         _sedan_cast(c, t, sec)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-12.5, ROAD_Y - 2.4, 1.3)).lerp(Vector((-9.6, ROAD_Y - 2.2, 1.25)), e), Vector((-3.0, -D2, 2.2)), 30)
+        return (Vector((-13.0, ROAD_Y - 4.2, 1.5)).lerp(Vector((-11.0, ROAD_Y - 4.0, 1.45)), e), Vector((-2.5, -9.0, 1.2)), 30)
     return cam, anim
 
 
-@move("sedan_inside", "summer_night", 4.5, cast=("d1:detective", "d2:detective2"), extra=("dcar:car:black:sedan",))
+@move("sedan_inside", "summer_night", 4.5, cast=("d1:detective",), extra=("dcar:car:black:sedan",))
 def _():
     def anim(c, t):
         sec = tick(c, t, "sedan_inside")
-        _sedan_cast(c, t, sec)
-        lean = ease(min(1.0, max(0.0, (sec - 2.0) / 1.2)))
-        h = P(c, "d1"); H.rotl(h, "spine03", (1, 0, 0), 10 * lean)
+        H.drive(c["dcar"], (-6.0, ROAD_Y - 2.1, G - 0.05), (-5.999, ROAD_Y - 2.1, G - 0.05), 0.0, heading=0.0)
+        h = P(c, "d1"); H.stand_at(h, (-5.2, ROAD_Y - 3.35, G), math.radians(160))
+        lean = ease(min(1.0, max(0.0, (sec - 2.2) / 1.2)))
+        H.rotl(h, "spine03", (1, 0, 0), 6 * lean); H.look(h, 10, -4)
+        if "cig" not in c:
+            c["cig"] = H.point((0, 0, 0), 0.0, (1.0, 0.35, 0.1), 0.01)
+            c["smoke"] = H.leaf_cloud(25, (-5.2, ROAD_Y - 3.0), (0.15, 0.15), 1.6, col=(0.6, 0.62, 0.66), seed=17)
+            for o in c["smoke"]:
+                o.scale = (0.03, 0.03, 1)
+        puff = max(0.0, math.sin(2 * math.pi * sec / 3.0)) * (1 - lean)
+        hd = h.bone_head("head"); M = h.arm.matrix_world.to_3x3(); fwd = M @ Vector((0, -1, 0))
+        tip = hd + fwd * (0.12 + 0.12 * (1 - puff)) + Vector((0, 0, -0.08 - 0.25 * (1 - puff)))
+        reach(h, "R", tip + Vector((0, 0, -0.03)), Vector((0, -0.3, -1)), fwd)
+        c["cig"].location = tip; c["cig"].data.energy = 0.3 + 0.8 * puff
+        for o in c["smoke"]:            # smoke rises from the cigarette
+            ph_ = o["ph"]; u = ((sec * 0.25 + ph_) % 1.0)
+            o.location = tip + Vector((0.1 * math.sin(3 * u + ph_), 0.05 * u, 0.9 * u)); o.scale = (0.03 + 0.08 * u,) * 2 + (1,)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-6.2, ROAD_Y - 4.6, 1.0)).lerp(Vector((-6.0, ROAD_Y - 4.3, 0.98)), e), Vector((-6.2, ROAD_Y - 1.7, 0.7)), 34)
+        return (Vector((-7.6, ROAD_Y - 5.6, 1.5)).lerp(Vector((-7.2, ROAD_Y - 5.2, 1.5)), e), Vector((-4.6, ROAD_Y - 2.6, 1.3)), 34)
     return cam, anim
 
 

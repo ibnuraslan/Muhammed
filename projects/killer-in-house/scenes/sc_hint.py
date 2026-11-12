@@ -473,7 +473,7 @@ def _():
             hold_torch(h, bm[k], Vector((-2.5 + 5.5 * k + 1.2 * a, -2.0 + 0.8 * a, 0.9)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.35, -0.6, 1.65)).lerp(Vector((0.3, -1.0, 1.65)), e), Vector((0.15, -4.8, 1.3)), 26)
+        return (Vector((-0.35, -0.5, 1.65)).lerp(Vector((-0.35, -0.9, 1.65)), e), Vector((0.1, -4.8, 1.2)), 24)
     return cam, anim
 
 
@@ -486,7 +486,7 @@ def _():
         hold_torch(h, bm[0], Vector((3.8, -3.5 + math.sin(sec), 0.8)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.45, -4.3, 1.4)).lerp(Vector((0.45, -3.6, 2.2)), e), Vector((0.45, -1.0, 2.6)).lerp(Vector((0.4, 0.2, F2 + 1.8)), e), 24)
+        return (Vector((-0.35, -4.4, 1.3)).lerp(Vector((-0.35, -3.9, 1.6)), e), Vector((0.45, -1.2, 2.4)).lerp(Vector((0.45, -0.3, F2 + 1.4)), e), 22)
     return cam, anim
 
 
@@ -503,7 +503,7 @@ def _():
             H.look(h, 0, -30 * up)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.4, -1.2, 1.9)).lerp(Vector((0.4, -1.4, 2.1)), e), Vector((0.0, -4.2, 1.3)), 30)
+        return (Vector((-0.35, -0.6, 2.5)).lerp(Vector((-0.35, -0.8, 2.6)), e), Vector((0.0, -4.0, 1.2)), 26)
     return cam, anim
 
 
@@ -511,9 +511,10 @@ def _():
 def _():
     def anim(c, t):
         c["upbed_door"].rotation_euler = (0, 0, math.radians(80))
+        c["upstairs_hall"].data.energy = 6
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.3, 1.4, F2 + 1.55)).lerp(Vector((-0.2, -1.6, F2 + 1.55)), e), Vector((-1.4, -2.6, F2 + 1.2)).lerp(Vector((-1.4, -1.3, F2 + 1.1)), e), 26)
+        return (Vector((0.4, 1.4, F2 + 1.6)).lerp(Vector((0.1, -0.6, F2 + 1.55)), e), Vector((-0.6, -2.7, F2 + 1.1)), 26)
     return cam, anim
 
 
@@ -636,8 +637,8 @@ def _():
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
         thin_on_bed(c, t * DUR["gaunt_orbit"])
     def cam(c, t):
-        a = math.radians(-60 + 40 * ease(t)); hd = Vector((-3.2, -3.85, F2 + 1.05))
-        return (hd + Vector((1.3 * math.sin(a), -1.3 * math.cos(a), 0.15)), hd, 50)
+        a = math.radians(35 + 35 * ease(t)); hd = Vector((-3.2, -3.85, F2 + 1.05))
+        return (hd + Vector((1.4 * math.sin(a), -1.4 * math.cos(a) * 0.5 + 0.6, 0.1)), hd, 45)
     return cam, anim
 
 
@@ -649,7 +650,7 @@ def _():
         c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
         if "stool" not in c:
             import ph
-            ch, _ = ph.model("dining_chair_02", loc=(-1.2, -0.95, F2), rot_z=math.pi); c["stool"] = ch
+            ch, _ = ph.model("dining_chair_02", loc=(HATCH[0], HATCH[1] + 0.05, F2), rot_z=math.pi); c["stool"] = ch
             c["torch"] = H.flashlight("ZTorch"); c["torch"].data.energy = 200
         h = P(c, "z")
         rise = 0.47 * ease(min(1.0, sec / 2.5))
@@ -661,12 +662,13 @@ def _():
         H.aim_obj(c["torch"], hand + Vector((0, 0, 0.1)), Vector((HATCH[0] + 1.5, HATCH[1] + 1.5, EAVE + 0.3)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-2.4, -2.8, F2 + 1.1)).lerp(Vector((-2.2, -2.5, F2 + 1.2)), e), Vector((-1.2, -0.75, F2 + 1.9)), 26)
+        return (Vector((-1.35, -2.9, F2 + 1.0)).lerp(Vector((-1.3, -2.6, F2 + 1.05)), e), Vector((-1.2, -0.95, F2 + 2.0)), 26)
     return cam, anim
 
 
 def attic_light(c, on=True, hot=0.0):
-    c["hp_light"].data.energy = 2.5 * hot
+    c["attic_fill"].data.energy = 3.0
+    c["hp_light"].data.energy = 14 * hot
     c["coil_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 6.0 * hot
 
 
@@ -674,6 +676,7 @@ def attic_light(c, on=True, hot=0.0):
 def _():
     def anim(c, t):
         sec = t * DUR["attic_torch"]
+        c["attic_fill"].data.energy = 3.0
         c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
         bm = beams(c, 1, 400)
         hx, hy = HATCH
@@ -689,6 +692,7 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["attic_track"]
+        c["attic_fill"].data.energy = 3.0
         bm = beams(c, 1, 400); hx, hy = HATCH
         H.aim_obj(bm[0], Vector((hx, hy, EAVE + 0.2)), Vector((hx + 0.2 + 0.8 * math.sin(0.5 * sec), hy + 2.0, EAVE + 0.1)))
     def cam(c, t):
@@ -701,8 +705,10 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["attic_finds"]
+        c["attic_fill"].data.energy = 3.0
         bm = beams(c, 1, 400); hx, hy = HATCH
         tgt = Vector((hx - 0.9, hy + 0.6, EAVE + 0.15)).lerp(Vector((hx + 0.9, hy + 0.5, EAVE + 0.05)), ease(t))
+        bm[0].data.energy = 150
         H.aim_obj(bm[0], Vector((hx, hy - 0.1, EAVE + 0.25)), tgt)
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
@@ -718,16 +724,16 @@ def _():
         c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
         if "stool" not in c:
             import ph
-            ch, _ = ph.model("dining_chair_02", loc=(-1.2, -0.8, F2), rot_z=math.pi); c["stool"] = ch
+            ch, _ = ph.model("dining_chair_02", loc=(HATCH[0], HATCH[1], F2), rot_z=math.pi); c["stool"] = ch
         h = P(c, "z")
         down = ease(min(1.0, max(0.0, (sec - 0.4) / 0.8)))
-        H.stand_at(h, (-1.2, -0.75 - 0.15 * down, F2 + 0.47), math.radians(90), z=F2 + 0.47 - 0.05 * down)
+        H.stand_at(h, (HATCH[0], HATCH[1] - 0.15 * down, F2 + 0.47), math.radians(90), z=F2 + 0.47 - 0.05 * down)
         H.rotl(h, "spine03", (1, 0, 0), 20 * down); H.rotl(h, "head", (0, 0, 1), -30 * down)
         hd = h.bone_head("head")
         reach(h, "R", hd + Vector((0.12, -0.15, -0.08)), Vector((1, 0, -1)), Vector((0, 1, 0.3)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-3.0, -3.2, F2 + 1.5)).lerp(Vector((-2.8, -3.0, F2 + 1.5)), e), Vector((-1.2, -0.85, F2 + 1.6)), 30)
+        return (Vector((-1.4, -3.3, F2 + 1.3)).lerp(Vector((-1.35, -3.0, F2 + 1.3)), e), Vector((-1.2, -1.0, F2 + 1.7)), 28)
     return cam, anim
 
 
@@ -785,7 +791,7 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["joist_drift"]
-        attic_light(c, hot=1.0 - ease(t))
+        attic_light(c, hot=1.0 - 0.7 * ease(t))
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
         return (Vector((hx + 1.0, hy + 1.6, EAVE + 0.4)).lerp(Vector((hx - 1.6, hy - 0.4, EAVE + 0.3)), e), Vector((hx, hy, EAVE)).lerp(Vector((hx - 3.5, hy - 1.0, EAVE + 0.2)), e), 26)

@@ -28,7 +28,7 @@ F1, C1 = 0.0, 2.7                  # ground floor / ceiling
 F2, C2 = 2.9, 5.4                  # upstairs floor / ceiling
 EAVE, RIDGE = 5.55, 7.25
 ROAD_Y = -15.5
-HATCH = (-1.2, -0.7)               # closet ceiling hatch centre (x, y)
+HATCH = (-1.2, -0.95)               # closet ceiling hatch centre (x, y)
 HATCH_W, HATCH_L = 0.2, 0.38       # about eight by fifteen inches
 
 _MAT = {}
@@ -677,6 +677,8 @@ def attic_set(c):
     for k in range(3):
         cyl("Can", (hx + 0.5 + 0.09 * k, hy + 0.15, z + 0.06), 0.035, 0.11, pbr("Tin", (0.55, 0.52, 0.48), 0.35, 0.9), 16)
     c["hp_light"] = point((hx + 0.9, hy + 0.5, z + 0.15), 0.0, (1.0, 0.35, 0.08), 0.06)
+    c["attic_fill"] = point((hx + 0.3, hy + 1.2, z + 0.9), 1.5, (0.7, 0.75, 0.9), 0.6)          # faint light leaking in at the eaves
+    c["upstairs_hall"] = point((0.2, 0.8, C2 - 0.3), 0.0, (1.0, 0.75, 0.5), 0.05)
 
 
 def cellar_set(c):
@@ -865,7 +867,7 @@ def person(name, kind):
         "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit04", cv=dict(hue=0.1, sat=0.4, val=0.25), hair="short01", hv=0.3, hat=False),
         "neighbour_w": dict(gender=0.0, years=45, weight=0.5, height=0.5, cloth="female_casualsuit02", cv=dict(hue=0.6, sat=0.45, val=0.4), hair="bob01", hv=0.25, hat=False),
         "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.08, sat=0.3, val=0.42), hair="short02", hv=0.2, hat=True),
-        "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_worksuit01", cv=dict(hue=0.6, sat=0.2, val=0.4), hair="short01", hv=0.15, hat=True),
+        "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
         "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit03", cv=dict(hue=0.12, sat=0.25, val=0.32), hair="long01", hv=0.3, hat=False),
