@@ -130,14 +130,20 @@ def tree(name, loc, kind="pine", seed=0):
 
 
 def window_view(ctr, side, seed=0, dmin=14, n_blocks=5):
-    """What a window looks out on: a few concrete apartment blocks 14-40 m out, so glass never reads as a white card."""
+    """What a window looks out on: plastered apartment blocks 14-40 m out with real window units, so glass never
+    reads as a white card or flat grey squares."""
     n = {"N": Vector((0, 1, 0)), "S": Vector((0, -1, 0)), "E": Vector((1, 0, 0)), "W": Vector((-1, 0, 0))}[side]
     t = Vector((-n.y, n.x, 0)); r = np.random.default_rng(seed)
     for k in range(n_blocks):
-        d = float(r.uniform(dmin, dmin + 26)); lat = float(r.uniform(-18, 18)); hgt = float(r.uniform(12, 30)); w = float(r.uniform(10, 18))
+        d = float(r.uniform(dmin, dmin + 26)); lat = float(r.uniform(-18, 18)); floors = int(r.integers(4, 9)); hgt = floors * 2.9 + 0.6
+        w = float(r.choice([12.0, 15.0, 18.0]))
         p = Vector(ctr) + n * d + t * lat; p.z = hgt / 2 - 1.0
-        fac = facade_material(f"ViewFac{seed}_{k}", [(0.72, 0.68, 0.6), (0.8, 0.76, 0.66), (0.62, 0.6, 0.56)][k % 3], floor=2.9, bay=3.2)
-        box("ViewBlock", p, (abs(t.x) * w + abs(n.x) * 10 + 0.01, abs(t.y) * w + abs(n.y) * 10 + 0.01, hgt), fac)
+        tint = [(0.86, 0.8, 0.68), (0.9, 0.86, 0.78), (0.76, 0.74, 0.7), (0.84, 0.72, 0.62)][k % 4]
+        pl = ph_mat("plastered_wall_04", 0.3, (0.7, 0.68, 0.62), name=f"ViewPlaster{seed}_{k}", tint=tint)
+        box("ViewBlock", p, (abs(t.x) * w + abs(n.x) * 10 + 0.01, abs(t.y) * w + abs(n.y) * 10 + 0.01, hgt), pl)
+        if side in ("N", "S"):                       # windows on the face that looks back at us
+            face_y = p.y - n.y * 5.0
+            facade_windows(f"ViewWin{seed}_{k}", Vector((p.x - w / 2, face_y, -1.0)), w, floors, floor_h=2.9, bay=3.0, sill0=0.9, normal_y=-int(n.y))
     box("ViewGround", Vector(ctr) + n * 30 + Vector((0, 0, -1.05)), (60, 60, 0.1), pbr("ViewGround", (0.25, 0.24, 0.22), 0.9))
 
 
@@ -251,6 +257,11 @@ def build(variant=None):
         curtain(f"Curtain{k}", BEDS[k].x + 1.3, 3.75, 3.75 - (1.2 + 0.5 * (k % 2)))
     ph_model("industrial_storage_cart", loc=BEDS[3] + Vector((1.3, -2.2, 0)), rot_z=0.2)       # nurses' trolley
     ph_model("SchoolChair_01", loc=BEDS[0] + Vector((0.9, -0.4, 0)), rot_z=math.radians(80))
+    for k, x in enumerate((-2.25, 2.25)):        # two more beds along the window wall, heads to the wall, lockers and a drip
+        sb = WARD + Vector((x, -2.75, 0)); iron_bed(f"SBed{k}", sb, rot_z=math.pi)
+        blanket(f"SBlanket{k}", sb + Vector((0, 0.25, 0)), col=(0.3, 0.3, 0.34))
+        box(f"SLocker{k}", sb + Vector((0.75, -0.75, 0.4)), (0.42, 0.4, 0.8), painted_steel(f"SCab{k}", (0.78, 0.78, 0.74), 0.4, 0.3), bevel=0.01)
+        drip_stand(f"SDrip{k}", sb + Vector((-0.65, -0.6, 0)))
     chart = box("Chart", BEDS[2] + Vector((0, -1.03, 0.68)), (0.24, 0.015, 0.32), pbr("ChartBoard", (0.45, 0.35, 0.2), 0.5))
     c["chart"] = chart
     c["visitor_chair"] = ph_model("SchoolChair_01", loc=BEDS[2] + Vector((-0.9, -0.3, 0)), rot_z=math.radians(-90))
@@ -527,18 +538,20 @@ def c2_5a(c, t):
     c["focus"] = h.bone_head("head")
 
 
-def c2_6a(c, t):          # medium: the doctor at the counter dialling, whole upper body in frame
+def c2_6a(c, t):          # medium: the doctor lifts the receiver to his ear, his other hand resting on the counter
     sec = S("ch2_6a", t); hide(c, ("doc",)); leaves(c, 1)
-    ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.4, 0.5, 0))
-    stand_at(h, loc, ns + Vector((0.4, 0, 0)))
-    sd = forward(h).cross(Vector((0, 0, 1)))
-    dial = ns + Vector((0.4, 0.0, 1.22))
-    rch = reach
-    rch(h, "R", dial + Vector((0.03 * math.cos(sec * 4), 0.03 * math.sin(sec * 4), 0.02)), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, -1)))
-    hs = c["handset"]; ear = h.bone_head("head") + sd * 0.09 + Vector((0, 0, -0.04))
-    rch(h, "L", ear + Vector((0, 0, -0.08)), Vector((-sd.x, -sd.y, -0.7)), Vector((0, 0, 1)))
-    hs.location = ear + Vector((0, 0, -0.08)); hs.rotation_euler = (math.radians(80), 0, math.atan2(sd.y, sd.x))
-    h.rot("head", sd, -10)
+    ns = c["ns"]; h = c["people"]["doc"]; loc = ns + Vector((0.3, 0.55, 0))
+    stand_at(h, loc, ns + Vector((0.3, 0, 0)))
+    sd = forward(h).cross(Vector((0, 0, 1))).normalized()
+    k = ease(min(1.0, sec / 0.9))
+    ear = h.bone_head("head") + sd * 0.1 + Vector((0, 0, -0.05))
+    rest = ns + Vector((0.4, 0.05, 1.18))
+    hs_at = rest.lerp(ear + Vector((0, 0, -0.06)), k)
+    reach(h, "L", hs_at, Vector((-sd.x, -sd.y, -1.0)), Vector((0, 0, 1)))
+    reach(h, "R", ns + Vector((0.05, 0.22, 1.15)), Vector((sd.x, sd.y, -1.0)), forward(h))
+    fingers_curl(h, 55, thumb=40)
+    hs = c["handset"]; hs.location = hs_at; hs.rotation_euler = (math.radians(80 * k), 0, math.atan2(sd.y, sd.x))
+    h.rot("head", sd, -6)
     c["focus"] = h.bone_head("head")
 
 

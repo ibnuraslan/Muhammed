@@ -39,18 +39,18 @@ def build(variant=None):
     v = variant or "clear"
     rng = np.random.default_rng(21)
     sky("overcast")
-    bpy.context.scene.view_settings.exposure = 0.9
+    bpy.context.scene.view_settings.exposure = 0.35      # exposed for the interior; the street stays readable
     box("Ground", (0, 0, -0.06), (400, 400, 0.1), ph_mat("road_damaged", 0.15, (0.2, 0.2, 0.2), name="StreetAsphalt"))
     puddles(rng, ((-20, -16), (20, -8)), 10, size=(0.5, 1.5), z=0.01)
     # the warehouse room: brick walls, concrete floor, steel roof trusses, high windows, big front doors
     brick = ph_mat("brick_wall_02", 0.5, (0.4, 0.25, 0.2), name="WHBrick")
-    floor = ph_mat("concrete_floor_damaged_01", 0.12, (0.36, 0.35, 0.33), name="WHFloor", tint=(0.62, 0.6, 0.57))
+    floor = ph_mat("concrete_floor_worn_001", 0.45, (0.36, 0.35, 0.33), name="WHFloor", tint=(0.72, 0.7, 0.66))
     room("WH", Vector((0, 2.0, 0)), 18, 16, 6.0, floor, brick, ceil_m=ph_mat("rusty_corrugated_iron", 0.4, (0.3, 0.3, 0.3), name="WHRoof"),
          windows=[("N", -5.0, 3.6, 2.4, 1.6), ("N", 0.0, 3.6, 2.4, 1.6), ("N", 5.0, 3.6, 2.4, 1.6)],
          doors=[("S", -0.6, 0, 4.0, 3.6), ("E", -1.0, 0, 2.0, 2.6)])
     for x in (-5.0, 0.0, 5.0):
         daylight_window(Vector((x, 10.2, 4.4)), "N", (2.4, 1.6), energy=900)
-    dl = bpy.data.lights.new("DoorDay", 'AREA'); dl.size = 4.0; dl.size_y = 3.6; dl.energy = 2500; dl.color = (0.88, 0.92, 1.0)
+    dl = bpy.data.lights.new("DoorDay", 'AREA'); dl.size = 4.0; dl.size_y = 3.6; dl.energy = 3000; dl.color = (0.88, 0.92, 1.0)
     do = bpy.data.objects.new("DoorDay", dl); bpy.context.collection.objects.link(do); do.location = (-0.6, FRONT - 1.0, 1.8)
     do.rotation_euler = (math.radians(-90), 0, 0); do.visible_camera = False
     steel = painted_steel("Truss", (0.2, 0.22, 0.24), 0.5, 0.6)
@@ -69,7 +69,7 @@ def build(variant=None):
          windows=[("N", 0.0, 1.5, 1.6, 1.6)], doors=[("W", 0.0, 0, 2.0, 2.6)])
     daylight_window(Vector((14.0, 5.2, 2.3)), "N", (1.6, 1.6), energy=200)
     for k in range(3):
-        tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=110 if v != "dim" else 90)
+        tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=260 if v != "dim" else 200)
     # a half-cleared office floor: piles of old office furniture, filing cabinets, boxes, a rolled carpet
     def filing_cabinet(loc, rz, col):
         m = painted_steel(f"FC{loc[0]:.0f}{loc[1]:.0f}", col, 0.45, 0.45); k_ = pbr("FCHandle", (0.55, 0.55, 0.55), 0.3, 0.9)
@@ -96,7 +96,7 @@ def build(variant=None):
     for k in range(40):
         box("Paper", (rng.uniform(-7, 7), rng.uniform(-4, 8), 0.003), (0.21, 0.3, 0.002), paper, rot=(0, 0, rng.uniform(0, 3)))
     # winter sun through the open front doors: a light shaft in the dust
-    shaft = bpy.data.lights.new("DoorShaft", 'SPOT'); shaft.energy = 30000; shaft.spot_size = math.radians(16); shaft.spot_blend = 0.4
+    shaft = bpy.data.lights.new("DoorShaft", 'SPOT'); shaft.energy = 20000; shaft.spot_size = math.radians(16); shaft.spot_blend = 0.4
     shaft.color = (1.0, 0.92, 0.8); shaft.shadow_soft_size = 0.2
     so = bpy.data.objects.new("DoorShaft", shaft); bpy.context.collection.objects.link(so); so.location = (-0.6 - 3.0, FRONT - 9.0, 7.5)
     so.rotation_euler = (Vector((3.4, 12.0, -7.5))).to_track_quat('-Z', 'Y').to_euler()
@@ -108,9 +108,12 @@ def build(variant=None):
         c["pk"].append(o)
     # street outside: opposite apartment blocks, parked cars, traffic, the truck (placeholder)
     fac = facade_material("StreetFacade", (0.7, 0.66, 0.58), floor=2.9, bay=3.2)
+    from sc_hospital import facade_windows
+    opp_m = ph_mat("plastered_wall_04", 0.3, (0.7, 0.66, 0.58), name="OppPlaster", tint=(0.85, 0.8, 0.7))
     for k in range(6):
-        h = 12 + 3 * (k % 3)
-        box("Opp", (-25 + k * 10, -31.0, h / 2), (9.6, 10, h), fac)
+        fl = 4 + (k % 3); h = fl * 2.9 + 0.6
+        box("Opp", (-25 + k * 10, -31.0, h / 2), (9.6, 10, h), opp_m)
+        facade_windows(f"OppWin{k}", Vector((-25 + k * 10 - 4.8, -26.0, 0)), 9.0, fl, floor_h=2.9, bay=3.0, sill0=0.9, normal_y=1)
     for x in (-16.0, 24.0):
         box("Adj", (x, 2.0, 7.0), (12, 16, 14), fac)
     from rs_vehicles import car

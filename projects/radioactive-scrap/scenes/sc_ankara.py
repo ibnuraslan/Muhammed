@@ -84,6 +84,16 @@ def build(variant=None):
     c["stamp_rest"] = OFF + Vector((0.3, 0.25, 0.775))
     box("InkPad", OFF + Vector((0.32, 0.12, 0.785)), (0.1, 0.07, 0.015), pbr("InkPad", (0.1, 0.1, 0.25), 0.4))
     ph_model("vintage_cabinet_01", loc=OFF + Vector((2.3, -1.7, 0)), rot_z=math.pi / 2)
+    for k in range(3):                                   # a row of steel filing cabinets on the back wall
+        filing_cabinet(OFF + Vector((-2.2 + 0.5 * k, -1.88, 0)), 0.0, (0.42, 0.45, 0.42) if k != 1 else (0.5, 0.48, 0.42), name=f"OffFC{k}")
+    for k in range(3):
+        box("Binder", OFF + Vector((-2.35 + 0.08 * k, -1.85, 1.44)), (0.06, 0.28, 0.3), pbr(f"BinderM{k}", [(0.15, 0.2, 0.4), (0.4, 0.1, 0.08), (0.2, 0.3, 0.2)][k], 0.6))
+    # a framed portrait shape on the wall (no face: a soft sepia blur), a wall clock, a coat stand
+    box("PortraitFrame", OFF + Vector((0.6, -2.22, 2.0)), (0.5, 0.04, 0.62), wood("FrameWood", (0.2, 0.12, 0.06), (0.35, 0.22, 0.1)))
+    box("PortraitPanel", OFF + Vector((0.6, -2.2, 2.0)), (0.4, 0.02, 0.52), noisy("PortraitSepia", (0.45, 0.38, 0.28), 0.8, dirt=0.6, scale=1.5, dark=0.6))
+    cyl("WallClock", OFF + Vector((-1.0, -2.22, 2.2)), 0.16, 0.04, pbr("ClockFace", (0.9, 0.88, 0.82), 0.4), verts=32, rot=(math.radians(90), 0, 0))
+    cyl("CoatStand", OFF + Vector((2.2, 1.6, 0.9)), 0.02, 1.8, wood("CoatWood", (0.2, 0.12, 0.06), (0.35, 0.22, 0.1)), verts=8)
+    box("Coat", OFF + Vector((2.2, 1.55, 1.3)), (0.4, 0.2, 0.8), fabric("CoatF", (0.18, 0.16, 0.15), 0.95, 0.4, 300), bevel=0.08)
     ph_model("SchoolChair_01", loc=OFF + Vector((0.0, -0.25, 0)), rot_z=0.0)
     tube_light(OFF + Vector((0, 0, 2.95)), energy=80)
     # ---------------- storeroom (dusty): steel shelving, boxes, pallets with grey packages, a swinging lamp
@@ -160,7 +170,8 @@ def c2_12a(c, t):          # the clerk stamps a document under the desk lamp (me
     sp = c["doc"].location + Vector((0.02, 0.0, 0.002 + 0.16 * (1 - k)))
     c["stamp"].location = sp
     reach(h, "R", sp + Vector((0, 0, 0.14)), Vector((sd.x, sd.y, -0.7)), Vector((0, 0, -1)))
-    reach(h, "L", c["doc"].location + Vector((-0.2, -0.05, 0.03)), Vector((-sd.x, -sd.y, -0.7)), forward(h))
+    reach(h, "L", c["doc"].location + Vector((-0.16, -0.12, 0.03)), Vector((-sd.x, -sd.y, -1.0)), forward(h))
+    fingers_curl(h, 40, thumb=30)
     h.rot("head", sd, -12)
 
 
@@ -230,7 +241,7 @@ def c4_8b(c, t):
 
 
 SHOTS = {
-    "ch2_12a": ("office", c2_12a, C(OFF + Vector((1.5, 1.6, 1.5)), OFF + Vector((1.3, 1.4, 1.45)), OFF + Vector((0.0, 0.0, 1.0)), 32), 2.8),
+    "ch2_12a": ("office", c2_12a, C(OFF + Vector((2.3, 1.9, 1.65)), OFF + Vector((2.1, 1.75, 1.65)), OFF + Vector((-0.2, -0.6, 1.1)), 26), 2.8),
     "ch2_12b": ("full", c2_12b, C(STO + Vector((0.6, -6.2, 1.6)), STO + Vector((0.8, 0.0, 1.4)), STO + Vector((1.0, 4.8, 0.7)), 30), 4.0),
     "ch4_9a": ("empty", c4_9a, C(STO + Vector((2.0, -3.2, 1.5)), STO + Vector((1.9, -2.6, 1.5)), STO + Vector((0.4, 2.4, 1.3)), 32), 4.0),
     "ch4_9b": ("empty", c4_9b, C(STO + Vector((2.3, 0.6, 0.9)), STO + Vector((2.2, 1.0, 0.95)), STO + Vector((1.0, 4.0, 1.8)), 28), None),

@@ -956,3 +956,14 @@ def lie_in_bed(h, head_at, foot_dir, z):
 
 # ============================================================================ vehicles: the shared realistic kit replaces the placeholders
 from rs_vehicles import truck, excavator, pose_arm, set_grab, arm_ik, hang_tool_level, roll   # noqa: E402,F811
+
+
+def filing_cabinet(loc, rz, col=(0.42, 0.45, 0.42), name="FilingCabinet"):
+    """Four-drawer steel filing cabinet."""
+    from kit import pbr, box, join
+    m = painted_steel(name + "M", col, 0.45, 0.45); k_ = pbr("FCHandle", (0.55, 0.55, 0.55), 0.3, 0.9)
+    parts = [box("FCBody", (0, 0, 0.66), (0.47, 0.62, 1.32), m, bevel=0.01)]
+    for j in range(4):
+        parts += [box("FCDrawer", (0, -0.315, 0.17 + j * 0.32), (0.43, 0.012, 0.29), m, bevel=0.004), box("FCPull", (0, -0.33, 0.25 + j * 0.32), (0.12, 0.02, 0.02), k_)]
+    o = join(parts, name); o.location = loc; o.rotation_euler = (0, 0, rz)
+    return o

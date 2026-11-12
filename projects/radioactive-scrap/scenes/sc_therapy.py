@@ -49,24 +49,67 @@ def build(variant=None):
                  cyl("Shackle", (0, 0, 0.045), 0.018, 0.03, pbr("SteelS", (0.6, 0.6, 0.6), 0.3, 0.9), verts=10, rot=(math.radians(90), 0, 0))], "Padlock")
     c["lock"] = lock; c["lock_at"] = STORE + Vector((0.42, -0.08, 0.98))
     c["new_sign"] = sign_plate("NewSign", Vector((0, -150, 0)), 0.0, 0.32); c["new_sign_at"] = STORE + Vector((0.0, -0.04, 1.75))
-    # the cobalt unit: floor stand, rotating gantry arm, heavy source head with collimator jaws
-    unit = painted_steel("UnitPaint", (0.82, 0.82, 0.78), 0.4, 0.2)
-    dark = painted_steel("UnitDark", (0.2, 0.22, 0.24), 0.45, 0.4)
-    box("Stand", (0.0, 2.6, 1.3), (1.6, 1.0, 2.6), unit, bevel=0.06)
-    cyl("Bearing", (0.0, 2.05, 1.25), 0.55, 0.15, dark, verts=40, rot=(math.radians(90), 0, 0))
+    # the cobalt unit (1970s-80s style teletherapy machine, generic): pedestal with a big rotating ring, a C-arm carrying a heavy
+    # round source head with a tapered collimator (two pairs of jaws, light field), and a beam stopper opposite
+    unit = painted_steel("UnitPaint", (0.8, 0.78, 0.7), 0.4, 0.2)
+    grey = painted_steel("UnitGrey", (0.45, 0.47, 0.48), 0.4, 0.3)
+    dark = painted_steel("UnitDark", (0.16, 0.17, 0.19), 0.45, 0.4)
+    chrome = pbr("UnitChrome", (0.75, 0.75, 0.75), 0.15, 1.0)
+    box("Stand", (0.0, 2.7, 1.35), (1.9, 1.1, 2.7), unit, bevel=0.12)
+    box("StandPlinth", (0.0, 2.7, 0.06), (2.1, 1.3, 0.12), dark, bevel=0.02)
+    box("StandPanel", (0.6, 2.14, 0.7), (0.5, 0.02, 0.6), grey, bevel=0.01)
+    for k in range(4):
+        cyl("PanelKnob", (0.48 + 0.08 * k, 2.12, 0.85), 0.018, 0.02, dark, verts=10, rot=(math.radians(90), 0, 0))
     gantry = bpy.data.objects.new("Gantry", None); bpy.context.collection.objects.link(gantry); gantry.location = Vector((0, 1.95, 1.25))
-    arm = join([box("Arm", (0, -0.6, 0.0), (0.5, 1.2, 0.45), unit, bevel=0.05), box("ArmUp", (0, -1.1, 0.9), (0.55, 0.45, 1.8), unit, bevel=0.05)], "GantryArm")
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.9, minor_radius=0.1, major_segments=64, minor_segments=12, location=(0, 0, 0), rotation=(math.radians(90), 0, 0))
+    ring = bpy.context.active_object; ring.name = "GantryRing"; ring.data.materials.append(chrome); ring.parent = gantry; ring.location = (0, 0.02, 0)
+    disc = cyl("GantryDisc", (0, 0, 0), 0.86, 0.14, grey, verts=64, rot=(math.radians(90), 0, 0)); disc.parent = gantry; disc.location = (0, 0.0, 0)
+    for k in range(12):
+        a_ = k / 12 * 2 * math.pi
+        sc = cyl("RingScale", (0, 0, 0), 0.012, 0.01, dark, verts=6, rot=(math.radians(90), 0, 0)); sc.parent = gantry; sc.location = (0.78 * math.cos(a_), -0.075, 0.78 * math.sin(a_))
+    arm = join([box("Arm", (0, -0.55, 0.62), (0.62, 1.2, 0.42), unit, bevel=0.1), box("ArmUp", (0, -1.2, 0.95), (0.66, 0.42, 1.1), unit, bevel=0.1),
+                box("ArmLow", (0, -0.55, -0.62), (0.5, 1.2, 0.36), unit, bevel=0.1), box("ArmLowDn", (0, -1.2, -0.85), (0.5, 0.38, 0.6), unit, bevel=0.1)], "GantryArm")
     arm.parent = gantry; arm.location = (0, 0, 0)
-    head = join([cyl("Head", (0, -1.95, 1.35), 0.42, 0.75, unit, verts=36, rot=(0, 0, 0)), cyl("HeadRing", (0, -1.95, 0.98), 0.44, 0.08, dark, verts=36)], "SourceHead")
+    head = join([cyl("Head", (0, -1.95, 1.2), 0.5, 0.56, unit, verts=48), cyl("HeadBand", (0, -1.95, 1.2), 0.52, 0.12, grey, verts=48),
+                 cyl("HeadCap", (0, -1.95, 1.5), 0.42, 0.06, grey, verts=48), box("HeadYoke", (0, -1.55, 1.2), (0.7, 0.3, 0.5), unit, bevel=0.08)], "SourceHead")
     head.parent = gantry; head.location = (0, 0, 0)
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=0.2, radius2=0.33, depth=0.28, location=(0, 0, 0), rotation=(0, 0, math.radians(45)))
+    col = bpy.context.active_object; col.name = "Collimator"; col.data.materials.append(grey); col.parent = gantry; col.location = (0, -1.95, 0.78)
     c["jaws"] = []
     for sx in (-1, 1):
-        j = box("Jaw", (0, 0, 0), (0.18, 0.3, 0.12), dark, bevel=0.01); j.parent = gantry; j.location = (sx * 0.1, -1.95, 0.88); c["jaws"].append((j, sx))
-    cw = box("Counterweight", (0, 0, 0), (0.6, 0.5, 0.5), dark, bevel=0.04); cw.parent = gantry; cw.location = (0, -1.4, -1.3)
+        j = box("Jaw", (0, 0, 0), (0.1, 0.24, 0.08), dark, bevel=0.008); j.parent = gantry; j.location = (sx * 0.06, -1.95, 0.62); c["jaws"].append((j, sx, "x"))
+        j2 = box("Jaw2", (0, 0, 0), (0.24, 0.1, 0.05), dark, bevel=0.008); j2.parent = gantry; j2.location = (0, -1.95 + sx * 0.06, 0.6); c["jaws"].append((j2, sx, "y"))
+    lf = bpy.data.lights.new("LightField", 'SPOT'); lf.energy = 25; lf.spot_size = math.radians(14); lf.spot_blend = 0.05; lf.shadow_soft_size = 0.0; lf.color = (1.0, 0.95, 0.8)
+    lfo = bpy.data.objects.new("LightField", lf); bpy.context.collection.objects.link(lfo); lfo.parent = gantry; lfo.location = (0, -1.95, 0.56)
+    c["lightfield"] = lf
+    stopper = join([box("Stopper", (0, -1.95, -1.05), (0.6, 0.6, 0.3), dark, bevel=0.05), box("StopperArm", (0, -1.55, -0.95), (0.4, 0.5, 0.2), unit, bevel=0.05)], "BeamStopper")
+    stopper.parent = gantry
+    ht = sign_plate("HeadTrefoil", Vector((0, 0, 0)), 0.0, 0.12); ht.parent = gantry; ht.location = (0.0, -2.46, 1.25)
     c["gantry"] = gantry
+    # control-room window (lead glass in a deep frame), cable trays, beam-on lamp over the maze door
+    frame_m = painted_steel("LeadFrame", (0.35, 0.38, 0.4), 0.4, 0.5)
+    for (dy, dz, sy, sz) in ((0, 0.47, 1.3, 0.12), (0, -0.47, 1.3, 0.12), (-0.6, 0, 0.12, 1.0), (0.6, 0, 0.12, 1.0)):
+        box("LeadFrame", (4.44, -0.6 + dy, 1.45 + dz), (0.2, sy, sz), frame_m)
+    box("LeadGlass", (4.45, -0.6, 1.45), (0.05, 1.1, 0.82), pbr("LeadGlassM", (0.12, 0.14, 0.12), 0.05, 0.0, **{'Specular IOR Level': 0.9, 'Coat Weight': 0.8}))
+    l2 = bpy.data.lights.new("ControlRoom", 'AREA'); l2.energy = 60; l2.size = 1.0; l2o = bpy.data.objects.new("ControlRoom", l2); bpy.context.collection.objects.link(l2o)
+    l2o.location = (5.2, -0.6, 2.2); l2o.rotation_euler = (0, math.radians(45), 0)
+    tray = painted_steel("CableTray", (0.5, 0.52, 0.5), 0.5, 0.5)
+    box("CableTray", (0.0, 3.0, 2.95), (8.6, 0.3, 0.06), tray); box("CableTrayV", (-1.2, 3.12, 1.6), (0.25, 0.06, 2.7), tray)
+    for k in range(3):
+        cyl("Cable", (0.0, 2.92 + 0.07 * k, 2.99), 0.018, 8.6, pbr("CableM", (0.05, 0.05, 0.05), 0.6), verts=8, rot=(0, math.radians(90), 0))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.07, location=(-3.6, -3.05, 2.5))
+    lamp = bpy.context.active_object; lamp.name = "BeamOnLamp"; lamp.scale = (1, 1, 0.7)
+    lm = bpy.data.materials.new("BeamOnRed"); lm.use_nodes = True; lp = lm.node_tree.nodes["Principled BSDF"]
+    lp.inputs['Base Color'].default_value = (0.5, 0.02, 0.02, 1); lp.inputs['Emission Color'].default_value = (1.0, 0.05, 0.02, 1)
+    vn = lm.node_tree.nodes.new("ShaderNodeValue"); dd = vn.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "25 * (1 if frame > 12 else 0.05)"
+    lm.node_tree.links.new(vn.outputs[0], lp.inputs['Emission Strength']); lamp.data.materials.append(lm)
+    box("BeamOnBase", (-3.6, -3.13, 2.5), (0.16, 0.04, 0.16), dark)
     # treatment couch
-    couch = join([box("CouchTop", (0, -0.3, 0.88), (0.55, 2.2, 0.06), pbr("CouchPad", (0.15, 0.17, 0.2), 0.5), bevel=0.02),
-                  box("CouchBase", (0, 0.2, 0.42), (0.5, 0.8, 0.84), unit, bevel=0.04)], "Couch")
+    couch = join([box("CouchTop", (0, -0.3, 0.9), (0.55, 2.2, 0.06), pbr("CouchPad", (0.15, 0.17, 0.2), 0.5), bevel=0.02),
+                  box("CouchFrame", (0, -0.3, 0.84), (0.6, 2.0, 0.06), unit, bevel=0.02), box("CouchFoot", (0, 0.2, 0.05), (0.8, 1.2, 0.1), dark, bevel=0.02)], "Couch")
+    for sx in (-0.22, 0.22):
+        for sgn in (-1, 1):
+            bar = box("Scissor", (0, 0, 0), (0.05, 1.05, 0.05), chrome); bar.location = (sx, 0.2, 0.47); bar.rotation_euler = (sgn * math.radians(42), 0, 0)
     c["pillow"] = box("Pillow", (0, -150, 0), (0.45, 0.3, 0.1), fabric("PillowF", (0.88, 0.88, 0.85), 0.9, 0.3, 500), bevel=0.04)
     c["pillow_at"] = Vector((0, 0.55, 0.96))
     box("ControlDesk", (3.5, -2.6, 0.45), (1.2, 0.6, 0.9), unit)
@@ -80,7 +123,7 @@ def build(variant=None):
     cont.parent = trolley; cont.location = (0, 0, 0.38)
     trolley.location = (0, -150, 0); c["trolley"] = trolley
     P = {}
-    P["rad"] = person("Radiographer", 0.0, 36, "nurse", "bob02", hv=0.12)
+    P["rad"] = person("Radiographer", 0.0, 36, "nurse", "ponytail01", hv=0.12, hat="nurse", hat_col=(0.92, 0.92, 0.9))
     P["t1"] = person("TechA", 1.0, 41, "doctor", "short03", moustache=True)
     P["t2"] = person("TechB", 1.0, 30, "overall_white", "short02", dosimeter=True)
     P["insp"] = person("Inspector", 1.0, 50, "suit_grey", "short03", hv=0.55, moustache=True)
@@ -101,8 +144,10 @@ def walk_to(h, a, b, sec, speed=1.0, stride=1.25):
 
 def gantry(c, ang_deg, jaw=0.0):
     c["gantry"].rotation_euler = (0, math.radians(ang_deg), 0)
-    for j, sx in c["jaws"]:
-        j.location = (sx * (0.1 + 0.1 * jaw), -1.95, 0.88)
+    for j, sx, ax in c["jaws"]:
+        o = 0.06 + 0.07 * jaw
+        j.location = (sx * o, -1.95, 0.62) if ax == "x" else (0, -1.95 + sx * o, 0.6)
+    c["lightfield"].spot_size = math.radians(6 + 14 * jaw)
 
 
 def C(p0, p1, tgt, lens):
@@ -179,7 +224,7 @@ SHOTS = {
     "ch2_9a": ("room", c2_9a, C(Vector((-4.1, -2.9, 1.7)), Vector((-3.0, -2.9, 1.7)), Vector((0.0, 1.0, 1.6)), 20), None),
     "ch2_9b": ("room", c2_9b, C(Vector((2.6, -1.6, 1.5)), Vector((2.3, -1.3, 1.5)), Vector((0.4, 0.55, 1.1)), 35), 2.8),
     "ch2_10a": ("room", c2_10a, C(Vector((4.2, -2.6, 1.4)), Vector((4.0, -2.2, 1.5)), Vector((0.0, 0.8, 1.7)), 22), None),
-    "ch2_10b": ("room", c2_10b, C(Vector((2.7, -2.5, 1.55)), Vector((2.4, -2.2, 1.55)), Vector((0.0, 0.0, 1.6)), 40), 4.0),
+    "ch2_10b": ("room", c2_10b, C(Vector((1.6, -1.5, 1.3)), Vector((1.35, -1.25, 1.35)), Vector((0.0, 0.0, 1.95)), 32), 4.0),
     "ch2_11a": ("room", c2_11a, C(Vector((3.0, 1.0, 1.7)), Vector((2.6, 0.6, 1.7)), Vector((-2.4, -2.5, 0.9)), 24), 4.0),
     "ch2_11b": ("room", c2_11b, C(Vector((-10.5, -6.0, 1.4)), Vector((-10.2, -5.9, 1.4)), Vector((-3.6, -3.6, 1.3)), 28), 4.0),
     "ch4_10a": ("room", c4_10a, C(Vector((3.6, 1.6, 1.7)), Vector((3.3, 1.3, 1.7)), Vector((-2.5, -2.0, 1.4)), 24), 4.0),
