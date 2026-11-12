@@ -100,7 +100,7 @@ def build(variant=None):
     shaft.color = (1.0, 0.92, 0.8); shaft.shadow_soft_size = 0.2
     so = bpy.data.objects.new("DoorShaft", shaft); bpy.context.collection.objects.link(so); so.location = (-0.6 - 3.0, FRONT - 9.0, 7.5)
     so.rotation_euler = (Vector((3.4, 12.0, -7.5))).to_track_quat('-Z', 'Y').to_euler()
-    haze((0, 2, 3), (17.8, 15.8, 5.8), density=0.014, color=(0.85, 0.82, 0.76), anis=0.6)
+    haze((0, 2, 3), (17.8, 15.8, 5.8), density=0.005, color=(0.85, 0.82, 0.76), anis=0.6)
     # the two packages near the front
     c["pk"] = []
     for k, p in enumerate(PKG):

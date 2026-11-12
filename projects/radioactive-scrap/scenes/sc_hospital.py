@@ -91,9 +91,12 @@ def cloth_blanket(name, ctr, col, rot_z=0.0, w=1.12, l=1.42, foot=-1.0, nx=24, n
     o.location = (ctr[0], ctr[1], 0.0); o.rotation_euler = (0, 0, rot_z)
     me.materials.append(fabric(name + "W", col, 0.95, 0.5, 300))
     o.modifiers.new("Thick", 'SOLIDIFY').thickness = 0.012
-    # turned-down white sheet band along the top edge
-    sheet = box(name + "Sheet", (0, 0, 0), (w + 0.02, 0.22, 0.01), fabric(name + "SheetW", (0.86, 0.86, 0.82), 0.9, 0.3, 500), bevel=0.004)
-    sheet.parent = o; sheet.location = (0, foot + l - 0.06, 0)
+    # turned-down white sheet: the top rows of the same cloth carry a second (sheet) material, so it drapes too
+    me.materials.append(fabric(name + "SheetW", (0.86, 0.86, 0.82), 0.9, 0.3, 500))
+    for p_ in me.polygons:
+        if p_.index // nx >= ny - 5:
+            p_.material_index = 1
+    sheet = None
     return dict(obj=o, sheet=sheet, nx=nx, ny=ny, w=w, l=l, foot=foot)
 
 
@@ -102,7 +105,7 @@ def drape_blankets(c):
     beyond the mattress the cloth hangs ~25 cm; two smoothing passes; small folds."""
     dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene
     for B in c.get("blankets", []):
-        o = B["obj"]; home = o.location.copy(); o.location = (0, -400, 0); B["sheet"].location.z = -400
+        o = B["obj"]; home = o.location.copy(); o.location = (0, -400, 0)
         bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
         M = __import__("mathutils").Matrix.Translation(home) @ __import__("mathutils").Matrix.Rotation(o.rotation_euler.z, 4, 'Z')
         nx, ny = B["nx"], B["ny"]; H = [[0.0] * (nx + 1) for _ in range(ny + 1)]
@@ -112,7 +115,7 @@ def drape_blankets(c):
                 wp = M @ Vector((v.x, v.y, 2.2))
                 hit, loc, n, idx, ob, _ = sc.ray_cast(dg, wp, Vector((0, 0, -1)))
                 z = loc.z + 0.012 if hit else 0.4
-                H[j][i] = max(z, 0.42)
+                H[j][i] = min(max(z, 0.42), 0.98)      # cap: an upright patient sits out of the blanket at the waist
         for _ in range(2):
             H = [[(H[j][i] * 2 + H[max(0, j - 1)][i] + H[min(ny, j + 1)][i] + H[j][max(0, i - 1)] + H[j][min(nx, i + 1)]) / 6
                   for i in range(nx + 1)] for j in range(ny + 1)]
@@ -121,7 +124,6 @@ def drape_blankets(c):
                 v = o.data.vertices[j * (nx + 1) + i]
                 v.co.z = H[j][i] + 0.006 * math.sin(i * 1.7 + j * 0.9) * math.sin(j * 0.6)
         o.data.update(); o.location = home
-        B["sheet"].location.z = H[ny - 1][nx // 2] + 0.008
     bpy.context.view_layer.update()
 
 
@@ -198,7 +200,7 @@ def window_view(ctr, side, seed=0, dmin=14, n_blocks=5):
         if side in ("N", "S"):                       # windows on the face that looks back at us
             face_y = p.y - n.y * 5.0
             facade_windows(f"ViewWin{seed}_{k}", Vector((p.x - w / 2, face_y, -1.0)), w, floors, floor_h=2.9, bay=3.0, sill0=0.9, normal_y=-int(n.y))
-    box("ViewGround", Vector(ctr) + n * 30 + Vector((0, 0, -1.05)), (60, 60, 0.1), pbr("ViewGround", (0.25, 0.24, 0.22), 0.9))
+    box("ViewGround", Vector((ctr[0], ctr[1], -0.06)) + n * 31, (60, 60, 0.1), pbr("ViewGround", (0.25, 0.24, 0.22), 0.9))
 
 
 def build(variant=None):
@@ -312,7 +314,7 @@ def build(variant=None):
     ph_model("SchoolChair_01", loc=BEDS[0] + Vector((0.9, -0.4, 0)), rot_z=math.radians(80))
     for k, x in enumerate((-2.25, 2.25)):        # two more beds along the window wall, heads to the wall, lockers and a drip
         sb = WARD + Vector((x, -2.75, 0)); iron_bed(f"SBed{k}", sb, rot_z=math.pi)
-        blanket(f"SBlanket{k}", sb + Vector((0, 0.25, 0)), col=(0.3, 0.3, 0.34))
+        c["blankets"].append(cloth_blanket(f"SBlanket{k}", sb, (0.3, 0.3, 0.34), rot_z=math.pi))
         box(f"SLocker{k}", sb + Vector((0.75, -0.75, 0.4)), (0.42, 0.4, 0.8), painted_steel(f"SCab{k}", (0.78, 0.78, 0.74), 0.4, 0.3), bevel=0.01)
         drip_stand(f"SDrip{k}", sb + Vector((-0.65, -0.6, 0)))
     chart = box("Chart", BEDS[2] + Vector((0, -1.03, 0.68)), (0.24, 0.015, 0.32), pbr("ChartBoard", (0.45, 0.35, 0.2), 0.5))
@@ -343,18 +345,18 @@ def build(variant=None):
     lb = bpy.data.materials.new("LightboxPanel"); lb.use_nodes = True
     lp = lb.node_tree.nodes["Principled BSDF"]; lp.inputs['Base Color'].default_value = (0.9, 0.92, 0.95, 1); lp.inputs['Emission Color'].default_value = (0.9, 0.95, 1.0, 1)
     vnode = lb.node_tree.nodes.new("ShaderNodeValue"); d = vnode.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'
-    d.expression = "6.0 * (1 if frame < 60 else 0.0)" if v != "lightbox_off" else "6.0"
+    d.expression = "0.7 * (1 if frame < 60 else 0.0)" if v != "lightbox_off" else "0.7"
     lb.node_tree.links.new(vnode.outputs[0], lp.inputs['Emission Strength'])
     box("LightboxPanel", OFFICE + Vector((0, 1.875, 1.6)), (0.9, 0.01, 0.52), lb)
     lbl = bpy.data.lights.new("LBGlow", 'AREA'); lbl.size = 0.9; lbl.size_y = 0.5
-    dl = lbl.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = "40 * (1 if frame < 60 else 0.0)"
+    dl = lbl.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = "8 * (1 if frame < 60 else 0.0)"
     lo = bpy.data.objects.new("LBGlow", lbl); bpy.context.collection.objects.link(lo); lo.location = OFFICE + Vector((0, 1.82, 1.6)); lo.rotation_euler = (math.radians(90), 0, 0)
     film = bpy.data.materials.new("Film"); film.use_nodes = True
     fn = film.node_tree.nodes; fp = fn["Principled BSDF"]; tcn = fn.new("ShaderNodeTexCoord"); nn = fn.new("ShaderNodeTexNoise"); nn.inputs['Scale'].default_value = 3
     film.node_tree.links.new(tcn.outputs['Object'], nn.inputs['Vector']); cr_ = fn.new("ShaderNodeValToRGB")
     cr_.color_ramp.elements[0].color = (0.02, 0.025, 0.03, 1); cr_.color_ramp.elements[1].color = (0.3, 0.32, 0.35, 1)
     film.node_tree.links.new(nn.outputs['Fac'], cr_.inputs['Fac']); film.node_tree.links.new(cr_.outputs['Color'], fp.inputs['Base Color'])
-    fp.inputs['Transmission Weight'].default_value = 0.6; fp.inputs['Roughness'].default_value = 0.2
+    fp.inputs["Transmission Weight"].default_value = 0.2; fp.inputs["Roughness"].default_value = 0.3
     c["film"] = box("ScanFilm", (0, -150, 0), (0.35, 0.004, 0.43), film)
     c["lightbox"] = OFFICE + Vector((0, 1.86, 1.6))
     desk, _ = ph_model("metal_office_desk", loc=OFFICE + Vector((-0.8, -0.6, 0)), rot_z=0.0)
@@ -604,7 +606,7 @@ def c2_6a(c, t):          # medium: the doctor lifts the receiver to his ear, hi
     stand_at(h, loc, ns + Vector((0.3, 0, 0)))
     sd = forward(h).cross(Vector((0, 0, 1))).normalized()
     k = ease(min(1.0, sec / 0.9))
-    ear = h.bone_head("head") + sd * 0.1 + Vector((0, 0, -0.05))
+    ear = h.bone_head("head") - sd * 0.1 + Vector((0, 0, -0.05)) + forward(h) * 0.03      # his LEFT ear (sd points right)
     rest = ns + Vector((0.4, 0.05, 1.18))
     hs_at = rest.lerp(ear + Vector((0, 0, -0.06)), k)
     reach(h, "L", hs_at, Vector((-sd.x, -sd.y, -1.0)), Vector((0, 0, 1)))
@@ -798,7 +800,7 @@ SHOTS = {
     "ch2_2b": ("day", c2_2b, C(COR + Vector((-10.8, -1.2, 1.5)), COR + Vector((-10.5, -1.1, 1.5)), COR + Vector((-7.0, 0.2, 1.2)), 30), 4.0),
     "ch2_3a": ("day", c2_3a, C(WARD + Vector((-2.6, -1.4, 1.4)), WARD + Vector((-2.3, -1.2, 1.35)), BEDS[2] + Vector((-0.4, 0.2, 0.9)), 35), 2.8),
     "ch2_3b": ("day", c2_3b, C(BEDS[2] + Vector((-1.6, -1.5, 1.45)), BEDS[2] + Vector((-1.45, -1.3, 1.45)), BEDS[2] + Vector((0.3, 0.4, 1.0)), 38), 2.8),
-    "ch2_4a": ("day", c2_4a, C(WARD + Vector((2.2, 2.6, 1.6)), WARD + Vector((1.8, 2.3, 1.6)), WARD + Vector((0.2, -3.2, 1.5)), 35), 4.0),
+    "ch2_4a": ("day", c2_4a, C(WARD + Vector((1.3, 0.4, 1.5)), WARD + Vector((1.1, 0.2, 1.5)), WARD + Vector((0.2, -3.2, 1.45)), 32), 4.0),
     "ch2_4b": ("day", c2_4b, C(WARD + Vector((-1.8, 1.8, 1.6)), WARD + Vector((-1.2, 0.8, 1.6)), WARD + Vector((0.2, -3.2, 1.55)), 40), 2.8),
     "ch2_5a": ("day", c2_5a, C(BEDS[2] + Vector((-2.2, -2.4, 1.5)), BEDS[2] + Vector((-2.0, -2.2, 1.5)), BEDS[2] + Vector((0.9, -0.6, 1.5)), 38), 2.8),
     "ch2_6a": ("day", c2_6a, C(COR + Vector((4.2, -0.9, 1.55)), COR + Vector((4.0, -0.8, 1.55)), COR + Vector((1.4, -0.25, 1.4)), 32), 2.8),

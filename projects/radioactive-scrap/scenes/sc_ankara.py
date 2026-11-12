@@ -123,7 +123,7 @@ def build(variant=None):
     sl = bpy.data.lights.new("StoreBulb", 'SPOT'); sl.energy = 1400; sl.color = (1.0, 0.78, 0.5); sl.spot_size = math.radians(110); sl.spot_blend = 0.7
     so = bpy.data.objects.new("StoreBulb", sl); bpy.context.collection.objects.link(so); so.parent = swing; so.location = (0, 0, -1.25)
     c["swing"] = swing
-    haze(STO + Vector((0, 0, 1.7)), (5.8, 13.8, 3.3), density=0.012, color=(0.85, 0.8, 0.72), anis=0.5)
+    haze(STO + Vector((0, 0, 1.7)), (5.8, 13.8, 3.3), density=0.004, color=(0.85, 0.8, 0.72), anis=0.5)
     # ---------------- records room: two ledgers side by side under a lamp, a window draught
     room("Records", REC, 5.0, 4.5, 3.0, parq, two_tone("RecWall", (0.35, 0.42, 0.45), (0.78, 0.76, 0.7)), windows=[("W", 0.0, 1.0, 1.4, 1.5)])
     daylight_window(REC + Vector((-2.6, 0, 1.75)), "W", (1.4, 1.5), energy=1800)
