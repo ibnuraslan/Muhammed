@@ -1,5 +1,4 @@
-camera clearance, every 2 frames: 4 flagged
+camera clearance, every 2 frames: 3 flagged
 (121, 'Body_Door_Front_M_Plastic_0', 0.0075, 'near')
 (123, 'Inner_Raks_M_Interrior_Gray_0', 0.0256, 'INSIDE')
-(723, 'Inner_AgainsSun_R_M_Interrior_Gray_0', 0.0285, 'near')
 (1791, 'Driver.eyelashes01', 0.0055, 'near')
