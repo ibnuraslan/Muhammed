@@ -1014,9 +1014,9 @@ def _icebox_scene(c, sec):
     h = P(c, "y")
     crouch(h, (-0.85, 3.45), math.radians(180), lean=28)            # on both heels at the open icebox
     hd = h.bone_head("head"); tear = 0.04 * math.sin(2 * math.pi * 1.3 * sec)
-    r = hd + Vector((0.06, 0.25, -0.22 + tear)); c["roast"].location = r
+    r = hd + Vector((0.14, 0.18, -0.4 + tear)); c["roast"].location = r
     reach(h, "R", r + Vector((-0.06, -0.02, 0)), Vector((0, 0, -1)), Vector((1, 1, 0)))
-    reach(h, "L", Vector((-1.3, 3.75, 0.85)), Vector((0, 0, -1)), Vector((1, 0, 0)))      # one hand on the door
+    reach(h, "L", Vector((-1.3, 3.7, 0.6)), Vector((0, 0, -1)), Vector((1, 0, 0)))      # one hand low on the door
     H.rotl(h, "head", (1, 0, 0), 20)
 
 
@@ -1024,9 +1024,14 @@ def _icebox_scene(c, sec):
 def _():
     def anim(c, t):
         _icebox_scene(c, t * DUR["icebox_crouch"])
+        if "ice_cam" not in c:                          # looking out from inside the icebox at his lit face
+            c["ice_cam"] = True
+            for o in [c["icebox"]] + [o for o in bpy.data.objects if o.name.startswith(("IceCavity", "IceShelf", "IceInside", "IceLining"))]:
+                o.visible_camera = False
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.4, 1.6, 1.4)).lerp(Vector((1.1, 1.9, 1.35)), e), Vector((-0.8, 3.6, 0.7)), 32)
+        y = P(c, "y"); hd = y.bone_head("head")
+        return (Vector((-0.85, 4.24, 0.74)).lerp(Vector((-0.83, 4.18, 0.76)), e), hd + Vector((0, 0, -0.1)), 22)
     return cam, anim
 
 

@@ -50,19 +50,33 @@ def paper_mat():
 
 
 def build(variant=None):
-    if variant == "presses":                 # the shared press hall (nvidia_doc sc_press), with our generic SPIDER MAN page
-        import sc_press as NP
-        NP.newsprint = lambda path, W=1024, H=1400: front_page(path)
-        os.makedirs(GEN, exist_ok=True); NP.GEN = GEN                  # write our page into the project, never the shared asset
-        c = NP.build(); c["np"] = NP
-        steel = brushed_metal("RollerSteel", (0.5, 0.51, 0.52))
-        for o in bpy.data.objects:                       # open the near side frames so the cylinders and web read
-            if o.name.startswith("UnitL"):
-                o.hide_render = True
-            if o.name.startswith("Roller"):              # brushed steel, not mirror chrome (reads as cylinders)
-                o.data.materials.clear(); o.data.materials.append(steel)
-        H.point((-6.0, -3.0, 3.5), 400, (1.0, 0.85, 0.65), 0.5)
-        bpy.context.scene.view_settings.exposure = 0.3
+    if variant == "presses":                 # a dim print shop: a stack of fresh papers on a bench, a bundle drops on
+        c = {}
+        world_flat((0.01, 0.011, 0.013), 1.0)
+        bpy.context.scene.view_settings.exposure = 0.6
+        box("Floor", (0, 0, -0.02), (8, 8, 0.04), H.mat("conc"))
+        box("WallB", (0, 1.6, 2.0), (8, 0.2, 4), H.mat("brick2"))
+        box("Bench", (0, 0.4, 0.86), (2.4, 0.9, 0.06), H.mat("oak"), bevel=0.01)
+        for sx in (-1.1, 1.1):
+            for sy in (0.05, 0.75):
+                box("BLeg", (sx, sy, 0.42), (0.07, 0.07, 0.84), H.mat("oak"))
+        pm = paper_mat(); edge = pbr("PaperEdge", (0.82, 0.8, 0.74), 0.9)
+        rng = np.random.default_rng(5)
+        for k in range(22):                  # the stack: folded papers, slightly fanned; the top one shows the front page
+            box("Fold", (0.02 * rng.normal(), 0.35 + 0.02 * rng.normal(), 0.9 + 0.012 * k), (0.42, 0.6, 0.011), edge).rotation_euler = (0, 0, 0.04 * rng.normal())
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0.35, 0.9 + 0.012 * 22 + 0.001)); top = bpy.context.active_object
+        top.scale = (0.42, 0.6, 1); bpy.ops.object.transform_apply(scale=True); top.data.materials.append(pm)
+        twine = pbr("Twine", (0.55, 0.42, 0.25), 0.9)
+        bun = join([box("Bundle", (0, 0, 0), (0.6, 0.43, 0.22), edge, bevel=0.01), box("Tw1", (0, 0, 0), (0.62, 0.012, 0.235), twine), box("Tw2", (0, 0, 0), (0.012, 0.45, 0.235), twine)], "Bundle")
+        c["bundle"] = bun; c["top_z"] = 0.9 + 0.012 * 22
+        cyl("Shade", (0.1, 0.3, 2.2), 0.25, 0.12, pbr("ShadeG", (0.15, 0.2, 0.15), 0.4, 0.6), 24)
+        H.point((0.1, 0.3, 2.08), 120, (1.0, 0.82, 0.58), 0.05)
+        c["haze"] = haze((0, 0.3, 1.5), (3.0, 2.4, 2.4), density=0.02, color=(1.0, 0.95, 0.85), anis=0.6)
+        c["dust"] = []
+        mm = emissive("MoteM", (1.0, 0.9, 0.7), 1.5)
+        for k in range(120):
+            o = cyl("Mote", (rng.uniform(-0.9, 0.9), rng.uniform(-0.2, 0.9), rng.uniform(1.0, 2.0)), 0.0015, 0.003, mm, 6)
+            o["p0"] = tuple(o.location); c["dust"].append(o)
         return c
     c = {}
     world_flat((0.02, 0.022, 0.025), 1.0)
@@ -108,7 +122,13 @@ def anim_common(c, sec):
 
 
 def anim_presses(c, t):
-    c["np"].anim_press(c, t)
+    sec = t * DUR["presses"]
+    u = min(1.0, max(0.0, (sec - 1.0) / 0.45))
+    z = c["top_z"] + 0.11 + 0.9 * (1 - u) ** 2
+    bun = c["bundle"]; bun.location = (0.38, 0.3, z); bun.rotation_euler = (0, 0, math.radians(-25))
+    for k, o in enumerate(c["dust"]):
+        x0, y0, z0 = o["p0"]; kick = 0.03 * max(0.0, sec - 1.45)
+        o.location = (x0 + 0.02 * math.sin(0.5 * sec + k), y0, z0 + 0.01 * math.sin(0.7 * sec + k) + kick)
 
 
 def anim_stacks(c, t):
@@ -121,8 +141,8 @@ def anim_stacks(c, t):
 
 MOVES = {
     "presses": dict(kind="anim", dof=4.0, far=40, anim=anim_presses,
-                    cam=lambda c, t: (Vector((-12.5 + 7.0 * ease(t), -4.2, 3.4)), Vector((-8.5 + 7.0 * ease(t), 0.4, 2.0)), 30),    # oblique: rollers as cylinders
-                    focus=lambda c, t: Vector((-8.0 + 9.0 * ease(t), 0.0, 2.0))),
+                    cam=lambda c, t: (Vector((-0.45, -0.75, 1.75)).lerp(Vector((-0.25, -0.4, 1.6)), ease(t)), Vector((-0.05, 0.3, 1.15)), 40),   # slow push onto the headline
+                    focus=lambda c, t: Vector((-0.05, 0.3, 1.17))),
     "stacks": dict(kind="anim", dof=2.8, far=20, anim=anim_stacks,
                    cam=lambda c, t: (Vector((1.2, -4.6, 1.45)).lerp(Vector((1.6, -4.5, 1.4)), ease(t)), Vector((2.4, -3.4, 0.95)), 32),
                    focus=lambda c, t: Vector((2.4, -3.4, 0.95))),

@@ -122,7 +122,7 @@ def anim_stand(c, t):
         c["key"] = area_light((1.6, 6.6, 2.2), (0, 0, 0), 0.8, 120, (1.0, 0.95, 0.88)); point_at(c["key"], (3.2, 6.9, 1.3)); c["key"].visible_camera = False
     d = c["cast"]["def"]; seat(d, Vector((3.2, 6.85, 0.24)), 0.0, 10, floor=0.24)          # seated in the box, facing the court
     H.look(d, 10 * math.sin(0.8 * sec), 8)
-    reach(d, "R", Vector((3.0, 6.2, 0.99)), Vector((0, 0, -1)), Vector((0, -1, 0))); reach(d, "L", Vector((3.4, 6.2, 0.99)), Vector((0, 0, -1)), Vector((0, -1, 0)))
+    reach(d, "R", Vector((3.14, 6.22, 1.0)), Vector((0.3, 0.4, -1)), Vector((1, -0.5, 0))); reach(d, "L", Vector((3.26, 6.22, 1.0)), Vector((-0.3, 0.4, -1)), Vector((-1, -0.5, 0)))   # hands together on the rail, elbows in
 
 
 def anim_jury(c, t):
