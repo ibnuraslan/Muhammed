@@ -91,6 +91,8 @@ It flags:
 - **HOVER:** a hand within 12 cm of a prop with no fingertip touching it.
 - **CLAW:** fingers curled in the air touching nothing, or bent with a straight base joint.
 - **FACEPRESS:** a hand on the face.
+- **PROPMOVE** (added 21:20 UTC): a hand-sized prop moves with no fingertip within 3 cm of it, so it is moving by itself. The client rejected a marker pen that floated and drew by itself. A held prop must be IN the hand: grip_object plus Child Of the hand bone, with no offset gap. A prop riding on a trolley, a falling prop or an animated clock may stay, but you must list it.
+- **ATTACH** (added 21:20 UTC): a worn mask, glasses or goggles sits more than 1.5 cm off the skin (median), or a cap or hat sits more than 4 cm off. The client rejected a surgical mask hanging off the face. Fit it to the face and bind it to the head.
 - **ROLL** (added 18:25 UTC): the horizon is tilted more than about 20°. This usually comes from a Damped Track aim. Use Track To with world up, or list a deliberate dutch angle.
 - **CAMJUMP** (added 17:25 UTC): a hard cut, meaning a camera switch, or a teleport over 0.25 m in one frame (well above the neighbouring frames' speed), or a turn over 60° in one frame. A whip pan of up to 60° per frame is fine. The film is **one continuous camera**. Join framings with real eased moves (about 40 frames) through free space. Only a fully covered wipe (black or cloud frame) may hide a jump, and you list it.
 
