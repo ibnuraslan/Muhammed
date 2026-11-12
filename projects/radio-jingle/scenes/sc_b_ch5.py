@@ -58,7 +58,7 @@ def build(variant=None):
     if variant == "fedcourt":
         sky("grey")
         bpy.context.scene.view_settings.exposure += 0.6
-        stone = B.tex_mat("Stone", "concrete_wall_006", scale=0.25, tint=(0.75, 0.73, 0.68))
+        stone = B.tex_mat("Stone", "concrete_wall_006", scale=0.25, tint=(1.15, 1.08, 0.95))
         box("Plaza", (0, -6, -0.05), (80, 30, 0.1), B.tex_mat("PlazaM", "granite_tile", scale=0.3, tint=(0.6, 0.6, 0.6)))
         for k in range(8):                                   # broad steps up to the entrance
             box("Step", (0, 1.0 + k * 0.4, 0.08 + k * 0.16), (24, 0.4 + (7 - k) * 0.0, 0.16), stone)
@@ -193,9 +193,9 @@ def build(variant=None):
         c["bag"] = box("Holdall", (0, 0, -30), (0.5, 0.25, 0.28), pbr("Holdall", (0.08, 0.08, 0.09), 0.6), bevel=0.06)
         B.room_haze((0, 0, 4), (120, 60, 8), density=0.02, color=(0.85, 0.82, 0.8))
     if variant in ("fedcourt",):
-        B.finish_exterior(azim=235, elev=14)
+        B.finish_exterior(azim=323, elev=18, sun_energy=8.0, exposure=0.4)
     elif variant == "prison":
-        B.finish_exterior(azim=75, elev=4)                 # low warm dawn sun along the wall
+        B.finish_exterior(azim=72, elev=4, sun_energy=6.0, exposure=0.6)                 # low warm dawn sun along the wall
     elif variant in ("corridor", "physicist"):
         B.finish_interior(lift=0.0)
     else:

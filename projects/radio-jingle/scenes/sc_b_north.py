@@ -234,9 +234,9 @@ def build(variant=None):
         c["rests"] = [B.capture(h) for h in offs]
         B.room_haze((0, 0, 3), (60, 30, 6), density=0.006 if variant == "house_dawn" else 0.003, color=(0.7, 0.76, 0.88))
     if variant in ("harbour", "house_day"):
-        B.finish_exterior(azim=230, elev=12)
+        B.finish_exterior(azim=320, elev=14, sun_energy=8.0, exposure=0.4)
     elif variant == "house_dawn":
-        B.finish_exterior(azim=100, elev=3)                # dawn: a low warm sun raking the street
+        B.finish_exterior(azim=288, elev=4, sun_energy=6.0, exposure=0.6)                # dawn: a low warm sun raking the street
     elif variant == "shop":
         B.finish_interior(lift=0.0)
     else:

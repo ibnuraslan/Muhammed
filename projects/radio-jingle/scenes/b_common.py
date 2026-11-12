@@ -484,8 +484,8 @@ def finish_exterior(azim, elev=8, mood="low_sun", sky="blue", sun_energy=None, e
 # ============================================================================ CAST (fixed looks, all film long; see PLAN_B.md)
 def michael(name="Michael", years=47):
     """The brother, a music teacher in his forties: short greying hair, dark plain navy sweater, slim."""
-    h = person(name, 1.0, years, "male_casualsuit03", "short04", hair_val=1.05, hair_sat=0.3, weight=0.42, height=0.56)
-    flat_clothes(h, (0.045, 0.06, 0.11))
+    h = person(name, 1.0, years, "male_casualsuit03", "short04", hair_val=2.2, hair_sat=0.15, weight=0.42, height=0.56)
+    flat_clothes(h, (0.03, 0.04, 0.08))
     return h
 
 
