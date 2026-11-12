@@ -326,8 +326,13 @@ mon_back = bpy.data.objects.new("Monitor_back", bpy.data.meshes.new("Monitor_bac
 mon_back.location = mon.location
 for m in mon.data.materials: mon_back.data.materials.append(m)
 bm2 = bm.copy()
-bmesh.ops.delete(bm, geom=[f for f in bm.faces if f.normal.x > 0.35], context='FACES')
-bmesh.ops.delete(bm2, geom=[f for f in bm2.faces if f.normal.x <= 0.35], context='FACES')
+dz = [f.calc_center_median() for f in bm.faces if f.material_index == di]
+scr_x = min(c.x for c in dz); scr_z0 = min(c.z for c in dz) - 0.03
+def is_back(f):
+    c = f.calc_center_median()
+    return f.normal.x > 0.35 or (c.x > scr_x + 0.006 and c.z > scr_z0)
+bmesh.ops.delete(bm, geom=[f for f in bm.faces if is_back(f)], context='FACES')
+bmesh.ops.delete(bm2, geom=[f for f in bm2.faces if not is_back(f)], context='FACES')
 bm.to_mesh(mon.data); bm2.to_mesh(mon_back.data); bm.free(); bm2.free()
 mon.name = "Monitor"
 M_screen = bpy.data.materials.new("Screen_glass"); M_screen.use_nodes = True; ntS = M_screen.node_tree
@@ -341,7 +346,7 @@ mon.data.materials[di] = M_screen
 V = np.array([v.co[:] for v in mon.data.vertices])
 print("MONITOR", mon.location[:], V.min(0) + np.array(mon.location), V.max(0) + np.array(mon.location))
 sc["SCREEN"] = list(Vector(mon.location) + Vector(((V.min(0)[0]), (V.min(0)[1] + V.max(0)[1]) / 2, (V.min(0)[2] + V.max(0)[2]) / 2)))
-chair = imp("chair", C_C, size=1.05, axis=2, loc=(9.0, 1.0, 0), rotz=R_(-70))
+chair = imp("chair", C_C, size=1.05, axis=2, loc=(8.6, 2.45, 0), rotz=R_(-120))
 bench = box("Side_bench", C_C, (0.65, 1.5, 0.05), (9.62, -1.6, 0.88), M_wood, bevel=0.004); cube_uv(bench)
 for k, (dy) in enumerate((-0.68, 0.68)):
     o = box("Bench_leg_%d" % k, C_C, (0.6, 0.04, 0.86), (9.62, -1.6 + dy, 0.43), M_steel, bevel=0.003)

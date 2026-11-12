@@ -11,8 +11,8 @@ def srgb(h):
 mv = bpy.data.materials["Void_gradient"]
 for n in mv.node_tree.nodes:
     if n.type == 'VALTORGB':
-        n.color_ramp.elements[0].color = srgb("#E8F7FF"); n.color_ramp.elements[0].position = 0.38
-        n.color_ramp.elements[1].color = (0.0, 0.33, 0.85, 1); n.color_ramp.elements[1].position = 0.62   # saturated cyan (pre-AgX), reads as #4FC3F7
+        n.color_ramp.elements[0].color = srgb("#E8F7FF"); n.color_ramp.elements[0].position = 0.3
+        n.color_ramp.elements[1].color = (0.0, 0.26, 0.92, 1); n.color_ramp.elements[1].position = 0.5   # saturated cyan (pre-AgX), reads as #4FC3F7
     if n.type == 'MIX': n.inputs[0].default_value = 0.04
     if n.type == 'EMISSION': n.inputs[1].default_value = 2.4
 for L in [o for o in OB if o.name.startswith("Void_light_")]:

@@ -256,6 +256,7 @@ def stand(H, f, pos, yaw, flex=8, head=(10, 0), spine_flex=14, twist=0):
     H.key_root(f, Vector((pos[0], pos[1], H.root_head.z - 0.02)), yaw=yaw, flex=flex)
     H.key_spine(f, flex=spine_flex, twist=twist, head=head)
     for s in "LR": H.key_foot(s, f, H.foot_xy(s, Vector(pos), yaw), yaw)
+def yaw_of_xy(v): return math.degrees(math.atan2(v.x, -v.y))
 def grip_key(H, s_, f, G, d, n, pole, reach=0.07, palm=0.03):
     """wrist target so the palm sits on G: fingers along d (wrapping), palm facing n"""
     d = d.normalized(); n = (n - d * n.dot(d)).normalized()
@@ -351,8 +352,26 @@ glue.data.materials.append(gm)
 gm.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = 1.0
 key_vis(glue, [(1, False), (1725, True), (1976, False)])
 # assistant: background walk (life)
-AS.walk(lambda f: Vector((5.0 + 3.6 * smooth((f - 560) / 240), 2.15, 0)) if f < 820 else Vector((8.6 - 3.4 * smooth((f - 1520) / 300), 2.15, 0)),
-        lambda f: -90 if f < 820 else 90, 560, 800, stride=0.72)
+# the assistant walks to the desk and works the mouse while the monitor shows the 3D beak (director note, 12 s)
+AS_DESK = Vector((9.0, 1.95, 0))
+AS.walk(lambda f: Vector((5.0, 2.15, 0)).lerp(AS_DESK, smooth((f - 560) / 100)), lambda f: yaw_of_xy(AS_DESK - Vector((5.0, 2.15, 0))) if f < 655 else 90, 560, 660, stride=0.72)
+stand(AS, 672, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0)); stand(AS, 1505, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0))
+stand(AS, 1515, (8.6, 2.15), 90, head=(10, 0))
+_md = OB["desk"]; DESK_TOP = max((_md.matrix_world @ v.co).z for v in _md.data.vertices)
+mouse = bpy.data.objects.new("Mouse", bpy.data.meshes.new("Mouse")); C_ANIM.objects.link(mouse)
+bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(mouse.data); bm.free()
+mouse.scale = (0.11, 0.062, 0.034); mouse.location = (9.45, 1.58, DESK_TOP + 0.017)
+bv_ = mouse.modifiers.new("bv", 'BEVEL'); bv_.width = 0.45; bv_.segments = 5; bv_.limit_method = 'NONE'
+mouse.modifiers.new("sub", 'SUBSURF').levels = 2
+mouse.data.materials.append(bpy.data.materials["Scanner_plastic"]); [setattr(p_, "use_smooth", True) for p_ in mouse.data.polygons]
+pad = bpy.data.objects.new("Mouse_pad", bpy.data.meshes.new("Mouse_pad")); C_ANIM.objects.link(pad)
+bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(pad.data); bm.free()
+pad.scale = (0.24, 0.2, 0.003); pad.location = (9.45, 1.58, DESK_TOP + 0.0015); pad.data.materials.append(bpy.data.materials["Towel"])
+MTOP = Vector((9.44, 1.58, DESK_TOP + 0.036))
+for f, dx in ((662, -0.15), (676, 0.0), (700, 0.012), (730, -0.01), (760, 0.008), (1505, 0.0)):
+    grip_key(AS, "R", f, MTOP + Vector((dx, 0, 0.0 if dx > -0.1 else 0.08)), Vector((1, 0, -0.25)), Vector((0, 0, -1)), pole=Vector((AS_DESK.x - 0.1, AS_DESK.y - 0.5, 1.0)), reach=0.06, palm=0.025)
+    if dx > -0.1: key_loc(mouse, f, Vector((9.45 + dx, 1.58, DESK_TOP + 0.017)))
+AS.key_hand("L", 676, Vector((9.3, 2.1, DESK_TOP + 0.02)), Vector((1, 0, 0)), Vector((0, 0, -1)), pole=Vector((AS_DESK.x - 0.1, AS_DESK.y + 0.5, 1.0)))
 AS.walk(lambda f: Vector((8.6 - 3.4 * smooth((f - 1520) / 300), 2.15, 0)), lambda f: 90, 1520, 1820, stride=0.72)
 stand(AS, 1840, (5.2, 2.15), 180, head=(20, 0)); stand(AS, 1960, (5.2, 2.15), 180, head=(25, 10))
 for nm in ("VetA", "VetB", "Assist"):
@@ -378,6 +397,7 @@ for f in (1712, 1800): curl(VB, "R", f, 22, 0.5)
 for f in (1724, 1792): curl(VB, "L", f, 70, 0.8)
 for f in (1810, 1945): curl(VB, "R", f, 62, 1.0, spread=-4)
 for f in (560, 1960): curl(AS, "L", f, 20); curl(AS, "R", f, 20)
+for f in (676, 1505): curl(AS, "R", f, 28, 0.6)
 
 # faces (MPFB face bones): focused concentration while working, blinks, relief when the pin is in
 def face(H, f, brow=-0.006, lid=-14, jaw=0.0, brow_y=0.0):
@@ -446,7 +466,7 @@ for f in list(range(1515, 1693, 6)) + [1693]:
     if f % 30 == 3: print("SETTLE VetB prosthetic", f, "palm", round(palm, 3), "overlaps", n)
 
 # ================================================================== VOID (beats 5-8)
-V1 = Vector((11.7, 1.25, 1.05)); V2 = Vector((14.2, 3.0, -0.2)); V3 = Vector((13.6, -1.0, 0.95)); P3 = Vector((15.4, -2.4, -0.7))
+V1 = Vector((11.7, 1.65, 0.75)); V2 = Vector((14.2, 3.0, -0.2)); V3 = Vector((13.6, -1.0, 0.95)); P3 = Vector((15.4, -2.4, -0.7))
 BEAK_MID = (LB_base + LB_tip) / 2
 def void_copy(src, name, at, scale, mat=None, coll=C_ANIM, rest=None):
     o = bpy.data.objects.new(name, src.data.copy() if mat else src.data); coll.objects.link(o)
@@ -483,7 +503,7 @@ bpy.context.view_layer.update()
 for o in ref:
     mw = o.matrix_world.copy(); o.parent = refpar; o.matrix_parent_inverse = refpar.matrix_world.inverted()
 refpar.rotation_mode = 'XYZ'
-for f, off, rz in ((1, (0, 0.9, 0.25), 25), (700, (0, 0.9, 0.25), 25), (760, (0, 0.6, 0.2), 18), (835, (0, 0.0, 0.0), 0), (900, (0, 0, 0), 0)):
+for f, off, rz in ((1, (0, 0.28, 0.12), 12), (700, (0, 0.28, 0.12), 12), (760, (0, 0.2, 0.1), 9), (835, (0, 0.0, 0.0), 0), (900, (0, 0, 0), 0)):
     key_loc(refpar, f, V1 + Vector(off), (0, 0, R_(rz)))
 # rotating slowly for life
 for o in stump + [refpar]: pass
@@ -684,8 +704,8 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (592, Vector((5.55, -0.45, 1.45)), BC + Vector((0, 0, 0.15)), 28),
  (636, BEAKC + Vector((-0.14, 0.06, 0.5)), BEAKC, 34),
  (672, BEAKC + Vector((-0.2, -0.04, 0.42)), BEAKC, 40),
- (689, Vector((7.3, 0.0, 1.62)), BEAKC, 30),
- (705, Vector((8.1, 0.65, 1.38)), SCREEN, 30),
+ (689, Vector((7.3, 0.0, 1.62)), Vector((8.4, 0.75, 1.15)), 30),
+ (708, Vector((7.95, 0.9, 1.45)), SCREEN, 28),
  (738, SCREEN + Vector((-0.42, 0, 0.0)), SCREEN + Vector((1, 0, 0)), 30),
  (756, SCREEN + Vector((0.12, 0, 0.0)), SCREEN + Vector((1.5, 0, 0)), 30),
  (800, V1 + Vector((-0.95, -0.25, 0.18)), V1, 32),

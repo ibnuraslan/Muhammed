@@ -1,6 +1,6 @@
 # ToucanBeak v003: farm package (Connect28). This supersedes v002.
 
-- **File:** `ToucanBeak_v003_60fps.blend`, packed, 94.6 MB, normal git file with no LFS. It opens in factory Blender 5.2.2 with 0 unpacked images and no linked libraries.
+- **File:** `ToucanBeak_v003_60fps.blend`, packed, 94.55 MB, normal git file with no LFS. It opens in factory Blender 5.2.2 with 0 unpacked images and no linked libraries.
 - **Format:** 1080×1920, 60 fps, frames 1–2250 (37.5 s), Cycles CPU at 48 samples / 0.05 / OIDN, AgX Punchy. One camera, no cuts, no markers. Output goes to `//render/ToucanBeak_v003_####.png`.
 - **Look:** animated CG per `blender/STYLE_ANIMATED.md` (`pipeline/anim_look.py` plus `ToucanBeak_v001/scripts/05_look.py`).
 - **Voiceover:** none yet, because we used our own script. `beats.json` gives each beat's start frame and first words. Retime with `pipeline/retime_to_vo.py`.
@@ -39,4 +39,6 @@ No head-worn items are used.
 - **Scrubs:** loose top and trousers (MakeHuman casual suits with the print-free scrub fabric), with darker trousers. They no longer read as a one-piece bodysuit.
 - **X-ray lightbox:** on the clinic's east wall, showing the broken beak. It was rendered from the real bird meshes and has no text.
 - **Ending (33–37 s):** the camera holds a profile of the new beak while the toucan picks up, tosses and swallows the fig.
+- **Monitor (12 s):** the screen shows the 3D beak model while the clinic assistant works a mouse at the desk. The chair was moved out of the shot.
+- **Void:** the top half is a more saturated cyan.
 - **Audit:** still 0 in every category, every 2 frames (`audit_v003.txt`).
