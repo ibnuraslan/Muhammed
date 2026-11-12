@@ -301,7 +301,9 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
     spec = getattr(mod, "MOVES", {}).get(move)
     var = getattr(mod, "VARIANT_FOR", {}).get(move)
     if var in night:
-        return look.night_interior()
+        r = look.night_interior(faces=0)
+        _faces(c, spec, None, 12.0, (1.0, 0.82, 0.62))
+        return r
     camp = tgt = None
     if spec:
         for pre in (False, True):
@@ -332,6 +334,7 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
         ctr = camp if camp is not None else Vector((0, 0, 0))
         look.ground_haze((ctr.x, ctr.y), (320.0, 320.0), md, height=7.0, density=0.004)
         look.darken_surfaces(0.25, 0.85)
+        _faces(c, spec, camp, 18.0)
         return k
     near = [o for o in sc.objects if o.type == 'LIGHT' and o.name.startswith(keys)
             and (camp is None or (o.location - camp).length < 30.0)]
@@ -346,7 +349,29 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
     look.darken_surfaces(0.3)
     darken_painted(0.3)
     sc.view_settings.exposure += -0.5 if near else 0.5      # window rooms go darker; windowless rooms stay readable
+    _faces(c, spec, camp, 30.0)
     return dict(keys=near)
+
+
+def _faces(c, spec, camp, energy, color=(1.0, 0.86, 0.72)):
+    """look.face_fill for the people this shot poses: pose them mid-shot, add the soft warm face floor, then
+    parent each fill to its person's head bone so it follows the head through the whole move (and the bake)."""
+    import look
+    if spec and spec.get("anim"):
+        try:
+            spec["anim"](c, 0.5)
+        except Exception:
+            pass
+    bpy.context.view_layer.update()
+    arms = [o for o in bpy.context.scene.objects if o.type == 'ARMATURE' and "head" in o.pose.bones
+            and not o.hide_render and abs(o.location.z) < 20
+            and (camp is None or (o.matrix_world.translation - camp).length < 25.0)]
+    lights = look.face_fill(energy, color=color, people=arms)
+    for L_, a in zip(lights, arms):
+        W = L_.matrix_world.copy()
+        L_.parent = a; L_.parent_type = 'BONE'; L_.parent_bone = "head"
+        bpy.context.view_layer.update(); L_.matrix_world = W
+    return lights
 
 
 def darken_painted(cap=0.3):
