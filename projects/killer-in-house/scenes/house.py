@@ -1306,9 +1306,13 @@ def hair_mat(name, melanin=0.6, grey=0.3, rough=0.5):
         if 'Random Roughness' in b.inputs: b.inputs['Random Roughness'].default_value = 0.3
         if 'Random Color' in b.inputs: b.inputs['Random Color'].default_value = 0.2
         return b
-    dark, light = hb(melanin), hb(0.12)
-    hi = N.new("ShaderNodeHairInfo")
-    lt = N.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; lt.inputs[1].default_value = grey; L.new(hi.outputs['Random'], lt.inputs[0])
+    # opaque strands (thin Principled Hair strands read see-through at these sizes): dark brown, and ash grey
+    dark = N.new("ShaderNodeBsdfPrincipled"); light = N.new("ShaderNodeBsdfPrincipled")
+    dv = 0.11 * (1.0 - melanin) + 0.02
+    dark.inputs["Base Color"].default_value = (0.13, 0.085, 0.055, 1); dark.inputs['Roughness'].default_value = rough
+    light.inputs["Base Color"].default_value = (0.2, 0.19, 0.175, 1); light.inputs['Roughness'].default_value = rough + 0.1
+    hi = N.new("ShaderNodeAttribute"); hi.attribute_name = "strand_rand"; hi.attribute_type = 'GEOMETRY'     # per-strand random (curve attribute)
+    lt = N.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; lt.inputs[1].default_value = grey; L.new(hi.outputs['Fac'], lt.inputs[0])
     mix = N.new("ShaderNodeMixShader"); L.new(lt.outputs[0], mix.inputs[0]); L.new(dark.outputs[0], mix.inputs[1]); L.new(light.outputs[0], mix.inputs[2])
     L.new(mix.outputs[0], out.inputs['Surface'])
     return m
@@ -1349,6 +1353,7 @@ def strand_hair(h, name, roots, normals, center, n_pts, length, gravity, radius,
     ra = cv.attributes.get('radius') or cv.attributes.new('radius', 'FLOAT', 'POINT')
     rr = (radius * np.linspace(1.0, 0.35, n_pts))[None, :].repeat(n, 0).reshape(-1)
     ra.data.foreach_set('value', rr.astype(np.float32))
+    sr = cv.attributes.new('strand_rand', 'FLOAT', 'POINT'); sr.data.foreach_set('value', np.repeat(rng.random(n), n_pts).astype(np.float32))
     cv.materials.append(mat)
     o = bpy.data.objects.new(name, cv); bpy.context.collection.objects.link(o)
     bpy.context.view_layer.update()
@@ -1372,17 +1377,17 @@ def coneys_hair(h):
     cy = center[1]
     def scalp(i):
         x, y, z = co[i]
-        if y < cy - 0.02: return z > ztop - 0.05                # front: above the hairline only
+        if y < cy - 0.02: return z > ztop - 0.035               # front: hairline set back, forehead clear
         if y < cy + 0.03: return z > center[2] + 0.0            # sides: above the ears
         return z > zmin + 0.05                                  # back: down to the nape
     sc = np.array([i for i in allv if abs(co[i, 0]) < 0.11 and scalp(i)])
     k = 16000; pick = rng.choice(sc, size=k)
     roots = co[pick] + 0.002 * rng.normal(size=(k, 3)); nrm = nr[pick]
-    nrm = nrm + np.where((co[pick][:, 1] < center[1] - 0.02)[:, None], np.array([0, 0.9, 0.2]), 0.0)   # combed back off the brow
+    nrm = nrm + np.where((co[pick][:, 1] < center[1] - 0.02)[:, None], np.array([0, 1.3, 0.5]), 0.0)   # combed back off the brow
     rmin = np.linalg.norm(co[sc] - center, axis=1).mean() + 0.006
-    hm = hair_mat("ConeysHair", 0.62, 0.3, 0.55)
+    hm = hair_mat("ConeysHair", 0.62, 0.4, 0.55)
     strand_hair(h, h.name + "_hair", roots, nrm * 0.25 + np.array([0, 0.4, 0.1]), center, 12, 0.19, 0.8, 0.00045, hm, rng,
-                clump=0.6, frizz=0.0025, min_r=rmin)
+                clump=0.55, frizz=0.0038, min_r=rmin)
     # beard: jaw, chin, cheeks below the cheekbone, moustache
     def bz(i):
         x, y, z = co[i]
@@ -1394,7 +1399,7 @@ def coneys_hair(h):
     kb = 9000; pb = rng.choice(bvs, size=kb)
     broots = co[pb] + 0.001 * rng.normal(size=(kb, 3))
     strand_hair(h, h.name + "_beard", broots, nr[pb] * 0.4 + np.array([0, -0.1, -0.8]), center, 6, 0.035, 0.6, 0.00035,
-                hair_mat("ConeysBeard", 0.5, 0.35, 0.6), rng, clump=0.3, frizz=0.003)
+                hair_mat("ConeysBeard", 0.5, 0.45, 0.6), rng, clump=0.3, frizz=0.0045)
     return h
 
 
@@ -1435,6 +1440,7 @@ def roll_hair(h, melanin=0.5, grey=0.0, seed=3):
     cv.add_curves([n_pts] * k); cv.position_data.foreach_set('vector', P.reshape(-1).astype(np.float32))
     ra = cv.attributes.get('radius') or cv.attributes.new('radius', 'FLOAT', 'POINT')
     ra.data.foreach_set('value', np.full(k * n_pts, 0.0005, np.float32))
+    sr = cv.attributes.new('strand_rand', 'FLOAT', 'POINT'); sr.data.foreach_set('value', np.repeat(rng.random(k), n_pts).astype(np.float32))
     cv.materials.append(mat)
     o = bpy.data.objects.new(h.name + "_roll", cv); bpy.context.collection.objects.link(o); bpy.context.view_layer.update()
     mw = o.matrix_world.copy(); o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = "head"
