@@ -151,8 +151,8 @@ def _():
 
 
 DUR["guitar_dolly"] = 5.0; VARIANT_FOR["guitar_dolly"] = VARIANT_FOR["guitar"]
-MOVES["guitar_dolly"] = dict(MOVES["guitar"], cam=lambda c, t: (Vector((1.2, -4.35, 0.95)).lerp(Vector((2.3, -4.4, 1.05)), ease(t)),
-                                                                   Vector((2.2, -3.6, 0.7)).lerp(Vector((3.2, -2.0, 0.95)), ease(t)), 30))
+MOVES["guitar_dolly"] = dict(MOVES["guitar"], cam=lambda c, t: (Vector((4.1, -4.3, 1.25)).lerp(Vector((3.95, -3.7, 1.2)), ease(t)),
+                                                                   Vector((3.1, -2.0, 0.95)), 36))   # from his right, closer: hands on the strings
 
 
 @move("aftermath_push", "dusk", 5.0, rooms=("bedroom",))
@@ -163,7 +163,7 @@ def _():
             ch = c["bed_chair"]; ch.location = (-2.3, -2.6, 0.22); ch.rotation_euler = (math.radians(90), 0, math.radians(70))
             c["fallen"] = True
             b = c["bed_bulb_obj"]; c["swing"] = b
-            c["bulb_light"] = H.point((-2.4, -2.4, C1 - 0.6), 18, (1.0, 0.7, 0.42), 0.03)
+            c["bulb_light"] = H.point((-2.4, -2.4, C1 - 0.6), 45, (1.0, 0.7, 0.42), 0.03)
             cord = box("Cord", (-2.4, -2.4, C1 - 0.25), (0.008, 0.008, 0.5), H.mat("black")); c["cord"] = cord
         a = math.radians(9) * math.cos(1.9 * sec) * math.exp(-0.05 * sec)
         piv = Vector((-2.4, -2.4, C1))
@@ -173,7 +173,7 @@ def _():
         c["swing"].location = piv + off + Vector((0, 0, 0.12)); c["swing"].rotation_euler = (a, 0, 0)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.3, -1.0, 1.55)).lerp(Vector((-0.9, -1.4, 1.5)), e), Vector((-2.4, -2.7, 0.95)).lerp(Vector((-2.6, -2.8, 1.05)), e), 24)
+        return (Vector((-0.8, -1.05, 1.6)).lerp(Vector((-1.15, -1.3, 1.55)), e), Vector((-2.6, -2.7, 0.9)).lerp(Vector((-2.8, -2.8, 1.0)), e), 24)
     return cam, anim
 
 
@@ -193,7 +193,7 @@ def _():
         H.look(h, math.degrees(shake), 8)
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.6, 2.6, 1.6)).lerp(Vector((1.8, 2.9, 1.6)), e), Vector((3.2, 4.6, 1.1)), 30)
+        return (Vector((3.95, 3.0, 1.65)).lerp(Vector((3.9, 3.25, 1.6)), e), Vector((3.2, 4.7, 1.05)), 26)
     return cam, anim
 
 
@@ -225,7 +225,8 @@ def _():
         sec = t * DUR["doorway_behind"]
         if "fallen" not in c:
             ch = c["bed_chair"]; ch.location = (-2.3, -2.6, 0.22); ch.rotation_euler = (math.radians(90), 0, math.radians(70)); c["fallen"] = True
-            c["bed_lamp"].data.energy = 8
+            c["bed_lamp"].data.energy = 35; H.point((-2.4, -2.4, C1 - 0.6), 30, (1.0, 0.7, 0.42), 0.03)
+        c["bed_door"].rotation_euler = (0, 0, math.radians(-80))       # the bedroom door stands open
         m, w = P(c, "m"), P(c, "w")
         u = min(1.0, sec / 1.6)
         H.walk_to(m, (0.2, -1.4, 0), (-0.45, -1.35, 0), u, swing=6, face=math.radians(-90))
@@ -236,7 +237,7 @@ def _():
             reach(w, "R", m.bone_head("upperarm01.L") + Vector((0.05, 0.05, -0.15)), Vector((0, 0, -1)), Vector((-1, 0, 0)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.75, -0.3, 1.7)).lerp(Vector((0.7, -0.45, 1.7)), e), Vector((-2.4, -2.2, 1.0)), 26)
+        return (Vector((-2.7, -2.5, 1.6)).lerp(Vector((-2.5, -2.4, 1.6)), e), Vector((-0.5, -1.15, 1.45)), 30)   # from inside the room: they stop in the doorway
     return cam, anim
 
 
@@ -245,16 +246,17 @@ def _():
     def anim(c, t):
         sec = t * DUR["tool_floor"]
         if "placed" not in c:
-            tl = H.shaker_tool("FloorTool"); tl.location = (-2.9, -3.3, 0.0); tl.rotation_euler = (0, 0, math.radians(-25)); c["placed"] = True
-            ch = c["bed_chair"]; ch.location = (-2.0, -2.4, 0.22); ch.rotation_euler = (math.radians(90), 0, math.radians(70))
-            c["bed_lamp"].data.energy = 10
+            tl = H.shaker_tool("FloorTool"); tl.location = (-2.5, -2.9, 0.0); tl.rotation_euler = (0, math.radians(90), math.radians(-25))   # joined object keeps the bar's Y-90 frame; c["placed"] = True
+            H.point((-2.3, -2.6, 0.9), 6, (1.0, 0.72, 0.45), 0.2)       # the lamp pool falls across it
+            ch = c["bed_chair"]; ch.location = (-1.7, -3.7, 0.22); ch.rotation_euler = (math.radians(90), 0, math.radians(20))
+            c["bed_lamp"].data.energy = 40; H.point((-2.0, -2.0, 2.2), 12, (1.0, 0.75, 0.5), 0.3)
             c["dust"] = H.leaf_cloud(40, (-2.6, -3.0), (1.2, 1.0), 1.8, col=(0.8, 0.75, 0.65), seed=9)
             for o in c["dust"]:
                 o.scale = (0.03, 0.03, 1)
         H.fall_leaves(c["dust"], sec * 0.08, ground=0.0, drift=(0.02, 0.01))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.9, -1.3, 0.18)).lerp(Vector((-1.2, -1.6, 0.16)), e), Vector((-2.9, -3.3, 0.05)), 40)
+        return (Vector((-1.75, -2.0, 0.55)).lerp(Vector((-1.9, -2.15, 0.5)), e), Vector((-2.5, -2.9, 0.03)), 35)
     return cam, anim
 
 
@@ -264,7 +266,7 @@ def _():
         sec = t * DUR["flash_hall"]
         if "flash" not in c:
             c["flash"] = H.point((0, 0, 0), 0, (0.92, 0.95, 1.0), 0.08)
-            c["hallbulb"] = H.point((0.2, -2.5, C1 - 0.3), 25, (1.0, 0.7, 0.42), 0.05)
+            c["hallbulb"] = H.point((0.2, -2.5, C1 - 0.3), 10, (1.0, 0.7, 0.42), 0.05)
             c["camera_box"] = box("PressCam", (0, 0, 0), (0.14, 0.12, 0.12), H.mat("black"), bevel=0.01)
         phg, d = P(c, "ph"), P(c, "d")
         H.stand_at(phg, (-0.2, -2.0, 0), math.radians(90))
@@ -274,11 +276,11 @@ def _():
         reach(phg, "R", cp + Vector((0, -0.08, -0.04)), Vector((0, 0, -1)), fwd); reach(phg, "L", cp + Vector((0, 0.08, -0.04)), Vector((0, 0, -1)), fwd)
         pops = (1.2, 3.0)
         e = sum(max(0.0, 1 - abs(sec - p) / 0.06) for p in pops)
-        c["flash"].location = cp + fwd * 0.1 + Vector((0, 0, 0.15)); c["flash"].data.energy = 4000 * e
+        c["flash"].location = cp + fwd * 0.1 + Vector((0, 0, 0.15)); c["flash"].data.energy = 900 * e
         H.look(d, 20, 5)
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.55, -0.6, 1.6)).lerp(Vector((0.45, -0.9, 1.6)), e), Vector((-1.2, -2.8, 1.3)), 28)
+        return (Vector((-0.35, -4.4, 1.7)).lerp(Vector((-0.3, -4.2, 1.7)), e), Vector((-0.1, -2.0, 1.3)), 24)
     return cam, anim
 
 

@@ -243,7 +243,7 @@ def _():
             H.walk_to(P(c, key), (-7.0 + 0.6 * k, ROAD_Y - 5.0 - 0.3 * k, G), (0.0 + 0.6 * k, -D2 - 4.0 - 0.3 * k, G), 0.1 + 0.7 * t, swing=12)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-12.0, ROAD_Y - 7.5, 1.6)).lerp(Vector((-11.0, ROAD_Y - 6.5, 1.65)), e), Vector((-1.0, -D2, 1.8)), 28)
+        return (Vector((-4.5, ROAD_Y - 9.0, 1.5)).lerp(Vector((-4.0, ROAD_Y - 8.2, 1.55)), e), Vector((-0.5, -D2 - 1.0, 1.6)), 26)
     return cam, anim
 
 
@@ -308,7 +308,7 @@ def _():
     return cam, anim
 
 
-@move("winter_flicker", "winter_day", 5.0)
+@move("winter_flicker", "winter_night", 5.0)
 def _():
     def anim(c, t):
         sec = tick(c, t, "winter_flicker")

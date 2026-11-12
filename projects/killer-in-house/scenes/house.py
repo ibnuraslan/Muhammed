@@ -904,10 +904,10 @@ HAT = {}
 def person(name, kind):
     """kind: philip | helen | friend | neighbour_m | neighbour_w | detective | officer | thin | captain | nurse | boy"""
     spec = {
-        "philip": dict(gender=1.0, years=73, weight=0.42, height=0.42, cloth="male_casualsuit02", cv=dict(hue=0.55, sat=0.35, val=0.32), hair="short02", hv=0.85, hat=False, skin="old_lightskinned_male_diffuse.png"),
+        "philip": dict(gender=1.0, years=73, weight=0.42, height=0.42, cloth="male_casualsuit05", cv=dict(hue=0.5, sat=0.6, val=0.9), hair="short02", hv=0.85, hat=False, skin="old_lightskinned_male_diffuse.png"),
         "helen": dict(gender=0.0, years=68, weight=0.5, height=0.4, cloth="female_casualsuit01", cv=dict(hue=0.95, sat=0.35, val=0.45), hair="bob01", hv=0.8, hat=False, skin="old_lightskinned_female_diffuse.png"),
         "friend": dict(gender=0.0, years=62, weight=0.55, height=0.45, cloth="female_elegantsuit01", cv=dict(hue=0.35, sat=0.4, val=0.3), hair="bob02", hv=0.6, hat=False, skin="old_lightskinned_female_diffuse.png"),
-        "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit04", cv=dict(hue=0.1, sat=0.4, val=0.25), hair="short01", hv=0.3, hat=False),
+        "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit03", cv=dict(hue=0.55, sat=0.5, val=0.8), hair="short01", hv=0.3, hat=False),
         "neighbour_w": dict(gender=0.0, years=45, weight=0.5, height=0.5, cloth="female_casualsuit02", cv=dict(hue=0.6, sat=0.45, val=0.4), hair="bob01", hv=0.25, hat=False),
         "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.08, sat=0.3, val=0.42), hair="short02", hv=0.2, hat=True),
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
@@ -915,7 +915,7 @@ def person(name, kind):
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
         "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="long01", hv=0.28, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
-        "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
+        "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit01", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]
     sk = spec.get("skin") or ("middleage_lightskinned_female_diffuse.png" if spec["gender"] < 0.5 else "middleage_lightskinned_male_diffuse.png")
     h = Human(name, gender=spec["gender"], years=spec["years"], muscle=spec.get("muscle", 0.5), weight=spec["weight"], height=spec["height"],
