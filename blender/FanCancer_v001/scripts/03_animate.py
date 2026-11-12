@@ -264,7 +264,7 @@ def man_rink():
     face(MR, f(18.8), brow=-0.4, frown=1.0, squint=1.0, jaw=2)
     man.pose(f(19.8), MAN0 + Vector((0, 0.18, 0)), 180, flex=12, head=(-6, 10))     # looks up at her, puzzled
     face(MR, f(19.8), brow=1.0, frown=0.6, squint=0.2, smile=-0.3)
-    shrug = {"L": ((0.30, -0.10, 1.02), (0.3, -1, 0.2), (0, 0, 1)), "R": ((-0.30, -0.10, 1.02), (-0.3, -1, 0.2), (0, 0, 1))}
+    shrug = {"L": ((0.36, 0.0, 1.00), (0.3, -1, 0.2), (0, 0, 1)), "R": ((-0.36, 0.0, 1.00), (-0.3, -1, 0.2), (0, 0, 1))}
     man.pose(f(20.3), MAN0 + Vector((0, 0.14, 0)), 180, flex=2, head=(0, 12), hands=shrug, hip=0.02)
     face(MR, f(20.3), brow=0.7, smile=-0.6)
     man.pose(f(20.8), MAN0 + Vector((0, 0.1, 0)), 150, flex=2, head=(0, 0))
@@ -745,6 +745,13 @@ for i_ in range(4):
     r.parent = busO; r.matrix_parent_inverse.identity()
     for f in range(F(30.0), F(37.0), 30):
         seated_fk(r, f, Vector((-3.2 + i_ * 1.9, 0.55 if i_ % 2 else -0.55, 0.55)), 90, phone=True, head=(25, 0), sway=math.sin(f * 0.05 + i_))
+for _i, (_src, _y, _x0, _x1) in enumerate((("Crowd1", -12.2, -15.0, -3.0), ("Crowd5", 12.6, -6.0, 5.0), ("Crowd0", 12.2, 7.0, -3.5))):
+    _r = dup_rig(_src, f"Walker{_i}", C_CHAR); _a = Actor(_r.name)
+    _p = catmull([(F(32.0), CT + Vector((_x0, _y, 0))), (F(36.0), CT + Vector((_x1, _y, 0)))])
+    _yw = math.degrees(math.atan2(_x1 - _x0, 0.0001))
+    _a.H.walk(_p, (lambda fr, _yw=_yw: _yw), F(32.0), F(36.0), stride=0.7, lift=0.07)
+    arm_swing(_a, _p, (lambda fr, _yw=_yw: _yw), F(32.0), F(36.0), 0.7)
+    face(_r, F(32.0), smile=0.4)
 # rider phone glows
 for i_, r in enumerate(riders):
     gl = plane(f"RiderGlow{i_}", 0.07, 0.14, (0, 0, 0), bpy.data.materials["PhoneGlow"], C_CHAR)

@@ -94,9 +94,9 @@ K = [
     (25.45, V((-28.45, -2.70, 2.05)), docH, 36, False),
     (25.8, V((-28.15, -2.65, 1.85)), docH, 36, False),                 # doctor's serious face
     (26.6, V((-27.8, -2.75, 2.2)), moleB, 40, False),               # overhead on the hands
-    (27.0, V((-28.2, -1.55, 1.85)), moleB, 36, False),
+    (27.0, V((-27.95, -1.20, 1.70)), (moleB + manBH) / 2, 32, False),
     (27.4, V((-29.10, -1.45, 1.75)), moleB, 34, False),
-    (28.3, V((-28.80, -1.75, 1.40)), moleB, 36, False),               # front-left: the bandage pressed on
+    (28.3, V((-28.95, -1.40, 1.50)), (moleB + manBH) / 2, 32, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
@@ -106,12 +106,12 @@ K = [
     (32.8, CT + V((-4, -10.0, 13)), CT + V((0, 12, 9)), 26, False),
     (33.8, CT + V((-13, -12.6, 3.2)), CT + V((-17, -4, 1.8)), 28, False),
     (34.8, CT + V((-4.0, -12.6, 2.8)), CT + V((-6, -4, 1.8)), 30, False),  # alongside the bus, riders on phones
-    (35.4, WIN + V((0, -7.0, 0.4)), WIN, 40, False),
+    (35.3, WIN + V((0, -7.0, 0.4)), WIN + V((0, 0, -1.5)), 34, False),
     (35.9, WIN + V((0, -1.25, 0)), WIN, 40, False),
     (35.9, HMv + V((0, -3.0, 1.45)), HMv + V((0, 1.0, 1.0)), 40, True),  # through the curtain into her room
     (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
-    (37.5, LAPSCR + ls_n * 0.85 + V((0.25, 0, 0.35)), LAPSCR + V((0, 0.25, 0.05)), 32, False),   # her laptop, the call on screen
+    (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.72, LAPSCR + ls_n * 0.30 + V((0, 0, 0.06)), LAPSCR, 45, False),
     (37.9, LAPSCR + ls_n * 0.008, LAPSCR, 45, False),
     (37.9, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, True),  # out of the screen onto the ice

@@ -13,13 +13,13 @@ for r in rigs:
                 for cb in st.channelbags:
                     for fc in [fc for fc in cb.fcurves if '"finger' in fc.data_path]: cb.fcurves.remove(fc)
 FPLAN = {
-  "Fan": {"R": [(0.0, "flat_palm"), (12.6, "flat_palm"), (12.75, "relaxed"), (12.85, "hold_flat_object"), (23.0, "hold_flat_object"), (34.0, "relaxed"),
+  "Fan": {"R": [(0.0, "flat_palm"), (12.6, "flat_palm"), (12.75, "relaxed"), (12.85, "hold_flat_object"), (15.85, "hold_flat_object"), (16.1, "flat_palm"), (17.5, "flat_palm"), (19.6, "flat_palm"), (20.4, "hold_flat_object"), (23.0, "hold_flat_object"), (34.0, "relaxed"),
                 (36.4, "relaxed"), (37.8, "relaxed"), (38.0, "hold_flat_object"), (44.0, "hold_flat_object")],
           "L": [(0.0, "flat_palm"), (9.9, "flat_palm"), (10.3, "relaxed"), (10.9, "relaxed"), (11.2, "flat_palm"), (13.0, "flat_palm"), (13.4, "hold_flat_object"),
                 (15.6, "hold_flat_object"), (16.1, "relaxed"), (16.4, "power_fist"), (17.0, "power_fist"), (17.5, "relaxed"), (34.0, "relaxed"),
                 (37.0, "relaxed"), (38.0, "hold_flat_object"), (44.0, "hold_flat_object")]},
-  "Manager": {"R": [(0.0, "relaxed"), (20.0, "relaxed"), (20.3, "open_alarm"), (20.8, "relaxed"), (37.9, "relaxed"), (38.0, "flat_palm"), (44.0, "flat_palm")],
-              "L": [(0.0, "relaxed"), (20.0, "relaxed"), (20.3, "open_alarm"), (20.8, "relaxed"), (37.9, "relaxed"), (38.0, "flat_palm"), (44.0, "flat_palm")]},
+  "Manager": {"R": [(0.0, "relaxed"), (20.0, "relaxed"), (20.3, "open_alarm"), (20.8, "relaxed"), (44.0, "relaxed")],
+              "L": [(0.0, "relaxed"), (20.0, "relaxed"), (20.3, "open_alarm"), (20.8, "relaxed"), (44.0, "relaxed")]},
   "ManagerB": {"R": [(0.0, "relaxed"), (29.9, "relaxed"), (29.97, "hold_flat_object"), (34.0, "hold_flat_object")], "L": [(0.0, "relaxed")]},
   "Doctor": {"R": [(0.0, "relaxed"), (22.3, "relaxed"), (22.6, "wrap_grip"), (25.45, "wrap_grip"), (25.55, "relaxed"), (25.95, "relaxed"),
                    (26.02, "pinch"), (28.68, "pinch"), (28.75, "relaxed")],
