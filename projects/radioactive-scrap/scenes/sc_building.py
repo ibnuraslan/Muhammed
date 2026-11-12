@@ -92,8 +92,9 @@ def build(variant=None):
         box("Opp", (-25 + k * 10, -31.0, h / 2), (9.6, 10, h), fac)
     for x in (-16.0, 24.0):
         box("Adj", (x, 2.0, 7.0), (12, 16, 14), fac)
-    from sc_street import car
-    c["traffic"] = [car(f"Traffic{k}", col) for k, col in enumerate(((0.6, 0.6, 0.58), (0.45, 0.1, 0.08), (0.15, 0.2, 0.3), (0.6, 0.55, 0.4)))]
+    from rs_vehicles import car
+    c["traffic"] = [car(f"Traffic{k}", col, kind) for k, (col, kind) in enumerate((((0.6, 0.6, 0.58), "sedan_1990s_soviet"), ((0.45, 0.1, 0.08), "sedan_1990s_soviet"),
+                                                                                    ((0.75, 0.6, 0.05), "taxi"), ((0.15, 0.2, 0.3), "van_1990s")))]
     for k, t in enumerate(c["traffic"]):
         t.location = (-60, -16, 0)
     tk, wheels, bed_z, _ = truck("Truck", (0.12, 0.2, 0.3))
@@ -101,7 +102,8 @@ def build(variant=None):
     tk.location = (-0.6, -11.2, 0); tk.rotation_euler = (0, 0, math.pi)
     c["plank"] = box("Plank", (0, -150, 0), (0.35, 2.4, 0.05), noisy("PlankW", (0.4, 0.3, 0.18), 0.8))
     c["roller"] = cyl("RollerPipe", (0, -150, 0), 0.05, 1.2, rust_mat("RollerRust"), verts=12, rot=(0, math.radians(90), 0))
-    c["fk"], c["fk_car"] = forklift()
+    import vehicles as _V
+    c["fk"] = _V.make("forklift"); c["fk_car"] = _V.part(c["fk"], "forks"); c["fk_z0"] = c["fk_car"].location.z if c["fk_car"] else 0.0
     c["fk"].location = (0, -150, 0)
     ht, _ = ph_model("hand_truck", loc=(7.5, 8.0, 0)); c["handtruck"] = ht
     c["table"], _ = ph_model("WoodenTable_01", loc=(6.0, 7.5, 0))
@@ -162,7 +164,7 @@ def c1_2b(c, t):
 def c1_3a(c, t):           # two men roll a container on a pipe up a plank into the truck bed
     sec = t * dur("ch1_3a"); doors(c)
     tk = c["truck"]; bpy.context.view_layer.update()
-    tail = tk.matrix_world @ Vector((-2.1, 0, c["bed_z"]))
+    tail = tk.matrix_world @ Vector((-3.7, 0, c["bed_z"]))
     foot = tail + Vector((0, 2.2, -c["bed_z"]))
     pl = c["plank"]; pl.location = (tail + foot) / 2; pl.rotation_euler = (math.atan2(tail.z - foot.z, 2.2), 0, 0)
     k = ease(min(1.0, sec / dur("ch1_3a")))
@@ -191,12 +193,13 @@ def c1_3b(c, t):           # the truck pulls away and joins the traffic
 def c2_13a(c, t):          # a forklift sets two packages down inside the warehouse
     sec = t * dur("ch2_13a"); doors(c, 0.2, 0.2)
     k = ease(min(1.0, sec / (dur("ch2_13a") * 0.7)))
-    fk = c["fk"]; fk.location = Vector((3.5, 5.0 - 3.5 * k, 0)); fk.rotation_euler = (0, 0, math.radians(180) - math.radians(20) * (1 - k))
+    fk = c["fk"]; fk.location = Vector((3.5, 5.0 - 3.5 * k, 0)); fk.rotation_euler = (0, 0, math.radians(-90) - math.radians(20) * (1 - k))
     lift = 0.6 * (1 - ease(min(1.0, max(0.0, (sec - dur("ch2_13a") * 0.7) / (dur("ch2_13a") * 0.3)))))
-    c["fk_car"].location = (0, -1.1, 0.2 + lift)
+    if c["fk_car"] is not None:
+        c["fk_car"].location.z = c["fk_z0"] + lift
     bpy.context.view_layer.update()
     for j, o in enumerate(c["pk"]):
-        o.location = c["fk_car"].matrix_world @ Vector((0, -0.6 + 0.0 * j, 0.06)) + Vector((0.55 * (j - 0.5) * 2, 0, 0))
+        o.location = fk.matrix_world @ Vector((1.9, 0.55 * (j - 0.5) * 2, 0.15 + lift))
         o.rotation_euler = (0, 0, fk.rotation_euler.z)
 
 

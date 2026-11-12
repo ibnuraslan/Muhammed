@@ -588,7 +588,7 @@ def pose_sparks(sp, origin, sec, direction=Vector((1, 0, 0)), spread=1.0, on=Tru
         s = max(0.05, 1 - age / L_); o.scale = (1, 1, 0.5 + 2.5 * s)
 
 
-def flicker_light(name, loc, color=(1.0, 0.6, 0.3), energy=400, radius=0.05, seed=1.7):
+def flicker_light(name, loc, color=(1.0, 0.6, 0.3), energy=400, radius=0.05, seed=1.7):  # noqa
     l = bpy.data.lights.new(name, 'POINT'); l.color = color; l.shadow_soft_size = radius
     d = l.driver_add("energy").driver; d.type = 'SCRIPTED'
     d.expression = f"{energy} * (0.75 + 0.25 * sin(frame * 2.1 + {seed}) * sin(frame * 0.73))"
@@ -903,3 +903,7 @@ def lie_in_bed(h, head_at, foot_dir, z):
     top = w[np.argmax((w[:, :2] @ np.array([-foot_dir[0], -foot_dir[1]])))]
     h.arm.location = Vector((head_at[0] - top[0], head_at[1] - top[1], z - w[:, 2].min()))
     bpy.context.view_layer.update()
+
+
+# ============================================================================ vehicles: the shared realistic kit replaces the placeholders
+from rs_vehicles import truck, excavator, pose_arm, set_grab, arm_ik, hang_tool_level, roll   # noqa: E402,F811

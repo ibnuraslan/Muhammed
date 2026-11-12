@@ -96,7 +96,7 @@ def build(variant=None):
     c["steps_top"] = EXT + Vector((0, -8.6, 0.9))
     sign = text_obj("HospSign", "DEVLET HASTANESİ", EXT + Vector((0, -8.1, 4.4)), 0.55, pbr("SignLetters", (0.15, 0.25, 0.45), 0.5),
                     font_path="/usr/share/fonts/opentype/inter/Inter-Bold.otf", extrude=0.03)
-    from sc_street import car
+    from rs_vehicles import car
     c["car"] = car("FamilyCar", (0.55, 0.12, 0.08)); c["car"].location = EXT + Vector((11.0, -19.0, 0)); c["car"].rotation_euler = (0, 0, 0)
     car("ParkedA", (0.7, 0.7, 0.68)).location = EXT + Vector((-6.0, -19.5, 0))
     car("ParkedB", (0.15, 0.2, 0.3)).location = EXT + Vector((17.0, -19.0, 0))

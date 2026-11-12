@@ -99,54 +99,16 @@ def scatter(protos, hfun, cx, cy, R, n, rng, embed=0.12, scl=(1.1, 2.0), small=F
 
 # ============================================================================ vehicles / props
 def van(name="Van", col=(0.78, 0.78, 0.76)):
-    """1990s white panel van (generic): sloped bonnet, raked windscreen, sliding door. Front toward +X."""
-    paint = painted_steel(name + "Paint", col, 0.35, 0.3)
-    glass_m = pbr(name + "Glass", (0.02, 0.025, 0.03), 0.06, 0.0, **{'Coat Weight': 1.0})
-    black = pbr(name + "Black", (0.015, 0.015, 0.015), 0.6)
-    lamp = pbr(name + "Lamp", (0.85, 0.85, 0.8), 0.08, 0.0, **{'Coat Weight': 1.0})
-    parts = [box("Body", (-0.3, 0, 1.3), (4.0, 1.9, 1.9), paint, bevel=0.2),
-             box("Bonnet", (2.15, 0, 0.92), (0.95, 1.86, 0.75), paint, bevel=0.18),
-             box("BonnetTop", (2.0, 0, 1.3), (0.9, 1.84, 0.2), paint, bevel=0.08, rot=(0, math.radians(14), 0)),
-             box("Screen", (1.72, 0, 1.75), (0.03, 1.7, 0.7), glass_m, rot=(0, math.radians(-32), 0)),
-             box("WinL", (1.2, 0.952, 1.7), (0.85, 0.02, 0.55), glass_m), box("WinR", (1.2, -0.952, 1.7), (0.85, 0.02, 0.55), glass_m),
-             box("Bumper", (2.66, 0, 0.5), (0.1, 1.95, 0.2), black, bevel=0.03), box("RearBumper", (-2.33, 0, 0.5), (0.1, 1.95, 0.2), black),
-             box("Grille", (2.63, 0, 0.88), (0.02, 0.9, 0.22), black),
-             box("SlideSeam", (0.75, -0.953, 1.2), (0.012, 0.004, 1.55), black), box("SlideSeam", (-0.55, -0.953, 1.2), (0.012, 0.004, 1.55), black),
-             box("Rail", (0.1, -0.953, 1.95), (1.6, 0.01, 0.025), black),
-             box("RearWin", (-2.31, 0, 1.75), (0.02, 1.3, 0.45), glass_m)]
-    for sy in (-1, 1):
-        parts.append(box("Headlamp", (2.635, sy * 0.68, 0.9), (0.02, 0.32, 0.16), lamp))
-        parts.append(box("Mirror", (1.55, sy * 1.1, 1.75), (0.05, 0.14, 0.26), black, bevel=0.01))
-        parts.append(box("Arch", (1.75, sy * 0.95, 0.42), (0.85, 0.02, 0.18), black))
-        parts.append(box("Arch", (-1.45, sy * 0.95, 0.42), (0.85, 0.02, 0.18), black))
-    body = join(parts, name)
-    tyre = pbr(name + "Tyre", (0.022, 0.022, 0.022), 0.85); hub = painted_steel(name + "Hub", (0.4, 0.4, 0.4), 0.5, 0.4)
-    wheels = []
-    for wx in (-1.45, 1.75):
-        for sy in (-1, 1):
-            w = wheel("VanWheel", 0.33, 0.21, tyre, hub, sy); w.parent = body; w.location = (wx, sy * 0.84, 0.33)
-            wheels.append(w)
-    return body, wheels
-
+    from rs_vehicles import van as _van
+    return _van(name, col)
 
 def police_car(name="Police"):
-    from sc_street import car
-    from sc_police import flash_material
-    pc = car(name, (0.78, 0.78, 0.8))
-    stripe = box("PStripe", (0, 0, 0.62), (4.3, 1.87, 0.12), pbr("PoliceBlue", (0.02, 0.06, 0.25), 0.3, 0.2)); stripe.parent = pc
-    # one rotating blue beacon on the roof (1990s Turkish police car), no light bar, no glitter
-    base = cyl("BeaconBase", (0, 0, 1.36), 0.11, 0.05, pbr("BeaconBase", (0.05, 0.05, 0.05), 0.5), verts=20); base.parent = pc
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=10, radius=0.1, location=(0, 0, 1.43))
-    dome = bpy.context.active_object; dome.name = "BeaconDome"; dome.scale = (1, 1, 1.25)
-    dome.data.materials.append(pbr("BeaconGlass", (0.1, 0.25, 0.9), 0.1, 0.0, **{'Transmission Weight': 0.6, 'Emission Color': (0.15, 0.35, 1.0, 1), 'Emission Strength': 2.5}))
-    dome.parent = pc
-    rot = bpy.data.objects.new("BeaconSpin", None); bpy.context.collection.objects.link(rot); rot.parent = pc; rot.location = (0, 0, 1.43)
-    d = rot.driver_add("rotation_euler", 2).driver; d.type = 'SCRIPTED'; d.expression = "frame * 0.42"
-    l = bpy.data.lights.new("Beacon", 'SPOT'); l.color = (0.2, 0.4, 1.0); l.energy = 900; l.spot_size = math.radians(40); l.spot_blend = 0.6; l.shadow_soft_size = 0.02
-    lo = bpy.data.objects.new("Beacon", l); bpy.context.collection.objects.link(lo); lo.parent = rot; lo.location = (0, 0, 0)
-    lo.rotation_euler = (math.radians(85), 0, 0)
+    """1990s Turkish police sedan (kit body, white with a blue band) with one rotating blue beacon."""
+    import vehicles as _V
+    pc = _V.make("sedan_1990s_soviet", color=(0.82, 0.82, 0.8), dirt=0.2); pc.name = name
+    band = box("PBand", (0, 0, 0.62), (4.2, 1.82, 0.1), pbr("PoliceBlue", (0.03, 0.08, 0.3), 0.3, 0.2)); band.parent = pc
+    _V.add_rotating_beacon(pc, (0, 0, 1.47), (0.15, 0.3, 1.0), rate=1.4, energy=700)
     return pc
-
 
 def detector(name="Detector"):
     """Handheld survey meter: grey box with a round dial and a needle (pivot empty), a handle, and a probe on a cable."""
@@ -177,47 +139,37 @@ def lead_drum(name="LeadDrum"):
 
 
 def mobile_crane(name="Crane", col=(0.8, 0.55, 0.1)):
-    """Truck crane: carrier + slewing cab + telescopic boom (pivot) + hook line. hook() gives the hook point."""
-    tk, wheels, bz, _ = truck(name + "Carrier", (0.75, 0.5, 0.08), bed_len=5.2)
-    paint = painted_steel(name + "Paint", col, 0.45, 0.5)
-    piv = bpy.data.objects.new(name + "BoomP", None); bpy.context.collection.objects.link(piv); piv.parent = tk; piv.location = (-1.5, 0, 1.9)
-    box(name + "Turret", (0, 0, 0), (1.6, 1.4, 0.9), paint).parent = tk
-    bpy.data.objects[name + "Turret"].location = (-1.5, 0, 1.45)
-    boom = box(name + "Boom", (0, 0, 0), (13.0, 0.55, 0.6), paint, bevel=0.03); boom.parent = piv; boom.location = (6.0, 0, 0)
-    tip = bpy.data.objects.new(name + "Tip", None); bpy.context.collection.objects.link(tip); tip.parent = piv; tip.location = (12.4, 0, -0.2)
+    """Truck crane (kit boom truck) with a hoist line and a hook block hanging from the boom tip."""
+    from rs_vehicles import boom_truck as _bt
+    cr = _bt(name, col)
     line = cyl(name + "Line", (0, 0, 0), 0.015, 1.0, pbr("Cable", (0.03, 0.03, 0.03), 0.5), verts=6)
     steel = painted_steel(name + "BlockSteel", (0.18, 0.18, 0.19), 0.45, 0.6)
     blk = join([box("Sheave", (0, 0, 0.15), (0.32, 0.14, 0.36), steel, bevel=0.04),
                 cyl("Pin", (0, 0, 0.22), 0.05, 0.18, steel, verts=12, rot=(math.radians(90), 0, 0))], name + "HookBlock")
     bpy.ops.mesh.primitive_torus_add(major_radius=0.09, minor_radius=0.022, major_segments=20, minor_segments=8, location=(0, 0, -0.12), rotation=(math.radians(90), 0, 0))
     hk = bpy.context.active_object; hk.data.materials.append(steel); hk.parent = blk; hk.location = (0, 0, -0.12)
-    hook = blk
-    return dict(body=tk, wheels=wheels, piv=piv, tip=tip, line=line, hook=hook)
-
+    cr.update(line=line, block=blk)
+    return cr
 
 def crane_hang(cr, slew, luff, drop):
-    """slew (rad, about the carrier's Z), luff (rad up), drop: hook depth below the tip. Returns hook world pos."""
-    cr["piv"].rotation_euler = Euler((0, -luff, slew), 'ZYX')
-    bpy.context.view_layer.update()
-    tp = cr["tip"].matrix_world.translation
+    """slew/luff the boom (rad), then hang the hook block `drop` metres under the tip. Returns the hook point."""
+    from rs_vehicles import boom_pose, boom_tip
+    boom_pose(cr, slew, luff, 1.0)
+    tp = boom_tip(cr)
     hk = tp - Vector((0, 0, drop))
     ln = cr["line"]; ln.location = (tp + hk) / 2; ln.scale = (1, 1, max(0.05, drop)); ln.rotation_euler = (0, 0, 0)
-    cr["hook"].location = hk + Vector((0, 0, -0.2))
+    cr["block"].location = hk + Vector((0, 0, -0.2))
     return hk
 
-
 def boom_truck(name="BoomTruck"):
-    tk, wheels, bz, _ = truck(name, (0.5, 0.52, 0.5), bed_len=4.6)
-    steel = painted_steel(name + "Steel", (0.75, 0.75, 0.72), 0.4, 0.4)
-    post = box(name + "Post", (0, 0, 0), (0.4, 0.4, 1.4), steel); post.parent = tk; post.location = (-1.6, 0, 1.6)
-    piv = bpy.data.objects.new(name + "BoomP", None); bpy.context.collection.objects.link(piv); piv.parent = tk; piv.location = (-1.6, 0, 2.3)
-    tel = box(name + "Tele", (0, 0, 0), (9.0, 0.22, 0.22), steel); tel.parent = piv; tel.location = (-4.5, 0, 0)
-    head_p = bpy.data.objects.new(name + "HeadP", None); bpy.context.collection.objects.link(head_p); head_p.parent = piv; head_p.location = (-9.0, 0, 0)
-    det = join([cyl("DetHead", (0, 0, -0.5), 0.09, 0.35, pbr("DetYellow", (0.75, 0.6, 0.08), 0.4), verts=16),
-                cyl("DetCable", (0, 0, -0.18), 0.01, 0.36, pbr("Cable2", (0.02, 0.02, 0.02), 0.5), verts=6)], name + "Det")
-    det.parent = head_p; det.location = (0, 0, 0)
-    return dict(body=tk, wheels=wheels, piv=piv, tele=tel, head=head_p)
-
+    """Kit boom truck with a radiation detector probe hanging from the boom tip on a short cable."""
+    from rs_vehicles import boom_truck as _bt
+    bt = _bt(name, (0.55, 0.57, 0.55))
+    det = join([cyl("DetHead", (0, 0, -0.75), 0.09, 0.35, pbr("DetYellow", (0.75, 0.6, 0.08), 0.4), verts=16),
+                cyl("DetCable", (0, 0, -0.3), 0.01, 0.6, pbr("Cable2", (0.02, 0.02, 0.02), 0.5), verts=6)], name + "Det")
+    det.parent = bt["hook"]; det.location = (0, 0, 0)
+    bt["det"] = det
+    return bt
 
 def block_wall(loc, rot_z, mat, w=4.0, h=1.8):
     rng = np.random.default_rng(5)
@@ -429,7 +381,7 @@ def build(variant=None):
         mx_tk, mx_wh, _, _ = truck("Mixer", (0.55, 0.55, 0.52), bed_len=4.6)
         mx_tk.location = (-14.0, -36.5, 0)
         tilt = bpy.data.objects.new("MixerTilt", None); bpy.context.collection.objects.link(tilt); tilt.parent = mx_tk
-        tilt.location = (-0.3, 0, 2.0); tilt.rotation_euler = (0, math.radians(-78), 0)
+        tilt.location = (-1.0, 0, 2.3); tilt.rotation_euler = (0, math.radians(-78), 0)
         drum = cyl("MixerDrum", (0, 0, 0), 0.95, 3.4, painted_steel("MixDrum", (0.75, 0.7, 0.55), 0.5, 0.6), verts=24)
         drum.parent = tilt; drum.location = (0, 0, 0)
         for k in range(6):
@@ -531,8 +483,8 @@ def anim_van(c, t):
     stop = 2.4
     x = -18 + 14 * min(sec, stop) - 14 * min(sec, stop) ** 2 / (2 * stop)
     vn = c["van"]; vn.location = (x, -35.5, 0); vn.rotation_euler = (0, 0, 0)
-    for w in c["van_wheels"]:
-        w.rotation_euler = (0, (x + 18) / 0.33, 0)
+    from rs_vehicles import roll
+    roll(vn, x + 18)
     h = c["people"]["spec1"]
     if sec > stop + 0.2:
         walk(h, (x + 0.4, -34.4, 0), (x + 0.6, -31.5, 0), sec - stop - 0.2, speed=1.0)
@@ -609,20 +561,16 @@ def cam_grab(c, t):
 
 def anim_boom(c, t):
     sec = t * dur("ch3_10a")
+    from rs_vehicles import boom_pose, roll
     grab_idle_swing(c, 0)
     bt = c["bt"]; k = ease(min(1.0, sec / 3.2))
     bt["body"].location = HC + Vector((16.0 - 8.0 * k, 3.0, 0)); bt["body"].rotation_euler = (0, 0, 0)
-    for w in bt["wheels"]:
-        w.rotation_euler = (0, -(8.0 * k) / 0.45, 0)
-    bt["piv"].rotation_euler = (0, math.radians(-3), math.radians(8))
-    bt["tele"].scale = (0.55 + 0.45 * ease(min(1.0, max(0.0, (sec - 1.0) / 3.0))), 1, 1)
-    bt["tele"].location = (-4.5 * bt["tele"].scale.x, 0, 0); bt["head"].location = (-9.0 * bt["tele"].scale.x, 0, 0)
-    bt["head"].rotation_euler = (0, math.radians(3), 0)
+    roll(bt["body"], -8.0 * k)
+    boom_pose(bt, math.radians(-8), math.radians(4 + 4 * ease(min(1.0, sec / 2.0))), 0.4 + 0.5 * ease(min(1.0, max(0.0, (sec - 1.0) / 3.0))))
     crane_hang(c["crane"], math.radians(35), math.radians(28), 4.0)
-    c["drum"].location = c["crane"]["hook"].location + Vector((0, 0, -1.6)); c["lid"].location = (0, -150, 0)
+    c["drum"].location = c["crane"]["block"].location + Vector((0, 0, -1.6)); c["lid"].location = (0, -150, 0)
     stand(c["people"]["op"], HC + Vector((5.2, -10.6, 0)), HC)
     c["focus"] = bt["body"].location + Vector((0, 0, 1.5))
-
 
 def cam_boom(c, t):
     e = ease(t)
@@ -632,18 +580,10 @@ def cam_boom(c, t):
 def anim_drop(c, t):
     sec = t * dur("ch3_17b")
     grab_idle_swing(c, 0)
-    bt = c["bt"]; bt["body"].location = HC + Vector((8.0, 3.0, 0)); bt["piv"].rotation_euler = (0, math.radians(-3), math.radians(8))
+    boom_parked(c)
     cr = c["crane"]
-    drum_top = HC + Vector((-1.0, -5.0, 0.0))
-    hk = crane_hang(cr, 0, 0, 0)
-    # place the crane hook straight above the drum spot: aim slew/luff once, then the drum hangs 0.25 m off the ground
-    cr["piv"].rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
-    base = cr["piv"].matrix_world.translation
-    d = drum_top - base; slew = math.atan2(d.y, d.x) - cr["body"].rotation_euler.z
-    horiz = math.hypot(d.x, d.y); luff = math.acos(min(1.0, horiz / 12.4))
-    hk = crane_hang(cr, slew, luff, 1.0)
-    hk = crane_hang(cr, slew, luff, hk.z - 1.85)
-    drum = c["drum"]; drum.location = hk + Vector((0, 0, -1.65)); c["lid"].location = (0, -150, 0)
+    drum_on_crane(c, HC + Vector((-1.0, -5.0, 0.0)), 0.25)
+    drum = c["drum"]; c["lid"].location = (0, -150, 0)
     mouth = drum.location + Vector((0, 0, 0.92))
     # responder with the shovel tips it over the drum; the capsule slides off and drops in
     h2 = c["people"]["r2"]; stance = mouth + Vector((0.2, -1.25, 0)); stance.z = 0
@@ -742,21 +682,20 @@ def pair_pole_shovel(c, sec, at, drum_pos=None, scoop=True):
 
 def drum_on_crane(c, at, height):
     """Crane hook straight above `at`; the drum hangs with its base `height` above the ground."""
+    from rs_vehicles import aim_boom
     cr = c["crane"]
-    cr["piv"].rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
-    base = cr["piv"].matrix_world.translation; d = Vector(at) - base
-    slew = math.atan2(d.y, d.x) - cr["body"].rotation_euler.z
-    luff = math.acos(min(1.0, math.hypot(d.x, d.y) / 12.4))
-    hk = crane_hang(cr, slew, luff, 1.0)
-    hk = crane_hang(cr, slew, luff, max(0.3, hk.z - (height + 1.65 + 0.2)))
+    tip = aim_boom(cr, (at[0], at[1]), 6.0, 1.0)
+    drop = max(0.3, tip.z - (height + 1.65 + 0.2))
+    hk = tip - Vector((0, 0, drop))
+    ln = cr["line"]; ln.location = (tip + hk) / 2; ln.scale = (1, 1, drop); ln.rotation_euler = (0, 0, 0)
+    cr["block"].location = hk + Vector((0, 0, -0.2))
     c["drum"].location = hk + Vector((0, 0, -1.65))
     return c["drum"].location
 
-
 def boom_parked(c):
-    bt = c["bt"]; bt["body"].location = HC + Vector((8.0, 3.0, 0)); bt["piv"].rotation_euler = (0, math.radians(-3), math.radians(8))
-    bt["tele"].scale = (1, 1, 1); bt["tele"].location = (-4.5, 0, 0); bt["head"].location = (-9.0, 0, 0)
-
+    from rs_vehicles import boom_pose
+    bt = c["bt"]; bt["body"].location = HC + Vector((8.0, 3.0, 0)); bt["body"].rotation_euler = (0, 0, 0)
+    boom_pose(bt, math.radians(-8), math.radians(8), 0.9)
 
 def recovery_base(c, sec):
     grab_idle_swing(c, 0); boom_parked(c)
@@ -935,10 +874,10 @@ def a_walk_out(c, t):
 # ---- Chapter 3, Jan 10 (clear cold morning)
 def a_boom_head(c, t):
     sec = sec_of("ch3_10b", t); recovery_base(c, sec)
-    bt = c["bt"]; bt["head"].rotation_euler = (0, math.radians(3 + 2 * math.sin(sec * 0.9)), 0)
+    from rs_vehicles import boom_pose
+    bt = c["bt"]; boom_pose(bt, math.radians(-8 + 1.5 * math.sin(sec * 0.6)), math.radians(8), 0.9)
     drum_on_crane(c, HC + Vector((-1.0, -5.0, 0)), 0.0)
-    bpy.context.view_layer.update(); c["focus"] = bt["head"].matrix_world.translation + Vector((0, 0, -0.5))
-
+    bpy.context.view_layer.update(); c["focus"] = bt["det"].matrix_world.translation + Vector((0, 0, -0.6))
 
 def a_operator(c, t):
     sec = sec_of("ch3_11a", t); recovery_base(c, sec)

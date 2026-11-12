@@ -227,6 +227,25 @@ def hollow_house(name, loc, w, d, h, plaster, roof, win_at, rng):
     return dict(table=k0, bulb=lo, window=win_at)
 
 
+def _goggles_gloves(h):
+    """Welding goggles on the brow (parented to the head bone) and leather gloves (hand faces re-materialled)."""
+    from rs_kit import _to_bone
+    bpy.context.view_layer.update()
+    hd = h.bone_head("head"); tl = h.bone_tail("head"); up = (tl - hd).normalized()
+    eye = hd + (tl - hd) * 0.42 + Vector((0, -0.085, 0))
+    lens_m = pbr("GoggleLens", (0.02, 0.03, 0.02), 0.05, 0.3, **{'Coat Weight': 1.0})
+    parts = [cyl("Lens", eye + Vector((sx * 0.034, 0, 0)), 0.023, 0.02, lens_m, verts=16, rot=(math.radians(90), 0, 0)) for sx in (-1, 1)]
+    parts.append(box("Strap", eye + Vector((0, 0.07, 0.0)), (0.17, 0.15, 0.018), pbr("Strap", (0.04, 0.04, 0.04), 0.7)))
+    g = join(parts, h.name + "Goggles"); _to_bone(h, g, "head")
+    idx = set(h.vertex_region([b for b in h.rig.bones if b.startswith(("finger", "metacarpal", "wrist"))], 0.5).tolist())
+    me = h.body.data
+    me.materials.append(pbr("Glove", (0.18, 0.11, 0.06), 0.75))
+    gi = len(me.materials) - 1
+    for p in me.polygons:
+        if all(v in idx for v in p.vertices):
+            p.material_index = gi
+
+
 def build(variant=None):
     c = {}
     v = variant or "yard"
@@ -330,15 +349,18 @@ def build(variant=None):
     cont1, k1 = container("Cont1"); cont1.location = C1; cont1.rotation_euler = (0, 0, -math.pi / 2)
     cont2, k2 = container("Cont2"); cont2.location = C2; cont2.rotation_euler = (0, 0, -0.2)
     c.update(cont1=cont1, cont2=cont2, k1=k1, k2=k2)
-    for tr in (k1["trefoil"], k2["trefoil"]):
-        tr.hide_render = True                  # the mark is only noticed later (Ch2)
-    shell = curved_panel("Shell", 0.41, math.radians(-150), math.radians(-30), 0.8, k1["grey"], z0=0.0)
-    hinge = bpy.data.objects.new("ShellHinge", None); bpy.context.collection.objects.link(hinge)
-    hinge.parent = cont1; hinge.location = (0, 0, 0.15); shell.parent = hinge; shell.location = (0, 0, 0)
-    c["hinge"] = hinge
-    shell2 = curved_panel("Shell2", 0.41, math.radians(-150), math.radians(-30), 0.8, k2["grey"], z0=0.0)
-    hinge2 = bpy.data.objects.new("ShellHinge2", None); bpy.context.collection.objects.link(hinge2)
-    hinge2.parent = cont2; hinge2.location = (0, 0, 0.15); shell2.parent = hinge2; c["hinge2"] = hinge2
+    k2["trefoil"].hide_render = True           # one container shows the scuffed mark from the start
+    def bent_shell(nm, cont, mat):
+        """Outer steel shell in two hinged bands: the lower band swings out, the upper band folds further (bends)."""
+        hinge = bpy.data.objects.new(nm + "Hinge", None); bpy.context.collection.objects.link(hinge)
+        hinge.parent = cont; hinge.location = (0, 0, 0.15)
+        lo = curved_panel(nm + "Lo", 0.41, math.radians(-150), math.radians(-30), 0.42, mat, z0=0.0); lo.parent = hinge
+        fold = bpy.data.objects.new(nm + "Fold", None); bpy.context.collection.objects.link(fold); fold.parent = hinge; fold.location = (0, -0.41, 0.42)
+        hi = curved_panel(nm + "Hi", 0.41, math.radians(-150), math.radians(-30), 0.38, mat, z0=0.0); hi.parent = fold; hi.location = (0, 0.41, 0.0)
+        hinge["fold"] = fold.name
+        return hinge
+    c["hinge"] = bent_shell("Shell", cont1, k1["grey"])
+    c["hinge2"] = bent_shell("Shell2", cont2, k2["grey"])
     lead_core = cyl("LeadCore", (0, 0, 0.55), 0.33, 0.72, k2["lead"], verts=32); lead_core.parent = cont2; lead_core.location = (0, 0, 0.55); lead_core.hide_render = True
     c["lead_core"] = lead_core
     cr1 = crate("Crate1"); c["crate"] = cr1; cr1.location = (0, -150, 0)
@@ -346,20 +368,21 @@ def build(variant=None):
     chain_m = pbr("ChainM", (0.18, 0.18, 0.18), 0.5, 0.8)
     c["chain"] = cyl("Chain", (0, 0, 0), 0.012, 1.0, chain_m, verts=6); c["chain"].location = (0, -150, 0)
     # the truck (placeholder until the shared vehicle kit lands)
-    tk, wheels, bed_z, (bx0, bx1) = truck("Truck", (0.12, 0.2, 0.3))
+    tk, wheels, bed_z, (bx0, bx1) = truck("Truck", (0.14, 0.24, 0.36))
     c.update(truck=tk, wheels=wheels, bed_z=bed_z)
-    tc1, _ = container("TruckCont1", trefoil=False); tc1.parent = tk; tc1.location = (-0.9, 0.35, bed_z)
-    tc2, _ = container("TruckCont2", trefoil=False); tc2.parent = tk; tc2.location = (0.4, -0.35, bed_z); tc2.rotation_euler = (0, 0, 0.4)
+    tc1, tk1 = container("TruckCont1"); tc1.parent = tk; tc1.location = (-1.6, 0.35, bed_z); tc1.rotation_euler = (0, 0, math.pi)
+    tc2, _ = container("TruckCont2", trefoil=False); tc2.parent = tk; tc2.location = (-0.3, -0.35, bed_z); tc2.rotation_euler = (0, 0, 0.4)
+    # the mark is on one container from the start (scuffed), facing the street side
     c.update(tc1=tc1, tc2=tc2)
     load = []
     for k in range(18):
         p, w = kit_[[i for i, (pp, ww) in enumerate(kit_) if any(w_ in pp.name for w_ in ("Plate", "Pipe", "Bonnet", "IBeam", "Bar", "Angle"))][k % 12]]
-        o = instance(p, (rng.uniform(-1.8, 1.8), rng.uniform(-0.8, 0.8), bed_z + 0.1 + rng.uniform(0, 0.4)), rot=(rng.normal(0, 0.3), rng.normal(0, 0.3), rng.uniform(0, 6.28)), scale=(0.6,) * 3)
+        o = instance(p, (rng.uniform(-3.0, 1.0), rng.uniform(-0.8, 0.8), bed_z + 0.1 + rng.uniform(0, 0.4)), rot=(rng.normal(0, 0.3), rng.normal(0, 0.3), rng.uniform(0, 6.28)), scale=(0.6,) * 3)
         o.parent = tk; o.hide_render = v != "scrapload"; load.append(o)
     c["load"] = load
     rope_m = pbr("Rope", (0.45, 0.4, 0.3), 0.9)
     cu = bpy.data.curves.new("Rope", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.012
-    sp = cu.splines.new('POLY'); pts = [(-0.9, 1.05, bed_z + 0.42), (-0.9, 0.75, bed_z + 1.08), (-0.9, -0.05, bed_z + 1.1), (-0.9, -1.05, bed_z + 0.45), (-0.9, -1.3, bed_z + 0.2)]
+    sp = cu.splines.new('POLY'); pts = [(-1.6, 1.15, bed_z + 0.42), (-1.6, 0.75, bed_z + 1.08), (-1.6, -0.05, bed_z + 1.1), (-1.6, -1.15, bed_z + 0.5), (-1.6, -1.4, bed_z + 0.2)]
     sp.points.add(len(pts) - 1)
     for i, p in enumerate(pts):
         sp.points[i].co = (*p, 1)
@@ -367,7 +390,7 @@ def build(variant=None):
     c["rope"].parent = tk; c["rope_spline"] = sp
     # wipers for the rain shot (pivot empties on the cab front)
     c["wipers"] = []
-    for sy in (-0.35, 0.35):
+    for sy in ():
         e = bpy.data.objects.new("WiperP", None); bpy.context.collection.objects.link(e); e.parent = tk; e.location = (bx1 + 0.25 + 0.9 + 0.92, sy, 1.55)
         wb = box("WiperBlade", (0, 0, 0), (0.015, 0.02, 0.55), pbr("WiperM", (0.01, 0.01, 0.01), 0.6)); wb.parent = e; wb.location = (0, 0, 0.27)
         c["wipers"].append(e)
@@ -400,16 +423,35 @@ def build(variant=None):
     spade2, _ = ph_model("rusted_spade_01"); c["spade2"] = spade2
     crow, _ = ph_model("crowbar_01"); c["crowbar"] = crow
     # sparks + torch flame light
-    c["sparks"] = sparks("Spark", 80)
-    c["torch_light"] = flicker_light("TorchLight", (0, 0, -20), energy=140)
-    c["flame"] = box("Flame", (0, 0, -30), (0.015, 0.015, 0.06), emissive("Flame", (0.55, 0.7, 1.0), 40))
-    c["torch_tool"] = cyl("TorchTool", (0, 0, -30), 0.012, 0.45, pbr("Brass", (0.5, 0.35, 0.12), 0.35, 1.0), verts=8)
+    c["sparks"] = sparks("Spark", 150, color=(1.0, 0.5, 0.12), strength=45)
+    c["torch_light"] = flicker_light("TorchLight", (0, 0, -20), color=(1.0, 0.62, 0.32), energy=260, radius=0.02)
+    bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.014, radius2=0.002, depth=0.09, location=(0, 0, -30))
+    c["flame"] = bpy.context.active_object; c["flame"].name = "Flame"
+    c["flame"].data.materials.append(emissive("FlameBlue", (0.55, 0.75, 1.0), 60)); c["flame"].visible_shadow = False
+    brass = pbr("Brass", (0.5, 0.35, 0.12), 0.35, 1.0)
+    c["torch_tool"] = join([cyl("TorchBody", (0, 0, 0), 0.014, 0.42, brass, verts=10),
+                            cyl("TorchNozzle", (0, 0, 0.24), 0.006, 0.1, pbr("Copper", (0.6, 0.3, 0.15), 0.3, 1.0), verts=8),
+                            cyl("TorchHoseStub", (0, 0, -0.32), 0.009, 0.25, pbr("HoseRed", (0.35, 0.04, 0.03), 0.6), verts=8)], "TorchTool")
+    c["torch_tool"].location = (0, 0, -30)
+    c["cutline"] = box("CutLine", (0, 0, -30), (0.006, 0.01, 0.16), pbr("HotMetal", (0.2, 0.05, 0.0), 0.4, 0.8, **{'Emission Color': (1.0, 0.35, 0.06, 1), 'Emission Strength': 12.0}))
+    # gas bottles (oxygen + acetylene) on the ground beside the containers, a hose snaking to the torch hand
+    for k, col in enumerate(((0.12, 0.25, 0.45), (0.45, 0.06, 0.04))):
+        cyl("GasBottle", (C2.x - 2.0 + 0.32 * k, C2.y - 1.4, 0.65), 0.11, 1.3, painted_steel(f"Bottle{k}", col, 0.45, 0.4), verts=20)
+        cyl("BottleValve", (C2.x - 2.0 + 0.32 * k, C2.y - 1.4, 1.35), 0.04, 0.1, brass, verts=10)
+    hose_m = pbr("Hose", (0.35, 0.04, 0.03), 0.6)
+    hc = bpy.data.curves.new("Hose", 'CURVE'); hc.dimensions = '3D'; hc.bevel_depth = 0.01
+    sp_ = hc.splines.new('BEZIER'); hpts = [(C2.x - 1.85, C2.y - 1.4, 1.3), (C2.x - 1.9, C2.y - 1.0, 0.05), (C2.x - 1.45, C2.y - 0.75, 0.04), (C2.x - 1.15, C2.y - 0.5, 0.6)]
+    sp_.bezier_points.add(len(hpts) - 1)
+    for i, p in enumerate(hpts):
+        bp = sp_.bezier_points[i]; bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    ho = bpy.data.objects.new("Hose", hc); bpy.context.collection.objects.link(ho); hc.materials.append(hose_m)
     c["sack"] = box("Sack", (0, -150, 0), (0.5, 0.3, 0.7), fabric("SackCloth", (0.45, 0.38, 0.25), 0.95, 0.3, 300), bevel=0.12)
     # people: brothers, relatives, workers, neighbours (unnamed figures; no likeness)
     P = {}
     P["bro1"] = person("Bro1", 1.0, 38, "wool_brown", "short02", moustache=True)
     P["bro2"] = person("Bro2", 1.0, 33, "parka_green", "short04", hat="knit", hat_col=(0.14, 0.15, 0.2))
     P["worker"] = person("Worker", 1.0, 45, "charcoal", "short03", hat="flat", hat_col=(0.24, 0.2, 0.15), moustache=True, weight=0.6)
+    _goggles_gloves(P["worker"])
     P["rel1"] = person("Rel1", 1.0, 62, "wool_grey", "short02", hv=0.7, hat="flat", hat_col=(0.18, 0.18, 0.17), moustache=True)
     P["rel2"] = person("Rel2", 0.0, 50, "woman_coat", "bob02", hv=0.1)
     if v in ("yard", "lot", "yard_morning", "late", "dusk"):
@@ -459,8 +501,8 @@ def ex_rest(c):
 
 def set_truck(c, x, y, rot_z, roll=0.0):
     c["truck"].location = (x, y, 0); c["truck"].rotation_euler = (0, 0, rot_z)
-    for w in c["wheels"]:
-        w.rotation_euler = (0, roll / 0.45, 0)
+    from rs_vehicles import roll as _roll
+    _roll(c["truck"], roll)
 
 
 def stage(c, cont="yard", truck_at=None, ex=False, shells=(0, 0), people=()):
@@ -475,7 +517,7 @@ def stage(c, cont="yard", truck_at=None, ex=False, shells=(0, 0), people=()):
         c["cont1"].location = LOT + Vector((-1.2, 0.5, 0)); c["cont2"].location = LOT + Vector((1.3, -0.4, 0))
     else:
         c["cont1"].location = (0, -80, 0); c["cont2"].location = (2, -80, 0)
-    c["hinge"].rotation_euler = (math.radians(shells[0]), 0, 0); c["hinge2"].rotation_euler = (math.radians(shells[1]), 0, 0)
+    set_shell(c["hinge"], shells[0]); set_shell(c["hinge2"], shells[1])
     c["lead_core"].hide_render = shells[1] < 30
     if truck_at:
         set_truck(c, *truck_at)
@@ -486,8 +528,15 @@ def stage(c, cont="yard", truck_at=None, ex=False, shells=(0, 0), people=()):
         c["ex"]["base"].location = (-40, 50, 0)
     hide_people(c, people)
     pose_sparks(c["sparks"], (0, 0, -50), 0, on=False)
-    c["flame"].location = (0, 0, -30); c["torch_tool"].location = (0, 0, -30); c["torch_light"].location = (0, 0, -20)
+    c["flame"].location = (0, 0, -30); c["torch_tool"].location = (0, 0, -30); c["torch_light"].location = (0, 0, -20); c["cutline"].location = (0, 0, -30)
     precip_fall(c, 0)
+
+
+def set_shell(h, ang_deg):
+    h.rotation_euler = (math.radians(ang_deg), 0, 0)
+    f = bpy.data.objects.get(h["fold"])
+    if f is not None:
+        f.rotation_euler = (math.radians(0.45 * max(0.0, ang_deg - 10)), 0, 0)
 
 
 def laundry_sway(c, sec, amp=9):
@@ -524,9 +573,10 @@ def torch_man(c, h, sec, target, stance):
     fingers_curl(h, 60, thumb=30)
     tt = c["torch_tool"]; tt.location = grip.lerp(tip, 0.5)
     tt.rotation_mode = 'QUATERNION'; tt.rotation_quaternion = (tip - grip).to_track_quat('Z', 'Y')
-    c["flame"].location = tip; c["flame"].rotation_mode = 'QUATERNION'; c["flame"].rotation_quaternion = (tip - grip).to_track_quat('Z', 'Y')
-    c["torch_light"].location = Vector(target) + Vector((0, 0, 0.05)) - fwd * 0.1
-    pose_sparks(c["sparks"], target, sec, direction=Vector((side.x, side.y, 0.3)) * 0.4 + Vector((0, 0, -0.6)), spread=0.9)
+    c["flame"].location = tip + (tip - grip).normalized() * 0.04; c["flame"].rotation_mode = 'QUATERNION'; c["flame"].rotation_quaternion = (grip - tip).to_track_quat('Z', 'Y')
+    c["torch_light"].location = Vector(target) + Vector((0, 0, 0.08)) - fwd * 0.22
+    c["cutline"].location = Vector(target) + Vector((0, 0, -0.03)); c["cutline"].rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x))
+    pose_sparks(c["sparks"], target, sec, direction=Vector((side.x, side.y, 0.2)) * 0.5 + Vector((0, 0, -0.4)), spread=1.3)
     attach_cap(h)
 
 
@@ -562,7 +612,7 @@ def i1b(c, t):
     sec = S("intro_1b", t); stage(c, "truck", truck_at=(1.0, 5.2, 0.0), people=("bro1", "bro2"))
     h = c["people"]["bro1"]; stand_pose(h); place(h, (0.15, 3.45, 0), face_angle((0.15, 3.45), (0.1, 6)))
     pull = math.sin(min(1.0, sec / 2.4) * math.pi / 2)
-    M = c["truck"].matrix_world; top = M @ Vector((-0.9, -1.05, c["bed_z"] + 0.45))
+    M = c["truck"].matrix_world; top = M @ Vector((-1.6, -1.15, c["bed_z"] + 0.5))
     hand = top + Vector((0.0, -0.42, -0.05 - 0.35 * pull))
     c["rope_spline"].points[4].co = (*(M.inverted() @ (hand + Vector((0, 0, -0.25)))), 1)
     reach(h, "R", hand + Vector((0.05, 0, 0)), Vector((0.6, -0.3, -0.6)), Vector((0, 0.4, -1)))
@@ -583,21 +633,21 @@ def i2b(c, t):          # dusk, low close on the bucket hooking the shell, men s
     sec = S("intro_2b", t); stage(c, "yard", truck_at=(3.5, 13.5, math.pi), ex=True, people=("worker", "bro1"))
     ex = c["ex"]; ex["base"].location = (-6.6, 9.4, 0)
     k = ease(min(1.0, sec / dur("intro_2b")))
-    c["hinge"].rotation_euler = (math.radians(8 + 62 * k), 0, 0); bpy.context.view_layer.update()
-    edge = c["hinge"].matrix_world @ Vector((0, -0.41, 0.8))
+    set_shell(c["hinge"], 8 + 62 * k); bpy.context.view_layer.update()
+    edge = bpy.data.objects[c["hinge"]["fold"]].matrix_world @ Vector((0, 0.0, 0.38))
     arm_ik(ex, edge + Vector((-0.35, 0, 0.55)))
     b_ = ex["boom"].rotation_euler.y; s_ = ex["stick"].rotation_euler.y; ex["tool"].rotation_euler = (0, -(b_ + s_) + math.radians(95), 0)
-    p0 = C1 + Vector((0.9, -0.6, 0)); p1 = C1 + Vector((1.6, -1.8, 0))
+    p0 = C1 + Vector((1.0, 0.2, 0)); p1 = C1 + Vector((2.4, 0.9, 0))
     q = p0.lerp(p1, ease(min(1.0, sec / 1.4)))
     stand_at(c["people"]["worker"], q, C1, crossed=True)
-    stand_at(c["people"]["bro1"], C1 + Vector((-0.2, -2.6, 0)), C1, hands_pockets=True)
+    stand_at(c["people"]["bro1"], C1 + Vector((2.0, 2.2, 0)), C1, hands_pockets=True)
     c["focus"] = edge
 
 
 def i3a(c, t):
     sec = S("intro_3a", t); stage(c, "yard", truck_at=(1.5, 12.8, math.pi), shells=(70, 0), people=("worker",))
     M = c["truck"].matrix_world
-    rail = M @ Vector((-0.6, 1.07, 1.36)); out = (M.to_3x3() @ Vector((0, 1, 0))).normalized()
+    rail = M @ Vector((-1.5, 1.17, 1.74)); out = (M.to_3x3() @ Vector((0, 1, 0))).normalized()
     st = rail + out * 0.5; st.z = 0
     lean_forearm(c, c["people"]["worker"], sec, st, rail, rail)
     c["focus"] = c["people"]["worker"].bone_head("spine05")
@@ -788,8 +838,8 @@ def c1_8b(c, t):          # wide morning, from the street side: bucket peels the
     sec = S("ch1_8b", t); stage(c, "yard", truck_at=(3.5, 13.5, math.pi), ex=True, shells=(70, 0), people=("bro2", "worker"))
     ex = c["ex"]; ex["base"].location = (-3.4, 12.6, 0); ex["base"].rotation_euler = (0, 0, math.radians(-30))
     k = ease(min(1.0, sec / dur("ch1_8b")))
-    c["hinge2"].rotation_euler = (math.radians(8 + 70 * k), 0, 0); c["lead_core"].hide_render = False; bpy.context.view_layer.update()
-    edge = c["hinge2"].matrix_world @ Vector((0, -0.41, 0.8))
+    set_shell(c["hinge2"], 8 + 70 * k); c["lead_core"].hide_render = False; bpy.context.view_layer.update()
+    edge = bpy.data.objects[c["hinge2"]["fold"]].matrix_world @ Vector((0, 0.0, 0.38))
     arm_ik(ex, edge + Vector((-0.3, 0.3, 0.55)))
     b_ = ex["boom"].rotation_euler.y; s_ = ex["stick"].rotation_euler.y; ex["tool"].rotation_euler = (0, -(b_ + s_) + math.radians(95), 0)
     stand_at(c["people"]["bro2"], C2 + Vector((2.2, -1.6, 0)), C2, crossed=True)
@@ -936,8 +986,8 @@ SHOTS = {
     "ch4_5b": ("yard", c4_5b, C((-1.0, 11.0, 1.2), (-1.3, 11.3, 1.2), (-3.6, 14.2, 0.7), 32), 4.0),
     "intro_1a": ("drive", i1a, C((14.0, -2.6, 0.9), (13.0, -2.4, 1.1), (-14, 0.6, 2.0), 40), 4.0),
     "intro_1b": ("drive", i1b, C((-3.6, 1.5, 0.95), (-2.0, 1.55, 1.0), (0.9, 5.0, 1.45), 32), 2.8),
-    "intro_2a": ("yard_dusk", i2a, C((C2.x + 1.3, C2.y + 1.9, 0.55), (C2.x + 1.0, C2.y + 1.6, 0.6), (C2.x - 0.8, C2.y - 0.4, 0.95), 35), 2.0),
-    "intro_2b": ("yard_dusk", i2b, C((-4.6, 5.4, 0.55), (-4.2, 5.7, 0.6), (-2.4, 9.0, 1.1), 28), 2.8),
+    "intro_2a": ("yard_dusk", i2a, C((C2.x + 1.5, C2.y + 2.1, 0.6), (C2.x + 1.2, C2.y + 1.8, 0.62), (C2.x - 0.8, C2.y - 0.4, 1.25), 32), 2.0),
+    "intro_2b": ("yard_dusk", i2b, C((-1.2, 3.6, 0.7), (-1.5, 3.9, 0.75), (-2.8, 9.0, 1.3), 24), 2.8),
     "intro_3a": ("yard", i3a, C((-3.6, 8.0, 1.5), (-3.2, 8.4, 1.55), (-0.8, 11.6, 1.2), 32), 4.0),
     "intro_3b": ("yard", i3b, C((-2.45, 3.75, 1.12), (-2.65, 3.8, 1.12), (-5.3, 3.75, 1.2), 40), 2.0),
     "intro_4a": ("late", i4a, C((-6.5, 11.8, 1.05), (-6.2, 12.1, 1.05), (-2.9, 14.6, 0.55), 32), 3.5),
