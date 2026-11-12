@@ -51,8 +51,7 @@ for f in (950, 965):
     k = front34(f)
     if k: NEW.append(k)
 for f in (1322, 1336, 1350, 1366, 1384):
-    k = front34(f) or front34(f, dists=(0.50, 0.44, 0.38, 0.32), angs=(35, -35, 45, -45, 55, -55, 65, -65, 25, -25)) or \
-        front34(f, dists=(0.45, 0.38, 0.32, 0.27), angs=(30, -30, 45, -45, 60, -60, 75, -75), ylo=-0.55, ra=0.06)
+    k = front34(f) or front34(f, dists=(0.50, 0.44, 0.38, 0.32), angs=(35, -35, 45, -45, 55, -55, 65, -65, 25, -25))
     if k: NEW.append(k)
 # 1. covered wall pushes (inner and outer faces of the front wall, found by ray cast)
 def hit(o, d): h = ray(o, d); return h[1] if h else None
