@@ -882,7 +882,10 @@ def a_raise_hand(c, t):
     hold_detector(c, h, sec, sweep=0, level=0.9)
     k = ease(min(1.0, max(0.0, (sec - 0.6) / 0.8)))
     sh = h.bone_head("upperarm01.L")
-    reach(h, "L", sh + Vector((0, 0, -0.55)).lerp(Vector((0.05, 0, 0.6)), k), Vector((-1, 0, 0)), Vector((0, 0, 1)))
+    fw = forward(h); sd = fw.cross(Vector((0, 0, 1))).normalized()          # sd = his right
+    up = sh + Vector((0, 0, -0.55)).lerp(fw * 0.12 - sd * 0.12 + Vector((0, 0, 0.55)), k)
+    # elbow out to his LEFT and a little down (a fixed world pole bent it backwards and rolled the wrist 110 deg)
+    reach(h, "L", up, Vector((-sd.x, -sd.y, -0.4)), (fw * 0.3 + Vector((0, 0, -1))).lerp(Vector((0, 0, 1)) + fw * 0.15, k))   # hand follows the arm: down at rest, up when raised
     stand(c["people"]["spec1"], HC + Vector((-7.0, -2.0, 0)), h.arm.location)
     c["focus"] = h.bone_head("head")
 

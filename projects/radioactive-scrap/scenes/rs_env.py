@@ -286,6 +286,7 @@ NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
 GRADE_ONLY = {"therapy": "all", "smelter": "all", "ankara": "all",
               "hospital": ("except", ("ch4_2a", "ch4_2b", "ch2_1a", "ch4_11a", "ch4_11b"))}
 EXTERIOR_RELIGHT = True       # LOOK v5: low sun + blue sky, real colours, mood from shadows only
+SUN_OFFSET = {"hospital": 115.0, "building": -115.0}      # facades face the camera: rake them from the side
 EXT_EXPOSURE = {"mist": -0.2, "dusk": 0.2}
 
 
@@ -335,14 +336,16 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
         azim = 200.0
         if camp is not None:
             v = tgt - camp
-            azim = math.degrees(math.atan2(v.x, -v.y)) + 60.0       # low sun ahead and to one side: long shadows, rims
+            azim = math.degrees(math.atan2(v.x, -v.y)) + SUN_OFFSET.get(setn, 60.0)   # yards: sun ahead/side (rims); facades: side light
         for o in sc.objects:                       # thin the set's own haze a little; no extra haze (keeps colour)
             if o.name.startswith("Haze") and o.data.materials:
                 for n in o.data.materials[0].node_tree.nodes:
                     if n.type == 'PRINCIPLED_VOLUME':
                         n.inputs['Density'].default_value *= 0.6
-        look.negative_fill(0.3)                    # the sun is the key; no flat fill
-        k = look.day_light(md, azim=azim, sky="blue" if md == "low_sun" else None)
+        look.negative_fill(0.6)                    # the sun is the key; fill cut back, not killed
+        ex = sc.view_settings.exposure             # keep the set's own exposure (look's -0.6 crushes open yards)
+        k = look.day_light(md, azim=azim, elev=16 if md == "low_sun" else None, sky="blue" if md == "low_sun" else None,
+                           sun_energy=6.0 if md == "low_sun" else None, exposure=ex)
         _faces(c, spec, camp, 18.0)
         return k
     near = [o for o in sc.objects if o.type == 'LIGHT' and o.name.startswith(keys)
