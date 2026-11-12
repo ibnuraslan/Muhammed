@@ -523,5 +523,5 @@ def build(variant=None):
     if variant == "night":
         look.night_interior()
     else:
-        pass          # exterior day: held on the set's own light (real colours) until LOOK v5
+        look.day_light("low_sun", azim=210, elev=20, sky="blue")          # real colours: blue sky, warm low sun
     return c
