@@ -118,7 +118,7 @@ def build(variant=None):
                     if recovered:
                         for sx in (-0.028, 0.028):
                             dd.earring(f"RecE{i}{j}{sx}", p + Vector((sx, 0, 0.1)), 0.005, "diamond")
-                if recovered or rng.uniform() < 0.18:                # a paper tag on a string
+                if recovered or (rng.uniform() < 0.18 and abs(i - mid_i) > 2):                # a paper tag on a string
                     D.box(p + Vector((0.0, -0.1, 0.002)), (0.05, 0.032, 0.002), tagm, rot=(0, 0, 0.06 * float(rng.uniform(-1, 1))))
                     D.box(p + Vector((0.0, -0.06, 0.002)), (0.002, 0.06, 0.001), pbr("String", (0.75, 0.7, 0.6), 0.8))
         D.done()
@@ -147,7 +147,7 @@ def build(variant=None):
 def anim_layout(c, t):
     sec = t * DUR["layout"]
     h = c["counter"]
-    walk_to(h, Vector((-TL / 2 - 0.3, -TW / 2 - 0.55, 0)), Vector((TL / 2, -TW / 2 - 0.55, 0)), sec, speed=0.5, cadence=1.1)
+    walk_to(h, Vector((-TL / 2 - 0.3, -TW / 2 - 0.32, 0)), Vector((TL / 2, -TW / 2 - 0.32, 0)), sec, speed=0.5, cadence=1.1)
     arms_relaxed(h)
     h.rot("neck01", (1, 0, 0), 10); h.rot("head", (1, 0, 0), 16)
     from human import reach
@@ -155,7 +155,7 @@ def anim_layout(c, t):
     down = math.sin(math.pi * min(1.0, beat / 0.5)) if beat < 0.5 else 0.0
     if down > 0.01:
         sh = h.bone_head("upperarm01.L")
-        tgt = Vector((h.arm.location.x + 0.15, -TW / 2 + 0.25, TZ + 0.04))
+        tgt = Vector((h.arm.location.x + 0.2, -TW / 2 + 0.12, TZ + 0.06))
         reach(h, "L", sh.lerp(tgt, 0.35 + 0.65 * down), Vector((0.5, -0.3, -0.8)))
         if "held_tag" in c:
             c["held_tag"].location = h.bone_tail("wrist.L") + Vector((0, 0, -0.03))
@@ -184,7 +184,7 @@ MOVES = {
                    cam=lambda c, t: (Vector((-TL / 2 - 0.4 + 1.4 * ease(t), -0.9, 1.35)), Vector((-TL / 2 + 1.4 + 1.4 * ease(t), 0.05, TZ)), 40),
                    focus=lambda c, t: Vector((-TL / 2 + 1.0 + 1.4 * ease(t), 0.0, TZ))),
     "tags": dict(kind="anim", dof=5.6, anim=anim_tags,
-                 cam=lambda c, t: (Vector((c["counter"].arm.location.x - 1.6, 1.7, 1.75)), Vector((c["counter"].arm.location.x + 0.5, -0.6, 0.85)), 30),
+                 cam=lambda c, t: (Vector((c["counter"].arm.location.x - 1.8, 2.3, 1.95)), Vector((c["counter"].arm.location.x + 0.4, -0.7, 1.0)), 30),
                  focus=lambda c, t: c["counter"].arm.location + Vector((0, 0, 1.0))),
     "alone": dict(kind="anim", dof=2.0, anim=anim_final,
                   cam=lambda c, t: (c["hero_at"] + Vector((0.0, -0.16, 0.12)).lerp(Vector((0.0, -0.55, 0.3)), ease(t)), c["hero_at"] + Vector((0, 0, 0.085)), 70),
