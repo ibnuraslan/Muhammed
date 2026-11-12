@@ -16,7 +16,7 @@ for n, t, lab in SHOTS:
     tgt = (wl + wr) / 2
     fwd = (head - root); fwd.z = 0
     spine = r.pose.bones["spine03"]; M = r.matrix_world @ spine.matrix
-    face_dir = -(M.to_3x3() @ Vector((0, 0, 1)))   # bone z points back for MPFB spine; front is -z
+    face_dir = (M.to_3x3() @ Vector((0, 0, 1)))
     face_dir.z = 0
     if face_dir.length < 1e-3: face_dir = Vector((0, -1, 0))
     face_dir.normalize()

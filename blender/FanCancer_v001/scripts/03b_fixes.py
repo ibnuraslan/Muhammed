@@ -146,3 +146,17 @@ for g in {sl.material for o in BUILDINGS for sl in o.material_slots if sl.materi
     nt_.links.new(cr_.outputs['Color'], pp.inputs['Emission Color']); pp.inputs['Emission Strength'].default_value = 1.2
     pp.inputs['Base Color'].default_value = (0.02, 0.02, 0.03, 1); pp.inputs['Roughness'].default_value = 0.1
 m2.inputs['B'].default_value = (0.008, 0.012, 0.035, 1)
+# ---- body under clothes: sink covered skin 5 mm along normals so the shirt never shows skin at bends
+COVER = ("spine", "clavicle", "upperarm01", "upperarm02", "breast", "pelvis", "upperleg", "shoulder")
+for an in ("Fan", "Manager", "Doctor", "Nurse"):
+    b = bpy.data.objects[an + ".body"]
+    if "UnderShirt" in b.vertex_groups: continue
+    names = {g.index: g.name for g in b.vertex_groups}
+    vg = b.vertex_groups.new(name="UnderShirt")
+    for v in b.data.vertices:
+        w = sum(g.weight for g in v.groups if names.get(g.group, "").startswith(COVER))
+        if w > 0.05: vg.add([v.index], min(1.0, w), 'REPLACE')
+    d = b.modifiers.new("UnderShirt", 'DISPLACE'); d.vertex_group = "UnderShirt"; d.strength = -0.005; d.mid_level = 0.0
+    bpy.context.view_layer.objects.active = b
+    while b.modifiers.find("UnderShirt") > 0:
+        bpy.ops.object.modifier_move_up(modifier="UnderShirt")
