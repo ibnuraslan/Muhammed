@@ -146,7 +146,7 @@ def anim(c, t, dur):
 
 def cam_solder(c, t):
     e = ease(t)
-    return (Vector((0.75, -1.1, 1.62)).lerp(Vector((0.45, 0.0, 1.52)), e), Vector((-0.2, BENCH_Y, 1.25)), 30)
+    return (Vector((0.8, -1.25, 1.62)).lerp(Vector((0.6, -0.55, 1.56)), e), Vector((-0.2, BENCH_Y, 1.25)), 30)
 
 
 def cam_letters(c, t):

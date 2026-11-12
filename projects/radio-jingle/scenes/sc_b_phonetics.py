@@ -68,13 +68,13 @@ def build(variant=None):
         ph.model("metal_office_desk", loc=(BENCH_X, y, 0), rot_z=math.radians(90))
     c["recs"] = []
     for k in range(11):
-        y = -2.7 + k * 0.48
+        y = -2.75 + k * 0.49
         r = P.reel_recorder(f"Rec{k}", (BENCH_X + 0.05, y, DESK_TOP), rot_z=-math.pi / 2 + rng.uniform(-0.04, 0.04),
                             spin=0.45, start_frame=10 + 9 * k, lid_wood=(k % 3 != 1))
         c["recs"].append(r)
     # the seized machine is the last one: a microphone stands in front of it, a monitor behind shows its test
     last = c["recs"][-1]
-    c["mic"] = P.mic_stand("TestMic", (BENCH_X - 0.33, 2.1, DESK_TOP), (BENCH_X, 2.1, DESK_TOP + 0.17), h=0.2)
+    c["mic"] = P.mic_stand("TestMic", (BENCH_X - 0.05, 2.5, DESK_TOP), (BENCH_X, 2.12, DESK_TOP + 0.17), h=0.22)
     wfx = P.waveform_image(f"{B.GEN}/b_wave_test.png", segments=2, seed=21)
     P.lcd_monitor("MonTest", (BENCH_X + 0.25, 2.62, DESK_TOP), math.radians(-125), P.screen_mat("WaveT", wfx, 1.2, cursor_speed=0.12), w=0.44, h=0.28)
     # the pause key drops at frame 48 (frame driver), and its reels stop
@@ -125,7 +125,7 @@ def cam_segments(c, t):
 
 def cam_eleven(c, t):
     e = ease(t)
-    y = -3.0 + 3.0 * e
+    y = -3.0 + 2.2 * e
     return (Vector((2.25, y, 1.55)), Vector((BENCH_X, y + 1.7, 0.82)), 30)
 
 
@@ -140,7 +140,7 @@ MOVES = {
     "segments": dict(kind="anim", dof=2.4, cam=cam_segments, anim=lambda c, t: anim(c, t, DUR["segments"]),
                      focus=lambda c, t: Vector((-0.6, 2.45, 1.07))),
     "eleven": dict(kind="anim", dof=4.0, cam=cam_eleven, anim=lambda c, t: anim(c, t, DUR["eleven"]),
-                   focus=lambda c, t: Vector((BENCH_X, -3.0 + 3.0 * ease(t) + 1.6, 0.9))),
+                   focus=lambda c, t: Vector((BENCH_X, -3.0 + 2.2 * ease(t) + 1.6, 0.9))),
     "pause": dict(kind="anim", dof=2.0, cam=cam_pause, anim=lambda c, t: anim(c, t, DUR["pause"]),
                   focus=lambda c, t: Vector((BENCH_X + 0.05, 2.1, DESK_TOP + 0.12))),
 }
