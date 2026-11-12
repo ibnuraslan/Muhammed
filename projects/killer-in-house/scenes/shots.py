@@ -105,7 +105,7 @@ CH3 = [
     ("hint", "candle_steps", 0.4, "10B  food from the cellar"),
     ("hx", "attic_vent", 0.5, "11A  through the winter"),
     ("hx", "summer_still", 0.5, "11B  nine months since the killing"),
-    ("press", "presses", 0.5, "12A  Newspapers call him"),
+    ("press42", "presses", 0.5, "12A  Newspapers call him"),
     ("hx", "newsboy", 0.5, "12B  the Denver Spider Man"),
     ("court42", "prosecutor", 0.5, "13A  the death penalty"),
     ("court42", "stand", 0.5, "13B  Coneys takes the stand"),

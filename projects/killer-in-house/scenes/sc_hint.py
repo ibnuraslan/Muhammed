@@ -209,19 +209,14 @@ def _():
     def anim(c, t):
         sec = t * DUR["kitchen_glide"]
         h = P(c, "d")
-        H.stand_at(h, (2.2, 0.9, 0), math.radians(160))
-        if "pad" not in c:
-            c["pad"] = box("Notebook", (0, 0, 0), (0.1, 0.15, 0.012), pbr("Pad", (0.85, 0.83, 0.75), 0.8))
-        sh = h.bone_head("spine05" if False else "neck01"); M = h.arm.matrix_world.to_3x3()
-        fwd = M @ Vector((0, -1, 0)); left = M @ Vector((1, 0, 0))
-        pad = sh + fwd * 0.32 + Vector((0, 0, -0.38))
-        c["pad"].location = pad; c["pad"].rotation_euler = (math.radians(35), 0, h.arm.rotation_euler.z)
-        reach(h, "L", pad + left * 0.05, left + Vector((0, 0, -1)), fwd)
-        reach(h, "R", pad - left * 0.03 + Vector((0.02 * math.sin(7 * sec), 0, 0.02)), -left + Vector((0, 0, -1)), fwd)
-        H.look(h, 0, 25)
+        crouch(h, (2.85, 1.0), math.radians(-60))
+        for ch_ in c["k_chairs"]: ch_.hide_render = True
+        reach(h, "R", h.bone_tail("upperleg02.R") + Vector((0, 0, 0.06)), Vector((0, 0, -1)), Vector((0, -1, 0)))
+        reach(h, "L", h.bone_tail("upperleg02.L") + Vector((0.03, 0, 0.05)), Vector((0, 0, -1)), Vector((0, -1, 0)))
+        H.look(h, 8 * math.sin(0.7 * sec), 45)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.0, 3.6, 1.5)).lerp(Vector((1.0, 3.2, 1.45)), e), Vector((3.4, 1.4, 0.9)).lerp(Vector((2.4, 0.9, 1.3)), e), 30)
+        return (Vector((0.6, 3.0, 1.4)).lerp(Vector((1.0, 3.0, 1.35)), e), Vector((3.2, 1.2, 0.55)), 28)
     return cam, anim
 
 
@@ -398,15 +393,19 @@ def _():
         c["ice_door"].rotation_euler = (0, 0, math.radians(-100) * op)
         if "food" not in c:
             # a nearly empty shelf: one plate, an empty bottle (seen inside when the door opens)
-            box("IceInside", (-0.85, 4.28, 0.52), (0.66, 0.42, 0.72), pbr("Zinc", (0.55, 0.57, 0.57), 0.35, 0.8)).hide_render = False
-            cyl("IcePlate", (-0.95, 4.2, 0.45), 0.1, 0.015, H.mat("enamel"), 24)
-            cyl("Bottle", (-0.65, 4.2, 0.55), 0.03, 0.2, pbr("Milk", (0.85, 0.85, 0.82), 0.2, 0.0, **{'Transmission Weight': 0.6}), 16)
+            zinc = pbr("Zinc", (0.62, 0.64, 0.64), 0.3, 0.85)
+            box("IceCavity", (-0.85, 4.07, 0.52), (0.66, 0.012, 0.7), zinc)
+            box("IceShelf", (-0.85, 4.04, 0.46), (0.64, 0.07, 0.012), pbr("Wire", (0.7, 0.7, 0.7), 0.3, 1.0))
+            cyl("IcePlate", (-1.0, 4.03, 0.475), 0.08, 0.012, H.mat("enamel"), 24)
+            cyl("Bottle", (-0.66, 4.035, 0.56), 0.028, 0.18, pbr("Milk", (0.85, 0.85, 0.82), 0.2, 0.0, **{'Transmission Weight': 0.6}), 16)
+            box("Crust", (-1.0, 4.03, 0.5), (0.07, 0.04, 0.04), pbr("Crust", (0.45, 0.28, 0.12), 0.7))
+            H.point((-0.85, 3.85, 0.62), 4, (0.9, 0.95, 1.0), 0.15)
             c["food"] = True
         reach(h, "R", Vector((-0.45, 3.95, 0.95)) if op < 0.9 else Vector((-0.5, 3.9, 1.0)), Vector((0, 0, -1)), Vector((0, 1, 0)))
         H.rotl(h, "spine03", (1, 0, 0), 14); H.look(h, -6 if sec > 2.4 else 0, 22)
     def cam(c, t):
         e = ease(t)
-        return (Vector((1.3, 2.3, 1.55)).lerp(Vector((1.1, 2.55, 1.52)), e), Vector((-0.7, 4.15, 0.75)), 24)
+        return (Vector((0.45, 2.45, 1.45)).lerp(Vector((0.35, 2.65, 1.43)), e), Vector((-0.8, 4.05, 0.7)), 26)
     return cam, anim
 
 
@@ -440,7 +439,8 @@ def _():
             q = fabric("Quilt2", (0.5, 0.25, 0.18), 0.9, 0.5, 300)
             box("BedPillow", (-3.4, -3.0, 0.72), (0.72, 0.22, 0.3), fabric("BPillow", (0.85, 0.84, 0.8), 0.9, 0.3, 600), bevel=0.08)
             box("Valance", (-3.4, -2.2, 0.3), (0.92, 1.92, 0.5), q, bevel=0.02)
-            box("Quilt2", (-3.4, -1.95, 0.66), (0.98, 1.55, 0.16), q, bevel=0.06)
+            bedo = [o for o in bpy.data.objects if o.name.startswith(("Mattress1", "Valance", "BedPillow"))]
+            H.blanket_drape(h, bedo, 0.57, head_clear=0.2, width=1.0, name="Quilt2", col=(0.45, 0.22, 0.16), fold=False, foot=-1.3)
         up = ease(min(1.0, max(0.0, (sec - 1.2) / 1.5)))
         H.look(h, -10 * up, -28 * up)
         if "moonbed" not in c:
@@ -991,6 +991,14 @@ def _():
         e = ease(t)
         return (Vector((3.5, 0.6, 1.5)).lerp(Vector((3.3, 1.0, 1.45)), e), Vector((-0.6, 2.6, 0.9)), 26)
     return cam, anim
+
+
+def crouch(h, xy, rz, lean=30):
+    """Squat on the heels (a seated pose with nothing under it, grounded at the feet)."""
+    reset_pose(h); pose_sit(h, lean=lean)
+    for sd in ("L", "R"):
+        H.rotl(h, f"upperleg01.{sd}", (1, 0, 0), -25); H.rotl(h, f"lowerleg01.{sd}", (1, 0, 0), 35)
+    h.arm.rotation_euler = (0, 0, rz); h.arm.location = (xy[0], xy[1], 0); bpy.context.view_layer.update(); H.ground_to(h, 0.0)
 
 
 def _icebox_scene(c, sec):

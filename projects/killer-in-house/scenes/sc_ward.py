@@ -59,6 +59,9 @@ def build(variant=None):
     hl = H.person("Helen", "helen")
     reset_pose(hl); lay_down(hl, face_up=True, z=0.0)
     hl.arm.location = (-2.4, -0.4, 0.0); bpy.context.view_layer.update()
+    # turn her end for end onto her own bed: head on its pillow (y ~0.85), feet toward 2.4
+    hl.arm.rotation_euler.z += math.pi; bpy.context.view_layer.update()
+    hd0 = hl.bone_head("head"); hl.arm.location += Vector((-2.4 - hd0.x, 0.85 - hd0.y, 0)); bpy.context.view_layer.update()
     w = H.np.concatenate([H._world_verts(o) for o in hl.parts if o.type == 'MESH'])
     hl.arm.location.z += 0.63 - w[:, 2].min(); bpy.context.view_layer.update()
     H.rotl(hl, "head", (1, 0, 0), -15)
@@ -67,7 +70,8 @@ def build(variant=None):
     blanket.hide_render = True
     hd = hl.bone_head("head")
     box("PillowUp", (hd.x, hd.y, 0.72), (0.6, 0.35, 0.16), fabric("Pillow2", (0.9, 0.9, 0.88), 0.9, 0.3, 600), bevel=0.06)
-    c["blanket"] = H.blanket_over(hl, fabric("WardBlanket2", (0.62, 0.6, 0.52), 0.9, 0.4, 300), 0.62)
+    beds_ = [o for o in bpy.data.objects if o.name.startswith("PillowUp")]
+    c["blanket"] = H.blanket_drape(hl, beds_, 0.63, head_clear=0.22, width=1.0, name="WardBlanket")
     c["blanket"]["home"] = tuple(c["blanket"].location)
     if variant == "nurse":
         c["nurse"] = H.person("Nurse", "nurse")

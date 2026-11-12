@@ -904,7 +904,7 @@ HAT = {}
 def person(name, kind):
     """kind: philip | helen | friend | neighbour_m | neighbour_w | detective | officer | thin | captain | nurse | boy"""
     spec = {
-        "philip": dict(gender=1.0, years=86, weight=0.38, height=0.4, cloth="male_casualsuit05", cv=dict(hue=0.47, sat=0.5, val=0.8), hair="short02", hv=2.8, hat=False, skin="old_lightskinned_male_diffuse.png"),
+        "philip": dict(gender=1.0, years=86, weight=0.38, height=0.4, cloth="male_casualsuit05", cv=dict(hue=0.45, sat=0.35, val=0.55), hair="short02", hv=2.8, hat=False, skin="old_lightskinned_male_diffuse.png"),
         "helen": dict(gender=0.0, years=82, weight=0.5, height=0.4, cloth="female_elegantsuit01", cv=dict(hue=0.95, sat=0.35, val=1.4), hair="roll", roll=(0.12, 0.75), hv=0.8, hat=False, skin="old_lightskinned_female_diffuse.png"),
         "friend": dict(gender=0.0, years=66, weight=0.55, height=0.45, cloth="female_elegantsuit01", cv=dict(hue=0.35, sat=0.4, val=1.1), hair="roll", roll=(0.35, 0.45), hv=0.6, hat=False, skin="old_lightskinned_female_diffuse.png"),
         "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit03", cv=dict(hue=0.55, sat=0.5, val=0.8), hair="short01", hv=0.3, hat=False),
@@ -933,6 +933,8 @@ def person(name, kind):
         long_skirt(h)
     elif kind != "thin" and "casualsuit" in spec["cloth"]:
         wool_trousers(h, (0.2, 0.17, 0.13) if kind == "philip" else (0.14, 0.14, 0.15))
+    if kind in ("philip", "helen"):
+        aged_face(h)
     if kind == "thin":
         ragged(h); coneys_hair(h)
     elif kind == "thin_court":
@@ -1081,9 +1083,32 @@ def add_hat(h, tone="grey"):
 
 
 def reset_pose(h):
-    """Rest pose AND zero body rotation, so procedural poses (world-axis bone turns) are built facing -Y."""
+    """Rest pose AND zero body rotation, so procedural poses (world-axis bone turns) are built facing -Y.
+    The elderly keep a slight stoop (upper back rounded, head forward)."""
     h.arm.rotation_euler = (0, 0, 0)
     _hm.reset_pose(h)
+    if getattr(h, "kind", "") in ("philip", "helen"):
+        for b, d in (("spine03", 6), ("spine01", 7), ("neck01", 9)):
+            if b in h.arm.pose.bones: rotl(h, b, (1, 0, 0), d)
+
+
+def aged_face(h, strength=0.35):
+    """Lined, weathered skin: fine wrinkle bump and a mottled, slightly sallow tone."""
+    m = h.skin_mat; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    wv = N.new("ShaderNodeTexWave"); wv.inputs['Scale'].default_value = 140; wv.inputs['Distortion'].default_value = 9; wv.inputs['Detail'].default_value = 6
+    L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 420; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mx = N.new("ShaderNodeMath"); mx.operation = 'MULTIPLY'; L.new(wv.outputs['Fac'], mx.inputs[0]); L.new(nz.outputs['Fac'], mx.inputs[1])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = strength; L.new(mx.outputs[0], bp.inputs['Height'])
+    if p.inputs['Normal'].links:
+        L.new(p.inputs['Normal'].links[0].from_socket, bp.inputs['Normal'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    if p.inputs['Base Color'].links:
+        src = p.inputs['Base Color'].links[0].from_socket
+        tn = N.new("ShaderNodeMix"); tn.data_type = 'RGBA'; tn.blend_type = 'MULTIPLY'; tn.inputs['Factor'].default_value = 0.35
+        L.new(src, tn.inputs[6]); tn.inputs[7].default_value = (0.85, 0.78, 0.7, 1); L.new(tn.outputs[2], p.inputs['Base Color'])
+    p.inputs['Roughness'].default_value = 0.62
 
 
 def rotl(h, bone, axis, deg):
@@ -1528,3 +1553,60 @@ def blanket_over(h, mat_, mattress_z, head_clear=0.32, name="Blanket"):
     size = [0, 0, top - mattress_z]; size[axis] = abs(b - a); size[other] = 1.0
     loc = [0, 0, (top + mattress_z) / 2]; loc[axis] = (a + b) / 2; loc[other] = c0
     return box(name, tuple(loc), tuple(size), mat_, bevel=0.05)
+
+
+def blanket_drape(h, others, mattress_z, head_clear=0.3, width=1.0, res=0.012, name="Blanket", col=(0.42, 0.34, 0.27), fold=True, foot=None):
+    """A thin cloth blanket ray-draped over a figure in bed (feet end to the chest), falling over the mattress
+    sides; the sheet edge turned down at the chest. `others`: bed objects the cloth may rest on."""
+    from scipy.ndimage import gaussian_filter
+    bpy.context.view_layer.update()
+    w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH' and not o.hide_render])
+    hd = h.bone_head("head")
+    ax = 1 if abs(w[:, 1].max() - w[:, 1].min()) > abs(w[:, 0].max() - w[:, 0].min()) else 0
+    lo, hi = w[:, ax].min(), w[:, ax].max()
+    if abs(hd[ax] - hi) < abs(hd[ax] - lo):
+        a, b, chest = lo - 0.12, hd[ax] - head_clear, hd[ax] - head_clear
+    else:
+        a, b, chest = hd[ax] + head_clear, hi + 0.12, hd[ax] + head_clear
+    if foot is not None:                      # run on to the foot of the bed
+        b = max(b, foot) if b > a else b
+        a = min(a, foot) if b > a else a
+    oth = 1 - ax; c0 = (w[:, oth].min() + w[:, oth].max()) / 2
+    u = np.arange(min(a, b), max(a, b), res); v = np.arange(c0 - width / 2, c0 + width / 2, res)
+    dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene
+    names = {o.name for o in h.parts} | {o.name for t in others for o in [t] + list(t.children_recursive)}
+    Hh = np.where((np.abs(v - c0) < 0.44)[:, None], mattress_z, mattress_z - 0.18) * np.ones((len(v), len(u)))   # mattress top, falling off its sides
+    for j, vv in enumerate(v):
+        for i, uu in enumerate(u):
+            p = [0, 0, mattress_z + 1.5]; p[ax] = uu; p[oth] = vv
+            o = Vector(p)
+            for _ in range(4):
+                ok, loc, nrm, idx, ob, M = sc.ray_cast(dg, o, Vector((0, 0, -1)))
+                if not ok: break
+                if ob.name in names:
+                    Hh[j, i] = max(Hh[j, i], loc.z); break
+                o = loc + Vector((0, 0, -0.001))
+    Hs = np.maximum(gaussian_filter(Hh, 1.6), Hh) + 0.012
+    Hs = gaussian_filter(Hs, 0.8)
+    # vertices
+    verts = []; faces = []
+    for j, vv in enumerate(v):
+        for i, uu in enumerate(u):
+            p = [0, 0, Hs[j, i]]; p[ax] = uu; p[oth] = vv; verts.append(tuple(p))
+    nu = len(u)
+    for j in range(len(v) - 1):
+        for i in range(nu - 1):
+            faces.append((j * nu + i, j * nu + i + 1, (j + 1) * nu + i + 1, (j + 1) * nu + i))
+    me = bpy.data.meshes.new(name); me.from_pydata(verts, [], faces); me.update()
+    for p_ in me.polygons: p_.use_smooth = True
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    from kit import fabric as _fab
+    me.materials.append(_fab(name + "Wool", col, 0.95, 0.4, 260))
+    o.modifiers.new("thick", 'SOLIDIFY').thickness = 0.008
+    if fold:            # the white sheet turned down over the blanket edge at the chest
+        k = int(np.argmin(np.abs(u - chest)))
+        zc = Hs[:, max(0, k - 2):k + 1].max() + 0.012
+        size = [0, 0, 0.02]; size[ax] = 0.16; size[oth] = width * 0.92
+        loc = [0, 0, zc]; loc[ax] = chest - 0.06 * (1 if chest > (a + b) / 2 else -1); loc[oth] = c0
+        box(name + "Fold", tuple(loc), tuple(size), _fab(name + "Sheet", (0.88, 0.87, 0.84), 0.9, 0.3, 600), bevel=0.008)
+    return o

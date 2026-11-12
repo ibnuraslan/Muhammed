@@ -356,10 +356,29 @@ def _():
             for b in c["beams"]:
                 b.data.energy = 900; b.data.spot_size = math.radians(30)
             c["torch_heads"] = [H.point((0, 0, 0), 3.0, (0.95, 0.95, 1.0), 0.03) for _ in range(2)]
+            # haze in the dark rooms so the torch cones read through the glass
+            c["inhaze"] = [haze((0.0, -2.5, 1.35), (8.2, 4.4, 2.6), density=0.22, color=(0.9, 0.92, 1.0), anis=0.6),
+                           haze((0.0, -2.5, F2 + 1.25), (8.2, 4.4, 2.4), density=0.22, color=(0.9, 0.92, 1.0), anis=0.6)]
+            c["beams"].append(H.flashlight("T3")); c["beams"][2].data.energy = 900; c["beams"][2].data.spot_size = math.radians(28)
+            # visible torch cones (soft additive shells), one per torch
+            cm = bpy.data.materials.new("BeamCone"); cm.use_nodes = True; Nn = cm.node_tree.nodes; Ll = cm.node_tree.links
+            Nn.clear(); out_ = Nn.new("ShaderNodeOutputMaterial"); tr = Nn.new("ShaderNodeBsdfTransparent"); em = Nn.new("ShaderNodeEmission")
+            em.inputs['Color'].default_value = (0.9, 0.93, 1.0, 1); em.inputs['Strength'].default_value = 0.6
+            ad = Nn.new("ShaderNodeAddShader"); Ll.new(tr.outputs[0], ad.inputs[0]); Ll.new(em.outputs[0], ad.inputs[1]); Ll.new(ad.outputs[0], out_.inputs['Surface'])
+            c["cones"] = []
+            for k in range(3):
+                bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.0, radius2=0.55, depth=2.4, end_fill_type='NOTHING')
+                co_ = bpy.context.active_object; co_.data.materials.append(cm); co_.visible_shadow = False
+                bpy.ops.object.shade_smooth(); c["cones"].append(co_)
         # two beams inside: ground floor front room, then upstairs bedroom
         p1 = Vector((1.2 + 2.0 * t, -2.0, 1.5)); H.aim_obj(c["beams"][0], p1, Vector((3.0 + 1.2 * math.sin(1.6 * sec), -D2, 1.2)))
         p2 = Vector((-1.4 - 1.6 * t, -1.6, F2 + 1.5)); H.aim_obj(c["beams"][1], p2, Vector((-2.4 + 1.0 * math.sin(1.2 * sec + 1), -D2, F2 + 1.0)))
         c["torch_heads"][0].location = p1; c["torch_heads"][1].location = p2
+        p3 = Vector((-2.8 + 1.4 * t, -2.6, 1.4)); H.aim_obj(c["beams"][2], p3, Vector((-2.0 + 1.3 * math.sin(2.1 * sec), -D2, 0.9)))
+        for k, (p_, b_) in enumerate(zip((p1, p2, p3), c["beams"])):
+            d_ = (b_.matrix_world.to_3x3() @ Vector((0, 0, -1))).normalized()
+            cn = c["cones"][k]; cn.location = p_ + d_ * 1.2
+            cn.rotation_euler = d_.to_track_quat('Z', 'Y').to_euler()
     def cam(c, t):
         e = ease(t)
         return (Vector((5.0, ROAD_Y - 1.0, 1.6)).lerp(Vector((3.5, ROAD_Y + 1.2, 1.6)), e), Vector((0.0, -D2, 2.6)), 30)
@@ -540,7 +559,7 @@ def _():
     def anim(c, t):
         sec = tick(c, t, "newsboy")
         if "paper" not in c:
-            import sc_press
+            import sc_press42 as sc_press
             bpy.ops.mesh.primitive_plane_add(size=1); o = bpy.context.active_object; o.scale = (0.3, 0.43, 1)
             bpy.ops.object.transform_apply(scale=True); o.data.materials.append(sc_press.paper_mat()); c["paper"] = o
             c["bundle"] = box("Bundle", (-1.6, WALK_Y + 0.3, G + 0.2), (0.45, 0.32, 0.4), pbr("Bundle", (0.82, 0.8, 0.74), 0.85))
