@@ -262,20 +262,11 @@ def vegetation(c, density=1.0):
     shore_birch = scatter(c, (-25, 25, -10, 12), int(16 * density), lambda x, y: lake_side(x, y) and D(x, y) > 2.6 and y < _shore_y(x) - 4.0, 9)
     firs = [(Vector((x, y, ground_z(c, x, y))), rz, s * 1.1) for (x, y, rz, s) in wood_pts[0::3]]
     pines = [(Vector((x, y, ground_z(c, x, y))), rz, s) for (x, y, rz, s) in wood_pts[1::3]]
-    birches = [(Vector((x, y, ground_z(c, x, y))), rz, s * 1.5) for (x, y, rz, s) in wood_pts[2::3] + shore_birch]
+    birches = [(Vector((x, y, ground_z(c, x, y))), rz, s * 2.6) for (x, y, rz, s) in wood_pts[2::3] + shore_birch]
     c["trees"] = []
-    c["trees"] += rj.ph_instances("fir_tree_01", firs)
-    c["trees"] += rj.ph_instances("pine_tree_01", pines)
-    br, bms = rj.birch_template()
-    for (loc, rz, s) in birches:
-        r = bpy.data.objects.new("Birch", None); bpy.context.collection.objects.link(r)
-        for o in bms:
-            n_ = o.copy(); bpy.context.collection.objects.link(n_); n_.parent = r; n_.matrix_parent_inverse = o.matrix_parent_inverse.copy()
-        r.location = loc; r.rotation_euler = (0, 0, rz); r.scale = (s, s, s)
-        c["trees"].append(r)
-    br.location = (0, 0, -1000); br.hide_render = True
-    for o in bms:
-        o.hide_render = True
+    c["trees"] += rj.low_instances("fir_a", firs)
+    c["trees"] += rj.low_instances("fir_b", pines)
+    c["trees"] += rj.low_instances("birch", birches)
     # --- undergrowth: ferns, shrubs and grass along the verges and in the woods
     ferns = scatter(c, (-50, 45, -30, 8), int(260 * density), lambda x, y: not lake_side(x, y) and 1.5 < D(x, y) < 14, 7)
     c["ferns"] = rj.ph_instances("fern_02", [(Vector((x, y, ground_z(c, x, y))), rz, s * 1.2) for (x, y, rz, s) in ferns])
@@ -303,10 +294,12 @@ def lighting(c):
     if L == "lowsun":
         rj.sky("lowsun", rot=-10)           # sun low in the west over the lake, behind the trees
     elif L == "dusk":
-        rj.sky("dusk")
+        w, _ = rj.sky("dusk")
+        w.node_tree.nodes["Background"].inputs['Strength'].default_value = 1.1
+        from common import sun
+        sun(1.5, 290, 0.9, (1.0, 0.45, 0.25), 3)          # the last afterglow low over the lake
     elif L == "bluehour":
-        w, s = rj.sky("dusk")
-        w.node_tree.nodes["Background"].inputs['Strength'].default_value = 0.3
+        rj.sky("bluehour")
     elif L == "night":
         rj.sky("night")
         mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.035; mo.color = (0.55, 0.65, 1.0); mo.angle = math.radians(1)
@@ -420,7 +413,7 @@ def walker(c, h, p0, p1, sec, speed=1.3, stride=26, z=None):
     return moving
 
 
-def add_torch(c, key, energy=60.0, cone=24.0):
+def add_torch(c, key, energy=320.0, cone=24.0):
     t = rj.torch(key, on=True, energy=energy, cone=cone)
     c.setdefault("torches", {})[key] = t
     return t
@@ -463,16 +456,17 @@ def anim_ride(c, t, shot, dur):
 
 def cam_ride_track(c, t):
     e = ease(t)
-    p = P(D_BEND - 46 + 10 * e, 2.6); p.z = 1.2
+    p = P(D_BEND - 46 + 10 * e, 1.3); p.z = 1.65
     tgt = c["bike"]["root"].location + Vector((0, 0, 0.8))
     return (p, tgt, 50)
 
 
 def cam_ride_reeds(c, t):
     e = ease(t)
-    a = Vector((-24, 9.6, 0.05)); b = Vector((-19.5, 9.2, 0.1))
-    tgt = c["bike"]["root"].location + Vector((0, 0, 0.7))
-    return (a.lerp(b, e), tgt, 85)
+    x = -22 + 3 * e
+    a = Vector((x, _shore_y(x) + 4.0, 2.05))
+    tgt = c["bike"]["root"].location + Vector((0, 0, 0.8))
+    return (a, tgt, 70)
 
 
 # 5A / 5B: the empty bend at dusk
@@ -571,16 +565,16 @@ def anim_line(c, t, shot, dur):
     roles = [r for r in LINE if r in c["P"]]
     for k, r in enumerate(roles):
         h = c["P"][r]
-        x0 = -26 + k * 3.2; y0 = -6.5 - 0.6 * (k % 2)
-        walker(c, h, (x0, y0), (x0 + 0.8, y0 - 8), sec + k * 0.3, speed=0.7, stride=22)
+        x0 = -24.5 + k * 2.4; y0 = -2.6 - 0.5 * (k % 2)
+        walker(c, h, (x0, y0), (x0 - 0.6, y0 - 8), sec + k * 0.3, speed=0.7, stride=22)
         hold_torch(h, c["torches"][r], _sweep_dir(forward(h), sec, 0.55, 0.25, 0.35, ph=k * 1.3))
     _ambient(c, sec)
 
 
 def cam_line(c, t):
     e = ease(t)
-    a = Vector((-17.5, 1.0, 1.1)); b = Vector((-19.5, 0.8, 1.15))
-    return (a.lerp(b, e), Vector((-21, -9, 1.2)), 30)
+    a = Vector((-15.5, 3.2, 1.6)); b = Vector((-16.6, 2.8, 1.6))
+    return (a.lerp(b, e), Vector((-21.5, -5.0, 0.9)), 30)
 
 
 def anim_fire(c, t, shot, dur):
@@ -831,7 +825,7 @@ def build(variant=None):                      # noqa: F811
         if "uncle" in c["P"] and "u" not in c.get("torches", {}):
             add_torch(c, "u")
     if "car" in extras:
-        police_car(c, P(D_BEND - 20, 0.0), -8)
+        police_car(c, P(D_BEND - 20, -1.4), -6)
     if "dog" in extras:
         c["dog"] = rj.dog("Dog")
         cu = bpy.data.curves.new("Leash", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006
@@ -851,8 +845,11 @@ def build(variant=None):                      # noqa: F811
     if "boat" in extras:
         import rj_vehicles, vehicles
         c["boat"] = vehicles.make("boat_police", loc=(-9, 21, -0.38), heading_deg=170)
-    if light == "mist":
-        haze((0, 30, 2.0), (160, 60, 4.0), density=0.02, color=(0.8, 0.84, 0.88), anis=0.2)
-    if light in ("night", "bluehour"):
-        haze((-12, -5, 3), (50, 40, 6), density=0.006, color=(0.75, 0.8, 0.9), anis=0.5)
+    import look
+    if light in ("lowsun", "mist", "grey"):
+        look.forest(mood="mist", azim={"lowsun": 285, "mist": 110, "grey": 200}[light], area=((-5, 0), (110, 70)), canopy=16.0)
+    elif light in ("dusk", "bluehour"):
+        look.forest(mood="dusk", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
+    else:
+        haze((-12, -5, 3), (50, 40, 6), density=0.016, color=(0.75, 0.8, 0.9), anis=0.6)
     return c

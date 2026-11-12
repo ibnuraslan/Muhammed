@@ -179,7 +179,7 @@ def lane(c):
     c["letterbox"] = letterbox((GATE.x + 0.6, -3.2 - 0.17, 1.05))
     box("GardenPath", (GATE.x, -7.5, -0.01), (1.2, 8.4, 0.03), mat("gravel"))
     trees = [((x, y, 0), x * 0.7, s) for (x, y, s) in ((-6, -6, 1.0), (6.5, -7, 1.15), (-13, 6, 1.1), (14, 6, 0.95), (36, -4, 1.1), (-38, 5, 1.2), (3, 8, 0.9))]
-    c["trees"] = rj.ph_instances("tree_small_02", trees)
+    c["trees"] = rj.low_instances("birch", trees)
     c["trees"] += rj.ph_instances("shrub_02", [((x, -3.9, 0), x, 1.2) for x in (-7, -5.2, 1.0, 3.2, 5.5)])
     c["flowers"] = c["home"].get("flowers", [])
 
@@ -203,7 +203,13 @@ def gate_leaf(hinge, w, m):
 
 
 def light(c):
+    import look
     L = c["light"]
+    if look.enabled():
+        rj.sky("grey")
+        look.day_light("low_sun", azim=235 if L == "afternoon" else 140, elev=14 if L == "afternoon" else 18, sky="blue",
+                       haze_box=((0, 0, 8), (160, 120, 16)))
+        return
     from common import sun
     w, s = rj.sky("grey" if L in ("grey", "morning") else "lowsun", rot=0)
     if s is not None:
@@ -233,7 +239,17 @@ def build(variant=None):
     if "neighbour" in roles:
         pass
     if "father" in roles and L in ("grey", "morning"):
-        c["fiat"] = vehicles.make("fiat600", loc=(GATE.x + 3.2, 2.6 + LANE_Y - 0.6, 0), heading_deg=180, color=(0.78, 0.6, 0.08))
+        c["fiat"] = vehicles.make("fiat600", loc=(GATE.x + 2.4, LANE_Y - 1.25, 0), heading_deg=180, color=(0.78, 0.6, 0.08))
+        ex = box("Exhaust", (0, 0, 0), (0.5, 0.3, 0.3), None)
+        em = bpy.data.materials.new("ExhaustVol"); em.use_nodes = True
+        N = em.node_tree.nodes; Lk = em.node_tree.links; N.clear(); out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled")
+        tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 6
+        Lk.new(tc.outputs['Object'], nz.inputs['Vector']); rj.driven(nz.inputs['W'], "default_value", "frame * 0.04")
+        gr = N.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'; Lk.new(tc.outputs['Object'], gr.inputs['Vector'])
+        mu = N.new("ShaderNodeMath"); mu.operation = 'MULTIPLY'; Lk.new(nz.outputs['Fac'], mu.inputs[0]); Lk.new(gr.outputs['Fac'], mu.inputs[1])
+        mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.12; mr.inputs['From Max'].default_value = 0.45; mr.inputs['To Max'].default_value = 3.0
+        Lk.new(mu.outputs[0], mr.inputs['Value']); Lk.new(mr.outputs[0], vol.inputs['Density']); vol.inputs['Color'].default_value = (0.8, 0.8, 0.82, 1)
+        Lk.new(vol.outputs[0], out.inputs['Volume']); ex.data.materials.append(em); c["exhaust"] = ex
         from kit import pbr
         c["suitcase"], _ = rj.model_fit("vintage_suitcase", (0, 0, -50), height=0.45)
     rj.finish_scene()
@@ -261,7 +277,7 @@ def anim_gate(c, t, shot, dur):
     sec = t * dur
     h = c["P"]["sister"]; bk = c["bike"]
     c["gate"].rotation_euler.z = math.radians(-80) * ease(min(1, sec / 0.8))
-    wheel_bike(c, h, bk, (GATE.x + 0.1, -6.6), (GATE.x + 0.1, -0.4), sec + 1.2, speed=0.85)
+    wheel_bike(c, h, bk, (GATE.x + 0.1, -7.2), (GATE.x + 0.1, -0.4), sec + 0.2, speed=0.85)
     for k, f in enumerate(c["flowers"][::3]):
         f.rotation_euler.x = 0.06 * math.sin(sec * 1.7 + k)
     rj.sway(c["trees"], sec, 0.01, 0.3)
@@ -269,9 +285,9 @@ def anim_gate(c, t, shot, dur):
 
 def cam_gate(c, t):
     e = ease(t)
-    a = Vector((GATE.x + 5.5, 4.2, 5.2)); b = Vector((GATE.x + 4.6, 3.6, 1.7))      # crane down the house front
-    tgt = Vector((GATE.x + 0.2, -6.0, 3.5)).lerp(Vector((GATE.x, -3.6, 0.9)), e)
-    return (a.lerp(b, e), tgt, 30)
+    a = Vector((GATE.x - 2.2, -8.6, 4.6)); b = Vector((GATE.x - 1.4, -8.2, 1.6))     # crane down from the balcony, behind her
+    tgt = Vector((GATE.x + 0.4, -2.0, 1.4)).lerp(Vector((GATE.x + 0.2, -1.0, 0.7)), e)
+    return (a.lerp(b, e), tgt, 32)
 
 
 def anim_lane(c, t, shot, dur):
@@ -293,6 +309,95 @@ def cam_lane(c, t):
     return (a.lerp(b, e), tgt, 85)
 
 
+# --- 16A: the postman cycles up the lane ; 16B: he drops the envelope in the gate box, a neighbour on her balcony
+def anim_post(c, t, shot, dur):
+    sec = t * dur
+    h = c["P"]["postman"]; bk = c["pbike"]
+    if shot == "post_ride":
+        d = 3.3 * sec
+        bk["root"].location = (-26 + d, LANE_Y + 0.9, 0.02); bk["root"].rotation_euler = (0, 0, 0)
+        rj.roll_bike(bk, d); bpy.context.view_layer.update(); rj.ride_pose(h, bk, d)
+        bag = c["postbag"]; bag.location = bk["root"].matrix_world @ Vector((-0.37, 0, 0.86)); bag.rotation_euler = (0, 0, 0)
+        c["envelope"].location = (0, 0, -20)
+    else:
+        bk["root"].location = (GATE.x + 2.2, LANE_Y - 1.6, 0.0); bk["root"].rotation_euler = (math.radians(-12), 0, math.radians(180))
+        c["postbag"].location = bk["root"].matrix_world @ Vector((-0.37, 0, 0.86))
+        stand(h, Vector((GATE.x + 0.75, -2.55, 0)), math.pi)          # faces -Y toward the letterbox
+        k = ease(min(1.0, sec / 2.2))
+        slot = c["letterbox"].location + Vector((0, -0.11, 0.07))
+        fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        start = rj.rjp.chest_point(h, 0.25, 0.3) + right * 0.15
+        hand = start.lerp(slot + Vector((0, -0.03, 0.02)), k) if sec < 2.6 else start.lerp(slot, 0.3)
+        reach(h, "R", hand, Vector((0, 0, -1)) + right * 0.5, fwd)
+        env = c["envelope"]
+        if sec < 2.6:
+            env.location = h.bone_tail("wrist.R") + fwd * 0.08; env.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x) + math.pi / 2)
+        else:
+            env.location = (0, 0, -20)
+        side = right; h.rot("head", side, -10)
+    if "neighbour" in c["P"]:
+        n = c["P"]["neighbour"]
+        hb = c["houses"][4]
+        stand(n, Vector((-9.0, 13 - 4.5 - 0.7, hb.get("balcony_z", 3.2) + 0.05)), math.pi)
+        n.arm.location.z = hb.get("balcony_z", 3.2) + 0.05
+        n.arm.rotation_euler.z = math.pi * 0 + math.radians(-160 + 15 * ease(t))
+        fwd = forward(n); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        rail = n.arm.location + fwd * 0.5 + Vector((0, 0, 0.95))
+        reach(n, "R", rail + right * 0.2, Vector((0, 0, -1)) + right, fwd); reach(n, "L", rail - right * 0.2, Vector((0, 0, -1)) - right, fwd)
+    for k_, f in enumerate(c["flowers"][::3]):
+        f.rotation_euler.x = 0.06 * math.sin(sec * 1.7 + k_)
+    rj.sway(c["trees"], sec, 0.01, 0.3)
+
+
+def cam_post_ride(c, t):
+    e = ease(t)
+    a = Vector((6.0, 4.6, 1.5)); b = Vector((5.2, 4.2, 1.45))
+    return (a.lerp(b, e), c["pbike"]["root"].location + Vector((0, 0, 1.1)), 40)
+
+
+def cam_post_box(c, t):
+    e = ease(t)
+    a = Vector((GATE.x + 3.4, 2.4, 1.7)); b = Vector((GATE.x + 2.9, 2.1, 1.75))
+    return (a.lerp(b, e), Vector((GATE.x + 0.4, -3.0, 1.4)).lerp(Vector((-6.5, 6.0, 3.6)), ease(max(0, (t - 0.55) / 0.45))), 35)
+
+
+# --- 21A: the yellow Fiat at the kerb, the father carries the suitcase to it ; 21B: he waits at the wheel, engine idling
+def anim_fiat(c, t, shot, dur):
+    sec = t * dur
+    f = c["P"]["father"]; car = c["fiat"]; sc = c["suitcase"]
+    if shot == "fiat_load":
+        walk(f, (GATE.x + 0.05, -5.0), (GATE.x + 0.4, LANE_Y + 1.15), sec + 0.6, speed=1.0, stride=24)
+        fwd = forward(f); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        hand = Vector(f.arm.location) + right * 0.28 + Vector((0, 0, 0.72))
+        reach(f, "R", hand, Vector((0, 0, -1)) + right * 0.3, Vector((0, 0, -1)))
+        sc.location = f.bone_tail("wrist.R") + Vector((0, 0, -0.5)); sc.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x))
+        car.location.z = 0.0
+    else:
+        seat = car.matrix_world @ Vector((0.0, 0.33, 0.0))
+        rj.sit_on(f, (seat.x, seat.y), car.rotation_euler.z + math.pi / 2, 0.36, lean=4, feet=0.55)
+        fwd = forward(f); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        wheel = car.matrix_world @ Vector((0.6, 0.33, 0.78))
+        reach(f, "L", wheel - right * 0.15, Vector((0, 0, -1)) - right * 0.4, fwd)
+        reach(f, "R", wheel + right * 0.15, Vector((0, 0, -1)) + right * 0.4, fwd)
+        sc.location = car.matrix_world @ Vector((-0.75, -0.05, 0.5)); sc.rotation_euler = (0, 0, car.rotation_euler.z)
+        car.location.z = 0.004 * math.sin(sec * 35)                      # the idling engine shakes the little car
+        if "exhaust" in c:
+            c["exhaust"].location = car.matrix_world @ Vector((-1.75 - 0.05 * sec, -0.35, 0.3 + 0.03 * sec))
+    rj.sway(c["trees"], sec, 0.01, 0.3)
+
+
+def cam_fiat_load(c, t):
+    e = ease(t)
+    a = Vector((GATE.x + 4.6, LANE_Y + 3.2, 1.5)); b = Vector((GATE.x + 4.0, LANE_Y + 3.0, 1.45))
+    return (a.lerp(b, e), Vector((GATE.x + 1.6, LANE_Y - 0.6, 0.9)), 32)
+
+
+def cam_fiat_wide(c, t):
+    e = ease(t)
+    a = Vector((GATE.x - 4.0, LANE_Y + 8.5, 1.6)); b = Vector((GATE.x - 3.2, LANE_Y + 8.0, 1.55))
+    return (a.lerp(b, e), c["fiat"].location + Vector((0, 0, 0.8)), 40)
+
+
 def _mk(shot, dur, cam, anim_fn, focus=None, dof=None):
     DUR[shot] = dur
     spec = dict(kind="anim", cam=cam, anim=lambda c, t: anim_fn(c, t, shot, dur))
@@ -308,5 +413,10 @@ def _f_girl(c, t):
 MOVES = {
     "gate": _mk("gate", 6.5, cam_gate, anim_gate, _f_girl, 4.0),
     "lane": _mk("lane", 5.5, cam_lane, anim_lane, _f_girl, 8.0),
+    "post_ride": _mk("post_ride", 5.0, cam_post_ride, anim_post),
+    "post_box": _mk("post_box", 5.0, cam_post_box, anim_post),
+    "fiat_load": _mk("fiat_load", 5.0, cam_fiat_load, anim_fiat),
+    "fiat_wide": _mk("fiat_wide", 5.0, cam_fiat_wide, anim_fiat),
 }
-VARIANT_FOR = {"gate": "afternoon|sister", "lane": "afternoon|sister"}
+VARIANT_FOR = {"gate": "afternoon|sister", "lane": "afternoon|sister", "post_ride": "grey|postman", "post_box": "grey|postman,neighbour",
+               "fiat_load": "grey|father", "fiat_wide": "grey|father"}

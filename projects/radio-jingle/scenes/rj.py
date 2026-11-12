@@ -112,7 +112,7 @@ def mat(key):
         "tiles": lambda: T_("floor_tiles_08", 0.6, (0.75, 0.68, 0.6)),
         "lino": lambda: T_("old_linoleum_flooring_01", 0.5, (0.8, 0.72, 0.6)),
         "roof": lambda: T_("roof_tiles", 0.35, (0.55, 0.38, 0.32)),
-        "gravel": lambda: T_("gravel_floor_02", 0.5, (0.8, 0.78, 0.72)),
+        "gravel": lambda: T_("gravel_floor_02", 1.6, (0.85, 0.82, 0.76)),
         "forest": lambda: T_("forest_ground_04", 0.35),
         "leafy": lambda: T_("forrest_ground_01", 0.3),
         "grass": lambda: T_("leafy_grass", 0.25, (0.7, 0.75, 0.6)),
@@ -250,6 +250,7 @@ SKIES = {
     "lowsun":   ((0.70, 0.52, 0.34), (0.20, 0.28, 0.40), 6, 260, (1.0, 0.62, 0.32), 5.0, 1.0, 0.45, 0.4),
     "sunset":   ((0.80, 0.42, 0.20), (0.14, 0.18, 0.30), 2, 275, (1.0, 0.45, 0.18), 4.0, 1.0, 0.35, 0.35),
     "dusk":     ((0.24, 0.24, 0.34), (0.05, 0.07, 0.14), -3, 280, (0.55, 0.6, 0.9), 0.0, 8, 0.45, 0.4),
+    "bluehour": ((0.26, 0.30, 0.44), (0.07, 0.10, 0.20), 20, 150, (0.5, 0.6, 1.0), 0.25, 3, 1.0, 0.35),
     "night":    ((0.020, 0.026, 0.045), (0.004, 0.006, 0.014), 30, 140, (0.55, 0.65, 0.95), 0.06, 1.0, 1.0, 0.3),
     "mist":     ((0.50, 0.53, 0.55), (0.30, 0.34, 0.38), 9, 110, (1.0, 0.86, 0.68), 1.8, 4, 0.6, 0.8),
 }
@@ -506,13 +507,18 @@ def reel_deck(name="Deck", scale=1.0):
              box("HeadBlock", (0, -0.1, 0.125), (0.09, 0.035, 0.03), alu, bevel=0.004), box("Keys", (0, -0.155, 0.118), (0.22, 0.03, 0.012), alu, bevel=0.003)]
     for k in range(5):
         parts.append(box("Key", (-0.08 + 0.04 * k, -0.155, 0.127), (0.03, 0.025, 0.008), dark if k != 2 else pbr("KeyRed", (0.4, 0.03, 0.02), 0.4), bevel=0.002))
-    for x in (-0.14, 0.14):
+    for x in (0.12, 0.165):
         parts.append(cyl("Knob", (x, -0.155, 0.12), 0.012, 0.02, alu, 16))
     body = join(parts, name + "Body"); body.parent = r
-    vu_m = pbr("VUFace", (0.85, 0.72, 0.42), 0.4, 0.0, **{'Emission Color': (1.0, 0.72, 0.38, 1), 'Emission Strength': 1.2})
-    vu = box("VU", (0.14, -0.105, 0.116), (0.07, 0.035, 0.004), vu_m); vu.parent = r
+    vu_m = pbr("VUFace", (0.85, 0.72, 0.42), 0.4, 0.0, **{'Emission Color': (1.0, 0.72, 0.38, 1), 'Emission Strength': 0.35})
+    vu = box("VU", (-0.14, -0.105, 0.116), (0.07, 0.035, 0.004), vu_m); vu.parent = r
+    for k in range(9):                                          # meter scale ticks (no numbers)
+        a_ = math.radians(-40 + k * 10)
+        tk = box("VUTick", (-0.14 + 0.024 * math.sin(a_), -0.12 + 0.024 * math.cos(a_), 0.1185), (0.0012, 0.005 if k % 2 else 0.008, 0.0008),
+                 pbr("VUInk", (0.4, 0.05, 0.03) if k > 6 else (0.02, 0.02, 0.02), 0.5), rot=(0, 0, -a_))
+        tk.parent = r
     needle = bpy.data.objects.new(name + "Needle", None); bpy.context.collection.objects.link(needle); needle.parent = r
-    needle.location = (0.14, -0.12, 0.119)
+    needle.location = (-0.14, -0.12, 0.119)
     nd = box("NeedleM", (0, 0.014, 0), (0.0012, 0.028, 0.0012), pbr("NeedleBlk", (0.01, 0.01, 0.01), 0.5)); nd.parent = needle; nd.location = (0, 0.014, 0)
     reels = []
     flange = pbr("ReelFlange", (0.55, 0.57, 0.6), 0.25, 0.6)
@@ -546,25 +552,54 @@ def spin_reels(deck, sec, rate=1.2, on=True):
 
 def headphones(name="Headphones"):
     """Closed-back 1970s headphones (two cups on a band). Origin at the band top; cups along X."""
-    m = pbr("HPBlack", (0.02, 0.02, 0.022), 0.35); pad = pbr("HPPad", (0.03, 0.025, 0.02), 0.7)
+    m = pbr("HPMetal", (0.55, 0.55, 0.57), 0.3, 0.9); pad = pbr("HPPad", (0.06, 0.05, 0.045), 0.7)
     parts = []
     for k in range(13):
         a = math.radians(-90 + k * 15)
-        parts.append(box("Band", (0.085 * math.sin(a), 0, 0.085 * math.cos(a) - 0.085), (0.024, 0.03, 0.01), m, rot=(0, a, 0)))
+        parts.append(box("Band", (0.095 * math.sin(a), 0, 0.095 * math.cos(a) - 0.085), (0.026, 0.032, 0.012), m, rot=(0, a, 0)))
     for sx in (-1, 1):
-        parts.append(cyl("Cup", (sx * 0.088, 0, -0.105), 0.045, 0.035, m, 24, rot=(0, math.radians(90), 0)))
+        parts.append(cyl("Cup", (sx * 0.098, 0, -0.105), 0.048, 0.04, pbr("HPCup", (0.16, 0.16, 0.17), 0.35, 0.3), 24, rot=(0, math.radians(90), 0)))
         parts.append(cyl("Pad", (sx * 0.07, 0, -0.105), 0.042, 0.012, pad, 24, rot=(0, math.radians(90), 0)))
     return join(parts, name)
 
 
-def put_headphones(h, hp):
-    """Place headphones over a person's ears, parented to the head bone."""
+def head_top(h):
+    """World position of the top of the skull (from the posed body mesh: highest vertex weighted to the head bone)."""
+    idx = h.vertex_region(["head"], 0.5)
+    w = _world_verts(h.body) if False else None
+    dg = bpy.context.evaluated_depsgraph_get(); oe = h.body.evaluated_get(dg); me = oe.to_mesh()
+    co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co); co = co.reshape(-1, 3)
+    M = np.array(oe.matrix_world); co = co @ M[:3, :3].T + M[:3, 3]
+    lv = np.empty(len(me.loops), np.int32); me.loops.foreach_get("vertex_index", lv)
+    oe.to_mesh_clear()
+    idx = np.intersect1d(idx[idx < len(co)], np.unique(lv))          # skip MakeHuman's loose helper vertices
+    p = co[idx]; k = int(np.argmax(p[:, 2]))
+    return Vector(p[k].tolist())
+
+
+def wear_headphones(h, hp):
+    """Set the headphones on the head for the current pose (call every frame after posing): cups over the ears,
+    band over the crown, following the head's tilt."""
     hd = h.bone_head("head"); tl = h.bone_tail("head"); up = (tl - hd).normalized()
-    ear = hd + up * 0.06
+    right = forward(h).cross(Vector((0, 0, 1))).normalized()
+    right = (right - up * right.dot(up)).normalized(); Y = up.cross(right)
+    top = hd + up * (h.head_len if hasattr(h, "head_len") else 0.2)
+    M = Matrix((right, Y, up)).transposed().to_4x4(); M.translation = top
+    hp.matrix_world = M
+
+
+def put_headphones(h, hp):
+    t = head_top(h); h.head_len = (t - h.bone_head("head")).length + 0.01
+    h.parts.append(hp)
+    return hp
+
+
+def _put_headphones_old(h, hp):
+    """Place headphones over a person's ears, parented to the head bone."""
+    top = head_top(h)
     bpy.context.view_layer.update()
-    m = h.arm.matrix_world.to_3x3()
-    rot = m.to_4x4()
-    hp.matrix_world = Matrix.Translation(ear + up * 0.105) @ rot
+    rot = h.arm.matrix_world.to_3x3().to_4x4()
+    hp.matrix_world = Matrix.Translation(top + Vector((0, 0, 0.012))) @ rot
     mw = hp.matrix_world.copy()
     hp.parent = h.arm; hp.parent_type = 'BONE'; hp.parent_bone = "head"; hp.matrix_world = mw
     h.parts.append(hp)
@@ -1058,3 +1093,44 @@ def dog_walk(d, dist, pull=0.0, sniff=0.0, sec=0.0):
     d["head"].rotation_euler.y = math.radians(15 + 30 * sniff + 4 * math.sin(ph * 2))
     d["tail"].rotation_euler.z = 0.25 * math.sin(sec * 5.0)
     d["body"].location.z = 0.012 * math.sin(ph * 2)
+
+
+# ============================================================================ light tree cache
+LOW = {"fir_a": ("fir_tree_01", "_a", 120000), "fir_b": ("fir_tree_01", "_b", 120000), "birch": ("tree_small_02", "LOD0", 100000)}
+_LOWOBJ = {}
+
+
+def low_template(key):
+    """A cached, decimated single tree (see mklow.py); returns its template object (hidden, at the origin)."""
+    if key in _LOWOBJ and _LOWOBJ[key].name in bpy.data.objects:
+        return _LOWOBJ[key]
+    aid, pick, tgt = LOW[key]
+    path = os.path.join(ph.ROOT, "_low", f"{aid}_{pick}.blend")
+    if not os.path.exists(path):
+        import subprocess, sys
+        subprocess.run([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "mklow.py"), aid, pick, str(tgt)], check=True)
+    with bpy.data.libraries.load(path, link=False) as (src, dst):
+        dst.objects = list(src.objects)
+    o = dst.objects[0]
+    if key == "birch":
+        bark = birch_bark()
+        for s in o.material_slots:
+            nm = (s.material.name if s.material else "").lower()
+            if "trunk" in nm or "branch" in nm or "bark" in nm:
+                s.material = bark
+            elif s.material and not s.material.get("birch"):
+                retint(s.material, (1.05, 1.1, 0.7), sat=0.8); s.material["birch"] = 1
+    o.name = "TPL_" + key
+    _LOWOBJ[key] = o
+    return o
+
+
+def low_instances(key, placements):
+    """Linked copies of a cached tree: placements [(loc, rot_z, scale)]. The template itself is not rendered."""
+    tpl = low_template(key)
+    out = []
+    for (loc, rz, s) in placements:
+        o = bpy.data.objects.new(key, tpl.data); bpy.context.collection.objects.link(o)
+        o.location = loc; o.rotation_euler = (0, 0, rz); o.scale = (s, s, s)
+        out.append(o)
+    return out

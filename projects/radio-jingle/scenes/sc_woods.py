@@ -1,4 +1,4 @@
-"""FOREST: the spruce woods near the path, and the small clearing where the box was buried (Ch2; reused in Ch3).
+"""WOODS (was sc_forest; renamed so it does not clash with nvidia_doc/scenes/sc_forest.py): the spruce woods near the path, and the small clearing where the box was buried (Ch2; reused in Ch3).
 
 Coordinates: the clearing is centred on the origin (radius ~5 m). The buried box lies at BOX (its wooden cover flush
 with the ground). Dense spruce with some birch, moss, ferns, dead branches and haze. The path is ~800 m away (out of
@@ -40,7 +40,7 @@ def build_woods(c, seed=4, n_trees=180):
     verts = [(xs[i], ys[j], Hh[j, i]) for j in range(ny) for i in range(nx)]
     faces = [(j * nx + i, j * nx + i + 1, (j + 1) * nx + i + 1, (j + 1) * nx + i) for j in range(ny - 1) for i in range(nx - 1)]
     me.from_pydata(verts, [], faces); me.update(); me.polygons.foreach_set("use_smooth", [True] * len(me.polygons))
-    o = bpy.data.objects.new("ForestFloor", me); bpy.context.collection.objects.link(o); o.data.materials.append(mat("forest"))
+    o = bpy.data.objects.new("ForestFloor", me); bpy.context.collection.objects.link(o); o.data.materials.append(rj.ph.texture("forest_leaves_04", scale=0.35, name="LeafFloor"))
     pts = []
     while len(pts) < n_trees:
         x, y = r.uniform(-32, 32, 2)
@@ -52,17 +52,8 @@ def build_woods(c, seed=4, n_trees=180):
     gz = lambda x, y: ground_z(c, x, y)
     firs = [(Vector((x, y, gz(x, y) - 0.05)), rz, s) for (x, y, rz, s) in pts[0::5] + pts[1::5] + pts[2::5]]
     pines = [(Vector((x, y, gz(x, y) - 0.05)), rz, s) for (x, y, rz, s) in pts[3::5]]
-    birch = [(Vector((x, y, gz(x, y) - 0.05)), rz, s * 1.5) for (x, y, rz, s) in pts[4::5]]
-    c["trees"] = rj.ph_instances("fir_tree_01", firs) + rj.ph_instances("pine_tree_01", pines)
-    br, bms = rj.birch_template()
-    for (loc, rz, s) in birch:
-        rr = bpy.data.objects.new("Birch", None); bpy.context.collection.objects.link(rr)
-        for ob in bms:
-            n_ = ob.copy(); bpy.context.collection.objects.link(n_); n_.parent = rr; n_.matrix_parent_inverse = ob.matrix_parent_inverse.copy()
-        rr.location = loc; rr.rotation_euler = (0, 0, rz); rr.scale = (s, s, s); c["trees"].append(rr)
-    br.location = (0, 0, -1000); br.hide_render = True
-    for ob in bms:
-        ob.hide_render = True
+    birch = [(Vector((x, y, gz(x, y) - 0.05)), rz, s * 2.6) for (x, y, rz, s) in pts[4::5]]
+    c["trees"] = rj.low_instances("fir_a", firs) + rj.low_instances("fir_b", pines) + rj.low_instances("birch", birch)
     c["tree_pts"] = pts
     # undergrowth
     def sc(n, rmin, rmax, sd):
@@ -148,12 +139,8 @@ def lighting(c):
     w, s = rj.sky({"grey": "grey", "dusk": "dusk", "night": "night"}[L])
     if s is not None:
         bpy.data.objects.remove(s, do_unlink=True)
-    if L == "grey":
-        sun(22, 140, 1.4, (0.9, 0.93, 1.0), 12)          # overcast: a broad soft key through the canopy, dark fill
-        haze((0, 0, 3.0), (70, 70, 6.0), density=0.022, color=(0.8, 0.84, 0.86), anis=0.45)
-    elif L == "dusk":
-        sun(4, 250, 0.6, (1.0, 0.55, 0.3), 3)
-        haze((0, 0, 3.0), (70, 70, 6.0), density=0.015, color=(0.65, 0.7, 0.85), anis=0.45)
+    if L in ("grey", "dusk"):
+        pass                                             # look.forest() (end of build) lights the woods
     else:
         mo = bpy.data.lights.new("Moon", 'SUN'); mo.energy = 0.04; mo.color = (0.55, 0.65, 1.0); mo.angle = math.radians(1)
         o = bpy.data.objects.new("Moon", mo); bpy.context.collection.objects.link(o); o.rotation_euler = (math.radians(50), 0, math.radians(30))
@@ -545,7 +532,7 @@ def _mk(shot, dur, cam, anim_fn, focus=None, dof=None, title=None):
 
 
 MOVES = {
-    "line": _mk("line", 8.0, cam_line, anim_line),
+    "line": dict(_mk("line", 8.0, cam_line, anim_line), title=("CHAPTER 2", "SEVEN BOLTS", 18, 120)),
     "tape": _mk("tape", 5.0, cam_tape, anim_line, lambda c, t: Vector((-6.15, -2.25, 1.15)), 2.8),
     "rods": _mk("rods", 5.0, cam_rods, anim_rods),
     "rods_dog": _mk("rods_dog", 4.5, cam_rods_dog, anim_rods, lambda c, t: c["dog"]["root"].location, 4.0),
@@ -585,6 +572,21 @@ def build(variant=None):                      # noqa: F811
             c["tools"].append(r_)
     if "crowbar" in v:
         c["crowbar"], _ = rj.model_fit("crowbar_01", (0, 0, -50), height=0.75)
-    if "dark" in v or True:
-        pass
+    autumn(c)
+    import look
+    L = c["light"]
+    if L == "grey":
+        look.forest(mood="mist", azim=150, area=((0, 0), (70, 70)), canopy=16.0)
+    elif L == "dusk":
+        look.forest(mood="dusk", azim=250, area=((0, 0), (70, 70)), canopy=16.0)
     return c
+
+
+def autumn(c):
+    """4 October: birches yellowing, fallen leaves on the forest floor."""
+    t = bpy.data.objects.get("TPL_birch")
+    if t:
+        for sl in t.material_slots:
+            m = sl.material
+            if m and m.get("birch") and not m.get("autumn"):
+                rj.retint(m, (1.6, 1.15, 0.35), sat=1.1); m["autumn"] = 1

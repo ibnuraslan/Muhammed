@@ -151,7 +151,7 @@ def hall(c):
         rj.model_fit("steel_frame_shelves_02", (5.5, 2.0, 0), rot_z=-math.pi / 2, height=2.2)
     except Exception:
         pass
-    haze((0, 0, 2.5), (13.5, 11.5, 5.0), density=0.012, color=(0.85, 0.85, 0.85), anis=0.5)
+    # (no indoor haze: it goes milky)
 
 
 def build(variant=None):
@@ -168,6 +168,8 @@ def build(variant=None):
         c["P"][r] = person(base, name=r.capitalize(), cap=False)
     if "smoke" in v:
         smoke(c)
+    import look
+    look.interior_day(window=((-0.5, 7.5, 4.0), (0.0, 0.0, 0.7)), mood="overcast", key_size=3.0, keep=tuple(bpy.data.objects[n] for n in ("WorkL", "BulbL")))
     rj.finish_scene()
     return c
 

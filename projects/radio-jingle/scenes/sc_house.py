@@ -13,10 +13,10 @@ Garden ground outside, a neighbour's house and trees beyond the windows.
 Variants: "<light>" or "<light>+police" ; light = morning | afternoon | sunset | dusk | night
 Chat B: import this module and add MOVES with new angles (build(variant) returns every object in ctx).
 """
-import math
+import math, os
 import numpy as np
 import bpy
-from mathutils import Vector
+from mathutils import Vector, Matrix
 from kit import pbr, box, cyl, join, glass, emissive, area_light, point_at, fabric
 from common import ease
 import ph
@@ -35,7 +35,7 @@ DUR = {}
 
 
 def _light(variant):
-    return (variant or "morning").split("|")[0].split("+")[0]
+    return (variant or "morning").split("|")[0].split("+")[0].split("@")[0]
 
 
 def build(variant=None):
@@ -97,6 +97,12 @@ def build(variant=None):
     exterior(c)
     lighting(c)
     cast(c)
+    kitchen_extras(c)
+    apply_look(c)
+    if "+torches" in variant:
+        c["out_torches"] = [rj.torch(f"OutTorch{k}", energy=80, cone=24) for k in range(3)]
+    if c["police"] and "officer" in c["P"] and "hp" not in c:
+        c["hp"] = rj.put_headphones(c["P"]["officer"], rj.headphones("Headphones"))
     rj.finish_scene()
     return c
 
@@ -130,7 +136,7 @@ def hall_props(c):
             parts.append(box("PLeg", (t.x + sx * 0.17, t.y + sy * 0.45, 0.38), (0.035, 0.035, 0.76), tw))
     c["ptable"] = join(parts, "PhoneTable")
     ph_r, hs, dial = rj.rotary_phone("Phone")
-    ph_r.location = (t.x + 0.02, t.y - 0.22, 0.778); ph_r.rotation_euler = (0, 0, math.pi / 2 + 0.25)    # dial faces the hall (-X)
+    ph_r.location = (t.x + 0.02, t.y - 0.22, 0.778); ph_r.rotation_euler = (0, 0, -math.pi / 2 + 0.25)   # dial faces the hall (-X)
     c["phone"] = ph_r; c["handset"] = hs; c["dial"] = dial
     c["handset_rest"] = (hs.location.copy(), hs.rotation_euler.copy())
     # directory books, a notepad, a little brass lamp
@@ -144,7 +150,7 @@ def hall_props(c):
     sol = sh.modifiers.new("s", 'SOLIDIFY'); sol.thickness = 0.003
     c["shade_mat"] = sh.data.materials[0]
     lamp_parts.append(sh)
-    lamp = join(lamp_parts, "HallLamp"); lamp.location = (t.x + 0.03, t.y + 0.36, 0.778)
+    lamp = join(lamp_parts, "HallLamp"); lamp.location = (t.x + 0.06, t.y + 0.43, 0.778)
     c["hall_lamp"] = lamp
     # hall chair with the two stuffed toys
     ch_r, _ = rj.model_fit("WoodenChair_01", (0.72, -2.45, 0.0), rot_z=math.pi / 2, height=0.9)
@@ -178,7 +184,7 @@ def police_gear(c):
     """Recorder on the phone table, a cable to the phone, headphones, a folding chair and a notebook for the officer."""
     t = PHONE_T
     deck = rj.reel_deck("Deck")
-    deck["root"].location = (t.x - 0.02, t.y + 0.13, 0.778); deck["root"].rotation_euler = (0, 0, math.pi / 2)    # keys toward the hall
+    deck["root"].location = (t.x - 0.02, t.y + 0.13, 0.778); deck["root"].rotation_euler = (0, 0, -math.pi / 2)   # keys toward the hall
     c["deck"] = deck
     # cable from the deck to the phone (lying on the table)
     pts = [Vector((t.x + 0.12, t.y + 0.0, 0.79)), Vector((t.x + 0.15, t.y - 0.1, 0.785)), Vector((t.x + 0.1, t.y - 0.2, 0.785))]
@@ -291,7 +297,7 @@ def exterior(c):
     trees = []
     for (x, y, s) in ((-16, 9, 1.0), (-15, -8, 0.8), (-6, -11, 0.9), (6, -9, 1.1), (7, 10, 1.0), (-8, 12, 0.9)):
         trees.append((Vector((x, y, 0)), (x * 7.1) % 6.28, s))
-    c["trees"] = rj.ph_instances("tree_small_02", trees)
+    c["trees"] = rj.low_instances("birch", trees)
     hedge = rj.ph_instances("shrub_02", [((-9.5, y, 0), y, 1.0) for y in (-7.5, 6.5)] + [((x, -6.5, 0), x, 1.1) for x in (-5, 3)])
     c["trees"] += hedge
 
@@ -345,6 +351,26 @@ def lighting(c):
         ks.inputs['Emission Strength'].default_value = 1.2
         kl = bpy.data.lights.new("KitL", 'POINT'); kl.energy = 25; kl.color = (1.0, 0.6, 0.3)
         ko = bpy.data.objects.new("KitL", kl); bpy.context.collection.objects.link(ko); ko.location = (KTABLE.x, KTABLE.y, 1.75)
+
+
+ROOM_WINDOWS = {        # (window point outside, target inside) for look.interior_day: the one strong key per room
+    "piano": ((-4.45, -4.6, 1.6), (-3.8, 2.0, 0.8)),
+    "hall": ((0.0, -4.6, 1.5), (0.5, -1.4, 1.2)),
+    "kitchen": ((0.0, 8.6, 1.7), (0.0, 5.4, 0.8)),
+}
+
+
+def apply_look(c):
+    import look
+    v = c["variant"]; L = c["light"]
+    room = v.split("@")[1].split("|")[0].split("+")[0] if "@" in v else "piano"
+    if L in ("night", "dusk"):
+        look.night_interior()
+    else:
+        mood = {"morning": "low_sun" if room == "piano" else "overcast", "afternoon": "low_sun", "sunset": "low_sun"}[L]
+        for o in [o for o in bpy.data.objects if o.type == 'LIGHT' and o.data.type == 'SUN']:
+            bpy.data.objects.remove(o)
+        look.interior_day(window=ROOM_WINDOWS[room], mood=mood)
 
 
 def cast(c):
@@ -409,9 +435,10 @@ def place_officer(c, sec, press=0.0, write=0.0):
     o = need(c, "officer")
     rj.sit_on(o, (0.25, -0.62), math.radians(118), 0.45, lean=18, feet=0.4)
     if "hp" not in c:
-        hp = rj.headphones("Headphones"); c["hp"] = rj.put_headphones(o, hp)
+        c["hp"] = rj.put_headphones(o, rj.headphones("Headphones"))
     fwd = forward(o); side = fwd.cross(Vector((0, 0, 1))).normalized()
     o.rot("head", side, -14 - 3 * math.sin(sec * 0.4))
+    rj.wear_headphones(o, c["hp"])
     # left hand on the headphone cup (press = pulls it tighter), right hand on his knee or on the notebook
     hd = o.bone_head("head"); tl = o.bone_tail("head"); left = -side
     cup = hd + (tl - hd) * 0.5 + left * 0.1
@@ -466,31 +493,32 @@ def cam_co_officer(c, t):
     e = ease(t)
     o = c["P"]["officer"]; hd = o.bone_head("head")
     f = forward(o); left = Vector((-f.y, f.x, 0))
-    a = hd - f * 0.75 + left * 0.38 + Vector((0, 0, 0.16)); b = hd - f * 0.6 + left * 0.32 + Vector((0, 0, 0.14))
+    a = hd - f * 1.25 + left * 0.6 + Vector((0, 0, 0.3)); b = hd - f * 1.1 + left * 0.55 + Vector((0, 0, 0.28))
     m = c["P"]["mother"].bone_head("head")
-    return (a.lerp(b, e), hd.lerp(m, 0.55) + Vector((0, 0, -0.05)), 40)
+    return (a.lerp(b, e), hd.lerp(m, 0.55) + Vector((0, 0, -0.18)), 30)
 
 
 def cam_co_tape(c, t):
     e = ease(t)
     d = c["deck"]["root"].matrix_world
-    a = d @ Vector((0.2, -0.32, 0.14)); b = d @ Vector((-0.12, -0.3, 0.14))
-    return (a.lerp(b, e), d @ Vector((0.0, -0.08, 0.12)), 50)
+    a = d @ Vector((-0.3, -0.44, 0.22)); b = d @ Vector((0.02, -0.44, 0.21))
+    return (a.lerp(b, e), d @ Vector((0.0, -0.06, 0.12)), 45)
 
 
 def cam_co_top(c, t):
     d = c["deck"]["root"].matrix_world
     ang = math.radians(-20 + 25 * ease(t))
     tgt = d @ Vector((0, 0.035, 0.12))
-    off = Vector((0.06 * math.sin(ang), -0.06 * math.cos(ang), 0.55))
-    return (tgt + off, tgt, 40, (math.sin(ang + math.pi / 2) * 0 + d.to_3x3() @ Vector((0, 1, 0))))
+    off = Vector((0, 0, 0.5)) + d.to_3x3() @ Vector((0, -0.06, 0))
+    up = d.to_3x3() @ Vector((math.sin(ang), math.cos(ang), 0))
+    return (tgt + off, tgt, 38, tuple(up))
 
 
 def cam_co_meter(c, t):
     e = ease(t)
     d = c["deck"]["root"].matrix_world
-    a = d @ Vector((0.2, -0.42, 0.24)); b = d @ Vector((0.17, -0.3, 0.2))
-    return (a.lerp(b, e), d @ Vector((0.14, -0.105, 0.12)), 50)
+    a = d @ Vector((-0.24, -0.44, 0.25)); b = d @ Vector((-0.18, -0.32, 0.2))
+    return (a.lerp(b, e), d @ Vector((-0.14, -0.105, 0.12)), 50)
 
 
 # --- piano: the brother alone at night (Cold Open 4) ; brother and sister in the morning (Ch1 1)
@@ -581,7 +609,7 @@ def _f_deck(c, t):
 
 
 def _f_meter(c, t):
-    return c["deck"]["root"].matrix_world @ Vector((0.14, -0.105, 0.12))
+    return c["deck"]["root"].matrix_world @ Vector((-0.14, -0.105, 0.12))
 
 
 def _f_bench(c, t):
@@ -596,21 +624,405 @@ def cam_debug_liv(c, t):
     return (Vector((-1.6, -3.2, 2.4)), Vector((-4.0, 2.0, 0.6)), 16)
 
 
+# ============================================================================ Chapter One / Two house shots
+def suitcase():
+    """An open 1970s hard suitcase (brown vinyl, chrome latches): body + lid on a hinge empty. Local: hinge along +Y edge."""
+    vin = pbr("SuitVinyl", (0.12, 0.07, 0.04), 0.45, 0.0, **{'Coat Weight': 0.3}); lin = rj.fabric("SuitLining", (0.25, 0.18, 0.12), 0.9, 0.3)
+    W_, D_, H_ = 0.62, 0.42, 0.16
+    body = join([box("SBody", (0, 0, H_ / 2), (W_, D_, H_), vin, bevel=0.012), box("SLining", (0, 0, H_ - 0.004), (W_ - 0.03, D_ - 0.03, 0.006), lin)], "Suitcase")
+    hinge = bpy.data.objects.new("SuitHinge", None); bpy.context.collection.objects.link(hinge); hinge.parent = body; hinge.location = (0, D_ / 2, H_)
+    lid = join([box("SLid", (0, -D_ / 2, 0.045), (W_, D_, 0.09), vin, bevel=0.012), box("SLidLin", (0, -D_ / 2, 0.002), (W_ - 0.03, D_ - 0.03, 0.004), lin)], "SuitLid")
+    lid.parent = hinge
+    for x in (-0.18, 0.18):
+        box("Latch", (x, -D_ / 2 - 0.004, H_ - 0.01), (0.05, 0.012, 0.035), mat("chrome")).parent = body
+    box("SHandle", (0, -D_ / 2 - 0.02, H_ - 0.02), (0.14, 0.02, 0.025), pbr("HandleBlk", (0.03, 0.02, 0.015), 0.4), bevel=0.008).parent = body
+    return dict(root=body, hinge=hinge, W=W_, D=D_, H=H_)
+
+
+def note_bundle(name):
+    """A bundle of used, plain banknotes (no design, nothing readable): a slightly worn stack with a paper band."""
+    m = pbr("NotePaper", (0.42, 0.36, 0.30), 0.85)
+    band = pbr("NoteBand", (0.75, 0.72, 0.62), 0.8)
+    return join([box(name, (0, 0, 0.018), (0.16, 0.085, 0.036), m, bevel=0.002), box(name + "B", (0, 0, 0.018), (0.03, 0.087, 0.038), band)], name)
+
+
+def kitchen_extras(c):
+    v = c["variant"]
+    top = c["ktable_top"]
+    if "+letter" in v:
+        img = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "nvidia_doc", "assets", "generated", "rj_letter.png")
+        if not os.path.exists(img):
+            import letter; letter.make()
+        m = bpy.data.materials.new("Letter"); m.use_nodes = True
+        N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+        tx = N.new("ShaderNodeTexImage"); tx.image = bpy.data.images.load(os.path.abspath(img)); L.new(tx.outputs['Color'], p.inputs['Base Color'])
+        p.inputs['Roughness'].default_value = 0.85
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(KTABLE.x + 0.05, KTABLE.y - 0.05, top + 0.002))
+        lt = bpy.context.active_object; lt.scale = (0.21, 0.297, 1); lt.rotation_euler.z = 0.12; lt.data.materials.append(m)
+        c["letter"] = lt
+        env = box("EnvelopeK", (KTABLE.x - 0.32, KTABLE.y + 0.12, top + 0.004), (0.23, 0.12, 0.006), pbr("Env", (0.78, 0.74, 0.62), 0.8), rot=(0, 0, -0.3))
+    if "+suitcase" in v:
+        sc = suitcase(); sc["root"].location = (KTABLE.x - 0.05, KTABLE.y + 0.05, top); c["suit"] = sc
+        c["bundles"] = []
+        for k in range(14):
+            b = note_bundle(f"Bundle{k}")
+            r, q = divmod(k, 3)
+            b.location = (KTABLE.x - 0.05 - 0.17 + q * 0.17, KTABLE.y + 0.05 - 0.13 + (r % 3) * 0.09, top + 0.025 + (r // 3) * 0.037)
+            c["bundles"].append(b)
+        c["stack"] = [note_bundle(f"Stack{k}") for k in range(6)]
+        for k, b in enumerate(c["stack"]):
+            b.location = (KTABLE.x + 0.55, KTABLE.y - 0.15 + 0.0, top + k * 0.037)
+
+
+def stand_at(h, pos, face_z):
+    stand(h, Vector((pos[0], pos[1], 0)), face_z)
+
+
+# --- 4A/4B: sunset, the mother calls the cousin's house
+def anim_dial(c, t, shot, dur):
+    sec = t * dur
+    _clock(c, sec)
+    m = c["P"]["mother"]
+    if shot == "dial":
+        stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2)
+        breathe(m, sec)
+        side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -16)
+        phone_to_ear(c, m, sec)
+        d = c["dial"].matrix_world
+        k = (sec * 0.8) % 1.0
+        c["dial"].rotation_euler.z = math.radians(-120 * math.sin(math.pi * k))
+        reach(m, "R", d @ Vector((0.03, 0.0, 0.05)), Vector((0, -0.4, -1)), forward(m) + Vector((0, 0, -1)))
+    else:
+        put = ease(min(1.0, sec / 1.2))
+        stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2 + math.radians(28) * ease(max(0.0, (sec - 1.4) / 1.2)))
+        side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, 8 * ease(max(0.0, (sec - 1.4) / 1.2)))
+        if put < 1.0:
+            ear = phone_to_ear(c, m, sec)
+            hs = c["handset"]; rest = c["phone"].matrix_world @ Vector(c["handset_rest"][0])
+            M = hs.matrix_world.copy(); M.translation = M.translation.lerp(rest, put); hs.matrix_world = M
+            reach(m, "L", hs.matrix_world.translation + Vector((0, 0, 0.03)), Vector((0, -0.5, -1)), forward(m))
+        else:
+            handset_rest(c)
+
+
+def cam_dial(c, t):
+    e = ease(t)
+    a = Vector((0.75, -3.0, 1.45)); b = Vector((0.7, -2.75, 1.42))
+    return (a.lerp(b, e), Vector((0.25, -1.4, 1.25)), 45)
+
+
+def cam_hangup(c, t):
+    e = ease(t)
+    a = Vector((-0.85, -1.9, 1.5)); b = Vector((-0.75, -1.65, 1.5))
+    return (a.lerp(b, e), Vector((0.95, -0.85, 1.55)), 32)
+
+
+# --- 12A/B: night, the empty piano bench ; torches flicker outside past the piano
+def anim_empty_piano(c, t, shot, dur):
+    sec = t * dur
+    for k, tr in enumerate(c.get("out_torches", [])):
+        tr.location = (-12.5 + 3 * math.sin(sec * 0.3 + k), 2.0 + k * 3.0 - 0.6 * sec, 1.1 + 0.05 * math.sin(sec * 4 + k))
+        aim = Vector((math.sin(sec * 0.9 + k * 2), -0.5, -0.35)).normalized()
+        tr.rotation_euler = aim.to_track_quat('-Y', 'Z').to_euler()
+    rj.sway(c["trees"], sec, 0.01, 0.25)
+
+
+def cam_bench(c, t):
+    e = ease(t)
+    a = Vector((-3.75, 0.2, 1.05)); b = Vector((-3.78, 1.0, 0.95))
+    return (a.lerp(b, e), PIANO + Vector((0.0, -0.75, 0.7)), 40)
+
+
+def cam_pwin(c, t):
+    e = ease(t)
+    a = Vector((-2.6, 1.6, 1.4)); b = Vector((-2.9, 1.3, 1.35))
+    return (a.lerp(b, e), Vector((-6.6, 1.55, 1.4)), 30)
+
+
+# --- 14A/B: kitchen, grey morning, the radio
+def anim_kitchen(c, t, shot, dur):
+    sec = t * dur
+    P_ = c["P"]
+    if "mother" in P_:
+        rj.sit_on(P_["mother"], (KTABLE.x - 0.0, KTABLE.y - 0.62), 0.0 + math.pi, 0.46, lean=14, feet=0.35)
+        P_["mother"].arm.rotation_euler.z = math.pi
+        rj.sit_on(P_["mother"], (KTABLE.x, KTABLE.y - 0.66), math.pi, 0.46, lean=14, feet=0.32)
+        side = forward(P_["mother"]).cross(Vector((0, 0, 1))).normalized(); P_["mother"].rot("head", side, -14)
+    if "father" in P_ and shot == "k_radio":
+        rj.sit_on(P_["father"], (KTABLE.x - 0.88, KTABLE.y), -math.pi / 2, 0.46, lean=10, feet=0.35)
+        side = forward(P_["father"]).cross(Vector((0, 0, 1))).normalized(); P_["father"].rot("head", (0, 0, 1), 35)
+    if "father" in P_ and shot == "k_window":
+        f = P_["father"]; stand_at(f, (0.55, 6.75), math.pi + 0.15)
+        breathe(f, sec)
+        cup = c["cups"][0]
+        fwd = forward(f); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        hand = rj.rjp.chest_point(f, 0.3, 0.32 - 0.03 * math.sin(sec * 0.6))
+        reach(f, "R", hand, Vector((0, 0, -1)) + right * 0.4, fwd)
+        cup.location = f.bone_tail("wrist.R") + fwd * 0.05 + Vector((0, 0, 0.05))
+        side = right; f.rot("head", side, -6)
+    # the radio's tuning pointer drifts a hair, the scale glows
+    rj.sway(c["trees"], sec, 0.01, 0.25)
+
+
+def cam_kradio(c, t):
+    e = ease(t)
+    r = c["kradio"].location
+    a = r + Vector((0.55, -1.1, 0.35)); b = r + Vector((0.35, -0.7, 0.3))
+    return (a.lerp(b, e), r + Vector((0.0, 0.0, 0.1)), 50)
+
+
+def cam_kwin(c, t):
+    e = ease(t)
+    a = Vector((-1.6, 4.6, 1.5)); b = Vector((-1.3, 4.9, 1.5))
+    return (a.lerp(b, e), Vector((0.5, 6.9, 1.45)), 38)
+
+
+# --- 15A/B: the first call (grey morning): the phone rings, the mother hurries in ; she listens, lowers the receiver
+def anim_ring(c, t, shot, dur):
+    sec = t * dur
+    m = c["P"]["mother"]
+    ring = (sec % 2.0) < 1.0
+    c["phone"].rotation_euler.x = math.radians(0.6) * math.sin(sec * 120) if ring and shot == "ring" else 0.0
+    c["handset"].rotation_euler.y = (math.radians(0.8) * math.sin(sec * 140) if ring and shot == "ring" else 0.0)
+    if shot == "ring":
+        walk(m, (-0.45, 3.2), (PHONE_T.x - 0.55, PHONE_T.y + 0.1), sec + 0.0, speed=1.5, stride=30)
+    else:
+        lower = ease(max(0.0, (sec - dur * 0.6) / (dur * 0.35)))
+        stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2)
+        breathe(m, sec)
+        ear = phone_to_ear(c, m, sec)
+        if lower > 0:
+            hs = c["handset"]; M = hs.matrix_world.copy()
+            M.translation = M.translation + Vector((0.12, 0.05, -0.35)) * lower; hs.matrix_world = M
+            reach(m, "L", M.translation + Vector((0, 0, -0.06)), Vector((0, -0.4, -1)), forward(m))
+        side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -6 - 12 * lower)
+
+
+def cam_ring(c, t):
+    e = ease(t)
+    a = Vector((-0.55, -2.9, 1.35)); b = Vector((-0.45, -2.6, 1.3))
+    return (a.lerp(b, e), Vector((0.3, -0.4, 1.0)), 28)
+
+
+def cam_listen(c, t):
+    e = ease(t)
+    a = Vector((-0.3, 0.3, 1.5)); b = Vector((-0.2, 0.05, 1.48))        # from the left (north), profile
+    return (a.lerp(b, e), Vector((0.3, -1.45, 1.35)), 42)
+
+
+# --- 17A/B: the cut-out letter on the kitchen table
+def anim_letter(c, t, shot, dur):
+    sec = t * dur
+    P_ = c["P"]
+    if "father" in P_:
+        f = P_["father"]; stand_at(f, (KTABLE.x - 0.1, KTABLE.y - 0.78), math.pi + 0.05)
+        side = forward(f).cross(Vector((0, 0, 1))).normalized(); f.rot("spine03", side, -14); f.rot("head", side, -24)
+        breathe(f, sec)
+        reach(f, "R", Vector((KTABLE.x + 0.12, KTABLE.y - 0.45, c["ktable_top"] + 0.03)), Vector((0.3, 0, -1)), Vector((0, 1, -0.8)))
+    if "detective" in P_:
+        d = P_["detective"]; stand_at(d, (KTABLE.x + 0.72, KTABLE.y - 0.45), math.radians(125))
+        side = forward(d).cross(Vector((0, 0, 1))).normalized(); d.rot("spine03", side, -10); d.rot("head", side, -26)
+        breathe(d, sec + 1)
+
+
+def cam_letter(c, t):
+    e = ease(t)
+    lt = c["letter"].location
+    a = lt + Vector((0.02, -0.18, 0.95)); b = lt + Vector((0.01, -0.08, 0.6))
+    return (a.lerp(b, e), lt + Vector((0, 0.03, 0)), 40, (0.0, 1.0, 0.0))
+
+
+def cam_read(c, t):
+    e = ease(t)
+    a = Vector((KTABLE.x - 1.5, KTABLE.y + 0.9, 0.95)); b = Vector((KTABLE.x - 1.35, KTABLE.y + 0.7, 0.95))
+    return (a.lerp(b, e), Vector((KTABLE.x + 0.2, KTABLE.y - 0.5, 1.2)), 32)
+
+
+# --- 18A/B: the police arrive: a technician threads the recorder ; the officer pulls on his headphones
+def anim_police_day(c, t, shot, dur):
+    sec = t * dur
+    _reels(c, sec, on=(shot == "door"))
+    if shot == "thread" and "tech" in c["P"]:
+        h = c["P"]["tech"]
+        stand_at(h, (PHONE_T.x - 0.6, PHONE_T.y + 0.15), math.pi / 2)
+        rj.rjp.bend_to(h, PHONE_T + Vector((0, 0.13, 0.9)), frac=0.8, max_deg=20)
+        d = c["deck"]["root"].matrix_world
+        k = 0.5 + 0.5 * math.sin(sec * 1.4)
+        reach(h, "L", d @ Vector((-0.1, -0.03, 0.17)), Vector((0, 0, -1)) + Vector((0, 0.6, 0)), Vector((1, 0, -0.8)))
+        reach(h, "R", d @ Vector((-0.04 + 0.08 * k, -0.1, 0.16)), Vector((0, 0, -1)) + Vector((0, -0.6, 0)), Vector((1, 0, -0.8)))
+        fingers_curl(h, 30)
+        side = forward(h).cross(Vector((0, 0, 1))).normalized(); h.rot("head", side, -20)
+    if shot == "door" and "officer" in c["P"]:
+        o = c["P"]["officer"]
+        rj.sit_on(o, (0.25, -0.62), math.radians(118), 0.45, lean=12, feet=0.4)
+        k = ease(min(1.0, sec / 2.0))
+        hp = c["hp"]
+        rj.wear_headphones(o, hp)
+        M = hp.matrix_world.copy(); M.translation = M.translation + (Vector((0, 0, 0.3)) + forward(o) * 0.25) * (1 - k); hp.matrix_world = M
+        side = forward(o).cross(Vector((0, 0, 1))).normalized()
+        for sd, sg in SIDE.items():
+            cup = hp.matrix_world @ Vector((0.088 if sd == "R" else -0.088, 0, -0.105))
+            reach(o, sd, cup + Vector((0, 0, -0.04)), Vector((0, 0, -1)) + side * (0.7 if sd == "R" else -0.7), Vector((0, 0, 1)))
+
+
+def cam_thread(c, t):
+    e = ease(t)
+    a = Vector((-0.75, -2.35, 1.6)); b = Vector((-0.65, -2.1, 1.55))
+    return (a.lerp(b, e), PHONE_T + Vector((-0.1, 0.1, 0.95)), 38)
+
+
+def cam_door(c, t):
+    e = ease(t)
+    a = Vector((0.2, -3.3, 1.65)); b = Vector((0.15, -3.05, 1.62))
+    return (a.lerp(b, e), Vector((0.45, -0.75, 1.15)), 36)
+
+
+# --- 19A/B (night, police): the mother says they'll pay ; the stuffed toys ; Ch2 11A/B the same hall, later
+def anim_call(c, t, shot, dur):
+    sec = t * dur
+    _reels(c, sec, on=shot not in ("silent", "stairs"))
+    _clock(c, sec)
+    if shot in ("call_left", "toys", "co2_back", "co2_toy"):
+        place_mother_phone(c, sec, talk=0.6)
+        if "officer" in c["P"]:
+            place_officer(c, sec)
+    if shot == "stairs":
+        m = c["P"]["mother"]
+        rj.sit_on(m, (0.6, 0.25 + c["stair_run"] * 1.5), math.pi * 0.0 + math.radians(170), c["stair_rise"] * 2 + 0.0, lean=18, feet=0.32)
+        breathe(m, sec)
+        side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -18); m.rot("head", (0, 0, 1), -25)
+        handset_rest(c)
+
+
+def cam_call_left(c, t):
+    e = ease(t)
+    a = Vector((-0.55, 0.15, 1.45)); b = Vector((-0.45, -0.1, 1.45))
+    return (a.lerp(b, e), Vector((0.3, -1.5, 1.32)), 40)
+
+
+def cam_toys(c, t):
+    e = ease(t)
+    a = Vector((-0.2, -3.0, 0.75)); b = Vector((0.15, -2.85, 0.7))
+    return (a.lerp(b, e), Vector((0.77, -2.38, 0.6)), 50)
+
+
+def cam_silent(c, t):
+    e = ease(t)
+    a = Vector((-0.4, -2.2, 1.25)); b = Vector((0.1, -1.75, 1.05))
+    return (a.lerp(b, e), PHONE_T + Vector((0, -0.05, 0.85)), 40)
+
+
+def cam_stairs(c, t):
+    e = ease(t)
+    a = Vector((-0.2, -1.4, 1.3)); b = Vector((-0.45, -3.1, 1.5))
+    return (a.lerp(b, e), Vector((0.55, 0.7, 0.85)), 32)
+
+
+def cam_co2_back(c, t):
+    e = ease(t)
+    a = Vector((-0.75, -1.05, 1.5)); b = Vector((-0.95, 0.4, 1.6))
+    return (a.lerp(b, e), Vector((0.45, -1.4, 1.3)), 35)
+
+
+def cam_co2_toy(c, t):
+    e = ease(t)
+    a = Vector((1.0 - 0.35, -3.05, 0.85)); b = Vector((0.4, -2.95, 0.8))
+    return (a.lerp(b, e), Vector((0.8, -2.5, 0.62)), 45)
+
+
+# --- 20A/B: the suitcase on the kitchen table
+def anim_suit(c, t, shot, dur):
+    sec = t * dur
+    sc = c["suit"]; top = c["ktable_top"]
+    if shot == "suitcase":
+        sc["hinge"].rotation_euler.x = math.radians(100)
+        o = c["P"]["detective"]; stand_at(o, (KTABLE.x + 0.75, KTABLE.y - 0.35), math.radians(125))
+        k = (sec / 1.6) % 1.0; n = int(sec / 1.6)
+        b = c["stack"][min(n, len(c["stack"]) - 1)]
+        src = Vector((KTABLE.x + 0.55, KTABLE.y - 0.15, top + 0.2)); dst = Vector((KTABLE.x + 0.1 - 0.12 * (n % 2), KTABLE.y + 0.05, top + 0.12))
+        for j, bb in enumerate(c["stack"]):
+            if j < n:
+                bb.location = (KTABLE.x + 0.1 - 0.12 * (j % 2), KTABLE.y + 0.05 - 0.1 + 0.09 * (j // 2 % 3), top + 0.13)
+        b.location = src.lerp(dst, ease(k)) + Vector((0, 0, 0.1 * math.sin(math.pi * k)))
+        rj.rjp.bend_to(o, b.location, frac=0.8, max_deg=20)
+        fwd = forward(o); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        reach(o, "R", b.location + Vector((0, 0, 0.04)), Vector((0, 0, -1)) + right * 0.6, fwd + Vector((0, 0, -1)))
+        side = right; o.rot("head", side, -22)
+        if "father" in c["P"]:
+            f = c["P"]["father"]; stand_at(f, (KTABLE.x - 0.45, KTABLE.y - 0.85), math.pi + 0.2)
+            f.rot("head", forward(f).cross(Vector((0, 0, 1))).normalized(), -18)
+    else:
+        k = ease(min(1.0, sec / 1.6))
+        sc["hinge"].rotation_euler.x = math.radians(100) * (1 - k)
+        for bb in c["stack"]:
+            bb.location.z = -5
+        f = c["P"]["father"]; stand_at(f, (KTABLE.x - 0.05, KTABLE.y - 0.62), math.pi)
+        lidp = sc["hinge"].matrix_world @ Vector((0, -sc["D"], 0.08))
+        rj.rjp.bend_to(f, lidp, frac=0.8, max_deg=22)
+        fwd = forward(f); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        latch = lambda x: sc["root"].matrix_world @ Vector((x, -sc["D"] / 2 - 0.01, sc["H"]))
+        if k < 1.0:
+            reach(f, "R", lidp + right * 0.15 + Vector((0, 0, 0.03)), Vector((0, 0, -1)) + right * 0.5, fwd)
+            reach(f, "L", lidp - right * 0.15 + Vector((0, 0, 0.03)), Vector((0, 0, -1)) - right * 0.5, fwd)
+        else:
+            reach(f, "R", latch(0.18) + Vector((0, -0.03, 0.02)), Vector((0, 0, -1)) + right * 0.5, fwd + Vector((0, 0, -1)))
+            reach(f, "L", latch(-0.18) + Vector((0, -0.03, 0.02)), Vector((0, 0, -1)) - right * 0.5, fwd + Vector((0, 0, -1)))
+        f.rot("head", right, -20)
+
+
+def cam_suitcase(c, t):
+    e = ease(t)
+    a = Vector((KTABLE.x - 1.1, KTABLE.y - 0.9, 1.55)); b = Vector((KTABLE.x - 0.9, KTABLE.y - 0.75, 1.45))
+    return (a.lerp(b, e), Vector((KTABLE.x + 0.15, KTABLE.y, c["ktable_top"] + 0.1)), 40)
+
+
+def cam_latch(c, t):
+    e = ease(t)
+    a = Vector((KTABLE.x + 1.45, KTABLE.y - 0.2, 1.15)); b = Vector((KTABLE.x + 1.25, KTABLE.y - 0.3, 1.1))
+    return (a.lerp(b, e), Vector((KTABLE.x - 0.05, KTABLE.y - 0.1, c["ktable_top"] + 0.15)), 40)
+
+
 MOVES = {
     "debug": dict(kind="anim", cam=cam_debug, anim=lambda c, t: anim_co(c, t, "co_push", 4.0)),
     "debug_liv": dict(kind="anim", cam=cam_debug_liv, anim=lambda c, t: anim_piano(c, t, "p_title", 4.0)),
     "co_push": _mk("co_push", 6.0, cam_co_push, anim_co, _f_mother, 4.0),
     "co_profile": _mk("co_profile", 5.0, cam_co_profile, anim_co, _f_mother, 2.8),
     "co_officer": _mk("co_officer", 4.5, cam_co_officer, anim_co, _f_mother, 2.4),
-    "co_tape": _mk("co_tape", 3.5, cam_co_tape, anim_co, _f_deck, 2.0),
+    "co_tape": _mk("co_tape", 3.5, cam_co_tape, anim_co, _f_deck, 5.6),
     "co_top": _mk("co_top", 4.0, cam_co_top, anim_co, _f_deck, 4.0),
     "co_meter": _mk("co_meter", 4.0, cam_co_meter, anim_co, _f_meter, 1.8),
     "co_brother": _mk("co_brother", 5.0, cam_co_brother, anim_piano, _f_bench, 2.8),
     "co_brother_side": _mk("co_brother_side", 4.5, cam_co_brother_side, anim_piano, _f_bench, 4.0),
-    "p_title": _mk("p_title", 8.5, cam_p_title, anim_piano, _f_bench, 4.0),
+    "p_title": dict(_mk("p_title", 8.5, cam_p_title, anim_piano), title=("CHAPTER 1", "TEN MINUTES HOME", 18, 120)),
     "p_page": _mk("p_page", 5.0, cam_p_page, anim_piano, _f_bench, 4.0),
+    "dial": _mk("dial", 5.0, cam_dial, anim_dial, _f_mother, 2.8),
+    "hangup": _mk("hangup", 4.5, cam_hangup, anim_dial, lambda c, t: Vector((1.0, -0.6, 1.7)), 4.0),
+    "bench": _mk("bench", 5.0, cam_bench, anim_empty_piano, _f_bench, 2.8),
+    "pwin": _mk("pwin", 4.5, cam_pwin, anim_empty_piano),
+    "k_radio": _mk("k_radio", 5.5, cam_kradio, anim_kitchen, lambda c, t: c["kradio"].location + Vector((0, 0, 0.1)), 2.0),
+    "k_window": _mk("k_window", 5.0, cam_kwin, anim_kitchen, lambda c, t: c["P"]["father"].bone_head("head"), 2.8),
+    "ring": _mk("ring", 4.0, cam_ring, anim_ring),
+    "listen": _mk("listen", 5.0, cam_listen, anim_ring, _f_mother, 2.8),
+    "letter": _mk("letter", 5.5, cam_letter, anim_letter, lambda c, t: c["letter"].location, 2.8),
+    "read": _mk("read", 5.0, cam_read, anim_letter),
+    "thread": _mk("thread", 5.0, cam_thread, anim_police_day, _f_deck, 2.8),
+    "door": _mk("door", 5.0, cam_door, anim_police_day, _f_officer, 2.8),
+    "call_left": _mk("call_left", 5.0, cam_call_left, anim_call, _f_mother, 2.8),
+    "toys": _mk("toys", 4.5, cam_toys, anim_call, lambda c, t: Vector((0.77, -2.38, 0.6)), 2.0),
+    "silent": _mk("silent", 5.0, cam_silent, anim_call, _f_deck, 2.8),
+    "stairs": _mk("stairs", 5.0, cam_stairs, anim_call, _f_mother, 4.0),
+    "co2_back": _mk("co2_back", 5.0, cam_co2_back, anim_call, _f_mother, 4.0),
+    "co2_toy": _mk("co2_toy", 4.5, cam_co2_toy, anim_call, lambda c, t: Vector((0.78, -2.5, 0.6)), 1.8),
+    "suitcase": _mk("suitcase", 5.0, cam_suitcase, anim_suit),
+    "latch": _mk("latch", 4.5, cam_latch, anim_suit),
 }
 NP = "night+police|mother,officer"
-VARIANT_FOR = {"debug": "morning+police|mother,officer", "debug_liv": "morning|brother,sister", "co_push": NP, "co_profile": NP, "co_officer": NP, "co_tape": NP, "co_top": NP, "co_meter": NP,
+VARIANT_FOR = {"debug": "morning@hall+police|mother,officer", "debug_liv": "morning|brother,sister", "co_push": NP, "co_profile": NP, "co_officer": NP, "co_tape": NP, "co_top": NP, "co_meter": NP,
                "co_brother": "night|brother", "co_brother_side": "night|brother",
-               "p_title": "morning|brother,sister", "p_page": "morning|brother,sister"}
+               "p_title": "morning@piano|brother,sister", "p_page": "morning@piano|brother,sister",
+               "dial": "sunset@hall|mother", "hangup": "sunset@hall|mother", "bench": "night", "pwin": "night+torches",
+               "k_radio": "morning@kitchen|mother,father", "k_window": "morning@kitchen|mother,father", "ring": "morning@hall|mother", "listen": "morning@hall|mother",
+               "letter": "morning@kitchen+letter|father,detective", "read": "morning@kitchen+letter|father,detective",
+               "thread": "morning@hall+police|tech", "door": "morning@hall+police|officer", "call_left": NP, "toys": NP,
+               "silent": "night+police", "stairs": "night+police|mother", "co2_back": NP, "co2_toy": NP,
+               "suitcase": "morning@kitchen+suitcase|father,detective", "latch": "morning@kitchen+suitcase|father"}
