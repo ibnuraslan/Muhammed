@@ -6,7 +6,7 @@ blender -b anim_p.blend --python 05_package.py -- <tmp_dir> <out.blend> <package
 import sys, os, bpy
 a = sys.argv[sys.argv.index("--") + 1:]; TMP, OUT, PKG = a
 os.makedirs(TMP, exist_ok=True); os.makedirs(os.path.dirname(OUT), exist_ok=True)
-sc0 = bpy.context.scene; sc0.cycles.samples = 48; sc0.render.use_motion_blur = True; sc0.render.motion_blur_shutter = 0.5
+sc0 = bpy.context.scene; sc0.cycles.samples = 48; sc0.render.use_motion_blur = False; sc0.render.motion_blur_shutter = 0.5
 sc0.render.image_settings.file_format = "PNG"; sc0.render.image_settings.color_depth = "8"; sc0.render.image_settings.compression = 15
 sc0.frame_set(0)
 D = bpy.data

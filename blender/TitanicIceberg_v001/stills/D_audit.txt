@@ -1,0 +1,8 @@
+HAND_PEN Steward R bcamera 114 16
+HAND_PEN ExpertA R magnifier 1284 11
+HAND_PEN ExpertA R magnifier 1290 11
+HAND_PEN ExpertA R magnifier 1296 11
+HAND_PEN ExpertA R magnifier 1302 11
+HAND_PEN ExpertA R magnifier 1314 13
+HAT_POKE_THROUGH_VERTS 4
+TOTALS {'hover': 0, 'sink': 0, 'float': 0, 'pen': 6, 'cam': 0, 'hand_hand': 0, 'hand_body': 0}

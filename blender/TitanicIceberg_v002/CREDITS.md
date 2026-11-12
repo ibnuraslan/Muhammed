@@ -22,7 +22,7 @@ Titanic by farhad.Guli · Steamship by TKenterprise · Vintage camera by Andy Wo
 | Old wall clock | AndreiVNK | CC BY 4.0 | https://sketchfab.com/3d-models/8e920e8b129842718099a3f772cec024 | Office wall clock |
 
 ## CC0 (no attribution required)
-- **Poly Haven** HDRIs: Qwantani Dawn (Pure Sky) and Qwantani Night (Pure Sky), by Greg Zaal and Jarod Guest.
+- **Poly Haven** HDRIs: Kloofendal 48d Partly Cloudy (Pure Sky) and Qwantani Night (Pure Sky), by Greg Zaal and Jarod Guest.
 - **Poly Haven** textures:
   - Wood Floor Deck, by Dimitrios Savva
   - Rusty Painted Metal, by Amal Kumar

@@ -62,6 +62,30 @@ for name, (frames, floor, props) in ACT.items():
                 pen = sum(1 for v in hv[::3] if inside(pt, v))
                 if dmin > 0.03: tot["float"] += 1; P("HAND_FLOAT", name, s, pn, f, round(dmin, 3))
                 if pen > 10: tot["pen"] += 1; P("HAND_PEN", name, s, pn, f, pen)
+# hands: every 2 frames, hand vs other hand (closest verts < 6 mm) and hand verts inside own suit/clothes (BVH parity)
+tot["hand_hand"] = 0; tot["hand_body"] = 0
+for name, (frames, floor, props) in ACT.items():
+    rig = O[name]; body = O[name + ".body"]
+    suit = [c for c in rig.children if c.name.split(".")[-1].startswith(("male_", "female_"))]
+    f0, f1 = frames[0], frames[-1]
+    for f in range(f0, f1 + 1, 2):
+        sc.frame_set(f)
+        vs, _, wts = ev_mesh(body)
+        H = {s: [v for v, w in zip(vs, wts) if any(k.startswith(("finger", "wrist", "metacarpal")) and k.endswith("." + s) and val > 0.5 for k, val in w.items())] for s in "LR"}
+        if H["L"] and H["R"]:
+            tL = BVHTree.FromPolygons(H["L"], [])  # point set
+            from mathutils.kdtree import KDTree
+            kd = KDTree(len(H["L"]))
+            for i, v in enumerate(H["L"]): kd.insert(v, i)
+            kd.balance()
+            dmin = min(kd.find(v)[2] for v in H["R"][::2])
+            if dmin < 0.006: tot["hand_hand"] += 1; P("HAND_HAND", name, f, round(dmin, 4))
+        for sm in suit:
+            st_, _ = bvh(sm)
+            for s in "LR":
+                FV = [v for v, w in zip(vs, wts) if any(k.startswith("finger") and k.endswith("." + s) and val > 0.5 for k, val in w.items())]
+                n_in = sum(1 for v in FV[::3] if inside(st_, v))
+                if n_in > 3: tot["hand_body"] += 1; P("HAND_IN_CLOTHES", name, s, f, n_in)
 # head items: steward's hat
 sc.frame_set(100)
 hat = O.get("Steward.fedora01")

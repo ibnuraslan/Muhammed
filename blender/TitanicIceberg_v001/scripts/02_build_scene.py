@@ -122,13 +122,13 @@ w = bpy.data.worlds.new("World_Atlantic"); sc.world = w; w.use_nodes = True
 wn, wl = w.node_tree.nodes, w.node_tree.links; wn.clear()
 tc = wn.new('ShaderNodeTexCoord'); mp = wn.new('ShaderNodeMapping'); mp.inputs['Rotation'].default_value = (0, 0, R_(200))
 wl.new(tc.outputs['Generated'], mp.inputs['Vector'])
-dawn = wn.new('ShaderNodeTexEnvironment'); dawn.image = img(os.path.join(A, "hdri/qwantani_dawn_puresky_2k.hdr"))
+dawn = wn.new('ShaderNodeTexEnvironment'); dawn.image = img(os.path.join(A, "hdri/kloofendal_48d_partly_cloudy_puresky_2k.hdr"))
 night = wn.new('ShaderNodeTexEnvironment'); night.image = img(os.path.join(A, "hdri/qwantani_night_puresky_2k.hdr"))
 for t in (dawn, night): wl.new(mp.outputs['Vector'], t.inputs['Vector'])
-dsat = wn.new('ShaderNodeHueSaturation'); dsat.inputs['Saturation'].default_value = 0.55; dsat.inputs['Value'].default_value = 1.0
+dsat = wn.new('ShaderNodeHueSaturation'); dsat.inputs['Saturation'].default_value = 1.15; dsat.inputs['Value'].default_value = 1.0
 wl.new(dawn.outputs['Color'], dsat.inputs['Color'])
 nmul = wn.new('ShaderNodeMix'); nmul.data_type = 'RGBA'; nmul.blend_type = 'MULTIPLY'; nmul.inputs['Factor'].default_value = 1
-nmul.inputs['B'].default_value = (0.25, 0.35, 0.6, 1); wl.new(night.outputs['Color'], nmul.inputs['A'])
+nmul.inputs['B'].default_value = (0.1, 0.18, 0.45, 1); wl.new(night.outputs['Color'], nmul.inputs['A'])
 mixDN = wn.new('ShaderNodeMix'); mixDN.data_type = 'RGBA'; mixDN.name = "DayNight"
 wl.new(dsat.outputs['Color'], mixDN.inputs['A']); wl.new(nmul.outputs['Result'], mixDN.inputs['B'])
 bg = wn.new('ShaderNodeBackground'); bg.name = "SkyStrength"; bg.inputs['Strength'].default_value = 1.6
@@ -136,8 +136,8 @@ wl.new(mixDN.outputs['Result'], bg.inputs['Color'])
 out = wn.new('ShaderNodeOutputWorld'); wl.new(bg.outputs['Background'], out.inputs['Surface'])
 
 sun = bpy.data.objects.new("Key_Sun", bpy.data.lights.new("Key_Sun", 'SUN'))
-sun.data.energy = 4.5; sun.data.angle = R_(4); sun.data.color = (1.0, 0.78, 0.6)
-sun.rotation_euler = (R_(74), 0, R_(215)); link(sun, C_OCEAN) if False else sc.collection.objects.link(sun)
+sun.data.energy = 4.0; sun.data.angle = R_(4); sun.data.color = (1.0, 0.95, 0.88)
+sun.rotation_euler = (R_(48), 0, R_(25)); link(sun, C_OCEAN) if False else sc.collection.objects.link(sun)
 moon = bpy.data.objects.new("Moon_Key", bpy.data.lights.new("Moon_Key", 'SUN'))
 moon.data.energy = 0.0; moon.data.angle = R_(1); moon.data.color = (0.55, 0.68, 1.0)
 moon.rotation_euler = (R_(62), 0, R_(15)); sc.collection.objects.link(moon)
@@ -151,7 +151,7 @@ om.time = 1.0
 fc = om.driver_add("time"); fc.driver.expression = "1 + frame / 60"
 sea.data.polygons.foreach_set("use_smooth", [True] * len(sea.data.polygons))
 wm = bpy.data.materials.new("M_Sea"); wm.use_nodes = True; n, l = wm.node_tree.nodes, wm.node_tree.links
-p = n["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.008, 0.03, 0.04, 1); p.inputs['Roughness'].default_value = 0.06
+p = n["Principled BSDF"]; p.inputs['Base Color'].default_value = (0.01, 0.07, 0.17, 1); p.inputs['Roughness'].default_value = 0.08
 p.inputs['IOR'].default_value = 1.333
 at = n.new('ShaderNodeAttribute'); at.attribute_name = "foam"; fr = n.new('ShaderNodeMapRange'); fr.inputs['From Min'].default_value = 0.35
 fr.inputs['From Max'].default_value = 1.0
@@ -170,8 +170,8 @@ far.data.materials.append(wm)
 # fog volume (keyable density)
 fog = box("Fog_Volume", (1400, 1400, 120), (0, 0, 55), col=C_OCEAN)
 fmat = bpy.data.materials.new("M_Fog"); fmat.use_nodes = True; fn = fmat.node_tree.nodes; fn.remove(fn["Principled BSDF"])
-pv = fn.new('ShaderNodeVolumePrincipled'); pv.name = "FogVol"; pv.inputs['Density'].default_value = 0.0025
-pv.inputs['Color'].default_value = (0.62, 0.68, 0.75, 1); pv.inputs['Anisotropy'].default_value = 0.3
+pv = fn.new('ShaderNodeVolumePrincipled'); pv.name = "FogVol"; pv.inputs['Density'].default_value = 0.0004
+pv.inputs['Color'].default_value = (0.8, 0.9, 1.0, 1); pv.inputs['Anisotropy'].default_value = 0.3
 fmat.node_tree.links.new(pv.outputs[0], fn["Material Output"].inputs['Volume']); fog.data.materials.append(fmat)
 # low mist bank around the berg (noise-modulated)
 mist = box("Mist_Bank", (180, 120, 10), (0, -20, 4), col=C_OCEAN)
@@ -181,7 +181,7 @@ tcm = mn_.new('ShaderNodeTexCoord'); mpm = mn_.new('ShaderNodeMapping'); mpm.nam
 nzm = mn_.new('ShaderNodeTexNoise'); nzm.inputs['Scale'].default_value = 0.035; nzm.inputs['Detail'].default_value = 3
 sz = mn_.new('ShaderNodeSeparateXYZ'); hz = mn_.new('ShaderNodeMapRange'); hz.inputs['From Min'].default_value = 0.0; hz.inputs['From Max'].default_value = 9.0
 hz.inputs['To Min'].default_value = 1.0; hz.inputs['To Max'].default_value = 0.0
-cr = mn_.new('ShaderNodeMapRange'); cr.inputs['From Min'].default_value = 0.45; cr.inputs['From Max'].default_value = 0.75; cr.inputs['To Max'].default_value = 0.05
+cr = mn_.new('ShaderNodeMapRange'); cr.inputs['From Min'].default_value = 0.45; cr.inputs['From Max'].default_value = 0.75; cr.inputs['To Max'].default_value = 0.008
 mul = mn_.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'
 ml.new(tcm.outputs['Object'], mpm.inputs['Vector']); ml.new(mpm.outputs['Vector'], nzm.inputs['Vector'])
 ml.new(nzm.outputs['Fac'], cr.inputs['Value']); ml.new(tcm.outputs['Object'], sz.inputs['Vector'])
@@ -249,16 +249,16 @@ sn = n.new('ShaderNodeTexImage'); sn.image = img(nf, True); sn.projection = 'BOX
 geo = n.new('ShaderNodeNewGeometry')
 crev = n.new('ShaderNodeMapRange'); crev.inputs['From Min'].default_value = 0.42; crev.inputs['From Max'].default_value = 0.52
 l.new(geo.outputs['Pointiness'], crev.inputs['Value'])
-blue = n.new('ShaderNodeMix'); blue.data_type = 'RGBA'; blue.inputs['B'].default_value = (0.62, 0.8, 0.9, 1)
-blue.inputs['A'].default_value = (0.1, 0.38, 0.55, 1); l.new(crev.outputs['Result'], blue.inputs['Factor'])
-base = n.new('ShaderNodeMix'); base.data_type = 'RGBA'; base.blend_type = 'MULTIPLY'; base.inputs['Factor'].default_value = 0.85
+blue = n.new('ShaderNodeMix'); blue.data_type = 'RGBA'; blue.inputs['B'].default_value = (0.86, 0.96, 1.0, 1)
+blue.inputs['A'].default_value = (0.3, 0.72, 0.92, 1); l.new(crev.outputs['Result'], blue.inputs['Factor'])
+base = n.new('ShaderNodeMix'); base.data_type = 'RGBA'; base.blend_type = 'MULTIPLY'; base.inputs['Factor'].default_value = 0.35
 l.new(blue.outputs['Result'], base.inputs['A']); l.new(sd.outputs['Color'], base.inputs['B'])
 # vertical meltwater streaks (stretched noise)
 st_map = n.new('ShaderNodeMapping'); st_map.inputs['Scale'].default_value = (1.4, 1.4, 0.08); l.new(tc_.outputs['Object'], st_map.inputs['Vector'])
 st_n = n.new('ShaderNodeTexNoise'); st_n.inputs['Scale'].default_value = 1.0; st_n.inputs['Detail'].default_value = 6
 l.new(st_map.outputs['Vector'], st_n.inputs['Vector'])
 st_r = n.new('ShaderNodeMapRange'); st_r.inputs['From Min'].default_value = 0.35; st_r.inputs['From Max'].default_value = 0.75
-st_r.inputs['To Min'].default_value = 0.75; st_r.inputs['To Max'].default_value = 1.08; l.new(st_n.outputs['Fac'], st_r.inputs['Value'])
+st_r.inputs['To Min'].default_value = 0.93; st_r.inputs['To Max'].default_value = 1.04; l.new(st_n.outputs['Fac'], st_r.inputs['Value'])
 stm = n.new('ShaderNodeMix'); stm.data_type = 'RGBA'; stm.blend_type = 'MULTIPLY'; stm.inputs['Factor'].default_value = 1
 l.new(base.outputs['Result'], stm.inputs['A']); l.new(st_r.outputs['Result'], stm.inputs['B'])
 # red hull-paint smear: object-space band at the waterline on the scrape face, revealed by a keyable sweep
@@ -271,7 +271,7 @@ def mult(a, b):
     m_ = n.new('ShaderNodeMath'); m_.operation = 'MULTIPLY'; l.new(a, m_.inputs[0]); l.new(b, m_.inputs[1]) if not isinstance(b, float) else None
     if isinstance(b, float): m_.inputs[1].default_value = b
     return m_.outputs[0]
-zb = mult(ramp(ox.outputs['Z'], -0.2, 0.6), ramp(ox.outputs['Z'], 3.6, 2.4))
+zb = mult(ramp(ox.outputs['Z'], 0.85, 1.0), ramp(ox.outputs['Z'], 1.45, 1.3))
 yb = ramp(ox.outputs['Y'], Y0 + 2.0, Y0 + 0.4)      # only on the scrape face
 xb = mult(ramp(ox.outputs['X'], SMEAR_X[0], SMEAR_X[0] + 3), ramp(ox.outputs['X'], SMEAR_X[1], SMEAR_X[1] - 3))
 sweep = n.new('ShaderNodeValue'); sweep.name = "SmearSweep"; sweep.outputs[0].default_value = SMEAR_X[0] - 5
@@ -280,12 +280,12 @@ swr = ramp(sw.outputs[0], -1.0, 1.5)   # x < sweep -> painted (liner runs +X to 
 # reveal: painted where x > sweep  (sweep goes from SMEAR_X[1]+5 down to SMEAR_X[0]-5)
 inv = n.new('ShaderNodeMath'); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0; l.new(swr, inv.inputs[1])
 brk = n.new('ShaderNodeTexNoise'); brk.inputs['Scale'].default_value = 1.2; brk.inputs['Detail'].default_value = 10; brk.inputs['Roughness'].default_value = 0.7
-smap = n.new('ShaderNodeMapping'); smap.inputs['Scale'].default_value = (0.35, 1, 2.2); l.new(tc_.outputs['Object'], smap.inputs['Vector']); l.new(smap.outputs['Vector'], brk.inputs['Vector'])
-brr = ramp(brk.outputs['Fac'], 0.38, 0.62)
+smap = n.new('ShaderNodeMapping'); smap.inputs['Scale'].default_value = (0.6, 1, 4.0); l.new(tc_.outputs['Object'], smap.inputs['Vector']); l.new(smap.outputs['Vector'], brk.inputs['Vector'])
+brr = ramp(brk.outputs['Fac'], 0.4, 0.52)
 paint = mult(mult(mult(zb, yb), mult(xb, inv.outputs[0])), brr)
 paint_s = n.new('ShaderNodeMath'); paint_s.operation = 'MULTIPLY'; paint_s.use_clamp = True; paint_s.inputs[1].default_value = 1.4
 l.new(paint, paint_s.inputs[0])
-pc = n.new('ShaderNodeMix'); pc.data_type = 'RGBA'; pc.inputs['B'].default_value = (0.22, 0.025, 0.018, 1)
+pc = n.new('ShaderNodeMix'); pc.data_type = 'RGBA'; pc.inputs['B'].default_value = (0.62, 0.03, 0.025, 1)
 l.new(paint_s.outputs[0], pc.inputs['Factor']); l.new(stm.outputs['Result'], pc.inputs['A'])
 l.new(pc.outputs['Result'], p.inputs['Base Color'])
 l.new(pc.outputs['Result'], p.inputs['Subsurface Radius']) if False else None
@@ -295,7 +295,7 @@ rr = n.new('ShaderNodeMapRange'); rr.inputs['To Min'].default_value = 0.35; rr.i
 wet = ramp(ox.outputs['Z'], 3.0, 0.5)
 l.new(wet, rr.inputs['Value']); l.new(rr.outputs['Result'], p.inputs['Roughness'])
 p.inputs['Coat Weight'].default_value = 0.3
-nm = n.new('ShaderNodeNormalMap'); nm.inputs['Strength'].default_value = 0.8; l.new(sn.outputs['Color'], nm.inputs['Color'])
+nm = n.new('ShaderNodeNormalMap'); nm.inputs['Strength'].default_value = 0.3; l.new(sn.outputs['Color'], nm.inputs['Color'])
 l.new(nm.outputs['Normal'], p.inputs['Normal'])
 me.materials.append(icem)
 berg.rotation_euler = (0, 0, 0)
@@ -489,7 +489,7 @@ glow = bpy.data.objects.new("Scrape_Glow", bpy.data.lights.new("Scrape_Glow", 'P
 glow.data.shadow_soft_size = 0.2; C_FX.objects.link(glow); glow.parent = spk; glow.location = (0, 0, 1.5)
 
 # ---------------------------------------------------------------- rooms inside the berg (enclosed, red darkroom -> office), explainer cyc
-plaster = pbr("M_Plaster", "painted_plaster_wall", 1.5, tint=(0.75, 0.68, 0.58))
+plaster = pbr("M_Plaster", "painted_plaster_wall", 1.5, tint=(1.25, 1.12, 0.92), bump=0.3)
 plaster_dark = pbr("M_Plaster_Dark", "painted_plaster_wall", 1.5, tint=(0.35, 0.3, 0.27))
 floorw = pbr("M_Floor", "old_wood_floor", 1.6)
 def room(name, x0, x1, y0, y1, z0, z1, wallm, door=None):
@@ -519,8 +519,8 @@ for f_ in cyc.data.polygons: f_.use_smooth = True
 cm = bpy.data.materials.new("M_CycGradient"); cm.use_nodes = True; cn, cl = cm.node_tree.nodes, cm.node_tree.links; cn.clear()
 ctc = cn.new('ShaderNodeTexCoord'); csz = cn.new('ShaderNodeSeparateXYZ'); cl.new(ctc.outputs['Object'], csz.inputs['Vector'])
 cr_ = cn.new('ShaderNodeMapRange'); cr_.inputs['From Min'].default_value = -7; cr_.inputs['From Max'].default_value = 7; cl.new(csz.outputs['Z'], cr_.inputs['Value'])
-crp = cn.new('ShaderNodeValToRGB'); crp.color_ramp.elements[0].color = (0.004, 0.06, 0.075, 1); crp.color_ramp.elements[1].color = (0.003, 0.008, 0.035, 1)
-crp.color_ramp.elements.new(0.45).color = (0.008, 0.11, 0.13, 1)
+crp = cn.new('ShaderNodeValToRGB'); crp.color_ramp.elements[0].color = (0.80, 0.93, 1.0, 1); crp.color_ramp.elements[1].color = (0.08, 0.55, 0.93, 1)
+crp.color_ramp.elements[0].position = 0.25
 cl.new(cr_.outputs['Result'], crp.inputs['Fac'])
 cnz = cn.new('ShaderNodeTexNoise'); cnz.inputs['Scale'].default_value = 2.0
 cbg = cn.new('ShaderNodeEmission'); cl.new(crp.outputs['Color'], cbg.inputs['Color']); cbg.inputs['Strength'].default_value = 1.0
@@ -532,7 +532,7 @@ cl.new(ctr.outputs[0], cmx.inputs[1]); cl.new(cbg.outputs[0], cmx.inputs[2])
 co_ = cn.new('ShaderNodeOutputMaterial'); cl.new(cmx.outputs[0], co_.inputs['Surface']); cyc.data.materials.append(cm)
 cyc.visible_shadow = False
 # explainer floor: dark wet reflective stage
-stage = box("Explainer_Stage", (13, 13, 0.1), CYC_C - Vector((0, 0, 0.05)), mat_simple("M_Stage", (0.01, 0.025, 0.03), 0.15, 0.0), C_CYC)
+stage = box("Explainer_Stage", (13, 13, 0.1), CYC_C - Vector((0, 0, 0.05)), mat_simple("M_Stage", (0.55, 0.78, 0.92), 0.4, 0.0), C_CYC)
 
 # ---------------------------------------------------------------- the photo image (filled in by 03 with a render of beat 1)
 pimg = bpy.data.images.new("Photo_Iceberg", 540, 720); pimg.generated_color = (0.5, 0.48, 0.44, 1)
@@ -548,7 +548,7 @@ def photo_mat(name, develop=True, flat=False):
     l.new(paper.outputs['Result'], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.25 if develop else 0.45
     return m
 # ---------------------------------------------------------------- darkroom dressing
-redL = bpy.data.objects.new("Safelight", bpy.data.lights.new("Safelight", 'AREA')); redL.data.energy = 160; redL.data.color = (1.0, 0.08, 0.03)
+redL = bpy.data.objects.new("Safelight", bpy.data.lights.new("Safelight", 'AREA')); redL.data.energy = 230; redL.data.color = (1.0, 0.08, 0.03)
 redL.data.size = 0.4; redL.location = (1.2, Y0 + 5.0, RZ1 - 0.25); C_ROOMS.objects.link(redL)
 redL2 = bpy.data.objects.new("Safelight_Fill", bpy.data.lights.new("Safelight_Fill", 'POINT')); redL2.data.energy = 70; redL2.data.color = (1.0, 0.12, 0.05)
 redL2.location = (-1.0, Y0 + 2.0, RZ1 - 0.5); C_ROOMS.objects.link(redL2)
@@ -582,11 +582,11 @@ DESK_TOP = RZ0 + desk.dimensions.z
 lamp = import_glb("lamp", height=0.5, col=C_ROOMS); lamp.location = (7.6, Y0 + 4.85, DESK_TOP)
 lampL = bpy.data.objects.new("Desk_Lamp_Light", bpy.data.lights.new("Desk_Lamp_Light", 'POINT')); lampL.data.energy = 60; lampL.data.color = (1.0, 0.75, 0.45)
 lampL.location = (7.62, Y0 + 4.75, DESK_TOP + 0.38); lampL.data.shadow_soft_size = 0.08; C_ROOMS.objects.link(lampL)
-winL = bpy.data.objects.new("Office_Window_Light", bpy.data.lights.new("Office_Window_Light", 'AREA')); winL.data.energy = 300; winL.data.size = 2.5
-winL.data.color = (0.75, 0.85, 1.0); winL.location = (11.8, Y0 + 3.5, 3.0); winL.rotation_euler = (0, R_(-90), 0); C_ROOMS.objects.link(winL)
-fillO = bpy.data.objects.new("Office_Fill", bpy.data.lights.new("Office_Fill", 'AREA')); fillO.data.energy = 160; fillO.data.size = 3
+winL = bpy.data.objects.new("Office_Window_Light", bpy.data.lights.new("Office_Window_Light", 'AREA')); winL.data.energy = 650; winL.data.size = 4.0
+winL.data.color = (1.0, 0.93, 0.82); winL.location = (11.6, Y0 + 3.5, 3.0); winL.rotation_euler = (0, R_(90), 0); C_ROOMS.objects.link(winL)
+fillO = bpy.data.objects.new("Office_Fill", bpy.data.lights.new("Office_Fill", 'AREA')); fillO.data.energy = 900; fillO.data.size = 3
 fillO.location = (6.0, Y0 + 1.5, 3.8); fillO.rotation_euler = (R_(30), 0, 0); C_ROOMS.objects.link(fillO)
-backO = bpy.data.objects.new("Office_Back_Light", bpy.data.lights.new("Office_Back_Light", 'AREA')); backO.data.energy = 120; backO.data.size = 2
+backO = bpy.data.objects.new("Office_Back_Light", bpy.data.lights.new("Office_Back_Light", 'AREA')); backO.data.energy = 600; backO.data.size = 2
 backO.data.color = (1.0, 0.85, 0.65); backO.location = (9.5, Y0 + 3.0, 3.9); backO.rotation_euler = (R_(-35), R_(25), 0); C_ROOMS.objects.link(backO)
 clock = import_glb("clock", height=0.55, col=C_ROOMS); clock.location = (10.5, Y0 + 7.5, 2.4); clock.rotation_euler.z = R_(180)
 mag = import_glb("magnifier", height=0.28, col=C_ROOMS)

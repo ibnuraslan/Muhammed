@@ -63,13 +63,13 @@ def ship_mat(f):
 W = sc.world
 for f, v in ((0, 0.0), (905, 0.0), (940, 1.0), (1095, 1.0), (1150, 0.0)):
     node_key(W, "DayNight", f, v, inp='Factor')
-for f, v in ((0, 0.7), (905, 0.7), (940, 0.6), (1095, 0.6), (1150, 0.7)):
+for f, v in ((0, 1.0), (905, 1.0), (940, 1.0), (1095, 1.0), (1150, 1.0)):
     node_key(W, "SkyStrength", f, v, inp='Strength')
 sun, moon = O["Key_Sun"], O["Moon_Key"]
-for f, e in ((0, 3.2), (905, 3.2), (940, 0.0), (1095, 0.0), (1150, 3.2)): kv(sun.data, "energy", f, e)
-for f, e in ((0, 0.0), (905, 0.0), (940, 3.5), (1095, 3.5), (1150, 0.0)): kv(moon.data, "energy", f, e)
+for f, e in ((0, 4.0), (905, 4.0), (940, 0.0), (1095, 0.0), (1150, 4.0)): kv(sun.data, "energy", f, e)
+for f, e in ((0, 0.0), (905, 0.0), (940, 5.0), (1095, 5.0), (1150, 0.0)): kv(moon.data, "energy", f, e)
 fogm = D.materials["M_Fog"]
-for f, v in ((0, 0.0025), (1500, 0.0025), (1620, 0.0055), (END, 0.0065)): node_key(fogm, "FogVol", f, v, inp='Density')
+for f, v in ((0, 0.0004), (1500, 0.0004), (1620, 0.0009), (END, 0.0011)): node_key(fogm, "FogVol", f, v, inp='Density')
 mm = D.materials["M_Mist"]; md = mm.node_tree.nodes["MistDrift"]
 md.inputs['Location'].default_value = (0, 0, 0); md.inputs['Location'].keyframe_insert("default_value", frame=0)
 md.inputs['Location'].default_value = (-9, 3, 0); md.inputs['Location'].keyframe_insert("default_value", frame=END)
@@ -231,8 +231,8 @@ for f, (cp, pitch) in CAMP.items():
     Rm = Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pitch), 4, 'X')   # model lens points -Y; turn it to +Y
     cam_xf(f, Matrix.Translation(cp) @ Rm)
     # hands on the camera body sides, palms in
-    st.hand("L", f, cp + Vector((0.17, -0.06, -0.03)), (0, 0.4, 1), (-1, 0, 0), pole=cp + Vector((0.6, -0.4, -0.5)), curl=55)
-    st.hand("R", f, cp + Vector((-0.17, -0.06, -0.03)), (0, 0.4, 1), (1, 0, 0), pole=cp + Vector((-0.6, -0.4, -0.5)), curl=50)
+    st.hand("L", f, cp + Vector((0.155, -0.11, 0.075)), (0, 1, 0.15), (-1, 0, 0), pole=cp + Vector((0.6, -0.4, -0.5)), curl=10, thumb=18)
+    st.hand("R", f, cp + Vector((-0.155, -0.11, 0.075)), (0, 1, 0.15), (1, 0, 0), pole=cp + Vector((-0.6, -0.4, -0.5)), curl=10, thumb=18)
 STP = [(0, (0, 0, 0), (-6, 0), 0.0), (50, (4, 0, 0), (2, 0), 0.0), (95, (8, 0, 0), (6, 0), 0.02), (115, (9, -2, 0), (6, 0), 0.03),
        (125, (6, 0, 0), (4, 0), 0.02), (160, (5, 0, 0), (4, 0), 0.02), (230, (0, 5, 0), (-6, 8), 0.0), (360, (2, 3, 0), (-4, 4), 0.0)]
 for f, sp_, hd, cr in STP:
@@ -241,23 +241,23 @@ for f, kw in ((0, dict(brow=0.2, lids=0.2)), (60, dict(brow=0.8, lids=0.6, jaw=4
               (130, dict(brow=1.0, lids=1.0, jaw=8, smile=0.3)), (200, dict(brow=1.2, lids=1.0, jaw=10)), (360, dict(brow=0.8, lids=0.6, jaw=5))):
     face(st.R, f, **kw)
 # shutter click: right index finger pushes at 112
-key_fingers(st.R, "R", 105, [20, 50, 55, 55]); key_fingers(st.R, "R", 112, [55, 50, 55, 55]); key_fingers(st.R, "R", 120, [20, 50, 55, 55])
+key_fingers(st.R, "R", 105, [10, 10, 10, 10], 18); key_fingers(st.R, "R", 112, [30, 10, 10, 10], 18); key_fingers(st.R, "R", 120, [10, 10, 10, 10], 18)
 
 # --- deckhand coiling rope in the background
 dh = Actor("Deckhand", DK.z + 0.025); dh.o.parent = ship_root; dh.o.matrix_parent_inverse = Matrix.Identity(4); dh.o.location = (0, 0, 0)
-DP = DK + Vector((1.5, -1.0 + 0.55, 0))  # beside the coil, facing it (-Y)
-dfeet = {"L": (Vector((DP.x + 0.2, DP.y + 0.05)), 10), "R": (Vector((DP.x - 0.22, DP.y - 0.02)), -12)}
+DP = DK + Vector((1.5, -1.0 + 0.78, 0))  # beside the coil, facing it (-Y)
+dfeet = {"L": (Vector((DP.x + 0.22, DP.y + 0.08)), 10), "R": (Vector((DP.x - 0.24, DP.y + 0.02)), -12)}
 for f in range(0, 400, 20):
     a = f / 60 * 3.5
-    dh.pose(f, (DP.x, DP.y), 0.0, flex=22, spine=(35, 8 * math.sin(a), 0), head=(15, 5 * math.sin(a)), feet=dfeet, crouch=0.18)
-    c = DK + Vector((1.5, -1.0, 0.45)) + Vector((0.25 * math.cos(a), 0.25 * math.sin(a), 0.1 * math.sin(a * 2)))
-    dh.hand("R", f, c, (0, -0.3, -1), (0, 1, 0), pole=c + Vector((-0.5, 0.6, 0.2)), curl=60)
+    dh.pose(f, (DP.x, DP.y), 0.0, flex=34, spine=(55, 8 * math.sin(a), 0), head=(5, 5 * math.sin(a)), feet=dfeet, crouch=0.36)
+    c = DK + Vector((1.5, -1.0, 0.3)) + Vector((0.16 * math.cos(a), 0.1 * math.sin(a) - 0.05, 0.05 * math.sin(a * 2)))
+    dh.hand("R", f, c, (0, -0.3, -1), (0, 1, 0), pole=c + Vector((-0.5, 0.6, 0.2)), curl=70, thumb=40)
     dh.hand("L", f, DK + Vector((1.9, -0.85, 0.75)), (0.2, -0.5, -1), (-1, 0, 0), pole=DK + Vector((2.4, -0.3, 1.0)), curl=65)
     face(dh.R, f, brow=-0.3, lids=-0.3, frown=0.4, jaw=2)
 
 # --- darkroom technician rocking the tray with tongs
 tech = Actor("Tech", RZ0 + 0.026)
-TP = Vector((1.2, Y0 + 4.85))
+TP = Vector((1.2, Y0 + 4.72))
 tfeet = {"L": (Vector((TP.x + 0.15, TP.y - 0.05)), 172), "R": (Vector((TP.x - 0.17, TP.y)), 188)}
 tongs = O["Tongs"]
 for f in range(1060, 1215, 6):
@@ -265,9 +265,9 @@ for f in range(1060, 1215, 6):
     tech.pose(f, TP, 180.0, flex=10, spine=(26, 3 * rock, 0), head=(26, 2), feet=tfeet, crouch=0.04)
     tip = Vector((1.25 + 0.05 * rock, Y0 + 5.35, BENCH_TOP + 0.06 + 0.012 * rock))
     tongs.location = tip + Vector((0, -0.12, 0.04)); tongs.rotation_euler = (R_(-20), 0, R_(90)); tongs.keyframe_insert("location", frame=f); tongs.keyframe_insert("rotation_euler", frame=f)
-    tech.hand("R", f, tip + Vector((0, -0.30, 0.11)), (0, 1, -0.35), (0, 0, -1), pole=tip + Vector((-0.6, -0.6, 0)), curl=55)
+    tech.hand("R", f, tip + Vector((0, -0.27, 0.11)), (0, 1, -0.35), (0, 0, -1), pole=tip + Vector((-0.6, -0.6, 0)), curl=62, thumb=40)
     # left hand tilts the tray edge
-    tech.hand("L", f, Vector((0.5, Y0 + 5.2, BENCH_TOP + 0.075 + 0.01 * rock)), (0, 1, -0.2), (0, 0, -1), pole=Vector((0.0, Y0 + 4.6, 1.5)), curl=30)
+    tech.hand("L", f, Vector((0.5, Y0 + 5.2, BENCH_TOP + 0.065 + 0.01 * rock)), (0, 1, -0.2), (0, 0, -1), pole=Vector((0.0, Y0 + 4.6, 1.5)), curl=30)
     tray = O["Tray_1"]; tray.rotation_euler = (R_(1.2 * rock), 0, 0); tray.keyframe_insert("rotation_euler", frame=f)
 for f, kw in ((1060, dict(brow=-0.2, lids=-0.4, frown=0.3)), (1130, dict(brow=0.6, lids=0.4, jaw=4)), (1180, dict(brow=1.3, lids=1.0, jaw=10))):
     face(tech.R, f, **kw)
@@ -289,7 +289,7 @@ for f in range(1180, 1345, 10):
     pc = PRC + Vector((0.01 * sway, 0, 0.01 * math.sin(t * 3)))
     PR.location = pc; PR.keyframe_insert("location", frame=f)
     eb.hand("L", f, pc + Vector((0.185, 0.04, -0.02)), (-0.3, 0, 1), (0, -1, 0), pole=pc + Vector((0.6, 0.4, -0.5)), curl=45, thumb=35)
-    eb.hand("R", f, pc + Vector((-0.155, 0.035, -0.02)), (0.3, 0, 1), (0, -1, 0), pole=pc + Vector((-0.6, 0.4, -0.5)), curl=45, thumb=35)
+    eb.hand("R", f, pc + Vector((-0.15, 0.025, -0.02)), (0.3, 0, 1), (0, -1, 0), pole=pc + Vector((-0.6, 0.4, -0.5)), curl=45, thumb=35)
 AP = Vector((7.72, Y0 + 3.72))
 afeet = {"L": (Vector((AP.x - 0.14, AP.y + 0.02)), 172), "R": (Vector((AP.x + 0.15, AP.y - 0.06)), 190)}
 mag = O["magnifier"]
@@ -299,7 +299,7 @@ for f in range(1180, 1345, 10):
     mc = Vector((7.98 + 0.03 * k, Y0 + 4.25 + 0.1 * k, 2.08 + 0.06 * k)) + Vector((0.008 * math.sin(t * 4), 0, 0))
     mag.location = mc - Vector((0, 0, 0.235)); mag.rotation_euler = (R_(-6), 0, R_(4)); mag.keyframe_insert("location", frame=f); mag.keyframe_insert("rotation_euler", frame=f)
     hd = mc + Vector((0, 0, -0.16))     # handle grip below the lens
-    ea.hand("R", f, hd + Vector((0.06, -0.025, -0.05)), (-0.1, 0.1, 1), (-1, 0, 0), pole=hd + Vector((0.4, -0.5, -0.5)), curl=58, thumb=35)
+    ea.hand("R", f, hd + Vector((0.068, -0.025, -0.05)), (-0.1, 0.1, 1), (-1, 0, 0), pole=hd + Vector((0.4, -0.5, -0.5)), curl=58, thumb=35)
     ea.hand("L", f, Vector((7.55, Y0 + 4.3, DESK_TOP + 0.012)), (0.2, 1, 0), (0, 0, -1), pole=Vector((7.2, Y0 + 3.7, 1.6)), curl=15)
 for R, ks in ((ea.R, ((1180, dict(brow=0.3, lids=-0.5, frown=0.3)), (1260, dict(brow=0.8, lids=0.5, jaw=3)), (1300, dict(brow=1.4, lids=1.2, jaw=12)))),
               (eb.R, ((1180, dict(brow=0.5, lids=0.2)), (1270, dict(brow=1.2, lids=1.0, jaw=8)), (1320, dict(brow=1.4, lids=1.0, jaw=12, smile=0.3))))):
@@ -314,7 +314,20 @@ for f, x in ((1338, GP.x + 2.7 + 18), (1395, GP.x + 2.7 + 9), (1450, GP.x + 2.7 
     tip_local = LMINX if BOW_SIGN < 0 else -LMAXX
     lx.rotation_euler = (0, 0, 0.0 if BOW_SIGN < 0 else math.pi)
     lx.location = (x - tip_local * S, GP.y - 0.6, WL); lx.keyframe_insert("location", frame=f); lx.keyframe_insert("rotation_euler", frame=f)
-for f, v in ((1338, 0.0), (1360, 1.6), (1530, 1.6), (1545, 0.0)): node_key(gmx, "GhostAlpha", f, v)
+# on the bright cyc an additive ghost vanishes: give the explainer hull a translucent blue body
+_n = gmx.node_tree.nodes; _l = gmx.node_tree.links
+_out = next(n for n in _n if n.type == 'OUTPUT_MATERIAL'); _src = _out.inputs['Surface'].links[0].from_socket
+_body = _n.new('ShaderNodeBsdfPrincipled'); _body.inputs['Base Color'].default_value = (0.08, 0.35, 0.85, 1); _body.inputs['Roughness'].default_value = 0.4
+_lw = _n.new('ShaderNodeLayerWeight'); _lw.inputs['Blend'].default_value = 0.5
+_fa = _n.new('ShaderNodeMath'); _fa.operation = 'MULTIPLY_ADD'; _fa.inputs[1].default_value = 0.4; _fa.inputs[2].default_value = 0.25
+_l.new(_lw.outputs['Facing'], _fa.inputs[0])
+_fb = _n.new('ShaderNodeMath'); _fb.operation = 'MULTIPLY'; _fb.use_clamp = True; _l.new(_fa.outputs[0], _fb.inputs[0]); _l.new(_n["GhostAlpha"].outputs[0], _fb.inputs[1])
+_lp = _n.new('ShaderNodeLightPath'); _fc = _n.new('ShaderNodeMath'); _fc.operation = 'MULTIPLY'
+_lt = _n.new('ShaderNodeMath'); _lt.operation = 'LESS_THAN'; _lt.inputs[1].default_value = 0.5; _l.new(_lp.outputs['Transparent Depth'], _lt.inputs[0])
+_l.new(_fb.outputs[0], _fc.inputs[0]); _l.new(_lt.outputs[0], _fc.inputs[1])
+_mx = _n.new('ShaderNodeMixShader'); _l.new(_fc.outputs[0], _mx.inputs['Fac']); _l.new(_src, _mx.inputs[1]); _l.new(_body.outputs[0], _mx.inputs[2])
+_l.new(_mx.outputs[0], _out.inputs['Surface'])
+for f, v in ((1338, 0.0), (1360, 1.0), (1530, 1.0), (1545, 0.0)): node_key(gmx, "GhostAlpha", f, v)
 for f, v in ((0, 0.0), (1440, 0.0), (1470, 1.0), (1530, 1.0), (1545, 0.0)): node_key(gmx, "RedBand", f, v)
 # horizontal match line sweeping across print + hull at the waterline height
 bpy.ops.mesh.primitive_cylinder_add(radius=0.012, depth=1.0, location=(0, 0, 0), rotation=(0, R_(90), 0))
@@ -346,11 +359,11 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (240,  Vector((-12, -78, 6)),        Vector((-4, -30, 11)),     45, 8.0),
     (300,  Vector((-14, -58, 5)),        Vector((-4, -30, 7)),      26, 8.0),
     (350,  Vector((-14, -30, 2.4)),      Vector((-9, Y0, 1.6)),     28, 5.6),
-    (410,  Vector((-12.5, Y0 - 2.6, 1.0)), Vector((-8, Y0, 1.3)),   35, 2.8),
-    (470,  Vector((-6, Y0 - 1.5, 0.8)),  Vector((-3, Y0, 1.3)),     40, 2.8),
-    (530,  Vector((0.5, Y0 - 1.0, 1.1)), Vector((2.5, Y0, 1.7)),    50, 2.0),
-    (580,  Vector((6, Y0 - 1.5, 1.7)),   Vector((7.0, Y0, 3.2)),    40, 2.8),
-    (625,  Vector((9, Y0 - 5.0, 3.2)),   Vector((6, Y0, 2.2)),      30, 5.6),
+    (410,  Vector((-15, Y0 - 17, 4.5)),  Vector((-4, Y0, 3.0)),     30, 5.6),
+    (470,  Vector((-6, Y0 - 11, 3.0)),   Vector((0, Y0, 1.8)),      32, 5.6),
+    (530,  Vector((1.2, Y0 - 2.2, 1.35)), Vector((3.0, Y0, 1.2)),   40, 4.0),
+    (580,  Vector((6, Y0 - 7.5, 2.4)),   Vector((7.5, Y0, 1.6)),    32, 5.6),
+    (625,  Vector((10, Y0 - 12.0, 4.5)), Vector((6, Y0, 2.0)),      30, 5.6),
     (680,  Vector((6, Y0 - 13, 11)),     Vector((0, -45, 0)),       26, 8.0),
     (740,  Vector((-2, -36, 30)),        Vector((-6, -62, 0)),      24, 8.0),
     (800,  Vector((-8, -62, 38)),        Vector((-14, -84, 0)),     24, 8.0),
@@ -358,8 +371,8 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (915,  Vector((-34, -44, 12)),       Vector((0, Y0, 8)),        26, 8.0),
     (965,  Vector((-28, Y0 - 7, 3.2)),   Vector((10, Y0 - 3, 3.0)), 24, 5.6),
     (1015, Vector((-10, Y0 - 4.2, 2.4)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
-    (1055, Vector((0.5, Y0 - 3.2, 2.0)), Vector((2, Y0, 1.9)),      30, 4.0),
-    (1080, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 1.85)), 30, 4.0),
+    (1055, Vector((0.5, Y0 - 3.2, 1.5)), Vector((2, Y0, 1.25)),     30, 5.6),
+    (1080, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 1.25)), 30, 5.6),
     (1105, Vector((1.8, Y0 + 1.4, 2.85)), Vector((1.2, Y0 + 5.45, 1.7)), 26, 5.6),
     (1150, Vector((2.0, Y0 + 4.95, 2.35)), Vector((1.2, Y0 + 5.45, 1.72)), 35, 2.8),
     (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
@@ -380,10 +393,10 @@ CK = [  # frame, camera position, look target, lens, f-stop
 ]
 # real ice surface on the dive line (the facet displacement moves it off the Y0 plane)
 dg = bpy.context.evaluated_depsgraph_get(); bev = O["Iceberg"].evaluated_get(dg)
-hit_, loc_, _, _ = bev.ray_cast(Vector((2.0, Y0 - 12, 1.95)), Vector((0, 1, 0)))
+hit_, loc_, _, _ = bev.ray_cast(Vector((2.0, Y0 - 12, 1.25)), Vector((0, 1, 0)))
 YS_ICE = loc_.y if hit_ else Y0
 print("ICE SURFACE", YS_ICE)
-CK = [k if k[0] != 1080 else (1080, Vector((2.0, YS_ICE - 0.45, 1.95)), k[2], k[3], k[4]) for k in CK]
+CK = [k if k[0] != 1080 else (1080, Vector((2.0, YS_ICE - 0.45, 1.3)), k[2], k[3], k[4]) for k in CK]
 fpos = catmull([(k[0], k[1]) for k in CK])
 _tg = [pchip([(k[0], k[2][c]) for k in CK]) for c in range(3)]
 ftgt = lambda f: Vector((_tg[0](f), _tg[1](f), _tg[2](f)))   # monotone: no overshoot when the target jumps far
@@ -397,7 +410,7 @@ for f in range(0, END + 1, 2):
     cam.location = p; cam.rotation_mode = 'QUATERNION'; cam.rotation_quaternion = q
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f)
     cam.data.lens = flen(f); cam.data.keyframe_insert("lens", frame=f)
-    cam.data.dof.aperture_fstop = fst(f); cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
+    cam.data.dof.aperture_fstop = max(fst(f), 4.0 if (500 <= f <= 560 or 1130 <= f <= 1165) else 5.6); cam.data.dof.keyframe_insert("aperture_fstop", frame=f)
     fd = (t - p).length
     if f < 175: fd = (p - (STW(f, (0, 0.3, 1.5)) if f < 150 else Vector((0, Y0, 10)))).length if f < 150 else fd   # rack focus lens -> berg
     cam.data.dof.focus_distance = max(0.1, fd); cam.data.dof.keyframe_insert("focus_distance", frame=f)
@@ -444,6 +457,32 @@ for o in list(D.collections["Explainer_Cyc"].objects):
     o.hide_render = True; o.keyframe_insert("hide_render", frame=cross_giant + 1)
     set_interp(o, 'CONSTANT', lambda p_: p_ == "hide_render")
 sc["CROSS"] = [cross_skin, cross_print, cross_giant]
+# ---------------------------------------------------------------- hands: Limit Rotation on every finger, thumb and wrist (no backward bends)
+import re
+def limit_hands(rig, probe_frames):
+    pbs = rig.pose.bones; nlim = 0
+    for pb in pbs:
+        m = re.match(r"finger(\d)-(\d)\.([LR])$", pb.name)
+        if not m and not (re.match(r"wrist\.[LR]$", pb.name) and rig.name.startswith("Expert")): continue
+        c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HandLimit"
+        c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+        if m and m.group(1) != "1":
+            # forward-curl axis/sign measured from the keyed poses
+            acc = Vector((0, 0, 0))
+            for f in probe_frames:
+                sc.frame_set(f); e = pb.matrix_basis.to_euler('XYZ'); acc += Vector(e)
+            ax = max(range(3), key=lambda i: abs(acc[i])); sg = 1 if acc[ax] >= 0 else -1
+            lims = [(-R_(12), R_(12))] * 3
+            lims[ax] = (0.0, R_(95)) if sg > 0 else (-R_(95), 0.0)
+        elif m:
+            lims = [(-R_(50), R_(50))] * 3
+        else:
+            lims = [(-R_(65), R_(65)), (-R_(45), R_(45)), (-R_(30), R_(30))]
+        (c.min_x, c.max_x), (c.min_y, c.max_y), (c.min_z, c.max_z) = lims
+        nlim += 1
+    return nlim
+for nm_, fr_ in (("Steward", (60, 120, 200)), ("Deckhand", (100, 200)), ("Tech", (1120, 1160)), ("ExpertA", (1250, 1300)), ("ExpertB", (1250, 1300))):
+    print("HANDLIMIT", nm_, limit_hands(O[nm_], fr_))
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
 sc.frame_set(0)
