@@ -35,7 +35,7 @@ CAM = [  # frame, camera, aim, lens, fstop
     (391, Vector((3.6, -0.2, 1.3)), HER_HEAD + Vector((0.0, -0.08, -0.08)), 30, 5.6),
     # beat 4: her face freezing, his reach, bullet-level side view, low along the line with the tumbler between them
     (440, Vector((4.30, 0.12, 1.30)), HER_HEAD, 40, 5.6),
-    (451, Vector((4.55, -0.05, 1.38)), HER_HEAD + Vector((0.0, -0.05, 0.0)), 36, 5.6),
+    (451, Vector((4.52, -0.06, 1.24)), HER_HEAD + Vector((0.0, -0.05, -0.04)), 36, 5.6),
     (470, Vector((4.98, -0.42, 1.42)), HIS_HEAD + Vector((0.0, 0.1, -0.1)), 30, 5.6),
     (500, Vector((4.55, -0.25, 1.32)), HIS_HEAD + Vector((0.05, 0.25, -0.25)), 35, 2.8),
     (528, Vector((4.62, -0.05, 1.18)), HIS_HEAD + Vector((0.15, 0.3, -0.35)), 30, 4),
@@ -45,7 +45,7 @@ CAM = [  # frame, camera, aim, lens, fstop
     (640, P(640) - D * 0.1 + SV * 0.05 + Z(0.02), C3 - DXY * 0.045, 50, 2.8),
     (700, C3 + Vector((-0.14, 0.13, 0.02)), C3 + Vector((-0.03, 0.03, -0.01)), 55, 4),
     (724, Vector((4.36, -0.45, 1.17)), C3 + Vector((0.2, 0.1, 0.2)), 45, 4),
-    (748, Vector((4.52, -0.14, 1.27)), HER_HEAD + Vector((0.0, 0.02, 0.02)), 45, 2.8),
+    (748, Vector((4.50, -0.12, 1.20)), HER_HEAD + Vector((0.0, 0.02, -0.04)), 45, 5.6),
     (772, Vector((4.52, -0.30, 1.30)), C3 + Z(0.12), 40, 5.6),
     (795, C3 + Vector((0.08, -0.10, 0.34)), C3 + Z(0.13), 40, 5.6),
     (815, HH815 + Vector((0.32, 0.55, 0.02)), HH815 + Vector((0.0, 0.0, -0.12)), 30, 5.6),
@@ -59,14 +59,16 @@ CAM = [  # frame, camera, aim, lens, fstop
     (1100, C3 - DXY * 0.07 + Z(0.21), C3 + Vector((0, 0, sc['cup_top'] + 0.21 - IMPACT_Z)), 30, 5.6),
     (1160, Vector((3.95, -0.05, 1.08)), P(1160) + Vector((0.05, -0.05, 0.08)), 30, 5.6),
     (1220, Vector((3.85, -0.18, 1.22)), (HER_HEAD + HIS_HEAD) / 2 - Z(0.25), 26, 4),
-    (1270, Vector((3.30, -0.55, 1.05)), P(1270), 32, 5.6),
+    (1270, Vector((3.00, -0.45, 1.0)), P(1270), 34, 5.6),
     # beat 7: follow it over the edge and down, floor-level skim on the bounces, settle close-up
-    (1300, Vector((3.35, -1.30, 0.90)), P(1300), 36, 5.6),
+    (1285, Vector((3.05, -0.50, 0.92)), P(1285), 36, 5.6),
+    (1310, Vector((3.30, -1.10, 0.75)), P(1310), 36, 5.6),
     (1345, Vector((3.40, -1.15, 0.14)), P(1345), 36, 5.6),
     (1400, FL + Vector((0.0, -0.16, 0.045)), FL, 50, 5.6),
     # beat 8: crane up beside the table edge, then over the table end to her, shaken, holding the dented tumbler
-    (1417, Vector((3.4, -0.6, 1.05)), HER_HEAD + Vector((0.0, 0.0, -0.1)), 26, 5.6),
-    (1450, Vector((3.45, -0.5, 1.02)), HER_HEAD + Vector((0.05, -0.05, -0.15)), 28, 5.6),
+    (1408, Vector((3.30, -0.62, 0.90)), HER_HEAD + Vector((0.0, 0.0, -0.2)), 28, 5.6),
+    (1417, Vector((3.20, -0.25, 1.10)), HER_HEAD + Vector((0.0, 0.0, -0.08)), 32, 5.6),
+    (1450, Vector((3.35, -0.32, 1.12)), HER_HEAD + Vector((0.05, -0.05, -0.15)), 30, 5.6),
     (1485, Vector((3.55, -0.45, 1.12)), (HER_HEAD + HANDLE_POS) / 2, 30, 4),
     (1530, Vector((3.7, -0.2, 1.2)), (HER_HEAD + HANDLE_POS) / 2 + Z(0.03), 34, 4)]
 def vpchip(keys):

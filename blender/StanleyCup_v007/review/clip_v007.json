@@ -1,0 +1,31 @@
+{
+ "frames": {
+  "889": {
+   "Fiance_rig": {
+    "self": 0,
+    "clothes": 0,
+    "other": 158
+   }
+  },
+  "907": {
+   "Fiance_rig": {
+    "self": 0,
+    "clothes": 0,
+    "other": 53
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   889,
+   889
+  ],
+  [
+   907,
+   907
+  ]
+ ],
+ "fps": 60
+}

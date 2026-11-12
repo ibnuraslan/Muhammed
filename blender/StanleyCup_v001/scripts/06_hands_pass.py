@@ -12,6 +12,7 @@ for rn in ("Woman_rig", "Fiance_rig"):
         side = nm[-1] if nm[-2:] in (".L", ".R") else None
         if side is None: continue
         zs = 1 if side == "R" else -1
+        if any(c.name == "HandLimit" for c in pb.constraints): continue      # already limited by pipeline/hand_poses.add_hand_limits
         if nm.startswith("finger") and not nm.startswith("finger1"):
             c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.name = "HandLimit"
             c.use_limit_x = c.use_limit_y = c.use_limit_z = True
@@ -28,8 +29,8 @@ for rn in ("Woman_rig", "Fiance_rig"):
             c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.name = "HandLimit"
             c.use_limit_x = c.use_limit_z = True; c.min_x, c.max_x = R(-60), R(60); c.min_z, c.max_z = R(-25), R(25)
             n += 1
-        elif nm.startswith("lowerarm01"):
-            pb.use_ik_limit_x = True; pb.ik_min_x = R(-150); pb.ik_max_x = R(150)   # elbow: no wrap-around; hinge axis locked elsewhere
+        elif nm.startswith("lowerarm01") and not pb.use_ik_limit_x:
+            pb.use_ik_limit_x = True; pb.ik_min_x = R(-150); pb.ik_max_x = R(150)
 # v007: delete MPFB helper geometry (never rendered: hidden by the "Hide helpers" mask) so contact scans only see real surfaces
 import bmesh
 for bn in ("Woman.body", "Fiance.body"):

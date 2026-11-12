@@ -466,7 +466,7 @@ print("SEAT_TOP", round(seat, 4)); sc["seat_top"] = seat
 # table setting: plates, cutlery, candle, her glass, bread board
 M_PLATE = flat("M_Plate", (0.93, 0.92, 0.9), 0.15, coat=0.6)
 M_STEELF = flat("M_Cutlery", (0.8, 0.8, 0.8), 0.2, 1.0)
-for (px, py) in ((4.3, 0.14), (4.0, -0.2)):
+for (px, py) in ((4.2, 0.13), (4.0, -0.2)):
     p = lathe("Plate", [(0.0, 0), (0.09, 0), (0.105, 0.012), (0.13, 0.02), (0.128, 0.022), (0.1, 0.014), (0.0, 0.01)], 48, M_PLATE, C_PROP, False)
     p.location = (px, py, TOP)
     food = lathe("Food", [(0.0, 0.0), (0.06, 0.0), (0.055, 0.025), (0.02, 0.035), (0.0, 0.036)], 32, flat("M_Pasta", (0.75, 0.45, 0.2), 0.6), C_PROP, False)
@@ -487,11 +487,11 @@ o = bpy.data.objects.new("CandleLight", lc); o.location = fl_.location + Vector(
 wg = lathe("WineGlass", [(0.0, 0.0), (0.035, 0.0), (0.033, 0.004), (0.004, 0.008), (0.004, 0.09), (0.03, 0.11), (0.042, 0.16), (0.038, 0.21),
                          (0.036, 0.21), (0.040, 0.16), (0.028, 0.112), (0.0, 0.1)], 40, M_GLASS, C_PROP, False)
 wg.location = (3.68, -0.3, TOP); wg.name = "HisGlass"
-wg2 = wg.copy(); wg2.data = wg.data; C_PROP.objects.link(wg2); wg2.location = (4.5, 0.3, TOP); wg2.name = "HerGlass"
+wg2 = wg.copy(); wg2.data = wg.data; C_PROP.objects.link(wg2); wg2.location = (4.33, 0.34, TOP); wg2.name = "HerGlass"
 box("BreadBoard", (3.4, -0.05, TOP), (3.75, 0.2, TOP + 0.018), flat("M_BoardWood", (0.55, 0.36, 0.2), 0.6), C_PROP, 0.004)
 bread = lathe("Bread", [(0.0, 0), (0.07, 0), (0.08, 0.03), (0.06, 0.06), (0.0, 0.07)], 32, flat("M_Bread", (0.6, 0.36, 0.15), 0.7), C_PROP, False)
 bread.location = (3.57, 0.07, TOP + 0.018); bread.scale = (1.5, 1.0, 0.9)
-nap = box("Napkin", (4.4, -0.05, TOP), (4.55, 0.08, TOP + 0.006), flat("M_Napkin", (0.7, 0.25, 0.2), 0.9), C_PROP, 0.002)
+nap = box("Napkin", (4.05, 0.26, TOP), (4.2, 0.38, TOP + 0.006), flat("M_Napkin", (0.7, 0.25, 0.2), 0.9), C_PROP, 0.002)
 
 # ------------------------------------------------------------------ tumbler (generic insulated steel tumbler, no logo)
 M_POWDER = bpy.data.materials.new("M_Powdercoat"); M_POWDER.use_nodes = True

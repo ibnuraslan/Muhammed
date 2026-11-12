@@ -1,0 +1,4 @@
+HAND_AUDIT frames 1-1530 step 2: 0 hits
+HAND_AUDIT_CONTACTS (touch, <= 6 mm) 0
+HAND_AUDIT_BY_KIND Counter()
+HAND_AUDIT_HITS []

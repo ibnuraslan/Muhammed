@@ -15,7 +15,7 @@ CUP_C = V(4.42, -0.234, 0.0)         # tumbler base centre (z filled at build = 
 CUP_R_IMPACT = 0.047
 SHOT_SLOPE = 0.474                   # dy/dx of the shot line (comes in diagonally from the street)
 SHOT_Z0 = 1.30                      # bullet height at x=-14
-WOMAN_SEAT = V(5.05, 0.0, 0.0)      # chair position (end of table), she faces -X
+WOMAN_SEAT = V(4.95, 0.0, 0.0)      # chair position (end of table), she faces -X
 FIANCE_SEAT = V(4.22, -1.12, 0.0)   # chair position (long side, at her corner), he faces +Y
 F_IMPACT = BF[6]
 F_WALL = BF[2]

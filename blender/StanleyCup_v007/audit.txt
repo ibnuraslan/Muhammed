@@ -1,0 +1,5 @@
+AUDIT feet 0 []
+AUDIT seat 0 []
+AUDIT fingers 745 [(1, 'Woman', 979, -0.06), (3, 'Woman', 789, -0.041), (5, 'Woman', 239, -0.015), (7, 'Woman', 14, -0.006), (129, 'Woman', 65, -0.009), (131, 'Woman', 212, -0.014), (133, 'Woman', 377
+AUDIT camera 2 [(257, ['Drywall']), (283, ['GypChunk'])]
+AUDIT bullet 0 []

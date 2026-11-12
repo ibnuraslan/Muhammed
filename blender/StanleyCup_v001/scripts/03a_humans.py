@@ -44,5 +44,5 @@ class Sitter:
             R.key_rot("risorius03." + s, f, [("Z", (12 if s == "L" else -12) * smile)])
         R.key_rot("jaw", f, [("X", jaw)])
 
-ws = Sitter(HW, RW, WOMAN_SEAT, -90.0, 0.085, 0.44)
+ws = Sitter(HW, RW, WOMAN_SEAT, -90.0, 0.085, 0.40)
 fs = Sitter(HF, RF, FIANCE_SEAT, 180.0, 0.095, 0.5, sole=0.027)

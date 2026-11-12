@@ -32,12 +32,12 @@ for f, lids, brows, jaw, smile, look in W_FACE:
 cupW = Vector(CUP_C) + Vector((0, 0, sc["cup_top"]))
 handle_w = cupW + Matrix.Rotation(R_(35), 3, 'Z') @ Vector((0.082, 0, 0.14))
 W_HANDS = {  # frame: (R wrist, R fingers dir, R palm normal), (L ...). Resting hands lie palm-down ON the cloth (table end is 0.53 m in front of her seat)
-    1: ((wpt(-0.17, 0.57, 0.065), WF, -UP), (wpt(0.19, 0.56, 0.065), WF, -UP)),
-    40: ((wpt(-0.17, 0.57, 0.065), WF, -UP), (wpt(0.22, 0.38, 0.22), WF + UP, -WL)),
-    90: ((wpt(-0.16, 0.56, 0.065), WF, -UP), (wpt(0.16, 0.40, 0.15), WF + UP * 0.5, -WL)),
-    140: ((wpt(-0.17, 0.57, 0.065), WF, -UP), (wpt(0.19, 0.56, 0.065), WF, -UP)),
-    300: ((wpt(-0.17, 0.58, 0.065), WF, -UP), (wpt(0.19, 0.57, 0.065), WF, -UP)),
-    520: ((wpt(-0.16, 0.55, 0.065), WF, -UP), (wpt(0.18, 0.55, 0.065), WF, -UP)),
+    1: ((wpt(-0.13, 0.30, -0.10), WF, -UP * 0.98 + WF * 0.2), (wpt(0.12, 0.49, 0.065), WF, -UP)),
+    40: ((wpt(-0.13, 0.30, -0.10), WF, -UP * 0.98 + WF * 0.2), (wpt(0.22, 0.38, 0.22), WF + UP, -WL)),
+    90: ((wpt(-0.13, 0.30, -0.10), WF, -UP * 0.98 + WF * 0.2), (wpt(0.16, 0.40, 0.15), WF + UP * 0.5, -WL)),
+    140: ((wpt(-0.13, 0.30, -0.10), WF, -UP * 0.98 + WF * 0.2), (wpt(0.12, 0.49, 0.065), WF, -UP)),
+    300: ((wpt(-0.13, 0.30, -0.10), WF, -UP * 0.98 + WF * 0.2), (wpt(0.12, 0.50, 0.065), WF, -UP)),
+    520: ((wpt(-0.13, 0.30, -0.10), WF, -UP * 0.98 + WF * 0.2), (wpt(0.12, 0.49, 0.065), WF, -UP)),
     580: ((wpt(-0.16, 0.50, 0.14), WF, -UP), (wpt(0.18, 0.50, 0.14), WF, -UP)),
     760: ((wpt(-0.17, 0.33, 0.12), WF + UP * 0.6, -WL), (wpt(0.16, 0.32, 0.12), WF + UP * 0.6, WL)),
     870: ((wpt(-0.16, 0.30, 0.18), WF + UP * 0.8, -WL), (wpt(0.15, 0.31, 0.2), WF + UP * 0.8, WL)),
@@ -47,11 +47,14 @@ W_HANDS = {  # frame: (R wrist, R fingers dir, R palm normal), (L ...). Resting 
     1284: ((wpt(-0.14, 0.33, 0.26), UP + WF * 0.4, WF), (wpt(0.12, 0.33, 0.25), UP + WF * 0.4, WF)),
     1300: ((wpt(-0.16, 0.32, 0.30), UP + WF * 0.2, -WF), (wpt(0.13, 0.37, 0.21), UP + WF * 0.2, -WF)),
     1360: ((wpt(-0.18, 0.34, 0.10), WF, -WL), (wpt(0.05, 0.38, 0.26), -WL + UP * 0.2, -WF)),
-    1420: ((wpt(-0.17, 0.56, 0.085), WF, -UP), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
+    1420: ((wpt(-0.13, 0.32, -0.08), WF, -UP * 0.98 + WF * 0.2), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
     1433: ((wpt(-0.16, 0.50, 0.15), WF, -UP), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
     1447: ((handle_w + Vector((0.035, 0.035, 0.0)), (handle_w - Vector((0.01, 0.01, 0))) - wpt(-0.17, 0.30, 0.15), UP), (wpt(0.05, 0.405, 0.25), -WL + UP * 0.2, -WF)),
 }
+REST = (1, 140, 300, 520)
 for f, (r, l) in W_HANDS.items():
+    if f in REST:   # forearms resting on the table: elbows out and up so the palm can lie flat
+        ws.hand("R", f, r[0], r[1], r[2]); ws.hand("L", f, l[0], l[1], l[2], elbow_out=0.5, elbow_down=0.02); continue
     ws.hand("R", f, r[0], r[1], r[2])
     if f >= 1300:   # hand to chest / raised in front: elbow down and out, in front of the body (no arm wrapping over the shoulder)
         ws.hand("L", f, l[0], l[1], l[2], elbow_out=0.35, elbow_down=0.55, elbow_back=-0.05)
@@ -70,9 +73,7 @@ def curl(R, s, f, amt, thumb=None):
     t = amt if thumb is None else thumb
     for j in range(1, 4):
         R.key_q("finger1-%d.%s" % (j, s), f, Quaternion((1, 0, 0), R_(t * (18 if j == 1 else 30))))
-for f, a in ((1, 0.4), (600, 0.4), (700, 0.12), (1290, 0.12), (1360, 0.35), (1440, 0.4), (1452, 1.25), (1530, 1.25)): curl(RW, "R", f, a, 0.9 if f >= 1452 else None)
-for f, a in ((1, 0.4), (600, 0.4), (700, 0.12), (1285, 0.12), (1300, 0.45), (1360, 0.45), (1530, 0.45)): curl(RW, "L", f, a, 0.35 if f >= 1300 or f < 600 else 0.1)
-CUP_LIFT = [(1452, Vector((0, 0, 0))), (1478, Vector((0.02, 0.015, 0.018))), (1530, Vector((0.10, 0.07, 0.09)))]
+CUP_LIFT = [(1452, Vector((0, 0, 0))), (1478, Vector((0.015, 0.01, 0.02))), (1530, Vector((0.04, 0.03, 0.10)))]
 c_rest = CUP.location.copy()       # (after the skid keys, this is the final skid position from 03b)
 sc.frame_set(1452); c_rest = CUP.matrix_world.translation.copy()
 r_wr = W_HANDS[1447][0][0]; r_d = W_HANDS[1447][0][1]
@@ -101,18 +102,18 @@ for f, lids, brows, jaw, smile, look in F_FACE:
     fs.face(f, lids, brows, jaw, smile, look)
 her_forearm = lambda: wpt(0.13, 0.33, 0.19)
 F_HANDS = {  # his table edge is 0.69 m in front of his seat: resting hands at ly ~0.73, palm down
-    1: ((fpt(-0.2, 0.42, 0.2), FF + UP * 0.6, -FL), (fpt(0.2, 0.73, 0.085), FF, -UP)),
-    40: ((fpt(-0.24, 0.40, 0.3), FF + UP, -FL), (fpt(0.2, 0.73, 0.085), FF, -UP)),
-    95: ((fpt(-0.16, 0.50, 0.12), FF + UP * 0.3, -FL), (fpt(0.2, 0.73, 0.085), FF, -UP)),
-    150: ((fpt(-0.26, 0.40, 0.32), FF + UP, -FL), (fpt(0.2, 0.73, 0.085), FF, -UP)),
-    260: ((fpt(-0.2, 0.55, 0.14), FF + UP * 0.3, -FL), (fpt(0.2, 0.73, 0.085), FF, -UP)),
-    300: ((fpt(-0.19, 0.68, 0.16), FF, -UP), (fpt(0.2, 0.73, 0.085), FF, -UP)),
-    330: ((fpt(-0.18, 0.73, 0.11), FF, -UP), (fpt(0.2, 0.73, 0.11), FF, -UP)),
-    450: ((fpt(-0.24, 0.70, 0.11), FF, -UP), (fpt(0.18, 0.72, 0.11), FF, -UP)),
-    600: ((fpt(-0.34, 0.66, 0.14), FF - FL * 0.6, -UP - FL * 0.4), (fpt(0.18, 0.73, 0.085), FF, -UP)),
-    800: ((fpt(-0.45, 0.70, 0.22), FF - FL * 0.8 + UP * 0.1, -UP - FL * 0.5), (fpt(0.18, 0.73, 0.085), FF, -UP)),
-    1000: ((fpt(-0.40, 0.63, 0.22), FF - FL + UP * 0.1, -UP - FL * 0.5), (fpt(0.17, 0.74, 0.085), FF, -UP)),
-    1284: ((fpt(-0.42, 0.63, 0.24), FF - FL + UP * 0.1, -UP - FL * 0.5), (fpt(0.17, 0.74, 0.085), FF, -UP)),
+    1: ((fpt(-0.2, 0.42, 0.2), FF + UP * 0.6, -FL), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    40: ((fpt(-0.24, 0.40, 0.3), FF + UP, -FL), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    95: ((fpt(-0.16, 0.50, 0.12), FF + UP * 0.3, -FL), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    150: ((fpt(-0.26, 0.40, 0.32), FF + UP, -FL), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    260: ((fpt(-0.2, 0.55, 0.14), FF + UP * 0.3, -FL), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    300: ((fpt(-0.19, 0.68, 0.16), FF, -UP), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    330: ((fpt(-0.18, 0.73, 0.11), FF, -UP), (fpt(-0.04, 0.73, 0.11), FF, -UP)),
+    450: ((fpt(-0.12, 0.70, 0.11), FF, -UP), (fpt(-0.04, 0.73, 0.11), FF, -UP)),
+    600: ((fpt(-0.34, 0.66, 0.14), FF - FL * 0.6, -UP - FL * 0.4), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    800: ((fpt(-0.40, 0.64, 0.22), FF - FL * 0.8 + UP * 0.1, -UP - FL * 0.5), (fpt(-0.04, 0.73, 0.085), FF, -UP)),
+    1000: ((fpt(-0.36, 0.59, 0.22), FF - FL + UP * 0.1, -UP - FL * 0.5), (fpt(-0.04, 0.74, 0.085), FF, -UP)),
+    1284: ((fpt(-0.42, 0.63, 0.24), FF - FL + UP * 0.1, -UP - FL * 0.5), (fpt(-0.04, 0.74, 0.085), FF, -UP)),
     1298: ((fpt(-0.42, 0.63, 0.23), FF - FL + UP * 0.1, -UP - FL * 0.5), (fpt(0.15, 0.75, 0.085), FF, -UP)),
     1340: ((fpt(-0.50, 0.78, 0.11), FF - FL, -UP), (fpt(0.06, 0.78, 0.12), FF, -UP)),
     1400: ((her_forearm() + Vector((0.0, -0.035, 0.01)), -FL + UP * 0.2, FF), (fpt(0.04, 0.78, 0.12), FF, -UP)),
@@ -120,6 +121,28 @@ F_HANDS = {  # his table edge is 0.69 m in front of his seat: resting hands at l
 }
 for f, (r, l) in F_HANDS.items():
     fs.hand("R", f, r[0], r[1], r[2]); fs.hand("L", f, l[0], l[1], l[2])
-for f, a in ((1, 0.42), (40, 0.4), (95, 0.45), (150, 0.4), (260, 0.42), (500, 0.45), (1284, 0.48), (1340, 0.45), (1400, 1.05), (1530, 1.1)):
-    curl(RF, "R", f, a, 0.8 if f >= 1400 else None)
-for f, a in ((1, 0.4), (1530, 0.4)): curl(RF, "L", f, a)
+
+# ---- fingers: shared pose library (pipeline/hand_poses.py, director 14:59) instead of hand-set angles
+exec(open(os.path.join(PIPE, "hand_poses.py")).read())
+for rig_ in (W_RIG, F_RIG): add_hand_limits(rig_)
+HAND_SCHEDULE = {
+    (W_RIG, "R"): [(1, "relaxed"), (600, "relaxed"), (700, "open_alarm"), (1290, "open_alarm"), (1360, "relaxed"), (1440, "relaxed"), (1452, "wrap_grip"), (1530, "wrap_grip")],
+    (W_RIG, "L"): [(1, "relaxed"), (40, "relaxed"), (140, "relaxed"), (600, "relaxed"), (700, "open_alarm"), (1285, "open_alarm"), (1305, "flat_palm"), (1530, "flat_palm")],
+    (F_RIG, "R"): [(1, "relaxed"), (260, "relaxed"), (330, "flat_palm"), (450, "flat_palm"), (560, "relaxed"), (700, "open_alarm"), (1298, "open_alarm"), (1340, "flat_palm"), (1385, "relaxed"), (1400, "wrap_grip"), (1530, "wrap_grip")],
+    (F_RIG, "L"): [(1, "flat_palm"), (1530, "flat_palm")],
+}
+for (rig_, side_), sched in HAND_SCHEDULE.items():
+    for f_, pose_ in sched: apply_pose(rig_, side_, pose_, f_)
+
+# ---- resting hands: the library places the palm ON the cloth (palm normal toward the table), flat palm pose
+def _rest_on_table(rig_, side_, frames_, keyset, base_fn):
+    for f_ in frames_:
+        key = keyset[f_][0 if side_ == "R" else 1]
+        w_, d_, n_ = key
+        if (n_ + UP).length > 1e-6: continue          # only the palm-down table keys
+        p_ = Vector((w_.x, w_.y, TOP + (0.018 if rig_ is W_RIG else 0.0))) + d_.normalized() * 0.07
+        place_hand(rig_, side_, f_, p_, Vector((0, 0, -1)), d_)
+        apply_pose(rig_, side_, "flat_palm", f_)
+_rest_on_table(W_RIG, "L", [f for f in W_HANDS if f in REST], W_HANDS, wpt)
+_rest_on_table(F_RIG, "L", list(F_HANDS), F_HANDS, fpt)
+_rest_on_table(F_RIG, "R", [330, 450, 1340], F_HANDS, fpt)
