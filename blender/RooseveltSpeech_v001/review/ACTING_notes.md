@@ -50,3 +50,28 @@
 ## Still open (minor)
 - At about 12.5 s (around frame 750), a single 0.5 s still shows the page face filling about 70 % of the frame. It shows handwriting and fibre detail, not a blank colour.
 - At 2.0 s, the shooter's silhouette arm is still a large foreground shape. It frames the flash and is intended.
+
+## Revision after the director's v007 review
+| # | Director note | Fix |
+|---|---|---|
+| R1 | Manuscript pull: a fist above the paper, and the paper rising by itself | He reaches into the ghosted pocket during the x-ray pull-out. The thumb and index pinch the paper's top corner (library `pinch` pose, tip gap 0.4 cm) at f1166, then draw it out (f1166–1184). The paper moves only while pinched, and it is a child of the wrist from f1196. The corner stays between the fingertips through the lift and the hold at 21 s. See the `pinch_*`, `pocket_*` and `manuscript_lift` close-ups. |
+| R2 | 1.5–2.0 s: a black blob in the foreground | The shooter and the policeman are now normal lit characters in dark overcoats, not flat black silhouettes. The camera is pulled back at the flash. |
+| R3 | 7.5 s: face cut off | The beat-4 approach frames the pocket and his eyes together (f445). |
+| R4 | 10–11 s and 12.5 s: paper fills the frame | The x-ray framings are pulled back 1.5× and aimed toward the ribs. Every x-ray key now sits outside the ghosted body. |
+| R5 | Feet close-ups show a green panel | They are re-aimed from above the footwell and lit by a review-only fill light: `feet_car`, `feet_step`, `feet_step_mid`, `feet_stage`. The feet are planted; `audit_v3` shows 0 slide. |
+| R6 | Left hand hovering near the rail (`qa_check`) | His left hand now grips the rail from frame 1 (steadying himself while he waves). The grip is solved with `grip_object` and held on every rail frame. |
+| R7 | Shooter hand prop (`qa_check` HOVER) | `power_fist` closes around the dark lump. |
+| R8 | Hidden props counted by `qa_check` | Cutaway props, street props in the hall, and the anatomy roots collapse to ~0 scale while hidden. Spent paper flecks leave the scene. |
+| R9 | Finger angles | All hand poses now use `pipeline/hand_poses.py`: `add_hand_limits`, `apply_pose` (relaxed, pinch, open_alarm, flat_palm, power_fist) and `grip_object` (rail). The crowd keeps a relaxed curl. |
+
+## qa_check v007 (`qa_v007.json`): flags kept, with the reason
+- **INSIDE, f1153, f1195, f1201:** the camera is inside the studio backdrop dome (a 1.6 m sphere round his chest) as it pulls out of the x-ray. The dome is the cyan backdrop itself and is hidden from f1206. Intended.
+- **Raised fist (power_fist in the air, beat 9):** intended. The brief calls for a fist raised.
+
+## Self-check (ACTING_FIX, mandatory)
+1. Hands visibly touch what they hold: **checked**. The rail is wrapped, the podium has a flat palm, the manuscript is pinched at the corner and the hat is pinched at the brim (see `v7_hand_closeups.jpg`).
+2. No claws: **checked**. Idle hands are relaxed and the flail hands are open; the poses come from `hand_poses.py`.
+3. Nothing pressed into a face: **checked**. 0 FACEPRESS flags.
+4. No empty, blurred or black cells, and no back of the head on a beat: **checked**. `qa_check` shows 0 EMPTY, 0 FILL and 0 BACKHEAD.
+5. Close-ups show the hands (and the feet), aimed and lit: **checked**.
+6. `hand_poses.py` used: **checked**.

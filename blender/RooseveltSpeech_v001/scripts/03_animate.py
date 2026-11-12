@@ -32,6 +32,8 @@ def wt(f):
 # ------------------------------------------------------------------ hero rig
 H = bpy.data.objects["Hero"]
 R = make_human_ctrl(H); HU = Human(R)
+exec(open(os.path.dirname(os.path.dirname(HERE)) + "/pipeline/hand_poses.py").read())   # shared hand poses + limits
+add_hand_limits(H)   # before any keying, so every solve below sees the limited pose
 HB = R.BN
 def fingers(rig_pb, s, f, curl, thumb=None):
     for k in range(1, 6):
@@ -90,7 +92,7 @@ hR_keys = [(1, wave_R(1)), (F_IMPACT, wave_R(F_IMPACT)), (F_IMPACT + 6, Vector((
            (240, Vector((-0.33, -0.10, 0.92))), (300, Vector((-0.30, -0.08, 0.90))), (1150, Vector((-0.30, -0.08, 0.90))),
            (1238, Vector((-0.30, -0.42, 1.45))), (1262, Vector((-0.30, -0.30, 1.98))), (1285, Vector((-0.30, -0.30, 2.0))),
            (1310, Vector((-0.26, -0.45, 1.35))), (1360, Vector((-0.22, -0.44, 1.22))), (1420, Vector((-0.30, -0.42, 1.40))), (1500, Vector((-0.24, -0.44, 1.25)))]
-hL_keys = [(1, Vector((0.30, -0.12, 0.95))), (60, Vector((0.36, -0.30, 1.2))), (100, Vector((0.32, -0.20, 1.05))), (F_IMPACT, Vector((0.31, -0.14, 1.0))),
+hL_keys = [(1, RAIL), (60, RAIL), (100, RAIL), (F_IMPACT, RAIL),   # steadies himself on the rail while he waves
            (F_IMPACT + 7, Vector((0.48, -0.10, 1.25))), (188, RAIL + Vector((0, 0, 0.06))), (196, RAIL), (1150, RAIL), (1180, Vector((0.32, -0.25, 1.05))),
            (1192, Vector((0.24, -0.33, 1.18))), (1285, Vector((0.24, -0.33, 1.18))), (1300, Vector((0.36, -0.30, 1.75))), (1318, Vector((0.38, -0.28, 1.88))),
            (1336, Vector((0.36, -0.30, 1.70))), (1352, Vector((0.38, -0.28, 1.90))), (1372, Vector((0.24, -0.36, 1.19))), (1388, Vector((0.24, -0.36, 1.19))),
@@ -105,7 +107,7 @@ def hand_frame_R(f):  # (dir to fingers, palm normal)
     if f > 1225: return Vector((0.1, -0.2, 1)), Vector((-0.2, -1, 0)) if f < 1300 else Vector((0.4, 0.2, -1))
     return Vector((0, -0.2, -1)), Vector((1, 0, 0))
 def hand_frame_L(f):
-    if 190 <= f <= 1170: return Vector((0.2, -1, -0.6)), Vector((0, 0, -1))       # gripping the rail, palm down
+    if 190 <= f <= 1170 or f <= F_IMPACT + 1: return Vector((0.2, -1, -0.6)), Vector((0, 0, -1))       # gripping the rail, palm down
     if 1190 <= f <= 1290 or 1365 <= f <= 1395: return Vector((0, -1, -0.4)), Vector((0, 0, -1))   # on the podium edge
     if f > 1290: return Vector((0, 0, 1)), Vector((0, -1, 0))                     # raised fist
     return Vector((0, -0.2, -1)), Vector((-1, 0, 0))
@@ -121,16 +123,19 @@ for f in range(1, END + 1, 2):
     HU.key_spine(f, flex=sflex(w) + breath, twist=stw(w) * 0.6, side=rside(w) * 0.5, head=(hpitch(w), hyaw(w)))
     pr = Vector((-0.55, 0.45, 1.0)); pl = Vector((0.55, 0.45, 1.0))
     for s_, W_, (d_, n_), pol in (("R", hand_R(w), hand_frame_R(w), pr), ("L", hL(w), hand_frame_L(w), pl)):
-        if s_ == "L" and 190 <= w <= 1170: HU.key_hand(s_, f, W_, d_, n_, pole=pol); continue   # rail grip keeps its pose
+        if s_ == "L" and (190 <= w <= 1170 or w <= F_IMPACT + 1): HU.key_hand(s_, f, W_, d_, n_, pole=pol); continue   # rail grip keeps its pose
         HU.key_hand(s_, f, W_, *clamp_wrist(s_, W_, d_, n_, f), pole=pol)
     if "jaw" in R.PB:   # speaking in beat 9 (and a gasp at the hit)
         j = 0.0
         if f > 1240: j = 7 * max(0.0, math.sin(2 * math.pi * f / 11.0)) * (0.6 + 0.4 * math.sin(f / 23.0))
         elif F_IMPACT < w < F_IMPACT + 30: j = 9 * math.sin(math.pi * (w - F_IMPACT) / 30)
         R.key_rot("jaw", f, [("X", j)])
-for f, cr, cl in ((1, 70, 25), (F_IMPACT + 4, 70, 25), (F_IMPACT + 10, 30, 45), (188, 20, 30), (198, 20, 80), (1170, 20, 80), (1182, 20, 30),
-                  (1192, 20, 25), (1204, 25, 25), (1216, 75, 25), (1290, 75, 25), (1300, 75, 80), (1365, 75, 80), (1372, 75, 25), (1395, 75, 25), (1405, 75, 80), (1500, 75, 80)):
-    fingers(R.PB, "R", f, cr); fingers(R.PB, "L", f, cl)
+# finger poses from the shared library (pipeline/hand_poses.py); right-hand pinch on the manuscript is keyed in the pull block
+for f_, pose in ((1, "pinch"), (F_IMPACT + 3, "pinch"), (F_IMPACT + 10, "relaxed"), (1150, "relaxed")):   # hat held by the brim
+    apply_pose(H, "R", pose, f_)
+for f_, pose in ((F_IMPACT + 8, "open_alarm"), (190, "open_alarm"), (1176, "relaxed"), (1192, "flat_palm"), (1290, "flat_palm"), (1300, "power_fist"), (1365, "power_fist"),
+                 (1372, "flat_palm"), (1395, "flat_palm"), (1405, "power_fist"), (1500, "power_fist")):
+    apply_pose(H, "L", pose, f_)
 
 # ------------------------------------------------------------------ head items: spectacles + moustache (Child Of head bone)
 def child_of(o, rig, bone, f_set, from_rest=False):
@@ -229,6 +234,19 @@ for nm, loc, rot, dep in (("GrabRail", (0.26, 0.0, 0.99), (R_(90), 0, 0), 0.9), 
     for c in list(o.users_collection): c.objects.unlink(o)
     C_STREET.objects.link(o)
 
+# left hand on the brass rail: grip_object solves palm placement + finger closure once; that pose is held on every rail frame
+_rail = bpy.data.objects["GrabRail"]
+def _copy_hand(side, src, frames):
+    names = ["IK_hand." + side] + [n for n in R.PB.keys() if n.startswith("finger") and n.endswith("." + side)]
+    sc.frame_set(src); snap = {n: (R.PB[n].location.copy(), R.PB[n].rotation_quaternion.copy()) for n in names}
+    for f_ in frames:
+        for n, (lo, q) in snap.items():
+            pb = R.PB[n]; pb.location = lo; pb.rotation_quaternion = q
+            if n.startswith("IK"): pb.keyframe_insert("location", frame=f_, group=n)
+            pb.keyframe_insert("rotation_quaternion", frame=f_, group=n)
+_rep = grip_object(H, "L", 199, _rail, RAIL + Vector((0, 0, 0.014)), Vector((0, 0, -1)), finger_dir=Vector((0.35, -0.2, -1)))
+print("RAIL GRIP", _rep)
+_copy_hand("L", 199, list(range(1, F_IMPACT + 2, 2)) + list(range(197, 1171, 2)))
 # ------------------------------------------------------------------ hat prop: a static copy of the CrowdA fedora, held then dropped
 src = bpy.data.objects["CrowdA.fedora01"]
 hat = src.copy(); hat.data = src.data.copy(); hat.name = "HeroHat"; hat.parent = None; hat.modifiers.clear()
@@ -367,7 +385,7 @@ def pinch_pose(f):
             a = (15, 30, 21)[j - 1] if k == 1 else ((27, 45, 31)[j - 1] if k == 2 else (18, 26, 18)[j - 1])   # thumb-index tip gap ~1 cm
             pb = R.PB[n]; pb.rotation_quaternion = Quaternion((1, 0, 0), R_(a)); pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 for f_ in (1150, 1160) + tuple(x for x in (1170, 1182, 1192, 1204, 1216, 1290, 1300, 1365, 1372, 1395, 1405, 1500)):
-    if f_ >= 1160: pinch_pose(f_)
+    if f_ >= 1160: apply_pose(H, "R", "pinch", f_)
 D_G, N_G = Vector((0.9, 0.1, -0.45)), Vector((0, 1, 0.1))   # fingers across and down the chest, palm toward the coat
 Wt = hR(1150)
 for f in range(1151, T_HAND + 1, 2):
@@ -490,6 +508,7 @@ for i in range(36):
         tt = max(0.0, (f - t0) / 60.0)
         fl.location = HPw - dirv * 0.002 + v * tt + Vector((0, 0, -0.01 * tt * tt))
         fl.rotation_euler = (tt * 7 + i, tt * 5, i); fl.keyframe_insert("location", frame=f); fl.keyframe_insert("rotation_euler", frame=f)
+    fl.location = (0, 0, -60); fl.keyframe_insert("location", frame=int(t0) + 121)   # spent fleck leaves the scene
     vis(fl, ((1, True), (int(t0), False), (int(t0) + 120, True)))
 # anatomy behind: ribs and lungs fitted to the thorax, muscle patch with the bullet resting short of the lung
 sc.frame_set(400)
@@ -513,6 +532,10 @@ for grp, nm, size, cen in ((ribs, "RibsRoot", (0.33, 0.24, 0.34), thor + Vector(
         o.parent = root; o.matrix_parent_inverse = root.matrix_world.inverted()
     child_of(root, H, "spine01", 400)
     for o in [root] + grp: vis(o, ((1, True), (B[3] + 15, False), (1180, True)))
+    s0_ = root.scale.copy()   # collapsed while hidden (scene queries ignore hide_render)
+    for f_, sv in ((1, 1e-4), (B[3] + 14, 1e-4), (B[3] + 15, 1.0), (1180, 1.0), (1181, 1e-4)):
+        root.scale = s0_ * sv; root.keyframe_insert("scale", frame=f_)
+    root.scale = s0_
     if nm == "LungsRoot":
         for f in range(B[3] + 15, 1181, 10):
             k = 1.0 + 0.03 * math.sin(2 * math.pi * f / 120.0); root.scale = (k, k, k); root.keyframe_insert("scale", frame=f)
@@ -586,7 +609,22 @@ def limit_hands(rig):
         elif nm.startswith("wrist."):
             c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.name = "WristLimit"
             c.use_limit_x = c.use_limit_z = True; c.min_x, c.max_x = R_(-60), R_(60); c.min_z, c.max_z = R_(-25), R_(25)
-limit_hands(H)
 exec(open(HERE + "/03b_crowd_camera.py").read())
+# hidden props collapse to ~zero scale while hidden (hide_render alone still leaves geometry for scene queries)
+_ns = 0
+for o in bpy.data.objects:
+    if o.type != "MESH" or (o.parent and o.parent.type == "ARMATURE") or not o.animation_data or not o.animation_data.action: continue
+    fcs = [fc for lay in getattr(o.animation_data.action, "layers", []) for st in lay.strips for cb in st.channelbags for fc in cb.fcurves]
+    hr = next((fc for fc in fcs if fc.data_path == "hide_render"), None)
+    if hr is None or any(fc.data_path == "scale" for fc in fcs): continue
+    ks = sorted((int(k.co.x), k.co.y > 0.5) for k in hr.keyframe_points)
+    s0 = o.scale.copy(); tiny = s0 * 1e-4
+    for i, (fa, hid) in enumerate(ks):
+        o.scale = tiny if hid else s0; o.keyframe_insert("scale", frame=fa)
+        if fa > 1: o.scale = (s0 if hid else tiny); o.keyframe_insert("scale", frame=fa - 1)
+    o.scale = s0; _ns += 1
+    for fc in [fc for lay in o.animation_data.action.layers for st in lay.strips for cb in st.channelbags for fc in cb.fcurves if fc.data_path == "scale"]:
+        for k in fc.keyframe_points: k.interpolation = "CONSTANT"
+print("HIDDEN SCALE", _ns)
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("ANIM OK")

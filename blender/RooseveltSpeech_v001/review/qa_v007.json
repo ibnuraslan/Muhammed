@@ -1,0 +1,25 @@
+{
+ "frames": {
+  "1153": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1195": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1201": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ]
+ },
+ "counts": {
+  "INSIDE": 3
+ }
+}

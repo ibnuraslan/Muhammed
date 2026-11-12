@@ -1,0 +1,670 @@
+{
+ "frames": {
+  "1": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (12.0 cm)"
+   ],
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (3.3 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.8 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (3.2 cm)"
+   ]
+  ],
+  "7": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (11.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (3.0 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.6 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (5.4 cm)"
+   ]
+  ],
+  "13": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (9.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (2.7 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.5 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (4.7 cm)"
+   ]
+  ],
+  "19": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (6.3 cm)"
+   ],
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.3 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (3.6 cm)"
+   ]
+  ],
+  "25": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (2.7 cm)"
+   ],
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.7 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.3 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (6.1 cm)"
+   ]
+  ],
+  "31": [
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.3 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.4 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (1.9 cm)"
+   ]
+  ],
+  "37": [
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.5 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (7.1 cm)"
+   ]
+  ],
+  "43": [
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (4.8 cm)"
+   ]
+  ],
+  "49": [
+   [
+    "HOVER",
+    "StreetP02.R near 0 (5.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (7.5 cm)"
+   ]
+  ],
+  "55": [
+   [
+    "HOVER",
+    "StreetP02.R near 0 (5.6 cm)"
+   ]
+  ],
+  "61": [
+   [
+    "HOVER",
+    "StreetP02.R near 0 (6.1 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (7.3 cm)"
+   ]
+  ],
+  "67": [
+   [
+    "HOVER",
+    "StreetP02.R near 0 (6.6 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.L near 0 (1.9 cm)"
+   ]
+  ],
+  "73": [
+   [
+    "HOVER",
+    "StreetP02.R near 0 (7.0 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP04.R near 0 (2.6 cm)"
+   ]
+  ],
+  "79": [
+   [
+    "HOVER",
+    "Hero.L near PodiumTop (1.9 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (7.3 cm)"
+   ]
+  ],
+  "85": [
+   [
+    "HOVER",
+    "Hero.L near PodiumTop (6.1 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.4 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (7.4 cm)"
+   ]
+  ],
+  "91": [
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.6 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (7.5 cm)"
+   ]
+  ],
+  "97": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.7 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (7.3 cm)"
+   ]
+  ],
+  "103": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (2.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (7.1 cm)"
+   ]
+  ],
+  "109": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (3.0 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.7 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (6.6 cm)"
+   ]
+  ],
+  "115": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (3.7 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.7 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (6.1 cm)"
+   ]
+  ],
+  "121": [
+   [
+    "HOVER",
+    "Shooter.R near ShooterHandBlob (1.2 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.L near 0 (1.6 cm)"
+   ],
+   [
+    "HOVER",
+    "StreetP02.R near 0 (5.6 cm)"
+   ]
+  ],
+  "127": [
+   [
+    "HOVER",
+    "Shooter.R near GunSmoke (11.9 cm)"
+   ]
+  ],
+  "133": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (5.4 cm)"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "HOVER",
+    "Hero.L near GrabRail (5.9 cm)"
+   ]
+  ],
+  "145": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "HOVER",
+    "Hero.L near GrabRail (6.2 cm)"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "HOVER",
+    "Hero.L near GrabRail (6.5 cm)"
+   ]
+  ],
+  "157": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (6.8 cm)"
+   ]
+  ],
+  "163": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (6.9 cm)"
+   ]
+  ],
+  "169": [
+   [
+    "HOVER",
+    "Hero.L near GrabRail (6.5 cm)"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "649": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "655": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "985": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "991": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "997": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1003": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1009": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1015": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1021": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1159": [
+   [
+    "HOVER",
+    "Hero.R near Fleck00 (10.3 cm)"
+   ]
+  ],
+  "1165": [
+   [
+    "HOVER",
+    "Hero.R near Fleck25 (18.4 cm)"
+   ]
+  ],
+  "1339": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (16.4 cm)"
+   ]
+  ],
+  "1345": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (15.9 cm)"
+   ]
+  ],
+  "1351": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (15.6 cm)"
+   ]
+  ],
+  "1357": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (15.5 cm)"
+   ]
+  ],
+  "1363": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (15.3 cm)"
+   ]
+  ],
+  "1369": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (15.4 cm)"
+   ]
+  ],
+  "1375": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (15.9 cm)"
+   ]
+  ],
+  "1381": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (17.0 cm)"
+   ]
+  ],
+  "1387": [
+   [
+    "HOVER",
+    "Hero.R near Fleck31 (19.5 cm)"
+   ]
+  ],
+  "1441": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (5.2 cm)"
+   ]
+  ],
+  "1447": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (3.6 cm)"
+   ]
+  ],
+  "1453": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (10.3 cm)"
+   ]
+  ],
+  "1459": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (8.2 cm)"
+   ]
+  ],
+  "1465": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (2.8 cm)"
+   ]
+  ],
+  "1471": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (1.6 cm)"
+   ]
+  ],
+  "1477": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (8.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Hero.R near Fleck17 (19.4 cm)"
+   ]
+  ],
+  "1483": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (17.1 cm)"
+   ]
+  ],
+  "1489": [
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (16.7 cm)"
+   ]
+  ],
+  "1495": [
+   [
+    "HOVER",
+    "HallP096.R near ShooterHandBlob (1.9 cm)"
+   ],
+   [
+    "HOVER",
+    "Hero.R near Fleck07 (16.4 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "HOVER": 96,
+  "EMPTY": 19,
+  "INSIDE": 2,
+  "FILL": 10
+ }
+}

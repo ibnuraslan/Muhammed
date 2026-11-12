@@ -120,7 +120,10 @@ for f in range(1, F_OUT, 4):
 blob = bpy.data.objects.new("ShooterHandBlob", bpy.data.meshes.new("Blob")); CR.objects.link(blob)
 import bmesh as _bm
 bmm = _bm.new(); _bm.ops.create_cube(bmm, size=1.0); bmm.to_mesh(blob.data); bmm.free(); blob.scale = (0.035, 0.12, 0.06); blob.data.materials.append(SIL)
-sc.frame_set(1); blob.matrix_world = (sh.matrix_world @ sh.pose.bones["wrist.R"].matrix) @ Matrix.Translation((0, 0.08, 0)) @ Matrix.Diagonal((0.035, 0.12, 0.06, 1))
+apply_pose(sh, "R", "power_fist", 1)   # closed fist round the dark lump (no weapon detail)
+sc.frame_set(1); _pb = sh.pose.bones
+_fc = sh.matrix_world @ ((_pb["finger3-1.R"].head + _pb["finger3-3.R"].tail + _pb["finger4-1.R"].head + _pb["finger2-3.R"].tail) / 4)
+blob.matrix_world = Matrix.Translation(_fc) @ (sh.matrix_world @ _pb["wrist.R"].matrix).to_3x3().normalized().to_4x4() @ Matrix.Diagonal((0.03, 0.06, 0.03, 1))
 cb = blob.constraints.new("CHILD_OF"); cb.target = sh; cb.subtarget = "wrist.R"; cb.inverse_matrix = (sh.matrix_world @ sh.pose.bones["wrist.R"].matrix).inverted()
 for o in [sh, blob] + list(sh.children):
     o.hide_render = False; o.keyframe_insert("hide_render", frame=1); o.hide_render = True; o.keyframe_insert("hide_render", frame=F_OUT)
@@ -200,10 +203,10 @@ K = [  # frame, position, target, lens
  (75,   Vector((-0.6, -6.6, 1.6)),  Vector((-0.3, -1.0, 1.2)), 32),
  (100,  Vector((-1.9, -5.3, 1.3)), Vector((-0.5, -1.0, 1.2)), 32),   # low between heads, shooter silhouette in the foreground
  (F_FLASH, Vector((-2.15, -5.0, 1.35)), bul(F_FLASH + 6), 32),
- (135,  bul(135) + Vector((-0.30, -0.42, 0.10)), bul(141), 30),          # riding along the bullet
- (152,  bul(152) + Vector((-0.40, -0.55, 0.12)), bul(158), 30),
- (F_IMPACT, HIT + Vector((-0.55, -1.0, 0.12)), HIT + Vector((0, 0, 0.05)), 30),
- (187,  Vector((1.0, -2.2, 1.15)), Vector((0.0, -0.05, 0.85)), 26),   # full body: feet planting and his face   # looking down into the footwell at the planting feet
+ (135,  bul(135) + Vector((-0.30, -0.42, 0.22)), HIT + Vector((0, 0, 0.1)), 40),          # riding along the bullet
+ (152,  bul(152) + Vector((-0.40, -0.55, 0.22)), HIT + Vector((0, 0, 0.1)), 40),
+ (F_IMPACT, HIT + Vector((-0.5, -0.95, 0.15)), HIT + Vector((0, 0, 0.1)), 35),
+ (187,  Vector((0.8, -1.75, 1.25)), Vector((0.0, -0.05, 0.9)), 30),   # full body: feet planting and his face   # looking down into the footwell at the planting feet
  (245,  Vector((0.95, -1.55, 0.95)), Vector((0.0, -0.05, 0.95)), 30),   # crane up his body
  (300,  Vector((0.55, -1.15, 1.6)),  Vector((0.0, -0.12, 1.55)), 35),   # face, straightening
  (B[2], Vector((0.15, -1.05, 1.45)), Vector((-0.05, -0.15, 1.38)), 35),
@@ -211,15 +214,15 @@ K = [  # frame, position, target, lens
  (B[3], P((-0.32, -0.78, 0.13)), P((0, 0, 0.12)), 30),   # pocket and his eyes both in frame
  (480, P((-0.06, -0.30, 0.03)), P((0, 0.03, -0.01)), 30),              # through the cloth
  (540, P((0.21, -0.4, 0.145)), P((-0.015, 0.05, -0.02)), 28),
- (600, P((0.291, -0.133, 0.205)), P((-0.015, 0.05, -0.02)), 30),
- (660, P((0.046, -0.052, 0.317)), P((-0.015, 0.05, -0.01)), 30),          # over the fold edge
+ (600, P((0.25, -0.26, 0.19)), P((-0.015, 0.05, -0.02)), 30),
+ (660, P((0.05, -0.26, 0.2)), P((-0.015, 0.05, -0.01)), 30),          # over the fold edge
  (B[4], P((-0.371, -0.278, 0.194)), P((-0.005, 0.06, -0.02)), 30),
  (780, P((0.47, -0.184, 0.013)), P((0.02, 0.051, -0.03)), 32),     # lateral to the steel case
- (840, P((0.169, -0.001, -0.194)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
+ (840, P((0.15, -0.22, -0.17)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
  (B[5], P((-0.27, -0.189, 0.031)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
- (940, P((-0.212, -0.059, 0.075)), P((0.015, 0.025, -0.02)), 35),
- (B[6], P((-0.133, 0.016, -0.037)), P((0.02, 0.05, -0.02)), 35),       # push to the dent
- (1060, P((-0.272, 0.046, -0.057)), P((0.0, 0.08, -0.04)), 30),        # past the ribs: bullet short of the lung
+ (940, P((-0.2, -0.2, 0.06)), P((0.015, 0.025, -0.02)), 35),
+ (B[6], P((-0.2, -0.22, -0.03)), P((0.02, 0.05, -0.02)), 35),       # push to the dent
+ (1060, P((-0.3, -0.2, -0.05)), P((0.0, 0.08, -0.04)), 30),        # past the ribs: bullet short of the lung
  (1120, P((-0.442, -0.134, 0.055)), P((0.0, 0.07, -0.03)), 28),
  (B[7], Vector((-0.55, -1.35, 1.4)), Vector((-0.05, -0.2, 1.35)), 30),  # pull out: podium
  (1245, Vector((0.35, -2.5, 1.55)),  Vector((-0.05, -0.2, 1.55)), 30),

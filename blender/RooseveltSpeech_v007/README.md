@@ -37,6 +37,8 @@ The full list, with frames, is in `../RooseveltSpeech_v001/review/ACTING_notes.m
 - **Lift:** the lift of the paper arcs clear of the lapel.
 - **Checks:**
   - `review/clip_scan_v007.json`: **0 bad ranges** (v006 had 1).
+  - `review/qa_v007.json` (director `qa_check.py`): 3 INSIDE (camera inside the studio backdrop dome at the x-ray pull-out, intended). 0 EMPTY, FILL, HOVER, CLAW, FACEPRESS or BACKHEAD.
+  - Hands: `pipeline/hand_poses.py` is used throughout (limits, poses, `grip_object` on the rail). The manuscript is pinched by thumb and index.
   - `review/hand_audit_v7.json`: 1 hit (4 mm at the lapel), 0 joint-range violations.
   - Hand close-ups: `review/v7_hand_closeups.jpg`.
 
