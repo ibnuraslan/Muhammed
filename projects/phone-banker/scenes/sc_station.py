@@ -21,7 +21,7 @@ rng = np.random.default_rng(41)
 def arched_facade(x0, x1, y, h, col=(0.45, 0.55, 0.48)):
     """Station front: green stucco with white pilasters and tall lit arched windows (simple geometry, lit from inside)."""
     st = pbr("StationStucco", col, 0.75); white = pbr("StationWhite", (0.78, 0.78, 0.74), 0.6)
-    lit = emissive("StationWindow", (1.0, 0.82, 0.55), 2.2)
+    lit = emissive("StationWindow", (1.0, 0.82, 0.55), 0.8)
     box("StationWall", ((x0 + x1) / 2, y + 0.5, h / 2), (x1 - x0, 1.0, h), st)
     n = int((x1 - x0) / 4.0)
     for k in range(n):
@@ -39,7 +39,7 @@ def arched_facade(x0, x1, y, h, col=(0.45, 0.55, 0.48)):
 
 def train_car(name, x, y, lit=True):
     green = pbr("TrainGreen", (0.08, 0.2, 0.12), 0.45, 0.2, **{'Coat Weight': 0.4})
-    win = emissive("TrainWin", (1.0, 0.85, 0.6), 1.6 if lit else 0.1)
+    win = emissive("TrainWin", (1.0, 0.85, 0.6), 0.45 if lit else 0.05)
     parts = [box("TCar", (0, 0, 2.2), (24.0, 3.1, 3.4), green, bevel=0.2), box("TRoof", (0, 0, 3.95), (23.8, 2.9, 0.2), pbr("TRoofM", (0.2, 0.2, 0.2), 0.6), bevel=0.1)]
     for k in range(10):
         for sy in (-1, 1):

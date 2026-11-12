@@ -1082,7 +1082,7 @@ def cam_find(c, t):
 def cam_glance(c, t):
     e = ease(t)
     vis = c["people"]["visitor"]
-    start = Vector((1.9, -1.9, 1.6)); end = PHONE + Vector((0.55, -0.75, 0.42))
+    start = Vector((-2.6, 2.45, 1.7)); end = PHONE + Vector((-0.75, 0.55, 0.38))
     tgt = Vector((-0.95, 0.75, 1.5)).lerp(PHONE + Vector((0, 0, 0.06)), ease(max(0.0, (t - 0.35) / 0.65)))
     return (start.lerp(end, e), tgt, 32 + 14 * e)
 
@@ -1142,7 +1142,7 @@ MOVES = {
                    focus=lambda c, t: Vector((-0.2, 1.0, 1.0))),
     "alone": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("alone"), cam=_push((2.2, -2.4, 1.6), (1.9, -2.2, 1.58), (-0.6, 1.0, 1.2), (-0.7, 1.05, 1.2), 30),
                   focus=lambda c, t: Vector((-0.95, 0.62, 1.4))),
-    "reads": dict(kind="anim", dof=2.8, far=10.0, anim=_anim("reads"), cam=_push((-2.05, 1.75, 1.55), (-1.9, 1.6, 1.52), (-0.95, 0.62, 1.35), (-0.95, 0.62, 1.32), 38),
+    "reads": dict(kind="anim", dof=2.8, far=10.0, anim=_anim("reads"), cam=_push((-2.75, 2.45, 1.6), (-2.6, 2.3, 1.58), (-0.95, 0.62, 1.3), (-0.95, 0.62, 1.28), 32),
                   focus=lambda c, t: Vector((-0.95, 0.62, 1.4))),
     "steps_out": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("steps_out"), cam=_push((-2.4, 2.5, 1.6), (-2.2, 2.3, 1.58), (1.2, -0.4, 1.2), (2.4, -1.3, 1.3), 26),
                       focus=lambda c, t: Vector((1.0, 0.8, 1.3)).lerp(Vector((3.0, -1.5, 1.3)), ease(t))),

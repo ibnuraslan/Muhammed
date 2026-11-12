@@ -246,7 +246,7 @@ MOVES = {
                     focus=lambda c, t: Vector((1.4, 4.0, 1.3))),
     "verdict": dict(kind="anim", dof=5.6, far=30.0, anim=_anim("verdict"), cam=_push((0.3, -4.0, 1.75), (0.2, -3.0, 1.75), (0.0, BENCH.y, 1.75), (0.0, BENCH.y, 1.8), 36),
                     focus=lambda c, t: Vector((0, BENCH.y + 0.7, 1.9))),
-    "led_out": dict(kind="anim", dof=4.0, far=30.0, anim=_anim("led_out"), cam=_push((1.0, -1.5, 1.6), (1.4, -1.2, 1.6), (5.0, 3.0, 1.3), (5.5, 3.0, 1.3), 30),
+    "led_out": dict(kind="anim", dof=4.0, far=30.0, anim=_anim("led_out"), cam=_push((0.4, -3.6, 1.75), (0.9, -3.3, 1.75), (5.0, 3.0, 1.3), (5.5, 3.0, 1.3), 30),
                     focus=lambda c, t: Vector((5.2, 2.8, 1.4))),
     "volumes": dict(kind="anim", dof=3.2, far=20.0, anim=_anim("volumes"), cam=_push((3.8, -2.9, 1.6), (3.6, -2.6, 1.58), (2.4, -1.0, 1.0), (2.45, -1.0, 1.0), 32),
                     focus=lambda c, t: Vector((2.45, -1.0, 1.1))),
