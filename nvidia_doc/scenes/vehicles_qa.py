@@ -41,6 +41,50 @@ def tile(kind, variant, out, pct, samples, dirt):
         bpy.ops.render.render(write_still=True)
 
 
+def street(kind, variant, out, pct, samples):
+    """The vehicle parked in the sc_street night set (its own box cars and walker hidden), lamps on, 3/4 front."""
+    import bpy
+    from mathutils import Vector
+    from common import reset, camera
+    import kit, vehicles, sc_street
+    s = reset(res=kit.RES, samples=samples, exposure=sc_street.EXPOSURE)
+    s.render.resolution_percentage = pct; s.cycles.max_bounces = sc_street.BOUNCES
+    ctx = sc_street.build(None)
+    keep = set()
+    for o in bpy.data.objects:
+        n = o.name
+        if n.startswith(("Car", "Moving", "Bus", "Tyre", "Rim", "Head", "Tail", "Body", "Cabin", "Wheel")) or o.type == 'ARMATURE' \
+                or (o.type == 'MESH' and o.parent is not None and o.parent.type == 'ARMATURE'):
+            o.hide_render = True
+    v = vehicles.make(kind, loc=(0, -1.9, 0), heading_deg=180, variant=variant or None, lamps=True, real_lights=True)
+    bpy.context.view_layer.update()
+    pts = [o.matrix_world @ Vector(c) for o in [v] + list(v.children_recursive) if o.type == 'MESH' for c in o.bound_box]
+    L = max(p.x for p in pts) - min(p.x for p in pts); H = max(p.z for p in pts)
+    d = max(L, H * 2.2) * 1.05 + 3.0
+    cam = camera((0, 0, 0), (0, 1, 0), lens=40)
+    cam.location = (-d * 0.92, min(-1.9 + d * 0.40, 3.6), 1.45)        # from the far lane: no pillars or poles in between
+    tgt = Vector((0, -1.9, H * 0.4))
+    cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
+    s.render.filepath = os.path.join(out, f"street_{kind}{'_' + variant if variant else ''}.png")
+    bpy.ops.render.render(write_still=True)
+
+
+def street_sheet(path, d, items):
+    from PIL import Image, ImageDraw, ImageFont
+    ims = []
+    for it in items:
+        kind, _, var = it.partition(":")
+        ims.append((it, Image.open(os.path.join(d, f"street_{kind}{'_' + var if var else ''}.png")).convert("RGB")))
+    w, h = ims[0][1].size; cols = 2; rows = (len(ims) + 1) // 2; pad = 6
+    S = Image.new("RGB", (cols * w + (cols + 1) * pad, rows * (h + pad) + pad + 34), (18, 19, 21))
+    dr = ImageDraw.Draw(S); f = ImageFont.truetype("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf", 20)
+    dr.text((pad, 6), "in context: sc_street night set, lamps on", fill=(220, 220, 220), font=f)
+    for k, (name, im) in enumerate(ims):
+        x = pad + (k % cols) * (w + pad); y = 34 + (k // cols) * (h + pad)
+        S.paste(im, (x, y)); dr.text((x + 8, y + 6), name, fill=(235, 200, 120), font=f)
+    S.save(path, quality=88); print("sheet", path, S.size)
+
+
 def sheet(path, d, items):
     from PIL import Image, ImageDraw, ImageFont
     ims = []
@@ -68,6 +112,12 @@ if __name__ == "__main__":
     if sys.argv[1] == "tile":
         kind = sys.argv[2]; var = sys.argv[3] if len(sys.argv) > 3 and not sys.argv[3].startswith("--") else None
         out = arg('--out', "/tmp/vqa"); os.makedirs(out, exist_ok=True)
-        tile(kind, var, out, arg('--pct', 50), arg('--samples', 32), arg('--dirt', 0.0))
+        tile(kind, var, out, arg('--pct', 50), arg('--samples', 32), arg('--dirt', 0.0) if '--dirt' in sys.argv else None)
+    elif sys.argv[1] == "street":
+        kind = sys.argv[2]; var = sys.argv[3] if len(sys.argv) > 3 and not sys.argv[3].startswith("--") else None
+        out = arg('--out', "/tmp/vqa"); os.makedirs(out, exist_ok=True)
+        street(kind, var, out, arg('--pct', 50), arg('--samples', 48))
+    elif sys.argv[1] == "street_sheet":
+        street_sheet(sys.argv[2], sys.argv[3], sys.argv[4:])
     elif sys.argv[1] == "sheet":
         sheet(sys.argv[2], sys.argv[3], sys.argv[4:])

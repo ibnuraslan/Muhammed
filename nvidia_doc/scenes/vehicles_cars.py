@@ -108,6 +108,7 @@ def sedan_1990s_soviet(variant=None):
     parts.append(V.cylinder("Aerial", (1.55, 0.70, 1.15), 0.0025, 0.62, ch, axis='Z', verts=8))
     parts.append(V.cylinder("Exhaust", (-1.80, -0.42, 0.25), 0.024, 0.55, ch, axis='X', verts=16))
     parts.append(V.underbody("Floor", -1.5, 1.6, 0.5, 0.21, 0.31))
+    V.cabin_interior(parts, [-0.06, -0.85], 0.36, 0.48, 0.42, 0.80, 0.70)
     body = V.join(parts, "Sedan1990s")
     me = V.wheel_mesh("lada", R, 0.175, RIM, "steel")
     wheels4(body, me, XF, XR, TR, R, RIM)
@@ -184,6 +185,8 @@ def van_1990s(variant=None):
     parts.append(V.plate("PlateR", (-2.44, 0, 0.53), facing=-1))
     parts.append(V.cylinder("Exhaust", (-2.30, -0.55, 0.30), 0.03, 0.2, V.steel_dark(), axis='X', verts=16))
     parts.append(V.underbody("Floor", -2.0, 2.0, 0.62, 0.24, 0.42))
+    V.cabin_interior(parts, [0.82], 0.45, 0.80, 1.30, 1.10, 0.84)
+    parts.append(V.rbox("Bulkhead", (0.24, 0, 1.2), (0.04, 1.8, 1.5), 0.02, V.interior()))
     body = V.join(parts, "Van1990s")
     me = V.wheel_mesh("van", R, 0.195, RIM, "steel")
     wheels4(body, me, XF, XR, TR, R, RIM)
@@ -224,11 +227,12 @@ def cab_1990s(x_front=3.40, width=2.20, roof=2.62, floor=0.93, depth=1.62, tag="
     """Cab-over truck cab, lofted (rounded corners, slight rake), with windscreen, door glass, grille band and lamps.
     Returns the list of parts and the head-lamp positions."""
     w = width / 2; xb = x_front - depth
-    keys = [S(x_front, floor + 0.04, 1.62, roof - 0.10, w - 0.07, w - 0.12, rb=0.06, rs=0.02, rt=0.09, crown=0.015, bul=0.0),
-            S(x_front - 0.035, floor + 0.01, 1.62, roof - 0.03, w - 0.015, w - 0.07, rb=0.07, rs=0.02, rt=0.11, crown=0.025, bul=0.0),
-            S(x_front - 0.16, floor, 1.62, roof, w, w - 0.055, rb=0.07, rs=0.02, rt=0.12, crown=0.03, bul=0.004),
-            S(xb + 0.06, floor, 1.62, roof, w, w - 0.055, rb=0.07, rs=0.02, rt=0.12, crown=0.03, bul=0.004),
-            S(xb, floor + 0.04, 1.62, roof - 0.07, w - 0.04, w - 0.09, rb=0.05, rs=0.02, rt=0.09, crown=0.02, bul=0.0)]
+    keys = [S(x_front, floor + 0.06, 1.62, roof - 0.16, w - 0.16, w - 0.21, rb=0.1, rs=0.03, rt=0.12, crown=0.02, bul=0.0),
+            S(x_front - 0.03, floor + 0.02, 1.62, roof - 0.06, w - 0.06, w - 0.11, rb=0.12, rs=0.03, rt=0.16, crown=0.03, bul=0.0),
+            S(x_front - 0.12, floor, 1.62, roof - 0.01, w - 0.01, w - 0.065, rb=0.12, rs=0.03, rt=0.18, crown=0.035, bul=0.004),
+            S(x_front - 0.30, floor, 1.62, roof, w, w - 0.06, rb=0.12, rs=0.03, rt=0.18, crown=0.035, bul=0.006, soft=True),
+            S(xb + 0.08, floor, 1.62, roof, w, w - 0.06, rb=0.12, rs=0.03, rt=0.18, crown=0.035, bul=0.006),
+            S(xb, floor + 0.05, 1.62, roof - 0.08, w - 0.06, w - 0.11, rb=0.1, rs=0.03, rt=0.12, crown=0.02, bul=0.0)]
     xd0, xd1 = xb + 0.20, x_front - 0.12
 
     def masks(g):
@@ -237,7 +241,10 @@ def cab_1990s(x_front=3.40, width=2.20, roof=2.62, floor=0.93, depth=1.62, tag="
                            rear=[(-0.5, 1.75), (0.5, 1.75), (0.5, 2.15), (-0.5, 2.15)], seal=0.022)
         side = g.ss(0.55, 0.7, g.any)
         M['gap'] = V.gaps(g, [('x', xd0, floor + 0.05, roof - 0.12), ('x', xd1, floor + 0.05, roof - 0.12),
-                              ('z', floor + 0.06, xd0, xd1), ('end_z', 1, 1.50, w - 0.1)])
+                              ('z', floor + 0.06, xd0, xd1), ('end_z', 1, 1.50, w - 0.1), ('end_z', 1, 1.12, w - 0.12),
+                              ('end_y', 1, w - 0.12, 1.12, 1.50)])
+        split = g.band(g.y, 0.0, 0.03, 0.003) * g.ss(0.5, 0.7, g.nx) * g.inside(g.z, 1.62, roof - 0.15)
+        M['glass'] = g.clamp(M['glass'] - split); M['rubber'] = g.mx(M['rubber'], split)
         frontface = g.ss(0.5, 0.7, g.nx)
         grille = frontface * g.inside(g.z, 1.18, 1.46, 0.004) * g.ss(w - 0.32, w - 0.34, g.ay)
         slats = grille * g.ss(0.35, 0.5, V.E(g, g.math('FRACT', g.z / 0.035).s))
@@ -266,6 +273,10 @@ def cab_1990s(x_front=3.40, width=2.20, roof=2.62, floor=0.93, depth=1.62, tag="
     for y in (-0.5, 0.25):
         parts.append(V.rbox("Wiper", (x_front + 0.005, y, 1.70), (0.016, 0.012, 0.62), 0.004, bp, rot=(math.radians(70), 0, 0)))
     parts.append(V.plate("PlateF", (x_front + 0.14, 0, floor - 0.32)))
+    parts.append(V.rbox("Visor", (x_front + 0.06, 0, roof - 0.13), (0.30, width - 0.25, 0.035), 0.012, bp, rot=(0, math.radians(8), 0)))
+    for s_ in (-1, 1):
+        parts.append(V.rbox("VisorArm", (x_front - 0.02, s_ * (w - 0.2), roof - 0.10), (0.16, 0.03, 0.03), 0.01, bp))
+    V.cabin_interior(parts, [x_front - 0.95], 0.5, floor + 0.55, x_front - 0.36, floor + 0.62, w - 0.14, bench_rear=False, wheel_r=0.23)
     return parts, heads
 
 

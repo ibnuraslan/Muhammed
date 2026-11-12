@@ -21,9 +21,12 @@ def heavy_paint(tag, col=None, house=None):
             xr, xf, hw, zt = house
             side = g.ss(0.55, 0.7, g.any)
             M['gap'] = V.gaps(g, [('x', xr + 0.55, 0.35, zt - 0.08), ('x', xr + 1.15, 0.35, zt - 0.08), ('x', xr + 1.75, 0.35, zt - 0.08),
-                                  ('z', zt - 0.08, xr + 0.05, xr + 1.75), ('top_x', xr + 1.0, hw)])
+                                  ('z', zt - 0.08, xr + 0.05, xr + 1.75), ('top_x', xr + 1.0, hw),
+                                  ('z', zt - 0.16, -3.2, xr - 0.02), ('end_z', -1, zt - 0.16, 2.0), ('z', 0.38, -3.2, xr - 0.02)])
+            cwr = g.ss(xr - 0.05, xr - 0.15, g.x)                     # counterweight: darker lower lip
+            M['black'] = cwr * g.inside(g.z, 0.24, 0.36, 0.004)
             lv = side * g.inside(g.x, xr + 0.62, xr + 1.08) * g.inside(g.z, zt - 0.55, zt - 0.2)
-            M['black'] = lv * g.ss(0.45, 0.6, V.E(g, g.math('FRACT', g.z / 0.045).s))
+            M['black'] = g.mx(M['black'], lv * g.ss(0.45, 0.6, V.E(g, g.math('FRACT', g.z / 0.045).s)))
         return M
     return V.paint_shader("V_Paint_" + tag, masks, rough=0.42, fixed_color=col)
 
@@ -33,11 +36,15 @@ def track_mat():
         m, g = V._newmat("V_Track")
         gr = V.E(g, g.math('FRACT', (g.x + g.z * 0.7) / 0.19).s)
         grouser = g.ss(0.30, 0.18, abs(gr - 0.5))
+        seam = g.ss(0.035, 0.0, gr) + g.ss(0.965, 1.0, gr)            # gap between link plates
+        pin_ = g.band(g.ay, 0.0, 0.5, 0.01) * 0.0
         n = g.noise(4.0, 6.0)
-        col = g.mix_col(n, (0.035, 0.033, 0.03), (0.09, 0.075, 0.06))
+        col = g.mix_col(n, (0.035, 0.033, 0.03), (0.11, 0.09, 0.07))
+        col = g.mix_col(grouser * 0.6, col, (0.16, 0.15, 0.14))
+        col = g.mix_col(seam, col, (0.004, 0.004, 0.004))
         p = g.bsdf((0.05, 0.05, 0.05), 0.7, 0.6); g.L.new(col, p.inputs['Base Color'])
         g.link(0.55 + n * 0.3, p.inputs['Roughness'])
-        g.L.new(g.bump(grouser, 1.0, 0.02), p.inputs['Normal'])
+        g.L.new(g.bump(grouser - seam * 0.8, 1.0, 0.025), p.inputs['Normal'])
         g.out(p); return m
     return V.mat("V_Track", f)
 
@@ -165,6 +172,11 @@ def boom_mesh(name, pts, hs, width, m, up=(0, 1, 0)):
     return V.sweep(name, path, V.rounded_rect(1.0, 1.0, 0.12, 3), m, up=up, scales=[(h, width) for h in hs], sharp=60)
 
 
+def hose(name, pts, r=0.022):
+    return V.sweep(name, pts, [(r * math.cos(a), r * math.sin(a)) for a in [k * math.pi / 4 for k in range(8)]],
+                   V.rubber(), up=(0, 1, 0) if abs(pts[1][1] - pts[0][1]) < 0.5 else (0, 0, 1), cap=True, sharp=80)
+
+
 def pin(name, c, r, w, m=None):
     return V.cylinder(name, c, r, w, m or V.steel_dark(), axis='Y', verts=20)
 
@@ -186,7 +198,8 @@ def excavator(variant=None):
     bp = (1.05, -0.05, 0.55)
     bpts = [(-0.15, 0.0), (0.6, 0.55), (1.6, 1.35), (2.6, 1.95), (3.3, 2.05), (4.4, 1.55), (5.5, 0.95), (5.85, 0.75)]
     bhs = [0.55, 0.6, 0.72, 0.82, 0.85, 0.7, 0.55, 0.5]
-    boom = V.join([boom_mesh("Boom", bpts, bhs, 0.52, pm), pin("Pin", (0, 0, 0), 0.09, 0.62), pin("Pin", (5.7, 0, 0.84), 0.09, 0.6)], "ExcBoom")
+    hs = [hose("Hose", [(x, s_ * 0.2, z + h * 0.5 + 0.03) for (x, z), h in zip(bpts[1:-1], bhs[1:-1])]) for s_ in (-1, 1)]
+    boom = V.join([boom_mesh("Boom", bpts, bhs, 0.52, pm), pin("Pin", (0, 0, 0), 0.09, 0.62), pin("Pin", (5.7, 0, 0.84), 0.09, 0.6)] + hs, "ExcBoom")
     boom.parent = house; boom.location = bp; tag_part(boom, "boom")
     tip = Vector((5.7, 0, 0.84))
     spts = [(-0.55, 0.42), (-0.2, 0.1), (0.1, -0.5), (0.35, -1.6), (0.5, -2.65)]
@@ -287,7 +300,9 @@ def grab_crane(variant=None):
                    pin("Pin", (8.9, 0, 5.1), 0.09, 0.62)], "HandlerBoom")
     boom.parent = house; boom.location = (1.15, -0.2, 0.6); tag_part(boom, "boom")
     spts = [(-0.7, 0.45), (-0.2, 0.1), (0.4, -1.5), (1.1, -4.2), (1.4, -5.6)]
-    stick = V.join([boom_mesh("Stick", spts, [0.5, 0.6, 0.55, 0.45, 0.38], 0.42, pm), pin("Pin", (1.4, 0, -5.65), 0.08, 0.5)], "HandlerStick")
+    gh = [hose("GrabHose", [(0.55, s_ * 0.27, -2.0), (0.95, s_ * 0.27, -4.4), (1.25, s_ * 0.33, -5.25), (1.5, s_ * 0.22, -5.62), (1.42, s_ * 0.14, -5.82)], 0.028)
+          for s_ in (-1, 1)]
+    stick = V.join([boom_mesh("Stick", spts, [0.5, 0.6, 0.55, 0.45, 0.38], 0.42, pm), pin("Pin", (1.4, 0, -5.65), 0.08, 0.5)] + gh, "HandlerStick")
     stick.parent = boom; stick.location = (8.9, 0, 5.1); tag_part(stick, "stick")
     grab, tines = make_grab(pm)
     grab.parent = stick; grab.location = (1.4, 0, -5.75); tag_part(grab, "grab")
