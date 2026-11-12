@@ -1,0 +1,358 @@
+{
+ "1": [
+  {
+   "set": "capitol",
+   "move": "dawn_push",
+   "label": "1A Capitol at dawn + CHAPTER 1 title",
+   "name": "c1_01_capitol_dawn_push",
+   "frames": 193
+  },
+  {
+   "set": "signing",
+   "move": "sign",
+   "label": "1B Official signs the rule",
+   "name": "c1_02_signing_sign",
+   "frames": 286
+  },
+  {
+   "set": "dchall",
+   "move": "tray",
+   "label": "2A GPU tray slides in",
+   "name": "c1_03_dchall_tray",
+   "frames": 100
+  },
+  {
+   "set": "dchall",
+   "move": "aisle",
+   "label": "2B Data hall aisle",
+   "name": "c1_04_dchall_aisle",
+   "frames": 154
+  },
+  {
+   "set": "dchall",
+   "move": "install",
+   "label": "3A Technicians install a server",
+   "name": "c1_05_dchall_install",
+   "frames": 177
+  },
+  {
+   "set": "dchall",
+   "move": "wake",
+   "label": "3B One rack wakes",
+   "name": "c1_06_dchall_wake",
+   "frames": 63
+  },
+  {
+   "set": "remote",
+   "move": "enter",
+   "label": "4A Remote engineer hits Enter",
+   "name": "c1_07_remote_enter",
+   "frames": 108
+  },
+  {
+   "set": "dchall",
+   "move": "ripple",
+   "label": "4B Rack lights ripple",
+   "name": "c1_08_dchall_ripple",
+   "frames": 82
+  },
+  {
+   "set": "port",
+   "move": "ship_lift",
+   "label": "5A Crane lifts a container",
+   "name": "c1_09_port_ship_lift",
+   "frames": 226
+  },
+  {
+   "set": "city",
+   "move": "shanghai_drift",
+   "label": "6A Shanghai at dusk",
+   "name": "c1_10_city_shanghai_drift",
+   "frames": 124
+  },
+  {
+   "set": "corp",
+   "move": "lobby_walk",
+   "label": "6B Alice crosses the lobby",
+   "name": "c1_11_corp_lobby_walk",
+   "frames": 106
+  },
+  {
+   "set": "city",
+   "move": "singapore_drift",
+   "label": "7A Singapore by day",
+   "name": "c1_12_city_singapore_drift",
+   "frames": 135
+  },
+  {
+   "set": "signing",
+   "move": "transfer",
+   "label": "7B Alice signs the transfer",
+   "name": "c1_13_signing_transfer",
+   "frames": 143
+  },
+  {
+   "set": "invest",
+   "move": "filing",
+   "label": "8A Investigator reads the filing",
+   "name": "c1_14_invest_filing",
+   "frames": 71
+  },
+  {
+   "set": "invest",
+   "move": "chart",
+   "label": "8B Thin 2023 filing, towering 2024 stack",
+   "name": "c1_15_invest_chart",
+   "frames": 133
+  },
+  {
+   "set": "corp",
+   "move": "pitch_present",
+   "label": "9A Alice presents to investors",
+   "name": "c1_16_corp_pitch_present",
+   "frames": 144
+  },
+  {
+   "set": "corp",
+   "move": "pitch_whisper",
+   "label": "9B Investor whispers",
+   "name": "c1_17_corp_pitch_whisper",
+   "frames": 231
+  },
+  {
+   "set": "port",
+   "move": "tropical_dock",
+   "label": "10A Ship docks at a tropical port",
+   "name": "c1_18_port_tropical_dock",
+   "frames": 397
+  },
+  {
+   "set": "remote",
+   "move": "enter",
+   "label": "10B Callback: the remote engineer",
+   "name": "c1_19_remote_enter",
+   "frames": 84
+  },
+  {
+   "set": "invest",
+   "move": "pinning",
+   "label": "11A Pinning the evidence wall",
+   "name": "c1_20_invest_pinning",
+   "frames": 298
+  },
+  {
+   "set": "police",
+   "move": "pull_up",
+   "label": "11B Police car at the tower",
+   "name": "c1_21_police_pull_up",
+   "frames": 247
+  },
+  {
+   "set": "office_door",
+   "move": "door_push",
+   "label": "12B Locked door, two gray armchairs",
+   "name": "c1_22_office_door_door_push",
+   "frames": 346
+  }
+ ],
+ "2": [
+  {
+   "set": "computex",
+   "move": "crowd",
+   "label": "1A Trade-show party + CHAPTER 2 title",
+   "name": "c2_01_computex_crowd",
+   "frames": 359
+  },
+  {
+   "set": "computex",
+   "move": "flash",
+   "label": "1B The two side by side",
+   "name": "c2_02_computex_flash",
+   "frames": 89
+  },
+  {
+   "set": "restaurant",
+   "move": "tv_handheld",
+   "label": "2A Group dinner, TV-camera look",
+   "name": "c2_03_restaurant_tv_handheld",
+   "frames": 188
+  },
+  {
+   "set": "invest",
+   "move": "compare",
+   "label": "2B Footage beside the photo",
+   "name": "c2_04_invest_compare",
+   "frames": 159
+  },
+  {
+   "set": "dchall",
+   "move": "ripple",
+   "label": "3A Server racks",
+   "name": "c2_05_dchall_ripple",
+   "frames": 68
+  },
+  {
+   "set": "capitol",
+   "move": "night_push",
+   "label": "3B Capitol at night",
+   "name": "c2_06_capitol_night_push",
+   "frames": 113
+  },
+  {
+   "set": "signing",
+   "move": "memo_pass",
+   "label": "4A Memo passed across the desk",
+   "name": "c2_07_signing_memo_pass",
+   "frames": 171
+  },
+  {
+   "set": "signing",
+   "move": "memo_read",
+   "label": "4B Official reads the memo",
+   "name": "c2_08_signing_memo_read",
+   "frames": 187
+  },
+  {
+   "set": "dchall",
+   "move": "aisle",
+   "label": "4C Rows of AI chips",
+   "name": "c2_09_dchall_aisle",
+   "frames": 193
+  },
+  {
+   "set": "port",
+   "move": "scan_gate",
+   "label": "5A Container through the scanner",
+   "name": "c2_10_port_scan_gate",
+   "frames": 141
+  },
+  {
+   "set": "cafe",
+   "move": "title_push",
+   "label": "5B The cafe conversation",
+   "name": "c2_11_cafe_title_push",
+   "frames": 159
+  },
+  {
+   "set": "warehouse",
+   "move": "lights_off",
+   "label": "6A Warehouse lights go off",
+   "name": "c2_12_warehouse_lights_off",
+   "frames": 259
+  },
+  {
+   "set": "dchall",
+   "move": "half_empty",
+   "label": "6B Half-empty data hall",
+   "name": "c2_13_dchall_half_empty",
+   "frames": 335
+  },
+  {
+   "set": "press",
+   "move": "press_run",
+   "label": "7A Newspaper presses at night",
+   "name": "c2_14_press_press_run",
+   "frames": 337
+  },
+  {
+   "set": "office_door",
+   "move": "phone_ring",
+   "label": "7B Phone rings, nobody answers",
+   "name": "c2_15_office_door_phone_ring",
+   "frames": 224
+  }
+ ],
+ "3": [
+  {
+   "set": "capitol",
+   "move": "ch3_push",
+   "label": "1A Capitol by day + CHAPTER 3 title",
+   "name": "c3_01_capitol_ch3_push",
+   "frames": 147
+  },
+  {
+   "set": "signing",
+   "move": "letter_seal",
+   "label": "1B The letter sealed",
+   "name": "c3_02_signing_letter_seal",
+   "frames": 251
+  },
+  {
+   "set": "home",
+   "move": "behind",
+   "label": "2A Callback: over-shoulder phone",
+   "name": "c3_03_home_behind",
+   "frames": 197
+  },
+  {
+   "set": "street",
+   "move": "walk_away",
+   "label": "2B Alice walks away",
+   "name": "c3_04_street_walk_away",
+   "frames": 163
+  },
+  {
+   "set": "invest",
+   "move": "shelving",
+   "label": "3A Evidence boxes shelved",
+   "name": "c3_05_invest_shelving",
+   "frames": 185
+  },
+  {
+   "set": "capitol",
+   "move": "slow_push",
+   "label": "3C Washington by day",
+   "name": "c3_06_capitol_slow_push",
+   "frames": 129
+  },
+  {
+   "set": "courthouse",
+   "move": "lawyer_climb",
+   "label": "3B Lawyer climbs the courthouse steps",
+   "name": "c3_07_courthouse_lawyer_climb",
+   "frames": 175
+  },
+  {
+   "set": "courtroom",
+   "move": "push",
+   "label": "4A Empty courtroom",
+   "name": "c3_08_courtroom_push",
+   "frames": 241
+  },
+  {
+   "set": "courtroom",
+   "move": "clerk",
+   "label": "4B Clerk stacks the case files",
+   "name": "c3_09_courtroom_clerk",
+   "frames": 96
+  },
+  {
+   "set": "invest",
+   "move": "lights_out",
+   "label": "5A Lights out, papers left",
+   "name": "c3_10_invest_lights_out",
+   "frames": 154
+  },
+  {
+   "set": "invest",
+   "move": "drawer_close",
+   "label": "5B The drawer slides shut",
+   "name": "c3_11_invest_drawer_close",
+   "frames": 131
+  },
+  {
+   "set": "doors",
+   "move": "doors_close",
+   "label": "6A Hearing-room doors close",
+   "name": "c3_12_doors_doors_close",
+   "frames": 118
+  },
+  {
+   "set": "city",
+   "move": "beijing_night",
+   "label": "6B Beijing at night",
+   "name": "c3_13_city_beijing_night",
+   "frames": 229
+  }
+ ]
+}

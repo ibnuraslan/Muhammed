@@ -1,0 +1,40 @@
+The Typewriters That Spied on America
+Narration: 1,050 words across four chapters. Estimated spoken runtime: 8 min 24 s at 125 wpm.
+
+Moscow. May, 1984.
+A handwritten note is delivered to the American ambassador. The NSA has come to replace the embassy's communications equipment. Most of his staff will hear that they're getting an upgrade.
+Over the next several days, workers haul eleven tons of old equipment out of the building. Copiers. Computers. Encryption machines. All of it is going back to the United States.
+Washington suspects the Soviets have planted a spy device somewhere in that shipment. The Americans are looking hardest at the machines that send secret messages.
+The one they're looking for is a typewriter.
+
+## Chapter One · The Swap
+In August 1983, the French show the Americans a bug they've found in their embassy equipment. It can be controlled from a distance and sends its signal in bursts. An ordinary sweep could miss it. The NSA has to consider that somewhere in the American embassy, there might be a device doing the same thing.
+Walter Deeley, the official in charge of communications security at the NSA, helps put together a plan. Take the embassy's communications and information equipment out of Moscow. Get it back to the United States, where technicians can open it up and look properly. Keep the embassy working the entire time.
+President Reagan authorizes the operation in February 1984. It's called Project Gunman.
+One of the first problems is figuring out what's in the building. There's no central inventory. The NSA learns that the embassy has roughly two hundred and fifty IBM Selectric typewriters. The plant in Lexington, Kentucky, can spare fifty. The team sends those to replace the machines in the most sensitive areas. Its search is still focused on the equipment that handles communications and encryption.
+In May, the replacement equipment is staged in Frankfurt and flown to Moscow in batches. The crates are wrapped in burlap to mark them as diplomatic cargo. The staples and seals carry microscopic markings, so inspectors can tell if somebody has replaced them. Light sensors record when the doors of the trailers are opened.
+At the embassy, Ambassador Arthur Hartman gets word of the real operation in a handwritten note delivered in person. What most of his staff hear is that the embassy is getting an upgrade.
+Then the elevator loses power. The building has a hoist on the roof. Workers use it to bring equipment up the outside, and stage the swap in the attic. An NSA employee runs wires from alarms up there down to the Marines on the sixth floor. Crews carry the new machines downstairs and haul the old ones back up. Some of the teletypes barely fit through the stairways.
+About eleven tons go back to the United States. Buried in that shipment is the typewriter that will give them their first lead.
+
+## Chapter Two · The X-Ray
+At Fort Meade, a team of about twenty-five people examines the equipment. They work six days a week. They start with the gear they most expect to find a bug in. For weeks, they come up empty.
+Then they turn to the typewriters.
+On the evening of July twenty-third, technician Michael Arneson notices an extra coil in the power switch of an IBM Selectric. He X-rays the whole machine. The film shows a cluster of electronics inside a bar that runs the length of the machine.
+Arneson is alone. His wife works for the NSA, too. The operation is so tightly held that he can't even tell her what he's found.
+The next morning, the engineers debate whether they're looking at a spy device or a feature IBM put there. Some typewriters do have electronic memory. But the circuits on this film are tucked inside what looks like a solid piece of metal.
+They take apart two Selectrics side by side, one ordinary, one altered. From the outside, the two bars look alike. Inside one of them is a radio transmitter.
+
+## Chapter Three · The Signal
+Press a key on a Selectric and a little ball covered with raised characters tilts and turns. It brings the right letter up against the ribbon and strikes it onto the paper. Underneath, a set of small metal arms controls that movement.
+In the modified machine, some of those arms have magnets at their tips. The hidden electronics can sense which arms move. From that pattern, the device can pick up much of what's being typed. Once it has enough data, it sends a short radio burst to a receiver nearby.
+The designers give those bursts somewhere to hide. They use frequencies in the same band as Soviet television broadcasts. They can also switch the bugs off remotely. Some versions draw power straight from the typewriter. Others carry their own batteries.
+That difference explains a missed chance six years earlier. In 1978, American inspectors had already X-rayed parts of the embassy's typewriters. They aimed at the motor and the power components, where they expected to see a modification. The bugs in use then ran on batteries. The parts they were looking at could appear perfectly normal.
+There are gaps in what comes out. The space bar doesn't move the ball, so the bug misses the spaces between words. Some letters are hard to tell apart. To read the text, Soviet analysts have to work out where the words begin and end.
+
+## Chapter Four · What Moscow Read
+The Americans eventually find sixteen altered typewriters, thirteen from the Moscow embassy and three from the consulate in Leningrad. The earliest had shipped in 1976. Investigators think Soviet intelligence probably got access while the machines were in transit. The State Department later learns that one typewriter was left in Soviet customs overnight.
+Now the FBI has to work out who used the machines and what they might have typed. Some inventory records were routinely destroyed after two years. Staff rotated through posts. The trail back to individual desks is incomplete.
+But a former KGB officer gives the NSA one example of what the Soviets got. A bugged machine had been used in the office of the American agricultural attaché. According to the defector, Soviet intelligence pulled out the American position on a grain deal and passed it to its negotiators before the next session.
+In March 1985, CBS breaks the story. The State Department tightens procedures for shipping and inspecting equipment. The full list of documents intercepted stays beyond what U.S. investigators can reconstruct.
+The embassy could encrypt a message before sending it to Washington. It could send the paper in a sealed pouch. By the time the page came out of a bugged machine, part of that message could already have reached a Soviet listening post.
