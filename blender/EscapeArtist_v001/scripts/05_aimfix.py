@@ -1,4 +1,4 @@
-"""AimFix (director, v006): for every QA range with no character in view, blend a Damped Track on the camera
+"""AimFix (director, v006b: Track To with world up, horizon level): for every QA range with no character in view, blend a Damped Track on the camera
 toward the acting character's head (influence 0->1 over 10 frames in, 1->0 over 10 frames out). Camera path unchanged.
 blender -b film.blend --python 05_aimfix.py -- <qa.json> <out.blend>"""
 import sys, json, bpy
@@ -26,7 +26,7 @@ for r0, r1 in ranges:
     if 2840 <= r0 <= 2900: tgt = bpy.data.objects["Prisoner"]                                     # the runner in the corridor, not the inmate behind cell walls
     c = cons.get(tgt.name)
     if c is None:
-        c = cam.constraints.new("DAMPED_TRACK"); c.name = "AimFix_" + tgt.name; c.target = tgt; c.subtarget = "head"; c.track_axis = "TRACK_NEGATIVE_Z"
+        c = cam.constraints.new("TRACK_TO"); c.name = "AimFix_" + tgt.name; c.target = tgt; c.subtarget = "head"; c.track_axis = "TRACK_NEGATIVE_Z"; c.up_axis = "UP_Y"; c.use_target_z = False
         c.influence = 0.0; c.keyframe_insert("influence", frame=0); cons[tgt.name] = c
     for f, v in ((r0 - 10, 0.0), (r0, 1.0), (r1, 1.0), (r1 + 10, 0.0)):
         c.influence = v; c.keyframe_insert("influence", frame=f)
@@ -45,7 +45,7 @@ if c and c.id_data.animation_data:
         c.influence = v; c.keyframe_insert("influence", frame=f)
     co = cam.constraints.get("AimFix_PrisonerOld")
     if co is None:
-        co = cam.constraints.new("DAMPED_TRACK"); co.name = "AimFix_PrisonerOld"; co.target = bpy.data.objects["PrisonerOld"]; co.subtarget = "head"
+        co = cam.constraints.new("TRACK_TO"); co.name = "AimFix_PrisonerOld"; co.target = bpy.data.objects["PrisonerOld"]; co.subtarget = "head"; co.up_axis = "UP_Y"; co.use_target_z = False
         co.track_axis = "TRACK_NEGATIVE_Z"; co.influence = 0.0; co.keyframe_insert("influence", frame=0)
     for f, v in ((3172, 0.0), (3182, 1.0), (3204, 1.0), (3214, 0.0)):
         co.influence = v; co.keyframe_insert("influence", frame=f)
@@ -67,3 +67,15 @@ _c = cam.constraints.get("AimFix_Prisoner")
 for f, v in ((2826, 0.0), (2836, 1.0), (2884, 1.0), (2893, 0.0)):
     _c.influence = v; _c.keyframe_insert("influence", frame=f)
 bpy.ops.wm.save_as_mainfile(filepath=OUT); print("AIMFIX_2898")
+
+# runner in the field (30 s): aim on him until just before he is moved into the cell at 1860
+_c = cam.constraints.get("AimFix_Prisoner")
+for f, v in ((1778, 0.0), (1788, 1.0), (1848, 1.0), (1857, 0.0)):
+    _c.influence = v; _c.keyframe_insert("influence", frame=f)
+bpy.ops.wm.save_as_mainfile(filepath=OUT); print("AIMFIX_FIELD")
+# roll check: camera world X axis must stay level (|z| < 0.1)
+bad = []
+for f in range(sc.frame_start, sc.frame_end + 1):
+    sc.frame_set(f); x = cam.matrix_world.to_3x3().col[0]
+    if abs(x.z) >= 0.1: bad.append(f)
+print("ROLL_BAD", len(bad), bad[:20])
