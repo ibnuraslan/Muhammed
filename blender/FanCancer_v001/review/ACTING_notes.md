@@ -61,4 +61,6 @@ Strips: `review/CAMCUT_strips.jpg` (F−1 and F at each cut, rendered from the p
 | 2154 → 2155 | lit facade window | curtain knit |
 | 2280 → 2281 | laptop-screen pixel grid | blank cheque face at 12 cm (new: the cut moved from 37.9 s to 38.0 s, when the cheque exists on the ice; beat 13's frame is unchanged) |
 
+Fixed in v004d: the laptop push (2276–2279) is clamped in front of the screen plane, and the neck pull-back at 518 eases straight back before the swing. CAMJUMP is only the 5 covered cuts. Strip: `review/CAMCUT_strip_v004d.jpg` (516–520 and 2272–2284).
+
 Fixed: f1519, a 161° aim flip with 8 cm of movement during the move around the bed. The 25.45 s key now stays on the front side of the bed, so the look vector never reverses.

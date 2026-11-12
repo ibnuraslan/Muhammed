@@ -641,7 +641,7 @@
    ],
    [
     "CAMJUMP",
-    "cut: 367.62 m, 180 deg in one frame (neighbours 0.06 m, 10 deg)"
+    "cut: 367.62 m, 180 deg in one frame (neighbours 0.06 m, 3 deg)"
    ]
   ],
   "2287": [
@@ -649,30 +649,12 @@
     "EMPTY",
     "wall/prop fills the frame, character only 10%"
    ]
-  ],
-  "518": [
-   [
-    "CAMJUMP",
-    "cut: 0.02 m, 76 deg in one frame (neighbours 0.72 m, 5 deg)"
-   ]
-  ],
-  "2276": [
-   [
-    "CAMJUMP",
-    "cut: 0.01 m, 180 deg in one frame (neighbours 0.02 m, 7 deg)"
-   ]
-  ],
-  "2279": [
-   [
-    "CAMJUMP",
-    "cut: 0.01 m, 180 deg in one frame (neighbours 0.01 m, 16 deg)"
-   ]
   ]
  },
  "counts": {
   "BACKHEAD": 1,
   "FILL": 9,
   "EMPTY": 103,
-  "CAMJUMP": 8
+  "CAMJUMP": 5
  }
 }
