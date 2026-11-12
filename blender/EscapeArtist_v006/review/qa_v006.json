@@ -528,19 +528,25 @@
     "wall/prop fills the frame, character only 0%"
    ]
   ],
-  "1500": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 9%"
-   ]
-  ],
-  "1512": [
+  "1494": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 14%"
    ]
   ],
-  "1524": [
+  "1500": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1506": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1512": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
@@ -550,10 +556,22 @@
     "no character in view"
    ]
   ],
+  "1518": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1524": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
   "1530": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1602": [
@@ -720,8 +738,12 @@
   ],
   "1860": [
    [
-    "BACKHEAD",
-    "Prisoner"
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1866": [
@@ -1206,16 +1228,24 @@
     "Protester2.R curl 36"
    ]
   ],
-  "3624": [
+  "3618": [
    [
     "CLAW",
-    "Judge.L curl 35"
+    "Protester2.R curl 45"
    ]
   ],
-  "3630": [
+  "3624": [
    [
-    "CLAW",
-    "Protester2.R curl 65"
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Object_12 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "3684": [
@@ -1258,24 +1288,24 @@
     "cut: 0.41 m, 65 deg in one frame (neighbours 0.42 m, 16 deg)"
    ]
   ],
-  "1863": [
+  "3621": [
    [
     "CAMJUMP",
-    "cut: 0.38 m, 69 deg in one frame (neighbours 0.64 m, 14 deg)"
+    "cut: 0.27 m, 75 deg in one frame (neighbours 0.34 m, 11 deg)"
    ]
   ],
   "3622": [
    [
     "CAMJUMP",
-    "cut: 0.34 m, 90 deg in one frame (neighbours 0.38 m, 14 deg)"
+    "cut: 0.34 m, 61 deg in one frame (neighbours 0.38 m, 11 deg)"
    ]
   ]
  },
  "counts": {
-  "EMPTY": 152,
+  "EMPTY": 160,
   "FILL": 7,
-  "CLAW": 64,
-  "BACKHEAD": 2,
+  "CLAW": 63,
+  "BACKHEAD": 1,
   "CAMJUMP": 3
  }
 }
