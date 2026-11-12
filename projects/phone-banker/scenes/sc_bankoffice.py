@@ -645,7 +645,8 @@ def dust_sheets(c):
 
 # ============================================================================ people per variant
 def officer_shirt(name, years, hv=0.3):
-    return person(name, 1.0, years, "male_casualsuit01", "short02", cval=0.72, hv=hv, hue=0.58, sat=0.3)
+    from pbpeople import militia
+    return militia(name, years, hv)
 
 
 def build_people(c, variant):

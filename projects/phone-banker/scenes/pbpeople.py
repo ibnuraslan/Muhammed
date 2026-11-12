@@ -13,7 +13,7 @@ SKIN = {("m", "mid"): "middleage_lightskinned_male_diffuse.png", ("m", "old"): "
         ("f", "mid"): "middleage_lightskinned_female_diffuse.png", ("f", "young"): "young_lightskinned_female_diffuse.png"}
 
 
-PALETTE = [(0.16, 0.16, 0.17), (0.3, 0.3, 0.31), (0.22, 0.14, 0.08), (0.42, 0.3, 0.17), (0.08, 0.1, 0.17),
+PALETTE = [(0.16, 0.16, 0.17), (0.3, 0.3, 0.31), (0.22, 0.14, 0.08), (0.36, 0.27, 0.17), (0.08, 0.1, 0.17),
            (0.19, 0.2, 0.13), (0.2, 0.25, 0.32), (0.35, 0.28, 0.22), (0.26, 0.24, 0.27)]
 DARK_CLOTHES = ("male_elegantsuit01", "female_elegantsuit01", "male_casualsuit05", "male_casualsuit01")
 

@@ -12,12 +12,8 @@ def fender_loft(name, keys, m, y, arch=None):
         x, z, r = arch
         c = V.cylinder("Cut", (x, 0, z), r, 1.2, V.liner(), axis='Y', verts=48)
         f.data.materials.append(V.liner())
-        b = f.modifiers.new("arch", 'BOOLEAN'); b.operation = 'DIFFERENCE'; b.object = c; b.solver = 'EXACT'
-        try:
-            b.material_mode = 'TRANSFER'
-        except Exception:
-            pass
-        V.bake(f); import bpy; bpy.data.objects.remove(c)
+        V.boolean_cut(f, c)
+        import bpy; bpy.data.objects.remove(c)
         f.data.shade_smooth(); f.data.set_sharp_from_angle(angle=math.radians(40))
     f.data.transform(Matrix.Translation((0, y, 0)))
     return f
