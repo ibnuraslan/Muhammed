@@ -90,6 +90,7 @@ def build(variant=None):
     room("Store", STO, 6, 14, 3.4, conc, two_tone("StoreWall", (0.45, 0.45, 0.42), (0.62, 0.6, 0.55), split=1.0), windows=[("E", 3.5, 2.2, 1.2, 0.6)])
     daylight_window(STO + Vector((3.1, 3.5, 2.5)), "E", (1.2, 0.6), energy=1500)
     tube_light(STO + Vector((0, -3.5, 3.35)), energy=160)
+    tube_light(STO + Vector((0, 1.5, 3.35)), energy=200)
     for k in range(4):
         ph_model("steel_frame_shelves_01", loc=STO + Vector((-2.4, -5.0 + k * 2.6, 0)), rot_z=math.radians(90))
     for k in range(10):

@@ -205,7 +205,7 @@ def c2_13a(c, t):          # a forklift sets two packages down inside the wareho
 
 def c2_13b(c, t):          # one package wheeled on a hand truck through the doorway into the next building
     sec = t * dur("ch2_13b"); doors(c, 0.2, 0.2)
-    a = Vector((4.0, 1.0, 0)); b = Vector((12.0, 1.0, 0))
+    a = Vector((6.4, 1.0, 0)); b = Vector((12.0, 1.0, 0))
     h = c["people"]["b"]; p = walk_to(h, a, b, sec, speed=0.7, swing=0)
     d = (b - a).normalized(); cart = p + d * 0.75
     ht = c["handtruck"]
