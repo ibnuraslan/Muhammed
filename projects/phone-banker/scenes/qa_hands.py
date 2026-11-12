@@ -49,6 +49,14 @@ def main():
     by_var = {}
     for mv, t in jobs:
         by_var.setdefault(getattr(mod, "VARIANT_FOR", {}).get(mv), []).append((mv, t))
+    if len(by_var) > 1:                      # one process per variant: rebuilding a set in the same process trips stale refs
+        import subprocess
+        for variant, js in by_var.items():
+            args = {}
+            for mv, t in js:
+                args.setdefault(mv, []).append(str(t))
+            subprocess.run([sys.executable, os.path.abspath(__file__), set_name] + [f"{m}:{','.join(ts)}" for m, ts in args.items()])
+        return
     for variant, js in by_var.items():
         s = reset(res=kit.RES, samples=1, exposure=0.0)
         ctx = mod.build(variant)

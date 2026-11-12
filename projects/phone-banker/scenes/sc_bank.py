@@ -357,7 +357,8 @@ def animate_dusk(c, sec, shot):
     gp0 = b.bone_head("spine03") + _fwd(b) * 0.2 + Vector((0, 0, -0.35))
     gp1 = knees + fwd * 0.22 + Vector((0.1, 0, 0.05))
     glass_pos = gp0.lerp(gp1, hand_out)
-    reach(b, "R", glass_pos + Vector((0, 0, -0.03)), Vector((0.5, 0.3, -0.7)), Vector((0, 0, 1)))
+    # the wrist is only aimed while the glass is held out; resting, it follows the forearm (no folded-back hand)
+    reach(b, "R", glass_pos + Vector((0, 0, -0.03)), Vector((0.5, 0.3, -0.7)), Vector((0, 0, 1)) if hand_out > 0.3 else None)
     fingers_curl(b, 45, side=("R",), thumb=25)
     look(b, a.bone_head("head"), 1.0)
     # seated man's right hand comes up to take it at the end
