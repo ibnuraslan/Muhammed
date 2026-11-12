@@ -28,12 +28,38 @@ def mountains():
     ridge = np.clip((Y + 0.2) * 1.4, 0, 1)
     h = (h * 0.5 + 0.6) * ridge
     o = grid_mesh("Mountains", h.astype(np.float32), 2400, 1200, 420, origin=(0, 900, -20))
-    o.data.materials.append(H.ph.texture("rock_face", 0.004, name="MtnRock", tint=(0.55, 0.3, 0.22)))       # darker red-rock foothills (Royal Gorge)
+    m = H.ph.texture("rock_face", 0.004, name="MtnRock", tint=(0.42, 0.25, 0.19))         # dark red-brown rock (Royal Gorge)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.012; nz.inputs['Detail'].default_value = 8
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    scree = N.new("ShaderNodeMix"); scree.data_type = 'RGBA'
+    sr = N.new("ShaderNodeMapRange"); sr.inputs['From Min'].default_value = 0.5; sr.inputs['From Max'].default_value = 0.62; L.new(nz.outputs['Fac'], sr.inputs['Value'])
+    L.new(sr.outputs['Result'], scree.inputs['Factor'])
+    if src: L.new(src, scree.inputs[6])
+    scree.inputs[7].default_value = (0.3, 0.29, 0.28, 1)
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Normal'], sep.inputs[0])
+    nz2 = N.new("ShaderNodeTexNoise"); nz2.inputs['Scale'].default_value = 0.03; L.new(tc.outputs['Object'], nz2.inputs['Vector'])
+    flat = N.new("ShaderNodeMapRange"); flat.inputs['From Min'].default_value = 0.72; flat.inputs['From Max'].default_value = 0.86; L.new(sep.outputs['Z'], flat.inputs['Value'])
+    pat = N.new("ShaderNodeMapRange"); pat.inputs['From Min'].default_value = 0.48; pat.inputs['From Max'].default_value = 0.56; L.new(nz2.outputs['Fac'], pat.inputs['Value'])
+    mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; L.new(flat.outputs['Result'], mul.inputs[0]); L.new(pat.outputs['Result'], mul.inputs[1])
+    snowm = N.new("ShaderNodeMix"); snowm.data_type = 'RGBA'; L.new(mul.outputs[0], snowm.inputs['Factor'])
+    L.new(scree.outputs[2], snowm.inputs[6]); snowm.inputs[7].default_value = (0.88, 0.9, 0.94, 1)
+    L.new(snowm.outputs[2], p.inputs['Base Color'])
+    o.data.materials.append(m)
     return o
 
 
 def stone():
-    return H.ph.texture("stone_wall", 0.45, name="PenStone", tint=(0.33, 0.36, 0.42))                     # grey granite block
+    m = H.ph.texture("stone_wall", 0.45, name="PenStone")                                 # cool grey granite block
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    if p.inputs['Base Color'].links:
+        src = p.inputs['Base Color'].links[0].from_socket
+        hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.05; hs.inputs['Value'].default_value = 0.95
+        L.new(src, hs.inputs['Color'])
+        tn = N.new("ShaderNodeMix"); tn.data_type = 'RGBA'; tn.blend_type = 'MULTIPLY'; tn.inputs['Factor'].default_value = 1.0
+        L.new(hs.outputs['Color'], tn.inputs[6]); tn.inputs[7].default_value = (0.86, 0.9, 1.0, 1); L.new(tn.outputs[2], p.inputs['Base Color'])
+    return m
 
 
 def build(variant=None):
@@ -61,35 +87,38 @@ def build(variant=None):
         H.point((0, -2.5, 2.6), 20, (1.0, 0.8, 0.55), 0.2)
         c["man"] = H.person("Thin", "thin_court")
         return c
-    world_sky(sun_elev_deg=20, sun_rot_deg=120, strength=0.7, tint=(0.72, 0.84, 1.0))            # cold clear winter sky
-    sun(20, -30, energy=3.0, color=(1.0, 0.95, 0.88), angle_deg=1.0)
-    bpy.context.scene.view_settings.exposure = -0.4
+    world_sky(sun_elev_deg=20, sun_rot_deg=120, strength=0.45, tint=(0.62, 0.78, 1.0))            # cold clear winter sky
+    sun(20, -30, energy=1.7, color=(1.0, 0.95, 0.88), angle_deg=1.0)
+    bpy.context.scene.view_settings.exposure = -1.1
     mountains()
-    box("Ground", (0, 0, -0.05), (400, 400, 0.1), H.ph.texture("dry_ground_rocks", 0.2, name="DryGround", tint=(0.8, 0.72, 0.62)))
-    # pines dotting the foothills, and the nearer slopes
-    rng = np.random.default_rng(4); pine = pbr("Pine", (0.04, 0.08, 0.05), 0.85); trunk = pbr("PTrunk", (0.12, 0.08, 0.05), 0.9)
-    for k in range(260):
-        x = rng.uniform(-200, 200); y = rng.uniform(15, 160)
-        if abs(x) < 18 and y < 45: continue
-        sc_ = rng.uniform(4.0, 8.0)
-        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.35 * sc_, radius2=0.0, depth=sc_ * 1.6, location=(x, y, sc_ * 0.8 + 0.02 * y))
-        bpy.context.active_object.data.materials.append(pine)
-    for k in range(40):
-        x = rng.uniform(-60, 60); y = rng.uniform(-60, -20)
-        if abs(x) < 8: continue
-        sc_ = rng.uniform(1.8, 3.2)
-        bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.42 * sc_, radius2=0.0, depth=sc_ * 2.0, location=(x, y, sc_ * 1.0 + 0.5))
-        bpy.context.active_object.data.materials.append(pine)
-        cyl("PTrunkC", (x, y, 0.3), 0.08 * sc_, 0.6, trunk, 8)
-    snow = pbr("Snow", (0.85, 0.87, 0.9), 0.6)
+    box("Ground", (0, 0, -0.05), (400, 400, 0.1), H.ph.texture("dry_ground_rocks", 0.2, name="DryGround", tint=(0.5, 0.47, 0.45)))
+    # conifers (Poly Haven pine_tree_01 / fir_tree_01), instanced and scattered down the slopes
+    import ph as _ph
+    cols = []
+    for aid in ("fir_tree_01",):                                  # (pine_tree_01 is ~1 GB: too heavy)
+        col = bpy.data.collections.new("Conifer_" + aid)
+        root, ms = _ph.model(aid, loc=(0, 0, -1000))
+        for o in [root] + list(root.children_recursive):
+            for cc in o.users_collection: cc.objects.unlink(o)
+            col.objects.link(o)
+        root.location = (0, 0, 0); cols.append(col)
+    rng = np.random.default_rng(4)
     dg = bpy.context.evaluated_depsgraph_get()
-    for k in range(90):                                                     # snow patches lying on the hills
-        x_, y_ = rng.uniform(-600, 600), rng.uniform(320, 1100)
-        ok, loc, nrm, *_ = bpy.context.scene.ray_cast(dg, Vector((x_, y_, 800)), Vector((0, 0, -1)))
-        if not ok or loc.z < 30: continue
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=6, radius=1, location=loc)
-        o_ = bpy.context.active_object; o_.scale = (rng.uniform(12, 40), rng.uniform(8, 22), 2.0); o_.data.materials.append(snow)
-        o_.rotation_euler = Vector((0, 0, 1)).rotation_difference(nrm).to_euler()
+    def plant(x, y, sc_):
+        ok, loc, *_ = bpy.context.scene.ray_cast(dg, Vector((x, y, 900)), Vector((0, 0, -1)))
+        if not ok: return
+        e = bpy.data.objects.new("Conifer", None); e.instance_type = 'COLLECTION'; e.instance_collection = cols[0]
+        bpy.context.collection.objects.link(e); e.location = loc; e.rotation_euler = (0, 0, rng.uniform(0, 6.28)); e.scale = (sc_,) * 3
+    for k in range(220):                                         # on the foothills behind
+        plant(rng.uniform(-420, 420), rng.uniform(300, 700), rng.uniform(2.5, 4.0))
+    for k in range(60):                                          # nearer, either side of the road
+        x = rng.uniform(-90, 90)
+        if abs(x) < 14: continue
+        plant(x, rng.uniform(-70, -15), rng.uniform(0.8, 1.3))
+    for k in range(40):
+        plant(rng.uniform(-150, 150), rng.uniform(70, 260), rng.uniform(1.2, 2.2))
+    snow = pbr("Snow", (0.85, 0.87, 0.9), 0.6)
+
     for k in range(22):                                                     # a little snow in the shadow of the wall
         box("SnowPatch", (rng.uniform(-55, 55), rng.uniform(0.9, 2.2), 0.0), (rng.uniform(2, 7), rng.uniform(0.6, 1.4), 0.06), snow, bevel=0.03)
     box("Road", (0, -30, -0.02), (7, 60, 0.05), H.mat("asphalt"))

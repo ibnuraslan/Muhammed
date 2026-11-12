@@ -55,9 +55,13 @@ def build(variant=None):
         NP.newsprint = lambda path, W=1024, H=1400: front_page(path)
         os.makedirs(GEN, exist_ok=True); NP.GEN = GEN                  # write our page into the project, never the shared asset
         c = NP.build(); c["np"] = NP
+        steel = brushed_metal("RollerSteel", (0.5, 0.51, 0.52))
         for o in bpy.data.objects:                       # open the near side frames so the cylinders and web read
             if o.name.startswith("UnitL"):
                 o.hide_render = True
+            if o.name.startswith("Roller"):              # brushed steel, not mirror chrome (reads as cylinders)
+                o.data.materials.clear(); o.data.materials.append(steel)
+        H.point((-6.0, -3.0, 3.5), 400, (1.0, 0.85, 0.65), 0.5)
         bpy.context.scene.view_settings.exposure = 0.3
         return c
     c = {}
@@ -117,8 +121,8 @@ def anim_stacks(c, t):
 
 MOVES = {
     "presses": dict(kind="anim", dof=4.0, far=40, anim=anim_presses,
-                    cam=lambda c, t: (Vector((-6.0 + 17.0 * ease(t), -4.2, 2.3 - 0.6 * ease(t))), Vector((-2.0 + 16.0 * ease(t), 0.0, 1.9 - 0.8 * ease(t))), 30),
-                    focus=lambda c, t: Vector((-2.0 + 16.0 * ease(t), 0.0, 1.6))),
+                    cam=lambda c, t: (Vector((-12.5 + 7.0 * ease(t), -4.2, 3.4)), Vector((-8.5 + 7.0 * ease(t), 0.4, 2.0)), 30),    # oblique: rollers as cylinders
+                    focus=lambda c, t: Vector((-8.0 + 9.0 * ease(t), 0.0, 2.0))),
     "stacks": dict(kind="anim", dof=2.8, far=20, anim=anim_stacks,
                    cam=lambda c, t: (Vector((1.2, -4.6, 1.45)).lerp(Vector((1.6, -4.5, 1.4)), ease(t)), Vector((2.4, -3.4, 0.95)), 32),
                    focus=lambda c, t: Vector((2.4, -3.4, 0.95))),

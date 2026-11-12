@@ -1012,11 +1012,11 @@ def _icebox_scene(c, sec):
         c["iceglow"] = H.point((-0.85, 3.95, 0.8), 28, (0.78, 0.88, 1.0), 0.15)
         c["roast"] = cyl("Roast", (0, 0, 0), 0.09, 0.08, pbr("Roast", (0.28, 0.12, 0.05), 0.6), 20)
     h = P(c, "y")
-    reset_pose(h); pose_sit(h, lean=35)
-    h.arm.rotation_euler = (0, 0, math.radians(180)); h.arm.location = (-0.85, 3.35, 0); bpy.context.view_layer.update(); H.ground_to(h, 0.0)
+    crouch(h, (-0.85, 3.45), math.radians(180), lean=28)            # on both heels at the open icebox
     hd = h.bone_head("head"); tear = 0.04 * math.sin(2 * math.pi * 1.3 * sec)
-    r = hd + Vector((0.0, 0.25, -0.25 + tear)); c["roast"].location = r
-    reach(h, "R", r + Vector((-0.08, -0.02, 0)), Vector((0, 0, -1)), Vector((1, 1, 0))); reach(h, "L", r + Vector((0.08, -0.02, 0)), Vector((0, 0, -1)), Vector((-1, 1, 0)))
+    r = hd + Vector((0.06, 0.25, -0.22 + tear)); c["roast"].location = r
+    reach(h, "R", r + Vector((-0.06, -0.02, 0)), Vector((0, 0, -1)), Vector((1, 1, 0)))
+    reach(h, "L", Vector((-1.3, 3.75, 0.85)), Vector((0, 0, -1)), Vector((1, 0, 0)))      # one hand on the door
     H.rotl(h, "head", (1, 0, 0), 20)
 
 

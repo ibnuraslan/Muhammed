@@ -920,7 +920,7 @@ def person(name, kind):
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=1.6, hat=False),
         "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="short02", hv=0.12, hat=False),
-        "thin_court": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.1, val=0.35), hair="short02", hv=0.12, hat=False),
+        "thin_court": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_elegantsuit01", cv=dict(hue=0.42, sat=0.3, val=0.7), hair="short02", hv=1.7, hat=False),
         "philip_pj": dict(gender=1.0, years=86, weight=0.38, height=0.4, cloth="male_casualsuit03", cv=dict(hue=0.55, sat=0.25, val=1.6), hair="short02", hv=2.8, hat=False, skin="old_lightskinned_male_diffuse.png"),
         "judge": dict(gender=1.0, years=64, weight=0.55, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.05), hair="short02", hv=2.2, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=2.2), hair="roll", roll=(0.5, 0.0), hv=0.25, hat=False),
@@ -1422,8 +1422,9 @@ def coneys_hair(h, combed=False):
     nrm = nrm + np.where((co[pick][:, 1] < center[1] - 0.02)[:, None], np.array([0, 1.3, 0.5]), 0.0)   # combed back off the brow
     rmin = np.linalg.norm(co[sc] - center, axis=1).mean() + 0.006
     hm = hair_mat("ConeysHair", 0.62, 0.4, 0.55)
-    strand_hair(h, h.name + "_hair", roots, nrm * 0.25 + np.array([0, 0.4, 0.1]), center, 12, 0.16 if combed else 0.19, 1.1 if combed else 0.8, 0.00045, hm, rng,
-                clump=0.25 if combed else 0.55, frizz=0.0012 if combed else 0.0038, min_r=rmin)
+    if not combed:
+      strand_hair(h, h.name + "_hair", roots, nrm * 0.25 + np.array([0, 0.4, 0.1]), center, 12, 0.16 if combed else 0.19, 1.1 if combed else 0.8, 0.00045, hm, rng,
+                  clump=0.25 if combed else 0.55, frizz=0.0012 if combed else 0.0038, min_r=rmin)
     # beard: jaw, chin, cheeks below the cheekbone, moustache
     def bz(i):
         x, y, z = co[i]
@@ -1434,8 +1435,8 @@ def coneys_hair(h, combed=False):
     bvs = np.array([i for i in np.where((co[:, 2] > zmin - 0.03) & (np.abs(co[:, 0]) < 0.1))[0] if bz(i)])
     kb = 9000; pb = rng.choice(bvs, size=kb)
     broots = co[pb] + 0.001 * rng.normal(size=(kb, 3))
-    strand_hair(h, h.name + "_beard", broots, nr[pb] * 0.4 + np.array([0, -0.1, -0.8]), center, 6, 0.022 if combed else 0.035, 0.6, 0.00035,
-                hair_mat("ConeysBeard", 0.5, 0.45, 0.6), rng, clump=0.3, frizz=0.002 if combed else 0.0045)
+    strand_hair(h, h.name + "_beard", broots, nr[pb] * 0.4 + np.array([0, -0.1, -0.8]), center, 6, 0.012 if combed else 0.035, 0.6, 0.00035,
+                hair_mat("ConeysBeard", 0.5, 0.7 if combed else 0.45, 0.6), rng, clump=0.3, frizz=0.002 if combed else 0.0045)
     return h
 
 

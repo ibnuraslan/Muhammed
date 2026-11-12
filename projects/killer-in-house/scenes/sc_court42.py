@@ -42,8 +42,13 @@ def build(variant=None):
     box("Bench", (0, 7.6, 0.95), (4.4, 1.2, 1.9), dark, bevel=0.02); box("BenchTop", (0, 7.6, 1.92), (4.6, 1.3, 0.05), oak)
     box("Dais", (0, 8.0, 0.25), (5.5, 2.4, 0.5), oak)
     box("JudgeChair", (0, 8.5, 1.6), (0.8, 0.6, 1.9), pbr("Leather", (0.05, 0.03, 0.02), 0.45), bevel=0.06)
-    box("WitnessBox", (3.2, 6.8, 0.55), (1.4, 1.3, 1.1), dark, bevel=0.02)
-    box("WitnessRail", (3.2, 6.15, 1.12), (1.4, 0.06, 0.06), oak)
+    # witness box: a low front panel and rail, open inside, a chair on a raised floor
+    box("WitnessFloor", (3.2, 6.8, 0.12), (1.4, 1.3, 0.24), dark, bevel=0.02)
+    box("WitnessFront", (3.2, 6.17, 0.58), (1.4, 0.06, 0.7), dark, bevel=0.01)
+    for sx in (-1, 1):
+        box("WitnessSide", (3.2 + sx * 0.68, 6.8, 0.58), (0.06, 1.3, 0.7), dark, bevel=0.01)
+    box("WitnessRail", (3.2, 6.15, 0.95), (1.45, 0.08, 0.06), oak)
+    ph.model("dining_chair_02", loc=(3.2, 6.95, 0.24), rot_z=0.0)
     box("JuryBox", (-3.7, 1.65, 0.45), (4.4, 2.3, 0.9), dark, bevel=0.02)
     box("JuryRail", (-3.7, 0.45, 0.95), (4.4, 0.08, 0.08), oak)
     box("JuryStep", (-3.7, 2.1, 0.12), (4.4, 1.0, 0.24), oak)
@@ -115,9 +120,9 @@ def anim_stand(c, t):
     sec = t * DUR["stand"]; judge(c, sec)
     if "key" not in c:
         c["key"] = area_light((1.6, 6.6, 2.2), (0, 0, 0), 0.8, 120, (1.0, 0.95, 0.88)); point_at(c["key"], (3.2, 6.9, 1.3)); c["key"].visible_camera = False
-    d = c["cast"]["def"]; seat(d, Vector((3.2, 6.9, 0.25)), 0.0, 10, floor=0.25)          # faces the court
+    d = c["cast"]["def"]; seat(d, Vector((3.2, 6.85, 0.24)), 0.0, 10, floor=0.24)          # seated in the box, facing the court
     H.look(d, 10 * math.sin(0.8 * sec), 8)
-    reach(d, "R", Vector((3.05, 6.55, 0.95)), Vector((0, 0, -1)), Vector((0, -1, 0)))
+    reach(d, "R", Vector((3.0, 6.2, 0.99)), Vector((0, 0, -1)), Vector((0, -1, 0))); reach(d, "L", Vector((3.4, 6.2, 0.99)), Vector((0, 0, -1)), Vector((0, -1, 0)))
 
 
 def anim_jury(c, t):
@@ -152,10 +157,10 @@ MOVES = {
     "prosecutor": dict(kind="anim", dof=None, far=30, anim=anim_prosecutor,
                        cam=lambda c, t: (Vector((5.6, -5.2, 2.5)).lerp(Vector((5.2, -4.6, 2.45)), ease(t)), Vector((-2.2, 2.2, 1.0)), 24)),
     "stand": dict(kind="anim", dof=None, far=30, anim=anim_stand,
-                  cam=lambda c, t: (Vector((1.2, 5.9, 1.45)).lerp(Vector((1.5, 6.0, 1.45)), ease(t)), Vector((3.2, 6.95, 1.3)), 40)),
+                  cam=lambda c, t: (Vector((1.3, 4.6, 1.45)).lerp(Vector((1.55, 4.9, 1.45)), ease(t)), Vector((3.2, 6.8, 1.15)), 38)),
     "jury_in": dict(kind="anim", dof=None, far=30, anim=anim_jury,
                     cam=lambda c, t: (Vector((-0.4, -0.4, 1.5)).lerp(Vector((-0.6, 0.0, 1.5)), ease(t)), Vector((-4.0, 1.7, 1.1)), 28)),
     "gavel": dict(kind="anim", dof=4.0, far=30, anim=anim_gavel,
-                  cam=lambda c, t: (Vector((3.4, 1.2, 1.6)).lerp(Vector((3.1, 1.45, 1.6)), ease(t)), Vector((1.1, 3.6, 1.6)), 34),
-                  focus=lambda c, t: Vector((1.6, 2.2, 1.6))),
+                  cam=lambda c, t: (Vector((3.0, 4.0, 1.55)).lerp(Vector((2.85, 3.8, 1.55)), ease(t)), Vector((1.6, 2.2, 1.45)), 40),     # 3/4 front, face to camera
+                  focus=lambda c, t: Vector((1.6, 2.2, 1.55))),
 }
