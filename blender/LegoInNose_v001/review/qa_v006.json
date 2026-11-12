@@ -1,0 +1,3379 @@
+{
+ "frames": {
+  "1": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "7": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "13": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "19": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "73": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "79": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "85": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "91": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "97": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "103": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "109": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "115": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "121": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "127": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "133": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "139": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "145": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "151": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "157": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "163": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "169": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "175": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "181": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "187": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "193": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "205": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "211": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "217": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "223": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "229": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "235": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "241": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "247": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "253": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "259": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "265": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ]
+  ],
+  "301": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "307": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "313": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "319": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "325": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "331": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "337": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "343": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "349": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "355": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "361": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "367": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "373": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "379": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "385": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "391": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "397": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "403": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "409": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "415": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "421": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "427": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "433": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "439": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "445": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "451": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "457": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "469": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "487": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "523": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "529": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "535": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "541": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "547": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "553": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "559": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "565": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "571": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "577": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "583": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "589": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "619": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "625": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "631": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "637": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "649": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "661": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "685": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Return2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Return2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "FILL",
+    "Tunnel_Return1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "709": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "715": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "721": [
+   [
+    "FILL",
+    "Tunnel_Return1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Return1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "727": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "733": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "739": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "811": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "853": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.09 m, 179 deg in one frame (neighbours 0.16 m, 1 deg)"
+   ]
+  ],
+  "877": [
+   [
+    "FILL",
+    "Tunnel_Return1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Return1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "883": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "889": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "925": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "931": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "937": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "943": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "949": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "955": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "961": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "967": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "973": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "979": [
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1021": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1039": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1045": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1051": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1057": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1063": [
+   [
+    "FILL",
+    "hair / top of head 48%"
+   ],
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "1069": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Mom.R curl 36"
+   ]
+  ],
+  "1081": [
+   [
+    "FILL",
+    "hair / top of head 33%"
+   ]
+  ],
+  "1087": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1093": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1105": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.03 m, 119 deg in one frame (neighbours 0.03 m, 9 deg)"
+   ]
+  ],
+  "1111": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.40 m, 66 deg in one frame (neighbours 0.40 m, 16 deg)"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1207": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1213": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1231": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1243": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1255": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1261": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1267": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1273": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1315": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1327": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1333": [
+   [
+    "FILL",
+    "Tunnel_Dive1"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive1 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1339": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Tunnel_Dive2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1351": [
+   [
+    "FILL",
+    "Tunnel_Dive2"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1357": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1363": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1405": [
+   [
+    "CLAW",
+    "Teen.R curl 37"
+   ]
+  ],
+  "1417": [
+   [
+    "CLAW",
+    "Teen.L curl 37"
+   ]
+  ],
+  "1423": [
+   [
+    "CLAW",
+    "Teen.R curl 37"
+   ]
+  ],
+  "1429": [
+   [
+    "CLAW",
+    "Teen.R curl 37"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1459": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1465": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1471": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1561": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1567": [
+   [
+    "FILL",
+    "hair / top of head 45%"
+   ]
+  ],
+  "1573": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1711": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only LR_WallN3 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1717": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1843": [
+   [
+    "FILL",
+    "BR_Mattress"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1873": [
+   [
+    "FILL",
+    "BR_WallE0"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1879": [
+   [
+    "FILL",
+    "BR_WallE0"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "2011": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "2017": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "2023": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "2029": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "2035": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "2077": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "2083": [
+   [
+    "FILL",
+    "hair / top of head 45%"
+   ]
+  ],
+  "2089": [
+   [
+    "FILL",
+    "hair / top of head 37%"
+   ]
+  ],
+  "726": [
+   [
+    "CAMJUMP",
+    "cut: 0.05 m, 113 deg in one frame (neighbours 0.02 m, 6 deg)"
+   ]
+  ],
+  "731": [
+   [
+    "CAMJUMP",
+    "cut: 0.34 m, 125 deg in one frame (neighbours 0.38 m, 7 deg)"
+   ]
+  ],
+  "743": [
+   [
+    "CAMJUMP",
+    "cut: 0.47 m, 171 deg in one frame (neighbours 0.45 m, 14 deg)"
+   ]
+  ],
+  "857": [
+   [
+    "CAMJUMP",
+    "cut: 0.43 m, 108 deg in one frame (neighbours 0.43 m, 15 deg)"
+   ]
+  ],
+  "1104": [
+   [
+    "CAMJUMP",
+    "cut: 0.01 m, 156 deg in one frame (neighbours 0.03 m, 14 deg)"
+   ]
+  ],
+  "1110": [
+   [
+    "CAMJUMP",
+    "cut: 0.33 m, 99 deg in one frame (neighbours 0.35 m, 9 deg)"
+   ]
+  ],
+  "1122": [
+   [
+    "CAMJUMP",
+    "cut: 0.41 m, 83 deg in one frame (neighbours 0.40 m, 16 deg)"
+   ]
+  ],
+  "1312": [
+   [
+    "CAMJUMP",
+    "cut: 0.40 m, 87 deg in one frame (neighbours 0.42 m, 15 deg)"
+   ]
+  ],
+  "1325": [
+   [
+    "CAMJUMP",
+    "cut: 0.14 m, 164 deg in one frame (neighbours 0.22 m, 1 deg)"
+   ]
+  ],
+  "1844": [
+   [
+    "CAMJUMP",
+    "cut: 0.07 m, 87 deg in one frame (neighbours 0.07 m, 15 deg)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 432,
+  "FILL": 216,
+  "INSIDE": 29,
+  "CLAW": 17,
+  "CAMJUMP": 13
+ }
+}

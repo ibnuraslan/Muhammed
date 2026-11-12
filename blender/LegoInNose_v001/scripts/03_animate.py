@@ -5,6 +5,7 @@ import bpy, bmesh
 from mathutils import Vector, Matrix, Quaternion, Euler
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())   # shared hand poses + limits (Nov 12)
 OUT = sys.argv[sys.argv.index("--") + 1:][0]
 random.seed(7)
 def ground_z(x, y):
@@ -22,11 +23,12 @@ def key_vis(obj_names, ranges, f_end=2400):
     for nm in obj_names:
         o = bpy.data.objects[nm]
         obs = [o] + [c for c in o.children_recursive]
-        for ob in obs:
-            ob.hide_render = True; ob.keyframe_insert("hide_render", frame=0)
-            for a, b in ranges:
-                ob.hide_render = False; ob.keyframe_insert("hide_render", frame=a)
-                ob.hide_render = True; ob.keyframe_insert("hide_render", frame=b)
+        for ob in obs:      # hide_viewport is keyed too, so scene ray casts (QA) also skip hidden objects
+            for attr in ("hide_render", "hide_viewport"):
+                setattr(ob, attr, True); ob.keyframe_insert(attr, frame=0)
+                for a, b in ranges:
+                    setattr(ob, attr, False); ob.keyframe_insert(attr, frame=a)
+                    setattr(ob, attr, True); ob.keyframe_insert(attr, frame=b)
 def set_const(obj, data_path_prefix=""):
     ad = obj.animation_data
     if not ad or not ad.action: return
@@ -62,6 +64,9 @@ def face(body, f, **vals):
             if k in keys and alias in vals: v = vals[alias]
         kb["expr_" + k].value = v; kb["expr_" + k].keyframe_insert("value", frame=f)
 
+def pose(c, s, f, name, amount=1.0):
+    """hand_poses.apply_pose wrapper: never hand-set finger angles"""
+    apply_pose(c.arm, s, name, f, amount=amount)
 def fingers(r, s, f, curl=0.0, index=None, thumb=None, spread=0.0):
     """curl 0..1 for fingers 3-5 (and index/thumb if given)"""
     def rot(n, a, ax="X"):
@@ -79,6 +84,7 @@ class Char:
     def __init__(self, name):
         self.name = name; self.arm = bpy.data.objects[name]
         self.h = Human(make_human_ctrl(self.arm)); self.r = self.h.r; self.body = name + "_Body"
+        add_hand_limits(self.arm)
         self.nose_rest = None
     def bone_world(self, n, tail=False):
         pb = self.r.PB[n]; return self.arm.matrix_world @ (pb.tail if tail else pb.head)
@@ -218,10 +224,11 @@ for f, what in ((1, "knee"), (230, "knee"), (275, "knee"), (420, "knee"), (640, 
     elif what == "flapA": W_ = sh + V(0.22, -0.12, 0.22); b.h.key_hand("L", f, W_, V(0.4, -0.2, 1.0).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
     elif what == "flapB": W_ = sh + V(0.27, -0.18, 0.05); b.h.key_hand("L", f, W_, V(0.6, -0.3, 0.6).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
 # fingers
-for f, cR, iR, tR in ((1, 0.55, 0.35, 0.5), (255, 0.2, 0.1, 0.1), (290, 0.15, 0.05, 0.05), (330, 0.55, 0.35, 0.5), (880, 0.55, 0.35, 0.5),
-                      (895, 0.1, 0.05, 0.0), (985, 0.4, 0.3, 0.3)):
-    fingers(b.r, "R", f, cR, iR, tR)
-fingers(b.r, "L", 1, 0.25, 0.2, 0.1)
+for f, nm_ in ((1, "pinch"), (240, "pinch"), (262, "relaxed"), (300, "relaxed"), (325, "pinch"), (338, "pinch"), (880, "pinch"),
+               (893, "open_alarm"), (975, "open_alarm"), (995, "relaxed")):
+    pose(b, "R", f, nm_)
+for f, nm_ in ((1, "relaxed"), (885, "relaxed"), (893, "open_alarm"), (975, "open_alarm"), (995, "relaxed")):
+    pose(b, "L", f, nm_)
 # face (Boy)
 for f, kw in ((1, dict(brows=0.2)), (60, dict(brows=0.35, smile=0.2)), (128, dict(squint=0.3, purse=0.3)), (150, dict(wide=0.6, open=0.25, flare=0.6)),
               (190, dict(worry=0.5, squint=0.3, flare=0.5)), (230, dict(worry=0.4, sad=0.3)), (300, dict(brows=0.3)), (400, dict(smile=0.4, brows=0.5)),
@@ -278,7 +285,7 @@ for f, what in ((965, "reach"), (990, "approach"), (1015, "at_nose"), (1040, "gr
         w.h.key_hand("L", f, chin + V(0.15, -0.05, -0.15), (chin - shL).normalized(), V(-1, 0, 0), shL + V(0.3, 0.2, -0.3))
     else:
         w.h.key_hand("L", f, MOMK + V(0.12, -0.2, 0.22), V(0, -0.5, -0.8).normalized(), V(0, 0, -1), shL + V(0.3, 0.2, -0.3))
-fingers(w.r, "R", 960, 0.6, 0.3, 0.5); fingers(w.r, "L", 960, 0.2, 0.1, 0.2)
+pose(w, "R", 870, "relaxed"); pose(w, "R", 960, "pinch"); pose(w, "L", 870, "relaxed"); pose(w, "L", 1000, "cup_hold"); pose(w, "L", 1065, "relaxed")
 for f, kw in ((870, dict(worry=0.8, open=0.3)), (960, dict(worry=0.7, frown=0.2)), (1015, dict(squint=0.4, purse=0.3)), (1058, dict(wide=0.4, open=0.2)),
               (1075, dict(smile=0.8, brows=0.5)), (1140, dict(smile=0.6))):
     face(w.body, f, **kw)
@@ -295,7 +302,7 @@ for f in range(1395, 1439, 6):
     for s, sx in (("L", 1), ("R", -1)):
         hand_at(T, s, f, pad + V(sx * 0.055, 0.0, 0.0), V(-sx * 0.3, -0.5, 0.6).normalized(), V(0, 0.4, 1).normalized(),
                 pole=T.bone_world("upperarm01." + s) + V(sx * 0.35, 0.1, -0.3))
-        fingers(T.r, s, f, 0.6, 0.45 + 0.15 * math.sin(f * 1.3 + sx), 0.2 + 0.2 * math.sin(f * 1.1))
+        pose(T, s, f, "wrap_grip", amount=0.85 + 0.1 * math.sin(f * 1.3 + sx))
 for f, kw in ((1395, dict(squint=0.4, frown=0.3)), (1420, dict(squint=0.5, open=0.2)), (1438, dict(smile=0.3, squint=0.3))):
     face(T.body, f, **kw)
 MAN_LAP = {}
@@ -320,7 +327,7 @@ def man_bench(f, lean=10, head=(0, 0), twist=0.0, side=0.0):
         pole = V(BENCH.x + sx * 0.14, BENCH.y - 1.2, 0.6); n = "Pole_knee." + s; pb = M.r.PB[n]
         pb.location = M.r.rest(n).to_3x3().inverted() @ (pole - M.r.BN[n].head_local); pb.keyframe_insert("location", frame=f, group=n)
 MB_KEYS = ((1470, dict(lean=12, head=(8, 0))), (1500, dict(lean=6, head=(-14, 0))), (1520, dict(lean=14, head=(10, 0))), (1545, dict(lean=4, head=(-12, 4))),
-           (1570, dict(lean=22, head=(18, 0))), (1600, dict(lean=10, head=(6, 0))), (1630, dict(lean=14, head=(4, -6))), (1660, dict(lean=8, head=(-8, 0))),
+           (1570, dict(lean=10, head=(4, 0))), (1600, dict(lean=10, head=(6, 0))), (1630, dict(lean=14, head=(4, -6))), (1660, dict(lean=8, head=(-8, 0))),
            (1690, dict(lean=-6, head=(-16, 0))), (1708, dict(lean=4, head=(0, 0))), (1720, dict(lean=4, head=(0, 0))))
 for f, kw in MB_KEYS: man_bench(f, **kw)
 # tissue / inhaler hands
@@ -333,13 +340,17 @@ for f, what in ((1470, "lap"), (1495, "sniff"), (1515, "tissue_box"), (1535, "bl
     if what == "lap": tR = lap + V(-0.1, -0.05, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "sniff": tR = nt + fw * 0.075 - up * 0.03 + V(-0.035, 0, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "tissue_box": tR = BENCH + V(-0.38, -0.05, SEATZ + 0.12); tL = lap + V(0.1, -0.05, 0)
-    elif what in ("blow", "blow2"): tR = nt + fw * 0.055 - up * 0.01 + V(-0.03, 0, 0); tL = nt + fw * 0.055 - up * 0.01 + V(0.03, 0, 0)
+    elif what in ("blow", "blow2"): tR = nt + fw * 0.06 - up * 0.01 + V(-0.025, 0, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "toss": tR = BENCH + V(-0.3, -0.6, 0.55); tL = lap + V(0.1, -0.05, 0)
     elif what in ("shake1", "shake2"): tR = shR + V(0.1, -0.35, -0.05 if what == "shake1" else 0.08); tL = lap + V(0.1, -0.05, 0)
     elif what == "mouth": tR = nt + fw * 0.05 - up * 0.06; tL = lap + V(0.1, -0.05, 0)
     hand_at(M, "R", f, tR, (V(0.3, 0, 1) if what != "lap" else V(0, -0.7, -0.5)).normalized(), V(-1, 0, 0) if what != "lap" else V(0, 0, -1), shR + V(-0.3, 0.2, -0.3))
-    hand_at(M, "L", f, tL, (V(-0.3, 0, 1) if what in ("blow", "blow2") else V(0, -0.7, -0.5)).normalized(), V(1, 0, 0) if what in ("blow", "blow2") else V(0, 0, -1), shL + V(0.3, 0.2, -0.3))
-fingers(M.r, "R", 1470, 0.3, 0.2, 0.2); fingers(M.r, "R", 1610, 0.75, 0.6, 0.5)
+    hand_at(M, "L", f, tL, V(0, -0.7, -0.5).normalized(), V(0, 0, -1), shL + V(0.3, 0.2, -0.3))
+for f, nm_ in ((1440, "hold_flat_object"), (1470, "relaxed"), (1505, "relaxed"), (1515, "wrap_grip"), (1582, "wrap_grip"), (1596, "relaxed"),
+               (1606, "wrap_grip"), (1718, "wrap_grip"), (1724, "relaxed")):
+    pose(M, "R", f, nm_)
+for f, nm_ in ((1440, "hold_flat_object"), (1470, "relaxed"), (1530, "relaxed"), (1724, "relaxed")):
+    pose(M, "L", f, nm_)
 for f, kw in ((1470, dict(squint=0.3, sad=0.3)), (1495, dict(squint=0.6, flare=1.0, purse=0.3)), (1535, dict(squint=0.9, purse=0.6)), (1580, dict(sad=0.5, worry=0.5)),
               (1640, dict(worry=0.6, open=0.2)), (1672, dict(open=0.6, wide=0.4)), (1700, dict(open=0.3, squint=0.3)), (1715, dict(sad=0.4, worry=0.4))):
     face(M.body, f, **kw)
@@ -382,8 +393,8 @@ def man_shower(f, lean=0.0, head=(0, 0), twist=0.0, side=0.0):
     for s in "LR":
         xy = m.foot_xy(s, V(SHW.x, SHW.y, 0), yaw_sh)
         m.key_foot(s, f, xy, yaw_sh + (8 if s == "L" else -8), lift=SHW.z)
-SH_KEYS = ((1870, dict(head=(-20, 0))), (1930, dict(head=(-10, 10), lean=4)), (1960, dict(head=(10, 0), lean=10)), (1990, dict(head=(16, 0), lean=18)),
-           (2020, dict(head=(22, 0), lean=24)), (2060, dict(head=(16, 0), lean=20)), (2085, dict(head=(24, 0), lean=26)), (2100, dict(head=(10, 0), lean=12)),
+SH_KEYS = ((1870, dict(head=(-20, 0))), (1930, dict(head=(-10, 10), lean=4)), (1960, dict(head=(4, 0), lean=6)), (1990, dict(head=(6, 0), lean=8)),
+           (2020, dict(head=(8, 0), lean=10)), (2060, dict(head=(6, 0), lean=8)), (2085, dict(head=(10, 0), lean=12)), (2100, dict(head=(4, 0), lean=6)),
            (2150, dict(head=(20, 0), lean=14)), (2200, dict(head=(18, 0), lean=12)), (2230, dict(head=(-20, 0), lean=-6)), (2250, dict(head=(-26, 4), lean=-10, side=4)),
            (2270, dict(head=(-18, -4), lean=-4, side=-4)), (2290, dict(head=(-24, 4), lean=-8, side=4)), (2310, dict(head=(-14, 0), lean=-2)))
 for f, kw in SH_KEYS: man_shower(f, **kw)
@@ -408,7 +419,10 @@ for f, what in ((1870, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press")
     bk_ = -fw
     hand_at(M, "R", f, tR, dR, nR, shR + rt * 0.45 - up * 0.35 + bk_ * 0.25)
     hand_at(M, "L", f, tL, dL, nL, shL - rt * 0.45 - up * 0.35 + bk_ * 0.25)
-fingers(M.r, "R", 1870, 0.2, 0.1, 0.1); fingers(M.r, "L", 1870, 0.2, 0.1, 0.1); fingers(M.r, "L", 2077, 0.35, 0.3, 0.2)
+for f, nm_ in ((1870, "relaxed"), (1945, "relaxed"), (1958, "point"), (2077, "point"), (2088, "relaxed")):
+    pose(M, "R", f, nm_)
+for f, nm_ in ((1870, "relaxed"), (2077, "relaxed"), (2088, "cup_hold")):
+    pose(M, "L", f, nm_)
 for f, kw in ((1870, dict(squint=0.6, sad=0.2)), (1960, dict(squint=0.7, purse=0.3)), (1990, dict(squint=1.0, purse=0.8, flare=1.0)), (2040, dict(squint=1.0, purse=1.0, flare=1.0)),
               (2085, dict(squint=1.0, purse=1.0, flare=1.0)), (2095, dict(wide=1.0, open=0.5, brows=0.8)), (2150, dict(wide=1.0, open=0.6, brows=1.0)),
               (2200, dict(wide=0.6, brows=0.8, open=0.3, smile=0.3)), (2230, dict(smile=1.0, open=0.8, squint=0.4, brows=0.4)), (2310, dict(smile=1.0, open=0.6, squint=0.5))):

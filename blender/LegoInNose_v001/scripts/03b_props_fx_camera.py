@@ -373,8 +373,8 @@ def k(f, cam, aim, lens): K.append((f, Vector(cam), Vector(aim), float(lens)))
 k(1, V(0.95, -1.35, 0.22), V(-0.05, 0.0, 0.35), 24)
 k(60, V(0.6, -0.95, 0.42), pinch_of(B, "R", 60), 32)
 k(115, V(0.3, -0.5, 0.6), nose_of(B, 115), 45)
-k(170, V(0.14, -0.27, 0.63), nose_of(B, 170), 60)
-k(225, V(0.42, -0.24, 0.67), nose_of(B, 225), 55)
+k(170, V(0.16, -0.3, 0.55), nose_of(B, 170), 55)
+k(225, V(0.42, -0.26, 0.56), nose_of(B, 225), 50)
 # beat 2: whip down-left to the tub, macro on the dig, rise with the hand
 k(272, V(0.05, -0.72, 0.52), TUBW + V(0, 0, 0.12), 34)
 k(325, V(-0.18, -0.36, 0.3), TUBW + V(0.01, -0.02, 0.1), 50)
@@ -400,7 +400,7 @@ k(790, V(0.7, -1.9, -6.45), XS_AIR, 32)
 k(828, XS_AIR + V(0.1, -0.75, 0.05), XS_AIR + V(0, 0, 0.02), 40)
 RET1 = [(852, V(0.25, -1.6, -5.6)), (858, V(0.1, -1.2, -3.6)), (864, V(0.15, 0.3, -1.0))]
 N1 = nose_of(B, 870); fw1 = fw_of(B)
-RET1 += [(870, N1 + fw1 * 0.002), (879, N1 + fw1 * 0.09)]
+RET1 += [(867, N1 - V(0, 0, 0.22) - fw1 * 0.06), (870, N1 + fw1 * 0.002), (874, N1 + fw1 * 0.03), (882, N1 + fw1 * 0.1)]
 for i, (f, p) in enumerate(RET1):
     prv = RET1[i - 1][1] if i > 0 else XS_AIR
     k(f, p, prv if f < 870 else N1, 32 if f < 870 else 38)
@@ -420,10 +420,10 @@ for i, (f, p) in enumerate(DIVE2):
     k(f, p, nxt, 30)
 k(1185, V(-0.55, -1.7, -6.25), XS_HI, 34)
 k(1240, XS_HI + V(0.35, -0.75, -0.05), XS_HI, 48)
-k(1285, XS_HI + V(0.75, -0.95, 0.2), XS_HI, 42)
+k(1285, XS_HI + V(0.9, -1.3, 0.25), XS_HI, 42)
 RET2 = [(1307, V(0.4, -1.6, -5.5)), (1313, V(0.1, -1.2, -3.6)), (1319, V(0.15, 0.3, -1.0))]
 N3 = nose_of(B, 1325); fw3 = fw_of(B)
-RET2 += [(1325, N3 + fw3 * 0.002), (1340, N3 + fw3 * 0.12)]
+RET2 += [(1322, N3 - V(0, 0, 0.22) - fw3 * 0.06), (1325, N3 + fw3 * 0.002), (1329, N3 + fw3 * 0.03), (1340, N3 + fw3 * 0.12)]
 for i, (f, p) in enumerate(RET2):
     prv = RET2[i - 1][1] if i > 0 else XS_HI
     k(f, p, prv if f < 1325 else N3, 30 if f < 1325 else 36)
@@ -441,10 +441,10 @@ k(1640, V(-1.65, 1.38, 0.72), pinch_of(M, "R", 1640), 45)
 k(1688, V(-0.8, 1.15, 1.2), face_of(M, 1688), 40)
 k(1704, V(-0.45, 1.15, 1.25), face_of(M, 1704), 36)
 k(1722, V(0.9, 1.35, 1.35), V(2.8, 1.65, 1.1), 28)
-k(1745, V(3.25, 1.45, 1.45), V(5.1, 1.4, 0.6), 24)
-k(1790, V(4.75, 1.0, 2.15), face_of(M, 1790), 28)
-k(1830, V(4.5, 1.95, 1.0), face_of(M, 1830), 34)
-k(1862, V(5.75, 0.6, 1.25), face_of(M, 1862), 30)
+k(1745, V(4.1, 0.75, 1.3), face_of(M, 1745), 30)
+k(1790, V(4.75, 1.15, 1.55), face_of(M, 1790), 32)
+k(1830, V(4.3, 2.05, 1.15), face_of(M, 1830), 32)
+k(1862, V(5.55, 0.95, 1.15), face_of(M, 1862), 32)
 # beat 10: through the wall into the bathroom
 k(1878, V(6.2, 1.15, 1.5), V(7.5, 1.55, 1.5), 26)
 k(1888, V(6.62, 1.22, 1.55), V(8.0, 1.6, 1.55), 27)
@@ -466,11 +466,33 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt = cam.constraints.new("TRACK_TO"); tt.target = aim; tt.track_axis = "TRACK_NEGATIVE_Z"; tt.up_axis = "UP_Y"
 cam_d.dof.focus_object = aim
-fc_ = catmull([(f, c) for f, c, a, l in K]); fa_ = catmull([(f, a) for f, c, a, l in K]); fl_ = pchip([(f, l) for f, c, a, l in K])
+def pchip3(keys):
+    """monotone per-axis interpolation: C1, never overshoots a key (no loops at hard braking / tunnel corners)"""
+    fx = [pchip([(f, v[i]) for f, v in keys]) for i in range(3)]
+    return lambda f: Vector((fx[0](f), fx[1](f), fx[2](f)))
+fc_ = pchip3([(f, c) for f, c, a, l in K]); fa_ = pchip3([(f, a) for f, c, a, l in K]); fl_ = pchip([(f, l) for f, c, a, l in K])
 CAMPATH = fc_
+# tunnels: the aim follows the camera's own path (ahead on dives, behind on returns) so the view never flips
+TUN_AIM = [(712, 754, +1), (840, 880, -1), (1092, 1136, +1), (1300, 1340, -1)]
+def aim_at(f):
+    """inside a tunnel window the view direction turns smoothly from the entry view to the exit view
+    (spread over the whole pass, a few degrees per frame), whatever the tunnel path does"""
+    a0 = fa_(f)
+    for t0, t1, sgn in TUN_AIM:
+        fa0, fb0 = t0 - 8, t1 + 8
+        if fa0 <= f <= fb0:
+            d0 = (fa_(fa0) - fc_(fa0)).normalized(); d1 = (fa_(fb0) - fc_(fb0)).normalized()
+            w = smooth((f - fa0) / float(fb0 - fa0))
+            ang = d0.angle(d1, 0.0)
+            if ang < 1e-4: d = d0
+            else:
+                ax = d0.cross(d1); ax = ax.normalized() if ax.length > 1e-6 else d0.orthogonal().normalized()
+                d = Matrix.Rotation(ang * w, 3, ax) @ d0
+            return fc_(f) + d * 2.0
+    return a0
 for f in list(range(1, 2311, 2)) + [2310]:
     cam.location = fc_(f); cam.keyframe_insert("location", frame=f)
-    aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
+    aim.location = aim_at(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
 # f-stop: deep in the studio/tunnel, shallow in macros
 for f, fs in ((1, 4.0), (460, 5.6), (630, 4.0), (720, 8.0), (2070, 8.0), (2200, 5.6), (2310, 4.0)):
