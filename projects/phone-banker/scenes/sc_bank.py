@@ -314,8 +314,7 @@ def animate_dusk(c, sec, shot):
         ph_ = (sec * 0.9) % 1.0
         pose_walk_at(w, ph_, Vector((2.6, -4.4 + 1.2 * min(sec, 3.2), 0.0)), math.pi)
     else:
-        for o in [w.arm] + list(w.parts):
-            o.hide_render = True
+        PP.hide(w, True)                                                 # cap included
     # seated officer and the colleague with the glass (2B); in 2A they are already there, small in the background
     seat_on_steps(a, -0.8, 1)
     nod(a, "spine04", 10); nod(a, "neck01", 10); nod(a, "head", 14)
@@ -378,7 +377,7 @@ def cam_steps(c, t):
     e = ease(t)
     a = c["people"]["sit"]
     tgt = Vector((-0.55, -1.0, 0.85))
-    return (tgt + Vector((3.4, -5.8, 0.9)).lerp(Vector((3.0, -5.2, 0.85)), e), tgt + Vector((0.3, 0, 0.3)), 30)
+    return (tgt + Vector((-2.4, -5.6, 0.8)).lerp(Vector((-2.1, -5.0, 0.75)), e), tgt + Vector((0.3, 0, 0.25)), 30)
 
 
 MOVES = {
