@@ -105,13 +105,13 @@ class Person:
                 sw = math.sin(2 * math.pi * ph + (0 if s == "L" else math.pi))
                 if md == "stand" and nm in ("swing", "run"): nm = "hang"
                 if nm == "hang":
-                    W = shw + side * 0.26 + fw * 0.05 + up * (-0.83 * L); d = (-up + fw * 0.1).normalized(); n = (-side - fw * 0.8).normalized()
+                    W = shw + side * 0.10 + fw * 0.06 + up * (-0.86 * L); d = (-up + fw * 0.12).normalized(); n = (-side - fw * 0.5).normalized()
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "swing":
-                    W = shw + side * 0.26 + fw * (0.28 * L * sw) + up * (-0.82 * L); d = (-up + fw * 0.2).normalized(); n = (-side - fw * 0.8).normalized()
+                    W = shw + side * 0.10 + fw * (0.28 * L * sw) + up * (-0.84 * L); d = (-up + fw * 0.2).normalized(); n = (-side - fw * 0.5).normalized()
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "run":
-                    W = shw + side * 0.23 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
+                    W = shw + side * 0.12 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
                     pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
                 elif nm == "point":
                     W = shw + fw * 0.93 * L + up * (0.2 + 0.05 * math.sin(f * 0.13)) * L + side * (0.05 + 0.04 * math.sin(f * 0.07)); d = (fw + up * 0.2).normalized(); n = -up
@@ -239,16 +239,16 @@ for f, a in ((T(9.4), 0), (T(9.55), 18), (T(9.9), 14), (T(10.1), 20), (T(10.35),
     jaw.key_rot("jaw", f, [("X", a)])
 
 # ---------------------------------------------------------------- offscreen reset (13 s) and the flight inland past the camera (17.4 – 21.2 s)
-RUN = {"Fisher": [(6, 8), (5, -10), (8, -26)], "LocalW": [(2, 6), (1, -12), (-2, -27)], "TouristM": [(-4, 9), (-5, -9), (-9, -27)],
-       "TouristW": [(9, 7), (10, -10), (14, -26)], "KidA": [(0.5, 2), (0, -10), (-1, -23)], "KidB": [(4.5, 1.5), (4.5, -10), (5, -23)],
-       "OldM": [(-9, 2), (-10, -11), (-13, -24)], "LocalM": [(12, 10), (13, -9), (18, -26)]}
+RUN = {"Fisher": [(6, 8), (5, -10), (8, -26), (20, -40)], "LocalW": [(2, 6), (1, -12), (-2, -27), (-19, -40)], "TouristM": [(-4, 9), (-5, -9), (-9, -27), (-20, -42)],
+       "TouristW": [(9, 7), (10, -10), (14, -26), (19, -42)], "KidA": [(0.5, 2), (0, -10), (-1, -23), (-18, -34)], "KidB": [(4.5, 1.5), (4.5, -10), (5, -23), (18, -34)],
+       "OldM": [(-9, 2), (-10, -11), (-13, -24), (-20, -32)], "LocalM": [(12, 10), (13, -9), (18, -26), (21, -44)]}
 START = {"Fisher": 17.5, "LocalW": 17.6, "TouristM": 17.4, "TouristW": 17.7, "KidA": 17.9, "KidB": 18.0, "OldM": 17.2, "LocalM": 17.6}
 for n, pts in RUN.items():
     q = P[n]; kid = n.startswith("Kid")
     q.stand(T(13.0), T(START[n]), pts[0], 0 + (8 if n == "OldM" else 0), head=(-10, 180 if False else 0))
-    q.go(pts, T(START[n]), T(21.1), run=True, kid=kid)
-    q.key_arms(T(12.85), T(21.1), lambda f, s=START[n]: "run" if f > T(s) else "hang")
-    q.hide_after(T(21.15))
+    q.go(pts, T(START[n]), T(21.4), run=True, kid=kid)
+    q.key_arms(T(12.85), T(21.4), lambda f, s=START[n]: "run" if f > T(s) else "hang")
+    q.hide_after(T(21.45))
 # Fisher fish: rests on the sand, follows the right hand from the grasp until he drops it
 q = P["Fisher"]
 for f in range(T(6.9), T(9.05), 2):

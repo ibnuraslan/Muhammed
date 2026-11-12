@@ -268,12 +268,12 @@ for p in (o for o in bpy.data.objects if o.name.startswith("Hotel_Sofa_")):
 
 for o in bpy.data.objects:
     if o.name.startswith("HotelSpray_"):
-        i = int(o.name.split("_")[1]); t0 = T_front(-28) - 0.05 + 0.03 * i
+        i = int(o.name.split("_")[1]); t0 = T_front(-28) - 0.05 + 0.012 * i
         key_hide(o, [(1, True), (F(t0), False), (F(t0 + 1.6), True)])
         l = o.location.copy()
         key_tr(o, F(t0), loc=tuple(l), scale=0.3)
-        key_tr(o, F(t0 + 0.5), loc=(l.x, l.y + 2, l.z + 5), scale=(4, 3, 6))
-        key_tr(o, F(t0 + 1.5), loc=(l.x, l.y - 4, l.z + 7), scale=(6, 5, 7))
+        key_tr(o, F(t0 + 0.4), loc=(l.x, l.y - 1.5, l.z + 1.5), scale=(1.8, 2.2, 2.0))
+        key_tr(o, F(t0 + 1.4), loc=(l.x, l.y - 5, l.z + 3), scale=(2.4, 3.0, 2.6))
 CT = bpy.data.collections["Town"]
 for i in range(30):
     lib = [bpy.data.objects[n] for n in ("LIB_car", "LIB_car2", "LIB_umbrella", "LIB_rowboat", "LIB_longtail", "LIB_umbrella2")][i % 6]

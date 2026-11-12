@@ -87,6 +87,9 @@ dk.inputs["B"].default_value = (0.78, 0.78, 0.78, 1); LL.new(col, dk.inputs["A"]
 LL.new(dk.outputs["Result"], bsdf.inputs["Base Color"]); LL.new(nor, bsdf.inputs["Normal"])
 rw = NN.new("ShaderNodeMix"); rw.data_type = 'FLOAT'; LL.new(wetall.outputs[0], rw.inputs["Factor"]); LL.new(rou, rw.inputs["A"]); rw.inputs["B"].default_value = 0.18
 LL.new(rw.outputs["Result"], bsdf.inputs["Roughness"])
+_go = NN.new("ShaderNodeNewGeometry"); _em = NN.new("ShaderNodeEmission"); _em.inputs["Color"].default_value = (0.42, 0.33, 0.2, 1); _em.inputs["Strength"].default_value = 1.0
+_mx = NN.new("ShaderNodeMixShader"); LL.new(_go.outputs["Backfacing"], _mx.inputs["Fac"]); LL.new(bsdf.outputs[0], _mx.inputs[1]); LL.new(_em.outputs[0], _mx.inputs[2])
+LL.new(_mx.outputs[0], NN["Material Output"].inputs["Surface"])
 terr.data.materials.append(m); deep.data.materials.append(simple_mat("M_Deep", (0.05, 0.06, 0.05), 0.9))
 
 # roads (asphalt strips)
@@ -324,10 +327,17 @@ for i in range(24):
     u = inst(umb if i % 3 else umb2, "Umbrella_%02d" % i, C_B, (x, y, ground(x, y) - 0.25), (math.radians(random.uniform(-4, 4)), 0, random.uniform(0, 6.28)))
     UMB.append(u)
 lounger_m = simple_mat("M_Lounger", (0.75, 0.68, 0.55), 0.6)
-for i in range(12):
+for i in range(0):   # sun loungers were flat slabs (primitive look): removed
     x = -66 + i * 11 + random.uniform(-1, 1); y = random.uniform(-14, -6)
     box("Lounger_%02d" % i, C_B, (0.7, 1.9, 0.08), (x + 1.2, y, ground(x, y) + 0.35), lounger_m, rot=(math.radians(8), 0, math.radians(random.uniform(-10, 10))), bevel=0.02)
-stallL = import_glb("stall", 2.6, "z", C_LIB); vnetL = import_glb("vnet", 9.5, "x", C_LIB); fnetL = import_glb("fnet", 6.0, "y", C_LIB)
+stallL = import_glb("stall", 2.6, "z", C_LIB)
+for m_ in stallL.data.materials:   # the stall sign carries Japanese characters: plain cloth instead (no on-screen text)
+    if m_ and m_.use_nodes and "paper" in m_.name.lower():
+        bb = m_.node_tree.nodes.get("Principled BSDF")
+        for n_ in list(m_.node_tree.nodes):
+            if n_.type == 'TEX_IMAGE': m_.node_tree.nodes.remove(n_)
+        if bb: bb.inputs["Base Color"].default_value = (0.92, 0.86, 0.72, 1)
+vnetL = import_glb("vnet", 9.5, "x", C_LIB); fnetL = import_glb("fnet", 6.0, "y", C_LIB)
 for i, (x, y, yaw) in enumerate([(-34, -15, 0), (-28, -16, 0.1), (24, -16, 3.1), (30, -15.5, 3.0), (60, -15, 0), (-62, -16, 0.2)]):
     inst(stallL, "Stall_%d" % i, C_B, (x, y, ground(x, y) - 0.05), (0, 0, yaw))
 inst(vnetL, "VolleyNet", C_B, (-18, -8, ground(-18, -8) - 0.1), (0, 0, 0.0))
@@ -681,8 +691,8 @@ vol = NN.new("ShaderNodeVolumePrincipled"); vol.inputs["Color"].default_value = 
 vol.name = "DUSTVOL"; vol.inputs["Anisotropy"].default_value = 0.6
 LL.new(vol.outputs[0], NN["Material Output"].inputs["Volume"])
 dust = box("DustVolume", C_FX, (500, 420, 40), (0, -160, 20), dust_m)
-for i in range(9):
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(-14 + i * 3.5, -27.5, 2.0 + (i % 3) * 2.5))
+for i in range(24):
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.55, location=(-15 + i * 1.3, -27.6, 1.2 + (i % 3) * 0.9))
     o_ = bpy.context.active_object; o_.name = "HotelSpray_%d" % i; link(o_, C_FX); o_.data.materials.append(spray_m); o_.scale = (0.01,) * 3
 
 bpy.ops.wm.save_as_mainfile(filepath=out)
