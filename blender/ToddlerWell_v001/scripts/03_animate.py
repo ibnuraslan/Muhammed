@@ -75,7 +75,7 @@ class Char:
         # hands
         for s in "LR":
             sx = 1 if s == "L" else -1
-            spec = (hands or {}).get(s, ("rel", (0.13, 0.07, -0.88 * self.arm)))
+            spec = (hands or {}).get(s, ("rel", (0.16, 0.09, -0.86 * self.arm)))
             S = self.shoulder(s, rp, yaw, flex + spine, side)
             if spec[0] == "rel":
                 o, fw, up = spec[1]
@@ -143,7 +143,7 @@ def jaw(c, f, deg):
     c.r.key_rot("jaw", f, [("X", deg)])
 CH = {n: Char(n) for n in ("Toddler", "Teen", "ResA", "ResB", "ResC", "Mother", "Crowd1", "Crowd2", "Crowd3", "Crowd4")}
 T, TE, RA, RB, RC, MO = (CH[n] for n in ("Toddler", "Teen", "ResA", "ResB", "ResC", "Mother"))
-HANG = lambda c: ("rel", (0.13, 0.07, -0.88 * c.arm))
+HANG = lambda c: ("rel", (0.16, 0.09, -0.86 * c.arm))
 UP = lambda c, o=0.08, fw=0.05: ("rel", (o, fw, 0.92 * c.arm))
 
 # ================================================================== TODDLER
@@ -207,7 +207,7 @@ def crowd_idle(c, f0, f1, xy, yaw, mood):
         elif mood == "point":
             hands = {"R": ("rel", (0.05, 0.75 * c.arm, 0.1 * c.arm))} if (i % 4) < 2 else {}
         elif mood == "cheer":
-            hands = {"L": UP(c, 0.3 + 0.08 * math.sin(ph * 3), 0.1), "R": UP(c, 0.3 + 0.08 * math.cos(ph * 3), 0.1)}
+            hands = {"L": ("rel", (0.2 + 0.06 * math.sin(ph * 3), 0.2, 0.96 * c.arm), (V((0, 0, 1)), V((-1, 0, 0)))), "R": ("rel", (0.2 + 0.06 * math.cos(ph * 3), 0.2, 0.96 * c.arm), (V((0, 0, 1)), V((1, 0, 0))))}   # above and in front of the head, clear of the hair
         else:
             hands = {"L": ("rel", (0.14, 0.1 + 0.05 * math.sin(ph), -0.82 * c.arm))}
         c.key(f, V((xy[0] + 0.03 * math.sin(ph * 0.7), xy[1])), yaw + 6 * math.sin(ph * 0.5), flex=(14 + 6 * math.sin(ph * 1.7)) if mood == "plead" else 3 + 3 * math.sin(ph),
@@ -244,7 +244,7 @@ for i, f in enumerate(range(241, 470, 10)):
     RA.key(f, RA_P, yA, flex=14, spine=8, head=(35, 0), crouch=0.05, hands={"L": ("w", hl), "R": ("w", hr)})
     RB.key(f, RB_P, yaw_to(RB_P, (0, 0)), crouch=0.42, flex=35, spine=10, head=(40, 0),
            feet={"L": ("xy", RB_P + V((0.15, 0.05)), yaw_to(RB_P, (0, 0))), "R": ("xy", RB_P + V((-0.12, 0.25)), yaw_to(RB_P, (0, 0)))},
-           hands={"L": ("w", V((0.35, 0.24, 0.17))), "R": ("rel", (0.05, 0.45 * RB.arm, -0.35 * RB.arm))})
+           hands={"L": ("w", V((0.31, 0.09, 0.16))), "R": ("rel", (0.05, 0.45 * RB.arm, -0.35 * RB.arm))})
     RC.key(f, RC_P, yaw_to(RC_P, (0, 0)) + 20 * math.sin(ph), head=(0, 10 * math.sin(ph)),
            hands={"R": ("rel", (0.02, 0.12, 0.18 * RC.arm)), "L": ("rel", (0.2, 0.25, -0.3 * RC.arm)) if i % 4 < 2 else HANG(RC)})
 # beat 3 (463-672): step back as the excavator rolls in; ResC waves it in
@@ -257,14 +257,14 @@ for i, f in enumerate(range(470, 680, 12)):
 TL = [("bent", "wipe", "sit"), ("sit", "bent", "point"), ("wipe", "sit", "bent"), ("bent", "wipe", "sit"), ("sit", "point", "bent"), ("bent", "sit", "wipe")]
 def tired(c, f, p, yaw, kind):
     if kind == "bent":
-        c.key(f, p, yaw, flex=35, crouch=0.12, head=(10, 0), hands={"L": ("rel", (0.02, 0.42, -0.62 * c.arm)), "R": ("rel", (0.02, 0.42, -0.62 * c.arm))})
+        c.key(f, p, yaw, flex=35, crouch=0.12, head=(10, 0), hands={"L": ("rel", (0.06, 0.5, -0.58 * c.arm)), "R": ("rel", (0.06, 0.5, -0.58 * c.arm))})
     elif kind == "wipe":
         c.key(f, p, yaw, flex=-5, head=(-15, 0), hands={"R": ("rel", (-0.12, 0.12, 0.18 * c.arm)), "L": ("rel", (0.08, 0.1, -0.5 * c.arm))})
     elif kind == "drink":
         c.key(f, p, yaw, flex=-8, head=(-30, 0), hands={"R": ("rel", (-0.1, 0.12, 0.1 * c.arm))})
     elif kind == "sit":      # squat on heels, forearms on knees
         c.key(f, p, yaw, flex=20, crouch=0.48 * c.root.z, head=(5, 0),
-              hands={"L": ("rel", (0.02, 0.38, -0.32 * c.arm)), "R": ("rel", (0.02, 0.38, -0.32 * c.arm))})
+              hands={"L": ("rel", (0.06, 0.48, -0.3 * c.arm)), "R": ("rel", (0.06, 0.48, -0.3 * c.arm))})
     else:
         c.key(f, p, yaw, hands={"R": ("rel", (0.05, 0.75 * c.arm, 0.1))})
 TLP = {RA: V((-1.1, 1.5)), RB: V((0.4, 2.6)), RC: V((-2.4, 1.2))}
@@ -420,7 +420,7 @@ for f in range(1314, 1420, 4):
         if a.z > 0.95 and (a.to_2d() - pos).length < 0.75:
             hands = {"L": ("w", a + V((0.07 * sx, -0.03, 0.07))), "R": ("w", a + V((0.07 * sx, 0.03, -0.07)))}
         else:
-            hands = {"L": ("rel", (0.15, 0.3, -0.3 * c.arm)), "R": ("rel", (0.15, 0.3, -0.3 * c.arm))}
+            hands = {"L": ("rel", (0.22, 0.38, -0.18 * c.arm)), "R": ("rel", (0.22, 0.38, -0.18 * c.arm))}
         c.key(f, pos, yaw_to(pos, (0, 0)), flex=max(0, min(25, 30 - 20 * (a.z - 0.8))), crouch=max(0, min(0.15, 0.2 - 0.2 * (a.z - 0.6))), head=(30, 0),
               hands=hands)
 HAUL = {RA: V((-0.24, 1.6)), RB: V((-0.21, 2.4)), RC: V((-0.18, 3.2))}     # rope runs past their right side
@@ -440,7 +440,7 @@ for c in (RA, RB, RC):
               hands={"L": ("w", on_line(p.y - 0.62 + 0.05 * math.sin(ph))), "R": ("w", on_line(p.y - 0.36 + 0.05 * math.sin(ph)))})
     for k, f in enumerate(range(1630, 1770, 8)):     # haul: lean back, hand over hand
         p = HAUL[c]; a = (k % 2)
-        hl = on_line(p.y - 0.68 + 0.22 * a); hr = on_line(p.y - 0.36 - 0.22 * a)
+        hl = on_line(p.y - 0.7 + 0.2 * a); hr = on_line(p.y - 0.42 - 0.2 * a)
         c.key(f, p + V((0, 0.08 * math.sin(k * math.pi / 2))), 0, flex=-18 + 6 * a, crouch=0.12, head=(15, 0),
               feet={"L": ("xy", p + V((0.15, -0.25)), -10), "R": ("xy", p + V((-0.15, 0.15)), 10)},
               hands={"L": ("w", hl), "R": ("w", hr)})

@@ -42,7 +42,7 @@ problems = []
 if [o for o in bpy.data.objects if o.type == "CAMERA"].__len__() != 1 or any(m.camera for m in sc.timeline_markers): problems.append("camera")
 if bpy.data.libraries: problems.append("linked libraries")
 if [i.name for i in bpy.data.images if i.source == "FILE" and not i.packed_file]: problems.append("unpacked images")
-r.filepath = "//render/ToddlerWell_v002_"
+r.filepath = "//render/%s_" % os.path.basename(OUT).replace("_60fps.blend", "")
 sc.frame_set(1)
 print("FARM", dict(res=(r.resolution_x, r.resolution_y), fps=r.fps, frames=(sc.frame_start, sc.frame_end), samples=cy.samples,
                    denoise=cy.use_denoising, mblur=(r.use_motion_blur, r.motion_blur_shutter), view=(sc.view_settings.view_transform, sc.view_settings.look)))
