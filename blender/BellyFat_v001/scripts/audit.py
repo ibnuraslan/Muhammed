@@ -11,7 +11,7 @@ from mathutils.bvhtree import BVHTree
 argv = sys.argv[sys.argv.index("--") + 1:]
 OUT = argv[0]; STEP = int(argv[1]) if len(argv) > 1 else 4
 sc = bpy.context.scene
-SWAP_IN, SWAP_OUT = 154, 1225
+SWAP_IN, SWAP_OUT = 144, 1219
 issues = {}; stats = {}
 def flag(k, f, m): issues.setdefault(k, []).append((f, m))
 def stat(k, v): stats.setdefault(k, []).append(v)

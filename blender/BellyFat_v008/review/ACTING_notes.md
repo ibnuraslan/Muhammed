@@ -38,6 +38,21 @@ People are on camera only from 0 to 2.55 s and from 20.4 to 21.5 s. The rest is 
 | R3 | Close-up tiles 8 and 12 were black. | Re-aimed. The sheet now has 12 labelled tiles, none black. |
 | R4 | f1256 needed two angles. | Tiles `f1256front` and `f1256top` show the left hand clear of her body. |
 
+## Round 3 (director 6-point self-check)
+- **Basket:** her fist floated over the rim (no contact). Added an arched carry handle; its top bar sits inside her curled grip along her knuckle line (tiles `basket f0030`, `basketside f0060`).
+- **Swap cells:** the dives are compressed so no half-second cell is a bare shirt surface. The swaps are now at f144 and f1219. The 2.5 s cell shows the cross-section reveal with the bullet; the 20.5 s cell shows her torso and hands. Beat frames are unchanged.
+- **Wound-hand sweep:** open, relaxed fingers instead of a fist (no claw).
+- **Held box:** close-up re-aimed (`boxhold f0100`) so the cupping hand under the box is visible.
+- **Sheet:** the last cell is now the final frame (f1290), so there are no black padding cells.
+
+## 6-point self-check (ACTING_FIX_04-10.md)
+1. **Hands touch what they hold:** checked. Box (side wrap, then cupped under it), basket handle, cart handle, carton, chest press and wound press.
+2. **No claws:** checked. Idle hands are relaxed; the sweep hand is open.
+3. **Nothing pressed into a face:** checked.
+4. **No empty, blurred or black cells, and no back of the head on beats:** checked against `after_v008_sheet_0.5s.jpg`.
+5. **Close-ups show the hands:** checked. 12 labelled tiles, all aimed at hands and lit.
+6. **`hand_poses.py`:** checked. Not yet on the director branch as of 435ce5a; finger poses use this film's forward-only curl presets. I'll switch to it once it lands.
+
 ## Checks on v008
 - **Hand audit** (`audit_hands_v008.txt`, every 2 frames on all on-camera frames): hand vs hand, own body, own clothes, other characters, and wrist bend.
   - **0 overlaps.**

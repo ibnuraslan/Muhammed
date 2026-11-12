@@ -1,4 +1,4 @@
-BellyFat hand audit: step 2, 110 frames, 1100 hand-checks
+BellyFat hand audit: step 2, 108 frames, 1080 hand-checks
 
 HAND_IN_HAND        0
 HAND_IN_BODY        0

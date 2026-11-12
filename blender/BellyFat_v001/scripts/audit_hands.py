@@ -51,7 +51,7 @@ def evmesh(o, dg):
 def inside(tree, p):
     loc, nrm, idx, d = tree.find_nearest(p)
     return loc is not None and d > TOL and d < 0.05 and (p - loc).dot(nrm) < 0
-frames = [f for f in range(1, sc.frame_end + 1, STEP) if f < 154 or f >= 1225]
+frames = [f for f in range(1, sc.frame_end + 1, STEP) if f < 144 or f >= 1219]
 checked = 0
 for f in frames:
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()

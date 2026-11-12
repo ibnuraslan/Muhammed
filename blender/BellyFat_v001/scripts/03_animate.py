@@ -11,7 +11,7 @@ sc = bpy.context.scene
 FPS = 60
 def F(t): return 1 + round(t * FPS)
 def T(f): return (f - 1) / FPS
-SWAP_IN, SWAP_OUT = F(2.55), F(20.4)      # first macro frame, first real frame again
+SWAP_IN, SWAP_OUT = F(2.38), F(20.3)      # first macro frame, first real frame again
 FEND = 1290
 S = 0.025                                  # macro units -> metres
 
@@ -147,7 +147,28 @@ bk = bpy.data.objects["Basket"]
 sc.frame_set(1); bpy.context.view_layer.update()
 def wristM(f):
     sc.frame_set(f); return W.matrix_world @ W.pose.bones["wrist.R"].matrix
-OFF = wristM(1).inverted() @ (Matrix.Translation(wpt(0.07, -0.26, 0.66)) @ Matrix.Rotation(math.radians(90), 4, 'Z'))
+# arched carry handle on the basket (the hand grips its top bar)
+import bmesh as _bmh
+_hb = _bmh.new(); _pts = [Vector((-0.205 + 0.41 * i / 16, 0, 0.095 + 0.175 * math.sin(math.pi * i / 16))) for i in range(17)]
+_rings = []
+for i, c in enumerate(_pts):
+    tng = (_pts[min(i + 1, 16)] - _pts[max(i - 1, 0)]).normalized(); q = tng.to_track_quat('Z', 'Y')
+    _rings.append([_hb.verts.new(c + q @ Vector((0.007 * math.cos(2 * math.pi * k / 10), 0.007 * math.sin(2 * math.pi * k / 10), 0))) for k in range(10)])
+for r1, r2 in zip(_rings, _rings[1:]):
+    for k in range(10): _hb.faces.new((r1[k], r1[(k + 1) % 10], r2[(k + 1) % 10], r2[k])).smooth = True
+hme = bpy.data.meshes.new("BasketHandle"); _hb.to_mesh(hme); _hb.free(); hme.materials.append(bpy.data.materials["M_basket"])
+handle = bpy.data.objects.new("BasketHandle", hme); bpy.data.collections["REAL"].objects.link(handle); handle.parent = bk
+# seat the handle's top bar in her curled right hand: bar along her knuckle line, just inside the palm
+sc.frame_set(1)
+_pb = W.pose.bones; _mw = W.matrix_world
+_wr = _mw @ _pb["wrist.R"].head; _k3 = _mw @ _pb["finger3-1.R"].head
+_kax = (_mw @ _pb["finger5-1.R"].head) - (_mw @ _pb["finger2-1.R"].head)
+_nrm = (_k3 - _wr).cross(_kax).normalized()
+if _nrm.dot((_mw @ _pb["finger1-3.R"].tail) - _wr) < 0: _nrm = -_nrm
+_grip = _wr.lerp(_k3, 0.85) + _nrm * 0.022
+_yaw = math.atan2(_kax.y, _kax.x)
+_bkM = Matrix.Translation(_grip) @ Matrix.Rotation(_yaw, 4, 'Z') @ Matrix.Translation((0, 0, -0.27))
+OFF = wristM(1).inverted() @ _bkM
 for f in list(range(1, F(2.25) + 1, 2)) + [F(2.25)]:
     M = wristM(f) @ OFF; bk.location = M.translation; bk.rotation_euler = M.to_euler()
     bk.keyframe_insert("location", frame=f); bk.keyframe_insert("rotation_euler", frame=f)
@@ -275,7 +296,7 @@ def key_hand_pose(rig, s, f, kind, axes):
             bn = "finger%d-%d.%s" % (k, j, s); pb = rig.pose.bones[bn]; pb.rotation_mode = 'QUATERNION'
             pb.rotation_quaternion = Quaternion(axes[bn], math.radians(angs[j - 1] * (1.0 + 0.06 * (k - 3) if k > 1 else 1.0)))
             pb.keyframe_insert("rotation_quaternion", frame=f, group=bn)
-HANDS = {"Woman": {"L": [(0.0, "relax"), (0.4, "open"), (0.62, "grip"), (1.05, "grip"), (1.18, "relax"), (1.32, "grip"), (2.0, "grip"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (20.82, "grip"), (20.92, "relax"), (21.05, "flat"), (21.5, "flat")],
+HANDS = {"Woman": {"L": [(0.0, "relax"), (0.4, "open"), (0.62, "grip"), (1.05, "grip"), (1.18, "relax"), (1.32, "grip"), (2.0, "grip"), (2.15, "relax"), (2.55, "flat"), (20.75, "flat"), (20.82, "open"), (20.92, "open"), (21.05, "flat"), (21.5, "flat")],
                    "R": [(0.0, "grip"), (2.22, "grip"), (2.4, "relax"), (3.0, "press"), (21.5, "press")]},
          "ShopperA": {"L": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")],
                       "R": [(0.0, "grip"), (2.7, "grip"), (3.1, "relax"), (20.5, "relax"), (21.2, "touch"), (21.5, "touch")]},
@@ -498,9 +519,9 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (1.65, "tip", (0.3, 0, 0.1), 152, 6, 4.0, 30),
       (1.9, "hole", (-1.2, 0, 0), 110, 3, 3.5, 40),
       (2.05, "hole", (0.0, 0, 0), 95, 2, 2.4, 50),
-      (2.3, "hole", (0, -0.2, 0.05), 135, 8, 1.5, 50),
-      (2.55, "hole", (0, -0.45, 0.05), 158, 6, 1.6, 50),
-      (2.8, "hole", (0.4, -0.3, 0), 125, 30, 2.6, 45),
+      (2.2, "hole", (0, -0.2, 0.05), 135, 8, 1.5, 50),
+      (2.38, "hole", (0, -0.45, 0.05), 158, 6, 1.6, 50),
+      (2.6, "hole", (0.4, -0.3, 0), 125, 30, 2.6, 45),
       (3.1, "tip", (0.3, 0, 0), 96, 10, 4.0, 40),
       (4.0, "tip", (0.3, 0, -0.2), 70, -12, 3.2, 40),
       (5.0, "tip", (0.0, 0, 0), 80, 5, 1.7, 50),
@@ -523,9 +544,9 @@ CK = [(0.0, "torso", (0, 0, -6), 176, -6, 172, 26),
       (19.0, "tip", (0.3, 0, 0), 110, -35, 3.8, 35),
       (19.8, "tip", (-0.8, 0, 0), 98, 8, 6.0, 32),
       (20.1, "hole", (1.2, -0.2, 0), 105, 15, 4.2, 40),
-      (20.27, "hole", (0.0, -0.35, 0.1), 132, 28, 1.7, 48),
-      (20.4, "hole", (0, -0.45, 0.05), 158, 6, 1.6, 50),
-      (20.6, "hole", (-3.0, 0, 2.0), 158, 6, 6.0, 45),
+      (20.18, "hole", (0.0, -0.35, 0.1), 132, 28, 1.7, 48),
+      (20.3, "hole", (0, -0.45, 0.05), 158, 6, 1.6, 50),
+      (20.47, "hole", (-3.0, 0, 2.0), 158, 6, 12.0, 42),
       (20.8, "face", (-2, 0, -6), 152, 6, 28, 40),
       (21.5, "face", (-2, 0, -8), 138, 9, 48, 35)]
 kt = [k[0] for k in CK]

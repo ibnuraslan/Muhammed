@@ -1,4 +1,4 @@
-BellyFat audit, step 4, real frames 56, macro frames 268
+BellyFat audit, step 4, real frames 54, macro frames 269
 
 FOOT_HOVER            0
 FOOT_SINK             0
@@ -13,7 +13,7 @@ BULLET_IN_LOBULE      0
 BULLET_IN_FIBRE       0
 BULLET_IN_LAYER       0
 BULLET_HITS_ORGAN     0
-CAMERA_SPEED_JUMP     1   e.g. f121 32.7 -> 7.4 u/s
+CAMERA_SPEED_JUMP     1   e.g. f121 32.6 -> 7.8 u/s
                    frames [121]
 FRAMING_HOLD          0
 
@@ -25,5 +25,5 @@ stats
   sole_z_ShopperC  min -0.009  max -0.009
   cart_grip_cm     min 2.061  max 2.062
   lobule_overlap   min 0.000  max 0.000
-  gut_gap_mm       min 52.019  max 147.940
-  cam_y_local      min 0.146  max 8.475
+  gut_gap_mm       min 52.019  max 148.346
+  cam_y_local      min 0.151  max 8.494
