@@ -129,14 +129,14 @@ def build(variant=None):
             for k in range(n):
                 fx = xa + (xb - xa) * (k + 0.5) / n
                 fz = z0 + (z1 - z0) * (k + 1) / n
-                box("Step", (fx, sy * W_ / 4, fz - 0.09), (abs(xb - xa) / n + 0.01, W_ / 2 - 0.1, 0.18), conc)
+                box("Step", (fx, sy * 0.9, fz - 0.09), (abs(xb - xa) / n + 0.01, 1.1, 0.18), conc)
             # rail along the well side
             mid = Vector(((xa + xb) / 2, 0.0, (z0 + z1) / 2 + 0.95))
             L_ = math.hypot(xb - xa, z1 - z0); ang = math.atan2(z1 - z0, xb - xa)
-            cyl("Handrail", (mid.x, sy * 0.06, mid.z), 0.03, L_, wood_rail, verts=10, rot=(0, math.pi / 2 - ang, 0))
+            cyl("Handrail", (mid.x, sy * 0.32, mid.z), 0.03, L_, wood_rail, verts=10, rot=(0, math.pi / 2 - ang, 0))
             for k in range(8):
                 fx = xa + (xb - xa) * (k + 0.5) / 8; fz = z0 + (z1 - z0) * (k + 0.5) / 8
-                cyl("Baluster", (fx, sy * 0.06, fz + 0.45), 0.01, 0.95, rail, verts=6)
+                cyl("Baluster", (fx, sy * 0.32, fz + 0.45), 0.01, 0.95, rail, verts=6)
         if f == 0:
             pass
     box("StairOpening", (X0 + D / 2 + 0.6, 0, 1.4), (1.2, W_, 0.01), plaster).hide_render = True
@@ -152,7 +152,7 @@ def build(variant=None):
     # people
     P = {}
     P["counter"] = twp.person("Counter", 1.0, 44, "male_casualsuit01", "short02", hv=0.35, cval=0.5, hue=0.1, sat=0.2)
-    P["clerk"] = twp.person("Clerk2", 0.0, 29, "female_casualsuit02", "long01", hv=0.3, cval=0.55, hue=0.55, sat=0.25)
+    P["clerk"] = twp.person("Clerk2", 0.0, 29, "female_casualsuit01", "long01", hv=0.3, cval=0.55, hue=0.55, sat=0.25)
     P["staffA"] = twp.person("StaffA", 0.0, 48, "female_elegantsuit01", "bob01", hv=0.5, cval=0.55, hue=0.08, sat=0.25)
     P["staffB"] = twp.person("StaffB", 1.0, 36, "male_casualsuit03", "short03", hv=0.25, cval=0.5, hue=0.58, sat=0.2)
     P["workA"] = twp.person("WorkA", 1.0, 31, "male_worksuit01", "short01", hv=0.25, cval=0.5, hue=0.58, sat=0.15)
@@ -221,8 +221,8 @@ def animate(c, sec, shot):
         twp.seat(m, (-10.65, -0.55, 0), math.pi / 2, lean=8)
         alarm = ease(min(1.0, max(0.0, (sec - 1.5) / 0.6)))
         m.rot("head", (0, 0, 1), -20 * alarm); m.rot("spine03", (0, 0, 1), -10 * alarm)
-        reach(m, "R", Vector((-11.35, -0.55 + 0.1 * alarm, 0.8 + 0.25 * alarm)), Vector((0.3, -0.6, -0.7)), Vector((-1, 0, 0)))
-        reach(m, "L", Vector((-11.3, -0.25, 0.8)), Vector((0.3, 0.6, -0.7)), Vector((-1, 0, 0)))
+        reach(m, "R", Vector((-11.0, -0.68 + 0.08 * alarm, 0.62 + 0.12 * alarm)), Vector((0.5, -0.6, -0.7)), Vector((-1, 0, -0.3)))
+        reach(m, "L", Vector((-11.0, -0.38, 0.6)), Vector((0.5, 0.6, -0.7)), Vector((-1, 0, -0.3)))
     elif shot == "landing":
         a, b = P["workA"], P["workB"]
         tty = c["tty"]; twp.hide([tty] + list(tty.children), False)
@@ -274,17 +274,17 @@ def cam_lift(c, t):
 
 def cam_marine(c, t):
     e = ease(t)
-    return (Vector((-9.0, 0.7, 1.55)).lerp(Vector((-9.4, 0.55, 1.5)), e), Vector((-11.2, -0.55, 1.1)), 35)
+    return (Vector((-8.2, 0.75, 1.6)).lerp(Vector((-8.6, 0.65, 1.58)), e), Vector((-11.2, -0.55, 1.15)), 30)
 
 
 def cam_landing(c, t):
     e = ease(t); X0, D = STAIR_X, 6.0
-    return (Vector((X0 + 0.3, -1.1, 3.3)).lerp(Vector((X0, -1.0, 3.2)), e), Vector((X0 - D / 2 + 0.9, 0.0, 2.2)), 26)
+    return (Vector((X0 + D / 2 - 0.7, 0.95, 4.9)).lerp(Vector((X0 + D / 2 - 0.9, 0.9, 4.85)), e), Vector((X0 - D / 2 + 0.9, 0.0, 2.3)), 26)
 
 
 def cam_stairs(c, t):
     e = ease(t); X0 = STAIR_X
-    return (Vector((X0 + 0.1, 0.05, 5.4)).lerp(Vector((X0 + 0.05, 0.04, 5.2)), e), Vector((X0 - 0.1, 0.0, -4.0)), 24, (1, 0, 0))
+    return (Vector((X0 + 0.35, 0.02, 6.6)).lerp(Vector((X0 + 0.3, 0.02, 6.4)), e), Vector((X0 - 0.2, 0.0, -4.0)), 26, (1, 0, 0))
 
 
 MOVES = {

@@ -141,7 +141,7 @@ def build(variant="home"):
         return c
     if home:
         P["man"] = twp.person("Husband", 1.0, 40, "male_casualsuit02", "short02", hv=0.3, cval=0.55, hue=0.55, sat=0.2)
-        P["wife"] = twp.person("Wife", 0.0, 38, "female_casualsuit02", "long01", hv=0.3, cval=0.6, hue=0.08, sat=0.3)
+        P["wife"] = twp.person("Wife", 0.0, 38, "female_casualsuit01", "long01", hv=0.3, cval=0.6, hue=0.08, sat=0.3)
     else:
         P["defector"] = twp.person("Defector", 1.0, 50, "male_casualsuit04", "short04", hv=0.55, cval=0.45, hue=0.1, sat=0.2)
         P["offA"] = twp.person("OfficerA", 1.0, 42, "male_elegantsuit01", "short03", hv=0.25, cval=0.45, hue=0.6, sat=0.15)

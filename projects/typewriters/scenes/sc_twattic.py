@@ -127,6 +127,10 @@ def animate(c, sec, shot):
         reel.location = tech.bone_head("upperarm01.L") + Vector((0.1, -0.15, -0.45)); reel.rotation_euler = (math.radians(90), sec * 3, 0)
         reach(tech, "L", reel.location + Vector((0, -0.05, 0.05)), Vector((-0.3, -0.5, -0.8)))
         tech.rot("head", (1, 0, 0), 14)
+        if "worklamp" not in c:
+            wl = bpy.data.lights.new("WorkLamp", 'POINT'); wl.energy = 60; wl.color = (1.0, 0.8, 0.55); wl.shadow_soft_size = 0.1
+            c["worklamp"] = bpy.data.objects.new("WorkLamp", wl); bpy.context.collection.objects.link(c["worklamp"])
+        c["worklamp"].location = tech.arm.location + Vector((0.4, 0.2, 2.1))
         fingers_curl(tech, 45, thumb=20)
     for p in c["tty"]:
         pass
@@ -179,7 +183,8 @@ def cam_staple(c, t):
 
 def cam_cable(c, t):
     e = ease(t)
-    return (Vector((2.0, -1.6, 1.5)).lerp(Vector((1.4, -1.5, 1.5)), e), Vector((4.2, 1.2, 1.9)).lerp(Vector((3.6, 1.2, 1.9)), e), 30)
+    tc = c["tech"].arm.location
+    return (Vector((tc.x - 1.9, -1.2, 1.55)), Vector((tc.x + 0.2, 1.0, 1.75)), 32)
 
 
 MOVES = {

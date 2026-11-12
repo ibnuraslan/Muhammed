@@ -242,7 +242,7 @@ def build(variant=None):
         c["people"]["off"] = off
         for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PlanA", 1.0, 45, "male_casualsuit02", "short03", 0.55, 0.1),
                                                           ("PlanB", 1.0, 38, "male_casualsuit04", "short01", 0.5, 0.6),
-                                                          ("PlanC", 0.0, 41, "female_casualsuit02", "bob01", 0.55, 0.08))):
+                                                          ("PlanC", 0.0, 41, "female_casualsuit01", "bob01", 0.55, 0.08))):
             c["people"][nm] = twp.person(nm, g, yrs, cl, hr, hv=0.3, cval=cv, hue=hu, sat=0.2)
     if variant in (None, "day"):
         sec = twp.person("Secretary", 0.0, 33, "female_elegantsuit01", "ponytail01", hv=0.22, cval=0.55, hue=0.58, sat=0.3)

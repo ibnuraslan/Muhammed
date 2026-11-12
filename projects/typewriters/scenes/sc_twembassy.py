@@ -259,7 +259,7 @@ def build(variant=None):
         box("RailTop", (sx * 6.9, -1.6, 1.8), (8.8, 0.05, 0.05), rail)
     peds = []
     for k, (nm, g, yrs, cl, hr, cv, hu) in enumerate((("PedA", 0.0, 55, "female_casualsuit01", "bob01", 0.55, 0.08), ("PedB", 1.0, 40, "male_worksuit01", "short04", 0.45, 0.6),
-                                                      ("PedC", 1.0, 62, "male_casualsuit04", "short02", 0.5, 0.1), ("PedD", 0.0, 30, "female_casualsuit02", "long01", 0.6, 0.55))):
+                                                      ("PedC", 1.0, 62, "male_casualsuit04", "short02", 0.5, 0.1), ("PedD", 0.0, 30, "female_casualsuit01", "long01", 0.6, 0.55))):
         peds.append(dict(h=twp.person(nm, g, yrs, cl, hr, hv=0.35, cval=cv, hue=hu, sat=0.25), x0=-34 + k * 9.0, y=-2.6 - 3.2 * (k % 2), d=1 if k % 2 else -1, v=1.1 + 0.1 * k))
     c["peds"] = peds
     militia = twp.person("Militia", 1.0, 30, "male_worksuit01", "short01", hv=0.25, cval=0.4, hue=0.3, sat=0.3)
@@ -488,7 +488,7 @@ def cam_leave(c, t):
 
 def cam_hoist_street(c, t):
     e = ease(t)
-    return (Vector((JIB.x + 2.2, -5.2, 1.7)).lerp(Vector((JIB.x + 1.9, -4.9, 1.7)), e), Vector((JIB.x - 0.4, -1.6, 22.0)), 22, (0, 1, 0))
+    return (Vector((JIB.x + 3.5, -9.0, 1.7)).lerp(Vector((JIB.x + 3.2, -8.6, 1.7)), e), Vector((JIB.x - 0.4, -1.6, 21.0)), 24)
 
 
 def cam_window_night(c, t):

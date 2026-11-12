@@ -144,9 +144,12 @@ def _box_truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58
     _kid(box("CabSideGlass", (5.9, 0, 2.5), (0.9, 2.42, 0.6), M["glass"]), root)
     _kid(box("Chassis", (3.5, 0, 0.75), (7.0, 1.0, 0.3), M["black"]), root)
     _kid(box("Bumper", (6.6, 0, 0.7), (0.15, 2.4, 0.3), M["black"]), root)
-    _kid(box("TrailerBox", (0.0, 0, 2.3), (9.5, 2.5, 2.7), tr, bevel=0.03), root)
+    for (pos, size) in (((0, 1.24, 2.3), (9.5, 0.02, 2.7)), ((0, -1.24, 2.3), (9.5, 0.02, 2.7)), ((0, 0, 3.64), (9.5, 2.5, 0.02)),
+                        ((0, 0, 0.96), (9.5, 2.5, 0.02)), ((4.74, 0, 2.3), (0.02, 2.5, 2.7))):
+        _kid(box("TrailerBox", pos, size, tr), root)
     for k in range(12):
-        _kid(box("Rib", (-4.6 + k * 0.85, 0, 2.3), (0.04, 2.52, 2.7), tr), root)
+        for sy in (-1, 1):
+            _kid(box("Rib", (-4.6 + k * 0.85, sy * 1.255, 2.3), (0.04, 0.02, 2.7), tr), root)
     doors = []
     for sy in (-1, 1):
         d = bpy.data.objects.new("DoorPivot", None); bpy.context.collection.objects.link(d)
@@ -159,7 +162,13 @@ def _box_truck(name, cab_color=(0.24, 0.28, 0.22), trailer_color=(0.6, 0.6, 0.58
         for o in [leaf, bar, bar2, seam] + hinges:
             o.parent = d; o.matrix_parent_inverse = Matrix.Identity(4)
         doors.append(d)
-    _kid(box("Interior", (-0.2, 0, 2.3), (9.3, 2.38, 2.55), pbr("TrailerInside", (0.2, 0.2, 0.19), 0.8)), root)
+    import ph as _ph
+    ply = _ph.texture("oriented_strand_board", scale=0.6, name="TrailerPly", tint=(0.8, 0.75, 0.65))
+    for (pos, size) in (((-0.2, 0, 1.06), (9.3, 2.38, 0.04)), ((-0.2, 1.19, 2.3), (9.3, 0.02, 2.5)), ((-0.2, -1.19, 2.3), (9.3, 0.02, 2.5)),
+                        ((-0.2, 0, 3.55), (9.3, 2.38, 0.02)), ((4.5, 0, 2.3), (0.02, 2.38, 2.5))):
+        _kid(box("TrailerLining", pos, size, ply), root)
+    lamp = pbr("CargoLamp", (0.8, 0.8, 0.75), 0.3, 0.0, **{'Emission Color': (1, 0.85, 0.65, 1), 'Emission Strength': 1.5})
+    _kid(box("CargoLamp", (2.0, 0, 3.53), (0.4, 0.15, 0.03), lamp), root)
     wheels = []
     _wheels(root, (5.6, 2.6), 1.05, 0.5, M, wheels)
     _wheels(root, (-2.8, -3.9), 1.05, 0.5, M, wheels)

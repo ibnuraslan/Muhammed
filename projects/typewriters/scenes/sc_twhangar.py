@@ -186,6 +186,8 @@ def build(variant=None):
     pal = box("ForkLoad", (0, 0, 0), (1.0, 0.8, 0.9), hes, bevel=0.03); c["fork_load"] = pal
     c["trailers"] = []
     for k, (p, rz) in enumerate(((TRAILER, math.pi / 2), (Vector((-10, -HY - 10, 0)), 0.2), (Vector((-2, -HY - 13, 0)), 0.1), (Vector((6, -HY - 11, 0)), -0.05))):
+        if k > 0 and night:
+            continue                                   # the apron trailers are a daytime set-up
         tr, wh, doors = V.truck(f"Trailer{k}", cab_color=(0.25, 0.3, 0.26), trailer_color=(0.62, 0.62, 0.6), boxy=(k == 0))
         tr.location = p; tr.rotation_euler = (0, 0, rz)
         c["trailers"].append((tr, doors))
@@ -414,12 +416,12 @@ def cam_wrap(c, t):
 
 def cam_seal(c, t):
     e = ease(t)
-    return (WORK + Vector((2.3, -2.9, 1.55)).lerp(Vector((2.05, -2.6, 1.5)), e), WORK + Vector((-0.1, -0.45, 0.9)), 32)
+    return (WORK + Vector((2.6, -3.3, 1.8)).lerp(Vector((2.35, -3.0, 1.75)), e), WORK + Vector((-0.2, -0.55, 1.0)), 28)
 
 
 def cam_sensor(c, t):
     tr0 = c["sensor_tr"][0]; M = tr0.matrix_world; e = ease(t)
-    return (M @ Vector((-1.2, 0.7, 2.5)).lerp(M @ Vector((-1.6, 0.6, 2.45)), e), M @ Vector((-4.5, -0.6, 2.6)), 24)
+    return (M @ Vector((2.2, 0.55, 2.5)).lerp(M @ Vector((1.6, 0.5, 2.45)), e), M @ Vector((-4.7, -0.35, 2.4)), 22)
 
 
 def cam_apron(c, t):
