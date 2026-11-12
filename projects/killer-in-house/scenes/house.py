@@ -904,7 +904,7 @@ HAT = {}
 def person(name, kind):
     """kind: philip | helen | friend | neighbour_m | neighbour_w | detective | officer | thin | captain | nurse | boy"""
     spec = {
-        "philip": dict(gender=1.0, years=86, weight=0.38, height=0.4, cloth="male_casualsuit05", cv=dict(hue=0.47, sat=0.5, val=0.8), hair="short02", hv=0.9, hat=False, skin="old_lightskinned_male_diffuse.png"),
+        "philip": dict(gender=1.0, years=86, weight=0.38, height=0.4, cloth="male_casualsuit05", cv=dict(hue=0.47, sat=0.5, val=0.8), hair="short02", hv=2.8, hat=False, skin="old_lightskinned_male_diffuse.png"),
         "helen": dict(gender=0.0, years=82, weight=0.5, height=0.4, cloth="female_elegantsuit01", cv=dict(hue=0.95, sat=0.35, val=1.4), hair="roll", roll=(0.12, 0.75), hv=0.8, hat=False, skin="old_lightskinned_female_diffuse.png"),
         "friend": dict(gender=0.0, years=66, weight=0.55, height=0.45, cloth="female_elegantsuit01", cv=dict(hue=0.35, sat=0.4, val=1.1), hair="roll", roll=(0.35, 0.45), hv=0.6, hat=False, skin="old_lightskinned_female_diffuse.png"),
         "neighbour_m": dict(gender=1.0, years=50, weight=0.5, height=0.5, cloth="male_casualsuit03", cv=dict(hue=0.55, sat=0.5, val=0.8), hair="short01", hv=0.3, hat=False),
@@ -912,7 +912,7 @@ def person(name, kind):
         "detective": dict(gender=1.0, years=45, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.08, sat=0.3, val=0.42), hair="short02", hv=0.2, hat=True),
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
-        "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
+        "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=1.6, hat=False),
         "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="short02", hv=0.12, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=2.2), hair="roll", roll=(0.5, 0.0), hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit01", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
@@ -1501,7 +1501,7 @@ def wool_trousers(h, col=(0.16, 0.14, 0.12)):
             hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Saturation'].default_value = 0.0
             if src: L.new(src, hs.inputs['Color'])
             tint = N.new("ShaderNodeMix"); tint.data_type = 'RGBA'; tint.blend_type = 'MULTIPLY'; tint.inputs['Factor'].default_value = 1.0
-            L.new(hs.outputs['Color'], tint.inputs[6]); tint.inputs[7].default_value = (*[c_ * 2.2 for c_ in col], 1)
+            L.new(hs.outputs['Color'], tint.inputs[6]); tint.inputs[7].default_value = (*[c_ * 1.0 for c_ in col], 1)
             mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(at.outputs['Fac'], mx.inputs['Factor'])
             if src: L.new(src, mx.inputs[6])
             L.new(tint.outputs[2], mx.inputs[7]); L.new(mx.outputs[2], p.inputs['Base Color'])
