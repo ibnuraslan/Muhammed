@@ -9,7 +9,8 @@ how the set is lit:
   * A little haze / volumetrics in exteriors and forests, so the key reads as light in the air.
 
 Moods:  "overcast" - moody grey day: dark slate sky gradient, soft side key (shadow side ~2 stops down), firmer mids.
-        "mist"     - woods: cool mist, low sun shafts through the trunks, dark understory (look.forest).
+        "mist"     - woods by day: cool grey mist, low sun shafts and warm patches, dark understory (look.forest).
+        "dusk"     - blue hour: deep blue sky, last warm glow on the horizon, readable (look.forest search scenes).
         "low_sun"  - late sun: warm, low, hard key raking across the set; cool sky fill very low.
         "night"    - keep the set's own night lights, just warm the practicals and darken the walls.
 
@@ -32,10 +33,14 @@ MOODS = {
                      sun=3.4, haze=(0.55, 0.6, 0.66), exposure=-0.45,
                      horizon=(0.115, 0.125, 0.14), zenith=(0.03, 0.04, 0.055), ground=(0.02, 0.02, 0.022),
                      cine=dict(contrast=1.32)),
-    "mist":     dict(key=(0.86, 0.92, 1.0), gain=1.0, sky=2.0, tint=(0.9, 0.95, 1.0), elev=13, angle=3.0,
-                     sun=7.0, haze=(0.62, 0.72, 0.82), exposure=0.5,
-                     horizon=(0.24, 0.28, 0.32), zenith=(0.08, 0.1, 0.13), ground=(0.03, 0.033, 0.036),
-                     cine=dict(contrast=1.25)),
+    "mist":     dict(key=(1.0, 0.88, 0.72), gain=1.0, sky=2.0, tint=(1.0, 1.0, 1.0), elev=13, angle=3.0,
+                     sun=7.0, haze=(0.78, 0.79, 0.76), exposure=1.9,
+                     horizon=(0.27, 0.285, 0.29), zenith=(0.11, 0.12, 0.13), ground=(0.035, 0.036, 0.034),
+                     cine=dict(contrast=1.2, sat=1.08, black=(0.0003, 0.00012, 0.0), warm=(1.02, 1.01, 0.97), lift=(0.996, 1.0, 1.007))),
+    "dusk":     dict(key=(1.0, 0.62, 0.42), gain=1.0, sky=2.0, tint=(1.0, 1.0, 1.0), elev=2.5, angle=2.0,
+                     sun=1.4, haze=(0.5, 0.6, 0.82), exposure=2.0,
+                     horizon=(0.17, 0.16, 0.22), zenith=(0.03, 0.055, 0.12), ground=(0.025, 0.027, 0.035),
+                     cine=dict(contrast=1.15, sat=0.9, black=(0.0004, 0.0002, 0.0), warm=(0.97, 1.0, 1.07), lift=(0.992, 1.0, 1.014))),
     "low_sun":  dict(key=(1.0, 0.66, 0.40), gain=1.35, sky=0.14, tint=(0.62, 0.72, 0.95), elev=7, angle=1.2,
                      sun=4.2, haze=(1.0, 0.80, 0.62), exposure=-0.6),
 }
@@ -279,7 +284,7 @@ def forest(scene=None, mood="mist", azim=160, elev=None, area=((0, 0), (80, 80))
     sky(mood, azim, elev)
     k = sun_key(mood, azim, elev, sun_energy)
     (cx, cy), (sx, sy) = area
-    dens = density if density is not None else (0.010 if mood == "mist" else 0.006)
+    dens = density if density is not None else {"mist": 0.010, "dusk": 0.007}.get(mood, 0.006)
     hz = haze((cx, cy, canopy / 2), (sx, sy, canopy), mood, dens)
     darken_surfaces(cap=0.25, tex_scale=darken, objects=[o for o in bpy.data.objects if o.type == 'MESH'])  # incl. instanced
     s.view_settings.exposure = MOODS[mood]["exposure"] if exposure is None else exposure

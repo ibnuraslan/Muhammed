@@ -12,7 +12,7 @@ import look
 import ph
 
 EXPOSURE = -1.0
-VARIANT_FOR = {"path_push": "mist", "path_sun": "low_sun"}
+VARIANT_FOR = {"path_push": "mist", "path_sun": "low_sun", "path_dusk": "dusk"}
 AZIM = 165              # the sun sits up the path, behind the trees (backlight: shafts towards camera)
 
 
@@ -90,5 +90,6 @@ def cam_path(c, t):
 
 MOVES = {
     "path_push": dict(kind="anim", dof=8.0, far=80.0, cam=cam_path, focus=lambda c, t: Vector((0.2, -8, 1.5))),
+    "path_dusk": dict(kind="anim", dof=8.0, far=80.0, cam=cam_path, focus=lambda c, t: Vector((0.2, -8, 1.5))),
     "path_sun": dict(kind="anim", dof=8.0, far=80.0, cam=cam_path, focus=lambda c, t: Vector((0.2, -8, 1.5))),
 }

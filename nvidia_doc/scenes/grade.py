@@ -65,7 +65,7 @@ CINE = dict(exposure=-0.35,      # stops; the darker mood comes mostly from the 
 def _cinematic(nt, src, k=None):
     """Darker, denser, filmic: exposure down, contrast around mid-grey, rolled-off highlights, rich teal blacks,
     amber highlights, saturation down. Linear-light safe."""
-    k = dict(CINE, **(k or {}))
+    k = dict(CINE, **{a: b for a, b in (k or {}).items() if a in CINE})
     L = nt.links
     ex = nt.nodes.new("CompositorNodeExposure")
     # contrast c around pivot p: p * (x/p)^c = x^c * p^(1-c) -> fold p^(1-c) into the exposure
@@ -178,7 +178,10 @@ def add_grade(scene, bloom=0.35, vignette=None, look="cinematic", image=None, ci
         links.new(lens.outputs["Image"], vig.inputs[1]); links.new(ell.outputs[0], blur.inputs[0])
         links.new(blur.outputs[0], vig.inputs[2]); vig_out = vig.outputs[0]
     cb = nt.nodes.new("CompositorNodeColorBalance")
-    for name, val in (("Lift", (0.985, 1.0, 1.02, 1)), ("Gain", (1.03, 1.0, 0.97, 1))):
+    # Lift acts as an offset in linear light (~+0.02 blue here): fine at normal exposure, but it turns very dark sets
+    # that are exposed up (forest, dusk) navy, so moods can override it via cine={"lift": (r, g, b)}.
+    lift = tuple((cine or {}).get("lift", (0.985, 1.0, 1.02)))
+    for name, val in (("Lift", (*lift, 1)), ("Gain", (1.03, 1.0, 0.97, 1))):
         sk = _sock(cb, name, 'RGBA') or _sock(cb, name)
         try:
             sk.default_value = val

@@ -27,7 +27,7 @@ never photos.
       bars or blinds, so the sun lands in patches.
     - Overcast exteriors get a dark slate sky gradient and a soft side key, so the shadow side sits ~2 stops down.
       Use `look.ground_haze(...)` for haze only at the bottom of frame.
-    - Woods and lakeside paths: `look.forest(mood="mist" | "low_sun", azim=..., area=...)`. A low sun behind the
+    - Woods and lakeside paths: `look.forest(mood="mist" | "low_sun" | "dusk", azim=..., area=...)`. A low sun behind the
       trees gives shafts through mist and a dark understory. Point the camera towards the sun through the trunks.
       Test set: `sc_forest.py`.
     - Night: `look.night_interior()`.
@@ -39,7 +39,10 @@ never photos.
     Moods store per-shot tweaks such as extra contrast on the scene (`look.set_grade`), and `add_grade` reads them.
   - Night stays readable, never crushed.
   - `run.py --plain` renders the old look, and `--exr` + `look_sheet.py` make before/after sheets.
-  - Reference: `nvidia_doc/review/cinematic_look_v1.jpg` (all moods), `cinematic_look_v2.jpg` (overcast, forest).
+  - Reference: `nvidia_doc/review/cinematic_look_v1.jpg` (all moods), `cinematic_look_v2.jpg` (overcast),
+    `cinematic_look_v3.jpg` (forest misty day, dusk).
+  - The grade's blue lift acts as a linear offset, so sets that are exposed up (forest, dusk) override it per mood.
+    Otherwise they turn navy.
 - **Light.** Within that look: dawn, overcast day, low late sun, blue-hour dusk, readable night.
   Night only where the story is at night. Avoid neon glitter: no fields of "glimmering lights", no random glowing
   boxes, no flat emissive rectangles standing in for signs or screens.
