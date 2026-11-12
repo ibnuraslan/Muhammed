@@ -6,3 +6,4 @@ ch2_06_bank_release fixed 0.207  plain 0.087
 ch2_09_closedtown_checkpoint fixed 0.506  plain 0.483
 ch2_10_closedtown_institute fixed 0.522  plain 0.521
 ch2_13_forlab_ampoules fixed 0.345  plain 0.328
+ch2_18_bank_seasons fixed 0.229  plain 0.099
