@@ -216,7 +216,10 @@ def evidence_row(c, bench):
     ph.model("office_notepads", loc=(0.0, -0.8, 0.905), scale=0.4)
     for k in range(6):
         ph.model("cardboard_box_01", loc=(-5.3 + k * 0.5, 2.0 - 3.8, 0), rot_z=0.1 * k, scale=0.8)
-    lightbox_wall(c, Vector((5.98, -0.6, 1.6)), -math.pi / 2, 3)
+    for x in (-3.0, 0.0, 3.0):                              # an evidence hall under bright fluorescent light
+        l = area_light((x, -0.6, 3.0), (0, 0, 0), 1.2, 140, (0.9, 0.96, 1.0)); l.visible_camera = False
+    twp.venetian(-5.95, -2.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind", (0.72, 0.71, 0.66), 0.5), tilt=-45)
+    twp.venetian(-5.95, 0.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind2", (0.72, 0.71, 0.66), 0.5), tilt=-45)
 
 
 def lightbox_wall(c, at, rot_z, n, film=None):

@@ -198,8 +198,8 @@ def animate(c, sec, shot):
         twp.seat(d, (TABLE.x, TABLE.y + 0.66, 0), 0.0, lean=12)
         twp.seat(a, (TABLE.x - 0.9, TABLE.y, 0), -math.pi / 2, lean=10)
         twp.seat(b, (TABLE.x + 0.9, TABLE.y, 0), math.pi / 2, lean=14)
-        g = math.sin(sec * 2.1)
-        reach(d, "R", TABLE + Vector((0.2 + 0.05 * g, 0.3, 0.62 + 0.05 * abs(g))), Vector((0.6, 0.3, -0.7)), Vector((0, -1, 0.2)))
+        g = math.sin(sec * 1.3)
+        reach(d, "R", TABLE + Vector((0.18 + 0.02 * g, 0.28, 0.52)), Vector((0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
         reach(d, "L", TABLE + Vector((-0.2, 0.32, 0.52)), Vector((-0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
         d.rot("head", (0, 0, 1), 12 * math.sin(sec * 0.7))
         reach(b, "R", TABLE + Vector((0.45, -0.15, 0.52)), Vector((0.3, -0.6, -0.7)), Vector((-1, 0, -0.3)))
@@ -231,7 +231,7 @@ def cam_talk(c, t):
 
 def cam_reels(c, t):
     e = ease(t); r = c["reels"][0].matrix_world.translation
-    return (r + Vector((0.55, -0.7, 0.35)).lerp(Vector((0.42, -0.55, 0.28)), e), r + Vector((0.1, 0.0, 0.0)), 40)
+    return (r + Vector((1.5, -1.6, 0.85)).lerp(Vector((1.3, -1.4, 0.8)), e), r + Vector((0.0, 0.25, 0.15)), 32)        # medium-wide: the deck between them
 
 
 MOVES = {

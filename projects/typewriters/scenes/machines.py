@@ -127,9 +127,29 @@ def lamp_blink(mat_names=("LampRed", "LampGreen"), period=24, strength=6.0):
         d.expression = f"{strength} * (1 if (frame + {k * 7}) % {period} < {period * 0.6} else 0.25)"
 
 
+def burlap_material():
+    m = bpy.data.materials.get("BurlapProc")
+    if m:
+        return m
+    m = bpy.data.materials.new("BurlapProc"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.3, 0.22, 0.13, 1); cr.color_ramp.elements[1].color = (0.52, 0.41, 0.26, 1)
+    L.new(nz.outputs['Fac'], cr.inputs['Fac']); L.new(cr.outputs['Color'], p.inputs['Base Color'])
+    wv = N.new("ShaderNodeTexWave"); wv.inputs['Scale'].default_value = 140; wv.inputs['Distortion'].default_value = 1.5; L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    wv2 = N.new("ShaderNodeTexWave"); wv2.bands_direction = 'Y'; wv2.inputs['Scale'].default_value = 140; wv2.inputs['Distortion'].default_value = 1.5
+    L.new(tc.outputs['Object'], wv2.inputs['Vector'])
+    mx = N.new("ShaderNodeMath"); mx.operation = 'MULTIPLY'; L.new(wv.outputs['Fac'], mx.inputs[0]); L.new(wv2.outputs['Fac'], mx.inputs[1])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.35; bp.inputs['Distance'].default_value = 0.002
+    L.new(mx.outputs[0], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    p.inputs['Roughness'].default_value = 0.95; p.inputs['Sheen Weight'].default_value = 0.4
+    return m
+
+
 def burlap_crate(name, size=(0.95, 0.75, 0.85), tag=True):
     """A crate sewn into coarse burlap: weave texture, rope lashing both ways, staples along the top seam, a tag."""
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.65, name="BurlapBig", tint=(0.72, 0.6, 0.42))
+    hes = burlap_material()
     rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
     stm = bpy.data.materials.get("StapleE") or pbr("StapleE", (0.7, 0.7, 0.72), 0.25, 1.0)
     sx, sy, sz = size

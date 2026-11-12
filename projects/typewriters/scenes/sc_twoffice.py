@@ -499,7 +499,7 @@ def cam_nsa_plans(c, t):
 
 def cam_records_drawer(c, t):
     e = ease(t)
-    return (Vector((0.9, 0.2, 1.65)).lerp(Vector((1.1, 0.35, 1.62)), e), Vector((2.45, 1.85, 1.05)), 32)
+    return (Vector((3.55, 0.7, 1.65)).lerp(Vector((3.45, 0.85, 1.62)), e), Vector((2.35, 1.95, 1.0)), 30)
 
 
 def cam_records_burn(c, t):

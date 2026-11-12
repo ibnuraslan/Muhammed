@@ -108,9 +108,9 @@ def build(variant=None):
     # wire bundle running up the wall to the ceiling (from the attic)
     cyl("AlarmWire", (-11.56, -0.35, 2.05), 0.012, 1.5, pbr("WireGrey", (0.2, 0.2, 0.2), 0.5), verts=8)
     ph.model("vintage_telephone_wall_clock", loc=(-12.93, -0.9, 1.4), rot_z=-math.pi / 2)
-    marine = twp.person("MarineP", 1.0, 23, "male_casualsuit03", "short01", hv=0.2, cval=0.55, hue=0.12, sat=0.35)
+    marine = twp.person("MarineP", 1.0, 23, "male_elegantsuit01", "short01", hv=0.2, cval=0.55, hue=0.12, sat=0.35)
     for o in marine.parts:
-        if "casualsuit" in o.name:
+        if "elegantsuit" in o.name:
             twp.two_tone(o, 0.74, (0.62, 0.52, 0.32), (0.03, 0.04, 0.09))         # khaki shirt over blue trousers (seated)
     twp.marine_cap((-11.25, -0.25, 0.555), 0.4)
     c["marine"] = marine
@@ -211,6 +211,9 @@ def animate(c, sec, shot):
         for sd, sg in (("L", 1), ("R", -1)):
             reach(a, sd, cb.location - sa * 0.08 * sg + Vector((0, 0, -0.04)), Vector((-sg * sa.x, -sg * sa.y, -0.8)), fa)
         a.rot("head", (0, 0, 1), 15 * math.sin(sec * 0.7)); b.rot("head", (0, 0, 1), -10)
+        nb = Vector((1.1, CW / 2 - 0.05, 1.5))                                  # B points, small, at the notice
+        sh = b.bone_head("upperarm01.R")
+        reach(b, "R", sh + (nb - sh).normalized() * 0.42 + Vector((0, 0, -0.18)), Vector((0.3, -0.5, -0.8)), nb - sh)
         twp.walk(P["clerk"], (6.0, -0.3), (-6.0, -0.3), sec, speed=1.1)
     elif shot == "lift":
         a, b = P["workA"], P["workB"]
@@ -273,7 +276,7 @@ def cam_lift(c, t):
 
 def cam_marine(c, t):
     e = ease(t)
-    return (Vector((-8.2, 0.75, 1.6)).lerp(Vector((-8.6, 0.65, 1.58)), e), Vector((-11.2, -0.55, 1.15)), 30)
+    return (Vector((-9.0, 0.7, 1.45)).lerp(Vector((-9.3, 0.6, 1.42)), e), Vector((-11.1, -0.5, 1.0)), 32)
 
 
 def cam_landing(c, t):

@@ -60,10 +60,23 @@ def tower(m_conc, lamp_m):
     return t, lamps
 
 
+def night_gradient(world):
+    nt = world.node_tree; N = nt.nodes
+    bg = next(n for n in N if n.type == 'BACKGROUND')
+    tc = N.new("ShaderNodeTexCoord"); sp = N.new("ShaderNodeSeparateXYZ"); ramp = N.new("ShaderNodeValToRGB")
+    nt.links.new(tc.outputs["Generated"], sp.inputs[0]); nt.links.new(sp.outputs["Z"], ramp.inputs[0])
+    el = ramp.color_ramp.elements
+    el[0].position = 0.0; el[0].color = (0.05, 0.035, 0.03, 1)        # sodium glow sitting on the horizon
+    el[1].position = 0.35; el[1].color = (0.004, 0.006, 0.014, 1)     # deep night overhead
+    m = el.new(0.06); m.color = (0.025, 0.025, 0.04, 1)
+    nt.links.new(ramp.outputs["Color"], bg.inputs["Color"]); bg.inputs["Strength"].default_value = 1.0
+
+
 def build(variant=None):
     c = {}
     rng = np.random.default_rng(1984)
     w = world_flat((0.018, 0.026, 0.05), 1.0)
+    night_gradient(bpy.context.scene.world)                     # smooth dark sky: city glow at the horizon to deep blue overhead
     # low moonlit sky gradient: a big inverted dome would be heavy; a dim area light from above suffices
     moon = bpy.data.lights.new("Moon", 'SUN'); moon.energy = 0.35; moon.color = (0.55, 0.65, 1.0); moon.angle = math.radians(1)
     mo = bpy.data.objects.new("Moon", moon); bpy.context.collection.objects.link(mo); mo.rotation_euler = (math.radians(50), 0, math.radians(30))
@@ -114,7 +127,7 @@ def build(variant=None):
         for gx in range(-9, 10, 2):
             l = bpy.data.lights.new("Sodium", 'POINT'); l.energy = 2500; l.color = (1.0, 0.6, 0.3); l.shadow_soft_size = 0.3
             o = bpy.data.objects.new("Sodium", l); bpy.context.collection.objects.link(o); o.location = (gx * 24 + 12, gy * 16 + 8, 7)
-    haze((0, 250, 60), (500, 600, 120), density=0.0006, color=(0.65, 0.7, 0.85), anis=0.4)
+    haze((0, 250, 30), (500, 600, 60), density=0.00025, color=(0.65, 0.7, 0.85), anis=0.4)
     # the near rooftop (for the close shots): a pitched roof with a cluster of aerials, a chimney stack
     NR = Vector((6.0, -14.0, 18.0)); c["near"] = NR
     box("NearBlock", (NR.x, NR.y - 2, NR.z / 2), (22, 14, NR.z), wins[0])
@@ -142,7 +155,7 @@ def cam_tower(c, t):
 
 def cam_pull(c, t):
     e = ease(t); N = c["near"]
-    return (N + Vector((0.0, -3.0, 2.2)).lerp(Vector((-4.0, -14.0, 9.0)), e), TOWER + Vector((0, 0, 200)), 28)
+    return (N + Vector((0.0, -3.0, 4.0)).lerp(Vector((-4.0, -18.0, 22.0)), e), TOWER + Vector((0, 0, 150)), 28)
 
 
 def cam_antenna(c, t):

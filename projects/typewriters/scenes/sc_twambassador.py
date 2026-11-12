@@ -316,18 +316,19 @@ def animate(c, sec, shot):
         note.hide_render = True
     else:
         twp.hide(twp.person_objs(cou), True); env.hide_render = True; note.hide_render = False
-        twp.stand(amb, (1.75, 2.35, 0.0), math.pi)                            # at the window, back to the room
+        twp.stand(amb, (1.75, 2.35, 0.0), math.pi if shot == "note" else math.pi - 0.75)    # at the window (8A: turned three-quarter into the room)
         unfold = ease(min(1.0, max(0.0, (sec - 0.6) / 1.4))) if shot == "note" else 1.0
         fold = ease(min(1.0, max(0.0, (sec - 2.4) / 1.0))) if shot == "pocket" else 0.0
-        chest = amb.bone_head("spine03") + Vector((0, 0.36, 0.08))
+        chest = amb.bone_head("spine03") + twp.forward(amb) * 0.36 + Vector((0, 0, 0.08))
         nloc = chest + Vector((0, 0, 0.02 * math.sin(sec)))
         if shot == "pocket" and sec > 3.3:
             nloc = amb.bone_head("spine03").lerp(nloc, 1 - ease(min(1.0, (sec - 3.3) / 0.9))) + Vector((0.1, 0.06, -0.05))
         note.location = nloc
-        note.rotation_euler = (math.radians(70), 0, 0)
+        note.rotation_euler = (math.radians(70), 0, amb.arm.rotation_euler.z - math.pi)
         note.scale = (1, max(0.35, unfold * (1 - 0.6 * fold)), 1)
         for sd, sg in (("L", -1), ("R", 1)):
-            reach(amb, sd, nloc + Vector((sg * 0.15, -0.09, -0.05)), Vector((sg * 1, -0.3, -0.7)), Vector((-sg * 0.6, 1, 0.3)))
+            fw = twp.forward(amb); sd_v = fw.cross(Vector((0, 0, 1))) * -1
+            reach(amb, sd, nloc + sd_v * (sg * 0.15) - fw * 0.09 + Vector((0, 0, -0.05)), sd_v * sg + Vector((0, 0, -0.7)) - fw * 0.3, fw + sd_v * (-sg * 0.6) + Vector((0, 0, 0.3)))
         fingers_curl(amb, 60, thumb=40)
         amb.rot("neck01", (1, 0, 0), 10); amb.rot("head", (1, 0, 0), 12)
     bpy.context.view_layer.update()
@@ -377,5 +378,5 @@ MOVES = {
     "folder": dict(kind="anim", dof=2.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
     "handover": dict(kind="anim", dof=3.0, cam=cam_handover, focus=lambda c, t: c["env"].location, anim=anim("handover")),
     "note": dict(kind="anim", dof=2.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
-    "pocket": dict(kind="anim", dof=2.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("pocket")),
+    "pocket": dict(kind="anim", dof=3.0, cam=lambda c, t: (Vector((-0.9, -0.4, 1.65)).lerp(Vector((-0.6, -0.15, 1.62)), ease(t)), Vector((1.4, 2.3, 1.35)), 28), focus=lambda c, t: c["note"].location, anim=anim("pocket")),
 }

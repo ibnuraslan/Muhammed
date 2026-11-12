@@ -163,7 +163,7 @@ def build(variant=None):
             o2 = MC.burlap_crate(f"StockT{k}"); o2.location = (x, y, 1.29)
     for k in range(6):
         ph.model("wooden_crate_02" if k % 2 else "wooden_crate_01", loc=(6 + (k % 3) * 1.0, 10 + (k // 3) * 0.9, 0), rot_z=rng.uniform(-0.2, 0.2))
-    hes = bpy.data.materials.get("Burlap") or ph.texture("hessian_230", scale=2.0, name="Burlap", tint=(0.78, 0.66, 0.5))
+    hes = MC.burlap_material()
     for k in range(3):
         cyl("BurlapRoll", (WORK.x - 2.2, WORK.y + 0.8 + k * 0.42, 0.2), 0.2, 1.4, hes, verts=24, rot=(0, math.radians(90), 0))
     ph.model("metal_tool_chest", loc=(WORK.x + 1.8, WORK.y + 1.0, 0), rot_z=math.pi)
@@ -171,7 +171,7 @@ def build(variant=None):
     # ---------------------------------------------------------------- the wrapping station: one crate being wrapped and sealed
     wood = ph.texture("brown_planks_03", scale=1.5, name="CrateWood")
     crate = box("WrapCrate", (WORK.x, WORK.y, 0.48), (1.0, 0.8, 0.9), wood, bevel=0.01)
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.65, name="BurlapBig", tint=(0.72, 0.6, 0.42))
+    hes = MC.burlap_material()
     wrap = box("Wrapping", (0, 0, 0), (1.03, 0.83, 0.93), hes, bevel=0.03)
     sub = wrap.modifiers.new("sub", 'SUBSURF'); sub.levels = 3; sub.render_levels = 3; sub.subdivision_type = 'SIMPLE'
     dsp = wrap.modifiers.new("folds", 'DISPLACE'); tx = bpy.data.textures.new("Folds", 'CLOUDS'); tx.noise_scale = 0.18
@@ -244,6 +244,8 @@ def build(variant=None):
         ss.color = (1.0, 0.82, 0.6)
         so_ = bpy.data.objects.new("SlatSun", ss); bpy.context.collection.objects.link(so_)
         so_.location = Vector(sc.location) + Vector((-0.9, 0.6, 1.8)); point_at(so_, Vector(sc.location) + Vector((0, 0, 0.12)))   # light raking through the slats
+        inl = bpy.data.lights.new("CrateFill", 'POINT'); inl.energy = 6; inl.color = (1.0, 0.85, 0.65); inl.shadow_soft_size = 0.05
+        io = bpy.data.objects.new("CrateFill", inl); bpy.context.collection.objects.link(io); io.location = Vector(sc.location) + Vector((0.05, -0.15, 0.36))
         for k in range(5):
             o = MC.burlap_crate(f"Wait{k}", tag=False); o.location = (PLANE.x - 3.6 + (k % 3) * 1.05, PLANE.y + 25 + (k // 3) * 0.9, 0.43)
     if customs:
@@ -341,9 +343,10 @@ def animate(c, sec, shot):
         else:
             cr = c["dock_crates"][0]; cr.location = (DOCK.x + 3.0, DOCK.y, 0.82)
             twp.stand(ins, (DOCK.x + 3.0, DOCK.y - 0.95, 0), math.pi)
-            tag = Vector((DOCK.x + 3.0, DOCK.y - 0.36, 0.95))
-            reach(ins, "R", tag + Vector((0.05, -0.08, 0.02)), Vector((-0.5, -0.4, -0.7)), Vector((0, 1, 0)))
-            reach(ins, "L", tag + Vector((-0.25, -0.2, -0.05 + 0.03 * math.sin(sec))), Vector((0.5, -0.4, -0.7)), Vector((0, 1, 0.3)))
+            cb = c.setdefault("dock_cb", ph.model("clipboard")[0])                     # he holds a clipboard and checks the seal against it
+            fw = twp.forward(ins); cb.location = ins.bone_head("spine03") + fw * 0.3 + Vector((0.05, 0, -0.12)); cb.rotation_euler = (math.radians(-55), 0, math.atan2(fw.x, -fw.y))
+            reach(ins, "L", cb.location + Vector((-0.08, 0, -0.03)), Vector((0.5, -0.4, -0.8)), fw)
+            reach(ins, "R", cb.location + Vector((0.09, 0, 0.02)), Vector((-0.5, -0.4, -0.8)), fw + Vector((0, 0, -0.6)))
             ins.rot("head", (1, 0, 0), 16)
         fingers_curl(ins, 40, thumb=20)
     for hub in c["props"]:
@@ -466,7 +469,7 @@ def cam_load(c, t):
 
 def cam_slats(c, t):
     e = ease(t); s = c["slat"].location
-    return (s + Vector((0.7, -1.7, 1.35)).lerp(Vector((0.3, -0.9, 0.85)), e), s + Vector((0.0, -0.03, 0.12)), 40)
+    return (s + Vector((0.5, -1.4, 1.2)).lerp(Vector((0.0, -0.42, 0.72)), e), s + Vector((-0.08, 0.0, 0.16)), 45)
 
 
 def cam_customs_torch(c, t):
@@ -485,8 +488,8 @@ def cam_dock_xray(c, t):
 
 
 def cam_dock_seal(c, t):
-    e = ease(t); p = DOCK + Vector((3.0, -0.4, 0.95))
-    return (p + Vector((1.4, -1.6, 0.6)).lerp(Vector((1.15, -1.3, 0.5)), e), p, 35)
+    e = ease(t); p = DOCK + Vector((3.0, -0.6, 1.0))
+    return (p + Vector((2.2, -2.2, 0.55)).lerp(Vector((1.9, -1.9, 0.5)), e), p, 30)
 
 
 MOVES = {
@@ -499,5 +502,5 @@ MOVES = {
     "sensor": dict(kind="anim", dof=None, cam=cam_sensor, anim=anim("sensor")),
     "apron": dict(kind="anim", dof=None, cam=cam_apron, anim=anim("apron")),
     "load": dict(kind="anim", dof=None, cam=cam_load, anim=anim("load")),
-    "slats": dict(kind="anim", dof=4.0, cam=cam_slats, focus=lambda c, t: c["slat"].location + Vector((0, 0, 0.15)), anim=anim("slats")),
+    "slats": dict(kind="anim", dof=5.6, cam=cam_slats, focus=lambda c, t: c["slat"].location + Vector((-0.08, 0.0, 0.16)), anim=anim("slats")),
 }

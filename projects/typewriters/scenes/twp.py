@@ -56,6 +56,10 @@ def stand(h, loc, face_z):
     """Standing, arms relaxed. face_z: rotation about Z (0 faces -Y; pi faces +Y; pi/2 faces +X)."""
     upright(h)
     pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
+    from human import SIDE
+    for sd, sg in SIDE.items():                       # arms hanging close at the sides, a soft bend at the elbow
+        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 32)
+        h.rot(f"lowerarm01.{sd}", (1, 0, 0), -10)
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = loc; ground(h)
 
 
@@ -217,12 +221,14 @@ def two_tone(o, split_z, top, bottom, stripe=None):
 def marine_cap(loc, rot_z=0.0):
     """A white peaked service cover lying on the desk."""
     from kit import cyl, box, pbr, join
-    white = pbr("CoverWhite", (0.85, 0.85, 0.83), 0.45)
-    blk = pbr("CoverVisor", (0.01, 0.01, 0.012), 0.15, 0.0, **{'Coat Weight': 1.0})
-    parts = [cyl("CoverTop", (0, 0, 0.075), 0.135, 0.02, white, verts=40), cyl("CoverBand", (0, 0, 0.035), 0.1, 0.06, blk, verts=40),
-             cyl("CoverCrown", (0, 0, 0.06), 0.11, 0.04, white, verts=40)]
-    bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.1, depth=0.006, location=(0, -0.08, 0.012))
-    v = bpy.context.active_object; v.scale = (1.0, 0.55, 1); v.rotation_euler = (math.radians(-12), 0, 0); v.data.materials.append(blk); parts.append(v)
-    parts.append(box("Emblem", (0, -0.1, 0.045), (0.03, 0.004, 0.025), pbr("CoverEmblem", (0.75, 0.6, 0.3), 0.3, 1.0)))
+    white = pbr("CoverWhite", (0.88, 0.88, 0.86), 0.4)
+    blk = pbr("CoverVisor", (0.01, 0.01, 0.012), 0.12, 0.0, **{'Coat Weight': 1.0})
+    parts = [cyl("CoverBand", (0, 0, 0.03), 0.095, 0.06, blk, verts=40)]
+    bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.14, depth=0.03, location=(0, 0.01, 0.075))      # the flat white top, wider than the band
+    top = bpy.context.active_object; top.scale = (1.0, 0.92, 1); top.data.materials.append(white)
+    bv = top.modifiers.new("b", 'BEVEL'); bv.width = 0.01; bv.segments = 3; parts.append(top)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=32, radius=0.1, depth=0.006, location=(0, -0.09, 0.012))
+    v = bpy.context.active_object; v.scale = (1.0, 0.5, 1); v.rotation_euler = (math.radians(-15), 0, 0); v.data.materials.append(blk); parts.append(v)
+    parts.append(box("Emblem", (0, -0.096, 0.045), (0.035, 0.004, 0.03), pbr("CoverEmblem", (0.75, 0.6, 0.3), 0.3, 1.0)))
     o = join(parts, "MarineCover"); o.location = loc; o.rotation_euler = (0, 0, rot_z)
     return o

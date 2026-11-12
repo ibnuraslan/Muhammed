@@ -41,7 +41,7 @@ def studio_camera(name):
 def build(variant=None):
     c = {}
     rng = np.random.default_rng(85)
-    world_flat((0.02, 0.022, 0.026), 1.0)
+    world_flat((0.12, 0.13, 0.15), 1.0)
     box("Floor", (0, 0, -0.01), (16, 14, 0.02), ph.texture("concrete_floor_painted", scale=0.4, name="StudioFloor", tint=(0.45, 0.47, 0.48)))
     wall = ph.texture("painted_plaster_wall", scale=0.5, name="NewsWall", tint=(0.55, 0.58, 0.6))
     box("BackWall", (0, 3.6, 2.5), (16, 0.1, 5), wall); box("SideWall", (-8, 0, 2.5), (0.1, 14, 5), wall)
@@ -49,7 +49,12 @@ def build(variant=None):
     slat_m = pbr("Slat", (0.06, 0.09, 0.16), 0.45, 0.3)
     for k in range(24):
         box("BackSlat", (-2.9 + k * 0.25, 3.3, 1.9), (0.18, 0.08, 3.4), slat_m)
-    wash = area_light((0, 2.6, 4.2), (math.radians(30), 0, 0), 5.0, 120, (0.35, 0.5, 1.0)); point_at(wash, (0, 3.3, 1.2)); wash.visible_camera = False
+    wash = area_light((0, 2.6, 4.2), (math.radians(30), 0, 0), 5.0, 400, (0.35, 0.5, 1.0)); point_at(wash, (0, 3.3, 1.2)); wash.visible_camera = False
+    for x, e_ in ((-2.5, 900), (2.5, 600)):                  # big soft key and fill from the camera side (studio softboxes)
+        k = area_light((x, -1.5, 3.2), (0, 0, 0), 2.5, e_, (1.0, 0.94, 0.86)); point_at(k, (ANCHOR.x, ANCHOR.y, 1.1)); k.visible_camera = False
+    for k in range(3):                                        # a bank of monitors beside the set (practical CRTs)
+        r, tube = MC.terminal(f"SetMon{k}", (-3.1, 1.4 - k * 0.0 + k * 0.55, 1.0 + 0.0), math.radians(60))
+    box("MonStand", (-3.1, 1.95, 0.5), (0.5, 1.8, 1.0), pbr("MonStandM", (0.15, 0.15, 0.16), 0.5))
     # anchor desk (curved front), chair, papers
     desk_m = ph.texture("dark_wood", scale=0.8, name="AnchorDesk")
     box("DeskTop", (ANCHOR.x, ANCHOR.y - 0.1, 0.79), (2.6, 0.8, 0.04), pbr("DeskTopGrey", (0.3, 0.3, 0.31), 0.35))
@@ -98,6 +103,8 @@ def build(variant=None):
     P["anchor"] = twp.person("Anchor", 1.0, 50, "male_elegantsuit01", "short02", hv=0.55, cval=0.5, hue=0.6, sat=0.2)
     P["op"] = twp.person("CamOp", 1.0, 30, "male_casualsuit02", "short03", hv=0.25, cval=0.55, hue=0.1, sat=0.2)
     P["writer"] = twp.person("Writer", 0.0, 34, "female_elegantsuit01", "long01", hv=0.3, cval=0.6, hue=0.55, sat=0.25)
+    P["deskA"] = twp.person("NewsDeskA", 1.0, 41, "male_casualsuit02", "short03", hv=0.3, cval=0.55, hue=0.1, sat=0.2)
+    P["deskB"] = twp.person("NewsDeskB", 0.0, 29, "female_elegantsuit01", "bob02", hv=0.25, cval=0.6, hue=0.6, sat=0.25)
     c["P"] = P
     animate(c, 0.0, "roll")
     return c
@@ -117,6 +124,9 @@ def animate(c, sec, shot):
     reach(op, "R", Vector(cam0.location) + Vector((0.22, -0.88, 1.3)), Vector((0.5, -0.4, -0.7)), Vector((0, 1, 0)))
     op.rot("head", (1, 0, 0), 6)
     MC.run_teletype(c["wire"], sec, rate=9.0)
+    twp.seat(P["deskA"], (5.4 + 0.55, -2.0, 0), math.pi / 2, lean=14); twp.seat(P["deskB"], (7.2 + 0.55, -0.2, 0), math.pi / 2, lean=12)
+    for h in (P["deskA"], P["deskB"]):
+        h.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.8))
     w = P["writer"]
     twp.hide(twp.person_objs(w), shot == "wire")            # the wire teletype chattering on its own in the empty newsroom
     tty = c["wire_root"]
@@ -136,7 +146,7 @@ def anim(shot):
 
 def cam_roll(c, t):
     e = ease(t)
-    return (Vector((-2.6, -1.6, 1.75)).lerp(Vector((-2.3, -1.3, 1.7)), e), Vector((0.0, 1.6, 1.1)), 30)
+    return (Vector((-3.6, -3.2, 1.9)).lerp(Vector((-3.2, -2.8, 1.85)), e), Vector((0.6, 1.2, 1.1)), 26)            # wide: cameras, desk, newsroom behind glass
 
 
 def cam_wire(c, t):

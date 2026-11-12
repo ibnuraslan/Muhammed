@@ -80,7 +80,7 @@ def build(variant=None):
     c["last"] = Vector((4.3, 0.95, 0.0))
     wood = ph.texture("wood_table_001" if False else "brown_planks_03", scale=1.5, name="CrateWood")
     box("LastCrateWood", (c["last"].x, c["last"].y, 0.43), (0.95, 0.75, 0.85), wood, bevel=0.01)
-    hes = bpy.data.materials.get("Burlap") or ph.texture("hessian_230", scale=2.0, name="Burlap", tint=(0.78, 0.66, 0.5))
+    hes = MC.burlap_material()
     wrap = box("Wrap", (0, 0, 0), (0.97, 0.77, 0.87), hes, bevel=0.03)
     wrap.location = (c["last"].x, c["last"].y, 0.43)
     c["wrap"] = wrap
@@ -184,7 +184,7 @@ def cam_staple(c, t):
 def cam_cable(c, t):
     e = ease(t)
     tc = c["tech"].arm.location
-    return (Vector((tc.x - 1.9, -1.2, 1.55)), Vector((tc.x + 0.2, 1.0, 1.75)), 32)
+    return (Vector((tc.x + 1.6, 0.2, 1.65)), Vector((tc.x - 0.8, 1.3, 2.0)), 30)              # behind him, along the rafters he is wiring
 
 
 MOVES = {
