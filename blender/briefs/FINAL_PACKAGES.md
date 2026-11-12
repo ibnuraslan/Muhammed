@@ -41,7 +41,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 25 | Tsunami2004 | `claude/connect25-tsunami-2004` | `blender/Tsunami2004_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 26 | DwarfGiant | `claude/connect26-dwarf-giant` | `blender/DwarfGiant_v002/` |
 | 27 | SwedishCoffee | `claude/connect27-swedish-coffee` | `blender/SwedishCoffee_v004/` |
-| 28 | ToucanBeak | `claude/connect28-toucan-beak` | `blender/ToucanBeak_v003/` |
+| 28 | ToucanBeak | `claude/connect28-toucan-beak` | `blender/ToucanBeak_v004/` **acting fixed, approved, commit 96fe3ad (VO sync when your voiceover arrives)** |
 | 29 | AIAsleep | `claude/connect29-ai-asleep` | `blender/AIAsleep_v004/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 30 | FanCancer | `claude/connect30-fan-cancer` | `blender/FanCancer_v002/` |
 | 31 | PopeShot | `claude/connect31-pope-shot` | `blender/PopeShot_v004/` **acting fixed, approved, commit 915b1aa (VO sync when your voiceover arrives)** |
