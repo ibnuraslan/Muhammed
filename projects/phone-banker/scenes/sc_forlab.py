@@ -415,7 +415,16 @@ def a_photocopies(c, sec):
     shot = 1.0 if (sec % 1.8) < 0.15 else 0.0
     p = rp.bone_head("head") + fwd(rp) * 0.17 + Vector((0, 0, -0.07 - 0.01 * shot))
     cam.location = p; cam.rotation_euler = (math.radians(-60), 0, 0)
-    hand_to(rp, "R", p + Vector((0.075, -0.02, -0.04)), curl=50); hand_to(rp, "L", p + Vector((-0.075, -0.02, -0.05)), curl=40)
+    # hands on the camera BODY (the model's origin is not its centre): grip both ends of its real bounding box
+    bpy.context.view_layer.update()
+    lo, hi = ph.bounds([o for o in [cam] + list(cam.children_recursive) if o.type == 'MESH' and "strap" not in o.name.lower()])
+    ctr = (lo + hi) / 2; half = (hi.x - lo.x) / 2
+    cam.location = p + (p - ctr); bpy.context.view_layer.update()                      # re-centre the body where the eyes need it
+    lo, hi = ph.bounds([o for o in [cam] + list(cam.children_recursive) if o.type == 'MESH' and "strap" not in o.name.lower()])
+    ctr = (lo + hi) / 2; half = (hi.x - lo.x) / 2
+    # she faces +Y, so her right hand is on the +X end
+    hand_to(rp, "R", ctr + Vector((half + 0.035, -0.02, -0.03)), hand_dir=Vector((-0.6, 0.6, 0.2)), curl=75)
+    hand_to(rp, "L", ctr + Vector((-(half + 0.035), -0.02, -0.035)), hand_dir=Vector((0.6, 0.6, 0.2)), curl=70)
     # she slides the next page under the lamp now and then
     pg = bpy.data.objects.get("Copy2")
     if pg:

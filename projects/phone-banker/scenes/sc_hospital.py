@@ -405,7 +405,7 @@ def animate(c, sec, move):
 
 def a_gurney(c, sec):
     """Two orderlies push the bed toward camera through the swinging doors; a doctor walks alongside."""
-    y = -8.0 + 1.0 * sec
+    y = -5.6 + 1.0 * sec                                                    # the doors burst open half a second in
     root = c["bed_root"]; root.location = (0, y, 0); root.rotation_euler = (0, 0, 0)
     o1, o2, dr = c["orderlies"]
     for k, h in enumerate((o1, o2)):                                       # at the foot end, pushing (+Y)
@@ -530,7 +530,7 @@ def _push(a, b, ta, tb, lens):
 
 
 def cam_gurney(c, t):
-    y = -8.0 + DUR["gurney"] * t
+    y = -5.6 + DUR["gurney"] * t
     return (Vector((0.6, y + 4.2, 1.35)), Vector((0.0, y, 0.9)), 30)
 
 

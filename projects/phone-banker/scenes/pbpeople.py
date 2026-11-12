@@ -158,7 +158,32 @@ def hold_flat(h, obj, dist=0.33, drop=0.08, tilt_deg=55, spread=0.15, wobble=0.0
 def hand_to(h, sd, target, pole=None, hand_dir=None, curl=35):
     f = fwd(h); s = Vector((0, 0, 1)).cross(f).normalized() * (1 if sd == "L" else -1)
     reach(h, sd, Vector(target), pole or (s * 0.6 + Vector((0, 0, -0.7)) - f * 0.2), hand_dir)
-    fingers_curl(h, curl, side=(sd,), thumb=20)
+    curl_local(h, curl, sd, thumb=20)
+
+
+def curl_local(h, deg, sd, thumb=15):
+    """Curl the fingers about each finger bone's OWN bend axis (its local X in world space). human.fingers_curl
+    rotates about the world X axis, which only bends fingers in the rest orientation: on a hand turned sideways it
+    splays them into a claw. Call after the arm is posed (hand_to does)."""
+    from mathutils import Vector
+    bpy.context.view_layer.update()
+    for f in range(2, 6):
+        for k in (1, 2, 3):
+            b = f"finger{f}-{k}.{sd}"
+            pb = h.arm.pose.bones.get(b)
+            if pb is None:
+                continue
+            ax = (h.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()) @ Vector((1, 0, 0))
+            h.rot(b, ax, deg * (0.8 if k == 1 else 1.0))
+            bpy.context.view_layer.update()
+    for k in (2, 3):
+        b = f"finger1-{k}.{sd}"
+        pb = h.arm.pose.bones.get(b)
+        if pb is None:
+            continue
+        ax = (h.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()) @ Vector((1, 0, 0))
+        h.rot(b, ax, thumb)
+        bpy.context.view_layer.update()
 
 
 def attach(h, obj, bone, offset=(0, 0, 0)):

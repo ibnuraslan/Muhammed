@@ -310,7 +310,20 @@ def animate(c, sec, move):
             rest = D.bone_head("spine02") + fwd(D) * 0.15 + Vector((0, 0, -0.2))
             toward = (Vector((1.25, 4.2, 1.1)) - D.bone_head("spine03")); toward.z = 0; toward.normalize()
             gesture = D.bone_head("spine03") + toward * 0.38 + Vector((0, 0, -0.18))     # an open hand at waist height, toward the photo
-            hand_to(D, "R", rest.lerp(gesture, k), hand_dir=toward + Vector((0, 0, -0.3)), curl=15)
+            hp = rest.lerp(gesture, k)
+            hand_to(D, "R", hp, hand_dir=toward + Vector((0, 0, -0.3)), curl=45)          # holding a page, not an empty hand
+            if "def_doc" not in c:
+                import paper_tex
+                from pbkit import image_plane
+                c["def_doc"] = image_plane("DefencePage", paper_tex.make_all()["pages"][3], (0, 0, 0), (0.21, 0.28), (0, 0, 0), rough=0.8)
+            bpy.context.view_layer.update()
+            tipw = D.arm.matrix_world @ D.arm.pose.bones["finger3-1.R"].head
+            ang = math.atan2(toward.y, toward.x)
+            c["def_doc"].location = tipw + toward * 0.02 + Vector((0, 0, -0.13))
+            camp = Vector((-1.05, 0.35, 1.55))                                            # the defence shot camera (it barely moves)
+            nrm = (camp - c["def_doc"].location); nrm.z *= 0.3                             # the page faces the lens, not edge-on
+            c["def_doc"].rotation_mode = 'QUATERNION'
+            c["def_doc"].rotation_quaternion = nrm.normalized().to_track_quat('Z', 'Y')
             look(D, Vector((0, BENCH.y, 1.8)), 0.7)
         elif move in ("verdict", "led_out"):
             for h in (P, D) + tuple(c["public"]):
