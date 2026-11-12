@@ -59,7 +59,7 @@ def key_dome(f, s_, chest):
     DOME.keyframe_insert("scale", frame=f); DOME.keyframe_insert("location", frame=f)
 for k in range(0, 23, 2):
     u = k / 22.0; key_dome(f_x0 - 16 + k, 0.003 + 0.997 * u ** 3, CHEST_IN)
-for f_, s_ in ((f_r1 - 20, 1.0), (f_r1 - 12, 0.45), (f_r1 - 6, 0.18), (f_r1, 0.105), (f_r1 + 3, 0.1), (f_r1 + 7, 0.035), (f_r1 + 10, 0.002)):
+for f_, s_ in ((f_r1 - 20, 1.0), (f_r1 - 12, 0.45), (f_r1 - 6, 0.18), (f_r1 - 3, 0.09), (f_r1, 0.035), (f_r1 + 2, 0.014), (f_r1 + 4, 0.002)):
     key_dome(f_, s_, CHEST_OUT)
 # Lad: clothes/hair/eyes off in the x-ray (the body goes translucent)
 XRAY = (f_x0, f_r1)
@@ -600,7 +600,7 @@ CAM = [  # frame, camera, aim, lens
     (548, V(2.85, -3.4, 0.85), lad_p(548), 24),
     (575, V(3.3, -9.5, 1.15), lad_p(575, 0.1), 24),
     (615, V(3.2, y(615) - 3.5, 0.95), lad_p(615), 24),
-    (660, V(2.7, y(660) - 3.6, 0.36), lad_p(660), 24),
+    (660, V(0.25, y(660) - 1.8, 0.3), lad_p(660), 20),      # v005: under the loco, between the rails, head-on to him (the side view is all wheel)
     (700, V(0.3, y(700) - 1.25, 0.34), lad_p(700), 18),
     (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
     (815, V(0.3, y(815) - 1.4, 0.36), lad_p(815), 18),
