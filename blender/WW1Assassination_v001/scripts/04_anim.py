@@ -129,7 +129,7 @@ def arm_pose(H, s, f, pos, yaw, gz, kind, k=0.0, ph=0.0, extra=None):
     for side in "LR":
         sx = 1 if side == "L" else -1
         S = sh[side]
-        loc = Vector((S.x + sx * 0.07, S.y - 0.05, S.z - 0.55)); d = Vector((0, -0.05, -1)); n = Vector((-sx, 0, 0))
+        loc = Vector((S.x + sx * 0.11, S.y - 0.05, S.z - 0.55)); d = Vector((0, -0.05, -1)); n = Vector((-sx, 0, 0))
         pole = Vector((S.x + sx * 0.3, S.y + 0.5, S.z - 0.3))
         sway = 0.02 * math.sin(s * 1.3 + ph + (0 if side == "L" else 1.7))
         loc = loc + Vector((0, sway, 0))
@@ -154,7 +154,7 @@ def arm_pose(H, s, f, pos, yaw, gz, kind, k=0.0, ph=0.0, extra=None):
             dirw = (tgt - Sw).normalized()
             dl = Rz.inverted() @ dirw
             aimp = S + dl * 0.6
-            chest = Vector((0.06, S.y - 0.12, S.z - 0.2))
+            chest = Vector((0.06, S.y - 0.24, S.z - 0.16))
             loc = chest.lerp(aimp, kk) if kk > 0 else loc.lerp(chest, k)
             d = d.lerp(dl, max(k, kk)); n = n.lerp(Vector((1, 0, 0)), max(k, kk))
             pole = Vector((S.x + sx * 0.3, S.y + 0.4, S.z - 0.5))
@@ -232,6 +232,7 @@ print("RIGS ready")
 def car_pos_w(s):
     p, h = car1(s); return p
 
+KEEP_CLEAR = [(82.4, 6.7), (82.8, 7.2), (90.6, 6.7), (91.5, 7.1), (92.2, 9.3), (94.1, 8.3), (3.5, 11.7), (2.78, 10.7), (6.2, 13.8), (3.5, 11.0), (95.5, 4.4), (98.8, 4.2)]
 CORNER_FR = frames([(1, 520), (1080, 1800)], 4)
 BOMB_FR = frames([(380, 1200)], 4)
 crowd = []
@@ -239,6 +240,7 @@ def add_crowd(n, region, yaw, fr, group):
     for k in range(n):
         x = random.uniform(*region[0]); y = random.uniform(*region[1])
         if any((Vector((x, y)) - c[1]).length < 0.8 for c in crowd): continue
+        if any((Vector((x, y)) - Vector(p)).length < 1.3 for p in KEEP_CLEAR): continue   # never inside a principal
         crowd.append((group, Vector((x, y)), yaw + random.uniform(-25, 25), fr))
 add_crowd(16, ((-20, -3.2), (6.35, 7.8)), 0, CORNER_FR, "corner")
 add_crowd(12, ((5.0, 24), (6.35, 6.8)), 0, CORNER_FR, "corner")
@@ -257,7 +259,10 @@ def crowd_plan_factory(home, yaw, group):
         if dist < 16:
             dd = Vector((d.x, 0.0)).normalized() if abs(d.x) > 0.5 else Vector((1.0, 0.0))
             away = home + dd * (9.0 - 0.3 * dist) * random.uniform(0.7, 1.3) + Vector((0, random.uniform(-1.0, 1.0)))
-            if group == 'bomb' and any((away - c).length < 0.9 for c in AWAYS): away = away + Vector((random.choice((-1, 1)) * 1.2, 0))
+            for _try in range(12):
+                if any((away - c).length < 1.0 for c in AWAYS) or any((away - c[1]).length < 1.0 for c in crowd if c[1] is not home):
+                    away = away + Vector((random.uniform(-1.2, 1.2), random.uniform(-0.6, 0.6)))
+                else: break
             AWAYS.append(away)
     surge = None
     if group == "corner" and home.y > 6.2 and (home - GUNMAN1).length < 12:
@@ -346,7 +351,7 @@ for f in ALL2:
     for side in "LR":
         sx = 1 if side == "L" else -1
         knee = Vector((A_BASE.x + sx * 0.14, A_BASE.y - 0.38, A_BASE.z + 0.04))
-        loc = knee + Vector((0, 0, 0.06)); d = Vector((0, -1, -0.3)); n = Vector((0, 0, -1))
+        loc = knee + Vector((sx * 0.03, 0.04, 0.15)); d = Vector((0, -1, -0.15)); n = Vector((0, 0, -1))   # resting ON the thigh, not in it
         if side == "R" and 3.45 < s < 5.6:
             k = smooth((s - 3.45) / 0.25) * (1 - smooth((s - 4.6) / 0.8))
             up = Vector((A_BASE.x - 0.25, A_BASE.y - 0.15, A_BASE.z + 0.62)); loc = loc.lerp(up, k); d = d.lerp(Vector((-0.3, 0.3, 1)), k); n = n.lerp(Vector((-1, 0, 0)), k)
@@ -354,7 +359,7 @@ for f in ALL2:
             k = 0.6 + 0.4 * math.sin(s * 3)   # salute-ish wave to the crowd
             up = Vector((A_BASE.x + 0.12, A_BASE.y - 0.2, A_BASE.z + 0.5 + 0.04 * math.sin(s * 8))); loc = loc.lerp(up, max(0, min(1, k)) * 0.8)
         if slump > 0:
-            loc = loc.lerp(Vector((A_BASE.x + sx * 0.18, A_BASE.y - 0.32, A_BASE.z - 0.05)), slump)
+            loc = loc.lerp(Vector((A_BASE.x + sx * 0.27, A_BASE.y - 0.22, A_BASE.z + 0.1)), slump)   # hands drop beside the thighs onto the seat
         pole = Vector((A_BASE.x + sx * 0.5, A_BASE.y + 0.4, A_BASE.z + 0.2))
         hand_local(ARCH, side, f, loc, d, n, pole)
     # --- Duchess
@@ -365,15 +370,15 @@ for f in ALL2:
     seat(DUCH, f, D_BASE, flex=-6 + 18 * sl, side=-32 * sl, fwd=0.03 * sl, head=(-2 + 22 * sl, hy * (1 - sl)), twist=-8 * sl)
     for side in "LR":
         sx = 1 if side == "L" else -1
-        lap = Vector((D_BASE.x + sx * 0.1, D_BASE.y - 0.34, D_BASE.z + 0.06))
+        lap = Vector((D_BASE.x + sx * (0.1 if sx > 0 else 0.04), D_BASE.y - 0.3, D_BASE.z + 0.16))
         if side == "L":   # parasol hand (outer side)
             loc = Vector((D_BASE.x + 0.2, D_BASE.y - 0.3, D_BASE.z + 0.38)); d = Vector((0.0, -0.4, -0.25)); n = Vector((-1, 0, 0))
             loc = loc.lerp(lap + Vector((0.08, 0, 0.05)), sl); pole = Vector((D_BASE.x + 0.55, D_BASE.y + 0.2, D_BASE.z + 0.1))
         else:
             loc = lap; d = Vector((0, -1, -0.3)); n = Vector((0, 0, -1))
             if s > 25.3 and sl < 1:   # hand to chest in fright
-                k = smooth((s - 25.3) / 0.4) * (1 - sl); loc = loc.lerp(Vector((D_BASE.x - 0.02, D_BASE.y - 0.16, D_BASE.z + 0.42)), k)
-            pole = Vector((D_BASE.x - 0.5, D_BASE.y + 0.4, D_BASE.z + 0.2))
+                k = smooth((s - 25.3) / 0.4) * (1 - sl); loc = loc.lerp(Vector((D_BASE.x - 0.02, D_BASE.y - 0.28, D_BASE.z + 0.44)), k)   # hand to the chest, resting on it
+            pole = Vector((D_BASE.x - 0.12, D_BASE.y + 0.55, D_BASE.z + 0.1))   # inner elbow back, not across into the Archduke
         hand_local(DUCH, side, f, loc, d, n, pole)
     # --- Driver: hands on the wheel; looks back while reversing
     seat(DRV, f, V_BASE, flex=-2, head=(0, 120 * smooth((s - 23.5) / 0.4) * (1 - smooth((s - 25.6) / 0.5)) * 0.6))
@@ -407,7 +412,7 @@ def gun_plan(s):
     if s < STEP_S[1]:
         u = (s - STEP_S[0]) / (STEP_S[1] - STEP_S[0]); return GUNMAN0.lerp(GUNMAN1, smooth(u)), yaw_to(GUNMAN1 - GUNMAN0), "walk"
     if s > 27.0:   # pulled back by the officer
-        u = min(1.0, (s - 27.0) / 1.2); p = GUNMAN1.lerp(GUNMAN1 + Vector((0.9, 0.5)), smooth(u))
+        u = min(1.0, (s - 27.0) / 1.2); p = GUNMAN1.lerp(GUNMAN1 + Vector((0.15, 0.12)), smooth(u))   # staggers into the officer's grip
         return p, yaw_to(Vector((1.2, 10.0)) - GUNMAN1) + 25 * smooth(u), ("walk" if u < 1 else "stand")
     return GUNMAN1, yaw_to(Vector((1.0, 10.2)) - GUNMAN1), "stand"
 def gun_target(s):
@@ -434,7 +439,7 @@ pistol.matrix_world = Mw @ Matrix.Translation(Vector((0.0, 0.09, 0.02))) @ Matri
 c_.inverse_matrix = Mw.inverted()
 key_vis(pistol, lambda s: s > DRAW_S[0] + 0.35, ALL2)
 
-O0, O1 = Vector((6.2, 13.8)), Vector((3.5, 11.0))
+O0, O1 = Vector((6.2, 13.8)), Vector((2.72, 11.4))   # ends at the gunman's right side, ~0.5 m away
 def off_plan(s):
     if s < 26.3: return O0, yaw_to(car_pos_w(s) - O0), "stand"
     u = min(1.0, (s - 26.3) / 0.9); return O0.lerp(O1, smooth(u)), yaw_to(GUNMAN1 - O0), ("walk" if u < 1 else "stand")

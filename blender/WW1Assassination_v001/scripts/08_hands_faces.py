@@ -11,7 +11,7 @@ OUT = a[0]
 sc = bpy.context.scene
 R_ = math.radians
 humans = [o for o in bpy.data.objects if o.type == 'ARMATURE' and "finger1-1.L" in o.pose.bones]
-GRIP = {("Duchess", "L"): 62, ("Gunman", "R"): 70, ("Driver", "L"): 55, ("Driver", "R"): 55, ("Bomber", "R"): 60,
+GRIP = {("Archduke", "L"): 6, ("Archduke", "R"): 6, ("Duchess", "R"): 10, ("Duchess", "L"): 62, ("Gunman", "R"): 70, ("Driver", "L"): 55, ("Driver", "R"): 55, ("Bomber", "R"): 60,
         ("Officer", "L"): 45, ("Officer", "R"): 45}
 
 def palm_frame(arm, s):
@@ -52,11 +52,29 @@ def curl_hand(arm, s, deg):
 for arm in humans:
     base = arm.name.split("_")[0] if arm.name.startswith("Crowd") else arm.name
     for s in "LR":
-        curl_hand(arm, s, GRIP.get((arm.name, s), 24 + 6 * ((hash(arm.name) % 3))))
+        curl_hand(arm, s, GRIP.get((arm.name, s), 12 + 4 * ((hash(arm.name) % 3))))
         pb = arm.pose.bones["wrist." + s]
         c = pb.constraints.get("WristLimit") or pb.constraints.new('LIMIT_ROTATION'); c.name = "WristLimit"; c.owner_space = 'LOCAL'
         c.use_limit_x = c.use_limit_z = True; c.min_x, c.max_x = R_(-60), R_(60); c.min_z, c.max_z = R_(-35), R_(35)
         c.use_limit_y = True; c.min_y, c.max_y = R_(-70), R_(70)
+# lift the Archduke's resting hands onto the thighs (clip_scan: fingertips were 3-5 cm inside the thighs)
+def lift_hand(name, side, dz, dx=0.0, fmin=0):
+    arm = bpy.data.objects[name]; n = "IK_hand." + side
+    dl = arm.data.bones[n].matrix_local.to_3x3().inverted() @ Vector((dx, 0, dz))
+    for l in arm.animation_data.action.layers:
+        for st in l.strips:
+            for cb in st.channelbags:
+                for fc in cb.fcurves:
+                    if fc.data_path == f'pose.bones["{n}"].location':
+                        for kp in fc.keyframe_points:
+                            if kp.co[0] < fmin: continue
+                            kp.co[1] += dl[fc.array_index]; kp.handle_left[1] += dl[fc.array_index]; kp.handle_right[1] += dl[fc.array_index]
+                        fc.update()
+for sd in "LR": lift_hand("Archduke", sd, 0.07)
+lift_hand("Duchess", "R", 0.03)
+# slumped (story 26.75+ = film 1583+): hands fall beside the thighs onto the seat, not into them
+lift_hand("Archduke", "R", 0.03, dx=-0.09, fmin=1561)   # outer hand drops beside his thigh onto the seat
+lift_hand("Archduke", "L", 0.04, fmin=1561)            # inner hand stays on his thigh (moving it inward would hit the Duchess)
 print("HANDS curled + limits on", len(humans), "rigs")
 
 # ---------------------------------------------------------------- faces: couple expressions on the story clock

@@ -1,0 +1,1262 @@
+{
+ "frames": {
+  "1": {
+   "Archduke": {
+    "self": 295,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "7": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "13": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "19": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "25": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "31": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "37": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_21": {
+    "self": 68,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_32": {
+    "self": 258,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "43": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_21": {
+    "self": 151,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_32": {
+    "self": 119,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "49": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_21": {
+    "self": 152,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_32": {
+    "self": 139,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "55": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_21": {
+    "self": 156,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_32": {
+    "self": 282,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "61": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_21": {
+    "self": 164,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "67": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "73": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "79": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_15": {
+    "self": 217,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_16": {
+    "self": 186,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_17": {
+    "self": 225,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "85": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_45": {
+    "self": 153,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_46": {
+    "self": 273,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_47": {
+    "self": 131,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_51": {
+    "self": 147,
+    "clothes": 0,
+    "other": 6
+   },
+   "Crowd_bomb_52": {
+    "self": 421,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_53": {
+    "self": 144,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_55": {
+    "self": 0,
+    "clothes": 0,
+    "other": 74
+   },
+   "Crowd_bomb_56": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_57": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_58": {
+    "self": 390,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_59": {
+    "self": 175,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_63": {
+    "self": 194,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_64": {
+    "self": 400,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_15": {
+    "self": 215,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_16": {
+    "self": 191,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_17": {
+    "self": 173,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "91": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_45": {
+    "self": 153,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_46": {
+    "self": 273,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_47": {
+    "self": 131,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_51": {
+    "self": 147,
+    "clothes": 0,
+    "other": 6
+   },
+   "Crowd_bomb_52": {
+    "self": 421,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_53": {
+    "self": 144,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_55": {
+    "self": 0,
+    "clothes": 0,
+    "other": 74
+   },
+   "Crowd_bomb_56": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_57": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_58": {
+    "self": 390,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_59": {
+    "self": 175,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_63": {
+    "self": 194,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_64": {
+    "self": 400,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_65": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_68": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_69": {
+    "self": 255,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_70": {
+    "self": 386,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_71": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_15": {
+    "self": 211,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_16": {
+    "self": 190,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_17": {
+    "self": 211,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "97": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_45": {
+    "self": 153,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_46": {
+    "self": 273,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_47": {
+    "self": 131,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_51": {
+    "self": 147,
+    "clothes": 0,
+    "other": 6
+   },
+   "Crowd_bomb_52": {
+    "self": 421,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_53": {
+    "self": 144,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_55": {
+    "self": 0,
+    "clothes": 0,
+    "other": 74
+   },
+   "Crowd_bomb_56": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_57": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_58": {
+    "self": 390,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_59": {
+    "self": 175,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_63": {
+    "self": 194,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_64": {
+    "self": 400,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_65": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_68": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_69": {
+    "self": 255,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_70": {
+    "self": 386,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_71": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_15": {
+    "self": 209,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_16": {
+    "self": 191,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_17": {
+    "self": 198,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_41": {
+    "self": 140,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "103": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_45": {
+    "self": 153,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_46": {
+    "self": 273,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_47": {
+    "self": 131,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_51": {
+    "self": 147,
+    "clothes": 0,
+    "other": 6
+   },
+   "Crowd_bomb_52": {
+    "self": 421,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_53": {
+    "self": 144,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_55": {
+    "self": 0,
+    "clothes": 0,
+    "other": 74
+   },
+   "Crowd_bomb_56": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_57": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_58": {
+    "self": 390,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_59": {
+    "self": 175,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_63": {
+    "self": 194,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_64": {
+    "self": 400,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_65": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_68": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_69": {
+    "self": 255,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_70": {
+    "self": 386,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_71": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_15": {
+    "self": 201,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_16": {
+    "self": 189,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_17": {
+    "self": 169,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_33": {
+    "self": 173,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_35": {
+    "self": 136,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_38": {
+    "self": 33,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_41": {
+    "self": 135,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "109": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_65": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_68": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_69": {
+    "self": 255,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_70": {
+    "self": 386,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_71": {
+    "self": 172,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_33": {
+    "self": 182,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_35": {
+    "self": 136,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_36": {
+    "self": 163,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_38": {
+    "self": 16,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_41": {
+    "self": 127,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "115": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_bomb_70": {
+    "self": 386,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_33": {
+    "self": 183,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_35": {
+    "self": 165,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_38": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_41": {
+    "self": 118,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "121": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_33": {
+    "self": 185,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_35": {
+    "self": 295,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_38": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   },
+   "Crowd_corner_41": {
+    "self": 111,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "127": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "133": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "139": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "145": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "151": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "157": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "163": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "169": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "175": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "181": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "187": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "193": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "199": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "205": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "211": {
+   "Archduke": {
+    "self": 254,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "217": {
+   "Archduke": {
+    "self": 101,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "289": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "295": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "301": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "307": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "313": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "319": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "325": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "331": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "337": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "343": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "349": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "355": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "361": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "367": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "373": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "379": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "385": {
+   "Archduke": {
+    "self": 284,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "391": {
+   "Archduke": {
+    "self": 231,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "397": {
+   "Archduke": {
+    "self": 200,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "403": {
+   "Archduke": {
+    "self": 185,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "409": {
+   "Archduke": {
+    "self": 200,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "415": {
+   "Archduke": {
+    "self": 245,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "421": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "427": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "433": {
+   "Archduke": {
+    "self": 157,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "439": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "445": {
+   "Archduke": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "817": {
+   "Archduke": {
+    "self": 157,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "823": {
+   "Archduke": {
+    "self": 157,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "829": {
+   "Archduke": {
+    "self": 35,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1135": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1141": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1147": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1153": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1273": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1279": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1285": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1291": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1297": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1303": {
+   "Archduke": {
+    "self": 151,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1489": {
+   "Archduke": {
+    "self": 245,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1495": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1501": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1507": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1513": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1519": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Duchess": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1525": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   },
+   "Duchess": {
+    "self": 163,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1531": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1537": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1543": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1549": {
+   "Archduke": {
+    "self": 296,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1555": {
+   "Archduke": {
+    "self": 208,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1561": {
+   "Archduke": {
+    "self": 95,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1567": {
+   "Archduke": {
+    "self": 38,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1573": {
+   "Archduke": {
+    "self": 20,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1,
+   217
+  ],
+  [
+   289,
+   439
+  ],
+  [
+   817,
+   829
+  ],
+  [
+   1135,
+   1153
+  ],
+  [
+   1273,
+   1303
+  ],
+  [
+   1489,
+   1567
+  ]
+ ],
+ "fps": 60
+}
