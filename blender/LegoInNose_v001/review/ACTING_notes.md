@@ -98,3 +98,18 @@ Package: `../../LegoInNose_v008b/LegoInNose_v008b_60fps.blend`. Sheets: `v008b_h
 - **Hand audit:** 10 hits. Mom's shirt 1. The man's own shirt 7, sitting up in bed, which is intended. The man's own body 2.
 - **Grips:** the bricks 4–6 mm. The tweezers are still at 95 mm max and 10 mm mean. **Open.**
 - **Half-second sheet:** 6.0, 26.5–28.5 and 30.5 s are fixed. The tunnel cells at 12.0, 14.5, 18.5 and 22.0 s are pink, as accepted.
+
+### v008b: props in hand (director's mandatory check, qa_check.py e7b25f7)
+`qa_v008b.json` is now from `pipeline/qa_check.py` at e7b25f7: `{'EMPTY': 139, 'FILL': 9, 'INSIDE': 1, 'PROPMOVE': 114}`. **ATTACH is 0.** No masks, caps or glasses are worn in this film.
+- **Fixed:** `scripts/prop_snap.py` keys each held brick every frame, within 2 cm of the nearest finger joint that QA measures:
+  - big brick in the boy's pinch, 1–150 (it was up to 4.5 cm off)
+  - small brick in his pinch, 336–736 (up to 5 cm)
+  - small brick in the man's palm in the shower, 2152–2310 (up to 8.3 cm)
+
+  None of these are flagged now. The tweezers, inhaler, tissue, gamepad and phone were never flagged.
+- **All 114 remaining PROPMOVE flags are intended.** No hand holds these by design:
+  - **Brick_Big, 151–1045:** the red brick stuck in the boy's left nostril. It moves with his head, which is the story.
+  - **Brick_Big, 1063–1081:** the red brick in the tweezer tips. Mom holds the tweezers in her pinch, and the tips are 8.8 cm from her fingers.
+  - **Brick_Small, 2095–2149:** the yellow brick shooting out of the man's nostril into his palm. It's in flight, like "a brick falling".
+  - **Dream_Red / Dream_Yellow, 481–583, and FX_Sparkle03/04/11, 523–541:** the floating dream macro, two bricks clicking together, with sparkles.
+  - **XS_Brick_Big / XS_Brick_Small, 757–847:** the bricks inside the 6× cross-section head model in the studio. That's a diagram, with no character.

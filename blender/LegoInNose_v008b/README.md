@@ -42,6 +42,7 @@ v008 with only these changes. The beat frames are unchanged and no VO was added.
 - Tunnels: each dive and return is shorter, so every flat pink stretch is 15 frames or less.
 - Shower (33–34.5 s): the thumb pinches the side of one nostril (the "pinch" pose) instead of the index on the nose. This is intended contact.
 - The boy's resting hand lies flat on the top of his thigh (`place_hand` + `flat_palm`) at 0–0.2 s, 4.4 s and 22.7 s. Then `scripts/leg_fix.py` lifts any hand that is still more than 1.5 cm inside his own legs, pelvis or belly. `hand_fix.py` only tests the torso. It ran 3 + 8 rounds on the boy: 281 → 14 frames.
+- Held bricks stay in the hand (`scripts/prop_snap.py`, run on the packed file after `leg_fix.py`). qa_check e7b25f7 gives ATTACH 0, and every PROPMOVE flag left is intended (see ACTING_notes).
 - The man's MPFB "Delete" clothing masks are off for the whole film, so his vertex count is constant and the official `clip_scan.py` (3cfc53c) runs unmodified. His body under the shirt is hidden by the clothes.
 
 ## v008: acting fix (client, Nov 12)
