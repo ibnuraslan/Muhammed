@@ -665,15 +665,16 @@ for f in list(range(F(27.9), F(31.0), 8)) + list(range(F(31.0), F(32.3), 4)):   
 for s_, sx in (("L", -1), ("R", 1)):          # he is on the floor, out of reach: let go, hands back at the sides
     hand(s_, F(32.6), (sx * 0.22, 0.66, 0.86), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
     hand(s_, F(33.3), (sx * 0.22 + 0.02, 0.66, 0.86), d=(0, 0.3, -1), n=(-sx, 0, 0), curl=30)
-body(F(28.8), (0.0, 0.84, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
+body(F(28.8), (-0.04, 0.76, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.14, 0.72), (0.10, 0.80)); H.key_foot("L", F(29.0), Vector((-0.05, 0.76)), 180, 0.05)
 body(F(29.8), (-0.10, 0.64, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
 feet(F(30.4), (-0.24, 0.64), (0.0, 0.68)); H.key_foot("R", F(30.1), Vector((0.05, 0.74)), 180, 0.06)
 body(F(30.6), (-0.12, 0.64, STAND_Z - 0.12), flex=8, sflex=8, twist=-5, head=(15, 0))
 body(F(31.4), (-0.10, 0.64, STAND_Z - 0.16), flex=10, sflex=10, twist=-5, head=(20, 0))
-body(F(32.4), (-0.02, 0.62, STAND_Z - 0.12), flex=2, sflex=4, twist=-20, head=(20, -25))       # upright, back from the seat, looking right down at him on the floor
-feet(F(32.4), (-0.10, 0.62), (0.10, 0.66))
-body(F(33.2), (0.0, 0.62, STAND_Z - 0.12), flex=2, sflex=4, twist=-25, head=(20, -25))
+body(F(31.9), (-0.16, 0.62, STAND_Z - 0.04), flex=2, sflex=4, twist=-15, head=(20, -20))
+body(F(32.4), (-0.17, 0.60, STAND_Z), flex=2, sflex=4, twist=-20, head=(20, -25))       # upright, back from the seat, looking right down at him on the floor
+feet(F(32.4), (-0.25, 0.60), (-0.05, 0.64))
+body(F(33.2), (-0.15, 0.60, STAND_Z), flex=2, sflex=4, twist=-25, head=(20, -25))
 # beat 10-11: alarms, jolt, stagger forward to the windscreen
 body(F(33.7), (0.18, 0.76, STAND_Z - 0.12), flex=20, sflex=0, twist=-5, head=(-10, 0))
 hand("L", F(33.9), (-0.30, 0.98, 1.40), d=(0, 1, 0), n=(0, 0, -1), curl=55)
@@ -685,6 +686,8 @@ body(F(35.5), (0.12, 0.92, STAND_Z - 0.06), flex=18, sflex=6, side=-8, head=(-5,
 hand("L", F(35.5), (-0.10, 1.28, 1.0), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # braces on the pedestal
 hand("R", F(35.5), (0.30, 1.12, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(36.5), (0.14, 0.98, STAND_Z - 0.10), flex=26, sflex=14, side=6, head=(0, 0))
+hand("L", F(36.5), (-0.08, 1.30, 1.02), d=(0, 1, -0.5), n=(0, 0, 1), curl=40)                        # stays on the pedestal
+hand("L", F(37.6), (0.10, 1.40, 1.12), d=(0, 1, -0.3), n=(0, 0, 1), curl=30)                         # over his legs, not through them
 body(F(37.6), (0.20, 0.98, STAND_Z - 0.12), flex=28, sflex=14, side=-6, head=(5, -8))
 feet(F(37.6), (0.06, 0.92), (0.30, 0.85))
 # beat 12: into the right seat, both hands on the yoke
