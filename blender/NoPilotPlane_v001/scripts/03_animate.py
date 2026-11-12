@@ -103,7 +103,7 @@ for n, (row, side, k, x, y) in enumerate(seats):
 print("PASSENGERS", len(PASS), used)
 
 def pose_passenger(arm, row, side, k, x, y, f):
-    R = Rig(arm); rnd = random.Random(hash((row, side, k)) & 0xffff)
+    R = Rig(arm); rnd = random.Random(row * 100 + (0 if side == "L" else 50) + k)   # deterministic seed (str hash is randomized per process)
     aisle = (k == 0)
     to_aisle = (1 if side == "L" else -1)   # +X in world is character's -X (they face +Y after 180 turn): character left = world -X
     fk_leg(R, "L", f, hip=86 + rnd.uniform(-6, 4), knee=78 + rnd.uniform(-8, 8), splay=rnd.uniform(2, 9))
@@ -142,7 +142,7 @@ def fit_lap_hands(arm, row, side, k, x, y):
             ab = kn - hip; t = max(0.0, min(1.0, (w - hip).dot(ab) / ab.length_squared)); top = (hip + ab * t).z + 0.10
             el = ELB.get(s_, None)
             if el is None:
-                rnd = random.Random(hash((row, side, k)) & 0xffff); el = 58.0
+                rnd = random.Random(row * 100 + (0 if side == "L" else 50) + k); el = 58.0
             if w.z < top + 0.03: ELB[s_] = el + 9; ok = False        # more elbow bend lifts the hand
             elif w.z > top + 0.10: ELB[s_] = el - 6; ok = False
             else: ELB[s_] = el
@@ -195,17 +195,17 @@ def fo_pose(f, loc, rz=180.0, rx=0.0, ry=0.0, flex=10, side=-30, twist=0, hflex=
     for s in "LR": fingers_curl(RF, f, s, 30)
 SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
-fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)        # face turned toward the cabin, readable
+fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armR=(58, 20, 30, 30))        # face turned toward the cabin, readable
 fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(58, 20, 30, 30))
 fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(62, 5, 15, 30), armR=(58, 20, 30, 30))   # hauled up/back
 fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(60, -10, 15, 32))
 fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(62, -10, 15, 32))  # left arm swings down onto the yoke
-fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12, 32), armR=(62, -10, 15, 32))
-fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
-fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
-fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
+fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
+fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
+fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
+fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
 for f in range(F(38.0) + 40, 4410, 40):
-    fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(60, -10, 15, 45), armR=(60, -10, 15, 45))
+    fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
 
 # ------------------------------------------------------------------ pilot uniform details (bone-attached; director v006)
 M_gold = mat("M_uniform_gold", (0.95, 0.68, 0.18), rough=0.3, metal=1.0)
