@@ -285,6 +285,7 @@ NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
 # went to silhouette. ("except", moves) = grade only except those moves.
 GRADE_ONLY = {"therapy": "all", "smelter": "all", "ankara": "all",
               "hospital": ("except", ("ch4_2a", "ch4_2b"))}
+EXTERIOR_RELIGHT = False      # wait for LOOK v5 (real colours: blue sky, white stone, warm sun)
 EXT_EXPOSURE = {"mist": -0.2, "dusk": 0.2}
 
 
@@ -328,6 +329,8 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
         hit, *_ = sc.ray_cast(dg, camp, Vector((0, 0, 1)), distance=8.0)
         inside = bool(hit)
     if not inside:
+        if not EXTERIOR_RELIGHT:
+            return None                 # held: v4's grey sky/stone rejected; exteriors keep their own light until v5
         md = "dusk" if var in dusk else mood
         azim = 200.0
         if camp is not None:
