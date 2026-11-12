@@ -48,3 +48,27 @@
 | 15 | The hose pickup crouch had the head buried in the knee and shoulder. | The soldier now bends more at the knees, keeps his back less folded, and holds his **head up, looking at the hose**, with his fingers closing on it. |
 | 16 | 33.0 s: a yellow object at the frame edge (the crane cab), with empty desert behind. | The camera route now passes east of the crane and frames the bunker crew from 1988 on. |
 | 17 | 32.5 s: mostly empty sky with a blurred flame. | Beat 11 opens on the shaft and the wellhead with the dying flame (1925 framing at ground level). |
+
+## Hand-pose library and QA (final v004)
+- Finger shapes now come from `pipeline/hand_poses.py`:
+  - **wrap_grip:** hose holds and the hose pickup.
+  - **flat_palm:** a palm on the device casing.
+  - **relaxed:** everything else.
+- Its `add_hand_limits` replaces my own finger limits.
+- `qa_check.py` (step 12, with beats.json), `review/v004_qa_check.json`: CLAW 0, HOVER 0, FACEPRESS 0, FILL 0. The flags I'm keeping, with reasons:
+  - **EMPTY (102 samples):** the cross-section shots (bore, strata, blast, squeeze) and the fire and wide shots. They contain no characters by design, because the device, gas, fire and rock are the subjects of those beats.
+  - **BACKHEAD (f613, f625):** beat 5 ("a fireball over 400 feet tall"). The subject is the fire column. SolA is a small figure running away from the eruption toward the hoses.
+  - **INSIDE (f1–49, 793–805, 925, 1393–1405):** the stills at these frames render clean, with no fill and no black. I believe the back-face ray test is tripping inside the open shaft collar ring and other open, single-sided meshes, but I haven't verified that.
+
+## Mandatory 6-point self-check (ACTING_FIX_04-10.md)
+1. **Hands visibly touch what they hold: checked.**
+   - The hose grips at 849 and 960, both holders.
+   - The device casing at 1420: palm within 1 cm.
+2. **No claws: checked.** qa_check reports CLAW 0, and the close-ups use hand_poses shapes.
+3. **Nothing pressed into a face: checked.** FACEPRESS is 0, and the device soldiers' heads are 31 cm off the casing.
+4. **No empty, blurred or black cells, and no back-of-head on beats: checked on the half-second sheet.** The intended exceptions are listed above.
+5. **Close-ups actually show the hands: checked**, in `v004_hand_contact_closeups.jpg`:
+   - Cells 1–3 show the hose hands.
+   - In cell 4 (device, front view) the near hands are on the casing.
+   - Cell 5 (side view) shows the near hand behind the body.
+6. **hand_poses.py is used: checked.**

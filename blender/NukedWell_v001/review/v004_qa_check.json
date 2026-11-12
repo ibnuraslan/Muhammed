@@ -612,6 +612,12 @@
     "no character in view"
    ]
   ],
+  "1993": [
+   [
+    "EMPTY",
+    "only DustRing in view"
+   ]
+  ],
   "2005": [
    [
     "EMPTY",
@@ -663,7 +669,7 @@
  },
  "counts": {
   "INSIDE": 10,
-  "EMPTY": 101,
+  "EMPTY": 102,
   "BACKHEAD": 2
  }
 }

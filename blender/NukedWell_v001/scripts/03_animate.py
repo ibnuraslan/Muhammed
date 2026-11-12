@@ -445,6 +445,15 @@ def key_grip(nm, f, s, amt):
         n = "finger1-%d.%s" % (j, s)
         if n in P:
             P[n].rotation_quaternion = Quaternion(GRIP_AXIS, GRIP_SIGN * R_(ang * amt)); P[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
+# shared hand-pose library (director, pipeline/hand_poses.py): finger shapes + limits come from it
+import importlib.util as _ilu
+_sp = _ilu.spec_from_file_location("hand_poses", os.path.join(PIPE, "hand_poses.py")); HP = _ilu.module_from_spec(_sp); _sp.loader.exec_module(HP)
+for _nm in CREW:
+    for _pb in O[_nm].pose.bones:
+        for _c in [c for c in _pb.constraints if c.type == 'LIMIT_ROTATION']: _pb.constraints.remove(_c)
+    HP.add_hand_limits(O[_nm])
+def key_grip(nm, f, s, amt):
+    HP.apply_pose(O[nm], s, "wrap_grip" if amt >= 0.6 else ("flat_palm" if 0.25 <= amt < 0.34 else "relaxed"), f)
 def pose(nm, f, pos, yaw, L="side", R="side", crouch=0.03, flex=6.0, twist=0.0, side=0.0, head=(0.0, 0.0),
          feet=None, sway=0.0, hand_world=None, grip=(0.35, 0.35)):
     """one full key: root, spine, both feet (planted unless given), both hands"""
