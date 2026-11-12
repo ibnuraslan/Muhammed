@@ -285,12 +285,14 @@ HOSE = {}   # filled by crew section (nozzle positions)
 
 # ================================================================== sun / sky / exposure: day-night in beat 5, sky rewind in beat 3
 SUN = O["Sun"]; wn = sc.world.node_tree.nodes
+FF_A, FF_B = 1300, 1362
 def sun_x(f):
     base = 40.0
     if f <= RW0: return base
     if f <= RW1: return base - 360.0 * smooth((f - RW0) / (RW1 - RW0))     # sun races backwards once
     if f < b5 + 40: return base
     if f < BEAT[6] - 20: return base + 360.0 * smooth((f - b5 - 40) / (BEAT[6] - 20 - b5 - 40))
+    if FF_A <= f < FF_B: return base + 360.0 * smooth((f - FF_A) / (FF_B - FF_A))
     if f < b11 + 60: return base
     return base + 18.0 * smooth((f - b11 - 60) / 200.0)      # golden end
 def sky(f):
@@ -420,14 +422,14 @@ def pole_for(pos, yaw, s, z=1.0):
 HANDS = {   # local offsets (left(+)/right(-) x, forward, up), finger dir, palm normal (None = inward)
     "side": ((0.31, 0.06, 0.82), (0.1, 0.15, -1), None),
     "hip": ((0.34, 0.02, 1.0), (0, 0.6, -0.8), None),
+    "radio": ((0.2, 0.26, 1.5), (0, 0.2, 1), (1, 0, 0)),
     "chest": ((0.16, 0.4, 1.25), (-0.2, 0.9, 0.1), None),
     "point": ((0.18, 0.62, 1.42), (0, 1, 0.05), (0, 0, -1)),
     "point_down": ((0.16, 0.6, 1.05), (0, 0.8, -0.6), (0, 0, -1)),
-    "shield": ((0.1, 0.4, 1.62), (0, 0.1, 1), (0, 1, 0)),
-    "up": ((0.28, 0.12, 2.02), (0, 0.1, 1), (0, 1, 0)),
-    "wave_a": ((0.42, 0.18, 1.9), (0.4, 0.1, 1), (0, 1, 0)),
-    "wave_b": ((0.18, 0.22, 1.95), (-0.3, 0.1, 1), (0, 1, 0)),
-    "radio": ((0.2, 0.26, 1.5), (0, 0.2, 1), (1, 0, 0)),
+    "shield": ((0.12, 0.46, 1.62), (0, 0.1, 1), (0, 1, 0)),
+    "up": ((0.34, 0.14, 2.0), (0.2, 0.1, 1), (0, 1, 0)),
+    "wave_a": ((0.46, 0.22, 1.88), (0.4, 0.1, 1), (0, 1, 0)),
+    "wave_b": ((0.3, 0.28, 1.92), (-0.2, 0.1, 1), (0, 1, 0)),
     "brace": ((0.36, 0.3, 1.05), (0, 0.6, -0.4), None),
 }
 GRIP_AXIS = Vector((1, 0, 0)); GRIP_SIGN = 1.0
@@ -491,13 +493,14 @@ def idle(nm, f0, f1, pos, yaw, L="side", R="side", every=24, gest=None, feet=Non
         f += every; i += 1
     if (f - every) != f1: pose(nm, f1, pos, yaw, L, R, feet=feet, **kw)
 def walk(nm, f0, f1, p0, p1, yaw=None, backwards=False, stride=0.72):
+    """stride: metres per full cycle; time-lapse zips (rewind, fast-forward) use a long stride so the cycle doesn't flicker"""
     h = CREW[nm]; p0 = Vector(p0); p1 = Vector(p1)
     yw = yaw if yaw is not None else yaw_to(p0, p1) + (180 if backwards else 0)
     path = lambda f: p0.lerp(p1, smooth((f - f0) / (f1 - f0))).to_3d()
-    h.walk(path, lambda f: yw, f0, f1, stride=stride if not backwards else 0.5)
+    h.walk(path, lambda f: yw, f0, f1, stride=stride)
     for s in "LR":   # arm swing
-        for f in range(f0, f1 + 1, 12):
-            ph = (f - f0) / 24.0 * math.pi * 2 * (1 if s == "L" else -1)
+        for f in list(range(f0, f1 + 1, 2)) + [f1]:
+            ph = (f - f0) / 24.0 * math.pi * 2 * (1 if s == "L" else -1) * (0.15 if stride > 2 else 1.0)
             pos = p0.lerp(p1, smooth((f - f0) / (f1 - f0)))
             sx = 1 if s == "L" else -1
             W, d, n = hand_local(h, s, pos, yw, (0.31 * sx, 0.14 * math.sin(ph), 0.85), (0.1 * sx, 0.15, -1))
@@ -508,23 +511,29 @@ B = BEAT
 sh = SHAFT
 # ---------------- beats 1-2 (1966 opening, rim crew); beat 3 rewind holds these as small figures
 idle("SolA", 1, B[3] + 60, (sh.x - 4.2, sh.y + 4.2), yaw_to(Vector((sh.x - 4.2, sh.y + 4.2)), sh), "side", "point_down", gest=[(1, "side", "point_down"), (120, "hip", "point_down"), (220, "side", "chest")], flex=14)
-idle("SolB", 1, B[3] + 60, (sh.x + 4.0, sh.y + 4.6), yaw_to(Vector((sh.x + 4.0, sh.y + 4.6)), sh), "radio", "side", gest=[(1, "radio", "side"), (150, "side", "point")], flex=10)
+idle("SolB", 1, B[3] + 60, (sh.x + 4.0, sh.y + 4.6), yaw_to(Vector((sh.x + 4.0, sh.y + 4.6)), sh), "hip", "side", gest=[(1, "hip", "side"), (150, "side", "point")], flex=10)
 idle("EngA", 1, B[3] + 60, (-19.0, 6.2), yaw_to(Vector((-19, 6.2)), Vector((-16, 1))), "wave_a", "side", gest=[(1, "wave_a", "side"), (40, "wave_b", "side"), (80, "wave_a", "side"), (200, "point", "side"), (260, "wave_a", "side")])
 idle("EngB", 1, B[3] + 60, (-8.0, 7.5), yaw_to(Vector((-8, 7.5)), sh), "hip", "hip", gest=[(160, "hip", "point")])
 idle("SolC", 1, B[3] + 60, (-4.5, 9.5), yaw_to(Vector((-4.5, 9.5)), Vector((0, 0))), "shield", "side")
 idle("SolD", 1, B[3] + 60, (-27.5, 9.0), yaw_to(Vector((-27.5, 9.0)), Vector((-23, 3))), "side", "side", gest=[(200, "point", "side")])
+# ---------------- beat 3 rewind: everyone zips backwards along a straight line (reversed time-lapse) to where they stood in 1963
+RIM = {"SolA": (sh.x - 4.2, sh.y + 4.2), "SolB": (sh.x + 4.0, sh.y + 4.6), "EngA": (-19.0, 6.2), "EngB": (-8.0, 7.5), "SolC": (-4.5, 9.5), "SolD": (-27.5, 9.0)}
+Y63 = {"SolA": (8, 12), "SolB": (12, 16), "SolC": (-8, 12), "SolD": (-5, 22), "EngA": (41, -8.5), "EngB": (39.3, -5.8)}
+for nm in RIM:
+    walk(nm, B[3] + 61, B[4] - 6, Vector(RIM[nm]), Vector(Y63[nm]), backwards=True, stride=3.2)
 # ---------------- beats 4-5 (1963): two engineers far out watching the eruption, soldiers run back
-T0 = B[3] + 61
+T0 = B[4] - 5
 pose("EngA", T0, (41, -8.5), yaw_to(Vector((41, -8.5)), WELL)); pose("EngB", T0, (39.3, -5.8), yaw_to(Vector((39.3, -5.8)), WELL))
-idle("EngA", T0 + 1, B[6] - 40, (41, -8.5), yaw_to(Vector((41, -8.5)), WELL), "side", "side", gest=[(B[4] + 55, "shield", "side"), (B[5] + 90, "shield", "point"), (B[5] + 160, "side", "chest")])
-idle("EngB", T0 + 1, B[6] - 40, (39.3, -5.8), yaw_to(Vector((39.3, -5.8)), WELL), "side", "side", gest=[(B[4] + 58, "shield", "shield"), (B[5] + 120, "hip", "hip")])
-for nm, a, b in (("SolA", (6, 20), (16, 46)), ("SolB", (-5, 18), (-12, 45)), ("SolC", (12, 14), (24, 38)), ("SolD", (-14, 12), (-20, 40))):
-    pose(nm, T0, a, yaw_to(Vector(a), WELL)); idle(nm, T0 + 1, B[4] + 56, a, yaw_to(Vector(a), WELL), "side", "side")
-    yw = walk(nm, B[4] + 57, B[4] + 57 + 150, a, b, stride=1.1)
-    idle(nm, B[4] + 208, B[6] - 40, b, yaw_to(Vector(b), WELL), "shield", "side")
-# ---------------- beat 6: hose crews (water at the fire), engineer commanding
-H1 = (Vector((15.5, 18.5)), Vector((18.0, 22.4)))   # front, back person positions
+idle("EngA", T0 + 1, B[6] - 100, (41, -8.5), yaw_to(Vector((41, -8.5)), WELL), "side", "side", gest=[(B[4] + 55, "shield", "side"), (B[5] + 90, "shield", "point"), (B[5] + 160, "side", "chest")])
+idle("EngB", T0 + 1, B[6] - 100, (39.3, -5.8), yaw_to(Vector((39.3, -5.8)), WELL), "side", "side", gest=[(B[4] + 58, "shield", "shield"), (B[5] + 120, "hip", "hip")])
+H1 = (Vector((15.5, 18.5)), Vector((18.0, 22.4)))   # hose positions (front, back): the soldiers run there from the eruption
 H2 = (Vector((-16.5, 17.5)), Vector((-19.0, 21.6)))
+for nm, b in (("SolA", H1[0]), ("SolB", H1[1]), ("SolC", H2[0]), ("SolD", H2[1])):
+    a = Y63[nm]
+    pose(nm, T0, a, yaw_to(Vector(a), WELL)); idle(nm, T0 + 1, B[4] + 56, a, yaw_to(Vector(a), WELL), "side", "side")
+    walk(nm, B[4] + 57, B[4] + 57 + 150, Vector(a), b, stride=1.5)
+    idle(nm, B[4] + 208, B[6] - 62, b, yaw_to(b, WELL), "shield", "side")
+# ---------------- beat 6: hose crews (water at the fire), engineer commanding
 def hose_setup(name, front, back, nmF, nmB, f0, f1):
     tgt = WELL; yawF = yaw_to(front, tgt)
     fw, lf = body_frame(yawF)
@@ -542,6 +551,10 @@ def hose_setup(name, front, back, nmF, nmB, f0, f1):
         dvec = (nxt - WL).normalized() if nm == nmF else (WL - WR).normalized()
         hw = {"L": (WL + Vector((0, 0, 0.02)), dvec, Vector((0, 0, -1))), "R": (WR + Vector((0, 0, 0.025)), dvec, Vector((0, 0, -1)))}
         ft = stance(nm, pos, yw, front=0.38, width=1.3)
+        low = {k: (v[0] * Vector((1, 1, 0)) + Vector((0, 0, v[0].z * 0.06 + 0.03)), v[1], v[2]) for k, v in hw.items()}
+        pose(nm, PICK0, pos, yw, "side", "side", feet=ft)
+        pose(nm, PICK0 + 8, pos, yw, crouch=0.42, flex=48, head=(18, 0), feet=ft, hand_world=low, grip=(0.4, 0.4))
+        pose(nm, PICK0 + 14, pos, yw, crouch=0.42, flex=48, head=(18, 0), feet=ft, hand_world=low, grip=(0.85, 0.85))
         f = f0; i = 0
         while f <= f1:
             k = math.sin(i * 1.3)
@@ -557,17 +570,21 @@ def hose_setup(name, front, back, nmF, nmB, f0, f1):
     for f, v in ((1, 0.0), (b6 + 8, 0.0), (b6 + 30, 1.0), (B[7] - 10, 1.0), (B[7] + 10, 0.0)):
         wc.bevel_factor_end = v; wc.keyframe_insert("bevel_factor_end", frame=f)
     for f, hdn in ((1, True), (b6 + 6, False), (B[7] + 12, True)):
-        wo.hide_render = hdn; wo.keyframe_insert("hide_render", frame=f); ho.hide_render = hdn if f != 1 else True; ho.keyframe_insert("hide_render", frame=f)
+        wo.hide_render = hdn; wo.keyframe_insert("hide_render", frame=f)
+    for f, hdn in ((1, True), (B[4] + 10, False), (B[7] + 160, True)):
+        ho.hide_render = hdn; ho.keyframe_insert("hide_render", frame=f)
+    # the hose lies flat on the sand (z squashed) and is lifted by the crew's hands between PICK0 and f0
+    for f, z in ((1, 0.06), (PICK0 + 6, 0.06), (f0, 1.0), (B[7] + 120, 1.0), (B[7] + 150, 0.06)):
+        ho.scale = (1, 1, z); ho.keyframe_insert("scale", frame=f)
     return nozzle
 T6 = B[6] - 39
-for nm, p in (("SolA", H1[0]), ("SolB", H1[1]), ("SolC", H2[0]), ("SolD", H2[1])):
-    pose(nm, T6, p, yaw_to(p, WELL))
-HOSE["A"] = hose_setup("HoseA", H1[0], H1[1], "SolA", "SolB", T6 + 1, B[7] + 100)
-HOSE["B"] = hose_setup("HoseB", H2[0], H2[1], "SolC", "SolD", T6 + 1, B[7] + 100)
-pose("EngA", T6, (1.5, 30.0), yaw_to(Vector((1.5, 24)), WELL)); pose("EngB", T6, (18, 33), yaw_to(Vector((18, 33)), WELL))
-idle("EngA", T6 + 1, B[7] + 100, (1.5, 30.0), yaw_to(Vector((1.5, 30)), WELL), "wave_a", "point", every=14,
+PICK0 = B[6] - 60
+HOSE["A"] = hose_setup("HoseA", H1[0], H1[1], "SolA", "SolB", B[6] - 14, B[7] + 100)
+HOSE["B"] = hose_setup("HoseB", H2[0], H2[1], "SolC", "SolD", B[6] - 14, B[7] + 100)
+walk("EngA", T6 - 60, T6, Vector((41, -8.5)), Vector((34.0, 2.0)), stride=0.8); walk("EngB", T6 - 60, T6, Vector((39.3, -5.8)), Vector((36.5, 6.0)), stride=0.8)
+idle("EngA", T6 + 1, B[7] + 100, (34.0, 2.0), yaw_to(Vector((34.0, 2.0)), WELL), "wave_a", "point", every=14,
      gest=[(T6 + 1, "wave_a", "point"), (b6 + 20, "wave_b", "point"), (b6 + 34, "wave_a", "point"), (b6 + 48, "wave_b", "point"), (b6 + 62, "wave_a", "chest"), (b6 + 120, "side", "point"), (b6 + 170, "hip", "hip")])
-idle("EngB", T6 + 1, B[7] + 100, (18, 33), yaw_to(Vector((18, 33)), WELL), "radio", "side")
+idle("EngB", T6 + 1, B[7] + 100, (36.5, 6.0), yaw_to(Vector((36.5, 6.0)), WELL), "hip", "side")
 steam = [O["Steam%d" % i] for i in range(3)]
 ssock = bpy.data.materials["M_Steam"].node_tree.nodes
 KS(ssock["SteamAmt"].outputs[0], [(1, 0.0), (b6 + 26, 0.0), (b6 + 45, 1.4), (b6 + 90, 0.8), (b6 + 120, 1.5), (b6 + 170, 0.7), (B[7] + 20, 0.0)])
@@ -575,13 +592,25 @@ KS(ssock["SteamNoise"].inputs['W'], [(1, 0.0), (END, 14.0)])
 for i, o in enumerate(steam):
     K(o, "scale", [(b6 + 26, (0.3,) * 3), (b6 + 60 + i * 10, (1.3,) * 3), (b6 + 140, (1.0,) * 3), (B[7] + 20, (1.6,) * 3)])
 # ---------------- beat 7: crew backs away from the fissures (fire bursts out of the ground around them)
+FF0, FF1 = 1300, 1362      # forward time-lapse (story skip to the test day)
+B8POS = {"SolA": SHAFT + Vector((-0.98, 0.15)), "SolB": SHAFT + Vector((0.98, 0.15)), "EngA": Vector((-8.5, 4.5)),
+         "SolC": Vector((-19.5, 4.0)), "SolD": Vector((-9.5, 8.0)), "EngB": Vector((-21.0, 7.5))}
 for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", H2[0], (-20, 27)), ("SolD", H2[1], (-22, 30)),
-                 ("EngA", (1.5, 30.0), (3, 40)), ("EngB", (18, 33), (22, 42))):
+                 ("EngA", (34.0, 2.0), (38, 12)), ("EngB", (36.5, 6.0), (41, 15))):
     a = Vector(a); b = Vector(b)
-    walk(nm, 1236, 1236 + 90, a, b, yaw=yaw_to(a, WELL), backwards=True)
-    idle(nm, 1327, B[8] - 70, b, yaw_to(b, WELL), "shield", "side")
+    if nm.startswith("Sol"):   # let go of the hose: hands come down and in to the sides before stepping back
+        yy = yaw_to(a, WELL)
+        for k, ff in enumerate(range(B[7] + 104, 1236, 4)):
+            pose(nm, ff, a, yy, "brace" if k < 3 else "side", "brace" if k < 3 else "side", crouch=0.08, flex=10)
+    walk(nm, 1236, 1290, a, b, yaw=yaw_to(a, WELL), stride=0.55, backwards=True)
+    idle(nm, 1291, FF0 - 1, b, yaw_to(b, WELL), "shield", "side", every=8)
+    walk(nm, FF0, FF1, b, B8POS[nm], stride=3.0)
+    y0 = yaw_to(b, B8POS[nm]); y1 = yaw_to(B8POS[nm], SHAFT + Vector((0, 0.15))) if nm in ("SolA", "SolB") else (yaw_to(B8POS[nm], CB.to_2d()) if nm == "EngA" else yaw_to(B8POS[nm], SHAFT))
+    dy = (y1 - y0 + 180) % 360 - 180
+    for ff in range(FF1 + 1, FF1 + 6):   # turn on the spot to face the work, hands travelling with the body
+        pose(nm, ff, B8POS[nm], y0 + dy * smooth((ff - FF1) / 5.0), "side", "side")
 # ---------------- beat 8: soldiers guide the device into the bore, engineer signals the crane
-T8 = B[8] - 69
+T8 = FF1 + 6
 DZ0 = 10.6 - 9.0   # device bottom at the start of beat 8
 def dev_guide(nm, sgn, f0, f1):
     pos = SHAFT + Vector((sgn * 0.98, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
@@ -601,17 +630,17 @@ for nm, sg in (("SolA", -1), ("SolB", 1)):
     pp = SHAFT + Vector((sg * 0.98, 0.15)); idle(nm, T8, 1368, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
 dev_guide("SolA", -1, 1376, 1500)
 dev_guide("SolB", 1, 1376, 1500)
-idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-0.98, 0.15)), yaw_to(SHAFT + Vector((-0.98, 0.15)), SHAFT), "side", "point_down", flex=16)
-idle("SolB", 1501, B[9] - 6, SHAFT + Vector((0.98, 0.15)), yaw_to(SHAFT + Vector((0.98, 0.15)), SHAFT), "side", "side", flex=16)
+idle("SolA", 1501, B[9] + 1, SHAFT + Vector((-0.98, 0.15)), yaw_to(SHAFT + Vector((-0.98, 0.15)), SHAFT), "side", "point_down", flex=16)
+idle("SolB", 1501, B[9] + 1, SHAFT + Vector((0.98, 0.15)), yaw_to(SHAFT + Vector((0.98, 0.15)), SHAFT), "side", "side", flex=16)
 pE = Vector((-8.5, 4.5)); pose("EngA", T8, pE, yaw_to(pE, CB.to_2d()))
-idle("EngA", T8 + 1, B[9] - 6, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
+idle("EngA", T8 + 1, B[9] + 1, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
      gest=[(T8 + 1, "wave_a", "side"), (T8 + 13, "wave_b", "side"), (T8 + 25, "wave_a", "side"), (T8 + 37, "wave_b", "side"), (1440, "up", "point"), (1480, "side", "point_down")], head=(18, 0))
-for nm, p, L, R in (("SolC", Vector((-19.5, 4.0)), "radio", "side"), ("SolD", Vector((-9.5, 8.0)), "hip", "hip"), ("EngB", Vector((-21.0, 7.5)), "side", "chest")):
-    pose(nm, T8, p, yaw_to(p, SHAFT)); idle(nm, T8 + 1, B[9] - 6, p, yaw_to(p, SHAFT), L, R)
+for nm, p, L, R in (("SolC", Vector((-19.5, 4.0)), "hip", "side"), ("SolD", Vector((-9.5, 8.0)), "hip", "hip"), ("EngB", Vector((-21.0, 7.5)), "side", "chest")):
+    pose(nm, T8, p, yaw_to(p, SHAFT)); idle(nm, T8 + 1, B[9] + 1, p, yaw_to(p, SHAFT), L, R)
 # ---------------- beats 9-11: everyone behind the sandbags at the bunker (watching the test), jolt stumble, cheer
 BK = Vector((-25.0, 62.3))
 spots = {"SolA": (-4.2, 0.0), "SolB": (-2.4, 0.3), "SolC": (-0.6, -0.1), "EngA": (1.2, 0.2), "EngB": (3.0, 0.0), "SolD": (4.8, 0.4)}
-T9 = B[9] - 5
+T9 = B[9] + 2
 for nm, (dx, dy) in spots.items():
     p = BK + Vector((dx, dy)); yw = yaw_to(p, Vector((SHAFT.x, SHAFT.y))) * 0.4
     pose(nm, T9, p, yw, "hip" if nm.startswith("Eng") else "side", "side")
@@ -620,7 +649,7 @@ for nm, (dx, dy) in spots.items():
         if f_ < T9: continue
     pose(nm, B[9] + 9, p, yw, "brace", "brace", crouch=0.18, flex=25, side=8)
     pose(nm, B[9] + 22, p, yw, "brace", "chest", crouch=0.10, flex=12, side=-5, head=(10, 15))
-    idle(nm, B[9] + 36, B[11] + 40, p, yw, "side", "chest" if nm != "EngA" else "radio", every=26)
+    idle(nm, B[9] + 36, B[11] + 40, p, yw, "side", "chest" if nm != "EngA" else "hip", every=26)
     # cheer when the fire dies
     cf = B[11] + 70 + random.randint(0, 25)
     pose(nm, cf - 8, p, yw, "side", "side", crouch=0.08, flex=8)
@@ -635,10 +664,10 @@ for nm in CREW:
 # ================================================================== camera: one continuous Catmull-Rom spline through ~1 s framings
 CAMK = [  # frame, camera, target, lens
     (1,    (-11.0, -7.8, 3.4),  (-14.0, -2.7, 2.0), 30),
-    (50,   (-8.5, -17.0, 1.6), (-14.0, -2.7, -1.0), 28),
-    (100,  (-9.5, -17.0, -22.0), (-14.0, -2.7, -28.0), 28),
-    (150,  (-8.5, -16.0, -45.0), (-14.0, -2.7, -51.0), 28),
-    (193,  (-11.0, -14.0, -57.0), (-14.0, -2.7, -60.0), 30),
+    (50,   (-10.5, -9.5, 1.4), (-14.0, -2.7, -2.5), 30),
+    (100,  (-11.0, -9.0, -24.0), (-14.0, -2.7, -28.0), 32),
+    (150,  (-10.5, -9.5, -47.0), (-14.0, -2.7, -51.5), 32),
+    (193,  (-12.0, -10.0, -58.0), (-14.0, -2.7, -60.5), 32),
     (240,  (-20.0, -16.0, -50.0), (-14.0, -2.7, -52.0), 28),
     (290,  (-21.0, -26.0, -22.0), (-14.0, -2.7, -16.0), 26),
     (335,  (-29.0, -15.0, 3.2), (-18.5, 2.5, 1.5), 28),
@@ -654,7 +683,7 @@ CAMK = [  # frame, camera, target, lens
     (770,  (46.0, -14.0, 2.0), (12.0, 0.0, 22.0), 24),
     (830,  (-8.0, -62.0, 2.6), (0.0, 10.0, 32.0), 22),
     (885,  (-30.0, -48.0, 20.0), (0.0, 20.0, 18.0), 24),
-    (935,  (19.6, 24.8, 1.75), (10.0, 10.0, 3.0), 28),
+    (935,  (15.0, 11.8, 1.7), (16.6, 20.0, 1.5), 30),
     (990,  (20.0, 15.0, 5.0), (3.0, 2.0, 8.0), 24),
     (1045, (6.0, 26.0, 9.0), (-3.0, 4.0, 10.0), 24),
     (1095, (-30.0, 12.0, 9.0), (-6.0, 14.0, 6.0), 24),
@@ -663,8 +692,8 @@ CAMK = [  # frame, camera, target, lens
     (1240, (13.0, -24.0, 14.0), (2.0, 10.0, 1.0), 26),
     (1300, (32.0, -62.0, 46.0), (0.0, 14.0, 3.0), 24),
     (1350, (2.0, -40.0, 20.0), (-12.0, 0.0, 6.0), 26),
-    (1400, (-10.5, -6.8, 3.0), (-14.0, -2.7, 2.6), 30),
-    (1450, (-17.5, -6.8, 1.9), (-14.0, -2.7, 2.0), 28),
+    (1400, (-9.0, -9.2, 2.4), (-14.0, -2.6, 1.7), 26),
+    (1450, (-18.5, -8.0, 2.0), (-14.0, -2.6, 1.6), 26),
     (1500, (-18.8, -3.8, 1.5), (-14.0, -2.7, 0.9), 28),
     (1545, (-17.0, -12.5, -7.0), (-14.0, -2.7, -18.0), 26),
     (1592, (-4.0, -52.0, -40.0), (-14.0, -2.7, -56.0), 24),
