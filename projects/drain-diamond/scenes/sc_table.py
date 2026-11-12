@@ -184,6 +184,7 @@ def anim_layout(c, t):
     sec = t * DUR["layout"]
     h = c["counter"]
     walk_to(h, Vector((-TL / 2 - 0.3, -TW / 2 - 0.32, 0)), Vector((TL / 2, -TW / 2 - 0.32, 0)), sec, speed=0.5, cadence=1.1)
+    arms_relaxed(h, swing=12, phase=sec * 0.55)                              # arms low at his sides, a small swing
     h.rot("neck01", (1, 0, 0), -10); h.rot("head", (1, 0, 0), -12)        # natural walk, eyes on the rows as he goes
     c["key"].location = (-3 + 6 * t, -1.5, 2.6); point_at(c["key"], (-2 + 6 * t, 0, TZ))
 
