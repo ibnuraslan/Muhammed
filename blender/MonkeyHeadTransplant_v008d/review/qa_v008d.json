@@ -230,30 +230,18 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "CLAW",
-    "Anaes.R curl 70"
    ]
   ],
   "649": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "CLAW",
-    "Anaes.R curl 62"
    ]
   ],
   "655": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "CLAW",
-    "Anaes.R curl 63"
    ]
   ],
   "661": [
@@ -1955,7 +1943,6 @@
  },
  "counts": {
   "EMPTY": 177,
-  "CLAW": 3,
   "FILL": 44,
   "BACKHEAD": 1,
   "ROLL": 113,

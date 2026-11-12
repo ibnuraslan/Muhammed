@@ -810,7 +810,7 @@ for (tn, f), (s_, off) in sorted(TOOL_C.items(), key=lambda kv: kv[0][1]):
     ev(f); t_ = D[tn]; G = (fingertip(SURG, s_, 1) + fingertip(SURG, s_, 2)) / 2.0
     t_.location = G - off; t_.keyframe_insert("location", frame=f)
 bake_pen()
-for f in (640, 650, 660): pose_hand(ANA, "R", f, "wrap_grip")      # bag squeeze: closed wrap, no claw between grip keys
+for f in (641, 651, 661): pose_hand(ANA, "R", f, "cup_hold")      # bag squeeze: closed wrap, no claw between grip keys
 # table-2 group is transparent after the void and never seen again: hide it for good (QA: no invisible fill)
 for o in D:
     if o.type in ("MESH", "CURVE") and any(sl.material and "Fade_T2" in sl.material.node_tree.nodes for sl in o.material_slots if sl.material and sl.material.use_nodes):

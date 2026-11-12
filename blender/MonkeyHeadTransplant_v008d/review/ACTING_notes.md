@@ -91,5 +91,5 @@ Remaining flags, all intended:
 - QA (qa_check e7b25f7, clip_scan 3cfc53c): HOVER, FACEPRESS, INSIDE, CAMJUMP and ATTACH are 0.
   - PROPMOVE: only the clock hands (intended).
   - ROLL 113: the approved ranges only.
-  - CLAW: 3 frames (Anaes R on the bag, 643–655). Being fixed in a follow-up commit.
+  - CLAW: 0 (the Anaes R bag hand at 641–661 uses cup_hold between grip keys; follow-up commit).
   - clip_scan: 0 bad ranges.
