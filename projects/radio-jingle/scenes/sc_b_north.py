@@ -61,8 +61,9 @@ def gabled(name, x, y, w, d, h, brick, roof, face_y=-1, lit=(), rng=None):
                 continue
             box(name + "WF", (wx, y - 0.01, wz), (0.95, 0.06, 1.25), fr)
             lit_ = k in lit
-            box(name + "WP", (wx, y - 0.035, wz), (0.82, 0.01, 1.1), emissive("WinLit", (1.0, 0.7, 0.42), 1.4) if lit_ else pbr("WinDark", (0.006, 0.007, 0.008), 0.15, **{'Coat Weight': 0.35}))
-            box(name + "WC", (wx - 0.3, y - 0.04, wz), (0.22, 0.01, 1.05), fabric("NetC", (0.5, 0.48, 0.44), 0.9, 0.2, 200))
+            box(name + "WP", (wx, y - 0.035, wz), (0.82, 0.01, 1.1), emissive("WinLit", (1.0, 0.7, 0.42), 1.4) if lit_ else pbr("WinDark", (0.004, 0.0045, 0.005), 0.3))
+            box(name + "WC", (wx - 0.33, y - 0.04, wz), (0.14, 0.01, 1.05), fabric("NetC", (0.16, 0.14, 0.12), 0.9, 0.2, 200))
+            box(name + "WM", (wx, y - 0.045, wz), (0.04, 0.01, 1.1), fr); box(name + "WT", (wx, y - 0.045, wz + 0.15), (0.82, 0.01, 0.04), fr)
             k += 1
 
 
@@ -239,6 +240,9 @@ def build(variant=None):
         B.finish_exterior(azim=288, elev=4, sun_energy=6.0, exposure=0.6)                # dawn: a low warm sun raking the street
     elif variant == "shop":
         B.finish_interior(lift=0.0)
+    elif variant == "harbour_dusk":
+        bpy.context.scene.view_settings.exposure += 1.3
+        B.preview_cap()
     else:
         B.preview_cap()
     return c

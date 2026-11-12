@@ -9,7 +9,7 @@ Reused from chat A (new angles): Herrmann hallway, lakeside path bend, forest.
 
 | Person (never named on screen) | Era | Look | Helper |
 |---|---|---|---|
-| Michael, the brother | 2008–2013 | ~47, slim, short greying hair, dark plain navy sweater | `B.michael()` |
+| Michael, the brother | 2008–2013 | ~47, slim, short greying (salt-and-pepper) hair, dark plain navy sweater | `B.michael()` |
 | The acquaintance questioned (Ch3) | 1981 | ~31, slim, longer dark 80s hair, olive work jacket | `B.pfaffinger()` |
 | The convicted man | 1981 | 44, heavier and shorter, dark hair, dark brown work shirt; only in his workshop | `B.mazurek(era=1981)` |
 | The convicted man | 2007–2010 | 58, heavier, grey hair, grey-green jacket; only at his shop, searched, arrested, in court (behind / medium) | `B.mazurek(era=2007)` |

@@ -106,17 +106,20 @@ def facade(c, night_windows):
     for fl in range(3):
         for k in range(8):
             x = -9.0 + k * 2.6; z = 1.4 + fl * 2.8
+            if abs(x + 1.2) < 0.1 and fl == 1:               # the landlord's real window: a hollow frame only
+                for (dx, dz, sx, sz) in ((0, 0.68, 1.3, 0.06), (0, -0.68, 1.3, 0.06), (0.62, 0, 0.06, 1.4), (-0.62, 0, 0.06, 1.4)):
+                    box("FrameRing", (x + dx, y0 - 0.005, z + dz), (sx, 0.06, sz), fr)
+                continue
             box("Frame", (x, y0 - 0.005, z), (1.3, 0.06, 1.4), fr)
             if abs(x + 1.2) < 0.1 and fl == 1:
                 continue                                      # the real window (opening) is built separately
             lit_ = (k * 3 + fl) % 5 in night_windows
             box("Pane", (x, y0 - 0.035, z), (1.18, 0.01, 1.28),
-                emissive("RoomLit", (1.0, 0.66, 0.38), 1.1) if lit_ else pbr("DarkPane", (0.012, 0.014, 0.017), 0.06, **{'Coat Weight': 1.0}))
+                emissive("RoomLit", (1.0, 0.66, 0.38), 1.1) if lit_ else pbr("DarkPane", (0.004, 0.0045, 0.005), 0.3))
             box("Curt", (x - 0.4, y0 - 0.04, z), (0.3, 0.01, 1.22), fabric("CurtF", (0.3, 0.26, 0.2) if not lit_ else (0.55, 0.38, 0.2), 0.9, 0.3, 200))
             c["windows"].append((x, z))
     # the landlord's window (first floor, left of the door) gets a lace curtain
     x, z = -1.2, 1.4 + 2.8
-    box("RealPane", (x, y0 - 0.02, z), (1.18, 0.01, 1.28), wg)
     lace = pbr("LaceB", (0.85, 0.83, 0.78), 0.8, **{'Alpha': 0.45, 'Transmission Weight': 0.3})
     cur = box("Lace", (x, y0 + 0.1, z), (1.15, 0.01, 1.25), lace)
     c["lace"] = cur; c["lwin"] = Vector((x, y0, z))
