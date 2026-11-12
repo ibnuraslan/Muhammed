@@ -89,7 +89,7 @@ for o in OB:                       # subdivision after the helper masks (else he
         with bpy.context.temp_override(object=o): bpy.ops.object.modifier_move_to_index(modifier="Subdivision", index=n)
 RIGS = {n: OB["RIG_" + n] for n in ("Hero", "Young", "Officer1", "Officer2", "Clerk", "Recruit1", "Recruit2", "Surgeon1", "Surgeon2", "Nurse", "Normal")}
 HU = {}
-for n in ("Hero", "Officer1", "Officer2", "Young", "Normal"):
+for n in ("Hero", "Officer1", "Officer2", "Young", "Normal", "Clerk", "Surgeon1", "Surgeon2", "Nurse"):
     HU[n] = Human(make_human_ctrl(RIGS[n]))
 FK = {n: Rig(RIGS[n]) for n in RIGS if n not in HU}
 for r in FK.values():
@@ -130,6 +130,8 @@ HR = HU["Hero"]; HRIG = RIGS["Hero"]
 BODYM = {}
 def hand_rest(h, s, f, out=0.08, fwd=-0.02, up=0.0):
     B = h.r.BN; sx = 1 if s == "L" else -1
+    out = 0.03 + (out - 0.07) * 0.3; fwd = min(fwd, -0.045); up = up + 0.035      # v003: arms hang close, elbows soft
+    if h.r.o.name == "RIG_Hero": out += 0.035; fwd -= 0.01                          # his enlarged hands would brush his thighs
     sh = B["upperarm01." + s].head_local
     W = Vector((sh.x + sx * out, sh.y + fwd, sh.z - 0.43 * (sh.z / 1.031) * 1.0 + up))
     P = Vector((sh.x + sx * 0.2, sh.y + 0.5, sh.z - 0.3)); d = Vector((0, 0, -1)); n = Vector((-sx, 0, 0))
@@ -138,6 +140,17 @@ def hand_rest(h, s, f, out=0.08, fwd=-0.02, up=0.0):
         pos, yaw = M(f); R = Matrix.Rotation(R_(yaw), 3, "Z"); rh = h.root_head
         W = pos + R @ (W - Vector((0, rh.y, 0))); P = pos + R @ (P - Vector((0, rh.y, 0))); d = R @ d; n = R @ n
     h.key_hand(s, f, W, d, n, pole=P)
+def hand_w(h, s, f, W, d, n, pole):
+    """world-space IK hand target for a rig positioned by its object transform (evaluated at f)"""
+    sc.frame_set(f); M = h.r.o.matrix_world.inverted(); R3 = M.to_3x3()
+    h.key_hand(s, f, M @ W, (R3 @ d).normalized(), (R3 @ n).normalized(), pole=M @ pole)
+def breathe(h, f0, f1, sway=0.012, ph=0.0, base=None, yaw=0.0):
+    """weight shift + breathing on the root bone of a standing IK human (feet stay planted)"""
+    rh = h.root_head if base is None else base
+    for f in range(f0, f1 + 1, 30):
+        t = (f + ph * 60) / 60.0
+        p = rh + V(sway * math.sin(t * 0.9), 0.004 * math.sin(t * 0.55), -0.006 - 0.004 * math.sin(t * 1.7))
+        h.key_root(f, p, yaw=yaw, side=1.5 * math.sin(t * 0.9))
 def arms_idle(h, f, out=0.08, fwd=-0.02):
     hand_rest(h, "L", f, out, fwd); hand_rest(h, "R", f, out, fwd)
 
@@ -219,6 +232,28 @@ for f in (1482, 1600, 1700, 1800, 1857):
 for f in (1858, 1940, 1999): hero_pose(f, flex=10, side=4, head=(10, -16 if f > 1900 else 0)); arms_idle(HR, f, 0.07, -0.04)
 for f in (2000, 2150, 2340): hero_pose(f, flex=12, side=4, head=(8, 18 if f > 2100 else 6)); arms_idle(HR, f, 0.07, -0.04)
 
+# ---- growth: feet stay planted in WORLD space (armature scale would slide them outward); small re-plant steps
+def hero_scale(f):
+    sc.frame_set(f); return HRIG.scale[0]
+ANK = {sd: HR.ankle[sd].copy() for sd in "LR"}
+plant = {sd: V(HPOS.x + ANK[sd].x, HPOS.y + ANK[sd].y, 0) for sd in "LR"}     # world xy at s = 1
+STEPS = [(560, "L"), (650, "R"), (740, "L"), (830, "R"), (920, "L"), (1010, "R"), (1060, "L")]
+DUR = 16
+for sd in "LR": HR.key_foot(sd, 1, Vector((ANK[sd].x, ANK[sd].y)), 0.0); HR.key_foot(sd, 466, Vector((ANK[sd].x, ANK[sd].y)), 0.0)
+for f in list(range(468, 1102, 3)) + [1101]:
+    s_ = hero_scale(f)
+    for sd in "LR":
+        lift = 0.0; P = plant[sd]
+        for f0, st in STEPS:
+            if st != sd: continue
+            tgt = V(HPOS.x + ANK[sd].x * hero_scale(f0 + DUR), HPOS.y + ANK[sd].y * hero_scale(f0 + DUR), 0)
+            if f0 <= f < f0 + DUR:
+                u = (f - f0) / DUR; P = plant[sd].lerp(tgt, smooth(u)); lift = 0.04 * math.sin(math.pi * u)
+            elif f >= f0 + DUR: P = tgt
+        xy = Vector(((P.x - HPOS.x) / s_, (P.y - HPOS.y) / s_))
+        HR.key_foot(sd, f, xy, 0.0, lift=lift / s_)
+for sd in "LR": HR.key_foot(sd, 1110, Vector((ANK[sd].x, ANK[sd].y)), 0.0)
+sc.frame_set(1)
 # ---- solve the desk hand numerically (palm down, flat, resting on the top) and the ear cup on the evaluated head
 def bw(n, f=None):
     if f is not None: sc.frame_set(f)
@@ -245,28 +280,32 @@ for f in (696, 740, 790, 840):
 for f in (1400, 1470):
     sc.frame_set(f); M = HRIG.matrix_world @ HRIG.pose.bones["head"].matrix @ HR.r.BN["head"].matrix_local.inverted()
     earw = M @ V(0.085, -0.03, 1.245); upw = (M.to_3x3() @ V(0, 0, 1)).normalized(); fw = (M.to_3x3() @ V(0, -1, 0)).normalized(); sw = (M.to_3x3() @ V(1, 0, 0)).normalized()
-    tgt = to_arm(earw + sw * 0.06 - upw * 0.12 + fw * 0.02)      # wrist just below/outside the ear, hand cupped up behind it
-    HR.key_hand("L", f, tgt, HRIG.matrix_world.inverted().to_3x3() @ (upw * 0.9 - fw * 0.3), HRIG.matrix_world.inverted().to_3x3() @ (sw), pole=to_arm(earw + sw * 0.35 - upw * 0.45 + fw * 0.15))
+    tgt = to_arm(earw + sw * 0.07 - upw * 0.15 - fw * 0.04)          # wrist just below and outside the ear; fingers rise behind it      # wrist just below/outside the ear, hand cupped up behind it
+    HR.key_hand("L", f, tgt, HRIG.matrix_world.inverted().to_3x3() @ (upw * 0.9 - fw * 0.3), HRIG.matrix_world.inverted().to_3x3() @ (fw * 0.8 - sw * 0.2), pole=to_arm(earw + sw * 0.45 - upw * 0.6 + fw * 0.05))
 sc.frame_set(1)
 # ------------------------------------------------------------------ officers (IK feet, step back as he towers)
 O1, O2 = HU["Officer1"], HU["Officer2"]
-P1a, P1b = V(-0.75, 2.12, 0), V(-1.3, 1.05, 0)
-P2a, P2b = V(-1.15, 1.25, 0), V(-1.45, 0.4, 0)
+P1a, P1b = V(-0.86, 2.62, 0), V(-1.3, 1.05, 0)
+P2a, P2b = V(-1.15, 1.25, 0), V(-1.9, 0.72, 0)
 for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
     ya = yaw_to(pa, HPOS); yb = yaw_to(pb_, HPOS)
-    BODYM[h] = lambda f, pa=pa, pb_=pb_, ya=ya, yb=yb: (pa.lerp(pb_, smooth((f - 890) / 100)), ya + (yb - ya) * smooth((f - 890) / 100))
+    BODYM[h] = lambda f, pa=pa, pb_=pb_, ya=ya, yb=yb, bul=(0.42 if h is O1 else 0.0): (pa.lerp(pb_, smooth((f - 890) / 100)) + V(-bul * math.sin(math.pi * smooth((f - 890) / 100)), 0, 0), ya + (yb - ya) * smooth((f - 890) / 100))
     h.key_root(1, pa + V(0, 0, h.root_head.z - 0.01), yaw=ya)
     h.key_foot("L", 1, h.foot_xy("L", pa, ya), ya); h.key_foot("R", 1, h.foot_xy("R", pa, ya), ya)
     h.key_root(880, pa + V(0, 0, h.root_head.z - 0.01), yaw=ya)
     h.key_foot("L", 880, h.foot_xy("L", pa, ya), ya); h.key_foot("R", 880, h.foot_xy("R", pa, ya), ya)
-    path = lambda f, pa=pa, pb_=pb_: pa.lerp(pb_, smooth((f - 890) / 100))
+    path = lambda f, pa=pa, pb_=pb_, bul=(0.42 if h is O1 else 0.0): pa.lerp(pb_, smooth((f - 890) / 100)) + V(-bul * math.sin(math.pi * smooth((f - 890) / 100)), 0, 0)
     yfn = lambda f, ya=ya, yb=yb: ya + (yb - ya) * smooth((f - 890) / 100)
     h.walk(path, yfn, 890, 990, stride=0.5, lift=0.06, lean=-4)
+    breathe(h, 31, 850, base=pa + V(0, 0, h.root_head.z - 0.01), yaw=ya, ph=1.3 if h is O2 else 0.0)
+    breathe(h, 1020, 1446, base=pb_ + V(0, 0, h.root_head.z - 0.02), yaw=yb, ph=0.7 if h is O2 else 2.1)
     h.key_root(1476, pb_ + V(0, 0, h.root_head.z - 0.02), yaw=yb)
     h.key_foot("L", 1476, h.foot_xy("L", pb_, yb), yb); h.key_foot("R", 1476, h.foot_xy("R", pb_, yb), yb)
     for f in range(1, 1477, 30):
         if h is O1 and f < 200: hand_rest(h, "L", f, 0.07, -0.03)    # right hand is on the rod slider (keyed below)
-        else: arms_idle(h, f, 0.07, -0.03)
+        elif not (886 <= f <= 1476): arms_idle(h, f, 0.07, -0.03)
+    for f in range(886, 1000, 6): arms_idle(h, f, 0.1, -0.05)    # hands follow the body through the walk (no lag into the legs)
+    for f in range(1000, 1477, 12): arms_idle(h, f, 0.1, -0.05)      # leaning back to look up at him: hands clear of the thighs
     # head shakes (beat 1), look up (beat 6), talk (beat 8)
     for f in range(1, 180, 12):
         h.key_spine(f, flex=4, head=(6, 14 * (1 if (f // 12) % 2 else -1)))
@@ -274,45 +313,76 @@ for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
         h.key_spine(f, flex=-4, head=hd)
     talk(h.r, 1260, 1470, 10, 9); brows(h.r, 1, 0, 10); brows(h.r, 900, 14, 0); brows(h.r, 1300, 6, 6)
     jaw(h.r, 880, 1); jaw(h.r, 930, 10); jaw(h.r, 1000, 6)
-# officer1 lowers the slider onto the hero's head with his right hand (beat 1)
-GAUGE_TOP = V(-0.3, 2.62, 1.40)
-for f, W in ((1, V(-0.14, 2.52, 1.62)), (50, V(-0.22, 2.70, 1.52)), (120, V(-0.26, 2.73, 1.47)), (170, V(-0.22, 2.70, 1.50))):   # on the rod slider, above (not on) his head
-    yaw = yaw_to(P1a, HPOS)
-    Rm = Matrix.Rotation(-R_(yaw), 3, "Z"); Wl = Rm @ (W - P1a)   # into the officer's armature space (object at origin)
-    O1.key_hand("R", f, Rm.inverted() @ Wl + P1a if False else W, V(0, 0, -1), V(0, -1, 0), pole=W + V(-0.3, -0.3, -0.4))
-
+# officer1 grips the height rod with his right hand and slides it down to the hero's head height (beat 1)
+ROD = V(-0.30, 2.80, 0.0)
+to_rod = (ROD - P1a).to_2d().normalized(); side_ = V(-to_rod.y, to_rod.x, 0)
+for f, z in ((1, 1.62), (40, 1.58), (90, 1.48), (130, 1.43), (172, 1.43)):
+    W = ROD + V(-to_rod.x * 0.05, -to_rod.y * 0.05, z)          # palm against the near face of the rod
+    O1.key_hand("R", f, W, V(0, 0, -1) * 0.2 + side_, V(to_rod.x, to_rod.y, 0), pole=W + V(-to_rod.x * 0.25, -to_rod.y * 0.25, -0.45) - side_ * 0.25)
+_W = ROD + V(-to_rod.x * 0.3, -to_rod.y * 0.3, 1.12) - side_ * 0.22
+O1.key_hand("R", 188, _W, V(0, 0, -1), V(to_rod.x, to_rod.y, 0), pole=_W + V(0, 0, -0.4) - side_ * 0.3)
 # ------------------------------------------------------------------ FK extras (clerk writing, recruits waiting, surgeons, nurse)
 place("Clerk", 1, V(1.0, 1.6, 0), yaw_to(V(1.0, 1.6, 0), V(0.3, 1.6, 0)))
 place("Recruit1", 1, V(-2.85, 1.55, 0), yaw_to(V(-2.85, 1.55, 0), HPOS))
 place("Recruit2", 1, V(-2.7, 0.35, 0), yaw_to(V(-2.7, 0.35, 0), HPOS))
+CL = HU["Clerk"]; DESK_Z = 0.948
+for f in range(1, 1500, 10):
+    st = math.sin(f * 0.35)
+    hand_w(CL, "R", f, V(0.50 + 0.015 * st, 1.76 + 0.03 * math.sin(f * 0.11), DESK_Z + 0.035 + 0.006 * max(0, st)), V(-1, -0.15, 0), V(0, 0, -1), V(1.0, 2.15, 0.85))
+    hand_w(CL, "L", f, V(0.52, 1.42, DESK_Z + 0.033), V(-1, 0.2, 0), V(0, 0, -1), V(1.0, 1.05, 0.85))
+    CL.key_spine(f, flex=22 + 2 * math.sin(f * 0.05), twist=3 * math.sin(f * 0.13), head=(22, 4 * math.sin(f * 0.02)))
 for f in range(1, 1500, 16):
-    r = FK["Clerk"]; arms_down_fk(r, f, out=4, bend=35 + 8 * math.sin(f * 0.4)); body_fk(r, f, flex=10, twist=6 * math.sin(f * 0.13), head=(22, -8))
     for nm, ph in (("Recruit1", 0.0), ("Recruit2", 1.7)):
         r = FK[nm]; arms_down_fk(r, f, out=8, bend=14, sway=3 * math.sin(f * 0.05 + ph))
         body_fk(r, f, flex=3, side=4 * math.sin(f * 0.03 + ph), twist=8 * math.sin(f * 0.021 + ph), head=(-8 if 880 < f < 1300 else 2, 20 * math.sin(f * 0.017 + ph)))
 talk(FK["Recruit1"].r if hasattr(FK["Recruit1"], "r") else FK["Recruit1"], 300, 700, 7, 10)
 # theatre
 SUR = (("Surgeon1", V(6.1, 1.45, 0)), ("Surgeon2", V(7.72, 1.45, 0)), ("Nurse", V(7.55, -0.35, 0)))
+PAT = V(6.9, 1.0, 0)
 for nm, p in SUR:
-    place(nm, 1, p, yaw_to(p, V(6.9, 1.0, 0)))
-    r = FK[nm]
-    for f in range(1, 2341, 18):
-        lean = 30 if f < 1720 else 8
-        arms_down_fk(r, f, out=-4 if f < 1720 else 6, bend=55 if f < 1720 else 20, sway=4 * math.sin(f * 0.07))
-        body_fk(r, f, flex=lean + 4 * math.sin(f * 0.05), twist=6 * math.sin(f * 0.04), head=(25 if f < 1720 else 5, 6 * math.sin(f * 0.03)))
-place("Nurse", 1720, V(7.45, -0.35, 0), yaw_to(V(7.45, -0.35, 0), V(6.9, 1.0, 0)))
-place("Nurse", 1800, V(7.2, -0.95, 0), yaw_to(V(7.2, -0.95, 0), V(6.9, -0.6, 0)))
+    place(nm, 1, p, yaw_to(p, PAT if nm != "Nurse" else V(6.9, -0.35, 0)))
+def sterile(h, f, lean=18):
+    B = h.r.BN
+    for s_, sx in (("L", 1), ("R", -1)):
+        sh = B["upperarm01." + s_].head_local
+        W = V(sx * 0.12, sh.y - 0.29, sh.z - 0.25); P = V(sh.x + sx * 0.3, sh.y + 0.05, sh.z - 0.45)
+        h.key_hand(s_, f, W, V(0, -0.25, 1), V(-sx, 0, 0), pole=P)
+for nm in ("Surgeon1", "Surgeon2", "Nurse"):
+    h = HU[nm]; ph = {"Surgeon1": 0.0, "Surgeon2": 1.1, "Nurse": 2.3}[nm]
+    for f in range(1, 2341, 30):
+        if not (nm == "Surgeon1" and 1560 <= f <= 1712) and not (nm == "Nurse" and 1700 <= f <= 1857): sterile(h, f)
+        h.key_spine(f, flex=(20 if f < 1712 else 8) + 2 * math.sin(f * 0.05 + ph), twist=4 * math.sin(f * 0.03 + ph), head=(24 if f < 1712 else 8, 8 * math.sin(f * 0.02 + ph)))
+    breathe(h, 1, 2340, sway=0.008, ph=ph)
+# Surgeon1 lays his right hand on the drape at the patient's shoulder (contact, palm down)
+S1 = HU["Surgeon1"]
+for f in (1575, 1600, 1650, 1700, 1712):
+    sc.frame_set(f); sh_w = HRIG.matrix_world @ HRIG.pose.bones["upperarm01.R"].head
+    tgt = sh_w + V(0, -0.02, 0.075)
+    hand_w(S1, "R", f, tgt, (PAT - V(6.1, 1.45, 0)).normalized(), V(0, 0, -1), tgt + V(0.05, 0.35, -0.45))
+    if f >= 1575: hand_w(S1, "L", f, V(6.32, 1.25, 1.12), V(0.6, -0.6, 0.3), V(0.3, 0.3, -1), V(6.0, 1.2, 0.8))
+# Nurse tucks the blanket over his shins with both hands (beat 10)
+NU = HU["Nurse"]
+for i, f in enumerate([1690] + list(range(1700, 1858, 18)) + [1857]):
+    sc.frame_set(f)
+    for s_, ln, dx in (("L", "lowerleg01.L", 0.0), ("R", "lowerleg01.R", 0.0)):
+        lw = HRIG.matrix_world @ HRIG.pose.bones[ln].head
+        wide = 0.1 if f in (1690, 1857) else 0.0
+        tgt = lw + V(0.05 + wide, (0.12 + wide) if s_ == "L" else -(0.12 + wide), 0.11 + 0.01 * math.sin(i * 1.7) + wide * 1.5)
+        hand_w(NU, s_, f, tgt, V(-1, 0, -0.2), V(0, 0, -1), tgt + V(0.35, 0.0, -0.4))
+breathe(HR, 1, 1470, sway=0.008, ph=0.4); breathe(HR, 1858, 1999, sway=0.008, ph=0.9); breathe(HR, 2000, 2340, sway=0.01, ph=1.7)
 # beat 11 normal man looks up at the hero; beat 12 young self
 Nm = HU["Normal"]; PN = V(9.4, -2.55, 0); yN = yaw_to(PN, V(8.0, -1.4, 0)) + 10
 BODYM[Nm] = lambda f: (PN, yN)
 Nm.key_root(1, PN + V(0, 0, Nm.root_head.z - 0.01), yaw=yN)
 Nm.key_foot("L", 1, Nm.foot_xy("L", PN, yN), yN); Nm.key_foot("R", 1, Nm.foot_xy("R", PN, yN), yN)
 for f in range(1, 2341, 40): arms_idle(Nm, f, 0.07, -0.03); Nm.key_spine(f, flex=-3, head=(-14, -28 + 6 * math.sin(f * 0.05)))
+breathe(Nm, 1, 2340, base=PN + V(0, 0, Nm.root_head.z - 0.01), yaw=yN, ph=0.5)
 Yg = HU["Young"]; PY = SIL + V(-0.85, 0.05, 0); yY = 180 - 8
 BODYM[Yg] = lambda f: (PY, yY)
 Yg.key_root(1, PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY)
 Yg.key_foot("L", 1, Yg.foot_xy("L", PY, yY), yY); Yg.key_foot("R", 1, Yg.foot_xy("R", PY, yY), yY)
-for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex=-2, head=(-8, -20 if f > 2150 else 0))
+for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex=-2, head=(-10 if f > 2150 else -4, -24 if f > 2150 else -4))
+breathe(Yg, 1, 2340, base=PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY, ph=2.2)
 for nm, rng in (("Officer1", [(1, 1476)]), ("Officer2", [(1, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1476)]), ("Recruit2", [(1, 1476)]),
                 ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1857)]), ("Nurse", [(1477, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
     for m_ in meshes_of(RIGS[nm]): vis(m_, rng)
@@ -333,7 +403,7 @@ for md in [m for m in xr.modifiers if m.type == "MASK" and m.name.startswith("De
 XRAY = [(372, 500), (1074, 1262)]
 vis(xr, XRAY)
 for m_ in hero_meshes:
-    hide_ranges(m_, [(181, 470), (1080, 1255), (1668, 1712)])
+    hide_ranges(m_, [(181, 470), (1080, 1255), (1658, 1712)])
 BR = OB["Brain"]; BR.parent = HRIG; BR.parent_type = "BONE"; BR.parent_bone = "head"
 hb = HR.r.BN["head"]; BRAIN_LOCAL = V(0.0, -0.035, 0.085)        # in head-bone space (y along bone)
 BR.matrix_parent_inverse = Matrix.Identity(4)
@@ -341,13 +411,13 @@ BR.location = V(0, -0.148, 0.0); BR.scale = (0.84,) * 3
 BR.rotation_euler = (R_(-90), 0, 0)
 brain_objs = [BR] + list(BR.children_recursive)
 for o in brain_objs:
-    if o.type == "MESH": vis(o, [(181, 500), (1668, 1712)])
+    if o.type == "MESH": vis(o, [(181, 500), (1658, 1712)])
 PIT = OB["Pituitary"]; TUM = OB["Tumour"]
 for o, off in ((PIT, V(0, -0.014, 0.036)), (TUM, V(0, -0.017, 0.033))):
     o.parent = BR; o.location = off; o.rotation_euler = (R_(90), 0, 0)
-    vis(o, [(181, 500), (1668, 1712)])
+    vis(o, [(181, 500), (1658, 1712)])
 tb = TUM.data.materials[0].node_tree.nodes["Principled BSDF"]
-for f, s, e in ((181, 0.25, 0.0), (250, 0.5, 0.5), (300, 0.9, 1.5), (360, 1.3, 3.0), (420, 1.4, 4.0), (500, 1.4, 3.0), (1668, 1.4, 4.0), (1690, 1.4, 2.0)):
+for f, s, e in ((181, 0.25, 0.0), (250, 0.5, 0.5), (300, 0.9, 1.5), (360, 1.3, 3.0), (420, 1.4, 4.0), (500, 1.4, 3.0), (1658, 1.4, 4.0), (1690, 1.4, 2.0)):
     TUM.scale = (s,) * 3; TUM.keyframe_insert("scale", frame=f)
     tb.inputs["Emission Strength"].default_value = e; tb.inputs["Emission Strength"].keyframe_insert("default_value", frame=f)
 for f in range(260, 500, 14):  # pulse
@@ -371,7 +441,7 @@ for i, sx in enumerate((1, -1)):
     b.inputs["Metallic"].default_value = 1.0; b.inputs["Roughness"].default_value = 0.22; b.inputs["Base Color"].default_value = (0.75, 0.75, 0.76, 1)
     me.materials.append(mm); sub = fo.modifiers.new("s", "SUBSURF"); sub.levels = 1; sub.render_levels = 2
     fo.parent = TUM; fo.location = (sx * 0.003, 0, 0.002); fo.rotation_euler = (0, 0, 0)
-    vis(fo, [(1668, 1712)]); FORC.append(fo)
+    vis(fo, [(1658, 1712)]); FORC.append(fo)
 TUM.keyframe_insert("location", frame=1680)
 TUM.location = TUM.location + V(0, 0.0, -0.06); TUM.keyframe_insert("location", frame=1708)
 # spine inside the x-ray torso, bends (scoliosis)
@@ -432,31 +502,31 @@ BR9 = obj_w(1690, BRO, (0, 0, 0.05)); TU9 = obj_w(1690, TUMO)
 LH = c9
 c11, f11, s11, u11, _, _ = head_frame(1900)
 DYN = [(1275, eye8a + f8a * 0.10, OFFS, 28), (1335, eye8b + f8b * 0.12 + u8b * 0.02, OFFS, 30),
-       (1385, ear8c + s8c * 0.32 + f8c * 0.08, ear8c, 38), (1445, ear8d + s8d * 0.55 + f8d * 0.25 + u8d * 0.05, ear8d - u8d * 0.04, 34),
-       (1640, c9 + V(-0.35, -0.2, 0.4), c9, 34), (1662, c9b + s9b * 0.14 + u9b * 0.02, c9b, 40), (1670, c9b + s9b * 0.07, c9b, 40),
-       (1690, BR9 + s9b * 0.16 + f9b * 0.06, TU9, 40), (1708, BR9 + s9b * 0.12 - u9b * 0.05 + f9b * 0.08, TU9, 45)]
+       (1385, ear8c + s8c * 0.5 + f8c * 0.3 + u8c * 0.05, ear8c - u8c * 0.04, 32), (1445, ear8d + s8d * 0.6 + f8d * 0.4 + u8d * 0.08, ear8d - u8d * 0.06 + f8d * 0.05, 30),
+       (1640, c9 + f9 * 0.42 + s9 * 0.12 - u9 * 0.05, c9 + f9 * 0.06, 30), (1654, c9b + (f9b + u9b * 0.42).normalized() * 0.26, c9b, 32), (1660, c9b + (f9b + u9b * 0.42).normalized() * 0.16, c9b, 40), (1666, c9b + (f9b + u9b * 0.3).normalized() * 0.14 + s9b * 0.04, c9b, 38), (1676, c9b + f9b * 0.14 + s9b * 0.1, c9b, 36),
+       (1690, BR9 + s9b * 0.16 + f9b * 0.06, TU9, 40), (1708, BR9 + s9b * 0.12 - u9b * 0.05 + f9b * 0.08, TU9, 45), (1718, c9 + f9 * 0.45 + u9 * 0.15 + s9 * 0.1, c9, 30)]
 sc.frame_set(1)
 KEYS = [  # frame, cam, aim, lens
     (1, V(1.25, -0.55, 2.75), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
-    (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (140, V(-0.08, 1.72, 1.32), V(-0.28, 2.4, 1.25), 38),
-    (170, V(-0.17, 2.14, 1.255), V(-0.28, 2.38, 1.225), 45), (180, V(-0.232, 2.29, 1.232), V(-0.29, 2.39, 1.22), 45),
-    (190, V(-0.27, 2.345, 1.232), V(-0.3, 2.40, 1.235), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
+    (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (140, V(-0.35, 1.72, 1.3), V(-0.3, 2.4, 1.25), 38),
+    (170, V(-0.56, 2.28, 1.21), V(-0.3, 2.37, 1.205), 45), (180, V(-0.392, 2.352, 1.205), V(-0.3, 2.375, 1.205), 45),
+    (190, V(-0.335, 2.37, 1.215), V(-0.3, 2.39, 1.23), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
     (300, V(-0.36, 2.16, 1.17), PITW, 45), (355, V(-0.29, 2.22, 1.19), PITW, 55),
-    (380, V(-0.24, 2.2, 1.2), PITW + V(0, 0, -0.01), 45), (420, V(-0.05, 1.55, 1.05), V(-0.3, 2.45, 0.9), 28),
-    (462, V(0.15, 1.1, 0.8), V(-0.3, 2.45, 0.62), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
+    (380, V(-0.22, 2.08, 1.2), PITW + V(0, 0, -0.01), 40), (420, V(-0.05, 1.55, 1.05), V(-0.3, 2.45, 0.9), 28),
+    (462, V(-0.15, 1.0, 0.95), V(-0.3, 2.45, 0.62), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
     (565, V(0.85, 0.25, 1.25), V(-0.85, 2.5, 1.2), 22), (625, V(0.35, 0.15, 1.6), V(-0.6, 2.5, 1.45), 24),
     (690, V(0.05, 1.05, 1.4), V(0.1, 2.25, 0.95), 30), (740, V(0.1, 1.75, 1.22), V(0.12, 2.36, 0.96), 40),
-    (790, V(-0.15, 1.85, 0.28), V(-0.25, 2.42, 0.07), 38), (815, V(-0.8, 1.85, 1.2), V(0.2, 2.6, 1.4), 30), (845, V(-0.22, 2.64, 1.97), V(2.8, 2.98, 1.72), 38),
+    (790, V(-0.05, 1.6, 0.45), V(-0.25, 2.42, 0.12), 32), (815, V(-0.42, 1.72, 1.35), V(0.2, 2.6, 1.4), 30), (845, V(-0.22, 2.64, 1.97), V(2.8, 2.98, 1.72), 38),
     (880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
     (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
     (1075, V(-0.75, 0.75, 1.45), V(-0.3, 2.35, 1.4), 26), (1120, V(-0.95, 0.95, 1.3), V(-0.3, 2.45, 1.15), 28),
     (1175, V(-0.45, 1.2, 1.25), V(-0.3, 2.45, 1.1), 30), (1235, V(0.15, 1.35, 1.55), V(-0.3, 2.45, 1.3), 28),
-            (1488, V(2.45, 1.62, 2.13), V(5.0, 1.2, 1.6), 26), (1494, V(3.44, 1.44, 2.2), V(6.0, 1.0, 1.4), 24),
+            (1466, V(0.75, 1.95, 2.0), V(1.6, 3.1, 1.85), 28), (1488, V(2.45, 1.62, 2.13), V(5.0, 1.2, 1.6), 26), (1494, V(3.44, 1.44, 2.2), V(6.0, 1.0, 1.4), 24),
     (1498, V(3.95, 1.36, 2.26), V(6.5, 0.9, 1.3), 24), (1540, V(4.55, 1.25, 2.4), V(6.9, 0.6, 0.9), 24),
-    (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26),         (1735, V(6.3, 1.25, 1.25), V(6.9, 0.8, 0.72), 28),
-    (1790, V(6.15, 0.35, 1.3), V(6.9, -0.05, 0.7), 26), (1845, V(6.3, -1.3, 0.82), V(6.9, -0.75, 0.62), 30),
+    (1595, V(5.8, -0.65, 2.6), V(6.9, 0.6, 0.85), 26),         (1740, V(6.3, 1.2, 1.35), V(6.9, 0.6, 0.72), 28),
+    (1790, V(6.1, 0.5, 1.45), V(6.9, -0.05, 0.7), 26), (1845, V(5.7, -1.25, 1.55), V(6.9, -0.45, 0.6), 26),
     (1868, V(6.0, -1.25, 1.45), V(9.45, -1.0, 1.4), 22), (1930, V(6.2, -0.5, 0.8), V(9.45, -1.0, 1.55), 22),
-    (1972, V(7.6, 1.2, 2.25), V(7.15, 3.1, 2.1), 24), (1998, V(7.1, 3.0, 2.45), V(7.3, 6.0, 1.8), 26),
+    (1950, V(7.2, -0.1, 1.75), V(7.2, 3.1, 1.95), 24), (1972, V(7.4, 1.3, 2.2), V(7.1, 3.1, 2.0), 24), (1998, V(7.1, 3.0, 2.45), V(7.3, 6.0, 1.8), 26),
     (2035, V(8.3, 5.2, 3.2), V(8.6, 7.0, 0.1), 28), (2100, V(8.9, 6.1, 2.2), V(10.2, 11.5, 1.2), 30),
     (2180, V(9.25, 6.9, 1.55), V(10.2, 11.6, 1.25), 35), (2260, V(9.6, 7.3, 2.35), V(10.2, 11.6, 1.35), 32),
     (2340, V(9.75, 7.45, 2.8), V(10.2, 11.6, 1.45), 32)]
@@ -475,7 +545,7 @@ for f in list(range(1, 2341, 4)) + [2340]:
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1, 8.0), (180, 8.0), (181, 22.0), (500, 22.0), (501, 8.0), (1262, 8.0), (1290, 1.2), (1352, 1.2), (1380, 8.0), (1667, 8.0), (1668, 22.0), (1712, 22.0), (1713, 8.0)):
+for f, fs in ((1, 8.0), (180, 8.0), (181, 22.0), (500, 22.0), (501, 8.0), (1262, 8.0), (1292, 1.4), (1335, 1.4), (1365, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
@@ -487,13 +557,13 @@ _rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ram
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
-CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.2), (462, 1.0, 1.7), (470, 1.0, 1.7), (500, 0.0, 1.7),
-        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1667, 0.0, 0.45), (1668, 1.0, 0.45), (1700, 1.0, 0.45), (1712, 0.0, 0.45)]
+CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 1.62), (470, 1.0, 1.62), (500, 0.0, 1.62),
+        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)
     cc.location = (0, 0, -dist); cc.scale = (dist * 1.3, dist * 2.2, 1); cc.keyframe_insert("location", frame=f); cc.keyframe_insert("scale", frame=f)
-vis(cc, [(181, 500), (1074, 1262), (1668, 1712)])
+vis(cc, [(181, 500), (1074, 1262), (1658, 1712)])
 bpy.data.objects.remove(XB, do_unlink=True)
 for o in [o for o in OB if "stash" in o.name.lower()]: bpy.data.objects.remove(o, do_unlink=True)
 # light for the cutaway (studio key/rim parented to camera)
@@ -502,7 +572,7 @@ for nm, loc, e, colr in (("Cut_Key", (0.4, 0.5, 0.2), 6.0, (1.0, 0.92, 0.85)), (
     lo = bpy.data.objects.new(nm, l); sc.collection.objects.link(lo); lo.parent = cam; lo.location = loc
     tc = lo.constraints.new("TRACK_TO"); tc.target = aim; tc.track_axis = "TRACK_NEGATIVE_Z"; tc.up_axis = "UP_Y"
     l.energy = 0.0; l.keyframe_insert("energy", frame=1)
-    for f0, f1 in ((181, 500), (1074, 1262), (1668, 1712)):
+    for f0, f1 in ((181, 500), (1074, 1262), (1658, 1712)):
         l.energy = 0.0; l.keyframe_insert("energy", frame=f0 - 1); l.energy = e; l.keyframe_insert("energy", frame=f0)
         l.keyframe_insert("energy", frame=f1); l.energy = 0.0; l.keyframe_insert("energy", frame=f1 + 1)
 
@@ -551,7 +621,7 @@ for k in range(160):
     vis(o, [(1, 1525)] if room == 0 else [(1477, 2000)])
 # fly-through: the shared office/theatre wall is not rendered while the camera passes it (no blank plaster frames)
 for nm in ("Off_WallR", "Off_WainR", "Off_RailR", "Th_WallL"):
-    hide_ranges(OB[nm], [(1484, 1497)])
+    hide_ranges(OB[nm], [(1482, 1497)])
 # hide helper empties from render
 for o in OB:
     if o.type == "EMPTY": o.hide_render = True

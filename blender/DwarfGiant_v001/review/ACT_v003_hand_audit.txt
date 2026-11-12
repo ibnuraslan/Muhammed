@@ -1,0 +1,2 @@
+HAND AUDIT step 2 frames 1-2340: {'hand_hand': 0, 'hand_self': 0, 'hand_other': 0} total 0
+
