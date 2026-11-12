@@ -50,6 +50,7 @@ def build(variant=None):
         box("Win", (5.05, 2.1 + k * 3.0, 1.75), (0.02, 2.2, 1.9), rain_glass("OffRain", 60, 0.55))
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 9; pt.size_y = 2.0; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (5.2, 4, 1.75); po.rotation_euler = (0, math.radians(-90), 0)
+    box("Haze", (9.0, 4, 0.5), (0.05, 30, 4.0), emissive("HazeE", (0.62, 0.66, 0.72), 1.0))     # grey rainy distance below the skyline
     box("Roofs", (26, 4, 0.2), (40, 60, 0.1), pbr("Zinc", (0.42, 0.44, 0.47), 0.35, 0.8))     # grey zinc roofs below the window line
     haussmann(-20, 20, seed=60, rot_z=math.radians(90), origin=(22, 4, -14), lit_frac=0.3)
     # desks, chairs, lamps, binders, a filing cabinet row, the corkboard
@@ -61,8 +62,10 @@ def build(variant=None):
         else:
             office_chair((x + 0.8, y, 0), -math.pi / 2, fab, met)      # the reader's chair, between desk and window
         dd.model_h("binder_notebook", (x - 0.4, y, 0.76), 0.05, rot_z=0.3 * k)
-        if k % 2 == 0:
+        if k % 2 == 0 and k != 4:
             dd.model_h("desk_lamp_arm_01", (x + 0.5, y + 0.1, 0.76), 0.45, rot_z=2.5)
+        elif k == 4:                                   # the reader's lamp at the far corner of her desk, clear of her face
+            dd.model_h("desk_lamp_arm_01", (x - 0.15, y - 0.6, 0.76), 0.45, rot_z=0.6)
         for j in range(3):
             box("Folder", (x + 0.1, y - 0.05 + 0.02 * j, 0.77 + 0.012 * j), (0.25, 0.33, 0.01), pbr("FolderM", ((0.55, 0.42, 0.25), (0.2, 0.3, 0.5), (0.6, 0.15, 0.1))[j], 0.7), rot=(0, 0, 0.1 * j))
     for k in range(4):

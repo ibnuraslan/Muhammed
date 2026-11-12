@@ -565,6 +565,24 @@ def pavillon(origin=(0, 0, 0), w=9.0, d=8.0, floors=2, rot_z=0.0, name="House", 
     return house, dict(downpipe=Vector((ox + dp_x, oy - 0.12, 0)), door=Vector((ox - 0.3, oy - 0.4, 0)), height=H)
 
 
+_VELVET = {}
+
+
+def black_velvet(name="BlackVelvet"):
+    """Deep black jeweller's velvet: near-black base, soft grey sheen at grazing angles (reads black, not grey felt)."""
+    if name in _VELVET:
+        return _VELVET[name]
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    b = m.node_tree.nodes["Principled BSDF"]
+    b.inputs['Base Color'].default_value = (0.004, 0.004, 0.005, 1); b.inputs['Roughness'].default_value = 0.95
+    b.inputs['Sheen Weight'].default_value = 0.6; b.inputs['Sheen Roughness'].default_value = 0.35
+    b.inputs['Sheen Tint'].default_value = (0.22, 0.22, 0.25, 1)
+    if 'Specular IOR Level' in b.inputs:
+        b.inputs['Specular IOR Level'].default_value = 0.1
+    _VELVET[name] = m
+    return m
+
+
 # ============================================================================ fast batched geometry
 class Builder:
     """Accumulate many cuboids into ONE mesh (bmesh, no bpy.ops per part): facades with thousands of mouldings and bars."""
@@ -590,6 +608,15 @@ class Builder:
         from mathutils import Matrix, Euler
         M = Matrix.Translation(Vector(loc)) @ Euler(rot).to_matrix().to_4x4()
         res = bmesh.ops.create_cone(self.bm, cap_ends=True, segments=verts, radius1=r, radius2=r, depth=depth, matrix=M)
+        mi = self._mi(mat)
+        for f in {f for v in res["verts"] for f in v.link_faces}:
+            f.material_index = mi
+        return self
+
+    def cone(self, loc, r1, r2, depth, mat, verts=20, rot=(0, 0, 0), scale=(1, 1, 1)):
+        from mathutils import Matrix, Euler
+        M = Matrix.Translation(Vector(loc)) @ Euler(rot).to_matrix().to_4x4() @ Matrix.Diagonal((*scale, 1))
+        res = bmesh.ops.create_cone(self.bm, cap_ends=True, segments=verts, radius1=r1, radius2=r2, depth=depth, matrix=M)
         mi = self._mi(mat)
         for f in {f for v in res["verts"] for f in v.link_faces}:
             f.material_index = mi

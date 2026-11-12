@@ -29,7 +29,7 @@ def build(variant=None):
     mx = N.new("ShaderNodeMixShader"); L.new(lp.outputs['Is Camera Ray'], mx.inputs[0]); L.new(N["Background"].outputs[0], mx.inputs[1])
     L.new(bg2.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], N["World Output"].inputs['Surface'])
     stone = dd.tex_mat("white_sandstone_blocks_02", 0.3, tint=(0.88, 0.86, 0.82), name="CourtStone", sat=0.5)
-    stepm = dd.wet(dd.tex_mat("white_sandstone_blocks_02", 0.8, tint=(1.0, 0.98, 0.94), name="StepStone", sat=0.4), 0.12, ripples=False)
+    stepm = dd.wet(dd.tex_mat("white_sandstone_blocks_02", 0.8, tint=(1.0, 0.98, 0.94), name="StepStone", sat=0.4), 0.38, ripples=False)
     B = dd.Builder("Steps")
     for k in range(NST):
         B.box((0, k * RUN + RUN / 2, (k + 1) * RISE / 2), (30, RUN, (k + 1) * RISE), stepm)
@@ -46,6 +46,19 @@ def build(variant=None):
     for x in (-15.6, 15.6):
         box("Cheek", (x, TOP_Y / 2, NST * RISE / 2 + 0.3), (1.2, TOP_Y + 0.4, NST * RISE + 0.6), stone)
     haussmann(-60, -20, seed=51, origin=(0, 10, 0)); haussmann(20, 60, seed=52, origin=(0, 10, 0))
+    # a TV crew at the foot of the steps: a camera on a tripod, the operator behind it
+    T = dd.Builder("TVTripod"); tm = pbr("TripodM", (0.05, 0.05, 0.05), 0.4, 0.7)
+    for k in range(3):
+        a_ = k * 2 * math.pi / 3
+        T.cyl((0.22 * math.cos(a_), 0.22 * math.sin(a_), 0.7), 0.012, 1.45, tm, verts=8,
+              rot=(-0.3 * math.sin(a_), 0.3 * math.cos(a_), 0))
+    T.box((0, 0.05, 1.5), (0.16, 0.45, 0.22), pbr("TVCam", (0.06, 0.06, 0.065), 0.35, 0.3))
+    T.cyl((0, -0.22, 1.52), 0.06, 0.12, pbr("TVLens", (0.01, 0.01, 0.01), 0.15, 0.2), verts=16, rot=(math.radians(90), 0, 0))
+    T.done((1.8, -1.6, 0), rot_z=math.radians(160))
+    op = person("TVOp", 1.0, 38, "male_casualsuit03", "short01", cval=0.9)
+    from human import pose_walk
+    dd.zero(op); pose_walk(op, 0.0, stride=0.0, arm_swing=0.0); dd.place(op, (1.95, -2.15, 0), math.radians(160)); dd.arms_relaxed(op)
+    c["op"] = op
     rng = np.random.default_rng(3)
     c["people"] = []
     looks = [("male_elegantsuit01", 2.4, (0.72, 0.58, 0.42)), ("male_casualsuit05", 1.2, (1, 1, 1)), ("female_elegantsuit01", 1.9, (0.3, 0.32, 0.42)),
@@ -78,5 +91,5 @@ def anim_steps(c, t):
 
 
 MOVES = {"steps": dict(kind="anim", dof=8.0, anim=anim_steps,
-                       cam=lambda c, t: (Vector((7.5, -6.5, 2.2)).lerp(Vector((6.5, -5.8, 1.9)), ease(t)), Vector((-0.5, 3.5, 2.0)), 30),
-                       focus=lambda c, t: Vector((0.0, 3.0, 1.5)))}
+                       cam=lambda c, t: (Vector((4.6, -3.6, 1.55)).lerp(Vector((4.0, -3.1, 1.5)), ease(t)), Vector((-0.6, 4.0, 1.7)), 35),
+                       focus=lambda c, t: Vector((-0.3, 3.0, 1.2)))}

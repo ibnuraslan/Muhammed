@@ -29,14 +29,14 @@ def stand_obj(name, loc, mat):
 def build(variant=None):
     c = {}
     v = variant or "count"
-    world_flat((0.02, 0.022, 0.028), 1.0)
+    world_flat((0.004, 0.005, 0.007), 1.0)
     rng = np.random.default_rng(41)
     B = dd.Builder("EvidenceRoom")
     B.box((0, 0, -0.05), (16, 10, 0.1), dd.tex_mat("concrete_floor_02", 0.6, tint=(0.5, 0.5, 0.5), name="ERFloor", sat=0.3))
-    wall = pbr("ERWall", (0.42, 0.44, 0.44), 0.8)
+    wall = pbr("ERWall", (0.16, 0.17, 0.18), 0.8)
     B.box((0, 4.0, 1.5), (16, 0.1, 3.0), wall).box((-7.5, 0, 1.5), (0.1, 10, 3.0), wall)
     B.box((0, -4.6, 1.5), (16, 0.1, 3.0), wall).box((7.5, 0, 1.5), (0.1, 10, 3.0), wall).box((0, 0, 3.05), (16, 10, 0.1), wall)
-    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), dd.tex_mat("velour_velvet", 2.5, tint=(0.025, 0.025, 0.03), name="TableCloth", sat=0.2))
+    B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), dd.black_velvet())
     for sx in (-1, 1):
         for sy in (-1, 1):
             B.box((sx * TL / 2, sy * TW / 2, TZ / 2), (0.05, 0.05, TZ), pbr("Leg", (0.3, 0.3, 0.32), 0.4, 0.8))
@@ -56,7 +56,7 @@ def build(variant=None):
         # the haul laid out on black velvet: rows of rings on cones, earring pairs, necklaces laid in U-shapes,
         # each piece with a paper evidence tag on a string
         c["tags"] = []
-        cone_m = dd.tex_mat("velour_velvet", 3.0, tint=(0.05, 0.05, 0.06), name="ConeVel", sat=0.2)
+        cone_m = dd.black_velvet()
         M = dd.jewel_mats()
         stones = ["diamond", "diamond", "sapphire", "ruby", "emerald", "diamond"]
         cols, rows = 16, 3
@@ -85,11 +85,50 @@ def build(variant=None):
         h = officer("Counter", 46, seed=3); c["counter"] = h
         c["held_tag"] = box("HeldTag", (0, 0, -20), (0.05, 0.032, 0.002), tagm)
     else:
-        for k, p in enumerate(grid):
-            stand_obj("Stand", p, smat)
-        mid = grid[(NX // 2) * NY + 1]
+        # the closing image: rows of EMPTY displays on black velvet (ring cones, necklace busts, earring T-bars), a few
+        # with evidence tags; one small cluster of recovered pieces at the far end; the big diamond alone on its cone
+        vel = dd.black_velvet(); M = dd.jewel_mats()
+        D = dd.Builder("EmptyDisplays")
+        rod = pbr("StandRod", (0.55, 0.55, 0.57), 0.3, 1.0)
+        mid_i, mid_j = NX // 2, 1
+        for i in range(NX):
+            for j in range(NY):
+                p = grid[i * NY + j]
+                if (i, j) == (mid_i, mid_j):
+                    continue
+                kind = (i * 3 + j) % 4
+                recovered = i >= NX - 3 and j < 3
+                if kind in (0, 1):                                   # ring cone
+                    D.cone(p + Vector((0, 0, 0.025)), 0.018, 0.006, 0.05, vel)
+                    if recovered:
+                        dd.ring(f"Rec{i}_{j}", p + Vector((0, 0, 0.0565)), stone_r=float(rng.uniform(0.004, 0.006)),
+                                band="gold" if j % 2 else "plat", stone=("sapphire", "diamond", "ruby")[j % 3])
+                elif kind == 2:                                      # necklace bust
+                    D.cone(p + Vector((0, 0, 0.09)), 0.06, 0.022, 0.18, vel, scale=(0.6, 1.0, 1.0))
+                    D.cyl(p + Vector((0, 0, 0.19)), 0.02, 0.02, vel, verts=16)
+                    if recovered:
+                        for q in range(18):
+                            a_ = math.pi * q / 17
+                            cyl(f"RecN{i}{j}", p + Vector((0.034 * math.cos(a_), -0.012 - 0.03 * math.sin(a_), 0.15 - 0.05 * math.sin(a_))),
+                                0.0028, 0.004, M["gold"], verts=8)
+                else:                                                # earring T-bar
+                    D.cyl(p + Vector((0, 0, 0.003)), 0.025, 0.006, vel, verts=20)
+                    D.cyl(p + Vector((0, 0, 0.06)), 0.003, 0.11, rod, verts=8)
+                    D.box(p + Vector((0, 0, 0.115)), (0.07, 0.005, 0.005), rod)
+                    if recovered:
+                        for sx in (-0.028, 0.028):
+                            dd.earring(f"RecE{i}{j}{sx}", p + Vector((sx, 0, 0.1)), 0.005, "diamond")
+                if recovered or rng.uniform() < 0.18:                # a paper tag on a string
+                    D.box(p + Vector((0.0, -0.1, 0.002)), (0.05, 0.032, 0.002), tagm, rot=(0, 0, 0.06 * float(rng.uniform(-1, 1))))
+                    D.box(p + Vector((0.0, -0.06, 0.002)), (0.002, 0.06, 0.001), pbr("String", (0.75, 0.7, 0.6), 0.8))
+        D.done()
+        mid = grid[mid_i * NY + mid_j]
         c["hero_at"] = mid
-        dd.ring("HeroRing", mid + Vector((0, 0, 0.045)), stone_r=0.0105, band="plat", band_r=0.0105)
+        bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.03, radius2=0.009, depth=0.08, location=mid + Vector((0, 0, 0.04)))
+        bpy.context.active_object.data.materials.append(vel)
+        dd.ring("HeroRing", mid + Vector((0, 0, 0.08 + 0.0105 - 0.003)), stone_r=0.0105, band="plat", band_r=0.0105)
+        sp = bpy.data.lights.new("Sparkle", 'POINT'); sp.energy = 6; sp.shadow_soft_size = 0.005; sp.color = (0.95, 0.97, 1.0)
+        so = bpy.data.objects.new("Sparkle", sp); bpy.context.collection.objects.link(so); so.location = mid + Vector((0.25, -0.2, 0.45))
         # motes in the lamp light (slowly drifting, frame-driven)
         hz = box("Motes", (0, 0, 1.6), (TL, 3, 1.6))
         m = bpy.data.materials.new("Motes"); m.use_nodes = True
@@ -97,7 +136,7 @@ def build(variant=None):
         out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled"); vol.inputs['Density'].default_value = 0.02
         L.new(vol.outputs[0], out.inputs['Volume']); hz.data.materials.append(m); hz.visible_shadow = False
     # lighting: a long softbox over the table and two practical lamp pools
-    a = bpy.data.lights.new("Soft", 'AREA'); a.shape = 'RECTANGLE'; a.size = TL; a.size_y = 1.2; a.energy = 420 if v == "count" else 140; a.color = (0.95, 0.97, 1.0)
+    a = bpy.data.lights.new("Soft", 'AREA'); a.shape = 'RECTANGLE'; a.size = TL; a.size_y = 1.2; a.energy = 420 if v == "count" else 220; a.color = (0.82, 0.9, 1.0)
     ao = bpy.data.objects.new("Soft", a); bpy.context.collection.objects.link(ao); ao.location = (0, 0, 2.8)
     box("Tube", (0, 0, 2.9), (TL, 0.15, 0.04), emissive("TubeE", (0.9, 0.95, 1.0), 6))
     k = bpy.data.lights.new("Key", 'SPOT'); k.energy = 260; k.spot_size = math.radians(40); k.spot_blend = 0.6; k.color = (1.0, 0.9, 0.75)
@@ -145,12 +184,12 @@ MOVES = {
                    cam=lambda c, t: (Vector((-TL / 2 - 0.4 + 1.4 * ease(t), -0.9, 1.35)), Vector((-TL / 2 + 1.4 + 1.4 * ease(t), 0.05, TZ)), 40),
                    focus=lambda c, t: Vector((-TL / 2 + 1.0 + 1.4 * ease(t), 0.0, TZ))),
     "tags": dict(kind="anim", dof=5.6, anim=anim_tags,
-                 cam=lambda c, t: (Vector((-1.0 + 1.5 * ease(t), 3.4, 2.9)), Vector((0.2 + 1.5 * ease(t), -0.9, 0.7)), 26),
+                 cam=lambda c, t: (Vector((c["counter"].arm.location.x - 1.6, 1.7, 1.75)), Vector((c["counter"].arm.location.x + 0.5, -0.6, 0.85)), 30),
                  focus=lambda c, t: c["counter"].arm.location + Vector((0, 0, 1.0))),
     "alone": dict(kind="anim", dof=2.0, anim=anim_final,
-                  cam=lambda c, t: (c["hero_at"] + Vector((0.0, -0.12, 0.09)).lerp(Vector((0.0, -0.55, 0.32)), ease(t)), c["hero_at"] + Vector((0, 0, 0.05)), 60),
-                  focus=lambda c, t: c["hero_at"] + Vector((0, 0, 0.05))),
+                  cam=lambda c, t: (c["hero_at"] + Vector((0.0, -0.16, 0.12)).lerp(Vector((0.0, -0.55, 0.3)), ease(t)), c["hero_at"] + Vector((0, 0, 0.085)), 70),
+                  focus=lambda c, t: c["hero_at"] + Vector((0, 0, 0.09))),
     "empty": dict(kind="anim", dof=4.0, anim=anim_final,
-                  cam=lambda c, t: (c["hero_at"] + Vector((0.4, -1.2, 0.7)).lerp(Vector((1.6, -3.4, 2.0)), ease(t)), c["hero_at"] + Vector((-0.3, 0.2, 0.0)), 35),
+                  cam=lambda c, t: (c["hero_at"] + Vector((0.3, -1.0, 0.55)).lerp(Vector((1.4, -3.6, 2.6)), ease(t)), c["hero_at"] + Vector((-0.2, 0.2, 0.0)), 35),
                   focus=lambda c, t: c["hero_at"]),
 }

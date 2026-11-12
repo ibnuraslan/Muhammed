@@ -15,7 +15,7 @@ from kit import *
 import ph
 import dd
 from dd import person, place, face_to, walk_to, arms_relaxed, pose_floor_sit, zero, ground
-from human import reach, fingers_curl
+from human import reach, fingers_curl, pose_walk
 from sc_street import car
 
 EXPOSURE = 0.0
@@ -332,9 +332,9 @@ def build_dawn(c):
 
 def build_lane(c, night=False):
     if night:
-        world_flat((0.03, 0.04, 0.065), 1.0)
-        for y in (-6.0, 14.0):
-            sl = bpy.data.lights.new("StreetL", 'SPOT'); sl.energy = 1500; sl.spot_size = math.radians(120); sl.color = (1.0, 0.7, 0.42)
+        world_flat((0.012, 0.016, 0.028), 1.0)
+        for y in (-14.0,):                      # one far street lamp at the mouth of the lane, the rest dark
+            sl = bpy.data.lights.new("StreetL", 'SPOT'); sl.energy = 400; sl.spot_size = math.radians(120); sl.color = (1.0, 0.7, 0.42)
             so = bpy.data.objects.new("StreetL", sl); bpy.context.collection.objects.link(so); so.location = (-3.5, y, 6.0)
     else:
         w = world_sky(sun_elev_deg=6, sun_rot_deg=300, strength=2.2, tint=(0.9, 0.93, 1.0))
@@ -349,7 +349,7 @@ def build_lane(c, night=False):
         box("LaneKerb", (sx * 3.6, 0, 0.04), (0.3, 70, 0.1), pbr("LaneKerbM", (0.3, 0.3, 0.31), 0.55))
         for y in (-8.0, 2.0, 12.0, 22.0):
             dd.model_h("industrial_wall_lamp", (sx * 3.92, y + (0 if sx > 0 else 4.0), 3.0), 0.32, rot_z=(-math.pi / 2 if sx > 0 else math.pi / 2))
-            wl = bpy.data.lights.new("WallLamp", 'POINT'); wl.energy = 40 if not night else 90; wl.color = WARM; wl.shadow_soft_size = 0.08
+            wl = bpy.data.lights.new("WallLamp", 'POINT'); wl.energy = 40 if not night else 0; wl.color = WARM; wl.shadow_soft_size = 0.08
             wo = bpy.data.objects.new("WallLamp", wl); bpy.context.collection.objects.link(wo); wo.location = (sx * 3.6, y + (0 if sx > 0 else 4.0), 2.95)
     for k in range(4):                         # a few drainpipes, a bin, a crate on the cobbles
         cyl("LanePipe", (3.9, -12 + k * 9.3, 4.0), 0.05, 8.0, pbr("PipeL", (0.35, 0.37, 0.38), 0.4, 0.8), verts=12)
@@ -359,20 +359,22 @@ def build_lane(c, night=False):
     D = dd.Builder("ServiceDoor"); D.box((-0.0, 0.55, 1.15), (0.06, 1.1, 2.3), pbr("SteelDoor", (0.08, 0.085, 0.09), 0.45, 0.6))
     c["sdoor"] = D.done((3.94, 8.45, 0.0))
     if night:     # behind the door: a lit back corridor
-        box("DoorInside", (4.05, 9.0, 1.15), (0.02, 1.08, 2.28), emissive("Inside", (1.0, 0.85, 0.65), 1.2))
+        box("DoorInside", (4.6, 9.0, 1.15), (0.02, 1.08, 2.28), emissive("Inside", (1.0, 0.85, 0.65), 0.35))
+        for sy in (-1, 1):                      # the passage behind the door
+            box("Passage", (4.3, 9.0 + sy * 0.56, 1.15), (0.6, 0.04, 2.3), pbr("PassageWall", (0.3, 0.29, 0.27), 0.8))
     box("ServiceFrame", (3.98, 9.0, 1.2), (0.05, 1.3, 2.45), pbr("DoorFrameM", (0.3, 0.3, 0.3), 0.5, 0.5))
-    lamp = bpy.data.lights.new("DoorLamp", 'POINT'); lamp.energy = 60 if night else 25; lamp.color = WARM; lamp.shadow_soft_size = 0.05
+    lamp = bpy.data.lights.new("DoorLamp", 'POINT'); lamp.energy = 35 if night else 25; lamp.color = WARM; lamp.shadow_soft_size = 0.05
     lo = bpy.data.objects.new("DoorLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (3.7, 9.0, 2.8)
     box("DoorLampBox", (3.85, 9.0, 2.8), (0.15, 0.15, 0.2), emissive("DoorLampGlow", WARM, 6))
     c["door_at"] = Vector((3.4, 9.0, 0))
     c["painters"] = []
     if night:
+        box("Bulb", (3.8, 9.0, 2.72), (0.05, 0.05, 0.07), emissive("BulbE", (1.0, 0.8, 0.5), 40))      # a single bare bulb
         g = dd.guard("Guard", 41, "short02"); c["guard"] = g
-        place(g, (3.75, 9.0, 0.12), math.radians(90), z=0.12); arms_relaxed(g)
-        for k in range(4):
-            h = person(f"Shape{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01", "short03")[k],
-                       cval=0.85, hv=0.15)
-            c["painters"].append((h, None, Vector((-0.6 + 0.5 * (k % 2), -4.0 - 1.4 * k, 0)), 0.3 * k))
+        for k in range(4):                      # four men in overalls, each carrying a tin, hurrying to the door
+            h = painter(f"Shape{k}", 30 + 6 * k, k)
+            tin = paint_tin(f"STin{k}")
+            c["painters"].append((h, tin, Vector((-0.4 + 0.6 * (k % 2), -1.0 - 1.5 * k, 0)), 0.3 * k))
         return
     for k in range(4):
         h = painter(f"Painter{k}", 30 + 6 * k, k)
@@ -475,7 +477,7 @@ def vitrine(name, loc, size=(1.4, 0.6), rot_z=0.0, rng=None, lit=True):
 
 def build_salon(c, night=False):
     if night:
-        world_sky(sun_elev_deg=-2, sun_rot_deg=95, strength=4.0, tint=(0.55, 0.68, 1.0))
+        world_sky(sun_elev_deg=-2, sun_rot_deg=95, strength=0.4, tint=(0.55, 0.68, 1.0))
     else:
         world_sky(sun_elev_deg=4, sun_rot_deg=95, strength=0.5, tint=(0.85, 0.9, 1.0))
         sun(4, 95, energy=1.0, color=(1.0, 0.75, 0.55), angle_deg=1.5)
@@ -492,14 +494,29 @@ def build_salon(c, night=False):
         sl = bpy.data.lights.new("Downstairs", 'AREA'); sl.size = 1.2; sl.color = (1.0, 0.85, 0.65)
         dr = sl.driver_add("energy").driver; dr.type = 'SCRIPTED'; dr.expression = "0 if frame < 96 else min(260, (frame - 96) * 26)"
         so = bpy.data.objects.new("Downstairs", sl); bpy.context.collection.objects.link(so); so.location = (5.0, 9.6, 0.4); so.rotation_euler = (math.radians(-60), 0, 0)
+        # near-dark: three men on the floor with their backs to the cases, one standing at the blinds; sodium streetlight
+        # falls through the slats in bars across them; a wall clock; then the morning light comes up (frame driver)
         c["seated"] = []
-        for k, (x, y) in enumerate(((-5.9, 4.6), (-5.85, 5.6), (-5.95, 6.6), (-5.9, 7.6))):
-            h = person(f"Waiter{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01", "short03")[k], cval=0.85)
-            pose_floor_sit(h, hunch=10, hands_back=False); place(h, (x, y, 0), face_to((x, y), (0.0, y)))
+        for k, (x, y) in enumerate(((-3.35, 2.6), (-2.6, 2.6), (0.15, 3.0))):
+            h = person(f"Waiter{k}", 1.0, 30 + 6 * k, ("male_casualsuit05", "male_casualsuit01")[k % 2], ("short02", "short04", "short01")[k], cval=0.85)
+            pose_floor_sit(h, hunch=12, hands_back=False); place(h, (x, y, 0), 0.0)
+            hp = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) / 2
+            h.arm.location.z += 0.11 - hp.z; bpy.context.view_layer.update()
             c["seated"].append(h)
-        if k == 3:                                    # a faint cool spill from the street windows over the wall where they sit
-            ml = bpy.data.lights.new("MoonFill", 'AREA'); ml.size = 3.0; ml.energy = 45; ml.color = (0.6, 0.72, 1.0)
-            mo = bpy.data.objects.new("MoonFill", ml); bpy.context.collection.objects.link(mo); mo.location = (-3.5, 6.1, 3.2); point_at(mo, (-5.9, 6.1, 0.5))
+        wm = person("WindowMan", 1.0, 44, "male_casualsuit01", "short03", cval=0.7); c["window_man"] = wm
+        zero(wm); pose_walk(wm, 0.0, stride=0.0, arm_swing=0.0); place(wm, (-0.9, 0.55, 0), math.radians(-10)); arms_relaxed(wm)
+        BL = dd.Builder("Blinds")
+        slat = pbr("BlindSlat", (0.7, 0.68, 0.64), 0.5)
+        for x in (-5.0, 0.0, 5.0):
+            for j in range(40):
+                BL.box((x, 0.1, 0.25 + j * 0.092), (3.4, 0.05, 0.012), slat, rot=(math.radians(35), 0, 0))
+        BL.done()
+        st = bpy.data.lights.new("StreetSodium", 'SPOT'); st.energy = 9000; st.spot_size = math.radians(40); st.color = (1.0, 0.6, 0.28); st.shadow_soft_size = 0.04
+        sto = bpy.data.objects.new("StreetSodium", st); bpy.context.collection.objects.link(sto); sto.location = (2.0, -7.0, 5.5); point_at(sto, (-1.8, 2.8, 0.4))
+        dd.model_h("wall_clock", (-6.88, 2.2, 3.0), 0.42, rot_z=-math.pi / 2)
+        dawn = bpy.data.lights.new("DawnWin", 'AREA'); dawn.shape = 'RECTANGLE'; dawn.size = 13; dawn.size_y = 3.6; dawn.color = (0.75, 0.82, 1.0)
+        dr = dawn.driver_add("energy").driver; dr.type = 'SCRIPTED'; dr.expression = "0 if frame < 130 else min(900, (frame - 130) * 14)"
+        do = bpy.data.objects.new("DawnWin", dawn); bpy.context.collection.objects.link(do); do.location = (0, 0.4, 2.1); do.rotation_euler = (math.radians(90), 0, 0)
         for k, (x, y) in enumerate(((-3.0, 3.2), (0.4, 3.6), (3.5, 3.2), (-2.4, 6.6), (3.5, 6.4))):
             vitrine(f"Vit{k}", (x, y, 0), rng=np.random.default_rng(9), lit=False)
         haussmann(-30, 30, seed=30, rot_z=math.pi, origin=(0, -14, 0), lit_frac=0.05)
@@ -774,24 +791,32 @@ def cam_chair(c, t):
 
 def anim_night_door(c, t):
     sec = t * DUR["night_door"]
-    u = ease(min(1.0, sec / 2.0))
-    c["sdoor"].rotation_euler = (0, 0, math.radians(-105 * u))
-    for h, _, start, delay in c["painters"]:
-        walk_to(h, start, c["door_at"] + Vector((-0.9, -0.4 + 0.3 * start.x, 0)), max(0.0, sec - delay), speed=1.0)
+    c["sdoor"].rotation_euler = (0, 0, math.radians(-55 - 5 * math.sin(sec * 0.7)))      # held half open
+    g = c["guard"]; zero(g); pose_walk(g, 0.0, stride=0.0, arm_swing=0.0)
+    place(g, (3.95, 9.45, 0.0), math.radians(-15)); arms_relaxed(g)
+    edge = c["sdoor"].matrix_world @ Vector((0, 1.05, 1.05))
+    reach(g, "L", edge, Vector((1, 0.3, -1)))                      # a hand on the door
+    g.rot("head", (0, 0, 1), 25 + 10 * math.sin(sec * 0.9))        # glancing up the lane
+    for h, tin, start, delay in c["painters"]:
+        walk_to(h, start, c["door_at"] + Vector((0.2, -0.3 + 0.2 * start.x, 0)), max(0.0, sec - delay), speed=1.35, cadence=2.1)
+        tip = h.bone_tail("wrist.R") if "wrist.R" in h.arm.pose.bones else h.bone_tail("lowerarm02.R")
+        tin.location = tip - Vector((0, 0, 0.3))
 
 
 def anim_night_wait(c, t):
+    sec = t * DUR["night_wait"]
     for k, h in enumerate(c["seated"]):
-        h.rot("head", (0, 0, 1), 0)
+        h.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.3 + k))
+    c["window_man"].rot("head", (0, 0, 1), 8 * math.sin(sec * 0.25))
 
 
 MOVES = {
     "night_door": dict(kind="anim", dof=5.6, anim=anim_night_door,
-                       cam=lambda c, t: (Vector((-2.8, -6.0, 1.8)).lerp(Vector((-2.4, -4.8, 1.75)), ease(t)), Vector((2.6, 8.0, 1.3)), 30),
-                       focus=lambda c, t: Vector((2.5, 8.0, 1.2))),
+                       cam=lambda c, t: (Vector((-1.9, 0.6, 1.6)).lerp(Vector((-1.6, 1.6, 1.55)), ease(t)), Vector((3.3, 9.0, 1.3)), 30),
+                       focus=lambda c, t: Vector((3.6, 9.2, 1.3))),
     "night_wait": dict(kind="anim", dof=4.0, anim=anim_night_wait,
-                       cam=lambda c, t: (Vector((-1.2, 4.6, 1.9)).lerp(Vector((-1.6, 5.0, 1.85)), ease(t)), Vector((-5.6, 6.1, 0.6)), 28),
-                       focus=lambda c, t: Vector((-5.6, 6.0, 0.6))),
+                       cam=lambda c, t: (Vector((2.2, 7.6, 1.9)).lerp(Vector((2.6, 7.2, 1.85)), ease(t)), Vector((-1.5, 2.0, 0.8)), 28),
+                       focus=lambda c, t: Vector((-1.6, 2.4, 0.6))),
     "corridor": dict(kind="anim", dof=4.0, cam=cam_corridor, anim=anim_corridor, focus=lambda c, t: Vector((0, 6.0, 1.4))),
     "chair": dict(kind="anim", dof=2.8, cam=cam_chair, anim=lambda c, t: None, focus=lambda c, t: Vector((0.55, 8.6, 0.6))),
     "facade": dict(kind="anim", dof=8.0, cam=cam_facade, anim=anim_facade, focus=lambda c, t: c["info"]["door"]),
