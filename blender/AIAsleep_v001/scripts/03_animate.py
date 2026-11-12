@@ -287,6 +287,11 @@ def fcs(idb):
     try: return list(ad.action.fcurves)
     except AttributeError:
         return [fc for l in ad.action.layers for s in l.strips for cb in s.channelbags for fc in cb.fcurves]
+# face -> screen pans (aim swings ~180 deg): route the aim sideways through the passenger side, never under the camera
+for fx in (252, 944):
+    sc.frame_set(fx); p_ = cam.matrix_world.translation.copy()
+    aim.location = p_ + Vector((-0.30, -0.02, -0.08)); aim.keyframe_insert("location", frame=fx)
+    cam.location = p_; cam.keyframe_insert("location", frame=fx)
 for idb in (cam, aim, camd):
     for fc in fcs(idb):
         for kp in fc.keyframe_points: kp.interpolation = "BEZIER"; kp.handle_left_type = kp.handle_right_type = "AUTO_CLAMPED"
