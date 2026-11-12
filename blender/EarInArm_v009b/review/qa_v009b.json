@@ -1,0 +1,104 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Surgeon"
+   ]
+  ],
+  "139": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "601": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "607": [
+   [
+    "FILL",
+    "hair / top of head 41%"
+   ]
+  ],
+  "613": [
+   [
+    "FILL",
+    "hair / top of head 48%"
+   ]
+  ],
+  "619": [
+   [
+    "FILL",
+    "hair / top of head 38%"
+   ]
+  ],
+  "625": [
+   [
+    "FILL",
+    "hair / top of head 35%"
+   ]
+  ],
+  "631": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "637": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1255": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1261": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1273": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "FILL": 15
+ }
+}
