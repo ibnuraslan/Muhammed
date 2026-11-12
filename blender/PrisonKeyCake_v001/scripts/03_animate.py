@@ -162,7 +162,7 @@ def mold_up(f):
     if f <= 1216: return mlerp(Bm, Cm, ss(f, 1208, 1216))
     return mlerp(Cm, Dm, ss(f, 1236, 1250))     # taken from outside
 bake_obj(WAXM, 1182, 1252, mold_up)
-key_hide(WAXM, [(1, True), (330, False), (414, True), (1182, False), (1252, True)])
+key_hide(WAXM, [(1, True), (330, False), (414, True), (1182, False), (1234, True)])   # taken from the sill out of view
 key_hide(WAX, [(1, False), (1182, True)])
 key_hide(OB["WaxTin"], [(1, False), (1182, True)])
 P.hand_fn["R"].append((1190, 1216, lambda f: grip_hand(mold_up(f) @ V(0, 0.075, 0), V(0, 0.3, 1), V(0, 1, 0))))
@@ -607,6 +607,7 @@ for i, (fa, fb) in enumerate(((1478, 1506), (1496, 1522), (1520, 1548))):
             g.rotation_euler = (0, 0, R_(sg * a)); g.keyframe_insert("rotation_euler", frame=f)
 exec(open(os.path.join(HERE, "03c_details.py")).read())
 exec(open(os.path.join(HERE, "03d_hands.py")).read())
+exec(open(os.path.join(HERE, "03e_attach.py")).read())
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("ANIM saved", OUT)

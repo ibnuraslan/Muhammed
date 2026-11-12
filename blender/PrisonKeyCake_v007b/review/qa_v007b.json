@@ -1,0 +1,1662 @@
+{
+ "frames": {
+  "301": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "307": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "313": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "319": [
+   [
+    "FILL",
+    "WoodenTable_01"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon04 moves 17.4 cm with no hand on it (nearest finger 771 cm)"
+   ]
+  ],
+  "355": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 20.9 cm with no hand on it (nearest finger 825 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon04 moves 17.3 cm with no hand on it (nearest finger 774 cm)"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "BACKHEAD",
+    "Guard"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 1.7 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "PROPMOVE",
+    "Spark15 moves 9.9 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark16 moves 5359.2 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark2 moves 10.1 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark26 moves 19.6 cm with no hand on it (nearest finger 91 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark27 moves 12.8 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark28 moves 17.8 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark3 moves 14.1 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark38 moves 12.0 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 4.9 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark4 moves 5358.1 cm with no hand on it (nearest finger 55 cm)"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Spark19 moves 11.0 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark20 moves 11.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 5351.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark32 moves 15.9 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark33 moves 5353.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark8 moves 13.2 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon00 moves 20.2 cm with no hand on it (nearest finger 631 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon02 moves 15.2 cm with no hand on it (nearest finger 693 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 20.8 cm with no hand on it (nearest finger 481 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark20 moves 7.5 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 10.0 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark32 moves 10.2 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark33 moves 7.1 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 5351.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark8 moves 9.6 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark9 moves 5361.2 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon00 moves 20.2 cm with no hand on it (nearest finger 617 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon02 moves 15.3 cm with no hand on it (nearest finger 677 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 20.8 cm with no hand on it (nearest finger 494 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon04 moves 17.2 cm with no hand on it (nearest finger 819 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark10 moves 5353.6 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 3.6 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark22 moves 5361.7 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark33 moves 3.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 13.3 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark9 moves 9.2 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon00 moves 20.3 cm with no hand on it (nearest finger 601 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon02 moves 15.4 cm with no hand on it (nearest finger 659 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 20.9 cm with no hand on it (nearest finger 504 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon04 moves 17.3 cm with no hand on it (nearest finger 827 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark10 moves 8.3 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark11 moves 5358.9 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 10.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark22 moves 13.6 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark23 moves 5359.9 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark33 moves 13.0 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 11.8 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark35 moves 5362.3 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark9 moves 8.5 cm with no hand on it (nearest finger 33 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon00 moves 20.4 cm with no hand on it (nearest finger 590 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon02 moves 15.4 cm with no hand on it (nearest finger 644 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 21.0 cm with no hand on it (nearest finger 519 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark10 moves 14.9 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark11 moves 8.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark12 moves 5354.5 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark21 moves 20.4 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark22 moves 11.8 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark23 moves 7.6 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark24 moves 5356.2 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark35 moves 6.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 5359.3 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 2.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 21.0 cm with no hand on it (nearest finger 539 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark11 moves 2.4 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark12 moves 10.6 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark23 moves 6.7 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark24 moves 11.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark35 moves 8.3 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark36 moves 9.4 cm with no hand on it (nearest finger 40 cm)"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 2.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 21.1 cm with no hand on it (nearest finger 556 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark12 moves 11.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark24 moves 13.3 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark35 moves 16.9 cm with no hand on it (nearest finger 77 cm)"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 2.2 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 0.9 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 19.7 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 12.0 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Crucible moves 11.5 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "PROPMOVE",
+    "Cake1 moves 13.0 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ParcelBox_Lid moves 13.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.86 m, 78 deg in one frame (neighbours 0.82 m, 13 deg)"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "BACKHEAD",
+    "Prisoner"
+   ]
+  ],
+  "907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "PROPMOVE",
+    "Key_Master moves 29.6 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1219": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1225": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.6 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.6 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "1279": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1291": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1303": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1411": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1441": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1681": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1687": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1735": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1493": [
+   [
+    "CAMJUMP",
+    "cut: 0.06 m, 65 deg in one frame (neighbours 0.07 m, 13 deg)"
+   ]
+  ],
+  "1494": [
+   [
+    "CAMJUMP",
+    "cut: 0.06 m, 70 deg in one frame (neighbours 0.06 m, 13 deg)"
+   ]
+  ],
+  "145": [
+   [
+    "PROPMOVE",
+    "Key_Master moves 0.7 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "487": [
+   [
+    "PROPMOVE",
+    "Pigeon03 moves 21.1 cm with no hand on it (nearest finger 655 cm)"
+   ]
+  ],
+  "499": [
+   [
+    "PROPMOVE",
+    "Crucible moves 2.4 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "505": [
+   [
+    "PROPMOVE",
+    "Crucible moves 2.4 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "517": [
+   [
+    "PROPMOVE",
+    "Spark0 moves 5358.0 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "523": [
+   [
+    "PROPMOVE",
+    "Spark0 moves 13.5 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark1 moves 5353.3 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark13 moves 5355.4 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark25 moves 5352.0 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark37 moves 5356.0 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ],
+  "529": [
+   [
+    "PROPMOVE",
+    "Spark0 moves 6.2 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark1 moves 10.8 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark13 moves 6.5 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark14 moves 5353.0 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark2 moves 5351.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark25 moves 18.0 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark26 moves 5355.4 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark37 moves 8.5 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark38 moves 5358.5 cm with no hand on it (nearest finger 50 cm)"
+   ]
+  ],
+  "535": [
+   [
+    "PROPMOVE",
+    "Spark0 moves 9.3 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark1 moves 8.7 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark13 moves 8.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark14 moves 5.1 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark15 moves 5351.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark2 moves 13.1 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark25 moves 21.2 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark26 moves 11.3 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark27 moves 5353.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark37 moves 12.1 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark38 moves 9.2 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 5357.1 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "541": [
+   [
+    "PROPMOVE",
+    "Spark1 moves 15.0 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark13 moves 17.4 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark14 moves 6.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark15 moves 8.0 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark2 moves 6.4 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark26 moves 12.7 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark27 moves 15.9 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark28 moves 5351.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark3 moves 5362.9 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark37 moves 20.3 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark38 moves 4.3 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark39 moves 10.3 cm with no hand on it (nearest finger 57 cm)"
+   ]
+  ],
+  "553": [
+   [
+    "PROPMOVE",
+    "Spark15 moves 18.0 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark16 moves 10.5 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark17 moves 5356.9 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark27 moves 16.4 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark28 moves 12.0 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark29 moves 5357.5 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark3 moves 11.4 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark4 moves 8.1 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark5 moves 5355.0 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPMOVE",
+    "Spark15 moves 27.2 cm with no hand on it (nearest finger 98 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark16 moves 16.0 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark17 moves 18.5 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark18 moves 5355.8 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark28 moves 12.8 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark29 moves 12.3 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark30 moves 5357.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark4 moves 11.4 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark5 moves 8.5 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark6 moves 5356.9 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "565": [
+   [
+    "PROPMOVE",
+    "Spark17 moves 18.3 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark18 moves 12.7 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark19 moves 5355.8 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark28 moves 19.3 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark29 moves 15.3 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark30 moves 7.5 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark31 moves 5357.7 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark4 moves 19.6 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark5 moves 11.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark6 moves 12.2 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark7 moves 5354.1 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "571": [
+   [
+    "PROPMOVE",
+    "Spark18 moves 16.9 cm with no hand on it (nearest finger 86 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark19 moves 9.9 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark20 moves 5353.4 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark30 moves 10.9 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark31 moves 13.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark32 moves 5358.7 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark5 moves 19.7 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark6 moves 5.2 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark7 moves 16.8 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark8 moves 5351.7 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "829": [
+   [
+    "PROPMOVE",
+    "Cake1 moves 6.5 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "ParcelBox_Lid moves 6.5 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "841": [
+   [
+    "PROPMOVE",
+    "ParcelBox_Lid moves 60.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "847": [
+   [
+    "PROPMOVE",
+    "ParcelBox_Lid moves 47.7 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "1117": [
+   [
+    "PROPMOVE",
+    "Key_Master moves 5.0 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "1213": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1231": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.8 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1237": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "1243": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "1249": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.7 cm with no hand on it (nearest finger 55 cm)"
+   ]
+  ],
+  "1255": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.7 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.6 cm with no hand on it (nearest finger 49 cm)"
+   ]
+  ],
+  "1267": [
+   [
+    "PROPMOVE",
+    "Candle_Flame moves 0.5 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Candle_Wick moves 0.5 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "1321": [
+   [
+    "PROPMOVE",
+    "Crumb00 moves 13.7 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb01 moves 13.0 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb02 moves 11.2 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb03 moves 9.5 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb04 moves 14.4 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb05 moves 12.9 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb06 moves 11.4 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb07 moves 12.9 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb08 moves 12.9 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "1333": [
+   [
+    "PROPMOVE",
+    "Crumb09 moves 0.7 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb10 moves 0.8 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb12 moves 1.0 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb13 moves 1.0 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb14 moves 0.6 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb16 moves 0.8 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "1339": [
+   [
+    "PROPMOVE",
+    "Crumb10 moves 9.7 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb11 moves 13.4 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb12 moves 11.8 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb13 moves 12.4 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb15 moves 14.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb16 moves 10.0 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "1351": [
+   [
+    "PROPMOVE",
+    "Crumb17 moves 10.6 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb18 moves 12.4 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb23 moves 11.3 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb24 moves 13.4 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb25 moves 10.0 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "1357": [
+   [
+    "PROPMOVE",
+    "Crumb17 moves 0.9 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb18 moves 1.0 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb19 moves 1.2 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb20 moves 0.7 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb21 moves 0.8 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb22 moves 1.0 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb23 moves 0.9 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb24 moves 1.1 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Crumb25 moves 0.8 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "1741": [
+   [
+    "PROPMOVE",
+    "CrowdHat05 moves 1.4 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 0.9 cm with no hand on it (nearest finger 14 cm)"
+   ]
+  ],
+  "1765": [
+   [
+    "PROPMOVE",
+    "CrowdHat11 moves 1.9 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1771": [
+   [
+    "PROPMOVE",
+    "CrowdHat11 moves 1.4 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 1.6 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "1777": [
+   [
+    "PROPMOVE",
+    "CrowdHat01 moves 2.1 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat05 moves 1.1 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 2.0 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat01 is 9.0 cm off CrowdC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat03 is 5.3 cm off Crowd03's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat05 is 9.0 cm off Crowd05's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat09 is 5.3 cm off Crowd09's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat11 is 6.5 cm off Crowd11's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat12 is 6.0 cm off Crowd12's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat13 is 9.2 cm off Crowd13's skin (median)"
+   ]
+  ],
+  "1783": [
+   [
+    "PROPMOVE",
+    "CrowdHat01 moves 2.2 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat05 moves 2.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 1.5 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "1789": [
+   [
+    "PROPMOVE",
+    "CrowdHat01 moves 0.8 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat05 moves 1.8 cm with no hand on it (nearest finger 21 cm)"
+   ]
+  ],
+  "1795": [
+   [
+    "PROPMOVE",
+    "CrowdHat05 moves 0.6 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 1.2 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1801": [
+   [
+    "PROPMOVE",
+    "CrowdHat05 moves 0.8 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 2.0 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat03 is 5.2 cm off Crowd03's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat05 is 9.0 cm off Crowd05's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat09 is 5.3 cm off Crowd09's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat11 is 6.5 cm off Crowd11's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat13 is 9.2 cm off Crowd13's skin (median)"
+   ]
+  ],
+  "1807": [
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 1.7 cm with no hand on it (nearest finger 23 cm)"
+   ]
+  ],
+  "1813": [
+   [
+    "PROPMOVE",
+    "CrowdHat11 moves 1.9 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 0.7 cm with no hand on it (nearest finger 20 cm)"
+   ]
+  ],
+  "1819": [
+   [
+    "PROPMOVE",
+    "CrowdHat11 moves 1.5 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "1825": [
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 1.8 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat03 is 5.2 cm off Crowd03's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "CrowdHat13 is 9.2 cm off Crowd13's skin (median)"
+   ]
+  ],
+  "1831": [
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 2.0 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1837": [
+   [
+    "PROPMOVE",
+    "CrowdHat13 moves 1.1 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "1849": [
+   [
+    "ATTACH",
+    "CrowdHat03 is 5.3 cm off Crowd03's skin (median)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 81,
+  "FILL": 1,
+  "BACKHEAD": 2,
+  "CAMJUMP": 3,
+  "PROPMOVE": 254,
+  "ATTACH": 15
+ }
+}

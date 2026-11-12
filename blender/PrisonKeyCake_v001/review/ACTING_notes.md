@@ -41,3 +41,19 @@ Frames are v005 frames (the same as the beat frames in `beats.json`; story-beat 
   - 511 (beat 4): the nearest character is the guard; the acting character, the ally, is facing the camera at the crucible.
   - 367 (beat 3, visitor) and 1057 (beat 7, prisoner): not intended and not fixed for the deadline.
 - HOVER, CLAW, FACEPRESS and INSIDE: 0.
+
+## v007b: props in hand (PROPMOVE / ATTACH, qa_check e7b25f7)
+Cause: the v005 wrist rotation limits clamp the hand's orientation, so the fingers pointed away from the props they held (10–30 cm gap).
+Fix (scripts/03e_attach.py, the last step of the animation build):
+- Every carried prop is re-keyed from the hand's actual grasp point (thumb tip, index and middle finger), so it sits in the fingers on every carried frame. The interior gap is now 0 for:
+  - Key_Master, Key_Copy1 and Key_Copy2;
+  - WaxMold (visitor and prisoner), ParcelBox_Lid, Knife_Blade and Crucible.
+- Keys in the lock and the key pressed into the wax are not moved; the hand is on them there.
+- The mould on the sill is hidden at 1234, before the outside hand takes it.
+- President_Glasses moved onto the nose: median gap 1.0 cm (was 1.9).
+Intended PROPMOVE: Spark* (casting sparks), Crumb* (falling cake crumbs), Pigeon* (birds in flight), CrowdHat* (thrown in the celebration), Candle_Flame/Candle_Wick (flame flicker).
+Intended ATTACH: CrowdHat* (thrown hats).
+Not intended and not fixed for the deadline:
+- Crucible: 10 sampled frames, 499–643. The fingers are on the shank but more than 3 cm from its bounding box at those samples.
+- ParcelBox_Lid and Cake1 at 823–847: they ride inside or on the carried box, with the hands on the box, not on them.
+- Key_Master at 145 and 1117: the wax-press phases, where the key is pressed into the wax and not re-keyed.
