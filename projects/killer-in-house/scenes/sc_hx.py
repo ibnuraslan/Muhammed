@@ -58,7 +58,7 @@ def build(variant=None):
         if season == "winter":
             look.day_light("overcast", azim=200)
         else:
-            look.day_light("low_sun", azim=235, elev=16, sky="blue", exposure=-0.2)
+            look.day_light("low_sun", azim=300, elev=36, sky="blue", sun_energy=6.0, sky_strength=0.6, exposure=1.8)   # above the houses across the street   # sun front-left, raking the facades (azim 235 put every front in shadow)
     return c
 
 

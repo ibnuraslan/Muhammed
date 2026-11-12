@@ -147,7 +147,7 @@ def build(variant=None):
     else:
         c["guards"] = [H.person("Guard%d" % k, "officer") for k in range(2)]
     import look                   # cold winter day: low sky, one sun key, a little haze
-    look.day_light("low_sun", azim=210, elev=20, sky="blue", exposure=-0.3)     # cold clear day, blue sky, grey stone keeps its colour
+    look.day_light("low_sun", azim=300, elev=24, sky="blue", sun_energy=6.0, sky_strength=0.6, exposure=1.2)     # cold clear day, blue sky, grey stone keeps its colour
     return c
 
 

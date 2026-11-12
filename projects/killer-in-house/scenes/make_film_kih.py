@@ -24,7 +24,7 @@ if os.path.exists(STING):
 else:
     print("[film] WARNING: no sting file at", STING, "- pass --sting; the film is built without it")
 for c in ("ch1", "ch2", "ch3"):
-    parts.append((c, [(f"{s}_{m}", lab) for s, m, t, lab in shots.CHAPTERS[c]], os.path.join(P, "vo", f"{c}.mp3"), 2.0, BL))
+    parts.append((c, [(f"{s}_{m}", lab) for s, m, t, lab in shots.CHAPTERS[c]], os.path.join(P, "vo", f"{c}.mp3"), 3.0, BL))   # >= 3 s under each chapter title card
 
 for folder, shot_list, _, _, base in parts:
     for name, _ in shot_list:
