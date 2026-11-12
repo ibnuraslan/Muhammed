@@ -283,7 +283,7 @@ NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
 EXT_EXPOSURE = {"mist": -0.2, "dusk": 0.2}
 
 
-def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dusk=("dusk", "yard_dusk"), gain=1.8):
+def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dusk=("dusk", "yard_dusk"), gain=1.2):
     """Apply the house look recipe at the end of a set's build(), per shot: the move is read from argv (run.py /
     bake.py <set> <move>). Benchmark: nvidia_doc/review/cinematic_look_v3.jpg (mist day, dusk).
     The camera's start position decides the recipe:
@@ -321,7 +321,7 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
         azim = 200.0
         if camp is not None:
             v = tgt - camp
-            azim = math.degrees(math.atan2(v.x, -v.y)) + 35.0       # sun ahead of the camera: subjects backlit
+            azim = math.degrees(math.atan2(v.x, -v.y)) + 60.0       # sun ahead of the camera and to one side: backlit rims, faces/facades not black
         for o in sc.objects:                       # the set's own haze would double the new ground haze
             if o.name.startswith("Haze") and o.data.materials:
                 for n in o.data.materials[0].node_tree.nodes:
@@ -334,14 +334,36 @@ def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dus
         look.darken_surfaces(0.25, 0.85)
         return k
     near = [o for o in sc.objects if o.type == 'LIGHT' and o.name.startswith(keys)
-            and (camp is None or (o.location - camp).length < 18.0)]
+            and (camp is None or (o.location - camp).length < 30.0)]
     for o in near:
         o["look_key"] = True
         if not (o.data.animation_data and o.data.animation_data.drivers):
             o.data.energy *= gain
     look.let_light_through()
-    look.negative_fill(0.15 if near else 0.4)
+    look.negative_fill(0.15 if near else 0.6)
     look.world_strength(0.35)
     look.warm_practicals()
     look.darken_surfaces(0.3)
+    darken_painted(0.3)
+    sc.view_settings.exposure += -0.5 if near else 0.5      # window rooms go darker; windowless rooms stay readable
     return dict(keys=near)
+
+
+def darken_painted(cap=0.3):
+    """two_tone() and similar walls mix constant colours (the look's darken_surfaces skips linked base colours):
+    cap the constant RGBA inputs of every colour Mix feeding a Principled base colour."""
+    import look
+    mats = {m for o in bpy.context.scene.objects if o.type == 'MESH' and not look._is_human(o)
+            for m in (o.data.materials or []) if m is not None}
+    for m in mats:
+        if not m.use_nodes or any(k in m.name for k in ("Glass", "Emit", "Bulb", "Lightbox", "Sky")):
+            continue
+        for n in m.node_tree.nodes:
+            if n.type == 'MIX' and n.data_type == 'RGBA':
+                for i in (6, 7):
+                    sk = n.inputs[i]
+                    if sk.is_linked:
+                        continue
+                    c_ = sk.default_value; mx = max(c_[:3])
+                    if mx > cap and mx < 0.999:          # leave pure-white multiply/tint helpers alone
+                        sk.default_value = (*(v * cap / mx for v in c_[:3]), 1)
