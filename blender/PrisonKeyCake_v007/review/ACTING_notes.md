@@ -22,3 +22,22 @@ Frames are v005 frames (the same as the beat frames in `beats.json`; story-beat 
 | 16 | 24.0–25.0 s | 1441–1501 | clip_scan: the sleeping guard's hands are inside his thighs | Hands rest on top of the thighs |
 | 17 | 17.3–17.7, 25.6–26.2 s | 1039–1063, 1537–1573 | clip_scan: walking hands brush the thighs | The arm swing hangs 3.5 cm wider |
 | 18 | 19.4, 21.7, 23.0–23.3 s | 1165, 1303, 1381–1399 | clip_scan: the pocket, the cake and the step to the door | Re-checked after the fixes (see the after scan) |
+
+## qa_check.py (c6240b2) flags left in v007, with reasons
+- EMPTY, 97 sampled frames: all are deliberate hand/prop macros. The hands and the prop fill the frame and the character's body is under 15%. Ranges:
+  - 307–355: the visitor's hand and the mould at the window;
+  - 547–739: the pour, casting and mould top;
+  - 769–781: the cake;
+  - 865–907: key into the lock;
+  - 961: the jam;
+  - 1081–1093 and 1171–1225: the second press and the window tin;
+  - 1261–1303: the candle and the knife;
+  - 1411–1441: the lock turn and door push;
+  - 1483–1495: the corridor gates;
+  - 1681–1735: the crane over the wall.
+  The close-ups sheet shows the hands in contact in each of these.
+- FILL 331 (table) and 337 (wall): the move from the press to the window. These are not intended and were not fixed for the 16:20 deadline.
+- BACKHEAD:
+  - 511 (beat 4): the nearest character is the guard; the acting character, the ally, is facing the camera at the crucible.
+  - 367 (beat 3, visitor) and 1057 (beat 7, prisoner): not intended and not fixed for the deadline.
+- HOVER, CLAW, FACEPRESS and INSIDE: 0.
