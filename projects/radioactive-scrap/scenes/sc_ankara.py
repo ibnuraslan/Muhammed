@@ -136,7 +136,7 @@ def build(variant=None):
     c["ledA"], c["leafA"] = ledger("LedgerA", REC + Vector((-0.45, 0.0, 0.78)), 0.03)
     c["ledB"], c["leafB"] = ledger("LedgerB", REC + Vector((0.45, 0.02, 0.78)), -0.02)
     for k in range(2):
-        ph_model("SchoolChair_01", loc=REC + Vector((-0.5 + k * 1.0, -0.95, 0)), rot_z=0.0)
+        ph_model("SchoolChair_01", loc=REC + Vector((-0.5 + k * 1.0, -0.95, 0)), rot_z=math.pi)      # backrest behind the sitter, seat facing the table
     pend = bpy.data.lights.new("RecLamp", 'SPOT'); pend.energy = 380; pend.color = (1.0, 0.85, 0.65); pend.spot_size = math.radians(80); pend.spot_blend = 0.6
     po = bpy.data.objects.new("RecLamp", pend); bpy.context.collection.objects.link(po); po.location = REC + Vector((0, 0, 2.2))
     cone = bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.25, radius2=0.04, depth=0.2, location=REC + Vector((0, 0, 2.3)))
@@ -146,7 +146,7 @@ def build(variant=None):
     P = {}
     P["clerk"] = person("Clerk", 1.0, 52, "suit_brown", "short03", hv=0.55, moustache=True)
     P["inv"] = person("InvA", 1.0, 48, "camel", "short02", moustache=True)      # short cut: the face reads
-    P["inv2"] = person("InvB", 1.0, 41, "wool_grey", "short03", moustache=False)    # second investigator: a man with a short cut, face visible
+    P["inv2"] = person("InvB", 1.0, 41, "wool_grey", "short04", hv=0.3, moustache=False)    # second investigator: a man with a short cut, face visible
     c["people"] = P
     for h in P.values():
         place(h, (0, -150, 0), 0)

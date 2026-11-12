@@ -644,52 +644,27 @@ def anim_drop(c, t):
     drum_on_crane(c, HC + Vector((-1.0, -5.0, 0.0)), 0.02)       # drum set down, still on the hook
     drum = c["drum"]; c["lid"].location = (0, -150, 0)
     mouth = drum.location + Vector((0, 0, 0.92))
-    h2 = c["people"]["r2"]; stance = mouth + Vector((0.15, -1.45, 0)); stance.z = 0
-    reset_pose(h2); stand_pose(h2, head_down=22); place(h2, stance, face_angle(stance, mouth))
+    # simple and still: he stands by the drum looking in, the spade upright beside him, blade on the ground,
+    # one gloved hand resting on the D-grip at hip height, the other arm relaxed at his side
+    h2 = c["people"]["r2"]; stance = mouth + Vector((0.1, -0.85, 0)); stance.z = 0
+    reset_pose(h2); stand_pose(h2, head_down=26); place(h2, stance, face_angle(stance, mouth)); attach_cap(h2)
     fwd = forward(h2); side = fwd.cross(Vector((0, 0, 1))).normalized()
-    # working stance: knees a little bent, back leaning in over the drum
-    for sd_ in ("L", "R"):
-        h2.rot(f"upperleg01.{sd_}", side, 14); h2.rot(f"lowerleg01.{sd_}", side, -24)
-    h2.rot("spine03", side, -12); h2.rot("spine05", side, -6)
-    place(h2, stance, face_angle(stance, mouth)); attach_cap(h2)
-    tip_k = ease(min(1.0, max(0.0, (sec - 0.3) / 1.1)))
-    hip = h2.bone_head("upperleg01.R")
-    grip = stance + fwd * 0.2 + side * 0.12; grip.z = hip.z + 0.3 + 0.05 * tip_k      # D-grip at the hip (top of the spade), shaft angled down into the drum
-    aim_pt = mouth - fwd * 0.18 + Vector((0, 0, 0.03))                                  # blade tip just inside the rim
-    ax = (aim_pt - grip).normalized(); across = ax.cross(Vector((0, 0, 1))).normalized()
-    blade = grip + ax * 0.91                                                            # blade centre (model: grip +0.58, tip -0.50)
-    handle = grip
-    from rs_kit import _reach_raw              # full reach: the hands must close ON the shaft (no elbow clamp here)
-    # near (right) hand in the D-grip, knuckles along the shaft; far (left) hand under the shaft, mid-way
-    _reach_raw(h2, "R", grip + ax * 0.05, Vector((side.x, side.y, -0.8)), ax + Vector((0, 0, -0.2)))
-    mid = grip + ax * 0.5
-    up_ = across.cross(ax).normalized()                      # shaft-normal pointing up
-    if up_.z < 0: up_ = -up_
-    # overhand grip mid-shaft: wrist just above and behind the shaft, knuckles curling over and around it
-    _reach_raw(h2, "L", mid + up_ * 0.035 - ax * 0.05, Vector((-side.x * 0.5, -side.y * 0.5, -1.0)), ax * 0.6 - up_ * 0.8)
-    fingers_curl(h2, 95, thumb=70)
+    h2.rot("spine03", side, -6)
+    foot = stance + side * 0.32 + fwd * 0.12; foot.z = 0
     sp = c["spade"]
     if sp is not None:
-        d_ = (handle - blade).normalized()       # model: blade toward -Z, grip toward +Z (grip top at +0.58)
-        sp.location = grip - d_ * 0.58; sp.rotation_mode = 'QUATERNION'
-        sp.rotation_quaternion = d_.to_track_quat('Z', 'Y') @ Quaternion((0, 0, 1), tip_k * 0.9)
-    cap = c["capsule"]; lip = blade + fwd * 0.1
-    slide = ease(min(1.0, max(0.0, (sec - 0.6) / 0.8)))
-    fall = max(0.0, sec - 1.4)
-    if fall <= 0:
-        cap.location = blade.lerp(lip, slide) + Vector((0, 0, 0.012))
-        cap.rotation_euler = (math.radians(90), 0, math.atan2(fwd.y, fwd.x) + math.pi / 2)
-    else:
-        cap.location = lip + fwd * 0.08 * fall + Vector((0, 0, 0.012 - 4.9 * fall * fall))
-        cap.rotation_euler = (math.radians(90) + fall * 6.0, fall * 2.0, math.atan2(fwd.y, fwd.x) + math.pi / 2)
-        if cap.location.z < mouth.z - 0.45:
-            cap.location = (0, -150, 0)
+        sp.rotation_mode = 'QUATERNION'
+        sp.rotation_quaternion = Quaternion((0, 0, 1), math.atan2(fwd.y, fwd.x)) @ Quaternion((1, 0, 0), math.radians(4))
+        sp.location = foot + Vector((0, 0, 0.5))                            # model: tip at -0.50, grip top at +0.58
+    top = foot + Vector((0, 0, 1.06))
+    from rs_kit import _reach_raw
+    _reach_raw(h2, "R", top + Vector((0, 0, 0.05)) - side * 0.02, Vector((side.x, side.y, -0.6)) - fwd * 0.3, fwd * 0.5 + Vector((0, 0, -0.8)))
+    fingers_curl(h2, 70, side=("R",), thumb=40)
+    fingers_curl(h2, 20, side=("L",), thumb=10)
+    lip = mouth
+    c["capsule"].location = (0, -150, 0)
     for d in c["dust"]:
-        age = sec - d["t0"]
-        if age < 0 or age > 2.2:
-            d["o"].location = (0, -150, 0); continue
-        d["o"].location = lip + d["off"] + d["off"] * age * 2 + Vector((0, 0, -d["v"] * age - 0.3 * age * age))
-        d["o"].scale = (d["r"],) * 3
+        d["o"].location = (0, -150, 0)
     h1 = c["people"]["r1"]; st1 = mouth + Vector((-1.5, 1.2, 0)); st1.z = 0
     reset_pose(h1); stand_pose(h1, head_down=12); place(h1, st1, face_angle(st1, mouth)); attach_cap(h1)
     hold_detector(c, h1, sec, 0.2)
