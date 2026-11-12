@@ -25,8 +25,8 @@ import b_common as B
 import b_props as P
 
 EXPOSURE = 0.2
-DUR = {"quay": 6.0, "watch": 5.5, "lock": 5.5, "shop": 5.0, "boxes": 5.0, "steps": 5.5, "dawn": 6.0, "away": 6.5}
-VARIANT_FOR = {"quay": "harbour", "watch": "harbour_dusk", "lock": "harbour_dusk", "shop": "shop",
+DUR = {"saliva": 5.0, "quay": 6.0, "watch": 5.5, "lock": 5.5, "shop": 5.0, "boxes": 5.0, "steps": 5.5, "dawn": 6.0, "away": 6.5}
+VARIANT_FOR = {"saliva": "kitchen", "quay": "harbour", "watch": "harbour_dusk", "lock": "harbour_dusk", "shop": "shop",
                "boxes": "house_day", "steps": "house_day", "dawn": "house_dawn", "away": "house_dawn"}
 SHOP_DOOR = Vector((4.0, 6.0, 0.0))
 HOUSE_DOOR = Vector((0.0, 6.0, 0.6))
@@ -102,6 +102,27 @@ def build(variant=None):
     brick2 = B.tex_mat("Brick2", "red_brick_03" if False else "brick_wall_08", scale=0.35, tint=(0.6, 0.45, 0.38))
     roof = B.tex_mat("Roof", "grey_roof_tiles", scale=0.4, tint=(0.4, 0.38, 0.38))
     cars = []
+    if variant == "kitchen":
+        # inside the house: a kitchen table; the man sits with his back to us, an officer hands him a swab tube
+        world_flat((0.006, 0.007, 0.01), 1.0)
+        box("KFloor", (0, 0, -0.01), (5, 4, 0.02), B.tex_mat("KFl", "floor_tiles_06", scale=0.5, tint=(0.6, 0.6, 0.58)))
+        kw = B.plaster("KWall", (0.6, 0.58, 0.52), dirt=0.1)
+        box("KWallB", (0, 2.0, 1.3), (5, 0.1, 2.6), kw); box("KWallL", (-2.5, 0, 1.3), (0.1, 4, 2.6), kw); box("KWallR", (2.5, 0, 1.3), (0.1, 4, 2.6), kw)
+        box("KWin", (0.0, 1.96, 1.5), (1.2, 0.02, 1.0), emissive("KGrey", (0.75, 0.8, 0.85), 1.2))
+        B.key_spot((0.0, 2.6, 2.0), (0, 0.3, 0.8), 900, 50, (0.8, 0.86, 0.95), soft=0.6, name="KWinKey")
+        ph.model("wooden_table_02", loc=(0, 0.5, 0), rot_z=0)
+        for x, fz in ((-0.1, math.pi), (0.25, 0.0)):
+            ph.model("dining_chair_02", loc=(x, -0.15 if fz == math.pi else 1.15, 0), rot_z=fz + math.pi)
+        man = B.person("Searched", 1.0, 58, "male_casualsuit03", "short02", hue=0.6, sat=0.2, val=0.35, hair_val=2.0, hair_sat=0.0)
+        B.seat(man, (-0.1, -0.22, 0), math.pi, lean=8)          # faces +Y, back to the camera
+        off = B.person("SwabOfficer", 0.0, 36, "female_elegantsuit01", "ponytail01", hue=0.6, sat=0.2, val=0.3, hair_val=0.3)
+        B.stand(off, (0.35, 1.25, 0), 0.0)                        # across the table, facing -Y
+        B.flat_clothes(off, (0.12, 0.14, 0.18))
+        c["man"], c["off"] = man, off
+        c["tube"] = cyl("SwabTube", (0, 0, 0), 0.012, 0.14, pbr("TubeClear", (0.9, 0.92, 0.95), 0.1, **{'Transmission Weight': 0.7}), verts=16)
+        c["rest"] = B.capture(man); c["rests"] = [B.capture(off)]; c["offs"] = [off]
+        B.room_haze((0, 0, 1.3), (4.8, 3.8, 2.6), density=0.012)
+        return c
     if variant.startswith("harbour") or variant == "shop":
         # quay along y = 0..6 (water at y < 0), a street y = 1..5, houses from y = 6
         box("Quay", (0, 3.0, -0.25), (80, 6.0, 0.5), B.tex_mat("QuayStone", "cobblestone_02", scale=0.25, tint=(0.55, 0.55, 0.55)))
@@ -218,6 +239,21 @@ def drive(car, x0, x1, u):
 def anim(c, t, move):
     sec = t * DUR[move]
     v = c["variant"]
+    if v == "kitchen":
+        man, off = c["man"], c["off"]
+        B.apply_pose(man, c["rest"]); B.apply_pose(off, c["rests"][0])
+        u = ease(min(1.0, max(0.0, (sec - 0.8) / 1.6)))
+        tube = Vector((0.1, 0.75 - 0.2 * u, 0.95 - 0.05 * u))
+        reach(off, "R", tube + Vector((0.0, 0.08, 0.02)), Vector((0.4, 0.5, -0.8)), Vector((0, -1, 0)))
+        fingers_curl(off, 40, side=("R",)); B.nod(off, 18)
+        c["tube"].location = tube; c["tube"].rotation_euler = (math.radians(90), 0, 0)
+        fwd = B.fwd_of(man); side = fwd.cross(Vector((0, 0, 1))).normalized()
+        for sd, sg in (("L", -1), ("R", 1)):
+            reach(man, sd, man.bone_head("spine01") + fwd * 0.42 + side * (0.15 * sg) + Vector((0, 0, 0.8 - man.bone_head("spine01").z + 0.05)),
+                  Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
+        fingers_curl(man, 30); B.nod(man, 6)
+        bpy.context.view_layer.update()
+        return
     if v.startswith("harbour"):
         for k, b in enumerate(c["boats"]):
             b.location.z = -1.0 + 0.05 * math.sin(sec * 1.1 + k * 1.3)
@@ -323,6 +359,8 @@ def cam_quay(c, t):
 
 
 MOVES = {
+    "saliva": dict(kind="anim", dof=2.8, cam=cam((-0.9, -1.9, 1.6), (-0.7, -1.6, 1.55), (0.15, 0.7, 1.05), 32),
+                   anim=lambda c, t: anim(c, t, "saliva"), focus=lambda c, t: c["off"].bone_head("spine03")),
     "quay": dict(kind="anim", dof=None, cam=cam_quay, anim=lambda c, t: anim(c, t, "quay")),
     "watch": dict(kind="anim", dof=2.0, cam=cam((0.15, 2.0, 1.25), (0.3, 2.0, 1.24), (6.0, 5.0, 1.2), 32),
                   anim=lambda c, t: anim(c, t, "watch"), focus=lambda c, t: Vector((SHOP_DOOR.x, 5.8, 1.2))),

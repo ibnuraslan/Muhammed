@@ -57,6 +57,7 @@ def build(variant=None):
     rng = np.random.default_rng(55)
     if variant == "fedcourt":
         sky("grey")
+        bpy.context.scene.view_settings.exposure += 0.6
         stone = B.tex_mat("Stone", "concrete_wall_006", scale=0.25, tint=(0.75, 0.73, 0.68))
         box("Plaza", (0, -6, -0.05), (80, 30, 0.1), B.tex_mat("PlazaM", "granite_tile", scale=0.3, tint=(0.6, 0.6, 0.6)))
         for k in range(8):                                   # broad steps up to the entrance
@@ -148,8 +149,8 @@ def build(variant=None):
         d = so.driver_add("rotation_euler", 0).driver; d.type = 'SCRIPTED'; d.expression = "radians(40) + 0.35 * min(1, frame / 160)"
         for i, ex in enumerate(("1.0", "0.8 - 0.1 * min(1, frame / 160)", "0.6 + 0.3 * min(1, frame / 160)")):
             dd = sd.driver_add("color", i).driver; dd.type = 'SCRIPTED'; dd.expression = ex
-        B.practical((0.9, 1.0, 1.6), 30, (1.0, 0.75, 0.5), 0.1, "BenchLamp")
-        ph.model("desk_lamp_arm_01", loc=(1.0, 1.55, 0.83), rot_z=math.radians(-150))
+        B.practical((0.7, 1.1, 1.5), 30, (1.0, 0.75, 0.5), 0.1, "BenchLamp")
+        ph.model("desk_lamp_arm_01", loc=(0.75, 1.5, 0.83), rot_z=math.radians(-150))
         old = B.person("Physicist", 1.0, 70, "male_casualsuit05", "short02", hue=0.08, sat=0.3, val=0.4, hair_val=2.4, hair_sat=0.0)
         B.seat(old, (0.15, 0.7, 0), math.pi, lean=14)
         ph.model("dining_chair_02", loc=(0.15, 0.62, 0), rot_z=math.pi)
@@ -224,7 +225,7 @@ def anim(c, t, move):
             u = sec / DUR[move]
             B.walk_to(m, (0.1, -12.0, 0), (-0.1, 0.5, 0), u, 7.5 * u, stride=22, swing=6)
         else:
-            B.seat(m, (-1.2, -1.0, 0), -math.pi / 2, lean=10); B.ground(m, 0.0)
+            B.seat(m, (-1.15, -1.0, 0), math.pi / 2, lean=10); B.ground(m, 0.0)
             B.nod(m, 10 + 3 * math.sin(sec * 0.4))
         fwd = B.fwd_of(m); side = fwd.cross(Vector((0, 0, 1))).normalized()
         hand = m.bone_head("upperarm01.L") + Vector((0, 0, -0.55)) - side * 0.12 + fwd * 0.05
@@ -263,7 +264,7 @@ def cam(a, b, tgt, lens):
 
 
 MOVES = {
-    "fedwide": dict(kind="anim", dof=None, cam=cam((-6.0, -18.0, 2.2), (-5.0, -15.0, 2.4), (0.0, 6.0, 4.5), 28), anim=lambda c, t: anim(c, t, "fedwide")),
+    "fedwide": dict(kind="anim", dof=None, cam=cam((-7.0, -24.0, 1.8), (-6.0, -21.0, 2.0), (0.0, 6.0, 6.0), 26), anim=lambda c, t: anim(c, t, "fedwide")),
     "press": dict(kind="anim", dof=4.0, cam=cam((5.0, -6.5, 1.7), (4.4, -5.9, 1.65), (0.0, 1.0, 1.4), 35),
                   anim=lambda c, t: anim(c, t, "press"), focus=lambda c, t: c["lawyer"].bone_head("spine03")),
     "walk": dict(kind="anim", dof=4.0, cam=cam((0.3, 3.5, 1.6), (0.2, 2.6, 1.6), (0.0, -8.0, 1.3), 35),
@@ -272,7 +273,7 @@ MOVES = {
                  anim=lambda c, t: anim(c, t, "wait"), focus=lambda c, t: c["m"].bone_head("head")),
     "listen": dict(kind="anim", dof=2.8, cam=cam((1.6, -0.9, 1.55), (1.3, -0.6, 1.5), (0.1, 1.2, 1.15), 32),
                    anim=lambda c, t: anim(c, t, "listen"), focus=lambda c, t: c["old"].bone_head("head")),
-    "year": dict(kind="anim", dof=2.8, cam=cam((-0.6, -0.4, 1.6), (-0.3, -0.2, 1.62), (0.9, 1.6, 1.4), 30),
+    "year": dict(kind="anim", dof=2.8, cam=cam((-1.4, -1.2, 1.7), (-1.1, -0.9, 1.68), (1.0, 1.6, 1.35), 30),
                  anim=lambda c, t: anim(c, t, "year"), focus=lambda c, t: Vector((1.2, 1.7, 1.5))),
     "fog": dict(kind="anim", dof=None, cam=cam((1.8, -16.0, 1.7), (1.4, -13.5, 1.75), (0.0, 25.0, 6.0), 32), anim=lambda c, t: anim(c, t, "fog")),
     "gate": dict(kind="anim", dof=4.0, cam=cam((0.5, 10.5, 1.7), (0.4, 9.6, 1.68), (0.0, -6.0, 1.5), 32),

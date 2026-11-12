@@ -334,7 +334,7 @@ MOVES = {
                  anim=lambda c, t: anim(c, t, "dock"), focus=lambda c, t: c["people"]["lawyer"].bone_head("head")),
     "witness": dict(kind="anim", dof=2.8, cam=cam((1.4, 4.4, 1.55), (1.2, 4.2, 1.5), (0.0, 2.3, 1.15), 45),
                     anim=lambda c, t: anim(c, t, "witness"), focus=lambda c, t: c["people"]["witness"].bone_head("head")),
-    "bench": dict(kind="anim", dof=4.0, cam=cam((0.6, -0.4, 1.55), (0.4, 2.0, 1.75), (0.0, 6.4, 1.75), 32),
+    "bench": dict(kind="anim", dof=None, title=("CHAPTER 5", "After the Verdict", 8, 96), cam=cam((0.6, -0.4, 1.55), (0.4, 2.0, 1.75), (0.0, 6.4, 1.75), 32),
                   anim=lambda c, t: anim(c, t, "bench"), focus=lambda c, t: c["people"]["Presiding"].bone_head("head")),
     "exhibit": dict(kind="anim", dof=3.2, cam=cam((-0.2, 2.2, 1.6), (0.1, 2.5, 1.55), (2.3, 4.2, 1.05), 35),
                     anim=lambda c, t: anim(c, t, "exhibit"), focus=lambda c, t: c["exhibit"].matrix_world.translation),

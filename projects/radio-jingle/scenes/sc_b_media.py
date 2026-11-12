@@ -48,7 +48,7 @@ def build(variant=None):
         for k in range(9):
             a = math.radians(-40 + k * 10)
             box("Backdrop", (6.0 * math.sin(a), 4.5 + 6.0 * (1 - math.cos(a)) * 0.0 + 1.2 * (1 - math.cos(a)), 1.6), (1.1, 0.06, 3.2),
-                emissive("BackBlue", (0.08, 0.16, 0.38), 0.6 + 0.25 * (k % 2)), rot=(0, 0, a))
+                pbr("BackBlue", (0.06, 0.12, 0.3) if k % 2 else (0.1, 0.16, 0.32), 0.6), rot=(0, 0, a))
         box("Desk", (0, 2.6, 0.4), (2.2, 0.7, 0.8), pbr("DeskGrey", (0.35, 0.36, 0.4), 0.4), bevel=0.02)
         box("DeskTop", (0, 2.6, 0.81), (2.3, 0.75, 0.03), pbr("DeskTopW", (0.6, 0.6, 0.62), 0.3))
         B.sheet("Notes", (0.15, 2.6, 0.83), (0.21, 0.297), B.paper_mat("PrNotes", (0.88, 0.87, 0.82)), rot=(0, 0, 0.1))
@@ -94,7 +94,8 @@ def build(variant=None):
         box("WallR_a", (3.5, -2.2, 1.6), (0.1, 1.6, 1.4), wall); box("WallR_b", (3.5, 2.2, 1.6), (0.1, 1.6, 1.4), wall)
         box("RainPane", (3.5, 0.0, 1.6), (0.02, 2.8, 1.4), rain_glass("Rain", 60, 0.4))
         sky = box("Outside", (6.0, 0, 1.5), (0.05, 8, 4), emissive("RainSky", (0.55, 0.62, 0.7), 0.9)); sky.visible_shadow = False
-        B.key_spot((5.0, 0.0, 2.2), (0.0, 1.5, 1.0), 1200, 40, (0.75, 0.85, 1.0), soft=0.8, name="WinKey")
+        B.key_spot((5.0, 0.0, 2.2), (0.0, 1.5, 1.0), 3500, 50, (0.75, 0.85, 1.0), soft=0.8, name="WinKey")
+        B.key_spot((1.5, 1.0, 2.7), (-0.3, 2.9, 1.4), 400, 40, (1.0, 0.78, 0.55), soft=0.3, name="DeskLampKey")
         box("Ceil", (0, 0, 2.82), (7, 6, 0.04), wall)
         cork = pbr("Cork", (0.42, 0.3, 0.19), 0.9)
         box("Cork", (-0.5, 2.94, 1.5), (3.0, 0.03, 1.3), cork)
@@ -118,7 +119,7 @@ def build(variant=None):
         det = B.person("Detective07", 1.0, 48, "male_casualsuit05", "short02", hue=0.6, sat=0.2, val=0.32, hair_val=1.0, hair_sat=0.2)
         B.stand(det, (-0.3, 2.35, 0), math.pi)
         c["det"] = det; c["rest"] = {"det": B.capture(det)}
-        B.practical((0.8, 0.2, 2.6), 30, (1.0, 0.8, 0.6), 0.3, "OffBulb")
+        B.practical((0.8, 0.2, 2.6), 80, (1.0, 0.8, 0.6), 0.3, "OffBulb")
         B.room_haze((0, 0, 1.4), (6.8, 5.8, 2.8), density=0.01)
     else:
         box("Floor", (0, 0, -0.01), (6, 5, 0.02), pbr("EditFloor", (0.05, 0.05, 0.055), 0.6))
@@ -156,7 +157,7 @@ def anim(c, t, move):
         for sd, sg in (("L", -1), ("R", 1)):
             reach(pres, sd, Vector((0.18 * sg, 2.5, 0.88)), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
         fingers_curl(pres, 25); pres.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.6)); B.nod(pres, -2)
-        c["studiocam"].location = Vector((-3.4 + 1.8 * ease(t), -1.5, 0))
+        c["studiocam"].location = Vector((-3.4 + 1.6 * ease(t), -1.6, 0))
         for k, (h, hs) in enumerate(c["callers"]):
             B.apply_pose(h, c["rest"][f"c{k}"])
             fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
@@ -202,16 +203,16 @@ def cam(a, b, tgt, lens):
 
 
 MOVES = {
-    "appeal": dict(kind="anim", dof=4.0, cam=cam((-1.2, -4.8, 1.7), (-0.6, -4.2, 1.65), (0.0, 3.0, 1.3), 35),
+    "appeal": dict(kind="anim", dof=4.0, cam=cam((-3.6, -3.2, 1.75), (-3.2, -2.9, 1.72), (0.0, 3.0, 1.25), 40),
                    anim=lambda c, t: anim(c, t, "appeal"), focus=lambda c, t: c["pres"].bone_head("head")),
     "phones": dict(kind="anim", dof=4.0, cam=cam((3.4, -1.6, 1.7), (3.8, -1.3, 1.65), (7.2, 1.3, 0.95), 30),
                    anim=lambda c, t: anim(c, t, "phones"), focus=lambda c, t: Vector((6.3, 1.1, 1.0))),
     "pin": dict(kind="anim", dof=3.2, cam=cam((1.9, -0.6, 1.65), (1.6, -0.2, 1.6), (-0.3, 2.9, 1.45), 30),
                 anim=lambda c, t: anim(c, t, "pin"), focus=lambda c, t: Vector((0.3, 2.9, 1.5))),
-    "clock": dict(kind="anim", dof=2.4, cam=cam((1.2, -0.8, 1.6), (1.7, 0.6, 1.85), (2.2, 2.93, 2.1), 40),
+    "clock": dict(kind="anim", dof=2.4, cam=cam((1.9, -1.9, 0.9), (2.0, 0.4, 1.6), (2.2, 2.93, 2.0), 35),
                   anim=lambda c, t: anim(c, t, "clock"), focus=lambda c, t: Vector((2.2, 2.93, 2.1))),
     "scrub": dict(kind="anim", dof=2.8, cam=cam((1.6, -1.2, 1.55), (1.3, -0.8, 1.5), (0.0, 1.85, 1.0), 32),
                   anim=lambda c, t: anim(c, t, "scrub"), focus=lambda c, t: c["j1"].bone_head("head")),
-    "paused": dict(kind="anim", dof=2.4, cam=cam((-0.9, -0.1, 1.3), (-0.4, 0.15, 1.28), (0.0, 1.85, 1.0), 40),
+    "paused": dict(kind="anim", dof=2.4, cam=cam((0.25, -0.2, 1.38), (0.05, 0.1, 1.35), (0.0, 1.85, 1.06), 40),
                    anim=lambda c, t: anim(c, t, "paused"), focus=lambda c, t: Vector((0.0, 1.85, 0.95))),
 }

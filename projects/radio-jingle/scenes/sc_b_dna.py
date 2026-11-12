@@ -182,7 +182,7 @@ def cam_orbit(c, t):
 
 
 MOVES = {
-    "swab": dict(kind="anim", dof=2.8, cam=cam((1.2, -1.8, 1.6), (0.9, -1.4, 1.55), (BOX_AT.x + 0.5, BOX_AT.y - 0.2, 1.05), 30),
+    "swab": dict(kind="anim", dof=None, title=("CHAPTER 4", "The Clicks", 8, 96), cam=cam((1.2, -1.8, 1.6), (0.9, -1.4, 1.55), (BOX_AT.x + 0.5, BOX_AT.y - 0.2, 1.05), 30),
                  anim=lambda c, t: anim(c, t, "swab"), focus=lambda c, t: c["tech"].bone_head("head")),
     "seq": dict(kind="anim", dof=2.8, cam=cam((1.4, 0.2, 1.55), (1.1, 0.6, 1.5), (0.0, 2.6, 1.1), 32),
                 anim=lambda c, t: anim(c, t, "seq"), focus=lambda c, t: SEQ + Vector((0, -0.3, 0.3))),
