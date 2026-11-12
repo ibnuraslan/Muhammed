@@ -66,6 +66,18 @@ def build(variant=None):
     box("CorWallN", (4.2, 1.1, 1.4), (4.0, 0.1, 2.8), paint); box("CorWallS", (4.2, -1.1, 1.4), (4.0, 0.1, 2.8), paint)
     box("CorCeil", (4.2, 0, 2.82), (4.0, 2.2, 0.04), B.plaster("CorC", (0.45, 0.45, 0.42)))
     box("CorEnd", (6.2, 0, 1.4), (0.1, 2.2, 2.8), upper)
+    # corridor dressing: doors along both walls, a notice board, a radiator, a bench
+    door_c = pbr("CorDoor", (0.22, 0.14, 0.08), 0.45)
+    for (x, y) in ((3.4, 1.06), (5.0, 1.06), (4.3, -1.06)):
+        box("CorDoorL", (x, y, 1.05), (0.9, 0.05, 2.1), door_c, bevel=0.005)
+        box("CorDoorFr", (x, y, 2.13), (1.0, 0.06, 0.08), pbr("CorFr", (0.5, 0.48, 0.42), 0.5))
+        cyl("CorKnob", (x + 0.35, y - 0.04 * (1 if y > 0 else -1), 1.0), 0.025, 0.05, pbr("Brass2", (0.6, 0.45, 0.2), 0.3, 1.0), verts=12, rot=(math.radians(90), 0, 0))
+    box("Notice", (5.6, -1.04, 1.5), (1.0, 0.03, 0.7), pbr("CorkN", (0.42, 0.3, 0.19), 0.9))
+    for k in range(5):
+        B.sheet("NoticeP", (5.25 + k * 0.17, -1.02, 1.45 + 0.12 * (k % 2)), (0.13, 0.18), B.paper_mat("NP", (0.86, 0.85, 0.78)), rot=(math.radians(90), 0, math.radians(180)))
+    for k in range(8):
+        box("RadFin", (3.2 + k * 0.07, -1.0, 0.45), (0.04, 0.08, 0.55), pbr("Radiator", (0.75, 0.73, 0.68), 0.35))
+    box("CorBench", (4.3, 0.85, 0.23), (1.4, 0.35, 0.05), pbr("BenchW", (0.3, 0.2, 0.12), 0.6))
     for x in (3.5, 5.3):
         box("CorTube", (x, 0, 2.78), (1.2, 0.12, 0.04), emissive("Tube", (0.85, 0.95, 0.9), 2.0 if variant == "night" else 0.5))
         l = area_light((x, 0, 2.7), (0, 0, 0), 1.0, 25 if variant == "night" else 8, (0.8, 0.95, 0.88)); l.visible_camera = False
@@ -91,9 +103,11 @@ def build(variant=None):
     B.fill((-1.8, -1.6, 2.0), (0, 0.3, 1.0), 40, 1.5, (0.4, 0.55, 0.75))
     B.room_haze((1.8, 0, 1.4), (8.4, 4.0, 2.8), density=0.01, color=(0.92, 0.92, 0.9))
     # ------------------------------------------------------------------ people
-    d1 = B.person("Det1", 1.0, 46, "male_casualsuit05", "short02", hue=0.08, sat=0.35, val=0.45, hair_val=0.5)
-    d2 = person81("detective", "Det2", (1.0, 38, "male_elegantsuit01", "short04")) if False else B.person("Det2", 1.0, 36, "male_elegantsuit01", "short04", hue=0.08, sat=0.25, val=0.35, hair_val=0.3)
-    man = B.person("Questioned", 1.0, 33, "male_casualsuit03", "short01", hue=0.55, sat=0.3, val=0.5, hair_val=0.6)
+    d1 = B.person("Det1", 1.0, 48, "male_elegantsuit01", "short02", hair_val=0.9, hair_sat=0.3)
+    B.flat_clothes(d1, (0.06, 0.06, 0.065))                      # grey suit
+    d2 = B.person("Det2", 1.0, 36, "male_elegantsuit01", "short04", hair_val=0.3)
+    B.flat_clothes(d2, (0.075, 0.045, 0.025))                       # brown suit
+    man = B.pfaffinger("Questioned")
     B.seat(d1, (-0.3, -0.42, 0), math.pi, lean=10)      # face +Y, across the table
     B.seat(d2, (0.35, -0.42, 0), math.pi, lean=14)
     B.seat(man, (0.0, 1.05, 0), 0.0, lean=8)            # faces -Y
@@ -103,8 +117,9 @@ def build(variant=None):
         P0 = c["rest"]["man"]
         B.stand(man, (3.0, 0.0, 0), math.pi / 2); c["walkpose"] = B.capture(man)   # for the corridor walk
         B.apply_pose(man, P0)
-        coat = box("Coat", (0, 0, 0), (0.06, 0.32, 0.55), fabric("CoatFab", (0.12, 0.1, 0.08), 0.9, 0.3, 300), bevel=0.02)
+        coat = B.draped_coat("Coat", color=(0.2, 0.14, 0.08))
         coat.location = (0, 0, -30); c["coat"] = coat
+    B.finish_interior(lift=-0.3 if variant == "day" else -0.1)
     return c
 
 
@@ -168,6 +183,18 @@ def anim(c, t, move):
         c["door"].rotation_euler = (0, 0, math.radians(-95) * ease(min(1.0, sec / 1.2)))
         u = ease(min(1.0, max(0.0, (sec - 0.6) / (DUR["leave"] - 0.6))))
         B.walk_to(man, (2.55, 0.0, 0), (5.6, 0.05, 0), u, 4.2 * u, stride=22, swing=6)
+        # the coat folded over his left forearm (forearm held level in front of the waist)
+        fwd = B.fwd_of(man); side = fwd.cross(Vector((0, 0, 1))).normalized()
+        sh = man.bone_head("upperarm01.L")
+        wr = sh + Vector((0, 0, -0.46)) + fwd * 0.28 + side * -0.12
+        reach(man, "L", wr, Vector((0, 0, -1)) - fwd * 0.3, fwd)
+        fingers_curl(man, 40, side=("L",))
+        el = man.bone_tail("upperarm02.L"); w2 = man.bone_tail("lowerarm02.L")
+        ax = (w2 - el); ax.z = 0; ax = ax.normalized()
+        from mathutils import Matrix
+        y_ = Vector((0, 0, 1)).cross(ax).normalized(); z_ = ax.cross(y_)
+        M = Matrix((ax, y_, z_)).transposed().to_4x4(); M.translation = (el + w2) * 0.5 + Vector((0, 0, 0.03))
+        c["coat"].matrix_world = M
         fwd = B.fwd_of(man)
         B.nod(man, 10)
     bpy.context.view_layer.update()

@@ -14,7 +14,7 @@ import b_common as B
 
 EXPOSURE = getattr(H, "EXPOSURE", 0.0)
 BOUNCES = getattr(H, "BOUNCES", 6)
-DUR = {"line_end": 5.0, "offhook": 7.0}
+DUR = {"line_end": 5.0, "offhook": 8.0}   # offhook: reels stop at 5.0 s on "answered", then 3 s hold
 VARIANT_FOR = {"line_end": "night+police", "offhook": "night+police"}
 T = H.PHONE_T
 
@@ -23,6 +23,15 @@ def build(variant=None):
     c = H.build(variant or "night+police")
     # the receiver off the hook for the final shot: lying on the table beside the phone, cord slack
     c["hs_rest"] = (c["handset"].location.copy(), c["handset"].rotation_euler.copy())
+    # cap the practicals (the shade clipped to white on sheet 1)
+    for k in ("shade_mat", "pshade_mat"):
+        if c.get(k):
+            c[k].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.7
+    for nm in ("HallLampL", "PianoLampL"):
+        o = bpy.data.objects.get(nm)
+        if o:
+            o.data.energy *= 0.55
+    B.finish_interior(lift=0.1, faces=0)
     return c
 
 
@@ -50,7 +59,7 @@ def anim(c, t, move):
         hs.matrix_parent_inverse.identity()
         hs.location = Vector((T.x - 0.08, T.y - 0.42, 0.80)); hs.rotation_euler = (math.radians(90), 0, math.radians(15))
         # reels slow to a stop by ~4.5 s: angle = integral of a linearly falling rate
-        stop = 4.5; r0 = 0.9
+        stop = 5.0; r0 = 0.9
         s_ = min(sec, stop); revs = r0 * s_ - 0.5 * (r0 / stop) * s_ * s_
         _spin(c, sec, revs)
         if c.get("deck"):

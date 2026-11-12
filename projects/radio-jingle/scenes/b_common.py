@@ -108,6 +108,8 @@ def practical(loc, energy, color=(1.0, 0.72, 0.42), radius=0.05, name="Practical
 
 
 def room_haze(loc, size, density=0.012, color=(0.9, 0.92, 0.95)):
+    if max(size) < 20:                     # indoors: only a whisper of haze (the person: no heavy haze indoors)
+        density = min(density, 0.005)
     return haze(loc, size, density=density, color=color, anis=0.55)
 
 
@@ -460,3 +462,88 @@ def flat_clothes(h, color, rough=0.75):
             for l in list(p.inputs['Base Color'].links):
                 m.node_tree.links.remove(l)
             p.inputs['Base Color'].default_value = (*color, 1); p.inputs['Roughness'].default_value = rough
+
+
+
+# ============================================================================ the house look (nvidia_doc/scenes/look.py)
+def finish_interior(lift=0.5, faces=14.0, darken=0.3, warm=0.45):
+    """Interiors: keep the set's own directional key and practicals (already one key + low fill), darken plain walls,
+    warm the practicals, lift exposure so faces and key props sit at mid level, and a face floor for every person."""
+    import look
+    look.night_interior(darken=darken, fill=1.0, warm=warm, lift=lift, faces=faces)
+    preview_cap()
+
+
+def finish_exterior(azim, elev=8, mood="low_sun", sky="blue", sun_energy=None, exposure=None, haze_box=None):
+    """Exteriors: real colours (blue sky, warm low sun from the side), mood from shadows and contrast."""
+    import look
+    look.day_light(mood, azim=azim, elev=elev, sky=sky, sun_energy=sun_energy, exposure=exposure, haze_box=haze_box)
+    preview_cap()
+
+
+# ============================================================================ CAST (fixed looks, all film long; see PLAN_B.md)
+def michael(name="Michael", years=47):
+    """The brother, a music teacher in his forties: short greying hair, dark plain navy sweater, slim."""
+    h = person(name, 1.0, years, "male_casualsuit03", "short04", hair_val=1.05, hair_sat=0.3, weight=0.42, height=0.56)
+    flat_clothes(h, (0.045, 0.06, 0.11))
+    return h
+
+
+def pfaffinger(name="Acquaintance"):
+    """The acquaintance questioned in 1981 (unnamed on screen): early thirties, longer 80s hair, olive work jacket."""
+    h = person(name, 1.0, 31, "male_casualsuit05", "bob01", hair_val=0.16, weight=0.4, height=0.5)
+    flat_clothes(h, (0.075, 0.065, 0.03))
+    return h
+
+
+def mazurek(name="Man", era=1981):
+    """The convicted man (unnamed, never shown committing any act): heavier build, shorter; 1981 a dark brown
+    work shirt and dark hair, from 2007 a grey-green jacket and grey hair (white by 2023)."""
+    if era < 2000:
+        h = person(name, 1.0, 44, "male_casualsuit01", "short02", hair_val=0.3, weight=0.62, height=0.44)
+        flat_clothes(h, (0.12, 0.08, 0.05))
+    else:
+        h = person(name, 1.0, 58 if era < 2015 else 72, "male_casualsuit05", "short02",
+                   hair_val=1.9 if era < 2015 else 2.6, hair_sat=0.0, weight=0.62, height=0.44, skin=SKIN_OLD)
+        flat_clothes(h, (0.14, 0.16, 0.13))
+    return h
+
+
+
+def draped_coat(name, color=(0.09, 0.08, 0.065), length=(0.55, 0.42), width=0.4):
+    """A coat folded over a forearm: a soft cloth sheet bent over a roll (local x along the forearm, z up),
+    hanging down both sides with wavy hems. Place it with matrix_world at the forearm."""
+    import bmesh
+    nx, ny = 10, 40
+    la, lb = length; r = 0.05
+    total = la + math.pi * r + lb
+    bm = bmesh.new()
+    verts = []
+    rng = np.random.default_rng(7)
+    for j in range(ny + 1):
+        s_ = j / ny * total
+        row = []
+        for i in range(nx + 1):
+            x = (i / nx - 0.5) * width
+            if s_ < la:                                   # front panel, hanging (s from the hem up)
+                d = la - s_; y, z = r + 0.01 * math.sin(x * 20), -d
+                y += 0.03 * (d / la) ** 2
+            elif s_ < la + math.pi * r:                  # over the roll
+                a = (s_ - la) / r; y, z = r * math.cos(a), r * math.sin(a)
+            else:                                         # back panel
+                d = s_ - la - math.pi * r; y, z = -r - 0.03 * (d / lb) ** 2, -d
+            if s_ < 0.04 or s_ > total - 0.04:
+                z += 0.02 * math.sin(x * 25 + j)          # wavy hems
+            row.append(bm.verts.new((x, y, z)))
+        verts.append(row)
+    for j in range(ny):
+        for i in range(nx):
+            bm.faces.new((verts[j][i], verts[j][i + 1], verts[j + 1][i + 1], verts[j + 1][i]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    sol = o.modifiers.new("thick", 'SOLIDIFY'); sol.thickness = 0.012
+    sub = o.modifiers.new("sub", 'SUBSURF'); sub.levels = 1; sub.render_levels = 2
+    for p in me.polygons:
+        p.use_smooth = True
+    o.data.materials.append(fabric(name + "F", color, 0.95, 0.4, 250))
+    return o

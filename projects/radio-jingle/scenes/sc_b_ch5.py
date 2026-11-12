@@ -8,7 +8,7 @@
   physicist: a retired physicist's home workbench (basement window).
              listen  (A): an older man in headphones at the bench, the borrowed recorder's reels turning
              year    (B): calendar pages fall away as the window light swings across the bench (time passing)
-  school:    an old boarding-school building beyond the woods in fog; a figure walks the drive.
+  school:    an old boarding-school building beyond the woods; fog drifts past it (no figure: an unproven lead).
              fog     (A)
   prison:    a prison wall and a sliding steel gate at dawn, 2023.
              gate    (A): the gate slides open; a man walks out, seen from behind
@@ -110,7 +110,7 @@ def build(variant=None):
             box("CDoorFrame", (-1.55, y, 2.45), (0.08, 1.45, 0.1), oak)
         for y in (-7.0, -1.0, 5.0):
             box("Bench", (-1.3, y, 0.23), (0.45, 1.8, 0.06), oak); box("BenchLeg", (-1.3, y, 0.11), (0.4, 1.7, 0.2), pbr("BLeg", (0.2, 0.2, 0.2), 0.4, 0.8))
-        mic = B.person("Michael13", 1.0, 49, "male_casualsuit05", "short04", hue=0.62, sat=0.25, val=0.32, hair_val=0.45, hair_sat=0.5)
+        mic = B.michael("Michael13", 51)
         c["m"] = mic
         c["folder"] = box("Folder", (0, 0, -30), (0.03, 0.24, 0.32), pbr("FolderBlue", (0.08, 0.12, 0.25), 0.6))
         B.room_haze((0, 0, 1.75), (3.0, 29, 3.4), density=0.02, color=(0.95, 0.92, 0.88))
@@ -171,8 +171,7 @@ def build(variant=None):
             for k in range(12):
                 box("SWinB", (-15 + k * 2.7, 23.95, 2.5 + fl * 3.3), (1.1, 0.05, 1.8), fr)
         B.ph_instances("fir_tree_01", [((sx * (6 + 9 * k) + rng.uniform(-2, 2), -6 + rng.uniform(-8, 14), 0), rng.uniform(0, 6), 0.6) for sx in (-1, 1) for k in range(4)])
-        walker = B.person("Walker", 1.0, 40, "male_casualsuit05", "short02", hue=0.6, sat=0.1, val=0.18, hair_val=0.2)
-        c["walker"] = walker
+        c["fogbank"] = B.room_haze((0, 18, 4), (60, 12, 8), density=0.05, color=(0.85, 0.87, 0.9))   # a drifting bank of fog
         B.room_haze((0, 10, 6), (120, 90, 14), density=0.03, color=(0.82, 0.85, 0.88))
     else:   # prison
         sky("mist")
@@ -189,10 +188,18 @@ def build(variant=None):
         box("YardWallL", (-3.0, 8.0, 3.0), (0.4, 8.0, 6.0), concrete); box("YardWallR", (3.0, 8.0, 3.0), (0.4, 8.0, 6.0), concrete)
         ph.model("security_light", loc=(2.4, 3.45, 5.6), rot_z=math.pi) if True else None
         B.key_sun(4, 75, 4.0, color=(1.0, 0.62, 0.35), angle=1.5)             # low dawn sun along the wall
-        man = B.person("Released", 1.0, 74, "male_casualsuit05", "short02", hue=0.1, sat=0.2, val=0.3, hair_val=2.4, hair_sat=0.0, weight=0.5)
+        man = B.mazurek("Released", 2023)
         c["man"] = man
         c["bag"] = box("Holdall", (0, 0, -30), (0.5, 0.25, 0.28), pbr("Holdall", (0.08, 0.08, 0.09), 0.6), bevel=0.06)
         B.room_haze((0, 0, 4), (120, 60, 8), density=0.02, color=(0.85, 0.82, 0.8))
+    if variant in ("fedcourt",):
+        B.finish_exterior(azim=235, elev=14)
+    elif variant == "prison":
+        B.finish_exterior(azim=75, elev=4)                 # low warm dawn sun along the wall
+    elif variant in ("corridor", "physicist"):
+        B.finish_interior(lift=0.0)
+    else:
+        B.preview_cap()
     return c
 
 
@@ -244,7 +251,7 @@ def anim(c, t, move):
         fingers_curl(old, 30); B.nod(old, 16 + 3 * math.sin(sec * 0.5))
     elif v == "school":
         u = sec / DUR[move]
-        B.walk_to(c["walker"], (0.4, -4.0, 0), (0.0, 6.0, 0), u, 6.0 * u, stride=20, swing=10)
+        c["fogbank"].location.x = -12.0 + 24.0 * u                 # fog drifts past the building; no one on the drive
     else:
         man = c["man"]
         op = ease(min(1.0, sec / 2.2)) if move == "gate" else 1.0

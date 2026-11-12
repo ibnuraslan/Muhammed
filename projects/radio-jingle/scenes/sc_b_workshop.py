@@ -104,7 +104,7 @@ def build(variant=None):
     env = [B.stamp_mat(f"Env{k}", base=(0.86 - 0.04 * k, 0.83 - 0.04 * k, 0.75 - 0.05 * k)) for k in range(3)] + [B.paper_mat("EnvPlain", (0.8, 0.78, 0.7), lines=False)]
     c["letters"] = B.envelope_pile((-0.62, BENCH_Y + 0.0, TOP + 0.002), 22, rng, env, spread=0.08)
     # ------------------------------------------------------------------ the man, standing at the bench, back to camera
-    h = B.person("Repairman", 1.0, 44, "male_casualsuit03", "short02", hue=0.5, sat=0.5, val=0.55, hair_val=0.25)
+    h = B.mazurek("Repairman", 1981)
     if variant == "away":                                   # B: he has stepped to the far end, looking at a set on the shelf
         B.stand(h, (1.3, BENCH_Y - 0.75, 0), math.pi + 0.15)
         c["iron"].location = (-0.3, BENCH_Y - 0.12, TOP + 0.012); c["iron"].rotation_euler = (0, 0, 0.6)
@@ -113,6 +113,7 @@ def build(variant=None):
         B.stand(h, (-0.2, BENCH_Y - 0.62, 0), math.pi)      # facing +Y, the bench
     c["man"] = h
     c["variant"] = variant
+    B.finish_interior(lift=-0.1)
     return c
 
 

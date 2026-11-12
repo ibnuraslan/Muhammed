@@ -116,7 +116,7 @@ def build(variant=None):
         ph.model("wooden_table_02", loc=(0, 0.5, 0), rot_z=0)
         for x, fz in ((-0.1, math.pi), (0.25, 0.0)):
             ph.model("dining_chair_02", loc=(x, -0.15 if fz == math.pi else 1.15, 0), rot_z=fz + math.pi)
-        man = B.person("Searched", 1.0, 58, "male_casualsuit03", "short02", hue=0.6, sat=0.2, val=0.35, hair_val=2.0, hair_sat=0.0)
+        man = B.mazurek("Searched", 2007)
         B.seat(man, (-0.1, -0.22, 0), math.pi, lean=8)          # faces +Y, back to the camera
         off = B.person("SwabOfficer", 0.0, 36, "female_elegantsuit01", "ponytail01", hue=0.6, sat=0.2, val=0.3, hair_val=0.3)
         B.stand(off, (0.35, 1.25, 0), 0.0)                        # across the table, facing -Y
@@ -125,6 +125,7 @@ def build(variant=None):
         c["tube"] = cyl("SwabTube", (0, 0, 0), 0.012, 0.14, pbr("TubeClear", (0.9, 0.92, 0.95), 0.1, **{'Transmission Weight': 0.7}), verts=16)
         c["rest"] = B.capture(man); c["rests"] = [B.capture(off)]; c["offs"] = [off]
         B.room_haze((0, 0, 1.3), (4.8, 3.8, 2.6), density=0.012)
+        B.finish_interior(lift=0.0)
         return c
     if variant.startswith("harbour") or variant == "shop":
         # quay along y = 0..6 (water at y < 0), a street y = 1..5, houses from y = 6
@@ -162,7 +163,7 @@ def build(variant=None):
             c["obs"] = (o1, o2)
             ph.model("street_lamp_01", loc=(8.0, 5.3, 0.0), rot_z=math.radians(90))
             B.key_spot((8.0, 4.4, 5.2), (5.0, 5.5, 0.5), 2200, 60, (1.0, 0.65, 0.35), soft=0.2, name="Sodium")
-        man = B.person("Seller", 1.0, 58, "male_casualsuit05", "short02", hue=0.6, sat=0.25, val=0.25, hair_val=2.0, hair_sat=0.0)
+        man = B.mazurek("Seller", 2007)
         c["man"] = man
         B.room_haze((0, 0, 4), (80, 40, 8), density=0.004, color=(0.75, 0.78, 0.82))
         if variant == "shop":                                   # the interior behind the shop front (y 6.0 .. 10)
@@ -226,12 +227,20 @@ def build(variant=None):
             c["car2"] = vehicles.make("sedan_modern", loc=(-22.0, -3.0, 0.0), heading_deg=0, color=(0.25, 0.26, 0.28), lamps=True)
             offs = [B.person(f"Off{k}", 1.0, 32 + 6 * k, "male_casualsuit05", ["short03", "short01", "short04", "short02"][k], hue=0.6, sat=0.2, val=0.3, hair_val=0.3) for k in range(4)]
             c["offs"] = offs
-            man = B.person("Arrested", 1.0, 59, "male_casualsuit03", "short02", hue=0.6, sat=0.2, val=0.35, hair_val=2.0, hair_sat=0.0)
+            man = B.mazurek("Arrested", 2008)
             c["man"] = man
             ph.model("street_lamp_01", loc=(6.0, 1.6, 0.12), rot_z=math.radians(90))
             B.key_spot((6.0, 0.7, 5.2), (2.0, -1.0, 0.3), 1800, 60, (1.0, 0.65, 0.35), soft=0.2, name="Sodium")
         c["rests"] = [B.capture(h) for h in offs]
         B.room_haze((0, 0, 3), (60, 30, 6), density=0.006 if variant == "house_dawn" else 0.003, color=(0.7, 0.76, 0.88))
+    if variant in ("harbour", "house_day"):
+        B.finish_exterior(azim=230, elev=12)
+    elif variant == "house_dawn":
+        B.finish_exterior(azim=100, elev=3)                # dawn: a low warm sun raking the street
+    elif variant == "shop":
+        B.finish_interior(lift=0.0)
+    else:
+        B.preview_cap()
     return c
 
 

@@ -58,7 +58,7 @@ def build(variant=None):
         import sc_forest as F
         c.update(F.build("grey|detective,detective2"))
         c["F"] = F
-        man = B.person("Guide", 1.0, 33, "male_casualsuit03", "short01", hue=0.55, sat=0.3, val=0.5, hair_val=0.6)
+        man = B.pfaffinger("Guide")
         c["P"]["man"] = man
         clear_path([((-6.0, -9.0), (-2.5, -3.0)), ((-7.2, -10.4), (-3.7, -4.4)), ((-5.2, -10.8), (-1.8, -4.8)), ((-6.8, -7.6), (-2.9, -4.2))], 1.0)
     else:

@@ -48,6 +48,7 @@ def build(variant=None):
     h = c["P"]["tech"]
     B.stand(h, (TAPE.x + 0.48, TAPE.y + 0.3, 0), -math.pi / 2 - 0.35)     # faces -X, the box wall
     c["rest"] = B.capture(h)
+    B.finish_interior(lift=-0.3)
     return c
 
 

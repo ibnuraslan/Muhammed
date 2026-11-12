@@ -134,6 +134,7 @@ def build(variant=None):
         B.key_spot((0.0, 0.0, 3.0), (0, 0, 0.9), 900, 22, (1.0, 0.86, 0.68), soft=0.08, blend=0.25, name="TopKey")
         B.fill((-2.5, -2.5, 1.5), (0, 0, 1.0), 6, 2.0, (0.4, 0.5, 0.75))
         B.room_haze((0, 0, 1.5), (6, 6, 3), density=0.02)
+    B.finish_interior(lift=-0.2)
     return c
 
 

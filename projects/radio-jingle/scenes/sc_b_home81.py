@@ -202,6 +202,10 @@ def build(variant=None):
         box("UpFloor", (lw.x, lw.y + 1.0, 2.79), (3, 2, 0.02), pbr("UpF", (0.2, 0.15, 0.1), 0.8))
         B.practical((lw.x + 0.4, lw.y + 2.2, 4.9), 160, (1.0, 0.68, 0.38), 0.3, "LandlordLamp")
         B.room_haze((0, -2, 3), (30, 14, 6), density=0.004, color=(0.75, 0.78, 0.9))
+    if variant in ("evening", "nextday"):
+        B.finish_interior(lift=0.0)
+    else:
+        B.preview_cap()
     return c
 
 

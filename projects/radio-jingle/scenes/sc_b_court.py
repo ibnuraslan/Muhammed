@@ -62,8 +62,20 @@ def files_on(loc, n, rng, mats, rot=0.0):
 
 
 def robe(name, gender, years, hair, hv=0.3, val=0.07):
-    return B.person(name, gender, years, "male_elegantsuit01" if gender > 0.5 else "female_elegantsuit01", hair,
-                    hue=0.5, sat=0.2, val=val, hair_val=hv)
+    """Black court robe (judges, prosecutor, counsel)."""
+    h = B.person(name, gender, years, "male_elegantsuit01" if gender > 0.5 else "female_elegantsuit01", hair, hair_val=hv)
+    B.flat_clothes(h, (0.012, 0.012, 0.014), rough=0.6)
+    return h
+
+
+def civilian(name, gender, years, hair, hv=0.3):
+    """Lay judges (Schoeffen) sit in plain civilian clothes."""
+    if gender > 0.5:
+        h = B.person(name, gender, years, "male_casualsuit05", hair, hair_val=hv)
+        B.flat_clothes(h, (0.13, 0.1, 0.07))
+    else:
+        h = B.person(name, gender, years, "female_elegantsuit01", hair, hue=0.55, sat=0.6, val=0.9, hair_val=hv)
+    return h
 
 
 def build(variant=None):
@@ -92,7 +104,7 @@ def build(variant=None):
         for k in range(4):
             box("Mull", (6.12, y0 - 1.2 + k * 0.8, 2.35), (0.06, 0.05, 3.1), fr)
         box("Trans", (6.12, y0, 2.9), (0.06, 2.4, 0.05), fr)
-    sky = box("Outside", (9.0, 1, 2.2), (0.05, 18, 7), emissive("CourtSky", (0.85, 0.8, 0.72), 0.7)); sky.visible_shadow = False
+    sky = box("Outside", (9.0, 1, 2.2), (0.05, 18, 7), emissive("CourtSky", (0.85, 0.8, 0.72), 0.22)); sky.visible_shadow = False
     sun_e = {"empty": 6.0}.get(variant, 24.0)
     B.key_sun(14, 30, sun_e, color=(1.0, 0.72, 0.48), angle=0.7)               # from +X (window side), low
     B.fill((-4.5, -4.0, 3.5), (0, 3, 1.2), 30, 4.0, (0.45, 0.58, 0.78))
@@ -156,7 +168,7 @@ def build(variant=None):
     c["people"] = {}
     P_ = c["people"]
     def judge(nm, x, g, yrs, hair):
-        h = robe(nm, g, yrs, hair, hv=0.3 if yrs < 55 else 1.4)
+        h = (civilian if nm.startswith("Lay") else robe)(nm, g, yrs, hair, hv=0.3 if yrs < 55 else 1.4)
         B.seat(h, (x, 6.62, 0), 0.0, lean=4); B.ground(h, DAIS_Z + 0.1)
         h.arm.location.z = h.arm.location.z           # seated on the dais
         P_[nm] = h; return h
@@ -166,7 +178,7 @@ def build(variant=None):
         judge("JudgeR", 1.2, 1.0, 50, "short04")
         judge("LayL", -2.4, 0.0, 61, "bob02")
         judge("LayR", 2.4, 1.0, 39, "short03")
-        dfn = B.person("Defendant", 1.0, 58, "male_casualsuit05", "short02", hue=0.5, sat=0.2, val=0.3, hair_val=2.2, hair_sat=0.0)
+        dfn = B.mazurek("Defendant", 2009)
         B.seat(dfn, (-4.45, 2.0, 0), math.pi / 2, lean=6)              # faces +X, across the court
         chair((-4.53, 2.0, 0), math.pi / 2, leather)
         P_["defendant"] = dfn
@@ -201,7 +213,7 @@ def build(variant=None):
     if variant == "civil":
         j = robe("CivilJudge", 0.0, 55, "bob01", hv=1.6)
         B.seat(j, (0.0, 6.62, 0), 0.0, lean=4); B.ground(j, DAIS_Z + 0.1); P_["Presiding"] = j
-        cl = B.person("Claimant", 1.0, 45, "male_casualsuit05", "short04", hue=0.6, sat=0.3, val=0.32, hair_val=0.28)
+        cl = B.michael("Claimant", 51)
         B.seat(cl, (-0.35, 2.32, 0), math.pi, lean=8); chair((-0.35, 2.24, 0), math.pi, leather); P_["claimant"] = cl
         law = robe("CivLawyer", 1.0, 50, "short02", hv=0.4)
         B.seat(law, (0.45, 2.32, 0), math.pi, lean=8); chair((0.45, 2.24, 0), math.pi, leather); P_["civlaw"] = law
@@ -220,6 +232,7 @@ def build(variant=None):
             B.stand(h, (loc.x + fwd.x * 0.15, loc.y + fwd.y * 0.15, 0), fz, z=DAIS_Z + 0.0 if k in ("Presiding", "JudgeL", "JudgeR", "LayL", "LayR") else 0.0)
             c["standp"][k] = B.capture(h)
             B.apply_pose(h, P0)
+    B.finish_interior(lift=-0.2)
     return c
 
 

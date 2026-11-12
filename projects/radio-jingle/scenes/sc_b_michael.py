@@ -122,7 +122,7 @@ def build(variant=None):
         ph.model("book_encyclopedia_set_01", loc=(-2.2, -1.65 + k * 0.55, 1.02 + 0.0 * k), rot_z=math.radians(90))
     ph.model("potted_plant_01", loc=(2.2, 1.5, 0), rot_z=1.0)
     # ------------------------------------------------------------------ Michael (forties, navy jumper)
-    h = B.person("Michael", 1.0, 44, "male_casualsuit03", "short04", hue=0.62, sat=0.25, val=0.32, hair_val=0.3)
+    h = B.michael("Michael", 47)
     if variant in ("music", "music_night"):
         if variant == "music":
             B.seat(h, (PIANO_X + 0.62, 0.42, 0), -math.pi / 2, lean=8)         # faces -X, the keys
@@ -134,6 +134,7 @@ def build(variant=None):
     if variant == "night":
         c["phones"] = P.headphones(h)
     c["rest"] = B.capture(h)
+    B.finish_interior(lift=0.0)
     return c
 
 
@@ -215,7 +216,7 @@ MOVES = {
                    anim=lambda c, t: anim(c, t, "lookup"), focus=lambda c, t: c["m"].bone_head("head")),
     "replay": dict(kind="anim", dof=2.4, cam=cam((2.3, 0.3, 1.45), (2.15, 0.6, 1.4), (1.1, 1.3, 1.15), 35),
                    anim=lambda c, t: anim(c, t, "replay"), focus=lambda c, t: c["m"].bone_head("head")),
-    "objection": dict(kind="anim", dof=2.0, cam=cam((2.35, 1.95, 1.25), (2.2, 1.85, 1.22), (1.2, 1.0, 1.0), 35),
+    "objection": dict(kind="anim", dof=2.8, cam=cam((0.05, 0.35, 1.5), (0.3, 0.55, 1.46), (1.45, 1.65, 0.98), 32),
                       anim=lambda c, t: anim(c, t, "objection"), focus=lambda c, t: Vector((DESK.x + 0.42, DESK.y - 0.2, TOP + 0.1))),
     "notes": dict(kind="anim", dof=2.8, cam=cam((0.6, -1.4, 1.45), (0.2, -0.9, 1.4), (PIANO_X, 0.4, 1.0), 35),
                   anim=lambda c, t: anim(c, t, "notes"), focus=lambda c, t: c["m"].bone_head("head")),

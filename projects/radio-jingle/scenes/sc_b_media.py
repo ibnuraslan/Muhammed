@@ -145,6 +145,7 @@ def build(variant=None):
         c["j1"], c["j2"] = j1, j2
         c["rest"] = {"j1": B.capture(j1), "j2": B.capture(j2)}
         B.room_haze((0, 0, 1.4), (5.8, 4.8, 2.8), density=0.015)
+    B.finish_interior(lift=0.0)
     return c
 
 
