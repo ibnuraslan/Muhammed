@@ -1113,10 +1113,25 @@ cpos = catmull([(k[0], k[1]) for k in K]); ctgt = catmull([(k[0], k[2]) for k in
 cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.objects.link(cam); sc.camera = cam
 cam.data.sensor_width = 36; cam.data.clip_start = 0.01; cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 3.2
 foc = bpy.data.objects.new("CamFocus", None); sc.collection.objects.link(foc); cam.data.dof.focus_object = foc
+# orientations first; then ease any one-frame snap (> 20 deg/frame) into a short whip with the same end framings
+QS = {f: (ctgt(f) - cpos(f)).to_track_quat('-Z', 'Y') for f in range(1, 1621)}
+def ang(a_, b_): return math.degrees(2 * math.acos(min(1.0, abs(a_.dot(b_)))))
+for f in range(2, 1621):                      # keep consecutive quaternions in one hemisphere (slerp takes the short way)
+    if QS[f].dot(QS[f - 1]) < 0: QS[f] = -QS[f]
+for it in range(40):
+    jumps = [f for f in range(2, 1621) if ang(QS[f - 1], QS[f]) > 18.0]
+    if not jumps: break
+    for j in jumps:
+        tot = ang(QS[max(1, j - 1)], QS[j]); half = max(4, int(math.ceil(tot / 16.0)) + 2)
+        a0, b0 = max(1, j - half), min(1620, j + half)
+        qa, qb = QS[a0].copy(), QS[b0].copy()
+        for f in range(a0 + 1, b0):
+            u = smooth((f - a0) / (b0 - a0)); QS[f] = qa.slerp(qb, u)
+print("CAMJUMP max deg/frame", round(max(ang(QS[f - 1], QS[f]) for f in range(2, 1621)), 1))
 prev = None
 for f in range(1, 1621):
     p = cpos(f); t = ctgt(f)
-    q = (t - p).to_track_quat('-Z', 'Y'); e = q.to_euler('XYZ', prev) if prev else q.to_euler('XYZ'); prev = e
+    q = QS[f]; e = q.to_euler('XYZ', prev) if prev else q.to_euler('XYZ'); prev = e
     cam.location = p; cam.rotation_euler = e; cam.data.lens = clen(f)
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_euler", frame=f); cam.data.keyframe_insert("lens", frame=f)
     foc.location = t; foc.keyframe_insert("location", frame=f)

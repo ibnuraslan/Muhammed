@@ -1,0 +1,145 @@
+{
+ "frames": {
+  "409": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "433": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "445": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "457": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "469": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "481": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cell in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1153": [
+   [
+    "BACKHEAD",
+    "Pope"
+   ]
+  ],
+  "1261": [
+   [
+    "EMPTY",
+    "only Shrine in view"
+   ]
+  ],
+  "1285": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1297": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1321": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1333": [
+   [
+    "EMPTY",
+    "only Shrine in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1345": [
+   [
+    "EMPTY",
+    "only Shrine in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1537": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ]
+ },
+ "counts": {
+  "INSIDE": 7,
+  "EMPTY": 16,
+  "BACKHEAD": 1
+ }
+}
