@@ -492,7 +492,7 @@ def cam_nsa_desk(c, t):
 
 def cam_nsa_plans(c, t):
     e = ease(t)
-    return (Vector((-3.3, 0.6, 1.45)).lerp(Vector((-3.05, 0.55, 1.42)), e), Vector((-1.4, 0.35, 1.15)), 32)        # side-on, eye level
+    return (Vector((-3.9, 0.9, 1.6)).lerp(Vector((-3.7, 0.85, 1.57)), e), Vector((-1.4, 0.35, 1.1)), 30)        # side-on, eye level
 
 
 def cam_records_drawer(c, t):
@@ -525,7 +525,7 @@ def cam_page_out(c, t):
 
 def cam_count(c, t):
     e = ease(t)
-    return (Vector((-4.5, -3.0, 1.75)).lerp(Vector((-4.0, -2.7, 1.7)), e), Vector((2.0 - 3.5 * e, -0.6, 1.1)), 26)
+    return (Vector((-3.6, -2.7, 1.75)).lerp(Vector((-3.3, -2.5, 1.72)), e), Vector((2.2 - 3.0 * e, -0.5, 1.05)), 26)
 
 
 MOVES = {

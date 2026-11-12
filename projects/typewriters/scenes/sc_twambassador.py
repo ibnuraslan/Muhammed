@@ -228,7 +228,7 @@ def build(variant=None):
         lp = bpy.data.objects.new("CaseLidHinge", None); bpy.context.collection.objects.link(lp); lp.location = case.location + Vector((0, 0.165, 0.09))
         lid.parent = lp; lid.location = (0, 0.165, 0.0); lp.rotation_euler = (math.radians(-100), 0, 0)
         c["case"] = case; c["case_lid"] = lp
-        pool = bpy.data.lights.new("CasePool", 'SPOT'); pool.energy = 45; pool.spot_size = math.radians(55); pool.spot_blend = 0.6; pool.color = (1.0, 0.76, 0.5)
+        pool = bpy.data.lights.new("CasePool", 'SPOT'); pool.energy = 90; pool.spot_size = math.radians(55); pool.spot_blend = 0.6; pool.color = (1.0, 0.76, 0.5)
         po = bpy.data.objects.new("CasePool", pool); bpy.context.collection.objects.link(po); po.location = case.location + Vector((0.05, -0.1, 0.7)); point_at(po, case.location)
         fo.modifiers.new("thick", 'SOLIDIFY').thickness = 0.006
         c["folder"] = fo
@@ -357,7 +357,7 @@ def cam_sign(c, t):
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
     cl = c["case"].location
-    return (cl + Vector((0.9, -1.25, 0.55)).lerp(Vector((0.75, -1.05, 0.5)), e), cl + Vector((-0.02, -0.18, 0.05)), 38)
+    return (cl + Vector((0.35, -0.95, 0.75)).lerp(Vector((0.28, -0.8, 0.68)), e), cl + Vector((-0.02, -0.12, 0.08)), 40)
 
 
 def cam_talks_wide(c, t):

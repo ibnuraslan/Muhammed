@@ -367,16 +367,16 @@ def animate(c, sec, shot):
     # wrapping station
     if shot == "wrap":
         k = ease(min(1.0, sec / 4.2))
-        wrap.scale = (1, 1, max(0.02, 0.35 + 0.65 * k))
+        wrap.scale = (1, 1, 1); wrap.location = (WORK.x, WORK.y, 0.015 + 0.85 * (1 - k))      # lowered down over the crate
         a, b = P["wA"], P["wB"]
         twp.stand(a, (WORK.x - 0.2, WORK.y - 0.98, 0), math.pi)
         twp.stand(b, (WORK.x + 0.95, WORK.y + 0.05, 0), math.pi / 2 + math.pi)       # faces -X, the crate side
-        top = 0.015 + 0.93 * wrap.scale.z
-        sheet.location = (WORK.x, WORK.y - 0.46, top + 0.3); sheet.rotation_euler = (math.radians(75), 0, 0)
-        for sd, dx in (("L", 0.35), ("R", -0.35)):
-            reach(a, sd, Vector((WORK.x + dx, WORK.y - 0.5, top + 0.25)), Vector((dx, -0.6, -0.6)), Vector((0, 1, 0)))
-        reach(b, "R", Vector((WORK.x + 0.55, WORK.y - 0.2, top - 0.05)), Vector((0.3, -0.6, -0.6)), Vector((-1, 0, 0)))
-        reach(b, "L", Vector((WORK.x + 0.55, WORK.y + 0.25, top - 0.05)), Vector((0.3, 0.6, -0.6)), Vector((-1, 0, 0)))
+        top = wrap.location.z + 0.93
+        sheet.location = (0, 0, -30)
+        for sd, dx in (("L", 0.4), ("R", -0.4)):
+            reach(a, sd, Vector((WORK.x + dx, WORK.y - 0.42, top - 0.06)), Vector((dx, -0.6, -0.6)), Vector((0, 1, -0.4)))
+        reach(b, "R", Vector((WORK.x + 0.52, WORK.y - 0.3, top - 0.06)), Vector((0.3, -0.6, -0.6)), Vector((-1, 0, -0.4)))
+        reach(b, "L", Vector((WORK.x + 0.52, WORK.y + 0.3, top - 0.06)), Vector((0.3, 0.6, -0.6)), Vector((-1, 0, -0.4)))
         fingers_curl(a, 50, thumb=25); fingers_curl(b, 40, thumb=20)
         for s_ in c["staples"]:
             s_.hide_render = True
@@ -465,7 +465,7 @@ def cam_load(c, t):
 
 def cam_slats(c, t):
     e = ease(t); s = c["slat"].location
-    return (s + Vector((0.6, -1.6, 1.2)).lerp(Vector((0.18, -0.6, 0.66)), e), s + Vector((0.0, -0.03, 0.14)), 45)
+    return (s + Vector((0.7, -1.7, 1.35)).lerp(Vector((0.3, -0.9, 0.85)), e), s + Vector((0.0, -0.03, 0.12)), 40)
 
 
 def cam_customs_torch(c, t):
@@ -498,5 +498,5 @@ MOVES = {
     "sensor": dict(kind="anim", dof=None, cam=cam_sensor, anim=anim("sensor")),
     "apron": dict(kind="anim", dof=None, cam=cam_apron, anim=anim("apron")),
     "load": dict(kind="anim", dof=None, cam=cam_load, anim=anim("load")),
-    "slats": dict(kind="anim", dof=1.6, cam=cam_slats, focus=lambda c, t: c["slat"].location + Vector((0, 0, 0.15)), anim=anim("slats")),
+    "slats": dict(kind="anim", dof=4.0, cam=cam_slats, focus=lambda c, t: c["slat"].location + Vector((0, 0, 0.15)), anim=anim("slats")),
 }
