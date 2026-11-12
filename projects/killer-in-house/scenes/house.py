@@ -913,7 +913,7 @@ def person(name, kind):
         "detective2": dict(gender=1.0, years=38, weight=0.55, height=0.5, cloth="male_casualsuit01", cv=dict(hue=0.6, sat=0.2, val=0.38), hair="short01", hv=0.15, hat=True),
         "officer": dict(gender=1.0, years=35, weight=0.5, height=0.55, cloth="male_elegantsuit01", cv=dict(hue=0.64, sat=0.45, val=0.26), hair="short01", hv=0.15, hat=True),
         "captain": dict(gender=1.0, years=58, weight=0.6, height=0.5, cloth="male_elegantsuit01", cv=dict(hue=0.55, sat=0.15, val=0.38), hair="short02", hv=0.7, hat=False),
-        "thin": dict(gender=1.0, years=58, weight=0.0, height=0.45, muscle=0.2, cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.2, val=0.55), hair="long01", hv=0.34, hat=False),
+        "thin": dict(gender=1.0, years=66, weight=0.0, height=0.45, muscle=0.1, skin="old_lightskinned_male_diffuse2.png", cloth="male_casualsuit01", cv=dict(hue=0.1, sat=0.1, val=1.9), hair="long01", hv=0.28, hat=False),
         "nurse": dict(gender=0.0, years=30, weight=0.45, height=0.5, cloth="female_elegantsuit01", cv=dict(hue=0.5, sat=0.0, val=0.85), hair="bob02", hv=0.25, hat=False),
         "son": dict(gender=1.0, years=42, weight=0.5, height=0.55, cloth="male_casualsuit06", cv=dict(hue=0.08, sat=0.3, val=0.25), hair="short02", hv=0.25, hat=True),
     }[kind]
@@ -942,16 +942,17 @@ def ragged(h):
             N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
             if "casualsuit" in m.name or "shoes" in m.name:
                 tc = N.new("ShaderNodeTexCoord")
-                n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 9; n.inputs['Detail'].default_value = 8; L.new(tc.outputs['Object'], n.inputs['Vector'])
-                v = N.new("ShaderNodeTexVoronoi"); v.inputs['Scale'].default_value = 7; L.new(tc.outputs['Object'], v.inputs['Vector'])
-                tear = N.new("ShaderNodeMath"); tear.operation = 'LESS_THAN'; tear.inputs[1].default_value = 0.12; L.new(v.outputs['Distance'], tear.inputs[0])
+                n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 5; n.inputs['Detail'].default_value = 10; L.new(tc.outputs['Object'], n.inputs['Vector'])
+                v = N.new("ShaderNodeTexVoronoi"); v.inputs['Scale'].default_value = 3.0; L.new(tc.outputs['Object'], v.inputs['Vector'])
+                tear = N.new("ShaderNodeMath"); tear.operation = 'LESS_THAN'; tear.inputs[1].default_value = 0.22; L.new(v.outputs['Distance'], tear.inputs[0])
                 src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
                 grime = N.new("ShaderNodeMix"); grime.data_type = 'RGBA'; grime.blend_type = 'MULTIPLY'
-                L.new(n.outputs['Fac'], grime.inputs['Factor'])
+                gr_ = N.new("ShaderNodeMapRange"); gr_.inputs['From Min'].default_value = 0.48; gr_.inputs['From Max'].default_value = 0.62
+                L.new(n.outputs['Fac'], gr_.inputs['Value']); L.new(gr_.outputs['Result'], grime.inputs['Factor'])      # blotchy stains
                 if src: L.new(src, grime.inputs[6])
-                grime.inputs[7].default_value = (0.25, 0.2, 0.14, 1)
+                grime.inputs[7].default_value = (0.16, 0.12, 0.08, 1)
                 holes = N.new("ShaderNodeMix"); holes.data_type = 'RGBA'; L.new(tear.outputs[0], holes.inputs['Factor'])
-                L.new(grime.outputs[2], holes.inputs[6]); holes.inputs[7].default_value = (0.03, 0.025, 0.02, 1)
+                L.new(grime.outputs[2], holes.inputs[6]); holes.inputs[7].default_value = (0.42, 0.3, 0.23, 1)
                 if "casualsuit" in m.name:
                     me_ = o.data; zz = np.array([v.co.z for v in me_.vertices]); cut = zz.min() + 0.52 * (zz.max() - zz.min())
                     la = me_.color_attributes.new("legs", 'FLOAT_COLOR', 'POINT')
@@ -973,9 +974,12 @@ def ragged(h):
     face = np.zeros(len(co))
     if len(hv):
         hc = co[hv]; zmin = hc[:, 2].min(); zmax = hc[:, 2].max(); ymin = hc[:, 1].min()
-        for i in hv:
+        for i in np.where((co[:, 2] > zmin) & (np.abs(co[:, 0]) < 0.1))[0]:      # by position: the lips/cheeks are weighted to face bones, not 'head'
             x, y, z = co[i]
-            beard = max(0.0, 1.0 - (z - zmin) / 0.11) * (1.0 if y < ymin + 0.11 else 0.4)
+            top = zmin + (0.088 if abs(x) < 0.045 else 0.112)                     # full beard: jaw, cheeks, moustache
+            beard = min(1.0, max(0.0, (top - z) / 0.018)) * (1.0 if y < ymin + 0.125 else max(0.0, 1.0 - (y - ymin - 0.125) / 0.03))
+            if zmin + 0.058 < z < zmin + 0.071 and abs(x) < 0.02 and y < ymin + 0.04:
+                beard *= 0.3                                                          # lips show through
             cheek = 0.5 * max(0.0, 1.0 - abs(z - (zmin + 0.1)) / 0.03) * (1.0 if abs(x) > 0.035 and y < ymin + 0.07 else 0.0)
             eye = 0.55 * max(0.0, 1.0 - abs(z - (zmin + 0.145)) / 0.022) * max(0.0, 1.0 - abs(abs(x) - 0.033) / 0.02) * (1.0 if y < ymin + 0.06 else 0.0)
             face[i] = min(1.0, beard + cheek + eye)
@@ -986,26 +990,44 @@ def ragged(h):
     a = N.new("ShaderNodeAttribute"); a.attribute_name = "beard"; a.attribute_type = 'GEOMETRY'
     tc = N.new("ShaderNodeTexCoord"); n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 900; L.new(tc.outputs['Object'], n.inputs['Vector'])
     f = N.new("ShaderNodeMath"); f.operation = 'MULTIPLY'; L.new(a.outputs['Fac'], f.inputs[0]); L.new(n.outputs['Fac'], f.inputs[1])
-    f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; f2.inputs[1].default_value = 2.4; f2.use_clamp = True; L.new(f.outputs[0], f2.inputs[0])
+    f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; f2.inputs[1].default_value = 2.2; f2.use_clamp = True; L.new(f.outputs[0], f2.inputs[0])
     src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
     mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(f2.outputs[0], mx.inputs['Factor'])
     if src: L.new(src, mx.inputs[6])
-    mx.inputs[7].default_value = (0.09, 0.07, 0.055, 1)
-    L.new(mx.outputs[2], p.inputs['Base Color'])
+    mx.inputs[7].default_value = (0.13, 0.115, 0.1, 1)
+    dn = N.new("ShaderNodeTexNoise"); dn.inputs['Scale'].default_value = 14; dn.inputs['Detail'].default_value = 8; L.new(tc.outputs['Object'], dn.inputs['Vector'])
+    dr = N.new("ShaderNodeMapRange"); dr.inputs['From Min'].default_value = 0.4; dr.inputs['From Max'].default_value = 0.68; dr.inputs['To Max'].default_value = 0.75; L.new(dn.outputs['Fac'], dr.inputs['Value'])
+    dmx = N.new("ShaderNodeMix"); dmx.data_type = 'RGBA'; dmx.blend_type = 'MULTIPLY'; L.new(dr.outputs['Result'], dmx.inputs['Factor'])
+    L.new(mx.outputs[2], dmx.inputs[6]); dmx.inputs[7].default_value = (0.42, 0.33, 0.24, 1)
+    L.new(dmx.outputs[2], p.inputs['Base Color'])
+    inv = N.new("ShaderNodeMath"); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0; L.new(f2.outputs[0], inv.inputs[1])
+    for k_ in ('Subsurface Weight', 'Specular IOR Level'):         # beard: no skin translucency or sheen through it
+        if k_ in p.inputs and not p.inputs[k_].links:
+            sv = N.new("ShaderNodeMath"); sv.operation = 'MULTIPLY'; sv.inputs[1].default_value = p.inputs[k_].default_value
+            L.new(inv.outputs[0], sv.inputs[0]); L.new(sv.outputs[0], p.inputs[k_])
+    bmp = N.new("ShaderNodeBump"); bmp.inputs['Strength'].default_value = 0.6; L.new(f.outputs[0], bmp.inputs['Height'])
+    if not p.inputs['Normal'].links: L.new(bmp.outputs['Normal'], p.inputs['Normal'])
     vg = h.body.vertex_groups.new(name="beardvg")
     if len(hv):
         hc_ = co[hv]; z0_ = hc_[:, 2].min(); y0_ = hc_[:, 1].min()
-        sel = [int(i) for i in hv if z0_ + 0.012 < co[i, 2] < z0_ + 0.078 and co[i, 1] < y0_ + 0.12 and not (co[i, 2] > z0_ + 0.058 and abs(co[i, 0]) < 0.024)]
+        sel = [int(i) for i in hv if z0_ + 0.005 < co[i, 2] < (z0_ + 0.083 if abs(co[i, 0]) < 0.05 else z0_ + 0.1) and co[i, 1] < y0_ + 0.12
+               and not (z0_ + 0.06 < co[i, 2] < z0_ + 0.072 and abs(co[i, 0]) < 0.022 and co[i, 1] < y0_ + 0.045)]   # lips
         vg.add(sel, 1.0, 'REPLACE')
     bd = h.body.copy(); bd.name = h.name + "_beard"; bpy.context.collection.objects.link(bd)
     mk = bd.modifiers.new("beardmask", 'MASK'); mk.vertex_group = "beardvg"
-    tx = bpy.data.textures.new(h.name + "_beardtx", 'CLOUDS'); tx.noise_scale = 0.004
-    dsp = bd.modifiers.new("beardfuzz", 'DISPLACE'); dsp.texture = tx; dsp.strength = 0.012; dsp.mid_level = 0.0
+    tx = bpy.data.textures.new(h.name + "_beardtx", 'CLOUDS'); tx.noise_scale = 0.003
+    dsp = bd.modifiers.new("beardfuzz", 'DISPLACE'); dsp.texture = tx; dsp.strength = 0.009; dsp.mid_level = 0.0
+    bd.modifiers.new("beardshell", 'SOLIDIFY').thickness = 0.003
     bm_ = bpy.data.materials.new("BeardHair"); bm_.use_nodes = True; bp_ = bm_.node_tree.nodes["Principled BSDF"]
-    bp_.inputs['Base Color'].default_value = (0.05, 0.04, 0.03, 1); bp_.inputs['Roughness'].default_value = 0.9
+    bp_.inputs['Base Color'].default_value = (0.1, 0.085, 0.07, 1); bp_.inputs['Roughness'].default_value = 0.95
+    if 'Sheen Weight' in bp_.inputs: bp_.inputs['Sheen Weight'].default_value = 0.0
+    bN = bm_.node_tree.nodes; bL = bm_.node_tree.links
+    btc = bN.new("ShaderNodeTexCoord"); bn = bN.new("ShaderNodeTexNoise"); bn.inputs['Scale'].default_value = 400; bL.new(btc.outputs['Object'], bn.inputs['Vector'])
+    bmx = bN.new("ShaderNodeMix"); bmx.data_type = 'RGBA'; bL.new(bn.outputs['Fac'], bmx.inputs['Factor'])
+    bmx.inputs[6].default_value = (0.07, 0.06, 0.05, 1); bmx.inputs[7].default_value = (0.17, 0.155, 0.14, 1); bL.new(bmx.outputs[2], bp_.inputs['Base Color'])
     for sl in bd.material_slots:
         sl.link = 'OBJECT'; sl.material = bm_
-    h.parts.append(bd)
+    bpy.data.objects.remove(bd, do_unlink=True)          # painted beard reads better than a shell
     for o in h.parts:            # hair: bigger, matted
         if "long01" in o.name:   # long hair cut ragged at the collar: strands, face left clear
             import bmesh
@@ -1016,7 +1038,21 @@ def ragged(h):
             bmesh.ops.delete(bm2, geom=kill, context='VERTS'); bm2.to_mesh(o.data); bm2.free()
             for m in o.data.materials:
                 if m and m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
-                    m.node_tree.nodes["Principled BSDF"].inputs['Roughness'].default_value = 0.75
+                    hN = m.node_tree.nodes; hL = m.node_tree.links; hp_ = hN["Principled BSDF"]
+                    hp_.inputs['Roughness'].default_value = 0.95
+                    for k_ in ('Sheen Weight', 'Coat Weight'):
+                        if k_ in hp_.inputs: hp_.inputs[k_].default_value = 0.0
+                    if 'Specular IOR Level' in hp_.inputs: hp_.inputs['Specular IOR Level'].default_value = 0.1
+                    if hp_.inputs['Base Color'].links:
+                        src_ = hp_.inputs['Base Color'].links[0].from_socket
+                        htc = hN.new("ShaderNodeTexCoord"); hw = hN.new("ShaderNodeTexNoise"); hw.inputs['Scale'].default_value = 300; hw.inputs['Detail'].default_value = 2
+                        hL.new(htc.outputs['Object'], hw.inputs['Vector'])
+                        hr = hN.new("ShaderNodeMapRange"); hr.inputs['From Min'].default_value = 0.35; hr.inputs['From Max'].default_value = 0.75; hr.inputs['To Min'].default_value = 0.05; hr.inputs['To Max'].default_value = 0.4
+                        hL.new(hw.outputs['Fac'], hr.inputs['Value'])
+                        hm = hN.new("ShaderNodeMix"); hm.data_type = 'RGBA'; hL.new(hr.outputs['Result'], hm.inputs['Factor'])
+                        hL.new(src_, hm.inputs[6]); hm.inputs[7].default_value = (0.3, 0.29, 0.27, 1); hL.new(hm.outputs[2], hp_.inputs['Base Color'])
+            tx = bpy.data.textures.new(o.name + "_clump", 'CLOUDS'); tx.noise_scale = 0.02
+            dm = o.modifiers.new("clump", 'DISPLACE'); dm.texture = tx; dm.strength = 0.012; dm.mid_level = 0.5
         if "bob01" in o.name or "short02" in o.name:
             tx = bpy.data.textures.new(o.name + "_mat", 'CLOUDS'); tx.noise_scale = 0.015
             dm = o.modifiers.new("matted", 'DISPLACE'); dm.texture = tx; dm.strength = 0.014; dm.mid_level = 0.4
