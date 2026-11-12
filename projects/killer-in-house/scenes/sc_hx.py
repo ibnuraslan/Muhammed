@@ -55,7 +55,9 @@ def build(variant=None):
     c["variant"] = vv
     import look                   # house look (cinematic): low sky + one sun key + haze by day
     if tod == "day":
-        look.day_light("overcast" if season == "winter" else "low_sun", azim=150, haze_box=((0, -10, 8), (80, 60, 16)))
+        # misty overcast (the v3 benchmark): soft cool key, low sky, ground mist down the street; exposed for faces
+        look.day_light("overcast", azim=200, exposure=0.1)
+        look.ground_haze((0, -12), (90, 70), height=6.0, density=0.012)
     return c
 
 

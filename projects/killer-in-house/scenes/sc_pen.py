@@ -86,7 +86,7 @@ def build(variant=None):
             box("CotLeg", (-0.55, 0.9 + sy * 0.9, 0.19), (0.66, 0.04, 0.38), H.mat("iron"))
         H.point((0, -2.5, 2.6), 20, (1.0, 0.8, 0.55), 0.2)
         c["man"] = H.person("Thin", "thin_court")
-    import look                   # the cell: one cold shaft from the window
+        import look                   # the cell: one cold shaft from the window
         look.interior_day(window=((0.0, 2.0, 2.3), (-0.4, 0.5, 0.8)), mood="overcast", fill=0.3, key_size=0.5)
         return c
     world_sky(sun_elev_deg=20, sun_rot_deg=120, strength=0.45, tint=(0.62, 0.78, 1.0))            # cold clear winter sky
@@ -147,7 +147,8 @@ def build(variant=None):
     else:
         c["guards"] = [H.person("Guard%d" % k, "officer") for k in range(2)]
     import look                   # cold winter day: low sky, one sun key, a little haze
-    look.day_light("overcast", azim=210, haze_box=((0, 60, 20), (400, 300, 40)))
+    look.day_light("overcast", azim=210, exposure=-0.2)
+    look.ground_haze((0, 60), (500, 400), height=30.0, density=0.004)
     return c
 
 

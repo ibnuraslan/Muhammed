@@ -77,7 +77,7 @@ def build(variant=None):
         for k in range(120):
             o = cyl("Mote", (rng.uniform(-0.9, 0.9), rng.uniform(-0.2, 0.9), rng.uniform(1.0, 2.0)), 0.0015, 0.003, mm, 6)
             o["p0"] = tuple(o.location); c["dust"].append(o)
-    import look
+        import look
         look.night_interior()
         return c
     c = {}
