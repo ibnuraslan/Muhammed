@@ -11,7 +11,7 @@ import dd
 from dd import person, walk_to
 from sc_boutique import haussmann
 
-EXPOSURE = 0.3
+EXPOSURE = 0.6
 DUR = {"steps": 9.0}
 NST, RISE, RUN = 16, 0.16, 0.42
 TOP_Y = NST * RUN
@@ -48,23 +48,35 @@ def build(variant=None):
     haussmann(-60, -20, seed=51, origin=(0, 10, 0)); haussmann(20, 60, seed=52, origin=(0, 10, 0))
     rng = np.random.default_rng(3)
     c["people"] = []
+    looks = [("male_elegantsuit01", 2.4, (0.72, 0.58, 0.42)), ("male_casualsuit05", 1.2, (1, 1, 1)), ("female_elegantsuit01", 1.9, (0.3, 0.32, 0.42)),
+             ("male_elegantsuit01", 1.8, (0.45, 0.47, 0.5)), ("male_casualsuit03", 1.1, (1, 1, 1)), ("female_elegantsuit01", 2.2, (0.7, 0.3, 0.25)),
+             ("male_casualsuit01", 1.2, (1, 1, 1))]
+    props = ["camera", "mic", None, "camera", "mic", None, "camera"]
     for k in range(7):
-        g = 1.0 if k % 3 else 0.0
-        h = person(f"Rep{k}", g, int(rng.integers(26, 60)), ("male_casualsuit05", "male_casualsuit01", "male_elegantsuit01")[k % 3] if g else "female_elegantsuit01",
-                   ("short02", "short04", "bob01", "short01", "ponytail01", "short03", "bob02")[k], cval=float(rng.uniform(0.08, 0.3)))
-        x = -4.0 + k * 1.3 + float(rng.uniform(-0.3, 0.3))
-        c["people"].append((h, Vector((x, TOP_Y + 0.6 + float(rng.uniform(0, 1.5)), 0)), float(rng.uniform(0, 1.2))))
+        cl, v, tn = looks[k]; g = 0.0 if cl.startswith("female") else 1.0
+        h = person(f"Rep{k}", g, int(rng.integers(26, 60)), cl, ("short02", "short04", "bob01", "short01", "short03", "ponytail01", "short02")[k],
+                   cval=v, tint=tn, sat=0.3)
+        x = -5.0 + k * 1.6 + float(rng.uniform(-0.5, 0.5))
+        y0 = TOP_Y + 0.4 + float(rng.uniform(0, 1.8))
+        prop = None
+        if props[k] == "camera":
+            prop = dd.model_h("Camera_01", (0, 0, 0), 0.12)
+        elif props[k] == "mic":
+            prop = cyl(f"RepMic{k}", (0, 0, 0), 0.012, 0.2, pbr("RepMicM", (0.03, 0.03, 0.03), 0.4), verts=10)
+        c["people"].append((h, Vector((x, y0, 0)), float(rng.uniform(0, 2.0)), prop, float(rng.uniform(-0.6, 0.6))))
     return c
 
 
 def anim_steps(c, t):
     sec = t * DUR["steps"]
-    for h, start, delay in c["people"]:
-        end = Vector((start.x + 0.6, -3.0, 0))
-        walk_to(h, start, end, max(0.0, sec - delay), speed=0.85, cadence=1.6)
+    for h, start, delay, prop, drift in c["people"]:
+        end = Vector((start.x + drift * 3.0, -3.0, 0))
+        walk_to(h, start, end, max(0.0, sec - delay), speed=0.7, cadence=1.5)
         dd.ground(h, step_z(h.arm.location.y))
+        if prop is not None:
+            prop.location = h.bone_tail("lowerarm02.R") - Vector((0, 0, 0.08)); prop.rotation_euler = (0, 0, h.arm.rotation_euler.z)
 
 
 MOVES = {"steps": dict(kind="anim", dof=8.0, anim=anim_steps,
-                       cam=lambda c, t: (Vector((6.0, -10.0, 5.5)).lerp(Vector((5.0, -9.0, 2.6)), ease(t)), Vector((0.0, 3.5, 2.2)), 30),
+                       cam=lambda c, t: (Vector((7.5, -6.5, 2.2)).lerp(Vector((6.5, -5.8, 1.9)), ease(t)), Vector((-0.5, 3.5, 2.0)), 30),
                        focus=lambda c, t: Vector((0.0, 3.0, 1.5)))}
