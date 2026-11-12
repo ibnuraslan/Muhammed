@@ -1,0 +1,6 @@
+HAND AUDIT GameBoxBullet: frames 1-1500 every 2 frames (750 frames), 2 characters
+flagged frames: 750, overlapping triangle pairs: 61200
+
+by check: handL-box 474 frames / 23700 pairs, handR-box 750 frames / 37500 pairs
+hand-box overlaps are the grip contact (palm/thumb pad pressing the box side); max pairs in one frame: 18
+NON-CONTACT HITS (hand vs hand, own body, own shirt, other character): 0
