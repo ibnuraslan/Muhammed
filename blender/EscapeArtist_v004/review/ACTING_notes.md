@@ -54,3 +54,29 @@ See `review/clip_scan_v004.json`.
 - Hand audit (`scripts/hand_audit.py`, every 20 frames): 2 flags, both at the fence top (1740–1760), hands passing over the razor wire.
 - Contact audit (`scripts/audit.py`): hover 0, sink 0, camera inside geometry 0.
 - Hand close-ups: `review/hand_closeups_v004.jpg` (28 contacts) and `review/hand_closeups_v004_targeted.jpg` (side angles on the new contacts).
+
+## Round 2 (deadline pass, 16:00 UTC): `hand_poses.py` + `qa_check.py`
+- **Hand poses:** all finger poses now come from `pipeline/hand_poses.py` (cached `apply_pose` rotations: relaxed, cup_hold, wrap_grip, open_alarm, point), with `add_hand_limits` on every rig in place of my own finger limits.
+- **Real contact:** `grip_object` closes the fingers onto the cell bars (beat 1), the file handle and the key scrap (beat 2), the hacksaw handle and tip (beat 10), the toolbox handle (father and boy, beats 5–6), the phone body (stepmother) and the placard sticks (protesters).
+- **Helper objects removed or parked:** the dust volume is gone (its particles never rendered). Filings now emit from the visible bar notch. Particle instance meshes sit far below the set. The never-rendered phone dial-number mesh is deleted. Props are parked 100 m below the set (delta location) while hidden.
+
+**`qa_check.py` (commit c6240b2), step 6, on the packed v004 (`review/qa_v004.json`):**
+
+| | BACKHEAD | HOVER | EMPTY | FILL | INSIDE | CLAW | FACEPRESS |
+|---|---|---|---|---|---|---|---|
+| v004 first pass | 5 | 398 | 470 | 35 | 84 | 0 | 0 |
+| v004 now | 7 | **0** | 257 | 7 | **0** | 25 | **0** |
+
+**Open, not fixed before the deadline:**
+- **EMPTY 257:** most are "wall/prop fills the frame, character only N %" on wide room shots and fly-through transitions (the character covers under 15 % of frame), plus 83 "no character in view" frames on transitions (546–690 corridor→memory, the court whip, the yard approach, the tally-wall moments).
+- **CLAW 25:** the file and phone grips (318–474, 1182–1272) and a few placard frames read as curled fingers without registered contact.
+- **BACKHEAD 7:** beat frames 0, 276, 942, 1548, 2484, 2898 and 3498, where the camera is behind the nearest character at the exact beat frame.
+- **FILL 7:** hair at 204–228 (the eye ECU in beat 1) and one corridor wall frame at 690.
+
+## Mandatory 6-point self-check
+1. Hands touch what they hold: **checked for the targeted contacts** (door, gate, saw, toolbox, phone, bars, placards), with HOVER at 0. The fence-top hands are not checked.
+2. No claws: **not fully.** QA still reports 25 CLAW frames (file and phone grips).
+3. Nothing pressed into a face: **checked** (FACEPRESS 0).
+4. No empty, blurred or black cells: **not fully.** There are no black cells, but QA flags EMPTY on wide and transition frames (257).
+5. Close-ups show hands: **checked for the targeted set.** Some generic close-ups (fence top, tally) show the body rather than the hand.
+6. `hand_poses.py` used: **checked.**

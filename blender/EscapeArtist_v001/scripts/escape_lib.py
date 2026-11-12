@@ -26,7 +26,7 @@ globals()["ground_z"] = ground_z
 def vis_key(objs, ranges, f_end=3750):
     """ranges: list of (f0, f1) visible. Constant interpolation."""
     for o in objs:
-        vp = o.type == "MESH"          # meshes also hide in the viewport (so scans skip them); armatures keep evaluating
+        vp = False                    # viewport stays on so hidden props keep evaluating (they are parked instead)
         o.hide_render = True; o.keyframe_insert("hide_render", frame=-1)
         if vp: o.hide_viewport = True; o.keyframe_insert("hide_viewport", frame=-1)
         for f0, f1 in ranges:
@@ -40,6 +40,16 @@ def vis_key(objs, ranges, f_end=3750):
             for fc in fcurves_of(o):
                 for k in fc.keyframe_points: k.interpolation = "CONSTANT"
         if vp: o.hide_viewport = o.hide_render
+        # props (not characters): park far below the set while hidden, so nothing invisible sits next to a hand
+        if o.parent is None and o.type != "ARMATURE":
+            o.delta_location = (0, 0, -100); o.keyframe_insert("delta_location", frame=-1)
+            for f0, f1 in ranges:
+                o.delta_location = (0, 0, 0); o.keyframe_insert("delta_location", frame=f0)
+                o.delta_location = (0, 0, -100); o.keyframe_insert("delta_location", frame=f1 + 1)
+            for fc in fcurves_of(o):
+                if fc.data_path == "delta_location":
+                    for k in fc.keyframe_points: k.interpolation = "CONSTANT"
+            o.delta_location = (0, 0, 0 if any(f0 <= 0 <= f1 for f0, f1 in ranges) else -100)
 
 def fcurves_of(idb):
     ad = idb.animation_data
@@ -227,3 +237,26 @@ def turn_steps(H, f0, f1, pos, yaw0, yaw1, z):
         for s, sg in (("L", -1), ("R", 1)):
             W = rel(pos, y, (sg * 0.36, 0.06, -0.02)); d, n = hand_dirs(y, (0, 0.15, -1), (-sg, 0, 0))
             H.key_hand(s, f, W, d, n, rel(pos, y, (sg * 0.5, -0.45, 0.25)))
+
+# ---------------------------------------------------------------- shared hand-pose library (director, pipeline/hand_poses.py)
+exec(open("/home/user/Muhammed/blender/pipeline/hand_poses.py").read())
+_POSE_CACHE = {}
+def _pose_for(amt):
+    return "wrap_grip" if amt >= 0.85 else ("cup_hold" if amt >= 0.6 else ("relaxed" if amt >= 0.25 else "open_alarm"))
+def grip(H, s, f, amt=1.0, thumb=0.7, spread=0.0, pose_name=None):
+    """finger pose from the shared library (cached per rig/side/pose), keyed at f"""
+    pn = pose_name or _pose_for(amt); rig = H.r.o; key = (rig.name, s, pn)
+    if key not in _POSE_CACHE:
+        sc.frame_set(0); _POSE_CACHE[key] = _pose_rots(rig, s, pn)
+    _key(rig, s, _POSE_CACHE[key], f, 1.0)
+def mesh_of(name):
+    o = bpy.data.objects[name]
+    if o.type == "MESH": return o
+    ms = [c for c in o.children_recursive if c.type == "MESH"]
+    return max(ms, key=lambda c: len(c.data.vertices))
+def gripo(H, s, f, obj, point, approach, finger_dir=None):
+    """real contact grip on a prop (hand_poses.grip_object); falls back silently if the solver fails"""
+    try:
+        grip_object(H.r.o, s, int(f), obj, Vector(point), Vector(approach), finger_dir=Vector(finger_dir) if finger_dir is not None else None)
+    except Exception as e:
+        print("GRIP_FAIL", H.r.o.name, s, f, obj.name, e)

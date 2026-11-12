@@ -46,17 +46,7 @@ HS = {}
 for n in CAST:
     HS[n] = Human(make_human_ctrl(O[n]))
 P_, PO, BOY, FA, SM, G1, G2, JU, PR1, PR2 = [HS[n] for n in CAST]
-for n in CAST:
-    for pb in O[n].pose.bones:
-        nm = pb.name
-        if nm.startswith("finger") and not nm.startswith("finger1"):
-            c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
-            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-            c.min_x, c.max_x = R_(-5), R_(95); c.min_y, c.max_y = R_(-10), R_(10); c.min_z, c.max_z = R_(-12), R_(12)
-        elif nm.startswith("finger1"):
-            c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
-            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-            c.min_x, c.max_x = R_(-20), R_(60); c.min_y, c.max_y = R_(-30), R_(30); c.min_z, c.max_z = R_(-30), R_(30)
+for n in CAST: add_hand_limits(O[n])
 Z = {n: HS[n].root_head.z for n in CAST}
 
 # visibility per character
@@ -85,6 +75,8 @@ for f, hd, br, ld in ((0, (5, -35), -0.2, 0.0), (60, (0, -25), -0.6, 0.2), (130,
     pose(P_, f, PR + Vector((0, 0, -0.01 * (f % 2))), yaw=180, spine=(4, hd[1] * 0.3, 0), head=hd,
          hands={"L": (bars["L"], dL, nL, None), "R": (bars["R"], dR, nR, None)}, fingers={"L": 0.85, "R": 0.85})
     face(P_, f, brow=br, lid=ld)
+    for s_, bx in (("L", 0.23), ("R", 0.575)):
+        gripo(P_, s_, f, O["CellFront_0"], (bx, -0.017, 1.32), (0, 1, 0), finger_dir=(0, 0, -1))
 # key ring rides the guard's right hip, swinging
 ring = O["KeyRing"]
 for f in range(0, 558, 2):
@@ -125,11 +117,15 @@ for f in range(316, 533, 4):
                 "R": (fp + rel(Vector(), SY, (0.17, -0.03, 0.04)), dR, nR, None)},
          fingers={"L": 0.85, "R": 0.9})
     face(P_, f, brow=-0.9, lid=0.35, jaw=1)
+    if f % 8 == 4:
+        sc.frame_set(f); fh = O["File_Handle"]
+        gripo(P_, "R", f, fh, fh.matrix_world.translation, (0, 0, -1))
+        gripo(P_, "L", f, scrap, scrap.matrix_world.translation + rel(Vector(), SY, (-0.02, 0, 0)), (0, 0, -1))
 sk = scrap.data.shape_keys.key_blocks["Cut"]
 sk.value = 0; sk.keyframe_insert("value", frame=310); sk.value = 1; sk.keyframe_insert("value", frame=530)
 # sparks: tiny emissive specks thrown from the scrap edge while filing
 spk_mat = emit_mat("Spark", (1.0, 0.55, 0.15), 60.0)
-bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.0025); spark = bpy.context.object; spark.name = "SparkMesh"; spark.data.materials.append(spk_mat); spark.hide_render = True
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.0025); spark = bpy.context.object; spark.name = "SparkMesh"; spark.data.materials.append(spk_mat); spark.hide_render = True; spark.location = (0, 0, -100)
 ps = scrap.modifiers.new("sparks", "PARTICLE_SYSTEM").particle_system.settings
 ps.count = 520; ps.frame_start, ps.frame_end = 318, 535; ps.lifetime = 14; ps.normal_factor = 0.6; ps.factor_random = 0.8
 ps.render_type = "OBJECT"; ps.instance_object = spark; ps.particle_size = 1.0; ps.size_random = 0.6; ps.effector_weights.gravity = 1.0
@@ -213,6 +209,8 @@ for f in range(992, 1041, 4):
          hands={"R": (handle + Vector((0.05, 0, 0.07)), dR, nR, None), "L": (handle + Vector((-0.06, 0, 0.07)), dL, nL, None)},
          fingers={"R": 0.95, "L": 0.95})
     face(FA, f, smile=0.5, brow=0.2)
+    if f % 8 == 0:
+        tm_ = mesh_of("Toolbox"); gripo(FA, "R", f, tm_, handle + Vector((0.05, 0, 0)), (0, 0, -1)); gripo(FA, "L", f, tm_, handle + Vector((-0.06, 0, 0)), (0, 0, -1))
 for f in range(942, 1128, 4):
     t = (f - 942)
     yb = 180 if f < 1000 else 180 - min(70, (f - 1000) * 1.5)
@@ -223,6 +221,8 @@ for f in range(942, 1128, 4):
         dR, nR = hand_dirs(yb, (0, 0.3, -1), (0, 0, -1))
         pose(BOY, f, BR + Vector((0.15, -0.1, -0.02)), yaw=yb, spine=(12, 0, 0), head=(20, 0),
              hands={"R": (handle + Vector((0.04, 0, 0.07)), dR, nR, None), "L": (handle + Vector((-0.04, 0, 0.07)), dR, nR, None)}, fingers={"R": 0.95, "L": 0.95})
+        if f % 8 == 0:
+            tm_ = mesh_of("Toolbox"); gripo(BOY, "R", f, tm_, handle + Vector((0.04, 0, 0)), (0, 0, -1)); gripo(BOY, "L", f, tm_, handle + Vector((-0.04, 0, 0)), (0, 0, -1))
     face(BOY, f, smile=0.9 if f < 1070 else 0.0, frown=0.0 if f < 1070 else 0.6, brow=0.6 if f < 1070 else -0.2)
 chair = O["Armchair"]
 for f in range(1040, 1422, 10):
@@ -251,6 +251,10 @@ for f in range(1140, 1422, 4):
          hands={"R": (hR, dR, nR, rel(SR, SYw, (0.55, -0.1, 0.1))), "L": (rel(SR, SYw, (-0.38, 0.5 + 0.05 * pt, 0.42)), dL, nL, rel(SR, SYw, (-0.6, -0.2, 0.2)))},
          fingers={"R": 0.9, "L": 0.35})
     face(SM, f, brow=-1.0, lid=0.25, jaw=6 + 10 * pt, frown=1.0)
+    grip(SM, "L", f, pose_name="point")
+    if f % 8 == 0 and lift >= 1:
+        sc.frame_set(f); ph_ = mesh_of("Phone_Phone_0") if O["Phone_Phone_0"].type == "MESH" else mesh_of(phone.name)
+        gripo(SM, "R", f, ph_, ph_.matrix_world.translation, (0, 0, 1))
 # the boy reacts: clutches the toolbox, steps back toward the chair
 for f in range(1132, 1422, 6):
     yb = 110 + 20 * min(1, (f - 1132) / 60)
@@ -259,6 +263,8 @@ for f in range(1132, 1422, 6):
     pose(BOY, f, BR + Vector((0.15, -0.1, -0.02)), yaw=yb, spine=(8, 0, 0), head=(-5, 15 * math.sin(f / 30)),
          hands={"R": (handle + Vector((0.04, 0, 0.07)), dB, nB, None), "L": (handle + Vector((-0.04, 0, 0.07)), dB, nB, None)}, fingers={"R": 0.95, "L": 0.95})
     face(BOY, f, brow=0.9, lid=0.0, jaw=6, frown=0.7)
+    if f % 12 == 0:
+        tm_ = mesh_of("Toolbox"); gripo(BOY, "R", f, tm_, handle + Vector((0.04, 0, 0)), (0, 0, -1)); gripo(BOY, "L", f, tm_, handle + Vector((-0.04, 0, 0)), (0, 0, -1))
 for nm in ("PoliceRed", "PoliceBlue"):
     L = O[nm]; ph = 0 if nm == "PoliceRed" else 1
     L.data.energy = 0; L.data.keyframe_insert("energy", frame=0); L.data.keyframe_insert("energy", frame=1240)
@@ -398,6 +404,9 @@ for f in range(2186, 2441, 3):
          hands={"R": (handle + Vector((0, 0.1, 0.02)), dR, nR, None), "L": (tip + Vector((-0.02, 0.1, 0.02)), dL, nL, None)},
          fingers={"R": 0.95, "L": 0.85})
     face(P_, f, brow=-1.0 if not glance else 0.7, lid=0.4 if not glance else 0.0, jaw=4, frown=0.7)
+    if (f - 2186) % 6 == 0:
+        sm_ = mesh_of("Hacksaw")
+        gripo(P_, "R", f, sm_, handle, (0, -1, 0)); gripo(P_, "L", f, sm_, tip, (0, -1, 0))
 key_obj(saw, 0, loc=SAW0, rot=(0, 0, R_(30))); key_obj(saw, 2156, loc=SAW0, rot=(0, 0, R_(30)))
 for f in range(2158, 2186, 2):
     sc.frame_set(f); M = bone_world(O["Prisoner"], "wrist.L")
@@ -406,16 +415,17 @@ for f in range(2158, 2186, 2):
 key_obj(saw, 2898, loc=barp + Vector((0.08 * math.sin((2439 - 2186) * 2 * math.pi / 26), 0.03, 0.0)), rot=(0, 0, R_(90)))
 vis_key([saw] + saw.children_recursive, [(2150, 2898)])
 # filings falling from the cut
-bpy.ops.mesh.primitive_plane_add(size=0.02, location=barp + Vector((0, 0.03, -0.01))); fem = bpy.context.object; fem.name = "FilingsEmitter"; fem.hide_render = True
+fem = None
 fmat = bpy.data.materials.new("Filings"); fmat.use_nodes = True; fb_ = fmat.node_tree.nodes["Principled BSDF"]; fb_.inputs["Metallic"].default_value = 1; fb_.inputs["Base Color"].default_value = (0.6, 0.6, 0.62, 1)
-bpy.ops.mesh.primitive_cube_add(size=0.002); fil = bpy.context.object; fil.name = "FilingMesh"; fil.data.materials.append(fmat); fil.hide_render = True
-pf = fem.modifiers.new("filings", "PARTICLE_SYSTEM").particle_system.settings
-pf.count = 900; pf.frame_start, pf.frame_end = 2190, 2480; pf.lifetime = 40; pf.normal_factor = 0.2; pf.factor_random = 0.3
-pf.render_type = "OBJECT"; pf.instance_object = fil; pf.particle_size = 1.0; pf.size_random = 0.5; fem.show_instancer_for_render = False
+bpy.ops.mesh.primitive_cube_add(size=0.002); fil = bpy.context.object; fil.name = "FilingMesh"; fil.data.materials.append(fmat); fil.hide_render = True; fil.location = (0, 0, -100)
+
 # a notch deepens on the bar: dark ring scaled in
 bpy.ops.mesh.primitive_torus_add(major_radius=0.0145, minor_radius=0.003, location=barp); notch = bpy.context.object; notch.name = "BarNotch"
 nm_ = bpy.data.materials.new("Notch"); nm_.use_nodes = True; nm_.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.75, 0.74, 0.72, 1); nm_.node_tree.nodes["Principled BSDF"].inputs["Metallic"].default_value = 1
 notch.data.materials.append(nm_)
+pf = notch.modifiers.new("filings", "PARTICLE_SYSTEM").particle_system.settings
+pf.count = 900; pf.frame_start, pf.frame_end = 2190, 2480; pf.lifetime = 40; pf.normal_factor = 0.2; pf.factor_random = 0.3
+pf.render_type = "OBJECT"; pf.instance_object = fil; pf.particle_size = 1.0; pf.size_random = 0.5; notch.show_instancer_for_render = True
 key_obj(notch, 0, scale=(1, 1, 0.01)); key_obj(notch, 2200, scale=(1, 1, 0.1)); key_obj(notch, 2480, scale=(1, 1, 1.0))
 vis_key([notch], [(2190, 3750)])
 
@@ -561,6 +571,9 @@ for i, (H, nm, xy, yw) in enumerate(PROT):
         pose(H, f, root + Vector((0, 0, -0.01 * bob)), yaw=yw + 180 if False else yw + 180, spine=(-3, 5 * math.sin(f / 20 + i), 0), head=(-10, 0),
              hands={"L": (sp_ + Vector((-0.02, 0.05, -0.05)), dd, nn_, None), "R": (sp_ + Vector((0.02, 0.05, -0.2)), dd, nn_, None)}, fingers={"L": 0.95, "R": 0.95})
         face(H, f, brow=0.2, jaw=4 + 8 * max(0, math.sin(f / 7 + i)), frown=0.3)
+        if f % 12 == 0:
+            sc.frame_set(f); st_ = stick
+            gripo(H, "L", f, st_, sp_ + Vector((0, 0, 0.0)), (0, 1, 0)); gripo(H, "R", f, st_, sp_ + Vector((0, 0, -0.15)), (0, 1, 0))
 # candles flicker
 cd = O["Candles"]; cd.location = (0.4, -17.0, ground_z(0.4, -17.0))
 for k, (x, y) in enumerate(((0.4, -17.0), (-0.9, -16.9), (1.6, -17.1))):
@@ -602,14 +615,6 @@ for f in range(0, 700, 7):
     if random.random() < 0.15:
         fl.data.energy = 90; fl.data.keyframe_insert("energy", frame=f); fl.data.energy = 300; fl.data.keyframe_insert("energy", frame=f + 3)
 
-# dust motes drifting in the air of the cell block (life in every interior frame)
-bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -0.2, 1.5)); dv = bpy.context.object; dv.name = "DustVolume"; dv.scale = (6, 3.2, 1.4)
-dv.hide_render = True; dv.display_type = "WIRE"
-bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.0012); dm = bpy.context.object; dm.name = "DustMote"; dm.hide_render = True
-dmat = emit_mat("Dust", (1.0, 0.95, 0.85), 3.0); dm.data.materials.append(dmat)
-pd = dv.modifiers.new("dust", "PARTICLE_SYSTEM").particle_system.settings
-pd.count = 1500; pd.frame_start, pd.frame_end = -200, -199; pd.lifetime = 5000; pd.emit_from = "VOLUME"; pd.normal_factor = 0
-pd.effector_weights.gravity = 0.0; pd.brownian_factor = 0.02; pd.render_type = "OBJECT"; pd.instance_object = dm; dv.show_instancer_for_render = False
 sc.frame_start = 0
 
 

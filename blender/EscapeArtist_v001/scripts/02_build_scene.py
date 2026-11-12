@@ -364,7 +364,7 @@ chair, _ = glb("armchair", "Armchair", 0.9, 0, (4.4, 7.4, 0.0), rotz=R_(200), co
 box("SideTable", None, (6.9, 7.8, 0.36), (0.55, 0.55, 0.72), M_WOOD, coll="HOUSE", bevel=0.02)
 phone, pm = glb("phone", "Phone", 0.5, 2, (6.9, 7.8, 0.435), rotz=R_(200), coll="HOUSE")
 for o in pm:
-    if "Dial Numbers" in o.name: o.hide_render = True; o.hide_viewport = True          # no text on screen
+    if "Dial Numbers" in o.name: bpy.data.objects.remove(o)          # no text on screen
 # loose gears on the bench (small toothed discs)
 def gear(name, r, teeth, th, loc, mat):
     bm = bmesh.new(); pts = []
