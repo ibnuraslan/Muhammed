@@ -6,6 +6,20 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())      # shared director hand-pose library
+def hp_key(rig_obj, side, name, frame):
+    """apply_pose without the per-call frame_set (full-strength poses do not depend on the current pose)"""
+    _key(rig_obj, side, _pose_rots(rig_obj, side, name, None), frame, 1.0)
+def pose_for(c):
+    """legacy (curl, thumb) tuples -> shared pose names"""
+    if isinstance(c, str): return c
+    cu = c[0]
+    if isinstance(cu, (list, tuple)): return "point"
+    if cu >= 80: return "power_fist"
+    if cu <= 18: return "flat_palm"
+    if cu <= 34: return "relaxed"
+    if cu <= 55: return "cup_hold"
+    return "wrap_grip"
 OUT = sys.argv[sys.argv.index("--") + 1]
 sc = bpy.context.scene
 V = lambda *a: Vector(a)
@@ -120,8 +134,7 @@ class H:
             R.key_rot("foot." + s, f, [("X", -ank)])
         R.key_rot("jaw", f, [("X", -p["jaw"])])
         for s in "LR":
-            c = p["curl"].get(s, (28, 14))
-            self.key_fingers(s, f, c[0], c[1])
+            hp_key(self.o, s, pose_for(p["curl"].get(s, "relaxed")), f)
     def key_hands(self, f, p):
         ev(f)
         R = self.R
@@ -186,7 +199,7 @@ DV.P(232, (X0 + 0.1, EDGE_Y + 3.7, 1.05), yaw=180, pitch=-14, spine=(14, 0, 0), 
 SIT_Y = EDGE_Y + 3.75
 SIT = (X0 + 0.1, SIT_Y, 0.13)
 DV.P(252, (X0 + 0.1, SIT_Y, 0.38), yaw=180, pitch=-8, spine=(12, 0, 0), head=(5, 0, 0), legs=legs((84, 8, 12, -72)), arms=arms(fwd=35, out=50))
-DV.P(264, SIT, yaw=180, pitch=-10, spine=(26, 0, 0), head=(14, 0, 0), legs=legs((86, 8, 8, -72)), arms={"L": ("calf", dict(s="L", t=0.4)), "R": ("calf", dict(s="R", t=0.55))}, curl={"L": (28, 22), "R": (28, 22)})
+DV.P(264, SIT, yaw=180, pitch=-10, spine=(26, 0, 0), head=(14, 0, 0), legs=legs((86, 8, 8, -72)), arms={"L": ("calf", dict(s="L", t=0.4)), "R": ("calf", dict(s="R", t=0.55))}, curl={"L": "cup_hold", "R": "cup_hold"})
 # --- beat 3: cramps — knees jerk, toes lock, hands clutch the right calf
 CALF_HOLD = lambda f: None
 for k, f in enumerate(range(276, 520, 16)):
@@ -198,7 +211,7 @@ for k, f in enumerate(range(276, 520, 16)):
          head=(28 if pull else 18, 6 * (j * 2 - 1), 0),
          legs=legs((92 + 0.5 * kn_l, 8, kn_l, -82), ((126, 4, 118, -50) if pull else (92 + 0.6 * kn_r, 10, kn_r, -84))), jaw=4 + 4 * j,
          arms={"L": (("rest", dict(fwd=-15, out=38)) if pull else ("calf", dict(s="L", t=0.45))), "R": (("fin", dict(p=min(1.0, max(0.0, (f - 484) / 32.0)))) if f >= 484 else ("calf", dict(s="R", t=0.6)))},
-         curl={"L": (28, 22), "R": (((15, 10) if f >= 516 else (45, 35)) if f >= 484 else (28, 22))})
+         curl={"L": ("relaxed" if pull else "cup_hold"), "R": (("relaxed" if f >= 516 else "wrap_grip") if f >= 484 else "cup_hold")})
 # --- beat 4: claws upward, legs locked, rises, sinks back
 DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((86, 8, 10, -72), (100, 6, 60, -65)), arms=arms(fwd=120, out=30))
 for k, f in enumerate(range(535, 610, 15)):
@@ -577,7 +590,7 @@ for nm, x, y in GAL:
             if 1090 <= f <= 1210:          # nods to the beluga, palm on the glass, other hand signals
                 stand(h, f, (x, y), 180, spine=(8, 0, 0), head=(18 * j, 0, 0), arms_={"L": glass_hand(h, "L", x - 0.25, 1.55), "R": ("rest", dict(fwd=60 + 40 * j, out=25))})
             elif alarmed and f > 1210:      # radios the deck, points up
-                stand(h, f, (x, y), 180, spine=(4, 0, 0), head=(-25, 0, 0), arms_={"L": mouth_hand(h, "L"), "R": ("rest", dict(fwd=150, out=15))}, curl={"R": (POINT, 40)})
+                stand(h, f, (x, y), 180, spine=(4, 0, 0), head=(-25, 0, 0), arms_={"L": mouth_hand(h, "L"), "R": ("rest", dict(fwd=150, out=15))}, curl={"R": "open_alarm"})
             elif happy:
                 stand(h, f, (x, y), 180, spine=(0, 0, 0), head=(-15, 0, 0), arms_=clap(h, j))
             else:
@@ -589,7 +602,7 @@ for nm, x, y in GAL:
             stand(h, f, (x, y), 180, spine=(10, 0, 0), head=(12, 8 * math.sin(k), 0),
                   arms_={"L": glass_hand(h, "L", x - 0.24, 1.5 + 0.05 * j), "R": glass_hand(h, "R", x + 0.24, 1.45)}, curl={"L": (8, 10), "R": (8, 10)})
         elif alarmed and nm == "SpecB":
-            stand(h, f, (x, y), 180, spine=(8, 0, -8), head=(5, 10, 0), arms_=arms(l=dict(fwd=100 + 8 * j, out=12), r=dict(fwd=15, out=12)), curl={"L": (POINT, 45)})
+            stand(h, f, (x, y), 180, spine=(8, 0, -8), head=(5, 10, 0), arms_=arms(l=dict(fwd=100 + 8 * j, out=12), r=dict(fwd=15, out=12)), curl={"L": "open_alarm"})
         elif alarmed and nm == "SpecD":
             stand(h, f, (x, y), 180, spine=(12, 0, 0), head=(8, 0, 0), arms_={"R": mouth_hand(h, "R"), "L": ("rest", dict(fwd=40 + 15 * j, out=15))})
         else:
@@ -601,12 +614,12 @@ for nm, x, y in DECK:
         if f >= BEAT[11] + 30:       # clap, and one fist pump
             if nm == "SpecE" and (k // 3) % 2:
                 stand(h, f, (x, y), 180 - 6 * x, spine=(-4, 0, 0), head=(-8, 0, 0), knee=4, gz=DECK_Z,
-                      arms_=arms(l=dict(fwd=160 - 25 * j, out=20), r=dict(fwd=20, out=15)), curl={"L": (85, 50), "R": (25, 20)})
+                      arms_=arms(l=dict(fwd=160 - 25 * j, out=20), r=dict(fwd=20, out=15)), curl={"L": "open_alarm", "R": "relaxed"})
             else:
                 stand(h, f, (x, y), 180 - 6 * x, spine=(6, 0, 0), head=(20, 0, 0), knee=4, gz=DECK_Z, arms_=clap(h, j), curl={"L": (12, 15), "R": (12, 15)})
         elif f >= BEAT[4]:           # lean over the rail, point down into the tank
             stand(h, f, (x, y), 180 - 6 * x, spine=(28, 0, 0), head=(35, 6 * math.sin(k * 0.3), 0), gz=DECK_Z,
-                  arms_=arms(l=dict(fwd=60 + 6 * j, out=15), r=dict(fwd=20, out=15)), curl={"L": (POINT, 45)})
+                  arms_=arms(l=dict(fwd=60 + 6 * j, out=15), r=dict(fwd=20, out=15)), curl={"L": "open_alarm"})
         elif k % 5 == 0 or f == 1:
             stand(h, f, (x, y), 180 - 6 * x, spine=(10, 0, 0), head=(20, 6 * math.sin(k * 0.6), 0), gz=DECK_Z, arms_=arms(fwd=15 + 15 * j, out=12))
 # deck keeper (SpecF in a navy staff top) runs to the edge with a ring buoy and holds it out to her
@@ -643,7 +656,7 @@ for f in (RUN1 + 30, END):
     K2H.key_spine(f, flex=34, head=(25, 0))
     for s_ in "LR": K2H.key_foot(s_, f, K2H.foot_xy(s_, p, k2_yaw(f)), k2_yaw(f))
 # the buoy: a real ring life-buoy (orange/white bands), held in both hands
-bpy.ops.mesh.primitive_torus_add(major_radius=0.24, minor_radius=0.055, major_segments=48, minor_segments=16)
+bpy.ops.mesh.primitive_torus_add(major_radius=0.26, minor_radius=0.055, major_segments=48, minor_segments=16)
 buoy = bpy.context.active_object; buoy.name = "RingBuoy"
 bm_m = bpy.data.materials.new("M_RingBuoy"); bm_m.use_nodes = True
 bnn, bll = bm_m.node_tree.nodes, bm_m.node_tree.links; bpb = bnn["Principled BSDF"]; bpb.inputs['Roughness'].default_value = 0.55
@@ -668,9 +681,9 @@ for f in list(range(1, END + 1, 6)) + [END]:
     buoy.location = c; buoy.rotation_quaternion = q
     buoy.keyframe_insert("location", frame=f); buoy.keyframe_insert("rotation_quaternion", frame=f)
     for s_, sx in (("L", 1), ("R", -1)):
-        W = c + side * sx * 0.37                     # grip on the outer edge of the ring, each side (palm outside the tube)
+        W = c + side * sx * 0.30                     # grip on the outer edge of the ring, each side (palm outside the tube)
         K2H.key_hand(s_, f, W + Vector((0, 0, 0.03)), Vector((0, 0, -1)), -side * sx, pole=W + side * sx * 0.4 - fwd * 0.4 + Vector((0, 0, -0.3)))
-        K2F.key_fingers(s_, f, 45, 40)
+        hp_key(K2, s_, "wrap_grip", f)
 # the buoy follows the hands the IK actually reached: rim between the two palms
 for f in list(range(1, END + 1, 6)) + [END]:
     ev(f)

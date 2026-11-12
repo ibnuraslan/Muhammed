@@ -7,7 +7,7 @@ BR = bpy.data.objects["Beluga_Rig"]; M = BR.matrix_world
 head = M @ Vector((0, -1.45, 0.1)); mid = M @ Vector((0, 0.0, 0.0))
 cd = bpy.data.cameras.new("QW"); cam = bpy.data.objects.new("QW", cd); sc.collection.objects.link(cam); sc.camera = cam
 for o in bpy.data.objects:
-    if o.name == "Explainer_Card": o.animation_data_clear(); o.hide_render = True
+    if o.name == "Explainer_Backdrop": o.animation_data_clear(); o.hide_render = True
 sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 12; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = "JPEG"
 R3 = M.to_3x3()

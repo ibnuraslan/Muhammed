@@ -154,6 +154,7 @@ def ice_wall(name, size_u, size_v, loc, rot, amp=0.55, seed=0):
         p_ = v.co + Vector((seed, seed * 0.7, 0))
         h = noise.fractal(p_ * 0.55, 0.6, 2.2, 5) * 0.6 + abs(noise.noise(p_ * 0.25)) * 1.0 + noise.noise(p_ * 2.5) * 0.08
         v.co += nrm * (amp * (0.4 + h))
+    for f_ in me.polygons: f_.flip()      # face normals point into the tank (towards the camera)
     me.update()
     sm = o.modifiers.new("Sub", 'SUBSURF'); sm.levels = 1; sm.render_levels = 1
     for f_ in me.polygons: f_.use_smooth = True

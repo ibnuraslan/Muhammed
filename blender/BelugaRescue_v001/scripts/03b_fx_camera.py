@@ -83,7 +83,7 @@ def RG(f): ev(f); return ring.matrix_world.translation.copy()
 FR = []
 def K(f, c, a, l): FR.append((f, c, a, float(l)))
 # beat 1 — deck, spring, entry, through the surface
-K(1, V(X0 - 1.5, -7.6, DECK_Z + 2.4), V(X0 + 0.2, -3.2, 5.4), 22)
+K(1, V(X0 + 1.6, -3.7, DECK_Z + 1.7), V(X0, -5.2, DECK_Z + 1.3), 26)
 K(40, V(X0 + 1.5, -4.2, DECK_Z + 1.3), PEL(40), 26)
 K(66, V(X0 + 1.9, -3.4, 6.9), H_(66), 24)
 K(84, V(X0 + 1.3, -3.0, 6.12), CH(84), 22)
@@ -205,7 +205,7 @@ json.dump([(f, list(c), list(a), l) for f, c, a, l in FR], open(os.path.join(HER
 
 # ------------------------------------------------------------------ explainer gradient card behind the calf (beat 3)
 bpy.ops.mesh.primitive_plane_add(size=1)
-card = bpy.context.active_object; card.name = "Explainer_Card"
+card = bpy.context.active_object; card.name = "Explainer_Backdrop"
 card.parent = cam; card.location = (0, 0, -1.6); card.scale = (2.2, 2.2, 1)
 cm = bpy.data.materials.new("M_ExplainerGradient"); cm.use_nodes = True
 cn, cl = cm.node_tree.nodes, cm.node_tree.links; cn.clear()
@@ -223,6 +223,7 @@ for f, v in ((1, 0.0), (330, 0.0), (352, 1.0), (470, 1.0), (500, 0.0)):
     val.outputs[0].default_value = v; val.outputs[0].keyframe_insert("default_value", frame=f)
 for f, h in ((1, True), (329, False), (501, True)):
     card.hide_render = h; card.keyframe_insert("hide_render", frame=f)
+    card.hide_viewport = h; card.keyframe_insert("hide_viewport", frame=f)
 # card distance follows the focus distance + 0.5 m
 for f in range(326, 506, 6):
     d_ = (fc(f) - fa(f)).length
@@ -479,7 +480,7 @@ dp.inputs['Transmission Weight'].default_value = 0.85; dp.inputs['IOR'].default_
 droplets("Splash_Break", Vector((hp.x, hp.y, WATER_Z)), 1903, 1985)
 droplets("Splash_Spout", Vector((hp.x - 1.4, hp.y + 1.9, WATER_Z)), 2120, 2190, n=300, speed=(2.5, 4.0), spread=0.08)
 # ------------------------------------------------------------------ suspended particles in the water (static random cloud drifting slowly)
-pme = bpy.data.meshes.new("Particulates"); pobj = bpy.data.objects.new("Particulates", pme); sc.collection.objects.link(pobj)
+pme = bpy.data.meshes.new("Water_Particulates"); pobj = bpy.data.objects.new("Water_Particulates", pme); sc.collection.objects.link(pobj)
 pts = [(random.uniform(-5.8, 5.8), random.uniform(-4.9, 4.9), random.uniform(0.05, 5.9)) for _ in range(4000)]
 pme.from_pydata(pts, [], [])
 ng = bpy.data.node_groups.new("Particulates_GN", 'GeometryNodeTree')

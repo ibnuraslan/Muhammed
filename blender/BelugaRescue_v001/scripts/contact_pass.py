@@ -37,7 +37,7 @@ sc.camera = cam
 sc.render.resolution_x, sc.render.resolution_y, sc.render.resolution_percentage = 270, 480, 100
 sc.cycles.samples = 8; sc.render.use_motion_blur = False; sc.render.image_settings.file_format = "JPEG"
 for o in bpy.data.objects:
-    if o.name == "Explainer_Card": o.animation_data_clear(); o.hide_render = True
+    if o.name == "Explainer_Backdrop": o.animation_data_clear(); o.hide_render = True
 for name, f, tf, off, lens in SHOTS:
     t = tf(f); cam.location = t + off; cam.rotation_euler = (t - cam.location).to_track_quat('-Z', 'Y').to_euler(); cd.lens = lens
     sc.frame_set(f); sc.render.filepath = os.path.join(OUT, "%s_f%04d.jpg" % (name, f)); bpy.ops.render.render(write_still=True)

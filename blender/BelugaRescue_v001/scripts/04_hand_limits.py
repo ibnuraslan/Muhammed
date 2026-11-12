@@ -10,8 +10,11 @@ R_ = math.radians
 RIGS = [o for o in bpy.data.objects if o.type == 'ARMATURE' and o.name in ("Diver", "Keeper", "SpecA", "SpecB", "SpecC", "SpecD", "SpecE", "SpecF", "SpecG")]
 SAMPLE = list(range(1, sc.frame_end + 1, 40))
 n_con = 0
+import os
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "pipeline", "hand_poses.py")).read())
 for rig in RIGS:
-    names = [b.name for b in rig.pose.bones if b.name.startswith(("finger", "wrist."))]
+    add_hand_limits(rig); n_con += 1
+    names = []      # shared library limits replace the per-animation limits below [b.name for b in rig.pose.bones if b.name.startswith(("finger", "wrist."))]
     # local rotation the animation uses, per bone, sampled over the film
     used = {n: [] for n in names}
     for f in SAMPLE:

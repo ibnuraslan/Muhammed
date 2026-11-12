@@ -6,7 +6,7 @@ sc = bpy.context.scene; D = bpy.data.objects["Diver"]
 cd = bpy.data.cameras.new("QG"); cam = bpy.data.objects.new("QG", cd); sc.collection.objects.link(cam); cd.clip_start = 0.01; cd.lens = 40
 sc.camera = cam
 for o in bpy.data.objects:
-    if o.name == "Explainer_Card": o.animation_data_clear(); o.hide_render = True
+    if o.name == "Explainer_Backdrop": o.animation_data_clear(); o.hide_render = True
 sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 8; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = "JPEG"
 for f in map(int, a[1:]):
