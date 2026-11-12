@@ -59,7 +59,7 @@ def window_unit(name, w, h, frame_m, glass_m, curtain_m, sill_m, seed):
 
 def burlap_crate(name, size=(1.3, 1.0, 1.1)):
     """Large crate sewn into burlap: coarse weave, rope lashing both ways, rows of staples along the seams, a tag."""
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.35, name="BurlapBig", tint=(0.72, 0.6, 0.42))
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.65, name="BurlapBig", tint=(0.72, 0.6, 0.42))
     rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
     stm = pbr("StapleE", (0.7, 0.7, 0.72), 0.25, 1.0)
     sx, sy, sz = size

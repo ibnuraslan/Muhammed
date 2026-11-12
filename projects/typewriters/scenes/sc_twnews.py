@@ -119,10 +119,10 @@ def animate(c, sec, shot):
     MC.run_teletype(c["wire"], sec, rate=9.0)
     w = P["writer"]
     tty = c["wire_root"]
-    front = tty.matrix_world @ Vector((0, -0.75, 0))
+    front = tty.matrix_world @ Vector((0, -0.62, 0))
     twp.stand(w, (front.x, front.y, 0), tty.rotation_euler.z + math.pi)          # facing the machine
     tear = ease(min(1.0, max(0.0, (sec - 2.6) / 0.8))) if shot == "wire" else 0.0
-    pp = tty.matrix_world @ Vector((0.0, 0.0, 1.3 + 0.1 * tear))
+    pp = tty.matrix_world @ Vector((0.0, -0.05, 1.18 + 0.1 * tear))
     for sd, dx in (("L", -0.12), ("R", 0.12)):
         reach(w, sd, pp + tty.matrix_world.to_3x3() @ Vector((dx, -0.12, 0)), Vector((dx * 4, -0.3, -0.9)), tty.matrix_world.to_3x3() @ Vector((0, 1, 0.3)))
     fingers_curl(w, 40, thumb=20); w.rot("head", (1, 0, 0), 10)

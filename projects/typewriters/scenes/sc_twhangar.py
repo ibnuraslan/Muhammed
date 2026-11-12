@@ -171,7 +171,7 @@ def build(variant=None):
     # ---------------------------------------------------------------- the wrapping station: one crate being wrapped and sealed
     wood = ph.texture("brown_planks_03", scale=1.5, name="CrateWood")
     crate = box("WrapCrate", (WORK.x, WORK.y, 0.48), (1.0, 0.8, 0.9), wood, bevel=0.01)
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.35, name="BurlapBig", tint=(0.72, 0.6, 0.42))
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.65, name="BurlapBig", tint=(0.72, 0.6, 0.42))
     wrap = box("Wrapping", (0, 0, 0), (1.03, 0.83, 0.93), hes, bevel=0.03)
     sub = wrap.modifiers.new("sub", 'SUBSURF'); sub.levels = 3; sub.render_levels = 3; sub.subdivision_type = 'SIMPLE'
     dsp = wrap.modifiers.new("folds", 'DISPLACE'); tx = bpy.data.textures.new("Folds", 'CLOUDS'); tx.noise_scale = 0.18
@@ -267,7 +267,7 @@ def build(variant=None):
             o = MC.burlap_crate(f"CStock{k}", tag=False); o.location = (CUSTOMS.x + 2.0 + (k % 3) * 1.0, CUSTOMS.y + 1.5 + (k // 3) * 0.9, 0.43)
         torch, _ = ph.model("vintage_flashlight"); c["torch"] = torch
         cl = area_light((CUSTOMS.x + 1.0, CUSTOMS.y - 1.0, 3.2), (0, 0, 0), 2.0, 60, (0.55, 0.62, 0.8)); point_at(cl, CUSTOMS); cl.visible_camera = False
-        wl = area_light((CUSTOMS.x + 0.5, HY - 1.6, 4.2), (0, 0, 0), 1.2, 140, (0.85, 0.78, 0.6)); point_at(wl, (CUSTOMS.x + 0.5, HY, 3.0)); wl.visible_camera = False
+        wl = area_light((CUSTOMS.x + 0.5, HY - 1.6, 4.2), (0, 0, 0), 1.2, 450, (0.85, 0.78, 0.6)); point_at(wl, (CUSTOMS.x + 0.5, HY, 3.0)); wl.visible_camera = False
         sp = bpy.data.lights.new("TorchC", 'SPOT'); sp.energy = 600; sp.spot_size = math.radians(26); sp.spot_blend = 0.3; sp.color = (1.0, 0.9, 0.75)
         so = bpy.data.objects.new("TorchC", sp); bpy.context.collection.objects.link(so); c["beam"] = so
     if variant == "dock":

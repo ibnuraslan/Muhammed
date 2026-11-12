@@ -22,7 +22,9 @@ VARIANT_FOR = {"count": "count", "analyst": "analyst", "night_push": "night", "n
                "records_drawer": "records", "records_burn": "records", "attache": "attache", "platen": "attache"}
 DESK_Z = 0.79
 DESK_A = Vector((0.9, 0.4, 0.0))
-TEXT_G = "AGRICULTURAL OFFICE\n\nWheat and feed grains: position for\nthe next session. Price range and\nvolumes as discussed with the\ndelegation. Not for distribution."
+TEXT_G = ("AGRICULTURAL OFFICE\n\nWheat and feed grains: position for\nthe next session. Price range and\nvolumes as discussed with the\n"
+          "delegation. Shipping schedule for the\nsecond quarter to follow. Corn and\nsoybean figures attached separately.\n"
+          "Delegation to meet again on the\nfourteenth. Not for distribution.\n")
 TEXT_A = "The copier on the fourth floor will be replaced\nthis week. Please clear all papers from the"
 TEXT_N = "Moscow, May 1984."
 TEXT_P = "Moscow, May 1984.\n\nReference your cable of the 9th.\nThe meeting with the delegation is set\nfor Thursday. Our position on volumes\nand price remains as agreed.\n"
@@ -331,7 +333,7 @@ def animate(c, sec, shot=None):
         bpy.context.view_layer.update()
         return
     if c["variant"] == "attache":
-        T.type_at(c["tw"], sec, start=0.3 if shot == "attache" else -16.0, cps=4.5)
+        T.type_at(c["tw"], sec, start=0.3 if shot == "attache" else -70.0, cps=4.5)
         twp.type_pose(c["people"]["sec"], c["tw"], sec)
         bpy.context.view_layer.update()
         return
@@ -355,7 +357,7 @@ def animate(c, sec, shot=None):
             side = d.cross(Vector((0, 0, 1)))
             edge = pl - d * (0.38 if k < 2 else 0.5)                      # hands flat on the desk edge, leaning in
             for sd, sg in (("L", -1), ("R", 1)):
-                reach(h, sd, edge + side * 0.22 * sg + Vector((0, 0, 0.06)), Vector((sg * side.x, sg * side.y, -0.6)), d + Vector((0, 0, -1.2)))
+                reach(h, sd, edge + side * 0.14 * sg + Vector((0, 0, 0.05)), Vector((sg * side.x, sg * side.y, -1.0)), d + Vector((0, 0, -1.5)))
             from human import fingers_curl as _fc
             _fc(h, 10, thumb=5)
         bpy.context.view_layer.update()
@@ -502,7 +504,7 @@ def cam_records_drawer(c, t):
 
 def cam_records_burn(c, t):
     e = ease(t); b = c["bag"].location
-    return (b + Vector((-1.6, 1.4, 1.5)).lerp(Vector((-1.4, 1.2, 1.45)), e), b + Vector((0.4, -0.1, 0.75)), 30)
+    return (b + Vector((-1.7, 0.75, 1.5)).lerp(Vector((-1.5, 0.65, 1.45)), e), b + Vector((0.4, -0.1, 0.75)), 30)
 
 
 def cam_attache(c, t):

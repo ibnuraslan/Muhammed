@@ -129,7 +129,7 @@ def lamp_blink(mat_names=("LampRed", "LampGreen"), period=24, strength=6.0):
 
 def burlap_crate(name, size=(0.95, 0.75, 0.85), tag=True):
     """A crate sewn into coarse burlap: weave texture, rope lashing both ways, staples along the top seam, a tag."""
-    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.35, name="BurlapBig", tint=(0.72, 0.6, 0.42))
+    hes = bpy.data.materials.get("BurlapBig") or ph.texture("hessian_230", scale=0.65, name="BurlapBig", tint=(0.72, 0.6, 0.42))
     rope = bpy.data.materials.get("Rope") or ph.texture("hessian_380", scale=6.0, name="Rope", tint=(0.55, 0.45, 0.32))
     stm = bpy.data.materials.get("StapleE") or pbr("StapleE", (0.7, 0.7, 0.72), 0.25, 1.0)
     sx, sy, sz = size

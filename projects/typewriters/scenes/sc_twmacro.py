@@ -113,7 +113,7 @@ def cam_space(c, t):
 
 
 MOVES = {
-    "strike": dict(kind="anim", dof=7.1, cam=cam_strike, focus=ball, anim=anim("strike"), title=("CHAPTER 3", "THE SIGNAL", 10, 130)),
+    "strike": dict(kind="anim", dof=7.1, cam=cam_strike, focus=lambda c, t: ball(c), anim=anim("strike"), title=("CHAPTER 3", "THE SIGNAL", 10, 130)),
     "platen": dict(kind="anim", dof=6.3, cam=cam_platen, focus=lambda c, t: W(c, (T.PAGE_LEFT + T.MARGIN + 0.03, T.PLATEN_Y - T.PLATEN_R, T.PLATEN_Z)), anim=anim("platen")),
     "sink": dict(kind="anim", dof=5.6, cam=cam_sink, focus=lambda c, t: ball(c).lerp(W(c, (0.0, T.BAR_Y + 0.03, 0.04)), ease(t)), anim=anim("sink")),
     "arms": dict(kind="anim", dof=5.6, cam=cam_arms, focus=lambda c, t: W(c, (0.0, -0.085, 0.04)), anim=anim("arms")),
