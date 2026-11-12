@@ -179,5 +179,7 @@ _build_set = build
 def build(variant=None):
     c = _build_set(variant)
     from pbkit import finish_scene
+    import pblook
+    pblook.apply("sc_salisbury", variant)                 # the house cinematic light (HOUSE_LOOK=plain for the old)
     finish_scene()
     return c

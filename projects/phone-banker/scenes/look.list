@@ -1,0 +1,18 @@
+Office (hero set), day|bankoffice|door_push|0.5
+Office: the dial|bankoffice|dial|0.5
+Ante-room, secretary's desk|bankoffice|ante_desk|0.5
+Summer street|bank|traffic|0.5
+Autumn rain|bank|detain|0.5
+Hospital corridor|hospital|gurney|0.5
+Ward|hospital|ward|0.5
+Pathologist|hospital|path_read|0.5
+Lab 1995|forlab|compare|0.6
+Lab 2018|forlab|specialists|0.5
+Memorial hall|memorial|dignitaries|0.5
+Courtroom|court|verdict|0.6
+Court corridor|court|doors|0.5
+Checkpoint|closedtown|checkpoint|0.45
+Institute corridor|closedtown|institute|0.5
+Courtyard|apartment|wait|0.6
+Salisbury street|salisbury|street|0.6
+Salisbury suits|salisbury|suits|0.6
