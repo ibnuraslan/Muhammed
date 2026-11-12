@@ -233,7 +233,7 @@ mul = n.new('ShaderNodeMath'); mul.operation = 'MULTIPLY'; l.new(rmp.outputs['Re
 l.new(mul.outputs[0], pv.inputs['Density']); pv.inputs['Color'].default_value = (1, 1, 1, 1)
 l.new(pv.outputs[0], o_.inputs['Volume'])
 clouds = mesh_obj("CloudLayer", bm, [CLOUD], CM)
-for f, v in ((1, 0.0), (f_of(27.6), 0.0), (f_of(28.6), 0.07), (SWAP_F - 6, 0.08), (SWAP_F + 6, 0.08), (f_of(29.8), 0.05), (f_of(30.6), 0.0), (2130, 0.0)):
+for f, v in ((1, 0.0), (f_of(27.6), 0.0), (f_of(28.6), 0.03), (SWAP_F - 6, 0.04), (SWAP_F + 6, 0.04), (f_of(29.8), 0.05), (f_of(30.6), 0.0), (2130, 0.0)):
     dens.outputs[0].default_value = v; dens.outputs[0].keyframe_insert("default_value", frame=f)
 # whiteout near the swap: a camera-parented white card fades in/out (added in 05 where the camera exists)
 sc["SWAP_F"] = SWAP_F

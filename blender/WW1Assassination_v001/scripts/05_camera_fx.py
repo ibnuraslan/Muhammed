@@ -135,7 +135,7 @@ l.new(val.outputs[0], mx.inputs[0]); l.new(tr.outputs[0], mx.inputs[1]); l.new(e
 card = mesh_obj("WhiteoutCard", bm, [WM], CF); card.parent = cam; card.location = (0, 0, -0.05); card.scale = (0.2, 0.2, 1)
 card.visible_shadow = False
 SW = sc.get("SWAP_F", f_of(29.12))
-for f, v in ((1, 0.0), (SW - 14, 0.0), (SW - 2, 0.6), (SW + 2, 0.6), (SW + 14, 0.0), (F_END, 0.0)):
+for f, v in ((1, 0.0), (SW - 5, 0.0), (SW - 2, 0.85), (SW + 1, 0.85), (SW + 4, 0.0), (F_END, 0.0)):
     val.outputs[0].default_value = v; val.outputs[0].keyframe_insert("default_value", frame=f)
 
 # ------------------------------------------------------------------ muzzle flashes (pistol), with a light that pops on faces and paint
