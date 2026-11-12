@@ -95,14 +95,22 @@ def man_state(f):
     w = smooth((f - 1360) / 60.0); hp += 12 * w; flex += 6 * w; dz -= 0.02 * w
     z = smooth((f - 1415) / 50.0)
     hp -= 40 * z; hy += 34 * z; twist += 4 * z
-    return dy, dz, flex, twist, side, hp, hy
+    # acting pass: weight shifts foot to foot, head and shoulders follow the box he is turning, small tremor after the hit
+    fade = 1 - smooth((f - 250) / 110.0)
+    ws = math.sin(2 * math.pi * f / 240.0)
+    wx = 0.016 * ws; side += 2.5 * ws; dz -= 0.006 * abs(ws)
+    twist += 5 * math.sin(2 * math.pi * f / 180.0 + 0.4) * fade; hy += 7 * math.sin(2 * math.pi * f / 180.0 + 0.9) * fade
+    if f > F_HIT:
+        e = math.exp(-(f - F_HIT) / 420.0); hp += 1.6 * math.sin(f * 0.11) * e; hy += 1.2 * math.sin(f * 0.07 + 1) * e
+    return dy, dz, flex, twist, side, hp, hy, wx
 
 for f in list(range(1, F_END + 1, 4)) + [F_END]:
-    dy, dz, flex, twist, side, hp, hy = man_state(f)
-    H.key_root(f, V((MAN.x, MAN.y + H.root_head.y + dy, FZ + H.root_head.z - 0.01 + dz)), yaw=0.0, flex=flex * 0.3, side=side)
+    dy, dz, flex, twist, side, hp, hy, wx = man_state(f)
+    H.key_root(f, V((MAN.x + wx, MAN.y + H.root_head.y + dy, FZ + H.root_head.z - 0.01 + dz)), yaw=0.0, flex=flex * 0.3, side=side)
     H.key_spine(f, flex=flex, twist=twist, side=side, head=(hp, hy))
 
-for f, a in ((1, 0.0), (F_HIT + 10, 0.0), (F_HIT + 90, 14.0), (1300, 10.0), (1420, 16.0), (1470, 9.0), (F_END, 8.0)):
+JAWK = [(1, 0.0), (F_HIT + 10, 0.0), (F_HIT + 90, 14.0)] + [(F_HIT + 90 + 50 * i, 14.0 + (2.5 if i % 2 else -2.5)) for i in range(1, 16)] + [(1300, 10.0), (1420, 16.0), (1450, 12.0), (1475, 15.0), (F_END, 10.0)]
+for f, a in sorted(JAWK):
     pb = R.PB["jaw"]; pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * float(os.environ.get("JAW", "1")))); pb.keyframe_insert("rotation_quaternion", frame=f)
 # face: smile while unboxing (mouth corners up/back, cheeks up), eyes wide open after the hit
 SM = float(os.environ.get("SMILE_SIGN", "1")); LID = float(os.environ.get("LID_SIGN", "-1"))
@@ -118,6 +126,21 @@ def key_face(f, smile, wide):
 for f, sm_, wd in ((1, 0.6, 0.0), (90, 1.0, 0.0), (200, 0.8, 0.0), (300, 1.0, 0.0), (F_HIT, 0.9, 0.1), (F_HIT + 30, 0.0, 0.9),
                    (700, -0.2, 1.0), (1300, -0.2, 0.8), (1380, 0.0, 0.6), (1440, -0.1, 1.0), (F_END, -0.1, 0.95)):
     key_face(f, sm_, wd)
+# blinks: lids close fast and reopen, every ~2-3 s (keyed on top of the lid curves)
+def blink_keys():
+    act = man.animation_data.action
+    BL = [60, 205, 330, 470, 600, 760, 900, 1060, 1210, 1330, 1395, 1488]
+    for sd in "LR":
+        nm = "orbicularis03." + sd; pb = R.PB[nm]
+        fcs = [fc for fc in act.fcurves if fc.data_path == 'pose.bones["%s"].rotation_quaternion' % nm] if hasattr(act, "fcurves") else []
+        for fb in BL:
+            if fb > F_END - 4: continue
+            qs = []
+            for ff in (fb - 3, fb + 4):
+                sc.frame_set(ff); qs.append((ff, pb.rotation_quaternion.copy()))
+            for ff, q in qs:
+                pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=ff)
+            pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(22 * LID)); pb.keyframe_insert("rotation_quaternion", frame=fb)
 # hands grip the box sides (wrist targets ride with the box)
 GX = float(os.environ.get("GX", "0.178")); GZ = float(os.environ.get("GZ", "-0.12")); GY = float(os.environ.get("GY", "0.02"))
 GRIP_L = V((GX, GY, GZ)); GRIP_R = V((-GX, GY, GZ))
@@ -132,6 +155,7 @@ def key_hands(f):
         H.key_hand(s, f, W, d, n, pole)
 for f in list(range(1, F_END + 1, 2)) + [F_END]:
     key_hands(f)
+blink_keys()
 # finger curl around the front edge, thumbs over the top edge
 CURL = float(os.environ.get("CURL", "1"))
 for f in (1, F_END):
@@ -351,7 +375,8 @@ def puff(name, p0, drift, f0, r0, r1, mat, dur=240):
 for i in range(4):
     puff("Dust_out_%d" % i, HOLE + V((random.uniform(-0.05, 0.05), -0.08, random.uniform(-0.05, 0.05))), V((random.uniform(-0.3, 0.3), -0.4, 0.15)), F_WALL + i * 3, 0.02, 0.35, M_dust, 300)
 for i in range(6):
-    puff("Dust_in_%d" % i, HOLE + V((random.uniform(-0.05, 0.05), 0.25 + 0.05 * i, random.uniform(-0.05, 0.05))), V((random.uniform(-0.3, 0.3), 0.5 + 0.1 * i, random.uniform(-0.1, 0.2))), 188 + 4 * i, 0.03, 0.45, M_drydust, 360)
+    sx_ = 1 if i % 2 else -1   # off the bullet/camera line so the room reads through
+    puff("Dust_in_%d" % i, HOLE + V((sx_ * random.uniform(0.12, 0.22), 0.25 + 0.05 * i, random.uniform(-0.12, 0.12))), V((sx_ * random.uniform(0.2, 0.4), 0.5 + 0.1 * i, random.uniform(-0.1, 0.2))), 188 + 4 * i, 0.03, 0.30, M_drydust, 300)
 # impact puff + flakes at the box cover
 for i in range(24):
     o = piece("Cover_flake_%02d" % i, [random.uniform(0.002, 0.006)] * 2 + [0.0008], bpy.data.materials["M_box_shell"])
@@ -516,8 +541,8 @@ CK = [  # frame, camera position, aim point, lens
     (45,   behind(45, 0.32, 0.04, 0.06),   V((0.0, -12.0, 1.470)), 40),
     (95,   behind(95, 0.36, -0.10, 0.16),  V((0.0, -6.0, 1.570)), 34),
     (130,  behind(130, 0.42, 0.10, -0.12), V((0.0, 0.0, 1.470)), 36),
-    (150,  behind(150, 0.45, 0.03, 0.05),  V((0.0, 0.3, 1.470)), 36),
-    (F_WALL, behind(F_WALL, 0.32, 0.01, 0.02), V((0.0, 0.5, 1.470)), 36),
+    (150,  behind(150, 1.10, 0.30, 0.55),  V((-0.2, 0.3, 1.470)), 24),
+    (F_WALL, behind(F_WALL, 0.55, 0.10, 0.18), V((0.0, 0.5, 1.470)), 28),
     (166,  behind(166, 0.25, 0.0, 0.01),   V((0.0, 0.8, 1.470)), 35),
     (178,  behind(178, 0.24, 0.0, 0.0),    V((0.0, 0.9, 1.470)), 34),
     (186,  V((0.0, -0.045, 1.470)),         V((0.0, 1.0, 1.470)), 34),
@@ -526,13 +551,13 @@ CK = [  # frame, camera position, aim point, lens
     (228,  V((0.06, 0.45, 1.530)),       V((0.0, 2.0, 1.520)), 30),
     (270,  V((0.62, 0.62, 1.790)),       V((0.0, 2.2, 1.550)), 26),
     (330,  V((1.25, 1.55, 1.650)),       V((0.0, 2.55, 1.530)), 28),
-    (378,  V((0.55, 2.52, 1.530)),       V((0.0, 2.90, 1.480)), 40),
+    (378,  V((0.50, 2.40, 1.720)),       V((0.0, 2.95, 1.620)), 32),
 ]
 for f, c, a, l in [
-    (420,  V((0.30, 2.50, 1.570)),       V((0.0, 2.90, 1.500)), 38),
+    (420,  V((0.32, 2.38, 1.750)),       V((0.0, 2.95, 1.630)), 32),
     (480,  V((-0.05, 2.18, 1.730)),      V((0.0, 2.97, 1.620)), 34),
     (540,  V((-0.62, 2.32, 1.530)),      V((0.0, 2.95, 1.550)), 34),
-    (600,  V((-0.42, 2.52, 1.290)),      V((0.0, 2.92, 1.530)), 32),
+    (600,  V((-0.55, 2.45, 1.550)),      V((0.0, 2.95, 1.620)), 30),
     (650,  V((-0.13, 2.70, 1.460)),      V((0.0, 2.90, 1.480)), 40),
     (695,  V((-0.045, 2.795, 1.505)),   V((0.0, 2.92, 1.470)), 50),
     (735,  V((0.06, 2.805, 1.440)),      V((0.0, 2.92, 1.480)), 55),
@@ -552,6 +577,8 @@ for f, c, a, l in [(1395, V((0.75, 2.25, 1.670)), V((0.0, 2.95, 1.470)), 35), (1
     CK.append((f, SH(f, c), SH(f, a), l))
 fc = catmull([(f, c) for f, c, a, l in CK]); fa = catmull([(f, a) for f, c, a, l in CK]); fl = catmull([(f, float(l)) for f, c, a, l in CK])
 cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0
+for f_, v_ in ((1, 8.0), (172, 8.0), (184, 22.0), (232, 22.0), (250, 8.0)):
+    cam_d.dof.aperture_fstop = v_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 CAMLOG = []
 for f in range(1, F_END + 1):
     c = fc(f); a = fa(f)
