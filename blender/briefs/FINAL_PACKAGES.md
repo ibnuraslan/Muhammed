@@ -33,7 +33,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v003/` |
 | 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v003/` |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v002/` |
-| 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v005/` |
+| 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v005/` |
 | 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v004/` |
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v004/` |
