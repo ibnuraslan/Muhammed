@@ -11,11 +11,62 @@ def _node(nt, kind, **inputs):
     return n
 
 
-def add_grade(scene, bloom=0.35, vignette=0.55):
+def _set(n, name, val):
+    if name in n.inputs:
+        try:
+            n.inputs[name].default_value = val
+        except Exception:
+            pass
+
+
+def _cinematic(nt, src):
+    """Darker, denser, filmic day: exposure down, S-curve with rolled-off highlights (no white walls),
+    saturation down, teal shadows / amber highlights."""
+    L = nt.links
+    ex = nt.nodes.new("CompositorNodeExposure"); _set(ex, "Exposure", -0.8)
+    L.new(src, ex.inputs["Image"])
+    cv = nt.nodes.new("CompositorNodeCurveRGB")
+    c = cv.mapping.curves[3]
+    for (x, y), pt in zip([(0.0, 0.0), (1.0, 0.84)], c.points):
+        pt.location = (x, y)
+    for x, y in [(0.12, 0.035), (0.30, 0.15), (0.55, 0.38), (0.85, 0.71)]:
+        c.points.new(x, y)
+    cv.mapping.update()
+    L.new(ex.outputs["Image"], cv.inputs["Image"])
+    hs = nt.nodes.new("CompositorNodeHueSat"); _set(hs, "Saturation", 0.78)
+    L.new(cv.outputs["Image"], hs.inputs["Image"])
+    cb = nt.nodes.new("CompositorNodeColorBalance")
+    _set(cb, "Lift", (0.92, 0.955, 1.0, 1)); _set(cb, "Gamma", (1.0, 0.99, 0.97, 1)); _set(cb, "Gain", (1.05, 1.0, 0.92, 1))
+    L.new(hs.outputs["Image"], cb.inputs["Image"])
+    return cb.outputs["Image"]
+
+
+def grade_file(src, dst, look="cinematic", **kw):
+    """Grade a still on disk (look tests, preview sheets)."""
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    sc = bpy.context.scene
+    img = bpy.data.images.load(src)
+    sc.render.resolution_x, sc.render.resolution_y = img.size
+    sc.render.resolution_percentage = 100
+    sc.view_settings.view_transform = 'Standard'
+    add_grade(sc, look=look, image=img, **kw)
+    sc.render.filepath = dst
+    bpy.ops.render.render(write_still=True)
+    return dst
+
+
+def add_grade(scene, bloom=0.35, vignette=0.55, look="cinematic", image=None):
+    """look="cinematic" (default from Nov 2026): the person wants every scene, day included, moody and filmic,
+    never a bright plain 'normal camera' day: about half a stop darker, firmer contrast, less saturation,
+    cooler shadows and warm highlights. look="plain" gives the original house grade.
+    image: a bpy Image to grade instead of the render (for look tests on stills)."""
     nt = bpy.data.node_groups.new("HouseGrade", "CompositorNodeTree")
     if hasattr(nt, "interface"):
         nt.interface.new_socket("Image", in_out='OUTPUT', socket_type='NodeSocketColor')
-    rl = nt.nodes.new("CompositorNodeRLayers"); rl.scene = scene
+    if image is not None:
+        rl = nt.nodes.new("CompositorNodeImage"); rl.image = image
+    else:
+        rl = nt.nodes.new("CompositorNodeRLayers"); rl.scene = scene
     out = nt.nodes.new("NodeGroupOutput")
     glare = nt.nodes.new("CompositorNodeGlare")
     for attr, val in (("glare_type", 'FOG_GLOW'), ("quality", 'MEDIUM')):
@@ -74,7 +125,10 @@ def add_grade(scene, bloom=0.35, vignette=0.55):
             except Exception:
                 pass
     links.new(vig_out, cb.inputs["Image"])
-    links.new(cb.outputs["Image"], out.inputs[0])
+    last = cb.outputs["Image"]
+    if look == "cinematic":
+        last = _cinematic(nt, last)
+    links.new(last, out.inputs[0])
     scene.compositing_node_group = nt
     scene.render.use_compositing = True
     return nt

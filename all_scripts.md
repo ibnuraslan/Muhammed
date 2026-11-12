@@ -407,3 +407,10 @@ He'll spend the rest of his life in the state penitentiary in Cañon City, where
 
 "I'll have a better home than I have had in many years."
 
+
+
+---
+
+# Film 7 — The Kidnapper Who Only Played a Radio Jingle
+
+See projects/radio-jingle/script.txt
