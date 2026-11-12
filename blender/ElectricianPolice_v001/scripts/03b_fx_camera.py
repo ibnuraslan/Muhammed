@@ -118,7 +118,7 @@ loc2, f32, n2 = palm_pose(CH["Man"], "R", TICKET_F, 0.09, -0.02)
 attach_seq(slip, [(1, CH["OfficerA"], "wrist.R", frame_from(loc, f3, -n), 268), (TICKET_F, CH["Man"], "wrist.R", frame_from(loc2, f32, -n2))])
 key_vis(slip, [(262, 345)])
 phone = ob("St_Phone")
-loc, f3, n = palm_pose(CH["OfficerC"], "R", 1200, 0.06, -0.03)
+loc, f3, n = palm_pose(CH["OfficerC"], "R", 1200, 0.075, -0.045)
 attach_seq(phone, [(1, CH["OfficerC"], "wrist.R", frame_from(loc, -n, f3), 1200)])
 torch = bpy.data.lights.new("PhoneTorch", "SPOT"); torch.energy = 160; torch.spot_size = R_(70); torch.spot_blend = 0.6; torch.shadow_soft_size = 0.01
 torch.color = (1.0, 0.97, 0.92)
@@ -458,7 +458,7 @@ for nm in ST_TUBES + ["StLamp"]:
         e.default_value = v_; e.keyframe_insert("default_value", frame=f)
 for i in range(2):
     L = ob("StFill_%d" % i).data
-    for f, v_ in ((1, 300), (1214, 300), (1216, 0)):
+    for f, v_ in ((1, 600), (1214, 600), (1216, 0)):
         L.energy = v_; L.keyframe_insert("energy", frame=f)
 moon = bpy.data.lights.new("StDusk", "AREA"); moon.energy = 260; moon.size = 4; moon.color = (0.35, 0.45, 0.85)
 mo = bpy.data.objects.new("StDusk", moon); mo.location = (-11.5, 57.0, 3.25); mo.rotation_euler = (0, 0, 0); moon.size = 7; C("Station").objects.link(mo)
@@ -524,7 +524,7 @@ CAMK = [
     (460, V(7.6, 28.5, 6.5), V(12.0, 36.0, 10.0), 22),
     (485, V(9.5, 31.5, 15.5), V(12.0, 36.0, 20.0), 22),
     (510, V(12.5, 30.0, 24.0), V(2.0, 60.0, 10.0), 24),
-    (540, V(19.5, 30.5, 9.0), V(21.5, 38.0, 1.6), 24),
+    (540, V(19.0, 31.0, 7.0), V(21.5, 38.0, 1.6), 26),
     (562, V(21.5, 35.4, 2.2), V(21.5, 42.0, 1.3), 24),
     (578, V(21.55, 38.0, 1.62), V(21.5, 43.0, 1.15), 24),
     (600, V(21.95, 41.7, 1.55), SCRN, 28),
@@ -548,7 +548,7 @@ CAMK = [
     (1142, V(21.5, 37.3, 1.62), V(21.6, 41.0, 1.5), 24),
     (1156, V(21.3, 35.6, 5.8), V(20.5, 40.0, 3.0), 24),
     (1174, V(15.5, 42.5, 16.5), V(-4.0, 57.0, 5.0), 24),
-    (1195, V(3.5, 51.0, 14.0), V(-7.0, 57.0, 4.0), 24),
+    (1195, V(3.5, 51.0, 10.5), V(-7.0, 56.0, 3.0), 24),
     (1215, V(-1.0, 52.5, 5.5), V(-7.2, 55.0, 3.6), 26),
     (1232, V(-5.3, 53.9, 1.75), V(-9.0, 53.9, 1.6), 26),
     (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 24),

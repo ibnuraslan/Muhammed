@@ -517,9 +517,9 @@ wire_curve("FeedLine", [sag(st_feed[0], st_feed[1], 0.6), sag(st_feed[1], st_fee
 
 # ------------------------------------------------------------------ utility office (walls as slabs, window opening in the south wall)
 O = OFFICE; t = 0.2
-INT_W = ph_mat("painted_plaster_wall", 0.5, tint=(0.75, 0.9, 0.82), name="OfficeWall")
-EXT_W = plaster((0.95, 0.93, 0.85))
-FLOOR_T = ph_mat("gravel_concrete_03", 0.6, tint=(0.8, 0.75, 0.7), name="Terrazzo")
+INT_W = ph_mat("painted_plaster_wall", 0.5, tint=(1.25, 1.12, 0.85), name="OfficeWall")   # warm cream paint
+EXT_W = plaster((1.0, 0.7, 0.45))   # warm saffron exterior so the dive reads as a building, not grey
+FLOOR_T = ph_mat("gravel_concrete_03", 0.6, tint=(1.1, 1.0, 0.9), name="Terrazzo")
 def walled_room(name, x0, x1, y0, y1, h, ext, intm, holes, c):
     """four walls with rectangular holes. holes: list of (wall, centre_along, z0, z1, width) wall in 'S','N','W','E'"""
     def wall(wn, a0, a1, fixed, axis):
@@ -544,13 +544,13 @@ def walled_room(name, x0, x1, y0, y1, h, ext, intm, holes, c):
     wall("S", x0, x1, y0, "x"); wall("N", x0, x1, y1, "x"); wall("W", y0 + t / 2, y1 - t / 2, x0, "y"); wall("E", y0 + t / 2, y1 - t / 2, x1, "y")
     box(name + "_floor", (x0, y0, -0.02), (x1, y1, 0.02), FLOOR_T, c=c)
     box(name + "_ceiling", (x0, y0, h), (x1, y1, h + 0.25), intm, c=c)
-    box(name + "_roof", (x0 - 0.3, y0 - 0.3, h + 0.25), (x1 + 0.3, y1 + 0.3, h + 0.4), CONC, c=c)
+    box(name + "_roof", (x0 - 0.3, y0 - 0.3, h + 0.25), (x1 + 0.3, y1 + 0.3, h + 0.4), plaster((0.95, 0.5, 0.35)), c=c)   # terracotta, not blank grey
 walled_room("Office", O["x0"], O["x1"], O["y0"], O["y1"], O["h"], EXT_W, INT_W,
             [("S", OFFICE_WIN.x, OFFICE_WIN.z - 0.7, OFFICE_WIN.z + 0.7, 1.6), ("W", 40.5, 0.0, 2.2, 1.0)], "Office")
 box("OfficeWin_sill", (OFFICE_WIN.x - 0.9, O["y0"] - 0.25, OFFICE_WIN.z - 0.78), (OFFICE_WIN.x + 0.9, O["y0"] + 0.15, OFFICE_WIN.z - 0.7), CONC, c="Office")
 OFFICE_LIGHT_MAT = pbr("TubeLight", (1, 1, 1), 0.3, emit=(1.0, 0.97, 0.9), estr=6.0)
 box("Office_tube", (21.0, 41.8, O["h"] - 0.06), (22.2, 41.9, O["h"] - 0.02), OFFICE_LIGHT_MAT, c="Office")
-L = bpy.data.lights.new("OfficeFill", "AREA"); L.energy = 250; L.size = 1.2; L.color = (1.0, 0.95, 0.88)
+L = bpy.data.lights.new("OfficeFill", "AREA"); L.energy = 520; L.size = 1.2; L.color = (1.0, 0.95, 0.88)
 lo = bpy.data.objects.new("OfficeFill", L); lo.location = (21.5, 42.0, O["h"] - 0.1); link(lo, "Office")
 desk = inst(DESK_M, "Office_Desk", DESK, rotz=R_(0), c="Office")
 dd = Vector(DESK_M["dims"]); DESK_TOP = DESK.z + dd.z
@@ -576,10 +576,11 @@ for k, nm in enumerate(("ceiling_fan", "ceiling_fan_blades")):
 # ------------------------------------------------------------------ police station
 ST = STATION
 ST_EXT = plaster((0.93, 0.85, 0.62))
-ST_INT = ph_mat("painted_plaster_wall", 0.5, tint=(0.9, 0.88, 0.8), name="StationWall")
+ST_INT = ph_mat("painted_plaster_wall", 0.5, tint=(0.85, 1.0, 1.25), name="StationWall")   # light blue paint
 holes = [("E", y, 0.95, 2.25, 1.2) for y in ST_WIN_Y] + [("E", ST_DOOR.y, 0.0, 2.4, 1.5)]
 walled_room("Station", ST["x0"], ST["x1"], ST["y0"], ST["y1"], 3.4, ST_EXT, ST_INT, holes, "Station")
 box("Station_upper", (ST["x0"], ST["y0"], 3.65), (ST["x1"] + 0.1, ST["y1"], ST["h"]), ST_EXT, c="Station")
+box("Station_roofslab", (ST["x0"] - 0.2, ST["y0"] - 0.2, ST["h"]), (ST["x1"] + 0.3, ST["y1"] + 0.2, ST["h"] + 0.15), plaster((0.95, 0.45, 0.35)), c="Station")
 box("Station_parapet", (ST["x1"] - 0.15, ST["y0"], ST["h"]), (ST["x1"] + 0.1, ST["y1"], ST["h"] + 0.8), ST_EXT, c="Station")
 box("Station_band", (ST["x1"], ST["y0"], 3.4), (ST["x1"] + 0.25, ST["y1"], 3.7), plaster((0.55, 0.2, 0.15)), c="Station")
 WIN_LIT = []
@@ -638,6 +639,20 @@ for k in range(6):
     box("St_Paper_%d" % k, (-18.82, 59.65 + (k % 3) * 0.6, 1.4 + (k // 3) * 0.45), (-18.80, 60.05 + (k % 3) * 0.6, 1.8 + (k // 3) * 0.45), pbr("Paper", (0.92, 0.9, 0.85), 0.8), c="Station")
 box("St_Cooler", (-18.6, 63.0, 0.0), (-18.2, 63.5, 1.2), pbr("CoolerBlue", (0.6, 0.75, 0.85), 0.3), c="Station")
 
+# ------------------------------------------------------------------ interior dressing (no text): posters with simple shapes, plants, cabinets
+def poster(name, centre, normal_x, w, h, col, icon_col, c):
+    x = centre.x; s_ = 1 if normal_x > 0 else -1
+    box(name, (min(x, x + s_ * 0.01), centre.y - w / 2, centre.z - h / 2), (max(x, x + s_ * 0.01), centre.y + w / 2, centre.z + h / 2), pbr(name + "_m", col, 0.6), c=c)
+    st = bpy.data.objects.new(name + "_icon", star_mesh(name + "_star", min(w, h) * 0.3, min(w, h) * 0.12)); st.location = (x + s_ * 0.012, centre.y, centre.z)
+    st.data.materials.append(pbr(name + "_im", icon_col, 0.5)); link(st, c)
+for i, (cy, col, ic) in enumerate([(39.6, (0.2, 0.55, 0.85), (1.0, 0.85, 0.2)), (41.4, (0.95, 0.5, 0.2), (1.0, 1.0, 0.9))]):
+    poster("Office_Poster%d" % i, Vector((O["x0"] + 0.11, cy, 1.75)), 1, 0.7, 0.9, col, ic, "Office")
+inst(PLANT, "Office_Plant2", (17.6, 45.2, 0.0), c="Office"); inst(DRAWER, "Office_Drawers2", (23.6, 45.6, 0.0), rotz=R_(180), c="Office")
+for i, (cy, col, ic) in enumerate([(52.2, (0.85, 0.2, 0.2), (1.0, 1.0, 1.0)), (55.0, (0.15, 0.35, 0.8), (1.0, 0.85, 0.2)), (63.2, (0.2, 0.6, 0.35), (1.0, 1.0, 0.9))]):
+    poster("St_Poster%d" % i, Vector((ST["x0"] + 0.11, cy, 1.8)), 1, 0.6, 0.85, col, ic, "Station")
+for i, (x_, y_) in enumerate(((-18.4, 50.6), (-8.0, 63.4), (-18.4, 58.6))):
+    inst(PLANT, "St_Plant%d" % i, (x_, y_, 0.0), c="Station")
+inst(DRAWER, "St_Drawers", (-13.0, 63.6, 0.0), rotz=R_(180), c="Station")
 # ------------------------------------------------------------------ props for the characters
 HAT_Y = pbr("HardHatYellow", (0.95, 0.72, 0.03), 0.25)
 def hard_hat(name):
