@@ -102,6 +102,46 @@ lock(PAT, "R", 1660)
 for s in "LR":
     for f in (700, 1000, 1308): apply_pose(NUR, s, "relaxed", f)
 
+# ---------------------------------------------------------------- v009c: no starfish gloves
+# finger limits back to the table in hand_poses.py (z = side +-10), then every surgeon / nurse finger key is replaced by a clean
+# schedule of hand_poses with spread = 0 (pinch on the forceps, relaxed on the tray, flat_palm on chest / scalp)
+for rig in (SUR, PAT, NUR):
+    for pb in rig.pose.bones:
+        c = pb.constraints.get("HandLimit")
+        if not c: continue
+        lim = LIMITS["wrist"] if pb.name.startswith("wrist") else LIMITS["thumb"] if pb.name.startswith("finger1") else LIMITS["finger"]
+        for ax, (lo, hi) in zip("xyz", lim): setattr(c, "min_" + ax, math.radians(lo)); setattr(c, "max_" + ax, math.radians(hi))
+def fcurves_of(obj):
+    ad = obj.animation_data; act = ad.action
+    if hasattr(act, "fcurves"): return act.fcurves
+    from bpy_extras import anim_utils
+    return anim_utils.action_get_channelbag_for_slot(act, ad.action_slot).fcurves
+def clear_fingers(rig):
+    fcs = fcurves_of(rig)
+    for fc in [fc for fc in fcs if fc.data_path.startswith('pose.bones["finger')]: fcs.remove(fc)
+SCHED = {(SUR, "R"): [(1, "pinch"), (339, "pinch"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed"), (560, "relaxed"), (566, "pinch"),
+                      (1500, "pinch"), (1502, "tripod"), (1685, "tripod"), (1715, "relaxed"), (1770, "relaxed")],
+         (SUR, "L"): [(1, "relaxed"), (96, "relaxed"), (106, "flat_palm"), (278, "flat_palm"), (290, "relaxed"), (337, "relaxed"), (343, "pinch"),
+                      (464, "pinch"), (476, "relaxed"), (1385, "relaxed"), (1392, "flat_palm"), (1498, "flat_palm"), (1508, "relaxed"), (1770, "relaxed")],
+         (NUR, "L"): [(1, "relaxed"), (1770, "relaxed")], (NUR, "R"): [(1, "relaxed"), (1770, "relaxed")]}
+for rig in (SUR, NUR): clear_fingers(rig)
+for (rig, s_), sch in SCHED.items():
+    for i, (f, pose) in enumerate(sch):
+        apply_pose(rig, s_, pose, f, spread=0)
+        if i + 1 < len(sch) and sch[i + 1][1] == pose:          # same pose held: extra keys so the thumb solve follows the hand frame
+            for g in range(f + 60, sch[i + 1][0] - 20, 60): apply_pose(rig, s_, pose, g, spread=0)
+# f1-45: the surgeon stands 10 cm further back from the patient's knee (his hip met the patient's resting left hand)
+sc.frame_set(52); rb = SUR.pose.bones["root"]; rb.keyframe_insert("location", frame=52, group="root")
+for f in range(1, 46, 4):
+    sc.frame_set(f); rb.location = rb.location + SUR.data.bones["root"].matrix_local.to_3x3().inverted() @ (SUR.matrix_world.inverted().to_3x3() @ (Vector((0.63, -0.78, 0)).normalized() * 0.10))
+    rb.keyframe_insert("location", frame=f, group="root")
+# (the patient's own hand path is unchanged)
+lock(PAT, "L", 1); lock(PAT, "L", 42)
+for f, w in ((5, 0.5), (11, 1.0), (18, 1.0), (24, 1.0), (30, 1.0), (36, 0.5)):
+    sc.frame_set(f); pb = PAT.pose.bones["IK_hand.L"]; off = Vector((0, 0, 0))
+    pb.location = pb.location + PAT.data.bones["IK_hand.L"].matrix_local.to_3x3().inverted() @ (PAT.matrix_world.inverted().to_3x3() @ off)
+    pb.keyframe_insert("location", frame=f, group=pb.name)
+
 # ---------------------------------------------------------------- 7/8. unclip: every hand vertex >= 1 cm off skin it nears (bodies + clothes)
 ARMK = ("hand", "finger", "metacarpal", "thumb", "palm")
 def hand_verts(rig, s):

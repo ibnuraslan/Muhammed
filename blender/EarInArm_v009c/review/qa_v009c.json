@@ -1,0 +1,87 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Surgeon"
+   ]
+  ],
+  "49": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "139": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "877": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1225": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1255": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "1273": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "FILL": 9,
+  "EMPTY": 3
+ }
+}

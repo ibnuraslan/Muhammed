@@ -399,17 +399,18 @@ def nurse_arms(f, swing=0.0, fwd=0.0):
         sx = 1 if s == "L" else -1
         NUR.R.key_rot("upperarm01." + s, f, [("Y", sx * 62), ("X", -(fwd + swing * sx))])
         NUR.R.key_rot("lowerarm01." + s, f, [("X", -(20 + fwd * 0.6))])
-N_A, N_B, N_C, N_D = Vector((-1.9, 1.75)), Vector((1.6, -0.15)), Vector((1.25, -0.35)), Vector((-0.75, -1.15))
+N_A, N_B, N_C, N_D = Vector((-1.9, 1.75)), Vector((1.72, -0.15)), Vector((1.25, -0.35)), Vector((-0.75, -1.15))
 walk(NUR, N_A, Vector((1.0, 1.6)), 1, 120, -90, -90, stride=0.6)
 for f in range(1, 121, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 walk(NUR, Vector((1.0, 1.6)), N_B, 121, 300, -90, -100, stride=0.6)
 for f in range(121, 300, 18): nurse_arms(f, swing=12 * math.sin(f * 0.21))
 for f in range(310, 565, 50):
     stand(NUR, f, N_B, -100, spine=(10, 0, 0), head=(16, 0, 0)); nurse_arms(f, fwd=45 + 10 * math.sin(f * 0.05))
-walk(NUR, N_B, N_C, 570, 640, -100, -150, stride=0.3)
-for f in range(570, 640, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
-for f in [641] + list(range(700, 1309, 60)):
-    stand(NUR, f, N_C, -150, spine=(8, 0, 0), head=(18, 0, 0)); nurse_arms(f, fwd=55)
+walk(NUR, N_B, N_C, 605, 660, -100, -150, stride=0.3)   # v009c: starts after the surgeon has crossed her path
+for f in (572, 600): nurse_arms(f, fwd=4)   # arms down while the surgeon passes her
+for f in range(605, 660, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
+for f in [661] + list(range(700, 1309, 60)):
+    stand(NUR, f, N_C, -150, spine=(8, 0, 0), head=(18, 0, 0)); nurse_arms(f, fwd=4)   # v009c: arms hang at her sides
 walk(NUR, N_C, Vector((1.3, -1.35)), 1312, 1380, -150, 0, stride=0.55); walk(NUR, Vector((1.3, -1.35)), N_D, 1381, 1460, 0, -90, stride=0.55)
 for f in range(1312, 1460, 18): nurse_arms(f, swing=10 * math.sin(f * 0.21))
 stand(NUR, 1461, N_D, -90); walk(NUR, N_D, N_D + Vector((0.06, 0.08)), 1462, 1505, -90, -213, stride=0.3)
@@ -417,7 +418,7 @@ for f in [1506] + list(range(1530, B["end"] + 1, 60)):
     stand(NUR, f, N_D + Vector((0.06, 0.08)), -213, spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
 for f in range(B["b9"] + 60, B["end"], 12):   # little clap
     nurse_arms(f, fwd=70 + (6 if (f // 12) % 2 else -2))
-for s_ in "LR": HP(NUR, s_, "relaxed", 1); HP(NUR, s_, "cup_hold", 700); HP(NUR, s_, "relaxed", 1309)
+for s_ in "LR": HP(NUR, s_, "relaxed", 1, spread=0); HP(NUR, s_, "relaxed", 1309, spread=0)
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
 
 # ================================================================== surgeon look: gloves, cap, mask
@@ -636,7 +637,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     else:
         keymat(ear_new, f, Matrix.Translation(Vector((0, 0, -5))))
     # kidney dish in the nurse's hands from 700 to 1309
-    if 700 <= f < 1309:
+    if False:   # v009c: the nurse no longer carries the dish (arms at her sides); it stays on the side counter
         Lw = wrist_w(NUR, "L").translation; Rw_ = wrist_w(NUR, "R").translation
         keymat(kd, f, Matrix.Translation((Lw + Rw_) / 2 + Vector((0, 0, 0.03))) @ Matrix.Rotation(R_(-200 + 90), 4, 'Z'))
     else:

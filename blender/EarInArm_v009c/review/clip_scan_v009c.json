@@ -1,0 +1,106 @@
+{
+ "frames": {
+  "481": {
+   "Surgeon": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "487": {
+   "Surgeon": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "493": {
+   "Surgeon": {
+    "self": 16,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "499": {
+   "Surgeon": {
+    "self": 16,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "505": {
+   "Surgeon": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "541": {
+   "Surgeon": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "547": {
+   "Surgeon": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1267": {
+   "Surgeon": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1273": {
+   "Surgeon": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1369": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1375": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 4
+   }
+  },
+  "1381": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1405": {
+   "Surgeon": {
+    "self": 8,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1741": {
+   "Patient": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
