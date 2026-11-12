@@ -95,7 +95,7 @@ K = [
     (25.8, V((-28.45, -2.88, 1.70)), docH, 42, False),                 # doctor's serious face
     (26.6, V((-27.9, -2.7, 2.1)), moleB, 45, False),               # overhead on the hands
     (27.4, V((-29.10, -1.45, 1.75)), moleB, 34, False),
-    (28.3, V((-28.60, -1.35, 1.60)), moleB, 35, False),               # front-left: the bandage pressed on
+    (28.3, V((-28.95, -2.86, 1.95)), moleB, 32, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),

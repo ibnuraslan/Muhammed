@@ -173,3 +173,19 @@ FR.data.pose_position = 'REST'; bpy.context.view_layer.update()
 bone_parent(pp, FR, "head", pp.matrix_world.copy())
 for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(37.9), 0.001), (F(37.9) + 1, 1)):
     pp.scale = (_v,) * 3; pp.keyframe_insert("scale", frame=_f)
+# ---- delete MPFB helper geometry (normally hidden by the MASK modifier) from every body mesh
+import bmesh as _bmh
+_done = set()
+for o in bpy.data.objects:
+    if o.type != 'MESH' or not o.name.endswith(".body") or o.data.name in _done: continue
+    _done.add(o.data.name)
+    me = o.data
+    if me.shape_keys: continue
+    gi = {g.index for g in o.vertex_groups if g.name.lower().startswith(("helper", "joint")) or g.name in ("HelperGeometry", "JointCubes")}
+    kill = [v.index for v in me.vertices if any(g.group in gi and g.weight > 0.5 for g in v.groups)]
+    if not kill: continue
+    bm = _bmh.new(); bm.from_mesh(me); bm.verts.ensure_lookup_table()
+    _bmh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(me); bm.free()
+    for m in o.modifiers:
+        if m.type == 'MASK': m.show_viewport = m.show_render = False
+print("HELPERS_DELETED", len(_done))

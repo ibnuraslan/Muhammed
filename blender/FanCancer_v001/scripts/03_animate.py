@@ -334,7 +334,7 @@ def doc_anim():
             if g.weight > 0.3 and (nm.startswith("finger") or nm.startswith("wrist") or nm.startswith("metacarpal")): hand_v.add(v.index)
     for p_ in body.data.polygons:
         if all(i in hand_v for i in p_.vertices): p_.material_index = gi
-    scope = {"R": ((-0.15, -0.53, 1.30), (0.2, -0.5, 0.6), (0.8, 0, 0.3)), "L": ((0.16, -0.51, 1.30), (-0.2, -0.6, 0.4), (-0.8, 0, 0.3))}
+    scope = {"R": ((-0.11, -0.58, 1.44), (0.1, -0.6, 0.5), (0, -0.6, -0.2)), "L": ((0.04, -0.52, 1.36), (0, -0.7, 0.3), (0, -0.3, -1))}
     rest = None
     doc.set_plant(DOCP + Vector((0.04, 0, 0)), 90)
     doc.pose(f(20.0), DOCP, 90, flex=10, head=(16, 0))
@@ -347,7 +347,7 @@ def doc_anim():
     doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains
     face(DR, f(25.8), brow=0.3, frown=0.5, jaw=8); face(DR, f(26.0), jaw=2, frown=0.5)
     doc.pose(f(26.0), DOCP, 85, flex=8, head=(4, 20), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps from the pocket
-    cut = {"R": ((-0.15, -0.55, 1.27), (0.1, -0.6, 0.3), (0.5, 0, 0.8)), "L": ((0.15, -0.55, 1.28), (-0.1, -0.6, 0.3), (-0.5, 0, 0.8))}
+    cut = {"R": ((-0.12, -0.60, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.01, -0.58, 1.40), (0, -0.7, 0.2), (0, -0.5, -0.8))}
     for i, t in enumerate((26.4, 27.0, 27.6, 28.2)):
         doc.pose(f(t), DOCP + Vector((0.08, 0, 0)), 95, flex=32, head=(34, -2), hands={k: ((v[0][0], v[0][1] - 0.01 * (i % 2), v[0][2]), v[1], v[2]) for k, v in cut.items()})
     face(DR, f(26.6), brow=-0.3, frown=0.8, squint=0.7)
@@ -439,7 +439,7 @@ for i, x in enumerate((-2.6, -1.5, 1.4, 2.5)):
     r = dup_rig(f"Player{i % 2}", f"Bench{i}", C_CHAR)
     for f in range(1, 1500, 40):
         t = f / 60.0
-        seated_fk(r, f, Vector((x, -1.55, 0.0)), 0, cheer=0.0 if (t + i) % 9 > 1 else 0.35, sway=0.5 * math.sin(t + i), head=(0, 20 * math.sin(t * 0.6 + i)), relax=True)
+        seated_fk(r, f, Vector((x, -1.55, 0.0)), 0, cheer=0.0, sway=0.5 * math.sin(t + i), head=(0, 20 * math.sin(t * 0.6 + i)), relax=True)
     hold = Human(Rig(r));
 SKATE = []
 for i in range(6):
