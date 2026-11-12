@@ -48,3 +48,8 @@ Final count: 13 hand–hand, 548 hand–self, 268 hand–other. Each hit is one 
   - Crowd1's cheering hands against her own hair: 94.
   - ResB's hands touching while knotting: 12.
 - These were reduced from 862 hand–self in the first run by re-keying three poses: haulers' hands moved off their bellies, ResA's feeding lean, and ResB's kneeling hand. They are the next fix if there is time.
+
+## Final fixes before D (director, 00:15 UTC)
+- **22 s, head-first entry:** the leg-holders stand wider (±0.82 m). They grab the ankles only once the legs are up and within reach, and lean less. The camera now frames the dive from the front: the teen centred, a holder on each side, nothing passing through anything.
+- **End hug:** the mother holds the toddler at chest height with both arms, one under him and one across his back. His arms go up around her neck.
+- The hand-audit figures above come from the build before these two re-keys. Both fixes move hands away from bodies.
