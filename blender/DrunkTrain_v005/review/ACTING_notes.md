@@ -48,3 +48,14 @@ Source: `BEFORE_v004_sheet_0.5s.jpg` (every 30 frames, 270×480, 8 samples) and 
 | 28 | 26.5 s (beat 11) | Torso-only macro. | Wider and higher, so his head is in frame. |
 
 QA: `review/qa_v005.json` (`blender/pipeline/qa_check.py` @ c6240b2, step 6, beats.json), run on the packed file.
+
+## clip_scan and qa_check pass (director, 16:11)
+| # | Where | Flag | Fix |
+|---|---|---|---|
+| 29 | 5.1–5.9 s (307–355) | Stock `clip_scan` (b6d7900): Lad's draped right hand goes into his head as the head lolls. | The arm lies further out to the side over the rail, clear of the head. Stock `clip_scan`: 0 bad ranges. |
+| 30 | 13.7 s (823) | `qa_check` INSIDE and FILL (wheelset0): the camera crossed the rail through the front wheelset. | The camera stays inside the gauge while the wheels turn, then crosses ahead of the front wheelset as the train stops. |
+| 31 | 19.5 s (beat 8) | His face did not read at the beat start. | The camera is low inside the gauge, in front of him. |
+
+### qa_check flags that stay (intended)
+- **BACKHEAD at 331 (beat 3), 541 (beat 4) and 871 (beat 6).** He is passed out, lying on his back and then face down under the train. At beats 3 and 4 the acting subject is the train coming at his head, and at beat 6 his face is down on the ballast. Turning his face to the camera would break the physics the client asked for.
+- **EMPTY "wall/prop fills the frame, character only N %".** These are the wide outdoor shots of him lying on the track, the train coming, and the witnesses on the ramp. On the sheet he or the witnesses are always in frame and readable. The flag counts the ballast and the side of the loco within 3 m as a wall. There are no bare-wall, sky or black cells.

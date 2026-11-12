@@ -589,8 +589,8 @@ CAM = [  # frame, camera, aim, lens
     (700, V(0.3, y(700) - 1.25, 0.34), lad_p(700), 18),
     (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
     (815, V(0.3, y(815) - 1.4, 0.36), lad_p(815), 18),
-    (842, V(1.9, y(842) - 1.2, 0.36), lad_p(842), 20),
-    (866, V(2.7, -42.8, 0.45), V(0.2, -40.0, 0.25), 24),
+    (842, V(0.35, y(842) - 1.0, 0.36), lad_p(842), 20),      # v005: stays inside the gauge while the wheels still turn (no camera through a wheelset)
+    (866, V(2.7, -43.6, 0.45), V(0.2, -40.0, 0.25), 24),      # v005: crosses the rail ahead of the front wheelset
     (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
     (935, V(3.5, -46.0, 2.2), V(0.9, -42.5, 0.9), 23),      # v005: on the train braking, not the empty track
     (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),

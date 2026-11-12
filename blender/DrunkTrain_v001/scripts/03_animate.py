@@ -319,13 +319,13 @@ for f in list(range(f_lie0, f_lie1 + 1, 3)) + [f_lie1]:
         sx = 1 if s == "L" else -1
         kick = 0.06 * tw(F(6.2)) if s == "R" else 0.05 * tw(F(7.5))
         LB.foot(s, f, Bm, V(sx * (0.24 + 0.03 * kick / 0.06), LB.an[s].y + 0.1, LB.an[s].z + 0.12 * kick / 0.06 * 0.3), Matrix.Rotation(R_(sx * 25), 3, 'Z'))
-    LB.hand("L", f, Bm, V(0.06, -0.215 - 0.012 * br, RH.z + 0.2), V(-0.9, -0.1, -0.2).normalized(), V(0, 1, 0))     # left forearm across his belly
+    LB.hand("L", f, Bm, V(0.06, -0.245 - 0.016 * br, RH.z + 0.2), V(-0.9, -0.1, -0.2).normalized(), V(0, 1, 0))     # left forearm across his belly
     if f < F(4.6):
         LB.hand("R", f, Bm, V(-0.02, -0.16 - 0.012 * br, RH.z + 0.18), V(0.9, -0.1, -0.2), V(0, 1, 0))     # hand resting on his belly
     elif f < F(4.75):
         LB.arm_dir("R", f, Bm, V(-0.55, -0.6, 0.3), 0.9, palm=V(0, 0.4, -1))
     else:
-        LB.arm_dir("R", f, Bm, V(-0.62, -0.12 - 0.08 * math.exp(-((f - F(6.9)) / 6.0) ** 2), 0.5), 0.78, palm=V(0, -0.2, 1))   # bent, hand draped over the rail beside his head
+        LB.arm_dir("R", f, Bm, V(-0.86, -0.1 - 0.08 * math.exp(-((f - F(6.9)) / 6.0) ** 2), 0.3), 0.8, palm=V(0, -0.2, 1))   # bent, hand draped over the rail beside his head
 
 # --- impact + rag-doll spin (beat 4) and drag beneath the train (beat 5), come to rest prone (by 14.3 s)
 f_rest = F(14.3)
