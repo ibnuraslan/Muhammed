@@ -955,6 +955,13 @@ cam.rotation_mode = 'QUATERNION'; prevq = None
 foc = bpy.data.objects.new("Cam_focus", None); C_ANIM.objects.link(foc); cam.data.dof.focus_object = foc
 for f in range(1, 2251):
     p = fp(f); t = ft(f); q = (t - p).to_track_quat('-Z', 'Y')
+    if 660 < f <= 710 and prevq is not None:
+        # v004b: the up-vector flips near a straight-down view (f677, f695). Parallel-transport the previous orientation
+        # to the new view direction (no roll jump), then blend back into the standard aim over 700-710
+        fw0 = prevq @ Vector((0, 0, -1)); fw1 = (t - p).normalized(); qpt = fw0.rotation_difference(fw1) @ prevq
+        w = max(0.0, min(1.0, (f - 700) / 10.0)); w = w * w * (3 - 2 * w)
+        if qpt.dot(q) < 0: q = -q
+        q = qpt.slerp(q, w)
     if prevq is not None and prevq.dot(q) < 0: q = -q
     prevq = q
     cam.location = p; cam.keyframe_insert("location", frame=f)
