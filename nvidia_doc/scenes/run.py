@@ -2,10 +2,14 @@
   python scenes/run.py office_door door_push --still --lowres --samples 16      # look-dev still
   python scenes/run.py office_door door_push --anim 72 --samples 64             # hero animation (12 fps)
   python scenes/run.py port crane_rise --plate                                   # plate + depth for 2.5D
+  --plain : old bright lighting (look.py recipes become no-ops), for before/after sheets
+  --exr   : still as scene-linear EXR (plate.exr + plate.json with the exposure), to grade with grade.grade_file
 """
 import os, sys, importlib
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+if "--plain" in sys.argv:
+    os.environ["HOUSE_LOOK"] = "plain"
 import bpy
 import kit
 from common import reset, camera
@@ -50,7 +54,15 @@ else:
     t = 0.0 if spec.get("kind") == "anim" and "--still" in sys.argv and "--mid" not in sys.argv else 0.5
     t = arg('--t', t)
     kit.apply_cam(cam, ctx, spec, t)
-    s.render.filepath = os.path.join(OUT, "plate.png"); bpy.ops.render.render(write_still=True)
+    if "--exr" in sys.argv:
+        import json
+        s.render.image_settings.file_format = 'OPEN_EXR'; s.render.image_settings.color_depth = '32'
+        s.render.use_compositing = False
+        json.dump(dict(exposure=s.view_settings.exposure, look=s.view_settings.look), open(os.path.join(OUT, "plate.json"), "w"))
+        s.render.filepath = os.path.join(OUT, "plate.exr")
+    else:
+        s.render.filepath = os.path.join(OUT, "plate.png")
+    bpy.ops.render.render(write_still=True)
     if "--plate" in sys.argv:
         kit.render_depth(os.path.join(OUT, "depth.png"), far=spec.get("far", 60.0))
     if hasattr(mod, "screen_corners"):
