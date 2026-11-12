@@ -363,7 +363,7 @@ def clear_view(c, fc):
         h2 = sc.ray_cast(dg, c, dv, distance=0.25)
         if h2[0] and h2[4] is not None and h2[4].name.startswith("Woman"): return False
     return True
-def face_cam(fk, lens=22, dists=(0.55, 0.47, 0.40, 0.34), ups=(0.0, 0.10, 0.22), angs=(0, 20, -20, 40, -40, 60, -60)):
+def face_cam(fk, lens=22, dists=(0.55, 0.47, 0.40, 0.34), ups=(0.0, 0.10, 0.22), angs=(0, 20, -20, 40, -40, 60, -60), box=(0.62, -0.42, 0.46, 2.15)):
     """camera in front of her face (head bone), inside the bin with 8 cm clearance, outside the flap swing"""
     sc.frame_set(fk); M = WR_.matrix_world
     fc = face(fk); fw = (M.to_3x3() @ (HB.matrix.to_3x3() @ FWD_L)); fw.z = max(-0.3, min(0.3, fw.z)); fw.normalize()
@@ -372,7 +372,7 @@ def face_cam(fk, lens=22, dists=(0.55, 0.47, 0.40, 0.34), ups=(0.0, 0.10, 0.22),
             for up in ups:
                 d = Matrix.Rotation(R_(ang), 3, 'Z') @ fw
                 c = fc + d * dist + Vector((0, 0, up))
-                if -0.62 < c.x < 0.62 and -0.42 < c.y < 0.46 and 0.75 < c.z < 2.15 and flap_clear(c) and c.z > ground_z(c.x, c.y) + 0.25 and clear_view(c, fc):
+                if -box[0] < c.x < box[0] and box[1] < c.y < box[2] and 0.75 < c.z < box[3] and flap_clear(c) and c.z > ground_z(c.x, c.y) + 0.25 and clear_view(c, fc):
                     return [fk, list(c), list(mix(fc, chest(fk), 0.2)), lens]
     return None
 K(215, (0.55, -1.75, 2.15), (0.0, -0.60, 1.30), 20)                      # back and up: no shoe sole in the lens
@@ -385,16 +385,19 @@ for f in (340, 375, 410, 445, 480, 515, 950, 990, 1035, 1080, 1120, 1160, 1595,
           1620, 1680, 1740, 1800, 1845):
     k_ = face_cam(f, lens=24 if f >= 1600 else 22, angs=ANG.get(f, (0, 20, -20, 40, -40, 60, -60)),
                   ups=(-0.10, 0.0, 0.10) if 980 <= f <= 1090 else (0.0, 0.10, 0.22))     # wall beat: from her face height or a little below, not her hair
+    if not k_: k_ = face_cam(f, lens=22, dists=(0.55, 0.47, 0.40, 0.34, 0.30), ups=(0.0, 0.10, -0.10, 0.22), box=(0.64, -0.50, 0.50, 2.25))
     if k_: NEW.append(k_)
     else: print("NOFACE", f)
 K(880, (0.62, -0.50, 1.85), mix(face(880), chest(880), 0.3), 20)
 K(930, (0.55, -0.45, 1.60), mix(face(930), chest(930), 0.2), 22)
 # jump: whole body from the side (crouch, jump, hands slap high on the back wall, slide down)
-K(1180, (0.63, 0.02, 1.30), (0.0, 0.28, 1.40), 14); K(1215, (0.64, 0.08, 1.45), (0.0, 0.30, 1.65), 14)
-K(1250, (0.64, 0.08, 1.40), (0.0, 0.28, 1.50), 14); K(1290, (0.62, -0.05, 1.30), (0.0, 0.20, 1.40), 15)
+# (QA round: camera almost in the back-wall plane, so her face reads in profile)
+K(1180, (0.62, 0.46, 1.20), (0.0, 0.35, 1.15), 12); K(1215, (0.62, 0.46, 1.25), (0.0, 0.36, 1.40), 12)
+K(1250, (0.62, 0.46, 1.25), (0.0, 0.36, 1.30), 12); K(1290, (0.60, 0.40, 1.25), (0.0, 0.30, 1.25), 13)
 # scream: one steady camera low in the front-right corner, looking up at her face
-for f_, cp in ((1322, (0.52, -0.48, 1.50)), (1350, (0.51, -0.48, 1.48)), (1384, (0.50, -0.48, 1.47))):
-    K(f_, cp, face(f_), 20)
+# (QA round: front-right, a little below her face and 0.5 m off it, clear of the flap stop bar)
+for f_, cp in ((1322, (0.40, -0.40, 1.82)), (1350, (0.40, -0.40, 1.84)), (1384, (0.40, -0.40, 1.83))):
+    K(f_, cp, face(f_) - Vector((0, 0, 0.04)), 20)
 K(905, (0.58, -0.46, 1.85), mix(face(905), chest(905), 0.3), 20)
 K(1402, (0.10, -0.46, 1.80), mix(face(1402), chest(1402), 0.3), 20)
 # QA round: cut (no pass through the flap) to a wide exterior of the closed bin, and cut back in for the three days
