@@ -1,4 +1,4 @@
-# PrisonKeyCake_v008: acting fix, synced to the voiceover
+# PrisonKeyCake_v008: ON HOLD, DO NOT RENDER (floating keys; fix in progress)
 
 This is the Connect06 acting fix (their v007, commit 2440dca), director-approved:
 - Every hand contact is real: the key at his chest, the mould press, the pour, the knife, the key into the lock, the door push.
