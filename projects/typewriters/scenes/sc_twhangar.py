@@ -240,7 +240,7 @@ def build(variant=None):
             o = MC.burlap_crate(f"Roll{k}", size=(0.8, 0.7, 0.7), tag=False); c["roll_crates"].append(o)
         sc, stw = slatted_crate("SlatCrate"); sc.location = (PLANE.x - 2.4, PLANE.y + 23.5, 0.0); sc.rotation_euler = (0, 0, 0.2)
         c["slat"] = sc
-        ss = bpy.data.lights.new("SlatSun", 'SPOT'); ss.energy = 1200; ss.spot_size = math.radians(30); ss.spot_blend = 0.2; ss.shadow_soft_size = 0.02
+        ss = bpy.data.lights.new("SlatSun", 'SPOT'); ss.energy = 380; ss.spot_size = math.radians(30); ss.spot_blend = 0.2; ss.shadow_soft_size = 0.02
         ss.color = (1.0, 0.82, 0.6)
         so_ = bpy.data.objects.new("SlatSun", ss); bpy.context.collection.objects.link(so_)
         so_.location = Vector(sc.location) + Vector((-0.9, 0.6, 1.8)); point_at(so_, Vector(sc.location) + Vector((0, 0, 0.12)))   # light raking through the slats

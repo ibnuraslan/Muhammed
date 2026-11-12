@@ -220,6 +220,19 @@ def evidence_row(c, bench):
         l = area_light((x, -0.6, 3.0), (0, 0, 0), 1.2, 140, (0.9, 0.96, 1.0)); l.visible_camera = False
     twp.venetian(-5.95, -2.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind", (0.72, 0.71, 0.66), 0.5), tilt=-45)
     twp.venetian(-5.95, 0.3, 1.0, 2.7, 1.8, "y", pbr("EvBlind2", (0.72, 0.71, 0.66), 0.5), tilt=-45)
+    twp.venetian(-5.95, 2.4, 1.0, 2.7, 0.6, "y", pbr("EvBlind3", (0.72, 0.71, 0.66), 0.5), tilt=-45)
+    dado = ph.texture("painted_plaster_wall", scale=0.5, name="EvDado", tint=(0.38, 0.45, 0.48))      # two-tone walls, a rail, shelving, clock
+    rail = ph.texture("dark_wood", scale=1.0, name="EvRail", tint=(0.7, 0.65, 0.6))
+    for nm, loc, sz in (("EvDadoB", (0, 2.995, 0.55), (12, 0.01, 1.1)), ("EvDadoF", (0, -3.995, 0.55), (12, 0.01, 1.1)), ("EvDadoR", (5.995, -0.5, 0.55), (0.01, 7, 1.1))):
+        box(nm, loc, sz, dado); box(nm + "Rail", (loc[0] - 0.01 * (nm == "EvDadoR"), loc[1] - 0.01 * (nm == "EvDadoB") + 0.01 * (nm == "EvDadoF"), 1.1), (sz[0] + 0.02, sz[1] + 0.02, 0.05), rail)
+    for k in range(7):
+        ph.model("steel_frame_shelves_02", loc=(-4.6 + k * 0.62, 2.75, 0), rot_z=math.pi)
+    for k in range(14):
+        ph.model("cardboard_box_01", loc=(-4.6 + (k % 7) * 0.62, 2.75, 0.48 + (k // 7) * 0.72), rot_z=0.15 * ((k * 5) % 3 - 1), scale=0.72)
+    ph.model("wall_clock", loc=(2.0, 2.98, 2.4), rot_z=math.pi)
+    ph.model("power_box_01", loc=(5.98, 1.5, 1.6), rot_z=math.pi / 2)
+    ph.model("drawer_cabinet", loc=(5.6, 2.4, 0), rot_z=math.pi)
+    ph.model("metal_office_desk", loc=(3.6, 2.2, 0), rot_z=math.pi, scale=0.8)
 
 
 def lightbox_wall(c, at, rot_z, n, film=None):
@@ -283,7 +296,7 @@ def cam_scope(c, t):
 
 def cam_sixteen(c, t):
     e = ease(t)
-    return (Vector((-5.4, -2.6, 1.45)).lerp(Vector((-4.6, -2.3, 1.4)), e), Vector((0.5, -0.5, 1.0)), 28)
+    return (Vector((5.5, -2.7, 1.6)).lerp(Vector((4.8, -2.45, 1.55)), e), Vector((-1.5, -0.2, 1.05)), 26)        # down the row toward the blinds
 
 
 def cam_tags(c, t):
@@ -292,7 +305,7 @@ def cam_tags(c, t):
 
 
 MOVES = {
-    "sixteen": dict(kind="anim", dof=4.0, cam=cam_sixteen, focus=lambda c, t: Vector((-2.0, -0.6, 1.0)), anim=anim("sixteen"),
+    "sixteen": dict(kind="anim", dof=4.0, cam=cam_sixteen, focus=lambda c, t: Vector((1.5, -0.6, 1.0)), anim=anim("sixteen"),
                     title=("CHAPTER 4", "WHAT MOSCOW READ", 10, 130)),
     "tags": dict(kind="anim", dof=1.2, cam=cam_tags, focus=lambda c, t: Vector((-2.6 + 1.2 * ease(t) + 0.25, -0.76, 0.96)), anim=anim("tags")),
     "cover": dict(kind="anim", dof=3.0, cam=cam_cover, focus=lambda c, t: Vector((-1.4, -0.5, 1.1)), anim=anim("cover"),

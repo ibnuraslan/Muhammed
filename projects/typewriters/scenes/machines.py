@@ -135,15 +135,18 @@ def burlap_material():
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
     tc = N.new("ShaderNodeTexCoord")
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 6; nz.inputs['Detail'].default_value = 6; L.new(tc.outputs['Object'], nz.inputs['Vector'])
-    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.3, 0.22, 0.13, 1); cr.color_ramp.elements[1].color = (0.52, 0.41, 0.26, 1)
-    L.new(nz.outputs['Fac'], cr.inputs['Fac']); L.new(cr.outputs['Color'], p.inputs['Base Color'])
-    wv = N.new("ShaderNodeTexWave"); wv.inputs['Scale'].default_value = 140; wv.inputs['Distortion'].default_value = 1.5; L.new(tc.outputs['Object'], wv.inputs['Vector'])
-    wv2 = N.new("ShaderNodeTexWave"); wv2.bands_direction = 'Y'; wv2.inputs['Scale'].default_value = 140; wv2.inputs['Distortion'].default_value = 1.5
+    cr = N.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = (0.17, 0.12, 0.06, 1); cr.color_ramp.elements[1].color = (0.36, 0.27, 0.15, 1)
+    L.new(nz.outputs['Fac'], cr.inputs['Fac'])
+    wv = N.new("ShaderNodeTexWave"); wv.inputs['Scale'].default_value = 80; wv.inputs['Distortion'].default_value = 1.5; L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    wv2 = N.new("ShaderNodeTexWave"); wv2.bands_direction = 'Y'; wv2.inputs['Scale'].default_value = 80; wv2.inputs['Distortion'].default_value = 1.5
     L.new(tc.outputs['Object'], wv2.inputs['Vector'])
     mx = N.new("ShaderNodeMath"); mx.operation = 'MULTIPLY'; L.new(wv.outputs['Fac'], mx.inputs[0]); L.new(wv2.outputs['Fac'], mx.inputs[1])
-    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.35; bp.inputs['Distance'].default_value = 0.002
+    gap = N.new("ShaderNodeMixRGB"); gap.blend_type = 'MULTIPLY'; L.new(cr.outputs['Color'], gap.inputs[1])      # the weave darkens the gaps between threads
+    gr = N.new("ShaderNodeMapRange"); gr.inputs['To Min'].default_value = 0.55; L.new(mx.outputs[0], gr.inputs['Value'])
+    L.new(gr.outputs[0], gap.inputs[2]); gap.inputs[0].default_value = 1.0; L.new(gap.outputs[0], p.inputs['Base Color'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.7; bp.inputs['Distance'].default_value = 0.002
     L.new(mx.outputs[0], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
-    p.inputs['Roughness'].default_value = 0.95; p.inputs['Sheen Weight'].default_value = 0.4
+    p.inputs['Roughness'].default_value = 0.95; p.inputs['Sheen Weight'].default_value = 0.15
     return m
 
 

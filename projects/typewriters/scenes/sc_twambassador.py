@@ -316,7 +316,7 @@ def animate(c, sec, shot):
         note.hide_render = True
     else:
         twp.hide(twp.person_objs(cou), True); env.hide_render = True; note.hide_render = False
-        twp.stand(amb, (1.75, 2.35, 0.0), math.pi if shot == "note" else math.pi - 0.75)    # at the window (8A: turned three-quarter into the room)
+        twp.stand(amb, (1.75, 2.35, 0.0), math.pi if shot == "note" else -0.45)    # at the window (8A: turned three-quarter into the room)
         unfold = ease(min(1.0, max(0.0, (sec - 0.6) / 1.4))) if shot == "note" else 1.0
         fold = ease(min(1.0, max(0.0, (sec - 2.4) / 1.0))) if shot == "pocket" else 0.0
         chest = amb.bone_head("spine03") + twp.forward(amb) * 0.36 + Vector((0, 0, 0.08))
@@ -378,5 +378,5 @@ MOVES = {
     "folder": dict(kind="anim", dof=2.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
     "handover": dict(kind="anim", dof=3.0, cam=cam_handover, focus=lambda c, t: c["env"].location, anim=anim("handover")),
     "note": dict(kind="anim", dof=2.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
-    "pocket": dict(kind="anim", dof=3.0, cam=lambda c, t: (Vector((-0.9, -0.4, 1.65)).lerp(Vector((-0.6, -0.15, 1.62)), ease(t)), Vector((1.4, 2.3, 1.35)), 28), focus=lambda c, t: c["note"].location, anim=anim("pocket")),
+    "pocket": dict(kind="anim", dof=3.0, cam=lambda c, t: (Vector((2.6, -0.5, 1.65)).lerp(Vector((2.4, -0.25, 1.62)), ease(t)), Vector((0.6, 2.4, 1.35)), 28), focus=lambda c, t: c["note"].location, anim=anim("pocket")),
 }

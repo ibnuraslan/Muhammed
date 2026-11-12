@@ -79,13 +79,13 @@ def build(variant="home"):
     ph.model("vintage_telephone_wall_clock", loc=(2.49, 0.9, 1.4), rot_z=math.pi / 2)
     ph.model("potted_plant_04", loc=(0.8, 2.25, 0.94), scale=0.5)
     # the table and chairs
-    ph.model("WoodenTable_02" if False else "dining_table", loc=TABLE, rot_z=0.0, scale=0.55)
+    tr, _ = ph.model("dining_table", loc=TABLE, rot_z=0.0, scale=0.55); tr.scale = (0.55, 0.55, 0.85)     # a kitchen-height top (0.74 m)
     for k, (dx, dy, rz) in enumerate(((0, -0.62, 0.0), (0, 0.62, math.pi), (-0.85, 0, -math.pi / 2), (0.85, 0, math.pi / 2))):
         ph.model("dining_chair_02", loc=(TABLE.x + dx, TABLE.y + dy, 0), rot_z=rz)
     for k in range(2):
-        ph.model("tea_set_01", loc=(TABLE.x - 0.15 + 0.3 * k, TABLE.y + 0.05, 0.48), rot_z=k, scale=0.45) if k == 0 else None
+        ph.model("tea_set_01", loc=(TABLE.x - 0.15 + 0.3 * k, TABLE.y + 0.05, 0.74), rot_z=k, scale=0.45) if k == 0 else None
     mug_m = pbr("Mug", (0.75, 0.72, 0.65), 0.25)
-    c["mugs"] = [cyl("Mug", (TABLE.x + 0.15, TABLE.y - 0.25, 0.53), 0.04, 0.09, mug_m, verts=24), cyl("Mug2", (TABLE.x - 0.25, TABLE.y + 0.2, 0.53), 0.04, 0.09, mug_m, verts=24)]
+    c["mugs"] = [cyl("Mug", (TABLE.x + 0.15, TABLE.y - 0.25, 0.79), 0.04, 0.09, mug_m, verts=24), cyl("Mug2", (TABLE.x - 0.25, TABLE.y + 0.2, 0.79), 0.04, 0.09, mug_m, verts=24)]
     pot = join([cyl("PotBody", (0, 0, 0.09), 0.065, 0.18, pbr("PotGlass", (0.15, 0.08, 0.04), 0.1, 0.0, **{'Transmission Weight': 0.3}), verts=24),
                 cyl("PotTop", (0, 0, 0.2), 0.05, 0.04, pbr("PotBlack", (0.02, 0.02, 0.02), 0.4), verts=24),
                 box("PotHandle", (0.08, 0, 0.12), (0.02, 0.02, 0.12), pbr("PotBlack2", (0.02, 0.02, 0.02), 0.4))], "CoffeePot")
@@ -110,20 +110,20 @@ def build(variant="home"):
         po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, 2.6, 1.5); po.rotation_euler = (math.radians(-90), 0, 0)
         fill = area_light((0, -2.0, 2.3), (0, 0, 0), 2.0, 90, (0.9, 0.93, 1.0)); point_at(fill, TABLE + Vector((0, 0, 0.8))); fill.visible_camera = False
         tl = area_light((TABLE.x + 0.4, TABLE.y - 0.6, 1.3), (0, 0, 0), 0.5, 12, (1.0, 0.92, 0.8)); point_at(tl, TABLE + Vector((0.15, 0, 0.5))); tl.visible_camera = False
-        deck, reels = reel_deck("Deck"); deck.location = TABLE + Vector((0.15, -0.05, 0.475)); deck.rotation_euler = (0, 0, 0.2)
+        deck, reels = reel_deck("Deck"); deck.location = TABLE + Vector((0.15, -0.05, 0.735)); deck.rotation_euler = (0, 0, 0.2)
         c["reels"] = reels
-        ph.model("office_notepads", loc=TABLE + Vector((-0.3, -0.2, 0.48)), scale=0.35)
+        ph.model("office_notepads", loc=TABLE + Vector((-0.3, -0.2, 0.74)), scale=0.35)
         box("Outside", (0, 14, 4), (30, 1, 10), ph.texture("brick_wall_02", scale=0.3, name="KitOut"))
     # people
     P = {}
     if variant == "post":                         # a Soviet listening post in a flat: blinds shut, receivers on the table
         for k in range(3):
-            ph.model("vintage_radio_transceiver", loc=(TABLE.x - 0.3 + 0.0 * k, TABLE.y + 0.25, 0.48 + k * 0.0) if k == 0 else (TABLE.x + 0.35, TABLE.y + 0.3, 0.48 + (k - 1) * 0.43), rot_z=math.pi)
-        deck, reels = reel_deck("PostDeck"); deck.location = TABLE + Vector((0.0, -0.15, 0.475)); c["reels"] = reels
+            ph.model("vintage_radio_transceiver", loc=(TABLE.x - 0.3 + 0.0 * k, TABLE.y + 0.25, 0.74 + k * 0.0) if k == 0 else (TABLE.x + 0.35, TABLE.y + 0.3, 0.74 + (k - 1) * 0.43), rot_z=math.pi)
+        deck, reels = reel_deck("PostDeck"); deck.location = TABLE + Vector((0.0, -0.15, 0.735)); c["reels"] = reels
         dial = pbr("DialGlow", (0.5, 0.35, 0.1), 0.3, 0.0, **{'Emission Color': (1.0, 0.7, 0.3, 1), 'Emission Strength': 1.5})
         for k in range(3):
             box("Dial", (TABLE.x - 0.3 + 0.12 * k, TABLE.y + 0.1, 0.62), (0.06, 0.005, 0.03), dial)
-        c["switch"] = box("Switch", (TABLE.x + 0.2, TABLE.y - 0.3, 0.52), (0.02, 0.04, 0.015), pbr("SwitchM", (0.6, 0.6, 0.62), 0.3, 1.0))
+        c["switch"] = box("Switch", (TABLE.x + 0.2, TABLE.y - 0.3, 0.78), (0.02, 0.04, 0.015), pbr("SwitchM", (0.6, 0.6, 0.62), 0.3, 1.0))
         P["op"] = twp.person("Operator", 1.0, 38, "male_casualsuit05", "short01", hv=0.3, cval=0.5, hue=0.3, sat=0.2)
         c["P"] = P
         animate(c, 0.0, "post")
@@ -163,7 +163,7 @@ def animate(c, sec, shot):
         flick = ease(min(1.0, max(0.0, (sec - 2.0) / 0.5)))
         sw = c["switch"]; sw.rotation_euler = (0, math.radians(30) * (1 if flick > 0.5 else -1), 0)
         reach(op, "R", sw.location + Vector((0.04, -0.06, 0.05 - 0.02 * flick)), Vector((0.6, -0.3, -0.7)), Vector((0, 1, -0.3)))
-        reach(op, "L", TABLE + Vector((-0.2, -0.25, 0.52)), Vector((-0.6, -0.3, -0.7)), Vector((0, 1, -0.2)))
+        reach(op, "L", TABLE + Vector((-0.2, -0.25, 0.78)), Vector((-0.6, -0.3, -0.7)), Vector((0, 1, -0.2)))
         fingers_curl(op, 40, thumb=20); op.rot("head", (1, 0, 0), 12)
         spin = 3.0 * (1 - flick) + 0.0
         ang = 3.0 * min(sec, 2.0) + 3.0 * max(0.0, sec - 2.0) * (1 - 0.5 * min(1.0, (sec - 2.0) / 1.5)) if sec > 2.0 else 3.0 * sec
@@ -181,8 +181,8 @@ def animate(c, sec, shot):
     if c["variant"] == "home":
         m, w = P["man"], P["wife"]
         twp.seat(m, (TABLE.x, TABLE.y - 0.66, 0), math.pi, lean=22)            # faces +Y over the table, head low
-        reach(m, "L", TABLE + Vector((-0.08, -0.22, 0.52)), Vector((-0.6, -0.4, -0.6)), Vector((0.3, 1, -0.2)))
-        reach(m, "R", TABLE + Vector((0.12, -0.25, 0.52)), Vector((0.6, -0.4, -0.6)), Vector((-0.2, 1, -0.2)))
+        reach(m, "L", TABLE + Vector((-0.08, -0.22, 0.78)), Vector((-0.6, -0.4, -0.6)), Vector((0.3, 1, -0.2)))
+        reach(m, "R", TABLE + Vector((0.12, -0.25, 0.78)), Vector((0.6, -0.4, -0.6)), Vector((-0.2, 1, -0.2)))
         fingers_curl(m, 40, thumb=20)
         m.rot("head", (1, 0, 0), 18 + 2 * math.sin(sec * 0.5))
         twp.stand(w, (1.3, 1.55, 0), math.radians(160))                         # at the counter, turning to the table with the pot
@@ -198,13 +198,13 @@ def animate(c, sec, shot):
     else:
         d, a, b = P["defector"], P["offA"], P["offB"]
         twp.seat(d, (TABLE.x, TABLE.y + 0.66, 0), 0.0, lean=12)
-        twp.seat(a, (TABLE.x - 0.9, TABLE.y, 0), -math.pi / 2, lean=10)
-        twp.seat(b, (TABLE.x + 0.9, TABLE.y, 0), math.pi / 2, lean=14)
+        twp.seat(a, (TABLE.x - 0.9, TABLE.y, 0), math.pi / 2, lean=10)
+        twp.seat(b, (TABLE.x + 0.9, TABLE.y, 0), -math.pi / 2, lean=14)
         g = math.sin(sec * 1.3)
-        reach(d, "R", TABLE + Vector((0.18 + 0.02 * g, 0.28, 0.52)), Vector((0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
-        reach(d, "L", TABLE + Vector((-0.2, 0.32, 0.52)), Vector((-0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
+        reach(d, "R", TABLE + Vector((0.18 + 0.02 * g, 0.28, 0.78)), Vector((0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
+        reach(d, "L", TABLE + Vector((-0.2, 0.32, 0.78)), Vector((-0.6, 0.3, -0.7)), Vector((0, -1, -0.2)))
         d.rot("head", (0, 0, 1), 12 * math.sin(sec * 0.7))
-        reach(b, "R", TABLE + Vector((0.45, -0.15, 0.52)), Vector((0.3, -0.6, -0.7)), Vector((-1, 0, -0.3)))
+        reach(b, "L", TABLE + Vector((0.5, -0.12, 0.78)), Vector((0.3, -0.6, -0.8)), Vector((-1, 0, -0.3)))
         for h in (a, b):
             h.rot("head", (1, 0, 0), 6)
         for k, r in enumerate(c["reels"]):
@@ -228,12 +228,12 @@ def cam_wide(c, t):
 
 def cam_talk(c, t):
     e = ease(t)
-    return (TABLE + Vector((-1.75, -1.6, 1.45)).lerp(Vector((-1.5, -1.35, 1.42)), e), TABLE + Vector((0.1, 0.35, 0.95)), 30)
+    return (TABLE + Vector((-2.2, -2.0, 1.6)).lerp(Vector((-1.95, -1.75, 1.55)), e), TABLE + Vector((0.1, 0.3, 1.0)), 28)
 
 
 def cam_reels(c, t):
     e = ease(t); r = c["reels"][0].matrix_world.translation
-    return (r + Vector((1.5, -1.6, 0.85)).lerp(Vector((1.3, -1.4, 0.8)), e), r + Vector((0.0, 0.25, 0.15)), 32)        # medium-wide: the deck between them
+    return (r + Vector((0.3, -2.1, 0.6)).lerp(Vector((0.25, -1.85, 0.55)), e), r + Vector((0.0, 0.3, 0.2)), 32)        # medium-wide: the deck between them
 
 
 MOVES = {

@@ -85,6 +85,7 @@ def build(variant=None):
     c["pseal"] = seal
     sealer = twp.person("Courier2", 1.0, 41, "male_casualsuit02", "short03", hv=0.3, cval=0.55, hue=0.6, sat=0.2)
     c["courier"] = sealer
+    pl = area_light(tuple(DESK2 + Vector((-0.2, -1.0, 2.1))), (0, 0, 0), 0.8, 60, (1.0, 0.9, 0.75)); point_at(pl, DESK2 + Vector((-0.45, -0.05, 0.9))); pl.visible_camera = False
     ph.model("metal_office_desk", loc=(2.6, -1.8, 0), rot_z=0.0, scale=0.8)
     MC.terminal("VTerm", (2.6, -1.8, 0.632), 0.0)
     ph.model("SchoolChair_01", loc=(2.6, -2.4, 0), rot_z=0.0)
@@ -114,13 +115,13 @@ def animate(c, sec, shot="push"):
     cou = c["courier"]
     twp.hide(twp.person_objs(cou), shot != "pouch")
     if shot == "pouch":
-        twp.stand(cou, (DESK2.x - 0.4, DESK2.y - 0.75, 0), math.pi)
+        twp.stand(cou, (DESK2.x - 0.42, DESK2.y - 0.48, 0), math.pi)
         top = DESK2 + Vector((-0.45, -0.05, 1.08))
         crimp = max(0.0, math.sin(math.pi * min(1.0, max(0.0, (sec - 2.6) / 0.6))))
         draw = ease(min(1.0, sec / 2.0))
         c["pseal"].location = top + Vector((0, -0.04, -0.02 - 0.06 * draw))
-        reach(cou, "R", top + Vector((0.08, -0.1, 0.05 - 0.05 * draw - 0.01 * crimp)), Vector((-0.6, -0.3, -0.7)), Vector((0, 1, -0.2)))
-        reach(cou, "L", top + Vector((-0.1, -0.1, 0.08 + 0.1 * (1 - draw))), Vector((0.6, -0.3, -0.7)), Vector((0, 1, 0.3)))
+        reach(cou, "R", top + Vector((0.05, -0.06, 0.02 - 0.05 * draw - 0.01 * crimp)), Vector((-0.3, -0.4, -0.85)), Vector((0, 1, -0.2)))
+        reach(cou, "L", top + Vector((-0.06, -0.05, 0.04 + 0.06 * (1 - draw))), Vector((0.3, -0.4, -0.85)), Vector((0, 1, 0.3)))
         fingers_curl(cou, 50 + 20 * crimp, thumb=30)
         cou.rot("head", (1, 0, 0), 15)
     from human import reach, fingers_curl
@@ -149,7 +150,7 @@ MOVES = {
                  cam=lambda c, t: (TAPE_AT + Vector((0.55, -0.35, 0.32)).lerp(Vector((0.42, -0.28, 0.26)), ease(t)), TAPE_AT + Vector((-0.05, 0, 0.0)), 45),
                  focus=lambda c, t: TAPE_AT + Vector((0.05, 0, 0))),
     "pouch": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["pouch"], "pouch"),
-                  cam=lambda c, t: (DESK2 + Vector((-2.4, 0.9, 1.6)).lerp(Vector((-2.2, 0.8, 1.55)), ease(t)), DESK2 + Vector((-0.4, -0.3, 1.0)), 32),
+                  cam=lambda c, t: (DESK2 + Vector((-2.0, 1.1, 1.65)).lerp(Vector((-1.8, 1.0, 1.6)), ease(t)), DESK2 + Vector((-0.4, -0.25, 1.1)), 30),
                   focus=lambda c, t: DESK2 + Vector((-0.45, -0.05, 1.0))),
     "push": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["push"], "push"),
                  cam=lambda c, t: (Vector((-2.0, -0.9, 1.25)).lerp(Vector((-1.45, -0.35, 1.18)), ease(t)), Vector((-0.6, 0.8, 1.0)), 35),
