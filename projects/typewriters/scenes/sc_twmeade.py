@@ -504,6 +504,6 @@ def build(variant=None):
     else:
         look.interior_day(window=((-7.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="low_sun", key_size=3.0)
         look.gobo((-7.2, 0.0, 1.85), (8.0, 1.7), axis="x", bars=8, kind="blinds")
-        look.haze((0, 0, 1.6), (14, 8, 3.2), "low_sun", 0.025)
         twp.window_plate((-7.6, 0.0, 1.85), (9.0, 2.6), axis="x")
+    twp.neutral_daylight()
     return c

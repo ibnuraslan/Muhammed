@@ -265,9 +265,9 @@ def animate(c, sec, shot):
     t_ = P["tech"]
     twp.stand(t_, (-0.72, -0.98, 0), -2.12)                                 # at the machine's right-hand end, turned to it and to us
     hp = c["hood"].matrix_world @ Vector((0, -0.42, -0.05))
-    twp.work(t_, {"R": hp + Vector((0.06, -0.08, -0.03))}, head=6,              # an open, presenting palm: up and inward,
-             hand_dir=twp.forward(t_) + Vector((0, 0, -0.1)),                    # wrist straight, thumb up and away
-             palm=lambda sd, right: Vector((0, 0, 0.85)) - right * 0.45)
+    side_ = c["hood"].matrix_world.to_3x3() @ Vector((1, 0, 0))                # both hands grip the hood's front edge and lift it
+    twp.work(t_, {"L": hp + side_ * 0.16 + Vector((0, 0, -0.02)), "R": hp - side_ * 0.16 + Vector((0, 0, -0.02))}, head=10)
+    fingers_curl(t_, 30, thumb=20)
     a, b = P["usA"], P["usB"]
     twp.stand(a, (-0.25, -1.38, 0), -2.18); twp.stand(b, (0.28, -1.88, 0), -2.24)  # the two Americans beside him, watching
     a.rot("head", (1, 0, 0), 8); b.rot("head", (1, 0, 0), 6 + 4 * lift)
@@ -321,7 +321,7 @@ _build_raw = build
 def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     look.interior_day(window=((-6.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="low_sun", key_size=3.0)
-    look.haze((0, 0, 1.5), (12, 8, 3.0), "low_sun", 0.025)
     twp.window_plate((-6.6, 0.0, 1.85), (9.0, 2.6), axis="x", strength=0.45)
     look.gobo((-6.2, 0.0, 1.85), (6.0, 1.8), axis="x", bars=7, kind="blinds")
+    twp.neutral_daylight()
     return c

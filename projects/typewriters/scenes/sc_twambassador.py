@@ -400,9 +400,8 @@ def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     if variant == "talks":
         look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.3, 0.9)), mood="low_sun")
-        look.haze((0, 0, 1.6), (7, 6, 3.2), "low_sun", 0.03)
     else:
         look.interior_day(window=((0.3, 3.4, 2.0), (0.3, 0.5, 0.9)), mood="low_sun")
         look.gobo((0.3, 3.25, 1.8), (4.0, 2.0), axis="y", bars=6)
-        look.haze((0, 0, 1.6), (7, 6, 3.2), "low_sun", 0.03)
+    twp.neutral_daylight()
     return c

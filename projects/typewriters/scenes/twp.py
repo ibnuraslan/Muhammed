@@ -349,3 +349,23 @@ def _reach_rolled(h, side, wrist_target, pole, hand_dir=None, palm=None):
 
 _hm.reach = _reach_rolled
 reach = _reach_rolled
+
+
+
+def neutral_daylight(warm=(1.0, 0.93, 0.84)):
+    """Daylight patches are neutral or slightly warm, never blue: retint any bluish lamp (and the world) in a day
+    interior after the look has run."""
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT':
+            r, g, b = o.data.color
+            if b > r + 0.04:
+                o.data.color = warm
+    w = bpy.context.scene.world
+    if w and w.use_nodes:
+        for n in w.node_tree.nodes:
+            if n.bl_idname == "ShaderNodeBackground":
+                col = n.inputs['Color']
+                if not col.is_linked:
+                    r, g, b, a = col.default_value
+                    if b > r + 0.04:
+                        col.default_value = (*warm, 1)

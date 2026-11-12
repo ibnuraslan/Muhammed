@@ -48,7 +48,7 @@ def build(variant=None):
         l = area_light((x, -LY * 0.7, 2.0), (math.radians(90), 0, 0), 1.0, 160, (0.85, 0.92, 1.0)); point_at(l, (x + 0.8, 0.8, 0.0))
         l.data.shape = 'RECTANGLE'; l.data.size = 1.0; l.data.size_y = 0.8; l.visible_camera = False
         l.data.spread = math.radians(40)
-    haze((0, 0, 1.5), (2 * LX, 2 * LY, 3.0), density=0.012, color=(0.75, 0.8, 0.88), anis=0.55)
+    haze((0, 0, 1.5), (2 * LX, 2 * LY, 3.0), density=0.004, color=(0.85, 0.82, 0.76), anis=0.6)
     # bare bulbs on pull-chain sockets along the ridge
     bulb = pbr("Bulb", (1, 0.9, 0.7), 0.1, 0.0, **{'Emission Color': (1.0, 0.75, 0.45, 1), 'Emission Strength': 25.0})
     for x in (-6.0, -2.0, 2.0, 6.0):
@@ -203,5 +203,5 @@ _build_raw = build
 def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     look.interior_day(window=((-0.5, -LY * 0.75, 2.1), (0.5, 0.8, 0.3)), mood="low_sun", key_size=1.5)
-    look.haze((0, 0, 1.7), (18, 6.8, 3.4), "low_sun", 0.04)
+    twp.neutral_daylight()
     return c
