@@ -120,7 +120,7 @@ def animate(c, sec, shot):
     w = P["writer"]
     tty = c["wire_root"]
     front = tty.matrix_world @ Vector((0, -0.75, 0))
-    twp.stand(w, (front.x, front.y, 0), tty.rotation_euler.z)
+    twp.stand(w, (front.x, front.y, 0), tty.rotation_euler.z + math.pi)          # facing the machine
     tear = ease(min(1.0, max(0.0, (sec - 2.6) / 0.8))) if shot == "wire" else 0.0
     pp = tty.matrix_world @ Vector((0.0, 0.0, 1.3 + 0.1 * tear))
     for sd, dx in (("L", -0.12), ("R", 0.12)):

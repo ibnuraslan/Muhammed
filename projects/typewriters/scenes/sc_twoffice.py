@@ -502,7 +502,7 @@ def cam_records_drawer(c, t):
 
 def cam_records_burn(c, t):
     e = ease(t); b = c["bag"].location
-    return (b + Vector((-1.9, -2.2, 1.55)).lerp(Vector((-1.7, -1.95, 1.5)), e), b + Vector((0.4, 0, 0.75)), 30)
+    return (b + Vector((-1.6, 1.4, 1.5)).lerp(Vector((-1.4, 1.2, 1.45)), e), b + Vector((0.4, -0.1, 0.75)), 30)
 
 
 def cam_attache(c, t):
@@ -513,8 +513,8 @@ def cam_attache(c, t):
 
 def cam_platen(c, t):
     e = ease(t); car = c["tw"]["carrier"].location.x
-    a = _tw(c, (0.36, -0.1, 0.3)); b = _tw(c, (0.3, -0.08, 0.27))       # from the side, past the platen knob, onto the page
-    return (a.lerp(b, e), _tw(c, (-0.02, 0.05, 0.19)), 50)
+    a = _tw(c, (0.3, -0.38, 0.42)); b = _tw(c, (0.25, -0.33, 0.38))     # over the keyboard, onto the typed page
+    return (a.lerp(b, e), _tw(c, (-0.03, 0.06, 0.2)), 45)
 
 
 def cam_page_out(c, t):
@@ -537,7 +537,7 @@ MOVES = {
     "records_drawer": dict(kind="anim", dof=2.2, cam=cam_records_drawer, focus=lambda c, t: c["drawer"].matrix_world @ Vector((0, 0.3, 0.1)), anim=anim("records_drawer")),
     "records_burn": dict(kind="anim", dof=2.6, cam=cam_records_burn, focus=lambda c, t: c["bag"].location + Vector((0.2, 0, 0.7)), anim=anim("records_burn")),
     "attache": dict(kind="anim", dof=2.6, cam=cam_attache, focus=lambda c, t: _tw(c, (0.0, 0.0, 0.13)), anim=anim("attache")),
-    "platen": dict(kind="anim", dof=1.6, cam=cam_platen, focus=lambda c, t: T.strike_point(c["tw"]) + Vector((0, 0, 0.03)), anim=anim("platen")),
+    "platen": dict(kind="anim", dof=5.6, cam=cam_platen, focus=lambda c, t: _tw(c, (-0.03, 0.06, 0.2)), anim=anim("platen")),
     "nsa_desk": dict(kind="anim", dof=2.4, cam=cam_nsa_desk, focus=lambda c, t: c["pad"].location, anim=anim("nsa_desk")),
     "nsa_plans": dict(kind="anim", dof=3.0, cam=cam_nsa_plans, focus=lambda c, t: c["plans"].location, anim=anim("nsa_plans")),
     "typing": dict(kind="anim", dof=2.6, cam=cam_typing, focus=lambda c, t: _tw(c, (0.0, 0.03, 0.13)), anim=anim("typing")),

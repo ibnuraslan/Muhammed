@@ -18,7 +18,7 @@ DUR = {"tower": 5.0, "antenna": 4.5, "pullback": 6.0}
 TOWER = Vector((0.0, 420.0, 0.0))
 
 
-def win_mat(name, lit=(1.0, 0.75, 0.45), density=0.25, strength=2.5):
+def win_mat(name, lit=(1.0, 0.75, 0.45), density=0.35, strength=6.0):
     return window_material(name, lit=lit, density=density, floor=2.8, bay=1.4, strength=strength, glass_col=(0.02, 0.022, 0.025))
 
 
@@ -63,9 +63,9 @@ def tower(m_conc, lamp_m):
 def build(variant=None):
     c = {}
     rng = np.random.default_rng(1984)
-    w = world_flat((0.008, 0.011, 0.02), 1.0)
+    w = world_flat((0.018, 0.026, 0.05), 1.0)
     # low moonlit sky gradient: a big inverted dome would be heavy; a dim area light from above suffices
-    moon = bpy.data.lights.new("Moon", 'SUN'); moon.energy = 0.08; moon.color = (0.55, 0.65, 1.0); moon.angle = math.radians(1)
+    moon = bpy.data.lights.new("Moon", 'SUN'); moon.energy = 0.35; moon.color = (0.55, 0.65, 1.0); moon.angle = math.radians(1)
     mo = bpy.data.objects.new("Moon", moon); bpy.context.collection.objects.link(mo); mo.rotation_euler = (math.radians(50), 0, math.radians(30))
     ground = ph.texture("asphalt_02", scale=0.05, name="CityGround", tint=(0.5, 0.5, 0.5))
     box("Ground", (0, 200, -0.1), (1200, 1200, 0.2), ground)
@@ -84,7 +84,7 @@ def build(variant=None):
     roof_m = ph.texture("grey_roof_tiles", scale=0.25, name="RoofTiles", tint=(0.55, 0.55, 0.55))
     metal_roof = ph.texture("corrugated_iron", scale=0.2, name="MetalRoof", tint=(0.45, 0.48, 0.46))
     ant = pbr("AerialM", (0.35, 0.35, 0.36), 0.4, 0.9)
-    wins = [win_mat(f"CityWin{k}", density=d_) for k, d_ in enumerate((0.18, 0.3, 0.12))]
+    wins = [win_mat(f"CityWin{k}", density=d_) for k, d_ in enumerate((0.3, 0.42, 0.25))]
     c["roofs"] = []
     for gx in range(-9, 10):
         for gy in range(0, 26):

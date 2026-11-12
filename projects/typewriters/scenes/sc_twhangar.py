@@ -267,7 +267,7 @@ def build(variant=None):
             o = MC.burlap_crate(f"CStock{k}", tag=False); o.location = (CUSTOMS.x + 2.0 + (k % 3) * 1.0, CUSTOMS.y + 1.5 + (k // 3) * 0.9, 0.43)
         torch, _ = ph.model("vintage_flashlight"); c["torch"] = torch
         cl = area_light((CUSTOMS.x + 1.0, CUSTOMS.y - 1.0, 3.2), (0, 0, 0), 2.0, 60, (0.55, 0.62, 0.8)); point_at(cl, CUSTOMS); cl.visible_camera = False
-        wl = area_light((CUSTOMS.x + 0.5, HY - 1.5, 4.5), (0, 0, 0), 1.5, 40, (0.8, 0.75, 0.6)); point_at(wl, (CUSTOMS.x + 0.5, HY, 3.0)); wl.visible_camera = False
+        wl = area_light((CUSTOMS.x + 0.5, HY - 1.6, 4.2), (0, 0, 0), 1.2, 140, (0.85, 0.78, 0.6)); point_at(wl, (CUSTOMS.x + 0.5, HY, 3.0)); wl.visible_camera = False
         sp = bpy.data.lights.new("TorchC", 'SPOT'); sp.energy = 600; sp.spot_size = math.radians(26); sp.spot_blend = 0.3; sp.color = (1.0, 0.9, 0.75)
         so = bpy.data.objects.new("TorchC", sp); bpy.context.collection.objects.link(so); c["beam"] = so
     if variant == "dock":
@@ -476,7 +476,7 @@ def cam_customs_torch(c, t):
 
 def cam_customs_clock(c, t):
     e = ease(t)
-    return (CUSTOMS + Vector((-0.6, -2.8, 0.9)).lerp(Vector((-0.4, -2.3, 1.1)), e), CUSTOMS + Vector((0.3, 3.0, 2.1)), 26)
+    return (CUSTOMS + Vector((-0.3, -1.6, 0.75)).lerp(Vector((-0.2, -1.2, 0.85)), e), CUSTOMS + Vector((0.4, 3.0, 2.0)), 30)
 
 
 def cam_dock_xray(c, t):

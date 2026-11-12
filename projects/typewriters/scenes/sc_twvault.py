@@ -70,7 +70,7 @@ def build(variant=None):
     L.new(inv.outputs[0], p_.inputs['Alpha']); p_.inputs['Base Color'].default_value = (0.82, 0.74, 0.52, 1); p_.inputs['Roughness'].default_value = 0.8
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0)); tp = bpy.context.active_object; tp.name = "Tape"
     tp.scale = (0.9, 0.025, 1); bpy.ops.object.transform_apply(scale=True); tp.data.materials.append(tape_m)
-    tp.location = TAPE_AT + Vector((0.1, 0, 0.01)); tp.rotation_euler = (0, 0, 0)
+    tp.location = TAPE_AT + Vector((0.1, 0, 0.053)); tp.rotation_euler = (0, 0, 0)
     bpy.ops.mesh.primitive_plane_add(size=1); tp2 = bpy.context.active_object; tp2.scale = (0.5, 0.025, 1); bpy.ops.object.transform_apply(scale=True)
     tp2.data.materials.append(tape_m); tp2.location = TAPE_AT + Vector((-0.55, 0, -0.18)); tp2.rotation_euler = (0, math.radians(60), 0)
     # diplomatic pouch on the desk by the terminal: a canvas bag, drawstring, a lead seal on the cord
@@ -149,7 +149,7 @@ MOVES = {
                  cam=lambda c, t: (TAPE_AT + Vector((0.55, -0.35, 0.32)).lerp(Vector((0.42, -0.28, 0.26)), ease(t)), TAPE_AT + Vector((-0.05, 0, 0.0)), 45),
                  focus=lambda c, t: TAPE_AT + Vector((0.05, 0, 0))),
     "pouch": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["pouch"], "pouch"),
-                  cam=lambda c, t: (DESK2 + Vector((-1.6, -0.9, 1.5)).lerp(Vector((-1.4, -0.8, 1.45)), ease(t)), DESK2 + Vector((-0.4, -0.1, 0.95)), 32),
+                  cam=lambda c, t: (DESK2 + Vector((-2.1, -1.2, 1.55)).lerp(Vector((-1.9, -1.05, 1.5)), ease(t)), DESK2 + Vector((-0.4, -0.15, 1.0)), 30),
                   focus=lambda c, t: DESK2 + Vector((-0.45, -0.05, 1.0))),
     "push": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["push"], "push"),
                  cam=lambda c, t: (Vector((-2.0, -0.9, 1.25)).lerp(Vector((-1.45, -0.35, 1.18)), ease(t)), Vector((-0.6, 0.8, 1.0)), 35),
