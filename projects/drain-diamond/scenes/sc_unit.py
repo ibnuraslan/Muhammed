@@ -41,6 +41,7 @@ def build(variant=None):
     wall = dd.tex_mat("painted_plaster_wall", 0.6, tint=(0.62, 0.63, 0.6), name="OffWall", sat=0.4)
     B.box((0, 4, -0.05), (10, 9, 0.1), floor).box((0, 4, 3.05), (10, 9, 0.1), pbr("OffCeil", (0.8, 0.8, 0.78), 0.9))
     B.box((-5.05, 4, 1.5), (0.1, 9, 3.0), wall).box((0, 8.55, 1.5), (10, 0.1, 3.0), wall)
+    B.box((0, -0.55, 1.5), (10, 0.1, 3.0), wall)                      # the front wall (seen past the listener)
     # window wall on the right (x = 5): tall windows over the roofs, rain on the glass
     for k in range(3):
         B.box((5.05, 0.6 + k * 3.0, 1.8), (0.1, 0.8, 1.8), wall)      # piers only between sill and lintel (no coplanar overlap)
