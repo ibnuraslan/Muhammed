@@ -1,0 +1,12 @@
+ToucanBeak audit, every 2 frames (1125 samples)
+HEAD_ITEM: n/a (no head-worn items in this film)
+BIRD_HOVER       0  
+BIRD_SINK        0  
+HAND_IN_BIRD     7  f1505 VetB glove/bird triangle overlaps: 10; f1507 VetB glove/bird triangle overlaps: 174; f1509 VetB glove/bird triangle overlaps: 160; f1693 VetB glove/bird triangle overlaps: 584; f1695 VetB glove/bird triangle overlaps: 549; f1697 VetB glove/bird triangle overlaps: 495; f1699 VetB glove/bird triangle overlaps: 88
+HAND_FLOAT       0  
+HAND_HAND        0  
+HAND_SELF        1  f1797 VetB L hand into own torso/clothes/head 1
+HAND_OTHER       0  
+CAMERA_INSIDE    2  f673 camera at (6.69, 0.13, 1.25) inside a mesh (6/6 back-face hits); f687 camera at (7.24, 0.31, 1.32) inside a mesh (6/6 back-face hits)
+PROP_FLOAT       0  
+counts {'toe_samples': 1125, 'hand_rule_frames': 723, 'hand_checks': 1420}

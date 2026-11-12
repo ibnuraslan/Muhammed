@@ -14,7 +14,7 @@ for n in mv.node_tree.nodes:
         n.color_ramp.elements[0].color = srgb("#E8F7FF"); n.color_ramp.elements[0].position = 0.3
         n.color_ramp.elements[1].color = srgb("#4FC3F7"); n.color_ramp.elements[1].position = 0.8
     if n.type == 'MIX': n.inputs[0].default_value = 0.04
-    if n.type == 'EMISSION': n.inputs[1].default_value = 1.0
+    if n.type == 'EMISSION': n.inputs[1].default_value = 1.7
 for L in [o for o in OB if o.name.startswith("Void_light_")]:
     L.data.energy *= 2.2; L.data.color = (1, 1, 1)
 # ---- explainer materials readable on a light background
@@ -43,29 +43,12 @@ fill.rotation_euler = (Vector((7.0, 0.0, 1.0)) - fill.location).to_track_quat('-
 OB["Sun"].data.energy = 6.0; OB["Sun"].rotation_euler = (R_(38), R_(12), R_(-110))
 skyfill = bpy.data.objects.new("Sky_fill", bpy.data.lights.new("Sky_fill", 'SUN')); sc.collection.objects.link(skyfill)
 skyfill.data.energy = 1.5; skyfill.data.color = (0.75, 0.88, 1.0); skyfill.data.angle = R_(60); skyfill.rotation_euler = (R_(-30), 0, R_(60))
-for nm in ("Forest_floor", "Bark", "Bark_willow"):
-    m = bpy.data.materials[nm]
-    for n in m.node_tree.nodes:
-        if n.type == 'MIX' and n.blend_type == 'MULTIPLY': n.inputs[7].default_value = (1.1, 1.0, 0.8, 1)
+m = bpy.data.materials["Forest_floor"]
+for n in m.node_tree.nodes:
+    if n.type == 'MIX' and n.blend_type == 'MULTIPLY': n.inputs[7].default_value = (0.62, 0.8, 0.42, 1)
 OB["Enclosure_sky"].data.energy *= 1.5
 # ---- toucan: clean plumage, glossy bill
 b = bsdf(bpy.data.materials["Toucan_feathers"]); b.inputs["Roughness"].default_value = 0.42
-# ---- hands rule: joint limits on fingers / thumbs / wrists (local space), elbows no hyper-extension
-for nm in ("VetA", "VetB", "Assist"):
-    rig = OB[nm]
-    for pb in rig.pose.bones:
-        n = pb.name
-        if n.startswith("finger") and "-" in n:
-            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
-            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-            if n.startswith("finger1"):
-                c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(-10), R_(60), R_(-30), R_(30), R_(-30), R_(30)
-            else:
-                c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(0), R_(90), R_(-5), R_(5), R_(-10), R_(10)
-        elif n.startswith("wrist."):
-            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
-            c.use_limit_x = c.use_limit_z = True
-            c.min_x, c.max_x, c.min_z, c.max_z = R_(-60), R_(60), R_(-25), R_(25)
 # ---- camera: deep focus except true macros (anim_look sets >=5.6); macros 1580-1830 stay at 5.6
 sc["look"] = "animated_cg_v1"
 bpy.ops.wm.save_as_mainfile(filepath=out, compress=False)

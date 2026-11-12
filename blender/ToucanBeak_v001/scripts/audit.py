@@ -30,7 +30,8 @@ def glove_sel(o):
     return (lambda p: p.material_index in gi)
 EXCL = {"Wall_patch", "Monitor_back", "Void_front", "Void_box", "Mote_emitter", "Extrude_cutter", "Print_clip"}
 dirs = [Vector(d) for d in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))]
-frames = list(range(sc.frame_start, sc.frame_end + 1, STEP))
+F0 = int(a[2]) if len(a) > 2 else sc.frame_start; F1 = int(a[3]) if len(a) > 3 else sc.frame_end
+frames = list(range(F0, F1 + 1, STEP))
 for f in frames:
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     # ---- toes vs support
@@ -52,6 +53,10 @@ for f in frames:
         bt, bv = tree(body, dg)
         beak = OB["Prosthetic_beak"] if f >= 1692 else OB["Toucan_beak_upper_broken"]
         kt, _ = tree(beak, dg)
+        if 1515 <= f < 1692:     # held prosthetic: light finger contact only
+            pt_, _ = tree(OB["Prosthetic_beak"], dg); gt_, _ = tree(gloveB, dg, glove_sel(gloveB))
+            n_ = len(gt_.overlap(pt_))
+            if n_ > 40: flag("HAND_IN_PROP", f, "VetB glove into held prosthetic %d" % n_)
         for nm, g in (("VetA", gloveA), ("VetB", gloveB)):
             ht, hv = tree(g, dg, glove_sel(g))
             n = len(ht.overlap(bt)) + len(ht.overlap(kt))
@@ -83,7 +88,9 @@ for f in frames:
             P_[nm] = dict(L=BVHTree.FromPolygons(vs, hand["L"]), R=BVHTree.FromPolygons(vs, hand["R"]), torso=BVHTree.FromPolygons(vs, torso), cloth=ct, all=BVHTree.FromPolygons(vs, [tuple(p.vertices) for p in me.polygons]) if False else None)
         for nm, d in P_.items():
             n = len(d["L"].overlap(d["R"]))
-            if n: flag("HAND_HAND", f, "%s L/R hands overlap %d" % (nm, n))
+            if n:
+                rg_ = OB[nm]; dw = (rg_.matrix_world @ rg_.pose.bones["wrist.L"].head - rg_.matrix_world @ rg_.pose.bones["wrist.R"].head).length
+                flag("HAND_HAND", f, "%s L/R hands overlap %d (wrists %.2f m apart)" % (nm, n, dw))
             for s_ in "LR":
                 n = len(d[s_].overlap(d["torso"])) + sum(len(d[s_].overlap(t)) for t in d["cloth"])
                 if n: flag("HAND_SELF", f, "%s %s hand into own torso/clothes/head %d" % (nm, s_, n))
@@ -109,7 +116,7 @@ for f in frames:
 with open(OUT, "w") as fo:
     fo.write("ToucanBeak audit, every %d frames (%d samples)\n" % (STEP, len(frames)))
     fo.write("HEAD_ITEM: n/a (no head-worn items in this film)\n")
-    for k in ("BIRD_HOVER", "BIRD_SINK", "HAND_IN_BIRD", "HAND_FLOAT", "HAND_HAND", "HAND_SELF", "HAND_OTHER", "CAMERA_INSIDE", "PROP_FLOAT"):
+    for k in ("BIRD_HOVER", "BIRD_SINK", "HAND_IN_BIRD", "HAND_IN_PROP", "HAND_FLOAT", "HAND_HAND", "HAND_SELF", "HAND_OTHER", "CAMERA_INSIDE", "PROP_FLOAT"):
         L = issues.get(k, [])
         fo.write("%-14s %3d  %s\n" % (k, len(L), "; ".join("f%d %s" % x for x in L[:12])))
     fo.write("counts %s\n" % counts)

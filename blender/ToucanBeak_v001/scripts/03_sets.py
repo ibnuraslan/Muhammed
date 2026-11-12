@@ -83,7 +83,7 @@ def box(name, c, size, loc, mat=None, bevel=0.0):
     bm.to_mesh(me); bm.free(); o = bpy.data.objects.new(name, me); c.objects.link(o)
     o.scale = size; o.location = loc
     if mat: me.materials.append(mat)
-    bpy.context.view_layer.objects.active = o; o.select_set(True); bpy.ops.object.transform_apply(scale=True); o.select_set(False)
+    bpy.context.view_layer.objects.active = o; o.select_set(True); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True); o.select_set(False)
     if bevel:
         bv = o.modifiers.new("bv", 'BEVEL'); bv.width = bevel; bv.segments = 3
     me.uv_layers.new() if not me.uv_layers else None
@@ -139,9 +139,9 @@ def trunk(name, loc, r, h, mat, lean=(0, 0)):
     bpy.ops.object.shade_smooth()
     sub = t.modifiers.new("s", 'SUBSURF'); sub.levels = 1; sub.render_levels = 2
     tx_ = bpy.data.textures.new(name, 'STUCCI'); tx_.noise_scale = 0.25
-    dd = t.modifiers.new("d", 'DISPLACE'); dd.texture = tx_; dd.strength = r * 0.25
+    dd = t.modifiers.new("d", 'DISPLACE'); dd.texture = tx_; dd.strength = r * 0.06
     tx2 = bpy.data.textures.new(name + "b", 'CLOUDS'); tx2.noise_scale = 1.2
-    dd2 = t.modifiers.new("d2", 'DISPLACE'); dd2.texture = tx2; dd2.strength = r * 0.5
+    dd2 = t.modifiers.new("d2", 'DISPLACE'); dd2.texture = tx2; dd2.strength = r * 0.15
     t.rotation_euler = (R_(lean[0]), R_(lean[1]), random.uniform(0, 6))
     # cylindrical UVs
     bpy.ops.object.mode_set(mode='EDIT'); bpy.ops.mesh.select_all(action='SELECT')
@@ -151,7 +151,7 @@ def trunk(name, loc, r, h, mat, lean=(0, 0)):
 trunk("Trunk_hero", (-0.62, 0.05), 0.2, 9, M_bark2, (2, -3))
 for i, (x, y, r) in enumerate([(-3.5, -2.5, 0.35), (-6, 2.5, 0.5), (-2.2, 4.2, 0.28), (-8, -5, 0.6), (-4.5, 6.5, 0.4),
                                 (1.5, -6.5, 0.3), (-10, 1, 0.7), (0.5, 6.0, 0.25), (-1.8, -5.5, 0.32), (2.5, 4.5, 0.22)]):
-    trunk("Trunk_%d" % i, (x, y), r, 14, M_bark if i % 2 else M_bark2, (random.uniform(-4, 4), random.uniform(-4, 4)))
+    trunk("Trunk_%d" % i, (x, y), r, 24, M_bark if i % 2 else M_bark2, (random.uniform(-4, 4), random.uniform(-4, 4)))
 
 # perch branch (scanned) running along x from the hero trunk
 br = imp("branch", C_J, size=1.25, loc=(0, 0, 0))
@@ -196,6 +196,10 @@ fig_src = imp("fig", C_P, size=0.05, base=False); fig_src.name = "Fig"
 fig_src.location = (0, 0.3, 1.86)
 fig2 = fig_src.copy(); fig2.data = fig_src.data; fig2.name = "Fig_enclosure"; C_P.objects.link(fig2)
 twig = imp("stick", C_J, size=0.42, base=False); twig.name = "Fig_twig"
+V = np.array([v.co[:] for v in twig.data.vertices]); ax = int(np.argmax(V.max(0) - V.min(0)))
+if ax == 0: twig.data.transform(Matrix.Rotation(R_(90), 4, 'Y'))
+if ax == 1: twig.data.transform(Matrix.Rotation(R_(90), 4, 'X'))
+twig.data.transform(Matrix.Diagonal((0.4, 0.4, 1.0, 1.0)))
 # the stick that strikes (scanned wood)
 weapon = imp("stick", C_P, size=0.95, base=False); weapon.name = "Strike_stick"
 V = np.array([v.co[:] for v in weapon.data.vertices]); ax = int(np.argmax(V.max(0) - V.min(0)))

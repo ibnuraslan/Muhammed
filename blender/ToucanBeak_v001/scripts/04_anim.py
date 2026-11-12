@@ -79,14 +79,12 @@ LB_base, LB_tip = Vector(UP["base"]), Vector(UP["tip"])
 key_vis(UP, [(1, True), (104, False), (1976, True)])
 key_vis(UPB, [(1, False), (104, True), (1976, False)])
 # prosthetic: full upper beak copy (printed + painted), parented to head, slides on 1600-1690
-PRO = UP.copy(); PRO.data = UP.data.copy(); PRO.name = "Prosthetic_beak"; C_ANIM.objects.link(PRO)
+PRO = bpy.data.objects.new("Prosthetic_beak", UP.data.copy()); C_ANIM.objects.link(PRO)
 pm = UP.data.materials[0].copy(); pm.name = "Prosthetic_paint"
 for nd in pm.node_tree.nodes:
     if nd.type == 'BSDF_PRINCIPLED': nd.inputs["Roughness"].default_value = 0.22; nd.inputs["Coat Weight"].default_value = 0.8
 PRO.data.materials[0] = pm
 axis_r = (LB_tip - LB_base).normalized()
-for f, off in ((1, 0.09), (1560, 0.09), (1600, 0.05), (1660, 0.008), (1692, 0.0)):
-    PRO.location = axis_r * off + Vector((0, 0, 0.004 if off > 0 else 0)); PRO.keyframe_insert("location", frame=f)
 key_vis(PRO, [(1, False), (1515, True), (1976, False)])
 
 def beak_point(frac, f=None, obj=None):
@@ -134,6 +132,15 @@ pose(2112, head=(36, 0, 0), neck=(14, 0, 0), jaw=(-2, 0, 0))
 pose(2140, head=(46, 0, 0), neck=(18, 0, 0), chest=(6, 0, 0))    # swallow
 pose(2175, head=(2, 0, 10), tail=(10, 0, 0)); pose(2215, head=(-4, 0, -14)); pose(2250, head=(0, 0, -6))
 
+# ---- prosthetic: follows the (hidden) intact upper beak's head-bone pose, slid out along the beak axis until seated at 1692
+pro_off = pchip([(1515, 0.09), (1560, 0.09), (1600, 0.05), (1660, 0.008), (1692, 0.0), (1980, 0.0)])
+PRO.rotation_mode = 'QUATERNION'
+for f in list(range(1513, 1980, 2)):
+    ev(f); M = UP.matrix_world.copy(); axw = (M.to_3x3() @ axis_r).normalized()
+    o_ = pro_off(f); M = Matrix.Translation(axw * o_ + Vector((0, 0, 0.004 if o_ > 0 else 0))) @ M
+    loc, q, sc_ = M.decompose(); PRO.location = loc; PRO.rotation_quaternion = q; PRO.scale = sc_
+    PRO.keyframe_insert("location", frame=f); PRO.keyframe_insert("rotation_quaternion", frame=f); PRO.keyframe_insert("scale", frame=f)
+
 # ---- the stick (swing plane = bird's side; contact on the upper beak at frame 102)
 stick = OB["Strike_stick"]; pivot = bpy.data.objects.new("Stick_pivot", None); C_ANIM.objects.link(pivot)
 ev(100)
@@ -179,11 +186,7 @@ FIG = OB["Fig"]; TWIG = OB["Fig_twig"]
 fpiv = bpy.data.objects.new("Fig_pivot", None); C_ANIM.objects.link(fpiv)
 FIG0 = stub_tip_lunge + Vector((0, 0.03, -0.004))
 fpiv.location = FIG0 + Vector((0, 0, 0.42))
-TWIG.parent = fpiv; TWIG.location = (0, 0, -0.21); TWIG.rotation_euler = (0, 0, 0)
-V = np.array([v.co[:] for v in TWIG.data.vertices]); ax_ = int(np.argmax(V.max(0) - V.min(0)))
-sc_ = [0.45] * 3; sc_[ax_] = 1.0; TWIG.scale = sc_
-if ax_ == 0: TWIG.rotation_euler = (0, R_(90), 0)
-if ax_ == 1: TWIG.rotation_euler = (R_(90), 0, 0)
+TWIG.parent = fpiv; TWIG.location = (0, 0, -0.21); TWIG.rotation_euler = (0, 0, 0); TWIG.scale = (1, 1, 1)
 FIG.parent = fpiv; FIG.location = (0, 0, -0.42 - 0.012)
 fpiv.rotation_mode = 'XYZ'
 for f, a in ((1, 0), (320, 0), (326, 18), (338, -10), (350, 6), (362, -3), (372, 0), (378, 24), (390, -14), (404, 8), (420, -4), (440, 2), (470, 0)):
@@ -233,36 +236,54 @@ people = {}
 for nm in ("VetA", "VetB", "Assist"):
     r = make_human_ctrl(OB[nm]); people[nm] = Human(r)
 VA, VB, AS = people["VetA"], people["VetB"], people["Assist"]
+# hands rule: joint limits (local space) on fingers / thumbs / wrists
+for nm in ("VetA", "VetB", "Assist"):
+    for pb in OB[nm].pose.bones:
+        n = pb.name
+        if n.startswith("finger") and "-" in n:
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            if n.startswith("finger1"): c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(-10), R_(60), R_(-30), R_(30), R_(-30), R_(30)
+            else: c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(0), R_(90), R_(-5), R_(5), R_(-10), R_(10)
+        elif n.startswith("wrist."):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.use_limit_x = c.use_limit_z = True
+            c.min_x, c.max_x, c.min_z, c.max_z = R_(-60), R_(60), R_(-25), R_(25)
 def stand(H, f, pos, yaw, flex=8, head=(10, 0), spine_flex=14, twist=0):
     H.key_root(f, Vector((pos[0], pos[1], H.root_head.z - 0.02)), yaw=yaw, flex=flex)
     H.key_spine(f, flex=spine_flex, twist=twist, head=head)
     for s in "LR": H.key_foot(s, f, H.foot_xy(s, Vector(pos), yaw), yaw)
+def grip_key(H, s_, f, G, d, n, pole, reach=0.07, palm=0.03):
+    """wrist target so the palm sits on G: fingers along d (wrapping), palm facing n"""
+    d = d.normalized(); n = (n - d * n.dot(d)).normalized()
+    H.key_hand(s_, f, G - d * reach - n * palm, d, n, pole=pole)
 ev(600)
 def bw(local):     # bird-space (rest) point -> world, clinic placement
     return Matrix.Translation(BIRD_C) @ Euler(ROT_C).to_matrix().to_4x4() @ Vector(local)
-A_POS, B_POS = (7.02, -0.56), (6.98, 0.58)
+A_POS, B_POS = (7.02, -0.6), (6.98, 0.58)
 for f in (530, 900, 1400, 1960):
-    stand(VA, f, A_POS, 180, flex=10, head=(18, 0), spine_flex=18)
+    stand(VA, f, A_POS, 180, flex=6, head=(14, 0), spine_flex=8)
 for f in (530, 700, 1500, 1960):
-    stand(VB, f, B_POS, 0, flex=10, head=(16, 0), spine_flex=16)
+    stand(VB, f, B_POS, 0, flex=8, head=(18, 0), spine_flex=10)
 # VetA cradles the bird the whole clinic stay
 for f in (530, 1000, 1500, 1960):
-    VA.key_hand("R", f, bw((-0.075, -0.03, 0.10)), Vector((0.15, 0.1, 1)), Vector((1, 0, 0)), pole=Vector((A_POS[0] - 0.4, A_POS[1] - 0.2, 1.0)))
-    VA.key_hand("L", f, bw((-0.035, -0.075, 0.235)), Vector((0, 1, -0.45)), Vector((0, 0, -1)), pole=Vector((A_POS[0] + 0.45, A_POS[1] - 0.1, 1.2)))
+    VA.key_hand("R", f, bw((0.0, -0.12, 0.085)), Vector((0, 1, 0.2)), Vector((-1, 0, 0)), pole=Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0)))
+    VA.key_hand("L", f, bw((0.0, 0.085, 0.115)), Vector((0, 1, 0.25)), Vector((1, 0, 0)), pole=Vector((A_POS[0] - 0.45, A_POS[1] - 0.15, 1.0)))
 # scanner sweeping (VetB right hand), beat 4
 SCN = OB["Scanner"]; SCN.rotation_mode = 'QUATERNION'
 stub_mid = bw(LB_base + (LB_tip - LB_base) * 0.25)
 for f, dx in ((540, 0.06), (575, -0.04), (610, 0.05), (645, -0.05), (680, 0.02)):
-    S = stub_mid + Vector((dx, 0.17, 0.12))
+    S = stub_mid + Vector((dx - 0.1, 0.12, 0.13))
     q = (stub_mid - S).to_track_quat('Y', 'Z')
     key_loc(SCN, f, S); SCN.rotation_quaternion = q; SCN.keyframe_insert("rotation_quaternion", frame=f)
-    grip = S + q @ Vector((0, -0.02, -0.11))
-    VB.key_hand("R", f, grip, q @ Vector((0, 1, 0.2)), q @ Vector((0, 0, -1)) * -1, pole=grip + Vector((0.3, 0.3, -0.3)))
-    VB.key_hand("L", f, Vector((6.85, 0.32, TZ + 0.02)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.6, 0.8, 1.0)))
+    G = S + q @ Vector((0, -0.02, -0.11))
+    grip_key(VB, "R", f, G, q @ Vector((-1, 0, 0)), q @ Vector((0, 1, 0)), pole=G + Vector((0.35, 0.35, -0.25)), reach=0.06, palm=0.035)
+    VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.02)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
+VB.key_hand("R", 696, Vector((6.86, 0.12, TZ + 0.46)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.2, 0.9, 1.2)))
+VB.key_hand("R", 712, Vector((7.15, 0.04, TZ + 0.45)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.5, 0.9, 1.2)))
+key_loc(SCN, 696, Vector((6.86, 0.14, TZ + 0.5))); key_loc(SCN, 712, Vector((7.12, 0.16, TZ + 0.56)))
 key_loc(SCN, 760, Vector((7.45, 0.25, TZ + 0.03))); SCN.rotation_quaternion = Quaternion((1, 0, 0, 0)); SCN.keyframe_insert("rotation_quaternion", frame=760)
 for f in (760, 1500):
-    VB.key_hand("R", f, Vector((7.3, 0.3, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.5, 0.8, 1.0)))
-    VB.key_hand("L", f, Vector((6.75, 0.3, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.5, 0.8, 1.0)))
+    VB.key_hand("R", f, Vector((7.45, 0.1, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
+    VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 # laser line: narrow red spot projected from the scanner lens onto the stump
 las = bpy.data.objects.new("Laser_spot", bpy.data.lights.new("Laser_spot", 'SPOT')); C_ANIM.objects.link(las)
 las.data.energy = 6; las.data.color = (1, 0.04, 0.02); las.data.spot_size = R_(28); las.data.spot_blend = 0.0; las.data.shadow_soft_size = 0
@@ -270,23 +291,38 @@ las.parent = SCN; las.location = (0, 0.03, 0); las.rotation_euler = (R_(-90), 0,
 OB["Laser_line"].hide_render = True
 key_vis(las, [(1, False), (538, True), (690, False)])
 # prosthetic in VetB's hand (1515-1692): hand follows the prosthetic
-for f in range(1515, 1700, 6):
-    ev(f); pw = PRO.matrix_world @ (LB_base + (LB_tip - LB_base) * 0.75)
-    VB.key_hand("R", f, pw + Vector((0.0, 0.07, 0.05)), Vector((0, -1, -0.5)), Vector((0, 0, -1)), pole=pw + Vector((0.3, 0.4, -0.2)))
+VB.key_hand("R", 1507, Vector((7.3, 0.2, TZ + 0.42)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=Vector((7.6, 0.9, 1.2)))
+PRO_D = (Euler(ROT_C).to_matrix() @ axis_r) + Vector((0, 0.25, 0)); PRO_N = Vector((0.15, -0.35, -1))   # fingers laid along the culmen, palm down, thumb on the near flank
+def pro_grip_pt(f):
+    ev(f); return PRO.matrix_world @ (LB_base + (LB_tip - LB_base) * 0.5 + Vector((0, 0, 0.012)))
+for f in range(1515, 1693, 6):
+    pw = pro_grip_pt(f)
+    grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=0.016)
 # glue syringe (left hand) 1704-1800, tweezers + pin (right) 1810-1950
 SYR, TWZ, PIN = OB["Glue_syringe"], OB["Tweezers"], OB["Pin"]
 seam = bw(LB_base + (LB_tip - LB_base) * 0.42 + Vector((0, 0.012, 0.02)))
-for f, s_ in ((1700, 0.08), (1730, 0.0), (1760, 0.0), (1790, 0.06)):
-    p_ = seam + Vector((0.0, 0.05 + s_, 0.035)); q = (seam - p_).to_track_quat('Z', 'Y')
+_pw = pro_grip_pt(1692)
+grip_key(VB, "R", 1693, _pw, PRO_D, PRO_N, pole=_pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=0.016)
+VB.key_hand("R", 1702, _pw + Vector((0.0, 0.16, 0.2)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=_pw + Vector((0.3, 0.5, 0.0)))
+VB.key_hand("L", 1712, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
+VB.key_hand("L", 1719, Vector((7.18, 0.12, TZ + 0.24)), Vector((-1, -0.3, -0.4)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.2)))
+for f, s_ in ((1726, 0.1), (1744, 0.0), (1768, 0.0), (1792, 0.08)):
+    p_ = seam + Vector((0.0, 0.04 + s_, 0.06)); q = (seam - p_).to_track_quat('Z', 'Y')
     SYR.rotation_mode = 'QUATERNION'; key_loc(SYR, f, p_ + (p_ - seam).normalized() * 0.06); SYR.rotation_quaternion = q; SYR.keyframe_insert("rotation_quaternion", frame=f)
-    VB.key_hand("L", f, p_ + (p_ - seam).normalized() * 0.1, (seam - p_).normalized(), Vector((0, 0, -1)), pole=p_ + Vector((-0.3, 0.4, -0.2)))
+    ax_s = (seam - p_).normalized(); Gs = p_ - ax_s * 0.06
+    grip_key(VB, "L", f, Gs, Vector((0, 0, -1)).cross(ax_s) * -1, Vector((0, 0.3, -1)), pole=Gs + Vector((-0.3, 0.4, -0.2)), reach=0.065, palm=0.03)
 key_vis(SYR, [(1, False), (1690, True), (1810, False)])
+for f in (1712, 1800):
+    VB.key_hand("R", f, Vector((6.55, 0.12, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((6.3, 0.8, 1.0)))
+VB.key_hand("L", 1799, seam + Vector((0.18, 0.12, 0.28)), Vector((1, -0.3, -0.4)), Vector((0, 0, -1)), pole=Vector((7.6, 0.9, 1.3)))
+for f in (1806, 1950):
+    VB.key_hand("L", f, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 pin_in = bw(LB_base + (LB_tip - LB_base) * 0.36 + Vector((0, 0.0, 0.03)))
 for f, d_ in ((1810, 0.08), (1850, 0.02), (1880, 0.008), (1910, 0.0), (1945, 0.0)):
     p_ = pin_in + Vector((0, d_, 0.01 + d_ * 0.5))
     PIN.rotation_mode = 'XYZ'; key_loc(PIN, f, p_, (R_(90), 0, 0))
     TWZ.rotation_mode = 'XYZ'; key_loc(TWZ, f, p_ + Vector((0, 0.065, 0.004)), (0, 0, R_(90)))
-    VB.key_hand("R", f, p_ + Vector((0, 0.13, 0.03)), Vector((0, -1, -0.1)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)))
+    grip_key(VB, "R", f, p_ + Vector((0, 0.075, 0.006)), Vector((0, -1, -0.15)), Vector((0, 0, -1)), pole=p_ + Vector((0.3, 0.4, -0.2)), reach=0.055, palm=0.022)
 key_vis(PIN, [(1, False), (1800, True), (1976, False)]); key_vis(TWZ, [(1, False), (1800, True), (1950, False)])
 # glue bead along the seam (grows)
 st_a = (LB_tip - LB_base).length * 0.42
@@ -294,7 +330,7 @@ VV = [v.co for o_ in (UPB, LOW) for v in o_.data.vertices]
 sec = [v for v in VV if abs((v - LB_base).dot(axis_r) - st_a) < 0.003]
 cy = sum((v.y for v in sec)) / len(sec); cz = (max(v.z for v in sec) + min(v.z for v in sec)) / 2
 hz = (max(v.z for v in sec) - min(v.z for v in sec)) / 2 + 0.0012; hx = (max(v.x for v in sec) - min(v.x for v in sec)) / 2 + 0.0012
-bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.06, major_segments=48, minor_segments=8, location=(0, 0, -30))
+bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.035, major_segments=48, minor_segments=8, location=(0, 0, -30))
 glue = bpy.context.active_object; glue.name = "Glue_bead"
 for c in glue.users_collection: c.objects.unlink(glue)
 C_ANIM.objects.link(glue)
@@ -329,11 +365,30 @@ def curl(H, side, f, amt, thumb=0.5, spread=0.0):
             H.r.PB[n].rotation_quaternion = q; H.r.PB[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
 for f in (530, 1960):
     curl(VA, "L", f, 10, 0.4); curl(VA, "R", f, 14, 0.5)
-for f in (530, 760, 1500, 1960):
-    curl(VB, "L", f, 30 if f < 1690 else 38, 0.6); curl(VB, "R", f, 52 if f < 700 else 40, 0.8)
-for f in (1700, 1800): curl(VB, "L", f, 55, 0.9)
-for f in (1810, 1945): curl(VB, "R", f, 30, 1.0, spread=-4)
+for f in (530, 690): curl(VB, "R", f, 78, 0.7)
+for f in (712, 1500): curl(VB, "R", f, 25, 0.5)
+for f in (530, 1500, 1712, 1806, 1960): curl(VB, "L", f, 22, 0.5)
+for f in (1515, 1692): curl(VB, "R", f, 16, 1.0)
+for f in (1712, 1800): curl(VB, "R", f, 22, 0.5)
+for f in (1724, 1792): curl(VB, "L", f, 70, 0.8)
+for f in (1810, 1945): curl(VB, "R", f, 62, 1.0, spread=-4)
 for f in (560, 1960): curl(AS, "L", f, 20); curl(AS, "R", f, 20)
+
+# faces (MPFB face bones): focused concentration while working, blinks, relief when the pin is in
+def face(H, f, brow=-0.006, lid=-14, jaw=0.0, brow_y=0.0):
+    PB_ = H.r.PB
+    for s_ in "LR":
+        for b_ in ("oculi01.", "oculi02."):
+            pb = PB_[b_ + s_]; pb.location = (0, brow_y, brow); pb.keyframe_insert("location", frame=f)
+        pb = PB_["orbicularis03." + s_]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (R_(lid), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+    pb = PB_["jaw"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (R_(jaw), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+for H, ofs in ((VA, 0), (VB, 23), (AS, 41)):
+    face(H, 530, -0.005, -12)
+    face(H, 640, -0.007, -16); face(H, 1520, -0.006, -14); face(H, 1700, -0.008, -18); face(H, 1880, -0.008, -18)
+    face(H, 1925, 0.003, -4, 4, 0.002); face(H, 1975, 0.002, -2, 2, 0.002)            # relief: brows lift, mouth softens
+    for fb in range(560 + ofs, 1960, 170):                                                 # blinks
+        if 760 < fb < 1500: continue
+        face(H, fb, -0.006, -14); face(H, fb + 3, -0.006, -55); face(H, fb + 7, -0.006, -14)
 
 # ---- settle VetA's cradling hands: push each wrist target away from the bird until the glove only touches (few overlaps)
 from mathutils.bvhtree import BVHTree
@@ -353,8 +408,8 @@ def tri_tree(o, side=None):
     ev_.to_mesh_clear(); return BVHTree.FromPolygons(vs_, ps_)
 GA = OB["VetA.body"]
 BODY_C = bw((0, -0.03, 0.14))
-HANDA = {"R": (lambda: bw((-0.075, -0.03, 0.10)), Vector((0.15, 0.1, 1)), Vector((1, 0, 0)), Vector((A_POS[0] - 0.4, A_POS[1] - 0.2, 1.0))),
-         "L": (lambda: bw((-0.035, -0.075, 0.235)), Vector((0, 1, -0.45)), Vector((0, 0, -1)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.1, 1.2)))}
+HANDA = {"R": (lambda: bw((0.0, -0.12, 0.085)), Vector((0, 1, 0.2)), Vector((-1, 0, 0)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0))),
+         "L": (lambda: bw((0.0, 0.085, 0.115)), Vector((0, 1, 0.25)), Vector((1, 0, 0)), Vector((A_POS[0] - 0.45, A_POS[1] - 0.15, 1.0)))}
 for f in (530, 1000, 1500, 1960):
     for s_ in "LR":
         Wf, d_, n_, pole_ = HANDA[s_]; W = Wf()
@@ -362,10 +417,28 @@ for f in (530, 1000, 1500, 1960):
         for it in range(26):
             ev(f); bt_ = tri_tree(OB["Toucan_body"]); ht_ = tri_tree(GA, s_)
             n = len(ht_.overlap(bt_))
-            if n <= 6: break
+            if n == 0: break
             W = W + away * 0.004
             VA.key_hand(s_, f, W, d_, n_, pole=pole_)
         print("SETTLE VetA", s_, f, "iters", it, "overlaps", n)
+
+# ---- settle VetB's prosthetic grip: raise the palm off the held beak until only light contact remains
+GB = OB["VetB.body"]
+def glove_tree_side(o, rig, side):
+    dg_ = bpy.context.evaluated_depsgraph_get(); ev_ = o.evaluated_get(dg_); me_ = ev_.to_mesh(); mw_ = o.matrix_world
+    vs_ = [mw_ @ v.co for v in me_.vertices]
+    gi = [i for i, m in enumerate(o.data.materials) if m and m.name.startswith("Nitrile")]
+    wr = rig.matrix_world @ rig.pose.bones["wrist." + side].head
+    ps_ = [tuple(p.vertices) for p in me_.polygons if p.material_index in gi and (mw_ @ p.center - wr).length < 0.16]
+    ev_.to_mesh_clear(); return BVHTree.FromPolygons(vs_, ps_)
+for f in list(range(1515, 1693, 6)) + [1693]:
+    pw = pro_grip_pt(min(f, 1692)); palm = 0.016
+    for it in range(14):
+        ev(f); n = len(glove_tree_side(GB, OB["VetB"], "R").overlap(tri_tree(PRO)))
+        if n <= 30: break
+        palm += 0.004
+        grip_key(VB, "R", f, pw, PRO_D, PRO_N, pole=pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=palm)
+    if f % 30 == 3: print("SETTLE VetB prosthetic", f, "palm", round(palm, 3), "overlaps", n)
 
 # ================================================================== VOID (beats 5-8)
 V1 = Vector((11.7, 1.25, 1.05)); V2 = Vector((14.2, 3.0, -0.2)); V3 = Vector((13.6, -1.0, 0.95)); P3 = Vector((15.4, -2.4, -0.7))
@@ -568,10 +641,7 @@ for f in range(1340, 1540, 6):
     a = f * 0.35; key_loc(noz, f, Vector((cx + 0.12 * math.cos(a), cy + 0.25 * math.sin(a * 1.3), z)))
 for o in (prn_v, printed, noz, blk): key_vis(o, [(1, False), (1330, True), (1540, False)])
 # portal: hide wall patch + monitor back from camera while the camera passes through the screen
-vf_ = OB["Void_front"]
-for f, v in ((1, False), (758, True), (1527, False)):
-    vf_.visible_camera = v; vf_.keyframe_insert("visible_camera", frame=f)
-constant(vf_)
+vf_ = OB["Void_front"]   # keyed after the camera path is known (see end)
 for nm in ("Wall_patch", "Monitor_back"):
     o = OB[nm]
     for f, v in ((1, True), (690, False), (1560, True)):
@@ -592,8 +662,8 @@ ENC = BIRD_E; HEADE = BIRD_E + Vector((0, 0.03, 0.25))
 K = [  # frame, position, target, lens, focus target(None = target)
  (1, BIRD_J + Vector((0.85, 1.25, -0.55)), HEADJ + Vector((0, 0, -0.08)), 24),
  (34, BIRD_J + Vector((0.75, 0.85, 0.05)), HEADJ, 28),
- (64, STK(-48) + Vector((0.42, 0.12, 0.05)), STK(-48) * 0.4 + BEAKJ * 0.6, 28),
- (90, STK(-14) + Vector((0.36, 0.14, 0.02)), BEAKJ, 32),
+ (64, STK(-48) + Vector((0.45, 0.2, 0.28)), STK(-48) * 0.3 + BEAKJ * 0.7, 28),
+ (90, STK(-14) + Vector((0.38, 0.22, 0.12)), BEAKJ, 32),
  (104, BEAKJ + Vector((0.34, 0.12, 0.06)), BEAKJ, 38),
  (135, BEAKJ + Vector((0.12, 0.34, 0.08)), BEAKJ + Vector((0, 0.1, 0.02)), 45),
  (175, BEAKJ + Vector((-0.16, 0.30, 0.02)), BEAKJ + Vector((0, 0.18, -0.04)), 52),
@@ -608,7 +678,8 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (552, Vector((3.85, 0.0, 1.55)), BC + Vector((0, 0, 0.1)), 22),
  (592, Vector((5.55, -0.45, 1.45)), BC + Vector((0, 0, 0.15)), 28),
  (636, BEAKC + Vector((-0.36, 0.26, 0.22)), BEAKC, 36),
- (672, BEAKC + Vector((-0.22, 0.14, 0.12)), BEAKC, 42),
+ (672, BEAKC + Vector((-0.27, -0.06, 0.15)), BEAKC, 42),
+ (689, Vector((7.3, 0.0, 1.62)), SCREEN, 30),
  (705, Vector((8.1, 0.65, 1.38)), SCREEN, 30),
  (738, SCREEN + Vector((-0.42, 0, 0.0)), SCREEN + Vector((1, 0, 0)), 30),
  (756, SCREEN + Vector((0.12, 0, 0.0)), SCREEN + Vector((1.5, 0, 0)), 30),
@@ -654,6 +725,12 @@ for f in range(1, 2251):
     cam.rotation_quaternion = q; cam.keyframe_insert("rotation_quaternion", frame=f)
     cam.data.lens = fl(f); cam.data.keyframe_insert("lens", frame=f)
     foc.location = t; foc.keyframe_insert("location", frame=f)
+# void front face: camera-visible only while the camera is well inside the void and looking away from the wall
+inside = [f for f in range(1, 2251) if fp(f).x > 10.45 and f < 1490]
+f_in, f_out = (min(inside), max(inside)) if inside else (800, 1490)
+for f, v in ((1, False), (f_in, True), (f_out + 1, False)):
+    vf_.visible_camera = v; vf_.keyframe_insert("visible_camera", frame=f)
+constant(vf_); print("VOID_FRONT visible", f_in, f_out)
 json.dump([[k[0], list(k[1]), list(k[2]), k[3]] for k in K], open(os.path.join(HERE, "camera_keys.json"), "w"))
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)

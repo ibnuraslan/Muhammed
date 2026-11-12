@@ -1,0 +1,13 @@
+ToucanBeak audit, every 2 frames (1125 samples)
+HEAD_ITEM: n/a (no head-worn items in this film)
+BIRD_HOVER       0  
+BIRD_SINK        0  
+HAND_IN_BIRD     0  
+HAND_IN_PROP     0  
+HAND_FLOAT       0  
+HAND_HAND        0  
+HAND_SELF        3  f1699 VetB R hand into own torso/clothes/head 1; f1701 VetB R hand into own torso/clothes/head 87; f1703 VetB R hand into own torso/clothes/head 7
+HAND_OTHER       0  
+CAMERA_INSIDE    0  
+PROP_FLOAT       0  
+counts {'toe_samples': 1125, 'hand_rule_frames': 723, 'hand_checks': 1420}
