@@ -85,7 +85,7 @@ for b in ("TwinA", "TwinB", "TwinA_old", "TwinB_old", "TwinA_vold", "King", "Gua
 def P(pos, yaw): return Matrix.Translation(V(pos)) @ Matrix.Rotation(R_(yaw), 4, 'Z')
 SETDEF = [  # name, frames [on, off), entry portal, exit portal (local pos, yaw of travel)
     ("S1_Courtyard", 1, 158, ((0, -14, 4), 0), ((4.6, -1.2, 4.2), 0)),
-    ("S2_ThroneHall", 158, 575, ((0, -3.5, 2.6), 0), ((-1.0, 4.62, 1.22), 0)),
+    ("S2_ThroneHall", 158, 575, ((0, -3.5, 2.6), 0), ((-1.0, 4.62, 1.22), -29)),
     ("S3_Street", 575, 705, ((0, -9, 3.0), 0), ((-2.2, 6.0, 1.9), 90)),
     ("S4_Chamber", 705, 1630, ((0, -3.2, 1.8), 0), ((5.2, -1.0, 1.9), -90)),
     ("S5_Church", 1630, 1850, ((0, -16, 2.5), 0), ((0, 2.0, 3.2), 0)),
@@ -304,7 +304,10 @@ G = human("Guard", "Guard_S2", c); hat(G.a, A_["tricorn"], c)
 G.stand(175, pos=(1.8, 4.2), yaw=200); G.arms_down(175); G.face(175, brow=1.5)
 G.stand(200, pos=(1.8, 4.2), yaw=200, flex=10); G.arms_down(200)
 G.H.walk(lambda f: V((1.8, 4.2, 0)).lerp(V((-3.5, -7.5, 0)), smooth((f - 205) / 90)), lambda f: 160, 205, 295, stride=1.5, duty=0.42, lift=0.14, lean=14)
-G.arms_down(205); G.arms_down(295); G.stand(296, pos=(-3.5, -7.5), yaw=160); G.stand(590, pos=(-3.5, -7.5), yaw=160); G.arms_down(590)
+G.arms_down(205)
+for f_ in range(220, 296, 15):   # hands follow the running body
+    u_ = smooth((f_ - 205) / 90); G.pos = V((1.8, 4.2)).lerp(V((-3.5, -7.5)), u_); G.yaw = 160; G.arms_down(f_, sway=0.05 * math.sin(f_ / 4))
+G.pos = V((-3.5, -7.5)); G.arms_down(295); G.stand(296, pos=(-3.5, -7.5), yaw=160); G.stand(590, pos=(-3.5, -7.5), yaw=160); G.arms_down(590)
 for x in (-3.5, 3.5):
     W_ = human("Guard", "Guard_S2b_%d" % (x > 0), c); hat(W_.a, A_["tricorn"], c)
     crowd_idle(W_, 175, 590, (x, 1.0), 90 if x > 0 else -90, "watch", seed=int(x))
@@ -363,6 +366,13 @@ for f in (588, 600, 612, 624, 632, 640, 645):
     sc.frame_set(f); hw = (hand_world(S1_.a, "L") + hand_world(S1_.a, "R")) / 2
     pot.matrix_world = Matrix.Translation(ROOT[2].matrix_world.inverted() @ hw + V((0, 0, -0.12)))
     pot.keyframe_insert("location", frame=f)
+for f in (588, 600, 612, 624, 632, 640, 645):
+    sc.frame_set(f); bpy.context.view_layer.update()
+    Pw = pot.matrix_world.translation.copy() if pot.parent is None else pot.matrix_world.translation.copy()
+    Pw = ROOT[2].matrix_world @ pot.location
+    lat = ROOT[2].matrix_world.to_3x3() @ (Matrix.Rotation(R_(S1_.yaw), 3, 'Z') @ V((1, 0, 0)))
+    for s_, sx in (("L", 1), ("R", -1)):
+        grip_object(S1_.a, s_, f, pot, Pw + lat * (0.085 * sx) + V((0, 0, 0.12)), -lat * sx)
 pot.hide_render = False; pot.keyframe_insert("hide_render", frame=648); pot.hide_render = True; pot.keyframe_insert("hide_render", frame=649)
 ip = pot.location.copy(); ip.z = 0.0
 for k in range(10):
@@ -565,7 +575,8 @@ cam(1440, (3.4, -0.9, 1.7), (3.0, -2.8, 1.2), 32)
 cam(1462, (3.8, -1.3, 1.7), (2.4, -2.2, 1.25), 30)
 cam(1480, (4.2, -1.8, 1.8), (2.5, 0.2, 1.2), 28)
 cam(1545, (2.6, 0.2, 1.5), (0.0, 1.6, 1.2), 30)
-cam(1600, (3.5, -0.6, 1.7), (2.8, -2.8, 1.2), 30)
+cam(1590, (2.9, 0.1, 1.6), (0.3, 1.6, 1.2), 30)
+cam(1612, (3.9, -0.7, 1.8), (0.3, 1.6, 1.2), 30)
 cam(1648, (5.15, -1.0, 1.9), (8.0, -1.0, 1.9), 28)
 finish_set(3)
 
@@ -574,6 +585,10 @@ c = S(4)
 plane("ground", c, 80, (0, 0, 0), M["snow"])
 chg = inst(A_["church"], c, (0, 22, 0), rz=180)
 _cm = A_["church"].data
+for _m in (M["roof"], M["castle"]):
+    _bs = _m.node_tree.nodes["Principled BSDF"]
+    if _bs.inputs["Base Color"].links: _m.node_tree.links.new(_bs.inputs["Base Color"].links[0].from_socket, _bs.inputs["Emission Color"])
+    _bs.inputs["Emission Strength"].default_value = 0.6
 _cm.materials.append(M["roof"]); _cm.materials.append(M["castle"]); _iroof, _istone = len(_cm.materials) - 2, len(_cm.materials) - 1
 for _p in _cm.polygons:
     _mn = _cm.materials[_p.material_index].name if _cm.materials[_p.material_index] else ""
@@ -621,7 +636,7 @@ for ci, x in enumerate((-1.3, 1.3)):
     path = lambda f, y0=y0, y1=y1: V((0, y0 + (y1 - y0) * (f - 1650) / 222, 0))
     for f in range(1650, 1873, 6):
         p = path(f); cf.location = V((x, p.y + 0.0, 0.72)); cf.rotation_euler = (0, 0, R_(90)); cf.keyframe_insert("location", frame=f)
-    for k, (dx, dy) in enumerate(((-0.42, -0.6), (0.42, -0.6), (-0.42, 0.6), (0.42, 0.6))):
+    for k, (dx, dy) in enumerate(((-0.55, -0.6), (0.55, -0.6), (-0.55, 0.6), (0.55, 0.6))):
         A = human(("Townsman", "Guard", "Townsman", "Guard")[k], "Bearer_S5_%d_%d" % (ci, k), c)
         A.H.walk(lambda f, x=x, dx=dx, dy=dy, path=path: V((x + dx, path(f).y + dy, 0)), lambda f: 0, 1650, 1872, stride=0.6, duty=0.6, lift=0.06, lean=3)
         s_in = "R" if dx > 0 else "L"; s_out = "L" if dx > 0 else "R"
@@ -629,14 +644,15 @@ for ci, x in enumerate((-1.3, 1.3)):
             yy = path(f).y + dy
             A.pos = V((x + dx, yy)); A.yaw = 0
             sx = 1 if s_in == "L" else -1
-            A.hand(f, s_in, (0.13 * sx, -0.04, 0.88), d=(0.25 * sx, -0.1, -1), n=(sx, 0, 0), pole=(-0.15 * sx, 0.45, 1.0))
+            A.hand(f, s_in, (0.25 * sx, -0.04, 0.9), d=(0.15 * sx, -0.1, -1), n=(sx, 0, 0), pole=(0.1 * sx, 0.45, 1.0))
             A.hand(f, s_out, (-0.35 * sx, -0.11, 0.9), d=(0, 0, -1), n=(sx, 0, 0), pole=(-0.3 * sx, 0.6, 1.1))
             A.face(f, brow=0.8, lids=0.35, frown=0.6); grip(A.R, f, s_in, 0.9)
 for k, b in enumerate(("TwinA_old", "TwinB_old")):
     A = human(b, b + "_S5", c)
     A.H.walk(lambda f, k=k: V((-0.5 + k * 1.0, 12.5 - 15.0 * (f - 1650) / 222, 0)), lambda f: 0, 1650, 1872, stride=0.6, duty=0.6, lift=0.06, lean=4)
-    for f in range(1650, 1873, 24):
-        A.arms_down(f, sway=0.01); A.face(f, brow=1.6, lids=0.4, frown=1.0)
+    for f in range(1630, 1873, 12):
+        A.pos = V((-0.5 + k * 1.0, 12.5 - 15.0 * (f - 1650) / 222)); A.yaw = 0   # hands follow the walking body
+        A.arms_down(f, sway=0.02 * math.sin(f / 9 + k)); A.face(f, brow=1.6, lids=0.4, frown=1.0)
 # falling snow
 bpy.ops.mesh.primitive_ico_sphere_add(radius=0.012, subdivisions=1); flake = bpy.context.active_object; flake.name = "flake"; link(flake, LIBC); setmat(flake, simple("m_flake", (1, 1, 1), rough=0.6))
 sn = gn_fall("SnowEmit", c, [(random.uniform(-12, 12), random.uniform(-18, 12), random.uniform(0, 14)) for _ in range(7000)], flake, "snow", H=14.0, speed=0.02)
@@ -850,6 +866,7 @@ cam(2250, (1.6, 0.6, 1.4), (3.3, -1.6, 1.1), 32)
 cam(2320, (2.3, -0.4, 1.35), (3.25, -1.55, 1.15), 45)
 cam(2400, (2.0, -2.4, 1.3), (3.2, -1.5, 1.15), 40)
 cam(2448, (2.4, -0.2, 1.65), (3.3, -1.6, 1.15), 34)
+cam(2472, (3.7, -0.5, 1.6), (3.3, -1.6, 1.15), 32)
 cam(2470, (2.6, -0.4, 1.5), (3.25, -1.6, 1.15), 34)
 cam(2506, (4.65, -1.0, 1.7), (8.0, -1.0, 1.7), 28)
 finish_set(6)
@@ -915,6 +932,11 @@ for f, i in TR:
         CK.append((f - 12, i, li @ (p0 - d * 0.9), li @ (p0 + (r70 @ d) * 5), 28))
         CK.append((f, i, li @ p0, li @ (p0 + (r35 @ d) * 5), 28))
         CK.append((f + 12, i + 1, li2 @ (p0 + d * 0.9), li2 @ (p0 + d * 7 + V((0, 0, -2.2 if i == 5 else 0.0))), 28))   # whip ends facing forward, onto the next beat (down onto the bed for the bedroom)
+    elif i in (3, 6):   # window exits: keep the room's characters until the last frames, whip out through the window
+        back = {3: V((0.3, 1.6, 1.2)), 6: V((3.3, -1.6, 1.15))}[i]
+        CK.append((f - 8, i, li @ (p0 - d * 0.8), back, 30))
+        CK.append((f, i, li @ p0, li @ (p0 + d * 6), 26))
+        CK.append((f + 18, i + 1, li2 @ (p0 + d * 2.2), li2 @ (p0 + d * 8), 26))
     else:
         CK.append((f - 5, i, li @ (p0 - d * 0.7), li @ (p0 + d * 4), 26))
         CK.append((f, i, li @ p0, li @ (p0 + d * 6), 26))

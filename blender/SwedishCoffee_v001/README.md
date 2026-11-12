@@ -1,6 +1,6 @@
 # SwedishCoffee (Connect27)
 
-Current package: `blender/SwedishCoffee_v006/SwedishCoffee_v006_60fps.blend` (75 MB, normal git). This is v005 plus the director's v005 review fixes; beats.json is unchanged.
+Current package: `blender/SwedishCoffee_v007/SwedishCoffee_v007_60fps.blend` (75 MB, normal git). This is v006 plus the director's v006 review fixes (cathedral roof band, empty cells at 9.5 / 26.5–27 / 41 s, soldier's pot grip with grip_object) and walking-arm fixes; beats.json is unchanged.
 - All hands use `pipeline/hand_poses.py`: its `add_hand_limits` and its pose table for every grip (relaxed idle hands, wrap grips on the pots and the dancers' joined hands, a flat palm for the king's raised hand and his hands on the floor, a fist for the masked man).
 - Empty cells reworked: 7.5–9 s keeps the king behind the cup and steam, the ball's couples are closer to the camera, 40.5 s holds on the old twin, and the square starts closer.
 - The ledger cover is plain (the model's spine had lettering).

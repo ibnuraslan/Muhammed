@@ -52,3 +52,22 @@ Not changed (checked, plausible): soldier smashing the pot (both hands on it, sh
 - **Cathedral roof:** roof faces reassigned to our roof material, but the band still renders black at 27.5–30 s. Not resolved.
 - **QA:** `v006_qa_check_director.json` (unchanged script) and `v006_qa_check_setaware.json` (viewport synced to render each frame): INSIDE 0, FILL 0. EMPTY are all "no character in view" (character list built at frame 1). BACKHEAD 1 is f1 (intended).
 - Ledger cover changed to plain leather (the model's spine had lettering).
+
+
+## v007 (director review of v006)
+- **Cathedral roof band:** not a holdout, shadow catcher, unconnected output or culled material (checked in that order). The faces are recessed under the eaves and receive no light, so they render black. Fix: the roof faces use our slate roof material and the recessed band faces our stone, both with a gentle self-illumination (emission 0.6 of their own texture), so they read as dark slate and stone at 27.5–30 s.
+- **Empty cells:**
+  - 9.5 s: the steam pass now looks through the steam toward the king (exit yaw −29°).
+  - 26.5–27.0 s: the camera holds on the twins and servants until 8 frames before the window, then whips out.
+  - 41.0 s: same treatment for the very old twin; the cell now lands on the whip, showing the side table, candle and the twin at the edge.
+- **Close-up 2:** `grip_object` on the soldier's pot at every pot key; both hands wrap the pot.
+- **Found on review and fixed:**
+  - The old twins walking behind the coffins held their arms out (their hand targets didn't follow the walk).
+  - The guard who runs out of the throne hall had the same bug.
+  - The coffin bearers walked inside the coffin's width, with their inner hands inside their own hips. They now walk at ±0.55 m with the hand on the side rail.
+- **Re-check:**
+  - set-aware clip scan: bad ranges [(1915, 1915)], a single sample of a fleeing dancer's raised hands.
+  - camera proximity: 1 sample at 0.31 m.
+  - qa_check set-aware: INSIDE 0, FILL 0, BACKHEAD 1 (f1, intended), EMPTY 413 (all "no character in view", character list built at frame 1).
+  - qa_check unchanged: INSIDE 74, FILL 42, EMPTY 525, BACKHEAD 2 (hidden sets).
+  - Close-ups 3 and 13 are still black review images; the film frames at those moments are fine (see the sheets).
