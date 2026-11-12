@@ -85,6 +85,11 @@ def sheet_screen(seed, w=1600, h=900):
 
 def make_all():
     os.makedirs(GEN, exist_ok=True)
+    names = dict(pages=[f"page_text_{k}.png" for k in range(6)] + [f"page_table_{10 + k}.png" for k in range(3)],
+                 photos=[f"photo_{k}.png" for k in range(6)], screens=[f"screen_{k}.png" for k in range(3)])
+    paths = {k: [os.path.join(GEN, n) for n in v] for k, v in names.items()}
+    if all(os.path.exists(q) for v in paths.values() for q in v):
+        return paths                      # already generated (seeded, identical): don't rewrite tracked files
     out = dict(pages=[page(k) for k in range(6)] + [page(10 + k, kind="table") for k in range(3)],
                photos=[photo(k) for k in range(6)], screens=[sheet_screen(k) for k in range(3)])
     return out
