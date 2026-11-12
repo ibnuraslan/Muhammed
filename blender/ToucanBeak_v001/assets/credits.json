@@ -160,5 +160,59 @@
   "license": "CC Attribution",
   "source": "https://sketchfab.com/3d-models/bd85a8005ff0403cab2f1e9845016b8f",
   "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "shelf": {
+  "uid": "8ee9e268c3e54ac6a2850930081af3aa",
+  "title": "Simple Wall Shelf",
+  "author": "Blender3D",
+  "author_profile": "https://sketchfab.com/Blender3D",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/8ee9e268c3e54ac6a2850930081af3aa",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "bottles": {
+  "uid": "3cdb3831222748558dbf76ba4b116cc2",
+  "title": "Some more simple Bottles....",
+  "author": "Ethan Cox",
+  "author_profile": "https://sketchfab.com/EthanfromEngland",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/3cdb3831222748558dbf76ba4b116cc2",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "lamp": {
+  "uid": "7377ec591df04445a1aae370017aaa13",
+  "title": "Desk lamp",
+  "author": "KaramellGlass",
+  "author_profile": "https://sketchfab.com/BlueHour",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/7377ec591df04445a1aae370017aaa13",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "potplant": {
+  "uid": "1ab9bf841df04c07b1819be596327629",
+  "title": "Monstera Deliciosa Potted Mid-Century plant",
+  "author": "Giora",
+  "author_profile": "https://sketchfab.com/ChubbyPanda",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/1ab9bf841df04c07b1819be596327629",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "pothos": {
+  "uid": "e9832f38484f4f85b3f9081b51fa3799",
+  "title": "[FREE] Pothos Potted Plant - Money Plant",
+  "author": "AllQuad",
+  "author_profile": "https://sketchfab.com/AllQuad",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/e9832f38484f4f85b3f9081b51fa3799",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
+ },
+ "frame": {
+  "uid": "5b4f6ab0cd54433c82b429b42f4c9259",
+  "title": "Picture Frame",
+  "author": "Wyme",
+  "author_profile": "https://sketchfab.com/Wyme",
+  "license": "CC Attribution",
+  "source": "https://sketchfab.com/3d-models/5b4f6ab0cd54433c82b429b42f4c9259",
+  "via": "Objaverse (allenai/objaverse on Hugging Face)"
  }
 }

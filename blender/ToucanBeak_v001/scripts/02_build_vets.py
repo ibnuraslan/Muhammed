@@ -33,8 +33,8 @@ def fabric_mat(name, rgb):
 def make_glove():
     if "Nitrile_glove" in bpy.data.materials: return bpy.data.materials["Nitrile_glove"]
     glove = bpy.data.materials.new("Nitrile_glove"); glove.use_nodes = True
-    gb = glove.node_tree.nodes["Principled BSDF"]; gb.inputs["Base Color"].default_value = (0.04, 0.08, 0.36, 1)
-    gb.inputs["Roughness"].default_value = 0.38; gb.inputs["Subsurface Weight"].default_value = 0.0
+    gb = glove.node_tree.nodes["Principled BSDF"]; gb.inputs["Base Color"].default_value = (0.06, 0.12, 0.42, 1)
+    gb.inputs["Roughness"].default_value = 0.42; gb.inputs["Sheen Weight"].default_value = 0.25; gb.inputs["Subsurface Weight"].default_value = 0.0
     gn_ = glove.node_tree.nodes.new("ShaderNodeTexNoise"); gn_.inputs["Scale"].default_value = 2500
     gbp = glove.node_tree.nodes.new("ShaderNodeBump"); gbp.inputs["Strength"].default_value = 0.08
     glove.node_tree.links.new(gn_.outputs["Fac"], gbp.inputs["Height"]); glove.node_tree.links.new(gbp.outputs["Normal"], gb.inputs["Normal"])
@@ -67,8 +67,12 @@ def person(name, gender, age, race, hair, clothes, shoes, skin, x, scrub_rgb, gl
                 w = sum(g.weight for g in v.groups if any(k in vg.get(g.group, "") for k in ("wrist", "finger", "metacarpal", "thumb")))
                 if w > 0.5: hand.add(v.index)
             glove = make_glove(); ch.data.materials.append(glove); gi = len(ch.data.materials) - 1; n = 0
+            # clean cuff ~5 cm above the wrist: faces near either wrist joint (rest pose) also get the glove
+            arm_ = bpy.data.objects[name].data.bones
+            wr_ = [arm_["wrist." + s_].head_local for s_ in "LR"]
             for p in ch.data.polygons:
-                if all(v in hand for v in p.vertices): p.material_index = gi; n += 1
+                near = min((p.center - w_).length for w_ in wr_) < 0.055
+                if all(v in hand for v in p.vertices) or near: p.material_index = gi; n += 1
             print("GLOVE faces", name, ch.name, n)
     return rig
 

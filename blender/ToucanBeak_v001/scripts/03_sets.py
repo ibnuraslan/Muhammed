@@ -205,6 +205,7 @@ weapon = imp("stick", C_P, size=0.95, base=False); weapon.name = "Strike_stick"
 V = np.array([v.co[:] for v in weapon.data.vertices]); ax = int(np.argmax(V.max(0) - V.min(0)))
 if ax == 0: weapon.data.transform(Matrix.Rotation(R_(90), 4, 'Y'))
 if ax == 1: weapon.data.transform(Matrix.Rotation(R_(90), 4, 'X'))
+weapon.data.transform(Matrix.Diagonal((0.38, 0.38, 1.0, 1.0)))   # slimmer: a swung branch, not a log
 weapon.data.transform(Matrix.Translation(Vector((0, 0, 0.42))))   # pivot near one end (z from -0.05 to 0.9)
 
 # dust motes in the light (background life)
@@ -344,6 +345,35 @@ chair = imp("chair", C_C, size=1.05, axis=2, loc=(9.0, 1.0, 0), rotz=R_(-70))
 bench = box("Side_bench", C_C, (0.65, 1.5, 0.05), (9.62, -1.6, 0.88), M_wood, bevel=0.004); cube_uv(bench)
 for k, (dy) in enumerate((-0.68, 0.68)):
     o = box("Bench_leg_%d" % k, C_C, (0.6, 0.04, 0.86), (9.62, -1.6 + dy, 0.43), M_steel, bevel=0.003)
+# ---- clinic dressing (director C note): shelves with supplies, exam lamp, framed photos (no text), plants
+def wall_face(o, want):
+    """rotate o about z so its thinnest horizontal side faces `want` (a unit xy vector pointing away from the wall)"""
+    V = np.array([v.co[:] for v in o.data.vertices]); d = V.max(0) - V.min(0)
+    if d[0] < d[1]: o.data.transform(Matrix.Rotation(R_(90), 4, 'Z'))
+    o.rotation_euler = (0, 0, math.atan2(want[1], want[0]) - math.pi / 2)
+for k, x in enumerate((7.3, 8.45)):
+    sh = imp("shelf", C_C, size=0.95, loc=(x, 2.83, 1.05)); wall_face(sh, (0, -1)); sh.name = "Shelf_%d" % k
+    V = np.array([v.co[:] for v in sh.data.vertices]); shz = V[:, 2].max() - V[:, 2].min()
+    for j in range(3):
+        b_ = imp("bottles", C_C, size=0.24, loc=(x - 0.3 + 0.3 * j, 2.8, 1.05 + 0.005 + (shz * 0.5 if j == 1 else 0.0)))
+        b_.rotation_euler = (0, 0, random.uniform(0, 6.28)); b_.name = "Supplies_%d_%d" % (k, j)
+for j, (x, y) in enumerate([(9.75, -1.0), (9.5, -2.2)]):
+    b_ = imp("bottles", C_C, size=0.22, loc=(x, y, 0.905)); b_.name = "Supplies_bench_%d" % j
+lmp = imp("lamp", C_C, size=0.62, axis=2, loc=(7.58, -0.27, 0.885), rotz=R_(150)); lmp.name = "Exam_lamp"
+pp = imp("potplant", C_C, size=1.25, axis=2, loc=(9.55, 2.55, 0)); pp.name = "Clinic_plant"
+po = imp("pothos", C_C, size=0.45, axis=2, loc=(9.72, 0.45, DESK_Z if 'DESK_Z' in dir() else 0.75)); po.name = "Desk_plant"
+M_photo = bpy.data.materials.new("Photo_print"); M_photo.use_nodes = True
+pt = M_photo.node_tree; pb2 = pt.nodes["Principled BSDF"]; it = pt.nodes.new("ShaderNodeTexImage")
+it.image = bpy.data.images.load(os.path.join(PH, "hdri", "forest_slope_1k.hdr"), check_existing=True)
+pt.links.new(it.outputs[0], pb2.inputs["Base Color"]); pb2.inputs["Roughness"].default_value = 0.35
+for k, (loc, face) in enumerate([((9.93, -0.75, 1.55), (-1, 0)), ((6.6, 2.93, 1.6), (0, -1)), ((5.3, -2.93, 1.55), (0, 1))]):
+    fr_ = imp("frame", C_C, size=0.62, loc=loc, base=False); wall_face(fr_, face); fr_.name = "Photo_frame_%d" % k
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, -30)); ph_ = bpy.context.active_object; link(ph_, C_C); ph_.name = "Photo_%d" % k
+    ph_.data.materials.append(M_photo); ph_.scale = (0.46, 0.34, 1)
+    ph_.rotation_euler = (R_(90), 0, math.atan2(face[1], face[0]) - math.pi / 2)
+    ph_.location = Vector(loc) + Vector((face[0], face[1], 0)) * 0.012
+    for l_ in ph_.data.uv_layers.active.data: l_.uv = (0.15 + l_.uv[0] * 0.35 + 0.2 * k, 0.35 + l_.uv[1] * 0.3)
+
 printer = imp("printer", C_C, size=0.55, loc=(9.62, -1.65, 0.905), rotz=R_(-90), join=True)
 syr = imp("syringe", C_P, size=0.12, base=False); syr.name = "Glue_syringe"
 twz = imp("tweezers", C_P, size=0.12, base=False); twz.name = "Tweezers"

@@ -11,10 +11,10 @@ def srgb(h):
 mv = bpy.data.materials["Void_gradient"]
 for n in mv.node_tree.nodes:
     if n.type == 'VALTORGB':
-        n.color_ramp.elements[0].color = srgb("#E8F7FF"); n.color_ramp.elements[0].position = 0.3
-        n.color_ramp.elements[1].color = srgb("#4FC3F7"); n.color_ramp.elements[1].position = 0.8
+        n.color_ramp.elements[0].color = srgb("#E8F7FF"); n.color_ramp.elements[0].position = 0.38
+        n.color_ramp.elements[1].color = (0.0, 0.33, 0.85, 1); n.color_ramp.elements[1].position = 0.62   # saturated cyan (pre-AgX), reads as #4FC3F7
     if n.type == 'MIX': n.inputs[0].default_value = 0.04
-    if n.type == 'EMISSION': n.inputs[1].default_value = 1.7
+    if n.type == 'EMISSION': n.inputs[1].default_value = 2.4
 for L in [o for o in OB if o.name.startswith("Void_light_")]:
     L.data.energy *= 2.2; L.data.color = (1, 1, 1)
 # ---- explainer materials readable on a light background
@@ -32,6 +32,21 @@ for n in gm.node_tree.nodes:
     if n.type == 'EMISSION': n.inputs[0].default_value = (0.02, 0.25, 0.85, 1); n.inputs[1].default_value = 2.0
     if n.type == 'LAYER_WEIGHT': n.inputs[0].default_value = 0.55
 b = bsdf(bpy.data.materials["Heavy_beak"]); b.inputs["Base Color"].default_value = (0.25, 0.25, 0.28, 1)
+
+# back (void-facing) side of the clinic's east wall: same sky gradient in world z, so the exit whip sees sky + the bright screen hole
+mw_ = mv.copy(); mw_.name = "Void_gradient_wall"; nt_ = mw_.node_tree
+tc_ = next(n for n in nt_.nodes if n.type == 'TEX_COORD'); sp_ = next(n for n in nt_.nodes if n.type == 'SEPXYZ')
+geo = nt_.nodes.new("ShaderNodeNewGeometry"); mr = nt_.nodes.new("ShaderNodeMapRange")
+mr.inputs[1].default_value = -1.8; mr.inputs[2].default_value = 4.2
+nt_.links.new(geo.outputs["Position"], sp_.inputs[0])
+zl = [l for l in nt_.links if l.from_node == sp_ and l.from_socket.name == "Z"]
+for l in zl:
+    to = l.to_socket; nt_.links.remove(l); nt_.links.new(sp_.outputs["Z"], mr.inputs[0]); nt_.links.new(mr.outputs[0], to)
+for o in OB:
+    if o.name.startswith("WallE_") or o.name == "Wall_patch":
+        o.data.materials.append(mw_); k = len(o.data.materials) - 1
+        for p_ in o.data.polygons:
+            if (o.matrix_world.to_3x3() @ p_.normal).x > 0.9: p_.material_index = k
 # ---- bright clinic
 for o in OB:
     if o.type == 'LIGHT' and (o.name.startswith("Lamp_") or o.name.startswith("Exam_")): o.data.energy *= 1.8

@@ -154,7 +154,7 @@ base_q = Vector((0, 0, 1)).rotation_difference(d0)
 pivot.rotation_mode = 'QUATERNION'
 def stick_ang(f, a):
     pivot.rotation_quaternion = Quaternion(Vector((1, 0, 0)), R_(a)) @ base_q; pivot.keyframe_insert("rotation_quaternion", frame=f)
-for f, a in ((1, -95), (30, -80), (60, -48), (85, -18), (102, 0), (110, 7), (130, 14), (160, 20), (200, 34), (260, 70), (300, 100)):
+for f, a in ((1, -95), (30, -80), (60, -48), (85, -18), (102, 0), (108, 3), (124, -12), (150, -45), (190, -85), (240, -110), (300, -120)):
     stick_ang(f, a)
 key_vis(stick, [(1, True), (300, False)])
 # tip piece + shards: fly from the beak in slow motion (time scale 0.3 until 220)
@@ -201,8 +201,8 @@ for f in range(392, 470, 2):
     t = (f - 392) / FPS; p = fw.translation + Vector((0, 0.15 * t, -4.9 * t * t)); p.z = max(p.z, gz + 0.025)
     key_loc(FIG_FALL, f, p, (t * 6, t * 2, 0))
 key_vis(FIG_FALL, [(1, False), (392, True), (528, False)])
-key_vis(FIG, [(1, True), (392, False)])
-key_vis(TWIG, [(1, True), (528, False)])
+key_vis(FIG, [(1, False), (262, True), (392, False)])
+key_vis(TWIG, [(1, False), (262, True), (528, False)])
 
 # background toucan (second bird, static copy) on the far perch, head bob = life
 bg = bpy.data.objects.new("BG_toucan", None); C_ANIM.objects.link(bg)
@@ -236,7 +236,12 @@ people = {}
 for nm in ("VetA", "VetB", "Assist"):
     r = make_human_ctrl(OB[nm]); people[nm] = Human(r)
 VA, VB, AS = people["VetA"], people["VetB"], people["Assist"]
-# hands rule: joint limits (local space) on fingers / thumbs / wrists
+# hands rule: joint limits (local space) on fingers / thumbs / wrists; wrist copy-rotation softened (full influence twisted
+# the wrist into a "balloon" candy-wrapper, found in the C close-ups)
+for nm in ("VetA", "VetB", "Assist"):
+    for s_ in "LR":
+        for c in OB[nm].pose.bones["wrist." + s_].constraints:
+            if c.type == 'COPY_ROTATION': c.influence = 0.35
 for nm in ("VetA", "VetB", "Assist"):
     for pb in OB[nm].pose.bones:
         n = pb.name
@@ -265,7 +270,7 @@ for f in (530, 700, 1500, 1960):
     stand(VB, f, B_POS, 0, flex=8, head=(18, 0), spine_flex=10)
 # VetA cradles the bird the whole clinic stay
 for f in (530, 1000, 1500, 1960):
-    VA.key_hand("R", f, bw((0.0, -0.12, 0.085)), Vector((0, 1, 0.2)), Vector((-1, 0, 0)), pole=Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0)))
+    VA.key_hand("R", f, bw((-0.11, -0.06, 0.035)), Vector((0, 1, -0.1)), Vector((0, 0, -1)), pole=Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0)))
     VA.key_hand("L", f, bw((0.0, 0.085, 0.115)), Vector((0, 1, 0.25)), Vector((1, 0, 0)), pole=Vector((A_POS[0] - 0.45, A_POS[1] - 0.15, 1.0)))
 # scanner sweeping (VetB right hand), beat 4
 SCN = OB["Scanner"]; SCN.rotation_mode = 'QUATERNION'
@@ -303,7 +308,7 @@ SYR, TWZ, PIN = OB["Glue_syringe"], OB["Tweezers"], OB["Pin"]
 seam = bw(LB_base + (LB_tip - LB_base) * 0.42 + Vector((0, 0.012, 0.02)))
 _pw = pro_grip_pt(1692)
 grip_key(VB, "R", 1693, _pw, PRO_D, PRO_N, pole=_pw + Vector((0.35, 0.35, -0.15)), reach=0.075, palm=0.016)
-VB.key_hand("R", 1702, _pw + Vector((0.0, 0.16, 0.2)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=_pw + Vector((0.3, 0.5, 0.0)))
+VB.key_hand("R", 1702, _pw + Vector((0.14, 0.04, 0.22)), Vector((0, -1, -0.3)), Vector((0, 0, -1)), pole=_pw + Vector((0.3, 0.5, 0.0)))
 VB.key_hand("L", 1712, Vector((7.38, 0.18, TZ + 0.03)), Vector((0, -1, 0)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.0)))
 VB.key_hand("L", 1719, Vector((7.18, 0.12, TZ + 0.24)), Vector((-1, -0.3, -0.4)), Vector((0, 0, -1)), pole=Vector((7.6, 0.8, 1.2)))
 for f, s_ in ((1726, 0.1), (1744, 0.0), (1768, 0.0), (1792, 0.08)):
@@ -408,7 +413,7 @@ def tri_tree(o, side=None):
     ev_.to_mesh_clear(); return BVHTree.FromPolygons(vs_, ps_)
 GA = OB["VetA.body"]
 BODY_C = bw((0, -0.03, 0.14))
-HANDA = {"R": (lambda: bw((0.0, -0.12, 0.085)), Vector((0, 1, 0.2)), Vector((-1, 0, 0)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0))),
+HANDA = {"R": (lambda: bw((-0.11, -0.06, 0.035)), Vector((0, 1, -0.1)), Vector((0, 0, -1)), Vector((A_POS[0] + 0.45, A_POS[1] - 0.15, 1.0))),
          "L": (lambda: bw((0.0, 0.085, 0.115)), Vector((0, 1, 0.25)), Vector((1, 0, 0)), Vector((A_POS[0] - 0.45, A_POS[1] - 0.15, 1.0)))}
 for f in (530, 1000, 1500, 1960):
     for s_ in "LR":
@@ -617,15 +622,14 @@ key_vis(hollow, [(1, False), (1330, True), (1530, False)])
 prn = OB["printer"]; prn_v = bpy.data.objects.new("Printer_void", prn.data); C_ANIM.objects.link(prn_v)
 prn_v.location = P3; prn_v.scale = (3.2, 3.2, 3.2); prn_v.rotation_euler = (0, 0, R_(-60))
 Vp = np.array([v.co[:] for v in prn.data.vertices]); bed_z = P3.z + 3.2 * (Vp[:, 2].min() + 0.18 * np.ptp(Vp[:, 2]))
-printed = void_copy(UP, "Printing_beak", Vector((P3.x, P3.y, bed_z + 0.0)) + Vector((0, 0, 0.0)), 3.0, M_pla)
-pc_ = bpy.data.objects.new("Print_clip", bpy.data.meshes.new("Print_clip")); C_ANIM.objects.link(pc_)
-bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0); bm.to_mesh(pc_.data); bm.free(); pc_.hide_render = True; pc_.display_type = 'WIRE'
+printed = void_copy(UP, "Printing_beak", Vector((P3.x, P3.y, bed_z + 0.0)), 4.0, M_pla)
 Vb_ = np.array([printed.matrix_world @ Vector(v.co) for v in printed.data.vertices]); zmin, zmax = Vb_[:, 2].min(), Vb_[:, 2].max()
 printed.location.z += bed_z - zmin; zmax += bed_z - zmin; zmin = bed_z
-for f, h in ((1, 0.001), (1420, 0.2), (1530, 0.75)):
-    pc_.scale = (1.5, 1.5, (zmax - zmin) * h); pc_.location = (P3.x, P3.y, zmin + (zmax - zmin) * h / 2)
-    pc_.keyframe_insert("scale", frame=f); pc_.keyframe_insert("location", frame=f)
-b2 = printed.modifiers.new("clip", 'BOOLEAN'); b2.object = pc_; b2.operation = 'INTERSECT'; b2.solver = 'EXACT'
+# printing reveal: the beak rises layer by layer from the bed (scale in z about the bed), no boolean (scan mesh not manifold)
+grw = bpy.data.objects.new("Print_grow", None); C_ANIM.objects.link(grw); grw.location = (printed.location.x, printed.location.y, zmin)
+bpy.context.view_layer.update(); mwp = printed.matrix_world.copy(); printed.parent = grw; printed.matrix_parent_inverse = grw.matrix_world.inverted(); printed.matrix_world = mwp
+for f, h in ((1, 0.02), (1340, 0.02), (1420, 0.35), (1530, 1.0)):
+    grw.scale = (1, 1, h); grw.keyframe_insert("scale", frame=f)
 M_brass = bpy.data.materials.new("Brass"); M_brass.use_nodes = True; bs = M_brass.node_tree.nodes["Principled BSDF"]
 bs.inputs["Base Color"].default_value = (0.8, 0.55, 0.25, 1); bs.inputs["Metallic"].default_value = 1; bs.inputs["Roughness"].default_value = 0.3
 bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.035, radius2=0.004, depth=0.06, location=(0, 0, -50)); noz = bpy.context.active_object; noz.name = "Nozzle"
@@ -637,9 +641,10 @@ blk.data.materials.append(OB["Steel"].active_material if "Steel" in OB else bpy.
 cx, cy = P3.x, P3.y
 for f in range(1340, 1540, 6):
     h = 0.001 + (0.2 - 0.001) * min(1, max(0, (f - 1) / 1419)) if f < 1420 else 0.2 + 0.55 * (f - 1420) / 110
-    z = zmin + (zmax - zmin) * min(h, 0.75) + 0.035
+    z = zmin + (zmax - zmin) * min(1.0, 0.02 + (0.33 * (f - 1340) / 80 if f < 1420 else 0.35 + 0.65 * (f - 1420) / 110)) + 0.035
     a = f * 0.35; key_loc(noz, f, Vector((cx + 0.12 * math.cos(a), cy + 0.25 * math.sin(a * 1.3), z)))
 for o in (prn_v, printed, noz, blk): key_vis(o, [(1, False), (1330, True), (1540, False)])
+print('BED_Z', bed_z, 'PRINT z', zmin, zmax)
 # portal: hide wall patch + monitor back from camera while the camera passes through the screen
 vf_ = OB["Void_front"]   # keyed after the camera path is known (see end)
 for nm in ("Wall_patch", "Monitor_back"):
@@ -664,7 +669,7 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (34, BIRD_J + Vector((0.75, 0.85, 0.05)), HEADJ, 28),
  (64, STK(-48) + Vector((0.45, 0.2, 0.28)), STK(-48) * 0.3 + BEAKJ * 0.7, 28),
  (90, STK(-14) + Vector((0.38, 0.22, 0.12)), BEAKJ, 32),
- (104, BEAKJ + Vector((0.34, 0.12, 0.06)), BEAKJ, 38),
+ (104, BEAKJ + Vector((0.46, 0.2, 0.12)), BEAKJ, 34),
  (135, BEAKJ + Vector((0.12, 0.34, 0.08)), BEAKJ + Vector((0, 0.1, 0.02)), 45),
  (175, BEAKJ + Vector((-0.16, 0.30, 0.02)), BEAKJ + Vector((0, 0.18, -0.04)), 52),
  (215, BIRD_J + Vector((-0.65, 0.75, 0.42)), HEADJ, 32),
@@ -677,9 +682,9 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (528, Vector((2.3, 0.0, 1.62)), Vector((4.6, 0, 1.5)), 22),
  (552, Vector((3.85, 0.0, 1.55)), BC + Vector((0, 0, 0.1)), 22),
  (592, Vector((5.55, -0.45, 1.45)), BC + Vector((0, 0, 0.15)), 28),
- (636, BEAKC + Vector((-0.36, 0.26, 0.22)), BEAKC, 36),
- (672, BEAKC + Vector((-0.27, -0.06, 0.15)), BEAKC, 42),
- (689, Vector((7.3, 0.0, 1.62)), SCREEN, 30),
+ (636, BEAKC + Vector((-0.14, 0.06, 0.5)), BEAKC, 34),
+ (672, BEAKC + Vector((-0.2, -0.04, 0.42)), BEAKC, 40),
+ (689, Vector((7.3, 0.0, 1.62)), BEAKC, 30),
  (705, Vector((8.1, 0.65, 1.38)), SCREEN, 30),
  (738, SCREEN + Vector((-0.42, 0, 0.0)), SCREEN + Vector((1, 0, 0)), 30),
  (756, SCREEN + Vector((0.12, 0, 0.0)), SCREEN + Vector((1.5, 0, 0)), 30),
@@ -695,8 +700,9 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (1300, V2 + Vector((-2.3, -0.6, 1.3)), V2 + Vector((0, 0.4, 0.9)), 30),
  (1360, V3 + Vector((1.05, 0.75, 0.4)), V3, 30),
  (1410, V3 + Vector((0.62, -0.05, 0.12)), V3 + Vector((0.0, 0.1, -0.03)), 36),
- (1460, P3 + Vector((-1.2, 1.0, 1.75)), P3 + Vector((0, 0, 1.0)), 32),
- (1495, P3 + Vector((-1.3, 1.5, 1.5)), P3 + Vector((0, 0, 0.9)), 28),
+ (1460, P3 + Vector((-1.0, 0.9, 1.45)), Vector((P3.x, P3.y, bed_z + 0.2)), 34),
+ (1492, P3 + Vector((-1.2, 1.3, 1.4)), Vector((P3.x, P3.y, bed_z + 0.25)), 30),
+ (1500, SCREEN + Vector((0.95, -0.05, 0.05)), SCREEN, 30),
  (1530, SCREEN + Vector((0.45, 0, 0.0)), SCREEN + Vector((-1, 0, 0)), 30),
  (1552, SCREEN + Vector((-0.5, -0.1, 0.05)), BEAKC, 30),
  (1600, BEAKC + Vector((-0.2, -0.16, 0.1)), SEAM, 48),

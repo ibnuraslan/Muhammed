@@ -22,14 +22,22 @@ for m in bpy.data.materials:
             k = (bpy.path.abspath(nd.image.filepath), nd.image.colorspace_settings.name)
             if k in by_path and by_path[k] != nd.image: nd.image = by_path[k]
             else: by_path[k] = nd.image
+KEEP1K = set()
+for o in bpy.data.objects:
+    if o.type == 'MESH' and o.name.startswith(("Toucan", "Prosthetic", "VetA", "VetB", "Assist", "BG_Toucan")):
+        for m in o.data.materials:
+            if m and m.node_tree:
+                for nd in m.node_tree.nodes:
+                    if nd.type == 'TEX_IMAGE' and nd.image: KEEP1K.add(nd.image.name)
 n = 0
 for im in list(bpy.data.images):
     if im.users == 0 or im.source != 'FILE' or im.name.startswith("forest_slope"): continue
     try: w, h = im.size
     except Exception: continue
     if w == 0: continue
-    if max(w, h) > 1024:
-        k = 1024 / max(w, h); im.scale(max(1, int(w * k)), max(1, int(h * k)))
+    cap = 1024 if im.name in KEEP1K else 512
+    if max(w, h) > cap:
+        k = cap / max(w, h); im.scale(max(1, int(w * k)), max(1, int(h * k)))
     cs = im.colorspace_settings.name
     png = im.name in alpha_used
     p = os.path.join(tmp, "img_%03d.%s" % (n, "png" if png else "jpg")); n += 1
@@ -46,6 +54,39 @@ for o in bpy.data.objects:
         o.hide_render = True
 for c in [o for o in bpy.data.objects if o.type == 'CAMERA' and o != sc.camera]:
     bpy.data.objects.remove(c)
+
+# ---- de-duplicate repeated imports (same mesh / same image imported several times)
+import re, hashlib
+def base(n): return re.sub(r"\.\d{3}$", "", n)
+seen = {}
+for o in bpy.data.objects:
+    if o.type != 'MESH' or o.modifiers and any(m.type in ('ARMATURE', 'NODES', 'PARTICLE_SYSTEM') for m in o.modifiers): continue
+    me = o.data; k = (base(me.name), len(me.vertices), len(me.polygons), tuple(m.name if m else '' for m in me.materials))
+    if k in seen and seen[k] != me: o.data = seen[k]
+    else: seen[k] = me
+imh = {}
+for im in list(bpy.data.images):
+    if im.source != 'FILE' or im.size[0] == 0: continue
+    try: px = im.pixels[:4096:7]
+    except Exception: continue
+    k = (tuple(im.size), hashlib.md5(str([round(x, 3) for x in px]).encode()).hexdigest(), im.colorspace_settings.name)
+    if k in imh: im.user_remap(imh[k])
+    else: imh[k] = im
+# ---- decimate heavy static background props (cabinets, printer frame, bottles, plants), never the hero bird / people
+HERO = ("Toucan", "Prosthetic", "Ghost", "Hollow", "Printing", "Scan_", "Ref_", "New_half", "BG_", "Vet", "Assist", "Beak", "Fig")
+done = set()
+for o in bpy.data.objects:
+    if o.type != 'MESH' or o.name.startswith(HERO) or o.data in done: continue
+    if len(o.modifiers): continue            # displaced/subdivided/rigged geometry keeps its stack
+    if len(o.data.vertices) > 25000:
+        n0 = len(o.data.vertices); r_ = max(0.15, 20000 / n0)
+        bm_ = __import__("bmesh").new(); bm_.from_mesh(o.data)
+        __import__("bmesh").ops.triangulate(bm_, faces=bm_.faces[:]); bm_.to_mesh(o.data); bm_.free()
+        d = o.modifiers.new("dec", 'DECIMATE'); d.ratio = r_
+        dg = bpy.context.evaluated_depsgraph_get(); me2 = bpy.data.meshes.new_from_object(o.evaluated_get(dg))
+        o.modifiers.remove(d); old = o.data
+        for u in [x for x in bpy.data.objects if x.data == old]: u.data = me2
+        done.add(me2); print("DECIMATED", o.name, n0, "->", len(me2.vertices))
 bpy.ops.outliner.orphans_purge(do_local_ids=True, do_linked_ids=True, do_recursive=True)
 r = sc.render; r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1920, 100
 r.fps = 60; r.fps_base = 1.0; r.engine = 'CYCLES'; sc.frame_start, sc.frame_end = 1, 2250
