@@ -244,8 +244,8 @@ def build(variant=None):
     c["drip3"], c["platelet"] = drip_stand("DripP", BEDS[1] + Vector((-0.65, 0.6, 0)), bag_col=(0.95, 0.8, 0.35))
     for k, b in enumerate(BEDS):            # occupied beds: the blanket is drawn up over the patient to the chest
         occ = k != 1
-        blanket(f"Blanket{k}", b + Vector((0, -0.31 if occ else -0.25, 0)), col=[(0.38, 0.38, 0.4), (0.42, 0.36, 0.32), (0.36, 0.4, 0.42)][k % 3],
-                length=1.38 if occ else 1.4, z=0.8 if occ else 0.72, thick=0.2 if occ else 0.12)
+        blanket(f"Blanket{k}", b + Vector((0, -0.31 if occ else -0.25, 0)), col=[(0.22, 0.24, 0.3), (0.32, 0.22, 0.18), (0.24, 0.28, 0.24)][k % 3],
+                length=1.38 if occ else 1.4, z=0.84 if occ else 0.72, thick=0.32 if occ else 0.12)
         box(f"Pillow{k}", b + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"Pillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
     for k in range(4):                     # cubicle curtains between beds, partly drawn back to the wall
         curtain(f"Curtain{k}", BEDS[k].x + 1.3, 3.75, 3.75 - (1.2 + 0.5 * (k % 2)))
@@ -326,7 +326,7 @@ def build(variant=None):
         cc = CLINIC + Vector((-2.4 + k * 2.0, 1.3, 0))
         iron_bed(f"Cot{k}", cc)
         drip_stand(f"CDrip{k}", cc + Vector((-0.6, 0.7, 0)), fill=0.6)
-        blanket(f"CBlanket{k}", cc + Vector((0, -0.31, 0)), col=[(0.45, 0.35, 0.3), (0.36, 0.38, 0.42), (0.42, 0.4, 0.3)][k], length=1.38, z=0.8, thick=0.2)
+        blanket(f"CBlanket{k}", cc + Vector((0, -0.31, 0)), col=[(0.32, 0.22, 0.18), (0.22, 0.24, 0.3), (0.3, 0.28, 0.2)][k], length=1.38, z=0.84, thick=0.32)
         box(f"CPillow{k}", cc + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"CPillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
         c["cots"].append(cc)
     # small 1998 clinic: a glass-fronted cabinet, a sink with a mirror, a chair, a calendar, a window onto the dark street

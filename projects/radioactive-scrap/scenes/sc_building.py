@@ -166,7 +166,7 @@ def carry_pair(c, h1, h2, obj, a, b, sec, speed=0.7):
     place(h1, (p.x, p.y, 0), face_angle(p, p - d))                  # front man faces back along the desk
     q = walk_to(h2, Vector(a) - d * 2.3, Vector(b) - d * 2.3, sec, speed=speed, swing=0)
     mid = p - d * 1.15 + Vector((0, 0, 0.62))
-    obj.location = mid + Vector((0, 0, -0.74)); obj.rotation_euler = (0, 0, math.atan2(d.y, d.x))   # desk long axis is local X
+    obj.location = Vector((mid.x, mid.y, 0.06)); obj.rotation_euler = (0, 0, math.atan2(d.y, d.x))   # desk long axis is local X
     for h, end in ((h1, mid + d * 0.62), (h2, mid - d * 0.62)):
         sd = forward(h).cross(Vector((0, 0, 1))).normalized()
         reach(h, "R", end + sd * 0.32, Vector((sd.x, sd.y, -1.0)), forward(h)); reach(h, "L", end - sd * 0.32, Vector((-sd.x, -sd.y, -1.0)), forward(h))

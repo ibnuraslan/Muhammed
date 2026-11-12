@@ -29,6 +29,24 @@ def molten(name, strength=18.0):
     return m
 
 
+def mouth_glow(name, strength):
+    """Furnace mouth: white-hot at the centre fading to deep orange at the edges (spherical gradient)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Location'].default_value = (-0.5, -0.5, -0.5)
+    L.new(tc.outputs['Generated'], mp.inputs['Vector'])
+    gr = N.new("ShaderNodeTexGradient"); gr.gradient_type = 'SPHERICAL'; L.new(mp.outputs['Vector'], gr.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    mx = N.new("ShaderNodeMath"); mx.operation = 'MULTIPLY_ADD'; mx.inputs[1].default_value = 0.25
+    L.new(nz.outputs['Fac'], mx.inputs[0]); L.new(gr.outputs['Fac'], mx.inputs[2])
+    cr = N.new("ShaderNodeValToRGB"); e = cr.color_ramp.elements
+    e[0].position = 0.1; e[0].color = (0.6, 0.12, 0.01, 1); e[1].position = 0.7; e[1].color = (1.0, 0.85, 0.55, 1)
+    L.new(mx.outputs[0], cr.inputs['Fac'])
+    p.inputs['Base Color'].default_value = (0.05, 0.02, 0.01, 1); L.new(cr.outputs['Color'], p.inputs['Emission Color'])
+    p.inputs['Emission Strength'].default_value = strength
+    return m
+
+
 def build(variant=None):
     c = {}
     v = variant or "hot"
@@ -70,8 +88,8 @@ def build(variant=None):
     # a recessed mouth: a deep soot-black frame around an opening, refractory cheeks lit from within, melt glow at the back
     for (dx, dz, w, h_) in ((0, 0.62, 1.9, 0.5), (0, -0.62, 1.9, 0.5) , (-0.78, 0, 0.35, 1.75), (0.78, 0, 0.35, 1.75)):
         box("MouthFrame", FUR + Vector((dx, -2.75, 1.45 + dz)), (w, 0.9, h_), soot)
-    glow_m = molten("FurnaceGlow", 9.0 if v == "hot" else 5.0)     # white-hot at the back, orange cheeks
-    cheek = molten("FurnaceCheek", 1.2)
+    glow_m = mouth_glow("FurnaceGlow", 6.0 if v == "hot" else 4.0)     # white-hot centre, orange edges
+    cheek = molten("FurnaceCheek", 0.6)
     box("Mouth", FUR + Vector((0, -2.3, 1.45)), (1.25, 0.02, 0.8), glow_m)
     for dx in (-0.6, 0.6):
         box("MouthCheek", FUR + Vector((dx, -2.75, 1.45)), (0.02, 0.85, 0.75), cheek)
@@ -84,7 +102,7 @@ def build(variant=None):
     fo.visible_camera = False; fo.visible_glossy = False
     c["fur_light"] = fo
     if v != "hot":
-        glow_m.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 4.0
+        pass
     # ladle on a crane hook and the mould row
     lad = join([cyl("Ladle", (0, 0, 0.6), 0.7, 1.2, shell, verts=28), cyl("LadleLip", (0.72, 0, 1.15), 0.15, 0.12, shell, verts=10, rot=(0, math.radians(90), 0)),
                 cyl("LadleMelt", (0, 0, 1.12), 0.62, 0.05, molten("LadleMelt", 20.0 if v == "hot" else 0.5), verts=28)], "Ladle")
