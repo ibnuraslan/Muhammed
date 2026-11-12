@@ -5,6 +5,8 @@ src = open("/home/user/Muhammed/blender/pipeline/qa_check.py").read()
 pre = src[:src.index("res = {")]
 pre = pre.replace("a = sys.argv[sys.argv.index(\"--\") + 1:]", "a = ['/dev/null']")
 exec(pre)
+_wc = bpy.data.objects.get("WipeCard")
+if _wc: _wc.hide_viewport = True; _wc.hide_render = True; _wc.hide_set(True)
 HAIR = ("hair", "short0", "long0", "bob0", "ponytail", "braid", "afro")
 def metrics(dg):
     cpos = cam.matrix_world.translation
@@ -63,7 +65,8 @@ for spec in sys.argv[sys.argv.index("--") + 1:]:
             cam.location = c; cam.rotation_euler = (head - c).to_track_quat('-Z', 'Y').to_euler(); cam.data.lens = lens
             dg = bpy.context.evaluated_depsgraph_get(); dg.update()
             charf, facing, fill, ins, seen = metrics(dg)
-            if ins or fill or not seen or facing < 0.1 or charf < 0.18 or (c - head).length < 0.6: score[i] = None; continue
+            near = [sc.ray_cast(dg, c, dd, distance=0.08)[0] for dd in (Vector((1,0,0)),Vector((-1,0,0)),Vector((0,1,0)),Vector((0,-1,0)),Vector((0,0,1)),Vector((0,0,-1)))]
+            if ins or fill or not seen or facing < 0.1 or charf < 0.18 or (c - head).length < 0.6 or any(near): score[i] = None; continue
             score[i].append(charf + 0.6 * facing)
     ok = [(min(v) - 0.05 * (cands[i][0] - head0).length, i) for i, v in score.items() if v]
     ok.sort(reverse=True)

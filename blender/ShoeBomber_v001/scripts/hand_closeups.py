@@ -27,15 +27,16 @@ for i, (f, rig, bone, off) in enumerate(SHOTS):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); r = O[rig]
     p = (r.matrix_world @ r.pose.bones[bone].matrix).translation
     hand_c = (p + r.matrix_world @ r.pose.bones[bone.replace("wrist", "finger3-1")].tail) / 2
-    def score(d):
-        c = hand_c + d * 0.42
-        ok, loc, n, idx, ob, _ = sc.ray_cast(dg, c, (hand_c - c).normalized(), distance=0.40)
-        if ok and not (ob.parent == r): return -1
+    def score(dd_):
+        d, dist = dd_
+        c = hand_c + d * dist
+        ok, loc, n, idx, ob, _ = sc.ray_cast(dg, c, (hand_c - c).normalized(), distance=dist + 0.1)
+        if not ok or (loc - hand_c).length > 0.08: return -1      # first thing on the sightline must be the hand itself
         for dd in DIRS[::3]:
             ok2, l2, n2, _, ob2, _ = sc.ray_cast(dg, c, dd, distance=0.08)
             if ok2: return -1
-        return d.dot(Vector(off).normalized()) + 0.5 * d.z
-    best = max(DIRS, key=score)
-    cam.location = hand_c + best * 0.42; cam.rotation_euler = (hand_c - cam.location).to_track_quat('-Z', 'Y').to_euler()
+        return d.dot(Vector(off).normalized()) + 0.5 * d.z - 0.3 * dist
+    best = max([(d, dist) for d in DIRS for dist in (0.42, 0.6)], key=score)
+    cam.location = hand_c + best[0] * best[1]; cam.rotation_euler = (hand_c - cam.location).to_track_quat('-Z', 'Y').to_euler()
     lo.location = cam.location + Vector((0, 0, 0.15))
     sc.render.filepath = "%s_%02d_f%d_%s_%s.jpg" % (OUT, i, f, rig, bone); bpy.ops.render.render(write_still=True)

@@ -412,46 +412,57 @@ def op(name, f, off=(0, 0, 0)):
 P = lambda x, y, z: V((x, y, z))
 CAB = [
   [  # beat 1: his face over the shoe and the match
-    (1,   P(-0.092, 0.214, 0.986), bp("Bomber", "head", 1, (0, 0, -0.05)), 28),
+    (1,   V((-0.86, 0.44, 1.32)), (op("Shoe_R", 1, (0, 0, 0.1)) * 0.5 + bp("Bomber", "head", 1) * 0.5), 26),
     (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
     (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.45 + bp("Bomber", "head", 100) * 0.55), 24),
     (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
     (198, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 198, (0, 0.2, -0.3)), 26),
     (212, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 212, (0, 0.2, -0.3)), 26),
   ], [  # beat 2: CUT to the attendant walking down the aisle, dolly back ahead of her, push to her eyes (sniff)
-    (213, P(-0.109, 5.08, 1.052), bp("Attendant", "head", 213, (0, 0, -0.1)), 28),
-    (225, bp("Attendant", "spine03", 225, (0.05, -1.7, 0.35)), bp("Attendant", "head", 225, (0, 0, -0.25)), 26),
+    (213, P(0.068, 5.165, 1.121), bp("Attendant", "head", 213, (0, 0, -0.1)), 28),
+    (222, P(0.068, 5.165, 1.121), bp("Attendant", "head", 222, (0, 0, -0.1)), 28),
+    (232, P(0.064, 4.198, 1.041), bp("Attendant", "head", 232, (0, 0, -0.1)), 28),
+    (244, P(0.064, 4.198, 1.041), bp("Attendant", "head", 244, (0, 0, -0.1)), 28),
     (265, bp("Attendant", "spine03", 265, (0.04, -1.5, 0.15)), bp("Attendant", "head", 265, (0, 0, -0.25)), 28),
     (300, bp("Attendant", "spine03", 300, (0.05, -1.3, 0.35)), bp("Attendant", "head", 300, (0, 0, -0.1)), 30),
     (330, V((0.16, 1.80, 1.50)), bp("Attendant", "head", 330, (0, 0, -0.05)), 42),
     (376, V((0.02, 1.95, 1.46)), bp("Attendant", "head", 376, (0, -0.02, -0.02)), 52),
   ], [  # beat 3: CUT low from the row-3 aisle seat: she comes down the aisle at us and stops at his row
-    (377, P(-0.207, 0.022, 0.852), bp("Attendant", "head", 377, (0, 0, -0.1)), 28),
-    (436, P(-0.207, 0.022, 0.852), bp("Attendant", "head", 436, (0, 0, -0.1)), 28),
+    (377, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 377, (0, 0, -0.1)), 28),
+    (388, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 388, (0, 0, -0.1)), 28),
+  ], [
+    (389, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 389, (0, 0, -0.1)), 28),
+    (402, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 402, (0, 0, -0.1)), 28),
+  ], [  # CUT: from the seat row as she reaches his row
+    (403, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 403, (0, 0, -0.1)), 28),
+    (436, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 436, (0, 0, -0.1)), 28),
   ], [  # CUT: reverse from row 4: her face as she catches him
-    (437, P(-0.81, 1.206, 1.074), bp("Attendant", "head", 437, (0, 0, -0.1)), 28),
-    (478, P(-0.81, 1.206, 1.074), bp("Attendant", "head", 478, (0, 0, -0.1)), 28),
+    (437, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 437, (0, 0, -0.1)), 28),
+    (478, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 478, (0, 0, -0.1)), 28),
   ], [  # beat 4: CUT: PaxA lunges in
-    (479, P(0.163, -0.253, 1.054), bp("PaxA", "head", 479), 22),
-    (520, P(0.163, -0.253, 1.054), bp("PaxA", "head", 520), 22),
+    (479, P(0.154, -0.254, 1.057), bp("PaxA", "head", 479), 28),
+    (520, P(0.154, -0.254, 1.057), bp("PaxA", "head", 520), 28),
   ], [  # CUT: the attendant hauling him into the aisle
-    (521, P(0.404, -0.153, 0.906), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
-    (545, P(0.404, -0.153, 0.906), bp("Attendant", "head", 545, (0, 0, -0.1)), 28),
+    (521, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 521, (0, 0, -0.1)), 28),
+    (545, P(-0.892, 1.042, 1.143), bp("Attendant", "head", 545, (0, 0, -0.1)), 28),
   ], [  # CUT: from row 4 as she steps up to his head
-    (546, P(-1.018, 0.596, 1.305), bp("Attendant", "head", 546, (0, 0, -0.1)), 28),
-    (574, P(-1.018, 0.596, 1.305), bp("Attendant", "head", 574, (0, 0, -0.1)), 28),
+    (546, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 546, (0, 0, -0.1)), 28),
+    (574, P(-1.011, 0.664, 1.523), bp("Attendant", "head", 574, (0, 0, -0.1)), 28),
   ], [  # CUT: high over the pin
     (575, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 575, (0, 0.3, 0)), 22),
     (600, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 600, (0, 0.3, 0)), 22),
     (648, V((0.05, 1.70, 2.05)), bp("Bomber", "spine01", 648, (0, 0.2, 0)), 22),
   ], [  # beat 5: CUT low to the steward's face as he injects, push to the arm, two-shot on "finally sedated"
-    (649, P(-0.038, 0.44, 0.75), bp("Steward", "head", 649), 28),
-    (668, P(-0.038, 0.44, 0.75), bp("Steward", "head", 668), 28),
+    (649, P(-0.192, -0.419, 0.593), bp("Steward", "head", 649), 28),
+    (668, P(-0.192, -0.419, 0.593), bp("Steward", "head", 668), 28),
     (690, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 690), 32),
     (712, V((0.30, 0.95, 0.80)), bp("Bomber", "upperarm02.R", 712), 32),
     (736, V((-0.02, 0.80, 1.20)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
     (756, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 756) + bp("Attendant", "head", 756)) / 2 + V((0, 0, -0.08)), 20),
-    (772, P(0.122, 0.678, 0.757), bp("Attendant", "head", 772, (0, 0, -0.1)), 28),
+    (772, P(0.168, 0.702, 1.191), bp("Attendant", "head", 772, (0, 0, -0.1)), 28),
+    (774, P(0.168, 0.702, 1.191), bp("Attendant", "head", 774, (0, 0, -0.1)), 28),
+  ], [  # beat 6 continues: CUT to his feet
+    (775, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 775), 26),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
     (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
@@ -488,7 +499,6 @@ SEG4 = [
     (1508, AX + V((-1.60, 0.45, 1.45)), bp("Traveller", "head", 1508, (0, 0, -0.2)), 28),
     (1525, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1525), 28),
     (1537, AX + V((-1.219, 0.39, 1.492)), bp("Traveller", "head", 1537), 28),
-    (1550, AX + V((-0.2, -1.9, 1.05)), op("Tray_1", 1550, (0, 0, 0.1)), 32),
     (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
     (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
     (END, AX + V((-1.35, 0.05, 1.50)), bp("Traveller", "head", END, (0, 0, -0.15)), 40),
