@@ -365,7 +365,7 @@ for c_ in goat.children:
                 mx = nt.nodes.new('ShaderNodeMath'); mx.operation = 'MAXIMUM'
                 sub = nt.nodes.new('ShaderNodeMath'); sub.operation = 'SUBTRACT'
                 mr_ = nt.nodes.new('ShaderNodeMapRange'); mr_.inputs['From Min'].default_value = 0.12; mr_.inputs['From Max'].default_value = 0.3
-                mix_ = nt.nodes.new('ShaderNodeMix'); mix_.data_type = 'RGBA'; mix_.inputs['B'].default_value = (0.11, 0.075, 0.06, 1)
+                mix_ = nt.nodes.new('ShaderNodeMix'); mix_.data_type = 'RGBA'; mix_.inputs['B'].default_value = (0.16, 0.11, 0.11, 1)     # dark grey-pink (director v003 fix)
                 nt.links.new(src, sep.inputs[0]); nt.links.new(sep.outputs[1], mx.inputs[0]); nt.links.new(sep.outputs[2], mx.inputs[1])
                 nt.links.new(sep.outputs[0], sub.inputs[0]); nt.links.new(mx.outputs[0], sub.inputs[1]); nt.links.new(sub.outputs[0], mr_.inputs['Value'])
                 nt.links.new(mr_.outputs['Result'], mix_.inputs['Factor']); nt.links.new(src, mix_.inputs['A']); nt.links.new(mix_.outputs['Result'], nd.inputs['Base Color'])

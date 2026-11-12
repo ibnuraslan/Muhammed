@@ -186,7 +186,7 @@ def owner_menace(f, raise_amt, shake=0.0):
     if raise_amt <= 0.6:
         W0, d0, n0 = HP("low", "R"); W = W0.lerp(W, raise_amt / 0.6); d = d0.lerp(d, raise_amt / 0.6)
     OW.hand_local("R", f, M, W + Vector((0, 0, shake * 0.03)), d, n)
-    OW.arm("L", f, M, fwd=25, out=18, L=0.5)
+    OW.arm("L", f, M, fwd=6, out=8, L=0.5)
     OW.fingers("R", f, 70, 40); OW.fingers("L", f, 35, 20)
     OW.face(f, jaw=6 + 6 * raise_amt, brow=-3, lid=-1.5, smile=-1.5)
 for f, r, sh in ((1, 0.3, 0), (20, 0.5, 0), (42, 1.0, 1), (70, 1.0, -1), (96, 1.0, 1), (124, 1.0, 0.5), (150, 1.0, -1), (175, 0.8, 0)):
@@ -199,9 +199,7 @@ for f in range(186, 461, 12):
     M = OW.M(Vector((p_ow(f).x, p_ow(f).y, ground_z(p_ow(f).x, p_ow(f).y) + OW.RH.z)), yaw_to(p_ow(f - 3), p_ow(f + 3)))
     sw = 18 * math.sin((f - 186) / 22.0)
     OW.arm("R", f, M, fwd=12 + sw, out=10, L=0.5); OW.arm("L", f, M, fwd=12 - sw, out=8, L=0.5)
-OW.vis(1, True); OW.vis(461, False); OW.vis(474, True); OW.vis(563, False)
-for f, r, sh in ((474, 1.0, 1), (486, 1.0, -1), (498, 0.7, 0), (510, 1.0, 1), (522, 1.0, -1), (534, 1.0, 1), (546, 0.8, 0), (558, 1.0, -1)):
-    owner_menace(f, r, sh)
+OW.vis(1, True); OW.vis(461, False)     # inside the house during the time-lapse (the pop-in visits read as snaps)
 # beat 4: comes back out, down the steps toward the goat with the stick
 OW.vis(600, True)
 p_ow2 = catmull([(600, V(6.4, 6.2, 0)), (640, V(5.4, 6.0, 0)), (690, V(4.0, 6.0, 0)), (760, V(2.6, 3.6, 0)), (812, V(1.2, 1.6, 0)), (830, V(1.05, 1.4, 0))])
@@ -223,20 +221,20 @@ def ow_hit(f, pos, lean, spine, head, jaw, hands="belly", brow=4, lid=3, crouch=
         else:
             OW.arm(s, f, M, fwd=hands[0], out=hands[1], L=0.48); OW.fingers(s, f, 20, 15)
     OW.face(f, jaw=jaw, brow=brow, lid=lid, smile=-3)
-ow_hit(850, OC, -6, -4, 6, 8, hands=(40, 20), brow=-4, lid=-1)
+ow_hit(850, OC, -6, -4, 6, 8, hands=(15, 10), brow=-4, lid=-1)
 OW.hand_local("R", 850, OW.M(Vector((OC.x, OC.y, OW.RH.z)), yaw_c, -6), *HP("raised", "R"))
 OW.hand_local("R", 930, OW.M(Vector((OC.x, OC.y, OW.RH.z)), yaw_c, -8), *HP("overhead", "R"))
 OW.face(930, jaw=18, brow=6, lid=4, smile=-3)
 FEET_C = {"L": (OC + Vector((0.1, -0.12)), yaw_c), "R": (OC + Vector((0.08, 0.2)), yaw_c + 15)}
-ow_hit(955, OC, 16, 14, -6, 20, hands=(80, 30), feet=FEET_C, crouch=0.1)
+ow_hit(955, OC, 16, 14, -6, 20, hands=(35, 12), feet=FEET_C, crouch=0.1)
 OC2 = OC + Vector((0.25, -0.1))
-ow_hit(985, OC2, 28, 38, 22, 34, hands=(55, 40), crouch=0.12, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.22, 0.2)), yaw_c + 15, 0.05)})
+ow_hit(985, OC2, 28, 38, 22, 34, hands=(40, 14), crouch=0.12, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.22, 0.2)), yaw_c + 15, 0.05)})
 ow_hit(1040, OC2 + Vector((0.12, -0.04)), 34, 44, 26, 30, hands=(75, 22), crouch=0.16, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
 ow_hit(1100, OC2 + Vector((0.15, -0.05)), 24, 30, 14, 24, hands=(65, 22), crouch=0.10, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
 # beat 6: second hit (fast) at 1145
 OC3 = OC2 + Vector((0.55, -0.1))
 ow_hit(1138, OC2 + Vector((0.15, -0.05)), 14, 18, 6, 20, hands=(50, 25), crouch=0.06, feet={"L": (OC + Vector((0.32, -0.12)), yaw_c), "R": (OC + Vector((0.42, 0.18)), yaw_c + 15)})
-ow_hit(1152, OC3, 36, 46, 28, 36, hands=(55, 40), crouch=0.18, roll=-6, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
+ow_hit(1152, OC3, 36, 46, 28, 36, hands=(40, 14), crouch=0.18, roll=-6, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
 ow_hit(1180, OC3 + Vector((0.05, 0.05)), 26, 34, 16, 26, hands=(40, 30), crouch=0.10, feet={"L": (OC3 + Vector((0.05, -0.15)), yaw_c), "R": (OC3 + Vector((0.1, 0.2)), yaw_c + 20)})
 # beat 7: staggers to the porch, up the steps, along the deck to the south edge
 p_ow3 = catmull([(1182, V(OC3.x + 0.05, OC3.y + 0.05, 0)), (1240, V(2.7, 3.4, 0)), (1300, V(3.7, 5.4, 0)), (1330, V(4.2, 6.0, 0)),
@@ -269,7 +267,7 @@ for f, P, lean, roll, yawv in fall:
         a = OW.h.ankle[s]; W = M @ Vector((a.x * 1.4, a.y + 0.05, a.z))
         W.z = max(W.z, 0.05)
         OW.key_foot_world(s, f, W, M.to_3x3())
-        OW.arm(s, f, M, fwd=(60 + 30 * sx) if f < 1478 else 15, out=40 if f < 1478 else 55, L=0.5)
+        OW.arm(s, f, M, fwd=(60 + 30 * sx) if f < 1478 else (25 if s == 'L' else 5), out=40 if f < 1478 else (30 if s == 'L' else 12), L=0.5)
     OW.face(f, jaw=30 if f < 1480 else 6, brow=6 if f < 1480 else 0, lid=4 if f < 1480 else -6, smile=-4 if f < 1480 else 0)
 # beat 9+: lies still, face down (eyes closed), arms out.  Hold to the end of the farm part.
 LIE = Vector((6.33, 2.08, 0.27))
@@ -281,7 +279,7 @@ for f in (1500, 1735, 1905):
         sx = 1 if s == "L" else -1
         a = OW.h.ankle[s]; W = M @ Vector((a.x * 1.5, a.y + 0.05, a.z)); W.z = 0.06
         OW.key_foot_world(s, f, W, M.to_3x3())
-        OW.arm(s, f, M, fwd=10 + 8 * sx, out=55, L=0.5)
+        OW.arm(s, f, M, fwd=(25 if s == 'L' else 5), out=(30 if s == 'L' else 12), L=0.46)   # arms close to the body, one up near the head
     OW.face(f, jaw=4, lid=-8)
 OW.vis(1910, False)
 
@@ -295,7 +293,7 @@ def wrist_frame(h_, s):
     d_ = (f3 - wr).normalized(); a_ = (a_ - d_ * a_.dot(d_)).normalized(); n_ = d_.cross(a_)
     return wr, d_, a_, n_
 wr, d_, a_, n_ = wrist_frame(OW, "R")
-G0 = (OW.o.matrix_world @ OW.R.PB['finger3-1.R'].head) - d_ * 0.01 + n_ * 0.025
+G0 = (OW.o.matrix_world @ OW.R.PB['finger3-1.R'].head) - d_ * 0.01 - n_ * 0.03
 xa = a_; ya = d_; za = xa.cross(ya)
 Sm = Matrix((xa, ya, za)).transposed().to_4x4(); Sm.translation = G0 + xa * 0.3
 cst = stick.constraints.new('CHILD_OF'); cst.target = OW.o; cst.subtarget = "wrist.R"
@@ -325,7 +323,7 @@ gneck(1, 5, 5, 0, 0, 10)
 gp = gpath([(30, GA), (60, GA + Vector((-0.35, 0.12))), (90, GA + Vector((-0.55, 0.15))), (186, GA + Vector((-0.6, 0.2)))])
 for f in (30, 44, 52, 60, 72, 90, 110, 130, 150, 170, 186):
     p = gp(f); flinch = 1.0 if 44 <= f <= 130 else 0.4
-    ghold(f, p.to_2d(), h_face + (25 if f > 50 else 0) * flinch + (8 if f % 20 == 0 else -4), dz=-0.06 * flinch, pitch=-4 * flinch, roll=3 * flinch)
+    ghold(f, p.to_2d(), h_face + (25 if f > 50 else 0), dz=-0.05 * flinch, pitch=-3 * flinch, roll=0)
     gneck(f, -10 * flinch, 18 * flinch, 10 * flinch, turn=(-30 if f % 40 < 20 else -18) * flinch, tail=-20 * flinch)
 # quick hoof shuffles while backing (re-key hooves via quad_move over the short back-off)
 quad_move(G, lambda f: Vector((gp(f).x, gp(f).y, 0)), 44, 92, stride=0.35, gait="walk", heading_fn=lambda f: R_(h_face + 25))
@@ -338,12 +336,11 @@ for f in (187, 200, 240, 280, 320, 360, 400, 440, 462):
     sn = 1 if (f // 40) % 2 else 0
     gneck(f, -6 + 12 * sn, -8, 4 + 10 * sn, turn=hh * 0.5, tail=25)
 # beat 3: time-lapse: the goat jumps between resting spots by the shed (stop-motion feel)
-spots = [(GB, -30), (GB + Vector((-0.4, 0.6)), 20), (GB + Vector((0.2, 0.5)), 60), (GB + Vector((-0.2, 0.9)), -60), (GB + Vector((0.3, -0.2)), 10), (GB, -20)]
-for i, f in enumerate(range(463, 631, 28)):
-    p, hh = spots[i % len(spots)]
-    for ff in (f, f + 26):
-        ghold(ff, p, hh, dz=-0.04 - 0.02 * i / 6, pitch=-3)
-        gneck(ff, 20 if i % 2 else -5, 10, 15 if i % 2 else 0, turn=(i % 3 - 1) * 25, tail=-10)
+spots = [GB, GB + Vector((-0.4, 0.6)), GB + Vector((0.2, 0.5)), GB + Vector((-0.2, 0.9)), GB + Vector((0.3, -0.2)), GB]
+tl = catmull([(463 + i * 33, Vector((p.x, p.y, 0))) for i, p in enumerate(spots)])
+quad_move(G, tl, 463, 630, stride=0.42, gait="walk")      # fast-forward walk around the tether post (no teleports)
+for i, f in enumerate(range(463, 631, 21)):
+    gneck(f, 16 if i % 2 else -4, 8, 10 if i % 2 else 0, turn=(i % 3 - 1) * 18, tail=-10)
 # thinner over time: the coat sinks onto the frame (displace inward along normals, before the armature)
 gbody = [c for c in G.o.children if c.type == 'MESH'][0]
 dm = gbody.modifiers.new("Thin", 'DISPLACE'); dm.mid_level = 0.0; dm.strength = 0.0
@@ -353,7 +350,7 @@ for f, s_ in ((463, 0.0), (630, -0.012), (1905, -0.012), (1990, -0.006)):
 # beat 4: had enough: head down, horns forward, front hoof stamps
 G4 = GB + Vector((0.25, -0.1)); h4 = math.degrees(math.atan2((OC - G4).x, -(OC - G4).y))
 for f in (631, 660, 700, 740, 780, 816):
-    ghold(f, G4, h4, dz=-0.05, pitch=-6)
+    ghold(f, G4, h4, dz=-0.02, pitch=-2)
     gneck(f, 16, 8, 12, turn=0, tail=-25)
 for i, f in enumerate(range(650, 820, 34)):           # FL stamps
     for df, lz in ((0, 0.0), (8, 0.09), (14, 0.0)):
@@ -371,7 +368,7 @@ for f in (950, 956, 962, 968):
     ghold(f, cp(f).to_2d(), h4, dz=0.06, pitch=16)
 for f in (1140, 1146, 1152):
     ghold(f, cp(f).to_2d(), h4, dz=0.06, pitch=16)
-for f, n1, hd in ((816, 26, 22), (850, 30, 26), (940, 24, 20), (958, -18, -20), (975, -10, -12), (1060, 14, 10), (1128, 24, 20), (1146, -18, -20), (1182, 18, 12)):
+for f, n1, hd in ((816, 16, 12), (850, 18, 14), (940, 16, 12), (958, -12, -12), (975, -6, -8), (1060, 10, 6), (1128, 16, 12), (1146, -12, -12), (1182, 12, 8)):
     gneck(f, n1, 8, hd, 0, -20)
 # beat 7: follows him to the porch and up the steps
 gp7 = catmull([(1183, V(*(OC3 + (G4 - OC).normalized() * 0.75), 0)), (1260, V(2.1, 2.9, 0)), (1320, V(3.0, 5.2, 0)), (1355, V(3.9, 6.0, 0)),
@@ -393,7 +390,7 @@ PAST_G = Vector((2.1, 62.4)); h11 = -70
 ghold(1906, PAST_G, h11); ghold(2190, PAST_G, h11)
 for f in range(1906, 2191, 24):
     k = (f // 24) % 3
-    gneck(f, 30 + 6 * k, 14, 22 + 6 * (k == 1), turn=-6 + 6 * k, tail=20 if k == 2 else 5)
+    gneck(f, 6 + 3 * k, 4, 6 + 4 * (k == 1), turn=-4 + 4 * k, tail=20 if k == 2 else 5)     # head up, eating from her hand (chewing nods)
 # pasture goats grazing
 for i, (p, hh) in enumerate(((Vector((-1.5, 64.5)), 30), (Vector((4.8, 66.0)), -120), (Vector((-0.5, 59.0)), 160))):
     R2 = Rig(bpy.data.objects["PGoat_%d_rig" % i])
@@ -473,10 +470,10 @@ pole.scale = (1.8, 0.8, 0.8)
 key_obj(pole, 1600, Matrix.Translation(Vector((-3.5, 11.0, -3))))
 
 # ================================================================= RESCUER (kneels, strokes the goat, it eats from her palm)
-RP = Vector((0.9, 61.9)); ry = yaw_to(RP, PAST_G)
+RP = Vector((1.0, 61.95)); ry = yaw_to(RP, PAST_G)
 RS.vis(1, False); RS.vis(1906, True)
-for i, f in enumerate(range(1906, 2191, 30)):
-    st = (i % 2)
+for i, f in enumerate(range(1906, 2191, 12)):
+    st = ((i // 3) % 2)
     M = RS.stand(f, RP, ry, lean=6, spine=(16, 0, -6), head=(22 + 4 * st, 0), crouch=0.42,
                  feet={"L": (RP + Matrix.Rotation(R_(ry), 2) @ Vector((0.14, -0.28)), ry, 0.0, 0.0),
                        "R": (RP + Matrix.Rotation(R_(ry), 2) @ Vector((-0.14, 0.42)), ry, 0.0, 55)})
@@ -485,11 +482,12 @@ for i, f in enumerate(range(1906, 2191, 30)):
     hh_ = G.o.matrix_world @ G.PB["head"].head; fw_ = (G.o.matrix_world @ G.PB["neck1"].head) - (G.o.matrix_world @ G.PB["hips"].head); fw_.z = 0; fw_.normalize()
     pts_ = [gbody.matrix_world @ v.co for v in gm.vertices]; ge.to_mesh_clear()
     near = [p for p in pts_ if (p - hh_).length < 0.4]
-    mouth = max(near, key=lambda p: 0.3 * (p - hh_).dot(fw_) - p.z) if near else G.o.matrix_world @ G.PB["head"].tail
-    RS.h.key_hand("R", f, mouth + Vector((0.0, 0.0, -0.04)) + fw_ * 0.06,
+    mouth = max(near, key=lambda p: (p - hh_).dot(fw_) - 0.3 * abs(p.z - hh_.z)) if near else G.o.matrix_world @ G.PB["head"].tail
+    tw_ = Vector((RP.x - mouth.x, RP.y - mouth.y, 0)).normalized()
+    RS.h.key_hand("R", f, mouth + Vector((0.0, 0.0, -0.09)) + tw_ * 0.1,
                   Matrix.Rotation(R_(ry), 3, 'Z') @ Vector((0, -1, 0.1)), Vector((0, 0, 1)), M @ Vector((-0.5, 0.2, 0.9)))
-    neck = G.o.matrix_world @ G.PB["neck1"].head.lerp(G.PB["chest"].head, 0.3 + 0.4 * st)
-    RS.h.key_hand("L", f, neck + Vector((0, 0, 0.2)), -fw_, Vector((0, 0, -1)), M @ Vector((0.5, 0.2, 0.9)))
+    neck = G.o.matrix_world @ G.PB["neck1"].head.lerp(G.PB["chest"].head, 0.05 + 0.25 * st)
+    RS.h.key_hand("L", f, neck + Vector((0, 0, 0.15 + 0.06 * st)), -fw_, Vector((0, 0, -1)), M @ Vector((0.5, 0.2, 0.9)))
     RS.fingers("R", f, 6, 4); RS.fingers("L", f, 4, 2)
     RS.face(f, jaw=3, brow=2, lid=0.5, smile=3)
 
@@ -614,21 +612,21 @@ def spec(v):
         return p + Vector(v[1]) if len(v) > 1 else p
     return Vector(v)
 CAMK = [
- (1,    (0.5, -6.6, 0.62), (0.2, 1.5, 0.85), 40),     # low behind the broken fence rails
+ (1,    (0.5, -6.7, 0.95), (0.2, 1.5, 0.85), 40),     # low behind the broken fence rails
  (60,   (0.9, -5.0, 1.0), ("mid", (0, 0, 0.1)), 42),
  (120,  (1.6, -0.5, 1.7), ("gh", (0, 0, 0)), 32),       # over the shoulder, stick high
  (186,  ("gh", (-1.0, -0.7, 0.1), "g"), ("gh",), 34),     # goat's face
  (250,  ("gb", (1.5, 0.2, 0.1), "g"), ("gh",), 38),      # orbit around
- (320,  ("gb", (0.45, 1.5, 0.55), "g"), ("gp",), 30),    # behind the goat; passer-by beyond the fence
- (390,  ("gb", (-1.3, -0.7, 0.25), "g"), ("gh",), 40),
+ (320,  (-1.3, 4.2, 1.0), (-0.6, -1.5, 0.55), 26),   # behind the goat, the passer-by beyond the fence    # behind the goat; passer-by beyond the fence
+ (390,  (-2.7, 2.7, 0.75), ("gh",), 36),
  (462,  ("gn", (0.7, -0.6, 0.1), "g"), ("gn",), 38),     # tense neck
- (540,  (1.6, 5.0, 1.6), ("gb", (0.6, -0.4, 0.2)), 20),                    # time-lapse push along the shed wall
+ (540,  (1.4, 5.0, 1.9), ("gb",), 18),                    # time-lapse push along the shed wall
  (630,  ("gb", (1.1, -1.3, 0.3), "g"), ("gh",), 32),
  (690,  ("gh", (1.0, -0.55, 0.3), "g"), ("gh", (0, 0, 0.05)), 38),    # eye macro
  (740,  ("gh", (0.8, -0.9, 0.15), "g"), ("gh",), 34),    # horns
  (790,  ("gf", (0.5, -0.55, 0.15), "g"), ("gf", (0, 0, 0.12)), 40),   # stamping hoof
  (816,  ("gb", (1.3, -0.3, -0.1), "g"), ("mid",), 30),
- (880,  ("gb", (1.3, 0.3, -0.25), "g"), ("gh",), 28),     # skimming beside the charge
+ (880,  (OC.x - 1.0, OC.y - 2.1, 0.55), ("gh",), 28),     # skimming beside the charge
  (960,  (OC.x - 0.2, OC.y - 1.7, 0.7), ("ob", (0, 0, -0.15)), 30),   # impact, side-on
  (1000, (OC.x - 0.5, OC.y - 1.7, 1.05), ("fm",), 30),        # orbit around the doubled-over man
  (1040, (OC.x - 1.4, OC.y - 1.3, 1.1), ("fm",), 30),
@@ -649,7 +647,7 @@ CAMK = [
  (1735, (0.6, 1.0, 4.0), ("gb",), 24),
  (1800, (1.8, 5.6, 1.5), ("gb",), 28),
  (1860, (1.8, 8.0, 1.9), ("gb",), 28),                     # beside the ramp, clear of the officials
- (1905, (0.5, 9.5, 3.5), (-1.0, 16.0, 2.0), 22),
+ (1905, (0.5, 9.5, 3.5), (1.0, 30.0, 6.0), 22),
  (1940, (0.5, 22.0, 9.0), (1.5, 40.0, 4.0), 22),           # over the tree line
  (1975, (2.5, 50.0, 5.0), (2.0, 61.5, 0.5), 26),
  (2020, (4.6, 58.6, 2.2), (1.9, 62.3, 0.5), 28),           # down into the pasture
