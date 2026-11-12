@@ -477,16 +477,17 @@ def _():
     return cam, anim
 
 
-@move("stairwell_drift", "night", 4.5, cast=("d1:detective",), rooms=("front", "upstairs", "attic"), haze=((0.0, -3.6, 0.0), (0.9, -0.2, 5.4)))
+@move("stairwell_drift", "night", 4.5, cast=("d1:detective2",), rooms=("kitchen", "front"), haze=((-1.5, -0.2, 0.0), (4.2, 4.7, 2.7)))
 def _():
     def anim(c, t):
         sec = t * DUR["stairwell_drift"]
-        bm = beams(c, 1)
-        h = P(c, "d1"); H.walk_to(h, (2.2, -2.2, 0.0), (3.0, -1.4, 0.0), t, swing=6, stride=1.0)
-        hold_torch(h, bm[0], Vector((3.8, -3.5 + math.sin(sec), 0.8)))
+        bm = beams(c, 1, 500)
+        h = P(c, "d1"); H.walk_to(h, (-0.25, -0.9, 0.0), (-0.2, 0.3, 0.0), t * 0.8, swing=6, stride=0.9)
+        a = math.sin(0.9 * sec)
+        hold_torch(h, bm[0], Vector((1.6 + 1.8 * a, 3.2 - 0.8 * a, 0.8)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.35, -4.4, 1.3)).lerp(Vector((-0.35, -3.9, 1.6)), e), Vector((0.45, -1.2, 2.4)).lerp(Vector((0.45, -0.3, F2 + 1.4)), e), 22)
+        return (Vector((3.7, 4.2, 1.9)).lerp(Vector((3.5, 3.9, 1.85)), e), Vector((0.2, 0.4, 1.2)), 24)
     return cam, anim
 
 
@@ -496,6 +497,9 @@ def _():
         sec = t * DUR["freeze_look"]
         bm = beams(c)
         up = ease(min(1.0, max(0.0, (sec - 0.6) / 0.8)))
+        if "doorspill" not in c:
+            c["front_door"].rotation_euler = (0, 0, math.radians(-90))
+            c["doorspill"] = H.day_fill((0.15, -D2 - 0.3, 2.0), 1.0, 60, (0.55, 0.68, 1.0), rot=(math.radians(60), 0, 0))
         for k, key in enumerate(("d1", "d2")):
             h = P(c, key)
             H.stand_at(h, (0.3 - 0.75 * k, -4.0 - 0.3 * k, 0.0), math.radians(180))
@@ -503,7 +507,7 @@ def _():
             H.look(h, 0, -30 * up)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.35, -0.6, 2.5)).lerp(Vector((-0.35, -0.8, 2.6)), e), Vector((0.0, -4.0, 1.2)), 26)
+        return (Vector((0.45, -2.1, 2.45)).lerp(Vector((0.45, -2.3, 2.4)), e), Vector((0.0, -4.1, 1.3)), 28)
     return cam, anim
 
 
@@ -547,7 +551,7 @@ def legs_in_hatch(c, rise):
     H.rotl(h, "upperleg01.L", (0, 1, 0), -3); H.rotl(h, "upperleg01.R", (0, 1, 0), 3)
     h.arm.rotation_euler = (0, 0, math.radians(90)); bpy.context.view_layer.update()
     hip0 = h.joint("upperleg01.L").z if False else 0.95
-    h.arm.location = (hx, hy, C2 - hip0 - 0.05 + rise); bpy.context.view_layer.update()
+    h.arm.location = (hx, hy, C2 - hip0 - 0.45 + rise); bpy.context.view_layer.update()
     return h
 
 
@@ -563,7 +567,7 @@ def _():
         H.aim_obj(bm[0], Vector((-1.0, -2.2, F2 + 1.2)), Vector((HATCH[0], HATCH[1], C2 - 0.6)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.25, -1.1, F2 + 0.35)).lerp(Vector((-1.25, -1.15, F2 + 0.45)), e), Vector((HATCH[0], HATCH[1], C2 - 0.3)), 18, (0, 1, 0))
+        return (Vector((-0.95, -1.12, F2 + 0.3)).lerp(Vector((-0.98, -1.1, F2 + 0.4)), e), Vector((HATCH[0], HATCH[1], C2 - 0.55)), 22, (0, 1, 0))
     return cam, anim
 
 
@@ -638,7 +642,7 @@ def _():
         thin_on_bed(c, t * DUR["gaunt_orbit"])
     def cam(c, t):
         a = math.radians(35 + 35 * ease(t)); hd = Vector((-3.2, -3.85, F2 + 1.05))
-        return (hd + Vector((1.4 * math.sin(a), -1.4 * math.cos(a) * 0.5 + 0.6, 0.1)), hd, 45)
+        return (hd + Vector((1.9 * math.sin(a), -1.9 * math.cos(a) * 0.5 + 0.6, 0.15)), hd, 35)
     return cam, anim
 
 
@@ -759,16 +763,17 @@ def _():
     def anim(c, t):
         sec = t * DUR["eyes_hatch"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
-        c["hatch"].location = c["hatch_home"] + Vector((0.1, 0, 0.0))
+        c["hatch"].location = c["hatch_home"] + Vector((0.2, 0, 0.0))
         if "glints" not in c:
             gm = emissive("Glint", (1.0, 0.95, 0.88), 0.0); c["glint_mat"] = gm
-            c["glints"] = [cyl("Glint", (HATCH[0] - 0.055 + 0.065 * k, HATCH[1] - 0.12, C2 + 0.05), 0.0035, 0.002, gm, 12, rot=(math.radians(90), 0, 0)) for k in range(2)]
+            c["glints"] = [cyl("Glint", (HATCH[0] - 0.035 + 0.065 * k, HATCH[1] - 0.05, C2 + 0.06), 0.006, 0.002, gm, 12, rot=(0, 0, 0)) for k in range(2)]
+            c["closet_light"].data.energy = 1.0
         k = ease(min(1.0, max(0.0, (sec - 1.8) / 1.5)))
         blink = 0.0 if 3.6 < sec < 3.75 else 1.0
-        c["glint_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 1.6 * k * blink
+        c["glint_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 5.0 * k * blink
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
-        return (Vector((hx - 0.2, hy - 1.0, F2 + 1.3)).lerp(Vector((hx - 0.05, hy - 0.4, C2 - 0.6)), e), Vector((hx, hy - 0.06, C2)), 35)
+        return (Vector((hx, -1.8, F2 + 0.5)).lerp(Vector((hx, -1.5, F2 + 0.7)), e), Vector((hx, hy, C2)), 30, (0, 1, 0))
     return cam, anim
 
 

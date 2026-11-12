@@ -427,7 +427,7 @@ def _():
             o.location = tip + Vector((0.1 * math.sin(3 * u + ph_), 0.05 * u, 0.9 * u)); o.scale = (0.03 + 0.08 * u,) * 2 + (1,)
     def cam(c, t):
         e = ease(t)
-        return (Vector((-7.6, ROAD_Y - 5.6, 1.5)).lerp(Vector((-7.2, ROAD_Y - 5.2, 1.5)), e), Vector((-4.6, ROAD_Y - 2.6, 1.3)), 34)
+        return (Vector((-2.6, ROAD_Y - 5.8, 1.55)).lerp(Vector((-2.9, ROAD_Y - 5.4, 1.55)), e), Vector((-5.4, ROAD_Y - 3.0, 1.35)), 34)
     return cam, anim
 
 
