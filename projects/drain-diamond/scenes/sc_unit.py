@@ -52,7 +52,7 @@ def build(variant=None):
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (5.2, 4, 1.75); po.rotation_euler = (0, math.radians(-90), 0)
     box("Haze", (9.0, 4, 0.5), (0.05, 30, 4.0), emissive("HazeE", (0.62, 0.66, 0.72), 1.0))     # grey rainy distance below the skyline
     box("Roofs", (26, 4, 0.2), (40, 60, 0.1), pbr("Zinc", (0.42, 0.44, 0.47), 0.35, 0.8))     # grey zinc roofs below the window line
-    haussmann(-20, 20, seed=60, rot_z=math.radians(90), origin=(22, 4, -14), lit_frac=0.3)
+    haussmann(-20, 20, seed=60, rot_z=math.radians(90), origin=(40, 4, -14), lit_frac=0.3)
     # desks, chairs, lamps, binders, a filing cabinet row, the corkboard
     fab = fabric("ChairFab", (0.05, 0.05, 0.06), 0.9, 0.3, 400); met = pbr("ChairMetal", (0.25, 0.25, 0.27), 0.35, 0.9)
     for k, (x, y, rz) in enumerate(((-2.5, 2.2, 0), (0.5, 2.2, 0), (-2.5, 5.0, math.pi), (0.5, 5.0, math.pi), (3.3, 3.6, -math.pi / 2))):
@@ -175,6 +175,7 @@ def anim_listen(c, t):
     for k, nd in enumerate(c.get("needles", [])):
         nd.rotation_euler = (math.radians(35 * (0.4 + 0.3 * math.sin(sec * 7.0 + k) + 0.2 * math.sin(sec * 13.0 + 2 * k))), 0, 0)
     r = c["reader"]
+    r.rot("neck01", (1, 0, 0), -14); r.rot("head", (1, 0, 0), -10)       # head up, listening, not reading
     r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
     c["headband"].location = hd + Vector((0, 0, 0.07)); c["headband"].rotation_euler = (0, 0, r.arm.rotation_euler.z)
@@ -207,7 +208,7 @@ def anim_read(c, t):
 
 MOVES = {
     "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
-                   cam=lambda c, t: (Vector((2.3, 4.9, 1.45)).lerp(Vector((2.55, 4.7, 1.42)), ease(t)), Vector((3.8, 3.7, 1.05)), 32),
+                   cam=lambda c, t: (Vector((2.4, 4.8, 1.3)).lerp(Vector((2.6, 4.6, 1.28)), ease(t)), Vector((3.9, 3.65, 1.15)), 34),
                    focus=lambda c, t: Vector((3.6, 3.8, 1.0))),
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
