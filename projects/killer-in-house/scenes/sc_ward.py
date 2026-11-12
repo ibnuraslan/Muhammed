@@ -79,6 +79,8 @@ def build(variant=None):
         c["philip"] = H.person("Philip", "philip")
         c["hat"] = box("Hat", (0, 0, 0), (0.3, 0.3, 0.12), pbr("Felt", (0.12, 0.1, 0.08), 0.8), bevel=0.05)
         ch, _ = H.ph.model("dining_chair_02", loc=(-1.5, 0.9, 0), rot_z=math.radians(-90)); c["chair"] = ch
+    import look                   # one strong window key from the ward windows
+    look.interior_day(window=((3.3, 3.0, 2.2), (0.0, 2.0, 0.6)), mood="overcast", fill=0.3, key_size=2.0)
     return c
 
 

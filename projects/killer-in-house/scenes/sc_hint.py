@@ -58,6 +58,16 @@ def build(variant=None):
     for k in cast:
         c["cast"][k.split(":")[0]] = H.person(k.split(":")[-1].capitalize() + k.split(":")[0], k.split(":")[-1])
     _CAST.clear(); _CAST.update(c["cast"])
+    # house look (cinematic): one window key per room by day, cut fill, darker walls; nights keep their own lights
+    import look
+    if tod == "day":
+        r0 = (rooms or ("kitchen",))[0]
+        win = {"kitchen": ((1.1, D2 - 0.3, 1.7), (1.4, 2.0, 0.6)), "front": ((2.6, -D2 + 0.3, 1.7), (2.6, -2.4, 0.6)),
+               "bedroom": ((-2.4, -D2 + 0.3, 1.7), (-2.6, -2.6, 0.6)), "upstairs": ((-2.4, -D2 + 0.3, F2 + 1.5), (-2.4, -2.6, F2 + 0.6)),
+               "attic": ((-2.4, -D2 + 0.3, F2 + 1.5), (-2.4, -2.6, F2 + 0.6))}.get(r0, ((1.1, D2 - 0.3, 1.7), (1.4, 2.0, 0.6)))
+        look.interior_day(window=win, mood="low_sun", fill=0.3, key_size=1.6)
+    else:
+        look.night_interior()
     return c
 
 

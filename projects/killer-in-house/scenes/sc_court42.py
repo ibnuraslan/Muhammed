@@ -87,6 +87,8 @@ def build(variant=None):
              "jury_in": dict(judge="judge", **jury),
              "gavel": {"def": "thin_court", "judge": "judge", "law": "detective2"}}[variant]
     c["cast"] = {k: H.person(v.capitalize() + k, v) for k, v in kinds.items()}
+    import look                   # winter window key from the tall windows, cut fill, darker panelling
+    look.interior_day(window=((6.6, 2.0, 4.0), (0.0, 3.5, 1.0)), mood="overcast", fill=0.35, key_size=3.0)
     return c
 
 

@@ -67,6 +67,8 @@ def build(variant=None):
         cast = {"w": "neighbour_w", "p": "philip"}
     c["cast"] = {k: H.person(v.capitalize() + k, v) for k, v in cast.items()}
     c["wrapped"] = box("WrappedPlate", (0, 0, -20), (0.3, 0.3, 0.07), fabric("Cloth", (0.82, 0.8, 0.72), 0.9, 0.4, 500), bevel=0.04)
+    import look                   # neighbours' dining room at dusk: lamplit, keep the practicals, darker walls
+    look.night_interior()
     return c
 
 

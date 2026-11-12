@@ -47,6 +47,8 @@ def build(variant=None):
     c["thin"] = H.person("Thin", "thin"); c["cap"] = H.person("Captain", "captain")
     if variant == "interview":
         c["typist"] = H.person("Typist", "detective2")
+    import look
+    look.night_interior()
     return c
 
 

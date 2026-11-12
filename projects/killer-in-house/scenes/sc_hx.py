@@ -53,6 +53,9 @@ def build(variant=None):
             col = {"black": (0.03, 0.03, 0.033), "green": (0.03, 0.06, 0.04), "maroon": (0.12, 0.02, 0.02), "grey": (0.12, 0.12, 0.12)}[colr]
             c[nm] = H.vehicle(nm, col, kind)
     c["variant"] = vv
+    import look                   # house look (cinematic): low sky + one sun key + haze by day
+    if tod == "day":
+        look.day_light("overcast" if season == "winter" else "low_sun", azim=150, haze_box=((0, -10, 8), (80, 60, 16)))
     return c
 
 
