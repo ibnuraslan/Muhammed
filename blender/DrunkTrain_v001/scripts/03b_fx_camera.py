@@ -142,52 +142,33 @@ def ramp_keys(rig, names, pts):
     for f, deg in pts:
         for n, w_ in names:
             if n in rig.pose.bones: key_local_rot(rig, n, f, deg * w_)
-FING_R = [("finger%d-%d.R" % (i, j), 0.6 if i == 1 else 1.0) for i in range(1, 6) for j in range(1, 4)]
-ramp_keys(LADO, FING_R, [(1, 60), (f_drop - 2, 60), (f_drop + 4, 8), (f_fb0 - 14, 8), (f_fb0 - 8, 60), (f_fb1 - 2, 60), (f_fb1 + 4, 8)])
 LIDS = [("orbicularis03.L", 1.0), ("orbicularis03.R", 1.0)]
 f_land_ = int(eval(sc["lad_rest"]) and 0) or 0
 f_shut = 262; f_open = sc["f_stir"] + 8
 ramp_keys(LADO, LIDS, [(1, 18), (60, 26), (64, 6), (68, 22), (f_shut - 30, 22), (f_shut, 46), (f_open, 46), (f_open + 10, 20),
                        (f_open + 30, 10), (f_open + 34, 40), (f_open + 38, 12), (sc.frame_end - 120, 14), (sc.frame_end - 116, 38), (sc.frame_end - 112, 18)])
-# hands (client, 23:00): relaxed curled default on every character, anatomical limits on fingers, thumbs and wrists
+# hands (v005): the shared director library blender/pipeline/hand_poses.py, no hand-set finger angles
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())
 f_palm0_x = eval(sc["palm"])[0]
 RIGS4 = [bpy.data.objects[n] for n in ("Lad", "WitA", "WitB", "Worker")]
-def finger_names(rig, s_):
-    return [b.name for b in rig.data.bones if b.name.startswith("finger") and b.name.endswith("." + s_)]
 for rg in RIGS4:
     for pb in rg.pose.bones: pb.rotation_mode = 'QUATERNION'
-    for s_ in "LR":
-        for n in finger_names(rg, s_):
-            pb = rg.pose.bones[n]
-            thumb = n.startswith("finger1")
-            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
-            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-            c.min_x, c.max_x = (math.radians(-5), math.radians(70)) if thumb else (0.0, math.radians(90))
-            c.min_y, c.max_y = math.radians(-15 if thumb else -10), math.radians(15 if thumb else 10)
-            c.min_z, c.max_z = math.radians(-20 if thumb else -10), math.radians(20 if thumb else 10)
-        wb = rg.pose.bones["wrist." + s_]
-        c = wb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.use_limit_x = c.use_limit_z = True
-        c.min_x, c.max_x = math.radians(-60), math.radians(60); c.min_z, c.max_z = math.radians(-25), math.radians(25)
-    # relaxed curl wherever the fingers are not already keyed (Lad's right hand keeps its bottle grip keys)
-    keyed = set()
-    ad_ = rg.animation_data
-    if ad_ and ad_.action:
-        for layer in getattr(ad_.action, "layers", []):
-            for strip in layer.strips:
-                for cb in strip.channelbags:
-                    for fc in cb.fcurves:
-                        if fc.data_path.startswith('pose.bones["finger'): keyed.add(fc.data_path.split('"')[1])
-    for s_ in "LR":
-        for n in finger_names(rg, s_):
-            if n in keyed: continue
-            j = int(n.split("-")[1].split(".")[0]); thumb = n.startswith("finger1")
-            key_local_rot(rg, n, 1, (8 if thumb else 8 + 4 * j))      # v005: softer, so idle hands read relaxed (no claws)
-# Lad's open right hand (outside the bottle grips) also relaxes rather than going flat
-FING_R = [("finger%d-%d.R" % (i, j), 0.6 if i == 1 else 1.0) for i in range(1, 6) for j in range(1, 4)]
-ramp_keys(LADO, FING_R, [(f_drop + 4, 28), (f_fb0 - 14, 28), (f_fb1 + 4, 28)])
-# v005: Lad's left hand opens flat-ish while he looks at his palm (beat 12), not a claw
-FING_L = [("finger%d-%d.L" % (i, j), 0.5 if i == 1 else 1.0) for i in range(1, 6) for j in range(1, 4)]
-ramp_keys(LADO, FING_L, [(1, 16), (f_palm0_x - 4, 16), (f_palm0_x + 8, 6), (sc.frame_end, 6)])
+    add_hand_limits(rg)
+    for s_ in "LR": apply_pose(rg, s_, "relaxed", 1)
+def poses(rg, s_, keys):
+    for f_, nm in keys: apply_pose(rg, s_, nm, int(f_))
+# Lad right hand: bottle wrap while staggering and in the swig; open on the ballast while crawling
+poses(LADO, "R", [(1, "wrap_grip"), (f_drop - 2, "wrap_grip"), (f_drop + 4, "relaxed"),
+                  (f_crawl0 - 6, "relaxed"), (f_crawl0, "flat_palm"), (f_crawl1, "flat_palm"), (f_crawl1 + 8, "relaxed"),
+                  (f_fb0 - 14, "relaxed"), (f_fb0 - 8, "wrap_grip"), (f_fb1 - 2, "wrap_grip"), (f_fb1 + 4, "relaxed")])
+# Lad left hand: flat on the ballast while crawling, palm open when he looks at it (beat 12)
+poses(LADO, "L", [(f_crawl0 - 6, "relaxed"), (f_crawl0, "flat_palm"), (f_crawl1, "flat_palm"), (f_crawl1 + 8, "relaxed"),
+                  (f_palm0_x - 4, "relaxed"), (f_palm0_x + 8, "cup_hold"), (sc.frame_end, "cup_hold")])
+# witnesses: alarm hands open and relaxed (hand at the mouth, hands on the head); the worker's hand cups the hard hat
+for nm_, s_ in (("WitA", "L"), ("WitA", "R"), ("WitB", "L"), ("WitB", "R")):
+    poses(bpy.data.objects[nm_], s_, [(1010, "relaxed"), (1035, "open_alarm"), (1215, "open_alarm"), (1240, "relaxed")])
+poses(bpy.data.objects["WitA"], "L", [(F(31.0), "relaxed"), (F(31.5), "shield"), (sc.frame_end, "shield")])
+poses(bpy.data.objects["Worker"], "R", [(F(32.5), "relaxed"), (F(32.5) + 10, "cup_hold"), (sc.frame_end, "cup_hold")])
 # faces: snore (jaw), horror (jaw drop), stunned/dazed lids, the final dopey grin
 def key_jaw(rig, f, deg): key_local_rot(rig, "jaw", f, deg)
 def key_grin(rig, f, k):
