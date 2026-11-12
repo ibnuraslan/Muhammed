@@ -34,10 +34,11 @@ def ksock(sock, f, v):
     sock.default_value = v; sock.keyframe_insert("default_value", frame=f)
 def khide(ob, ranges):
     """hide_render/visibility keyed: visible only inside the given frame ranges"""
-    ob.hide_render = True; ob.keyframe_insert("hide_render", frame=1)
-    for f0, f1 in ranges:
-        ob.hide_render = False; ob.keyframe_insert("hide_render", frame=f0)
-        ob.hide_render = True; ob.keyframe_insert("hide_render", frame=f1)
+    for attr in ("hide_render", "hide_viewport"):      # viewport too, so scene ray casts (QA) agree with the render
+        setattr(ob, attr, True); ob.keyframe_insert(attr, frame=1)
+        for f0, f1 in ranges:
+            setattr(ob, attr, False); ob.keyframe_insert(attr, frame=f0)
+            setattr(ob, attr, True); ob.keyframe_insert(attr, frame=f1)
     if ob.animation_data and ob.animation_data.action:
         for fc in _fcurves(ob.animation_data.action):
             for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
@@ -144,16 +145,8 @@ for nd in list(mA.node_tree.nodes):
 CT, HU = {}, {}
 for n, ob in RIG.items():
     CT[n] = make_human_ctrl(ob); HU[n] = Human(CT[n])
-def limit(pb, x, y, z):
-    c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.use_transform_limit = True
-    c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-    c.min_x, c.max_x = R_(x[0]), R_(x[1]); c.min_y, c.max_y = R_(y[0]), R_(y[1]); c.min_z, c.max_z = R_(z[0]), R_(z[1])
-for n, ob in RIG.items():
-    for pb in ob.pose.bones:
-        nm = pb.name
-        if nm.startswith("finger1-"): limit(pb, (-30, 60), (-35, 35), (-35, 35))
-        elif nm.startswith("finger"): limit(pb, (-2, 90), (-10, 10), (-10, 10))
-        elif nm.startswith("wrist."): limit(pb, (-60, 60), (-45, 45), (-25, 25))
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())   # shared hand-pose library (director, 7155c8d)
+for n, ob in RIG.items(): add_hand_limits(ob)
 def HOLD(n, s, f):
     return (n == "Hero" and s == "R" and f <= F(8.35)) or (n == "NeighbourA" and F(0.3) <= f <= F(7.6))
 def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
@@ -182,7 +175,7 @@ def arms(h, n, f, pos, yaw, mode="hang", phase=0.0, amp=0.0):
         Wl = W - Vector((root.x, root.y, 0.0))
         base = Vector((pos.x, pos.y, ground_z(pos.x, pos.y)))
         Ww = base + Ry @ Wl
-        if not HOLD(n, s, f): grip(h.r.o, s, f, {"head": 0.3, "up": 0.15, "out": 0.25, "brow": 0.3, "hips": 0.35}.get(mode, 0.3))
+        if not HOLD(n, s, f): grip(h.r.o, s, f, 0, pose={"head": "cup_hold", "up": "open_alarm", "brow": "cup_hold"}.get(mode, "relaxed"))
         h.key_hand(s, f, Ww, Ry @ d, Ry @ nn, pole=base + Ry @ (B["lowerarm01." + s].head_local - Vector((root.x, root.y, 0.0)) + (Vector((sx * 0.6, 0.1, 0.45)) if mode in ("head", "up") else Vector((sx * 0.3, 0.4, -0.1)))))
 def stand(h, f, pos, yaw, flex=0.0, crouch=0.0, side=0.0, head=(0, 0), twist=0.0, feet=None):
     gz = ground_z(pos.x, pos.y)
@@ -202,21 +195,12 @@ def face(rig, f, brow=0.0, jaw=0.0, lids=0.0, smile=0.0):
         pb = P["risorius03." + s]; pb.location = (0, smile * 0.004, 0); pb.keyframe_insert("location", frame=f)
     pb = P["jaw"]; pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(jaw * 16), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
 
-def grip(rig, s, f, amt):
-    """curl fingers (local X) for a grasp; amt 0 open .. 1 fist"""
-    P = rig.pose.bones
-    for fi in range(2, 6):
-        for j in range(1, 4):
-            pb = P.get(f"finger{fi}-{j}.{s}")
-            if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * (48 if j == 1 else 62)), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
-    sx = 1 if s == "L" else -1
-    pb = P.get(f"finger1-1.{s}")
-    if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * 20), 0, R_(-sx * amt * 25)); pb.keyframe_insert("rotation_euler", frame=f)
-    for j in (2, 3):
-        pb = P.get(f"finger1-{j}.{s}")
-        if pb: pb.rotation_mode = "XYZ"; pb.rotation_euler = (R_(amt * 30), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+def grip(rig, s, f, amt, pose=None):
+    """key a hand_poses.py preset: holding -> wrap_grip, otherwise relaxed (or the given pose)"""
+    if pose is None: pose = "wrap_grip" if amt >= 0.55 else "relaxed"
+    apply_pose(rig, s, pose, f)
 for n in RIG:
-    for s in "LR": grip(RIG[n], s, 1, 0.3)
+    for s in "LR": grip(RIG[n], s, 1, 0, pose="relaxed")
 H = HU["Hero"]; HR = RIG["Hero"]
 VALVE = bpy.data.objects["Valve_0"]
 def valve_pos(f):
@@ -325,6 +309,8 @@ for f, hd, md in ((1, (-25, 10), "hips"), (F(1.4), (-30, -15), "hips"), (F(2.6),
     stand(NB, f, pb0, 30, head=hd); arms(NB, "NeighbourB", f, pb0, 30, md)
 NB.walk(lambda f: pb0.lerp(pb1, smooth((f - F(2.8)) / (F(6.0) - F(2.8)))), lambda f: 120, F(2.8), F(6.0), stride=0.65)
 for f in range(F(2.8), F(6.0) + 1, 4): arms(NB, "NeighbourB", f, pb0.lerp(pb1, smooth((f - F(2.8)) / (F(6.0) - F(2.8)))), 120, "hang", phase=f / 40, amp=0.5)
+for f in (F(6.4), F(8.0), F(9.6), F(11.2)):
+    stand(NB, f, pb1, 0, flex=-2, head=(0, 15 * math.sin(f * 0.02))); arms(NB, "NeighbourB", f, pb1, 0, "hips")
 bpath = lambda f: pb1.lerp(pb1 + Vector((0, 1.1, 0)), smooth((f - F(11.8)) / (F(13.4) - F(11.8))))
 stand(NB, F(11.6), pb1, 0, flex=-6, head=(10, 0)); arms(NB, "NeighbourB", F(11.6), pb1, 0, "hang")
 NB.walk(bpath, lambda f: 0, F(11.8), F(13.4), stride=0.45, lean=-6)
@@ -484,7 +470,7 @@ CAM = [  # (t seconds, position, look-at, lens)
     (28.2, V((-10.0, -11.5, 1.6)), V((-2.0, -6.0, 1.2)), 24),
     (29.2, V((0.6, -8.4, 2.4)), V((2.4, -4.3, 2.6)), 30),
     (30.3, V((3.4, -7.1, 2.7)), V((2.4, -4.3, 2.75)), 38),
-    (31.3, V((1.8, -5.6, 3.4)), V((0.6, -7.8, 0.9)), 26),
+    (31.3, V((1.6, -7.4, 3.8)), V((0.6, -8.0, 0.9)), 26),
     (32.3, V((1.0, -10.0, 16.0)), V((0.4, -2.0, 0.0)), 28),
     (33.5, V((0.5, -3.5, 42.0)), V((0.2, -0.8, 0.0)), 28),
 ]

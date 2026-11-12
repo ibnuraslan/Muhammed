@@ -33,3 +33,37 @@ Checked and OK: feet planted while walking (IK plants), the bin wheeled with bot
 - Camera inside geometry: 0; below ground: 0 (`contact_audit_v003.txt`).
 - Contact audit, feet: 34 samples more than 4 cm up, mostly mid-swing and on the porch steps; same as v002.
 - Story-beat frames are unchanged (`beats.json` is identical to v002).
+
+## Round 2 (director review of e36d3d3), Nov 12
+- **Nozzle grip:** `hand_poses.py` `wrap_grip` on both hands. The nozzle is placed in the curled-finger ring from frame 1, seated on the valve cap in beat 1 and carried in the fist after. No gap (`after_v003_nozzle_grip.jpg`).
+- **No claws:** every free hand uses a `hand_poses.py` preset: `relaxed`, `open_alarm` for raised alarm hands, and `cup_hold` for the hero's hands on top of his head at beat 10. Neighbour B's alarm is an open hand raised in front, then lowering. Joint limits come from `add_hand_limits`.
+- **Neighbour B:** no T-pose in-betweens; his arms stay in front.
+- **Camera:** pulled back at 2.0–2.5 s; at 10.5–11.5 s moved up over the verge (no foam fill); the 31.3 s key is clear of the porch roof.
+- **Hidden objects:** now hidden in the viewport too, so the QA ray-casts match the render.
+
+## qa_check.py (qa_v003.json, step 6): flags that stay, and why
+- **HOVER, CLAW, FACEPRESS, BACKHEAD, FILL: 0.**
+- **EMPTY (183 samples):** no character in the frame by design:
+  - the beat 2 crane over the ring (7.5–8.3 s)
+  - the flood surging down the street (8.3–11.9 s)
+  - the tube cutaway and explainer on the sky-blue gradient (14.3–20.8 s)
+  - the slam at the barrier (22–22.8 s)
+  - the aftermath street (24.9–25.8 s)
+  - the drone pull-up (31–33.5 s)
+
+  The early beat 1 samples flag "character under 15 %" because the swelling tube shares the frame with him. Hands, valve and tube read together, as asked.
+- **INSIDE (18 samples):** false positives. The camera is outside all geometry (ray-parity audit: 0 frames inside).
+  - 1.2–2.6 s: the rays hit the inside-facing side of the tube mesh.
+  - 20.8–20.9 s: the cutaway shell fading out.
+  - 31.1 s: one sample.
+
+## Hand audit
+5 hits, all at f371–375: Neighbour B finishing his walk at his door, about 6 s, off-camera behind the street whip. Everything else is 0. clip_scan has 0 bad ranges.
+
+## Self-check (6 points)
+1. Hands touch what they hold: checked (nozzle, hose, bin)
+2. No claws: checked
+3. Nothing pressed into a face: checked (QA FACEPRESS 0)
+4. No empty, blurred or black cells, and no back of head on beats: checked (QA BACKHEAD 0; the no-character cells are the intended water/cutaway/aerial shots listed above)
+5. Close-ups show the hands: checked
+6. hand_poses.py used: checked
