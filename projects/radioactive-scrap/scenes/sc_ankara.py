@@ -206,7 +206,7 @@ def investigators(c, sec, lean_back=0.0):
     a = c["people"]["inv"]; b = c["people"]["inv2"]
     sit_at(a, REC + Vector((-0.5, -0.95, 0.45)), REC + Vector((-0.5, 0, 0)), lean=18 - 30 * lean_back)
     sit_at(b, REC + Vector((0.5, -0.95, 0.45)), REC + Vector((0.5, 0, 0)), lean=20)
-    lap_hands(a); lap_hands(b)
+    arms_crossed(a); arms_crossed(b)
     return a, b
 
 
@@ -218,7 +218,7 @@ def c4_7a(c, t):           # two investigators lay the two ledgers side by side 
     edge = c["ledB"].location + Vector((0, -0.2, 0.04))
     reach(b, "R", edge + sd * 0.12, Vector((sd.x, sd.y, -1.0)), forward(b)); reach(b, "L", edge - sd * 0.12, Vector((-sd.x, -sd.y, -1.0)), forward(b))
     fingers_curl(b, 30, thumb=20)
-    lap_hands(a)
+    arms_crossed(a)
     a.rot("head", forward(a).cross(Vector((0, 0, 1))), -16); b.rot("head", sd, -14)
 
 
