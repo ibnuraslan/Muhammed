@@ -185,7 +185,7 @@ KEYS = [(1791, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 
         (1980, CUTC + V((0.050, -0.030, 0.030)), CUTC + V((0, -0.006, 0.005)), 34),
         (2060, CUTC + V((0.058, -0.018, -0.016)), CUTC + V((0, -0.006, 0.004)), 34),
         (2140, CUTC + V((0.040, -0.048, 0.012)), CUTC + V((0, -0.008, 0.004)), 32),
-        (2200, EYE + V((0.008, -0.075, 0.004)), EYE + V((0.004, 0, 0)), 40)]
+        (2200, EYE + V((0.030, -0.110, 0.010)), EYE + V((0.004, 0, 0)), 40)]
 for f, p, a, l in KEYS:
     cam.location = p; cam.keyframe_insert("location", frame=f); aim.location = a; aim.keyframe_insert("location", frame=f); camd.lens = l; camd.keyframe_insert("lens", frame=f)
 for idb in (cam, aim, camd):

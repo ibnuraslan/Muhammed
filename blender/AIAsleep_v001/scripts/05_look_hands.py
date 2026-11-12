@@ -74,6 +74,30 @@ for o in O:
 for o in O:   # sun visors flipped up out of frame (they blocked the eye-level push-in)
     if o.name.startswith('Inner_AgainsSun') and 'Traffic' not in o.name:
         o.animation_data_clear(); o.hide_render = True
+# viewport visibility follows render visibility (QA ray casts use the viewport state)
+def _fcs(idb):
+    ad = idb.animation_data
+    if not ad or not ad.action: return []
+    try: return list(ad.action.fcurves)
+    except AttributeError: return [fc for ly in ad.action.layers for st in ly.strips for cb in st.channelbags for fc in cb.fcurves]
+for o in O:
+    hr = [fc for fc in _fcs(o) if fc.data_path == "hide_render"]
+    if hr:
+        for kp in list(hr[0].keyframe_points):
+            o.hide_viewport = bool(kp.co.y > 0.5); o.keyframe_insert("hide_viewport", frame=int(kp.co.x))
+        for fc in _fcs(o):
+            if fc.data_path == "hide_viewport":
+                for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
+    elif o.hide_render:
+        o.hide_viewport = True
+# car glass is real glass (transmissive), so QA sees the driver through the windows
+for m in bpy.data.materials:
+    if m.name.startswith("M_Glass") and m.node_tree:
+        for n in m.node_tree.nodes:
+            if n.type == "BSDF_PRINCIPLED":
+                t = n.inputs.get("Transmission Weight")
+                if t is not None and not t.is_linked: t.default_value = 1.0
+                n.inputs["Roughness"].default_value = 0.02
 sc.render.use_motion_blur = False
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT_PATH, compress=True); print("SAVED", OUT_PATH)

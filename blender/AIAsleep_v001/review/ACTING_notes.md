@@ -47,3 +47,27 @@ Story-beat frames (`beats.json`) are unchanged.
 | 23 | 9.5 s, 41.5 s | Half-open mouth with lower teeth bared (snarl). | All jaw keys 0.5°: lips relaxed, teeth hidden. |
 | 24 | 42.5 s (2551) | Back of his head on the last character beat. | 2535/2562 framings moved in front of him (3/4 face). |
 | 25 | 16.0 / 17.0 s (961, 1021) | Blurred fabric and wheel. | The camera arrives on the HUD by 958 and holds/drifts on it to 1030. |
+
+## Hand library + QA pass (director, 14:41–15:00 UTC)
+- Grips now use `pipeline/hand_poses.py`: `add_hand_limits(rig)` plus `grip_object(rig, side, f, rim, contact, approach=-radial, finger_dir=-normal)` at every hand key. The hand comes from the outside of the rim at 9-and-3, every finger closes onto the rim, and the thumb opposes. No hand-set finger angles remain.
+- The rig's viewport visibility now follows its keyed render visibility. Car glass is transmissive, so `qa_check.py` sees through windows the way the render does.
+- Re-staged from QA flags:
+  - beat-2 HUD now shows his hand (270/335)
+  - 9.3 s no longer looks down on his hair (545)
+  - 20 s gesture is a 3/4 front shot of his face and hands (1220)
+  - the roof rise aims at him (1318)
+  - the cutaway exit path goes around the slab (2200, was INSIDE 2185–2209)
+  - the last exit is low through the cabin and out of the rear glass (2588/2610, was INSIDE the roof at 2575)
+
+### qa_check.py exceptions kept (intended)
+| Flag | Frames | Reason |
+|---|---|---|
+| EMPTY | 259–337 | Beat 2, "flashed red": the dash HUD with the red closed-eye icon is the subject of the line. Close on the screen, about 1.3 s. |
+| EMPTY | 949–1039 | Beat 5, "screen turns green": the director asked for a hold on the readable HUD here (review of 3777fec, point 5). |
+| EMPTY | 1195–1213 | About 0.3 s of camera travel during the 20 s gesture, between his face and the 3/4 hands framing. |
+| EMPTY | 1333–1513 | Beat 7, the time-lapse drive: wide establishing exterior shots of the car on the highway. The driver is inside the car (too small to count). |
+| EMPTY | 1795–2209 | Beat 9, the anatomical cross-section of the eyelid: an explainer cutaway with no character by design. |
+| EMPTY | 2593–2605 | The ending: the camera leaves through the rear glass and the car drives on (wide exterior). |
+| FILL (<12 cm) | 1669–1885, 1933–2023, 2107–2155, 2215–2461 | Beats 8–10: intended eye macros and the cross-section close-ups (the iris detection is the story). |
+| FILL (glass) | 1513, 2593 | One sample each, as the camera passes through the windshield and the rear glass. |
+INSIDE, BACKHEAD, HOVER, CLAW and FACEPRESS are all 0.
