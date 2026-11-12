@@ -41,6 +41,36 @@ def set_const(obj):
                     if fc.data_path in ("hide_render", "hide_viewport"):
                         for kp in fc.keyframe_points: kp.interpolation = "CONSTANT"
 
+# ------------------------------------------------------------------ v008d: masks skinned to the face (no gap at any frame)
+from mathutils.kdtree import KDTree as _KD
+for _nm in ("Surgeon", "Nurse", "Anaes"):
+    _rig = D[_nm]; _body = D[_nm + ".body"]; _mask = D[_nm + "_Mask"]
+    _rig.data.pose_position = "REST"; bpy.context.view_layer.update()
+    _Mw = _mask.matrix_world.copy()
+    _mask.parent = None; _mask.matrix_world = Matrix.Identity(4); _mask.data.transform(_Mw)
+    _mask.data.transform(_body.matrix_world.inverted())
+    _mask.parent = _body.parent; _mask.parent_type = _body.parent_type; _mask.parent_bone = _body.parent_bone
+    _mask.matrix_parent_inverse = _body.matrix_parent_inverse.copy(); _mask.matrix_basis = _body.matrix_basis.copy()
+    _bv = _body.data.vertices; _kd = _KD(len(_bv))
+    for _v in _bv: _kd.insert(_v.co, _v.index)
+    _kd.balance()
+    _gn = {g.index: g.name for g in _body.vertex_groups}; _bones = {b_.name for b_ in _rig.data.bones}
+    for _v in _mask.data.vertices:
+        _near = _kd.find_n(_v.co, 4); _acc = {}
+        for (_co, _i, _d) in _near:
+            _w = 1.0 / max(_d, 1e-4)
+            for _g in _bv[_i].groups:
+                _n = _gn[_g.group]
+                if _n in _bones: _acc[_n] = _acc.get(_n, 0.0) + _g.weight * _w
+        _tot = sum(_acc.values()) or 1.0
+        for _n, _w in _acc.items():
+            _vg = _mask.vertex_groups.get(_n) or _mask.vertex_groups.new(name=_n); _vg.add([_v.index], _w / _tot, "REPLACE")
+    _md = _mask.modifiers.new("Armature", "ARMATURE"); _md.object = _rig
+    while _mask.modifiers[0] != _md: bpy.ops.object.modifier_move_up({"object": _mask}, modifier=_md.name) if False else _mask.modifiers.move(len(_mask.modifiers) - 1, 0)
+    _sw = _mask.modifiers.new("FitFace", "SHRINKWRAP"); _sw.target = _body; _sw.wrap_method = "NEAREST_SURFACEPOINT"; _sw.wrap_mode = "OUTSIDE_SURFACE"; _sw.offset = 0.002
+    _mask.modifiers.move(len(_mask.modifiers) - 1, 1)
+    _rig.data.pose_position = "POSE"; bpy.context.view_layer.update()
+    print("MASK skinned", _nm, len(_mask.vertex_groups), "groups")
 # ------------------------------------------------------------------ key places
 rootB = D["MonkeyRootB"]; rootA = D["MonkeyRootA"]; head = D["MK_Head"]; nref = D["NeckRef"]
 M_LIE2 = rootB.matrix_world.copy(); M_LIE1 = rootA.matrix_world.copy()
@@ -93,7 +123,7 @@ def head_pt(f, model_pt):   # world position of a model-space point on the movin
 # marker line reveal (drawn 70-200)
 A0, A1 = A_UP - 1.3, A_UP + 1.3
 bpy.data.materials["M_MarkerLine"].node_tree.nodes["RevealStart"].outputs[0].default_value = A0 + math.pi
-for f in range(1, 1771, 10):
+for f in list(range(1, 260, 2)) + list(range(260, 1771, 30)):
     a_ = A0 + (A1 - A0) * smooth((f - 60) / 140.0)
     node_key("M_MarkerLine", "Reveal", f, max(0.0, min(1.0, (a_ - A0) / (2 * math.pi) + 0.0)))
 hide_keys(D["MarkerLine"], [(1, False), (252, True)])
@@ -268,6 +298,7 @@ for o in D:
 # ------------------------------------------------------------------ people
 SURG = Human(make_human_ctrl(D["Surgeon"])); NURSE = Human(make_human_ctrl(D["Nurse"]))
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())
+for nm_ in ("Surgeon", "Nurse"): add_hand_limits(D[nm_])     # v008d: limits on before any grip is solved (they used to be added last and pulled hands off props)
 _POSE_CACHE = {}
 def pose_hand(H, s, f, name):
     rig = H.r.o; key = (rig.name, s, name)
@@ -315,28 +346,49 @@ SHOULDER_W = M_LIE1 @ _sv
 def AWAY(p):   # horizontal unit vector from the surgeon's chest toward p (keeps hands off his own torso)
     d = (p - V(S0.x, S0.y, p.z)); d.z = 0
     return d.normalized() if d.length > 1e-4 else V(0, 1, 0)
-for f in list(range(1, 212, 6)) + [211]:
-    sw = 0.5 + 0.5 * math.sin(f / 24.0)
-    pose(SURG, f, S0, Y0, flex=26 + 3 * sw, twist=-6, headr=(18, 4))
+# ---- v008d: the marker pen lives in the right hand (tripod grip), tip on the skin along the dashed line; left palm steadies the head
+_hw1 = head_world(1); _hv = [_hw1 @ v.co for v in head.data.vertices]
+_zt = max(p.z for p in _hv); _top = [p for p in _hv if p.z > _zt - 0.012]
+_c = sum(_top, V(0, 0, 0)) / len(_top); STEADY_W = min(_hv, key=lambda p: (p - _c).length)
+PEN_HALF = 0.082                                         # origin -> tip end (MarkerPenTip at local -Z)
+PEN_REST_O = V(-0.2, -0.16, 0.925); T_REST = PEN_REST_O - V(PEN_HALF, 0, 0); U_REST = V(1, 0, 0)
+U_DRAW = V(0.05, -0.45, 1.0).normalized()
+def pen_tip_target(f):
     a = A0 + (A1 - A0) * smooth((f - 60) / 140.0)
-    tip = neck_ring(M_LIE1, a, 0.081) if f > 40 else neck_ring(M_LIE1, A0, 0.11) + V(0, -0.05, 0.08)
-    if f > 205: tip = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10 * smooth((f - 205) / 20))
-    Wp = tip + V(0, -0.04, 0.13); Wp.z = max(Wp.z, NA.z + 0.13)
-    Wp = Wp + AWAY(Wp) * 0.10 * smooth((f - 195) / 15.0)
-    hand(SURG, "R", f, Wp, V(0.1, 0.3, -1), V(1, 0, 0.2), 0.35, Y0)
-    pose_hand(SURG, "R", f, "pinch" if f <= 205 else "relaxed")
-    place_hand(SURG.r.o, "L", f, SHOULDER_W + V(0, 0, 0.004), V(0, 0, -1), V(0.35, 1, 0)); pose_hand(SURG, "L", f, "flat_palm")
-# pen: in the right hand until put down on the drape at ~232
-def wrist_M(f, s):
-    ev(f); pb = SURG.r.PB["wrist." + s]
-    return srig.matrix_world @ pb.matrix
-for f in range(1, 240, 3):
-    M = wrist_M(f, "R")
-    p = (fingertip(SURG, "R", 1) + fingertip(SURG, "R", 2)) / 2.0
-    pen.location = p; pen.keyframe_insert("location", frame=f)
-    pen.rotation_mode = "QUATERNION"; pen.rotation_quaternion = (M.to_quaternion() @ Quaternion((1, 0, 0), math.radians(90))); pen.keyframe_insert("rotation_quaternion", frame=f)
-pen.location = V(-0.2, -0.16, 0.925); pen.keyframe_insert("location", frame=246)
-pen.rotation_quaternion = Quaternion((0, 1, 0), math.radians(90)) @ Quaternion((0, 0, 1), math.radians(20)); pen.keyframe_insert("rotation_quaternion", frame=246)
+    if f <= 40: return neck_ring(M_LIE1, A0, 0.11) + V(0, -0.05, 0.06) * (1 - smooth((f - 20) / 20.0)), U_DRAW
+    if f <= 60: return neck_ring(M_LIE1, A0, 0.11).lerp(neck_ring(M_LIE1, A0, 0.081), smooth((f - 40) / 20.0)), U_DRAW
+    if f <= 205: return neck_ring(M_LIE1, a, 0.081), U_DRAW
+    k = smooth((f - 205) / 21.0); T0 = neck_ring(M_LIE1, A1, 0.081)
+    return T0.lerp(T_REST, k) + V(0, 0, 0.07 * math.sin(math.pi * k)), U_DRAW.lerp(U_REST, k).normalized()
+def grip_pt(): return (fingertip(SURG, "R", 1) + fingertip(SURG, "R", 2)) / 2.0
+PEN_FRAMES = list(range(1, 226, 3)) + [226]
+for f in PEN_FRAMES:
+    sw = 0.5 + 0.5 * math.sin(f / 24.0)
+    if f <= 211: pose(SURG, f, S0, Y0, flex=26 + 3 * sw, twist=-6, headr=(18, 4))
+    T, u = pen_tip_target(f); Gs = T + u * 0.05 + (V(0, 0, 0.008) if f > 205 else V(0, 0, 0))
+    W = Gs + V(0, -0.03, 0.09)
+    for _it in range(2):        # numeric correction: put the thumb/index pinch exactly on the barrel point Gs
+        hand(SURG, "R", f, W, V(0.1, 0.3, -1), V(1, 0, 0.2), 0.35, Y0); pose_hand(SURG, "R", f, "pinch")
+        ev(f); W = W + (Gs - grip_pt())
+    hand(SURG, "R", f, W, V(0.1, 0.3, -1), V(1, 0, 0.2), 0.35, Y0); pose_hand(SURG, "R", f, "pinch")
+    if f == 226: R_REL = W.copy()
+    if f <= 211:
+        place_hand(SURG.r.o, "L", f, STEADY_W + V(0, 0, 0.004), V(0, 0, -1), V(0.35, 1, 0)); pose_hand(SURG, "L", f, "flat_palm")
+# pen: baked every frame from the evaluated hand (equivalent to Child Of hand.R, baked): passes through the pinch, tip on the skin
+def bake_pen():
+  global PEN_LOG
+  pen.animation_data_clear(); pen.rotation_mode = "QUATERNION"
+  PEN_LOG = []
+  for f in range(1, 227):
+    ev(f); T, _u = pen_tip_target(f); G = grip_pt()
+    _rb = SURG.r.o; _web = _rb.matrix_world @ ((_rb.pose.bones["finger1-2.R"].head + _rb.pose.bones["finger2-1.R"].head) / 2.0)
+    u = (_web - T).normalized() if (_web - T).length > 0.01 else _u      # barrel runs from the tip through the pinch and out over the thumb-index web
+    pen.location = T + u * PEN_HALF; pen.rotation_quaternion = V(0, 0, 1).rotation_difference(u)
+    pen.keyframe_insert("location", frame=f); pen.keyframe_insert("rotation_quaternion", frame=f)
+    PEN_LOG.append((f, round((G - T).length, 4)))
+  pen.keyframe_insert("location", frame=1770); pen.keyframe_insert("rotation_quaternion", frame=1770)   # released at 226: rests where he set it
+  print("PEN grip-to-tip (m) min/max", min(d for _, d in PEN_LOG), max(d for _, d in PEN_LOG))
+SHOULDER_W = STEADY_W
 # beat 2: both hands cup the head (under jaw / behind skull), lift, side-step, place on body B
 FM = V(-0.385, -0.923, 0).normalized()
 HC_M = EYEMID - FM * 0.045 + V(0, 0, 0.01)
@@ -375,10 +427,10 @@ def beat2_keys(frames):
                 kL = smooth((f - 212) / 38.0); W = (SHOULDER_W + V(0, 0, 0.07)).lerp(W, kL); W = W + AWAY(W) * 0.06 * math.sin(math.pi * kL)
                 d_ = V(0.4, 1, 0.18).normalized().lerp(d_, kL).normalized(); n_ = V(0, 0, -1).lerp(n_, kL).normalized()
             elif f < 250:
-                tip0 = neck_ring(M_LIE1, A1, 0.11) + V(0.0, -0.08, 0.10)
-                R0 = tip0 + V(0, -0.04, 0.13); R0.z = max(R0.z, NA.z + 0.13)
+                if f <= 226: continue
+                R0 = R_REL
                 k_ = smooth((f - 226) / 30.0)
-                W = R0.lerp(W, k_) + V(0, 0.12, 0.02) * math.sin(math.pi * k_) + AWAY(R0) * 0.10 * (1 - k_)
+                W = R0.lerp(W, k_) + V(0, 0.12, 0.02) * math.sin(math.pi * k_)
                 kd = smooth((f - 226) / 26.0)
                 d_ = V(0.1, 0.3, -1).normalized().lerp(d_, kd).normalized(); n_ = V(1, 0, 0.2).normalized().lerp(n_, kd).normalized()
             else:
@@ -504,12 +556,30 @@ for o in tro:
 NP0 = TRO_END + V(-0.55, -0.75, 0) + V(-0.15, -0.55, 0); NP1 = TRO_END + V(-0.12, -0.55, 0)
 ny = yaw_to(NP1, TRO_END)
 NURSE.walk(lambda f: NP0.lerp(NP1, smooth((f - 1) / 150.0)).to_3d(), lambda f: ny, 1, 160, stride=0.55, duty=0.6, lift=0.07, bob=0.018, crouch=0.04, lean=8)
+_trol = D["Trolley"]
+for o in tro:
+    if o is _trol: continue
+    o.animation_data_clear() if o.name != "Bowl" else None
+    if o.name == "Bowl":
+        for fc_ in []: pass
+    o.location = o.location  # keep
+bpy.context.scene.frame_set(150); bpy.context.view_layer.update()
+_TW = _trol.matrix_world.copy()
+for o in tro:
+    if o is _trol: continue
+    if o.animation_data: o.animation_data_clear()
+    bpy.context.scene.frame_set(150); bpy.context.view_layer.update()
+    _w = o.matrix_world.copy(); o.parent = _trol; o.matrix_parent_inverse = _TW.inverted(); o.matrix_basis = _w   # world = trolley(f) @ inv(trolley_150) @ w
 for f in list(range(1, 161, 4)) + [160]:
     p = NP0.lerp(NP1, smooth((f - 1) / 150.0))
+    bpy.context.scene.frame_set(f); bpy.context.view_layer.update()
+    _bb = [_trol.matrix_world @ V(*c) for c in _trol.bound_box]
+    _lo = V(min(q.x for q in _bb), min(q.y for q in _bb), min(q.z for q in _bb)); _hi = V(max(q.x for q in _bb), max(q.y for q in _bb), max(q.z for q in _bb))
+    Rz = Matrix.Rotation(math.radians(ny), 3, "Z")
     for s in "LR":
-        Rz = Matrix.Rotation(math.radians(ny), 3, "Z")
-        hand(NURSE, s, f, p + Rz @ V((0.16 if s == "L" else -0.16), -0.38, 0) + V(0, 0, 0.88), Rz @ V(0, -1, -0.3), V(0, 0, 1), 0.3, ny)
-        pose_hand(NURSE, s, f, "wrap_grip")
+        g = p + Rz @ V((0.16 if s == "L" else -0.16), -0.38, 0) + V(0, 0, 0.88)
+        cp = V(min(max(g.x, _lo.x + 0.03), _hi.x - 0.03), min(max(g.y, _lo.y + 0.03), _hi.y - 0.03), _hi.z)
+        place_hand(D["Nurse"], s, f, cp, V(0, 0, -1), Rz @ V(0, 1, 0)); pose_hand(NURSE, s, f, "flat_palm")   # pushing: palms flat on the trolley top
 NP2 = V(-1.05, -0.62, 0); ny2 = yaw_to(NP2, V(0.0, 0.05, 0))
 NP2b = V(-0.82, 1.15, 0); ny2b = yaw_to(NP2b, V(-1.35, 1.25, 0))
 WALKS = [(300, 400, NP2, NP2b), (560, 680, NP2b, NP2)]
@@ -572,8 +642,8 @@ for f in list(range(200, 918, 6)) + [917]:
     bowl.location = p_ + Rz_ @ V(0.10, -0.40, 0) + V(0, 0, 0.93); bowl.keyframe_insert("location", frame=f)
     bpy.context.view_layer.update()
     rim = bowl.location + Rz_ @ V(0.0, 0.075, 0) + V(0, 0, 0.018)
-    try: grip_object(D["Nurse"], "L", f, bowl, rim, V(0, 0, -1), finger_dir=Rz_ @ V(0, -1, 0))
-    except Exception as e: print("BOWLFAIL", f, e)
+    _bb = [bowl.matrix_world @ V(*c) for c in bowl.bound_box]; _bz = min(q.z for q in _bb)
+    place_hand(D["Nurse"], "L", f, V(bowl.matrix_world.translation.x, bowl.matrix_world.translation.y, _bz), V(0, 0, 1), Rz_ @ V(0, -1, 0)); pose_hand(NURSE, "L", f, "hold_flat_object")   # carried on the flat palm
 p0 = bowl.location.copy()
 for df, dz, dx in ((0, 0, 0), (10, -0.35, 0.05), (22, -(p0.z - 0.02), 0.1), (28, -(p0.z - 0.02) + 0.09, 0.14), (34, -(p0.z - 0.02), 0.17), (38, -(p0.z - 0.02) + 0.03, 0.18), (42, -(p0.z - 0.02), 0.19)):
     bowl.location = p0 + V(dx, -dx * 0.5, dz); bowl.keyframe_insert("location", frame=918 + df)
@@ -601,7 +671,7 @@ for f in list(range(1190, 1771, 6)):
     hang(NURSE, "L", f, NP3, ny3, 0.08)
 for ob in [D["Nurse"]] + [c for c in D["Nurse"].children]:
     hide_keys(ob, [(1, False), (1036, True), (1187, False)])
-ANA = Human(make_human_ctrl(D["Anaes"]))
+ANA = Human(make_human_ctrl(D["Anaes"])); add_hand_limits(D["Anaes"])
 AP = V(-1.62, 0.6, 0); AY = yaw_to(AP, V(-1.3, 1.25, 0)); RzA = Matrix.Rotation(math.radians(AY), 3, "Z")
 bag = D["Anaes_Bag"]; bag_c = bag.location.copy()
 for f in list(range(1, 1771, 6)):
@@ -640,7 +710,7 @@ for f_, a_ in ((1300, 0.0), (1345, 3.0), (1770, 3.4)):
 for tool in (nh, fcp):
     tool.rotation_mode = "QUATERNION"
     hide_keys(tool, [(1, True), (382, False), (676, True)])
-TOOL_LOG = []
+TOOL_LOG = []; TOOL_C = {}
 for f in list(range(400, 672, 6)):
     k = min((f - 395) // 26, len(STITCH_ORDER) - 1); ph = ((f - 395) % 26) / 26.0
     a = stitch_ang[STITCH_ORDER[k]] + 0.12
@@ -653,6 +723,7 @@ for f in list(range(400, 672, 6)):
         tool.rotation_quaternion = dir_.to_track_quat("Z", "Y"); tool.keyframe_insert("location", frame=f); tool.keyframe_insert("rotation_quaternion", frame=f)
         bpy.context.view_layer.update()
         C = sp_ + dir_ * (0.12 if s_ == "R" else 0.09); side_ = dir_.cross(V(0, 0, 1)).normalized()
+        TOOL_C[(tool.name, f)] = (s_, C - tool.location)
         try: TOOL_LOG.append(grip_object(SURG.r.o, s_, f, tool, C, -side_ if s_ == "R" else side_))
         except Exception as e: print("TOOLFAIL", f, s_, e)
 print("TOOLGRIPS", len(TOOL_LOG))
@@ -673,7 +744,7 @@ FWW = M_LIE2.to_3x3() @ V(-0.385, -0.923, 0)       # monkey B face direction in 
 UPW = V(0, 0, 1)
 # (frame, pos, aim, lens, up, space)   space 'W' world, 'B' monkey-B model space
 K = [
- (1,    V(0.35, 0.95, 1.5), V(-0.3, -0.35, 1.12), 24, UPW, "W"),
+ (1,    V(0.35, 0.95, 1.72), V(-0.3, -0.35, 1.2), 24, UPW, "W"),
  (61,   V(0.45, 0.25, 1.38), NA + V(-0.05, -0.15, 0.05), 28, UPW, "W"),
  (121,  V(0.48, -0.3, 1.55), NA, 38, UPW, "W"),
  (181,  NA + V(0.26, -0.04, 0.17), NA, 50, UPW, "W"),
@@ -734,6 +805,12 @@ for f in range(1, 1771):
     CAMLOG.append((f, tuple(round(x, 3) for x in p), tuple(round(x, 3) for x in a), round(fl(f), 1)))
 json.dump(CAMLOG[::30], open(os.path.join(HERE, "..", "camera_path.json"), "w"))
 for nm_ in ("Surgeon", "Nurse", "Anaes"): add_hand_limits(D[nm_])
+# v008d contact bake: with every hand key final, put each held prop exactly in the evaluated pinch
+for (tn, f), (s_, off) in sorted(TOOL_C.items(), key=lambda kv: kv[0][1]):
+    ev(f); t_ = D[tn]; G = (fingertip(SURG, s_, 1) + fingertip(SURG, s_, 2)) / 2.0
+    t_.location = G - off; t_.keyframe_insert("location", frame=f)
+bake_pen()
+for f in (640, 650, 660): pose_hand(ANA, "R", f, "wrap_grip")      # bag squeeze: closed wrap, no claw between grip keys
 # table-2 group is transparent after the void and never seen again: hide it for good (QA: no invisible fill)
 for o in D:
     if o.type in ("MESH", "CURVE") and any(sl.material and "Fade_T2" in sl.material.node_tree.nodes for sl in o.material_slots if sl.material and sl.material.use_nodes):
