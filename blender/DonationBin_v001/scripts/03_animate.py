@@ -109,7 +109,12 @@ print("ROOT_HEIGHT", RH)
 up = Vector((0, 0, 1))
 def stand_feet(x, y, yaw, lift=0.0, pitch=0.0, spread=1.0):
     fx = {s: WO.foot_xy(s, Vector((x, y, 0)), yaw) for s in "LR"}
-    return {s: ("g", (fx[s].x, fx[s].y), yaw, lift, pitch) for s in "LR"}
+    fw = Matrix.Rotation(R_(yaw), 3, 'Z') @ Vector((0, -0.14, 0))
+    out = {}
+    for s in "LR":     # on the uneven clothes, raise the foot so the toe ball does not dig into a rise in front of the heel
+        h = ground_z(fx[s].x, fx[s].y); t = ground_z(fx[s].x + fw.x, fx[s].y + fw.y)
+        out[s] = ("g", (fx[s].x, fx[s].y), yaw, lift + max(0.0, t - h), pitch)
+    return out
 # --- beat 1 (1-150): on tiptoe reaching into the chute, the other hand on the sill
 TIP_PITCH = float(os.environ.get("TIP_PITCH", "40"))
 SILL = Vector((-0.27, FY - 0.03, sc["chute_z"][0] + 0.02))
@@ -157,9 +162,9 @@ seated(560, look=(-30, 20), lean=0); seated(610, look=(-20, -15), lean=10)
 STAND = Vector((0.02, -0.18, 0))
 def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
     z = PZ(STAND.x, STAND.y)
-    ph = 1.30 + 0.03 * wob
+    ph = 1.50 + 0.03 * wob
     WO.pose(f, (STAND.x, STAND.y - 0.05 * push, z + RH - 0.04), yaw=0, flex=5 + 5 * push, sp=(3 + 4 * push, 0, 0), head=look,
-            hands={"L": ("w", (0.16, FY + 0.048 - 0.006 * push, ph), (0, 0, 1), (0, 1, 0)), "R": ("w", (-0.16, FY + 0.048 - 0.006 * push, ph + 0.04), (0, 0, 1), (0, 1, 0))},
+            hands={"L": ("w", (0.16, FY + 0.07 - 0.006 * push, ph), (0, 0, 1), (0, -1, 0)), "R": ("w", (-0.16, FY + 0.07 - 0.006 * push, ph + 0.04), (0, 0, 1), (0, -1, 0))},
             feet=stand_feet(STAND.x, STAND.y + 0.08, 0, 0, 0), jaw=jaw, curl={"L": 0.1, "R": 0.1})
 WO.pose(660, (0.04, 0.02, PZ(0.04, 0.02) + 0.45), yaw=0, flex=20, sp=(35, 0, 0), head=(-20, 0),
         hands={"L": ("r", (0.0, -0.2, 0.1)), "R": ("r", (0.0, -0.2, 0.1))}, feet=stand_feet(0.04, -0.02, 0))
@@ -170,37 +175,39 @@ LW = -0.735
 def at_wall(f, a, b, look=(0, 0)):
     p = Vector((-0.30, 0.0, 0)); z = PZ(p.x, p.y)
     WO.pose(f, (p.x, p.y, z + RH - 0.05), yaw=-90, flex=8, sp=(6, 0, 0), head=look,
-            hands={"L": ("w", (LW + 0.004 + 0.06 * a, -0.18, 1.45), (0, 0, 1), (1, 0, 0)), "R": ("w", (LW + 0.004 + 0.06 * b, 0.17, 1.30), (0, 0, 1), (1, 0, 0))},
+            hands={"L": ("w", (LW + 0.012 + 0.06 * a, -0.18, 1.45), (0, 0, 1), (-1, 0, 0)), "R": ("w", (LW + 0.012 + 0.06 * b, 0.17, 1.30), (0, 0, 1), (-1, 0, 0))},
             feet=stand_feet(p.x + 0.05, p.y, -90), curl={"L": 0.05, "R": 0.05})
 for i, f in enumerate(range(975, 1090, 12)):
     at_wall(f, (i % 2) * 1.0, ((i + 1) % 2) * 1.0, look=(-10 + 4 * (i % 3), 15 * math.sin(i)))
 def search(f, x, look):
     z = PZ(0.0, -0.15)
     WO.pose(f, (0.0, -0.17, z + RH - 0.06), yaw=0, flex=12, sp=(10, 0, 0), head=look,
-            hands={"L": ("w", (x + 0.12, FY + 0.048, 1.22), (0, 0, 1), (0, 1, 0)), "R": ("w", (x - 0.12, FY + 0.048, 1.38), (0, 0, 1), (0, 1, 0))},
+            hands={"L": ("w", (x + 0.12, FY + 0.07, 1.48), (0, 0, 1), (0, -1, 0)), "R": ("w", (x - 0.12, FY + 0.07, 1.56), (0, 0, 1), (0, -1, 0))},
             feet=stand_feet(0.0, -0.08, 0), curl={"L": 0.1, "R": 0.1})
 search(1110, -0.15, (10, -20)); search(1135, 0.18, (15, 20)); search(1160, 0.0, (-10, 0))
 # jump at the back wall (facing +y = yaw 180)
 JW = Vector((0.0, 0.18, 0)); jz = PZ(JW.x, JW.y)
 def jump(f, dz, flex, hz, hands_on=True, crouch=0.0, airborne=False, look=(-30, 0)):
     hy = 0.570
-    hands = {"L": ("w", (-0.16, hy, hz), (0, 0, 1), (0, -1, 0)), "R": ("w", (0.16, hy, hz + 0.03), (0, 0, 1), (0, -1, 0))} if hands_on else \
+    hands = {"L": ("w", (-0.16, hy - 0.01, hz), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.16, hy - 0.01, hz + 0.03), (0, 0, 1), (0, 1, 0))} if hands_on else \
             {"L": ("r", (0.05, -0.1, 0.1)), "R": ("r", (-0.05, -0.1, 0.1))}
     feet = {"L": ("r", (0, 0.05, 0.15), 30), "R": ("r", (0, -0.05, 0.25), 20)} if airborne else stand_feet(JW.x, JW.y - 0.05, 180)
     WO.pose(f, (JW.x, JW.y, jz + RH - crouch + dz), yaw=180, flex=flex, sp=(flex * 0.5, 0, 0), head=look, hands=hands, feet=feet, curl={"L": 0.3, "R": 0.3})
 jump(1178, 0, 5, 1.45, hands_on=False, look=(-35, 0)); jump(1192, 0, 20, 1.2, hands_on=False, crouch=0.22)
-jump(1206, 0.32, -5, 2.0, airborne=True, look=(-40, 0)); jump(1216, 0.36, -5, 2.02, airborne=True, look=(-40, 0))
-jump(1232, 0.20, 0, 1.86, airborne=True, look=(-30, 0)); jump(1244, 0.04, 4, 1.66, airborne=True)
-jump(1252, 0, 10, 1.56, crouch=0.15); jump(1268, 0, 30, 1.40, hands_on=True, crouch=0.30, look=(10, 0)); jump(1300, 0, 20, 1.3, hands_on=False, crouch=0.12, look=(20, 15))
+jump(1206, 0.22, -5, 2.0, airborne=True, look=(-40, 0)); jump(1216, 0.25, -5, 2.05, airborne=True, look=(-40, 0))
+jump(1232, 0.14, 0, 1.86, airborne=True, look=(-30, 0)); jump(1244, 0.04, 4, 1.66, airborne=True)
+jump(1252, 0, 10, 1.56, crouch=0.15); jump(1268, 0, 25, 1.58, hands_on=True, crouch=0.18, look=(10, 0)); jump(1300, 0, 20, 1.3, hands_on=False, crouch=0.12, look=(20, 15))
 # --- beat 7 (1321-1500): screams for help, hands cupped at her mouth, face up to the chute
 def scream(f, jaw, bob=0.0, look=(-28, 0)):
     p = Vector((0.0, 0.05, 0)); z = PZ(p.x, p.y)
     M = WO.Mb(Vector((p.x, p.y, z + RH - 0.04 + 0.02 * bob)), 0, -4, 0)
     WO.pose(f, (p.x, p.y, z + RH - 0.04 + 0.02 * bob), yaw=0, flex=-4, sp=(-8 - 4 * bob, 0, 0), head=look,
-            hands={"L": ("w", M @ Vector((0.075, -0.22, 1.30)), (-0.5, -0.5, 0.5), (-1, 0.2, 0)), "R": ("w", M @ Vector((-0.075, -0.22, 1.30)), (0.5, -0.5, 0.5), (1, 0.2, 0))},
+            hands={"L": ("w", M @ Vector((0.11, -0.22, 1.30)), (-0.2, -0.5, 0.8), (-1, 0.2, 0)), "R": ("w", M @ Vector((-0.11, -0.22, 1.30)), (0.2, -0.5, 0.8), (1, 0.2, 0))},
             feet=stand_feet(p.x, p.y, 0), jaw=jaw, curl={"L": 0.35, "R": 0.35})
 def pound(f, hit):
-    p = Vector((0.0, -0.08, 0)); z = PZ(p.x, p.y)
+    p = Vector((0.0, -0.08, 0))
+    fx_ = [WO.foot_xy(s_, Vector((p.x, p.y + 0.05, 0)), 0) for s_ in "LR"]
+    z = min(PZ(v.x, v.y) for v in fx_) + 0.04
     WO.pose(f, (p.x, p.y - 0.05 * hit, z + RH - 0.05), yaw=0, flex=8 + 10 * hit, sp=(6 + 8 * hit, 0, 0), head=(-15, 0),
             hands={"L": ("w", (0.14, FY + 0.05 + 0.18 * (1 - hit), 1.42 + 0.12 * (1 - hit)), (0, -1, 0.4), (0, 0, 1)),
                    "R": ("w", (-0.14, FY + 0.05 + 0.18 * (1 - hit), 1.46 + 0.12 * (1 - hit)), (0, -1, 0.4), (0, 0, 1))},
@@ -220,7 +227,7 @@ CUR = Vector((0.05, 0.05, 0))
 def curled(f, yaw, side, k, weak, head=(25, 0)):
     z = PZ(CUR.x, CUR.y) + 0.16 - 0.03 * weak
     WO.pose(f, (CUR.x, CUR.y, z), yaw=yaw, flex=5, side=side, sp=(35 + 10 * k, 0, 0), head=head,
-            hands={"L": ("r", (-0.30, -0.12, 0.22)), "R": ("r", (0.30, -0.14, 0.20))},
+            hands={"L": ("r", (-0.28, -0.26, 0.22)), "R": ("r", (0.28, -0.28, 0.18))},
             feet={"L": ("r", (-0.05, -0.18 * k, 0.42 * k), 10), "R": ("r", (0.05, -0.12 * k, 0.36 * k), 10)}, curl={"L": 0.6, "R": 0.6})
 WO.pose(1500, (0.05, 0.05, PZ(0.05, 0.05) + 0.4), yaw=-30, flex=30, sp=(40, 0, 0), head=(20, 0), hands={"L": ("r", (0, -0.2, 0.2)), "R": ("r", (0, -0.2, 0.2))},
         feet=stand_feet(0.05, 0.0, -30))
@@ -247,12 +254,26 @@ for f in range(2170, 2490, 20):
     M = WO.Mb(path_w(min(f, 2340)) + Vector((0, 0, RH - 0.06)), 25, 5, 0)
     for s in "LR":
         sx = 1 if s == "L" else -1
-        T = M @ Matrix.Translation(WO.wrist[s] + Vector((-sx * 0.34, -0.12, 0.26))) @ Matrix.Translation(-WO.wrist[s]) @ WO.r.rest("IK_hand." + s)
+        T = M @ Matrix.Translation(WO.wrist[s] + Vector((-sx * 0.29, -0.16, 0.26))) @ Matrix.Translation(-WO.wrist[s]) @ WO.r.rest("IK_hand." + s)
         WO.r.key_world("IK_hand." + s, f, T)
 WO.pose(2380, (-0.95, -2.35, RH - 0.06), yaw=-20, flex=8, sp=(10, -20, 0), head=(5, -35),
-        hands={"L": ("r", (-0.34, -0.12, 0.26)), "R": ("r", (0.34, -0.12, 0.26))}, feet=stand_feet(-0.95, -2.35, 25))
+        hands={"L": ("r", (-0.29, -0.16, 0.26)), "R": ("r", (0.29, -0.16, 0.26))}, feet=stand_feet(-0.95, -2.35, 25))
 WO.pose(2460, (-0.95, -2.35, RH - 0.07), yaw=-25, flex=10, sp=(14, -25, 0), head=(15, -40),
-        hands={"L": ("r", (-0.33, -0.12, 0.28)), "R": ("r", (0.33, -0.12, 0.28))}, feet=stand_feet(-0.95, -2.35, 25))
+        hands={"L": ("r", (-0.29, -0.16, 0.28)), "R": ("r", (0.29, -0.16, 0.28))}, feet=stand_feet(-0.95, -2.35, 25))
+
+# --- steps between standing poses on the clothes: each foot lifts clear of the heap instead of sliding through it
+def step_between(f0, f1, lift=0.12):
+    """L steps during the first half, R during the second half; the other foot stays planted"""
+    for k, s_ in enumerate("LR"):
+        n_ = "IK_foot." + s_; pb_ = WO.r.PB[n_]
+        sc.frame_set(f0); A_ = pb_.matrix.copy(); sc.frame_set(f1); B_ = pb_.matrix.copy()
+        fa, fm, fb = (f0, f0 + (f1 - f0) // 4, f0 + (f1 - f0) // 2) if k == 0 else (f0 + (f1 - f0) // 2, f0 + 3 * (f1 - f0) // 4, f1)
+        WO.r.key_world(n_, fa, A_); WO.r.key_world(n_, fb, B_)
+        P_ = A_.translation.lerp(B_.translation, 0.5)
+        P_.z = max(A_.translation.z, B_.translation.z, ground_z(P_.x, P_.y) + WO.ankle[s_].z) + lift
+        WO.r.key_world(n_, fm, Matrix.Translation(P_) @ A_.to_quaternion().slerp(B_.to_quaternion(), 0.5).to_matrix().to_4x4())
+for f0, f1 in ((930, 975), (1086, 1110), (1160, 1178), (1300, 1322), (1336, 1348), (1380, 1394)):
+    step_between(f0, f1)
 
 # ============================================================== SHOVER (hood up, face away)
 hide_keys("Shover", [(1, False), (320, True)])
@@ -260,10 +281,10 @@ pS = catmull([(40, Vector((-2.6, -2.4, 0))), (100, Vector((-1.1, -2.0, 0))), (14
 SH.walk(pS, lambda f: 180 - 30 * max(0, (148 - f)) / 108.0, 40, 148, stride=0.7, lift=0.08, bob=0.02, crouch=0.04, lean=8)
 walk_arms(SH, pS, lambda f: 180 - 30 * max(0, (148 - f)) / 108.0, 40, 144, 0.7)
 for f, dz, fl, hy, ext in ((154, 0.0, 8, -1.30, 0.0), (163, -0.03, 20, -1.12, 0.6), (172, -0.04, 28, -0.98, 1.0), (196, -0.02, 18, -1.05, 0.8), (226, 0.0, 5, -1.25, 0.0)):
-    p = Vector((-0.02, -1.62 + 0.12 * ext, RH + dz))
-    hands = {"L": ("w", (-0.12, hy, 1.08), (0, 0, 1), (0, -1, 0)), "R": ("w", (0.12, hy, 1.10), (0, 0, 1), (0, -1, 0))}
+    p = Vector((-0.02, -1.75 + 0.12 * ext, RH + dz))
+    hands = {"L": ("w", (-0.12, hy - 0.03, 1.08), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.12, hy - 0.03, 1.10), (0, 0, 1), (0, 1, 0))}
     SH.pose(f, p, yaw=180, flex=fl, sp=(fl * 0.6, 0, 0), head=(5, 0), hands=hands,
-            feet={"L": ("g", (-0.14, -1.42 + 0.06 * ext), 180), "R": ("g", (0.12, -1.80 + 0.1 * ext), 175)}, curl={"L": 0.1, "R": 0.1})
+            feet={"L": ("g", (-0.14, -1.55 + 0.06 * ext), 180), "R": ("g", (0.12, -1.93 + 0.1 * ext), 175)}, curl={"L": 0.1, "R": 0.1})
 pS2 = catmull([(232, Vector((-0.02, -1.62, 0))), (280, Vector((-1.5, -2.9, 0))), (320, Vector((-2.6, -4.3, 0)))])
 SH.walk(pS2, lambda f: 35.0 if f > 240 else 180 - (f - 226) * 10, 232, 320, stride=1.1, lift=0.12, bob=0.03, crouch=0.08, lean=14)
 walk_arms(SH, pS2, lambda f: 35.0 if f > 240 else 180 - (f - 226) * 10, 236, 320, 1.1, swing=0.22)
@@ -319,7 +340,7 @@ pFB = catmull([(2120, Vector((0.65, -1.45, 0))), (2200, Vector((0.05, -1.6, 0)))
 FB.walk(pFB, lambda f: 25.0, 2120, 2340, stride=0.6, lift=0.06, bob=0.015)
 walk_arms(FB, pFB, lambda f: 25.0, 2120, 2340, 0.6, sides="L", swing=0.08)
 for f in range(2140, 2341, 10):
-    wp = path_w(min(max(f, 2166), 2340)) + Vector((0.18, 0.05, 1.10))
+    wp = path_w(min(max(f, 2166), 2340)) + Vector((0.27, 0.05, 1.18))
     FB.key_hand("R", f, wp, Vector((-1, 0.3, 0)), Vector((0, 0, 1)))
 FA.pose(2078, (-1.0, FY - 0.75, RH - 0.05), yaw=160, flex=10, sp=(10, 0, 0), head=(5, 15), hands={"L": ("r", (-0.18, 0.0, -0.15)), "R": ("r", (0.18, -0.05, -0.12))}, feet=stand_feet(-1.0, FY - 0.75, 160))
 FA.pose(2140, (-1.1, FY - 0.7, RH - 0.05), yaw=200, flex=10, sp=(10, 0, 0), head=(0, -10), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.1, FY - 0.7, 200))

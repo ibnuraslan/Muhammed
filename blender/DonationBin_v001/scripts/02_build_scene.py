@@ -170,7 +170,7 @@ for i, (x, y, s) in enumerate(((1.8, -2.6, 1.0), (-2.9, -4.4, 1.6), (3.9, -6.0, 
     link(pd); pd.data.materials.append(M_PUD)
 
 # ------------------------------------------------------------------ the bin
-BW, BD, BH = 1.5, 1.2, 2.15
+BW, BD, BH = 1.5, 1.2, 2.45
 T = 0.012
 CH_Z0, CH_Z1, CH_X = 1.12, 1.62, 0.42       # chute opening
 FY = -BD / 2                                  # front face plane
@@ -295,8 +295,8 @@ def glb(name, size, loc, rz=0.0, sink=0.0, axis_len=None):
     for poly in m.data.polygons: poly.use_smooth = True
     return m
 heap = glb("pile", 1.05, (-0.12, 0.12, pile_h(-0.12, 0.12) - 0.18), rz=0.6); heap.name = "ClothHeap"
-heap.scale.z = 0.55
-heap2 = glb("pile2", 0.75, (0.42, 0.30, pile_h(0.42, 0.30) - 0.12), rz=2.2); heap2.name = "ClothHeap2"; heap2.scale.z = 0.6
+heap.scale.z = 0.42
+heap2 = glb("pile2", 0.75, (0.42, 0.30, pile_h(0.42, 0.30) - 0.12), rz=2.2); heap2.name = "ClothHeap2"; heap2.scale.z = 0.42
 heap3 = heap.copy(); heap3.data = heap.data; heap3.name = "ClothHeap3"; col_bin.objects.link(heap3)
 heap3.location = (-0.45, -0.32, pile_h(-0.45, -0.32) - 0.12); heap3.rotation_euler.z = 2.9; heap3.scale = (0.6, 0.6, 0.35)
 sc["pile_colliders"] = "Pile,ClothHeap,ClothHeap2,ClothHeap3"
@@ -431,7 +431,7 @@ sun_d = bpy.data.lights.new("Sun", 'SUN'); sun_d.energy = 3.2; sun_d.angle = mat
 sun = bpy.data.objects.new("Sun", sun_d); link(sun)
 sun.rotation_euler = (math.radians(52), 0, math.radians(-160))   # from front-left, high enough to light the chute interior
 fill_d = bpy.data.lights.new("BinFill", 'AREA'); fill_d.energy = 6.0; fill_d.size = 0.9; fill_d.color = (0.85, 0.9, 1.0)
-fill = bpy.data.objects.new("BinFill", fill_d); col_bin.objects.link(fill); fill.location = (0, 0.1, 1.95)
+fill = bpy.data.objects.new("BinFill", fill_d); col_bin.objects.link(fill); fill.location = (0, 0.1, 2.25)
 slot_d = bpy.data.lights.new("SlotBeam", 'SPOT'); slot_d.energy = 120; slot_d.spot_size = math.radians(40); slot_d.spot_blend = 0.4; slot_d.color = (1, 0.93, 0.8)
 slot = bpy.data.objects.new("SlotBeam", slot_d); col_bin.objects.link(slot); slot.location = (0, FY - 1.3, CH_Z1 + 1.0)
 slot.rotation_euler = (Vector((0, 0.15, 0.45)) - slot.location).to_track_quat("-Z", "Y").to_euler()

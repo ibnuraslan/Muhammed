@@ -12,10 +12,15 @@ a = sys.argv[sys.argv.index("--") + 1:]
 OUT = a[0]; STEP = int(a[1]) if len(a) > 1 else 2
 sc = bpy.context.scene; dg = bpy.context.evaluated_depsgraph_get()
 PILE = bpy.data.objects["Pile"]; FY = sc["bin_front_y"]
-def gz(x, y):
+COLL = [bpy.data.objects[n] for n in sc.get("pile_colliders", "Pile").split(",")]
+def gz(x, y):      # same surface the animation plants on: base heap + scanned cloth heaps
     if -0.73 < x < 0.73 and -0.58 < y < 0.58:
-        hit, loc, n, i = PILE.ray_cast(Vector((x, y, 3)), Vector((0, 0, -1)))
-        if hit: return loc.z
+        z = 0.0
+        for o in COLL:
+            inv = o.matrix_world.inverted()
+            hit, loc, n, i = o.ray_cast(inv @ Vector((x, y, 3)), (inv.to_3x3() @ Vector((0, 0, -1))).normalized())
+            if hit: z = max(z, (o.matrix_world @ loc).z)
+        return z
     return 0.0
 # windows where a character is meant to be off the ground (airborne, lying, crouched on the pile with body-relative feet)
 FREE = {"Woman": [(156, 300), (290, 470), (640, 670), (1188, 1250), (1495, 2100), (2095, 2150)], "Shover": [], "Passerby": [], "FireA": [], "FireB": []}
