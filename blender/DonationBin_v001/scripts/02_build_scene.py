@@ -79,6 +79,7 @@ def uv_box(o, s=1.0):
     """cube-project UVs in object space (meters * s)"""
     me = o.data
     if not me.uv_layers: me.uv_layers.new()
+    if me.uv_layers.active is None: me.uv_layers.active_index = 0
     uv = me.uv_layers.active.data
     for poly in me.polygons:
         n = poly.normal; ax = max(range(3), key=lambda i: abs(n[i]))
@@ -194,7 +195,41 @@ hood = box("b_hood", (0, FY - 0.13, CH_Z1 + 0.10), (2 * CH_X + 0.14, 0.26, 0.012
 hood.rotation_euler.x = math.radians(-24); P.append(hood)
 for sx in (-1, 1):
     P.append(box("b_hoodside", (sx * (CH_X + 0.07), FY - 0.12, CH_Z1 + 0.02), (0.012, 0.24, 0.26), M_BIN, col_bin))
+# rivets along the front panel edges, a grab handle on the hood, and a simple clothing (T-shirt) icon, no text
+M_ICON = principled("BinIcon", (0.92, 0.92, 0.88), 0.45)
+rv = bmesh.new()
+for z in (0.14, CH_Z1 + 0.05, BH - 0.06):
+    for k in range(9):
+        x = -BW / 2 + 0.06 + k * (BW - 0.12) / 8
+        bmesh.ops.create_uvsphere(rv, u_segments=8, v_segments=4, radius=0.009, matrix=Matrix.Translation(Vector((x, FY - 0.002, z))))
+for x in (-BW / 2 + 0.03, BW / 2 - 0.03):
+    for k in range(7):
+        bmesh.ops.create_uvsphere(rv, u_segments=8, v_segments=4, radius=0.009, matrix=Matrix.Translation(Vector((x, FY - 0.002, 0.25 + k * (BH - 0.5) / 6))))
+rme = bpy.data.meshes.new("Rivets"); rv.to_mesh(rme); rv.free(); rob = bpy.data.objects.new("Rivets", rme); col_bin.objects.link(rob); rme.materials.append(M_BIN); P.append(rob)
+bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.013, depth=0.46, location=(0, FY - 0.27, CH_Z1 + 0.2), rotation=(0, math.radians(90), 0))
+hd = bpy.context.object; hd.name = "HoodHandle"
+for c_ in hd.users_collection: c_.objects.unlink(hd)
+col_bin.objects.link(hd); hd.data.materials.append(M_MECH); P.append(hd)
+for sx in (-0.22, 0.22):
+    P.append(box("HandlePost", (sx, FY - 0.245, CH_Z1 + 0.19), (0.02, 0.05, 0.02), M_MECH, col_bin))
+shirt = [(-0.11, 0.0), (0.11, 0.0), (0.11, 0.15), (0.17, 0.12), (0.21, 0.19), (0.12, 0.25), (0.05, 0.25), (0.0, 0.22), (-0.05, 0.25), (-0.12, 0.25), (-0.21, 0.19), (-0.17, 0.12), (-0.11, 0.15)]
+ib = bmesh.new(); vs_ = [ib.verts.new((x, FY - 0.003, CH_Z1 + 0.42 + z)) for x, z in shirt]; ib.faces.new(vs_)
+ime = bpy.data.meshes.new("BinIcon"); ib.to_mesh(ime); ib.free(); iob = bpy.data.objects.new("BinIcon", ime); col_bin.objects.link(iob); ime.materials.append(M_ICON); P.append(iob)
 BIN = join(P, "BinShell")
+bv_ = BIN.modifiers.new("round", 'BEVEL'); bv_.width = 0.008; bv_.segments = 3; bv_.limit_method = 'ANGLE'
+# pressed steel: vertical ribs + horizontal panel seams as a bump on the paint
+for mm in (M_BIN,):
+    nt_ = mm.node_tree; pr_ = next(x for x in nt_.nodes if x.type == 'BSDF_PRINCIPLED')
+    tc_ = nt_.nodes.new('ShaderNodeTexCoord')
+    w1 = nt_.nodes.new('ShaderNodeTexWave'); w1.wave_type = 'BANDS'; w1.bands_direction = 'X'; w1.inputs['Scale'].default_value = 7.0; w1.wave_profile = 'SAW'
+    w2 = nt_.nodes.new('ShaderNodeTexWave'); w2.wave_type = 'BANDS'; w2.bands_direction = 'Z'; w2.inputs['Scale'].default_value = 1.6; w2.wave_profile = 'SAW'
+    for w_ in (w1, w2): nt_.links.new(tc_.outputs['Object'], w_.inputs['Vector'])
+    mxm = nt_.nodes.new('ShaderNodeMath'); mxm.operation = 'MINIMUM'; nt_.links.new(w1.outputs['Fac'], mxm.inputs[0]); nt_.links.new(w2.outputs['Fac'], mxm.inputs[1])
+    pw = nt_.nodes.new('ShaderNodeMath'); pw.operation = 'POWER'; pw.inputs[1].default_value = 0.15; nt_.links.new(mxm.outputs[0], pw.inputs[0])
+    bp_ = nt_.nodes.new('ShaderNodeBump'); bp_.name = "PressedSteel"; bp_.inputs['Strength'].default_value = 2.5; bp_.inputs['Distance'].default_value = 0.01
+    nt_.links.new(pw.outputs[0], bp_.inputs['Height'])
+    if pr_.inputs['Normal'].links: nt_.links.new(pr_.inputs['Normal'].links[0].from_socket, bp_.inputs['Normal'])
+    nt_.links.new(bp_.outputs['Normal'], pr_.inputs['Normal'])
 uv_box(BIN, 0.55)
 # inner liner (separate object so its faces render the inner steel)
 inner = []

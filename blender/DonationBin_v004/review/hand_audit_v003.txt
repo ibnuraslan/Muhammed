@@ -1,0 +1,113 @@
+HAND AUDIT step 2 frames 1-2490
+TOTAL 110
+BY {('Shover', 'hand-hand'): 13, ('Shover', 'own-torso'): 1, ('Woman', 'own-torso'): 41, ('Woman', 'hand-hand'): 55}
+f 157 Shover   hand-hand 0.006
+f 193 Shover   hand-hand 0.005
+f 195 Shover   hand-hand 0.005
+f 197 Shover   hand-hand 0.007
+f 199 Shover   hand-hand 0.006
+f 205 Shover   hand-hand 0.007
+f 207 Shover   hand-hand 0.006
+f 209 Shover   hand-hand 0.004
+f 211 Shover   hand-hand 0.004
+f 213 Shover   hand-hand 0.007
+f 221 Shover   hand-hand 0.008
+f 223 Shover   hand-hand 0.007
+f 225 Shover   hand-hand 0.005
+f 231 Shover   handR-own-torso 0.000
+f 437 Woman    handL-own-torso 0.000
+f 803 Woman    handL-own-torso 0.000
+f 805 Woman    handL-own-torso 0.000
+f 833 Woman    handL-own-torso 0.000
+f 835 Woman    handL-own-torso 0.000
+f 951 Woman    handR-own-torso 0.000
+f1105 Woman    handL-own-torso 0.000
+f1107 Woman    handL-own-torso 0.000
+f1109 Woman    handL-own-torso 0.000
+f1111 Woman    handL-own-torso 0.000
+f1113 Woman    handL-own-torso 0.000
+f1115 Woman    handL-own-torso 0.000
+f1119 Woman    handL-own-torso 0.000
+f1123 Woman    handR-own-torso 0.000
+f1149 Woman    handR-own-torso 0.000
+f1151 Woman    handR-own-torso 0.000
+f1153 Woman    handR-own-torso 0.000
+f1155 Woman    handR-own-torso 0.000
+f1157 Woman    handL-own-torso 0.000
+f1157 Woman    handR-own-torso 0.000
+f1159 Woman    handR-own-torso 0.000
+f1161 Woman    handL-own-torso 0.000
+f1161 Woman    handR-own-torso 0.000
+f1163 Woman    handL-own-torso 0.000
+f1163 Woman    handR-own-torso 0.000
+f1165 Woman    handL-own-torso 0.000
+f1165 Woman    handR-own-torso 0.000
+f1167 Woman    handR-own-torso 0.000
+f1169 Woman    handR-own-torso 0.000
+f1171 Woman    handR-own-torso 0.000
+f1261 Woman    handR-own-torso 0.000
+f1263 Woman    handL-own-torso 0.000
+f1263 Woman    handR-own-torso 0.000
+f1265 Woman    handL-own-torso 0.000
+f1267 Woman    handL-own-torso 0.000
+f1269 Woman    handL-own-torso 0.000
+f1311 Woman    handR-own-torso 0.000
+f1313 Woman    handR-own-torso 0.000
+f1315 Woman    handL-own-torso 0.000
+f1315 Woman    handR-own-torso 0.000
+f1319 Woman    hand-hand 0.004
+f1321 Woman    hand-hand 0.004
+f1323 Woman    hand-hand 0.002
+f1325 Woman    hand-hand 0.003
+f1327 Woman    hand-hand 0.003
+f1329 Woman    hand-hand 0.003
+f1331 Woman    hand-hand 0.002
+f1333 Woman    hand-hand 0.001
+f1335 Woman    hand-hand 0.000
+f1337 Woman    hand-hand 0.001
+f1339 Woman    hand-hand 0.006
+f1393 Woman    hand-hand 0.000
+f1395 Woman    hand-hand 0.000
+f1397 Woman    hand-hand 0.000
+f1399 Woman    hand-hand 0.000
+f1401 Woman    hand-hand 0.000
+f1403 Woman    hand-hand 0.000
+f1405 Woman    hand-hand 0.000
+f1407 Woman    hand-hand 0.000
+f1409 Woman    hand-hand 0.000
+f1411 Woman    hand-hand 0.000
+f1413 Woman    hand-hand 0.000
+f1415 Woman    hand-hand 0.000
+f1417 Woman    hand-hand 0.000
+f1419 Woman    hand-hand 0.000
+f1421 Woman    hand-hand 0.000
+f1423 Woman    hand-hand 0.000
+f1425 Woman    hand-hand 0.000
+f1427 Woman    hand-hand 0.000
+f1429 Woman    hand-hand 0.000
+f1431 Woman    hand-hand 0.000
+f1433 Woman    hand-hand 0.000
+f1435 Woman    hand-hand 0.000
+f1437 Woman    hand-hand 0.000
+f1439 Woman    hand-hand 0.000
+f1441 Woman    hand-hand 0.000
+f1443 Woman    hand-hand 0.000
+f1445 Woman    hand-hand 0.000
+f1447 Woman    hand-hand 0.000
+f1449 Woman    hand-hand 0.000
+f1451 Woman    hand-hand 0.001
+f1453 Woman    hand-hand 0.001
+f1455 Woman    hand-hand 0.001
+f1457 Woman    hand-hand 0.002
+f1459 Woman    hand-hand 0.002
+f1461 Woman    hand-hand 0.003
+f1463 Woman    hand-hand 0.003
+f1465 Woman    hand-hand 0.003
+f1467 Woman    hand-hand 0.004
+f1469 Woman    hand-hand 0.003
+f1471 Woman    hand-hand 0.003
+f1473 Woman    hand-hand 0.003
+f1475 Woman    hand-hand 0.002
+f1477 Woman    hand-hand 0.000
+f1479 Woman    hand-hand 0.005
+f1521 Woman    handR-own-torso 0.000

@@ -173,17 +173,17 @@ at_flap(880, 0.6, look=(-5, -15)); at_flap(930, 0.0, look=(10, 25))
 # --- beat 6 (961-1320): pats the left wall, searches the flap for a handle, jumps, slips down
 LW = -0.735
 def at_wall(f, a, b, look=(0, 0)):
-    p = Vector((-0.30, 0.0, 0)); z = PZ(p.x, p.y)
-    WO.pose(f, (p.x, p.y, z + RH - 0.05), yaw=-90, flex=8, sp=(6, 0, 0), head=look,
+    p = Vector((-0.14, 0.0, 0)); z = PZ(p.x, p.y)
+    WO.pose(f, (p.x, p.y, z + RH - 0.05), yaw=-90, flex=16, sp=(6, 0, 0), head=look,
             hands={"L": ("w", (LW + 0.012 + 0.06 * a, -0.18, 1.45), (0, 0, 1), (-1, 0, 0)), "R": ("w", (LW + 0.012 + 0.06 * b, 0.17, 1.30), (0, 0, 1), (-1, 0, 0))},
             feet=stand_feet(p.x + 0.05, p.y, -90), curl={"L": 0.05, "R": 0.05})
 for i, f in enumerate(range(975, 1090, 12)):
     at_wall(f, (i % 2) * 1.0, ((i + 1) % 2) * 1.0, look=(-10 + 4 * (i % 3), 15 * math.sin(i)))
 def search(f, x, look):
-    z = PZ(0.0, -0.15)
-    WO.pose(f, (0.0, -0.17, z + RH - 0.06), yaw=0, flex=12, sp=(10, 0, 0), head=look,
+    z = PZ(0.0, -0.02)
+    WO.pose(f, (0.0, -0.04, z + RH - 0.06), yaw=0, flex=18, sp=(10, 0, 0), head=look,
             hands={"L": ("w", (x + 0.12, FY + 0.07, 1.48), (0, 0, 1), (0, -1, 0)), "R": ("w", (x - 0.12, FY + 0.07, 1.56), (0, 0, 1), (0, -1, 0))},
-            feet=stand_feet(0.0, -0.08, 0), curl={"L": 0.1, "R": 0.1})
+            feet=stand_feet(0.0, 0.05, 0), curl={"L": 0.1, "R": 0.1})
 search(1110, -0.15, (10, -20)); search(1135, 0.18, (15, 20)); search(1160, 0.0, (-10, 0))
 # jump at the back wall (facing +y = yaw 180)
 JW = Vector((0.0, 0.18, 0)); jz = PZ(JW.x, JW.y)

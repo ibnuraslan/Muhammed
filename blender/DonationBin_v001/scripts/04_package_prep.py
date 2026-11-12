@@ -18,7 +18,7 @@ for m in bpy.data.materials:
             nt.nodes.remove(nd)
 for i in list(bpy.data.images):
     if i.users == 0: bpy.data.images.remove(i)
-HERO = ("middleage_", "female_sportsuit01", "green_metal_rust_diff", "asphalt_02_diff", "bob02", "shoes02")
+HERO = ("middleage_",)
 n = 0
 for i in bpy.data.images:
     if i.source != 'FILE' or i.type != 'IMAGE': continue

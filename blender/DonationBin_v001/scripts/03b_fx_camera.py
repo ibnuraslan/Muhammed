@@ -203,11 +203,9 @@ CAMK = [  # frame, location, target, lens
     (440, (-0.5, 0.2, 0.95), (0.1, 0.05, 0.5), 22), (470, (-0.05, 0.48, 1.6), (0.05, -0.1, 0.75), 22), (495, (0.62, -0.15, 0.95), (0.0, -0.2, 0.85), 22),
     (540, (1.25, -0.2, 1.05), (0.0, -0.3, 1.1), 24), (600, (2.1, -0.9, 1.5), (0.0, -0.5, 1.3), 30), (680, (2.3, 0.3, 1.75), (0.0, -0.45, 1.3), 30),
     (760, (1.6, -1.6, 1.6), (0.0, -0.55, 1.28), 35),
-    (805, (0.9, -1.05, 1.28), (0.0, -0.62, 1.16), 45), (835, (0.35, -0.92, 1.02), (0.0, -0.63, 1.14), 55), (870, (-0.35, -1.0, 1.25), (0.1, -0.62, 1.15), 55), (905, (0.75, -1.25, 1.4), (0.0, -0.6, 1.25), 45),
+    (805, (0.95, -1.15, 1.3), (0.0, -0.62, 1.2), 38), (835, (0.55, -1.55, 1.1), (0.0, -0.62, 1.25), 28), (870, (-0.5, -1.6, 1.35), (0.0, -0.6, 1.3), 28), (905, (0.8, -1.3, 1.45), (0.0, -0.6, 1.25), 36),
     (952, (0.95, -0.35, 1.3), (0.0, -0.1, 1.0), 26), (962, (0.62, -0.25, 1.35), (-0.4, -0.1, 1.2), 22),
-    (990, (0.45, -0.05, 1.45), (-0.74, -0.05, 1.3), 20), (1030, (0.05, 0.45, 1.2), (-0.72, -0.05, 1.35), 20), (1070, (-0.25, 0.45, 1.05), (-0.72, -0.1, 1.4), 20), (1125, (0.45, 0.35, 1.25), (0.0, -0.58, 1.3), 20),
-    (1180, (0.4, -0.35, 0.75), (0.0, 0.55, 1.4), 18), (1230, (0.35, -0.4, 1.1), (0.0, 0.5, 1.85), 16), (1275, (0.25, -0.35, 1.75), (0.0, 0.45, 1.6), 16),
-    (1305, (0.35, -0.25, 1.95), (0.0, 0.15, 0.45), 16),
+    (1305, (0.35, -0.25, 2.3), (0.0, 0.15, 1.2), 16),
     (1340, (0.35, -0.2, 1.8), (0.0, 0.05, 1.68), 28), (1360, (0.5, -0.3, 1.55), (0.0, -0.45, 1.45), 24), (1384, (0.3, -0.42, 1.68), (0.0, 0.0, 1.68), 30), (1404, (0.0, -0.72, 1.45), (0.0, 0.0, 1.4), 26),
     (1440, (0.5, -2.9, 1.6), (0.0, -0.5, 1.1), 20), (1490, (-1.5, -5.6, 2.3), (0.0, -1.0, 0.9), 18),
     (1540, (0.0, -1.5, 2.6), (0.0, -0.4, 1.3), 24), (1566, (0.0, -0.95, 1.46), (0.0, 0.0, 0.6), 20), (1578, (0.0, -0.42, 1.40), (0.05, 0.1, 0.3), 18), (1600, (0.0, -0.3, 1.38), (0.05, 0.1, 0.3), 18),
@@ -219,6 +217,33 @@ CAMK = [  # frame, location, target, lens
     (2110, (-0.35, -1.45, 0.95), (0.0, -0.5, 0.8), 20), (2160, (0.3, -2.6, 1.35), (-0.2, -1.2, 1.1), 24), (2210, (0.2, -3.5, 1.6), (-0.5, -1.8, 1.1), 24),
     (2265, (1.6, -4.6, 2.4), (0.3, -1.4, 1.0), 22), (2345, (3.0, -6.6, 3.6), (2.4, 0.0, 1.0), 20), (2420, (3.9, -7.6, 4.2), (3.0, 0.3, 1.0), 21),
     (2490, (5.0, -8.4, 4.6), (3.6, 0.3, 0.9), 23)]
+WR_ = bpy.data.objects["Woman"]
+HB = WR_.pose.bones["head"]; FWD_L = WR_.data.bones["head"].matrix_local.to_3x3().inverted() @ Vector((0, -1, 0))
+def face_key(fk, dist=0.5, side=0.18, up=0.04, lens=26):
+    """camera in front of her face (from the head bone), clamped inside the bin"""
+    sc.frame_set(fk); M = WR_.matrix_world
+    face = M @ (HB.head + (HB.tail - HB.head) * 0.45); fwd = (M.to_3x3() @ (HB.matrix.to_3x3() @ FWD_L)).normalized()
+    sideV = fwd.cross(Vector((0, 0, 1))).normalized()
+    c = face + fwd * dist + sideV * side + Vector((0, 0, up))
+    c.x = max(-0.66, min(0.66, c.x)); c.y = max(-0.52, min(0.52, c.y)); c.z = max(0.7, min(2.33, c.z))
+    return (fk, tuple(c), tuple(face), lens)
+def face_key2(fk, lens=26):
+    """search a camera spot in front of her face with clearance from the bin walls/roof"""
+    sc.frame_set(fk); M = WR_.matrix_world
+    face = M @ (HB.head + (HB.tail - HB.head) * 0.45); fwd = (M.to_3x3() @ (HB.matrix.to_3x3() @ FWD_L)); fwd.z = 0; fwd.normalize()
+    for dist in (0.5, 0.42, 0.34):
+        for ang in (0, 25, -25, 45, -45, 65, -65):
+            for up in (0.12, 0.28):
+                d = Matrix.Rotation(R_(ang), 3, 'Z') @ fwd
+                c = face + d * dist + Vector((0, 0, up))
+                if -0.64 < c.x < 0.64 and -0.5 < c.y < 0.5 and c.z < 2.3:
+                    return (fk, tuple(c), tuple(face), lens)
+    return face_key(fk)
+CAMK = [k for k in CAMK if not (980 <= k[0] <= 1300 or 1680 <= k[0] <= 1760)]
+CAMK += [face_key2(990, 22), face_key2(1040, 22), face_key2(1085, 22), face_key2(1125), face_key2(1165),
+         face_key(1205, side=0.2, up=-0.05), face_key(1245, side=-0.15, up=0.15, lens=22),
+         face_key(1700, dist=0.42, side=0.12, up=0.12, lens=28), face_key(1760, dist=0.42, side=-0.12, up=0.12, lens=28)]
+CAMK = sorted(CAMK, key=lambda k: k[0])
 sc["cam_keys"] = json.dumps(CAMK)
 cl = catmull([(k[0], Vector(k[1])) for k in CAMK]); ct = catmull([(k[0], Vector(k[2])) for k in CAMK]); cln = pchip([(k[0], float(k[3])) for k in CAMK])
 qprev = None
@@ -316,6 +341,35 @@ for nm in ("FireA", "FireB"):
     ain = {v.index for v in body_.data.vertices if sum(g.weight for g in v.groups if g.group in ag) > 0.5}
     for poly in body_.data.polygons:
         if poly.material_index != gi and all(i in ain for i in poly.vertices): poly.material_index = si
+    # turnout coat over the overalls: the body's torso + arms + collar, inflated with folds, tan fabric, reflective bands, darker seams
+    coat = body_.copy(); coat.data = body_.data.copy(); coat.name = nm + "_Coat"; col_fx.objects.link(coat)
+    kg = [g.index for g in coat.vertex_groups if g.name.split(".")[0] in ("spine01", "spine02", "spine03", "spine04", "spine05", "pelvis", "root", "clavicle", "shoulder01",
+                                                                          "upperarm01", "upperarm02", "lowerarm01", "lowerarm02", "breast", "neck01")]
+    cv = coat.vertex_groups.new(name="CoatMask")
+    for v in coat.data.vertices:
+        if sum(g.weight for g in v.groups if g.group in kg) > 0.5: cv.add([v.index], 1.0, 'REPLACE')
+    for md in list(coat.modifiers):
+        if md.type != 'ARMATURE': coat.modifiers.remove(md)
+    cm_ = coat.modifiers.new("mask", 'MASK'); cm_.vertex_group = "CoatMask"
+    d1 = coat.modifiers.new("folds", 'DISPLACE'); d1.strength = 0.03; d1.mid_level = 0.0; tx_ = bpy.data.textures.new(nm + "folds", 'CLOUDS'); tx_.noise_scale = 0.09; d1.texture = tx_; d1.texture_coords = 'OBJECT'
+    d2 = coat.modifiers.new("inflate", 'DISPLACE'); d2.strength = 0.035; d2.mid_level = 0.0
+    sm2 = coat.modifiers.new("smooth", 'SMOOTH'); sm2.factor = 1.0; sm2.iterations = 6
+    so2 = coat.modifiers.new("thick", 'SOLIDIFY'); so2.thickness = 0.01
+    sb2 = coat.modifiers.new("sub", 'SUBSURF'); sb2.levels = 0; sb2.render_levels = 1
+    coat.data.materials.clear(); cmat = bpy.data.materials[nm + "_Sleeve"].copy(); cmat.name = nm + "_CoatMat"; coat.data.materials.append(cmat)
+    for poly in coat.data.polygons: poly.material_index = 0
+    ct = cmat.node_tree; cpr = next(x for x in ct.nodes if x.type == 'BSDF_PRINCIPLED')
+    # seams: thin dark lines along object X=0 (front zip) and vertical side seams, plus a darker collar band
+    tco = ct.nodes.new('ShaderNodeTexCoord'); sx_ = ct.nodes.new('ShaderNodeSeparateXYZ'); ct.links.new(tco.outputs['Object'], sx_.inputs['Vector'])
+    ab = ct.nodes.new('ShaderNodeMath'); ab.operation = 'ABSOLUTE'; ct.links.new(sx_.outputs['X'], ab.inputs[0])
+    zs = ct.nodes.new('ShaderNodeMath'); zs.operation = 'LESS_THAN'; zs.inputs[1].default_value = 0.012; ct.links.new(ab.outputs[0], zs.inputs[0])
+    col_ = ct.nodes.new('ShaderNodeMath'); col_.operation = 'GREATER_THAN'; col_.inputs[1].default_value = 1.47; ct.links.new(sx_.outputs['Z'], col_.inputs[0])
+    mx_ = ct.nodes.new('ShaderNodeMath'); mx_.operation = 'MAXIMUM'; ct.links.new(zs.outputs[0], mx_.inputs[0]); ct.links.new(col_.outputs[0], mx_.inputs[1])
+    mixs = ct.nodes.new('ShaderNodeMix'); mixs.data_type = 'RGBA'; mixs.inputs['B'].default_value = (0.16, 0.12, 0.06, 1)
+    src_ = cpr.inputs['Base Color'].links[0].from_socket
+    ct.links.new(src_, mixs.inputs['A']); ct.links.new(mx_.outputs[0], mixs.inputs['Factor']); ct.links.new(mixs.outputs['Result'], cpr.inputs['Base Color'])
+    for f_, h_ in ((1, True), (1975, False)):
+        coat.hide_render = h_; coat.keyframe_insert("hide_render", frame=f_)
     hm.parent = rig; hm.parent_type = 'BONE'; hm.parent_bone = "head"; hm.matrix_parent_inverse = Matrix.Identity(4)
     hm.location = (0, HELM_Y, HELM_Z); hm.rotation_euler = (R_(HELM_RX), R_(HELM_RY), R_(HELM_RZ))
     for o_ in (hm, tk):
