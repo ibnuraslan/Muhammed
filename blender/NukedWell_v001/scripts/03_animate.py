@@ -122,7 +122,7 @@ for f in range(1, END + 1, 2):
     CABLE.location = (tip.x, tip.y, hook_z + 1.2); CABLE.scale = (1, 1, max(0.1, 32.4 - (hook_z + 1.2)))
     CABLE.keyframe_insert("location", frame=f); CABLE.keyframe_insert("scale", frame=f)
     swing = 0.0
-    if f > BEAT[8] - 130 and f < 1460: swing = 0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0))
+    if f > BEAT[8] - 130 and f < 1460: swing = 0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1370) / 22.0))
     DEV.location = (tip.x + swing, tip.y, z_d); DEV.rotation_euler = (0, R_(swing * 2), (f * 0.002) % 6.3)
     DEV.keyframe_insert("location", frame=f); DEV.keyframe_insert("rotation_euler", frame=f)
     yaw_c, r_c, z_c = cap_state(f)
@@ -530,8 +530,8 @@ def hose_setup(name, front, back, nmF, nmB, f0, f1):
     fw, lf = body_frame(yawF)
     def side_pt(pos, fwd, right, z): return pos.to_3d() + fw * fwd - lf * right + Vector((0, 0, z))
     nozzle = side_pt(front, 1.0, 0.24, 1.14)
-    fL, fR = side_pt(front, 0.62, 0.28, 1.08), side_pt(front, 0.24, 0.38, 1.0)
-    bL, bR = side_pt(back, 0.62, 0.3, 1.0), side_pt(back, 0.18, 0.4, 0.95)
+    fL, fR = side_pt(front, 0.46, 0.22, 1.05), side_pt(front, 0.2, 0.36, 1.0)
+    bL, bR = side_pt(back, 0.4, 0.24, 1.0), side_pt(back, 0.16, 0.38, 0.95)
     hp = [nozzle, fL, fR, bL, bR, side_pt(back, -0.8, 0.3, 0.25), side_pt(back, -2.0, 0.3, 0.06), back.to_3d() - fw * 6.0 + Vector((0, 0, 0.06))]
     cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.05; cu.bevel_resolution = 2
     sp = cu.splines.new('POLY'); sp.points.add(len(hp) - 1)
@@ -540,7 +540,7 @@ def hose_setup(name, front, back, nmF, nmB, f0, f1):
     for nm, pos, WL, WR, nxt in ((nmF, front, fL, fR, nozzle), (nmB, back, bL, bR, fR)):
         yw = yaw_to(pos, tgt)
         dvec = (nxt - WL).normalized() if nm == nmF else (WL - WR).normalized()
-        hw = {"L": (WL + Vector((0, 0, 0.04)), dvec, Vector((0, 0, -1))), "R": (WR + Vector((0, 0, 0.04)), dvec, Vector((0, 0, -1)))}
+        hw = {"L": (WL + Vector((0, 0, 0.02)), dvec, Vector((0, 0, -1))), "R": (WR + Vector((0, 0, 0.025)), dvec, Vector((0, 0, -1)))}
         ft = stance(nm, pos, yw, front=0.38, width=1.3)
         f = f0; i = 0
         while f <= f1:
@@ -584,25 +584,25 @@ for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", 
 T8 = B[8] - 69
 DZ0 = 10.6 - 9.0   # device bottom at the start of beat 8
 def dev_guide(nm, sgn, f0, f1):
-    pos = SHAFT + Vector((sgn * 1.08, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
+    pos = SHAFT + Vector((sgn * 0.98, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
     f = f0
     while f <= f1:
         _, _, zd, _ = dev_state(f); zb = zd - 4.6
         hz = max(zb + 0.6, 1.15); hz = min(hz, zb + 2.5)
-        cx = SHAFT.x + sgn * 0.47 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
+        cx = SHAFT.x + sgn * 0.445 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1370) / 22.0)) if f < 1460 else 0)
         release = smooth((f - 1452) / 14.0)
         hw = {}
         for s, dy in (("L", -0.17 * sgn), ("R", 0.17 * sgn)):
-            W = Vector((cx + sgn * 0.03 + sgn * 0.1 * release, SHAFT.y + dy * (1 + 0.6 * release), hz + 0.3 * release))
+            W = Vector((cx + sgn * 0.1 * release, SHAFT.y + dy * (1 + 0.6 * release), hz + 0.3 * release))
             hw[s] = (W, Vector((0, 0, 1)), Vector((-sgn, 0, 0)))
-        pose(nm, f, pos, yw, crouch=0.08, flex=30 - 14 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1), grip=(0.15, 0.15))
+        pose(nm, f, pos, yw, crouch=0.08, flex=30 - 14 * release, head=(-12, 0), hand_world=hw, sway=0.0, grip=(0.32, 0.32))
         f += 6
 for nm, sg in (("SolA", -1), ("SolB", 1)):
-    pp = SHAFT + Vector((sg * 1.08, 0.15)); idle(nm, T8, 1368, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
+    pp = SHAFT + Vector((sg * 0.98, 0.15)); idle(nm, T8, 1368, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
 dev_guide("SolA", -1, 1376, 1500)
 dev_guide("SolB", 1, 1376, 1500)
-idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-1.08, 0.15)), yaw_to(SHAFT + Vector((-1.08, 0.15)), SHAFT), "side", "point_down", flex=16)
-idle("SolB", 1501, B[9] - 6, SHAFT + Vector((1.08, 0.15)), yaw_to(SHAFT + Vector((1.08, 0.15)), SHAFT), "side", "side", flex=16)
+idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-0.98, 0.15)), yaw_to(SHAFT + Vector((-0.98, 0.15)), SHAFT), "side", "point_down", flex=16)
+idle("SolB", 1501, B[9] - 6, SHAFT + Vector((0.98, 0.15)), yaw_to(SHAFT + Vector((0.98, 0.15)), SHAFT), "side", "side", flex=16)
 pE = Vector((-8.5, 4.5)); pose("EngA", T8, pE, yaw_to(pE, CB.to_2d()))
 idle("EngA", T8 + 1, B[9] - 6, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
      gest=[(T8 + 1, "wave_a", "side"), (T8 + 13, "wave_b", "side"), (T8 + 25, "wave_a", "side"), (T8 + 37, "wave_b", "side"), (1440, "up", "point"), (1480, "side", "point_down")], head=(18, 0))
