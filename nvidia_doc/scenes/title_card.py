@@ -1,5 +1,6 @@
 """Chapter title as part of the 3D shot: a camera-parented plane carrying a generated RGBA image
-(small 'CHAPTER 1' over a bold slab-serif title with a soft glow). Its fade is a frame-driven driver, so it
+(small 'CHAPTER 1' over a bold slab-serif title with a soft glow; long titles wrap onto two lines, and a soft
+dark scrim behind the text fades with it). Its fade is a frame-driven driver, so it
 plays in any render of the .blend with no scripts."""
 import os, math
 import numpy as np
@@ -11,23 +12,50 @@ FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets",
 GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated")
 
 
-def title_image(small, big, path, W=1920, H=816):
+def split_title(big, limit=18):
+    """One line up to `limit` characters; longer titles wrap onto two lines split at the most balanced word break."""
+    words = big.split()
+    if len(big) <= limit or len(words) < 2:
+        return [big]
+    best = min(range(1, len(words)), key=lambda k: max(len(" ".join(words[:k])), len(" ".join(words[k:]))))
+    return [" ".join(words[:best]), " ".join(words[best:])]
+
+
+def title_image(small, big, path, W=1920, H=816, scrim=0.36):
+    """RGBA title card. Long titles wrap onto two balanced lines, set smaller and kept inside the middle ~70% of the
+    width. Behind the text a soft centred scrim (about 36% darker at the middle, feathered, no hard edges) makes it
+    stand out; it rides on the same alpha, so it fades in and out with the title."""
     s = skia.Surface(W, H); c = s.getCanvas(); c.clear(skia.Color4f(0, 0, 0, 0))
     p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(1, 1, 1, 1))
-    f_big = skia.Font(skia.Typeface.MakeFromFile(os.path.join(FONTS, "RobotoSlab-ExtraBold.ttf")), 112)
+    tf_big = skia.Typeface.MakeFromFile(os.path.join(FONTS, "RobotoSlab-ExtraBold.ttf"))
     f_small = skia.Font(skia.Typeface.MakeFromFile(os.path.join(FONTS, "RobotoSlab-Bold.ttf")), 34)
     big = big.upper(); small = small.upper()
-    wb = f_big.measureText(big); ws = sum(f_small.measureText(ch) for ch in small) + 9 * (len(small) - 1)
+    lines = split_title(big)
+    size = 112 if len(lines) == 1 else 92
+    f_big = skia.Font(tf_big, size)
+    widest = max(f_big.measureText(ln) for ln in lines)
+    if widest > 0.70 * W:                             # never wider than the middle 70%
+        size = size * 0.70 * W / widest; f_big = skia.Font(tf_big, size)
+    lh = size * 1.12
+    block = 34 + 0.75 * size + lh * (len(lines) - 1) + size * 0.75     # small line + gap + title lines (cap heights)
+    top = H / 2 - block / 2 + 10
+    ws = sum(f_small.measureText(ch) for ch in small) + 9 * (len(small) - 1)
     x = W / 2 - ws / 2
     for ch in small:                                  # letter-spaced chapter number
-        c.drawString(ch, x, H / 2 - 70, f_small, p); x += f_small.measureText(ch) + 9
-    c.drawString(big, W / 2 - wb / 2, H / 2 + 50, f_big, p)
+        c.drawString(ch, x, top + 25, f_small, p); x += f_small.measureText(ch) + 9
+    for i, ln in enumerate(lines):
+        c.drawString(ln, W / 2 - f_big.measureText(ln) / 2, top + 34 + 0.75 * size + size * 0.72 + i * lh, f_big, p)
     a = s.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType).astype(np.float32) / 255
     alpha = a[..., 3]
     glow = gaussian_filter(alpha, 18) * 0.55 + gaussian_filter(alpha, 5) * 0.35
+    a_t = np.clip(alpha + glow * (1 - alpha), 0, 1)                 # the lettering with its glow (white)
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    cy = top + block / 2
+    a_s = scrim * np.exp(-0.5 * ((yy - cy) / (0.19 * H)) ** 2) * np.exp(-0.5 * ((xx - W / 2) / (0.36 * W)) ** 2)
+    a_o = a_t + a_s * (1 - a_t)                                     # white text over a black scrim (straight alpha)
     out = np.zeros_like(a)
-    out[..., :3] = np.array([1.0, 0.97, 0.92])
-    out[..., 3] = np.clip(alpha + glow * (1 - alpha), 0, 1)
+    out[..., :3] = np.array([1.0, 0.97, 0.92]) * (a_t / np.maximum(a_o, 1e-6))[..., None]
+    out[..., 3] = np.clip(a_o, 0, 1)
     from PIL import Image
     Image.fromarray((out * 255).astype(np.uint8), "RGBA").save(path)
     return path
