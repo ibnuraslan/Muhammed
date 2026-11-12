@@ -69,7 +69,7 @@ def build(variant=None):
          windows=[("N", 0.0, 1.5, 1.6, 1.6)], doors=[("W", 0.0, 0, 2.0, 2.6)])
     daylight_window(Vector((14.0, 5.2, 2.3)), "N", (1.6, 1.6), energy=200)
     for k in range(3):
-        tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=110 if v != "dim" else 50)
+        tube_light(Vector((-5 + 5 * k, 2.0, 5.5)), energy=110 if v != "dim" else 90)
     # rubbish being cleared: crates, boxes, broken chairs, a desk, rolled carpet, an old cabinet
     for k in range(10):
         ph_model("cardboard_box_01", loc=(rng.uniform(-7.5, -3.5), rng.uniform(2, 8), 0.0), rot_z=rng.uniform(0, 3))
@@ -205,7 +205,7 @@ def c2_13a(c, t):          # a forklift sets two packages down inside the wareho
 
 def c2_13b(c, t):          # one package wheeled on a hand truck through the doorway into the next building
     sec = t * dur("ch2_13b"); doors(c, 0.2, 0.2)
-    a = Vector((4.0, -1.0, 0)); b = Vector((12.0, -1.0, 0))
+    a = Vector((4.0, 1.0, 0)); b = Vector((12.0, 1.0, 0))
     h = c["people"]["b"]; p = walk_to(h, a, b, sec, speed=0.7, swing=0)
     d = (b - a).normalized(); cart = p + d * 0.75
     ht = c["handtruck"]
@@ -235,7 +235,7 @@ SHOTS = {
     "ch1_3a": ("clear", c1_3a, C(Vector((5.5, -11.0, 1.5)), Vector((5.1, -10.6, 1.5)), Vector((-0.6, -8.6, 1.0)), 30), 4.0),
     "ch1_3b": ("clear", c1_3b, C(Vector((7.0, -22.0, 1.6)), Vector((6.0, -22.0, 1.6)), Vector((-4.0, -12.0, 1.5)), 30), None),
     "ch2_13a": ("dim", c2_13a, C(Vector((-3.5, -2.0, 1.4)), Vector((-3.0, -2.6, 1.45)), Vector((2.0, -1.0, 0.9)), 30), 4.0),
-    "ch2_13b": ("dim", c2_13b, C(Vector((6.0, -4.5, 1.5)), Vector((6.6, -4.2, 1.5)), Vector((9.5, -1.0, 1.2)), 32), 4.0),
+    "ch2_13b": ("dim", c2_13b, C(Vector((5.0, -3.0, 1.5)), Vector((5.6, -2.7, 1.5)), Vector((9.5, 1.0, 1.2)), 30), 4.0),
     "ch2_14a": ("dim", c2_14a, C(Vector((-2.0, 4.0, 1.2)), Vector((-1.8, 3.2, 1.2)), Vector((-0.8, -4.6, 0.8)), 32), 4.0),
     "ch2_14b": ("dim", c2_14b, C(Vector((-0.6, 3.6, 1.5)), Vector((0.0, 3.4, 1.5)), Vector((-0.6, -3.6, 1.0)), 28), 4.0),
 }

@@ -70,7 +70,7 @@ def build(variant=None):
     conc = ph_mat("concrete_floor_worn_001", 0.4, (0.4, 0.4, 0.38), name="StoreFloor")
     # ---------------- Ankara office
     room("Office", OFF, 5.5, 4.5, 3.0, parq, two_tone("OffWall", (0.5, 0.45, 0.36), (0.8, 0.76, 0.66)), windows=[("N", 0.8, 1.0, 1.6, 1.5)])
-    daylight_window(OFF + Vector((0.8, 2.35, 1.75)), "N", (1.6, 1.5), energy=200)
+    daylight_window(OFF + Vector((0.8, 2.35, 1.75)), "N", (1.6, 1.5), energy=650)
     ph_model("metal_office_desk", loc=OFF + Vector((0, 0.4, 0)), rot_z=math.pi)
     lamp_root, _ = ph_model("desk_lamp_arm_01", loc=OFF + Vector((-0.45, 0.55, 0.76)), rot_z=math.radians(150))
     l = bpy.data.lights.new("DeskLamp", 'SPOT'); l.energy = 60; l.color = (1.0, 0.82, 0.6); l.spot_size = math.radians(70); l.shadow_soft_size = 0.05
@@ -83,12 +83,13 @@ def build(variant=None):
                        cyl("StampHandle", (0, 0, 0.08), 0.015, 0.09, wood("StampWood", (0.15, 0.08, 0.04), (0.35, 0.2, 0.1)), verts=12)], "Stamp")
     c["stamp_rest"] = OFF + Vector((0.3, 0.25, 0.775))
     box("InkPad", OFF + Vector((0.32, 0.12, 0.785)), (0.1, 0.07, 0.015), pbr("InkPad", (0.1, 0.1, 0.25), 0.4))
-    ph_model("vintage_cabinet_01", loc=OFF + Vector((2.2, 1.6, 0)), rot_z=math.pi)
+    ph_model("vintage_cabinet_01", loc=OFF + Vector((2.3, -1.7, 0)), rot_z=math.pi / 2)
     ph_model("SchoolChair_01", loc=OFF + Vector((0.0, -0.25, 0)), rot_z=0.0)
-    tube_light(OFF + Vector((0, 0, 2.95)), energy=25)
+    tube_light(OFF + Vector((0, 0, 2.95)), energy=80)
     # ---------------- storeroom (dusty): steel shelving, boxes, pallets with grey packages, a swinging lamp
     room("Store", STO, 6, 14, 3.4, conc, two_tone("StoreWall", (0.45, 0.45, 0.42), (0.62, 0.6, 0.55), split=1.0), windows=[("E", 3.5, 2.2, 1.2, 0.6)])
-    daylight_window(STO + Vector((3.1, 3.5, 2.5)), "E", (1.2, 0.6), energy=120)
+    daylight_window(STO + Vector((3.1, 3.5, 2.5)), "E", (1.2, 0.6), energy=500)
+    tube_light(STO + Vector((0, -3.5, 3.35)), energy=60)
     for k in range(4):
         ph_model("steel_frame_shelves_01", loc=STO + Vector((-2.4, -5.0 + k * 2.6, 0)), rot_z=math.radians(90))
     for k in range(10):
@@ -108,13 +109,13 @@ def build(variant=None):
     shade = join([cyl("Shade", (0, 0, 0), 0.18, 0.12, painted_steel("ShadeM", (0.25, 0.3, 0.28), 0.4, 0.5), verts=20)], "LampShade"); shade.parent = swing; shade.location = (0, 0, -1.15)
     bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.04, location=(0, 0, 0))
     bulb = bpy.context.active_object; bulb.data.materials.append(pbr("SBulb", (1, 1, 1), 0.2, 0.0, **{'Emission Color': (1.0, 0.78, 0.5, 1), 'Emission Strength': 18.0})); bulb.parent = swing; bulb.location = (0, 0, -1.22)
-    sl = bpy.data.lights.new("StoreBulb", 'SPOT'); sl.energy = 220; sl.color = (1.0, 0.78, 0.5); sl.spot_size = math.radians(110); sl.spot_blend = 0.7
+    sl = bpy.data.lights.new("StoreBulb", 'SPOT'); sl.energy = 700; sl.color = (1.0, 0.78, 0.5); sl.spot_size = math.radians(110); sl.spot_blend = 0.7
     so = bpy.data.objects.new("StoreBulb", sl); bpy.context.collection.objects.link(so); so.parent = swing; so.location = (0, 0, -1.25)
     c["swing"] = swing
     haze(STO + Vector((0, 0, 1.7)), (5.8, 13.8, 3.3), density=0.06, color=(0.85, 0.8, 0.72), anis=0.5)
     # ---------------- records room: two ledgers side by side under a lamp, a window draught
     room("Records", REC, 5.0, 4.5, 3.0, parq, two_tone("RecWall", (0.35, 0.42, 0.45), (0.78, 0.76, 0.7)), windows=[("W", 0.0, 1.0, 1.4, 1.5)])
-    daylight_window(REC + Vector((-2.6, 0, 1.75)), "W", (1.4, 1.5), energy=200)
+    daylight_window(REC + Vector((-2.6, 0, 1.75)), "W", (1.4, 1.5), energy=600)
     tab = wood("RecTable", (0.1, 0.06, 0.035), (0.28, 0.16, 0.09), rough=0.5, coat=0.3)
     box("RecTableTop", REC + Vector((0, 0, 0.76)), (1.8, 1.0, 0.04), tab)
     for dx in (-0.85, 0.85):

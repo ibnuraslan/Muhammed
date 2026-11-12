@@ -284,22 +284,19 @@ def sit_at(h, loc, look, lean=10):
 
 
 def sit_up_in_bed(h, bed, k=1.0):
-    """Patient sitting up against the pillows (k 0 lying back .. 1 upright)."""
+    """Patient sitting up against the pillows: legs straight along the mattress, torso raised (k 0 low .. 1 upright)."""
     h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); reset_pose(h)
     for sd in ("L", "R"):
-        h.aim(f"upperleg01.{sd}", (0, -1, 0.0)); h.aim(f"upperleg02.{sd}", (0, -1, 0.0))
-        h.aim(f"lowerleg01.{sd}", (0, -1, -0.05)); h.aim(f"lowerleg02.{sd}", (0, -1, -0.05))
-    arms_relaxed(h)
-    h.arm.rotation_euler = (math.radians(-(30 + 35 * (1 - k))), 0, 0)
-    bpy.context.view_layer.update()
-    place(h, bed + Vector((0, 0.55, 0.62)), 0.0)
-    h.arm.rotation_euler = (math.radians(-(30 + 35 * (1 - k))), 0, 0)
-    bpy.context.view_layer.update()
-    from human import _world_verts
-    w = np.concatenate([_world_verts(o) for o in h.parts if o is h.body])
-    h.arm.location.z += 0.66 - w[:, 2].min()
-    bpy.context.view_layer.update()
-
+        for b_ in ("upperleg01", "upperleg02", "lowerleg01", "lowerleg02"):
+            h.aim(f"{b_}.{sd}", (0, -1, -0.02))
+        h.aim(f"foot.{sd}", (0, -0.4, 1))
+    back = 35 + 25 * (1 - k)                               # lean back against the raised pillows
+    h.rot("spine05", (1, 0, 0), -back * 0.5); h.rot("spine03", (1, 0, 0), -back * 0.5)
+    h.rot("head", (1, 0, 0), back * 0.45)
+    for sd, sg in (("L", 1), ("R", -1)):
+        h.aim(f"upperarm01.{sd}", (sg * 0.25, 0.1, -1)); h.aim(f"upperarm02.{sd}", (sg * 0.25, 0.1, -1))
+        h.aim(f"lowerarm01.{sd}", (sg * 0.1, -1, -0.35)); h.aim(f"lowerarm02.{sd}", (sg * 0.1, -1, -0.35))
+    place(h, bed + Vector((0, 0.35, 0.62)), 0.0)
 
 def ward_patients(c, sec, upright=None):
     lie_in_bed(c["people"]["pat2"], BEDS[3] + Vector((0, 0.9, 0)), (0, -1), 0.66)
