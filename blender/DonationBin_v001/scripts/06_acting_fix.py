@@ -256,7 +256,7 @@ def pound(f, hit):
 scream(1322, 2); scream(1336, 22, 1.0); pound(1348, 0); pound(1356, 1); pound(1364, 0.2); pound(1372, 1); pound(1380, 0.1)
 scream(1394, 24, 1.0, (-26, -6)); scream(1420, 8, 0.2); scream(1446, 22, 1.0, (-30, 0)); scream(1478, 4, 0.0, (-10, 0))
 # --- 1500-1842: three days. She sinks down and lies curled on her side in the middle of the clothes, head on her arm, face to the flap
-CUR = Vector((-0.12, -0.02, 0)); CY = 52.0          # side-lying: head toward the back-right corner, front of her body faces the front wall
+CUR = Vector((-0.12, 0.13, 0)); CY = 52.0   # y +0.15: her feet stay clear of the front wall          # side-lying: head toward the back-right corner, front of her body faces the front wall
 def curled(f, k, weak, head=(20, 0), breathe=0.0, jaw=0.0):
     z = PZ(CUR.x, CUR.y) + 0.17 - 0.02 * weak + 0.006 * breathe
     M = WO.Mb(Vector((CUR.x, CUR.y, z)), CY, 0, 88)
@@ -347,7 +347,7 @@ def chest(fk):
     sc.frame_set(fk); return WR_.matrix_world @ WR_.pose.bones["spine03"].head
 def mix(a, b, t): return a.lerp(b, t)
 KEEP = lambda f: not (200 <= f <= 520 or 860 <= f <= 1425 or 1600 <= f <= 1870)
-CAMK = [k for k in CAMK if KEEP(k[0])]
+CAMK = [k for k in CAMK if KEEP(k[0]) and k[0] not in (1, 60, 150, 168, 1410, 1440, 1566, 1578, 2068, 2086, 2110)]
 NEW = []
 def K(f, pos, tgt, lens): NEW.append([f, list(pos), list(tgt), lens])
 FWD_L = WR_.data.bones["head"].matrix_local.to_3x3().inverted() @ Vector((0, -1, 0))
@@ -372,18 +372,19 @@ def face_cam(fk, lens=22, dists=(0.55, 0.47, 0.40, 0.34), ups=(0.0, 0.10, 0.22),
             for up in ups:
                 d = Matrix.Rotation(R_(ang), 3, 'Z') @ fw
                 c = fc + d * dist + Vector((0, 0, up))
-                if -0.64 < c.x < 0.64 and -0.5 < c.y < 0.5 and 0.75 < c.z < 2.30 and flap_clear(c) and c.z > ground_z(c.x, c.y) + 0.25 and clear_view(c, fc):
+                if -0.62 < c.x < 0.62 and -0.42 < c.y < 0.46 and 0.75 < c.z < 2.15 and flap_clear(c) and c.z > ground_z(c.x, c.y) + 0.25 and clear_view(c, fc):
                     return [fk, list(c), list(mix(fc, chest(fk), 0.2)), lens]
     return None
 K(215, (0.55, -1.75, 2.15), (0.0, -0.60, 1.30), 20)                      # back and up: no shoe sole in the lens
 K(240, (0.30, -1.50, 1.95), (0.0, -0.40, 1.10), 20)
-K(268, (0.0, -0.85, 1.35), (0.05, 0.0, 0.55), 18)
-K(288, (0.30, 0.05, 1.25), (0.08, 0.05, 0.45), 17)                       # in under the swinging flap, looking down at the landing
-K(312, (-0.45, 0.20, 1.70), (0.08, 0.05, 0.45), 18)
+K(268, (0.0, -0.70, 1.35), (0.05, 0.0, 0.55), 20)
+K(288, (0.30, 0.05, 1.20), (0.08, 0.05, 0.45), 21)                       # in under the swinging flap, looking down at the landing
+K(312, (-0.38, 0.18, 1.45), (0.08, 0.05, 0.45), 21)
 ANG = {1620: (20, 40, -20, 0), 1680: (-20, -40, 20, 0), 1740: (40, 20, -40, 0), 1800: (-40, -20, 40, 0), 1845: (0, 20, -20)}
 for f in (340, 375, 410, 445, 480, 515, 950, 990, 1035, 1080, 1120, 1160, 1595,
           1620, 1680, 1740, 1800, 1845):
-    k_ = face_cam(f, lens=24 if f >= 1600 else 22, angs=ANG.get(f, (0, 20, -20, 40, -40, 60, -60)))
+    k_ = face_cam(f, lens=24 if f >= 1600 else 22, angs=ANG.get(f, (0, 20, -20, 40, -40, 60, -60)),
+                  ups=(-0.10, 0.0, 0.10) if 980 <= f <= 1090 else (0.0, 0.10, 0.22))     # wall beat: from her face height or a little below, not her hair
     if k_: NEW.append(k_)
     else: print("NOFACE", f)
 K(880, (0.62, -0.50, 1.85), mix(face(880), chest(880), 0.3), 20)
@@ -395,8 +396,16 @@ K(1250, (0.64, 0.08, 1.40), (0.0, 0.28, 1.50), 14); K(1290, (0.62, -0.05, 1.30),
 for f_, cp in ((1322, (0.52, -0.48, 1.50)), (1350, (0.51, -0.48, 1.48)), (1384, (0.50, -0.48, 1.47))):
     K(f_, cp, face(f_), 20)
 K(905, (0.58, -0.46, 1.85), mix(face(905), chest(905), 0.3), 20)
-K(1402, (0.10, -0.46, 1.80), mix(face(1402), chest(1402), 0.3), 20); K(1410, (0.10, -0.78, 1.80), (0.0, -1.6, 1.4), 20)
-K(1862, (0.10, -0.40, 1.45), mix(face(1862), chest(1862), 0.3), 20)
+K(1402, (0.10, -0.46, 1.80), mix(face(1402), chest(1402), 0.3), 20)
+# QA round: cut (no pass through the flap) to a wide exterior of the closed bin, and cut back in for the three days
+K(1404, (0.55, -4.30, 1.65), (0.0, -0.6, 1.30), 26); K(1440, (0.35, -4.60, 1.80), (0.0, -0.6, 1.20), 24)
+k_ = face_cam(1560, lens=22) or [1560, [0.40, -0.38, 1.20], [0.30, 0.25, 0.70], 20]; NEW.append(k_)
+k_ = face_cam(1862, lens=22) or [1862, [0.45, -0.35, 1.15], list(face(1862)), 20]; NEW.append(k_)
+# opening: from the right so the shover walks into the shot side-on (no back of a head on beats 1 and 2)
+K(1, (2.8, -4.6, 0.5), (0.0, -0.8, 1.0), 18); K(60, (1.6, -3.4, 0.8), (0.0, -0.85, 1.1), 22)
+K(150, (1.0, -1.2, 1.8), (0.0, -0.8, 1.15), 28); K(168, (0.9, -2.0, 1.85), (-0.05, -1.15, 1.1), 30)
+# rescue: low and close at the cut opening, looking up at her
+K(2068, (0.35, -1.6, 1.0), (0.0, -0.3, 0.9), 24); K(2086, (0.0, -1.2, 0.85), (0.05, -0.1, 1.05), 22); K(2110, (-0.25, -1.15, 0.95), (0.0, -0.4, 0.85), 22)
 CAMK = sorted(CAMK + NEW, key=lambda k: k[0])
 sc["cam_keys"] = json.dumps(CAMK)
 cam = sc.camera; cam_d = cam.data
@@ -405,16 +414,29 @@ if cam_d.animation_data and cam_d.animation_data.action:
     for l in cam_d.animation_data.action.layers:
         for st in l.strips:
             for cb in st.channelbags: cb.fcurves.clear()
-cl = catmull([(k[0], Vector(k[1])) for k in CAMK]); ct = catmull([(k[0], Vector(k[2])) for k in CAMK]); cln = pchip([(k[0], float(k[3])) for k in CAMK])
+CUTS = [1, 1404, 1560, sc.frame_end + 1]
+SEG = []
+for a_, b_ in zip(CUTS, CUTS[1:]):
+    ks = [k for k in CAMK if a_ <= k[0] < b_]
+    SEG.append((a_, b_, catmull([(k[0], Vector(k[1])) for k in ks]), catmull([(k[0], Vector(k[2])) for k in ks]), pchip([(k[0], float(k[3])) for k in ks])))
+def seg(f): return next(s_ for s_ in SEG if s_[0] <= f < s_[1])
+def cl(f): return seg(f)[2](f)
+def ct(f): return seg(f)[3](f)
+def cln(f): return seg(f)[4](f)
 qprev = None
 for f in range(1, sc.frame_end + 1):
     p, t = cl(f), ct(f)
+    if (960 <= f <= 1402 or 1560 <= f <= 1870) and abs(p.x) < 0.75 and abs(p.y) < 0.6 and p.z < 2.45:   # spline overshoot: stay inside the bin
+        p = Vector((max(-0.62, min(0.62, p.x)), max(-0.46, min(0.48, p.y)), min(2.2, p.z)))
     cam.location = p; cam.keyframe_insert("location", frame=f)
     q = (t - p).to_track_quat('-Z', 'Y'); cam.rotation_mode = 'QUATERNION'
     if qprev is not None and q.dot(qprev) < 0: q = -q
     qprev = q.copy(); cam.rotation_quaternion = q; cam.keyframe_insert("rotation_quaternion", frame=f)
     cam_d.lens = cln(f); cam_d.keyframe_insert("lens", frame=f)
     cam_d.dof.focus_distance = (t - p).length; cam_d.dof.keyframe_insert("focus_distance", frame=f)
+for fc_ in list(cam.animation_data.action.layers[0].strips[0].channelbags[0].fcurves) + [c for l in cam_d.animation_data.action.layers for st in l.strips for cb in st.channelbags for c in cb.fcurves]:
+    for kp in fc_.keyframe_points:
+        if int(round(kp.co.x)) in (1403, 1559): kp.interpolation = 'CONSTANT'      # hard cuts
 sc["director_fix"] = "v006 re-stage: shove on upper back, roll onto back with feet down, sit up, upright at walls, curled on side mid-pile, corner camera"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("FIX09_DONE", len(CAMK))
