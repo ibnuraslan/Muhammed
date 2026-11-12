@@ -289,7 +289,7 @@ for n in ("DiverA", "DiverB", "DiverC"):
 # head torches off for the crowd clones (they are not cloned with lamps)
 
 # =============================================================== BEAT 1-2: walk in, flood, run deeper (frames 1-590)
-WALK = [("Coach", 0.15, -1.6), ("Boy1", -0.55, -2.8), ("Boy2", 0.55, -3.0), ("Boy3", -0.5, -4.1), ("Boy4", 0.6, -4.3), ("Boy5", 0.0, -5.4)]
+WALK = [("Coach", 0.1, -1.4), ("Boy1", -0.7, -2.8), ("Boy2", 0.7, -3.1), ("Boy3", -0.7, -4.5), ("Boy4", 0.75, -4.8), ("Boy5", 0.0, -6.1)]
 F_END_RUN = 590
 def s_of(f, s_start):
     # 1.3 m/s walking, accelerating to 2.6 m/s running from f 300 (beat 2)
@@ -351,7 +351,7 @@ fl_.new(cmp.outputs[0], mx.inputs['Fac']); fl_.new(src, mx.inputs[1]); fl_.new(t
 flood.data.materials.append(mf)
 surge = bpy.data.objects["S2_SurgeFront"]
 bpy.data.objects["S2_FloodWater"].hide_render = True
-last_boy_S0 = S_MOUTH - 5.4 - 4.5
+last_boy_S0 = S_MOUTH - 6.1 - 4.5
 for f in list(range(1, 600, 6)) + [600, 606]:
     if f < 330: front_s = -10.0; depth = -0.3
     else:
