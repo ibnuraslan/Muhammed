@@ -80,6 +80,9 @@ for s in "LR":   # elbow: IK limits, no hyper-extension
     for ax in ("x", "y", "z"): setattr(pb, "lock_ik_" + ax, False)
 for o in O:
     if o.type == 'LIGHT': o.visible_camera = False   # light panels never show up in frame
+for o in O:   # sun visors flipped up out of frame (they blocked the eye-level push-in)
+    if o.name.startswith('Inner_AgainsSun') and 'Traffic' not in o.name:
+        o.animation_data_clear(); o.hide_render = True
 sc.render.use_motion_blur = False
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT_PATH, compress=True); print("SAVED", OUT_PATH)

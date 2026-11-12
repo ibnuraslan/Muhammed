@@ -38,3 +38,12 @@ Story-beat frames (`beats.json`) are unchanged.
 - `review/v004_clip_scan.json`: director `clip_scan.py`, 0 bad ranges.
 - `review/v004_hand_audit.txt`: hand vs hand, torso/shirt and head all 0. The rim check flags 1–2 finger-bone samples on grip frames, which is the rim inside the curled fist.
 - `review/v004_camera_clearance.txt`: the window-frame entry at 121–123, a sun-visor pass at 723 (2.9 cm) and the intended skin dive at 1791 only.
+
+## Director review of 3777fec, fixed
+| # | Time (frame) | Problem | Fix |
+|---|---|---|---|
+| 21 | 4.0 / 10.0 / 14.0 s (hand close-ups) | Near hand lifted off the wheel with the fingers spread. | Re-grip and gesture are now slides along the rim: fingers stay curled, palm in contact (hands(700,-98,98); R hand 90→76→80→90). |
+| 22 | 15.0–15.5 s (901–931) | Up-the-nose angle. | Push-in raised to just above eye level. The sun visors are removed from render (they read as flipped up) because they blocked the eye-level camera. |
+| 23 | 9.5 s, 41.5 s | Half-open mouth with lower teeth bared (snarl). | All jaw keys 0.5°: lips relaxed, teeth hidden. |
+| 24 | 42.5 s (2551) | Back of his head on the last character beat. | 2535/2562 framings moved in front of him (3/4 face). |
+| 25 | 16.0 / 17.0 s (961, 1021) | Blurred fabric and wheel. | The camera arrives on the HUD by 958 and holds/drifts on it to 1030. |
