@@ -114,7 +114,7 @@ def pose_passenger(arm, row, side, k, x, y, f):
             fk_arm(R, s, f, down=62, fwd=rnd.uniform(-5, 10), elbow=rnd.uniform(5, 20), out=rnd.uniform(0, 10))
         else:
             dn, fw, el = rnd.uniform(36, 46), rnd.uniform(18, 32), rnd.uniform(48, 68)
-            fk_arm(R, s, f, down=dn, fwd=fw, elbow=ELB.get(s, el), out=6)
+            fk_arm(R, s, f, down=dn, fwd=fw, elbow=ELB.get(s, el), out=0)
         fingers_curl(R, f, s, 25)
     eyes_closed(R, f, 1.0)
     R.key_rot("jaw", f, [("X", rnd.uniform(2, 9))])
@@ -187,12 +187,12 @@ SEATED_FO = (0.52, 1.57, -0.23)
 # side < 0 leans toward character's -X = world +X (window) since he faces +Y
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)        # face turned toward the cabin, readable
 fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30)
-fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30, 15), armR=(55, 0, 15, 15))   # hauled up/back
-fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 15), armR=(60, -10, 15, 15))
-fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 15), armR=(62, -10, 15, 15))  # left arm swings down onto the yoke
-fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12, 15), armR=(62, -10, 15, 15))
-fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20, 15), armR=(60, -20, 15, 15))
-fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20, 15), armR=(58, 0, 15, 15))
+fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(45, 10, 30, 32), armR=(55, 0, 15, 32))   # hauled up/back
+fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(60, -10, 15, 32))
+fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(62, -10, 15, 32))  # left arm swings down onto the yoke
+fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(48, 30, 12, 32), armR=(62, -10, 15, 32))
+fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(50, 20, 20, 32), armR=(60, -20, 15, 32))
+fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(50, 10, 20, 32), armR=(58, 0, 15, 32))
 fo_pose(F(38.0), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18, side=14, hflex=45, hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
 for f in range(F(38.0) + 40, 4410, 40):
     fo_pose(f, (0.74, 0.96, -0.55), rz=200, rx=-20, flex=18 + 1.8 * math.sin(2 * math.pi * f / (4.3 * FPS)), side=14, hflex=45 + 1.2 * math.sin(2 * math.pi * f / (4.3 * FPS)), hside=35, legs=(80, 20), armL=(55, 5, 10, 20), armR=(60, 0, 10, 20))
@@ -513,8 +513,8 @@ hand("R", 1, (sx_ + 0.13, sy_ + 0.12, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), cur
 body(F(0.8), SIT, flex=-10, sflex=10, head=(10, 0))
 hand("L", F(0.8), (sx_ - 0.10, sy_ + 0.12, 1.05), d=(0.4, 0.3, 1), n=(0.3, 1, 0), curl=30)     # hands rise to the face
 hand("R", F(0.8), (sx_ + 0.12, sy_ + 0.14, 1.07), d=(-0.4, 0.3, 1), n=(-0.3, 1, 0), curl=30)
-hand("L", F(1.6), (sx_ - 0.08, sy_ + 0.25, 0.92), d=(0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
-hand("R", F(1.6), (sx_ + 0.12, sy_ + 0.25, 0.90), d=(-0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
+hand("L", F(1.6), (sx_ - 0.08, sy_ + 0.16, 0.90), d=(0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
+hand("R", F(1.6), (sx_ + 0.12, sy_ + 0.16, 0.88), d=(-0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
 body(F(1.6), SIT, flex=-8, sflex=4, head=(0, 0))
 body(F(2.4), SIT, flex=-8, sflex=4, twist=-25, head=(5, -35))
 hand("L", F(2.4), (sx_ - 0.10, sy_ + 0.28, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=45)          # grips own thigh (the shared armrest is the neighbour's)
@@ -555,10 +555,10 @@ def wpath(f):
     u = (f - W0) / (W1 - W0); u = smooth(u) * 0.35 + u * 0.65
     return Vector((-0.04 + 0.04 * u, yA + (yB - yA) * u, 0))
 H.walk(wpath, lambda f: 180.0, W0, W1, stride=0.72, lift=0.09, bob=0.03, lean=10)
-for f, x, y, z in ((F(10.4), -0.55, -2.70, 1.02), (F(11.0), -0.50, -1.95, 1.02), (F(11.6), -0.30, -0.9, 1.2)):
-    hand("L", f, (x, y, z), d=(0, 1, -0.3), n=(-1, 0, 0.3), curl=30)
-for f, x, y, z in ((F(10.6), 0.30, -2.42, 1.08), (F(11.3), 0.36, -1.55, 1.0)):
-    hand("R", f, (x, y, z), d=(0, 1, -0.3), n=(1, 0, 0.3), curl=45)
+for i_, f in enumerate(range(F(10.1), F(11.5), 14)):      # relaxed arm swing while walking (no hands on seats or heads)
+    p_ = wpath(f); sw = 0.10 * math.sin(i_ * 1.6)
+    hand("L", f, (p_.x - 0.24, p_.y + 0.06 + sw, 0.86), d=(0.1, 0.3, -1), n=(-1, 0, 0), curl=30)
+    hand("R", f, (p_.x + 0.24, p_.y + 0.06 - sw, 0.86), d=(-0.1, 0.3, -1), n=(1, 0, 0), curl=30)
 # beat 4: door push (door free edge / panel point follows rotation)
 def door_pt(f, local):
     sc.frame_set(f); return DOOR.matrix_world @ Vector(local)
@@ -699,7 +699,7 @@ hand("R", F(64.2), (0.13, 1.84, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=25)
 for f in range(F(56.6), F(72.6), 60):
     W = grip(f, "L"); hand("L", f, W - Vector((0, 0.035, 0)), d=(0.6, 1, 0.5), n=(-0.3, 0.2, 1), pole=W + Vector((0.4, -0.3, -0.25)), curl=65)
 # beat 17: look back over the right shoulder
-hand("R", F(65.0), (0.24, 1.30, 0.86), d=(-0.3, 1, -0.5), n=(0, 0, 1), curl=60)                     # braces on the pedestal while turning
+hand("R", F(65.0), (0.78, 1.36, 0.78), d=(0, 1, -0.3), n=(0, 0, 1), curl=60)                 # own right armrest                     # braces on the pedestal while turning
 SEATB(F(64.6), sflex=14, twist=45, head=(0, 50), dy=0.12, dx=-0.10); SEATB(F(65.8), sflex=24, twist=70, head=(25, 70), dy=0.18, dx=-0.18)
 SEATB(F(66.9), sflex=16, twist=75, head=(5, 80), dy=0.16, dx=-0.18); SEATB(F(67.9), sflex=10, twist=40, head=(5, 50), dy=0.08, dx=-0.06)
 # beat 18-19: forward, hands back on the yoke, wide-eyed
