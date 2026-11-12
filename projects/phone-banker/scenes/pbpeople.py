@@ -242,7 +242,7 @@ def protective_gear(h, suit=(0.9, 0.91, 0.93), full_face=True, gloves=(0.15, 0.3
 
 def tyvek(name, gender=1.0, years=38, police_bg=False):
     """A forensic investigator in a full Tyvek suit (pale, matte), hood up, full-face respirator, gloves, overshoes."""
-    cloth = "male_casualsuit01" if gender > 0.5 else "female_casualsuit01"
+    cloth = "male_casualsuit01"                                                    # the full coverall on everyone: no bare arms or legs
     h = person(name, gender, years, cloth, None, col=(0.9, 0.91, 0.93))
     protective_gear(h)
     return h
