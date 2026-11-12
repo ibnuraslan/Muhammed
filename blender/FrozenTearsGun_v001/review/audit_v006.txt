@@ -1,3 +1,4 @@
 FrozenTearsGun audit, every 3 frames
-no contact problems found
+fingertip inside gun part >3mm                   count    1  worst 0.0066 m at frame 463
+    frames: 463:Gun_Body
 camera inside closed geometry: none

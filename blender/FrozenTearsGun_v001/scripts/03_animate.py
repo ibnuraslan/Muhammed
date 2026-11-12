@@ -796,9 +796,9 @@ wp(26.6, OF(0.3, -0.25, 1.85), HEAD(M, F(26.6)), 30, 4.0)
 wp(27.4, OF(0.35, 0.35, 1.7), HEAD(M, F(27.4)), 30, 4.0)
 wp(28.15, OF(0.65, -0.05, 1.6), HEAD(M, F(28.15)) + Vector((0, 0, -0.05)), 28, 4.0)
 wp(28.45, Vector((0.05, -3.4, 1.45)), Vector((0, 0.2, 1.0)), 28, 2.0)
-wp(28.8, Vector((0.9, -1.15, 1.45)), Vector((0.0, 0.1, BT + 0.1)), 30, 4.0)
-wp(29.7, Vector((0.15, -0.95, 1.75)), Vector((-0.2, 0.1, BT + 0.1)), 30, 4.0)
-wp(30.6, Vector((-1.05, -0.75, 1.3)), Vector((-0.3, 0.2, BT + 0.15)), 30, 4.0)
+wp(28.8, Vector((0.7, -0.75, 1.45)), Vector((0.0, 0.35, BT + 0.25)), 32, 5.6)
+wp(29.7, Vector((0.05, -0.6, 1.65)), Vector((-0.2, 0.35, BT + 0.3)), 32, 5.6)
+wp(30.6, Vector((-0.85, -0.45, 1.35)), Vector((-0.2, 0.4, BT + 0.3)), 32, 5.6)
 wp(31.3, Vector((-0.85, 0.15, 1.25)), Vector((0.0, 0.3, 1.05)), 30, 4.0)
 wp(31.7, Vector((-1.0, 0.75, 1.5)), HEAD(M, F(31.7)) + Vector((0, 0, -0.2)), 30, 5.6)
 wp(32.1, Vector((-0.38, 1.25, 1.62)), HEAD(M, F(32.1)) + Vector((0, 0, -0.25)), 30, 4.0)
@@ -821,7 +821,7 @@ for f in range(1, 2101):
     cam_d.dof.focus_distance = max(0.02, (tg - p).length); cam_d.dof.keyframe_insert("focus_distance", frame=f)
     cam_d.dof.aperture_fstop = cfs(f); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
     if F(4.2) <= f <= F(15.9):
-        dgun = (gun_mat(f).translation - p).length + 0.13
+        dgun = (gun_mat(f).translation - p).length + 0.3
         h = 2 * dgun * 18 / cam_d.lens * 1.25
         card.location = (0, 0, -dgun); card.scale = (h * 0.75, h, 1)
         card.keyframe_insert("location", frame=f); card.keyframe_insert("scale", frame=f)
@@ -835,6 +835,30 @@ for o in [bpy.data.objects["Gas_%d" % i] for i in range(6)]:
     key_hide(o, [(1, True), (F(7.3), False), (F(12.7), True)])
 key_hide(bpy.data.objects["MuzzlePuff"], [(1, True), (F(14.95), False), (F(16.1), True), (F(32.35), False), (F(33.5), True)])
 key_hide(bpy.data.objects["ImpactPuff"], [(1, True), (F(32.85), False), (F(34.9), True)])
+# park FX geometry out of the scene while it isn't used (it would otherwise sit beside her hands)
+key_hide(card, [(1, True), (F(4.2), False), (F(15.9), True)])   # hidden from render and from ray casts outside the cutaway
+for fr_ in (1, F(4.2) - 1, F(15.9) + 1, 2100):      # outside the cutaway the (see-through) card sits far ahead, away from the hands
+    card.location = (0, 0, -80); card.keyframe_insert("location", frame=fr_)
+def park(o, ranges):
+    home = o.location.copy()
+    for a_, b_ in ranges:
+        for fr_, loc_ in ((1, (0, 0, -50)), (a_ - 1, (0, 0, -50)), (a_, home), (b_, home), (b_ + 1, (0, 0, -50))):
+            o.location = loc_; o.keyframe_insert("location", frame=fr_)
+    set_interp(o, 'CONSTANT')
+park(bpy.data.objects["Frost"], [(F(10.2), F(18.8))])
+for i in range(6):
+    o = bpy.data.objects["Gas_%d" % i]
+    ad = o.animation_data
+    if ad and ad.action:
+        for layer in ad.action.layers:
+            for strip in layer.strips:
+                for cb in strip.channelbags:
+                    for fc in cb.fcurves:
+                        if fc.data_path == "location":
+                            for kp in list(fc.keyframe_points):
+                                if kp.co.x < F(7.3) or kp.co.x > F(12.7): fc.keyframe_points.remove(kp)
+    for fr_ in (F(7.3) - 1, F(12.7) + 1):
+        o.location = (0, 0, -50); o.keyframe_insert("location", frame=fr_)
 # exposure: white flashes for the memory in / out, office a touch brighter
 vs = sc.view_settings
 for t, e in ((0, 0.0), (18.62, 0.0), (18.92, 5.5), (19.05, 5.5), (19.35, -0.4), (28.05, -0.4), (28.32, 5.5), (28.45, 5.5), (28.8, 0.0)):

@@ -365,6 +365,16 @@ spring = obj_from_bm("Gun_Spring", sm, M_SPRING, C_GUN); spring.parent = gun
 spring.location = (0, -0.052, 0.034); spring.scale = (1, 0.075, 1)
 plunger = cyl("Gun_Plunger", 0.0125, 0.006, (0, -0.128, 0.034), M_BRASS_DK, C_GUN, axis="Y"); plunger.parent = gun
 gun.location = (0.05, 0.2, 1.1)
+# merge the static gun parts into one mesh (moving parts stay separate: trigger, valve wheel, spring, plunger)
+bpy.context.view_layer.update()
+static = [o for o in C_GUN.objects if o.parent is gun and o.type in ('MESH', 'CURVE') and o.name not in ("Gun_Spring", "Gun_Plunger")]
+for o in static:
+    with bpy.context.temp_override(active_object=o, selected_objects=[o], selected_editable_objects=[o], object=o):
+        bpy.ops.object.convert(target='MESH')
+static = [bpy.data.objects[o.name] for o in static]
+with bpy.context.temp_override(active_object=static[0], selected_objects=static, selected_editable_objects=static, object=static[0]):
+    bpy.ops.object.join()
+static[0].name = "Gun_Body"; static[0].data.name = "Gun_Body"
 
 # ------------------------------------------------------------------ monocle funnel + tube, built at the rest pose on the Inventor's head
 W = bpy.data.objects["Inventor"]; body = bpy.data.objects["Inventor.body"]
@@ -656,6 +666,14 @@ for o in bpy.data.objects:
 for o in bpy.data.objects:       # rig control widgets that came inside rigged Poly Haven models must never render
     if o.name.lower().startswith(("wdg", "wgt", "widget", "cs_")):
         o.hide_render = True; o.hide_viewport = True
+# wall / floor / ceiling planes face into their room (the camera never sees their back faces)
+bpy.context.view_layer.update()
+for o in bpy.data.objects:
+    if o.type == 'MESH' and o.name.startswith(("WS_", "OF_")) and len(o.data.polygons) == 1:
+        c_room = Vector((0, -1.1, 1.5)) if o.name.startswith("WS_") else Vector((0, -6.5, 1.5))
+        pl = o.data.polygons[0]; nw = (o.matrix_world.to_3x3() @ pl.normal).normalized(); cw = o.matrix_world @ pl.center
+        if nw.dot(c_room - cw) < 0:
+            bm_ = bmesh.new(); bm_.from_mesh(o.data); bmesh.ops.reverse_faces(bm_, faces=bm_.faces[:]); bm_.to_mesh(o.data); bm_.free()
 bpy.ops.file.make_paths_absolute()
 # de-duplicate images loaded more than once (props appended twice)
 seen = {}
