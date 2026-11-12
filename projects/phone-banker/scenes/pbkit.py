@@ -8,7 +8,7 @@ from kit import box, cyl, join, pbr, emissive, glass
 
 
 def masonry_facade(name, plaster=(0.5, 0.44, 0.36), floor=3.3, bay=2.4, win_w=0.5, win_h=0.55, lit_frac=0.0,
-                   lit_col=(1.0, 0.78, 0.5), lit_strength=2.0, frame_col=(0.75, 0.73, 0.68)):
+                   lit_col=(1.0, 0.78, 0.5), lit_strength=2.0, frame_col=(0.75, 0.73, 0.68), joints=0.0, glass_coat=1.0):
     """Stucco wall with a grid of punched windows (frames, dark glass, net-curtain glow, a few lit at night).
     Works on X- and Y-facing walls (world coordinates)."""
     m = bpy.data.materials.new(name); m.use_nodes = True
@@ -56,8 +56,23 @@ def masonry_facade(name, plaster=(0.5, 0.44, 0.36), floor=3.3, bay=2.4, win_w=0.
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.6; nz.inputs['Detail'].default_value = 8; L.new(geo.outputs['Position'], nz.inputs['Vector'])
     pl = N.new("ShaderNodeMix"); pl.data_type = 'RGBA'; pl.blend_type = 'MULTIPLY'; pl.inputs['Factor'].default_value = 0.45
     pl.inputs[6].default_value = (*plaster, 1); L.new(nz.outputs['Color'], pl.inputs[7])
+    if joints > 0:
+        # precast panels: dark joints along every cell edge, and rain streaks of grime running down from the windows
+        ex = N.new("ShaderNodeMath"); ex.operation = 'GREATER_THAN'; ex.inputs[1].default_value = 0.5 - 0.025 / bay; L.new(hx.outputs[0], ex.inputs[0])
+        ez = N.new("ShaderNodeMath"); ez.operation = 'GREATER_THAN'; ez.inputs[1].default_value = 0.5 - 0.025 / floor; L.new(hz.outputs[0], ez.inputs[0])
+        jn = N.new("ShaderNodeMath"); jn.operation = 'MAXIMUM'; L.new(ex.outputs[0], jn.inputs[0]); L.new(ez.outputs[0], jn.inputs[1])
+        streak = N.new("ShaderNodeTexNoise"); streak.inputs['Scale'].default_value = 3.0; streak.inputs['Detail'].default_value = 4
+        sv = N.new("ShaderNodeMapping"); sv.inputs['Scale'].default_value = (6.0, 6.0, 0.25); L.new(geo.outputs['Position'], sv.inputs['Vector']); L.new(sv.outputs[0], streak.inputs['Vector'])
+        dark = N.new("ShaderNodeMix"); dark.data_type = 'RGBA'; dark.blend_type = 'MULTIPLY'; L.new(streak.outputs['Fac'], dark.inputs['Factor'])
+        L.new(pl.outputs[2], dark.inputs[6]); dark.inputs[7].default_value = (0.7, 0.68, 0.64, 1)
+        jm = N.new("ShaderNodeMix"); jm.data_type = 'RGBA'; L.new(jn.outputs[0], jm.inputs['Factor'])
+        jf = N.new("ShaderNodeMath"); jf.operation = 'MULTIPLY'; jf.inputs[1].default_value = joints; L.new(jn.outputs[0], jf.inputs[0]); L.new(jf.outputs[0], jm.inputs['Factor'])
+        L.new(dark.outputs[2], jm.inputs[6]); jm.inputs[7].default_value = (0.05, 0.05, 0.05, 1)
+        plaster_out = jm.outputs[2]
+    else:
+        plaster_out = pl.outputs[2]
     c1 = N.new("ShaderNodeMix"); c1.data_type = 'RGBA'; L.new(hole.outputs[0], c1.inputs['Factor'])
-    L.new(pl.outputs[2], c1.inputs[6]); c1.inputs[7].default_value = (*frame_col, 1)
+    L.new(plaster_out, c1.inputs[6]); c1.inputs[7].default_value = (*frame_col, 1)
     # a cross of glazing bars inside every pane
     vbar = mul(lt(hx, 0.022 / bay), pane); hbar = mul(lt(hz, 0.02 / floor), pane)
     bars = N.new("ShaderNodeMath"); bars.operation = 'MAXIMUM'; L.new(vbar.outputs[0], bars.inputs[0]); L.new(hbar.outputs[0], bars.inputs[1])
@@ -67,7 +82,8 @@ def masonry_facade(name, plaster=(0.5, 0.44, 0.36), floor=3.3, bay=2.4, win_w=0.
     L.new(c2.outputs[2], p.inputs['Base Color'])
     r = N.new("ShaderNodeMapRange"); r.inputs['To Min'].default_value = 0.85; r.inputs['To Max'].default_value = 0.08
     L.new(glass_only.outputs[0], r.inputs['Value']); L.new(r.outputs[0], p.inputs['Roughness'])
-    L.new(glass_only.outputs[0], p.inputs['Coat Weight']); p.inputs['Coat Roughness'].default_value = 0.03     # the glass reflects the street
+    gcw = N.new("ShaderNodeMath"); gcw.operation = 'MULTIPLY'; gcw.inputs[1].default_value = glass_coat; L.new(glass_only.outputs[0], gcw.inputs[0])
+    L.new(gcw.outputs[0], p.inputs['Coat Weight']); p.inputs['Coat Roughness'].default_value = 0.03     # the glass reflects the street
     if lit_frac > 0:
         # a room behind the glass: curtain folds (vertical bands), the lamp's falloff from the middle, each room its own warmth
         lit_g = mul(on, glass_only)
@@ -443,3 +459,40 @@ def glazed_window(name, center, width, height, normal="x", cols=2, rows=3, frame
     else:
         parts.append(box(name + "Pane", (cx, cy, cz), (width, 0.01, height), g))
     return parts
+
+
+def birch(loc, rot_z=0.0, scale=1.4):
+    """A birch: the scanned small tree with its bark swapped for white birch bark (dark horizontal marks, black scars
+    low on the trunk) and lighter, yellower leaves."""
+    import ph
+    r, ms = ph.model("tree_small_02", loc=loc, rot_z=rot_z, scale=scale)
+    bark = bpy.data.materials.get("BirchBark")
+    if bark is None:
+        bark = bpy.data.materials.new("BirchBark"); bark.use_nodes = True
+        N = bark.node_tree.nodes; L = bark.node_tree.links; p = N["Principled BSDF"]
+        tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (3.0, 3.0, 28.0)
+        L.new(tc.outputs['Object'], mp.inputs['Vector'])
+        nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 2.5; nz.inputs['Detail'].default_value = 3; L.new(mp.outputs[0], nz.inputs['Vector'])
+        ramp = N.new("ShaderNodeValToRGB"); L.new(nz.outputs['Fac'], ramp.inputs['Fac'])
+        ramp.color_ramp.elements[0].position = 0.62; ramp.color_ramp.elements[0].color = (0.74, 0.73, 0.68, 1)
+        ramp.color_ramp.elements[1].position = 0.7; ramp.color_ramp.elements[1].color = (0.04, 0.04, 0.035, 1)
+        L.new(ramp.outputs['Color'], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.6
+    for o in ms:
+        for s in getattr(o, "material_slots", []):
+            if s.material is None:
+                continue
+            nm = s.material.name
+            if "trunk" in nm or "branches" in nm:
+                s.link = 'OBJECT'; s.material = bark
+            elif "leaves" in nm:
+                lv = bpy.data.materials.get("BirchLeaves")
+                if lv is None:
+                    lv = s.material.copy(); lv.name = "BirchLeaves"
+                    pb = lv.node_tree.nodes.get("Principled BSDF")
+                    if pb and pb.inputs['Base Color'].is_linked:
+                        src = pb.inputs['Base Color'].links[0].from_socket
+                        mx = lv.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+                        lv.node_tree.links.new(src, mx.inputs[6]); mx.inputs[7].default_value = (1.15, 1.2, 0.75, 1)
+                        lv.node_tree.links.new(mx.outputs[2], pb.inputs['Base Color'])
+                s.link = 'OBJECT'; s.material = lv
+    return r

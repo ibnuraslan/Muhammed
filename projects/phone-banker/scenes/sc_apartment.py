@@ -7,10 +7,10 @@ import bpy
 from mathutils import Vector
 from kit import *
 import ph
-from pbkit import joinm, masonry_facade, soviet_car, ph_instances
+from pbkit import joinm, masonry_facade, soviet_car, ph_instances, birch
 from pbpeople import person, stand, walk_at, nod, look, hand_to, hide, fwd
 
-EXPOSURE = -1.0
+EXPOSURE = -1.6
 BOUNCES = 6
 DUR = {"wait": 5.5, "arrest": 6.5}
 VARIANT_FOR = {"wait": None, "arrest": None}
@@ -19,10 +19,11 @@ DOOR = Vector((0.0, 0.0, 0.0))     # entrance at the block's foot; the courtyard
 
 def build(variant=None):
     c = {}
+    bpy.context.scene.view_settings.exposure = EXPOSURE
     world_sky(sun_elev_deg=40, sun_rot_deg=120, strength=0.45, tint=(0.88, 0.92, 1.0)); sun(40, 120, 0.9, (1.0, 0.95, 0.88), 1.5)
     box("Courtyard", (0, -12, -0.02), (80, 30, 0.04), ph.texture("asphalt_02", scale=0.25))
     box("Walk", (0, -1.5, 0.0), (60, 3.0, 0.08), ph.texture("concrete_pavers", scale=0.8))
-    panel = masonry_facade("PanelBlock", (0.32, 0.32, 0.31), 2.8, 3.0, 1.4, 1.35, 0.0)
+    panel = masonry_facade("PanelBlock", (0.3, 0.3, 0.28), 2.8, 3.0, 1.4, 1.35, 0.0, joints=0.8, glass_coat=0.3, frame_col=(0.55, 0.53, 0.5))
     box("Block", (0, 6.0, 12.6), (60, 12, 25.2), panel)
     box("BlockOpp", (0, -34, 12.6), (60, 12, 25.2), panel)
     box("BlockSide", (-34, -12, 12.6), (12, 40, 25.2), panel)
@@ -54,23 +55,31 @@ def build(variant=None):
                 ac.append(((x + 1.1, -0.15, z + 1.4), 0.0, 0.5))
     ph_instances("exterior_aircon_unit", ac)
     # a playground: climbing frame and swings (painted steel tube), a sandpit
+    PX, PY = 11.5, -3.6                                                         # climbing frame and sandpit, right of the entrance
+    SX, SY = 1.0, -3.3                                                           # the swing set (its legs at SX + 4 .. SX + 6)
     tube = pbr("PlayTube", (0.55, 0.12, 0.08), 0.45, 0.4)
-    for (x, y) in ((-1.0, -15.0), (1.0, -15.0), (-1.0, -16.6), (1.0, -16.6)):
+    for (x, y) in ((PX - 1.0, PY + 0.8), (PX + 1.0, PY + 0.8), (PX - 1.0, PY - 0.8), (PX + 1.0, PY - 0.8)):
         cyl("FramePost", (x, y, 1.0), 0.03, 2.0, tube, verts=10)
     for z in (0.7, 1.4, 2.0):
-        for (y) in (-15.0, -16.6):
-            cyl("FrameBar", (0, y, z), 0.025, 2.0, tube, verts=10, rot=(0, math.radians(90), 0))
-    for x in (4.0, 6.0):
-        cyl("SwingLeg", (x, -15.8, 1.1), 0.04, 2.3, pbr("SwingBlue", (0.15, 0.3, 0.55), 0.45, 0.4), verts=10, rot=(0, math.radians(8 if x < 5 else -8), 0))
-    cyl("SwingTop", (5.0, -15.8, 2.25), 0.04, 2.0, pbr("SwingBlue2", (0.15, 0.3, 0.55), 0.45, 0.4), verts=10, rot=(0, math.radians(90), 0))
+        for (y) in (PY + 0.8, PY - 0.8):
+            cyl("FrameBar", (PX, y, z), 0.025, 2.0, tube, verts=10, rot=(0, math.radians(90), 0))
+    for x in (SX + 4.0, SX + 6.0):
+        cyl("SwingLeg", (x, SY, 1.1), 0.04, 2.3, pbr("SwingBlue", (0.15, 0.3, 0.55), 0.45, 0.4), verts=10, rot=(0, math.radians(8 if x < SX + 5 else -8), 0))
+    cyl("SwingTop", (SX + 5.0, SY, 2.25), 0.04, 2.0, pbr("SwingBlue2", (0.15, 0.3, 0.55), 0.45, 0.4), verts=10, rot=(0, math.radians(90), 0))
     c["swing"] = joinm([cyl("Chain", (-0.25, 0, -0.75), 0.008, 1.5, rail, verts=6), cyl("Chain", (0.25, 0, -0.75), 0.008, 1.5, rail, verts=6),
                         box("Seat", (0, 0, -1.5), (0.55, 0.22, 0.04), pbr("SeatWood2", (0.4, 0.25, 0.12), 0.6))], "Swing")
-    c["swing"].location = (5.0, -15.8, 2.22)
-    box("Sandpit", (-4.5, -15.5, 0.12), (2.4, 2.4, 0.24), pbr("SandFrame", (0.4, 0.3, 0.15), 0.7))
-    box("Sand", (-4.5, -15.5, 0.2), (2.2, 2.2, 0.06), pbr("Sand", (0.62, 0.55, 0.4), 0.95))
+    c["swing"].location = (SX + 5.0, SY, 2.22)
+    box("Sandpit", (PX + 3.0, PY, 0.12), (2.4, 2.4, 0.24), pbr("SandFrame", (0.4, 0.3, 0.15), 0.7))
+    box("Sand", (PX + 3.0, PY, 0.2), (2.2, 2.2, 0.06), pbr("Sand", (0.62, 0.55, 0.4), 0.95))
     ph_instances("tree_small_02", [((x, y, 0), float(r_.uniform(0, 6.28)), float(r_.uniform(1.4, 1.9))) for (x, y) in ((-20, -10), (-14, -18), (12, -18), (22, -9), (-26, -4))])
+    birch((-5.6, -3.3, 0), 0.8, 1.5); birch((13.5, -8.5, 0), 2.4, 1.4)                  # birches by the benches and the playground
     # parked cars: two unmarked cars of the officers, a few residents' cars
     c["carA"] = soviet_car("UnmarkedA", (0.55, 0.57, 0.6), kind="lada"); c["carA"].location = (4.5, -5.5, 0); c["carA"].rotation_euler = (0, 0, math.radians(180))
+    bpy.context.view_layer.update()
+    pts = [o.matrix_world @ v.co for o in [c["carA"]] + list(c["carA"].children_recursive) if o.type == 'MESH' for v in o.data.vertices]
+    zt = max(p.z for p in pts); top = [p for p in pts if p.z > zt - 0.04]
+    c["roofA"] = (min(p.x for p in top), max(p.x for p in top), min(p.y for p in top), max(p.y for p in top), zt)
+    print("[apartment] roof A", [round(v, 2) for v in c["roofA"]])
     c["carB"] = soviet_car("UnmarkedB", (0.08, 0.09, 0.1), kind="volga"); c["carB"].location = (-5.0, -5.8, 0)
     for k, x in enumerate((-12.0, 11.0, 17.0)):
         car = soviet_car(f"Resident{k}", ((0.5, 0.1, 0.08), (0.2, 0.3, 0.35), (0.7, 0.68, 0.6))[k], kind="lada")
@@ -82,7 +91,8 @@ def build(variant=None):
     from pbpeople import seat
     c["babushkas"] = []
     for k, x in enumerate((-3.15, -2.45)):
-        b = person(f"Babushka{k}", 0.0, 72, "female_elegantsuit01", "bob01", hv=0.7, col=((0.3, 0.18, 0.14), (0.2, 0.22, 0.3))[k], weight=0.7)
+        from pbpeople import babushka
+        b = babushka(f"Babushka{k}", 70 + 5 * k, coat=((0.1, 0.1, 0.12), (0.16, 0.12, 0.1))[k], scarf=((0.5, 0.14, 0.1), (0.25, 0.3, 0.45))[k])
         seat(b, (x, -2.45, 0), 0.0, lean=8)
         c["babushkas"].append(b)
     animate(c, 0.0, "wait")
@@ -97,9 +107,11 @@ def animate(c, sec, move):
         _look(b, m.bone_head("head") if move == "arrest" else Vector((3.2, -4.6, 1.6)), 0.6)
     if move == "wait":
         hide(m, True)
-        stand(o1, (3.2, -4.6, 0), math.radians(180 + 20)); nod(o1, "head", 4)              # leaning by the car, eyes on the door
-        look(o1, DOOR + Vector((0, 0, 1.6)), 0.8)
-        hand_to(o1, "L", Vector((3.6, -5.0, 1.0)), curl=20)
+        rx0, rx1, ry0, ry1, rz = c["roofA"]                                             # forearms on the roof of car A, across it from the door
+        stand(o1, ((rx0 + rx1) / 2, ry0 - 0.42, 0), math.radians(180)); nod(o1, "spine04", 12); nod(o1, "head", -4)
+        look(o1, DOOR + Vector((0, 0, 1.6)), 0.6)
+        hand_to(o1, "L", Vector(((rx0 + rx1) / 2 + 0.22, ry0 + 0.12, rz + 0.03)), hand_dir=Vector((0, 0.5, -0.8)), curl=35)
+        hand_to(o1, "R", Vector(((rx0 + rx1) / 2 - 0.2, ry0 + 0.18, rz + 0.03)), hand_dir=Vector((0, 0.5, -0.8)), curl=35)
         stand(o2, (-3.8, -4.7, 0), math.radians(180 - 25)); look(o2, DOOR + Vector((0, 0, 1.6)), 0.8)
         hand_to(o2, "R", o2.bone_head("spine02") + fwd(o2) * 0.1 + Vector((0, 0, -0.2)), curl=40)
         stand(o3, (-5.8, -4.6, 0), math.radians(160)); nod(o3, "head", 12)                   # checks his watch
@@ -120,7 +132,7 @@ def animate(c, sec, move):
         nod(m, "head", 6 if sec < 1.6 else 16)
         s = Vector((math.cos(face), math.sin(face), 0))
         k = min(1.0, max(0.0, (sec - 1.0) / 1.0))
-        a0, b0 = Vector((3.2, -4.6, 0)), Vector((-3.8, -4.7, 0))
+        a0, b0 = Vector(((c['roofA'][0] + c['roofA'][1]) / 2, c['roofA'][2] - 0.42, 0)), Vector((-3.8, -4.7, 0))
         pa = a0.lerp(p + s * 0.55, ease(k)); pb = b0.lerp(p - s * 0.55, ease(k))
         walk_at(o1, sec * 0.85, pa, face if k >= 1 else math.atan2((p - a0).x, -(p - a0).y), stride=20, swing=8)
         walk_at(o2, sec * 0.85 + 0.5, pb, face if k >= 1 else math.atan2((p - b0).x, -(p - b0).y), stride=20, swing=8)
@@ -137,7 +149,7 @@ def _push(a, b, ta, tb, lens):
 
 MOVES = {
     "wait": dict(kind="anim", dof=4.0, far=60.0, anim=lambda c, t: animate(c, t * DUR["wait"], "wait"),
-                 cam=_push((-1.5, -13.0, 1.6), (-1.0, -12.0, 1.6), (0.0, -2.0, 1.5), (0.0, -2.0, 1.6), 30),
+                 cam=_push((-3.0, -14.5, 1.75), (-2.4, -13.7, 1.75), (1.3, -3.2, 1.45), (1.3, -3.2, 1.55), 27),
                  focus=lambda c, t: Vector((3.2, -4.6, 1.4))),
     "arrest": dict(kind="anim", dof=4.0, far=60.0, anim=lambda c, t: animate(c, t * DUR["arrest"], "arrest"),
                    cam=_push((-6.5, -12.5, 1.65), (-5.8, -11.8, 1.65), (0.5, -1.8, 1.3), (2.4, -3.6, 1.3), 30),

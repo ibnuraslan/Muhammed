@@ -265,3 +265,34 @@ def medic(name, gender, years, hair, coat=(0.86, 0.87, 0.85)):
     h = person(name, gender, years, cloth, hair, hv=0.25)
     recolor(h, cloth, coat)
     return h
+
+
+def babushka(name, years=72, coat=(0.12, 0.12, 0.14), scarf=(0.45, 0.12, 0.1), stockings=(0.16, 0.13, 0.11)):
+    """An elderly woman of the courtyard bench: a dark coat, thick brown stockings (the leg faces of the body mesh
+    are re-materialled, as for gloves), a headscarf tied under the chin."""
+    import bmesh
+    from kit import pbr
+    h = person(name, 0.0, years, "female_elegantsuit01", "bob01", hv=0.75, col=coat, weight=0.72, height=0.45)
+    stand(h, (0, 0, 0), 0.0)
+    st = pbr(name + "Stockings", stockings, 0.85)
+    body = h.body; body.data.materials.append(st); si = len(body.data.materials) - 1
+    leg_bones = [b.name for b in h.arm.data.bones if b.name.startswith(("upperleg", "lowerleg", "foot", "toe"))]
+    region = set(h.vertex_region(leg_bones, 0.5).tolist())
+    for poly in body.data.polygons:
+        if all(v in region for v in poly.vertices):
+            poly.material_index = si
+    # headscarf: a cloth shell over the head and hair, open at the face, a knot under the chin
+    hd = h.bone_head("head"); tl = h.bone_tail("head"); c = (hd + tl) / 2
+    sm = pbr(name + "Scarf", scarf, 0.85, 0.0, **{'Sheen Weight': 0.4})
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=0.118, location=(c.x, c.y + 0.015, c.z + 0.005))
+    sc = bpy.context.active_object; sc.name = name + "Scarf"; sc.scale = (0.95, 1.05, 1.12)
+    kill = [v.index for v in sc.data.vertices if v.co.y < -0.035 and -0.09 < v.co.z < 0.07]
+    bm = bmesh.new(); bm.from_mesh(sc.data); bm.verts.ensure_lookup_table()
+    bmesh.ops.delete(bm, geom=[bm.verts[i] for i in kill], context='VERTS'); bm.to_mesh(sc.data); bm.free()
+    so = sc.modifiers.new("t", 'SOLIDIFY'); so.thickness = 0.008
+    bpy.ops.object.shade_smooth(); sc.data.materials.append(sm)
+    parent_keep(sc, h, "head")
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.025, location=(c.x, c.y - 0.06, c.z - 0.13))
+    kn = bpy.context.active_object; kn.name = name + "Knot"; kn.scale = (1.3, 0.8, 0.8); kn.data.materials.append(sm)
+    parent_keep(kn, h, "head")
+    return h
