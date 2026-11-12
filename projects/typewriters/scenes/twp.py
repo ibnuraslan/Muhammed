@@ -59,7 +59,8 @@ def stand(h, loc, face_z):
     from human import SIDE
     for sd, sg in SIDE.items():                       # arms hanging close at the sides, a soft bend at the elbow
         h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 32)
-        h.rot(f"lowerarm01.{sd}", (1, 0, 0), -10)
+        h.rot(f"lowerarm01.{sd}", (1, 0, 0), 8)           # forearms hang (the walk rest pose bends them 12 deg forward)
+    fingers_curl(h, 22, thumb=10)                        # relaxed hands, palms toward the thighs
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = loc; ground(h)
 
 

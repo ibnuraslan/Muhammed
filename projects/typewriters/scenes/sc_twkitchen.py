@@ -185,7 +185,7 @@ def animate(c, sec, shot):
         twp.work(m, {"L": mug.location + Vector((-0.06, -0.03, -0.01)), "R": mug.location + Vector((0.06, -0.03, -0.01))}, head=14)
         fingers_curl(m, 40, thumb=20)
         m.rot("head", (0, 0, 1), 2 * math.sin(sec * 0.5))
-        twp.stand(w, (TABLE.x + 0.58, TABLE.y - 0.5, 0), -1.97)                 # beside him, pouring into his cup
+        twp.stand(w, (TABLE.x - 0.55, TABLE.y - 0.5, 0), 2.01)                  # across the corner from him, facing us, pouring into his cup
         pour = ease(min(1.0, max(0.0, (sec - 1.2) / 1.2)))
         pot = c["pot"]
         tgt = mug.location + Vector((0.1, 0.0, 0.2))
@@ -201,7 +201,7 @@ def animate(c, sec, shot):
         twp.seat(a, (TABLE.x - 0.9, TABLE.y, 0), math.pi / 2, lean=10)
         twp.seat(b, (TABLE.x + 0.9, TABLE.y, 0), -math.pi / 2, lean=14)
         g = math.sin(sec * 1.3)
-        twp.work(d, {"R": TABLE + Vector((-0.18 + 0.02 * g, 0.3, 0.78)), "L": TABLE + Vector((0.2, 0.32, 0.78))}, head=0)
+        twp.work(d, {"R": TABLE + Vector((-0.18 + 0.02 * g, 0.3, 0.78)), "L": TABLE + Vector((0.2, 0.32, 0.78))}, head=-14)
         d.rot("head", (0, 0, 1), 12 * math.sin(sec * 0.7))
         twp.work(b, {"L": TABLE + Vector((0.52, -0.12, 0.78))}, head=0)
         for h in (a, b):
@@ -232,7 +232,7 @@ def cam_talk(c, t):
 
 def cam_reels(c, t):
     e = ease(t); r = c["reels"][0].matrix_world.translation
-    return (TABLE + Vector((-1.6, -0.42, 1.32)).lerp(Vector((-1.5, -0.36, 1.3)), e), TABLE + Vector((0.0, 0.62, 1.12)), 35)     # over officer A's shoulder: the KGB man talking, the reels between them
+    return (TABLE + Vector((-2.25, -0.95, 1.6)).lerp(Vector((-2.1, -0.85, 1.56)), e), TABLE + Vector((0.08, 0.42, 0.98)), 32)     # over officer A's shoulder: the KGB man talking, the reels between them
 
 
 MOVES = {

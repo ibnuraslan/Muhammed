@@ -104,9 +104,9 @@ def build(variant=None):
     c["cable"] = cab
     reel = cyl("CableReel", (0, 0, 0), 0.14, 0.08, pbr("Reel", (0.35, 0.3, 0.2), 0.6), verts=24, rot=(math.radians(90), 0, 0))
     c["reel"] = reel
-    box("CableBeam", (0.5, 1.38, 2.27), (13.0, 0.09, 0.07), ph.texture("brown_planks_03", scale=0.5, name="BeamWood"))   # the purlin the cable is clipped under
+    box("CableBeam", (0.5, 1.34, 1.93), (13.0, 0.09, 0.07), ph.texture("brown_planks_03", scale=0.5, name="BeamWood"))   # the collar tie the cable is clipped under
     for k in range(12):
-        cyl("Clip", (6.5 - k * 0.6, 1.35, 2.2), 0.012, 0.02, pbr("ClipM", (0.6, 0.6, 0.6), 0.3, 1.0), verts=8)
+        cyl("Clip", (6.5 - k * 0.6, 1.32, 1.885), 0.012, 0.02, pbr("ClipM", (0.6, 0.6, 0.6), 0.3, 1.0), verts=8)
     ht, _ = ph.model("hand_truck")
     c["truck"] = ht
     animate(c, 0.0, "track")
@@ -121,10 +121,10 @@ def animate(c, sec, shot):
     twp.hide(twp.person_objs(tech) + [cab, reel], not on)
     if on:
         x = 6.5 - 0.55 * sec                                                  # walks along the rafters toward -x, paying out cable
-        twp.walk(tech, (6.9, 0.85), (-4.0, 0.85), sec, speed=0.55)
-        hand = Vector((x - 0.15, 1.3, 2.18))
-        cab.location = Vector((6.6, 1.35, 2.2)); cab.scale = (1, 1, max(0.05, 6.6 - hand.x))
-        reach(tech, "R", hand + Vector((0.05, -0.05, -0.05)), Vector((0.3, -0.5, -0.8)), Vector((0, 1, 0.4)))
+        twp.walk(tech, (6.9, 1.05), (-4.0, 1.05), sec, speed=0.55)
+        hand = tech.bone_head("upperarm01.R") + Vector((-0.08, 0.07, 0.33))      # just above his shoulder: elbow well bent
+        cab.location = Vector((6.6, hand.y + 0.02, hand.z + 0.02)); cab.scale = (1, 1, max(0.05, 6.6 - hand.x))
+        reach(tech, "R", hand, Vector((0.0, 0.6, -0.6)), Vector((-0.4, 0.2, 1.0)))
         reel.location = tech.bone_head("upperarm01.L") + Vector((0.1, -0.15, -0.45)); reel.rotation_euler = (math.radians(90), sec * 3, 0)
         reach(tech, "L", reel.location + Vector((0, -0.05, 0.05)), Vector((-0.3, -0.5, -0.8)))
         tech.rot("head", (1, 0, 0), 14)
@@ -132,7 +132,7 @@ def animate(c, sec, shot):
             wl = bpy.data.lights.new("WorkLamp", 'POINT'); wl.energy = 60; wl.color = (1.0, 0.8, 0.55); wl.shadow_soft_size = 0.1
             c["worklamp"] = bpy.data.objects.new("WorkLamp", wl); bpy.context.collection.objects.link(c["worklamp"])
         c["worklamp"].location = tech.arm.location + Vector((0.4, 0.2, 2.1))
-        fingers_curl(tech, 45, thumb=20)
+        fingers_curl(tech, 75, thumb=40)
     for p in c["tty"]:
         pass
     # stapler worker: stands at the crate's front face (-Y side), stapling along the top edge left to right
