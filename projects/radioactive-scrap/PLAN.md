@@ -8,6 +8,9 @@ packages sat in) · **Clinic** (local clinic) · **Hospital** (large hospital: w
 (hospital radiotherapy room with a cobalt machine) · **Storeroom** (Ankara storeroom) · **Records** (investigators'
 office). Nothing is a map or graphic; the camera always drifts slowly and something in frame always moves.
 
+**Master timing (person's rule, Nov 2026):** the intro has 2.5 s of picture before the first word. Each chapter has at
+least **3.0 s** of picture under its title card before the voice starts (make_master lead = 3.0 for chapters).
+
 ## Intro (no title, 2.5 s of picture before the first word)
 
 | Set | Script line | Shot A | Shot B |
