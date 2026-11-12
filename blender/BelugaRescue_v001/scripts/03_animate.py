@@ -192,12 +192,15 @@ CALF_HOLD = lambda f: None
 for k, f in enumerate(range(276, 520, 16)):
     j = (k % 2)
     kn_r = 22 if j else 4; kn_l = 14 if (k % 3 == 0) else 4
-    DV.P(f, (SIT[0], SIT[1] + 0.02 * j, SIT[2] + 0.01 * j), yaw=180, pitch=-6 + 6 * j, roll=3 * (j * 2 - 1), spine=(34 + 10 * j, 4 * (j * 2 - 1), 0),
-         head=(18, 6 * (j * 2 - 1), 0), legs=legs((92 + 0.5 * kn_l, 8, kn_l, -82), (92 + 0.6 * kn_r, 10, kn_r, -84)), jaw=4 + 4 * j,
-         arms={"L": ("calf", dict(s="L", t=0.45)), "R": (("fin", dict(p=min(1.0, max(0.0, (f - 484) / 32.0)))) if f >= 484 else ("calf", dict(s="R", t=0.6)))},
-         curl={"L": (28, 22), "R": ((45, 35) if f >= 484 else (28, 22))})
+    pull = f >= 468                       # draws the cramping right foot in to reach the fin
+    DV.P(f, (SIT[0], SIT[1] + 0.02 * j, SIT[2] + 0.01 * j), yaw=180, pitch=(4 if pull else -6 + 6 * j), roll=3 * (j * 2 - 1),
+         spine=((62 if pull else 34 + 10 * j), (8 if pull else 4 * (j * 2 - 1)), (-10 if pull else 0)),
+         head=(28 if pull else 18, 6 * (j * 2 - 1), 0),
+         legs=legs((92 + 0.5 * kn_l, 8, kn_l, -82), ((126, 4, 118, -50) if pull else (92 + 0.6 * kn_r, 10, kn_r, -84))), jaw=4 + 4 * j,
+         arms={"L": (("rest", dict(fwd=-15, out=38)) if pull else ("calf", dict(s="L", t=0.45))), "R": (("fin", dict(p=min(1.0, max(0.0, (f - 484) / 32.0)))) if f >= 484 else ("calf", dict(s="R", t=0.6)))},
+         curl={"L": (28, 22), "R": (((15, 10) if f >= 516 else (45, 35)) if f >= 484 else (28, 22))})
 # --- beat 4: claws upward, legs locked, rises, sinks back
-DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((86, 8, 10, -72)), arms=arms(fwd=120, out=30))
+DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs((86, 8, 10, -72), (100, 6, 60, -65)), arms=arms(fwd=120, out=30))
 for k, f in enumerate(range(535, 610, 15)):
     up = k / 5.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 * up, SIT[2] + 0.75 * up), yaw=180, pitch=-28 * up - 8, spine=(-8, 0, 0), head=(-35, 0, 0),
@@ -254,12 +257,19 @@ def diver_hands(f, p):
             out = (k1 - k0).cross(Vector((0, 0, 1))).normalized() * sx
             W = c + out * 0.2 + Vector((0, 0, 0.14))
             a[s] = ("world", dict(W=W, d=(k1 - k0).normalized() * 0.85 + Vector((0, 0, -1)) * 0.15, n=-out * 0.6 + Vector((0, 0, -0.8)), pole=W + Vector((sx * 0.3, 0, 0.5))))
+        elif kind == "lift":     # hand held up clear above the right knee
+            ev(f)
+            kn = DV.world("lowerleg01.R", f)
+            sd_ = (DV.world("foot.R", f) - kn).cross(Vector((0, 0, 1))).normalized()
+            if sd_.dot(kn - DV.world("root", f)) < 0: sd_ = -sd_
+            W = kn + sd_ * 0.17 + Vector((0, 0, 0.06))
+            a[s] = ("world", dict(W=W, d=Vector((0, 1, -0.4)).normalized(), n=Vector((0, 0, -1)), pole=W + Vector((-0.3, 0.2, 0.4))))
         elif kind == "fin":      # grip the fin blade just past the toes and pull it off along the foot
             ev(f)
             hd = DV.world("foot.R", f); tl = DV.world("foot.R", f, "tail")
             fwd_ = (tl - hd).normalized()
             up_ = Vector((0, 0, 1)) - fwd_ * fwd_.z; up_.normalize()
-            W = tl + fwd_ * (0.12 + 0.2 * prm["p"]) + up_ * 0.12
+            W = tl + fwd_ * (0.07 + 0.12 * prm["p"]) + up_ * (0.12 + 0.1 * prm["p"])
             a[s] = ("world", dict(W=W, d=fwd_, n=-up_, pole=W + Vector((-0.3, 0.2, 0.5))))
         elif kind == "coping":
             sx = 1 if s == "L" else -1

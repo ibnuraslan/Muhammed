@@ -1,8 +1,15 @@
 {
  "frames": {
-  "517": {
+  "463": {
    "Diver": {
-    "self": 6,
+    "self": 21,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "487": {
+   "Diver": {
+    "self": 2,
     "clothes": 0,
     "other": 0
    }
