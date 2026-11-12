@@ -12,11 +12,11 @@ wipe = bpy.data.objects.get("CAM_RockWipe")
 if wipe: wipe.hide_render = True
 sc.render.resolution_x, sc.render.resolution_y = 270, 480; sc.cycles.samples = 8; sc.render.use_motion_blur = False
 sc.render.image_settings.file_format = 'JPEG'
-OVR = {"diver_hands_on_ledge": ((0.0, 0.55, 0.35), 8), "medic_syringe_grip": ((0.35, -0.45, 0.1), 6)}   # label: (camera offset from the hand, light W)
+OVR = {"diver_treading_water": ((0.0, 0.7, 0.45), 8), "medic_syringe_grip": ((0.05, -0.6, 0.25), 6)}   # label: (camera offset from the hand, light W)
 SHOTS = [  # label, frame, rig, hand bone, extra up
     ("walk_hand", 200, "Boy2", "wrist.L", 0.1), ("run_hand", 480, "Boy5", "wrist.R", 0.1),
     ("huddle_hands_on_knees", 1050, "HB2", "wrist.L", 0.15), ("huddle_hands_boy1", 1050, "Boy1", "wrist.R", 0.15),
-    ("shield_hand", 1160, "Boy4", "wrist.R", 0.05), ("diver_hands_on_ledge", 1150, "DiverA", "wrist.L", 0.2),
+    ("shield_hand", 1160, "Boy4", "wrist.R", 0.05), ("diver_treading_water", 1150, "DiverA", "wrist.L", 0.2),
     ("rope_hand", 1330, "DiverB", "wrist.R", 0.1), ("edge_palms_on_rock", 1900, "Boy3", "wrist.L", 0.2),
     ("medic_syringe_grip", 2240, "DiverA", "wrist.R", 0.1), ("medic_steadying_hand", 2240, "DiverA", "wrist.L", 0.1),
     ("mask_fit_L", 2350, "DiverB", "wrist.L", 0.05), ("mask_fit_R", 2350, "DiverB", "wrist.R", 0.05),

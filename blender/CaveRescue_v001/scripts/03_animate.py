@@ -446,12 +446,12 @@ for f, z, pit in ((F_CH0 - 12, -1.6, 60), (F_SURF - 20, -1.25, 40), (F_SURF, -0.
         sx = 1 if s == "L" else -1
         key_foot_free(DA, s, f, bw(DA, P, Rb, H.ankle[s] + V((0, 0.15 * math.sin(f * 0.1 + sx), 0.05))), Rb @ Rx(-50))
     hh = {}
-    for s_ in "LR": key_fingers(DA, s_, f, "cup_hold" if f >= F_SURF else "relaxed")
+    for s_ in "LR": key_fingers(DA, s_, f, "relaxed")
     if f >= F_SURF:
         for s in "LR":
             sx = 1 if s == "L" else -1
-            ex = V((pool.x + 0.3 * sx, pool.y + 0.75, 0)); g = ground_z(ex.x, ex.y)
-            hh[s] = (V((ex.x, ex.y, g + 0.045)), V((0, 1, -0.2)).normalized(), V((0, 0, -1)), V((ex.x + 0.6 * sx, pool.y + 0.3, g - 0.4)))
+            ex = V((pool.x + 0.28 * sx, pool.y + 0.38, WZ - 0.06))          # treading water, hands just under the surface
+            hh[s] = (ex, V((0.3 * sx, 1, -0.1)).normalized(), V((0, 0, -1)), V((ex.x + 0.5 * sx, pool.y - 0.1, WZ - 0.4)))
     key_hands(DA, f, P, Rb, hh)
 TELE[DA].add(F_CH0 - 13)
 # diver A then kneels by Boy2 as the medic (seen from 2017)
@@ -516,15 +516,15 @@ for f in (1850, 1900, 1950, 1995):
     hh = {}
     for s in "LR":
         sx = 1 if s == "L" else -1
-        ex = V((P.x + 0.28 * sx, P.y + 0.72, 0)); g = ground_z(ex.x, ex.y)
-        hh[s] = (V((ex.x, ex.y, g + 0.045)), V((0, 1, -0.2)).normalized(), V((0, 0, -1)), V((ex.x + 0.6 * sx, P.y + 0.3, g - 0.4)))
-        key_fingers("DiverB", s, f, "cup_hold")
+        ex = V((P.x + 0.28 * sx, P.y + 0.38, WZ - 0.06))
+        hh[s] = (ex, V((0.3 * sx, 1, -0.1)).normalized(), V((0, 0, -1)), V((ex.x + 0.5 * sx, P.y - 0.1, WZ - 0.4)))
+        key_fingers("DiverB", s, f, "relaxed")
     key_hands("DiverB", f, P, Rb, hh)
 TELE["DiverB"].add(1995)
 for f in (2005, 2017, 2060, 2110, 2154):
     kneel("DiverB", f, P2.x - 0.45, P2.y - 0.45, 135, lean=24 + 6 * math.sin(f * 0.045), head=(22 + 8 * math.sin(f * 0.05), 14 * math.sin(f * 0.03)))
 for f in (DIVERS_IN, 1800, 1900, 1990, 2017, 2060, 2110, 2154):    # leaning in, nodding, looking at each other and the boy
-    kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=28 + 5 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
+    kneel(DA, f, P2.x + 0.42, P2.y + 0.05, -82, lean=36 + 4 * math.sin(f * 0.04 + 1), head=(26 + 6 * math.sin(f * 0.06), -14 * math.sin(f * 0.035 + 1)))
 TELE[DA].add(DIVERS_IN - 1)
 for n, x, y, yaw in HUDDLE:
     if n in ("Boy3",): continue
@@ -627,7 +627,7 @@ for f in range(TOW0, TOW1 + 1, 10):
     sq = math.exp(-((y + 13.0) ** 2) / 4.0)
     P = pas_mid(y, 0.85 - 0.2 * sq, 0.3)
     swim("DiverB", f, P, 0.0, phase=f * 0.25, kick=0.9)
-    Pb = pas_mid(y - 0.15, 0.45 - 0.12 * sq, -0.35)
+    Pb = pas_mid(y - 0.1, 0.4 - 0.12 * sq, 0.12)                # just below the diver, harness within reach
     H = HUM["Boy2"]; Rb = body_R(180, -88)
     H.key_root(f, Pb, yaw=180, flex=-88); H.key_spine(f, flex=0, head=(0, 0))
     for s in "LR":
@@ -686,7 +686,7 @@ for n, off in (("DiverA", -1.55), ("DiverB", 1.55)):
 for f in range(OUT0, OUT1 + 1, 6):
     a = carry_path(f, -1.55); b = carry_path(f, 1.55)
     ga, gb = ground_z(a.x, a.y), ground_z(b.x, b.y)
-    pa = V((a.x, a.y, ga + 0.78)); pb_ = V((b.x, b.y, gb + 0.78)); mid = (pa + pb_) / 2
+    pa = V((a.x, a.y, ga + 0.9)); pb_ = V((b.x, b.y, gb + 0.9)); mid = (pa + pb_) / 2
     d_ = (pa - pb_).normalized()
     stre.location = mid; stre.rotation_euler = V((0, -1, 0)).rotation_difference(d_).to_euler()
     stre.keyframe_insert("location", frame=f); stre.keyframe_insert("rotation_euler", frame=f)
