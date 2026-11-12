@@ -32,8 +32,9 @@ CAM = [  # frame, camera, aim, lens, fstop
     (365, Vector((3.35, -0.55, 1.2)), COUPLE + Z(0.08), 28, 5.6),
     (391, Vector((3.6, -0.2, 1.3)), HER_HEAD + Vector((0.0, -0.08, -0.08)), 30, 5.6),
     # beat 4: her face freezing, his reach, bullet-level side view, low along the line with the tumbler between them
-    (440, HER_HEAD + Vector((-0.55, -0.32, -0.02)), HER_HEAD, 45, 2.8),
-    (470, Vector((4.48, -0.12, 1.34)), HIS_HEAD + Vector((0.05, 0.15, -0.15)), 32, 5.6),
+    (440, Vector((4.30, 0.12, 1.30)), HER_HEAD, 40, 5.6),
+    (451, Vector((4.55, -0.05, 1.38)), HER_HEAD + Vector((0.0, -0.05, 0.0)), 36, 5.6),
+    (470, Vector((4.98, -0.42, 1.42)), HIS_HEAD + Vector((0.0, 0.1, -0.1)), 30, 5.6),
     (500, Vector((4.55, -0.25, 1.32)), HIS_HEAD + Vector((0.05, 0.25, -0.25)), 35, 2.8),
     (528, Vector((4.62, -0.05, 1.18)), HIS_HEAD + Vector((0.15, 0.3, -0.35)), 30, 4),
     (555, P(555) - D * 0.09 + SV * 0.022 + Z(0.012), P(555) + D * 1.2, 32, 5.6),
@@ -45,8 +46,9 @@ CAM = [  # frame, camera, aim, lens, fstop
     (748, Vector((4.52, -0.14, 1.27)), HER_HEAD + Vector((0.0, 0.02, 0.02)), 45, 2.8),
     (772, Vector((4.52, -0.30, 1.30)), C3 + Z(0.12), 40, 5.6),
     (795, C3 + Vector((0.08, -0.10, 0.34)), C3 + Z(0.13), 40, 5.6),
-    (842, HIS_HAND_842 + Vector((0.16, 0.22, 0.12)), HIS_HAND_842 + Vector((-0.08, -0.12, 0.06)), 32, 5.6),
-    (885, C3 + Vector((-0.16, -0.18, 0.02)), C3 + Vector((0.02, 0.0, 0.03)), 40, 4),
+    (815, Vector((4.50, -0.25, 1.38)), HIS_HEAD + Vector((0.22, 0.3, -0.25)), 30, 5.6),
+    (842, Vector((4.50, -0.20, 1.40)), HIS_HEAD + Vector((0.22, 0.25, -0.3)), 28, 5.6),
+    (885, Vector((4.15, -0.05, 1.12)), C3 + Vector((0.03, 0.0, 0.03)), 40, 5.6),
     (920, P(920) - D * 0.35 + SV * 0.10 + Z(0.07), C3 + Z(0.03), 40, 4),
     (960, IMP + SV * 0.10 - D * 0.04 + Z(0.015), IMP, 55, 2.8),
     # beat 6: macro impact, orbit through the sparks, dive into the x-ray cup to see the ripples, out again, wider on their reaction
@@ -55,13 +57,13 @@ CAM = [  # frame, camera, aim, lens, fstop
     (1100, C3 - DXY * 0.07 + Z(0.21), C3 + Vector((0, 0, sc['cup_top'] + 0.21 - IMPACT_Z)), 30, 5.6),
     (1160, Vector((3.95, -0.05, 1.08)), P(1160) + Vector((0.05, -0.05, 0.08)), 30, 5.6),
     (1220, Vector((3.85, -0.18, 1.22)), (HER_HEAD + HIS_HEAD) / 2 - Z(0.25), 26, 4),
-    (1270, Vector((3.62, -0.70, 0.98)), P(1270), 30, 5.6),
+    (1270, Vector((3.30, -0.55, 1.05)), P(1270), 32, 5.6),
     # beat 7: follow it over the edge and down, floor-level skim on the bounces, settle close-up
-    (1300, Vector((3.85, -0.74, 0.86)), P(1300), 35, 5.6),
-    (1345, FL + Vector((-0.02, -0.38, 0.09)), P(1345), 30, 5.6),
+    (1300, Vector((3.35, -1.30, 0.90)), P(1300), 36, 5.6),
+    (1345, Vector((3.40, -1.15, 0.14)), P(1345), 36, 5.6),
     (1400, FL + Vector((0.0, -0.16, 0.045)), FL, 50, 5.6),
     # beat 8: crane up beside the table edge, then over the table end to her, shaken, holding the dented tumbler
-    (1417, Vector((3.4, -0.62, 0.88)), HER_HEAD + Vector((0.0, 0.0, -0.1)), 26, 5.6),
+    (1417, Vector((3.4, -0.6, 1.05)), HER_HEAD + Vector((0.0, 0.0, -0.1)), 26, 5.6),
     (1450, Vector((3.45, -0.5, 1.02)), HER_HEAD + Vector((0.05, -0.05, -0.15)), 28, 5.6),
     (1485, Vector((3.55, -0.45, 1.12)), (HER_HEAD + HANDLE_POS) / 2, 30, 4),
     (1530, Vector((3.7, -0.2, 1.2)), (HER_HEAD + HANDLE_POS) / 2 + Z(0.03), 34, 4)]

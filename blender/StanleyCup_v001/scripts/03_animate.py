@@ -52,7 +52,7 @@ def P(f):
 TABLE_EDGE_Y = TABLE_C.y - 0.705 * TABLE_SY
 p_imp = on_line(X_IMPACT)
 REB = p_imp - DXY * 0.085 + Vector((0, -0.04, 0))
-LAND = Vector((REB.x - 0.42, REB.y - 0.06, 0.0046))
+LAND = Vector((REB.x - 0.62, REB.y - 0.03, 0.0046))
 BOUNCES = [(1285, REB + Vector((0, 0, -0.06))), (1306, LAND + Vector((0.03, 0.01, 0))), (1328, LAND + Vector((-0.04, -0.01, 0.0045))),
            (1336, LAND + Vector((-0.07, -0.01, 0.0045))), (1395, LAND + Vector((-0.16, 0.0, 0.0045)))]
 def BPOST(f):
