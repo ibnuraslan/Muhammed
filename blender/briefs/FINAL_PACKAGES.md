@@ -28,7 +28,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v006/` |
 | 13 | FrozenTearsGun | `claude/connect13-frozen-tears-gun` | `blender/FrozenTearsGun_v005/` |
 | 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v005/` |
-| 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v006/` |
+| 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v004/` |
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v003/` |
 | 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v003/` |
