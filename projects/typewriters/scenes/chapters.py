@@ -59,7 +59,7 @@ CHAPTERS = {
         ("twmeade", "row", 1.4, "3A Then they turn"),
         ("twmeade", "covers", 1.6, "3B to the typewriters."),
         ("twmeade", "lone", 3.4, "4A On the evening of July twenty-third..."),
-        ("twmeade", "coil", 3.0, "4B ...an extra coil in the power switch"),
+        ("twmacro", "coil", 3.0, "4B ...an extra coil in the power switch"),
         ("twmeade", "cabinet", 2.2, "5A He X-rays the whole machine."),
         ("twmeade", "film", 4.4, "5B The film shows a cluster of electronics..."),
         ("twkitchen", "silent", 3.4, "6A Arneson is alone. His wife works for the NSA, too."),

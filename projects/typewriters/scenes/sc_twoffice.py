@@ -503,7 +503,7 @@ def cam_records_drawer(c, t):
 
 def cam_records_burn(c, t):
     e = ease(t); b = c["bag"].location
-    return (b + Vector((-2.6, 0.6, 1.35)).lerp(Vector((-2.4, 0.55, 1.32)), e), b + Vector((0.45, -0.05, 0.95)), 26)
+    return (b + Vector((-1.7, -1.3, 1.5)).lerp(Vector((-1.55, -1.18, 1.47)), e), b + Vector((0.4, 0.0, 0.9)), 28)
 
 
 def cam_attache(c, t):

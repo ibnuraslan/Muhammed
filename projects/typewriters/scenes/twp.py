@@ -58,8 +58,8 @@ def stand(h, loc, face_z):
     pose_walk(h, 0.0, stride=0.0, arm_swing=0.0)
     from human import SIDE
     for sd, sg in SIDE.items():                       # arms hanging close at the sides, a soft bend at the elbow
-        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 32)
-        h.rot(f"lowerarm01.{sd}", (1, 0, 0), 8)           # forearms hang (the walk rest pose bends them 12 deg forward)
+        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 14)
+        h.rot(f"lowerarm01.{sd}", (1, 0, 0), 50)          # forearms hang by the thighs (measured: wrist just ahead of the hip, ~0.9 m)
     fingers_curl(h, 22, thumb=10)                        # relaxed hands, palms toward the thighs
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = loc; ground(h)
 
@@ -79,8 +79,8 @@ def walk(h, p0, p1, s, speed=1.2, stride=26, z0=0.0):
     pose_walk(h, phase if moving else 0.0, stride=stride if moving else 0.0, arm_swing=20 if moving else 0.0)
     from human import SIDE
     for sd, sg in SIDE.items():                       # arms in at the sides (MakeHuman's A-pose reads as a puppet)
-        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 30)
-        h.rot(f"lowerarm01.{sd}", (1, 0, 0), -8)
+        h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 12)
+        h.rot(f"lowerarm01.{sd}", (1, 0, 0), 35)
     ang = math.atan2(d.x, -d.y)                 # rotation z that faces direction d
     h.arm.rotation_euler = (0, 0, ang)
     h.arm.location = p0 + d.normalized() * dist; h.arm.location.z = z0; ground(h)

@@ -447,16 +447,16 @@ CAMS = {
     "debate": lambda c, t: (V3(LB.x - 0.28, LB.y + 2.4, 1.72).lerp(V3(LB.x - 0.4, LB.y + 2.22, 1.7), ease(t)), V3(LB.x - 1.0, LB.y - 0.75, 1.42), 32),
     "memory": lambda c, t: (MEM + V3(-1.5, -0.9, 0.45).lerp(V3(-1.25, -0.75, 0.38), ease(t)), MEM + V3(0, 0, 0.1), 35),
     "pair": lambda c, t: (PAIR + V3(-1.3, -1.9, 0.65).lerp(V3(-1.1, -1.65, 0.6), ease(t)), PAIR + V3(0.15, -0.1, 0.2), 30),
-    "barlid": lambda c, t: (c["pair"][1]["bar"].matrix_world.translation + V3(0.06, -0.4, 0.27).lerp(V3(0.05, -0.34, 0.23), ease(t)), c["pair"][1]["bar"].matrix_world.translation + V3(0.0, 0.0, 0.0), 50),
+    "barlid": lambda c, t: (c["pair"][1]["bar"].matrix_world.translation + V3(-0.1, -0.2, 0.3).lerp(V3(-0.09, -0.17, 0.26), ease(t)), c["pair"][1]["bar"].matrix_world.translation + V3(-0.07, 0.0, 0.0), 50),     # down onto the end the lid slides off
     "bars": lambda c, t: (PAIR + V3(1.32, -0.78, 0.46).lerp(V3(1.3, -0.68, 0.41), ease(t)), PAIR + V3(1.27, -0.2, 0.0), 40),
-    "inspect78": lambda c, t: (XC + V3(1.15, -1.95, 1.45).lerp(V3(1.05, -1.8, 1.42), ease(t)), XC + V3(-0.15, -0.72, 0.85), 28),
+    "inspect78": lambda c, t: (XC + V3(0.9, -3.2, 1.6).lerp(V3(0.82, -3.0, 1.57), ease(t)), XC + V3(-0.2, -0.9, 1.0), 26),
     "motorfilm": lambda c, t: (V3(LB.x - 1.2, LB.y - 0.2, 1.55).lerp(V3(LB.x - 1.0, LB.y - 0.3, 1.55), ease(t)), V3(LB.x, LB.y - 0.62, 1.55), 40),
 }
 
 MOVES = {k: dict(kind="anim", dof=3.0, cam=fn, anim=anim(k)) for k, fn in CAMS.items()}
 MOVES["team"]["title"] = ("CHAPTER 2", "THE X-RAY", 10, 130)
 MOVES["team"]["dof"] = None
-for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04))), ("barlid", lambda c, t: c["pair"][1]["bar"].matrix_world.translation),
+for k, foc in (("coil", lambda c, t: T.world(c["row"][0], (0.162, -0.07, 0.04))), ("barlid", lambda c, t: c["pair"][1]["bar"].matrix_world.translation + V3(-0.07, 0.0, 0.0)),
                ("bars", lambda c, t: PAIR + V3(1.27, -0.2, 0.01)), ("film", lambda c, t: V3(LB.x, LB.y, 1.55)), ("memory", lambda c, t: MEM + V3(0, 0, 0.1))):
     MOVES[k]["focus"] = foc
     MOVES[k]["dof"] = 4.0 if k not in ("barlid", "coil") else 11.0

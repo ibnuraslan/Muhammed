@@ -19,7 +19,7 @@ import twp
 import typewriter as T
 
 EXPOSURE = 0.2
-DUR = {"strike": 6.0, "platen": 5.0, "sink": 6.0, "arms": 5.0, "magnets": 5.0, "xray": 6.0, "space": 4.5}
+DUR = {"coil": 4.0, "strike": 6.0, "platen": 5.0, "sink": 6.0, "arms": 5.0, "magnets": 5.0, "xray": 6.0, "space": 4.5}
 TEXT = "the quick brown fox jumps over the lazy dog\nnow is the time for all good men to come"
 SPACE_TEXT = "now is the time"
 FPS = 24
@@ -43,7 +43,7 @@ def build(variant=None):
     tw = T.make("Hero", loc=(0, 0, 0), color=(0.17, 0.22, 0.28), bugged=True, text=TEXT, dpi=400, seed=5)
     c["tw"] = tw
     # the X-ray fade (only the shots that call for it switch it on via their expression)
-    c["fade_expr"] = {"sink": "min(1, max(0, (frame - 30) / 60)) * 0.9", "xray": "min(1, max(0, (frame - 24) / 72))", "arms": "0.93", "magnets": "1"}
+    c["fade_expr"] = {"sink": "1", "coil": "1", "xray": "min(1, max(0, (frame - 24) / 72))", "arms": "0.93", "magnets": "1"}
     return c
 
 
@@ -115,9 +115,11 @@ def cam_space(c, t):
 MOVES = {
     "strike": dict(kind="anim", dof=7.1, cam=cam_strike, focus=lambda c, t: ball(c), anim=anim("strike"), title=("CHAPTER 3", "THE SIGNAL", 10, 130)),
     "platen": dict(kind="anim", dof=6.3, cam=cam_platen, focus=lambda c, t: W(c, (T.PAGE_LEFT + T.MARGIN + 0.03, T.PLATEN_Y - T.PLATEN_R, T.PLATEN_Z)), anim=anim("platen")),
-    "sink": dict(kind="anim", dof=11.0, cam=cam_sink, focus=lambda c, t: ball(c).lerp(W(c, (0.0, T.BAR_Y + 0.03, 0.04)), ease(t)), anim=anim("sink")),
+    "sink": dict(kind="anim", dof=None, cam=cam_sink, focus=lambda c, t: ball(c).lerp(W(c, (0.0, T.BAR_Y + 0.03, 0.04)), ease(t)), anim=anim("sink")),
     "arms": dict(kind="anim", dof=5.6, cam=cam_arms, focus=lambda c, t: W(c, (0.0, -0.085, 0.04)), anim=anim("arms")),
     "magnets": dict(kind="anim", dof=16.0, cam=cam_magnets, focus=lambda c, t: W(c, (0.0, T.BAR_Y + 0.004, T.BAR_Z + 0.012)), anim=anim("magnets")),
     "xray": dict(kind="anim", dof=8.0, cam=cam_xray, focus=lambda c, t: W(c, (0.0, -0.06, 0.06)), anim=anim("xray")),
+    "coil": dict(kind="anim", dof=None, cam=lambda c, t: (W(c, (0.3, -0.24, 0.2)).lerp(W(c, (0.26, -0.2, 0.17)), ease(t)), W(c, (0.162, -0.066, 0.036)), 60),
+                 anim=anim("coil")),                       # Ch2 4B: the open power switch and its extra coil, housing faded away
     "space": dict(kind="anim", dof=8.0, cam=cam_space, focus=lambda c, t: W(c, (0.0, -0.17, 0.05)), anim=anim("space")),
 }

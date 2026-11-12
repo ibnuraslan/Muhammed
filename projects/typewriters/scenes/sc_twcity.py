@@ -18,7 +18,7 @@ DUR = {"tower": 5.0, "antenna": 4.5, "pullback": 6.0}
 TOWER = Vector((0.0, 420.0, 0.0))
 
 
-def win_mat(name, lit=(1.0, 0.7, 0.42), density=0.3, strength=0.7):
+def win_mat(name, lit=(1.0, 0.62, 0.34), density=0.3, strength=0.42):
     """Lit flat windows with something inside them: curtains and lamp falloff break up each cell (no flat glowing
     rectangles), the light fades toward the head of the window, and each window gets its own warmth."""
     m = window_material(name, lit=lit, density=density, floor=2.8, bay=1.4, strength=strength, glass_col=(0.02, 0.022, 0.025))
@@ -40,7 +40,7 @@ def win_mat(name, lit=(1.0, 0.7, 0.42), density=0.3, strength=0.7):
     m2 = N.new("ShaderNodeMath"); m2.operation = 'MULTIPLY'; L.new(m1.outputs[0], m2.inputs[0]); L.new(gz.outputs[0], m2.inputs[1])
     L.new(m2.outputs[0], p.inputs['Emission Strength'])
     hue = N.new("ShaderNodeTexNoise"); hue.inputs['Scale'].default_value = 0.35; L.new(geo.outputs['Position'], hue.inputs['Vector'])
-    hr = N.new("ShaderNodeValToRGB"); hr.color_ramp.elements[0].color = (*[x * 0.9 for x in lit], 1); hr.color_ramp.elements[1].color = (1.0, 0.85, 0.62, 1)
+    hr = N.new("ShaderNodeValToRGB"); hr.color_ramp.elements[0].color = (*[x * 0.9 for x in lit], 1); hr.color_ramp.elements[1].color = (1.0, 0.72, 0.45, 1)
     hr.color_ramp.elements[0].position = 0.35; hr.color_ramp.elements[1].position = 0.65
     L.new(hue.outputs['Fac'], hr.inputs[0]); L.new(hr.outputs[0], p.inputs['Emission Color'])
     return m
@@ -154,7 +154,7 @@ def build(variant=None):
     haze((0, 250, 30), (500, 600, 60), density=0.00025, color=(0.65, 0.7, 0.85), anis=0.4)
     # the near rooftop (for the close shots): a pitched roof with a cluster of aerials, a chimney stack
     NR = Vector((6.0, -14.0, 18.0)); c["near"] = NR
-    box("NearBlock", (NR.x, NR.y - 2, NR.z / 2), (22, 14, NR.z), win_mat("NearWin", lit=(0.85, 0.5, 0.28), density=0.15, strength=0.5))
+    box("NearBlock", (NR.x, NR.y - 2, NR.z / 2), (22, 14, NR.z), win_mat("NearWin", lit=(0.85, 0.5, 0.28), density=0.15, strength=0.3))
     box("NearRoof", (NR.x, NR.y - 2, NR.z + 0.3), (22.4, 14.4, 0.6), ph.texture("roof_tiles" if False else "asphalt_02", scale=0.3, name="NearFelt"))
     box("NearParapet", (NR.x, NR.y + 5.1, NR.z + 0.9), (22.4, 0.3, 0.9), plaster[0])
     c["near_aerials"] = []
