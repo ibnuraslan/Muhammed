@@ -604,7 +604,7 @@ def fire_material(name, dens=6.0, smoke=False):
         l.new(ramp.outputs['Color'], vol.inputs['Emission Color'])
         lift = M('MULTIPLY', M('SUBTRACT', z, 0.02), 25.0, clamp=True)
         core_boost = M('MULTIPLY_ADD', M('MULTIPLY', hot, hot), 2.5); core_boost.node.inputs[2].default_value = 1.0
-        l.new(M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.32), core_boost), vol.inputs['Emission Strength'])
+        l.new(M('MULTIPLY', M('MULTIPLY', M('MULTIPLY', dens_, lift), 0.2), core_boost), vol.inputs['Emission Strength'])
     else:
         f1 = M('MULTIPLY_ADD', core, 0.3); f1.node.inputs[2].default_value = -0.6
         field = M('ADD', f1, nz.outputs['Fac'])

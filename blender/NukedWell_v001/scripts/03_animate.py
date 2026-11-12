@@ -370,6 +370,15 @@ def _key_foot(self, s, f, xy, yaw, lift=0.0, pitch=0.0): _kf(self, s, f, xy, yaw
 Human.key_foot = _key_foot
 for nm in ("SolA", "SolB", "SolC", "SolD", "EngA", "EngB"):
     rig = make_human_ctrl(O[nm]); CREW[nm] = Human(rig)
+    # hands rule: no backward bends - limit every finger / thumb joint in local space
+    for pb in O[nm].pose.bones:
+        if pb.name.startswith("finger"):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            thumb = pb.name.startswith("finger1-")
+            c.min_x, c.max_x = R_(-5), R_(95 if not thumb else 50)
+            c.min_y, c.max_y = R_(-12 if not thumb else -30), R_(12 if not thumb else 30)
+            c.min_z, c.max_z = R_(-12 if not thumb else -30), R_(12 if not thumb else 30)
 # ---------------- soldiers' field caps: rigid, bone-parented to 'head', sized to clear the hair
 import bmesh
 M_CAPC = bpy.data.materials.get("M_Canvas").copy(); M_CAPC.name = "M_FieldCap"
@@ -409,17 +418,17 @@ def pole_for(pos, yaw, s, z=1.0):
     fw, lf = body_frame(yaw); sx = 1 if s == "L" else -1
     return pos.to_3d() + lf * sx * 0.55 - fw * 0.5 + Vector((0, 0, z))
 HANDS = {   # local offsets (left(+)/right(-) x, forward, up), finger dir, palm normal (None = inward)
-    "side": ((0.24, 0.04, 0.80), (0, 0.15, -1), None),
-    "hip": ((0.27, -0.02, 1.0), (0, 0.6, -0.8), None),
-    "chest": ((0.12, 0.32, 1.25), (-0.2, 0.9, 0.1), None),
+    "side": ((0.31, 0.06, 0.82), (0.1, 0.15, -1), None),
+    "hip": ((0.34, 0.02, 1.0), (0, 0.6, -0.8), None),
+    "chest": ((0.16, 0.4, 1.25), (-0.2, 0.9, 0.1), None),
     "point": ((0.18, 0.62, 1.42), (0, 1, 0.05), (0, 0, -1)),
     "point_down": ((0.16, 0.6, 1.05), (0, 0.8, -0.6), (0, 0, -1)),
-    "shield": ((0.05, 0.28, 1.62), (0, 0.1, 1), (0, 1, 0)),
+    "shield": ((0.1, 0.4, 1.62), (0, 0.1, 1), (0, 1, 0)),
     "up": ((0.28, 0.12, 2.02), (0, 0.1, 1), (0, 1, 0)),
     "wave_a": ((0.42, 0.18, 1.9), (0.4, 0.1, 1), (0, 1, 0)),
     "wave_b": ((0.18, 0.22, 1.95), (-0.3, 0.1, 1), (0, 1, 0)),
-    "radio": ((0.12, 0.08, 1.58), (0, 0.2, 1), (1, 0, 0)),
-    "brace": ((0.3, 0.25, 1.05), (0, 0.6, -0.4), None),
+    "radio": ((0.2, 0.26, 1.5), (0, 0.2, 1), (1, 0, 0)),
+    "brace": ((0.36, 0.3, 1.05), (0, 0.6, -0.4), None),
 }
 GRIP_AXIS = Vector((1, 0, 0)); GRIP_SIGN = 1.0
 def key_grip(nm, f, s, amt):
@@ -435,7 +444,7 @@ def key_grip(nm, f, s, amt):
         if n in P:
             P[n].rotation_quaternion = Quaternion(GRIP_AXIS, GRIP_SIGN * R_(ang * amt)); P[n].keyframe_insert("rotation_quaternion", frame=f, group=n)
 def pose(nm, f, pos, yaw, L="side", R="side", crouch=0.03, flex=6.0, twist=0.0, side=0.0, head=(0.0, 0.0),
-         feet=None, sway=0.0, hand_world=None, grip=(0.2, 0.2)):
+         feet=None, sway=0.0, hand_world=None, grip=(0.35, 0.35)):
     """one full key: root, spine, both feet (planted unless given), both hands"""
     h = CREW[nm]; pos = Vector((pos[0], pos[1]))
     fw, lf = body_frame(yaw)
@@ -491,7 +500,7 @@ def walk(nm, f0, f1, p0, p1, yaw=None, backwards=False, stride=0.72):
             ph = (f - f0) / 24.0 * math.pi * 2 * (1 if s == "L" else -1)
             pos = p0.lerp(p1, smooth((f - f0) / (f1 - f0)))
             sx = 1 if s == "L" else -1
-            W, d, n = hand_local(h, s, pos, yw, (0.25 * sx, 0.12 * math.sin(ph), 0.84), (0, 0.15, -1))
+            W, d, n = hand_local(h, s, pos, yw, (0.31 * sx, 0.14 * math.sin(ph), 0.85), (0.1 * sx, 0.15, -1))
             h.key_hand(s, f, W, d, n, pole_for(pos, yw, s))
     return yw
 
@@ -575,13 +584,12 @@ for nm, a, b in (("SolA", H1[0], (19, 28)), ("SolB", H1[1], (21, 31)), ("SolC", 
 T8 = B[8] - 69
 DZ0 = 10.6 - 9.0   # device bottom at the start of beat 8
 def dev_guide(nm, sgn, f0, f1):
-    pos = SHAFT + Vector((sgn * 1.2, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
-    pose(nm, f0 - 1, pos, yw)
+    pos = SHAFT + Vector((sgn * 1.08, 0.15)); yw = yaw_to(pos, SHAFT + Vector((0, 0.15)))
     f = f0
     while f <= f1:
         _, _, zd, _ = dev_state(f); zb = zd - 4.6
         hz = max(zb + 0.6, 1.15); hz = min(hz, zb + 2.5)
-        cx = SHAFT.x + sgn * 0.47 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
+        cx = SHAFT.x + sgn * 0.43 + (0.2 * math.sin(f * 0.07) * (1 - smooth((f - 1380) / 70.0)) if f < 1460 else 0)
         release = smooth((f - 1452) / 14.0)
         hw = {}
         for s, dy in (("L", -0.17 * sgn), ("R", 0.17 * sgn)):
@@ -590,11 +598,11 @@ def dev_guide(nm, sgn, f0, f1):
         pose(nm, f, pos, yw, crouch=0.08, flex=30 - 14 * release, head=(-12, 0), hand_world=hw, sway=0.02 * math.sin(f * 0.1), grip=(0.15, 0.15))
         f += 6
 for nm, sg in (("SolA", -1), ("SolB", 1)):
-    pp = SHAFT + Vector((sg * 1.2, 0.15)); idle(nm, T8, 1360, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
-dev_guide("SolA", -1, 1372, 1500)
-dev_guide("SolB", 1, 1372, 1500)
-idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-1.2, 0.15)), yaw_to(SHAFT + Vector((-1.2, 0.15)), SHAFT), "side", "point_down", flex=16)
-idle("SolB", 1501, B[9] - 6, SHAFT + Vector((1.2, 0.15)), yaw_to(SHAFT + Vector((1.2, 0.15)), SHAFT), "side", "side", flex=16)
+    pp = SHAFT + Vector((sg * 1.08, 0.15)); idle(nm, T8, 1368, pp, yaw_to(pp, SHAFT + Vector((0, 0.15)), ), "chest", "up" if sg < 0 else "chest", every=20, head=(-20, 0))
+dev_guide("SolA", -1, 1376, 1500)
+dev_guide("SolB", 1, 1376, 1500)
+idle("SolA", 1501, B[9] - 6, SHAFT + Vector((-1.08, 0.15)), yaw_to(SHAFT + Vector((-1.08, 0.15)), SHAFT), "side", "point_down", flex=16)
+idle("SolB", 1501, B[9] - 6, SHAFT + Vector((1.08, 0.15)), yaw_to(SHAFT + Vector((1.08, 0.15)), SHAFT), "side", "side", flex=16)
 pE = Vector((-8.5, 4.5)); pose("EngA", T8, pE, yaw_to(pE, CB.to_2d()))
 idle("EngA", T8 + 1, B[9] - 6, pE, yaw_to(pE, CB.to_2d()), "up", "side", every=12,
      gest=[(T8 + 1, "wave_a", "side"), (T8 + 13, "wave_b", "side"), (T8 + 25, "wave_a", "side"), (T8 + 37, "wave_b", "side"), (1440, "up", "point"), (1480, "side", "point_down")], head=(18, 0))
@@ -667,10 +675,10 @@ CAMK = [  # frame, camera, target, lens
     (1830, (5.0, -46.0, -50.0), (-5.0, 0.0, -54.0), 28),
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
     (1925, (2.0, -50.0, 0.5), (0.0, 0.0, 24.0), 24),
-    (1965, (7.0, 9.0, 6.0), (0.0, -1.6, 5.0), 26),
+    (1965, (12.0, 14.0, 6.0), (0.0, -1.6, 5.0), 26),
     (2000, (-15.0, 42.0, 3.0), (-25.0, 62.0, 1.6), 28),
     (2030, (-21.0, 53.0, 2.0), (-25.0, 62.3, 1.6), 30),
-    (2065, (-17.0, 65.0, 5.5), (-20.0, 40.0, 3.0), 28),
+    (2065, (-21.0, 67.5, 2.6), (-18.0, 48.0, 1.8), 28),
     (2100, (-28.0, 76.0, 11.0), (-8.0, 0.0, 6.0), 26),
     (2160, (-32.0, 98.0, 30.0), (-6.0, 0.0, 4.0), 26),
 ]
