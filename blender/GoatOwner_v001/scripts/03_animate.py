@@ -6,6 +6,7 @@ from mathutils import Vector, Matrix, Quaternion, Euler
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 exec(open(os.path.join(HERE, "anim_lib.py")).read())
+exec(open(os.path.join(HERE, "hand_poses_director.py")).read())      # director hand-pose library (flat_palm, place_hand)
 OUT = sys.argv[sys.argv.index("--") + 1]
 sc = bpy.context.scene
 random.seed(7)
@@ -152,12 +153,30 @@ def HP(name, s):
             }[name]
 
 def clutch(f, s, kind):
+    """palm flat on his stomach: ray onto the overalls surface in front of the belly, place_hand + flat_palm"""
     ev(f)
     D = OW.o.matrix_world @ OW.R.delta("spine02"); R3 = D.to_3x3()
     W, d, n = HP(kind, s); sx = 1 if s == "L" else -1
-    pole = D @ (OW.SH[s] + Vector((0.35 * sx, 0.45, -0.25)))
-    OW.h.key_hand(s, f, D @ W, R3 @ d, R3 @ n, pole)
-
+    tgt = D @ Vector((sx * 0.09, -0.05, W.z))            # point inside the belly
+    org = D @ Vector((sx * 0.09, -0.6, W.z))             # in front of it
+    dg_ = bpy.context.evaluated_depsgraph_get(); best = None
+    for o in [c for c in OW.o.children if c.type == 'MESH' and ("worksuit" in c.name or c.name.endswith(".body"))]:
+        e = o.evaluated_get(dg_); mi = o.matrix_world.inverted()
+        hit, loc, nrm, idx = e.ray_cast(mi @ org, (mi.to_3x3() @ (tgt - org)).normalized())
+        if hit:
+            wl = o.matrix_world @ loc
+            if best is None or (wl - org).length < (best[0] - org).length:
+                best = (wl, (o.matrix_world.to_3x3().inverted().transposed() @ nrm).normalized())
+    if best is None:
+        pole = D @ (OW.SH[s] + Vector((0.35 * sx, 0.45, -0.25)))
+        OW.h.key_hand(s, f, D @ W, R3 @ d, R3 @ n, pole); return
+    p, nr = best
+    fdir = (R3 @ Vector((-sx * 1.0, 0, -0.35))).normalized()      # fingers across the stomach, slightly down
+    place_hand(OW.o, s, f, p, -nr, fdir, skin=0.03)
+    pb = OW.R.PB["Pole_elbow." + s]; nme = "Pole_elbow." + s
+    pb.location = OW.R.rest(nme).to_3x3().inverted() @ (D @ (OW.SH[s] + Vector((0.35 * sx, 0.45, -0.25))) - OW.R.BN[nme].head_local)
+    pb.keyframe_insert("location", frame=f, group=nme)
+    apply_pose(OW.o, s, "flat_palm", f)
 
 # ================================================================= goat
 G = Rig(bpy.data.objects["Goat_rig"])
@@ -250,7 +269,7 @@ for f in range(1182, 1431, 8):
     else:
         OW.arm("L", f, M, fwd=38, out=14, L=0.46)      # left arm hangs forward for balance; right hand clutches the stomach
     clutch(f, "R", "belly2")
-    OW.fingers("L", f, 35, 20); OW.fingers("R", f, 30, 20)
+    OW.fingers("L", f, 10, 8)
     OW.face(f, jaw=22 + 8 * math.sin(f / 7.0), brow=5, lid=3, smile=-4)
 # beat 8: butted at 1440 off the south edge (y = 3), falls, lands at 1478
 EDGE = Vector((6.2, 3.45))
@@ -445,7 +464,7 @@ for h_, fn in ((OA, pa), (OB_, pb_)):
 for f in range(1600, 1906, 10):
     for h_, fn in ((OA, pa), (OB_, pb_)):
         pth = OFF_PATH[h_.o.name]; p_ = pth(f); M_ = h_.M(Vector((p_.x, p_.y, h_.RH.z)), yaw_to(pth(f - 4), pth(f + 4))); sw = 14 * math.sin(f / 20.0)
-        if f < 1700 or (h_ is OB_ and f < 1735):
+        if f < 1700 or (h_ is OB_ and (f < 1735 or f >= 1830)):
             h_.arm("R", f, M_, fwd=10 + sw, out=24, L=0.5)
         h_.arm("L", f, M_, fwd=10 - sw, out=24, L=0.5)      # OffA holds the catch pole one-handed
         h_.fingers("L", f, 20, 15); h_.fingers("R", f, 20, 15)
@@ -461,7 +480,7 @@ for f in range(1600, 1906, 10):
     OA.face(f, jaw=3, brow=-1)
     pB = OFF_PATH['OffB'](f).to_2d(); MB = OB_.M(Vector((pB.x, pB.y, OB_.RH.z)), yaw_to(OFF_PATH['OffB'](f - 4), OFF_PATH['OffB'](f + 4)))
     back = G.o.matrix_world @ G.PB["spine2"].head + Vector((0, 0, 0.12))
-    if f >= 1735:
+    if 1735 <= f < 1830:
         OB_.h.key_hand("R", f, back, Vector((0, 0, -1)).cross(Vector((1, 0, 0))), Vector((0, 0, -1)), MB @ Vector((0.5, 0.4, 1.1)))
     OB_.face(f, jaw=2, brow=2, smile=-1)
 pole.hide_render = True; pole.keyframe_insert("hide_render", frame=1); pole.hide_render = False; pole.keyframe_insert("hide_render", frame=1700)
@@ -555,7 +574,7 @@ for o in bpy.data.objects:
 # drifting dust in the yard (wind), settling dust after the fall
 for f, p, sz in ((20, (-1.5, -2.0, 0.25), 1.4), (200, (3.0, -3.0, 0.3), 1.6), (420, (-2.0, 0.5, 0.25), 1.2), (640, (1.5, -0.5, 0.2), 1.3),
                  (1200, (0.0, 3.0, 0.2), 1.3), (1530, (5.0, 0.8, 0.2), 1.8), (1620, (7.5, 1.5, 0.25), 1.6), (1760, (0.5, 4.5, 0.2), 1.4)):
-    dust(f, Vector(p), sz, dur=170, rise=0.35, n_clods=0)
+    dust(f, Vector(p), sz * 0.4, dur=170, rise=0.12, n_clods=0)      # low ground drift, never around the camera
 # background figure: the passer-by later works the far field edge (beats 4-9)
 pp2 = catmull([(600, V(-13.0, -4.0, 0)), (1100, V(-13.5, 8.0, 0)), (1520, V(-12.0, 20.0, 0))])
 PS.h.walk(pp2, lambda f: 180, 600, 1520, stride=0.7)
@@ -619,6 +638,7 @@ CAMK = [
  (250,  ("gb", (1.5, 0.2, 0.1), "g"), ("gh",), 38),      # orbit around
  (320,  (-1.3, 4.2, 1.0), (-0.6, -1.5, 0.55), 26),   # behind the goat, the passer-by beyond the fence    # behind the goat; passer-by beyond the fence
  (390,  (-2.7, 2.7, 0.75), ("gh",), 36),
+ (425,  (-1.6, 3.7, 1.15), ("gb",), 28),      # wide on the whole goat on the way round
  (462,  (0.6, 0.4, 0.95), ("gh",), 32),    # tense goat, whole head and neck in frame
  (540,  (0.4, 3.9, 1.3), ("gb",), 26),
  (630,  ("gb", (1.1, -1.3, 0.3), "g"), ("gh",), 32),
@@ -648,6 +668,7 @@ CAMK = [
  (1800, (1.8, 5.6, 1.5), ("gb",), 28),
  (1860, (1.8, 8.0, 1.9), ("gb",), 28),                     # beside the ramp, clear of the officials
  (1905, (0.5, 9.0, 2.6), ("gb",), 24),
+ (1916, (2.0, 52.5, 2.4), (2.0, 62.1, 0.6), 28),       # the fly-over arrives on the goat and rescuer
  (1928, (2.2, 56.0, 2.0), (2.0, 62.1, 0.55), 28),           # fast fly-over the tree line onto the goat at the sanctuary
  (1970, (3.2, 58.8, 1.3), (1.9, 62.2, 0.55), 30),
  (2020, (4.6, 58.6, 2.2), (1.9, 62.3, 0.5), 28),           # down into the pasture
