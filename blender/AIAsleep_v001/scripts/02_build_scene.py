@@ -178,8 +178,10 @@ ROAD_LEN = 2600.0
 bpy.ops.mesh.primitive_plane_add(size=1); rd = bpy.context.object; rd.name = "Road"
 for u in list(rd.users_collection): u.objects.unlink(rd)
 hc.objects.link(rd); rd.parent = Mover; rd.scale = (16, ROAD_LEN, 1); rd.location = (-2.0, -ROAD_LEN / 2 + 200, 0.0)
-M_asph = pbr("Asphalt", "asphalt_02", 0.35, rough_mul=1.0, bump=0.8)
+M_asph = pbr("Asphalt", "asphalt_02", 0.25, tint=(0.30, 0.31, 0.34), rough_mul=1.0, bump=0.5)
 rd.data.materials.append(M_asph)
+bpy.ops.object.select_all(action="DESELECT"); rd.select_set(True); bpy.context.view_layer.objects.active = rd
+bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 # lane dashes + edge lines (thin painted strips, emissive-free retro-reflective white)
 mpaint = bpy.data.materials.new("LanePaint"); mpaint.use_nodes = True; pb_ = mpaint.node_tree.nodes["Principled BSDF"]
 pb_.inputs["Base Color"].default_value = (0.75, 0.72, 0.62, 1); pb_.inputs["Roughness"].default_value = 0.5
@@ -200,7 +202,9 @@ for nm, x in (("Median", 6.2), ("Barrier_R", -9.8)):
     bpy.ops.mesh.primitive_cube_add(size=1); o = bpy.context.object; o.name = nm
     for u in list(o.users_collection): u.objects.unlink(o)
     hc.objects.link(o); o.parent = Mover; o.scale = (0.5, ROAD_LEN, 0.85); o.location = (x, -ROAD_LEN / 2 + 200, 0.42)
-    o.modifiers.new("b", "BEVEL").width = 0.08; o.data.materials.append(M_conc)
+    o.data.materials.append(M_conc)
+    bpy.ops.object.select_all(action="DESELECT"); o.select_set(True); bpy.context.view_layer.objects.active = o
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True); o.modifiers.new("b", "BEVEL").width = 0.08
 # street lights: imported model + warm sodium/LED point light, every 38 m on the median
 sl = imp(os.path.join(A, "models/streetlight.glb"), hc)
 slm = [o for o in sl if o.type == "MESH"]; sl_names = [o.name for o in sl]
@@ -220,6 +224,13 @@ dims = SL.dimensions; s_ = 10.0 / max(dims); SL.scale = (s_,) * 3; SL.location =
 bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
 bpy.context.view_layer.update()
 SL.hide_render = True; SL.hide_viewport = True
+mglow = bpy.data.materials.new("LampGlow"); mglow.use_nodes = True; gb = mglow.node_tree.nodes["Principled BSDF"]
+gb.inputs["Base Color"].default_value = (1, 0.8, 0.5, 1); gb.inputs["Emission Color"].default_value = (1.0, 0.78, 0.45, 1); gb.inputs["Emission Strength"].default_value = 25.0
+bpy.ops.mesh.primitive_cube_add(size=1); glow_src = bpy.context.object; glow_src.name = "LampGlowSrc"
+for u in list(glow_src.users_collection): u.objects.unlink(glow_src)
+glow_src.data.materials.append(mglow); glow_src.scale = (0.9, 0.35, 0.08); bpy.ops.object.transform_apply(location=False, rotation=False, scale=True) if False else None
+glow_mesh = glow_src.data
+for v in glow_mesh.vertices: v.co = Vector((v.co.x * 0.9, v.co.y * 0.35, v.co.z * 0.08))
 lamp_light = bpy.data.lights.new("StreetLamp", "POINT"); lamp_light.energy = 9000; lamp_light.color = (1.0, 0.72, 0.42); lamp_light.shadow_soft_size = 0.4
 for k in range(int(ROAD_LEN / 38)):
     y = 200 - k * 38
@@ -230,6 +241,8 @@ for k in range(int(ROAD_LEN / 38)):
         if k < 70:   # real lights only along the stretch the camera sees
             l = bpy.data.objects.new("SLampLight_%d_%d" % (k, side), lamp_light); hc.objects.link(l); l.parent = Mover
             l.location = (x - 2.6 if side == 0 else x + 2.6, y, 10.0)
+        g = bpy.data.objects.new("SLampGlow_%d_%d" % (k, side), glow_mesh); hc.objects.link(g); g.parent = Mover
+        g.location = (x - 2.6 if side == 0 else x + 2.6, y, 10.25)
 # city skyline: imported city blocks set back on both sides, scaled up; parallax-moved at a fraction of road speed
 cityc = coll("City")
 cobjs = imp(os.path.join(A, "models/city.glb"), cityc)

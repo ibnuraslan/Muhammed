@@ -147,7 +147,7 @@ for nm, off, e, col in (("Sec_Key", (0.06, -0.05, 0.05), 0.4, (1.0, 0.93, 0.85))
     l = bpy.data.lights.new(nm, "AREA"); l.size = 0.08; l.color = col; lo = O.new(nm, l); secc.objects.link(lo)
     lo.location = EYE + Vector(off); lo.rotation_euler = (EYE - lo.location).to_track_quat("-Z", "Y").to_euler(); lights.append((l, e))
 # visibility timeline: dive in at 1806, back out at 2210
-D0, D1 = 1806, 2210
+D0, D1 = 1793, 2210
 def vis(o, f, show):
     o.hide_render = not show; o.keyframe_insert("hide_render", frame=f)
 for o in secc.objects:
@@ -175,11 +175,12 @@ def fcurves(idb):
     except AttributeError: return [fc for ly in act.layers for s in ly.strips for cb in s.channelbags for fc in cb.fcurves]
 for idb in (cam, aim, camd):
     for fc in fcurves(idb):
-        for kp in [k for k in fc.keyframe_points if 1795 < k.co.x < 2250][::-1]: fc.keyframe_points.remove(kp)
+        for kp in [k for k in fc.keyframe_points if 1789 < k.co.x < 2250][::-1]: fc.keyframe_points.remove(kp)
 CUTC = Vector((CUT_X, EYE.y - 0.004, EYE.z + 0.002))
 V = Vector
-KEYS = [(1803, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 40),     # into the skin at the inner corner (<=6 frames)
-        (1830, CUTC + V((0.055, -0.035, 0.006)), CUTC, 30),
+KEYS = [(1791, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 40),     # into the skin at the inner corner (<=6 frames)
+        (1802, CUTC + V((0.055, -0.035, 0.006)), CUTC, 30),
+        (1850, CUTC + V((0.058, -0.024, 0.012)), CUTC, 30),
         (1900, CUTC + V((0.060, -0.010, 0.020)), CUTC + V((0, -0.003, 0.002)), 30),
         (1980, CUTC + V((0.050, -0.030, 0.030)), CUTC + V((0, -0.006, 0.005)), 34),
         (2060, CUTC + V((0.058, -0.018, -0.016)), CUTC + V((0, -0.006, 0.004)), 34),

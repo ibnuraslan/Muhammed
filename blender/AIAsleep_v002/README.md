@@ -18,10 +18,22 @@
 - Camera clearance (every 2 frames): only the intended ≤6-frame skin dive at 1803–1805, plus brief near-passes at 121–123 (window frame) and 1311 (sun visor).
 - Feet planted all film (static IK targets).
 
+## Director fixes applied after C (00:17 UTC)
+- 15 s: the push-in is sharp (f/9) and pulled back, so the eyes and brows read.
+- 30 s: the dive into the cutaway is 9 frames earlier, so the 1/s sample lands on the readable section. The approach is frontal.
+- 22 s: the roof drops out only for frames 1305–1318 while the camera rises; no murky frame.
+- 23–24 s: dark asphalt now tiles at real scale (the plank streaks are gone), with lane lines and glowing street lamps sweeping past.
+- Light panels are invisible to the camera (the blue blob is gone).
+- The eye socket skin inside the eyeballs is culled, and the medial sclera is matte.
+- 31 s: an added section key keeps the cutaway in frame.
+
+## Audits
+- Hand audit (`review/D_hand_audit.txt`), every 2 frames over 1305 frames: hand vs hand 0, hand vs torso/shirt 0, hand vs head 0. The rim check flags 1–2 finger-bone axis samples inside the rim on grip frames: the rim is inside the curled fist, and the close-ups show a clean wrap.
+- Camera clearance (`review/D_camera_clearance.txt`): 2 brief near-passes on the window frame at frames 121–123 as the camera enters the car.
+
 ## Known issues
 - No voiceover yet; retime with `beats.json` when it arrives.
-- The epicanthic fold is a modest corrective shape key, so it reads in the macro but is subtle at medium distance.
-- Not done from director note 1/2: the side-by-side ghost eye without the fold, and the beard shadow / stronger jaw (dropped for the new smooth-CG skin rule).
-- 15 s (forced-wide-eyes push-in) and 30 s (dive) are soft and close by design; 22 s passes up through the sunroof and briefly shows the headliner.
-- The street-light model reads simple at distance.
+- A faint dark squiggle shows at the inner corner of his right eye in the steep close-up just before the dive (about 0.2 s). It is refraction in the MPFB procedural eye.
+- The epicanthic fold is a modest shape key and is subtle at medium distance. The side-by-side ghost eye without the fold is not built.
+- 21 s is a close over-the-shoulder shot during his hand gesture.
 - The IR grade uses the compositor (CPU device set); keep compositing enabled on the farm.

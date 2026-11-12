@@ -72,5 +72,7 @@ for pb in rig.pose.bones:
 for s in "LR":   # elbow: IK limits, no hyper-extension
     pb = rig.pose.bones["lowerarm01." + s]
     for ax in ("x", "y", "z"): setattr(pb, "lock_ik_" + ax, False)
+for o in O:
+    if o.type == 'LIGHT': o.visible_camera = False   # light panels never show up in frame
 sc.render.use_motion_blur = False
 bpy.ops.wm.save_as_mainfile(filepath=OUT_PATH, compress=True); print("SAVED", OUT_PATH)

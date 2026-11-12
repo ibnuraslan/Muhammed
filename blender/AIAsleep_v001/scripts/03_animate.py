@@ -29,6 +29,34 @@ for v in eo.data.vertices:
     w = sum(g.weight for g in v.groups if g.group in bidx)
     if w > 0: hg.add([v.index], w, "ADD")
 for g in bad: eo.vertex_groups.remove(g)
+# medial sclera: plain material (the procedural eye shader draws dark streaks at its seam near the inner corner)
+msc = bpy.data.materials.new("ScleraPlain"); msc.use_nodes = True; bsc = msc.node_tree.nodes["Principled BSDF"]
+bsc.inputs["Base Color"].default_value = (0.92, 0.86, 0.84, 1); bsc.inputs["Roughness"].default_value = 0.6; bsc.inputs["Coat Weight"].default_value = 0.0; bsc.inputs["Specular IOR Level"].default_value = 0.2
+bsc.inputs["Subsurface Weight"].default_value = 0.3
+eo.data.materials.append(msc); si = len(eo.data.materials) - 1
+cR = rig.data.bones["eye.R"].head_local; cL = rig.data.bones["eye.L"].head_local
+for poly in eo.data.polygons:
+    cen = poly.center; c_ = cR if cen.x < 0 else cL
+    medial = (cen.x - c_.x) * (1 if cen.x < 0 else -1)      # toward the nose
+    if medial > 0.0060: poly.material_index = si
+# hide the socket skin that sits inside the eyeballs (it showed through the transparent eye shell as dark streaks)
+bo = O["Driver.body"]; bm_ = bo.data; kb_ = bm_.shape_keys.key_blocks
+mixc = [v.co.copy() for v in bm_.vertices]
+for k in kb_[1:]:
+    if k.mute or k.value == 0: continue
+    for i in range(len(mixc)): mixc[i] += (k.data[i].co - k.relative_key.data[i].co) * k.value
+eyeR_mix = [mixc[v.index] for v in bm_.vertices]
+# eye centres in the morphed mesh: average of the eye proxy rest positions is close to the bone heads
+def _in_socket(p_):
+    for c_ in (cR, cL):
+        d_ = p_ - c_
+        if d_.length < 0.0140: return True
+    return False
+inside = [i for i, p_ in enumerate(mixc) if _in_socket(p_)]
+vg_in = bo.vertex_groups.new(name="inside_eye"); vg_in.add(inside, 1.0, "REPLACE")
+mk_ = bo.modifiers.new("hide_inside_eye", "MASK"); mk_.vertex_group = "inside_eye"; mk_.invert_vertex_group = True
+while bo.modifiers.find("hide_inside_eye") > 0: bpy.ops.object.modifier_move_up({"object": bo}, modifier="hide_inside_eye") if False else bo.modifiers.move(bo.modifiers.find("hide_inside_eye"), 0)
+print("INSIDE_EYE verts", len(inside))
 # skin pores were too strong for the macros
 sgp = next(n for n in bpy.data.materials["Driver.body"].node_tree.nodes if n.type == "GROUP")
 sgp.inputs["Pore strength"].default_value = 0.06
@@ -171,6 +199,10 @@ for f0, f1, e in ((20, 234, 1.2), (1545, 1728, 0.8)):
 K(sbd, "energy", 1, 0.0)
 lensm = bpy.data.materials["LensGlass"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 nkey(lensm, 1, 0.0); nkey(lensm, 20, 3.0); nkey(lensm, 234, 3.0); nkey(lensm, 250, 0.5)
+for o in O:
+    if o.type == "MESH" and o.name.startswith(("Body_Roof", "Glass_Top", "Inner_AgainsSun")) and o.parent is not None and "Traffic" not in o.name:
+        for f, h in ((1, False), (1305, True), (1318, False)):
+            o.hide_render = h; o.keyframe_insert("hide_render", frame=f)
 # side window rolled down (the camera enters through it)
 for o in O:
     if "Glass_Side_Front" in o.name: o.hide_render = True
@@ -200,14 +232,15 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (660,  V((-0.38, 0.75, 1.30)), V((0, -0.4, 1.1)), 24),
  (720,  V((-0.72, -0.15, 1.24)), V((0, 0.0, 1.1)), 22),
  (780,  V((-0.26, -0.50, 1.12)), FACE, 26),
- (840,  V((-0.22, -0.45, 1.18)), FACE, 30),
- (930,  V((-0.08, -0.30, 1.31)), EYE, 50),
+ (840,  V((-0.22, -0.50, 1.18)), FACE, 30),
+ (930,  V((-0.17, -0.46, 1.23)), EYE, 50),
  (980,  V((-0.30, -0.40, 1.17)), SCR, 35),
  (1080, V((-0.45, -0.62, 1.13)), FACE, 42),
  (1140, V((0.34, -0.20, 1.25)), FACE, 38),
- (1220, V((-0.25, 0.38, 1.32)), SCR, 28),
+ (1220, V((-0.42, 0.30, 1.28)), SCR, 26),
  (1302, V((-0.32, -0.04, 1.31)), V((0, -0.3, 0.9)), 20),
- (1340, V((-0.36, -0.02, 1.95)), CAR, 20),
+ (1318, V((-0.36, -0.02, 1.66)), CAR, 20),
+ (1340, V((-0.40, 0.4, 2.4)), CAR, 20),
  (1400, V((-1.6, 9.5, 4.2)), CAR, 24),
  (1464, V((3.6, -7.8, 1.9)), CAR, 28),
  (1500, V((0.0, -1.75, 1.16)), FACE, 30),
@@ -216,7 +249,8 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (1620, V((0.0, -0.36, 1.27)), FACE, 40),
  (1680, V((-0.03, -0.16, 1.29)), EYE, 60),
  (1728, V((0.01, -0.13, 1.30)), EYE, 55),
- (1790, EYE + V((-0.005, -0.085, 0.004)), INNER, 40),
+ (1770, EYE + V((0.0, -0.17, 0.004)), EYE, 40),
+ (1782, EYE + V((0.002, -0.075, 0.004)), EYE + V((0.004, 0, 0)), 40),
  (1830, EYE + V((0.000, -0.050, 0.002)), INNER, 40),
  (1900, EYE + V((-0.030, -0.060, 0.012)), INNER, 35),
  (1980, EYE + V((-0.012, -0.050, 0.028)), INNER, 35),
@@ -245,7 +279,7 @@ for idb in (cam, aim, camd):
 for fc in fcs(mover):
     for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 camd.dof.use_dof = True; camd.dof.focus_object = aim; camd.dof.aperture_fstop = 4.0
-for f, v in ((1, 4.0), (1700, 4.0), (1760, 18.0), (2448, 18.0), (2500, 4.0)): K(camd.dof, "aperture_fstop", f, v)
+for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1700, 4.0), (1760, 18.0), (2448, 18.0), (2500, 4.0)): K(camd.dof, "aperture_fstop", f, v)
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 # ---------------- look fixes: dark brown irises, black hair, warmer skin
 eg = next(n for n in bpy.data.materials["Driver.high-poly"].node_tree.nodes if n.type == "GROUP")
