@@ -256,13 +256,13 @@ f = F(12.0); m = fmid(f).lerp(ringp(f), 0.3); k_(f, m + Vector((0.03, -0.15, -0.
 f = F(13.0); m = fmid(f).lerp(ringp(f), 0.2); k_(f, m + Vector((-0.1, -0.15, 0.03)), m, 55)
 f = F(13.9); m = fmid(f); k_(f, m + Vector((-0.04, -0.3, 0.06)), m, 50)
 n_ = nickp(F(14.4)); k_(F(14.4), n_ + Vector((0.1, -0.2, 0.05)), n_, 55)
-n_ = nickp(F(15.0)); k_(F(15.0), n_ + Vector((0.13, -0.24, 0.08)), n_, 50)
+n_ = nickp(F(15.0)); k_(F(15.0), Vector((0.26, -0.86, 1.5)), n_.lerp(face(F(15.0)), 0.5), 42)
 k_(F(15.6), (0.2, -0.72, 1.72), face(F(15.6)), 45)
 nk = neckp(F(16.55)); k_(F(16.55), (-0.26, -0.5, 1.56), nk, 45)
 nk = neckp(F(17.1)); k_(F(17.1), (-0.36, -0.48, 1.5), nk + Vector((0, 0, -0.02)), 42)
 k_(F(17.9), (0.36, -0.86, 1.47), handL(F(17.9)).lerp(face(F(17.9)), 0.4), 42)
-r = ringp(F(18.9)); k_(F(18.9), r + Vector((0.15, -0.2, 0.1)), r, 60)
-r = ringp(F(19.5)); k_(F(19.5), r + Vector((-0.14, -0.3, 0.14)), r, 55)
+r = ringp(F(18.9)); k_(F(18.9), r + Vector((0.22, -0.3, 0.16)), r, 50)
+r = ringp(F(19.5)); k_(F(19.5), r + Vector((-0.22, -0.42, 0.2)), r.lerp(face(F(19.5)), 0.4), 42)
 k_(F(20.1), (-0.17, -0.64, 1.52), face(F(20.1)), 45)
 k_(F(20.8), (-0.45, -1.45, 1.75), (0.25, 0.0, 1.4), 32)
 k_(F(21.8), (-0.95, -2.5, 2.1), (1.3, 0.3, 1.1), 24)
@@ -281,10 +281,11 @@ def ride(f):
     rad = 0.035 + 0.02 * u; back = 0.075 - 0.05 * u
     b = bpos(f); off = (up * math.cos(ang) + sd * math.sin(ang)) * rad - DIR * back
     tgt = b + (face(f) - b).normalized() * 0.012 + up * 0.006
+    tgt = tgt.lerp(face(f), 0.85 * smooth((u - 0.6) / 0.4))   # v006: swing to his face for the peel-off (no blank wall frame)
     return b + off, tgt, b
 LOCKS = [  # (f0, f1, ramp, offset fn(f)->(loc, target, focus))
     (F(1.25), F(2.95), 14, lambda f: ride(f)),
-    (F(6.6), F(7.4), 14, lambda f: (bpos(f) - DIR * 0.07 + Vector((0.006 + 0.03 * (f - F(6.6)) / 48, 0.0, 0.012)), bpos(f).lerp(ringp(f), 0.25 + 0.4 * smooth((f - F(6.6)) / 48)), bpos(f).lerp(ringp(f), smooth((f - F(6.8)) / 40)))),
+    (F(6.4), F(7.4), 14, lambda f: (bpos(f) - DIR * 0.07 + Vector((0.006 + 0.03 * (f - F(6.6)) / 48, 0.0, 0.012)), bpos(f).lerp(ringp(f), 0.25 + 0.4 * smooth((f - F(6.6)) / 48)), bpos(f).lerp(ringp(f), smooth((f - F(6.8)) / 40)))),
 ]
 FACE_C = {}
 def lockw(f):

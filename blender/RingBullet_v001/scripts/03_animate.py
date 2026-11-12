@@ -96,7 +96,7 @@ for f, flex, tw, sd, hd in ((1, 0, 0, 0, (-4, 0)), (FIRE, -4, 0, 0, (-8, 0)), (1
 def hands_low(f, jitter=0.0):
     o_hand("L", f, (0.22 + jitter, -0.22, 1.02), (0.05, -0.6, 0.8), palm("L", (0.3, -0.9, -0.3)), (0.5, 0.3, 0.9))
     o_hand("R", f, (-0.22 - jitter, -0.22, 1.02), (-0.05, -0.6, 0.8), palm("R", (-0.3, -0.9, -0.3)), (-0.5, 0.3, 0.9))
-hands_low(1); hands_low(FIRE, 0.01)
+hands_low(1); hands_low(18, 0.015); hands_low(FIRE, 0.03)   # small startle before the shot
 # the snap up (slow motion): f163 -> f390
 def hands_up(f, k=1.0, jl=(0, 0, 0), rl=(0, 0, 0), right=True):
     o_hand("L", f, Vector((0.07, -0.30, 1.50)) + Vector(jl), (0.04, -0.1, 1.0), palm("L", (-0.15, 1.0, 0.0)), (0.45, -0.1, 1.1))
@@ -110,20 +110,29 @@ hands_up(262); hands_up(400, jl=(0.0, 0.004, 0.003)); hands_up(541, jl=(0.0, 0.0
 hands_up(550, jl=(0.015, 0.045, 0.02), rl=(-0.05, 0.0, 0)); hands_up(620, jl=(0.02, 0.05, 0.015), rl=(-0.05, 0.0, 0))
 hands_up(760, jl=(0.015, 0.035, 0.01), rl=(-0.04, 0.0, 0)); hands_up(880, jl=(0.01, 0.03, 0.0), rl=(0, 0.01, 0))
 # wince: left hand flinches away (finger hit) f890-930
-hands_up(900, jl=(0.05, 0.06, -0.04), rl=(-0.01, 0.02, -0.03)); hands_up(970, jl=(0.04, 0.05, -0.06), rl=(-0.01, 0.02, -0.04))
+# wince (v006): the hit hand jerks back and down to the chest, curling; the other hand comes up open beside it (no contact)
+o_hand("L", 906, (0.14, -0.36, 1.37), (-0.2, -0.5, 0.8), palm("L", (-0.2, 0.8, 0.5)), (0.5, -0.05, 1.0))
+o_hand("L", 936, (0.08, -0.40, 1.27), (-0.1, -0.6, 0.8), palm("L", (0.2, 0.6, 0.7)), (0.5, 0.0, 0.95))
+o_hand("L", 975, (0.09, -0.40, 1.28), (-0.1, -0.6, 0.8), palm("L", (0.2, 0.6, 0.7)), (0.5, 0.0, 0.95))
+o_hand("R", 906, (-0.14, -0.33, 1.36), (0.3, -0.2, 0.9), palm("R", (0.3, -0.9, 0.1)), (-0.45, -0.1, 1.05))
+o_hand("R", 936, (-0.15, -0.42, 1.25), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 0.2)), (-0.45, -0.2, 1.0))
+o_hand("R", 975, (-0.15, -0.42, 1.26), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 0.2)), (-0.45, -0.2, 1.0))
 # right hand flies to the right side of his neck f990-1010, left hand stays up and drops a bit
-o_hand("R", 990, (-0.27, -0.18, 1.42), (0.25, 0.6, 0.6), palm("R", (0.9, 0.1, 0.0)), (-0.5, -0.2, 1.0))
-o_hand("R", 1004, (-0.2, -0.075, 1.465), (0.22, 0.75, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1060, (-0.2, -0.07, 1.46), (0.22, 0.75, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-hands_up(1004, jl=(0.04, 0.03, -0.1), right=False)
+o_hand("R", 990, (-0.27, -0.2, 1.46), (0.2, 0.6, 0.6), palm("R", (0.95, 0.0, -0.1)), (-0.55, -0.2, 1.0))
+o_hand("R", 1030, (-0.2, -0.072, 1.457), (0.22, 0.72, 0.4), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1004, (-0.2, -0.07, 1.46), (0.22, 0.72, 0.4), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
+o_hand("R", 1060, (-0.2, -0.068, 1.455), (0.22, 0.72, 0.4), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
+o_hand("L", 1004, (0.1, -0.40, 1.28), (-0.15, -0.6, 0.75), palm("L", (0.2, 0.6, 0.7)), (0.5, 0.0, 0.95))
 # look at the ring: left hand lowered to chest in front, palm toward him, back of hand up so the ring faces camera
 o_hand("L", 1075, (0.12, -0.32, 1.28), (-0.6, -0.4, 0.5), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
 o_hand("L", 1150, (0.10, -0.34, 1.27), (-0.6, -0.45, 0.45), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
 o_hand("L", 1235, (0.13, -0.33, 1.25), (-0.55, -0.45, 0.5), palm("L", (0.05, 0.6, 0.6)), (0.5, 0.0, 0.9))
 o_hand("L", 1262, (0.33, -0.32, 1.1), (-0.4, -0.6, 0.4), palm("L", (0.1, 0.6, 0.7)), (0.5, 0.1, 0.9))
-o_hand("R", 1085, (-0.27, -0.22, 1.36), (0.2, 0.2, 0.9), palm("R", (0.9, 0.0, 0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1120, (-0.28, -0.3, 1.12), (0.3, 0.5, 0.6), palm("R", (0.9, 0.2, 0.0)), (-0.5, -0.3, 1.0))
-o_hand("R", 1240, (-0.3, -0.14, 0.98), (0.0, -0.3, -1.0), palm("R", (-0.9, 0.0, 0.0)), (-0.5, 0.3, 1.0))
+o_hand("R", 1072, (-0.3, -0.15, 1.44), (0.1, 0.4, 0.8), palm("R", (0.9, 0.0, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1083, (-0.31, -0.25, 1.35), (-0.15, -0.9, 0.2), palm("R", (-0.3, 0.1, -0.9)), (-0.55, 0.0, 1.0))   # fingers lead forward-out while the hand comes down
+o_hand("R", 1095, (-0.29, -0.3, 1.26), (0.1, -0.3, -0.9), palm("R", (-0.6, -0.3, 0.0)), (-0.5, 0.1, 1.0))
+o_hand("R", 1130, (-0.25, -0.1, 1.0), (0.0, -0.2, -1.0), palm("R", (-0.9, 0.0, 0.0)), (-0.5, 0.3, 1.0))
+o_hand("R", 1240, (-0.25, -0.11, 0.99), (0.0, -0.25, -1.0), palm("R", (-0.9, 0.0, 0.0)), (-0.5, 0.3, 1.0))
 # fingers
 for s in "LR":
     key_fingers(ROW, s, 1, curl=25, spread=4, thumb=10); key_fingers(ROW, s, FIRE, curl=18, spread=8, thumb=5)
@@ -131,7 +140,7 @@ for s in "LR":
     key_fingers(ROW, s, 541, curl=-4, spread=26, thumb=-10)
 key_fingers(ROW, "L", 550, curl=-12, spread=32, thumb=-14); key_fingers(ROW, "L", 700, curl=-2, spread=26, thumb=-10)
 key_fingers(ROW, "L", 890, curl=-2, spread=26, thumb=-10); key_fingers(ROW, "L", 905, curl=35, spread=10, thumb=20)
-key_fingers(ROW, "L", 1000, curl=25, spread=8, thumb=15); key_fingers(ROW, "R", 1000, curl=10, spread=4, thumb=10)
+key_fingers(ROW, "L", 1000, curl=40, spread=2, thumb=20); key_fingers(ROW, "R", 936, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 975, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 1000, curl=10, spread=4, thumb=15); key_fingers(ROW, "R", 1110, curl=22, spread=2, thumb=10)
 key_fingers(ROW, "L", 1075, curl=4, spread=10, thumb=0); key_fingers(ROW, "L", 1150, curl=2, spread=12, thumb=0)
 key_fingers(ROW, "L", 1235, curl=20, spread=4, thumb=10); key_fingers(ROW, "R", 1240, curl=25, spread=2, thumb=10)
 
@@ -175,8 +184,8 @@ for f in range(1252, 1411, 6):
     for s, sx in (("L", 1), ("R", -1)):
         if s == "L" and f < 1263: continue
         sw = ph * 0.12 * (1 if s == "L" else -1)
-        loc = p + Rz @ Vector((0.31 * sx, -sw - 0.07, 0.95))
-        if s == "L" and f < 1270: loc = p + Rz @ Vector((0.4 * sx, -0.24, 1.04))   # swing out around the hip while turning into the walk
+        loc = p + Rz @ Vector((0.29 * sx, -sw - 0.06, 0.94))
+        if s == "L" and f < 1270: loc = p + Rz @ Vector((0.37 * sx, -0.22, 1.04))   # swing out around the hip while turning into the walk
         HO.key_hand(s, f, loc, Rz @ Vector((0.0, -0.1, -1.0)), Rz @ Vector((-0.9 * sx, 0.0, 0.0)), pole=p + Rz @ Vector((0.4 * sx, 0.4, 1.1)))
 for s in "LR": key_fingers(ROW, s, 1260, curl=38, spread=0, thumb=20)
 
