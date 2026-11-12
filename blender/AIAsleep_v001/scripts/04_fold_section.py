@@ -190,7 +190,7 @@ for f, p, a, l in KEYS:
     cam.location = p; cam.keyframe_insert("location", frame=f); aim.location = a; aim.keyframe_insert("location", frame=f); camd.lens = l; camd.keyframe_insert("lens", frame=f)
 for idb in (cam, aim, camd):
     for fc in fcurves(idb):
-        for kp in fc.keyframe_points: kp.handle_left_type = kp.handle_right_type = "AUTO"
+        for kp in fc.keyframe_points: kp.handle_left_type = kp.handle_right_type = "AUTO_CLAMPED"
         fc.update()
 for fc in fcurves(camd):
     if "fstop" in fc.data_path:

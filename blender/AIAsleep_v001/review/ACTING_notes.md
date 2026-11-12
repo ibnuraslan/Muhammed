@@ -24,3 +24,17 @@ The question for each still: would a real driver move like this, here, for this 
 | 17 | Hands | Re-grip at 11.5 s is a half-open hand hovering for about 0.4 s. | Shorter hover (8 frames) and a lower lift, so the palm stays on the rim. |
 
 Story-beat frames (`beats.json`) are unchanged.
+
+## Found on the after pass and fixed
+| # | Time (frame) | Problem | Fix |
+|---|---|---|---|
+| 18 | 28.5 s (1711) | The IR eye close-up was still a grey blank: Bezier overshoot carried the camera to 1.7 cm off the cornea. | Removed the back-and-forth key at 1770. All camera and aim keys now use clamped auto handles (no overshoot through faces), and 1680/1728 are re-keyed to the real eye position. |
+| 19 | 28.5–29.6 s | Two mirror near-passes at 629 and 1133 (2 cm). | Keys 635/1140 lowered under the mirror. |
+| 20 | 20.0 s | Gesture hand flat-splayed. | Relaxed half-curl (k 0.5). |
+
+## Result
+- `review/v004_after_half_s_A.jpg`, `review/v004_after_half_s_B.jpg`: the same half-second sheet on v004.
+- `review/v004_hand_closeups.jpg`: 24 close-ups of every hand action (grips, re-grip, gesture, steering corrections, sigh).
+- `review/v004_clip_scan.json`: director `clip_scan.py`, 0 bad ranges.
+- `review/v004_hand_audit.txt`: hand vs hand, torso/shirt and head all 0. The rim check flags 1–2 finger-bone samples on grip frames, which is the rim inside the curled fist.
+- `review/v004_camera_clearance.txt`: the window-frame entry at 121–123, a sun-visor pass at 723 (2.9 cm) and the intended skin dive at 1791 only.

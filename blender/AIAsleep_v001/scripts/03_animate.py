@@ -130,7 +130,7 @@ hands(1000, -90, 90)
 # beat 6: eyes relax -> red again; slump, frustrated exhale, right hand gesture off the wheel
 face(1100, lid=0, brow_up=0); seat(1110, flex=-14, spine=8, head=(0, -6))
 face(1150, brow_knit=20, jaw=2); seat(1160, flex=-18, spine=12, dz=-0.015, head=(-10, 0), side=-3)
-hand("R", 1180, 90); hand("R", 1205, 85, Vector((-0.02, 0.07, 0.07)), 0.35); hand("R", 1240, 85, Vector((-0.02, 0.06, 0.06)), 0.4); hand("R", 1265, 90)
+hand("R", 1180, 90); hand("R", 1205, 85, Vector((-0.02, 0.07, 0.07)), 0.5); hand("R", 1240, 85, Vector((-0.02, 0.06, 0.06)), 0.55); hand("R", 1265, 90)
 face(1215, brow_knit=18, jaw=3); seat(1230, flex=-16, spine=10, head=(4, -20)); seat(1302, flex=-15, spine=8, head=(0, 0)); face(1302, brow_knit=12)
 hand("L", 1265, -90)
 # beat 7..: steady driving with breathing and occasional blinks
@@ -261,7 +261,6 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (1620, V((0.0, -0.36, 1.27)), FACE, 40),
  (1680, EYE + V((-0.004, -0.115, 0.0)), EYE + V((0, 0, 0)), 50),
  (1728, EYE + V((0.008, -0.095, 0.002)), EYE + V((0, 0, 0)), 55),
- (1770, EYE + V((0.0, -0.17, 0.004)), EYE, 40),
  (1782, EYE + V((0.002, -0.075, 0.004)), EYE + V((0.004, 0, 0)), 40),
  (1830, EYE + V((0.000, -0.050, 0.002)), INNER, 40),
  (1900, EYE + V((-0.030, -0.060, 0.012)), INNER, 35),
@@ -289,7 +288,7 @@ def fcs(idb):
         return [fc for l in ad.action.layers for s in l.strips for cb in s.channelbags for fc in cb.fcurves]
 for idb in (cam, aim, camd):
     for fc in fcs(idb):
-        for kp in fc.keyframe_points: kp.interpolation = "BEZIER"; kp.handle_left_type = kp.handle_right_type = "AUTO"
+        for kp in fc.keyframe_points: kp.interpolation = "BEZIER"; kp.handle_left_type = kp.handle_right_type = "AUTO_CLAMPED"
 for fc in fcs(mover):
     for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 camd.dof.use_dof = True; camd.dof.focus_object = aim; camd.dof.aperture_fstop = 4.0
