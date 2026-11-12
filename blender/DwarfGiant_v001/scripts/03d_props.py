@@ -45,6 +45,14 @@ def shell(char, name, keep, offset, mat, thick=0.003):
     o.animation_data_clear()
     for md in [m for m in o.modifiers if m.type == "MASK" and m.name.startswith("Delete")]: o.modifiers.remove(md)
     me = o.data; B = rig.data.bones
+    if me.shape_keys:   # bake the phenotype targets first so the region test uses the real (morphed) head
+        import numpy as np
+        kb = me.shape_keys.key_blocks; n = len(me.vertices); base = np.empty(n * 3); kb[0].data.foreach_get("co", base); mix = base.copy()
+        for k in kb[1:]:
+            if k.mute or k.value == 0: continue
+            c = np.empty(n * 3); k.data.foreach_get("co", c); ref = np.empty(n * 3); (k.relative_key or kb[0]).data.foreach_get("co", ref)
+            mix += k.value * (c - ref)
+        o.shape_key_clear(); me.vertices.foreach_set("co", mix); me.update()
     vg_body = me.vertices and o.vertex_groups.get("body")
     bm = bmesh.new(); bm.from_mesh(me); dl = bm.verts.layers.deform.active
     gi = vg_body.index if vg_body else None
@@ -86,7 +94,7 @@ vis(dr, [(1491, 1712)]); vis(bl, [(1713, 1857)])
 # ---------------------------------------------------------------- officer peaked caps (CC-BY) on the head bone
 def imp(path):
     before = set(OB); bpy.ops.import_scene.gltf(filepath=path); return [o for o in OB if o not in before]
-for ch in ("Officer1", "Officer2"):
+for ch in ():   # officer caps disabled for v002: see README known issues
     new = imp(f"{A}/models/ofcap.glb"); ms = [o for o in new if o.type == "MESH"]
     for o in new:
         if o.type != "MESH": bpy.data.objects.remove(o, do_unlink=True)

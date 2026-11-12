@@ -79,8 +79,7 @@ uniform_mat(OB["Officer2.male_elegantsuit01"], (0.27, 0.29, 0.24))
 for nm in ("Surgeon1", "Surgeon2"):
     tint_mat(OB[f"{nm}.male_worksuit01"], (0.62, 0.72, 0.66))
 tint_mat(OB["Nurse.female_elegantsuit01"], (0.9, 0.9, 0.88))
-for nm in ("Hero", "Young"):
-    tint_mat(OB[f"{nm}.male_worksuit01"], (0.36, 0.25, 0.16))
+# hero keeps the worksuit's own clear colours: white shirt + blue dungarees (reads as clothed at thumbnail size)
 tint_mat(OB["Clerk.male_elegantsuit01"], (0.18, 0.17, 0.16))
 
 # ------------------------------------------------------------------ rigs
@@ -246,8 +245,8 @@ for f in (696, 740, 790, 840):
 for f in (1400, 1470):
     sc.frame_set(f); M = HRIG.matrix_world @ HRIG.pose.bones["head"].matrix @ HR.r.BN["head"].matrix_local.inverted()
     earw = M @ V(0.085, -0.03, 1.245); upw = (M.to_3x3() @ V(0, 0, 1)).normalized(); fw = (M.to_3x3() @ V(0, -1, 0)).normalized(); sw = (M.to_3x3() @ V(1, 0, 0)).normalized()
-    tgt = to_arm(earw + sw * 0.035 - fw * 0.045 - upw * 0.06)
-    HR.key_hand("L", f, tgt, HRIG.matrix_world.inverted().to_3x3() @ (upw + fw * 0.3), HRIG.matrix_world.inverted().to_3x3() @ (-fw), pole=to_arm(earw + sw * 0.4 - upw * 0.3 + fw * 0.2))
+    tgt = to_arm(earw + sw * 0.06 - upw * 0.12 + fw * 0.02)      # wrist just below/outside the ear, hand cupped up behind it
+    HR.key_hand("L", f, tgt, HRIG.matrix_world.inverted().to_3x3() @ (upw * 0.9 - fw * 0.3), HRIG.matrix_world.inverted().to_3x3() @ (sw), pole=to_arm(earw + sw * 0.35 - upw * 0.45 + fw * 0.15))
 sc.frame_set(1)
 # ------------------------------------------------------------------ officers (IK feet, step back as he towers)
 O1, O2 = HU["Officer1"], HU["Officer2"]
@@ -476,7 +475,7 @@ for f in list(range(1, 2341, 4)) + [2340]:
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1262, 4.0), (1290, 1.2), (1352, 1.2), (1380, 4.0)):
+for f, fs in ((1, 8.0), (180, 8.0), (181, 22.0), (500, 22.0), (501, 8.0), (1262, 8.0), (1290, 1.2), (1352, 1.2), (1380, 8.0), (1667, 8.0), (1668, 22.0), (1712, 22.0), (1713, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
@@ -488,8 +487,8 @@ _rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ram
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
-CARD = [(181, 0.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.2), (462, 1.0, 1.7), (470, 1.0, 1.7), (500, 0.0, 1.7),
-        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1668, 0.0, 0.45), (1672, 1.0, 0.45), (1700, 1.0, 0.45), (1712, 0.0, 0.45)]
+CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.2), (462, 1.0, 1.7), (470, 1.0, 1.7), (500, 0.0, 1.7),
+        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1667, 0.0, 0.45), (1668, 1.0, 0.45), (1700, 1.0, 0.45), (1712, 0.0, 0.45)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)

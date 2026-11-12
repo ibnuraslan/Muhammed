@@ -21,7 +21,13 @@ def curl_sign(rig, s):
         pb.rotation_quaternion = Quaternion((1, 0, 0), R_(30 * sg)); bpy.context.view_layer.update()
         res[sg] = (rig.matrix_world.inverted() @ tip_world(rig, "finger3-2." + s)).dot(nn.normalized())
     pb.rotation_quaternion = old; bpy.context.view_layer.update()
-    return 1 if res[1] < res[-1] else -1      # palm normal from key_hand points out of the back of the hand in MPFB
+    # MakeHuman rest pose has the palms facing down: the curl is the sign that moves the fingertip down
+    z = {}
+    for sg in (1, -1):
+        pb.rotation_quaternion = Quaternion((1, 0, 0), R_(30 * sg)); bpy.context.view_layer.update()
+        z[sg] = tip_world(rig, "finger3-2." + s).z
+    pb.rotation_quaternion = old; bpy.context.view_layer.update()
+    return 1 if z[1] < z[-1] else -1
 
 sc.frame_set(1)
 nlim = 0
@@ -51,7 +57,10 @@ for rig in RIGS:
                     pb.rotation_quaternion = Quaternion((1, 0, 0), R_(deg * sg)); pb.keyframe_insert("rotation_quaternion", frame=1, group=n)
         # wrist: +-60 flex, +-25 side
         pb = rig.pose.bones["wrist." + s]
+        if any(cc.type == "COPY_ROTATION" for cc in pb.constraints):
+            nlim += 0   # IK-driven hand: orientation is solved explicitly (key_hand); a clamp here folds the hand into a mitten
         c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"; c.name = "HandLimit"
+        if any(cc.type == "COPY_ROTATION" for cc in pb.constraints): c.mute = True
         # which local axis is flex (moves fingertips along the palm normal) vs side (in the palm plane)?
         B = rig.data.bones; wr = B["wrist." + s].head_local
         nn = (B["finger3-1." + s].head_local - wr).cross(B["finger2-1." + s].head_local - B["finger5-1." + s].head_local).normalized()
