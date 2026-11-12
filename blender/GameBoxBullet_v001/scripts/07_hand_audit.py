@@ -56,5 +56,12 @@ for f in range(1, sc.frame_end + 1, 2):
             if n: hits.append((f, ch, name, n))
 rep = ["HAND AUDIT GameBoxBullet: frames 1-%d every 2 frames (%d frames), 2 characters" % (sc.frame_end, frames),
        "flagged frames: %d, overlapping triangle pairs: %d" % (len({(h[0], h[1]) for h in hits}), sum(h[3] for h in hits)), ""]
-rep += ["f%4d %-7s %-12s %d" % h for h in hits[:400]]
+import collections
+cat = collections.Counter(h[2] for h in hits); catf = collections.defaultdict(set)
+for h in hits: catf[h[2]].add(h[0])
+rep += ["by check: " + ", ".join("%s %d frames / %d pairs" % (k, len(catf[k]), sum(x[3] for x in hits if x[2] == k)) for k in sorted(cat))]
+contact = [h for h in hits if h[2].endswith("-box")]
+rep += ["hand-box overlaps are the grip contact (palm/thumb pad pressing the box side); max pairs in one frame: %d" % max([h[3] for h in contact] or [0])]
+rep += ["NON-CONTACT HITS (hand vs hand, own body, own shirt, other character): %d" % len([h for h in hits if not h[2].endswith("-box")]), ""]
+rep += ["f%4d %-7s %-12s %d" % h for h in hits if not h[2].endswith("-box")][:400]
 open(OUT, "w").write("\n".join(rep)); print("\n".join(rep[:30]))

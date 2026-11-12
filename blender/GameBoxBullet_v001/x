@@ -1,0 +1,45 @@
+HAND AUDIT GameBoxBullet: frames 1-1500 every 2 frames (8 frames), 2 characters
+flagged frames: 8, overlapping triangle pairs: 1148
+
+f   1 Gamer   handL-box    26
+f   1 Gamer   handR-box    26
+f   1 Gamer   handL-box    16
+f   1 Gamer   handR-box    16
+f   1 Gamer   handR-box    40
+f   1 Gamer   handL-box    40
+f  61 Gamer   handL-box    26
+f  61 Gamer   handR-box    26
+f  61 Gamer   handL-box    16
+f  61 Gamer   handR-box    16
+f  61 Gamer   handR-box    40
+f  61 Gamer   handL-box    40
+f 301 Gamer   handL-box    26
+f 301 Gamer   handR-box    26
+f 301 Gamer   handL-box    16
+f 301 Gamer   handR-box    16
+f 301 Gamer   handR-box    40
+f 301 Gamer   handL-box    40
+f 451 Gamer   handL-box    26
+f 451 Gamer   handR-box    26
+f 451 Gamer   handL-box    16
+f 451 Gamer   handR-box    16
+f 451 Gamer   handR-box    40
+f 451 Gamer   handL-box    40
+f 801 Gamer   handR-box    26
+f 801 Gamer   handR-box    16
+f 801 Gamer   handR-box    40
+f1101 Gamer   handR-box    26
+f1101 Gamer   handR-box    16
+f1101 Gamer   handR-box    40
+f1421 Gamer   handL-box    26
+f1421 Gamer   handR-box    26
+f1421 Gamer   handL-box    16
+f1421 Gamer   handR-box    16
+f1421 Gamer   handR-box    40
+f1421 Gamer   handL-box    40
+f1491 Gamer   handL-box    26
+f1491 Gamer   handR-box    26
+f1491 Gamer   handL-box    16
+f1491 Gamer   handR-box    16
+f1491 Gamer   handR-box    40
+f1491 Gamer   handL-box    40

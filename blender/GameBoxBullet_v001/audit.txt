@@ -1,370 +1,1082 @@
 AUDIT GameBoxBullet  frames 1-1500 step 5
 
-worst box_chest_gap          f1141  +0.1223
+worst box_chest_gap          f1266  +0.1087
 worst fingertip_in_box_L     f   1  +0.0000
 worst fingertip_in_box_R     f   1  +0.0000
-worst penetration_verts      f1416  +31.0000
+worst penetration_verts      f1401  +215.0000
 worst sole_L                 f1391  -0.0001
 worst sole_R                 f 461  +0.0473
-worst wrist_gap_L            f 396  +0.0360
-worst wrist_gap_R            f 396  +0.0360
+worst wrist_gap_L            f 214  -0.0700
+worst wrist_gap_R            f  36  -0.0700
 min   camera_clearance       f 116  +0.0267 m
-penetration: 356 sampled frames with any body/clothes vertex inside the box, 3451 vertex-hits total
+penetration: 356 sampled frames with any body/clothes vertex inside the box, 75587 vertex-hits total
 
-356 failures
-FAIL penetration_verts  f   1 14.0000
-FAIL penetration_verts  f   6 14.0000
-FAIL penetration_verts  f  11 13.0000
-FAIL penetration_verts  f  16 12.0000
-FAIL penetration_verts  f  21 12.0000
-FAIL penetration_verts  f  26 12.0000
-FAIL penetration_verts  f  31 11.0000
-FAIL penetration_verts  f  36 11.0000
-FAIL penetration_verts  f  41 11.0000
-FAIL penetration_verts  f  46 11.0000
-FAIL penetration_verts  f  51 11.0000
-FAIL penetration_verts  f  56 11.0000
-FAIL penetration_verts  f  61 10.0000
-FAIL penetration_verts  f  66 11.0000
-FAIL penetration_verts  f  71 11.0000
-FAIL penetration_verts  f  76 11.0000
-FAIL penetration_verts  f  81 11.0000
-FAIL penetration_verts  f  86 11.0000
-FAIL penetration_verts  f  91 12.0000
-FAIL penetration_verts  f  96 13.0000
-FAIL penetration_verts  f 101 14.0000
-FAIL penetration_verts  f 106 14.0000
-FAIL penetration_verts  f 111 15.0000
-FAIL penetration_verts  f 116 15.0000
-FAIL penetration_verts  f 121 14.0000
-FAIL penetration_verts  f 126 16.0000
-FAIL penetration_verts  f 131 16.0000
-FAIL penetration_verts  f 136 16.0000
-FAIL penetration_verts  f 141 16.0000
-FAIL penetration_verts  f 146 16.0000
-FAIL penetration_verts  f 151 16.0000
-FAIL penetration_verts  f 156 16.0000
-FAIL penetration_verts  f 160 16.0000
-FAIL penetration_verts  f 161 16.0000
-FAIL penetration_verts  f 162 16.0000
-FAIL penetration_verts  f 163 15.0000
-FAIL penetration_verts  f 164 15.0000
-FAIL penetration_verts  f 165 15.0000
-FAIL penetration_verts  f 166 14.0000
-FAIL penetration_verts  f 167 14.0000
-FAIL penetration_verts  f 168 14.0000
-FAIL penetration_verts  f 169 15.0000
-FAIL penetration_verts  f 170 15.0000
-FAIL penetration_verts  f 171 15.0000
-FAIL penetration_verts  f 172 15.0000
-FAIL penetration_verts  f 173 15.0000
-FAIL penetration_verts  f 174 15.0000
-FAIL penetration_verts  f 175 15.0000
-FAIL penetration_verts  f 176 15.0000
-FAIL penetration_verts  f 177 15.0000
-FAIL penetration_verts  f 178 15.0000
-FAIL penetration_verts  f 179 15.0000
-FAIL penetration_verts  f 180 15.0000
-FAIL penetration_verts  f 181 14.0000
-FAIL penetration_verts  f 182 14.0000
-FAIL penetration_verts  f 183 14.0000
-FAIL penetration_verts  f 184 14.0000
-FAIL penetration_verts  f 185 14.0000
-FAIL penetration_verts  f 186 14.0000
-FAIL penetration_verts  f 187 14.0000
-FAIL penetration_verts  f 188 14.0000
-FAIL penetration_verts  f 189 14.0000
-FAIL penetration_verts  f 190 13.0000
-FAIL penetration_verts  f 191 14.0000
-FAIL penetration_verts  f 192 14.0000
-FAIL penetration_verts  f 193 14.0000
-FAIL penetration_verts  f 194 13.0000
-FAIL penetration_verts  f 195 13.0000
-FAIL penetration_verts  f 196 13.0000
-FAIL penetration_verts  f 197 13.0000
-FAIL penetration_verts  f 198 13.0000
-FAIL penetration_verts  f 199 14.0000
-FAIL penetration_verts  f 200 14.0000
-FAIL penetration_verts  f 201 14.0000
-FAIL penetration_verts  f 202 14.0000
-FAIL penetration_verts  f 203 14.0000
-FAIL penetration_verts  f 204 14.0000
-FAIL penetration_verts  f 205 14.0000
-FAIL penetration_verts  f 206 14.0000
-FAIL penetration_verts  f 207 14.0000
-FAIL penetration_verts  f 208 14.0000
-FAIL penetration_verts  f 209 14.0000
-FAIL penetration_verts  f 210 13.0000
-FAIL penetration_verts  f 211 13.0000
-FAIL penetration_verts  f 212 13.0000
-FAIL penetration_verts  f 213 13.0000
-FAIL penetration_verts  f 214 13.0000
-FAIL penetration_verts  f 215 13.0000
-FAIL penetration_verts  f 216 13.0000
-FAIL penetration_verts  f 217 13.0000
-FAIL penetration_verts  f 218 13.0000
-FAIL penetration_verts  f 219 13.0000
-FAIL penetration_verts  f 220 13.0000
-FAIL penetration_verts  f 221 12.0000
-FAIL penetration_verts  f 222 12.0000
-FAIL penetration_verts  f 223 12.0000
-FAIL penetration_verts  f 224 12.0000
-FAIL penetration_verts  f 225 12.0000
-FAIL penetration_verts  f 226 12.0000
-FAIL penetration_verts  f 227 12.0000
-FAIL penetration_verts  f 228 12.0000
-FAIL penetration_verts  f 229 11.0000
-FAIL penetration_verts  f 231 11.0000
-FAIL penetration_verts  f 236 11.0000
-FAIL penetration_verts  f 241 11.0000
-FAIL penetration_verts  f 246 11.0000
-FAIL penetration_verts  f 251 11.0000
-FAIL penetration_verts  f 256 12.0000
-FAIL penetration_verts  f 261 11.0000
-FAIL penetration_verts  f 266 11.0000
-FAIL penetration_verts  f 271 11.0000
-FAIL penetration_verts  f 276 12.0000
-FAIL penetration_verts  f 281 11.0000
-FAIL penetration_verts  f 286 11.0000
-FAIL penetration_verts  f 291 10.0000
-FAIL penetration_verts  f 296 10.0000
-FAIL penetration_verts  f 301 10.0000
-FAIL penetration_verts  f 306 10.0000
-FAIL penetration_verts  f 311 10.0000
-FAIL penetration_verts  f 316 10.0000
-FAIL penetration_verts  f 321 8.0000
-FAIL penetration_verts  f 326 8.0000
-FAIL penetration_verts  f 331 8.0000
-FAIL penetration_verts  f 336 8.0000
-FAIL penetration_verts  f 341 7.0000
-FAIL penetration_verts  f 346 7.0000
-FAIL penetration_verts  f 351 7.0000
-FAIL penetration_verts  f 356 7.0000
-FAIL penetration_verts  f 361 7.0000
-FAIL penetration_verts  f 366 7.0000
-FAIL penetration_verts  f 371 7.0000
-FAIL penetration_verts  f 376 7.0000
-FAIL penetration_verts  f 381 7.0000
-FAIL penetration_verts  f 386 7.0000
-FAIL penetration_verts  f 391 7.0000
-FAIL penetration_verts  f 396 6.0000
-FAIL penetration_verts  f 401 6.0000
-FAIL penetration_verts  f 406 6.0000
-FAIL penetration_verts  f 411 6.0000
-FAIL penetration_verts  f 416 6.0000
-FAIL penetration_verts  f 421 6.0000
-FAIL penetration_verts  f 426 7.0000
-FAIL penetration_verts  f 431 6.0000
-FAIL penetration_verts  f 436 6.0000
-FAIL penetration_verts  f 441 6.0000
-FAIL penetration_verts  f 446 6.0000
-FAIL penetration_verts  f 451 6.0000
-FAIL penetration_verts  f 456 6.0000
-FAIL penetration_verts  f 461 8.0000
-FAIL penetration_verts  f 466 8.0000
-FAIL penetration_verts  f 471 8.0000
-FAIL penetration_verts  f 476 8.0000
-FAIL penetration_verts  f 481 7.0000
-FAIL penetration_verts  f 486 7.0000
-FAIL penetration_verts  f 491 6.0000
-FAIL penetration_verts  f 496 6.0000
-FAIL penetration_verts  f 501 6.0000
-FAIL penetration_verts  f 506 6.0000
-FAIL penetration_verts  f 511 6.0000
-FAIL penetration_verts  f 516 6.0000
-FAIL penetration_verts  f 521 6.0000
-FAIL penetration_verts  f 526 6.0000
-FAIL penetration_verts  f 531 6.0000
-FAIL penetration_verts  f 536 6.0000
-FAIL penetration_verts  f 541 6.0000
-FAIL penetration_verts  f 546 6.0000
-FAIL penetration_verts  f 551 6.0000
-FAIL penetration_verts  f 556 7.0000
-FAIL penetration_verts  f 561 7.0000
-FAIL penetration_verts  f 566 7.0000
-FAIL penetration_verts  f 571 7.0000
-FAIL penetration_verts  f 576 7.0000
-FAIL penetration_verts  f 581 7.0000
-FAIL penetration_verts  f 586 7.0000
-FAIL penetration_verts  f 591 7.0000
-FAIL penetration_verts  f 596 6.0000
-FAIL penetration_verts  f 601 6.0000
-FAIL penetration_verts  f 606 6.0000
-FAIL penetration_verts  f 611 6.0000
-FAIL penetration_verts  f 616 6.0000
-FAIL penetration_verts  f 621 6.0000
-FAIL penetration_verts  f 626 6.0000
-FAIL penetration_verts  f 631 6.0000
-FAIL penetration_verts  f 636 6.0000
-FAIL penetration_verts  f 641 6.0000
-FAIL penetration_verts  f 646 6.0000
-FAIL penetration_verts  f 651 6.0000
-FAIL penetration_verts  f 656 6.0000
-FAIL penetration_verts  f 661 6.0000
-FAIL penetration_verts  f 666 6.0000
-FAIL penetration_verts  f 671 7.0000
-FAIL penetration_verts  f 676 7.0000
-FAIL penetration_verts  f 681 7.0000
-FAIL penetration_verts  f 686 7.0000
-FAIL penetration_verts  f 691 7.0000
-FAIL penetration_verts  f 696 7.0000
-FAIL penetration_verts  f 701 7.0000
-FAIL penetration_verts  f 706 6.0000
-FAIL penetration_verts  f 711 6.0000
-FAIL penetration_verts  f 716 6.0000
-FAIL penetration_verts  f 721 6.0000
-FAIL penetration_verts  f 726 6.0000
-FAIL penetration_verts  f 731 6.0000
-FAIL penetration_verts  f 736 6.0000
-FAIL penetration_verts  f 741 6.0000
-FAIL penetration_verts  f 746 6.0000
-FAIL penetration_verts  f 751 6.0000
-FAIL penetration_verts  f 756 6.0000
-FAIL penetration_verts  f 761 6.0000
-FAIL penetration_verts  f 766 6.0000
-FAIL penetration_verts  f 771 6.0000
-FAIL penetration_verts  f 776 6.0000
-FAIL penetration_verts  f 781 6.0000
-FAIL penetration_verts  f 786 6.0000
-FAIL penetration_verts  f 791 6.0000
-FAIL penetration_verts  f 796 6.0000
-FAIL penetration_verts  f 801 6.0000
-FAIL penetration_verts  f 806 6.0000
-FAIL penetration_verts  f 811 6.0000
-FAIL penetration_verts  f 816 6.0000
-FAIL penetration_verts  f 821 6.0000
-FAIL penetration_verts  f 826 6.0000
-FAIL penetration_verts  f 831 6.0000
-FAIL penetration_verts  f 836 6.0000
-FAIL penetration_verts  f 841 6.0000
-FAIL penetration_verts  f 846 6.0000
-FAIL penetration_verts  f 851 6.0000
-FAIL penetration_verts  f 856 6.0000
-FAIL penetration_verts  f 861 6.0000
-FAIL penetration_verts  f 866 6.0000
-FAIL penetration_verts  f 871 6.0000
-FAIL penetration_verts  f 876 7.0000
-FAIL penetration_verts  f 881 7.0000
-FAIL penetration_verts  f 886 7.0000
-FAIL penetration_verts  f 891 7.0000
-FAIL penetration_verts  f 896 7.0000
-FAIL penetration_verts  f 901 7.0000
-FAIL penetration_verts  f 906 7.0000
-FAIL penetration_verts  f 911 7.0000
-FAIL penetration_verts  f 916 7.0000
-FAIL penetration_verts  f 921 7.0000
-FAIL penetration_verts  f 926 7.0000
-FAIL penetration_verts  f 931 6.0000
-FAIL penetration_verts  f 936 6.0000
-FAIL penetration_verts  f 941 6.0000
-FAIL penetration_verts  f 946 6.0000
-FAIL penetration_verts  f 951 6.0000
-FAIL penetration_verts  f 956 6.0000
-FAIL penetration_verts  f 961 6.0000
-FAIL penetration_verts  f 966 6.0000
-FAIL penetration_verts  f 971 6.0000
-FAIL penetration_verts  f 976 6.0000
-FAIL penetration_verts  f 981 6.0000
-FAIL penetration_verts  f 986 6.0000
-FAIL penetration_verts  f 991 6.0000
-FAIL penetration_verts  f 996 6.0000
-FAIL penetration_verts  f1001 6.0000
-FAIL penetration_verts  f1006 6.0000
-FAIL penetration_verts  f1011 6.0000
-FAIL penetration_verts  f1016 6.0000
-FAIL penetration_verts  f1021 6.0000
-FAIL penetration_verts  f1026 6.0000
-FAIL penetration_verts  f1031 6.0000
-FAIL penetration_verts  f1036 6.0000
-FAIL penetration_verts  f1041 6.0000
-FAIL penetration_verts  f1046 6.0000
-FAIL penetration_verts  f1051 6.0000
-FAIL penetration_verts  f1056 6.0000
-FAIL penetration_verts  f1061 6.0000
-FAIL penetration_verts  f1066 6.0000
-FAIL penetration_verts  f1071 6.0000
-FAIL penetration_verts  f1076 6.0000
-FAIL penetration_verts  f1081 6.0000
-FAIL penetration_verts  f1086 6.0000
-FAIL penetration_verts  f1091 6.0000
-FAIL penetration_verts  f1096 6.0000
-FAIL penetration_verts  f1101 6.0000
-FAIL penetration_verts  f1106 6.0000
-FAIL penetration_verts  f1111 7.0000
-FAIL penetration_verts  f1116 7.0000
-FAIL penetration_verts  f1121 7.0000
-FAIL penetration_verts  f1126 7.0000
-FAIL penetration_verts  f1131 7.0000
-FAIL penetration_verts  f1136 7.0000
-FAIL penetration_verts  f1141 7.0000
-FAIL penetration_verts  f1146 7.0000
-FAIL penetration_verts  f1151 7.0000
-FAIL penetration_verts  f1156 7.0000
-FAIL penetration_verts  f1161 7.0000
-FAIL penetration_verts  f1166 7.0000
-FAIL penetration_verts  f1171 7.0000
-FAIL penetration_verts  f1176 6.0000
-FAIL penetration_verts  f1181 6.0000
-FAIL penetration_verts  f1186 6.0000
-FAIL penetration_verts  f1191 6.0000
-FAIL penetration_verts  f1196 6.0000
-FAIL penetration_verts  f1201 6.0000
-FAIL penetration_verts  f1206 6.0000
-FAIL penetration_verts  f1211 6.0000
-FAIL penetration_verts  f1216 6.0000
-FAIL penetration_verts  f1221 6.0000
-FAIL penetration_verts  f1226 6.0000
-FAIL penetration_verts  f1231 6.0000
-FAIL penetration_verts  f1236 6.0000
-FAIL penetration_verts  f1241 6.0000
-FAIL penetration_verts  f1246 6.0000
-FAIL penetration_verts  f1251 6.0000
-FAIL penetration_verts  f1256 6.0000
-FAIL penetration_verts  f1261 6.0000
-FAIL penetration_verts  f1266 6.0000
-FAIL penetration_verts  f1271 6.0000
-FAIL penetration_verts  f1276 6.0000
-FAIL penetration_verts  f1281 6.0000
-FAIL penetration_verts  f1286 6.0000
-FAIL penetration_verts  f1291 6.0000
-FAIL penetration_verts  f1296 6.0000
-FAIL penetration_verts  f1301 6.0000
-FAIL penetration_verts  f1306 6.0000
-FAIL penetration_verts  f1311 6.0000
-FAIL penetration_verts  f1316 6.0000
-FAIL penetration_verts  f1321 6.0000
-FAIL penetration_verts  f1326 6.0000
-FAIL penetration_verts  f1331 6.0000
-FAIL penetration_verts  f1336 6.0000
-FAIL penetration_verts  f1341 6.0000
-FAIL penetration_verts  f1346 6.0000
-FAIL penetration_verts  f1351 7.0000
-FAIL penetration_verts  f1356 7.0000
-FAIL penetration_verts  f1361 7.0000
-FAIL penetration_verts  f1366 8.0000
-FAIL penetration_verts  f1371 10.0000
-FAIL penetration_verts  f1376 11.0000
-FAIL penetration_verts  f1381 14.0000
-FAIL penetration_verts  f1386 16.0000
-FAIL penetration_verts  f1391 18.0000
-FAIL penetration_verts  f1396 19.0000
-FAIL penetration_verts  f1401 20.0000
-FAIL penetration_verts  f1406 25.0000
-FAIL penetration_verts  f1411 28.0000
-FAIL penetration_verts  f1416 31.0000
-FAIL penetration_verts  f1421 31.0000
-FAIL penetration_verts  f1426 31.0000
-FAIL penetration_verts  f1431 30.0000
-FAIL penetration_verts  f1436 29.0000
-FAIL penetration_verts  f1441 28.0000
-FAIL penetration_verts  f1446 26.0000
-FAIL penetration_verts  f1451 22.0000
-FAIL penetration_verts  f1456 19.0000
-FAIL penetration_verts  f1461 18.0000
-FAIL penetration_verts  f1466 18.0000
-FAIL penetration_verts  f1471 17.0000
-FAIL penetration_verts  f1476 16.0000
-FAIL penetration_verts  f1481 16.0000
-FAIL penetration_verts  f1486 16.0000
-FAIL penetration_verts  f1491 16.0000
-FAIL penetration_verts  f1496 16.0000
+1068 failures
+FAIL wrist_gap_L        f   1 -0.0700
+FAIL wrist_gap_R        f   1 -0.0700
+FAIL penetration_verts  f   1 212.0000
+FAIL wrist_gap_L        f   6 -0.0700
+FAIL wrist_gap_R        f   6 -0.0700
+FAIL penetration_verts  f   6 212.0000
+FAIL wrist_gap_L        f  11 -0.0700
+FAIL wrist_gap_R        f  11 -0.0700
+FAIL penetration_verts  f  11 211.0000
+FAIL wrist_gap_L        f  16 -0.0700
+FAIL wrist_gap_R        f  16 -0.0700
+FAIL penetration_verts  f  16 211.0000
+FAIL wrist_gap_L        f  21 -0.0700
+FAIL wrist_gap_R        f  21 -0.0700
+FAIL penetration_verts  f  21 213.0000
+FAIL wrist_gap_L        f  26 -0.0700
+FAIL wrist_gap_R        f  26 -0.0700
+FAIL penetration_verts  f  26 213.0000
+FAIL wrist_gap_L        f  31 -0.0700
+FAIL wrist_gap_R        f  31 -0.0700
+FAIL penetration_verts  f  31 213.0000
+FAIL wrist_gap_L        f  36 -0.0700
+FAIL wrist_gap_R        f  36 -0.0700
+FAIL penetration_verts  f  36 212.0000
+FAIL wrist_gap_L        f  41 -0.0700
+FAIL wrist_gap_R        f  41 -0.0700
+FAIL penetration_verts  f  41 212.0000
+FAIL wrist_gap_L        f  46 -0.0700
+FAIL wrist_gap_R        f  46 -0.0700
+FAIL penetration_verts  f  46 212.0000
+FAIL wrist_gap_L        f  51 -0.0700
+FAIL wrist_gap_R        f  51 -0.0700
+FAIL penetration_verts  f  51 212.0000
+FAIL wrist_gap_L        f  56 -0.0700
+FAIL wrist_gap_R        f  56 -0.0700
+FAIL penetration_verts  f  56 212.0000
+FAIL wrist_gap_L        f  61 -0.0700
+FAIL wrist_gap_R        f  61 -0.0700
+FAIL penetration_verts  f  61 212.0000
+FAIL wrist_gap_L        f  66 -0.0700
+FAIL wrist_gap_R        f  66 -0.0700
+FAIL penetration_verts  f  66 212.0000
+FAIL wrist_gap_L        f  71 -0.0700
+FAIL wrist_gap_R        f  71 -0.0700
+FAIL penetration_verts  f  71 212.0000
+FAIL wrist_gap_L        f  76 -0.0700
+FAIL wrist_gap_R        f  76 -0.0700
+FAIL penetration_verts  f  76 212.0000
+FAIL wrist_gap_L        f  81 -0.0700
+FAIL wrist_gap_R        f  81 -0.0700
+FAIL penetration_verts  f  81 213.0000
+FAIL wrist_gap_L        f  86 -0.0700
+FAIL wrist_gap_R        f  86 -0.0700
+FAIL penetration_verts  f  86 213.0000
+FAIL wrist_gap_L        f  91 -0.0700
+FAIL wrist_gap_R        f  91 -0.0700
+FAIL penetration_verts  f  91 213.0000
+FAIL wrist_gap_L        f  96 -0.0700
+FAIL wrist_gap_R        f  96 -0.0700
+FAIL penetration_verts  f  96 211.0000
+FAIL wrist_gap_L        f 101 -0.0700
+FAIL wrist_gap_R        f 101 -0.0700
+FAIL penetration_verts  f 101 211.0000
+FAIL wrist_gap_L        f 106 -0.0700
+FAIL wrist_gap_R        f 106 -0.0700
+FAIL penetration_verts  f 106 212.0000
+FAIL wrist_gap_L        f 111 -0.0700
+FAIL wrist_gap_R        f 111 -0.0700
+FAIL penetration_verts  f 111 212.0000
+FAIL wrist_gap_L        f 116 -0.0700
+FAIL wrist_gap_R        f 116 -0.0700
+FAIL penetration_verts  f 116 211.0000
+FAIL wrist_gap_L        f 121 -0.0700
+FAIL wrist_gap_R        f 121 -0.0700
+FAIL penetration_verts  f 121 212.0000
+FAIL wrist_gap_L        f 126 -0.0700
+FAIL wrist_gap_R        f 126 -0.0700
+FAIL penetration_verts  f 126 212.0000
+FAIL wrist_gap_L        f 131 -0.0700
+FAIL wrist_gap_R        f 131 -0.0700
+FAIL penetration_verts  f 131 212.0000
+FAIL wrist_gap_L        f 136 -0.0700
+FAIL wrist_gap_R        f 136 -0.0700
+FAIL penetration_verts  f 136 213.0000
+FAIL wrist_gap_L        f 141 -0.0700
+FAIL wrist_gap_R        f 141 -0.0700
+FAIL penetration_verts  f 141 213.0000
+FAIL wrist_gap_L        f 146 -0.0700
+FAIL wrist_gap_R        f 146 -0.0700
+FAIL penetration_verts  f 146 213.0000
+FAIL wrist_gap_L        f 151 -0.0700
+FAIL wrist_gap_R        f 151 -0.0700
+FAIL penetration_verts  f 151 213.0000
+FAIL wrist_gap_L        f 156 -0.0700
+FAIL wrist_gap_R        f 156 -0.0700
+FAIL penetration_verts  f 156 213.0000
+FAIL wrist_gap_L        f 160 -0.0700
+FAIL wrist_gap_R        f 160 -0.0700
+FAIL penetration_verts  f 160 212.0000
+FAIL wrist_gap_L        f 161 -0.0700
+FAIL wrist_gap_R        f 161 -0.0700
+FAIL penetration_verts  f 161 212.0000
+FAIL wrist_gap_L        f 162 -0.0700
+FAIL wrist_gap_R        f 162 -0.0700
+FAIL penetration_verts  f 162 212.0000
+FAIL wrist_gap_L        f 163 -0.0700
+FAIL wrist_gap_R        f 163 -0.0700
+FAIL penetration_verts  f 163 212.0000
+FAIL wrist_gap_L        f 164 -0.0700
+FAIL wrist_gap_R        f 164 -0.0700
+FAIL penetration_verts  f 164 212.0000
+FAIL wrist_gap_L        f 165 -0.0700
+FAIL wrist_gap_R        f 165 -0.0700
+FAIL penetration_verts  f 165 212.0000
+FAIL wrist_gap_L        f 166 -0.0700
+FAIL wrist_gap_R        f 166 -0.0700
+FAIL penetration_verts  f 166 212.0000
+FAIL wrist_gap_L        f 167 -0.0700
+FAIL wrist_gap_R        f 167 -0.0700
+FAIL penetration_verts  f 167 212.0000
+FAIL wrist_gap_L        f 168 -0.0700
+FAIL wrist_gap_R        f 168 -0.0700
+FAIL penetration_verts  f 168 212.0000
+FAIL wrist_gap_L        f 169 -0.0700
+FAIL wrist_gap_R        f 169 -0.0700
+FAIL penetration_verts  f 169 212.0000
+FAIL wrist_gap_L        f 170 -0.0700
+FAIL wrist_gap_R        f 170 -0.0700
+FAIL penetration_verts  f 170 212.0000
+FAIL wrist_gap_L        f 171 -0.0700
+FAIL wrist_gap_R        f 171 -0.0700
+FAIL penetration_verts  f 171 212.0000
+FAIL wrist_gap_L        f 172 -0.0700
+FAIL wrist_gap_R        f 172 -0.0700
+FAIL penetration_verts  f 172 212.0000
+FAIL wrist_gap_L        f 173 -0.0700
+FAIL wrist_gap_R        f 173 -0.0700
+FAIL penetration_verts  f 173 212.0000
+FAIL wrist_gap_L        f 174 -0.0700
+FAIL wrist_gap_R        f 174 -0.0700
+FAIL penetration_verts  f 174 212.0000
+FAIL wrist_gap_L        f 175 -0.0700
+FAIL wrist_gap_R        f 175 -0.0700
+FAIL penetration_verts  f 175 211.0000
+FAIL wrist_gap_L        f 176 -0.0700
+FAIL wrist_gap_R        f 176 -0.0700
+FAIL penetration_verts  f 176 211.0000
+FAIL wrist_gap_L        f 177 -0.0700
+FAIL wrist_gap_R        f 177 -0.0700
+FAIL penetration_verts  f 177 212.0000
+FAIL wrist_gap_L        f 178 -0.0700
+FAIL wrist_gap_R        f 178 -0.0700
+FAIL penetration_verts  f 178 212.0000
+FAIL wrist_gap_L        f 179 -0.0700
+FAIL wrist_gap_R        f 179 -0.0700
+FAIL penetration_verts  f 179 212.0000
+FAIL wrist_gap_L        f 180 -0.0700
+FAIL wrist_gap_R        f 180 -0.0700
+FAIL penetration_verts  f 180 212.0000
+FAIL wrist_gap_L        f 181 -0.0700
+FAIL wrist_gap_R        f 181 -0.0700
+FAIL penetration_verts  f 181 212.0000
+FAIL wrist_gap_L        f 182 -0.0700
+FAIL wrist_gap_R        f 182 -0.0700
+FAIL penetration_verts  f 182 212.0000
+FAIL wrist_gap_L        f 183 -0.0700
+FAIL wrist_gap_R        f 183 -0.0700
+FAIL penetration_verts  f 183 212.0000
+FAIL wrist_gap_L        f 184 -0.0700
+FAIL wrist_gap_R        f 184 -0.0700
+FAIL penetration_verts  f 184 212.0000
+FAIL wrist_gap_L        f 185 -0.0700
+FAIL wrist_gap_R        f 185 -0.0700
+FAIL penetration_verts  f 185 212.0000
+FAIL wrist_gap_L        f 186 -0.0700
+FAIL wrist_gap_R        f 186 -0.0700
+FAIL penetration_verts  f 186 212.0000
+FAIL wrist_gap_L        f 187 -0.0700
+FAIL wrist_gap_R        f 187 -0.0700
+FAIL penetration_verts  f 187 212.0000
+FAIL wrist_gap_L        f 188 -0.0700
+FAIL wrist_gap_R        f 188 -0.0700
+FAIL penetration_verts  f 188 212.0000
+FAIL wrist_gap_L        f 189 -0.0700
+FAIL wrist_gap_R        f 189 -0.0700
+FAIL penetration_verts  f 189 212.0000
+FAIL wrist_gap_L        f 190 -0.0700
+FAIL wrist_gap_R        f 190 -0.0700
+FAIL penetration_verts  f 190 212.0000
+FAIL wrist_gap_L        f 191 -0.0700
+FAIL wrist_gap_R        f 191 -0.0700
+FAIL penetration_verts  f 191 212.0000
+FAIL wrist_gap_L        f 192 -0.0700
+FAIL wrist_gap_R        f 192 -0.0700
+FAIL penetration_verts  f 192 211.0000
+FAIL wrist_gap_L        f 193 -0.0700
+FAIL wrist_gap_R        f 193 -0.0700
+FAIL penetration_verts  f 193 211.0000
+FAIL wrist_gap_L        f 194 -0.0700
+FAIL wrist_gap_R        f 194 -0.0700
+FAIL penetration_verts  f 194 211.0000
+FAIL wrist_gap_L        f 195 -0.0700
+FAIL wrist_gap_R        f 195 -0.0700
+FAIL penetration_verts  f 195 213.0000
+FAIL wrist_gap_L        f 196 -0.0700
+FAIL wrist_gap_R        f 196 -0.0700
+FAIL penetration_verts  f 196 213.0000
+FAIL wrist_gap_L        f 197 -0.0700
+FAIL wrist_gap_R        f 197 -0.0700
+FAIL penetration_verts  f 197 213.0000
+FAIL wrist_gap_L        f 198 -0.0700
+FAIL wrist_gap_R        f 198 -0.0700
+FAIL penetration_verts  f 198 213.0000
+FAIL wrist_gap_L        f 199 -0.0700
+FAIL wrist_gap_R        f 199 -0.0700
+FAIL penetration_verts  f 199 213.0000
+FAIL wrist_gap_L        f 200 -0.0700
+FAIL wrist_gap_R        f 200 -0.0700
+FAIL penetration_verts  f 200 213.0000
+FAIL wrist_gap_L        f 201 -0.0700
+FAIL wrist_gap_R        f 201 -0.0700
+FAIL penetration_verts  f 201 213.0000
+FAIL wrist_gap_L        f 202 -0.0700
+FAIL wrist_gap_R        f 202 -0.0700
+FAIL penetration_verts  f 202 213.0000
+FAIL wrist_gap_L        f 203 -0.0700
+FAIL wrist_gap_R        f 203 -0.0700
+FAIL penetration_verts  f 203 213.0000
+FAIL wrist_gap_L        f 204 -0.0700
+FAIL wrist_gap_R        f 204 -0.0700
+FAIL penetration_verts  f 204 213.0000
+FAIL wrist_gap_L        f 205 -0.0700
+FAIL wrist_gap_R        f 205 -0.0700
+FAIL penetration_verts  f 205 213.0000
+FAIL wrist_gap_L        f 206 -0.0700
+FAIL wrist_gap_R        f 206 -0.0700
+FAIL penetration_verts  f 206 213.0000
+FAIL wrist_gap_L        f 207 -0.0700
+FAIL wrist_gap_R        f 207 -0.0700
+FAIL penetration_verts  f 207 213.0000
+FAIL wrist_gap_L        f 208 -0.0700
+FAIL wrist_gap_R        f 208 -0.0700
+FAIL penetration_verts  f 208 212.0000
+FAIL wrist_gap_L        f 209 -0.0700
+FAIL wrist_gap_R        f 209 -0.0700
+FAIL penetration_verts  f 209 212.0000
+FAIL wrist_gap_L        f 210 -0.0700
+FAIL wrist_gap_R        f 210 -0.0700
+FAIL penetration_verts  f 210 212.0000
+FAIL wrist_gap_L        f 211 -0.0700
+FAIL wrist_gap_R        f 211 -0.0700
+FAIL penetration_verts  f 211 212.0000
+FAIL wrist_gap_L        f 212 -0.0700
+FAIL wrist_gap_R        f 212 -0.0700
+FAIL penetration_verts  f 212 212.0000
+FAIL wrist_gap_L        f 213 -0.0700
+FAIL wrist_gap_R        f 213 -0.0700
+FAIL penetration_verts  f 213 212.0000
+FAIL wrist_gap_L        f 214 -0.0700
+FAIL wrist_gap_R        f 214 -0.0700
+FAIL penetration_verts  f 214 212.0000
+FAIL wrist_gap_L        f 215 -0.0700
+FAIL wrist_gap_R        f 215 -0.0700
+FAIL penetration_verts  f 215 212.0000
+FAIL wrist_gap_L        f 216 -0.0700
+FAIL wrist_gap_R        f 216 -0.0700
+FAIL penetration_verts  f 216 212.0000
+FAIL wrist_gap_L        f 217 -0.0700
+FAIL wrist_gap_R        f 217 -0.0700
+FAIL penetration_verts  f 217 212.0000
+FAIL wrist_gap_L        f 218 -0.0700
+FAIL wrist_gap_R        f 218 -0.0700
+FAIL penetration_verts  f 218 212.0000
+FAIL wrist_gap_L        f 219 -0.0700
+FAIL wrist_gap_R        f 219 -0.0700
+FAIL penetration_verts  f 219 212.0000
+FAIL wrist_gap_L        f 220 -0.0700
+FAIL wrist_gap_R        f 220 -0.0700
+FAIL penetration_verts  f 220 212.0000
+FAIL wrist_gap_L        f 221 -0.0700
+FAIL wrist_gap_R        f 221 -0.0700
+FAIL penetration_verts  f 221 212.0000
+FAIL wrist_gap_L        f 222 -0.0700
+FAIL wrist_gap_R        f 222 -0.0700
+FAIL penetration_verts  f 222 212.0000
+FAIL wrist_gap_L        f 223 -0.0700
+FAIL wrist_gap_R        f 223 -0.0700
+FAIL penetration_verts  f 223 212.0000
+FAIL wrist_gap_L        f 224 -0.0700
+FAIL wrist_gap_R        f 224 -0.0700
+FAIL penetration_verts  f 224 212.0000
+FAIL wrist_gap_L        f 225 -0.0700
+FAIL wrist_gap_R        f 225 -0.0700
+FAIL penetration_verts  f 225 212.0000
+FAIL wrist_gap_L        f 226 -0.0700
+FAIL wrist_gap_R        f 226 -0.0700
+FAIL penetration_verts  f 226 212.0000
+FAIL wrist_gap_L        f 227 -0.0700
+FAIL wrist_gap_R        f 227 -0.0700
+FAIL penetration_verts  f 227 212.0000
+FAIL wrist_gap_L        f 228 -0.0700
+FAIL wrist_gap_R        f 228 -0.0700
+FAIL penetration_verts  f 228 212.0000
+FAIL wrist_gap_L        f 229 -0.0700
+FAIL wrist_gap_R        f 229 -0.0700
+FAIL penetration_verts  f 229 212.0000
+FAIL wrist_gap_L        f 231 -0.0700
+FAIL wrist_gap_R        f 231 -0.0700
+FAIL penetration_verts  f 231 212.0000
+FAIL wrist_gap_L        f 236 -0.0700
+FAIL wrist_gap_R        f 236 -0.0700
+FAIL penetration_verts  f 236 212.0000
+FAIL wrist_gap_L        f 241 -0.0700
+FAIL wrist_gap_R        f 241 -0.0700
+FAIL penetration_verts  f 241 212.0000
+FAIL wrist_gap_L        f 246 -0.0700
+FAIL wrist_gap_R        f 246 -0.0700
+FAIL penetration_verts  f 246 212.0000
+FAIL wrist_gap_L        f 251 -0.0700
+FAIL wrist_gap_R        f 251 -0.0700
+FAIL penetration_verts  f 251 212.0000
+FAIL wrist_gap_L        f 256 -0.0700
+FAIL wrist_gap_R        f 256 -0.0700
+FAIL penetration_verts  f 256 212.0000
+FAIL wrist_gap_L        f 261 -0.0700
+FAIL wrist_gap_R        f 261 -0.0700
+FAIL penetration_verts  f 261 213.0000
+FAIL wrist_gap_L        f 266 -0.0700
+FAIL wrist_gap_R        f 266 -0.0700
+FAIL penetration_verts  f 266 213.0000
+FAIL wrist_gap_L        f 271 -0.0700
+FAIL wrist_gap_R        f 271 -0.0700
+FAIL penetration_verts  f 271 213.0000
+FAIL wrist_gap_L        f 276 -0.0700
+FAIL wrist_gap_R        f 276 -0.0700
+FAIL penetration_verts  f 276 211.0000
+FAIL wrist_gap_L        f 281 -0.0700
+FAIL wrist_gap_R        f 281 -0.0700
+FAIL penetration_verts  f 281 211.0000
+FAIL wrist_gap_L        f 286 -0.0700
+FAIL wrist_gap_R        f 286 -0.0700
+FAIL penetration_verts  f 286 211.0000
+FAIL wrist_gap_L        f 291 -0.0700
+FAIL wrist_gap_R        f 291 -0.0700
+FAIL penetration_verts  f 291 212.0000
+FAIL wrist_gap_L        f 296 -0.0700
+FAIL wrist_gap_R        f 296 -0.0700
+FAIL penetration_verts  f 296 212.0000
+FAIL wrist_gap_L        f 301 -0.0700
+FAIL wrist_gap_R        f 301 -0.0700
+FAIL penetration_verts  f 301 211.0000
+FAIL wrist_gap_L        f 306 -0.0700
+FAIL wrist_gap_R        f 306 -0.0700
+FAIL penetration_verts  f 306 211.0000
+FAIL wrist_gap_L        f 311 -0.0700
+FAIL wrist_gap_R        f 311 -0.0700
+FAIL penetration_verts  f 311 211.0000
+FAIL wrist_gap_L        f 316 -0.0700
+FAIL wrist_gap_R        f 316 -0.0700
+FAIL penetration_verts  f 316 211.0000
+FAIL wrist_gap_L        f 321 -0.0700
+FAIL wrist_gap_R        f 321 -0.0700
+FAIL penetration_verts  f 321 212.0000
+FAIL wrist_gap_L        f 326 -0.0700
+FAIL wrist_gap_R        f 326 -0.0700
+FAIL penetration_verts  f 326 212.0000
+FAIL wrist_gap_L        f 331 -0.0700
+FAIL wrist_gap_R        f 331 -0.0700
+FAIL penetration_verts  f 331 211.0000
+FAIL wrist_gap_L        f 336 -0.0700
+FAIL wrist_gap_R        f 336 -0.0700
+FAIL penetration_verts  f 336 211.0000
+FAIL wrist_gap_L        f 341 -0.0700
+FAIL wrist_gap_R        f 341 -0.0700
+FAIL penetration_verts  f 341 211.0000
+FAIL wrist_gap_L        f 346 -0.0700
+FAIL wrist_gap_R        f 346 -0.0700
+FAIL penetration_verts  f 346 211.0000
+FAIL wrist_gap_L        f 351 -0.0700
+FAIL wrist_gap_R        f 351 -0.0700
+FAIL penetration_verts  f 351 211.0000
+FAIL wrist_gap_L        f 356 -0.0700
+FAIL wrist_gap_R        f 356 -0.0700
+FAIL penetration_verts  f 356 211.0000
+FAIL wrist_gap_L        f 361 -0.0700
+FAIL wrist_gap_R        f 361 -0.0700
+FAIL penetration_verts  f 361 211.0000
+FAIL wrist_gap_L        f 366 -0.0700
+FAIL wrist_gap_R        f 366 -0.0700
+FAIL penetration_verts  f 366 211.0000
+FAIL wrist_gap_L        f 371 -0.0700
+FAIL wrist_gap_R        f 371 -0.0700
+FAIL penetration_verts  f 371 211.0000
+FAIL wrist_gap_L        f 376 -0.0700
+FAIL wrist_gap_R        f 376 -0.0700
+FAIL penetration_verts  f 376 211.0000
+FAIL wrist_gap_L        f 381 -0.0700
+FAIL wrist_gap_R        f 381 -0.0700
+FAIL penetration_verts  f 381 211.0000
+FAIL wrist_gap_L        f 386 -0.0700
+FAIL wrist_gap_R        f 386 -0.0700
+FAIL penetration_verts  f 386 211.0000
+FAIL wrist_gap_L        f 391 -0.0700
+FAIL wrist_gap_R        f 391 -0.0700
+FAIL penetration_verts  f 391 211.0000
+FAIL wrist_gap_L        f 396 -0.0700
+FAIL wrist_gap_R        f 396 -0.0700
+FAIL penetration_verts  f 396 211.0000
+FAIL wrist_gap_L        f 401 -0.0700
+FAIL wrist_gap_R        f 401 -0.0700
+FAIL penetration_verts  f 401 211.0000
+FAIL wrist_gap_L        f 406 -0.0700
+FAIL wrist_gap_R        f 406 -0.0700
+FAIL penetration_verts  f 406 211.0000
+FAIL wrist_gap_L        f 411 -0.0700
+FAIL wrist_gap_R        f 411 -0.0700
+FAIL penetration_verts  f 411 212.0000
+FAIL wrist_gap_L        f 416 -0.0700
+FAIL wrist_gap_R        f 416 -0.0700
+FAIL penetration_verts  f 416 212.0000
+FAIL wrist_gap_L        f 421 -0.0700
+FAIL wrist_gap_R        f 421 -0.0700
+FAIL penetration_verts  f 421 212.0000
+FAIL wrist_gap_L        f 426 -0.0700
+FAIL wrist_gap_R        f 426 -0.0700
+FAIL penetration_verts  f 426 212.0000
+FAIL wrist_gap_L        f 431 -0.0700
+FAIL wrist_gap_R        f 431 -0.0700
+FAIL penetration_verts  f 431 212.0000
+FAIL wrist_gap_L        f 436 -0.0700
+FAIL wrist_gap_R        f 436 -0.0700
+FAIL penetration_verts  f 436 211.0000
+FAIL wrist_gap_L        f 441 -0.0700
+FAIL wrist_gap_R        f 441 -0.0700
+FAIL penetration_verts  f 441 211.0000
+FAIL wrist_gap_L        f 446 -0.0700
+FAIL wrist_gap_R        f 446 -0.0700
+FAIL penetration_verts  f 446 211.0000
+FAIL wrist_gap_L        f 451 -0.0700
+FAIL wrist_gap_R        f 451 -0.0700
+FAIL penetration_verts  f 451 212.0000
+FAIL wrist_gap_L        f 456 -0.0700
+FAIL wrist_gap_R        f 456 -0.0700
+FAIL penetration_verts  f 456 212.0000
+FAIL wrist_gap_L        f 461 -0.0700
+FAIL wrist_gap_R        f 461 -0.0700
+FAIL penetration_verts  f 461 212.0000
+FAIL wrist_gap_L        f 466 -0.0700
+FAIL wrist_gap_R        f 466 -0.0700
+FAIL penetration_verts  f 466 212.0000
+FAIL wrist_gap_L        f 471 -0.0700
+FAIL wrist_gap_R        f 471 -0.0700
+FAIL penetration_verts  f 471 212.0000
+FAIL wrist_gap_L        f 476 -0.0700
+FAIL wrist_gap_R        f 476 -0.0700
+FAIL penetration_verts  f 476 212.0000
+FAIL wrist_gap_L        f 481 -0.0700
+FAIL wrist_gap_R        f 481 -0.0700
+FAIL penetration_verts  f 481 212.0000
+FAIL wrist_gap_L        f 486 -0.0700
+FAIL wrist_gap_R        f 486 -0.0700
+FAIL penetration_verts  f 486 212.0000
+FAIL wrist_gap_L        f 491 -0.0700
+FAIL wrist_gap_R        f 491 -0.0700
+FAIL penetration_verts  f 491 212.0000
+FAIL wrist_gap_L        f 496 -0.0700
+FAIL wrist_gap_R        f 496 -0.0700
+FAIL penetration_verts  f 496 212.0000
+FAIL wrist_gap_L        f 501 -0.0700
+FAIL wrist_gap_R        f 501 -0.0700
+FAIL penetration_verts  f 501 212.0000
+FAIL wrist_gap_L        f 506 -0.0700
+FAIL wrist_gap_R        f 506 -0.0700
+FAIL penetration_verts  f 506 212.0000
+FAIL wrist_gap_L        f 511 -0.0700
+FAIL wrist_gap_R        f 511 -0.0700
+FAIL penetration_verts  f 511 212.0000
+FAIL wrist_gap_L        f 516 -0.0700
+FAIL wrist_gap_R        f 516 -0.0700
+FAIL penetration_verts  f 516 212.0000
+FAIL wrist_gap_L        f 521 -0.0700
+FAIL wrist_gap_R        f 521 -0.0700
+FAIL penetration_verts  f 521 212.0000
+FAIL wrist_gap_L        f 526 -0.0700
+FAIL wrist_gap_R        f 526 -0.0700
+FAIL penetration_verts  f 526 213.0000
+FAIL wrist_gap_L        f 531 -0.0700
+FAIL wrist_gap_R        f 531 -0.0700
+FAIL penetration_verts  f 531 212.0000
+FAIL wrist_gap_L        f 536 -0.0700
+FAIL wrist_gap_R        f 536 -0.0700
+FAIL penetration_verts  f 536 212.0000
+FAIL wrist_gap_L        f 541 -0.0700
+FAIL wrist_gap_R        f 541 -0.0700
+FAIL penetration_verts  f 541 212.0000
+FAIL wrist_gap_L        f 546 -0.0700
+FAIL wrist_gap_R        f 546 -0.0700
+FAIL penetration_verts  f 546 212.0000
+FAIL wrist_gap_L        f 551 -0.0700
+FAIL wrist_gap_R        f 551 -0.0700
+FAIL penetration_verts  f 551 212.0000
+FAIL wrist_gap_L        f 556 -0.0700
+FAIL wrist_gap_R        f 556 -0.0700
+FAIL penetration_verts  f 556 212.0000
+FAIL wrist_gap_L        f 561 -0.0700
+FAIL wrist_gap_R        f 561 -0.0700
+FAIL penetration_verts  f 561 212.0000
+FAIL wrist_gap_L        f 566 -0.0700
+FAIL wrist_gap_R        f 566 -0.0700
+FAIL penetration_verts  f 566 212.0000
+FAIL wrist_gap_L        f 571 -0.0700
+FAIL wrist_gap_R        f 571 -0.0700
+FAIL penetration_verts  f 571 212.0000
+FAIL wrist_gap_L        f 576 -0.0700
+FAIL wrist_gap_R        f 576 -0.0700
+FAIL penetration_verts  f 576 212.0000
+FAIL wrist_gap_L        f 581 -0.0700
+FAIL wrist_gap_R        f 581 -0.0700
+FAIL penetration_verts  f 581 212.0000
+FAIL wrist_gap_L        f 586 -0.0700
+FAIL wrist_gap_R        f 586 -0.0700
+FAIL penetration_verts  f 586 212.0000
+FAIL wrist_gap_L        f 591 -0.0700
+FAIL wrist_gap_R        f 591 -0.0700
+FAIL penetration_verts  f 591 212.0000
+FAIL wrist_gap_L        f 596 -0.0700
+FAIL wrist_gap_R        f 596 -0.0700
+FAIL penetration_verts  f 596 212.0000
+FAIL wrist_gap_L        f 601 -0.0700
+FAIL wrist_gap_R        f 601 -0.0700
+FAIL penetration_verts  f 601 212.0000
+FAIL wrist_gap_L        f 606 -0.0700
+FAIL wrist_gap_R        f 606 -0.0700
+FAIL penetration_verts  f 606 212.0000
+FAIL wrist_gap_L        f 611 -0.0700
+FAIL wrist_gap_R        f 611 -0.0700
+FAIL penetration_verts  f 611 212.0000
+FAIL wrist_gap_L        f 616 -0.0700
+FAIL wrist_gap_R        f 616 -0.0700
+FAIL penetration_verts  f 616 212.0000
+FAIL wrist_gap_L        f 621 -0.0700
+FAIL wrist_gap_R        f 621 -0.0700
+FAIL penetration_verts  f 621 212.0000
+FAIL wrist_gap_L        f 626 -0.0700
+FAIL wrist_gap_R        f 626 -0.0700
+FAIL penetration_verts  f 626 212.0000
+FAIL wrist_gap_L        f 631 -0.0700
+FAIL wrist_gap_R        f 631 -0.0700
+FAIL penetration_verts  f 631 212.0000
+FAIL wrist_gap_L        f 636 -0.0700
+FAIL wrist_gap_R        f 636 -0.0700
+FAIL penetration_verts  f 636 212.0000
+FAIL wrist_gap_L        f 641 -0.0700
+FAIL wrist_gap_R        f 641 -0.0700
+FAIL penetration_verts  f 641 212.0000
+FAIL wrist_gap_L        f 646 -0.0700
+FAIL wrist_gap_R        f 646 -0.0700
+FAIL penetration_verts  f 646 212.0000
+FAIL wrist_gap_L        f 651 -0.0700
+FAIL wrist_gap_R        f 651 -0.0700
+FAIL penetration_verts  f 651 213.0000
+FAIL wrist_gap_L        f 656 -0.0700
+FAIL wrist_gap_R        f 656 -0.0700
+FAIL penetration_verts  f 656 213.0000
+FAIL wrist_gap_L        f 661 -0.0700
+FAIL wrist_gap_R        f 661 -0.0700
+FAIL penetration_verts  f 661 213.0000
+FAIL wrist_gap_L        f 666 -0.0700
+FAIL wrist_gap_R        f 666 -0.0700
+FAIL penetration_verts  f 666 213.0000
+FAIL wrist_gap_L        f 671 -0.0700
+FAIL wrist_gap_R        f 671 -0.0700
+FAIL penetration_verts  f 671 213.0000
+FAIL wrist_gap_L        f 676 -0.0700
+FAIL wrist_gap_R        f 676 -0.0700
+FAIL penetration_verts  f 676 213.0000
+FAIL wrist_gap_L        f 681 -0.0700
+FAIL wrist_gap_R        f 681 -0.0700
+FAIL penetration_verts  f 681 213.0000
+FAIL wrist_gap_L        f 686 -0.0700
+FAIL wrist_gap_R        f 686 -0.0700
+FAIL penetration_verts  f 686 213.0000
+FAIL wrist_gap_L        f 691 -0.0700
+FAIL wrist_gap_R        f 691 -0.0700
+FAIL penetration_verts  f 691 213.0000
+FAIL wrist_gap_L        f 696 -0.0700
+FAIL wrist_gap_R        f 696 -0.0700
+FAIL penetration_verts  f 696 213.0000
+FAIL wrist_gap_L        f 701 -0.0700
+FAIL wrist_gap_R        f 701 -0.0700
+FAIL penetration_verts  f 701 213.0000
+FAIL wrist_gap_L        f 706 -0.0700
+FAIL wrist_gap_R        f 706 -0.0700
+FAIL penetration_verts  f 706 213.0000
+FAIL wrist_gap_L        f 711 -0.0700
+FAIL wrist_gap_R        f 711 -0.0700
+FAIL penetration_verts  f 711 213.0000
+FAIL wrist_gap_L        f 716 -0.0700
+FAIL wrist_gap_R        f 716 -0.0700
+FAIL penetration_verts  f 716 213.0000
+FAIL wrist_gap_L        f 721 -0.0700
+FAIL wrist_gap_R        f 721 -0.0700
+FAIL penetration_verts  f 721 213.0000
+FAIL wrist_gap_L        f 726 -0.0700
+FAIL wrist_gap_R        f 726 -0.0700
+FAIL penetration_verts  f 726 213.0000
+FAIL wrist_gap_L        f 731 -0.0700
+FAIL wrist_gap_R        f 731 -0.0700
+FAIL penetration_verts  f 731 213.0000
+FAIL wrist_gap_L        f 736 -0.0700
+FAIL wrist_gap_R        f 736 -0.0700
+FAIL penetration_verts  f 736 213.0000
+FAIL wrist_gap_L        f 741 -0.0700
+FAIL wrist_gap_R        f 741 -0.0700
+FAIL penetration_verts  f 741 213.0000
+FAIL wrist_gap_L        f 746 -0.0700
+FAIL wrist_gap_R        f 746 -0.0700
+FAIL penetration_verts  f 746 212.0000
+FAIL wrist_gap_L        f 751 -0.0700
+FAIL wrist_gap_R        f 751 -0.0700
+FAIL penetration_verts  f 751 212.0000
+FAIL wrist_gap_L        f 756 -0.0700
+FAIL wrist_gap_R        f 756 -0.0700
+FAIL penetration_verts  f 756 212.0000
+FAIL wrist_gap_L        f 761 -0.0700
+FAIL wrist_gap_R        f 761 -0.0700
+FAIL penetration_verts  f 761 212.0000
+FAIL wrist_gap_L        f 766 -0.0700
+FAIL wrist_gap_R        f 766 -0.0700
+FAIL penetration_verts  f 766 212.0000
+FAIL wrist_gap_L        f 771 -0.0700
+FAIL wrist_gap_R        f 771 -0.0700
+FAIL penetration_verts  f 771 212.0000
+FAIL wrist_gap_L        f 776 -0.0700
+FAIL wrist_gap_R        f 776 -0.0700
+FAIL penetration_verts  f 776 212.0000
+FAIL wrist_gap_L        f 781 -0.0700
+FAIL wrist_gap_R        f 781 -0.0700
+FAIL penetration_verts  f 781 212.0000
+FAIL wrist_gap_L        f 786 -0.0700
+FAIL wrist_gap_R        f 786 -0.0700
+FAIL penetration_verts  f 786 212.0000
+FAIL wrist_gap_L        f 791 -0.0700
+FAIL wrist_gap_R        f 791 -0.0700
+FAIL penetration_verts  f 791 212.0000
+FAIL wrist_gap_L        f 796 -0.0700
+FAIL wrist_gap_R        f 796 -0.0700
+FAIL penetration_verts  f 796 212.0000
+FAIL wrist_gap_L        f 801 -0.0700
+FAIL wrist_gap_R        f 801 -0.0700
+FAIL penetration_verts  f 801 212.0000
+FAIL wrist_gap_L        f 806 -0.0700
+FAIL wrist_gap_R        f 806 -0.0700
+FAIL penetration_verts  f 806 212.0000
+FAIL wrist_gap_L        f 811 -0.0700
+FAIL wrist_gap_R        f 811 -0.0700
+FAIL penetration_verts  f 811 212.0000
+FAIL wrist_gap_L        f 816 -0.0700
+FAIL wrist_gap_R        f 816 -0.0700
+FAIL penetration_verts  f 816 212.0000
+FAIL wrist_gap_L        f 821 -0.0700
+FAIL wrist_gap_R        f 821 -0.0700
+FAIL penetration_verts  f 821 212.0000
+FAIL wrist_gap_L        f 826 -0.0700
+FAIL wrist_gap_R        f 826 -0.0700
+FAIL penetration_verts  f 826 212.0000
+FAIL wrist_gap_L        f 831 -0.0700
+FAIL wrist_gap_R        f 831 -0.0700
+FAIL penetration_verts  f 831 212.0000
+FAIL wrist_gap_L        f 836 -0.0700
+FAIL wrist_gap_R        f 836 -0.0700
+FAIL penetration_verts  f 836 212.0000
+FAIL wrist_gap_L        f 841 -0.0700
+FAIL wrist_gap_R        f 841 -0.0700
+FAIL penetration_verts  f 841 213.0000
+FAIL wrist_gap_L        f 846 -0.0700
+FAIL wrist_gap_R        f 846 -0.0700
+FAIL penetration_verts  f 846 213.0000
+FAIL wrist_gap_L        f 851 -0.0700
+FAIL wrist_gap_R        f 851 -0.0700
+FAIL penetration_verts  f 851 213.0000
+FAIL wrist_gap_L        f 856 -0.0700
+FAIL wrist_gap_R        f 856 -0.0700
+FAIL penetration_verts  f 856 213.0000
+FAIL wrist_gap_L        f 861 -0.0700
+FAIL wrist_gap_R        f 861 -0.0700
+FAIL penetration_verts  f 861 213.0000
+FAIL wrist_gap_L        f 866 -0.0700
+FAIL wrist_gap_R        f 866 -0.0700
+FAIL penetration_verts  f 866 213.0000
+FAIL wrist_gap_L        f 871 -0.0700
+FAIL wrist_gap_R        f 871 -0.0700
+FAIL penetration_verts  f 871 213.0000
+FAIL wrist_gap_L        f 876 -0.0700
+FAIL wrist_gap_R        f 876 -0.0700
+FAIL penetration_verts  f 876 213.0000
+FAIL wrist_gap_L        f 881 -0.0700
+FAIL wrist_gap_R        f 881 -0.0700
+FAIL penetration_verts  f 881 213.0000
+FAIL wrist_gap_L        f 886 -0.0700
+FAIL wrist_gap_R        f 886 -0.0700
+FAIL penetration_verts  f 886 213.0000
+FAIL wrist_gap_L        f 891 -0.0700
+FAIL wrist_gap_R        f 891 -0.0700
+FAIL penetration_verts  f 891 213.0000
+FAIL wrist_gap_L        f 896 -0.0700
+FAIL wrist_gap_R        f 896 -0.0700
+FAIL penetration_verts  f 896 213.0000
+FAIL wrist_gap_L        f 901 -0.0700
+FAIL wrist_gap_R        f 901 -0.0700
+FAIL penetration_verts  f 901 213.0000
+FAIL wrist_gap_L        f 906 -0.0700
+FAIL wrist_gap_R        f 906 -0.0700
+FAIL penetration_verts  f 906 213.0000
+FAIL wrist_gap_L        f 911 -0.0700
+FAIL wrist_gap_R        f 911 -0.0700
+FAIL penetration_verts  f 911 213.0000
+FAIL wrist_gap_L        f 916 -0.0700
+FAIL wrist_gap_R        f 916 -0.0700
+FAIL penetration_verts  f 916 213.0000
+FAIL wrist_gap_L        f 921 -0.0700
+FAIL wrist_gap_R        f 921 -0.0700
+FAIL penetration_verts  f 921 213.0000
+FAIL wrist_gap_L        f 926 -0.0700
+FAIL wrist_gap_R        f 926 -0.0700
+FAIL penetration_verts  f 926 213.0000
+FAIL wrist_gap_L        f 931 -0.0700
+FAIL wrist_gap_R        f 931 -0.0700
+FAIL penetration_verts  f 931 213.0000
+FAIL wrist_gap_L        f 936 -0.0700
+FAIL wrist_gap_R        f 936 -0.0700
+FAIL penetration_verts  f 936 213.0000
+FAIL wrist_gap_L        f 941 -0.0700
+FAIL wrist_gap_R        f 941 -0.0700
+FAIL penetration_verts  f 941 213.0000
+FAIL wrist_gap_L        f 946 -0.0700
+FAIL wrist_gap_R        f 946 -0.0700
+FAIL penetration_verts  f 946 213.0000
+FAIL wrist_gap_L        f 951 -0.0700
+FAIL wrist_gap_R        f 951 -0.0700
+FAIL penetration_verts  f 951 213.0000
+FAIL wrist_gap_L        f 956 -0.0700
+FAIL wrist_gap_R        f 956 -0.0700
+FAIL penetration_verts  f 956 213.0000
+FAIL wrist_gap_L        f 961 -0.0700
+FAIL wrist_gap_R        f 961 -0.0700
+FAIL penetration_verts  f 961 212.0000
+FAIL wrist_gap_L        f 966 -0.0700
+FAIL wrist_gap_R        f 966 -0.0700
+FAIL penetration_verts  f 966 212.0000
+FAIL wrist_gap_L        f 971 -0.0700
+FAIL wrist_gap_R        f 971 -0.0700
+FAIL penetration_verts  f 971 212.0000
+FAIL wrist_gap_L        f 976 -0.0700
+FAIL wrist_gap_R        f 976 -0.0700
+FAIL penetration_verts  f 976 212.0000
+FAIL wrist_gap_L        f 981 -0.0700
+FAIL wrist_gap_R        f 981 -0.0700
+FAIL penetration_verts  f 981 212.0000
+FAIL wrist_gap_L        f 986 -0.0700
+FAIL wrist_gap_R        f 986 -0.0700
+FAIL penetration_verts  f 986 212.0000
+FAIL wrist_gap_L        f 991 -0.0700
+FAIL wrist_gap_R        f 991 -0.0700
+FAIL penetration_verts  f 991 212.0000
+FAIL wrist_gap_L        f 996 -0.0700
+FAIL wrist_gap_R        f 996 -0.0700
+FAIL penetration_verts  f 996 212.0000
+FAIL wrist_gap_L        f1001 -0.0700
+FAIL wrist_gap_R        f1001 -0.0700
+FAIL penetration_verts  f1001 212.0000
+FAIL wrist_gap_L        f1006 -0.0700
+FAIL wrist_gap_R        f1006 -0.0700
+FAIL penetration_verts  f1006 212.0000
+FAIL wrist_gap_L        f1011 -0.0700
+FAIL wrist_gap_R        f1011 -0.0700
+FAIL penetration_verts  f1011 212.0000
+FAIL wrist_gap_L        f1016 -0.0700
+FAIL wrist_gap_R        f1016 -0.0700
+FAIL penetration_verts  f1016 212.0000
+FAIL wrist_gap_L        f1021 -0.0700
+FAIL wrist_gap_R        f1021 -0.0700
+FAIL penetration_verts  f1021 212.0000
+FAIL wrist_gap_L        f1026 -0.0700
+FAIL wrist_gap_R        f1026 -0.0700
+FAIL penetration_verts  f1026 212.0000
+FAIL wrist_gap_L        f1031 -0.0700
+FAIL wrist_gap_R        f1031 -0.0700
+FAIL penetration_verts  f1031 212.0000
+FAIL wrist_gap_L        f1036 -0.0700
+FAIL wrist_gap_R        f1036 -0.0700
+FAIL penetration_verts  f1036 212.0000
+FAIL wrist_gap_L        f1041 -0.0700
+FAIL wrist_gap_R        f1041 -0.0700
+FAIL penetration_verts  f1041 212.0000
+FAIL wrist_gap_L        f1046 -0.0700
+FAIL wrist_gap_R        f1046 -0.0700
+FAIL penetration_verts  f1046 212.0000
+FAIL wrist_gap_L        f1051 -0.0700
+FAIL wrist_gap_R        f1051 -0.0700
+FAIL penetration_verts  f1051 212.0000
+FAIL wrist_gap_L        f1056 -0.0700
+FAIL wrist_gap_R        f1056 -0.0700
+FAIL penetration_verts  f1056 212.0000
+FAIL wrist_gap_L        f1061 -0.0700
+FAIL wrist_gap_R        f1061 -0.0700
+FAIL penetration_verts  f1061 212.0000
+FAIL wrist_gap_L        f1066 -0.0700
+FAIL wrist_gap_R        f1066 -0.0700
+FAIL penetration_verts  f1066 212.0000
+FAIL wrist_gap_L        f1071 -0.0700
+FAIL wrist_gap_R        f1071 -0.0700
+FAIL penetration_verts  f1071 212.0000
+FAIL wrist_gap_L        f1076 -0.0700
+FAIL wrist_gap_R        f1076 -0.0700
+FAIL penetration_verts  f1076 212.0000
+FAIL wrist_gap_L        f1081 -0.0700
+FAIL wrist_gap_R        f1081 -0.0700
+FAIL penetration_verts  f1081 213.0000
+FAIL wrist_gap_L        f1086 -0.0700
+FAIL wrist_gap_R        f1086 -0.0700
+FAIL penetration_verts  f1086 213.0000
+FAIL wrist_gap_L        f1091 -0.0700
+FAIL wrist_gap_R        f1091 -0.0700
+FAIL penetration_verts  f1091 213.0000
+FAIL wrist_gap_L        f1096 -0.0700
+FAIL wrist_gap_R        f1096 -0.0700
+FAIL penetration_verts  f1096 213.0000
+FAIL wrist_gap_L        f1101 -0.0700
+FAIL wrist_gap_R        f1101 -0.0700
+FAIL penetration_verts  f1101 213.0000
+FAIL wrist_gap_L        f1106 -0.0700
+FAIL wrist_gap_R        f1106 -0.0700
+FAIL penetration_verts  f1106 213.0000
+FAIL wrist_gap_L        f1111 -0.0700
+FAIL wrist_gap_R        f1111 -0.0700
+FAIL penetration_verts  f1111 213.0000
+FAIL wrist_gap_L        f1116 -0.0700
+FAIL wrist_gap_R        f1116 -0.0700
+FAIL penetration_verts  f1116 213.0000
+FAIL wrist_gap_L        f1121 -0.0700
+FAIL wrist_gap_R        f1121 -0.0700
+FAIL penetration_verts  f1121 213.0000
+FAIL wrist_gap_L        f1126 -0.0700
+FAIL wrist_gap_R        f1126 -0.0700
+FAIL penetration_verts  f1126 213.0000
+FAIL wrist_gap_L        f1131 -0.0700
+FAIL wrist_gap_R        f1131 -0.0700
+FAIL penetration_verts  f1131 213.0000
+FAIL wrist_gap_L        f1136 -0.0700
+FAIL wrist_gap_R        f1136 -0.0700
+FAIL penetration_verts  f1136 213.0000
+FAIL wrist_gap_L        f1141 -0.0700
+FAIL wrist_gap_R        f1141 -0.0700
+FAIL penetration_verts  f1141 213.0000
+FAIL wrist_gap_L        f1146 -0.0700
+FAIL wrist_gap_R        f1146 -0.0700
+FAIL penetration_verts  f1146 213.0000
+FAIL wrist_gap_L        f1151 -0.0700
+FAIL wrist_gap_R        f1151 -0.0700
+FAIL penetration_verts  f1151 213.0000
+FAIL wrist_gap_L        f1156 -0.0700
+FAIL wrist_gap_R        f1156 -0.0700
+FAIL penetration_verts  f1156 213.0000
+FAIL wrist_gap_L        f1161 -0.0700
+FAIL wrist_gap_R        f1161 -0.0700
+FAIL penetration_verts  f1161 213.0000
+FAIL wrist_gap_L        f1166 -0.0700
+FAIL wrist_gap_R        f1166 -0.0700
+FAIL penetration_verts  f1166 213.0000
+FAIL wrist_gap_L        f1171 -0.0700
+FAIL wrist_gap_R        f1171 -0.0700
+FAIL penetration_verts  f1171 213.0000
+FAIL wrist_gap_L        f1176 -0.0700
+FAIL wrist_gap_R        f1176 -0.0700
+FAIL penetration_verts  f1176 213.0000
+FAIL wrist_gap_L        f1181 -0.0700
+FAIL wrist_gap_R        f1181 -0.0700
+FAIL penetration_verts  f1181 213.0000
+FAIL wrist_gap_L        f1186 -0.0700
+FAIL wrist_gap_R        f1186 -0.0700
+FAIL penetration_verts  f1186 213.0000
+FAIL wrist_gap_L        f1191 -0.0700
+FAIL wrist_gap_R        f1191 -0.0700
+FAIL penetration_verts  f1191 213.0000
+FAIL wrist_gap_L        f1196 -0.0700
+FAIL wrist_gap_R        f1196 -0.0700
+FAIL penetration_verts  f1196 213.0000
+FAIL wrist_gap_L        f1201 -0.0700
+FAIL wrist_gap_R        f1201 -0.0700
+FAIL penetration_verts  f1201 213.0000
+FAIL wrist_gap_L        f1206 -0.0700
+FAIL wrist_gap_R        f1206 -0.0700
+FAIL penetration_verts  f1206 212.0000
+FAIL wrist_gap_L        f1211 -0.0700
+FAIL wrist_gap_R        f1211 -0.0700
+FAIL penetration_verts  f1211 212.0000
+FAIL wrist_gap_L        f1216 -0.0700
+FAIL wrist_gap_R        f1216 -0.0700
+FAIL penetration_verts  f1216 212.0000
+FAIL wrist_gap_L        f1221 -0.0700
+FAIL wrist_gap_R        f1221 -0.0700
+FAIL penetration_verts  f1221 212.0000
+FAIL wrist_gap_L        f1226 -0.0700
+FAIL wrist_gap_R        f1226 -0.0700
+FAIL penetration_verts  f1226 212.0000
+FAIL wrist_gap_L        f1231 -0.0700
+FAIL wrist_gap_R        f1231 -0.0700
+FAIL penetration_verts  f1231 212.0000
+FAIL wrist_gap_L        f1236 -0.0700
+FAIL wrist_gap_R        f1236 -0.0700
+FAIL penetration_verts  f1236 212.0000
+FAIL wrist_gap_L        f1241 -0.0700
+FAIL wrist_gap_R        f1241 -0.0700
+FAIL penetration_verts  f1241 212.0000
+FAIL wrist_gap_L        f1246 -0.0700
+FAIL wrist_gap_R        f1246 -0.0700
+FAIL penetration_verts  f1246 212.0000
+FAIL wrist_gap_L        f1251 -0.0700
+FAIL wrist_gap_R        f1251 -0.0700
+FAIL penetration_verts  f1251 212.0000
+FAIL wrist_gap_L        f1256 -0.0700
+FAIL wrist_gap_R        f1256 -0.0700
+FAIL penetration_verts  f1256 212.0000
+FAIL wrist_gap_L        f1261 -0.0700
+FAIL wrist_gap_R        f1261 -0.0700
+FAIL penetration_verts  f1261 212.0000
+FAIL wrist_gap_L        f1266 -0.0700
+FAIL wrist_gap_R        f1266 -0.0700
+FAIL penetration_verts  f1266 212.0000
+FAIL wrist_gap_L        f1271 -0.0700
+FAIL wrist_gap_R        f1271 -0.0700
+FAIL penetration_verts  f1271 212.0000
+FAIL wrist_gap_L        f1276 -0.0700
+FAIL wrist_gap_R        f1276 -0.0700
+FAIL penetration_verts  f1276 212.0000
+FAIL wrist_gap_L        f1281 -0.0700
+FAIL wrist_gap_R        f1281 -0.0700
+FAIL penetration_verts  f1281 212.0000
+FAIL wrist_gap_L        f1286 -0.0700
+FAIL wrist_gap_R        f1286 -0.0700
+FAIL penetration_verts  f1286 212.0000
+FAIL wrist_gap_L        f1291 -0.0700
+FAIL wrist_gap_R        f1291 -0.0700
+FAIL penetration_verts  f1291 212.0000
+FAIL wrist_gap_L        f1296 -0.0700
+FAIL wrist_gap_R        f1296 -0.0700
+FAIL penetration_verts  f1296 212.0000
+FAIL wrist_gap_L        f1301 -0.0700
+FAIL wrist_gap_R        f1301 -0.0700
+FAIL penetration_verts  f1301 212.0000
+FAIL wrist_gap_L        f1306 -0.0700
+FAIL wrist_gap_R        f1306 -0.0700
+FAIL penetration_verts  f1306 212.0000
+FAIL wrist_gap_L        f1311 -0.0700
+FAIL wrist_gap_R        f1311 -0.0700
+FAIL penetration_verts  f1311 212.0000
+FAIL wrist_gap_L        f1316 -0.0700
+FAIL wrist_gap_R        f1316 -0.0700
+FAIL penetration_verts  f1316 212.0000
+FAIL wrist_gap_L        f1321 -0.0700
+FAIL wrist_gap_R        f1321 -0.0700
+FAIL penetration_verts  f1321 213.0000
+FAIL wrist_gap_L        f1326 -0.0700
+FAIL wrist_gap_R        f1326 -0.0700
+FAIL penetration_verts  f1326 213.0000
+FAIL wrist_gap_L        f1331 -0.0700
+FAIL wrist_gap_R        f1331 -0.0700
+FAIL penetration_verts  f1331 213.0000
+FAIL wrist_gap_L        f1336 -0.0700
+FAIL wrist_gap_R        f1336 -0.0700
+FAIL penetration_verts  f1336 213.0000
+FAIL wrist_gap_L        f1341 -0.0700
+FAIL wrist_gap_R        f1341 -0.0700
+FAIL penetration_verts  f1341 213.0000
+FAIL wrist_gap_L        f1346 -0.0700
+FAIL wrist_gap_R        f1346 -0.0700
+FAIL penetration_verts  f1346 213.0000
+FAIL wrist_gap_L        f1351 -0.0700
+FAIL wrist_gap_R        f1351 -0.0700
+FAIL penetration_verts  f1351 213.0000
+FAIL wrist_gap_L        f1356 -0.0700
+FAIL wrist_gap_R        f1356 -0.0700
+FAIL penetration_verts  f1356 213.0000
+FAIL wrist_gap_L        f1361 -0.0700
+FAIL wrist_gap_R        f1361 -0.0700
+FAIL penetration_verts  f1361 213.0000
+FAIL wrist_gap_L        f1366 -0.0700
+FAIL wrist_gap_R        f1366 -0.0700
+FAIL penetration_verts  f1366 213.0000
+FAIL wrist_gap_L        f1371 -0.0700
+FAIL wrist_gap_R        f1371 -0.0700
+FAIL penetration_verts  f1371 214.0000
+FAIL wrist_gap_L        f1376 -0.0700
+FAIL wrist_gap_R        f1376 -0.0700
+FAIL penetration_verts  f1376 214.0000
+FAIL wrist_gap_L        f1381 -0.0700
+FAIL wrist_gap_R        f1381 -0.0700
+FAIL penetration_verts  f1381 214.0000
+FAIL wrist_gap_L        f1386 -0.0700
+FAIL wrist_gap_R        f1386 -0.0700
+FAIL penetration_verts  f1386 214.0000
+FAIL wrist_gap_L        f1391 -0.0700
+FAIL wrist_gap_R        f1391 -0.0700
+FAIL penetration_verts  f1391 214.0000
+FAIL wrist_gap_L        f1396 -0.0700
+FAIL wrist_gap_R        f1396 -0.0700
+FAIL penetration_verts  f1396 214.0000
+FAIL wrist_gap_L        f1401 -0.0700
+FAIL wrist_gap_R        f1401 -0.0700
+FAIL penetration_verts  f1401 215.0000
+FAIL wrist_gap_L        f1406 -0.0700
+FAIL wrist_gap_R        f1406 -0.0700
+FAIL penetration_verts  f1406 215.0000
+FAIL wrist_gap_L        f1411 -0.0700
+FAIL wrist_gap_R        f1411 -0.0700
+FAIL penetration_verts  f1411 215.0000
+FAIL wrist_gap_L        f1416 -0.0700
+FAIL wrist_gap_R        f1416 -0.0700
+FAIL penetration_verts  f1416 215.0000
+FAIL wrist_gap_L        f1421 -0.0700
+FAIL wrist_gap_R        f1421 -0.0700
+FAIL penetration_verts  f1421 215.0000
+FAIL wrist_gap_L        f1426 -0.0700
+FAIL wrist_gap_R        f1426 -0.0700
+FAIL penetration_verts  f1426 215.0000
+FAIL wrist_gap_L        f1431 -0.0700
+FAIL wrist_gap_R        f1431 -0.0700
+FAIL penetration_verts  f1431 215.0000
+FAIL wrist_gap_L        f1436 -0.0700
+FAIL wrist_gap_R        f1436 -0.0700
+FAIL penetration_verts  f1436 215.0000
+FAIL wrist_gap_L        f1441 -0.0700
+FAIL wrist_gap_R        f1441 -0.0700
+FAIL penetration_verts  f1441 215.0000
+FAIL wrist_gap_L        f1446 -0.0700
+FAIL wrist_gap_R        f1446 -0.0700
+FAIL penetration_verts  f1446 215.0000
+FAIL wrist_gap_L        f1451 -0.0700
+FAIL wrist_gap_R        f1451 -0.0700
+FAIL penetration_verts  f1451 215.0000
+FAIL wrist_gap_L        f1456 -0.0700
+FAIL wrist_gap_R        f1456 -0.0700
+FAIL penetration_verts  f1456 212.0000
+FAIL wrist_gap_L        f1461 -0.0700
+FAIL wrist_gap_R        f1461 -0.0700
+FAIL penetration_verts  f1461 212.0000
+FAIL wrist_gap_L        f1466 -0.0700
+FAIL wrist_gap_R        f1466 -0.0700
+FAIL penetration_verts  f1466 212.0000
+FAIL wrist_gap_L        f1471 -0.0700
+FAIL wrist_gap_R        f1471 -0.0700
+FAIL penetration_verts  f1471 212.0000
+FAIL wrist_gap_L        f1476 -0.0700
+FAIL wrist_gap_R        f1476 -0.0700
+FAIL penetration_verts  f1476 212.0000
+FAIL wrist_gap_L        f1481 -0.0700
+FAIL wrist_gap_R        f1481 -0.0700
+FAIL penetration_verts  f1481 212.0000
+FAIL wrist_gap_L        f1486 -0.0700
+FAIL wrist_gap_R        f1486 -0.0700
+FAIL penetration_verts  f1486 212.0000
+FAIL wrist_gap_L        f1491 -0.0700
+FAIL wrist_gap_R        f1491 -0.0700
+FAIL penetration_verts  f1491 212.0000
+FAIL wrist_gap_L        f1496 -0.0700
+FAIL wrist_gap_R        f1496 -0.0700
+FAIL penetration_verts  f1496 212.0000

@@ -29,7 +29,7 @@ for f in sorted(set(list(range(1, sc.frame_end + 1, 5)) + list(range(160, 230)))
         inside = abs(l.x) < W2 - 0.002 and abs(l.y) < D2 - 0.002 and abs(l.z) < H2 - 0.002
         note("fingertip_in_box_" + s, f, 1.0 if inside else 0.0, inside)
         wr = Bi @ (rig.matrix_world @ rig.pose.bones["wrist." + s].head)
-        gap = -wr.z - H2
+        gap = abs(wr.x) - W2
         note("wrist_gap_" + s, f, gap, gap > 0.05 or gap < 0.0)
     # chest contact: box back face vs body surface along the box normal
     back = broot.matrix_world @ V((0, D2, 0.0)); nrm = (broot.matrix_world.to_3x3() @ V((0, 1, 0))).normalized()

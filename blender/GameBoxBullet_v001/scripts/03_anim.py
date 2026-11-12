@@ -119,14 +119,15 @@ for f, sm_, wd in ((1, 0.6, 0.0), (90, 1.0, 0.0), (200, 0.8, 0.0), (300, 1.0, 0.
                    (700, -0.2, 1.0), (1300, -0.2, 0.8), (1380, 0.0, 0.6), (1440, -0.1, 1.0), (F_END, -0.1, 0.95)):
     key_face(f, sm_, wd)
 # hands grip the box sides (wrist targets ride with the box)
-GRIP_L = V((0.128, 0.040, -0.238)); GRIP_R = V((-0.128, 0.040, -0.238))
+GX = float(os.environ.get("GX", "0.178")); GZ = float(os.environ.get("GZ", "-0.12")); GY = float(os.environ.get("GY", "0.02"))
+GRIP_L = V((GX, GY, GZ)); GRIP_R = V((-GX, GY, GZ))
 HAND_SIGN = float(os.environ.get("HAND_SIGN", "1"))
 def key_hands(f):
     M = box_M(f); Rb = M.to_3x3()
     for s, g, sx in (("L", GRIP_L, 1), ("R", GRIP_R, -1)):
         W = M @ g
-        d = Rb @ V((-sx * 0.12, -1.0, 0.0)).normalized()  # fingers forward along the box bottom
-        n = Rb @ V((0.0, 0.0, HAND_SIGN))                  # palm up against the bottom
+        d = Rb @ V((0.0, -0.12, -1.0)).normalized()       # fingers point down the box side toward the bottom-front corner
+        n = Rb @ V((-sx * HAND_SIGN, 0.0, 0.0))           # palm flat against the side
         pole = M @ V((sx * 0.55, 0.45, -0.35))
         H.key_hand(s, f, W, d, n, pole)
 for f in list(range(1, F_END + 1, 2)) + [F_END]:
@@ -136,10 +137,12 @@ CURL = float(os.environ.get("CURL", "1"))
 for f in (1, F_END):
     for s in "LR":
         for k in range(2, 6):
-            for j, a in {2: ((1, 10), (2, 45), (3, 0)), 3: ((1, 10), (2, 42), (3, 0)), 4: ((1, 2), (2, 3), (3, 3)), 5: ((1, 2), (2, 3), (3, 3))}[k]:
+            for j, a in {2: ((1, 25), (2, 55), (3, 35)), 3: ((1, 28), (2, 60), (3, 35)), 4: ((1, 30), (2, 60), (3, 35)), 5: ((1, 32), (2, 55), (3, 30))}[k]:
                 n = "finger%d-%d.%s" % (k, j, s); pb = R.PB[n]
                 pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * CURL)); pb.keyframe_insert("rotation_quaternion", frame=f)
-        for j, a in ((2, 10), (3, 8)):   # thumb rests on the box side, opposing the fingers underneath
+        TZ = float(os.environ.get("TZ", "35")); TX = float(os.environ.get("TX", "-20"))
+        pb = R.PB["finger1-1." + s]; pb.rotation_quaternion = Quaternion(V((0, 0, 1)), R_(TZ if s == "R" else -TZ)) @ Quaternion(V((1, 0, 0)), R_(TX)); pb.keyframe_insert("rotation_quaternion", frame=f)
+        for j, a in ((2, 5), (3, 5)):   # thumb rests on the box side, opposing the fingers underneath
             n = "finger1-%d.%s" % (j, s); pb = R.PB[n]
             pb.rotation_quaternion = Quaternion(V((1, 0, 0)), R_(a * CURL)); pb.keyframe_insert("rotation_quaternion", frame=f)
 bpy.ops.object.mode_set(mode='OBJECT')
