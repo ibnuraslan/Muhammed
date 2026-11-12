@@ -989,7 +989,11 @@ for f in range(780, 1015, 30):          # blessing: two fingers up, ring + littl
             b = pope.pose.bones["finger%d-%d.R" % (fi, seg)]; b.rotation_quaternion = Quaternion((1, 0, 0), R_(CURL_SIGN * a_)); b.keyframe_insert("rotation_quaternion", frame=f)
 for nm in ("AideA", "AideB"):
     for s_ in "LR": curl_keys(O[nm], s_, [(1, 20, 10), (512, 20, 10), (528, 60, 40), (700, 25, 15)])
-curl_keys(O["AideB"], "R", [(1153, 12, 10), (1190, 18, 40), (1320, 18, 40), (1328, 10, 8)])
+curl_keys(O["AideB"], "R", [(1153, 12, 10), (1328, 10, 8)])
+for f in (1190, 1320):      # pinch: index meets thumb, middle/ring/little relaxed
+    for fi, a_ in ((1, 38), (2, 42), (3, 18), (4, 14), (5, 12)):
+        for seg in (1, 2, 3):
+            b = O["AideB"].pose.bones["finger%d-%d.R" % (fi, seg)]; b.rotation_quaternion = Quaternion((1, 0, 0), R_(CURL_SIGN * a_ * (0.7 if seg == 1 else 1.0))); b.keyframe_insert("rotation_quaternion", frame=f)
 curl_keys(shooter, "R", [(1, 75, 50)]); curl_keys(shooter, "L", [(1, 25, 15)])
 for nm in ("SurgA", "SurgB", "SurgC", "Nurse"):
     for s_ in "LR": curl_keys(O[nm], s_, [(600, 25, 15), (680, 35, 25), (740, 22, 15)])
@@ -1066,14 +1070,14 @@ K += [
  (505,  popechest(505) + FD * 2.1 + PERP * 0.5 + Vector((0, 0, 0.3)), popechest(505) + Vector((0, 0, -0.1)), 30),
  (555,  popechest(505) + FD * 1.6 - PERP * 1.5 + Vector((0, 0, -0.5)), popechest(505) + Vector((0, 0, -0.35)), 24),
  (598,  popechest(505) + FD * 1.7 - PERP * 3.0 + Vector((0, 0, 0.8)), popechest(505) + Vector((0, 0, -0.3)), 22),
- (628,  Vector((-5.0, 22.0, 6.6)),              Vector((-8.0, 36.0, 9.3)), 22),
+ (628,  Vector((-5.2, 8.0, 4.6)),               Vector((-7.0, 30.0, 7.0)), 22),
  (640,  Vector((-7.7, 31.5, 9.0)),              Vector((-8.0, 36.0, 9.3)), 22),
  (650,  Vector((-8.0, 35.3, 9.35)),             Vector((-8.0, 40.0, 8.6)), 22),
  (668,  Vector((-8.1, 38.0, 10.3)),             Vector((-8.0, 40.3, 8.1)), 24),
  (700,  Vector((-6.6, 39.0, 9.6)),             Vector((-8.0, 40.4, 8.2)), 26),
  (738,  Vector((-7.05, 39.95, 9.25)),            (MON + Vector((-7.6, 40.8, 8.35))) / 2, 30),
  (760,  Vector((-6.75, 40.05, 9.15)),           Vector((-7.9, 40.95, 8.25)), 30),
- (782,  Vector((-7.7, 37.6, 9.5)),              Vector((-6.0, 30.0, 8.5)), 24),
+ (782,  Vector((-7.6, 34.4, 9.7)),              Vector((-3.0, 22.0, 3.0)), 24),
  (805,  Vector((-7.0, 32.5, 10.2)),             Vector((-1.0, 22.0, 3.0)), 22),
  (845,  Vector((-3.6, 23.5, 11.2)),             Vector((0.0, 34.0, 8.2)), 24),
  (900,  Vector((-1.4, 30.2, 8.7)),              Vector((0.0, 33.9, 8.5)), 32),
@@ -1081,7 +1085,8 @@ K += [
  (990,  Vector((0.75, 34.2, 8.85)),             Vector((0.0, 37.0, 8.6)), 30),
  (1013, Vector((0.0, 36.3, 8.75)),              Vector((0.0, 39.5, 8.3)), 26),
  (1032, Vector((0.0, 38.65, 8.55)),             Vector((0.0, 40.65, 7.95)), 26),
- (1062, Vector((1.35, 39.55, 8.05)),            Vector((0.0, 40.65, 7.95)), 30),
+ (1062, Vector((-0.95, 39.85, 8.32)),           Vector((0.18, 40.92, 8.12)), 32),
+ (1077, Vector((-0.9, 40.95, 8.45)),            Vector((0.1, 40.75, 8.05)), 30),
  (1092, Vector((-0.05, 41.95, 8.2)),             Vector((-0.05, 40.66, 8.05)), 30),
  (1118, Vector((-0.45, 41.65, 8.3)),             Vector((0.18, 40.92, 8.12)), 38),
  (1132, SHW + Vector((0.45, -0.75, 0.15)),       SHW, 45),
@@ -1091,8 +1096,8 @@ K += [
  (1205, Vector((0.6, 46.3, 8.5)),               Vector((0.0, 52.0, 8.8)), 24),
  (1245, Vector((-1.3, 50.6, 9.0)),              Vector((0.0, 53.6, 9.4)), 28),
  (1285, Vector((-0.95, 52.3, 10.1)),            CROWN_W, 35),
- (1322, CROWN_W + Vector((-0.42, -0.3, 0.02)), CROWN_W, 60),
- (1355, CROWN_W + Vector((-0.12, -0.48, 0.06)), CROWN_W, 60),
+ (1318, CROWN_W + Vector((-0.42, -0.32, 0.02)), CROWN_W, 55),
+ (1345, CROWN_W + Vector((-0.55, -1.05, -0.25)), CROWN_W + Vector((0, 0, -0.45)), 35),
  (1382, CROWN_W + Vector((-0.85, -0.95, -0.55)), POPEHEAD8, 32),
  (1405, XCW8 + Vector((0.7, 0.95, 0.4)),         XCW8 + Vector((0, 0, 0.15)), 34),
  (1440, XCW8 + Vector((0.45, 0.5, 0.12)),        XCW8, 32),

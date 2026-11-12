@@ -16,8 +16,12 @@ SHOTS = [  # frame, character, bone, label
     (1100, "Pope", "wrist.L", "hand_on_shoulder"), (1100, "Prisoner", "wrist.R", "prisoner_hands"),
     (1300, "AideB", "wrist.R", "bullet_pinch"), (1450, "Pope", "wrist.L", "prayer_hands"),
 ]
+FIXED = {"nurse": ((-6.55, 40.45, 8.65), (-7.3, 40.98, 8.05)), "surgeon_A": ((-7.95, 39.55, 8.8), (-8.13, 40.35, 8.28))}
 for f, ch, b, lab in SHOTS:
     sc.frame_set(f); r = O[ch]; pb = r.pose.bones[b]
+    if lab in FIXED:
+        cam.location = FIXED[lab][0]; cam.rotation_euler = (Vector(FIXED[lab][1]) - cam.location).to_track_quat('-Z', 'Y').to_euler()
+        sc.render.filepath = os.path.join(OUT, "h%04d_%s.jpg" % (f, lab)); bpy.ops.render.render(write_still=True); continue
     p = r.matrix_world @ ((pb.head + pb.tail) / 2 + (pb.tail - pb.head) * 1.5)
     root = r.matrix_world.translation; fwd = r.matrix_world.to_3x3() @ Vector((0, -1, 0))
     cam.location = p + fwd * 0.45 + Vector((0, 0, 0.12)) + (p - Vector((root.x, root.y, p.z))).normalized() * 0.15

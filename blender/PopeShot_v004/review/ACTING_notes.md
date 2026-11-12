@@ -49,3 +49,12 @@ Checked as OK:
 4. **No empty, blurred or black cells, and no back-of-head on beats: checked on the sheets.** The QA EMPTY and BACKHEAD frames are the intended transitions and the beat-7 wide, listed above.
 5. **Close-ups show the hands: checked.** Two of the 16 close-ups (nurse, surgeon A) had been black because the close-up camera sat inside geometry. They were re-rendered from the packed v004 file with explicit cameras (`after_v004_hand_closeups.jpg`).
 6. **`hand_poses.py`: not applied in v004.** The director's library message reached me after the pass was finished. The contacts were set with IK targets, surface ray casts and finger curls instead, and every hand contact passed the checks above. It can be adopted in a v005 if wanted.
+
+## Director review round 2 (16:00), applied in the same v004 package
+1. **Black close-ups 7 and 8:** re-aimed with explicit cameras (nurse on the tray, surgeon A on the drape).
+2. **Close-up 14 (raised claw):** now a relaxed pinch. Index and thumb meet, and the other fingers are loosely curled.
+3. **18 s (the back of the prisoner's head):** over the Pope's shoulder onto the prisoner's face (hand on his shoulder), then an arc round to both profiles.
+4. **13 s:** the camera comes out of the theatre window onto the crowd below. **10.5 s:** re-aimed over the left crowd rows. At that instant the square crowd is mostly behind the camera, so the frame is the facade (windows, shutters, flags).
+5. **Crown macro:** now under 0.5 s (around frame 1318), then a pull-back to the statue and the cleric's hand by frame 1345.
+
+`qa_check` (step 12, on the packed file): INSIDE 7 (the x-ray backdrop dome, by design), EMPTY 13 (the half-second fly-through transitions and the short crown insert), BACKHEAD 1 (frame 1153, the Pope at 7 m seen through the cell window). HOVER, CLAW, FACEPRESS and FILL are 0.

@@ -36,19 +36,7 @@
     "camera inside geometry"
    ]
   ],
-  "625": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "769": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "781": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
@@ -58,6 +46,12 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
    ]
   ],
   "1141": [
@@ -105,7 +99,7 @@
   "1333": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "only Shrine in view"
    ],
    [
     "EMPTY",
@@ -115,23 +109,11 @@
   "1345": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "only Shrine in view"
    ],
    [
     "EMPTY",
     "no character in view"
-   ]
-  ],
-  "1357": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1393": [
-   [
-    "INSIDE",
-    "camera inside geometry"
    ]
   ],
   "1537": [
@@ -142,8 +124,8 @@
   ]
  },
  "counts": {
-  "INSIDE": 8,
-  "EMPTY": 15,
+  "INSIDE": 7,
+  "EMPTY": 13,
   "BACKHEAD": 1
  }
 }
