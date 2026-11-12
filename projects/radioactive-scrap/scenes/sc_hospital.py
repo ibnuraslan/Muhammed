@@ -215,7 +215,7 @@ def build(variant=None):
         a = k / 6 * 2 * math.pi
         cyl("ORBulbDisc", OR_ + Vector((0.22 * math.cos(a), 0.22 * math.sin(a), 2.15)), 0.07, 0.01, bulbm, verts=16)
     sl = bpy.data.lights.new("ORLamp", 'SPOT'); sl.spot_size = math.radians(45); sl.spot_blend = 0.4; sl.shadow_soft_size = 0.3; sl.color = (1.0, 0.97, 0.92)
-    ds = sl.driver_add("energy").driver; ds.type = 'SCRIPTED'; ds.expression = "1500 * min(1, max(0, (frame - 36) / 3))"
+    ds = sl.driver_add("energy").driver; ds.type = 'SCRIPTED'; ds.expression = "1500 * min(1, max(0, (frame - 14) / 3))"
     so = bpy.data.objects.new("ORLamp", sl); bpy.context.collection.objects.link(so); so.location = OR_ + Vector((0, 0, 2.1))
     tube_light(OR_ + Vector((1.8, 1.8, 3.15)), energy=12); tube_light(OR_ + Vector((-1.8, -1.8, 3.15)), energy=12)
     ph_model("industrial_storage_cart", loc=OR_ + Vector((-2.0, 1.6, 0)), rot_z=0.4)

@@ -218,8 +218,8 @@ def c4_8b(c, t):
 SHOTS = {
     "ch2_12a": ("office", c2_12a, C(OFF + Vector((1.5, 1.6, 1.5)), OFF + Vector((1.3, 1.4, 1.45)), OFF + Vector((0.0, 0.0, 1.0)), 32), 2.8),
     "ch2_12b": ("full", c2_12b, C(STO + Vector((0.6, -6.2, 1.6)), STO + Vector((0.8, 0.0, 1.4)), STO + Vector((1.0, 4.8, 0.7)), 30), 4.0),
-    "ch4_9a": ("empty", c4_9a, C(STO + Vector((-1.2, -3.2, 1.5)), STO + Vector((-1.0, -2.6, 1.5)), STO + Vector((0.4, 2.4, 1.3)), 32), 4.0),
-    "ch4_9b": ("empty", c4_9b, C(STO + Vector((-1.4, 0.6, 0.6)), STO + Vector((-1.2, 1.0, 0.65)), STO + Vector((1.0, 4.0, 1.6)), 28), None),
+    "ch4_9a": ("empty", c4_9a, C(STO + Vector((-0.2, -3.2, 1.5)), STO + Vector((0.0, -2.6, 1.5)), STO + Vector((0.6, 2.4, 1.3)), 32), 4.0),
+    "ch4_9b": ("empty", c4_9b, C(STO + Vector((-0.2, 0.4, 0.8)), STO + Vector((0.0, 0.8, 0.85)), STO + Vector((1.0, 4.0, 1.8)), 28), None),
     "ch4_7a": ("office", c4_7a, C(REC + Vector((1.6, 1.6, 1.7)), REC + Vector((1.4, 1.4, 1.7)), REC + Vector((0.0, -0.3, 0.95)), 32), 2.8),
     "ch4_7b": ("office", c4_7b, C(REC + Vector((0.9, 0.9, 1.25)), REC + Vector((0.7, 0.75, 1.2)), REC + Vector((0.0, 0.0, 0.8)), 40), 2.0),
     "ch4_8a": ("office", c4_8a, C(REC + Vector((-1.4, 1.5, 1.5)), REC + Vector((-1.25, 1.35, 1.5)), REC + Vector((-0.5, -0.9, 1.15)), 35), 2.8),

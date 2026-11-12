@@ -387,7 +387,7 @@ def build(variant=None):
         bt = boom_truck(); bt["body"].location = HC + Vector((8.0, 2.0, 0)); bt["body"].rotation_euler = (0, 0, 0)
         c["bt"] = bt
         blocks = ph_mat("concrete_block_wall", 0.8, (0.45, 0.45, 0.43), name="CBlock")
-        block_wall(HC + Vector((5.5, -9.0, 0)), math.radians(20), ph_mat("rough_concrete", 1.5, (0.4, 0.4, 0.38), name="BreezeBlock", tint=(0.6, 0.6, 0.58)))
+        block_wall(HC + Vector((5.5, -9.0, 0)), math.radians(20), ph_mat("rough_concrete", 1.5, (0.4, 0.4, 0.38), name="BreezeBlock", tint=(0.46, 0.48, 0.5)))
         cr = mobile_crane(); cr["body"].location = HC + Vector((-7.5, -10.0, 0)); cr["body"].rotation_euler = (0, 0, math.radians(30))
         c["crane"] = cr
         dr, lid = lead_drum(); c["drum"] = dr; c["lid"] = lid
@@ -651,7 +651,7 @@ def anim_drop(c, t):
     h2.rot("spine03", side, -10); h2.rot("spine05", side, -6)
     reach(h2, "R", handle, Vector((side.x * 0.6, side.y * 0.6, -1.0)), blade - handle)
     reach(h2, "L", handle.lerp(blade, 0.35), Vector((-side.x * 0.6, -side.y * 0.6, -1.0)), blade - handle)
-    fingers_curl(h2, 70, thumb=40)
+    fingers_curl(h2, 95, thumb=70)
     sp = c["spade"]
     if sp is not None:
         d_ = (handle - blade).normalized()       # model: blade toward -Z, grip toward +Z
