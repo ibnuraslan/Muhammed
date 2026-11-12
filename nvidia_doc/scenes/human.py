@@ -465,31 +465,14 @@ def _chain(h, bones_dirs):
         h.aim(b, d)
 
 
-def _bend_axis(h, bone, rest_world_axis):
-    """The finger's bend axis in world space NOW: `rest_world_axis` is the axis as seen with the figure in its rest
-    orientation (facing -Y, unposed); it is expressed in the bone's rest frame and carried through the current pose,
-    so it follows the hand however the arm is turned. In the rest orientation it equals rest_world_axis."""
-    b = h.arm.data.bones[bone]
-    local = b.matrix_local.to_3x3().inverted() @ Vector(rest_world_axis)
-    pb = h.arm.pose.bones[bone]
-    return (h.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3() @ local).normalized()
-
-
 def fingers_curl(h, deg=35, side=("L", "R"), thumb=15):
-    """Curl the fingers (and the thumb) toward the palm. Each joint bends about its OWN axis, so the curl works on a
-    posed hand (turned sideways, palm down, reaching): rotating about a fixed world axis only curled in the rest
-    orientation and splayed posed hands into an open claw."""
     for sd in side:
         sgn = SIDE[sd]
         for f in range(2, 6):
             for k in (1, 2, 3):
-                b = f"finger{f}-{k}.{sd}"
-                bpy.context.view_layer.update()
-                h.rot(b, _bend_axis(h, b, (1, 0, 0)), deg * (0.8 if k == 1 else 1.0))
+                h.rot(f"finger{f}-{k}.{sd}", (1, 0, 0), deg * (0.8 if k == 1 else 1.0))
         for k in (2, 3):
-            b = f"finger1-{k}.{sd}"
-            bpy.context.view_layer.update()
-            h.rot(b, _bend_axis(h, b, (0, 0, sgn)), thumb)
+            h.rot(f"finger1-{k}.{sd}", (0, 0, sgn), thumb)
 
 
 def pose_sit(h, lean=18, hands="knees"):
