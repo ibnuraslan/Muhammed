@@ -7,6 +7,7 @@ import numpy as np
 import bpy
 from mathutils import Vector
 from kit import *
+import look
 from sc_home import facade, haze_mix
 
 EXPOSURE = -0.8
@@ -22,6 +23,9 @@ def build(variant=None):
     if bj:
         world_flat((0.004, 0.006, 0.012), 1.0)
         haze_col = (0.05, 0.06, 0.09)
+    elif sg and look.enabled():                     # house look: low late sun behind the towers, warm haze
+        look.day_light("low_sun", azim=150, elev=9)
+        haze_col = (0.62, 0.5, 0.42)
     elif sg:
         world_sky(sun_elev_deg=38, sun_rot_deg=230, strength=0.16, tint=(0.92, 0.96, 1.0), aerosol=2.2)
         sun(38, 230, energy=1.1, color=(1.0, 0.95, 0.88), angle_deg=1.0)

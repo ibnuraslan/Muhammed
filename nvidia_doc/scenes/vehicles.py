@@ -558,7 +558,7 @@ def cut_arches(body, arches, m_liner, solver='EXACT'):
 
 
 # ============================================================================ paint with masks
-def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=True, fixed_color=None):
+def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=True, fixed_color=None, back_col=(0.035, 0.035, 0.037)):
     """Clear-coat paint whose base colour comes from the object colour (so one material serves a whole fleet) and
     whose glass, seals, chrome, gaps and livery come from object-space masks.
     build_masks(g) -> dict with optional keys: glass, rubber, chrome, black, gap, livery=[(mask, colour)],
@@ -609,7 +609,7 @@ def paint_shader(name, build_masks, metallic=0.0, rough=0.32, glass_thin=True, f
         # inside of the shell (seen through the glass): dark trim / headliner, never paint
         if 'glass' in M:
             back = g.backfacing() * (1.0 - M['glass'])
-            layers.append((back, (0.035, 0.035, 0.037), 0.8, 0.0, 0.0, 0.0, None, 0.0))
+            layers.append((back, back_col, 0.8, 0.0, 0.0, 0.0, None, 0.0))
         for (mk, lc, lr, lm, lco, lt, ec, st) in layers:
             col = g.mix_col(mk, col, lc)
             rgh = lerp(rgh, lr, mk); met = lerp(met, lm, mk); coat = lerp(coat, lco, mk); trn = lerp(trn, lt, mk)
@@ -927,13 +927,14 @@ def _clone(root):
     return r
 
 
-def make(kind, loc=(0, 0, 0), heading_deg=0.0, color=None, variant=None, dirt=None, lamps=False, real_lights=False):
-    """Return the root object of a new vehicle of `kind` placed at loc, facing heading_deg (0 = +X)."""
+def make(kind, loc=(0, 0, 0), heading_deg=0.0, color=None, variant=None, dirt=None, lamps=False, real_lights=False, **opts):
+    """Return the root object of a new vehicle of `kind` placed at loc, facing heading_deg (0 = +X).
+    Extra keyword options go to the builder (e.g. cars=4 for trains)."""
     if kind not in KINDS:
         raise KeyError(f"unknown vehicle kind {kind!r}; have {sorted(KINDS)}")
-    key = (kind, variant)
+    key = (kind, variant, tuple(sorted(opts.items())))
     if key not in _TEMPLATES or _TEMPLATES[key].name not in bpy.data.objects:
-        t = KINDS[kind](variant)
+        t = KINDS[kind](variant, **opts) if opts else KINDS[kind](variant)
         t["vehicle_kind"] = kind; t["vehicle_variant"] = variant or ""
         _stash(t); _TEMPLATES[key] = t
     root = _clone(_TEMPLATES[key])
@@ -997,6 +998,12 @@ try:
     _reg_modern(KINDS)
 except ImportError as e:
     if "vehicles_modern" not in str(e):
+        raise
+try:
+    from vehicles_rail import register as _reg_rail      # noqa: E402
+    _reg_rail(KINDS)
+except ImportError as e:
+    if "vehicles_rail" not in str(e):
         raise
 try:
     from vehicles_air import register as _reg_air        # noqa: E402
