@@ -1,0 +1,9 @@
+HAND AUDIT frames 1-2310 step 2: 27 hits
+by kind: {('Boy', 'hand-ownbody'): 22, ('Mom', 'hand-Boy'): 4, ('Man', 'hand-ownshirt'): 1}
+Boy handR-ownbody f129-133
+Boy handR-ownbody f141-161
+Boy handR-ownbody f715-721
+Boy handR-ownbody f755-761
+Mom handL-Boy f1027-1027
+Mom handL-Boy f1053-1057
+Man handR-ownshirt f1843-1843

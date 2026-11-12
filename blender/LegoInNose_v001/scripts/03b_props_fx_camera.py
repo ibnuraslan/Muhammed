@@ -346,7 +346,7 @@ def ex_step(f_mid, before, after):
     ex_fc.keyframe_points.insert(f_mid - 1, before); ex_fc.keyframe_points.insert(f_mid, after)
     for kp in ex_fc.keyframe_points:
         if int(round(kp.co.x)) == f_mid - 1: kp.interpolation = "CONSTANT"
-ex_step(735, 0.6, -0.6); ex_step(861, -0.6, 0.6); ex_step(1115, 0.6, -0.6); ex_step(1322, -0.6, 0.6)
+ex_step(736, 0.6, -0.6); ex_step(861, -0.6, 0.6); ex_step(1115, 0.6, -0.6); ex_step(1317, -0.6, 0.6)
 for kp in ex_fc.keyframe_points:
     if kp.co.x >= 1882: kp.co.y = 0.0
     elif 1470 <= kp.co.x <= 1720: kp.co.y = 0.15
@@ -388,9 +388,10 @@ k(612, V(0.35, -0.6, 0.6), face_of(B, 612), 42)
 # beat 4: low hero angle, push to the nostril, dive
 k(660, V(0.1, -0.5, 0.4), face_of(B, 660), 34)
 k(700, nose_of(B, 700) + V(0.03, -0.13, -0.05), nose_of(B, 700), 50)
-N0 = nose_of(B, 724); fwB = fw_of(B); upB = up_of(B)
-k(718, N0 + fwB * 0.03 - upB * 0.018, N0, 40)
-DIVE1 = [(724, N0 + fwB * 0.002), (728, N0 + upB * 0.03 - fwB * 0.01), (733, V(0.15, 0.3, -1.0)), (739, V(0.0, -1.4, -3.6)), (747, V(0.05, -2.75, -6.2))]
+N0 = nose_of(B, 725); fwB = fw_of(B); upB = up_of(B)
+k(714, N0 + fwB * 0.09 - upB * 0.04, N0, 40)
+k(721, N0 + fwB * 0.05 - upB * 0.025, N0, 40)
+DIVE1 = [(725, N0 + fwB * 0.002), (729, N0 + upB * 0.03 - fwB * 0.01), (734, V(0.15, 0.3, -1.0)), (740, V(0.0, -1.4, -3.6)), (748, V(0.05, -2.75, -6.2))]
 for i, (f, p) in enumerate(DIVE1):
     nxt = DIVE1[i + 1][1] if i + 1 < len(DIVE1) else XS_C
     k(f, p, nxt, 32)
@@ -420,12 +421,12 @@ for i, (f, p) in enumerate(DIVE2):
 k(1185, V(-0.55, -1.7, -6.25), XS_HI, 34)
 k(1240, XS_HI + V(0.35, -0.75, -0.05), XS_HI, 48)
 k(1285, XS_HI + V(0.75, -0.95, 0.2), XS_HI, 42)
-RET2 = [(1312, V(0.4, -1.6, -5.5)), (1318, V(0.1, -1.2, -3.6)), (1324, V(0.15, 0.3, -1.0))]
-N3 = nose_of(B, 1330); fw3 = fw_of(B)
-RET2 += [(1330, N3 + fw3 * 0.002), (1342, N3 + fw3 * 0.12)]
+RET2 = [(1307, V(0.4, -1.6, -5.5)), (1313, V(0.1, -1.2, -3.6)), (1319, V(0.15, 0.3, -1.0))]
+N3 = nose_of(B, 1325); fw3 = fw_of(B)
+RET2 += [(1325, N3 + fw3 * 0.002), (1340, N3 + fw3 * 0.12)]
 for i, (f, p) in enumerate(RET2):
     prv = RET2[i - 1][1] if i > 0 else XS_HI
-    k(f, p, prv if f < 1330 else N3, 30 if f < 1330 else 36)
+    k(f, p, prv if f < 1325 else N3, 30 if f < 1325 else 36)
 # beat 8: time-lapse orbit
 SITC = BOYP + V(0, 0, 0.55)
 k(1365, V(0.45, -0.75, 0.75), SITC, 26)
@@ -450,11 +451,11 @@ k(1888, V(6.62, 1.22, 1.55), V(8.0, 1.6, 1.55), 27)
 k(1897, V(6.85, 1.25, 1.6), face_of(M, 1897), 28)
 k(1935, V(7.2, 1.0, 1.65), face_of(M, 1935), 34)
 k(1990, V(7.5, 1.3, 1.45), face_of(M, 1990), 45)
-k(2040, V(7.6, 1.38, 1.5), nose_of(M, 2040, 0), 62)
+k(2040, V(7.45, 1.3, 1.55), nose_of(M, 2040, 0), 45)
 # beat 11: macro on the nostril, track the brick (slow-mo), land in the palm, pull back on the laugh
-k(2077, V(7.665, 1.42, 1.62), nose_of(M, 2077, 0), 85)
-k(2115, V(7.665, 1.41, 1.55), shoot(2115).translation, 85)
-k(2150, V(7.665, 1.4, 1.47), M_PALM_W(2150), 85)
+k(2077, V(7.5, 1.32, 1.6), nose_of(M, 2077, 0), 55)
+k(2115, V(7.5, 1.32, 1.52), (shoot(2115).translation + nose_of(M, 2115, 0)) / 2, 50)
+k(2150, V(7.5, 1.3, 1.48), (M_PALM_W(2150) + face_of(M, 2150)) / 2, 45)
 k(2200, V(7.6, 1.32, 1.55), (M_PALM_W(2200) + face_of(M, 2200)) / 2, 50)
 k(2260, V(7.2, 1.08, 1.6), face_of(M, 2260), 34)
 k(2310, V(6.9, 0.88, 1.62), (M_PALM_W(2310) + face_of(M, 2310)) / 2, 30)
@@ -540,13 +541,13 @@ def tunnel(name, f0, f1, nostril_end):
     for f in range(f0, f1 + 1, 2):
         lt.location = fc_(f + 1); lt.keyframe_insert("location", frame=f)
     key_vis([lt.name], [(f0 - 1, f1 + 2)])
-tunnel("Tunnel_Dive1", 720, 744, "start")
+tunnel("Tunnel_Dive1", 722, 745, "start")
 tunnel("Tunnel_Return1", 850, 872, "end")
 tunnel("Tunnel_Dive2", 1100, 1125, "start")
-tunnel("Tunnel_Return2", 1310, 1332, "end")
+tunnel("Tunnel_Return2", 1305, 1327, "end")
 # while the camera is inside a tunnel, the room, props and people are invisible to the camera only (shadows/light unchanged):
 # otherwise the floor slab and the boy's own skin cut across the tube as membranes.
-INSIDE = [(726, 748), (849, 869), (1106, 1130), (1309, 1329)]
+INSIDE = [(727, 749), (849, 869), (1106, 1130), (1304, 1324)]
 hide_cols = [bpy.data.collections[n] for n in ("Set_LivingRoom", "Props")]
 obs = set(o for c_ in hide_cols for o in c_.all_objects)
 for nm in ("Boy", "Teen", "Man", "Mom"):

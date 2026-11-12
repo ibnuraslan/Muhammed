@@ -31,6 +31,12 @@ if bm: scale_keys(bm, "energy", fn=lambda v: v * 1.6)
 lamp = bpy.data.lights.get("BR_NightLamp")
 if lamp: lamp.energy = 25
 if sc.world and sc.world.node_tree: scale_keys(sc.world.node_tree, "nodes[\"BG", k=1.4)
+# readable blue night in the bedroom: a soft blue fill over the bed during the night beat + warm lamp
+bf = bpy.data.lights.new("BR_BlueNightFill", "AREA"); bf.size = 2.5; bf.color = (0.5, 0.62, 1.0)
+bo = bpy.data.objects.new("BR_BlueNightFill", bf); bpy.data.collections["Set_Bedroom"].objects.link(bo); bo.location = (4.4, 0.9, 2.55)
+for f, e in ((1, 0), (1716, 0), (1736, 260), (1866, 260), (1880, 0)):
+    bf.energy = e; bf.keyframe_insert("energy", frame=f)
+if lamp: lamp.energy = 40
 # 2. exposure: brighter overall, but bright beats must not blow out (studio and bathroom are already bright)
 scale_keys(sc, "view_settings.exposure", fn=lambda v: v + 0.25 if v < 1.0 else v + 0.1)
 # 3. f-stop >= 5.6 everywhere (keyed); true macros keep 5.6
