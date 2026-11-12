@@ -58,7 +58,7 @@ def build_hall(c):
     for k in range(12):
         B.box((-1.4 + k * 0.28, 1.64, 0.55 + k * 0.205 + 0.45), (0.035, 0.035, 0.9), oak)
     # the closed side under the stairs: panelled; one panel is the hidden door
-    B.box((0.6, 1.66, 0.6), (2.6, 0.04, 1.2), dd.tex_mat("wooden_panels", 0.6, tint=(0.75, 0.68, 0.58), name="UnderPanel", sat=0.8))
+    B.box((0.6, 1.66, 0.6), (2.6, 0.04, 1.2), dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="UnderPanel", sat=0.8))
     B.box((0.6, 2.1, 0.6), (1.0, 0.8, 1.15), pbr("Cavity", (0.03, 0.025, 0.02), 0.8))
     B.done()
     # inside: small display stands with jewels
@@ -69,7 +69,7 @@ def build_hall(c):
         dd.ring(f"HidRing{k}", p + Vector((0, 0, 0.14)), stone_r=0.0045, band="plat" if k % 2 else "gold", stone=("diamond", "sapphire", "diamond", "ruby", "diamond")[k])
     for k in range(3):
         box("NeckBust", (0.35 + k * 0.3, 2.3, 0.2), (0.12, 0.08, 0.3), fabric("BustVel", (0.08, 0.08, 0.1), 0.9, 0.6, 300))
-    pnl = dd.Builder("HiddenPanel"); pnl.box((0, 0, 0), (0.95, 0.04, 1.1), dd.tex_mat("wooden_panels", 0.6, tint=(0.75, 0.68, 0.58), name="HidPanel", sat=0.8))
+    pnl = dd.Builder("HiddenPanel"); pnl.box((0, 0, 0), (0.95, 0.04, 1.1), dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="HidPanel", sat=0.8))
     c["panel"] = pnl.done((0.6, 1.62, 0.58))
     tl = bpy.data.lights.new("RaidTorch", 'SPOT'); tl.energy = 90; tl.spot_size = math.radians(22); tl.spot_blend = 0.4; tl.color = (1.0, 0.95, 0.85)
     to = bpy.data.objects.new("RaidTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
@@ -103,8 +103,8 @@ def anim_arrive(c, t):
 def anim_stairs(c, t):
     sec = t * DUR["stairs"]
     u = ease(min(1.0, max(0.0, (sec - 1.0) / 2.5)))
-    p = c["panel"]; p.location = (0.6 - 0.25 * u, 1.62 - 0.55 * u, 0.58 + 0.15 * u); p.rotation_euler = (0, 0, math.radians(-25 * u))
-    h = c["officer"]; sp = Vector((1.75, 0.9, 0)); place(h, sp, face_to(sp, (0.6, 2.0))); arms_relaxed(h)
+    p = c["panel"]; p.location = (0.6 + 1.05 * u, 1.6 - 0.12 * u, 0.58); p.rotation_euler = (0, 0, math.radians(-8 * u))   # slides aside
+    h = c["officer"]; sp = Vector((2.3, 0.6, 0)); place(h, sp, face_to(sp, (0.6, 2.0))); arms_relaxed(h)
     to = c["torch"]; to.location = h.bone_head("upperarm01.R") + Vector((0.25, 0.25, -0.15))
     point_at(to, Vector((0.55 + 0.25 * math.sin(sec * 0.5), 2.0, 0.2)))
 
@@ -114,6 +114,6 @@ MOVES = {
                    cam=lambda c, t: (Vector((14.0, -6.5, 2.4)).lerp(Vector((12.0, -6.0, 2.2)), ease(t)), Vector((-1.0, 6.0, 1.0)), 30),
                    focus=lambda c, t: Vector((-1.0, 5.0, 1.0))),
     "stairs": dict(kind="anim", dof=2.8, anim=anim_stairs,
-                   cam=lambda c, t: (Vector((-1.1, -0.7, 1.3)).lerp(Vector((-0.9, -0.5, 1.22)), ease(t)), Vector((0.6, 1.9, 0.5)), 28),
+                   cam=lambda c, t: (Vector((-0.2, -0.45, 0.95)).lerp(Vector((0.0, -0.2, 0.85)), ease(t)), Vector((0.6, 2.05, 0.3)), 30),
                    focus=lambda c, t: Vector((0.6, 2.0, 0.25))),
 }
