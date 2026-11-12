@@ -8,10 +8,10 @@ lights cut back and dark walls, night sets keep their own lights with warmer pra
 import look
 
 # set -> variant -> (recipe, kwargs). A variant of None is the set's default build.
-EXT = "ext"; INT = "int"; NIGHT = "night"; KEEP = "keep"
+EXT = "ext"; INT = "int"; NIGHT = "night"; KEEP = "keep"; FOREST = "forest"
 
-OFFICE_WIN = dict(window=((-3.55, 0.3, 1.9), (0.2, 0.9, 0.6)), mood="low_sun", key_size=1.6)
-ANTE_WIN = dict(window=((7.55, -1.4, 1.9), (5.0, -1.2, 0.6)), mood="overcast", key_size=1.5)
+OFFICE_WIN = dict(window=((-3.55, 0.3, 1.9), (0.2, 0.9, 0.6)), mood="low_sun", key_size=1.6, key_energy=2600, fill=0.35, sky_factor=0.6)
+ANTE_WIN = dict(window=((7.55, -1.4, 1.9), (5.0, -1.2, 0.6)), mood="overcast", key_size=1.5, key_energy=900, fill=0.35, sky_factor=0.6)
 
 PLAN = {
     "sc_bankoffice": {
@@ -26,29 +26,29 @@ PLAN = {
         "seasons": (EXT, dict(mood="overcast", azim=150, haze_box=((0, -10, 12), (220, 60, 24)))),
     },
     "sc_hospital": {
-        None: (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4)),
-        "corridor": (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4)),
-        "dawn": (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4)),
-        "ward": (INT, dict(window=((-3.9, 0.15, 1.8), (0.5, 1.0, 0.6)), mood="overcast", key_size=1.6)),
-        "path": (INT, dict(window=((-2.9, 0.0, 1.75), (-0.8, -1.0, 0.7)), mood="overcast", key_size=1.4)),
+        None: (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
+        "corridor": (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
+        "dawn": (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
+        "ward": (INT, dict(window=((-3.9, 0.15, 1.8), (0.5, 1.0, 0.6)), mood="overcast", key_size=1.6, fill=0.35, sky_factor=0.6)),
+        "path": (INT, dict(window=((-2.9, 0.0, 1.75), (-0.8, -1.0, 0.7)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "night": (NIGHT, {}),
         "arrive": (KEEP, {}),
     },
     "sc_forlab": {
-        **{v: (INT, dict(window=((-4.4, 0.2, 1.8), (0.0, 0.4, 0.7)), mood="overcast", key_size=1.6)) for v in ("lab95", "evid", "y2018", None)},
+        **{v: (INT, dict(window=((-4.4, 0.2, 1.8), (0.0, 0.4, 0.7)), mood="overcast", key_size=1.6, fill=0.35, sky_factor=0.6)) for v in ("lab95", "evid", "y2018", None)},
         "end": (NIGHT, {}),
     },
     "sc_memorial": {None: (INT, dict(window=((0.0, 11.4, 3.6), (0.0, 4.0, 0.8)), mood="low_sun", key_size=2.4))},
     "sc_court": {
-        "room": (INT, dict(window=((-6.5, 2.0, 2.7), (0.5, 3.0, 0.7)), mood="overcast", key_size=2.4)),
-        None: (INT, dict(window=((-6.5, 2.0, 2.7), (0.5, 3.0, 0.7)), mood="overcast", key_size=2.4)),
-        "hall": (INT, dict(window=((0.0, 8.5, 1.85), (0.0, 2.0, 0.6)), mood="overcast", key_size=1.3)),
+        "room": (INT, dict(window=((-6.5, 2.0, 2.7), (0.5, 3.0, 0.7)), mood="overcast", key_size=2.4, fill=0.35, sky_factor=0.6)),
+        None: (INT, dict(window=((-6.5, 2.0, 2.7), (0.5, 3.0, 0.7)), mood="overcast", key_size=2.4, fill=0.35, sky_factor=0.6)),
+        "hall": (INT, dict(window=((0.0, 8.5, 1.85), (0.0, 2.0, 0.6)), mood="overcast", key_size=1.3, fill=0.35, sky_factor=0.6)),
         "archive": (NIGHT, {}),
     },
     "sc_closedtown": {
-        "checkpoint": (EXT, dict(mood="overcast", azim=140, haze_box=((-20, 30, 10), (220, 90, 20)), haze_density=0.004)),
-        None: (EXT, dict(mood="overcast", azim=140, haze_box=((-20, 30, 10), (220, 90, 20)), haze_density=0.004)),
-        "institute": (INT, dict(window=((0.0, 15.4, 1.8), (0.0, 8.0, 0.6)), mood="overcast", key_size=1.4)),
+        "checkpoint": (FOREST, dict(mood="mist", azim=140, area=((-20, 30), (220, 90)), canopy=20.0)),
+        None: (FOREST, dict(mood="mist", azim=140, area=((-20, 30), (220, 90)), canopy=20.0)),
+        "institute": (INT, dict(window=((0.0, 15.4, 1.8), (0.0, 8.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "kitchen": (NIGHT, {}), "blocks": (KEEP, {}),
     },
     "sc_apartment": {None: (EXT, dict(mood="low_sun", azim=105, haze_box=((0, -12, 12), (90, 50, 26))))},
@@ -69,8 +69,14 @@ def apply(set_name, variant=None):
         return
     plan = PLAN.get(set_name, {})
     recipe, kw = plan.get(variant, plan.get(None, (KEEP, {})))
+    kw = dict(kw)
     if recipe == EXT:
+        hz = kw.pop("haze_box", None)
         look.day_light(**kw)
+        if hz is not None:                                                          # haze that hugs the street, the sky stays clean
+            look.ground_haze((hz[0][0], hz[0][1]), (hz[1][0], hz[1][1]), kw.get("mood", "overcast"), height=6.0, density=0.004)
+    elif recipe == FOREST:
+        look.forest(**kw)
     elif recipe == INT:
         look.interior_day(**kw)
         gk = "office" if set_name == "sc_bankoffice" and variant not in ("ante", "ledger") else (variant or "room")
