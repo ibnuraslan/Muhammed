@@ -134,6 +134,8 @@ def build(variant=None):
     leather = pbr("Leather", (0.05, 0.035, 0.03), 0.45, **{'Coat Weight': 0.3})
     paper = B.paper_mat("CasePaper", (0.86, 0.85, 0.8)); manila = pbr("Manila", (0.62, 0.5, 0.3), 0.8); red = pbr("RedFile", (0.4, 0.08, 0.06), 0.7)
     for x in JUDGE_X:
+        if variant == "civil" and x != 0:                  # a small civil court: a single judge, one chair
+            continue
         chair((x, 6.75, DAIS_Z), 0.0, leather, high=True)
         files_on((x + 0.25, 5.95, BENCH_TOP + 0.025), 3 if x != 0 else 5, rng, [manila, red, paper])
     c["page"] = B.sheet("TurnPage", (0, 0, -20), (0.21, 0.297), paper)
@@ -211,7 +213,8 @@ def build(variant=None):
         B.stand(clerk, (3.2, 3.4, 0), math.pi); P_["clerk"] = clerk
         c["carry"] = ev
     if variant == "civil":
-        j = robe("CivilJudge", 0.0, 55, "bob01", hv=1.6)
+        j = robe("CivilJudge", 0.0, 55, "ponytail01", hv=1.4)
+        B.key_spot((-1.6, 3.4, 3.4), (0.0, 6.55, DAIS_Z + 1.15), 260, 30, (1.0, 0.9, 0.78), soft=0.4, name="JudgeFace")
         B.seat(j, (0.0, 6.62, 0), 0.0, lean=4); B.ground(j, DAIS_Z + 0.1); P_["Presiding"] = j
         cl = B.michael("Claimant", 51)
         B.seat(cl, (-0.35, 2.32, 0), math.pi, lean=8); chair((-0.35, 2.24, 0), math.pi, leather); P_["claimant"] = cl
@@ -241,12 +244,15 @@ def turn_page(c, h, sec, at=1.2):
     """The presiding judge turns a page of the open file (hands at medium distance)."""
     f = c["open_file"]; base = f.location + Vector((0, 0, 0.012))
     u = ease(min(1.0, max(0.0, (sec - at) / 1.1)))
-    pg = c["page"]; pg.location = base + Vector((0.11, 0, 0.0))
-    pg.rotation_mode = 'XYZ'; pg.rotation_euler = (0, -math.pi * u, 0)
-    pg.location = base + Vector((0.11 * math.cos(math.pi * u), 0, 0.11 * math.sin(math.pi * u) + 0.001))
-    tip = base + Vector((0.2 * math.cos(math.pi * u), -0.08, 0.04 + 0.12 * math.sin(math.pi * u)))
-    reach(h, "R", tip, Vector((0.6, -0.4, -0.6)), Vector((0, 1, -0.6)))
-    reach(h, "L", base + Vector((-0.2, -0.1, 0.04)), Vector((-0.6, -0.4, -0.6)), Vector((0, 1, -0.6)))
+    # the judge faces -Y, so her right hand is on -X: the page flips from her right (-X) over to her left (+X)
+    pg = c["page"]
+    pg.rotation_mode = 'XYZ'; pg.rotation_euler = (0, math.pi * u, 0)
+    pg.location = base + Vector((-0.11 * math.cos(math.pi * u), 0, 0.11 * math.sin(math.pi * u) + 0.001))
+    tip = base + Vector((-0.2 * math.cos(math.pi * u), -0.08, 0.04 + 0.12 * math.sin(math.pi * u)))
+    back = ease(min(1.0, max(0.0, (sec - at - 1.1) / 0.6)))   # after the turn the right hand returns to rest
+    tip = tip.lerp(base + Vector((-0.26, -0.14, 0.02)), back)
+    reach(h, "R", tip, Vector((-0.6, -0.4, -0.6)), Vector((0, -1, -0.6)))
+    reach(h, "L", base + Vector((0.34, -0.12, 0.02)), Vector((0.6, -0.4, -0.6)), Vector((0, -1, -0.6)))
     B.curl(h, 25, thumb=10)
     B.nod(h, 14)
 
@@ -278,7 +284,10 @@ def anim(c, t, move):
         B.apply_pose(h, c["rest"][k])
     idle(c, sec)
     if "Presiding" in P_:
-        turn_page(c, P_["Presiding"], sec, at=1.0 if move in ("bench", "civil") else 99)
+        if move == "civil":                                 # the civil judge reads with her hands resting on the bench
+            desk_hands(P_["Presiding"], 0, sec, 0.0, top=BENCH_TOP, spread=0.2); B.nod(P_["Presiding"], 14)
+        else:
+            turn_page(c, P_["Presiding"], sec, at=1.0 if move == "bench" else 99)
     if v == "trial":
         law = P_["lawyer"]
         fwd = B.fwd_of(law)
@@ -322,6 +331,8 @@ def anim(c, t, move):
                     if k.startswith("pub"):
                         h.rot("head", (0, 0, 1), (18 if int(k[3:]) % 2 else -14) * ease(min(1.0, max(0.0, (sec - 1.0 - 0.15 * int(k[3:])) / 0.8))))
     if v == "civil":
+        jd = P_["Presiding"]                                # reads the ruling, then looks up to the room
+        B.nod(jd, -16 * ease(min(1.0, max(0.0, (sec - 2.4) / 0.9))))
         for k in ("claimant", "civlaw"):
             desk_hands(P_[k], 0, sec, 0.5 if k == "civlaw" else 0.0, spread=0.15)
         B.nod(P_["claimant"], 6)
@@ -355,7 +366,7 @@ MOVES = {
                  anim=lambda c, t: anim(c, t, "rise"), focus=lambda c, t: Vector((0, 4.0, 1.4))),
     "back": dict(kind="anim", dof=2.8, cam=cam((-5.6, 0.6, 1.75), (-5.5, 1.0, 1.72), (-1.5, 3.0, 1.5), 35),
                  anim=lambda c, t: anim(c, t, "back"), focus=lambda c, t: c["people"]["defendant"].bone_head("head")),
-    "civil": dict(kind="anim", dof=3.2, cam=cam((-0.3, -0.2, 1.6), (-0.3, 0.7, 1.6), (0.0, 6.4, 1.6), 32),
+    "civil": dict(kind="anim", dof=3.2, cam=cam((-0.35, 0.5, 1.66), (-0.35, 1.2, 1.66), (0.0, 6.4, 1.55), 40),
                   anim=lambda c, t: anim(c, t, "civil"), focus=lambda c, t: c["people"]["Presiding"].bone_head("head")),
     "lights": dict(kind="anim", dof=4.0, cam=cam((4.6, -3.0, 2.3), (4.3, -2.6, 2.25), (-1.5, 4.0, 1.0), 28),
                    anim=lambda c, t: anim(c, t, "lights"), focus=lambda c, t: Vector((-3.9, 3.35, 1.0))),
