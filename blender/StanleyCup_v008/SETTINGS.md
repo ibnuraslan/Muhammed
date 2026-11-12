@@ -9,7 +9,7 @@ Values read back from `StanleyCup_v008_60fps.blend` opened in factory-startup Bl
 | Engine | Cycles. Device saved as CPU; GPU is fine. No special features. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1530**, step 1 (25.5 s) |
+| Frame range | **1–1386**, step 1 (23.1 s at 60 fps; synced to the voiceover) |
 | Camera | One camera, `CAM_Film`, one continuous move. No camera cuts or camera markers. Lens and f-stop are animated (16–70 mm, f/5.6–11; f/4 only on the impact and condensation macros); DOF on, focus object `CAM_Film_Aim`. Clip start 2 mm (the camera flies through a bullet hole). |
 | Samples | 48, adaptive, noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
@@ -34,3 +34,5 @@ Measured on v003 (same geometry, with motion blur): one full frame (f700, 1080×
 ## Do not
 - Do not render other cameras; `CAM_Film` is the only one.
 - Do not change the exposure or the world; the exposure and the light keys are animated for the move.
+
+> **Note (voiceover sync):** frame counts in the time estimate and the test-frame numbers above come from the version before the sync. The film is now the range in the table at the top. Any test frame inside that range is fine to render.

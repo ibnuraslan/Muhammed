@@ -9,7 +9,7 @@ These values were read back from `BeethovenDeaf_v010_60fps.blend`, opened in fac
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1590**, step 1 (26.5 s) |
+| Frame range | **1–1435**, step 1 (23.9 s at 60 fps; synced to the voiceover) |
 | Camera | One camera, `CAM_Film`, in one continuous move. There are no camera cuts or camera markers. Lens and f-stop are animated: f/5.6 on wide shots, f/8–11 on macro. DOF focuses on `CAM_Film_Aim`. |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
@@ -40,3 +40,5 @@ Before you approve the whole job, run these test frames:
 - Do not render other cameras; `CAM_Film` is the only one.
 - Do not lower the transparent bounces below 32.
 - Do not change exposure or the X-ray / backdrop node values; they are animated.
+
+> **Note (voiceover sync):** frame counts in the time estimate and the test-frame numbers above come from the version before the sync. The film is now the range in the table at the top. Any test frame inside that range is fine to render.

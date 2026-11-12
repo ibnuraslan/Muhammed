@@ -9,7 +9,7 @@ These values were read back from `SurgeonBrandsLivers_v009_60fps.blend`, opened 
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1710**, step 1 (28.5 s) |
+| Frame range | **1–1644**, step 1 (27.4 s at 60 fps; synced to the voiceover) |
 | Camera | One camera, `CAM_Film`, in one continuous move. There are no camera cuts or timeline markers. The lens and the f-stop are animated (f/8 macro in the studio, f/5.6 elsewhere, so backgrounds stay readable). Sensor fit is Auto (36 mm). DOF is on, focused on `CAM_Film_Aim`. |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
@@ -37,3 +37,5 @@ If the studio frames (142–275, 1064–1178) are noisy around the smoke, raise 
 ## Do not
 - Do not render other cameras; `CAM_Film` is the only one.
 - Do not re-grade toward a film look; this version follows `blender/STYLE_ANIMATED.md`.
+
+> **Note (voiceover sync):** frame counts in the time estimate and the test-frame numbers above come from the version before the sync. The film is now the range in the table at the top. Any test frame inside that range is fine to render.

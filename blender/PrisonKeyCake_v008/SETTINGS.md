@@ -9,7 +9,7 @@ These values were read back from `PrisonKeyCake_v008_60fps.blend` opened in fact
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1890**, step 1 (31.5 s) |
+| Frame range | **1–1836**, step 1 (30.6 s at 60 fps; synced to the voiceover) |
 | Camera | One camera, `CAM_Film`, in one continuous move (Track-To an empty, `CAM_Film_Aim`). There are no camera cuts or camera markers. The lens and f-stop are animated. Sensor fit is Auto (36 mm). DOF is on, focused on the aim empty. |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
@@ -35,3 +35,5 @@ Night cell frames (870–1460) are the noisiest. If you see noise there, raise t
 ## Do not
 - Do not render other cameras; `CAM_Film` is the only one.
 - Do not change exposure or the world settings; both are animated (the day/night mix is the `DayNight` node in the world).
+
+> **Note (voiceover sync):** frame counts in the time estimate and the test-frame numbers above come from the version before the sync. The film is now the range in the table at the top. Any test frame inside that range is fine to render.

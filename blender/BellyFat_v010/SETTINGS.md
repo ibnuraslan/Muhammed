@@ -9,7 +9,7 @@ These values were read back from `BellyFat_v010_60fps.blend` opened in factory-s
 | Engine | Cycles. The device is saved as CPU; GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1290**, step 1 (21.5 s) |
+| Frame range | **1–1273**, step 1 (21.2 s at 60 fps; synced to the voiceover) |
 | Camera | One camera, `CAM_Film`, on one baked continuous path. There are no camera markers or switches. Lens, clip start, focus distance and f-stop are keyed per frame; DOF is on, at f/5.6 or higher everywhere (shallow only in the macro section). The clip start drops to 0.2 mm in the macro section, so do not override it. |
 | Samples | 48, adaptive; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
@@ -40,3 +40,5 @@ When the mp3 arrives:
 3. Run `blender -b BellyFat_v010_60fps.blend --python pipeline/retime_to_vo.py -- anchors.json vo.mp3 BellyFat_v010_60fps.blend`.
 
 The camera, the bullet and the tissue animation are all ordinary keyframes, so the warp moves them together. The swap frames (154/1225) are constant-interpolated `hide_render` keys and warp with them.
+
+> **Note (voiceover sync):** frame counts in the time estimate and the test-frame numbers above come from the version before the sync. The film is now the range in the table at the top. Any test frame inside that range is fine to render.
