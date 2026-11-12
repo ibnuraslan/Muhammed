@@ -95,6 +95,48 @@ def dust_volume(loc, r=0.28):
 
 
 
+def _bone_attach(o, h, bone):
+    mw = o.matrix_world.copy(); o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = bone
+    bpy.context.view_layer.update(); o.matrix_world = mw
+
+
+def rain_gear(h, k):
+    """A glossy hip-length rain shell over the clothes (collar turned up), and either the hood up or a peaked cap.
+    Built over the rest pose and bone-parented so it follows the walk."""
+    from human import reset_pose
+    dd.zero(h); reset_pose(h); h.arm.location = (0, 0, 0); h.arm.rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
+    shell = pbr(f"RainShell{k % 2}", ((0.04, 0.06, 0.1), (0.05, 0.05, 0.045))[k % 2], 0.25, 0.0, **{"Coat Weight": 0.8, "Coat Roughness": 0.08})
+    nk = h.bone_head("neck01"); hd = h.bone_head("head"); top = h.bone_tail("head")
+    S = dd.Builder(f"Shell{k}")
+    S.cone(nk + Vector((0, 0.01, -0.33)), 0.25, 0.2, 0.62, shell, verts=28, scale=(1.15, 0.78, 1.0))
+    S.cone(nk + Vector((0, 0.01, 0.03)), 0.105, 0.09, 0.12, shell, verts=24)                 # collar turned up
+    sh = S.done(); _bone_attach(sh, h, "spine03")
+    for sd in ("L", "R"):
+        a_, b_ = h.bone_head(f"upperarm01.{sd}"), h.bone_tail(f"lowerarm02.{sd}")
+        el = h.bone_tail(f"upperarm02.{sd}")
+        for (p0, p1, bn, r0, r1) in ((a_, el, f"upperarm01.{sd}", 0.07, 0.06), (el, b_, f"lowerarm01.{sd}", 0.058, 0.05)):
+            d = p1 - p0
+            A = dd.Builder(f"Sleeve{k}{sd}{bn}")
+            A.cone((p0 + p1) / 2, r0, r1, d.length, shell, verts=16, rot=Vector((0, 0, 1)).rotation_difference(d.normalized()).to_euler())
+            _bone_attach(A.done(), h, bn)
+    H = dd.Builder(f"Head{k}")
+    if k == 0:                                                     # hood up: a shell around the back and top of the head
+        H.cone(hd + Vector((0, 0.03, 0.1)), 0.13, 0.1, 0.24, shell, verts=24, scale=(1.0, 1.05, 1.0))
+        H.cyl(top + Vector((0, 0.02, 0.0)), 0.1, 0.05, shell, verts=24)
+    else:                                                          # a dark peaked cap
+        capm = pbr(f"Cap{k}", (0.03, 0.035, 0.05), 0.6)
+        H.cyl(top + Vector((0, 0.0, -0.03)), 0.098, 0.07, capm, verts=24)
+        H.box(top + Vector((0, -0.12, -0.06)), (0.15, 0.09, 0.012), capm, rot=(math.radians(-8), 0, 0))
+    _bone_attach(H.done(), h, "head")
+    return h
+
+
+def drill_case(name):
+    B = dd.Builder(name); m = pbr("DrillCase", (0.08, 0.08, 0.085), 0.45)
+    B.box((0, 0, -0.18), (0.42, 0.12, 0.32), m).box((0, 0, 0.0), (0.14, 0.03, 0.03), m)
+    return B.done()
+
+
 def umbrella(name, radius=0.47):
     """A black umbrella: a deep domed canopy in 8 gores (each sagging between its ribs), visible ribs ending in tips,
     a shaft, and a hooked J handle. Modelled with the canopy tip at the origin; the shaft runs down -Z."""
@@ -298,11 +340,11 @@ def build(variant=None):
     if v == "gate":
         sh = bpy.data.lights.new("SheenKey", 'AREA'); sh.size = 6.0; sh.energy = 900; sh.color = (0.85, 0.9, 1.0)
         so = bpy.data.objects.new("SheenKey", sh); bpy.context.collection.objects.link(so); so.location = (1.5, -9.0, 6.0)
-        point_at(so, (1.5, -2.5, 2.0)); so.visible_camera = False          # bright sky behind them: a sheen on the canopies
+        point_at(so, (1.5, -2.5, 2.0)); so.visible_camera = False          # bright sky behind them: a sheen on the wet shells
         c["walkers"] = []
         for k in range(3):
-            h = officer(f"Ret{k}", 36 + 6 * k, seed=k + 2)
-            u = umbrella(f"Umb{k}") if k != 1 else None
+            h = rain_gear(officer(f"Ret{k}", 36 + 6 * k, seed=k + 2), k)
+            u = drill_case(f"DrillCase{k}") if k == 1 else None
             c["walkers"].append((h, GATE + Vector((0.15 * k, -2.0 - 1.3 * k, 0)), Vector((0.4 + 1.0 * k, 1.2 - 0.6 * k, 0)), 0.6 * k, u))
     if v == "torch":
         tl = bpy.data.lights.new("TorchBeam", 'SPOT'); tl.energy = 320; tl.spot_size = math.radians(18); tl.spot_blend = 0.3
@@ -379,15 +421,9 @@ def anim_gate(c, t):
     rain_fall(c, sec)
     for h, a, b, delay, u in c["walkers"]:
         walk_to(h, a, b, max(0.0, sec - delay), speed=0.95)
-        if u is not None:
-            M = h.arm.matrix_world.to_3x3()
-            hd = h.bone_head("head")
-            grip = hd + M @ Vector((-0.12, -0.24, -0.42))           # the handle in the hand at chest height
-            tipp = grip + Vector((0.02, 0.02, 0.86))                  # the shaft shows between hand and canopy; rim just above the head
-            u.location = tipp
-            d = (tipp - grip).normalized(); u.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
-            reach(h, "R", grip + Vector((0, 0, -0.02)), M @ Vector((-1, 0.4, -0.8)))
-            fingers_curl(h, 60, side=("R",), thumb=30)
+        if u is not None:                                             # the drill case swings from the right hand
+            tip = h.bone_tail("wrist.R") if "wrist.R" in h.arm.pose.bones else h.bone_tail("lowerarm02.R")
+            u.location = tip - Vector((0, 0, 0.02)); u.rotation_euler = (0, 0, h.arm.rotation_euler.z)
 
 
 def anim_torch(c, t):

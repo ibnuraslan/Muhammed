@@ -38,7 +38,7 @@ def room():
     for y in np.arange(0.5, 20, 1.6):
         B.box((-6.95, y, 1.1), (0.03, 0.05, 2.2), dark)
     for k in range(6):                                               # right wall: tall windows
-        B.box((7.1, -0.2 + k * 3.6, 4), (0.2, 1.2, 8), plaster)
+        B.box((7.1, -0.2 + k * 3.6, 4.3), (0.2, 1.2, 5.0), plaster)      # piers only between sill and head (no coplanar overlap)
     B.box((7.1, 10, 0.9), (0.2, 22, 1.8), oak).box((7.1, 10, 7.4), (0.2, 22, 1.2), plaster)
     # bench on a dais, the clerk's desk, the prosecutor's raised desk
     B.box((0, BENCH_Y + 1.0, 0.25), (9, 3.0, 0.5), oak)

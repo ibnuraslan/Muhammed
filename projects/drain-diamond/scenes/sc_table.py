@@ -146,7 +146,7 @@ def build(variant=None):
                         for zb, wb in ((0.13, 0.035), (0.085, 0.026)):
                             for sx in (-wb, wb):
                                 dd.earring(f"RecE{i}{j}{sx}{zb}", p + Vector((sx, 0, zb)), 0.005, ("diamond", "sapphire")[j % 2])
-                if abs(i - mid_i) > 1 or abs(j - mid_j) > 1:          # a small paper tag on a string for each stand
+                if abs(i - mid_i) > 2:          # a small paper tag on a string for each stand
                     D.box(p + Vector((0.02, -0.1, 0.002)), (0.045, 0.028, 0.002), tagm, rot=(0, 0, 0.1 * float(rng.uniform(-1, 1))))
                     D.box(p + Vector((0.01, -0.06, 0.002)), (0.002, 0.05, 0.001), pbr("String", (0.75, 0.7, 0.6), 0.8), rot=(0, 0, 0.3))
         D.done()
@@ -171,6 +171,10 @@ def build(variant=None):
         ct = bpy.data.lights.new("CoolTop", 'SPOT'); ct.energy = 1600; ct.spot_size = math.radians(110); ct.spot_blend = 1.0
         ct.color = (0.8, 0.88, 1.0); ct.shadow_soft_size = 0.6
         cto = bpy.data.objects.new("CoolTop", ct); bpy.context.collection.objects.link(cto); cto.location = (-2.2, 0, 2.7); point_at(cto, (-0.5, 0, TZ))
+    if v == "count":                           # small hard glints so the stones sparkle at the low angle
+        for q in range(4):
+            gl_ = bpy.data.lights.new("Glint", 'POINT'); gl_.energy = 30; gl_.shadow_soft_size = 0.01; gl_.color = (1.0, 0.97, 0.92)
+            go = bpy.data.objects.new("Glint", gl_); bpy.context.collection.objects.link(go); go.location = (-3.0 + q * 2.0, 0.9, 1.6)
     k = bpy.data.lights.new("Key", 'SPOT'); k.energy = 260; k.spot_size = math.radians(40); k.spot_blend = 0.6; k.color = (1.0, 0.9, 0.75)
     ko = bpy.data.objects.new("Key", k); bpy.context.collection.objects.link(ko); c["key"] = ko
     return c
@@ -180,17 +184,7 @@ def anim_layout(c, t):
     sec = t * DUR["layout"]
     h = c["counter"]
     walk_to(h, Vector((-TL / 2 - 0.3, -TW / 2 - 0.32, 0)), Vector((TL / 2, -TW / 2 - 0.32, 0)), sec, speed=0.5, cadence=1.1)
-    arms_relaxed(h)
-    h.rot("neck01", (1, 0, 0), -12); h.rot("head", (1, 0, 0), -16)
-    from human import reach
-    beat = (sec % 2.2) / 2.2                                   # every 2.2 s a tag goes down on the cloth
-    down = math.sin(math.pi * min(1.0, beat / 0.5)) if beat < 0.5 else 0.0
-    if down > 0.01:
-        sh = h.bone_head("upperarm01.L")
-        tgt = Vector((h.arm.location.x + 0.2, -TW / 2 + 0.12, TZ + 0.06))
-        reach(h, "L", sh.lerp(tgt, 0.35 + 0.65 * down), Vector((0.5, -0.3, -0.8)))
-        if "held_tag" in c:
-            c["held_tag"].location = h.bone_tail("wrist.L") + Vector((0, 0, -0.03))
+    h.rot("neck01", (1, 0, 0), -10); h.rot("head", (1, 0, 0), -12)        # natural walk, eyes on the rows as he goes
     c["key"].location = (-3 + 6 * t, -1.5, 2.6); point_at(c["key"], (-2 + 6 * t, 0, TZ))
 
 
@@ -213,7 +207,7 @@ def anim_final(c, t):
 
 MOVES = {
     "layout": dict(kind="anim", dof=2.8, anim=anim_layout_only,
-                   cam=lambda c, t: (Vector((-TL / 2 - 0.4 + 1.4 * ease(t), -0.9, 1.35)), Vector((-TL / 2 + 1.4 + 1.4 * ease(t), 0.05, TZ)), 40),
+                   cam=lambda c, t: (Vector((-TL / 2 - 0.4 + 1.4 * ease(t), -0.95, 1.0)), Vector((-TL / 2 + 1.8 + 1.4 * ease(t), 0.1, TZ + 0.02)), 40),
                    focus=lambda c, t: Vector((-TL / 2 + 1.0 + 1.4 * ease(t), 0.0, TZ))),
     "tags": dict(kind="anim", dof=5.6, anim=anim_tags,
                  cam=lambda c, t: (Vector((c["counter"].arm.location.x - 1.8, 2.3, 1.95)), Vector((c["counter"].arm.location.x + 0.4, -0.7, 1.0)), 30),

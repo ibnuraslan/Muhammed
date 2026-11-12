@@ -43,7 +43,7 @@ def build(variant=None):
     B.box((-5.05, 4, 1.5), (0.1, 9, 3.0), wall).box((0, 8.55, 1.5), (10, 0.1, 3.0), wall)
     # window wall on the right (x = 5): tall windows over the roofs, rain on the glass
     for k in range(3):
-        B.box((5.05, 0.6 + k * 3.0, 1.5), (0.1, 0.8, 3.0), wall)
+        B.box((5.05, 0.6 + k * 3.0, 1.8), (0.1, 0.8, 1.8), wall)      # piers only between sill and lintel (no coplanar overlap)
     B.box((5.05, 4, 0.45), (0.1, 9, 0.9), wall).box((5.05, 4, 2.85), (0.1, 9, 0.3), wall)
     B.done()
     for k in range(3):
@@ -106,6 +106,16 @@ def build(variant=None):
     bpy.ops.mesh.primitive_plane_add(size=1, location=(-4.97, 4.0, 1.7), rotation=(math.radians(90), 0, math.radians(-90)))
     mp = bpy.context.active_object; mp.scale = (1.6, 1.1, 1); mp.data.materials.append(mm)
     box("MapFrame", (-5.0, 4.0, 1.7), (0.02, 1.68, 1.18), pbr("MapFrameM", (0.1, 0.1, 0.1), 0.5))
+    for x in (-4.3, -3.75, 1.2, 1.75, 2.3):
+        dd.model_h("drawer_cabinet", (x, 8.2, 0), 1.3, rot_z=math.pi)
+    dd.model_h("steel_frame_shelves_01", (3.6, 8.2, 0), 2.0)
+    for j in range(3):
+        for q in range(6):
+            box("ShelfBinder", (3.25 + q * 0.12, 8.2, 0.62 + j * 0.62), (0.07, 0.28, 0.3),
+                pbr("BinderM", ((0.15, 0.25, 0.5), (0.55, 0.1, 0.08), (0.2, 0.2, 0.22))[(q + j) % 3], 0.6))
+    dd.model_h("wall_clock", (-3.3, 8.47, 2.45), 0.35, rot_z=math.pi)
+    cyl("Cooler", (-3.0, 7.9, 0.5), 0.17, 1.0, pbr("CoolerBody", (0.85, 0.85, 0.83), 0.4), verts=20)
+    cyl("CoolerJug", (-3.0, 7.9, 1.2), 0.15, 0.4, glass("JugG", (0.75, 0.85, 0.95), 0.02), verts=20)
     cork = dd.tex_mat("concrete_floor_02", 1.0, tint=(0.62, 0.45, 0.28), name="Cork", sat=0.9)
     box("Corkboard", (-1.0, 8.47, 1.65), (3.0, 0.03, 1.4), cork)
     box("CorkFrame", (-1.0, 8.49, 1.65), (3.1, 0.02, 1.5), pbr("CorkFrameM", (0.35, 0.25, 0.15), 0.5))
@@ -120,7 +130,7 @@ def build(variant=None):
         a = bpy.data.lights.new("FluoL", 'AREA'); a.shape = 'RECTANGLE'; a.size = 0.3; a.size_y = 1.3; a.energy = 90; a.color = (0.92, 0.96, 1.0)
         o = bpy.data.objects.new("FluoL", a); bpy.context.collection.objects.link(o); o.location = (x, 4, 2.9)
     c["pinner"] = officer("Pinner", 47, seed=3, band=False)
-    reader = officer("Reader", 38, seed=0, gender=0.0, band=False); c["reader"] = reader
+    reader = officer("Reader", 38, seed=1, gender=0.0, band=False); c["reader"] = reader      # hair tied back: her face reads
     # the reader seated at the desk by the window, facing -X toward the room... reading a file
     zero(reader); reset_pose(reader); pose_sit(reader, lean=14)
     for sd, sg in (("L", 1), ("R", -1)):
@@ -128,6 +138,14 @@ def build(variant=None):
     place(reader, (3.3 + 0.8, 3.6, 0), math.radians(-90))      # facing -X: the room, the desk in front of her
     hip = (reader.bone_head("upperleg01.L") + reader.bone_head("upperleg01.R")) / 2
     reader.arm.location.z += 0.52 - hip.z; bpy.context.view_layer.update()
+    # 5B: a different detective at the same desk for the listening post: a man in his fifties in headphones
+    ls = officer("Listener", 54, seed=1, band=False); c["listener"] = ls
+    zero(ls); reset_pose(ls); pose_sit(ls, lean=6)
+    for sd, sg in (("L", 1), ("R", -1)):
+        reach(ls, sd, Vector((-0.14 * sg, -0.4, 0.74)), Vector((sg * 0.6, 0.2, -0.6)))
+    place(ls, (3.3 + 0.8, 3.6, 0), math.radians(-90))
+    hip = (ls.bone_head("upperleg01.L") + ls.bone_head("upperleg01.R")) / 2
+    ls.arm.location.z += 0.52 - hip.z; bpy.context.view_layer.update()
     c["file"] = box("OpenFile", (3.55, 3.5, 0.775), (0.33, 0.45, 0.01), pbr("FilePaper", (0.88, 0.87, 0.82), 0.7))
     l = bpy.data.lights.new("DeskLampL", 'SPOT'); l.energy = 40; l.spot_size = math.radians(70); l.color = (1.0, 0.85, 0.6)
     lo = bpy.data.objects.new("DeskLampL", l); bpy.context.collection.objects.link(lo); lo.location = (3.3, 3.2, 1.2); point_at(lo, (3.3, 3.6, 0.77))
@@ -174,8 +192,8 @@ def anim_listen(c, t):
         sp.rotation_euler = (0, 0, -sec * (2.2 if k else 1.6))
     for k, nd in enumerate(c.get("needles", [])):
         nd.rotation_euler = (math.radians(35 * (0.4 + 0.3 * math.sin(sec * 7.0 + k) + 0.2 * math.sin(sec * 13.0 + 2 * k))), 0, 0)
-    r = c["reader"]
-    r.rot("neck01", (1, 0, 0), -16); r.rot("head", (1, 0, 0), -12)       # head up, listening, not reading
+    c["reader"].arm.location.z = -60
+    r = c["listener"]
     r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
     c["headband"].location = hd + Vector((0, 0, 0.07)); c["headband"].rotation_euler = (0, 0, r.arm.rotation_euler.z)
@@ -202,13 +220,14 @@ def arms_relaxed_one_left(h):
 
 def anim_read(c, t):
     sec = t * DUR["read"]
+    c["listener"].arm.location.z = -60
     r = c["reader"]; r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     f = c["file"]; f.rotation_euler = (0, 0, 0.03 * math.sin(sec * 0.3))
 
 
 MOVES = {
     "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
-                   cam=lambda c, t: (Vector((2.3, 4.9, 1.35)).lerp(Vector((2.5, 4.7, 1.32)), ease(t)), Vector((3.8, 3.7, 0.98)), 30),
+                   cam=lambda c, t: (Vector((4.0, 5.7, 1.32)).lerp(Vector((3.95, 5.4, 1.3)), ease(t)), Vector((3.75, 3.6, 1.08)), 35),
                    focus=lambda c, t: Vector((3.6, 3.8, 1.0))),
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
