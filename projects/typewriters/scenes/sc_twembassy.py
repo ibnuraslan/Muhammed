@@ -524,5 +524,5 @@ def build(variant=None):
         look.night_interior()
     else:
         look.day_light("mist", azim=210)
-        look.ground_haze((0, 0), (160, 160), mood="mist", height=12.0, density=0.012)
+        look.ground_haze((0, 0), (160, 160), mood="mist", height=12.0, density=0.004)
     return c

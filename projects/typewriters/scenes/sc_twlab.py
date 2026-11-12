@@ -322,6 +322,6 @@ def build(variant=None):
     c = _build_raw(variant) if variant is not None else _build_raw()
     look.interior_day(window=((-6.5, 0.0, 1.9), (0.0, 0.0, 0.9)), mood="low_sun", key_size=3.0)
     look.haze((0, 0, 1.5), (12, 8, 3.0), "low_sun", 0.025)
-    twp.window_plate((-6.6, 0.0, 1.85), (9.0, 2.6), axis="x")
+    twp.window_plate((-6.6, 0.0, 1.85), (9.0, 2.6), axis="x", strength=0.45)
     look.gobo((-6.2, 0.0, 1.85), (6.0, 1.8), axis="x", bars=7, kind="blinds")
     return c
