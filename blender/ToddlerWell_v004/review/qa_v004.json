@@ -15,7 +15,7 @@
   "85": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 3%"
+    "wall/prop fills the frame, character only 6%"
    ]
   ],
   "97": [
@@ -736,37 +736,23 @@
     "hair / top of head 32%"
    ]
   ],
-  "1351": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ]
-  ],
   "1357": [
    [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
+    "BACKHEAD",
+    "Teen"
    ]
   ],
   "1363": [
    [
-    "FILL",
-    "ShadowSlab"
-   ],
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
-  "1369": [
-   [
     "INSIDE",
     "camera inside geometry"
    ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1369": [
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
@@ -776,10 +762,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1381": [
@@ -818,6 +800,10 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "1399": [
@@ -828,10 +814,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
    ]
   ],
   "1405": [
@@ -841,11 +823,7 @@
    ],
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "wall/prop fills the frame, character only 1%"
    ]
   ],
   "1411": [
@@ -1482,8 +1460,9 @@
   ]
  },
  "counts": {
-  "EMPTY": 169,
-  "FILL": 17,
-  "INSIDE": 116
+  "EMPTY": 164,
+  "FILL": 16,
+  "INSIDE": 116,
+  "BACKHEAD": 1
  }
 }
