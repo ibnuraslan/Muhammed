@@ -41,3 +41,11 @@ Checked as OK:
   - **EMPTY 1261–1357:** the crown macro (beat 7, "placed in the crown of a statue"). It is a prop insert of the crown and the bullet; the cleric's hand enters at its start.
   - **BACKHEAD 1153:** the start of beat 7. The camera looks through the cell window into the shrine, with the Pope at 7 m seen from behind, praying before the statue. His face reads from 1375 (beat 8).
 - **Hand close-ups:** `after_v004_hand_closeups.jpg`.
+
+## Director 6-point self-check (looked at the images myself)
+1. **Hands touch what they hold: checked.** Pistol grip, the aides under the armpits, the Pope's hands on his stomach, the surgeons' fingertips on the drape, the nurse on the tray, the Pope's hand on the prisoner's shoulder, the bullet pinch at the crown, the prayer hands.
+2. **No claws: checked.** Idle hands use relaxed curls under Limit Rotation (no backward joints). The aides' outer hands at their sides are loosely curled, not clawed.
+3. **Nothing pressed into a face: checked.** qa_check reports FACEPRESS 0.
+4. **No empty, blurred or black cells, and no back-of-head on beats: checked on the sheets.** The QA EMPTY and BACKHEAD frames are the intended transitions and the beat-7 wide, listed above.
+5. **Close-ups show the hands: checked.** Two of the 16 close-ups (nurse, surgeon A) had been black because the close-up camera sat inside geometry. They were re-rendered from the packed v004 file with explicit cameras (`after_v004_hand_closeups.jpg`).
+6. **`hand_poses.py`: not applied in v004.** The director's library message reached me after the pass was finished. The contacts were set with IK targets, surface ray casts and finger curls instead, and every hand contact passed the checks above. It can be adopted in a v005 if wanted.
