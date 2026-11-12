@@ -465,7 +465,7 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         fwd = 0.35 * (q if q <= 0.6 else 0.6 - (q - 0.6) * 1.5)
         # hand under the shoulder (world: down), knee under the hip: hands planted with palms flat
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
-        Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.05 + lift)
+        Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.15 + lift)      # v005: palm on top of the stones, not sunk into them
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
         hw = Bm @ LB.hip[s]; fwd_ = V(math.sin(R_(yaw_c)), -math.cos(R_(yaw_c)), 0)
         kq = (ph + 0.5 * k + 0.5) % 1.0; kf = 0.25 * (kq if kq <= 0.6 else 0.6 - (kq - 0.6) * 1.5); klift = 0.06 * math.sin(math.pi * kq) if kq > 0.6 else 0.0
@@ -673,8 +673,8 @@ for name in BYS:
                 sx = 1 if s == "L" else -1
                 if name == "WitA":
                     if s == "L":      # one hand over the mouth
-                        Wt = mouth + V(0.05, -0.13, -0.15)
-                        Bd.hand(s, f, Bm, (Bd.sh[s] + V(sx * 0.28, -0.25, -0.38)).lerp(Wt, u), V(-0.3, -0.15, 1).normalized(), V(0, 1, 0))
+                        Wt = mouth + V(0.09, -0.12, -0.2)      # v005: fingers angled across the mouth, below the nose, not pressed on the face
+                        Bd.hand(s, f, Bm, (Bd.sh[s] + V(sx * 0.28, -0.25, -0.38)).lerp(Wt, u), V(-0.75, -0.1, 0.65).normalized(), V(0, 1, 0))
                     else:             # the other held just off her chest
                         Wt = Bd.sh["R"] + V(0.1, -0.24, -0.2)
                         Bd.hand(s, f, Bm, (Bd.sh[s] + V(sx * 0.28, -0.25, -0.38)).lerp(Wt, u), V(0.6, -0.2, 0.75).normalized(), V(0, 1, 0))

@@ -150,6 +150,7 @@ f_shut = 262; f_open = sc["f_stir"] + 8
 ramp_keys(LADO, LIDS, [(1, 18), (60, 26), (64, 6), (68, 22), (f_shut - 30, 22), (f_shut, 46), (f_open, 46), (f_open + 10, 20),
                        (f_open + 30, 10), (f_open + 34, 40), (f_open + 38, 12), (sc.frame_end - 120, 14), (sc.frame_end - 116, 38), (sc.frame_end - 112, 18)])
 # hands (client, 23:00): relaxed curled default on every character, anatomical limits on fingers, thumbs and wrists
+f_palm0_x = eval(sc["palm"])[0]
 RIGS4 = [bpy.data.objects[n] for n in ("Lad", "WitA", "WitB", "Worker")]
 def finger_names(rig, s_):
     return [b.name for b in rig.data.bones if b.name.startswith("finger") and b.name.endswith("." + s_)]
@@ -180,10 +181,13 @@ for rg in RIGS4:
         for n in finger_names(rg, s_):
             if n in keyed: continue
             j = int(n.split("-")[1].split(".")[0]); thumb = n.startswith("finger1")
-            key_local_rot(rg, n, 1, (10 if thumb else 14 + 6 * j))
+            key_local_rot(rg, n, 1, (8 if thumb else 8 + 4 * j))      # v005: softer, so idle hands read relaxed (no claws)
 # Lad's open right hand (outside the bottle grips) also relaxes rather than going flat
 FING_R = [("finger%d-%d.R" % (i, j), 0.6 if i == 1 else 1.0) for i in range(1, 6) for j in range(1, 4)]
 ramp_keys(LADO, FING_R, [(f_drop + 4, 28), (f_fb0 - 14, 28), (f_fb1 + 4, 28)])
+# v005: Lad's left hand opens flat-ish while he looks at his palm (beat 12), not a claw
+FING_L = [("finger%d-%d.L" % (i, j), 0.5 if i == 1 else 1.0) for i in range(1, 6) for j in range(1, 4)]
+ramp_keys(LADO, FING_L, [(1, 16), (f_palm0_x - 4, 16), (f_palm0_x + 8, 6), (sc.frame_end, 6)])
 # faces: snore (jaw), horror (jaw drop), stunned/dazed lids, the final dopey grin
 def key_jaw(rig, f, deg): key_local_rot(rig, "jaw", f, deg)
 def key_grin(rig, f, k):
@@ -607,14 +611,14 @@ CAM = [  # frame, camera, aim, lens
     (842, V(1.9, y(842) - 1.2, 0.36), lad_p(842), 20),
     (866, V(2.7, -42.8, 0.45), V(0.2, -40.0, 0.25), 24),
     (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
-    (935, V(3.5, -46.0, 2.2), V(0.9, -50.0, 0.8), 23),
+    (935, V(3.5, -46.0, 2.2), V(0.9, -42.5, 0.9), 23),      # v005: on the train braking, not the empty track
     (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
     (1045, V(2.0, -40.2, 1.5), V(3.8, -38.9, 1.25), 20),
     (1090, V(1.95, -39.2, 1.45), V(3.9, -39.4, 1.2), 20),
     (1113, V(1.8, -40.4, 1.45), V(4.0, -38.4, 1.3), 18),
     (1138, V(1.85, -40.1, 0.95), V(2.62, -41.6, 0.8), 24),
-    (1168, V(2.7, -40.9, 0.62), V(0.3, -40.0, 0.35), 24),
+    (1168, V(2.6, -40.8, 0.3), V(0.5, -40.0, 0.38), 22),      # v005: under the skirt line, so his face reads as he stirs
     (1200, V(2.95, -41.0, 0.5), V(1.3, -40.0, 0.45), 24),
     (1230, V(3.45, -40.95, 0.9), V(2.2, -40.1, 1.05), 26),
     (1250, V(3.95, -40.6, 1.45), V(2.4, -40.1, 1.45), 28),
@@ -625,15 +629,15 @@ CAM = [  # frame, camera, aim, lens
     (1440, V(3.45, -40.1, 1.3), V(2.45, -40.1, 1.15), 26),
     (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
     (1560, V(3.2, -41.25, 1.2), V(2.45, -40.35, 1.05), 32),
-    (1605, V(rp(1605).x + 1.4, rp(1605).y - 1.7, 1.0), rp(1605), 28),
-    (1625, V(rp(1625).x + 0.9, rp(1625).y - 1.0, 0.7), rp(1625), 30),
+    (1605, V(rp(1605).x + 2.1, rp(1605).y - 2.5, 1.3), rp(1605) + V(0, 0, 0.35), 26),
+    (1625, V(rp(1625).x + 1.5, rp(1625).y - 1.7, 1.0), rp(1625) + V(0, 0, 0.25), 28),
     (1680, V(rp(1680).x + 1.3, rp(1680).y - 1.5, 0.85), rp(1680), 28),
     (1750, V(rp(1750).x - 1.1, rp(1750).y - 1.0, 0.8), rp(1750), 30),
     (1812, V(rp(1812).x + 1.0, rp(1812).y - 1.1, 0.75), rp(1812), 30),
     (1834, V(rp(1834).x + 1.0, rp(1834).y - 1.0, 0.8), rp(1834), 30),
-    (1846, V(2.7, -38.0, 1.6), V(2.45, -40.3, 1.1), 26),
-    (1876, V(2.65, -38.3, 1.65), V(2.4, -41.0, 1.3), 28),
-    (1920, V(3.4, -40.0, 1.5), V(2.45, -41.8, 1.2), 28),
+    (1846, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
+    (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
+    (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
     (2020, V(2.78, -43.6, 1.5), V(2.5, -43.1, 1.42), 40),
     (2070, V(2.64, -43.8, 1.62), V(2.45, -42.9, 1.63), 40)]
