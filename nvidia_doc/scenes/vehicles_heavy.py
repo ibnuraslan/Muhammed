@@ -375,3 +375,114 @@ def register(K):
     K["excavator"] = excavator
     K["grab_crane"] = grab_crane
     K["boom_truck"] = boom_truck
+
+
+# ============================================================================ concrete mixer truck
+def drum_mat():
+    def masks(g):
+        ang = g.math('ARCTAN2', g.z, g.y)
+        u = V.E(g, g.math('FRACT', ang / (2 * math.pi) + g.x / -1.6).s)
+        stripe = g.inside(u, 0.0, 0.16, 0.01)                         # painted spiral bands following the blades
+        splat = g.clamp(g.ss(0.55, 0.68, g.noise(2.2, 6.0, 0.7)) + g.ss(-3.6, -4.6, g.x) * 0.8)
+        drips = g.ss(0.62, 0.72, g.noise_s(6.0, 2.0, 2.0, 0.15)) * g.ss(0.2, -0.4, g.z)
+        crust = g.clamp(splat * 0.85 + drips * 0.9)
+        return dict(livery=[(stripe, (0.85, 0.85, 0.82)), (crust, (0.52, 0.51, 0.47))])
+    return V.paint_shader("V_Paint_Drum", masks, rough=0.45, fixed_color=(0.78, 0.36, 0.05))
+
+
+def concrete_mixer(variant=None):
+    from vehicles_cars import cab_1990s, truck_chassis, fender
+    XF, XR1, XR2, R, RIM = 2.95, -1.55, -2.95, 0.45, 0.25
+    parts, heads = cab_1990s(3.85, tag="CabMix")
+    truck_chassis(parts, -4.3, 3.6, 0.85)
+    dk, bp = V.steel_dark(), V.black_plastic()
+    grey = V.paint_shader("V_Paint_MixerFrame", lambda g: {}, rough=0.5, fixed_color=(0.32, 0.33, 0.34))
+    # drum supports: front pedestal, rear roller frame, water tank, hopper and chute frame
+    parts.append(V.rbox("FrontStand", (1.95, 0, 1.45), (0.35, 1.3, 1.1), 0.05, grey))
+    for s in (-1, 1):
+        parts.append(V.rbox("RearLeg", (-2.07, s * 0.62, 1.42), (0.22, 0.18, 0.9), 0.03, grey))
+        parts.append(V.cylinder("Roller", (-2.07, s * 0.55, 1.86), 0.12, 0.16, dk, axis='Y', verts=16))
+        parts.append(V.rbox("Brace", (-2.7, s * 0.62, 1.3), (1.2, 0.12, 0.12), 0.02, grey, rot=(0, math.radians(-30), 0)))
+    parts.append(V.rbox("RollerBeam", (-2.07, 0, 1.72), (0.3, 1.5, 0.16), 0.03, grey))
+    for s in (-1, 1):
+        parts.append(V.rbox("HopperLeg", (-3.8, s * 0.55, 2.4), (0.14, 0.14, 2.9), 0.02, grey))
+    parts.append(V.cylinder("WaterTank", (2.25, 0, 2.45), 0.32, 1.6, V.paint_shader("V_Paint_MixerTank", lambda g: {}, rough=0.4,
+                                                                                    fixed_color=(0.7, 0.7, 0.68)), axis='Y', verts=28))
+    hop = V.lathe("Hopper", [(0.26, 0.0), (0.32, 0.25), (0.62, 0.75), (0.66, 0.8)], grey, 24, axis='Z')
+    hop.data.transform(Matrix.Translation((-3.8, 0, 3.55))); parts.append(hop)
+    chute = V.sweep("Chute", [(-3.85, 0, 2.75), (-4.35, 0, 2.45), (-4.95, 0, 2.05)],
+                    [(-0.28, 0.0), (-0.24, -0.16), (0.0, -0.22), (0.24, -0.16), (0.28, 0.0), (0.24, -0.12), (0.0, -0.18), (-0.24, -0.12)],
+                    grey, up=(0, 0, 1), cap=False, sharp=70)
+    parts.append(chute)
+    parts.append(V.rbox("ChuteSlide", (-3.95, 0, 2.95), (0.5, 0.6, 0.05), 0.02, grey))
+    # ladder up the rear to the hopper platform
+    for s in (-1, 1):
+        parts.append(V.rbox("LadderRail", (-4.0, 0.8 + s * 0.22, 2.0), (0.04, 0.04, 2.5), 0.01, V.alu(), rot=(0, math.radians(-12), 0)))
+    for k in range(8):
+        z = 1.0 + k * 0.3
+        parts.append(V.cylinder("Rung", (-4.0 - (z - 2.0) * 0.21, 0.8, z), 0.018, 0.44, V.alu(), axis='Y', verts=8))
+    parts.append(V.rbox("Platform", (-4.25, 0.8, 3.3), (0.5, 0.6, 0.04), 0.01, V.alu()))
+    # fenders over all three axles, under-run, lamps, plate
+    parts.append(fender("FenderF", XF, R, R + 0.07, 0.95, 0.4, bp))
+    parts.append(fender("FenderF", XF, R, R + 0.07, -0.95, 0.4, bp))
+    for s in (-1, 1):
+        parts.append(V.rbox("RearGuard", ((XR1 + XR2) / 2, s * 0.85, R + 0.55), (2.6, 0.62, 0.03), 0.01, bp))
+        parts.append(V.rbox("Flap", (XR2 - 0.6, s * 0.85, 0.5), (0.01, 0.55, 0.6), 0.005, V.rubber()))
+        parts.append(V.lamp(f"Tail{s}", (-4.35, s * 0.95, 0.9), (0.06, 0.28, 0.12), "tail", 0.015, facing=-1))
+        parts.append(V.rbox("SideGuard", (0.4, s * 1.1, 0.8), (1.8, 0.03, 0.1), 0.01, V.alu()))
+    parts.append(V.rbox("LampBar", (-4.32, 0, 0.9), (0.05, 2.1, 0.09), 0.01, dk))
+    parts.append(V.rbox("Underrun", (-4.3, 0, 0.62), (0.08, 2.1, 0.12), 0.01, dk))
+    parts.append(V.plate("PlateR", (-4.37, 0.0, 0.62), facing=-1))
+    parts.append(V.cylinder("Tank", (0.6, -0.8, 0.8), 0.26, 0.9, V.alu(), axis='X', verts=28))
+    body = V.join(parts, "ConcreteMixer")
+    # the drum (part 'drum'): spins about its own axis = local X; tilted up towards the rear opening
+    L = 5.7
+    prof = [(0.0, 0.0), (0.45, -0.03), (0.95, -0.35), (1.17, -1.1), (1.2, -2.4), (1.12, -3.4), (0.88, -4.4), (0.62, -5.2),
+            (0.55, -5.55), (0.6, -5.62), (0.62, -5.7)]
+    dm = drum_mat()
+    shell = V.lathe("DrumShell", [(r, h) for (r, h) in prof], dm, 56, axis='X')
+    # lathe(axis='X') maps h -> +x; mirror so the opening points to -x
+    fins = []
+    for k in range(2):
+        pts = []
+        for i in range(90):
+            t = i / 89.0
+            x = -0.25 - t * 5.2
+            ang = 2 * math.pi * (t * 3.2 + k * 0.5)
+            # radius of the profile at this x
+            r = 0.0
+            for (r0, h0), (r1, h1) in zip(prof, prof[1:]):
+                if h1 <= x <= h0:
+                    r = r0 + (r1 - r0) * (x - h0) / (h1 - h0); break
+            pts.append((x, (r + 0.025) * math.cos(ang), (r + 0.025) * math.sin(ang)))
+        fins.append(V.sweep("Fin", pts, V.rounded_rect(0.05, 0.09, 0.015, 1), dm, up=(1, 0, 0), sharp=70))
+    ring = V.lathe("Track", [(1.0, -4.0), (1.0, -4.2)], dk, 40, axis='X')
+    gear = V.lathe("Gearbox", [(0.0, 0.25), (0.35, 0.2), (0.35, 0.0)], dk, 24, axis='X')
+    drum = V.join([shell, ring, gear] + fins, "Drum")
+    drum.parent = body; drum.location = (1.95, 0, 2.05); drum.rotation_euler = (0, math.radians(11), 0)
+    drum["part"] = "drum"
+    mf = V.wheel_mesh("mixer_f", R, 0.3, RIM, "truckgrey")
+    md = V.wheel_mesh("mixer_d", R, 0.28, RIM, "truckgrey", dual=True)
+    for s in (-1, 1):
+        V.add_wheel(body, mf, XF, s * 0.98, R, R, RIM, s)
+        for x in (XR1, XR2):
+            V.add_wheel(body, md, x, s * 1.0, R, R, RIM, s)
+    return V._finish(body, "ConcreteMixer", (0.86, 0.86, 0.84), heads=heads)
+
+
+def spin_drum(root, angle_rad, keyframe_frame=None):
+    """Turn the mixer drum about its own (tilted) axis."""
+    d = V.part(root, "drum")
+    d.rotation_euler[0] = angle_rad
+    if keyframe_frame is not None:
+        d.keyframe_insert("rotation_euler", index=0, frame=keyframe_frame)
+
+
+V.spin_drum = spin_drum
+_old_register = register
+
+
+def register(K):
+    _old_register(K)
+    K["concrete_mixer"] = concrete_mixer
+    V.DEFAULT_DIRT["concrete_mixer"] = 0.45
