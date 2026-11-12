@@ -516,7 +516,8 @@ ledge = grid_mesh("S4_Ledge", CX - 8, CX + 8, -9, 9, 96, 108, H4, S4, solid=0.8)
 m_mud = pbr("M_LedgeMud", "brown_mud_02", 1.4, sat=0.9, val=0.75, bump=1.0, rough_mul=0.5)
 ledge.data.materials.append(m_mud)
 bpy.ops.mesh.primitive_uv_sphere_add(radius=1.0, location=(CX, 0.5, -0.6), segments=64, ring_count=32)
-cav = bpy.context.active_object; cav.name = "S4_Cavern"; cav.scale = (8.2, 9.5, 4.6); apply_mods(cav)
+cav = bpy.context.active_object; cav.name = "S4_Cavern"; cav.scale = (8.2, 9.5, 4.6)
+bpy.ops.object.transform_apply(location=True, rotation=False, scale=True)
 for v in cav.data.vertices:
     q = v.co.copy(); n_ = (q - V((CX, 0.5, -0.6))).normalized()
     v.co = q + n_ * (0.7 * noise.noise(q * 0.35) + 0.25 * noise.noise(q * 1.3))
@@ -532,7 +533,9 @@ pcut, _ = tube_mesh("CUT_Passage", [(CX, 1.0, -2.4)] + PAS[:3] + [(CX - 0.2, -11
 boolean_cut(cav, pcut); apply_mods(ledge); boolean_cut(ledge, pcut)
 bpy.data.objects.remove(pcut, do_unlink=True)
 m_cav = pbr("M_CavernRock", "rock_surface", 3.0, sat=0.5, val=0.55, bump=1.6, rough_mul=0.45)
-cav.data.materials.append(m_cav)
+cav.data.materials.clear(); cav.data.materials.append(m_cav)
+for pg in cav.data.polygons: pg.material_index = 0
+_bc = bmesh.new(); _bc.from_mesh(cav.data); bmesh.ops.reverse_faces(_bc, faces=_bc.faces); _bc.to_mesh(cav.data); _bc.free()   # normals face into the cavern
 m_pas = pbr("M_PassageRock", "dark_rock", 2.0, sat=0.5, val=0.6, bump=1.4, rough_mul=0.5)
 mix_mud(m_pas, "brown_mud_02", "mud"); set_mud_by_height(passage, PAS_D, 0.6)
 passage.data.materials.append(m_pas)

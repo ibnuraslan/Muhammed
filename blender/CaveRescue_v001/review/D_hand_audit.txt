@@ -1,0 +1,12 @@
+Hand audit: 515 frames (every 6), overlapping-frame counts
+TOTAL flagged frame-events: 9
+     3  Boy3 hand R vs own clothes (torso) (first f325)
+     2  DiverB hand L vs Boy2 (first f2365)
+     2  DiverB hand R vs Boy2 (first f2365)
+     1  Boy3 hand L vs own clothes (torso) (first f529)
+     1  DiverB hand L vs hand R (first f2365)
+
+Explained hits (intended or negligible):
+- Boy3 hand vs own clothes, f325 and f529 (4 sampled frames): while running, the pumping arm brushes the jacket front. It's a sleeve-on-jacket touch.
+- DiverB hands vs Boy2 and L vs R, f2365 (5): the diver's hands hold the full-face mask and pull the straps behind the boy's head. That's deliberate contact.
+History: 3471 (first run, after the look pass) -> 43 -> 9.

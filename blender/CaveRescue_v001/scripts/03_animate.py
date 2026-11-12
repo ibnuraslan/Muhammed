@@ -140,7 +140,7 @@ def seated(n, f, x, y, yaw, lean=22.0, head=(-10.0, 0.0), hug=True, hand_over=No
     fw = Rz(yaw) @ V((0, -1, 0)); sd = Rz(yaw) @ V((1, 0, 0))
     for s in "LR":
         sx = 1 if s == "L" else -1
-        xy = (V((x, y, 0)) + fw * (0.36 + knee) + sd * (0.11 * sx)).to_2d()
+        xy = (V((x, y, 0)) + fw * (0.36 + knee + (0.08 if n == "Coach" else 0.0)) + sd * (0.12 * sx)).to_2d()
         H.key_foot(s, f, xy, yaw, 0.0, 0.0)
         pb = H.r.PB["Pole_knee." + s]; nm = "Pole_knee." + s
         pole = V((xy.x, xy.y, g + 1.2)) + fw * 0.3
@@ -150,8 +150,13 @@ def seated(n, f, x, y, yaw, lean=22.0, head=(-10.0, 0.0), hug=True, hand_over=No
     if hug:
         for s in "LR":
             sx = 1 if s == "L" else -1
-            W = V((x, y, g)) + fw * (0.36 + knee) + sd * (0.06 * sx) + V((0, 0, 0.36))
+            W = V((x, y, g)) + fw * (0.40 + knee) + sd * (0.13 * sx) + V((0, 0, 0.34))
             hands[s] = (W, (-sd * sx + V((0, 0, -0.3))).normalized(), -fw, V((x, y, g + 0.4)) + sd * (0.7 * sx) + fw * 0.1)
+    if hug and n == "Coach":      # adult: hands rest on top of each knee, well apart
+        for s in "LR":
+            sx = 1 if s == "L" else -1
+            W = V((x, y, g)) + fw * 0.30 + sd * (0.2 * sx) + V((0, 0, 0.47))
+            hands[s] = (W, (fw + V((0, 0, -0.4))).normalized(), V((0, 0, -1)), V((x, y, g + 0.4)) + sd * (0.8 * sx))
     if hand_over:
         hands.update(hand_over)
     key_hands(n, f, P, Rb, hands)
@@ -359,7 +364,7 @@ for f in list(range(1, 600, 6)) + [600, 606]:
     for k in ("location", "rotation_euler", "scale"): surge.keyframe_insert(k, frame=f)
 # rain + torrent at the mouth (beat 2), sky darkens
 rain_v = bpy.data.materials["M_Rain"].node_tree.nodes["RainAmount"].outputs[0]
-for f, v in ((1, 0.0), (285, 0.0), (300, 1.0), (600, 1.0), (610, 0.0)):
+for f, v in ((1, 0.0), (285, 0.0), (300, 0.6), (600, 0.6), (610, 0.0)):
     rain_v.default_value = v; rain_v.keyframe_insert("default_value", frame=f)
 tor = bpy.data.objects["FX_MouthTorrent"]
 tor.hide_render = True
@@ -529,6 +534,8 @@ for f, h in ((1, True), (2150, False), (2335, True)):
 for f, a in ((2155, 0), (2280, 0), (2320, 1)):
     for s in "LR":
         RIG["Boy2"].key_rot("orbicularis03." + s, f, [("X", 28 * a)])
+for f in (2345, 2406):
+    kneel(DA, f, P2.x + 0.5, P2.y + 0.05, -82, lean=20, head=(20, 0))
 for f, hd in ((2155, (5, 10)), (2290, (5, 10)), (2328, (25, 18)), (2406, (28, 20))):
     seated("Boy2", f, P2.x, P2.y, -10, lean=14, head=hd, hug=False)
 # beat 11: full-face mask fitted (2329-2406) by DiverB, then lift (2380+)
@@ -570,7 +577,7 @@ for f in (2329, 2345, 2365, 2385, 2406):
             W = c_ + side * (0.11 * -sx) + fwd2 * 0.02 + V((0, 0, -0.02))
             HUM["DiverB"].key_hand(s, f, W, (-side * -sx + fwd2 * 0.2).normalized(), -fwd2, W + fwd2 * 0.5 + side * 0.4 * -sx + V((0, 0, -0.3)))
         else:      # pull the straps behind the head
-            W = c_ - fwd2 * 0.13 + side * (0.06 * -sx) + V((0, 0, 0.05))
+            W = c_ - fwd2 * 0.13 + side * (0.1 * -sx) + V((0, 0, 0.05))
             HUM["DiverB"].key_hand(s, f, W, (fwd2 * -1 + V((0, 0, 0.3))).normalized(), side * sx, W + fwd2 * 0.6 + side * 0.4 * -sx)
 # =============================================================== BEAT 12: tow through the flooded passage (2407-2570)
 # DiverB swims, Boy2 lies face-up in the harness beside him (head first), the mask stays on the boy's head
@@ -657,7 +664,7 @@ for f in range(OUT0, OUT1 + 1, 6):
     hb4 = {}
     for s in "LR":
         sx = 1 if s == "L" else -1
-        W = bw("Boy4", Pboy, Rb, rest_head("Boy4", "spine04") + V((0.09 * sx, -0.17, 0.02)))
+        W = bw("Boy4", Pboy, Rb, rest_head("Boy4", "spine04") + V((0.1 * sx, -0.22, 0.02)))
         hb4[s] = (W, Rb @ V((-sx, 0, 0.2)).normalized(), Rb @ V((0, 1, 0)), W + Rb @ V((0.4 * sx, 0.2, 0)))
     key_hands("Boy4", f, Pboy, Rb, hb4)
 TELE["Boy4"].add(OUT0 - 1)
@@ -746,7 +753,7 @@ for i, y in enumerate((-4.0, -11.0, -18.0, -26.0)):
 f4 = bpy.data.objects["S4_Fill"]; f4.data.energy = 90; f4.visible_volume_scatter = False; f4.data.color = (0.85, 0.9, 1.0)
 EXPO = [(1, 0.0), (290, 0.0), (330, 0.8), (580, 0.8), (583, 0.0), (1008, 0.0), (1009, 1.0), (1212, 1.0), (1240, 1.0), (1700, 1.0), (1840, 1.0),
         (2430, 1.0), (2470, 1.0), (2565, 1.0), (2566, 0.0), (2726, 0.0), (2727, 0.6), (2800, 0.0), (3090, 0.0)]
-for f, e in ((1, 90), (1212, 90), (1218, 0), (1878, 0), (1886, 90), (2430, 90), (2438, 0), (2565, 0)):
+for f, e in ((1, 150), (1212, 150), (1218, 0), (1878, 0), (1886, 150), (2430, 150), (2438, 0), (2565, 0)):
     f4.data.energy = e; f4.data.keyframe_insert("energy", frame=f)
 for f, v in EXPO:
     sc.view_settings.exposure = v; sc.view_settings.keyframe_insert("exposure", frame=f)
