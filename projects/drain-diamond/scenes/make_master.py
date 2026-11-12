@@ -47,7 +47,9 @@ CHAPTERS = {
 
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
 chapter, folder, vo = args[:3]
-LEAD = float(args[3]) if len(args) > 3 else (2.5 if chapter == "intro" else 0.0)   # seconds of picture before the first word
+LEAD = float(args[3]) if len(args) > 3 else (2.5 if chapter == "intro" else 3.0)   # seconds of picture before the first word
+if chapter != "intro":
+    LEAD = max(LEAD, 3.0)          # the person's rule: at least 3.0 s of picture under each chapter title before the voice
 folder = os.path.abspath(folder)
 shots = CHAPTERS[chapter]
 
