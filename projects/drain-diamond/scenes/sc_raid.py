@@ -111,7 +111,7 @@ def build(variant=None):
     {"street": build_street, "hall": build_hall}[variant or "street"](c)
     import look
     if (variant or "street") == "street":         # June dawn: a low raking sun down the suburban street
-        pass                                      # LOOK: exteriors on hold for look v5 (keep real colours): grade only
+        look.day_light("low_sun", azim=80, elev=9, sky="blue")     # LOOK v5: June dawn, raking sun, blue sky, real colours
     else:
         look.night_interior()
     return c

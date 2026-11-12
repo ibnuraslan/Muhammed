@@ -673,9 +673,9 @@ def build(variant=None):
      "lane_night": lambda c: build_lane(c, True), "salon_night": lambda c: build_salon(c, True)}[v](c)
     import look                                   # house cinematic lighting (look.py), at the end of the build
     if v == "dawn":
-        pass                                      # LOOK: exteriors on hold for look v5 (keep real colours): grade only
+        look.day_light("low_sun", azim=70, elev=12, sky="blue")    # LOOK v5: dawn sun raking the stone, blue sky
     elif v == "lane":
-        pass                                      # LOOK: exteriors on hold for look v5: grade only
+        look.day_light("low_sun", azim=150, elev=16, sky="blue")   # LOOK v5
     elif v == "salon":
         look.interior_day(window=((0, -1.2, 2.6), (-0.5, 5.0, 0.4)), mood="low_sun", key_size=3.0)
     else:                                         # safe, corridors, the night lane and the dark salon
