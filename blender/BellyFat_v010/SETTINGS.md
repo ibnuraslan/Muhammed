@@ -1,10 +1,10 @@
-# BellyFat_v009: farm render sheet
+# BellyFat_v010: farm render sheet
 
-These values were read back from `BellyFat_v009_60fps.blend` opened in factory-startup Blender 5.2.2, with no add-ons.
+These values were read back from `BellyFat_v010_60fps.blend` opened in factory-startup Blender 5.2.2, with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `BellyFat_v009_60fps.blend`: 71 MB, compressed (the bowel model and the bevelled store products add the extra size). All images are packed: 1K, except the woman's skin, hair and SSS map at 2K; it has no linked libraries and no drivers. Stored as a regular git file, because the Git LFS upload was refused (verify: Forbidden). |
+| File | `BellyFat_v010_60fps.blend`: 71 MB, compressed (the bowel model and the bevelled store products add the extra size). All images are packed: 1K, except the woman's skin, hair and SSS map at 2K; it has no linked libraries and no drivers. Stored as a regular git file, because the Git LFS upload was refused (verify: Forbidden). |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU; GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -16,7 +16,7 @@ These values were read back from `BellyFat_v009_60fps.blend` opened in factory-s
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
 | Motion blur | Off (animated look: no heavy motion blur) |
 | Colour | Display sRGB, view AgX, look "AgX - Punchy", exposure −0.3 |
-| Output | PNG, RGB, 8-bit, compression 15, to `//render/BellyFat_v009_####.png` |
+| Output | PNG, RGB, 8-bit, compression 15, to `//render/BellyFat_v010_####.png` |
 | Audio | None yet: the voiceover has not been delivered. See "Voiceover" below. |
 | Caches / sims | None: no simulations, particles or Alembic. All motion is keyframes and shape keys, plus one geometry-nodes modifier: `M_FatPoints`, which instances about 7.5k fat lobules from the unlinked collection `LobuleProtos`. It is driven live by the keyed empty `TipCtl` and the scene time, with nothing baked. Do not delete `LobuleProtos` or `TipCtl`. |
 | Add-ons | None needed. MPFB2 only built the characters. |
@@ -37,6 +37,6 @@ Cost was not measured: no full-resolution frame was rendered here, under the stu
 When the mp3 arrives:
 1. Get word times with `pipeline/transcribe.py`.
 2. Fill in `anchors_template.json`, giving the start second of each beat's first words from `beats.json`.
-3. Run `blender -b BellyFat_v009_60fps.blend --python pipeline/retime_to_vo.py -- anchors.json vo.mp3 BellyFat_v009_60fps.blend`.
+3. Run `blender -b BellyFat_v010_60fps.blend --python pipeline/retime_to_vo.py -- anchors.json vo.mp3 BellyFat_v010_60fps.blend`.
 
 The camera, the bullet and the tissue animation are all ordinary keyframes, so the warp moves them together. The swap frames (154/1225) are constant-interpolated `hide_render` keys and warp with them.
