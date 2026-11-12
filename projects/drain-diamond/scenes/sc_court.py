@@ -129,7 +129,7 @@ def robe(h, judge=False):
     J = dd.Builder(h.name + "_jabot")
     white = pbr("Jabot", (0.9, 0.9, 0.88), 0.7)
     for sx in (-0.018, 0.018):
-        J.box(nk + Vector((sx, -0.085, -0.06)), (0.03, 0.006, 0.1), white, rot=(math.radians(-8), 0, 0))
+        J.box(nk + Vector((sx, -0.135, -0.08)), (0.035, 0.008, 0.12), white, rot=(math.radians(-8), 0, 0))
     if judge:                                                         # epitoge: black band edged with white fur
         J.box(nk + Vector((0.12, -0.11, -0.2)), (0.07, 0.02, 0.32), pbr("Ermine", (0.92, 0.91, 0.88), 0.95))
         J.box(nk + Vector((0.12, 0.1, -0.2)), (0.07, 0.02, 0.32), pbr("Ermine", (0.92, 0.91, 0.88), 0.95))
