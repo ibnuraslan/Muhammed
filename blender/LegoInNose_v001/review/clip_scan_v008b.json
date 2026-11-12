@@ -1,78 +1,8 @@
 {
  "frames": {
-  "1": {
-   "Boy": {
-    "self": 22,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "7": {
-   "Boy": {
-    "self": 77,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "13": {
-   "Boy": {
-    "self": 211,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "19": {
-   "Boy": {
-    "self": 60,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "265": {
-   "Boy": {
-    "self": 108,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "367": {
-   "Boy": {
-    "self": 161,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "955": {
-   "Boy": {
-    "self": 52,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "961": {
-   "Boy": {
-    "self": 134,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "967": {
-   "Boy": {
-    "self": 7,
-    "clothes": 0,
-    "other": 0
-   }
-  },
   "973": {
    "Mom": {
     "self": 1537,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "991": {
-   "Boy": {
-    "self": 40,
     "clothes": 0,
     "other": 0
    }
@@ -104,66 +34,18 @@
     "clothes": 0,
     "other": 17
    }
-  },
-  "1363": {
-   "Boy": {
-    "self": 193,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1369": {
-   "Boy": {
-    "self": 259,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1375": {
-   "Boy": {
-    "self": 336,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1381": {
-   "Boy": {
-    "self": 59,
-    "clothes": 0,
-    "other": 0
-   }
   }
  },
  "step": 6,
  "depth_cm": 2.0,
  "bad_ranges": [
   [
-   7,
-   19
-  ],
-  [
-   265,
-   265
-  ],
-  [
-   367,
-   367
-  ],
-  [
-   955,
+   973,
    973
-  ],
-  [
-   991,
-   991
   ],
   [
    1069,
    1075
-  ],
-  [
-   1363,
-   1381
   ]
  ],
  "fps": 60

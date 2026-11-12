@@ -754,8 +754,16 @@
   ],
   "1873": [
    [
+    "FILL",
+    "BR_WallE0"
+   ],
+   [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only BR_WallE0 in view"
    ],
    [
     "EMPTY",
@@ -777,13 +785,17 @@
    ],
    [
     "EMPTY",
+    "only BR_WallE0 in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ]
  },
  "counts": {
-  "EMPTY": 137,
-  "FILL": 8,
+  "EMPTY": 139,
+  "FILL": 9,
   "INSIDE": 1
  }
 }

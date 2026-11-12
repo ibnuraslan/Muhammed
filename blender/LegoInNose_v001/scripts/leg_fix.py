@@ -1,5 +1,6 @@
 """v008b: lift hands out of the character's own legs/pelvis/belly (hand_fix.py only tests the torso).
-blender -b in.blend --python leg_fix.py -- out.blend [rounds] [Boy,Man,...]
+blender -b in.blend --python leg_fix.py -- out.blend [rounds] [Boy,Man,...] [other=Mom f0-f1]
+With other=NAME the target is that character's whole body (hands out of another person), only over frames f0-f1.
 For each frame (step 2) where a hand vertex is >1.5 cm under the leg/pelvis/spine skin, the IK hand target is keyed
 along the mean surface normal by the deepest depth + 0.8 cm. A prop held in that hand at that frame moves with it."""
 import sys, bpy
@@ -7,11 +8,13 @@ from mathutils import Vector
 from mathutils.bvhtree import BVHTree
 a = sys.argv[sys.argv.index("--") + 1:]; OUT = a[0]; ROUNDS = int(a[1]) if len(a) > 1 else 4
 sc = bpy.context.scene
+OTHER = next((x.split("=")[1] for x in a if x.startswith("other=")), None)
+RNG = next(((int(x.split("-")[0]), int(x.split("-")[1])) for x in a if "-" in x and x.replace("-", "").isdigit()), (sc.frame_start, sc.frame_end))
 HAND = ("hand", "finger", "metacarpal", "thumb"); TGT = ("upperleg", "lowerleg", "pelvis", "spine01", "spine02", "glute", "foot")
 HELD = (("Brick_Big", "Boy", "R", 1, 131), ("Brick_Small", "Boy", "R", 336, 712), ("Prop_Tweezers", "Mom", "R", 960, 1145),
         ("Prop_Inhaler", "Man", "R", 1606, 1720), ("Prop_Tissue", "Man", "R", 1515, 1582), ("Prop_Gamepad", "Teen", "R", 1395, 1439), ("Prop_Phone", "Man", "R", 1440, 1469))
 INFO = {}
-for nm in (a[2].split(",") if len(a) > 2 else ("Boy", "Teen", "Man", "Mom")):
+for nm in tuple(a[2].split(",") if len(a) > 2 else ("Boy", "Teen", "Man", "Mom")) + ((OTHER,) if OTHER else ()):
     arm = bpy.data.objects[nm]; body = bpy.data.objects[nm + "_Body"]
     bones = set(arm.data.bones.keys()); gi = {g.index: g.name for g in body.vertex_groups if g.name in bones}
     dom = []
@@ -29,17 +32,22 @@ def push(arm, s, f, delta):
             o = bpy.data.objects[pn]; o.location = o.location + delta; o.keyframe_insert("location", frame=f)
 for rnd in range(ROUNDS):
     n_hit = 0
-    for f in range(sc.frame_start, sc.frame_end + 1, 2):
+    for f in range(RNG[0], RNG[1] + 1, 1 if OTHER else 2):
         sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get(); todo = []
+        OT = None
+        if OTHER:
+            oarm, obody, _ = INFO[OTHER]; e = obody.evaluated_get(dg); me = e.to_mesh(); Mw = e.matrix_world
+            OT = BVHTree.FromPolygons([Mw @ v.co for v in me.vertices], [tuple(p.vertices) for p in me.polygons]); e.to_mesh_clear()
         for nm, (arm, body, dom) in INFO.items():
-            if arm.hide_render or body.hide_render: continue
+            if arm.hide_render or body.hide_render or nm == OTHER: continue
             e = body.evaluated_get(dg); me = e.to_mesh()
             if len(me.vertices) != len(dom): e.to_mesh_clear(); continue
             Mw = e.matrix_world; V = [Mw @ v.co for v in me.vertices]
             polys = [tuple(p.vertices) for p in me.polygons if all(dom[i].startswith(TGT) for i in p.vertices)]
             e.to_mesh_clear()
-            if not polys: continue
-            T = BVHTree.FromPolygons(V, polys)
+            if OT: T = OT
+            elif not polys: continue
+            else: T = BVHTree.FromPolygons(V, polys)
             for s in "LR":
                 deep, nsum = 0.0, Vector()
                 for i, n in enumerate(dom):
