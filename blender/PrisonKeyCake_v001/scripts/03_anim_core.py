@@ -79,7 +79,7 @@ CH_S = ("flex", "side", "sp_flex", "sp_twist", "sp_side", "h_pitch", "h_yaw", "c
 class Actor:
     def __init__(self, name):
         self.o = bpy.data.objects[name]; self.r = make_human_ctrl(self.o); self.h = Human(self.r)
-        self.keys = []; self.walks = []; self.feet = {"L": [], "R": []}; self.hand_fn = {"L": [], "R": []}
+        self.keys = []; self.walks = []; self.feet = {"L": [], "R": []}; self.hand_fn = {"L": [], "R": []}; self._lastW = {}
         self.breath = 1.0; self.name = name
         self.dz = (self.h.root_head.z - 0.035) - 0.99      # root z 0.99 in the keys means 'standing' for every actor
         sh = [c for c in self.o.children if "shoes" in c.name]
@@ -193,17 +193,45 @@ class Actor:
                 for n_, w_ in self.h.HEAD_W.items():
                     self.r.key_rot(n_, f, [("X", (self.T["h_pitch"](f)) * w_), ("Z", self.T["h_yaw"](f) * w_)])
             for s in "LR":
-                fn = next((g for (a, b, g) in self.hand_fn[s] if a <= f <= b), None)
-                if fn: W, dd, nn = fn(f)
+                cur = next(((a, b, g) for (a, b, g) in self.hand_fn[s] if a <= f <= b), None)
+                fn = cur[2] if cur else None
+                if fn:
+                    W, dd, nn = fn(f)
+                    # grip-to-grip hand-off with no gap: ease from where the last grip let go
+                    pr = max(((b, g) for (a, b, g) in self.hand_fn[s] if cur[0] - 2 <= b <= cur[0] and g is not cur[2]), default=None, key=lambda x: x[0])
+                    if pr and f - cur[0] < GRIP_EASE:
+                        gW, gd, gn = pr[1](pr[0]); u = smooth((f - cur[0] + 1) / (GRIP_EASE + 1.0))
+                        W = gW.lerp(W, u); dd = gd.lerp(dd, u).normalized(); nn = gn.lerp(nn, u).normalized()
                 elif ("H" + s) in self.T:
                     tW, td, tn = self.T["H" + s]; W, dd, nn = tW(f), td(f), tn(f)
+                    # ease onto a prop grip that starts soon, and off one that just ended (no single-frame jumps)
+                    E = GRIP_EASE
+                    nx = min(((a - f, a, g) for (a, b, g) in self.hand_fn[s] if 0 < a - f <= 2 * E), default=None, key=lambda x: x[0])
+                    pv = min(((f - b, b, g) for (a, b, g) in self.hand_fn[s] if 0 < f - b <= 2 * E), default=None, key=lambda x: x[0])
+                    if nx and pv and nx[1] - pv[1] <= 2 * E:   # short gap between two grips: travel straight from one to the other
+                        aW, ad, an = pv[2](pv[1]); bW, bd, bn = nx[2](nx[1]); u = smooth((f - pv[1]) / float(nx[1] - pv[1]))
+                        W = aW.lerp(bW, u); dd = ad.lerp(bd, u).normalized(); nn = an.lerp(bn, u).normalized()
+                    else:
+                        for e in (nx, pv):
+                            if e is None or e[0] > E: continue
+                            gW, gd, gn = e[2](e[1]); u = smooth(1.0 - e[0] / (E + 1.0))
+                            W = W.lerp(gW, u); dd = dd.lerp(gd, u).normalized(); nn = nn.lerp(gn, u).normalized()
                 else: continue
+                # speed limit on keyed (non-grip) hand travel: no flicks faster than HAND_VMAX m/frame
+                free = fn is None and not any(0 < a - f <= 2 * GRIP_EASE for (a, b, g) in self.hand_fn[s])   # never while reaching for a grip
                 p, yw = self.root_at(f)
+                lw = self._lastW.get(s)     # body-relative, so whole-body moves and re-entries are not slowed
+                if free and lw is not None and 0 < f - lw[0] <= 4:
+                    lim = HAND_VMAX * (f - lw[0]); dv = (W - p) - lw[1]
+                    if dv.length > lim: W = p + lw[1] + dv.normalized() * lim
+                self._lastW[s] = (f, W - p)
                 pole = p + Matrix.Rotation(R_(yw), 3, 'Z') @ V(0.45 if s == "L" else -0.45, 0.5, -0.25)
                 self.h.key_hand(s, f, W, dd, nn, pole=pole)
             if f % 4 == 1 or step > 2:
                 curl(self.r, "L", f, self.T["cL"](f)); curl(self.r, "R", f, self.T["cR"](f))
 
+GRIP_EASE = 10
+HAND_VMAX = 0.07
 def grip_hand(G, d, n):
     """wrist target so that the palm centre is at G, fingers along d, palm facing n (n points from palm to object)"""
     d = d.normalized(); n = (n - d * n.dot(d)).normalized()
@@ -212,14 +240,14 @@ def grip_hand(G, d, n):
 def B(W, d, n):
     return ('B', Vector(W), Vector(d), Vector(n))
 
-HANG = {"L": B((0.275, 0.0, -0.03), (0.12, -0.1, -1), (-1, 0, 0)), "R": B((-0.275, 0.0, -0.03), (-0.12, -0.1, -1), (1, 0, 0))}
+HANG = {"L": B((0.29, 0.0, -0.03), (0.12, -0.1, -1), (-1, 0, 0)), "R": B((-0.29, 0.0, -0.03), (-0.12, -0.1, -1), (1, 0, 0))}
 
-def arm_swing(actor, f0, f1, path, amp=0.11):
+def arm_swing(actor, f0, f1, path, amp=0.11, wide=0.29):
     """body-relative hand keys every 6 frames, opposite to the legs"""
     dist = 0.0; prev = path(f0); stride = 0.8
     for f in range(f0, f1 + 1, 6):
         p = path(f); dist += (p - prev).to_2d().length; prev = p
         c = math.sin(2 * math.pi * dist / (2 * stride) * 2)
         for s, sg in (("L", 1), ("R", -1)):
-            x = 0.275 if s == "L" else -0.275
+            x = wide if s == "L" else -wide
             actor.k(f, **{"h" + s: B((x, 0.0 - amp * sg * c, -0.05 + 0.03 * abs(c)), (0, -0.25 * sg * c, -1), (-1 if s == "L" else 1, 0, 0))})

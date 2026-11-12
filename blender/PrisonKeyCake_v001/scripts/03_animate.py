@@ -91,13 +91,14 @@ def lock_key(depth, ang):
 JAM = [(870, None), (894, (0.05, 0)), (900, (0.03, 0)), (903, (0.032, 0)), (910, (0.0, 0)), (920, (0.0, 14)), (925, (0.0, 3)), (934, (0.0, 16)),
        (939, (0.0, 2)), (948, (0.0, 2)), (958, (0.0, -12)), (964, (0.0, 4)), (972, (0.0, 15)), (977, (0.0, 0)), (1000, (0.0, 0)), (1018, (0.06, 0))]
 K1_HAND = mat_from(V(1.62, 0.64, 1.08), V(0.6, -0.3, 0.4), V(0, -0.5, 1))
+K1_DOWN = mat_from(V(1.58, 0.58, 0.96), V(0.7, -0.2, -0.4), V(0, -1, 0.2))
 def k1_path(f):
     if f < 894: return mlerp(K1_HAND, lock_key(0.05, 0), ss(f, 866, 894))
     for (fa, va), (fb, vb) in zip(JAM[1:], JAM[2:]):
         if fa <= f <= fb:
             t = ss(f, fa, fb); return lock_key(lerp(va[0], vb[0], t), lerp(va[1], vb[1], t))
-    if f <= 1040: return mlerp(lock_key(0.06, 0), K1_HAND, ss(f, 1018, 1040))
-    return K1_HAND
+    if f <= 1040: return mlerp(lock_key(0.06, 0), K1_DOWN, ss(f, 1018, 1040))   # drawn out and lowered to his side
+    return K1_DOWN
 bake_obj(K1, 845, 1040, k1_path)
 def hand_lock(M):
     x = (M.to_3x3() @ V(1, 0, 0)).normalized(); y = (M.to_3x3() @ V(0, 1, 0)).normalized()
@@ -112,16 +113,17 @@ P.k(934, sp_twist=-10, side=5, h_pitch=30, flex=8)
 P.k(940, h_yaw=-38, h_pitch=8, sp_twist=-4)          # a light passes outside: freezes, eyes to the gap under the door
 P.k(950, h_yaw=-32, h_pitch=12)
 P.k(958, sp_twist=4, side=-3, h_yaw=-24, h_pitch=26)
-P.k(972, sp_twist=-12, side=6, flex=10, h_pitch=34)                  # strain
-P.k(982, hL=grip_hand(V(1.72, 1.14, 1.5), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=6, h_pitch=10, h_yaw=10)  # wind up
-P.k(992, hL=grip_hand(V(1.965, 1.12, 1.44), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=-4, flex=12)            # slap
-P.k(998, root=DOOR_ST + V(0.09, 0, -0.03), flex=14)
-P.k(1018, root=DOOR_ST + V(0.14, -0.08, -0.08), flex=22, sp_flex=24, h_pitch=40, h_yaw=0, sp_twist=0, side=0)   # forehead to the door
-P.k(1034, root=DOOR_ST + V(0.12, -0.08, -0.06))
+P.k(972, sp_twist=-12, side=6, flex=10, h_pitch=34, hL=grip_hand(V(1.948, 1.22, 1.46), V(0, 0.2, 1), V(1, 0, 0)))                  # strain
+P.k(982, hL=grip_hand(V(1.74, 1.26, 1.48), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=6, h_pitch=10, h_yaw=10)  # wind up
+P.k(992, hL=grip_hand(V(1.948, 1.24, 1.50), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=-4, flex=12)            # slap
+P.k(998, root=DOOR_ST + V(0.07, 0.04, -0.03), flex=14)
+P.k(1006, hL=grip_hand(V(1.948, 1.25, 1.62), V(0, 0.15, 1), V(1, 0, 0)))   # the hand slides up the door as he sags
+P.k(1018, root=DOOR_ST + V(0.08, 0.07, -0.08), flex=22, sp_flex=24, h_pitch=40, h_yaw=0, sp_twist=0, side=0, hL=grip_hand(V(1.948, 1.25, 1.66), V(0, 0.1, 1), V(1, 0, 0)))   # forehead to the door
+P.k(1034, root=DOOR_ST + V(0.08, 0.06, -0.06))
 P.k(1046, root=DOOR_ST, flex=6, sp_flex=10, h_pitch=12, hL=HANG["L"], hR=HANG["R"], cR=20)
 # ---- beat 7: second impression + wait (1057-1302)
 pth, yfn = P.walk(1046, 1100, [(1.5, 0.9), (1.2, 0.95), (0.92, 0.97)], stride=0.6, yaw_override=lambda f: lerp(90, 180, ss(f, 1046, 1094)))
-arm_swing(P, 1046, 1100, pth)
+arm_swing(P, 1046, 1100, pth, wide=0.32)
 end_walk(P, 1100, pth, yfn)
 P.k(1100, root=STA, yaw=180, flex=8, sp_flex=16, h_pitch=30, hL=LH_TABLE, cL=20)
 B7 = 1100 - 110 + 10    # re-use the beat-1 key path shifted (press at ~1110-1180)
@@ -144,6 +146,7 @@ P.hand_fn["R"].append((1098, 1180, lambda f: hand_on_key(km_b7(f), press=1112 <=
 P.hand_fn["L"].append((1122, 1156, lambda f: (lambda M: grip_hand(M @ V(0.105, -0.012, 0) + M.to_3x3() @ V(0, 0, 0.012), -(M.to_3x3() @ V(1, 0, 0)) + V(0, 0, -0.3), -(M.to_3x3() @ V(0, 0, 1))))(km_b7(f))))
 P.k(1122, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, cR=10, cL=8)
 P.k(1156, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, hL=LH_TABLE)
+P.k(1168, root=STA + V(0, 0.03, -0.03), flex=10, sp_flex=16, h_pitch=35)   # straightens to look at the new mould
 # hands the mould up through the window bars (1182-1215)
 WIN_C = V(0.80, 1.99, 1.665)
 def mold_up(f):
@@ -151,18 +154,24 @@ def mold_up(f):
     Bm = Matrix.Translation(WIN_C + V(0, -0.12, 0.0)) @ Matrix.Rotation(R_(70), 4, 'X')
     Cm = Matrix.Translation(WIN_C + V(0, 0.05, -0.08)) @ Matrix.Rotation(R_(10), 4, 'X')
     Dm = Matrix.Translation(WIN_C + V(0, 0.45, -0.08)) @ Matrix.Rotation(R_(10), 4, 'X')
-    if f <= 1200: return mlerp(A, Bm, ss(f, 1182, 1200))
-    if f <= 1214: return mlerp(Bm, Cm, ss(f, 1200, 1214))
+    Au = Matrix.Translation(WAX.location + V(0.18, 0.04, 0.22))
+    Am = Matrix.Translation(WIN_C + V(0.14, -0.34, -0.04)) @ Matrix.Rotation(R_(40), 4, 'X')
+    if f <= 1198: return mlerp(A, Au, ss(f, 1190, 1198))   # waits in the tin for the hand, lifts up on his right, clear of his chest
+    if f <= 1204: return mlerp(Au, Am, ss(f, 1198, 1204))
+    if f <= 1208: return mlerp(Am, Bm, ss(f, 1204, 1208))
+    if f <= 1216: return mlerp(Bm, Cm, ss(f, 1208, 1216))
     return mlerp(Cm, Dm, ss(f, 1236, 1250))     # taken from outside
 bake_obj(WAXM, 1182, 1252, mold_up)
 key_hide(WAXM, [(1, True), (330, False), (414, True), (1182, False), (1252, True)])
 key_hide(WAX, [(1, False), (1182, True)])
 key_hide(OB["WaxTin"], [(1, False), (1182, True)])
-P.hand_fn["R"].append((1182, 1214, lambda f: grip_hand(mold_up(f) @ V(0, 0.075, 0), V(0, 0.3, 1), V(0, 1, 0))))
+P.hand_fn["R"].append((1190, 1216, lambda f: grip_hand(mold_up(f) @ V(0, 0.075, 0), V(0, 0.3, 1), V(0, 1, 0))))
 P.k(1182, root=STA + V(0, 0.06, -0.06), flex=18, sp_flex=26, h_pitch=30, cR=45)
-P.k(1192, root=V(0.88, 1.1, 0.97), flex=26, sp_flex=18, h_pitch=-10)
+P.k(1192, root=V(0.88, 1.05, 0.97), flex=26, sp_flex=18, h_pitch=-10)
 P.k(1205, root=V(0.84, 1.2, 1.0), flex=42, sp_flex=16, h_pitch=-35, sp_side=-4, hL=grip_hand(V(0.7, 1.45, TABLE_Z + 0.02), V(0, 1, -0.2), V(0, 0, -1)))   # leans over the table to the sill
-P.k(1214, root=V(0.84, 1.21, 1.0), flex=44, sp_flex=20, h_pitch=-40)
+P.k(1214, root=V(0.84, 1.21, 1.0), flex=44, sp_flex=20, h_pitch=-40, hL=B((0.30, -0.28, 0.12), (0.2, -1, -0.3), (0, 0, -1)), cL=25, hR=B((-0.24, -0.32, 0.12), (-0.2, -1, -0.3), (0, 0, -1)), cR=25)
+P.k(1220, hR=grip_hand(WIN_C + V(0.06, -0.06, -0.10), V(0, 1, -0.2), V(0, 0, -1)), cR=25)   # pushes back off the sill
+P.k(1225, hR=B((-0.30, -0.32, 0.30), (-0.3, -1, -0.4), (0, 0, -1)), cR=25)
 P.k(1228, root=STA + V(0, 0.03, 0), flex=6, sp_flex=6, h_pitch=-20, hR=HANG["R"], cR=15, hL=HANG["L"])
 for i, s in enumerate("LR"):
     P.plant(s, 1186 + i * 6, 1198 + i * 6, P.h.foot_xy(s, V(0.86, 1.1, 0), 180), 180, 0.05)
@@ -175,8 +184,10 @@ STOOL.location = (SIT.x - _c.x - 0.04, SIT.y - _c.y, 0)
 SIT.z = max(c.z for c in _bb) + 0.11
 P.k(1240, root=STA + V(-0.25, -0.05, -0.05), yaw=150, flex=10, sp_flex=14, h_pitch=15)
 P.k(1258, root=SIT, yaw=110, flex=-2, sp_flex=38, h_pitch=35, h_yaw=10,
-    hL=B((0.15, -0.3, 0.0), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.15, -0.3, 0.0), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
-P.k(1285, root=SIT + V(0, 0, 0.0), sp_flex=42, h_pitch=45, h_yaw=-8)
+    hL=B((0.16, -0.3, 0.07), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.16, -0.3, 0.07), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
+P.k(1264, sp_flex=30, h_pitch=5, h_yaw=35)            # looks to the candle
+P.k(1274, sp_flex=34, h_pitch=22, h_yaw=-12)          # then to the door, listening
+P.k(1285, root=SIT + V(0, 0, 0.0), sp_flex=26, h_pitch=-12, h_yaw=-25)   # looks up at the window
 for s, o_ in (("L", 0.13), ("R", -0.13)):
     P.plant(s, 1232 + (s == "R") * 8, 1248 + (s == "R") * 8, P.h.foot_xy(s, V(0.42, 0.72, 0), 110) , 110)
 P.k(1300, root=STA + V(0.2, 0.01, -0.02), yaw=180, flex=12, sp_flex=18, h_pitch=35, hL=LH_TABLE, cL=20, hR=HANG["R"])
@@ -198,11 +209,12 @@ def knife(f):
     if f <= 1324: return mlerp(E1, A2, ss(f, 1319, 1324))
     if f <= 1331: return mlerp(A2, D2, ss(f, 1324, 1331))
     if f <= 1336: return mlerp(D2, E2, ss(f, 1331, 1336))
-    if f <= 1341: return mlerp(E2, A2, ss(f, 1336, 1341))
-    return mlerp(A2, mat_from(V(1.38, 1.78, TABLE_Z + 0.008), V(1, 0.1, 0), V(0, 0, 1)), ss(f, 1341, 1350))
+    AR = A2.copy(); AR.translation = CAKE2_P + V(0.13, -0.03, 0.26)   # lifts out to his right, away from the left hand
+    if f <= 1341: return mlerp(E2, AR, ss(f, 1336, 1341))
+    return mlerp(AR, mat_from(V(1.38, 1.78, TABLE_Z + 0.008), V(1, 0.1, 0), V(0, 0, 1)), ss(f, 1341, 1346))
 # knife blade origin is at the handle end: blade runs +x
 bake_obj(KNIFE, 1294, 1350, knife)
-P.hand_fn["R"].append((1294, 1350, lambda f: grip_hand(knife(f) @ V(-0.05, 0, 0), V(0, 1, -0.3), V(-1, 0, 0))))
+P.hand_fn["R"].append((1294, 1346, lambda f: grip_hand(knife(f) @ V(-0.05, 0, 0), V(0, 1, -0.3), V(-1, 0, 0))))
 def slice_m(f):
     out = Matrix.Translation(CAKE2_P + V(-0.09, 0.03, 0.0)) @ Matrix.Rotation(R_(-14), 4, 'Z')
     up = Matrix.Translation(CAKE2_P + V(-0.05, 0.015, 0.025)) @ Matrix.Rotation(R_(-6), 4, 'Z') @ Matrix.Rotation(R_(8), 4, 'Y')
@@ -221,19 +233,29 @@ for o_ in [SLICE, CMAIN] + [OB["Crumb%02d" % i] for i in range(26)]:
     key_hide(o_, [(1, True), (1250, False)])
 K2_IN = mat_from(CAKE2_P + V(-0.012, 0, 0.047), V(0, 0.05, -1), V(0, 1, 0))
 K2_UP = mat_from(V(1.18, 1.2, 1.15), V(0.5, 0.3, 0.8), V(0, -1, 0.3))
+K2_MID = mat_from(V(1.50, 1.16, 1.20), V(0.8, -0.3, 0.3), V(0, -1, 0.3))
 def k2_path(f):
-    if f <= 1352: return K2_IN
-    if f <= 1372: return mlerp(K2_IN, K2_UP, ss(f, 1352, 1372))
-    if f <= 1400: return mlerp(K2_UP, lock_key(0.06, 0), ss(f, 1370, 1400))
+    if f <= 1354: return K2_IN
+    if f <= 1372: return mlerp(K2_IN, K2_UP, ss(f, 1354, 1372))
+    if f <= 1382: return mlerp(K2_UP, K2_MID, ss(f, 1372, 1382))
+    if f <= 1394: return mlerp(K2_MID, lock_key(0.14, 0), ss(f, 1382, 1394))     # arcs ahead of him, never across his chest
+    if f <= 1400: return mlerp(lock_key(0.14, 0), lock_key(0.06, 0), ss(f, 1394, 1400))
     if f <= 1412: return mlerp(lock_key(0.06, 0), lock_key(0.0, 0), ss(f, 1400, 1412))
     if f <= 1426: return lock_key(0.0, 90 * ss(f, 1414, 1424))
     return lock_key(0.0, 90)
 bake_obj(K2, 1300, 1440, k2_path)
 key_hide(K2, [(1, True), (1250, False), (1434, True)])
-P.hand_fn["R"].append((1351, 1372, lambda f: grip_hand(bow(k2_path(f)), k2_path(f).to_3x3() @ V(1, 0, 0), k2_path(f).to_3x3() @ V(0, 0, -1))))
+def reach_key(f):   # knife down -> an easy arc to the key in the cake (no jump)
+    a = grip_hand(knife(1346) @ V(-0.05, 0, 0), V(0, 1, -0.3), V(-1, 0, 0))
+    M = k2_path(1354); b = grip_hand(bow(M), M.to_3x3() @ V(1, 0, 0), M.to_3x3() @ V(0, 0, -1))
+    t = ss(f, 1346, 1354)
+    return (a[0].lerp(b[0], t) + V(0, 0, 0.07 * math.sin(math.pi * t)), a[1].lerp(b[1], t).normalized(), a[2].lerp(b[2], t).normalized())
+P.hand_fn["R"].append((1347, 1353, reach_key))
+P.hand_fn["R"].append((1354, 1372, lambda f: grip_hand(bow(k2_path(f)), k2_path(f).to_3x3() @ V(1, 0, 0), k2_path(f).to_3x3() @ V(0, 0, -1))))
 P.hand_fn["R"].append((1373, 1432, lambda f: hand_lock(k2_path(f)) if f > 1398 else grip_hand(bow(k2_path(f)), k2_path(f).to_3x3() @ V(1, 0, 0), k2_path(f).to_3x3() @ V(0, 0, -1))))
 P.k(1312, root=STB + V(0, 0.02, -0.03), flex=9, sp_flex=16, h_pitch=50, cR=60, hL=grip_hand(CAKE2_P + V(-0.09, -0.08, 0.06), V(0.7, 0.6, -0.5), V(0.7, 0.7, 0)), cL=30)
 P.k(1330, root=STB + V(0, 0.03, -0.04), flex=11, sp_flex=18)
+P.k(1352, hL=grip_hand(slice_m(1352) @ V(-0.125, 0, 0.06), V(0.35, 0, -1), V(1, 0, 0)))   # continuity with the slice grip
 P.k(1356, hL=HANG["L"], h_pitch=48)
 P.k(1354, root=STB + V(0, 0.08, -0.08), flex=22, sp_flex=32)
 P.k(1360, root=STB + V(0, 0.02, 0), flex=8, sp_flex=12, h_pitch=20, hL=HANG["L"], cR=55)
@@ -241,6 +263,7 @@ P.k(1360, root=STB + V(0, 0.02, 0), flex=8, sp_flex=12, h_pitch=20, hL=HANG["L"]
 for i, s in enumerate("RL"):
     P.plant(s, 1368 + i * 12, 1386 + i * 12, P.h.foot_xy(s, DOOR_ST, 90), 90, 0.08)
 P.k(1372, root=STB + V(0.1, -0.05, 0), yaw=160)
+P.k(1384, hL=B((0.31, -0.08, 0.0), (0.2, -0.3, -1), (-1, 0, 0)), cL=18)
 P.k(1398, root=DOOR_ST, yaw=90, flex=6, sp_flex=12, h_pitch=22, h_yaw=-26, hL=LH_DOOR, cL=10)
 P.k(1418, sp_twist=-8, side=3, h_pitch=26)
 P.k(1428, sp_twist=2, side=0, h_pitch=12, h_yaw=-10)
@@ -272,19 +295,22 @@ VST = V(0.9, 3.05, 0.99)
 Vi.stand(1, VST, 120)
 def mold_v(f):
     hand = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.05, -0.32, 0.12)) @ Matrix.Rotation(R_(80), 4, 'X') @ Matrix.Rotation(R_(30), 4, 'Z')
-    pocket = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.23, -0.13, -0.1)) @ Matrix.Rotation(R_(95), 4, 'X') @ Matrix.Rotation(R_(120), 4, 'Z')
+    pocket = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.27, -0.12, -0.1)) @ Matrix.Rotation(R_(95), 4, 'X') @ Matrix.Rotation(R_(120), 4, 'Z')
+    side = Matrix.Translation(VST + Matrix.Rotation(R_(120), 3, 'Z') @ V(-0.34, -0.30, 0.04)) @ Matrix.Rotation(R_(88), 4, 'X') @ Matrix.Rotation(R_(80), 4, 'Z')
     if f <= 372: return hand
-    return mlerp(hand, pocket, ss(f, 372, 402))
+    if f <= 388: return mlerp(hand, side, ss(f, 372, 388))     # out to his side first, clear of his belly
+    return mlerp(side, pocket, ss(f, 388, 402))
 bake_obj(WAXM, 330, 412, mold_v)
 Vi.hand_fn["R"].append((330, 410, lambda f: grip_hand(mold_v(f) @ V(0, 0.07, 0), mold_v(f).to_3x3() @ V(0, -1, 0) , mold_v(f).to_3x3() @ V(0, 0, 1) * -1)))
-Vi.k(1, root=VST, yaw=120, sp_flex=6, h_pitch=20, h_yaw=10, hL=HANG["L"], hR=HANG["R"], cR=40)
+VH = {"L": B((0.275, 0.0, -0.03), (0.12, -0.1, -1), (-1, 0, 0)), "R": B((-0.275, 0.0, -0.03), (-0.12, -0.1, -1), (1, 0, 0))}   # his arms are shorter
+Vi.k(1, root=VST, yaw=120, sp_flex=6, h_pitch=20, h_yaw=10, hL=VH["L"], hR=VH["R"], cR=40)
 Vi.k(340, h_pitch=30, h_yaw=-25, sp_twist=-6)         # glances back at the window
 Vi.k(372, h_pitch=10, h_yaw=30, sp_twist=5)           # looks to the guard
-Vi.k(410, h_yaw=0, sp_twist=0, cR=15, hR=HANG["R"])
+Vi.k(410, h_yaw=0, sp_twist=0, cR=15, hR=VH["R"])
 pv, yv = Vi.walk(420, 860, [(0.9, 3.05), (3.5, 4.0), (6.5, 5.0), (9.4, 5.95), (11.6, 6.0), (13.2, 5.6), (13.9, 4.4)], stride=0.82)
-arm_swing(Vi, 424, 860, pv)
+arm_swing(Vi, 424, 860, pv, wide=0.275)
 end_walk(Vi, 860, pv, yv)
-Vi.k(860, root=V(13.9, 4.4, 0.99), yaw=yv(860), hL=HANG["L"], hR=HANG["R"])
+Vi.k(860, root=V(13.9, 4.4, 0.99), yaw=yv(860), hL=VH["L"], hR=VH["R"])
 Vi.k(900, yaw=60, h_yaw=10)
 Vi.k(500, h_yaw=-20); Vi.k(560, h_yaw=15); Vi.k(640, h_yaw=0)
 Vi.bake()
@@ -321,7 +347,7 @@ for i, s in enumerate("LR"):
 GS = V(6.12, -0.62, 0.70)
 G.k(1290, root=V(13.9, 6.15, 0.99), yaw=90, hL=HANG["L"], hR=HANG["R"])
 G.k(1300, root=GS, yaw=180, flex=-12, sp_flex=-4, h_pitch=40, h_yaw=15, side=4,
-    hL=B((0.15, -0.3, 0.0), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.15, -0.3, 0.0), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
+    hL=B((0.16, -0.3, 0.07), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.16, -0.3, 0.07), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
 for i, s in enumerate("LR"):
     G.plant(s, 1294, 1300, G.h.foot_xy(s, V(6.12, -0.2, 0), 180), 180, 0.0)
 G.k(1560, h_pitch=34, h_yaw=-5)     # stirs as the gate clangs
@@ -349,13 +375,13 @@ def cru(f):
     if f <= 515: return mlerp(up, tilt, ss(f, 480, 515))
     if f <= 598: return tilt @ Matrix.Rotation(R_(3 * math.sin(f / 5.0)), 4, 'X')
     if f <= 625: return mlerp(tilt, up, ss(f, 598, 625))
-    return mlerp(up, rest, ss(f, 625, 650))
+    return mlerp(up, rest, ss(f, 622, 640))
 bake_obj(CRU, 470, 650, cru)
 CRU.matrix_world = cru(470); CRU.keyframe_insert("location", frame=1); CRU.keyframe_insert("rotation_euler", frame=1)
 def shank_grip(f, x):
     M = cru(f); return grip_hand(M @ V(x, 0, 0) + V(0, 0, 0.0), V(0.2, 1, -0.2), V(0, 0, -1))
-A.hand_fn["L"].append((470, 650, lambda f: shank_grip(f, -0.68)))
-A.hand_fn["R"].append((470, 650, lambda f: shank_grip(f, -0.5)))
+A.hand_fn["L"].append((470, 640, lambda f: shank_grip(f, -0.68)))
+A.hand_fn["R"].append((470, 640, lambda f: shank_grip(f, -0.5)))
 A.k(1, root=AST, yaw=180, flex=8, sp_flex=16, h_pitch=35, cL=60, cR=60, hL=HANG["L"], hR=HANG["R"])
 A.k(500, root=AST + V(0, 0.03, -0.03), flex=12, sp_flex=22, h_pitch=40, side=-3)
 A.k(598, root=AST + V(0, 0.04, -0.04), flex=14, sp_flex=24)
@@ -449,7 +475,8 @@ def box_m(f):
     if f <= 828: return mlerp(PB0, lift, ss(f, 814, 828))
     if f <= 850: return mlerp(lift, hand, ss(f, 828, 850))
     gp, gy = G.root_at(f)
-    return Matrix.Translation(gp + Matrix.Rotation(R_(gy), 3, 'Z') @ V(0, -0.46, 0.12)) @ Matrix.Rotation(R_(gy), 4, 'Z')
+    carry = Matrix.Translation(gp + Matrix.Rotation(R_(gy), 3, 'Z') @ V(0, -0.46, 0.12)) @ Matrix.Rotation(R_(gy), 4, 'Z')
+    return mlerp(hand, carry, ss(f, 850, 866)) if f < 866 else carry   # settles into his carry, no snap
 def lid_m(f):
     on = PB0 @ Matrix.Translation(V(0, 0, 0.13))
     up = Matrix.Translation(LID0.translation + V(0, -0.15, 0.15)) @ Matrix.Rotation(R_(60), 4, 'X')

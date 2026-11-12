@@ -1,0 +1,485 @@
+{
+ "frames": {
+  "55": {
+   "Prisoner": {
+    "self": 8,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "61": {
+   "Prisoner": {
+    "self": 6,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "337": {
+   "Guard2": {
+    "self": 58,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "385": {
+   "Visitor": {
+    "self": 200,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "391": {
+   "Visitor": {
+    "self": 775,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "397": {
+   "Visitor": {
+    "self": 1426,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "403": {
+   "Visitor": {
+    "self": 1188,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "409": {
+   "Visitor": {
+    "self": 1185,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "421": {
+   "YardP2": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "427": {
+   "YardP2": {
+    "self": 83,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "433": {
+   "Visitor": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "445": {
+   "Visitor": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   },
+   "YardP2": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "463": {
+   "YardP2": {
+    "self": 12,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "469": {
+   "Visitor": {
+    "self": 17,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "481": {
+   "Visitor": {
+    "self": 19,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "973": {
+   "Prisoner": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1039": {
+   "Prisoner": {
+    "self": 82,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1051": {
+   "Prisoner": {
+    "self": 588,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1057": {
+   "Prisoner": {
+    "self": 599,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1063": {
+   "Prisoner": {
+    "self": 143,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1165": {
+   "Prisoner": {
+    "self": 180,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1195": {
+   "Prisoner": {
+    "self": 11,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1219": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 1184,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1225": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1231": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1237": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1243": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1249": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 65,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1255": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 42,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1261": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 144,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1267": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 146,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1273": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1279": {
+   "Guard2": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1303": {
+   "Guard": {
+    "self": 1321,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1381": {
+   "Prisoner": {
+    "self": 520,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1387": {
+   "Guard": {
+    "self": 1387,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 378,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1393": {
+   "Guard": {
+    "self": 1386,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1399": {
+   "Guard": {
+    "self": 1380,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1441": {
+   "Guard": {
+    "self": 1330,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1447": {
+   "Guard": {
+    "self": 1319,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1453": {
+   "Guard": {
+    "self": 1317,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1459": {
+   "Guard": {
+    "self": 1310,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1465": {
+   "Guard": {
+    "self": 1304,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1471": {
+   "Guard": {
+    "self": 1300,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1477": {
+   "Guard": {
+    "self": 1295,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1483": {
+   "Guard": {
+    "self": 1295,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1489": {
+   "Guard": {
+    "self": 1238,
+    "clothes": 0,
+    "other": 0
+   },
+   "Prisoner": {
+    "self": 160,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1495": {
+   "Prisoner": {
+    "self": 26,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1501": {
+   "Prisoner": {
+    "self": 25,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1507": {
+   "Prisoner": {
+    "self": 16,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1525": {
+   "Prisoner": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1537": {
+   "Prisoner": {
+    "self": 133,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1549": {
+   "Prisoner": {
+    "self": 110,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1561": {
+   "Prisoner": {
+    "self": 89,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1573": {
+   "Prisoner": {
+    "self": 97,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   337,
+   337
+  ],
+  [
+   385,
+   409
+  ],
+  [
+   427,
+   427
+  ],
+  [
+   1039,
+   1063
+  ],
+  [
+   1165,
+   1165
+  ],
+  [
+   1219,
+   1219
+  ],
+  [
+   1249,
+   1267
+  ],
+  [
+   1303,
+   1303
+  ],
+  [
+   1381,
+   1399
+  ],
+  [
+   1441,
+   1501
+  ],
+  [
+   1537,
+   1573
+  ]
+ ],
+ "fps": 60
+}
