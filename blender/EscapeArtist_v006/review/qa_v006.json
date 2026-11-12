@@ -1,0 +1,1281 @@
+{
+ "frames": {
+  "168": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "204": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "210": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "270": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "276": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "318": [
+   [
+    "CLAW",
+    "Prisoner.R curl 75"
+   ]
+  ],
+  "342": [
+   [
+    "CLAW",
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "360": [
+   [
+    "CLAW",
+    "Prisoner.R curl 68"
+   ]
+  ],
+  "378": [
+   [
+    "CLAW",
+    "Prisoner.R curl 71"
+   ]
+  ],
+  "390": [
+   [
+    "CLAW",
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "402": [
+   [
+    "CLAW",
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "426": [
+   [
+    "CLAW",
+    "Prisoner.R curl 71"
+   ]
+  ],
+  "432": [
+   [
+    "CLAW",
+    "Prisoner.R curl 69"
+   ]
+  ],
+  "450": [
+   [
+    "CLAW",
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "474": [
+   [
+    "CLAW",
+    "Prisoner.R curl 74"
+   ]
+  ],
+  "594": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "630": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 34"
+   ]
+  ],
+  "636": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "642": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "696": [
+   [
+    "FILL",
+    "Corridor_FarWall"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Corridor_FarWall in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "702": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "720": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "726": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "732": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "738": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "744": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "750": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "756": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "762": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "768": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "774": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "780": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "786": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "798": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "804": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "810": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "816": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "822": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "846": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "864": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "966": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1044": [
+   [
+    "CLAW",
+    "Boy.R curl 56"
+   ]
+  ],
+  "1080": [
+   [
+    "CLAW",
+    "Boy.R curl 29"
+   ]
+  ],
+  "1086": [
+   [
+    "CLAW",
+    "Boy.R curl 40"
+   ]
+  ],
+  "1164": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1170": [
+   [
+    "CLAW",
+    "Stepmother.R curl 69"
+   ]
+  ],
+  "1176": [
+   [
+    "CLAW",
+    "Stepmother.R curl 74"
+   ]
+  ],
+  "1182": [
+   [
+    "CLAW",
+    "Stepmother.R curl 64"
+   ]
+  ],
+  "1206": [
+   [
+    "CLAW",
+    "Stepmother.R curl 71"
+   ]
+  ],
+  "1218": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 68"
+   ]
+  ],
+  "1224": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1230": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 68"
+   ]
+  ],
+  "1236": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1242": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 50"
+   ]
+  ],
+  "1248": [
+   [
+    "CLAW",
+    "Stepmother.R curl 64"
+   ]
+  ],
+  "1254": [
+   [
+    "CLAW",
+    "Stepmother.R curl 54"
+   ]
+  ],
+  "1260": [
+   [
+    "CLAW",
+    "Stepmother.R curl 60"
+   ]
+  ],
+  "1266": [
+   [
+    "CLAW",
+    "Stepmother.R curl 63"
+   ]
+  ],
+  "1278": [
+   [
+    "CLAW",
+    "Stepmother.R curl 63"
+   ]
+  ],
+  "1284": [
+   [
+    "CLAW",
+    "Stepmother.R curl 60"
+   ]
+  ],
+  "1290": [
+   [
+    "CLAW",
+    "Stepmother.R curl 54"
+   ]
+  ],
+  "1296": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 64"
+   ]
+  ],
+  "1302": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 52"
+   ]
+  ],
+  "1308": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1314": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "CLAW",
+    "Stepmother.R curl 68"
+   ]
+  ],
+  "1320": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1326": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1338": [
+   [
+    "CLAW",
+    "Stepmother.R curl 74"
+   ]
+  ],
+  "1362": [
+   [
+    "CLAW",
+    "Stepmother.R curl 64"
+   ]
+  ],
+  "1368": [
+   [
+    "CLAW",
+    "Stepmother.R curl 74"
+   ]
+  ],
+  "1374": [
+   [
+    "CLAW",
+    "Stepmother.R curl 51"
+   ]
+  ],
+  "1380": [
+   [
+    "CLAW",
+    "Stepmother.R curl 74"
+   ]
+  ],
+  "1398": [
+   [
+    "CLAW",
+    "Stepmother.R curl 61"
+   ]
+  ],
+  "1404": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1416": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1422": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1428": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1452": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1482": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1488": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1500": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1512": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1524": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1530": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1602": [
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
+   ]
+  ],
+  "1608": [
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
+   ]
+  ],
+  "1614": [
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
+   ]
+  ],
+  "1620": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 52"
+   ]
+  ],
+  "1626": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 52"
+   ]
+  ],
+  "1632": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 52"
+   ]
+  ],
+  "1638": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 66"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 66"
+   ]
+  ],
+  "1644": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
+   ]
+  ],
+  "1650": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
+   ]
+  ],
+  "1656": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 52"
+   ]
+  ],
+  "1662": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 54"
+   ]
+  ],
+  "1668": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 60"
+   ]
+  ],
+  "1674": [
+   [
+    "CLAW",
+    "Prisoner.R curl 69"
+   ]
+  ],
+  "1722": [
+   [
+    "CLAW",
+    "Prisoner.L curl 75"
+   ]
+  ],
+  "1740": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1746": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1770": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 60"
+   ],
+   [
+    "CLAW",
+    "Prisoner.R curl 60"
+   ]
+  ],
+  "1776": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1782": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1860": [
+   [
+    "BACKHEAD",
+    "Prisoner"
+   ]
+  ],
+  "1866": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1890": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1896": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1902": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "2142": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2184": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "CLAW",
+    "Prisoner.L curl 37"
+   ]
+  ],
+  "2190": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2196": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2202": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2214": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2220": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "2226": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2232": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2388": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2406": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2412": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2484": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "2490": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "2496": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "2502": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2508": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "2514": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2856": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2862": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2868": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2874": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2880": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cell_Divider_3 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2886": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2892": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "2898": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "2922": [
+   [
+    "FILL",
+    "HeroDoor"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only HeroDoor in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2928": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2940": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2946": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2952": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2958": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2964": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2970": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2982": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2988": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2994": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3000": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "3084": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "3156": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3162": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cell_Divider_2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3168": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cell_Divider_2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3174": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3492": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "3498": [
+   [
+    "BACKHEAD",
+    "PrisonerOld"
+   ]
+  ],
+  "3504": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "3510": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3528": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3534": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3546": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3552": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3558": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3564": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3570": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3576": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3582": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3588": [
+   [
+    "FILL",
+    "Object_12"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Object_12 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3594": [
+   [
+    "CLAW",
+    "Guard2.L curl 56"
+   ],
+   [
+    "CLAW",
+    "Protester2.L curl 54"
+   ]
+  ],
+  "3600": [
+   [
+    "CLAW",
+    "Guard2.L curl 57"
+   ],
+   [
+    "CLAW",
+    "Protester2.L curl 53"
+   ],
+   [
+    "CLAW",
+    "Protester2.R curl 27"
+   ]
+  ],
+  "3606": [
+   [
+    "CLAW",
+    "Protester2.L curl 51"
+   ]
+  ],
+  "3612": [
+   [
+    "CLAW",
+    "Protester2.R curl 36"
+   ]
+  ],
+  "3624": [
+   [
+    "CLAW",
+    "Judge.L curl 35"
+   ]
+  ],
+  "3630": [
+   [
+    "CLAW",
+    "Protester2.R curl 65"
+   ]
+  ],
+  "3684": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "3732": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3738": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3744": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3750": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1539": [
+   [
+    "CAMJUMP",
+    "cut: 0.41 m, 65 deg in one frame (neighbours 0.42 m, 16 deg)"
+   ]
+  ],
+  "1863": [
+   [
+    "CAMJUMP",
+    "cut: 0.38 m, 69 deg in one frame (neighbours 0.64 m, 14 deg)"
+   ]
+  ],
+  "3622": [
+   [
+    "CAMJUMP",
+    "cut: 0.34 m, 90 deg in one frame (neighbours 0.38 m, 14 deg)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 152,
+  "FILL": 7,
+  "CLAW": 64,
+  "BACKHEAD": 2,
+  "CAMJUMP": 3
+ }
+}
