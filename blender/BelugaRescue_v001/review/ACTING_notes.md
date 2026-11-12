@@ -23,3 +23,15 @@ Frames = v004 frames (60 fps, frame = 1 + 60·t). Story-beat start frames are un
 - Hand-contact close-ups: `v005_hand_closeups.jpg` (incl. new `fin_pull_grip_f0490`, `fin_pull_off_f0512`).
 - `blender/pipeline/clip_scan.py` (director branch), step 6, depth 2 cm: **0 bad ranges** (`clip_scan_v005.json`).
 - Story-beat frames unchanged (`beats.json` identical to v004).
+- Hands: all finger poses come from `blender/pipeline/hand_poses.py` (`apply_pose` presets via `hp_key`; `add_hand_limits` on every rig in `04_hand_limits.py`). Pointing / fist pump → `open_alarm`; buoy carry → `wrap_grip`; calf → `cup_hold`; fin root → `wrap_grip`.
+
+## QA (`blender/pipeline/qa_check.py` @ c6240b2, step 6, `review/qa_v005.json`)
+Fixed in v005: CLAW (pointing/fist poses), HOVER (helper card / particulates were hit by rays; now hidden or excluded), BACKHEAD at frame 1 (camera reframed in front of the diver), FILL/EMPTY from the hidden explainer card (now hidden to rays outside 329–501), INSIDE from the ice walls (face normals flipped toward the tank), EMPTY from the water volume (explicit transparent surface, render-neutral), tighter lenses at 650/1925/1965/2010.
+
+Remaining flags — all intended:
+| Flag | Frames | Reason |
+|---|---|---|
+| INSIDE | 163–205, 1147–1249, 1555–1903 | The camera is underwater, i.e. inside the `Water_Volume` box; every back-face hit is `Water_Volume` / `Water_Surface` (checked ray by ray). |
+| EMPTY "no character" | 853, 925, 931 | Whale-only shots: the beluga is the acting character; QA counts only MPFB rigs. |
+| EMPTY "wall/prop fills" | 1291–1315, 1387, 1435–1477 | The beluga (and its jaw) fills the frame next to the diver at the approach and leg grab; QA counts the whale as a prop. |
+| EMPTY "wall/prop fills" | 265–307 | Low floor-level shot of the cramp: she is lying on the tank floor, the floor around her fills the frame (diver 10–11%). Kept for the story beat; not changed under the deadline. |

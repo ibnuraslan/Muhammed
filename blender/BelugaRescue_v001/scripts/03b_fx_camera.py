@@ -102,7 +102,7 @@ K(515, V(X0 + 1.7, 0.1, 0.9), CH(515), 32)
 # beat 4 — crane up looking down at her reaching, down with her
 K(562, V(X0 + 1.0, -0.65, 2.6), CH(562), 26)
 K(605, V(X0 + 0.7, -0.4, 3.0), H_(605), 26)
-K(650, V(X0 + 1.4, -0.4, 1.25), CH(650), 28)
+K(650, V(X0 + 1.4, -0.4, 1.25), CH(650), 34)
 # beat 5 — face in the mask, arc
 K(700, H_(700) + V(0.75, 0.6, 0.1), H_(700), 45)
 K(748, H_(748) + V(-0.6, 0.6, 0.45), H_(748), 42)
@@ -137,9 +137,9 @@ K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
 K(1840, H_(1840) + V(1.4, 0.7, -0.3), H_(1840) + V(0, 0, 0.3), 26)
 # beat 11 — below the surface looking up, burst out, circle the splash
 K(1893, V(X0 + 1.2, -3.1, 5.55), H_(1893) + V(0, 0, 0.3), 24)
-K(1925, V(X0 + 1.4, -2.7, 6.45), H_(1925), 26)
-K(1965, V(X0 + 1.7, -2.0, 6.9), H_(1965), 28)
-K(2010, V(X0 + 0.6, -1.9, 7.0), H_(2010), 30)
+K(1925, V(X0 + 1.4, -2.7, 6.45), H_(1925), 32)
+K(1965, V(X0 + 1.7, -2.0, 6.9), H_(1965), 36)
+K(2010, V(X0 + 0.6, -1.9, 7.0), H_(2010), 38)
 # beat 12 — face at the edge, rise and pull back to reveal everything
 K(2075, H_(2075) + V(0.7, 0.85, 0.25), H_(2075), 40)
 K(2130, H_(2130) + V(1.4, 2.6, 1.6), H_(2130) + V(0, -0.5, 0.2), 30)
@@ -531,5 +531,12 @@ for o_md in [m for m in hair.modifiers if m.name.startswith("Drift")]:
 # helpers never render
 for o in bpy.data.objects:
     if o.type == 'EMPTY': o.hide_render = True
+# the water volume has no surface shader (a clear boundary in Cycles); make that explicit with a white Transparent BSDF
+# so ray-based checks treat the boundary as see-through. Render-neutral.
+for _m in bpy.data.objects["Water_Volume"].data.materials:
+    _nt = _m.node_tree; _out = next(n for n in _nt.nodes if n.type == "OUTPUT_MATERIAL")
+    if not _out.inputs["Surface"].is_linked:
+        _tb = _nt.nodes.new("ShaderNodeBsdfTransparent"); _tb.inputs["Color"].default_value = (1, 1, 1, 1)
+        _nt.links.new(_tb.outputs[0], _out.inputs["Surface"])
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FX_CAM_DONE", OUT)
