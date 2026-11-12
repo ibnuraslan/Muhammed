@@ -1,0 +1,2626 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Owner"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "253": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "259": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "265": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "271": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "277": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "289": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "295": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "385": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "391": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "397": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "403": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "409": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "415": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "421": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "433": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "439": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "445": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "451": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "457": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "463": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "469": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "475": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "481": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "487": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "493": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "499": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "505": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "511": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "517": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "523": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_14 moves 4001.0 cm with no hand on it (nearest finger 718 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_14 moves 1.6 cm with no hand on it (nearest finger 707 cm)"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_14 moves 1.2 cm with no hand on it (nearest finger 696 cm)"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_14 moves 0.8 cm with no hand on it (nearest finger 683 cm)"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "703": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_30 moves 4017.3 cm with no hand on it (nearest finger 537 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_31 moves 4012.2 cm with no hand on it (nearest finger 539 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_32 moves 4020.4 cm with no hand on it (nearest finger 537 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 4002.4 cm with no hand on it (nearest finger 535 cm)"
+   ]
+  ],
+  "709": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_31 moves 15.4 cm with no hand on it (nearest finger 510 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 2.1 cm with no hand on it (nearest finger 498 cm)"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_31 moves 15.3 cm with no hand on it (nearest finger 482 cm)"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_31 moves 14.6 cm with no hand on it (nearest finger 461 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 2.6 cm with no hand on it (nearest finger 427 cm)"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_31 moves 38.7 cm with no hand on it (nearest finger 442 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 6.2 cm with no hand on it (nearest finger 390 cm)"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 8.0 cm with no hand on it (nearest finger 354 cm)"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 7.8 cm with no hand on it (nearest finger 325 cm)"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_5 moves 5.7 cm with no hand on it (nearest finger 293 cm)"
+   ]
+  ],
+  "751": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_33 moves 4010.8 cm with no hand on it (nearest finger 286 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_34 moves 4016.1 cm with no hand on it (nearest finger 280 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_35 moves 4013.9 cm with no hand on it (nearest finger 286 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_6 moves 4003.4 cm with no hand on it (nearest finger 268 cm)"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_33 moves 17.8 cm with no hand on it (nearest finger 274 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_34 moves 13.8 cm with no hand on it (nearest finger 259 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_35 moves 17.5 cm with no hand on it (nearest finger 269 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_6 moves 1.3 cm with no hand on it (nearest finger 230 cm)"
+   ]
+  ],
+  "787": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_33 moves 14.7 cm with no hand on it (nearest finger 264 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_34 moves 9.3 cm with no hand on it (nearest finger 245 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_35 moves 19.7 cm with no hand on it (nearest finger 259 cm)"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_33 moves 19.3 cm with no hand on it (nearest finger 260 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_35 moves 18.8 cm with no hand on it (nearest finger 250 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_6 moves 4.0 cm with no hand on it (nearest finger 168 cm)"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_01 moves 3.5 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_02 moves 3.2 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.4 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.9 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 2.9 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.6 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07 moves 4.6 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 4.1 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.9 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_1 moves 0.9 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Stick moves 4.6 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.6 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_01 moves 3.5 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_02 moves 3.0 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.2 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.7 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 2.9 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.9 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07 moves 4.3 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.9 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.9 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.7 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_01 moves 3.4 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_02 moves 2.8 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 2.9 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.3 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.3 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.8 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07 moves 4.1 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.7 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.9 cm with no hand on it (nearest finger 50 cm)"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.7 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_01 moves 3.1 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_02 moves 2.9 cm with no hand on it (nearest finger 80 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 2.8 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.1 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.7 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 3.4 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07 moves 3.8 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.5 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.7 cm with no hand on it (nearest finger 47 cm)"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.3 cm with no hand on it (nearest finger 53 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_01 moves 2.9 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_02 moves 3.0 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 2.8 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.1 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.8 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 3.5 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07 moves 3.7 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.3 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.8 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 2.8 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.2 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.6 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 3.3 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.0 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.6 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 2.8 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.2 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.1 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.7 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.5 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 2.9 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.5 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.0 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.4 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 2.6 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.9 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.4 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 2.9 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.5 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.3 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.7 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.4 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.4 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 2.9 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.6 cm with no hand on it (nearest finger 49 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.5 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.8 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.0 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.5 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.0 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.6 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.7 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.8 cm with no hand on it (nearest finger 73 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 0.9 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.7 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.0 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.7 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.7 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 3.0 cm with no hand on it (nearest finger 75 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 0.8 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 3.9 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.1 cm with no hand on it (nearest finger 46 cm)"
+   ]
+  ],
+  "1063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 2.9 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 4.9 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 3.6 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 0.9 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 4.1 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.3 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.3 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 57.8 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.0 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 4.5 cm with no hand on it (nearest finger 82 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.7 cm with no hand on it (nearest finger 51 cm)"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.6 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.3 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.9 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "1081": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.7 cm with no hand on it (nearest finger 67 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.8 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.9 cm with no hand on it (nearest finger 57 cm)"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.6 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.6 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 3.9 cm with no hand on it (nearest finger 59 cm)"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.5 cm with no hand on it (nearest finger 74 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 3.2 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 4.0 cm with no hand on it (nearest finger 61 cm)"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.6 cm with no hand on it (nearest finger 77 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.8 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 3.5 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 4.2 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 3.4 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 6.1 cm with no hand on it (nearest finger 71 cm)"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.9 cm with no hand on it (nearest finger 64 cm)"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.1 cm with no hand on it (nearest finger 66 cm)"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 1.6 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1165": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_10 moves 5.7 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_11 moves 20.9 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_12 moves 7.2 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_13 moves 4.8 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_14 moves 11.6 cm with no hand on it (nearest finger 55 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_15 moves 5.1 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_16 moves 12.3 cm with no hand on it (nearest finger 40 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_17 moves 14.2 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_2 moves 0.9 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "1171": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_10 moves 11.4 cm with no hand on it (nearest finger 57 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_11 moves 34.6 cm with no hand on it (nearest finger 81 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_12 moves 12.0 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_13 moves 10.1 cm with no hand on it (nearest finger 64 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_15 moves 5.1 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_16 moves 10.7 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_17 moves 14.5 cm with no hand on it (nearest finger 38 cm)"
+   ]
+  ],
+  "1177": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_10 moves 40.6 cm with no hand on it (nearest finger 96 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_15 moves 13.6 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_16 moves 17.9 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_17 moves 16.7 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_15 moves 48.0 cm with no hand on it (nearest finger 114 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_16 moves 20.1 cm with no hand on it (nearest finger 99 cm)"
+   ]
+  ],
+  "1189": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_7 moves 4001.6 cm with no hand on it (nearest finger 106 cm)"
+   ]
+  ],
+  "1195": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_7 moves 6.0 cm with no hand on it (nearest finger 105 cm)"
+   ]
+  ],
+  "1201": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_15 moves 4000.3 cm with no hand on it (nearest finger 197 cm)"
+   ]
+  ],
+  "1387": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1393": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1399": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "1405": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1453": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1489": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_18 moves 10.4 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_19 moves 14.4 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_20 moves 18.9 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_21 moves 10.0 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_22 moves 22.6 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_23 moves 20.4 cm with no hand on it (nearest finger 48 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_24 moves 23.3 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_25 moves 14.3 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_26 moves 17.2 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_27 moves 21.4 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_28 moves 15.1 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_29 moves 18.7 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_4 moves 5.8 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_19 moves 16.0 cm with no hand on it (nearest finger 50 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_20 moves 19.0 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_21 moves 35.1 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_22 moves 41.3 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_23 moves 20.7 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_24 moves 19.8 cm with no hand on it (nearest finger 79 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_25 moves 11.8 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_27 moves 25.0 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_28 moves 79.2 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_29 moves 37.2 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_19 moves 356.2 cm with no hand on it (nearest finger 329 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_20 moves 155.2 cm with no hand on it (nearest finger 116 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_23 moves 155.6 cm with no hand on it (nearest finger 132 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_24 moves 48.5 cm with no hand on it (nearest finger 88 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_25 moves 161.4 cm with no hand on it (nearest finger 140 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_27 moves 91.6 cm with no hand on it (nearest finger 105 cm)"
+   ]
+  ],
+  "1519": [
+   [
+    "BACKHEAD",
+    "Owner"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_16 moves 4000.3 cm with no hand on it (nearest finger 139 cm)"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1597": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1735": [
+   [
+    "BACKHEAD",
+    "OffB"
+   ]
+  ],
+  "1885": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1915": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1957": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1963": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1969": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1975": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1999": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2155": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2161": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2167": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2185": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "961": [
+   [
+    "PROPMOVE",
+    "DustPuff_0 moves 4000.7 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "967": [
+   [
+    "PROPMOVE",
+    "DustPuff_0 moves 3.3 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "973": [
+   [
+    "PROPMOVE",
+    "DustPuff_0 moves 2.4 cm with no hand on it (nearest finger 18 cm)"
+   ]
+  ],
+  "979": [
+   [
+    "PROPMOVE",
+    "Clod_00 moves 4.2 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.7 cm with no hand on it (nearest finger 69 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 3.0 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 5.2 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 5.0 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 4.4 cm with no hand on it (nearest finger 63 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_0 moves 1.6 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_1 moves 2.0 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Stick moves 44.1 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "985": [
+   [
+    "PROPMOVE",
+    "Clod_00 moves 3.6 cm with no hand on it (nearest finger 65 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_01 moves 3.8 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_02 moves 3.5 cm with no hand on it (nearest finger 78 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_03 moves 3.6 cm with no hand on it (nearest finger 68 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_04 moves 2.9 cm with no hand on it (nearest finger 71 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_05 moves 3.3 cm with no hand on it (nearest finger 66 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.5 cm with no hand on it (nearest finger 62 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_07 moves 5.0 cm with no hand on it (nearest finger 76 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_08 moves 4.5 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_09 moves 4.1 cm with no hand on it (nearest finger 61 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_0 moves 1.0 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_1 moves 1.4 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Stick moves 44.3 cm with no hand on it (nearest finger 53 cm)"
+   ]
+  ],
+  "1129": [
+   [
+    "PROPMOVE",
+    "Clod_06 moves 2.2 cm with no hand on it (nearest finger 70 cm)"
+   ]
+  ],
+  "1135": [
+   [
+    "PROPMOVE",
+    "Clod_06 moves 4.5 cm with no hand on it (nearest finger 77 cm)"
+   ]
+  ],
+  "1141": [
+   [
+    "PROPMOVE",
+    "Clod_06 moves 8.4 cm with no hand on it (nearest finger 84 cm)"
+   ]
+  ],
+  "1147": [
+   [
+    "PROPMOVE",
+    "DustPuff_2 moves 4002.4 cm with no hand on it (nearest finger 54 cm)"
+   ]
+  ],
+  "1153": [
+   [
+    "PROPMOVE",
+    "Clod_10 moves 4015.3 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_11 moves 4011.0 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_12 moves 4012.3 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_13 moves 4012.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_14 moves 4011.0 cm with no hand on it (nearest finger 47 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_15 moves 4021.2 cm with no hand on it (nearest finger 39 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_16 moves 4024.0 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_17 moves 4019.7 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_2 moves 9.0 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_3 moves 4008.2 cm with no hand on it (nearest finger 26 cm)"
+   ]
+  ],
+  "1159": [
+   [
+    "PROPMOVE",
+    "Clod_10 moves 13.4 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_11 moves 20.9 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_12 moves 9.6 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_13 moves 7.9 cm with no hand on it (nearest finger 43 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_14 moves 14.2 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_15 moves 15.0 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_16 moves 17.4 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_17 moves 16.3 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_2 moves 3.0 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_3 moves 4.8 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1261": [
+   [
+    "PROPMOVE",
+    "DustPuff_9 moves 4001.6 cm with no hand on it (nearest finger 192 cm)"
+   ]
+  ],
+  "1267": [
+   [
+    "PROPMOVE",
+    "DustPuff_9 moves 6.0 cm with no hand on it (nearest finger 201 cm)"
+   ]
+  ],
+  "1483": [
+   [
+    "PROPMOVE",
+    "Clod_18 moves 4008.1 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_19 moves 4015.0 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_20 moves 4017.4 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_21 moves 4013.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_22 moves 4012.9 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_23 moves 4017.5 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_24 moves 4019.0 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_25 moves 4016.9 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_26 moves 4008.7 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_27 moves 4019.2 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_28 moves 4012.3 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_29 moves 4013.4 cm with no hand on it (nearest finger 38 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "DustPuff_4 moves 4004.7 cm with no hand on it (nearest finger 9 cm)"
+   ]
+  ],
+  "1495": [
+   [
+    "PROPMOVE",
+    "Clod_19 moves 11.9 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_20 moves 12.2 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_21 moves 4.1 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_22 moves 17.7 cm with no hand on it (nearest finger 54 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_23 moves 13.5 cm with no hand on it (nearest finger 59 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_24 moves 16.6 cm with no hand on it (nearest finger 58 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_25 moves 8.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_26 moves 16.4 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_27 moves 20.4 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_28 moves 15.6 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_29 moves 18.3 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1501": [
+   [
+    "PROPMOVE",
+    "Clod_18 moves 135.9 cm with no hand on it (nearest finger 122 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_19 moves 12.6 cm with no hand on it (nearest finger 52 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_20 moves 14.9 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_21 moves 11.0 cm with no hand on it (nearest finger 42 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_22 moves 19.0 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_23 moves 16.5 cm with no hand on it (nearest finger 56 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_24 moves 18.6 cm with no hand on it (nearest finger 70 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_25 moves 10.2 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_26 moves 35.1 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_27 moves 17.3 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_28 moves 18.1 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Clod_29 moves 21.0 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1621": [
+   [
+    "PROPMOVE",
+    "DustPuff_17 moves 4000.3 cm with no hand on it (nearest finger 67 cm)"
+   ]
+  ],
+  "1627": [
+   [
+    "PROPMOVE",
+    "DustPuff_17 moves 1.8 cm with no hand on it (nearest finger 65 cm)"
+   ]
+  ],
+  "1633": [
+   [
+    "PROPMOVE",
+    "DustPuff_17 moves 1.3 cm with no hand on it (nearest finger 60 cm)"
+   ]
+  ],
+  "1639": [
+   [
+    "PROPMOVE",
+    "DustPuff_17 moves 1.0 cm with no hand on it (nearest finger 52 cm)"
+   ]
+  ],
+  "1645": [
+   [
+    "PROPMOVE",
+    "DustPuff_17 moves 0.6 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 3,
+  "EMPTY": 241,
+  "INSIDE": 3,
+  "PROPMOVE": 308
+ }
+}
