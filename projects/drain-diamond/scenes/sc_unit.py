@@ -92,7 +92,7 @@ def build(variant=None):
     # the listening post on the reader's desk: a recorder with two turning spools, headphones on her head
     dd.model_h("vintage_radio_transceiver", (3.25, 3.15, 0.76), 0.18, rot_z=math.radians(-90))
     rec = Vector((3.25, 3.95, 0.76))
-    box("Recorder", rec + Vector((0, 0, 0.05)), (0.3, 0.42, 0.1), pbr("RecBody", (0.18, 0.18, 0.19), 0.4, 0.3), bevel=0.01)
+    box("Recorder", rec + Vector((0, 0, 0.05)), (0.3, 0.42, 0.1), pbr("RecBody", (0.05, 0.05, 0.055), 0.35, 0.4), bevel=0.01)
     box("RecWindow", rec + Vector((-0.151, 0, 0.07)), (0.004, 0.3, 0.05), pbr("RecGlass", (0.02, 0.02, 0.02), 0.05))
     c["spools"] = []
     for k in range(2):

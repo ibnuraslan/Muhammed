@@ -61,7 +61,9 @@ def build_hall(c):
     up_m = dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="UnderPanel", sat=0.8)
     B.box((-0.29, 1.66, 0.6), (0.82, 0.04, 1.2), up_m).box((1.49, 1.66, 0.6), (0.82, 0.04, 1.2), up_m)   # the opening is x 0.12..1.08
     B.box((0.6, 1.66, 1.18), (0.96, 0.04, 0.04), up_m)
-    B.box((0.6, 2.1, 0.6), (1.0, 0.8, 1.15), pbr("Cavity", (0.03, 0.025, 0.02), 0.8))
+    cav = pbr("Cavity", (0.09, 0.07, 0.05), 0.8)
+    B.box((0.6, 2.52, 0.6), (1.0, 0.04, 1.15), cav).box((0.6, 2.1, 0.01), (1.0, 0.8, 0.02), cav)        # back, floor
+    B.box((0.1, 2.1, 0.6), (0.04, 0.8, 1.15), cav).box((1.1, 2.1, 0.6), (0.04, 0.8, 1.15), cav)          # sides
     B.done()
     # inside: small display stands with jewels
     stand = pbr("DispStand", (0.85, 0.84, 0.8), 0.5)
@@ -71,6 +73,8 @@ def build_hall(c):
         dd.ring(f"HidRing{k}", p + Vector((0, 0, 0.14)), stone_r=0.0045, band="plat" if k % 2 else "gold", stone=("diamond", "sapphire", "diamond", "ruby", "diamond")[k])
     for k in range(3):
         box("NeckBust", (0.35 + k * 0.3, 2.3, 0.2), (0.12, 0.08, 0.3), fabric("BustVel", (0.08, 0.08, 0.1), 0.9, 0.6, 300))
+    il = bpy.data.lights.new("CavityGlow", 'POINT'); il.energy = 6; il.color = (1.0, 0.85, 0.65); il.shadow_soft_size = 0.1
+    io = bpy.data.objects.new("CavityGlow", il); bpy.context.collection.objects.link(io); io.location = (0.6, 2.2, 0.9)
     pnl = dd.Builder("HiddenPanel"); pnl.box((0, 0, 0), (0.95, 0.04, 1.1), dd.tex_mat("wooden_panels", 1.6, tint=(0.75, 0.68, 0.58), name="HidPanel", sat=0.8))
     c["panel"] = pnl.done((0.6, 1.62, 0.58))
     tl = bpy.data.lights.new("RaidTorch", 'SPOT'); tl.energy = 90; tl.spot_size = math.radians(22); tl.spot_blend = 0.4; tl.color = (1.0, 0.95, 0.85)
