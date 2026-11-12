@@ -90,14 +90,19 @@ print("ARM_VESSELS", nv)
 
 
 # the forearm skin itself goes glassy around the pocket (x-ray), keyed 790-815 on, 1040-1066 off
-def xray(name, parent, r0, r1, keys, objs):
+def xray(name, parent, r0, r1, keys, objs, static=None):
     xr = bpy.data.objects.new(name, None); bpy.data.collections["Props"].objects.link(xr); xr.parent = parent; xr.location = (0, 0, 0)
+    bpy.context.view_layer.update(); ps_ = parent.matrix_world.to_scale().x; xr.scale = (1 / ps_,) * 3   # object coords in metres
     for ob_ in objs:
         for m in ob_.data.materials:
             nt_ = m.node_tree; outn = next(n for n in nt_.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
             src = outn.inputs["Surface"].links[0].from_socket
-            tcx = nt_.nodes.new("ShaderNodeTexCoord"); tcx.object = xr
-            ln = nt_.nodes.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; nt_.links.new(tcx.outputs["Object"], ln.inputs[0])
+            ln = nt_.nodes.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'
+            if static is None:
+                tcx = nt_.nodes.new("ShaderNodeTexCoord"); tcx.object = xr; nt_.links.new(tcx.outputs["Object"], ln.inputs[0])
+            else:   # world-space centre (the chest does not move while it is x-rayed)
+                geo = nt_.nodes.new("ShaderNodeNewGeometry"); sub = nt_.nodes.new("ShaderNodeVectorMath"); sub.operation = 'SUBTRACT'
+                sub.inputs[1].default_value = static; nt_.links.new(geo.outputs["Position"], sub.inputs[0]); nt_.links.new(sub.outputs[0], ln.inputs[0])
             mr_ = nt_.nodes.new("ShaderNodeMapRange"); mr_.inputs["From Min"].default_value = r0; mr_.inputs["From Max"].default_value = r1
             mr_.inputs["To Min"].default_value = 1.0; mr_.inputs["To Max"].default_value = 0.0; nt_.links.new(ln.outputs["Value"], mr_.inputs["Value"])
             amt = nt_.nodes.new("ShaderNodeMath"); amt.operation = 'MULTIPLY'; nt_.links.new(mr_.outputs["Result"], amt.inputs[0])
@@ -112,8 +117,7 @@ def xray(name, parent, r0, r1, keys, objs):
             nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
 xray("Xray_Center", OB["Arm_Pocket"], 0.03, 0.055, ((1, 0.0), (790, 0.0), (815, 0.95), (1040, 0.95), (1066, 0.0)), [OB["Patient.body"]])
 # chest x-ray (beat 2): body and tee go glassy over the rib cage while the cartilage is harvested
-xray("Xray_Chest", OB["Chest_Thorax"], 0.09, 0.17, ((1, 0.0), (140, 0.0), (165, 0.92), (322, 0.92), (346, 0.0)),
-     [OB["Patient.body"], OB["Patient.male_casualsuit06"]])
+xray("Xray_Chest", OB["Chest_Thorax"], 5.0, 6.0, ((1, 0.0), (140, 0.0), (165, 0.92), (322, 0.92), (346, 0.0)), [OB["Patient.male_casualsuit06"]])   # the whole tee turns x-ray glass
 # heartbeat pulse of the glow on the patch
 # ================================================================== world + OR lights + render settings
 w = bpy.data.worlds.get("World") or bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
@@ -161,9 +165,9 @@ SEGS = [
   [  # OR, one continuous move: beat 1 shock -> x-ray of the chest (beat 2) -> follow the cartilage to the tray -> carving ...
     (1, V(1.9, -1.7, 1.2), FACE1 + V(0, 0, -0.1), 26), (30, V(1.2, -1.35, 1.35), FACE1, 32), (60, V(0.2, -0.95, 1.4), FACE1, 40),
     (90, V(0.75, -0.12, 1.45), EAR1, 45), (118, V(0.6, 0.05, 1.4), EAR1, 48), (145, V(0.15, -0.75, 1.25), PC + V(0, 0, 0.06), 38),
-    (175, V(-0.05, -0.62, 1.12), PC + V(0, 0, 0.02), 42), (205, V(-0.22, -0.5, 1.08), PC, 45), (235, V(-0.12, -0.42, 1.18), PC, 50),
-    (262, V(0.02, -0.46, 1.2), PC + V(0.02, -0.03, 0.03), 46), (292, V(0.3, -0.85, 1.4), PC.lerp(BLK, 0.4) + V(0, 0, 0.1), 34),
-    (322, V(0.95, -1.15, 1.35), BLK + V(0, 0, 0.02), 36),
+    (175, V(-0.05, -0.62, 1.12), PC + V(0, 0, 0.02), 42), (205, V(-0.22, -0.5, 1.08), PC, 45), (235, V(-0.18, -0.5, 1.2), PC, 50),
+    (262, V(-0.12, -0.62, 1.28), PC + V(0.02, -0.03, 0.03), 44), (292, V(-0.05, -1.05, 1.5), PC.lerp(BLK, 0.4) + V(0, 0, 0.1), 34),
+    (322, V(0.65, -1.4, 1.45), BLK + V(0, 0, 0.02), 38),
     (362, BLK + V(-0.08, -0.2, 0.16), BLK + V(0, 0, 0.01), 40),
     (400, BLK + V(-0.3, -0.28, 0.28), BLK + V(0, 0.03, 0.03), 34), (440, BLK + V(-0.34, -0.3, 0.3), BLK + V(0, 0.03, 0.03), 34),
     (480, BLK + V(0.02, -0.42, 0.36), BLK + V(0, 0.02, 0.0), 38), (525, BLK + V(0.24, -0.26, 0.22), BLK + V(0, 0.0, 0.0), 44),

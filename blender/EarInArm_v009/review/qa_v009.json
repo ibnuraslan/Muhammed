@@ -1,0 +1,111 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Surgeon"
+   ]
+  ],
+  "73": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "139": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "559": [
+   [
+    "HOVER",
+    "Surgeon.R near Shaving13 (14.3 cm)"
+   ]
+  ],
+  "601": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "607": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "613": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "619": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "625": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "631": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1177": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1237": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1243": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1261": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1273": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 1,
+  "FILL": 15,
+  "HOVER": 1
+ }
+}

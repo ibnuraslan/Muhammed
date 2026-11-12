@@ -167,7 +167,7 @@ for f in range(470, B["b9"], 120):
 pat_rec(B["b9"] + 10)
 # beat 9: sits up, turns to camera, left hand comes up and touches the new ear, big smile
 pat_up(B["b9"] + 75, head=(-2, -8, 0)); pat_up(B["b9"] + 100, head=(-4, -14, 3), spine=(4, 2, 3)); pat_up(B["end"], head=(-5, -10, 2), spine=(5, 1, 2))
-EAR_TOUCH = EAR_C + Vector((0.045, 0.02, -0.304 - 0.075))
+EAR_TOUCH = EAR_C + Vector((0.12, -0.01, -0.304 - 0.09))
 PAT.key_hand("L", B["b9"] + 60, *ARM_L_REST)
 PAT.key_hand("L", B["b9"] + 92, EAR_TOUCH + Vector((0.05, -0.05, -0.08)), (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
 PAT.key_hand("L", B["b9"] + 108, EAR_TOUCH, (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
@@ -289,19 +289,19 @@ for f in (1, 60):
     fwd = Matrix.Rotation(R_(yA), 3, 'Z') @ Vector((0, -1, 0))
     sh(f, "L", c + fwd * 0.25 + Vector((0.05, 0, -0.12)), fwd + Vector((0, 0, -0.3)), Vector((0, 0, 1)).cross(fwd))
     sh(f, "R", c + fwd * 0.27 + Vector((-0.02, 0, -0.1)), fwd + Vector((0, 0, -0.3)), -Vector((0, 0, 1)).cross(fwd))
-sh(100, "L", CHEST + Vector((0.12, -0.16, 0.05)), (-0.6, 0.6, -0.4), (0.4, -0.5, 0.6))
-sh(128, "L", CHEST + Vector((0.05, -0.085, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
-sh(175, "L", CHEST + Vector((0.06, -0.09, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
+sh(100, "L", CHEST + Vector((0.12, -0.19, 0.05)), (-0.6, 0.6, -0.4), (0.4, -0.5, 0.6))
+sh(128, "L", CHEST + Vector((0.05, -0.115, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
+sh(175, "L", CHEST + Vector((0.06, -0.12, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
 sh(215, "L", CHEST + Vector((0.18, -0.22, -0.15)), (-0.3, 0.3, -0.9), (0, 0, -1))
 # beat 2: forceps go into the x-rayed chest, free the cartilage piece and carry it to the tray (keys re-aimed + tip-solved below)
 PCW = CHEST_PIECE_W   # world point of the cartilage piece in the patient's chest (patient upright 1..350)
 for f, tip in ((200, PCW + Vector((0.05, -0.12, 0.08))), (225, PCW + Vector((0.0, -0.01, 0.0))), (250, PCW), (268, PCW + Vector((0.0, -0.06, 0.04))),
-               (290, PCW + Vector((0.12, -0.2, 0.12))), (315, BLK + Vector((-0.1, 0.05, 0.12))), (334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
+               (290, Vector((0.85, -0.62, 1.15))), (315, BLK + Vector((-0.1, -0.06, 0.16))), (334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
     sh(f, "R", tip, (0, 0, 0), (0, 0, 1), tip_mode=True)
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(343, 565, 6):
     k = (f - 343) / 37.0
-    away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(462, 488, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
+    away = Vector((0, 0.03, 0.14)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.06, 0.03)) * smoothstep(462, 488, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
     shL = Vector((ST.x + 0.18, ST.y - 0.08, 1.38)); gripL = BLK + Vector((0.028, -0.005, 0.01))
     dL = (gripL - shL).normalized()
     sh(f, "L", gripL - dL * 0.075 + Vector((0, 0, -0.065)) + away, dL, (0.0, 0.2, 1.0))
@@ -361,11 +361,12 @@ for s in "LR":
     ev_at(B["b9"] + 70)
     sh(B["b9"] + 70, s, SUR.wpos("spine04") + Vector((0.0, 0, -0.05)) + (Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector(((0.12 if s == "R" else -0.12), -0.22, -0.12))),
        Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector((0, -1, -0.5)), (0, 0, 1))
-HP(SUR, "R", "pinch", 1386); HP(SUR, "R", "tripod", 1502); HP(SUR, "R", "tripod", B["b9"] + 40); HP(SUR, "R", "relaxed", B["b9"] + 70); HP(SUR, "L", "relaxed", B["b9"] + 70)
-HP(SUR, "R", "pinch", 1); HP(SUR, "L", "relaxed", 1); HP(SUR, "L", "flat_palm", 100); HP(SUR, "L", "flat_palm", 175); HP(SUR, "L", "relaxed", 215); HP(SUR, "R", "pinch", 339); HP(SUR, "R", "tripod", 343)
+HP(SUR, "R", "pinch", 1386, amount=0.8); HP(SUR, "R", "pinch", 1460, amount=0.8); HP(SUR, "R", "tripod", 1502); HP(SUR, "R", "tripod", B["b9"] + 40); HP(SUR, "R", "relaxed", B["b9"] + 70); HP(SUR, "L", "relaxed", B["b9"] + 70)
+HP(SUR, "R", "pinch", 1); HP(SUR, "L", "relaxed", 1); HP(SUR, "L", "flat_palm", 100); HP(SUR, "L", "flat_palm", 175); HP(SUR, "L", "relaxed", 215); HP(SUR, "R", "pinch", 339); HP(SUR, "R", "cup_hold", 343); HP(SUR, "R", "cup_hold", 560)   # scalpel held lightly between thumb and index, fingers loosely together
 SUR.face(1, **N0); SUR.face(B["b9"] + 60, **N0); SUR.face(B["b9"] + 90, **dict(N0, eye_left_slit=0.5, eye_right_slit=0.5, mouth_corner_puller=0.7))
 
 # tool tips onto their targets: re-key each surgeon hand key until the forceps / needle tip (or the index tip) lands on it
+CONTACT_LIFT = Vector((0, 0, 0.025))
 TIP_LOCAL = {"F": Vector((0, 0.09, 0)), "N": Vector((0, 0.108, 0))}
 def pinch_pt(P_, s_):
     return P_.o.matrix_world @ ((P_.R.PB["finger1-3." + s_].tail + P_.R.PB["finger2-3." + s_].tail) / 2)
@@ -384,7 +385,7 @@ for it in range(3):
             act = pinch_pt(SUR, "R") + WM.to_3x3().normalized() @ TIP_LOCAL["F" if f <= 1500 else "N"]
         else:
             act = SUR.o.matrix_world @ SUR.R.PB["finger2-3.L"].tail
-        err = tip - act; worst = max(worst, err.length)
+        tgt_ = tip + (Vector((0, 0, 0.05)) if 650 <= f <= 1300 else (Vector((0, 0, 0.05)) + side * 0.06 + Vector((0, 0.03, 0)) if 1300 < f <= 1500 else Vector())); err = tgt_ - act; worst = max(worst, err.length)
         if err.length > 0.004:
             rec[3] = W + err * 0.9; SUR.key_hand(s_, f, rec[3], d, n)
     print("TIP_FIX iter", it, "worst", round(worst, 3))
@@ -608,7 +609,7 @@ for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     sc.frame_set(f)
     Rw = wrist_w(SUR, "R").to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
     if f == 1501: HEADSIDE = Matrix.Translation(pinch_pt(SUR, "R") + Vector((0, 0.06, -0.06)))
-    keymat(scal, f, PP @ Rw @ Matrix.Translation((0, -0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'Z') if 343 <= f <= 562 else scal_rest)
+    keymat(scal, f, PP @ Rw @ Matrix.Translation((0, -0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'Z') if 343 <= f <= 464 else scal_rest)
     held_f = f <= 337 or 566 <= f <= 1500
     keymat(forc, f, PP @ Rw @ Matrix.Translation((0, -0.04, 0)) if held_f else (forc_rest if f < 1500 else HEADSIDE @ Matrix.Rotation(R_(90), 4, 'Z')))
     keymat(nh, f, PP @ Rw @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(180), 4, 'Z') if 1502 <= f <= B["b9"] + 40 else
