@@ -103,7 +103,7 @@ def room():
     # painting behind the judges (a generic allegory: warm umber figures-and-sky impression, no text)
     P = dd.Builder("Pilasters")
     carved = dd.tex_mat("wooden_panels", 0.4, tint=(0.62, 0.5, 0.38), name="CarvedPanel", sat=0.8, coat=0.2)
-    P.box((-7.02, 10, 2.5), (0.04, 22, 5.0), carved)
+    P.box((-6.9, 10, 2.5), (0.02, 22, 5.0), carved)
     for y in np.arange(0.4, 20.5, 3.2):
         P.box((-6.92, y, 2.5), (0.16, 0.5, 5.0), dark).box((-6.88, y, 5.1), (0.25, 0.7, 0.25), dark).box((-6.88, y, 0.12), (0.25, 0.66, 0.24), dark)
     for x in (-6.2, -3.4, 3.4, 6.2):
@@ -157,7 +157,7 @@ def _to_bone(o, h, bone):
 def _gown_mesh(name, nk, length, mat):
     """A long gown from the neck to mid-shin: shoulders, a flared skirt with soft vertical folds deepening downward."""
     import bmesh
-    prof = [(0.0, 0.085), (0.05, 0.2), (0.1, 0.245), (0.25, 0.23), (0.45, 0.24), (0.7, 0.29), (1.0, 0.37)]
+    prof = [(0.0, 0.085), (0.05, 0.2), (0.1, 0.245), (0.25, 0.23), (0.45, 0.225), (0.7, 0.25), (1.0, 0.29)]
     def rad(f):
         for (f0, r0), (f1, r1) in zip(prof, prof[1:]):
             if f <= f1:
@@ -200,7 +200,7 @@ def robe(h, judge=False):
     reset_pose(h); h.arm.location = (0, 0, 0); h.arm.rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
     nk = h.bone_head("neck01")
     gown = pbr("Gown", (0.012, 0.012, 0.014), 0.55, 0.0, **{"Sheen Weight": 0.5, "Sheen Roughness": 0.4})
-    length = max(0.9, nk.z - 0.38)
+    length = max(1.0, nk.z - 0.28)
     g = _gown_mesh(h.name + "_gown", nk, length, gown); _to_bone(g, h, "spine03")
     for sd in ("L", "R"):
         _sleeve(f"{h.name}_upslv{sd}", h, f"upperarm01.{sd}", f"upperarm02.{sd}", 0.075, 0.095, gown, f"upperarm01.{sd}")
