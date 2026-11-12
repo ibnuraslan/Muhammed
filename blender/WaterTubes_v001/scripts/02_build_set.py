@@ -309,7 +309,7 @@ bpy.context.collection.objects.unlink(TREE)
 SHR = ph_objs("shrub_02", ["shrub_02_a_LOD1", "shrub_02_b_LOD1", "shrub_02_c_LOD1"])
 LAMP = ph_objs("street_lamp_01", ["street_lamp_01"])["street_lamp_01"]
 TREES = []
-for i, (x, y) in enumerate([(-11, -10.5), (13.5, -10.0), (-30, -10.5), (31, -10.5), (-14, -26), (8, -26.5), (30, -26), (-36, -26.5), (52, -10.3), (-52, -26)] + [(random.uniform(-85, 85), random.choice((18, 22, -50, -55))) for _ in range(30)] + [(random.choice((-84, 84)), random.uniform(-60, 60)) for _ in range(12)]):
+for i, (x, y) in enumerate([(-12.8, -6.5), (13.5, -10.0), (-30, -10.5), (31, -10.5), (-14, -26), (8, -26.5), (30, -26), (-36, -26.5), (52, -10.3), (-52, -26)] + [(random.uniform(-85, 85), random.choice((18, 22, -50, -55))) for _ in range(30)] + [(random.choice((-84, 84)), random.uniform(-60, 60)) for _ in range(12)]):
     t = bpy.data.objects.new(f"Tree_{i}", TREE.data); link(t, C_VEG); t.location = (x, y, 0); t.rotation_euler.z = random.uniform(0, 6.28)
     t.scale = [random.uniform(1.25, 1.6)] * 3; TREES.append(t)
 for i in range(40):
