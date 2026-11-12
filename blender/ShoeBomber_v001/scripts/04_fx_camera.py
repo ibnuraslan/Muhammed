@@ -430,10 +430,10 @@ SEG = [
     # beat 5: low push to the arm -> macro syringe -> orbit to his face as he goes limp
     (680, V((0.05, 1.05, 2.05)), bp("Bomber", "upperarm02.R", 680), 28),
     (697, V((0.05, 0.85, 1.30)), bp("Bomber", "upperarm02.R", 697), 32),
-    (712, V((0.32, 1.00, 0.50)), bp("Bomber", "upperarm02.R", 712), 34),
-    (736, V((-0.22, 1.30, 0.62)), bp("Bomber", "head", 736), 26),
-    (756, V((-0.24, 1.32, 0.60)), bp("Bomber", "head", 756), 26),
-    (774, V((0.10, 1.10, 1.05)), bp("Bomber", "head", 774), 26),
+    (712, V((0.30, 0.95, 0.80)), bp("Bomber", "upperarm02.R", 712), 32),
+    # "finally sedated": two-shot of the steward's and the attendant's faces over his limp body (his face is to the carpet)
+    (736, V((0.12, 1.02, 1.05)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.15)), 22),
+    (760, V((0.10, 1.10, 1.00)), (bp("Steward", "head", 760) + bp("Attendant", "head", 760)) / 2 + V((0, 0, -0.18)), 22),
     # beat 6: kneeling level at his feet -> rise with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (800, V((0.52, 1.20, 1.60)), bp("Bomber", "foot.L", 800), 26),
     (866, V((0.12, 0.55, 0.80)), bp("Attendant", "head", 866, (0, 0.25, -0.35)), 28),
@@ -465,7 +465,8 @@ SEG4 = [
     (1440, AX + V((-0.95, 0.40, 1.55)), bp("Traveller", "head", 1440, (0, 0, -0.35)), 26),
     (1470, AX + V((-1.25, 0.40, 0.98)), bp("Traveller", "head", 1470), 26),
     (1490, AX + V((-1.30, 0.35, 1.10)), bp("Traveller", "head", 1490, (0, 0, -0.1)), 28),
-    (1508, AX + V((-0.85, 0.30, 1.40)), bp("Traveller", "head", 1508, (0, 0, -0.2)), 28),
+    (1508, AX + V((-1.60, 0.45, 1.45)), bp("Traveller", "head", 1508, (0, 0, -0.2)), 28),
+    (1525, AX + V((-2.00, -0.60, 1.40)), bp("Traveller", "head", 1525, (0, 0, -0.2)), 30),
     (1540, AX + V((-0.2, -1.9, 1.05)), op("Tray_1", 1540, (0, 0, 0.1)), 32),
     (1562, AX + V((-1.9, 0.10, 1.45)), bp("Traveller", "head", 1562, (0, 0, -0.3)), 30),
     (1585, AX + V((-1.5, 0.15, 1.55)), bp("Traveller", "head", 1580, (0, 0, -0.25)), 32),
