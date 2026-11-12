@@ -49,4 +49,4 @@ Every story-beat frame is unchanged in v004: 1, 241, 463, 673, 913, 1135, 1297, 
 | FILL "hair / top of head 32 %" | 1015 | One sampled frame in a camera move past the mother's head (14 frames). Not a beat frame. |
 | BACKHEAD Toddler | 1 (beat 1) | **Not fixed in this push.** The opening wide shot shows the toddler walking away from camera toward the well. His face is not on screen. Fix for the next version: start the camera in front of him. |
 | BACKHEAD Teen | 1765 (beat 11) | **Not fixed in this push.** The teen faces into the pipe as he comes out legs-first. Fix for the next version: key the camera at the front of the well 10 frames earlier. |
-| FACEPRESS Toddler.L | 1789 | **Not fixed in this push.** During the swing the toddler's left hand crosses close to his own face. |
+| FACEPRESS | — | Fixed: the toddler now holds the teen's forearms 7 cm above his wrists (0 flags). |
