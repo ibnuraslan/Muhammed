@@ -85,9 +85,9 @@ for f, dz, back, side in ((1, -0.01, 0.0, 0), (20, -0.015, 0.01, 1), (FIRE, -0.0
                           (541, -0.055, 0.065, -2), (556, -0.06, 0.085, -3), (700, -0.06, 0.08, -2), (890, -0.07, 0.07, 1), (930, -0.075, 0.06, 2),
                           (1000, -0.07, 0.07, -3), (1075, -0.05, 0.05, -1), (1150, -0.04, 0.04, 0), (1240, -0.03, 0.02, 0)):
     o_root(f, dz, back, side=side)
-for f, flex, tw, sd, hd in ((1, 0, 0, 0, (-4, 0)), (FIRE, -4, 0, 0, (-8, 0)), (120, -8, -4, 0, (-12, 6)), (300, -10, -8, 2, (-14, 14)),
-                            (541, -10, -8, 2, (-14, 16)), (556, -14, -10, 3, (-20, 20)), (700, -12, -8, 2, (-16, 16)),
-                            (880, -10, -6, 0, (-10, 12)), (900, -2, 4, -4, (6, 4)), (960, -4, 2, -2, (2, 0)),
+for f, flex, tw, sd, hd in ((1, 0, 0, 0, (-4, 0)), (FIRE, -4, 0, 0, (-8, 0)), (120, -8, -4, 0, (-5, 6)), (300, -10, -8, 2, (-6, 14)),
+                            (541, -10, -8, 2, (-6, 16)), (556, -14, -10, 3, (-10, 20)), (700, -12, -8, 2, (-7, 16)),
+                            (880, -10, -6, 0, (-4, 12)), (900, -2, 4, -4, (6, 4)), (960, -4, 2, -2, (2, 0)),
                             (990, -8, -6, 4, (-6, -18)), (1020, -6, -8, 6, (-4, -22)), (1075, 6, 0, 0, (18, -4)),
                             (1150, 8, 4, 0, (24, 6)), (1200, 6, -2, 0, (16, -8)), (1240, 2, 0, 0, (4, 0))):
     HO.key_spine(f, flex=flex, twist=tw, side=sd, head=hd)
@@ -99,8 +99,8 @@ def hands_low(f, jitter=0.0):
 hands_low(1); hands_low(18, 0.015); hands_low(FIRE, 0.03)   # small startle before the shot
 # the snap up (slow motion): f163 -> f390
 def hands_up(f, k=1.0, jl=(0, 0, 0), rl=(0, 0, 0), right=True):
-    o_hand("L", f, Vector((0.07, -0.29, 1.50)) + Vector(jl), (0.04, -0.1, 1.0), palm("L", (-0.15, 1.0, 0.0)), (0.45, -0.1, 1.1))
-    if right: o_hand("R", f, Vector((-0.16, -0.28, 1.45)) + Vector(rl), (0.0, -0.1, 1.0), palm("R", (0.15, 1.0, 0.0)), (-0.45, -0.1, 1.1))
+    o_hand("L", f, Vector((0.12, -0.29, 1.36)) + Vector(jl), (0.04, -0.1, 1.0), palm("L", (-0.15, 1.0, 0.0)), (0.45, -0.1, 1.1))
+    if right: o_hand("R", f, Vector((-0.2, -0.28, 1.35)) + Vector(rl), (0.0, -0.1, 1.0), palm("R", (0.15, 1.0, 0.0)), (-0.45, -0.1, 1.1))
 o_hand("L", 70, (0.27, -0.32, 1.12), (0.0, -0.7, 0.7), palm("L", (0.2, -1.0, 0.0)), (0.5, 0.2, 0.95))
 o_hand("R", 70, (-0.25, -0.3, 1.12), (0.0, -0.7, 0.7), palm("R", (-0.2, -1.0, 0.0)), (-0.5, 0.2, 0.95))
 o_hand("L", 200, (0.25, -0.44, 1.33), (-0.1, -0.3, 1.0), palm("L", (-0.3, 0.9, -0.2)), (0.5, 0.0, 1.0))
@@ -140,7 +140,7 @@ for s in "LR":
     key_fingers(ROW, s, 200, curl=5, spread=18, thumb=-5); key_fingers(ROW, s, 262, curl=6, spread=8, thumb=0)
     key_fingers(ROW, s, 541, curl=6, spread=8, thumb=0)
 key_fingers(ROW, "L", 550, curl=4, spread=14, thumb=-5); key_fingers(ROW, "L", 700, curl=6, spread=8, thumb=0)
-key_fingers(ROW, "L", 890, curl=6, spread=8, thumb=0); key_fingers(ROW, "L", 905, curl=28, spread=4, thumb=15)
+key_fingers(ROW, "L", 890, curl=6, spread=8, thumb=0); key_fingers(ROW, "L", 905, curl=14, spread=4, thumb=5)
 key_fingers(ROW, "L", 1000, curl=18, spread=2, thumb=8); key_fingers(ROW, "R", 1080, curl=12, spread=4, thumb=12); key_fingers(ROW, "R", 936, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 975, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 1000, curl=18, spread=2, thumb=40); key_fingers(ROW, "R", 1110, curl=22, spread=2, thumb=10)
 key_fingers(ROW, "L", 1075, curl=4, spread=10, thumb=0); key_fingers(ROW, "L", 1150, curl=2, spread=12, thumb=0)
 key_fingers(ROW, "L", 1235, curl=20, spread=4, thumb=10); key_fingers(ROW, "R", 1240, curl=25, spread=2, thumb=10)
@@ -155,14 +155,14 @@ def key_face(f, jaw=0.0, brow=0.0, wide=0.0, squint=0.0, grim=0.0):
     for n, r in spec.items():
         pb = ROW.PB[n]; pb.rotation_quaternion = Euler([math.radians(v) for v in r], 'XYZ').to_quaternion()
         pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
-for f, jw, br, wd, sq, gr in ((1, 6, 14, 14, 0, 0), (FIRE, 8, 18, 18, 0, 0), (45, 13, 22, 22, 0, 6), (200, 12, 20, 6, 16, 12), (541, 12, 18, 2, 22, 14),
+for f, jw, br, wd, sq, gr in ((1, 6, 14, 14, 0, 0), (FIRE, 8, 18, 18, 0, 0), (45, 13, 22, 12, 0, 6), (200, 12, 20, 6, 16, 12), (541, 12, 18, 2, 22, 14),
                               (560, 15, 10, 0, 30, 20), (700, 12, 14, 4, 22, 14), (890, 10, 14, 6, 18, 12), (905, 6, -8, 0, 34, 24),
                               (990, 5, -6, 0, 30, 20), (1004, 14, -4, 0, 32, 24), (1060, 8, 4, 4, 16, 12), (1100, 5, 18, 16, 0, 0),
                               (1160, 7, 22, 12, 0, 0), (1176, 7, 22, 4, 30, 0), (1186, 7, 22, 4, 30, 0), (1200, 7, 20, 10, 0, 0), (1230, 4, 12, 6, 0, 4), (1300, 2, 4, 2, 0, 6), (1410, 1, 2, 0, 0, 8)):
     key_face(f, jw, br, wd, sq, gr)
 
 # eyes: look down at the ring during the disbelief beat, back up as he leaves
-for f, pitch in ((1, 0), (1075, 0), (1100, -14), (1230, -12), (1265, 0)):
+for f, pitch in ((1, 0), (45, 6), (560, 6), (880, 4), (1000, 0), (1075, 0), (1100, -14), (1230, -12), (1265, 0)):   # v006: eyes keep looking at the gun while the head tilts back (no white roll-up)
     for sd in ".L", ".R":
         pb = ROW.PB["eye" + sd]; pb.rotation_quaternion = Euler((math.radians(pitch), 0, 0), 'XYZ').to_quaternion()
         pb.keyframe_insert("rotation_quaternion", frame=f, group="eye" + sd)

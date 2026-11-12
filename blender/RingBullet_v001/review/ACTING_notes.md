@@ -43,3 +43,19 @@ Checks after round 2:
 - hand audit: **0**
 - contact audit: **0**
 - beats.json unchanged
+
+## Round 3: self-check fixes before resubmitting
+- **Shield (4.0–4.5 s):** both hands are lower (wrist z 1.36) and wider apart, so his eyes and face show above them from the camera. They're still held about 16 cm out from the face, so nothing is pressed in.
+- **Terror eyes:** the head tilts back less during the slow motion (−5° to −10°, was −12° to −20°) and the wide-eye amount is smaller, so the irises stay visible instead of rolling up to white.
+- **Wince hand (f905–936):** the curl is lowered to 14° on the way to the chest, so it no longer reads as a pinch.
+- **Hidden sparks:** parked 10 m below the floor while hidden, so they don't sit beside his hand.
+
+## qa_check.py, intended flags (qa_v006.json)
+| Flag | Frames | Why it stays |
+|---|---|---|
+| BACKHEAD Robber | 1 (beat 1) | The brief's sensitive rule: never show the robber's face. Beat 1 is over his shoulder, and the owner's face is in frame and readable. |
+| FILL "surface < 12 cm" | 73 | The camera rides the 9 mm bullet in slow motion, about 8 cm behind it. The bullet is the subject; the owner reads behind it. |
+| HOVER Owner.L near Spark37 | 781, 787 | A spark from the split flies past his hand. It's moving FX, not a prop to hold. |
+| HOVER Owner.L near FragmentA | 895–1243 | The bullet fragment lodged in the side of his middle finger (the story). It sits on the finger skin by the nick, about 1.4–2.5 cm from the fingertip and knuckle points the script measures. Nothing is held. |
+
+No CLAW, FACEPRESS, INSIDE or EMPTY flags.

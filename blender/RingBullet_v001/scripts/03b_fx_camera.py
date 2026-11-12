@@ -166,6 +166,8 @@ def burst(objs, f0, origin, life, speed):
         v = d * speed * rnd.uniform(0.4, 1.0); l = int(life * rnd.uniform(0.6, 1.0))
         o.rotation_mode = 'QUATERNION'
         hide(o, 1, True); hide(o, f0, False); hide(o, f0 + l, True)
+        PARK = Vector((0, 0, -10))   # hidden sparks wait far below the floor, not at the impact point next to the hand
+        o.location = PARK; key(o, "location", 1); key(o, "location", f0 - 1); key(o, "location", f0 + l + 1)
         for f in range(f0, f0 + l + 1, 3):
             t = WT(f) - WT(f0)
             p = origin + v * t + Vector((0, 0, -4.9 * t * t)); vel = v + Vector((0, 0, -9.8 * t))
