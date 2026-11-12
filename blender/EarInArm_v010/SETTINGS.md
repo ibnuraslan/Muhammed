@@ -1,22 +1,22 @@
-# EarInArm_v008 — farm render sheet
+# EarInArm_v010 — farm render sheet
 
-These values were read back from `EarInArm_v008_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
+These values were read back from `EarInArm_v010_60fps.blend`, opened in factory-startup Blender 5.2.2 with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `EarInArm_v008_60fps.blend`: 70 MB, compressed. All images are packed. Stored as a plain git blob: the Git LFS push was refused (lfs.github.com returned 403 through the proxy), and the file is under GitHub’s 100 MB limit. |
+| File | `EarInArm_v010_60fps.blend`: 70 MB, compressed. All images are packed. Stored as a plain git blob: the Git LFS push was refused (lfs.github.com returned 403 through the proxy), and the file is under GitHub’s 100 MB limit. |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
 | Frame rate | 60 fps (fps_base 1.0) |
-| Frame range | **1–1770**, step 1 (29.5 s) |
+| Frame range | **1–1572**, step 1 (26.2 s at 60 fps; synced to the voiceover) |
 | Camera | One camera, `CAM_Film`, in one continuous move. There are no camera markers. Lens and f-stop are animated, and DOF focuses on `CAM_Film_Aim`. Sensor fit is Auto (36 mm). |
 | Samples | 48 with adaptive sampling; noise threshold 0.05 |
 | Denoising | On (OpenImageDenoise) |
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
 | Motion blur | Off (animated-CG look) |
 | Colour | Display sRGB. View AgX with the look "AgX - Punchy". Exposure −1.5 (scene-wide, not animated). |
-| Output | PNG, RGB, 8-bit, compression 15, written to `//render/EarInArm_v008_####.png` |
+| Output | PNG, RGB, 8-bit, compression 15, written to `//render/EarInArm_v010_####.png` |
 | Audio | None yet. When the VO arrives, retime with `pipeline/retime_to_vo.py` using `EarInArm_v001/beats.json`. That adds the VO strip at frame 1. |
 | Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. |
 | Add-ons | None needed. MPFB2 only built the file. |
