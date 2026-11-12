@@ -47,7 +47,7 @@ def build(variant=None):
     B.box((5.05, 4, 0.45), (0.1, 9, 0.9), wall).box((5.05, 4, 2.85), (0.1, 9, 0.3), wall)
     B.done()
     for k in range(3):
-        box("Win", (5.05, 2.1 + k * 3.0, 1.75), (0.02, 2.2, 1.9), rain_glass("OffRain", 60, 0.55))
+        box("Win", (5.05, 2.1 + k * 3.0, 1.75), (0.02, 2.2, 1.9), glass("OffGlass", (0.92, 0.94, 0.96), 0.02))
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 9; pt.size_y = 2.0; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (5.2, 4, 1.75); po.rotation_euler = (0, math.radians(-90), 0)
     box("Haze", (9.0, 4, 0.5), (0.05, 30, 4.0), emissive("HazeE", (0.62, 0.66, 0.72), 1.0))     # grey rainy distance below the skyline
@@ -175,7 +175,7 @@ def anim_listen(c, t):
     for k, nd in enumerate(c.get("needles", [])):
         nd.rotation_euler = (math.radians(35 * (0.4 + 0.3 * math.sin(sec * 7.0 + k) + 0.2 * math.sin(sec * 13.0 + 2 * k))), 0, 0)
     r = c["reader"]
-    r.rot("neck01", (1, 0, 0), 12); r.rot("head", (1, 0, 0), 8)       # head up, listening, not reading
+    r.rot("neck01", (1, 0, 0), -16); r.rot("head", (1, 0, 0), -12)       # head up, listening, not reading
     r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
     c["headband"].location = hd + Vector((0, 0, 0.07)); c["headband"].rotation_euler = (0, 0, r.arm.rotation_euler.z)
@@ -208,7 +208,7 @@ def anim_read(c, t):
 
 MOVES = {
     "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
-                   cam=lambda c, t: (Vector((2.4, 4.8, 1.3)).lerp(Vector((2.6, 4.6, 1.28)), ease(t)), Vector((3.9, 3.65, 1.15)), 34),
+                   cam=lambda c, t: (Vector((2.3, 4.9, 1.35)).lerp(Vector((2.5, 4.7, 1.32)), ease(t)), Vector((3.8, 3.7, 0.98)), 30),
                    focus=lambda c, t: Vector((3.6, 3.8, 1.0))),
     "pin": dict(kind="anim", dof=None, anim=anim_pin, title=("Chapter Three", "A Little Cement", 24, 4.5 * 24),
                 cam=lambda c, t: (Vector((2.6, 0.2, 2.1)).lerp(Vector((1.8, 2.4, 2.0)), ease(t)), Vector((-1.0, 8.4, 1.5)), 26)),
