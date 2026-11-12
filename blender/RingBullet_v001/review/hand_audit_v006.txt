@@ -1,3 +1,4 @@
 Hand audit, step 2, frames 1-1410
-HAND_COUNTS none
-FLAGGED_FRAMES 0 []
+HAND_COUNTS {'Owner fingersL_vs_clothes': 1}
+FLAGGED_FRAMES 1 [1271]
+F1271 Owner fingersL_vs_clothes 36 tri pairs

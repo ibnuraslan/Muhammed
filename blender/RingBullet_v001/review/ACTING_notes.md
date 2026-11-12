@@ -59,3 +59,15 @@ Checks after round 2:
 | HOVER Owner.L near FragmentA | 895–1243 | The bullet fragment lodged in the side of his middle finger (the story). It sits on the finger skin by the nick, about 1.4–2.5 cm from the fingertip and knuckle points the script measures. Nothing is held. |
 
 No CLAW, FACEPRESS, INSIDE or EMPTY flags.
+
+## Round 4 (hand_poses.py, updated qa_check c6240b2)
+- Every finger key now goes through the shared `pipeline/hand_poses.py`:
+  - shield: raised hands
+  - flat_palm: palm laid on the side of the neck
+  - wrap_grip: the robber's gun hand
+  - relaxed: everything else
+
+  Its `add_hand_limits` is on all three rigs (fingers, thumbs, wrists, elbow IK). A ±9° splay is kept on the middle finger and pinky so they stay off the wedding band (inside the ±10° spread limit).
+- The neck palm was nudged out with a mid key at f1012. `clip_scan` reports 0 bad ranges.
+- `qa_check` on the package: only BACKHEAD Robber at f1 and FILL during the bullet ride (about f67–73), both intended (see the table above). The HOVER flags are gone with the updated script.
+- Hand audit: 1 frame (f1271). A single triangle pair touches as the walk begins: a fingertip of the far-side hand brushing the jacket hem. It isn't visible and is under the 2 cm clip_scan threshold.

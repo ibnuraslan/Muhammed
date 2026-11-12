@@ -7,6 +7,8 @@ from mathutils.bvhtree import BVHTree
 
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 exec(open(os.path.join(ROOT, "..", "pipeline", "anim_lib.py")).read())
+exec(open(os.path.join(ROOT, "..", "pipeline", "hand_poses.py")).read())   # shared director hand-pose library (v006)
+_lib_add_hand_limits = add_hand_limits
 OUT = sys.argv[sys.argv.index("--") + 1]
 SOLE = 0.017   # MPFB shoe sole sits below the ankle-derived ground height
 def ground_z(x, y): return SOLE
@@ -47,6 +49,19 @@ bpy.ops.object.mode_set(mode='OBJECT')
 
 RING_SPLAY = {3: 9.0, 5: -10.0}   # keep middle finger and pinky off the wedding band
 def key_fingers(R, s, f, curl=0.0, spread=0.0, thumb=0.0, per=None):
+    """v006: every finger key goes through the shared hand_poses library (named, limit-safe poses)."""
+    if R is ROW and s == "R" and 995 <= f <= 1070: pose = "flat_palm"         # palm laid on the side of the neck
+    elif R is ROW and 200 <= f <= 890: pose = "shield"                         # raised, fingers together
+    elif R is RRB and s == "R": pose = "wrap_grip"                            # robber's gun grip
+    elif curl < 8: pose = "flat_palm"
+    else: pose = "relaxed"
+    apply_pose(R.o, s, pose, f)
+    if R is ROW and s == "L":      # keep the middle finger and pinky just off the wedding band (within the +-10 deg spread limit)
+        for i, dz in RING_SPLAY.items():
+            pb = R.PB["finger%d-1.L" % i]
+            pb.rotation_quaternion = pb.rotation_quaternion @ Euler((0, 0, math.radians(dz)), 'XYZ').to_quaternion()
+            pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name)
+def _key_fingers_manual(R, s, f, curl=0.0, spread=0.0, thumb=0.0, per=None):
     """curl in degrees (+ bends toward palm), spread in degrees (fan out)"""
     for i in range(1, 6):
         c = max(4.0, per[i - 1] if per else curl)   # relaxed curl, never bent backwards
@@ -119,10 +134,11 @@ o_hand("R", 936, (-0.15, -0.42, 1.25), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 
 o_hand("R", 975, (-0.15, -0.42, 1.26), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 0.2)), (-0.45, -0.2, 1.0))
 # right hand flies to the right side of his neck f990-1010, left hand stays up and drops a bit
 o_hand("R", 990, (-0.27, -0.2, 1.46), (0.2, 0.6, 0.6), palm("R", (0.95, 0.0, -0.1)), (-0.55, -0.2, 1.0))
-o_hand("R", 1030, (-0.208, -0.07, 1.442), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1004, (-0.205, -0.068, 1.437), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
-o_hand("R", 1046, (-0.21, -0.072, 1.448), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1060, (-0.207, -0.068, 1.44), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
+o_hand("R", 1012, (-0.232, -0.08, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1030, (-0.218, -0.076, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1004, (-0.218, -0.075, 1.45), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
+o_hand("R", 1046, (-0.21, -0.072, 1.462), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1060, (-0.207, -0.068, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
 o_hand("L", 1004, (0.1, -0.3, 1.25), (-0.15, -0.15, 1.0), palm("L", (0.05, 1.0, 0.1)), (0.5, 0.0, 0.95))
 # look at the ring: left hand lowered to chest in front, palm toward him, back of hand up so the ring faces camera
 o_hand("L", 1075, (0.12, -0.32, 1.28), (-0.6, -0.4, 0.5), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
@@ -186,7 +202,7 @@ for f in range(1252, 1411, 6):
         if s == "L" and f < 1263: continue
         sw = ph * 0.12 * (1 if s == "L" else -1)
         loc = p + Rz @ Vector((0.29 * sx, -sw - 0.06, 0.94))
-        if s == "L" and f < 1270: loc = p + Rz @ Vector((0.37 * sx, -0.22, 1.04))   # swing out around the hip while turning into the walk
+        if s == "L" and f < 1270: loc = p + Rz @ Vector((0.39 * sx, -0.22, 1.05))   # swing out around the hip while turning into the walk
         HO.key_hand(s, f, loc, Rz @ Vector((0.0, -0.1, -1.0)), Rz @ Vector((-0.9 * sx, 0.0, 0.0)), pole=p + Rz @ Vector((0.4 * sx, 0.4, 1.1)))
 for s in "LR": key_fingers(ROW, s, 1260, curl=38, spread=0, thumb=20)
 
@@ -231,7 +247,7 @@ for f, z in ((1325, 1.3), (1340, 1.42), (1355, 1.3), (1370, 1.42), (1385, 1.32))
 key_fingers(ROF, "L", 1, curl=40, spread=2, thumb=10); key_fingers(ROF, "R", 1, curl=20, spread=4, thumb=10)
 
 # ---------------- hand rule: Limit Rotation (local) on fingers, thumbs, wrists of every character
-def add_hand_limits(R):
+def _add_hand_limits_v005(R):
     for pb in R.PB:
         n = pb.name
         if n.startswith("finger") and n[-2:] in (".L", ".R"):
@@ -244,7 +260,7 @@ def add_hand_limits(R):
         elif n.startswith("wrist."):
             c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HandLimit"
             c.use_limit_x = c.use_limit_z = True; c.min_x, c.max_x = math.radians(-70), math.radians(70); c.min_z, c.max_z = math.radians(-45), math.radians(45)
-for R_ in (ROW, RRB, ROF): add_hand_limits(R_)
+for R_ in (ROW, RRB, ROF): _lib_add_hand_limits(R_.o)   # shared library limits (fingers, thumbs, wrists, elbows)
 
 # =============================================================== attach props to bones
 def bone_world(R, n, f=None):

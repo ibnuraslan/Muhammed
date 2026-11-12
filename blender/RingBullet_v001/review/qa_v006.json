@@ -6,76 +6,15 @@
     "Robber"
    ]
   ],
-  "73": [
+  "67": [
    [
     "FILL",
     "surface <12 cm"
-   ]
-  ],
-  "781": [
-   [
-    "HOVER",
-    "Owner.L near Spark37 (2.7 cm)"
-   ]
-  ],
-  "787": [
-   [
-    "HOVER",
-    "Owner.L near Spark37 (2.8 cm)"
-   ]
-  ],
-  "895": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (1.9 cm)"
-   ]
-  ],
-  "1057": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (2.2 cm)"
-   ]
-  ],
-  "1111": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (1.4 cm)"
-   ]
-  ],
-  "1117": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (2.1 cm)"
-   ]
-  ],
-  "1225": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (2.2 cm)"
-   ]
-  ],
-  "1231": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (2.2 cm)"
-   ]
-  ],
-  "1237": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (2.2 cm)"
-   ]
-  ],
-  "1243": [
-   [
-    "HOVER",
-    "Owner.L near FragmentA (2.5 cm)"
    ]
   ]
  },
  "counts": {
   "BACKHEAD": 1,
-  "FILL": 1,
-  "HOVER": 10
+  "FILL": 1
  }
 }
