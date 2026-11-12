@@ -14,7 +14,7 @@ from common import world_flat, area_light, ease
 import ph
 
 EXPOSURE = 0.0
-DUR = {"torch": 5.0, "board": 5.0, "bag": 5.0, "tape": 5.0}
+DUR = {"torch": 5.0, "board": 5.0, "bag": 6.0, "tape": 5.0}
 VARIANT_FOR = {"torch": "torch", "board": "board", "bag": "bag", "tape": "tape"}
 LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "brand", "seldom_logo.png")
 ASPECT = 1361 / 404
@@ -50,6 +50,59 @@ def logo_plane(name, loc, width, mat, rot=(math.radians(90), 0, 0)):
     return o
 
 
+def stranger(name="Stranger"):
+    """A dark figure in a long coat and fedora (reads as a silhouette)."""
+    from human import Human, add_asset
+    h = Human(name, gender=1.0, years=50, muscle=0.5, weight=0.5, height=0.6, eyelashes="eyelashes01")
+    add_asset(h, "clothes", "male_worksuit01", val=0.03, rough=0.8)
+    add_asset(h, "clothes", "shoes02", val=0.05, rough=0.5)
+    # a simple dark fedora parented to the head bone (the MakeHuman fedora has no texture here)
+    hm = pbr("HatFelt", (0.015, 0.015, 0.017), 0.8)
+    hd = h.bone_head("head")
+    crown = cyl("HatCrown", (hd.x, hd.y, hd.z + 0.2), 0.105, 0.12, hm, verts=24)
+    brim = cyl("HatBrim", (hd.x, hd.y, hd.z + 0.145), 0.2, 0.012, hm, verts=32)
+    for o in (crown, brim):
+        o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = "head"
+        o.matrix_parent_inverse = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix @
+                                   __import__("mathutils").Matrix.Translation((0, h.arm.data.bones["head"].length, 0))).inverted()
+    # pure silhouette: skin and clothes go matte near-black so no bare skin catches the light
+    sil = pbr("Silhouette", (0.006, 0.006, 0.007), 0.9)
+    for o in list(h.parts) + [crown, brim]:
+        if o.type == 'MESH':
+            o.data.materials.clear(); o.data.materials.append(sil)
+    return h
+
+
+def place_walk(h, x, y, heading, phase, ground=0.0):
+    from human import pose_walk, _world_verts
+    bob = pose_walk(h, phase % 1.0, stride=24, arm_swing=14)
+    h.arm.rotation_euler = (0, 0, heading); h.arm.location = (x, y, ground)
+    bpy.context.view_layer.update()
+    if "_foot" not in h.__dict__:
+        vv = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
+        h._foot = vv[:, 2].min() - ground
+    h.arm.location.z = ground - h._foot + bob
+    bpy.context.view_layer.update()
+
+
+def shake(t, amp=0.006, seed=0.0):
+    """Slow handheld drift (no jitter): a few incommensurate sines."""
+    a = 6.283 * t
+    return Vector((amp * (math.sin(a * 1.3 + seed) + 0.5 * math.sin(a * 3.7 + 2 * seed)),
+                   0.0, amp * (math.sin(a * 1.9 + 1 + seed) + 0.4 * math.sin(a * 4.3 + seed))))
+
+
+def buzz(s, start):
+    """Faulty-neon flicker for the first ~0.6 s after the logo lights."""
+    k = s - start
+    if k < 0:
+        return 0.0
+    if k > 0.65:
+        return 1.0
+    pattern = [1, 0.15, 1, 1, 0.05, 0.6, 1, 0.1, 1, 1, 1, 0.3, 1, 1, 1, 1]
+    return pattern[min(len(pattern) - 1, int(k * 24))]
+
+
 # ---------------------------------------------------------------------------------------------------- build
 def build(variant=None):
     c = {"glow": []}
@@ -60,7 +113,7 @@ def build(variant=None):
     v = variant or "torch"
     if v == "torch":
         world_flat((0.002, 0.0025, 0.003), 1.0)
-        wall = ph.texture("concrete_floor_02", scale=0.6, name="Wall", tint=(0.55, 0.55, 0.58))
+        wall = ph.texture("concrete_floor_02", scale=0.6, name="Wall", tint=(0.34, 0.34, 0.36))
         box("Wall", (0, 0.05, 1.4), (9, 0.1, 5), wall)
         box("Floor", (0, -2.5, -0.02), (9, 5.2, 0.04), ph.texture("concrete_floor_02", scale=0.5, name="Floor", tint=(0.35, 0.35, 0.37)))
         m = logo_material("LogoPaint", c["glow"], rough=0.6)
@@ -70,7 +123,8 @@ def build(variant=None):
         lt.energy = 900; lt.color = (1.0, 0.95, 0.86); lt.shadow_soft_size = 0.02
         to = bpy.data.objects.new("Torch", lt); bpy.context.collection.objects.link(to); to.location = (-0.9, -3.4, 1.55)
         c["torch"] = to
-        haze((0, -1.8, 1.6), (8, 3.6, 3.4), density=0.035, color=(0.8, 0.82, 0.85), anis=0.55)
+        haze((0, -1.8, 1.6), (8, 3.6, 3.4), density=0.07, color=(0.8, 0.82, 0.85), anis=0.55)
+        c["stranger"] = stranger()
         c["fill"] = area_light((0, -2.0, 2.8), (math.radians(-60), 0, 0), 3.0, 0.0, (0.45, 0.55, 0.8))
         c["fill"].visible_camera = False
     elif v == "board":
@@ -110,11 +164,24 @@ def build(variant=None):
             hub = min(hubs, key=lambda hb: (hb - p0).length)
             strings.append((o, p0, hub, rng.uniform(0.0, 0.35)))
         c["strings"] = strings
-        lamp = bpy.data.lights.new("BoardSpot", 'SPOT'); lamp.spot_size = math.radians(34); lamp.spot_blend = 0.6; lamp.energy = 650
-        lamp.color = (1.0, 0.86, 0.66)
-        lo = bpy.data.objects.new("BoardSpot", lamp); bpy.context.collection.objects.link(lo); lo.location = (0.6, -2.0, 3.3)
-        lo.rotation_euler = (Vector((0, 0.1, 1.5)) - lo.location).to_track_quat('-Z', 'Y').to_euler()
-        c["lamp"] = lo
+        # a bare bulb on a cord, swinging: the light and every shadow on the board move
+        pivot = bpy.data.objects.new("Pendant", None); bpy.context.collection.objects.link(pivot); pivot.location = (0.1, -0.9, 4.2)
+        cord = cyl("Cord", (0, 0, -0.75), 0.004, 1.5, pbr("CordM", (0.02, 0.02, 0.02), 0.6), verts=8); cord.parent = pivot
+        shade = bpy.data.meshes.new("Shade")
+        import bmesh
+        bm_ = bmesh.new(); bmesh.ops.create_cone(bm_, cap_ends=False, segments=24, radius1=0.2, radius2=0.04, depth=0.18); bm_.to_mesh(shade)
+        so_ = bpy.data.objects.new("Shade", shade); bpy.context.collection.objects.link(so_); so_.parent = pivot; so_.location = (0, 0, -1.55)
+        sm = pbr("ShadeM", (0.03, 0.035, 0.03), 0.5, 0.6); shade.materials.append(sm)
+        so_.modifiers.new("solid", 'SOLIDIFY').thickness = 0.004
+        bulb = cyl("Bulb", (0, 0, -1.62), 0.035, 0.06, emissive("BulbGlow", (1.0, 0.78, 0.45), 30), verts=16); bulb.parent = pivot
+        lamp = bpy.data.lights.new("Bulb", 'POINT'); lamp.energy = 160; lamp.color = (1.0, 0.8, 0.55); lamp.shadow_soft_size = 0.03
+        lo = bpy.data.objects.new("BulbLight", lamp); bpy.context.collection.objects.link(lo); lo.parent = pivot; lo.location = (0, 0, -1.66)
+        c["lamp"] = lo; c["pivot"] = pivot
+        xm = pbr("RedX", (0.7, 0.02, 0.02), 0.6)
+        for k, (x, z) in enumerate(spots):
+            if k % 3 == 1:
+                for a in (40, -40):
+                    box("X", (x, 0.091, z), (0.3, 0.002, 0.016), xm, rot=(0, math.radians(a), 0))
         haze((0, -1.6, 1.8), (7, 3.2, 3.6), density=0.012, color=(0.9, 0.85, 0.8))
     elif v == "bag":
         world_flat((0.003, 0.003, 0.0035), 1.0)
@@ -134,17 +201,54 @@ def build(variant=None):
         card = box("Card", (0, -0.03, 0.0), (0.56, 0.28, 0.003), cardm)
         m = logo_material("LogoBagArt", c["glow"], rough=0.5)
         logo = logo_plane("Logo", (0, -0.03, 0.0035), 0.5, m, rot=(0, 0, 0))
-        txt = text_obj("EvidenceTxt", "EVIDENCE", (0, 0.19, 0.0105), 0.05, pbr("Ink", (0.6, 0.02, 0.02), 0.6), rot=(0, 0, 0),
+        txt = text_obj("EvidenceTxt", "EVIDENCE", (0, 0.19, 0.0105), 0.065, pbr("Ink", (0.6, 0.02, 0.02), 0.6), rot=(0, 0, 0),
                        font_path="/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Bold.ttf" if os.path.exists("/usr/share/fonts/truetype/jetbrains-mono/JetBrainsMono-Bold.ttf") else "/usr/share/fonts/opentype/inter/Inter-SemiBold.otf")
         root = bpy.data.objects.new("BagRoot", None); bpy.context.collection.objects.link(root)
         for o in (bag, strip, seal, card, logo, txt):
             o.parent = root
         c["bag"] = root
+        tube = box("Tube", (0, 0.1, 2.7), (1.3, 0.05, 0.05), None)
+        tm = bpy.data.materials.new("TubeGlow"); tm.use_nodes = True; Nn = tm.node_tree.nodes; Nn.clear()
+        oo = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (0.85, 1.0, 0.92, 1)
+        vv = Nn.new("ShaderNodeValue"); c["tube_val"] = vv
+        tm.node_tree.links.new(vv.outputs[0], em.inputs['Strength']); tm.node_tree.links.new(em.outputs[0], oo.inputs['Surface'])
+        tube.data.materials.append(tm)
+        tent = pbr("TentYellow", (0.95, 0.75, 0.02), 0.5)
+        for side in (1, -1):
+            box("Tent", (0.4, -0.33 + side * 0.035, 0.98), (0.16, 0.004, 0.13), tent, rot=(math.radians(side * 22), 0, math.radians(-15)))
+        text_obj("TentNum", "1", (0.4 - 0.012, -0.375, 0.985), 0.08, pbr("TentInk", (0.02, 0.02, 0.02), 0.5),
+                 rot=(math.radians(90 - 22), 0, math.radians(-15)), extrude=0.0)
         top = bpy.data.lights.new("TopLight", 'SPOT'); top.spot_size = math.radians(28); top.spot_blend = 0.4; top.energy = 420
         top.color = (1.0, 0.97, 0.92)
         to = bpy.data.objects.new("TopLight", top); bpy.context.collection.objects.link(to); to.location = (0, 0.1, 3.1)
         to.rotation_euler = (0, 0, 0)
         c["top"] = to
+        # a case table buried in paper: typed reports, photos, a manila folder, a fingerprint card
+        import paper_tex
+        from sc_invest import img_mat, sheet
+        pt = paper_tex.make_all()
+        pages = [img_mat(f"CasePage{k}", p_, 0.75) for k, p_ in enumerate(pt["pages"])]
+        photos = [img_mat(f"CasePhoto{k}", p_, 0.35) for k, p_ in enumerate(pt["photos"])]
+        rng = np.random.default_rng(11); papers = []
+        for k in range(26):
+            is_ph = k % 3 == 2
+            sz = (0.15, 0.11) if is_ph else (0.21, 0.297)
+            x = rng.uniform(-0.95, 0.95); y = rng.uniform(-0.5, 0.5)
+            if abs(x) < 0.3 and abs(y) < 0.2 and k % 2:      # leave room under the bag, but let some sheets sit under it
+                x += 0.45 * (1 if x >= 0 else -1)
+            z = 0.921 + 0.0012 * k
+            o = sheet("CasePaper", (x, y, z), sz, (photos if is_ph else pages)[k % (len(photos) if is_ph else len(pages))],
+                      rot=(0, 0, rng.uniform(-0.6, 0.6)))
+            papers.append((o, Vector((x, y, z)), o.rotation_euler.z))
+        c["papers"] = papers
+        manila = pbr("Manila", (0.62, 0.48, 0.28), 0.8)
+        box("Folder", (-0.62, 0.22, 0.925), (0.42, 0.31, 0.006), manila, rot=(0, 0, 0.18))
+        text_obj("FolderTxt", "CASE FILE  No. 0417", (-0.64, 0.26, 0.9295), 0.03, pbr("Stamp", (0.55, 0.04, 0.03), 0.6),
+                 rot=(0, 0, 0.18), extrude=0.0)
+        text_obj("FolderTxt2", "CONFIDENTIAL", (-0.6, 0.16, 0.9295), 0.045, pbr("Stamp2", (0.6, 0.05, 0.04), 0.6),
+                 rot=(0, 0, 0.18 + math.radians(-8)), extrude=0.0)
+        clip = brushed_metal("Clip", (0.7, 0.7, 0.72), rough=(0.2, 0.3))
+        box("PaperClip", (0.62, -0.18, 0.93), (0.012, 0.045, 0.003), clip, rot=(0, 0, 0.4))
         r = area_light((-2.5, -1.5, 1.6), (math.radians(70), 0, math.radians(-55)), 1.5, 25, (0.55, 0.65, 0.9)); r.visible_camera = False
         haze((0, 0, 2.0), (4, 4, 2.4), density=0.02, color=(0.9, 0.9, 0.9), anis=0.5)
     else:  # tape
@@ -184,7 +288,7 @@ def build(variant=None):
             o.visible_camera = False
         street = bpy.data.lights.new("StreetLamp", 'SPOT'); street.spot_size = math.radians(70); street.energy = 380
         street.color = (1.0, 0.72, 0.4)
-        so = bpy.data.objects.new("StreetLamp", street); bpy.context.collection.objects.link(so); so.location = (1.6, -0.6, 4.2)
+        so = bpy.data.objects.new("StreetLamp", street); bpy.context.collection.objects.link(so); so.location = (2.1, -0.9, 4.2)
         so.rotation_euler = (Vector((0, 0.5, 1.5)) - so.location).to_track_quat('-Z', 'Y').to_euler()
         rain = bpy.data.materials.new("Rain"); rain.use_nodes = True
         rp = rain.node_tree.nodes["Principled BSDF"]; rp.inputs['Base Color'].default_value = (0.8, 0.85, 0.9, 1)
@@ -195,7 +299,12 @@ def build(variant=None):
             p = Vector((rng.uniform(-3.6, 3.6), rng.uniform(-3.0, 0.4), rng.uniform(0, 4)))
             drops.append((instance(src, tuple(p)), p, rng.uniform(5.5, 7.5)))
         c["drops"] = drops
-        haze((0, -1.4, 1.8), (9, 4.2, 4), density=0.015, color=(0.75, 0.8, 0.9))
+        haze((0, -1.4, 1.8), (9, 4.2, 4), density=0.03, color=(0.75, 0.8, 0.9))
+        c["lamp"] = so
+        h = stranger(); c["stranger"] = h
+        place_walk(h, 1.45, 0.05, math.radians(8), 0.0)
+    import grade
+    grade.add_grade(bpy.context.scene, bloom=0.3, vignette=0.85)
     return c
 
 
@@ -214,8 +323,13 @@ def anim_torch(c, t):
     on = 1.0 if s > 0.3 else 0.0                                   # click on
     flick = 0.25 if 0.3 < s < 0.38 else 1.0
     g = ease(min(1.0, max(0.0, (s - 2.15) / 0.5)))
-    to.data.energy = 900 * on * flick * (1 - 0.55 * g)
-    _glow(c, 1.25 * g * (1 + 0.04 * math.sin(s * 23)))
+    jitter = 1.0 - 0.18 * max(0.0, math.sin(s * 37.0) * math.sin(s * 11.0))       # weak battery
+    to.data.energy = 900 * on * flick * jitter * (1 - 0.55 * g)
+    _glow(c, 1.25 * g * buzz(s, 2.15))
+    # a figure crosses close to the lens (between the torch and the wall): a silhouette and a huge shadow
+    k = (s - 3.35) / 1.25
+    x = -2.2 + 4.4 * k if 0 <= k <= 1 else (-9 if k < 0 else 9)
+    place_walk(c["stranger"], x, -1.7, math.radians(-90), s * 0.95)
     c["fill"].data.energy = 30 * g
 
 
@@ -235,13 +349,20 @@ def anim_board(c, t):
                 q = p0.lerp(q, min(1.0, 0.25 + u))
             pt.co = (q.x, q.y, q.z, 1)
     g = ease(min(1.0, max(0.0, (s - 2.3) / 0.6)))
-    _glow(c, 1.0 * g)
-    c["lamp"].data.energy = 520 * (0.9 + 0.1 * g)
+    _glow(c, 1.0 * g * buzz(s, 2.3))
+    c["pivot"].rotation_euler = (math.radians(9 * math.sin(s * 1.7) * math.exp(-s * 0.12)), 0,
+                                 math.radians(5 * math.sin(s * 1.1 + 0.6)))
+    c["lamp"].data.energy = 160 * (0.92 + 0.08 * math.sin(s * 31)) * (0.4 if 2.9 < s < 2.97 else 1.0)
 
 
 def anim_bag(c, t):
     s = t * DUR["bag"]
     z_table = 0.92 + 0.008
+    s = s - 0.5                                   # a beat of paper and silence first
+    if s < 0:
+        c["bag"].location = (0, 0, 5.0); _glow(c, 0.0)
+        c["top"].data.energy = 420; c["tube_val"].outputs[0].default_value = 6.0
+        return
     if s < 0.9:                                   # falls in from above, slightly tilted
         u = s / 0.9
         z = z_table + 1.4 * (1 - u * u); tilt = math.radians(18) * (1 - u)
@@ -249,9 +370,20 @@ def anim_bag(c, t):
         k = s - 0.9
         z = z_table + 0.05 * abs(math.sin(k * 9)) * math.exp(-k * 6); tilt = math.radians(2) * math.exp(-k * 5) * math.sin(k * 12)
     c["bag"].location = (0.0, 0.0, z); c["bag"].rotation_euler = (tilt, 0, math.radians(-6))
+    # the impact puffs the loose sheets around it
+    for o, p0, rz in c["papers"]:
+        d = max(0.0, 1.0 - (Vector((p0.x, p0.y, 0)).length / 0.75))
+        k = s - 0.9
+        lift = 0.025 * d * math.sin(min(math.pi, max(0.0, k) * 7)) if k > 0 else 0.0
+        o.location = (p0.x * (1 + 0.04 * d * min(1, max(0, k) * 3)), p0.y * (1 + 0.04 * d * min(1, max(0, k) * 3)), p0.z + lift)
     g = ease(min(1.0, max(0.0, (s - 1.9) / 0.6)))
-    _glow(c, 0.9 * g)
-    c["top"].data.energy = 420 * (1.0 if s > 0.15 else 0.0) * (0.35 if 0.15 < s < 0.22 else 1.0)
+    _glow(c, 0.9 * g * buzz(s, 1.9))
+    fl = 1.0
+    for a, b in ((0.1, 0.18), (0.26, 0.3), (3.1, 3.16), (3.9, 3.95)):
+        if a < s < b:
+            fl = 0.08
+    c["top"].data.energy = 420 * fl * (1.0 if s > 0.1 else 0.0)
+    c["tube_val"].outputs[0].default_value = 6.0 * fl * (1.0 if s > 0.1 else 0.0)
 
 
 def anim_tape(c, t):
@@ -265,24 +397,25 @@ def anim_tape(c, t):
         zz = (p.z - s * v) % 4.0
         o.location = (p.x, p.y, zz)
     g = ease(min(1.0, max(0.0, (s - 1.8) / 0.8)))
-    _glow(c, 1.15 * g)
+    _glow(c, 1.15 * g * buzz(s, 1.8))
+    c["lamp"].data.energy = 380 * (0.25 if (2.6 < s < 2.68 or 4.1 < s < 4.2) else 1.0)
 
 
 def _cam_torch(c, t):
-    return (Vector((0.0, -4.6, 1.5)).lerp(Vector((0.0, -3.7, 1.47)), ease(t)), Vector((0, 0, 1.45)), 40)
+    return (Vector((0.0, -4.6, 1.5)).lerp(Vector((0.0, -3.7, 1.47)), ease(t)) + shake(t, 0.008), Vector((0, 0, 1.45)), 40)
 
 
 def _cam_board(c, t):
-    return (Vector((-0.45, -4.4, 1.4)).lerp(Vector((0.0, -2.9, 1.55)), ease(t)), Vector((0, 0.1, 1.55)), 40)
+    return (Vector((-0.45, -4.4, 1.4)).lerp(Vector((0.0, -2.9, 1.55)), ease(t)) + shake(t, 0.007, 1.0), Vector((0, 0.1, 1.55)), 40)
 
 
 def _cam_bag(c, t):
     e = ease(t)
-    return (Vector((0.15, -1.35, 1.35)).lerp(Vector((0.0, -0.95, 1.3)), e), Vector((0, 0.02, 0.93)), 42)
+    return (Vector((0.35, -1.75, 1.6)).lerp(Vector((0.0, -1.0, 1.32)), e) + shake(t, 0.004, 2.0), Vector((0, 0.02, 0.93)), 40)
 
 
 def _cam_tape(c, t):
-    return (Vector((0.25, -4.9, 1.45)).lerp(Vector((0.0, -4.2, 1.5)), ease(t)), Vector((0, 0.5, 1.5)), 38)
+    return (Vector((0.25, -4.9, 1.45)).lerp(Vector((0.0, -4.2, 1.5)), ease(t)) + shake(t, 0.008, 3.0), Vector((0, 0.5, 1.5)), 38)
 
 
 MOVES = {

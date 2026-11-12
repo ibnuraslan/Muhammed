@@ -17,6 +17,8 @@ INTRO = ["home_behind", "home_front", "invest_drawer", "invest_reveal", "street_
          "cafe_title_push", "cafe_pull_back"]
 tim = json.load(open(os.path.join(ND, "vo", "ch_timing.json")))
 parts = [("intro", [(n, n) for n in INTRO], os.path.join(ND, "vo", "intro_vo.mp3"), 2.5)]
+# the Seldom logo sting sits between the intro and Chapter 1 (its own sound design, no voiceover)
+parts.append(("sting", [("seldom_sting", "Seldom logo sting")], os.path.join(ND, "..", "brand", "seldom_sting_sfx.wav"), 0.0))
 for c in ("1", "2", "3"):
     parts.append((f"chapter{c}", [(s["name"], s["label"]) for s in tim[c]], os.path.join(ND, "vo", f"ch{c}_vo.mp3"), 2.0))
 
@@ -65,6 +67,31 @@ for folder, shots, vo, lead in parts:
         print("[film] could not pack", vo, e)
     print(f"[film] {folder}: frames {start}-{frame - 1}", flush=True)
 master.frame_start, master.frame_end = 1, frame - 1
+
+
+# fades through black: intro fades out ~1 s after its last word, the sting fades in/out, Chapter 1 fades in
+def black(f0, f1, a0, a1, ch=5):
+    kw = dict(name="Fade", type='COLOR', channel=ch, frame_start=f0)
+    try:
+        st = strips.new_effect(frame_end=f1, **kw)
+    except TypeError:
+        st = strips.new_effect(length=f1 - f0, **kw)
+    st.color = (0, 0, 0); st.blend_type = 'ALPHA_OVER'
+    st.blend_alpha = a0; st.keyframe_insert("blend_alpha", frame=f0)
+    st.blend_alpha = a1; st.keyframe_insert("blend_alpha", frame=f1 - 1)
+    return st
+starts = {m.name: m.frame for m in master.timeline_markers}
+s_sting, s_ch1 = starts["STING"], starts["CHAPTER1"]
+black(s_sting - 24, s_sting, 0.0, 1.0)          # intro -> black over 1 s
+black(s_sting, s_sting + 12, 1.0, 0.0)          # sting fades up
+black(s_ch1 - 36, s_ch1, 0.0, 1.0)              # sting -> black over 1.5 s
+black(s_ch1, s_ch1 + 24, 1.0, 0.0)              # Chapter 1 fades in
+# the intro's music/VO tail and the sting's sound both fade with the picture
+for st in strips:
+    if st.type == 'SOUND' and st.name == "VO intro":
+        end = s_sting
+        st.volume = 1.0; st.keyframe_insert("volume", frame=end - 24)
+        st.volume = 0.0; st.keyframe_insert("volume", frame=end)
 master.render.use_sequencer = True
 master.render.use_compositing = False
 master.render.filepath = "//render/nvidia_film_"
