@@ -2,9 +2,13 @@
 import sys, os, bpy
 D = os.path.dirname(os.path.abspath(__file__))
 os.environ.setdefault("FC_ASSETS", os.path.join(D, "..", "assets"))
-argv = sys.argv[sys.argv.index("--") + 1:]
+argv = sys.argv[sys.argv.index("--") + 1:]; SAVE_PATH = argv[0]; DO_ANIM = "anim" in argv
 exec(open(os.path.join(D, "02_build_scene.py")).read())
-if "anim" in argv:
+if DO_ANIM:
     exec(open(os.path.join(D, "03_animate.py")).read())
-bpy.ops.wm.save_as_mainfile(filepath=argv[0], compress=False)
-print("SAVED", argv[0])
+    _argv = sys.argv; sys.argv = ["blender", "--"]
+    exec(open(os.path.join(D, "..", "..", "pipeline", "anim_look.py")).read())
+    sys.argv = _argv
+    exec(open(os.path.join(D, "03c_look.py")).read())
+bpy.ops.wm.save_as_mainfile(filepath=SAVE_PATH, compress=False)
+print("SAVED", SAVE_PATH)

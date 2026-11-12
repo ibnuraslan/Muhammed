@@ -28,6 +28,11 @@ fanH1 = bone_at(FR, "head", F(2.2)); fanH4 = bone_at(FR, "head", F(10.0)); fanH1
 manH = bone_at(MR, "head", F(19.4)); manBH = bone_at(MBR, "head", F(29.6)); docH = bone_at(DR, "head", F(25.8))
 ph_p, ph_n = at(bpy.data.objects["ManPhone_screen"], F(31.8))
 ph_n = (bpy.data.objects["ManPhone_screen"].matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+_dg = bpy.context.evaluated_depsgraph_get()
+_hit = sc.ray_cast(_dg, ph_p + ph_n * 0.004, ph_n, distance=0.3)[0]
+if _hit:
+    ph_p, _n2 = at(bpy.data.objects["ManPhone_screenB"], F(31.8)); ph_n = (bpy.data.objects["ManPhone_screenB"].matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
+print("PHONE_SIDE", "B" if _hit else "A")
 fphone, fphoneN = at(bpy.data.objects["FanPhone_screen"], F(14.4))
 ls_n = (ls.matrix_world.to_3x3() @ Vector((0, 0, 1))).normalized()
 SK = Vector((200, 0, 0)); CT = Vector((-300, 0, 0)); HMv = Vector((-300, 200, 0))
@@ -62,12 +67,12 @@ K = [
     (11.2, V((-0.50, -0.22, 1.32)), fanH4, 45, False),
     (12.2, V((-0.22, -0.22, 1.30)), fanH4, 50, False),
     (13.0, V((-0.05, -0.18, 1.30)), fanH4 + V((0, 0, -0.05)), 48, False),
-    (13.6, V((-0.50, 0.30, 1.45)), fphone, 40, False),                # through the glass to her right side
-    (14.3, V((-0.34, 0.68, 1.50)), fphone, 40, False),               # top-down on the thumbs
-    (15.2, V((0.16, 0.60, 1.38)), fphone + V((0, -0.03, 0)), 50, False),
-    (15.8, V((0.50, 0.70, 1.55)), V((0.0, 0.35, 1.3)), 40, False),
-    (16.4, V((0.95, 0.75, 1.65)), V((0.0, 0.05, 1.45)), 32, False),   # the slap, wide
-    (17.0, V((0.30, 0.15, 2.90)), V((0.0, -0.3, 1.5)), 32, False),     # over the glass to his side
+    (13.6, V((-0.85, 0.20, 1.50)), fphone, 34, False),                # through the glass to her right side
+    (14.3, V((-0.80, 0.30, 1.42)), fphone, 42, False),               # top-down on the thumbs
+    (15.2, V((-0.72, 0.08, 1.38)), fphone + V((0, 0, 0.1)), 40, False),
+    (15.8, V((-0.70, 0.55, 1.55)), V((0.0, 0.2, 1.4)), 34, False),
+    (16.4, V((-0.90, 0.75, 1.80)), V((0.0, 0.05, 1.45)), 30, False),   # the slap, wide
+    (17.0, V((-0.40, 0.15, 2.90)), V((0.0, -0.4, 1.5)), 30, False),     # over the glass to his side
     (17.8, V((0.55, -0.55, 1.75)), V((-0.05, 0.0, 1.5)), 38, False),
     (18.6, V((0.55, -1.15, 1.80)), V((-0.05, 0.0, 1.5)), 40, False),  # over his shoulder, the phone on the glass
     (19.4, V((-0.40, -0.18, 1.62)), manH, 42, False),                 # his puzzled face
@@ -87,8 +92,8 @@ K = [
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
     (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
     (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
-    (31.4, fill(ph_p, ph_n, 0.16) + V((0, -0.05, 0)), ph_p, 45, False),
-    (31.8, fill(ph_p, ph_n, 0.006), ph_p, 45, False),
+    (31.3, V((-27.75, -1.25, 2.15)), V((-27.4, -1.0, 2.79)), 40, False),
+    (31.8, V((-27.4, -1.0, 2.70)), V((-27.4, -1.0, 2.79)), 40, False),   # into the light panel
     (31.8, CT + V((-6, -9, 2.2)), CT + V((-6, 13, 8)), 40, True),     # out of the screen glow into the night city
     (32.8, CT + V((-4, -10, 13)), CT + V((0, 12, 9)), 26, False),
     (33.8, CT + V((-12, -10, 3.0)), CT + V((-17, -4, 1.8)), 32, False),
@@ -146,7 +151,7 @@ for f0, f1, pos, tgt, lens in spans:
             u = smooth((t - 3.0) / 0.5); dg = (glassP - p).length
             dist = dg + (dist - dg) * u
         cd.dof.focus_distance = max(0.005, dist); cd.dof.keyframe_insert("focus_distance", frame=f)
-        cd.dof.aperture_fstop = min(64.0, max(2.8, 2.8 / max(dist, 0.05) * 1.2)) if not (200 > 100 and p.x > 150) else 64.0
+        cd.dof.aperture_fstop = 64.0 if p.x > 150 else (max(5.6, min(32.0, 0.5 / max(dist, 0.01))) if dist < 0.25 else 8.0)
         cd.dof.keyframe_insert("aperture_fstop", frame=f)
 # jumps must be hard: constant interpolation on the frame before each jump
 JUMPS = [sp[1] for sp in spans[:-1]]

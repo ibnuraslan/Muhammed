@@ -4,8 +4,8 @@ from mathutils import Vector, Matrix
 # ---- clothing: rebuild every suit material from AO + normal (no prints); shirt/pants split on rest-pose height
 TINTS = {"Fan": ((0.20, 0.26, 0.20), (0.06, 0.07, 0.10)), "Manager": ((0.08, 0.10, 0.20), (0.10, 0.10, 0.12)),
          "Doctor": ((0.90, 0.91, 0.92), (0.15, 0.17, 0.25)), "Nurse": ((0.20, 0.45, 0.48), (0.20, 0.45, 0.48)),
-         "Crowd0": ((0.55, 0.10, 0.08), (0.10, 0.12, 0.20)), "Crowd1": ((0.80, 0.75, 0.65), (0.08, 0.08, 0.09)),
-         "Crowd2": ((0.12, 0.22, 0.42), (0.25, 0.22, 0.18)), "Crowd3": ((0.45, 0.28, 0.18), (0.10, 0.10, 0.12)),
+         "Crowd0": ((0.55, 0.10, 0.08), (0.10, 0.12, 0.20)), "Crowd1": ((0.95, 0.72, 0.10), (0.08, 0.08, 0.09)),
+         "Crowd2": ((0.12, 0.22, 0.42), (0.25, 0.22, 0.18)), "Crowd3": ((0.15, 0.55, 0.30), (0.10, 0.10, 0.12)),
          "Crowd4": ((0.18, 0.18, 0.20), (0.12, 0.14, 0.22)), "Crowd5": ((0.55, 0.12, 0.22), (0.07, 0.07, 0.08)),
          "Player0": ((0.55, 0.05, 0.05), (0.06, 0.06, 0.07)), "Player1": ((0.05, 0.11, 0.38), (0.06, 0.06, 0.07))}
 fab_n = bpy.data.images.load(f"{PH}/knitted_fleece/textures/" + [f for f in os.listdir(f"{PH}/knitted_fleece/textures") if "nor_gl" in f][0], check_existing=True)
@@ -66,7 +66,7 @@ eyez = FR.data.bones["eye.L"].head_local.z
 top_v = [v for v in hv if v.z > eyez + 0.03]
 cx = (max(v.x for v in top_v) + min(v.x for v in top_v)) / 2; cy = (max(v.y for v in top_v) + min(v.y for v in top_v)) / 2
 rx = (max(v.x for v in top_v) - min(v.x for v in top_v)) / 2 + 0.008; ry = (max(v.y for v in top_v) - min(v.y for v in top_v)) / 2 + 0.008
-bot = eyez + 0.045
+bot = eyez + 0.07
 bpy.ops.mesh.primitive_uv_sphere_add(segments=96, ring_count=48, radius=1.0)
 bn = bpy.context.object; bn.name = "BeanieKnitMesh"
 import bmesh as _bm2

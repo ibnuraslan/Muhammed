@@ -91,12 +91,12 @@ class Actor:
             sx = 1 if s == "L" else -1
             if hands and s in hands:
                 lp, ld, ln = hands[s]
-                Wp = W(pos, yaw, lp); d = Ry(yaw) @ Vector(ld); n = -(Ry(yaw) @ Vector(ln))   # rig convention: n = back of hand
+                Wp = W(pos, yaw, lp); d = Ry(yaw) @ Vector(ld); n = Ry(yaw) @ Vector(ln)   # n = palm normal
                 pole = W(pos, yaw, (sx * 0.55, 0.45, 0.85))
                 H.key_hand(s, f, Wp, d, n, pole=pole)
             else:   # relaxed at the side
                 Wp = W(pos, yaw, (sx * 0.24, -0.02, 0.83 - crouch + hip)); H.key_hand(s, f, Wp, Ry(yaw) @ Vector((0.05 * sx, -0.1, -1)),
-                                                                            Ry(yaw) @ Vector((sx, 0, 0)), pole=W(pos, yaw, (sx * 0.55, 0.45, 1.0)))
+                                                                            Ry(yaw) @ Vector((-sx, 0, 0)), pole=W(pos, yaw, (sx * 0.55, 0.45, 1.0)))
 
 def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0, knee=0.42, foot_lift=0.0):
     """seated on a seat of height seat_h, feet on the floor in front"""
@@ -106,8 +106,8 @@ def sit(A, f, pos, yaw, seat_h, hands=None, flex=8, head=(0, 0), twist=0, side=0
 # palm helpers (body-local, character faces -Y): d = finger direction, n = palm normal
 HANDS_ON_BOARDS = {"L": ((0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1)), "R": ((-0.25, -0.38, 1.11), (0, -1, -0.3), (0, 0, -1))}
 def phone_hold(dz=0.0, both=True, spread=0.0):
-    hd = {"R": ((-0.03, -0.30, 1.08 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
-    if both: hd["L"] = ((0.06 + spread, -0.29, 1.07 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
+    hd = {"R": ((-0.03, -0.32, 1.17 + dz), (0.1, -0.2, 1), (0.05, 0.6, 0.8))}
+    if both: hd["L"] = ((0.06 + spread, -0.31, 1.16 + dz), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))
     return hd
 
 # ================================================================== FAN
@@ -167,10 +167,10 @@ def fan_home():
     sit(fan, f(34.0), p, 0, 0.45, hands=lap, flex=12, head=(14, 0))
     sit(fan, f(35.4), p, 0, 0.45, hands=lap, flex=14, head=(16, 0))
     face(FR, f(35.4), brow=0.0, smile=0.0)
-    mouth = {"R": ((-0.02, -0.18, 1.08), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
+    mouth = {"R": ((-0.02, -0.22, 1.06), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
     sit(fan, f(36.4), p, 0, 0.45, hands=mouth, flex=-6, head=(-6, 0))
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
-    both = {"R": ((-0.04, -0.17, 1.06), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.06, -0.17, 1.04), (-0.2, 0.3, 1), (0, 1, 0))}
+    both = {"R": ((-0.05, -0.21, 1.05), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.06, -0.21, 1.02), (-0.2, 0.3, 1), (0, 1, 0))}
     sit(fan, f(37.2), p, 0, 0.45, hands=both, flex=-8, head=(-4, 6))
     face(FR, f(37.2), brow=1.0, lid=-0.3, jaw=10, smile=0.5)
     sit(fan, f(37.8), p, 0, 0.45, hands=both, flex=-4, head=(0, -4))
@@ -429,7 +429,7 @@ def palm_frame(rig, s):
     B = rig.data.bones
     wr = B["wrist." + s].head_local; f3 = B["finger3-1." + s].head_local
     dd = (f3 - wr).normalized(); aa = (B["finger2-1." + s].head_local - B["finger5-1." + s].head_local).normalized()
-    nn = -(dd.cross(aa) if s == "L" else aa.cross(dd)); nn.normalize()
+    nn = dd.cross(aa) if s == "L" else aa.cross(dd); nn.normalize()
     ctr = wr + (f3 - wr) * 0.75
     return ctr, dd, aa, nn
 
@@ -468,10 +468,12 @@ def make_phone(name, scr_mat, cl):
     bpy.ops.mesh.primitive_plane_add(size=1); s = bpy.context.object; s.name = name + "_screen"
     s.scale = (0.138, 0.064, 1); bpy.ops.object.transform_apply(scale=True)
     for lp in s.data.uv_layers[0].data: lp.uv = (lp.uv[1], 1 - lp.uv[0])
-    s.rotation_euler = (0, math.radians(90), 0); s.location = (o.dimensions.x / 2 + 0.0006, 0, 0)
+    s.rotation_euler = (0, math.radians(-90), 0); s.location = (-o.dimensions.x / 2 - 0.0006, 0, 0)   # screen faces away from the palm
     s.data.materials.append(scr_mat); s.parent = o
     for u in list(s.users_collection): u.objects.unlink(s)
     cl.objects.link(s)
+    s2 = s.copy(); s2.data = s.data.copy(); s2.name = name + "_screenB"; s2.parent = o
+    s2.rotation_euler = (0, math.radians(90), 0); s2.location = (o.dimensions.x / 2 + 0.0006, 0, 0); cl.objects.link(s2)
     return o, s
 
 def attach_phone(phone, rig, s="R"):
