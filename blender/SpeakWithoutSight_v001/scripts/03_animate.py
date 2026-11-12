@@ -534,8 +534,8 @@ for f in keys_every(1, END, 12):
     # stitching: left hand holds the hoop, right hand pulls the thread up and pushes it back down
     if u < 0.5:
         ph = (f % 72) / 72.0; up_ = math.sin(math.pi * min(1, ph * 1.6)) if ph < 0.62 else 0.0
-        Mo.hand("L", f, LAP - MO_R * 0.13 + V(0, 0, 0.05), MO_F * 1.0 + MO_R * 0.1, UP, LAP - MO_R * 0.45 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 35, 25)
-        Mo.hand("R", f, LAP + MO_R * 0.12 + MO_F * 0.03 + V(0, 0, 0.085 + 0.16 * up_), MO_F * 0.9 - MO_R * 0.1 - UP * 0.25, UP + MO_F * 0.3, LAP + MO_R * 0.45 - MO_F * 0.2)
+        Mo.hand("L", f, LAP - MO_R * 0.14 + V(0, 0, 0.09), MO_F * 1.0 + MO_R * 0.05, UP, LAP - MO_R * 0.45 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 35, 25)
+        Mo.hand("R", f, LAP + MO_R * 0.16 + MO_F * 0.03 + V(0, 0, 0.10 + 0.16 * up_), MO_F * 0.9 - MO_R * 0.1 - UP * 0.25, UP + MO_F * 0.3, LAP + MO_R * 0.45 - MO_F * 0.2)
         Mo.fingers("R", f, [40, 55, 65, 70], 30)
     else:
         ev(f); ch = Mo.bone_world("spine02") + MO_F * 0.17 + V(0, 0, 0.05)

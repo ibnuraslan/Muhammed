@@ -11,7 +11,8 @@ from mathutils.bvhtree import BVHTree
 a = sys.argv[sys.argv.index("--") + 1:]
 OUT = a[0]; STEP = int(a[1]) if len(a) > 1 else 2; DEPTH = float(a[2]) if len(a) > 2 else 0.005
 sc = bpy.context.scene
-CH = ["Girl", "Teacher", "Mother", "Father"]
+import os
+CH = os.environ.get("HA_CH", "Girl,Teacher,Mother,Father").split(",")
 def segs(rig, names):
     out = []
     for n in names:

@@ -14,6 +14,15 @@ building `anchors.json` from `beats.json` plus the word times from `pipeline/tra
 The source is `../SpeakWithoutSight_v001/scripts` (`build.sh` rebuilds everything: 01 humans → 02 parlour → 03 animation + 03b FX/camera).
 Review sheets are in `../SpeakWithoutSight_v001/review/`.
 
+## Hand audit (BVH, every 2 frames, flagged = more than 8 hand vertices deeper than 5 mm)
+- **About 1,094 flagged samples in this package, down from 2,767 at C.** This is an estimate: the girl, teacher and father counts come from the full run; the mother came from a separate mother-only run after her final fix, and that run doesn't check her hands against other characters. Files: `../SpeakWithoutSight_v001/review/D_hand_audit_full_prev.txt` and `D_hand_audit_mother_final.txt`.
+- **Mother: 0**, after spreading her hands and lifting them off her lap.
+- **The rest:**
+  - Deliberate contact: the girl's hand on the teacher's throat, lips and nose (Tadoma, about 300 samples), and her own hand on her own lips and throat.
+  - The girl's lap hand resting on her skirt drape (about 430 samples), a few millimetres deep.
+  - The teacher's hands near each other during the gasp, and on her thigh and heart (about 200 samples).
+  - None are joints bent the wrong way: Limit Rotation constraints sit on every finger, thumb and wrist bone.
+
 ## Known issues
 - **Look.** This is the animated-CG look ordered by the client at 22:45: AgX Punchy, high-key, a sky-blue explainer dome, and clean cream and pink anatomy.
 - **No voiceover yet.** Beats sit on the target times in the brief. Retime with `beats.json` when the VO arrives.

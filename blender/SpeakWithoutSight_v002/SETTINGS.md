@@ -4,7 +4,7 @@ These values are read back from `SpeakWithoutSight_v002_60fps.blend` opened in f
 
 | Item | Value |
 |---|---|
-| File | `SpeakWithoutSight_v002_60fps.blend`: 80 MB (83,680,507 bytes), compressed, with every image packed. A normal git file, not LFS. |
+| File | `SpeakWithoutSight_v002_60fps.blend`: 80 MB (83,685,564 bytes), compressed, with every image packed. A normal git file, not LFS. |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU; GPU is fine. |
 | Resolution | 1080 × 1920 at 100% |

@@ -1,0 +1,5 @@
+HAND AUDIT every 2 frames, depth 5 mm (flag = more than 8 hand vertices deeper)
+flagged samples: 0
+
+
+
