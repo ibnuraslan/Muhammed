@@ -230,9 +230,12 @@ def build(variant=None):
     if variant == "records":
         c["people"]["agent"] = twp.person("Agent", 1.0, 44, "male_elegantsuit01", "short03", hv=0.3, cval=0.5, hue=0.6, sat=0.15)
         c["people"]["clerkR"] = twp.person("ClerkR", 0.0, 50, "female_elegantsuit01", "bob01", hv=0.55, cval=0.6, hue=0.1, sat=0.2)
-        bag_m = pbr("BurnBag", (0.62, 0.52, 0.38), 0.85)
-        bag = join([cyl("Bag", (0, 0, 0.35), 0.24, 0.7, bag_m, verts=24)] +
-                   [box("BagStripe", (0, 0, 0.2 + k * 0.18), (0.49, 0.49, 0.03), pbr("BagRed", (0.45, 0.06, 0.05), 0.8)) for k in range(3)], "BurnBagObj")
+        bag_m = ph.texture("cardboard", scale=1.0, name="BurnBag") if False else pbr("BurnBag", (0.55, 0.42, 0.28), 0.85)
+        stripe = pbr("BagRed", (0.45, 0.06, 0.05), 0.8)
+        parts = [box("Bag", (0, 0, 0.33), (0.42, 0.28, 0.66), bag_m, bevel=0.01), box("BagFold", (0, 0, 0.67), (0.43, 0.29, 0.04), bag_m)]
+        for k in range(5):
+            parts.append(box("BagStripe", (-0.16 + k * 0.08, -0.141, 0.33), (0.025, 0.004, 0.62), stripe, rot=(0, math.radians(25), 0)))
+        bag = join(parts, "BurnBagObj")
         bag.location = (-0.3, 1.8, 0); c["bag"] = bag
         bx, _ = ph.model("cardboard_box_01"); c["rbox"] = bx
         c["sheets"] = []
@@ -240,7 +243,7 @@ def build(variant=None):
             bpy.ops.mesh.primitive_plane_add(size=1); o = bpy.context.active_object; o.scale = (0.21, 0.28, 1); o.data.materials.append(pages[k % 3])
             c["sheets"].append(o)
     if variant == "attache":
-        at = twp.person("Attache", 1.0, 48, "male_casualsuit04", "short02", hv=0.45, cval=0.55, hue=0.1, sat=0.2)
+        at = twp.person("Attache", 1.0, 48, "male_elegantsuit01", "short02", hv=0.45, cval=0.55, hue=0.1, sat=0.25)
         twp.seat(at, (DESK_A.x - 0.15, DESK_A.y + 0.66, 0), 0.0, lean=12)
         c["people"]["sec"] = at
         jar = join([cyl("Jar", (0, 0, 0.09), 0.06, 0.18, glass("JarGlass", (0.9, 0.92, 0.9)), verts=24),
@@ -494,24 +497,24 @@ def cam_nsa_plans(c, t):
 
 def cam_records_drawer(c, t):
     e = ease(t)
-    return (Vector((3.25, 1.05, 1.75)).lerp(Vector((3.05, 1.2, 1.7)), e), Vector((2.38, 2.05, 1.0)), 32)
+    return (Vector((0.9, 0.2, 1.65)).lerp(Vector((1.1, 0.35, 1.62)), e), Vector((2.45, 1.85, 1.05)), 32)
 
 
 def cam_records_burn(c, t):
     e = ease(t); b = c["bag"].location
-    return (b + Vector((-1.4, -1.6, 1.4)).lerp(Vector((-1.2, -1.35, 1.35)), e), b + Vector((0.3, 0, 0.6)), 32)
+    return (b + Vector((-1.9, -2.2, 1.55)).lerp(Vector((-1.7, -1.95, 1.5)), e), b + Vector((0.4, 0, 0.75)), 30)
 
 
 def cam_attache(c, t):
     e = ease(t)
-    a = _tw(c, (0.95, 0.05, 0.32)); b = _tw(c, (0.8, 0.02, 0.3))
-    return (a.lerp(b, e), _tw(c, (0.0, -0.05, 0.14)).lerp(c["people"]["sec"].bone_head("head"), 0.4), 36)
+    a = _tw(c, (2.1, -0.32, 0.62)); b = _tw(c, (1.85, -0.3, 0.58))
+    return (a.lerp(b, e), _tw(c, (0.0, -0.05, 0.14)).lerp(c["people"]["sec"].bone_head("head"), 0.4), 32)
 
 
 def cam_platen(c, t):
     e = ease(t); car = c["tw"]["carrier"].location.x
-    a = _tw(c, (-0.05, -0.32, 0.36)); b = _tw(c, (0.0, -0.28, 0.33))
-    return (a.lerp(b, e), _tw(c, (0.0, 0.03, 0.16)), 50)
+    a = _tw(c, (0.36, -0.1, 0.3)); b = _tw(c, (0.3, -0.08, 0.27))       # from the side, past the platen knob, onto the page
+    return (a.lerp(b, e), _tw(c, (-0.02, 0.05, 0.19)), 50)
 
 
 def cam_page_out(c, t):

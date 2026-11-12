@@ -145,7 +145,7 @@ def build(variant=None):
             ph.model("hanging_industrial_lamp", loc=(x, y, HZ - 0.1))
             if customs and not (x < -6 and y > 0):
                 continue                                # a Soviet customs shed at night: one lamp left burning
-            pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = (250 if customs else 1200) if night else 1400; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
+            pl = bpy.data.lights.new("HangLamp", 'SPOT'); pl.energy = (1500 if customs else 1200) if night else 1400; pl.spot_size = math.radians(110); pl.spot_blend = 0.8
             pl.color = (1.0, 0.85, 0.65)
             po = bpy.data.objects.new("HangLamp", pl); bpy.context.collection.objects.link(po); po.location = (x, y, HZ - 1.4)
     if not night:
@@ -260,6 +260,8 @@ def build(variant=None):
         for k in range(6):
             o = MC.burlap_crate(f"CStock{k}", tag=False); o.location = (CUSTOMS.x + 2.0 + (k % 3) * 1.0, CUSTOMS.y + 1.5 + (k // 3) * 0.9, 0.43)
         torch, _ = ph.model("vintage_flashlight"); c["torch"] = torch
+        cl = area_light((CUSTOMS.x + 1.0, CUSTOMS.y - 1.0, 3.2), (0, 0, 0), 2.0, 60, (0.55, 0.62, 0.8)); point_at(cl, CUSTOMS); cl.visible_camera = False
+        wl = area_light((CUSTOMS.x + 0.5, HY - 1.5, 4.5), (0, 0, 0), 1.5, 40, (0.8, 0.75, 0.6)); point_at(wl, (CUSTOMS.x + 0.5, HY, 3.0)); wl.visible_camera = False
         sp = bpy.data.lights.new("TorchC", 'SPOT'); sp.energy = 600; sp.spot_size = math.radians(26); sp.spot_blend = 0.3; sp.color = (1.0, 0.9, 0.75)
         so = bpy.data.objects.new("TorchC", sp); bpy.context.collection.objects.link(so); c["beam"] = so
     if variant == "dock":

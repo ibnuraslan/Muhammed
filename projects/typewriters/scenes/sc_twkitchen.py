@@ -106,7 +106,8 @@ def build(variant="home"):
         so = bpy.data.objects.new("Sun", sn); bpy.context.collection.objects.link(so); so.rotation_euler = (math.radians(-50), math.radians(10), 0)
         pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 2.0; pt.size_y = 1.0; pt.cycles.is_portal = True
         po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (0, 2.6, 1.5); po.rotation_euler = (math.radians(-90), 0, 0)
-        fill = area_light((0, -2.0, 2.3), (0, 0, 0), 2.0, 40, (0.9, 0.93, 1.0)); point_at(fill, TABLE + Vector((0, 0, 0.8))); fill.visible_camera = False
+        fill = area_light((0, -2.0, 2.3), (0, 0, 0), 2.0, 90, (0.9, 0.93, 1.0)); point_at(fill, TABLE + Vector((0, 0, 0.8))); fill.visible_camera = False
+        tl = area_light((TABLE.x + 0.4, TABLE.y - 0.6, 1.3), (0, 0, 0), 0.5, 12, (1.0, 0.92, 0.8)); point_at(tl, TABLE + Vector((0.15, 0, 0.5))); tl.visible_camera = False
         deck, reels = reel_deck("Deck"); deck.location = TABLE + Vector((0.15, -0.05, 0.475)); deck.rotation_euler = (0, 0, 0.2)
         c["reels"] = reels
         ph.model("office_notepads", loc=TABLE + Vector((-0.3, -0.2, 0.48)), scale=0.35)
@@ -225,7 +226,7 @@ def cam_wide(c, t):
 
 def cam_talk(c, t):
     e = ease(t)
-    return (TABLE + Vector((1.6, -1.7, 1.45)).lerp(Vector((1.35, -1.45, 1.4)), e), TABLE + Vector((-0.1, 0.3, 0.95)), 32)
+    return (TABLE + Vector((-1.75, -1.6, 1.45)).lerp(Vector((-1.5, -1.35, 1.42)), e), TABLE + Vector((0.1, 0.35, 0.95)), 30)
 
 
 def cam_reels(c, t):

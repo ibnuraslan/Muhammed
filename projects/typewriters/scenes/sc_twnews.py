@@ -62,7 +62,7 @@ def build(variant=None):
         for j in range(2):
             x = -2.4 + k * 1.2; y = -0.5 + j * 1.6
             ph.model("hanging_industrial_lamp", loc=(x, y, 4.6), scale=0.6)
-            sp = bpy.data.lights.new("Fresnel", 'SPOT'); sp.energy = 450; sp.spot_size = math.radians(40); sp.spot_blend = 0.5; sp.color = (1.0, 0.9, 0.78)
+            sp = bpy.data.lights.new("Fresnel", 'SPOT'); sp.energy = 1600; sp.spot_size = math.radians(40); sp.spot_blend = 0.5; sp.color = (1.0, 0.9, 0.78)
             so = bpy.data.objects.new("Fresnel", sp); bpy.context.collection.objects.link(so); so.location = (x, y, 4.0); point_at(so, (ANCHOR.x, ANCHOR.y, 1.0))
     box("Grid", (0, 0.3, 4.75), (6, 2.2, 0.05), pbr("GridPipe", (0.1, 0.1, 0.1), 0.4, 0.8))
     cams = []
@@ -122,9 +122,9 @@ def animate(c, sec, shot):
     front = tty.matrix_world @ Vector((0, -0.75, 0))
     twp.stand(w, (front.x, front.y, 0), tty.rotation_euler.z)
     tear = ease(min(1.0, max(0.0, (sec - 2.6) / 0.8))) if shot == "wire" else 0.0
-    pp = tty.matrix_world @ Vector((0.0, 0.12, 1.42 + 0.15 * tear))
-    for sd, dx in (("L", -0.15), ("R", 0.15)):
-        reach(w, sd, pp + tty.matrix_world.to_3x3() @ Vector((dx, -0.08, 0)), Vector((dx * 4, -0.3, -0.7)), tty.matrix_world.to_3x3() @ Vector((0, 1, 0.3)))
+    pp = tty.matrix_world @ Vector((0.0, 0.0, 1.3 + 0.1 * tear))
+    for sd, dx in (("L", -0.12), ("R", 0.12)):
+        reach(w, sd, pp + tty.matrix_world.to_3x3() @ Vector((dx, -0.12, 0)), Vector((dx * 4, -0.3, -0.9)), tty.matrix_world.to_3x3() @ Vector((0, 1, 0.3)))
     fingers_curl(w, 40, thumb=20); w.rot("head", (1, 0, 0), 10)
     bpy.context.view_layer.update()
 
@@ -135,7 +135,7 @@ def anim(shot):
 
 def cam_roll(c, t):
     e = ease(t)
-    return (Vector((-3.2, -3.4, 1.9)).lerp(Vector((-2.8, -2.9, 1.8)), e), Vector((-0.2, 1.0, 1.1)), 28)
+    return (Vector((-2.6, -1.6, 1.75)).lerp(Vector((-2.3, -1.3, 1.7)), e), Vector((0.0, 1.6, 1.1)), 30)
 
 
 def cam_wire(c, t):
