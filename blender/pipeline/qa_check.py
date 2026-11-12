@@ -14,6 +14,9 @@ Per sampled frame it reports:
              straight or bent backwards (<10 deg), or whose fingertips fan out >30 deg apart while curled
   FACEPRESS  a fingertip or palm vertex inside 1 cm of the same character's face region, or the head within
              3 cm of a prop surface
+  CAMJUMP    (every frame) a camera switch, or the camera teleports >0.25 m in one frame (or turns >60 deg): a hard cut.
+             The film is ONE continuous camera; only a fully covered wipe may hide a jump.
+  ROLL       the horizon is tilted more than ~20 deg (upside-down / sideways frame from an aim constraint).
 A clean film reports 0 for every category except intended, listed exceptions.
 Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
 a deliberate point / trigger finger / writing grip is not a CLAW.
@@ -194,6 +197,32 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             hd = wpos(r, "head");
             if min((t - hd).length for t in tips) < 0.07: flag(f, "FACEPRESS", "%s.%s hand on face" % (r.name, s))
     if f % 120 == 1: print("QA", f, res["frames"].get(str(f)))
+
+# CAMJUMP: the film must be ONE continuous camera. Every frame (not STEP): a camera switch (markers), or a
+# one-frame move/turn that is a step, not motion: >0.25 m (or a turn >60 deg: a whip pan up to 60 deg/frame is style) AND >3x the neighbouring frames' speed
+# (a fast fly-over moves a lot every frame; a cut moves a lot in one frame). Only a fully covered wipe
+# (black / cloud frame) may hide one; list those in ACTING_notes.md.
+P = []
+for f in range(sc.frame_start, sc.frame_end + 1):
+    sc.frame_set(f); P.append((f, sc.camera, sc.camera.matrix_world.copy()))
+D = [(0.0, 0.0)] + [((P[k][2].translation - P[k-1][2].translation).length,
+       (lambda a: min(a, 360 - a))(math.degrees(P[k-1][2].to_quaternion().rotation_difference(P[k][2].to_quaternion()).angle))) for k in range(1, len(P))]
+for k in range(1, len(P)):
+    f, c, m = P[k]
+    if c != P[k-1][1]: flag(f, "CAMJUMP", "camera switch %s -> %s" % (P[k-1][1].name, c.name)); continue
+    nb = [D[x] for x in range(max(1, k-3), min(len(D), k+4)) if x != k]
+    vd = sorted(x[0] for x in nb)[len(nb)//2] if nb else 0; va = sorted(x[1] for x in nb)[len(nb)//2] if nb else 0
+    d, ang = D[k]
+    if (d > 0.25 and d > 3 * vd + 0.02) or (ang > 60 and ang > 3 * va + 1):
+        flag(f, "CAMJUMP", "cut: %.2f m, %.0f deg in one frame (neighbours %.2f m, %.0f deg)" % (d, ang, vd, va))
+
+# ROLL: the horizon must stay level (no upside-down / sideways frames from Damped Track or aim flips). The camera's
+# world X axis must stay near horizontal: |x.z| > 0.34 (about 20 deg of roll) is flagged; a deliberate dutch angle
+# must be listed. Skipped while the camera looks almost straight up/down (the horizon is not in frame then).
+for (f, c, m) in P[::max(1, STEP // 2)]:
+    x = m.col[0].xyz.normalized(); fwd = (-m.col[2].xyz).normalized()
+    if abs(fwd.z) < 0.85 and abs(x.z) > 0.34:
+        flag(f, "ROLL", "horizon tilted %.0f deg" % math.degrees(math.asin(min(1.0, abs(x.z)))))
 
 json.dump(res, open(OUT, "w"), indent=1)
 print("QA_COUNTS", res["counts"])
