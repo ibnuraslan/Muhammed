@@ -211,7 +211,6 @@ HAND_POSE_RULES = [  # actor, side (None = both), first, last frame, pose
     ("GloveHands", None, 1030, 1710, "cup_hold"), # lifting the liver
     ("PanelA", "R", 1470, 1710, "power_fist"),    # gavel, thumb over the fingers
     ("PanelB", "R", 1555, 1630, "wrap_grip"),     # stamp handle
-    ("PanelC", "R", 1, 1710, "tripod"),           # writing
     ("PanelA", None, 1, 1710, "flat_palm"), ("PanelB", None, 1, 1710, "flat_palm"), ("PanelC", None, 1, 1710, "flat_palm"),
 ]
 def pose_name(actor, s, f, p):

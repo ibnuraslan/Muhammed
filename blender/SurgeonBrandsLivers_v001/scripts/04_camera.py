@@ -62,7 +62,7 @@ K = [  # frame, camera position, aim point, lens (mm)
     (500, V(-0.05, 0.10, 1.68), S1H(500), 50),
     (545, V(-0.22, 0.02, 1.66), S1H(540), 56),
     # 3 - whip-pan to the calendar, drift, through the wall
-    (568, V(0.05, -0.1, 1.68), S1H(560) + V(0.5, 0, 0), 45),
+    (568, V(0.05, -0.1, 1.68), S1H(560) + V(0.15, 0, 0), 45),   # v007b: he stays in frame on beat 3
     # v007b: over the nurse's shoulder onto the calendar (a person stays in frame), then one fast push through it
     (571, V(0.08, 0.30, 1.64), V(0.85, 0.45, 1.42), 40),
     (586, V(0.10, 1.46, 1.58), V(2.23, -0.66, 1.45), 30),
@@ -117,7 +117,7 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1370, V(-7.55, 1.15, 1.55), S1H(1370), 34),
     (1405, V(-7.8, 0.35, 1.45), S1H(1405), 42),
     (1440, V(-7.75, -0.75, 1.3), S1H(1440) + V(0.2, 0, -0.1), 36),
-    (1458, V(-7.85, -0.45, 1.3), V(-7.9, 1.6, 1.35), 30),
+    (1458, V(-7.85, -0.45, 1.3), V(-10.3, 1.0, 1.55), 28),     # v007b: pan across the panel, not the empty side wall
     (1478, V(-8.3, -0.35, 1.25), V(-10.3, 0.0, 1.55), 24),
     # 8 - gavel slams, the license gets the red stamp, push in and settle
     (1510, V(-9.1, 0.5, 1.62), V(-10.2, -0.05, 1.4), 30),

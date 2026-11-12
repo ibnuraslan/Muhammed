@@ -63,12 +63,45 @@ def hover(r, s, f, dg):
             if t2 and any((t2.find_nearest(p, 0.012)[0] is not None) for p in T[:5]):
                 return ("held", o.name, o2.name)
         d, v = best
-        if d > 0.06:
+        if d > 0.12:
             return ("far", o.name, "%.1f cm" % (d * 100))
         return (o.name, v * ((d - 0.005) / d))
     return None
 
-report = []; todo = {}
+# --- tool holds: thumb and index tips close on the tool (tripod grip), every 2 frames
+TOOL_HOLDS = [("Surgeon1", "R", 1, 300, "ArgonPen_OR"), ("Surgeon1", "R", 318, 458, "ND_"), ("GloveHands", "R", 1, 300, "ArgonPen_Studio")]
+def ik_keys_remove(r, s, a0, b0):
+    ad = r.animation_data
+    for fc in [fc for L in ad.action.layers for st in L.strips for cb in st.channelbags for fc in cb.fcurves
+               if fc.data_path in ('pose.bones["IK_hand.%s"].location' % s, 'pose.bones["IK_hand.%s"].rotation_quaternion' % s)]:
+        kps = fc.keyframe_points
+        for i in reversed(range(len(kps))):
+            if a0 < kps[i].co.x < b0:
+                kps.remove(kps[i], fast=True)
+        fc.update()
+report = []; n_tool = 0
+for name, s, f0, f1, pre in TOOL_HOLDS:
+    r = bpy.data.objects[name]; pb = r.pose.bones["IK_hand." + s]
+    objs = [o for o in PROPS if o.name.startswith(pre)]
+    plan = {}
+    for f in range(f0, f1 + 1, 2):
+        sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+        mid = (W(r, "finger1-3." + s, True) + W(r, "finger2-3." + s, True)) / 2
+        best = None
+        for o in objs:
+            t = bvh(o, dg, f)
+            if t is None: continue
+            loc, n, i, d = t.find_nearest(mid, 0.3)
+            if loc is not None and (best is None or d < best[0]): best = (d, loc - mid)
+        v = best[1] * ((best[0] - 0.004) / best[0]) if best and best[0] > 0.006 else Vector()
+        plan[f] = (r.matrix_world @ pb.matrix).copy(), v
+    ik_keys_remove(r, s, f0 - 1, f1 + 1)
+    for f, (M, v) in sorted(plan.items()):
+        sc.frame_set(f); pb.matrix = r.matrix_world.inverted() @ (Matrix.Translation(v) @ M)
+        pb.keyframe_insert("location", frame=f, group=pb.name); pb.keyframe_insert("rotation_quaternion", frame=f, group=pb.name); n_tool += 1
+    report.append("  tool hold %s.%s %d-%d on %s* (max shift %.1f cm)" % (name, s, f0, f1, pre, 100 * max(v.length for M, v in plan.values())))
+print("TOOL_KEYS", n_tool)
+todo = {}
 for f in range(1, sc.frame_end + 1, 2):
     sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
     for r in RIGS:
@@ -78,7 +111,7 @@ for f in range(1, sc.frame_end + 1, 2):
             if h is None: continue
             if h[0] in ("held", "far"):
                 report.append("  %5d %s.%s near %s, %s %s - left" % (f, r.name, s, h[1], "holding" if h[0] == "held" else "gap", h[2])); continue
-            if h[1].length > 0.10: continue
+            if any(n_ == r.name and s_ == s and f0 <= f <= f1 for n_, s_, f0, f1, _ in TOOL_HOLDS): continue
             todo.setdefault((r.name, s), {})[f] = h
 print("HOVER_FRAMES", sum(len(v) for v in todo.values()))
 
