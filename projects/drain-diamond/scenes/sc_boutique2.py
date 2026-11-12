@@ -146,7 +146,7 @@ def build_upstairs(c, after=False):
             if (k + row) % 2:                              # a black velvet ring cone
                 bpy.ops.mesh.primitive_cone_add(vertices=20, radius1=0.025, radius2=0.008, depth=0.08, location=(-6.86, y, z + 0.04))
                 bpy.context.active_object.data.materials.append(nv)
-                dd.ring(f"NicheRing{k}{row}", (-6.86, y, z + 0.05), stone_r=0.006, band="plat" if k % 2 else "gold",
+                dd.ring(f"NicheRing{k}{row}", (-6.86, y, z + 0.0865), stone_r=0.006, band="plat" if k % 2 else "gold",
                         stone=("diamond", "sapphire", "diamond", "ruby")[k], upright=True, rot=(0, 0, math.radians(90)))
             else:                                          # a small velvet necklace bust
                 bpy.ops.mesh.primitive_cone_add(vertices=20, radius1=0.07, radius2=0.025, depth=0.22, location=(-6.86, y, z + 0.11))

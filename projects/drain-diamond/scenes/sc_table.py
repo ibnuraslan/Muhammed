@@ -35,6 +35,7 @@ def build(variant=None):
     B.box((0, 0, -0.05), (16, 10, 0.1), dd.tex_mat("concrete_floor_02", 0.6, tint=(0.5, 0.5, 0.5), name="ERFloor", sat=0.3))
     wall = pbr("ERWall", (0.42, 0.44, 0.44), 0.8)
     B.box((0, 4.0, 1.5), (16, 0.1, 3.0), wall).box((-7.5, 0, 1.5), (0.1, 10, 3.0), wall)
+    B.box((0, -4.6, 1.5), (16, 0.1, 3.0), wall).box((7.5, 0, 1.5), (0.1, 10, 3.0), wall).box((0, 0, 3.05), (16, 10, 0.1), wall)
     B.box((0, 0, TZ - 0.02), (TL + 0.2, TW + 0.2, 0.04), dd.tex_mat("velour_velvet", 2.5, tint=(0.025, 0.025, 0.03), name="TableCloth", sat=0.2))
     for sx in (-1, 1):
         for sy in (-1, 1):
@@ -66,7 +67,7 @@ def build(variant=None):
                 if kind == 0:                                        # a ring on a velvet cone
                     bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=0.018, radius2=0.006, depth=0.05, location=p + Vector((0, 0, 0.025)))
                     cn = bpy.context.active_object; cn.data.materials.append(cone_m)
-                    dd.ring(f"R{i}_{j}", p + Vector((0, 0, 0.03)), stone_r=float(rng.uniform(0.004, 0.007)), band="plat" if i % 2 else "gold",
+                    dd.ring(f"R{i}_{j}", p + Vector((0, 0, 0.0565)), stone_r=float(rng.uniform(0.004, 0.007)), band="plat" if i % 2 else "gold",
                             stone=stones[(i + j) % 6], upright=True, rot=(0, 0, float(rng.uniform(-0.4, 0.4))))
                 elif kind == 1:                                      # a pair of earrings
                     for sx in (-0.018, 0.018):
@@ -108,6 +109,7 @@ def anim_layout(c, t):
     sec = t * DUR["layout"]
     h = c["counter"]
     walk_to(h, Vector((-TL / 2 - 0.3, -TW / 2 - 0.55, 0)), Vector((TL / 2, -TW / 2 - 0.55, 0)), sec, speed=0.5, cadence=1.1)
+    arms_relaxed(h)
     h.rot("neck01", (1, 0, 0), 10); h.rot("head", (1, 0, 0), 16)
     from human import reach
     beat = (sec % 2.2) / 2.2                                   # every 2.2 s a tag goes down on the cloth
