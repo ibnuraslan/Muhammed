@@ -1,5 +1,34 @@
 {
- "frames": {},
+ "frames": {
+  "1009": {
+   "Owner": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Owner": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1021": {
+   "Owner": {
+    "self": 5,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1027": {
+   "Owner": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
  "step": 6,
  "depth_cm": 2.0,
  "bad_ranges": [],
