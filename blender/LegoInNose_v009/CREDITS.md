@@ -1,4 +1,4 @@
-# LegoInNose_v007: credits
+# LegoInNose_v008c: credits
 
 ## Required attribution (CC BY 4.0)
 Paste this block into the video description:

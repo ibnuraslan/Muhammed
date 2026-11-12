@@ -16,7 +16,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 |---|---|---|---|
 | 01 | EarInArm | `claude/beautiful-ptolemy-c5vrcq` | `blender/EarInArm_v008/` **ON HOLD: acting fix in progress (render stopped), do not render** |
 | 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v009/` **ON HOLD: DO NOT RENDER (floating marker pen and surgeon mask found by the client; fix in progress)** |
-| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v007/` **ON HOLD: acting fix in progress (render stopped), do not render** |
+| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v009/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–2036)** |
 | 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v008/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1386)** |
 | 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v009/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1644)** |
 | 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v008/` **ON HOLD: DO NOT RENDER (keys float beside the hands, e.g. 22 s; fix in progress)** |
