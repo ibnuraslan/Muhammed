@@ -31,11 +31,16 @@ def tile(kind, variant, out, pct, samples, dirt):
     lo = Vector((min(p.x for p in pts), min(p.y for p in pts), 0)); hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
     c = (lo + hi) / 2; ext = max(hi.x - lo.x, hi.y - lo.y, (hi.z - lo.z) * 2.3)
     cam = camera((0, 0, 0), (0, 1, 0), lens=50)
+    has_ramp = vehicles.part(v, "ramp") is not None
     for k, (lab, az) in enumerate(ANGLES):
         d = ext * 1.55 + 2.0
+        if has_ramp and k == 2:                      # rear view with the ramp open, looking into the hold
+            vehicles.set_ramp(v, 1.0); az = 158; d = ext * 0.62 + 2.0
         a = math.radians(az)
         cam.location = (c.x + d * math.cos(a), c.y + d * math.sin(a), 1.55 + (hi.z - lo.z) * 0.18)
         tgt = Vector((c.x, c.y, hi.z * 0.42))
+        if has_ramp and k == 2:                      # frame the open tail and the hold
+            cam.location = (lo.x - 14.0, c.y - 15.0, 4.8); tgt = Vector((lo.x + 11.0, c.y, 2.6))
         cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
         s.render.filepath = os.path.join(out, f"{kind}{'_' + variant if variant else ''}_{k}.png")
         bpy.ops.render.render(write_still=True)
