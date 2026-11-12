@@ -638,6 +638,9 @@ def key_light(l, pts):
     for f, e in pts: l.energy = e; l.keyframe_insert("energy", frame=f)
 key_light(XL, [(1, 0), (455, 0), (470, 11000), (545, 11000), (560, 0), (770, 0), (785, 11000), (860, 11000), (875, 0), (1342, 0), (1350, 9000), (1745, 11000), (1765, 0)])
 key_light(SFL, [(1, 0), (110, 0), (140, 300), (250, 300), (258, 60), (292, 60), (300, 300), (1300, 300), (1340, 40), (1770, 40)])
+_sd = bpy.data.materials["M_ShaftDust"].node_tree.nodes["Principled Volume"].inputs["Density"]     # no glowing dust in front of the lens on the rise up the shaft
+for f_, v_ in ((1, 0.06), (250, 0.06), (256, 0.0), (292, 0.0), (298, 0.06)):
+    _sd.default_value = v_; _sd.keyframe_insert("default_value", frame=f_)
 key_light(HT, [(1, 0), (1320, 0), (1335, 90), (1780, 90), (1800, 0)])
 for n_ in ("Teen.torch_strap", "Teen.torch_lamp", "Teen.torch_lens"): key_vis(bpy.data.objects[n_], [(1240, END + 10)])
 lens = bpy.data.materials["M_TorchLens"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
