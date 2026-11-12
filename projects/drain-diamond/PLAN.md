@@ -70,7 +70,7 @@ with natural colours and readable faces. If a relight kills the soul of a shot, 
 | Steps (ch4 5B) | grade only | "has more soul"; set keeps its grey-sky light |
 | Unit office (read, pin, listen) | grade only | relight lost her face; set keeps its sun through the blinds |
 | Drain yard / gate / all drain shots | grade only | the mist relight went milky and flat; the set's soft grey morning kept |
-| Raid street (ch3 4A) | grade only (exteriors on hold for look v5) | keep real colours |
-| Dawn facade (intro) and the painters' lane | grade only (on hold for look v5) | keep real colours |
-| December street (ch2 xmas, door, getaway) | grade only (on hold for look v5) | the set's own dusk |
+| Raid street (ch3 4A) | full look v5: low sun, blue sky | real colours |
+| Dawn facade (intro) and the painters' lane | full look v5: low sun, blue sky | warm cream stone, deep balcony shadow |
+| December street (ch2 xmas, door, getaway) | grade only | evening, warm shop light, natural colours |
 | Night / windowless sets | night_interior (darker walls, warm practicals) | own lights kept |
