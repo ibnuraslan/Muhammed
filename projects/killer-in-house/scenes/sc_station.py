@@ -40,7 +40,7 @@ def build(variant=None):
                        box("Paper", (0, 0.15, 0.27), (0.22, 0.01, 0.2), pbr("Paper", (0.9, 0.88, 0.82), 0.8))], "Typewriter")
     c["typer"].location = (2.0, 1.6, 0.77)
     H.point((2.0, 1.4, 1.6), 8, (1.0, 0.8, 0.6), 0.2)
-    c["file"] = box("FilePhoto", (0, 0, -20), (0.13, 0.005, 0.18), pbr("Photo", (0.55, 0.53, 0.5), 0.4))
+    c["file"] = box("FilePhoto", (0, 0, -20), (0.18, 0.006, 0.24), pbr("Photo", (0.55, 0.53, 0.5), 0.4))
     ph.model("dining_chair_02", loc=(0, -0.75, 0), rot_z=math.pi)
     ph.model("dining_chair_02", loc=(0, 0.75, 0), rot_z=0.0)
     ph.model("dining_chair_02", loc=(2.0, 2.2, 0), rot_z=0.0)
@@ -59,14 +59,12 @@ def anim_common(c, sec, lean_in=0.0):
     seat(c["thin"], Vector((0, -0.75, 0)), math.pi, lean=24)
     H.rotl(c["thin"], "head", (1, 0, 0), 28)
     seat(c["cap"], Vector((0, 0.75, 0)), 0.0, lean=10 + 20 * lean_in)
-    for sd in ("L", "R"):
-        reach(c["thin"], sd, Vector((0.12 * (1 if sd == "L" else -1), -0.3, 0.8)), Vector((0, 0, -1)), Vector((0, 1, 0)))
+    # his hands stay in his lap (pose_sit), out of sight under the table edge
 
 
 def anim_interview(c, t):
     sec = t * DUR["interview"]
     anim_common(c, sec)
-    reach(c["cap"], "R", Vector((-0.2, 0.3, 0.79)), Vector((0, 0, -1)), Vector((0, -1, 0)))
     H.look(c["cap"], 4 * math.sin(sec), 8)
     ty = c["typist"]; seat(ty, Vector((2.0, 2.2, 0)), 0.0, lean=14)
     for sd, ph_ in (("L", 0.0), ("R", 1.7)):
@@ -80,7 +78,8 @@ def anim_photo(c, t):
     anim_common(c, sec)
     up = ease(min(1.0, sec / 1.2)) * (1 - ease(min(1.0, max(0.0, (sec - 3.0) / 1.0))))
     hd = c["thin"].bone_head("head")
-    p = Vector((0.15, 0.2, 0.8)).lerp(hd + Vector((0.28, 0.12, 0.0)), up)
+    ch = c["cap"].bone_head("spine05") + Vector((0.12, -0.32, -0.12))
+    p = Vector((0.15, 0.25, 0.79)).lerp(ch, up)
     c["file"].location = p; c["file"].rotation_euler = (0, 0, 0)
     reach(c["cap"], "R", p + Vector((0.0, 0.05, -0.08)), Vector((0, 0, -1)), Vector((0, -1, 0.5)))
     H.look(c["cap"], 0, 6)
@@ -91,8 +90,6 @@ def anim_talk(c, t):
     lean = ease(min(1.0, sec / 3.0))
     anim_common(c, sec, lean)
     H.rotl(c["thin"], "jaw", (1, 0, 0), 4 * max(0.0, math.sin(9 * sec))) if "jaw" in c["thin"].arm.pose.bones else None
-    reach(c["cap"], "R", Vector((-0.2, 0.25, 0.79)), Vector((0, 0, -1)), Vector((0, -1, 0)))
-    reach(c["cap"], "L", Vector((0.2, 0.25, 0.79)), Vector((0, 0, -1)), Vector((0, -1, 0)))
     H.look(c["cap"], 0, 14)
 
 

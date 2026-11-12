@@ -28,7 +28,7 @@ F1, C1 = 0.0, 2.7                  # ground floor / ceiling
 F2, C2 = 2.9, 5.4                  # upstairs floor / ceiling
 EAVE, RIDGE = 5.55, 7.25
 ROAD_Y = -15.5
-HATCH = (-1.2, -0.95)               # closet ceiling hatch centre (x, y)
+HATCH = (-1.1, -0.9)               # closet ceiling hatch centre (x, y)
 HATCH_W, HATCH_L = 0.2, 0.38       # about eight by fifteen inches
 
 _MAT = {}
@@ -470,11 +470,20 @@ def interiors(c):
     wall_x("PartUC", -IX, IX, -0.2, F2, C2, t, pl, [(-0.55, 0.85, F2, F2 + DH)])
     wall_x("PartUD", -0.6, 0.9, 1.8, F2, C2, t, pl, [(-0.3, 0.5, F2, F2 + DH)])
     # the closet in the upstairs bedroom (back-right corner): x[-1.8,-0.6] y[-1.2,-0.2]
-    wall_x("ClosetF", -1.8, -0.6, -1.2, F2, C2, 0.1, pl, [(-1.62, -0.92, F2, F2 + 2.0)])
-    wall_y("ClosetS", -1.2, -0.2, -1.8, F2, C2, 0.1, pl)
-    c["closet_door"] = hinge_door("ClosetDoor", (-1.62, -1.25, F2), 0.7, 2.0, 0.035, mat("door"))
-    box("ClosetShelf", (-1.2, -0.45, F2 + 1.75), (1.1, 0.4, 0.025), mat("oak"))
-    box("ClosetRod", (-1.2, -0.55, F2 + 1.68), (1.1, 0.02, 0.02), mat("chrome"))
+    # the closet (about 1 m wide): x[-1.6,-0.6] y[-1.2,-0.2]; shelf + hanging rail at the back, the slot above
+    cpl = mat("plaster")
+    wall_x("ClosetF", -1.6, -0.6, -1.2, F2, C2, 0.1, pl, [(-1.45, -0.75, F2, F2 + 2.0)])
+    wall_y("ClosetS", -1.2, -0.2, -1.6, F2, C2, 0.1, pl)
+    box("ClosetLiningL", (-1.545, -0.7, F2 + 1.25), (0.01, 0.98, 2.5), cpl)
+    box("ClosetLiningR", (-0.665, -0.7, F2 + 1.25), (0.01, 0.98, 2.5), cpl)
+    box("ClosetLiningB", (-1.1, -0.265, F2 + 1.25), (0.86, 0.01, 2.5), cpl)
+    c["closet_door"] = hinge_door("ClosetDoor", (-1.45, -1.25, F2), 0.7, 2.0, 0.035, mat("door"))
+    box("ClosetShelf", (-1.1, -0.43, F2 + 1.78), (0.9, 0.34, 0.025), mat("oak"))
+    box("ClosetRod", (-1.1, -0.52, F2 + 1.7), (0.9, 0.02, 0.02), mat("chrome"))
+    for k, (x, col) in enumerate(((-1.45, (0.3, 0.25, 0.2)), (-1.33, (0.35, 0.33, 0.3)))):
+        box("ClosetCoat", (x, -0.52, F2 + 1.15), (0.06, 0.45, 1.0), fabric("Coat%d" % k, col, 0.95, 0.3, 300), bevel=0.02)
+    for k in range(3):
+        box("HatBox", (-1.35 + 0.28 * k, -0.42, F2 + 1.88), (0.24, 0.24, 0.18), pbr("Box%d" % k, (0.5 - 0.06 * k, 0.42, 0.32), 0.8), bevel=0.01)
     # doors
     c["front_door"] = hinge_door("FrontDoor", (FRONT_DOOR[0] - FRONT_DOOR[1] / 2 + 0.03, -D2 + 0.12, F1), FRONT_DOOR[1] - 0.06, 2.1, 0.045, mat("door"))
     c["back_door"] = hinge_door("BackDoor", (BACK_DOOR[0] - BACK_DOOR[1] / 2 + 0.03, D2 - 0.12, F1), BACK_DOOR[1] - 0.06, 2.05, 0.045, mat("door"))
@@ -649,7 +658,7 @@ def upstairs_set(c):
     ph.model("hanging_picture_frame_02", loc=(-3.4, -0.33, F2 + 1.7), rot_z=math.pi, scale=0.8)
     uc, _ = ph.model("dining_chair_02", loc=(-0.95, -2.0, F2), rot_z=math.radians(-110)); c["up_chair"] = uc
     rug = box("RugUp", (-2.6, -2.6, F2 + 0.015), (2.2, 1.6, 0.008), fabric("RugUp", (0.25, 0.12, 0.08), 0.95, 0.3, 300))
-    c["closet_light"] = point((-1.2, -0.7, C2 - 0.3), 0.0, (1.0, 0.7, 0.42), 0.05)
+    c["closet_light"] = point((-1.1, -0.7, C2 - 0.3), 0.0, (1.0, 0.7, 0.42), 0.05)
 
 
 def attic_set(c):
@@ -657,27 +666,30 @@ def attic_set(c):
     hx, hy = HATCH; z = EAVE
     hp = join([box("HotPlate", (0, 0, 0.04), (0.28, 0.22, 0.07), pbr("HPEnamel", (0.35, 0.34, 0.3), 0.4, 0.3), bevel=0.01),
                cyl("HPCoil", (0, 0, 0.08), 0.085, 0.01, emissive("Coil", (1.0, 0.25, 0.05), 0.0), 24)], "HotPlate")
-    hp.location = (hx + 0.9, hy + 0.5, z); c["hotplate"] = hp
+    hp.location = (hx + 0.85, hy + 0.55, z); c["hotplate"] = hp
     coil = [m for m in hp.data.materials if m.name.startswith("Coil")][0]; c["coil_mat"] = coil
     rad = join([box("Radio", (0, 0, 0.17), (0.36, 0.2, 0.34), wood("RadioWood", (0.08, 0.04, 0.02), (0.22, 0.12, 0.06), scale=(0.3, 6, 6)), bevel=0.04),
                 box("RadioCloth", (0, -0.101, 0.2), (0.24, 0.004, 0.16), fabric("Grille", (0.5, 0.42, 0.3), 0.9, 0.2, 800)),
                 box("RadioDial", (0, -0.101, 0.07), (0.2, 0.004, 0.05), emissive("Dial", (1.0, 0.7, 0.35), 0.6))], "Radio")
-    rad.location = (hx - 0.9, hy + 0.6, z); rad.rotation_euler = (0, 0, math.radians(15)); c["radio"] = rad
+    rad.location = (hx + 0.35, hy + 0.85, z); rad.rotation_euler = (0, 0, math.radians(-10)); c["radio"] = rad
     # the bare wire: a thin curve from the radio and hot plate to an outlet rigged on a rafter
     cu = bpy.data.curves.new("Wire", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.004
-    sp = cu.splines.new('BEZIER'); pts = [(hx - 0.8, hy + 0.7, z + 0.02), (hx + 0.2, hy + 1.2, z + 0.01), (hx + 0.9, hy + 0.6, z + 0.03), (hx + 1.6, hy + 1.3, z + 0.5)]
+    sp = cu.splines.new('BEZIER'); pts = [(hx + 0.4, hy + 0.95, z + 0.02), (hx + 0.85, hy + 0.75, z + 0.01), (hx + 1.15, hy + 0.9, z + 0.02), (hx + 1.3, hy + 1.05, z + 0.28)]
     sp.bezier_points.add(len(pts) - 1)
     for bp, p in zip(sp.bezier_points, pts):
         bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
     w = bpy.data.objects.new("Wire", cu); bpy.context.collection.objects.link(w); w.data.materials.append(mat("black"))
-    box("Outlet", (hx + 1.6, hy + 1.3, z + 0.55), (0.07, 0.04, 0.1), pbr("Bakelite", (0.1, 0.06, 0.03), 0.3))
+    box("Post", (hx + 1.3, hy + 1.12, z + 0.45), (0.08, 0.08, 0.9), mat("raw"))
+    box("Outlet", (hx + 1.3, hy + 1.07, z + 0.32), (0.07, 0.03, 0.1), pbr("Bakelite", (0.1, 0.06, 0.03), 0.3))
     bl = box("Blanket", (hx + 0.1, hy + 1.9, z + 0.02), (0.8, 1.7, 0.03), fabric("Blanket", (0.32, 0.3, 0.24), 0.95, 0.4, 250), bevel=0.012)
     bl.rotation_euler = (0, 0, math.radians(8)); c["blanket"] = bl
     # a few cans and a jar
     for k in range(3):
         cyl("Can", (hx + 0.5 + 0.09 * k, hy + 0.15, z + 0.06), 0.035, 0.11, pbr("Tin", (0.55, 0.52, 0.48), 0.35, 0.9), 16)
     c["hp_light"] = point((hx + 0.9, hy + 0.5, z + 0.15), 0.0, (1.0, 0.35, 0.08), 0.06)
-    c["attic_fill"] = point((hx + 0.3, hy + 1.2, z + 0.9), 1.5, (0.7, 0.75, 0.9), 0.6)          # faint light leaking in at the eaves
+    c["attic_fill"] = point((hx + 0.3, hy + 1.2, z + 0.9), 1.5, (0.7, 0.75, 0.9), 0.6)
+    c["attic_fill2"] = area_light((hx - 1.5, hy + 0.5, z + 1.2), (0, 0, 0), 2.0, 0.0, (0.75, 0.8, 0.95))
+    c["attic_fill2"].visible_camera = False          # faint light leaking in at the eaves
     c["upstairs_hall"] = point((0.2, 0.8, C2 - 0.3), 0.0, (1.0, 0.75, 0.5), 0.05)
 
 
@@ -878,12 +890,66 @@ def person(name, kind):
     h = Human(name, gender=spec["gender"], years=spec["years"], muscle=spec.get("muscle", 0.5), weight=spec["weight"], height=spec["height"],
               skin=sk, eyelashes="eyelashes01")
     add_asset(h, "clothes", spec["cloth"], rough=0.8, sheen=0.3, **spec["cv"])
-    add_asset(h, "clothes", "shoes02" if spec["gender"] < 0.5 else "shoes01", val=0.15, rough=0.45)
+    add_asset(h, "clothes", "shoes02" if spec["gender"] < 0.5 else "shoes01", sat=0.3 if kind == "thin" else 1.0, val=0.08 if kind == "thin" else 0.15, rough=0.6)
     if spec["hat"]:
         add_hat(h, "grey" if kind in ("detective", "son") else "black")
     else:
         add_asset(h, "hair", spec["hair"], sat=0.1 if spec["hv"] > 0.6 else 0.5, val=spec["hv"], rough=0.45)
+    if kind == "thin":
+        ragged(h)
     h.kind = kind
+    return h
+
+
+def ragged(h):
+    """Coneys after nine months in the crawl space: grime and torn dark patches on the clothes, a matted beard,
+    hollow cheeks (darkened), unkempt hair (scaled up, roughened)."""
+    for o in h.parts:
+        for m in o.data.materials:
+            if m is None or not m.use_nodes or "Principled BSDF" not in m.node_tree.nodes:
+                continue
+            N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+            if "casualsuit" in m.name or "shoes" in m.name:
+                tc = N.new("ShaderNodeTexCoord")
+                n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 9; n.inputs['Detail'].default_value = 8; L.new(tc.outputs['Object'], n.inputs['Vector'])
+                v = N.new("ShaderNodeTexVoronoi"); v.inputs['Scale'].default_value = 7; L.new(tc.outputs['Object'], v.inputs['Vector'])
+                tear = N.new("ShaderNodeMath"); tear.operation = 'LESS_THAN'; tear.inputs[1].default_value = 0.07; L.new(v.outputs['Distance'], tear.inputs[0])
+                src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+                grime = N.new("ShaderNodeMix"); grime.data_type = 'RGBA'; grime.blend_type = 'MULTIPLY'
+                L.new(n.outputs['Fac'], grime.inputs['Factor'])
+                if src: L.new(src, grime.inputs[6])
+                grime.inputs[7].default_value = (0.35, 0.28, 0.2, 1)
+                holes = N.new("ShaderNodeMix"); holes.data_type = 'RGBA'; L.new(tear.outputs[0], holes.inputs['Factor'])
+                L.new(grime.outputs[2], holes.inputs[6]); holes.inputs[7].default_value = (0.03, 0.025, 0.02, 1)
+                L.new(holes.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.95
+    # beard + sunken cheeks: a vertex colour on the body, darkening the lower face (follows the rig)
+    me = h.body.data
+    co = np.array([v.co[:] for v in me.vertices])
+    hv = h.vertex_region(["head", "jaw"], 0.5) if "jaw" in h.rig.bones else h.vertex_region(["head"], 0.5)
+    face = np.zeros(len(co))
+    if len(hv):
+        hc = co[hv]; zmin = hc[:, 2].min(); zmax = hc[:, 2].max(); ymin = hc[:, 1].min()
+        for i in hv:
+            x, y, z = co[i]
+            beard = max(0.0, 1.0 - (z - zmin) / 0.085) * (1.0 if y < ymin + 0.11 else 0.4)
+            cheek = 0.5 * max(0.0, 1.0 - abs(z - (zmin + 0.1)) / 0.03) * (1.0 if abs(x) > 0.035 and y < ymin + 0.07 else 0.0)
+            face[i] = min(1.0, beard + cheek)
+    attr = me.color_attributes.new("beard", 'FLOAT_COLOR', 'POINT')
+    for i, f in enumerate(face):
+        attr.data[i].color = (f, f, f, 1.0)
+    m = h.skin_mat; N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    a = N.new("ShaderNodeAttribute"); a.attribute_name = "beard"; a.attribute_type = 'GEOMETRY'
+    tc = N.new("ShaderNodeTexCoord"); n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 900; L.new(tc.outputs['Object'], n.inputs['Vector'])
+    f = N.new("ShaderNodeMath"); f.operation = 'MULTIPLY'; L.new(a.outputs['Fac'], f.inputs[0]); L.new(n.outputs['Fac'], f.inputs[1])
+    f2 = N.new("ShaderNodeMath"); f2.operation = 'MULTIPLY'; f2.inputs[1].default_value = 1.6; f2.use_clamp = True; L.new(f.outputs[0], f2.inputs[0])
+    src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(f2.outputs[0], mx.inputs['Factor'])
+    if src: L.new(src, mx.inputs[6])
+    mx.inputs[7].default_value = (0.09, 0.07, 0.055, 1)
+    L.new(mx.outputs[2], p.inputs['Base Color'])
+    for o in h.parts:            # hair: bigger, matted
+        if "short02" in o.name:
+            o.modifiers.new("matted", 'DISPLACE').strength = 0.012
     return h
 
 

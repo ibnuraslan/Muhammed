@@ -541,84 +541,87 @@ def _():
     return cam, anim
 
 
-def legs_in_hatch(c, rise):
-    """The thin man hanging in the hatch: body vertical, hips at the hatch, rising by `rise` metres."""
+def legs_in_hatch(c, feet_below):
+    """Coneys hanging in the slot: body vertical, arms up inside the attic, feet `feet_below` metres under the ceiling.
+    The left knee bends: that shoe catches on the edge."""
     h = thin_man(c); hx, hy = HATCH
     reset_pose(h)
     for sd in ("L", "R"):
-        H.rotl(h, f"foot.{sd}", (1, 0, 0), 40)
-        h.aim(f"upperarm01.{sd}", (0, 0, 1)); h.aim(f"upperarm02.{sd}", (0, 0, 1)); h.aim(f"lowerarm01.{sd}", (0, 0, 1)); h.aim(f"lowerarm02.{sd}", (0, 0, 1))
-    H.rotl(h, "upperleg01.L", (0, 1, 0), -3); H.rotl(h, "upperleg01.R", (0, 1, 0), 3)
-    h.arm.rotation_euler = (0, 0, math.radians(90)); bpy.context.view_layer.update()
-    hip0 = h.joint("upperleg01.L").z if False else 0.95
-    h.arm.location = (hx, hy, C2 - hip0 - 0.45 + rise); bpy.context.view_layer.update()
+        H.rotl(h, f"foot.{sd}", (1, 0, 0), 35)
+        for b in ("upperarm01", "upperarm02", "lowerarm01", "lowerarm02"):
+            h.aim(f"{b}.{sd}", (0, 0, 1))
+    H.rotl(h, "upperleg01.L", (1, 0, 0), -14); H.rotl(h, "lowerleg01.L", (1, 0, 0), 38)
+    h.arm.rotation_euler = (0, 0, math.radians(90)); h.arm.location = (hx, hy, 0); bpy.context.view_layer.update()
+    w = np.concatenate([H._world_verts(o) for o in h.parts if o.type == 'MESH'])
+    h.arm.location.z += (C2 - feet_below) - w[:, 2].min(); bpy.context.view_layer.update()
     return h
 
 
-@move("legs_hatch", "night", 4.0, rooms=("upstairs", "attic"), dof=4.0, haze=((-1.8, -1.2, F2), (-0.6, -0.2, C2)))
+def closet_dust(c, sec, n=40, rate=0.25):
+    if "cdust" not in c:
+        c["cdust"] = H.leaf_cloud(n, HATCH, (0.12, 0.2), C2 - 0.02, col=(0.85, 0.82, 0.75), seed=31)
+        for o in c["cdust"]:
+            o.scale = (0.01, 0.01, 1)
+    H.fall_leaves(c["cdust"], sec * rate, ground=F2, drift=(0.0, 0.0))
+
+
+@move("legs_hatch", "night", 4.0, rooms=("upstairs", "attic"), dof=4.0, haze=((-1.6, -1.2, F2), (-0.6, -0.2, C2)))
 def _():
     def anim(c, t):
         sec = t * DUR["legs_hatch"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
-        c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
-        rise = 0.55 * ease(min(1.0, sec / 3.6))
-        legs_in_hatch(c, rise + 0.15 * math.sin(6 * sec) * 0.1)
-        bm = beams(c, 1)
-        H.aim_obj(bm[0], Vector((-1.0, -2.2, F2 + 1.2)), Vector((HATCH[0], HATCH[1], C2 - 0.6)))
+        c["hatch"].location = c["hatch_home"] + Vector((0.32, 0, 0.02))
+        legs_in_hatch(c, 1.25 - 0.75 * ease(min(1.0, sec / 3.6)) + 0.015 * math.sin(9 * sec))
+        closet_dust(c, sec)
+        bm = beams(c, 1, 350)
+        H.aim_obj(bm[0], Vector((-0.8, -1.9, F2 + 0.9)), Vector((HATCH[0], HATCH[1], C2 - 0.35)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-0.95, -1.12, F2 + 0.3)).lerp(Vector((-0.98, -1.1, F2 + 0.4)), e), Vector((HATCH[0], HATCH[1], C2 - 0.55)), 22, (0, 1, 0))
+        return (Vector((-1.15, -3.3, F2 + 0.45)).lerp(Vector((-1.13, -3.1, F2 + 0.5)), e), Vector((HATCH[0], HATCH[1], C2 - 0.55)), 40)
     return cam, anim
 
 
-@move("haul_down", "night", 4.0, cast=("d1:detective", "d2:detective2"), rooms=("upstairs", "attic"), haze=((-4.2, -4.7, F2), (-0.6, -0.2, C2)))
+@move("haul_down", "night", 4.0, cast=("d1:detective", "d2:detective2"), rooms=("upstairs", "attic"), haze=((-1.6, -1.2, F2), (-0.6, -0.2, C2)))
 def _():
     def anim(c, t):
         sec = t * DUR["haul_down"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
-        c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
-        pull = 0.25 * ease(min(1.0, sec / 3.0)) + 0.04 * math.sin(9 * sec)
-        h = legs_in_hatch(c, 0.35 - pull)
-        bm = beams(c, 1)
+        c["hatch"].location = c["hatch_home"] + Vector((0.32, 0, 0.02))
+        h = legs_in_hatch(c, 0.75 + 0.35 * ease(min(1.0, sec / 3.0)) + 0.03 * math.sin(9 * sec))
+        closet_dust(c, sec, 60, 0.4)
         d1, d2 = P(c, "d1"), P(c, "d2")
-        H.stand_at(d1, (-1.35, -0.95, F2), math.radians(30), z=F2); H.stand_at(d2, (-1.0, -1.45, F2), math.radians(-20), z=F2)
-        ank = h.bone_head("foot.L"); kn = h.bone_head("lowerleg01.R")
-        reach(d1, "R", ank + Vector((0.05, 0, 0)), Vector((0, -1, -1)), Vector((0, 0, 1))); reach(d1, "L", ank + Vector((0.0, 0.05, 0.08)), Vector((0, -1, -1)), Vector((0, 0, 1)))
-        reach(d2, "R", kn + Vector((0, -0.05, 0)), Vector((0, -1, -1)), Vector((0, 0, 1)))
+        H.stand_at(d1, (-1.3, -1.3, F2), math.radians(-15) + math.pi, z=F2); H.stand_at(d2, (-0.85, -1.35, F2), math.radians(15) + math.pi, z=F2)
+        ank = h.bone_head("foot.R"); kn = h.bone_head("lowerleg01.L")
+        reach(d1, "R", ank + Vector((0.0, -0.04, 0)), Vector((0, -1, -1)), Vector((0, 0, 1))); reach(d1, "L", ank + Vector((-0.03, -0.04, -0.1)), Vector((0, -1, -1)), Vector((0, 0, 1)))
+        reach(d2, "L", kn + Vector((0.03, -0.04, 0)), Vector((0, -1, -1)), Vector((0, 0, 1)))
         H.look(d1, 0, -35); H.look(d2, 0, -40)
-        H.aim_obj(bm[0], Vector((-2.4, -2.6, F2 + 0.3)), Vector((-1.2, -0.8, C2 - 0.6)))
+        bm = beams(c, 1, 260)
+        H.aim_obj(bm[0], Vector((-2.2, -2.6, F2 + 0.5)), Vector((-1.1, -0.9, C2 - 0.7)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-3.2, -3.4, F2 + 1.5)).lerp(Vector((-3.0, -3.1, F2 + 1.45)), e), Vector((-1.2, -0.9, F2 + 1.6)), 26)
+        return (Vector((-1.0, -3.4, F2 + 1.25)).lerp(Vector((-1.05, -3.1, F2 + 1.25)), e), Vector((-1.1, -0.95, F2 + 1.65)), 26)
     return cam, anim
 
 
-@move("drop_out", "night", 4.0, cast=("d1:detective", "d2:detective2"), rooms=("upstairs", "attic"))
+@move("drop_out", "night", 4.0, cast=("d1:detective", "d2:detective2"), rooms=("upstairs", "attic"), haze=((-2.6, -2.6, F2), (-0.6, -0.2, C2)))
 def _():
     def anim(c, t):
         sec = t * DUR["drop_out"]
         c["closet_door"].rotation_euler = (0, 0, math.radians(-105))
+        closet_dust(c, sec + 3.0, 60, 0.4)
         h = thin_man(c)
         u = ease(min(1.0, sec / 3.5))
-        H.walk_to(h, (-1.2, -0.9, F2), (-2.1, -2.3, F2), u * 0.8, swing=4, stride=0.8, floor=F2)
-        H.rotl(h, "spine03", (1, 0, 0), 25); H.rotl(h, "head", (1, 0, 0), 25)
+        H.walk_to(h, (-1.1, -1.0, F2), (-1.4, -2.3, F2), u * 0.8, swing=4, stride=0.8, floor=F2)
+        H.rotl(h, "spine03", (1, 0, 0), 28); H.rotl(h, "head", (1, 0, 0), 25)
         d1, d2 = P(c, "d1"), P(c, "d2")
-        H.walk_to(d1, (-1.6, -1.4, F2), (-2.5, -2.4, F2), u * 0.8, swing=3, stride=0.8, floor=F2)
-        H.stand_at(d2, (-1.0, -1.9, F2), math.radians(200), z=F2)
-        reach(d1, "R", h.bone_head("upperarm01.L") + Vector((0, 0, -0.1)), Vector((0, 0, -1)), Vector((1, 0, 0)))
-        bm = beams(c, 1); hold_torch(d2, bm[0], h.bone_head("spine05"))
+        H.stand_at(d1, (-1.95, -1.9, F2), math.radians(-60), z=F2)
+        H.stand_at(d2, (-0.55, -2.3, F2), math.radians(60), z=F2)
+        reach(d1, "R", h.bone_head("upperarm01.R") + Vector((0, 0, -0.1)), Vector((0, 0, -1)), Vector((1, 0, 0)))
+        bm = beams(c, 1, 300); hold_torch(d2, bm[0], h.bone_head("spine05"))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-3.5, -4.0, F2 + 1.6)).lerp(Vector((-3.3, -3.8, F2 + 1.55)), e), Vector((-1.7, -1.6, F2 + 1.0)), 28)
+        return (Vector((-2.9, -4.0, F2 + 1.45)).lerp(Vector((-2.7, -3.8, F2 + 1.45)), e), Vector((-1.3, -1.8, F2 + 1.0)), 28)
     return cam, anim
-
-
-def thin_on_bed(c, sec):
-    h = thin_man(c)
-    reset_pose(h); pose_sit(h, lean=22)
-    h.arm.rotation_euler = (0, 0, math.radians(0)); h.arm.location = (-3.2, -3.5, F2); bpy.context.view_layer.update(); H.ground_to(h, F2)
-    H.rotl(h, "head", (1, 0, 0), 30 + 2 * math.sin(sec))
-    return h
 
 
 @move("gaunt_bed", "night", 4.5, cast=("d1:detective",), rooms=("upstairs", "attic"))
@@ -646,32 +649,40 @@ def _():
     return cam, anim
 
 
-@move("officer_hatch", "night", 4.5, cast=("z:officer",), rooms=("upstairs", "attic"))
+def zarnow(c, sec, head_up):
+    c["closet_door"].rotation_euler = (0, 0, math.radians(-105)); c["closet_light"].data.energy = 0.0
+    c["hatch"].location = c["hatch_home"] + Vector((0.32, 0, 0.02))
+    if "stool" not in c:
+        import ph
+        ch, _ = ph.model("dining_chair_02", loc=(HATCH[0], HATCH[1] - 0.05, F2), rot_z=math.pi); c["stool"] = ch
+        c["crate"] = box("Crate", (HATCH[0], HATCH[1] - 0.05, F2 + 0.47 + 0.18), (0.42, 0.36, 0.36), H.mat("raw"), bevel=0.01)
+        c["torch"] = H.flashlight("ZTorch"); c["torch"].data.energy = 260
+        c["cfill"] = H.point((-1.1, -1.6, F2 + 1.0), 4, (0.55, 0.68, 1.0), 0.3)
+    h = P(c, "z")
+    base = F2 + 0.83
+    H.stand_at(h, (HATCH[0], HATCH[1] - 0.04, base), math.radians(90), z=base - 0.25 + 0.25 * head_up)
+    return h
+
+
+@move("officer_hatch", "night", 4.5, cast=("z:officer",), rooms=("upstairs", "attic"), dof=4.0)
 def _():
     def anim(c, t):
         sec = t * DUR["officer_hatch"]
-        c["closet_door"].rotation_euler = (0, 0, math.radians(-105)); c["closet_light"].data.energy = 15
-        c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
-        if "stool" not in c:
-            import ph
-            ch, _ = ph.model("dining_chair_02", loc=(HATCH[0], HATCH[1] + 0.05, F2), rot_z=math.pi); c["stool"] = ch
-            c["torch"] = H.flashlight("ZTorch"); c["torch"].data.energy = 200
-        h = P(c, "z")
-        rise = 0.47 * ease(min(1.0, sec / 2.5))
-        H.stand_at(h, (HATCH[0], HATCH[1] - 0.05, F2), math.radians(90), z=F2 + rise)
+        u = ease(min(1.0, sec / 2.2))
+        h = zarnow(c, sec, u)
         H.look(h, 0, -10)
-        hand = Vector((HATCH[0] + 0.05, HATCH[1] + 0.12, C2 + 0.12 * ease(min(1.0, max(0.0, (sec - 1.5) / 1.5)))))
+        hand = Vector((HATCH[0] + 0.04, HATCH[1] + 0.1, C2 + 0.12 * ease(min(1.0, max(0.0, (sec - 1.5) / 1.5)))))
         reach(h, "R", hand, Vector((0, 0, -1)), Vector((0, 0, 1)))
-        reach(h, "L", Vector((-1.6, -0.4, F2 + 1.75)), Vector((0, 0, -1)), Vector((-1, 0, 0.3)))
+        reach(h, "L", Vector((HATCH[0] - 0.2, HATCH[1] + 0.3, F2 + 1.78)), Vector((0, 0, -1)), Vector((0, 1, 0)))
         H.aim_obj(c["torch"], hand + Vector((0, 0, 0.1)), Vector((HATCH[0] + 1.5, HATCH[1] + 1.5, EAVE + 0.3)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.35, -2.9, F2 + 1.0)).lerp(Vector((-1.3, -2.6, F2 + 1.05)), e), Vector((-1.2, -0.95, F2 + 2.0)), 26)
+        return (Vector((-0.75, -0.33, F2 + 0.35)).lerp(Vector((-0.77, -0.35, F2 + 0.45)), e), Vector((HATCH[0], HATCH[1], C2 - 0.25)), 20, (0, -1, 0))
     return cam, anim
 
 
 def attic_light(c, on=True, hot=0.0):
-    c["attic_fill"].data.energy = 3.0
+    c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
     c["hp_light"].data.energy = 14 * hot
     c["coil_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 6.0 * hot
 
@@ -680,7 +691,7 @@ def attic_light(c, on=True, hot=0.0):
 def _():
     def anim(c, t):
         sec = t * DUR["attic_torch"]
-        c["attic_fill"].data.energy = 3.0
+        c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
         c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
         bm = beams(c, 1, 400)
         hx, hy = HATCH
@@ -696,7 +707,7 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["attic_track"]
-        c["attic_fill"].data.energy = 3.0
+        c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
         bm = beams(c, 1, 400); hx, hy = HATCH
         H.aim_obj(bm[0], Vector((hx, hy, EAVE + 0.2)), Vector((hx + 0.2 + 0.8 * math.sin(0.5 * sec), hy + 2.0, EAVE + 0.1)))
     def cam(c, t):
@@ -709,14 +720,14 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["attic_finds"]
-        c["attic_fill"].data.energy = 3.0
+        c["attic_fill"].data.energy = 6.0; c["attic_fill2"].data.energy = 25.0
         bm = beams(c, 1, 400); hx, hy = HATCH
-        tgt = Vector((hx - 0.9, hy + 0.6, EAVE + 0.15)).lerp(Vector((hx + 0.9, hy + 0.5, EAVE + 0.05)), ease(t))
-        bm[0].data.energy = 150
-        H.aim_obj(bm[0], Vector((hx, hy - 0.1, EAVE + 0.25)), tgt)
+        tgt = Vector((hx + 0.5, hy + 0.8, EAVE + 0.1)).lerp(Vector((hx + 0.95, hy + 0.75, EAVE + 0.1)), ease(t))
+        bm[0].data.energy = 120; bm[0].data.spot_size = math.radians(45)
+        H.aim_obj(bm[0], Vector((hx, hy - 0.05, EAVE + 0.3)), tgt)
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
-        return (Vector((hx - 0.3, hy - 0.6, EAVE + 0.45)).lerp(Vector((hx + 0.1, hy - 0.5, EAVE + 0.45)), e), Vector((hx - 0.6, hy + 0.7, EAVE + 0.1)).lerp(Vector((hx + 0.7, hy + 0.6, EAVE + 0.05)), e), 28)
+        return (Vector((hx + 0.1, hy - 0.45, EAVE + 0.55)).lerp(Vector((hx + 0.35, hy - 0.4, EAVE + 0.55)), e), Vector((hx + 0.75, hy + 0.85, EAVE + 0.1)), 28)
     return cam, anim
 
 
@@ -724,20 +735,16 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["recoil"]
-        c["closet_door"].rotation_euler = (0, 0, math.radians(-105)); c["closet_light"].data.energy = 15
-        c["hatch"].location = c["hatch_home"] + Vector((0.4, 0, 0.02))
-        if "stool" not in c:
-            import ph
-            ch, _ = ph.model("dining_chair_02", loc=(HATCH[0], HATCH[1], F2), rot_z=math.pi); c["stool"] = ch
-        h = P(c, "z")
         down = ease(min(1.0, max(0.0, (sec - 0.4) / 0.8)))
-        H.stand_at(h, (HATCH[0], HATCH[1] - 0.15 * down, F2 + 0.47), math.radians(90), z=F2 + 0.47 - 0.05 * down)
-        H.rotl(h, "spine03", (1, 0, 0), 20 * down); H.rotl(h, "head", (0, 0, 1), -30 * down)
+        h = zarnow(c, sec, 1.0 - down)
+        H.rotl(h, "spine03", (1, 0, 0), 20 * down); H.rotl(h, "head", (0, 0, 1), -35 * down); H.rotl(h, "head", (1, 0, 0), 20 * down)
         hd = h.bone_head("head")
         reach(h, "R", hd + Vector((0.12, -0.15, -0.08)), Vector((1, 0, -1)), Vector((0, 1, 0.3)))
+        reach(h, "L", Vector((HATCH[0] - 0.3, HATCH[1] - 0.3, F2 + 1.4)), Vector((0, 0, -1)), Vector((-1, 0, 0)))
+        H.aim_obj(c["torch"], h.bone_tail("wrist.L"), Vector((HATCH[0] + 0.5, HATCH[1] - 1.5, F2)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((-1.4, -3.3, F2 + 1.3)).lerp(Vector((-1.35, -3.0, F2 + 1.3)), e), Vector((-1.2, -1.0, F2 + 1.7)), 28)
+        return (Vector((-1.15, -3.1, F2 + 1.25)).lerp(Vector((-1.12, -2.85, F2 + 1.25)), e), Vector((-1.1, -0.95, F2 + 1.75)), 28)
     return cam, anim
 
 
@@ -781,14 +788,21 @@ def _():
 def _():
     def anim(c, t):
         sec = t * DUR["hotplate_glow"]
-        attic_light(c, hot=0.8 + 0.2 * math.sin(3 * sec))
+        attic_light(c, hot=0.8 + 0.2 * math.sin(3 * sec)); c["attic_fill2"].data.energy = 8.0
         h = thin_man(c)
-        reset_pose(h); pose_sit(h, lean=30)
-        h.arm.rotation_euler = (0, 0, math.radians(-110)); h.arm.location = (HATCH[0] + 0.3, HATCH[1] + 0.9, EAVE); bpy.context.view_layer.update(); H.ground_to(h, EAVE)
-        H.rotl(h, "head", (1, 0, 0), 25)
+        reset_pose(h)
+        for sd, sg in (("L", 1), ("R", -1)):          # knees drawn up, curled on his side
+            H.rotl(h, f"upperleg01.{sd}", (1, 0, 0), -70); H.rotl(h, f"lowerleg01.{sd}", (1, 0, 0), 95)
+            h.aim(f"upperarm01.{sd}", (0, -0.6, -0.8)); h.aim(f"lowerarm01.{sd}", (sg * -0.6, -0.8, 0.2))
+        H.rotl(h, "spine03", (1, 0, 0), 20); H.rotl(h, "head", (1, 0, 0), 20)
+        h.arm.rotation_euler = (0, math.radians(90), math.radians(-20)); h.arm.location = (HATCH[0] - 0.1, HATCH[1] + 1.6, EAVE + 0.25)
+        bpy.context.view_layer.update()
+        w = np.concatenate([H._world_verts(o) for o in h.parts if o.type == 'MESH'])
+        h.arm.location.z += EAVE + 0.03 - w[:, 2].min(); bpy.context.view_layer.update()
+        H.rotl(h, "spine05", (0, 0, 1), 3 * math.sin(0.8 * sec))
     def cam(c, t):
         e = ease(t); hx, hy = HATCH
-        return (Vector((hx + 2.6, hy - 0.4, EAVE + 0.55)).lerp(Vector((hx + 2.2, hy - 0.2, EAVE + 0.55)), e), Vector((hx + 0.5, hy + 0.8, EAVE + 0.5)), 30)
+        return (Vector((hx + 2.4, hy + 0.1, EAVE + 0.5)).lerp(Vector((hx + 2.1, hy + 0.3, EAVE + 0.5)), e), Vector((hx + 0.2, hy + 1.3, EAVE + 0.25)), 30)
     return cam, anim
 
 
