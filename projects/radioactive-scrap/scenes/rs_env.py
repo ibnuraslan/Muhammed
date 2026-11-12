@@ -280,13 +280,18 @@ def puddles(rng, area, n=12, avoid=(), size=(0.8, 3.0), z=0.004):
 # ------------------------------------------------------------------ cinematic house look (look.py, Nov 2026)
 KEY_PREFIXES = ("Daylight", "DoorDay", "DoorShaft", "RoofShaft", "RoofDay", "FurnaceLight", "ORLamp", "LightField")
 NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
+EXT_EXPOSURE = {"mist": -0.2, "dusk": 0.2}
 
 
-def cinematic(c, mod_name, mood="overcast", azim=200, keys=KEY_PREFIXES, night=NIGHT_VARIANTS, gain=1.8):
+def cinematic(c, mod_name, mood="mist", keys=KEY_PREFIXES, night=("night",), dusk=("dusk", "yard_dusk"), gain=1.8):
     """Apply the house look recipe at the end of a set's build(), per shot: the move is read from argv (run.py /
-    bake.py <set> <move>). The camera's start position decides the recipe: a ceiling overhead -> interior by day
-    (the room's window/door/shaft lights become the keys, everything else negative fill, dark walls, warm
-    practicals); open sky -> exterior day_light (low sky, one sun key); night/dusk variants -> night_interior."""
+    bake.py <set> <move>). Benchmark: nvidia_doc/review/cinematic_look_v3.jpg (mist day, dusk).
+    The camera's start position decides the recipe:
+      open sky  -> exterior: dark slate "mist" sky (or "dusk"), one low sun key BEHIND the subject (from ahead of
+                   the camera, 35 deg off axis), ground haze around the camera, darker ground and walls;
+      ceiling   -> interior by day: the room's window/door/shaft lights become the keys, everything else negative
+                   fill, dark walls, warm practicals;
+      night     -> night_interior (the set's own lights, deeper walls, warm practicals)."""
     import sys
     import look
     if not look.enabled():
@@ -297,22 +302,37 @@ def cinematic(c, mod_name, mood="overcast", azim=200, keys=KEY_PREFIXES, night=N
     var = getattr(mod, "VARIANT_FOR", {}).get(move)
     if var in night:
         return look.night_interior()
-    camp = None
+    camp = tgt = None
     if spec:
-        try:
-            camp = Vector(spec["cam"](c, 0.0)[0])
-        except Exception:
+        for pre in (False, True):
             try:
-                spec["anim"](c, 0.0); camp = Vector(spec["cam"](c, 0.0)[0])
+                if pre:
+                    spec["anim"](c, 0.0)
+                r = spec["cam"](c, 0.0); camp, tgt = Vector(r[0]), Vector(r[1]); break
             except Exception:
-                camp = None
+                camp = tgt = None
     sc = bpy.context.scene; bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
     inside = False
     if camp is not None:
-        hit, loc, *_ = sc.ray_cast(dg, camp, Vector((0, 0, 1)), distance=8.0)
+        hit, *_ = sc.ray_cast(dg, camp, Vector((0, 0, 1)), distance=8.0)
         inside = bool(hit)
     if not inside:
-        return look.day_light(mood, azim=azim)
+        md = "dusk" if var in dusk else mood
+        azim = 200.0
+        if camp is not None:
+            v = tgt - camp
+            azim = math.degrees(math.atan2(v.x, -v.y)) + 35.0       # sun ahead of the camera: subjects backlit
+        for o in sc.objects:                       # the set's own haze would double the new ground haze
+            if o.name.startswith("Haze") and o.data.materials:
+                for n in o.data.materials[0].node_tree.nodes:
+                    if n.type == 'PRINCIPLED_VOLUME':
+                        n.inputs['Density'].default_value *= 0.4
+        look.negative_fill(0.2)                    # no flat fill outdoors: the sun is the key
+        k = look.day_light(md, azim=azim, exposure=EXT_EXPOSURE[md])   # open yards: the forest exposure would blow out
+        ctr = camp if camp is not None else Vector((0, 0, 0))
+        look.ground_haze((ctr.x, ctr.y), (320.0, 320.0), md, height=7.0, density=0.004)
+        look.darken_surfaces(0.25, 0.85)
+        return k
     near = [o for o in sc.objects if o.type == 'LIGHT' and o.name.startswith(keys)
             and (camp is None or (o.location - camp).length < 18.0)]
     for o in near:
