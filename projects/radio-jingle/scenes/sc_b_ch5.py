@@ -189,6 +189,7 @@ def build(variant=None):
         ph.model("security_light", loc=(2.4, 3.45, 5.6), rot_z=math.pi) if True else None
         B.key_sun(4, 75, 4.0, color=(1.0, 0.62, 0.35), angle=1.5)             # low dawn sun along the wall
         man = B.mazurek("Released", 2023)
+        yl = area_light((0.0, 8.0, 5.5), (0, 0, 0), 4.0, 120, (0.75, 0.8, 0.9)); yl.visible_camera = False   # soft yard skylight
         c["man"] = man
         c["bag"] = box("Holdall", (0, 0, -30), (0.5, 0.25, 0.28), pbr("Holdall", (0.08, 0.08, 0.09), 0.6), bevel=0.06)
         B.room_haze((0, 0, 4), (120, 60, 8), density=0.02, color=(0.85, 0.82, 0.8))
@@ -255,7 +256,7 @@ def anim(c, t, move):
     else:
         man = c["man"]
         op = ease(min(1.0, sec / 2.2)) if move == "gate" else 1.0
-        c["gate"].location.x = 4.2 * op
+        c["gate"].location.x = 0.7 + 3.5 * op          # ajar at the start: dawn light already in the gap
         if move == "gate":
             u = min(1.0, max(0.0, (sec - 1.4) / (DUR[move] - 1.4)))
             B.walk_to(man, (0.0, 6.6, 0), (0.6, -3.5, 0), u, 6.0 * u + 0.001, stride=20, swing=10)

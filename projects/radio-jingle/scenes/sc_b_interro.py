@@ -180,7 +180,7 @@ def anim(c, t, move):
         man.rot("head", (0, 0, 1), 15 * math.sin(sec * 3.4) * (1 if sec < 1.6 or sec > 3.3 else 0.3))
     elif move == "leave":
         B.hide_person(d1); B.hide_person(d2)
-        c["door"].rotation_euler = (0, 0, math.radians(-95) * ease(min(1.0, sec / 1.2)))
+        c["door"].rotation_euler = (0, 0, math.radians(-30 - 65 * ease(min(1.0, sec / 1.2))))
         u = ease(min(1.0, max(0.0, (sec - 0.6) / (DUR["leave"] - 0.6))))
         B.walk_to(man, (2.55, 0.0, 0), (5.6, 0.05, 0), u, 4.2 * u, stride=22, swing=6)
         # the coat folded over his left forearm (forearm held level in front of the waist)

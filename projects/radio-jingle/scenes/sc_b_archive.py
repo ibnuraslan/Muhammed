@@ -133,7 +133,7 @@ def anim(c, t, move):
         cl = c["clerk"]
         if move == "aisle":
             u = ease(min(1.0, sec / 3.0))
-            B.walk_to(cl, (0.0, -5.0, 0), (-0.05, c["tray_in"].y - 0.65, 0), u, 4.0 * u + 0.001, stride=20, swing=10)
+            B.walk_to(cl, (0.0, -4.0, 0), (-0.05, c["tray_in"].y - 0.65, 0), u, 4.0 * u + 0.001, stride=20, swing=10)
             pull = ease(min(1.0, max(0.0, (sec - 3.2) / 1.2)))
             tr = c["tray"]; tr.location = c["tray_in"] + Vector((0.4 * pull, 0, 0)); tr.rotation_euler = (0, 0, math.pi / 2)
             if sec > 3.0:
