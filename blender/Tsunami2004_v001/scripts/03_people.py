@@ -33,7 +33,9 @@ class Person:
             gz = ground_z(pos.x, pos.y)
             hd = head(f) if callable(head) else head
             sd = (sum(map(ord, self.name)) % 97) / 97.0 * 6.28
-            hd = (hd[0] + 3.0 * math.sin(ph * 1.1 + sd), hd[1] + 14.0 * math.sin(ph * 0.7 + sd) + 6.0 * math.sin(ph * 1.9 + 2 * sd))
+            calm = getattr(self, "calm", None)
+            amp = 0.15 if (calm and calm[0] <= f <= calm[1]) else 1.0
+            hd = (hd[0] + 3.0 * amp * math.sin(ph * 1.1 + sd), hd[1] + amp * (14.0 * math.sin(ph * 0.7 + sd) + 6.0 * math.sin(ph * 1.9 + 2 * sd)))
             fl = flex(f) if callable(flex) else flex
             cr = crouch(f) if callable(crouch) else crouch
             sh_ = 0.025 * math.sin(ph * 0.9 + (sum(map(ord, self.name)) % 13))
@@ -111,13 +113,13 @@ class Person:
                     W = shw + side * 0.10 + fw * (0.28 * L * sw) + up * (-0.84 * L); d = (-up + fw * 0.2).normalized(); n = (-side - fw * 0.5).normalized()
                     pole = shw + side * 0.25 - fw * 0.45 - up * 0.2
                 elif nm == "run":
-                    W = shw + side * 0.12 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
+                    W = shw + side * 0.17 + fw * (0.25 * L + 0.42 * L * sw) + up * (-0.55 * L + 0.1 * L * sw); d = (fw + up * 0.3).normalized(); n = -side
                     pole = shw + side * 0.2 - fw * 0.5 - up * 0.35
                 elif nm == "point":
                     W = shw + fw * 0.93 * L + up * (0.2 + 0.05 * math.sin(f * 0.13)) * L + side * (0.05 + 0.04 * math.sin(f * 0.07)); d = (fw + up * 0.2).normalized(); n = -up
                     pole = shw + side * 0.4 - up * 0.3
                 elif nm == "shade":
-                    W = shw + fw * 0.5 * L + up * 0.55 * L - side * 0.06; d = (-side + up * 0.2).normalized(); n = -up
+                    W = shw + fw * 0.72 * L + up * 0.6 * L - side * 0.04; d = (-side + up * 0.2).normalized(); n = -up
                     pole = shw + side * 0.5 + up * 0.1
                 elif nm == "wave":
                     k = math.sin(f * 0.35)
@@ -180,13 +182,13 @@ k.stand(T(10.6), T(12.4), (8.5, 47), 185, head=(-10, 0))
 k.go([(8.5, 47), (8.6, 44.5)], T(12.4), T(12.95), run=True, kid=True)
 k.key_arms(T(0), T(12.8), lambda f: {"L": "point"} if T(11.2) <= f <= T(12.3) else ("swing" if T(8.8) <= f <= T(10.6) else "run"))
 # adults walk out onto the wet sand, point, pick up a fish, look; one man shouts
-q = P["TouristW"]
+q = P["TouristW"]; q.calm = (T(8.2), T(10.2))
 q.stand(T(0), T(4.6), (-4, 3), 175, head=lambda f: (-5, 15 * math.sin(f / 50)))
 q.go([(-4, 3), (-4.5, 22), (-5.5, 39)], T(4.6), T(8.2))
 q.stand(T(8.2), T(12.4), (-5.5, 39), 180, head=(-8, 0))
 q.go([(-5.5, 39), (-5.7, 36.5)], T(12.4), T(12.95), run=True)
 q.key_arms(T(0), T(12.8), lambda f: {"R": "point"} if T(6.0) <= f <= T(7.4) else ({"L": "shade"} if T(8.4) <= f <= T(10.0) else {"R": "point"} if T(10.6) <= f <= T(12.3) else {"L": "swing", "R": "swing"}) if f < T(12.4) else "run")
-q = P["TouristM"]
+q = P["TouristM"]; q.calm = (T(7.8), T(10.4))
 q.stand(T(0), T(5.0), (-1.5, 1), 180)
 q.go([(-1.5, 1), (-2, 20), (-1.5, 42)], T(5.0), T(8.6))
 q.stand(T(8.6), T(12.4), (-1.5, 42), 182, head=(-6, 0))
@@ -204,7 +206,7 @@ q.go([(16, 10), (17, 28), (17.5, 44)], T(5.2), T(8.6))
 q.stand(T(8.6), T(12.4), (17.5, 44), 175)
 q.go([(17.5, 44), (17.3, 41.5)], T(12.4), T(12.95), run=True)
 q.key_arms(T(0), T(12.8), lambda f: {"L": "point"} if T(9.0) <= f <= T(10.0) or T(10.9) <= f <= T(12.3) else ("run" if f > T(12.4) else "swing"))
-q = P["OldM"]
+q = P["OldM"]; q.calm = (T(6.3), T(10.6))
 q.stand(T(0), T(10.6), (-11, -3), 170, head=lambda f: (-6, 0))
 q.go([(-11, -3), (-12, -18)], T(10.6), T(12.8), run=False)
 q.key_arms(T(0), T(12.8), lambda f: {"R": "shade"} if T(6.5) <= f <= T(10.4) else "swing")
