@@ -39,6 +39,15 @@ for name, _ in shots:
     if sc.compositing_node_group is None or sc.compositing_node_group.name.startswith("HouseGrade") is False:
         grade.add_grade(sc)
     sc.name = name
+    # farm-ready: denoised Cycles at 32 samples, fonts packed (else the farm swaps in Blender's default font)
+    sc.cycles.samples = int(os.environ.get("FILM_SAMPLES", 32))
+    sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
+    for fo in bpy.data.fonts:
+        if fo.filepath and fo.filepath != "<builtin>" and not fo.packed_file:
+            try:
+                fo.pack()
+            except Exception as e:
+                print("[master] could not pack font", fo.filepath, e)
     bpy.ops.wm.save_mainfile(filepath=path, compress=True)
     print("[master] graded", name, sc.frame_end, "frames", flush=True)
 
@@ -70,6 +79,12 @@ try:
     snd.sound.pack()
 except Exception as e:
     print("[master] could not pack sound:", e)
+# render farms refuse a file without a scene camera, and read the sample count from the master scene
+cam = bpy.data.objects.new("FilmCam", bpy.data.cameras.new("FilmCam"))
+master.collection.objects.link(cam); master.camera = cam
+master.render.engine = 'CYCLES'
+master.cycles.samples = int(os.environ.get("FILM_SAMPLES", 32)); master.cycles.adaptive_threshold = 0.05
+master.render.film_transparent = False
 master.render.use_sequencer = True
 master.render.use_compositing = False          # each shot scene applies its own grade
 master.render.filepath = f"//render/{chapter}_"

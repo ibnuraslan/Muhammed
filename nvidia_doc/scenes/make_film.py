@@ -36,6 +36,13 @@ for folder, shots, _, _ in parts:
         sc.cycles.use_adaptive_sampling = True
         sc.cycles.adaptive_threshold = 0.05
         sc.cycles.use_denoising = True
+        # pack fonts so the render farm does not fall back to Blender's default font
+        for fo in bpy.data.fonts:
+            if fo.filepath and not fo.packed_file and fo.filepath != "<builtin>":
+                try:
+                    fo.pack()
+                except Exception as e:
+                    print("[film] could not pack font", fo.filepath, e)
         bpy.ops.wm.save_mainfile(filepath=path, compress=True)
         b1 = path + "1"
         if os.path.exists(b1):
@@ -92,6 +99,13 @@ for st in strips:
         end = s_sting
         st.volume = 1.0; st.keyframe_insert("volume", frame=end - 24)
         st.volume = 0.0; st.keyframe_insert("volume", frame=end)
+# render farms refuse a file without a scene camera; also show the real sample count on the farm form
+cam = bpy.data.objects.new("FilmCam", bpy.data.cameras.new("FilmCam"))
+master.collection.objects.link(cam); master.camera = cam
+master.render.engine = 'CYCLES'
+master.cycles.samples = SAMPLES
+master.cycles.adaptive_threshold = 0.05
+master.render.film_transparent = False
 master.render.use_sequencer = True
 master.render.use_compositing = False
 master.render.filepath = "//render/nvidia_film_"
