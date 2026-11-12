@@ -1,0 +1,1193 @@
+{
+ "frames": {
+  "1": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "7": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "13": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "19": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "25": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "31": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "37": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "43": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "85": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "97": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "103": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "109": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "115": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "121": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "127": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "133": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "139": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "145": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "151": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "289": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "295": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "301": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "427": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "433": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "439": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "535": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "541": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "547": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "553": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "559": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "565": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "571": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "577": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "817": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "823": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "829": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ]
+  ],
+  "961": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "967": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "973": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "979": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1015": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1021": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1027": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1033": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1039": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1045": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1099": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only BlastSmoke_2 in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "BACKHEAD",
+    "Archduke"
+   ],
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1117": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1123": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1129": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1147": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1153": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1159": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1165": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1171": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1177": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1183": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1195": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1201": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1207": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1213": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1219": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1225": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1231": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1237": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1243": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1249": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1255": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1261": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1267": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1273": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1279": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1285": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1291": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1297": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1303": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1309": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1615": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1621": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1627": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1633": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1639": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1645": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1651": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1657": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1663": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1669": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1675": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1681": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1687": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1693": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1699": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1705": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1711": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1717": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1723": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1729": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1735": [
+   [
+    "CLAW",
+    "Driver.L curl 39"
+   ]
+  ],
+  "1741": [
+   [
+    "EMPTY",
+    "only CloudLayer in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1747": [
+   [
+    "EMPTY",
+    "only CloudLayer in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1753": [
+   [
+    "EMPTY",
+    "only CloudLayer in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1759": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1765": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1771": [
+   [
+    "EMPTY",
+    "only CloudLayer in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1777": [
+   [
+    "EMPTY",
+    "only CloudLayer in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1783": [
+   [
+    "EMPTY",
+    "only CloudLayer in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1789": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1795": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1801": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1807": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1813": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1819": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1825": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1831": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1843": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1849": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1855": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1861": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1867": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1873": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1879": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1885": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1891": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1897": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1921": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1927": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1933": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1939": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1945": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1951": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1957": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1963": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1969": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1975": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1981": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1987": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1993": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ]
+ },
+ "counts": {
+  "CLAW": 91,
+  "EMPTY": 111,
+  "BACKHEAD": 1
+ }
+}

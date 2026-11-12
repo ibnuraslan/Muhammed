@@ -79,3 +79,11 @@ Sheets: `ACTING_v004_sheet_0-18s.jpg` and `ACTING_v004_sheet_18-36s.jpg` (before
 ## Result (resubmission)
 - **qa_check** (`qa_v005.json`, packed file, step 6): HOVER 0 (it was 251); BACKHEAD 1 (intended, see above); EMPTY 111 (all in the intended spans listed above); CLAW 91 (the driver's left hand only, explained above).
 - **clip_scan** (`v005_clip_scan.json`): 0 bad ranges.
+
+## v005b: camera polish (director, CAMJUMP)
+- **The fault:** qa_check CAMJUMP found two one-frame snaps.
+  - f1486: a 74° turn.
+  - f1751: a 134° turn. The camera's Track-To constraint flipped its roll when looking almost straight down.
+- **The fix:** `scripts/10_camjump.py` bakes the camera rotation per frame and eases each snap into a 6-frame smoothstep whip, between the same start and end framings.
+- **The result:** the largest turn in the film is now 54.8° per frame. `qa_v005b.json` shows CAMJUMP 0, and every other count is the same as v005.
+- **Check frames:** `v005b_camjump_frames.jpg`.
