@@ -37,3 +37,26 @@ The rest was checked and kept:
   - 12.5 s: the door is close and fills most of the frame.
   - 32.0–33.5 s: the side of the first officer's seat fills a third to most of the frame while the look follows him to the floor. 33.5 s is almost all seat.
   - 27.5–28.0 s: YOU's forearm crosses close to the lens, with a black corner.
+
+## v007 fix round 2 (director list, 16:15 UTC)
+Build: `hand_poses.py` is now in the packaged file. Every finger pose goes through `apply_pose` (cached per rig), with `add_hand_limits` on all rigs and `grip_object` for the handset.
+- **Handset, 20.9 s and 26.3 s:** `grip_object` wraps it. Index, middle, ring and little fingers all touch; the thumb is 2.8 cm off.
+- **Knee brace, 5.8–8.0 s:** flat_palm on the knee.
+- **Rising from the seat, 9.2–9.5 s:** relaxed hands, no claw.
+- **Door, 12.1–12.8 s:** the look goes past the door into the cockpit, so the door is only at the right edge and the captain is in frame.
+- **Haul, 27.5–28 s:** the elbows go out (IK poles), so the forearms no longer cross the lens.
+  - The palms are snapped to the jacket surface (collar and near shoulder) on every key from 27.9 to 32.3 s.
+  - The grip is released after he lands, and the hands drop relaxed.
+- **Drag, 32–33.5 s:** YOU stays upright and back from the first officer's seat and looks right and down at him on the floor; he is now in frame.
+- **First officer's arms, 28–29 s, 31.4 s, 33.4 s and after:** new arm poses keep his hands out of his thighs. They were searched with a per-hand probe.
+- **Passengers:** the per-seat random seed is now deterministic. It used Python's string hash, which changes on every run, so each rebuild re-rolled all 49 slumps.
+
+**Still open (honest list):**
+- **clip_scan on this build** (`clip_scan_v007b.json`):
+  - The first officer's right fingertips are about 2 cm into his own right knee while seated, 0–28 s. This came from keying the new hand pose from frame 1.
+  - YOU and another character touch at 36.6–36.8 s (108 probes).
+  - The passenger hits and the first officer's hits during the lift and drag are gone.
+- **Cells:**
+  - At 32.0 s the edge of the first officer's seat still covers about 40 % of the frame; at 33.5 s (the whip to the alarms) about 25 %.
+  - At 28.5 s a small black sliver is left in the bottom-right corner.
+- **Close-ups:** the 8.0 s right-hand close-up renders black. The close-up camera is inside the seat; that is the review tool, not the film.
