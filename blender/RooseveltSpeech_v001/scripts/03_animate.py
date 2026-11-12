@@ -63,7 +63,7 @@ rflex = pk([(1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 6, -12.0), (205, 6.0), (250, 
 rside = pk([(1, 0.0), (F_IMPACT, 0.0), (190, -5.0), (215, 6.0), (245, -2.0), (300, 0.0), (1500, 0.0)])
 sflex = pk([(1, 2.0), (F_IMPACT, 2.0), (F_IMPACT + 5, -18.0), (200, 10.0), (240, -6.0), (300, -8.0), (1190, -4.0), (1260, -10.0), (1300, 8.0), (1340, 14.0), (1380, 4.0), (1420, 16.0), (1500, 6.0)])
 stw = pk([(1, -8.0), (60, 12.0), (120, -6.0), (F_IMPACT, -4.0), (F_IMPACT + 6, -14.0), (210, 6.0), (300, 0.0), (1190, 0.0), (1260, -10.0), (1320, 14.0), (1380, -12.0), (1440, 10.0), (1500, 0.0)])
-hpitch = pk([(1, -4.0), (F_IMPACT, -2.0), (F_IMPACT + 5, -14.0), (205, 10.0), (260, -6.0), (300, -8.0), (1190, 0.0), (1230, -14.0), (1290, 4.0), (1340, -8.0), (1400, 6.0), (1450, -10.0), (1500, -4.0)])
+hpitch = pk([(1, -4.0), (F_IMPACT, -2.0), (F_IMPACT + 5, -14.0), (205, 10.0), (260, 2.0), (300, 4.0), (1190, 0.0), (1230, -14.0), (1290, 4.0), (1340, -8.0), (1400, 6.0), (1450, -10.0), (1500, -4.0)])
 hyaw = pk([(1, -10.0), (60, 18.0), (120, -16.0), (F_IMPACT, -20.0), (200, 10.0), (260, -6.0), (300, 0.0), (1190, 0.0), (1250, 10.0), (1320, -16.0), (1380, 18.0), (1440, -10.0), (1500, 0.0)])
 
 # wrist range: hand direction kept within 50 deg of the forearm, eased over frames (no wrong-way bends, no snaps)
@@ -349,7 +349,7 @@ for f_, a_, b_ in ((1, 1.0, 0.0), (1215, 1.0, 0.0), (1216, 0.0, 1.0)):
     c_sp.influence = a_; c_hand.influence = b_
     c_sp.keyframe_insert("influence", frame=f_); c_hand.keyframe_insert("influence", frame=f_)
 sc.frame_set(1180); _ms0 = MS.location.copy()
-for f_, u_ in ((1, 0.0), (1182, 0.0), (1200, 1.0), (END, 1.0)):
+for f_, u_ in ((1, 0.0), (1205, 0.0), (1216, 1.0), (END, 1.0)):   # the hand pulls it up: rises only while gripped
     MS.location = _ms0 + (Pocket.matrix_world.to_3x3() @ Vector((0.0, -0.006, 0.065))) * u_; MS.keyframe_insert("location", frame=f_)
 # right hand reaches the manuscript's top edge in the pocket (1199-1216), re-keyed now that the pocket is known
 for f in range(1197, 1219, 2):
@@ -371,7 +371,7 @@ def _two(a_, m_, b_, u):
     return (a_.lerp(m_, u * 2) if u < 0.5 else m_.lerp(b_, u * 2 - 1)).normalized()
 for f in range(1219, 1245, 2):   # ease out of the grasp into the lift, no orientation snap
     u = smooth((f - 1217) / 26.0)
-    W_ = hR(f) + (Wg - hR(1217)) * (1 - u) + Vector((0.0, -0.05, 0.0)) * math.sin(math.pi * u)
+    W_ = hR(f) + (Wg - hR(1217)) * (1 - u) + Vector((0.0, -0.075, 0.02)) * math.sin(math.pi * u)
     d_ = _two(Vector((0.9, 0.25, -0.35)), Vector((0.5, -0.6, 0.6)), Vector((0.1, -0.2, 1)), u)
     n_ = _two(Vector((0, 1, 0.2)), Vector((0.3, 0.5, 0.6)), Vector((-0.2, -1, 0)), u)
     HU.key_hand("R", f, W_, d_, n_, pole=Vector((-0.55, 0.45, 1.0)))

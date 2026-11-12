@@ -1,0 +1,78 @@
+{
+ "frames": {
+  "37": {
+   "StreetP11": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "247": {
+   "StreetP30": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "265": {
+   "StreetP30": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "283": {
+   "StreetP30": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "295": {
+   "StreetP30": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "301": {
+   "StreetP30": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "307": {
+   "StreetP30": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "313": {
+   "StreetP30": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "325": {
+   "StreetP30": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "343": {
+   "StreetP30": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
