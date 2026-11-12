@@ -150,9 +150,9 @@ def gendarme(name, years, hair):
     reset_pose(h); h.arm.location = (0, 0, 0); h.arm.rotation_euler = (0, 0, 0); bpy.context.view_layer.update()
     top = h.bone_tail("head")
     K = dd.Builder(name + "_kepi")
-    K.cyl(top + Vector((0, 0.005, 0.02)), 0.1, 0.11, pbr("Kepi", (0.03, 0.04, 0.09), 0.5), verts=24)
-    K.box(top + Vector((0, -0.1, -0.03)), (0.15, 0.07, 0.01), pbr("Visor", (0.01, 0.01, 0.01), 0.2))
-    K.cyl(top + Vector((0, 0.005, 0.03)), 0.102, 0.02, pbr("KepiBand", (0.02, 0.02, 0.025), 0.4), verts=24)
+    K.cyl(top + Vector((0, 0.005, 0.0)), 0.095, 0.065, pbr("Kepi", (0.03, 0.04, 0.09), 0.5), verts=24)
+    K.box(top + Vector((0, -0.1, -0.035)), (0.15, 0.07, 0.01), pbr("Visor", (0.01, 0.01, 0.01), 0.2))
+    K.cyl(top + Vector((0, 0.005, -0.02)), 0.097, 0.02, pbr("KepiBand", (0.02, 0.02, 0.025), 0.4), verts=24)
     k = K.done(); _to_bone(k, h, "head")
     return h
 
@@ -240,7 +240,7 @@ def build(variant=None):
                 seated(h, ((-1.6, 0, 1.6)[k], BENCH_Y + 1.05, 0.5), 0.0, seat_z=1.02)
     if v in ("prosecutor", "file"):
         pr = robed("Prosecutor", 0.0, 50, "bob01"); c["prosecutor"] = pr
-        standing(pr, (-5.4, 13.4, 0.4), math.radians(124), z=0.4)
+        standing(pr, (-5.4, 13.4, 0.4), math.radians(80), z=0.4)
     if v == "file":
         c["lawyers"] = []
         for k in range(3):
@@ -272,7 +272,7 @@ def anim_dock(c, t):
 
 def anim_prosecutor(c, t):
     sec = t * DUR["prosecutor"]
-    pr = c["prosecutor"]; standing(pr, (-5.4, 13.4, 0.4), math.radians(124), z=0.4)
+    pr = c["prosecutor"]; standing(pr, (-5.4, 13.4, 0.4), math.radians(80), z=0.4)
     M = pr.arm.matrix_world.to_3x3(); sh = pr.bone_head("upperarm01.R")
     g = 0.5 + 0.5 * math.sin(sec * 1.1)
     reach(pr, "R", sh + M @ Vector((-0.05, -0.32 - 0.04 * g, -0.3 + 0.07 * g)), M @ Vector((-0.6, 0.2, -0.7)))
@@ -303,7 +303,7 @@ def anim_judges(c, t):
     for k, h in enumerate(c["judges"]):
         x = (-1.6, 0, 1.6)[k]
         a = Vector((-4.2, BENCH_Y + 0.68, 0.5)); b = Vector((x, BENCH_Y + 0.68, 0.5))
-        walk_to(h, a, b, max(0.0, sec - 1.2 * k), speed=0.8)
+        walk_to(h, a, b, max(0.0, sec - 0.7 * k), speed=1.0)
         h.arm.rotation_euler.z = math.radians(90) if h.arm.location.x < x - 0.05 else 0.0
         ground(h, 0.5)
     # the public rises as they enter (a staggered stand-up)
