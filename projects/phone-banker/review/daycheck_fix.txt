@@ -4,3 +4,4 @@ ch1_07_hospital_gurney fixed 0.557  plain 0.558
 ch1_10_hospital_dawn fixed 0.405  plain 0.393
 ch2_06_bank_release fixed 0.207  plain 0.087
 ch2_09_closedtown_checkpoint fixed 0.506  plain 0.483
+ch2_10_closedtown_institute fixed 0.522  plain 0.521
