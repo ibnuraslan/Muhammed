@@ -244,8 +244,8 @@ def build(variant=None):
     c["drip3"], c["platelet"] = drip_stand("DripP", BEDS[1] + Vector((-0.65, 0.6, 0)), bag_col=(0.95, 0.8, 0.35))
     for k, b in enumerate(BEDS):            # occupied beds: the blanket is drawn up over the patient to the chest
         occ = k != 1
-        blanket(f"Blanket{k}", b + Vector((0, -0.27 if occ else -0.25, 0)), col=[(0.38, 0.38, 0.4), (0.42, 0.36, 0.32), (0.36, 0.4, 0.42)][k % 3],
-                length=1.48 if occ else 1.4, z=0.8 if occ else 0.72, thick=0.22 if occ else 0.12)
+        blanket(f"Blanket{k}", b + Vector((0, -0.31 if occ else -0.25, 0)), col=[(0.38, 0.38, 0.4), (0.42, 0.36, 0.32), (0.36, 0.4, 0.42)][k % 3],
+                length=1.38 if occ else 1.4, z=0.8 if occ else 0.72, thick=0.2 if occ else 0.12)
         box(f"Pillow{k}", b + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"Pillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
     for k in range(4):                     # cubicle curtains between beds, partly drawn back to the wall
         curtain(f"Curtain{k}", BEDS[k].x + 1.3, 3.75, 3.75 - (1.2 + 0.5 * (k % 2)))
@@ -326,7 +326,7 @@ def build(variant=None):
         cc = CLINIC + Vector((-2.4 + k * 2.0, 1.3, 0))
         iron_bed(f"Cot{k}", cc)
         drip_stand(f"CDrip{k}", cc + Vector((-0.6, 0.7, 0)), fill=0.6)
-        blanket(f"CBlanket{k}", cc + Vector((0, -0.27, 0)), col=[(0.45, 0.35, 0.3), (0.36, 0.38, 0.42), (0.42, 0.4, 0.3)][k], length=1.48, z=0.8, thick=0.22)
+        blanket(f"CBlanket{k}", cc + Vector((0, -0.31, 0)), col=[(0.45, 0.35, 0.3), (0.36, 0.38, 0.42), (0.42, 0.4, 0.3)][k], length=1.38, z=0.8, thick=0.2)
         box(f"CPillow{k}", cc + Vector((0, 0.78, 0.74)), (0.6, 0.32, 0.12), fabric(f"CPillow{k}", (0.86, 0.86, 0.82), 0.9, 0.3, 400), bevel=0.05)
         c["cots"].append(cc)
     # small 1998 clinic: a glass-fronted cabinet, a sink with a mirror, a chair, a calendar, a window onto the dark street
@@ -407,9 +407,9 @@ def sit_up_in_bed(h, bed, k=1.0):
     place(h, bed + Vector((0, 0.35, 0.62)), 0.0)
 
 def ward_patients(c, sec, upright=None):
-    lie_in_bed(c["people"]["pat2"], BEDS[3] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    lie_in_bed(c["people"]["pat2"], BEDS[3] + Vector((0, 0.9, 0)), (0, -1), 0.74)
     if upright is None:
-        lie_in_bed(c["people"]["pat1"], BEDS[2] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+        lie_in_bed(c["people"]["pat1"], BEDS[2] + Vector((0, 0.9, 0)), (0, -1), 0.74)
     else:
         sit_up_in_bed(c["people"]["pat1"], BEDS[2], upright)
 
@@ -559,15 +559,15 @@ def c2_6b(c, t):
 def c4_1a(c, t):
     sec = S("ch4_1a", t); hide(c, ("pat1", "pat2", "m1", "m2"))
     ward_patients(c, sec)
-    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.66)
-    lie_in_bed(c["people"]["m2"], BEDS[4] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.74)
+    lie_in_bed(c["people"]["m2"], BEDS[4] + Vector((0, 0.9, 0)), (0, -1), 0.74)
     c["focus"] = BEDS[2] + Vector((0, 0, 0.8))
 
 
 def c4_1b(c, t):
     sec = S("ch4_1b", t); hide(c, ("pat1", "pat2", "doc", "m1"))
     ward_patients(c, sec)
-    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.66)
+    lie_in_bed(c["people"]["m1"], BEDS[0] + Vector((0, 0.9, 0)), (0, -1), 0.74)
     h = c["people"]["doc"]; loc = BEDS[2] + Vector((0.1, -1.6, 0))
     stand_at(h, loc, BEDS[2])
     sd = forward(h).cross(Vector((0, 0, 1)))
@@ -694,7 +694,7 @@ def c4_13b(c, t):
 def c1_11a(c, t):         # local clinic, evening: a nurse adjusts the drip line at shoulder height beside the beds (medium)
     sec = S("ch1_11a", t); hide(c, ("nurse", "m1", "m2", "pat2"))
     for nm, cc in (("m1", c["cots"][0]), ("m2", c["cots"][1]), ("pat2", c["cots"][2])):
-        lie_in_bed(c["people"][nm], cc + Vector((0, 0.9, 0)), (0, -1), 0.66)
+        lie_in_bed(c["people"][nm], cc + Vector((0, 0.9, 0)), (0, -1), 0.74)
     h = c["people"]["nurse"]; pole = c["cots"][1] + Vector((-0.6, 0.7, 0)); loc = pole + Vector((-0.25, -0.5, 0))
     stand_at(h, loc, pole + Vector((0.12, 0, 0)))
     sd = forward(h).cross(Vector((0, 0, 1)))

@@ -934,7 +934,7 @@ def daylight_window(centre, side, size=(1.6, 1.6), energy=250, color=(0.85, 0.9,
     n = {"N": Vector((0, 1, 0)), "S": Vector((0, -1, 0)), "E": Vector((1, 0, 0)), "W": Vector((-1, 0, 0))}[side]
     o.location = Vector(centre) + n * 0.6
     o.rotation_euler = (-n).to_track_quat('-Z', 'Y').to_euler()
-    o.visible_camera = False
+    o.visible_camera = False; o.visible_transmission = False; o.visible_glossy = False   # never seen through the glass
     return o
 
 
