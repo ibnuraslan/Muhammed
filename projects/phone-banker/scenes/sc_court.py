@@ -1,4 +1,4 @@
-"""CLOSED COURTROOM, Moscow, 2007 (dramatization; generic Russian courtroom, no emblem or flag). Variants:
+"""CLOSED COURTROOM, Moscow, 2007 (dramatization; a generic Russian courtroom: a gold double-headed eagle relief, the tricolour). Variants:
   hall    : the corridor outside; a bailiff closes the doors on the waiting press (Ch3 1A, title)
   room    : the courtroom: the judge's bench on a dais, the steel dock, prosecution and defence tables, winter light
             (Ch3 1B prosecutor, 2A dock, 2B defence and the door photograph, 3A verdict, 3B led out)
@@ -24,6 +24,74 @@ VARIANT_FOR = {"doors": "hall", "prosecutor": "room", "dock": "room", "defence":
 BENCH = Vector((0.0, 6.5, 0.0))
 DOCK = Vector((4.6, 2.5, 0.0))
 rng = np.random.default_rng(71)
+
+
+def judges_chair(loc, wood):
+    """A judge's chair: a tall buttoned leather back in a carved oak frame, leather seat, oak arms."""
+    leather = pbr("JudgeLeather", (0.16, 0.05, 0.04), 0.45, 0.0, **{'Coat Weight': 0.3})
+    x, y, z = loc
+    parts = [box("JCSeat", (0, 0, 0.47), (0.62, 0.58, 0.1), leather, bevel=0.03),
+             box("JCBase", (0, 0, 0.22), (0.56, 0.52, 0.44), wood, bevel=0.01),
+             box("JCBack", (0, 0.27, 1.15), (0.6, 0.1, 1.3), leather, bevel=0.04),
+             box("JCFrameL", (-0.33, 0.28, 1.1), (0.06, 0.12, 1.45), wood, bevel=0.01), box("JCFrameR", (0.33, 0.28, 1.1), (0.06, 0.12, 1.45), wood, bevel=0.01),
+             box("JCCrest", (0, 0.28, 1.86), (0.74, 0.12, 0.12), wood, bevel=0.03),
+             box("JCArmL", (-0.33, 0.0, 0.68), (0.07, 0.55, 0.06), wood, bevel=0.01), box("JCArmR", (0.33, 0.0, 0.68), (0.07, 0.55, 0.06), wood, bevel=0.01)]
+    for (bx, bz) in ((-0.15, 0.85), (0.15, 0.85), (0.0, 1.1), (-0.15, 1.35), (0.15, 1.35)):
+        parts.append(cyl("JCButton", (bx, 0.215, bz), 0.012, 0.01, leather, verts=10, rot=(math.radians(90), 0, 0)))
+    o = joinm(parts, "JudgesChair"); o.location = (x, y, z)
+    return o
+
+
+def eagle(loc, s=1.0):
+    """A generic gilt relief of a double-headed eagle: spread wings of layered feathers, two crowned heads turned
+    outward, a shield on the breast, tail feathers. No text, no likeness of any particular coat of arms."""
+    gold = pbr("EagleGold", (0.75, 0.55, 0.2), 0.3, 1.0)
+    parts = []
+    parts.append(cyl("EBody", (0, 0, 0), 0.16 * s, 0.06 * s, gold, verts=24, rot=(math.radians(90), 0, 0)))
+    parts.append(box("EShield", (0, -0.035 * s, -0.04 * s), (0.17 * s, 0.02 * s, 0.2 * s), pbr("EagleRed", (0.45, 0.06, 0.05), 0.4), bevel=0.02 * s))
+    for sx in (-1, 1):
+        for k in range(6):                                                   # wing feathers fanning up and out
+            a = math.radians(20 + k * 13)
+            L_ = (0.55 - 0.05 * k) * s
+            cx = sx * (0.12 * s + math.cos(a) * L_ / 2); cz = 0.05 * s + math.sin(a) * L_ / 2
+            parts.append(box("EFeather", (cx, 0.0, cz), (L_, 0.03 * s, 0.07 * s), gold, rot=(0, -sx * a, 0), bevel=0.01 * s))
+        parts.append(cyl("ENeck", (sx * 0.09 * s, 0, 0.22 * s), 0.035 * s, 0.18 * s, gold, verts=12, rot=(0, sx * math.radians(25), 0)))
+        parts.append(cyl("EHead", (sx * 0.14 * s, -0.01 * s, 0.32 * s), 0.05 * s, 0.05 * s, gold, verts=16, rot=(math.radians(90), 0, 0)))
+        parts.append(box("EBeak", (sx * 0.2 * s, -0.01 * s, 0.31 * s), (0.06 * s, 0.03 * s, 0.025 * s), gold, rot=(0, sx * math.radians(-15), 0)))
+        parts.append(cyl("ECrown", (sx * 0.14 * s, -0.01 * s, 0.39 * s), 0.035 * s, 0.05 * s, gold, verts=8))
+        parts.append(box("ELeg", (sx * 0.06 * s, 0, -0.2 * s), (0.03 * s, 0.03 * s, 0.14 * s), gold, rot=(0, sx * math.radians(20), 0)))
+    parts.append(cyl("ECrownTop", (0, -0.01 * s, 0.5 * s), 0.05 * s, 0.07 * s, gold, verts=8))
+    for k in range(5):
+        a = math.radians(-60 + k * 30)
+        parts.append(box("ETail", (math.sin(a) * 0.08 * s, 0, -0.18 * s - math.cos(a) * 0.08 * s), (0.04 * s, 0.025 * s, 0.18 * s), gold, rot=(0, a, 0)))
+    o = joinm(parts, "Eagle"); o.location = loc
+    return o
+
+
+def tricolour(loc):
+    """The Russian tricolour hanging from a floor-standing pole with a gilt finial."""
+    x, y, z = loc
+    cyl("FlagPole", (x, y, z + 1.4), 0.02, 2.8, pbr("PoleWood", (0.25, 0.15, 0.08), 0.4), verts=12)
+    cyl("FlagBase", (x, y, z + 0.03), 0.18, 0.06, pbr("PoleBase", (0.3, 0.25, 0.15), 0.4, 0.6), verts=24)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.045, location=(x, y, z + 2.86))
+    fin = bpy.context.active_object; fin.data.materials.append(pbr("FinialGold", (0.75, 0.55, 0.2), 0.3, 1.0))
+    fm = bpy.data.materials.new("Tricolour"); fm.use_nodes = True
+    N = fm.node_tree.nodes; L = fm.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['UV'], sep.inputs[0])
+    r1 = N.new("ShaderNodeValToRGB"); L.new(sep.outputs['Y'], r1.inputs['Fac']); r1.color_ramp.interpolation = 'CONSTANT'
+    els = r1.color_ramp.elements
+    els[0].position = 0.0; els[0].color = (0.55, 0.05, 0.05, 1)                                                  # red at the bottom
+    els[1].position = 0.667; els[1].color = (0.85, 0.85, 0.83, 1)                                                # white at the top
+    e = els.new(0.333); e.color = (0.04, 0.16, 0.5, 1)                                                           # blue in the middle
+    assert len(els) == 3 and abs(sorted(x.position for x in els)[1] - 0.333) < 1e-3
+    L.new(r1.outputs['Color'], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.7; p.inputs['Sheen Weight'].default_value = 0.4
+    # the flag hangs down along the pole in soft vertical folds
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=40, y_subdivisions=30, size=1, location=(x + 0.33, y, z + 2.25), rotation=(math.radians(90), 0, 0))
+    f = bpy.context.active_object; f.name = "Flag"; f.scale = (0.62, 0.9, 1); f.data.materials.append(fm)
+    for v in f.data.vertices:
+        v.co.z += 0.06 * math.sin((v.co.x + 0.5) * 14.0) * (0.3 + 0.7 * (v.co.x + 0.5))
+    bpy.ops.object.shade_smooth()
+    return f
 
 
 def gown(h):
@@ -73,8 +141,17 @@ def build_room(c):
     # the bench on a dais, the judge's high-backed chair
     box("Dais", (0, BENCH.y + 0.6, 0.2), (5.0, 2.6, 0.4), oak)
     box("JudgeBench", (0, BENCH.y, 0.95), (4.4, 0.7, 1.1), oak, bevel=0.02); box("JudgeTop", (0, BENCH.y - 0.05, 1.52), (4.6, 0.85, 0.05), oak)
-    r, ch = ph.model("GreenChair_01", loc=(0, BENCH.y + 0.85, 0.4), rot_z=math.pi, scale=1.15)
+    for x in (-1.15, 0.0, 1.15):                                            # three judges' chairs with tall leather backs
+        judges_chair((x, BENCH.y + 0.85, 0.4), oak)
     box("PanelBehind", (0, 8.85, 2.4), (3.0, 0.05, 2.6), oak)
+    eagle((0.0, 8.82, 3.75), 1.05)                                          # the double-headed eagle relief above the bench
+    tricolour((-2.6, 8.35, 0.4))
+    # oak panelling to dado height round the room
+    for (loc, size) in (((0, 8.87, 0.6), (12, 0.04, 1.2)), ((5.88, 2, 0.6), (0.04, 14, 1.2)), ((0, -4.88, 0.6), (12, 0.04, 1.2))):
+        box("DadoPanel", loc, size, oak)
+        box("DadoRail", (loc[0], loc[1], 1.22), (size[0] + 0.02 if size[0] > 1 else 0.07, size[1] + 0.02 if size[1] > 1 else 0.07, 0.06), oak)
+    for k in range(4):                                                      # under the windows too, between the piers
+        box("DadoPanelL", (-5.88, -2.2 + k * 3.6, 0.5), (0.04, 2.4, 1.0), oak)
     # the dock: a steel cage on the right
     steel = pbr("CageSteel", (0.35, 0.36, 0.38), 0.35, 0.9)
     for k in range(15):
