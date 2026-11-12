@@ -263,7 +263,7 @@ def build(variant=None):
     {"xmas": build_xmas, "upstairs": build_upstairs, "after": lambda c: build_upstairs(c, True)}[v](c)
     import look                                   # December, 17:30: blue-hour dusk outside, the set's own lights inside
     if v == "xmas":
-        look.day_light("dusk", azim=240, haze_box=((0, 0, 6), (80, 40, 12)), haze_density=0.004)
+        pass                                      # LOOK: exteriors on hold for look v5: grade only, the set's own dusk
     else:
         look.night_interior()
     return c
