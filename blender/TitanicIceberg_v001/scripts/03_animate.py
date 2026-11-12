@@ -225,14 +225,14 @@ def cam_xf(f, M):
     bc.keyframe_insert("location", frame=f); bc.keyframe_insert("rotation_quaternion", frame=f)
 # camera held at chest -> raised to the eye -> shutter -> lowered and looking
 CAMP = {0: (Vector((SP.x, SP.y + 0.32, DK.z + 1.12)), -15), 50: (Vector((SP.x, SP.y + 0.34, DK.z + 1.25)), -5),
-        95: (Vector((SP.x + 0.02, SP.y + 0.30, DK.z + 1.52)), 4), 160: (Vector((SP.x + 0.02, SP.y + 0.30, DK.z + 1.53)), 5),
+        95: (Vector((SP.x + 0.02, SP.y + 0.40, DK.z + 1.5)), 4), 160: (Vector((SP.x + 0.02, SP.y + 0.40, DK.z + 1.51)), 5),
         230: (Vector((SP.x, SP.y + 0.33, DK.z + 1.2)), -10), 360: (Vector((SP.x - 0.02, SP.y + 0.33, DK.z + 1.18)), -12)}
 for f, (cp, pitch) in CAMP.items():
     Rm = Matrix.Rotation(R_(180), 4, 'Z') @ Matrix.Rotation(R_(pitch), 4, 'X')   # model lens points -Y; turn it to +Y
     cam_xf(f, Matrix.Translation(cp) @ Rm)
     # hands on the camera body sides, palms in
-    st.hand("L", f, cp + Vector((0.155, -0.11, 0.075)), (0, 1, 0.15), (-1, 0, 0), pole=cp + Vector((0.6, -0.4, -0.5)), curl=10, thumb=18)
-    st.hand("R", f, cp + Vector((-0.155, -0.11, 0.075)), (0, 1, 0.15), (1, 0, 0), pole=cp + Vector((-0.6, -0.4, -0.5)), curl=10, thumb=18)
+    st.hand("L", f, cp + Vector((0.172, 0.0, 0.05)), (0, 1, 0.1), (-1, 0, 0), pole=cp + Vector((0.6, -0.4, -0.5)), curl=16, thumb=22)
+    st.hand("R", f, cp + Vector((-0.06, 0.02, -0.035)), (0.15, 1, 0.0), (0, 0, 1), pole=cp + Vector((-0.6, -0.4, -0.5)), curl=22, thumb=25)
 STP = [(0, (0, 0, 0), (-6, 0), 0.0), (50, (4, 0, 0), (2, 0), 0.0), (95, (8, 0, 0), (6, 0), 0.02), (115, (9, -2, 0), (6, 0), 0.03),
        (125, (6, 0, 0), (4, 0), 0.02), (160, (5, 0, 0), (4, 0), 0.02), (230, (0, 5, 0), (-6, 8), 0.0), (360, (2, 3, 0), (-4, 4), 0.0)]
 for f, sp_, hd, cr in STP:
@@ -241,7 +241,7 @@ for f, kw in ((0, dict(brow=0.2, lids=0.2)), (60, dict(brow=0.8, lids=0.6, jaw=4
               (130, dict(brow=1.0, lids=1.0, jaw=8, smile=0.3)), (200, dict(brow=1.2, lids=1.0, jaw=10)), (360, dict(brow=0.8, lids=0.6, jaw=5))):
     face(st.R, f, **kw)
 # shutter click: right index finger pushes at 112
-key_fingers(st.R, "R", 105, [10, 10, 10, 10], 18); key_fingers(st.R, "R", 112, [30, 10, 10, 10], 18); key_fingers(st.R, "R", 120, [10, 10, 10, 10], 18)
+
 
 # --- deckhand coiling rope in the background
 dh = Actor("Deckhand", DK.z + 0.025); dh.o.parent = ship_root; dh.o.matrix_parent_inverse = Matrix.Identity(4); dh.o.location = (0, 0, 0)
@@ -361,7 +361,7 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (350,  Vector((-14, -30, 2.4)),      Vector((-9, Y0, 1.6)),     28, 5.6),
     (410,  Vector((-15, Y0 - 17, 4.5)),  Vector((-4, Y0, 3.0)),     30, 5.6),
     (470,  Vector((-6, Y0 - 11, 3.0)),   Vector((0, Y0, 1.8)),      32, 5.6),
-    (530,  Vector((1.2, Y0 - 2.2, 1.35)), Vector((3.0, Y0, 1.2)),   40, 4.0),
+    (530,  Vector((1.5, Y0 - 4.2, 2.2)), Vector((3.2, Y0, 1.6)),    35, 5.6),
     (580,  Vector((6, Y0 - 7.5, 2.4)),   Vector((7.5, Y0, 1.6)),    32, 5.6),
     (625,  Vector((10, Y0 - 12.0, 4.5)), Vector((6, Y0, 2.0)),      30, 5.6),
     (680,  Vector((6, Y0 - 13, 11)),     Vector((0, -45, 0)),       26, 8.0),
@@ -371,8 +371,8 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (915,  Vector((-34, -44, 12)),       Vector((0, Y0, 8)),        26, 8.0),
     (965,  Vector((-28, Y0 - 7, 3.2)),   Vector((10, Y0 - 3, 3.0)), 24, 5.6),
     (1015, Vector((-10, Y0 - 4.2, 2.4)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
-    (1055, Vector((0.5, Y0 - 3.2, 1.5)), Vector((2, Y0, 1.25)),     30, 5.6),
-    (1080, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 1.25)), 30, 5.6),
+    (1055, Vector((0.5, Y0 - 3.4, 2.6)), Vector((2, Y0, 2.5)),      30, 5.6),
+    (1080, Vector((2.0, Y0 - 0.7, 1.95)), Vector((2.0, Y0 + 5, 2.5)), 30, 5.6),
     (1105, Vector((1.8, Y0 + 1.4, 2.85)), Vector((1.2, Y0 + 5.45, 1.7)), 26, 5.6),
     (1150, Vector((2.0, Y0 + 4.95, 2.35)), Vector((1.2, Y0 + 5.45, 1.72)), 35, 2.8),
     (1185, Vector((3.4, Y0 + 4.0, 2.35)), Vector((6.5, Y0 + 4.4, 2.0)), 24, 5.6),
@@ -384,8 +384,10 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (1405, Vector((10.0, Y0 + 11.0, 2.7)), Vector((9.2, Y0 + 18.4, 2.6)), 22, 8.0),
     (1465, Vector((9.6, Y0 + 14.2, 2.5)), Vector((9.3, Y0 + 18.5, 2.45)), 26, 5.6),
     (1520, Vector((7.0, Y0 + 14.3, 2.9)), Vector((6.5, Y0 + 18.7, 3.0)), 26, 8.0),
-    (1555, Vector((6.6, Y0 + 20.5, 3.3)), Vector((7.5, Y0 + 32, 3.6)), 26, 8.0),
-    (1595, Vector((14, 37, 9)),          Vector((6, 6, 9)),         24, 8.0),
+    (1555, Vector((6.6, Y0 + 20.5, 3.3)), Vector((7.5, Y0 + 32, 3.8)), 26, 8.0),
+    (1572, Vector((9, 36, 7)),           Vector((24, 74, 3)),       24, 8.0),
+    (1581, Vector((14, 41, 8.5)),        Vector((46, 44, 5)),       24, 8.0),
+    (1590, Vector((20, 44, 10)),         Vector((4, 4, 10)),        24, 8.0),
     (1640, Vector((32, 44, 12)),         Vector((4, 4, 10)),        24, 8.0),
     (1700, Vector((58, 30, 12)),         Vector((0, 0, 11)),        24, 8.0),
     (1770, Vector((66, -28, 9)),         Vector((0, 0, 11)),        26, 8.0),
@@ -393,10 +395,10 @@ CK = [  # frame, camera position, look target, lens, f-stop
 ]
 # real ice surface on the dive line (the facet displacement moves it off the Y0 plane)
 dg = bpy.context.evaluated_depsgraph_get(); bev = O["Iceberg"].evaluated_get(dg)
-hit_, loc_, _, _ = bev.ray_cast(Vector((2.0, Y0 - 12, 1.25)), Vector((0, 1, 0)))
+hit_, loc_, _, _ = bev.ray_cast(Vector((2.0, Y0 - 12, 2.5)), Vector((0, 1, 0)))
 YS_ICE = loc_.y if hit_ else Y0
 print("ICE SURFACE", YS_ICE)
-CK = [k if k[0] != 1080 else (1080, Vector((2.0, YS_ICE - 0.45, 1.3)), k[2], k[3], k[4]) for k in CK]
+CK = [k if k[0] != 1080 else (1080, Vector((2.0, YS_ICE - 0.45, 2.5)), k[2], k[3], k[4]) for k in CK]
 fpos = catmull([(k[0], k[1]) for k in CK])
 _tg = [pchip([(k[0], k[2][c]) for k in CK]) for c in range(3)]
 ftgt = lambda f: Vector((_tg[0](f), _tg[1](f), _tg[2](f)))   # monotone: no overshoot when the target jumps far

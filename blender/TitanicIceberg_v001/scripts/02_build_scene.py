@@ -271,7 +271,7 @@ def mult(a, b):
     m_ = n.new('ShaderNodeMath'); m_.operation = 'MULTIPLY'; l.new(a, m_.inputs[0]); l.new(b, m_.inputs[1]) if not isinstance(b, float) else None
     if isinstance(b, float): m_.inputs[1].default_value = b
     return m_.outputs[0]
-zb = mult(ramp(ox.outputs['Z'], 0.85, 1.0), ramp(ox.outputs['Z'], 1.45, 1.3))
+zb = mult(ramp(ox.outputs['Z'], 1.15, 1.3), ramp(ox.outputs['Z'], 1.62, 1.5))
 yb = ramp(ox.outputs['Y'], Y0 + 2.0, Y0 + 0.4)      # only on the scrape face
 xb = mult(ramp(ox.outputs['X'], SMEAR_X[0], SMEAR_X[0] + 3), ramp(ox.outputs['X'], SMEAR_X[1], SMEAR_X[1] - 3))
 sweep = n.new('ShaderNodeValue'); sweep.name = "SmearSweep"; sweep.outputs[0].default_value = SMEAR_X[0] - 5
@@ -285,9 +285,14 @@ brr = ramp(brk.outputs['Fac'], 0.4, 0.52)
 paint = mult(mult(mult(zb, yb), mult(xb, inv.outputs[0])), brr)
 paint_s = n.new('ShaderNodeMath'); paint_s.operation = 'MULTIPLY'; paint_s.use_clamp = True; paint_s.inputs[1].default_value = 1.4
 l.new(paint, paint_s.inputs[0])
-pc = n.new('ShaderNodeMix'); pc.data_type = 'RGBA'; pc.inputs['B'].default_value = (0.62, 0.03, 0.025, 1)
+pc = n.new('ShaderNodeMix'); pc.data_type = 'RGBA'; pc.inputs['B'].default_value = (0.2, 0.025, 0.018, 1)
 l.new(paint_s.outputs[0], pc.inputs['Factor']); l.new(stm.outputs['Result'], pc.inputs['A'])
-l.new(pc.outputs['Result'], p.inputs['Base Color'])
+zk = mult(ramp(ox.outputs['Z'], 1.62, 1.72), ramp(ox.outputs['Z'], 1.98, 1.88))
+blk = mult(mult(mult(zk, yb), mult(xb, inv.outputs[0])), brr)
+blk_s = n.new('ShaderNodeMath'); blk_s.operation = 'MULTIPLY'; blk_s.use_clamp = True; blk_s.inputs[1].default_value = 1.3; l.new(blk, blk_s.inputs[0])
+pk = n.new('ShaderNodeMix'); pk.data_type = 'RGBA'; pk.inputs['B'].default_value = (0.018, 0.016, 0.016, 1)
+l.new(blk_s.outputs[0], pk.inputs['Factor']); l.new(pc.outputs['Result'], pk.inputs['A'])
+l.new(pk.outputs['Result'], p.inputs['Base Color'])
 l.new(pc.outputs['Result'], p.inputs['Subsurface Radius']) if False else None
 p.inputs['Subsurface Weight'].default_value = 0.6; p.inputs['Subsurface Radius'].default_value = (0.4, 0.8, 1.2)
 p.inputs['Subsurface Scale'].default_value = 0.6
@@ -316,6 +321,9 @@ for i in range(16):
     a = random.uniform(-2.6, 0.6); r = random.uniform(40, 70)
     BITS.append(chunk(f"Bergy_Bit_{i}", (random.uniform(0.6, 2.2), random.uniform(0.6, 1.8), random.uniform(0.4, 1.0)),
                       (r * math.cos(a), r * math.sin(a) * 0.9 - 10, 0.0)))
+# a few large floes on the far (+Y) side, so the exit from the berg (beat 9) always has ice in frame
+for i, (x, y, sz) in enumerate(((10, 58, 6.0), (24, 74, 8.0), (-2, 86, 7.0))):
+    BITS.append(chunk(f"Bergy_Bit_Far_{i}", (sz, sz * 0.8, sz * 0.5), (x, y, 0.0)))
 # small chunks at the scrape face waterline (macro beat)
 for i in range(10):
     BITS.append(chunk(f"Ice_Shard_{i}", (random.uniform(0.15, 0.5),) * 2 + (random.uniform(0.1, 0.3),),
