@@ -14,7 +14,7 @@ from human import reach, pose_walk, pose_sit, reset_pose, fingers_curl
 from sc_invest import office_chair
 from sc_boutique import haussmann
 
-EXPOSURE = -0.8
+EXPOSURE = -1.1
 DUR = {"pin": 9.0, "read": 9.0, "listen": 9.0}
 
 
@@ -38,7 +38,7 @@ def build(variant=None):
     world_sky(sun_elev_deg=15, sun_rot_deg=200, strength=0.5, tint=(0.75, 0.82, 0.95))
     B = dd.Builder("Office")
     floor = dd.tex_mat("laminate_floor_02", 0.6, tint=(0.6, 0.58, 0.55), name="OffFloor", sat=0.5)
-    wall = dd.tex_mat("painted_plaster_wall", 0.6, tint=(0.82, 0.82, 0.78), name="OffWall", sat=0.4)
+    wall = dd.tex_mat("painted_plaster_wall", 0.6, tint=(0.62, 0.63, 0.6), name="OffWall", sat=0.4)
     B.box((0, 4, -0.05), (10, 9, 0.1), floor).box((0, 4, 3.05), (10, 9, 0.1), pbr("OffCeil", (0.8, 0.8, 0.78), 0.9))
     B.box((-5.05, 4, 1.5), (0.1, 9, 3.0), wall).box((0, 8.55, 1.5), (10, 0.1, 3.0), wall)
     # window wall on the right (x = 5): tall windows over the roofs, rain on the glass
@@ -50,6 +50,7 @@ def build(variant=None):
         box("Win", (5.05, 2.1 + k * 3.0, 1.75), (0.02, 2.2, 1.9), rain_glass("OffRain", 60, 0.55))
     pt = bpy.data.lights.new("Portal", 'AREA'); pt.shape = 'RECTANGLE'; pt.size = 9; pt.size_y = 2.0; pt.cycles.is_portal = True
     po = bpy.data.objects.new("Portal", pt); bpy.context.collection.objects.link(po); po.location = (5.2, 4, 1.75); po.rotation_euler = (0, math.radians(-90), 0)
+    box("Roofs", (26, 4, 0.2), (40, 60, 0.1), pbr("Zinc", (0.42, 0.44, 0.47), 0.35, 0.8))     # grey zinc roofs below the window line
     haussmann(-20, 20, seed=60, rot_z=math.radians(90), origin=(22, 4, -14), lit_frac=0.3)
     # desks, chairs, lamps, binders, a filing cabinet row, the corkboard
     fab = fabric("ChairFab", (0.05, 0.05, 0.06), 0.9, 0.3, 400); met = pbr("ChairMetal", (0.25, 0.25, 0.27), 0.35, 0.9)
@@ -58,7 +59,7 @@ def build(variant=None):
         if k < 4:
             office_chair((x, y - 0.75 if rz == 0 else y + 0.75, 0), rz, fab, met)
         else:
-            office_chair((x + 0.8, y, 0), math.pi / 2, fab, met)      # the reader's chair, between desk and window
+            office_chair((x + 0.8, y, 0), -math.pi / 2, fab, met)      # the reader's chair, between desk and window
         dd.model_h("binder_notebook", (x - 0.4, y, 0.76), 0.05, rot_z=0.3 * k)
         if k % 2 == 0:
             dd.model_h("desk_lamp_arm_01", (x + 0.5, y + 0.1, 0.76), 0.45, rot_z=2.5)
