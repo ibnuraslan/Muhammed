@@ -46,6 +46,17 @@ HS = {}
 for n in CAST:
     HS[n] = Human(make_human_ctrl(O[n]))
 P_, PO, BOY, FA, SM, G1, G2, JU, PR1, PR2 = [HS[n] for n in CAST]
+for n in CAST:
+    for pb in O[n].pose.bones:
+        nm = pb.name
+        if nm.startswith("finger") and not nm.startswith("finger1"):
+            c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            c.min_x, c.max_x = R_(-5), R_(95); c.min_y, c.max_y = R_(-10), R_(10); c.min_z, c.max_z = R_(-12), R_(12)
+        elif nm.startswith("finger1"):
+            c = pb.constraints.new("LIMIT_ROTATION"); c.owner_space = "LOCAL"
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            c.min_x, c.max_x = R_(-20), R_(60); c.min_y, c.max_y = R_(-30), R_(30); c.min_z, c.max_z = R_(-30), R_(30)
 Z = {n: HS[n].root_head.z for n in CAST}
 
 # visibility per character
@@ -55,8 +66,8 @@ VIS = {
     "Boy": [(678, 1421)],
     "Father": [(678, 1040)],
     "Stepmother": [(942, 1421)],
-    "Guard": [(0, 1547), (1860, 3228)],
-    "Guard2": [(0, 677), (2172, 2897), (3480, END)],
+    "Guard": [(0, 1547), (2484, 3228)],
+    "Guard2": [(0, 677), (2484, 2897), (3480, END)],
     "Judge": [(1380, 1547), (3480, END)],
     "Protester1": [(3480, END)],
     "Protester2": [(0, 677), (2172, 3227), (3480, END)],
@@ -105,8 +116,8 @@ for f in range(300, 541, 4):
     dL, nL = hand_dirs(SY, (1, 0.2, 0), (0, 0, 1)); dR, nR = hand_dirs(SY, (-0.6, 0.6, 0), (0, 0, -1))
     hdx = 6 * math.sin(f * 0.05)
     pose(P_, f, sit_root + Vector((0, 0, 0.004 * stroke)), yaw=SY, flex=-8, feet=feet_sit, spine=(28, 4 * stroke, 0), head=(26, hdx),
-         hands={"L": (sp + rel(Vector(), SY, (-0.07, -0.02, -0.01)), dL, nL, None),
-                "R": (fp + rel(Vector(), SY, (0.13, -0.03, 0.03)), dR, nR, None)},
+         hands={"L": (sp + rel(Vector(), SY, (-0.11, -0.02, -0.01)), dL, nL, None),
+                "R": (fp + rel(Vector(), SY, (0.17, -0.03, 0.04)), dR, nR, None)},
          fingers={"L": 0.85, "R": 0.9})
     face(P_, f, brow=-0.9, lid=0.35, jaw=1)
 sk = scrap.data.shape_keys.key_blocks["Cut"]
@@ -154,7 +165,7 @@ for f in range(678, 941, 30):
     s = math.sin((f - 678) / 40)
     dR, nR = hand_dirs(150, (0, 0.2, 1), (0, -1, 0))
     pose(FA, f, FR + Vector((0.02 * s, 0, 0)), yaw=150, side=2 * s, spine=(6, 0, 0), head=(10, 10),
-         hands={"R": (rel(FR, 150, (0.05, 0.22, 0.48)), dR, nR, None)}, fingers={"R": 0.6})
+         hands={"R": (rel(FR, 150, (0.06, 0.32, 0.43)), dR, nR, None)}, fingers={"R": 0.6})
     face(FA, f, smile=0.7, brow=0.3)
 # a gear spins on the bench (life)
 gr = O["Gear_2"]
@@ -202,13 +213,15 @@ key_obj(phone, 0, loc=(6.9, 7.8, 0.435), rot=(0, 0, R_(200))); key_obj(phone, 11
 for f in range(1140, 1422, 4):
     t = (f - 1140) / 60
     lift = min(1, (f - 1140) / 30)
-    ear = rel(SR, SYw, (0.16, 0.12, 0.62))
-    pp = Vector((6.9, 7.8, 0.435)).lerp(ear + Vector((0, 0, -0.42)), lift)
-    key_obj(phone, f, loc=pp, rot=(R_(-10 * lift), 0, R_(200 - 60 * lift)))
     pt = 0.5 + 0.5 * math.sin(t * 5)
-    dR, nR = hand_dirs(SYw, (0, 0.2, 1), (-1, 0, 0)); dL, nL = hand_dirs(SYw - 60, (0, 1, 0.1), (0, 0, -1))
-    pose(SM, f, SR + Vector((0, 0, -0.01 * pt)), yaw=SYw, side=-3, spine=(-4, -14 - 6 * pt, 0), head=(-6 + 4 * pt, -20),
-         hands={"R": (pp + Vector((0, 0, 0.36)), dR, nR, None), "L": (rel(SR, SYw - 60, (-0.15, 0.55 + 0.06 * pt, 0.55)), dL, nL, None)},
+    wr = rel(SR, SYw, (0.2, -0.02, 0.5))                  # right wrist beside the head, below the ear
+    pp = Vector((6.9, 7.8, 0.435)).lerp(wr + Vector((0, 0, -0.1)), lift)
+    key_obj(phone, f, loc=pp, rot=(0, 0, R_(200 - 60 * lift)))
+    dR, nR = hand_dirs(SYw, (0, 0, 1), (-1, 0, 0))
+    hR = Vector((6.9, 7.8, 0.6)).lerp(wr, lift)
+    dL, nL = hand_dirs(SYw, (-0.4, 1, 0.1), (0, 0, -1))
+    pose(SM, f, SR + Vector((0, 0, -0.01 * pt)), yaw=SYw, side=-3, spine=(-4, 6 * pt, 0), head=(-6 + 4 * pt, 10),
+         hands={"R": (hR, dR, nR, rel(SR, SYw, (0.55, -0.1, 0.1))), "L": (rel(SR, SYw, (-0.38, 0.5 + 0.05 * pt, 0.42)), dL, nL, rel(SR, SYw, (-0.6, -0.2, 0.2)))},
          fingers={"R": 0.9, "L": 0.35})
     face(SM, f, brow=-1.0, lid=0.25, jaw=6 + 10 * pt, frown=1.0)
 # the boy reacts: clutches the toolbox, steps back toward the chair
@@ -351,6 +364,10 @@ for c in tube.children_recursive:
         m = c.modifiers.new("bend", "SIMPLE_DEFORM"); m.deform_method = "BEND"; m.angle = R_(85); m.deform_axis = "X"
 walk(P_, [(2484, (0.05, -2.5)), (2510, (-0.4, -1.0)), (2530, (-0.5, 0.4)), (2560, (-1.6, 1.4))], 2484, 2560)
 GR = [Vector((-4.6, 1.0, Z["Guard"])), Vector((-5.2, 2.0, Z["Guard2"]))]
+for f in (2484, 2520, 2556):            # guards standing at their posts before the freeze
+    for G, gr, gy in ((G1, GR[0], 90), (G2, GR[1], 100)):
+        pose(G, f, gr, yaw=gy, spine=(2, 4 * math.sin(f / 30), 0), head=(0, 8 * math.sin(f / 25)))
+        face(G, f, brow=-0.2)
 for f in range(2560, 2660, 4):
     back = (f - 2560) / 100.0
     root = Vector((-1.6 + 0.9 * back, 1.4, Z["Prisoner"])); yw = -90
@@ -406,9 +423,9 @@ for i, (f, kind) in enumerate(TL):
                      hands={"L": (rel(sr, SY, (-0.12, 0.42, 0.05)), *hand_dirs(SY, (0, 0.3, -1), (1, 0, 0)), None),
                             "R": (rel(sr, SY, (0.12, 0.42, 0.05)), *hand_dirs(SY, (0, 0.3, -1), (-1, 0, 0)), None)})
             elif kind == "window":
-                r = Vector((0.0, -2.62, z)); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
+                r = Vector((0.0, -2.86, z)); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
                 pose(H, ff, r, yaw=0, spine=(-4, 0, 0), head=(-12, 0),
-                     hands={"L": (Vector((0.16, -3.16, 1.6)), dd, nn_, None), "R": (Vector((-0.16, -3.16, 1.6)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
+                     hands={"L": (Vector((0.16, -3.17, 1.56)), dd, nn_, rel(r, 0, (-0.45, -0.2, 0.1))), "R": (Vector((-0.16, -3.17, 1.56)), dd, nn_, rel(r, 0, (0.45, -0.2, 0.1)))}, fingers={"L": 0.9, "R": 0.9})
             elif kind == "scratch":
                 r = Vector((-0.85, -1.6 - w * 2, z)); dd, nn_ = hand_dirs(90, (0, 1, 0.2), (0, 0, -1))
                 pose(H, ff, r, yaw=90, spine=(4, 0, 0), head=(5, 0), hands={"R": (Vector((-1.33, -1.4 - w * 4, 1.9 - w * 6)), dd, nn_, None)}, fingers={"R": 0.9})
@@ -478,13 +495,13 @@ for k, (x, y) in enumerate(((0.4, -17.0), (-0.9, -16.9), (1.6, -17.1))):
     for f in range(3460, END + 1, 3):
         cl.data.energy = 25 + 10 * random.random(); cl.data.keyframe_insert("energy", frame=f)
     cl.data.energy = 0; cl.data.keyframe_insert("energy", frame=3440)
-walk(PO, [(3466, (0.35, -1.95)), (3482, (0.15, -2.3)), (3498, (0.0, -2.62))], 3466, 3498)
+walk(PO, [(3466, (0.35, -1.95)), (3482, (0.15, -2.4)), (3498, (0.0, -2.86))], 3466, 3498)
 # the old man at the window, looking out
 for f in range(3498, END + 1, 8):
     t = (f - 3498) / 252
-    r = Vector((0.0, -2.62, Z["PrisonerOld"])); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
+    r = Vector((0.0, -2.86, Z["PrisonerOld"])); dd, nn_ = hand_dirs(0, (0, 0.3, 1), (0, 1, 0))
     pose(PO, f, r + Vector((0, 0, -0.005 * math.sin(f / 20))), yaw=0, spine=(-2, 0, 0), head=(-10, 4 * math.sin(f / 50)),
-         hands={"L": (Vector((0.16, -3.16, 1.62)), dd, nn_, None), "R": (Vector((-0.16, -3.16, 1.62)), dd, nn_, None)}, fingers={"L": 0.9, "R": 0.9})
+         hands={"L": (Vector((0.16, -3.17, 1.56)), dd, nn_, rel(r, 0, (-0.45, -0.2, 0.1))), "R": (Vector((-0.16, -3.17, 1.56)), dd, nn_, rel(r, 0, (0.45, -0.2, 0.1)))}, fingers={"L": 0.9, "R": 0.9})
     face(PO, f, brow=0.4, lid=0.15, smile=0.2 * t)
 
 # ================================================================ corridor/inmate life: neighbour inmate paces in cell x=3; second guard at the far end
@@ -497,13 +514,13 @@ walk(G2, [(0, (-8.5, 2.2)), (300, (-6.5, 2.1)), (677, (-9.0, 2.2))], 0, 677)
 # corridor lights: lights-out at night (beat 2), off in solitary beats, flicker on one tube
 for l in [o for o in O if o.name.startswith("CorrLight_")]:
     e0 = l.data.energy
-    for f, e in ((0, e0), (276, e0), (300, e0 * 0.25), (557, e0 * 0.25), (580, e0), (1859, e0), (1860, e0 * 0.1), (2171, e0 * 0.1), (2172, e0 * 0.35),
-                 (2484, e0), (2898, e0), (2899, e0 * 0.35), (3227, e0 * 0.35), (3228, e0 * 0.05), (3497, e0 * 0.05), (3498, e0 * 0.3)):
+    for f, e in ((0, e0), (276, e0), (300, e0 * 0.5), (557, e0 * 0.5), (580, e0), (1859, e0), (1860, e0 * 0.3), (2171, e0 * 0.3), (2172, e0 * 0.6),
+                 (2484, e0), (2898, e0), (2899, e0 * 0.6), (3227, e0 * 0.6), (3228, e0 * 0.3), (3497, e0 * 0.3), (3498, e0 * 0.5)):
         l.data.energy = e; l.data.keyframe_insert("energy", frame=f)
 fl = O["CorrLight_4"]
 for f in range(0, 700, 7):
     if random.random() < 0.15:
-        fl.data.energy = 15; fl.data.keyframe_insert("energy", frame=f); fl.data.energy = 120; fl.data.keyframe_insert("energy", frame=f + 3)
+        fl.data.energy = 90; fl.data.keyframe_insert("energy", frame=f); fl.data.energy = 300; fl.data.keyframe_insert("energy", frame=f + 3)
 
 # dust motes drifting in the air of the cell block (life in every interior frame)
 bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -0.2, 1.5)); dv = bpy.context.object; dv.name = "DustVolume"; dv.scale = (6, 3.2, 1.4)
@@ -519,13 +536,13 @@ sc.frame_start = 0
 # ================================================================ extra light: caged cell bulb + moonlight through the window (keeps night beats readable)
 bpy.ops.object.light_add(type="POINT", location=(0.0, -1.4, 2.75)); cb_ = bpy.context.object; cb_.name = "CellBulb"
 cb_.data.color = (1.0, 0.78, 0.5); cb_.data.shadow_soft_size = 0.05
-for f, e in ((0, 25), (276, 25), (300, 45), (557, 45), (1859, 45), (1860, 18), (2171, 18), (2172, 40), (3227, 40), (3228, 22), (3497, 22), (3498, 40)):
+for f, e in ((0, 60), (276, 60), (300, 90), (557, 90), (1859, 90), (1860, 45), (2171, 45), (2172, 90), (3227, 90), (3228, 50), (3497, 50), (3498, 90)):
     cb_.data.energy = e; cb_.data.keyframe_insert("energy", frame=f)
 bpy.ops.object.light_add(type="AREA", location=(0.6, -5.5, 3.3)); mn_ = bpy.context.object; mn_.name = "Moonlight"
-mn_.data.energy = 450; mn_.data.size = 1.5; mn_.data.color = (0.55, 0.68, 1.0)
+mn_.data.energy = 900; mn_.data.size = 1.5; mn_.data.color = (0.55, 0.68, 1.0)
 mn_.rotation_euler = ((Vector((0, -2.0, 1.0)) - mn_.location).to_track_quat("-Z", "Y").to_euler())
 bpy.ops.object.light_add(type="POINT", location=(0.0, -2.2, 1.9)); fl2 = bpy.context.object; fl2.name = "CellFace_Fill"
-fl2.data.energy = 15; fl2.data.color = (1.0, 0.85, 0.7); fl2.data.shadow_soft_size = 0.4
+fl2.data.energy = 40; fl2.data.color = (1.0, 0.85, 0.7); fl2.data.shadow_soft_size = 0.4
 # orange prison overalls (hue-shift the MakeHuman denim), print-free clothes everywhere
 def hue_shift(mat, hue, sat=1.0, val=1.0):
     nt = mat.node_tree; bsdf = next((n for n in nt.nodes if n.type == "BSDF_PRINCIPLED"), None)
@@ -646,7 +663,7 @@ CK = [
  (3750, (0.0, -5.0, 1.95), (0.0, -2.8, 1.65), 32, 0),
 ]
 build_camera(cam, CK)
-for f, fs in ((0, 4.0), (676, 4.0), (700, 2.0), (1420, 2.0), (1440, 4.0)):
+for f, fs in ((0, 5.6), (3750, 5.6)):
     camd.dof.aperture_fstop = fs; camd.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # beats.json for VO retime

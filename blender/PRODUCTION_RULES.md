@@ -27,8 +27,9 @@
 - Checkpoints where a Connect chat stops and waits for director approval: **A** beat sheet + camera plan, **B** blocking stills (1 per s), **C** polish stills (0.2 s sheets) + audit, **D** farm package.
 - See `pipeline/CONNECT_BRIEF.md` for the full brief every Connect chat follows.
 
-## Realism, not blocks (client, 21:00 UTC). This overrides any earlier "explainer" leniency
+## Detailed shapes, not blocks (client, 21:00 UTC)
+> **Look update (22:45 UTC):** the films must read as **bright 3D animation, not photoreal film**. Read `blender/STYLE_ANIMATED.md`; it overrides the photo-realism wording below. Keep the detailed shapes and drop the photographic look.
 - **Nothing may read as primitive geometry:** no rounded blocks, capsules, tubes, flat slabs or smooth blobs standing in for real things. That covers anatomy, organs, tissue, rock, soil, buildings, vehicles, props, clothes and water.
-- **Use real assets first.** Search CC-BY or CC0 models (`pipeline/find_models.py`: skull, head sagittal section, nasal cavity, ear anatomy, liver, intestines, lungs, ribcage, muscles, cochlea, buildings, vehicles…) and Poly Haven scans. Build procedurally only when no real asset exists, and then sculpt or displace it until it looks like a photograph of the real thing.
-- **Cutaways and cross-sections** show realistic anatomy with textured materials, not illustrated shapes: wet SSS tissue, porous bone, fibrous muscle, vessels.
+- **Use real assets first.** Search CC-BY or CC0 models (`pipeline/find_models.py`: skull, head sagittal section, nasal cavity, ear anatomy, liver, intestines, lungs, ribcage, muscles, cochlea, buildings, vehicles…) and Poly Haven scans. Build procedurally only when no real asset exists, and then sculpt or displace it until the shape is convincing (surfaced in the clean animated look).
+- **Cutaways and cross-sections** show correctly shaped anatomy in clean, colour-coded, glossy layers (see STYLE_ANIMATED.md), never wet or gory.
 - **Test:** pause any still. If a viewer could mistake it for a clay model, a toy or a diagram, it's a reject.

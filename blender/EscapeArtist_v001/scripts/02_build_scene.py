@@ -64,16 +64,20 @@ def emit_mat(name, color, strength):
     bs.inputs["Base Color"].default_value = color + (1,)
     return m
 
-M_CONC = tex_mat("Concrete_Wall", "concrete_wall_008", 0.6, tint=(0.82, 0.8, 0.74), bump=0.8)
-M_CONC_DIRTY = tex_mat("Concrete_Wall_Cell", "concrete_wall_008", 0.9, tint=(0.62, 0.6, 0.55), bump=1.0)
-M_FLOOR = tex_mat("Concrete_Floor", "concrete_floor_02", 0.5, bump=0.6, rough_mul=0.8)
-M_RUST = tex_mat("Rusty_Bars", "rusty_metal_02", 3.0, tint=(0.22, 0.22, 0.24), bump=0.4, metal=0.7, rough_mul=0.8)
-M_STEEL = tex_mat("Steel_Door", "rusty_metal_02", 4.0, tint=(0.2, 0.24, 0.26), bump=0.3, metal=0.7)
+M_CONC = tex_mat("Painted_Wall", "concrete_wall_008", 0.6, tint=(1.0, 0.97, 0.9), bump=0.15)
+M_CONC_DIRTY = tex_mat("Painted_Wall_Cell", "concrete_wall_008", 0.9, tint=(0.82, 0.9, 0.98), bump=0.15)
+M_FLOOR = tex_mat("Concrete_Floor", "concrete_floor_02", 0.5, tint=(0.85, 0.88, 0.9), bump=0.2, rough_mul=0.8)
+M_RUST = bpy.data.materials.new("Painted_Steel_Bars"); M_RUST.use_nodes = True
+_pb = M_RUST.node_tree.nodes["Principled BSDF"]; _pb.inputs["Base Color"].default_value = (0.12, 0.17, 0.26, 1)
+_pb.inputs["Metallic"].default_value = 0.6; _pb.inputs["Roughness"].default_value = 0.38
+M_STEEL = bpy.data.materials.new("Painted_Steel"); M_STEEL.use_nodes = True
+_ps = M_STEEL.node_tree.nodes["Principled BSDF"]; _ps.inputs["Base Color"].default_value = (0.32, 0.42, 0.5, 1)
+_ps.inputs["Metallic"].default_value = 0.5; _ps.inputs["Roughness"].default_value = 0.4
 M_GROUND = tex_mat("Yard_Ground", "dry_ground_rocks", 0.35, bump=1.0)
-M_BRICK = tex_mat("Brick", "brick_wall_001", 0.7, bump=0.8)
-M_BRICK_OUT = tex_mat("Brick_Outer", "brick_wall_001", 0.5, tint=(0.7, 0.66, 0.62), bump=0.9)
+M_BRICK = tex_mat("Plaster_Cream", "concrete_wall_008", 1.6, tint=(1.0, 0.9, 0.72), bump=0.1)
+M_BRICK_OUT = tex_mat("Brick_Outer", "brick_wall_001", 0.5, tint=(1.0, 0.95, 0.9), bump=0.3)
 M_WOOD = tex_mat("Wood", "wood_table_001", 1.0, bump=0.3)
-M_WOOD_DARK = tex_mat("Wood_Dark", "wood_table_001", 1.4, tint=(0.45, 0.3, 0.22), bump=0.3)
+M_WOOD_DARK = tex_mat("Wood_Floor", "wood_table_001", 1.4, tint=(1.0, 0.92, 0.8), bump=0.15)
 M_LAMP = emit_mat("Fluoro_Tube", (1.0, 0.95, 0.85), 18.0)
 
 def box(name, c, loc, size, mat, bevel=0.01, coll="SET"):
@@ -194,7 +198,7 @@ for i, x in enumerate(range(-9, 13, 3)):
     box("Fixture_%d" % i, None, (x, 1.5, 2.96), (1.25, 0.16, 0.06), M_STEEL, bevel=0.005, coll="LIGHTS")
     box("Tube_%d" % i, None, (x, 1.5, 2.92), (1.15, 0.05, 0.025), M_LAMP, bevel=0.0, coll="LIGHTS")
     bpy.ops.object.light_add(type="AREA", location=(x, 1.5, 2.88)); l = bpy.context.object; l.name = "CorrLight_%d" % i
-    l.data.shape = "RECTANGLE"; l.data.size, l.data.size_y = 1.2, 0.15; l.data.energy = 120; l.data.color = (1.0, 0.93, 0.8)
+    l.data.shape = "RECTANGLE"; l.data.size, l.data.size_y = 1.2, 0.15; l.data.energy = 300; l.data.color = (1.0, 0.95, 0.88)
     link(l, "LIGHTS")
 # gate across corridor at x=8.7 (slams in beat 7)
 gate_parts = [cyl("GBar", (8.7, 0.1 + 2.8 * k / 14, 0.02), (8.7, 0.1 + 2.8 * k / 14, 2.95), 0.02, M_RUST) for k in range(15)]
@@ -308,8 +312,10 @@ bpy.data.objects.remove(tuft)
 w = bpy.data.worlds.new("Night"); sc.world = w; w.use_nodes = True
 en = w.node_tree.nodes.new("ShaderNodeTexEnvironment")
 en.image = bpy.data.images.load(os.path.join(PH, "hdri", "moonless_golf_1k.hdr"))
-bg = w.node_tree.nodes["Background"]; bg.inputs["Strength"].default_value = 0.7
-w.node_tree.links.new(en.outputs["Color"], bg.inputs["Color"])
+bg = w.node_tree.nodes["Background"]; bg.inputs["Strength"].default_value = 1.6
+_mxw = w.node_tree.nodes.new("ShaderNodeMix"); _mxw.data_type = "RGBA"; _mxw.blend_type = "MULTIPLY"; _mxw.inputs["Factor"].default_value = 1.0
+_mxw.inputs[7].default_value = (0.55, 0.75, 1.0, 1)
+w.node_tree.links.new(en.outputs["Color"], _mxw.inputs[6]); w.node_tree.links.new(_mxw.outputs[2], bg.inputs["Color"])
 
 # ---------------------------------------------------------------- MEMORY HOUSE (behind far corridor wall) y[3.3,9]
 HY0, HY1 = 3.3, 9.0
@@ -348,8 +354,8 @@ BENCH_Z = 0.0  # resolved later from the bench mesh
 for i, (r, t, x, y) in enumerate(((0.025, 18, 0.62, 8.22), (0.016, 12, 0.7, 8.3), (0.034, 24, 0.25, 8.18), (0.012, 10, 0.55, 8.35), (0.02, 15, 0.8, 8.15))):
     gear("Gear_%d" % i, r, t, 0.003, (x, y + 0.3, 0.755), M_BRASS)
 # warm practical lamps
-bpy.ops.object.light_add(type="POINT", location=(0.6, 8.1, 1.9)); l = bpy.context.object; l.name = "BenchLamp"; l.data.energy = 120; l.data.color = (1.0, 0.72, 0.42); l.data.shadow_soft_size = 0.15; link(l, "LIGHTS")
-bpy.ops.object.light_add(type="AREA", location=(4.0, 5.5, 2.7)); l = bpy.context.object; l.name = "HouseFill"; l.data.energy = 220; l.data.size = 2.5; l.data.color = (1.0, 0.8, 0.6); link(l, "LIGHTS")
+bpy.ops.object.light_add(type="POINT", location=(0.6, 8.1, 1.9)); l = bpy.context.object; l.name = "BenchLamp"; l.data.energy = 200; l.data.color = (1.0, 0.72, 0.42); l.data.shadow_soft_size = 0.15; link(l, "LIGHTS")
+bpy.ops.object.light_add(type="AREA", location=(4.0, 5.5, 2.7)); l = bpy.context.object; l.name = "HouseFill"; l.data.energy = 700; l.data.size = 2.5; l.data.color = (1.0, 0.8, 0.6); link(l, "LIGHTS")
 bpy.ops.object.light_add(type="POINT", location=(7.0, 8.2, 1.6)); l = bpy.context.object; l.name = "PhoneLamp"; l.data.energy = 60; l.data.color = (1.0, 0.75, 0.5); link(l, "LIGHTS")
 # police lights outside the window (red/blue, keyed to flash in the animate script)
 for nm, c, y in (("PoliceRed", (1.0, 0.05, 0.03), 5.2), ("PoliceBlue", (0.05, 0.2, 1.0), 6.2)):
@@ -364,7 +370,7 @@ box("Court_BenchTop", None, (10.4, 7.45, 1.12), (2.8, 1.1, 0.05), M_WOOD, coll="
 for k in range(6): box("Court_Panel_%d" % k, None, (9.3 + k * 0.44, 7.13, 0.55), (0.36, 0.03, 0.8), M_WOOD, coll="COURT", bevel=0.01)
 gav, _ = glb("gavel", "Gavel", 0.3, 1, (10.2, 7.25, 1.145), rotz=R_(10), coll="COURT")
 cyl("SoundBlock", (10.0, 7.25, 1.145), (10.0, 7.25, 1.18), 0.06, M_WOOD, coll="COURT", verts=24)
-bpy.ops.object.light_add(type="AREA", location=(10.4, 5.8, 2.9)); l = bpy.context.object; l.name = "CourtKey"; l.data.energy = 300; l.data.size = 1.5; l.data.color = (1.0, 0.86, 0.7); link(l, "LIGHTS")
+bpy.ops.object.light_add(type="AREA", location=(10.4, 5.8, 2.9)); l = bpy.context.object; l.name = "CourtKey"; l.data.energy = 800; l.data.size = 1.5; l.data.color = (1.0, 0.86, 0.7); link(l, "LIGHTS")
 l.rotation_euler = (R_(35), 0, 0)
 
 # ---------------------------------------------------------------- small hero props (key ring, file, scrap/key, saw, tube, placards, candles)
