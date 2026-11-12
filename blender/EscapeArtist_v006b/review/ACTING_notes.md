@@ -50,4 +50,4 @@ EMPTY detail:
 - **31 s:** the night flight back over the fence. The runner is already in the cell, so it can't be aimed; listed as the establishing pass.
 - **59.5–61 s:** accepted by the director as the establishing wide.
 - **Roll check** (camera world X axis |z| < 0.1, every frame): only frames 373–406 exceed it. That is the deliberate **8° dutch angle** keyed on the beat-2 filing close-up (camera key at 390, roll 8°): **intended**.
-- **qa_check v006b:** EMPTY 156, FILL 7, CLAW 63, BACKHEAD 1; **CAMJUMP 0, ROLL 0**, HOVER, INSIDE and FACEPRESS 0. The full half-second sheet follows in the next commit.
+- **qa_check v006b:** EMPTY 156, FILL 7, CLAW 63, BACKHEAD 1; **CAMJUMP 0, ROLL 0**, HOVER, INSIDE and FACEPRESS 0. Full half-second sheet: `after_v006b_half.jpg`.
