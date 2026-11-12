@@ -27,15 +27,38 @@ def tile(kind, variant, out, pct, samples, dirt):
     bpy.ops.mesh.primitive_plane_add(size=400); bpy.context.active_object.data.materials.append(g)
     v = vehicles.make(kind, variant=variant or None, dirt=dirt)
     bpy.context.view_layer.update()
-    pts = [o.matrix_world @ Vector(c) for o in [v] + list(v.children_recursive) if o.type == 'MESH' for c in o.bound_box]
+    if v.get("train"):                               # frame the leading car; lay a track under the whole train
+        objs = [v]
+        for o in bpy.data.objects:
+            if o.type == 'MESH' and o.data.materials and o.data.materials[0].name == "Ground":
+                o.location.z = -0.3                      # ballast level below the rail heads
+        rail = bpy.data.materials.new("Rail"); rail.use_nodes = True
+        rp = rail.node_tree.nodes["Principled BSDF"]; rp.inputs['Base Color'].default_value = (0.3, 0.28, 0.26, 1)
+        rp.inputs['Metallic'].default_value = 0.8; rp.inputs['Roughness'].default_value = 0.4
+        sl = bpy.data.materials.new("Sleeper"); sl.use_nodes = True
+        sl.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (0.08, 0.075, 0.07, 1)
+        for y in (-0.79, 0.79):
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(-40, y, -0.08)); r = bpy.context.active_object
+            r.scale = (160, 0.07, 0.16); r.data.materials.append(rail)
+        for k in range(300):
+            bpy.ops.mesh.primitive_cube_add(size=1, location=(-118 + k * 0.55, 0, -0.22)); r = bpy.context.active_object
+            r.scale = (0.25, 2.6, 0.14); r.data.materials.append(sl)
+    else:
+        objs = [v] + list(v.children_recursive)
+    pts = [o.matrix_world @ Vector(c) for o in objs if o.type == 'MESH' for c in o.bound_box]
     lo = Vector((min(p.x for p in pts), min(p.y for p in pts), 0)); hi = Vector((max(p.x for p in pts), max(p.y for p in pts), max(p.z for p in pts)))
     c = (lo + hi) / 2; ext = max(hi.x - lo.x, hi.y - lo.y, (hi.z - lo.z) * 2.3)
     cam = camera((0, 0, 0), (0, 1, 0), lens=50)
+    has_ramp = vehicles.part(v, "ramp") is not None
     for k, (lab, az) in enumerate(ANGLES):
         d = ext * 1.55 + 2.0
+        if has_ramp and k == 2:                      # rear view with the ramp open, looking into the hold
+            vehicles.set_ramp(v, 1.0); az = 158; d = ext * 0.62 + 2.0
         a = math.radians(az)
         cam.location = (c.x + d * math.cos(a), c.y + d * math.sin(a), 1.55 + (hi.z - lo.z) * 0.18)
         tgt = Vector((c.x, c.y, hi.z * 0.42))
+        if has_ramp and k == 2:                      # frame the open tail and the hold
+            cam.location = (lo.x - 14.0, c.y - 15.0, 4.8); tgt = Vector((lo.x + 11.0, c.y, 2.6))
         cam.rotation_euler = (tgt - cam.location).to_track_quat('-Z', 'Y').to_euler()
         s.render.filepath = os.path.join(out, f"{kind}{'_' + variant if variant else ''}_{k}.png")
         bpy.ops.render.render(write_still=True)

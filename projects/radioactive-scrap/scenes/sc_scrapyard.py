@@ -441,16 +441,10 @@ def build(variant=None):
         box("Logbook", (tent_c.x + 0.4, tent_c.y + 0.6, 0.765), (0.3, 0.22, 0.015), pbr("Logbook", (0.15, 0.2, 0.35), 0.6))
         P["tentman"] = person("TentMan", 1.0, 52, "overall_white", "short02", moustache=True, hv=0.5, dosimeter=True)
         stool = cyl("Stool", (tent_c.x, tent_c.y + 1.15, 0.22), 0.18, 0.44, post_m, verts=12)
-        mx_tk, mx_wh, _, _ = truck("Mixer", (0.55, 0.55, 0.52), bed_len=4.6)
-        mx_tk.location = (-14.0, -36.5, 0)
-        tilt = bpy.data.objects.new("MixerTilt", None); bpy.context.collection.objects.link(tilt); tilt.parent = mx_tk
-        tilt.location = (-1.0, 0, 2.3); tilt.rotation_euler = (0, math.radians(-78), 0)
-        drum = cyl("MixerDrum", (0, 0, 0), 0.95, 3.4, painted_steel("MixDrum", (0.75, 0.7, 0.55), 0.5, 0.6), verts=24)
-        drum.parent = tilt; drum.location = (0, 0, 0)
-        for k in range(6):
-            fin = box("MixerFin", (0, 0, 0), (0.06, 0.12, 2.0), painted_steel("MixFin", (0.6, 0.55, 0.42), 0.5, 0.6)); fin.parent = drum
-            a = k / 6 * 2 * math.pi; fin.location = (1.0 * math.cos(a), 1.0 * math.sin(a), 0); fin.rotation_euler = (0, 0, a)
-        dd = drum.driver_add("rotation_euler", 2).driver; dd.type = 'SCRIPTED'; dd.expression = "frame * 0.08"
+        import vehicles as V
+        mx_tk = V.make("concrete_mixer", (-14.0, -36.5, 0), 0, dirt=0.5); mx_tk.name = "Mixer"
+        drum = V.part(mx_tk, "drum")                    # idling at the gate: ~1 turn every 4 s (driver, plays in any render)
+        dd = drum.driver_add("rotation_euler", 0).driver; dd.type = 'SCRIPTED'; dd.expression = "frame * 6.2832 / 96"
         c["mixer"] = mx_tk
     if v == "investigation":                            # the two opened shells, roped off
         for k, off in enumerate((Vector((-1.0, 0, 0)), Vector((1.0, 0.2, 0)))):
