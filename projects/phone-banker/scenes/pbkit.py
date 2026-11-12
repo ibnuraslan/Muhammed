@@ -415,3 +415,31 @@ def fume_hood(loc, rot_z=0.0):
     l = bpy.data.lights.new("HoodLight", 'AREA'); l.energy = 25; l.size = 1.2; l.color = (0.95, 0.98, 1.0)
     lo = bpy.data.objects.new("HoodLight", l); bpy.context.collection.objects.link(lo); lo.parent = o; lo.location = (0, 0, 2.1)
     return o
+
+
+def glazed_window(name, center, width, height, normal="x", cols=2, rows=3, frame_col=(0.78, 0.77, 0.72), depth=0.07):
+    """A real window: clear glass with a painted frame, mullions and transoms. `normal` is the wall's normal axis
+    ('x': the window spans Y and Z; 'y': it spans X and Z). Put something outside it (a facade, trees), not a glow."""
+    from kit import box, pbr, glass
+    fm = pbr(name + "Frame", frame_col, 0.5)
+    cx, cy, cz = center
+    parts = []
+
+    def bar(u, z, su, sz):
+        if normal == "x":
+            parts.append(box(name + "Bar", (cx, u, z), (depth, su, sz), fm))
+        else:
+            parts.append(box(name + "Bar", (u, cy, z), (su, depth, sz), fm))
+    u0 = cy if normal == "x" else cx
+    for k in range(cols + 1):                                                   # outer jambs + mullions
+        u = u0 - width / 2 + k * width / cols
+        bar(u, cz, 0.08 if k in (0, cols) else 0.05, height)
+    for k in range(rows + 1):                                                   # sill, head + transoms
+        z = cz - height / 2 + k * height / rows
+        bar(u0, z, width, 0.08 if k in (0, rows) else 0.05)
+    g = glass(name + "Glass", (0.9, 0.93, 0.94), 0.02)
+    if normal == "x":
+        parts.append(box(name + "Pane", (cx, cy, cz), (0.01, width, height), g))
+    else:
+        parts.append(box(name + "Pane", (cx, cy, cz), (width, 0.01, height), g))
+    return parts

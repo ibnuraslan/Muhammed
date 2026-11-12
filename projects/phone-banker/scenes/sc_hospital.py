@@ -12,7 +12,7 @@ import bpy
 from mathutils import Vector, Matrix
 from kit import *
 import ph
-from pbkit import joinm, masonry_facade, image_plane
+from pbkit import joinm, masonry_facade, image_plane, glazed_window
 from pbpeople import person, medic, stand, seat, walk_at, nod, look, hold_flat, hand_to, hide, recolor, fwd
 from sc_bankoffice import retint, plastic
 
@@ -218,7 +218,7 @@ def build_corridor(c, lino, walls, ceil, dawn):
             frame_m = pbr("DoorWhite", (0.78, 0.78, 0.74), 0.4)
             box("DoorFrame", (sx * (W / 2 - 0.01), y, 1.05), (0.04, 1.0, 2.15), frame_m)
             box("DoorLeaf", (sx * (W / 2 - 0.02), y, 1.03), (0.04, 0.9, 2.05), pbr("DoorLeafM", (0.7, 0.7, 0.66), 0.45))
-            box("DoorGlass", (sx * (W / 2 - 0.045), y, 1.55), (0.01, 0.6, 0.7), pbr("Frosted", (0.75, 0.78, 0.78), 0.3, 0.0, **{'Emission Color': (0.9, 0.95, 1.0, 1), 'Emission Strength': 0.4}))
+            box("DoorGlass", (sx * (W / 2 - 0.045), y, 1.55), (0.01, 0.6, 0.7), pbr("Frosted", (0.75, 0.78, 0.78), 0.3, 0.0, **{'Emission Color': (0.9, 0.95, 1.0, 1), 'Emission Strength': 0.0 if dawn else 0.12}) if not dawn else pbr("WiredGlass", (0.3, 0.33, 0.33), 0.25))
         for k in range(3):
             ph.model("painted_wooden_bench", loc=(sx * (W / 2 - 0.28), -6 + k * 6.5, 0), rot_z=math.radians(-90 * sx))
     # swinging double doors across the corridor at y = -4 (glazed), the trolley comes through them
@@ -230,8 +230,12 @@ def build_corridor(c, lino, walls, ceil, dawn):
     c["swing"] = leaves
     box("SwingHead", (0, -4.0, 2.6), (W, 0.12, 1.0), walls)
     # a window at the far end
-    box("EndWall", (0, -L_ / 2 - 0.05, H / 2), (W, 0.1, H), walls)
-    box("EndWin", (0, -L_ / 2, 1.8), (1.4, 0.02, 1.6), pbr("EndWinGlow", (0.8, 0.85, 0.9), 0.3, 0.0, **{'Emission Color': (0.85, 0.9, 1.0, 1), 'Emission Strength': 2.5 if not dawn else 4.0}))
+    ey = -L_ / 2 - 0.05
+    for (x0, x1, z0, z1) in ((-W / 2, -0.7, 0, H), (0.7, W / 2, 0, H), (-0.7, 0.7, 0, 1.0), (-0.7, 0.7, 2.6, H)):
+        box("EndWall", ((x0 + x1) / 2, ey, (z0 + z1) / 2), (x1 - x0, 0.1, z1 - z0), walls)
+    glazed_window("EndWin", (0, ey, 1.8), 1.4, 1.6, normal="y", cols=2, rows=3)
+    box("EndOutside", (0, ey - 16, 8), (40, 1, 24), masonry_facade("CorrOpp", (0.58, 0.55, 0.5), 3.2, 2.6, 1.2, 1.6, 0.0, lit_strength=0.0))
+    box("EndYard", (0, ey - 8, -0.6), (40, 16, 0.2), pbr("Yard", (0.4, 0.4, 0.38), 0.9))
     box("EndWall2", (0, L_ / 2 + 0.05, H / 2), (W, 0.1, H), walls)
     fluorescents([0.0], [-8.0, -3.0, 2.0, 7.0], H - 0.02, 0 if dawn else 28)
     if dawn:                                                   # dawn: cool daylight from the far window, one light still on
@@ -308,15 +312,24 @@ def build_path(c, lino, ceil):
     for (y0, y1) in ((-D / 2, -0.8), (0.8, D / 2)):
         box("TilesL", (-W / 2 - 0.05, (y0 + y1) / 2, H / 2), (0.1, y1 - y0, H), tile)
     box("WinUnder", (-W / 2 - 0.05, 0, 0.5), (0.1, 1.6, 1.0), tile); box("WinOver", (-W / 2 - 0.05, 0, 2.75), (0.1, 1.6, 0.5), tile)
-    box("WinGlass", (-W / 2 - 0.06, 0, 1.75), (0.01, 1.6, 1.5), pbr("PathFrost", (0.75, 0.78, 0.8), 0.3, 0.0, **{'Emission Color': (0.75, 0.82, 0.95, 1), 'Emission Strength': 1.2}))
+    glazed_window("PathWin", (-W / 2 - 0.05, 0, 1.75), 1.6, 1.5, normal="x", cols=2, rows=2)
+    box("PathOutside", (-W / 2 - 14, 0, 8), (1, 40, 24), masonry_facade("PathOpp", (0.55, 0.52, 0.47), 3.2, 2.6, 1.2, 1.6, 0.0, lit_strength=0.0))
+    box("PathYard", (-W / 2 - 7, 0, -0.5), (14, 40, 0.2), pbr("PYard", (0.4, 0.4, 0.38), 0.9))
     window_light(-W / 2 - 0.4, 0, 0, 90, (0.8, 0.86, 1.0))
     # his desk by the window, the empty steel table under the theatre lamp at the back
     r, desk = ph.model("metal_office_desk", loc=(-1.2, -1.2, 0), rot_z=math.radians(90))
     retint(desk, (0.85, 0.9, 0.88))
     r, ch = ph.model("SchoolChair_01", loc=(-0.45, -1.2, 0), rot_z=math.radians(90))
-    r, lmp = ph.model("desk_lamp_arm_01", loc=(-1.45, -0.6, 0.79), rot_z=math.radians(-30)); retint(lmp, (0.2, 0.25, 0.22))
+    r, lmp = ph.model("desk_lamp_arm_01", loc=(-1.2, -0.85, 0.79), rot_z=math.radians(-30)); retint(lmp, (0.2, 0.25, 0.22))
+    bpy.context.view_layer.update()
+    pts = [o.matrix_world @ v.co for o in lmp if o.type == 'MESH' for v in o.data.vertices]
+    shade = [p for p in pts if p.z > 1.4]
+    c["lamp_head"] = sum(shade, Vector()) / len(shade)                             # the shade centre: where he reaches for the switch
+    c["lamp_bulb"] = Vector((c["lamp_head"].x + 0.03, c["lamp_head"].y - 0.01, min(p.z for p in shade) - 0.04))
+    print("[path] lamp head", tuple(round(v, 3) for v in c["lamp_head"]))
     dl = bpy.data.lights.new("PathDeskLamp", 'SPOT'); dl.energy = 30; dl.spot_size = math.radians(70); dl.color = (1.0, 0.82, 0.6)
-    do = bpy.data.objects.new("PathDeskLamp", dl); bpy.context.collection.objects.link(do); do.location = (-1.3, -0.95, 1.35); point_at(do, (-1.05, -1.2, 0.8))
+    do = bpy.data.objects.new("PathDeskLamp", dl); bpy.context.collection.objects.link(do); do.location = c["lamp_bulb"]; point_at(do, (-1.0, -1.1, 0.8))
+    dl.energy = 45; c["desklamp"] = dl
     import paper_tex
     pages = paper_tex.make_all()["pages"]
     for k in range(3):
@@ -331,7 +344,7 @@ def build_path(c, lino, ceil):
     r, _ = ph.model("vintage_cabinet_01", loc=(1.0, D / 2 - 0.35, 0)); 
     r, _ = ph.model("vintage_microscope", loc=(-1.0, -1.65, 0.79), rot_z=1.0)
     r, rad = ph.model("vintage_radio_transceiver", loc=(-1.35, -2.0, 0.79), rot_z=math.radians(80))
-    fluorescents([0.0], [0.0], H - 0.02, 25)
+    fluorescents([0.0], [0.0], H - 0.02, 8)
     c["doctor"] = medic("Pathologist", 1.0, 56, "short04")
     folder = joinm([box("PFolder", (0, 0, 0), (0.31, 0.235, 0.004), pbr("PManila", (0.6, 0.48, 0.28), 0.8), bevel=0.001)], "PathFolder")
     pg = image_plane("PathPage", pages[0], (0, 0, 0.0025), (0.29, 0.215), (0, 0, math.radians(90)), rough=0.75); pg.parent = folder
@@ -466,30 +479,42 @@ def a_dawn(c, sec):
 
 def a_path(c, sec, close=0.0):
     d = c["doctor"]
-    seat(d, (-0.5, -1.2, 0), math.radians(90), lean=16)                     # faces -X: his desk
+    seat(d, (-0.5, -1.2, 0), math.radians(-90), lean=16)                    # faces -X: his desk, the window beyond
+    c["theatre"].energy = 0.0
     if close <= 0:
         nod(d, "neck01", 10); nod(d, "head", 16)
         hold_flat(d, c["folder"], dist=0.32, drop=0.0, tilt_deg=50, spread=0.13, wobble=0.006 * math.sin(sec * 0.7))
-        c["theatre"].energy = 220
+        c["desklamp"].energy = 45
+        return
+    # 6B: he lowers the file to the desk and closes it, reaches up to the desk lamp, and the light goes out
+    OFF = 3.9
+    bpy.context.scene.frame_set(int(sec * 24) + 1)                         # the lamp is a frame driver: evaluate it
+    lower = ease(min(1.0, sec / 1.4))
+    nod(d, "neck01", 10); nod(d, "head", 18 - 6 * ease(min(1.0, max(0.0, (sec - 2.0) / 1.0))))
+    held = hold_flat(d, c["folder"], dist=0.32, drop=0.0, tilt_deg=50, spread=0.13) if lower < 1.0 else None
+    on_desk = Vector((-1.0, -1.2, 0.795))
+    if lower < 1.0:
+        p0 = c["folder"].location.copy(); r0 = c["folder"].rotation_euler.copy()
+        c["folder"].location = p0.lerp(on_desk, lower)
+        c["folder"].rotation_euler = (r0.x * (1 - lower), r0.y * (1 - lower), math.radians(90))
     else:
-        # 6B: he closes the file on the desk, stands and switches the theatre lamp off at the wall
-        k = ease(min(1.0, sec / 1.5))
-        c["folder"].location = Vector((-1.0, -1.2, 0.8)); c["folder"].rotation_euler = (0, 0, math.radians(90))
-        if sec < 2.0:
-            hand_to(d, "R", Vector((-1.0, -1.25, 0.84)), curl=20); hand_to(d, "L", Vector((-1.0, -1.05, 0.84)), curl=20)
-            nod(d, "head", 20)
-            c["theatre"].energy = 220
-        else:
-            w = min(1.0, (sec - 2.0) / 2.2)
-            p = Vector((-0.4, -1.2, 0)).lerp(Vector((2.1, 0.2, 0)), w)
-            if w < 1:
-                walk_at(d, (sec - 2.0) * 0.9, p, math.radians(-90 + 30), stride=18, swing=8)
-                c["theatre"].energy = 220
-            else:
-                stand(d, (2.1, 0.2, 0), math.radians(-90))
-                hand_to(d, "L", Vector((2.48, 0.2, 1.42)), curl=40)
-                c["theatre"].energy = 0 if sec > 4.6 else 220
-                look(d, Vector((1.2, 1.4, 1.0)), 0.6)
+        c["folder"].location = on_desk; c["folder"].rotation_euler = (0, 0, math.radians(90))
+    pg = bpy.data.objects.get("PathPage")
+    if pg:
+        pg.hide_render = sec > 1.6                                          # the cover closes over the pages
+    f = c["folder"].location
+    if sec < 2.3:
+        hand_to(d, "L", f + Vector((0.08, -0.1, 0.03)), curl=15); hand_to(d, "R", f + Vector((0.08, 0.1, 0.03)), curl=15)
+    else:
+        reach = ease(min(1.0, (sec - 2.3) / 1.4))
+        lamp = c["lamp_head"] + Vector((0.12, -0.06, -0.05))
+        hand_to(d, "R", (f + Vector((0.08, 0.1, 0.03))).lerp(lamp, reach), curl=35)
+        hand_to(d, "L", f + Vector((0.1, -0.1, 0.03)), curl=15)
+        look(d, lamp, 0.4 * reach)
+    if "lamp_driver" not in c:
+        dr = c["desklamp"].driver_add("energy").driver; dr.type = 'SCRIPTED'
+        dr.expression = f"45 * max(0.0, min(1.0, ({int(OFF * 24) + 1} + 3 - frame) / 3.0))"
+        c["lamp_driver"] = dr
 
 
 ANIM = {"gurney": a_gurney, "ward": a_ward, "nightward": a_night, "doctor": a_doctor, "arrive": a_arrive, "dawn": a_dawn,
@@ -521,10 +546,10 @@ MOVES = {
                    focus=lambda c, t: c["van"].location + Vector((0, 0, 1.2))),
     "dawn": dict(kind="anim", dof=3.6, far=30.0, anim=_anim("dawn"), cam=_push((-0.7, 5.5, 1.6), (-0.6, 4.7, 1.58), (0.2, 0.0, 1.5), (0.4, 0.0, 1.4), 30),
                  focus=lambda c, t: Vector((0.6, 0.2, 1.4))),
-    "path_read": dict(kind="anim", dof=3.2, far=12.0, anim=_anim("path_read"), cam=_push((0.9, -2.2, 1.5), (0.7, -2.05, 1.48), (-0.7, -1.2, 1.2), (-0.65, -1.2, 1.2), 32),
+    "path_read": dict(kind="anim", dof=3.2, far=12.0, anim=_anim("path_read"), cam=_push((-2.15, -2.15, 1.55), (-2.1, -1.95, 1.52), (-0.55, -1.15, 1.2), (-0.55, -1.15, 1.18), 32),
                       focus=lambda c, t: Vector((-0.6, -1.2, 1.3))),
-    "path_light": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("path_light"), cam=_push((-1.9, -2.2, 1.6), (-1.8, -1.9, 1.6), (0.6, 0.5, 1.3), (1.4, 0.6, 1.4), 26),
-                       focus=lambda c, t: Vector((0.0, -0.5, 1.3)).lerp(Vector((2.1, 0.2, 1.4)), ease(t))),
+    "path_light": dict(kind="anim", dof=4.0, far=12.0, anim=_anim("path_light"), cam=_push((-2.2, -2.45, 1.62), (-2.1, -2.25, 1.6), (-0.85, -1.0, 1.15), (-0.9, -1.0, 1.15), 28),
+                       focus=lambda c, t: Vector((-0.65, -1.15, 1.2))),
 }
 
 

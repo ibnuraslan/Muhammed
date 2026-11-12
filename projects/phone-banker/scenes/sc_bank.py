@@ -112,6 +112,8 @@ def build(variant=None):
         for k in range(10):
             x = float(rng.uniform(-22, 25)); z = float(rng.choice([4.3, 7.3, 10.3]))
             l = area_light((x, 0.9, z), (math.radians(90), 0, 0), 1.2, 12, (1.0, 0.75, 0.45)); l.visible_camera = False
+    for sx in (-1, 1):                                                               # buildings closing both ends of the street
+        box("StreetEnd", (sx * 108, -12, 11), (4, 60, 22), masonry_facade(f"End{sx}", (0.56, 0.52, 0.46), 3.2, 2.6, 1.2, 1.7, 0.1, lit_col=(1.0, 0.72, 0.45), lit_strength=0.25))
     box("OppositeRow", (0, KERB_Y - ROAD_W - 12, 10), (220, 12, 20), masonry_facade("Opp", (0.55, 0.5, 0.42), 3.2, 2.6, 1.2, 1.7, 0.12, lit_col=(1.0, 0.72, 0.45), lit_strength=0.3))
     # street lamps (scanned) along the kerb, lit; linden-like small trees
     for x in (-16.0, -4.0, 8.0, 20.0):

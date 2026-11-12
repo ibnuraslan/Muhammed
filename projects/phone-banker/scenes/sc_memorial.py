@@ -9,10 +9,10 @@ import bpy
 from mathutils import Vector
 from kit import *
 import ph
-from pbkit import joinm
+from pbkit import joinm, glazed_window, masonry_facade
 from pbpeople import person, stand, walk_at, nod, look, hand_to, hide, fwd
 
-EXPOSURE = 0.8
+EXPOSURE = 0.2
 BOUNCES = 6
 DUR = {"mourners": 6.0, "dignitaries": 6.0}
 VARIANT_FOR = {"mourners": None, "dignitaries": None}
@@ -32,7 +32,7 @@ def carnation(loc, col):
 
 def build(variant=None):
     c = {}
-    world_flat((0.75, 0.78, 0.82), 1.0)
+    world_flat((0.75, 0.78, 0.82), 0.6)
     marble = ph.texture("marble_tiles", scale=0.5)
     W, D, H = 14.0, 18.0, 7.5
     box("Floor", (0, 2, -0.01), (W, D, 0.02), marble)
@@ -41,13 +41,16 @@ def build(variant=None):
     box("WallL", (-W / 2, 2, H / 2), (0.2, D, H), wall); box("WallR", (W / 2, 2, H / 2), (0.2, D, H), wall)
     # back wall behind the stand: three tall windows (the light source), heavy drapes
     for x in (-4.5, 0.0, 4.5):
-        box("TallWin", (x, D / 2 + 2.0, 3.6), (2.0, 0.05, 5.0), emissive("WinLight", (0.95, 0.96, 1.0), 1.2))
+        glazed_window("TallWin", (x, D / 2 + 2.0, 3.6), 2.0, 5.0, normal="y", cols=2, rows=5, frame_col=(0.82, 0.8, 0.74))
     for (x0, x1) in ((-W / 2, -5.5), (-3.5, -1.0), (1.0, 3.5), (5.5, W / 2)):
         box("BackPier", ((x0 + x1) / 2, D / 2 + 2.05, H / 2), (x1 - x0, 0.2, H), wall)
     box("BackTop", (0, D / 2 + 2.05, 6.6), (W, 0.2, 1.8), wall)
     for x in (-4.5, 0.0, 4.5):
-        l = area_light((x, D / 2 + 1.7, 3.6), (math.radians(90), 0, 0), 2.0, 450, (0.9, 0.94, 1.0)); l.visible_camera = False
+        l = area_light((x, D / 2 + 1.75, 3.6), (math.radians(-90), 0, 0), 2.0, 260, (0.9, 0.94, 1.0)); l.visible_camera = False; l.visible_glossy = False; l.visible_transmission = False
         l.data.size_y = 5.0; l.data.shape = 'RECTANGLE'
+    # outside the windows: a square with a row of buildings across it, under a pale summer sky
+    box("MemOutside", (0, D / 2 + 26, 10), (70, 1, 30), masonry_facade("MemOpp", (0.66, 0.62, 0.55), 3.4, 2.8, 1.3, 1.8, 0.0, lit_strength=0.0))
+    box("MemSquare", (0, D / 2 + 14, -0.3), (70, 24, 0.2), pbr("MemSquareM", (0.5, 0.5, 0.48), 0.9))
     box("FrontWall", (0, -D / 2 + 2, H / 2), (W, 0.2, H), wall)
     # columns along both sides
     col_m = pbr("ColumnMarble", (0.82, 0.8, 0.75), 0.25)
@@ -85,7 +88,7 @@ def build(variant=None):
     c["dignitaries"] = [person("Dig1", 1.0, 64, "male_elegantsuit01", "short04", cval=0.08, hv=0.65, sat=0.0),
                         person("Dig2", 1.0, 58, "male_elegantsuit01", "short01", cval=0.08, hv=0.5, sat=0.0)]
     c["bouquet"] = joinm(sum([carnation((rng.uniform(-0.05, 0.05), rng.uniform(-0.04, 0.04), rng.uniform(0, 0.06)), (0.6, 0.04, 0.05)) for _ in range(5)], []), "Bouquet")
-    haze((0, 4, H / 2), (W - 0.5, 14, H - 0.2), density=0.004, color=(0.9, 0.92, 0.95), anis=0.6)
+    haze((0, 4, H / 2), (W - 0.5, 14, H - 0.2), density=0.0015, color=(0.9, 0.92, 0.95), anis=0.6)
     animate(c, 0.0, "mourners")
     return c
 
