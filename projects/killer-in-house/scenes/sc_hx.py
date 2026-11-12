@@ -54,8 +54,7 @@ def build(variant=None):
             c[nm] = H.vehicle(nm, col, kind)
     c["variant"] = vv
     import look                   # house look (cinematic): low sky + one sun key + haze by day
-    if tod == "day":
-        # misty overcast (the v3 benchmark): soft cool key, low sky, ground mist down the street; exposed for faces
+    if tod == "day" and False:    # HOLD (hub): exterior relight waits for LOOK v5 (keep real colours); grade only for now
         look.day_light("overcast", azim=200, exposure=0.1)
         look.ground_haze((0, -12), (90, 70), height=6.0, density=0.012)
     return c

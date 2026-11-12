@@ -147,8 +147,9 @@ def build(variant=None):
     else:
         c["guards"] = [H.person("Guard%d" % k, "officer") for k in range(2)]
     import look                   # cold winter day: low sky, one sun key, a little haze
-    look.day_light("overcast", azim=210, exposure=-0.2)
-    look.ground_haze((0, 60), (500, 400), height=30.0, density=0.004)
+    if False:                     # HOLD (hub): exterior relight waits for LOOK v5 (keep real colours); grade only for now
+        look.day_light("overcast", azim=210, exposure=-0.2)
+        look.ground_haze((0, 60), (500, 400), height=30.0, density=0.004)
     return c
 
 
