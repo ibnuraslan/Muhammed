@@ -185,11 +185,32 @@ def _gown_mesh(name, nk, length, mat):
 
 
 def _sleeve(name, h, b0, b1, r0, r1, mat, parent_bone):
+    """A soft sleeve: a tube along the arm bone whose cross-section ripples into folds that deepen toward the cuff,
+    with a slight droop on the underside (cloth hanging from the arm)."""
+    import bmesh
     a, b = h.bone_head(b0), h.bone_tail(b1)
-    d = b - a
-    R = dd.Builder(name)
-    R.cone((a + b) / 2, r0, r1, d.length * 1.05, mat, verts=20, rot=Vector((0, 0, 1)).rotation_difference(d.normalized()).to_euler())
-    o = R.done(); _to_bone(o, h, parent_bone)
+    d = b - a; L_ = d.length * 1.05
+    q = Vector((0, 0, 1)).rotation_difference(d.normalized())
+    bm = bmesh.new(); NS, NR = 28, 8; rings = []
+    for k in range(NR + 1):
+        f = k / NR; r = r0 + (r1 - r0) * f; amp = 0.05 + 0.16 * f
+        ring = []
+        for j in range(NS):
+            th = 2 * math.pi * j / NS
+            rr = r * (1 + amp * math.sin(7 * th + 0.6 * k) + 0.4 * amp * math.sin(13 * th))
+            p_ = Vector((rr * math.cos(th), rr * math.sin(th), -L_ / 2 + L_ * f))
+            p_ = q @ p_ + (a + b) / 2 - Vector((0, 0, 0.35 * r * f * max(0.0, -math.sin(th))))
+            ring.append(bm.verts.new(p_))
+        rings.append(ring)
+    for k in range(NR):
+        for j in range(NS):
+            bm.faces.new((rings[k][j], rings[k][(j + 1) % NS], rings[k + 1][(j + 1) % NS], rings[k + 1][j]))
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    for f_ in me.polygons:
+        f_.use_smooth = True
+    me.materials.append(mat)
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    _to_bone(o, h, parent_bone)
     return o
 
 
@@ -284,7 +305,7 @@ def build(variant=None):
     rng = np.random.default_rng(23)
     x0, x1, y0, y1 = DOCK
     dock_mid = Vector(((x0 + x1) / 2, (y0 + y1) / 2, 0.3))
-    if v in ("aisle", "judges", "reverse"):
+    if v in ("aisle", "judges", "reverse", "ashamed"):
         c["public"] = public(c, 18 if v == "judges" else 30, rng, turned=(math.radians(-55) if v == "reverse" else 0.0))
     if v == "aisle":
         c["walkers"] = [person("Late0", 0.0, 34, "female_elegantsuit01", "bob02", cval=0.25),
@@ -416,8 +437,8 @@ MOVES = {
                  cam=lambda c, t: (Vector((-1.6, 13.5, 2.6)).lerp(Vector((-1.2, 13.8, 2.55)), ease(t)), Vector((3.2, 9.6, 0.9)), 30),
                  focus=lambda c, t: Vector((2.4, 9.4, 1.0))),
     "ashamed": dict(kind="anim", dof=2.8, anim=anim_ashamed,
-                    cam=lambda c, t: (Vector((1.4, 10.0, 1.75)).lerp(Vector((2.4, 10.5, 1.78)), ease(t)), Vector((5.15, 11.25, 1.7)), 45),
-                    focus=lambda c, t: Vector((5.15, 11.25, 1.8))),
+                    cam=lambda c, t: (Vector((5.55, 13.25, 1.72)).lerp(Vector((5.45, 12.75, 1.7)), ease(t)), Vector((4.95, 11.0, 1.55)), 45),
+                    focus=lambda c, t: Vector((5.15, 11.25, 1.65))),
     "reverse": dict(kind="anim", dof=4.0, anim=anim_reverse,
                     cam=lambda c, t: (Vector((6.3, 12.6, 2.1)).lerp(Vector((6.3, 12.0, 2.05)), ease(t)), Vector((-1.5, 3.5, 1.0)), 28),
                     focus=lambda c, t: Vector((-1.5, 4.0, 1.0))),
