@@ -95,3 +95,12 @@ Not changed (checked, plausible): soldier smashing the pot (both hands on it, sh
      - ~35–36.8 s: the dying twin under the blanket;
      - single whip frames at 20.8, 27.1, 30.4–30.6 and 41.4 s.
 - Found on review and fixed: the king's raised hand is `relaxed` (it read as splayed); the front bed curtains were removed (they filled the frame at 34–36 s).
+
+
+## v009 (optional polish after v008 approval: servants' pot handles only)
+- v008 (334d1cc) is the approved package. v009 changes only the two pouring servants; framing, camera and everything else are the same as v008.
+- Each servant's pot is no longer parented to the wrist. It is keyed in the chamber with its handle in the hand, spout toward the drinker's cup, tilted 55° while pouring and 16° on the approach. `grip_object` closes the hand on the handle at every key. The handle point and spout direction were measured from the two models.
+- Close-ups (`v009_hand_closeups.jpg`), seen from the film-camera side:
+  - Cell 3.0 s (silver pot): the red servant's fist is closed over the small handle on top of the tilted pot. The hand is now visible, not behind the pot.
+  - Cell 4.0 s (porcelain teapot): the green servant's fingers go through the handle loop. They are only lightly curled; the thumb is on top.
+- `qa_check.py` at 771d2da, unchanged → `v009_qa_check_director.json`: BACKHEAD 2, EMPTY 24, INSIDE 1, FILL 2 (identical to v008). CAMJUMP 0, ROLL 0, HOVER 0, CLAW 0, FACEPRESS 0.
