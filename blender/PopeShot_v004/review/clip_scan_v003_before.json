@@ -1,0 +1,237 @@
+{
+ "frames": {
+  "97": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 71
+   }
+  },
+  "139": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "523": {
+   "AideB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   },
+   "CrowdP43": {
+    "self": 741,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "553": {
+   "AideA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 58
+   },
+   "AideB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 202
+   }
+  },
+  "559": {
+   "AideA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 90
+   },
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "565": {
+   "AideA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 37
+   }
+  },
+  "577": {
+   "AideA": {
+    "self": 258,
+    "clothes": 0,
+    "other": 5
+   },
+   "AideB": {
+    "self": 98,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "583": {
+   "AideA": {
+    "self": 269,
+    "clothes": 0,
+    "other": 3
+   },
+   "AideB": {
+    "self": 367,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "589": {
+   "AideA": {
+    "self": 236,
+    "clothes": 0,
+    "other": 1
+   },
+   "AideB": {
+    "self": 409,
+    "clothes": 0,
+    "other": 5
+   }
+  },
+  "595": {
+   "AideA": {
+    "self": 269,
+    "clothes": 0,
+    "other": 0
+   },
+   "AideB": {
+    "self": 406,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "601": {
+   "AideA": {
+    "self": 288,
+    "clothes": 0,
+    "other": 0
+   },
+   "AideB": {
+    "self": 397,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "649": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   },
+   "SurgA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   },
+   "SurgB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "667": {
+   "SurgB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "673": {
+   "SurgA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   },
+   "SurgB": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "685": {
+   "SurgA": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "697": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "703": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  },
+  "1021": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1033": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1045": {
+   "Pope": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1069": {
+   "Prisoner": {
+    "self": 0,
+    "clothes": 0,
+    "other": 3
+   }
+  },
+  "1075": {
+   "Prisoner": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1111": {
+   "Prisoner": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   97,
+   97
+  ],
+  [
+   523,
+   523
+  ],
+  [
+   553,
+   601
+  ]
+ ],
+ "fps": 60
+}
