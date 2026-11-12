@@ -12,6 +12,8 @@ HOUSE = Vector((WALL_OUT, HOLE.y, 1.0))
 sc.frame_set(1452); HANDLE_POS = CUP.matrix_world @ Vector((0.0, 0.0, 0.14))
 FL = P(1395)
 sc.frame_set(842); _fr = bpy.data.objects['Fiance_rig']; HIS_HAND_842 = _fr.matrix_world @ _fr.pose.bones['wrist.R'].head
+sc.frame_set(815); HH815 = _fr.matrix_world @ _fr.pose.bones['head'].tail
+sc.frame_set(842); HH842 = _fr.matrix_world @ _fr.pose.bones['head'].tail
 CAM = [  # frame, camera, aim, lens, fstop
     # beat 1: street at dusk, bullet streaks in past the lens, camera whips in behind it and chases it to the siding
     (1, P(1) - D * 0.13 - SV * 0.035 + Z(0.02), P(1) + D * 4.0, 24, 8),
@@ -46,8 +48,8 @@ CAM = [  # frame, camera, aim, lens, fstop
     (748, Vector((4.52, -0.14, 1.27)), HER_HEAD + Vector((0.0, 0.02, 0.02)), 45, 2.8),
     (772, Vector((4.52, -0.30, 1.30)), C3 + Z(0.12), 40, 5.6),
     (795, C3 + Vector((0.08, -0.10, 0.34)), C3 + Z(0.13), 40, 5.6),
-    (815, Vector((4.50, -0.25, 1.38)), HIS_HEAD + Vector((0.22, 0.3, -0.25)), 30, 5.6),
-    (842, Vector((4.50, -0.20, 1.40)), HIS_HEAD + Vector((0.22, 0.25, -0.3)), 28, 5.6),
+    (815, HH815 + Vector((0.32, 0.55, 0.02)), HH815 + Vector((0.0, 0.0, -0.12)), 30, 5.6),
+    (842, HH842 + Vector((0.36, 0.6, 0.02)), HH842 + Vector((0.06, 0.1, -0.16)), 26, 5.6),
     (885, Vector((4.15, -0.05, 1.12)), C3 + Vector((0.03, 0.0, 0.03)), 40, 5.6),
     (920, P(920) - D * 0.35 + SV * 0.10 + Z(0.07), C3 + Z(0.03), 40, 4),
     (960, IMP + SV * 0.10 - D * 0.04 + Z(0.015), IMP, 55, 2.8),
