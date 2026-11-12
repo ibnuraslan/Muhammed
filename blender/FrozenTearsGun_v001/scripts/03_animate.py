@@ -287,7 +287,8 @@ for f in inv_f:
             palm_eyes = (Dh @ Vector((sx * 0.045, -0.23, hz + 0.035)), Dh3 @ Vector((-sx * 0.6, 0.05, 0.8)), Dh3 @ Vector((0.0, 1.0, 0.05)))
             # hand turned sideways: the bent index finger's side brushes along under her lower lashes, wrist out by the cheekbone
             knuckle = (Dh @ Vector((sx * (0.115 - 0.02 * math.sin(math.pi * wipe)), -0.175, hz + 0.0)), Dh3 @ Vector((-sx * 0.9, -0.15, 0.35)), Dh3 @ Vector((0.0, 0.25, 1.0)))
-            fc = lerp_grip(palm_eyes, knuckle, wipe)   # palms on the cheeks, hands apart
+            fc = lerp_grip(palm_eyes, knuckle, wipe)
+            fc = (fc[0] + Dh3 @ Vector((sx * 0.02, -0.05, 0.0)) * (4 * wipe * (1 - wipe)), fc[1], fc[2])   # arc off the face between the two contacts   # palms on the cheeks, hands apart
             g = lerp_grip(lap, fc, fs if s == "R" else 0.25 * fs)   # right hand over her eyes, left hand stays near her lap (no hand-on-hand)
             fw_ = fs if s == "R" else 0.25 * fs
             g = (g[0] + Dh3 @ Vector((sx * 0.05, -0.15, -0.03)) * math.sin(math.pi * fw_), g[1], g[2])   # arc in front of the chin

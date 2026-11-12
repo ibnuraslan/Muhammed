@@ -1,19 +1,5 @@
 {
  "frames": {
-  "1453": {
-   "Inventor": {
-    "self": 89,
-    "clothes": 0,
-    "other": 0
-   }
-  },
-  "1483": {
-   "Inventor": {
-    "self": 260,
-    "clothes": 0,
-    "other": 0
-   }
-  },
   "1567": {
    "Mentor": {
     "self": 4,
@@ -24,15 +10,6 @@
  },
  "step": 6,
  "depth_cm": 2.0,
- "bad_ranges": [
-  [
-   1453,
-   1453
-  ],
-  [
-   1483,
-   1483
-  ]
- ],
+ "bad_ranges": [],
  "fps": 60
 }
