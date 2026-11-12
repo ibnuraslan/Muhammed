@@ -8,6 +8,7 @@ out = sys.argv[sys.argv.index("--") + 1]
 R_ = math.radians
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "anim_lib.py")).read())
 exec(open(os.path.join(HERE, "lib_human.py")).read())
+exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())   # shared hand poses (director)
 sc = bpy.context.scene
 sc.render.fps = 60; sc.render.fps_base = 1.0; sc.frame_start, sc.frame_end = 1, 1770
 sc.render.resolution_x, sc.render.resolution_y = 1080, 1920
@@ -55,7 +56,7 @@ o = bpy.data.objects["ArmBoard"]
 TILT_UP, TILT_REC = 0.0, -32.0
 def key_tilt(f, deg):
     tilt.rotation_euler = (R_(deg), 0, 0); tilt.keyframe_insert("rotation_euler", index=0, frame=f)
-for f, d in ((1, TILT_UP), (175, TILT_UP), (300, TILT_REC), (B["b9"] + 10, TILT_REC), (B["b9"] + 75, TILT_UP), (B["end"], TILT_UP)):
+for f, d in ((1, TILT_UP), (350, TILT_UP), (470, TILT_REC), (B["b9"] + 10, TILT_REC), (B["b9"] + 75, TILT_UP), (B["end"], TILT_UP)):
     key_tilt(f, d)
 
 # ================================================================== people
@@ -73,7 +74,8 @@ PAT = Person(OB["Patient"]); SUR = Person(OB["Surgeon"]); NUR = Person(OB["Nurse
 # surgeon hands: no wrist copy-rotation (its target orientations twisted the wrist into a ballooned glove); the hand follows the forearm
 for P_ in (SUR, SAS):
     for s_ in "LR": P_.R.PB["wrist." + s_].constraints[0].influence = 0.0
-for P_ in (PAT, SUR, NUR, SAS): P_.limit_hands()
+for P_ in (PAT, SUR, NUR, SAS): add_hand_limits(P_.o)
+def HP(P_, s_, pose, f, **kw): apply_pose(P_.o, s_, pose, f, **kw)
 pr = PAT.o; M = pr.matrix_world.copy(); pr.parent = tilt; pr.matrix_parent_inverse = tilt.matrix_world.inverted()
 for s in "LR":
     PAT.R.PB["lowerleg02." + s].constraints[0].influence = 0.0   # FK seated legs
@@ -136,30 +138,31 @@ ARM_L_BOARD = ((0.74, -0.04, 1.03), (1, -0.15, 0.0), (0, 0, 1))   # palm up on t
 pat_up(1, head=(0, -8, 0)); pat_up(18, head=(-6, -12, 3), spine=(2, 0, 0)); pat_up(40, head=(-10, -18, 4), spine=(-2, 2, 0))
 pat_up(80, head=(-4, -22, 6), spine=(4, 3, 4)); pat_up(126, head=(-2, -16, 4), spine=(6, 2, 2)); pat_up(165, head=(0, -4, 0))
 for f, a in ((1, ARM_L_REST), (22, ARM_L_REST)): PAT.key_hand("L", f, *a)
-PAT.key_hand("L", 44, EARHAND_W + Vector((0.07, -0.02, -0.08)), (-0.25, -0.1, 1.0), (-1, 0, 0.1))
-PAT.key_hand("L", 70, EARHAND_W, (-0.3, -0.1, 1.0), (-1, 0, 0.1))
-PAT.key_hand("L", 110, EARHAND_W + Vector((0.008, 0.004, -0.01)), (-0.3, -0.1, 1.0), (-1, 0, 0.1))
-PAT.key_hand("L", 150, EARHAND_W + Vector((0.12, -0.06, -0.2)), (0.2, -0.6, -0.5), (0, 0, -1))
-PAT.key_hand("L", 200, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])
-PAT.key_hand("L", 300, *ARM_L_BOARD); PAT.key_hand("L", B["b9"] + 15, *ARM_L_BOARD)
+ALARM_L = Vector((0.13, -0.3, 1.04))
+for f, dz in ((44, 0.0), (70, -0.012), (110, 0.012)):
+    PAT.key_hand("L", f, ALARM_L + Vector((0, 0, dz)), (-0.1, -0.3, 1.0), (0, -1, 0.2))
+PAT.key_hand("L", 150, ALARM_L + Vector((0.12, 0.1, -0.24)), (0.2, -0.6, -0.5), (0, 0, -1))
+PAT.key_hand("L", 380, ARM_L_REST[0], ARM_L_REST[1], ARM_L_REST[2])
+PAT.key_hand("L", 470, *ARM_L_BOARD); PAT.key_hand("L", B["b9"] + 15, *ARM_L_BOARD)
 for f in (1, 16, 175, 300, B["b9"]): PAT.key_hand("R", f, *ARM_R)
-MOUTH = Vector((0.0, -0.125, 1.30))
-for f, dz in ((38, 0.0), (70, -0.01), (112, 0.005)):
-    PAT.key_hand("R", f, MOUTH + Vector((-0.02, -0.07, -0.085 + dz)), (0.15, 0.35, 1.0), (0.1, 1, -0.2))
-PAT.key_hand("R", 140, MOUTH + Vector((-0.12, -0.1, -0.3)), (0.1, -0.5, -0.4), (0, 0, -1))
-PAT.key_fingers("L", 1, 18); PAT.key_fingers("L", 50, 8, 10); PAT.key_fingers("L", 150, 15); PAT.key_fingers("L", 300, 25, 15)
-PAT.key_fingers("R", 1, 22); PAT.key_fingers("R", 38, 12, 10); PAT.key_fingers("R", 112, 18, 12); PAT.key_fingers("R", 150, 22)
+ALARM = Vector((-0.12, -0.3, 1.02))
+for f, dz in ((38, 0.0), (70, -0.015), (112, 0.01)):
+    PAT.key_hand("R", f, ALARM + Vector((0, 0, dz)), (0.1, -0.3, 1.0), (0, -1, 0.2))
+PAT.key_hand("R", 140, ALARM + Vector((-0.08, 0.1, -0.22)), (0.1, -0.5, -0.4), (0, 0, -1))
+HP(PAT, "L", "relaxed", 1); HP(PAT, "L", "open_alarm", 50); HP(PAT, "L", "open_alarm", 112); HP(PAT, "L", "relaxed", 150); HP(PAT, "L", "relaxed", 470)
+HP(PAT, "R", "relaxed", 1); HP(PAT, "R", "open_alarm", 38); HP(PAT, "R", "open_alarm", 112); HP(PAT, "R", "relaxed", 150)
 N0 = FACE_NEUTRAL()
 PAT.face(1, **dict(N0, eye_left_opened_up=0.4, eye_right_opened_up=0.4))
 SHOCK = dict(N0, eye_left_opened_up=1, eye_right_opened_up=1, eyebrows_left_up=1, eyebrows_right_up=1, eyebrows_left_inner_up=0.8,
              eyebrows_right_inner_up=0.8, mouth_open=0.75)
 PAT.face(14, **SHOCK); PAT.face(100, **dict(SHOCK, mouth_open=0.45, mouth_depression=0.4)); PAT.face(160, **dict(N0, eyebrows_left_inner_up=0.5, eyebrows_right_inner_up=0.5))
 SLEEP = dict(N0, eye_left_closure=1, eye_right_closure=1)
-PAT.face(260, **SLEEP); PAT.face(B["b9"] + 20, **SLEEP)
+PAT.face(340, **dict(N0, eye_left_slit=0.3, eye_right_slit=0.3)); PAT.face(430, **SLEEP); PAT.face(B["b9"] + 20, **SLEEP)
 SMILE = dict(N0, mouth_corner_puller=1.0, mouth_upward_retraction=0.5, eye_left_slit=0.35, eye_right_slit=0.35, eyebrows_left_up=0.3, eyebrows_right_up=0.3)
 PAT.face(B["b9"] + 45, **dict(N0, eye_left_opened_up=0.3, eye_right_opened_up=0.3)); PAT.face(B["b9"] + 75, **SMILE); PAT.face(B["end"], **SMILE)
 # reclined: breathing and a slow head roll; head turned to the right so the left ear faces the surgeon
-for f in range(300, B["b9"], 120):
+pat_up(340, head=(4, 0, 0)); pat_up(355, head=(4, 0, 0))
+for f in range(470, B["b9"], 120):
     pat_rec(f, breath=0.0); pat_rec(f + 60, breath=1.5)
 pat_rec(B["b9"] + 10)
 # beat 9: sits up, turns to camera, left hand comes up and touches the new ear, big smile
@@ -169,7 +172,7 @@ PAT.key_hand("L", B["b9"] + 60, *ARM_L_REST)
 PAT.key_hand("L", B["b9"] + 92, EAR_TOUCH + Vector((0.05, -0.05, -0.08)), (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
 PAT.key_hand("L", B["b9"] + 108, EAR_TOUCH, (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
 PAT.key_hand("L", B["end"], EAR_TOUCH + Vector((0.003, 0.004, 0.006)), (-0.3, -0.1, 1.0), (-1, 0.1, 0.1))
-PAT.key_fingers("L", B["b9"] + 60, 20); PAT.key_fingers("L", B["b9"] + 100, 6, 10)
+HP(PAT, "L", "relaxed", B["b9"] + 60); HP(PAT, "L", "cup_hold", B["b9"] + 100)
 
 def ev_at(f):
     sc.frame_set(f); bpy.context.view_layer.update()
@@ -188,7 +191,7 @@ ab_local = tilt_inv @ (mid + Vector((0, 0, -0.05)))
 ab.matrix_parent_inverse = Matrix.Identity(4); ab.location = ab_local; ab.rotation_euler = (0, 0, math.atan2((wr - el).y, (wr - el).x))
 ad_ = OB["ArmBoard_Drape"]; ad_.matrix_parent_inverse = Matrix.Identity(4); ad_.location = ab_local + Vector((0, 0, 0.023)); ad_.rotation_euler = ab.rotation_euler
 print("FOREARM", el, wr)
-for o_ in (ab, ad_): key_vis(o_, 1, False); key_vis(o_, 200, True); key_vis(o_, B['b9'] + 30, False)
+for o_ in (ab, ad_): key_vis(o_, 1, False); key_vis(o_, 380, True); key_vis(o_, B['b9'] + 30, False)
 
 # --- key points on the patient (world, reclined) used by the surgeon
 FA_LOCAL = lambda u: None
@@ -200,6 +203,27 @@ HM = pr.matrix_world @ PAT.R.PB["head"].matrix @ HEAD_REST.inverted()  # rest ar
 EAR_W = HM @ EAR_C
 EAR_OUT = (HM.to_3x3() @ Vector((1, 0, 0))).normalized()
 print("INC", INC, "EAR_W", EAR_W, "EAR_OUT", EAR_OUT)
+
+# ================================================================== chest x-ray (beat 2): real rib cage inside the patient
+TH = OB["SA_Thorax"]; CP = OB["SA_CartBlock"]; CL = OB["SA_CutLine"]
+CH_C = Vector((0.0, -0.005, 1.31)); CH_S = 0.5           # rest-armature chest centre and scale (rib cage ~0.31 m tall)
+def chest_copy(src, name, M_rest):
+    o = src.copy(); o.data = src.data; o.animation_data_clear(); o.name = name; C_PROP.objects.link(o)
+    attach_bone(o, PAT, "spine02", M_rest); return o
+ch_th = chest_copy(TH, "Chest_Thorax", Matrix.Translation(CH_C) @ Matrix.Scale(CH_S, 4))
+PIECE_REST = CH_C + (CP.location - TH.location) * CH_S
+ch_pc = chest_copy(CP, "Chest_Piece", Matrix.Translation(PIECE_REST) @ Matrix.Scale(CH_S, 4))
+ch_cl = CL.copy(); ch_cl.data = CL.data.copy(); ch_cl.animation_data_clear(); ch_cl.name = "Chest_CutLine"; C_PROP.objects.link(ch_cl)
+attach_bone(ch_cl, PAT, "spine02", Matrix.Translation(PIECE_REST) @ Matrix.Scale(CH_S, 4))
+for f, v in ((1, 0.0), (185, 0.0), (238, 1.0)):
+    ch_cl.data.bevel_factor_end = v; ch_cl.data.keyframe_insert("bevel_factor_end", frame=f)
+for o in (ch_th, ch_pc, ch_cl): key_vis(o, 1, False); key_vis(o, 140, True)
+key_vis(ch_th, 345, False); key_vis(ch_pc, 255, False); key_vis(ch_cl, 260, False)
+ev_at(200); CHEST_PIECE_W = ch_pc.matrix_world.translation.copy(); print("CHEST_PIECE_W", CHEST_PIECE_W)
+carry = bpy.data.objects.new("Chest_Piece_Carry", CP.data); C_PROP.objects.link(carry); carry.rotation_mode = 'XYZ'
+key_vis(carry, 1, False); key_vis(carry, 255, True); key_vis(carry, 335, False)
+for o in list(bpy.data.collections["Studio_Ribs"].objects) + list(bpy.data.collections["Studio_Tissue"].objects):
+    o.hide_render = True; o.hide_viewport = True
 
 # ================================================================== surgeon
 SH = Human(SUR.R)
@@ -217,14 +241,15 @@ def walk(P, a, b, f0, f1, yaw0, yaw1, stride=0.55):
     yawf = lambda f: yaw0 + (yaw1 - yaw0) * smooth((f - f0) / (f1 - f0))
     H.walk(path, yawf, f0, f1, stride=stride, lift=0.07, bob=0.015, crouch=0.03, lean=4.0, step=2)
 
-SA_ = Vector((-0.5, -0.42)); yA = yaw_to(Vector((0, -0.05)) - SA_)
+SA_ = Vector((0.45, -0.58)); yA = yaw_to(Vector((0.05, -0.1)) - SA_)
 ST = Vector((1.05, -0.4)); yT = 0.0
 SB_ = Vector((INC.x - 0.02, INC.y + 0.42)); yB = 0.0
 SC_ = Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)); yC = yaw_to(EAR_W.to_2d() - Vector((EAR_W.x + 0.22, EAR_W.y + 0.5)))
 stand(SUR, 1, SA_, yA, head=(10, 0, 0)); stand(SUR, 60, SA_, yA, spine=(6, 0, 0), head=(14, 0, 0)); stand(SUR, 128, SA_, yA, spine=(14, 0, 4), head=(18, 0, 0), crouch=0.03)
 stand(SUR, 160, SA_, yA, spine=(8, 0, 0))
-stand(SUR, 199, SA_, yA, spine=(8, 0, 0)); stand(SUR, 200, ST, yT, spine=(18, 0, 0))
-stand(SUR, 330, ST, yT, spine=(18, 0, 0), head=(28, 0, 0), crouch=0.02)
+stand(SUR, 205, SA_, yA, spine=(16, 0, 0), head=(22, 0, 0), crouch=0.03); stand(SUR, 280, SA_, yA, spine=(14, 0, 0), head=(20, 0, 0), crouch=0.03)
+walk(SUR, SA_, ST, 281, 338, yA, yT, stride=0.4)
+stand(SUR, 340, ST, yT, spine=(18, 0, 0), head=(28, 0, 0), crouch=0.02)
 for f in range(343, 565, 40):
     stand(SUR, f, ST, yT, spine=(30 + 3 * math.sin(f), 2 * math.sin(f * 0.3), 3 * math.sin(f * 0.2)), head=(30, 4 * math.sin(f * 0.1), 0), crouch=0.06)
 stand(SUR, 566, ST, yT, spine=(18, 0, 0)); walk(SUR, ST, Vector((1.0, 0.75)), 567, 625, yT, 100, stride=0.45); walk(SUR, Vector((1.0, 0.75)), SB_, 626, 660, 100, yB, stride=0.4)
@@ -243,11 +268,15 @@ stand(SUR, B["end"], SC_ + Vector((0.35, 0.15)), yCC, spine=(2, 0, -6), head=(4,
 TRAY = OB["Tray"].matrix_world.translation.copy()
 BLK = TRAY + Vector((-0.02, -0.02, 0.035))
 SUR_TIPS = []
-def sh(f, s, W, d, n, pole=None):
+def sh(f, s, W, d, n, pole=None, tip_mode=False):
     """surgeon hand. From the arm beats on, the hand follows the forearm (no wrist copy-rotation), so re-aim it:
     keep the intended tool point ~15 cm beyond the wrist and line the wrist up on the shoulder->tool-point ray"""
-    W = Vector(W); d = Vector(d).normalized()
-    if f >= 566:
+    W = Vector(W); d = Vector(d).normalized() if Vector(d).length else Vector(d)
+    if tip_mode:
+        ev_at(f); shp = SUR.wpos("upperarm01." + s); tip = W; dn = (tip - shp).normalized()
+        W = tip - dn * 0.15; d = dn
+        SUR_TIPS.append([f, s, tip.copy(), W.copy(), d.copy(), Vector(n)])
+    elif f >= 566:
         ev_at(f); shp = SUR.wpos("upperarm01." + s)
         tip = W + d * 0.15; dn = (tip - shp).normalized()
         W = tip - dn * 0.15; d = dn
@@ -260,11 +289,17 @@ for f in (1, 60):
     fwd = Matrix.Rotation(R_(yA), 3, 'Z') @ Vector((0, -1, 0))
     sh(f, "L", c + fwd * 0.25 + Vector((0.05, 0, -0.12)), fwd + Vector((0, 0, -0.3)), Vector((0, 0, 1)).cross(fwd))
     sh(f, "R", c + fwd * 0.27 + Vector((-0.02, 0, -0.1)), fwd + Vector((0, 0, -0.3)), -Vector((0, 0, 1)).cross(fwd))
-sh(100, "R", CHEST + Vector((-0.1, -0.14, 0.05)), (0.6, 0.6, -0.4), (-0.4, -0.5, 0.6))
-sh(128, "R", CHEST + Vector((-0.02, -0.072, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6, 0.5))
-sh(199, "R", CHEST + Vector((-0.02, -0.075, 0.0)), (0.6, 0.6, -0.3), (-0.4, -0.6, 0.5))
+sh(100, "L", CHEST + Vector((0.12, -0.16, 0.05)), (-0.6, 0.6, -0.4), (0.4, -0.5, 0.6))
+sh(128, "L", CHEST + Vector((0.05, -0.085, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
+sh(175, "L", CHEST + Vector((0.06, -0.09, 0.0)), (-0.6, 0.6, -0.3), (0.4, -0.6, 0.5))
+sh(215, "L", CHEST + Vector((0.18, -0.22, -0.15)), (-0.3, 0.3, -0.9), (0, 0, -1))
+# beat 2: forceps go into the x-rayed chest, free the cartilage piece and carry it to the tray (keys re-aimed + tip-solved below)
+PCW = CHEST_PIECE_W   # world point of the cartilage piece in the patient's chest (patient upright 1..350)
+for f, tip in ((200, PCW + Vector((0.05, -0.12, 0.08))), (225, PCW + Vector((0.0, -0.01, 0.0))), (250, PCW), (268, PCW + Vector((0.0, -0.06, 0.04))),
+               (290, PCW + Vector((0.12, -0.2, 0.12))), (315, BLK + Vector((-0.1, 0.05, 0.12))), (334, BLK + Vector((0.0, 0.0, 0.012))), (339, BLK + Vector((0.02, 0.04, 0.06)))):
+    sh(f, "R", tip, (0, 0, 0), (0, 0, 1), tip_mode=True)
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
-for f in range(300, 565, 6):
+for f in range(343, 565, 6):
     k = (f - 343) / 37.0
     away = Vector((0, 0.12, 0.1)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.1, 0.12)) * smoothstep(462, 488, f)   # hands come in after the camera leaves the block, lift off to reveal the ear
     shL = Vector((ST.x + 0.18, ST.y - 0.08, 1.38)); gripL = BLK + Vector((0.028, -0.005, 0.01))
@@ -274,9 +309,9 @@ for f in range(300, 565, 6):
     tgt = BLK + Vector((-0.02 + 0.04 * ph, 0.012 * math.sin(k * 2.3), 0.018 + 0.006 * math.sin(math.pi * ph)))
     shR = Vector((ST.x - 0.18, ST.y - 0.08, 1.38)); dR = (tgt - shR).normalized()
     sh(f, "R", tgt - dR * (0.13 + 0.03 * (1 if f < 350 else 0)) + Vector((0, 0, -0.06)) + away, dR, (-0.2, -0.3, 1.0))
-SUR.key_fingers("L", 300, [22, 60, 70, 75], 45); SUR.key_fingers("R", 300, [40, 62, 72, 78], 42)   # L: thumb-index pinch on the cartilage, R: scalpel grip
-SUR.key_fingers("L", 470, [22, 60, 70, 75], 45); SUR.key_fingers("L", 500, [25, 40, 50, 55], 25)
-SUR.key_fingers("R", 566, [30, 58, 68, 74], 42); SUR.key_fingers("L", 566, [25, 50, 60, 66], 35)   # forceps pinch / retracting fingers, never splayed
+HP(SUR, "L", "pinch", 343)   # L: thumb-index pinch on the cartilage, R: scalpel held like a pen
+HP(SUR, "L", "pinch", 470); HP(SUR, "L", "relaxed", 500)
+HP(SUR, "R", "pinch", 566); HP(SUR, "L", "pinch", 566)   # forceps pinch / skin-edge pinch
 # beat 4: R forceps carries the ear to the forearm, slides it in; L forceps lifts the skin edge
 ev_at(640)
 sh(570, "R", BLK + Vector((0.05, -0.04, 0.08)), (-0.6, 0.4, -0.5), (-0.2, -0.4, 1.0))
@@ -326,11 +361,14 @@ for s in "LR":
     ev_at(B["b9"] + 70)
     sh(B["b9"] + 70, s, SUR.wpos("spine04") + Vector((0.0, 0, -0.05)) + (Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector(((0.12 if s == "R" else -0.12), -0.22, -0.12))),
        Matrix.Rotation(R_(yCC), 3, 'Z') @ Vector((0, -1, -0.5)), (0, 0, 1))
-SUR.key_fingers("R", 1386, 40, 45); SUR.key_fingers("R", B["b9"] + 40, 40, 45); SUR.key_fingers("R", B["b9"] + 70, 20); SUR.key_fingers("L", B["b9"] + 70, 20)
+HP(SUR, "R", "pinch", 1386); HP(SUR, "R", "tripod", 1502); HP(SUR, "R", "tripod", B["b9"] + 40); HP(SUR, "R", "relaxed", B["b9"] + 70); HP(SUR, "L", "relaxed", B["b9"] + 70)
+HP(SUR, "R", "pinch", 1); HP(SUR, "L", "relaxed", 1); HP(SUR, "L", "flat_palm", 100); HP(SUR, "L", "flat_palm", 175); HP(SUR, "L", "relaxed", 215); HP(SUR, "R", "pinch", 339); HP(SUR, "R", "tripod", 343)
 SUR.face(1, **N0); SUR.face(B["b9"] + 60, **N0); SUR.face(B["b9"] + 90, **dict(N0, eye_left_slit=0.5, eye_right_slit=0.5, mouth_corner_puller=0.7))
 
 # tool tips onto their targets: re-key each surgeon hand key until the forceps / needle tip (or the index tip) lands on it
-TIP_LOCAL = {"F": Vector((0, 0.16, -0.02)), "N": Vector((0, 0.128, -0.025))}
+TIP_LOCAL = {"F": Vector((0, 0.09, 0)), "N": Vector((0, 0.108, 0))}
+def pinch_pt(P_, s_):
+    return P_.o.matrix_world @ ((P_.R.PB["finger1-3." + s_].tail + P_.R.PB["finger2-3." + s_].tail) / 2)
 _fast = []
 for o in bpy.data.objects:
     if o.type == 'MESH':
@@ -340,10 +378,10 @@ for it in range(3):
     worst = 0.0
     for rec in SUR_TIPS:
         f, s_, tip, W, d, n = rec
-        if f > 1500: continue   # stitching: keep the hand above the ear so the macro shows the stitches
+        if f > 1500 or (343 <= f < 566): continue   # stitching / carving: keep the hand above the ear so the macro shows the stitches
         ev_at(f); WM = SUR.o.matrix_world @ SUR.R.PB["wrist." + s_].matrix
         if s_ == "R":
-            act = WM @ TIP_LOCAL["F" if f <= 1500 else "N"]
+            act = pinch_pt(SUR, "R") + WM.to_3x3().normalized() @ TIP_LOCAL["F" if f <= 1500 else "N"]
         else:
             act = SUR.o.matrix_world @ SUR.R.PB["finger2-3.L"].tail
         err = tip - act; worst = max(worst, err.length)
@@ -378,6 +416,7 @@ for f in [1506] + list(range(1530, B["end"] + 1, 60)):
     stand(NUR, f, N_D + Vector((0.06, 0.08)), -213, spine=(6, 0, 0), head=(12, 0, 0)); nurse_arms(f, fwd=40 if f < B["b9"] else 70)
 for f in range(B["b9"] + 60, B["end"], 12):   # little clap
     nurse_arms(f, fwd=70 + (6 if (f // 12) % 2 else -2))
+for s_ in "LR": HP(NUR, s_, "relaxed", 1); HP(NUR, s_, "cup_hold", 700); HP(NUR, s_, "relaxed", 1309)
 NUR.face(1, **N0); NUR.face(B["b9"] + 50, **N0); NUR.face(B["b9"] + 80, **SMILE)
 
 # ================================================================== surgeon look: gloves, cap, mask
@@ -448,7 +487,7 @@ TRAY_TOP = TRAY.z + 0.006
 blk.location = Vector((BLK.x, BLK.y, TRAY_TOP)); blk.rotation_euler = (0, 0, R_(90))
 for f, s_ in ((343, (1, 1, 1)), (390, (0.95, 0.95, 0.7)), (430, (0.9, 0.9, 0.42)), (468, (0.85, 0.85, 0.15))):
     blk.scale = s_; blk.keyframe_insert("scale", frame=f)
-key_vis(blk, 1, True); key_vis(blk, 472, False)
+key_vis(blk, 1, False); key_vis(blk, 335, True); key_vis(blk, 472, False)
 key_vis(ear_real, 1, False); key_vis(ear_real, 370, True)
 ear_real.scale = (0.85, 0.85, 0.3); ear_real.keyframe_insert("scale", frame=370)
 ear_real.scale = (1, 1, 1); ear_real.keyframe_insert("scale", frame=468)
@@ -559,19 +598,24 @@ for o in bpy.data.objects:
 sc.frame_set(1)
 scal_rest = Matrix.Translation(TRAY + Vector((0.13, 0.12, 0.012))) @ Matrix.Rotation(R_(15), 4, 'Z')
 forc_rest = Matrix.Translation(TRAY + Vector((0.13, -0.13, 0.01))) @ Matrix.Rotation(R_(-10), 4, 'Z')
-nh_rest = Matrix.Translation(TRAY + Vector((-0.14, -0.1, 0.01))) @ Matrix.Rotation(R_(90), 4, 'Z') @ Matrix.Rotation(R_(90), 4, 'X')
+ev_at(1501); nh_rest = Matrix.Translation(pinch_pt(SUR, "R") + Vector((0.0, 0.0, -0.005))) @ Matrix.Rotation(R_(90), 4, 'Z')
 def keymat(o, f, M):
     o.matrix_world = M; o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
 for o in (scal, forc, nh, ear_arm, ear_new, kd):
     o.rotation_mode = 'XYZ'
+HEADSIDE = None
 for f in list(range(1, B["end"] + 1, 2)) + [B["end"]]:
     sc.frame_set(f)
-    # scalpel: held in R from 330 to 560
-    keymat(scal, f, wrist_w(SUR, "R") @ G_SCAL if 330 <= f <= 562 else scal_rest)
-    # forceps in R hand 566..1500
-    keymat(forc, f, wrist_w(SUR, "R") @ G_FORC if 566 <= f <= 1500 else forc_rest)
-    keymat(nh, f, wrist_w(SUR, "R") @ G_NH if 1502 <= f <= B["b9"] + 40 else nh_rest)
+    Rw = wrist_w(SUR, "R").to_3x3().normalized().to_4x4(); PP = Matrix.Translation(pinch_pt(SUR, "R"))
+    if f == 1501: HEADSIDE = Matrix.Translation(pinch_pt(SUR, "R") + Vector((0, 0.06, -0.06)))
+    keymat(scal, f, PP @ Rw @ Matrix.Translation((0, -0.03, 0)) @ Matrix.Rotation(R_(90), 4, 'Z') if 343 <= f <= 562 else scal_rest)
+    held_f = f <= 337 or 566 <= f <= 1500
+    keymat(forc, f, PP @ Rw @ Matrix.Translation((0, -0.04, 0)) if held_f else (forc_rest if f < 1500 else HEADSIDE @ Matrix.Rotation(R_(90), 4, 'Z')))
+    keymat(nh, f, PP @ Rw @ Matrix.Translation((0, 0.03, 0)) @ Matrix.Rotation(R_(180), 4, 'Z') if 1502 <= f <= B["b9"] + 40 else
+           (nh_rest if f < 1502 else HEADSIDE @ Matrix.Translation((0.03, 0, 0)) @ Matrix.Rotation(R_(90), 4, 'Z')))
     tip = forc.matrix_world @ Vector((0, 0.13, 0))
+    if 255 <= f <= 335:
+        keymat(carry, f, Matrix.Translation(tip) @ forc.matrix_world.to_3x3().normalized().to_4x4() @ Matrix.Scale(CH_S, 4))
     # the carved ear: on the tray until 566, in forceps 566..700, in the pocket 700..1120, forceps 1120..1440, head after
     pocket = patch.matrix_world @ Matrix.Translation((0, 0, -0.004)) @ Matrix.Rotation(R_(-90), 4, 'X') @ Matrix.Scale(0.85, 4)
     Rf = forc.matrix_world.to_quaternion().to_matrix().to_4x4()
@@ -693,10 +737,14 @@ for f in range(127, 343, 4):
         SAS.key_hand("L", f, Vector((SA_POS.x, SA_POS.y, 1.0)) + fwdSA * 0.18 + Vector((0.1, 0, 0)), Vector((0, 0, -1)) + fwdSA * 0.3, fwdSA)
     else:         # pinches the freed block and lifts it out
         SAS.key_hand("L", f, b_ + Vector((0.045, 0.0, 0.005)) - dL_SA * 0.085, dL_SA, (0, 0, 1))
-SAS.key_fingers("R", 127, 38, 32); SAS.key_fingers("L", 127, 15, 10); SAS.key_fingers("L", 270, 15, 10); SAS.key_fingers("L", 285, 45, 40)
+HP(SAS, "R", "tripod", 127); HP(SAS, "L", "relaxed", 127); HP(SAS, "L", "relaxed", 270); HP(SAS, "L", "pinch", 285)
 scal_sa = scal.copy(); scal_sa.animation_data_clear(); scal_sa.name = "SA_Scalpel"; bpy.data.collections["Studio_Ribs"].objects.link(scal_sa)
 scal_sa.parent = SA_RIG; scal_sa.parent_type = 'BONE'; scal_sa.parent_bone = "wrist.R"; scal_sa.matrix_parent_inverse = Matrix.Identity(4)
 scal_sa.matrix_basis = Matrix.Translation((0, -SAS.R.BN["wrist.R"].length, 0)) @ G_SCAL
+# the rib-studio surgeon clone is no longer used (beat 2 is an x-ray in the room): delete it, so no duplicate character remains
+_del = {o.name for o in [SA_RIG] + list(SA_RIG.children_recursive)} | {"SurgeonSA_Cap", "SurgeonSA_Mask", "SA_Scalpel"}
+for n in _del:
+    if n in OB: bpy.data.objects.remove(OB[n], do_unlink=True)
 print("ANIM_DONE")
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=out)

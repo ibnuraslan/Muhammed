@@ -1,0 +1,1199 @@
+{
+ "frames": {
+  "1": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "7": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "13": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "19": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "25": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "31": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "37": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "43": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "49": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "55": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "FACEPRESS",
+    "Patient.R hand on face"
+   ],
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "61": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "FACEPRESS",
+    "Patient.R hand on face"
+   ]
+  ],
+  "67": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "FACEPRESS",
+    "Patient.R hand on face"
+   ]
+  ],
+  "73": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "FACEPRESS",
+    "Patient.R hand on face"
+   ]
+  ],
+  "79": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "FACEPRESS",
+    "Patient.R hand on face"
+   ]
+  ],
+  "85": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ],
+   [
+    "FACEPRESS",
+    "Patient.R hand on face"
+   ]
+  ],
+  "91": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "97": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "103": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "109": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "121": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "139": [
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "145": [
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "175": [
+   [
+    "FILL",
+    "SA_Membrane"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only SA_Membrane in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "181": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "205": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "223": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "HOVER",
+    "SurgeonSA.R near SA_Thorax (5.9 cm)"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "241": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "319": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "325": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "331": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "337": [
+   [
+    "FILL",
+    "SA_CartBlock"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "343": [
+   [
+    "FILL",
+    "Cart_Block"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Cart_Block in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 39.00 m, 72 deg in one frame (neighbours 0.01 m, 4 deg)"
+   ]
+  ],
+  "349": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "361": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ]
+  ],
+  "367": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "373": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 56"
+   ]
+  ],
+  "379": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "385": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "391": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "397": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "403": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "409": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "415": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "421": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "427": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 55"
+   ]
+  ],
+  "433": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "439": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "445": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "451": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "457": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "463": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "469": [
+   [
+    "CLAW",
+    "Surgeon.L curl 51"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 54"
+   ]
+  ],
+  "475": [
+   [
+    "CLAW",
+    "Surgeon.L curl 50"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 53"
+   ]
+  ],
+  "481": [
+   [
+    "CLAW",
+    "Surgeon.L curl 47"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 53"
+   ]
+  ],
+  "487": [
+   [
+    "CLAW",
+    "Surgeon.L curl 43"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 53"
+   ]
+  ],
+  "493": [
+   [
+    "CLAW",
+    "Surgeon.L curl 40"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 53"
+   ]
+  ],
+  "499": [
+   [
+    "CLAW",
+    "Surgeon.R curl 53"
+   ]
+  ],
+  "541": [
+   [
+    "CLAW",
+    "Surgeon.R curl 52"
+   ]
+  ],
+  "547": [
+   [
+    "CLAW",
+    "Surgeon.L curl 43"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 52"
+   ]
+  ],
+  "553": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 52"
+   ]
+  ],
+  "559": [
+   [
+    "CLAW",
+    "Surgeon.L curl 45"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 51"
+   ]
+  ],
+  "565": [
+   [
+    "CLAW",
+    "Surgeon.L curl 45"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 51"
+   ]
+  ],
+  "571": [
+   [
+    "CLAW",
+    "Surgeon.L curl 45"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 51"
+   ]
+  ],
+  "577": [
+   [
+    "CLAW",
+    "Surgeon.L curl 45"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 51"
+   ]
+  ],
+  "583": [
+   [
+    "CLAW",
+    "Surgeon.L curl 45"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 51"
+   ]
+  ],
+  "589": [
+   [
+    "CLAW",
+    "Surgeon.L curl 45"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 51"
+   ]
+  ],
+  "595": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "601": [
+   [
+    "FILL",
+    "hair / top of head 29%"
+   ]
+  ],
+  "607": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "613": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "619": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "625": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "631": [
+   [
+    "CLAW",
+    "Surgeon.R curl 50"
+   ]
+  ],
+  "637": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 50"
+   ]
+  ],
+  "643": [
+   [
+    "CLAW",
+    "Surgeon.R curl 50"
+   ]
+  ],
+  "649": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "655": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "661": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "667": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "673": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "679": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "685": [
+   [
+    "CLAW",
+    "Surgeon.L curl 44"
+   ],
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "691": [
+   [
+    "CLAW",
+    "Surgeon.R curl 49"
+   ]
+  ],
+  "697": [
+   [
+    "CLAW",
+    "Surgeon.R curl 48"
+   ]
+  ],
+  "805": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "811": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "817": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "823": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "829": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "835": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "841": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "847": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "853": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "859": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "865": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1015": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1021": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1027": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1033": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1039": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1045": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1051": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1057": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1231": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1243": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1249": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1255": [
+   [
+    "FILL",
+    "hair / top of head 28%"
+   ]
+  ],
+  "1261": [
+   [
+    "FILL",
+    "hair / top of head 31%"
+   ]
+  ],
+  "1267": [
+   [
+    "FILL",
+    "hair / top of head 32%"
+   ]
+  ],
+  "1273": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1369": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1405": [
+   [
+    "FILL",
+    "hair / top of head 25%"
+   ]
+  ],
+  "1411": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1417": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "1531": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1537": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1543": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1549": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1555": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1561": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1567": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1573": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1579": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1585": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1591": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1597": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1603": [
+   [
+    "FILL",
+    "Ear_New"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1609": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "1735": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "1741": [
+   [
+    "FACEPRESS",
+    "Patient.L hand on face"
+   ]
+  ],
+  "172": [
+   [
+    "CAMJUMP",
+    "cut: 39.88 m, 8 deg in one frame (neighbours 0.01 m, 1 deg)"
+   ]
+  ]
+ },
+ "counts": {
+  "CLAW": 104,
+  "FACEPRESS": 20,
+  "FILL": 70,
+  "EMPTY": 29,
+  "HOVER": 1,
+  "INSIDE": 1,
+  "CAMJUMP": 2
+ }
+}

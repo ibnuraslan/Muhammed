@@ -90,25 +90,30 @@ print("ARM_VESSELS", nv)
 
 
 # the forearm skin itself goes glassy around the pocket (x-ray), keyed 790-815 on, 1040-1066 off
-xr = bpy.data.objects.new("Xray_Center", None); bpy.data.collections["Props"].objects.link(xr)
-xr.parent = OB["Arm_Pocket"]; xr.location = (0, 0, 0)
-for m in OB["Patient.body"].data.materials:
-    nt_ = m.node_tree; outn = next(n for n in nt_.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
-    src = outn.inputs["Surface"].links[0].from_socket
-    tcx = nt_.nodes.new("ShaderNodeTexCoord"); tcx.object = xr
-    ln = nt_.nodes.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; nt_.links.new(tcx.outputs["Object"], ln.inputs[0])
-    mr_ = nt_.nodes.new("ShaderNodeMapRange"); mr_.inputs["From Min"].default_value = 0.03; mr_.inputs["From Max"].default_value = 0.055
-    mr_.inputs["To Min"].default_value = 1.0; mr_.inputs["To Max"].default_value = 0.0; nt_.links.new(ln.outputs["Value"], mr_.inputs["Value"])
-    amt = nt_.nodes.new("ShaderNodeMath"); amt.operation = 'MULTIPLY'; nt_.links.new(mr_.outputs["Result"], amt.inputs[0])
-    for f, v in ((1, 0.0), (790, 0.0), (815, 0.95), (1040, 0.95), (1066, 0.0)):
-        amt.inputs[1].default_value = v; amt.inputs[1].keyframe_insert("default_value", frame=f)
-    gl_ = nt_.nodes.new("ShaderNodeBsdfGlass"); gl_.inputs["Color"].default_value = (0.95, 0.8, 0.75, 1); gl_.inputs["Roughness"].default_value = 0.15
-    em_ = nt_.nodes.new("ShaderNodeEmission"); em_.inputs["Color"].default_value = (0.4, 0.75, 1.0, 1); em_.inputs["Strength"].default_value = 0.4
-    ad_ = nt_.nodes.new("ShaderNodeAddShader"); nt_.links.new(gl_.outputs[0], ad_.inputs[0]); nt_.links.new(em_.outputs[0], ad_.inputs[1])
-    tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent")
-    mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = 0.2; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
-    mx_ = nt_.nodes.new("ShaderNodeMixShader"); nt_.links.new(amt.outputs[0], mx_.inputs[0]); nt_.links.new(src, mx_.inputs[1]); nt_.links.new(mx2.outputs[0], mx_.inputs[2])
-    nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
+def xray(name, parent, r0, r1, keys, objs):
+    xr = bpy.data.objects.new(name, None); bpy.data.collections["Props"].objects.link(xr); xr.parent = parent; xr.location = (0, 0, 0)
+    for ob_ in objs:
+        for m in ob_.data.materials:
+            nt_ = m.node_tree; outn = next(n for n in nt_.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
+            src = outn.inputs["Surface"].links[0].from_socket
+            tcx = nt_.nodes.new("ShaderNodeTexCoord"); tcx.object = xr
+            ln = nt_.nodes.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; nt_.links.new(tcx.outputs["Object"], ln.inputs[0])
+            mr_ = nt_.nodes.new("ShaderNodeMapRange"); mr_.inputs["From Min"].default_value = r0; mr_.inputs["From Max"].default_value = r1
+            mr_.inputs["To Min"].default_value = 1.0; mr_.inputs["To Max"].default_value = 0.0; nt_.links.new(ln.outputs["Value"], mr_.inputs["Value"])
+            amt = nt_.nodes.new("ShaderNodeMath"); amt.operation = 'MULTIPLY'; nt_.links.new(mr_.outputs["Result"], amt.inputs[0])
+            for f, v in keys:
+                amt.inputs[1].default_value = v; amt.inputs[1].keyframe_insert("default_value", frame=f)
+            gl_ = nt_.nodes.new("ShaderNodeBsdfGlass"); gl_.inputs["Color"].default_value = (0.95, 0.8, 0.75, 1); gl_.inputs["Roughness"].default_value = 0.15
+            em_ = nt_.nodes.new("ShaderNodeEmission"); em_.inputs["Color"].default_value = (0.4, 0.75, 1.0, 1); em_.inputs["Strength"].default_value = 0.4
+            ad_ = nt_.nodes.new("ShaderNodeAddShader"); nt_.links.new(gl_.outputs[0], ad_.inputs[0]); nt_.links.new(em_.outputs[0], ad_.inputs[1])
+            tr_ = nt_.nodes.new("ShaderNodeBsdfTransparent")
+            mx2 = nt_.nodes.new("ShaderNodeMixShader"); mx2.inputs[0].default_value = 0.2; nt_.links.new(tr_.outputs[0], mx2.inputs[1]); nt_.links.new(ad_.outputs[0], mx2.inputs[2])
+            mx_ = nt_.nodes.new("ShaderNodeMixShader"); nt_.links.new(amt.outputs[0], mx_.inputs[0]); nt_.links.new(src, mx_.inputs[1]); nt_.links.new(mx2.outputs[0], mx_.inputs[2])
+            nt_.links.new(mx_.outputs[0], outn.inputs["Surface"])
+xray("Xray_Center", OB["Arm_Pocket"], 0.03, 0.055, ((1, 0.0), (790, 0.0), (815, 0.95), (1040, 0.95), (1066, 0.0)), [OB["Patient.body"]])
+# chest x-ray (beat 2): body and tee go glassy over the rib cage while the cartilage is harvested
+xray("Xray_Chest", OB["Chest_Thorax"], 0.09, 0.17, ((1, 0.0), (140, 0.0), (165, 0.92), (322, 0.92), (346, 0.0)),
+     [OB["Patient.body"], OB["Patient.male_casualsuit06"]])
 # heartbeat pulse of the glow on the patch
 # ================================================================== world + OR lights + render settings
 w = bpy.data.worlds.get("World") or bpy.data.worlds.new("World"); sc.world = w; w.use_nodes = True
@@ -140,8 +145,7 @@ def pbone(name, f):
 EAR1 = pbone("head", 60) + (P.matrix_world.to_3x3() @ V(0.08, 0.0, 0.02))
 FACE1 = pbone("head", 60) + V(0, -0.1, 0.04)
 CHEST = V(0.08, -0.16, 1.02)
-P0 = OB["SA_CartBlock"].location.copy()
-ev_at(340); BLK_SA = OB["SA_CartBlock"].matrix_world.translation.copy(); ev_at(1)
+ev_at(200); PC = OB["Chest_Piece"].matrix_world.translation.copy(); BLK_SA = PC; ev_at(1)
 TRAY = OB["Tray"].matrix_world.translation.copy(); BLK = TRAY + V(-0.02, -0.02, 0.035)
 ev_at(700); INC = OB["Arm_Pocket"].matrix_world.translation.copy()
 ev_at(1480); EAR_W = OB["Ear_New"].matrix_world.translation.copy()
@@ -154,30 +158,27 @@ up = V(0, 0, 1); fwd = up.cross(EAR_OUT).normalized()
 def EO(o, s, u): return EAR_W + EAR_OUT * o + fwd * s + up * u
 
 SEGS = [
-  [  # OR: beat 1 -> into the chest
-    (1, V(1.9, -1.7, 1.2), FACE1 + V(0, 0, -0.1), 26), (30, V(1.35, -1.1, 1.35), FACE1, 32), (60, V(0.8, -0.72, 1.42), FACE1, 42),
-    (90, V(0.8, -0.18, 1.45), EAR1, 45), (118, V(0.5, 0.02, 1.42), EAR1, 52), (140, V(0.45, -0.5, 1.2), CHEST + V(0, 0, 0.02), 40),
-    (157, V(0.24, -0.48, 1.08), CHEST + V(0.06, 0, 0.03), 40), (166, V(0.17, -0.33, 1.06), CHEST + V(0.07, 0.05, 0.03), 40), (171, V(0.155, -0.275, 1.06), CHEST + V(0.07, 0.1, 0.03), 40)],
-  [  # studio A: out of the membrane, orbit the rib cage, push to the block being lifted
-    (172, V(40.03, -0.6, 1.17), P0 + V(-0.04, 0.2, 0.05), 32), (186, V(40.07, -0.52, 1.2), V(40.02, 0, 1.15), 30), (212, V(40.33, -0.47, 1.32), V(40.02, 0, 1.18), 28),
-    (240, V(40.12, -0.44, 1.2), P0 + V(0, 0, 0.03), 34), (265, V(39.93, -0.33, 1.06), P0, 45), (300, V(40.0, -0.31, 1.15), P0 + V(0, -0.03, 0.01), 52),
-    (328, BLK_SA + V(0.02, -0.16, 0.035), BLK_SA + V(0, 0.01, 0), 45), (337, BLK_SA + V(0.006, -0.085, 0.015), BLK_SA, 40), (342, BLK_SA + V(-0.002, -0.042, 0.008), BLK_SA, 40)],
-  [  # OR: out of the block on the tray, orbit the carving hands, follow the ear to the arm, macro on the bump, into the skin
-    (343, BLK + V(0.0, -0.012, 0.1), BLK, 70), (362, BLK + V(-0.08, -0.2, 0.16), BLK + V(0, 0, 0.01), 40),
+  [  # OR, one continuous move: beat 1 shock -> x-ray of the chest (beat 2) -> follow the cartilage to the tray -> carving ...
+    (1, V(1.9, -1.7, 1.2), FACE1 + V(0, 0, -0.1), 26), (30, V(1.2, -1.35, 1.35), FACE1, 32), (60, V(0.2, -0.95, 1.4), FACE1, 40),
+    (90, V(0.75, -0.12, 1.45), EAR1, 45), (118, V(0.6, 0.05, 1.4), EAR1, 48), (145, V(0.15, -0.75, 1.25), PC + V(0, 0, 0.06), 38),
+    (175, V(-0.05, -0.62, 1.12), PC + V(0, 0, 0.02), 42), (205, V(-0.22, -0.5, 1.08), PC, 45), (235, V(-0.12, -0.42, 1.18), PC, 50),
+    (262, V(0.02, -0.46, 1.2), PC + V(0.02, -0.03, 0.03), 46), (292, V(0.3, -0.85, 1.4), PC.lerp(BLK, 0.4) + V(0, 0, 0.1), 34),
+    (322, V(0.95, -1.15, 1.35), BLK + V(0, 0, 0.02), 36),
+    (362, BLK + V(-0.08, -0.2, 0.16), BLK + V(0, 0, 0.01), 40),
     (400, BLK + V(-0.3, -0.28, 0.28), BLK + V(0, 0.03, 0.03), 34), (440, BLK + V(-0.34, -0.3, 0.3), BLK + V(0, 0.03, 0.03), 34),
     (480, BLK + V(0.02, -0.42, 0.36), BLK + V(0, 0.02, 0.0), 38), (525, BLK + V(0.24, -0.26, 0.22), BLK + V(0, 0.0, 0.0), 44),
     (565, BLK + V(0.25, 0.12, 0.36), BLK + V(-0.08, 0.2, 0.1), 30), (605, V(1.15, -0.25, 1.38), V(0.85, -0.1, 1.08), 32),
     (645, INC + V(0.3, -0.36, 0.26), INC, 34), (685, INC + V(0.17, -0.22, 0.07), INC, 42), (725, INC + V(0.07, -0.14, 0.05), INC, 52),
     (760, INC + V(0.05, -0.12, 0.08), INC, 50), (795, INC + V(0.02, -0.09, 0.1), INC, 58),
     # x-ray: the skin turns glassy and the camera orbits the ear growing inside the forearm
-    (830, INC + V(0.05, -0.07, 0.07), INC + V(0, 0, -0.006), 55), (870, INC + V(0.11, -0.04, 0.06), INC + V(0, 0, -0.006), 55),
-    (910, INC + V(0.09, 0.0, 0.11), INC + V(0, 0, -0.006), 50), (950, INC + V(0.0, -0.02, 0.13), INC + V(0, 0, -0.006), 50),
-    (990, INC + V(-0.09, -0.05, 0.09), INC + V(0, 0, -0.006), 50), (1030, INC + V(-0.05, -0.09, 0.06), INC + V(0, 0, -0.006), 55),
+    (830, INC + V(0.07, -0.11, 0.1), INC + V(0, 0, -0.006), 70), (870, INC + V(0.16, -0.06, 0.09), INC + V(0, 0, -0.006), 70),
+    (910, INC + V(0.13, 0.0, 0.16), INC + V(0, 0, -0.006), 65), (950, INC + V(0.0, -0.03, 0.19), INC + V(0, 0, -0.006), 65),
+    (990, INC + V(-0.13, -0.07, 0.13), INC + V(0, 0, -0.006), 65), (1030, INC + V(-0.07, -0.13, 0.09), INC + V(0, 0, -0.006), 70),
     (1071, INC + V(0.04, -0.1, 0.09), INC, 50), (1130, INC + V(0.14, -0.24, 0.13), INC, 40),
     (1180, V(0.98, 0.12, 1.42), INC + V(0, 0, 0.06), 36), (1240, V(0.92, 0.3, 1.5), INC + V(0, 0, 0.18), 36), (1300, V(0.88, 0.22, 1.6), FT, 34),
     (1345, EO(0.6, -0.2, 0.3), EO(0.1, 0, 0.05), 32), (1385, EO(0.4, -0.15, 0.17), EAR_W, 38), (1425, EO(0.26, -0.09, 0.08), EAR_W, 45),
-    (1465, EO(0.12, -0.03, 0.03), EAR_W + V(0, 0, -0.005), 55), (1505, EO(0.11, 0.03, 0.04), EAR_W, 55), (1545, EO(0.1, -0.035, 0.0), EAR_W, 55),
-    (1585, EO(0.1, 0.0, -0.03), EAR_W, 55), (1625, EO(0.11, 0.04, 0.02), EAR_W, 52), (1650, EO(0.18, 0.02, 0.06), EAR_W, 45),
+    (1465, EO(0.17, -0.03, 0.03), EAR_W + V(0, 0, -0.005), 75), (1505, EO(0.16, 0.03, 0.04), EAR_W, 75), (1545, EO(0.16, -0.04, 0.0), EAR_W, 75),
+    (1585, EO(0.16, 0.0, -0.03), EAR_W, 75), (1625, EO(0.16, 0.04, 0.02), EAR_W, 70), (1650, EO(0.18, 0.02, 0.06), EAR_W, 45),
     (1685, V(0.75, 0.15, 1.5), V(0.05, 0.1, 1.3), 34), (1715, V(0.85, -0.45, 1.46), FACE9, 36), (1745, V(0.5, -0.88, 1.43), FACE9 + V(0.02, 0, -0.02), 40),
     (1770, V(0.4, -0.95, 1.42), FACE9 + V(0.02, 0, -0.02), 41)],
 ]
@@ -231,5 +232,7 @@ beats = [(1, 1, "Lose an ear in an accident"), (2, 127, "A surgeon takes some ca
          (7, 1309, "The blood vessels are connected"), (8, 1501, "and the skin is carefully stitched"), (9, 1645, "giving you a brand new ear")]
 json.dump([dict(beat=b, frame=f, first_words=w_) for b, f, w_ in beats], open(os.path.join(HERE, "..", "beats.json"), "w"), indent=1)
 sc.frame_set(1)
+for c_ in ("Studio_Ribs", "Studio_Tissue"):
+    for o in list(bpy.data.collections[c_].objects): bpy.data.objects.remove(o, do_unlink=True)
 print("CAMERA_DONE")
 bpy.ops.wm.save_as_mainfile(filepath=out)
