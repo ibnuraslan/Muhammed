@@ -35,16 +35,9 @@
     "other": 0
    }
   },
-  "1507": {
-   "Woman": {
-    "self": 392,
-    "clothes": 0,
-    "other": 0
-   }
-  },
   "1513": {
    "Woman": {
-    "self": 11,
+    "self": 13,
     "clothes": 0,
     "other": 0
    }
@@ -60,10 +53,6 @@
  "step": 6,
  "depth_cm": 2.0,
  "bad_ranges": [
-  [
-   1507,
-   1507
-  ],
   [
    2029,
    2029

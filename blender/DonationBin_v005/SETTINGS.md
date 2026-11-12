@@ -4,7 +4,7 @@ These values were read back from `DonationBin_v005_60fps.blend`, opened in facto
 
 | Item | Value |
 |---|---|
-| File | `DonationBin_v005_60fps.blend`: 88 MB (93245207 bytes), compressed. Every image is packed. Committed as a plain git file, not Git LFS.  |
+| File | `DonationBin_v005_60fps.blend`: 89 MB (93255892 bytes), compressed. Every image is packed. Committed as a plain git file, not Git LFS.  |
 | Blender | 5.2.2 LTS |
 | Engine | Cycles. The device is saved as CPU, but GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |

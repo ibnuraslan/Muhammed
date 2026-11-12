@@ -26,8 +26,20 @@ The re-stage lives in `../../DonationBin_v001/scripts/06_acting_fix.py`, which i
 ## Re-check
 - **Half-second sheets:** `review/BEFORE_v004_0p5s.jpg` and `review/AFTER_v005_0p5s.jpg` (270×480, 8 samples, every 30 frames).
 - **Hand close-ups:** `review/hands_closeups_v005.jpg` holds 14 hand contacts at 270×480.
-- **Clip scan** (`pipeline/clip_scan.py`, step 6, 2 cm): see `review/clip_scan_v005.json`. The only ranges left are f1507 and f2029, and both are off camera. At f1507 the camera is outside on the empty lot and the bin is closed. At f2029 the camera is outside on the firefighters and the panel is still shut. On camera: 0.
+- **Clip scan** (`pipeline/clip_scan.py`, step 6, 2 cm): see `review/clip_scan_v005.json`. The only range left is f2029, and it is off camera. At f2029 the camera is outside on the firefighters and the panel is still shut. On camera: 0.
 
 ## Known, not fixed
 - The flap pass-throughs at about f1400 and f1570 still last about 4–8 frames on textured steel.
 - In the three days she lies on her side, so her face reads rotated about 90° in a vertical frame.
+
+## Round 2 (director review of fc2718f): eight fixes
+| # | Time | Fix |
+|---|---|---|
+| 1 | 20–24 s | Jump: one side camera (x≈0.63, 14 mm) shows her whole body crouching, jumping, slapping the wall high and sliding down. The turns before and after are stepped turns (`turn_keys`) with her hands in front, so they don't sweep through her chest. Scream: one steady low front-corner camera (0.52, −0.48, 1.50) aimed at her face. Her body is upright, her head is tilted up to the chute, her mouth is open, and her hands are cupped at her mouth (placed from the posed head). |
+| 2 | 29–31 s | No black frames. The night fill is raised and the face camera checks for a clear view (no camera inside her shirt and no ground clip). |
+| 3 | 26.5 s | The curl start is framed on her face and shoulders (face_cam). |
+| 4 | 36–37 s | Walking out, her left hand holds the blanket at her chest and her right arm hangs. The IK arm keys are cleared. |
+| 5 | 2.0 s | The camera at f110 is raised and moved to the side, so the shover's head no longer covers her. |
+| 6 | 5.0 s | The landing frame is lit (fill and exposure at f290). |
+| 7 | close-ups | Hands are re-aimed by a ray-cast search for a clear view of the wrist from inside the bin. f1000 and f1216 show palms on the wall, and f1135 shows her palm on the flap edge. Script: `pipeline/hands_closeups.py`. |
+| 8 | 15.5 s | The face_cam framing uses the face point (head bone −3 cm, +5 cm forward), not the top of her head. |

@@ -101,6 +101,7 @@ def stand_feet(x, y, yaw, lift=0.0, pitch=0.0):
         out[s] = ("g", (p.x, p.y), yaw, lift + max(0.0, t - h), pitch)
     return out
 PALM_DOWN = Vector((0, 0, -1))
+FWDH = WOo.data.bones['head'].matrix_local.to_3x3().inverted() @ Vector((0, -1, 0))
 
 clear_keys(WOo, 158, 2094)
 
@@ -176,7 +177,7 @@ def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
     z = PZ(STAND.x, STAND.y)
     ph = 1.50 + 0.03 * wob
     WO.pose(f, (STAND.x, STAND.y - 0.05 * push, z + RH - 0.04), yaw=0, flex=3 + 5 * push, sp=(2 + 4 * push, 0, 0), head=look,
-            hands={"L": ("w", (0.16, FY + 0.07 - 0.006 * push, ph), (0, 0, 1), (0, -1, 0)), "R": ("w", (-0.16, FY + 0.07 - 0.006 * push, ph + 0.04), (0, 0, 1), (0, -1, 0))},
+            hands={"L": ("w", (0.16, FY + 0.05 - 0.006 * push, ph), (0, 0, 1), (0, -1, 0)), "R": ("w", (-0.16, FY + 0.05 - 0.006 * push, ph + 0.04), (0, 0, 1), (0, -1, 0))},
             feet=stand_feet(STAND.x, STAND.y + 0.08, 0), jaw=jaw, curl={"L": 0.1, "R": 0.1})
 at_flap(720, 0.0, look=(-15, 10)); at_flap(780, 0.2); at_flap(805, 1.0, jaw=8); at_flap(818, 0.3); at_flap(835, 1.0, jaw=10); at_flap(850, 0.2)
 at_flap(880, 0.6, look=(-5, -15)); at_flap(930, 0.0, look=(0, 25))
@@ -192,7 +193,7 @@ for i, f in enumerate(range(975, 1090, 14)):
 def search(f, x, look):
     z = PZ(0.0, -0.02)
     WO.pose(f, (0.0, -0.06, z + RH - 0.04), yaw=0, flex=4, sp=(2, 0, 0), head=look,
-            hands={"L": ("w", (x + 0.12, FY + 0.07, 1.55), (0, 0, 1), (0, -1, 0)), "R": ("w", (x - 0.12, FY + 0.07, 1.62), (0, 0, 1), (0, -1, 0))},
+            hands={"L": ("w", (x + 0.12, FY + 0.05, 1.55), (0, 0, 1), (0, -1, 0)), "R": ("w", (x - 0.12, FY + 0.05, 1.62), (0, 0, 1), (0, -1, 0))},
             feet=stand_feet(0.0, 0.03, 0), curl={"L": 0.1, "R": 0.1})
 search(1110, -0.15, (-15, -20)); search(1135, 0.18, (-15, 20)); search(1160, 0.0, (-25, 0))
 JW = Vector((0.0, 0.18, 0)); jz = PZ(JW.x, JW.y)
@@ -228,11 +229,22 @@ turn_keys(1160, 1178, 0.0, 180.0, Vector((0.0, -0.06, 0)), Vector((JW.x, JW.y, 0
 turn_keys(1300, 1322, 180.0, 360.0, Vector((JW.x, JW.y, 0)), Vector((0.0, 0.05, 0)))
 # --- 1321-1500: screams for help up at the flap, hands cupped, pounds on the flap
 def scream(f, jaw, bob=0.0, look=(-28, 0)):
+    """upright, head tipped up toward the chute, hands cupped at her mouth (placed from the posed head)"""
     p = Vector((0.0, 0.05, 0)); z = PZ(p.x, p.y)
-    M = WO.Mb(Vector((p.x, p.y, z + RH - 0.04 + 0.02 * bob)), 0, -4, 0)
-    WO.pose(f, (p.x, p.y, z + RH - 0.04 + 0.02 * bob), yaw=0, flex=-4, sp=(-8 - 4 * bob, 0, 0), head=look,
-            hands={"L": ("w", M @ Vector((0.11, -0.22, 1.30)), (-0.2, -0.5, 0.8), (-1, 0.2, 0)), "R": ("w", M @ Vector((-0.11, -0.22, 1.30)), (0.2, -0.5, 0.8), (1, 0.2, 0))},
+    pos = (p.x, p.y, z + RH - 0.04 + 0.01 * bob)
+    WO.pose(f, pos, yaw=0, flex=2, sp=(4, 0, 0), head=(look[0] * 0.8, look[1]), hands={"L": ("r", (0, -0.2, 0.3)), "R": ("r", (0, -0.2, 0.3))},
             feet=stand_feet(p.x, p.y, 0), jaw=jaw, curl={"L": 0.35, "R": 0.35})
+    sc.frame_set(f)
+    hbn = WOo.pose.bones["head"]; Mw = WOo.matrix_world
+    hd = Mw @ hbn.head; tl = Mw @ hbn.tail; up = (tl - hd).normalized()
+    fw_ = (Mw.to_3x3() @ (hbn.matrix.to_3x3() @ FWDH)).normalized()
+    mouth = hd - up * 0.08 + fw_ * 0.08
+    sideV = up.cross(fw_).normalized()
+    for s_ in "LR":
+        sx = 1 if s_ == "L" else -1
+        W_ = mouth + sideV * (0.06 * sx) + fw_ * 0.04 - up * 0.06
+        WO.key_hand(s_, f, W_, (up * 0.7 - sideV * 0.4 * sx + fw_ * 0.2).normalized(), (-sideV * sx).normalized(),
+                    pole=W_ + sideV * (0.35 * sx) - up * 0.35)
 def pound(f, hit):
     p = Vector((0.0, -0.08, 0))
     fx_ = [WO.foot_xy(s_, Vector((p.x, p.y + 0.05, 0)), 0) for s_ in "LR"]
@@ -279,6 +291,26 @@ def seated(f, look=(0, 0), lean=15, jaw=0.0, dy=0.0):
             feet={s: ("g", (fx[s].x, fx[s].y), 0, 0.0, 15) for s in "LR"}, jaw=jaw)
 seated(2045, look=(-10, 25), lean=25, dy=0.05); seated(2070, look=(-5, 20), lean=25, dy=0.05); seated(2088, look=(-5, 10), lean=20, dy=0.0)
 
+# ---------------------------------------------------------------- walk out (2150-2490): left hand holds the blanket at her chest, right arm hangs
+def body_M(f):
+    sc.frame_set(f); pr = WOo.pose.bones["root"]
+    return WOo.matrix_world @ pr.matrix @ WOo.data.bones["root"].matrix_local.inverted()
+hb = [n for n in ("IK_hand.L", "IK_hand.R")]
+ad_ = WOo.animation_data
+for l in ad_.action.layers:
+    for st in l.strips:
+        for cb in st.channelbags:
+            for fc in cb.fcurves:
+                if any(fc.data_path.startswith('pose.bones["%s"]' % n) for n in hb + ["Pole_elbow.L", "Pole_elbow.R"]):
+                    for k in [k for k in fc.keyframe_points if 2150 <= k.co.x <= 2490][::-1]: fc.keyframe_points.remove(k, fast=True)
+                    fc.update()
+for f in list(range(2150, 2491, 10)):
+    Mb_ = body_M(f); R3 = Mb_.to_3x3()
+    WO.key_hand("L", f, Mb_ @ Vector((0.05, -0.28, 1.20)), (R3 @ Vector((-1, 0, 0.35))).normalized(), (R3 @ Vector((0, 1, 0))).normalized(),
+                pole=Mb_ @ Vector((0.35, 0.10, 1.05)))
+    WO.key_hand("R", f, Mb_ @ Vector((-0.28, 0.0, 0.82)), (R3 @ Vector((0, -0.1, -1))).normalized(), (R3 @ Vector((1, 0, 0))).normalized(),
+                pole=Mb_ @ Vector((-0.30, 0.25, 1.05)))
+
 # ---------------------------------------------------------------- shover: hands on her upper back (not her hips)
 clear_keys(SHo, 150, 231)
 def back_point(f):
@@ -306,12 +338,15 @@ for f, dz, fl, ext in ((154, 0.0, 8, 0.0), (163, -0.03, 22, 0.6), (172, -0.04, 3
 CAMK = json.loads(sc["cam_keys"])
 WR_ = WOo; HB = WR_.pose.bones["head"]
 def face(fk):
+    """eyes/nose: the MPFB head bone starts at eye level, so step down a little and forward"""
     sc.frame_set(fk); M = WR_.matrix_world
-    return M @ (HB.head + (HB.tail - HB.head) * 0.45)
+    hd = M @ HB.head; up = (M @ HB.tail - hd).normalized()
+    fw_ = (M.to_3x3() @ (HB.matrix.to_3x3() @ FWDH)).normalized()
+    return hd - up * 0.03 + fw_ * 0.05
 def chest(fk):
     sc.frame_set(fk); return WR_.matrix_world @ WR_.pose.bones["spine03"].head
 def mix(a, b, t): return a.lerp(b, t)
-KEEP = lambda f: not (200 <= f <= 520 or 860 <= f <= 1420 or 1600 <= f <= 1870)
+KEEP = lambda f: not (200 <= f <= 520 or 860 <= f <= 1425 or 1600 <= f <= 1870)
 CAMK = [k for k in CAMK if KEEP(k[0])]
 NEW = []
 def K(f, pos, tgt, lens): NEW.append([f, list(pos), list(tgt), lens])
@@ -319,6 +354,15 @@ FWD_L = WR_.data.bones["head"].matrix_local.to_3x3().inverted() @ Vector((0, -1,
 def flap_clear(c):
     # stay out of the flap's swing (hinge y=-0.576, z=1.615, radius 0.475) and away from the front wall
     return ((c.y + 0.576) ** 2 + (c.z - 1.615) ** 2) ** 0.5 > 0.56 or c.y < -0.62
+def clear_view(c, fc):
+    """nothing (body, clothes, bags, walls) between the camera and her face, and 30 cm of air around the camera"""
+    dg = bpy.context.evaluated_depsgraph_get(); v = fc - c; L = v.length
+    hit, loc, n, i, ob, M = sc.ray_cast(dg, c, v.normalized(), distance=L)
+    if hit and (loc - c).length < L - 0.15: return False
+    for dv in (Vector((1, 0, 0)), Vector((-1, 0, 0)), Vector((0, 1, 0)), Vector((0, -1, 0)), Vector((0, 0, -1))):
+        h2 = sc.ray_cast(dg, c, dv, distance=0.25)
+        if h2[0] and h2[4] is not None and h2[4].name.startswith("Woman"): return False
+    return True
 def face_cam(fk, lens=22, dists=(0.55, 0.47, 0.40, 0.34), ups=(0.0, 0.10, 0.22), angs=(0, 20, -20, 40, -40, 60, -60)):
     """camera in front of her face (head bone), inside the bin with 8 cm clearance, outside the flap swing"""
     sc.frame_set(fk); M = WR_.matrix_world
@@ -328,7 +372,7 @@ def face_cam(fk, lens=22, dists=(0.55, 0.47, 0.40, 0.34), ups=(0.0, 0.10, 0.22),
             for up in ups:
                 d = Matrix.Rotation(R_(ang), 3, 'Z') @ fw
                 c = fc + d * dist + Vector((0, 0, up))
-                if -0.64 < c.x < 0.64 and -0.5 < c.y < 0.5 and 0.75 < c.z < 2.30 and flap_clear(c):
+                if -0.64 < c.x < 0.64 and -0.5 < c.y < 0.5 and 0.75 < c.z < 2.30 and flap_clear(c) and c.z > ground_z(c.x, c.y) + 0.25 and clear_view(c, fc):
                     return [fk, list(c), list(mix(fc, chest(fk), 0.2)), lens]
     return None
 K(215, (0.55, -1.75, 2.15), (0.0, -0.60, 1.30), 20)                      # back and up: no shoe sole in the lens
@@ -337,14 +381,21 @@ K(268, (0.0, -0.85, 1.35), (0.05, 0.0, 0.55), 18)
 K(288, (0.30, 0.05, 1.25), (0.08, 0.05, 0.45), 17)                       # in under the swinging flap, looking down at the landing
 K(312, (-0.45, 0.20, 1.70), (0.08, 0.05, 0.45), 18)
 ANG = {1620: (20, 40, -20, 0), 1680: (-20, -40, 20, 0), 1740: (40, 20, -40, 0), 1800: (-40, -20, 40, 0), 1845: (0, 20, -20)}
-for f in (340, 375, 410, 445, 480, 515, 930, 950, 1280, 1300, 1322, 990, 1035, 1080, 1120, 1160, 1200, 1240, 1340, 1384,
+for f in (340, 375, 410, 445, 480, 515, 950, 990, 1035, 1080, 1120, 1160, 1595,
           1620, 1680, 1740, 1800, 1845):
     k_ = face_cam(f, lens=24 if f >= 1600 else 22, angs=ANG.get(f, (0, 20, -20, 40, -40, 60, -60)))
     if k_: NEW.append(k_)
     else: print("NOFACE", f)
 K(880, (0.62, -0.50, 1.85), mix(face(880), chest(880), 0.3), 20)
+K(930, (0.55, -0.45, 1.60), mix(face(930), chest(930), 0.2), 22)
+# jump: whole body from the side (crouch, jump, hands slap high on the back wall, slide down)
+K(1180, (0.63, 0.02, 1.30), (0.0, 0.28, 1.40), 14); K(1215, (0.64, 0.08, 1.45), (0.0, 0.30, 1.65), 14)
+K(1250, (0.64, 0.08, 1.40), (0.0, 0.28, 1.50), 14); K(1290, (0.62, -0.05, 1.30), (0.0, 0.20, 1.40), 15)
+# scream: one steady camera low in the front-right corner, looking up at her face
+for f_, cp in ((1322, (0.52, -0.48, 1.50)), (1350, (0.51, -0.48, 1.48)), (1384, (0.50, -0.48, 1.47))):
+    K(f_, cp, face(f_), 20)
 K(905, (0.58, -0.46, 1.85), mix(face(905), chest(905), 0.3), 20)
-K(1404, (0.10, -0.50, 1.95), mix(face(1404), chest(1404), 0.3), 20)
+K(1402, (0.10, -0.46, 1.80), mix(face(1402), chest(1402), 0.3), 20); K(1410, (0.10, -0.78, 1.80), (0.0, -1.6, 1.4), 20)
 K(1862, (0.10, -0.40, 1.45), mix(face(1862), chest(1862), 0.3), 20)
 CAMK = sorted(CAMK + NEW, key=lambda k: k[0])
 sc["cam_keys"] = json.dumps(CAMK)
