@@ -346,7 +346,7 @@ def ex_step(f_mid, before, after):
     ex_fc.keyframe_points.insert(f_mid - 1, before); ex_fc.keyframe_points.insert(f_mid, after)
     for kp in ex_fc.keyframe_points:
         if int(round(kp.co.x)) == f_mid - 1: kp.interpolation = "CONSTANT"
-ex_step(736, 0.6, -0.6); ex_step(861, -0.6, 0.6); ex_step(1115, 0.6, -0.6); ex_step(1317, -0.6, 0.6)
+ex_step(733, 0.6, -0.6); ex_step(861, -0.6, 0.6); ex_step(1112, 0.6, -0.6); ex_step(1317, -0.6, 0.6)
 for kp in ex_fc.keyframe_points:
     if kp.co.x >= 1882: kp.co.y = 0.0
     elif 1470 <= kp.co.x <= 1720: kp.co.y = 0.15
@@ -378,7 +378,7 @@ k(225, V(0.42, -0.26, 0.56), nose_of(B, 225), 50)
 # beat 2: whip down-left to the tub, macro on the dig, rise with the hand
 k(272, V(0.05, -0.72, 0.52), TUBW + V(0, 0, 0.12), 34)
 k(325, V(-0.18, -0.36, 0.3), TUBW + V(0.01, -0.02, 0.1), 50)
-k(378, V(-0.05, -0.48, 0.48), pinch_of(B, "R", 378), 45)
+k(378, V(-0.28, -0.6, 0.62), (pinch_of(B, "R", 378) + face_of(B, 378)) / 2, 40)
 k(430, V(0.08, -0.4, 0.66), (pinch_of(B, "R", 430) + face_of(B, 430)) / 2, 50)
 # beat 3: floating macro on the dream bricks
 k(480, DREAM + V(0.13, -0.15, 0.03), DREAM, 70)
@@ -391,14 +391,14 @@ k(700, nose_of(B, 700) + V(0.03, -0.13, -0.05), nose_of(B, 700), 50)
 N0 = nose_of(B, 725); fwB = fw_of(B); upB = up_of(B)
 k(714, N0 + fwB * 0.09 - upB * 0.04, N0, 40)
 k(721, N0 + fwB * 0.05 - upB * 0.025, N0, 40)
-DIVE1 = [(725, N0 + fwB * 0.002), (729, N0 + upB * 0.03 - fwB * 0.01), (734, V(0.15, 0.3, -1.0)), (740, V(0.0, -1.4, -3.6)), (748, V(0.05, -2.75, -6.2))]
+DIVE1 = [(725, N0 + fwB * 0.002), (728, N0 + upB * 0.03 - fwB * 0.01), (732, V(0.15, 0.3, -1.0)), (736, V(0.0, -1.4, -3.6)), (742, V(0.05, -2.75, -6.2))]
 for i, (f, p) in enumerate(DIVE1):
     nxt = DIVE1[i + 1][1] if i + 1 < len(DIVE1) else XS_C
     k(f, p, nxt, 32)
 # beat 5: studio, wedge
 k(790, V(0.7, -1.9, -6.45), XS_AIR, 32)
 k(828, XS_AIR + V(0.1, -0.75, 0.05), XS_AIR + V(0, 0, 0.02), 40)
-RET1 = [(852, V(0.25, -1.6, -5.6)), (858, V(0.1, -1.2, -3.6)), (864, V(0.15, 0.3, -1.0))]
+RET1 = [(856, V(0.25, -1.6, -5.6)), (860, V(0.1, -1.2, -3.6)), (864, V(0.15, 0.3, -1.0))]
 N1 = nose_of(B, 870); fw1 = fw_of(B)
 RET1 += [(867, N1 - V(0, 0, 0.22) - fw1 * 0.06), (870, N1 + fw1 * 0.002), (874, N1 + fw1 * 0.03), (882, N1 + fw1 * 0.1)]
 for i, (f, p) in enumerate(RET1):
@@ -414,14 +414,14 @@ k(1075, BOYP + V(-0.2, -0.75, 0.95), twz_tip(1075).translation, 36)
 # beat 7: dive two
 N2 = nose_of(B, 1104); fw2 = fw_of(B); up2 = up_of(B)
 k(1094, N2 + fw2 * 0.08 + V(0.03, 0, 0.0), N2, 48)
-DIVE2 = [(1104, N2 + fw2 * 0.002), (1108, N2 + up2 * 0.03 - fw2 * 0.01), (1113, V(0.15, 0.3, -1.0)), (1119, V(-0.3, -1.4, -3.6)), (1128, V(-1.0, -2.7, -6.0))]
+DIVE2 = [(1104, N2 + fw2 * 0.002), (1107, N2 + up2 * 0.03 - fw2 * 0.01), (1111, V(0.15, 0.3, -1.0)), (1115, V(-0.3, -1.4, -3.6)), (1121, V(-1.0, -2.7, -6.0))]
 for i, (f, p) in enumerate(DIVE2):
     nxt = DIVE2[i + 1][1] if i + 1 < len(DIVE2) else XS_C
     k(f, p, nxt, 30)
 k(1185, V(-0.55, -1.7, -6.25), XS_HI, 34)
 k(1240, XS_HI + V(0.35, -0.75, -0.05), XS_HI, 48)
 k(1285, XS_HI + V(0.9, -1.3, 0.25), XS_HI, 42)
-RET2 = [(1307, V(0.4, -1.6, -5.5)), (1313, V(0.1, -1.2, -3.6)), (1319, V(0.15, 0.3, -1.0))]
+RET2 = [(1311, V(0.4, -1.6, -5.5)), (1315, V(0.1, -1.2, -3.6)), (1319, V(0.15, 0.3, -1.0))]
 N3 = nose_of(B, 1325); fw3 = fw_of(B)
 RET2 += [(1322, N3 - V(0, 0, 0.22) - fw3 * 0.06), (1325, N3 + fw3 * 0.002), (1329, N3 + fw3 * 0.03), (1340, N3 + fw3 * 0.12)]
 for i, (f, p) in enumerate(RET2):
@@ -437,10 +437,9 @@ k(1455, V(-0.15, -0.95, 0.85), BOYP + V(0, 0, 0.45), 30)
 k(1485, V(-0.35, 0.55, 1.05), face_of(M, 1485), 30)
 k(1530, V(-0.85, 1.15, 1.05), face_of(M, 1530), 45)
 k(1590, V(-1.55, 1.3, 0.95), face_of(M, 1590), 40)
-k(1640, V(-1.65, 1.38, 0.72), pinch_of(M, "R", 1640), 45)
+k(1640, V(-1.7, 1.2, 1.0), (pinch_of(M, "R", 1640) + face_of(M, 1640)) / 2, 40)
 k(1688, V(-0.8, 1.15, 1.2), face_of(M, 1688), 40)
 k(1704, V(-0.45, 1.15, 1.25), face_of(M, 1704), 36)
-k(1713, V(-0.05, 1.1, 1.2), V(1.3, 1.85, 0.62), 30)
 k(1722, V(0.9, 1.35, 1.35), V(2.8, 1.65, 1.1), 28)
 k(1745, V(4.1, 0.75, 1.3), face_of(M, 1745), 30)
 k(1790, V(4.75, 1.15, 1.55), face_of(M, 1790), 32)
@@ -467,6 +466,10 @@ cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); 
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt = cam.constraints.new("TRACK_TO"); tt.target = aim; tt.track_axis = "TRACK_NEGATIVE_Z"; tt.up_axis = "UP_Y"
 cam_d.dof.focus_object = aim
+tth = cam.constraints.new("TRACK_TO"); tth.name = "TrackManHead"; tth.target = bpy.data.objects["Man"]; tth.subtarget = "head"
+tth.track_axis = "TRACK_NEGATIVE_Z"; tth.up_axis = "UP_Y"; tth.use_target_z = False
+for f, v in ((1, 0.0), (1585, 0.0), (1595, 1.0), (1716, 1.0), (1726, 0.0)):
+    tth.influence = v; tth.keyframe_insert("influence", frame=f)
 def pchip3(keys):
     """monotone per-axis interpolation: C1, never overshoots a key (no loops at hard braking / tunnel corners)"""
     fx = [pchip([(f, v[i]) for f, v in keys]) for i in range(3)]
@@ -474,7 +477,7 @@ def pchip3(keys):
 fc_ = pchip3([(f, c) for f, c, a, l in K]); fa_ = pchip3([(f, a) for f, c, a, l in K]); fl_ = pchip([(f, l) for f, c, a, l in K])
 CAMPATH = fc_
 # tunnels: the aim follows the camera's own path (ahead on dives, behind on returns) so the view never flips
-TUN_AIM = [(712, 754, +1), (840, 880, -1), (1092, 1136, +1), (1300, 1340, -1)]
+TUN_AIM = [(712, 748, +1), (844, 880, -1), (1092, 1130, +1), (1304, 1340, -1)]
 def aim_at(f):
     """inside a tunnel window the view direction turns smoothly from the entry view to the exit view
     (spread over the whole pass, a few degrees per frame), whatever the tunnel path does"""
@@ -570,13 +573,13 @@ def tunnel(name, f0, f1, nostril_end):
     for f in range(f0, f1 + 1, 2):
         lt.location = fc_(f + 1); lt.keyframe_insert("location", frame=f)
     key_vis([lt.name], [(f0 - 1, f1 + 2)])
-tunnel("Tunnel_Dive1", 722, 745, "start")
-tunnel("Tunnel_Return1", 850, 872, "end")
-tunnel("Tunnel_Dive2", 1100, 1125, "start")
-tunnel("Tunnel_Return2", 1305, 1327, "end")
+tunnel("Tunnel_Dive1", 722, 740, "start")
+tunnel("Tunnel_Return1", 854, 872, "end")
+tunnel("Tunnel_Dive2", 1100, 1119, "start")
+tunnel("Tunnel_Return2", 1309, 1327, "end")
 # while the camera is inside a tunnel, the room, props and people are invisible to the camera only (shadows/light unchanged):
 # otherwise the floor slab and the boy's own skin cut across the tube as membranes.
-INSIDE = [(727, 749), (849, 869), (1106, 1130), (1304, 1324)]
+INSIDE = [(727, 744), (853, 869), (1106, 1124), (1308, 1324)]
 hide_cols = [bpy.data.collections[n] for n in ("Set_LivingRoom", "Props")]
 obs = set(o for c_ in hide_cols for o in c_.all_objects)
 for nm in ("Boy", "Teen", "Man", "Mom"):

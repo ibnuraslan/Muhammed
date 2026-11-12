@@ -211,8 +211,9 @@ for f, what in ((1, "chest"), (60, "chest_up"), (110, "near_nose"), (128, "at_no
     elif what == "flapA": tip, d, n = sh + V(-0.2, -0.12, 0.22), V(-0.4, -0.2, 1.0), V(0, -1, 0)
     elif what == "flapB": tip, d, n = sh + V(-0.26, -0.18, 0.05), V(-0.6, -0.3, 0.6), V(0, -1, 0)
     elif what == "lap":   # resting along the top of the right thigh
-        hpR = b.bone_world("upperleg01.R"); knR = b.bone_world("lowerleg01.R"); tip, d, n = hpR.lerp(knR, 0.55) + V(0, 0, 0.15), (knR - hpR).normalized(), V(0, 0, -1)
+        hpR = b.bone_world("upperleg01.R"); knR = b.bone_world("lowerleg01.R"); tip, d, n = hpR.lerp(knR, 0.55) + V(0, 0, 0.055), (knR - hpR).normalized(), V(0, 0, -1)
     hand_keys_R.append((f, what, tip.copy()))
+    if what == "lap": place_hand(b.arm, "R", f, tip, n, d); b_tip_R[f] = tip; continue
     boyR(f, tip, d, n, pole=sh + V(-0.35, 0.15, -0.25))
 # left hand: on the floor (support) / on the knee, flaps in the panic, chin during the tweezers
 for f, what in ((1, "knee"), (230, "knee"), (275, "knee"), (420, "knee"), (640, "chest"), (700, "knee"), (880, "knee"), (895, "flapB"), (910, "flapA"),
@@ -222,15 +223,16 @@ for f, what in ((1, "knee"), (230, "knee"), (275, "knee"), (420, "knee"), (640, 
     if what == "floor": W_ = BOYP + V(0.24, 0.12, 0.062); b.h.key_hand("L", f, W_, V(0.3, -0.85, -0.22).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
     elif what == "knee":   # hand resting along the top of the thigh (not on the shin)
         hp_ = b.bone_world("upperleg01.L"); kn_ = b.bone_world("lowerleg01.L"); dth = (kn_ - hp_).normalized()
-        W_ = hp_.lerp(kn_, 0.35) + V(0, 0, 0.13); b.h.key_hand("L", f, W_, dth, V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
+        top = hp_.lerp(kn_, 0.55) + V(0, 0, 0.055)        # top surface of the thigh
+        place_hand(b.arm, "L", f, top, V(0, 0, -1), dth); apply_pose(b.arm, "L", "flat_palm", f)
     elif what == "chest": W_ = b.bone_world("spine02") + V(0.08, -0.13, -0.02); b.h.key_hand("L", f, W_, V(-1, -0.2, 0).normalized(), V(0, 1, 0), sh + V(0.4, 0.1, -0.2))
     elif what == "flapA": W_ = sh + V(0.22, -0.12, 0.22); b.h.key_hand("L", f, W_, V(0.4, -0.2, 1.0).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
     elif what == "flapB": W_ = sh + V(0.27, -0.18, 0.05); b.h.key_hand("L", f, W_, V(0.6, -0.3, 0.6).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
 # fingers
 for f, nm_ in ((1, "pinch"), (240, "pinch"), (262, "relaxed"), (300, "relaxed"), (325, "pinch"), (338, "pinch"), (880, "pinch"),
-               (893, "open_alarm"), (975, "open_alarm"), (995, "relaxed")):
+               (893, "open_alarm"), (975, "open_alarm"), (985, "flat_palm"), (1360, "flat_palm")):
     pose(b, "R", f, nm_)
-for f, nm_ in ((1, "relaxed"), (885, "relaxed"), (893, "open_alarm"), (975, "open_alarm"), (995, "relaxed")):
+for f, nm_ in ((640, "relaxed"), (885, "flat_palm"), (893, "open_alarm"), (945, "open_alarm")):
     pose(b, "L", f, nm_)
 # face (Boy)
 for f, kw in ((1, dict(brows=0.2)), (60, dict(brows=0.35, smile=0.2)), (128, dict(squint=0.3, purse=0.3)), (150, dict(wide=0.6, open=0.25, flare=0.6)),
@@ -414,7 +416,7 @@ for f, what in ((1870, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press")
         tR = hd + rt * 0.06 + fw * 0.05 + V(0, 0, 0.02 if what == "wash" else -0.02); tL = hd - rt * 0.06 + fw * 0.05 + V(0, 0, -0.02 if what == "wash" else 0.02)
         dR, nR, dL, nL = V(0, 0, 1), -rt, V(0, 0, 1), rt
     elif what == "press":
-        tR = nt + rt * 0.012 + fw * 0.004; dR, nR = (up + rt * 0.3).normalized(), -rt
+        tR = nt + rt * 0.016 + fw * 0.002 - up * 0.004; dR, nR = (up * 0.6 - fw * 0.3 + rt * 0.5).normalized(), -rt   # pinch on the right nostril wing
         tL = shL + fw * 0.38 - up * 0.22 - rt * 0.08; dL, nL = fw, up
     else:
         tR = shR + rt * 0.1 + fw * 0.02 - up * 0.5; dR, nR = (-up + fw * 0.2).normalized(), rt
@@ -424,7 +426,7 @@ for f, what in ((1870, "wash"), (1910, "wash2"), (1935, "wash"), (1960, "press")
     bk_ = -fw
     hand_at(M, "R", f, tR, dR, nR, shR + rt * 0.45 - up * 0.35 + bk_ * 0.25)
     hand_at(M, "L", f, tL, dL, nL, shL - rt * 0.45 - up * 0.35 + bk_ * 0.25)
-for f, nm_ in ((1870, "relaxed"), (1945, "relaxed"), (1958, "point"), (2077, "point"), (2088, "relaxed")):
+for f, nm_ in ((1870, "relaxed"), (1945, "relaxed"), (1958, "pinch"), (2077, "pinch"), (2088, "relaxed")):
     pose(M, "R", f, nm_)
 for f, nm_ in ((1870, "relaxed"), (2077, "relaxed"), (2088, "cup_hold")):
     pose(M, "L", f, nm_)

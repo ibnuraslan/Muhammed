@@ -37,6 +37,11 @@ bo = bpy.data.objects.new("BR_BlueNightFill", bf); bpy.data.collections["Set_Bed
 for f, e in ((1, 0), (1716, 0), (1736, 260), (1866, 260), (1880, 0)):
     bf.energy = e; bf.keyframe_insert("energy", frame=f)
 if lamp: lamp.energy = 40
+# the bedroom ceiling must not read black at night: a soft bounce light pointing up at it
+cb = bpy.data.lights.new("BR_CeilingBounce", "AREA"); cb.size = 3.0; cb.color = (0.55, 0.65, 1.0)
+cbo = bpy.data.objects.new("BR_CeilingBounce", cb); bpy.data.collections["Set_Bedroom"].objects.link(cbo); cbo.location = (4.6, 0.8, 2.2); cbo.rotation_euler = (3.14159, 0, 0)
+for f, e in ((1, 0), (1716, 0), (1736, 180), (1866, 180), (1880, 0)):
+    cb.energy = e; cb.keyframe_insert("energy", frame=f)
 # 2. exposure: brighter overall, but bright beats must not blow out (studio and bathroom are already bright)
 scale_keys(sc, "view_settings.exposure", fn=lambda v: v + 0.25 if v < 1.0 else v + 0.1)
 # 3. f-stop >= 5.6 everywhere (keyed); true macros keep 5.6
