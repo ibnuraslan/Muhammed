@@ -139,40 +139,20 @@ class Person:
                 if not (self.name == "Fisher" and s == "R" and T(6.3) <= f <= T(9.35)):
                     self.key_fingers(s, f, nm)
 
-    FPOSE = {"point": ((4, 2, 2), (75, 85, 70), (20, 35, 30)),   # index straight, other three curled, thumb tucked
-             "run": ((50, 55, 40), (55, 60, 45), (15, 30, 25)),    # loose fist
-             "relax": ((15, 18, 12), (18, 22, 15), (8, 10, 8))}
+    HPOSE = {"point": ("point", 1.0), "run": ("power_fist", 0.65), "shade": ("flat_palm", 1.0), "wave": ("open_alarm", 1.0)}
     def key_fingers(self, s, f, nm):
-        idx, rest, th = self.FPOSE.get(nm if nm in self.FPOSE else "relax")
-        R_ = math.radians; PB = self.o.pose.bones
-        for k in range(2, 6):
-            src = idx if k == 2 else rest
-            for j, seg in enumerate(("-1", "-2", "-3")):
-                pb = PB.get("finger%d%s.%s" % (k, seg, s))
-                if pb: pb.rotation_mode = 'XYZ'; pb.rotation_euler = (R_(src[j]), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
-        for j, seg in enumerate(("-1", "-2", "-3")):
-            pb = PB.get("finger1%s.%s" % (seg, s))
-            if pb: pb.rotation_mode = 'XYZ'; pb.rotation_euler = (R_(th[j]), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+        pose, amt = self.HPOSE.get(nm, ("relaxed", 1.0))
+        last = self._hp.get(s)
+        if last == (pose, amt): return
+        if last is not None:
+            apply_pose(self.o, s, last[0], max(1, f - 4), amount=last[1])   # hold the old pose until just before the change
+        apply_pose(self.o, s, pose, f, amount=amt); self._hp[s] = (pose, amt)
     def hand_limits(self):
-        """client hands rule: no backward bends; relaxed curled default"""
-        R_ = math.radians
-        for pb in self.o.pose.bones:
-            n = pb.name
-            if n.startswith("finger"):
-                pb.rotation_mode = 'XYZ'
-                thumb = n.startswith("finger1")
-                c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
-                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-                if thumb:
-                    c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(-15), R_(60), R_(-25), R_(25), R_(-30), R_(30)
-                else:
-                    c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = 0.0, R_(90), 0.0, 0.0, R_(-10), R_(10)
-                pb.rotation_euler = (R_(10 if thumb else 18), 0, 0)
-                pb.keyframe_insert("rotation_euler", frame=1)
-            elif n.startswith("wrist."):
-                c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'
-                c.use_limit_x = c.use_limit_y = c.use_limit_z = True
-                c.min_x, c.max_x, c.min_y, c.max_y, c.min_z, c.max_z = R_(-60), R_(60), R_(-40), R_(40), R_(-25), R_(25)
+        """client hands rule: shared hand_poses.py limits; relaxed curled default"""
+        add_hand_limits(self.o)
+        for side_ in "LR":
+            apply_pose(self.o, side_, "relaxed", 1)
+        self._hp = {}
     def hide_after(self, f):
         for ob in [self.o] + list(self.o.children):
             key_hide(ob, [(1, False), (f, True)])

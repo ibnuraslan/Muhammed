@@ -177,10 +177,11 @@ def key_tr(ob, f, loc=None, rot=None, scale=None):
     if scale is not None:
         ob.scale = (scale,) * 3 if isinstance(scale, (int, float)) else scale; ob.keyframe_insert("scale", frame=f)
 
-def key_hide(ob, frames_states):
+def key_hide(ob, frames_states, viewport=True):
     for f, h in frames_states:
         ob.hide_render = h; ob.keyframe_insert("hide_render", frame=f)
-        ob.hide_viewport = h; ob.keyframe_insert("hide_viewport", frame=f)
+        if viewport:
+            ob.hide_viewport = h; ob.keyframe_insert("hide_viewport", frame=f)
 
 def set_interp(ob, kind='BEZIER'):
     ad = ob.animation_data

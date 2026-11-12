@@ -699,5 +699,7 @@ for i in range(24):
     bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.55, location=(-15 + i * 1.3, -27.6, 1.2 + (i % 3) * 0.9))
     o_ = bpy.context.active_object; o_.name = "HotelSpray_%d" % i; link(o_, C_FX); o_.data.materials.append(spray_m); o_.scale = (0.01,) * 3
 
+for o_ in LIB.objects:   # library source objects live far away (never near people, never in view)
+    o_.location = (5000, 5000, -500); o_.matrix_world = Matrix.Translation((5000, 5000, -500))
 bpy.ops.wm.save_as_mainfile(filepath=out)
 print("SCENE_DONE", len(HOUSES), "houses", len(PALMS), "palms")

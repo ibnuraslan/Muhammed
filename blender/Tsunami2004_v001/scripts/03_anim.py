@@ -15,6 +15,7 @@ if not SKIP_PEOPLE:
     for o in dst.objects:
         if o is not None: CP.objects.link(o)
     exec(open("/home/user/Muhammed/blender/pipeline/anim_lib.py").read())
+    exec(open("/home/user/Muhammed/blender/pipeline/hand_poses.py").read())
     exec(open(HERE + "/scripts/03_people.py").read())
     # crowd: time-shifted clones of the eight performers, offset along the beach (x only: the beach height depends on y)
     def shifted(act, df):
@@ -56,14 +57,10 @@ if not SKIP_PEOPLE:
                 if md.type == 'ARMATURE': md.object = r2
             if ch.animation_data and ch.animation_data.action:
                 c2.animation_data.action = shifted(ch.animation_data.action, df)
-    # grasp: fisher's right fingers close round the fish
-    rr = P["Fisher"].H.r
-    for f, a in ((T(6.5), 0), (T(6.75), 1), (T(9.0), 1), (T(9.2), 0)):
-        for fn_ in ("finger2", "finger3", "finger4", "finger5"):
-            for seg in ("-1", "-2", "-3"):
-                pb = rr.PB[fn_ + seg + ".R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(18 + (CURL - 18) * a * (0.8 if seg == "-1" else 1.0)), 0, 0)
-                pb.keyframe_insert("rotation_euler", frame=f)
-        pb = rr.PB["finger1-2.R"]; pb.rotation_mode = 'XYZ'; pb.rotation_euler = (math.radians(10 + 30 * a), 0, 0); pb.keyframe_insert("rotation_euler", frame=f)
+            key_hide(c2, [(F(21.40), True)])   # every clone has left frame before the impact beat
+    # grasp: fisher's right hand wraps the fish tail (shared hand_poses library)
+    fo = bpy.data.objects["Fisher"]
+    apply_pose(fo, "R", "relaxed", T(6.5)); apply_pose(fo, "R", "wrap_grip", T(6.75)); apply_pose(fo, "R", "wrap_grip", T(9.0)); apply_pose(fo, "R", "relaxed", T(9.2))
 
 # ---------------------------------------------------------------- sea drawback
 sea = bpy.data.objects["SeaPlane"]
@@ -143,12 +140,13 @@ FACE = []
 lt = bpy.data.objects["LIB_longtail"]; pb_ = bpy.data.objects["LIB_palm_b"]; c2 = bpy.data.objects["LIB_car2"]
 for i, (lib, x, frac, rot) in enumerate([(lt, -9, 0.42, (0.4, 0.9, 1.2)), (pb_, 3, 0.58, (1.4, 0.3, 0.2)), (lt, 15, 0.66, (-0.5, 2.2, 0.4)),
                                          (pb_, -20, 0.5, (1.2, -0.6, 2.0)), (c2, 24, 0.36, (0.6, 1.8, 0.3))]):
-    o = bpy.data.objects.new("FaceDebris_%d" % i, lib.data); bpy.data.collections["Water"].objects.link(o); o.scale = (0.9,) * 3
+    o = bpy.data.objects.new("FaceDebris_%d" % i, lib.data); bpy.data.collections["Water"].objects.link(o); o.scale = (0.9,) * 3; o.location = (0, 3000, -200)
     FACE.append((o, x, frac, rot))
 NXW_, NUW_ = 900, 170
 xs_ = np.linspace(-1500, 1500, NXW_)
 for o, x, frac, rot in FACE:
-    key_hide(o, [(1, True), (F(15.8), False)])
+    key_hide(o, [(1, True), (F(15.8), False)], viewport=False)
+    key_tr(o, 1, loc=(x, 3000, -200)); key_tr(o, F(15.75), loc=(x, 3000, -200))   # parked far away until it rides the wave
     for f in range(F(15.8), F(21.05), 6):
         t = (f - 1) / 60.0; u = frac
         yf = wave_y(t) + (8 * u - 8 * u ** 3) - 1.6 + 3 * math.sin(x / 61.0); zf = (-5 + 18 * u ** 1.6) * 1.6

@@ -19,4 +19,5 @@ fs=sorted(glob.glob('/tmp/claude-0/hcu5/*.jpg')); S=Image.new('RGB',(270*7,480*2
 for i,f in enumerate(fs):
     im=Image.open(f); ImageDraw.Draw(im).rectangle((0,0,270,12),fill=(0,0,0)); ImageDraw.Draw(im).text((2,1),f.split('/')[-1][:-4],fill=(255,255,0)); S.paste(im,((i%7)*270,(i//7)*480))
 S.save('review/hand_closeups_v005.jpg',quality=85)"
+$B -b "$OUT"/Tsunami2004_v005_60fps.blend --python ../pipeline/qa_check.py -- $PWD/review/qa_v005.json 6 "$OUT"/beats.json > /tmp/claude-0/qa5.log 2>&1
 echo V005_DONE

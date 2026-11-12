@@ -79,6 +79,9 @@ for nm, ratio in (("LIB_mosque", 0.45), ("LIB_b_rumah", 0.5), ("LIB_b_pariaman",
     for x in me_old_users: x.data = nmesh
     bpy.data.objects.remove(o); nmesh.name = nm + "_dec"
 bpy.context.scene.render.image_settings.file_format = 'PNG'; bpy.context.scene.render.image_settings.color_mode = 'RGB'
+lib_c = bpy.data.collections.get("LIB")
+if lib_c:   # library source objects: their meshes are used by instances; the objects themselves are never rendered
+    for o in list(lib_c.objects): bpy.data.objects.remove(o, do_unlink=True)
 bpy.data.orphans_purge(do_recursive=True)
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("SHRUNK", n, "images ->", OUT, os.path.getsize(OUT) // 2**20, "MB")
