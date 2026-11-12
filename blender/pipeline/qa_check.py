@@ -14,6 +14,8 @@ Per sampled frame it reports:
              straight or bent backwards (<10 deg), or whose fingertips fan out >30 deg apart while curled
   FACEPRESS  a fingertip or palm vertex inside 1 cm of the same character's face region, or the head within
              3 cm of a prop surface
+  CAMJUMP    (every frame) a camera switch, or the camera moves >0.25 m or turns >20 deg in one frame: a hard cut.
+             The film is ONE continuous camera; only a fully covered wipe may hide a jump.
 A clean film reports 0 for every category except intended, listed exceptions.
 Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
 a deliberate point / trigger finger / writing grip is not a CLAW.
@@ -194,6 +196,24 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
             hd = wpos(r, "head");
             if min((t - hd).length for t in tips) < 0.07: flag(f, "FACEPRESS", "%s.%s hand on face" % (r.name, s))
     if f % 120 == 1: print("QA", f, res["frames"].get(str(f)))
+
+# CAMJUMP: the film must be ONE continuous camera. Every frame (not STEP): a camera switch (markers), or a
+# one-frame move/turn that is a step, not motion: >0.25 m (or >20 deg) AND >3x the neighbouring frames' speed
+# (a fast fly-over moves a lot every frame; a cut moves a lot in one frame). Only a fully covered wipe
+# (black / cloud frame) may hide one; list those in ACTING_notes.md.
+P = []
+for f in range(sc.frame_start, sc.frame_end + 1):
+    sc.frame_set(f); P.append((f, sc.camera, sc.camera.matrix_world.copy()))
+D = [(0.0, 0.0)] + [((P[k][2].translation - P[k-1][2].translation).length,
+       (lambda a: min(a, 360 - a))(math.degrees(P[k-1][2].to_quaternion().rotation_difference(P[k][2].to_quaternion()).angle))) for k in range(1, len(P))]
+for k in range(1, len(P)):
+    f, c, m = P[k]
+    if c != P[k-1][1]: flag(f, "CAMJUMP", "camera switch %s -> %s" % (P[k-1][1].name, c.name)); continue
+    nb = [D[x] for x in range(max(1, k-3), min(len(D), k+4)) if x != k]
+    vd = sorted(x[0] for x in nb)[len(nb)//2] if nb else 0; va = sorted(x[1] for x in nb)[len(nb)//2] if nb else 0
+    d, ang = D[k]
+    if (d > 0.25 and d > 3 * vd + 0.02) or (ang > 20 and ang > 3 * va + 1):
+        flag(f, "CAMJUMP", "cut: %.2f m, %.0f deg in one frame (neighbours %.2f m, %.0f deg)" % (d, ang, vd, va))
 
 json.dump(res, open(OUT, "w"), indent=1)
 print("QA_COUNTS", res["counts"])

@@ -621,10 +621,33 @@ CAMK = [
     (1515, V(-4.5, 58.9, 1.58), V(-3.6, 56.5, 1.6), 32),
     (1560, V(-4.25, 58.25, 1.6), V(-3.63, 56.8, 1.63), 40)]
 fc_ = catmull([(f, c) for f, c, a, l in CAMK]); fa_ = catmull([(f, a) for f, c, a, l in CAMK]); fl_ = catmull([(f, float(l)) for f, c, a, l in CAMK])
-for f in list(range(1, FRAME_END + 1, 2)) + [FRAME_END]:
-    cam.location = fc_(f); cam.keyframe_insert("location", frame=f)
-    aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
-    cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
+# one continuous camera: no aim snap. Where the view direction turns >15 deg in a frame (a fast whip whose aim point
+# swings past close to the camera), re-interpolate the direction over an eased window long enough to stay <20 deg/frame.
+from mathutils import Quaternion
+CP = {f: fc_(f) for f in range(1, FRAME_END + 1)}; AP = {f: fa_(f) for f in range(1, FRAME_END + 1)}
+def _dir(f): return (AP[f] - CP[f]).normalized()
+def _step(f): return math.degrees(_dir(f - 1).angle(_dir(f), 0.0))
+for _it in range(20):
+    bad = [f for f in range(2, FRAME_END + 1) if _step(f) > 15.0]
+    if not bad: break
+    k = bad[0]; a_, b_ = k - 3, k + 3
+    while True:
+        a_ = max(1, a_); b_ = min(FRAME_END, b_)
+        tot = math.degrees(_dir(a_).angle(_dir(b_), 0.0)); need = math.ceil(1.6 * tot / 16.0)
+        if b_ - a_ >= need and (a_ == 1 or _step(a_) <= 12) and (b_ == FRAME_END or _step(b_ + 1) <= 12): break
+        a_ -= 1; b_ += 1
+    da, db = _dir(a_), _dir(b_); q = da.rotation_difference(db)
+    la, lb = (AP[a_] - CP[a_]).length, (AP[b_] - CP[b_]).length
+    for f in range(a_ + 1, b_):
+        t = smooth((f - a_) / (b_ - a_))
+        AP[f] = CP[f] + (Quaternion().slerp(q, t) @ da) * (la + (lb - la) * t)
+    print("CAM_EASE", k, "window", a_, b_, "turn %.0f deg" % tot)
+for f in range(1, FRAME_END + 1):
+    cam.location = CP[f]; cam.keyframe_insert("location", frame=f)
+    aim.location = AP[f]; aim.keyframe_insert("location", frame=f)
+    if f % 2 == 1 or f == FRAME_END:
+        cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
+print("CAM_MAX_STEP %.1f deg" % max(_step(f) for f in range(2, FRAME_END + 1)))
 _dh = bpy.data.objects.get("DustHaze")
 if _dh: _dh.hide_viewport = True     # still renders (hide_render stays False); a volume fog is not an occluder
 sc.frame_set(1)

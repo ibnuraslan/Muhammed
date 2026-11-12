@@ -123,3 +123,16 @@ The beat frames are unchanged and beats.json is identical. Everything kept from 
 | 940 celebration | The hands are above his head (z 1.72, lateral 0.5), so his face reads. |
 
 Kept as intended, in addition to the table above: f1243, one 0.1 s sample as the camera passes through the station window frame.
+
+## v007 rev 3: CAMJUMP (director, 17:45 UTC)
+Three aim snaps came from fast whips, where the interpolated aim point swung past close to the camera. `03b_fx_camera.py` now keys the camera and aim on every frame. Wherever the view direction turns more than 15° in one frame, it re-interpolates the direction with an eased slerp across a window. The framings at each end of the window are unchanged.
+
+| Frames | Turn | Eased window |
+|---|---|---|
+| 324–325 | 143° | 316–332 |
+| 1013–1014 | 144° | 1005–1021 |
+| 1418–1419 | 164° | 1409–1427 |
+
+The largest step is now 13.6° per frame, and CAMJUMP is 0. Turns this large can't stay under 20° per frame in 6–8 frames, so the windows are 16–18 frames (about 0.3 s).
+
+Two more QA EMPTY samples are kept as intended: 1015 and 1417, each in the middle of one of these whips.
