@@ -20,10 +20,10 @@ PLAN = {
     },
     "sc_bank": {
         "dusk": (KEEP, {}),
-        "summer": (EXT, dict(mood="low_sun", elev=14, sky="blue", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
-        "autumn": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
-        "winter": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
-        "seasons": (EXT, dict(mood="overcast", azim=60, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "summer": (EXT, dict(mood="low_sun", elev=30, sky="blue", azim=70, exposure=1.0, sky_strength=0.5, sun_energy=9.0, haze_box=((0, -10, 12), (220, 60, 24)))),
+        "autumn": (KEEP, {}),                                                     # rain/snow: the relight lost the figures; grade only
+        "winter": (KEEP, {}),                                                     # rain/snow: the relight lost the figures; grade only
+        "seasons": (KEEP, {}),                                                     # rain/snow: the relight lost the figures; grade only
     },
     "sc_hospital": {
         None: (INT, dict(window=((0.0, -11.4, 1.9), (0.0, -5.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
@@ -51,8 +51,8 @@ PLAN = {
         "institute": (INT, dict(window=((0.0, 15.4, 1.8), (0.0, 8.0, 0.6)), mood="overcast", key_size=1.4, fill=0.35, sky_factor=0.6)),
         "kitchen": (NIGHT, {}), "blocks": (KEEP, {}),
     },
-    "sc_apartment": {None: (EXT, dict(mood="low_sun", elev=16, sky="blue", azim=-55, haze_box=((0, -12, 12), (90, 50, 26))))},
-    "sc_salisbury": {None: (EXT, dict(mood="low_sun", elev=12, sky="blue", azim=50, haze_box=((-10, 0, 10), (120, 60, 22))))},
+    "sc_apartment": {None: (EXT, dict(mood="low_sun", elev=34, sky="blue", azim=70, exposure=1.0, sky_strength=0.5, sun_energy=9.0, haze_box=((0, -12, 12), (90, 50, 26))))},
+    "sc_salisbury": {None: (EXT, dict(mood="low_sun", elev=28, sky="blue", azim=65, exposure=1.0, sky_strength=0.5, sun_energy=9.0, haze_box=((-10, 0, 10), (120, 60, 22))))},
     "sc_station": {None: (NIGHT, {})},
 }
 
