@@ -399,8 +399,8 @@ body(1, SIT, flex=-14, sflex=18, head=(25, 0)); feet(1, FL_, FR_)
 hand("L", 1, (sx_ - 0.13, sy_ + 0.12, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=35)
 hand("R", 1, (sx_ + 0.13, sy_ + 0.12, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=35)
 body(F(0.8), SIT, flex=-10, sflex=10, head=(10, 0))
-hand("L", F(0.8), (sx_ - 0.05, sy_ + 0.12, 1.05), d=(0.4, 0.3, 1), n=(0.3, 1, 0), curl=30)     # hands rise to the face
-hand("R", F(0.8), (sx_ + 0.07, sy_ + 0.14, 1.07), d=(-0.4, 0.3, 1), n=(-0.3, 1, 0), curl=30)
+hand("L", F(0.8), (sx_ - 0.10, sy_ + 0.12, 1.05), d=(0.4, 0.3, 1), n=(0.3, 1, 0), curl=30)     # hands rise to the face
+hand("R", F(0.8), (sx_ + 0.12, sy_ + 0.14, 1.07), d=(-0.4, 0.3, 1), n=(-0.3, 1, 0), curl=30)
 hand("L", F(1.6), (sx_ - 0.08, sy_ + 0.25, 0.92), d=(0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
 hand("R", F(1.6), (sx_ + 0.12, sy_ + 0.25, 0.90), d=(-0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
 body(F(1.6), SIT, flex=-8, sflex=4, head=(0, 0))
@@ -444,8 +444,8 @@ def wpath(f):
 H.walk(wpath, lambda f: 180.0, W0, W1, stride=0.72, lift=0.09, bob=0.03, lean=10)
 for f, x, y, z in ((F(10.4), -0.55, -2.70, 1.02), (F(11.0), -0.50, -1.95, 1.02), (F(11.6), -0.30, -0.9, 1.2)):
     hand("L", f, (x, y, z), d=(0, 1, -0.3), n=(-1, 0, 0.3), curl=30)
-for f, x, y, z in ((F(10.6), 0.45, -2.30, 1.0), (F(11.3), 0.40, -1.50, 1.0)):
-    hand("R", f, (x, y, z), d=(0, 1, -0.3), n=(1, 0, 0.3), curl=30)
+for f, x, y, z in ((F(10.6), 0.30, -2.42, 1.08), (F(11.3), 0.36, -1.55, 1.0)):
+    hand("R", f, (x, y, z), d=(0, 1, -0.3), n=(1, 0, 0.3), curl=45)
 # beat 4: door push (door free edge / panel point follows rotation)
 def door_pt(f, local):
     sc.frame_set(f); return DOOR.matrix_world @ Vector(local)
@@ -488,16 +488,17 @@ hand("R", F(19.7), (0.14, 1.24, 0.95), d=(0, 1, -1), n=(0, 0.6, 1), curl=10)
 GRIP = (0.12, 1.33, 0.835)
 hand("R", F(20.6), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=15)
 hand("R", F(20.9), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=55)            # closed on it
-hand("L", F(20.0), (-0.30, 1.0, 1.30), d=(0, 1, 0), n=(0, 0, -1), curl=50)
+hand("L", F(20.0), (-0.36, 1.10, 1.42), d=(0, 1, 0), n=(0, 0, -1), curl=60)
+for t_ in (21.0, 22.2, 23.4, 24.6, 25.8): hand("L", F(t_), (-0.37 + 0.01 * (t_ % 2), 1.11, 1.43), d=(0, 1, 0), n=(0, 0, -1), curl=60)
 body(F(21.8), POSW, flex=6, sflex=6, head=(0, -5))
-hand("R", F(21.8), (0.18, 1.50, 1.12), d=(-0.3, 0.2, 1), n=(-0.6, -1, 0), curl=55)
+hand("R", F(21.8), (0.18, 1.50, 1.12), d=(-0.3, 0.2, 1), n=(-0.6, -1, 0), curl=78)
 for i, t in enumerate((22.8, 23.4, 23.9, 24.5, 25.0)):
     j = 0.012 * (1 if i % 2 else -1)
-    hand("R", F(t), (0.18 + j, 1.55, 1.18 + j), d=(-0.3, 0.1, 1), n=(-0.8, -1, 0), curl=55)
+    hand("R", F(t), (0.18 + j, 1.55, 1.18 + j), d=(-0.3, 0.1, 1), n=(-0.8, -1, 0), curl=78)
     body(F(t), (POSW[0], POSW[1], POSW[2] - 0.01 * (i % 2)), flex=8 + 3 * (i % 2), sflex=10, head=(5 + 4 * (i % 2), -3))
 # beat 8: silence, lower handset, put it back
 body(F(25.6), POSW, flex=14, sflex=20, head=(30, 0))
-hand("R", F(25.6), (0.10, 1.38, 1.08), d=(0, 0.3, 1), n=(-0.6, -1, 0), curl=55)
+hand("R", F(25.6), (0.10, 1.38, 1.08), d=(0, 0.3, 1), n=(-0.6, -1, 0), curl=78)
 hand("R", F(26.3), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=55)
 hand("R", F(26.6), GRIP, d=(0, 1, -0.3), n=(0, 0, -1), curl=10)
 # beat 9: haul the FO out
@@ -508,12 +509,11 @@ feet(F(27.8), (-0.08, 0.98), (0.14, 1.02))
 def fo_shoulders(f, s):
     sc.frame_set(f); nm = "upperarm01." + s
     return FO.matrix_world @ FO.pose.bones[nm].head
-hand("L", F(28.0), fo_shoulders(F(28.0), "R") + Vector((-0.05, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
-hand("R", F(28.0), fo_shoulders(F(28.0), "L") + Vector((-0.03, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
-for t in (28.8, 29.8, 30.6, 31.4, 32.4, 33.2):
-    f = F(t)
-    hand("L", f, fo_shoulders(f, "R") + Vector((-0.05, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
-    hand("R", f, fo_shoulders(f, "L") + Vector((-0.03, -0.10, 0.09)), d=(0.3, 1, -0.5), n=(0, -0.3, 1), curl=60)
+def fo_point(f, bone, off):
+    sc.frame_set(f); return FO.matrix_world @ FO.pose.bones[bone].head + Vector(off)
+for f in range(F(27.9), F(33.3), 8):          # left hand on the collar, right hand on his near shoulder seam, outside the jacket
+    hand("L", f, fo_point(f, "neck01", (-0.04, -0.15, 0.05)), d=(0.3, 1, -0.4), n=(0, -0.5, 1), curl=72)
+    hand("R", f, fo_point(f, "upperarm01.L", (-0.07, -0.10, 0.21)), d=(0.3, 1, -0.6), n=(0, -0.3, 1), curl=72)          # top of his near shoulder, outside the jacket
 body(F(28.8), (0.04, 0.95, STAND_Z - 0.08), flex=12, sflex=6, twist=-15, head=(10, -10))
 feet(F(29.2), (-0.10, 0.80), (0.14, 0.90)); H.key_foot("L", F(29.0), Vector((0.05, 0.78)), 180, 0.05)
 body(F(29.8), (0.0, 0.74, STAND_Z - 0.10), flex=10, sflex=8, twist=-10, head=(10, -10))
@@ -552,7 +552,7 @@ def hands_on_yoke(f, curl=65, jitter=0.0):
     for s in "LR":
         W = grip(f, s) + Vector((random.uniform(-jitter, jitter), random.uniform(-jitter, jitter), random.uniform(-jitter, jitter)))
         sx = 1 if s == "L" else -1
-        hand(s, f, W - Vector((0, 0.035, 0.0)), d=(sx * 0.6, 1, 0.5), n=(-sx * 0.3, 0.2, 1), pole=W + Vector((sx * 0.4, -0.3, -0.25)), curl=curl)
+        hand(s, f, W - Vector((sx * 0.012, 0.022, 0.012)), d=(sx * 0.35, 0.6, 1.0), n=(-sx * 0.2, -1.0, 0.3), pole=W + Vector((sx * 0.4, -0.3, -0.25)), curl=max(curl, 78))
 for f in range(F(39.2), F(45.0), 15):
     hands_on_yoke(f, 70, 0.006)
 SEATB = lambda f, flex=-4, sflex=8, twist=0, head=(10, 0), dz=0.0, dy=0.0, dx=0.0: body(f, (CS[0] + dx, CS[1] + dy, CS[2] + dz), flex=flex, sflex=sflex, twist=twist, head=head)
@@ -572,9 +572,9 @@ hand("R", F(57.7), (0.09, 1.86, 1.0), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=15)
 SEATB(F(56.8), sflex=20, twist=28, head=(20, 30), dx=-0.08, dy=0.06); SEATB(F(58.0), sflex=4, head=(0, 0))
 hand("R", F(58.6), (0.11, 1.82, 1.02), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=15)
 sc.frame_set(F(59.2)); tw = THR()
-hand("R", F(59.2), tw + Vector((0.03, -0.04, 0.05)), d=(-0.6, 1, -0.8), n=(0, 0, 1), curl=45)
-hand("R", F(59.8), tw + Vector((0.03, -0.08, 0.05)), d=(-0.6, 1, -0.8), n=(0, 0, 1), curl=45)
-SEATB(F(59.2), sflex=22, twist=30, head=(20, 30), dx=-0.1, dy=0.08)
+hand("R", F(59.2), tw + Vector((0.0, -0.035, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70)
+hand("R", F(59.8), tw + Vector((0.0, -0.075, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70)
+SEATB(F(59.2), sflex=30, twist=34, head=(20, 30), dx=-0.2, dy=0.14)
 hand("R", F(60.4), grip(F(60.4), "R") - Vector((0, 0.035, 0)), d=(-0.6, 1, 0.5), n=(0.3, 0.2, 1), curl=65)
 SEATB(F(60.4), sflex=14, head=(25, 0)); SEATB(F(61.5), sflex=2, head=(0, 0)); SEATB(F(62.6), sflex=4, twist=30, head=(0, 45))
 hand("R", F(63.2), (0.12, 1.85, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=20)
@@ -583,7 +583,7 @@ hand("R", F(64.2), (0.13, 1.84, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=25)
 for f in range(F(56.6), F(72.6), 60):
     W = grip(f, "L"); hand("L", f, W - Vector((0, 0.035, 0)), d=(0.6, 1, 0.5), n=(-0.3, 0.2, 1), pole=W + Vector((0.4, -0.3, -0.25)), curl=65)
 # beat 17: look back over the right shoulder
-hand("R", F(65.0), (0.16, 1.45, 0.82), d=(-0.3, 1, -0.5), n=(0, 0, 1), curl=50)                     # braces on the pedestal while turning
+hand("R", F(65.0), (0.24, 1.30, 0.86), d=(-0.3, 1, -0.5), n=(0, 0, 1), curl=60)                     # braces on the pedestal while turning
 SEATB(F(64.6), sflex=14, twist=45, head=(0, 50), dy=0.12, dx=-0.10); SEATB(F(65.8), sflex=24, twist=70, head=(25, 70), dy=0.18, dx=-0.18)
 SEATB(F(66.9), sflex=16, twist=75, head=(5, 80), dy=0.16, dx=-0.18); SEATB(F(67.9), sflex=10, twist=40, head=(5, 50), dy=0.08, dx=-0.06)
 # beat 18-19: forward, hands back on the yoke, wide-eyed
@@ -622,6 +622,36 @@ def quick_steps():
         print("QUICKSTEPS", s_, len(adds) // 2)
 quick_steps()
 
+def add_joint_limits(arm, f_ref):
+    """Limit Rotation (local) on every finger, thumb and wrist bone: forward curl only, small spread; wrist +-60 flex / +-25 side"""
+    sc.frame_set(f_ref); n = 0
+    for pb in arm.pose.bones:
+        nm = pb.name
+        if nm.startswith("finger"):
+            e = pb.matrix_basis.to_euler('XYZ'); ax = max(range(3), key=lambda i: abs(e[i])); sg = 1 if e[ax] >= 0 else -1
+            thumb = nm.startswith("finger1")
+            lim = R_(70 if thumb else 90); side = R_(30 if thumb else 10)
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "HAND_LIMIT"
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            for i, a_ in enumerate("xyz"):
+                if i == ax and abs(e[ax]) > R_(2):
+                    lo, hi = (0.0, lim) if sg > 0 else (-lim, 0.0)
+                else:
+                    lo, hi = -side, side
+                setattr(c, "min_" + a_, lo - R_(1)); setattr(c, "max_" + a_, hi + R_(1))
+            n += 1
+        elif nm.startswith("wrist."):
+            c = pb.constraints.new('LIMIT_ROTATION'); c.owner_space = 'LOCAL'; c.name = "WRIST_LIMIT"
+            c.use_limit_x = c.use_limit_y = c.use_limit_z = True
+            c.min_x, c.max_x = -R_(60), R_(60); c.min_z, c.max_z = -R_(25), R_(25); c.min_y, c.max_y = -R_(45), R_(45)
+            n += 1
+        elif nm.startswith("lowerarm01."):
+            pb.use_ik_limit_x = True; pb.ik_min_x = R_(-145); pb.ik_max_x = R_(145)
+    return n
+nl = add_joint_limits(YOU, F(40.2)) + add_joint_limits(FO, 1) + add_joint_limits(CA, 1)
+for (arm_, *_r) in PASS: nl += add_joint_limits(arm_, 1)
+print("JOINT LIMITS", nl)
+
 # ------------------------------------------------------------------ camera (head-cam baked from the eyes, authored look)
 camd = bpy.data.cameras.new("CAM_Film"); camd.lens = 14; camd.clip_start = 0.03; camd.clip_end = 90000; camd.sensor_fit = 'AUTO'
 CAM = bpy.data.objects.new("CAM_Film", camd); sc.collection.objects.link(CAM); sc.camera = CAM
@@ -640,10 +670,10 @@ yaw_f = catmull([(F(t), y) for t, y, p in LOOK]); pit_f = catmull([(F(t), p) for
 rol_f = catmull([(1, 0.0)] + [(F(t), r) for t, r in sorted(ROLL.items())] + [(4410, 0.0)])
 def shake(f):
     t = f / FPS; a = 0.0
-    if F(21.5) <= f <= F(25.4): a = 0.5
-    if F(33.7) <= f <= F(44.5): a = 2.4 * min(1, (f - F(33.7)) / 20) * (1 - max(0, (f - F(42.5)) / (F(44.5) - F(42.5))))
-    if F(38.8) <= f <= F(46.0): a = max(a, 0.6)                      # straining on the yoke
-    br = Vector((0.35 * math.sin(t * 1.9), 0.25 * math.sin(t * 1.3 + 1), 0.2 * math.sin(t * 0.9)))   # breathing sway, never still
+    if F(21.5) <= f <= F(25.4): a = 0.25
+    if F(33.7) <= f <= F(44.5): a = 1.2 * min(1, (f - F(33.7)) / 20) * (1 - max(0, (f - F(42.5)) / (F(44.5) - F(42.5))))
+    if F(38.8) <= f <= F(46.0): a = max(a, 0.25)                      # straining on the yoke
+    br = Vector((0.15 * math.sin(t * 1.9), 0.1 * math.sin(t * 1.3 + 1), 0.08 * math.sin(t * 0.9)))   # breathing sway, never still
     return Vector((math.sin(t * 37.1) * 0.6 + math.sin(t * 23.3), math.sin(t * 29.7) + math.sin(t * 41.9) * 0.5, math.sin(t * 19.1))) * a + br
 FLOAT0, FLOATR, FLOAT1 = F(71.4), F(72.6), F(73.5)
 FREE = [(FLOAT0, None), (F(72.0), Vector((0.66, 1.62, 1.44))), (FLOATR, Vector((0.56, 1.93, 1.34))), (4410, Vector((0.535, 1.86, 1.31)))]
@@ -727,7 +757,7 @@ r = sc.render; r.resolution_x, r.resolution_y, r.resolution_percentage = 1080, 1
 sc.frame_start, sc.frame_end = 1, 4410
 sc.cycles.samples = 48; sc.cycles.adaptive_threshold = 0.05; sc.cycles.use_denoising = True
 r.use_motion_blur = True; r.motion_blur_shutter = 0.5
-c_ = sc.cycles; c_.max_bounces = 8; c_.diffuse_bounces = 3; c_.glossy_bounces = 3; c_.transmission_bounces = 8; c_.transparent_max_bounces = 16
+c_ = sc.cycles; c_.max_bounces = 12; c_.diffuse_bounces = 4; c_.glossy_bounces = 4; c_.transmission_bounces = 12; c_.transparent_max_bounces = 16   # eyes need the depth
 c_.caustics_reflective = False; c_.caustics_refractive = False; r.use_persistent_data = True
 r.image_settings.file_format = 'PNG'; r.image_settings.color_mode = 'RGB'; r.image_settings.color_depth = '8'; r.image_settings.compression = 15
 sc.frame_set(1)
