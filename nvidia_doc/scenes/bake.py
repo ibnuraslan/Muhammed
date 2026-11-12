@@ -82,7 +82,12 @@ movers = [o for o in movers if len({sn[o.name] for sn in snap}) > 1]
 print("[bake] moving objects:", [o.name for o in movers][:20], len(movers), flush=True)
 
 prev_q, prev_e = {}, {}
-for f in range(1, n + 1):
+# key every STEP frames (Blender interpolates between keys); per-frame UI image sequences need every frame
+STEP = 1 if screen_tex is not None else int(os.environ.get("BAKE_STEP", arg('--step', 2)))
+key_frames = list(range(1, n + 1, STEP))
+if key_frames[-1] != n:
+    key_frames.append(n)
+for f in key_frames:
     t = (f - 1) / max(n - 1, 1)
     restore_pose(); kit.apply_cam(cam, ctx, spec, t)
     bpy.context.view_layer.update()
