@@ -33,4 +33,5 @@ The source is `../GoatOwner_v001/scripts/`, and `05_package.sh` rebuilds everyth
 - The rescuer's feeding hand sits just above the grazing goat's head rather than under its muzzle in some frames.
 - Hooves float 3–4 cm mid-trot during the charge and sink 3.5 cm on one porch step (27.7 s).
 - The goat's mouth interior (red) shows at some angles in the head close-ups at 11–12 s. The camera was pulled back to minimise it.
+- The stick grip in beat 1 reads as the stick resting across the top of his raised hand, with the thumb out, rather than a full fist wrap. See `D_contact_closeups.jpg` at 0100.
 - No voiceover yet, so timing follows the brief's target beat times.
