@@ -483,7 +483,7 @@ def build(variant="empty"):
     c.update(phone=root, handset=hs, phone_base=base)
     # ---------------------------------------------------------------- per-variant set dressing
     if variant in ("day", "brother", "visit", "alone", "leave"):
-        c["chair"].location = CHAIR_AT_DESK; c["chair"].rotation_euler = (0, 0, math.pi)
+        c["chair"].location = CHAIR_AT_DESK; c["chair"].rotation_euler = (0, 0, 0.0)
     if variant in ("sealed", "ante", "ledger"):
         c["door"].rotation_euler = (0, 0, 0)                       # door shut (ante shots see it from the other side)
     if variant in ("ante", "ledger"):
@@ -822,25 +822,63 @@ def point_hand(h, sd, index=8, others=78, thumb=35):
             h.rot(pb.name, ax, thumb); bpy.context.view_layer.update()
 
 
+def palm_down(h, sd):
+    """Roll the hand about its own axis so the palm (the side the fingers curl toward, bone +Z) faces down."""
+    pb = h.arm.pose.bones[f"wrist.{sd}"]
+    def axes():
+        bpy.context.view_layer.update()
+        M = h.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()
+        return (M @ Vector((0, 1, 0))).normalized(), (M @ Vector((0, 0, 1))).normalized()
+    y, z = axes()
+    want = Vector((0, 0, -1)); want = (want - y * want.dot(y)).normalized()
+    ang = math.degrees(z.angle(want))
+    h.rot(pb.name, y, ang)
+    if axes()[1].dot(want) < 0.9:
+        h.rot(pb.name, y, -2 * ang)
+    bpy.context.view_layer.update()
+
+
 def a_dial(c, sec):
     """Ch1 2A: on the phone already, handset in his left hand at his ear, cord hanging to the base; head a little
     bowed toward the phone, his right index finger presses the keys one after another. Shoulders relaxed."""
     b = seat_banker(c)
     nod(b, "neck01", 8); nod(b, "head", 14)
-    place_handset(c, handset_at_ear(c, b, 1.0))
+    M = handset_at_ear(c, b, 1.0); M.translation += Vector((0, 0, -0.045)) + fwd_of(b) * 0.01       # at the ear, not above it
+    place_handset(c, M)
     hs = c["handset"].matrix_world
-    hand_to(b, "L", hs @ Vector((0.0, -0.01, -0.02)), curl=55)
+    if not c.get("dial_cord"):                                           # the desk cord stretches into loops at the ear:
+        c["cord"].hide_render = True; c["cord"].hide_viewport = True      # build one hanging from the handset to the base
+        P = c["phone"].matrix_world
+        top = hs @ Vector((0.0, -HS_L / 2 + 0.004, -0.012)); sock = P @ Vector((-0.103, -0.05, 0.016))
+        low = Vector(((top.x + sock.x) / 2, (top.y + sock.y) / 2, TOP_Z - 0.06))   # sags just below the desk edge
+        pts = [top, top + Vector((0, 0, -0.08)), top.lerp(low, 0.55) + Vector((0, 0, -0.04)), low,
+               low.lerp(sock, 0.6) + Vector((0, 0, 0.02)), sock]
+        c["dial_cord"] = cord_mesh(coiled_cord("DialCord", pts, mat=bpy.data.materials["CordWhite"]), c["handset"], pts[0], reach_len=0.12)
+    s_l = Vector((0, 0, 1)).cross(fwd_of(b)).normalized()                # his left
+    hand_to(b, "L", hs @ Vector((0.0, -0.01, -0.02)), pole=fwd_of(b) * 0.7 + Vector((0, 0, -0.7)) + s_l * 0.25, curl=55)   # elbow down, forward
     # keys: a slow sequence across the keypad, the fingertip dips onto each key and lifts a little between them
     seq = [(1, 0), (0, 1), (2, 2), (1, 1), (0, 3), (2, 1), (1, 2)]
     i = int(sec / 0.42) % len(seq); ph_ = (sec / 0.42) % 1.0
     col, row = seq[i]
     key = c["phone"].matrix_world @ Vector((0.022 + 0.026 * col, -0.024 * row, 0.06))       # top of that key
     dip = 0.018 * (1 - math.sin(math.pi * min(1.0, ph_ / 0.6))) if ph_ < 0.6 else 0.018
-    d = Vector((0.12, -0.62, -0.78)).normalized()                         # the hand points away from him and down
-    wrist = key - d * 0.165 + Vector((0, 0, dip))                         # wrist one hand-length behind the fingertip
-    s = Vector((0, 0, 1)).cross(fwd_of(b)).normalized() * -1             # his right
-    hand_to(b, "R", wrist, pole=s * 0.5 + Vector((0, 0, -0.9)), hand_dir=d, curl=0)
-    point_hand(b, "R")
+    # the same hand placement as the approved note shot (hand_dir, curl 45), then only the index straightened
+    tip_off = Vector((0.0, 0.07, 0.05))                                   # the wrist sits back and up from the fingertip
+    hand_to(b, "R", key + tip_off + Vector((0, 0, dip)), hand_dir=Vector((0, -0.6, -0.8)), curl=45)
+    for k in (1, 2, 3):                                                   # index: undo most of the curl
+        pb = b.arm.pose.bones.get(f"finger2-{k}.R")
+        if pb is not None:
+            bpy.context.view_layer.update()
+            ax = (b.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()) @ Vector((1, 0, 0))
+            b.rot(pb.name, ax, -45 * (0.8 if k == 1 else 1.0) * 0.8)
+    for k in (1, 2, 3):                                                   # the other three fold a little further
+        for f in (3, 4, 5):
+            pb = b.arm.pose.bones.get(f"finger{f}-{k}.R")
+            if pb is not None:
+                bpy.context.view_layer.update()
+                ax = (b.arm.matrix_world.to_3x3() @ pb.matrix.to_3x3()) @ Vector((1, 0, 0))
+                b.rot(pb.name, ax, 25)
+    bpy.context.view_layer.update()
     look(b, key, 0.45)
 
 
@@ -1134,7 +1172,7 @@ MOVES = {
                    focus=lambda c, t: Vector((-0.7, 1.9, 1.3))),
     "find": dict(kind="anim", dof=2.4, far=10.0, cam=cam_find, anim=_anim("find"), focus=lambda c, t: PHONE + Vector((0, 0, 0.05))),
     # chapter 1
-    "dial": dict(kind="anim", dof=3.2, far=12.0, anim=_anim("dial"), cam=_push((-2.0, 0.1, 1.45), (-1.75, 0.35, 1.42), (-0.1, 1.85, 1.1), (-0.05, 1.9, 1.12), 35),
+    "dial": dict(kind="anim", dof=3.2, far=12.0, anim=_anim("dial"), cam=_push((-2.0, 0.1, 1.5), (-1.75, 0.35, 1.47), (-0.25, 1.7, 0.98), (-0.2, 1.75, 1.0), 35),
                  focus=lambda c, t: Vector((0.0, 1.95, 1.2))),
     "note": dict(kind="anim", dof=2.8, far=10.0, anim=_anim("note"), cam=_push((-1.0, 2.75, 1.75), (-0.85, 2.62, 1.7), (0.05, 1.3, 0.85), (0.1, 1.3, 0.85), 35),
                  focus=lambda c, t: Vector((0.1, 1.35, 0.85))),
