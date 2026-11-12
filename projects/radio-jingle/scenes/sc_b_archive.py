@@ -110,7 +110,7 @@ def build(variant=None):
         # one flickering fluorescent tube over the row (frame driver), dimming at the end
         tube = box("Tube", (0.0, 4.6, 2.95), (3.0, 0.1, 0.04), emissive("TubeE", (0.9, 0.95, 0.88), 2.5))
         tl = area_light((0.0, 4.6, 2.9), (0, 0, 0), 3.0, 90, (0.88, 0.95, 0.85)); tl.visible_camera = False
-        expr = "(1 if (frame < 70 or (frame % 7 > 2 and frame < 110)) else 0.15) * (1 if frame < 120 else 0.15)"
+        expr = "(1 if (frame < 70 or (frame % 7 > 2 and frame < 110)) else 0.35) * (1 if frame < 120 else 0.4)"
         d = tl.data.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = f"90 * {expr}"
         em = tube.data.materials[0].node_tree.nodes["Principled BSDF"].inputs['Emission Strength']
         d = em.driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = f"2.5 * {expr}"
