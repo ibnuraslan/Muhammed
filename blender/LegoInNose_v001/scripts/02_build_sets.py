@@ -399,6 +399,10 @@ L.new(cnz.outputs[0], ccr.inputs[0]); L.new(ccr.outputs[0], cut.inputs["Base Col
 geo = N.new("ShaderNodeNewGeometry"); mix = N.new("ShaderNodeMixShader")
 L.new(geo.outputs["Backfacing"], mix.inputs[0]); L.new(bs.outputs[0], mix.inputs[1]); L.new(cut.outputs[0], mix.inputs[2])
 L.new(mix.outputs[0], N["Material Output"].inputs[0]); me.materials.append(mk)
+# inner shell (front faces toward the cut): the camera sees real front-facing cut tissue, not back faces (QA INSIDE rule)
+mcut = bpy.data.materials.new("M_XS_InnerCut"); mcut.use_nodes = True; bci = mcut.node_tree.nodes["Principled BSDF"]
+bci.inputs["Base Color"].default_value = (0.78, 0.3, 0.32, 1); bci.inputs["Roughness"].default_value = 0.4; bci.inputs["Coat Weight"].default_value = 0.4
+me.materials.append(mcut)
 # sagittal cut: keep x > XCUT (the boy's left half). Boolean with a big box.
 XCUT = nose_tip.x + 0.0085
 bm_ = bmesh.new(); bm_.from_mesh(me)
@@ -413,6 +417,8 @@ if hair_src:
     bmh.to_mesh(hm_); bmh.free()
     XS_HAIR = bpy.data.objects.new("XS_Hair", hm_); STUDIO.objects.link(XS_HAIR)
     for p in hm_.polygons: p.use_smooth = True
+sol_ = head_o.modifiers.new("inner", "SOLIDIFY"); sol_.thickness = 0.004; sol_.offset = -1.0; sol_.use_flip_normals = False
+sol_.use_rim = True; sol_.material_offset = 1; sol_.material_offset_rim = 1
 # place: x6 in the studio, cut face toward -X (camera side), nose pointing -Y
 PIV = Vector((XCUT, nose_tip.y + 0.05, HB.z))
 head_o.matrix_world = Matrix.Translation(SC + Vector((0.0, 0.0, 0.25))) @ Matrix.Rotation(R_(-90), 4, "Z") @ Matrix.Scale(XS, 4) @ Matrix.Translation(-PIV)

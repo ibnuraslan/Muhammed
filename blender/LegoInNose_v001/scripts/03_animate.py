@@ -210,16 +210,19 @@ for f, what in ((1, "chest"), (60, "chest_up"), (110, "near_nose"), (128, "at_no
     elif what == "proud": tip, d, n = nt + fw * 0.22 - up * 0.02 + V(-0.08, 0, 0), V(0.3, -0.1, 1.0), V(-0.7, -0.5, 0)
     elif what == "flapA": tip, d, n = sh + V(-0.2, -0.12, 0.22), V(-0.4, -0.2, 1.0), V(0, -1, 0)
     elif what == "flapB": tip, d, n = sh + V(-0.26, -0.18, 0.05), V(-0.6, -0.3, 0.6), V(0, -1, 0)
-    elif what == "lap": tip, d, n = BOYP + V(-0.12, -0.18, 0.18), V(0.3, -0.6, -0.5), V(0, 0, -1)
+    elif what == "lap":   # resting along the top of the right thigh
+        hpR = b.bone_world("upperleg01.R"); knR = b.bone_world("lowerleg01.R"); tip, d, n = hpR.lerp(knR, 0.55) + V(0, 0, 0.15), (knR - hpR).normalized(), V(0, 0, -1)
     hand_keys_R.append((f, what, tip.copy()))
     boyR(f, tip, d, n, pole=sh + V(-0.35, 0.15, -0.25))
 # left hand: on the floor (support) / on the knee, flaps in the panic, chin during the tweezers
 for f, what in ((1, "knee"), (230, "knee"), (275, "knee"), (420, "knee"), (640, "chest"), (700, "knee"), (880, "knee"), (895, "flapB"), (910, "flapA"),
-                (925, "flapB"), (940, "flapA"), (960, "flapB"), (990, "knee"), (1360, "knee")):
+                (925, "flapB"), (940, "flapA"), (952, "knee"), (990, "knee"), (1360, "knee")):
     ev(f)
     sh = b.bone_world("upperarm01.L")
     if what == "floor": W_ = BOYP + V(0.24, 0.12, 0.062); b.h.key_hand("L", f, W_, V(0.3, -0.85, -0.22).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
-    elif what == "knee": W_ = BOYP + V(0.16, -0.24, 0.27); b.h.key_hand("L", f, W_, V(0.0, -0.6, -0.6).normalized(), V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
+    elif what == "knee":   # hand resting along the top of the thigh (not on the shin)
+        hp_ = b.bone_world("upperleg01.L"); kn_ = b.bone_world("lowerleg01.L"); dth = (kn_ - hp_).normalized()
+        W_ = hp_.lerp(kn_, 0.35) + V(0, 0, 0.13); b.h.key_hand("L", f, W_, dth, V(0, 0, -1), sh + V(0.4, 0.1, -0.1))
     elif what == "chest": W_ = b.bone_world("spine02") + V(0.08, -0.13, -0.02); b.h.key_hand("L", f, W_, V(-1, -0.2, 0).normalized(), V(0, 1, 0), sh + V(0.4, 0.1, -0.2))
     elif what == "flapA": W_ = sh + V(0.22, -0.12, 0.22); b.h.key_hand("L", f, W_, V(0.4, -0.2, 1.0).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
     elif what == "flapB": W_ = sh + V(0.27, -0.18, 0.05); b.h.key_hand("L", f, W_, V(0.6, -0.3, 0.6).normalized(), V(0, -1, 0), sh + V(0.4, 0.2, -0.1))
@@ -265,12 +268,13 @@ def mom_kneel(f, depth, lean, head=(20, 0), twist=0.0):
 for f, dpt, ln, hd in ((975, 0.25, 25, (20, 0)), (990, 0.52, 22, (25, 0)), (1100, 0.52, 18, (15, 0)), (1140, 0.4, 12, (10, 0))):
     mom_kneel(f, dpt, ln, hd)
 # tweezers + chin hold
-for f, what in ((965, "reach"), (990, "approach"), (1015, "at_nose"), (1040, "grip"), (1058, "pull"), (1075, "show"), (1100, "show"), (1140, "down")):
+for f, what in ((965, "reach"), (978, "reach2"), (990, "approach"), (1015, "at_nose"), (1040, "grip"), (1058, "pull"), (1075, "show"), (1100, "show"), (1140, "down")):
     ev(f)
     nz = b.nose(1.0); hm = b.head_M(); fw = (hm.to_3x3() @ V(0, -1, 0)).normalized(); up = (hm.to_3x3() @ V(0, 0, 1)).normalized()
     shR = w.bone_world("upperarm01.R"); shL = w.bone_world("upperarm01.L")
     toward = (nz - shR).normalized()
-    if what == "reach": tip = shR + V(0, -0.25, -0.2)
+    if what == "reach": tip = shR + (BOYP - MOMK).normalized() * 0.3 + V(0, 0, 0.02)
+    elif what == "reach2": tip = shR + (BOYP - MOMK).normalized() * 0.38 + V(0, 0, 0.0)   # in front of her while she kneels
     elif what == "approach": tip = nz + fw * 0.12 + V(0.05, 0, -0.02)
     elif what == "at_nose": tip = nz + fw * 0.075 - up * 0.02
     elif what == "grip": tip = nz + fw * 0.072 - up * 0.022
@@ -280,7 +284,7 @@ for f, what in ((965, "reach"), (990, "approach"), (1015, "at_nose"), (1040, "gr
     hand_at(w, "R", f, tip, (toward + V(0, 0, 0.2)).normalized(), V(0, 0, 1), shR + V(0.2, 0.2, -0.3))
     chin = b.bone_world("jaw", True) + fw * 0.015 - up * 0.02
     if what in ("at_nose", "grip", "pull"):
-        w.h.key_hand("L", f, chin + V(0.04, 0.0, -0.03), (chin - shL).normalized(), V(-1, 0, 0), shL + V(0.3, 0.2, -0.3))
+        w.h.key_hand("L", f, chin + V(0.11, 0.0, -0.095), (chin - shL).normalized(), V(-1, 0, 0), shL + V(0.3, 0.2, -0.3))
     elif what in ("reach", "approach"):
         w.h.key_hand("L", f, chin + V(0.15, -0.05, -0.15), (chin - shL).normalized(), V(-1, 0, 0), shL + V(0.3, 0.2, -0.3))
     else:
@@ -310,7 +314,7 @@ for f in range(1440, 1469, 7):
     sit_floor(M, f, BOYP, lean=14, head=(10, 0), legs=(0.18, 0.72), knee_up=0.35)
 for f in range(1440, 1469, 7):
     ev(f); kn = (M.bone_world("lowerleg01.L") + M.bone_world("lowerleg01.R")) / 2; hp = M.bone_world("root")
-    lap = M.bone_world("spine02") + V(0, -0.32, -0.12); MAN_LAP[f] = lap
+    lap = M.bone_world("spine02") + V(0, -0.36, -0.02); MAN_LAP[f] = lap
     for s, sx in (("L", 1), ("R", -1)):
         tip = lap + V(sx * 0.04, 0.0, 0.005 * math.sin(f * 1.7 + sx))
         hand_at(M, s, f, tip, V(-sx * 0.3, -0.5, 0.6).normalized(), V(0, 0.4, 1).normalized(), pole=M.bone_world("upperarm01." + s) + V(sx * 0.35, 0.1, -0.3))
@@ -331,15 +335,16 @@ MB_KEYS = ((1470, dict(lean=12, head=(8, 0))), (1500, dict(lean=6, head=(-14, 0)
            (1690, dict(lean=-6, head=(-16, 0))), (1708, dict(lean=4, head=(0, 0))), (1720, dict(lean=4, head=(0, 0))))
 for f, kw in MB_KEYS: man_bench(f, **kw)
 # tissue / inhaler hands
-for f, what in ((1470, "lap"), (1495, "sniff"), (1515, "tissue_box"), (1535, "blow"), (1560, "blow2"), (1580, "toss"), (1605, "lap"),
+for f, what in ((1470, "lap"), (1495, "sniff"), (1505, "aside"), (1515, "tissue_box"), (1535, "blow"), (1560, "blow2"), (1580, "toss"), (1605, "lap"),
                 (1625, "shake1"), (1635, "shake2"), (1645, "shake1"), (1655, "shake2"), (1672, "mouth"), (1706, "mouth"), (1720, "lap")):
     ev(f)
     nt = M.nose(0.0); hm = M.head_M(); fw = (hm.to_3x3() @ V(0, -1, 0)).normalized(); up = (hm.to_3x3() @ V(0, 0, 1)).normalized()
     shR = M.bone_world("upperarm01.R"); shL = M.bone_world("upperarm01.L")
-    lap = BENCH + V(0, -0.3, SEATZ + 0.16)
+    lap = BENCH + V(0, -0.42, SEATZ + 0.2)
     if what == "lap": tR = lap + V(-0.1, -0.05, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "sniff": tR = nt + fw * 0.075 - up * 0.03 + V(-0.035, 0, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "tissue_box": tR = BENCH + V(-0.38, -0.05, SEATZ + 0.12); tL = lap + V(0.1, -0.05, 0)
+    elif what == "aside": tR = BENCH + V(-0.36, -0.3, SEATZ + 0.32); tL = lap + V(0.1, -0.05, 0)
     elif what in ("blow", "blow2"): tR = nt + fw * 0.06 - up * 0.01 + V(-0.025, 0, 0); tL = lap + V(0.1, -0.05, 0)
     elif what == "toss": tR = BENCH + V(-0.3, -0.6, 0.55); tL = lap + V(0.1, -0.05, 0)
     elif what in ("shake1", "shake2"): tR = shR + V(0.1, -0.35, -0.05 if what == "shake1" else 0.08); tL = lap + V(0.1, -0.05, 0)
@@ -380,7 +385,7 @@ for f in (1724, 1800, 1852, 1868):
     ev(f)
     for s in "LR":
         sh = M.bone_world("upperarm01." + s); sx = 1 if s == "R" else -1
-        W_ = sh + V(sx * 0.25, -0.35 if f != 1800 else 0.1, -0.12 if f < 1852 else -0.25); W_.z = max(W_.z, 0.64)
+        hp_ = M.bone_world("spine03"); W_ = V(hp_.x + sx * 0.33, hp_.y + 0.02, 0.62)          # resting on the mattress beside him
         M.h.key_hand(s, f, W_, V(0, -1, 0.15).normalized(), V(0, 0, -1))
 
 # ================================================================== MAN in the shower (beats 10-11)

@@ -409,7 +409,7 @@ k(905, V(0.3, -1.05, 0.62), face_of(B, 905), 30)
 k(950, V(0.05, -1.4, 0.95), (face_of(B, 950) + V(0.8, 0.0, 0.3)), 26)
 ev(1010); dirm = (MOMK - BOYP).normalized()
 k(1005, BOYP + V(-0.3, -0.62, 0.78), (nose_of(B, 1005) + pinch_of(W, "R", 1005)) / 2, 38)
-k(1045, nose_of(B, 1045) + V(-0.1, -0.12, 0.02), nose_of(B, 1045), 55)
+k(1045, nose_of(B, 1045) + V(-0.13, -0.2, 0.05), (nose_of(B, 1045) + face_of(B, 1045)) / 2, 45)
 k(1075, BOYP + V(-0.2, -0.75, 0.95), twz_tip(1075).translation, 36)
 # beat 7: dive two
 N2 = nose_of(B, 1104); fw2 = fw_of(B); up2 = up_of(B)
@@ -440,6 +440,7 @@ k(1590, V(-1.55, 1.3, 0.95), face_of(M, 1590), 40)
 k(1640, V(-1.65, 1.38, 0.72), pinch_of(M, "R", 1640), 45)
 k(1688, V(-0.8, 1.15, 1.2), face_of(M, 1688), 40)
 k(1704, V(-0.45, 1.15, 1.25), face_of(M, 1704), 36)
+k(1713, V(-0.05, 1.1, 1.2), V(1.3, 1.85, 0.62), 30)
 k(1722, V(0.9, 1.35, 1.35), V(2.8, 1.65, 1.1), 28)
 k(1745, V(4.1, 0.75, 1.3), face_of(M, 1745), 30)
 k(1790, V(4.75, 1.15, 1.55), face_of(M, 1790), 32)
@@ -537,6 +538,12 @@ def tunnel(name, f0, f1, nostril_end):
     for r0, r1 in zip(rings, rings[1:]):
         for j in range(seg):
             bm_.faces.new((r0[j], r0[(j + 1) % seg], r1[(j + 1) % seg], r1[j]))
+    bm_.normal_update()
+    flip = []
+    for i_, fc_r in enumerate(bm_.faces):     # every face must point at the tube's centreline (camera inside sees front faces)
+        ring_i = min(120, i_ // seg); ctr_ = pts[ring_i]
+        if fc_r.normal.dot(ctr_ - fc_r.calc_center_median()) < 0: flip.append(fc_r)
+    if flip: bmesh.ops.reverse_faces(bm_, faces=flip)
     me_ = bpy.data.meshes.new(name); bm_.to_mesh(me_); bm_.free()
     o = bpy.data.objects.new(name, me_); bpy.data.collections["Set_Studio"].objects.link(o); me_.materials.append(TM)
     for p in me_.polygons: p.use_smooth = True

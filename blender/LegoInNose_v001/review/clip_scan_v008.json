@@ -1,0 +1,134 @@
+{
+ "frames": {
+  "1": {
+   "Boy": {
+    "self": 431,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "7": {
+   "Boy": {
+    "self": 352,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "13": {
+   "Boy": {
+    "self": 92,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "265": {
+   "Boy": {
+    "self": 107,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "367": {
+   "Boy": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "391": {
+   "Boy": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "955": {
+   "Boy": {
+    "self": 37,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "961": {
+   "Boy": {
+    "self": 99,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "973": {
+   "Mom": {
+    "self": 1537,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "991": {
+   "Boy": {
+    "self": 60,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "997": {
+   "Boy": {
+    "self": 43,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Mom": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1069": {
+   "Mom": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1363": {
+   "Boy": {
+    "self": 204,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1369": {
+   "Boy": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   1,
+   13
+  ],
+  [
+   265,
+   265
+  ],
+  [
+   955,
+   973
+  ],
+  [
+   991,
+   997
+  ],
+  [
+   1363,
+   1363
+  ]
+ ],
+ "fps": 60
+}
