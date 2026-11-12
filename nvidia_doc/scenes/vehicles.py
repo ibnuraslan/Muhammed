@@ -999,6 +999,12 @@ except ImportError as e:
     if "vehicles_modern" not in str(e):
         raise
 try:
+    from vehicles_air import register as _reg_air        # noqa: E402
+    _reg_air(KINDS)
+except ImportError as e:
+    if "vehicles_air" not in str(e):
+        raise
+try:
     from vehicles_heavy import register as _reg_heavy    # noqa: E402
     _reg_heavy(KINDS)
 except ImportError:

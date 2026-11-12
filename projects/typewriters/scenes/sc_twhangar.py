@@ -26,7 +26,7 @@ VARIANT_FOR = {"load": "night", "slats": "night", "customs_torch": "customs", "c
 CUSTOMS = Vector((-6.0, 3.0, 0.0))
 DOCK = Vector((2.0, -4.0, 0.0))
 HX, HY, HZ = 18.0, 14.0, 11.0          # hangar half-length (x), half-depth (y), eave height; doors open on -Y
-PLANE = Vector((26.0, -100.0, 0.0))          # far out on the apron: a soft silhouette until the kit has a cargo plane
+PLANE = Vector((4.0, -62.0, 0.0))            # the kit's cargo plane, tail toward the hangar, ramp down at PLANE.y + 8..13.7
 WORK = Vector((-4.0, 2.0, 0.0))         # the wrapping station
 TRAILER = Vector((12.0, -HY - 5.0, 0.0))      # parked on the apron just outside the doors
 
@@ -216,20 +216,25 @@ def build(variant=None):
         o = MC.burlap_crate(f"TrLoad{k}", tag=False); o.parent = tr0; o.location = (-2.0 + (k // 2) * 1.0, -0.55 + (k % 2) * 1.1, 1.38)
     if not night:
         haze((0, -HY - 50, 10), (160, 90, 20), density=0.0025, color=(0.82, 0.86, 0.92), anis=0.3)
-    pl, props = transport("Transport"); pl.location = PLANE; pl.rotation_euler = (0, 0, math.pi); c["plane"] = pl; c["props"] = props
+    import vehicles as _K
+    pl = _K.make("cargo_plane", loc=PLANE, heading_deg=-90, dirt=0.25); _K.set_ramp(pl, 1.0)
+    if night:
+        _K.lights(pl, True)
+    c["plane"] = pl; c["props"] = []
     # night: floodlight masts on the apron, crates on a roller conveyor into the hold
     c["roll_crates"] = []
     if night:
         for x in (-14.0, 22.0):
-            cyl("FloodMast", (x, PLANE.y + 22, 7.0), 0.15, 14, steel, verts=12)
+            cyl("FloodMast", (x, PLANE.y + 24, 7.0), 0.15, 14, steel, verts=12)
             fl = bpy.data.lights.new("Flood", 'SPOT'); fl.energy = 25000; fl.spot_size = math.radians(55); fl.spot_blend = 0.4; fl.color = (1.0, 0.82, 0.6)
-            fo = bpy.data.objects.new("Flood", fl); bpy.context.collection.objects.link(fo); fo.location = (x, PLANE.y + 21.2, 13.2); point_at(fo, (PLANE.x, PLANE.y + 16, 0.5))
-            box("FloodHead", (x, PLANE.y + 22, 14.1), (1.2, 0.4, 0.8), pbr("FloodHousing", (0.1, 0.1, 0.1), 0.4))
+            fo = bpy.data.objects.new("Flood", fl); bpy.context.collection.objects.link(fo); fo.location = (x, PLANE.y + 23.2, 13.2); point_at(fo, (PLANE.x, PLANE.y + 12, 0.5))
+            box("FloodHead", (x, PLANE.y + 24, 14.1), (1.2, 0.4, 0.8), pbr("FloodHousing", (0.1, 0.1, 0.1), 0.4))
         haze((PLANE.x, PLANE.y + 15, 6), (60, 50, 12), density=0.004, color=(0.8, 0.85, 0.95), anis=0.6)
         ramp_end = PLANE + Vector((0, 15 + 5, 0))
-        for k in range(10):
-            cyl("Roller", (PLANE.x, PLANE.y + 22 - k * 0.5, 0.42), 0.04, 0.9, steel, verts=12, rot=(0, math.radians(90), 0))
-        box("ConveyorRail", (PLANE.x - 0.47, PLANE.y + 19.8, 0.4), (0.04, 5.2, 0.12), steel); box("ConveyorRail", (PLANE.x + 0.47, PLANE.y + 19.8, 0.4), (0.04, 5.2, 0.12), steel)
+        for k in range(11):                               # a low roller bed leading to the foot of the ramp
+            cyl("Roller", (PLANE.x, PLANE.y + 19.2 - k * 0.5, 0.06), 0.04, 0.9, steel, verts=12, rot=(0, math.radians(90), 0))
+        for sx in (-0.47, 0.47):
+            box("ConveyorRail", (PLANE.x + sx, PLANE.y + 16.7, 0.06), (0.04, 5.4, 0.1), steel)
         for k in range(4):
             o = MC.burlap_crate(f"Roll{k}", size=(0.8, 0.7, 0.7), tag=False); c["roll_crates"].append(o)
         sc, stw = slatted_crate("SlatCrate"); sc.location = (PLANE.x - 2.4, PLANE.y + 23.5, 0.0); sc.rotation_euler = (0, 0, 0.2)
@@ -414,13 +419,17 @@ def animate(c, sec, shot):
     # night loading: crates roll up the conveyor and the ramp into the hold
     if shot == "load":
         for k, o in enumerate(c["roll_crates"]):
-            s_ = (sec * 0.22 + k * 0.25) % 1.0
-            y = PLANE.y + 23.0 - 9.0 * s_
-            z = 0.8 if y > PLANE.y + 17.5 else 0.8 + (PLANE.y + 17.5 - y) * 0.19
-            o.location = (PLANE.x, y, min(z, 1.6))
+            s_ = (sec * 0.16 + k * 0.25) % 1.0
+            y = PLANE.y + 19.5 - 14.0 * s_
+            if y > PLANE.y + 13.7:
+                z = 0.45                                         # on the roller bed
+            else:
+                z = -0.37 + (PLANE.y + 13.71 - y) / 5.76 * 1.67 + 0.36
+                z = min(z, 1.3 + 0.36)                          # up the ramp, then level in the hold
+            o.location = (PLANE.x, y, z)
         a, b = P["load1"], P["wA"]
-        twp.stand(a, (PLANE.x + 0.9, PLANE.y + 21.0 - 0.3 * sec, 0), math.radians(160))
-        twp.stand(b, (PLANE.x - 1.0, PLANE.y + 19.5, 0), math.radians(-150))
+        twp.stand(a, (PLANE.x + 0.95, PLANE.y + 16.5 - 0.3 * sec, 0), math.radians(160))
+        twp.stand(b, (PLANE.x - 1.1, PLANE.y + 17.5, 0), math.radians(-150))
         reach(a, "L", c["roll_crates"][1].location + Vector((0.45, 0.0, 0.1)), Vector((0.6, 0, -0.7)), Vector((-1, 0, 0)))
     bpy.context.view_layer.update()
 
@@ -451,7 +460,7 @@ def cam_apron(c, t):
 
 def cam_load(c, t):
     e = ease(t)
-    return (Vector((PLANE.x + 2.2, PLANE.y + 24.5, 1.05)).lerp(Vector((PLANE.x + 1.8, PLANE.y + 23.2, 1.0)), e), Vector((PLANE.x - 0.1, PLANE.y + 15.8, 1.5)), 32)
+    return (Vector((PLANE.x + 3.0, PLANE.y + 22.5, 1.4)).lerp(Vector((PLANE.x + 2.5, PLANE.y + 21.2, 1.3)), e), Vector((PLANE.x - 0.2, PLANE.y + 10.5, 2.0)), 30)
 
 
 def cam_slats(c, t):

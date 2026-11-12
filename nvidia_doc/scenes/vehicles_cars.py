@@ -128,6 +128,16 @@ def register(K):
     K["sedan_1990s_soviet"] = sedan_1990s_soviet
 
 
+def _mesh_guard_mat():
+    m, g = V._newmat("V_MeshGuard")
+    gy = V.E(g, g.math('FRACT', g.y / 0.045).s); gz = V.E(g, g.math('FRACT', g.z / 0.045).s)
+    wire = g.mx(g.ss(0.42, 0.36, abs(gy - 0.5)), g.ss(0.42, 0.36, abs(gz - 0.5)))
+    wire = g.mx(g.ss(0.36, 0.44, abs(gy - 0.5)), g.ss(0.36, 0.44, abs(gz - 0.5)))
+    col = g.mix_col(wire, (0.02, 0.02, 0.022), (0.42, 0.43, 0.44))
+    p = g.bsdf((0.3, 0.3, 0.3), 0.4, 0.0); g.L.new(col, p.inputs['Base Color']); g.link(wire * 0.8, p.inputs['Metallic'])
+    g.out(p); return m
+
+
 # ============================================================================ 2. 1990s panel van (Transit Mk3-like)
 def van_1990s(variant=None):
     XF, XR, R, RIM, TR = 1.45, -1.385, 0.31, 0.178, 0.82
@@ -187,6 +197,9 @@ def van_1990s(variant=None):
     parts.append(V.underbody("Floor", -2.0, 2.0, 0.62, 0.24, 0.42))
     V.cabin_interior(parts, [0.82], 0.45, 0.80, 1.30, 1.10, 0.84)
     parts.append(V.rbox("Bulkhead", (0.24, 0, 1.2), (0.04, 1.8, 1.5), 0.02, V.interior()))
+    # steel mesh guard behind the rear-door glass, and a ply-lined cargo floor
+    parts.append(V.rbox("MeshGuard", (-2.22, 0, 1.56), (0.02, 1.7, 0.6), 0.005, V.mat("V_MeshGuard", _mesh_guard_mat)))
+    parts.append(V.rbox("CargoFloor", (-0.95, 0, 0.62), (2.5, 1.75, 0.03), 0.01, V.simple("V_Ply", (0.32, 0.24, 0.15), 0.8)))
     body = V.join(parts, "Van1990s")
     me = V.wheel_mesh("van", R, 0.195, RIM, "steel")
     wheels4(body, me, XF, XR, TR, R, RIM)
