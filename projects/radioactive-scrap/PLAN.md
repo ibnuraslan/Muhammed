@@ -13,10 +13,7 @@ least **3.0 s** of picture under its title card before the voice starts (make_ma
 Titles: new title_card style (long titles on 2 lines, soft scrim, one PNG per title).
 **Delivery (Banker lesson):** unpack textures into one shared deduped folder (<=2K), share identical meshes, measure
 peak RAM opening the master, zip into <=380 MB parts with one shared top folder plus a MERGE .bat.
-**Delivery is CHAPTER-WISE (person's rule, supersedes one film file):** one farm-ready .blend per part: intro (Seldom
-sting at its end after a fade), then one per chapter. Each: frame range from 1, own fades in/out, own audio pair (with
-and without voice) matching exactly, output JPEG quality 92. Farm rules stay: FilmCam, packed fonts, 32 samples
-(adaptive 0.05, denoise), shared deduped textures <=2K, shared meshes, peak RAM measured.
+**Delivery:** ONE film file (intro + Seldom sting + chapters) with one audio pair (with and without voice), PNG output.
 
 ## Intro (no title, 2.5 s of picture before the first word)
 
