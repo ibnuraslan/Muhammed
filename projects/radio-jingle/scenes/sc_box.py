@@ -34,16 +34,16 @@ def perforated_pipe(name, a, b, r=0.028):
     p.inputs['Roughness'].default_value = 0.42; p.inputs['Specular IOR Level'].default_value = 0.45
     tc = N.new("ShaderNodeTexCoord"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(tc.outputs['Object'], sep.inputs[0])
     ang = N.new("ShaderNodeMath"); ang.operation = 'ARCTAN2'; L.new(sep.outputs['Y'], ang.inputs[0]); L.new(sep.outputs['X'], ang.inputs[1])
-    u = N.new("ShaderNodeMath"); u.operation = 'MULTIPLY'; u.inputs[1].default_value = 10.0 / (2 * math.pi); L.new(ang.outputs[0], u.inputs[0])
-    v = N.new("ShaderNodeMath"); v.operation = 'MULTIPLY'; v.inputs[1].default_value = 1.0 / 0.035; L.new(sep.outputs['Z'], v.inputs[0])
+    u = N.new("ShaderNodeMath"); u.operation = 'MULTIPLY'; u.inputs[1].default_value = 16.0 / (2 * math.pi); L.new(ang.outputs[0], u.inputs[0])
+    v = N.new("ShaderNodeMath"); v.operation = 'MULTIPLY'; v.inputs[1].default_value = 1.0 / 0.022; L.new(sep.outputs['Z'], v.inputs[0])
     cmb = N.new("ShaderNodeCombineXYZ"); L.new(u.outputs[0], cmb.inputs[0]); L.new(v.outputs[0], cmb.inputs[1])
     fr = N.new("ShaderNodeVectorMath"); fr.operation = 'FRACTION'; L.new(cmb.outputs[0], fr.inputs[0])
     sub = N.new("ShaderNodeVectorMath"); sub.operation = 'SUBTRACT'; sub.inputs[1].default_value = (0.5, 0.5, 0.0); L.new(fr.outputs[0], sub.inputs[0])
     ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(sub.outputs[0], ln.inputs[0])
-    hole = N.new("ShaderNodeMath"); hole.operation = 'LESS_THAN'; hole.inputs[1].default_value = 0.17; L.new(ln.outputs['Value'], hole.inputs[0])
+    hole = N.new("ShaderNodeMath"); hole.operation = 'LESS_THAN'; hole.inputs[1].default_value = 0.12; L.new(ln.outputs['Value'], hole.inputs[0])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 80; L.new(tc.outputs['Object'], nz.inputs['Vector'])
     base = N.new("ShaderNodeMix"); base.data_type = 'RGBA'; base.inputs['Factor'].default_value = 0.08
-    base.inputs[6].default_value = (0.46, 0.47, 0.46, 1); L.new(nz.outputs['Color'], base.inputs[7])
+    base.inputs[6].default_value = (0.24, 0.25, 0.25, 1); L.new(nz.outputs['Color'], base.inputs[7])
     dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; L.new(hole.outputs[0], dk.inputs['Factor'])
     L.new(base.outputs[2], dk.inputs[6]); dk.inputs[7].default_value = (0.006, 0.006, 0.006, 1)
     L.new(dk.outputs[2], p.inputs['Base Color'])
@@ -339,7 +339,7 @@ def smoke(c):
     tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 28
     nz.inputs['Detail'].default_value = 4; nz.inputs['Distortion'].default_value = 0.6
     L.new(tc.outputs['Object'], nz.inputs['Vector']); rj.driven(nz.inputs['W'], "default_value", "frame * 0.006")
-    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.48; mr.inputs['From Max'].default_value = 0.68; mr.inputs['To Max'].default_value = 9.0
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.38; mr.inputs['From Max'].default_value = 0.62; mr.inputs['To Max'].default_value = 40.0
     L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], vol.inputs['Density'])
     vol.inputs['Color'].default_value = (0.82, 0.83, 0.84, 1); vol.inputs['Anisotropy'].default_value = 0.3
     L.new(vol.outputs[0], out.inputs['Volume']); o.data.materials.clear(); o.data.materials.append(m)
