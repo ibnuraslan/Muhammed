@@ -347,6 +347,7 @@ def anim_hit(c, t, shot, dur):
             wv = math.sin((sec - 2.2) * 7.0)
             tgt = sh + Vector((0, 0, 0.45)) * k + right * (0.25 + 0.12 * wv * k) + fwd * 0.1
             reach(h, "R", tgt, right + Vector((0, 0, -0.4)), Vector((0, 0, 1)))
+            rj.curl(h, -17, side=("R",), thumb=0)          # an open, flat waving hand (undo the relaxed curl)
             side = fwd.cross(Vector((0, 0, 1))).normalized(); h.rot("head", (0, 0, 1), 50 * k)
     others = [r for r in ("officer2", "officer3", "officer4", "officer5") if r in c["P"]]
     for k, r in enumerate(others):
@@ -416,7 +417,7 @@ def anim_lid(c, t, shot, dur):
     sec = t * dur
     if shot == "bolt":
         h = c["P"]["officer"]
-        rj.crouch(h, (BOX.x + 0.95, BOX.y - 0.25), math.radians(90), hip_h=0.5, z=ground_z(c, BOX.x + 0.95, BOX.y - 0.25))
+        rj.crouch(h, (BOX.x + 0.95, BOX.y - 0.25), math.radians(-90), hip_h=0.5, z=ground_z(c, BOX.x + 0.95, BOX.y - 0.25))
         fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
         c["crowbar"].location = (0, 0, -60)
         bolt = BOX + Vector((0.47, -0.28, 0.035))
