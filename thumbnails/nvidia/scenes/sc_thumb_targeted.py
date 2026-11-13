@@ -51,17 +51,19 @@ def build(variant=None):
                     if l.to_socket == pb.inputs['Base Color']:
                         m.node_tree.links.remove(l)
                 pb.inputs['Base Color'].default_value = (0.005, 0.005, 0.0055, 1); pb.inputs['Roughness'].default_value = 0.45
-                pb.inputs['Coat Weight'].default_value = 0.7; pb.inputs['Coat Roughness'].default_value = 0.22
+                pb.inputs['Coat Weight'].default_value = 0.25; pb.inputs['Coat Roughness'].default_value = 0.18; pb.inputs['Roughness'].default_value = 0.55
+                pb.inputs['Specular IOR Level'].default_value = 0.08
+                if 'Sheen Weight' in pb.inputs: pb.inputs['Sheen Weight'].default_value = 0.0
     pose_sit(h, lean=24)
     h.rot("neck01", (1, 0, 0), 2); h.rot("head", (1, 0, 0), -4)
     h.arm.location = (0, 0.55, 0.0); bpy.context.view_layer.update()
     _ground(h, 0.0)
     h.arm.location.z += 0.08; bpy.context.view_layer.update()       # sitting on a stool hidden behind the table
     hd = h.bone_head("head"); ht = h.bone_tail("head")
-    c = hd + (ht - hd) * 0.55
+    c = hd + (ht - hd) * 0.38
     for sd, sg in (("L", 1), ("R", -1)):
-        reach(h, sd, c + Vector((0.098 * sg, 0.0, 0.02)), (0.3 * sg, -0.2, -1.0), hand_dir=(-0.15 * sg, 0.25, 1.0))
-    fingers_curl(h, 25, thumb=5)
+        reach(h, sd, c + Vector((0.088 * sg, 0.035, 0.0)), (0.45 * sg, -0.25, -1.0), hand_dir=(-0.55 * sg, 0.15, 0.85))
+    fingers_curl(h, 32, thumb=5)
     # four women behind him in the dark
     W = [((-1.05, 2.2, 0), 0.25, "long01", "female_elegantsuit01", "middleage_lightskinned_female_diffuse.png", 38),
          ((-0.35, 2.9, 0), 0.08, "bob02", "female_elegantsuit01", "young_lightskinned_female_diffuse.png", 30),
@@ -73,7 +75,7 @@ def build(variant=None):
         l = bpy.data.lights.new(n, 'SPOT'); l.energy = e; l.color = col; l.spot_size = math.radians(deg)
         l.spot_blend = blend; l.shadow_soft_size = soft
         o = bpy.data.objects.new(n, l); bpy.context.collection.objects.link(o); o.location = loc; point_at(o, tgt); return o
-    spot("Key", (0.25, 0.0, 3.2), (0, 0.3, 1.0), 1500, (1.0, 0.93, 0.84), 28, 0.35, 0.08)
+    spot("Key", (0.25, 0.0, 3.2), (0, 0.3, 1.0), 1000, (1.0, 0.93, 0.84), 28, 0.35, 0.08)
     spot("WomenSide", (-3.5, 2.0, 2.4), (0, 2.6, 1.4), 900, (0.62, 0.72, 0.9), 30, 0.7, 0.3)
     spot("WomenSide2", (3.5, 2.2, 2.2), (0.6, 2.8, 1.4), 300, (0.62, 0.72, 0.9), 30, 0.7, 0.3)
     # the accelerator module on the desk in front of him: the one lime accent (its own small lime glow)
