@@ -2,7 +2,7 @@
 (small 'CHAPTER 1' over a bold slab-serif title with a soft glow; long titles wrap onto two lines, and a soft
 dark scrim behind the text fades with it). Its fade is a frame-driven driver, so it
 plays in any render of the .blend with no scripts."""
-import os, math
+import os, re, math
 import numpy as np
 import bpy
 import skia
@@ -64,7 +64,10 @@ def title_image(small, big, path, W=1920, H=816, scrim=0.36):
 def add_title(cam, small, big, f_in, f_out, fade=12, name="ChapterTitle"):
     """Plane in front of the camera filling the frame; fades in at f_in, out at f_out (frames)."""
     os.makedirs(GEN, exist_ok=True)
-    path = title_image(small, big, os.path.join(GEN, f"{name}.png"))
+    # one file per title (ChapterTitle_<slug>.png): a single shared ChapterTitle.png let one film's bake pick up another
+    # film's card when the file was regenerated or restored from git mid-bake
+    slug = re.sub(r"[^a-z0-9]+", "_", f"{small} {big}".lower()).strip("_")[:60]
+    path = title_image(small, big, os.path.join(GEN, f"{name}_{slug}.png"))
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
