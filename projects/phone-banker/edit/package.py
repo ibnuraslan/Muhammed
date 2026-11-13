@@ -6,7 +6,7 @@ Files are stored, not deflated: the .blend files are already zstd-compressed and
 import os, sys, zipfile, glob, hashlib
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 OUT = os.path.join(ROOT, "out", "package"); os.makedirs(OUT, exist_ok=True)
-LIMIT = 380 * 2**20; HEAD = 2 * 2**20                     # room for zip headers / central directory
+LIMIT = 380_000_000; HEAD = 2_000_000                  # 380 MB in decimal units (the upload limit counts bytes); headers margin
 TOP = "phone_banker_film"
 files = []
 for d in ("film", "sting", "intro", "ch1", "ch2", "ch3", "textures"):
@@ -63,6 +63,7 @@ README = """THE PHONE THAT KILLED A BANKER - render package
 3. Upload or open phone_banker_film\\out\\blend\\film\\phone_banker_film.blend and render the animation
    (frames 1-%FRAMES%, 1920x816, 24 fps, Cycles 32 samples, denoise). Keep the folder structure as it is: the film file
    links the shot files in out\\blend\\<part>\\ and the textures in out\\blend\\textures\\ by relative paths.
+   Memory: opening the film file takes about 9.5 GB of RAM; rendering peaks at about 12 GB (16 GB machines are fine).
 
 Audio (phone_banker_audio.zip): the full mix with voice and without voice, WAV 48 kHz and MP3 previews, exactly the
 length of the film; lay either one under the rendered frames from frame 1.
@@ -73,7 +74,7 @@ for i, (sz, ps) in enumerate(bins, 1):
     with zipfile.ZipFile(zp, "w", zipfile.ZIP_STORED, allowZip64=True) as z:
         for p in sorted(ps):
             z.write(p, os.path.join(TOP, os.path.relpath(p, ROOT)))
-    print(f"[zip] {os.path.basename(zp)} {os.path.getsize(zp) / 2**20:.1f} MB, {len(ps)} files", flush=True)
+    print(f"[zip] {os.path.basename(zp)} {os.path.getsize(zp) / 1e6:.1f} MB, {len(ps)} files", flush=True)
 count = len(files)
 frames = 9247
 bat = BAT.replace("%N%", str(N)).replace("%NN%", nn).replace("%COUNT%", str(count))
@@ -83,7 +84,7 @@ aud = os.path.join(OUT, "phone_banker_audio.zip")
 with zipfile.ZipFile(aud, "w", zipfile.ZIP_DEFLATED) as z:
     for f in ("phone_banker_AUDIO_with_voice.wav", "phone_banker_AUDIO_no_voice.wav", "phone_banker_AUDIO_with_voice.mp3", "phone_banker_AUDIO_no_voice.mp3"):
         z.write(os.path.join(ROOT, "out", "deliver", f), os.path.join("phone_banker_audio", f))
-print(f"[zip] phone_banker_audio.zip {os.path.getsize(aud) / 2**20:.1f} MB", flush=True)
+print(f"[zip] phone_banker_audio.zip {os.path.getsize(aud) / 1e6:.1f} MB", flush=True)
 with open(os.path.join(OUT, "manifest.txt"), "w") as m:
     for i, (sz, ps) in enumerate(bins, 1):
         for p in sorted(ps):
