@@ -426,10 +426,6 @@
    [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only ShaftDust in view"
    ]
   ],
   "457": [
@@ -454,6 +450,10 @@
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "ShaftDust"
    ],
    [
     "EMPTY",
@@ -3810,8 +3810,8 @@
   ]
  },
  "counts": {
-  "EMPTY": 162,
-  "FILL": 16,
+  "EMPTY": 161,
+  "FILL": 17,
   "INSIDE": 115,
   "PROPMOVE": 587
  }

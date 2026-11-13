@@ -38,6 +38,11 @@ Every story-beat frame is unchanged in v004: 1, 241, 463, 673, 913, 1135, 1297, 
 | 27 | 1864–1900 | Hand-off: the teen's and the mother's hands were on the same points on the toddler. The teen's left and right were mirrored (crossed arms), and the toddler was still above the mother's reach (clip_scan up to 750). | The hand-down is continuous from the hold-up grip. The teen keeps hold under the toddler's arms until halfway. The mother reaches up and only takes him (one hand under, one across his back) once he is in reach. |
 | 28 | 1324 | Crowd1's hand on the mother's upper arm crossed her pleading hand. | Crowd1's hand rests on top of her right shoulder. |
 | 29 | 1762–1786 | ResA's hip-guide hands sank into the teen. | ResA stands 10 cm further back (-0.6, -0.15), with his hands on the front of the teen's hips. |
+| 30 | 1328–1342 | The holders still had their hands on the legs while the teen slid in, and their fingers sank into his calves (clip_scan). | They let go once he hangs on the rope (from 1342), then keep their hands ready. |
+| 31 | Whole film | Hard hats and the head torch followed the head through a Child Of constraint, so qa read them as props moving with no hand. | They are true children of the head bone. |
+| 32 | 470–1760 | Crowd1's hand on the mother's back: it was placed from the mother's spine bones, which sit 10 cm behind her mesh, so the hand floated off her. When it was moved onto her, it sank in between keys. | The hand is placed on the nearest point of her evaluated back mesh, and Crowd1 is keyed on the mother's own key frames so the hand moves with her. The other hand rests at Crowd1's side. |
+| 33 | Whole film | The crowd's idle phase used Python `hash()`, which changes every run, so every rebuild moved the crowd slightly. | It uses a fixed per-name seed, so each build is repeatable. |
+| 34 | 448–468 | Beat 3: the camera's tilt showed the empty world below the ground block in one corner. | The target is raised 25 cm: the toddler and the shaft wall fill the frame (`ACTING_v004_beat_frames_241_463_1501_1627.jpg`). |
 | 20 | Whole film | Hand audit: rescuers' fingertips on their own clothes, and Crowd1's cheer in her hair. These were reported at D. | They were handled in v003 and are kept in v004. |
 
 ## Re-check (v004)
@@ -46,26 +51,19 @@ Every story-beat frame is unchanged in v004: 1, 241, 463, 673, 913, 1135, 1297, 
 - `clip_v004.json`: the clip_scan result, with the bad ranges listed in the push message.
 - `qa_v004.json`: `qa_check.py` (director commit c6240b2) on the packed `ToddlerWell_v004_60fps.blend`, step 6, with `beats.json`.
 
-## qa_check flags left in, with the reason
-BACKHEAD, HOVER and FACEPRESS are all 0 in v004. These flags stay:
+## qa_check flags left in, with the reason (qa_check e7b25f7, `qa_v004.json`)
+These are all 0: BACKHEAD, CAMJUMP, ATTACH, HOVER, CLAW and FACEPRESS. clip_scan has 0 bad ranges (`clip_v004.json`).
 
 | Flag | Frames | Why it stays |
 |---|---|---|
-| INSIDE "camera inside geometry", EMPTY "wall fills / no character / only ShaftDust" | 127–289, 403–469 | Intended: the falls down the shaft and the rise back up. The camera travels inside the open 0.3 m steel casing, which is a hollow tube, so the ray test reads it as "inside". The toddler is small in the frame by design: this is the depth shot. On the way up the frame shows the shaft wall and the bright opening. |
+| PROPMOVE Clod00–29 | 661–859 | Intended: dirt clods thrown by the excavator bucket during the time-lapse dig. They fly through the air and land; no hand is meant to touch them. |
+| INSIDE "camera inside geometry", EMPTY "wall fills / no character / only ShaftDust", FILL ShaftDust | 127–289, 403–469 | Intended: the falls down the shaft and the rise back up. The camera travels inside the open 0.3 m steel casing, a hollow tube, so the ray test reads it as "inside". The rays also stop on the dust volume. |
 | INSIDE / EMPTY | 487–547, 787–871, 1351–1741 | Intended: the cut-away cross-section. The earth block is cut open with backface-transparent faces, so the camera is "inside" the ground mass but looks through the open cut at the pipe, the teen and the toddler. In the time-lapse (793–865) the camera holds on the empty pit for the "days pass" beat. |
+| EMPTY on beat frames 241, 463, 1501, 1627 ("character 0–2 %", 463 "no character") | | Checked in renders: `ACTING_v004_beat_frames_241_463_1501_1627.jpg`. The toddler's face (241, 463) and the grab with both faces (1501, 1627) read clearly. The rays pass through the transparent cut faces or stop on the dust volume, so qa under-counts the characters. |
 | EMPTY "character only 1–3 %" | 73–103, 1303 | Wide framings of the toddler near the well and the crowd at the rim: the people are small in the frame, but their faces read. |
-| FILL ShaftDust / ShadowSlab | 139–169, 253–265, 457, 541, 1363, 1555–1591 | ShaftDust is a thin volume of dust in the light shaft. ShadowSlab is a shadow-only helper that the camera never renders. Neither is a wall in the image. |
-| FILL "hair / top of head 32 %" | 1015 | One sampled frame in a camera move past the mother's head. Not a beat frame. |
+| FILL ShadowSlab | 541, 1363 | ShadowSlab is a shadow-only helper with camera visibility off. It never renders. |
+| FILL "hair / top of head" | 1015 | One sampled frame in a camera move past the mother's head. Not a beat frame. |
 
-## Still open (this push, 18:20)
-I checked these myself on the sheet and the close-ups. They are not fixed yet; a fix is in progress for each.
-- **Sheet incomplete:** 52 of 65 cells. From s0039 on only the even cells rendered, because a render worker was killed for lack of memory. The cell labels after 19.5 s are therefore shifted: those cells are 1 s apart.
-- **Frame 271 (4.5 s):** still a near-empty frame of the orange shaft wall with a pink light glow.
-- **Frames 1681 and 1741 (the cells labelled 24.0 and 24.5 s):** the casing tube, the tripod leg and the winch plate fill the frame during the rise.
-- **Hand close-ups that fail:**
-  - Teen grabs toddler (1580) and toddler clings (1700): there is a 20–26 cm gap between their hands. The teen's arms can't reach the grip point inside the pipe. In progress: the teen goes 17 cm lower and they hold each other's forearms at a reachable height.
-  - Crowd1 restraining the mother (900): her hand is not visibly on the mother's back. In progress: the hand moves onto the back surface, with a grip.
-  - The operator's levers (640) and holders 1336: the close-up camera is blocked by the cab or a tripod leg, so the hands don't show.
-  - Hand-off (1884): shot in the moment the mother is still reaching. The shot moves to 1900, when she holds him.
-- **qa_check fc62c27:** CAMJUMP 0, BACKHEAD 0, HOVER 0, FACEPRESS 0. EMPTY 177, INSIDE 120 and FILL 19 are the intended shaft and cross-section shots in the table above, except 271, 1681 and 1741 (listed here as open).
-- **clip_scan:** 0 bad ranges on this package (`clip_v004.json`).
+## Re-check result
+- `ACTING_v004_after_0.5s.jpg`: all 65 cells, labelled every 0.5 s. I checked every cell: no empty, black or blown-out cells, and a face reads on every beat.
+- `ACTING_v004_hand_closeups.jpg`: 19 close-ups. Each shows the hand on what it holds: rope, rim, levers, the mother's back, the knot, the tripod leg, the teen's belt and shins, the toddler's forearms, the haul line, the teen's hips, the toddler, and the mother's hug.
