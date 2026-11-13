@@ -124,3 +124,18 @@ def warm_setup(c):
 CONCEPTS["targeted_hq"] = dict(CONCEPTS["targeted_clear"], exposure=0.1, setup=warm_setup)
 CONCEPTS["targeted_hq_side"] = dict(CONCEPTS["targeted_hq"], cam=lambda c: (c["head"] + Vector((2.2, -0.6, 0.0)), c["head"] + Vector((0, 0, -0.25)), 40), fstop=None, mask=None)
 CONCEPTS["targeted_hq_head"] = dict(CONCEPTS["targeted_hq"], cam=lambda c: (c["head"] + Vector((0.3, -0.8, 0.2)), c["head"], 55), fstop=None, mask=None)
+
+
+def bg_setup(c):
+    """The office wall and its lights only (people, chair, table hidden): a light layer for the ChatGPT picture."""
+    mood_setup(c)
+    keep = ("BackWall", "PanelGroove", "Wainscot", "SideWall", "Haze", "Ceiling", "Floor", "Downlight")
+    for o in bpy.data.objects:
+        if o.type in ('MESH', 'EMPTY') and not o.name.startswith(keep):
+            o.hide_render = True
+            for ch in o.children_recursive:
+                ch.hide_render = True
+
+
+CONCEPTS["mood_bg"] = dict(CONCEPTS["targeted_mood"], setup=bg_setup, mask=None, fstop=3.0,
+                           cam=lambda c: (Vector((0.0, -0.4, 1.35)), Vector((0.0, 5.4, 1.75)), 30))
