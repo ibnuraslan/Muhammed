@@ -12,6 +12,8 @@ import ph
 EXPOSURE = -0.3
 DUR = {"forklift": 5.0, "lights_off": 5.0, "forklift_real": 11.0}       # estimates until the voiceover arrives
 ROWS = 6
+import os as _os
+OFF_START = int(_os.environ.get("WAREHOUSE_OFF_START", 30)); OFF_STEP = int(_os.environ.get("WAREHOUSE_OFF_STEP", 14))
 
 
 def build(variant=None):
@@ -60,7 +62,9 @@ def build(variant=None):
         Nn = m.node_tree.nodes; Ll = m.node_tree.links; Nn.clear()
         out = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.96, 0.9, 1)
         v = Nn.new("ShaderNodeValue")
-        off_at = 1e6 if variant != "dark" else 30 + (ROWS - 1 - r) * 14
+        # rows switch off one by one; OFF_START/OFF_STEP (frames) default to the 5 s Ch2 cut. Longer cuts set them via
+        # env (CH5 8A, 13.5 s: start 40, step 45) so the aisle doesn't sit in black for the last 9 s.
+        off_at = 1e6 if variant != "dark" else OFF_START + (ROWS - 1 - r) * OFF_STEP
         expr = f"12 * (1 if frame < {off_at} else 0.0)"
         d = v.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = expr
         Ll.new(v.outputs[0], em.inputs['Strength']); Ll.new(em.outputs[0], out.inputs['Surface'])
