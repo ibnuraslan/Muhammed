@@ -26,6 +26,9 @@ OUT = os.path.join(ROOT, "out", "blend", "ch45"); os.makedirs(OUT, exist_ok=True
 tim = json.load(open(os.path.join(ROOT, "vo", "ch45_timing.json")))
 SHOTS = [(c, sh["name"], sh["label"], sh["frames"]) for c in ("4", "5") for sh in tim[c]]
 skip_prep = "--skip-prep" in sys.argv
+PARTIAL = "--partial" in sys.argv          # test mode: only the shots already baked, saved as nvidia_ch45_TEST.blend
+if PARTIAL:
+    SHOTS = [s for s in SHOTS if os.path.exists(os.path.join(ROOT, "out", "blend", f"ch{s[0]}", s[1] + ".blend"))]
 
 
 def farm_ready(sc):
@@ -70,6 +73,16 @@ for c, name, label, frames in SHOTS:
     sc = dst.scenes[0]; sc.name = name
     scenes.append((sc, label, frames))
     print("[master45] appended", name, flush=True)
+# an append leaves a record of each source file behind; drop the ones no datablock uses, then insist on none
+def _lib_users(lib):
+    return sum(1 for coll in (bpy.data.objects, bpy.data.meshes, bpy.data.materials, bpy.data.images, bpy.data.scenes,
+                              bpy.data.node_groups, bpy.data.worlds, bpy.data.fonts, bpy.data.cameras, bpy.data.lights,
+                              bpy.data.actions, bpy.data.collections, bpy.data.armatures, bpy.data.curves, bpy.data.sounds,
+                              bpy.data.textures)
+               for i in coll if i.library == lib)
+for lib in list(bpy.data.libraries):
+    if _lib_users(lib) == 0:
+        bpy.data.libraries.remove(lib)
 assert not bpy.data.libraries, "linked libraries left in the master"
 
 
@@ -99,9 +112,13 @@ for im in [i for i in bpy.data.images if i.users == 0]:
 
 
 def rnd(v):
+    if isinstance(v, str) or v is None:
+        return str(v)
+    if hasattr(v, "name") and not hasattr(v, "__len__"):      # an ID (object/image/...) socket value
+        return getattr(v, "name", str(v))
     try:
         return tuple(round(float(x), 5) for x in v)
-    except TypeError:
+    except (TypeError, ValueError):
         try: return round(float(v), 5)
         except Exception: return str(v)
 
@@ -200,7 +217,7 @@ for (sc, label, frames), (c, name, _, _) in zip(scenes, SHOTS):
     frame += n
 END = frame - 1
 master.frame_start, master.frame_end = 1, END
-for c, vo in (("4", "vo/ch4_vo.mp3"), ("5", "vo/ch5_vo.mp3")):
+for c, vo in [(c, v) for c, v in (("4", "vo/ch4_vo.mp3"), ("5", "vo/ch5_vo.mp3")) if c in ch_start]:
     snd = strips.new_sound(f"Voiceover Ch{c}", os.path.join(ROOT, vo), channel=2 + int(c) - 4, frame_start=ch_start[c] + int(round(LEAD * FPS)))
     snd.sound.pack()
 # fade from / to black: a black colour strip over the picture, opacity keyed 1->0 (1 s) and 0->1 (1.5 s)
@@ -212,7 +229,8 @@ for nm, f0, f1, a0, a1 in (("FadeIn", 1, 1 + FPS, 1.0, 0.0), ("FadeOut", END - i
     col.color = (0, 0, 0); col.blend_type = 'ALPHA_OVER'
     col.blend_alpha = a0; col.keyframe_insert("blend_alpha", frame=f0)
     col.blend_alpha = a1; col.keyframe_insert("blend_alpha", frame=f1)
-master.timeline_markers.new("CH4", frame=ch_start["4"]); master.timeline_markers.new("CH5", frame=ch_start["5"])
+for c in ch_start:
+    master.timeline_markers.new(f"CH{c}", frame=ch_start[c])
 cam = bpy.data.objects.new("FilmCam", bpy.data.cameras.new("FilmCam"))
 master.collection.objects.link(cam); master.camera = cam
 master.render.engine = 'CYCLES'
@@ -221,11 +239,13 @@ master.render.use_sequencer = True
 master.render.use_compositing = False          # each shot scene applies its own (plain) grade
 master.render.filepath = "//render/nvidia_ch45_"
 master.render.image_settings.file_format = 'PNG'
-outp = os.path.join(OUT, "nvidia_ch45.blend")
+outp = os.path.join(OUT, "nvidia_ch45_TEST.blend" if PARTIAL else "nvidia_ch45.blend")
 bpy.ops.wm.save_as_mainfile(filepath=outp, compress=True)
 info = dict(file=outp, mb=round(os.path.getsize(outp) / 1e6, 1), frames=END, shots=len(SHOTS),
-            ch4_start=ch_start["4"], ch5_start=ch_start["5"], images=len(bpy.data.images), meshes=len(bpy.data.meshes),
+            ch_start=ch_start, images=len(bpy.data.images), meshes=len(bpy.data.meshes),
             materials=len(bpy.data.materials), shared=dict(images=n_img, materials=n_mat, meshes=n_mesh), scaled=n_scaled,
             libraries=len(bpy.data.libraries))
-json.dump(info, open(os.path.join(OUT, "master_info.json"), "w"), indent=1)
+json.dump(info, open(os.path.join(OUT, "master_info_TEST.json" if PARTIAL else "master_info.json"), "w"), indent=1)
 print("[master45] saved", info, flush=True)
+import resource
+print("[master45] peak RSS %.2f GB" % (resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e6), flush=True)
