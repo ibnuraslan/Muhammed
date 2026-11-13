@@ -10,6 +10,9 @@ office). Nothing is a map or graphic; the camera always drifts slowly and someth
 
 **Master timing (person's rule, Nov 2026):** the intro has 2.5 s of picture before the first word. Each chapter has at
 least **3.0 s** of picture under its title card before the voice starts (make_master lead = 3.0 for chapters).
+Titles: new title_card style (long titles on 2 lines, soft scrim, one PNG per title).
+**Delivery (Banker lesson):** unpack textures into one shared deduped folder (<=2K), share identical meshes, measure
+peak RAM opening the master, zip into <=380 MB parts with one shared top folder plus a MERGE .bat.
 
 ## Intro (no title, 2.5 s of picture before the first word)
 
