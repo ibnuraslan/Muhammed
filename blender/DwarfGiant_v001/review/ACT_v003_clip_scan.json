@@ -1,36 +1,57 @@
 {
  "frames": {
-  "889": {
+  "907": {
    "RIG_Hero": {
-    "self": 0,
-    "clothes": 0,
-    "other": 18
-   }
-  },
-  "895": {
-   "RIG_Hero": {
-    "self": 0,
-    "clothes": 0,
-    "other": 18
-   }
-  },
-  "901": {
-   "RIG_Officer1": {
     "self": 0,
     "clothes": 0,
     "other": 4
    }
   },
-  "907": {
-   "RIG_Officer1": {
+  "913": {
+   "RIG_Hero": {
     "self": 0,
     "clothes": 0,
-    "other": 3
+    "other": 2
    }
   },
-  "991": {
-   "RIG_Officer1": {
+  "1387": {
+   "RIG_Hero": {
     "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1411": {
+   "RIG_Hero": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1417": {
+   "RIG_Hero": {
+    "self": 3,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1423": {
+   "RIG_Hero": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1429": {
+   "RIG_Hero": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1441": {
+   "RIG_Hero": {
+    "self": 2,
     "clothes": 0,
     "other": 0
    }

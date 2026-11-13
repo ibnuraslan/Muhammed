@@ -102,4 +102,55 @@ for fi in range(1, 6):
         for f, q in ((680, relaxed), (696, Quaternion((1, 0, 0), R_(3 * sgL))), (880, Quaternion((1, 0, 0), R_(3 * sgL))), (900, relaxed)):
             pb.rotation_quaternion = q; pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 print("LIMITS", nlim, "on", len(RIGS), "rigs")
+# ---- v003: shared hand-pose library (director, Nov 12) replaces the hand-set finger angles above
+exec(open(__import__("os").path.join(__import__("os").path.dirname(__import__("os").path.abspath(__file__)), "..", "..", "pipeline", "hand_poses.py")).read())
+for rig in RIGS:
+    for pb in rig.pose.bones:                       # drop my own finger limits; the library adds the agreed ones
+        if pb.name.startswith("finger"):
+            for c in [c for c in pb.constraints if c.name == "HandLimit"]: pb.constraints.remove(c)
+    add_hand_limits(rig)
+    for s_ in "LR":
+        wr = rig.pose.bones["wrist." + s_]
+        if any(c.type == "COPY_ROTATION" for c in wr.constraints):      # IK-solved wrist: a clamp folds the hand (v002 mitten bug)
+            for c in wr.constraints:
+                if c.type == "LIMIT_ROTATION": c.mute = True
+    for s_ in "LR": apply_pose(rig, s_, "relaxed", 1)
+OBR = bpy.data.objects
+POSES_PLAN = [("Hero", "L", [(680, "relaxed"), (696, "flat_palm"), (880, "flat_palm"), (900, "relaxed"),
+                             (1380, "relaxed"), (1398, "cup_hold"), (1470, "cup_hold"), (1482, "relaxed")]),
+              ("Officer1", "L", [(188, "relaxed")]),
+              ("Clerk", "L", [(1, "flat_palm")]), ("Clerk", "R", [(1, "flat_palm")]),
+              ("Surgeon1", "R", [(1565, "relaxed"), (1575, "flat_palm"), (1712, "flat_palm"), (1725, "relaxed")]),
+              ("Nurse", "L", [(1681, "relaxed"), (1690, "flat_palm"), (1857, "flat_palm"), (1866, "relaxed")]),
+              ("Nurse", "R", [(1681, "relaxed"), (1690, "flat_palm"), (1857, "flat_palm"), (1866, "relaxed")])]
+for ch, s_, keys in POSES_PLAN:
+    for f, pose in keys: apply_pose(OBR["RIG_" + ch], s_, pose, f)
+# clerk: palms resting ON the desk top (surface found by ray cast), small writing strokes with the right hand
+dg = bpy.context.evaluated_depsgraph_get()
+def surface_z(x, y):
+    ok, loc, n_, i_, ob_, m_ = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((x, y, 1.6)), Vector((0, 0, -1)))
+    return loc.z if ok else 0.948
+CLR = OBR["RIG_Clerk"]
+for c in [c for c in CLR.children if c.type == "MESH"]: c.hide_viewport = True     # don't ray-hit himself
+for f in range(1, 1500, 10):
+    sc.frame_set(f); st = math.sin(f * 0.35)
+    xr, yr = 0.60 + 0.012 * st, 1.74 + 0.025 * math.sin(f * 0.11)
+    place_hand(CLR, "R", f, Vector((xr, yr, surface_z(xr, yr) + 0.003 * max(0.0, st))), Vector((0, 0, -1)), Vector((-1, -0.15, 0)))
+    place_hand(CLR, "L", f, Vector((0.61, 1.46, surface_z(0.61, 1.46))), Vector((0, 0, -1)), Vector((-1, 0.2, 0)))
+for c in [c for c in CLR.children if c.type == "MESH"]: c.hide_viewport = False
+# officer 1: real wrap grip on the height-rod mesh (grip_object closes each finger onto it, thumb opposes)
+ROD = Vector((-0.30, 2.97, 0.0)); O1R = OBR["RIG_Officer1"]
+gauge = [o for o in OBR["Gauge"].children_recursive if o.type == "MESH"]; print("GAUGE_MESHES", [(o.name, tuple(round(d, 2) for d in o.dimensions)) for o in gauge])
+rod = max(gauge, key=lambda o: max(o.dimensions), default=None)   # the tall measuring column
+if rod:
+    P1 = Vector((-0.66, 2.86, 0.0)); app = (ROD - P1); app.z = 0; app.normalize()
+    for f, z in ((1, 1.62), (40, 1.58), (90, 1.48), (130, 1.43), (172, 1.43)):
+        sc.frame_set(f); ok, loc, nrm, idx = rod.closest_point_on_mesh(rod.matrix_world.inverted() @ Vector((ROD.x - 0.2, ROD.y, z)))
+        cp = rod.matrix_world @ loc
+        # the 2.3 cm bar stands flush with the wall, so no hand can wrap it: palm flat on its side face, fingers up the bar
+        place_hand(O1R, "L", f, Vector((cp.x, cp.y, z)), Vector((1, 0, 0)), Vector((0, 0.15, 1)), skin=0.006)
+        apply_pose(O1R, "L", "flat_palm", f)
+        sc.frame_set(f); tip = O1R.matrix_world @ O1R.pose.bones["finger3-3.L"].tail; pal = O1R.matrix_world @ O1R.pose.bones["finger3-1.L"].head
+        print("ROD_CONTACT", f, round(_dist_to(rod, tip), 3), round(_dist_to(rod, pal), 3))
+print("HAND_POSES applied")
 bpy.ops.wm.save_as_mainfile(filepath=out)

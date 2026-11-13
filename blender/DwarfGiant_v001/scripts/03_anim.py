@@ -130,8 +130,8 @@ HR = HU["Hero"]; HRIG = RIGS["Hero"]
 BODYM = {}
 def hand_rest(h, s, f, out=0.08, fwd=-0.02, up=0.0):
     B = h.r.BN; sx = 1 if s == "L" else -1
-    out = 0.03 + (out - 0.07) * 0.3; fwd = min(fwd, -0.045); up = up + 0.035      # v003: arms hang close, elbows soft
-    if h.r.o.name == "RIG_Hero": out += 0.035; fwd -= 0.01                          # his enlarged hands would brush his thighs
+    out = 0.085 + (out - 0.07) * 0.3; fwd = min(fwd, -0.05); up = up + 0.035     # v003: arms hang relaxed, elbows soft; curled fingers clear the thigh
+    if h.r.o.name == "RIG_Hero": out += 0.04; fwd -= 0.015                            # his enlarged hands would brush his thighs
     sh = B["upperarm01." + s].head_local
     W = Vector((sh.x + sx * out, sh.y + fwd, sh.z - 0.43 * (sh.z / 1.031) * 1.0 + up))
     P = Vector((sh.x + sx * 0.2, sh.y + 0.5, sh.z - 0.3)); d = Vector((0, 0, -1)); n = Vector((-sx, 0, 0))
@@ -285,10 +285,10 @@ for f in (1400, 1470):
 sc.frame_set(1)
 # ------------------------------------------------------------------ officers (IK feet, step back as he towers)
 O1, O2 = HU["Officer1"], HU["Officer2"]
-P1a, P1b = V(-0.86, 2.62, 0), V(-1.3, 1.05, 0)
+P1a, P1b = V(-0.66, 2.86, 0), V(-1.3, 1.05, 0)
 P2a, P2b = V(-1.15, 1.25, 0), V(-1.9, 0.72, 0)
 for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
-    ya = yaw_to(pa, HPOS); yb = yaw_to(pb_, HPOS)
+    ya = yaw_to(pa, V(-0.28, 2.78, 0) if h is O1 else HPOS); yb = yaw_to(pb_, HPOS)   # officer 1 turns toward the rod he holds
     BODYM[h] = lambda f, pa=pa, pb_=pb_, ya=ya, yb=yb, bul=(0.42 if h is O1 else 0.0): (pa.lerp(pb_, smooth((f - 890) / 100)) + V(-bul * math.sin(math.pi * smooth((f - 890) / 100)), 0, 0), ya + (yb - ya) * smooth((f - 890) / 100))
     h.key_root(1, pa + V(0, 0, h.root_head.z - 0.01), yaw=ya)
     h.key_foot("L", 1, h.foot_xy("L", pa, ya), ya); h.key_foot("R", 1, h.foot_xy("R", pa, ya), ya)
@@ -302,7 +302,7 @@ for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
     h.key_root(1476, pb_ + V(0, 0, h.root_head.z - 0.02), yaw=yb)
     h.key_foot("L", 1476, h.foot_xy("L", pb_, yb), yb); h.key_foot("R", 1476, h.foot_xy("R", pb_, yb), yb)
     for f in range(1, 1477, 30):
-        if h is O1 and f < 200: hand_rest(h, "L", f, 0.07, -0.03)    # right hand is on the rod slider (keyed below)
+        if h is O1 and f < 200: hand_rest(h, "R", f, 0.07, -0.03)    # left hand is on the height rod (keyed below)
         elif not (886 <= f <= 1476): arms_idle(h, f, 0.07, -0.03)
     for f in range(886, 1000, 6): arms_idle(h, f, 0.1, -0.05)    # hands follow the body through the walk (no lag into the legs)
     for f in range(1000, 1477, 12): arms_idle(h, f, 0.1, -0.05)      # leaning back to look up at him: hands clear of the thighs
@@ -314,22 +314,23 @@ for h, nm, pa, pb_ in ((O1, "Officer1", P1a, P1b), (O2, "Officer2", P2a, P2b)):
     talk(h.r, 1260, 1470, 10, 9); brows(h.r, 1, 0, 10); brows(h.r, 900, 14, 0); brows(h.r, 1300, 6, 6)
     jaw(h.r, 880, 1); jaw(h.r, 930, 10); jaw(h.r, 1000, 6)
 # officer1 grips the height rod with his right hand and slides it down to the hero's head height (beat 1)
-ROD = V(-0.30, 2.80, 0.0)
+ROD = V(-0.30, 2.97, 0.0)
 to_rod = (ROD - P1a).to_2d().normalized(); side_ = V(-to_rod.y, to_rod.x, 0)
 for f, z in ((1, 1.62), (40, 1.58), (90, 1.48), (130, 1.43), (172, 1.43)):
     W = ROD + V(-to_rod.x * 0.05, -to_rod.y * 0.05, z)          # palm against the near face of the rod
-    O1.key_hand("R", f, W, V(0, 0, -1) * 0.2 + side_, V(to_rod.x, to_rod.y, 0), pole=W + V(-to_rod.x * 0.25, -to_rod.y * 0.25, -0.45) - side_ * 0.25)
-_W = ROD + V(-to_rod.x * 0.3, -to_rod.y * 0.3, 1.12) - side_ * 0.22
-O1.key_hand("R", 188, _W, V(0, 0, -1), V(to_rod.x, to_rod.y, 0), pole=_W + V(0, 0, -0.4) - side_ * 0.3)
+    O1.key_hand("L", f, W, V(0, 0, 1), V(to_rod.x, to_rod.y, 0), pole=W + V(-to_rod.x * 0.3, -to_rod.y * 0.3, -0.45))
+_fo = (V(-0.28, 2.78, 0) - P1a).to_2d().normalized(); _left = V(-_fo.y, _fo.x, 0)
+_W = P1a + _left * 0.34 + V(_fo.x * 0.12, _fo.y * 0.12, 1.12)             # release: hand comes away out to his left side
+O1.key_hand("L", 186, _W, V(0, 0, -1), _left, pole=_W + V(0, 0, -0.4) + _left * 0.2)
 # ------------------------------------------------------------------ FK extras (clerk writing, recruits waiting, surgeons, nurse)
-place("Clerk", 1, V(1.0, 1.6, 0), yaw_to(V(1.0, 1.6, 0), V(0.3, 1.6, 0)))
+place("Clerk", 1, V(0.9, 1.6, 0), yaw_to(V(0.9, 1.6, 0), V(0.3, 1.6, 0)))
 place("Recruit1", 1, V(-2.85, 1.55, 0), yaw_to(V(-2.85, 1.55, 0), HPOS))
 place("Recruit2", 1, V(-2.7, 0.35, 0), yaw_to(V(-2.7, 0.35, 0), HPOS))
 CL = HU["Clerk"]; DESK_Z = 0.948
 for f in range(1, 1500, 10):
     st = math.sin(f * 0.35)
-    hand_w(CL, "R", f, V(0.50 + 0.015 * st, 1.76 + 0.03 * math.sin(f * 0.11), DESK_Z + 0.035 + 0.006 * max(0, st)), V(-1, -0.15, 0), V(0, 0, -1), V(1.0, 2.15, 0.85))
-    hand_w(CL, "L", f, V(0.52, 1.42, DESK_Z + 0.033), V(-1, 0.2, 0), V(0, 0, -1), V(1.0, 1.05, 0.85))
+    hand_w(CL, "R", f, V(0.60 + 0.012 * st, 1.76 + 0.03 * math.sin(f * 0.11), DESK_Z + 0.035 + 0.006 * max(0, st)), V(-1, -0.15, 0), V(0, 0, -1), V(1.0, 2.15, 0.85))
+    hand_w(CL, "L", f, V(0.61, 1.46, DESK_Z + 0.033), V(-1, 0.2, 0), V(0, 0, -1), V(1.0, 1.05, 0.85))
     CL.key_spine(f, flex=22 + 2 * math.sin(f * 0.05), twist=3 * math.sin(f * 0.13), head=(22, 4 * math.sin(f * 0.02)))
 for f in range(1, 1500, 16):
     for nm, ph in (("Recruit1", 0.0), ("Recruit2", 1.7)):
@@ -375,7 +376,7 @@ Nm = HU["Normal"]; PN = V(9.4, -2.55, 0); yN = yaw_to(PN, V(8.0, -1.4, 0)) + 10
 BODYM[Nm] = lambda f: (PN, yN)
 Nm.key_root(1, PN + V(0, 0, Nm.root_head.z - 0.01), yaw=yN)
 Nm.key_foot("L", 1, Nm.foot_xy("L", PN, yN), yN); Nm.key_foot("R", 1, Nm.foot_xy("R", PN, yN), yN)
-for f in range(1, 2341, 40): arms_idle(Nm, f, 0.07, -0.03); Nm.key_spine(f, flex=-3, head=(-14, -28 + 6 * math.sin(f * 0.05)))
+for f in range(1, 2341, 40): arms_idle(Nm, f, 0.15, -0.04); Nm.key_spine(f, flex=-3, head=(-14, -28 + 6 * math.sin(f * 0.05)))
 breathe(Nm, 1, 2340, base=PN + V(0, 0, Nm.root_head.z - 0.01), yaw=yN, ph=0.5)
 Yg = HU["Young"]; PY = SIL + V(-0.85, 0.05, 0); yY = 180 - 8
 BODYM[Yg] = lambda f: (PY, yY)
@@ -383,7 +384,8 @@ Yg.key_root(1, PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY)
 Yg.key_foot("L", 1, Yg.foot_xy("L", PY, yY), yY); Yg.key_foot("R", 1, Yg.foot_xy("R", PY, yY), yY)
 for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex=-2, head=(-10 if f > 2150 else -4, -24 if f > 2150 else -4))
 breathe(Yg, 1, 2340, base=PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY, ph=2.2)
-for nm, rng in (("Officer1", [(1, 1476)]), ("Officer2", [(1, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1476)]), ("Recruit2", [(1, 1476)]),
+for nm, rng in (("Officer1", [(1, 371), (480, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
+                ("Officer2", [(1, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1476)]), ("Recruit2", [(1, 1476)]),
                 ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1857)]), ("Nurse", [(1477, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
     for m_ in meshes_of(RIGS[nm]): vis(m_, rng)
 
@@ -507,16 +509,16 @@ DYN = [(1275, eye8a + f8a * 0.10, OFFS, 28), (1335, eye8b + f8b * 0.12 + u8b * 0
        (1690, BR9 + s9b * 0.16 + f9b * 0.06, TU9, 40), (1708, BR9 + s9b * 0.12 - u9b * 0.05 + f9b * 0.08, TU9, 45), (1718, c9 + f9 * 0.45 + u9 * 0.15 + s9 * 0.1, c9, 30)]
 sc.frame_set(1)
 KEYS = [  # frame, cam, aim, lens
-    (1, V(1.25, -0.55, 2.75), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
+    (1, V(0.35, 0.5, 2.05), V(-0.3, 2.3, 1.15), 26), (45, V(0.55, 0.35, 1.95), V(-0.3, 2.4, 1.05), 28),
     (95, V(-0.05, 1.1, 1.25), V(-0.3, 2.45, 1.22), 32), (140, V(-0.35, 1.72, 1.3), V(-0.3, 2.4, 1.25), 38),
     (170, V(-0.56, 2.28, 1.21), V(-0.3, 2.37, 1.205), 45), (180, V(-0.392, 2.352, 1.205), V(-0.3, 2.375, 1.205), 45),
-    (190, V(-0.335, 2.37, 1.215), V(-0.3, 2.39, 1.23), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
+    (190, V(-0.395, 2.355, 1.22), V(-0.3, 2.385, 1.23), 32), (240, V(-0.5, 2.25, 1.33), HEAD0, 35),
     (300, V(-0.36, 2.16, 1.17), PITW, 45), (355, V(-0.29, 2.22, 1.19), PITW, 55),
     (380, V(-0.22, 2.08, 1.2), PITW + V(0, 0, -0.01), 40), (420, V(-0.05, 1.55, 1.05), V(-0.3, 2.45, 0.9), 28),
     (462, V(-0.15, 1.0, 0.95), V(-0.3, 2.45, 0.62), 24), (510, V(0.55, 0.55, 0.95), V(-0.75, 2.5, 1.0), 22),
     (565, V(0.85, 0.25, 1.25), V(-0.85, 2.5, 1.2), 22), (625, V(0.35, 0.15, 1.6), V(-0.6, 2.5, 1.45), 24),
-    (690, V(0.05, 1.05, 1.4), V(0.1, 2.25, 0.95), 30), (740, V(0.1, 1.75, 1.22), V(0.12, 2.36, 0.96), 40),
-    (790, V(-0.05, 1.6, 0.45), V(-0.25, 2.42, 0.12), 32), (815, V(-0.42, 1.72, 1.35), V(0.2, 2.6, 1.4), 30), (845, V(-0.22, 2.64, 1.97), V(2.8, 2.98, 1.72), 38),
+    (690, V(0.05, 1.05, 1.4), V(0.1, 2.25, 0.95), 30), (740, V(-0.02, 1.72, 1.24), V(0.12, 2.36, 0.96), 40),
+    (790, V(-0.18, 1.6, 0.45), V(-0.25, 2.42, 0.12), 32), (815, V(-0.42, 1.72, 1.35), V(0.2, 2.6, 1.4), 30), (845, V(-0.22, 2.64, 1.97), V(2.8, 2.98, 1.72), 38),
     (880, V(-0.2, 1.0, 1.3), V(-0.35, 2.2, 1.5), 26), (920, V(1.5, -0.1, 0.45), V(-0.3, 2.0, 1.5), 22),
     (975, V(0.35, -0.85, 0.42), V(-0.35, 2.0, 1.6), 22), (1030, V(-1.45, -0.45, 0.5), V(-0.3, 2.1, 1.6), 22),
     (1075, V(-0.75, 0.75, 1.45), V(-0.3, 2.35, 1.4), 26), (1120, V(-0.95, 0.95, 1.3), V(-0.3, 2.45, 1.15), 28),

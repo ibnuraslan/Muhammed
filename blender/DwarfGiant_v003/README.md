@@ -9,10 +9,12 @@ This is the same film, timeline and story-beat frames as v002 (`beats.json` is u
   - `ACT_v003_hand_closeups.jpg`: 270×480 close-ups of every hand contact.
   - `ACT_v003_clip_scan.json`: director's `clip_scan.py`.
   - `ACT_v003_hand_audit.txt`: BVH hand audit every 2 frames.
+  - `qa_v003.json`: director's `qa_check.py` (intended flags are listed in ACTING_notes.md).
 
 ## What changed (see ACTING_notes.md for frames)
-- **Clerk:** palms on the desk; he writes in the ledger with his right hand while his left holds the page.
-- **Officer 1:** grips the real height rod and slides it down to the hero's head.
+- **Clerk:** palms on the desk (`place_hand` onto the ray-cast desk surface); he writes in the ledger with his right hand while his left holds the page.
+- **Officer 1:** steadies the real height rod with his left palm flat on the bar while he measures.
+- **Hands:** every hand uses the shared `pipeline/hand_poses.py` presets (relaxed, flat_palm, cup_hold) and its joint limits.
 - **Standing characters:** everyone breathes and shifts weight. Arms hang close with soft elbows, with no stiff A-pose.
 - **Hero's growth:** his feet stay planted in world space, with small re-plant steps, instead of sliding outward as he scales.
 - **Ear cup:** elbow out, cupped hand behind the ear, and the face readable.
