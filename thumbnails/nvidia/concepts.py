@@ -108,3 +108,19 @@ def mood_setup(c):
 
 
 CONCEPTS["targeted_mood"] = dict(CONCEPTS["targeted_clear"], exposure=0.2, setup=mood_setup)
+
+
+def warm_setup(c):
+    """ChatGPT-reference lighting: soft frontal key on him, a warm red-orange glow on the wall behind the chair,
+    women softly and evenly lit, dark edges."""
+    clear_setup(c)
+    h = c["head"]
+    _spot("WallGlow", (h.x, h.y + 0.6, 0.9), (h.x, 5.42, 1.7), 260, (1.0, 0.32, 0.12), 55, 0.95, 0.3)
+    for k, w in enumerate(c["women"]):
+        p = w.bone_head("head")
+        sp = area_light(p + Vector((0.4 if p.x < 0 else -0.4, -1.6, 0.4)), (0, 0, 0), 1.0, 45, (1.0, 0.95, 0.9)); point_at(sp, p + Vector((0, 0, -0.4)))
+
+
+CONCEPTS["targeted_hq"] = dict(CONCEPTS["targeted_clear"], exposure=0.1, setup=warm_setup)
+CONCEPTS["targeted_hq_side"] = dict(CONCEPTS["targeted_hq"], cam=lambda c: (c["head"] + Vector((2.2, -0.6, 0.0)), c["head"] + Vector((0, 0, -0.25)), 40), fstop=None, mask=None)
+CONCEPTS["targeted_hq_head"] = dict(CONCEPTS["targeted_hq"], cam=lambda c: (c["head"] + Vector((0.3, -0.8, 0.2)), c["head"], 55), fstop=None, mask=None)

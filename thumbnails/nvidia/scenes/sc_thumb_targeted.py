@@ -52,6 +52,57 @@ def woman_standing(name, loc, rot, hair, suit, skin, years, stance="relaxed", tu
     return h
 
 
+def strand_hair(h, tag, melanin=0.12, length=0.045, count=9000, children=14, root=(0.03, 0.03, 0.032)):
+    """Real strand hair grown from the MakeHuman hair proxy (which stays as a dark root layer underneath)."""
+    o = next(o for o in h.parts if o.type == 'MESH' and tag in o.name)
+    for m in o.data.materials:
+        pb = m.node_tree.nodes["Principled BSDF"]
+        for l in list(m.node_tree.links):
+            if l.to_socket == pb.inputs['Base Color']:
+                m.node_tree.links.remove(l)
+        pb.inputs['Base Color'].default_value = (*root, 1); pb.inputs['Roughness'].default_value = 0.9
+    bpy.context.view_layer.update()
+    sc = o.matrix_world.to_scale().x
+    if o.parent: sc = o.parent.matrix_world.to_scale().x * o.matrix_basis.to_scale().x
+    print("[hair] object scale", o.matrix_world.to_scale(), "dims", o.dimensions, flush=True)
+    # bake the pose into this mesh first: particle hair on an armature-deformed mesh stretches back to the rest pose
+    bpy.ops.object.select_all(action='DESELECT'); bpy.context.view_layer.objects.active = o; o.select_set(True)
+    for md in list(o.modifiers):
+        try:
+            bpy.ops.object.modifier_apply(modifier=md.name)
+        except Exception as e:
+            print("[hair] apply failed", md.name, e, flush=True)
+    mw = o.matrix_world.copy(); o.parent = None; o.matrix_world = mw
+    ps = o.modifiers.new("Strands", 'PARTICLE_SYSTEM'); st = ps.particle_system.settings
+    st.type = 'HAIR'; st.count = count; st.hair_length = length; st.emit_from = 'FACE'; st.use_even_distribution = True
+    st.normal_factor = length * 0.12; st.tangent_factor = length * 0.35; st.tangent_phase = 0.0   # combed back
+    st.child_type = 'INTERPOLATED'; st.rendered_child_count = children; st.child_length = 1.0
+    st.clump_factor = 0.25; st.roughness_1 = 0.004; st.roughness_endpoint = 0.006; st.roughness_2 = 0.002
+    st.root_radius = 1.0; st.tip_radius = 0.2; st.radius_scale = 0.00005; st.display_step = 3; st.render_step = 4
+    hm = bpy.data.materials.new(h.name + "_strands"); hm.use_nodes = True
+    N = hm.node_tree.nodes; N.clear()
+    hb = N.new("ShaderNodeBsdfHairPrincipled"); out = N.new("ShaderNodeOutputMaterial")
+    hb.parametrization = 'COLOR'
+    hb.inputs['Color'].default_value = (0.42, 0.42, 0.44, 1)          # salt-and-pepper grey
+    hb.inputs['Roughness'].default_value = 0.38
+    for k_, v_ in (('Random Color', 0.35), ('Melanin Redness', 0.1), ('Random Roughness', 0.3)):
+        if k_ in hb.inputs: hb.inputs[k_].default_value = v_
+    hm.node_tree.links.new(hb.outputs[0], out.inputs['Surface'])
+    o.data.materials.append(hm); st.material = len(o.data.materials)
+    return o
+
+
+def textured(h, tag, tex, tint, scale=6.0, rough_mul=1.0, coat=0.0):
+    """Swap one clothing asset's material for a scanned Poly Haven fabric/leather (grain + normals), tinted."""
+    import ph
+    m = ph.texture(tex, scale=scale, tint=tint, name=f"{h.name}_{tex}")
+    pb = m.node_tree.nodes["Principled BSDF"]; pb.inputs['Coat Weight'].default_value = coat
+    for o in h.parts:
+        if o.type == 'MESH' and tag in o.name:
+            o.data.materials.clear(); o.data.materials.append(m)
+    return m
+
+
 def _recolor(h, tag, base, rough=None, coat=None):
     """Solid colour on one clothing asset (keeps its normal map / folds)."""
     for o in h.parts:
@@ -111,6 +162,7 @@ def build(variant=None):
                 pb = m.node_tree.nodes["Principled BSDF"]
                 pb.inputs['Roughness'].default_value = 0.85; pb.inputs['Specular IOR Level'].default_value = 0.15
                 pb.inputs['Coat Weight'].default_value = 0.0
+    textured(h, "casualsuit05", "brown_leather", (0.07, 0.065, 0.065), scale=7.0, coat=0.25)
     pose_sit(h, lean=24)
     h.rot("neck01", (1, 0, 0), 8); h.rot("head", (1, 0, 0), 16); h.rot("head", (0, 1, 0), -10)
     h.arm.location = (0, TABLE_END + 0.55, 0.0); bpy.context.view_layer.update()
@@ -130,6 +182,15 @@ def build(variant=None):
     print("[pose] elbow z", round(el.z, 3), "table top ->", round(top, 3), flush=True)
     if el.z - 0.045 > top:                                  # sink him a little into the chair if the elbow rides high
         h.arm.location.z -= (el.z - 0.045) - top; bpy.context.view_layer.update()
+    bpy.context.view_layer.update()
+    sx = h.bone_head("spine01").x
+    wv = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH'])
+    # his belly/chest (spine bones + ~0.17 m of body and jacket in front) must stay behind the table's end
+    ys = [h.bone_head(b_).y for b_ in ("spine03", "spine02", "spine01")]
+    need = (TABLE_END + 0.02) - (min(ys) - 0.17)
+    print("[pose] torso clearance need", round(need, 3), flush=True)
+    if need > 0:
+        h.arm.location.y += need; bpy.context.view_layer.update()
     dz = top - TOP
     for n in ("Table", "Pedestal", "Pedestal.001"):
         if n in bpy.data.objects:
@@ -140,6 +201,7 @@ def build(variant=None):
     reach(h, "L", knee + Vector((-0.06, 0.12, 0.08)), (1.0, 0.3, -0.4), hand_dir=(-0.3, -1.0, -0.2))   # left hand rests in his lap, under the table
     fingers_curl(h, 95, side=("L",), thumb=45)
     c = h.bone_head("head") + (h.bone_tail("head") - h.bone_head("head")) * 0.4
+    # strand_hair(h, "short02", melanin=0.22, length=0.024, count=16000, children=18)
     # a chair behind him (scanned leather chair), mostly hidden by his body
     import ph
     ph.model("mid_century_lounge_chair", loc=(0, h.arm.location.y + 0.32, 0), rot_z=0.0)
@@ -155,7 +217,8 @@ def build(variant=None):
     for k, (loc, rot, hair, suit, skin, yrs, col) in enumerate(W):
         st, turn, tilt = ST[k]
         w = woman_standing(f"W{k}", loc, rot, hair, suit, skin, yrs, st, turn, tilt)
-        _recolor(w, suit, col, rough=0.9, coat=0.0)
+        FAB = ["wool_boucle", "poly_wool_herringbone", "rough_linen", "poly_wool_herringbone"]
+        textured(w, suit, FAB[k], tuple(min(1.0, c_ * 1.6) for c_ in col), scale=9.0)
         for o in w.parts:
             for m in (o.data.materials if o.data else []):
                 if m and suit in m.name:
