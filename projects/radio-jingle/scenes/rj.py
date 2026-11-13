@@ -311,7 +311,7 @@ ROLES = {
     # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
     # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 52, "female_elegantsuit01", "ponytail01", 0.40, 0.08, 0.18, 0.55, 0.45, 0.58),
+    "mother":     (0.0, 58, "female_elegantsuit01", "ponytail01", 0.40, 0.08, 0.18, 0.55, 0.45, 0.58),
     "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
     "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
     "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
@@ -367,7 +367,7 @@ def person(role, name=None, cap=True):
                 _two_tone_local(o, split, top, bot)
     hair_matte(h)
     if role in ("mother", "father", "uncle", "neighbour", "expert", "aunt"):
-        hair_grey(h, 0.45 if role == "mother" else 0.5)
+        hair_grey(h, 0.55 if role == "mother" else 0.5)
     if role in ("officer", "officer2", "officer3") and cap:
         h.cap = police_cap(h)
     if role == "firefighter":
@@ -1200,42 +1200,54 @@ def dog_fur():
     return m
 
 
+def _skin_mesh(name, pts, edges, mat_):
+    """An organic tube shape from a point chain: Skin modifier (radius per point) + Subdivision."""
+    me = bpy.data.meshes.new(name)
+    me.from_pydata([p for p, r in pts], edges, []); me.update()
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    sk = o.modifiers.new("skin", 'SKIN'); sk.use_smooth_shade = True
+    for i, (p, r) in enumerate(pts):
+        sv = me.skin_vertices[0].data[i]; sv.radius = (r, r)
+        sv.use_root = (i == 0)
+    sd = o.modifiers.new("sub", 'SUBSURF'); sd.levels = 2; sd.render_levels = 2
+    o.data.materials.append(mat_)
+    return o
+
+
 def dog(name="Dog"):
     """A German shepherd, about 0.62 m at the shoulder. Forward is local +X, origin on the ground under the chest.
     Returns dict(root, body, head, tail, legs=[(hip, knee)] x4 (FL, FR, HL, HR))."""
     fur = dog_fur(); dark = pbr("DogNose", (0.01, 0.01, 0.01), 0.3, 0.0, **{'Coat Weight': 0.7})
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
-    # body: deep chest, high withers, tucked waist, sloping back to a lower croup, muscular hindquarters
-    body = _meta_mesh(name + "Body", [((0.22, 0, 0.55), 0.19, (1.1, 0.75, 1.15)), ((0.25, 0, 0.68), 0.13, (1.1, 0.7, 1.0)),
-                                      ((-0.04, 0, 0.6), 0.14, (1.45, 0.64, 0.78)), ((-0.27, 0, 0.56), 0.16, (1.0, 0.74, 1.0)),
-                                      ((-0.3, 0, 0.47), 0.12, (0.95, 0.85, 1.2)), ((0.38, 0, 0.76), 0.1, (1.0, 0.72, 1.3)),
-                                      ((0.45, 0, 0.84), 0.08, (1.0, 0.75, 1.0))], fur)
+    # skin-modifier "skeletons" (point chains with radii, subdivided): one connected organic shape per part
+    body = _skin_mesh(name + "Body", [((-0.38, 0, 0.57), 0.11), ((-0.27, 0, 0.6), 0.14), ((-0.06, 0, 0.62), 0.115), ((0.16, 0, 0.6), 0.15),
+                                      ((0.3, 0, 0.66), 0.12), ((0.42, 0, 0.77), 0.085), ((0.48, 0, 0.86), 0.07), ((0.18, 0, 0.47), 0.1)],
+                      [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (3, 7)], fur)
     body.parent = root
-    head = bpy.data.objects.new(name + "HeadPivot", None); bpy.context.collection.objects.link(head); head.parent = root; head.location = (0.48, 0, 0.88)
-    hm = _meta_mesh(name + "Head", [((0.04, 0, 0.03), 0.085, (1.15, 0.85, 0.85)), ((0.15, 0, -0.01), 0.05, (1.6, 0.72, 0.68)),
-                                    ((0.22, 0, -0.018), 0.034, (1.2, 0.7, 0.62))], fur)
+    head = bpy.data.objects.new(name + "HeadPivot", None); bpy.context.collection.objects.link(head); head.parent = root; head.location = (0.5, 0, 0.88)
+    hm = _skin_mesh(name + "Head", [((-0.03, 0, 0.0), 0.07), ((0.06, 0, 0.005), 0.068), ((0.15, 0, -0.02), 0.042), ((0.22, 0, -0.03), 0.028)],
+                    [(0, 1), (1, 2), (2, 3)], fur)
     hm.parent = head
     for sy in (-1, 1):                                    # big upright ears
-        bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.045, radius2=0.004, depth=0.13, location=(0.0, sy * 0.045, 0.13), rotation=(sy * -0.22, -0.12, 0))
+        bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.045, radius2=0.004, depth=0.13, location=(0.0, sy * 0.045, 0.1), rotation=(sy * -0.22, -0.12, 0))
         ear = bpy.context.active_object; ear.scale = (0.55, 1.0, 1.0); ear.data.materials.append(fur); ear.parent = head
-    nose = cyl("Nose", (0.255, 0, -0.012), 0.017, 0.02, dark, 12, rot=(0, math.radians(90), 0)); nose.parent = head
+    nose = cyl("Nose", (0.245, 0, -0.03), 0.017, 0.02, dark, 12, rot=(0, math.radians(90), 0)); nose.parent = head
     for sy in (-1, 1):
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.011, location=(0.105, sy * 0.05, 0.045))
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.011, location=(0.1, sy * 0.05, 0.03))
         ey = bpy.context.active_object; ey.data.materials.append(dark); ey.parent = head
-    tail = bpy.data.objects.new(name + "TailPivot", None); bpy.context.collection.objects.link(tail); tail.parent = root; tail.location = (-0.44, 0, 0.6)
-    tm = _meta_mesh(name + "Tail", [((-0.06, 0, -0.05), 0.055, (1.0, 0.7, 0.7)), ((-0.12, 0, -0.17), 0.06, (0.85, 0.7, 1.0)),
-                                    ((-0.14, 0, -0.3), 0.055, (0.8, 0.65, 1.0)), ((-0.12, 0, -0.4), 0.04, (0.8, 0.6, 0.9))], fur)
+    tail = bpy.data.objects.new(name + "TailPivot", None); bpy.context.collection.objects.link(tail); tail.parent = root; tail.location = (-0.45, 0, 0.6)
+    tm = _skin_mesh(name + "Tail", [((0, 0, 0), 0.045), ((-0.1, 0, -0.12), 0.055), ((-0.14, 0, -0.27), 0.048), ((-0.12, 0, -0.38), 0.03)],
+                    [(0, 1), (1, 2), (2, 3)], fur)
     tm.parent = tail
     legs = []
-    for (x, y, front) in ((0.25, 0.09, True), (0.25, -0.09, True), (-0.3, 0.1, False), (-0.3, -0.1, False)):
+    for (x, y, front) in ((0.24, 0.085, True), (0.24, -0.085, True), (-0.3, 0.09, False), (-0.3, -0.09, False)):
         hip = bpy.data.objects.new(name + "Hip", None); bpy.context.collection.objects.link(hip); hip.parent = root; hip.location = (x, y, 0.5)
-        up = _meta_mesh(name + "Thigh", [((0, 0, -0.05), 0.075 if front else 0.1, (0.9, 0.6, 1.3)),
-                                         ((0.0 if front else -0.03, 0, -0.15), 0.05 if front else 0.06, (0.75, 0.6, 1.3))], fur)
+        up = _skin_mesh(name + "Thigh", [((0, 0, 0.04), 0.065 if front else 0.09), ((0.0 if front else -0.04, 0, -0.22), 0.04)], [(0, 1)], fur)
         up.parent = hip
         knee = bpy.data.objects.new(name + "Knee", None); bpy.context.collection.objects.link(knee); knee.parent = hip
-        knee.location = (0.0 if front else -0.06, 0, -0.22)
-        lo = _meta_mesh(name + "Shin", [((0, 0, -0.09), 0.032, (0.75, 0.75, 2.2)), ((0.0 if front else 0.03, 0, -0.2), 0.03, (0.8, 0.8, 1.6)),
-                                        ((0.03, 0, -0.265), 0.033, (1.5, 0.85, 0.55))], fur)
+        knee.location = (0.0 if front else -0.04, 0, -0.22)
+        lo = _skin_mesh(name + "Shin", [((0, 0, 0.0), 0.035), ((0.0 if front else 0.04, 0, -0.21), 0.026), ((0.05, 0, -0.265), 0.03)],
+                        [(0, 1), (1, 2)], fur)
         lo.parent = knee
         legs.append((hip, knee, front))
     return dict(root=root, body=body, head=head, tail=tail, legs=legs)
