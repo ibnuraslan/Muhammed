@@ -120,11 +120,30 @@ def motorboat(name, loc, rz, col):
     sub = hull.modifiers.new("sub", 'SUBSURF'); sub.levels = 1; sub.render_levels = 2
     white = pbr("CabWhite", (0.82, 0.82, 0.8), 0.35); dark = pbr("CabGlass", (0.02, 0.03, 0.035), 0.04, **{'Coat Weight': 1.0})
     teak = pbr("Teak", (0.3, 0.18, 0.09), 0.6)
-    parts = [box(name + "Cab", (-0.6, 0, 0.62), (2.0, 1.6, 1.0), white, bevel=0.08),
-             box(name + "CabRoof", (-0.6, 0, 1.33), (2.3, 1.8, 0.08), white, bevel=0.03),
-             box(name + "WinF", (0.41, 0, 0.95), (0.02, 1.4, 0.38), dark),
-             box(name + "WinS1", (-0.6, 0.805, 0.95), (1.6, 0.02, 0.32), dark),
-             box(name + "WinS2", (-0.6, -0.805, 0.95), (1.6, 0.02, 0.32), dark),
+    # wheelhouse: tapered sides, a raked windscreen, a sloped roof with overhang, framed windows, a dark trim band
+    cab = box(name + "Cab", (-0.6, 0, 0.62), (2.0, 1.6, 1.0), white)
+    for v in cab.data.vertices:                           # local box: x +-1, y +-0.8 (scaled by size), z +-0.5
+        if v.co.z > 0:
+            v.co.y *= 0.86                                # tumblehome: the cabin narrows toward the roof
+            if v.co.x > 0:
+                v.co.x -= 0.32                          # raked windscreen (mesh is in metres)
+    bv = cab.modifiers.new("bv", 'BEVEL'); bv.width = 0.04; bv.segments = 2
+    trim = pbr("CabTrim", (0.05, 0.08, 0.16), 0.4, **{'Coat Weight': 0.5})
+    frame = pbr("WinFrame", (0.12, 0.12, 0.13), 0.35, 0.6)
+    roof = box(name + "CabRoof", (-0.72, 0, 1.15), (2.25, 1.62, 0.07), white, bevel=0.02)
+    roof.rotation_euler = (0, math.radians(-4), 0)           # sloped: the roof drops toward the stern
+    parts = [cab, roof,
+             box(name + "RoofEdge", (-0.72, 0, 1.11), (2.27, 1.64, 0.04), trim),
+             box(name + "TrimBand", (-0.6, 0, 0.2), (2.04, 1.64, 0.1), trim),
+             box(name + "WinF", (0.155, 0, 0.92), (0.02, 1.2, 0.34), dark, rot=(0, math.radians(-17.7), 0)),
+             box(name + "WinFMull", (0.165, 0, 0.92), (0.03, 0.04, 0.36), frame, rot=(0, math.radians(-17.7), 0)),
+             box(name + "WinS1", (-0.62, 0.72, 0.92), (1.5, 0.02, 0.3), dark),
+             box(name + "WinS2", (-0.62, -0.72, 0.92), (1.5, 0.02, 0.3), dark)]
+    for sy in (1, -1):                                       # side window frames: sill, head, two mullions
+        y_ = sy * 0.735
+        parts += [box(name + "WFs", (-0.62, y_, 0.765), (1.56, 0.03, 0.03), frame), box(name + "WFh", (-0.62, y_, 1.075), (1.56, 0.03, 0.03), frame)]
+        parts += [box(name + "WFm", (-0.62 + dx, y_, 0.92), (0.03, 0.03, 0.3), frame) for dx in (-0.5, 0.0, 0.5)]
+    parts += [
              box(name + "Rail1", (0.6, 0.98, 0.45), (3.4, 0.03, 0.03), pbr("RailSteel", (0.75, 0.75, 0.77), 0.2, 1.0)),
              box(name + "Rail2", (0.6, -0.98, 0.45), (3.4, 0.03, 0.03), pbr("RailSteel", (0.75, 0.75, 0.77), 0.2, 1.0))]
     mast = cyl(name + "Mast", (-0.9, 0, 2.6), 0.045, 2.6, pbr("MastAlu", (0.75, 0.75, 0.75), 0.25, 1.0), verts=12)
