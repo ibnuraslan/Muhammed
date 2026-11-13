@@ -35,7 +35,13 @@ Frames are v002 / v003 frames (60 fps). Story-beat frames (beats.json) stay wher
 
 On IK-solved wrists, the library's wrist limit is muted. The orientation is solved explicitly there, and that clamp is what folded the hands into mittens in v002. FK wrists keep the limit.
 
-## Remaining qa_check flags: intended (qa_v003.json)
+## Third round (director review of v003, v003b)
+| # | Problem | Fix |
+|---|---|---|
+| 23 | 1170–1235: a straight-edged translucent slab cut diagonally across the x-ray. The card sits behind the hero, so the floor, wall and desk crossed it. | While the card is fully opaque (1091–1231), everything except the x-ray figure and spine is off for render (`03e_xray_clean.py`). |
+| 24 | 1245–1262: washed-out blank grey-blue frames as the x-ray faded, because the camera was already flying off the hero. | The card fades in 8 frames (1232–1240), while the body is still framed. The x-ray ends at 1240 and the normal hero is back at 1241. |
+| 25 | 1290–1330: the whole frame is out of focus. | Intended: this is the scripted blurred-vision POV (beat 8). |
+: intended (qa_v003.json)
 | Flag | Frames | Why it stays |
 |---|---|---|
 | PROPMOVE | across the office and theatre | All 118 flagged objects are the dust motes (`Dust000–159`): 2.5 mm specks drifting in the window light. They are ambient air particles, not hand props. |

@@ -402,10 +402,10 @@ tr = nt.nodes.new("ShaderNodeBsdfTransparent"); ad_ = nt.nodes.new("ShaderNodeAd
 nt.links.new(tr.outputs[0], ad_.inputs[0]); nt.links.new(em.outputs[0], ad_.inputs[1]); nt.links.new(ad_.outputs[0], o_.inputs[0])
 xr.data.materials.clear(); xr.data.materials.append(xm)
 for md in [m for m in xr.modifiers if m.type == "MASK" and m.name.startswith("Delete")]: xr.modifiers.remove(md)
-XRAY = [(372, 500), (1074, 1262)]
+XRAY = [(372, 500), (1074, 1240)]   # v003b: x-ray ends with the 8-frame card fade (was a blank fade to 1262)
 vis(xr, XRAY)
 for m_ in hero_meshes:
-    hide_ranges(m_, [(181, 470), (1080, 1255), (1658, 1712)])
+    hide_ranges(m_, [(181, 470), (1080, 1240), (1658, 1712)])
 BR = OB["Brain"]; BR.parent = HRIG; BR.parent_type = "BONE"; BR.parent_bone = "head"
 hb = HR.r.BN["head"]; BRAIN_LOCAL = V(0.0, -0.035, 0.085)        # in head-bone space (y along bone)
 BR.matrix_parent_inverse = Matrix.Identity(4)
@@ -450,7 +450,7 @@ TUM.location = TUM.location + V(0, 0.0, -0.06); TUM.keyframe_insert("location", 
 SP = OB["Spine"]; SP.parent = HRIG; SP.location = (0, 0.035, 0.6); SP.rotation_euler = (0, 0, 0); SP.scale = (0.95,) * 3
 spm = [o for o in SP.children_recursive if o.type == "MESH"]
 for o in spm:
-    vis(o, [(1074, 1262), (372, 500)])
+    vis(o, [(1074, 1240), (372, 500)])
     md = o.modifiers.new("bend", "SIMPLE_DEFORM"); md.deform_method = "BEND"; md.deform_axis = "Y"; md.origin = SP
     md.angle = 0.0; md.keyframe_insert("angle", frame=1090); md.angle = R_(55); md.keyframe_insert("angle", frame=1220)
 # hormone stream: glowing particles from the pituitary down vessels (in hero armature space)
@@ -560,12 +560,12 @@ cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nod
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
 CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 1.62), (470, 1.0, 1.62), (500, 0.0, 1.62),
-        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1240, 1.0, 1.85), (1262, 0.0, 1.85), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
+        (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1232, 1.0, 1.85), (1240, 0.0, 1.85), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)
     cc.location = (0, 0, -dist); cc.scale = (dist * 1.3, dist * 2.2, 1); cc.keyframe_insert("location", frame=f); cc.keyframe_insert("scale", frame=f)
-vis(cc, [(181, 500), (1074, 1262), (1658, 1712)])
+vis(cc, [(181, 500), (1074, 1240), (1658, 1712)])
 bpy.data.objects.remove(XB, do_unlink=True)
 for o in [o for o in OB if "stash" in o.name.lower()]: bpy.data.objects.remove(o, do_unlink=True)
 # light for the cutaway (studio key/rim parented to camera)
@@ -574,7 +574,7 @@ for nm, loc, e, colr in (("Cut_Key", (0.4, 0.5, 0.2), 6.0, (1.0, 0.92, 0.85)), (
     lo = bpy.data.objects.new(nm, l); sc.collection.objects.link(lo); lo.parent = cam; lo.location = loc
     tc = lo.constraints.new("TRACK_TO"); tc.target = aim; tc.track_axis = "TRACK_NEGATIVE_Z"; tc.up_axis = "UP_Y"
     l.energy = 0.0; l.keyframe_insert("energy", frame=1)
-    for f0, f1 in ((181, 500), (1074, 1262), (1658, 1712)):
+    for f0, f1 in ((181, 500), (1074, 1240), (1658, 1712)):
         l.energy = 0.0; l.keyframe_insert("energy", frame=f0 - 1); l.energy = e; l.keyframe_insert("energy", frame=f0)
         l.keyframe_insert("energy", frame=f1); l.energy = 0.0; l.keyframe_insert("energy", frame=f1 + 1)
 
