@@ -63,6 +63,9 @@ def anim(c, t, move):
     if move == "lift":                                   # she has stepped back; only the strip and the hanging powder
         B.hide_person(h)                                  # she has left the frame: nothing of her (or the brush) may poke in
         c["brush"].hide_render = True; c["brush"].location = (0, 0, -30)
+        for o in bpy.data.objects:                         # the box's low air pipe pokes into this close-up's corner and
+            if o.name.startswith("PipeLow"):               # reads as a floating handle (hub 3-2B); the wide 3-2A keeps it
+                o.hide_render = True
         bpy.context.view_layer.update()
         return
     fwd = B.fwd_of(h)
@@ -86,6 +89,6 @@ def cam(a, b, tgt, lens):
 MOVES = {
     "dust": dict(kind="anim", dof=2.8, cam=cam((3.5, -2.4, 1.65), (3.1, -2.0, 1.6), (0.6, 0.05, 1.0), 28),
                  anim=lambda c, t: anim(c, t, "dust"), focus=lambda c, t: TAPE),
-    "lift": dict(kind="anim", dof=2.0, cam=cam((1.9, -1.3, 1.35), (1.45, -0.9, 1.25), (TAPE.x, TAPE.y + 0.1, TAPE.z), 45),
+    "lift": dict(kind="anim", dof=2.0, cam=cam((1.9, -1.3, 1.55), (1.5, -0.95, 1.45), (TAPE.x, TAPE.y + 0.1, TAPE.z + 0.04), 60),
                  anim=lambda c, t: anim(c, t, "lift"), focus=lambda c, t: TAPE),
 }
