@@ -1,6 +1,6 @@
-# MonkeyHeadTransplant_v010: ON HOLD, DO NOT RENDER (forceps float off the left hand at about 6.5–7.5 s; fix in progress)
+# MonkeyHeadTransplant_v011: fixed and synced to your voiceover (READY TO RENDER)
 
-This is Connect02's version **MonkeyHeadTransplant_v008d** (branch `claude/connect02-monkey-head-transplant`, commit 24ce61b), retimed so each story beat lands on its words in your recording `MonkeyHeadTransplant_v010_VO.mp3`. It replaces v009, which you rejected.
+This is Connect02's version **MonkeyHeadTransplant_v008e** (branch `claude/connect02-monkey-head-transplant`, commit 4a4179b), retimed so each story beat lands on its words in your recording `MonkeyHeadTransplant_v011_VO.mp3`. It replaces v009 and v010. v011 also puts the forceps and needle holder IN the fingers during the stitching (measured: at most 0.6 cm from the fingertips on every frame).
 
 What was wrong in v009, and is now fixed:
 - **Marker pen:** it floated upright and drew by itself. It is now IN the surgeon's right-hand pinch on every frame, and its tip touches the skin where each dash appears. He then sets it down on the drape.
