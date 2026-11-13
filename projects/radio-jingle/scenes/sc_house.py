@@ -403,7 +403,7 @@ def apply_look(c):
             bpy.data.objects.remove(o)
         look.interior_day(window=ROOM_WINDOWS[room], mood=mood, key_energy={"piano": None, "hall": 520.0, "kitchen": 380.0}[room])
         if room == "kitchen":
-            bpy.context.scene.view_settings.exposure -= 0.3
+            bpy.context.scene.view_settings.exposure += 0.15         # the window no longer blows out: lift the room
             view_plate((0.0, 11.5, 1.9), (9.0, 3.8), 'y', -1, strength=1.0)       # north window: the lake beyond the garden
             for o in bpy.data.objects:                                          # the north net glowed white over the view: drawn back
                 if o.name.startswith("WNet") and o.type == 'MESH':

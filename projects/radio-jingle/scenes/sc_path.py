@@ -391,7 +391,7 @@ def cam_ride_reeds(c, t):
 
 # window-view plate for the house (kitchen windows): the misty lake beyond the garden, no people
 def cam_view(c, t):
-    return (Vector((-6.0, 1.0, 2.4)), Vector((-4.0, 40.0, 1.6)), 28)
+    return (Vector((-6.0, 7.0, 5.5)), Vector((-4.0, 70.0, 2.0)), 30)              # over the reed tops: water, mist, far shore
 
 
 def _f_bike(c, t):
@@ -784,7 +784,7 @@ def cam_bend_long(c, t):
 
 # window-view plate for the house (kitchen windows): the misty lake beyond the garden, no people
 def cam_view(c, t):
-    return (Vector((-6.0, 1.0, 2.4)), Vector((-4.0, 40.0, 1.6)), 28)
+    return (Vector((-6.0, 7.0, 5.5)), Vector((-4.0, 70.0, 2.0)), 30)              # over the reed tops: water, mist, far shore
 
 
 def _f_bike(c, t):
