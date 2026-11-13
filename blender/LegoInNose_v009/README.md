@@ -1,4 +1,4 @@
-# LegoInNose_v009: acting fixed and synced to your voiceover (READY TO RENDER)
+# LegoInNose_v009: ON HOLD, DO NOT RENDER (brick floats off the fingers at about 1.8–2 s; fix in progress)
 
 This is Connect03's acting-fix version **LegoInNose_v008c** (branch `claude/connect03-lego-in-nose`, commit 6e93a4a), retimed so each story beat lands on its words in your recording `LegoInNose_v009_VO.mp3`.
 
