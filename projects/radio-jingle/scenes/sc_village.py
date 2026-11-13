@@ -234,7 +234,7 @@ def light(c):
         rj.sky("grey")
         az, el = {"afternoon": (70, 16), "garden": (115, 30)}.get(L, (140, 20))   # garden: from the side, over the house (gate shot)
         look.day_light("low_sun", azim=az, elev=el, sky="blue",
-                       haze_box=((0, 0, 8), (160, 120, 16)), exposure=1.3)
+                       haze_box=((0, 0, 8), (160, 120, 16)), exposure=1.6 if L == "garden" else 1.3)
         rj.sink_haze()
         return
     from common import sun
