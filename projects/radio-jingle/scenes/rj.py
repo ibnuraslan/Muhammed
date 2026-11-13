@@ -311,7 +311,7 @@ ROLES = {
     # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
     # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 58, "female_elegantsuit01", "ponytail01", 0.40, 0.08, 0.18, 0.55, 0.45, 0.58),
+    "mother":     (0.0, 58, "female_elegantsuit01", "bob02", 0.22, 0.08, 0.18, 0.55, 0.45, 0.58),
     "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
     "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
     "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
@@ -366,8 +366,15 @@ def person(role, name=None, cap=True):
             if o.type == 'MESH' and cloth in o.name:
                 _two_tone_local(o, split, top, bot)
     hair_matte(h)
+    if role == "mother":                                 # brown hair with a little grey: the sheen washed it out to white
+        for o in h.parts:
+            if o.type == 'MESH' and "bob0" in o.name:
+                for m in o.data.materials:
+                    p = m.node_tree.nodes.get("Principled BSDF")
+                    if p:
+                        p.inputs['Sheen Weight'].default_value = 0.08
     if role in ("mother", "father", "uncle", "neighbour", "expert", "aunt"):
-        hair_grey(h, 0.55 if role == "mother" else 0.5)
+        hair_grey(h, 0.28 if role == "mother" else 0.5)
     if role in ("officer", "officer2", "officer3") and cap:
         h.cap = police_cap(h)
     if role == "firefighter":
