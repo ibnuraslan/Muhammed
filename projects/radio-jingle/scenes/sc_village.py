@@ -207,7 +207,7 @@ def light(c):
     L = c["light"]
     if look.enabled():
         rj.sky("grey")
-        look.day_light("low_sun", azim=300 if L == "afternoon" else 140, elev=16 if L == "afternoon" else 20, sky="blue",
+        look.day_light("low_sun", azim=70 if L == "afternoon" else 140, elev=16 if L == "afternoon" else 20, sky="blue",
                        haze_box=((0, 0, 8), (160, 120, 16)), exposure=1.3)
         return
     from common import sun

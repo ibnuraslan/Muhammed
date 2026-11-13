@@ -383,10 +383,10 @@ def apply_look(c):
             if "+suitcase" in v or "+letter" in v:            # the pendant is on over the table (grey morning)
                 kl = bpy.data.lights.new("KitPendant", 'SPOT'); kl.energy = 420; kl.spot_size = math.radians(110); kl.spot_blend = 0.7
                 kl.color = (1.0, 0.72, 0.45); ko = bpy.data.objects.new("KitPendant", kl); bpy.context.collection.objects.link(ko)
-                ko.location = (KTABLE.x, KTABLE.y, 1.78)
+                ko.location = (KTABLE.x, KTABLE.y, 1.62)             # below the shade's closed base
                 c["kshade_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.6
         if room == "piano":
-            bpy.context.scene.view_settings.exposure += 1.3       # day must read (mean luminance >= 0.18)
+            bpy.context.scene.view_settings.exposure += 1.6       # day must read (mean luminance >= 0.18)
 
 
 def cast(c):
@@ -989,10 +989,11 @@ def anim_suit(c, t, shot, dur):
                 bb.location = slot(j)
             elif j > n:
                 bb.location = (KTABLE.x + 0.55, KTABLE.y - 0.15, top + (5 - j) * 0.037)
-        b.location = src.lerp(dst, ease(k)) + Vector((0, 0, 0.12 * math.sin(math.pi * k)))
-        rj.rjp.bend_to(o, b.location, frac=0.8, max_deg=20)
+        path_pt = src.lerp(dst, ease(k)) + Vector((0, 0, 0.12 * math.sin(math.pi * k)))
+        rj.rjp.bend_to(o, path_pt, frac=0.8, max_deg=20)
         fwd = forward(o); right = fwd.cross(Vector((0, 0, 1))).normalized()
-        reach(o, "R", b.location + Vector((0, 0, 0.04)), Vector((0, 0, -1)) + right * 0.6, fwd + Vector((0, 0, -1)))
+        reach(o, "R", path_pt + Vector((0, 0, 0.05)), Vector((0, 0, -1)) + right * 0.6, fwd + Vector((0, 0, -1)))
+        b.location = o.bone_tail("wrist.R") + Vector((0, 0, -0.05))         # the bundle rides in his hand
         side = right; o.rot("head", side, -22)
         if "father" in c["P"]:
             f = c["P"]["father"]; stand_at(f, (KTABLE.x - 0.45, KTABLE.y - 0.85), math.pi + 0.2)

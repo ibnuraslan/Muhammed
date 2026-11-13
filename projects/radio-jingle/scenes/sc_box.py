@@ -226,6 +226,9 @@ def anim_box(c, t, shot, dur):
         aim = (mouth - w_).normalized()
         tube.matrix_world = Matrix.Translation(w_) @ aim.to_track_quat('Z', 'Y').to_matrix().to_4x4()
         c["smoke"].location = mouth + Vector((0.0, -0.04 - 0.01 * sec, 0.004 * sec))
+    if shot == "smoke" and "tech" not in c["P"]:
+        mouth = Vector((W / 2 - T - 0.04, -D / 2 - 0.02, Z0 + 0.62))
+        c["smoke"].location = mouth + Vector((0.0, -0.05 - 0.008 * sec, 0.004 * sec))      # the test smoke barely drifts
     if shot in ("experts", "door"):
         ex = [c["P"][r] for r in ("expert", "expert2") if r in c["P"]]
         if ex:
@@ -254,7 +257,7 @@ def cam_crane(c, t):
 def cam_cable(c, t):
     e = ease(t)
     p0 = c["cable_pts"]
-    a = Vector((W / 2 + 0.9, -1.4, 1.65)); b = Vector((W / 2 + 1.5, -1.1, 0.75))
+    a = Vector((W / 2 + 2.4, -1.6, 1.5)); b = Vector((W / 2 + 2.3, -1.0, 0.8))
     tgt = Vector((W / 2 + 0.05, 0.15, Z0 + H - 0.15)).lerp(Vector(c["battery"]) + Vector((0, 0, 0.12)), e)
     return (a.lerp(b, e), tgt, 32)
 
@@ -280,8 +283,8 @@ def cam_pipe(c, t):
 
 def cam_smoke(c, t):
     e = ease(t)
-    a = Vector((W / 2 + 0.9, -1.75, 1.55)); b = Vector((W / 2 + 0.8, -1.55, 1.5))     # over his right shoulder
-    return (a.lerp(b, e), Vector((W / 2 - 0.08, -D / 2 + 0.05, Z0 + 0.62)), 35)
+    a = Vector((0.0, -1.05, 0.95)); b = Vector((0.08, -0.95, 0.9))                     # close on the pipe mouth
+    return (a.lerp(b, e), Vector((W / 2 - T - 0.04, -D / 2 - 0.02, Z0 + 0.64)), 45)
 
 
 def cam_experts(c, t):
@@ -314,7 +317,7 @@ MOVES = {
     "experts": _mk("experts", 4.5, cam_experts),
     "door": _mk("door", 5.0, cam_door),
 }
-VARIANT_FOR = {"radio": "hall|tech", "smoke": "hall+smoke|tech", "experts": "hall|expert,expert2", "door": "hall|expert,expert2"}
+VARIANT_FOR = {"radio": "hall|tech", "smoke": "hall+smoke", "experts": "hall|expert,expert2", "door": "hall|expert,expert2"}
 
 _build = build
 
