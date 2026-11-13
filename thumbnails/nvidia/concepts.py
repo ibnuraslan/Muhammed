@@ -139,3 +139,6 @@ def bg_setup(c):
 
 CONCEPTS["mood_bg"] = dict(CONCEPTS["targeted_mood"], setup=bg_setup, mask=None, fstop=3.0,
                            cam=lambda c: (Vector((0.0, -0.4, 1.35)), Vector((0.0, 5.4, 1.75)), 30))
+
+CONCEPTS["targeted_final"] = dict(CONCEPTS["targeted_mood"],
+                                  cam=lambda c: (c["head"] + Vector((0.12, -2.35, 0.08)), c["head"] + Vector((0, 0.8, 0.2)), 36))

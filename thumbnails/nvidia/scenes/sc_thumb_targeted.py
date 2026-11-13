@@ -206,13 +206,13 @@ def build(variant=None):
     import ph
     ph.model("mid_century_lounge_chair", loc=(0, h.arm.location.y + 0.32, 0), rot_z=0.0)
     # four women behind him, between him and the glass, each dressed differently
-    W = [((-1.15, 4.35, 0), 0.22, "long01", "female_elegantsuit01", "middleage_lightskinned_female_diffuse.png", 38, (0.09, 0.012, 0.018)),
-         ((-0.42, 4.75, 0), 0.07, "bob02", "male_elegantsuit01", "young_lightskinned_female_diffuse.png", 31, (0.05, 0.05, 0.055)),
-         ((0.45, 4.8, 0), -0.07, "ponytail01", "female_elegantsuit01", "middleage_lightskinned_female_diffuse2.png", 44, (0.012, 0.03, 0.06)),
-         ((1.2, 4.4, 0), -0.22, "braid01", "male_elegantsuit01", "young_lightskinned_female_diffuse3.png", 34, (0.16, 0.11, 0.07))]
+    W = [((-0.88, 4.3, 0), 0.22, "long01", "female_elegantsuit01", "middleage_lightskinned_female_diffuse.png", 38, (0.09, 0.012, 0.018)),
+         ((-0.36, 4.75, 0), 0.07, "bob02", "male_elegantsuit01", "young_lightskinned_female_diffuse.png", 31, (0.05, 0.05, 0.055)),
+         ((0.38, 4.8, 0), -0.07, "ponytail01", "female_elegantsuit01", "middleage_lightskinned_female_diffuse2.png", 44, (0.012, 0.03, 0.06)),
+         ((0.92, 4.35, 0), -0.22, "braid01", "male_elegantsuit01", "young_lightskinned_female_diffuse3.png", 34, (0.16, 0.11, 0.07))]
     women = []
     ST = [("behind", 18, 4), ("relaxed", 0, -5), ("behind", -25, 0), ("relaxed", -10, 6)]
-    W[1] = ((-0.42, 5.0, 0),) + W[1][1:]          # a step back
+    W[1] = ((-0.36, 5.0, 0),) + W[1][1:]          # a step back
     W[2] = (W[2][0], -0.55) + W[2][2:]           # half-turned toward him
     for k, (loc, rot, hair, suit, skin, yrs, col) in enumerate(W):
         st, turn, tilt = ST[k]
