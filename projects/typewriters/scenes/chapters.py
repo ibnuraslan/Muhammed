@@ -9,6 +9,9 @@ shot gives the title ~2 s before the narration.
 # DELIVERY: title_card.py (2-line titles, scrim, one PNG per title); textures unpacked into one shared deduped
 # folder (<= 2K), identical meshes shared, peak RAM measured on opening the master, zipped into <= 380 MB parts with
 # one shared top folder plus a MERGE .bat. FilmCam, packed fonts, 32 samples (make_master).
+# CHAPTER-WISE (supersedes one film file): one farm-ready .blend per part: intro (Seldom sting at its end after a
+# fade), then one per chapter; each frame range starts at 1, own fades in/out, own audio pair (with / without voice)
+# matching exactly; output JPEG quality 92.
 LEAD = 2.5
 
 CHAPTERS = {
