@@ -311,7 +311,7 @@ ROLES = {
     # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
     # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 47, "female_elegantsuit01", "ponytail01", 0.40, 0.08, 0.18, 0.55, 0.45, 0.58),
+    "mother":     (0.0, 52, "female_elegantsuit01", "ponytail01", 0.40, 0.08, 0.18, 0.55, 0.45, 0.58),
     "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
     "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
     "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
@@ -367,7 +367,7 @@ def person(role, name=None, cap=True):
                 _two_tone_local(o, split, top, bot)
     hair_matte(h)
     if role in ("mother", "father", "uncle", "neighbour", "expert", "aunt"):
-        hair_grey(h, 0.35 if role == "mother" else 0.5)
+        hair_grey(h, 0.45 if role == "mother" else 0.5)
     if role in ("officer", "officer2", "officer3") and cap:
         h.cap = police_cap(h)
     if role == "firefighter":
@@ -581,12 +581,13 @@ def rotary_phone(name="Phone"):
     # handset: lies across the cradles along X
     hs = bpy.data.objects.new(name + "Handset", None); bpy.context.collection.objects.link(hs); hs.parent = r
     hs.location = (0, 0.045, 0.14)
-    hp = [box("Grip", (0, 0, 0.004), (0.15, 0.042, 0.03), pm, bevel=0.012)]
+    # a real handset: about 21 cm end to end, slim grip, 5-6 cm ear and mouth cups
+    hp = [box("Grip", (0, 0, 0.003), (0.12, 0.03, 0.022), pm, bevel=0.009)]
     for sx in (-1, 1):
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(sx * 0.095, 0, -0.012))
-        cup = bpy.context.active_object; cup.scale = (0.045, 0.04, 0.03); cup.data.materials.append(pm)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(sx * 0.073, 0, -0.009))
+        cup = bpy.context.active_object; cup.scale = (0.032, 0.029, 0.021); cup.data.materials.append(pm)
         bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); hp.append(cup)
-        hp.append(cyl("CupFace", (sx * 0.095, 0, -0.038), 0.032, 0.006, pbr("CupGrille", (0.12, 0.13, 0.11), 0.5), 24))
+        hp.append(cyl("CupFace", (sx * 0.073, 0, -0.028), 0.023, 0.005, pbr("CupGrille", (0.12, 0.13, 0.11), 0.5), 24))
     hj = apply_rot(join(hp, name + "HandsetM")); hj.parent = hs; hj.location = (0, 0, 0)
     bpy.ops.object.shade_smooth()
     # coiled cord from the body's side to the handset's mouth end: 9 hooked points, moved by phone_cord()
@@ -627,7 +628,7 @@ def phone_cord(phone_root, handset):
     co = bpy.data.objects[phone_root["cord"]]; hooks = [bpy.data.objects[n] for n in co["hooks"]]
     bpy.context.view_layer.update()
     a = phone_root.matrix_world @ Vector((-0.11, 0.0, 0.03))
-    b = handset.matrix_world @ Vector((-0.11, 0, -0.012))
+    b = handset.matrix_world @ Vector((-0.085, 0, -0.01))
     n = len(hooks); L_ = (b - a).length
     for k, e in enumerate(hooks):
         t = k / (n - 1)
@@ -830,9 +831,15 @@ def portable_radio(name="PortRadio"):
              box("PRTrim", (0, -0.036, 0.145), (0.22, 0.002, 0.008), chrome)]
     for z in (0.11, 0.05):
         parts.append(cyl("PRKnob", (0.085, -0.04, z), 0.014, 0.012, chrome, 20, rot=(math.radians(90), 0, 0)))
-    for k in range(9):                                         # strap
-        a = math.radians(k * 22.5)
-        parts.append(box("Strap", (0.09 * math.cos(a), 0, 0.15 + 0.05 * math.sin(a)), (0.012, 0.02, 0.006), case, rot=(0, -a + math.pi / 2, 0)))
+    import bmesh                                               # carry strap: one continuous leather arc
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.07, major_segments=48, minor_segments=8, location=(0, 0, 0))
+    st = bpy.context.active_object; st.name = "Strap"
+    bm = bmesh.new(); bm.from_mesh(st.data)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y < -0.02], context='VERTS'); bm.to_mesh(st.data); bm.free()
+    st.rotation_euler = (math.radians(90), 0, 0); st.scale = (0.09, 0.05, 0.25); st.location = (0, 0, 0.148)
+    st.data.materials.append(case); bpy.ops.object.select_all(action='DESELECT'); st.select_set(True)
+    bpy.context.view_layer.objects.active = st; bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+    parts.append(st)
     body = join(parts, name + "Body")
     d = box("PRDialM", (0.085, -0.036, 0.135), (0.05, 0.002, 0.012), dial)
     r = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(r)
@@ -1198,28 +1205,37 @@ def dog(name="Dog"):
     Returns dict(root, body, head, tail, legs=[(hip, knee)] x4 (FL, FR, HL, HR))."""
     fur = dog_fur(); dark = pbr("DogNose", (0.01, 0.01, 0.01), 0.3, 0.0, **{'Coat Weight': 0.7})
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
-    body = _meta_mesh(name + "Body", [((0.22, 0, 0.6), 0.2, (1.25, 0.7, 0.95)), ((-0.05, 0, 0.6), 0.2, (1.3, 0.72, 0.9)),
-                                      ((-0.3, 0, 0.58), 0.19, (1.0, 0.75, 0.9)), ((0.36, 0, 0.74), 0.12, (1.1, 0.75, 1.2)),
-                                      ((0.12, 0, 0.5), 0.15, (1.6, 0.6, 0.6))], fur)
+    # body: deep chest, high withers, tucked waist, sloping back to a lower croup, muscular hindquarters
+    body = _meta_mesh(name + "Body", [((0.22, 0, 0.55), 0.19, (1.1, 0.75, 1.15)), ((0.25, 0, 0.68), 0.13, (1.1, 0.7, 1.0)),
+                                      ((-0.04, 0, 0.6), 0.14, (1.45, 0.64, 0.78)), ((-0.27, 0, 0.56), 0.16, (1.0, 0.74, 1.0)),
+                                      ((-0.3, 0, 0.47), 0.12, (0.95, 0.85, 1.2)), ((0.38, 0, 0.76), 0.1, (1.0, 0.72, 1.3)),
+                                      ((0.45, 0, 0.84), 0.08, (1.0, 0.75, 1.0))], fur)
     body.parent = root
-    head = bpy.data.objects.new(name + "HeadPivot", None); bpy.context.collection.objects.link(head); head.parent = root; head.location = (0.44, 0, 0.82)
-    hm = _meta_mesh(name + "Head", [((0.06, 0, 0.04), 0.1, (1.0, 0.85, 0.85)), ((0.17, 0, 0.0), 0.06, (1.4, 0.65, 0.6)),
-                                    ((0.23, 0, -0.01), 0.04, (1.2, 0.6, 0.5))], fur)
+    head = bpy.data.objects.new(name + "HeadPivot", None); bpy.context.collection.objects.link(head); head.parent = root; head.location = (0.48, 0, 0.88)
+    hm = _meta_mesh(name + "Head", [((0.04, 0, 0.03), 0.085, (1.15, 0.85, 0.85)), ((0.15, 0, -0.01), 0.05, (1.6, 0.72, 0.68)),
+                                    ((0.22, 0, -0.018), 0.034, (1.2, 0.7, 0.62))], fur)
     hm.parent = head
+    for sy in (-1, 1):                                    # big upright ears
+        bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.045, radius2=0.004, depth=0.13, location=(0.0, sy * 0.045, 0.13), rotation=(sy * -0.22, -0.12, 0))
+        ear = bpy.context.active_object; ear.scale = (0.55, 1.0, 1.0); ear.data.materials.append(fur); ear.parent = head
+    nose = cyl("Nose", (0.255, 0, -0.012), 0.017, 0.02, dark, 12, rot=(0, math.radians(90), 0)); nose.parent = head
     for sy in (-1, 1):
-        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.04, radius2=0.004, depth=0.11, location=(0.02, sy * 0.045, 0.14), rotation=(sy * -0.25, -0.15, 0))
-        ear = bpy.context.active_object; ear.data.materials.append(fur); ear.parent = head
-    nose = cyl("Nose", (0.27, 0, -0.005), 0.016, 0.02, dark, 12, rot=(0, math.radians(90), 0)); nose.parent = head
-    tail = bpy.data.objects.new(name + "TailPivot", None); bpy.context.collection.objects.link(tail); tail.parent = root; tail.location = (-0.47, 0, 0.62)
-    tm = _meta_mesh(name + "Tail", [((-0.08, 0, -0.05), 0.06, (1.0, 0.6, 0.6)), ((-0.18, 0, -0.17), 0.055, (0.8, 0.55, 0.9)), ((-0.24, 0, -0.3), 0.05, (0.7, 0.5, 0.9))], fur)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.011, location=(0.105, sy * 0.05, 0.045))
+        ey = bpy.context.active_object; ey.data.materials.append(dark); ey.parent = head
+    tail = bpy.data.objects.new(name + "TailPivot", None); bpy.context.collection.objects.link(tail); tail.parent = root; tail.location = (-0.44, 0, 0.6)
+    tm = _meta_mesh(name + "Tail", [((-0.06, 0, -0.05), 0.055, (1.0, 0.7, 0.7)), ((-0.12, 0, -0.17), 0.06, (0.85, 0.7, 1.0)),
+                                    ((-0.14, 0, -0.3), 0.055, (0.8, 0.65, 1.0)), ((-0.12, 0, -0.4), 0.04, (0.8, 0.6, 0.9))], fur)
     tm.parent = tail
     legs = []
-    for (x, y, front) in ((0.3, 0.1, True), (0.3, -0.1, True), (-0.32, 0.1, False), (-0.32, -0.1, False)):
-        hip = bpy.data.objects.new(name + "Hip", None); bpy.context.collection.objects.link(hip); hip.parent = root; hip.location = (x, y, 0.55)
-        up = _meta_mesh(name + "Thigh", [((0, 0, -0.06), 0.09 if not front else 0.07, (0.9, 0.6, 1.4)), ((0.0 if front else -0.03, 0, -0.17), 0.05, (0.7, 0.55, 1.4))], fur)
+    for (x, y, front) in ((0.25, 0.09, True), (0.25, -0.09, True), (-0.3, 0.1, False), (-0.3, -0.1, False)):
+        hip = bpy.data.objects.new(name + "Hip", None); bpy.context.collection.objects.link(hip); hip.parent = root; hip.location = (x, y, 0.5)
+        up = _meta_mesh(name + "Thigh", [((0, 0, -0.05), 0.075 if front else 0.1, (0.9, 0.6, 1.3)),
+                                         ((0.0 if front else -0.03, 0, -0.15), 0.05 if front else 0.06, (0.75, 0.6, 1.3))], fur)
         up.parent = hip
-        knee = bpy.data.objects.new(name + "Knee", None); bpy.context.collection.objects.link(knee); knee.parent = hip; knee.location = (0.0 if front else -0.05, 0, -0.26)
-        lo = _meta_mesh(name + "Shin", [((0, 0, -0.1), 0.035, (0.7, 0.7, 2.2)), ((0.03, 0, -0.27), 0.035, (1.4, 0.8, 0.6))], fur)
+        knee = bpy.data.objects.new(name + "Knee", None); bpy.context.collection.objects.link(knee); knee.parent = hip
+        knee.location = (0.0 if front else -0.06, 0, -0.22)
+        lo = _meta_mesh(name + "Shin", [((0, 0, -0.09), 0.032, (0.75, 0.75, 2.2)), ((0.0 if front else 0.03, 0, -0.2), 0.03, (0.8, 0.8, 1.6)),
+                                        ((0.03, 0, -0.265), 0.033, (1.5, 0.85, 0.55))], fur)
         lo.parent = knee
         legs.append((hip, knee, front))
     return dict(root=root, body=body, head=head, tail=tail, legs=legs)

@@ -232,9 +232,9 @@ def probe(c, h, rod, sec, ph=0.0, stuck=False):
     tip.z = ground_z(c, tip.x, tip.y) - depth
     rod.location = tip; rod.rotation_euler = ((-fwd).to_track_quat('Z', 'Y').to_euler()) if False else (0, 0, math.atan2(fwd.y, fwd.x))
     rod.rotation_euler.y = 0.0
-    lean = Matrix.Rotation(math.radians(-12), 4, right)
+    lean = Matrix.Rotation(math.radians(-5), 4, right)         # near-vertical, pushed into the soil
     rod.matrix_world = Matrix.Translation(tip) @ lean @ Matrix.Rotation(math.atan2(fwd.y, fwd.x), 4, 'Z')
-    top = tip + (lean.to_3x3() @ Vector((0, 0, 1.3)))
+    top = tip + (lean.to_3x3() @ Vector((0, 0, 1.25)))
     for sd in ("L", "R"):
         grip = top + right * (0.11 if sd == "R" else -0.11)
         reach(h, sd, grip, Vector((0, 0, -1)) + right * (0.7 if sd == "R" else -0.7) - fwd * 0.3, right * (1 if sd == "R" else -1) + Vector((0, 0, -0.3)))
@@ -300,8 +300,7 @@ def anim_rods(c, t, shot, dur):
     roles = [r for r in LINE if r in c["P"]]
     for k, r in enumerate(roles):
         h = c["P"][r]; x0 = -6 + k * 1.6
-        walk_on(c, h, (x0, -6.0), (x0 + 0.1, -6.0 + 0.25 * sec), 0.0, speed=0.0)
-        stand_on(c, h, (x0, -6.0 + 0.18 * sec), 0.0)
+        stand_on(c, h, (x0, -6.0 + 0.18 * sec), 0.0)          # feet planted (no walk pose under a standing position)
         h.arm.rotation_euler.z = math.pi                         # facing +Y (toward the clearing)
         probe(c, h, c["rods"][r], sec, ph=k * 0.29)
     if "dog" in c and "officer5" in c["P"]:
@@ -585,7 +584,7 @@ VARIANT_FOR = {"line": "grey|" + G5, "tape": "grey|officer,officer2,officer3,off
                "converge": "grey|officer,officer2,officer3,officer4,officer5+rods", "dig": "grey|officer,officer2,officer3+cover+tools",
                "sweep": "grey|officer,officer2+cover+tools", "lid": "grey+lid", "bolt": "grey|officer,officer2,officer3+lid+crowbar",
                "lift": "grey|officer,officer2,officer3+open", "cap": "grey|officer,officer2,officer3+open",
-               "spr_orbit": "dusk+spruces", "spr_low": "dusk+spruces", "torch_far": "night+spruces+torch", "dark": "night+spruces+torch",
+               "spr_orbit": "dusk+spruces+lift", "spr_low": "dusk+spruces", "torch_far": "night+spruces+torch", "dark": "night+spruces+torch",
                "pull": "grey+spruces"}
 
 _build = build
@@ -611,6 +610,8 @@ def build(variant=None):                      # noqa: F811
     else:
         look.forest(mood="dusk", azim=200, area=((0, 0), (70, 70)), canopy=16.0, exposure=1.2)
     rj.sink_haze()
+    if "+lift" in (variant or ""):                     # dusk that reads: the five spruces and the capped tube clear
+        bpy.context.scene.view_settings.exposure += 1.0
     return c
 
 
@@ -621,4 +622,44 @@ def autumn(c):
         for sl in t.material_slots:
             m = sl.material
             if m and m.get("birch") and not m.get("autumn"):
-                rj.retint(m, (1.6, 1.15, 0.35), sat=1.1); m["autumn"] = 1
+                _yellow(m, (0.62, 0.46, 0.07), (0.45, 0.5, 0.12), 0.75); m["autumn"] = 1
+    fl = bpy.data.materials.get("LeafFloor")                # a scatter of fresh yellow birch leaves on the brown litter
+    if fl and not fl.get("autumn"):
+        N = fl.node_tree.nodes; L = fl.node_tree.links; p = N["Principled BSDF"]
+        src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+        tc = N.new("ShaderNodeTexCoord"); vo = N.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 26
+        L.new(tc.outputs['Object'], vo.inputs['Vector'])
+        sel = N.new("ShaderNodeMath"); sel.operation = 'GREATER_THAN'; sel.inputs[1].default_value = 0.86
+        sep = N.new("ShaderNodeSeparateColor"); L.new(vo.outputs['Color'], sep.inputs[0]); L.new(sep.outputs[0], sel.inputs[0])
+        shape = N.new("ShaderNodeMath"); shape.operation = 'LESS_THAN'; shape.inputs[1].default_value = 0.32
+        L.new(vo.outputs['Distance'], shape.inputs[0])
+        both = N.new("ShaderNodeMath"); both.operation = 'MULTIPLY'; L.new(sel.outputs[0], both.inputs[0]); L.new(shape.outputs[0], both.inputs[1])
+        mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(both.outputs[0], mx.inputs['Factor'])
+        if src is not None:
+            L.new(src, mx.inputs[6])
+        mx.inputs[7].default_value = (0.58, 0.42, 0.06, 1)
+        L.new(mx.outputs[2], p.inputs['Base Color']); fl["autumn"] = 1
+
+
+def _yellow(m, yel, green, amount):
+    """Turn a leaf material toward autumn: most leaves yellow-ochre, some still yellow-green, varying in patches."""
+    N = m.node_tree.nodes; L = m.node_tree.links
+    p = next((n for n in N if n.type == 'BSDF_PRINCIPLED'), None)
+    if p is None:
+        return
+    src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3.0
+    L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    ramp = N.new("ShaderNodeValToRGB"); L.new(nz.outputs['Fac'], ramp.inputs['Fac'])
+    ramp.color_ramp.elements[0].position = 0.35; ramp.color_ramp.elements[0].color = (*green, 1)
+    ramp.color_ramp.elements[1].position = 0.6; ramp.color_ramp.elements[1].color = (*yel, 1)
+    lum = N.new("ShaderNodeRGBToBW")
+    if src is not None:
+        L.new(src, lum.inputs[0])
+    tone = N.new("ShaderNodeMath"); tone.operation = 'MULTIPLY'; tone.inputs[1].default_value = 3.2; L.new(lum.outputs[0], tone.inputs[0])
+    mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
+    L.new(ramp.outputs[0], mul.inputs[6]); L.new(tone.outputs[0], mul.inputs[7])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.inputs['Factor'].default_value = amount
+    if src is not None:
+        L.new(src, mx.inputs[6])
+    L.new(mul.outputs[2], mx.inputs[7]); L.new(mx.outputs[2], p.inputs['Base Color'])

@@ -446,7 +446,7 @@ def phone_to_ear(c, h, sec, side="L", talk=0.0):
     E = head + up * 0.045 + left * 0.075 - fwd * 0.005           # ear
     Mo = head - up * 0.035 + fwd * 0.085 + left * 0.035         # mouth corner
     X = (E - Mo).normalized(); Z = (left - X * left.dot(X)).normalized(); Y = Z.cross(X)
-    C = (E + Mo) * 0.5 + Z * 0.04
+    C = (E + Mo) * 0.5 + Z * 0.03
     M = Matrix((X, Y, Z)).transposed().to_4x4(); M.translation = C
     hs.matrix_world = M
     wrist_t = C + Z * 0.03 - X * 0.03 - up * (0.07 if side == "L" else 0.1)
