@@ -36,8 +36,10 @@ def perforated_pipe(name, a, b, r=0.028):
     vor = N.new("ShaderNodeTexVoronoi"); vor.inputs['Scale'].default_value = 60; vor.feature = 'F1'
     mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (1.0, 1.0, 4.0); L.new(tc.outputs['Object'], mp.inputs['Vector'])
     L.new(mp.outputs[0], vor.inputs['Vector'])
-    hole = N.new("ShaderNodeMath"); hole.operation = 'GREATER_THAN'; hole.inputs[1].default_value = 0.14; L.new(vor.outputs['Distance'], hole.inputs[0])
-    L.new(hole.outputs[0], p.inputs['Alpha'])
+    hole = N.new("ShaderNodeMath"); hole.operation = 'GREATER_THAN'; hole.inputs[1].default_value = 0.16; L.new(vor.outputs['Distance'], hole.inputs[0])
+    dk = N.new("ShaderNodeMix"); dk.data_type = 'RGBA'; L.new(hole.outputs[0], dk.inputs['Factor'])
+    dk.inputs[6].default_value = (0.01, 0.01, 0.01, 1); dk.inputs[7].default_value = (0.42, 0.42, 0.4, 1)     # drilled holes read as dark dots
+    L.new(dk.outputs[2], p.inputs['Base Color'])
     a = Vector(a); b = Vector(b); d = b - a
     o = cyl(name, (a + b) / 2, r, d.length, m, 24)
     o.rotation_euler = d.to_track_quat('Z', 'Y').to_euler()
@@ -55,7 +57,7 @@ def build_box(c):
              box("SideR", (x1 - T / 2, 0, Z0 + H / 2), (T, D, H), ply),
              box("Top", (0, 0, Z0 + H - T / 2), (W, D, T), ply)]
     # the front panel stands beside the box, leaning on the pallet (the cutaway)
-    fp = box("FrontPanel", (x1 + 0.45, y0 - 0.25, Z0 + H / 2 - 0.05), (W, T, H), ply, rot=(math.radians(-6), 0, math.radians(-35)))
+    fp = box("FrontPanel", (x0 - 0.5, y0 - 0.2, Z0 + H / 2 - 0.05), (W, T, H), ply, rot=(math.radians(-6), 0, math.radians(35)))
     for k in range(4):                                     # frame battens inside the corners
         sx = -1 if k % 2 else 1; sy = -1 if k < 2 else 1
         parts.append(box("Batten", (sx * (W / 2 - T - 0.02), sy * (D / 2 - T - 0.02), Z0 + H / 2), (0.04, 0.04, H - 2 * T), mat("rawwood")))
@@ -215,7 +217,7 @@ def anim_box(c, t, shot, dur):
         fingers_curl(h, 40)
     if shot == "smoke" and "tech" in c["P"]:
         h = c["P"]["tech"]
-        stand(h, (W / 2 + 0.25, -D / 2 - 0.7, 0.0), math.radians(160))
+        stand(h, (W / 2 + 0.15, -D / 2 - 0.55, 0.0), math.radians(165))
         mouth = Vector((W / 2 - T - 0.04, -D / 2 - 0.02, Z0 + 0.62))
         fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
         rj.rjp.bend_to(h, mouth, frac=0.8, max_deg=25)
@@ -278,8 +280,8 @@ def cam_pipe(c, t):
 
 def cam_smoke(c, t):
     e = ease(t)
-    a = Vector((W / 2 + 2.0, -2.2, 1.35)); b = Vector((W / 2 + 1.8, -2.0, 1.3))
-    return (a.lerp(b, e), Vector((W / 2 - 0.15, -D / 2 - 0.2, Z0 + 0.75)), 30)
+    a = Vector((W / 2 + 0.9, -1.75, 1.55)); b = Vector((W / 2 + 0.8, -1.55, 1.5))     # over his right shoulder
+    return (a.lerp(b, e), Vector((W / 2 - 0.08, -D / 2 + 0.05, Z0 + 0.62)), 35)
 
 
 def cam_experts(c, t):

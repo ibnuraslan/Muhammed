@@ -911,7 +911,7 @@ def torch(name="Torch", on=True, energy=40.0, cone=22.0, color=(1.0, 0.86, 0.62)
         ld = bpy.data.lights.new(name + "L", 'SPOT'); ld.energy = energy; ld.spot_size = math.radians(cone); ld.spot_blend = 0.45
         ld.color = color; ld.shadow_soft_size = 0.01
         lo = bpy.data.objects.new(name + "L", ld); bpy.context.collection.objects.link(lo); lo.parent = r
-        lo.location = (0, -0.065, 0); lo.rotation_euler = (math.radians(90), 0, 0)
+        lo.location = (0, -0.065, 0); lo.rotation_euler = (math.radians(-90), 0, 0)      # spot (-Z) along the beam (-Y)
         r["light"] = lo.name
     return r
 
@@ -1234,6 +1234,7 @@ def low_template(key):
             elif s.material and not s.material.get("birch"):
                 retint(s.material, (1.05, 1.1, 0.7), sat=0.8); s.material["birch"] = 1
     o.name = "TPL_" + key
+    o.location = (0, 0, -1000); o.hide_render = True; o.hide_viewport = True      # the template is never seen
     _LOWOBJ[key] = o
     return o
 
@@ -1308,3 +1309,23 @@ def label(c, text, f_in=6, fade=12):
     c["_label"] = o
 
 
+
+
+
+def crouch(h, pos, face_z, hip_h=0.5, z=0.0, lean=35):
+    """Crouch / squat down (to work at ground level): hips at hip_h, feet flat under the knees, back leaning in."""
+    upright(h); reset_pose(h)
+    h.arm.rotation_euler = (0, 0, face_z); h.arm.location = (0, 0, 0)
+    bpy.context.view_layer.update()
+    hip = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) * 0.5
+    h.arm.location = Vector((pos[0], pos[1], z + hip_h)) - Vector((hip.x, hip.y, hip.z))
+    bpy.context.view_layer.update()
+    fwd = forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
+    for sd, sg in SIDE.items():
+        hp = h.bone_head(f"upperleg01.{sd}")
+        ankle = Vector((hp.x, hp.y, z + 0.09)) + fwd * 0.12 - side * sg * 0.12
+        leg_reach(h, sd, ankle, fwd + Vector((0, 0, 0.3)) - side * sg * 0.3)
+        h.aim(f"foot.{sd}", fwd + Vector((0, 0, -0.1)))
+    for b, a in (("spine05", 4), ("spine04", 5), ("spine03", 5), ("spine02", 4), ("spine01", 3)):
+        h.rot(b, side, -lean * a / 21)
+    fingers_curl(h, 25)

@@ -380,6 +380,11 @@ def apply_look(c):
         look.interior_day(window=ROOM_WINDOWS[room], mood=mood, key_energy={"piano": None, "hall": 520.0, "kitchen": 380.0}[room])
         if room == "kitchen":
             bpy.context.scene.view_settings.exposure -= 0.3
+            if "+suitcase" in v or "+letter" in v:            # the pendant is on over the table (grey morning)
+                kl = bpy.data.lights.new("KitPendant", 'SPOT'); kl.energy = 420; kl.spot_size = math.radians(110); kl.spot_blend = 0.7
+                kl.color = (1.0, 0.72, 0.45); ko = bpy.data.objects.new("KitPendant", kl); bpy.context.collection.objects.link(ko)
+                ko.location = (KTABLE.x, KTABLE.y, 1.78)
+                c["kshade_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.6
         if room == "piano":
             bpy.context.scene.view_settings.exposure += 1.3       # day must read (mean luminance >= 0.18)
 

@@ -466,9 +466,9 @@ def cam_ride_track(c, t):
 def cam_ride_reeds(c, t):
     e = ease(t)
     x = -12.9 + 0.5 * e
-    a = Vector((x, _shore_y(-12.6) + 3.0, 0.45))                   # low over the water, looking through the gap
+    a = Vector((x, _shore_y(-12.6) + 8.0, 0.55))                   # low over the water, far, looking through the gap
     tgt = Vector((-12.4, np.interp(-12.4, [p.x for p in PTS], [p.y for p in PTS]), 0.85))
-    return (a, tgt, 55)
+    return (a, tgt, 50)
 
 
 # 5A / 5B: the empty bend at dusk
@@ -597,8 +597,9 @@ def anim_fire(c, t, shot, dur):
 
 def cam_fire(c, t):
     e = ease(t)
-    a = Vector((-13.5, 9.5, 0.8)); b = Vector((-12.0, 10.5, 3.8))
-    return (a.lerp(b, e), Vector((-10, 2.8, 0.9)).lerp(Vector((-9, 2.0, 0.5)), e), 32)
+    a = P(D_BEND - 19, -1.2); a.z = 1.5; b = P(D_BEND - 18, -1.4); b.z = 3.6        # from the woods side of the path, crane up
+    f = c["P"].get("firefighter"); tgt = Vector(f.arm.location) + Vector((1.0, 0, 1.0)) if f else Vector((-10, 3, 1))
+    return (a.lerp(b, e), tgt, 32)
 
 
 # 9A: the dog leads its handler away from the lakeshore into the trees ; 9B: the beam bobs toward camera
@@ -631,7 +632,7 @@ def anim_dog(c, t, shot, dur):
 
 def cam_dog_low(c, t):
     e = ease(t)
-    a = Vector((-9.0, -1.2, 0.35)); b = Vector((-9.4, -1.8, 0.4))
+    a = Vector((-8.0, -0.2, 0.5)); b = Vector((-8.5, -0.9, 0.55))
     return (a.lerp(b, e), c["dog"]["root"].location + Vector((-0.8, 0, 0.6)), 26)
 
 
@@ -645,7 +646,7 @@ def cam_dog_front(c, t):
 def anim_brush(c, t, shot, dur):
     sec = t * dur
     bk = c["bike"]
-    bk["root"].location = BRUSH + Vector((0, 0, ground_z(c, BRUSH.x, BRUSH.y) + 0.06)); bk["root"].rotation_euler = (math.radians(84), 0, math.radians(35))
+    bk["root"].location = BRUSH + Vector((0, 0, ground_z(c, BRUSH.x, BRUSH.y) + 0.13)); bk["root"].rotation_euler = (math.radians(84), 0, math.radians(35))
     h = c["P"]["officer"]
     if shot == "brush_find":
         rj.stand(h, BRUSH + Vector((-1.4, 2.8, 0)), 0.0); h.arm.rotation_euler.z = math.radians(-25)
@@ -678,9 +679,8 @@ def anim_brush(c, t, shot, dur):
 
 def cam_brush_find(c, t):
     e = ease(t)
-    o = c["P"]["officer"]; p = Vector(o.arm.location)
-    a = p + Vector((-0.8, 1.6, 1.55)); b = p + Vector((-0.6, 1.2, 1.5))
-    return (a.lerp(b, e), BRUSH + Vector((0.3, 0.6, 0.2)), 32)
+    a = BRUSH + Vector((-3.4, 4.2, 1.7)); b = BRUSH + Vector((-3.0, 3.7, 1.6))
+    return (a.lerp(b, e), BRUSH + Vector((0.2, 0.3, 0.2)), 35)
 
 
 def cam_brush_ring(c, t):
@@ -733,25 +733,25 @@ def anim_heli(c, t, shot, dur):
 
 def cam_heli(c, t):
     e = ease(t)
-    a = Vector((-22, 8.5, 1.4)); b = Vector((-20, 8.9, 1.5))
+    a = Vector((-12.9, 3.8, 1.5)); b = Vector((-12.5, 4.2, 1.6))           # from the reed gap, out over the lake
     return (a.lerp(b, e), c["heli"].location + Vector((0, 0, -1.0)), 38)
 
 
 def anim_divers(c, t, shot, dur):
     sec = t * dur
     for k, r in enumerate([r for r in ("diver", "diver2") if r in c["P"]]):
-        h = c["P"][r]; x0 = -14 + k * 2.0; y0 = 8.2 + k * 0.8
-        moving = walk(h, (x0, y0), (x0 + 4, y0 + 0.4), sec + k * 0.7, speed=0.45, stride=16)
+        h = c["P"][r]; x0 = -13.3 + k * 1.3; y0 = _shore_y(-12.6) + 1.0 + k * 0.9
+        moving = walk(h, (x0, y0), (x0 + 0.4, y0 + 1.8), sec + k * 0.7, speed=0.4, stride=16)
         h.arm.location.z = -0.62                     # waist deep among the reeds
     b = c["boat"]
-    b.location = (-9 + 0.4 * sec, 21, -0.38 + 0.03 * math.sin(sec * 1.3)); b.rotation_euler = (0.02 * math.sin(sec), 0.015 * math.sin(sec * 1.4), math.radians(170))
+    b.location = (-15 + 0.4 * sec, 24, -0.38 + 0.03 * math.sin(sec * 1.3)); b.rotation_euler = (0.02 * math.sin(sec), 0.015 * math.sin(sec * 1.4), math.radians(170))
     _ambient(c, sec)
 
 
 def cam_divers(c, t):
     e = ease(t)
-    a = Vector((-17.5, 4.4, 1.25)); b = Vector((-16.8, 4.0, 1.3))
-    return (a.lerp(b, e), Vector((-11.5, 9.5, 0.2)), 45)
+    a = Vector((-12.8, 3.6, 1.45)); b = Vector((-12.6, 4.1, 1.45))          # through the reed gap toward the water
+    return (a.lerp(b, e), Vector((-12.6, _shore_y(-12.6) + 2.5, 0.2)), 40)
 
 
 # Ch2 14B: a long lens on the empty bend in grey day, drifting toward the trees
@@ -828,6 +828,10 @@ def build(variant=None):                      # noqa: F811
             add_torch(c, "u")
     if "car" in extras:
         police_car(c, P(D_BEND - 20, -1.4), -6)
+    if "dog" in extras or light == "night":
+        # brush round the place where the bicycle lies
+        rj.ph_instances("fern_02", [(Vector((BRUSH.x + dx, BRUSH.y + dy, ground_z(c, BRUSH.x + dx, BRUSH.y + dy))), dx * 3, 1.3)
+                                     for (dx, dy) in ((-1.2, 0.6), (1.1, -0.4), (0.4, 1.3), (-0.6, -1.2), (1.6, 0.9))])
     if "dog" in extras:
         c["dog"] = rj.dog("Dog")
         cu = bpy.data.curves.new("Leash", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006
@@ -850,7 +854,7 @@ def build(variant=None):                      # noqa: F811
     import look
     if light in ("lowsun", "mist", "grey"):
         look.forest(mood="mist", azim={"lowsun": 5, "mist": 110, "grey": 200}[light], area=((-5, 0), (110, 70)), canopy=16.0,
-                    exposure={"lowsun": 0.9, "mist": 1.2, "grey": 1.0}[light])
+                    exposure={"lowsun": 0.9, "mist": 0.55, "grey": 1.0}[light])
     elif light in ("dusk", "bluehour"):
         look.forest(mood="dusk", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
     else:                                   # night: a moonlit version of the dusk look (readable deep blue) + torches

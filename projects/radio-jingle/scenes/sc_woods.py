@@ -29,12 +29,12 @@ def ground_mat():
 def build_woods(c, seed=4, n_trees=180):
     r = np.random.default_rng(seed)
     # gently uneven ground
-    nx = ny = 81; S_ = 70.0
+    nx = ny = 161; S_ = 70.0
     xs = np.linspace(-S_ / 2, S_ / 2, nx); ys = np.linspace(-S_ / 2, S_ / 2, ny)
     X, Y = np.meshgrid(xs, ys)
     Hh = 0.18 * np.sin(X * 0.21) * np.cos(Y * 0.17) + 0.08 * np.sin(X * 0.7 + Y * 0.5)
     R_ = np.hypot(X - BOX.x, Y - BOX.y)
-    Hh *= np.clip((R_ - 2.0) / 4.0, 0, 1)                      # flat around the box
+    f = np.clip((R_ - 1.4) / 4.5, 0, 1); Hh *= f * f * (3 - 2 * f)        # eases flat around the box (no hard edge)
     c["H"] = (xs, ys, Hh)
     me = bpy.data.meshes.new("ForestFloor")
     verts = [(xs[i], ys[j], Hh[j, i]) for j in range(ny) for i in range(nx)]
@@ -412,9 +412,8 @@ def anim_lid(c, t, shot, dur):
     sec = t * dur
     if shot == "bolt":
         h = c["P"]["officer"]
-        stand_on(c, h, (BOX.x + 1.05, BOX.y - 0.15), math.radians(90))         # faces -X toward the lid edge
+        rj.crouch(h, (BOX.x + 0.95, BOX.y - 0.25), math.radians(90), hip_h=0.5, z=ground_z(c, BOX.x + 0.95, BOX.y - 0.25))
         fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
-        rj.rjp.bend_to(h, BOX + Vector((0.45, -0.1, 0.2)), frac=0.62, max_deg=55)
         c["crowbar"].location = (0, 0, -60)
         bolt = BOX + Vector((0.47, -0.28, 0.035))
         pull = 0.04 * ease(min(1.0, sec / 2.0))                    # the bolt slides back
