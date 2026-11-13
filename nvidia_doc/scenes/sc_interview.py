@@ -98,8 +98,9 @@ def anim_warn(c, t):
 
 
 MOVES = {
-    # CH5 1A: establishing medium + CHAPTER 5 title (two-line card + scrim via bake.py)
-    "passport_slide": dict(kind="anim", dof=2.6, far=12.0, anim=anim_hold,
+    # CH5 1A: establishing medium + CHAPTER 5 title (two-line card + scrim via bake.py).
+    # DOF off so the camera-parented title plane stays crisp (as in the Ch1-3 title shots).
+    "passport_slide": dict(kind="anim", far=12.0, anim=anim_hold,
                            title=("CHAPTER 5", "THE PASSPORT AND THE PAPER TRAIL", 18, 120),
                            cam=lambda c, t: (Vector((1.65, -2.15, 1.35)).lerp(Vector((1.35, -1.75, 1.28)), ease(t)),
                                              Vector((0.0, -0.05, TH + 0.05)), 40),

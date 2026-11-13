@@ -25,9 +25,13 @@ args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
 chapter, folder, vo = args[:3]
 if chapter not in CHAPTERS and chapter.startswith("chapter"):      # chapter1..3: shot list cut to the voiceover
     import json
-    tim = json.load(open(os.path.join(HERE, "..", "vo", "ch_timing.json")))[chapter[len("chapter"):]]
+    cnum = chapter[len("chapter"):]
+    tfile = "ch45_timing.json" if cnum in ("4", "5") else "ch_timing.json"   # ch4/5 live in their own timing file
+    tim = json.load(open(os.path.join(HERE, "..", "vo", tfile)))[cnum]
     CHAPTERS[chapter] = [(s["name"], s["label"]) for s in tim]
 LEAD = float(args[3]) if len(args) > 3 else (2.5 if chapter == "intro" else 0.0)   # seconds of picture before the first word
+# Ch4/5 match the farm-rendered Ch1-3, which used the ORIGINAL house grade -> look="plain" (no cinematic relook).
+LOOK = os.environ.get("FILM_LOOK", "plain" if chapter in ("chapter4", "chapter5") else "cinematic")
 folder = os.path.abspath(folder)
 shots = CHAPTERS[chapter]
 
@@ -37,7 +41,7 @@ for name, _ in shots:
     bpy.ops.wm.open_mainfile(filepath=path)
     sc = bpy.context.scene
     if sc.compositing_node_group is None or sc.compositing_node_group.name.startswith("HouseGrade") is False:
-        grade.add_grade(sc)
+        grade.add_grade(sc, look=LOOK)
     sc.name = name
     # farm-ready: denoised Cycles at 32 samples, fonts packed (else the farm swaps in Blender's default font)
     sc.cycles.samples = int(os.environ.get("FILM_SAMPLES", 32))

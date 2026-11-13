@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 projects/*/out/
+
+# render artifacts (never commit; see pipeline/README.md)
+nvidia_doc/out/blend/
+nvidia_doc/out/ch45_sb/
+nvidia_doc/assets/polyhaven/
+nvidia_doc/assets/generated/
