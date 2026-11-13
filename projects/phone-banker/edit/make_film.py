@@ -52,6 +52,18 @@ if os.environ.get("SKIP_SHOTS") != "1":
                 os.remove(path + "1")
             print("[film] prepared", name, flush=True)
 
+# The master links each shot's scene. Linking loads the whole shot (about 0.4 GB each, ~28 GB for the film), more than
+# this machine has, so the links are made against tiny placeholder files (an empty scene with the same name and frame
+# range) and each library path is then pointed at the real shot file. Blender resolves the links by scene name when the
+# farm opens the master, so it renders the real shots; nothing heavy is loaded here.
+FRAMES = {r["name"]: r["frames"] for p in ("intro", "ch1", "ch2", "ch3") for r in T[p]["shots"]}; FRAMES["seldom_sting"] = 144
+PH = os.path.join(BL, "_placeholders"); os.makedirs(PH, exist_ok=True)
+for folder, shots, _, _ in parts:
+    for name, _ in shots:
+        bpy.ops.wm.read_factory_settings(use_empty=True)
+        sc = bpy.context.scene; sc.name = name; sc.frame_start, sc.frame_end = 1, FRAMES[name]
+        bpy.ops.wm.save_as_mainfile(filepath=os.path.join(PH, name + ".blend"))
+
 bpy.ops.wm.read_factory_settings(use_empty=True)
 master = bpy.context.scene; master.name = "PHONE_BANKER_FILM"
 master.render.resolution_x, master.render.resolution_y, master.render.resolution_percentage = 1920, 816, 100
@@ -59,18 +71,20 @@ master.render.fps = FPS
 se = master.sequence_editor_create()
 strips = se.strips if hasattr(se, "strips") else se.sequences
 out_dir = os.path.join(BL, "film"); os.makedirs(out_dir, exist_ok=True)
+out = os.path.join(out_dir, "phone_banker_film.blend")
+bpy.ops.wm.save_as_mainfile(filepath=out)                 # saved first, so relative library paths are relative to it
 edl = dict(shots=[], vo=[])
 frame = 1
 for folder, shots, vo, lead in parts:
     start = frame
     master.timeline_markers.new(folder.upper(), frame=frame)
     for name, label in shots:
-        path = os.path.join(BL, folder, name + ".blend")
-        with bpy.data.libraries.load(path, link=True, relative=True) as (src, dst):
-            dst.scenes = [n for n in src.scenes if n == name] or src.scenes[:1]
+        with bpy.data.libraries.load(os.path.join(PH, name + ".blend"), link=True, relative=True) as (src, dst):
+            dst.scenes = [name]
         sc = dst.scenes[0]
         strips.new_scene(name=f"{folder} {label}"[:60], scene=sc, channel=1, frame_start=frame)
-        n = sc.frame_end - sc.frame_start + 1
+        sc.library.filepath = "//" + os.path.relpath(os.path.join(BL, folder, name + ".blend"), out_dir)   # -> the real shot
+        n = FRAMES[name]
         edl["shots"].append([frame, frame + n, name])
         frame += n
     f_vo = start + int(round(lead * FPS))
@@ -116,7 +130,6 @@ master.render.use_sequencer = True
 master.render.use_compositing = False
 master.render.filepath = "//render/phone_banker_film_"
 master.render.image_settings.file_format = 'PNG'
-out = os.path.join(out_dir, "phone_banker_film.blend")
-bpy.ops.wm.save_as_mainfile(filepath=out, compress=True, relative_remap=True)
+bpy.ops.wm.save_as_mainfile(filepath=out, compress=True, relative_remap=False)
 json.dump(edl, open(os.path.join(HERE, "film_edl.json"), "w"), indent=1)
 print("[film] saved", out, "frames", master.frame_end, f"({(frame - 1) / FPS / 60:.2f} min)", flush=True)

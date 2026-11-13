@@ -1,0 +1,21 @@
+PASS 71 linked shot files, all relative paths
+PASS every link resolves next to the master (out/blend/<part>/<shot>.blend)
+PASS no link points at a placeholder
+PASS 71 shot strips in order: intro, sting, Ch1, Ch2, Ch3
+PASS every strip has its cut length (frames from vo/timing.json)
+PASS strips butt-joined from frame 1: no gaps, no overlaps
+PASS master frames 1-9247 = 385.292 s (6.42 min)
+PASS VO intro: frame 61.0 = part start 1 + 2.5 s (60 frames), sound packed
+PASS VO ch1: frame 885.0 = part start 813 + 3.0 s (72 frames), sound packed
+PASS VO ch2: frame 4046.0 = part start 3974 + 3.0 s (72 frames), sound packed
+PASS VO ch3: frame 6632.0 = part start 6560 + 3.0 s (72 frames), sound packed
+PASS sting SFX at the sting start (frame 669), packed
+PASS fades through black: intro out 645-669, sting in 669-681, sting out 777-813, Ch1 in 813-837
+PASS master has a scene camera: FilmCam
+PASS master: Cycles, 32 samples, adaptive 0.05, denoise, alpha off, sequencer on
+PASS 1920x816 at 100%, 24 fps
+PASS phone_banker_AUDIO_with_voice.wav: 385.292 s = 9247.00 frames = film length
+INFO phone_banker_AUDIO_with_voice.wav: -14.2 LUFS integrated, true peak -0.9 dBFS
+PASS phone_banker_AUDIO_no_voice.wav: 385.292 s = 9247.00 frames = film length
+INFO phone_banker_AUDIO_no_voice.wav: -29.0 LUFS integrated, true peak -4.4 dBFS
+PASS all 71 shot files: scene named after the shot, frame range = cut length, 32 samples, adaptive 0.05, denoise, alpha off, house grade, camera, fonts packed, images packed/found
