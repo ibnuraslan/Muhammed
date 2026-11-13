@@ -167,6 +167,12 @@ def build(variant=None):
     spot("WomenSide", (-3.0, 3.6, 2.2), (0, 4.6, 1.5), 240, (0.75, 0.8, 0.9), 30, 0.7, 0.3)
     spot("WallWash", (1.8, 4.6, 2.9), (1.2, 5.4, 1.2), 160, (1.0, 0.72, 0.45), 40, 0.8, 0.2)
     spot("WallWash2", (-2.0, 4.6, 2.9), (-1.4, 5.4, 1.0), 90, (1.0, 0.72, 0.45), 40, 0.8, 0.2)
+    for k, x in enumerate((-2.8, -1.4, 0.0, 1.4, 2.8)):      # wall-washer downlights: warm scallops on the panelling
+        spot(f"Scallop{k}", (x, 5.15, 2.96), (x, 5.42, 1.6), 140, (1.0, 0.74, 0.48), 48, 0.85, 0.05)
+        box(f"Downlight{k}", (x, 5.15, 2.985), (0.12, 0.12, 0.01), emissive(f"DL{k}", (1.0, 0.85, 0.65), 6.0))
+    # a soft cove light where the wall meets the ceiling, so the top of the panelling never goes to pure black
+    cv = bpy.data.lights.new("Cove", 'AREA'); cv.shape = 'RECTANGLE'; cv.size = 8.5; cv.size_y = 0.06; cv.energy = 90; cv.color = (1.0, 0.78, 0.55)
+    co = bpy.data.objects.new("Cove", cv); bpy.context.collection.objects.link(co); co.location = (0, 5.3, 2.97); co.rotation_euler = (math.radians(-160), 0, 0)
     spot("RimL", (-1.6, 5.3, 2.2), (-0.9, 4.4, 1.5), 110, (1.0, 0.78, 0.55), 30, 0.6, 0.1)
     spot("RimR", (1.7, 5.3, 2.2), (0.9, 4.5, 1.5), 110, (1.0, 0.78, 0.55), 30, 0.6, 0.1)
     # the accelerator module on the table in front of him: the one lime accent (its own small lime glow)
