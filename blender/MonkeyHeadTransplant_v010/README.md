@@ -1,4 +1,4 @@
-# MonkeyHeadTransplant_v010: fixed and synced to your voiceover (READY TO RENDER)
+# MonkeyHeadTransplant_v010: ON HOLD, DO NOT RENDER (forceps float off the left hand at about 6.5–7.5 s; fix in progress)
 
 This is Connect02's version **MonkeyHeadTransplant_v008d** (branch `claude/connect02-monkey-head-transplant`, commit 24ce61b), retimed so each story beat lands on its words in your recording `MonkeyHeadTransplant_v010_VO.mp3`. It replaces v009, which you rejected.
 
