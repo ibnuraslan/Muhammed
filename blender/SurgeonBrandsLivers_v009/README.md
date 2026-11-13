@@ -1,4 +1,4 @@
-# SurgeonBrandsLivers_v009: acting fix, synced to the voiceover
+# SurgeonBrandsLivers_v009: ON HOLD, DO NOT RENDER (branding tool not gripped, runs into his face; fix in progress)
 
 This is the Connect05 acting fix (their v008, commit 32d7716), director-approved:
 - One hand pulls the mask off in front of his face, and the mask moves only while the hand holds it.
