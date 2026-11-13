@@ -88,7 +88,7 @@ BOTTLE = [(0.001, 0.0), (0.03, 0.0), (0.033, 0.004), (0.034, 0.012), (0.034, 0.1
 
 def bottle(name, loc, liquid, fill=0.78):
     """A 1981 0.7 l returnable glass bottle (no label, no brand), crown cap, with its liquid inside."""
-    glass_m = pbr("BottleGlass2", (0.85, 0.9, 0.88), 0.03, 0.0, **{'Transmission Weight': 1.0, 'IOR': 1.5})
+    glass_m = pbr("BottleGlass2", (0.55, 0.72, 0.6), 0.06, 0.0, **{'Transmission Weight': 0.85, 'IOR': 1.5, 'Coat Weight': 0.6})   # pale green bottle glass
     g = lathe(name, BOTTLE, glass_m)
     top = 0.274 * fill
     inner = [(max(0.0005, r - 0.003), z) for (r, z) in BOTTLE if z <= top] + [(0.0005, top)]
@@ -180,7 +180,7 @@ def build_box(c):
     water = pbr("Water", (0.8, 0.88, 0.9), 0.0, 0.0, **{'Transmission Weight': 1.0, 'IOR': 1.33})
     soda = pbr("OrangeSoda", (0.95, 0.42, 0.04), 0.0, 0.0, **{'Transmission Weight': 0.85, 'IOR': 1.34})
     for k, (x, lq) in enumerate(((0.035, water), (0.1, water), (0.165, soda))):
-        bottle(f"Bottle{k}", (x, D / 2 - 0.1, sh_z), lq, fill=0.8 if lq is water else 0.7)
+        bottle(f"Bottle{k}", (x, D / 2 - 0.1, sh_z), lq, fill=0.5 if lq is water else 0.45)      # below the shoulder: the neck reads
     for k in range(3):
         chocolate(f"Choc{k}", (0.0 + 0.004 * k, D / 2 - 0.205, sh_z + 0.0005 + k * 0.0125), rz=0.06 * (k - 1))
     for k, (col, th) in enumerate((((0.42, 0.12, 0.07), 0.028), ((0.12, 0.2, 0.3), 0.022), ((0.5, 0.42, 0.16), 0.03), ((0.18, 0.28, 0.16), 0.02))):

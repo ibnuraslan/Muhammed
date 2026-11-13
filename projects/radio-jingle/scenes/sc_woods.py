@@ -186,6 +186,7 @@ def build(variant=None):
             c["rods"][r] = probe_rod("Rod_" + r)
     if "dog" in extras:
         c["dog"] = rj.dog("Dog")
+        c["leash"] = cyl("Leash", (0, 0, 0), 0.006, 1.0, pbr("LeashLeather", (0.12, 0.07, 0.04), 0.6), 8)
     if "torch" in extras:
         t = rj.torch("LoneTorch", energy=45, cone=26)
         c["torch"] = t
@@ -224,23 +225,22 @@ def walk_on(c, h, p0, p1, sec, speed=0.8, stride=22):
 
 
 def probe(c, h, rod, sec, ph=0.0, stuck=False):
-    """Two hands on the T handle, thrusting the rod into the ground in front of the feet."""
+    """The rod angled down into the soil ahead (about 28 degrees off vertical); one hand at chest height, the other
+    lower at the hip, elbows bent; the rod thrusts down along its own axis."""
     fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
     cyc = (sec * 0.8 + ph) % 1.0
-    depth = 0.25 * math.sin(math.pi * min(1.0, cyc / 0.6)) if not stuck else 0.12
-    tip = Vector(h.arm.location) + fwd * 0.45
-    tip.z = ground_z(c, tip.x, tip.y) - depth
-    rod.location = tip; rod.rotation_euler = ((-fwd).to_track_quat('Z', 'Y').to_euler()) if False else (0, 0, math.atan2(fwd.y, fwd.x))
-    rod.rotation_euler.y = 0.0
-    lean = Matrix.Rotation(math.radians(-5), 4, right)         # near-vertical, pushed into the soil
-    rod.matrix_world = Matrix.Translation(tip) @ lean @ Matrix.Rotation(math.atan2(fwd.y, fwd.x), 4, 'Z')
-    top = tip + (lean.to_3x3() @ Vector((0, 0, 1.25)))
-    for sd in ("L", "R"):
-        grip = top + right * (0.11 if sd == "R" else -0.11)
-        reach(h, sd, grip, Vector((0, 0, -1)) + right * (0.7 if sd == "R" else -0.7) - fwd * 0.3, right * (1 if sd == "R" else -1) + Vector((0, 0, -0.3)))
-    fingers_curl(h, 65, thumb=30)
-    side = fwd.cross(Vector((0, 0, 1))).normalized()
-    h.rot("head", side, -18)
+    depth = 0.22 * math.sin(math.pi * min(1.0, cyc / 0.6)) if not stuck else 0.12
+    ang = math.radians(28)
+    d = (Vector((0, 0, math.cos(ang))) - fwd * math.sin(ang)).normalized()      # along the rod, tip -> handle
+    tip = Vector(h.arm.location) + fwd * 0.72
+    tip.z = ground_z(c, tip.x, tip.y)
+    tip = tip - d * depth
+    rod.matrix_world = Matrix.Translation(tip) @ d.to_track_quat('Z', 'Y').to_matrix().to_4x4()
+    hi = tip + d * 1.18; lo = tip + d * 0.86
+    reach(h, "R", hi, Vector((0, 0, -1)) + right * 0.8 - fwd * 0.2, right + Vector((0, 0, -0.5)))
+    reach(h, "L", lo, Vector((0, 0, -1)) - right * 0.8 - fwd * 0.2, -right + Vector((0, 0, -0.5)))
+    rj.curl(h, 70, thumb=35)
+    h.rot("head", right, -22)
 
 
 # --- 1A title: a line of officers stepping through misty spruce ; 1B: an officer ties marker tape between two trunks
@@ -307,9 +307,17 @@ def anim_rods(c, t, shot, dur):
         a = Vector((-9.0, -3.5)); b = Vector((3.0, -2.0))
         d = (b - a); u = d.normalized(); dist = min(d.length, sec * 1.15)
         dpos = a + u * (dist + 1.4)
-        dg["root"].location = (dpos.x, dpos.y, ground_z(c, dpos.x, dpos.y)); dg["root"].rotation_euler.z = math.atan2(u.y, u.x)
-        rj.dog_walk(dg, dist, sniff=0.9, sec=sec)
+        dg["root"].location = (0, 0, -60)                       # the dog is never shown in daylight: only its leash
         walk_on(c, h, a, b, sec, speed=1.15)
+        fwd = forward(h); right = fwd.cross(Vector((0, 0, 1))).normalized()
+        hand_t = h.bone_head("spine03") + fwd * 0.35 - right * 0.12 + Vector((0, 0, -0.32))
+        reach(h, "L", hand_t, Vector((0, 0, -1)) - right * 0.4, fwd + Vector((0, 0, -0.6)))
+        rj.curl(h, 55, side=("L",), thumb=30)
+        grip = h.bone_tail("wrist.L") + fwd * 0.04
+        end = Vector((dpos.x, dpos.y, ground_z(c, dpos.x, dpos.y) + 0.45))     # the collar, ahead and below the frame
+        dv = end - grip
+        lz = c["leash"]; lz.matrix_world = Matrix.Translation((grip + end) / 2) @ dv.to_track_quat('Z', 'Y').to_matrix().to_4x4()
+        lz.scale = (1.0, 1.0, dv.length)
     rj.sway(c["trees"], sec, 0.004, 0.15)
 
 
@@ -321,8 +329,9 @@ def cam_rods(c, t):
 
 def cam_rods_dog(c, t):
     e = ease(t)
-    a = Vector((-4.0, 2.5, 1.0)); b = Vector((-2.5, 2.2, 1.0))
-    return (a.lerp(b, e), c["dog"]["root"].location + Vector((0, 0, 0.4)), 35)
+    p = Vector(c["P"]["officer5"].arm.location)                     # the handler from the side, waist up, past a birch
+    a = p + Vector((-1.0, 3.2, 1.5)); b = p + Vector((-0.6, 3.0, 1.45))
+    return (a.lerp(b, e), c["P"]["officer5"].bone_head("spine05") + Vector((0.3, 0, 0.05)), 40)
 
 
 # --- 3A: a rod stops, the officer straightens and waves the others over ; 3B: they converge on the clearing
@@ -562,7 +571,7 @@ MOVES = {
     "line": dict(_mk("line", 8.0, cam_line, anim_line), title=("CHAPTER 2", "SEVEN BOLTS", 18, 120)),
     "tape": _mk("tape", 5.0, cam_tape, anim_line, lambda c, t: Vector((-6.15, -2.25, 1.15)), 2.8),
     "rods": _mk("rods", 5.0, cam_rods, anim_rods),
-    "rods_dog": _mk("rods_dog", 4.5, cam_rods_dog, anim_rods, lambda c, t: c["dog"]["root"].location, 4.0),
+    "rods_dog": _mk("rods_dog", 4.5, cam_rods_dog, anim_rods, lambda c, t: c["P"]["officer5"].bone_head("spine05"), 4.0),
     "hit": _mk("hit", 4.5, cam_hit, anim_hit),
     "converge": _mk("converge", 4.0, cam_converge, anim_hit),
     "dig": _mk("dig", 4.5, cam_dig, anim_dig),
@@ -621,14 +630,28 @@ def autumn(c):
         for sl in t.material_slots:
             m = sl.material
             if m and m.get("birch") and not m.get("autumn"):
-                _yellow(m, (0.62, 0.46, 0.07), (0.45, 0.5, 0.12), 0.75); m["autumn"] = 1
+                _yellow(m, (0.8, 0.58, 0.08), (0.5, 0.52, 0.12), 1.0); m["autumn"] = 1
+    # young birch and hazel undergrowth at eye level, turning yellow (the canopy is mostly out of frame)
+    spots = [(-6, 3), (-2, 2), (-5, -1), (-1, 4.5), (-8.5, 0.5), (-7, -2.6), (-4.4, -1.6), (-8.3, -6.5), (-3.2, 6.5),
+             (BOX.x - 5.5, BOX.y + 3.5), (BOX.x - 8.0, BOX.y - 2.5), (BOX.x - 4.2, BOX.y - 3.8), (BOX.x + 3.5, BOX.y + 4.0),
+             (BOX.x - 9.5, BOX.y + 5.0), (BOX.x + 4.5, BOX.y - 3.0)]
+    spots = [(x, y) for (x, y) in spots if math.hypot(x - BOX.x, y - BOX.y) > 2.6]
+    roots = rj.ph_instances("shrub_02", [(Vector((x, y, ground_z(c, x, y) - 0.02)), x * 1.7, 1.1 + 0.25 * math.sin(x * y)) for (x, y) in spots])
+    seen = set()
+    for r_ in roots:
+        for o in r_.children_recursive:
+            for sl in getattr(o, "material_slots", []):
+                m = sl.material
+                if m and m.name not in seen and not m.get("autumn"):
+                    seen.add(m.name); _yellow(m, (0.85, 0.6, 0.08), (0.55, 0.55, 0.12), 0.9); m["autumn"] = 1
+    c.setdefault("trees", []).extend(roots)
     fl = bpy.data.materials.get("LeafFloor")                # a scatter of fresh yellow birch leaves on the brown litter
     if fl and not fl.get("autumn"):
         N = fl.node_tree.nodes; L = fl.node_tree.links; p = N["Principled BSDF"]
         src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
         tc = N.new("ShaderNodeTexCoord"); vo = N.new("ShaderNodeTexVoronoi"); vo.inputs['Scale'].default_value = 26
         L.new(tc.outputs['Object'], vo.inputs['Vector'])
-        sel = N.new("ShaderNodeMath"); sel.operation = 'GREATER_THAN'; sel.inputs[1].default_value = 0.86
+        sel = N.new("ShaderNodeMath"); sel.operation = 'GREATER_THAN'; sel.inputs[1].default_value = 0.78
         sep = N.new("ShaderNodeSeparateColor"); L.new(vo.outputs['Color'], sep.inputs[0]); L.new(sep.outputs[0], sel.inputs[0])
         shape = N.new("ShaderNodeMath"); shape.operation = 'LESS_THAN'; shape.inputs[1].default_value = 0.32
         L.new(vo.outputs['Distance'], shape.inputs[0])
@@ -636,7 +659,7 @@ def autumn(c):
         mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(both.outputs[0], mx.inputs['Factor'])
         if src is not None:
             L.new(src, mx.inputs[6])
-        mx.inputs[7].default_value = (0.58, 0.42, 0.06, 1)
+        mx.inputs[7].default_value = (0.7, 0.5, 0.07, 1)
         L.new(mx.outputs[2], p.inputs['Base Color']); fl["autumn"] = 1
 
 

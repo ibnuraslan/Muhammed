@@ -861,6 +861,10 @@ def build(variant=None):                      # noqa: F811
                                      for (dx, dy) in ((-1.2, 0.6), (1.1, -0.4), (0.4, 1.3), (-0.6, -1.2), (1.6, 0.9))])
     if "dog" in extras:
         c["dog"] = rj.dog("Dog")
+        dark = rj.pbr("DogNight", (0.012, 0.011, 0.01), 0.7)          # at night only a dark shape in the torch light
+        for o in c["dog"]["root"].children_recursive:
+            if o.type == 'MESH':
+                o.data.materials.clear(); o.data.materials.append(dark)
         cu = bpy.data.curves.new("Leash", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006
         sp = cu.splines.new('POLY'); sp.points.add(7)
         o = bpy.data.objects.new("Leash", cu); bpy.context.collection.objects.link(o); o.data.materials.append(rj.mat("black"))
