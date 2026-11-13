@@ -367,6 +367,30 @@ ROOM_WINDOWS = {        # (window point outside, target inside) for look.interio
 }
 
 
+def view_plate(center, size, normal_axis, facing, strength=1.0):
+    """A window view outside (the misty lake beyond the garden): an emission card only the camera (and glossy rays)
+    sees, so the glass shows a scene instead of a white slab and the room light is unchanged."""
+    img = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "nvidia_doc", "assets", "generated", "rj_view_lake.png")
+    if not os.path.exists(img):
+        return None
+    bpy.ops.mesh.primitive_plane_add(size=1.0, location=center)
+    o = bpy.context.object; o.name = "WindowView"
+    o.scale = (size[0], size[1], 1)
+    # plane normal +Z -> face the room: rotate about X (wall along X) or about Z then X (wall along Y)
+    if normal_axis == 'y':
+        o.rotation_euler = (math.radians(90), 0, 0 if facing < 0 else math.pi)
+    else:
+        o.rotation_euler = (math.radians(90), 0, math.radians(90) if facing > 0 else math.radians(-90))
+    m = bpy.data.materials.new("WindowView"); m.use_nodes = True; nt = m.node_tree; nt.nodes.clear()
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); em = nt.nodes.new("ShaderNodeEmission"); tx = nt.nodes.new("ShaderNodeTexImage")
+    tx.image = bpy.data.images.load(img, check_existing=True); tx.extension = 'EXTEND'
+    em.inputs['Strength'].default_value = strength
+    nt.links.new(tx.outputs['Color'], em.inputs['Color']); nt.links.new(em.outputs['Emission'], out.inputs['Surface'])
+    o.data.materials.append(m)
+    o.visible_shadow = False; o.visible_diffuse = False; o.visible_volume_scatter = False; o.visible_transmission = True
+    return o
+
+
 def apply_look(c):
     import look
     v = c["variant"]; L = c["light"]
@@ -380,6 +404,8 @@ def apply_look(c):
         look.interior_day(window=ROOM_WINDOWS[room], mood=mood, key_energy={"piano": None, "hall": 520.0, "kitchen": 380.0}[room])
         if room == "kitchen":
             bpy.context.scene.view_settings.exposure -= 0.3
+            view_plate((0.0, 11.5, 1.9), (9.0, 3.8), 'y', -1, strength=1.6)       # north window: the lake beyond the garden
+            view_plate((-6.5, 5.25, 1.9), (9.0, 3.8), 'x', +1, strength=1.4)      # west window
             if "+suitcase" in v or "+letter" in v:            # the pendant is on over the table (grey morning)
                 kl = bpy.data.lights.new("KitPendant", 'SPOT'); kl.energy = 420; kl.spot_size = math.radians(110); kl.spot_blend = 0.7
                 kl.color = (1.0, 0.72, 0.45); ko = bpy.data.objects.new("KitPendant", kl); bpy.context.collection.objects.link(ko)
@@ -412,7 +438,7 @@ def phone_to_ear(c, h, sec, side="L", talk=0.0):
     hs = c["handset"]
     fwd = forward(h); left = -fwd.cross(Vector((0, 0, 1))).normalized() * sgn     # "left" = the holding side
     head = h.bone_head("head"); tail = h.bone_tail("head"); up = (tail - head).normalized()
-    E = head + up * 0.06 + left * 0.075 + fwd * 0.0             # ear
+    E = head + up * 0.045 + left * 0.075 - fwd * 0.005           # ear
     Mo = head - up * 0.035 + fwd * 0.085 + left * 0.035         # mouth corner
     X = (E - Mo).normalized(); Z = (left - X * left.dot(X)).normalized(); Y = Z.cross(X)
     C = (E + Mo) * 0.5 + Z * 0.04
@@ -606,8 +632,8 @@ def cam_p_title(c, t):
 
 def cam_p_page(c, t):
     e = ease(t)
-    a = Vector((-5.65, 0.6, 1.45)); b = Vector((-5.45, 0.95, 1.42))          # from the left, wider
-    return (a.lerp(b, e), PIANO + Vector((0.05, -0.55, 0.95)), 30)
+    a = Vector((-4.75, 0.45, 1.8)); b = Vector((-4.6, 0.75, 1.72))           # high behind her left shoulder: back of her head only
+    return (a.lerp(b, e), PIANO + Vector((0.0, -0.3, 1.0)), 32)
 
 
 def _anim_and_cord(anim_fn, shot, dur):
@@ -654,36 +680,117 @@ def cam_debug_liv(c, t):
 
 
 # ============================================================================ Chapter One / Two house shots
+def _vinyl(name, col):
+    """Grained vinyl / leatherette: a fine noise bump and a soft clearcoat."""
+    m = pbr(name, col, 0.45, 0.0, **{'Coat Weight': 0.3, 'Coat Roughness': 0.3})
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 260; n.inputs['Detail'].default_value = 3
+    L.new(tc.outputs['Object'], n.inputs['Vector'])
+    bm = N.new("ShaderNodeBump"); bm.inputs['Strength'].default_value = 0.25; bm.inputs['Distance'].default_value = 0.0006
+    L.new(n.outputs['Fac'], bm.inputs['Height']); L.new(bm.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def _lining(name):
+    """Patterned 70s lining: a woven ochre ground with a soft repeating figure (no text)."""
+    m = rj.fabric(name, (0.30, 0.20, 0.10), 0.9, 0.3)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); w = N.new("ShaderNodeTexWave"); w.wave_type = 'RINGS'; w.inputs['Scale'].default_value = 22
+    w.inputs['Distortion'].default_value = 4
+    L.new(tc.outputs['Object'], w.inputs['Vector'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 0.35
+    mx.inputs[6].default_value = (0.30, 0.20, 0.10, 1); L.new(w.outputs['Color'], mx.inputs[7])
+    L.new(mx.outputs[2], p.inputs['Base Color'])
+    return m
+
+
 def suitcase():
-    """An open 1970s hard suitcase: brown vinyl shell with rounded edges, a hollow body lined in fabric, chrome
-    latches and a handle; the lid on a hinge empty (rotate hinge.rotation_euler.x to open). Hinge along the +Y edge."""
-    vin = pbr("SuitVinyl", (0.075, 0.042, 0.025), 0.42, 0.0, **{'Coat Weight': 0.35, 'Coat Roughness': 0.25})
-    lin = rj.fabric("SuitLining", (0.22, 0.15, 0.10), 0.9, 0.3)
+    """An open 1970s suitcase: brown grained vinyl over a frame, piped edges, metal corner caps, two hinges on the
+    back, chrome latches and a handle on brackets; a patterned lining, a pocket and two cross straps inside.
+    The lid is on a hinge empty (rotate hinge.rotation_euler.x to open). Hinge along the +Y edge."""
+    vin = _vinyl("SuitVinyl", (0.085, 0.048, 0.028))
+    pip = pbr("SuitPiping", (0.035, 0.02, 0.012), 0.5)
+    lin = _lining("SuitLining")
     trim = mat("chrome")
+    strap = pbr("SuitStrap", (0.18, 0.12, 0.07), 0.7)
     W_, D_, H_, t = 0.66, 0.44, 0.15, 0.012
-    parts = [box("SBottom", (0, 0, t / 2), (W_, D_, t), vin, bevel=0.006),
-             box("SFront", (0, -D_ / 2 + t / 2, H_ / 2), (W_, t, H_), vin, bevel=0.006), box("SBack", (0, D_ / 2 - t / 2, H_ / 2), (W_, t, H_), vin, bevel=0.006),
-             box("SLeft", (-W_ / 2 + t / 2, 0, H_ / 2), (t, D_, H_), vin, bevel=0.006), box("SRight", (W_ / 2 - t / 2, 0, H_ / 2), (t, D_, H_), vin, bevel=0.006),
+    parts = [box("SBottom", (0, 0, t / 2), (W_, D_, t), vin, bevel=0.012),
+             box("SFront", (0, -D_ / 2 + t / 2, H_ / 2), (W_, t, H_), vin, bevel=0.012), box("SBack", (0, D_ / 2 - t / 2, H_ / 2), (W_, t, H_), vin, bevel=0.012),
+             box("SLeft", (-W_ / 2 + t / 2, 0, H_ / 2), (t, D_, H_), vin, bevel=0.012), box("SRight", (W_ / 2 - t / 2, 0, H_ / 2), (t, D_, H_), vin, bevel=0.012),
              box("SLiningB", (0, 0, t + 0.002), (W_ - 2 * t, D_ - 2 * t, 0.004), lin),
-             box("SRim", (0, -D_ / 2, H_ - 0.004), (W_ + 0.004, 0.016, 0.008), trim), box("SRimB", (0, D_ / 2, H_ - 0.004), (W_ + 0.004, 0.016, 0.008), trim)]
+             box("SLiningF", (0, -D_ / 2 + t + 0.002, H_ / 2), (W_ - 2 * t, 0.004, H_ - 0.02), lin), box("SLiningK", (0, D_ / 2 - t - 0.002, H_ / 2), (W_ - 2 * t, 0.004, H_ - 0.02), lin),
+             box("SLiningL", (-W_ / 2 + t + 0.002, 0, H_ / 2), (0.004, D_ - 2 * t, H_ - 0.02), lin), box("SLiningR", (W_ / 2 - t - 0.002, 0, H_ / 2), (0.004, D_ - 2 * t, H_ - 0.02), lin)]
+    for y in (-D_ / 2, D_ / 2):                                   # piping round the rim and the base
+        for z in (H_ - 0.003, 0.004):
+            parts.append(cyl("Pipe", (0, y, z), 0.0055, W_, pip, verts=10, rot=(0, math.radians(90), 0)))
+    for x in (-W_ / 2, W_ / 2):
+        for z in (H_ - 0.003, 0.004):
+            parts.append(cyl("Pipe", (x, 0, z), 0.0055, D_, pip, verts=10, rot=(math.radians(90), 0, 0)))
+    for sx in (-1, 1):                                            # metal corner caps on the base
+        for sy in (-1, 1):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.022, location=(sx * (W_ / 2 - 0.008), sy * (D_ / 2 - 0.008), 0.012))
+            cc = bpy.context.active_object; cc.scale = (1, 1, 0.75); cc.data.materials.append(trim); parts.append(cc)
+    for x in (-0.12, 0.12):                                       # cross straps inside, with buckles
+        parts.append(box("SStrap", (x, 0, t + 0.006), (0.025, D_ - 2 * t, 0.003), strap))
+        parts.append(box("SBuckle", (x, -0.05, t + 0.009), (0.035, 0.03, 0.004), trim))
     body = join(parts, "Suitcase")
     hinge = bpy.data.objects.new("SuitHinge", None); bpy.context.collection.objects.link(hinge); hinge.parent = body; hinge.location = (0, D_ / 2, H_)
-    lparts = [box("SLidTop", (0, -D_ / 2, 0.07), (W_, D_, t), vin, bevel=0.006),
-              box("SLidF", (0, -D_ + t / 2, 0.035), (W_, t, 0.07), vin, bevel=0.006), box("SLidB", (0, -t / 2, 0.035), (W_, t, 0.07), vin, bevel=0.006),
-              box("SLidL", (-W_ / 2 + t / 2, -D_ / 2, 0.035), (t, D_, 0.07), vin, bevel=0.006), box("SLidR", (W_ / 2 - t / 2, -D_ / 2, 0.035), (t, D_, 0.07), vin, bevel=0.006),
-              box("SLidLin", (0, -D_ / 2, 0.062), (W_ - 2 * t, D_ - 2 * t, 0.004), lin)]
+    lparts = [box("SLidTop", (0, -D_ / 2, 0.07), (W_, D_, t), vin, bevel=0.012),
+              box("SLidF", (0, -D_ + t / 2, 0.035), (W_, t, 0.07), vin, bevel=0.012), box("SLidB", (0, -t / 2, 0.035), (W_, t, 0.07), vin, bevel=0.012),
+              box("SLidL", (-W_ / 2 + t / 2, -D_ / 2, 0.035), (t, D_, 0.07), vin, bevel=0.012), box("SLidR", (W_ / 2 - t / 2, -D_ / 2, 0.035), (t, D_, 0.07), vin, bevel=0.012),
+              box("SLidLin", (0, -D_ / 2, 0.062), (W_ - 2 * t, D_ - 2 * t, 0.004), lin),
+              box("SLidPocket", (0, -D_ / 2 - 0.06, 0.057), (W_ - 0.08, D_ * 0.55, 0.006), lin, bevel=0.002),
+              box("SPocketEdge", (0, -D_ / 2 - 0.06 + D_ * 0.275, 0.055), (W_ - 0.08, 0.012, 0.008), strap)]
+    for sx in (-1, 1):
+        for sy in (0, -1):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.022, location=(sx * (W_ / 2 - 0.008), sy * D_ + (0.008 if sy else -0.008), 0.068))
+            cc = bpy.context.active_object; cc.scale = (1, 1, 0.75); cc.data.materials.append(trim); lparts.append(cc)
     lid = join(lparts, "SuitLid"); lid.parent = hinge
-    for x in (-0.2, 0.2):
-        box("Latch", (x, -D_ / 2 - 0.006, H_ - 0.012), (0.05, 0.012, 0.04), trim).parent = body
-    box("SHandle", (0, -D_ / 2 - 0.025, H_ - 0.03), (0.15, 0.025, 0.028), pbr("HandleBlk", (0.03, 0.02, 0.015), 0.4), bevel=0.01).parent = body
+    for x in (-0.2, 0.2):                                         # latches: base plate + clasp
+        box("LatchPlate", (x, -D_ / 2 - 0.004, H_ - 0.012), (0.06, 0.006, 0.045), trim, bevel=0.003).parent = body
+        box("Latch", (x, -D_ / 2 - 0.01, H_ - 0.004), (0.035, 0.008, 0.03), trim, bevel=0.004).parent = body
+    for x in (-0.22, 0.22):                                       # hinges on the back
+        box("SHingeP", (x, D_ / 2 + 0.004, H_), (0.07, 0.008, 0.03), trim, bevel=0.002).parent = body
+    hb = pbr("HandleBlk", (0.035, 0.022, 0.014), 0.4, 0.0, **{'Coat Weight': 0.3})
+    for x in (-0.075, 0.075):
+        box("SHandleBr", (x, -D_ / 2 - 0.012, H_ - 0.03), (0.022, 0.022, 0.03), trim, bevel=0.003).parent = body
+    box("SHandle", (0, -D_ / 2 - 0.03, H_ - 0.03), (0.15, 0.025, 0.028), hb, bevel=0.011).parent = body
     return dict(root=body, hinge=hinge, W=W_, D=D_, H=H_)
 
 
+_NOTE_MATS = {}
+
+
+def _note_paper():
+    """Used banknote paper seen as a stack: a blue-grey tone with fibre noise and fine sheet lines along the edges
+    (nothing printed, nothing readable)."""
+    if "p" in _NOTE_MATS:
+        return _NOTE_MATS["p"], _NOTE_MATS["b"]
+    m = pbr("NotePaper", (0.20, 0.24, 0.30), 0.85)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    wv = N.new("ShaderNodeTexWave"); wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 90; wv.inputs['Distortion'].default_value = 1.5
+    L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 120; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    m1 = N.new("ShaderNodeMix"); m1.data_type = 'RGBA'; m1.blend_type = 'MULTIPLY'; m1.inputs['Factor'].default_value = 0.35
+    m1.inputs[6].default_value = (0.20, 0.24, 0.30, 1); L.new(wv.outputs['Color'], m1.inputs[7])
+    m2 = N.new("ShaderNodeMix"); m2.data_type = 'RGBA'; m2.blend_type = 'OVERLAY'; m2.inputs['Factor'].default_value = 0.25
+    L.new(m1.outputs[2], m2.inputs[6]); L.new(nz.outputs['Color'], m2.inputs[7]); L.new(m2.outputs[2], p.inputs['Base Color'])
+    band = pbr("NoteBand", (0.55, 0.46, 0.32), 0.8)                # brown paper band
+    _NOTE_MATS["p"] = m; _NOTE_MATS["b"] = band
+    return m, band
+
+
 def note_bundle(name):
-    """A bundle of used, plain banknotes (no design, nothing readable): a slightly worn stack with a paper band."""
-    m = pbr("NotePaper", (0.42, 0.36, 0.30), 0.85)
-    band = pbr("NoteBand", (0.75, 0.72, 0.62), 0.8)
-    return join([box(name, (0, 0, 0.018), (0.16, 0.085, 0.036), m, bevel=0.002), box(name + "B", (0, 0, 0.018), (0.03, 0.087, 0.038), band)], name)
+    """A bundle of used plain banknotes: a slightly uneven stack (sheet lines on the edges) with a paper band."""
+    m, band = _note_paper()
+    import random
+    rnd = random.Random(sum(map(ord, name)) * 7919)
+    parts = [box(name, (0, 0, 0.018), (0.16, 0.085, 0.036), m, bevel=0.0015),
+             box(name + "T", (rnd.uniform(-0.002, 0.002), rnd.uniform(-0.002, 0.002), 0.0365), (0.158, 0.084, 0.002), m, bevel=0.0008, rot=(0, 0, rnd.uniform(-0.03, 0.03))),
+             box(name + "B", (0, 0, 0.0185), (0.032, 0.087, 0.0385), band)]
+    o = join(parts, name); o.rotation_euler.z = rnd.uniform(-0.04, 0.04)
+    return o
 
 
 def kitchen_extras(c):
@@ -865,6 +972,12 @@ def anim_letter(c, t, shot, dur):
         d = P_["detective"]; stand_at(d, (KTABLE.x + 0.72, KTABLE.y - 0.45), math.radians(125))
         side = forward(d).cross(Vector((0, 0, 1))).normalized(); d.rot("spine03", side, -10); d.rot("head", side, -26)
         breathe(d, sec + 1)
+        # hands clasped behind his back (no free hand hanging in frame)
+        back = -forward(d); hip = d.bone_head("spine01") + back * 0.16 + Vector((0, 0, 0.02))
+        for sd in ("L", "R"):
+            s_ = SIDE[sd]
+            reach(d, sd, hip + side * (-0.035 * s_), Vector((0, 0, -1)) + back * 0.5, side * (-s_) + Vector((0, 0, -0.4)))
+        rj.curl(d, 30)
 
 
 def cam_letter(c, t):
@@ -939,8 +1052,8 @@ def anim_call(c, t, shot, dur):
 
 def cam_call_left(c, t):
     e = ease(t)
-    a = Vector((-0.55, 0.15, 1.45)); b = Vector((-0.45, -0.1, 1.45))
-    return (a.lerp(b, e), Vector((0.3, -1.5, 1.32)), 40)
+    a = Vector((0.05, 0.35, 1.5)); b = Vector((0.15, 0.15, 1.48))          # from her left side: handset along the cheek, ear to jaw
+    return (a.lerp(b, e), Vector((0.27, -1.5, 1.4)), 45)
 
 
 def cam_toys(c, t):
@@ -1014,8 +1127,13 @@ def anim_suit(c, t, shot, dur):
             reach(f, "L", lidp - right * 0.15 + Vector((0, 0, 0.03)), Vector((0, 0, -1)) - right * 0.5, fwd)
         else:
             reach(f, "R", latch(0.18) + Vector((0, -0.03, 0.02)), Vector((0, 0, -1)) + right * 0.5, fwd + Vector((0, 0, -1)))
-            reach(f, "L", latch(-0.18) + Vector((0, -0.03, 0.02)), Vector((0, 0, -1)) - right * 0.5, fwd + Vector((0, 0, -1)))
+            reach(f, "L", latch(-0.18) + Vector((0, 0.06, 0.05)), Vector((0, 0, -1)) - right * 0.5, fwd)
         f.rot("head", right, -20)
+    for m in bpy.data.materials:                     # backlit thin fingers glowed red through the subsurface: tighten it here
+        if m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
+            pp = m.node_tree.nodes["Principled BSDF"]
+            if pp.inputs['Subsurface Weight'].default_value > 0.05 and pp.inputs['Subsurface Scale'].default_value > 0.005:
+                pp.inputs['Subsurface Scale'].default_value = 0.004
 
 
 def cam_suitcase(c, t):

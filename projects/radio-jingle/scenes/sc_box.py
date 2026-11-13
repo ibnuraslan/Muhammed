@@ -175,7 +175,7 @@ def build(variant=None):
         smoke(c)
     import look
     look.interior_day(window=((-0.5, 7.5, 4.0), (0.0, 0.0, 0.7)), mood="overcast", key_size=3.0, keep=tuple(bpy.data.objects[n] for n in ("WorkL", "BulbL", "TopSoft", "InspLamp")))
-    bpy.context.scene.view_settings.exposure += 1.0
+    bpy.context.scene.view_settings.exposure += 0.5            # was +1.0: the cutaway read washed out
     rj.finish_scene()
     return c
 

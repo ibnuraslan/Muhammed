@@ -40,6 +40,10 @@ def build_woods(c, seed=4, n_trees=180):
     verts = [(xs[i], ys[j], Hh[j, i]) for j in range(ny) for i in range(nx)]
     faces = [(j * nx + i, j * nx + i + 1, (j + 1) * nx + i + 1, (j + 1) * nx + i) for j in range(ny - 1) for i in range(nx - 1)]
     me.from_pydata(verts, [], faces); me.update(); me.polygons.foreach_set("use_smooth", [True] * len(me.polygons))
+    uv = me.uv_layers.new(name="UVMap")                  # planar UVs: the normal map needs tangents (flat ground went grey without)
+    co = np.array(verts)[:, :2] / S_ + 0.5
+    li = np.zeros(len(me.loops), dtype=np.int64); me.loops.foreach_get("vertex_index", li)
+    uv.data.foreach_set("uv", co[li].astype(np.float32).ravel())
     o = bpy.data.objects.new("ForestFloor", me); bpy.context.collection.objects.link(o); o.data.materials.append(rj.ph.texture("forest_leaves_04", scale=0.35, name="LeafFloor"))
     pts = []
     while len(pts) < n_trees:
@@ -605,6 +609,7 @@ def build(variant=None):                      # noqa: F811
         look.forest(mood="dusk", azim=250, area=((0, 0), (70, 70)), canopy=16.0, exposure=2.8)
     else:
         look.forest(mood="dusk", azim=200, area=((0, 0), (70, 70)), canopy=16.0, exposure=1.2)
+    rj.sink_haze()
     return c
 
 

@@ -182,6 +182,31 @@ def lane(c):
     c["trees"] = rj.low_instances("birch", trees)
     c["trees"] += rj.ph_instances("shrub_02", [((x, -3.9, 0), x, 1.2) for x in (-7.5, 2.0, 5.5)])
     c["flowers"] = c["home"].get("flowers", [])
+    village_east(c)
+
+
+def village_east(c):
+    """The lane runs on east through the village toward the lake: more houses and fences on both sides, garden trees,
+    and the lake with its far wooded shore in haze at the end (the "lane" shot looks down it from behind her)."""
+    more = [((46, -12, 0), math.pi, 14), ((61, -13, 0), math.pi, 15), ((76, -12, 0), math.pi, 16),
+            ((40, 13, 0), 0.0, 17), ((56, 14, 0), 0.0, 18), ((71, 13, 0), 0.0, 19)]
+    c["houses"] += [house_block(p, r, s_) for (p, r, s_) in more]
+    fm = rj.mat("pine")
+    for (a, b) in (((24, -3.2), (38, -3.2)), ((40, -3.2), (54, -3.2)), ((56, -3.2), (70, -3.2)),
+                   ((-20, 3.2), (-2, 3.2)), ((0, 3.2), (18, 3.2)), ((20, 3.2), (36, 3.2)), ((38, 3.2), (52, 3.2)), ((54, 3.2), (70, 3.2))):
+        fence_x(a, b, 0.95, fm)
+    c["trees"] += rj.low_instances("birch", [((x, y, 0), x * 0.37, sc) for (x, y, sc) in
+                                             ((22, -6, 1.1), (33, 7, 1.0), (44, -7, 1.2), (52, 6.5, 0.95), (63, -6.5, 1.05), (68, 7, 1.15), (79, -5, 1.2), (82, 6, 1.0))])
+    c["trees"] += rj.ph_instances("shrub_02", [((x, y, 0), x, 1.1) for (x, y) in ((28, 3.9), (47, -3.9), (59, 3.9), (66, -3.9))])
+    from sc_path import water_material
+    box("LakeEast", (240, 0, -0.03), (300, 600, 0.02), water_material())           # the lake begins past the last gardens
+    from kit import pbr
+    hm = pbr("FarShore", (0.16, 0.20, 0.20), 0.9)                                      # far wooded shore, blued by distance
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=48, ring_count=16, location=(900, 0, -10))
+    hill = bpy.context.object; hill.name = "FarShore"; hill.scale = (60, 700, 34); hill.data.materials.append(hm)
+    for k in (-1, 1):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=12, location=(860, k * 420, -8))
+        h2 = bpy.context.object; h2.scale = (50, 260, 26); h2.data.materials.append(hm)
 
 
 def fence_x(a, b, h, m):
@@ -210,6 +235,7 @@ def light(c):
         az, el = {"afternoon": (70, 16), "garden": (115, 30)}.get(L, (140, 20))   # garden: from the side, over the house (gate shot)
         look.day_light("low_sun", azim=az, elev=el, sky="blue",
                        haze_box=((0, 0, 8), (160, 120, 16)), exposure=1.3)
+        rj.sink_haze()
         return
     from common import sun
     w, s = rj.sky("grey" if L in ("grey", "morning") else "lowsun", rot=0)
@@ -278,7 +304,7 @@ def anim_gate(c, t, shot, dur):
     sec = t * dur
     h = c["P"]["sister"]; bk = c["bike"]
     c["gate"].rotation_euler.z = math.radians(-80) * ease(min(1, sec / 0.8))
-    wheel_bike(c, h, bk, (GATE.x + 0.1, -7.2), (GATE.x + 0.1, -0.4), sec + 0.2, speed=0.85)
+    wheel_bike(c, h, bk, (GATE.x + 0.1, -6.3), (GATE.x + 0.1, 0.5), sec + 0.2, speed=0.85)
     for k, f in enumerate(c["flowers"][::3]):
         f.rotation_euler.x = 0.06 * math.sin(sec * 1.7 + k)
     rj.sway(c["trees"], sec, 0.01, 0.3)
@@ -286,9 +312,9 @@ def anim_gate(c, t, shot, dur):
 
 def cam_gate(c, t):
     e = ease(t)
-    a = Vector((GATE.x - 2.6, -7.1, 3.0)); b = Vector((GATE.x - 2.0, -6.7, 1.5))     # crane down in the front garden, behind her (house wall at y -7.5)
+    a = Vector((GATE.x - 0.05, -7.3, 2.7)); b = Vector((GATE.x + 0.05, -7.2, 1.9))    # straight behind her, against the house wall (y -7.5): her back only
     g = c["P"]["sister"].bone_head("spine05")
-    return (a.lerp(b, e), g + Vector((0.2, 1.8, -0.2)), 32)
+    return (a.lerp(b, e), g + Vector((0.1, 2.5, -0.35)), 30)
 
 
 def anim_lane(c, t, shot, dur):
@@ -305,9 +331,9 @@ def anim_lane(c, t, shot, dur):
 
 def cam_lane(c, t):
     e = ease(t)
-    a = Vector((GATE.x - 0.9, -4.3, 2.0)); b = Vector((GATE.x - 0.7, -4.1, 1.95))
-    tgt = c["bike"]["root"].location + Vector((0, 0, 0.8))
-    return (a.lerp(b, e), tgt, 85)
+    p = Vector(c["bike"]["root"].location)                                    # following behind her down the lane, eye level
+    cam = p + Vector((-6.5 + 0.6 * e, 0.9, 1.55))
+    return (cam, p + Vector((12.0, 0.2, 0.7)), 35)
 
 
 # --- 16A: the postman cycles up the lane ; 16B: he drops the envelope in the gate box, a neighbour on her balcony

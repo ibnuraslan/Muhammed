@@ -133,7 +133,7 @@ def mat(key):
         "ivory": lambda: pbr("Ivory", (0.78, 0.75, 0.66), 0.25, 0.0, **{'Coat Weight': 0.5}),
         "glass": lambda: window_glass(),
         "frosted": lambda: frosted_glass(),
-        "phone": lambda: pbr("PhonePlastic", (0.30, 0.33, 0.28), 0.3, 0.0, **{'Coat Weight': 0.5, 'Coat Roughness': 0.15}),   # Bundespost grey-green
+        "phone": lambda: pbr("PhonePlastic", (0.21, 0.27, 0.20), 0.3, 0.0, **{'Coat Weight': 0.5, 'Coat Roughness': 0.15}),   # Bundespost grey-green
         "curtain": lambda: fabric("Curtain", (0.42, 0.34, 0.24), 0.85, 0.5),
         "net": lambda: net_curtain(),
         "rug": lambda: fabric("Rug", (0.30, 0.12, 0.08), 0.95, 0.4, 300),
@@ -373,7 +373,7 @@ def person(role, name=None, cap=True):
     if role == "firefighter":
         h.cap = fire_helmet(h)
     if role == "diver":
-        h.cap = diver_hood(h)
+        h.cap = diver_hood(h); diver_tank(h)
     if role == "postman" and cap:
         h.cap = police_cap(h, crown=(0.10, 0.13, 0.2), band=(0.06, 0.07, 0.1))
     return h
@@ -503,11 +503,42 @@ def fire_helmet(h):
 
 
 def diver_hood(h):
-    m = pbr("Neoprene", (0.01, 0.01, 0.012), 0.5)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=(0, 0.0, -0.04))
-    t = bpy.context.active_object; t.scale = (0.11, 0.12, 0.14); t.data.materials.append(m); bpy.ops.object.transform_apply(scale=True)
-    mask = box("Mask", (0, -0.11, -0.07), (0.12, 0.03, 0.07), pbr("MaskGlass", (0.05, 0.06, 0.07), 0.05, 0.0, **{'Coat Weight': 1.0}), bevel=0.02)
-    return _head_hat(h, [t, mask], h.name + "_hood")
+    """1981 scuba diver's head: a close neoprene hood, an oval mask with a rubber frame and strap, a J-snorkel on
+    the left. Hat-local axes at build: the person faces -Y, his left is +X, origin near the skull top."""
+    m = pbr("Neoprene", (0.012, 0.012, 0.014), 0.55)
+    rub = pbr("MaskRubber", (0.03, 0.03, 0.035), 0.45)
+    gl = pbr("MaskGlass", (0.04, 0.05, 0.06), 0.04, 0.0, **{'Coat Weight': 1.0})
+    sn = pbr("Snorkel", (0.75, 0.38, 0.05), 0.4)                         # orange snorkel (period)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=(0, 0.012, -0.055))
+    t = bpy.context.active_object; t.scale = (0.097, 0.106, 0.122); t.data.materials.append(m); bpy.ops.object.transform_apply(scale=True)
+    parts = [t]
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.104, minor_radius=0.009, location=(0, 0.012, -0.085), rotation=(math.radians(-8), 0, 0))
+    st = bpy.context.active_object; st.scale = (0.98, 1.06, 1); st.data.materials.append(rub); bpy.ops.object.transform_apply(scale=True); parts.append(st)
+    parts.append(box("MaskFrame", (0, -0.1, -0.085), (0.13, 0.035, 0.075), rub, bevel=0.022))
+    parts.append(box("Mask", (0, -0.12, -0.085), (0.11, 0.012, 0.058), gl, bevel=0.02))
+    parts.append(cyl("SnorkelTube", (0.1, -0.04, -0.02), 0.012, 0.3, sn, verts=12))
+    parts.append(cyl("SnorkelBend", (0.07, -0.09, -0.165), 0.012, 0.07, sn, verts=12, rot=(0, math.radians(70), math.radians(-35))))
+    return _head_hat(h, parts, h.name + "_hood")
+
+
+def diver_tank(h):
+    """A single steel tank on the back with a harness strap (parented to the upper spine)."""
+    tm = pbr("Tank", (0.62, 0.6, 0.55), 0.3, 0.6)
+    vm = pbr("Valve", (0.15, 0.15, 0.15), 0.3, 0.9)
+    hb = pbr("Harness", (0.02, 0.02, 0.02), 0.6)
+    sp = h.bone_head("spine03")
+    c0 = sp + Vector((0, 0.17, 0.08))
+    parts = [cyl("TankBody", c0, 0.085, 0.62, tm, verts=24), cyl("TankValve", c0 + Vector((0, 0, 0.35)), 0.025, 0.08, vm, verts=12)]
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=0.085, location=c0 + Vector((0, 0, 0.31)))
+    d = bpy.context.active_object; d.data.materials.append(tm); parts.append(d)
+    for z in (0.18, -0.12):
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.17, minor_radius=0.012, location=sp + Vector((0, 0.03, z + 0.08)))
+        b_ = bpy.context.active_object; b_.scale = (1.05, 0.85, 1); b_.data.materials.append(hb); parts.append(b_)
+    o = join(parts, h.name + "_tank")
+    mw = o.matrix_world.copy()
+    o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = "spine03"; o.matrix_world = mw
+    h.parts.append(o)
+    return o
 
 
 def hide_person(h, on=True):
@@ -1345,3 +1376,18 @@ def curl(h, deg=35, side=("L", "R"), thumb=15):
             b = f"finger1-{k}.{sd}"
             if b in h.arm.pose.bones:
                 rotate_bone(h.arm, b, (0, 0, -1 if sd == "L" else 1), thumb, space="LOCAL")
+
+
+def sink_haze(depth=0.6):
+    """Volume boxes whose bottom face lies on flat ground (z = 0) fight with it: the flat floor rendered as a grey
+    slab. Push every haze box's bottom below the ground (top stays where it was)."""
+    for o in bpy.data.objects:
+        if o.type == 'MESH' and o.name.startswith("Haze"):
+            bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+            z0 = min(p.z for p in bb); z1 = max(p.z for p in bb)
+            if z0 > -0.05:
+                k = (z1 - z0 + depth) / max(z1 - z0, 1e-3)
+                o.scale.z *= k; o.location.z -= depth / 2 + (o.location.z - (z0 + z1) / 2) * (k - 1) * 0
+                bpy.context.view_layer.update()
+                bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+                o.location.z += (z0 - depth) - min(p.z for p in bb)

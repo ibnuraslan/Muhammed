@@ -375,6 +375,11 @@ def cam_ride_reeds(c, t):
     return (a.lerp(b, e), tgt, 85)
 
 
+# window-view plate for the house (kitchen windows): the misty lake beyond the garden, no people
+def cam_view(c, t):
+    return (Vector((-6.0, 1.0, 2.4)), Vector((-4.0, 40.0, 1.6)), 28)
+
+
 def _f_bike(c, t):
     return c["bike"]["root"].location + Vector((0, 0, 0.8))
 
@@ -546,8 +551,8 @@ def anim_meet(c, t, shot, dur):
 
 def cam_meet_wide(c, t):
     e = ease(t)
-    a = Vector((-6, 12, 8.5)); b = Vector((-4.5, 12.5, 8.0))
-    return (a.lerp(b, e), Vector((0.0, -0.5, 0.6)), 32)
+    a = Vector((-5, 9, 5.2)); b = Vector((-3.8, 9.4, 4.8))                 # closer and lower: the two men read
+    return (a.lerp(b, e), Vector((0.0, -0.5, 0.9)), 32)
 
 
 def cam_father_call(c, t):
@@ -726,15 +731,17 @@ def cam_bro_line(c, t):
 def anim_heli(c, t, shot, dur):
     sec = t * dur
     hl = c["heli"]
-    x = -60 + 16 * sec
-    hl.location = (x, 40 - 0.15 * x, 14 + 0.5 * math.sin(sec * 0.7)); hl.rotation_euler = (0, math.radians(-6), math.radians(-8))
+    x = -48 + 11 * sec                                   # low and slow along the shore, over the misty water
+    hl.location = (x, 52 - 0.1 * x, 8.0 + 0.4 * math.sin(sec * 0.7)); hl.rotation_euler = (0, math.radians(-5), math.radians(-6))
     _ambient(c, sec)
 
 
 def cam_heli(c, t):
     e = ease(t)
-    a = Vector((-12.9, 3.8, 1.5)); b = Vector((-12.5, 4.2, 1.6))           # from the reed gap, out over the lake
-    return (a.lerp(b, e), c["heli"].location + Vector((0, 0, -1.0)), 38)
+    y0 = _shore_y(-12.6) + 2.2                                           # standing in the shallows past the reeds: water, far shore, sky
+    a = Vector((-12.9, y0, 1.35)); b = Vector((-12.6, y0 + 0.3, 1.4))
+    tgt = c["heli"].location * 0.75 + Vector((-14.0, 200.0, 2.0)) * 0.25
+    return (a.lerp(b, e), tgt, 40)
 
 
 def anim_divers(c, t, shot, dur):
@@ -759,6 +766,11 @@ def cam_bend_long(c, t):
     e = ease(t)
     a = Vector((-30, 4.5, 1.6)); b = Vector((-30, 3.6, 1.6))
     return (a.lerp(b, e), Vector((1.0, -2.0, 1.2)).lerp(Vector((2.5, -4.0, 1.3)), e), 120)
+
+
+# window-view plate for the house (kitchen windows): the misty lake beyond the garden, no people
+def cam_view(c, t):
+    return (Vector((-6.0, 1.0, 2.4)), Vector((-4.0, 40.0, 1.6)), 28)
 
 
 def _f_bike(c, t):
@@ -797,15 +809,16 @@ MOVES = {
     "heli": _mk("heli", 5.0, cam_heli, anim_heli),
     "divers": _mk("divers", 5.0, cam_divers, anim_divers, lambda c, t: Vector((-12, 8.6, 0.1)), 5.6),
     "bend_long": _mk("bend_long", 5.0, cam_bend_long, anim_empty),
+    "view": _mk("view", 3.0, cam_view, anim_empty),
 }
 NIGHT_LINE = "night|officer,officer2,neighbour,officer3,uncle"
 VARIANT_FOR = {"ride_track": "lowsun|sister", "ride_reeds": "lowsun|sister", "bend_push": "dusk", "bend_high": "dusk",
-               "father_walk": "dusk|father", "uncle_torch": "dusk|uncle", "meet_wide": "bluehour|father,uncle",
+               "father_walk": "dusk|father", "uncle_torch": "dusk|uncle", "meet_wide": "bluehour|father,uncle+lift",
                "father_call": "bluehour|father,uncle", "night_line": NIGHT_LINE + "+car", "night_fire": "night|firefighter,firefighter2",
-               "dog_low": "night|officer+dog", "dog_front": "night|officer+dog", "brush_find": "night|officer+dog",
+               "dog_low": "night|officer+dog", "dog_front": "night|officer+dog", "brush_find": "night|officer+dog+lift",
                "brush_ring": "night|officer,officer2,officer3,neighbour,uncle", "bro_run": "night|brother,officer,officer2,neighbour",
                "bro_line": "night|brother,officer,officer2,neighbour,officer3", "heli": "mist+heli", "divers": "mist|diver,diver2+boat",
-               "bend_long": "grey"}
+               "bend_long": "grey", "view": "mist"}
 
 _build = build
 
@@ -850,7 +863,7 @@ def build(variant=None):                      # noqa: F811
         c["heli"] = vehicles.make("helicopter_police", loc=(0, 40, 14), heading_deg=0)
     if "boat" in extras:
         import rj_vehicles, vehicles
-        c["boat"] = vehicles.make("boat_police", loc=(-9, 21, -0.38), heading_deg=170)
+        c["boat"] = vehicles.make("dinghy_police", loc=(-9, 21, -0.3), heading_deg=170)
     import look
     if light in ("lowsun", "mist", "grey"):
         look.forest(mood="mist", azim={"lowsun": 5, "mist": 110, "grey": 200}[light], area=((-5, 0), (110, 70)), canopy=16.0,
@@ -859,4 +872,14 @@ def build(variant=None):                      # noqa: F811
         look.forest(mood="dusk", azim=290, area=((-5, 0), (110, 70)), canopy=16.0)
     else:                                   # night: a moonlit version of the dusk look (readable deep blue) + torches
         look.forest(mood="dusk", azim=200, area=((-5, -5), (110, 70)), canopy=16.0, exposure=1.0)
+    rj.sink_haze()
+    if "lift" in extras:                    # readable night: figures, beams and the red bike must read (keeps the blue mood)
+        bpy.context.scene.view_settings.exposure += 0.8
+        for o in bpy.data.objects:
+            if o.type == 'LIGHT' and o.data.type == 'SPOT':
+                o.data.energy *= 2.0
+        if light == "night":                # a low cool moon fill skimming the scene
+            ml = bpy.data.lights.new("MoonFill", 'SUN'); ml.energy = 0.08; ml.color = (0.55, 0.65, 1.0); ml.angle = math.radians(3)
+            mo = bpy.data.objects.new("MoonFill", ml); bpy.context.collection.objects.link(mo)
+            mo.rotation_euler = (math.radians(62), 0, math.radians(150))
     return c
