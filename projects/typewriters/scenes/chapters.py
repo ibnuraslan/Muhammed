@@ -6,6 +6,9 @@ shot gives the title ~2 s before the narration.
 """
 # MASTER RULE (Nov 2026): every chapter gets >= 3.0 s of picture under its title card before the voice starts;
 # the intro keeps a 2.5 s lead-in. Apply when building the masters after the voiceover arrives.
+# DELIVERY: title_card.py (2-line titles, scrim, one PNG per title); textures unpacked into one shared deduped
+# folder (<= 2K), identical meshes shared, peak RAM measured on opening the master, zipped into <= 380 MB parts with
+# one shared top folder plus a MERGE .bat. FilmCam, packed fonts, 32 samples (make_master).
 LEAD = 2.5
 
 CHAPTERS = {
