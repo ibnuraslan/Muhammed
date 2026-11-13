@@ -466,10 +466,10 @@ def place_officer(c, sec, press=0.0, write=0.0):
     lt = cup + left * 0.03 * (1 - press) + Vector((0, 0, -0.04))
     if press > 0.01:
         reach(o, "L", lt, left * 0.5 + Vector((0, 0, -1)) - fwd * 0.3, Vector((0, 0, 1)) - left * 0.35)
-        fingers_curl(o, 25, side=("L",))
+        rj.curl(o, 30, side=("L",))
     knee = o.bone_tail("upperleg02.R") + Vector((0, 0, 0.1))
     reach(o, "R", knee.lerp(Vector((PHONE_T.x - 0.06, PHONE_T.y + 0.42, 0.8)), write), side * 0.4 + Vector((0, 0, -1)), fwd + Vector((0, 0, -0.8)))
-    fingers_curl(o, 30)
+    rj.curl(o, 35)
     return o
 
 

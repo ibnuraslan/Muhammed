@@ -207,14 +207,15 @@ def light(c):
     L = c["light"]
     if look.enabled():
         rj.sky("grey")
-        look.day_light("low_sun", azim=70 if L == "afternoon" else 140, elev=16 if L == "afternoon" else 20, sky="blue",
+        az, el = {"afternoon": (70, 16), "garden": (115, 30)}.get(L, (140, 20))   # garden: from the side, over the house (gate shot)
+        look.day_light("low_sun", azim=az, elev=el, sky="blue",
                        haze_box=((0, 0, 8), (160, 120, 16)), exposure=1.3)
         return
     from common import sun
     w, s = rj.sky("grey" if L in ("grey", "morning") else "lowsun", rot=0)
     if s is not None:
         bpy.data.objects.remove(s, do_unlink=True)
-    if L == "afternoon":
+    if L in ("afternoon", "garden"):
         sun(22, 210, 3.5, (1.0, 0.78, 0.55), 1.5)            # low warm afternoon key across the lane
     else:
         sun(18, 160, 1.6, (0.85, 0.9, 1.0), 8)               # grey morning: a soft cool key, dark fill
@@ -418,5 +419,5 @@ MOVES = {
     "fiat_load": _mk("fiat_load", 5.0, cam_fiat_load, anim_fiat),
     "fiat_wide": _mk("fiat_wide", 5.0, cam_fiat_wide, anim_fiat),
 }
-VARIANT_FOR = {"gate": "afternoon|sister", "lane": "afternoon|sister", "post_ride": "grey|postman", "post_box": "grey|postman,neighbour",
+VARIANT_FOR = {"gate": "garden|sister", "lane": "afternoon|sister", "post_ride": "grey|postman", "post_box": "grey|postman,neighbour",
                "fiat_load": "grey|father", "fiat_wide": "grey|father"}

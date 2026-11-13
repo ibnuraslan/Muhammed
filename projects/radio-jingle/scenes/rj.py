@@ -1329,3 +1329,19 @@ def crouch(h, pos, face_z, hip_h=0.5, z=0.0, lean=35):
     for b, a in (("spine05", 4), ("spine04", 5), ("spine03", 5), ("spine02", 4), ("spine01", 3)):
         h.rot(b, side, -lean * a / 21)
     fingers_curl(h, 25)
+
+
+def curl(h, deg=35, side=("L", "R"), thumb=15):
+    """Finger curl about each bone's own flex axis (from chat B's b_common.curl; human.fingers_curl turns about the
+    world X axis, which splays a rotated hand into a claw). Thumb tucks."""
+    from human import rotate_bone
+    for sd in side:
+        for f in range(2, 6):
+            for k in (1, 2, 3):
+                b = f"finger{f}-{k}.{sd}"
+                if b in h.arm.pose.bones:
+                    rotate_bone(h.arm, b, (1, 0, 0), deg * (0.8 if k == 1 else 1.0), space="LOCAL")
+        for k in (2, 3):
+            b = f"finger1-{k}.{sd}"
+            if b in h.arm.pose.bones:
+                rotate_bone(h.arm, b, (0, 0, -1 if sd == "L" else 1), thumb, space="LOCAL")
