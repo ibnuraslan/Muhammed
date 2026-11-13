@@ -33,6 +33,42 @@ for o in [o for o in bpy.data.objects if o.type == 'MESH' and o.data and o.data.
 for me in [m for m in bpy.data.meshes if m.users == 0]:
     bpy.data.meshes.remove(me)
 print(f"[mesh] {shared} objects now share a mesh", flush=True)
+
+
+def mat_fp(m):
+    """Fingerprint of what a material renders: node types, input values and image files (copies made on import
+    compare equal)."""
+    if m is None:
+        return "none"
+    if not m.use_nodes:
+        return str(tuple(round(x, 4) for x in m.diffuse_color))
+    parts = []
+    for n in sorted(m.node_tree.nodes, key=lambda n: n.name.split(".")[0] + n.type):
+        p = [n.type]
+        if getattr(n, "image", None):
+            p.append(bpy.path.abspath(n.image.filepath) if not n.image.packed_file else hashlib.sha1(bytes(n.image.packed_file.data)).hexdigest())
+        for i in n.inputs:
+            v = getattr(i, "default_value", None)
+            try:
+                v = tuple(round(x, 4) for x in v)
+            except TypeError:
+                v = round(v, 4) if isinstance(v, float) else v
+            p.append(str(v))
+        parts.append("|".join(map(str, p)))
+    return hashlib.sha1("\n".join(parts).encode()).hexdigest()
+
+
+# objects sharing a mesh whose own materials render the same as the mesh's: use the mesh's materials (DATA slots), so
+# Cycles instances them instead of building a full copy per object (15 street trees x 1.8 M vertices otherwise)
+restored = 0
+for o in bpy.data.objects:
+    if o.type != 'MESH' or not o.data or o.data.users < 2 or not any(s_.link == 'OBJECT' for s_ in o.material_slots):
+        continue
+    if len(o.data.materials) == len(o.material_slots) and all(mat_fp(s_.material) == mat_fp(m_) for s_, m_ in zip(o.material_slots, o.data.materials)):
+        for s_ in o.material_slots:
+            s_.link = 'DATA'
+        restored += 1
+print(f"[mesh] {restored} objects use the shared mesh's own materials (instanced in Cycles)", flush=True)
 new = reused = scaled = 0
 for im in list(bpy.data.images):
     if not im.packed_file or im.source != 'FILE':
