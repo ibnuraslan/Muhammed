@@ -80,5 +80,8 @@ with natural colours and readable faces. If a relight kills the soul of a shot, 
 - Lead under each chapter title card ≥ 3.0 s (intro 2.5 s); enforced in scenes/make_master.py.
 - Title cards: new style (title_card.py from a5e97a4/b34ce08): long titles on two lines, soft scrim, one PNG per title.
 - Farm-ready: FilmCam on the master, fonts packed, 32 samples + adaptive 0.05 + denoise on every shot and the master.
+- CHAPTER-WISE delivery (supersedes "one film file"): one farm-ready .blend per part: intro (Seldom sting at its
+  end after a fade), then one per chapter. Each starts at frame 1, has its own fade in and out, and its own audio pair
+  (with and without voice) matching it exactly. Render output JPEG quality 92 (not PNG).
 - Size (Banker lesson, 9.8 GB to 2.2 GB): unpack textures into one shared deduped folder (≤2K), share identical meshes,
   measure peak RAM opening the master, zip into ≤380 MB parts with one shared top folder plus a MERGE .bat.
