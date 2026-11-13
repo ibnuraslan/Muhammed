@@ -30,7 +30,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 14 | ElectricianPolice | `claude/connect14-electrician-police` | `blender/ElectricianPolice_v007/` **acting fixed, approved, final commit 91f7a3d (VO sync when your voiceover arrives)** |
 | 15 | GameBoxBullet | `claude/connect15-game-box-bullet` | `blender/GameBoxBullet_v008/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 16 | DrunkTrain | `claude/connect16-drunk-train` | `blender/DrunkTrain_v005/` **acting fixed, approved, final commit 66c7cc0 (VO sync when your voiceover arrives)** |
-| 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v003/` |
+| 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v004/` **acting fixed, approved, final commit f3b113a (VO sync when your voiceover arrives)** |
 | 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved, final commit 284559b (VO sync when your voiceover arrives)** |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v004b/` **acting fixed, approved, final commit 57e65af (VO sync when your voiceover arrives)** |
 | 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
