@@ -55,18 +55,16 @@ pause
 """
 README = """THE PHONE THAT KILLED A BANKER - render package
 ====================================================
-%N% parts (phone_banker_part01of%NN%.zip ... phone_banker_part%NN%of%NN%.zip) + phone_banker_audio.zip
+%N% parts + phone_banker_audio.zip (sound, separate)
 
-1. Put all %N% part zips and MERGE_PHONE_BANKER.bat in one folder.
-2. Double-click MERGE_PHONE_BANKER.bat. It extracts every part into phone_banker_film\\ and checks that all
-   %COUNT% files arrived. (Without Windows: extract every zip into the same folder; they share the top folder.)
-3. Upload or open phone_banker_film\\out\\blend\\film\\phone_banker_film.blend and render the animation
-   (frames 1-%FRAMES%, 1920x816, 24 fps, Cycles 32 samples, denoise). Keep the folder structure as it is: the film file
-   links the shot files in out\\blend\\<part>\\ and the textures in out\\blend\\textures\\ by relative paths.
-   Memory: opening the film file takes about 9.5 GB of RAM; rendering peaks at about 12 GB (16 GB machines are fine).
-
-Audio (phone_banker_audio.zip): the full mix with voice and without voice, WAV 48 kHz and MP3 previews, exactly the
-length of the film; lay either one under the rendered frames from frame 1.
+(a) Download the %N% parts into ONE folder. Wait until each one shows its full size in File Explorer:
+%SIZES%
+(b) Right-click each part -> Extract All... -> set the destination to that SAME folder (delete the part-name bit at
+    the end of the path) -> Extract. If Windows asks, say "Replace" / "Yes to all".
+    You then have one folder, phone_banker_film, with %COUNT% files in it.
+(c) Right-click the phone_banker_film folder -> Send to -> Compressed (zipped) folder. This makes phone_banker_film.zip.
+(d) Upload phone_banker_film.zip to the farm. Main file: out/blend/film/phone_banker_film.blend, frames 1-%FRAMES%
+    (1920x816, 24 fps, Cycles). Memory: about 9.5 GB to open, about 12 GB peak while rendering.
 """
 nn = f"{N:02d}"
 for i, (sz, ps) in enumerate(bins, 1):
@@ -79,7 +77,8 @@ count = len(files)
 frames = 9247
 bat = BAT.replace("%N%", str(N)).replace("%NN%", nn).replace("%COUNT%", str(count))
 open(os.path.join(OUT, "MERGE_PHONE_BANKER.bat"), "w", newline="\r\n").write(bat)
-open(os.path.join(OUT, "README.txt"), "w", newline="\r\n").write(README.replace("%N%", str(N)).replace("%NN%", nn).replace("%COUNT%", str(count)).replace("%FRAMES%", str(frames)))
+sizes = "\n".join(f"      phone_banker_part{i:02d}of{nn}.zip   {(os.path.getsize(os.path.join(OUT, f'phone_banker_part{i:02d}of{nn}.zip')) + 1023) // 1024:,} KB" for i in range(1, N + 1))
+open(os.path.join(OUT, "README.txt"), "w", newline="\r\n").write(README.replace("%SIZES%", sizes).replace("%N%", str(N)).replace("%NN%", nn).replace("%COUNT%", str(count)).replace("%FRAMES%", str(frames)))
 aud = os.path.join(OUT, "phone_banker_audio.zip")
 with zipfile.ZipFile(aud, "w", zipfile.ZIP_DEFLATED) as z:
     for f in ("phone_banker_AUDIO_with_voice.wav", "phone_banker_AUDIO_no_voice.wav", "phone_banker_AUDIO_with_voice.mp3", "phone_banker_AUDIO_no_voice.mp3"):
