@@ -1,0 +1,86 @@
+[
+ {
+  "chapter": "4",
+  "pick": "fade-in",
+  "frame": 24,
+  "fade": 0.5,
+  "before": {
+   "text": 0.705,
+   "bg": 0.449
+  },
+  "after": {
+   "text": 0.824,
+   "bg": 0.278
+  }
+ },
+ {
+  "chapter": "4",
+  "pick": "hold",
+  "frame": 66,
+  "fade": 1.0,
+  "before": {
+   "text": 0.766,
+   "bg": 0.392
+  },
+  "after": {
+   "text": 0.944,
+   "bg": 0.093
+  }
+ },
+ {
+  "chapter": "4",
+  "pick": "fade-out",
+  "frame": 114,
+  "fade": 0.5,
+  "before": {
+   "text": 0.707,
+   "bg": 0.45
+  },
+  "after": {
+   "text": 0.825,
+   "bg": 0.278
+  }
+ },
+ {
+  "chapter": "5",
+  "pick": "fade-in",
+  "frame": 4126,
+  "fade": 0.5,
+  "before": {
+   "text": 0.739,
+   "bg": 0.693
+  },
+  "after": {
+   "text": 0.841,
+   "bg": 0.43
+  }
+ },
+ {
+  "chapter": "5",
+  "pick": "hold",
+  "frame": 4168,
+  "fade": 1.0,
+  "before": {
+   "text": 0.765,
+   "bg": 0.607
+  },
+  "after": {
+   "text": 0.944,
+   "bg": 0.148
+  }
+ },
+ {
+  "chapter": "5",
+  "pick": "fade-out",
+  "frame": 4216,
+  "fade": 0.5,
+  "before": {
+   "text": 0.737,
+   "bg": 0.694
+  },
+  "after": {
+   "text": 0.84,
+   "bg": 0.43
+  }
+ }
+]
