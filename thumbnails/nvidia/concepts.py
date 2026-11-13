@@ -71,7 +71,9 @@ CONCEPTS = {
 }
 
 CONCEPTS["targeted"] = dict(scene="thumb_targeted", exposure=0.0,
-                            cam=((0, -2.8, 1.62), (0, 1.0, 1.22), 36), focus=(0, 0.45, 1.2), fstop=4.0,
+                            cam=((0, -2.3, 1.12), (0, 1.0, 1.32), 38), focus=(0, 0.1, 1.05), fstop=4.0,
                             mask=lambda c: c["people"])
 
 CONCEPTS["targeted_head"] = dict(CONCEPTS["targeted"], cam=lambda c: (c["head"] + Vector((0.25, -0.75, 0.15)), c["head"], 50), fstop=None, mask=None)
+
+CONCEPTS["targeted_side"] = dict(CONCEPTS["targeted"], cam=lambda c: (Vector((2.4, -0.6, 1.1)), Vector((0, 0.0, 0.95)), 40), fstop=None, mask=None)

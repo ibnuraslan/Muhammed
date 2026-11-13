@@ -54,16 +54,22 @@ def build(variant=None):
                 pb.inputs['Coat Weight'].default_value = 0.25; pb.inputs['Coat Roughness'].default_value = 0.18; pb.inputs['Roughness'].default_value = 0.55
                 pb.inputs['Specular IOR Level'].default_value = 0.08
                 if 'Sheen Weight' in pb.inputs: pb.inputs['Sheen Weight'].default_value = 0.0
-    pose_sit(h, lean=24)
-    h.rot("neck01", (1, 0, 0), 2); h.rot("head", (1, 0, 0), -4)
+    pose_sit(h, lean=16)
+    h.rot("neck01", (1, 0, 0), -4); h.rot("head", (1, 0, 0), -12)
     h.arm.location = (0, 0.55, 0.0); bpy.context.view_layer.update()
     _ground(h, 0.0)
     h.arm.location.z += 0.08; bpy.context.view_layer.update()       # sitting on a stool hidden behind the table
     hd = h.bone_head("head"); ht = h.bone_tail("head")
     c = hd + (ht - hd) * 0.38
     for sd, sg in (("L", 1), ("R", -1)):
-        reach(h, sd, c + Vector((0.088 * sg, 0.035, 0.0)), (0.45 * sg, -0.25, -1.0), hand_dir=(-0.55 * sg, 0.15, 0.85))
+        reach(h, sd, c + Vector((0.088 * sg, 0.035, 0.0)), (0.2 * sg, -0.25, -1.0), hand_dir=(-0.5 * sg, 0.2, 0.85))
     fingers_curl(h, 32, thumb=5)
+    # elbows resting on the tabletop: move him (as a whole) so both elbows sit on the surface
+    bpy.context.view_layer.update()
+    el = (h.bone_tail("upperarm02.L") + h.bone_tail("upperarm02.R")) / 2
+    TOP = 0.765 + 0.025 + 0.045            # table surface + the sleeve's thickness under the elbow
+    h.arm.location += Vector((0, 0.02 - el.y, TOP - el.z)); bpy.context.view_layer.update()
+    c = c + Vector((0, 0.02 - el.y, TOP - el.z))
     # four women behind him in the dark
     W = [((-1.05, 2.2, 0), 0.25, "long01", "female_elegantsuit01", "middleage_lightskinned_female_diffuse.png", 38),
          ((-0.35, 2.9, 0), 0.08, "bob02", "female_elegantsuit01", "young_lightskinned_female_diffuse.png", 30),
@@ -88,7 +94,7 @@ def build(variant=None):
         o.parent = root
     root.location = (0.0, -0.22, 0.765); root.rotation_euler = (0, 0, math.radians(-12)); root.scale = (1.6, 1.6, 1.6)
     spot("LimeGlow", (0.0, -0.55, 1.25), (0, -0.22, 0.77), 20, (0.88, 0.97, 0.0), 14, 0.5, 0.02)
-    spot("Face", (0.0, -1.4, 1.45), (0, 0.45, 1.3), 140, (1.0, 0.9, 0.8), 18, 0.6, 0.2)   # a little light under the hands on his face
+    spot("Face", c + Vector((0.35, -1.3, -0.12)), c, 110, (1.0, 0.9, 0.8), 18, 0.6, 0.2)   # a little light under the hands on his face
     people = [o for hh in [h] + women for o in hh.parts]
     return dict(h=h, women=women, head=c, people=people)
 
