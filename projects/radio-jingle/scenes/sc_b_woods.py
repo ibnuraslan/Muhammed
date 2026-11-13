@@ -78,6 +78,7 @@ def build(variant=None):
         pts = c["wire_pts"]
         clear_path([((pts[k].x + 0.5, pts[k].y - 0.4), (pts[k + 8].x + 0.5, pts[k + 8].y - 0.4)) for k in (4, 26)], 0.9)
     B.preview_cap()
+    c["exp0"] = bpy.context.scene.view_settings.exposure
     return c
 
 
@@ -116,6 +117,8 @@ def walk_on(c, h, p0, p1, u, cycles, stride=20, swing=12):
 
 def anim(c, t, move):
     sec = t * DUR[move]
+    if move == "wire":                                    # the crane starts high under the canopy: open it up there
+        bpy.context.scene.view_settings.exposure = c["exp0"] + 0.5 * (1.0 - t)
     P_ = c["P"]
     if c["set"] == "wire":
         pts = c["wire_pts"]
