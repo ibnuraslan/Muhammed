@@ -1,6 +1,6 @@
-# LegoInNose_v009: ON HOLD, DO NOT RENDER (brick floats off the fingers at about 1.8–2 s; fix in progress)
+# LegoInNose_v010: fixed and synced to your voiceover (READY TO RENDER)
 
-This is Connect03's acting-fix version **LegoInNose_v008c** (branch `claude/connect03-lego-in-nose`, commit 6e93a4a), retimed so each story beat lands on its words in your recording `LegoInNose_v009_VO.mp3`.
+This is Connect03's acting-fix version **LegoInNose_v008e** (branch `claude/connect03-lego-in-nose`, commit 3a018c6), retimed so each story beat lands on its words in your recording `LegoInNose_v010_VO.mp3`.
 
 What changed against v007 (the render you stopped):
 - Every hand uses the shared hand library. The bricks, tweezers, inhaler, tissue, gamepad and phone are held IN the fingers on every frame (the prop check is 0 for held items).
@@ -12,4 +12,6 @@ What changed against v007 (the render you stopped):
 Render:
 - Frames **1–2036** at 60 fps (33.9 s).
 - The voiceover is packed into the .blend as a sound strip (channel 1), and the same mp3 is next to it.
-- Render as described in SETTINGS.md, then lay `LegoInNose_v009_VO.mp3` under the frames starting at frame 1.
+- Render as described in SETTINGS.md, then lay `LegoInNose_v010_VO.mp3` under the frames starting at frame 1.
+
+- v010: the brick stays pinched between his thumb and index tips all the way into his nostril (it floated off his fingers in v009). The rest of his hand stays at least 1.5 cm off his face.

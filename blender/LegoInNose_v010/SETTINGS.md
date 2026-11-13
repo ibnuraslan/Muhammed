@@ -1,10 +1,10 @@
-# LegoInNose_v009: farm render sheet
+# LegoInNose_v010: farm render sheet
 
-These values were read back from `LegoInNose_v009_60fps.blend` opened in factory-startup Blender 5.2.2, with no add-ons.
+These values were read back from `LegoInNose_v010_60fps.blend` opened in factory-startup Blender 5.2.2, with no add-ons.
 
 | Item | Value |
 |---|---|
-| File | `LegoInNose_v009_60fps.blend`, 56 MB, compressed. All images are packed: no unpacked files, no linked libraries. It's a normal git file (no LFS). Textures are 1K, and the hero male skin is 2K. Images are JPEG q90, except PNG where alpha matters (hair, brows, lashes, leaves). The HDRIs are 1K. |
+| File | `LegoInNose_v010_60fps.blend`, 56 MB, compressed. All images are packed: no unpacked files, no linked libraries. It's a normal git file (no LFS). Textures are 1K, and the hero male skin is 2K. Images are JPEG q90, except PNG where alpha matters (hair, brows, lashes, leaves). The HDRIs are 1K. |
 | Blender | 5.2.2 |
 | Engine | Cycles. The device is saved as CPU; GPU is fine. No special features are used. |
 | Resolution | 1080 × 1920 at 100 % |
@@ -16,7 +16,7 @@ These values were read back from `LegoInNose_v009_60fps.blend` opened in factory
 | Light paths | Max 8, diffuse 3, glossy 3, transmission 8, transparent 8. Caustics off. Persistent data on. |
 | Motion blur | Off (animated look, per `STYLE_ANIMATED.md`) |
 | Colour | Display sRGB. View AgX, look "AgX - Punchy". The scene exposure is keyframed (studio, night, time-lapse flashes), so do not override it. |
-| Output | PNG, RGB, 8-bit, written to `//render/LegoInNose_v009_####.png` |
+| Output | PNG, RGB, 8-bit, written to `//render/LegoInNose_v010_####.png` |
 | Audio | None yet. The voiceover isn't recorded. Once it is, retime with `retime_to_vo.py`, which adds the VO strip at frame 1, and add the mp3 when encoding. |
 | Caches / sims | None: no simulations, particles, Alembic, linked libraries or drivers. Water streaks are keyframed meshes, and the steam is a volume material. |
 | Add-ons | None needed. MPFB2 only built the file. |
