@@ -151,3 +151,26 @@ The phone is on screen only at 1440–1469 in this film. There is no phone at 12
   - clip_scan 3cfc53c: `[[991, 997]]`, inside the accepted window.
 - **Strip:** `v008d_brick_strip_540.jpg`, at 540×960, every 4 frames from 100 to 160. Up to f128 the brick is in the fingers. From f132 to f156 the fingers push it into the nostril. At f160 the porthole shows it inside.
 - **Not done:** the hand itself isn't re-rotated to aim the pinch at the nose. The pinch reaches the nostril because the IK target moves, not because the wrist re-orients.
+
+## 8. v008e: the brick-insertion pose
+The director's v008d note: at about f140–150 the fist was mashed flat over his nose and mouth.
+
+- **Pose** (`ins_pose.py`, 120–156 and 700–742):
+  - The thumb and index tips point up at the nostril, and the other fingers curl ("pinch"). The palm is turned 250° around the finger axis.
+  - The hand sits below and in front of the face. The brick is visible between the tips until its last 6 frames, when it slides into the nostril.
+- **Face clearance**, measured every frame: the evaluated hand mesh, all except the thumb and index tips (finger1-2/1-3, finger2-2/2-3), against the boy's face and head mesh.
+  - **Brick_Big 120–156: min 15.5 mm** (at f148)
+  - **Brick_Small 700–742: min 15.2 mm** (at f735)
+  - Pinch error 1.9 mm or less.
+- **Staging** (`ins_cam.py`): from the front camera a hand at the nostril always covers the mouth, because his right hand reaches his left nostril. So the camera orbits 50° about his head over 112–166 and shows the push in 3/4 profile.
+- **Fingertip measure (§7 rule), v008e, max while held:**
+  - Brick_Big 1–148: 1 cm or less. **149–150: 1.9 cm.**
+  - Brick_Small 336–734: 1 cm or less. **735–736: 2.0 cm.**
+  - In both, the brick is sliding into the nostril and the tips stay at the rim, outside the 15 mm clearance. This is intended ("disappears into the nostril").
+  - Every other held prop: 0.8 cm or less.
+- **Checks:** qa e7b25f7 `{'EMPTY': 138, 'FILL': 9, 'INSIDE': 1, 'PROPMOVE': 113}`. ATTACH, CAMJUMP and FACEPRESS are 0. clip_scan `[[991, 997]]`.
+- **Strips:** `v008e_brick_strip_100-160_540.jpg` and `v008e_brick_strip_700-740_540.jpg` (540×960, every 4 frames).
+  - The 700–740 strip is the nostril macro and the dive into the tunnel. The hand is out of frame there.
+- **Open:**
+  - At f160 the camera has swung back to the front, and the withdrawing hand is still in front of his chin.
+  - The 100–119 carry was re-baked after the strip was rendered, a shift of a few mm.
