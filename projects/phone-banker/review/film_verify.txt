@@ -1,3 +1,4 @@
+PASS all 71 shot files: scene named after the shot, frame range = cut length, 32 samples, adaptive 0.05, denoise, alpha off, house grade, camera, fonts packed, images packed/found
 PASS 71 linked shot files, all relative paths
 PASS every link resolves next to the master (out/blend/<part>/<shot>.blend)
 PASS no link points at a placeholder
@@ -18,4 +19,3 @@ PASS phone_banker_AUDIO_with_voice.wav: 385.292 s = 9247.00 frames = film length
 INFO phone_banker_AUDIO_with_voice.wav: -14.2 LUFS integrated, true peak -0.9 dBFS
 PASS phone_banker_AUDIO_no_voice.wav: 385.292 s = 9247.00 frames = film length
 INFO phone_banker_AUDIO_no_voice.wav: -29.0 LUFS integrated, true peak -4.4 dBFS
-PASS all 71 shot files: scene named after the shot, frame range = cut length, 32 samples, adaptive 0.05, denoise, alpha off, house grade, camera, fonts packed, images packed/found
