@@ -118,7 +118,7 @@ def walk_on(c, h, p0, p1, u, cycles, stride=20, swing=12):
 def anim(c, t, move):
     sec = t * DUR[move]
     if move == "wire":                                    # the crane starts high under the canopy: open it up there
-        bpy.context.scene.view_settings.exposure = c["exp0"] + 0.3 + 0.5 * (1.0 - t)
+        bpy.context.scene.view_settings.exposure = c["exp0"] + 0.3 + 0.8 * (1.0 - t)
     P_ = c["P"]
     if c["set"] == "wire":
         pts = c["wire_pts"]
