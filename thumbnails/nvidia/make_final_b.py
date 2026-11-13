@@ -5,7 +5,8 @@ sys.path.insert(0, os.path.join(HERE, "..", "tools"))
 from cine import cine_grade, title, LIME, WHITE
 from compose import load_plate
 P = os.path.join(HERE, "plates"); D = os.path.join(HERE, "download_b"); os.makedirs(D, exist_ok=True)
-g = cine_grade(load_plate(os.path.join(P, "targeted_final.png")))
+from PIL import ImageFilter
+g = cine_grade(load_plate(os.path.join(P, "targeted_final.png")).filter(ImageFilter.MedianFilter(3)), clarity=0.25, grain=0.004, bloom=0.22)
 t = title(g, "NVIDIA'S EX-CEO", "TARGETED?", LIME, WHITE, "anton", 360, 80, matte=os.path.join(P, "targeted_final_mask.png"))
 t.save(os.path.join(HERE, "nvidia_final_B.jpg"), quality=94)
 t.save(os.path.join(D, "nvidia_thumbnail_EXCEO_TARGETED.png")); t.save(os.path.join(D, "nvidia_thumbnail_EXCEO_TARGETED_youtube.jpg"), quality=96, subsampling=0)

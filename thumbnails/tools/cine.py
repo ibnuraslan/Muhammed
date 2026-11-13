@@ -27,7 +27,7 @@ def cine_grade(img, bloom=0.25, clarity=0.6, shadows=(0.02, 0.05, 0.07), highs=(
     return Image.fromarray((np.clip(b, 0, 1) * 255).astype(np.uint8))
 
 
-def _grit(size, seed=5, amount=0.12):
+def _grit(size, seed=5, amount=0.04):
     rng = np.random.default_rng(seed)
     n = rng.random((size[1] // 2, size[0] // 2)).astype(np.float32)
     n = np.asarray(Image.fromarray((n * 255).astype(np.uint8)).resize(size, Image.BILINEAR).filter(ImageFilter.GaussianBlur(1.2))) / 255
