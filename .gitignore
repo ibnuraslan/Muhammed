@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 projects/*/out/
+thumbnails/*/plates/
+thumbnails/*/plates_quick/
+thumbnails/*/out_tmp/
+__pycache__/
