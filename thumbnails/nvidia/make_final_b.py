@@ -6,9 +6,12 @@ from cine import cine_grade, title, LIME, WHITE
 from compose import load_plate
 P = os.path.join(HERE, "plates"); D = os.path.join(HERE, "download_b"); os.makedirs(D, exist_ok=True)
 from PIL import ImageFilter
-g = cine_grade(load_plate(os.path.join(P, "targeted_final.png")).filter(ImageFilter.MedianFilter(3)), clarity=0.25, grain=0.004, bloom=0.22)
+import cine
+cine._grit.__defaults__ = (5, 0.0)                       # flat, clean letters
+g = cine_grade(load_plate(os.path.join(P, "targeted_final.png")), clarity=0.0, grain=0.0, bloom=0.15,
+               shadows=(0.0, 0.0, 0.0), highs=(1.03, 1.0, 0.96), vignette=0.4)   # clean: no grain, no sharpening, no cool shadow tint
 t = title(g, "NVIDIA'S EX-CEO", "TARGETED?", LIME, WHITE, "anton", 360, 80, matte=os.path.join(P, "targeted_final_mask.png"))
-t.save(os.path.join(HERE, "nvidia_final_B.jpg"), quality=94)
+t.save(os.path.join(HERE, "nvidia_final_B.jpg"), quality=97, subsampling=0)
 t.save(os.path.join(D, "nvidia_thumbnail_EXCEO_TARGETED.png")); t.save(os.path.join(D, "nvidia_thumbnail_EXCEO_TARGETED_youtube.jpg"), quality=96, subsampling=0)
 g.save(os.path.join(D, "nvidia_thumbnail_notext.png")); g.save(os.path.join(D, "nvidia_thumbnail_notext_youtube.jpg"), quality=96, subsampling=0)
 print("done")

@@ -14,8 +14,9 @@ def cine_grade(img, bloom=0.25, clarity=0.6, shadows=(0.02, 0.05, 0.07), highs=(
     a = a + np.array(shadows) * (1 - l) ** 2 * 1.5                # cool shadows
     a = a * (1 + (np.array(highs) - 1) * l)                       # warm highlights
     im = Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8))
-    det = im.filter(ImageFilter.UnsharpMask(radius=6, percent=int(clarity * 120), threshold=2))   # local contrast / crispness
-    im = det.filter(ImageFilter.UnsharpMask(radius=1.2, percent=60, threshold=1))
+    if clarity > 0:
+        det = im.filter(ImageFilter.UnsharpMask(radius=6, percent=int(clarity * 120), threshold=2))   # local contrast / crispness
+        im = det.filter(ImageFilter.UnsharpMask(radius=1.2, percent=60, threshold=1))
     b = np.asarray(im).astype(np.float32) / 255
     hi = np.clip((b - 0.6) / 0.4, 0, 1)
     glow = np.asarray(Image.fromarray((hi * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(28))).astype(np.float32) / 255
@@ -23,7 +24,8 @@ def cine_grade(img, bloom=0.25, clarity=0.6, shadows=(0.02, 0.05, 0.07), highs=(
     yy, xx = np.mgrid[0:b.shape[0], 0:b.shape[1]]
     r = np.hypot((xx / b.shape[1] - 0.5) * 1.5, (yy / b.shape[0] - 0.5) * 1.3)
     b = b * (1 - vignette * np.clip(r - 0.3, 0, None) ** 1.5)[..., None]
-    b = b + np.random.default_rng(3).normal(0, grain, b.shape[:2])[..., None]
+    if grain > 0:
+        b = b + np.random.default_rng(3).normal(0, grain, b.shape[:2])[..., None]
     return Image.fromarray((np.clip(b, 0, 1) * 255).astype(np.uint8))
 
 
