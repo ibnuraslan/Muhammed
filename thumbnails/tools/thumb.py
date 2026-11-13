@@ -53,3 +53,14 @@ s.render.filepath = os.path.join(out, f"{name}.png")
 s.render.image_settings.color_depth = '8'
 bpy.ops.render.render(write_still=True)
 print("[thumb]", s.render.filepath, flush=True)
+if C.get("mask") and "--nomask" not in sys.argv:
+    # a matte of the objects that stand in front of the word (alpha), so the text can sit behind them
+    keep = set(C["mask"](ctx))
+    for o in bpy.data.objects:
+        if o.type in ('MESH', 'CURVE') and o not in keep:
+            o.hide_render = True
+    s.render.film_transparent = True; s.cycles.samples = 16; s.cycles.use_denoising = False
+    s.render.image_settings.color_mode = 'RGBA'
+    s.render.filepath = os.path.join(out, f"{name}_mask.png")
+    bpy.ops.render.render(write_still=True)
+    print("[mask]", s.render.filepath, flush=True)
