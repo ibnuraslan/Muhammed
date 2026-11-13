@@ -46,7 +46,13 @@ def build(variant=None):
     B.key_spot((1.4, -0.9, 2.3), TAPE, 260, 25, (1.0, 0.82, 0.62), soft=0.05, name="StripKey")
     B.key_spot((1.6, 1.6, 2.4), (0.9, 0.3, 1.3), 220, 35, (0.7, 0.8, 1.0), soft=0.3, name="TechRim")
     h = c["P"]["tech"]
-    B.flat_clothes(h, (0.78, 0.78, 0.75))                                # pale lab coat (CAST: forensic staff)
+    import rj                                                              # pale lab coat (CAST: forensic staff), painted
+    for o in h.parts:                                                      # the way A paints outfits: garments only
+        if o.type == 'MESH' and "suit" in o.name:
+            rj._two_tone_local(o, 0.0, (0.78, 0.78, 0.75), (0.78, 0.78, 0.75))
+        if o.type == 'MESH' and "short0" in o.name:                       # hair sheen 0.5 (rj.hair_matte) reads white under
+            for m in o.data.materials:                                      # the hard work lamp: keep it dark and matte here
+                m.node_tree.nodes["Principled BSDF"].inputs['Sheen Weight'].default_value = 0.08
     B.stand(h, (TAPE.x + 0.48, TAPE.y + 0.3, 0), -math.pi / 2 - 0.35)     # faces -X, the box wall
     c["rest"] = B.capture(h)
     B.finish_interior(lift=0.2)
