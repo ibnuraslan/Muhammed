@@ -905,6 +905,7 @@ def anim_police_day(c, t, shot, dur):
         for sd, sg in SIDE.items():
             cup = hp.matrix_world @ Vector((0.088 if sd == "R" else -0.088, 0, -0.105))
             reach(o, sd, cup + Vector((0, 0, -0.04)), Vector((0, 0, -1)) + side * (0.7 if sd == "R" else -0.7), Vector((0, 0, 1)))
+        rj.curl(o, 45, thumb=20)                                     # fingers round the cups, not splayed
 
 
 def cam_thread(c, t):
