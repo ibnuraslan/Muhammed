@@ -404,10 +404,15 @@ def apply_look(c):
         look.interior_day(window=ROOM_WINDOWS[room], mood=mood, key_energy={"piano": None, "hall": 520.0, "kitchen": 380.0}[room])
         if room == "kitchen":
             bpy.context.scene.view_settings.exposure -= 0.3
-            view_plate((0.0, 11.5, 1.9), (9.0, 3.8), 'y', -1, strength=1.6)       # north window: the lake beyond the garden
+            view_plate((0.0, 11.5, 1.9), (9.0, 3.8), 'y', -1, strength=1.0)       # north window: the lake beyond the garden
+            for o in bpy.data.objects:                                          # the north net glowed white over the view: drawn back
+                if o.name.startswith("WNet") and o.type == 'MESH':
+                    bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+                    if min(p.y for p in bb) > 6.5:
+                        o.hide_render = True
             view_plate((-6.5, 5.25, 1.9), (9.0, 3.8), 'x', +1, strength=1.4)      # west window
             if "+suitcase" in v or "+letter" in v:            # the pendant is on over the table (grey morning)
-                kl = bpy.data.lights.new("KitPendant", 'SPOT'); kl.energy = 420; kl.spot_size = math.radians(110); kl.spot_blend = 0.7
+                kl = bpy.data.lights.new("KitPendant", 'SPOT'); kl.energy = 230; kl.spot_size = math.radians(110); kl.spot_blend = 0.7
                 kl.color = (1.0, 0.72, 0.45); ko = bpy.data.objects.new("KitPendant", kl); bpy.context.collection.objects.link(ko)
                 ko.location = (KTABLE.x, KTABLE.y, 1.62)             # below the shade's closed base
                 c["kshade_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.6
@@ -695,10 +700,10 @@ def _lining(name):
     """Patterned 70s lining: a woven ochre ground with a soft repeating figure (no text)."""
     m = rj.fabric(name, (0.30, 0.20, 0.10), 0.9, 0.3)
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
-    tc = N.new("ShaderNodeTexCoord"); w = N.new("ShaderNodeTexWave"); w.wave_type = 'RINGS'; w.inputs['Scale'].default_value = 22
+    tc = N.new("ShaderNodeTexCoord"); w = N.new("ShaderNodeTexWave"); w.wave_type = 'RINGS'; w.inputs['Scale'].default_value = 140
     w.inputs['Distortion'].default_value = 4
     L.new(tc.outputs['Object'], w.inputs['Vector'])
-    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 0.35
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 0.18
     mx.inputs[6].default_value = (0.30, 0.20, 0.10, 1); L.new(w.outputs['Color'], mx.inputs[7])
     L.new(mx.outputs[2], p.inputs['Base Color'])
     return m

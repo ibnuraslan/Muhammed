@@ -280,7 +280,7 @@ def vegetation(c, density=1.0):
 
 
 def lake(c):
-    w = box("Lake", (0, 60, -0.32), (400, 110, 0.02), water_material())
+    w = box("Lake", (0, 82.5, -0.32), (400, 155, 0.02), water_material())
     c["lake"] = w
     # far shore: low wooded hills in haze across the water (Ammersee is ~4 km wide)
     hill = pbr("FarHills", (0.06, 0.08, 0.07), 0.9)
@@ -288,6 +288,20 @@ def lake(c):
         x = -240 + k * 60
         bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(x, 420 + 30 * math.sin(k), -6))
         o = bpy.context.active_object; o.scale = (70, 30, 22 + 8 * math.sin(k * 1.7)); o.data.materials.append(hill)
+    # the nearer far shore: a low bank with a ragged spruce-and-birch tree line (reads as forest in the mist,
+    # instead of smooth hills) and a thin haze over the open water
+    box("FarBank", (-25, 185, -0.15), (420, 50, 0.3), pbr("FarBank", (0.05, 0.06, 0.045), 0.95))
+    rr = np.random.default_rng(11)
+    trees = []
+    x = -210.0
+    while x < 170:
+        y = 163 + rr.uniform(0, 14); kind = "birch" if rr.uniform() < 0.25 else ("fir_a" if rr.uniform() < 0.6 else "fir_b")
+        trees.append((kind, (Vector((x, y, 0.0)), rr.uniform(0, 6.28), rr.uniform(0.9, 1.4) * (2.4 if kind == "birch" else 1.0))))
+        x += rr.uniform(2.2, 4.5)
+    for kind in ("fir_a", "fir_b", "birch"):
+        rj.low_instances(kind, [t for k_, t in trees if k_ == kind])
+    if c.get("light") in ("mist", "grey", "lowsun"):
+        haze((-25, 120, 10), (420, 110, 20), density=0.006, color=(0.78, 0.8, 0.82), anis=0.4)
 
 
 def lighting(c):
@@ -874,7 +888,7 @@ def build(variant=None):                      # noqa: F811
         look.forest(mood="dusk", azim=200, area=((-5, -5), (110, 70)), canopy=16.0, exposure=1.0)
     rj.sink_haze()
     if "lift" in extras:                    # readable night: figures, beams and the red bike must read (keeps the blue mood)
-        bpy.context.scene.view_settings.exposure += 0.8
+        bpy.context.scene.view_settings.exposure += 0.8 + (0.45 if light == "bluehour" else 0.0)
         for o in bpy.data.objects:
             if o.type == 'LIGHT' and o.data.type == 'SPOT':
                 o.data.energy *= 2.0
