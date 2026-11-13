@@ -74,3 +74,11 @@ with natural colours and readable faces. If a relight kills the soul of a shot, 
 | Dawn facade (intro) and the painters' lane | full look v5: low sun, blue sky | warm cream stone, deep balcony shadow |
 | December street (ch2 xmas, door, getaway) | grade only | evening, warm shop light, natural colours |
 | Night / windowless sets | night_interior (darker walls, warm practicals) | own lights kept |
+
+## Final master: delivery notes (to apply after VO)
+
+- Lead under each chapter title card ≥ 3.0 s (intro 2.5 s); enforced in scenes/make_master.py.
+- Title cards: new style (title_card.py from a5e97a4/b34ce08): long titles on two lines, soft scrim, one PNG per title.
+- Farm-ready: FilmCam on the master, fonts packed, 32 samples + adaptive 0.05 + denoise on every shot and the master.
+- Size (Banker lesson, 9.8 GB to 2.2 GB): unpack textures into one shared deduped folder (≤2K), share identical meshes,
+  measure peak RAM opening the master, zip into ≤380 MB parts with one shared top folder plus a MERGE .bat.
