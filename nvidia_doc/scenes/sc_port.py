@@ -45,8 +45,8 @@ def crane(x, y, mat, h=52, boom=70):
     return join(parts, "Crane")
 
 
-VARIANT_FOR = {"ship_lift": None, "tropical_dock": "tropical", "scan_gate": None}
-DUR = {"ship_lift": 5.0, "tropical_dock": 5.0, "scan_gate": 5.0}     # estimates until the chapter 1 voiceover arrives
+VARIANT_FOR = {"ship_lift": None, "tropical_dock": "tropical", "scan_gate": None, "xray_gate": "xray"}
+DUR = {"xray_gate": 9.5, "ship_lift": 5.0, "tropical_dock": 5.0, "scan_gate": 5.0}     # estimates until the chapter 1 voiceover arrives
 
 
 def container_ship(x0, y0, protos, rng, length=220, beam=32):
@@ -118,19 +118,50 @@ def build(variant=None):
     cables = [cyl("HoistCable", (0, 0, 0), 0.05, 1.0, cable, verts=6) for _ in range(4)]
     ctx.update(spreader=spreader, lifted=lifted, cables=cables, crane_x=-2.0)
     # the scanner portal on the gate road (y = 150) and a truck with a container that drives through it
-    gate_m = pbr("Gate", (0.75, 0.75, 0.73), 0.4, 0.2)
-    for sx in (-3.2, 3.2):
-        box("GatePost", (-120 + sx, 150, 3.0), (0.8, 2.0, 6.0), gate_m, bevel=0.05)
-    box("GateTop", (-120, 150, 6.3), (7.2, 2.0, 0.8), gate_m, bevel=0.05)
-    sm = bpy.data.materials.new("ScanBeam"); sm.use_nodes = True
-    Nn = sm.node_tree.nodes; Ll = sm.node_tree.links; Nn.clear()
-    o_ = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.1, 0.06, 1)
-    v = Nn.new("ShaderNodeValue"); dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "0.12 + 0.06 * sin(frame * 0.8)"
-    tr = Nn.new("ShaderNodeBsdfTransparent"); mxs = Nn.new("ShaderNodeMixShader"); em.inputs['Strength'].default_value = 6.0
-    Ll.new(v.outputs[0], mxs.inputs[0]); Ll.new(tr.outputs[0], mxs.inputs[1]); Ll.new(em.outputs[0], mxs.inputs[2]); Ll.new(mxs.outputs[0], o_.inputs['Surface'])
-    for sx in (-2.75, 2.75):                       # bright red scan bars on the inner faces of the posts
-        box("ScanBar", (-120 + sx, 150, 3.0), (0.05, 0.08, 5.6), emissive("ScanBar", (1.0, 0.12, 0.06), 25))
-    box("Beam", (-120, 150, 3.0), (6.0, 0.03, 5.8), sm).visible_shadow = False
+    if variant == "xray":
+        # CH5 9A: a container X-ray portal: open steel gantry (lattice posts + cross-beam), a ribbed detector arm,
+        # an equipment hut, amber warning beacons that flash (frame drivers). No glowing slab.
+        steel = pbr("GantrySteel", (0.55, 0.56, 0.58), 0.35, 0.85)
+        yellow = pbr("GantryYellow", (0.72, 0.52, 0.08), 0.45, 0.2)
+        for sx in (-3.4, 3.4):
+            for dy in (-0.7, 0.7):
+                box("PostLeg", (-120 + sx, 150 + dy, 3.4), (0.28, 0.28, 6.8), yellow, bevel=0.02)
+            for k in range(6):                                           # lattice bracing between the leg pairs
+                box("Brace", (-120 + sx, 150, 0.6 + k * 1.1), (0.12, 1.4, 0.12), steel, rot=(math.radians(35 if k % 2 else -35), 0, 0))
+            box("DetectorArm", (-120 + sx * 0.82, 150, 3.2), (0.35, 0.5, 5.2), pbr("Detector", (0.18, 0.19, 0.2), 0.45, 0.4), bevel=0.04)
+        box("CrossBeam", (-120, 150, 7.0), (7.6, 1.8, 0.6), yellow, bevel=0.03)
+        box("SourceHead", (-120, 150, 6.45), (1.2, 1.2, 0.6), pbr("SourceHead", (0.25, 0.26, 0.27), 0.4, 0.6), bevel=0.05)
+        box("Hut", (-128.5, 146, 1.4), (3.0, 2.5, 2.8), pbr("Hut", (0.6, 0.6, 0.58), 0.6), bevel=0.05)
+        box("HutWin", (-127.0, 146, 1.7), (0.02, 1.4, 0.8), emissive("HutWin", (1.0, 0.85, 0.6), 1.5))
+        for k, (sx, ph_) in enumerate(((-3.4, 0), (3.4, 12))):
+            bm = bpy.data.materials.new(f"Beacon{k}"); bm.use_nodes = True
+            Nn = bm.node_tree.nodes; Ll = bm.node_tree.links; Nn.clear()
+            o_ = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.55, 0.08, 1)
+            v = Nn.new("ShaderNodeValue"); dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'
+            dd.expression = f"30 * (1 if ((frame + {ph_}) % 24) < 10 else 0.03)"
+            Ll.new(v.outputs[0], em.inputs['Strength']); Ll.new(em.outputs[0], o_.inputs['Surface'])
+            cyl("Beacon", (-120 + sx, 150, 7.45), 0.16, 0.3, bm, verts=16)
+            bl = bpy.data.lights.new(f"BeaconL{k}", 'POINT'); bl.color = (1.0, 0.55, 0.1); bl.shadow_soft_size = 0.1
+            dl = bl.driver_add("energy").driver; dl.type = 'SCRIPTED'; dl.expression = f"900 * (1 if ((frame + {ph_}) % 24) < 10 else 0.03)"
+            bo = bpy.data.objects.new(f"BeaconL{k}", bl); bpy.context.collection.objects.link(bo); bo.location = (-120 + sx, 149.4, 7.6)
+        for sx in (-4.2, 4.2):                                           # road barriers + painted stop line
+            box("Barrier", (-120 + sx, 140, 0.5), (0.4, 1.6, 1.0), pbr("Barrier", (0.8, 0.8, 0.78), 0.5), bevel=0.05)
+        box("StopLine", (-120, 143, 0.03), (6.5, 0.3, 0.02), pbr("Paint", (0.85, 0.85, 0.8), 0.6))
+        area_light((-112, 140, 9), (0, 0, 0), 6, 1200, (1.0, 0.92, 0.82))
+    else:
+        gate_m = pbr("Gate", (0.75, 0.75, 0.73), 0.4, 0.2)
+        for sx in (-3.2, 3.2):
+            box("GatePost", (-120 + sx, 150, 3.0), (0.8, 2.0, 6.0), gate_m, bevel=0.05)
+        box("GateTop", (-120, 150, 6.3), (7.2, 2.0, 0.8), gate_m, bevel=0.05)
+        sm = bpy.data.materials.new("ScanBeam"); sm.use_nodes = True
+        Nn = sm.node_tree.nodes; Ll = sm.node_tree.links; Nn.clear()
+        o_ = Nn.new("ShaderNodeOutputMaterial"); em = Nn.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (1.0, 0.1, 0.06, 1)
+        v = Nn.new("ShaderNodeValue"); dd = v.outputs[0].driver_add("default_value").driver; dd.type = 'SCRIPTED'; dd.expression = "0.12 + 0.06 * sin(frame * 0.8)"
+        tr = Nn.new("ShaderNodeBsdfTransparent"); mxs = Nn.new("ShaderNodeMixShader"); em.inputs['Strength'].default_value = 6.0
+        Ll.new(v.outputs[0], mxs.inputs[0]); Ll.new(tr.outputs[0], mxs.inputs[1]); Ll.new(em.outputs[0], mxs.inputs[2]); Ll.new(mxs.outputs[0], o_.inputs['Surface'])
+        for sx in (-2.75, 2.75):                       # bright red scan bars on the inner faces of the posts
+            box("ScanBar", (-120 + sx, 150, 3.0), (0.05, 0.08, 5.6), emissive("ScanBar", (1.0, 0.12, 0.06), 25))
+        box("Beam", (-120, 150, 3.0), (6.0, 0.03, 5.8), sm).visible_shadow = False
     box("GateRoad", (-120, 150, -0.48), (14, 300, 1), pbr("Asphalt", (0.05, 0.05, 0.055), 0.6))
     cab_m = pbr("Cab", (0.08, 0.22, 0.4), 0.35, 0.3)
     truck = join([box("Cab", (0, 5.6, 1.6), (2.5, 2.2, 2.6), cab_m, bevel=0.15),
@@ -176,6 +207,11 @@ def anim_scan(c, t):
     anim_lift(c, 0.0)
 
 
+def _xray(c, t):
+    c["truck"].location = (-120, 128 + 26.0 * t, 0)          # ~2.7 m/s: the container clears the portal by the end
+    anim_lift(c, 0.0)
+
+
 def cam_lift(c, t):
     e = ease(t)
     return (Vector((-75, -135, 6)).lerp(Vector((-68, -128, 7)), e), Vector((-2, -40, 28 + 4 * e)), 45)       # from the water: ship, crane, the lift
@@ -189,6 +225,9 @@ def cam_dock(c, t):
 MOVES = {
     "scan_gate": dict(kind="anim", far=1200.0, anim=anim_scan,
                       cam=lambda c, t: (Vector((-104, 132, 2.2)).lerp(Vector((-105, 135, 2.4)), ease(t)), Vector((-120, 150, 3.0)), 35)),
+    # CH5 9A: the truck rolls its container slowly through the X-ray portal, amber beacons flashing
+    "xray_gate": dict(kind="anim", far=1200.0, anim=lambda c, t: _xray(c, t),
+                      cam=lambda c, t: (Vector((-106, 129, 2.4)).lerp(Vector((-107.5, 132, 2.6)), ease(t)), Vector((-120, 150, 3.4)), 32)),
     "ship_lift": dict(kind="anim", far=1200.0, cam=cam_lift, anim=anim_lift),
     "tropical_dock": dict(kind="anim", far=1200.0, cam=cam_dock, anim=anim_dock),
     "crane_rise": dict(kind="anim", far=1200.0, cam=lambda c, t: ((95, -175, 5 + 6 * t), (-5, 10, 24), 32)),

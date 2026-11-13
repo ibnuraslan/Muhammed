@@ -61,13 +61,13 @@ def title_image(small, big, path, W=1920, H=816, scrim=0.36):
     return path
 
 
-def add_title(cam, small, big, f_in, f_out, fade=12, name="ChapterTitle"):
+def add_title(cam, small, big, f_in, f_out, fade=12, name="ChapterTitle", scrim=0.36):
     """Plane in front of the camera filling the frame; fades in at f_in, out at f_out (frames)."""
     os.makedirs(GEN, exist_ok=True)
     # one file per title (ChapterTitle_<slug>.png): a single shared ChapterTitle.png let one film's bake pick up another
     # film's card when the file was regenerated or restored from git mid-bake
     slug = re.sub(r"[^a-z0-9]+", "_", f"{small} {big}".lower()).strip("_")[:60]
-    path = title_image(small, big, os.path.join(GEN, f"{name}_{slug}.png"))
+    path = title_image(small, big, os.path.join(GEN, f"{name}_{slug}.png"), scrim=scrim)
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")

@@ -15,8 +15,8 @@ import ph
 import skia
 
 EXPOSURE = -0.4
-VARIANT_FOR = {"lobby_walk": "lobby", "pitch_present": "pitch", "pitch_whisper": "pitch"}
-DUR = {"lobby_walk": 5.0, "pitch_present": 4.5, "pitch_whisper": 4.0}     # estimates until the chapter 1 voiceover
+VARIANT_FOR = {"lobby_busy": "busy", "lobby_walk": "lobby", "pitch_present": "pitch", "pitch_whisper": "pitch"}
+DUR = {"lobby_busy": 12.0, "lobby_walk": 5.0, "pitch_present": 4.5, "pitch_whisper": 4.0}     # estimates until the chapter 1 voiceover
 GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated")
 
 
@@ -50,15 +50,15 @@ def slide_image(path, W=1600, H=900):
 
 def build(variant=None):
     c = {}
-    if variant == "lobby":
-        build_lobby(c)
+    if variant in ("lobby", "busy"):
+        build_lobby(c, busy=variant == "busy")
     else:
         build_pitch(c)
     return c
 
 
 # ============================================================================ lobby
-def build_lobby(c):
+def build_lobby(c, busy=False):
     world_sky(sun_elev_deg=30, sun_rot_deg=150, strength=0.18, tint=(0.95, 0.97, 1.0))
     sun(30, 150, energy=0.9, color=(1.0, 0.95, 0.88), angle_deg=1.0)
     marble = ph.texture("marble_tiles", scale=0.3)
@@ -90,7 +90,26 @@ def build_lobby(c):
     for x in (-4, 0, 4):
         for y in (2, 8, 14):
             l = area_light((x, y, 8.9), (0, 0, 0), 1.2, 35, (1.0, 0.95, 0.88)); l.visible_camera = False
-    a = woman("Alice"); c["alice"] = a
+    if not busy:
+        a = woman("Alice"); c["alice"] = a
+        return
+    # CH4 2B: a busy morning lobby, 6 mixed employees crossing, all seen from behind or far (nobody singled out)
+    from human import Human, add_asset
+    crowd = [  # (gender, years, clothes, hair, skin, x0, y0, heading(+1 away / -1 across to -X), speed)
+        (1.0, 34, "male_casualsuit04", "short02", "young_lightskinned_male_diffuse.png", -0.95, -1.0, 1, 0.86),
+        (0.0, 29, "female_casualsuit02", "ponytail01", "young_darkskinned_female_diffuse.png", 1.25, 0.6, 1, 0.72),
+        (1.0, 51, "male_elegantsuit01", "short04", "middleage_darkskinned_male_diffuse.png", 0.15, 1.8, 1, 0.62),
+        (0.0, 44, "female_elegantsuit01", "bob01", "middleage_lightskinned_female_diffuse2.png", 6.0, 7.2, -1, 0.8),
+        (1.0, 27, "male_casualsuit02", "short03", "young_lightskinned_male_diffuse3.png", 2.35, 3.0, 1, 0.55),
+        (0.0, 36, "female_sportsuit01", "long01", "young_lightskinned_female_diffuse2.png", 7.0, 8.6, -1, 0.75)]
+    c["crowd"] = []
+    for k, (g, yrs, cl, hr, sk, x0, y0, hd, sp) in enumerate(crowd):
+        h = Human(f"Walker{k}", gender=g, years=yrs, muscle=0.5, weight=0.45, height=0.45 + 0.05 * (k % 3),
+                  eyelashes="eyelashes01", skin=sk)
+        add_asset(h, "clothes", cl, val=0.2 + 0.08 * (k % 3), rough=0.7)
+        add_asset(h, "clothes", "shoes02", val=0.2, rough=0.4)
+        add_asset(h, "hair", hr, val=0.15 + 0.1 * (k % 3), rough=0.45)
+        c["crowd"].append((h, x0, y0, hd, sp, k * 0.37))
 
 
 def place_alice(c, sec):
@@ -101,6 +120,22 @@ def place_alice(c, sec):
     arms_down(a, (1.05 * sec / 1.3) % 1.0, 14)
     bpy.context.view_layer.update()
     return Vector((0.4, y, 1.2))
+
+
+def anim_busy(c, t):
+    sec = t * DUR.get("lobby_busy", 12.0)
+    for h, x0, y0, hd, sp, ph_ in c["crowd"]:
+        d = sp * sec
+        if hd > 0:                               # walking away from camera (+Y), through the gates; stop before the wall
+            d = min(d, 9.3 - y0); loc = (x0, y0 + d); rz = math.pi
+        else:                                    # crossing right to left far back (-X), in profile at distance
+            d = min(d, x0 + 6.5); loc = (x0 - d, y0); rz = -math.pi / 2
+        walking = d < (9.3 - y0 if hd > 0 else x0 + 6.5) - 1e-3
+        phase = (d / 1.3 + ph_) % 1.0
+        bob = pose_walk(h, phase if walking else 0.0, stride=24 if walking else 0.0, arm_swing=14 if walking else 0.0)
+        h.arm.rotation_euler = (0, 0, rz); h.arm.location = (loc[0], loc[1], bob); bpy.context.view_layer.update()
+        arms_down(h, phase, 14)
+    bpy.context.view_layer.update()
 
 
 def anim_lobby(c, t):
@@ -197,6 +232,10 @@ def cam_whisper(c, t):
 
 MOVES = {
     "lobby_walk": dict(kind="anim", dof=4.0, far=60.0, cam=cam_lobby, focus=lambda c, t: c["p"], anim=anim_lobby),
+    # CH4 2B: wide, from behind and high-ish: a busy lobby, nobody singled out
+    "lobby_busy": dict(kind="anim", dof=5.6, far=60.0, anim=anim_busy,
+                       cam=lambda c, t: (Vector((-1.2, -6.0, 2.3)).lerp(Vector((-0.8, -4.6, 2.2)), ease(t)), Vector((0.3, 9.0, 1.1)), 30),
+                       focus=lambda c, t: Vector((0.3, 6.0, 1.1))),
     "pitch_present": dict(kind="anim", dof=2.8, far=20.0, cam=cam_present, focus=lambda c, t: Vector((0.0, -0.75, 1.1)),
                           anim=lambda c, t: anim_pitch(c, t, False, DUR["pitch_present"])),
     "pitch_whisper": dict(kind="anim", dof=2.4, far=20.0, cam=cam_whisper, focus=lambda c, t: Vector((0.3, -0.75, 1.15)),

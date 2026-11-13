@@ -724,6 +724,11 @@ MOVES = {
     "drawer_close": dict(kind="anim", dof=2.4, far=10.0, anim=anim_drawer_close,
                          cam=lambda c, t: (DRAWER_CAM[1] + Vector((0.25, -0.35, 0.25)), c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02)), 35),
                          focus=lambda c, t: c["drawer"].matrix_world @ Vector((0.0, 0.3, 0.02))),
+    # CH5 4A: a male investigator (ReaderA) seen from behind, medium, reading the overseas file at the table
+    "filing_officer": dict(kind="anim", dof=2.4, far=10.0, anim=lambda c, t: animate(c, t * 12.0, {"lift": 0.0}),
+                           cam=lambda c, t: (c["people"]["ReaderA"].bone_head("head") + Vector((-1.35, -0.55, 0.6)).lerp(Vector((-1.15, -0.48, 0.55)), ease(t)),
+                                             c["people"]["ReaderA"].bone_head("head") + Vector((0.75, 0.05, -0.42)), 35),
+                           focus=lambda c, t: c["people"]["ReaderA"].bone_head("head") + Vector((0.3, 0, -0.25))),
     "filing": dict(kind="anim", dof=2.4, far=10.0, cam=cam_filing, focus=lambda c, t: c["held"]["ReaderB"].location, anim=lambda c, t: anim_filing(c, t)),
     "compare": dict(kind="anim", dof=2.8, far=10.0, cam=cam_compare, focus=lambda c, t: c["mon"] + Vector((0, -0.32, 0)), anim=anim_compare),
     "chart": dict(kind="anim", dof=2.8, far=10.0, cam=cam_chart, focus=focus_chart, anim=anim_chart),

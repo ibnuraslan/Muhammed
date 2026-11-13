@@ -10,19 +10,20 @@ from kit import *
 from sc_home import facade, haze_mix
 
 EXPOSURE = -0.8
-VARIANT_FOR = {"shanghai_drift": "shanghai", "singapore_drift": "singapore", "beijing_night": "beijing"}
-DUR = {"shanghai_drift": 5.0, "singapore_drift": 5.0, "beijing_night": 6.0}     # estimates until the chapter 1 voiceover arrives
+VARIANT_FOR = {"shanghai_drift": "shanghai", "singapore_drift": "singapore", "beijing_night": "beijing", "singapore_dusk": "sgdusk", "beijing_eye": "beijing"}
+DUR = {"singapore_dusk": 14.0, "beijing_eye": 11.0, "shanghai_drift": 5.0, "singapore_drift": 5.0, "beijing_night": 6.0}     # estimates until the chapter 1 voiceover arrives
 
 
 def build(variant=None):
     c = {}
-    sg = variant == "singapore"
+    sg = variant in ("singapore", "sgdusk")          # sgdusk: the Singapore skyline at dusk (CH4 8A)
+    sgday = variant == "singapore"
     rng = np.random.default_rng(3 if sg else 8)
     bj = variant == "beijing"
     if bj:
         world_flat((0.004, 0.006, 0.012), 1.0)
         haze_col = (0.05, 0.06, 0.09)
-    elif sg:
+    elif sgday:
         world_sky(sun_elev_deg=38, sun_rot_deg=230, strength=0.16, tint=(0.92, 0.96, 1.0), aerosol=2.2)
         sun(38, 230, energy=1.1, color=(1.0, 0.95, 0.88), angle_deg=1.0)
         haze_col = (0.5, 0.56, 0.62)
@@ -31,7 +32,7 @@ def build(variant=None):
         sun(1.5, 20, energy=1.6, color=(1.0, 0.55, 0.3), angle_deg=1.5)
         haze_col = (0.62, 0.55, 0.55)
     H = lambda m, k=0.8: haze_mix(m, color=haze_col, start=300, end=5000, strength=k)
-    water = pbr("Water", (0.01, 0.02, 0.025) if not sg else (0.02, 0.05, 0.06), 0.04, 0.0, **{'Specular IOR Level': 0.7})
+    water = pbr("Water", (0.01, 0.02, 0.025) if not sgday else (0.02, 0.05, 0.06), 0.04, 0.0, **{'Specular IOR Level': 0.7})
     N = water.node_tree.nodes; L = water.node_tree.links; tc = N.new("ShaderNodeTexCoord")
     wv = N.new("ShaderNodeTexWave"); wv.inputs['Scale'].default_value = 0.05; wv.inputs['Distortion'].default_value = 6; L.new(tc.outputs['Object'], wv.inputs['Vector'])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 0.3; nz.inputs['Detail'].default_value = 8; L.new(tc.outputs['Object'], nz.inputs['Vector'])
@@ -51,11 +52,11 @@ def build(variant=None):
     box("Embank", (0, 1200, 1), (8000, 8, 4), H(pbr("Embank", (0.35, 0.34, 0.32), 0.7)))
     near = pbr("Promenade", (0.32, 0.31, 0.29), 0.75)
     box("NearShore", (0, -150, 0), (8000, 300, 2), near)
-    lf = 0.0 if sg else (0.38 if bj else 0.12)
+    lf = 0.0 if sgday else (0.38 if bj else 0.12)
     types = [facade("GlassA", (0.05, 0.08, 0.11), (0.45, 0.47, 0.5) if not bj else (0.08, 0.085, 0.09), floor=4.0, bay=1.6, lit_frac=lf, refl=0.45),
-             facade("GlassB", (0.07, 0.1, 0.1), (0.55, 0.55, 0.52), floor=3.8, bay=1.5, lit_frac=0.0 if sg else 0.1, refl=0.4),
-             facade("Stone", (0.08, 0.085, 0.09), (0.66, 0.62, 0.56), floor=3.6, bay=1.4, lit_frac=0.0 if sg else 0.15, refl=0.12),
-             facade("Dark", (0.03, 0.035, 0.045), (0.22, 0.23, 0.25), floor=4.2, bay=1.8, lit_frac=0.0 if sg else 0.08, refl=0.5)]
+             facade("GlassB", (0.07, 0.1, 0.1), (0.55, 0.55, 0.52), floor=3.8, bay=1.5, lit_frac=0.0 if sgday else 0.1, refl=0.4),
+             facade("Stone", (0.08, 0.085, 0.09), (0.66, 0.62, 0.56), floor=3.6, bay=1.4, lit_frac=0.0 if sgday else 0.15, refl=0.12),
+             facade("Dark", (0.03, 0.035, 0.045), (0.22, 0.23, 0.25), floor=4.2, bay=1.8, lit_frac=0.0 if sgday else 0.08, refl=0.5)]
     for m in types:
         H(m, 0.7)
     cx = 0.0
@@ -74,7 +75,7 @@ def build(variant=None):
         else:
             box("Tower", (x, y, hgt / 2), (w, d, hgt), m)
             box("Crown", (x, y, hgt + 4), (w * 0.6, d * 0.6, 8), m)
-    low = facade("Low", (0.07, 0.08, 0.09), (0.5, 0.48, 0.45), floor=3.4, bay=2.0, lit_frac=0.0 if sg else 0.1, refl=0.08)
+    low = facade("Low", (0.07, 0.08, 0.09), (0.5, 0.48, 0.45), floor=3.4, bay=2.0, lit_frac=0.0 if sgday else 0.1, refl=0.08)
     H(low, 0.75)
     for k in range(900):
         x = rng.uniform(-3500, 3500); y = rng.uniform(1220, 3800); hgt = rng.uniform(12, 45)
@@ -114,5 +115,8 @@ def _drift(c, t, seconds, start, end, tgt):
 MOVES = {
     "shanghai_drift": dict(kind="anim", far=6000.0, cam=lambda c, t: _drift(c, t, DUR["shanghai_drift"], (-260, -60, 70), (-120, 40, 85), (0, 1600, 180))),
     "beijing_night": dict(kind="anim", far=8000.0, cam=lambda c, t: _drift(c, t, DUR["beijing_night"], (-400, 300, 420), (-150, 650, 380), (200, 2200, 60))),
+    "singapore_dusk": dict(kind="anim", far=6000.0, cam=lambda c, t: _drift(c, t, DUR["singapore_dusk"], (200, -45, 14), (90, -35, 18), (0, 1500, 140))),
+    # CH5 5B: Beijing at night from low across the avenues: lit windows, haze, depth (not the high dotted aerial)
+    "beijing_eye": dict(kind="anim", far=8000.0, cam=lambda c, t: _drift(c, t, DUR["beijing_eye"], (-300, 250, 60), (-180, 330, 70), (0, 1700, 150))),
     "singapore_drift": dict(kind="anim", far=6000.0, cam=lambda c, t: _drift(c, t, DUR["singapore_drift"], (180, -40, 12), (60, -30, 16), (0, 1500, 130))),
 }

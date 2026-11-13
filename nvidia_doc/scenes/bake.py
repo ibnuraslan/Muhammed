@@ -48,8 +48,8 @@ def restore_pose():
     bpy.context.view_layer.update()
 if spec.get("title"):                          # chapter title card inside the shot (fades by frame-driven driver)
     import title_card
-    small, big, f_in, f_out = spec["title"]
-    title_card.add_title(cam, small, big, f_in, f_out)
+    small, big, f_in, f_out = spec["title"][:4]
+    title_card.add_title(cam, small, big, f_in, f_out, scrim=spec["title"][4] if len(spec["title"]) > 4 else 0.36)
 
 n = int(round(SECONDS * FPS))
 s.frame_start, s.frame_end = 1, n

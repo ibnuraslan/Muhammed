@@ -26,7 +26,7 @@ for c, lst in CH.items():
 ref = ("capitol", "ch3_push", "REF Ch3 c3_01 capitol ch3_push (look match)", "c3_ref_capitol_ch3_push")
 
 
-def render_one(mod, st, mv, name, t=0.5):
+def render_one(mod, st, mv, name, t=0.5, title_frame=None):
     exposure = getattr(mod, "EXPOSURE", 0.0)
     s = reset(res=kit.RES, samples=SAMPLES, exposure=exposure)
     s.render.resolution_percentage = PCT
@@ -39,7 +39,11 @@ def render_one(mod, st, mv, name, t=0.5):
     if spec.get("dof"):
         cam.data.dof.use_dof = True
     ctx["cam"] = cam
-    s.frame_set(40)                                  # evaluate any frame drivers (clock, lights)
+    if spec.get("title") and title_frame is not None:   # inject the chapter card exactly as bake.py does
+        import title_card
+        small, big, f_in, f_out = spec["title"][:4]
+        title_card.add_title(cam, small, big, f_in, f_out, scrim=spec["title"][4] if len(spec["title"]) > 4 else 0.36)
+    s.frame_set(title_frame if title_frame is not None else 40)    # evaluate frame drivers (clock, lights, title fade)
     kit.apply_cam(cam, ctx, spec, t)
     grade.add_grade(s, look="plain")
     s.render.filepath = os.path.join(OUT, name + ".png")
@@ -48,6 +52,21 @@ def render_one(mod, st, mv, name, t=0.5):
 
 
 # group by set to build once per (set, variant); but reset() wipes the scene, so just build per shot (simpler, robust)
+NAMES = [n for n in os.environ.get("SB_NAMES", "").split(",") if n]
+TS = [float(x) for x in os.environ.get("SB_TS", "0.5").split(",")]
+if NAMES:
+    for (c, k, st, mv, lab, name) in shots:
+        if name not in NAMES:
+            continue
+        mod = importlib.import_module("sc_" + st)
+        for t in TS:
+            try:
+                render_one(mod, st, mv, f"{name}_t{int(t*100):03d}", t=t)
+            except Exception as e:
+                import traceback; traceback.print_exc(); print("[sb][ERR]", name, e, flush=True)
+        if mod.MOVES[mv].get("title"):
+            render_one(mod, st, mv, f"{name}_title", t=0.25, title_frame=66)
+    print("[sb] done named", len(NAMES)); sys.exit(0)
 todo = [sh for sh in shots if not only or sh[2] in only]
 for (c, k, st, mv, lab, name) in todo:
     try:

@@ -10,7 +10,7 @@ from mathutils import Vector
 from kit import *
 
 EXPOSURE = 0.4
-VARIANT_FOR = {"night_dim": "dim", "night_lit": "lit", "watch": "watch", "dusk_push": "dusk"}
+VARIANT_FOR = {"night_dim": "dim", "night_lit": "lit", "watch": "watch", "dusk_push": "dusk", "watch_clear": "watch_clear"}
 LIT_FLOOR = 9
 
 
@@ -33,7 +33,7 @@ def ceiling_panels(name, strength, color=(1.0, 0.9, 0.78)):
 
 
 def build(variant=None):
-    if variant == "dusk":
+    if variant in ("dusk", "watch_clear"):
         # blue-hour establishing: a graded sky behind the tower, brighter than the night variants so the
         # CHAPTER 4 title reads over it. A few floors stay lit, including the board floor.
         from common import world_sky, sun
@@ -56,14 +56,14 @@ def build(variant=None):
     for f in range(FLOORS):
         z = f * FH
         box("Slab", (x0, y0, z + 0.15), (W_ - 0.2, D_ - 0.2, 0.3), slab)
-        if variant in ("lit", "watch", None) and f == LIT_FLOOR:
+        if variant in ("lit", "watch", "watch_clear", None) and f == LIT_FLOOR:
             cm = board_ceil
         else:
             cm = lit_ceils[int(r.integers(0, 3))] if r.random() < 0.12 else dark_ceil
         box("Ceiling", (x0, y0, z + FH - 0.35), (W_ - 0.3, D_ - 0.3, 0.05), cm)
         box("Spandrel", (x0, front - 0.06, z + 0.15), (W_ + 0.2, 0.08, 0.5), pbr("Span", (0.07, 0.075, 0.08), 0.35, 0.6))
     # the boardroom: long table + chairs inside the lit floor
-    if variant in ("lit", "watch", None):
+    if variant in ("lit", "watch", "watch_clear", None):
         z = LIT_FLOOR * FH + 0.3
         box("Table", (x0, front + 5, z + 0.75), (18, 2.4, 0.08), wood("Table", (0.02, 0.01, 0.006), (0.07, 0.035, 0.018), rough=0.25))
         for j in range(10):
@@ -89,7 +89,7 @@ def build(variant=None):
     for k in range(10):
         box("Lamp", (-60 + k * 13, 22, 6), (0.8, 0.4, 0.2), emissive("Sodium", (1.0, 0.62, 0.3), 40))
     ctx = dict(focus=Vector((x0, front, LIT_FLOOR * FH + 2)))
-    if variant == "watch":
+    if variant in ("watch", "watch_clear"):
         rain = glass("RainGlass", (0.9, 0.93, 0.95), 0.0)
         nt = rain.node_tree; N = nt.nodes; L = nt.links; tc = N.new("ShaderNodeTexCoord")
         vor = N.new("ShaderNodeTexVoronoi"); vor.inputs['Scale'].default_value = 55; vor.feature = 'F1'
@@ -98,7 +98,7 @@ def build(variant=None):
         cap = N.new("ShaderNodeMapRange"); cap.inputs['From Min'].default_value = 0.0; cap.inputs['From Max'].default_value = 0.32
         cap.inputs['To Min'].default_value = 1.0; cap.inputs['To Max'].default_value = 0.0
         L.new(vor.outputs['Distance'], cap.inputs['Value'])
-        sel = N.new("ShaderNodeMath"); sel.operation = 'GREATER_THAN'; sel.inputs[1].default_value = 0.45
+        sel = N.new("ShaderNodeMath"); sel.operation = 'GREATER_THAN'; sel.inputs[1].default_value = 0.45 if variant == "watch" else 0.86
         sep = N.new("ShaderNodeSeparateColor"); L.new(vor.outputs['Color'], sep.inputs[0]); L.new(sep.outputs[0], sel.inputs[0])
         dome = N.new("ShaderNodeMath"); dome.operation = 'SQRT'; L.new(cap.outputs[0], dome.inputs[0])
         hm = N.new("ShaderNodeMath"); hm.operation = 'MULTIPLY'; L.new(dome.outputs[0], hm.inputs[0]); L.new(sel.outputs[0], hm.inputs[1])
@@ -122,6 +122,10 @@ MOVES = {
     "watch": dict(kind="plate", dof=1.8, far=300.0, cam=lambda c, t: ((-19.9, -30.55, 8.0), (0, 43, 36), 50),
                   focus=lambda c, t: (-19.85, -30.0, 8.2)),
     # CH4 1A: slow dusk push toward the tower, CHAPTER 4 title over it (two-line card + scrim, via bake.py)
-    "dusk_push": dict(kind="anim", far=400.0, title=("CHAPTER 4", "THE SECOND EMPLOYEE", 18, 120),
+    # CH4 7D: the same window, far fewer drops, focus on the tower: the lit board floor reads clearly through the glass
+    "watch_clear": dict(kind="anim", dof=8.0, far=300.0,
+                        cam=lambda c, t: (Vector((-19.9, -30.6, 8.0)).lerp(Vector((-19.8, -30.45, 8.05)), ease(t)), (0, 43, 34), 42),
+                        focus=lambda c, t: (0, 43, 34)),
+    "dusk_push": dict(kind="anim", far=400.0, title=("CHAPTER 4", "THE SECOND EMPLOYEE", 18, 120, 0.55),
                       cam=lambda c, t: (Vector((-34, -60, 4.0)).lerp(Vector((-30, -52, 5.2)), ease(t)), (0, 43, 23), 30)),
 }

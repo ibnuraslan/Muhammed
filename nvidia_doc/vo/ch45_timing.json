@@ -16,23 +16,23 @@
   },
   {
    "set": "corp",
-   "move": "lobby_walk",
-   "label": "2B A figure crosses the lobby",
-   "name": "c4_03_corp_lobby_walk",
+   "move": "lobby_busy",
+   "label": "2B A busy lobby, employees from behind",
+   "name": "c4_03_corp_lobby_busy",
    "frames": 288
   },
   {
-   "set": "press",
-   "move": "press_run",
-   "label": "3A Newspaper presses at night",
-   "name": "c4_04_press_press_run",
+   "set": "newsdesk",
+   "move": "news_push",
+   "label": "3A A laptop lights up with a news page",
+   "name": "c4_04_newsdesk_news_push",
    "frames": 145
   },
   {
-   "set": "office_door",
-   "move": "phone_ring",
-   "label": "3B Phone set down, no face",
-   "name": "c4_05_office_door_phone_ring",
+   "set": "newsdesk",
+   "move": "handset",
+   "label": "3B The handset settles into its cradle",
+   "name": "c4_05_newsdesk_handset",
    "frames": 204
   },
   {
@@ -99,10 +99,10 @@
    "frames": 188
   },
   {
-   "set": "press",
-   "move": "press_run",
-   "label": "7A Presses again, a second report",
-   "name": "c4_15_press_press_run",
+   "set": "newsdesk",
+   "move": "news_second",
+   "label": "7A A second screen, a second report",
+   "name": "c4_15_newsdesk_news_second",
    "frames": 107
   },
   {
@@ -113,24 +113,24 @@
    "frames": 301
   },
   {
-   "set": "office_door",
-   "move": "phone_ring",
-   "label": "7C Phone rings, nobody answers",
-   "name": "c4_17_office_door_phone_ring",
+   "set": "newsdesk",
+   "move": "ring",
+   "label": "7C The desk phone rings, nobody answers",
+   "name": "c4_17_newsdesk_ring",
    "frames": 190
   },
   {
    "set": "hq",
-   "move": "watch",
-   "label": "7D Four days, the tower watched",
-   "name": "c4_18_hq_watch",
+   "move": "watch_clear",
+   "label": "7D The tower behind rainy glass",
+   "name": "c4_18_hq_watch_clear",
    "frames": 199
   },
   {
-   "set": "police",
-   "move": "pull_up",
-   "label": "8A Singapore police at the tower",
-   "name": "c4_19_police_pull_up",
+   "set": "city",
+   "move": "singapore_dusk",
+   "label": "8A Singapore skyline at dusk",
+   "name": "c4_19_city_singapore_dusk",
    "frames": 333
   }
  ],
@@ -172,9 +172,9 @@
   },
   {
    "set": "invest",
-   "move": "filing",
-   "label": "4A Investigator pulls an overseas file",
-   "name": "c5_06_invest_filing",
+   "move": "filing_officer",
+   "label": "4A An officer reads an overseas file",
+   "name": "c5_06_invest_filing_officer",
    "frames": 345
   },
   {
@@ -199,10 +199,10 @@
    "frames": 136
   },
   {
-   "set": "city",
-   "move": "beijing_night",
+   "set": "shanghai",
+   "move": "beijing_drift",
    "label": "5B Beijing at night",
-   "name": "c5_10_city_beijing_night",
+   "name": "c5_10_shanghai_beijing_drift",
    "frames": 262
   },
   {
@@ -256,9 +256,9 @@
   },
   {
    "set": "warehouse",
-   "move": "forklift",
-   "label": "8B A pallet of crates moves out",
-   "name": "c5_18_warehouse_forklift",
+   "move": "forklift_real",
+   "label": "8B A forklift moves a pallet of crates",
+   "name": "c5_18_warehouse_forklift_real",
    "frames": 266
   },
   {
@@ -270,16 +270,16 @@
   },
   {
    "set": "port",
-   "move": "scan_gate",
-   "label": "9A Customs scanner, Malaysia inquiry",
-   "name": "c5_20_port_scan_gate",
+   "move": "xray_gate",
+   "label": "9A A container through the X-ray portal",
+   "name": "c5_20_port_xray_gate",
    "frames": 227
   },
   {
-   "set": "invest",
-   "move": "compare",
-   "label": "9B Customs officer checks a manifest",
-   "name": "c5_21_invest_compare",
+   "set": "newsdesk",
+   "move": "manifest",
+   "label": "9B A customs officer checks a manifest",
+   "name": "c5_21_newsdesk_manifest",
    "frames": 184
   },
   {

@@ -14,7 +14,7 @@ FPS = 24
 chapter = sys.argv[1]
 arg = lambda k, d: type(d)(sys.argv[sys.argv.index(k) + 1]) if k in sys.argv else d
 samples = arg("--samples", 32)
-only = arg("--only", "")
+only = set(x for x in arg("--only", "").split(",") if x)
 force = "--force" in sys.argv
 step = arg("--step", 2)
 
@@ -26,7 +26,7 @@ scenes_dir = os.path.join(ROOT, "scenes")
 done, skipped = [], []
 for sh in tim:
     name = sh["name"]
-    if only and name != only:
+    if only and name not in only:
         continue
     blend = os.path.join(outdir, name + ".blend")
     if os.path.exists(blend) and not force:
@@ -38,6 +38,6 @@ for sh in tim:
     env = dict(os.environ, BAKE_STEP=str(step))
     r = subprocess.run(cmd, cwd=scenes_dir, env=env)
     if r.returncode != 0:
-        print("[bake_ch45][ERR]", name, "rc", r.returncode, flush=True); sys.exit(2)
+        print("[bake_ch45][ERR]", name, "rc", r.returncode, flush=True); continue
     done.append(name)
 print(f"[bake_ch45] ch{chapter}: baked {len(done)}, skipped {len(skipped)} -> {outdir}")

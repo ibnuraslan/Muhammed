@@ -30,4 +30,6 @@ def build(variant=None):
     return {}
 
 
-MOVES = {"night_drift": dict(kind="plate", far=3000.0, cam=lambda c, t: ((-60 + 40 * t, -120, 22), (0, 900, 140), 40))}
+MOVES = {"night_drift": dict(kind="plate", far=3000.0, cam=lambda c, t: ((-60 + 40 * t, -120, 22), (0, 900, 140), 40)),
+         # CH5 5B: a generic night skyline (no landmarks) for Beijing: lit windows, haze, depth; slow lateral drift
+         "beijing_drift": dict(kind="anim", far=3000.0, cam=lambda c, t: ((-90 + 34 * ease(t), -140, 26 + 3 * ease(t)), (0, 900, 150), 38))}

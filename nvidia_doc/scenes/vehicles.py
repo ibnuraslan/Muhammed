@@ -933,7 +933,11 @@ def make(kind, loc=(0, 0, 0), heading_deg=0.0, color=None, variant=None, dirt=No
     if kind not in KINDS:
         raise KeyError(f"unknown vehicle kind {kind!r}; have {sorted(KINDS)}")
     key = (kind, variant, tuple(sorted(opts.items())))
-    if key not in _TEMPLATES or _TEMPLATES[key].name not in bpy.data.objects:
+    try:                                   # a template from an earlier (reset) scene is a dead reference
+        alive = key in _TEMPLATES and _TEMPLATES[key].name in bpy.data.objects
+    except ReferenceError:
+        alive = False
+    if not alive:
         t = KINDS[kind](variant, **opts) if opts else KINDS[kind](variant)
         t["vehicle_kind"] = kind; t["vehicle_variant"] = variant or ""
         _stash(t); _TEMPLATES[key] = t
