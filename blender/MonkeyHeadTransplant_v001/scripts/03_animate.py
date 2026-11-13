@@ -436,7 +436,7 @@ def beat2_keys(frames):
             else:
                 W = W + Nw * 0.09 * rel + V(0, -0.05, 0.04) * rel
             hand(SURG, s, f, W, d_, n_, 0.4, yw)
-            pose_hand(SURG, s, f, "cup_hold" if max(app, rel) < 0.5 else "relaxed")
+            if f < 392: pose_hand(SURG, s, f, "cup_hold" if max(app, rel) < 0.5 else "relaxed")
 
 beat2_keys(list(range(214, 400, 3)) + [400])
 # numeric grip search: back each hand off the head surface until the glove sits on the fur (no verts inside)
@@ -707,9 +707,10 @@ for f_, a_ in ((1300, 0.0), (1345, 3.0), (1770, 3.4)):
     l_, q_, _ = Md.decompose(); head.location = l_; head.keyframe_insert("location", frame=f_)
     head.rotation_quaternion = q_; head.keyframe_insert("rotation_quaternion", frame=f_)
 # needle holder / forceps follow the surgeon's hands (beat 3 only), parked on the tray otherwise
+TOOL_V0, TOOL_V1 = 392, 671      # v008e: tools are in a hand on every visible frame
 for tool in (nh, fcp):
     tool.rotation_mode = "QUATERNION"
-    hide_keys(tool, [(1, True), (382, False), (676, True)])
+    hide_keys(tool, [(1, True), (TOOL_V0, False), (TOOL_V1 + 1, True)])
 TOOL_LOG = []; TOOL_C = {}
 for f in list(range(400, 672, 6)):
     k = min((f - 395) // 26, len(STITCH_ORDER) - 1); ph = ((f - 395) % 26) / 26.0
@@ -772,10 +773,8 @@ K = [
  (1250, CH + V(-0.6, -1.35, 0.62), CH + V(0, 0.25, 0.62), 24, UPW, "W"),
  (1320, CH + V(0.35, -1.45, 0.85), CH + V(0.05, 0.2, 0.66), 26, UPW, "W"),
  (1380, V(2.85, -0.42, 1.08), V(2.95, 0.7, 0.95), 30, UPW, "W"),
- (1440, SCR + V(-0.07, -0.42, 0.05), SCR + V(-0.03, 0, 0), 45, UPW, "W"),
- (1460, SCR + V(-0.07, -0.40, 0.05), SCR + V(-0.03, 0, 0), 47, UPW, "W"),
- (1480, SCR + V(-0.07, -0.38, 0.05), SCR + V(-0.03, 0, 0), 49, UPW, "W"),
- (1500, SCR + V(-0.07, -0.36, 0.05), SCR + V(-0.03, 0, 0), 50, UPW, "W"),
+ (1440, SCR + V(-0.06, -0.42, 0.05), SCR, 45, UPW, "W"),
+ (1500, SCR + V(0.06, -0.36, 0.05), SCR, 55, UPW, "W"),
  (1530, V(2.55, -0.42, 1.45), M_CHAIR @ EYEMID + V(-0.15, 0, 0), 40, UPW, "W"),
  (1560, V(1.98, 0.22, 1.32), M_CHAIR @ EYEMID, 36, UPW, "W"),
  (1620, V(2.0, -0.55, 1.55), V(2.5, 0.9, 0.75), 30, UPW, "W"),
@@ -808,10 +807,50 @@ for f in range(1, 1771):
 json.dump(CAMLOG[::30], open(os.path.join(HERE, "..", "camera_path.json"), "w"))
 for nm_ in ("Surgeon", "Nurse", "Anaes"): add_hand_limits(D[nm_])
 # v008d contact bake: with every hand key final, put each held prop exactly in the evaluated pinch
-for (tn, f), (s_, off) in sorted(TOOL_C.items(), key=lambda kv: kv[0][1]):
-    ev(f); t_ = D[tn]; G = (fingertip(SURG, s_, 1) + fingertip(SURG, s_, 2)) / 2.0
-    t_.location = G - off; t_.keyframe_insert("location", frame=f)
 bake_pen()
+# v008e tool bake: every visible frame, from the EVALUATED fingertip vertices (equivalent to Child Of on the fingertips, baked)
+#  forceps (L): shaft passes through the thumb-index pinch, tip end toward its keyed seam point
+#  needle holder (R): thumb tip in one ring, ring-finger tip in the other, jaws toward the seam
+_sb = D["Surgeon.body"]; _mods = [(m_, m_.show_viewport) for m_ in _sb.modifiers if m_.type in ("MASK", "SUBSURF", "MULTIRES")]
+for m_, _ in _mods: m_.show_viewport = False
+_gi = {g.index: g.name for g in _sb.vertex_groups}
+def _tipvert(bone):
+    pbn = D["Surgeon"].data.bones[bone]; hd = pbn.head_local; tl = pbn.tail_local
+    ids = [v.index for v in _sb.data.vertices if any(_gi[g.group] == bone and g.weight > 0.6 for g in v.groups)]
+    return max(ids, key=lambda i: (_sb.data.vertices[i].co - hd).dot((tl - hd).normalized()))
+TIPV = {(s_, k): _tipvert("finger%d-3.%s" % (k, s_)) for s_ in "LR" for k in (1, 2, 4)}
+def _tips(s_):
+    dg_ = bpy.context.evaluated_depsgraph_get(); eb = _sb.evaluated_get(dg_); mb = eb.to_mesh()
+    out = {k: eb.matrix_world @ mb.vertices[TIPV[(s_, k)]].co for k in (1, 2, 4)}; eb.to_mesh_clear(); return out
+for f in range(TOOL_V0, TOOL_V1 + 1):      # closed pinch, keyed on every frame so no other finger key sits between on both hands for the whole hold (thumb-index 1.0 cm, thumb-ring 3.7 cm)
+    pose_hand(SURG, "L", f, "pinch"); pose_hand(SURG, "R", f, "pinch")
+_seam_tip = {}
+for f in range(TOOL_V0, TOOL_V1 + 1):          # keyed seam targets (tool tip ends) before re-baking
+    sc.frame_set(f)
+    _seam_tip[("Forceps", f)] = fcp.matrix_world @ V(0, 0, -0.06)
+    _seam_tip[("NeedleHolder", f)] = nh.matrix_world @ V(0, 0, -0.075)
+for t_ in (fcp, nh): t_.animation_data_clear(); t_.rotation_mode = "QUATERNION"
+TOOL_GAP = {}
+RING_MID = V(0, 0, 0.085); RING_AX = V(1, 0, 0)
+for f in range(TOOL_V0, TOOL_V1 + 1):
+    sc.frame_set(f)
+    tl_ = _tips("L"); G = (tl_[1] + tl_[2]) / 2.0; S_ = _seam_tip[("Forceps", f)]
+    u = (G - S_).normalized(); Lh = 0.06
+    d_ = (G - S_).length
+    org = S_ + u * Lh if d_ <= 0.10 else G - u * 0.04          # pinch 2 cm below the top end when the hand is far from the seam
+    fcp.location = org; fcp.rotation_quaternion = u.to_track_quat("Z", "Y")
+    fcp.keyframe_insert("location", frame=f); fcp.keyframe_insert("rotation_quaternion", frame=f)
+    tr = _tips("R"); Pm = (tr[1] + tr[4]) / 2.0; S2 = _seam_tip[("NeedleHolder", f)]
+    u2 = (Pm - S2).normalized()
+    side = (tr[4] - tr[1]); side = (side - u2 * side.dot(u2))
+    side = side.normalized() if side.length > 1e-4 else u2.orthogonal().normalized()
+    Rm = Matrix((side, u2.cross(side), u2)).transposed()      # columns: local X (ring axis), Y, Z (shaft)
+    nh.rotation_quaternion = Rm.to_quaternion(); nh.location = Pm - Rm @ RING_MID
+    nh.keyframe_insert("location", frame=f); nh.keyframe_insert("rotation_quaternion", frame=f)
+    TOOL_GAP[f] = (round((tl_[1] - tl_[2]).length * 100, 1), round((tr[1] - tr[4]).length * 100, 1))
+for m_, vis in _mods: m_.show_viewport = vis
+for t_ in (nh, fcp): hide_keys(t_, [(1, True), (TOOL_V0, False), (TOOL_V1 + 1, True)])   # re-key visibility (animation_data_clear removed it)
+print("TOOLBAKE pinch gap L (cm) max", max(g[0] for g in TOOL_GAP.values()), "thumb-ring R (cm) min/max", min(g[1] for g in TOOL_GAP.values()), max(g[1] for g in TOOL_GAP.values()))
 for f in (641, 651, 661): pose_hand(ANA, "R", f, "cup_hold")      # bag squeeze: closed wrap, no claw between grip keys
 # table-2 group is transparent after the void and never seen again: hide it for good (QA: no invisible fill)
 for o in D:
