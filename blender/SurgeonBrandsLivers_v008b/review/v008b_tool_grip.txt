@@ -1,0 +1,3 @@
+Tool grip pass (pinch preset, limits on before solve, pen baked from the evaluated wrist every frame)
+Surgeon1.R holds ArgonPen_OR 1-300, carries it to rest by 312: pen 150 mm long, tip off its path max 0.0 cm, barrel to head centre min 23.2 cm
+GloveHands.R holds ArgonPen_Studio 1-300: pen 150 mm long, tip off its path max 0.0 cm, barrel to head centre min 38.1 cm

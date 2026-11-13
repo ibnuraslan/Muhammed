@@ -1,0 +1,825 @@
+{
+ "frames": {
+  "133": [
+   [
+    "FILL",
+    "AbdomenSkin"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only AbdomenSkin in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "only StudioDome in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "199": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ]
+  ],
+  "211": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "217": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "229": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "235": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "241": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "247": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "PROPMOVE",
+    "Spark_13 moves 8.7 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "277": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "StudioMembrane"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only StudioMembrane in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "283": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.10 m, 85 deg in one frame (neighbours 0.04 m, 25 deg)"
+   ]
+  ],
+  "325": [
+   [
+    "FILL",
+    "AbdomenSkin"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "637": [
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "877": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "883": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "889": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "1057": [
+   [
+    "FILL",
+    "AbdomenSkin"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only AbdomenSkin in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 0.25 m, 16 deg in one frame (neighbours 0.04 m, 15 deg)"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1087": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "1093": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1135": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "1141": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1147": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "1153": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1159": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1177": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "StudioMembrane"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only StudioMembrane in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Anaesth_Mask is 2.0 cm off Anaesth's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "1183": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only OR_Ceil in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "CAMJUMP",
+    "cut: 6.40 m, 37 deg in one frame (neighbours 0.04 m, 10 deg)"
+   ]
+  ],
+  "1237": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only OR_WallW in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1309": [
+   [
+    "HOVER",
+    "Patient.L near Drape (1.4 cm)"
+   ]
+  ],
+  "1411": [
+   [
+    "HOVER",
+    "Patient.L near Drape (1.4 cm)"
+   ]
+  ],
+  "1417": [
+   [
+    "HOVER",
+    "Patient.L near Drape (1.4 cm)"
+   ],
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ]
+  ],
+  "1423": [
+   [
+    "HOVER",
+    "Patient.L near Drape (1.4 cm)"
+   ]
+  ],
+  "1447": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1507": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1513": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1573": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1579": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "1585": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1591": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1603": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1609": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1615": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1621": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "138": [
+   [
+    "CAMJUMP",
+    "cut: 6.40 m, 6 deg in one frame (neighbours 0.03 m, 18 deg)"
+   ]
+  ],
+  "278": [
+   [
+    "CAMJUMP",
+    "cut: 6.40 m, 9 deg in one frame (neighbours 0.05 m, 27 deg)"
+   ]
+  ],
+  "286": [
+   [
+    "CAMJUMP",
+    "cut: 0.04 m, 86 deg in one frame (neighbours 0.04 m, 19 deg)"
+   ]
+  ],
+  "570": [
+   [
+    "CAMJUMP",
+    "cut: 0.17 m, 80 deg in one frame (neighbours 0.10 m, 8 deg)"
+   ]
+  ],
+  "639": [
+   [
+    "CAMJUMP",
+    "cut: 0.32 m, 2 deg in one frame (neighbours 0.10 m, 1 deg)"
+   ]
+  ],
+  "773": [
+   [
+    "CAMJUMP",
+    "cut: 0.27 m, 74 deg in one frame (neighbours 0.23 m, 15 deg)"
+   ]
+  ],
+  "1058": [
+   [
+    "CAMJUMP",
+    "cut: 0.01 m, 84 deg in one frame (neighbours 0.11 m, 16 deg)"
+   ]
+  ],
+  "1060": [
+   [
+    "CAMJUMP",
+    "cut: 6.40 m, 18 deg in one frame (neighbours 0.10 m, 22 deg)"
+   ]
+  ],
+  "1232": [
+   [
+    "CAMJUMP",
+    "cut: 0.05 m, 65 deg in one frame (neighbours 0.08 m, 8 deg)"
+   ]
+  ],
+  "1": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.1 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "25": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "49": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "73": [
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "97": [
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "121": [
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ]
+  ],
+  "253": [
+   [
+    "PROPMOVE",
+    "Spark_16 moves 7.3 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "259": [
+   [
+    "PROPMOVE",
+    "Spark_23 moves 9.5 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark_25 moves 9.9 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPMOVE",
+    "Spark_28 moves 8.4 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "271": [
+   [
+    "PROPMOVE",
+    "Spark_32 moves 5.0 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark_33 moves 9.2 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "289": [
+   [
+    "PROPMOVE",
+    "Smoke_4 moves 4.3 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark_05 moves 9.5 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "313": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "385": [
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ]
+  ],
+  "409": [
+   [
+    "ATTACH",
+    "AnaesMaskCone is 1.9 cm off Patient's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.1 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "433": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "457": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 2.2 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "481": [
+   [
+    "ATTACH",
+    "Surgeon1_Mask is 1.6 cm off Surgeon1's skin (median)"
+   ]
+  ],
+  "577": [
+   [
+    "PROPMOVE",
+    "Mug moves 0.7 cm with no hand on it (nearest finger 494 cm)"
+   ],
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "601": [
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "625": [
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "673": [
+   [
+    "PROPMOVE",
+    "Mug moves 49.7 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "793": [
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "817": [
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ]
+  ],
+  "937": [
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "961": [
+   [
+    "ATTACH",
+    "Anaesth_Mask is 2.0 cm off Anaesth's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "985": [
+   [
+    "ATTACH",
+    "Anaesth_Mask is 2.0 cm off Anaesth's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "1009": [
+   [
+    "ATTACH",
+    "Anaesth_Mask is 2.0 cm off Anaesth's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "1033": [
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "1201": [
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "1225": [
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ],
+  "1297": [
+   [
+    "ATTACH",
+    "Nurse_Mask is 1.8 cm off Nurse's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "Surgeon2_Mask is 1.7 cm off Surgeon2's skin (median)"
+   ]
+  ]
+ },
+ "counts": {
+  "FILL": 10,
+  "EMPTY": 74,
+  "INSIDE": 2,
+  "HOVER": 4,
+  "CAMJUMP": 12,
+  "ATTACH": 40,
+  "PROPMOVE": 11
+ }
+}
