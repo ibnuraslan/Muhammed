@@ -5,3 +5,5 @@ thumbnails/*/plates/
 thumbnails/*/plates_quick/
 thumbnails/*/out_tmp/
 __pycache__/
+thumbnails/nvidia/download*/
+*.zip
