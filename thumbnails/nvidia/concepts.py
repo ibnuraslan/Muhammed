@@ -89,3 +89,22 @@ def clear_setup(c):
 CONCEPTS["targeted_clear"] = dict(CONCEPTS["targeted"], exposure=0.3, setup=clear_setup,
                                   cam=lambda c: (c["head"] + Vector((0.15, -2.0, 0.12)), c["head"] + Vector((0, 0.8, 0.12)), 42),
                                   focus=lambda c: c["head"], fstop=2.2)
+
+
+def mood_setup(c):
+    """CUET-style atmosphere: haze in the room, hard top-light beams on each woman (faces half in shadow), a top key
+    on him, the wall scallops kept as background texture."""
+    from kit import haze
+    for o in bpy.data.objects:
+        if o.type == 'LIGHT' and not o.name.startswith(("Scallop", "Cove", "LimeGlow")):
+            o.data.energy *= 0.3
+    haze((0, 3.2, 1.5), (7.0, 5.0, 3.0), density=0.045, color=(0.9, 0.85, 0.8), anis=0.55)
+    for k, w in enumerate(c["women"]):
+        p = w.bone_head("head")
+        _spot(f"Beam{k}", (p.x + 0.15, p.y + 0.35, 2.95), (p.x, p.y - 0.05, 1.0), 380, (1.0, 0.9, 0.78), 17, 0.25, 0.04)
+    h = c["head"]
+    _spot("TopKey", (h.x + 0.25, h.y - 0.35, 2.95), h + Vector((0, -0.05, -0.2)), 650, (1.0, 0.94, 0.86), 22, 0.3, 0.05)
+    f = area_light(h + Vector((0.6, -1.6, 0.1)), (0, 0, 0), 1.2, 25, (0.9, 0.92, 1.0)); point_at(f, h)   # faint fill
+
+
+CONCEPTS["targeted_mood"] = dict(CONCEPTS["targeted_clear"], exposure=0.2, setup=mood_setup)
