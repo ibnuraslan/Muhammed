@@ -1,4 +1,4 @@
-# All Scripts: Six Films
+# All Scripts: Seven Films
 
 Record and send one chapter at a time. Every film opens with an **Intro** (no chapter title), then the chapters.
 
@@ -411,6 +411,80 @@ He'll spend the rest of his life in the state penitentiary in Cañon City, where
 
 ---
 
-# Film 7 — The Kidnapper Who Only Played a Radio Jingle
+# 7. The Kidnapper Who Only Played a Radio Jingle
 
-See projects/radio-jingle/script.txt
+The Kidnapper Who Only Played a Radio Jingle
+Narration: 2,362 words · Estimated finished runtime: about 13 minutes and 10 seconds at 184 words per minute, with 20 seconds of pauses.
+
+Cold Open
+The caller plays a radio jingle. Ursula Herrmann's mother asks for the names her daughter gave two of her stuffed toys. She's agreed to pay two million marks. All she wants now is some sign that her ten-year-old is alive.
+The person on the other end says nothing.
+Police are recording the call. Between the notes and the silence, the tape picks up a few faint clicks. Those clicks will help send a man to prison. And one of the people who will challenge that evidence is Ursula's own brother.
+
+Chapter One · Ten Minutes Home
+Two days before the first call, Ursula sits down at a piano in her family's house in Eching, a village on Bavaria's Ammersee. Her older brother Michael helps her practice. It's the first day of the school year. She still has gymnastics that afternoon.
+Ursula takes her red bicycle down the lakeside path to Schondorf. She knows the route. After gymnastics, she stops for dinner at her cousin's house. At about seven twenty, her mother calls to say it's time to come home. The ride takes about ten minutes.
+Half an hour later, her mother calls again. Ursula's aunt says she left twenty-five minutes ago.
+Her father heads down the path from Eching. Her uncle comes from the other direction. Somewhere between the two villages, the men meet. They call Ursula's name into the trees. By the time police, firefighters, and neighbors are out looking, it's dark.
+Close to midnight, a search dog leads its handler away from the lakeshore. In the brush, about twenty meters off the path, there's a red bicycle. Ursula is gone.
+Michael is playing music at a friend's house when he learns that Ursula is missing. He comes home and joins the search. Earlier that day, his sister had been beside him at the piano. Now the searchers have a bicycle to show where she got to.
+By morning, a helicopter is up. Police search the shore, and divers check the shallows. The radio carries a description of a missing girl in a gray cardigan and dark green trousers. The following morning, a sound from that same medium reaches her parents in a very different way.
+The telephone rings. There's a short melody they recognize. It's what Bayern Three plays around its traffic bulletins. The line goes quiet. The melody plays again. Then the caller hangs up.
+More calls follow. They make sense only when an envelope arrives for Ursula's father on Friday. Inside, bits of newspaper have been cut out and assembled into sentences. The writer says they've taken his daughter. They want two million marks in used hundred-mark notes. The family is supposed to hear a signal on the phone and give a simple answer. Will they pay?
+The letter says to expect the signal on Thursday. Thursday has already passed. The court will later hear that the envelopes were missing the postal code, which delayed delivery. For hours, Ursula's parents had been hearing a signal whose instructions were still in the mail.
+When the caller tries again, Ursula's mother says they'll pay. She asks about the stuffed toys. The line gives her nothing she can use to tell whether her daughter is safe.
+A second letter acknowledges that the family has agreed. It gives Ursula's father instructions for the handoff. A suitcase full of used notes. A yellow Fiat Six Hundred. He must drive alone, stay below ninety kilometers an hour, and wait for a call telling him where to go. The letter promises to release Ursula six hours after the money is handed over.
+A neighbor helps raise part of the ransom. The state agrees to cover the rest. The family can pay. They still need a destination.
+The call giving them one never comes.
+
+Chapter Two · Seven Bolts
+Police go back into the forest. This time, they divide it into grids. More than a hundred officers and ten search dogs work through the sections. The officers use metal rods to check beneath the surface.
+On October fourth, nineteen days after Ursula disappears, one of those rods hits something solid. The spot is in a small clearing, roughly eight hundred meters from where investigators believe she was taken. The officers clear the soil and uncover a wooden cover. Beneath it is a lid held shut by seven sliding bolts.
+They force it open. Ursula is inside. She's dead.
+The box is about the height of a ten-year-old child. It has a shelf, a seat with a toilet opening, and a light wired to a car battery buried outside. Inside are water, orange soda, chocolate, and books. There's even a portable radio. It's tuned to Bayern Three.
+The builders have fitted two lengths of plastic pipe, one intended to bring in fresh air and one to let air out. They've drilled thousands of little holes in the pipes and added fabric to muffle sound. They've provided enough food and drink to keep a child there for days. In the forensic reconstruction, the ventilation barely exchanges air with the outside.
+The medical estimate is that Ursula survives between thirty minutes and five hours after she's put inside. The experts can't pin it down further. They also can't establish whether she was sedated before she went into the box.
+By the time her mother asks about the toys, Ursula is already dead.
+The box weighs about sixty kilos. The covering goes under a layer of earth. The court's reconstruction describes five small spruces pushed into the ground over it. The top has a capped tube that the court believes was meant for talking to whoever was inside. The judges will later infer that the caller went back to the box after Ursula's mother asked for proof of life and discovered she was dead. That is the court's explanation for why the calls stopped.
+Someone had to build the box, get it into the forest, dig deep enough to bury it upright, and disguise the spot. Whoever planned this had time to work. There's evidence of preparation back by the path, too.
+
+Chapter Three · The Man with the Spade
+Investigators eventually trace about a hundred and forty meters of green wire through the trees near the place Ursula's bicycle was found. The path bends sharply. The wire runs past the bend, connecting two positions with views in opposite directions. Investigators believe it could have let one person signal to another when somebody was coming. How it was used that evening remains uncertain.
+Forensic investigators lift a fingerprint from adhesive tape on the box. As the inquiry expands, they will compare around twenty thousand fingerprints. They find no match for the print on the tape.
+One name comes up within days of the discovery. Werner Mazurek lives a few hundred meters from the Herrmanns. He's a trained mechanic with a television repair business and substantial debts. When police ask where he was the night Ursula vanished, he eventually says he was playing the board game Risk with his wife and two friends. An early search of his home and workshop turns up nothing that ties him to the crime.
+Then police speak to Klaus Pfaffinger, an acquaintance of Mazurek's. His landlord has reported seeing him with a spade strapped to his moped before the kidnapping.
+Under questioning, Pfaffinger tells the detectives that Mazurek offered him a thousand marks and a color television to dig a hole in the woods. He says he dug it and later saw a box in it. Some of his details about the size of the hole and the soil will matter decades later.
+First, the detectives take him into the woods and ask him to show them the spot. He fails to lead them to it. Back at the police station, he retracts his story. He never repeats it in later interrogations. Police release him without charge.
+The investigation goes nationwide. A television appeal puts the case in front of viewers across West Germany. The tips keep coming. Eventually, the files on the leads fill twelve steel cabinets. By the end of the eighties, the investigation has slowed. The calls are still on tape.
+
+Chapter Four · The Clicks
+In the mid-2000s, investigators go back to the physical evidence. This time, they have DNA profiling. They recover several genetic profiles from traces on the box. In 2007, one from a screw appears to match a sample from a drinking glass in the apartment of a woman killed in Munich. It looks like a connection between two crimes. The man ultimately convicted in Munich was a small child in 1981. After further forensic work, the court in the Munich case finds no link between the two crimes.
+By 2007, Pfaffinger is dead. Mazurek has moved to northern Germany and sells boat accessories. Investigators are running up against a deadline. The offense they're pursuing, kidnapping for ransom resulting in death, carries a thirty-year limitation period. A case that's already taken more than twenty-five years has only a few years left to bring charges.
+Police put Mazurek under surveillance and search his home. They take a saliva sample. His DNA doesn't match the profiles recovered from the box. But police also take away something he says he bought at a flea market just weeks earlier.
+A reel-to-reel tape recorder. A Grundig TK Two Forty-Eight.
+A forensic phonetics specialist from the Bavarian state criminal police listens to the old calls. Of the recordings she examines, three contain the radio jingle. The station broadcast it to anyone with a receiver. She focuses on details a listener might miss, including the sounds around the melody and the way one of the highest notes drops in volume.
+She tests the Grundig. Its controls produce noises that resemble some of the sounds on the calls. The comparison includes the play button, the pause button, and the way the machine sounds when its pause mechanism is operated remotely. Investigators test eleven comparable recorders. The seized machine produces the combination the expert finds most persuasive. Her conclusion is that it was probably one of the devices used to prepare the ransom recordings.
+Police arrest Mazurek in May 2008. In court, his explanation is still the flea market. He says the Grundig came into his possession in 2007. Sellers questioned about the market can't recall the sale of the machine. The judges eventually reject his account and conclude he had it at the time of the kidnapping.
+Ursula's brother Michael joins the criminal proceedings on behalf of the family. He's a music teacher now. He's also worked with recording equipment. He asks to see the files and reads thousands of pages in the first weeks of the trial. Somewhere in that paperwork is the detail that he helped Ursula practice piano the day she disappeared. He'd forgotten that moment until he read about it in the file.
+The sound evidence bothers him. Start with the radio broadcast. In the court's reconstruction, someone records and edits the jingle on the Grundig. That version is copied onto a smaller player. The player goes to a public phone booth, where its speaker plays into the mouthpiece. The signal travels down the phone line and is recorded at the Herrmanns' end.
+If you hear a click on the police tape, where did it enter the chain? At the Grundig? At the second machine? In the booth? Even the change in volume matters. A note that comes out quieter at the end could have lost some of its strength at an earlier step.
+The sound on the police tape has passed through every one of those steps. The portable player, the booth, and the telephone line can all change it. Michael wants to know how confidently the expert can work backward from that recording and identify one machine at the start. He puts his objections in writing to the court.
+
+Chapter Five · After the Verdict
+The judges weigh the tape alongside the rest of the evidence. They credit details in Pfaffinger's original statement despite his retraction. They conclude that a pair of binoculars found at the abduction site belonged to Mazurek. They consider his debts, his workshop skills, and the case for his having owned the Grundig in 1981.
+In March 2010, after fifty-six days of hearings, the court finds Werner Mazurek guilty of kidnapping for ransom resulting in death and sentences him to life in prison. His wife, who was tried as an accessory, is acquitted. Mazurek maintains his innocence. Germany's Federal Court of Justice upholds the conviction.
+Michael finds another way to put parts of the case back in front of judges.
+In 2013, he sues Mazurek for twenty thousand euros. Michael has developed tinnitus, a persistent noise in his ear that interferes with teaching music and sleeping. A medical assessment links the condition to the stress of the criminal proceedings. For Michael, the civil claim is also a chance to get the evidence examined again.
+A retired physicist named Bernd Haider borrows a comparable recorder and spends about a year testing it against the call recordings. He says he can't reproduce the state expert's findings and offers his work to the defense.
+The civil court initially awards Michael seven thousand euros. In reaching that decision, it agrees with the criminal court about who kidnapped his sister. Michael also submits material to prosecutors raising a possible lead involving a boarding school near the woods. In 2019, prosecutors say the material gives them no grounds to reopen the case.
+The award is overturned on appeal in 2020. The appeals court finds that Michael's illness arose too long after the crime to qualify for damages on that basis. The criminal verdict stands.
+In June 2023, after more than fifteen years in custody, Mazurek is released on probation. He continues to deny involvement. In 2024, German public broadcasters revisit the case, following the defense's effort to clear him and examining the alternative leads around the boarding school. The conviction remains in force.
+A court has ruled on who took Ursula. The recording preserves what her mother was trying to find out before anyone knew where to look. After agreeing to pay, she asked the caller for something that would have cost him nothing to give.
+Two names. Something her daughter would know.
+On the other end of the line, nobody answered.
+
+Research and production notes
+- The call count: sources disagree (7 vs 11). The narration uses the documented sequence and leaves the disputed total out.
+- The recorder and the verdict: the state expert's conclusion was probabilistic; the court also relied on the binoculars, Pfaffinger's retracted statement and other circumstantial evidence. For the animated phone-booth sequence, label the equipment chain "Court reconstruction".
+- Michael's challenge and the aftermath: the civil appeal overturned the damages award; Mazurek's 2023 release was on probation; the boarding-school lead has not overturned the conviction.
+Sources: polizei.bayern.de (case history), redacted criminal judgment (allmystery.de mirror), Augsburger Allgemeine chronology, Merkur (audio tests), The Guardian (2019-09-24), justiz.bayern.de (Augsburg civil ruling 2018), Süddeutsche (civil appeal), RTL (2023 release), SWR/NDR ARD Crime Time.
