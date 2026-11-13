@@ -37,10 +37,10 @@ if __name__ == "__main__":
         from PIL import ImageFont
         P = os.path.join(HERE, "plates")
         f = ImageFont.truetype(os.path.join(FONTS, "Anton-Regular.ttf"), 330); w = f.getlength("TARGETED?")
-        im = layered(os.path.join(P, "targeted.png"), os.path.join(P, "targeted_mask.png"), ["TARGETED?"], 960 - w / 2, 190, 330,
-                     color=LIME, stroke=6, shadow=0.6)
+        im = layered(os.path.join(P, "targeted.png"), os.path.join(P, "targeted_mask.png"), ["TARGETED?"], 960 - w / 2, 250, 330,
+                     color=LIME, stroke=6, shadow=0.6, lift=0.01)
         save(im, os.path.join(HERE, "nvidia_final_text.jpg"))
-        save(grade(load_plate(os.path.join(P, "targeted.png")), vignette=0.45), os.path.join(HERE, "nvidia_final_notext.jpg"))
+        save(grade(load_plate(os.path.join(P, "targeted.png")), vignette=0.45, lift=0.01), os.path.join(HERE, "nvidia_final_notext.jpg"))
     else:
         n = sys.argv[2]
         save(build(n, "plates"), os.path.join(HERE, "nvidia_final_text.jpg"))

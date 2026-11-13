@@ -4,7 +4,7 @@ from compose import load_plate, grade, draw_text, W, H
 
 
 def layered(plate, mask, lines, x, y, size, **kw):
-    base = grade(load_plate(plate), vignette=kw.pop("vignette", 0.45))
+    base = grade(load_plate(plate), vignette=kw.pop("vignette", 0.45), lift=kw.pop("lift", 0.0))
     txt = draw_text(base, lines, x, y, size, **kw)
     m = Image.open(mask).split()[-1].resize((W, H), Image.LANCZOS)
     return Image.composite(base, txt, m)
