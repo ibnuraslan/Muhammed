@@ -319,10 +319,10 @@ def build(variant=None):
 def smoke(c):
     """A thin wisp of test smoke curling out of the low pipe's mouth: a slim curved volume tube whose density is a
     slowly drifting noise (frame-driven), so it reads as a broken thread of smoke that barely moves."""
-    m0 = Vector((W / 2 - T - 0.04, -D / 2 - 0.03, Z0 + 0.62))
-    pts = [m0, m0 + Vector((0.0, -0.05, 0.01)), m0 + Vector((0.015, -0.1, 0.05)), m0 + Vector((-0.01, -0.13, 0.12)),
-           m0 + Vector((0.02, -0.15, 0.2)), m0 + Vector((0.0, -0.16, 0.3)), m0 + Vector((0.03, -0.17, 0.42))]
-    cu = bpy.data.curves.new("SmokeWisp", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.022; cu.bevel_resolution = 3
+    m0 = Vector((0, 0, 0))                                # built about the pipe mouth; the shot places it there
+    pts = [m0, m0 + Vector((-0.02, -0.05, 0.01)), m0 + Vector((-0.04, -0.09, 0.05)), m0 + Vector((-0.07, -0.11, 0.12)),
+           m0 + Vector((-0.08, -0.12, 0.2)), m0 + Vector((-0.11, -0.13, 0.3)), m0 + Vector((-0.12, -0.13, 0.42))]   # leans into the open box
+    cu = bpy.data.curves.new("SmokeWisp", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.024; cu.bevel_resolution = 4
     cu.use_fill_caps = True
     sp = cu.splines.new('NURBS'); sp.points.add(len(pts) - 1)
     for q, pnt in zip(sp.points, pts):
@@ -333,17 +333,27 @@ def smoke(c):
     o = bpy.data.objects.new("Smoke", cu); bpy.context.collection.objects.link(o)
     bpy.ops.object.select_all(action='DESELECT'); o.select_set(True); bpy.context.view_layer.objects.active = o
     bpy.ops.object.convert(target='MESH'); o = bpy.context.active_object
+    import bmesh                                          # a closed, outward-facing shell (volumes need it)
+    bm = bmesh.new(); bm.from_mesh(o.data); bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-5)
+    bmesh.ops.holes_fill(bm, edges=bm.edges, sides=0); bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(o.data); bm.free()
     m = bpy.data.materials.new("SmokeVol"); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
     out = N.new("ShaderNodeOutputMaterial"); vol = N.new("ShaderNodeVolumePrincipled")
-    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 28
+    tc = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.noise_dimensions = '4D'; nz.inputs['Scale'].default_value = 40
     nz.inputs['Detail'].default_value = 4; nz.inputs['Distortion'].default_value = 0.6
     L.new(tc.outputs['Object'], nz.inputs['Vector']); rj.driven(nz.inputs['W'], "default_value", "frame * 0.006")
-    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.38; mr.inputs['From Max'].default_value = 0.62; mr.inputs['To Max'].default_value = 40.0
+    mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.42; mr.inputs['From Max'].default_value = 0.66; mr.inputs['To Max'].default_value = 30.0
     L.new(nz.outputs['Fac'], mr.inputs['Value']); L.new(mr.outputs[0], vol.inputs['Density'])
     vol.inputs['Color'].default_value = (0.82, 0.83, 0.84, 1); vol.inputs['Anisotropy'].default_value = 0.3
+    vol.inputs['Emission Strength'].default_value = 0.0
     L.new(vol.outputs[0], out.inputs['Volume']); o.data.materials.clear(); o.data.materials.append(m)
-    o.visible_shadow = False
+    try:
+        m.cycles.volume_step_rate = 0.05                 # a 1-5 cm thread: sample it finely or it is skipped
+    except Exception:
+        pass
+    bpy.context.scene.cycles.volume_step_rate = 0.1
+    o.location = Vector((W / 2 - T - 0.04, -D / 2 - 0.03, Z0 + 0.62))
     c["smoke"] = o
 
 
@@ -378,7 +388,7 @@ def anim_box(c, t, shot, dur):
         c["smoke"].location = mouth + Vector((0.0, -0.04 - 0.01 * sec, 0.004 * sec))
     if shot == "smoke" and "tech" not in c["P"]:
         mouth = Vector((W / 2 - T - 0.04, -D / 2 - 0.02, Z0 + 0.62))
-        c["smoke"].location = mouth + Vector((0.0, -0.05 - 0.008 * sec, 0.004 * sec))      # the test smoke barely drifts
+        c["smoke"].location = mouth + Vector((0.0, 0.06 - 0.008 * sec, 0.004 * sec))       # out of the pipe mouth; the test smoke barely drifts
     if shot in ("experts", "door"):
         ex = [c["P"][r] for r in ("expert", "expert2") if r in c["P"]]
         if ex:
@@ -433,8 +443,8 @@ def cam_pipe(c, t):
 
 def cam_smoke(c, t):
     e = ease(t)
-    a = Vector((0.0, -1.05, 0.95)); b = Vector((0.08, -0.95, 0.9))                     # close on the pipe mouth
-    return (a.lerp(b, e), Vector((W / 2 - T - 0.04, -D / 2 - 0.02, Z0 + 0.64)), 45)
+    a = Vector((-0.22, -1.05, 1.0)); b = Vector((-0.15, -0.95, 0.96))                   # close on the pipe mouth and the thread rising
+    return (a.lerp(b, e), Vector((W / 2 - T - 0.1, -D / 2 - 0.02, Z0 + 0.72)), 45)
 
 
 def cam_experts(c, t):

@@ -300,8 +300,7 @@ def anim_rods(c, t, shot, dur):
     roles = [r for r in LINE if r in c["P"]]
     for k, r in enumerate(roles):
         h = c["P"][r]; x0 = -6 + k * 1.6
-        stand_on(c, h, (x0, -6.0 + 0.18 * sec), 0.0)          # feet planted (no walk pose under a standing position)
-        h.arm.rotation_euler.z = math.pi                         # facing +Y (toward the clearing)
+        walk_on(c, h, (x0, -6.6), (x0, -2.0), sec + k * 0.5, speed=0.22, stride=12)   # a slow step forward along the line, feet on the ground
         probe(c, h, c["rods"][r], sec, ph=k * 0.29)
     if "dog" in c and "officer5" in c["P"]:
         h = c["P"]["officer5"]; dg = c["dog"]
@@ -316,8 +315,8 @@ def anim_rods(c, t, shot, dur):
 
 def cam_rods(c, t):
     e = ease(t)
-    a = Vector((-8.5, -2.6, 0.35)); b = Vector((-7.6, -2.4, 0.4))
-    return (a.lerp(b, e), Vector((-2.0, -5.0, 0.6)), 30)
+    a = Vector((-9.8, -2.6, 1.55)); b = Vector((-9.4, -2.9, 1.5))          # eye level, slightly down: the line and the rods in the soil
+    return (a.lerp(b, e), Vector((-3.6, -5.6, 0.75)), 32)
 
 
 def cam_rods_dog(c, t):
