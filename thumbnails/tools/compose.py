@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "..", "..", "assets", "fonts")
-FONT = {"anton": "Anton-Regular.ttf", "bebas": "BebasNeue-Regular.ttf", "oswald": "Oswald-Bold.ttf"}
+FONT = {"anton": "Anton-Regular.ttf", "bebas": "BebasNeue-Regular.ttf", "oswald": "Oswald-Bold.ttf", "montserrat": "Montserrat-Black.ttf", "archivo": "ArchivoBlack-Regular.ttf"}
 W, H = 1920, 1080
 RED = (214, 28, 32)
 WHITE = (244, 242, 238)

@@ -75,3 +75,17 @@ CONCEPTS["targeted"] = dict(scene="thumb_targeted", exposure=0.0,
                             focus=lambda c: c["head"], fstop=2.4, mask=lambda c: c["people"])
 CONCEPTS["targeted_head"] = dict(CONCEPTS["targeted"], cam=lambda c: (c["head"] + Vector((0.25, -0.75, 0.15)), c["head"], 50), fstop=None, mask=None)
 CONCEPTS["targeted_side"] = dict(CONCEPTS["targeted"], cam=lambda c: (c["head"] + Vector((2.4, -0.4, 0.1)), c["head"] + Vector((0, 0, -0.2)), 40), fstop=None, mask=None)
+
+
+def clear_setup(c):
+    """Brighter, clearer read (fern-style): a big soft frontal key on him, a fill, and a warmer, lighter wall."""
+    h = c["head"]
+    k = area_light(h + Vector((0.9, -1.4, 0.7)), (0, 0, 0), 1.2, 160, (1.0, 0.94, 0.86)); point_at(k, h)
+    f = area_light(h + Vector((-1.2, -1.0, 0.2)), (0, 0, 0), 1.5, 45, (0.85, 0.9, 1.0)); point_at(f, h)
+    r = area_light(h + Vector((0.0, 0.9, 0.9)), (0, 0, 0), 0.6, 60, (1.0, 0.85, 0.7)); point_at(r, h)       # hair/shoulder rim
+    pass
+
+
+CONCEPTS["targeted_clear"] = dict(CONCEPTS["targeted"], exposure=0.3, setup=clear_setup,
+                                  cam=lambda c: (c["head"] + Vector((0.15, -2.0, 0.12)), c["head"] + Vector((0, 0.8, 0.12)), 42),
+                                  focus=lambda c: c["head"], fstop=2.2)

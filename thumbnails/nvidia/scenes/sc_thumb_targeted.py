@@ -73,7 +73,7 @@ def build(variant=None):
         if o.name.startswith(("Chair", "GlassWall", "Mullion", "Tower", "CityGround")) or o.name in ("Folder", "Paper"):
             o.hide_render = True
     # a dark wood-panelled office wall, a bookshelf, side walls
-    panel = wood("Panel", (0.012, 0.007, 0.004), (0.035, 0.02, 0.011), scale=(0.4, 0.4, 7), rough=0.4, coat=0.3)
+    panel = wood("Panel", (0.012, 0.007, 0.004), (0.035, 0.02, 0.011), scale=(0.4, 0.4, 7), rough=0.55, coat=0.0)
     box("BackWall", (0, 5.45, 1.5), (9, 0.06, 3.0), panel)
     for k in range(13):
         box("PanelGroove", (-4.2 + k * 0.7, 5.41, 1.5), (0.012, 0.02, 3.0), pbr("Groove", (0.004, 0.003, 0.002), 0.6))
@@ -155,7 +155,12 @@ def build(variant=None):
     for k, (loc, rot, hair, suit, skin, yrs, col) in enumerate(W):
         st, turn, tilt = ST[k]
         w = woman_standing(f"W{k}", loc, rot, hair, suit, skin, yrs, st, turn, tilt)
-        _recolor(w, suit, col, rough=0.55)
+        _recolor(w, suit, col, rough=0.9, coat=0.0)
+        for o in w.parts:
+            for m in (o.data.materials if o.data else []):
+                if m and suit in m.name:
+                    pb = m.node_tree.nodes['Principled BSDF']; pb.inputs['Specular IOR Level'].default_value = 0.2
+                    pb.inputs['Sheen Weight'].default_value = 0.5; pb.inputs['Sheen Roughness'].default_value = 0.5
         women.append(w)
     def spot(n, loc, tgt, e, col, deg, blend, soft):
         l = bpy.data.lights.new(n, 'SPOT'); l.energy = e; l.color = col; l.spot_size = math.radians(deg)
@@ -183,8 +188,8 @@ def build(variant=None):
     root = bpy.data.objects.new("Module", None); bpy.context.collection.objects.link(root)
     for o in mod:
         o.parent = root
-    root.location = (0.3, TABLE_END - 0.5, top + 0.0); root.rotation_euler = (0, 0, math.radians(-12)); root.scale = (1.6, 1.6, 1.6)
-    spot("LimeGlow", (0.3, TABLE_END - 0.85, top + 0.5), (0.3, TABLE_END - 0.5, top), 30, (0.88, 0.97, 0.0), 14, 0.5, 0.02)
+    root.location = (-0.42, TABLE_END - 0.55, top + 0.0); root.rotation_euler = (0, 0, math.radians(-12)); root.scale = (1.6, 1.6, 1.6)
+    spot("LimeGlow", (-0.42, TABLE_END - 0.9, top + 0.5), (-0.42, TABLE_END - 0.55, top), 30, (0.88, 0.97, 0.0), 14, 0.5, 0.02)
     people = [o for hh in [h] + women for o in hh.parts]
     return dict(h=h, women=women, head=c, people=people, top=top)
 
