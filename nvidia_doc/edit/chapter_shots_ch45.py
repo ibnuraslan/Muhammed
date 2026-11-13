@@ -1,0 +1,56 @@
+"""Chapters 4-5: shot list (set, move, label, anchor phrase). Follows the same pattern as chapter_shots.py.
+Timing comes from the recorded voiceover (vo/ch4_vo.mp3, vo/ch5_vo.mp3 -> vo/ch45_words.json); see edit/time_ch45.py.
+Every shot reuses an approved Ch1-3 set with a new angle, except sc_interview and sc_airport (new).
+Original Nvidia look: build with grade.add_grade(sc, look="plain"); no look.py relights.
+Content rules: no likeness of the named people; unnamed figures from behind / silhouette / medium-wide; the second
+employee is never depicted; generic documents, no logos; no hand or face close-ups; day shots stay bright."""
+LEAD = 3.0      # seconds of picture (with the chapter title) before the first word of each chapter
+
+CH = {
+ 4: [("hq",          "dusk_push",    "1A Nvidia HQ at dusk + CHAPTER 4 title",    "before that briefing"),
+     ("office",      "dolly",        "2A Healthcare floor, scan screens wake",     "her name is kimberly powell"),
+     ("corp",        "lobby_walk",   "2B A figure crosses the lobby",              "by 2026 she runs"),
+     ("press",       "press_run",    "3A Newspaper presses at night",              "the new york times reports"),
+     ("office_door", "phone_ring",   "3B Phone set down, no face",                 "when a reporter calls huang"),
+     ("office_door", "through_glass", "3C Dark locked reception, no comment",       "powell and nvidia don't immediately"),
+     ("memo_desk",   "memo_push",    "4A Code-of-conduct booklet on a desk",       "open nvidia's code of conduct"),
+     ("memo_desk",   "memo_close",   "4B The conflict-of-interest clause",         "the company lists personal relationships"),
+     ("memo_desk",   "memo_close2",  "4C A question left for the company",         "if a conflict arises"),
+     ("boardroom",   "board_slide",  "5A Directors meet at night",                 "that night according to reuters"),
+     ("boardroom",   "empty_chair",  "5B One empty chair, resignation",            "the date is in nvidia's securities"),
+     ("hq",          "night_lit",    "5C One board floor lit",                     "after thirty three years"),
+     ("boardroom",   "slow_push",    "6A New interim leadership",                  "collette kress"),
+     ("boardroom",   "dossier",      "6B Folder for the new board chair",          "they name long time director"),
+     ("press",       "press_run",    "7A Presses again, a second report",          "then with the resignation already"),
+     ("office",      "dolly",        "7B Quiet floor, second employee unseen",     "two people familiar with the matter"),
+     ("office_door", "phone_ring",   "7C Phone rings, nobody answers",             "nvidia declines to comment"),
+     ("hq",          "watch",        "7D Four days, the tower watched",            "in four days nvidia has gone"),
+     ("police",      "pull_up",      "8A Singapore police at the tower",           "then a government statement")],
+ 5: [("interview",   "passport_slide", "1A Interview room + CHAPTER 5 title",      "on june twenty"),
+     ("dchall",      "aisle",        "1B A post-shipment check at the servers",    "carry out a post"),
+     ("invest",      "shelving",     "1C Police and customs open the case",        "police and customs officers have"),
+     ("interview",   "question",     "2A A passport taken across the table",       "that same day police question"),
+     ("port",        "crane_rise",   "3A Container crane, servers in transit",     "the servers in singapore's account"),
+     ("invest",      "filing",       "4A Investigator pulls an overseas file",     "they need records from overseas"),
+     ("interview",   "warning",      "4B Empty chair, insufficient evidence",      "by february twenty twenty"),
+     ("invest",      "drawer",       "4C A stern warning issued",                  "police also say they assessed"),
+     ("interview",   "passport_back", "5A The passport slid back, she leaves",     "on february twenty six"),
+     ("city",        "beijing_night", "5B Beijing at night",                       "bloomberg reports that alice"),
+     ("port",        "container_push", "6A A shipment waiting to move",            "there's another development"),
+     ("warehouse",   "crates",       "6B Stacked chip crates, Hong Kong",          "nvidia h two hundred chips"),
+     ("dchall",      "wake",         "6C Some chips reach the mainland",           "allowed into mainland china"),
+     ("dchall",      "half_empty",   "7A Data hall, a domestic-chip rule",         "data center projects to use"),
+     ("remote",      "enter",        "7B Callback: renting compute overseas",      "the option of renting it overseas"),
+     ("dchall",      "ripple",       "7C Chinese firms seek more capacity",        "some chinese ai companies"),
+     ("warehouse",   "lights_off",   "8A The larger claim about the chips",        "the information makes a much larger"),
+     ("warehouse",   "forklift",     "8B A pallet of crates moves out",            "she helped move roughly"),
+     ("invest",      "drawer_close", "8C Megaspeed denies, hires a firm",          "megaspeed denies illegally diverting"),
+     ("port",        "scan_gate",    "9A Customs scanner, Malaysia inquiry",       "malaysia confirms"),
+     ("invest",      "compare",      "9B Customs officer checks a manifest",       "working with customs to establish"),
+     ("invest",      "reveal",       "9C A concrete place to look",                "that gives investigators a concrete"),
+     ("courthouse",  "slow_push",    "10A Justice Department by day",              "attorney general todd blanche"),
+     ("doors",       "doors_close",  "10B Hearing-room doors, December first",     "the house chairs now want"),
+     ("memo_desk",   "letter_push",  "10C The House letter and a subpoena",        "they want nvidia's top lawyer"),
+     ("memo_desk",   "memo_close2",  "11A Closing: the filing and the records",    "nvidia can point to a filing"),
+     ("memo_desk",   "memo_close",   "11B A customer record, an empty chair",      "a customer record that shows")],
+}

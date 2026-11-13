@@ -116,4 +116,8 @@ MOVES = {
     "lights_off": dict(kind="anim", dof=5.6, far=60.0,
                        cam=lambda c, t: (Vector((-0.5, -5.0, 2.2)).lerp(Vector((-0.3, -3.8, 2.3)), ease(t)), Vector((0, 20, 2.6)), 28),
                        focus=lambda c, t: Vector((0, 10, 2.5))),
+    # CH5 6B: a slow track along the loaded racking (stacked chip crates); the forklift idles across the far aisle
+    "crates": dict(kind="anim", dof=3.5, far=60.0, anim=anim_forklift,
+                   cam=lambda c, t: (Vector((-2.3, 1.0, 1.9)).lerp(Vector((-2.3, 6.5, 2.0)), ease(t)), Vector((3.0, 9.0, 2.0)), 34),
+                   focus=lambda c, t: Vector((3.0, 7.5, 2.0))),
 }

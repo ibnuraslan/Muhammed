@@ -10,7 +10,7 @@ from mathutils import Vector
 from kit import *
 
 EXPOSURE = 0.4
-VARIANT_FOR = {"night_dim": "dim", "night_lit": "lit", "watch": "watch"}
+VARIANT_FOR = {"night_dim": "dim", "night_lit": "lit", "watch": "watch", "dusk_push": "dusk"}
 LIT_FLOOR = 9
 
 
@@ -33,7 +33,14 @@ def ceiling_panels(name, strength, color=(1.0, 0.9, 0.78)):
 
 
 def build(variant=None):
-    world_flat((0.008, 0.012, 0.024), 1.0)
+    if variant == "dusk":
+        # blue-hour establishing: a graded sky behind the tower, brighter than the night variants so the
+        # CHAPTER 4 title reads over it. A few floors stay lit, including the board floor.
+        from common import world_sky, sun
+        world_sky(sun_elev_deg=3.5, sun_rot_deg=295, strength=1.15, tint=(1.0, 0.86, 0.72), aerosol=5.0)
+        sun(elev_deg=4.0, azim_deg=295, energy=2.0, color=(1.0, 0.72, 0.5), angle_deg=2.0)
+    else:
+        world_flat((0.008, 0.012, 0.024), 1.0)
     r = np.random.default_rng(3)
     W_, D_, FLOORS, FH = 64.0, 30.0, 11, 4.0
     x0, y0 = 0.0, 58.0           # building centre; front face at y = y0 - D_/2 = 43
@@ -114,4 +121,7 @@ MOVES = {
     "night_lit": dict(kind="plate", far=300.0, cam=lambda c, t: ((-48, -40, 1.7), (0, 43, 22), 30)),
     "watch": dict(kind="plate", dof=1.8, far=300.0, cam=lambda c, t: ((-19.9, -30.55, 8.0), (0, 43, 36), 50),
                   focus=lambda c, t: (-19.85, -30.0, 8.2)),
+    # CH4 1A: slow dusk push toward the tower, CHAPTER 4 title over it (two-line card + scrim, via bake.py)
+    "dusk_push": dict(kind="anim", far=400.0, title=("CHAPTER 4", "THE SECOND EMPLOYEE", 18, 120),
+                      cam=lambda c, t: (Vector((-34, -60, 4.0)).lerp(Vector((-30, -52, 5.2)), ease(t)), (0, 43, 23), 30)),
 }

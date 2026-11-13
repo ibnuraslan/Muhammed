@@ -1,0 +1,328 @@
+{
+ "4": [
+  {
+   "set": "hq",
+   "move": "dusk_push",
+   "label": "1A Nvidia HQ at dusk + CHAPTER 4 title",
+   "name": "c4_01_hq_dusk_push",
+   "frames": 249
+  },
+  {
+   "set": "office",
+   "move": "dolly",
+   "label": "2A Healthcare floor, scan screens wake",
+   "name": "c4_02_office_dolly",
+   "frames": 193
+  },
+  {
+   "set": "corp",
+   "move": "lobby_walk",
+   "label": "2B A figure crosses the lobby",
+   "name": "c4_03_corp_lobby_walk",
+   "frames": 288
+  },
+  {
+   "set": "press",
+   "move": "press_run",
+   "label": "3A Newspaper presses at night",
+   "name": "c4_04_press_press_run",
+   "frames": 145
+  },
+  {
+   "set": "office_door",
+   "move": "phone_ring",
+   "label": "3B Phone set down, no face",
+   "name": "c4_05_office_door_phone_ring",
+   "frames": 204
+  },
+  {
+   "set": "office_door",
+   "move": "through_glass",
+   "label": "3C Dark locked reception, no comment",
+   "name": "c4_06_office_door_through_glass",
+   "frames": 182
+  },
+  {
+   "set": "memo_desk",
+   "move": "memo_push",
+   "label": "4A Code-of-conduct booklet on a desk",
+   "name": "c4_07_memo_desk_memo_push",
+   "frames": 143
+  },
+  {
+   "set": "memo_desk",
+   "move": "memo_close",
+   "label": "4B The conflict-of-interest clause",
+   "name": "c4_08_memo_desk_memo_close",
+   "frames": 114
+  },
+  {
+   "set": "memo_desk",
+   "move": "memo_close2",
+   "label": "4C A question left for the company",
+   "name": "c4_09_memo_desk_memo_close2",
+   "frames": 297
+  },
+  {
+   "set": "boardroom",
+   "move": "board_slide",
+   "label": "5A Directors meet at night",
+   "name": "c4_10_boardroom_board_slide",
+   "frames": 334
+  },
+  {
+   "set": "boardroom",
+   "move": "empty_chair",
+   "label": "5B One empty chair, resignation",
+   "name": "c4_11_boardroom_empty_chair",
+   "frames": 248
+  },
+  {
+   "set": "hq",
+   "move": "night_lit",
+   "label": "5C One board floor lit",
+   "name": "c4_12_hq_night_lit",
+   "frames": 196
+  },
+  {
+   "set": "boardroom",
+   "move": "slow_push",
+   "label": "6A New interim leadership",
+   "name": "c4_13_boardroom_slow_push",
+   "frames": 191
+  },
+  {
+   "set": "boardroom",
+   "move": "dossier",
+   "label": "6B Folder for the new board chair",
+   "name": "c4_14_boardroom_dossier",
+   "frames": 188
+  },
+  {
+   "set": "press",
+   "move": "press_run",
+   "label": "7A Presses again, a second report",
+   "name": "c4_15_press_press_run",
+   "frames": 107
+  },
+  {
+   "set": "office",
+   "move": "dolly",
+   "label": "7B Quiet floor, second employee unseen",
+   "name": "c4_16_office_dolly",
+   "frames": 301
+  },
+  {
+   "set": "office_door",
+   "move": "phone_ring",
+   "label": "7C Phone rings, nobody answers",
+   "name": "c4_17_office_door_phone_ring",
+   "frames": 190
+  },
+  {
+   "set": "hq",
+   "move": "watch",
+   "label": "7D Four days, the tower watched",
+   "name": "c4_18_hq_watch",
+   "frames": 199
+  },
+  {
+   "set": "police",
+   "move": "pull_up",
+   "label": "8A Singapore police at the tower",
+   "name": "c4_19_police_pull_up",
+   "frames": 333
+  }
+ ],
+ "5": [
+  {
+   "set": "interview",
+   "move": "passport_slide",
+   "label": "1A Interview room + CHAPTER 5 title",
+   "name": "c5_01_interview_passport_slide",
+   "frames": 215
+  },
+  {
+   "set": "dchall",
+   "move": "aisle",
+   "label": "1B A post-shipment check at the servers",
+   "name": "c5_02_dchall_aisle",
+   "frames": 277
+  },
+  {
+   "set": "invest",
+   "move": "shelving",
+   "label": "1C Police and customs open the case",
+   "name": "c5_03_invest_shelving",
+   "frames": 180
+  },
+  {
+   "set": "interview",
+   "move": "question",
+   "label": "2A A passport taken across the table",
+   "name": "c5_04_interview_question",
+   "frames": 155
+  },
+  {
+   "set": "port",
+   "move": "crane_rise",
+   "label": "3A Container crane, servers in transit",
+   "name": "c5_05_port_crane_rise",
+   "frames": 232
+  },
+  {
+   "set": "invest",
+   "move": "filing",
+   "label": "4A Investigator pulls an overseas file",
+   "name": "c5_06_invest_filing",
+   "frames": 345
+  },
+  {
+   "set": "interview",
+   "move": "warning",
+   "label": "4B Empty chair, insufficient evidence",
+   "name": "c5_07_interview_warning",
+   "frames": 248
+  },
+  {
+   "set": "invest",
+   "move": "drawer",
+   "label": "4C A stern warning issued",
+   "name": "c5_08_invest_drawer",
+   "frames": 239
+  },
+  {
+   "set": "interview",
+   "move": "passport_back",
+   "label": "5A The passport slid back, she leaves",
+   "name": "c5_09_interview_passport_back",
+   "frames": 136
+  },
+  {
+   "set": "city",
+   "move": "beijing_night",
+   "label": "5B Beijing at night",
+   "name": "c5_10_city_beijing_night",
+   "frames": 262
+  },
+  {
+   "set": "port",
+   "move": "container_push",
+   "label": "6A A shipment waiting to move",
+   "name": "c5_11_port_container_push",
+   "frames": 197
+  },
+  {
+   "set": "warehouse",
+   "move": "crates",
+   "label": "6B Stacked chip crates, Hong Kong",
+   "name": "c5_12_warehouse_crates",
+   "frames": 162
+  },
+  {
+   "set": "dchall",
+   "move": "wake",
+   "label": "6C Some chips reach the mainland",
+   "name": "c5_13_dchall_wake",
+   "frames": 233
+  },
+  {
+   "set": "dchall",
+   "move": "half_empty",
+   "label": "7A Data hall, a domestic-chip rule",
+   "name": "c5_14_dchall_half_empty",
+   "frames": 252
+  },
+  {
+   "set": "remote",
+   "move": "enter",
+   "label": "7B Callback: renting compute overseas",
+   "name": "c5_15_remote_enter",
+   "frames": 79
+  },
+  {
+   "set": "dchall",
+   "move": "ripple",
+   "label": "7C Chinese firms seek more capacity",
+   "name": "c5_16_dchall_ripple",
+   "frames": 236
+  },
+  {
+   "set": "warehouse",
+   "move": "lights_off",
+   "label": "8A The larger claim about the chips",
+   "name": "c5_17_warehouse_lights_off",
+   "frames": 325
+  },
+  {
+   "set": "warehouse",
+   "move": "forklift",
+   "label": "8B A pallet of crates moves out",
+   "name": "c5_18_warehouse_forklift",
+   "frames": 266
+  },
+  {
+   "set": "invest",
+   "move": "drawer_close",
+   "label": "8C Megaspeed denies, hires a firm",
+   "name": "c5_19_invest_drawer_close",
+   "frames": 233
+  },
+  {
+   "set": "port",
+   "move": "scan_gate",
+   "label": "9A Customs scanner, Malaysia inquiry",
+   "name": "c5_20_port_scan_gate",
+   "frames": 227
+  },
+  {
+   "set": "invest",
+   "move": "compare",
+   "label": "9B Customs officer checks a manifest",
+   "name": "c5_21_invest_compare",
+   "frames": 184
+  },
+  {
+   "set": "invest",
+   "move": "reveal",
+   "label": "9C A concrete place to look",
+   "name": "c5_22_invest_reveal",
+   "frames": 230
+  },
+  {
+   "set": "courthouse",
+   "move": "slow_push",
+   "label": "10A Justice Department by day",
+   "name": "c5_23_courthouse_slow_push",
+   "frames": 301
+  },
+  {
+   "set": "doors",
+   "move": "doors_close",
+   "label": "10B Hearing-room doors, December first",
+   "name": "c5_24_doors_doors_close",
+   "frames": 138
+  },
+  {
+   "set": "memo_desk",
+   "move": "letter_push",
+   "label": "10C The House letter and a subpoena",
+   "name": "c5_25_memo_desk_letter_push",
+   "frames": 159
+  },
+  {
+   "set": "memo_desk",
+   "move": "memo_close2",
+   "label": "11A Closing: the filing and the records",
+   "name": "c5_26_memo_desk_memo_close2",
+   "frames": 291
+  },
+  {
+   "set": "memo_desk",
+   "move": "memo_close",
+   "label": "11B A customer record, an empty chair",
+   "name": "c5_27_memo_desk_memo_close",
+   "frames": 251
+  }
+ ]
+}
