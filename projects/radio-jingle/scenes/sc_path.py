@@ -639,20 +639,19 @@ def anim_dog(c, t, shot, dur):
     # leash from the left hand to the collar
     lh = rj.rjp.chest_point(h, 0.4, 0.45) - right * 0.15
     reach(h, "L", lh, Vector((0, 0, -1)) - right * 0.5, fwd)
-    collar = dg["root"].matrix_world @ Vector((0.42, 0, 0.72))
-    w = h.bone_tail("wrist.L")
-    sp = c["leash"].data.splines[0]
-    for k, pt in enumerate(sp.points):
-        q = k / (len(sp.points) - 1)
-        pp = w.lerp(collar, q) + Vector((0, 0, -0.15 * math.sin(math.pi * q)))
-        pt.co = (*pp, 1)
+    collar = Vector((dpos.x, dpos.y, ground_z(c, dpos.x, dpos.y) + 0.5))
+    if shot == "dog_low":                       # never a clear view of the dog: it stays hidden in the reeds ahead
+        dg["root"].location = (0, 0, -60)
+    w = h.bone_tail("wrist.L"); dv = collar - w
+    lz = c["leash"]; lz.matrix_world = Matrix.Translation((w + collar) / 2) @ dv.to_track_quat('Z', 'Y').to_matrix().to_4x4()
+    lz.scale = (1.0, 1.0, dv.length)
     _ambient(c, sec)
 
 
 def cam_dog_low(c, t):
     e = ease(t)
     a = Vector((-8.0, -0.2, 0.5)); b = Vector((-8.5, -0.9, 0.55))
-    return (a.lerp(b, e), c["dog"]["root"].location + Vector((-0.8, 0, 0.6)), 26)
+    return (a.lerp(b, e), c["P"]["officer"].bone_head("spine05") + Vector((0.0, 0.0, -0.2)), 30)
 
 
 def cam_dog_front(c, t):
@@ -814,7 +813,7 @@ MOVES = {
     "father_call": _mk("father_call", 4.5, cam_father_call, anim_meet, _fp("father"), 2.8),
     "night_line": _mk("night_line", 4.5, cam_line, anim_line, lambda c, t: Vector((-21, -8, 1.2)), 4.0),
     "night_fire": _mk("night_fire", 4.5, cam_fire, anim_fire),
-    "dog_low": _mk("dog_low", 4.5, cam_dog_low, anim_dog, lambda c, t: c["dog"]["root"].location + Vector((0, 0, 0.5)), 2.8),
+    "dog_low": _mk("dog_low", 4.5, cam_dog_low, anim_dog, _fp("officer", "spine05"), 2.8),
     "dog_front": _mk("dog_front", 4.0, cam_dog_front, anim_dog, _fp("officer", "spine05"), 2.8),
     "brush_find": _mk("brush_find", 4.5, cam_brush_find, anim_brush, lambda c, t: BRUSH, 2.8),
     "brush_ring": _mk("brush_ring", 4.5, cam_brush_ring, anim_brush, lambda c, t: BRUSH, 4.0),
@@ -865,10 +864,7 @@ def build(variant=None):                      # noqa: F811
         for o in c["dog"]["root"].children_recursive:
             if o.type == 'MESH':
                 o.data.materials.clear(); o.data.materials.append(dark)
-        cu = bpy.data.curves.new("Leash", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.006
-        sp = cu.splines.new('POLY'); sp.points.add(7)
-        o = bpy.data.objects.new("Leash", cu); bpy.context.collection.objects.link(o); o.data.materials.append(rj.mat("black"))
-        c["leash"] = o
+        c["leash"] = cyl("Leash", (0, 0, 0), 0.006, 1.0, rj.mat("black"), 8)   # a straight leash set by transform (bakes)
     if "firefighter" in c["P"] or "firefighter2" in c["P"]:
         c["lanterns"] = []
         for k in range(2):

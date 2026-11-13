@@ -91,7 +91,8 @@ def bottle(name, loc, liquid, fill=0.78):
     glass_m = pbr("BottleGlass2", (0.55, 0.72, 0.6), 0.06, 0.0, **{'Transmission Weight': 0.85, 'IOR': 1.5, 'Coat Weight': 0.6})   # pale green bottle glass
     g = lathe(name, BOTTLE, glass_m)
     top = 0.274 * fill
-    inner = [(max(0.0005, r - 0.003), z) for (r, z) in BOTTLE if z <= top] + [(0.0005, top)]
+    rt = float(np.interp(top, [z for r, z in BOTTLE], [r for r, z in BOTTLE]))
+    inner = [(max(0.0005, r - 0.003), z) for (r, z) in BOTTLE if z < top] + [(rt - 0.003, top), (0.0005, top)]   # a flat surface
     inner = [(r, max(0.003, z)) for (r, z) in inner]
     lq = lathe(name + "Liq", inner, liquid)
     cap = cyl(name + "Cap", (0, 0, 0.276), 0.0165, 0.008, pbr("CrownCap", (0.55, 0.52, 0.45), 0.35, 1.0), 20)
@@ -424,8 +425,8 @@ def cam_cable(c, t):
 
 def cam_shelf(c, t):
     e = ease(t)
-    a = Vector((-0.22, -0.55, Z0 + 1.2)); b = Vector((0.2, -0.5, Z0 + 1.17))
-    return (a.lerp(b, e), Vector((-0.05 + 0.2 * e, D / 2 - 0.14, Z0 + 1.1)), 40)
+    a = Vector((-0.22, -0.6, Z0 + 1.26)); b = Vector((0.2, -0.55, Z0 + 1.23))
+    return (a.lerp(b, e), Vector((-0.05 + 0.2 * e, D / 2 - 0.14, Z0 + 1.15)), 36)   # bottle necks and caps in frame
 
 
 def cam_radio(c, t):
