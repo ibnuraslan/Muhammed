@@ -200,7 +200,7 @@ def build(variant=None):
         bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=4.2, depth=10, location=(430, 0, 33)); bpy.context.active_object.data.materials.append(house_m)
         B.room_haze((200, 0, 15), (700, 300, 30), density=0.0012, color=(0.75, 0.7, 0.75))
     if variant == "table":
-        B.finish_interior(lift=0.0)
+        B.finish_interior(lift=0.25)
     else:
         B.preview_cap()
     return c

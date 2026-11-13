@@ -122,10 +122,15 @@ def build(variant=None):
         for rank, k in enumerate(order):
             sh, l, _ = c["lamps"][k]
             off = 20 + rank * 9 if rank < len(order) - 3 else 95 + (rank - (len(order) - 3)) * 6
-            d = l.data.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = f"28 * (1 if frame < {off} else 0)"
             m = lamp_m.copy(); sh.data = sh.data.copy(); sh.data.materials.clear(); sh.data.materials.append(m)
-            d = m.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].driver_add("default_value").driver
-            d.type = 'SCRIPTED'; d.expression = f"2.5 * (1 if frame < {off} else 0)"
+            for idb, path, e in ((l.data, "energy", 28), (m.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'], "default_value", 2.5)):
+                d = idb.driver_add(path).driver; d.type = 'SCRIPTED'
+                v = d.variables.new(); v.name = "sh"; v.targets[0].id_type = 'SCENE'; v.targets[0].id = bpy.context.scene
+                v.targets[0].data_path = '["off_shift"]'
+                d.expression = f"{e} * (1 if frame + sh < {off} else 0)"     # off_shift: per shot (anim)
+        bpy.context.scene["off_shift"] = 0
+        # a faint cool spill from the corridor glass, so the room still reads once the last light is out
+        sp = area_light((5.8, -2.0, 2.2), (0, 0, 0), 2.0, 22, (0.55, 0.65, 0.9)); point_at(sp, (0, 4.0, 1.0)); sp.visible_camera = False
     # ------------------------------------------------------------------ the bench
     box("Dais", (0, 6.55, DAIS_Z / 2), (8.4, 2.0, DAIS_Z), oak_dark)
     box("BenchFront", (0, 5.72, (BENCH_TOP - 0.03) / 2), (7.6, 0.08, BENCH_TOP - 0.03), oak, bevel=0.01)
@@ -345,6 +350,7 @@ def anim(c, t, move):
         B.curl(cl, 30); B.nod(cl, 18)
         if move == "pullback":
             B.hide_person(cl)
+        bpy.context.scene["off_shift"] = -60 if move == "lights" else 0   # 5-8A: only the front rows go off
     bpy.context.view_layer.update()
 
 

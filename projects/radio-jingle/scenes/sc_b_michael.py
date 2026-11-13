@@ -139,7 +139,7 @@ def build(variant=None):
     if variant == "day":                                      # soft room-side fill so his greying hair reads against the window
         B.key_spot((DESK.x - 1.8, DESK.y - 0.9, 2.1), (DESK.x, DESK.y - 0.68, 1.3), 120, 50, (0.95, 0.92, 0.88), soft=0.6, name="HairFill")
     c["rest"] = B.capture(h)
-    B.finish_interior(lift=0.4 if variant in ("day", "music") else 0.0)   # day must read (hub luminance rule)
+    B.finish_interior(lift=0.55 if variant == "music" else (0.4 if variant == "day" else 0.0))   # day must read (hub luminance rule)
     return c
 
 

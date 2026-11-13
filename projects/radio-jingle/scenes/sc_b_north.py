@@ -256,9 +256,11 @@ def build(variant=None):
         c["door"] = box("HouseDoor", (0, 5.98, 0.6 + 1.05), (1.0, 0.06, 2.1), pbr("HouseDoorM", (0.25, 0.08, 0.05), 0.4))
         gabled("Neigh1", -11.5, 7.0, 8.0, 8.0, 5.5, brick2, roof, lit=(1,) if variant == "house_dawn" else ())
         gabled("Neigh2", 11.5, 7.5, 8.0, 8.0, 5.5, brick2, roof)
-        hedge = B.tex_mat("Hedge", "leafy_grass", scale=0.8, tint=(0.25, 0.32, 0.2))
-        for x in (-3.0, 3.0):
-            box("Hedge", (x * 1.7, 2.1, 0.5), (4.6, 0.6, 1.0), hedge)
+        try:                                                  # front-garden hedges: real shrubs, not a green block
+            B.ph_instances("shrub_02", [((sx * 5.1 - 2.1 + 0.6 * k, 2.1 + 0.1 * (k % 2), 0), 0.9 * k, 0.75 + 0.08 * (k % 3))
+                                        for sx in (-1, 1) for k in range(8)])
+        except Exception as e:
+            print("[north] hedge", e)
         import vehicles
         if variant == "house_day":
             c["van"] = vehicles.make("van_1990s", loc=(3.5, -2.8, 0.0), heading_deg=180, color=(0.82, 0.82, 0.8))
@@ -440,7 +442,7 @@ def anim(c, t, move):
         if v == "house_day":
             if move == "boxes":
                 for k, (h, bx) in enumerate(zip(offs[:2], c["boxes"])):
-                    u = ease(min(1.0, max(0.0, (sec - 0.4 - 1.6 * k) / 3.0)))
+                    u = ease(min(1.0, max(0.0, (sec - 0.3 - 1.2 * k) / 4.6)))   # both still in frame at the cut
                     B.walk_to(h, (0.0 + 0.3 * k, 5.4, 0.0), (0.6 + 0.3 * k, 0.2, 0.0), u, 4.0 * u + 0.001, stride=20, swing=0)
                     fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
                     hold = h.bone_head("spine02") + fwd * 0.32 + Vector((0, 0, -0.12))
@@ -450,9 +452,12 @@ def anim(c, t, move):
                     B.curl(h, 40)
                 B.hide_person(offs[2]); c["evbox"].location = (0, 0, -30)
             else:
+                c["van"].hide_render = True                    # only a sliver at frame edge here: it read as a box (QA)
+                for ch_ in c["van"].children_recursive:
+                    ch_.hide_render = True
                 h = offs[2]
-                u = ease(min(1.0, sec / (DUR["steps"] * 0.9)))
-                path = [Vector((0.0, 5.5, 0.6)), Vector((0.0, 4.6, 0.06)), Vector((1.6, 0.4, 0.12)), Vector((3.0, -1.2, 0.0))]
+                u = ease(min(1.0, sec / (DUR["steps"] * 1.35)))   # still on his way to the van at the cut
+                path = [Vector((0.0, 5.5, 0.6)), Vector((0.0, 4.6, 0.06)), Vector((0.9, 2.2, 0.12)), Vector((1.7, 0.6, 0.0))]
                 seg = min(2, int(u * 3)); su = u * 3 - seg
                 p = path[seg].lerp(path[seg + 1], su)
                 B.walk_to(h, path[seg], path[seg + 1], su, 1.4 * su + seg * 1.4, stride=18, swing=0)

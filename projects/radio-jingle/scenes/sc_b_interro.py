@@ -119,7 +119,7 @@ def build(variant=None):
         B.apply_pose(man, P0)
         coat = B.draped_coat("Coat", color=(0.2, 0.14, 0.08))
         coat.location = (0, 0, -30); c["coat"] = coat
-    B.finish_interior(lift=-0.3 if variant == "day" else -0.1)
+    B.finish_interior(lift=0.0 if variant == "day" else -0.1)
     return c
 
 

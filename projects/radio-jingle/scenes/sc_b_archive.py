@@ -110,10 +110,11 @@ def build(variant=None):
         # one flickering fluorescent tube over the row (frame driver), dimming at the end
         tube = box("Tube", (0.0, 4.6, 2.95), (3.0, 0.1, 0.04), emissive("TubeE", (0.9, 0.95, 0.88), 2.5))
         tl = area_light((0.0, 4.6, 2.9), (0, 0, 0), 3.0, 90, (0.88, 0.95, 0.85)); tl.visible_camera = False
-        expr = "(1 if (frame < 70 or (frame % 7 > 2 and frame < 110)) else 0.35) * (1 if frame < 120 else 0.4)"
+        expr = "(1 if (frame < 70 or (frame % 7 > 2 and frame < 110)) else 0.5) * (1 if frame < 120 else 0.6)"
         d = tl.data.driver_add("energy").driver; d.type = 'SCRIPTED'; d.expression = f"90 * {expr}"
         em = tube.data.materials[0].node_tree.nodes["Principled BSDF"].inputs['Emission Strength']
         d = em.driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = f"2.5 * {expr}"
+        c["tube_l"], c["tube_em"] = tl, em
         B.key_spot((3.5, 1.0, 2.0), (0.0, 5.3, 0.9), 300, 30, (1.0, 0.75, 0.5), soft=0.2, name="Doorway")
         clerk = B.person("Clerk", 1.0, 52, "male_elegantsuit01", "short02", hue=0.1, sat=0.2, val=0.35, hair_val=1.1, hair_sat=0.2)
         B.stand(clerk, (c["drawer_x"], 4.35, 0), math.pi)
@@ -160,7 +161,10 @@ def anim(c, t, move):
         dr = c["drawer"]
         shut = ease(min(1.0, max(0.0, (sec - 1.0) / 1.0)))
         dr.location = Vector((c["drawer_x"], 5.25 - 0.27 + 0.27 * shut - 0.0, 0.17 + 2 * 0.32))
-        if move == "twelve":
+        if move == "twelve":                              # the tube only flickers and dims in the next shot (3-11B)
+            if c["tube_l"].data.animation_data and c["tube_l"].data.animation_data.drivers:
+                c["tube_l"].data.driver_remove("energy"); c["tube_em"].driver_remove("default_value")
+                c["tube_l"].data.energy = 90; c["tube_em"].default_value = 2.5
             reach(cl, "R", dr.location + Vector((0.05, -0.3, 0.06)), Vector((0.4, -0.6, -0.8)), Vector((0, 1, 0)))
             reach(cl, "L", dr.location + Vector((-0.1, -0.3, 0.06)), Vector((-0.4, -0.6, -0.8)), Vector((0, 1, 0)))
             B.curl(cl, 35)

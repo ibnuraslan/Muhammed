@@ -163,7 +163,7 @@ def anim(c, t, move):
 def cam_wire(c, t):
     e = ease(t)
     a = c["wire_pts"][6]
-    return (Vector((a.x - 3.2, a.y - 3.5, gz(c, a.x, a.y) + 4.2 - 2.6 * e)), Vector((a.x + 2.0, a.y - 0.6, gz(c, a.x, a.y) + 0.6)), 28)
+    return (Vector((a.x - 3.2, a.y - 3.5, gz(c, a.x, a.y) + 2.9 - 1.4 * e)), Vector((a.x + 2.0, a.y - 0.6, gz(c, a.x, a.y) + 0.6)), 28)
 
 
 def cam_lookout(c, t):
