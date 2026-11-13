@@ -5,6 +5,25 @@ Ursula appears only at the piano (from behind) and on the red bicycle (from behi
 Real people are unnamed figures. The only on-screen text is the cut-out letter.
 Reused sets: HOUSE (piano room, hallway phone, kitchen), PATH (lakeside path and bend), FOREST (grid search, clearing), BOX (forensic reconstruction), VILLAGE (street, Fiat).
 
+
+## Cast (unnamed MakeHuman figures, no likenesses; rj.person(role) in scenes/rj.py)
+
+| Role | Look (1981) | Garment | Hair |
+|---|---|---|---|
+| mother | oatmeal knit blouse, dark brown knee skirt | female_elegantsuit01 | long01, dark brown, matte |
+| father | brown check shirt, dark trousers | male_casualsuit01 | short02 |
+| brother (Michael, 19) | navy knit jumper, jeans | male_casualsuit02 | short04, dark |
+| sister (Ursula, 10; only from behind / far) | grey cardigan-jumper, dark green trousers, red bicycle | male_casualsuit02 | ponytail01 |
+| officer at the recorder (plain clothes) | brown sports jacket, light shirt, tie | male_elegantsuit01 | short01 |
+| uniformed police (search, forest) | green jacket, beige trousers, green peaked cap, no crest | male_casualsuit05 | short |
+| technician | light blue shirt, dark trousers | male_casualsuit03 | short04 |
+| uncle | brown field jacket | male_casualsuit05 | short03 |
+| firefighters | dark navy jacket, silver helmet | male_casualsuit05 | short01 |
+| postman | blue-grey jacket and cap | male_casualsuit05 | short02 |
+| neighbour / aunt | blouse and skirt | female_elegantsuit01 | bob01 |
+| experts | dark suit / dark blouse and skirt | male_elegantsuit01 / female_elegantsuit01 | short02 / bob02 |
+| Michael later (Ch4–5, chat B) | navy sweater, greying hair | male_casualsuit02 | short04, grey |
+
 ## Cold Open · about 32 s (90 words = 29 s, plus 2.5 s of picture first)
 
 | Set | Script line | Shot A | Shot B |

@@ -133,7 +133,7 @@ def mat(key):
         "ivory": lambda: pbr("Ivory", (0.78, 0.75, 0.66), 0.25, 0.0, **{'Coat Weight': 0.5}),
         "glass": lambda: window_glass(),
         "frosted": lambda: frosted_glass(),
-        "phone": lambda: pbr("PhoneBakelite", (0.30, 0.25, 0.17), 0.22, 0.0, **{'Coat Weight': 0.8, 'Coat Roughness': 0.1}),
+        "phone": lambda: pbr("PhonePlastic", (0.21, 0.27, 0.20), 0.3, 0.0, **{'Coat Weight': 0.5, 'Coat Roughness': 0.15}),   # Bundespost grey-green
         "curtain": lambda: fabric("Curtain", (0.42, 0.34, 0.24), 0.85, 0.5),
         "net": lambda: net_curtain(),
         "rug": lambda: fabric("Rug", (0.30, 0.12, 0.08), 0.95, 0.4, 300),
@@ -145,6 +145,15 @@ def mat(key):
     }
     _MAT[key] = table[key]()
     return _MAT[key]
+
+
+def apply_rot(o):
+    """kit.join keeps the first part's rotation as the object's own: bake it into the mesh so local axes are world axes."""
+    for ob in bpy.context.selected_objects:
+        ob.select_set(False)
+    o.select_set(True); bpy.context.view_layer.objects.active = o
+    bpy.ops.object.transform_apply(location=False, rotation=True, scale=False)
+    return o
 
 
 def driven(idblock, path, expr, index=-1):
@@ -298,43 +307,50 @@ def finish_scene():
 
 # ============================================================================ people (unnamed; 1981 clothes)
 ROLES = {
+    # 1981 clothes (garment meshes checked in a lineup render): suit+tie = male_elegantsuit01, knit jumper =
+    # male_casualsuit02, collared shirt = male_casualsuit01/03, field/uniform jacket = male_casualsuit05,
+    # women: long-sleeved blouse + knee skirt = female_elegantsuit01.
     #              gender years  cloth                 hair       hair val  hue   sat  val   height weight
-    "mother":     (0.0, 42, "female_casualsuit01", "bob02", 0.35, 0.08, 0.18, 0.55, 0.45, 0.45),
-    "father":     (1.0, 46, "male_casualsuit02", "short02", 0.32, 0.10, 0.12, 0.45, 0.5, 0.5),
-    "brother":    (1.0, 18, "male_casualsuit01", "short04", 0.30, 0.58, 0.20, 0.40, 0.55, 0.38),
-    "sister":     (0.0, 10, "female_casualsuit01", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
-    "uncle":      (1.0, 50, "male_casualsuit04", "short03", 0.45, 0.07, 0.15, 0.40, 0.5, 0.55),
-    "aunt":       (0.0, 45, "female_casualsuit01", "bob01", 0.30, 0.95, 0.15, 0.55, 0.45, 0.5),
-    "neighbour":  (0.0, 58, "female_casualsuit01", "bob01", 0.6, 0.05, 0.12, 0.6, 0.4, 0.55),
-    "officer":    (1.0, 38, "male_casualsuit04", "short01", 0.25, 0.28, 0.35, 0.25, 0.55, 0.5),
-    "officer2":   (1.0, 30, "male_casualsuit04", "short03", 0.30, 0.28, 0.35, 0.25, 0.5, 0.45),
-    "officer3":   (1.0, 45, "male_casualsuit04", "short02", 0.40, 0.28, 0.35, 0.25, 0.5, 0.55),
-    "detective":  (1.0, 44, "male_casualsuit04", "short02", 0.30, 0.09, 0.18, 0.38, 0.5, 0.5),
-    "tech":       (1.0, 34, "male_casualsuit05", "short04", 0.25, 0.55, 0.12, 0.35, 0.5, 0.45),
-    "firefighter":(1.0, 36, "male_casualsuit04", "short01", 0.25, 0.62, 0.40, 0.14, 0.55, 0.55),
-    "diver":      (1.0, 32, "male_casualsuit01", "short01", 0.25, 0.60, 0.05, 0.03, 0.55, 0.45),
-    "postman":    (1.0, 52, "male_casualsuit04", "short02", 0.45, 0.60, 0.22, 0.30, 0.5, 0.5),
+    "mother":     (0.0, 58, "female_elegantsuit01", "bob02", 0.22, 0.08, 0.18, 0.55, 0.45, 0.58),
+    "father":     (1.0, 46, "male_casualsuit01", "short02", 0.30, 0.10, 0.12, 0.45, 0.5, 0.5),
+    "brother":    (1.0, 19, "male_casualsuit02", "short04", 0.28, 0.58, 0.20, 0.40, 0.55, 0.38),
+    "sister":     (0.0, 10, "male_casualsuit02", "ponytail01", 0.42, 0.0, 0.0, 0.5, 0.15, 0.38),
+    "uncle":      (1.0, 50, "male_casualsuit05", "short03", 0.45, 0.07, 0.15, 0.40, 0.5, 0.55),
+    "aunt":       (0.0, 45, "female_elegantsuit01", "bob01", 0.30, 0.95, 0.15, 0.55, 0.45, 0.5),
+    "neighbour":  (0.0, 58, "female_elegantsuit01", "bob01", 0.6, 0.05, 0.12, 0.6, 0.4, 0.55),
+    "officer":    (1.0, 38, "male_casualsuit05", "short01", 0.25, 0.28, 0.35, 0.25, 0.55, 0.5),
+    "officer2":   (1.0, 30, "male_casualsuit05", "short03", 0.30, 0.28, 0.35, 0.25, 0.5, 0.45),
+    "officer3":   (1.0, 45, "male_casualsuit05", "short02", 0.40, 0.28, 0.35, 0.25, 0.5, 0.55),
+    "plainclothes": (1.0, 40, "male_elegantsuit01", "short01", 0.25, 0.09, 0.18, 0.38, 0.55, 0.5),
+    "detective":  (1.0, 44, "male_elegantsuit01", "short02", 0.30, 0.09, 0.18, 0.38, 0.5, 0.5),
+    "tech":       (1.0, 34, "male_casualsuit03", "short04", 0.25, 0.55, 0.12, 0.35, 0.5, 0.45),
+    "firefighter":(1.0, 36, "male_casualsuit05", "short01", 0.25, 0.62, 0.40, 0.14, 0.55, 0.55),
+    "diver":      (1.0, 32, "male_casualsuit02", "short01", 0.25, 0.60, 0.05, 0.03, 0.55, 0.45),
+    "postman":    (1.0, 52, "male_casualsuit05", "short02", 0.45, 0.60, 0.22, 0.30, 0.5, 0.5),
     "expert":     (1.0, 55, "male_elegantsuit01", "short02", 0.55, 0.58, 0.08, 0.30, 0.5, 0.5),
-    "expert2":    (0.0, 47, "female_casualsuit01", "bob02", 0.30, 0.58, 0.10, 0.40, 0.48, 0.45),
+    "expert2":    (0.0, 47, "female_elegantsuit01", "bob02", 0.30, 0.58, 0.10, 0.40, 0.48, 0.45),
 }
 
-# two-tone outfits: top colour above, trousers below a split given as a fraction of the person's height
+# outfits: top colour above, bottom below a split (fraction of the person's height); plain period fabrics
 OUTFITS = {
-    "sister": ((0.30, 0.30, 0.29), (0.035, 0.07, 0.04), 0.53),          # grey cardigan, dark green trousers
-    "officer": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),          # green jacket, beige trousers
+    "sister": ((0.30, 0.30, 0.29), (0.035, 0.07, 0.04), 0.53),          # grey cardigan-jumper, dark green trousers
+    "officer": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),          # green uniform jacket, beige trousers
     "officer2": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),
     "officer3": ((0.07, 0.10, 0.06), (0.30, 0.27, 0.20), 0.50),
+    "plainclothes": ((0.16, 0.12, 0.08), (0.14, 0.12, 0.10), 0.50),     # brown sports jacket, light shirt, tie (mesh)
+    "detective": ((0.11, 0.10, 0.09), (0.11, 0.10, 0.09), 0.50),        # grey-brown suit
     "firefighter": ((0.03, 0.04, 0.07), (0.03, 0.04, 0.07), 0.5),
     "diver": ((0.012, 0.012, 0.014), (0.012, 0.012, 0.014), 0.5),
     "postman": ((0.12, 0.16, 0.24), (0.10, 0.12, 0.17), 0.50),
-    "mother": ((0.13, 0.05, 0.05), (0.08, 0.07, 0.07), 0.53),            # dark burgundy knit, dark brown trousers
-    "aunt": ((0.08, 0.10, 0.16), (0.12, 0.12, 0.14), 0.53),
-    "neighbour": ((0.10, 0.14, 0.12), (0.20, 0.17, 0.15), 0.53),
-    "expert2": ((0.07, 0.07, 0.09), (0.10, 0.10, 0.12), 0.53),
-    "father": ((0.22, 0.20, 0.17), (0.11, 0.11, 0.12), 0.53),
-    "brother": ((0.13, 0.17, 0.24), (0.10, 0.12, 0.18), 0.53),           # navy jumper, jeans
-    "detective": ((0.20, 0.15, 0.10), (0.14, 0.12, 0.10), 0.50),
-    "uncle": ((0.15, 0.17, 0.12), (0.12, 0.11, 0.10), 0.50),
+    "mother": ((0.30, 0.26, 0.20), (0.10, 0.08, 0.07), 0.56),           # oatmeal knit blouse, dark brown skirt
+    "aunt": ((0.10, 0.12, 0.18), (0.12, 0.12, 0.14), 0.56),
+    "neighbour": ((0.10, 0.14, 0.12), (0.20, 0.17, 0.15), 0.56),
+    "expert2": ((0.07, 0.07, 0.09), (0.10, 0.10, 0.12), 0.56),
+    "expert": ((0.08, 0.09, 0.11), (0.08, 0.09, 0.11), 0.50),
+    "father": ((0.22, 0.20, 0.17), (0.11, 0.11, 0.12), 0.53),           # check-shirt brown, dark trousers
+    "brother": ((0.05, 0.07, 0.15), (0.10, 0.12, 0.18), 0.53),          # navy knit jumper, jeans
+    "uncle": ((0.15, 0.13, 0.09), (0.12, 0.11, 0.10), 0.50),
+    "tech": ((0.40, 0.45, 0.52), (0.10, 0.10, 0.11), 0.53),
 }
 
 
@@ -349,12 +365,22 @@ def person(role, name=None, cap=True):
         for o in h.parts:
             if o.type == 'MESH' and cloth in o.name:
                 _two_tone_local(o, split, top, bot)
+    hair_matte(h)
+    if role == "mother":                                 # brown hair with a little grey: the sheen washed it out to white
+        for o in h.parts:
+            if o.type == 'MESH' and "bob0" in o.name:
+                for m in o.data.materials:
+                    p = m.node_tree.nodes.get("Principled BSDF")
+                    if p:
+                        p.inputs['Sheen Weight'].default_value = 0.08
+    if role in ("mother", "father", "uncle", "neighbour", "expert", "aunt"):
+        hair_grey(h, 0.28 if role == "mother" else 0.5)
     if role in ("officer", "officer2", "officer3") and cap:
         h.cap = police_cap(h)
     if role == "firefighter":
         h.cap = fire_helmet(h)
     if role == "diver":
-        h.cap = diver_hood(h)
+        h.cap = diver_hood(h); diver_tank(h)
     if role == "postman" and cap:
         h.cap = police_cap(h, crown=(0.10, 0.13, 0.2), band=(0.06, 0.07, 0.1))
     return h
@@ -367,26 +393,82 @@ def rj_height(h):
 
 def _two_tone_local(o, split, top, bottom):
     """Top/trousers split on the garment's REST height (object coordinates follow the rig), so it holds when the
-    person walks, sits or bends. MakeHuman meshes: object z = height above the feet in rest pose."""
+    person walks, sits or bends. Plain fabric: the stock MakeHuman texture (prints, logos) is dropped; a fine knit
+    noise gives the weave. Light collars/shirts keep the mesh's shading."""
     for m in o.data.materials:
         N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
         tc = N.new("ShaderNodeAttribute"); tc.attribute_name = "rest_z"; tc.attribute_type = 'GEOMETRY'
         gt = N.new("ShaderNodeMath"); gt.operation = 'GREATER_THAN'; gt.inputs[1].default_value = split; L.new(tc.outputs['Fac'], gt.inputs[0])
         mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(gt.outputs[0], mx.inputs['Factor'])
         mx.inputs[6].default_value = (*bottom, 1); mx.inputs[7].default_value = (*top, 1)
-        src = p.inputs['Base Color'].links[0].from_socket if p.inputs['Base Color'].links else None
-        if src is not None:                                       # keep a little of the weave texture
-            wv = N.new("ShaderNodeMix"); wv.data_type = 'RGBA'; wv.blend_type = 'MULTIPLY'; wv.inputs['Factor'].default_value = 0.35
-            L.new(mx.outputs[2], wv.inputs[6]); L.new(src, wv.inputs[7])
-            hs = N.new("ShaderNodeHueSaturation"); hs.inputs['Value'].default_value = 1.6
-            L.new(wv.outputs[2], hs.inputs['Color']); L.new(hs.outputs[0], p.inputs['Base Color'])
-        else:
-            L.new(mx.outputs[2], p.inputs['Base Color'])
-        p.inputs['Roughness'].default_value = 0.8
+        co = N.new("ShaderNodeTexCoord"); nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 900; nz.inputs['Detail'].default_value = 2
+        L.new(co.outputs['Object'], nz.inputs['Vector'])
+        wv = N.new("ShaderNodeMapRange"); wv.inputs['To Min'].default_value = 0.85; wv.inputs['To Max'].default_value = 1.1
+        L.new(nz.outputs['Fac'], wv.inputs['Value'])
+        mul = N.new("ShaderNodeMix"); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'; mul.inputs['Factor'].default_value = 1.0
+        L.new(mx.outputs[2], mul.inputs[6]); L.new(wv.outputs[0], mul.inputs[7])
+        out_col = mul.outputs[2]
+        img = next((n for n in N if n.type == 'TEX_IMAGE'), None)
+        if img is not None and "elegantsuit" in o.name:          # keep the light shirt / collar / tie areas of the suit
+            bw = N.new("ShaderNodeRGBToBW"); L.new(img.outputs['Color'], bw.inputs[0])
+            mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.45; mr.inputs['From Max'].default_value = 0.65
+            L.new(bw.outputs[0], mr.inputs['Value'])
+            sh = N.new("ShaderNodeMix"); sh.data_type = 'RGBA'; L.new(mr.outputs[0], sh.inputs['Factor'])
+            L.new(out_col, sh.inputs[6]); sh.inputs[7].default_value = (0.62, 0.60, 0.55, 1)
+            out_col = sh.outputs[2]
+        L.new(out_col, p.inputs['Base Color'])
+        bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.15; L.new(nz.outputs['Fac'], bp.inputs['Height'])
+        if not p.inputs['Normal'].is_linked:
+            L.new(bp.outputs['Normal'], p.inputs['Normal'])
+        p.inputs['Roughness'].default_value = 0.85
+        p.inputs['Sheen Weight'].default_value = 0.4
     me = o.data
     co = np.empty(len(me.vertices) * 3, np.float32); me.vertices.foreach_get("co", co)
     at = me.attributes.get("rest_z") or me.attributes.new("rest_z", 'FLOAT', 'POINT')
     at.data.foreach_set("value", co.reshape(-1, 3)[:, 2].copy())
+
+
+def hair_trim(h, frac=0.80):
+    """Cut a long hairstyle to shoulder length: delete hair faces whose rest height is below frac x body height."""
+    import bmesh
+    top = rj_height(h); zc = frac * top
+    for o in h.parts:
+        if o.type == 'MESH' and "long01" in o.name:
+            bm = bmesh.new(); bm.from_mesh(o.data)
+            kill = [f for f in bm.faces if all(v.co.z < zc for v in f.verts)]
+            bmesh.ops.delete(bm, geom=kill, context='FACES')
+            bm.to_mesh(o.data); bm.free(); o.data.update()
+
+
+def hair_grey(h, amount=0.35):
+    """A few grey strands: mix a light grey into the hair colour by a fine streaky noise."""
+    for o in h.parts:
+        if o.type == 'MESH' and any(k in o.name for k in ("long01", "bob0", "short0", "ponytail", "braid", "afro")):
+            for m in o.data.materials:
+                N = m.node_tree.nodes; L = m.node_tree.links; p = N.get("Principled BSDF")
+                if not p or not p.inputs['Base Color'].is_linked:
+                    continue
+                src = p.inputs['Base Color'].links[0].from_socket
+                tc = N.new("ShaderNodeTexCoord"); mp = N.new("ShaderNodeMapping"); mp.inputs['Scale'].default_value = (60, 60, 4)
+                L.new(tc.outputs['Object'], mp.inputs['Vector'])
+                nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 3; L.new(mp.outputs[0], nz.inputs['Vector'])
+                mr = N.new("ShaderNodeMapRange"); mr.inputs['From Min'].default_value = 0.55; mr.inputs['From Max'].default_value = 0.7
+                mr.inputs['To Max'].default_value = amount; L.new(nz.outputs['Fac'], mr.inputs['Value'])
+                mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(mr.outputs[0], mx.inputs['Factor'])
+                L.new(src, mx.inputs[6]); mx.inputs[7].default_value = (0.42, 0.41, 0.4, 1)
+                L.new(mx.outputs[2], p.inputs['Base Color'])
+
+
+def hair_matte(h):
+    """Matte, softer hair: high roughness, no clear-coat shine (MakeHuman hair reads as a plastic helmet otherwise)."""
+    for o in h.parts:
+        if o.type == 'MESH' and any(k in o.name for k in ("long01", "bob0", "short0", "ponytail", "braid", "afro")):
+            for m in o.data.materials:
+                p = m.node_tree.nodes.get("Principled BSDF")
+                if p:
+                    p.inputs['Roughness'].default_value = 0.82
+                    p.inputs['Specular IOR Level'].default_value = 0.25
+                    p.inputs['Sheen Weight'].default_value = 0.5
 
 
 def _head_hat(h, objs, name):
@@ -428,11 +510,42 @@ def fire_helmet(h):
 
 
 def diver_hood(h):
-    m = pbr("Neoprene", (0.01, 0.01, 0.012), 0.5)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=(0, 0.0, -0.04))
-    t = bpy.context.active_object; t.scale = (0.11, 0.12, 0.14); t.data.materials.append(m); bpy.ops.object.transform_apply(scale=True)
-    mask = box("Mask", (0, -0.11, -0.07), (0.12, 0.03, 0.07), pbr("MaskGlass", (0.05, 0.06, 0.07), 0.05, 0.0, **{'Coat Weight': 1.0}), bevel=0.02)
-    return _head_hat(h, [t, mask], h.name + "_hood")
+    """1981 scuba diver's head: a close neoprene hood, an oval mask with a rubber frame and strap, a J-snorkel on
+    the left. Hat-local axes at build: the person faces -Y, his left is +X, origin near the skull top."""
+    m = pbr("Neoprene", (0.012, 0.012, 0.014), 0.55)
+    rub = pbr("MaskRubber", (0.03, 0.03, 0.035), 0.45)
+    gl = pbr("MaskGlass", (0.04, 0.05, 0.06), 0.04, 0.0, **{'Coat Weight': 1.0})
+    sn = pbr("Snorkel", (0.75, 0.38, 0.05), 0.4)                         # orange snorkel (period)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=32, ring_count=16, radius=1.0, location=(0, 0.012, -0.055))
+    t = bpy.context.active_object; t.scale = (0.097, 0.106, 0.122); t.data.materials.append(m); bpy.ops.object.transform_apply(scale=True)
+    parts = [t]
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.104, minor_radius=0.009, location=(0, 0.012, -0.085), rotation=(math.radians(-8), 0, 0))
+    st = bpy.context.active_object; st.scale = (0.98, 1.06, 1); st.data.materials.append(rub); bpy.ops.object.transform_apply(scale=True); parts.append(st)
+    parts.append(box("MaskFrame", (0, -0.1, -0.085), (0.13, 0.035, 0.075), rub, bevel=0.022))
+    parts.append(box("Mask", (0, -0.12, -0.085), (0.11, 0.012, 0.058), gl, bevel=0.02))
+    parts.append(cyl("SnorkelTube", (0.1, -0.04, -0.02), 0.012, 0.3, sn, verts=12))
+    parts.append(cyl("SnorkelBend", (0.07, -0.09, -0.165), 0.012, 0.07, sn, verts=12, rot=(0, math.radians(70), math.radians(-35))))
+    return _head_hat(h, parts, h.name + "_hood")
+
+
+def diver_tank(h):
+    """A single steel tank on the back with a harness strap (parented to the upper spine)."""
+    tm = pbr("Tank", (0.62, 0.6, 0.55), 0.3, 0.6)
+    vm = pbr("Valve", (0.15, 0.15, 0.15), 0.3, 0.9)
+    hb = pbr("Harness", (0.02, 0.02, 0.02), 0.6)
+    sp = h.bone_head("spine03")
+    c0 = sp + Vector((0, 0.17, 0.08))
+    parts = [cyl("TankBody", c0, 0.085, 0.62, tm, verts=24), cyl("TankValve", c0 + Vector((0, 0, 0.35)), 0.025, 0.08, vm, verts=12)]
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=0.085, location=c0 + Vector((0, 0, 0.31)))
+    d = bpy.context.active_object; d.data.materials.append(tm); parts.append(d)
+    for z in (0.18, -0.12):
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.17, minor_radius=0.012, location=sp + Vector((0, 0.03, z + 0.08)))
+        b_ = bpy.context.active_object; b_.scale = (1.05, 0.85, 1); b_.data.materials.append(hb); parts.append(b_)
+    o = join(parts, h.name + "_tank")
+    mw = o.matrix_world.copy()
+    o.parent = h.arm; o.parent_type = 'BONE'; o.parent_bone = "spine03"; o.matrix_world = mw
+    h.parts.append(o)
+    return o
 
 
 def hide_person(h, on=True):
@@ -475,25 +588,59 @@ def rotary_phone(name="Phone"):
     # handset: lies across the cradles along X
     hs = bpy.data.objects.new(name + "Handset", None); bpy.context.collection.objects.link(hs); hs.parent = r
     hs.location = (0, 0.045, 0.14)
-    hp = [cyl("Grip", (0, 0, 0), 0.017, 0.14, pm, 20, rot=(0, math.radians(90), 0))]
+    # a real handset: about 21 cm end to end, slim grip, 5-6 cm ear and mouth cups
+    hp = [box("Grip", (0, 0, 0.003), (0.12, 0.03, 0.022), pm, bevel=0.009)]
     for sx in (-1, 1):
-        cup = cyl("Cup", (sx * 0.095, 0, -0.012), 0.03, 0.045, pm, 24, rot=(0, 0, 0)); hp.append(cup)
-        hp.append(box("Neck", (sx * 0.075, 0, -0.004), (0.04, 0.03, 0.03), pm, bevel=0.01))
-    hj = join(hp, name + "HandsetM"); hj.parent = hs; hj.location = (0, 0, 0)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=(sx * 0.073, 0, -0.009))
+        cup = bpy.context.active_object; cup.scale = (0.032, 0.029, 0.021); cup.data.materials.append(pm)
+        bpy.ops.object.transform_apply(scale=True); bpy.ops.object.shade_smooth(); hp.append(cup)
+        hp.append(cyl("CupFace", (sx * 0.073, 0, -0.028), 0.023, 0.005, pbr("CupGrille", (0.12, 0.13, 0.11), 0.5), 24))
+    hj = apply_rot(join(hp, name + "HandsetM")); hj.parent = hs; hj.location = (0, 0, 0)
     bpy.ops.object.shade_smooth()
-    # coiled cord from the body side to the handset end (static coil, slack)
-    cord_pts = []
-    for k in range(120):
-        t = k / 119
-        base = Vector((-0.11 - 0.05 * math.sin(t * math.pi), 0.0 - 0.06 * t, 0.03 + 0.02 * math.sin(t * math.pi * 1.0)))
-        ang = t * 34 * math.pi
-        cord_pts.append(base + Vector((0, 0.007 * math.cos(ang), 0.007 * math.sin(ang))))
-    cu = bpy.data.curves.new(name + "Cord", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0025; cu.bevel_resolution = 2
-    sp = cu.splines.new('POLY'); sp.points.add(len(cord_pts) - 1)
-    for p, q in zip(sp.points, cord_pts):
-        p.co = (*q, 1)
-    co = bpy.data.objects.new(name + "Cord", cu); bpy.context.collection.objects.link(co); co.data.materials.append(pm); co.parent = r
+    # coiled cord from the body's side to the handset's mouth end: 9 hooked points, moved by phone_cord()
+    n = 9
+    cu = bpy.data.curves.new(name + "Cord", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0045; cu.bevel_resolution = 3
+    sp = cu.splines.new('NURBS'); sp.points.add(n - 1); sp.order_u = 3; sp.use_endpoint_u = True
+    cm = pbr("CordCoil", (0.30, 0.33, 0.28), 0.35)
+    N = cm.node_tree.nodes; Lk = cm.node_tree.links; tc = N.new("ShaderNodeTexCoord"); wv = N.new("ShaderNodeTexWave")
+    wv.wave_type = 'RINGS'; wv.inputs['Scale'].default_value = 120.0; Lk.new(tc.outputs['Generated'], wv.inputs['Vector'])
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.8; Lk.new(wv.outputs['Fac'], bp.inputs['Height']); Lk.new(bp.outputs['Normal'], N["Principled BSDF"].inputs['Normal'])
+    co = bpy.data.objects.new(name + "Cord", cu); bpy.context.collection.objects.link(co); co.data.materials.append(cm)
+    hooks = []
+    for k in range(n):
+        sp.points[k].co = (0, 0, 0, 1)
+        e = bpy.data.objects.new(name + f"CordH{k}", None); bpy.context.collection.objects.link(e)
+        hk = co.modifiers.new(f"h{k}", 'HOOK'); hk.object = e
+        hooks.append(e)
+    co["hooks"] = [e.name for e in hooks]
+    r["cord"] = co.name
+    for k, e in enumerate(hooks):               # point k follows empty k: assign through edit mode
+        pass
+    bpy.context.view_layer.objects.active = co
+    for ob in bpy.context.selected_objects:
+        ob.select_set(False)
+    co.select_set(True)
+    bpy.ops.object.mode_set(mode='EDIT')
+    for k in range(n):
+        for q, pt in enumerate(co.data.splines[0].points):
+            pt.select = (q == k)
+        bpy.ops.object.hook_assign(modifier=f"h{k}")
+        bpy.ops.object.hook_reset(modifier=f"h{k}")
+    bpy.ops.object.mode_set(mode='OBJECT')
     return r, hs, dial
+
+
+def phone_cord(phone_root, handset):
+    """Lay the coiled cord from the phone body's left side to the handset's mouth end, sagging between them."""
+    co = bpy.data.objects[phone_root["cord"]]; hooks = [bpy.data.objects[n] for n in co["hooks"]]
+    bpy.context.view_layer.update()
+    a = phone_root.matrix_world @ Vector((-0.11, 0.0, 0.03))
+    b = handset.matrix_world @ Vector((-0.085, 0, -0.01))
+    n = len(hooks); L_ = (b - a).length
+    for k, e in enumerate(hooks):
+        t = k / (n - 1)
+        sag = 0.25 * math.sin(math.pi * t) * max(0.15, 0.45 - L_ * 0.3) + 0.04 * math.sin(math.pi * t)
+        e.location = a.lerp(b, t) + Vector((0, 0, -sag))
 
 
 def reel_deck(name="Deck", scale=1.0):
@@ -560,7 +707,7 @@ def headphones(name="Headphones"):
     for sx in (-1, 1):
         parts.append(cyl("Cup", (sx * 0.098, 0, -0.105), 0.048, 0.04, pbr("HPCup", (0.16, 0.16, 0.17), 0.35, 0.3), 24, rot=(0, math.radians(90), 0)))
         parts.append(cyl("Pad", (sx * 0.07, 0, -0.105), 0.042, 0.012, pad, 24, rot=(0, math.radians(90), 0)))
-    return join(parts, name)
+    return apply_rot(join(parts, name))
 
 
 def head_top(h):
@@ -580,16 +727,21 @@ def head_top(h):
 def wear_headphones(h, hp):
     """Set the headphones on the head for the current pose (call every frame after posing): cups over the ears,
     band over the crown, following the head's tilt."""
-    hd = h.bone_head("head"); tl = h.bone_tail("head"); up = (tl - hd).normalized()
+    hd = h.bone_head("head"); tl = h.bone_tail("head"); bone_up = (tl - hd).normalized()
+    bpy.context.view_layer.update()
+    Mb = h.arm.matrix_world @ h.arm.pose.bones["head"].matrix
+    top = Mb @ h.hp_off if hasattr(h, "hp_off") else hd + bone_up * 0.2   # the crown, carried by the head bone
+    up = (bone_up + Vector((0, 0, 1))).normalized()                 # the band sits level on the crown
     right = forward(h).cross(Vector((0, 0, 1))).normalized()
     right = (right - up * right.dot(up)).normalized(); Y = up.cross(right)
-    top = hd + up * (h.head_len if hasattr(h, "head_len") else 0.2)
     M = Matrix((right, Y, up)).transposed().to_4x4(); M.translation = top
     hp.matrix_world = M
 
 
 def put_headphones(h, hp):
-    t = head_top(h); h.head_len = (t - h.bone_head("head")).length + 0.01
+    t = head_top(h) + Vector((0, 0, 0.012)); h.head_len = (t - h.bone_head("head")).length
+    bpy.context.view_layer.update()
+    h.hp_off = (h.arm.matrix_world @ h.arm.pose.bones["head"].matrix).inverted() @ t
     h.parts.append(hp)
     return hp
 
@@ -686,9 +838,15 @@ def portable_radio(name="PortRadio"):
              box("PRTrim", (0, -0.036, 0.145), (0.22, 0.002, 0.008), chrome)]
     for z in (0.11, 0.05):
         parts.append(cyl("PRKnob", (0.085, -0.04, z), 0.014, 0.012, chrome, 20, rot=(math.radians(90), 0, 0)))
-    for k in range(9):                                         # strap
-        a = math.radians(k * 22.5)
-        parts.append(box("Strap", (0.09 * math.cos(a), 0, 0.15 + 0.05 * math.sin(a)), (0.012, 0.02, 0.006), case, rot=(0, -a + math.pi / 2, 0)))
+    import bmesh                                               # carry strap: one continuous leather arc
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.07, major_segments=48, minor_segments=8, location=(0, 0, 0))
+    st = bpy.context.active_object; st.name = "Strap"
+    bm = bmesh.new(); bm.from_mesh(st.data)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.y < -0.02], context='VERTS'); bm.to_mesh(st.data); bm.free()
+    st.rotation_euler = (math.radians(90), 0, 0); st.scale = (0.09, 0.05, 0.25); st.location = (0, 0, 0.148)
+    st.data.materials.append(case); bpy.ops.object.select_all(action='DESELECT'); st.select_set(True)
+    bpy.context.view_layer.objects.active = st; bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+    parts.append(st)
     body = join(parts, name + "Body")
     d = box("PRDialM", (0.085, -0.036, 0.135), (0.05, 0.002, 0.012), dial)
     r = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(r)
@@ -798,7 +956,7 @@ def torch(name="Torch", on=True, energy=40.0, cone=22.0, color=(1.0, 0.86, 0.62)
         ld = bpy.data.lights.new(name + "L", 'SPOT'); ld.energy = energy; ld.spot_size = math.radians(cone); ld.spot_blend = 0.45
         ld.color = color; ld.shadow_soft_size = 0.01
         lo = bpy.data.objects.new(name + "L", ld); bpy.context.collection.objects.link(lo); lo.parent = r
-        lo.location = (0, -0.065, 0); lo.rotation_euler = (math.radians(90), 0, 0)
+        lo.location = (0, -0.065, 0); lo.rotation_euler = (math.radians(-90), 0, 0)      # spot (-Z) along the beam (-Y)
         r["light"] = lo.name
     return r
 
@@ -1049,33 +1207,54 @@ def dog_fur():
     return m
 
 
+def _skin_mesh(name, pts, edges, mat_):
+    """An organic tube shape from a point chain: Skin modifier (radius per point) + Subdivision."""
+    me = bpy.data.meshes.new(name)
+    me.from_pydata([p for p, r in pts], edges, []); me.update()
+    o = bpy.data.objects.new(name, me); bpy.context.collection.objects.link(o)
+    sk = o.modifiers.new("skin", 'SKIN'); sk.use_smooth_shade = True
+    for i, (p, r) in enumerate(pts):
+        sv = me.skin_vertices[0].data[i]; sv.radius = (r, r)
+        sv.use_root = (i == 0)
+    sd = o.modifiers.new("sub", 'SUBSURF'); sd.levels = 2; sd.render_levels = 2
+    o.data.materials.append(mat_)
+    return o
+
+
 def dog(name="Dog"):
     """A German shepherd, about 0.62 m at the shoulder. Forward is local +X, origin on the ground under the chest.
     Returns dict(root, body, head, tail, legs=[(hip, knee)] x4 (FL, FR, HL, HR))."""
     fur = dog_fur(); dark = pbr("DogNose", (0.01, 0.01, 0.01), 0.3, 0.0, **{'Coat Weight': 0.7})
     root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
-    body = _meta_mesh(name + "Body", [((0.22, 0, 0.6), 0.2, (1.25, 0.7, 0.95)), ((-0.05, 0, 0.6), 0.2, (1.3, 0.72, 0.9)),
-                                      ((-0.3, 0, 0.58), 0.19, (1.0, 0.75, 0.9)), ((0.36, 0, 0.74), 0.12, (1.1, 0.75, 1.2)),
-                                      ((0.12, 0, 0.5), 0.15, (1.6, 0.6, 0.6))], fur)
+    # skin-modifier "skeletons" (point chains with radii, subdivided): one connected organic shape per part
+    body = _skin_mesh(name + "Body", [((-0.38, 0, 0.57), 0.11), ((-0.27, 0, 0.6), 0.14), ((-0.06, 0, 0.62), 0.115), ((0.16, 0, 0.6), 0.15),
+                                      ((0.3, 0, 0.66), 0.12), ((0.42, 0, 0.77), 0.085), ((0.48, 0, 0.86), 0.07), ((0.18, 0, 0.47), 0.1)],
+                      [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (3, 7)], fur)
     body.parent = root
-    head = bpy.data.objects.new(name + "HeadPivot", None); bpy.context.collection.objects.link(head); head.parent = root; head.location = (0.44, 0, 0.82)
-    hm = _meta_mesh(name + "Head", [((0.06, 0, 0.04), 0.1, (1.0, 0.85, 0.85)), ((0.17, 0, 0.0), 0.06, (1.4, 0.65, 0.6)),
-                                    ((0.23, 0, -0.01), 0.04, (1.2, 0.6, 0.5))], fur)
+    head = bpy.data.objects.new(name + "HeadPivot", None); bpy.context.collection.objects.link(head); head.parent = root; head.location = (0.5, 0, 0.88)
+    hm = _skin_mesh(name + "Head", [((-0.03, 0, 0.0), 0.07), ((0.06, 0, 0.005), 0.068), ((0.15, 0, -0.02), 0.042), ((0.22, 0, -0.03), 0.028)],
+                    [(0, 1), (1, 2), (2, 3)], fur)
     hm.parent = head
+    for sy in (-1, 1):                                    # big upright ears
+        bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.045, radius2=0.004, depth=0.13, location=(0.0, sy * 0.045, 0.1), rotation=(sy * -0.22, -0.12, 0))
+        ear = bpy.context.active_object; ear.scale = (0.55, 1.0, 1.0); ear.data.materials.append(fur); ear.parent = head
+    nose = cyl("Nose", (0.245, 0, -0.03), 0.017, 0.02, dark, 12, rot=(0, math.radians(90), 0)); nose.parent = head
     for sy in (-1, 1):
-        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.04, radius2=0.004, depth=0.11, location=(0.02, sy * 0.045, 0.14), rotation=(sy * -0.25, -0.15, 0))
-        ear = bpy.context.active_object; ear.data.materials.append(fur); ear.parent = head
-    nose = cyl("Nose", (0.27, 0, -0.005), 0.016, 0.02, dark, 12, rot=(0, math.radians(90), 0)); nose.parent = head
-    tail = bpy.data.objects.new(name + "TailPivot", None); bpy.context.collection.objects.link(tail); tail.parent = root; tail.location = (-0.47, 0, 0.62)
-    tm = _meta_mesh(name + "Tail", [((-0.08, 0, -0.05), 0.06, (1.0, 0.6, 0.6)), ((-0.18, 0, -0.17), 0.055, (0.8, 0.55, 0.9)), ((-0.24, 0, -0.3), 0.05, (0.7, 0.5, 0.9))], fur)
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.011, location=(0.1, sy * 0.05, 0.03))
+        ey = bpy.context.active_object; ey.data.materials.append(dark); ey.parent = head
+    tail = bpy.data.objects.new(name + "TailPivot", None); bpy.context.collection.objects.link(tail); tail.parent = root; tail.location = (-0.45, 0, 0.6)
+    tm = _skin_mesh(name + "Tail", [((0, 0, 0), 0.045), ((-0.1, 0, -0.12), 0.055), ((-0.14, 0, -0.27), 0.048), ((-0.12, 0, -0.38), 0.03)],
+                    [(0, 1), (1, 2), (2, 3)], fur)
     tm.parent = tail
     legs = []
-    for (x, y, front) in ((0.3, 0.1, True), (0.3, -0.1, True), (-0.32, 0.1, False), (-0.32, -0.1, False)):
-        hip = bpy.data.objects.new(name + "Hip", None); bpy.context.collection.objects.link(hip); hip.parent = root; hip.location = (x, y, 0.55)
-        up = _meta_mesh(name + "Thigh", [((0, 0, -0.06), 0.09 if not front else 0.07, (0.9, 0.6, 1.4)), ((0.0 if front else -0.03, 0, -0.17), 0.05, (0.7, 0.55, 1.4))], fur)
+    for (x, y, front) in ((0.24, 0.085, True), (0.24, -0.085, True), (-0.3, 0.09, False), (-0.3, -0.09, False)):
+        hip = bpy.data.objects.new(name + "Hip", None); bpy.context.collection.objects.link(hip); hip.parent = root; hip.location = (x, y, 0.5)
+        up = _skin_mesh(name + "Thigh", [((0, 0, 0.04), 0.065 if front else 0.09), ((0.0 if front else -0.04, 0, -0.22), 0.04)], [(0, 1)], fur)
         up.parent = hip
-        knee = bpy.data.objects.new(name + "Knee", None); bpy.context.collection.objects.link(knee); knee.parent = hip; knee.location = (0.0 if front else -0.05, 0, -0.26)
-        lo = _meta_mesh(name + "Shin", [((0, 0, -0.1), 0.035, (0.7, 0.7, 2.2)), ((0.03, 0, -0.27), 0.035, (1.4, 0.8, 0.6))], fur)
+        knee = bpy.data.objects.new(name + "Knee", None); bpy.context.collection.objects.link(knee); knee.parent = hip
+        knee.location = (0.0 if front else -0.04, 0, -0.22)
+        lo = _skin_mesh(name + "Shin", [((0, 0, 0.0), 0.035), ((0.0 if front else 0.04, 0, -0.21), 0.026), ((0.05, 0, -0.265), 0.03)],
+                        [(0, 1), (1, 2)], fur)
         lo.parent = knee
         legs.append((hip, knee, front))
     return dict(root=root, body=body, head=head, tail=tail, legs=legs)
@@ -1121,6 +1300,7 @@ def low_template(key):
             elif s.material and not s.material.get("birch"):
                 retint(s.material, (1.05, 1.1, 0.7), sat=0.8); s.material["birch"] = 1
     o.name = "TPL_" + key
+    o.location = (0, 0, -1000); o.hide_render = True; o.hide_viewport = True      # the template is never seen
     _LOWOBJ[key] = o
     return o
 
@@ -1134,3 +1314,115 @@ def low_instances(key, placements):
         o.location = loc; o.rotation_euler = (0, 0, rz); o.scale = (s, s, s)
         out.append(o)
     return out
+
+
+# ============================================================================ "Court reconstruction" label (chat B's style, shared)
+GEN = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "nvidia_doc", "assets", "generated")
+
+
+def label_image(text, path, W=1920, H=816):
+    import skia
+    from PIL import Image
+    from scipy.ndimage import gaussian_filter
+    s = skia.Surface(W, H); cv = s.getCanvas(); cv.clear(skia.Color4f(0, 0, 0, 0))
+    p = skia.Paint(AntiAlias=True); p.setColor4f(skia.Color4f(1, 1, 1, 1))
+    f = skia.Font(skia.Typeface.MakeFromFile("/usr/share/fonts/opentype/inter/Inter-SemiBold.otf"), 34)
+    x, y = 96, H - 84
+    cv.drawRect(skia.Rect.MakeXYWH(x, y - 30, 4, 38), p)                 # a thin bar before the words
+    tx = x + 18
+    for ch in text.upper():                                              # letter-spaced caps
+        cv.drawString(ch, tx, y, f, p); tx += f.measureText(ch) + 4
+    a = s.makeImageSnapshot().toarray(colorType=skia.kRGBA_8888_ColorType).astype(np.float32) / 255
+    al = a[..., 3]
+    sh = gaussian_filter(al, 4) * 0.6
+    out = np.zeros_like(a); out[..., :3] = 1.0
+    out[..., 3] = np.clip(al * 0.92 + sh * (1 - al), 0, 1)
+    rgb = out[..., :3] * al[..., None] + 0.0 * (1 - al[..., None])     # shadow is black, letters white
+    out[..., :3] = np.where(al[..., None] > 0.01, 1.0, 0.0)
+    Image.fromarray((out * 255).astype(np.uint8), "RGBA").save(path)
+    return path
+
+
+def label(c, text, f_in=6, fade=12):
+    """Camera-parented plane with a small lower-left caption (fades in by frame driver). Idempotent."""
+    if c.get("_label") or "cam" not in c:
+        return
+    cam = c["cam"]
+    path = os.path.join(GEN, "b_label_" + text.lower().replace(" ", "_") + ".png")
+    if not os.path.exists(path):
+        label_image(text, path)
+    m = bpy.data.materials.new("Label"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); tc = N.new("ShaderNodeTexCoord")
+    tex = N.new("ShaderNodeTexImage"); tex.image = bpy.data.images.load(path); tex.image.alpha_mode = 'STRAIGHT'
+    L.new(tc.outputs['UV'], tex.inputs['Vector'])
+    em = N.new("ShaderNodeEmission"); L.new(tex.outputs['Color'], em.inputs['Color']); em.inputs['Strength'].default_value = 0.9
+    tr = N.new("ShaderNodeBsdfTransparent")
+    fv = N.new("ShaderNodeValue")
+    d = fv.outputs[0].driver_add("default_value").driver; d.type = 'SCRIPTED'; d.expression = f"min(1, max(0, (frame - {f_in}) / {fade}))"
+    mul = N.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'; L.new(tex.outputs['Alpha'], mul.inputs[0]); L.new(fv.outputs[0], mul.inputs[1])
+    mx = N.new("ShaderNodeMixShader"); L.new(mul.outputs[0], mx.inputs[0]); L.new(tr.outputs[0], mx.inputs[1]); L.new(em.outputs[0], mx.inputs[2])
+    L.new(mx.outputs[0], out.inputs['Surface'])
+    dist = 0.5; cd = cam.data; sensor = cd.sensor_width
+    bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0)); o = bpy.context.active_object; o.name = "ReconLabel"
+    o.data.materials.append(m); o.parent = cam; o.location = (0, 0, -dist)
+    for axis, k in ((0, 1.0), (1, 816 / 1920)):
+        dd = o.driver_add("scale", axis).driver; dd.type = 'SCRIPTED'
+        v = dd.variables.new(); v.name = "lens"; v.targets[0].id_type = 'CAMERA'; v.targets[0].id = cd; v.targets[0].data_path = "lens"
+        dd.expression = f"{dist} * {sensor} / lens * {k}"
+    o.visible_shadow = False; o.visible_diffuse = False; o.visible_glossy = False; o.visible_transmission = False
+    o.visible_volume_scatter = False
+    c["_label"] = o
+
+
+
+
+
+def crouch(h, pos, face_z, hip_h=0.5, z=0.0, lean=35):
+    """Crouch / squat down (to work at ground level): hips at hip_h, feet flat under the knees, back leaning in."""
+    upright(h); reset_pose(h)
+    h.arm.rotation_euler = (0, 0, face_z); h.arm.location = (0, 0, 0)
+    bpy.context.view_layer.update()
+    hip = (h.bone_head("upperleg01.L") + h.bone_head("upperleg01.R")) * 0.5
+    h.arm.location = Vector((pos[0], pos[1], z + hip_h)) - Vector((hip.x, hip.y, hip.z))
+    bpy.context.view_layer.update()
+    fwd = forward(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
+    for sd, sg in SIDE.items():
+        hp = h.bone_head(f"upperleg01.{sd}")
+        ankle = Vector((hp.x, hp.y, z + 0.09)) + fwd * 0.12 - side * sg * 0.12
+        leg_reach(h, sd, ankle, fwd + Vector((0, 0, 0.3)) - side * sg * 0.3)
+        h.aim(f"foot.{sd}", fwd + Vector((0, 0, -0.1)))
+    for b, a in (("spine05", 4), ("spine04", 5), ("spine03", 5), ("spine02", 4), ("spine01", 3)):
+        h.rot(b, side, -lean * a / 21)
+    fingers_curl(h, 25)
+
+
+def curl(h, deg=35, side=("L", "R"), thumb=15):
+    """Finger curl about each bone's own flex axis (from chat B's b_common.curl; human.fingers_curl turns about the
+    world X axis, which splays a rotated hand into a claw). Thumb tucks."""
+    from human import rotate_bone
+    for sd in side:
+        for f in range(2, 6):
+            for k in (1, 2, 3):
+                b = f"finger{f}-{k}.{sd}"
+                if b in h.arm.pose.bones:
+                    rotate_bone(h.arm, b, (1, 0, 0), deg * (0.8 if k == 1 else 1.0), space="LOCAL")
+        for k in (2, 3):
+            b = f"finger1-{k}.{sd}"
+            if b in h.arm.pose.bones:
+                rotate_bone(h.arm, b, (0, 0, -1 if sd == "L" else 1), thumb, space="LOCAL")
+
+
+def sink_haze(depth=0.6):
+    """Volume boxes whose bottom face lies on flat ground (z = 0) fight with it: the flat floor rendered as a grey
+    slab. Push every haze box's bottom below the ground (top stays where it was)."""
+    for o in bpy.data.objects:
+        if o.type == 'MESH' and o.name.startswith("Haze"):
+            bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+            z0 = min(p.z for p in bb); z1 = max(p.z for p in bb)
+            if z0 > -0.05:
+                k = (z1 - z0 + depth) / max(z1 - z0, 1e-3)
+                o.scale.z *= k; o.location.z -= depth / 2 + (o.location.z - (z0 + z1) / 2) * (k - 1) * 0
+                bpy.context.view_layer.update()
+                bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+                o.location.z += (z0 - depth) - min(p.z for p in bb)

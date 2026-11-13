@@ -120,6 +120,20 @@ def helicopter_police(variant=None):
     mast = V.cylinder("Mast", (0.15, 0, 2.15), 0.09, 0.3, dk, axis='Z', verts=16)
     eng = loft_ellipse("Engine", [(0.9, 2.0, 0.05, 0.05), (0.7, 2.0, 0.4, 0.2), (-0.8, 2.0, 0.42, 0.22), (-1.6, 1.85, 0.2, 0.12)], paint, ring=24)
     parts = [pod, canopy, band, boom, fin, stab, mast, eng]
+    seam = V.simple("V_HeliSeam", (0.12, 0.12, 0.12), 0.5)
+    for sy in (-1, 1):                                  # rear side windows, door seams, step, door handle
+        parts.append(V.rbox("SideWin", (0.15, sy * 0.775, 1.28), (0.75, 0.02, 0.42), 0.06, gl))
+        parts.append(V.rbox("DoorSeamF", (0.62, sy * 0.79, 1.0), (0.02, 0.012, 0.9), 0.004, seam))
+        parts.append(V.rbox("DoorSeamR", (-0.28, sy * 0.79, 1.0), (0.02, 0.012, 0.9), 0.004, seam))
+        parts.append(V.rbox("Step", (0.15, sy * 0.92, 0.32), (0.55, 0.12, 0.025), 0.01, dk))
+        parts.append(V.rbox("Handle", (0.0, sy * 0.8, 1.02), (0.1, 0.015, 0.02), 0.005, dk))
+    parts.append(V.rbox("TailBand", (-4.0, 0, 1.62), (1.2, 0.27, 0.27), 0.1, green))
+    parts.append(V.cylinder("Exhaust", (-1.45, 0, 2.05), 0.09, 0.3, dk, axis='X', verts=16))
+    parts.append(V.cylinder("Antenna", (-0.6, 0, 0.08), 0.008, 0.35, dk, axis='Z', verts=6))
+    nl = V.simple("V_NoseLight", (1.0, 0.95, 0.85), 0.1, 0.0, **{'Emission Color': (1.0, 0.92, 0.75, 1), 'Emission Strength': 4.0})
+    parts.append(V.cylinder("LandLight", (2.0, 0, 0.32), 0.06, 0.05, nl, axis='X', verts=16))
+    rl = V.simple("V_AntiColl", (0.8, 0.05, 0.03), 0.3, 0.0, **{'Emission Color': (1.0, 0.05, 0.02, 1), 'Emission Strength': 6.0})
+    parts.append(V.cylinder("AntiColl", (-1.2, 0, 1.98), 0.05, 0.06, rl, axis='Z', verts=12))
     for s in (-1, 1):                                   # skids
         parts.append(V.cylinder("Skid", (0.1, s * 0.95, 0.05), 0.035, 3.0, dk, axis='X', verts=12))
         for x in (0.9, -0.6):
@@ -173,3 +187,42 @@ def register():
 
 
 register()
+
+
+# ============================================================================ police diving dinghy (inflatable)
+def dinghy_police(variant=None):
+    """A 1970s inflatable (grey Hypalon tubes in a U, a pointed bow, a plywood transom with an outboard, a floor,
+    grab lines along the tubes, a dark-green rubbing strake)."""
+    tube_m = V.simple("V_DinghyTube", (0.16, 0.17, 0.17), 0.55, 0.0)
+    strake = V.simple("V_DinghyStrake", (0.04, 0.11, 0.06), 0.5)
+    floor_m = V.simple("V_DinghyFloor", (0.10, 0.10, 0.10), 0.8)
+    wood = V.simple("V_Transom", (0.22, 0.15, 0.08), 0.6)
+    rope = V.simple("V_Rope", (0.6, 0.55, 0.45), 0.8)
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.22, major_segments=64, minor_segments=20, location=(0.2, 0, 0.3))
+    tube = bpy.context.active_object; tube.name = "DinghyTube"; tube.scale = (2.0, 0.78, 1.0); tube.data.materials.append(tube_m)
+    bpy.ops.object.transform_apply(scale=True)
+    import bmesh                                          # cut the stern: the tubes end at the transom (x < -1.6)
+    bm = bmesh.new(); bm.from_mesh(tube.data)
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.x < -1.55], context='VERTS'); bm.to_mesh(tube.data); bm.free()
+    parts = [tube]
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.03, major_segments=64, minor_segments=8, location=(0.2, 0, 0.3))
+    st = bpy.context.active_object; st.scale = (2.13, 0.92, 1.0); st.data.materials.append(strake); bpy.ops.object.transform_apply(scale=True)
+    bm = bmesh.new(); bm.from_mesh(st.data); bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.x < -1.55], context='VERTS'); bm.to_mesh(st.data); bm.free()
+    parts.append(st)
+    bpy.ops.mesh.primitive_torus_add(major_radius=1.0, minor_radius=0.008, major_segments=64, minor_segments=6, location=(0.2, 0, 0.52))
+    rp = bpy.context.active_object; rp.scale = (1.95, 0.74, 1.0); rp.data.materials.append(rope); bpy.ops.object.transform_apply(scale=True)
+    bm = bmesh.new(); bm.from_mesh(rp.data); bmesh.ops.delete(bm, geom=[v for v in bm.verts if v.co.x < -1.5], context='VERTS'); bm.to_mesh(rp.data); bm.free()
+    parts.append(rp)
+    parts.append(V.rbox("DinghyFloor", (0.0, 0, 0.12), (3.2, 1.05, 0.04), 0.1, floor_m))
+    parts.append(V.rbox("Transom", (-1.6, 0, 0.32), (0.05, 1.5, 0.42), 0.02, wood))
+    parts.append(V.rbox("Outboard", (-1.82, 0, 0.62), (0.32, 0.28, 0.38), 0.07, V.black_plastic()))
+    parts.append(V.cylinder("OBShaft", (-1.86, 0, 0.12), 0.04, 0.6, V.steel_dark(), axis='Z', verts=12))
+    parts.append(V.rbox("Thwart", (0.4, 0, 0.42), (0.28, 1.4, 0.04), 0.01, wood))
+    parts.append(V.rbox("TankBox", (-0.9, 0.25, 0.25), (0.45, 0.3, 0.22), 0.03, V.simple("V_Fuel", (0.5, 0.08, 0.05), 0.5)))
+    for k in range(3):                                   # spare air tanks lying on the floor
+        parts.append(V.cylinder("SpareTank", (-0.3 + 0.0 * k, -0.25 + 0.17 * k, 0.22), 0.08, 0.62, V.simple("V_TankS", (0.62, 0.6, 0.55), 0.3, 0.6), axis='X', verts=16))
+    body = V.join(parts, "PoliceDinghy")
+    return V._finish(body, "PoliceDinghy", (0.16, 0.17, 0.17))
+
+
+V.KINDS["dinghy_police"] = dinghy_police

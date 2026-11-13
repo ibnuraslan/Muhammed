@@ -100,7 +100,9 @@ def build(variant=None):
     kitchen_extras(c)
     apply_look(c)
     if "+torches" in variant:
-        c["out_torches"] = [rj.torch(f"OutTorch{k}", energy=80, cone=24) for k in range(3)]
+        c["out_torches"] = [rj.torch(f"OutTorch{k}", energy=260, cone=26) for k in range(3)]
+        from kit import haze
+        haze((-10.5, 1.0, 1.5), (5.0, 8.0, 3.0), density=0.03, color=(0.8, 0.85, 0.9), anis=0.6)
     if c["police"] and "officer" in c["P"] and "hp" not in c:
         c["hp"] = rj.put_headphones(c["P"]["officer"], rj.headphones("Headphones"))
     rj.finish_scene()
@@ -145,7 +147,7 @@ def hall_props(c):
     lamp_parts = [cyl("LBase", (0, 0, 0.012), 0.065, 0.024, pbr("BrassL", (0.6, 0.45, 0.2), 0.3, 1.0), 24),
                   cyl("LStem", (0, 0, 0.18), 0.009, 0.33, pbr("BrassL2", (0.6, 0.45, 0.2), 0.3, 1.0), 12)]
     bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.15, radius2=0.09, depth=0.17, location=(0, 0, 0.37))
-    sh = bpy.context.active_object; sh.data.materials.append(pbr("LampShade", (0.7, 0.55, 0.34), 0.7, 0.0, **{'Transmission Weight': 0.4,
+    sh = bpy.context.active_object; sh.data.materials.append(pbr("LampShade", (0.7, 0.55, 0.34), 0.7, 0.0, **{'Transmission Weight': 0.0,
                                                                     'Emission Color': (1.0, 0.65, 0.35, 1), 'Emission Strength': 0.0}))
     sol = sh.modifiers.new("s", 'SOLIDIFY'); sol.thickness = 0.003
     c["shade_mat"] = sh.data.materials[0]
@@ -153,10 +155,10 @@ def hall_props(c):
     lamp = join(lamp_parts, "HallLamp"); lamp.location = (t.x + 0.06, t.y + 0.43, 0.778)
     c["hall_lamp"] = lamp
     # hall chair with the two stuffed toys
-    ch_r, _ = rj.model_fit("WoodenChair_01", (0.72, -2.45, 0.0), rot_z=math.pi / 2, height=0.9)
+    ch_r, _ = rj.model_fit("WoodenChair_01", (0.72, -2.45, 0.0), rot_z=-math.pi / 2, height=0.9)
     c["chair"] = ch_r
-    bear = rj.teddy("Bear"); bear.location = (0.78, -2.5, 0.47); bear.rotation_euler = (0, 0, math.pi / 2 + 0.25)
-    rab = rj.plush_rabbit("Rabbit"); rab.location = (0.76, -2.25, 0.47); rab.rotation_euler = (0, 0.12, math.pi / 2 - 0.3)
+    bear = rj.teddy("Bear"); bear.location = (0.78, -2.5, 0.47); bear.rotation_euler = (0, 0, -math.pi / 2 + 0.25)
+    rab = rj.plush_rabbit("Rabbit"); rab.location = (0.76, -2.25, 0.47); rab.rotation_euler = (0, 0.12, -math.pi / 2 - 0.3)
     c["toys"] = [bear, rab]
     # wall clock above the table, a mirror and coat hooks on the west wall
     ck, hands, pend = rj.wall_clock("HallClock")
@@ -208,7 +210,7 @@ def piano_room(c):
     lamp_parts = [cyl("PLBase", (0, 0, 0.01), 0.06, 0.02, pbr("BrassP", (0.55, 0.42, 0.2), 0.3, 1.0), 24),
                   cyl("PLStem", (0, 0, 0.17), 0.008, 0.32, pbr("BrassP2", (0.55, 0.42, 0.2), 0.3, 1.0), 12)]
     bpy.ops.mesh.primitive_cone_add(vertices=32, radius1=0.13, radius2=0.08, depth=0.15, location=(0, 0, 0.36))
-    sh = bpy.context.active_object; sh.data.materials.append(pbr("PShade", (0.72, 0.6, 0.4), 0.7, 0.0, **{'Transmission Weight': 0.4,
+    sh = bpy.context.active_object; sh.data.materials.append(pbr("PShade", (0.72, 0.6, 0.4), 0.7, 0.0, **{'Transmission Weight': 0.0,
                                                                  'Emission Color': (1.0, 0.68, 0.38, 1), 'Emission Strength': 0.0}))
     c["pshade_mat"] = sh.data.materials[0]
     lamp_parts.append(sh)
@@ -224,7 +226,7 @@ def piano_room(c):
     rj.model_fit("CoffeeTable_01", (-3.9, -1.1, 0), rot_z=0.0, width=1.1)
     box("RugLiv", (-3.9, -1.0, 0.004), (2.8, 2.0, 0.008), mat("rug"))
     try:
-        rj.model_fit("wooden_bookshelf_worn", (-1.55, 1.6, 0), rot_z=math.pi / 2, height=1.9)
+        rj.model_fit("painted_wooden_cabinet", (-1.5, 1.7, 0), rot_z=-math.pi / 2, height=1.25)
     except Exception:
         pass
     try:
@@ -333,12 +335,17 @@ def lighting(c):
         rj.sky("night")
         mo = area_light((-10, 4, 6), (0, 0, 0), 6.0, 60, (0.4, 0.5, 0.9)); point_at(mo, (-4, 0, 0)); mo.visible_camera = False
     if lamps_on or L == "night":
-        st.inputs['Emission Strength'].default_value = 3.0
-        hl = bpy.data.lights.new("HallLampL", 'POINT'); hl.energy = 38; hl.color = (1.0, 0.62, 0.32); hl.shadow_soft_size = 0.06
+        st.inputs['Emission Strength'].default_value = 0.35         # the shade glows as fabric, never pure white
+        hl = bpy.data.lights.new("HallLampL", 'POINT'); hl.energy = 45; hl.color = (1.0, 0.62, 0.32); hl.shadow_soft_size = 0.06
         ho = bpy.data.objects.new("HallLampL", hl); bpy.context.collection.objects.link(ho)
         ho.location = c["hall_lamp"].location + Vector((0, 0, 0.36))
-        ps.inputs['Emission Strength'].default_value = 3.0
-        pl = bpy.data.lights.new("PianoLampL", 'POINT'); pl.energy = 30; pl.color = (1.0, 0.62, 0.32); pl.shadow_soft_size = 0.05
+        ps.inputs['Emission Strength'].default_value = 0.35
+        # a soft bounce off the music sheet onto the player's face (Michael alone at night)
+        fb = area_light(PIANO + Vector((0.55, -0.25, 1.15)), (0, 0, 0), 0.35, 9, (1.0, 0.72, 0.45)); fb.visible_camera = False
+        point_at(fb, PIANO + Vector((0.0, -0.8, 1.15)))
+        sp = area_light(PIANO + Vector((0.3, -0.6, 2.2)), (0, 0, 0), 0.8, 14, (1.0, 0.68, 0.4)); sp.visible_camera = False   # lamp spill on the bench
+        point_at(sp, PIANO + Vector((0.0, -0.75, 0.5)))
+        pl = bpy.data.lights.new("PianoLampL", 'POINT'); pl.energy = 70; pl.color = (1.0, 0.62, 0.32); pl.shadow_soft_size = 0.05
         po = bpy.data.objects.new("PianoLampL", pl); bpy.context.collection.objects.link(po)
         po.location = c["piano_lamp"].location + Vector((0, 0, 0.35))
         c["hall_light"] = ho; c["piano_light"] = po
@@ -360,6 +367,30 @@ ROOM_WINDOWS = {        # (window point outside, target inside) for look.interio
 }
 
 
+def view_plate(center, size, normal_axis, facing, strength=1.0):
+    """A window view outside (the misty lake beyond the garden): an emission card only the camera (and glossy rays)
+    sees, so the glass shows a scene instead of a white slab and the room light is unchanged."""
+    img = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "nvidia_doc", "assets", "generated", "rj_view_lake.png")
+    if not os.path.exists(img):
+        return None
+    bpy.ops.mesh.primitive_plane_add(size=1.0, location=center)
+    o = bpy.context.object; o.name = "WindowView"
+    o.scale = (size[0], size[1], 1)
+    # plane normal +Z -> face the room: rotate about X (wall along X) or about Z then X (wall along Y)
+    if normal_axis == 'y':
+        o.rotation_euler = (math.radians(90), 0, 0 if facing < 0 else math.pi)
+    else:
+        o.rotation_euler = (math.radians(90), 0, math.radians(90) if facing > 0 else math.radians(-90))
+    m = bpy.data.materials.new("WindowView"); m.use_nodes = True; nt = m.node_tree; nt.nodes.clear()
+    out = nt.nodes.new("ShaderNodeOutputMaterial"); em = nt.nodes.new("ShaderNodeEmission"); tx = nt.nodes.new("ShaderNodeTexImage")
+    tx.image = bpy.data.images.load(img, check_existing=True); tx.extension = 'EXTEND'
+    em.inputs['Strength'].default_value = strength
+    nt.links.new(tx.outputs['Color'], em.inputs['Color']); nt.links.new(em.outputs['Emission'], out.inputs['Surface'])
+    o.data.materials.append(m)
+    o.visible_shadow = False; o.visible_diffuse = False; o.visible_volume_scatter = False; o.visible_transmission = True
+    return o
+
+
 def apply_look(c):
     import look
     v = c["variant"]; L = c["light"]
@@ -370,7 +401,23 @@ def apply_look(c):
         mood = {"morning": "low_sun" if room == "piano" else "overcast", "afternoon": "low_sun", "sunset": "low_sun"}[L]
         for o in [o for o in bpy.data.objects if o.type == 'LIGHT' and o.data.type == 'SUN']:
             bpy.data.objects.remove(o)
-        look.interior_day(window=ROOM_WINDOWS[room], mood=mood)
+        look.interior_day(window=ROOM_WINDOWS[room], mood=mood, key_energy={"piano": None, "hall": 520.0, "kitchen": 380.0}[room])
+        if room == "kitchen":
+            bpy.context.scene.view_settings.exposure += 0.15         # the window no longer blows out: lift the room
+            view_plate((0.0, 11.5, 1.9), (9.0, 3.8), 'y', -1, strength=1.0)       # north window: the lake beyond the garden
+            for o in bpy.data.objects:                                          # the north net glowed white over the view: drawn back
+                if o.name.startswith("WNet") and o.type == 'MESH':
+                    bb = [o.matrix_world @ Vector(v) for v in o.bound_box]
+                    if min(p.y for p in bb) > 6.5:
+                        o.hide_render = True
+            view_plate((-6.5, 5.25, 1.9), (9.0, 3.8), 'x', +1, strength=1.4)      # west window
+            if "+suitcase" in v or "+letter" in v:            # the pendant is on over the table (grey morning)
+                kl = bpy.data.lights.new("KitPendant", 'SPOT'); kl.energy = 230; kl.spot_size = math.radians(110); kl.spot_blend = 0.7
+                kl.color = (1.0, 0.72, 0.45); ko = bpy.data.objects.new("KitPendant", kl); bpy.context.collection.objects.link(ko)
+                ko.location = (KTABLE.x, KTABLE.y, 1.62)             # below the shade's closed base
+                c["kshade_mat"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 0.6
+        if room == "piano":
+            bpy.context.scene.view_settings.exposure += 1.6       # day must read (mean luminance >= 0.18)
 
 
 def cast(c):
@@ -379,7 +426,8 @@ def cast(c):
     c["P"] = {}
     roles = c["variant"].split("|")[1].split(",") if "|" in c["variant"] else []
     for role in roles:
-        c["P"][role] = person(role, cap=False)                 # indoors: no caps
+        # indoors the officer at the recorder is plain-clothes (jacket, shirt and tie)
+        c["P"][role] = person("plainclothes" if role == "officer" else role, name=role.capitalize(), cap=False)
 
 
 def need(c, role):
@@ -388,21 +436,22 @@ def need(c, role):
 
 # ============================================================================ actions
 def phone_to_ear(c, h, sec, side="L", talk=0.0):
+    sgn = 1.0 if side == "L" else -1.0
     """Standing at the phone: the handset along the left cheek (earpiece at the ear, mouthpiece at the mouth),
     held at the grip, elbow down and forward."""
     from mathutils import Matrix
     hs = c["handset"]
-    fwd = forward(h); left = -fwd.cross(Vector((0, 0, 1))).normalized()
+    fwd = forward(h); left = -fwd.cross(Vector((0, 0, 1))).normalized() * sgn     # "left" = the holding side
     head = h.bone_head("head"); tail = h.bone_tail("head"); up = (tail - head).normalized()
-    E = head + up * 0.06 + left * 0.075 + fwd * 0.0             # ear
+    E = head + up * 0.045 + left * 0.075 - fwd * 0.005           # ear
     Mo = head - up * 0.035 + fwd * 0.085 + left * 0.035         # mouth corner
     X = (E - Mo).normalized(); Z = (left - X * left.dot(X)).normalized(); Y = Z.cross(X)
-    C = (E + Mo) * 0.5 + Z * 0.04
+    C = (E + Mo) * 0.5 + Z * 0.03
     M = Matrix((X, Y, Z)).transposed().to_4x4(); M.translation = C
     hs.matrix_world = M
-    wrist_t = C + Z * 0.035 - X * 0.02 - up * 0.07
+    wrist_t = C + Z * 0.03 - X * 0.03 - up * (0.07 if side == "L" else 0.1)
     reach(h, side, wrist_t, Vector((0, 0, -1.0)) + fwd * 0.55 + left * 0.35, X + Z * 0.3)
-    fingers_curl(h, 55, side=(side,), thumb=30)
+    fingers_curl(h, 82, side=(side,), thumb=45)            # a closed grip round the handset
     return E
 
 
@@ -418,15 +467,18 @@ def breathe(h, sec, amt=1.0):
     h.rot("neck01", side, amt * 0.8 * math.sin(sec * 1.6 + 0.6))
 
 
-def place_mother_phone(c, sec, yaw=0.0, talk=0.4, look=0.0):
+def place_mother_phone(c, sec, yaw=0.0, talk=0.4, look=0.0, hand="L"):
     m = need(c, "mother")
     stand(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12, 0.0), math.pi / 2 + yaw)       # faces the table (+X)
     breathe(m, sec)
     side = forward(m).cross(Vector((0, 0, 1))).normalized()
     m.rot("head", side, -8 - 2 * math.sin(sec * 0.5)); m.rot("head", (0, 0, 1), look)
-    phone_to_ear(c, m, sec)
-    # free hand rests on the table edge
-    reach(m, "R", Vector((PHONE_T.x - 0.24, PHONE_T.y - 0.33, 0.8)), Vector((0.2, -0.6, -1)), forward(m) + Vector((0, 0, -0.8)))
+    phone_to_ear(c, m, sec, side=hand)
+    # the free hand rests on the table edge
+    free = "R" if hand == "L" else "L"
+    reach(m, free, Vector((PHONE_T.x - 0.24, PHONE_T.y + (-0.33 if free == "R" else 0.05), 0.8)), Vector((0.2, -0.6 if free == "R" else 0.6, -1)),
+          forward(m) + Vector((0, 0, -0.8)))
+    fingers_curl(m, 20, side=(free,))
     return m
 
 
@@ -440,14 +492,15 @@ def place_officer(c, sec, press=0.0, write=0.0):
     o.rot("head", side, -14 - 3 * math.sin(sec * 0.4))
     rj.wear_headphones(o, c["hp"])
     # left hand on the headphone cup (press = pulls it tighter), right hand on his knee or on the notebook
-    hd = o.bone_head("head"); tl = o.bone_tail("head"); left = -side
-    cup = hd + (tl - hd) * 0.5 + left * 0.1
-    lt = cup + Vector((0, 0, -0.06)) + left * 0.03 - fwd * 0.01 + left * 0.02 * (1 - press)
+    left = -side
+    cup = c["hp"].matrix_world @ Vector((-0.12, 0, -0.105))         # outside of the left ear cup
+    lt = cup + left * 0.03 * (1 - press) + Vector((0, 0, -0.04))
     if press > 0.01:
-        reach(o, "L", lt, left * 0.5 + Vector((0, 0, -1)), Vector((0, 0, 1)) - left * 0.6)
+        reach(o, "L", lt, left * 0.5 + Vector((0, 0, -1)) - fwd * 0.3, Vector((0, 0, 1)) - left * 0.35)
+        rj.curl(o, 30, side=("L",))
     knee = o.bone_tail("upperleg02.R") + Vector((0, 0, 0.1))
     reach(o, "R", knee.lerp(Vector((PHONE_T.x - 0.06, PHONE_T.y + 0.42, 0.8)), write), side * 0.4 + Vector((0, 0, -1)), fwd + Vector((0, 0, -0.8)))
-    fingers_curl(o, 30)
+    rj.curl(o, 35)
     return o
 
 
@@ -473,7 +526,7 @@ def anim_co(c, t, shot, dur):
     sec = t * dur
     _reels(c, sec); _clock(c, sec)
     if shot in ("co_push", "co_profile", "co_officer", "co_meter", "co_tape", "co_top"):
-        place_mother_phone(c, sec, talk=0.6)
+        place_mother_phone(c, sec, talk=0.6, hand="R" if shot == "co_officer" else "L")
         place_officer(c, sec, press=ease(min(1, max(0, (sec - 0.6) / 1.5))) if shot == "co_officer" else 0.0)
 
 
@@ -584,13 +637,20 @@ def cam_p_title(c, t):
 
 def cam_p_page(c, t):
     e = ease(t)
-    a = Vector((-5.65, 0.6, 1.45)); b = Vector((-5.45, 0.95, 1.42))          # from the left, wider
-    return (a.lerp(b, e), PIANO + Vector((0.05, -0.55, 0.95)), 30)
+    a = Vector((-4.75, 0.45, 1.8)); b = Vector((-4.6, 0.75, 1.72))           # high behind her left shoulder: back of her head only
+    return (a.lerp(b, e), PIANO + Vector((0.0, -0.3, 1.0)), 32)
+
+
+def _anim_and_cord(anim_fn, shot, dur):
+    def f(c, t):
+        anim_fn(c, t, shot, dur)
+        rj.phone_cord(c["phone"], c["handset"])
+    return f
 
 
 def _mk(shot, dur, cam, anim_fn, focus=None, dof=None):
     DUR[shot] = dur
-    spec = dict(kind="anim", cam=cam, anim=lambda c, t: anim_fn(c, t, shot, dur))
+    spec = dict(kind="anim", cam=cam, anim=_anim_and_cord(anim_fn, shot, dur))
     if focus:
         spec["focus"] = focus; spec["dof"] = dof or 2.8
     return spec
@@ -625,25 +685,117 @@ def cam_debug_liv(c, t):
 
 
 # ============================================================================ Chapter One / Two house shots
+def _vinyl(name, col):
+    """Grained vinyl / leatherette: a fine noise bump and a soft clearcoat."""
+    m = pbr(name, col, 0.45, 0.0, **{'Coat Weight': 0.3, 'Coat Roughness': 0.3})
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); n = N.new("ShaderNodeTexNoise"); n.inputs['Scale'].default_value = 260; n.inputs['Detail'].default_value = 3
+    L.new(tc.outputs['Object'], n.inputs['Vector'])
+    bm = N.new("ShaderNodeBump"); bm.inputs['Strength'].default_value = 0.25; bm.inputs['Distance'].default_value = 0.0006
+    L.new(n.outputs['Fac'], bm.inputs['Height']); L.new(bm.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def _lining(name):
+    """Patterned 70s lining: a woven ochre ground with a soft repeating figure (no text)."""
+    m = rj.fabric(name, (0.30, 0.20, 0.10), 0.9, 0.3)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord"); w = N.new("ShaderNodeTexWave"); w.wave_type = 'RINGS'; w.inputs['Scale'].default_value = 140
+    w.inputs['Distortion'].default_value = 4
+    L.new(tc.outputs['Object'], w.inputs['Vector'])
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 0.18
+    mx.inputs[6].default_value = (0.30, 0.20, 0.10, 1); L.new(w.outputs['Color'], mx.inputs[7])
+    L.new(mx.outputs[2], p.inputs['Base Color'])
+    return m
+
+
 def suitcase():
-    """An open 1970s hard suitcase (brown vinyl, chrome latches): body + lid on a hinge empty. Local: hinge along +Y edge."""
-    vin = pbr("SuitVinyl", (0.12, 0.07, 0.04), 0.45, 0.0, **{'Coat Weight': 0.3}); lin = rj.fabric("SuitLining", (0.25, 0.18, 0.12), 0.9, 0.3)
-    W_, D_, H_ = 0.62, 0.42, 0.16
-    body = join([box("SBody", (0, 0, H_ / 2), (W_, D_, H_), vin, bevel=0.012), box("SLining", (0, 0, H_ - 0.004), (W_ - 0.03, D_ - 0.03, 0.006), lin)], "Suitcase")
+    """An open 1970s suitcase: brown grained vinyl over a frame, piped edges, metal corner caps, two hinges on the
+    back, chrome latches and a handle on brackets; a patterned lining, a pocket and two cross straps inside.
+    The lid is on a hinge empty (rotate hinge.rotation_euler.x to open). Hinge along the +Y edge."""
+    vin = _vinyl("SuitVinyl", (0.085, 0.048, 0.028))
+    pip = pbr("SuitPiping", (0.035, 0.02, 0.012), 0.5)
+    lin = _lining("SuitLining")
+    trim = mat("chrome")
+    strap = pbr("SuitStrap", (0.18, 0.12, 0.07), 0.7)
+    W_, D_, H_, t = 0.66, 0.44, 0.15, 0.012
+    parts = [box("SBottom", (0, 0, t / 2), (W_, D_, t), vin, bevel=0.012),
+             box("SFront", (0, -D_ / 2 + t / 2, H_ / 2), (W_, t, H_), vin, bevel=0.012), box("SBack", (0, D_ / 2 - t / 2, H_ / 2), (W_, t, H_), vin, bevel=0.012),
+             box("SLeft", (-W_ / 2 + t / 2, 0, H_ / 2), (t, D_, H_), vin, bevel=0.012), box("SRight", (W_ / 2 - t / 2, 0, H_ / 2), (t, D_, H_), vin, bevel=0.012),
+             box("SLiningB", (0, 0, t + 0.002), (W_ - 2 * t, D_ - 2 * t, 0.004), lin),
+             box("SLiningF", (0, -D_ / 2 + t + 0.002, H_ / 2), (W_ - 2 * t, 0.004, H_ - 0.02), lin), box("SLiningK", (0, D_ / 2 - t - 0.002, H_ / 2), (W_ - 2 * t, 0.004, H_ - 0.02), lin),
+             box("SLiningL", (-W_ / 2 + t + 0.002, 0, H_ / 2), (0.004, D_ - 2 * t, H_ - 0.02), lin), box("SLiningR", (W_ / 2 - t - 0.002, 0, H_ / 2), (0.004, D_ - 2 * t, H_ - 0.02), lin)]
+    for y in (-D_ / 2, D_ / 2):                                   # piping round the rim and the base
+        for z in (H_ - 0.003, 0.004):
+            parts.append(cyl("Pipe", (0, y, z), 0.0055, W_, pip, verts=10, rot=(0, math.radians(90), 0)))
+    for x in (-W_ / 2, W_ / 2):
+        for z in (H_ - 0.003, 0.004):
+            parts.append(cyl("Pipe", (x, 0, z), 0.0055, D_, pip, verts=10, rot=(math.radians(90), 0, 0)))
+    for sx in (-1, 1):                                            # metal corner caps on the base
+        for sy in (-1, 1):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.022, location=(sx * (W_ / 2 - 0.008), sy * (D_ / 2 - 0.008), 0.012))
+            cc = bpy.context.active_object; cc.scale = (1, 1, 0.75); cc.data.materials.append(trim); parts.append(cc)
+    for x in (-0.12, 0.12):                                       # cross straps inside, with buckles
+        parts.append(box("SStrap", (x, 0, t + 0.006), (0.025, D_ - 2 * t, 0.003), strap))
+        parts.append(box("SBuckle", (x, -0.05, t + 0.009), (0.035, 0.03, 0.004), trim))
+    body = join(parts, "Suitcase")
     hinge = bpy.data.objects.new("SuitHinge", None); bpy.context.collection.objects.link(hinge); hinge.parent = body; hinge.location = (0, D_ / 2, H_)
-    lid = join([box("SLid", (0, -D_ / 2, 0.045), (W_, D_, 0.09), vin, bevel=0.012), box("SLidLin", (0, -D_ / 2, 0.002), (W_ - 0.03, D_ - 0.03, 0.004), lin)], "SuitLid")
-    lid.parent = hinge
-    for x in (-0.18, 0.18):
-        box("Latch", (x, -D_ / 2 - 0.004, H_ - 0.01), (0.05, 0.012, 0.035), mat("chrome")).parent = body
-    box("SHandle", (0, -D_ / 2 - 0.02, H_ - 0.02), (0.14, 0.02, 0.025), pbr("HandleBlk", (0.03, 0.02, 0.015), 0.4), bevel=0.008).parent = body
+    lparts = [box("SLidTop", (0, -D_ / 2, 0.07), (W_, D_, t), vin, bevel=0.012),
+              box("SLidF", (0, -D_ + t / 2, 0.035), (W_, t, 0.07), vin, bevel=0.012), box("SLidB", (0, -t / 2, 0.035), (W_, t, 0.07), vin, bevel=0.012),
+              box("SLidL", (-W_ / 2 + t / 2, -D_ / 2, 0.035), (t, D_, 0.07), vin, bevel=0.012), box("SLidR", (W_ / 2 - t / 2, -D_ / 2, 0.035), (t, D_, 0.07), vin, bevel=0.012),
+              box("SLidLin", (0, -D_ / 2, 0.062), (W_ - 2 * t, D_ - 2 * t, 0.004), lin),
+              box("SLidPocket", (0, -D_ / 2 - 0.06, 0.057), (W_ - 0.08, D_ * 0.55, 0.006), lin, bevel=0.002),
+              box("SPocketEdge", (0, -D_ / 2 - 0.06 + D_ * 0.275, 0.055), (W_ - 0.08, 0.012, 0.008), strap)]
+    for sx in (-1, 1):
+        for sy in (0, -1):
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=8, radius=0.022, location=(sx * (W_ / 2 - 0.008), sy * D_ + (0.008 if sy else -0.008), 0.068))
+            cc = bpy.context.active_object; cc.scale = (1, 1, 0.75); cc.data.materials.append(trim); lparts.append(cc)
+    lid = join(lparts, "SuitLid"); lid.parent = hinge
+    for x in (-0.2, 0.2):                                         # latches: base plate + clasp
+        box("LatchPlate", (x, -D_ / 2 - 0.004, H_ - 0.012), (0.06, 0.006, 0.045), trim, bevel=0.003).parent = body
+        box("Latch", (x, -D_ / 2 - 0.01, H_ - 0.004), (0.035, 0.008, 0.03), trim, bevel=0.004).parent = body
+    for x in (-0.22, 0.22):                                       # hinges on the back
+        box("SHingeP", (x, D_ / 2 + 0.004, H_), (0.07, 0.008, 0.03), trim, bevel=0.002).parent = body
+    hb = pbr("HandleBlk", (0.035, 0.022, 0.014), 0.4, 0.0, **{'Coat Weight': 0.3})
+    for x in (-0.075, 0.075):
+        box("SHandleBr", (x, -D_ / 2 - 0.012, H_ - 0.03), (0.022, 0.022, 0.03), trim, bevel=0.003).parent = body
+    box("SHandle", (0, -D_ / 2 - 0.03, H_ - 0.03), (0.15, 0.025, 0.028), hb, bevel=0.011).parent = body
     return dict(root=body, hinge=hinge, W=W_, D=D_, H=H_)
 
 
+_NOTE_MATS = {}
+
+
+def _note_paper():
+    """Used banknote paper seen as a stack: a blue-grey tone with fibre noise and fine sheet lines along the edges
+    (nothing printed, nothing readable)."""
+    if "p" in _NOTE_MATS:
+        return _NOTE_MATS["p"], _NOTE_MATS["b"]
+    m = pbr("NotePaper", (0.20, 0.24, 0.30), 0.85)
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    wv = N.new("ShaderNodeTexWave"); wv.bands_direction = 'Z'; wv.inputs['Scale'].default_value = 90; wv.inputs['Distortion'].default_value = 1.5
+    L.new(tc.outputs['Object'], wv.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 120; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    m1 = N.new("ShaderNodeMix"); m1.data_type = 'RGBA'; m1.blend_type = 'MULTIPLY'; m1.inputs['Factor'].default_value = 0.35
+    m1.inputs[6].default_value = (0.20, 0.24, 0.30, 1); L.new(wv.outputs['Color'], m1.inputs[7])
+    m2 = N.new("ShaderNodeMix"); m2.data_type = 'RGBA'; m2.blend_type = 'OVERLAY'; m2.inputs['Factor'].default_value = 0.25
+    L.new(m1.outputs[2], m2.inputs[6]); L.new(nz.outputs['Color'], m2.inputs[7]); L.new(m2.outputs[2], p.inputs['Base Color'])
+    band = pbr("NoteBand", (0.55, 0.46, 0.32), 0.8)                # brown paper band
+    _NOTE_MATS["p"] = m; _NOTE_MATS["b"] = band
+    return m, band
+
+
 def note_bundle(name):
-    """A bundle of used, plain banknotes (no design, nothing readable): a slightly worn stack with a paper band."""
-    m = pbr("NotePaper", (0.42, 0.36, 0.30), 0.85)
-    band = pbr("NoteBand", (0.75, 0.72, 0.62), 0.8)
-    return join([box(name, (0, 0, 0.018), (0.16, 0.085, 0.036), m, bevel=0.002), box(name + "B", (0, 0, 0.018), (0.03, 0.087, 0.038), band)], name)
+    """A bundle of used plain banknotes: a slightly uneven stack (sheet lines on the edges) with a paper band."""
+    m, band = _note_paper()
+    import random
+    rnd = random.Random(sum(map(ord, name)) * 7919)
+    parts = [box(name, (0, 0, 0.018), (0.16, 0.085, 0.036), m, bevel=0.0015),
+             box(name + "T", (rnd.uniform(-0.002, 0.002), rnd.uniform(-0.002, 0.002), 0.0365), (0.158, 0.084, 0.002), m, bevel=0.0008, rot=(0, 0, rnd.uniform(-0.03, 0.03))),
+             box(name + "B", (0, 0, 0.0185), (0.032, 0.087, 0.0385), band)]
+    o = join(parts, name); o.rotation_euler.z = rnd.uniform(-0.04, 0.04)
+    return o
 
 
 def kitchen_extras(c):
@@ -667,11 +819,11 @@ def kitchen_extras(c):
         for k in range(14):
             b = note_bundle(f"Bundle{k}")
             r, q = divmod(k, 3)
-            b.location = (KTABLE.x - 0.05 - 0.17 + q * 0.17, KTABLE.y + 0.05 - 0.13 + (r % 3) * 0.09, top + 0.025 + (r // 3) * 0.037)
+            b.location = (KTABLE.x - 0.05 - 0.17 + q * 0.17, KTABLE.y + 0.05 - 0.14 + (r % 3) * 0.09, top + 0.015 + (r // 3) * 0.037)
             c["bundles"].append(b)
         c["stack"] = [note_bundle(f"Stack{k}") for k in range(6)]
         for k, b in enumerate(c["stack"]):
-            b.location = (KTABLE.x + 0.55, KTABLE.y - 0.15 + 0.0, top + k * 0.037)
+            b.location = (KTABLE.x + 0.55, KTABLE.y - 0.15 + 0.0, top + (5 - k) * 0.037)
 
 
 def stand_at(h, pos, face_z):
@@ -684,14 +836,16 @@ def anim_dial(c, t, shot, dur):
     _clock(c, sec)
     m = c["P"]["mother"]
     if shot == "dial":
-        stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2)
+        stand_at(m, (PHONE_T.x - 0.46, PHONE_T.y - 0.12), math.pi / 2)
+        rj.rjp.bend_to(m, c["dial"].matrix_world.translation, frac=0.7, max_deg=14)
         breathe(m, sec)
         side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -16)
         phone_to_ear(c, m, sec)
         d = c["dial"].matrix_world
         k = (sec * 0.8) % 1.0
         c["dial"].rotation_euler.z = math.radians(-120 * math.sin(math.pi * k))
-        reach(m, "R", d @ Vector((0.03, 0.0, 0.05)), Vector((0, -0.4, -1)), forward(m) + Vector((0, 0, -1)))
+        reach(m, "R", d @ Vector((0.03, 0.0, 0.06)), Vector((0, -0.6, -1)) - forward(m) * 0.3, forward(m) + Vector((0, 0, -1.2)))
+        fingers_curl(m, 35, side=("R",), thumb=20)
     else:
         put = ease(min(1.0, sec / 1.2))
         stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2 + math.radians(28) * ease(max(0.0, (sec - 1.4) / 1.2)))
@@ -707,8 +861,8 @@ def anim_dial(c, t, shot, dur):
 
 def cam_dial(c, t):
     e = ease(t)
-    a = Vector((0.75, -3.0, 1.45)); b = Vector((0.7, -2.75, 1.42))
-    return (a.lerp(b, e), Vector((0.25, -1.4, 1.25)), 45)
+    a = Vector((0.8, -3.25, 1.3)); b = Vector((0.75, -3.0, 1.28))
+    return (a.lerp(b, e), Vector((0.45, -1.45, 1.05)), 36)
 
 
 def cam_hangup(c, t):
@@ -721,8 +875,8 @@ def cam_hangup(c, t):
 def anim_empty_piano(c, t, shot, dur):
     sec = t * dur
     for k, tr in enumerate(c.get("out_torches", [])):
-        tr.location = (-12.5 + 3 * math.sin(sec * 0.3 + k), 2.0 + k * 3.0 - 0.6 * sec, 1.1 + 0.05 * math.sin(sec * 4 + k))
-        aim = Vector((math.sin(sec * 0.9 + k * 2), -0.5, -0.35)).normalized()
+        tr.location = (-7.7 - 0.8 * k + 0.3 * math.sin(sec * 0.3 + k), 0.5 + k * 1.1 - 0.35 * sec, 1.1 + 0.05 * math.sin(sec * 4 + k))
+        aim = Vector((0.8 + 0.4 * math.sin(sec * 0.9 + k * 2), 0.35 * math.cos(sec * 0.7 + k), -0.3)).normalized()
         tr.rotation_euler = aim.to_track_quat('-Y', 'Z').to_euler()
     rj.sway(c["trees"], sec, 0.01, 0.25)
 
@@ -790,11 +944,11 @@ def anim_ring(c, t, shot, dur):
         lower = ease(max(0.0, (sec - dur * 0.6) / (dur * 0.35)))
         stand_at(m, (PHONE_T.x - 0.55, PHONE_T.y - 0.12), math.pi / 2)
         breathe(m, sec)
-        ear = phone_to_ear(c, m, sec)
+        ear = phone_to_ear(c, m, sec, side="R")                 # the receiver in the far hand (camera on her left)
         if lower > 0:
             hs = c["handset"]; M = hs.matrix_world.copy()
-            M.translation = M.translation + Vector((0.12, 0.05, -0.35)) * lower; hs.matrix_world = M
-            reach(m, "L", M.translation + Vector((0, 0, -0.06)), Vector((0, -0.4, -1)), forward(m))
+            M.translation = M.translation + Vector((0.12, -0.05, -0.35)) * lower; hs.matrix_world = M
+            reach(m, "R", M.translation + Vector((0, 0, -0.06)), Vector((0, -0.4, -1)), forward(m))
         side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -6 - 12 * lower)
 
 
@@ -823,6 +977,12 @@ def anim_letter(c, t, shot, dur):
         d = P_["detective"]; stand_at(d, (KTABLE.x + 0.72, KTABLE.y - 0.45), math.radians(125))
         side = forward(d).cross(Vector((0, 0, 1))).normalized(); d.rot("spine03", side, -10); d.rot("head", side, -26)
         breathe(d, sec + 1)
+        # hands clasped behind his back (no free hand hanging in frame)
+        back = -forward(d); hip = d.bone_head("spine01") + back * 0.16 + Vector((0, 0, 0.02))
+        for sd in ("L", "R"):
+            s_ = SIDE[sd]
+            reach(d, sd, hip + side * (-0.035 * s_), Vector((0, 0, -1)) + back * 0.5, side * (-s_) + Vector((0, 0, -0.4)))
+        rj.curl(d, 30)
 
 
 def cam_letter(c, t):
@@ -834,8 +994,8 @@ def cam_letter(c, t):
 
 def cam_read(c, t):
     e = ease(t)
-    a = Vector((KTABLE.x - 1.5, KTABLE.y + 0.9, 0.95)); b = Vector((KTABLE.x - 1.35, KTABLE.y + 0.7, 0.95))
-    return (a.lerp(b, e), Vector((KTABLE.x + 0.2, KTABLE.y - 0.5, 1.2)), 32)
+    a = Vector((KTABLE.x - 0.25, KTABLE.y + 1.3, 1.02)); b = Vector((KTABLE.x - 0.15, KTABLE.y + 1.15, 1.0))
+    return (a.lerp(b, e), Vector((KTABLE.x + 0.25, KTABLE.y - 0.7, 1.2)), 22)
 
 
 # --- 18A/B: the police arrive: a technician threads the recorder ; the officer pulls on his headphones
@@ -863,12 +1023,13 @@ def anim_police_day(c, t, shot, dur):
         for sd, sg in SIDE.items():
             cup = hp.matrix_world @ Vector((0.088 if sd == "R" else -0.088, 0, -0.105))
             reach(o, sd, cup + Vector((0, 0, -0.04)), Vector((0, 0, -1)) + side * (0.7 if sd == "R" else -0.7), Vector((0, 0, 1)))
+        rj.curl(o, 45, thumb=20)                                     # fingers round the cups, not splayed
 
 
 def cam_thread(c, t):
     e = ease(t)
-    a = Vector((-0.75, -2.35, 1.6)); b = Vector((-0.65, -2.1, 1.55))
-    return (a.lerp(b, e), PHONE_T + Vector((-0.1, 0.1, 0.95)), 38)
+    a = Vector((-0.85, -2.95, 1.6)); b = Vector((-0.8, -2.7, 1.58))
+    return (a.lerp(b, e), PHONE_T + Vector((-0.35, 0.2, 1.15)), 30)
 
 
 def cam_door(c, t):
@@ -883,21 +1044,21 @@ def anim_call(c, t, shot, dur):
     _reels(c, sec, on=shot not in ("silent", "stairs"))
     _clock(c, sec)
     if shot in ("call_left", "toys", "co2_back", "co2_toy"):
-        place_mother_phone(c, sec, talk=0.6)
+        place_mother_phone(c, sec, talk=0.6, hand="R" if shot == "co2_back" else "L")
         if "officer" in c["P"]:
             place_officer(c, sec)
     if shot == "stairs":
         m = c["P"]["mother"]
-        rj.sit_on(m, (0.6, 0.25 + c["stair_run"] * 1.5), math.pi * 0.0 + math.radians(170), c["stair_rise"] * 2 + 0.0, lean=18, feet=0.32)
+        rj.sit_on(m, (0.6, 0.25 + c["stair_run"] * 1.5), math.radians(-12), c["stair_rise"] * 2 + 0.0, lean=18, feet=0.42)
         breathe(m, sec)
-        side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -18); m.rot("head", (0, 0, 1), -25)
+        side = forward(m).cross(Vector((0, 0, 1))).normalized(); m.rot("head", side, -14); m.rot("head", (0, 0, 1), 22)    # looks toward the phone
         handset_rest(c)
 
 
 def cam_call_left(c, t):
     e = ease(t)
-    a = Vector((-0.55, 0.15, 1.45)); b = Vector((-0.45, -0.1, 1.45))
-    return (a.lerp(b, e), Vector((0.3, -1.5, 1.32)), 40)
+    a = Vector((0.05, 0.35, 1.5)); b = Vector((0.15, 0.15, 1.48))          # from her left side: handset along the cheek, ear to jaw
+    return (a.lerp(b, e), Vector((0.27, -1.5, 1.4)), 45)
 
 
 def cam_toys(c, t):
@@ -937,16 +1098,21 @@ def anim_suit(c, t, shot, dur):
     if shot == "suitcase":
         sc["hinge"].rotation_euler.x = math.radians(100)
         o = c["P"]["detective"]; stand_at(o, (KTABLE.x + 0.75, KTABLE.y - 0.35), math.radians(125))
-        k = (sec / 1.6) % 1.0; n = int(sec / 1.6)
-        b = c["stack"][min(n, len(c["stack"]) - 1)]
-        src = Vector((KTABLE.x + 0.55, KTABLE.y - 0.15, top + 0.2)); dst = Vector((KTABLE.x + 0.1 - 0.12 * (n % 2), KTABLE.y + 0.05, top + 0.12))
+        k = (sec / 1.6) % 1.0; n = min(int(sec / 1.6), len(c["stack"]) - 1)
+        b = c["stack"][n]
+        src = Vector((KTABLE.x + 0.55, KTABLE.y - 0.15, top + (5 - n) * 0.037))
+        slot = lambda j: Vector((KTABLE.x - 0.05 - 0.17 + (j % 3) * 0.17, KTABLE.y + 0.05 - 0.04 + 0.09 * (j // 3), top + 0.085))
+        dst = slot(n)
         for j, bb in enumerate(c["stack"]):
             if j < n:
-                bb.location = (KTABLE.x + 0.1 - 0.12 * (j % 2), KTABLE.y + 0.05 - 0.1 + 0.09 * (j // 2 % 3), top + 0.13)
-        b.location = src.lerp(dst, ease(k)) + Vector((0, 0, 0.1 * math.sin(math.pi * k)))
-        rj.rjp.bend_to(o, b.location, frac=0.8, max_deg=20)
+                bb.location = slot(j)
+            elif j > n:
+                bb.location = (KTABLE.x + 0.55, KTABLE.y - 0.15, top + (5 - j) * 0.037)
+        path_pt = src.lerp(dst, ease(k)) + Vector((0, 0, 0.12 * math.sin(math.pi * k)))
+        rj.rjp.bend_to(o, path_pt, frac=0.8, max_deg=20)
         fwd = forward(o); right = fwd.cross(Vector((0, 0, 1))).normalized()
-        reach(o, "R", b.location + Vector((0, 0, 0.04)), Vector((0, 0, -1)) + right * 0.6, fwd + Vector((0, 0, -1)))
+        reach(o, "R", path_pt + Vector((0, 0, 0.05)), Vector((0, 0, -1)) + right * 0.6, fwd + Vector((0, 0, -1)))
+        b.location = o.bone_tail("wrist.R") + Vector((0, 0, -0.05))         # the bundle rides in his hand
         side = right; o.rot("head", side, -22)
         if "father" in c["P"]:
             f = c["P"]["father"]; stand_at(f, (KTABLE.x - 0.45, KTABLE.y - 0.85), math.pi + 0.2)
@@ -966,8 +1132,13 @@ def anim_suit(c, t, shot, dur):
             reach(f, "L", lidp - right * 0.15 + Vector((0, 0, 0.03)), Vector((0, 0, -1)) - right * 0.5, fwd)
         else:
             reach(f, "R", latch(0.18) + Vector((0, -0.03, 0.02)), Vector((0, 0, -1)) + right * 0.5, fwd + Vector((0, 0, -1)))
-            reach(f, "L", latch(-0.18) + Vector((0, -0.03, 0.02)), Vector((0, 0, -1)) - right * 0.5, fwd + Vector((0, 0, -1)))
+            reach(f, "L", latch(-0.18) + Vector((0, 0.06, 0.05)), Vector((0, 0, -1)) - right * 0.5, fwd)
         f.rot("head", right, -20)
+    for m in bpy.data.materials:                     # backlit thin fingers glowed red through the subsurface: tighten it here
+        if m.use_nodes and "Principled BSDF" in m.node_tree.nodes:
+            pp = m.node_tree.nodes["Principled BSDF"]
+            if pp.inputs['Subsurface Weight'].default_value > 0.05 and pp.inputs['Subsurface Scale'].default_value > 0.005:
+                pp.inputs['Subsurface Scale'].default_value = 0.004
 
 
 def cam_suitcase(c, t):
@@ -978,8 +1149,8 @@ def cam_suitcase(c, t):
 
 def cam_latch(c, t):
     e = ease(t)
-    a = Vector((KTABLE.x + 1.45, KTABLE.y - 0.2, 1.15)); b = Vector((KTABLE.x + 1.25, KTABLE.y - 0.3, 1.1))
-    return (a.lerp(b, e), Vector((KTABLE.x - 0.05, KTABLE.y - 0.1, c["ktable_top"] + 0.15)), 40)
+    a = Vector((KTABLE.x + 2.3, KTABLE.y + 0.4, 1.35)); b = Vector((KTABLE.x + 2.1, KTABLE.y + 0.2, 1.3))
+    return (a.lerp(b, e), Vector((KTABLE.x - 0.1, KTABLE.y - 0.3, 0.95)), 32)
 
 
 MOVES = {
