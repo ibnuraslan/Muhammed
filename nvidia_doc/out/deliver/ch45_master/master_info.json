@@ -1,0 +1,20 @@
+{
+ "file": "/home/user/Muhammed/nvidia_doc/out/blend/ch45/nvidia_ch45.blend",
+ "mb": 280.2,
+ "frames": 10155,
+ "shots": 46,
+ "ch_start": {
+  "4": 1,
+  "5": 4103
+ },
+ "images": 101,
+ "meshes": 2264,
+ "materials": 499,
+ "shared": {
+  "images": 477,
+  "materials": 1635,
+  "meshes": 5800
+ },
+ "scaled": 6,
+ "libraries": 0
+}

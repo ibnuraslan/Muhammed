@@ -1,0 +1,31 @@
+{
+ "c4_03_corp_lobby_busy": {
+  "frame": 587,
+  "seconds": 80.4
+ },
+ "c5_06_invest_filing_officer": {
+  "frame": 5334,
+  "seconds": 101.5
+ },
+ "c4_19_city_singapore_dusk": {
+  "frame": 3936,
+  "seconds": 52.5
+ },
+ "c5_20_port_xray_gate": {
+  "frame": 8488,
+  "seconds": 87.7
+ },
+ "c5_10_shanghai_beijing_drift": {
+  "frame": 6261,
+  "seconds": 161.2
+ },
+ "f:66": {
+  "frame": 66,
+  "seconds": 73.0
+ },
+ "f:4168": {
+  "frame": 4168,
+  "seconds": 82.4
+ },
+ "peak_rss_gb": 6.09
+}
