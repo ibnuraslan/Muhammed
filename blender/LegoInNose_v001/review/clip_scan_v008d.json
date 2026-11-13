@@ -1,0 +1,48 @@
+{
+ "frames": {
+  "991": {
+   "Mom": {
+    "self": 41,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "997": {
+   "Mom": {
+    "self": 166,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1003": {
+   "Mom": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Mom": {
+    "self": 8,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1063": {
+   "Mom": {
+    "self": 16,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [
+  [
+   991,
+   997
+  ]
+ ],
+ "fps": 60
+}

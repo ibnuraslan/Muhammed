@@ -129,3 +129,25 @@ Package: `../../LegoInNose_v008c/LegoInNose_v008c_60fps.blend`. It's v008b plus 
 - **qa_check e7b25f7:** `{'EMPTY': 138, 'FILL': 9, 'INSIDE': 1, 'PROPMOVE': 114}`. ATTACH, CAMJUMP, ROLL, CLAW, HOVER and FACEPRESS are 0. PROPMOVE is the intended list from section 5, and the tweezer-tip range now starts at 1057.
 - **clip_scan 3cfc53c:** `[[991, 997]]`. That's 16.5–16.6 s, inside the accepted window, and 0.1 s long.
 - **Open:** INSIDE f727, the nostril opening.
+
+## 7. v008d: held props on the fingertips
+The director's measurement is the prop's bounding box to the nearest evaluated fingertip (finger1-3 … finger5-3 tail), taken on **every frame** while the prop is held and visible. In v008c, `prop_snap.py` measured to finger joints instead, so it passed while the red brick floated 3.6 cm off the fingers. `tip_fix.py` fixes this. The measurement below is an independent re-run on the packed v008d:
+
+| Prop | Held | v008c max | **v008d max** |
+|---|---|---|---|
+| Brick_Big (boy's pinch; into the nostril 132–150) | 1–150 | 3.6 cm (34 frames over 1 cm) | **0.0 cm** |
+| Brick_Small (boy's pinch; into the nostril 714–736) | 336–736 | 3.8 cm | **0.0 cm** |
+| Brick_Small (man's left palm, shower) | 2152–2310 | 4.7 cm | **0.8 cm** |
+| Prop_Phone (man's right hand) | 1440–1469, visible 1441–1461 | 5.4 cm | **0.8 cm** |
+| Prop_Inhaler (man's right hand) | 1606–1720 | 1.1 cm (1 frame) | **0.8 cm** |
+| Prop_Tweezers (Mom's pinch) | 960–1145 | 0.0 cm | 0.0 cm |
+| Prop_Tissue (man's right hand) | 1515–1582 | 0.0 cm | 0.0 cm |
+| Prop_Gamepad (teen's right hand) | 1395–1439 | 0.0 cm | 0.0 cm |
+
+The phone is on screen only at 1440–1469 in this film. There is no phone at 1270–1290 in v008c/v008d frame numbers.
+
+- **Checks:**
+  - qa_check e7b25f7: `{'EMPTY': 138, 'FILL': 9, 'INSIDE': 1, 'PROPMOVE': 111}`. The 3 removed PROPMOVE flags were held-brick frames. ATTACH, CAMJUMP, ROLL, CLAW, HOVER and FACEPRESS are 0.
+  - clip_scan 3cfc53c: `[[991, 997]]`, inside the accepted window.
+- **Strip:** `v008d_brick_strip_540.jpg`, at 540×960, every 4 frames from 100 to 160. Up to f128 the brick is in the fingers. From f132 to f156 the fingers push it into the nostril. At f160 the porthole shows it inside.
+- **Not done:** the hand itself isn't re-rotated to aim the pinch at the nose. The pinch reaches the nostril because the IK target moves, not because the wrist re-orients.
