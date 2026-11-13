@@ -69,3 +69,6 @@ CONCEPTS = {
                   cam=((0.3, -0.6, 1.1), (0.0, 3.6, 0.72), 70), shift=(-0.1, 0.0),
                   focus=(0, 3.55, 0.75), fstop=2.0, setup=chair_setup),
 }
+
+CONCEPTS["targeted"] = dict(scene="thumb_targeted", exposure=0.0,
+                            cam=((0, -2.7, 1.42), (0, 1.0, 1.42), 36), focus=(0, 0.45, 1.2), fstop=4.0)

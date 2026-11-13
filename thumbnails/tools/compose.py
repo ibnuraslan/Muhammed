@@ -10,6 +10,8 @@ FONT = {"anton": "Anton-Regular.ttf", "bebas": "BebasNeue-Regular.ttf", "oswald"
 W, H = 1920, 1080
 RED = (214, 28, 32)
 WHITE = (244, 242, 238)
+LIME = (224, 248, 0)        # Seldom brand lime #E0F800
+OUTLINE = (24, 24, 0)      # logo outline #181800
 
 
 def grade(img, vignette=0.35, contrast=1.04, grain=0.012, lift=0.0, seed=1):
@@ -33,7 +35,7 @@ def load_plate(path):
 
 
 def draw_text(img, lines, x, y, size, font="anton", color=WHITE, accent=None, anchor="la", spacing=0.92,
-              shadow=0.55, tracking=0):
+              shadow=0.55, tracking=0, stroke=0, stroke_fill=(24, 24, 0)):
     """lines: list of strings, or of [(text, color), ...] runs. Clean edge, soft dark shadow (no glow)."""
     f = ImageFont.truetype(os.path.join(FONTS, FONT[font]), size)
     layer = Image.new("RGBA", img.size, (0, 0, 0, 0))
@@ -46,7 +48,7 @@ def draw_text(img, lines, x, y, size, font="anton", color=WHITE, accent=None, an
         cx = x - total if anchor[0] == "r" else x - total / 2 if anchor[0] == "m" else x
         for t, c in runs:
             for ch in t:
-                d.text((cx, cy), ch, font=f, fill=c)
+                d.text((cx, cy), ch, font=f, fill=c, stroke_width=stroke, stroke_fill=stroke_fill)
                 ds.text((cx + size * 0.02, cy + size * 0.035), ch, font=f, fill=255)
                 cx += d.textlength(ch, font=f) + tracking
         cy += size * spacing
