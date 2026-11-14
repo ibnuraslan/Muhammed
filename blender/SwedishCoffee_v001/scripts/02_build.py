@@ -287,7 +287,7 @@ setmat(stm, steam_mat("m_steamK", 1.2))
 sk = inst(A_["skull"], c, (-1.0, 5.0, 1.16), rz=180, name="SteamSkull"); sk.scale = (0.9, 0.9, 0.9)
 skm = steam_mat("m_skull", 0.0, (0.95, 0.95, 0.97)); setmat(sk, skm)
 dn = skm.node_tree.nodes["Dens"]
-for f, v in ((505, 0.0), (515, 24.0), (530, 24.0), (542, 0.0)):
+for f, v in ((508, 0.0), (516, 20.0), (524, 20.0), (532, 0.0)):
     dn.outputs[0].default_value = v; dn.outputs[0].keyframe_insert("default_value", frame=f)
 for f, z in ((470, 1.08), (588, 1.26)):
     sk.location.z = z; sk.keyframe_insert("location", index=2, frame=f)
@@ -720,10 +720,12 @@ for f, ph in ((1872, 0), (1900, 0), (1909, 1), (1916, 2), (1928, 3), (1940, 4), 
         K.stand(f, crouch=0.15, flex=14, side=4, lean=6, head=(12, 0)); K.face(f, brow=2.5, lids=0.3, jaw=16)
         K.hand(f, "R", (-0.06, -0.24, 1.22), d=(0.6, 0.1, 0.4), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.16, 0.8), d=(0.1, -0.2, -1), g=0.4)
     elif ph == 3:   # on both knees, hand still on the chest, other hand on the thigh
-        K.stand(f, crouch=0.5, flex=18, side=4, lean=6, head=(18, 0)); K.face(f, brow=2.2, lids=0.5, jaw=12)
+        K.stand(f, rootz=0.55, flex=18, side=4, lean=6, head=(18, 0), feet=False); K.face(f, brow=2.2, lids=0.5, jaw=12)
+        for s_, sx_ in (("L", 1), ("R", -1)): K.H.key_foot(s_, f, K.W((0.13 * sx_, 0.42, 0)).to_2d(), K.yaw, lift=0.02, pitch=-75)   # kneeling: shins on the floor, toes behind
         K.hand(f, "R", (-0.06, -0.24, 0.98), d=(0.6, 0.1, 0.4), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.2, -0.3, 0.5), d=(0, -1, -0.3), n=(0, 0, -1), g=0.4)
     else:           # slumped forward on his knees, left hand on the floor beside the knee, head down
-        K.stand(f, crouch=0.58, flex=38, side=12, lean=14, head=(30, 10)); K.face(f, brow=1.0, lids=0.9, jaw=6)
+        K.stand(f, rootz=0.45, flex=38, side=12, lean=18, head=(30, 10), feet=False); K.face(f, brow=1.0, lids=0.9, jaw=6)
+        for s_, sx_ in (("L", 1), ("R", -1)): K.H.key_foot(s_, f, K.W((0.13 * sx_, 0.42, 0)).to_2d(), K.yaw, lift=0.02, pitch=-75)
         K.hand(f, "R", (-0.06, -0.26, 0.8), d=(0.6, 0.1, 0.3), n=(0, 1, 0), g=0.6); K.hand(f, "L", (0.3, -0.42, 0.06), d=(0.1, -0.4, -1), n=(0, 0, -1), g=0.25)
         grip(K.R, f, "L", pose="flat_palm")
 MF.pos = V((1.2, 4.2)); MF.yaw = 180 + 15
@@ -779,8 +781,8 @@ light(c, 'AREA', (0, 0, 7.8), 3000, (1.0, 0.93, 0.85), 10, rot=(0, 0, 0), name="
 cam(1872, (0, -9.8, 5.2), (0, 2.0, 3.0), 28)
 cam(1890, (2.6, 0.6, 2.0), (0.6, 2.8, 1.5), 32)
 cam(1905, (3.4, 6.2, 1.8), (0.6, 2.5, 1.3), 34)
-cam(1930, (3.3, 4.0, 1.4), (0.5, 2.6, 0.7), 32)
-cam(1960, (2.4, 3.2, 1.6), (0.4, 3.0, 0.3), 30)
+cam(1930, (3.3, 4.0, 1.4), (0.55, 2.4, 0.8), 32)
+cam(1960, (2.6, 3.0, 1.5), (0.55, 2.4, 0.55), 30)
 cam(1985, (-5.5, 1.5, 1.6), (-9.0, 0.0, 1.8), 28)
 cam(2002, (-8.0, 0.0, 1.8), (-11.0, 0.0, 1.8), 28)
 finish_set(5)
