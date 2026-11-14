@@ -186,10 +186,14 @@ def pat_world(f, local):
 ev_at(600)   # v009e: from the reclined pose (f400 was mid-move: the arm hung off the board)
 el = pr.matrix_world @ PAT.R.PB["lowerarm01.L"].head; wr = pr.matrix_world @ PAT.R.PB["wrist.L"].head
 ab = OB["ArmBoard"]; mid = el.lerp(wr, 0.68)   # under forearm and hand
-tilt_inv = tilt.matrix_world.inverted()
-ab_local = tilt_inv @ (mid + Vector((0, 0, -0.05)))
-ab.matrix_parent_inverse = Matrix.Identity(4); ab.location = ab_local; ab.rotation_euler = (0, 0, math.atan2((wr - el).y, (wr - el).x))
-ad_ = OB["ArmBoard_Drape"]; ad_.matrix_parent_inverse = Matrix.Identity(4); ad_.location = ab_local + Vector((0, 0, 0.023)); ad_.rotation_euler = ab.rotation_euler
+# v009e: world-placed (not parented to the chair tilt, which tilted it up across the arm), sloping with the forearm
+abX = (wr - el).normalized(); abY = Vector((0, 0, 1)).cross(abX).normalized(); abZ = abX.cross(abY)
+abRot = Matrix((abX, abY, abZ)).transposed().to_4x4()
+ad_ = OB["ArmBoard_Drape"]
+for ab_o in (ab, ad_):
+    ab_o.parent = None; ab_o.matrix_parent_inverse = Matrix.Identity(4)
+ab.matrix_world = Matrix.Translation(mid - abZ * 0.062) @ abRot          # board top ~2 cm under the forearm's underside
+ad_.matrix_world = Matrix.Translation(mid - abZ * 0.039) @ abRot
 print("FOREARM", el, wr)
 for o_ in (ab, ad_): key_vis(o_, 1, False); key_vis(o_, 380, True); key_vis(o_, B['b9'] + 30, False)
 
