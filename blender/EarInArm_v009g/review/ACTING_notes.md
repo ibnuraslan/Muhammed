@@ -7,6 +7,21 @@
 4. **f1301–1330, top of his cap:** the camera at 1266/1300/1330/1340 is at 1.58–1.6 m (it was 1.8–1.85 m), aimed at 1.2 m, so his face and mask show. The arm still never crosses the patient's body on screen.
 5. **f1657–1690, the arm straight out sideways:** while the chair rises (1655–1720), both hands are re-placed on his own thighs every 6 frames (thigh point from the upperleg/lowerleg bones), with the elbows bent. The left hand lifts off the board at 1664 and is in his lap by 1678. A self-unclip keeps the hands on the jeans.
 
+- **Found while watching:** after the lift-out pull-back, the camera sat above him and his cap dome topped the frame at 1141–1255. The 1130/1180/1240 keys are now at about face height, so his face shows above the hands, and the forceps and ear stay to the side of his face. The wider x-ray framing also revealed his hanging hand 2–4 cm into the patient's upper arm at 1045 (an old fault, off-frame before), which is now cleared (unclip 990–1066).
+
+## Checks (v009g, packed)
+- clip_scan: 0.
+- cam_clear: 0.
+- qa: CLAW, HOVER, FACEPRESS, INSIDE, CAMJUMP, ROLL and ATTACH are all 0.
+  - BACKHEAD 2: f1, f127, the foreground wipe as he passes the lens.
+  - EMPTY 3: 625–637.
+  - FILL 5: hair at the frame edge.
+  - PROPMOVE 136.
+- limb_check (9a0a692): ARMBODY 823, PROPHEAD 172. Shoulder-root residuals as in v009f; nothing into another person.
+- Watched the full every-2nd-frame preview (every 6th film frame on sheets). Residuals:
+  - his back for about 4 frames as he turns at 286–290 (medium shot);
+  - the top of his cap for about 12 frames at 1237–1249 as he bends over the arm (medium shot, under a quarter of the frame).
+
 ---
 
 # EarInArm v009f

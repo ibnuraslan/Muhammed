@@ -1,0 +1,36 @@
+{
+ "frames": {
+  "127": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "133": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "589": {
+   "Nurse": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "595": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 2
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
