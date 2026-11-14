@@ -113,3 +113,13 @@ The round-3 preview was every 5th frame with the volumes hidden. Since round 4, 
 | 34 | f1301–1340: the sky pops from night to day. | The fast-forward (1300–1362) no longer sweeps the sun through a night. It stays day. |
 
 Beat frames are unchanged and there is no VO.
+
+## Round 5: director review of v006 (Nov 14, 22:04)
+| # | Note | v007 fix |
+|---|---|---|
+| 35 | Sky pops at f431–491 and f711–781: night blue, then day again. | Daylight throughout. The rewind sun race and the beat 5 night are removed; only the slow golden end remains. |
+| 36 | f1641–1661: a flat, untextured beige plane at the ground-skin crossing. | That was the dust ring's bottom cap, seen from below ground. The cap is removed. Seen from above, the dust disc also hazed the whole ground beige, so the dust is now drawn only as the expanding outer ring and wall. |
+| 37 | Ending: about 3.5 s of empty desert, then an aerial view with the crew as specks. | 1950–1972: a medium shot of the wellhead as the flame dies. 1972–2010: a quick move east of the crane to the bunker. 2030: the crew cheering behind the sandbags (faces). Then the camera rises over the wall to a view just behind them (2075, 9–16 m from the crew), with the smoke wisp rising from the dead wellhead beyond, beside the crane. It holds about 1.5 s, then makes a short rise. The wellhead body itself sits low behind the fire truck and crane base from this side. A face-on shot of the crew cannot also show the wellhead: they face it, 65 m away, with the crane in between. |
+| 38 | Beat 9 dust ring: keep the camera inside it under 0.5 s. | The 1648 and 1665 keys are now above the dust (z 10 and 12). The camera passes through it in about 4 frames each way. |
+
+The v007 preview is spliced from three renders of the same edits: f1–1600 and f1711–1920 from build v16, f1601–1710 and f1921–2040 from build v17 (dust ring), and f2041–2160 from the package build v18 (final framing). Between those builds only the dust shader and the last three camera keys changed.

@@ -76,9 +76,15 @@ def smoke(name):
     finish(nt, alpha, df.outputs[0])
 
 
-def puff(name, amt_name, color, power=2.0, cap=0.6, thresh=0.45):
+def puff(name, amt_name, color, power=2.0, cap=0.6, thresh=0.45, ring=False):
     nt = M[name].node_tree; nz = nt.nodes["SteamNoise"]; amt = nt.nodes[amt_name].outputs[0]
     thick, z = common(nt)
+    if ring:   # dust: an expanding ring (outer rim + wall), not a full disc of haze over the ground
+        tc = next(n for n in nt.nodes if n.type == 'TEX_COORD')
+        cx = nt.nodes.new('ShaderNodeVectorMath'); cx.operation = 'SUBTRACT'; cx.inputs[1].default_value = (0.5, 0.5, 0.0); nt.links.new(tc.outputs['Generated'], cx.inputs[0])
+        cm = nt.nodes.new('ShaderNodeVectorMath'); cm.operation = 'MULTIPLY'; cm.inputs[1].default_value = (2.0, 2.0, 0.0); nt.links.new(cx.outputs[0], cm.inputs[0])
+        rl = nt.nodes.new('ShaderNodeVectorMath'); rl.operation = 'LENGTH'; nt.links.new(cm.outputs[0], rl.inputs[0])
+        amt = math_(nt, 'MULTIPLY', amt, math_(nt, 'MULTIPLY', math_(nt, 'SUBTRACT', rl.outputs['Value'], 0.62), 3.5, clamp=True))
     nzr = math_(nt, 'MULTIPLY', math_(nt, 'SUBTRACT', nz.outputs['Fac'], thresh), 2.5, clamp=True)
     alpha = math_(nt, 'MINIMUM', math_(nt, 'MULTIPLY', math_(nt, 'MULTIPLY', nzr, math_(nt, 'POWER', thick, power)), amt), cap)
     df = nt.nodes.new('ShaderNodeBsdfDiffuse'); df.inputs['Color'].default_value = color
@@ -88,7 +94,7 @@ def puff(name, amt_name, color, power=2.0, cap=0.6, thresh=0.45):
 
 
 fire("M_Fire"); fire("M_FissureFire", 1.2); smoke("M_Smoke")
-puff("M_Steam", "SteamAmt", (0.95, 0.95, 0.95, 1)); puff("M_Dust", "DustAmt", (0.78, 0.62, 0.44, 1), power=0.8, cap=0.85, thresh=0.3)   # the dust ring must read in wide shots
+puff("M_Steam", "SteamAmt", (0.95, 0.95, 0.95, 1)); puff("M_Dust", "DustAmt", (0.78, 0.62, 0.44, 1), power=0.8, cap=0.7, thresh=0.3, ring=True)   # the dust ring must read in wide shots
 for o in bpy.data.objects:
     if o.type == 'MESH' and o.data.materials and o.data.materials[0] and o.data.materials[0].name in ("M_Fire", "M_FissureFire", "M_Steam"):
         o.visible_shadow = False            # emissive / thin: no dark cut-out shadows; the fire lights do the lighting

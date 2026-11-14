@@ -691,6 +691,7 @@ M_DUST = M_STEAM.copy(); M_DUST.name = "M_Dust"
 M_DUST.node_tree.nodes["Principled Volume"].inputs['Color'].default_value = (0.75, 0.6, 0.42, 1)
 M_DUST.node_tree.nodes["SteamAmt"].name = "DustAmt"
 bm = bmesh.new(); bmesh.ops.create_cone(bm, cap_ends=True, segments=48, radius1=1.0, radius2=0.8, depth=0.35, matrix=Matrix.Translation((0, 0, 0.17)))
+bmesh.ops.delete(bm, geom=[f_ for f_ in bm.faces if f_.calc_center_median().z < 0.01], context='FACES_ONLY')   # no bottom cap: it showed as a flat beige plane from below ground
 me = bpy.data.meshes.new("DustRing"); bm.to_mesh(me); bm.free()
 DUST = bpy.data.objects.new("DustRing", me); DUST.location = (SHAFT_X, 4, 0); link(DUST, C_FX); me.materials.append(M_DUST)
 # blast: emission sphere + light

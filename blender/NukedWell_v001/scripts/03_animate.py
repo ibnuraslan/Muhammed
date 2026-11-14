@@ -233,6 +233,14 @@ for f in range(1, END + 1, 2):
     SMOKE.keyframe_insert("hide_render", frame=f); SMOKE.keyframe_insert("hide_viewport", frame=f)
     for i, o in enumerate(CRK):
         s_ = crack_s(f - i * 2); o.scale = (max(0.001, s_),) * 3; o.keyframe_insert("scale", frame=f)
+# a thin smoke wisp rises from the dead wellhead after the fire dies (the ending holds on it)
+WISP = SMOKE.copy(); WISP.animation_data_clear(); WISP.name = "SmokeWisp"
+for c_ in SMOKE.users_collection: c_.objects.link(WISP)
+WISP.location = (0.0, -1.6, 3.4)
+for f, w in [(1, 0.0), (b11 + 85, 0.0), (b11 + 160, 0.13), (END, 0.16)]:
+    WISP.scale = (max(0.001, w * 0.6), max(0.001, w * 0.6), max(0.001, w)); WISP.keyframe_insert("scale", frame=f)
+    WISP.hide_render = WISP.hide_viewport = w < 0.01
+    WISP.keyframe_insert("hide_render", frame=f); WISP.keyframe_insert("hide_viewport", frame=f)
 fm = bpy.data.materials["M_Fire"].node_tree.nodes
 for mat in ("M_Fire", "M_FissureFire", "M_Smoke"):
     nn = bpy.data.materials[mat].node_tree.nodes
@@ -297,9 +305,7 @@ FF_A, FF_B = 1300, 1362
 def sun_x(f):
     base = 40.0
     if f <= RW0: return base
-    if f <= RW1: return base - 360.0 * smooth((f - RW0) / (RW1 - RW0))     # sun races backwards once
-    if f < b5 + 40: return base
-    if f < BEAT[6] - 20: return base + 360.0 * smooth((f - b5 - 40) / (BEAT[6] - 20 - b5 - 40))
+    # (director, v006: no night/day sky pops; daylight throughout, only the slow golden end below)
     # (no sun sweep in the 1300-1362 fast-forward: it flashed a night sky for half a second)
     if f < b11 + 60: return base
     return base + 18.0 * smooth((f - b11 - 60) / 200.0)      # golden end
@@ -727,21 +733,22 @@ CAMK = [  # frame, camera, target, lens
     (1545, (-17.0, -12.5, -7.0), (-14.0, -2.7, -18.0), 26),
     (1592, (-4.0, -52.0, -40.0), (-14.0, -2.7, -56.0), 24),
     (1632, (-8.0, -72.0, -6.0), (-14.0, 0.0, -20.0), 22),
-    (1648, (-12.0, -46.0, 4.0), (-14.0, 0.0, 1.5), 22),       # beat 9 surface: the heave at the wellhead and crane, closer
-    (1665, (-16.0, -36.0, 6.0), (-14.0, 2.0, 1.5), 22),
+    (1648, (-12.0, -46.0, 10.0), (-14.0, 0.0, 1.0), 22),      # beat 9 surface: above the dust ring (inside it < 0.5 s)
+    (1665, (-16.0, -36.0, 12.0), (-14.0, 2.0, 1.0), 22),
     (1705, (-6.0, -46.0, -40.0), (-7.0, 0.0, -55.0), 26),
     (1760, (-3.0, -30.0, -57.0), (-3.0, -1.6, -59.0), 30),
     (1830, (5.0, -46.0, -50.0), (-5.0, 0.0, -54.0), 28),
     (1880, (6.0, -70.0, -42.0), (-4.0, 0.0, -42.0), 26),
     (1925, (4.0, -30.0, 4.0), (-6.0, 0.0, 4.0), 26),
-    (1942, (-9.0, 2.0, 8.0), (-20.0, 50.0, 3.0), 26),         # 9 m clear of the cap
-    (1958, (-17.0, 18.0, 7.0), (-24.0, 62.0, 2.0), 26),       # west of the shaft, the mixer and the crane cab, straight toward the bunker crew
-    (1985, (-12.0, 42.0, 4.5), (-24.0, 62.0, 1.6), 26),       # east of the parked fire truck
-    (2008, (-14.0, 48.0, 3.0), (-25.0, 62.0, 1.6), 28),
-    (2030, (-19.0, 53.5, 2.0), (-25.0, 62.3, 1.6), 30),
-    (2065, (-16.0, 46.0, 7.0), (-24.0, 62.0, 1.8), 28),       # steady crane-up on the cheering crew (no swing over the wall)
-    (2100, (-18.0, 38.0, 16.0), (-23.0, 58.0, 2.0), 26),
-    (2160, (-16.0, 28.0, 30.0), (-21.0, 54.0, 2.0), 26),      # end high and clear of the crane mast
+    (1950, (8.0, -12.0, 4.5), (0.0, -1.6, 4.0), 32),         # medium on the wellhead as the flame dies
+    (1972, (9.0, -7.0, 5.0), (0.0, -1.6, 4.0), 32),
+    (1992, (6.0, 26.0, 7.0), (-24.0, 62.0, 2.0), 26),        # quick move east of the crane to the bunker (no empty-desert hold)
+    (2010, (-12.0, 48.0, 3.5), (-25.0, 62.0, 1.6), 28),
+    (2030, (-19.0, 53.5, 2.0), (-25.0, 62.3, 1.6), 30),      # the crew cheering behind the sandbags (faces)
+    (2052, (-22.0, 58.0, 6.5), (-24.0, 64.0, 1.6), 28),      # rise over the wall
+    (2075, (-34.0, 70.0, 6.0), (-8.0, 20.0, 3.0), 20),       # just behind the cheering crew (9-16 m): the dead, smoking wellhead beyond, left of the crane, sight line over the fire truck
+    (2135, (-34.3, 70.8, 6.3), (-8.0, 20.0, 3.0), 20),       # hold ~1.5 s
+    (2160, (-34.8, 73.0, 10.0), (-8.0, 18.0, 2.0), 20),      # short rise
 ]
 CAM = O["CAM_Film"]; TG = O["CAM_Target"]
 cpos = catmull([(k[0], Vector(k[1])) for k in CAMK]); ctg = catmull([(k[0], Vector(k[2])) for k in CAMK]); clens = pchip([(k[0], float(k[3])) for k in CAMK])
