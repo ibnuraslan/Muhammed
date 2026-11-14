@@ -85,8 +85,9 @@ wetall = NN.new("ShaderNodeMath"); wetall.operation = 'MAXIMUM'; LL.new(wet.outp
 dk = NN.new("ShaderNodeMix"); dk.data_type = 'RGBA'; dk.blend_type = 'MULTIPLY'; LL.new(wetall.outputs[0], dk.inputs["Factor"])
 dk.inputs["B"].default_value = (0.78, 0.78, 0.78, 1); LL.new(col, dk.inputs["A"])
 LL.new(dk.outputs["Result"], bsdf.inputs["Base Color"]); LL.new(nor, bsdf.inputs["Normal"])
-rw = NN.new("ShaderNodeMix"); rw.data_type = 'FLOAT'; LL.new(wetall.outputs[0], rw.inputs["Factor"]); LL.new(rou, rw.inputs["A"]); rw.inputs["B"].default_value = 0.42
+rw = NN.new("ShaderNodeMix"); rw.data_type = 'FLOAT'; LL.new(wetall.outputs[0], rw.inputs["Factor"]); LL.new(rou, rw.inputs["A"]); rw.inputs["B"].default_value = 0.55
 LL.new(rw.outputs["Result"], bsdf.inputs["Roughness"])
+bsdf.inputs["Specular IOR Level"].default_value = 0.3   # vNEXT: no blown sun glare on the wet sand
 _go = NN.new("ShaderNodeNewGeometry"); _em = NN.new("ShaderNodeEmission"); _em.inputs["Color"].default_value = (0.42, 0.33, 0.2, 1); _em.inputs["Strength"].default_value = 1.0
 LL.new(dk.outputs["Result"], _em.inputs["Color"]); _em.inputs["Strength"].default_value = 1.3
 _mx = NN.new("ShaderNodeMixShader"); LL.new(_go.outputs["Backfacing"], _mx.inputs["Fac"]); LL.new(bsdf.outputs[0], _mx.inputs[1]); LL.new(_em.outputs[0], _mx.inputs[2])
@@ -394,7 +395,7 @@ for i, (x, y) in enumerate(fish_spots):
     o = bpy.data.objects.new("Fish_%02d" % i, fme); C_SEA.objects.link(o)
     sc_ = random.uniform(1.0, 1.7) if i > 6 else 1.9
     o.scale = (sc_,) * 3
-    o.location = (x, y, ground(x, y) + 0.09 * sc_); o.rotation_euler = (0, math.radians(90), random.uniform(0, 6.28))
+    o.location = (x, y, ground(x, y) + 0.03 * sc_); o.rotation_euler = (0, math.radians(90), random.uniform(0, 6.28))
     FISH.append(o)
 
 # ================================================================== hotel (3 storeys, seafront at y -28)

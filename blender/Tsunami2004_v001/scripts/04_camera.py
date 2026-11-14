@@ -68,6 +68,9 @@ for f in range(1, 2401):
     tt_ = (f - 1) / 60.0
     if not (12.9 < tt_ < 15.7):
         p = Vector((p.x, p.y, max(p.z, g(p.x, p.y) + 0.7)))
+    # vNEXT: leave the cross-section in one frame at 15.15 s (no tilted box in a grey void, no frame under the sea floor)
+    if F(15.15) <= f < F(15.6):
+        u = posf(F(15.6)); p = Vector((u.x, u.y, max(u.z, g(u.x, u.y) + 0.9))); d = dirf(F(15.6)).normalized()
     q = d.to_track_quat('-Z', 'Y'); e = q.to_euler()
     if prev is not None: e.make_compatible(prev)
     prev = e

@@ -198,7 +198,7 @@ for o in bpy.data.objects:
         f = F(t)
         key_tr(o, f, loc=(x, y, z0), rot=(0, math.radians(90), yaw0))
         dt = random.uniform(0.14, 0.24)
-        key_tr(o, F(t + dt * 0.5), loc=(x, y, z0 + random.uniform(0.06, 0.16)), rot=(random.uniform(-0.5, 0.5), math.radians(90 + random.choice([-1, 1]) * random.uniform(25, 50)), yaw0 + random.uniform(-0.4, 0.4)))
+        key_tr(o, F(t + dt * 0.5), loc=(x, y, z0 + random.uniform(0.03, 0.07)), rot=(random.uniform(-0.5, 0.5), math.radians(90 + random.choice([-1, 1]) * random.uniform(25, 50)), yaw0 + random.uniform(-0.4, 0.4)))
         yaw0 += random.uniform(-0.3, 0.3)
         t += dt + random.uniform(0.05, 0.6)
     key_tr(o, F(t), loc=(x, y, z0), rot=(0, math.radians(90), yaw0))
