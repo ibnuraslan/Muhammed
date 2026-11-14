@@ -98,6 +98,9 @@ for m in bpy.data.materials:
                 t = n.inputs.get("Transmission Weight")
                 if t is not None and not t.is_linked: t.default_value = 1.0
                 n.inputs["Roughness"].default_value = 0.02
+# black-hole eye fix (LESSONS_LEARNED section 3, from LegoInNose eye_fix.py)
+_NO_SAVE = True
+exec(open(os.path.join(HERE, 'scripts', 'eye_fix.py')).read())
 sc.render.use_motion_blur = False
 sc.frame_set(1)
 bpy.ops.wm.save_as_mainfile(filepath=OUT_PATH, compress=True); print("SAVED", OUT_PATH)
