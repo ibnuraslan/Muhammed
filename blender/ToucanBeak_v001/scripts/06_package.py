@@ -42,7 +42,7 @@ for im in list(bpy.data.images):
     png = im.name in alpha_used
     p = os.path.join(tmp, "img_%03d.%s" % (n, "png" if png else "jpg")); n += 1
     im.filepath_raw = p; im.file_format = 'PNG' if png else 'JPEG'
-    try: im.save()
+    try: im.save(quality=78) if not png else im.save()   # JPEG q84 keeps the package under 95 MB now that distinct images are no longer merged by mistake
     except Exception as e: print("SKIP", im.name, e); continue
     if im.packed_file: im.unpack(method='REMOVE') if False else None
     im.filepath = p; im.source = 'FILE'; im.reload(); im.colorspace_settings.name = cs
@@ -67,9 +67,11 @@ for o in bpy.data.objects:
 imh = {}
 for im in list(bpy.data.images):
     if im.source != 'FILE' or im.size[0] == 0: continue
-    try: px = im.pixels[:4096:7]
+    try:
+        import numpy as _np; _a = _np.empty(len(im.pixels), dtype=_np.float32); im.pixels.foreach_get(_a)
+        px = _a[::997]   # sample across the WHOLE image (the first 4096 values matched different hair/lash cut-outs: same transparent corner)
     except Exception: continue
-    k = (tuple(im.size), hashlib.md5(str([round(x, 3) for x in px]).encode()).hexdigest(), im.colorspace_settings.name)
+    k = (tuple(im.size), hashlib.md5(_np.round(px, 3).tobytes()).hexdigest(), im.colorspace_settings.name, im.alpha_mode)
     if k in imh: im.user_remap(imh[k])
     else: imh[k] = im
 # ---- decimate heavy static background props (cabinets, printer frame, bottles, plants), never the hero bird / people

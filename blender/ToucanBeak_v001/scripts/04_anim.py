@@ -383,7 +383,8 @@ bld = glue.modifiers.new("grow", 'BUILD'); bld.frame_start = 1736; bld.frame_dur
 # the assistant walks to the desk and works the mouse while the monitor shows the 3D beak (director note, 12 s)
 AS_DESK = Vector((9.0, 1.95, 0))
 AS.walk(lambda f: Vector((5.0, 2.15, 0)).lerp(AS_DESK, smooth((f - 560) / 100)), lambda f: yaw_of_xy(AS_DESK - Vector((5.0, 2.15, 0))) if f < 655 else 90, 560, 660, stride=0.72)
-stand(AS, 672, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0)); stand(AS, 1505, (AS_DESK.x, AS_DESK.y), 90, head=(22, 0)); stand(AS, 1520, (AS_DESK.x, AS_DESK.y), 90, head=(12, 0))
+# v006: the assistant looks at the monitor (face in profile for the over-shoulder shot)
+stand(AS, 672, (AS_DESK.x, AS_DESK.y), 90, head=(16, -40)); stand(AS, 1505, (AS_DESK.x, AS_DESK.y), 90, head=(16, -40)); stand(AS, 1520, (AS_DESK.x, AS_DESK.y), 90, head=(12, 0))
 stand(AS, 1560, (AS_DESK.x, AS_DESK.y), 90, head=(18, 0))
 _md = OB["desk"]; DESK_TOP = max((_md.matrix_world @ v.co).z for v in _md.data.vertices)
 mouse = bpy.data.objects.new("Mouse", bpy.data.meshes.new("Mouse")); C_ANIM.objects.link(mouse)
@@ -668,6 +669,7 @@ for obj_, s_, f0_, f1_, g_, pz_ in ((SCN, "R", 528, 744, "wrap", "wrap_grip"), (
             C_ = Mo.translation.copy(); sh_ = VB.r.o.matrix_world @ VB.r.o.pose.bones["upperarm01." + s_].head
             ap_ = (C_ - sh_).normalized() + Vector((0, 0, -0.5))
         HP.grip_object(VB.r.o, s_, f_, obj_, C_, ap_.normalized(), grip=("pinch" if g_ == "pinch" else "wrap"))
+        HP.apply_pose(VB.r.o, s_, ("pinch" if g_ == "pinch" else ("cup_hold" if obj_ is PRO else "wrap_grip")), f_, spread=0.0)   # cup the prosthetic (a closed fist read as punching the head)   # v006: closed, even fingers (no fan)
 hpose(VB, "R", (1968, 1975), "relaxed")               # released after setting the tweezers down
 hpose(VB, "R", (748,), "relaxed")                     # released after setting the scanner down
 ev(1910); print("PIN at 1910", [round(x, 3) for x in PIN.matrix_world.translation], "target", [round(x, 3) for x in pin_in])
@@ -871,7 +873,15 @@ for f in range(1340, 1540, 6):
     h = 0.001 + (0.2 - 0.001) * min(1, max(0, (f - 1) / 1419)) if f < 1420 else 0.2 + 0.55 * (f - 1420) / 110
     z = zmin + (zmax - zmin) * min(1.0, 0.02 + (0.33 * (f - 1340) / 80 if f < 1420 else 0.35 + 0.65 * (f - 1420) / 110)) + 0.035
     a = f * 0.35; key_loc(noz, f, Vector((cx + 0.12 * math.cos(a), cy + 0.25 * math.sin(a * 1.3), z)))
-for o in (prn_v, printed, noz, blk): key_vis(o, [(1, False), (1330, True), (1540, False)])
+for o in (prn_v, printed, noz, blk): key_vis(o, [(1, False), (528, True), (1976, False)])
+# v006: the real printer stands on the clinic side bench (real size, facing the room); it prints the hollow beak 1340-1540
+PRN_ROOT = bpy.data.objects.new("Printer_root", None); C_ANIM.objects.link(PRN_ROOT); PRN_ROOT.location = P3
+bpy.context.view_layer.update()
+for o in (prn_v, grw, noz):
+    o.parent = PRN_ROOT; o.matrix_parent_inverse = PRN_ROOT.matrix_world.inverted()
+BENCH_PT = Vector((9.62, -1.6, 0.9))
+PRN_ROOT.location = BENCH_PT; PRN_ROOT.rotation_euler = (0, 0, R_(90)); PRN_ROOT.scale = (1 / 3.2,) * 3
+bpy.context.view_layer.update()
 print('BED_Z', bed_z, 'PRINT z', zmin, zmax)
 # portal: hide wall patch + monitor back from camera while the camera passes through the screen
 vf_ = OB["Void_front"]   # keyed after the camera path is known (see end)
@@ -937,7 +947,7 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (1516, SCREEN + Vector((0.2, -0.12, 0.0)), SCREEN + Vector((-1, -0.12, 0)), 30),     # v005: quick, centred pass through the screen (no black bezel panels)
  (1532, SCREEN + Vector((-0.45, -0.25, 0.12)), SCREEN + Vector((-1.5, -0.45, -0.05)), 28),   # clear of the assistant's arm at the mouse
  (1552, SCREEN + Vector((-0.5, -0.1, 0.05)), BEAKC, 30),
- (1575, Vector((7.25, 0.05, 1.78)), SEAM, 36),
+ (1575, Vector((6.2, -0.4, 1.65)), SEAM, 32),   # v006: front-left, no straight-down view (no aim flip)
  (1600, BEAKC + Vector((-0.55, -0.25, 0.3)), SEAM, 32),     # v005: medium shots of the seating (the fist filled the lens)
  (1650, BEAKC + Vector((-0.45, -0.38, 0.1)), SEAM, 36),
  (1700, BEAKC + Vector((-0.45, -0.22, 0.25)), SEAM, 38),
@@ -955,11 +965,62 @@ K = [  # frame, position, target, lens, focus target(None = target)
  (2250, ENC + Vector((0.82, 0.55, 0.3)), HEADE, 36),
 ]
 fp, ft, fl = catmull([(k[0], k[1]) for k in K]), catmull([(k[0], k[2]) for k in K]), pchip([(k[0], float(k[3])) for k in K])
+# ---- v006: the "computer rebuild" plays ON the clinic monitor. The void set is moved every frame so the old void camera's
+# view sits behind the screen hole as seen from EYE (over the assistant's shoulder): a live 3D display, no void, no blank frames.
+fpo, fto = fp, ft
+EYE = Vector((8.35, 1.2, 1.4)); AS_HEAD = Vector((9.3, 1.95, 1.31)); AIM = SCREEN * 0.55 + AS_HEAD * 0.45
+M_EYE = Matrix.LocRotScale(EYE, (SCREEN - EYE).to_track_quat('-Z', 'Y'), None)
+VROOT = bpy.data.objects.new("Void_display_root", None); C_ANIM.objects.link(VROOT)
+skip = {"Void_box", "Void_front", "Camera", "Cam_focus", "Void_display_root", "Printer_root"}
+vtops = set()
+for f_ in (700, 760, 900, 1050, 1200, 1350, 1415):
+    ev(f_)
+    for o in list(C_ANIM.objects) + list(OB.get("Void_box").users_collection[0].objects):
+        if o.parent is None and o.name not in skip and not o.name.startswith("Void_light") and o.type != 'CAMERA':
+            if o.matrix_world.translation.x > 10.45: vtops.add(o.name)
+for n in sorted(vtops):
+    OB[n].parent = VROOT; OB[n].matrix_parent_inverse = Matrix()
+print("VOID_DISPLAY children", sorted(vtops))
+VROOT.rotation_mode = 'QUATERNION'
+for f in [690] + list(range(700, 1421)):
+    ff = max(f, 700); po = fpo(ff); qo = (fto(ff) - po).to_track_quat('-Z', 'Y')
+    Cv = Matrix.LocRotScale(po, qo, None)
+    R = M_EYE @ Matrix.Translation((0, 0, -1.8)) @ Matrix.Scale(2.0, 4) @ Cv.inverted()
+    lo, qq, ss = R.decompose(); VROOT.location = lo; VROOT.rotation_quaternion = qq; VROOT.scale = ss
+    VROOT.keyframe_insert("location", frame=f); VROOT.keyframe_insert("rotation_quaternion", frame=f); VROOT.keyframe_insert("scale", frame=f)
+# real camera keys: replace the void flight + the close glove shots + the door fly-through
+FACEB_SEAM = Vector((6.92, 0.2, 1.32))
+K2 = [k for k in K if not (606 <= k[0] <= 1560 or 1745 <= k[0] <= 1840 or 1950 <= k[0] <= 1965)] + [
+ (636, Vector((6.5, 0.42, 1.72)), BEAKC + Vector((0.08, -0.25, 0.05)), 30),     # over VetB's shoulder: VetA's face + the bird
+ (681, Vector((6.45, -0.42, 1.6)), Vector((6.92, 0.2, 1.35)), 28),             # beat 679: VetB's face + the bird (no back of head)
+ (693, Vector((7.5, -0.25, 2.0)), Vector((8.6, 1.2, 1.3)), 26),               # v006: over the table, clear of VetB (the direct path went through him: black frame)
+ (706, Vector((7.75, 0.95, 1.75)), Vector((9.2, 1.6, 1.15)), 26),
+ (725, EYE + Vector((-0.05, 0.03, 0.02)), AIM, 22),                              # the assistant's profile + the model on screen
+ (1000, EYE, AIM, 22),
+ (1410, EYE + Vector((0.04, -0.03, -0.01)), AIM, 22),
+ (1421, BENCH_PT + Vector((-1.35, 0.35, 0.55)), BENCH_PT + Vector((0, 0, 0.22)), 30),   # cut: the real printer on the bench
+ (1490, BENCH_PT + Vector((-1.25, 0.1, 0.5)), BENCH_PT + Vector((0, 0, 0.2)), 32),
+ (1545, BENCH_PT + Vector((-1.2, -0.05, 0.48)), BENCH_PT + Vector((0, 0, 0.2)), 32),
+ (1546, Vector((5.6, -0.25, 1.6)), Vector((7.0, 0.0, 1.25)), 26),               # cut: start on the two vets
+ (1750, Vector((6.45, -0.42, 1.5)), FACEB_SEAM, 30),                            # hand, tool, beak and VetB's face together
+ (1800, Vector((6.42, -0.45, 1.52)), FACEB_SEAM, 30),
+ (1836, Vector((6.4, -0.5, 1.55)), FACEB_SEAM, 28),
+ (1955, Vector((4.55, -0.22, 1.52)), BC + Vector((0, 0, 0.3)), 24),
+ (1962, Vector((2.45, -0.52, 1.5)), HEADE + Vector((0, 0, 0.1)), 24)]           # cut: straight to the garden
+K2.sort(key=lambda k: k[0])
+CUTS = [1, 1421, 1546, 1962, 2251]
+_seg = []
+for a_, b_ in zip(CUTS[:-1], CUTS[1:]):
+    kk = [k for k in K2 if a_ <= k[0] < b_]
+    _seg.append((a_, b_, catmull([(k[0], k[1]) for k in kk]), catmull([(k[0], k[2]) for k in kk]), pchip([(k[0], float(k[3])) for k in kk])))
+def _pick(f): return next(sg for sg in _seg if sg[0] <= f < sg[1])
+fp = lambda f: _pick(f)[2](f); ft = lambda f: _pick(f)[3](f); fl = lambda f: _pick(f)[4](f)
+K = K2
 cam.rotation_mode = 'QUATERNION'; prevq = None
 foc = bpy.data.objects.new("Cam_focus", None); C_ANIM.objects.link(foc); cam.data.dof.focus_object = foc
 for f in range(1, 2251):
     p = fp(f); t = ft(f); q = (t - p).to_track_quat('-Z', 'Y')
-    if 660 < f <= 710 and prevq is not None:
+    if False and 660 < f <= 710 and prevq is not None:   # v006: not needed with the new keys (it tilted the horizon)
         # v004b: the up-vector flips near a straight-down view (f677, f695). Parallel-transport the previous orientation
         # to the new view direction (no roll jump), then blend back into the standard aim over 700-710
         fw0 = prevq @ Vector((0, 0, -1)); fw1 = (t - p).normalized(); qpt = fw0.rotation_difference(fw1) @ prevq
@@ -975,7 +1036,7 @@ for f in range(1, 2251):
 # void front face: camera-visible only while the camera is well inside the void and looking away from the wall
 inside = [f for f in range(1, 2251) if fp(f).x > 10.45 and f < 1490]
 f_in, f_out = (min(inside), max(inside)) if inside else (800, 1490)
-for f, v in ((1, False), (f_in, True), (f_out + 1, False)):
+for f, v in ((1, False),):
     vf_.visible_camera = v; vf_.keyframe_insert("visible_camera", frame=f)
 constant(vf_); print("VOID_FRONT visible", f_in, f_out)
 json.dump([[k[0], list(k[1]), list(k[2]), k[3]] for k in K], open(os.path.join(HERE, "camera_keys.json"), "w"))
