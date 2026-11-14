@@ -14,7 +14,7 @@ P = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "plates")
 OUT = sys.argv[2] if len(sys.argv) > 2 else HERE
 NAME = sys.argv[3] if len(sys.argv) > 3 else "tw_b"
 LAY = dict(l1=("THE SOVIETS SPIED ON AMERICA", 124, 110), l2=("USING A", 124, 252, 830),
-           arrow=((1085, 330), (1640, 285), (1425, 615)), label=("typewriter", 66, 44, 0.12, 0.78))
+           arrow=((1035, 352), (1470, 338), (1345, 600)), label=("typewriter", 56, 38, 0.14, 0.80))
 
 
 def bez(p0, p1, p2, t):
