@@ -95,3 +95,14 @@ I watched the v007 and v008 moving previews page by page. Faults found, then fix
 | 1121–1186 | After the cut closes, the speech pokes out through the front of the closed coat | The speech and the case are hidden from f1110 while the cut closes. The speech reappears only between his fingers at the pinch (f1166). |
 
 Preview: `review/preview.mp4` (every 5th frame at real speed) and `review/preview_page_p01–p06.jpg`, all from the final v009 file.
+
+## v010: director's v009 review (Nov 14)
+| Preview frames | Note | Fix |
+|---|---|---|
+| 466–1136 | ~11 s of chest close-up with no face | A medium framing with his face and the open cut together (f500–800, f1095–1189). Close-ups only f845–1045 (~3.5 s): the bullet tears through the speech and case, dents it and slows. |
+| 1131–1161 | Suit filling the frame, and a blurred hand sweeping the lens | A medium shot on his left, about 1.1 m out, clear of the right hand's path to the pocket |
+| 1136–1180 | A blank stare and a stiff body | A wince (eyelid squint, jaw gasp, chest heave). Real-time breathing while his face is in frame, and blinks. |
+| 1306–1321 | He seemed to climb onto the podium, twisted | The hall crouch, flex and twist are halved, and the feet stay planted. The f1312 framing is from the front, so the podium screens his legs. |
+| 1351–1451 | Only his back to the end | A brief back view of the cheering hall (f1325–1390). It then ends front three-quarter on his face, raising the speech, with cheering arms in the foreground. |
+
+Preview: `review/preview.mp4` and `review/preview_page_p01–p06.jpg`, from v010 (frames 1–441 unchanged from v009).
