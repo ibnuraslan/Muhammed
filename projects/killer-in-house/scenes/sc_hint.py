@@ -1258,7 +1258,7 @@ def _():
             reach(h, sd, c["flying"].location + Vector((-0.6, 0.35 * (1 if sd == "L" else -1), 0.0)), Vector((0, 0, -1)), Vector((1, -1, -0.5)))
     def cam(c, t):
         e = ease(t)
-        return (Vector((0.6, -4.6, 1.85)).lerp(Vector((0.75, -4.45, 1.83)), e), Vector((2.6, -2.2, 1.05)), 22)   # rule 7: the son's head in frame
+        return (Vector((0.95, -4.35, 1.85)).lerp(Vector((1.1, -4.2, 1.83)), e), Vector((2.6, -2.2, 1.05)), 20)   # rule 7: the son's head in frame
     return cam, anim
 
 

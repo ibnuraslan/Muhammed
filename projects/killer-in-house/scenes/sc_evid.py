@@ -252,9 +252,9 @@ def sheet(name, path, w, h, loc, rot=(0, 0, 0), rough=0.8, curl=0.0):
     return o
 
 
-def black_void(floor=(0.012, 0.012, 0.013), rough=0.32):
+def black_void(floor=(0.012, 0.012, 0.013), rough=0.55):
     world_flat((0.0, 0.0, 0.0), 0.0)
-    return box("VoidFloor", (0, 0, -0.01), (30, 30, 0.02), pbr("VoidFloor", floor, rough, 0.0, **{'Coat Weight': 0.3}))
+    return box("VoidFloor", (0, 0, -0.01), (30, 30, 0.02), pbr("VoidFloor", floor, rough, 0.0, **{'Coat Weight': 0.05}))   # no hot specular of the lamp
 
 
 def spot(loc, tgt, energy, size_deg=40, blend=0.35, col=(1.0, 0.86, 0.68), radius=0.03, name="Spot"):
