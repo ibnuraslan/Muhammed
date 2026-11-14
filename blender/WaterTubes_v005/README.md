@@ -10,3 +10,8 @@
 4. **n145–149:** pulled back (12.3 s key moved to 2.9 m, 2.6 m further back).
 5. **n100–125:** the empty street before the surge is cut to about 1.2 s (the flood front starts closer and arrives earlier).
 - Rain returns at 17.5 s for the exterior shots.
+
+## Re-check after watching the v005 preview
+- Item 2 (n246–248) still swung the aim straight down over the tube on the first pass. Fixed: an overhead key at 20.65 s (5.2 m up, looking across the tube to the flood) replaces the low swing. The aim turns from the house to the street over a readable top view of the barrier.
+- The slam crane (22.4 s) is raised to 4.8 m. The white disc on the water at 22.4–22.6 s is sun glint, not an object.
+- `review/preview.mp4` is the full preview; frames 1151–1401 were re-rendered from the final packed file.
