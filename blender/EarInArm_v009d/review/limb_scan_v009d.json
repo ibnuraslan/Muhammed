@@ -21,7 +21,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 1.6,
-    "visible": true
+    "visible": false
    },
    "Nurse.R": {
     "bone": "lowerarm01",
@@ -41,7 +41,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 1.8,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -55,7 +55,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.1,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -69,7 +69,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.5,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -83,7 +83,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.4,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -97,13 +97,13 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 1.8,
-    "visible": true
+    "visible": false
    },
    "Nurse.R": {
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 1.6,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -117,7 +117,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 1.9,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm01",
@@ -131,7 +131,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.5,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm01",
@@ -145,7 +145,7 @@
     "bone": "lowerarm02",
     "into": "Nurse",
     "depth_cm": 2.8,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm01",
@@ -159,7 +159,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.3,
-    "visible": true
+    "visible": false
    },
    "Surgeon.L": {
     "bone": "upperarm01",
@@ -207,7 +207,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.5,
-    "visible": false
+    "visible": true
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -221,7 +221,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.6,
-    "visible": false
+    "visible": true
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -309,7 +309,7 @@
     "bone": "upperarm02",
     "into": "Surgeon",
     "depth_cm": 7.0,
-    "visible": false
+    "visible": true
    }
   },
   "81": {
@@ -317,7 +317,7 @@
     "bone": "lowerarm01",
     "into": "Nurse",
     "depth_cm": 2.0,
-    "visible": false
+    "visible": true
    },
    "Surgeon.L": {
     "bone": "upperarm02",
@@ -4619,7 +4619,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4645,7 +4645,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4671,7 +4671,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4703,7 +4703,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4735,13 +4735,13 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 3.9,
-    "visible": true
+    "visible": false
    },
    "Surgeon.R": {
     "bone": "upperarm01",
@@ -4761,7 +4761,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4787,7 +4787,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4813,7 +4813,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -4845,7 +4845,7 @@
     "bone": "upperarm01",
     "into": "Patient",
     "depth_cm": 8.3,
-    "visible": false
+    "visible": true
    },
    "Patient.R": {
     "bone": "upperarm01",
@@ -6471,12 +6471,8 @@
  },
  "bad_ranges": [
   [
-   5,
-   49
-  ],
-  [
-   61,
-   77
+   45,
+   81
   ],
   [
    129,
@@ -6504,7 +6500,7 @@
   ],
   [
    1157,
-   1373
+   1389
   ],
   [
    1673,

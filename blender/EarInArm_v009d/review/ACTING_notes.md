@@ -36,16 +36,20 @@ The client's frame numbers are in the synced v010 timeline (1–1572). I mapped 
 ## Checks on the packed `EarInArm_v009d_60fps.blend`
 - **clip_scan (40c131b):** 0 bad ranges.
 - **qa_check (e7b25f7):** CLAW, HOVER, FACEPRESS, INSIDE, CAMJUMP, ROLL and ATTACH are all 0.
-  - BACKHEAD 1 (f1, the wide opener; the surgeon's back is to the camera).
-  - EMPTY 2 (625/631, the high shot following the forceps to the arm).
-  - FILL 27: the push-ins at 19, 79, 85 and 121; the surgeon's cap at the frame edge at 877/883 and 1369–1501; the stitching shot at 1633–1651.
-  - PROPMOVE 115: items in the forceps tips, the grafted ear, and the shavings (all accepted in v009c).
-- **limb_scan (new, `pipeline/limb_scan.py`):** the upper-arm, forearm and hand bone axes of every character are tested against every body's skin, including their own torso, head and legs. Visible hits that remain, and why:
-  - **Patient.L upper arm, 569–1717, 8.3 cm, constant:** the arm lies out on the arm board. The sample by the armpit is under the chest skin; it does not show in renders.
-  - **Surgeon upper arm (upperarm02) at the walks, 293–613, up to 4 cm:** the upper arm brushing the side of the torso as he walks.
-  - **Nurse forearms, 5–213, 2.5 cm:** forearms against her hips while she walks. They are now covered by scrub material.
-  - **Single frames:** f225, 273 and 285 (fingertips on the patient's chest during the press); f1737 (the patient's hand passing over his chest to the ear).
-- **cam_clear (new, `pipeline/cam_clear.py`):** the camera comes within 10 cm of a character only at f123 (9 cm from the surgeon's hair).
+  - BACKHEAD 1: f1, the wide opener with the surgeon's back to the camera.
+  - EMPTY 2: 625/631, the high shot that follows the forceps to the arm. The arm, the glove and the ear are in frame.
+  - FILL 22: the push-ins at 85 and 121; the surgeon's cap at the frame edge at 877/883 and 1327; the head close-ups at 1429–1501 and 1633–1651, where the ear is placed and the stitching ends.
+  - PROPMOVE 123: items in the forceps tips, the grafted ear and the shavings, as accepted in v009c. The hand tools themselves are 0.
+- **limb_scan (new, `pipeline/limb_scan.py`):** the upper-arm, forearm and hand bone axes of every character are tested against every body's skin, including their own torso, head and legs. Visible hits that remain:
+  - **Patient.L upper arm, 569–1717, 8.3 cm, constant:** the arm lies out on the arm board, and the sample by the armpit is under the chest skin. It does not show in renders.
+  - **Surgeon upper arm against his side, up to 7 cm:** during the hand-to-chest moves (77–289) and the walks (293–613).
+  - **Nurse forearms, 45–213, 2.6 cm:** against her hips while she walks (scrub-covered).
+  - **Single frames:** fingertips on the patient's chest during the press (225, 273, 285); the patient's hand passing over his chest to the ear (1737).
+- **cam_clear (new, `pipeline/cam_clear.py`):** the camera comes within 10 cm of a character only at f123, where it passes 9 cm from the edge of the surgeon's hair.
 
 ## Moving preview
-`review/preview_v009d_270x480_every2nd.mp4`: every 2nd frame at 30 fps (real time), 270×480, 2 samples, with the frame number in the corner. I watched it start to finish before sending.
+`review/preview_v009d_270x480_every2nd.mp4`: every 2nd frame at 30 fps (real time), 270×480, 2 samples, with the frame number in the corner. I checked every 6th film frame in order, start to finish. The first pass found the problems below, which were fixed before this final preview was rendered:
+- f19 and f79–91: the surgeon's back or cap filled the frame. The opening now stays on the patient's side, then arcs over the surgeon to the front.
+- f367–391: the carving hands were too close; the camera now pulls back.
+- f1393–1441: the camera sat on the skull; the ear placement is now framed like the stitching.
+- The black forearm in the first preview was a preview-only artefact (too few light bounces for the skin's subsurface scattering). The full-quality render was checked at f661.
