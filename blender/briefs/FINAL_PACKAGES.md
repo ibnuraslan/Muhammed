@@ -14,15 +14,15 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 
 | # | Film | Branch | Package folder |
 |---|---|---|---|
-| 01 | EarInArm | `claude/beautiful-ptolemy-c5vrcq` | `blender/EarInArm_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1572)** |
-| 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v011/` **fixed (pen and tools in the fingers, masks on faces) + synced to your voiceover: READY TO RENDER (frames 1–1656)** |
-| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v010/` **fixed (brick pinched in the fingertips) + synced to your voiceover: READY TO RENDER (frames 1–2036)** |
-| 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v008/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1386)** |
-| 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v010/` **fixed (pen gripped, clear of the face) + synced to your voiceover: READY TO RENDER (frames 1–1644)** |
-| 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v009/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1836)** |
-| 07 | ShoeBomber | `claude/beautiful-ptolemy-c5vrcq` | `blender/ShoeBomber_v007/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1469)** |
+| 01 | EarInArm | `claude/beautiful-ptolemy-c5vrcq` | `blender/EarInArm_v010/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v011/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v010/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v008/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v010/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v009/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 07 | ShoeBomber | `claude/beautiful-ptolemy-c5vrcq` | `blender/ShoeBomber_v007/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
 | 08 | BeethovenDeaf | `claude/beautiful-ptolemy-c5vrcq` | `blender/BeethovenDeaf_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1435)** |
-| 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v008/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–2388)** |
+| 09 | DonationBin | `claude/beautiful-ptolemy-c5vrcq` | `blender/DonationBin_v008/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
 | 10 | BellyFat | `claude/beautiful-ptolemy-c5vrcq` | `blender/BellyFat_v010/` **acting fixed + synced to your voiceover: READY TO RENDER (frames 1–1273)** |
 | 11 | WW1Assassination | `claude/connect11-ww1-assassination` | `blender/WW1Assassination_v005b/` **acting fixed, approved, final commit 4ff1225 (VO sync when your voiceover arrives)** |
 | 12 | NoPilotPlane | `claude/connect12-no-pilot-plane` | `blender/NoPilotPlane_v007/` **acting fixed, approved, final commit 800e346 (VO sync when your voiceover arrives)** |
