@@ -85,7 +85,8 @@ def cassock(rig, mat):
     for z in zs:
         band = [v for v in vs if abs(v.z - z) < 0.02 and abs(v.x) < 0.32]
         rx = max((abs(v.x) for v in band), default=0.15); ry = max((abs(v.y - cy) for v in band), default=0.12)
-        prof.append([z, rx + 0.05, ry + 0.06])
+        k_ = len(prof); tm = min(1.0, (22 - k_) / 3.0)      # top rings hug the waist (no open rim seen from above)
+        prof.append([z, rx + 0.012 + 0.038 * tm, ry + 0.015 + 0.045 * tm])
     for i in range(len(prof) - 2, -1, -1):        # only widen going down (hangs from the hips)
         prof[i][1] = max(prof[i][1], prof[i + 1][1] + 0.004); prof[i][2] = max(prof[i][2], prof[i + 1][2] + 0.003)
     me = bpy.data.meshes.new(rig.name + "_Cassock"); bm = bmesh.new(); rings = []
@@ -102,6 +103,16 @@ def cassock(rig, mat):
     for p in me.polygons: p.use_smooth = True
     for c in rig.users_collection: c.objects.link(o)
     transfer_weights(o, body, rig)
+    # explicit skinning: hips carry the skirt, thighs pull the lower hem a little (no lift into the torso when he slumps)
+    for g in list(o.vertex_groups): o.vertex_groups.remove(g)
+    gR, gL_, gR_ = (o.vertex_groups.new(name=n_) for n_ in ("root", "upperleg01.L", "upperleg01.R"))
+    zt, zb = zs[-1], zs[0]
+    for v in me.vertices:
+        t = max(0.0, min(1.0, (zt - v.co.z) / (zt - zb))); sl = max(0.0, min(1.0, 0.5 + v.co.x / 0.3))
+        wl, wr = 0.35 * t * sl, 0.35 * t * (1 - sl)
+        gR.add([v.index], 1 - wl - wr, 'REPLACE')
+        if wl > 0.001: gL_.add([v.index], wl, 'REPLACE')
+        if wr > 0.001: gR_.add([v.index], wr, 'REPLACE')
     s = o.modifiers.new("sol", 'SOLIDIFY'); s.thickness = 0.012
     o.modifiers.new("sub", 'SUBSURF').levels = 1
     # sash at the waist
@@ -401,8 +412,14 @@ for i, nm in enumerate(("GuardA", "GuardB")):
     path = lambda f, sx=sx: Vector((sx * 1.4, (JY(tw(f)) if tw(f) < 380 else -2.0) + 0.4, 0)) if f < 505 else \
         Vector((sx * (1.4 - 0.2 * smooth((f - 505) / 60)), -2.0 + 0.4 - 0.9 * smooth((f - 505) / 60), 0))
     h.walk(path, lambda f: 180.0 if f < 505 else 180.0 + sx * 40, 1, 638, stride=0.7, step=3)
-    for f in range(1, 640, 6):
-        arms_down(h, f, sw=0.06)
+    yawf = lambda f, sx=sx: 180.0 if f < 505 else 180.0 + sx * 40
+    for f in range(1, 640, 3):          # hands hang at his sides and swing with the walk (targets follow the walking root)
+        pf = path(f); Rz = Matrix.Rotation(R_(yawf(f)), 3, 'Z'); sw_ = 0.07 * math.sin(f * 0.11)
+        for s_, sg in (("L", 1), ("R", -1)):
+            off = Rz @ Vector((sg * 0.27, -0.03 + sg * sw_ - 0.02, 0.0))
+            W = Vector((pf.x + off.x, pf.y + off.y, 0.86))
+            d = Rz @ Vector((0, -0.15, -1)); nrm = Rz @ Vector((sg, 0, 0))
+            hand_at(h, s_, f, tuple(W), d=tuple(d), n=tuple(nrm), pole=tuple(W + Rz @ Vector((sg * 0.2, 0.45, 0.35))))
 
 # ------------------------------------------------------------------ CROWD (instances of 8 base people, FK acting)
 def copy_human(src, name):
@@ -423,7 +440,7 @@ for side in (-1, 1):
             x = side * (3.4 + row * 0.75 + random.uniform(-0.15, 0.15))
             crowd.append((x, y))
 SHOOTER = Vector((-3.45, 1.6))
-crowd = [c for c in crowd if (Vector(c) - SHOOTER).length > 0.8]
+crowd = [c for c in crowd if (Vector(c) - SHOOTER).length > 1.4]
 CR = []
 for i, (x, y) in enumerate(crowd):
     src = O["Crowd%d" % (i % 8)]
@@ -438,23 +455,23 @@ def fk_pose(R, f, kind, ph, t, gasp=0.0, look=0.0):
         R.key_rot(nm_, f, [("X", (-6 - 10 * gasp) * wgt), ("Z", (10 * math.sin(t * 0.03 + ph) + look) * wgt)])
     # arms: angles relative to the A-pose (Y rot lowers/raises sideways, X swings forward)
     if gasp > 0.01:
-        aL = ("Y", 40 - 60 * gasp); aR = ("Y", -40 + 60 * gasp)
+        aL = ("Y", 48 - 8 * gasp); aR = ("Y", -48 + 8 * gasp)   # arms stay down at the sides, hands come up to the chest (no T-pose)
         R.key_rot("upperarm01.L", f, [aL, ("X", -55 * gasp)]); R.key_rot("upperarm01.R", f, [aR, ("X", -55 * gasp)])
         R.key_rot("lowerarm01.L", f, [("X", -120 * gasp), ("Z", 30 * gasp)]); R.key_rot("lowerarm01.R", f, [("X", -120 * gasp), ("Z", -30 * gasp)])
         return
     if kind == "wave":
-        R.key_rot("upperarm01.R", f, [("Y", 112 + 8 * w), ("X", -15)]); R.key_rot("lowerarm01.R", f, [("Y", 20 + 22 * w)])
-        R.key_rot("upperarm01.L", f, [("Y", 42)]); R.key_rot("lowerarm01.L", f, [("X", -10)])
+        R.key_rot("upperarm01.R", f, [("Y", 92 + 6 * w), ("X", -22)]); R.key_rot("lowerarm01.R", f, [("X", -40), ("Y", 12 + 20 * w)])
+        R.key_rot("upperarm01.L", f, [("Y", 50 + 3 * s), ("X", -8)]); R.key_rot("lowerarm01.L", f, [("X", -30)])
     elif kind == "cheer":
-        R.key_rot("upperarm01.R", f, [("Y", 108 + 10 * w), ("X", -12)]); R.key_rot("upperarm01.L", f, [("Y", -108 - 10 * w), ("X", -12)])
-        R.key_rot("lowerarm01.R", f, [("Y", 15)]); R.key_rot("lowerarm01.L", f, [("Y", -15)])
+        R.key_rot("upperarm01.R", f, [("Y", 95 + 8 * w), ("X", -25)]); R.key_rot("upperarm01.L", f, [("Y", -95 - 8 * w), ("X", -25)])
+        R.key_rot("lowerarm01.R", f, [("X", -38)]); R.key_rot("lowerarm01.L", f, [("X", -38)])
     elif kind == "clap":
         c = 0.5 + 0.5 * math.sin(t * 0.35 + ph)
         R.key_rot("upperarm01.L", f, [("Y", 30), ("X", -45)]); R.key_rot("upperarm01.R", f, [("Y", -30), ("X", -45)])
         R.key_rot("lowerarm01.L", f, [("X", -70), ("Z", 40 + 20 * c)]); R.key_rot("lowerarm01.R", f, [("X", -70), ("Z", -40 - 20 * c)])
     else:
-        R.key_rot("upperarm01.L", f, [("Y", 42 + 3 * s)]); R.key_rot("upperarm01.R", f, [("Y", -42 - 3 * s)])
-        R.key_rot("lowerarm01.L", f, [("X", -15)]); R.key_rot("lowerarm01.R", f, [("X", -15)])
+        R.key_rot("upperarm01.L", f, [("Y", 50 + 3 * s), ("X", -8)]); R.key_rot("upperarm01.R", f, [("Y", -50 - 3 * s), ("X", -8)])
+        R.key_rot("lowerarm01.L", f, [("X", -32 - 4 * s)]); R.key_rot("lowerarm01.R", f, [("X", -32 + 4 * s)])
 for pb in shooter.pose.bones: pb.rotation_mode = 'QUATERNION'
 for (r, x, y, kind, ph) in CR:
     for pb in r.pose.bones: pb.rotation_mode = 'QUATERNION'
@@ -471,7 +488,7 @@ for (r, x, y, kind, ph) in CR:
         fk_pose(R, f, kind if f < 640 else random.choice(("wave", "cheer", "clap")) if f == 700 else kind, ph, t, gasp=g)
 # shooter: in the second row on the left, gun hand rising from the crowd (seen from behind)
 Rs = Rig(shooter)
-key_obj(shooter, 1, loc=(SHOOTER.x, SHOOTER.y, 0), rot=(0, 0, R_(yaw_to(1.0, -0.9))), interp='CONSTANT')
+key_obj(shooter, 1, loc=(SHOOTER.x, SHOOTER.y, 0), rot=(0, 0, R_(yaw_to(0.55, -0.83))), interp='CONSTANT')   # aims at the jeep
 key_obj(shooter, 700, loc=(0, 0, -60), interp='CONSTANT')
 for f in range(1, 640, 3):
     t = tw(f); u = smooth((t - 8) / 40)
@@ -626,7 +643,8 @@ em = n.new('ShaderNodeEmission'); em.inputs['Strength'].default_value = 1.1; l.n
 tr = n.new('ShaderNodeBsdfTransparent'); ms = n.new('ShaderNodeMixShader'); fv = n.new('ShaderNodeValue'); fv.name = "DomeFade"
 for f, x in ((1, 0), (322, 0), (330, 1), (490, 1), (502, 0), (1395, 0), (1412, 1), (1512, 1), (1540, 0)):
     fv.outputs[0].default_value = x; fv.outputs[0].keyframe_insert("default_value", frame=f)
-l.new(fv.outputs[0], ms.inputs['Fac']); l.new(tr.outputs['BSDF'], ms.inputs[1]); l.new(em.outputs[0], ms.inputs[2])
+bfm = n.new('ShaderNodeMath'); bfm.operation = 'MULTIPLY'; l.new(fv.outputs[0], bfm.inputs[0]); l.new(geo.outputs['Backfacing'], bfm.inputs[1])   # seen only from inside: no wash when the camera leaves it
+l.new(bfm.outputs[0], ms.inputs['Fac']); l.new(tr.outputs['BSDF'], ms.inputs[1]); l.new(em.outputs[0], ms.inputs[2])
 oo = n.new('ShaderNodeOutputMaterial'); l.new(ms.outputs[0], oo.inputs[0])
 dome.data.materials.append(dm)
 dome.visible_shadow = False; dome.visible_diffuse = False; dome.visible_glossy = False; dome.visible_transmission = False; dome.visible_volume_scatter = False
@@ -766,6 +784,18 @@ dro.modifiers.new("sol", 'SOLIDIFY').thickness = 0.006
 dro.modifiers.new("sub", 'SUBSURF').levels = 1
 key_vis(dro, ((1, False), (631, True), (763, False)))
 key_vis(O["Pope_Cassock"], ((1, True), (631, False), (763, True)))
+# camera leaves the theatre through its wall and the facade: hide them from camera rays for that pass (no blank wall frames)
+for nm_, f0_, f1_ in (("Theatre", 765, 777), ("Facade", 765, 777)):
+    o_ = O[nm_]
+    for f_, v_ in ((1, True), (f0_, False), (f1_, True)):
+        o_.visible_camera = v_; o_.keyframe_insert("visible_camera", frame=f_)
+    for fc in fcurves(o_.animation_data.action):
+        if fc.data_path == "visible_camera":
+            for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
+# the cell gate slides open on the 'face to face' beat, before the camera passes through the doorway
+cd_ = O["celldoor"]
+for f_, x_ in ((1, 0.0), (1000, 0.0), (1024, 2.9)):
+    cd_.location.x = x_; cd_.keyframe_insert("location", index=0, frame=f_)
 TEAM = (("SurgA", Vector((-8.75, 40.4)), 90), ("SurgB", Vector((-7.25, 40.2)), -90), ("SurgC", Vector((-8.0, 41.55)), 0), ("Nurse", Vector((-7.0, 41.3)), -51))
 O["InstrumentTray"].location = (-7.32, 40.98, 8.0); O["TrayStand"].location = (-7.32, 40.98, 7.5)
 HANDS_ON = {"SurgA": ((-8.12, 40.22), (-8.14, 40.5)), "SurgB": ((-7.9, 40.12), (-7.88, 40.4)), "SurgC": ((-7.88, 40.7), (-8.12, 40.7))}
@@ -1047,28 +1077,29 @@ ev(340); XCW = XC.matrix_world.translation.copy(); ev(440); XHW = XH.matrix_worl
 ev(1440); XCW8 = XC.matrix_world.translation.copy(); POPEHEAD8 = bone_w(pope, "head", "tail") + Vector((0, 0, -0.08))
 ev(960); HANDW = bone_w(pope, "wrist.R")
 ev(1130); SHW = bone_w(pris, "shoulder01.L")
-SDIR = Vector((1.0, -0.9, 0)).normalized(); SRIGHT = Vector((SDIR.y, -SDIR.x, 0))
-SHOT = Vector((SHOOTER.x, SHOOTER.y, 1.66)) - SDIR * 0.75 + SRIGHT * 0.32
+SDIR = Vector((0.55, -0.83, 0)).normalized(); SRIGHT = Vector((SDIR.y, -SDIR.x, 0))
+SHOT = Vector((SHOOTER.x, SHOOTER.y, 1.75)) - SDIR * 0.95 + SRIGHT * 0.38     # over his right shoulder, gun hand in frame
 K = [
- (1,    SHOT,                                  popehead(1), 55),
- (60,   Vector((SHOOTER.x, SHOOTER.y, 0)) - SDIR * 0.6 + SRIGHT * 0.9 + Vector((0, 0, 2.3)), popehead(60), 45),
+ (1,    SHOT,                                  Vector((SHOOTER.x, SHOOTER.y, 1.35)) + SDIR * 4.0, 32),
+ (60,   SHOT + Vector((0, 0, 0.25)) - SDIR * 0.2,   Vector((SHOOTER.x, SHOOTER.y, 1.45)) + SDIR * 5.0, 32),   # stays over his shoulder while the gun comes up
  (115,  popehead(115) + FD * 1.9 + Vector((0, 0, 0.2)), popehead(115) + Vector((0, 0, -0.1)), 35),
  (165,  popechest(165) + PERP * 2.4 + FD * 0.8 + Vector((0, 0, 0.9)), popechest(165), 24),
- (210,  Vector((2.8, -4.5, 4.6)),               Vector((-2.0, -1.5, 1.2)), 22),
- (238,  Vector((SHOOTER.x, SHOOTER.y, 0)) - SDIR * 0.8 + SRIGHT * 0.45 + Vector((0, 0, 1.85)), MUZZLE + SDIR * 2.0, 40),
+ (210,  Vector((2.8, -4.5, 5.6)),               Vector((-2.0, -1.5, 1.2)), 22),
+ (226,  Vector((SHOOTER.x, SHOOTER.y, 0)) - SDIR * 1.6 + SRIGHT * 0.6 + Vector((0, 0, 3.0)), popechest(226), 30),   # over the crowd, not through it
+ (240,  Vector((SHOOTER.x, SHOOTER.y, 0)) - SDIR * 0.95 + SRIGHT * 0.38 + Vector((0, 0, 2.3)), MUZZLE + SDIR * 2.2, 34),
 ]
 for f in range(256, 307, 10):
     side = 0.16 * (1 - (f - 256) / 70.0) + 0.05
     K.append((f, bullet_pos(f) - BD * 0.24 + SRIGHT * side + Vector((0, 0, 0.05)), bullet_pos(f) + BD * 0.9, 45))
 # the chase camera brakes 0.7 m short of the robe and lets the bullet fly on into the porthole (never enters the body)
-K.append((320, ENTRY - BD * 0.7 + SRIGHT * 0.08 + Vector((0, 0, 0.06)), ENTRY, 40))
+K.append((320, ENTRY - BD * 1.15 + SRIGHT * 0.1 + Vector((0, 0, 0.18)), ENTRY + Vector((0, 0, 0.2)), 36))
 K += [
- (334,  ENTRY - BD * 0.72 + Vector((0, 0, 0.06)), XCW, 30),
- (378,  XCW + (Matrix.Rotation(R_(-50), 3, 'Z') @ (-BD)) * 0.75 + Vector((0, 0, 0.12)), XCW, 30),
+ (334,  ENTRY - BD * 1.05 + Vector((0, 0, 0.16)), XCW + Vector((0, 0, 0.15)), 32),
+ (378,  XCW + (Matrix.Rotation(R_(-50), 3, 'Z') @ (-BD)) * 0.95 + Vector((0, 0, 0.14)), XCW, 30),
  (418,  (XHW + popehead(418)) / 2 + (Matrix.Rotation(R_(-15), 3, 'Z') @ FD) * 1.35 + Vector((0, 0, -0.05)), (XHW + popehead(418)) / 2, 32),
  (465,  (XHW + popehead(465)) / 2 + (Matrix.Rotation(R_(25), 3, 'Z') @ FD) * 1.3 + Vector((0, 0, 0.05)), (XHW + popehead(465)) / 2 + Vector((0, 0, -0.05)), 30),
  (505,  popechest(505) + FD * 2.1 + PERP * 0.5 + Vector((0, 0, 0.3)), popechest(505) + Vector((0, 0, -0.1)), 30),
- (555,  popechest(505) + FD * 1.6 - PERP * 1.5 + Vector((0, 0, -0.5)), popechest(505) + Vector((0, 0, -0.35)), 24),
+ (555,  popechest(505) + FD * 2.2 - PERP * 1.8 + Vector((0, 0, -0.3)), popechest(505) + Vector((0, 0, -0.35)), 24),
  (598,  popechest(505) + FD * 1.7 - PERP * 3.0 + Vector((0, 0, 0.8)), popechest(505) + Vector((0, 0, -0.3)), 22),
  (622,  Vector((-1.8, -6.2, 3.4)),              Vector((-3.0, 8.0, 2.4)), 22),    # jeep + Pope in the foreground, facade far
  (631,  Vector((-2.3, -5.2, 3.7)),              Vector((-3.4, 10.0, 2.6)), 22),
@@ -1090,7 +1121,7 @@ K += [
  (1077, Vector((-0.9, 40.95, 8.45)),            Vector((0.1, 40.75, 8.05)), 30),
  (1092, Vector((-0.05, 41.95, 8.2)),             Vector((-0.05, 40.66, 8.05)), 30),
  (1118, Vector((-0.45, 41.65, 8.3)),             Vector((0.18, 40.92, 8.12)), 38),
- (1132, SHW + Vector((0.45, -0.75, 0.15)),       SHW, 45),
+ (1132, Vector((0.1, 41.95, 8.45)),               SHW + Vector((0, 0, 0.1)), 36),   # simplified: hold the two-shot (faces) instead of a close dive past the prisoner
  (1143, Vector((0.3, 41.3, 8.7)),              Vector((0.0, 43.2, 9.0)), 26),
  (1158, Vector((0.0, 42.45, 8.98)),             Vector((0.0, 44.5, 9.0)), 26),
  (1172, Vector((0.0, 43.6, 9.0)),               Vector((0.0, 53.6, 9.2)), 24),
@@ -1101,8 +1132,8 @@ K += [
  (1345, CROWN_W + Vector((-0.55, -1.05, -0.25)), CROWN_W + Vector((0, 0, -0.45)), 35),
  (1382, CROWN_W + Vector((-0.85, -0.95, -0.55)), POPEHEAD8, 32),
  (1405, XCW8 + Vector((0.7, 0.95, 0.4)),         XCW8 + Vector((0, 0, 0.15)), 34),
- (1440, XCW8 + Vector((0.45, 0.5, 0.12)),        XCW8, 32),
- (1480, XCW8 + Vector((-0.45, 0.55, 0.14)),      XCW8, 32),
+ (1440, XCW8 + Vector((0.75, 0.85, 0.15)),        XCW8, 32),
+ (1480, XCW8 + Vector((-0.75, 0.85, 0.18)),      XCW8, 32),
  (1520, XCW8 + Vector((-0.95, 1.0, 0.5)),        XCW8 + Vector((0, 0, 0.2)), 30),
  (1555, Vector((-1.4, 47.6, 8.3)),              Vector((0.0, 52.6, 8.9)), 26),
  (1590, Vector((-0.3, 46.4, 8.9)),              Vector((0.0, 53.2, 9.2)), 26),
@@ -1111,7 +1142,7 @@ K += [
 K.sort(key=lambda k: k[0])
 cpos = catmull([(k[0], k[1]) for k in K]); ctgt = catmull([(k[0], k[2]) for k in K]); clen = pchip([(k[0], float(k[3])) for k in K])
 cam = bpy.data.objects.new("CAM", bpy.data.cameras.new("CAM")); sc.collection.objects.link(cam); sc.camera = cam
-cam.data.sensor_width = 36; cam.data.clip_start = 0.01; cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 3.2
+cam.data.sensor_width = 36; cam.data.clip_start = 0.01; cam.data.dof.use_dof = True; cam.data.dof.aperture_fstop = 8.0
 foc = bpy.data.objects.new("CamFocus", None); sc.collection.objects.link(foc); cam.data.dof.focus_object = foc
 # orientations first; then ease any one-frame snap (> 20 deg/frame) into a short whip with the same end framings
 QS = {f: (ctgt(f) - cpos(f)).to_track_quat('-Z', 'Y') for f in range(1, 1621)}
