@@ -190,7 +190,7 @@ FLAPO = bpy.data.objects["Flap"]
 def flap_in_y(f, x, z):          # the flap's own inner face (its own ray cast: her body is not in the way)
     sc.frame_set(f); inv = FLAPO.matrix_world.inverted()
     ok, loc, n, i = FLAPO.ray_cast(inv @ Vector((x, 0.0, z)), (inv.to_3x3() @ Vector((0, -1, 0))).normalized())
-    return ((FLAPO.matrix_world @ loc).y if ok else FY) + 0.045
+    return ((FLAPO.matrix_world @ loc).y if ok else FY) + 0.030
 def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
     z = PZ(STAND.x, STAND.y)
     ph = 1.30 + 0.02 * wob
@@ -200,7 +200,7 @@ def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
 at_flap(720, 0.0, look=(-15, 10)); at_flap(780, 0.2); at_flap(805, 1.0, jaw=8); at_flap(818, 0.3); at_flap(835, 1.0, jaw=10); at_flap(850, 0.2)
 at_flap(880, 0.6, look=(-5, -15)); at_flap(930, 0.0, look=(0, 25))
 # --- 961-1320: runs her hands over the left wall (smooth, nothing to hold), looks up, searches the flap edge, jumps at the back wall
-LW = -0.680        # wrists 3.3 cm off the liner: fingers lie on it, not through it
+LW = -0.722        # palms on the liner; 06b_contain pushes her body clear if anything would cross        # wrists 3.3 cm off the liner: fingers lie on it, not through it
 def at_wall(f, a, b, look=(0, 0)):
     p = Vector((-0.20, 0.0, 0)); z = PZ(p.x, p.y)
     WO.pose(f, (p.x, p.y, z + RH - 0.04), yaw=-90, flex=4, sp=(2, 0, 0), head=look,
@@ -230,7 +230,7 @@ def jump(f, dz, flex, hz, hands_on=True, crouch=0.0, airborne=False, look=(-30, 
     WO.pose(f, (JW.x, JW.y, jz + RH - crouch + dz), yaw=180, flex=flex, sp=(flex * 0.5, 0, 0), head=look, hands=hands, feet=feet, curl={"L": 0.3, "R": 0.3})
 def bang(f, hl, hr, look=(-20, 0), lean=0.0):
     p = Vector((JW.x, JW.y + 0.08, 0)); z = PZ(p.x, p.y)
-    hands = {"L": ("w", (-0.19, 0.500 - hl, 1.45 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.19, 0.500 - hr, 1.49 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
+    hands = {"L": ("w", (-0.19, 0.555 - hl, 1.45 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.19, 0.555 - hr, 1.49 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
     WO.pose(f, (p.x, p.y, z + RH - 0.04), yaw=180, flex=4 + 4 * lean, sp=(3 + 4 * lean, 0, 0), head=look, hands=hands, feet=stand_feet(p.x, p.y - 0.02, 180), curl={"L": 0.1, "R": 0.1})
 for i, f in enumerate(range(1180, 1290, 10)):
     bang(f, 0.07 if i % 2 == 0 else 0.0, 0.0 if i % 2 == 0 else 0.07, look=(-22 + 4 * (i % 3), 0), lean=0.5 * (i % 2))
@@ -376,7 +376,7 @@ for bn_, dz_ in (("root", 0.04), ("IK_foot.L", 0.0), ("IK_foot.R", 0.0)):
 clear_keys(SHo, 150, 231)
 def back_point(f):
     sc.frame_set(f)
-    pb = WOo.pose.bones["spine02"]; c = WOo.matrix_world @ pb.head
+    pb = WOo.pose.bones["spine03"]; c = WOo.matrix_world @ pb.head
     dg = bpy.context.evaluated_depsgraph_get()
     body = next(o for o in WOo.children if o.name.endswith(".body"))
     ev = body.evaluated_get(dg)
@@ -442,13 +442,13 @@ K(268, (0.0, -0.70, 1.35), (0.05, 0.0, 0.55), 20)
 K(288, (0.30, 0.05, 1.20), (0.08, 0.05, 0.45), 21)                       # in under the swinging flap, looking down at the landing
 K(312, (-0.38, 0.18, 1.45), (0.08, 0.05, 0.45), 21)
 ANG = {1620: (20, 40, -20, 0), 1680: (-20, -40, 20, 0), 1740: (40, 20, -40, 0), 1800: (-40, -20, 40, 0), 1845: (0, 20, -20)}
-for f in (340, 375, 410, 445, 480, 515, 560, 600, 640, 680, 950, 990, 1035, 1080):
+for f in (340, 375, 410, 445, 480, 515, 560, 600, 950, 990, 1035, 1080):
     k_ = face_cam(f, lens=24 if f >= 1600 else 22, angs=ANG.get(f, (0, 20, -20, 40, -40, 60, -60)),
                   ups=(-0.15, -0.05, 0.05) if 980 <= f <= 1090 else (0.0, 0.10, 0.22), dists=(0.65, 0.58, 0.50, 0.42) if 980 <= f <= 1090 else (0.55, 0.47, 0.40, 0.34))     # wall beat: from her face height or a little below, not her hair
     if not k_: k_ = face_cam(f, lens=22, dists=(0.55, 0.47, 0.40, 0.34, 0.30), ups=(0.0, 0.10, -0.10, 0.22), box=(0.64, -0.50, 0.50, 2.25))
     if not k_: k_ = [f, [0.40, -0.40, 1.80], list(face(f) - Vector((0, 0, 0.04))), 20]; print("NOFACE", f, "-> front-right corner")
     NEW.append(k_)
-for f_ in (720, 760, 800, 840, 880, 920, 1110, 1135, 1160): K(f_, (0.45, -0.30, 1.70), face(f_), 28)      # at the flap: profile, inside
+for f_ in (640, 680, 720, 760, 800, 840, 880, 920, 1110, 1135, 1160): K(f_, (0.45, -0.30, 1.70), face(f_), 28 if f_ >= 720 else 24)      # at the flap: profile, inside
 def topcam(f, dx):
     t = chest(f).lerp(face(f), 0.35); c = t + Vector((dx, -0.42, 1.05))
     return [f, [max(-0.6, min(0.6, c.x)), max(-0.45, c.y), min(2.15, c.z)], list(t), 20]

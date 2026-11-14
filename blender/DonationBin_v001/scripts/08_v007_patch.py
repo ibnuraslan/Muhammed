@@ -258,6 +258,28 @@ print("EXPLAINER_LIGHT_KEYS_HELD", nl)
 rm_ = [o for o in bpy.data.objects if o.name.startswith(("Mote", "GhostBag", "CounterWeight", "Blanket"))]
 for o in rm_: bpy.data.objects.remove(o, do_unlink=True)
 print("REMOVED", len(rm_))
+# hidden characters: their coats, helmets, tanks etc. hide with them (they were parked unseen inside the bin floor)
+def _hide_fc(o):
+    ad = o.animation_data
+    if not ad or not ad.action: return None
+    for l in ad.action.layers:
+        for st in l.strips:
+            for cb in st.channelbags:
+                for c in cb.fcurves:
+                    if c.data_path == "hide_render": return c
+    return None
+for rn in ("FireA", "FireB", "Passerby", "Shover"):
+    rig = bpy.data.objects.get(rn)
+    if rig is None: continue
+    src = _hide_fc(rig) or next((_hide_fc(c) for c in rig.children_recursive if _hide_fc(c)), None)
+    if src is None: continue
+    keys = [(k.co.x, k.co.y) for k in src.keyframe_points]
+    for c in rig.children_recursive:
+        if c.type in ('MESH', 'CURVE') and _hide_fc(c) is None:
+            for fx, v in keys:
+                c.hide_render = bool(v > 0.5); c.keyframe_insert("hide_render", frame=int(fx))
+                c.hide_viewport = bool(v > 0.5); c.keyframe_insert("hide_viewport", frame=int(fx))
+print("HIDE_SYNCED")
 sc["director_fix"] = "v007: one continuous camera (covered wall pushes), front 3/4 on beat 6 and scream, hands flat on clothes"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("V007_DONE", len(CAMK))

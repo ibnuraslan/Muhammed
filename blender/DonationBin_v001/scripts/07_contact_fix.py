@@ -40,6 +40,8 @@ def need(r, s, dg, cache):
         t = cache[o.name]
         if t is None or t.find_nearest(w, 0.12)[0] is None: continue
         if o.name.startswith(SKIP): return None              # QA stops at the first prop near the wrist
+        if r.name == "Woman" and o.name.startswith(("BinShell", "BinLiner", "Flap", "CutPanel", "StopBar", "HingePin", "Spring")):
+            return None      # her bin contacts are placed in 06 and kept clear by 06b_contain (client: nothing through the bin)
         best = None
         for p in tips(r, s):
             loc, n, i, d = t.find_nearest(p, 0.3)
