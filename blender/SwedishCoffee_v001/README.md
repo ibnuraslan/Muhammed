@@ -1,12 +1,12 @@
 # SwedishCoffee (Connect27)
 
-Current package: `blender/SwedishCoffee_v010/SwedishCoffee_v010_60fps.blend` (75 MB, normal git). It's v008 plus the fixes from watching the v008 moving preview (every 5th frame, `pipeline/preview.py`) and the v009 pot-handle grip. Fixed: a black frame and bodies filling the lens on several camera moves, pour streams showing between pours, steam fog over the king, cup macros cutting off faces, the dying twin's hidden arms, the shackled hands' height and the tiny procession at beat 9. The frame-by-frame list is in ACTING_notes.md, section v010. Moving preview of the delivered file: `SwedishCoffee_v001/review/preview.mp4` (12 fps, no audio) and the contact pages in `review/v010_preview_pages/`. beats.json is unchanged and there's no VO yet.
+Current package: `blender/SwedishCoffee_v011/SwedishCoffee_v011_60fps.blend` (75 MB, normal git). It's v010 plus the director's v010 notes: the king clutches his chest, sinks to his knees and slumps forward (no lying sprawl), the camera stays clear of the masked man, the guests react with a hand to the mouth, the pans past bare walls are quick, the steam skull is short and the king's raised arm comes down sooner. The details are in ACTING_notes.md, section v011. Moving preview of the delivered file: `SwedishCoffee_v001/review/preview.mp4` (12 fps, no audio), with pages in `review/v011_preview_pages/`. beats.json is unchanged and there's no VO yet.
 - All hands use `pipeline/hand_poses.py`: its `add_hand_limits` and its pose table for every grip (relaxed idle hands, wrap grips on the pots and the dancers' joined hands, a flat palm for the king's raised hand and his hands on the floor, a fist for the masked man).
 - Empty cells reworked: 7.5–9 s keeps the king behind the cup and steam, the ball's couples are closer to the camera, 40.5 s holds on the old twin, and the square starts closer.
 - The ledger cover is plain (the model's spine had lettering).
 - The cathedral roof faces were reassigned to our roof material.
 
-v002–v009 are kept. Acting notes: `SwedishCoffee_v001/review/ACTING_notes.md`.
+v002–v010 are kept. Acting notes: `SwedishCoffee_v001/review/ACTING_notes.md`.
 
 ## Files
 - `SwedishCoffee_v00N_60fps.blend`: packed farm file (see `SETTINGS.md`). Opens in factory Blender 5.2.2.

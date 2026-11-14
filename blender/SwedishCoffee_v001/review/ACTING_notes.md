@@ -151,3 +151,34 @@ Checked and kept as they are:
   - f2131–2203 (8 samples) have the bed counted as a prop filling the frame. The pages show both twins in frame: A at the bedside, B in bed with chest and arms visible.
   - f1249, f1627, f1837, f1963, f2209 and f2485 are single samples during pans and whips, each empty for under 0.25 s on the pages.
   - f577 is the steam pass.
+
+
+## v011 (director review of v010)
+The director's preview indices did not map onto this film: their f1446 is the doctors' room here. I matched each note to v010 frames by its content.
+
+| Note | v010 frames | Fix in v011 |
+|---|---|---|
+| 1. The king's fall: crouch, frog pose, face down with splayed limbs | 1926–1961 | Simplified: hand to chest at 1916, on both knees (shins on the floor, toes behind) at 1928, then slumped forward onto one hand at 1940, held. No lying pose and no splayed limbs. The camera stays wide. |
+| 2. The masked man passes the lens | 1911–1931 | Ballroom keys 1905 and 1930 keep the camera more than 2 m from him. |
+| 3. Guests with both hands flat on their heads | 1966–1990 | One hand to the mouth, the other at the side, while they step back. |
+| 4. White wall during the pan to the doctors (and the doctors to the table) | 1246, 1461 | Both pans now finish in about 10 frames on the people. The pan's target is distant, so the turn never exceeds 60° per frame (qa CAMJUMP 0). |
+| 5. Steam over the king's face | 500–546 | The skull steam is dense for about 15 frames (516–524 at full). |
+| 6. A stiff raised arm (the king's raised hand; the "long white wig" is his powdered hair) | 185–290 | Lowered from 222, down by 258. |
+
+Found on the v011 check and fixed:
+- The whip out of the ballroom was routed wider so it no longer passes through the kneeling king.
+- The chest-clutch hand was below the chin (qa FACEPRESS 0).
+- The faster pan had a 68° one-frame turn (now CAMJUMP 0).
+
+**Re-check: moving preview of the delivered file** (`review/preview.mp4`, 534 frames, pages in `review/v011_preview_pages/`).
+- The whole film was rendered and every page watched.
+- After the last two fixes, f1196–1271 and f1906–1991 were re-rendered from the final file and watched again.
+- Still close but acceptable: at f1966, on the whip out, the camera passes about 1.5 m from the kneeling king's back for one preview cell. He is sharp and whole.
+
+**qa_check 771d2da, unchanged** → `v011_qa_check_director.json`: BACKHEAD 2, INSIDE 1, FILL 2, EMPTY 14. CAMJUMP, ROLL, HOVER, CLAW, FACEPRESS, PROPMOVE and ATTACH are all 0.
+- BACKHEAD: f1 is the crowd opening; f169 is the guard.
+- INSIDE and FILL: the f577 steam pass.
+- EMPTY:
+  - f2131–2203: the bed counted as a prop while both twins are in frame;
+  - f1627, f1837, f2209 and f2485: single whip samples;
+  - f577: the steam pass.
