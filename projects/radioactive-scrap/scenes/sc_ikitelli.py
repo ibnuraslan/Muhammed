@@ -830,7 +830,13 @@ def c1_7a(c, t):
     walk_to(c["people"]["kid2"], (-6.3, 2.2, 0), (7, 2.2, 0), sec, speed=1.0, stride=0.8)
     walk_to(c["people"]["rel2"], (-8.0, 2.0, 0), (5, 2.0, 0), sec, speed=0.9)
     laundry_sway(c, sec)
-    c["focus"] = c["people"]["kid1"].arm.location + Vector((0, 0, 0.8))
+    # highlight the way cinema does: soft warm bands on the ground around the containers, and focus that moves
+    # from the children to the containers as the track settles
+    if c.get("ripple") is None:
+        c["ripple"] = ripple("YardRipple", (C1 + C2) / 2, radius=3.2)
+    c["ripple"].hide_render = False
+    kid = c["people"]["kid1"].arm.location + Vector((0, 0, 0.8)); tgt = (C1 + C2) / 2 + Vector((0, 0, 0.7))
+    c["focus"] = kid.lerp(tgt, ease(min(1.0, max(0.0, (sec - 0.8) / 2.0))))
 
 
 def c1_7b(c, t):
@@ -906,14 +912,19 @@ def c1_10b(c, t):
     c["focus"] = h.bone_head("spine05")
 
 
-def c1_12a(c, t):         # night kitchen: a man alone at the table under a bare bulb, staring down (hands below the table)
+def c1_12a(c, t):         # night kitchen: the man at the table lifts his head to the wall calendar, the 10th and 13th ringed
     sec = S("ch1_12a", t); stage(c, "yard", shells=(70, 78), people=("worker",))
+    if c.get("calendar") is None:
+        c["calendar"] = wall_calendar(Vector((7.54, 12.25, 1.5)), math.radians(90))
     h = c["people"]["worker"]; k0 = c["fam"]["table"]
-    reset_pose(h); h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); pose_sit(h, lean=24, hands="knees")
-    place(h, k0 + Vector((0.8, 0.1, 0.0)), face_angle(k0 + Vector((0.8, 0.1, 0)), k0))
+    reset_pose(h); h.arm.rotation_euler = (0, 0, 0); h.arm.location = (0, 0, 0); pose_sit(h, lean=18, hands="knees")
+    seat = k0 + Vector((0.8, 0.1, 0.0)); place(h, seat, face_angle(seat, k0))
     sd = forward(h).cross(Vector((0, 0, 1)))
-    h.rot("neck01", sd, -10); h.rot("head", sd, -14 - 2 * math.sin(sec * 0.5))
-    c["focus"] = h.bone_head("head")
+    k = ease(min(1.0, max(0.0, (sec - 0.6) / 1.4)))                      # he looks up from the table to the calendar
+    h.rot("neck01", sd, -10 + 12 * k); h.rot("head", sd, -14 + 18 * k)
+    h.rot("neck01", Vector((0, 0, 1)), -10 * k); h.rot("head", Vector((0, 0, 1)), -16 * k)
+    cal = c["calendar"].location + Vector((0, 0, -0.08))
+    c["focus"] = h.bone_head("head").lerp(cal, ease(min(1.0, max(0.0, (sec - 0.9) / 1.2))))
 
 
 def c1_12b(c, t):
@@ -998,6 +1009,10 @@ def c4_5b(c, t):          # a surveyor kneels by the old pit while neighbours wa
 
 
 SHOTS = {
+    "ch4_5a": ("yard", c4_5a, C((5.5, 4.5, 1.6), (5.0, 5.0, 1.6), (-0.5, 10.0, 1.1), 30), 4.0),
+    "ch1_7a": ("yard", c1_7a, C((-6.0, -3.0, 1.2), (2.0, -3.0, 1.2), (-4.0, 6.0, 1.0), 32, (2.0, 8.0, 1.0)), 4.0),
+    "ch1_12a": ("night", c1_12a, C((10.55, 10.6, 1.62), (9.75, 11.35, 1.58), (7.6, 12.22, 1.38), 40), 2.4),
+    "ch1_13b": ("scrapload", c1_13b, C((-8.0, -3.0, 1.2), (-7.5, -2.6, 1.3), (0.0, 4.0, 1.5), 30), 4.0),
     "ch2_5b": ("yard", c2_5b, C((C1.x - 0.5, C1.y + 2.1, 0.78), (C1.x - 0.3, C1.y + 1.35, 0.72), (C1.x - 0.1, C1.y + 0.38, 0.66), 50), 2.0),
     "ch4_5b": ("yard", c4_5b, C((-1.0, 11.0, 1.2), (-1.3, 11.3, 1.2), (-3.6, 14.2, 0.7), 32), 4.0),
     "intro_1a": ("drive", i1a, C((14.0, -2.6, 0.9), (13.0, -2.4, 1.1), (-14, 0.6, 2.0), 40), 4.0),

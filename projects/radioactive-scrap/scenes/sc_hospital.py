@@ -820,8 +820,9 @@ def c1_11a(c, t):         # local clinic, evening: a nurse adjusts the drip line
 def c1_11b(c, t):         # the men walk out of the clinic door into the dark street
     sec = S("ch1_11b", t); hide(c, ("m1", "m2"))
     door = CLINIC + Vector((2.4, -2.5, 0))
-    walk_to(c["people"]["m1"], door + Vector((0, 1.2, 0)), door + Vector((3.5, -4.0, 0)), sec, speed=0.8)
-    walk_to(c["people"]["m2"], door + Vector((0, 2.0, 0)), door + Vector((2.5, -4.4, 0)), sec - 0.6, speed=0.75)
+    # both leave through the door gap itself (a diagonal from deep inside cut through the wall)
+    walk_to(c["people"]["m1"], door + Vector((0, 0.35, 0)), door + Vector((2.5, -4.2, 0)), sec, speed=0.8)
+    walk_to(c["people"]["m2"], door + Vector((0, 1.3, 0)), door + Vector((0.4, -4.6, 0)), sec - 0.8, speed=0.75)
     c["focus"] = c["people"]["m1"].arm.location + Vector((0, 0, 1.3))
 
 

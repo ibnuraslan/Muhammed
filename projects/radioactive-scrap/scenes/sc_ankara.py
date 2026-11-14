@@ -18,7 +18,7 @@ STO = Vector((20, 0, 0))          # storeroom
 REC = Vector((-20, 0, 0))         # records room
 
 
-def ledger_material(name, seed=0.0):
+def ledger_material(name, seed=0.0, blank=False):
     """Ruled ledger page: faint blue rules, a red margin line, and blocks of dark 'ink' in columns (no glyphs)."""
     m = bpy.data.materials.new(name); m.use_nodes = True
     N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
@@ -41,13 +41,24 @@ def ledger_material(name, seed=0.0):
     i2 = N.new("ShaderNodeMath"); i2.operation = 'MULTIPLY'; L.new(i1.outputs[0], i2.inputs[0]); L.new(band2.outputs[0], i2.inputs[1])
     paper = N.new("ShaderNodeMix"); paper.data_type = 'RGBA'; L.new(rule.outputs[0], paper.inputs['Factor'])
     paper.inputs[6].default_value = (0.86, 0.83, 0.74, 1); paper.inputs[7].default_value = (0.55, 0.62, 0.75, 1)
-    out = N.new("ShaderNodeMix"); out.data_type = 'RGBA'; L.new(i2.outputs[0], out.inputs['Factor'])
+    out = N.new("ShaderNodeMix"); out.data_type = 'RGBA'
+    if not blank:
+        L.new(i2.outputs[0], out.inputs['Factor'])
+    else:
+        out.inputs['Factor'].default_value = 0.0
     L.new(paper.outputs[2], out.inputs[6]); out.inputs[7].default_value = (0.08, 0.08, 0.12, 1)
     L.new(out.outputs[2], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.85
     return m
 
 
-def ledger(name, loc, rot_z):
+LEDGER_A = ("COMPANY RECORD", [("SOURCE 1", "returned"), ("SOURCE 2", "returned"), ("SOURCE 3", "returned"),
+                               ("SOURCE 4", "kept"), ("SOURCE 5", "returned"), ("SOURCE 6", "kept")])
+LEDGER_B = ("SUPPLIER RECORD", [("SOURCE 1", "returned"), ("SOURCE 2", "returned"), ("SOURCE 3", "not received"),
+                                ("SOURCE 4", "kept"), ("SOURCE 5", "returned"), ("SOURCE 6", "kept")])
+MISMATCH_ROW = 2
+
+
+def ledger(name, loc, rot_z, entries=None, entry_side=1):
     """Open ledger: two page planes on a cloth spine; a loose page hinged at the spine that can lift."""
     cover = pbr(name + "Cover", (0.25, 0.12, 0.08), 0.6)
     base = join([box("CoverL", (-0.21, 0, 0.005), (0.42, 0.32, 0.01), cover), box("CoverR", (0.21, 0, 0.005), (0.42, 0.32, 0.01), cover)], name)
@@ -56,6 +67,16 @@ def ledger(name, loc, rot_z):
         bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0))
         pg = bpy.context.active_object; pg.scale = (0.4, 0.3, 1); pg.data.materials.append(ledger_material(name + f"Page{side}", seed=hash(name) % 97 + side))
         pg.parent = base; pg.location = (side * 0.205, 0, 0.022)
+        if side == entry_side and entries:                # this page carries legible typed entries
+            pg.data.materials[0] = ledger_material(name + "PageR", seed=3, blank=True)
+            ink = pbr(name + "Ink", (0.02, 0.02, 0.04), 0.6)
+            head, rows = entries
+            px = side * 0.205
+            text_obj(name + "Head", head, (px, 0.115, 0.0225), 0.016, ink, rot=(0, 0, 0), extrude=0.0).parent = base
+            for r, (sn, st) in enumerate(rows):
+                y = 0.08 - r * 0.0385
+                text_obj(name + "Sn", sn, (px - 0.175, y, 0.0225), 0.017, ink, rot=(0, 0, 0), extrude=0.0, align='LEFT').parent = base
+                text_obj(name + "St", st, (px - 0.005, y, 0.0225), 0.017, ink, rot=(0, 0, 0), extrude=0.0, align='LEFT').parent = base
     hinge = bpy.data.objects.new(name + "Leaf", None); bpy.context.collection.objects.link(hinge); hinge.parent = base; hinge.location = (0, 0, 0.024)
     bpy.ops.mesh.primitive_plane_add(size=1, location=(0, 0, 0))
     lf = bpy.context.active_object; lf.scale = (0.4, 0.3, 1); lf.data.materials.append(ledger_material(name + "Leaf", seed=7)); lf.parent = hinge; lf.location = (0.2, 0, 0)
@@ -133,8 +154,8 @@ def build(variant=None):
     for dx in (-0.85, 0.85):
         for dy in (-0.45, 0.45):
             box("RecLeg", REC + Vector((dx, dy, 0.38)), (0.05, 0.05, 0.76), tab)
-    c["ledA"], c["leafA"] = ledger("LedgerA", REC + Vector((-0.45, 0.0, 0.78)), 0.03)
-    c["ledB"], c["leafB"] = ledger("LedgerB", REC + Vector((0.45, 0.02, 0.78)), -0.02)
+    c["ledA"], c["leafA"] = ledger("LedgerA", REC + Vector((-0.45, 0.0, 0.78)), 0.03, LEDGER_A)
+    c["ledB"], c["leafB"] = ledger("LedgerB", REC + Vector((0.45, 0.02, 0.78)), -0.02, LEDGER_B, entry_side=-1)
     for k in range(2):
         ph_model("SchoolChair_01", loc=REC + Vector((-0.5 + k * 1.0, -0.95, 0)), rot_z=math.pi)      # backrest behind the sitter, seat facing the table
     pend = bpy.data.lights.new("RecLamp", 'SPOT'); pend.energy = 380; pend.color = (1.0, 0.85, 0.65); pend.spot_size = math.radians(80); pend.spot_blend = 0.6
@@ -236,25 +257,73 @@ def c4_7b(c, t):           # the ledger pages lift in a draught from the window
         lf.rotation_euler = (0, -math.radians(max(0.0, 35 * math.sin(sec * 1.2 + k * 1.3) ** 2)), 0)
 
 
-def c4_8a(c, t):           # one investigator leans back and shakes his head; the other keeps his hands in his lap
-    sec = t * dur("ch4_8a"); a, b = investigators(c, sec, lean_back=ease(min(1.0, sec / 1.2)))
-    arms_crossed(a)
-    if sec > 1.2:
-        a.rot("head", (0, 0, 1), 14 * math.sin((sec - 1.2) * 5.0) * max(0.0, 1 - (sec - 1.2) / 2.0))
-    lap_hands(b)
+def row_point(c, led, r=MISMATCH_ROW):
+    """World point on a ledger's entry page, just left of entry row r's status word (where a fingertip rests)."""
+    bpy.context.view_layer.update()
+    px = 0.205 if led == "ledA" else -0.205
+    return c[led].matrix_world @ Vector((px - 0.02, 0.08 - r * 0.0385 + 0.004, 0.03))
 
 
-def c4_8b(c, t):
-    sec = t * dur("ch4_8b"); investigators(c, sec)
+def ledgers_close(c):
+    """For the comparison the two ledgers lie at the near edge of the desk, open side by side."""
+    c["ledA"].location = REC + Vector((-0.42, -0.42, 0.78)); c["ledB"].location = REC + Vector((0.44, -0.42, 0.78))
+
+
+def point_finger(h, side):
+    """Index finger straight, the others curled: a man pointing at a line of text."""
+    fingers_curl(h, 75, side=(side,), thumb=40)
+    from human import rotate_bone
+    for k in (1, 2, 3):
+        rotate_bone(h.arm, f"finger2-{k}.{side}", (1, 0, 0), -75 * (0.8 if k == 1 else 1.0), space="LOCAL")
+
+
+def c4_8a(c, t):           # he turns the supplier's page, puts a finger on the same entry in both records, looks up
+    sec = t * dur("ch4_8a"); D = dur("ch4_8a"); a, b = investigators(c, sec)
+    sb = forward(b).cross(Vector((0, 0, 1))).normalized()
+    # 1) the loose leaf of the supplier's ledger turned over by his right hand
+    k1 = ease(min(1.0, sec / (D * 0.35)))
+    ledgers_close(c)
+    c["leafA"].rotation_euler = (0, -math.pi, 0)                       # the company's ledger is already open at the entry
+    c["leafB"].rotation_euler = (0, -math.pi * (1 - k1), 0); bpy.context.view_layer.update()   # he turns the supplier's leaf back
+    edge = c["leafB"].matrix_world @ Vector((0.36, 0.0, 0.0))
+    k2 = ease(min(1.0, max(0.0, (sec - D * 0.4) / (D * 0.25))))      # 2) fingers onto the mismatched entries
+    rB = row_point(c, "ledB"); rA = row_point(c, "ledA")
+    from rs_kit import _reach_raw as reach_full
+    fb = forward(b)
+    reach_full(b, "R", edge.lerp(rB - fb * 0.07 + Vector((0, 0, 0.05)), k2), Vector((sb.x, sb.y, -1.0)), fb + Vector((0, 0, -0.35)))
+    rest = b.bone_head("spine02") + forward(b) * 0.4; rest.z = 0.8
+    reach_full(b, "L", rest.lerp(rA - fb * 0.07 + Vector((0, 0, 0.05)), k2), Vector((-sb.x, -sb.y, -1.0)), fb + Vector((0, 0, -0.35)))
+    point_finger(b, "R"); point_finger(b, "L")
+    k3 = ease(min(1.0, max(0.0, (sec - D * 0.72) / (D * 0.2))))       # 3) he looks up at his colleague, who turns to him
+    b.rot("head", Vector((0, 0, 1)), 28 * k3); b.rot("head", sb, 10 * k3 - 12 * (1 - k3))
+    sa = forward(a).cross(Vector((0, 0, 1))).normalized()
+    a.rot("head", Vector((0, 0, 1)), -18 * k3)
+    c["focus"] = b.bone_head("head")
+
+
+def c4_8b(c, t):           # insert: his two fingertips on the same entry in both ledgers - "returned" against "not received"
+    sec = t * dur("ch4_8b"); a, b = investigators(c, sec)
+    ledgers_close(c)
+    c["leafB"].rotation_euler = (0, 0, 0); c["leafA"].rotation_euler = (0, -math.pi, 0)
+    sb = forward(b).cross(Vector((0, 0, 1))).normalized()
+    rB = row_point(c, "ledB"); rA = row_point(c, "ledA")
+    from rs_kit import _reach_raw as reach_full
+    fb = forward(b)                                       # wrist ~14 cm behind the fingertip, so the index rests on the entry
+    reach_full(b, "R", rB - fb * 0.07 + Vector((0, 0, 0.05)), Vector((sb.x, sb.y, -1.0)), fb + Vector((0, 0, -0.35)))
+    reach_full(b, "L", rA - fb * 0.035 + Vector((0, 0, 0.05)), Vector((-sb.x, -sb.y, -1.0)), fb + Vector((0, 0, -0.35)))
+    point_finger(b, "R"); point_finger(b, "L")
+    c["focus"] = (rA + rB) / 2
 
 
 SHOTS = {
+    "ch2_12a": ("office", c2_12a, C(OFF + Vector((2.3, 1.9, 1.65)), OFF + Vector((2.1, 1.75, 1.65)), OFF + Vector((-0.2, -0.6, 1.1)), 26), 2.8),
+    "ch4_8b": ("office", c4_8b, C(REC + Vector((0.12, -0.95, 1.5)), REC + Vector((0.1, -0.82, 1.38)), REC + Vector((0.02, -0.38, 0.79)), 40), 4.0),
     "ch2_12b": ("full", c2_12b, C(STO + Vector((0.6, -6.2, 1.6)), STO + Vector((0.8, 0.0, 1.4)), STO + Vector((1.0, 4.8, 0.7)), 30), 4.0),
     "ch4_9a": ("empty", c4_9a, C(STO + Vector((2.0, -3.2, 1.5)), STO + Vector((1.9, -2.6, 1.5)), STO + Vector((0.4, 2.4, 1.3)), 32), 4.0),
     "ch4_9b": ("empty", c4_9b, C(STO + Vector((2.3, 0.6, 0.9)), STO + Vector((2.2, 1.0, 0.95)), STO + Vector((1.0, 4.0, 1.8)), 28), None),
     "ch4_7a": ("office", c4_7a, C(REC + Vector((1.6, 1.6, 1.7)), REC + Vector((1.4, 1.4, 1.7)), REC + Vector((0.0, -0.3, 0.95)), 32), 2.8),
     "ch4_7b": ("office", c4_7b, C(REC + Vector((0.9, 0.9, 1.25)), REC + Vector((0.7, 0.75, 1.2)), REC + Vector((0.0, 0.0, 0.8)), 40), 2.0),
-    "ch4_8a": ("office", c4_8a, C(REC + Vector((-1.4, 1.5, 1.5)), REC + Vector((-1.25, 1.35, 1.5)), REC + Vector((-0.5, -0.9, 1.15)), 35), 2.8),
+    "ch4_8a": ("office", c4_8a, C(REC + Vector((-1.25, 1.35, 1.8)), REC + Vector((-1.1, 1.2, 1.75)), REC + Vector((0.05, -0.35, 0.95)), 30), 2.8),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
 DUR = {k: dur(k) for k in SHOTS}

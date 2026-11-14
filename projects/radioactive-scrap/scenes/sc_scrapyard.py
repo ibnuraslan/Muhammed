@@ -1074,6 +1074,8 @@ def a_circle(c, t):
 
 
 SHOTS = {
+    "ch3_8a": ("search", a_heap_wide, C((8.0, -9.5, 0.9), (7.2, -10.0, 1.0), (-1.0, 0.0, 2.0), 24), None),
+    "ch3_14a": ("recovery", a_swap, C((8.0, -2.0, 1.6), (7.4, -2.4, 1.6), (3.0, -7.5, 1.2), 30), 5.6),
     # name: (variant, anim, cam, dof)
     "ch1_15a": ("quiet", anim_wide, cam_wide, None),
     "ch1_15b": ("quiet", anim_heap, cam_heap, 4.0),

@@ -454,6 +454,7 @@ def build(variant=None):
             if (i + 1) in ill:
                 m_ = cyl(f"Mag{i}", p + Vector((0.058, -0.012, 0.058)), 0.018, 0.014, mag, verts=24, rot=(math.radians(90), 0, 0))
                 c["magnets"].append(m_)
+        c["nurse"] = person("BoardNurse", 0.0, 34, "nurse", "ponytail01", hv=0.1, hat="nurse", hat_col=(0.92, 0.92, 0.9))
         tube_light((0, -0.6, 2.9), 1.2, 45)
         area((-1.5, -1.6, 2.2), (0, 0, 1.45), 60, 1.5, (1.0, 0.95, 0.88), "WardWindow")
         box("Floor", (0, -1, -0.01), (10, 6, 0.02), pbr("WardFloor", (0.35, 0.36, 0.34), 0.5))
@@ -591,13 +592,12 @@ def s_ch4_5a(c, t):         # the route retraced: pins drop at Istanbul and the 
     c["focus"] = (c["W"](*T_IST) + c["W"](*T_SMELT)) / 2
 
 
-def s_ch2_4a(c, t):         # the container on black, cut open: shell, the thick lead lining, the small source well
+def s_ch2_4a(c, t):         # the container cut open on black; the camera pushes in and focus pulls from the steel to the well
     sec = S("ch2_4a", t); D = dur("ch2_4a")
-    c["cut"].rotation_euler = (0, 0, math.radians(-30 + 25 * ease(sec / D)))
-    set_reveal(c["lead_line"], D * 24 * 0.35, D * 24 * 0.55); set_reveal(c["src_line"], D * 24 * 0.6, D * 24 * 0.8)
-    for nm, t0 in (("lab_lead", 0.5), ("lab_src", 0.78)):
-        k = ease((sec - D * t0) / 0.4); c[nm].scale = (k + 1e-3,) * 3
-    c["focus"] = Vector((0, 0, 0.6))
+    c["cut"].rotation_euler = (0, 0, math.radians(-18))
+    for nm in ("lab_lead", "lab_src", "lead_line", "src_line"):
+        c[nm].hide_render = True
+    c["focus"] = Vector((0.3, -0.25, 0.75)).lerp(Vector((0.0, 0.0, 0.6)), ease((sec - 0.6) / (D * 0.6)))
 
 
 def s_ch3_8a(c, t):         # the pile as plates over the capsule: each plate lifted away, the meter needle climbs
@@ -643,11 +643,30 @@ def s_ch3_14a(c, t):        # chalk tally on the shield wall: nine strokes there
     c["focus"] = Vector((0, 0, 0.93))
 
 
-def s_ch4_1b(c, t):         # eighteen bed cards; ten red magnets go up one by one
+def s_ch4_1b(c, t):         # nine red magnets on the bed board; a nurse puts up the tenth, then steps back
     sec = S("ch4_1b", t); D = dur("ch4_1b")
-    for k, m in enumerate(c["magnets"]):
-        e = ease((sec - 0.3 - k * (D - 1.2) / 10) / 0.25); m.scale = (max(1e-3, e),) * 3
-    c["focus"] = Vector((0, 0, 1.45))
+    from human import reset_pose
+    h = c["nurse"]; mags = c["magnets"]; last = mags[-1]
+    if "mag_home" not in c:
+        c["mag_home"] = last.location.copy()
+    home = c["mag_home"]
+    stand = Vector((home.x + 0.42, -0.62, 0)); reset_pose(h); stand_pose(h)
+    place(h, stand, face_angle(stand, Vector((home.x + 0.1, 0.0, 0))))
+    fw = forward(h); sd = fw.cross(Vector((0, 0, 1))).normalized()
+    k = ease(min(1.0, max(0.0, (sec - 0.4) / (D * 0.4))))             # hand travels from her side to the card
+    back = ease(min(1.0, max(0.0, (sec - D * 0.62) / (D * 0.3))))      # then drops back down
+    side_pt = h.bone_head("upperarm01.R") + fw * 0.2 + Vector((0, 0, -0.45))
+    at_card = home + Vector((0.0, -0.035, -0.01))
+    tgt = side_pt.lerp(at_card, k).lerp(side_pt, back)
+    reach(h, "R", tgt, Vector((sd.x, sd.y, -1.0)), Vector((0, 0.9, 0.35)))
+    fingers_curl(h, 60, side=("R",), thumb=45)
+    bpy.context.view_layer.update()
+    if back <= 0.0 and k < 0.999:                                     # carried between finger and thumb
+        last.location = tgt + Vector((0, 0.03, 0.01))
+    else:
+        last.location = home
+    h.rot("head", sd, -4)
+    c["focus"] = home
 
 
 def s_ch4_8b(c, t):         # cork board: red string between the rows the two records disagree on, then the "?" card
@@ -665,18 +684,8 @@ def s_ch4_10a(c, t):        # forty-six binders, one per centre; a green tick go
 
 
 SHOTS = {
-    "ch1_3b": ("desk_ist", s_ch1_3b, C((0.42, -0.62, 1.32), (0.34, -0.52, 1.18), (0.0, 0.03, 0.76), 40, (-0.05, 0.05, 0.76)), 4.0),
-    "ch1_7a": ("model", s_ch1_7a, C((1.3, -1.7, 1.6), (1.0, -1.35, 1.35), (0.0, -0.1, 0.42), 40), 5.6),
-    "ch1_12a": ("calendar", s_ch1_12a, C((0.35, -1.25, 1.62), (0.18, -0.95, 1.58), (0.0, 0.0, 1.47), 50, (-0.03, 0.0, 1.43)), 2.8),
-    "ch1_13b": ("desk_ist", s_ch1_13b, C((-0.05, -0.55, 1.2), (-0.2, -0.45, 1.08), (-0.2, 0.05, 0.76), 45, (-0.3, 0.05, 0.76)), 4.0),
     "ch2_4a": ("void", s_ch2_4a, C((1.9, -2.3, 1.45), (1.55, -1.9, 1.25), (0.1, -0.05, 0.62), 40), 5.6),
-    "ch2_12a": ("desk_tr", s_ch2_12a, C((0.55, -0.75, 1.25), (0.42, -0.58, 1.12), (0.13, -0.2, 0.76), 45, (0.12, -0.22, 0.76)), 4.0),
-    "ch3_8a": ("void", s_ch3_8a, C((6.9, -3.0, 1.25), (6.75, -2.6, 1.1), (6.5, -0.1, 0.33), 35), 5.6),
-    "ch3_14a": ("tally", s_ch3_14a, C((0.5, -1.25, 1.0), (0.3, -1.0, 0.98), (-0.15, 0.1, 0.93), 50), 4.0),
-    "ch4_1b": ("board", s_ch4_1b, C((0.75, -1.55, 1.5), (0.45, -1.3, 1.48), (0.0, 0.0, 1.45), 40), 5.6),
-    "ch4_5a": ("desk_tr", s_ch4_5a, C((-0.08, -0.42, 1.05), (-0.04, -0.34, 0.98), (-0.12, 0.08, 0.76), 40, (-0.08, 0.08, 0.76)), 4.0),
-    "ch4_8b": ("cork", s_ch4_8b, C((0.75, -1.5, 1.55), (0.5, -1.2, 1.5), (0.0, 0.0, 1.42), 38), 4.0),
-    "ch4_10a": ("binders", s_ch4_10a, C((-4.4, -1.3, 1.3), (-1.6, -1.3, 1.3), (-3.6, 0.15, 1.15), 32, (-0.8, 0.15, 1.15)), 5.6),
+    "ch4_1b": ("board", s_ch4_1b, C((-0.55, -2.1, 1.55), (-0.35, -1.85, 1.52), (0.4, -0.2, 1.3), 34), 5.6),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
 DUR = {k: dur(k) for k in SHOTS}

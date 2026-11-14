@@ -223,6 +223,7 @@ def c4_10b(c, t):          # the store door is padlocked; a new trefoil sign goe
 
 
 SHOTS = {
+    "ch4_10a": ("room", c4_10a, C(Vector((3.6, 1.6, 1.7)), Vector((3.3, 1.3, 1.7)), Vector((-2.5, -2.0, 1.4)), 24), 4.0),
     "ch2_9a": ("room", c2_9a, C(Vector((-4.1, -2.9, 1.7)), Vector((-3.0, -2.9, 1.7)), Vector((0.0, 1.0, 1.6)), 20), None),
     "ch2_9b": ("room", c2_9b, C(Vector((2.6, -1.6, 1.5)), Vector((2.3, -1.3, 1.5)), Vector((0.4, 0.55, 1.1)), 35), 2.8),
     "ch2_10a": ("room", c2_10a, C(Vector((4.2, -2.6, 1.4)), Vector((4.0, -2.2, 1.5)), Vector((0.0, 0.8, 1.7)), 22), None),

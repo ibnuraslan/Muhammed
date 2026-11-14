@@ -1032,3 +1032,80 @@ def fingers_curl(h, deg=35, side=("L", "R"), thumb=15):
 
 
 _human.fingers_curl = fingers_curl
+
+
+def ripple(name, centre, radius=2.5, color=(0.81, 0.17, 0.012), opacity=0.55, period=96.0, z=0.03):
+    """Soft highlight on the ground around a target: FILLED concentric bands (never thin rings), a solid warm core,
+    each band lighter (~100/63/40/25/15 %), soft edges, fading to nothing at the rim; the bands drift outward and
+    loop slowly (frame driver: plays in any render). Casts no shadow; hidden by default (show it per shot)."""
+    bpy.ops.mesh.primitive_circle_add(vertices=96, radius=1.0, fill_type='NGON', location=Vector(centre) + Vector((0, 0, z)))
+    o = bpy.context.active_object; o.name = name; o.scale = (radius, radius, 1)
+    m = bpy.data.materials.new(name + "M"); m.use_nodes = True; m.blend_method = 'BLEND' if hasattr(m, "blend_method") else None
+    N = m.node_tree.nodes; L = m.node_tree.links; N.clear()
+    out = N.new("ShaderNodeOutputMaterial"); mix = N.new("ShaderNodeMixShader")
+    tr = N.new("ShaderNodeBsdfTransparent"); em = N.new("ShaderNodeEmission"); em.inputs['Color'].default_value = (*color, 1); em.inputs['Strength'].default_value = 2.2
+    tc = N.new("ShaderNodeTexCoord"); ln = N.new("ShaderNodeVectorMath"); ln.operation = 'LENGTH'; L.new(tc.outputs['Object'], ln.inputs[0])
+
+    def op(kind, a, b=None, val=None):
+        n = N.new("ShaderNodeMath"); n.operation = kind
+        for i, x in enumerate((a, b)):
+            if x is None:
+                continue
+            if isinstance(x, (int, float)):
+                n.inputs[i].default_value = x
+            else:
+                L.new(x, n.inputs[i])
+        return n.outputs[0]
+    vt = N.new("ShaderNodeValue"); dr = vt.outputs[0].driver_add("default_value").driver; dr.type = 'SCRIPTED'; dr.expression = f"frame / {period:.1f}"
+    shift = op('MULTIPLY', op('FRACT', vt.outputs[0]), 0.2)
+    d = ln.outputs['Value']
+    e = op('MULTIPLY', op('SUBTRACT', d, shift), 5.0)
+    bi = op('MAXIMUM', op('FLOOR', e), 0.0); bf = op('FRACT', e)
+    a1 = op('POWER', 0.63, bi)
+    mr = N.new("ShaderNodeMapRange"); mr.interpolation_type = 'SMOOTHSTEP'; mr.inputs['From Min'].default_value = 0.75; mr.inputs['From Max'].default_value = 1.0
+    L.new(bf, mr.inputs['Value'])
+    soft = op('MULTIPLY', a1, op('SUBTRACT', 1.0, op('MULTIPLY', mr.outputs[0], 0.37)))
+    rim = op('MAXIMUM', op('SUBTRACT', 1.0, d), 0.0)                       # fades to nothing at the edge
+    alpha = op('MULTIPLY', op('MULTIPLY', soft, op('POWER', rim, 0.6)), opacity)
+    L.new(alpha, mix.inputs['Fac']); L.new(tr.outputs[0], mix.inputs[1]); L.new(em.outputs[0], mix.inputs[2]); L.new(mix.outputs[0], out.inputs['Surface'])
+    o.data.materials.append(m); o.visible_shadow = False; o.visible_glossy = False; o.hide_render = True
+    return o
+
+
+def wall_calendar(loc, rz, ringed=(10, 13), name="Calendar"):
+    """A printed Turkish wall calendar, ARALIK 1998 (1 Dec 1998 was a Tuesday), hung on a nail; the given dates are
+    ringed in red ballpoint (slightly uneven loops, as drawn by hand). Front faces (sin rz, -cos rz). Returns root."""
+    from kit import text_obj
+    root = bpy.data.objects.new(name, None); bpy.context.collection.objects.link(root)
+    paper = noisy(name + "Paper", (0.88, 0.86, 0.8), 0.85, dirt=0.25, scale=30, dark=0.85)
+    ink = pbr(name + "Ink", (0.05, 0.05, 0.06), 0.6); red = pbr(name + "Red", (0.55, 0.05, 0.05), 0.55)
+    parts = [box(name + "Sheet", (0, 0, 0), (0.42, 0.004, 0.56), paper),
+             box(name + "Pic", (0, -0.003, 0.15), (0.38, 0.002, 0.2), ph_mat("brick_wall_02", 0.4, (0.4, 0.35, 0.3), name=name + "PicM")),
+             cyl(name + "Nail", (0, -0.006, 0.3), 0.003, 0.02, pbr(name + "NailM", (0.4, 0.4, 0.4), 0.3, 1.0), rot=(math.radians(90), 0, 0))]
+    for o in parts:
+        o.parent = root
+
+    def t(s, p, size, m):
+        o = text_obj(name + "T", s, p, size, m, rot=(math.radians(90), 0, 0), extrude=0.0); o.parent = root
+    t("ARALIK 1998", (0, -0.004, 0.015), 0.03, ink)
+    X0, DX, Y0, DY = -0.165, 0.055, -0.03, 0.048
+    for i, dn in enumerate(["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"]):
+        t(dn, (X0 + i * DX, -0.004, Y0), 0.012, red if i == 6 else ink)
+    cells = {}
+    for d in range(1, 32):
+        col = d % 7; row = d // 7
+        p = Vector((X0 + col * DX, -0.004, Y0 - (row + 1) * DY)); t(str(d), p, 0.02, red if col == 6 else ink); cells[d] = p
+    for k, d in enumerate(ringed):          # hand-drawn loops: two passes, slightly off-round, open where the pen lifted
+        for pas in range(2):
+            pts = []
+            for i in range(40):
+                a = (i / 39) * 2 * math.pi * (1.0 + 0.08 * pas) + 0.4 * k
+                r = 0.021 + 0.002 * math.sin(a * 3 + k) + 0.0015 * pas
+                pts.append(cells[d] + Vector((r * 1.2 * math.cos(a), -0.0015, 0.007 + r * math.sin(a))))
+            cu = bpy.data.curves.new(name + "Ring", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0006
+            sp = cu.splines.new('POLY'); sp.points.add(len(pts) - 1)
+            for i, p in enumerate(pts):
+                sp.points[i].co = (p.x, p.y, p.z, 1)
+            o = bpy.data.objects.new(name + "Ring", cu); bpy.context.collection.objects.link(o); cu.materials.append(red); o.parent = root
+    root.location = loc; root.rotation_euler = (0, 0, rz)
+    return root
