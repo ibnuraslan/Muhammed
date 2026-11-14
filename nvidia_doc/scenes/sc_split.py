@@ -64,7 +64,7 @@ def build(variant=None):
         lamp = bpy.data.lights.new("DeskLamp", 'POINT'); lamp.energy = 25; lamp.color = (1.0, 0.75, 0.5); lamp.shadow_soft_size = 0.1
         lo = bpy.data.objects.new("DeskLamp", lamp); bpy.context.collection.objects.link(lo); lo.location = (-2.2, 0.2, 1.2)
         box("LampShade", (-2.2, 0.2, 1.22), (0.25, 0.25, 0.18), emissive("Shade", (1.0, 0.75, 0.5), 2.5))
-        rim = area_light((1.5, 2.6, 2.2), (0, 0, 0), 1.5, 40, (0.55, 0.7, 1.0)); point_at(rim, (0.2, 1.8, 1.5))
+        rim = area_light((1.5, 2.6, 2.2), (0, 0, 0), 1.5, 110, (0.55, 0.7, 1.0)); point_at(rim, (0.2, 1.8, 1.5))
         rim.visible_camera = False; rim.visible_glossy = False; rim.visible_transmission = False
         from people import man
         h = man("ExecPhone")

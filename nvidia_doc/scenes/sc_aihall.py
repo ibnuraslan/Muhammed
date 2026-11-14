@@ -178,7 +178,7 @@ def _push(c, t):
 
 def _half(c, t):
     e = ease(t)
-    return (Vector((-0.55, -1.9, 2.05)).lerp(Vector((0.35, -1.4, 1.95)), e), Vector((0.1, 9.5, 0.8)), 24)
+    return (Vector((-0.12, -2.1, 2.05)).lerp(Vector((0.35, -1.4, 1.95)), e), Vector((0.1, 9.5, 0.8)), 24)
 
 
 def _ripple(c, t):

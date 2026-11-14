@@ -93,7 +93,7 @@ def build(variant=None):
     area_light((0.8, -2.0, 2.2), (0, 0, 0), 2.0, 30, (0.7, 0.8, 1.0)).visible_camera = False
     # foreground desk with a phone that lights up (frame driver), out of focus
     box("Desk", (0.15, -0.55, 0.74), (1.2, 0.6, 0.04), wood("Desk", (0.06, 0.04, 0.025), (0.14, 0.09, 0.05), scale=(6, 0.35, 0.35), rough=0.3))
-    box("Books", (0.32, -0.25, 1.1), (0.22, 0.16, 0.2), pbr("Books", (0.25, 0.1, 0.08), 0.7), bevel=0.004)
+    box("Books", (0.32, -0.25, 0.98), (0.22, 0.16, 0.44), pbr("Books", (0.25, 0.1, 0.08), 0.7), bevel=0.004)
     box("Phone", (0.32, -0.27, 1.205), (0.075, 0.155, 0.008), pbr("PhoneBody", (0.02, 0.02, 0.022), 0.3), bevel=0.004, rot=(0, 0, 0.25))
     pm = bpy.data.materials.new("PhoneScreen"); pm.use_nodes = True
     n_ = pm.node_tree.nodes; l_ = pm.node_tree.links; n_.clear(); o_ = n_.new("ShaderNodeOutputMaterial"); em = n_.new("ShaderNodeEmission")
@@ -110,6 +110,11 @@ def build(variant=None):
     for k in range(4):
         off = mathutils.Matrix.Rotation(0.25, 3, 'Z') @ mathutils.Vector((0, 0.045 - k * 0.026, 0))
         box("Notif", (0.32 + off.x, -0.27 + off.y, 1.2102), (0.06, 0.02, 0.0005), nm, rot=(0, 0, 0.25))
+    rig = bpy.data.objects.new("PhoneRig", None); bpy.context.collection.objects.link(rig)   # tilt the phone
+    rig.location = (0.32, -0.27, 1.205); bpy.context.view_layer.update()                   # toward the lens so
+    for o in [o for o in bpy.data.objects if o.name.startswith(("Phone", "Notif")) and o is not rig]:   # the glow reads
+        mw = o.matrix_world.copy(); o.parent = rig; o.matrix_world = mw
+    rig.location.z += 0.03; rig.location.x -= 0.07; rig.rotation_euler = (0.55, 0, 0)
     cyl("Mug", (-0.2, -0.45, 0.8), 0.04, 0.1, pbr("Mug", (0.6, 0.6, 0.6), 0.3), verts=24)
     c["cal"] = CAL_C
     return c
