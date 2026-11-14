@@ -349,7 +349,7 @@ for f, th, fy, fl in ((1976, 0, -1.0, 10), (2040, 0, -1.0, 12), (2060, 0, -1.0, 
             feet=stand_feet(0.98, fy, 140), curl={"L": 0.8, "R": 0.8})
 FB.pose(2100, (0.95, -1.35, RH - 0.05), yaw=150, flex=8, sp=(8, 0, 0), head=(10, 20), hands={"L": ("r", (-0.2, 0.05, -0.15)), "R": ("r", (0.2, 0.05, -0.15))}, feet=stand_feet(0.95, -1.35, 150))
 # FireB helps her out: hand on her arm, walks beside her
-pFB = catmull([(2120, Vector((0.65, -1.45, 0))), (2200, Vector((0.05, -1.6, 0))), (2340, Vector((-0.45, -2.55, 0)))])
+pFB = catmull([(2120, Vector((0.80, -1.45, 0))), (2200, Vector((0.30, -1.65, 0))), (2340, Vector((-0.15, -2.60, 0)))])     # a step further from her: arms never touch
 PANEL_DOWN = True
 FB.walk(pFB, lambda f: 25.0, 2120, 2340, stride=0.6, lift=0.06, bob=0.015)
 PANEL_DOWN = False

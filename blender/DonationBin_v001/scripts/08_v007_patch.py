@@ -231,6 +231,28 @@ for idb in list(bpy.data.materials) + list(bpy.data.worlds) + list(bpy.data.node
 for o in bpy.data.objects:
     for k in [k for k in o.keys() if "xray" in k.lower()]: o[k] = 0.0
 print("XRAY_REMOVED", nx)
+# the explainer's studio lighting (dark interior lights, studio key, low exposure) goes with it: hold the
+# normal inside-the-bin lighting of f505 through the old explainer window
+def _fcs(idb):
+    ad = getattr(idb, "animation_data", None)
+    if not ad or not ad.action: return []
+    return [c for l in ad.action.layers for st in l.strips for cb in st.channelbags for c in cb.fcurves]
+nl = 0
+for idb in [o.data for o in bpy.data.objects if o.type == 'LIGHT'] + [sc] + [w.node_tree for w in bpy.data.worlds if w.node_tree]:
+    for c in _fcs(idb):
+        k505 = [k for k in c.keyframe_points if int(round(k.co.x)) == 505]
+        if not k505: continue
+        v = k505[0].co.y
+        for k in c.keyframe_points:
+            if 510 <= k.co.x <= 960: k.co.y = v; k.handle_left.y = v; k.handle_right.y = v; nl += 1
+        c.update()
+for o in bpy.data.objects:
+    if o.type == 'LIGHT' and o.name.startswith("StudioKey"):
+        for c in _fcs(o.data):
+            for k in c.keyframe_points: k.co.y = 0.0; k.handle_left.y = 0.0; k.handle_right.y = 0.0
+            c.update()
+        o.data.energy = 0.0
+print("EXPLAINER_LIGHT_KEYS_HELD", nl)
 # simplify: props that floated or passed through bodies (blanket that appeared from nowhere, dust motes, the
 # explainer's ghost bag, the flap counterweight) are removed
 rm_ = [o for o in bpy.data.objects if o.name.startswith(("Mote", "GhostBag", "CounterWeight", "Blanket"))]

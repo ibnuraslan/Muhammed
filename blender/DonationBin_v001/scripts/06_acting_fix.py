@@ -230,7 +230,7 @@ def jump(f, dz, flex, hz, hands_on=True, crouch=0.0, airborne=False, look=(-30, 
     WO.pose(f, (JW.x, JW.y, jz + RH - crouch + dz), yaw=180, flex=flex, sp=(flex * 0.5, 0, 0), head=look, hands=hands, feet=feet, curl={"L": 0.3, "R": 0.3})
 def bang(f, hl, hr, look=(-20, 0), lean=0.0):
     p = Vector((JW.x, JW.y + 0.08, 0)); z = PZ(p.x, p.y)
-    hands = {"L": ("w", (-0.17, 0.500 - hl, 1.52 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.17, 0.500 - hr, 1.56 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
+    hands = {"L": ("w", (-0.19, 0.500 - hl, 1.45 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.19, 0.500 - hr, 1.49 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
     WO.pose(f, (p.x, p.y, z + RH - 0.04), yaw=180, flex=4 + 4 * lean, sp=(3 + 4 * lean, 0, 0), head=look, hands=hands, feet=stand_feet(p.x, p.y - 0.02, 180), curl={"L": 0.1, "R": 0.1})
 for i, f in enumerate(range(1180, 1290, 10)):
     bang(f, 0.07 if i % 2 == 0 else 0.0, 0.0 if i % 2 == 0 else 0.07, look=(-22 + 4 * (i % 3), 0), lean=0.5 * (i % 2))
@@ -267,6 +267,8 @@ def scream(f, jaw, bob=0.0, look=(-28, 0)):
         WO.key_hand(s_, f, W_, (up * 0.7 - sideV * 0.4 * sx + fw_ * 0.2).normalized(), (-sideV * sx).normalized(),
                     pole=W_ + sideV * (0.35 * sx) - up * 0.35)
 def pound(f, hit):
+    return at_flap(f, hit, look=(-15, 0), jaw=18 * hit)
+def _pound_old(f, hit):
     p = Vector((0.0, -0.08, 0))
     fx_ = [WO.foot_xy(s_, Vector((p.x, p.y + 0.05, 0)), 0) for s_ in "LR"]
     z = min(PZ(v.x, v.y) for v in fx_) + 0.04
@@ -297,9 +299,6 @@ for f, k, weak, hd, br in ((1532, 0.85, 0.0, (15, 10), 0), (1580, 0.9, 0.1, (18,
     curled(f, k, weak, hd, br)
 # --- 1843-2094: hears the knock, lifts her head, props up on her arm and sits up toward the light
 curled(1910, 1.0, 1.0, (25, 0)); curled(1935, 0.95, 0.9, (0, -20), jaw=8)
-WO.pose(1990, (CUR.x + 0.02, CUR.y, PZ(CUR.x, CUR.y) + 0.24), yaw=CY - 20, flex=20, side=55, sp=(20, 0, 0), head=(-5, -20),
-        hands={"L": ("w", (CUR.x - 0.10, CUR.y + 0.20, PZ(CUR.x - 0.10, CUR.y + 0.20) + 0.035), (0.6, 0.3, 0), tuple(PALM_DOWN)), "R": ("w", (CUR.x + 0.46, CUR.y - 0.32, PZ(CUR.x + 0.46, CUR.y - 0.32) + 0.035), (0.3, -0.6, 0), tuple(PALM_DOWN))},
-        feet={"L": ("r", (-0.02, -0.30, 0.40), 15), "R": ("r", (0.04, -0.24, 0.34), 15)}, jaw=4)
 SEAT = Vector((0.05, 0.12, 0))
 def seated(f, look=(0, 0), lean=15, jaw=0.0, dy=0.0):
     p = Vector((SEAT.x, SEAT.y + dy, PZ(SEAT.x, SEAT.y + dy) + 0.13))
@@ -311,7 +310,7 @@ def seated(f, look=(0, 0), lean=15, jaw=0.0, dy=0.0):
         hands[s] = ("w", (hp.x, hp.y, PZ(hp.x, hp.y) + 0.035), (0.3 * sx, -1, 0), tuple(PALM_DOWN))
     WO.pose(f, p, yaw=0, flex=-10, sp=(lean, 0, 0), head=look, hands=hands,
             feet={s: ("g", (fx[s].x, fx[s].y), 0, 0.0, 15) for s in "LR"}, jaw=jaw)
-seated(2045, look=(-10, 25), lean=25, dy=0.05); seated(2070, look=(-5, 20), lean=25, dy=0.05); seated(2088, look=(-5, 10), lean=20, dy=0.0)
+seated(1990, look=(-5, -20), lean=30, dy=0.0); seated(2045, look=(-10, 25), lean=25, dy=0.05); seated(2070, look=(-5, 20), lean=25, dy=0.05); seated(2088, look=(-5, 10), lean=20, dy=0.0)
 
 # ---------------------------------------------------------------- walk out (2150-2490): left hand holds the blanket at her chest, right arm hangs
 def body_M(f):
@@ -326,6 +325,11 @@ for l in ad_.action.layers:
                 if any(fc.data_path.startswith('pose.bones["%s"]' % n) for n in hb + ["Pole_elbow.L", "Pole_elbow.R"]):
                     for k in [k for k in fc.keyframe_points if 2150 <= k.co.x <= 2490][::-1]: fc.keyframe_points.remove(k, fast=True)
                     fc.update()
+sc.frame_set(628)
+for s_ in "LR":
+    sx = 1 if s_ == "L" else -1
+    kn = WOo.matrix_world @ WOo.pose.bones["lowerleg01." + s_].head
+    WO.key_hand(s_, 628, kn + Vector((0, 0, 0.11)), Vector((0, -1, 0)), PALM_DOWN, pole=kn + Vector((0.45 * sx, 0.2, 0.3)))
 for f in (650, 676):
     Mb_ = body_M(f); R3 = Mb_.to_3x3()
     for s_ in "LR":
@@ -344,7 +348,7 @@ if cp_:
         Mb_ = body_M(f)
         for s_ in "LR":
             sx = 1 if s_ == "L" else -1
-            WO.key_hand(s_, f, Vector((0.22 * sx, FY - 0.01, zb + 0.02)), Vector((0, -0.3, -1)).normalized(), Vector((0, -1, 0)),
+            WO.key_hand(s_, f, Vector((0.34 * sx, FY - 0.07, zb + 0.03)), Vector((0, -0.3, -1)).normalized(), Vector((0, -1, 0)),
                         pole=Mb_ @ Vector((0.45 * sx, 0.10, 1.05)))
     for f in (2136,):
         Mb_ = body_M(f); R3 = Mb_.to_3x3()
