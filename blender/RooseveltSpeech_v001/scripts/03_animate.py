@@ -11,7 +11,7 @@ random.seed(3)
 STREET_Z = sc["STREET_Z"]
 B = [1, 187, 337, 445, 721, 877, 1003, 1189, 1285]   # beat start frames
 F_FLASH, F_IMPACT, F_SWAP, END = 116, 168, 1100, 1500
-F_OUT, F_IN = 506, 1165   # street hidden / hall shown (both behind the opaque studio dome)
+F_OUT, F_IN = 1160, 1165   # v010b: the street stays behind him through the cutaway; swap to the hall behind the dome dissolve
 C_STREET, C_HALL, C_STUDIO = (bpy.data.collections[n] for n in ("Street", "Hall", "Studio"))
 def lerp(a, b, t): return a + (b - a) * t
 def pk(keys):  # pchip on scalar or Vector keys
@@ -585,9 +585,9 @@ child_of(mp, H, "spine01", 400); vis(mp, ((1, True), (B[5], False), (1180, True)
 dome = bpy.data.objects["StudioDome"]; dome.visible_shadow = True
 sc.frame_set(400); dome.location = PL((0, 0.02, 0))
 dfade = dome.data.materials[0].node_tree.nodes["DomeFade"]
-for f_, v_ in ((1, 0.0), (B[3] + 15, 0.0), (B[3] + 60, 1.0), (1170, 1.0), (1205, 0.0)):
+for f_, v_ in ((1, 0.0), (1145, 0.0), (1160, 1.0), (1170, 1.0), (1205, 0.0)):   # v010b: dome only as the street-to-hall dissolve
     dfade.outputs[0].default_value = v_; dfade.outputs[0].keyframe_insert("default_value", frame=f_)
-vis(dome, ((1, True), (B[3] + 14, False), (1206, True)))
+vis(dome, ((1, True), (1144, False), (1206, True)))
 for nm in ("StudioKey", "StudioFill", "StudioRim"):
     lo = bpy.data.objects[nm]; e = lo.data.energy
     lo.location = PL(lo.location - Vector((-0.1, -0.2, 1.28))) if False else lo.location

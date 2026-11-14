@@ -240,6 +240,9 @@ for f in range(1, END + 1):
     q = (t - p).to_track_quat("-Z", "Y"); roll = 4.0 * math.sin(f / 70.0) if f < B[3] or f > B[7] else 0.0
     cam.rotation_quaternion = q @ Quaternion((0, 0, 1), R_(roll))
     cam_d.lens = cl(f)
+    cam_d.dof.use_dof = True; cam_d.dof.focus_distance = (t - p).length   # v010b: soft street behind him in the cutaway only
+    cam_d.dof.aperture_fstop = 5.6 if 470 <= f <= 1165 else 128.0
+    cam_d.keyframe_insert("dof.focus_distance", frame=f); cam_d.keyframe_insert("dof.aperture_fstop", frame=f)
     cam.keyframe_insert("location", frame=f); cam.keyframe_insert("rotation_quaternion", frame=f); cam_d.keyframe_insert("lens", frame=f)
 json.dump([{"beat": i + 1, "frame": f_, "first_words": w_} for i, (f_, w_) in enumerate(zip(B, [
     "The bullet hit him", "somehow, he stayed", "So how was", "Well, Roosevelt had", "along with a", "The bullet tore", "kept it from", "And despite the", "he insisted on"]))],

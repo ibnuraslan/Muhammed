@@ -106,3 +106,8 @@ Preview: `review/preview.mp4` (every 5th frame at real speed) and `review/previe
 | 1351–1451 | Only his back to the end | A brief back view of the cheering hall (f1325–1390). It then ends front three-quarter on his face, raising the speech, with cheering arms in the foreground. |
 
 Preview: `review/preview.mp4` and `review/preview_page_p01–p06.jpg`, from v010 (frames 1–441 unchanged from v009).
+
+## v010b: director's v010 review
+| Frames | Note | Fix |
+|---|---|---|
+| 500–1160 | A plain empty blue sky behind him (reads as a void) | The street set (facade, car, lamps, crowd figures) stays behind him, softly out of focus (f/5.6 depth of field for f470–1165 only). The studio dome is only the street-to-hall dissolve (f1145–1205). |

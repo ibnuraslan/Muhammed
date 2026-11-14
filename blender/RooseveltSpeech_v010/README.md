@@ -1,4 +1,4 @@
-# RooseveltSpeech_v010: farm package (director's v009 review; earlier packages are kept unchanged)
+# RooseveltSpeech_v010 / v010b: farm package (director's v009 review; earlier packages are kept unchanged)
 
 25.0 s vertical short: 1080×1920, 60 fps, frames 1–1500. One continuous camera.
 
@@ -25,6 +25,12 @@
   6. `pipeline/anim_look.py`
   7. `06_daylight_anim_look.py`
   8. `pipeline/package_for_farm.py`
+
+## v010b (director's v010 review): the street stays behind him. Nothing else changed
+- **`RooseveltSpeech_v010b_60fps.blend`** (90.6 MB, packed, plain git; package_for_farm PROBLEMS none) is the deliverable. `RooseveltSpeech_v010_60fps.blend` is kept unchanged.
+- f500–1160: he no longer stands in front of an empty blue sky. The street set (hotel facade, car, gas lamps and crowd figures) stays behind him through the cutaway, held in the freeze-frame. The camera has depth of field at f/5.6 for f470–1165 only, so the street is soft behind him. Everywhere else it stays sharp (f/128), as before.
+- The sky-gradient studio dome is used only as a short street-to-hall dissolve (f1145–1205), while the set swaps behind it.
+- Preview: `../RooseveltSpeech_v001/review/preview.mp4` and `preview_page_p01–p06.jpg`, now from v010b (f446–1206 re-rendered; the other frames are unchanged).
 
 ## Director's v009 review, fixed in v010 (Nov 14). Story-beat frames unchanged, no VO added
 | # | Note | Fix |
