@@ -40,7 +40,11 @@ Source: v006b. I watched it as a moving preview (`pipeline/preview.py`, every 5t
   - The remaining hits are **fingers hooked into the chain-link** during the climb. A real chain-link grip puts the fingers through the holes. I checked by position: the crossing points are 0.11–0.2 m below the wrists, along the fingers.
   - There are small seat and body contacts on the blanket while he sits on it (1720–1744).
   - Tool note: `body_prop_cross` labels each crossing body part by vertex index, and MPFB's mask modifiers reorder the evaluated vertices. So its labels (for example "head|Object_8") are wrong on MPFB bodies; check by position.
-- `qa_check`: `qa_v007.json` (counts below).
+- `qa_check` on the delivered file (`qa_v007.json`):
+  - **CAMJUMP 0, ROLL 0, INSIDE 0, HOVER 0, FACEPRESS 0.**
+  - BACKHEAD 1: frame 3498, the old man, unchanged since v006b.
+  - FILL 4, CLAW 41: grip_object holds on thin props.
+  - EMPTY 159: room-wide frames, as in earlier rounds.
 
 ## Preview of the delivered file
 `review/preview.mp4` and `review/pages/` show the delivered `EscapeArtist_v007_60fps.blend`.

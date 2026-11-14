@@ -1003,7 +1003,7 @@
   "3516": [
    [
     "EMPTY",
-    "wall/prop fills the frame, character only 5%"
+    "wall/prop fills the frame, character only 9%"
    ]
   ],
   "3522": [
@@ -1048,52 +1048,30 @@
     "no character in view"
    ]
   ],
-  "3564": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "3570": [
    [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "CLAW",
+    "Protester2.L curl 26"
    ]
   ],
   "3576": [
    [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "CLAW",
+    "Protester2.L curl 43"
    ]
   ],
   "3582": [
    [
-    "FILL",
-    "Object_12"
+    "CLAW",
+    "Protester1.R curl 75"
    ],
    [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
+    "CLAW",
+    "Protester2.L curl 42"
    ],
    [
-    "EMPTY",
-    "only Object_12 in view"
-   ],
-   [
-    "EMPTY",
-    "no character in view"
+    "CLAW",
+    "Protester2.R curl 48"
    ]
   ],
   "3588": [
@@ -1147,6 +1125,10 @@
   "3630": [
    [
     "EMPTY",
+    "only Yard_Ground in view"
+   ],
+   [
+    "EMPTY",
     "no character in view"
    ]
   ],
@@ -1188,9 +1170,9 @@
   ]
  },
  "counts": {
-  "EMPTY": 167,
-  "FILL": 5,
-  "CLAW": 36,
+  "EMPTY": 159,
+  "FILL": 4,
+  "CLAW": 41,
   "BACKHEAD": 1
  }
 }
