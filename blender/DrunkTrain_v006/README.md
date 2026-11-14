@@ -6,9 +6,7 @@ v006 is v005 after a watch of the film moving, start to finish (director, Nov 14
 - `DrunkTrain_v006_60fps.blend` (73 MB, compressed, a plain git file with no LFS). Every texture is packed. Factory-startup check: `CAM_Film`, frames 1–2070, 60 fps, f/11, 0 unpacked images.
 - `review/preview.mp4`: the moving preview at real speed (`pipeline/preview.py`: every 5th frame, 270×480, Cycles 4 samples + OIDN, frame numbers burned in). `review/pages/p01–p09.jpg` are the contact pages of every preview frame.
   - The preview frames were rendered from the v006 build in stages, then each changed range was re-rendered from the final build.
-  - The animation is identical to the packed file. The only exceptions are two small camera re-aims that are not re-rendered in the preview. Both were checked with `qa_check` on the final build:
-    - 966–1015: looking down into the coupling gap.
-    - 1155–1185: the camera kept in the gap.
+  - Every range that changed (including the last camera fixes at 946–1021 and 1136–1216) was re-rendered from the final animation before the MP4 was rebuilt.
 - `beats.json`, `SETTINGS.md` (frame range 1–2070, f/11), `CREDITS.md` and `models_credits.json`.
 
 ## Checks
