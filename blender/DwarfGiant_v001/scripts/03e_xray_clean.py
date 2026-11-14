@@ -28,4 +28,11 @@ for o in OB:
         for kp in f.keyframe_points: kp.interpolation = "CONSTANT"
     n += 1
 print("XRAYCLEAN hidden", n, "objects for", RANGES)
+# director's eye fix (LESSONS_LEARNED 3): cornea as Transparent mix instead of refraction, so irises are lit
+import os
+if "EnhancedEye" in bpy.data.node_groups:
+    _NO_SAVE = True
+    exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "eye_fix.py")).read())
+else:
+    print("EYEFIX skipped: no EnhancedEye group")
 bpy.ops.wm.save_as_mainfile(filepath=out)
