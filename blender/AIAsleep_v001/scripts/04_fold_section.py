@@ -184,10 +184,10 @@ KEYS = [(1791, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 
         (1880, CUTC + V((0.050, -0.030, 0.026)), CUTC + V((0, -0.006, 0.004)), 32),
         (1915, CUTC + V((0.052, -0.036, 0.010)), CUTC, 30),
         (1926, EYE + V((0.006, -0.026, 0.004)), EYE + V((0.009, -0.01, 0.003)), 40),   # back out through the skin at the inner corner
-        (1945, EYE + V((0.006, -0.065, 0.005)), EYE + V((0.009, 0, 0.002)), 40),
-        (2010, EYE + V((-0.012, -0.062, 0.008)), EYE + V((0.009, 0, 0.002)), 40),       # real skin: the fold over the inner corner
-        (2090, EYE + V((0.004, -0.056, 0.010)), EYE + V((0.009, 0, 0.002)), 40),
-        (2160, EYE + V((-0.018, -0.066, 0.004)), EYE + V((0.006, 0, 0.002)), 40),
+        (1945, EYE + V((0.004, -0.075, 0.005)), EYE + V((0.004, 0, 0.001)), 40),
+        (2010, EYE + V((-0.008, -0.072, 0.008)), EYE + V((0.004, 0, 0.001)), 40),       # real skin: the fold over the inner corner
+        (2090, EYE + V((0.006, -0.068, 0.010)), EYE + V((0.004, 0, 0.001)), 40),
+        (2160, EYE + V((-0.012, -0.074, 0.004)), EYE + V((0.003, 0, 0.001)), 40),
         (2210, EYE + V((-0.006, -0.080, 0.003)), EYE, 40)]
 for f, p, a, l in KEYS:
     cam.location = p; cam.keyframe_insert("location", frame=f); aim.location = a; aim.keyframe_insert("location", frame=f); camd.lens = l; camd.keyframe_insert("lens", frame=f)
