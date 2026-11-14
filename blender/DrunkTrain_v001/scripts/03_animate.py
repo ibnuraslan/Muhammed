@@ -157,7 +157,7 @@ print("LAD root", [round(v, 3) for v in RH], "arm", round(LB.L_arm["L"], 3), "le
 
 # ------------------------------------------------------------------ generic gait with drunk sway
 RAIL_XS = [tx + sx * GAUGE for tx in (0.0, -4.3) for sx in (-1, 1)]
-def off_rail(xy, clear=0.3):
+def off_rail(xy, clear=0.4):
     """never plant a foot across a rail: shift the plant to the nearer side"""
     for rx in RAIL_XS:
         if abs(xy.x - rx) < clear:
@@ -348,8 +348,8 @@ def drag_state(f):
         y = tf + rel
         x = LIE_X + (0.0 - LIE_X) * smooth(min(1.0, u / 0.35))
         z = 0.14 + (0.15 * math.sin(math.pi * u / 0.2) if u < 0.2 else 0.02 * abs(math.sin(u * 9)))
-        z = max(z, 0.14 + 0.2 * max(0.0, 1 - abs(x - 0.72) / 0.35))      # v006: swept OVER the rail, never through it     # thrown up at the hit, then low under the plough
-        yaw = 90 + 450 * (1 - (1 - min(1.0, u / 0.6)) ** 2)   # spins around (ends heading -Y before the first wheelset)
+        z = max(z, 0.14 + 0.2 * (1.0 - smooth(min(1.0, max(0.0, (u - 0.4) / 0.15)))))      # v006: carried on the plough above the rail tops until he lies along the track     # thrown up at the hit, then low under the plough
+        yaw = 90 + 90 * (1 - (1 - min(1.0, u / 0.6)) ** 2)    # v006: a quarter turn only (ends heading along the track); a full spin swept his legs through the rails
         roll = 300 * u + 40 * math.sin(u * 7)
         pitch = -90 + 18 * math.sin(u * 6.5) * (1 - u)
     else:
@@ -476,12 +476,12 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         # hand under the shoulder (world: down), knee under the hip: hands planted with palms flat
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
         Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.15 + lift)      # v005: palm on top of the stones, not sunk into them
-        if abs(Wh.x - 0.72) < 0.14: Wh.z = max(Wh.z, 0.172 + 0.1)       # v006: a hand that lands on the rail rests ON its top
+        if abs(Wh.x - 0.72) < 0.3: Wh.z = max(Wh.z, 0.172 + 0.1)       # v006: a hand that lands on the rail rests ON its top
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
         hw = Bm @ LB.hip[s]; fwd_ = V(math.sin(R_(yaw_c)), -math.cos(R_(yaw_c)), 0)
         kq = (ph + 0.5 * k + 0.5) % 1.0; kf = 0.25 * (kq if kq <= 0.6 else 0.6 - (kq - 0.6) * 1.5); klift = 0.06 * math.sin(math.pi * kq) if kq > 0.6 else 0.0
         Wa = hw - fwd_ * (0.44 - kf) ; Wa = V(Wa.x, Wa.y, ground_z(Wa.x, Wa.y) + 0.085 + klift)
-        if abs(Wa.x - 0.72) < 0.2: Wa.z = max(Wa.z, 0.172 + 0.09)        # v006: knee lifted over the rail
+        if abs(Wa.x - 0.72) < 0.3: Wa.z = max(Wa.z, 0.172 + 0.09)        # v006: knee lifted over the rail
         LB.foot_world(s, f, Wa, yaw_c, pitch=165, pole_dir=V(0, -0.9, -0.6))
 # stand up: push back onto the feet, rise, wobble
 for f, z_k, pi, fl in ((f_up0, 0.55, 75, -8), (f_up0 + 10, 0.65, 45, 30), (f_up0 + 20, RH.z - 0.35, 25, 35), (f_up0 + 32, RH.z - 0.06, 6, 10), (f_up1, RH.z - 0.03, -4, 6)):
