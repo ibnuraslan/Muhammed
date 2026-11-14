@@ -48,6 +48,8 @@ def node_key(tree_owner, node_name, f, v, sock=0, inp=None):
     s = nd.outputs[sock] if inp is None else nd.inputs[inp]
     s.default_value = v; s.keyframe_insert("default_value", frame=f)
 
+# v007: the wave patch also covers the ship's water (its edge at y=-100 showed as a dark line in the beat-4 wide); shifted by one 120 m tile so the waves elsewhere are unchanged
+_sea = O["Ocean"]; _sea.location.y -= 120; _sea.modifiers["Ocean"].repeat_y = 3
 # ---------------------------------------------------------------- ship: slow forward motion + gentle roll
 ship_root = O["Ship_Root"]
 def ship_pos(f): return SHIP0 + Vector((1.5 * f / 60, 0, 0))
@@ -368,11 +370,11 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (300,  Vector((-14, -58, 5)),        Vector((-4, -30, 7)),      26, 8.0),
     (350,  Vector((-15, -45, 5.0)),     Vector((-11, Y0, 5.0)),    28, 8.0),   # v006 beat 3: readable mid shot of the berg + smear
     (520,  Vector((5, -45, 6.0)),        Vector((8, Y0, 5.0)),      28, 8.0),
-    (590,  Vector((2, -50, 20)),         Vector((0, -36, 0)),       24, 8.0),   # crane up, tilt over the debris (~1 s)
-    (640,  Vector((0, -52, 34)),         Vector((-3, -66, 0)),      22, 8.0),
-    (700,  Vector((-2, -48, 40)),        Vector((-10, -104, 6)),    20, 8.0),   # beat 4: ship sailing past the debris field
-    (850,  Vector((-10, -50, 38)),       Vector((2, -108, 8)),      20, 8.0),
-    (885,  Vector((-22, -54, 34)),       Vector((-22, -46, 0)),     22, 8.0),
+    (580,  Vector((28, -70, 16)),        Vector((5, -25, 4)),       26, 8.0),   # v007: swing round the bow, berg + debris always in frame (no top-down)
+    (640,  Vector((62, -122, 30)),       Vector((0, -40, 2)),       22, 8.0),
+    (700,  Vector((0, -178, 36)),       Vector((-5, -60, 2)),      20, 8.0),   # beat 4: the ship in the foreground, debris, the berg behind
+    (830,  Vector((-22, -178, 34)),      Vector((0, -62, 2)),       20, 8.0),
+    (870,  Vector((-95, -112, 28)),      Vector((-10, -30, 6)),     22, 8.0),   # round the stern to the berg
     (915,  Vector((-34, -44, 12)),       Vector((0, Y0, 8)),        26, 8.0),
     (965,  Vector((-28, Y0 - 7, 3.2)),   Vector((10, Y0 - 3, 3.0)), 24, 5.6),
     (1015, Vector((-10, Y0 - 6.5, 2.6)), Vector((6, Y0 - 1, 2.0)),  26, 5.6),
@@ -388,16 +390,16 @@ CK = [  # frame, camera position, look target, lens, f-stop
     (1232, Vector((7.55, Y0 + 5.35, 2.7)), Vector((7.8, Y0 + 4.0, 2.3)), 26, 8.0),
     (1265, Vector((9.4, Y0 + 3.9, 2.45)), Vector((8.0, Y0 + 4.4, 2.3)), 26, 5.6),
     (1310, Vector((8.27, Y0 + 3.55, 2.4)), Vector((8.22, Y0 + 4.86, 2.05)), 30, 5.6),
-    (1360, Vector((8.28, Y0 + 3.62, 2.3)), Vector((8.2, Y0 + 4.86, 2.0)), 30, 8.0),   # v006: slow push into the print IN Expert B's hands
-    (1450, Vector((8.3, Y0 + 3.78, 2.2)), Vector((8.2, Y0 + 4.86, 1.97)), 33, 8.0),
-    (1560, Vector((8.32, Y0 + 3.9, 2.12)), Vector((8.2, Y0 + 4.86, 1.96)), 37, 8.0),
-    (1610, Vector((8.32, Y0 + 3.98, 2.08)), Vector((8.2, Y0 + 4.86, 1.96)), 40, 8.0),
-    (1630, Vector((8.25, Y0 + 4.55, 2.02)), Vector((8.2, Y0 + 9, 1.98)), 36, 8.0),
-    (1640, Vector((8.3, Y0 + 6.5, 2.3)),  Vector((9, 36, 4)),       30, 8.0),
-    (1650, Vector((8.6, Y0 + 20, 3.5)),   Vector((9, 40, 4)),       26, 8.0),
-    (1660, Vector((9, 22, 6)),            Vector((24, 74, 3)),      24, 8.0),
-    (1670, Vector((13, 38, 8)),           Vector((46, 44, 5)),      24, 8.0),
-    (1682, Vector((20, 44, 10)),          Vector((4, 4, 10)),       24, 8.0),
+    (1360, Vector((8.28, Y0 + 3.62, 2.3)), Vector((8.2, Y0 + 4.86, 2.1)), 30, 8.0),   # v007: face + print in his hands (no headless push)
+    (1450, Vector((8.3, Y0 + 3.68, 2.3)), Vector((8.2, Y0 + 4.86, 2.15)), 31, 8.0),
+    (1560, Vector((8.32, Y0 + 3.72, 2.3)), Vector((8.2, Y0 + 4.86, 2.15)), 32, 8.0),
+    (1612, Vector((8.3, Y0 + 3.74, 2.28)), Vector((8.2, Y0 + 4.86, 2.15)), 32, 8.0),
+    (1617, Vector((8.29, Y0 + 3.95, 2.26)), Vector((8.2, Y0 + 6, 2.15)), 31, 8.0),
+    (1624, Vector((8.25, Y0 + 6.5, 2.2)), Vector((9, 36, 4)),       28, 8.0),   # fast through the print: a clean cut to the sea
+    (1634, Vector((8.6, Y0 + 16, 3.5)),   Vector((9, 40, 4)),       26, 8.0),
+    (1645, Vector((9, 22, 6)),            Vector((24, 74, 3)),      24, 8.0),
+    (1655, Vector((13, 38, 8)),           Vector((46, 44, 5)),      24, 8.0),
+    (1667, Vector((20, 44, 10)),          Vector((4, 4, 10)),       24, 8.0),
     (1750, Vector((36, 44, 12)),         Vector((4, 4, 10)),        24, 8.0),
     (END,  Vector((56, 30, 11)),         Vector((0, 0, 11)),        26, 8.0),
 ]
@@ -442,7 +444,7 @@ vis(["liner"], cross_skin, 1700)
 vis(["Darkroom_WallFront"], cross_skin, cross_skin + 10)   # back on once the camera is inside (v004: it showed the sea behind the tech)
 bb = [O["Iceberg"].matrix_world @ Vector(c) for c in O["Iceberg"].bound_box]
 BERG_MAXY = max(v.y for v in bb)
-cross_print = next(f for f in range(1560, 1700) if fpos(f).y > Y0 + 4.9)
+cross_print = 1614   # v007: clean cut - the office (people, print, desk, walls) drops away in one frame, the camera then rushes out over the sea
 back_on = next(f for f in range(cross_print + 1, 1760) if fpos(f).y > BERG_MAXY + 1.0)
 print("BERG back on", back_on, BERG_MAXY)
 for n in ("Iceberg", "Mist_Bank"):
@@ -454,12 +456,12 @@ vis(["Print_Office", "ExpertB", "Office_WallBack", "Darkroom_WallRight", "Office
 cross_giant = cross_print
 print("CROSS", cross_skin, cross_print)
 # rooms never render outside their beats (safety: they're inside the berg anyway)
-for o in list(D.collections["Rooms_In_Berg"].objects) + [O[n] for n in ("Tech", "ExpertA", "ExpertB")]:
+for o in list(D.collections["Rooms_In_Berg"].objects) + [O[n] for n in ("Tech", "ExpertA", "ExpertB", "magnifier", "Print_Office", "Tongs") if n in O and O[n] not in list(D.collections["Rooms_In_Berg"].objects)]:
     if "DoorCut" in o.name: continue
     for ob in [o] + list(o.children):
         ob.hide_render = True; ob.keyframe_insert("hide_render", frame=0)
         ob.hide_render = False; ob.keyframe_insert("hide_render", frame=cross_skin - 2)
-        ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_print + 2)
+        ob.hide_render = True; ob.keyframe_insert("hide_render", frame=cross_print)
         set_interp(ob, 'CONSTANT', lambda p_: p_ == "hide_render")
 for o in list(D.collections["Explainer_Cyc"].objects):
     o.hide_render = True; o.keyframe_insert("hide_render", frame=0)     # v006: the explainer void is cut (photo stays in the office, in his hands)
@@ -580,7 +582,7 @@ for f in range(0, 366, 12):
 for L_ in [o for o in O if o.type == "LIGHT"]: L_.visible_camera = False
 O["Darkroom_DoorCut"].hide_render = True
 # the ghost liner is done after the night scrape: off the render entirely (it showed as a faint hull at the berg at 1760+)
-for f_, v_ in ((0, False), (1100, True)):
+for f_, v_ in ((0, True), (905, False), (1100, True)):   # v007: no ghost panes over the berg in beat 2; only the night scrape
     liner.hide_render = v_; liner.keyframe_insert("hide_render", frame=f_)
 set_interp(liner, 'CONSTANT', lambda p_: p_ == "hide_render")
 # hidden objects must not block camera rays: mirror every hide_render key onto hide_viewport (after all evaluation passes)
