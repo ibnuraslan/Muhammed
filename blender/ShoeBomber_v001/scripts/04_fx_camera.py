@@ -471,7 +471,8 @@ CAB = [[
     (769, V((-0.80, 1.25, 1.60)), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
     (776, V((-0.80, 1.25, 1.60)), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
     # beat 6: rise to his feet -> kneeling level -> with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
-    (830, V((0.20, 0.70, 1.45)), bp("PaxB", "head", 830, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
+    (826, V((-0.80, 1.25, 1.60)), bp("PaxB", "head", 826, (0, 0, -0.1)), 24),   # v006d: hold until PaxA has finished his few steps
+    (850, V((0.20, 0.70, 1.45)), bp("PaxB", "head", 850, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
     # v006d: her face while she pulls the shoes off (the old framing looked down on the top of her head)
     (866, P(0.223, 0.702, 1.347), bp("PaxB", "head", 866, (0, 0, -0.1)), 22),
     (890, P(0.223, 0.702, 1.347), bp("PaxB", "head", 890, (0, 0, -0.1)), 22),
