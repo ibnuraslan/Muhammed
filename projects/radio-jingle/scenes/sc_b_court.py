@@ -286,7 +286,7 @@ def anim(c, t, move):
     sec = t * DUR[move]
     P_ = c["people"]; v = c["variant"]
     for k, h in P_.items():
-        B.apply_pose(h, c["rest"][k])
+        B.apply_pose(h, c["rest"][k]); B.idle(h, sec, seed=sum(map(ord, k)) % 7, amp=0.8)
     idle(c, sec)
     if "Presiding" in P_:
         if move == "civil":                                 # the civil judge reads with her hands resting on the bench

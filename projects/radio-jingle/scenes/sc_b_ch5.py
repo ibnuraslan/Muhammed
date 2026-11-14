@@ -308,7 +308,7 @@ def anim(c, t, move):
         if move == "wait":
             f.location = m.arm.location + Vector((0.0, 0.0, 0.0)) + Vector((-0.05, 0.35, 0.3)); f.rotation_euler = (math.radians(90), 0, 0)
     elif v == "physicist":
-        old = c["old"]; B.apply_pose(old, c["rest"])
+        old = c["old"]; B.apply_pose(old, c["rest"]); B.idle(old, sec, 1.0)
         fwd = B.fwd_of(old); side = fwd.cross(Vector((0, 0, 1))).normalized()
         knob = Vector((0.15, 1.2, 0.98))
         reach(old, "R", knob + Vector((0.05, -0.05, 0.03)), Vector((0.6, -0.4, -0.6)), fwd + Vector((0, 0, -0.5)))

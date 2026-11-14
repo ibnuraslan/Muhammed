@@ -18,7 +18,7 @@ import ph
 import b_common as B
 
 EXPOSURE = 0.2
-DUR = {"game": 5.0, "search": 6.0, "moped": 5.0, "curtain": 5.5}
+DUR = {"game": 6.0, "search": 6.0, "moped": 5.0, "curtain": 5.5}
 VARIANT_FOR = {"game": "evening", "search": "nextday", "moped": "flat", "curtain": "flat"}
 CT = Vector((0.0, 0.0, 0.0))        # coffee table centre
 
@@ -195,9 +195,24 @@ def build(variant=None):
         img = board_image(os.path.join(B.GEN, "b_board.png"))
         c["board"] = B.sheet("Board", (0, 0.0, top + 0.005), (0.72, 0.52), B.img_mat("BoardM", img, 0.6))
         cols = [(0.6, 0.05, 0.04), (0.05, 0.1, 0.5), (0.85, 0.75, 0.1), (0.1, 0.35, 0.1)]
+        c["pieces"] = []
         for k in range(46):
             x, y = rng.uniform(-0.32, 0.32), rng.uniform(-0.22, 0.22)
-            box("Piece", (x, y, top + 0.012), (0.012, 0.012, 0.012), pbr(f"Piece{k % 4}", cols[k % 4], 0.4))
+            c["pieces"].append(box("Piece", (x, y, top + 0.012), (0.012, 0.012, 0.012), pbr(f"Piece{k % 4}", cols[k % 4], 0.4)))
+        # v2 alibi time-lapse: a mantel/table clock beside the board (hands animated), the evening passing
+        cbody = pbr("ClockBody", (0.25, 0.15, 0.08), 0.45, **{'Coat Weight': 0.4})
+        clock = join([cyl("ClockCase", (0, 0, 0.0), 0.075, 0.03, cbody, verts=40),
+                      cyl("ClockFace", (0, 0, 0.016), 0.064, 0.003, pbr("ClockFaceM", (0.9, 0.88, 0.8), 0.4), verts=40)], "TableClock")
+        for k in range(12):
+            a_ = k / 12 * 2 * math.pi
+            box("ClockTick", (0.055 * math.sin(a_), 0.055 * math.cos(a_), 0.019), (0.003, 0.009, 0.001), pbr("TickK", (0.05, 0.05, 0.05), 0.5),
+                rot=(0, 0, -a_)).parent = clock
+        hm = pbr("Hands", (0.04, 0.04, 0.04), 0.4)
+        c["h_hour"] = box("HourHand", (0, 0.017, 0.021), (0.005, 0.036, 0.0015), hm); c["h_min"] = box("MinHand", (0, 0.025, 0.023), (0.003, 0.052, 0.0015), hm)
+        for o in (c["h_hour"], c["h_min"]):
+            o.data.transform(__import__("mathutils").Matrix.Translation((0, -o.location.y, 0))); o.location.y = 0; o.parent = clock
+        clock.location = (0.46, -0.2, top + 0.017); c["clock"] = clock
+        c["piece_home"] = [tuple(p.location) for p in c["pieces"]]
         c["dice"] = [box(f"Die{k}", (0, 0, -30), (0.016, 0.016, 0.016), pbr("Die", (0.9, 0.88, 0.82), 0.3), bevel=0.003) for k in range(3)]
         ph.model("painted_wooden_cabinet", loc=(2.3, 2.15, 0), rot_z=0)        # the sideboard
         ph.model("Television_01", loc=(-2.3, 2.1, 0.0), rot_z=0.3)
@@ -266,7 +281,20 @@ def anim(c, t, move):
                 k_ = h.bone_tail(f"upperleg02.{sd}")
                 reach(h, sd, k_ + Vector((0, 0, 0.06)) + fwd * 0.08, Vector((sg * side.x, sg * side.y, -0.6)), fwd + Vector((0, 0, -0.7)))
             B.curl(h, 30)
-            B.nod(h, 22 + 3 * math.sin(sec * 0.5 + k))
+            B.nod(h, 22 + 3 * math.sin(sec * 0.5 + k) + (6 * math.sin(sec * 2.3 + k * 1.7) if move == "game" else 0))
+            if move == "game":
+                h.rot("spine03", (0, 0, 1), 7 * math.sin(sec * 1.9 + k * 2.1))       # time-lapse fidgeting: lean, turn
+        if move == "game":                                          # v2: the evening passes, 19:30 -> 01:00
+            mins = 19.5 * 60 + (5.5 * 60) * ease(t)
+            c["h_min"].rotation_euler = (0, 0, -math.radians(mins % 60 * 6))
+            c["h_hour"].rotation_euler = (0, 0, -math.radians((mins / 60) % 12 * 30))
+            rng_ = np.random.default_rng(7)
+            nstep = int(sec * 4.5)                                  # pieces hop territory to territory in jumps
+            pos = [Vector(p) for p in c["piece_home"]]
+            for st in range(nstep):
+                k_ = int(rng_.integers(0, len(pos))); pos[k_] = Vector((rng_.uniform(-0.32, 0.32), rng_.uniform(-0.22, 0.22), pos[k_].z))
+            for pc, p in zip(c["pieces"], pos):
+                pc.location = p
         # dice: thrown at 1.0 s from the near edge, tumble across the board, settle
         for k, d in enumerate(c["dice"]):
             u = min(1.0, max(0.0, (sec - 1.0 - 0.05 * k) / 1.1))
@@ -302,7 +330,7 @@ def cam(a, b, tgt, lens):
 
 
 MOVES = {
-    "game": dict(kind="anim", dof=2.0, cam=cam((0.25, -0.75, 1.25), (0.15, -0.55, 1.08), (0.0, 0.02, 0.38), 35),
+    "game": dict(kind="anim", dof=None, cam=cam((0.08, -0.18, 1.75), (0.06, -0.14, 1.62), (0.06, -0.02, 0.38), 32),
                  anim=lambda c, t: anim(c, t, "game"), focus=lambda c, t: Vector((0.05, 0.0, 0.4))),
     "search": dict(kind="anim", dof=4.0, cam=cam((-2.4, -2.1, 1.65), (-2.1, -1.7, 1.6), (0.6, 1.0, 0.8), 28),
                    anim=lambda c, t: anim(c, t, "search"), focus=lambda c, t: c["d1"].bone_head("spine03")),

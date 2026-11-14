@@ -20,8 +20,8 @@ import b_common as B
 import b_props as P
 
 EXPOSURE = 0.2
-DUR = {"read": 5.5, "lookup": 5.0, "replay": 5.5, "objection": 5.0, "notes": 6.0, "window": 6.5}
-VARIANT_FOR = {"read": "day", "lookup": "day", "replay": "night", "objection": "night", "notes": "music", "window": "music_night"}
+DUR = {"read": 5.5, "lookup": 5.0, "replay": 5.5, "objection": 5.0, "notes": 6.0, "window": 6.5, "memory": 7.0}
+VARIANT_FOR = {"read": "day", "lookup": "day", "replay": "night", "objection": "night", "notes": "music", "window": "music_night", "memory": "memory"}
 DESK = Vector((1.2, 1.78, 0))
 TOP = 0.8
 PIANO_X = -1.9
@@ -42,6 +42,9 @@ def binder(name, loc, rot_z, col, upright=False):
 
 def build(variant=None):
     variant = variant or "day"
+    memory = variant == "memory"
+    if memory:
+        variant = "music"
     night = variant in ("night", "music_night")
     c = {"variant": variant}
     rng = np.random.default_rng(45)
@@ -131,6 +134,28 @@ def build(variant=None):
     else:
         B.seat(h, (DESK.x, DESK.y - 0.68, 0), math.pi, lean=12)
     c["m"] = h
+    # v2 props by the piano: a metronome on top, children's sheet music, a glass of water (5-5B: its surface keeps trembling)
+    mb = pbr("MetroWood", (0.25, 0.13, 0.06), 0.4, **{'Coat Weight': 0.5})
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=0.08, radius2=0.025, depth=0.22, location=(PIANO_X - 0.25, 0.85, 1.36), rotation=(0, 0, math.radians(45)))
+    met = bpy.context.active_object; met.data.materials.append(mb)
+    pend = join([cyl("MetroRod", (0, 0, 0.09), 0.002, 0.18, pbr("MetroSteel", (0.75, 0.75, 0.76), 0.2, 1.0), verts=6),
+                 box("MetroWeight", (0, 0, 0.13), (0.022, 0.012, 0.022), pbr("MetroBrass", (0.6, 0.45, 0.2), 0.3, 1.0))], "Pendulum")
+    pend.location = (PIANO_X - 0.23, 0.85, 1.27); c["pend"] = pend
+    import b_fx as FX
+    sheet_m = B.paper_mat("KidsMusic", (0.92, 0.9, 0.84))
+    c["music"] = [FX.card_plane("MusicL", (PIANO_X + 0.02, 0.25, 1.05), 0.22, 0.29, sheet_m, rot=(math.radians(78), 0, math.radians(90))),
+                  FX.card_plane("MusicR", (PIANO_X + 0.02, 0.53, 1.05), 0.22, 0.29, sheet_m, rot=(math.radians(78), 0, math.radians(90)))]
+    cyl("Glass", (PIANO_X - 0.25, 0.0, 1.31), 0.035, 0.1, glass("WaterGlass", (0.92, 0.95, 0.96), 0.02), verts=32)
+    bpy.ops.mesh.primitive_circle_add(vertices=48, radius=0.032, fill_type='TRIFAN', location=(PIANO_X - 0.25, 0.0, 1.335))
+    wat = bpy.context.active_object; wat.data.materials.append(glass("Water", (0.9, 0.95, 0.97), 0.0))
+    sub = wat.modifiers.new("s", 'SUBSURF'); sub.levels = 3; sub.render_levels = 3; sub.subdivision_type = 'SIMPLE'
+    wv = wat.modifiers.new("ripple", 'WAVE'); wv.height = 0.0015; wv.width = 0.008; wv.speed = 0.06; wv.narrowness = 1.2
+    c["water"] = wat
+    if memory:                                              # 4-13B: the memory without her: an empty bench for two
+        B.hide_person(h)
+        for k, y in enumerate((0.22, 0.6)):
+            box(f"Cushion{k}", (PIANO_X + 0.6, y, 0.53), (0.3, 0.32, 0.05), fabric(f"Cush{k}", (0.45, 0.12, 0.08) if k else (0.2, 0.3, 0.45), 0.9, 0.5, 300), bevel=0.02)
+        B.key_spot((1.8, -1.6, 1.5), (PIANO_X + 0.4, 0.4, 0.8), 900, 30, (1.0, 0.72, 0.42), soft=0.05, name="LateSun")
     if variant == "night":
         c["phones"] = P.headphones(h)
         # lamp bounce off the wall onto his face and greying hair (continuity: he must read grey at night too)
@@ -166,7 +191,7 @@ def type_hands(h, sec, kb):
 
 def anim(c, t, move):
     sec = t * DUR[move]
-    h = c["m"]; B.apply_pose(h, c["rest"])
+    h = c["m"]; B.apply_pose(h, c["rest"]); B.idle(h, sec, 0.7, amp=0.8)
     for o in c.get("phones", []):
         o.hide_render = (move == "objection")                 # typing: headphones off, his grey hair visible
     if move == "read":
@@ -201,6 +226,10 @@ def anim(c, t, move):
             reach(h, sd, keys + side * (0.18 * sg + 0.02 * math.sin(sec * 1.5) * play) + Vector((0, 0, -press + lift)), Vector((sg * side.x, sg * side.y, -0.7)), fwd + Vector((0, 0, -0.5)))
         B.curl(h, 25, thumb=10)
         B.nod(h, 12 + (8 * ease(min(1.0, max(0.0, (sec - 2.6) / 1.5)))))
+    if "pend" in c:
+        c["pend"].rotation_euler = (math.radians(26 * math.sin(sec * math.pi * 1.6)), 0, 0) if move == "memory" else (0, 0, 0)
+    if move == "memory":
+        bpy.context.view_layer.update(); return
     elif move == "window":
         fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
         knee = h.bone_tail("upperleg02.L")
@@ -227,6 +256,8 @@ MOVES = {
                       anim=lambda c, t: anim(c, t, "objection"), focus=lambda c, t: Vector((DESK.x + 0.42, DESK.y - 0.2, TOP + 0.1))),
     "notes": dict(kind="anim", dof=2.8, cam=cam((0.6, -1.4, 1.45), (0.2, -0.9, 1.4), (PIANO_X, 0.4, 1.0), 35),
                   anim=lambda c, t: anim(c, t, "notes"), focus=lambda c, t: c["m"].bone_head("head")),
-    "window": dict(kind="anim", dof=2.8, cam=cam((-0.3, -1.5, 1.4), (-0.45, -1.1, 1.36), (-0.9, 0.7, 1.0), 35),
-                   anim=lambda c, t: anim(c, t, "window"), focus=lambda c, t: c["m"].bone_head("head")),
+    "memory": dict(kind="anim", dof=2.4, cam=cam((0.3, -1.3, 1.35), (-0.35, -0.7, 1.25), (PIANO_X + 0.3, 0.5, 0.98), 32),
+                   anim=lambda c, t: anim(c, t, "memory"), focus=lambda c, t: Vector((PIANO_X + 0.55, 0.42, 0.6))),
+    "window": dict(kind="anim", dof=2.0, cam=cam((-2.8, -0.65, 1.45), (-2.7, -0.5, 1.42), (-1.45, 0.45, 1.08), 35),
+                   anim=lambda c, t: anim(c, t, "window"), focus=lambda c, t: Vector((PIANO_X - 0.25, 0.0, 1.33))),
 }

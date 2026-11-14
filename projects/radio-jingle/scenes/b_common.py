@@ -612,3 +612,15 @@ def curl(h, deg=35, side=("L", "R"), thumb=15, spread=None):
 
 
 CURL_SIGN = 1.0     # +1 bends the fingers into the palm (tested; -1 bends them backward)
+
+
+def idle(h, sec, seed=0.0, amp=1.0, head=True):
+    """Living stillness: breathing in the chest, a slow weight shift through the spine, small head turns and nods.
+    Call right after apply_pose() and BEFORE reach() so the hands stay where the shot needs them."""
+    fw = fwd_of(h); side = Vector((0, 0, 1)).cross(fw).normalized()
+    br = math.sin(sec * 2 * math.pi * 0.23 + seed)                      # ~14 breaths a minute
+    h.rot("spine03", side, 1.2 * amp * br)
+    h.rot("spine01", fw, 1.6 * amp * math.sin(sec * 0.31 + seed * 1.7))    # weight shift side to side
+    if head:
+        h.rot("head", Vector((0, 0, 1)), 4.0 * amp * math.sin(sec * 0.37 + seed * 2.3) + 2.0 * amp * math.sin(sec * 0.91 + seed))
+        h.rot("neck01", side, 1.5 * amp * math.sin(sec * 0.53 + seed * 0.7))

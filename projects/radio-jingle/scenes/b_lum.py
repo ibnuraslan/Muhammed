@@ -16,7 +16,7 @@ NIGHT = {("b_workshop", m) for m in ("solder", "letters")} | {("b_home81", "game
          ("b_media", "scrub"), ("b_media", "paused"), ("b_ch5", "gate"), ("b_ch5", "wall"), ("b_chain", "poles")}
 tmp = tempfile.mkdtemp(); fails = 0
 for ch, rows in b_shots.CHAPTERS.items():
-    for s, m, lab in rows:
+    for s, m, lab, *_ in rows:
         d = f"/tmp/claude-0/st/{s}_{m}_{T}"
         if not os.path.exists(os.path.join(d, "plate.exr")):
             print(f"{lab:46s} MISSING"); continue

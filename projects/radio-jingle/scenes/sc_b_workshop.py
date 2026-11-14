@@ -15,8 +15,8 @@ import ph
 import b_common as B
 
 EXPOSURE = -0.3
-DUR = {"solder": 5.5, "letters": 5.0}
-VARIANT_FOR = {"letters": "away"}
+DUR = {"solder": 5.5, "letters": 5.0, "nothing": 6.0}
+VARIANT_FOR = {"letters": "away", "nothing": "search"}
 BENCH_Y = 2.15
 TOP = 0.83
 
@@ -113,7 +113,32 @@ def build(variant=None):
         B.stand(h, (-0.2, BENCH_Y - 0.62, 0), math.pi)      # facing +Y, the bench
     c["man"] = h
     c["variant"] = variant
-    B.finish_interior(lift=-0.1)
+    if variant == "search":                                 # 3-5B: the early search; nothing found. Nobody in frame
+        B.hide_person(h)
+        card = pbr("Carton", (0.52, 0.4, 0.26), 0.85)
+        cx, cy, cz = 0.35, BENCH_Y - 0.05, TOP
+        w, d, hh = 0.42, 0.3, 0.26
+        parts = [box("CtBottom", (0, 0, 0.004), (w, d, 0.008), card), box("CtF", (0, -d / 2, hh / 2), (w, 0.006, hh), card),
+                 box("CtB", (0, d / 2, hh / 2), (w, 0.006, hh), card), box("CtL", (-w / 2, 0, hh / 2), (0.006, d, hh), card),
+                 box("CtR", (w / 2, 0, hh / 2), (0.006, d, hh), card),
+                 box("CtLab", (0, -d / 2 - 0.004, hh * 0.62), (0.16, 0.002, 0.09), pbr("CtLabel", (0.93, 0.92, 0.88), 0.7))]
+        carton = join(parts, "Carton"); carton.location = (cx, cy, cz)
+        c["flaps"] = []
+        from mathutils import Matrix
+        for k, (px_, py_, ax, sgn, L_) in enumerate(((0, -d / 2, 'X', 1, d / 2), (0, d / 2, 'X', -1, d / 2), (-w / 2, 0, 'Y', -1, w / 2), (w / 2, 0, 'Y', 1, w / 2))):
+            sz = (w, L_, 0.006) if ax == 'X' else (L_, d, 0.006)
+            fl = box(f"Flap{k}", (0, 0, 0), sz, card)
+            off = Vector((0, sgn * L_ / 2, 0)) if ax == 'X' else Vector((-sgn * L_ / 2, 0, 0))   # closed: lies inward over the opening
+            fl.data.transform(Matrix.Translation(off))
+            fl.location = (cx + px_, cy + py_, cz + hh)
+            c["flaps"].append((fl, ax, sgn))
+        # a torch beam sweeping the shelves (the officers are out of frame); a little haze to carry the beam
+        tl = bpy.data.lights.new("Torch", 'SPOT'); tl.energy = 60; tl.spot_size = math.radians(14); tl.spot_blend = 0.4
+        tl.color = (1.0, 0.92, 0.78); tl.shadow_soft_size = 0.02
+        to = bpy.data.objects.new("Torch", tl); bpy.context.collection.objects.link(to); to.location = (1.6, -1.6, 1.6)
+        c["torch"] = to
+        B.room_haze((0, 0, 1.3), (5, 5, 2.6), density=0.03)
+    B.finish_interior(lift=-0.1 if variant != "search" else 0.1)
     return c
 
 
@@ -135,6 +160,34 @@ def pose_man(c, sec):
 
 
 def anim(c, t, dur):
+    sec = t * dur
+    if c.get("variant") == "search":
+        u = ease(min(1.0, max(0.0, (sec - 1.4) / 2.2)))
+        for k, (fl, ax, sgn) in enumerate(c["flaps"]):
+            uu = ease(min(1.0, max(0.0, (sec - 1.4 - 0.35 * k) / 1.0)))
+            a = math.radians(160 * (1 - uu))                                  # open (folded back) -> closed flat
+            fl.rotation_euler = ((-a * sgn, 0, 0) if ax == 'X' else (0, a * sgn, 0))
+        to = c["torch"]; ang = -0.9 + 1.6 * ease(t)                           # the beam passes along the shelves, then on
+        tgt = Vector((-1.2 + 2.8 * ease(t), BENCH_Y + 0.4, 1.1 + 0.25 * math.sin(sec * 0.9)))
+        from common import point_at
+        point_at(to, tgt)
+        bpy.context.view_layer.update()
+        return
+    if c.get("variant") == "away":
+        # 3-4B v2: the letters keep arriving, one by one, onto the pile
+        n = len(c["letters"]); shown = 8 + int((n - 8) * min(1.0, t * 1.1))
+        for k, o in enumerate(c["letters"]):
+            if "home" not in o:
+                o["home"] = tuple(o.location); o["rz"] = o.rotation_euler.z
+            hm = Vector(o["home"])
+            if k < shown - 1:
+                o.hide_render = False; o.location = hm; o.rotation_euler.z = o["rz"]
+            elif k == shown - 1:
+                f = min(1.0, (t * 1.1 * (n - 8)) % 1.0 * 2.5)
+                o.hide_render = False; o.location = hm + Vector((0.02 * (1 - f), -0.03 * (1 - f), 0.22 * (1 - ease(f))))
+                o.rotation_euler.z = o["rz"] + 0.6 * (1 - f)
+            else:
+                o.hide_render = True
     if c.get("variant") == "away":
         h = c["man"]; sec = t * dur
         B.arms_down(h)
@@ -155,7 +208,14 @@ def cam_letters(c, t):
     return (Vector((-1.55, 1.3, 1.38)).lerp(Vector((-1.35, 1.45, 1.3)), e), Vector((-0.35, BENCH_Y - 0.08, 0.9)), 35)
 
 
+def cam_nothing(c, t):
+    e = ease(t)
+    return (Vector((1.25, -1.05, 1.55)).lerp(Vector((1.0, -0.8, 1.45)), e), Vector((0.35, BENCH_Y - 0.05, TOP + 0.12)), 35)
+
+
 MOVES = {
+    "nothing": dict(kind="anim", dof=2.8, cam=cam_nothing, anim=lambda c, t: anim(c, t, DUR["nothing"]),
+                    focus=lambda c, t: Vector((0.35, BENCH_Y - 0.05, TOP + 0.15))),
     "solder": dict(kind="anim", dof=2.8, cam=cam_solder, anim=lambda c, t: anim(c, t, DUR["solder"]),
                    focus=lambda c, t: c["man"].bone_head("head")),
     "letters": dict(kind="anim", dof=2.0, cam=cam_letters, anim=lambda c, t: anim(c, t, DUR["letters"]),

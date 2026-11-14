@@ -104,6 +104,17 @@ def build(variant=None):
         tb = box("TapeBox", (-3.3 + 11 * 0.52, 5.5, 1.32 + 0.11), (0.2, 0.2, 0.22), pbr("TapeBoxCard", (0.55, 0.45, 0.32), 0.8), bevel=0.003)
         tb.rotation_euler = (math.radians(90), 0, 0.2)
         c["tapebox"] = tb
+        # v2: the count is on the cabinets (stencilled 1-12), and the years pass on a flip card beside the tapes
+        import b_fx as F
+        for k in range(12):
+            F.stencil(f"CabNo{k}", str(k + 1), (-3.3 + k * 0.52, 5.236, 1.205), 0.075, (math.radians(90), 0, 0), color=(0.92, 0.9, 0.84))
+        xl = -3.3 + 11 * 0.52 - 0.17
+        box("FlipStand", (xl, 5.42, 1.32 + 0.06), (0.14, 0.04, 0.12), pbr("FlipStand", (0.15, 0.15, 0.16), 0.4), rot=(math.radians(-12), 0, 0))
+        c["years"] = []
+        for k, yr in enumerate(range(1981, 1990)):
+            card = box(f"YearCard{yr}", (xl, 5.397, 1.32 + 0.065), (0.12, 0.002, 0.08), pbr("YearCardM", (0.92, 0.9, 0.84), 0.7), rot=(math.radians(-12), 0, 0))
+            tx = F.stencil(f"YearTxt{yr}", str(yr), (xl, 5.394, 1.32 + 0.055), 0.04, (math.radians(90 - 12), 0, 0), color=(0.08, 0.07, 0.06))
+            c["years"].append((card, tx))
         for k in (2, 5, 8):
             for j in range(3):
                 box("ArchFile", (-3.3 + k * 0.52, 5.5, 1.335 + j * 0.03), (0.24, 0.32, 0.028), pbr(f"AF{k}{j}", (0.55, 0.45, 0.28), 0.8), rot=(0, 0, rng.uniform(-0.1, 0.1)))
@@ -161,6 +172,10 @@ def anim(c, t, move):
         dr = c["drawer"]
         shut = ease(min(1.0, max(0.0, (sec - 1.0) / 1.0)))
         dr.location = Vector((c["drawer_x"], 5.25 - 0.27 + 0.27 * shut - 0.0, 0.17 + 2 * 0.32))
+        if c.get("years"):
+            k_ = min(8, int(ease(t) * 9.0)) if move == "tube" else 0     # 1981 .. 1989 across the shot
+            for j, (cd, tx) in enumerate(c["years"]):
+                cd.hide_render = tx.hide_render = (j != k_)
         if move == "twelve":                              # the tube only flickers and dims in the next shot (3-11B)
             if c["tube_l"].data.animation_data and c["tube_l"].data.animation_data.drivers:
                 c["tube_l"].data.driver_remove("energy"); c["tube_em"].driver_remove("default_value")

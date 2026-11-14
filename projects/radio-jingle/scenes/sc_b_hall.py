@@ -14,7 +14,7 @@ import b_common as B
 
 EXPOSURE = getattr(H, "EXPOSURE", 0.0)
 BOUNCES = getattr(H, "BOUNCES", 6)
-DUR = {"line_end": 5.0, "offhook": 8.0}   # offhook: reels stop at 5.0 s on "answered", then 3 s hold
+DUR = {"line_end": 5.0, "offhook": 25.0}   # v2 hero long take: reels stop at 20 s on "answered", then a held end
 VARIANT_FOR = {"line_end": "night+police", "offhook": "night+police"}
 T = H.PHONE_T
 
@@ -66,12 +66,21 @@ def anim(c, t, move):
         hs.rotation_mode = 'XYZ'
         hs.location = Vector((ph_loc.x - 0.24, ph_loc.y - 0.06, 0.815)); hs.rotation_euler = (math.radians(90), 0, math.radians(-70))
         # reels slow to a stop by ~4.5 s: angle = integral of a linearly falling rate
-        stop = 5.0; r0 = 0.9
+        stop = 20.0; r0 = 0.9
         s_ = min(sec, stop); revs = r0 * s_ - 0.5 * (r0 / stop) * s_ * s_
         _spin(c, sec, revs)
         if c.get("deck"):
             c["deck"]["needle"].rotation_euler.z = math.radians(-35 + 8 * max(0.0, 1 - sec / stop) * math.sin(sec * 9.0))
     bpy.context.view_layer.update()
+
+
+def cam_offhook(t):
+    """25 s: from up the dark hall (north of the table) a slow arcing push round to the receiver on the table."""
+    u = ease(min(1.0, t / 0.82))
+    pts = [Vector((T.x - 0.9, T.y + 2.2, 1.62)), Vector((T.x - 1.25, T.y + 0.9, 1.5)), Vector((T.x - 1.2, T.y - 0.1, 1.38)),
+           Vector((T.x - 0.95, T.y - 0.55, 1.28))]
+    x = u * (len(pts) - 1); k = min(len(pts) - 2, int(x)); f = x - k
+    return (pts[k].lerp(pts[k + 1], f), None)
 
 
 def cam(a, b, tgt, lens):
@@ -81,6 +90,6 @@ def cam(a, b, tgt, lens):
 MOVES = {
     "line_end": dict(kind="anim", dof=None, cam=cam((-0.55, -0.05, 1.72), (-0.42, -0.45, 1.62), (T.x - 0.02, T.y + 0.13, 0.82), 40),
                      anim=lambda c, t: anim(c, t, "line_end"), focus=lambda c, t: Vector((T.x - 0.02, T.y + 0.13, 0.85))),
-    "offhook": dict(kind="anim", dof=2.4, cam=cam((T.x - 1.3, T.y - 0.7, 1.42), (T.x - 0.95, T.y - 0.55, 1.3), (T.x - 0.1, T.y - 0.1, 0.8), 32),
+    "offhook": dict(kind="anim", dof=2.4, cam=lambda c, t: (cam_offhook(t)[0], Vector((T.x - 0.1, T.y - 0.1, 0.8)), 32 + 6 * ease(min(1.0, t / 0.82))),
                     anim=lambda c, t: anim(c, t, "offhook"), focus=lambda c, t: Vector((T.x - 0.06, T.y - 0.25, 0.82))),
 }

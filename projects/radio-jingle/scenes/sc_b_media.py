@@ -158,14 +158,14 @@ def anim(c, t, move):
     sec = t * DUR[move]
     v = c["variant"]
     if v == "studio81":
-        B.apply_pose(c["pres"], c["rest"]["pres"])
+        B.apply_pose(c["pres"], c["rest"]["pres"]); B.idle(c["pres"], sec, 0.3)
         pres = c["pres"]; fwd = B.fwd_of(pres); side = fwd.cross(Vector((0, 0, 1))).normalized()
         for sd, sg in (("L", -1), ("R", 1)):
             reach(pres, sd, Vector((-0.18 * sg, 2.5, 0.88)), Vector((sg * side.x, sg * side.y, -0.8)), fwd + Vector((0, 0, -0.4)))
         B.curl(pres, 25); pres.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.6)); B.nod(pres, -2)
         c["studiocam"].location = Vector((-3.4 + 1.6 * ease(t), -1.6, 0))
         for k, (h, hs) in enumerate(c["callers"]):
-            B.apply_pose(h, c["rest"][f"c{k}"])
+            B.apply_pose(h, c["rest"][f"c{k}"]); B.idle(h, sec, k * 1.3)
             fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
             pick = 0.4 + 0.9 * k
             if sec > pick and hasattr(hs, "matrix_parent_inverse"):
@@ -181,7 +181,7 @@ def anim(c, t, move):
             reach(h, "R", Vector((slip.x, slip.y, 0.79)) + Vector((0.01 * math.sin(sec * 6 + k), 0, 0)), Vector((0.4, -0.5, -0.8)), fwd + Vector((0, 0, -0.6)))
             B.curl(h, 35); B.nod(h, 14)
     elif v == "office07":
-        det = c["det"]; B.apply_pose(det, c["rest"]["det"])
+        det = c["det"]; B.apply_pose(det, c["rest"]["det"]); B.idle(det, sec, 2.0)
         u = ease(min(1.0, max(0.0, (sec - 0.5) / 1.8)))
         f = c["newfile"]; f.location = Vector((0.2, 2.6, 1.25)).lerp(Vector((0.55, 2.91, 1.5)), u)
         reach(det, "R", f.location + Vector((0.08, -0.08, 0.05)), Vector((0.5, -0.6, -0.6)), Vector((0, 1, 0.3)))
@@ -190,7 +190,7 @@ def anim(c, t, move):
         B.curl(det, 35); B.nod(det, -4)
     else:
         for k in ("j1", "j2"):
-            B.apply_pose(c[k], c["rest"][k])
+            B.apply_pose(c[k], c["rest"][k]); B.idle(c[k], sec, len(k))
         j1, j2 = c["j1"], c["j2"]
         for h, ph_ in ((j1, 0.0), (j2, 1.0)):
             fwd = B.fwd_of(h); side = fwd.cross(Vector((0, 0, 1))).normalized()
