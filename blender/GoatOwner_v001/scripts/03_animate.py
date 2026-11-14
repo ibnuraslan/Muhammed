@@ -198,9 +198,11 @@ B = {1: 1, 2: 187, 3: 463, 4: 631, 5: 817, 6: 1129, 7: 1183, 8: 1417, 9: 1519, 1
 
 # ================================================================= OWNER
 yaw_g = yaw_to(OA_, GA)
-def owner_menace(f, raise_amt, shake=0.0):
-    M = OW.stand(f, OA_, yaw_g + shake * 3, lean=-4 * raise_amt, spine=(-6 * raise_amt + 4, 0, -10 * raise_amt), head=(10, 0),
-                 feet={"L": (OA_ + Vector((0.12, -0.08)), yaw_g - 10), "R": (OA_ + Vector((0.05, 0.28)), yaw_g + 20)})
+def owner_menace(f, raise_amt, shake=0.0, at=None, yw=None):
+    at = OA_ if at is None else at; yw = yaw_g if yw is None else yw
+    fo = Matrix.Rotation(R_(yw - yaw_g), 2)
+    M = OW.stand(f, at, yw + shake * 3, lean=-4 * raise_amt, spine=(-6 * raise_amt + 4, 0, -10 * raise_amt), head=(10, 0),
+                 feet={"L": (at + fo @ Vector((0.12, -0.08)), yw - 10), "R": (at + fo @ Vector((0.05, 0.28)), yw + 20)})
     W, d, n = HP("overhead" if raise_amt > 0.6 else "front", "R")
     if raise_amt <= 0.6:
         W0, d0, n0 = HP("low", "R"); W = W0.lerp(W, raise_amt / 0.6); d = d0.lerp(d, raise_amt / 0.6)
@@ -212,12 +214,21 @@ for f, r, sh in ((1, 0.3, 0), (20, 0.5, 0), (42, 1.0, 1), (70, 1.0, -1), (96, 1.
     owner_menace(f, r, sh)
 OW.arm("R", 183, OW.M(Vector((OA_.x, OA_.y, OW.RH.z)), yaw_g), fwd=35, out=28, L=0.5)   # lowers the stick out to the side, clear of the body
 # beat 2: he turns and walks to the porch steps, stick hanging; beat 3: offscreen in the house
-p_ow = catmull([(186, V(OA_.x, OA_.y, 0)), (260, V(2.2, 3.0, 0)), (340, V(3.6, 5.2, 0)), (380, V(4.2, 6.0, 0)), (420, V(5.6, 6.0, 0)), (460, V(6.6, 6.4, 0))])
-OW.h.walk(p_ow, lambda f: yaw_to(p_ow(f - 3), p_ow(f + 3)) if f < 455 else 90, 186, 460, stride=0.72, lean=4)
-for f in range(186, 461, 12):
+p_ow = catmull([(186, V(OA_.x, OA_.y, 0)), (256, V(2.2, 3.0, 0)), (326, V(3.6, 5.2, 0)), (358, V(4.2, 6.0, 0)), (392, V(5.4, 6.05, 0))])
+OW.h.walk(p_ow, lambda f: yaw_to(p_ow(f - 3), p_ow(f + 3)), 186, 392, stride=0.72, lean=4)
+for f in range(186, 393, 12):
     M = OW.M(Vector((p_ow(f).x, p_ow(f).y, ground_z(p_ow(f).x, p_ow(f).y) + OW.RH.z)), yaw_to(p_ow(f - 3), p_ow(f + 3)))
     sw = 18 * math.sin((f - 186) / 22.0)
     OW.arm("R", f, M, fwd=12 + sw, out=10, L=0.5); OW.arm("L", f, M, fwd=12 - sw, out=8, L=0.5)
+# on the porch he turns back and raises the stick at the goat again (seen in the background behind it), then goes in
+PORCH = Vector((5.4, 6.05)); yaw_p = yaw_to(PORCH, POST)
+for f, r, sh in ((398, 0.5, 0), (408, 1.0, 1), (418, 1.0, -1), (428, 1.0, 1), (436, 0.6, 0)):
+    owner_menace(f, r, sh, at=PORCH, yw=yaw_p)
+p_ow1 = catmull([(437, V(5.4, 6.05, 0)), (448, V(5.9, 6.2, 0)), (460, V(6.6, 6.4, 0))])
+OW.h.walk(p_ow1, lambda f: yaw_to(p_ow1(f - 3), p_ow1(f + 3)) if f < 455 else 90, 438, 460, stride=0.6, lean=4)
+for f in (440, 452, 460):
+    M = OW.M(Vector((p_ow1(f).x, p_ow1(f).y, ground_z(p_ow1(f).x, p_ow1(f).y) + OW.RH.z)), yaw_to(p_ow1(f - 3), p_ow1(f + 3)))
+    OW.arm("R", f, M, fwd=14, out=10, L=0.5); OW.arm("L", f, M, fwd=10, out=8, L=0.5)
 OW.vis(1, True); OW.vis(461, False)     # inside the house during the time-lapse (the pop-in visits read as snaps)
 # beat 4: comes back out, down the steps toward the goat with the stick
 OW.vis(600, True)
@@ -529,7 +540,7 @@ RP = Vector((1.0, 61.95)); ry = yaw_to(RP, PAST_G)
 RS.vis(1, False); RS.vis(1906, True)
 for i, f in enumerate(range(1906, 2191, 12)):
     st = ((i // 3) % 2)
-    M = RS.stand(f, RP, ry, lean=6, spine=(16, 0, -6), head=(22 + 4 * st, 0), crouch=0.42,
+    M = RS.stand(f, RP, ry, lean=6, spine=(16, 0, -6), head=(8 + 3 * st, 0), crouch=0.42,
                  feet={"L": (RP + Matrix.Rotation(R_(ry), 2) @ Vector((0.14, -0.28)), ry, 0.0, 0.0),
                        "R": (RP + Matrix.Rotation(R_(ry), 2) @ Vector((-0.14, 0.42)), ry, 0.0, 55)})
     ev(f)
@@ -538,13 +549,31 @@ for i, f in enumerate(range(1906, 2191, 12)):
     pts_ = [gbody.matrix_world @ v.co for v in gm.vertices]; ge.to_mesh_clear()
     near = [p for p in pts_ if (p - hh_).length < 0.4]
     mouth = max(near, key=lambda p: (p - hh_).dot(fw_) - 0.3 * abs(p.z - hh_.z)) if near else G.o.matrix_world @ G.PB["head"].tail
-    tw_ = Vector((RP.x - mouth.x, RP.y - mouth.y, 0)).normalized()
-    RS.h.key_hand("R", f, mouth + Vector((0.0, 0.0, -0.09)) + tw_ * 0.1,
-                  Matrix.Rotation(R_(ry), 3, 'Z') @ Vector((0, -1, 0.1)), Vector((0, 0, 1)), M @ Vector((-0.5, 0.2, 0.9)))
-    neck = G.o.matrix_world @ G.PB["neck1"].head.lerp(G.PB["chest"].head, 0.05 + 0.25 * st)
-    RS.h.key_hand("L", f, neck + Vector((0, 0, 0.15 + 0.06 * st)), -fw_, Vector((0, 0, -1)), M @ Vector((0.5, 0.2, 0.9)))
-    RS.fingers("R", f, 6, 4); RS.fingers("L", f, 4, 2)
-    RS.face(f, jaw=3, brow=2, lid=0.5, smile=3)
+    # left palm rests ON the goat (top of the head, stroking back toward the neck), elbow bent; right hand on her knee
+    ph = (i % 6) / 5.0                                           # stroke: poll -> just behind the head, and back
+    ph = ph * 2 if ph <= 0.5 else (1 - ph) * 2
+    hd_ = G.o.matrix_world @ G.PB["head"].head; nk_ = G.o.matrix_world @ G.PB["neck1"].head
+    P_ = hd_.lerp(nk_, 0.05 + 0.25 * ph)
+    top = [p for p in pts_ if (p.to_2d() - P_.to_2d()).length < 0.06]
+    pal_ = max(top, key=lambda p: p.z) if top else P_ + Vector((0, 0, 0.1))
+    place_hand(RS.o, "L", f, pal_, Vector((0, 0, -1)), -fw_ + Vector((0, 0, -0.15)), skin=0.012)
+    apply_pose(RS.o, "L", "flat_palm", f)
+    pbE = RS.R.PB["Pole_elbow.L"]; RS_D = RS.o.matrix_world
+    elb = M @ Vector((0.55, 0.35, 0.55))                         # elbow out to her side and down: a bent, relaxed arm
+    pbE.location = RS.R.rest("Pole_elbow.L").to_3x3().inverted() @ (elb - RS.R.BN["Pole_elbow.L"].head_local); pbE.keyframe_insert("location", frame=f, group="Pole_elbow.L")
+    kn = RS_D @ RS.R.PB["lowerleg01.L"].head                      # her raised front knee
+    fwd_r = (M.to_3x3() @ Vector((0, -1, 0))); fwd_r.z = 0; fwd_r.normalize()
+    RS.h.key_hand("R", f, kn + Vector((0, 0, 0.07)) - fwd_r * 0.07, fwd_r + Vector((0, 0, -0.6)), Vector((0, 0, -1)))   # palm down, fingers over the knee
+    pbR = RS.R.PB["Pole_elbow.R"]
+    pbR.location = RS.R.rest("Pole_elbow.R").to_3x3().inverted() @ (M @ Vector((-0.5, 0.3, 0.6)) - RS.R.BN["Pole_elbow.R"].head_local); pbR.keyframe_insert("location", frame=f, group="Pole_elbow.R")
+    RS.fingers("R", f, 28, 16)
+    RS.face(f, jaw=-5, brow=4, lid=-1.0, smile=0)              # lips closed
+    for sd in "LR":                                              # a warm closed-mouth smile: corners back and up, cheeks lifted
+        sx = 1 if sd == "L" else -1
+        for bn, v in (("risorius03." + sd, (sx * 0.008, 0.004, 0.015)), ("risorius02." + sd, (sx * 0.004, 0.002, 0.008)),
+                      ("levator06." + sd, (0, 0, 0.0045)), ("oris04." + sd, (sx * 0.002, 0.001, 0.004))):
+            if bn in RS.R.PB:
+                pb_ = RS.R.PB[bn]; pb_.location = RS.R.rest(bn).to_3x3().inverted() @ Vector(v); pb_.keyframe_insert("location", frame=f, group=bn)
 
 # ================================================================= DUST + CLODS
 PUFFS = [bpy.data.objects["DustPuff_%d" % i] for i in range(18)]; CLODS = [bpy.data.objects["Clod_%02d" % i] for i in range(40)]
@@ -614,9 +643,10 @@ for o in bpy.data.objects:
             if fc.array_index in (0, 1):
                 m = fc.modifiers.new('NOISE'); m.scale = random.uniform(40, 70); m.strength = 0.035; m.phase = random.uniform(0, 100)
 # drifting dust in the yard (wind), settling dust after the fall
-for f, p, sz in ((20, (-1.5, -2.0, 0.25), 1.4), (200, (3.0, -3.0, 0.3), 1.6), (420, (-2.0, 0.5, 0.25), 1.2), (640, (1.5, -0.5, 0.2), 1.3),
+for f, p, sz in ((20, (-1.5, -2.0, 0.25), 1.4), (200, (3.0, -3.0, 0.3), 1.6), (640, (1.5, -0.5, 0.2), 1.3),
                  (1200, (0.0, 3.0, 0.2), 1.3), (1530, (5.0, 0.8, 0.2), 1.8), (1620, (7.5, 1.5, 0.25), 1.6), (1760, (0.5, 4.5, 0.2), 1.4)):
     dust(f, Vector(p), sz * 0.4, dur=170, rise=0.12, n_clods=0)      # low ground drift, never around the camera
+    PUFFS[(_pi[0] - 1) % 18].visible_shadow = False                  # a low volume cast a dark square shadow across the yard (time-lapse sun)
 # background figure: the passer-by later works the far field edge (beats 4-9)
 pp2 = catmull([(600, V(-13.0, -4.0, 0)), (1100, V(-13.5, 8.0, 0)), (1520, V(-12.0, 20.0, 0))])
 PS.h.walk(pp2, lambda f: 180, 600, 1520, stride=0.7)
@@ -640,10 +670,14 @@ light(520, 15, 100, 0.8, (0.8, 0.85, 1.0), (0.7, 0.75, 0.85), 0.45, 340)     # g
 light(560, 30, -90, 2.0, (0.9, 0.9, 1.0), (0.8, 0.85, 0.95), 0.6, 30)
 light(595, 45, -60, 3.0, (1.0, 0.92, 0.82), (1.0, 0.92, 0.85), 0.8, 200)
 light(630, 38, -35, 3.4, (1.0, 0.9, 0.8), (1.0, 0.92, 0.84), 0.85, 244)
+# the low time-lapse sun threw the shed/house shadows across the yard as hard dark squares: no shadow casting from them during it
+for o in [ob for ob in bpy.data.objects if ob.name in ("Shed", "tires_shed", "house", "PorchRoof", "PorchSkirt") or ob.name.startswith("PorchPost")]:
+    for ff, v in ((463, True), (464, False), (628, False), (629, True)):
+        o.visible_shadow = v; o.keyframe_insert("visible_shadow", frame=ff)
 light(1500, 34, -30, 3.0, (1.0, 0.88, 0.76), (0.95, 0.9, 0.85), 0.8, 252)    # dust settles, slightly duller
 light(1880, 30, -30, 3.0, (1.0, 0.88, 0.76), (0.95, 0.9, 0.85), 0.8, 256)
-light(1960, 16, 60, 3.6, (1.0, 0.78, 0.52), (1.05, 0.9, 0.72), 1.0, 300)       # warm golden pasture
-light(2190, 14, 62, 3.6, (1.0, 0.76, 0.5), (1.05, 0.9, 0.72), 1.0, 302)
+light(1960, 18, 60, 4.8, (1.0, 0.8, 0.56), (1.05, 0.92, 0.76), 1.4, 300)       # warm golden pasture
+light(2190, 17, 62, 4.8, (1.0, 0.78, 0.54), (1.05, 0.92, 0.76), 1.4, 302)   # brighter ending (was dark)
 
 # ================================================================= CAMERA: one continuous spline (pos, target, lens)
 def TR(name):
@@ -658,6 +692,7 @@ def TR(name):
     if name == "oh": return OW.o.matrix_world @ OW.R.PB["head"].head
     if name == "ps": return PS.o.matrix_world @ PS.R.PB["spine03"].head
     if name == "mid": return (TR("gh") + TR("oc")) / 2
+    if name == "go": return TR("gh").lerp(TR("oh"), 0.3)      # goat in front, the owner on the porch behind it
     if name == "gp": return TR("gh") * 0.6 + TR("ps") * 0.4
     if name == "fm": return TR("gh") * 0.45 + TR("oh") * 0.55 + Vector((0, 0, -0.1))
     raise KeyError(name)
@@ -680,9 +715,10 @@ CAMK = [
  (250,  (-3.2, 1.0, 1.0), ("gh",), 32),      # orbit around, whole goat in frame
  (285,  (-2.6, 3.4, 1.0), ("gb",), 30),      # keeps the goat in frame on the way round
  (320,  (-1.3, 4.2, 1.0), (-0.6, -1.5, 0.55), 26),   # behind the goat, the passer-by beyond the fence    # behind the goat; passer-by beyond the fence
- (390,  (-2.7, 2.7, 0.75), ("gh",), 36),
- (425,  (-1.6, 3.7, 1.15), ("gb",), 28),      # wide on the whole goat on the way round
- (445,  (-2.6, 1.0, 1.1), ("gh",), 30),      # round the goat's head, clear of its body
+ (355,  (-2.35, 3.1, 1.1), ("gb",), 28),     # wider round the goat (the path passed 1 m from its flank), clear of the shed
+ (390,  (-2.7, 0.8, 1.0), ("go",), 32),      # past the goat to the porch: he raises the stick at it again
+ (425,  (-2.9, 0.9, 1.1), ("go",), 32),
+ (445,  (-2.6, 1.0, 1.1), ("go",), 30),      # round the goat's head, clear of its body
  (462,  (-1.0, -0.6, 1.1), ("gh",), 32),    # tense goat, whole head and neck in frame
  (500,  (1.6, 1.6, 1.4), ("gb",), 28),      # round the east side of the goat (the straight path went through it)
  (540,  (0.4, 3.9, 1.3), ("gb",), 26),
@@ -690,6 +726,7 @@ CAMK = [
  (690,  ("gh", (1.0, -0.55, 0.3), "g"), ("gh", (0, 0, 0.05)), 38),    # eye macro
  (740,  ("gh", (0.8, -0.9, 0.15), "g"), ("gh",), 34),    # horns
  (790,  ("gf", (0.9, -0.9, 0.4), "g"), ("gh", (0, 0, -0.25)), 30),   # stamping hoof, head in frame
+ (803,  (1.3, 1.1, 0.8), ("gh",), 30),                    # swing wide round its head (the path passed 0.35 m from it)
  (816,  (OC.x - 1.7, OC.y - 1.7, 0.85), ("mid",), 28),
  (880,  (OC.x - 1.0, OC.y - 2.1, 0.55), ("mid",), 26),    # skimming beside the charge, him and the goat both in frame
  (960,  (OC.x - 0.2, OC.y - 1.7, 0.7), ("ob", (0, 0, -0.15)), 30),   # impact, side-on
@@ -721,8 +758,8 @@ CAMK = [
  (1970, (3.2, 58.8, 1.3), (1.9, 62.2, 0.55), 30),
  (2020, (4.6, 58.6, 2.2), (1.9, 62.3, 0.5), 28),           # down into the pasture
  (2080, (2.6, 59.6, 1.3), (1.6, 62.2, 0.55), 32),
- (2140, (1.3, 60.3, 0.9), (1.5, 62.15, 0.5), 40),          # settle in front: goat's face at her palm, her face
- (2190, (1.1, 60.5, 0.85), (1.45, 62.1, 0.5), 44),
+ (2140, (2.3, 60.65, 0.98), (1.3, 62.05, 0.74), 36),        # settle three-quarter front: her smiling face, her hand on the goat
+ (2190, (2.45, 60.75, 1.0), (1.35, 62.05, 0.75), 38),
 ]
 CK = []
 for f, p, t, l in CAMK:
