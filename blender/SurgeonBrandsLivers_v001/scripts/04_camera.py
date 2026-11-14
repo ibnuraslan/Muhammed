@@ -40,23 +40,23 @@ K = [  # frame, camera position, aim point, lens (mm)
     (94, V(0.28, 0.16, 1.43), S1H(94) + V(0, 0.18, -0.22), 32),
     (108, V(0.26, -0.06, 1.58), WINP + V(0, 0, 0.05), 34),
     (119, V(0.12, -0.12, 1.56), WINP + V(0, 0, -0.02), 36),
-    (132, V(-0.27, -0.10, 1.26), WINP + V(0, 0.02, -0.4), 30),
-    (138, V(-0.28, -0.07, -2.5), V(-0.25, -0.06, -6.0), 28),
-    (142, V(-0.12, -0.2, LZ + 0.40), V(-0.05, -0.05, LZ), 32),
+    (132, V(-0.27, -0.10, 1.40), WINP + V(0, 0.02, -0.4), 30),     # v008d: off the skin (no fill)
+    (133, V(-0.05, -0.40, LZ + 0.30), V(-0.05, -0.05, LZ), 34),     # v008d: cut straight into the studio (no fill frames)
+    (142, V(-0.05, -0.40, LZ + 0.30), V(-0.05, -0.05, LZ), 34),
     # studio macro: S, then B, then the whole liver
-    (152, V(-0.06, -0.30, LZ + 0.30), V(-0.03, -0.03, LZ + 0.02), 38),
-    (170, V(-0.11, -0.19, LZ - 0.01), brand(200, "S"), 52),
-    (205, V(-0.03, -0.17, LZ - 0.025), brand(200, "S") + V(0, 0, 0.01), 58),
-    (240, V(0.09, -0.18, LZ - 0.015), brand(260, "B") + V(0, 0, 0.01), 56),
+    (152, V(-0.06, -0.38, LZ + 0.25), V(-0.03, -0.03, LZ + 0.02), 38),
+    (170, V(-0.24, -0.24, LZ + 0.03), brand(200, "S"), 45),     # v008d: left of the writing arm (it no longer crosses the lens)
+    (205, V(-0.20, -0.25, LZ + 0.01), brand(200, "S") + V(0, 0, 0.01), 48),
+    (240, V(0.09, -0.30, LZ + 0.05), brand(260, "B") + V(0, 0, 0.01), 45),     # v008d: pulled back, the B and the pen read (no blur)
     (266, V(0.03, -0.42, LZ + 0.10), V(0.0, -0.03, LZ), 40),     # v007b: whole liver + hand, not a surface
-    (274, V(0.0, -0.22, LZ + 0.40), V(0.0, -0.05, LZ + 0.7), 35),
+    (274, V(0.0, -0.30, LZ + 0.30), V(0.0, -0.03, LZ), 35),       # v008d: last studio frame is the liver
     # 2 - rise back out of the window, stitching top-down, crane to his face, mask down, smile
-    (277, V(-0.12, -0.14, -2.5), V(-0.2, -0.1, 1.0), 30),
-    (281, V(-0.28, -0.08, 1.21), V(-0.28, -0.06, 2.5), 30),
+    (275, V(-0.15, 0.25, 1.40), S1H(285) + V(0, 0.1, -0.15), 30),      # v008d: cut straight back to the OR, on his face
+    (281, V(-0.15, 0.28, 1.42), S1H(285) + V(0, 0.1, -0.15), 30),
     (288, V(-0.20, 0.12, 1.48), WINP + V(0, 0.08, 0.05), 30),
     (301, V(-0.12, 0.40, 1.40), S1H(301) + V(0, 0.16, -0.20), 30),   # v007b: beat 2: his face over his hands at the window
-    (330, V(-0.30, 0.0, 1.47), WINP, 38),
-    (365, V(0.02, -0.02, 1.50), WINP + V(0.02, 0, 0), 40),
+    (330, V(-0.30, 0.0, 1.62), WINP, 30),                        # v008d: pulled back, the glove no longer fills the frame
+    (365, V(0.02, -0.05, 1.62), WINP + V(0.02, 0, 0), 32),
     (410, V(0.30, -0.15, 1.62), (WINP + S1H(420)) / 2, 30),
     (455, V(0.25, 0.25, 1.68), S1H(470), 36),
     (500, V(-0.05, 0.10, 1.68), S1H(500), 50),
@@ -88,8 +88,8 @@ K = [  # frame, camera position, aim point, lens (mm)
     # 6 - dive into the window again: gloved hands lift the liver into the light; out to her widening eyes
     (1046, V(-0.22, -0.24, 1.70), WINP, 30),
     (1053, V(-0.24, -0.18, 1.62), WINP, 30),
-    (1057, V(-0.28, -0.07, 1.21), WINP + V(0, 0, -0.5), 30),
-    (1060, V(-0.28, -0.065, -2.5), V(-0.25, -0.06, -6.0), 28),
+    (1056, V(-0.24, -0.18, 1.62), WINP, 30),
+    (1057, V(-0.02, -0.25, LZ + 0.40), V(0.0, -0.02, LZ), 32),   # v008d: cut straight into the studio
     (1064, V(-0.02, -0.25, LZ + 0.40), V(0.0, -0.02, LZ), 32),
     (1078, V(0.05, -0.42, LZ + 0.25), V(0.0, -0.02, LZ + 0.02), 34),
     (1105, V(-0.16, -0.36, LZ + 0.06), V(0.0, -0.02, LZ + 0.08), 40),
@@ -97,16 +97,16 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1140, V(-0.06, -0.42, LZ + 0.20), brand(1150, "S") + V(0.03, 0, -0.01), 46),
     (1168, V(0.03, -0.48, LZ + 0.22), brand(1168, "S") + V(0.03, 0, -0.01), 42),
     (1174, V(0.03, -0.47, LZ + 0.24), brand(1168, "S") + V(0.03, 0, 0.0), 42),     # v007b: hold the liver + hands, then exit fast
-    (1178, V(0.0, -0.15, LZ + 0.40), V(0.0, -0.1, LZ + 2.0), 35),
-    (1182, V(-0.15, -0.1, -2.5), V(-0.2, -0.08, 1.0), 33),
-    (1186, V(-0.28, -0.08, 1.21), V(-0.28, 0.2, 2.2), 30),
+    (1175, V(-0.28, 0.12, 1.28), S2H(1180) + V(0, 0, -0.05), 30),       # v008d: cut straight back to the OR, low on Surgeon2's face
+    (1179, V(-0.28, 0.13, 1.30), S2H(1180) + V(0, 0, -0.05), 30),
     (1191, V(-0.26, -0.15, 1.62), S2H(1195) + V(0, 0, -0.15), 32),
     (1199, V(-0.29, -0.05, 1.55), S2H(1200), 38),
     (1210, V(-0.30, 0.02, 1.62), S2H(1210), 42),
     (1228, V(-0.30, 0.05, 1.58), S2H(1225), 52),
     # 7 - whip-pan through the west wall into the hearing room: anatomy wall, orbit to the confessing surgeon
     (1231, V(-0.31, 0.06, 1.62), S2H(1231) + V(-0.04, 0, 0), 48),     # v007b: still on him at the beat, then whip
-    (1235, V(-0.6, 0.1, 1.85), V(-6.0, 0.0, 1.75), 40),
+    (1235, V(-0.5, -0.25, 1.75), V(-1.3, 0.5, 1.55), 30),       # v008d: the whip passes the anaesthetist, then the wall
+    (1238, V(-2.6, -0.1, 1.75), V(-8.0, 0.0, 1.6), 30),
     (1241, V(-4.0, 0.0, 1.75), V(-8.0, 0.0, 1.6), 30),          # v007b: one fast pass through the wall
     (1254, V(-4.4, -0.6, 1.7), V(-7.5, 0.0, 1.5), 28),
     # v007b: the surgeon stays in frame; swing round in front of him so the anatomy wall reads behind him
@@ -144,7 +144,18 @@ def pvec(keys):
 def blend(keys):
     p_ = pvec(keys); c_ = catmull(keys)
     return lambda t: (p_(t) + c_(t)) * 0.5
-fc = blend([(f, c) for f, c, a, l in K]); fa = blend([(f, a) for f, c, a, l in K]); fl = pchip([(f, float(l)) for f, c, a, l in K])
+# v008d: hard cuts at the studio dives (no membrane / skin fill frames): the path is splined per section
+CUTS = (133, 275, 1057, 1175)
+_SEC = [[]]
+for _k in K:
+    if _k[0] in CUTS and _SEC[-1]: _SEC.append([])
+    _SEC[-1].append(_k)
+_FN = [(s_[0][0], blend([(f, c) for f, c, a, l in s_]), blend([(f, a) for f, c, a, l in s_]), pchip([(f, float(l)) for f, c, a, l in s_])) for s_ in _SEC]
+def _sec(t):
+    for e in reversed(_FN):
+        if t >= e[0]: return e
+    return _FN[0]
+fc = lambda t: _sec(t)[1](t); fa = lambda t: _sec(t)[2](t); fl = lambda t: _sec(t)[3](t)
 # transit snapping: the camera never sits inside a wall, floor or the gap between the OR table and the studio.
 # Frames that would be inside a slab are moved to the nearer face, so each pass-through is a single textured frame.
 MEMB_Z = LZ + 0.45
@@ -154,7 +165,7 @@ def body_h(x, y):
     legs = 0.14 * max(0.0, 1 - (y / 0.3) ** 2) if 0.4 < x < 1.15 else 0.0
     return max(torso, legs)
 ZONES = [  # axis, lo, hi, extra condition
-    ('x', 3.488, 3.812, lambda p: abs(p.y) < 3.0 and 0 < p.z < 2.7),
+    ('x', 3.44, 3.812, lambda p: abs(p.y) < 3.0 and 0 < p.z < 2.7),     # v008d: lo face in front of the calendar paper (was inside it: black)
     ('x', -3.912, -3.488, lambda p: abs(p.y) < 3.5 and 0 < p.z < 3.0),
 ]
 def snap(f, p, prev_side):
