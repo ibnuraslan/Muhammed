@@ -70,7 +70,7 @@ def tex_card(lines, name, w=900, h=540, seed=1, ruled=True):
     return _save(im, name)
 
 
-def rough_marks(size, strokes, words=(), col=RED, seed=3, width=7, grain=0.55):
+def rough_marks(size, strokes, words=(), col=RED, seed=3, width=7, grain=0.55, chalk=False):
     """Hand-made marks as an RGBA layer: each stroke is several jittered passes of uneven width; the alpha is then
     broken up by paper-tooth grain and pressure changes, so it reads as real pencil / chalk, never a clean tube.
     strokes: list of point lists (px); words: (text, (x, y), font_path, size, angle)."""
@@ -87,14 +87,27 @@ def rough_marks(size, strokes, words=(), col=RED, seed=3, width=7, grain=0.55):
                     wv = max(1, int(width * (0.45 + 0.35 * rng.random()) * (0.8 + 0.2 * math.sin(7 * a + k))))
                     d.line([(x0 + (x1 - x0) * a, y0 + (y1 - y0) * a), (x0 + (x1 - x0) * b, y0 + (y1 - y0) * b)], fill=int(150 + 100 * rng.random()), width=wv)
     for txt, (x, y), fp, sz, ang in words:
-        tl = Image.new("L", (int(sz * len(txt) * 0.8) + 40, int(sz * 1.6)), 0); ImageDraw.Draw(tl).text((20, 10), txt, font=F(fp, sz), fill=235)
+        tl = Image.new("L", (int(sz * len(txt) * 0.8) + 40, int(sz * 1.6)), 0)
+        ImageDraw.Draw(tl).text((20, 10), txt, font=F(fp, sz), fill=235, stroke_width=(3 if chalk else 0), stroke_fill=235)
+        if chalk:      # hand wobble: warp the lettering with smooth noise so it is not a typeset glyph
+            ta = np.array(tl); hh, ww = ta.shape; yy, xx = np.mgrid[0:hh, 0:ww]
+            dx = 3.0 * np.sin(yy / 9.0 + rng.random() * 6) + 2.0 * np.sin(xx / 23.0 + rng.random() * 6)
+            dy = 2.5 * np.sin(xx / 11.0 + rng.random() * 6)
+            tl = Image.fromarray(ta[np.clip((yy + dy).astype(int), 0, hh - 1), np.clip((xx + dx).astype(int), 0, ww - 1)])
         tl = tl.rotate(ang, expand=True, resample=Image.BICUBIC)
         lay.paste(Image.fromarray(np.maximum(np.array(lay.crop((x, y, x + tl.size[0], y + tl.size[1]))), np.array(tl))), (x, y))
     a = np.array(lay).astype(float) / 255.0
-    tooth = rng.random((h, w)); tooth = np.clip((tooth - (1 - grain)) / grain, 0, 1)            # paper tooth: grain skips
     from PIL import ImageFilter
+    tooth = rng.random((h, w)); tooth = np.clip((tooth - (1 - grain)) / grain, 0, 1)            # paper tooth: grain skips
     blot = np.array(Image.fromarray((rng.random((h // 16 + 1, w // 16 + 1)) * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC)) / 255.0
-    a = np.clip(1.5 * a * (0.55 + 0.45 * tooth) * (0.75 + 0.35 * blot), 0, 1)
+    if chalk:          # chalk: dry, broken grain (the plaster tooth shows through), streaks, and a faint dusty halo
+        fine = rng.random((h, w))
+        streak = np.array(Image.fromarray((rng.random((h // 3 + 1, w // 3 + 1)) * 255).astype(np.uint8)).resize((w, h), Image.NEAREST)) / 255.0
+        core = a * np.clip((fine - 0.3) / 0.45, 0, 1) * (0.55 + 0.6 * streak) * (0.6 + 0.6 * blot)
+        halo = np.array(Image.fromarray((a * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5))) / 255.0
+        a = np.clip(1.25 * core + 0.18 * halo * fine, 0, 1)
+    else:
+        a = np.clip(1.5 * a * (0.55 + 0.45 * tooth) * (0.75 + 0.35 * blot), 0, 1)
     a = np.array(Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(0.6))) / 255.0
     out = np.zeros((h, w, 4), np.uint8); out[..., :3] = col; out[..., 3] = (np.clip(a, 0, 1) * 255).astype(np.uint8)
     return Image.fromarray(out, "RGBA")

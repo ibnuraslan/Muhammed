@@ -1024,7 +1024,7 @@ def chalk_decal(hx, hy, z, hw, hl, size=0.9, ppm=1000):
                [P(xB, -hl / 2), P(xB, hl / 2)], [P(xB - 0.025, -hl / 2), P(xB + 0.025, -hl / 2)], [P(xB - 0.025, hl / 2), P(xB + 0.025, hl / 2)]]
     x8, y8 = P(-0.05, yA + 0.085); x15, y15 = P(xB + 0.03, 0.03)
     img = EV.rough_marks((n, n), strokes, words=(("8 in", (int(x8), int(y8)), EV.HAND, 54, 2), ("15 in", (int(x15), int(y15)), EV.HAND, 54, -3)),
-                         col=(232, 228, 214), seed=11, width=12, grain=0.5)
+                         col=(236, 233, 222), seed=11, width=15, grain=0.5, chalk=True)
     img = ImageOps.mirror(img)                    # seen from below: screen right is world -X
     path = EV._save(img, "hatch_chalk.png")
     m = bpy.data.materials.new("ChalkDecal"); m.use_nodes = True
