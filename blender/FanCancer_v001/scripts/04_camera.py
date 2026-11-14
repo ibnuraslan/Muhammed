@@ -54,11 +54,12 @@ K = [
     (0.0, V((4.0, -9.0, 3.6)), V((0.0, 2.5, 2.0)), 22, False),
     (1.0, V((2.2, -3.6, 2.6)), V((0.0, 0.6, 1.4)), 28, False),
     (1.7, V((1.2, -1.45, 1.9)), fanH1 + V((0, 0, -0.05)), 38, False),
+    (1.95, V((0.30, -1.65, 2.05)), fanH1, 42, False),
     (2.2, V((-0.6, -0.75, 1.62)), fanH1, 45, False),
     (2.55, V((-0.80, -0.95, 2.95)), mole3, 36, False),
     (2.85, V((-0.40, 0.35, 2.80)), mole3, 40, False),                 # rises over the glass
-    (3.3, V((-0.20, 1.05, 1.62)), mole3, 70, False),                 # her POV over her shoulder; rack focus
-    (3.9, V((-0.05, 0.95, 1.56)), mole3, 85, False),
+    (3.3, V((-0.20, 1.05, 1.88)), mole3, 70, False),                 # her POV over her shoulder; rack focus
+    (3.9, V((-0.05, 0.95, 1.82)), mole3, 85, False),
     (4.5, mole3 + V((0.05, 0.45, 0.35)), mole3, 60, False),
     (5.0, fill(mole3, moleN3, 0.015), mole3, 50, False),
     (5.0, SK + V((0, 0, 15)), SK, 50, True),                          # through the skin
