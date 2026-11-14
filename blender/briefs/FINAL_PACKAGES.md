@@ -16,7 +16,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 |---|---|---|---|
 | 01 | EarInArm | `claude/beautiful-ptolemy-c5vrcq` | `blender/EarInArm_v010/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
 | 02 | MonkeyHeadTransplant | `claude/beautiful-ptolemy-c5vrcq` | `blender/MonkeyHeadTransplant_v011/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
-| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v010/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
+| 03 | LegoInNose | `claude/beautiful-ptolemy-c5vrcq` | `blender/LegoInNose_v011/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–2036)** |
 | 04 | StanleyCup | `claude/beautiful-ptolemy-c5vrcq` | `blender/StanleyCup_v008/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
 | 05 | SurgeonBrandsLivers | `claude/beautiful-ptolemy-c5vrcq` | `blender/SurgeonBrandsLivers_v010/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
 | 06 | PrisonKeyCake | `claude/beautiful-ptolemy-c5vrcq` | `blender/PrisonKeyCake_v009/` **ON HOLD: DO NOT RENDER (moving-preview review found body/hand/face faults; fix in progress)** |
