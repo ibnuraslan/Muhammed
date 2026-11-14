@@ -70,17 +70,17 @@ def push_out(f_c1, f_c2, w, side):
     NEW.append([f_c1, list(w + Y * side * 0.02), list(w - Y * side * 0.2), 22])
     NEW.append([f_c2, list(w + Y * side * 0.03), list(w - Y * side * 0.2), 22])
 # exit after the scream: into the inner wall above the flap, out of the outer wall, pull back to the wide of the bin
-push_in(None, 1399, 1402, in_hi, +1); push_out(1403, 1405, out_hi, -1)
+# (director rule 3, Nov 14: no camera move through a wall) the three inside/outside transitions are whip-pans:
+# the camera tips up into the empty, dark bin ceiling, changes place there, and tips down out of an empty sky
 NEW.append([1412, [0.30, -1.70, 1.80], [0.0, -0.6, 1.35], 22])
 # back in for the three days: into the outer wall low, out of the inner wall, pan round to her face
-push_in(None, 1552, 1555, out_lo, -1); push_out(1556, 1558, in_lo, +1)
 def topcam(f, dx):
     sc.frame_set(f); ch = WO.matrix_world @ WO.pose.bones["spine03"].head
     t = ch.lerp(face(f)[0], 0.35); c = t + Vector((dx, -0.42, 1.05))
     return [f, [max(-0.6, min(0.6, c.x)), max(-0.45, c.y), min(2.15, c.z)], list(t), 20]
 NEW.append(topcam(1570, 0.15))
 # the knock: into the inner wall, out of the outer wall, then the passer-by (key 1880)
-push_in(None, 1865, 1868, in_lo, +1); push_out(1869, 1871, out_lo, -1)
+NEW.append([1880, [0.20, -1.10, 1.45], [1.3, -1.7, 1.5], 22])     # outside, clear of the bin front
 # 4. 35.5 s: her face height as she climbs out
 fc, _ = face(2130); NEW.append([2130, [fc.x + 0.30, fc.y - 0.85, fc.z - 0.02], list(fc), 24])
 CAMK = sorted([k for k in CAMK if not any(abs(k[0] - n[0]) < 1 for n in NEW)] + NEW, key=lambda k: k[0])
@@ -97,10 +97,12 @@ POS = {}
 for f in range(1, sc.frame_end + 1):
     s_ = seg(f); POS[f] = [s_[2](f), s_[3](f), s_[4](f)]
 # covered frames: hold 5 cm off the wall face (near-clip safe), looking straight into it
-COVER = [(1399, 1402, in_hi, +1), (1403, 1405, out_hi, -1), (1552, 1555, out_lo, -1), (1556, 1558, in_lo, +1), (1865, 1868, in_lo, +1), (1869, 1871, out_lo, -1)]
-for f0, f1, w, side in COVER:
-    for f in range(f0, f1 + 1): POS[f] = [w + Y * side * 0.05, w - Y * side * 0.2, 22.0]
-print("COVERED", [(a, b) for a, b, _, _ in COVER])
+WHIPS = [(1394, 1403, 1412), (1546, 1556, 1570), (1861, 1869, 1880)]      # (start, jump, settle)
+for a_, j_, b_ in WHIPS:
+    pin, pout = POS[a_][0].copy(), POS[b_][0].copy()
+    for f in range(a_, j_): POS[f][0] = pin
+    for f in range(j_, b_): POS[f][0] = pout
+print("WHIPS", WHIPS)
 # 3. keep 30 cm from her hands (19-20.5 s), smoothed
 off = {}
 for f in range(1140, 1200):
@@ -126,11 +128,18 @@ for f in range(1, sc.frame_end + 1):
     q = (POS[f][1] - POS[f][0]).to_track_quat('-Z', 'Y')
     if qprev is not None and q.dot(qprev) < 0: q = -q
     QS[f] = q; qprev = q
-# pans next to the pushes: slerp the rotation (smoothstep) so the look-at never swings past the lens
-for a_, b_ in ((1558, 1570), (1845, 1865), (1871, 1886)):
+def _tq(d):
+    q = Vector(d).normalized().to_track_quat('-Z', 'Y'); return q
+for a_, j_, b_ in WHIPS:
+    inside_first = POS[a_][0].y > -0.58
+    up_a = _tq((0, -0.15 if inside_first else -0.15, 1)); up_b = _tq((0, -0.15, 1))
     qa, qb = QS[a_], QS[b_]
-    for f in range(a_ + 1, b_):
-        t_ = (f - a_) / (b_ - a_); QS[f] = qa.slerp(qb, t_)      # linear: constant turn rate
+    if up_a.dot(qa) < 0: up_a = -up_a
+    for f in range(a_ + 1, j_):
+        t_ = (f - a_) / (j_ - 1 - a_); t_ = t_ * t_ * (3 - 2 * t_); QS[f] = qa.slerp(up_a, t_)
+    if up_b.dot(qb) < 0: up_b = -up_b
+    for f in range(j_, b_):
+        t_ = (f - j_) / (b_ - j_); t_ = t_ * t_ * (3 - 2 * t_); QS[f] = up_b.slerp(qb, t_)
 qprev = None
 for f in range(1, sc.frame_end + 1):
     p, t, ln = POS[f]

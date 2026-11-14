@@ -148,7 +148,7 @@ def back_lie(f, dz=0.0, sit=0.0, sp=(8, 0, 0), head=(10, 0), hands=None, knee=1.
         for s in "LR":
             sx = 1 if s == "L" else -1
             kn = WOo.matrix_world @ WOo.pose.bones["lowerleg01." + s].head
-            WO.key_hand(s, f, kn + Vector((0, 0, 0.085)) - LG * 0.06, LG, PALM_DOWN, pole=kn + lat(yaw) * (0.40 * sx) + Vector((0, 0, 0.15)))
+            WO.key_hand(s, f, kn + Vector((0, 0, 0.11)) + lat(yaw) * (0.05 * sx), LG, PALM_DOWN, pole=kn + lat(yaw) * (0.60 * sx) - LG * 0.30 + Vector((0, 0, 0.25)))   # elbows out, arms clear of her sides
 WO.pose(252, (0.06, -0.06, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
         hands={"L": ("r", (0.30, 0.05, 0.25)), "R": ("r", (-0.30, 0.05, 0.25))},
         feet={"L": ("r", (0, -0.25, 0.40), -10), "R": ("r", (0, -0.20, 0.32), -10)}, curl={"L": 0.2, "R": 0.2})
@@ -288,7 +288,7 @@ for f, k, weak, hd, br in ((1532, 0.85, 0.0, (15, 10), 0), (1580, 0.9, 0.1, (18,
 # --- 1843-2094: hears the knock, lifts her head, props up on her arm and sits up toward the light
 curled(1910, 1.0, 1.0, (25, 0)); curled(1935, 0.95, 0.9, (0, -20), jaw=8)
 WO.pose(1990, (CUR.x + 0.02, CUR.y, PZ(CUR.x, CUR.y) + 0.24), yaw=CY - 20, flex=20, side=55, sp=(20, 0, 0), head=(-5, -20),
-        hands={"L": ("w", (CUR.x - 0.10, CUR.y + 0.20, PZ(CUR.x - 0.10, CUR.y + 0.20) + 0.035), (0.6, 0.3, 0), tuple(PALM_DOWN)), "R": ("w", (CUR.x + 0.36, CUR.y - 0.26, PZ(CUR.x + 0.36, CUR.y - 0.26) + 0.035), (0.3, -0.6, 0), tuple(PALM_DOWN))},
+        hands={"L": ("w", (CUR.x - 0.10, CUR.y + 0.20, PZ(CUR.x - 0.10, CUR.y + 0.20) + 0.035), (0.6, 0.3, 0), tuple(PALM_DOWN)), "R": ("w", (CUR.x + 0.46, CUR.y - 0.32, PZ(CUR.x + 0.46, CUR.y - 0.32) + 0.035), (0.3, -0.6, 0), tuple(PALM_DOWN))},
         feet={"L": ("r", (-0.02, -0.30, 0.40), 15), "R": ("r", (0.04, -0.24, 0.34), 15)}, jaw=4)
 SEAT = Vector((0.05, 0.12, 0))
 def seated(f, look=(0, 0), lean=15, jaw=0.0, dy=0.0):
@@ -366,7 +366,7 @@ for f, dz, fl, ext in ((154, 0.0, 6, 0.0), (163, -0.02, 10, 0.6), (172, -0.03, 1
     p = Vector((-0.02, -1.50 + 0.12 * ext, RH + dz))
     if 160 <= f <= 200:
         bp, d = back_point(f)
-        hands = {s: ("w", tuple(bp + Vector((0.11 * (1 if s == "L" else -1) * -1, 0, 0)) - d * 0.07), (0, 0.45, 1), tuple(d)) for s in "LR"}
+        hands = {s: ("w", tuple(bp + Vector((0.11 * (1 if s == "L" else -1) * -1, 0, 0)) - d * 0.11), (0, 0.45, 1), tuple(d)) for s in "LR"}
     else:
         hands = {"L": ("r", (0.05, -0.15, 0.25)), "R": ("r", (-0.05, -0.15, 0.25))}
     SH.pose(f, p, yaw=180, flex=fl, sp=(fl * 0.6, 0, 0), head=(5, 0), hands=hands,
