@@ -1,0 +1,126 @@
+{
+ "frames": {
+  "1": [
+   [
+    "BACKHEAD",
+    "Crowd_S1_5"
+   ]
+  ],
+  "169": [
+   [
+    "BACKHEAD",
+    "Guard_S2"
+   ]
+  ],
+  "577": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
+    "FILL",
+    "Sphere"
+   ],
+   [
+    "FILL",
+    "surface <12 cm"
+   ],
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "only Sphere in view"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1249": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1627": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1837": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1963": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2197": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2203": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "2209": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2485": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ]
+ },
+ "counts": {
+  "BACKHEAD": 2,
+  "INSIDE": 1,
+  "FILL": 2,
+  "EMPTY": 16
+ }
+}

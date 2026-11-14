@@ -134,3 +134,20 @@ Checked and kept as they are:
 - The white floor patch at f161 is a glossy floor highlight.
 - The pans at f1246 and f1461 are empty for under 0.25 s.
 - The square, the king's collapse and the doctors are clean.
+
+**v010 re-check: the moving preview of the delivered file** (`review/preview.mp4`, 534 frames, all 11 pages in `review/v010_preview_pages/`).
+- Every fix above is confirmed on the pages.
+- Improved but still close:
+  - churchyard opening, f1631–1661: about 0.5 s of small figures;
+  - procession at f1786–1796: it passes about 1.5 m from the camera, bearers whole and sharp;
+  - the fleeing guard at f231–236: passes the camera at about 1.5 m, full body and sharp.
+
+**qa_check 771d2da, unchanged** → `v010_qa_check_director.json`: BACKHEAD 2, INSIDE 1, FILL 2, EMPTY 16 (v008: EMPTY 24). CAMJUMP, ROLL, HOVER, CLAW, FACEPRESS, PROPMOVE and ATTACH are all 0.
+- BACKHEAD:
+  - f1 is the opening behind the crowd;
+  - f169 is the guard nearest the camera while the king faces it.
+- INSIDE and FILL are all f577, the intended pass through the steam.
+- EMPTY:
+  - f2131–2203 (8 samples) have the bed counted as a prop filling the frame. The pages show both twins in frame: A at the bedside, B in bed with chest and arms visible.
+  - f1249, f1627, f1837, f1963, f2209 and f2485 are single samples during pans and whips, each empty for under 0.25 s on the pages.
+  - f577 is the steam pass.
