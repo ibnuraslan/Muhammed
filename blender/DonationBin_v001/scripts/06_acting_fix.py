@@ -109,9 +109,10 @@ clear_keys(WOo, 158, 2094)
 FALL = [  # f, pos, yaw, flex, side, spine, feet-delta, hand-delta L, R      (the v004 dive, unchanged to 238)
     (166, (0.0, -0.98, RH + 0.10), 180, 40, 0, (25, 0, 0), (0, 0.05, 0.10), (-0.05, -0.25, 0.45), (0.05, -0.25, 0.45)),
     (182, (0.0, -0.86, RH + 0.42), 180, 72, 5, (20, 0, 0), (0, 0.10, 0.25), (0.05, -0.35, 0.65), (-0.05, -0.35, 0.65)),
-    (200, (0.0, -0.66, 1.30), 180, 100, 8, (10, 8, 0), (0, 0.05, 0.25), (0.10, -0.30, 0.70), (-0.10, -0.30, 0.70)),
-    (218, (0.02, -0.42, 1.36), 175, 135, 10, (-10, 10, 0), (0, 0.10, 0.20), (0.25, -0.20, 0.55), (-0.25, -0.10, 0.60)),
-    (238, (0.04, -0.20, 1.18), 165, 170, 12, (-5, 0, 0), (0, 0.0, 0.15), (0.35, -0.20, 0.35), (-0.30, 0.10, 0.40)),
+    (200, (0.0, -0.62, 1.34), 180, 92, 6, (8, 0, 0), (0, 0.02, 0.0), (0.10, -0.30, 0.70), (-0.10, -0.30, 0.70)),
+    (212, (0.01, -0.30, 1.32), 178, 100, 6, (4, 0, 0), (0, 0.02, 0.0), (0.12, -0.30, 0.65), (-0.12, -0.30, 0.65)),
+    (224, (0.02, 0.05, 1.22), 172, 110, 8, (0, 0, 0), (0, 0.02, 0.0), (0.15, -0.25, 0.55), (-0.15, -0.25, 0.55)),
+    (236, (0.04, 0.15, 1.05), 165, 145, 10, (-5, 0, 0), (0, 0.0, 0.10), (0.12, -0.20, 0.40), (-0.12, -0.15, 0.40)),
 ]
 for f, pos, yaw, fl, sd, spn, fd, hl, hr in FALL:
     WO.pose(f, pos, yaw=yaw, flex=fl, side=sd, sp=spn, head=(-15, 0), hands={"L": ("r", hl), "R": ("r", hr)},
@@ -150,10 +151,10 @@ def back_lie(f, dz=0.0, sit=0.0, sp=(8, 0, 0), head=(10, 0), hands=None, knee=1.
             kn = WOo.matrix_world @ WOo.pose.bones["lowerleg01." + s].head
             WO.key_hand(s, f, kn + Vector((0, 0, 0.11)) + lat(yaw) * (0.05 * sx), LG, PALM_DOWN, pole=kn + lat(yaw) * (0.60 * sx) - LG * 0.30 + Vector((0, 0, 0.25)))   # elbows out, arms clear of her sides
 WO.pose(252, (0.06, -0.06, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
-        hands={"L": ("r", (0.30, 0.05, 0.25)), "R": ("r", (-0.30, 0.05, 0.25))},
+        hands={"L": ("r", (0.10, -0.12, 0.30)), "R": ("r", (-0.10, -0.12, 0.30))},
         feet={"L": ("r", (0, -0.25, 0.40), -10), "R": ("r", (0, -0.20, 0.32), -10)}, curl={"L": 0.2, "R": 0.2})
 WO.pose(266, (0.07, 0.0, 0.62), yaw=138, flex=245, side=5, sp=(30, 0, 0), head=(30, 0),
-        hands={"L": ("r", (0.30, 0.10, 0.15)), "R": ("r", (-0.30, 0.10, 0.15))},
+        hands={"L": ("r", (0.12, -0.10, 0.22)), "R": ("r", (-0.12, -0.10, 0.22))},
         feet={"L": ("r", (0, -0.35, 0.45), -10), "R": ("r", (0, -0.30, 0.38), -10)}, curl={"L": 0.2, "R": 0.2})
 back_lie(280, dz=0.06, knee=0.6, sp=(20, 0, 0), head=(25, 0))
 back_lie(290, dz=-0.03, sp=(0, 0, 0), head=(5, 0))        # bounce on the clothes
@@ -184,11 +185,14 @@ WO.pose(650, (KN.x, KN.y - 0.04, PZ(KN.x, KN.y) + 0.48), yaw=15, flex=30, sp=(25
 STAND = Vector((0.02, -0.18, 0))
 WO.pose(676, (STAND.x, STAND.y + 0.02, PZ(STAND.x, STAND.y) + RH - 0.10), yaw=5, flex=10, sp=(8, 0, 0), head=(-20, 0),
         hands={"L": ("r", (0.0, -0.12, 0.25)), "R": ("r", (0.0, -0.12, 0.25))}, feet=stand_feet(STAND.x, STAND.y + 0.08, 0), curl={"L": 0.3, "R": 0.3})
+def flap_in_y(f, x, z):
+    sc.frame_set(f); h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((x, 0.0, z)), Vector((0, -1, 0)), distance=1.0)
+    return (h[1].y if h[0] else FY) + 0.028
 def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
     z = PZ(STAND.x, STAND.y)
-    ph = 1.50 + 0.03 * wob
+    ph = 1.30 + 0.02 * wob
     WO.pose(f, (STAND.x, STAND.y - 0.05 * push, z + RH - 0.04), yaw=0, flex=3 + 5 * push, sp=(2 + 4 * push, 0, 0), head=look,
-            hands={"L": ("w", (0.16, FY + 0.05 - 0.006 * push, ph), (0, 0, 1), (0, -1, 0)), "R": ("w", (-0.16, FY + 0.05 - 0.006 * push, ph + 0.04), (0, 0, 1), (0, -1, 0))},
+            hands={"L": ("w", (0.16, flap_in_y(f, 0.16, ph + 0.08), ph), (0, 0, 1), (0, -1, 0)), "R": ("w", (-0.16, flap_in_y(f, -0.16, ph + 0.11), ph + 0.03), (0, 0, 1), (0, -1, 0))},
             feet=stand_feet(STAND.x, STAND.y + 0.08, 0), jaw=jaw, curl={"L": 0.1, "R": 0.1})
 at_flap(720, 0.0, look=(-15, 10)); at_flap(780, 0.2); at_flap(805, 1.0, jaw=8); at_flap(818, 0.3); at_flap(835, 1.0, jaw=10); at_flap(850, 0.2)
 at_flap(880, 0.6, look=(-5, -15)); at_flap(930, 0.0, look=(0, 25))
@@ -204,7 +208,7 @@ for i, f in enumerate(range(975, 1090, 14)):
 def search(f, x, look):
     z = PZ(0.0, -0.02)
     WO.pose(f, (0.0, -0.06, z + RH - 0.04), yaw=0, flex=4, sp=(2, 0, 0), head=look,
-            hands={"L": ("w", (x + 0.12, FY + 0.05, 1.55), (0, 0, 1), (0, -1, 0)), "R": ("w", (x - 0.12, FY + 0.05, 1.62), (0, 0, 1), (0, -1, 0))},
+            hands={"L": ("w", (x + 0.12, flap_in_y(f, x + 0.12, 1.38), 1.30), (0, 0, 1), (0, -1, 0)), "R": ("w", (x - 0.12, flap_in_y(f, x - 0.12, 1.42), 1.34), (0, 0, 1), (0, -1, 0))},
             feet=stand_feet(0.0, 0.03, 0), curl={"L": 0.1, "R": 0.1})
 search(1110, -0.15, (-15, -20)); search(1135, 0.18, (-15, 20)); search(1160, 0.0, (-25, 0))
 JW = Vector((0.0, 0.04, 0)); jz = PZ(JW.x, JW.y)
@@ -221,10 +225,13 @@ def jump(f, dz, flex, hz, hands_on=True, crouch=0.0, airborne=False, look=(-30, 
             hands[s_] = ("w", tuple(W_), tuple(fwd(180) + Vector((0, 0, 0.4))), tuple(-lat(180) * sx))
     feet = {"L": ("r", (0, 0.05, 0.12), 30), "R": ("r", (0, -0.05, 0.18), 20)} if airborne else stand_feet(JW.x, JW.y - 0.05, 180)
     WO.pose(f, (JW.x, JW.y, jz + RH - crouch + dz), yaw=180, flex=flex, sp=(flex * 0.5, 0, 0), head=look, hands=hands, feet=feet, curl={"L": 0.3, "R": 0.3})
-jump(1178, 0, 3, 1.45, hands_on=False, look=(-35, 0)); jump(1192, 0, 18, 1.2, hands_on=False, crouch=0.20)
-jump(1206, 0.18, 4, 1.84, airborne=True, look=(-30, 0)); jump(1216, 0.20, 4, 1.88, airborne=True, look=(-30, 0))
-jump(1232, 0.10, 5, 1.76, airborne=True, look=(-25, 0)); jump(1244, 0.03, 6, 1.64, airborne=True)
-jump(1252, 0, 10, 1.56, crouch=0.12); jump(1268, 0, 14, 1.58, hands_on=True, crouch=0.10, look=(-10, 0)); jump(1300, 0, 8, 1.3, hands_on=False, crouch=0.04, look=(10, 15))
+def bang(f, hl, hr, look=(-20, 0), lean=0.0):
+    p = Vector((JW.x, JW.y + 0.08, 0)); z = PZ(p.x, p.y)
+    hands = {"L": ("w", (-0.17, 0.556 - hl, 1.52 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.17, 0.556 - hr, 1.56 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
+    WO.pose(f, (p.x, p.y, z + RH - 0.04), yaw=180, flex=4 + 4 * lean, sp=(3 + 4 * lean, 0, 0), head=look, hands=hands, feet=stand_feet(p.x, p.y - 0.02, 180), curl={"L": 0.1, "R": 0.1})
+for i, f in enumerate(range(1180, 1290, 10)):
+    bang(f, 0.07 if i % 2 == 0 else 0.0, 0.0 if i % 2 == 0 else 0.07, look=(-22 + 4 * (i % 3), 0), lean=0.5 * (i % 2))
+bang(1296, 0.0, 0.0, look=(-5, 10), lean=1.0)
 # turns in place between the flap and the back wall: small steps, hands kept in front of her chest (no root spin)
 def turn_keys(f0, f1, y0, y1, p0, p1, n=3):
     for i in range(1, n + 1):
@@ -236,8 +243,8 @@ def turn_keys(f0, f1, y0, y1, p0, p1, n=3):
             sx = 1 if s_ == "L" else -1
             hands[s_] = ("w", tuple(M @ Vector((0.20 * sx, -0.30, 1.10))), tuple(fwd(yw) + Vector((0, 0, 0.5))), tuple(-lat(yw) * sx))
         WO.pose(f, (p.x, p.y, z + RH - 0.05), yaw=yw, flex=6, sp=(6, 0, 0), head=(-15, 0), hands=hands, feet=stand_feet(p.x, p.y, yw), curl={"L": 0.3, "R": 0.3})
-turn_keys(1160, 1178, 0.0, 180.0, Vector((0.0, -0.06, 0)), Vector((JW.x, JW.y, 0)))
-turn_keys(1300, 1322, 180.0, 360.0, Vector((JW.x, JW.y, 0)), Vector((0.0, 0.05, 0)))
+turn_keys(1160, 1180, 0.0, 180.0, Vector((0.0, -0.06, 0)), Vector((JW.x, JW.y + 0.08, 0)))
+turn_keys(1300, 1322, 180.0, 360.0, Vector((JW.x, JW.y + 0.08, 0)), Vector((0.0, 0.05, 0)))
 # --- 1321-1500: screams for help up at the flap, hands cupped, pounds on the flap
 def scream(f, jaw, bob=0.0, look=(-28, 0)):
     """upright, head tipped up toward the chute, hands cupped at her mouth (placed from the posed head)"""
@@ -253,7 +260,7 @@ def scream(f, jaw, bob=0.0, look=(-28, 0)):
     sideV = up.cross(fw_).normalized()
     for s_ in "LR":
         sx = 1 if s_ == "L" else -1
-        W_ = mouth + sideV * (0.06 * sx) + fw_ * 0.04 - up * 0.06
+        W_ = mouth + sideV * (0.06 * sx) + fw_ * 0.11 - up * 0.13
         WO.key_hand(s_, f, W_, (up * 0.7 - sideV * 0.4 * sx + fw_ * 0.2).normalized(), (-sideV * sx).normalized(),
                     pole=W_ + sideV * (0.35 * sx) - up * 0.35)
 def pound(f, hit):
@@ -344,8 +351,8 @@ if cp_:
                         pole=Mb_ @ Vector((0.35 * sx, 0.25, 1.05)))
 for f in list(range(2150, 2491, 10)):
     Mb_ = body_M(f); R3 = Mb_.to_3x3()
-    WO.key_hand("L", f, Mb_ @ Vector((0.05, -0.28, 1.20)), (R3 @ Vector((-1, 0, 0.35))).normalized(), (R3 @ Vector((0, 1, 0))).normalized(),
-                pole=Mb_ @ Vector((0.35, 0.10, 1.05)))
+    WO.key_hand("L", f, Mb_ @ Vector((0.28, 0.0, 0.82)), (R3 @ Vector((0, -0.1, -1))).normalized(), (R3 @ Vector((-1, 0, 0))).normalized(),
+                pole=Mb_ @ Vector((0.30, 0.25, 1.05)))
     WO.key_hand("R", f, Mb_ @ Vector((-0.28, 0.0, 0.82)), (R3 @ Vector((0, -0.1, -1))).normalized(), (R3 @ Vector((1, 0, 0))).normalized(),
                 pole=Mb_ @ Vector((-0.30, 0.25, 1.05)))
 
@@ -384,7 +391,7 @@ def face(fk):
 def chest(fk):
     sc.frame_set(fk); return WR_.matrix_world @ WR_.pose.bones["spine03"].head
 def mix(a, b, t): return a.lerp(b, t)
-KEEP = lambda f: not (200 <= f <= 520 or 860 <= f <= 1425 or 1600 <= f <= 1870)
+KEEP = lambda f: not (200 <= f <= 1425 or 1600 <= f <= 1870)      # whole stay inside the bin re-keyed (no x-ray views)
 CAMK = [k for k in CAMK if KEEP(k[0]) and k[0] not in (150, 168, 1410, 1440, 1566, 1578, 2086, 2110)]
 NEW = []
 def K(f, pos, tgt, lens): NEW.append([f, list(pos), list(tgt), lens])
@@ -419,28 +426,25 @@ K(268, (0.0, -0.70, 1.35), (0.05, 0.0, 0.55), 20)
 K(288, (0.30, 0.05, 1.20), (0.08, 0.05, 0.45), 21)                       # in under the swinging flap, looking down at the landing
 K(312, (-0.38, 0.18, 1.45), (0.08, 0.05, 0.45), 21)
 ANG = {1620: (20, 40, -20, 0), 1680: (-20, -40, 20, 0), 1740: (40, 20, -40, 0), 1800: (-40, -20, 40, 0), 1845: (0, 20, -20)}
-for f in (340, 375, 410, 445, 480, 515, 950, 990, 1035, 1080):
+for f in (340, 375, 410, 445, 480, 515, 560, 600, 640, 680, 950, 990, 1035, 1080):
     k_ = face_cam(f, lens=24 if f >= 1600 else 22, angs=ANG.get(f, (0, 20, -20, 40, -40, 60, -60)),
                   ups=(-0.15, -0.05, 0.05) if 980 <= f <= 1090 else (0.0, 0.10, 0.22), dists=(0.65, 0.58, 0.50, 0.42) if 980 <= f <= 1090 else (0.55, 0.47, 0.40, 0.34))     # wall beat: from her face height or a little below, not her hair
     if not k_: k_ = face_cam(f, lens=22, dists=(0.55, 0.47, 0.40, 0.34, 0.30), ups=(0.0, 0.10, -0.10, 0.22), box=(0.64, -0.50, 0.50, 2.25))
     if not k_: k_ = [f, [0.40, -0.40, 1.80], list(face(f) - Vector((0, 0, 0.04))), 20]; print("NOFACE", f, "-> front-right corner")
     NEW.append(k_)
-for f_ in (1110, 1135, 1160): K(f_, (0.45, -0.30, 1.70), face(f_), 28)
+for f_ in (720, 760, 800, 840, 880, 920, 1110, 1135, 1160): K(f_, (0.45, -0.30, 1.70), face(f_), 28)      # at the flap: profile, inside
 def topcam(f, dx):
     t = chest(f).lerp(face(f), 0.35); c = t + Vector((dx, -0.42, 1.05))
     return [f, [max(-0.6, min(0.6, c.x)), max(-0.45, c.y), min(2.15, c.z)], list(t), 20]
 for f_, dx in ((1595, 0.15), (1680, 0.05), (1760, -0.05), (1845, 0.10)): NEW.append(topcam(f_, dx))
-K(880, (0.62, -0.50, 1.85), mix(face(880), chest(880), 0.3), 20)
-K(930, (0.55, -0.45, 1.60), mix(face(930), chest(930), 0.2), 22)
 # jump: whole body from the side (crouch, jump, hands slap high on the back wall, slide down)
 # (QA round: camera almost in the back-wall plane, so her face reads in profile)
-K(1180, (0.62, 0.46, 1.20), (0.0, 0.22, 1.15), 12); K(1215, (0.62, 0.46, 1.25), (0.0, 0.24, 1.40), 12)
-K(1250, (0.62, 0.46, 1.25), (0.0, 0.24, 1.30), 12); K(1290, (0.60, 0.40, 1.25), (0.0, 0.20, 1.25), 13)
+K(1180, (0.62, 0.46, 1.25), (0.0, 0.30, 1.30), 12); K(1215, (0.62, 0.46, 1.30), (0.0, 0.30, 1.35), 12)
+K(1250, (0.62, 0.46, 1.30), (0.0, 0.30, 1.35), 12); K(1290, (0.60, 0.40, 1.30), (0.0, 0.25, 1.30), 13)
 # scream: one steady camera low in the front-right corner, looking up at her face
 # (QA round: front-right, a little below her face and 0.5 m off it, clear of the flap stop bar)
 for f_, cp in ((1322, (0.50, -0.20, 1.86)), (1350, (0.50, -0.20, 1.88)), (1384, (0.50, -0.20, 1.87))):
     K(f_, cp, face(f_) - Vector((0, 0, 0.04)), 20)
-K(905, (0.58, -0.46, 1.85), mix(face(905), chest(905), 0.3), 20)
 K(1402, (0.10, -0.46, 1.80), mix(face(1402), chest(1402), 0.3), 20)
 # QA round: cut (no pass through the flap) to a wide exterior of the closed bin, and cut back in for the three days
 K(1404, (0.55, -4.30, 1.65), (0.0, -0.6, 1.30), 26); K(1440, (0.35, -4.60, 1.80), (0.0, -0.6, 1.20), 24)

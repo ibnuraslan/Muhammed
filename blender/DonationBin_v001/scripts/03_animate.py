@@ -291,15 +291,15 @@ walk_arms(SH, pS2, lambda f: 35.0 if f > 240 else 180 - (f - 226) * 10, 236, 320
 
 # ============================================================== PASSER-BY (beat 9)
 hide_keys("Passerby", [(1, True), (1780, False)])
-pP = catmull([(1780, Vector((3.2, -2.9, 0))), (1860, Vector((1.6, -1.8, 0))), (1905, Vector((0.78, -1.32, 0)))])
+pP = catmull([(1780, Vector((3.2, -2.9, 0))), (1860, Vector((1.6, -1.8, 0))), (1905, Vector((0.55, -1.08, 0)))])
 yawP = lambda f: 237.0 + 33.0 * smooth((f - 1860) / 45.0)
 PB_.walk(pP, yawP, 1780, 1905, stride=0.72, lift=0.08, bob=0.02, crouch=0.04, lean=5)
 walk_arms(PB_, pP, yawP, 1780, 1905, 0.72)
-P0 = Vector((0.78, -1.32, 0))
+P0 = Vector((0.55, -1.08, 0))
 # stops facing along the wall (-x), right ear turned to the bin; knocks with the right hand
 for f, sd, hd, knock in ((1915, 4, (0, -20), 0), (1932, 12, (5, -35), 1), (1940, 12, (5, -35), 0), (1948, 12, (5, -35), 1), (1960, 6, (0, -15), 0), (1985, 0, (-5, -5), 0)):
     PB_.pose(f, (P0.x, P0.y, RH + 0.1), yaw=270, flex=3, side=0, sp=(6, 0, sd), head=hd,
-             hands={"R": ("w", (0.55, FY - 0.03 - 0.04 * (1 - knock), 1.28), (0, 0, 1), (1, 0, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
+             hands={"R": ("w", (0.30, FY - 0.032 - 0.05 * (1 - knock), 1.28), (0, 0, 1), (0, 1, 0)) if f < 1960 else ("r", (0.24, 0.05, -0.18)), "L": ("r", (-0.24, 0.08, -0.18))},
              feet=stand_feet(P0.x, P0.y, 270), curl={"L": 0.3, "R": 0.9})
 # moves aside for the firefighters (1992-2058), then watches
 pP2 = catmull([(1992, P0), (2030, Vector((1.4, -1.6, 0))), (2060, Vector((1.75, -1.9, 0)))])
@@ -327,12 +327,16 @@ for f in list(range(1976, 2062, 6)) + [2060]:
             hands={"L": ("w", c + Vector((-0.10, GRIP_L, 0.09)), (0.3, 1, 0), (0, 0, 1)), "R": ("w", c + Vector((0.0, GRIP_R, 0.0)), (0, 1, 0), (-1, 0, 0))},
             feet={"L": ("g", (kx + 0.12, FY - 0.62), 170), "R": ("g", (kx - 0.18, FY - 1.02), 175)}, curl={"L": 0.85, "R": 0.85})
 PH = sc["chute_z"][0] - 0.15
+def panel_face(th, dx):
+    up_ = Vector((0, -math.sin(R_(th)), math.cos(R_(th)))); out_ = Vector((0, -math.cos(R_(th)), -math.sin(R_(th))))
+    p = Vector((0.5 + dx, FY, 0.06)) + up_ * (PH - 0.14) + out_ * 0.035
+    return p, up_, -out_          # wrist, finger direction (up the panel), palm normal (into the panel)
 def panel_edge(th):
     return Vector((0.5, FY + 0.006 - PH * math.sin(R_(th)), 0.06 + PH * math.cos(R_(th))))
 for f, th, fy, fl in ((1976, 0, -1.0, 10), (2040, 0, -1.0, 12), (2060, 0, -1.0, 18), (2072, 15, -1.08, 25), (2085, 60, -1.3, 45)):
     e = panel_edge(th)
     FB.pose(f, (0.98, fy, RH - 0.05 - 0.2 * (fl > 30)), yaw=140, flex=fl * 0.6, sp=(fl, 0, 0), head=(15, 10),
-            hands={"L": ("w", e + Vector((0.12, 0, 0.0)), (-0.3, 1, -0.6), (0, 0, 1)), "R": ("w", e + Vector((-0.12, 0, 0.0)), (-0.3, 1, -0.6), (0, 0, 1))},
+            hands={s_: ("w", tuple(panel_face(th, 0.12 * (1 if s_ == "L" else -1))[0]), tuple(panel_face(th, 0)[1]), tuple(panel_face(th, 0)[2])) for s_ in "LR"},
             feet=stand_feet(0.98, fy, 140), curl={"L": 0.8, "R": 0.8})
 FB.pose(2100, (0.95, -1.35, RH - 0.05), yaw=150, flex=8, sp=(8, 0, 0), head=(10, 20), hands={"L": ("r", (-0.2, 0.05, -0.15)), "R": ("r", (0.2, 0.05, -0.15))}, feet=stand_feet(0.95, -1.35, 150))
 # FireB helps her out: hand on her arm, walks beside her
@@ -342,8 +346,8 @@ _Mfb = FB.Mb(Vector((pFB(2250).x, pFB(2250).y, RH)), 25.0, 0, 0)
 HS = "L" if (_Mfb.inverted() @ (path_w(2250) + Vector((0, 0, RH)))).x > 0 else "R"      # the hand on her side: no reach across his own body
 walk_arms(FB, pFB, lambda f: 25.0, 2120, 2340, 0.6, sides="LR", swing=0.08)      # walks beside her, arms swinging (no reach across bodies)
 FA.pose(2078, (-1.0, FY - 0.75, RH - 0.05), yaw=160, flex=10, sp=(10, 0, 0), head=(5, 15), hands={"L": ("r", (-0.18, 0.0, -0.15)), "R": ("r", (0.18, -0.05, -0.12))}, feet=stand_feet(-1.0, FY - 0.75, 160))
-FA.pose(2140, (-1.1, FY - 0.7, RH - 0.05), yaw=200, flex=10, sp=(10, 0, 0), head=(0, -10), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.1, FY - 0.7, 200))
-FA.pose(2300, (-1.2, FY - 0.8, RH - 0.05), yaw=170, flex=8, sp=(8, 20, 0), head=(5, 25), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.2, FY - 0.8, 170))
+FA.pose(2140, (-1.1, FY - 0.7, RH - 0.05), yaw=200, flex=10, sp=(10, 0, 0), head=(0, -10), hands={"L": ("r", (-0.18, 0.0, -0.15)), "R": ("r", (0.18, 0.0, -0.15))}, feet=stand_feet(-1.1, FY - 0.7, 200))
+FA.pose(2300, (-1.2, FY - 0.8, RH - 0.05), yaw=170, flex=8, sp=(8, 20, 0), head=(5, 25), hands={"L": ("r", (-0.18, 0.0, -0.15)), "R": ("r", (0.18, 0.0, -0.15))}, feet=stand_feet(-1.2, FY - 0.8, 170))
 
 # ============================================================== FLAP mechanism
 FL = bpy.data.objects["Flap"]; FL.rotation_mode = 'XYZ'

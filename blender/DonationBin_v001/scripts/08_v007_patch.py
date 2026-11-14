@@ -80,7 +80,8 @@ def topcam(f, dx):
     return [f, [max(-0.6, min(0.6, c.x)), max(-0.45, c.y), min(2.15, c.z)], list(t), 20]
 NEW.append(topcam(1570, 0.15))
 # the knock: into the inner wall, out of the outer wall, then the passer-by (key 1880)
-NEW.append([1880, [0.20, -1.10, 1.45], [1.3, -1.7, 1.5], 22])     # outside, clear of the bin front
+NEW.append([1880, [0.20, -1.10, 1.45], [1.3, -1.7, 1.5], 22])
+NEW.append([1540, [0.45, -3.30, 2.10], [0.0, -0.6, 1.20], 24])        # wide exterior hold: bin and alley, not a plain wall     # outside, clear of the bin front
 # 4. 35.5 s: her face height as she climbs out
 fc, _ = face(2130); NEW.append([2130, [fc.x + 0.30, fc.y - 0.85, fc.z - 0.02], list(fc), 24])
 CAMK = sorted([k for k in CAMK if not any(abs(k[0] - n[0]) < 1 for n in NEW)] + NEW, key=lambda k: k[0])
@@ -211,6 +212,30 @@ for f in range(1, sc.frame_end + 1, 4):
         if any((p_ - h).length < 0.20 for h in hp_): bad.add(o.name)
 for n in bad: bpy.data.objects.remove(bpy.data.objects[n], do_unlink=True)
 print("MOTES_REMOVED", len(bad), "of", len(motes))
+# client item B: no x-ray / glass look anywhere: every keyed XRAY / STUDIO_MIX value is removed and held at 0
+nx = 0
+for idb in list(bpy.data.materials) + list(bpy.data.worlds) + list(bpy.data.node_groups):
+    nt = idb if isinstance(idb, bpy.types.NodeTree) else getattr(idb, "node_tree", None)
+    if nt is None: continue
+    ad = nt.animation_data
+    if ad and ad.action:
+        for l in ad.action.layers:
+            for st in l.strips:
+                for cb in st.channelbags:
+                    for fcv in list(cb.fcurves):
+                        if "XRAY" in fcv.data_path or "STUDIO" in fcv.data_path or "Xray" in fcv.data_path: cb.fcurves.remove(fcv); nx += 1
+    for nd in nt.nodes:
+        if nd.name.upper().startswith(("XRAY", "STUDIO")) or nd.label.upper().startswith(("XRAY", "STUDIO")):
+            if nd.type == 'VALUE': nd.outputs[0].default_value = 0.0; nx += 1
+            if nd.type == 'MIX_SHADER': nd.inputs['Fac'].default_value = 0.0; nx += 1
+for o in bpy.data.objects:
+    for k in [k for k in o.keys() if "xray" in k.lower()]: o[k] = 0.0
+print("XRAY_REMOVED", nx)
+# simplify: props that floated or passed through bodies (blanket that appeared from nowhere, dust motes, the
+# explainer's ghost bag, the flap counterweight) are removed
+rm_ = [o for o in bpy.data.objects if o.name.startswith(("Mote", "GhostBag", "CounterWeight", "Blanket"))]
+for o in rm_: bpy.data.objects.remove(o, do_unlink=True)
+print("REMOVED", len(rm_))
 sc["director_fix"] = "v007: one continuous camera (covered wall pushes), front 3/4 on beat 6 and scream, hands flat on clothes"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("V007_DONE", len(CAMK))
