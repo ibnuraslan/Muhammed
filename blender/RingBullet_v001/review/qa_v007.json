@@ -367,18 +367,10 @@
   "613": [
    [
     "PROPMOVE",
-    "Spark08 moves 0.5 cm with no hand on it (nearest finger 9 cm)"
-   ],
-   [
-    "PROPMOVE",
     "Spark21 moves 0.6 cm with no hand on it (nearest finger 5 cm)"
    ]
   ],
   "619": [
-   [
-    "PROPMOVE",
-    "Spark08 moves 0.5 cm with no hand on it (nearest finger 9 cm)"
-   ],
    [
     "PROPMOVE",
     "Spark21 moves 0.6 cm with no hand on it (nearest finger 5 cm)"
@@ -551,6 +543,10 @@
   "739": [
    [
     "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark30 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
    ],
    [
@@ -559,6 +555,10 @@
    ]
   ],
   "745": [
+   [
+    "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 10 cm)"
+   ],
    [
     "PROPMOVE",
     "Spark30 moves 0.6 cm with no hand on it (nearest finger 8 cm)"
@@ -571,6 +571,10 @@
   "751": [
    [
     "PROPMOVE",
+    "FragmentA moves 1.0 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark30 moves 0.6 cm with no hand on it (nearest finger 9 cm)"
    ],
    [
@@ -581,7 +585,19 @@
   "757": [
    [
     "PROPMOVE",
+    "FragmentA moves 0.9 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark29 moves 0.5 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark30 moves 0.6 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 0.5 cm with no hand on it (nearest finger 5 cm)"
    ],
    [
     "PROPMOVE",
@@ -591,7 +607,19 @@
   "763": [
    [
     "PROPMOVE",
+    "FragmentA moves 0.9 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark29 moves 0.5 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark30 moves 0.6 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 0.6 cm with no hand on it (nearest finger 5 cm)"
    ],
    [
     "PROPMOVE",
@@ -601,7 +629,19 @@
   "769": [
    [
     "PROPMOVE",
+    "FragmentA moves 0.9 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark29 moves 0.6 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark30 moves 0.7 cm with no hand on it (nearest finger 10 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 0.6 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
@@ -615,6 +655,10 @@
    ],
    [
     "PROPMOVE",
+    "Spark34 moves 0.7 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark39 moves 0.6 cm with no hand on it (nearest finger 9 cm)"
    ]
   ],
@@ -622,6 +666,10 @@
    [
     "PROPMOVE",
     "Spark30 moves 0.8 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 0.7 cm with no hand on it (nearest finger 6 cm)"
    ],
    [
     "PROPMOVE",
@@ -635,6 +683,10 @@
    ],
    [
     "PROPMOVE",
+    "Spark34 moves 0.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark39 moves 0.7 cm with no hand on it (nearest finger 10 cm)"
    ]
   ],
@@ -645,10 +697,18 @@
    ],
    [
     "PROPMOVE",
+    "Spark34 moves 0.8 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
     "Spark39 moves 0.7 cm with no hand on it (nearest finger 10 cm)"
    ]
   ],
   "799": [
+   [
+    "PROPMOVE",
+    "Spark34 moves 0.9 cm with no hand on it (nearest finger 8 cm)"
+   ],
    [
     "PROPMOVE",
     "Spark39 moves 0.8 cm with no hand on it (nearest finger 11 cm)"
@@ -658,6 +718,10 @@
    [
     "PROPMOVE",
     "Spark32 moves 0.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "Spark34 moves 0.9 cm with no hand on it (nearest finger 8 cm)"
    ]
   ],
   "907": [
@@ -983,7 +1047,7 @@
   "1069": [
    [
     "PROPMOVE",
-    "WallChip02 moves 22.1 cm with no hand on it (nearest finger 285 cm)"
+    "WallChip02 moves 22.1 cm with no hand on it (nearest finger 286 cm)"
    ]
   ],
   "1075": [
@@ -995,6 +1059,6 @@
  },
  "counts": {
   "BACKHEAD": 1,
-  "PROPMOVE": 192
+  "PROPMOVE": 208
  }
 }
