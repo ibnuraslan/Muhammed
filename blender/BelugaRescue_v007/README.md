@@ -1,14 +1,16 @@
-# BelugaRescue_v007 — farm package (director notes on v006; README details in progress)
+# BelugaRescue_v007 — farm package (director notes on v006)
 
-Changes from v005 (director, after watching in motion; `LESSONS_LEARNED.md` section 1). Moving preview: `../BelugaRescue_v001/review/preview.mp4`
-(every 5th frame of this exact file, frame numbers burned in).
-- The bite: the whale's roll about her shin is now chosen to keep her leg, foot and fin out of its head (penetration ranks
-  before the tail-down preference), and the jaw is open wide enough for the ankle — she is held at the ankle in the mouth corner.
-- The approach no longer swims through her (it whipped 2.9 m through her chest at 1376–1390): it arrives high on her side and comes down to her ankle.
-- The release no longer slides through her legs: the whale backs off along its body and sinks away, then swims its surface circle.
-- Camera stays wide of her during the dive (no hand/hair across the lens at 160–170) and goes over her other leg into the calf macro (no blurred leg at 340–346).
-Beat frames unchanged; no VO added. QA `review/qa_v007.json`, clip scan `review/clip_scan_v007.json` (0 bad ranges),
-body-through-whale `review/bpc_v007.json`.
+Moving preview of this exact file: `../BelugaRescue_v001/review/preview.mp4` (every 5th frame, frame numbers burned in);
+contact pages `../BelugaRescue_v001/review/preview_pages_v007/`. Beat frames unchanged; no VO added.
+- Whale beats 6–8 (800–1300): computed two-shots — her face and the whale in frame together, camera kept 1.2 m off the whale.
+- Arms: bent, clawing up / loose and drifting; no straight T or starfish.
+- Push up (1440–1975): the whale bites just behind its snout tip and is nudged off her leg; body_prop_cross shows 0 frames
+  with leg/hip/body inside the whale (only the ankle in the mouth).
+- Rise (1840–1900): more drift and sway; camera holds while she rises past it.
+- Coping / end (1920–2190): top-down onto her face, then the wide shot with the nurse and keeper in full.
+- Calf grip: palms on the calf, wider macro (whole leg connected), hands lift as the knee draws in.
+- Water surface IOR 1.05 (keeps waves, removes most of the mirrored reflection from below).
+QA `review/qa_v007.json`, clip scan `review/clip_scan_v007.json` (0 bad ranges), whale crossing `review/bpc_v007.json`.
 
 The full 36.5 s film at 1080×1920, 60 fps, frames 1–2190, ready for RenderStreet. No render has been submitted.
 

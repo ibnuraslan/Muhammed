@@ -62,6 +62,39 @@
 1670,
 1674,
 1678,
+1782,
+1786,
+1790,
+1794,
+1798,
+1802,
+1806,
+1810,
+1814,
+1818,
+1822,
+1826,
+1830,
+1834,
+1838,
+1842,
+1846,
+1850,
+1854,
+1858,
+1862,
+1866,
+1870,
+1874,
+1878,
+1882,
+1886,
+1890,
+1894,
+1898,
+1902,
+1906,
+1910,
 1914,
 1918,
 1922,
@@ -559,176 +592,206 @@
 "Diver.FootPocket_R|Beluga|off": 38
 },
 "1782": {
-"foot.R|Beluga|off": 48,
+"foot.R|Beluga|VIS": 9,
+"foot.R|Beluga|off": 39,
 "lowerleg02.R|Beluga|off": 31,
-"Diver.FootPocket_R|Beluga|off": 38
+"Diver.FootPocket_R|Beluga|VIS": 9,
+"Diver.FootPocket_R|Beluga|off": 29
 },
 "1786": {
-"foot.R|Beluga|off": 48,
-"lowerleg02.R|Beluga|off": 31,
-"Diver.FootPocket_R|Beluga|off": 38
+"foot.R|Beluga|VIS": 16,
+"lowerleg02.R|Beluga|off": 11,
+"lowerleg02.R|Beluga|VIS": 20,
+"foot.R|Beluga|off": 32,
+"Diver.FootPocket_R|Beluga|VIS": 22,
+"Diver.FootPocket_R|Beluga|off": 16
 },
 "1790": {
-"foot.R|Beluga|off": 48,
-"lowerleg02.R|Beluga|off": 31,
-"Diver.FootPocket_R|Beluga|off": 38
+"foot.R|Beluga|VIS": 48,
+"lowerleg02.R|Beluga|VIS": 31,
+"Diver.FootPocket_R|Beluga|VIS": 38
 },
 "1794": {
-"foot.R|Beluga|off": 47,
-"lowerleg02.R|Beluga|off": 26,
-"Diver.FootPocket_R|Beluga|off": 35
+"foot.R|Beluga|VIS": 47,
+"lowerleg02.R|Beluga|VIS": 26,
+"Diver.FootPocket_R|Beluga|VIS": 35
 },
 "1798": {
-"foot.R|Beluga|off": 46,
-"lowerleg02.R|Beluga|off": 25,
-"Diver.FootPocket_R|Beluga|off": 33
+"foot.R|Beluga|VIS": 46,
+"lowerleg02.R|Beluga|VIS": 25,
+"Diver.FootPocket_R|Beluga|VIS": 33
 },
 "1802": {
-"foot.R|Beluga|off": 46,
-"lowerleg02.R|Beluga|off": 24,
-"Diver.FootPocket_R|Beluga|off": 32
+"foot.R|Beluga|VIS": 46,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 32
 },
 "1806": {
-"foot.R|Beluga|off": 46,
-"lowerleg02.R|Beluga|off": 24,
-"Diver.FootPocket_R|Beluga|off": 32
+"foot.R|Beluga|VIS": 46,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 32
 },
 "1810": {
-"foot.R|Beluga|off": 46,
-"lowerleg02.R|Beluga|off": 24,
-"Diver.FootPocket_R|Beluga|off": 32
+"foot.R|Beluga|VIS": 46,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 32
 },
 "1814": {
-"foot.R|Beluga|off": 43,
-"lowerleg02.R|Beluga|off": 24,
-"Diver.FootPocket_R|Beluga|off": 29
+"foot.R|Beluga|VIS": 43,
+"lowerleg02.R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|VIS": 29
 },
 "1818": {
-"foot.R|Beluga|off": 41,
-"lowerleg02.R|Beluga|off": 23,
-"Diver.FootPocket_R|Beluga|off": 27
+"foot.R|Beluga|VIS": 41,
+"lowerleg02.R|Beluga|VIS": 23,
+"Diver.FootPocket_R|Beluga|VIS": 27
 },
 "1822": {
-"lowerleg02.R|Beluga|off": 24,
-"foot.R|Beluga|off": 42,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 42,
+"Diver.FootPocket_R|Beluga|VIS": 29
 },
 "1826": {
-"lowerleg02.R|Beluga|off": 24,
-"foot.R|Beluga|off": 42,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 42,
+"Diver.FootPocket_R|Beluga|VIS": 29
 },
 "1830": {
-"lowerleg02.R|Beluga|off": 24,
-"foot.R|Beluga|off": 42,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 42,
+"Diver.FootPocket_R|Beluga|VIS": 29
 },
 "1834": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 46,
-"Diver.FootPocket_R|Beluga|off": 32
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 46,
+"Diver.FootPocket_R|Beluga|VIS": 32
 },
 "1838": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 46,
-"Diver.FootPocket_R|Beluga|off": 32
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 46,
+"Diver.FootPocket_R|Beluga|VIS": 32
 },
 "1842": {
-"lowerleg02.R|Beluga|off": 24,
-"foot.R|Beluga|off": 47,
-"Diver.FootPocket_R|Beluga|off": 34
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 47,
+"Diver.FootPocket_R|Beluga|VIS": 34
 },
 "1846": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 47,
-"Diver.FootPocket_R|Beluga|off": 31
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 47,
+"Diver.FootPocket_R|Beluga|VIS": 31
 },
 "1850": {
-"lowerleg02.R|Beluga|off": 24,
-"foot.R|Beluga|off": 44,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 24,
+"foot.R|Beluga|VIS": 44,
+"Diver.FootPocket_R|Beluga|VIS": 29
 },
 "1854": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 45,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 45,
+"Diver.FootPocket_R|Beluga|VIS": 29
 },
 "1858": {
-"lowerleg02.R|Beluga|off": 21,
-"foot.R|Beluga|off": 47,
-"Diver.FootPocket_R|Beluga|off": 31
+"lowerleg02.R|Beluga|VIS": 21,
+"foot.R|Beluga|VIS": 47,
+"Diver.FootPocket_R|Beluga|VIS": 31
 },
 "1862": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 46,
-"Diver.FootPocket_R|Beluga|off": 31
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 46,
+"Diver.FootPocket_R|Beluga|VIS": 31
 },
 "1866": {
-"lowerleg02.R|Beluga|off": 21,
-"foot.R|Beluga|off": 48,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 19,
+"foot.R|Beluga|VIS": 32,
+"lowerleg02.R|Beluga|off": 2,
+"foot.R|Beluga|off": 16,
+"Diver.FootPocket_R|Beluga|VIS": 24,
+"Diver.FootPocket_R|Beluga|off": 5
 },
 "1870": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 47,
-"Diver.FootPocket_R|Beluga|off": 29
+"lowerleg02.R|Beluga|VIS": 10,
+"foot.R|Beluga|VIS": 21,
+"foot.R|Beluga|off": 26,
+"lowerleg02.R|Beluga|off": 13,
+"Diver.FootPocket_R|Beluga|VIS": 15,
+"Diver.FootPocket_R|Beluga|off": 14
 },
 "1874": {
-"lowerleg02.R|Beluga|off": 21,
-"foot.R|Beluga|off": 52,
-"Diver.FootPocket_R|Beluga|off": 32
+"lowerleg02.R|Beluga|off": 15,
+"lowerleg02.R|Beluga|VIS": 6,
+"foot.R|Beluga|VIS": 20,
+"foot.R|Beluga|off": 32,
+"Diver.FootPocket_R|Beluga|VIS": 14,
+"Diver.FootPocket_R|Beluga|off": 18
 },
 "1878": {
-"lowerleg02.R|Beluga|off": 20,
-"foot.R|Beluga|off": 54,
-"Diver.FootPocket_R|Beluga|off": 33
+"lowerleg02.R|Beluga|off": 16,
+"foot.R|Beluga|off": 34,
+"foot.R|Beluga|VIS": 20,
+"lowerleg02.R|Beluga|VIS": 4,
+"Diver.FootPocket_R|Beluga|off": 20,
+"Diver.FootPocket_R|Beluga|VIS": 13
 },
 "1882": {
-"lowerleg02.R|Beluga|off": 24,
-"foot.R|Beluga|off": 55,
-"Diver.FootPocket_R|Beluga|off": 32
+"lowerleg02.R|Beluga|off": 21,
+"foot.R|Beluga|off": 36,
+"foot.R|Beluga|VIS": 19,
+"lowerleg02.R|Beluga|VIS": 3,
+"Diver.FootPocket_R|Beluga|off": 20,
+"Diver.FootPocket_R|Beluga|VIS": 12
 },
 "1886": {
-"lowerleg02.R|Beluga|off": 20,
-"foot.R|Beluga|off": 54,
-"Diver.FootPocket_R|Beluga|off": 30
+"lowerleg02.R|Beluga|off": 17,
+"foot.R|Beluga|off": 37,
+"foot.R|Beluga|VIS": 17,
+"lowerleg02.R|Beluga|VIS": 3,
+"Diver.FootPocket_R|Beluga|off": 20,
+"Diver.FootPocket_R|Beluga|VIS": 10
 },
 "1890": {
-"lowerleg02.R|Beluga|off": 21,
-"foot.R|Beluga|off": 53,
-"Diver.FootPocket_R|Beluga|off": 31
+"lowerleg02.R|Beluga|off": 18,
+"foot.R|Beluga|off": 35,
+"foot.R|Beluga|VIS": 18,
+"lowerleg02.R|Beluga|VIS": 3,
+"Diver.FootPocket_R|Beluga|off": 20,
+"Diver.FootPocket_R|Beluga|VIS": 11
 },
 "1894": {
-"lowerleg02.R|Beluga|off": 21,
-"foot.R|Beluga|off": 56,
-"Diver.FootPocket_R|Beluga|off": 33
+"lowerleg02.R|Beluga|VIS": 7,
+"foot.R|Beluga|off": 37,
+"foot.R|Beluga|VIS": 19,
+"lowerleg02.R|Beluga|off": 14,
+"Diver.FootPocket_R|Beluga|VIS": 12,
+"Diver.FootPocket_R|Beluga|off": 21
 },
 "1898": {
-"lowerleg02.R|Beluga|off": 22,
-"foot.R|Beluga|off": 56,
-"Diver.FootPocket_R|Beluga|off": 33
+"lowerleg02.R|Beluga|VIS": 8,
+"foot.R|Beluga|off": 33,
+"foot.R|Beluga|VIS": 23,
+"lowerleg02.R|Beluga|off": 14,
+"Diver.FootPocket_R|Beluga|VIS": 14,
+"Diver.FootPocket_R|Beluga|off": 19
 },
 "1902": {
-"lowerleg02.R|Beluga|off": 23,
-"foot.R|Beluga|off": 58,
-"Diver.FootPocket_R|Beluga|off": 34
+"lowerleg02.R|Beluga|VIS": 23,
+"foot.R|Beluga|VIS": 58,
+"Diver.FootPocket_R|Beluga|VIS": 34
 },
 "1906": {
-"lowerleg02.R|Beluga|off": 22,
-"foot.R|Beluga|off": 59,
-"Diver.FootPocket_R|Beluga|off": 34
+"lowerleg02.R|Beluga|VIS": 22,
+"foot.R|Beluga|VIS": 59,
+"Diver.FootPocket_R|Beluga|VIS": 34
 },
 "1910": {
-"lowerleg02.R|Beluga|off": 22,
-"foot.R|Beluga|off": 59,
-"Diver.FootPocket_R|Beluga|off": 34
+"lowerleg02.R|Beluga|VIS": 22,
+"foot.R|Beluga|VIS": 59,
+"Diver.FootPocket_R|Beluga|VIS": 34
 },
 "1914": {
-"lowerleg02.R|Beluga|off": 20,
-"foot.R|Beluga|off": 40,
-"foot.R|Beluga|VIS": 17,
-"Diver.FootPocket_R|Beluga|off": 24,
-"Diver.FootPocket_R|Beluga|VIS": 8
+"lowerleg02.R|Beluga|VIS": 20,
+"foot.R|Beluga|VIS": 57,
+"Diver.FootPocket_R|Beluga|VIS": 32
 },
 "1918": {
 "lowerleg02.R|Beluga|VIS": 20,
