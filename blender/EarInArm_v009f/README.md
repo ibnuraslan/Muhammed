@@ -37,7 +37,7 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
 
 ## v009f vs v009e (director review of the v009e preview)
 1. **Tray (361–457):** the left hand rests on the tray beside the cartilage with relaxed, even fingers, the fingertips at its edge, and the wrist in line with the forearm (`place_hand`). The scalpel hand stays 3 cm clear of it. Checked at 540×960 at f373, 397, 421 and 445.
-2. **Arm to the head (1300–1350):** the camera looks at the surgeon from the front, and his ear hand is carried and raised in front of his own chest before it reaches out to the ear. It no longer passes over the patient's shoulder.
+2. **His arm never crosses her body on screen:** a wide front shot while he carries the ear (1300–1340), then tight on the patient's face while the ear comes to the head (1358–1396). The lift-out (1141–1243) is seen from the patient's foot side, and the camera no longer passes his cap (1250–1267, 1633–1651). Details are in `review/ACTING_notes.md`.
 3. **End (1741–1770): no ear touch (director's simplify rule).** I made two attempts at the touch, and neither was clean. The old world-space keys swept his hand across his face at f1749, and keys placed from the ear put it at his throat. So his left hand stays relaxed out of the shot from 1715, and the last beat plays on his smile with the new ear in view. The story beat and its frames are unchanged.
 
 ## v009e vs v009d (director review of the v009d preview)
