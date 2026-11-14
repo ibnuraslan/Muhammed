@@ -44,17 +44,18 @@ K = [  # frame, camera position, aim point, lens (mm)
     (133, V(-0.05, -0.40, LZ + 0.30), V(-0.05, -0.05, LZ), 34),     # v008d: cut straight into the studio (no fill frames)
     (142, V(-0.05, -0.40, LZ + 0.30), V(-0.05, -0.05, LZ), 34),
     # studio macro: S, then B, then the whole liver
-    (152, V(-0.06, -0.38, LZ + 0.25), V(-0.03, -0.03, LZ + 0.02), 38),
-    (170, V(-0.24, -0.24, LZ + 0.03), brand(200, "S"), 45),     # v008d: left of the writing arm (it no longer crosses the lens)
-    (205, V(-0.20, -0.25, LZ + 0.01), brand(200, "S") + V(0, 0, 0.01), 48),
-    (240, V(0.09, -0.30, LZ + 0.05), brand(260, "B") + V(0, 0, 0.01), 45),     # v008d: pulled back, the B and the pen read (no blur)
-    (266, V(0.03, -0.42, LZ + 0.10), V(0.0, -0.03, LZ), 40),     # v007b: whole liver + hand, not a surface
+    (152, V(-0.06, -0.48, LZ + 0.30), V(-0.03, -0.03, LZ + 0.02), 36),    # v008d: studio macro from further back, the glove reads small
+    (170, V(-0.34, -0.40, LZ + 0.16), brand(200, "S"), 40),     # v008d: left of the writing arm (it no longer crosses the lens)
+    (205, V(-0.30, -0.40, LZ + 0.14), brand(200, "S") + V(0, 0, 0.01), 44),
+    (240, V(-0.10, -0.46, LZ + 0.16), brand(260, "B") + V(0, 0, 0.01), 44),     # v008d: pulled back, the B and the pen read (no blur)
+    (266, V(-0.02, -0.48, LZ + 0.16), V(0.0, -0.03, LZ), 38),     # v007b: whole liver + hand, not a surface
     (274, V(0.0, -0.30, LZ + 0.30), V(0.0, -0.03, LZ), 35),       # v008d: last studio frame is the liver
     # 2 - rise back out of the window, stitching top-down, crane to his face, mask down, smile
     (275, V(-0.15, 0.25, 1.40), S1H(285) + V(0, 0.1, -0.15), 30),      # v008d: cut straight back to the OR, on his face
     (281, V(-0.15, 0.28, 1.42), S1H(285) + V(0, 0.1, -0.15), 30),
     (288, V(-0.20, 0.12, 1.48), WINP + V(0, 0.08, 0.05), 30),
     (301, V(-0.12, 0.40, 1.40), S1H(301) + V(0, 0.16, -0.20), 30),   # v007b: beat 2: his face over his hands at the window
+    (318, V(-0.18, 0.22, 1.60), WINP + V(0, 0.06, 0.05), 30),
     (330, V(-0.30, 0.0, 1.62), WINP, 30),                        # v008d: pulled back, the glove no longer fills the frame
     (365, V(0.02, -0.05, 1.62), WINP + V(0.02, 0, 0), 32),
     (410, V(0.30, -0.15, 1.62), (WINP + S1H(420)) / 2, 30),
@@ -76,7 +77,8 @@ K = [  # frame, camera position, aim point, lens (mm)
     (732, V(5.15, -1.25, 0.95), V(5.9, -0.38, 0.95), 32),
     (756, V(5.0, -0.75, 1.15), V(5.95, -0.3, 0.85), 30),
     (768, V(5.1, -0.45, 1.20), V(5.9, -0.3, 1.0), 28),         # v007b: stay on her, then one fast pass through the wall
-    (776, V(3.82, 0.6, 1.35), V(3.0, 0.6, 1.3), 26),
+    (772, V(4.6, -0.1, 1.28), V(5.9, -0.3, 1.0), 28),          # v008d: still on her, then the pass
+    (776, V(3.40, 0.6, 1.35), V(2.0, 1.6, 1.2), 26),      # v008d: already in the OR on 776 (no black frame)
     # 5 - back through the wall into the OR: bed bursts through the doors, surgeon 2 steps in
     (784, V(3.0, 0.6, 1.35), V(1.7, 3.6, 1.1), 22),
     (830, V(3.05, 0.55, 1.35), V(1.75, 3.4, 0.9), 24),
@@ -97,9 +99,9 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1140, V(-0.06, -0.42, LZ + 0.20), brand(1150, "S") + V(0.03, 0, -0.01), 46),
     (1168, V(0.03, -0.48, LZ + 0.22), brand(1168, "S") + V(0.03, 0, -0.01), 42),
     (1174, V(0.03, -0.47, LZ + 0.24), brand(1168, "S") + V(0.03, 0, 0.0), 42),     # v007b: hold the liver + hands, then exit fast
-    (1175, V(-0.28, 0.12, 1.28), S2H(1180) + V(0, 0, -0.05), 30),       # v008d: cut straight back to the OR, low on Surgeon2's face
-    (1179, V(-0.28, 0.13, 1.30), S2H(1180) + V(0, 0, -0.05), 30),
-    (1191, V(-0.26, -0.15, 1.62), S2H(1195) + V(0, 0, -0.15), 32),
+    (1175, V(0.12, 0.10, 1.42), S2H(1180) + V(0, 0, -0.06), 30),     # v008d: low and to the side, under his cap       # v008d: cut straight back to the OR, low on Surgeon2's face
+    (1179, V(0.12, 0.10, 1.42), S2H(1180) + V(0, 0, -0.06), 30),
+    (1191, V(0.05, 0.08, 1.32), S2H(1195) + V(0, 0, -0.06), 32),   # v008d: low enough to read his face
     (1199, V(-0.29, -0.05, 1.55), S2H(1200), 38),
     (1210, V(-0.30, 0.02, 1.62), S2H(1210), 42),
     (1228, V(-0.30, 0.05, 1.58), S2H(1225), 52),
@@ -117,12 +119,13 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1370, V(-7.55, 1.15, 1.55), S1H(1370), 34),
     (1405, V(-7.8, 0.35, 1.45), S1H(1405), 42),
     (1440, V(-7.75, -0.75, 1.3), S1H(1440) + V(0.2, 0, -0.1), 36),
-    (1458, V(-7.85, -0.45, 1.3), V(-10.3, 1.0, 1.55), 28),     # v007b: pan across the panel, not the empty side wall
+    (1450, V(-7.85, -0.45, 1.3), V(-10.3, 1.0, 1.55), 28),     # v008d: faster pan (no empty wall)     # v007b: pan across the panel, not the empty side wall
     (1478, V(-8.3, -0.35, 1.25), V(-10.3, 0.0, 1.55), 24),
     # 8 - gavel slams, the license gets the red stamp, push in and settle
     (1510, V(-9.1, 0.5, 1.62), V(-10.2, -0.05, 1.4), 30),
     (1545, V(-9.25, 0.45, 1.6), V(-10.15, -0.08, 1.38), 32),
     (1566, V(-9.3, 0.3, 1.6), V(-10.15, -0.15, 1.38), 32),
+    (1578, V(-9.35, -0.2, 1.62), V(-10.3, -0.8, 1.4), 32),
     (1590, V(-9.4, -0.55, 1.62), V(-10.2, -1.0, 1.32), 34),
     # v007b: the judge stays in frame over the stamped licence
     (1615, V(-9.40, -0.75, 1.62), V(-10.15, -1.0, 1.30), 34),
