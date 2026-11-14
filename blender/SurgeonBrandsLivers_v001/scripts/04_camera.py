@@ -99,9 +99,9 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1140, V(-0.06, -0.42, LZ + 0.20), brand(1150, "S") + V(0.03, 0, -0.01), 46),
     (1168, V(0.03, -0.48, LZ + 0.22), brand(1168, "S") + V(0.03, 0, -0.01), 42),
     (1174, V(0.03, -0.47, LZ + 0.24), brand(1168, "S") + V(0.03, 0, 0.0), 42),     # v007b: hold the liver + hands, then exit fast
-    (1175, V(0.12, 0.10, 1.42), S2H(1180) + V(0, 0, -0.06), 30),     # v008d: low and to the side, under his cap       # v008d: cut straight back to the OR, low on Surgeon2's face
-    (1179, V(0.12, 0.10, 1.42), S2H(1180) + V(0, 0, -0.06), 30),
-    (1191, V(0.05, 0.08, 1.32), S2H(1195) + V(0, 0, -0.06), 32),   # v008d: low enough to read his face
+    (1175, V(-0.24, -0.20, 1.64), WINP, 30),     # v008e: his hands at the incision, arms entering from the frame top     # v008d: low and to the side, under his cap       # v008d: cut straight back to the OR, low on Surgeon2's face
+    (1179, V(-0.24, -0.20, 1.64), WINP, 30),
+    (1191, V(-0.27, -0.14, 1.62), WINP + V(0, 0.15, 0.12), 32),   # v008d: low enough to read his face
     (1199, V(-0.29, -0.05, 1.55), S2H(1200), 38),
     (1210, V(-0.30, 0.02, 1.62), S2H(1210), 42),
     (1228, V(-0.30, 0.05, 1.58), S2H(1225), 52),
