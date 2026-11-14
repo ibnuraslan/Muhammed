@@ -69,26 +69,38 @@ def build(variant=None):
         # tight insert under the dashboard: wiring loom, a fuse cover, the steering column; a gloved hand (black nitrile)
         # presses a small microphone capsule up into place under a torch beam
         interior(c)
-        plastic = pbr("DashUnder", (0.035, 0.035, 0.04), 0.7)
+        under_m = pbr("DashUnder", (0.06, 0.06, 0.065), 0.75)
+        nb = under_m.node_tree.nodes; lb = under_m.node_tree.links
+        nz = nb.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 400; bm_ = nb.new("ShaderNodeBump"); bm_.inputs['Strength'].default_value = 0.25
+        lb.new(nz.outputs['Fac'], bm_.inputs['Height']); lb.new(bm_.outputs['Normal'], nb["Principled BSDF"].inputs['Normal'])   # grained plastic
         U = dd.Builder("DashUnder")
-        U.box((1.15, 0.0, 0.54), (0.42, 1.4, 0.03), plastic)                # the under-dash closing panel
-        U.box((1.1, -0.05, 0.505), (0.12, 0.2, 0.04), pbr("FuseCover", (0.06, 0.06, 0.065), 0.5))
-        for k in range(5):                                                  # the wiring loom along the bulkhead
-            U.cyl((1.25, 0.1 + 0.012 * k, 0.5 - 0.008 * k), 0.006, 0.9, pbr(f"Wire{k}", ((0.05, 0.05, 0.05), (0.35, 0.05, 0.03), (0.04, 0.12, 0.3), (0.5, 0.45, 0.1), (0.06, 0.06, 0.06))[k], 0.5), verts=8, rot=(math.radians(90), 0, 0))
-        U.box((1.25, 0.12, 0.49), (0.04, 0.08, 0.03), pbr("LoomTape", (0.02, 0.02, 0.02), 0.8))
+        U.box((1.15, 0.0, 0.54), (0.42, 1.4, 0.03), under_m)                # the under-dash closing panel
+        U.box((1.08, -0.08, 0.505), (0.12, 0.2, 0.04), pbr("FuseCover", (0.09, 0.09, 0.095), 0.5))
+        rng = np.random.default_rng(7)
+        cols = [(0.03, 0.03, 0.03), (0.25, 0.12, 0.05), (0.05, 0.1, 0.3), (0.3, 0.3, 0.3), (0.03, 0.03, 0.03), (0.12, 0.2, 0.08),
+                (0.03, 0.03, 0.03), (0.35, 0.05, 0.04), (0.2, 0.2, 0.22), (0.03, 0.03, 0.03), (0.25, 0.22, 0.05), (0.03, 0.03, 0.03)]
+        for k in range(12):                                                 # the wiring loom: a bundle of insulated wires
+            a_ = 2 * math.pi * k / 12; rr = 0.009 + 0.004 * (k % 3) / 2
+            U.cyl((1.24 + rr * math.cos(a_), 0.15, 0.5 + rr * math.sin(a_)), 0.0028, 0.9, pbr(f"Wire{k}", cols[k], 0.45), verts=8, rot=(math.radians(90), 0, 0))
+        tie = pbr("CableTie", (0.75, 0.74, 0.7), 0.5)
+        for y in np.arange(-0.25, 0.6, 0.09):                               # nylon cable ties around the bundle
+            U.cyl((1.24, float(y), 0.5), 0.0165, 0.005, tie, verts=16, rot=(math.radians(90), 0, 0))
+            U.box((1.24, float(y), 0.481), (0.008, 0.006, 0.008), tie)
         U.box((1.0, 0.38, 0.2), (0.25, 0.08, 0.02), pbr("Pedal", (0.15, 0.15, 0.16), 0.4, 0.8), rot=(0, math.radians(-30), 0))
         U.done()
-        mic = dd.Builder("BugMic"); mm = pbr("MicBody", (0.2, 0.2, 0.21), 0.3, 0.6)
-        mic.cyl((0, 0, 0), 0.011, 0.034, mm, verts=16, rot=(0, math.radians(90), 0)).cyl((0.018, 0, 0), 0.008, 0.004, pbr("MicGrille", (0.6, 0.6, 0.62), 0.3, 1.0), verts=16, rot=(0, math.radians(90), 0))
-        mic.cyl((-0.06, 0, 0), 0.0012, 0.1, pbr("MicWire", (0.02, 0.02, 0.02), 0.5), verts=6, rot=(0, math.radians(90), 0))
+        mic = dd.Builder("BugMic"); mm = pbr("MicBody", (0.01, 0.01, 0.012), 0.3)
+        mic.cyl((0, 0, 0), 0.008, 0.03, mm, verts=20, rot=(0, math.radians(90), 0))                       # small black capsule
+        mic.cyl((0.0165, 0, 0), 0.0065, 0.003, pbr("MicGrille", (0.45, 0.45, 0.47), 0.35, 1.0), verts=20, rot=(0, math.radians(90), 0))
+        mic.cyl((0.0, 0, 0), 0.0085, 0.008, pbr("Tape", (0.6, 0.6, 0.58), 0.8), verts=20, rot=(0, math.radians(90), 0))   # grey tape band
+        mic.cyl((-0.07, 0, 0), 0.0011, 0.11, pbr("MicWire", (0.02, 0.02, 0.02), 0.5), verts=6, rot=(0, math.radians(90), 0))  # thin cable
         c["mic"] = mic.done((0, 0, -10))
         h = person("Tech", 1.0, 36, "male_casualsuit05", "short02", cval=1.1); c["tech"] = h
-        glove = pbr("Nitrile", (0.012, 0.012, 0.014), 0.35, 0.0, **{"Coat Weight": 0.3})
+        glove = pbr("Nitrile", (0.08, 0.22, 0.6), 0.4, 0.0, **{"Coat Weight": 0.25})          # blue nitrile gloves
         h.body.data.materials[0] = glove                                    # only the forearm and hand are ever in frame
         for o in bpy.data.objects:
             if o is not h.body and ("hair" in o.name.lower() or "short02" in o.name.lower() or "eyebrow" in o.name.lower()):
                 o.hide_render = True
-        tl = bpy.data.lights.new("TechTorch", 'SPOT'); tl.energy = 9; tl.spot_size = math.radians(30); tl.spot_blend = 0.5
+        tl = bpy.data.lights.new("TechTorch", 'SPOT'); tl.energy = 14; tl.spot_size = math.radians(34); tl.spot_blend = 0.35
         tl.color = (1.0, 0.95, 0.86); tl.shadow_soft_size = 0.015
         to = bpy.data.objects.new("TechTorch", tl); bpy.context.collection.objects.link(to); c["torch"] = to
     elif v in ("interior", "interior_day"):
@@ -114,7 +126,7 @@ def build(variant=None):
         box("Pave", (0, 3.6, 0.05), (80, 2.4, 0.12), dd.wet(dd.tex_mat("concrete_floor_02", 0.5, tint=(0.5, 0.5, 0.5), name="NightPave", sat=0.3), 0.8, 0.4))
         for k, (a, b) in enumerate(((-40, -10), (-10, 20), (20, 50))):
             haussmann(a, b, seed=90 + k, origin=(0, 4.8, 0), lit_frac=0.3)
-        car_ = dd.sedan("BugCar", (0.05, 0.08, 0.16), lights=False); car_.location = (0, 1.1, 0)   # dark metallic blue
+        car_ = dd.sedan("BugCar", (0.32, 0.03, 0.04), lights=False); car_.location = (0, 1.1, 0)   # deep burgundy metallic
         # cut the real front-door opening out of the body shell (kit seams: x 0.90 .. -0.49, sill 0.37 .. roof 1.40, +Y side)
         cut = box("DoorCut", (0.205, 1.1 + 0.95, 0.89), (1.36, 0.9, 1.03))
         cut.hide_render = True; cut.display_type = 'WIRE'; cut.visible_camera = False
@@ -122,7 +134,7 @@ def build(variant=None):
 
         # the open FRONT driver's door (left side = +Y), a real door with depth: outer skin, inner trim panel with an
         # armrest and pull, the window frame; hinged at its front edge and swung out 62 degrees
-        paint = pbr("DoorPaint", (0.05, 0.08, 0.16), 0.22, 0.6, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
+        paint = pbr("DoorPaint", (0.32, 0.03, 0.04), 0.22, 0.6, **{'Coat Weight': 1.0, 'Coat Roughness': 0.04})
         trim = pbr("DoorTrim", (0.05, 0.05, 0.055), 0.65)
         D = dd.Builder("OpenDoor")
         D.box((-0.69, 0.0, 0.65), (1.36, 0.05, 0.56), paint)               # outer skin, the size of the opening
@@ -182,17 +194,17 @@ def anim_mic_out(c, t):
     sec = t * DUR["mic"]
     rain_fall(c, sec)
     from dd import pose_kneel, arms_relaxed
-    h = c["tech"]; pose_kneel(h, lean=38)
-    sp = Vector((0.3, 2.45, 0.0)); place(h, sp, 0.0)                       # facing -Y: into the car through the opening
+    h = c["tech"]; pose_kneel(h, lean=48)
+    sp = Vector((0.12, 2.3, 0.0)); place(h, sp, 0.0)                       # facing -Y: head and shoulders inside the opening
     dd.ground(h, 0.0)
-    under = Vector((0.85, 1.62, 0.6))
+    under = Vector((0.6, 1.55, 0.6))
     reach(h, "R", under + Vector((0.0, 0.0, 0.02 * math.sin(sec * 1.8))), Vector((0.3, 0.6, -0.8)))      # working the mic
     reach(h, "L", under + Vector((-0.2, 0.22, -0.05)), Vector((-0.4, 0.6, -0.8)))
     fingers_curl(h, 35)
     c["torch"].location = h.bone_tail("wrist.L") + Vector((0, -0.03, 0.0)); point_at(c["torch"], under)
     lk = c["lookout"]; zero(lk); from human import pose_walk
     pose_walk(lk, 0.0, stride=0.0, arm_swing=0.0)
-    lp = Vector((3.4, 2.75, 0.12)); place(lk, lp, math.radians(100), z=0.12); arms_relaxed(lk)    # ahead of the car, watching the street
+    lp = Vector((4.6, 3.0, 0.12)); place(lk, lp, math.radians(100), z=0.12); arms_relaxed(lk)    # ahead of the car, watching the street
     lk.rot("head", (0, 0, 1), 18 * ease(min(1.0, max(0.0, (sec - 4.0) / 1.5))))     # a car passes at the end of the street: he looks
     tb = lk.bone_tail("wrist.R") if "wrist.R" in lk.arm.pose.bones else lk.bone_tail("lowerarm02.R")
     c["lk_torch_body"].location = tb + Vector((0, 0, -0.04)); c["lk_torch_body"].rotation_euler = (math.radians(70), 0, lk.arm.rotation_euler.z)
@@ -211,8 +223,8 @@ def anim_mic_dash(c, t):
     reach(h, "R", tgt + Vector((-0.02, 0.05, -0.03)), Vector((0.2, 0.6, -0.8)))
     fingers_curl(h, 45)
     hand = h.bone_tail("wrist.R") if "wrist.R" in h.arm.pose.bones else h.bone_tail("lowerarm02.R")
-    c["mic"].location = tgt + Vector((-0.035, -0.02, 0.0)); c["mic"].rotation_euler = (0, 0, math.radians(25))   # at his fingertips, toward the lens
-    c["torch"].location = Vector((0.75, 0.55, 0.32)); point_at(c["torch"], spot)
+    c["mic"].location = tgt + Vector((-0.03, -0.015, -0.004)); c["mic"].rotation_euler = (0, 0, math.radians(25))  # at his fingertips, pressed up to the loom
+    c["torch"].location = Vector((0.9, 0.3, 0.36)); point_at(c["torch"], c["mic"].location)        # the torch beside the lens, on hand and mic
 
 
 def anim_mic(c, t):
@@ -249,11 +261,11 @@ def anim_reels(c, t):
 
 MOVES = {
     "mic": dict(kind="anim", dof=5.6, anim=anim_mic_out,
-                cam=lambda c, t: (Vector((-2.9, 4.3, 1.9)).lerp(Vector((-2.5, 4.1, 1.8)), ease(t)), Vector((0.55, 2.1, 0.6)), 32),
+                cam=lambda c, t: (Vector((-3.3, 4.4, 1.7)).lerp(Vector((-2.9, 4.2, 1.62)), ease(t)), Vector((1.2, 2.2, 0.95)), 30),
                 focus=lambda c, t: Vector((0.55, 2.3, 0.7))),
-    "mic_dash": dict(kind="anim", dof=2.0, anim=anim_mic_dash,
-                     cam=lambda c, t: (Vector((0.74, 0.36, 0.26)).lerp(Vector((0.8, 0.33, 0.27)), ease(t)), Vector((1.18, 0.24, 0.56)), 30),
-                     focus=lambda c, t: Vector((1.2, 0.2, 0.52))),
+    "mic_dash": dict(kind="anim", dof=5.6, anim=anim_mic_dash,
+                     cam=lambda c, t: (Vector((0.86, 0.36, 0.36)).lerp(Vector((0.9, 0.34, 0.37)), ease(t)), Vector((1.17, 0.22, 0.52)), 32),
+                     focus=lambda c, t: c["mic"].location),
     "mic_old": dict(kind="anim", dof=2.8, anim=anim_mic,
                 cam=lambda c, t: (Vector((-0.85, -0.1, 1.28)).lerp(Vector((-0.75, -0.05, 1.26)), ease(t)), Vector((0.95, 0.35, 0.62)), 20),
                 focus=lambda c, t: Vector((0.8, 0.35, 0.8))),
