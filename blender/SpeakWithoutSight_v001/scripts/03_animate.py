@@ -432,7 +432,7 @@ for f in range(1110, 1723, 6):
 for f, dx, dz in LIP_KEYS:
     if dx is None:
         u = smooth((f - 1063) / 47.0); tp = t_throat(f); mp, ff = t_mouth(f)
-        tip = tp.lerp(mp + ff * 0.02, u) + ff * 0.085 * math.sin(math.pi * u)
+        tip = tp.lerp(mp + ff * 0.02, u) + ff * 0.03 * math.sin(math.pi * u)   # v005: flat arc up the teacher's chin (the 8.5 cm bulge swung her hand into her own face)
         g_hand_on("R", f, tip, fdir(T_YAW).lerp(ff, u).normalized(), (UP * 0.55 + rdir(T_YAW) * 0.85).lerp(-ff.cross(UP) + UP * 0.25, u), curl=12)
         t_rest(f, "R")   # v005: no wrist grip on the way to the lips
         apply_pose(G.o, "R", "shield", f)   # v005: thumb tucked beside the index (it poked into her own body here)
