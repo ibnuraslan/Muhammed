@@ -318,6 +318,10 @@
   ],
   "265": [
    [
+    "INSIDE",
+    "camera inside geometry"
+   ],
+   [
     "EMPTY",
     "wall/prop fills the frame, character only 0%"
    ],
@@ -534,6 +538,10 @@
    [
     "INSIDE",
     "camera inside geometry"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
    ]
   ],
   "511": [
@@ -586,18 +594,6 @@
    [
     "INSIDE",
     "camera inside geometry"
-   ],
-   [
-    "FILL",
-    "ShadowSlab"
-   ],
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 0%"
-   ],
-   [
-    "EMPTY",
-    "only ShadowSlab in view"
    ],
    [
     "EMPTY",
@@ -2296,12 +2292,6 @@
     "wall/prop fills the frame, character only 0%"
    ]
   ],
-  "1015": [
-   [
-    "FILL",
-    "surface <12 cm"
-   ]
-  ],
   "1369": [
    [
     "EMPTY",
@@ -3820,9 +3810,9 @@
   ]
  },
  "counts": {
-  "EMPTY": 156,
-  "FILL": 20,
-  "INSIDE": 115,
+  "EMPTY": 155,
+  "FILL": 18,
+  "INSIDE": 116,
   "PROPMOVE": 591
  }
 }

@@ -63,7 +63,7 @@ K = [  # frame, location, target, lens
  (1045, (0.3, 0.9, 1.55), (-1.12, 2.0, 1.55), 32),     # two-shot from the side: ResA out of the lens
  (1090, (0.25, 1.05, 1.55), (-1.12, 2.0, 1.55), 36),
  (1125, (0.2, -0.4, 1.4), (-1.2, 1.4, 1.2), 30),
- (1142, (-2.4, -0.9, 1.5), (-1.3, 1.1, 1.2), 28),     # outside the tripod leg, not behind it
+ (1142, (-1.0, -1.5, 1.6), (-1.3, 1.1, 1.25), 30),     # beat 6: on the teen walking to the knot; ResC (back to camera) out of frame
  # beat 6: knot
  (1160, (-2.8, 0.0, 1.4), (-1.36, 1.12, 1.2), 28),
  (1200, (-2.44, 0.4, 1.3), (-1.4, 1.15, 1.3), 30),

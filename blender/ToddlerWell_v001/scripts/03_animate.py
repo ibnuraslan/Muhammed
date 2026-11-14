@@ -296,7 +296,7 @@ for i, f in enumerate(range(920, 1140, 14)):
     ph = i * 0.9
     tgt = V((-1.0, 2.0)) if f > 1000 else V((-2.2, 4.8))
     RA.key(f, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), tgt), head=(0, 8 * math.sin(ph)), twist=6 * math.sin(ph),
-           hands={"R": ("rel", (0.14, 0.22, -0.3 * RA.arm + 0.06 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.18, -0.45 * RA.arm))})     # small gestures: his arm stays out of the lens
+           hands={"R": ("rel", (0.25, 0.35, -0.05 * RA.arm + 0.08 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.25, -0.35 * RA.arm))})
     RB.key(f, V((0.9, 2.3)), yaw_to((0.9, 2.3), tgt), head=(5, 0),
            hands={"L": ("rel", (0.3, 0.55 * RB.arm, -0.3 * RB.arm)) if (i % 4) < 2 else HANG(RB)})
     RC.key(f, V((-1.9, 0.2)), yaw_to((-1.9, 0.2), tgt), hands={"L": ("rel", (0.02, 0.15, -0.1 * RC.arm)), "R": ("rel", (0.02, 0.18, -0.1 * RC.arm))}, flex=-3)
@@ -316,7 +316,7 @@ for i, f in enumerate(range(1028, 1130, 14)):
     ph = i * 1.1
     who = "self" if 1070 < f < 1100 else "talk"
     hands = {"R": ("rel", (-0.12, 0.24, -0.06)), "L": HANG(TE)} if who == "self" else \
-            {"R": ("rel", (0.2, 0.35, -0.2 * TE.arm + 0.1 * math.sin(ph * 2))), "L": ("rel", (0.15, 0.3, -0.35 * TE.arm))}
+            {"R": ("rel", (0.2, 0.35, -0.2 * TE.arm + 0.1 * math.sin(ph * 2))), "L": ("rel", (0.1, 0.18, -0.5 * TE.arm))}
     TE.key(f, V((-1.12, 2.0)), yaw_to((-1.12, 2.0), (-0.9, 0.9)) + 6 * math.sin(ph), head=(-4 + 6 * math.sin(ph * 2), 6 * math.sin(ph)), twist=5 * math.sin(ph), hands=hands)
 # beat 6 (1135-1296): rope tied around his waist by ResB; arms lifted out of the way; ResA checks the line
 TPOS = V((-1.45, 1.25)); TYAW = yaw_to(TPOS, (-0.9, 0.42))
@@ -428,6 +428,7 @@ for f in range(RISE0, RISE1 + 1, 4):
     T.key(f, V((0, 0)), yb, root_world=tr, flex=-4, head=(-35, 10 * math.sin(f * 0.1)),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, -0.02, -T.root.z + T.ankle[s].z + 0.03 * math.sin(f * 0.2 + (s == "L") * 3))), Rz(yb)) for s in "LR"},
           hands={"L": ("w", gl + V((0.0, -0.03, 0.10))), "R": ("w", gr + V((0.0, -0.03, 0.10)))})   # on his forearms, above his hands
+RA.key(1135, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), (-0.15, 0.72)), hands={"L": HANG(RA), "R": HANG(RA)})     # turns to go with his arms down
 HOLD = {RB: V((-0.55, 0.45)), RA: V((0.55, 0.45))}     # beside the rim, close enough to reach his shins
 # rescuers: hold his legs while he goes in (1312-1400), then haul line; haul hand over hand in beat 10
 for f in range(1314, 1420, 4):
@@ -497,14 +498,16 @@ for f in range(1772, 1812, 4):
         feet = {s: teen_foot(rp, Rb, s, 180 * (1 - k)) for s in "LR"}
     else:
         feet = {s: ("xy", OUTP + V((0.12 if s == "R" else -0.12, 0.0)), 180) for s in "LR"}
-    gl = rp + Rb @ V((0.28, -0.45, 0.55 - 0.35 * k)); gr = rp + Rb @ V((-0.28, -0.45, 0.55 - 0.35 * k))
+    gl = rp + Rb @ V((0.24, -0.45, 0.55 - 0.35 * k)); gr = rp + Rb @ V((-0.24, -0.45, 0.55 - 0.35 * k))
     TE.key(f, xy, 0, root_world=rp if k < 0.85 else None, flex=180, side=-180 * k, head=(-20, 0), feet=feet,
            hands={"L": ("wg", gl), "R": ("wg", gr)})
     # (simplified for v005: ResA stays on the haul line; running him round to the hips crossed the tripod leg and the collar)
     tr = (gl + gr) / 2 + V((0, 0, -0.52))
     T.key(f, V((0, 0)), yb + 160 * k, root_world=tr, flex=0, head=(-25, 0),
           feet={s: ("w", tr + V((0.05 if s == "L" else -0.05, 0, -T.root.z + T.ankle[s].z + 0.04)), Rz(yb)) for s in "LR"},
-          hands={"L": ("w", gl + Rb @ V((0.0, 0.09, 0.0))), "R": ("w", gr + Rb @ V((0.0, 0.09, 0.0)))})
+          hands={"L": ("w", gl + Rb @ V((0.0, 0.18, 0.0))), "R": ("w", gr + Rb @ V((0.0, 0.18, 0.0)))})
+for f_ in (1778, 1796):     # after the haul: stands at his rope spot, arms relaxed, watching
+    RA.key(f_, HAUL[RA], yaw_to(HAUL[RA], (0, 0.5)), head=(5, 0), hands={"L": HANG(RA), "R": HANG(RA)})
 # hold up (1816-1870) then hand to the mother (1870-1950)
 for i, f in enumerate(range(1816, 1872, 8)):
     k = ease((f - 1816) / 30)
@@ -556,7 +559,7 @@ def clear_keys(c, f0, f1):
 MOVES = [
  (RA, 470, 520, [RA_P, (-0.9, 0.75), (-1.12, 0.92)]), (RA, 674, 690, [(-1.12, 0.92), (-1.1, 1.5)]), (RA, 905, 925, [(-1.1, 1.5), (-0.9, 0.9)]),
  (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.55, 0.45)]),
- (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1800, 1830, [(-0.24, 1.6), (0.5, 2.3), (0.95, 1.75)]),
+ (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1800, 1830, [(-0.24, 1.6), (-0.1, 2.4), (0.6, 2.5), (0.95, 1.75)]),     # away from the teen and toddler first
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
  (RB, 905, 925, [(0.4, 2.6), (0.9, 2.3)]), (RB, 1130, 1162, [(0.9, 2.3), (-0.3, 0.55), tuple(RBT)]),
  (RB, 1262, 1288, [tuple(RBT), (-0.95, 0.9), (-0.55, 0.45)]), (RB, 1430, 1490, [(-0.55, 0.45), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),

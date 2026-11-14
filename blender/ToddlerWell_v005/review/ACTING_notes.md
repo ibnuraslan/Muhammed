@@ -106,3 +106,17 @@ Second watch of the v005 preview (with the dust), more faults fixed:
 Render cost: the 24 dust and exhaust puffs were volumes that scale down to 0.001 when inactive. Cycles still built all 24 volumes on every frame, about 48 s of setup per frame. Each puff now exists (hide_render and hide_viewport keys) only during its own 40–90 frames, so at most 3 are live on any frame.
 - Measured at 270×480, 4 samples: 5–7 s per frame with the dust visible (frames 20, 205, 610, 700, 880, 1400), down from about 53 s.
 - The preview includes all the dust: what's in the preview is what the client renders.
+
+### v005 checks (all on the packed `ToddlerWell_v005_60fps.blend`)
+- `clip_v005.json`: full clip_scan, 0 bad ranges. The final camera key change at 1142 was re-scanned on 1093–1200: still 0.
+- `body_prop_cross.py` (casing, lip, collar, tube, tripod legs, winch, head) on 1740–1840: 0 visible crossings. On 1100–1170 (tripod legs): 0.
+- `qa_v005.json` (qa_check e7b25f7): BACKHEAD, CAMJUMP, ATTACH, HOVER, CLAW and FACEPRESS are all 0.
+  - PROPMOVE is only the 30 excavator clods (661–859), which are thrown dirt.
+  - EMPTY, INSIDE and FILL are the shaft and cross-section cut-away shots (table above).
+- `preview.mp4`: the moving preview of this exact package (every 5th frame at 12 fps, 270×480, 4 samples, with all the dust), with all 8 contact pages in `preview_pages/`. I watched every page.
+- Render cost: 5–7 s per frame at 270×480 with the dust (was about 53 s).
+
+Known small items left, judged acceptable:
+- One-frame dark or ground frames where the camera enters or leaves the shaft (136–141, 406, 781, 1366, 1736). Each is under 0.1 s.
+- A thin, sharp tripod leg crosses the knot approach (1131–1146).
+- ResA's arm enters from the frame edge, attached to his body, while he talks with the teen (1051–1106).
