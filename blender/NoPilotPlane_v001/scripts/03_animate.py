@@ -198,8 +198,8 @@ SEATED_FO = (0.52, 1.57, -0.23)
 fo_pose(1, SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armR=(55, 25, 45, 18))        # face turned toward the cabin, readable
 fo_pose(F(28.0), SEATED_FO, flex=12, side=-24, twist=14, hflex=28, hside=-22, htwist=30, armL=(60, 10, 20, 28), armR=(55, 25, 45, 18))
 fo_pose(F(28.8), (0.47, 1.50, -0.18), flex=-5, side=-10, hflex=-15, hside=-20, armL=(62, 5, 15, 30), armR=(58, 20, 30, 30))   # hauled up/back
-fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(60, -10, 15, 32))
-fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(62, -10, 15, 32))  # left arm swings down onto the yoke
+fo_pose(F(29.8), (0.45, 1.36, -0.14), rz=200, flex=-10, side=8, hflex=-30, hside=10, armL=(45, 30, 20, 32), armR=(55, 10, 25, 50))
+fo_pose(F(30.6), (0.43, 1.27, -0.16), rz=205, flex=-8, side=12, hflex=-35, hside=15, armL=(48, 32, 12, 32), armR=(55, 5, 25, 55))  # left arm swings down onto the yoke
 fo_pose(F(31.4), (0.56, 1.18, -0.25), rz=210, rx=-15, flex=-5, side=10, hflex=-30, hside=15, armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
 fo_pose(F(32.4), (0.76, 0.98, -0.48), rz=215, rx=-30, flex=-15, hflex=-30, hside=25, legs=(70, 40), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
 fo_pose(F(33.4), (0.74, 0.96, -0.55), rz=200, rx=-20, flex=10, side=10, hflex=35, hside=30, legs=(80, 20), armL=(55, 0, 25, 60), armR=(55, 0, 25, 60))
@@ -743,6 +743,7 @@ hand("R", F(59.2), tw + Vector((0.0, -0.035, 0.035)), d=(-0.3, 1, -0.9), n=(0, -
 hand("R", F(59.8), tw + Vector((0.0, -0.075, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70); sc.frame_set(F(59.8)); grip_object(YOU, "R", F(59.8), OB["THROTTLE_1"], THR(), (0, 0.3, -1))
 SEATB(F(59.2), sflex=30, twist=34, head=(20, 30), dx=-0.2, dy=0.14)
 hand("R", F(60.4), grip(F(60.4), "R") - Vector((0, 0.035, 0)), d=(-0.6, 1, 0.5), n=(0.3, 0.2, 1), curl=65); grip_yoke(F(60.4), "R", grip(F(60.4), "R"))
+SEATB(F(60.0), sflex=24, twist=26, head=(20, 25), dx=-0.14, dy=0.12)       # v008b: torso still turned while the hand comes back (no arm behind the body)
 SEATB(F(60.4), sflex=14, head=(25, 0)); SEATB(F(61.5), sflex=2, head=(0, 0)); SEATB(F(62.6), sflex=4, twist=30, head=(0, 45))
 hand("R", F(63.2), (0.12, 1.85, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=50)
 SEATB(F(63.6), sflex=20, twist=28, head=(20, 30), dx=-0.08, dy=0.06)

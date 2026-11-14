@@ -75,6 +75,29 @@ for o in bpy.data.objects:
         nt.links.new(mul.outputs[0], mx.inputs[0]); nt.links.new(src, mx.inputs[1]); nt.links.new(tr.outputs[0], mx.inputs[2])
         nt.links.new(mx.outputs[0], outn.inputs["Surface"])
 print("BACKFACE_TRANSPARENT", sorted(done))
+# v008b prop hygiene (qa_check PROPMOVE / ATTACH):
+# - uniform details followed their bones through a CHILD_OF constraint (parent None, so they read as props moving
+#   by themselves): parent them to the bone for real, keeping the frame-1 placement
+# - the deployed oxygen masks hang from the ceiling on their tubes: parent them to a fixed ceiling mount, and name
+#   them OXYDROP (they are not worn, so the worn-mask check does not apply); the cockpit sun visors become SUNSHADE
+sc_ = bpy.context.scene; sc_.frame_set(1)
+nb = 0
+for o in list(bpy.data.objects):
+    cs = [c for c in o.constraints if c.type == 'CHILD_OF' and c.target and c.target.type == 'ARMATURE']
+    if not cs: continue
+    c = cs[0]; arm, bone = c.target, c.subtarget
+    bpy.context.view_layer.update(); W = o.matrix_world.copy()
+    o.constraints.remove(c)
+    o.parent = arm; o.parent_type = 'BONE'; o.parent_bone = bone
+    bpy.context.view_layer.update(); o.matrix_world = W; nb += 1
+mount = bpy.data.objects.new("OXYDROP_CEILING_MOUNT", None); sc_.collection.objects.link(mount)
+nm = 0
+for o in list(bpy.data.objects):
+    if o.name.startswith("MASK_") and o.type == 'MESH':
+        o.name = "OXYDROP_" + o.name[5:]; o.parent = mount; nm += 1
+    elif o.name.startswith("VISOR_"):
+        o.name = "SUNSHADE_" + o.name[6:]
+print("PROPFIX bone-parented", nb, "oxygen drops", nm)
 # nothing belongs within 8 cm of an eye: clip YOU's own forearm when it crosses under the lens (29.0 s haul)
 bpy.context.scene.camera.data.clip_start = 0.08
 bpy.context.scene.frame_set(1)

@@ -1,0 +1,5527 @@
+{
+ "frames": {
+  "43": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "49": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 34.7 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 29.6 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 36.7 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 30.1 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "55": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "61": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "67": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "73": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 34.8 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 29.7 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.6 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.6 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 36.8 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 30.2 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 44.7 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 37.9 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "79": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "85": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "91": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "97": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.6 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.9 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 39.5 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 32.5 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "103": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "109": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "115": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "121": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.6 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 40.0 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 39.7 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 32.6 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 42.4 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 36.0 cm off PD_04R1's skin (median)"
+   ]
+  ],
+  "133": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "139": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "151": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "157": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "163": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "169": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 34.8 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 29.6 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.6 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.5 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "175": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "529": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 44.7 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 37.9 cm off PD_03L1's skin (median)"
+   ]
+  ],
+  "535": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "541": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "BACKHEAD",
+    "PC_03L0"
+   ]
+  ],
+  "547": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "553": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 34.7 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 29.5 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 36.6 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 29.9 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "559": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "565": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "577": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 34.7 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.7 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.3 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "583": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "589": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "595": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "601": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 34.8 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 29.7 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.7 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.7 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "607": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "613": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "619": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "625": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.7 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.9 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "631": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "637": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "643": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "655": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "661": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "667": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "673": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "679": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "685": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "691": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "697": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "715": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "721": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "727": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "733": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "739": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "745": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "757": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "763": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "769": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "775": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "781": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "793": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "799": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "805": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "823": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "829": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "835": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "841": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "847": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "853": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "859": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "865": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "871": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ]
+  ],
+  "931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ]
+  ],
+  "1483": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1495": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1501": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1519": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1525": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1531": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1537": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1543": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "1549": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1555": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1561": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1567": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1879": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_L moves 2.5 cm with no hand on it (nearest finger 94 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 2.5 cm with no hand on it (nearest finger 48 cm)"
+   ]
+  ],
+  "1891": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 0.7 cm with no hand on it (nearest finger 63 cm)"
+   ]
+  ],
+  "1897": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1903": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1909": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "1915": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 7.3 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 7.2 cm with no hand on it (nearest finger 17 cm)"
+   ]
+  ],
+  "1999": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.5 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 4.6 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "2005": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "2011": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2017": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2023": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2029": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2035": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2041": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2053": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2059": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2065": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2071": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2077": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2083": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2089": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2095": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2101": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2107": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2113": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2119": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2125": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2131": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2137": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2143": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2149": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2155": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2161": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2167": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2173": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2179": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2185": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2191": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2197": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2203": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2209": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2215": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2221": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2227": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2233": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2239": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2245": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2251": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2263": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "2269": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2275": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2281": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2287": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2293": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2299": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2509": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "2527": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2533": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2539": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2545": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2581": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2659": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2665": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2671": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2677": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2683": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2689": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2695": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2701": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2707": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2713": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2719": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2725": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2731": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2737": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2743": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2749": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2755": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2761": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "2767": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2791": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2815": [
+   [
+    "CLAW",
+    "YOU.R curl 43"
+   ]
+  ],
+  "2821": [
+   [
+    "CLAW",
+    "YOU.R curl 41"
+   ]
+  ],
+  "2827": [
+   [
+    "CLAW",
+    "YOU.R curl 43"
+   ]
+  ],
+  "2887": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2905": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2911": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2917": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2923": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2929": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2935": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2947": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ]
+  ],
+  "2953": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "2995": [
+   [
+    "CLAW",
+    "YOU.L curl 44"
+   ]
+  ],
+  "3001": [
+   [
+    "CLAW",
+    "YOU.L curl 43"
+   ]
+  ],
+  "3007": [
+   [
+    "CLAW",
+    "YOU.L curl 44"
+   ]
+  ],
+  "3097": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3175": [
+   [
+    "CLAW",
+    "YOU.L curl 44"
+   ]
+  ],
+  "3181": [
+   [
+    "CLAW",
+    "YOU.L curl 42"
+   ]
+  ],
+  "3187": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ],
+   [
+    "CLAW",
+    "YOU.L curl 43"
+   ]
+  ],
+  "3193": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3199": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "3205": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3211": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3217": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3223": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3229": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3235": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3241": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3247": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3253": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3259": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3265": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3271": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3277": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3283": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3295": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3361": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3367": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3373": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3379": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3385": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3397": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3409": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3415": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3481": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3493": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3499": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3505": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3511": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3517": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3523": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3529": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3535": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3571": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ]
+  ],
+  "3685": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3691": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3697": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3703": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3745": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3751": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3757": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3763": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3769": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3775": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3853": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3859": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3865": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3871": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3877": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "3895": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3901": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3907": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "3913": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "3919": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "3925": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "3931": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 1.3 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "3937": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 1.2 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.1 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.9 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 13.3 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 24.5 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 20.7 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 6.8 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 20.2 cm off PC_03L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 14.9 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 17.0 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 4.9 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 14.8 cm off PF_05L1's skin (median)"
+   ]
+  ],
+  "3943": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 1.0 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.1 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.0 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.2 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.9 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.6 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.6 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 0.9 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "3949": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.7 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.5 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.0 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.9 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.1 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.5 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.7 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 1.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "3955": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.5 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 0.9 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.7 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 1.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "3961": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.5 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 0.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.5 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_1 moves 1.0 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.6 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_0 moves 0.6 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_1 moves 0.6 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 0.9 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 1.3 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 12.9 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 24.6 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 22.7 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 6.0 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 16.3 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 12.6 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 17.1 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 4.7 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 20.2 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 13.6 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 12.5 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 11.7 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_0 is 21.3 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_1 is 14.5 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 26.9 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 21.4 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_0 is 15.1 cm off PC_07R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_1 is 12.7 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 17.5 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 12.0 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_0 is 25.6 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_1 is 24.4 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 14.3 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 8.5 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_0 is 13.3 cm off PE_09R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_1 is 22.9 cm off PE_09R0's skin (median)"
+   ]
+  ],
+  "3967": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_1 moves 0.6 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 0.7 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 1.0 cm with no hand on it (nearest finger 26 cm)"
+   ]
+  ],
+  "3973": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.6 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.6 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.0 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 0.8 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.7 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 0.6 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "3979": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.7 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.9 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.7 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.6 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.1 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.2 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.9 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.9 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 0.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 0.8 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.5 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "3985": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 11%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.7 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.2 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.4 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 1.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 1.1 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.9 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.1 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 0.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.8 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 11.3 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 25.0 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 15.8 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 9.3 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 20.5 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 8.5 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 17.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 21.5 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 16.6 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 8.8 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 16.8 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 11.5 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 14.9 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 5.6 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 11.7 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 6.1 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 21.0 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 12.4 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_0 is 25.0 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_1 is 20.6 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 14.1 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 10.4 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_0 is 16.2 cm off PE_06R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_1 is 14.3 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 27.7 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 21.2 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_0 is 17.0 cm off PC_07R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_1 is 13.7 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 18.4 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 11.0 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_0 is 25.1 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_1 is 23.5 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 14.7 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 10.0 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_0 is 11.7 cm off PE_09R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_1 is 22.2 cm off PE_09R0's skin (median)"
+   ]
+  ],
+  "3991": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.8 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.2 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.5 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 1.0 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.3 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 1.2 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 1.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.2 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 1.0 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 1.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.6 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_0 moves 0.6 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_1 moves 0.7 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "3997": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.5 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.0 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.4 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.9 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.3 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 1.1 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 1.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.2 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 1.1 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.8 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 1.0 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.8 cm with no hand on it (nearest finger 37 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_0 moves 0.7 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_1 moves 0.8 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "4003": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.7 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.2 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.7 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.1 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 0.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.1 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 1.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.9 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 1.0 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.8 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_0 moves 0.7 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_1 moves 0.9 cm with no hand on it (nearest finger 36 cm)"
+   ]
+  ],
+  "4009": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 0.8 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_1 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.8 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.7 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_0 moves 0.6 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_1 moves 0.8 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 0.5 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 11.6 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 24.6 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 13.1 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 8.4 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 19.3 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 10.2 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 14.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 20.3 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 16.7 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 7.6 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 15.0 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 8.5 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 13.2 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 11.1 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 14.4 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 8.9 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 22.4 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 13.5 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_0 is 13.5 cm off PA_05R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_1 is 20.7 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 12.1 cm off PC_06L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 9.0 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_0 is 16.4 cm off PE_06R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_1 is 13.9 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 27.9 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 22.1 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_0 is 10.7 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_1 is 13.7 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 18.6 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 10.7 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_0 is 22.9 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_1 is 20.5 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 16.2 cm off PC_09L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 9.4 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_0 is 11.0 cm off PE_09R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_1 is 21.4 cm off PE_09R0's skin (median)"
+   ]
+  ],
+  "4015": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.5 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.6 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_1_1 moves 0.6 cm with no hand on it (nearest finger 36 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 0.5 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "4021": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 10%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.0 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.6 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 0.6 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.6 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "4027": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.1 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.7 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 1.2 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.0 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 0.9 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.6 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_0 moves 0.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_0 moves 0.5 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "4033": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.1 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.8 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.8 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 1.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 1.4 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.1 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.7 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_0 moves 0.7 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_0 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 0.5 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 18.3 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 22.4 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 12.3 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 9.0 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 20.2 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 9.2 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 13.1 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 22.3 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 17.2 cm off PC_03L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 9.9 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 14.9 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 11.9 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 13.2 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 11.1 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 13.5 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 9.7 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 20.5 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 12.4 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_0 is 14.1 cm off PA_05R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_1 is 20.1 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 12.1 cm off PC_06L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 9.1 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_0 is 21.0 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_1 is 13.3 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 28.1 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 22.3 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_0 is 10.8 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_1 is 13.0 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 17.9 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 10.8 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_0 is 22.3 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_1 is 19.8 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 15.6 cm off PC_09L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 8.2 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_0 is 12.1 cm off PE_09R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_1 is 21.1 cm off PE_09R0's skin (median)"
+   ]
+  ],
+  "4039": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 0.9 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 1.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.3 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.2 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.8 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_0 moves 0.8 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.8 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_1_0 moves 0.9 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.9 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.7 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_1 moves 0.7 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.7 cm with no hand on it (nearest finger 34 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_0 moves 0.8 cm with no hand on it (nearest finger 31 cm)"
+   ]
+  ],
+  "4045": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 0.6 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.5 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.6 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.9 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 1.2 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_0 moves 0.8 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.8 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 1.0 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.8 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.8 cm with no hand on it (nearest finger 34 cm)"
+   ]
+  ],
+  "4051": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_1 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.9 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_1 moves 1.0 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_0 moves 0.6 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.8 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.9 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.8 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "4057": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 7%"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 26.1 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 21.5 cm off PB's skin (median)"
+   ]
+  ],
+  "4063": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 3%"
+   ]
+  ],
+  "4093": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4111": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4123": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4129": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4165": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4171": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4177": [
+   [
+    "EMPTY",
+    "no character in view"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4183": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4189": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4207": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4237": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4279": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "4291": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "25": [
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "145": [
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 39.6 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 39.8 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 50.0 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 39.8 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 32.7 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 42.5 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 36.2 cm off PD_04R1's skin (median)"
+   ]
+  ],
+  "193": [
+   [
+    "PROPMOVE",
+    "CUP moves 0.6 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "199": [
+   [
+    "PROPMOVE",
+    "CUP moves 1.1 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPMOVE",
+    "CUP moves 2.6 cm with no hand on it (nearest finger 6 cm)"
+   ]
+  ],
+  "211": [
+   [
+    "PROPMOVE",
+    "CUP moves 3.0 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "217": [
+   [
+    "PROPMOVE",
+    "CUP moves 0.6 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "229": [
+   [
+    "PROPMOVE",
+    "CUP moves 1.0 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "241": [
+   [
+    "PROPMOVE",
+    "DRIP_0 moves 5.0 cm with no hand on it (nearest finger 16 cm)"
+   ]
+  ],
+  "247": [
+   [
+    "PROPMOVE",
+    "DRIP_0 moves 13.9 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "259": [
+   [
+    "PROPMOVE",
+    "DRIP_1 moves 1.3 cm with no hand on it (nearest finger 7 cm)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPMOVE",
+    "DRIP_1 moves 9.3 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "649": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "817": [
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off FO's skin (median)"
+   ]
+  ],
+  "961": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "985": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1009": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1033": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1057": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1081": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1105": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1129": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1321": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1417": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1441": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1609": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1633": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1657": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1681": [
+   [
+    "ATTACH",
+    "VISOR_R is 46.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1687": [
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 0.6 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 0.8 cm with no hand on it (nearest finger 38 cm)"
+   ]
+  ],
+  "1693": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 0.9 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 0.7 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 1.6 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 2.1 cm with no hand on it (nearest finger 37 cm)"
+   ]
+  ],
+  "1699": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 1.4 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.1 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.1 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 2.4 cm with no hand on it (nearest finger 14 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 3.2 cm with no hand on it (nearest finger 35 cm)"
+   ]
+  ],
+  "1705": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 1.8 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.3 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.3 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 3.0 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 4.0 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 49.2 cm off FO's skin (median)"
+   ]
+  ],
+  "1711": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.5 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.5 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 3.4 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 4.5 cm with no hand on it (nearest finger 32 cm)"
+   ]
+  ],
+  "1717": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.7 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 3.6 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 4.6 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "1723": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.7 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 3.6 cm with no hand on it (nearest finger 5 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 4.5 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "1729": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.7 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 3.4 cm with no hand on it (nearest finger 4 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 4.0 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off FO's skin (median)"
+   ]
+  ],
+  "1735": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.8 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 3.1 cm with no hand on it (nearest finger 3 cm)"
+   ]
+  ],
+  "1741": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.9 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "1747": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "1753": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.1 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off FO's skin (median)"
+   ]
+  ],
+  "1759": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.8 cm with no hand on it (nearest finger 16 cm)"
+   ]
+  ],
+  "1765": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.2 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.8 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1771": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.2 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.8 cm with no hand on it (nearest finger 8 cm)"
+   ]
+  ],
+  "1777": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.2 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.8 cm with no hand on it (nearest finger 6 cm)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off FO's skin (median)"
+   ]
+  ],
+  "1783": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.1 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.8 cm with no hand on it (nearest finger 4 cm)"
+   ]
+  ],
+  "1789": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.0 cm with no hand on it (nearest finger 14 cm)"
+   ]
+  ],
+  "1795": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.9 cm with no hand on it (nearest finger 14 cm)"
+   ]
+  ],
+  "1801": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.7 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off FO's skin (median)"
+   ]
+  ],
+  "1807": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.5 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1813": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.4 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1819": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.3 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1825": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.2 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off FO's skin (median)"
+   ]
+  ],
+  "1831": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.2 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1837": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.1 cm with no hand on it (nearest finger 12 cm)"
+   ]
+  ],
+  "1843": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.6 cm with no hand on it (nearest finger 13 cm)"
+   ]
+  ],
+  "1849": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.9 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 2.8 cm with no hand on it (nearest finger 5 cm)"
+   ]
+  ],
+  "1855": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 4.0 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 4.0 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_L moves 0.6 cm with no hand on it (nearest finger 51 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 0.6 cm with no hand on it (nearest finger 22 cm)"
+   ]
+  ],
+  "1861": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 5.1 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 5.0 cm with no hand on it (nearest finger 13 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_L moves 1.7 cm with no hand on it (nearest finger 60 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 1.7 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "1867": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 6.0 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_L moves 2.4 cm with no hand on it (nearest finger 72 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 2.4 cm with no hand on it (nearest finger 30 cm)"
+   ]
+  ],
+  "1873": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 2.7 cm with no hand on it (nearest finger 83 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 2.7 cm with no hand on it (nearest finger 39 cm)"
+   ]
+  ],
+  "1885": [
+   [
+    "PROPMOVE",
+    "YOKE_L moves 1.9 cm with no hand on it (nearest finger 101 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "YOKE_R moves 1.9 cm with no hand on it (nearest finger 56 cm)"
+   ]
+  ],
+  "1921": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 7.6 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 6.7 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 6.6 cm with no hand on it (nearest finger 14 cm)"
+   ]
+  ],
+  "1927": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 6.5 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 5.9 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 5.8 cm with no hand on it (nearest finger 11 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 8.7 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "1933": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 5.3 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 5.0 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 4.9 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 7.5 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 7.1 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "1939": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 4.0 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 3.8 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 3.7 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 5.3 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 5.1 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1945": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 2.5 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.5 cm with no hand on it (nearest finger 20 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 2.5 cm with no hand on it (nearest finger 7 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 2.8 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 2.9 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1951": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 1.6 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.5 cm with no hand on it (nearest finger 21 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.5 cm with no hand on it (nearest finger 8 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 2.1 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 1.5 cm with no hand on it (nearest finger 41 cm)"
+   ]
+  ],
+  "1957": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 2.3 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 1.5 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.3 cm with no hand on it (nearest finger 9 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 4.9 cm with no hand on it (nearest finger 46 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 3.7 cm with no hand on it (nearest finger 42 cm)"
+   ]
+  ],
+  "1963": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 3.3 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.0 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.7 cm with no hand on it (nearest finger 12 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 7.4 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 5.8 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "1969": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 4.0 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.5 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 2.1 cm with no hand on it (nearest finger 15 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 9.0 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 7.3 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1975": [
+   [
+    "PROPMOVE",
+    "CHEST_FO moves 4.4 cm with no hand on it (nearest finger 3 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.7 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 2.3 cm with no hand on it (nearest finger 19 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 9.8 cm with no hand on it (nearest finger 45 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 8.2 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1981": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.8 cm with no hand on it (nearest finger 18 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 2.3 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 9.7 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 8.3 cm with no hand on it (nearest finger 45 cm)"
+   ]
+  ],
+  "1987": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.6 cm with no hand on it (nearest finger 17 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 2.2 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 8.9 cm with no hand on it (nearest finger 44 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 7.8 cm with no hand on it (nearest finger 44 cm)"
+   ]
+  ],
+  "1993": [
+   [
+    "PROPMOVE",
+    "CREASE_FO_L moves 2.1 cm with no hand on it (nearest finger 16 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "CREASE_FO_R moves 1.8 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_L moves 7.3 cm with no hand on it (nearest finger 41 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "EPAULETTE_FO_R moves 6.5 cm with no hand on it (nearest finger 43 cm)"
+   ]
+  ],
+  "3121": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3433": [
+   [
+    "ATTACH",
+    "VISOR_L is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3673": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "3721": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4153": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4249": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4273": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4297": [
+   [
+    "ATTACH",
+    "VISOR_R is 50.0 cm off YOU's skin (median)"
+   ]
+  ],
+  "4345": [
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.6 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 1.3 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.8 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.4 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 1.0 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_1 moves 0.6 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.8 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 1.1 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.5 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 1.2 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 0.5 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.9 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 25.1 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 24.6 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 16.4 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 6.1 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 14.4 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 10.4 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 15.4 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 11.8 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 18.5 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 10.5 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 17.9 cm off PC_06L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 11.8 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 27.8 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 19.6 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 19.4 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 13.7 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 16.8 cm off PC_09L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 7.2 cm off PD_09L1's skin (median)"
+   ]
+  ],
+  "4351": [
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.5 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.7 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.7 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.9 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.8 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_-1_0 moves 0.7 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_0 moves 0.7 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_3_1_1 moves 0.5 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 1.2 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_0 moves 0.5 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.9 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 0.9 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_1 moves 0.6 cm with no hand on it (nearest finger 22 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.8 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 1.1 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.5 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 1.3 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 1.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_1 moves 1.1 cm with no hand on it (nearest finger 29 cm)"
+   ]
+  ],
+  "4357": [
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.5 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_1 moves 0.6 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_-1_1 moves 0.9 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_4_1_1 moves 0.7 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_5_-1_0 moves 0.7 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_0 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 1.0 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_1_0 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_0 moves 0.5 cm with no hand on it (nearest finger 35 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 1.2 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_0 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 1.0 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_1 moves 1.1 cm with no hand on it (nearest finger 27 cm)"
+   ]
+  ],
+  "4363": [
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 0.7 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_0 moves 0.8 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.5 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.6 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_6_-1_1 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 1.0 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.9 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_1 moves 0.9 cm with no hand on it (nearest finger 25 cm)"
+   ]
+  ],
+  "4369": [
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.0 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_0 moves 1.2 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.6 cm with no hand on it (nearest finger 33 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.9 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.9 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_7_-1_1 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_-1_1 moves 0.7 cm with no hand on it (nearest finger 23 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_8_1_1 moves 0.7 cm with no hand on it (nearest finger 24 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 18.4 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 22.6 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 12.5 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 9.0 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 15.9 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 6.2 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 14.4 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 19.4 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 15.0 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 10.6 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 20.2 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 12.4 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 15.3 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 11.9 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 17.6 cm off PC_04R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 11.3 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 19.1 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 12.0 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_0 is 24.0 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_1 is 15.7 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 15.1 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 12.7 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_0 is 15.8 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_1 is 17.9 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 28.8 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 22.3 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_0 is 19.9 cm off PC_07R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_1 is 8.1 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 16.9 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 16.2 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_0 is 12.2 cm off PA_08R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_1 is 19.0 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 14.8 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 6.7 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_0 is 16.9 cm off PE_09R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_1 is 26.8 cm off PE_09R0's skin (median)"
+   ]
+  ],
+  "4375": [
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.1 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_0 moves 1.4 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.7 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 1.0 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.7 cm with no hand on it (nearest finger 25 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 1.2 cm with no hand on it (nearest finger 24 cm)"
+   ]
+  ],
+  "4381": [
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.2 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.6 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_0 moves 1.4 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.7 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 1.1 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.5 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.8 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 1.4 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.5 cm with no hand on it (nearest finger 33 cm)"
+   ]
+  ],
+  "4387": [
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 1.1 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_-1_1 moves 0.5 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_0 moves 1.2 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.7 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 1.0 cm with no hand on it (nearest finger 31 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_1 moves 0.5 cm with no hand on it (nearest finger 32 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_0 moves 0.6 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.8 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 1.5 cm with no hand on it (nearest finger 27 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_1_0 moves 0.5 cm with no hand on it (nearest finger 33 cm)"
+   ]
+  ],
+  "4393": [
+   [
+    "PROPMOVE",
+    "MASK_0_-1_0 moves 0.8 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_0 moves 0.9 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_0_1_1 moves 0.6 cm with no hand on it (nearest finger 30 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.8 cm with no hand on it (nearest finger 29 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_1_1_1 moves 0.7 cm with no hand on it (nearest finger 26 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 1.3 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_0 is 11.7 cm off PA's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_-1_1 is 20.1 cm off PB's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_0 is 16.4 cm off PC's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_0_1_1 is 6.4 cm off PD's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_0 is 16.4 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_-1_1 is 8.3 cm off PF's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_0 is 13.4 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_1_1_1 is 23.3 cm off PA_02R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_0 is 15.3 cm off PC_03L0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_-1_1 is 10.6 cm off PD_03L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_0 is 17.3 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_2_1_1 is 12.2 cm off PF_03R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_0 is 13.8 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_-1_1 is 11.9 cm off PA_04L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_0 is 15.9 cm off PC_04R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_3_1_1 is 11.3 cm off PD_04R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_0 is 19.1 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_-1_1 is 12.0 cm off PF_05L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_0 is 24.0 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_4_1_1 is 15.6 cm off PB_05R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_0 is 15.2 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_-1_1 is 12.7 cm off PD_06L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_0 is 15.8 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_5_1_1 is 17.9 cm off PF_06R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_0 is 28.8 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_-1_1 is 22.3 cm off PB_07L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_0 is 19.9 cm off PC_07R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_6_1_1 is 8.0 cm off PD_07R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_0 is 16.8 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_-1_1 is 16.4 cm off PF_08L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_0 is 12.2 cm off PA_08R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_7_1_1 is 19.1 cm off PB_08R1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_0 is 14.6 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_-1_1 is 6.9 cm off PD_09L1's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_0 is 16.9 cm off PE_09R0's skin (median)"
+   ],
+   [
+    "ATTACH",
+    "MASK_8_1_1 is 26.7 cm off PE_09R0's skin (median)"
+   ]
+  ],
+  "4399": [
+   [
+    "PROPMOVE",
+    "MASK_1_-1_0 moves 0.5 cm with no hand on it (nearest finger 28 cm)"
+   ],
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 1.0 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ],
+  "4405": [
+   [
+    "PROPMOVE",
+    "MASK_2_-1_0 moves 0.5 cm with no hand on it (nearest finger 28 cm)"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 281,
+  "BACKHEAD": 1,
+  "CLAW": 9,
+  "ATTACH": 374,
+  "PROPMOVE": 526
+ }
+}
