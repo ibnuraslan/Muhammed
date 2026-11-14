@@ -45,4 +45,37 @@ for m in bm_off: m.show_viewport = True
 mm.show_viewport = True
 vg.add(sorted(out_), 1.0, 'REPLACE')
 print("POST masked x-ray muscle verts outside the body", len(out_))
+# v006c: the station ramp has no platform left to meet (it read as a floating grey slab behind the worker)
+plat = [o for o in bpy.data.objects if o.name.lower().startswith("platform") and o.type == 'MESH' and o.name != "PlatformEdge" and not o.hide_render]
+print("POST platforms", [o.name for o in plat])
+# v006c: the director flagged the ramp as a grey slab crossing the frame behind the worker: hide it
+if True:
+    for n in ("Ramp",):
+        o = bpy.data.objects.get(n)
+        if o: o.animation_data_clear(); o.hide_render = True; o.hide_viewport = True
+    print("POST hid orphan ramp")
+# v006c: no studio at all: the dome mesh (it showed as a small blue disc) and the studio key lights are removed
+for o in list(bpy.data.objects):
+    if o.name.startswith("Studio"):
+        o.animation_data_clear()
+        if o.type == 'LIGHT':
+            if o.data.animation_data: o.data.animation_data_clear()
+            o.data.energy = 0.0
+        o.hide_render = True; o.hide_viewport = True
+print("POST studio removed")
+# v006c: the orange spark lights next to him turned his cyan shirt mint green at the halt: less saturated, weaker
+for o in bpy.data.objects:
+    if o.name.startswith("SparkLight") and o.type == 'LIGHT':
+        o.data.color = (1.0, 0.85, 0.7)
+        ad_ = o.data.animation_data
+        if ad_ and ad_.action:
+            for layer in getattr(ad_.action, "layers", []):
+                for strip in layer.strips:
+                    for cb in strip.channelbags:
+                        for fc in cb.fcurves:
+                            if fc.data_path == "energy":
+                                for kp in fc.keyframe_points: kp.co.y *= 0.35; kp.handle_left.y *= 0.35; kp.handle_right.y *= 0.35
+        else:
+            o.data.energy *= 0.35
+print("POST spark lights softened")
 bpy.ops.wm.save_as_mainfile(filepath=sys.argv[sys.argv.index("--") + 1], compress=True)

@@ -5,8 +5,8 @@ LADO = bpy.data.objects["Lad"]
 f_fb0, SWIG_UP, SWIG_HOLD, SWIG_DOWN, f_fb1 = eval(sc["swig"])
 f_r0, R_IMP, SLOW, f_r1 = eval(sc["replay"])
 f_x0 = f_fb1
-STUDIO = (f_x0, f_r1)                # world hidden only while the camera is inside the bubble
-BUBBLE = (f_x0 - 16, f_r1)      # v006b: gone at the cut (no bubble frames on the way out)           # studio bubble visible (grows from his chest / collapses into it)
+STUDIO = (-20, -10)      # v006c: no studio, the real world stays                # world hidden only while the camera is inside the bubble
+BUBBLE = (-20, -10)      # v006c: no bubble           # studio bubble visible (grows from his chest / collapses into it)
 
 def set_const(idb):
     ad = idb.animation_data
@@ -600,6 +600,8 @@ CAM = [  # frame, camera, aim, lens
     (950, V(0.3, -41.3, 0.34), lad_p(950) + V(0, 0, 0.1), 22),
     (963, V(5.4, -37.2, 1.6), V(1.2, -40.4, 0.35), 24),      # v006b: CUT from under the train to the side view of the halted train and the gap he lies in
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
+    (1032, V(7.6, -33.6, 6.35), V(2.2, -42.0, 0.6), 22),
+    (1033, V(2.0, -40.2, 1.5), V(3.8, -38.9, 1.25), 20),      # v006c: clean CUT to the witnesses (the top-down whip showed slabs)
     (1045, V(2.0, -40.2, 1.5), V(3.8, -38.9, 1.25), 20),
     (1090, V(1.95, -39.2, 1.45), V(3.9, -39.4, 1.2), 20),
     (1113, V(1.8, -40.4, 1.45), V(4.0, -38.4, 1.3), 18),
@@ -608,27 +610,24 @@ CAM = [  # frame, camera, aim, lens
     (1168, V(0.55, -40.98, 0.36), V(0.48, -40.4, 0.6), 22),
     (1185, V(1.55, -40.95, 0.62), V(1.0, -40.2, 0.55), 22),      # v006: crosses the rail high, so the rail never sweeps the lens      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
     (1200, V(2.95, -41.0, 0.5), V(1.3, -40.0, 0.45), 24),
-    (1230, V(3.45, -40.95, 0.9), V(2.2, -40.1, 1.05), 26),
+    (1230, V(3.6, -41.2, 1.1), V(2.45, -40.1, 1.15), 20),      # v006c: wider, his head stays in frame as he rises
     (1250, V(3.95, -40.6, 1.45), V(2.4, -40.1, 1.45), 28),
     (1275, V(3.1, -41.7, 1.75), V(2.45, -40.1, 1.62), 30),
     (1322, V(3.25, -39.45, 1.78), V(2.5, -40.05, 1.62), 36),
-    (1385, V(3.35, -40.25, 1.5), V(2.45, -40.1, 1.42), 30),
-    (1408, V(3.15, -40.35, 1.4), V(2.45, -40.1, 1.3), 28),
-    (1440, V(3.45, -40.1, 1.3), V(2.45, -40.1, 1.15), 26),
-    (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
-    (1560, V(3.75, -42.0, 1.3), V(2.45, -40.35, 1.05), 28),      # v006b: medium, not a torso-filling macro
-    (1605, V(rp(1605).x + 1.2, rp(1605).y - 1.4, 1.0), rp(1605) + V(0, 0, 0.15), 30),      # v006b: replay framed medium on him going limp
-    (1640, V(rp(1640).x + 1.15, rp(1640).y - 1.45, 0.95), rp(1640) + V(0, 0, 0.1), 30),
-    (1679, V(rp(1679).x + 1.1, rp(1679).y - 1.4, 0.95), rp(1679) + V(0, 0, 0.1), 30),
-    (1681, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 30),      # v006b: CUT back to the real scene: he stands dazed by the train
-    (1760, V(3.15, -42.8, 1.5), V(2.45, -40.45, 1.45), 32),
+    (1385, V(3.6, -41.0, 1.55), V(2.45, -40.1, 1.45), 30),      # v006c: medium (no dive into his chest)
+    (1410, V(3.45, -40.75, 1.5), V(2.45, -40.1, 1.42), 30),      # v006c: real scene, medium, head always in frame (no studio)
+    (1470, V(3.75, -41.0, 1.45), V(2.45, -40.1, 1.32), 30),
+    (1530, V(3.85, -39.55, 1.45), V(2.45, -40.1, 1.3), 30),
+    (1600, V(3.75, -41.25, 1.5), V(2.45, -40.15, 1.33), 30),
+    (1680, V(3.55, -41.75, 1.52), V(2.45, -40.2, 1.4), 30),
+    (1760, V(3.2, -42.45, 1.55), V(2.42, -40.3, 1.45), 30),
     (1852, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
     (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
     (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
     (2020, V(3.0, -44.25, 1.55), V(2.5, -43.1, 1.42), 40),      # v006: further back, his palm never fills the lens
     (2070, V(2.64, -43.8, 1.62), V(2.45, -42.9, 1.63), 40)]
-CUTS = [963, 1681]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
+CUTS = [963, 1033]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
 def seg_spline(idx):
     segs = []; bounds = [1] + CUTS + [10 ** 6]
     for a_, b_ in zip(bounds, bounds[1:]):
@@ -679,14 +678,14 @@ for f in range(F(6.3), T_IMP + 60, 2):
     amp = 0.004 + 0.02 * ((f - F(6.3)) / (T_IMP - F(6.3))) ** 2 if f < T_IMP else 0.03 * math.exp(-(f - T_IMP) / 15.0)
     base = fc_(f); n_ = mn_.noise_vector(Vector((f * 0.35, 1.7, 3.1)))
     cam.location = base + n_ * amp; cam.keyframe_insert("location", frame=f)
-fl_d = bpy.data.lights.new("UnderFill", 'POINT'); fl_d.color = (0.75, 0.88, 1.0); fl_d.shadow_soft_size = 0.6
+fl_d = bpy.data.lights.new("UnderFill", 'POINT'); fl_d.color = (1.0, 0.97, 0.93)      # v006c: neutral (the cool fill under the red underframe turned his shirt mint); fl_d.shadow_soft_size = 0.6
 fl_o = bpy.data.objects.new("UnderFill", fl_d); sc.collection.objects.link(fl_o)
-for f in list(range(F(10.6), F(14.6), 4)) + list(range(sc["f_stir"] - 30, F(21.0), 4)):
+for f in list(range(F(10.6), F(16.4), 4)) + list(range(sc["f_stir"] - 30, F(21.0), 4)):      # v006c: neutral fill kept on through the halt (shirt read mint under the red underframe)
     p_ = lad_p(min(f, f_rest)) if f < F(15) else V(*eval(sc["lad_rest"]))
     if f >= F(15) and f > sc["f_stir"] + 12: p_ = V(min(2.0, 0.2 + 1.8 * (f - sc["f_stir"] - 12) / (F(20.4) - sc["f_stir"] - 12)), p_.y, 0)
     fl_o.location = V(p_.x + 1.2, p_.y - 0.6, 0.45); fl_o.keyframe_insert("location", frame=f)
     fl_d.energy = 60.0; fl_d.keyframe_insert("energy", frame=f)
-for f in (F(10.5), F(14.7), sc["f_stir"] - 34, F(21.05)):
+for f in (F(10.5), F(16.5), sc["f_stir"] - 34, F(21.05)):
     fl_d.energy = 0.0; fl_d.keyframe_insert("energy", frame=f)
 # stylised impact flash: a bright star burst at the plough at the hit, gone in 8 frames
 bmg = bmesh.new()
@@ -704,3 +703,16 @@ for f, s_ in ((T_IMP - 1, 0.05), (T_IMP + 1, 1.0), (T_IMP + 4, 1.5), (T_IMP + 8,
 star.rotation_euler = (0, 0, math.radians(-30))
 vis(star, [(T_IMP - 1, T_IMP + 8)])
 print("FX_CAMERA_DONE")
+
+# v006c: soft face fill while he stands in the wagons' shadow (swig, limp, dazed, walk off): his face reads
+ff_d = bpy.data.lights.new("FaceFill", 'AREA'); ff_d.size = 1.2; ff_d.color = (1.0, 0.95, 0.88)
+ff_o = bpy.data.objects.new("FaceFill", ff_d); sc.collection.objects.link(ff_o)
+LADR = bpy.data.objects["Lad"]
+for f in list(range(F(20.8), sc.frame_end + 1, 6)) + [sc.frame_end]:
+    sc.frame_set(f); h_ = LADR.matrix_world @ LADR.pose.bones["head"].head
+    cp_ = fc_(f); d_ = (cp_ - h_); d_.z = 0; d_ = d_.normalized() if d_.length > 1e-3 else Vector((1, -1, 0)).normalized()
+    ff_o.location = h_ + d_ * 1.1 + Vector((0, 0, 0.45)); ff_o.rotation_euler = (h_ - ff_o.location).to_track_quat('-Z', 'Y').to_euler()
+    ff_o.keyframe_insert("location", frame=f); ff_o.keyframe_insert("rotation_euler", frame=f)
+for f, e in ((1, 0.0), (F(20.8) - 1, 0.0), (F(20.8) + 10, 70.0), (sc.frame_end, 70.0)):
+    ff_d.energy = e; ff_d.keyframe_insert("energy", frame=f)
+sc.frame_set(1)

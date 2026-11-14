@@ -534,7 +534,7 @@ for f in list(range(f_up1 + 2, f_fb1 + 1, 3)) + [f_fb1]:
 sc["swig"] = str((f_fb0, SWIG_UP, SWIG_HOLD, SWIG_DOWN, f_fb1))
 
 # --- beat 10 (23.5-26.5): x-ray, loose limbs swaying like rope (arms dangle and swing, one leg shaken out)
-f_x0, f_x1 = f_fb1, F(26.5)
+f_x0, f_x1 = f_fb1, F(26.5) + 89      # v006c: no studio and no replay; he stays limp in the real scene through 1680
 for f in list(range(f_x0 + 3, f_x1 + 1, 2)) + [f_x1]:
     t = (f - f_x0) / FPS
     sw = math.sin(t * 2.2)
@@ -555,12 +555,12 @@ for f in (f_x0 + 3, f_x1):
     foot_w("L", f, (STAND_XY.x - 0.05, STAND_XY.y + 0.16), 98)
 
 # --- beat 11 (26.5-31.0): slow-motion x-ray replay. Lies with head on a ghost rail, ghost train pushes, body flows with it
-f_r0, f_r1 = f_x1, f_x1 + 89          # v006b: the replay is 1.5 s only, then a clean cut back to the real scene (he stands dazed until the walk at beat 12)
+f_r0, f_r1 = f_x1, f_x1          # v006c: no replay (the director: the studio void read as empty); dazed acting follows the limp sway
 R_HEAD = V(STAND_XY.x - 1.25, STOP_Y + 1.5, RAIL_H + 0.095)    # ghost rail runs along Y at x = R_HEAD.x - 0.02
 sc["replay_head"] = str(tuple(R_HEAD))
 R_IMP = f_r0 + 40; SLOW = 5.0
 R_LIEX = R_HEAD.x + (LIE_X - HEAD_REST.x)
-for f in list(range(f_r0 + 2, f_r1 + 1, 2)) + [f_r1]:
+for f in list(range(f_r0 + 2, f_r1 + 1, 2)) + ([f_r1] if f_r1 > f_r0 else []):
     if f <= R_IMP:
         Bm = LB.B(V(R_LIEX, R_HEAD.y, 0.12), Rbody(yaw=90, pitch=-90))
         LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
@@ -600,17 +600,41 @@ def lad_arms2(f, cyc, p, yw, sd):
     Bm = LB.B(p, Rbody(yaw=yw, pitch=4, side=sd))
     LB.arm_dir("L", f, Bm, V(0.2, -0.35 * math.sin(2 * math.pi * cyc), -1.0), 0.95)
     LB.arm_dir("R", f, Bm, V(-0.2, 0.35 * math.sin(2 * math.pi * cyc), -1.0), 0.95)
-# v006b: after the replay cut he stands dazed beside the train (sways, blinks, looks down at himself) until the walk
-P_H = WK_P(f_w0); Y_H = WK_Y(f_w0)
-for f in list(range(f_r1 + 1, f_w0, 4)) + [f_w0 - 1]:
-    Bm = LB.B(V(P_H.x, P_H.y, RH.z - 0.035), Rbody(yaw=Y_H + 6 * math.sin(f / 23.0), pitch=3, side=3 * math.sin(f / 17.0)))
+# v006c: dazed acting after the limp sway (1681-1857): hand to his head, a stagger step while he turns to the camera, a look back at the train
+P_H = WK_P(f_w0); Y_H = WK_Y(f_w0); Y0 = 90.0
+def tw_(a_, b_, f_): return smooth(max(0.0, min(1.0, (f_ - a_) / float(b_ - a_))))
+for f in list(range(f_r1 + 1, f_w0, 3)) + [f_w0 - 1]:
+    turn = tw_(f_r1 + 1, f_r1 + 70, f); yw = Y0 + (Y_H - Y0) * turn
+    stag = math.exp(-((f - (f_r1 + 95)) / 9.0) ** 2)                       # stagger: the body lurches sideways and back
+    pos = V(STAND_XY.x, STAND_XY.y, 0).lerp(V(P_H.x, P_H.y, 0), turn) + V(0.06 * stag, 0.05 * stag, 0)
+    Bm = LB.B(V(pos.x, pos.y, RH.z - 0.04 - 0.02 * stag), Rbody(yaw=yw + 4 * math.sin(f / 19.0), pitch=4 + 5 * stag, side=3 * math.sin(f / 15.0) - 7 * stag))
     LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
-    LAD.key_spine(f, flex=9, twist=4 * math.sin(f / 19.0), side=3 * math.sin(f / 13.0), head=(14 + 6 * math.sin(f / 21.0), 12 * math.sin(f / 29.0)))
+    look = tw_(f_r1 + 115, f_r1 + 140, f) * (1 - tw_(f_w0 - 22, f_w0 - 6, f))   # looks back over his right shoulder at the train
+    LAD.key_spine(f, flex=8 + 4 * stag, twist=-14 * look, side=3 * math.sin(f / 13.0), head=(10 - 8 * look + 4 * math.sin(f / 21.0), -38 * look + 6 * math.sin(f / 29.0)))
+    hand = tw_(f_r1 + 8, f_r1 + 26, f) * (1 - tw_(f_r1 + 88, f_r1 + 104, f))      # right hand up to his head, then down for the stagger
+    if hand > 0.02:
+        tgt = LB.head + V(-0.12, -0.04, 0.06)
+        rest = LB.sh["R"] + V(-0.05, 0.0, -0.55)
+        LB.hand("R", f, Bm, rest.lerp(tgt, hand), V(0.25, -0.2, 1.0).normalized(), V(-1, 0, 0.2).normalized())
+    else:
+        LB.arm_dir("R", f, Bm, V(-0.2 - 0.25 * stag, 0.05, -1.0), 0.94)
+    LB.arm_dir("L", f, Bm, V(0.2 + 0.3 * stag, 0.05 - 0.1 * stag, -1.0), 0.94)
+# feet: planted, a step during the turn, the stagger step, then the walk stance
+F_STEPS = [(f_r1 + 1, Y0, V(STAND_XY.x, STAND_XY.y, 0), None),
+           (f_r1 + 35, Y0 + (Y_H - Y0) * 0.5, V(STAND_XY.x, STAND_XY.y, 0).lerp(V(P_H.x, P_H.y, 0), 0.5), "L"),
+           (f_r1 + 65, Y_H, V(P_H.x, P_H.y, 0), "R"),
+           (f_r1 + 97, Y_H, V(P_H.x + 0.08, P_H.y + 0.06, 0), "L"),
+           (f_r1 + 112, Y_H, V(P_H.x, P_H.y, 0), "L")]
+prev = {}
+for k_, (fk, yk, pk, mover) in enumerate(F_STEPS):
     for s_ in "LR":
-        sx_ = 1 if s_ == "L" else -1
-        LB.arm_dir(s_, f, Bm, V(sx_ * 0.18, 0.06, -1.0), 0.94)
-    if f in (f_r1 + 1, f_w0 - 1):
-        for s_ in "LR": foot_w(s_, f, LAD.foot_xy(s_, P_H, Y_H), Y_H)
+        xy = LAD.foot_xy(s_, pk, yk)
+        if mover is None or s_ == mover or k_ == len(F_STEPS) - 1:
+            if s_ in prev and mover == s_:
+                mid = (prev[s_][0] + xy) / 2
+                foot_w(s_, fk - 7, mid, (prev[s_][1] + yk) / 2, 0.08)
+            foot_w(s_, fk, xy, yk); prev[s_] = (xy, yk)
+for s_ in "LR": foot_w(s_, f_w0 - 1, LAD.foot_xy(s_, P_H, Y_H), Y_H)
 gait(LAD, WK_P, WK_Y, f_w0, f_w1, stride=0.55, duty=0.62, lift=0.09, bob=0.03, crouch=0.04, lean=6, side_fn=lad_side2,
      spine_fn=lad_spine2, arms_fn=lad_arms2)
 END_P = WK_P(f_w1); END_YAW = 0.0
