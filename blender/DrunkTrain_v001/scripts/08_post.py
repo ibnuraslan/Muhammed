@@ -23,4 +23,26 @@ vg.add(drop, 1.0, 'REPLACE')
 mm = mus.modifiers.get("v006_forearm_mask") or mus.modifiers.new("v006_forearm_mask", 'MASK')
 mm.vertex_group = vg.name; mm.invert_vertex_group = True
 print("POST masked x-ray forearm verts", len(drop), "of", len(mus.data.vertices))
+# v006b: muscle pieces that poke OUT of the glass body (slabs/shards over the belly and legs) are masked too:
+# sample the x-ray frames, and drop every muscle vertex that is outside the body surface by > 4 cm at any of them (the shards).
+from mathutils.bvhtree import BVHTree
+body = bpy.data.objects["Lad.body"]; sc = bpy.context.scene
+mm.show_viewport = False
+bm_off = [m for m in body.modifiers if m.type == 'MASK' and m.show_viewport]
+for m in bm_off: m.show_viewport = False
+out_ = set()
+for f in (1420, 1450, 1480, 1510, 1540, 1570, 1585):
+    sc.frame_set(f); dg = bpy.context.evaluated_depsgraph_get()
+    eb = body.evaluated_get(dg); meb = eb.to_mesh(); W = eb.matrix_world
+    bvh = BVHTree.FromPolygons([W @ v.co for v in meb.vertices], [tuple(pp.vertices) for pp in meb.polygons]); eb.to_mesh_clear()
+    em = mus.evaluated_get(dg); mem = em.to_mesh(); Wm = em.matrix_world
+    if len(mem.vertices) == len(mus.data.vertices):
+        for v in mem.vertices:
+            pw = Wm @ v.co; loc, nrm, _, d = bvh.find_nearest(pw, 0.5)
+            if loc is not None and (pw - loc).dot(nrm) > 0 and d > 0.04: out_.add(v.index)
+    em.to_mesh_clear()
+for m in bm_off: m.show_viewport = True
+mm.show_viewport = True
+vg.add(sorted(out_), 1.0, 'REPLACE')
+print("POST masked x-ray muscle verts outside the body", len(out_))
 bpy.ops.wm.save_as_mainfile(filepath=sys.argv[sys.argv.index("--") + 1], compress=True)

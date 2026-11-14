@@ -5,8 +5,8 @@ LADO = bpy.data.objects["Lad"]
 f_fb0, SWIG_UP, SWIG_HOLD, SWIG_DOWN, f_fb1 = eval(sc["swig"])
 f_r0, R_IMP, SLOW, f_r1 = eval(sc["replay"])
 f_x0 = f_fb1
-STUDIO = (f_x0, f_r1 - 7)                # world hidden only while the camera is inside the bubble
-BUBBLE = (f_x0 - 16, f_r1 + 10)           # studio bubble visible (grows from his chest / collapses into it)
+STUDIO = (f_x0, f_r1)                # world hidden only while the camera is inside the bubble
+BUBBLE = (f_x0 - 16, f_r1)      # v006b: gone at the cut (no bubble frames on the way out)           # studio bubble visible (grows from his chest / collapses into it)
 
 def set_const(idb):
     ad = idb.animation_data
@@ -59,14 +59,13 @@ def key_dome(f, s_, chest):
     DOME.keyframe_insert("scale", frame=f); DOME.keyframe_insert("location", frame=f)
 for k in range(0, 23, 2):
     u = k / 22.0; key_dome(f_x0 - 16 + k, 0.003 + 0.997 * u ** 3, CHEST_IN)
-for f_, s_ in ((f_r1 - 9, 1.0), (f_r1 - 6, 0.45), (f_r1 - 4, 0.18), (f_r1 - 2, 0.09), (f_r1, 0.035), (f_r1 + 2, 0.014), (f_r1 + 4, 0.002)):      # v006: fast collapse, no empty studio frames
+for f_, s_ in ((f_r1, 1.0), (f_r1 + 1, 0.002)):      # v006: fast collapse, no empty studio frames
     key_dome(f_, s_, CHEST_OUT)
 # Lad: clothes/hair/eyes off in the x-ray (the body goes translucent)
 XRAY = (f_x0, f_r1)
 for o in LADO.children:
     if o.type == 'MESH' and not o.name.endswith(".body"):
-        hide_in(o, [(f_x0, f_r0 - 1)])      # v006: clothes, hair and eyes back for the replay
-hide_in(bpy.data.objects["Lad.body"], [(f_r1 - 5, f_r1)])      # v006: body gone for 5 frames only (was 18: 0.3 s of empty studio)     # the replay body leaves while the bubble shrinks; he reappears standing inside it
+        pass      # v006b: clothes, hair and eyes stay on (no x-ray)
 
 # ------------------------------------------------------------------ helpers: bone attach + bake to a bone
 def bone_world(rig, bn):
@@ -224,7 +223,7 @@ add = nt.nodes.new('ShaderNodeAddShader'); nt.links.new(xr_tr.outputs[0], add.in
 mixx = nt.nodes.new('ShaderNodeMixShader'); XVAL = nt.nodes.new('ShaderNodeValue'); XVAL.name = "XRAY"; XVAL.label = "XRAY"
 nt.links.new(XVAL.outputs[0], mixx.inputs['Fac']); nt.links.new(srcs, mixx.inputs[1]); nt.links.new(add.outputs[0], mixx.inputs[2])
 nt.links.new(mixx.outputs[0], outn.inputs['Surface'])
-for f, v in ((1, 0.0), (f_x0 - 10, 0.0), (f_x0 + 2, 1.0), (f_r0 - 1, 1.0), (f_r0, 0.0)):      # v006: solid again for the replay (a glass-only body on white read as an empty frame)
+for f, v in ((1, 0.0), (sc.frame_end, 0.0)):      # v006b: no x-ray body at all (the muscle mesh shreds in motion); beat 10 is his real body going limp      # v006: solid again for the replay (a glass-only body on white read as an empty frame)
     XVAL.outputs[0].default_value = v; XVAL.outputs[0].keyframe_insert("default_value", frame=f)
 xr_em.inputs['Color'].default_value = (0.3, 0.75, 1.0, 1)
 ad = bm_.node_tree.animation_data
@@ -353,7 +352,7 @@ for o in XR_OBJS:
     if o.name.startswith("Mus_"):
         wm = o.modifiers.new("Ripple", 'WAVE'); wm.use_normal = True; wm.height = 0.004; wm.width = 0.06; wm.speed = 0.05; wm.time_offset = random.uniform(0, 30)
     o.animation_data_clear()          # drop the 'Lad children' x-ray keys first: one visibility track only
-    vis(o, [(f_x0 - 6, f_r0 - 2)])      # v006: muscles leave before the replay (its extreme poses tore the muscle mesh into shards)
+    o.hide_render = True; o.hide_viewport = True      # v006b: muscles never shown (the mesh tears into shards in motion)
 
 # ------------------------------------------------------------------ ghost replay set: ghost rails + ghost loco front + force arrows
 R_HEAD = V(*eval(sc["replay_head"]))
@@ -592,15 +591,14 @@ CAM = [  # frame, camera, aim, lens
     (615, V(3.2, y(615) - 3.5, 0.95), lad_p(615), 24),
     (636, V(0.3, -22.6, 0.42), lad_p(636), 20),      # v006: reaches the track centre in open air AHEAD of the pilot; the loco then passes over it (0.6 m clearance at the centre)
     (660, V(0.25, y(660) - 1.8, 0.3), lad_p(660), 20),      # v005: under the loco, between the rails, head-on to him (the side view is all wheel)
-    (700, V(0.3, y(700) - 1.25, 0.34), lad_p(700), 18),
-    (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
-    (815, V(0.3, y(815) - 1.4, 0.36), lad_p(815), 18),
+    (700, V(0.3, y(700) - 2.0, 0.34), lad_p(700), 20),      # v006b: further ahead under the train: his whole body and face read, fewer torso-only frames
+    (755, V(-0.2, y(755) - 2.0, 0.33), lad_p(755), 20),
+    (815, V(0.3, y(815) - 2.0, 0.36), lad_p(815), 20),
     (842, V(0.35, y(842) - 1.0, 0.36), lad_p(842), 20),      # v005: stays inside the gauge while the wheels still turn (no camera through a wheelset)
 (866, V(0.3, -41.4, 0.32), lad_p(866), 22),      # v006: stays inside the gauge under the train: he lies still as it passes over (no empty train-side frames)
     (905, V(0.32, -41.5, 0.3), lad_p(905), 22),
     (950, V(0.3, -41.3, 0.34), lad_p(950) + V(0, 0, 0.1), 22),
-    (966, V(0.9, -40.2, 1.0), lad_p(966), 24),      # v006: the train has halted with the coupling gap over him
-    (990, V(0.9, -40.2, 5.0), lad_p(990), 24),      # v006: looks DOWN at him lying in the gap while rising (no end wall filling the frame)      # v006: rises straight up through the empty coupling gap, then out to the wide shot
+    (963, V(5.4, -37.2, 1.6), V(1.2, -40.4, 0.35), 24),      # v006b: CUT from under the train to the side view of the halted train and the gap he lies in
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
     (1045, V(2.0, -40.2, 1.5), V(3.8, -38.9, 1.25), 20),
     (1090, V(1.95, -39.2, 1.45), V(3.9, -39.4, 1.2), 20),
@@ -618,22 +616,28 @@ CAM = [  # frame, camera, aim, lens
     (1408, V(3.15, -40.35, 1.4), V(2.45, -40.1, 1.3), 28),
     (1440, V(3.45, -40.1, 1.3), V(2.45, -40.1, 1.15), 26),
     (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
-    (1560, V(3.2, -41.25, 1.2), V(2.45, -40.35, 1.05), 32),
-    (1605, V(rp(1605).x + 2.1, rp(1605).y - 2.5, 1.3), rp(1605) + V(0, 0, 0.35), 26),
-    (1625, V(rp(1625).x + 2.3, rp(1625).y - 2.6, 1.35), rp(1625) + V(0, 0, 0.25), 26),      # v006: replay framed wider, the body never fills the frame
-    (1680, V(rp(1680).x + 2.3, rp(1680).y - 2.7, 1.4), rp(1680), 26),
-    (1750, V(rp(1750).x - 1.9, rp(1750).y - 1.8, 1.4), rp(1750), 26),
-    (1812, V(rp(1812).x + 1.8, rp(1812).y - 2.0, 1.3), rp(1812), 26),
-    (1834, V(rp(1834).x + 1.7, rp(1834).y - 1.8, 1.25), rp(1834), 28),
-    (1849, V(rp(1849).x + 1.7, rp(1849).y - 1.8, 1.25), rp(1849), 28),      # v006: stays on the replay body until the bubble collapses (no empty studio)
+    (1560, V(3.75, -42.0, 1.3), V(2.45, -40.35, 1.05), 28),      # v006b: medium, not a torso-filling macro
+    (1605, V(rp(1605).x + 1.2, rp(1605).y - 1.4, 1.0), rp(1605) + V(0, 0, 0.15), 30),      # v006b: replay framed medium on him going limp
+    (1640, V(rp(1640).x + 1.15, rp(1640).y - 1.45, 0.95), rp(1640) + V(0, 0, 0.1), 30),
+    (1679, V(rp(1679).x + 1.1, rp(1679).y - 1.4, 0.95), rp(1679) + V(0, 0, 0.1), 30),
+    (1681, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 30),      # v006b: CUT back to the real scene: he stands dazed by the train
+    (1760, V(3.15, -42.8, 1.5), V(2.45, -40.45, 1.45), 32),
     (1852, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
     (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
     (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),
     (2020, V(3.0, -44.25, 1.55), V(2.5, -43.1, 1.42), 40),      # v006: further back, his palm never fills the lens
     (2070, V(2.64, -43.8, 1.62), V(2.45, -42.9, 1.63), 40)]
-fc_ = catmull([(f, c) for f, c, a, l in CAM]); fa_ = catmull([(f, a) for f, c, a, l in CAM]); fl_ = catmull([(f, float(l)) for f, c, a, l in CAM])
-for f in list(range(1, sc.frame_end + 1, 2)) + [sc.frame_end]:
+CUTS = [963, 1681]      # v006b: clean cuts (requested by the director); the spline is built per segment so it never swings across a cut
+def seg_spline(idx):
+    segs = []; bounds = [1] + CUTS + [10 ** 6]
+    for a_, b_ in zip(bounds, bounds[1:]):
+        ks = [k for k in CAM if a_ <= k[0] < b_]
+        if len(ks) == 1: ks = ks + [(ks[0][0] + 1,) + tuple(ks[0][1:])]
+        segs.append((a_, b_, catmull([(k[0], k[idx] if idx != 3 else float(k[3])) for k in ks])))
+    return lambda f: next(fn(f) for a_, b_, fn in segs if a_ <= f < b_)
+fc_ = seg_spline(1); fa_ = seg_spline(2); fl_ = seg_spline(3)
+for f in sorted(set(list(range(1, sc.frame_end + 1, 2)) + [sc.frame_end] + [c_ - 1 for c_ in CUTS] + CUTS)):
     cam.location = fc_(f); cam.keyframe_insert("location", frame=f)
     aim.location = fa_(f); aim.keyframe_insert("location", frame=f)
     cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)

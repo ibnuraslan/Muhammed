@@ -555,7 +555,7 @@ for f in (f_x0 + 3, f_x1):
     foot_w("L", f, (STAND_XY.x - 0.05, STAND_XY.y + 0.16), 98)
 
 # --- beat 11 (26.5-31.0): slow-motion x-ray replay. Lies with head on a ghost rail, ghost train pushes, body flows with it
-f_r0, f_r1 = f_x1, F(31.0) - 4          # beat 12 starts 4 frames early so the 31 s still is the real scene
+f_r0, f_r1 = f_x1, f_x1 + 89          # v006b: the replay is 1.5 s only, then a clean cut back to the real scene (he stands dazed until the walk at beat 12)
 R_HEAD = V(STAND_XY.x - 1.25, STOP_Y + 1.5, RAIL_H + 0.095)    # ghost rail runs along Y at x = R_HEAD.x - 0.02
 sc["replay_head"] = str(tuple(R_HEAD))
 R_IMP = f_r0 + 40; SLOW = 5.0
@@ -589,7 +589,7 @@ for f in list(range(f_r0 + 2, f_r1 + 1, 2)) + [f_r1]:
 sc["replay"] = str((f_r0, R_IMP, SLOW, f_r1))
 
 # --- beat 12 (31.0-34.5): walks off along the platform, looks at his palm, dazed grin
-f_w0 = f_r1 + 1; f_w1 = F(33.0); f_palm0, f_palm1 = f_w1 + 4, F(34.5)
+f_w0 = F(31.0) - 3; f_w1 = F(33.0); f_palm0, f_palm1 = f_w1 + 4, F(34.5)
 WK_P = catmull([(f_w0, V(STAND_XY.x - 0.05, STAND_XY.y - 0.2, 0)), (f_w0 + 40, V(STAND_XY.x + 0.05, STAND_XY.y - 1.05, 0)),
                 (f_w0 + 80, V(STAND_XY.x - 0.05, STAND_XY.y - 1.9, 0)), (f_w1, V(STAND_XY.x, STAND_XY.y - 2.55, 0))])
 WK_Y = catmull([(f_w0, 4.0), (f_w0 + 40, -6.0), (f_w0 + 80, 6.0), (f_w1, 0.0)])
@@ -600,6 +600,17 @@ def lad_arms2(f, cyc, p, yw, sd):
     Bm = LB.B(p, Rbody(yaw=yw, pitch=4, side=sd))
     LB.arm_dir("L", f, Bm, V(0.2, -0.35 * math.sin(2 * math.pi * cyc), -1.0), 0.95)
     LB.arm_dir("R", f, Bm, V(-0.2, 0.35 * math.sin(2 * math.pi * cyc), -1.0), 0.95)
+# v006b: after the replay cut he stands dazed beside the train (sways, blinks, looks down at himself) until the walk
+P_H = WK_P(f_w0); Y_H = WK_Y(f_w0)
+for f in list(range(f_r1 + 1, f_w0, 4)) + [f_w0 - 1]:
+    Bm = LB.B(V(P_H.x, P_H.y, RH.z - 0.035), Rbody(yaw=Y_H + 6 * math.sin(f / 23.0), pitch=3, side=3 * math.sin(f / 17.0)))
+    LAD.r.key_world("root", f, Bm @ LAD.r.rest("root"))
+    LAD.key_spine(f, flex=9, twist=4 * math.sin(f / 19.0), side=3 * math.sin(f / 13.0), head=(14 + 6 * math.sin(f / 21.0), 12 * math.sin(f / 29.0)))
+    for s_ in "LR":
+        sx_ = 1 if s_ == "L" else -1
+        LB.arm_dir(s_, f, Bm, V(sx_ * 0.18, 0.06, -1.0), 0.94)
+    if f in (f_r1 + 1, f_w0 - 1):
+        for s_ in "LR": foot_w(s_, f, LAD.foot_xy(s_, P_H, Y_H), Y_H)
 gait(LAD, WK_P, WK_Y, f_w0, f_w1, stride=0.55, duty=0.62, lift=0.09, bob=0.03, crouch=0.04, lean=6, side_fn=lad_side2,
      spine_fn=lad_spine2, arms_fn=lad_arms2)
 END_P = WK_P(f_w1); END_YAW = 0.0
