@@ -328,7 +328,7 @@ for f in range(276, 330, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
 for f in range(572, 652, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
-for f in range(1300, 1344, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
+for f in range(1300, 1360, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
     carry_key(f, "R", (0.12, 0.2, 0.0)); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))   # v009f: R in front of his own chest (it wrapped across the patient's shoulder)
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(343, 565, 6):
@@ -371,14 +371,8 @@ def at_ear(off_out, off_fwd, off_up):
     # surgeon reaches from behind the head (+Y); off_out pushes away from the skull, off_fwd along -Y
     back = Vector((0, 1, 0))
     return EAR_W + side * (off_out * 0.35) + back * (off_out * 0.9) - back * off_fwd + Vector((0, 0, 1)) * off_up
-def ear_app(f, dist, up):
-    """v009f: ear approach on the line from the patient's ear to the surgeon's own shoulder (never in front of the patient)"""
-    ev_at(f); shp = SUR.wpos("upperarm01.R"); tip = EAR_W + (shp - EAR_W).normalized() * dist + Vector((0, 0, up))
-    d = (tip - shp).normalized(); sh(f, "R", tip - d * 0.15, d, (0, 0, 1))
-carry_key(1352, "R", (0.1, 0.24, 0.06), (0.4, -1, 0.0))   # v009f: raised in front of his own chest first, never over the patient
-carry_key(1364, "R", (0.2, 0.24, 0.15), (0.8, -1, 0.0))
-ear_app(1378, 0.15, -0.02)
-ear_app(1390, 0.11, 0.0)
+sh(1380, "R", at_ear(0.32, 0.0, 0.16), (-0.3, -1, -0.4), (0, 0, 1))   # v009e (approved): over and outside the head, never through it
+sh(1390, "R", at_ear(0.16, 0.0, 0.05), (-0.3, -1, -0.4), (0, 0, 1))   # v009e: the ear comes in from the side, close to the head
 sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)) + side * 0.012, (-0.3, -1, -0.5), (0, 0, 1))
 sh(1470, "R", at_ear(0.26, 0.0, 0.16) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))   # v009d: lifts off the scalp
 sh(1500, "R", at_ear(0.16, 0.0, 0.1) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))

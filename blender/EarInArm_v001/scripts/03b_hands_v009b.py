@@ -244,7 +244,8 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(SUR, "L", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08),
+JOBS = [(SUR, "R", range(1256, 1302, 2), lambda: [lambda: self_bvh(SUR)], 0.08),   # v009f: the low ear hand stays off his own belly
+        (SUR, "L", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08),
         (SUR, "R", range(1336, 1378, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1340, 1372, 2), lambda: [lambda: self_bvh(SUR)], 0.08),   # v009f: the ear hand stays outside the patient on its way to the head
         (SUR, "L", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),
         (PAT, "L", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08), (PAT, "R", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08),
