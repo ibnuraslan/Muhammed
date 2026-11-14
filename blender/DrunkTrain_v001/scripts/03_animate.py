@@ -270,7 +270,7 @@ for (f, p, yw, pi, sd, fl, hd, aL, aR) in TRIP_FIX:
 ft = f_trip
 foot_w("R", ft, (0.47, 0.95), 95, 0.0, -10); foot_w("R", ft + 10, (0.49, 0.95), 95, 0.03, -25)      # v006: toe snags AGAINST the rail side (touching, not inside it)
 foot_w("L", ft, (0.25, 1.18), 98, 0.0); foot_w("L", ft + 6, (0.6, 1.12), 96, 0.3, 20); foot_w("L", ft + 14, (1.18, 1.06), 92, 0.0)
-foot_w("R", ft + 16, (0.95, 0.96), 92, 0.26, 25); foot_w("R", ft + 24, (1.62, 0.84), 90, 0.0)
+foot_w("R", ft + 13, (0.72, 0.955), 93, 0.3, 30); foot_w("R", ft + 16, (0.95, 0.96), 92, 0.26, 25);      # v006: high over the rail foot_w("R", ft + 24, (1.62, 0.84), 90, 0.0)
 foot_w("L", ft + 26, (1.42, 1.0), 90, 0.18, 20); foot_w("L", ft + 34, (2.05, 0.82), 80, 0.0)          # big recovery step
 foot_w("R", ft + 40, (1.95, 0.6), 70, 0.15); foot_w("R", ft + 48, (1.72, 0.48), 60, 0.0)                # staggers back
 foot_w("L", ft + 52, (2.0, 0.62), 70, 0.12); foot_w("L", ft + 60, (1.98, 0.2), 80, 0.0)
@@ -357,7 +357,7 @@ def drag_state(f):
         y0 = train_front(T_IMP + 120) + 2.85
         y = max(y0 + (STOP_Y - y0) * (1 - (1 - min(1, u)) ** 2.2), tf + 2.6)     # never ahead of the plough
         x = 0.0 + 0.04 * math.sin(u * 13)
-        z = 0.15 + 0.08 * smooth(min(1, u)) + 0.07 * abs(math.sin(u * 22)) * (1 - u)
+        z = 0.13 + 0.05 * smooth(min(1, u)) + 0.03 * abs(math.sin(u * 22)) * (1 - u)      # v006: less bounce under the loco (head glanced the underframe)
         yaw = 540 + 25 * math.sin(u * 8) * (1 - u)
         roll = 300 + 40 * math.sin(7) + 900 * (1 - (1 - min(1, u)) ** 2)     # log-rolls 2.5 turns; ends prone (300+900 = 1200 = 3*360+120 -> fix below)
         pitch = -90
@@ -478,6 +478,8 @@ for f in list(range(f_crawl0, f_crawl1 + 1, 2)) + [f_crawl1]:
         Wh = Bm @ (LB.sh[s] + V(sx * 0.04, -0.06 - fwd * 0.4, -0.0))
         Wh = V(Wh.x, Wh.y, ground_z(Wh.x, Wh.y) + 0.15 + lift)      # v005: palm on top of the stones, not sunk into them
         if abs(Wh.x - 0.72) < 0.3: Wh.z = max(Wh.z, 0.172 + 0.1)       # v006: a hand that lands on the rail rests ON its top
+        shx = (Bm @ LB.sh[s]).x
+        if (shx - 0.72) * (Wh.x - 0.72) < 0: Wh = V(0.72, Wh.y, 0.172 + 0.1)      # v006: rail between shoulder and hand -> the hand goes on the rail, the arm never cuts through it
         LAD.key_hand(s, f, Wh, Bm.to_3x3() @ V(0, -1, 0), V(0, 0, -1))
         hw = Bm @ LB.hip[s]; fwd_ = V(math.sin(R_(yaw_c)), -math.cos(R_(yaw_c)), 0)
         kq = (ph + 0.5 * k + 0.5) % 1.0; kf = 0.25 * (kq if kq <= 0.6 else 0.6 - (kq - 0.6) * 1.5); klift = 0.06 * math.sin(math.pi * kq) if kq > 0.6 else 0.0
