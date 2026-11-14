@@ -292,8 +292,10 @@ def g_throat_along(f, tp):
 exec(open(os.path.join(HERE, "..", "..", "pipeline", "hand_poses.py")).read())   # shared director hand-pose library (7155c8d)
 def g_throat_pad(f, tp, press=0.0):
     """girl's right palm flat on the teacher's larynx (hand_poses: place_hand + flat_palm), light touch"""
-    F_ = fdir(T_YAW); along = g_throat_along(f, tp); along = (along - F_ * along.dot(F_)).normalized()
-    g_hand_on("R", f, tp, F_, along, press=press, curl=[2, 2, 2, 3], tilt=0.5, pad=0.012)   # reach-checked placement (place_hand's IK frame does not match this rig's controls)
+    # v005: flat palm ON the front of the throat, fingers pointing up to just under the jaw (reads as touching from any angle)
+    F_ = fdir(T_YAW); lat = g_throat_along(f, tp); lat = (lat - F_ * lat.dot(F_) - UP * lat.dot(UP)).normalized()
+    along = (UP * 0.85 + lat * 0.35).normalized()
+    g_hand_on("R", f, tp + UP * 0.035, F_, along, press=press, curl=[2, 2, 2, 3], tilt=0.0, pad=0.006)
     apply_pose(G.o, "R", "shield", f)       # hand_poses.py: flat fingers, thumb tucked beside the index (flat_palm thumb sticks out into the neck)
 def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.005, tilt=0.0):
     """middle fingertip pad at 'tip' (world), palm towards -normal, fingers pointing 'along'; two correction passes"""
@@ -328,10 +330,8 @@ def t_grip_wrist(f, W, d, n):
     T.hand("R", f, top, across, n, T_KNEEL + T_R * 0.45 + UP * 0.45)
     T.fingers("R", f, 3, 12)      # flat hand laid over the back of her wrist: guides without digging in
 # reach
-ev(442); sh = T.bone_world("upperarm01.R")
-for f in (442,):
-    T.hand("R", f, sh + T_R * 0.06 - UP * 0.42 + T_F * 0.1, -UP + T_F * 0.3, T_R, sh + T_R * 0.3 - T_F * 0.2); T.fingers("R", f, 20, 15)
-W, d, n, _ = g_lap_R(455); t_grip_wrist(455, W, d, n); t_grip_wrist(462, W, d, n)
+# v005 (simplify rule): no wrist grip. Her right hand settles on the girl's knee and stays there while the girl raises her own hand
+# (keys added after t_rest is defined, below)
 # travel: girl's hand rises to the throat (462-530)
 throat_keys = list(range(530, 1063, 6)) + [1062]
 for f in (480, 500, 516):
@@ -341,7 +341,6 @@ for f in (480, 500, 516):
     tip = (W0 + d0.normalized() * G_HL).lerp(tipT, u) + (UP * 0.02 - fdir(T_YAW) * 0.05) * math.sin(math.pi * u)   # arc out toward the teacher, clear of her own face
     nrm = n0.lerp(-fdir(T_YAW) * -1, u).normalized()
     g_hand_on("R", f, tip, nrm, d0.lerp(UP * 0.6 + T_R * -0.8, u), curl=20 - 14 * u)
-    ev(f); Wg = G.bone_world("wrist.R"); t_grip_wrist(f, Wg, d0.lerp(UP, u), nrm)
 for f in throat_keys:
     # beat 6: press harder when loud, relax when soft
     press = 0.004 if 895 <= f < 990 else (0.0 if f >= 990 else 0.002)
@@ -415,19 +414,21 @@ def lip_key(f, dx=0.0, dz=0.0, press=0.0):
         if hit: mp = hit - UP * dz
     side = ff.cross(UP).normalized()
     # Tadoma hold: fingers upright across the mouth, middle fingertip on the upper lip by the nose, palm on the face
-    g_hand_on("R", f, mp + side * dx * 0.5 + UP * (0.03 + dz * 0.6) + ff * 0.001, ff, UP * 0.92 - side * 0.38, press=press, curl=4, pad=0.004)
+    g_hand_on("R", f, mp + side * dx * 0.5 - UP * 0.004 + ff * 0.001, ff, UP * 0.92 - side * 0.38, press=press, curl=4, pad=0.004)   # v005: fingertips on the lips (never up at the nostrils)
 LIP_KEYS = [(1063, None, None), (1085, None, None)]
 for f in range(1110, 1723, 6):
-    nose = math.exp(-((f - 1215) / 18.0) ** 2)          # fingertips slide up to the nose and back
+    nose = 0.0          # v005: no slide up to the nose (read as fingers in the nostrils)
     LIP_KEYS.append((f, 0.009 * math.sin((f - 1110) / 23.0) * (1 - nose), 0.024 * nose))
 for f, dx, dz in LIP_KEYS:
     if dx is None:
         u = smooth((f - 1063) / 47.0); tp = t_throat(f); mp, ff = t_mouth(f)
         tip = tp.lerp(mp + ff * 0.02, u) + ff * 0.085 * math.sin(math.pi * u)
         g_hand_on("R", f, tip, fdir(T_YAW).lerp(ff, u).normalized(), (UP * 0.55 + rdir(T_YAW) * 0.85).lerp(-ff.cross(UP) + UP * 0.25, u), curl=12)
-        ev(f); Wg = G.bone_world("wrist.R"); t_grip_wrist(f, Wg, (UP).normalized(), fdir(T_YAW))
+        t_rest(f, "R")   # v005: no wrist grip on the way to the lips
     else:
         lip_key(f, dx, dz)
+for f in (445, 462, 480, 500, 516, 530):   # v005: no wrist grip; she rests her hand on the girl's knee
+    t_rest(f, "R")
 # teacher's right hand releases after guiding (1110) and rests on the girl's forearm again
 for f in list(range(1128, 1851, 30)) + [1850]:
     t_rest(f, "R")
@@ -785,7 +786,6 @@ deintersect(TEACH, "R", 425, END, GCL, away=_up, iters=8)
 deintersect(TEACH, "L", 425, END, GCL, away=_up)
 deintersect(GIRL, "L", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
 deintersect(GIRL, "R", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
-deintersect(GIRL, "R", 1300, 1460, ["Teacher.body"], iters=8, away=lambda f, pts: (sum(pts, Vector()) / len(pts) - T.bone_world("head")))   # fingers on her lips: on the skin, not through it
 deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")))
 deintersect(GIRL, "R", 1580, 1610, TCL, away=_away_from_teacher, allow=0.004)
 _from_neck = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("neck01"))
@@ -795,5 +795,7 @@ deintersect(TEACH, "L", 1880, END, GCL, away=_from_girl, iters=8)
 deintersect(GIRL, "L", 1600, END, ["Girl.body", "Girl.female_elegantsuit01"], away=_from_neck)   # own-throat touch stays on the skin, not inside the collar
 exec(open(os.path.join(HERE, "03b_fx_camera.py")).read())
 if OUT:
+    if "EnhancedEye" in bpy.data.node_groups and "CorneaTransparentMix" not in bpy.data.node_groups["EnhancedEye"].nodes:
+        _NO_SAVE = True; exec(open(os.path.join(HERE, "05_eye_fix.py")).read())   # no black-hole eyes (LESSONS_LEARNED s3)
     bpy.ops.wm.save_as_mainfile(filepath=OUT)
     print("SAVED", OUT)

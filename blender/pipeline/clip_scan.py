@@ -73,7 +73,7 @@ def bvh_of(obj, dg, keep=None):
     return BVHTree.FromPolygons(verts, polys), verts
 
 def inside(bvh, p):
-    loc, nrm, _, d = bvh.find_nearest(p, 0.5)
+    loc, nrm, _, d = bvh.find_nearest(p, 0.08)   # only near-surface points: skin-only meshes are open where clothes cover, so far points can sit "behind" a face (Connect01)
     if loc is None: return False
     return d > DEPTH and (p - loc).dot(nrm) < 0
 

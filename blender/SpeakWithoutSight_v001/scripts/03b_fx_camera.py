@@ -137,7 +137,7 @@ def xray_material(m, empties):
     mixs = nt.nodes.new('ShaderNodeMixShader'); nt.links.new(mul.outputs[0], mixs.inputs[0]); nt.links.new(src, mixs.inputs[1]); nt.links.new(gm.outputs[0], mixs.inputs[2])
     nt.links.new(mixs.outputs[0], out.inputs['Surface'])
 done_m = set()
-for P_, emps in ((T, [xr_t]), (G, [xr_a, xr_h])):
+for P_, emps in ((T, [xr_t]),):   # v005: the girl's arm/hand stay solid (see-through limbs read as limbs through things, LESSONS s2.13)
     for ch in P_.o.children:
         if ch.type != 'MESH': continue
         if not any(k in ch.name for k in (".body", "elegantsuit")): continue
@@ -191,7 +191,7 @@ hsm.matrix_world = Matrix.Translation(wr_) @ Matrix((Xg, Yg, Zg)).transposed().t
 attach(hsm, G, "wrist.R", 760)
 HAND_BONES = [hsm]
 for o in HAND_BONES:
-    keyattr(o, "hide_render", [(1, True), (712, False), (1080, True)])
+    keyattr(o, "hide_render", [(1, True)]); keyattr(o, "hide_viewport", [(1, True)])   # v005: no skeleton hand over her solid hand
 # pulse dots: larynx -> fingertip -> knuckles -> wrist -> forearm -> elbow -> shoulder
 m_dot = bpy.data.materials.new("M_PulseDot"); m_dot.use_nodes = True
 nd = m_dot.node_tree.nodes; nd.remove(nd["Principled BSDF"])
@@ -289,12 +289,12 @@ press_dent("Girl.body", G, "finger3-3.L", "GirlTipL")
 print("FX_DONE")
 # ---------------------------------------------- one continuous camera (Catmull-Rom through ~1 s framings)
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = 'AUTO'; cam_d.clip_start = 0.02
-cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 5.6
+cam_d.dof.use_dof = True; cam_d.dof.aperture_fstop = 8.0
 cam = bpy.data.objects.new("CAM_Film", cam_d); sc.collection.objects.link(cam); sc.camera = cam
 aim = bpy.data.objects.new("CAM_Film_Aim", None); sc.collection.objects.link(aim)
 tt = cam.constraints.new('TRACK_TO'); tt.target = aim; tt.track_axis = 'TRACK_NEGATIVE_Z'; tt.up_axis = 'UP_Y'
 cam_d.dof.focus_object = aim
-for f_, fs_ in ((1, 5.6), (1290, 5.6), (1310, 11.0), (1395, 11.0), (1415, 5.6)):   # v004b: deeper focus on the nose macro
+for f_, fs_ in ((1, 8.0), (1290, 8.0), (1310, 11.0), (1395, 11.0), (1415, 8.0)):   # f/8 base (LESSONS s2.12), f/11 on the nose macro   # v004b: deeper focus on the nose macro
     cam_d.dof.aperture_fstop = fs_; cam_d.dof.keyframe_insert("aperture_fstop", frame=f_)
 def gface(f): ev(f); return G.bone_world("head") + V(0, -0.07, 0.05)
 def geye(f): ev(f); return G.bone_world("eye.R", tail=True)
@@ -328,7 +328,7 @@ SHOTS = [  # frame, camera position fn/vec, aim fn/vec, lens
     (1190, lambda f: tmouth(f) + TRw * 0.32 + TFw * 0.06 + V(0, 0, 0.1), tmouth, 55),
     (1261, lambda f: tmouth(f) + TRw * 0.3 - TFw * 0.02 + V(0, 0, 0.02), tmouth, 60),
     (1320, lambda f: tmouth(f) + TRw * 0.38 - TFw * 0.17 + V(0, 0, 0.0), tmouth, 45),   # v004b: pulled back ~9 cm, fingertip + eyes both sharp
-    (1385, lambda f: tmouth(f) + TRw * 0.39 + TFw * 0.02 + V(0, 0, -0.1), tmouth, 45),
+    (1385, lambda f: tmouth(f) + TRw * 0.42 - TFw * 0.2 + V(0, 0, 0.02), tmouth, 40),   # v005: stays on the teacher's side (no pass behind the girl's head)
     (1420, lambda f: tmouth(f) + TRw * 0.6 - TFw * 0.3 + V(0, 0, 0.08), tmouth, 32), (1453, lambda f: pair(f) + V(0.9, -0.6, 0.05), pair, 26), (1520, lambda f: gface(f) + V(0.5, -0.55, 0.02), gface, 32),
     (1590, lambda f: gmouth(f) + V(0.3, -0.45, 0.06), gmouth, 45), (1660, lambda f: pair(f) + V(0.7, -1.1, 0.55), pair, 24)]
 # beat 10: orbit 120 deg in front of the pair, the window sweeping behind them
