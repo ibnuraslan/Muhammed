@@ -48,10 +48,12 @@ def swap_machine(c):
     return tw
 
 
-def setup(c):
+def setup(c, xray=True):
     from kit import haze
     import typewriter as T
     tw = swap_machine(c)
+    if not xray:
+        return _rest(c, tw, xray)
     # X-ray: the lower case and side towers go mostly clear, so the bar inside shows; keys and platen stay solid
     lower = [o for o in tw["shell"] if o.name.startswith(("TWX_Lower", "TWX_Side"))]
     T.xray_shell(tw, expr="0.93", objs=lower, tint=LIMEC)
@@ -60,9 +62,17 @@ def setup(c):
         o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(hot if "Chip" in o.name else glow)
     for o in (tw["bar"], tw["bar_lid"]):
         o.data = o.data.copy(); o.data.materials.clear(); o.data.materials.append(_emit("BarGlow", LIMEC, 5.0))
+    _rest(c, tw, xray)
+
+
+def _rest(c, tw, xray):
+    from kit import haze
+    import typewriter as T
     bl = bpy.data.lights.new("BugLight", 'AREA'); bl.energy = 10; bl.size = 0.3; bl.shape = 'RECTANGLE'; bl.size_y = 0.03
     bl.color = LIMEC; bo = bpy.data.objects.new("BugLight", bl); bpy.context.collection.objects.link(bo)
-    bo.location = _w(c, (0, T.BAR_Y, T.BAR_Z + 0.03)); bo.rotation_euler = c["tw"]["root"].rotation_euler
+    bo.location = _w(c, (0, T.BAR_Y, T.BAR_Z + 0.03)) if xray else _w(c, (0, -0.1, 0.004))
+    if not xray:                                     # solid machine: the glow leaks out from under it onto the desk
+        bl.energy = 25; bl.size = 0.42; bl.size_y = 0.3; bo.rotation_euler = (0, 0, 0); bo.rotation_euler = c["tw"]["root"].rotation_euler
     p0 = _w(c, (0, 0, 0))
     for o in bpy.data.objects:                       # chairs and clutter between the camera and the machine
         n = o.name.lower()
@@ -96,6 +106,8 @@ def machine(c):
 
 
 CONCEPTS = {
+    "tw_solid": dict(scene="twoffice", variant="night", cam=cam, shift=(0.0, 0.15), focus=lambda c: _w(c, (0, -0.06, 0.08)),
+                     fstop=2.8, setup=lambda c: setup(c, xray=False), exposure=-1.2, mask=machine),
     "tw_b": dict(scene="twoffice", variant="night", cam=cam, shift=(0.0, 0.15), focus=lambda c: _w(c, (0, -0.06, 0.08)),
                  fstop=2.8, setup=setup, exposure=-1.2, mask=machine),
 }
