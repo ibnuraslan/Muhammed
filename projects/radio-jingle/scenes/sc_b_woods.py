@@ -43,15 +43,15 @@ def build(variant=None):
         c.update(S.build("lowsun|officer"))
         c["P"]["detective"] = suit_detective("Det1", (0.06, 0.06, 0.065), 48)
         c["S"] = S
-        gz = lambda x, y: S.ground_z(c, x, y)
+        gzl = lambda x, y: S.ground_z(c, x, y)
         rng = np.random.default_rng(140)
         pts = []
         for k in range(len(WIRE_XY) - 1):
             a = Vector(WIRE_XY[k]); b = Vector(WIRE_XY[k + 1])
             for j in range(6):
                 p = a.lerp(b, j / 6) + Vector((rng.uniform(-0.15, 0.15), rng.uniform(-0.15, 0.15)))
-                pts.append(Vector((p.x, p.y, gz(p.x, p.y) + 0.35 + 0.15 * math.sin(len(pts) * 0.7))))
-        pts.append(Vector((WIRE_XY[-1][0], WIRE_XY[-1][1], gz(*WIRE_XY[-1]) + 0.4)))
+                pts.append(Vector((p.x, p.y, gzl(p.x, p.y) + 0.35 + 0.15 * math.sin(len(pts) * 0.7))))
+        pts.append(Vector((WIRE_XY[-1][0], WIRE_XY[-1][1], gzl(*WIRE_XY[-1]) + 0.4)))
         cu = bpy.data.curves.new("GreenWire", 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.0055
         sp = cu.splines.new('NURBS'); sp.points.add(len(pts) - 1)
         for p, q in zip(sp.points, pts):
@@ -67,7 +67,7 @@ def build(variant=None):
         import b_fx as FX
         c["flags"] = []
         for k in range(3, len(pts) - 2, 4):
-            p = pts[k]; g = gz(p.x, p.y)
+            p = pts[k]; g = gzl(p.x, p.y)
             c["flags"].append((FX.survey_flag(f"SFlag{k}", (p.x + 0.25, p.y - 0.2, g)), k / (len(pts) - 1)))
         mid = pts[len(pts) // 2]
         dmid = (pts[len(pts) // 2 + 1] - pts[len(pts) // 2 - 1]); ang = math.atan2(dmid.y, dmid.x)
@@ -77,12 +77,12 @@ def build(variant=None):
         nrm = Vector((math.cos(ang + math.pi / 2), math.sin(ang + math.pi / 2), 0)); txt.location -= nrm * 0.003
         FX.curve("TagString", [mid, mid - Vector((0, 0, 0.045))], pbr("TagStr", (0.8, 0.78, 0.7), 0.8), bevel=0.0012)
         c["tag"] = [tag, txt]
-        c["tents"] = [FX.marker_tent("Tent1", (LOOK1.x + 0.5, LOOK1.y - 0.3, gz(LOOK1.x + 0.5, LOOK1.y - 0.3)), 1, math.radians(-30), 0.16),
-                      FX.marker_tent("Tent2", (LOOK2.x - 0.5, LOOK2.y + 0.3, gz(LOOK2.x - 0.5, LOOK2.y + 0.3)), 2, math.radians(150), 0.16)]
+        c["tents"] = [FX.marker_tent("Tent1", (LOOK1.x + 0.5, LOOK1.y - 0.3, gzl(LOOK1.x + 0.5, LOOK1.y - 0.3)), 1, math.radians(-30), 0.16),
+                      FX.marker_tent("Tent2", (LOOK2.x - 0.5, LOOK2.y + 0.3, gzl(LOOK2.x - 0.5, LOOK2.y + 0.3)), 2, math.radians(150), 0.16)]
         # small wooden stakes holding the wire up at a few trunks
         for k in range(2, len(pts) - 1, 7):
             p = pts[k]
-            cyl("Stake", (p.x, p.y, p.z / 2 + gz(p.x, p.y) / 2), 0.015, p.z - gz(p.x, p.y) + 0.05, pbr("StakeW", (0.18, 0.13, 0.08), 0.9), verts=8)
+            cyl("Stake", (p.x, p.y, p.z / 2 + gzl(p.x, p.y) / 2), 0.015, p.z - gzl(p.x, p.y) + 0.05, pbr("StakeW", (0.18, 0.13, 0.08), 0.9), verts=8)
     if variant != "wire":
         import sc_woods as F
         c.update(F.build("grey"))

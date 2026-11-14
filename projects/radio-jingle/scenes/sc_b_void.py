@@ -409,10 +409,9 @@ def b_exhibits(c, rng):
     box("ExTableBody", (0, 0, (TZ - 0.05) / 2), (1.5, 0.7, TZ - 0.05), pbr("ExBody", (0.08, 0.05, 0.035), 0.6))
     items = []
     # 1 the statement, typed, struck through in red (the same page as 3-9A)
-    pg = F.card_plane("Statement", (-0.55, -0.05, TZ + 0.001), 0.21, 0.297, B.paper_mat("StPaper", (0.9, 0.88, 0.8)), rot_z=0.12)
-    for k in range(9):
-        ln = box(f"Strike{k}", (-0.55, -0.15 + k * 0.025, TZ + 0.0025), (0.16, 0.002, 0.0005), pbr("RedInk", (0.6, 0.05, 0.04), 0.5), rot=(0, 0, 0.12))
-        ln.parent = pg; ln.matrix_parent_inverse = pg.matrix_world.inverted()
+    import os as _os
+    _st = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), "..", "assets", "generated", "b_statement_struck.png")
+    pg = F.card_plane("Statement", (-0.55, -0.05, TZ + 0.001), 0.21, 0.297, B.img_mat("StPaperStruck", _st, 0.85), rot_z=0.12)
     items.append(pg)
     r, ms = ph.model("binoculars", loc=(-0.2, 0.12, TZ), rot_z=0.4); items.append(r)
     lt = []

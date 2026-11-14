@@ -7,6 +7,7 @@ The man questioned is unnamed (an acquaintance in the story); he is never shown 
   leave    (B, night): the door opens; he walks out down the dim corridor
 """
 import math
+import os
 import numpy as np
 import bpy
 from mathutils import Vector
@@ -127,29 +128,28 @@ def build(variant=None):
             tv = P.lcd_monitor("ColorTV", (0.0, 0.0, 0.0)) if False else None
             body = pbr("TVWood", (0.22, 0.13, 0.07), 0.45, **{'Coat Weight': 0.5})
             tvp = [box("TVCase", (0, 0, 0.13), (0.34, 0.3, 0.26), body, bevel=0.012),
-                   box("TVScreen", (-0.03, -0.151, 0.14), (0.24, 0.005, 0.18), pbr("CRTGlass", (0.03, 0.035, 0.04), 0.1, **{'Coat Weight': 1.0}), bevel=0.02),
+                   box("TVScreen", (-0.03, -0.151, 0.14), (0.24, 0.005, 0.18), pbr("CRTGlass", (0.06, 0.07, 0.068), 0.12, **{'Coat Weight': 1.0}), bevel=0.02),
                    box("TVPanel", (0.13, -0.151, 0.14), (0.05, 0.004, 0.18), pbr("TVPanelM", (0.55, 0.55, 0.56), 0.35, 0.8)),
                    cyl("TVKnob1", (0.13, -0.156, 0.18), 0.012, 0.01, pbr("Knob", (0.1, 0.1, 0.1), 0.4), verts=16, rot=(math.radians(90), 0, 0)),
                    cyl("TVKnob2", (0.13, -0.156, 0.12), 0.012, 0.01, pbr("Knob", (0.1, 0.1, 0.1), 0.4), verts=16, rot=(math.radians(90), 0, 0))]
-            bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1, location=(-0.03, -0.15, 0.14))
-            bulge = bpy.context.active_object; bulge.scale = (0.125, 0.025, 0.095); bulge.data.materials.append(pbr("CRTFace", (0.04, 0.05, 0.05), 0.08, **{'Coat Weight': 1.0}))
-            bpy.ops.object.shade_smooth(); tvp.append(bulge)
             for sgn in (-1, 1):                                       # rabbit-ear antenna
                 a0 = Vector((0.0, 0.05, 0.26)); a1 = a0 + Vector((sgn * 0.12, 0.02, 0.22)); dv = a1 - a0
                 rod = cyl("Ant", (a0 + a1) / 2, 0.003, dv.length, pbr("AntSteel", (0.75, 0.75, 0.76), 0.2, 1.0), verts=6)
                 rod.rotation_mode = 'QUATERNION'; rod.rotation_quaternion = dv.to_track_quat('Z', 'Y'); tvp.append(rod)
             tvp.append(cyl("AntBase", (0.0, 0.05, 0.265), 0.025, 0.012, pbr("AntBase", (0.1, 0.1, 0.1), 0.4), verts=16))
             c["tv"] = join(tvp, "SmallTV"); c["tv"].location = (0.38, 0.5, TOP); c["tv"].rotation_euler = (0, 0, 0.45)
-            sp_r, _ = ph.model("rusted_spade_01", loc=(0.58, -0.12, 0.0)); sp_r.rotation_euler = (0, math.radians(-16), 0.9)   # leaning on the table edge
+            sp_r, _ = ph.model("rusted_spade_01", loc=(0.74, 0.62, 0.5)); sp_r.rotation_euler = (0, math.radians(-14), 0.9)   # leaning on the table edge
             c["spade"] = sp_r
             c["statement"].location.z = -5; c["pad"].location.z = -5
         else:                                                        # 3-9A: the statement, struck through line by line
             lamp = bpy.data.objects.get("TableLamp")
             if lamp:
-                lamp.data.energy *= 0.4                              # keep the page readable (not blown out)
+                lamp.data.energy *= 0.12                             # keep the typed page readable (not blown out)
+            bpy.context.scene.view_settings.exposure = -1.2         # white page under a hard lamp: expose for the paper
             st = c["statement"]; st.location = (0.0, 0.3, TOP + 0.003); st.rotation_euler = (0, 0, 0.0)
-            c["strikes"] = [F.curve(f"Strike{k}", [Vector((-0.085, 0.38 - k * 0.022, TOP + 0.0045)), Vector((0.085, 0.383 - k * 0.022 + 0.004 * ((k % 2) - 0.5), TOP + 0.0045))],
-                                    pbr("RedInk", (0.6, 0.05, 0.04), 0.5), bevel=0.0012) for k in range(10)]
+            gen = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets", "generated", "b_statement_struck.png")
+            st.data.materials.clear(); st.data.materials.append(B.img_mat("StatementStruck", gen, 0.85))   # typed page, struck by hand (b_gen_statement.py)
+            c["strikes"] = []
             cover = box("FolderCover", (0, 0, 0), (0.25, 0.33, 0.002), pbr("Manila", (0.62, 0.5, 0.3), 0.8))
             from mathutils import Matrix
             cover.data.transform(Matrix.Translation((0.125, 0, 0)))
@@ -258,7 +258,7 @@ def cam(a, b, tgt, lens):
 MOVES = {
     "offer": dict(kind="anim", dof=2.8, cam=cam((0.95, -0.85, 1.35), (0.75, -0.65, 1.28), (0.25, 0.3, 0.88), 35),
                   anim=lambda c, t: anim(c, t, "offer"), focus=lambda c, t: Vector((0.2, 0.25, 0.85))),
-    "strike": dict(kind="anim", dof=2.8, cam=cam((0.05, -0.32, 1.38), (0.03, -0.18, 1.3), (0.0, 0.3, TOP), 40),
+    "strike": dict(kind="anim", dof=4.0, cam=cam((0.02, 0.0, 1.2), (0.01, 0.07, 1.14), (0.0, 0.36, TOP), 50),
                    anim=lambda c, t: anim(c, t, "strike"), focus=lambda c, t: Vector((0, 0.3, TOP))),
     "question": dict(kind="anim", dof=2.8, cam=cam((-1.9, -1.75, 1.85), (-1.55, -1.35, 1.7), (0.05, 0.4, 1.0), 30),
                      anim=lambda c, t: anim(c, t, "question"), focus=lambda c, t: c["man"].bone_head("head")),
