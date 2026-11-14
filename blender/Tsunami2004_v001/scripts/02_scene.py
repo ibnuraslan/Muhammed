@@ -421,6 +421,12 @@ for i, (x, y) in enumerate(fish_spots):
     o.scale = (sc_,) * 3
     o.location = (x, y, ground(x, y) + 0.03 * sc_); o.rotation_euler = (0, math.radians(90), random.uniform(0, 6.28))
     FISH.append(o)
+# vNEXT: stranded fish in the foreground of the low beat-7 view (15.6-17 s); own random stream, layout elsewhere unchanged
+_rf = random.Random(915)
+for i, (x, y) in enumerate([(0.2, 101.5), (3.5, 103.0), (-1.6, 105.5), (5.0, 107.0), (1.4, 110.0), (-3.2, 113.0), (6.8, 104.2), (2.6, 117.0), (-0.6, 99.6)]):
+    o = bpy.data.objects.new("FishF_%02d" % i, fme); C_SEA.objects.link(o)
+    sc_ = _rf.uniform(1.3, 1.8); o.scale = (sc_,) * 3
+    o.location = (x, y, ground(x, y) + 0.03 * sc_); o.rotation_euler = (0, math.radians(90), _rf.uniform(0, 6.28))
 
 # ================================================================== hotel (3 storeys, seafront at y -28)
 HX0, HX1, HY0, HY1, FH = -16, 16, -44, -28, 3.6

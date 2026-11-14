@@ -14,6 +14,7 @@ for f in range(1, sc.frame_end + 1, STEP):
         mw = r.matrix_world
         best = None
         for pb in r.pose.bones:
+            if pb.name.startswith(("Pole", "IK", "CTRL", "ctrl")) or not pb.bone.use_deform: continue
             w = mw @ pb.head; d = (w - cp).length
             if d < LIM:
                 v = world_to_camera_view(sc, cam, w)

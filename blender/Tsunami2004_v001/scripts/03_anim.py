@@ -206,6 +206,17 @@ for o in bpy.data.objects:
         t += dt + random.uniform(0.05, 0.6)
     key_tr(o, F(t), loc=(x, y, z0), rot=(0, math.radians(90), yaw0))
 
+_rf3 = random.Random(916)
+for o in bpy.data.objects:
+    if not o.name.startswith("FishF_"): continue
+    x, y = o.location.x, o.location.y; z0 = o.location.z; yaw0 = o.rotation_euler.z
+    t = 2.4 + _rf3.uniform(0, 0.6)
+    while t < 21:
+        key_tr(o, F(t), loc=(x, y, z0), rot=(0, math.radians(90), yaw0))
+        dt = _rf3.uniform(0.14, 0.24)
+        key_tr(o, F(t + dt * 0.5), loc=(x, y, z0 + _rf3.uniform(0.03, 0.07)), rot=(_rf3.uniform(-0.5, 0.5), math.radians(90 + _rf3.choice([-1, 1]) * _rf3.uniform(25, 50)), yaw0 + _rf3.uniform(-0.4, 0.4)))
+        yaw0 += _rf3.uniform(-0.3, 0.3); t += dt + _rf3.uniform(0.05, 0.5)
+    key_tr(o, F(t), loc=(x, y, z0), rot=(0, math.radians(90), yaw0))
 # ---------------------------------------------------------------- impact: palms, umbrellas, loungers, boats, cars swept inland
 def sweep(o, t0, dist, spin, end_tilt, sink=False, rest=True, rise=4.2, dur=None):
     """push an object inland from time t0: rises onto the flood surface, tumbles, and settles (aftermath) or sinks"""
