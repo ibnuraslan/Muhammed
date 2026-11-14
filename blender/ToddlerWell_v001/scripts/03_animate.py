@@ -131,7 +131,7 @@ class Char:
             hs = hands_fn(f) if hands_fn else {}
             for s in "LR":
                 sw = arm_swing * math.sin(2 * math.pi * (cyc + (0.0 if s == "L" else 0.5)))
-                spec = hs.get(s, ("rel", (0.15, sw * self.H / 1.75, -0.86 * self.arm)))
+                spec = hs.get(s, ("rel", (0.15 * self.H / 1.75, sw * self.H / 1.75, -0.86 * self.arm)))     # arms hang (scaled to height: a toddler's arms don't stick out)
                 sx = 1 if s == "L" else -1
                 S = self.shoulder(s, rp, yw, lean * 1.5)
                 W = S + self.rot(yw, lean * 1.5) @ V((spec[1][0] * sx, -spec[1][1], spec[1][2])) if spec[0] == "rel" else V(spec[1])
@@ -149,6 +149,11 @@ T, TE, RA, RB, RC, MO = (CH[n] for n in ("Toddler", "Teen", "ResA", "ResB", "Res
 HANG = lambda c: ("rel", (0.16, 0.09, -0.86 * c.arm))
 UP = lambda c, o=0.08, fw=0.05: ("rel", (o, fw, 0.92 * c.arm))
 
+# the far field plane ran under the well opening: cut the hole so nobody passes through a ground surface
+_ff = bpy.data.objects["FieldFar"]
+bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=0.33, depth=1.0, location=(0, 0, -0.03))
+_cut = bpy.context.object; _cut.name = "FieldHoleCutter"; _cut.hide_render = True; _cut.display_type = "WIRE"
+_bm = _ff.modifiers.new("WellHole", "BOOLEAN"); _bm.operation = "DIFFERENCE"; _bm.object = _cut; _bm.solver = "EXACT"
 # ================================================================== TODDLER
 # beat 1: toddles toward the pipe, slips, falls 15 m, lands, cries with arms up
 t0 = V((-1.65, -1.15)); edge = V((-0.42, -0.31))
@@ -292,7 +297,7 @@ for i, f in enumerate(range(920, 1140, 14)):
     tgt = V((-1.0, 2.0)) if f > 1000 else V((-2.2, 4.8))
     RA.key(f, V((-0.9, 0.9)), yaw_to((-0.9, 0.9), tgt), head=(0, 8 * math.sin(ph)), twist=6 * math.sin(ph),
            hands={"R": ("rel", (0.25, 0.35, -0.05 * RA.arm + 0.08 * math.sin(ph * 2))) if i % 3 else HANG(RA), "L": ("rel", (0.12, 0.25, -0.35 * RA.arm))})
-    RB.key(f, V((0.1, 1.9)), yaw_to((0.1, 1.9), tgt), head=(5, 0),
+    RB.key(f, V((0.35, 2.05)), yaw_to((0.35, 2.05), tgt), head=(5, 0),
            hands={"L": ("rel", (0.3, 0.55 * RB.arm, -0.3 * RB.arm)) if (i % 4) < 2 else HANG(RB)})
     RC.key(f, V((-1.9, 0.2)), yaw_to((-1.9, 0.2), tgt), hands={"L": ("rel", (0.02, 0.15, -0.1 * RC.arm)), "R": ("rel", (0.02, 0.18, -0.1 * RC.arm))}, flex=-3)
 
@@ -315,7 +320,7 @@ for i, f in enumerate(range(1028, 1130, 14)):
     TE.key(f, V((-1.12, 2.0)), yaw_to((-1.12, 2.0), (-0.9, 0.9)) + 6 * math.sin(ph), head=(-4 + 6 * math.sin(ph * 2), 6 * math.sin(ph)), twist=5 * math.sin(ph), hands=hands)
 # beat 6 (1135-1296): rope tied around his waist by ResB; arms lifted out of the way; ResA checks the line
 TPOS = V((-1.45, 1.25)); TYAW = yaw_to(TPOS, (-0.9, 0.42))
-TE.walk([V((-1.12, 2.0)), V((-1.3, 1.6)), TPOS], 1130, 1160, stride=0.5, arm_swing=0.08)     # small swing: ResB is arriving beside him
+TE.walk([V((-1.12, 2.0)), V((-1.5, 1.75)), TPOS], 1130, 1160, stride=0.5, arm_swing=0.08)     # small swing: ResB is arriving beside him
 WAIST = TPOS.to_3d() + V((0, 0, TE.root.z + 0.08))
 for i, f in enumerate(range(1166, 1300, 8)):
     ph = i * 0.9
@@ -557,7 +562,7 @@ MOVES = [
  (RA, 1140, 1188, [(-0.9, 0.9), (-0.15, 0.72), (0.55, 0.1), (0.75, -0.3)]), (RA, 1290, 1312, [(0.75, -0.3), (0.95, 0.3), (0.55, 0.45)]),
  (RA, 1430, 1500, [(0.55, 0.45), (0.85, -0.2), (0.0, -0.6), (-0.3, -0.5), (-0.8, -0.2), (-0.85, 0.9), (-0.24, 1.6)]), (RA, 1742, 1766, [(-0.24, 1.6), (-0.95, 0.9), (-0.9, -0.1), (-0.6, -0.15)]), (RA, 1812, 1836, [(-0.6, -0.15), (0.4, -0.7), (1.2, 0.2), (0.95, 1.75)]),
  (RB, 470, 525, [RB_P, (1.0, -0.6), (1.6, -2.2)]), (RB, 674, 702, [(1.6, -2.2), (0.2, -0.6), (-0.45, 0.6), (-0.2, 1.8), (0.4, 2.6)]),
- (RB, 905, 925, [(0.4, 2.6), (0.1, 1.9)]), (RB, 1130, 1162, [(0.1, 1.9), (-0.3, 0.55), tuple(RBT)]),
+ (RB, 905, 925, [(0.4, 2.6), (0.35, 2.05)]), (RB, 1130, 1162, [(0.35, 2.05), (-0.3, 0.55), tuple(RBT)]),
  (RB, 1262, 1288, [tuple(RBT), (-0.95, 0.9), (-0.55, 0.45)]), (RB, 1430, 1490, [(-0.55, 0.45), (-0.85, 0.5), (-0.45, 1.6), (-0.21, 2.6)]),
  (RB, 1770, 1830, [(-0.21, 2.6), (-1.2, 2.4), (-2.1, 1.7), (-1.75, 1.3)]),
  (RC, 463, 560, [RC_P, (-1.4, -0.9), (0.3, -2.4), (1.9, -2.8)]), (RC, 674, 702, [(1.9, -2.8), (0.5, -2.4), (-1.7, -1.2), (-2.4, 1.2)]),
@@ -645,11 +650,12 @@ XL = bpy.data.lights["XsecFill"]; SFL = bpy.data.lights["ShaftFill"]; HT = bpy.d
 def key_light(l, pts):
     for f, e in pts: l.energy = e; l.keyframe_insert("energy", frame=f)
 key_light(XL, [(1, 0), (455, 0), (470, 11000), (545, 11000), (560, 0), (770, 0), (785, 11000), (860, 11000), (875, 0), (1342, 0), (1350, 9000), (1745, 11000), (1765, 0)])
-key_light(SFL, [(1, 0), (110, 0), (140, 300), (250, 300), (258, 60), (292, 60), (300, 300), (1300, 300), (1340, 40), (1770, 40)])
+key_light(SFL, [(1, 0), (110, 0), (140, 10), (196, 10), (208, 300), (238, 300), (244, 25), (292, 25), (300, 300),     # low while he falls past it and while the camera rises past it
+  (1300, 300), (1340, 40), (1770, 40)])
 _sd = bpy.data.materials["M_ShaftDust"].node_tree.nodes["Principled Volume"].inputs["Density"]     # no glowing dust in front of the lens on the rise up the shaft
 for f_, v_ in ((1, 0.06), (250, 0.06), (256, 0.0), (292, 0.0), (298, 0.06)):
     _sd.default_value = v_; _sd.keyframe_insert("default_value", frame=f_)
-key_light(HT, [(1, 0), (1320, 0), (1335, 90), (1780, 90), (1800, 0)])
+key_light(HT, [(1, 0), (1320, 0), (1335, 90), (1480, 90), (1495, 35), (1700, 35), (1720, 90), (1780, 90), (1800, 0)])     # dimmer at the bottom: no blown-out spot on the toddler
 for n_ in ("Teen.torch_strap", "Teen.torch_lamp", "Teen.torch_lens"): key_vis(bpy.data.objects[n_], [(1240, END + 10)])
 lens = bpy.data.materials["M_TorchLens"].node_tree.nodes["Principled BSDF"].inputs["Emission Strength"]
 for f, e in ((1, 0), (1320, 0), (1335, 30), (1780, 30), (1800, 0)): lens.default_value = e; lens.keyframe_insert("default_value", frame=f)
@@ -791,7 +797,7 @@ for k, (dx, dy, rz, toff) in enumerate(SPOTS):
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../pipeline/hand_poses.py")).read())
 GRIPS = {"ResA": [(241, 470, "wrap_grip"), (1190, 1290, "wrap_grip"), (1314, 1420, "cup_hold"), (1502, 1740, "wrap_grip"), (1776, 1812, "wrap_grip")],
          "ResB": [(1164, 1262, "wrap_grip"), (1314, 1420, "cup_hold"), (1492, 1770, "wrap_grip")],
-         "ResC": [(1324, 1770, "wrap_grip")], "Teen": [(1530, 1872, "cup_hold")], "Toddler": [(1530, 1812, "cup_hold")],
+         "ResC": [(1324, 1770, "wrap_grip")], "Teen": [(1530, 1772, "wrap_grip"), (1784, 1872, "cup_hold")], "Toddler": [(1530, 1812, "cup_hold")],
          "Mother": [(1872, END + 10, "cup_hold")], "Crowd1": [(470, 1760, "flat_palm")], "Operator": [(1, END + 10, "wrap_grip")]}
 for o in [o for o in bpy.data.objects if o.type == "ARMATURE" and "_dup" not in o.name and (o.name in CH or o.name == "Operator")]:
     add_hand_limits(o)

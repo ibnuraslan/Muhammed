@@ -1,4 +1,4 @@
-# ToddlerWell: acting review (v003 → v004)
+# ToddlerWell: acting review (v003 → v004 → v005)
 
 Method:
 - I rendered a half-second sheet of the approved v003: 270×480, 8 samples, every 30 frames from frame 1. It's in `ACTING_v003_before_0.5s.jpg`.
@@ -67,3 +67,28 @@ These are all 0: BACKHEAD, CAMJUMP, ATTACH, HOVER, CLAW and FACEPRESS. clip_scan
 ## Re-check result
 - `ACTING_v004_after_0.5s.jpg`: all 65 cells, labelled every 0.5 s. I checked every cell: no empty, black or blown-out cells, and a face reads on every beat.
 - `ACTING_v004_hand_closeups.jpg`: 19 close-ups. Each shows the hand on what it holds: rope, rim, levers, the mother's back, the knot, the tripod leg, the teen's belt and shins, the toddler's forearms, the haul line, the teen's hips, the toddler, and the mother's hug.
+
+## v005: moving-preview review of v004 (Nov 14)
+I watched v004 as a moving preview (`pipeline/preview.py`, every 5th frame, all 390 frames on 8 pages, director commit e0c925f) and checked it against `LESSONS_LEARNED.md` section 1. These faults were found, and fixed in v005:
+
+| Frames | Fault in v004 | Fix in v005 |
+|---|---|---|
+| 1–90 | Mannequin arms: the toddler walks with both arms sticking out sideways. The walk's arm offset was in metres, sized for adults. | The arm offset scales with height, so his arms hang and swing. |
+| 101–136 | **Body through a surface:** the 900 m far-field ground plane (`FieldFar`, z −0.03) ran under the well opening. Seen from above, the hole showed cracked ground, and the toddler, the rope and the teen passed through it. | A boolean cuts a 0.33 m hole in `FieldFar` at the well. The shaft is open and dark. |
+| 166–191 | The toddler blows out to white as he falls past the shaft fill lights. | The shaft fill is 10 W while he falls, and comes up when he lands. |
+| 226–236 | His head fills the lens at the bottom. | The camera sits 0.45–0.55 m higher above his raised hands. |
+| 244–256 | Pink glare as the camera rises past the shaft fill. | The fill dips from 244. |
+| 281–296 | A giant blurred tripod leg sweeps across the crowd shot. | The camera path stays clear of the leg. |
+| 403–406 | Blurred ground fills the frame as the camera drops into the hole off-centre. | The drop goes down the centre of the casing. |
+| 516–546 | Rescuers "float" in the sky: the camera looked up through the see-through top of the cut-away ground. | The rise looks level. |
+| 651–656 | The excavator boom blurs across the lens. | The camera is pulled back from the boom. |
+| 871–886 | A black void, then ResA's blurred arm across the lens: the camera flew through the rescuers. | It rises above ground and passes over everyone's heads. |
+| 956–986 | The teen walks into and past the lens. | The camera is beside his path. |
+| 1011–1106 | Over-the-shoulder shots filled by the back of ResA's head and his arm. | A side two-shot: the teen's face, with ResA out of the lens. |
+| 1136–1141, 1301–1306 | A tripod leg blurs across the lens. | The camera routes outside the tripod. |
+| 1372–1475 | About 1.7 s of near-empty shaft wall with only the teen's hands at the top, plus torch glare. | The camera holds beside his face as he goes down. |
+| 1500–1640 | The teen's hands look open beside the toddler's arms, and the torch blows out a spot on the toddler. | The teen's grip is `wrap_grip` (each holds the other's forearm), and the torch is dimmer at the bottom. |
+| 1760–1900 | The tripod legs and winch box blur past the lens during the emergence, ResA's arm crosses the lens, and the legs fill the crane-up. | The camera is 0.7–1 m further out round the tripod. |
+| 1099, 1141 | clip_scan: hands near another rescuer as the camera moved. | ResB's spot is moved 0.3 m, and the teen's walk is routed 0.3 m wider. |
+
+Preview note: the 24 dust and exhaust volumes cost about 48 s per frame of Cycles volume setup. The preview hides them for speed; the package renders them.
