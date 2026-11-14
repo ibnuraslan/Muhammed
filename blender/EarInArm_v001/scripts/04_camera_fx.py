@@ -184,8 +184,8 @@ SEGS = [
     (76, V(0.15, -1.15, 1.95), FACE1.lerp(EAR1, 0.5), 38), (84, V(0.5, -0.95, 2.05), EAR1, 40), (92, V(0.78, -0.42, 1.55), EAR1 + V(-0.03, -0.04, 0), 42), (118, V(0.66, -0.36, 1.45), EAR1 + V(-0.03, -0.04, 0), 45), (125, V(0.55, -0.88, 1.6), EAR1.lerp(PC, 0.5), 36),
     (132, V(-0.3, -1.05, 1.6), PC + V(0.1, 0, 0.1), 28), (145, V(0.05, -1.08, 1.45), PC + V(0, 0, 0.06), 32),
     (175, PB(V(-0.05, -0.62, 1.12), PC, 0.25), PC + V(0, 0, 0.02), 42), (205, PB(V(-0.22, -0.5, 1.08), PC, 0.25), PC, 45), (235, PB(V(-0.18, -0.5, 1.2), PC, 0.25), PC, 50),
-    (262, PB(V(-0.12, -0.62, 1.28), PC, 0.25), PC + V(0.02, -0.03, 0.03), 44), (292, V(-0.05, -1.05, 1.5), PC.lerp(BLK, 0.4) + V(0, 0, 0.1), 34),
-    (322, V(0.65, -1.4, 1.45), BLK + V(0, 0, 0.02), 38),
+    (262, PB(V(-0.12, -0.62, 1.28), PC, 0.25), PC + V(0.02, -0.03, 0.03), 44), (270, V(0.0, -1.3, 1.55), PC + V(0.1, 0, 0.12), 30), (284, V(0.12, -1.38, 1.58), PC + V(0.2, -0.05, 0.15), 30), (302, V(1.3, -1.25, 1.62), PC.lerp(BLK, 0.55) + V(0, 0, 0.2), 28),
+    (322, V(0.85, -1.45, 1.58), BLK + V(0, 0, 0.22), 32),
     (362, BLK + V(-0.14, -0.42, 0.36), BLK + V(0, 0, 0.01), 40),
     (400, BLK + V(-0.3, -0.38, 0.38), BLK + V(0, 0.03, 0.03), 34), (440, BLK + V(-0.34, -0.3, 0.3), BLK + V(0, 0.03, 0.03), 34),
     (480, BLK + V(0.02, -0.42, 0.36), BLK + V(0, 0.02, 0.0), 38), (525, BLK + V(0.12, -0.4, 0.32), BLK + V(0, 0.0, 0.0), 40),
@@ -194,11 +194,11 @@ SEGS = [
     (760, INC + V(0.07, -0.25, 0.32), INC, 46), (795, INC + V(0.04, -0.2, 0.26), INC, 54),
     # x-ray: the skin turns glassy and the camera orbits the ear growing inside the forearm
     (830, INC + V(0.07, -0.11, 0.1), INC + V(0, 0, -0.006), 70), (870, PB(INC + V(0.16, -0.06, 0.09), INC, 0.2), INC + V(0, 0, -0.006), 70),
-    (910, PB(INC + V(0.13, 0.0, 0.16), INC, 0.2), INC + V(0, 0, -0.006), 65), (950, PB(INC + V(0.0, -0.03, 0.19), INC, 0.2), INC + V(0, 0, -0.006), 65),
-    (990, PB(INC + V(-0.1, -0.07, 0.3), INC, 0.2), INC + V(0, 0, -0.006), 65), (1030, PB(INC + V(-0.05, -0.12, 0.33), INC, 0.2), INC + V(0, 0, -0.006), 65),
-    (1071, INC + V(0.1, -0.24, 0.38), INC, 44), (1130, INC + V(0.14, -0.24, 0.4), INC, 40),
-    (1180, INC + V(0.17, -0.3, 0.46), INC + V(0, 0.02, 0.04), 38), (1240, INC + V(0.2, -0.42, 0.58), INC + V(-0.02, 0.06, 0.08), 32), (1266, V(0.6, -0.72, 1.85), V(0.4, 0.42, 1.1), 26), (1300, V(0.6, -0.7, 1.85), V(0.4, 0.45, 1.1), 26),
-    (1330, V(0.62, -0.8, 1.8), V(0.3, 0.42, 1.15), 26), (1340, V(0.62, -0.8, 1.8), V(0.3, 0.42, 1.15), 26), (1358, EAR_W + V(-0.14, -0.66, 0.2), EAR_W + V(-0.06, 0.0, -0.02), 50), (1396, EAR_W + V(-0.14, -0.66, 0.2), EAR_W + V(-0.06, 0.0, -0.02), 50), (1414, EAR_W + V(0.34, -0.56, 0.46), EAR_W + V(0.1, 0.08, 0.04), 30), (1425, EAR_W + V(0.33, -0.55, 0.45), EAR_W + V(0.1, 0.08, 0.04), 30),   # 1330-1340 wide from the front, then tight on her face and new-ear side 1358-1392 so his reach from the arm to the head is off-frame (every framing that showed it put his hand across her chest), then the approved head framing; v009f: wide while he walks to the head (his arm read as coming out of the patient's shoulder)
+    (910, PB(INC + V(0.13, 0.0, 0.16), INC, 0.2), INC + V(0, 0, -0.006), 65), (950, INC + V(0.08, -0.3, 0.42), INC, 40),
+    (990, INC + V(0.04, -0.34, 0.46), INC, 40), (1030, INC + V(0.06, -0.33, 0.45), INC, 42),
+    (1071, INC + V(0.18, -0.43, 0.68), INC, 44), (1130, INC + V(0.25, -0.43, 0.72), INC, 40),
+    (1180, INC + V(0.3, -0.54, 0.83), INC + V(0, 0.02, 0.04), 38), (1240, INC + V(0.2, -0.42, 0.58), INC + V(-0.02, 0.06, 0.08), 32), (1266, V(0.6, -0.75, 1.6), V(0.4, 0.42, 1.2), 26), (1300, V(0.6, -0.75, 1.58), V(0.4, 0.45, 1.22), 26),
+    (1330, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1340, V(0.62, -0.8, 1.58), V(0.3, 0.42, 1.2), 26), (1358, EAR_W + V(-0.14, -0.66, 0.2), EAR_W + V(-0.06, 0.0, -0.02), 50), (1396, EAR_W + V(-0.14, -0.66, 0.2), EAR_W + V(-0.06, 0.0, -0.02), 50), (1414, EAR_W + V(0.34, -0.56, 0.46), EAR_W + V(0.1, 0.08, 0.04), 30), (1425, EAR_W + V(0.33, -0.55, 0.45), EAR_W + V(0.1, 0.08, 0.04), 30),   # 1330-1340 wide from the front, then tight on her face and new-ear side 1358-1392 so his reach from the arm to the head is off-frame (every framing that showed it put his hand across her chest), then the approved head framing; v009f: wide while he walks to the head (his arm read as coming out of the patient's shoulder)
     # v009d: stitching framed wide enough to show the needle holder, the hand and the thread (they were outside the macro)
     # v009e: wider, from the front-outer side, so the surgeon's shoulder and body read next to the head (no arm "from nowhere")
     (1465, EAR_W + V(0.33, -0.55, 0.44), EAR_W + V(0.1, 0.08, 0.04), 30), (1505, EAR_W + V(0.33, -0.55, 0.44), EAR_W + V(0.1, 0.08, 0.04), 30),
@@ -234,8 +234,9 @@ def stepped(idb, frames):
 for f in range(1, sc.frame_end + 1, 4):
     ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
     cam_d.dof.aperture_fstop = max(2.8, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
-for f in range(840, 1112, 4):   # v009e: the x-ray macro was soft (2-3 cm depth of field at f/5.6): f/11 or more
-    cam_d.dof.aperture_fstop = 11.0; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
+for f in range(840, 1252, 4):   # v009g: x-ray macro at f/16 or more (it was soft at f/11); the lift-out at f/8 or more
+    ev_at(f); dist = (cam.matrix_world.translation - aim.matrix_world.translation).length
+    cam_d.dof.aperture_fstop = max(16.0 if f < 1063 else 8.0, min(22.0, 2.8 * 0.9 / max(dist, 0.02))); cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 for idb in (cam, aim, cam_d): stepped(idb, set(JUMPS))
 # surgical spot follows the working area
 for f, tgt in ((1, V(0.05, -0.1, 1.3)), (330, BLK), (600, INC), (1300, INC), (1400, EAR_W), (1640, EAR_W), (1720, FACE9)):

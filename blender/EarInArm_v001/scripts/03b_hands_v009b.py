@@ -179,16 +179,28 @@ for f in range(1, 46, 4):
 # (the patient's own hand path is unchanged)
 # v009d: the patient's hand on the new ear is relaxed (cup_hold read as a claw)
 apply_pose(PAT, "L", "relaxed_even", 1715, spread=0)
-# v009f end: no ear touch. Two tries at the touch (world keys swept the hand across his face; ear-placed keys put it at his
-# throat) were not clean, so per the director's simplify rule the risk is removed: his left hand stays relaxed where it is
-# at 1715 (out of the shot) and the beat plays on his smile with the new ear in view.
-_pbP = PAT.pose.bones["IK_hand.L"]
-lock(PAT, "L", 1715)
-for f in range(1716, 1771):
-    for path in ("location", "rotation_quaternion"):
-        try: _pbP.keyframe_delete(path, frame=f)
-        except RuntimeError: pass
-lock(PAT, "L", 1770)
+# v009f end: no ear touch (two tries were not clean; director's simplify rule).
+# v009g: as the chair rises (1655-1720) both hands go to his lap, placed on his own thighs every few frames, elbows bent
+# (world-fixed keys left the board arm sticking straight out sideways, director f1657-1690)
+def thigh_pt(s, f):
+    sc.frame_set(f); a_ = PAT.matrix_world @ PAT.pose.bones["upperleg01." + s].head; k_ = PAT.matrix_world @ PAT.pose.bones["lowerleg01." + s].head
+    p = a_.lerp(k_, 0.58); d = (k_ - a_); d.z = 0; d.normalize()
+    side = Vector((0, 0, 1)).cross(d) * (0.03 if s == "L" else -0.03)
+    return p + Vector((0, 0, 0.085)) + side, d
+for s_ in "LR":
+    pb_ = PAT.pose.bones["IK_hand." + s_]
+    for f in range(1661, 1771):
+        for path in ("location", "rotation_quaternion"):
+            try: pb_.keyframe_delete(path, frame=f)
+            except RuntimeError: pass
+lock(PAT, "L", 1660); lock(PAT, "R", 1660)
+sc.frame_set(1664); _w = wrist(PAT, "L"); _pbP = PAT.pose.bones["IK_hand.L"]
+_d = PAT.matrix_world.inverted().to_3x3() @ Vector((-0.08, -0.04, 0.12))   # lifts off the board first
+_pbP.location = _pbP.location + PAT.data.bones["IK_hand.L"].matrix_local.to_3x3().inverted() @ _d; _pbP.keyframe_insert("location", frame=1664, group=_pbP.name)
+for s_, frames in (("L", list(range(1678, 1771, 6)) + [1770]), ("R", list(range(1676, 1771, 6)) + [1770])):
+    for f in frames:
+        p, d = thigh_pt(s_, f); place_hand(PAT, s_, f, p, Vector((0, 0, -1)), d, skin=0.0)
+apply_pose(PAT, "L", "relaxed_even", 1684, spread=0); apply_pose(PAT, "R", "relaxed_even", 1690, spread=0)
 for f in (470, 800, 1100, 1400, 1640): apply_pose(PAT, "L", "relaxed_even", f, spread=0)   # v009e: relaxed on the arm board (read as a claw)
 lock(PAT, "L", 1); lock(PAT, "L", 42)
 for f, w in ((5, 0.5), (11, 1.0), (18, 1.0), (24, 1.0), (30, 1.0), (36, 0.5)):
@@ -261,7 +273,7 @@ JOBS = [(SUR, "R", range(1256, 1302, 2), lambda: [lambda: self_bvh(SUR)], 0.08),
         (SUR, "L", range(1405, 1494, 6), lambda: others(SUR)), (SUR, "R", range(1405, 1494, 3), lambda: others(SUR), 0.035),
         (SUR, "R", range(1398, 1422, 2), lambda: others(SUR), 0.12),   # v009f: f1406 forceps hand set the ear 2 cm into the scalp
         (SUR, "L", range(139, 284, 6), lambda: others(SUR)), (SUR, "R", range(139, 284, 6), lambda: others(SUR), 0.04),
-        (PAT, "L", range(1705, 1771, 6), lambda: [lambda: self_bvh(PAT)])]
+        (PAT, "L", range(1678, 1771, 4), lambda: [lambda: self_bvh(PAT)]), (PAT, "R", range(1676, 1771, 4), lambda: [lambda: self_bvh(PAT)])]
 for job in JOBS:
     rig, s, frs, tg = job[:4]; cap = job[4] if len(job) > 4 else 0.2
     for f in frs:
