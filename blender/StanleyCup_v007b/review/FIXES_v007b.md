@@ -11,8 +11,7 @@ Before/after on the flagged times: `review/hold_fixes_before_after.jpg` (top: v0
 ## The faults and the fixes
 
 1. **19–21 s, end: a grey sleeve with no body, and her hand frozen open in front of her chest for 2+ s.**
-   - Restaged the ending as a two-shot. After the floor bounces, the camera cranes up on his side of the table, crosses above the
-     table top and settles on her side wall. From there both bodies read whole: her in three-quarter view, him half-risen and
+   - Restaged the ending as a two-shot. After the bullet settles on the floor, a hard cut at f1401 goes to her side wall. From there both bodies read whole: her in three-quarter view, him half-risen and
      facing the camera, with the cup between them. It holds from f1417 (beat 8) to the end. A path check confirms the camera
      never enters the table.
    - She pulls back. After the flinch her left hand comes down into her lap, and her right hand goes to her chest, then down to
@@ -34,12 +33,13 @@ Before/after on the flagged times: `review/hold_fixes_before_after.jpg` (top: v0
    lens.
 
 ## Same fault elsewhere (found while watching the preview, also fixed)
-- **f861–876 (v008 ~14 s):** his sleeve reached into a cup insert from the frame edge. f885 is now an over-the-shoulder shot from
-  behind her right shoulder: the cup, his reaching arm and his face are in one frame.
+- **f861–876 (v008 ~14 s):** his sleeve reached into a cup insert from the frame edge. f885 now frames him from his left:
+  his face, his reaching arm and the cup are in one frame, and she is out of frame. An over-her-shoulder version was tried first
+  and dropped, because her hands crossed him (rule 2).
 - **f1121–1150 (v008 ~17.5 s):** after the impact, his arm crossed the frame toward her with no body. f1160/f1220 are now the
   two-shot from her side wall, with both reactions in frame.
-- Remaining moments without a face are fast camera moves lasting 1–2 preview frames (f456, f536, f791, f1111–1131). Also left:
-  the v007 condensation macro (f686–716), which is unchanged.
+- Remaining moments without a face are fast camera moves lasting 1–2 preview frames (f456, f536, f791, f1111–1131), and the
+  wall shot as the bullet bursts into the room (f200–262). Also left: the v007 condensation macro (f686–716), which is unchanged.
 
 ## Hands and wrists (found while watching, also fixed)
 - **Wrist flips.** The arm IK has no forearm twist, so the wrist takes 50–180° of pronation. The wrist Limit Rotation clamped twist
@@ -52,21 +52,57 @@ Before/after on the flagged times: `review/hold_fixes_before_after.jpg` (top: v0
   while the spine leans. `audit.py` fingers: deepest is now 9 mm (8 frames at step 3), down from 6 cm.
 - Dust motes that drifted through a head are hidden. That was the v007 limb_check PROPHEAD flag: DustMote.087 inside her head at f1486–1526.
 
+
+## Director rules 1–4 (17:27): second pass on top of the hold fixes
+
+Tool: `review/rules_check.py`, run every 2 frames over the whole film. Result on the final build: `review/rules_v007b.json` has **0 ARMOVER, 0 DETACHED, 0 BRUSH**. Bullet, spark and debris particles near the lens in the chase are not counted.
+- **ARMOVER:** the screen ray through any visible upper-arm, forearm or hand point continues on and hits the other person.
+- **DETACHED:** a hand is visible, no point of its arm is visible, and the arm doesn't leave the frame.
+- **BRUSH:** the camera is within 12 cm of a character, or within 10 cm of any other surface.
+
+Every hit below was also checked by eye.
+
+**Rule 2: no arm across the other person.**
+- f289–313, room reveal: the dolly looked down the table at her, so his table hands landed on her. It moved to her side of the table, with tighter lenses.
+- f555–646, bullet-level trailing shots: the camera sat at table height between them. It now rides 25 cm above and 20 cm toward her side of the bullet line. Her raised hands stay closer to her body and his reach stays on his side.
+- f877–898: the over-her-shoulder shot put her hands over him. It is replaced by a framing from his left, with her out of frame.
+- f1250–1300: after the impact he pulls his hand back to his chest, and the bullet drop is filmed from her side of the table.
+- f1404–1409: the crane up on his side put his hand on the cup in front of her. It is replaced by a hard cut (below).
+
+**Rule 3: no camera through or past a body, arm, lid or wall.**
+- **Beat 2** no longer flies through the siding, cavity and drywall. The camera stays 22–32 cm outside on the impact, then hard-cuts at f200 into the room, 1 m from the drywall, as the bullet bursts out. It whip-pans across the empty room to the couple at f268, and beat 3 (f271) lands on both faces.
+- All cup, lid and impact macros are kept 12 cm or more away, with longer lenses (impact 85/80 mm; x-ray dive 36 cm above the lid).
+- The f1040 orbit no longer passes his hand.
+- The floor skim is at 14–15 cm.
+- After the floor shot, a hard cut at f1401 goes to the two-shot. That replaces a crane up past his legs and under the table edge.
+- The descent at f1285–1296 runs straight down between two chairs (17 cm each side).
+- qa_check INSIDE went from 15 (v007) to 0, and audit camera to 0.
+
+**Rule 4: no floating hands.** The f920 approach is tighter (58 mm), so her fingertips no longer peek from behind the cup.
+
+**Rule 1: hands and props.** The only held-prop action is his handle grip. It is library-solved (`grip_object`), and it plays only in the wide two-shot, where the fingers don't need to read. hand_audit is 0.
+
+**Watched result.** The final `StanleyCup_v007b_preview.mp4` was decoded and watched frame by frame (306 frames).
+1. The only held-prop action (his handle grip) is shown wide, where the fingers don't need to read.
+2. No arm crosses the other person.
+3. No camera move passes through or near a body, an arm, a lid or a wall. The two hard cuts are at f200 and f1401.
+4. Every visible hand is connected to its body or runs off the frame edge.
+
 ## Checks on the final build (step in brackets)
 | Tool | v007 | v007b |
 |---|---|---|
-| `pipeline/limb_check.py` (5) | ARMBODY 306, PROPHEAD 9 | **ARMBODY 373, PROPHEAD 0, ARMBACK 0** (see below) |
-| `pipeline/qa_check.py` (6, beats.json) | EMPTY 148, FILL 32, INSIDE 15, BACKHEAD 1 | **EMPTY 135, FILL 30, INSIDE 13, BACKHEAD 0**; HOVER/CLAW/FACEPRESS 0 |
+| `pipeline/limb_check.py` (5) | ARMBODY 306, PROPHEAD 9 | **ARMBODY 334, PROPHEAD 0, ARMBACK 0** (see below) |
+| `pipeline/qa_check.py` (6, beats.json) | EMPTY 148, FILL 32, INSIDE 15, BACKHEAD 1 | **EMPTY 137, FILL 6, INSIDE 0, BACKHEAD 0**; HOVER/CLAW/FACEPRESS 0 |
 | `pipeline/clip_scan.py` (6) | 2 bad frames (889, 907) | **0** |
 | `scripts/hand_audit.py` (3) | 0 | **0** |
-| `scripts/audit.py` (3) | fingers in cloth to −6 cm | feet 0, seat 0, bullet 0, fingers ≤ 9 mm; camera: f283 GypChunk (debris passing the lens in the wall cavity, as v007) |
+| `scripts/audit.py` (3) | fingers in cloth to −6 cm | feet 0, seat 0, bullet 0, fingers ≤ 9 mm; **camera 0** |
 
-**limb_check ARMBODY 373.** Every flag is the shoulder joint itself. The count went up from v007 only because more frames now show
+**limb_check ARMBODY 334.** Every flag is the shoulder joint itself. The count went up from v007 only because more frames now show
 both people. I re-ran the same test and logged which bone points are inside: in every flag, the only inside points are k = 0–2 on `upperarm01`, i.e. within 4 cm of the joint centre. That part of the
 deltoid is skinned to `shoulder01`/`clavicle`, which limb_check classes as torso. No point on `upperarm02`, the forearm or the
 wrist is inside the character's own torso or the other character, in any frame. These are not visible faults, so I left them.
 Per-point log: `review/limb_points_v007b.json`. The arms that were really wrong (the straight reach, the detached sleeve) are fixed above.
 
-**qa_check: new flags vs v007.** One new frame: EMPTY at f985, the impact macro of the bullet hitting the cup. In v007 his hand sat
-behind the cup there; it has moved back (fault 2). Every other EMPTY/FILL/INSIDE flag is one of v007's bullet-flight and
-wall-cavity shots. The end two-shot (f1417–1530) has no flags.
+**qa_check: new flags vs v007.** EMPTY and FILL only on cup and bullet shots with no character in them: f679–685 (start of the condensation macro), f907 and f937 (the tighter 58 mm approach to the impact, rule 4), and f973–985 (the bullet-impact macro).
+These are cup and bullet shots with no character in them. Every other EMPTY flag is one of v007's bullet-flight and floor shots,
+or the new inside-the-room wall shot as the bullet bursts out (f200–262). The end two-shot (f1401–1530) has no flags.

@@ -38,7 +38,7 @@ if ad and ad.action:
     for fc in fcurves(sc):
         if "exposure" in fc.data_path:
             for kp in fc.keyframe_points:
-                kp.co.y = 0.25 if kp.co.x < 160 else -0.05
+                kp.co.y = 0.25 if kp.co.x < 200 else -0.05          # hard cut outside -> inside at f200
                 kp.handle_left.y = kp.handle_right.y = kp.co.y
             fc.update()
 # 4) interior fill: lift shadows (soft, even)
