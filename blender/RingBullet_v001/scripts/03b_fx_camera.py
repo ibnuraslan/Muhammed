@@ -114,7 +114,9 @@ NM = O["NeckMark"]; at(GRAZE); TB = wpos(NM); TBN = (NM.matrix_world.to_3x3() @ 
 at(SPLIT); P_S = bul.matrix_world.translation.copy()
 pa = catmull([(SPLIT, P_S), (SPLIT + 60, P_S.lerp(TA, 0.3) + GL * 0.012 - DIR * 0.01), (LODGE, TA)])
 WALL_HIT = Vector((0.532, 1.5, 1.92))   # bookshelf side panel, open upper-left of frame at f1016 (picked by ray cast)   # hits the bookshelf front (books), behind his head as framed
-pbk = [(SPLIT, P_S), (SPLIT + 90, P_S.lerp(TB, 0.35) - GL * 0.02 - DIR * 0.03), (GRAZE - 4, TB + TBN * 0.006 - DIR * 0.01), (GRAZE, TB + TBN * 0.002),
+# v007: B drifts near the ring in slow motion, then visibly crosses in front of his chin to the side of his neck, arriving at GRAZE
+pbk = [(SPLIT, P_S), (SPLIT + 90, P_S.lerp(TB, 0.12) - GL * 0.02 - DIR * 0.03), (945, P_S.lerp(TB, 0.25) - DIR * 0.03), (GRAZE - 12, TB + TBN * 0.05 + Vector((0, -0.06, 0.0))),
+       (GRAZE - 4, TB + TBN * 0.006 - DIR * 0.01), (GRAZE, TB + TBN * 0.002),
        (GRAZE + 4, TB + TBN * 0.004 + DIR * 0.03), (GRAZE + 5, TB.lerp(WALL_HIT, 0.55)), (GRAZE + 9, WALL_HIT)]
 pb_ = catmull(pbk)
 for o in (fa, fb): o.rotation_mode = 'XYZ'; hide(o, 1, True); hide(o, SPLIT, False)
@@ -126,6 +128,14 @@ hide(fa, SWAP, True)
 for f in range(SPLIT, GRAZE + 10, 1):
     fb.location = pb_(f); key(fb, "location", f); key(fb, "rotation_euler", f, Euler((f * 0.06, 0, f * 0.04)))
 hide(fb, GRAZE + 10, True)
+# v007: fragment B reads on screen: a bit larger and hot-glinting while it flies (no blood at the neck: the existing small cut only)
+fb.scale = fb.scale * 1.6
+mfb = (fb.active_material or bpy.data.materials.new("M_FragB")).copy(); mfb.name = "M_FragB_hot"; mfb.use_nodes = True; fb.data.materials.clear(); fb.data.materials.append(mfb)
+bsdf = next(n for n in mfb.node_tree.nodes if n.type == 'BSDF_PRINCIPLED')
+bsdf.inputs["Emission Color"].default_value = (1.0, 0.55, 0.2, 1)
+es = bsdf.inputs["Emission Strength"]
+for f, e in ((1, 0), (SPLIT, 0), (SPLIT + 30, 3.0), (GRAZE, 3.0), (GRAZE + 9, 1.0)):
+    es.default_value = e; es.keyframe_insert("default_value", frame=f)
 const_hide(fa); const_hide(fb); const_hide(bul)
 
 # ---------------------------------------------------------------- wall hit: dust puff + wood chips (real time after the slow motion)
@@ -241,29 +251,30 @@ def k_(f, loc, tgt, lens, foc=None): K.append((f, Vector(loc), Vector(tgt), lens
 k_(1, (0.74, -2.95, 1.56), face(1) + Vector((0, 0, -0.1)), 32)
 k_(F(0.5), (0.86, -2.3, 1.62), MZ.lerp(face(F(0.5)), 0.25), 34)
 k_(F(1.0), MZ + Vector((0.11, -0.2, 0.06)), MZ + DIR * 0.3, 38, MZ)
-for t in (1.6, 2.1, 2.6):
-    f = F(t); b = bpos(f); sd = DIR.cross(Vector((0, 0, 1))).normalized(); k_(f, b - DIR * 0.09 + Vector((0, 0, 0.024)) - sd * 0.008, face(f), 40, b)
-f = F(3.15); b = bpos(f); k_(f, b + Vector((0.16, 0.08, 0.04)), face(f), 40, b)
+# v007: no macro ride. A chase ~0.4 m behind/beside the bullet keeps HIM sharp (f/22) and the bullet small, flying at his head height
+SD_ = DIR.cross(Vector((0, 0, 1))).normalized(); UP_ = SD_.cross(DIR).normalized()
+def chase(f, back=0.42, side=0.13, upo=-0.06, aim=0.6):   # camera a little below the bullet: it reads in front of his face
+    b = bpos(f); return b - DIR * back + SD_ * side + UP_ * upo, b.lerp(face(f), aim), face(f)
+f = F(3.15); c_ = chase(f); k_(f, c_[0], c_[1], 40, c_[2])
 k_(F(3.7), (0.42, -0.95, 1.65), face(F(3.7)), 45)
 k_(F(4.7), (0.34, -0.8, 1.44), handL(F(4.7)), 50)
-r = ringp(F(5.7)); k_(F(5.7), r + Vector((0.07, -0.17, 0.03)), r, 60)
-f = F(6.8); b = bpos(f); r = ringp(f); k_(f, b - DIR * 0.07 + Vector((0.006, 0.0, 0.012)), b.lerp(r, 0.25), 50, b)
-f = F(7.5); b = bpos(f); r = ringp(f); k_(f, b - DIR * 0.07 + Vector((0.025, 0.0, 0.01)), b.lerp(r, 0.6), 50, r)
-f = F(8.2); b = bpos(f); r = ringp(f); k_(f, b.lerp(r, 0.5) + Vector((0.13, 0.0, 0.01)), b.lerp(r, 0.6), 50, b.lerp(r, 0.7))
+r = ringp(F(5.7)); k_(F(5.7), r + Vector((0.12, -0.42, 0.12)), r.lerp(face(F(5.7)), 0.45), 45, face(F(5.7)))
+f = F(6.9); c_ = chase(f, 0.24, 0.07, 0.03, 0.0); k_(f, c_[0], ringp(f).lerp(face(f), 0.35), 45, ringp(f))
+r = ringp(F(8.2)); k_(F(8.2), r + Vector((0.1, -0.3, 0.08)), r.lerp(face(F(8.2)), 0.3), 50, r)
 r = ringp(IMPACT); k_(IMPACT, r + Vector((0.085, -0.06, 0.012)), P_IMP, 60, P_IMP)
 r = ringp(F(10.0)); k_(F(10.0), r + Vector((0.17, -0.25, 0.04)), r, 55)
 def fmid(f): return (pa(min(f, LODGE)) + pb_(min(f, GRAZE))) / 2
-r = ringp(F(11.0)); k_(F(11.0), r + Vector((0.1, -0.08, 0.0)), r, 60)
+r = ringp(F(11.0)); k_(F(11.0), r + Vector((0.14, -0.38, 0.1)), r.lerp(face(F(11.0)), 0.45), 45, r)   # v007: pulled back, face + hand
 f = F(12.0); m = fmid(f).lerp(ringp(f), 0.3); k_(f, m + Vector((0.03, -0.15, -0.05)), m, 55)
 f = F(13.0); m = fmid(f).lerp(ringp(f), 0.2); k_(f, m + Vector((-0.1, -0.15, 0.03)), m, 55)
 f = F(13.9); m = fmid(f); k_(f, m + Vector((-0.04, -0.3, 0.06)), m, 50)
 n_ = nickp(F(14.4)); k_(F(14.4), n_ + Vector((0.1, -0.2, 0.05)), n_, 55)
 n_ = nickp(F(15.0)); k_(F(15.0), Vector((0.26, -0.86, 1.5)), n_.lerp(face(F(15.0)), 0.5), 42)
 k_(F(15.6), (0.2, -0.72, 1.72), face(F(15.6)), 45)
-nk = neckp(F(16.55)); k_(F(16.55), (-0.26, -0.5, 1.56), nk, 45)
-nk = neckp(F(17.1)); k_(F(17.1), (-0.36, -0.48, 1.5), nk + Vector((0, 0, -0.02)), 42)
+nk = neckp(F(16.55)); k_(F(16.55), (-0.3, -0.56, 1.55), nk.lerp(face(F(16.55)), 0.25), 42, nk)   # v007: wider, fragment B seen arriving
+nk = neckp(F(17.1)); k_(F(17.1), (-0.4, -0.68, 1.5), nk.lerp(face(F(17.1)), 0.3), 38, nk)   # v007: hand on neck + face read together
 k_(F(17.9), (0.36, -0.86, 1.47), handL(F(17.9)).lerp(face(F(17.9)), 0.4), 42)
-r = ringp(F(18.9)); k_(F(18.9), r + Vector((0.22, -0.3, 0.16)), r, 50)
+r = ringp(F(18.9)); m_ = r.lerp(face(F(18.9)), 0.5); k_(F(18.9), m_ + Vector((0.25, -0.55, 0.05)), m_, 40, r)   # v007: face + ring in frame
 r = ringp(F(19.5)); k_(F(19.5), r + Vector((-0.22, -0.42, 0.2)), r.lerp(face(F(19.5)), 0.4), 42)
 k_(F(20.1), (-0.17, -0.64, 1.52), face(F(20.1)), 45)
 k_(F(20.8), (-0.45, -1.45, 1.75), (0.25, 0.0, 1.4), 32)
@@ -275,19 +286,9 @@ cf = catmull([(k[0], k[4]) for k in K])
 cd = bpy.data.cameras.new("Cam"); cam = bpy.data.objects.new("Cam", cd); sc.collection.objects.link(cam); sc.camera = cam
 cd.clip_start = 0.002; cd.clip_end = 60; cd.sensor_width = 36; cd.dof.use_dof = True; cd.dof.aperture_fstop = 4.0
 cam.rotation_mode = 'QUATERNION'; prev = None
-def ride(f):
-    """orbit around the flying bullet: behind-above -> side -> below-side, closing in; target swings from the face to the bullet's nose"""
-    u = smooth((f - F(1.25)) / (F(2.95) - F(1.25)))
-    sd = DIR.cross(Vector((0, 0, 1))).normalized(); up = sd.cross(DIR).normalized()
-    ang = math.radians(-20 + 75 * u)                      # around the flight axis
-    rad = 0.035 + 0.02 * u; back = 0.075 - 0.05 * u
-    b = bpos(f); off = (up * math.cos(ang) + sd * math.sin(ang)) * rad - DIR * back
-    tgt = b + (face(f) - b).normalized() * 0.012 + up * 0.006
-    tgt = tgt.lerp(face(f), 0.85 * smooth((u - 0.6) / 0.4))   # v006: swing to his face for the peel-off (no blank wall frame)
-    return b + off, tgt, b.lerp(face(f), smooth((u - 0.55) / 0.45))   # v006b: focus follows the aim to his face (no fully soft frames)
-LOCKS = [  # (f0, f1, ramp, offset fn(f)->(loc, target, focus))
-    (F(1.25), F(2.95), 14, lambda f: ride(f)),
-    (F(6.4), F(7.4), 14, lambda f: (bpos(f) - DIR * 0.07 + Vector((0.006 + 0.03 * (f - F(6.6)) / 48, 0.0, 0.012)), bpos(f).lerp(ringp(f), 0.25 + 0.4 * smooth((f - F(6.6)) / 48)), bpos(f).lerp(ringp(f), smooth((f - F(6.8)) / 40)))),
+LOCKS = [  # (f0, f1, ramp, fn(f)->(loc, target, focus))
+    (F(1.3), F(3.0), 14, lambda f: chase(f)),
+    (F(6.6), F(7.4), 12, lambda f: (chase(f, 0.24, 0.07, 0.03)[0], ringp(f).lerp(face(f), 0.35), ringp(f))),
 ]
 FACE_C = {}
 def lockw(f):
@@ -316,7 +317,7 @@ for f in range(1, 1411):
     cd.lens = cn(f); cd.keyframe_insert("lens", frame=f)
     fp = cf(f) if lk is None else cf(f).lerp(lk[2], w)
     cd.dof.focus_distance = max(0.01, (fp - p).length); cd.dof.keyframe_insert("focus_distance", frame=f)
-    dd_ = (fp - p).length; st = 11.0 if dd_ < 0.12 else (8.0 if dd_ < 0.35 else (8.0 if ANIM else 4.0))
+    dd_ = (fp - p).length; st = 22.0 if ANIM else (11.0 if dd_ < 0.12 else (8.0 if dd_ < 0.35 else 4.0))   # v007: animated look stays sharp
     cd.dof.aperture_fstop = st; cd.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # ---------------------------------------------------------------- ring glints (rim kick placed near the camera->ring reflection)

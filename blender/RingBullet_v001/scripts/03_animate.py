@@ -103,7 +103,7 @@ for f, dz, back, side in ((1, -0.01, 0.0, 0), (20, -0.015, 0.01, 1), (FIRE, -0.0
 for f, flex, tw, sd, hd in ((1, 0, 0, 0, (-4, 0)), (FIRE, -4, 0, 0, (-8, 0)), (120, -8, -4, 0, (-5, 6)), (300, -10, -8, 2, (-6, 14)),
                             (541, -10, -8, 2, (-6, 16)), (556, -14, -10, 3, (-10, 20)), (700, -12, -8, 2, (-7, 16)),
                             (880, -10, -6, 0, (-4, 12)), (900, -2, 4, -4, (6, 4)), (960, -4, 2, -2, (2, 0)),
-                            (990, -8, -6, 4, (-6, -18)), (1020, -6, -8, 6, (-4, -22)), (1075, 6, 0, 0, (18, -4)),
+                            (990, -8, -6, 4, (-6, -18)), (1003, -8, -6, 4, (-6, -18)), (1008, -9, -8, 6, (-8, -24)), (1020, -6, -8, 6, (-4, -22)), (1075, 6, 0, 0, (18, -4)),
                             (1150, 8, 4, 0, (24, 6)), (1200, 6, -2, 0, (16, -8)), (1240, 2, 0, 0, (4, 0))):
     HO.key_spine(f, flex=flex, twist=tw, side=sd, head=hd)
 
@@ -132,18 +132,20 @@ o_hand("L", 975, (0.09, -0.3, 1.245), (-0.15, -0.15, 1.0), palm("L", (0.05, 1.0,
 o_hand("R", 906, (-0.14, -0.33, 1.36), (0.3, -0.2, 0.9), palm("R", (0.3, -0.9, 0.1)), (-0.45, -0.1, 1.05))
 o_hand("R", 936, (-0.15, -0.42, 1.25), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 0.2)), (-0.45, -0.2, 1.0))
 o_hand("R", 975, (-0.15, -0.42, 1.26), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 0.2)), (-0.45, -0.2, 1.0))
-# right hand flies to the right side of his neck f990-1010, left hand stays up and drops a bit
-o_hand("R", 990, (-0.27, -0.2, 1.46), (0.2, 0.6, 0.6), palm("R", (0.95, 0.0, -0.1)), (-0.55, -0.2, 1.0))
-o_hand("R", 1012, (-0.232, -0.08, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1030, (-0.218, -0.076, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
-o_hand("R", 1004, (-0.218, -0.075, 1.45), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
+# v007: the fragment hits his neck at GRAZE (1003) FIRST; then the flinch: the right hand leaves the chest and claps to the neck
+o_hand("R", 1003, (-0.15, -0.42, 1.265), (0.1, -0.5, 0.85), palm("R", (0.6, -0.3, 0.2)), (-0.45, -0.2, 1.0))
+o_hand("R", 1010, (-0.22, -0.2, 1.46), (0.2, 0.6, 0.6), palm("R", (0.95, 0.0, -0.1)), (-0.55, -0.2, 1.0))
+# the approved v006 neck-contact poses (clip-free), now arriving AFTER the hit
+o_hand("R", 1016, (-0.218, -0.075, 1.45), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
+o_hand("R", 1022, (-0.232, -0.08, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
+o_hand("R", 1032, (-0.218, -0.076, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
 o_hand("R", 1046, (-0.21, -0.072, 1.462), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.55, -0.1, 1.0))
 o_hand("R", 1060, (-0.207, -0.068, 1.455), (0.2, 0.8, 0.35), palm("R", (0.95, -0.1, -0.2)), (-0.5, -0.2, 1.0))
 o_hand("L", 1004, (0.1, -0.3, 1.25), (-0.15, -0.15, 1.0), palm("L", (0.05, 1.0, 0.1)), (0.5, 0.0, 0.95))
 # look at the ring: left hand lowered to chest in front, palm toward him, back of hand up so the ring faces camera
-o_hand("L", 1075, (0.12, -0.32, 1.28), (-0.6, -0.4, 0.5), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
-o_hand("L", 1150, (0.10, -0.34, 1.27), (-0.6, -0.45, 0.45), palm("L", (0.0, 0.6, 0.6)), (0.5, 0.0, 0.9))
-o_hand("L", 1235, (0.13, -0.33, 1.25), (-0.55, -0.45, 0.5), palm("L", (0.05, 0.6, 0.6)), (0.5, 0.0, 0.9))
+o_hand("L", 1075, (0.11, -0.32, 1.27), (-0.35, -0.2, 0.9), palm("L", (0.1, 0.9, 0.3)), (0.5, 0.15, 0.95))   # v007: elbow bent, hand relaxed
+o_hand("L", 1150, (0.10, -0.33, 1.28), (-0.35, -0.2, 0.9), palm("L", (0.1, 0.9, 0.3)), (0.5, 0.15, 0.95))
+o_hand("L", 1235, (0.13, -0.32, 1.27), (-0.4, -0.25, 0.85), palm("L", (0.1, 0.9, 0.3)), (0.5, 0.15, 0.95))
 o_hand("L", 1262, (0.33, -0.32, 1.1), (-0.4, -0.6, 0.4), palm("L", (0.1, 0.6, 0.7)), (0.5, 0.1, 0.9))
 o_hand("R", 1072, (-0.3, -0.15, 1.44), (0.1, 0.4, 0.8), palm("R", (0.9, 0.0, -0.2)), (-0.55, -0.1, 1.0))
 o_hand("R", 1078, (-0.31, -0.2, 1.37), (-0.15, -0.5, -0.85), palm("R", (-0.6, 0.4, 0.0)), (-0.55, 0.15, 1.0))
@@ -157,8 +159,8 @@ for s in "LR":
     key_fingers(ROW, s, 541, curl=6, spread=8, thumb=0)
 key_fingers(ROW, "L", 550, curl=4, spread=14, thumb=-5); key_fingers(ROW, "L", 700, curl=6, spread=8, thumb=0)
 key_fingers(ROW, "L", 890, curl=6, spread=8, thumb=0); key_fingers(ROW, "L", 905, curl=14, spread=4, thumb=5)
-key_fingers(ROW, "L", 1000, curl=18, spread=2, thumb=8); key_fingers(ROW, "R", 1080, curl=12, spread=4, thumb=12); key_fingers(ROW, "R", 936, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 975, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 1000, curl=18, spread=2, thumb=40); key_fingers(ROW, "R", 1110, curl=22, spread=2, thumb=10)
-key_fingers(ROW, "L", 1075, curl=4, spread=10, thumb=0); key_fingers(ROW, "L", 1150, curl=2, spread=12, thumb=0)
+key_fingers(ROW, "L", 1000, curl=18, spread=2, thumb=8); key_fingers(ROW, "R", 1080, curl=12, spread=4, thumb=12); key_fingers(ROW, "R", 936, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 975, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 1003, curl=15, spread=6, thumb=10); key_fingers(ROW, "R", 1014, curl=18, spread=2, thumb=40); key_fingers(ROW, "R", 1110, curl=22, spread=2, thumb=10)
+key_fingers(ROW, "L", 1075, curl=16, spread=5, thumb=8); key_fingers(ROW, "L", 1150, curl=18, spread=4, thumb=8)   # v007: relaxed, not flat
 key_fingers(ROW, "L", 1235, curl=20, spread=4, thumb=10); key_fingers(ROW, "R", 1240, curl=25, spread=2, thumb=10)
 
 # ---------------- face: terror -> brace -> wince -> pain -> disbelief -> relief
@@ -173,7 +175,7 @@ def key_face(f, jaw=0.0, brow=0.0, wide=0.0, squint=0.0, grim=0.0):
         pb.keyframe_insert("rotation_quaternion", frame=f, group=n)
 for f, jw, br, wd, sq, gr in ((1, 6, 14, 14, 0, 0), (FIRE, 8, 18, 18, 0, 0), (45, 13, 22, 12, 0, 6), (200, 12, 20, 6, 16, 12), (541, 12, 18, 2, 22, 14),
                               (560, 15, 10, 0, 30, 20), (700, 12, 14, 4, 22, 14), (890, 10, 14, 6, 18, 12), (905, 6, -8, 0, 34, 24),
-                              (990, 5, -6, 0, 30, 20), (1004, 14, -4, 0, 32, 24), (1060, 8, 4, 4, 16, 12), (1100, 5, 18, 16, 0, 0),
+                              (990, 5, -6, 0, 30, 20), (1003, 6, -4, 2, 20, 14), (1007, 15, -6, 0, 36, 26), (1060, 8, 4, 4, 16, 12), (1100, 5, 18, 16, 0, 0),
                               (1160, 7, 22, 12, 0, 0), (1176, 7, 22, 4, 30, 0), (1186, 7, 22, 4, 30, 0), (1200, 7, 20, 10, 0, 0), (1230, 4, 12, 6, 0, 4), (1300, 2, 4, 2, 0, 6), (1410, 1, 2, 0, 0, 8)):
     key_face(f, jw, br, wd, sq, gr)
 
@@ -238,13 +240,13 @@ for f, hd in ((1, (0, 0)), (1260, (4, -10)), (1330, (-2, 8)), (1410, (2, 4))):
     HF.key_spine(f, flex=2, head=hd)
 def of_hand(s_, f, local, d, n, pole):
     HF.key_hand(s_, f, OP + Rz_ @ Vector(local), Rz_ @ Vector(d), Rz_ @ Vector(n), pole=OP + Rz_ @ Vector(pole))
-for f in (1, 1300, 1410):     # left hand resting on the belt
-    of_hand("L", f, (0.2, -0.08, 1.0), (-0.3, -0.2, -0.9), (-0.9, 0, 0.2), (0.5, 0.3, 1.1))
-of_hand("R", 1, (-0.22, -0.02, 0.86), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3, 1.1))
-of_hand("R", 1300, (-0.22, -0.02, 0.86), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3, 1.1))
+for f in (1, 1300, 1410):     # v007: left hand hangs relaxed at his side, clear of the hip (clip_scan)
+    of_hand("L", f, (0.31, -0.02, 0.9), (0, -0.1, -1), (-0.9, 0, 0), (0.5, 0.3, 1.1))
+of_hand("R", 1, (-0.31, -0.02, 0.9), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3, 1.1))
+of_hand("R", 1300, (-0.31, -0.02, 0.9), (0, -0.1, -1), (0.9, 0, 0), (-0.5, 0.3, 1.1))
 for f, z in ((1325, 1.3), (1340, 1.42), (1355, 1.3), (1370, 1.42), (1385, 1.32)):   # beckoning wave
     of_hand("R", f, (-0.28, -0.3, z), (0.0, -0.4, 1.0), (0.0, 1.0, 0.0), (-0.5, 0.1, 1.0))
-key_fingers(ROF, "L", 1, curl=40, spread=2, thumb=10); key_fingers(ROF, "R", 1, curl=20, spread=4, thumb=10)
+key_fingers(ROF, "L", 1, curl=20, spread=4, thumb=10); key_fingers(ROF, "R", 1, curl=20, spread=4, thumb=10)
 
 # ---------------- hand rule: Limit Rotation (local) on fingers, thumbs, wrists of every character
 def _add_hand_limits_v005(R):
