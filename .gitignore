@@ -7,3 +7,4 @@ thumbnails/*/out_tmp/
 __pycache__/
 thumbnails/nvidia/download*/
 *.zip
+thumbnails/*/download*/
