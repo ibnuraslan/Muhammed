@@ -381,7 +381,7 @@ def anim_prosecutor(c, t):
     M = pr.arm.matrix_world.to_3x3(); sh = pr.bone_head("upperarm01.R")
     g = 0.5 + 0.5 * math.sin(sec * 1.1)
     reach(pr, "R", sh + M @ Vector((-0.05, -0.32 - 0.04 * g, -0.3 + 0.07 * g)), M @ Vector((-0.6, 0.2, -0.7)))
-    pr.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.6))
+    pr.rot("head", (1, 0, 0), 3 * g)                                       # small emphasis nods with the gesture
 
 
 def anim_file(c, t):
@@ -422,7 +422,7 @@ def anim_judges(c, t):
 
 def anim_reverse(c, t):
     for k, h in enumerate(c["public"]):
-        h.rot("head", (0, 0, 1), 3 * math.sin(t * 3 + k))
+        h.rot("head", (0, 0, 1), -14 * ease(min(1.0, max(0.0, t * 1.6 - 0.05 * (k % 6)))))     # faces turn toward the dock
 
 
 # ============================================================================ cameras

@@ -215,7 +215,7 @@ def anim_listen(c, t):
         nd.rotation_euler = (math.radians(35 * (0.4 + 0.3 * math.sin(sec * 7.0 + k) + 0.2 * math.sin(sec * 13.0 + 2 * k))), 0, 0)
     c["reader"].arm.location.z = -60
     r = c["listener"]
-    r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
+    r.rot("spine03", (1, 0, 0), -5 * ease(min(1.0, max(0.0, (sec - 3.0) / 2.0))))   # something on the tape: he leans in
     hd = r.bone_head("head"); M = r.arm.matrix_world.to_3x3()
     c["headband"].location = hd + Vector((0, 0, 0.07)); c["headband"].rotation_euler = (0, 0, r.arm.rotation_euler.z)
 
@@ -242,8 +242,7 @@ def arms_relaxed_one_left(h):
 def anim_read(c, t):
     sec = t * DUR["read"]
     c["listener"].arm.location.z = -60
-    r = c["reader"]; r.rot("head", (0, 1, 0), 3 * math.sin(sec * 0.4))
-    f = c["file"]; f.rotation_euler = (0, 0, 0.03 * math.sin(sec * 0.3))
+    r = c["reader"]; r.rot("head", (1, 0, 0), -6 * ease(t))               # reading: her head settles toward the file
 
 
 def anim_string(c, t):

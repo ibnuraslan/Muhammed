@@ -133,7 +133,7 @@ def anim_arrive(c, t):
 
 def anim_stairs(c, t):
     sec = t * DUR["stairs"]
-    u = ease(min(1.0, max(0.0, (sec - 1.0) / 2.5)))
+    u = 1.0                                                               # already lifted away by the officer (no self-motion)
     p = c["panel"]; p.location = (0.6 + 1.05 * u, 1.6 - 0.12 * u, 0.58); p.rotation_euler = (0, 0, math.radians(-8 * u))   # slides aside
     h = c["officer"]; sp = Vector((2.3, 0.6, 0)); place(h, sp, face_to(sp, (0.6, 2.0))); arms_relaxed(h)
     to = c["torch"]; to.location = h.bone_head("upperarm01.R") + Vector((0.25, 0.25, -0.15))

@@ -159,12 +159,12 @@ def anim_grid(c, t):
 
 
 def anim_ring(c, t):
-    c["ring"].rotation_euler = (0, 0, math.radians(-25 + 50 * t))
+    c["ring"].rotation_euler = (0, 0, math.radians(-12))                   # still: only the camera moves
 
 
 def anim_suitcase(c, t):
     sec = t * DUR["suitcase"]
-    c["tag_pivot"].rotation_euler = (math.radians(6 * math.sin(sec * 2.1) * math.exp(-sec * 0.3)), 0, math.radians(8))
+    c["tag_pivot"].rotation_euler = (0, 0, math.radians(8))                # still: only the camera moves
 
 
 def anim_dna(c, t):
@@ -175,10 +175,8 @@ def anim_dna(c, t):
 
 def anim_cctv(c, t):
     sec = t * DUR["cctv"]
-    for k, (pr, home, rz) in enumerate(c["prints"]):               # each print slides in from the left, a beat apart
-        u = ease(min(1.0, max(0.0, (sec - 0.2 - 0.85 * k) / 0.75)))
-        pr.location = home + Vector((-0.6 * (1 - u), -0.1 * (1 - u), 0))
-        pr.rotation_euler = (0, 0, rz - 0.45 * (1 - u))
+    for k, (pr, home, rz) in enumerate(c["prints"]):               # the prints lie where the detective spread them;
+        pr.location = home; pr.rotation_euler = (0, 0, rz)             # the camera push and the lamp pool carry the shot
 
 
 MOVES = {

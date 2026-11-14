@@ -817,8 +817,9 @@ def anim_night_door(c, t):
 def anim_night_wait(c, t):
     sec = t * DUR["night_wait"]
     for k, h in enumerate(c["seated"]):
-        h.rot("head", (0, 0, 1), 4 * math.sin(sec * 0.3 + k))
-    c["window_man"].rot("head", (0, 0, 1), 8 * math.sin(sec * 0.25))
+        h.rot("spine03", (1, 0, 0), 0.8 * math.sin(sec * 1.3 + k))           # breathing only
+    # the first light comes on downstairs (frame ~96 = 4 s): the man at the blinds turns his head to the room
+    c["window_man"].rot("head", (0, 0, 1), 35 * ease(min(1.0, max(0.0, (sec - 4.2) / 1.5))))
 
 
 MOVES = {

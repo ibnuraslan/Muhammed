@@ -200,7 +200,7 @@ def anim_tags(c, t):
     anim_layout(c, t)
     hx = c["counter"].arm.location.x
     for tg, home in c["tags"]:
-        tg.location = home if home.x < hx - 0.1 else Vector((0, 0, -20))
+        tg.location = home                                                # all tagged already: he walks the rows checking them
 
 
 def anim_final(c, t):

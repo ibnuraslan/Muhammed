@@ -143,7 +143,8 @@ def anim_lockers(c, t):
     a, b = c["talk"]
     for h, sp, tgt in ((a, Vector((4.5, 1.2, 0)), Vector((4.5, 2.2, 0))), (b, Vector((4.6, 2.3, 0)), Vector((4.5, 1.2, 0)))):
         zero(h); pose_walk(h, 0.0, stride=0.0, arm_swing=0.0); place(h, sp, face_to(sp, tgt)); arms_relaxed(h)
-    a.rot("head", (0, 0, 1), 6 * math.sin(sec * 0.8)); b.rot("head", (1, 0, 0), 4 * math.sin(sec * 0.6))
+    turn = ease(min(1.0, max(0.0, (sec - 3.5) / 1.2)))                     # the third man arrives: both look round to him
+    a.rot("head", (0, 0, 1), 25 * turn); b.rot("head", (0, 0, 1), -20 * turn)
     walk_to(c["joiner"], Vector((-2.0, 0.0, 0)), Vector((3.7, 1.7, 0)), sec - 0.5, speed=0.9)
     c["boxer"].arm.location = (0, 0, -60)
     for k, b_ in enumerate(c["bags"]):

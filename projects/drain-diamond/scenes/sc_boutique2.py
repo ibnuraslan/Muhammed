@@ -342,7 +342,7 @@ def anim_floor16(c, t):
     hide_floor(c)
     r = c["robbers"][0]; zero(r); pose_walk(r, 0.0, stride=0.0, arm_swing=0.0)
     place(r, (3.9, 7.4, 0), face_to((3.9, 7.4), (-4, 5))); arms_relaxed(r)
-    r.rot("head", (0, 0, 1), 20 * math.sin(sec * 0.5))
+    r.rot("head", (0, 0, 1), -18 + 30 * ease(t))                          # one slow look along the row of people on the floor
     c["wig_obj"].location = (2.6, 6.4, 0.05)
 
 
@@ -371,8 +371,10 @@ def anim_panel(c, t):
     u = ease(min(1.0, max(0.0, (sec - 1.0) / 3.5)))
     c["panel"].location = (-6.7, 6.0 + 1.65 * u, 1.5)
     r = c["robbers"][1]; zero(r); pose_walk(r, 0.0, stride=0.0, arm_swing=0.0)
-    rp = Vector((-5.8, 5.2, 0)); place(r, rp, face_to(rp, (-6.9, 6.0)))
+    rp = Vector((-6.15, 5.0 + 1.4 * u, 0)); place(r, rp, math.radians(-90))     # facing the wall, moving with the panel
     arms_relaxed(r)
+    if u > 0.0:                                                            # his right hand on the panel's edge pushes it aside
+        reach(r, "R", Vector((-6.66, 5.24 + 1.65 * u, 1.25)), Vector((0.6, 0.0, -0.8)))
     if sec > 4.0:
         v = ease(min(1.0, (sec - 4.0) / 2.0))
         reach(r, "R", Vector((-6.3, 5.6, 1.45)).lerp(Vector((-6.75, 5.85, 1.5)), v), Vector((0.3, -1, -0.6)))
