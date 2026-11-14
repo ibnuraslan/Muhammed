@@ -211,7 +211,7 @@ ACTION = {
     "3-3B": "Dusk aerial over the village: the family house and, down the lane, a second house; the camera travels between them.",
     "3-4B": "The workshop counter with the pile of letters as it stood; slow push-in, the lamp falls on the top envelope.",
     "3-5A": "Alibi time-lapse from above: the board, the clock racing 19:30→01:00, players' hands moving pieces in jumps.",
-    "3-5B": "Morning: the empty evidence carton, flaps closed, on the workshop floor; an officer's torch beam passes over it.",
+    "3-5B": "Morning: the empty evidence carton, flaps closed, on the workshop bench; an officer's torch beam passes over it.",
     "3-7A": "The offer as a still life under the lamp: banded notes, a small colour TV, a spade leaning at the table.",
     "3-7B": "Soil cross-section on black: the hole as found, a folding rule and a rod laid in it, the box outline inside (as described).",
     "3-8B": "From above: three men walk a loop; flags already mark each spot he named; he stops and points at the next.",
