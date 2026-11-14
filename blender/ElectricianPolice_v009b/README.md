@@ -1,0 +1,158 @@
+# ElectricianPolice_v009b: v009 with the officers' eyes cleared
+
+The only changes from v009 (c984181), per the director's review:
+- The long side-swept fringe (short03, worn by the phone officer and the sweating officer) hung over one eye and read as a dark band, a blindfold, in the dim station. Its front vertices are compressed upward so the fringe ends 1.2 cm above the eyebrows. Both eyes now show (check: 540x960 face close-ups of all five officers).
+- The police cap visor was near-black, which read as a band across the face. It is now dark khaki.
+- Checked against the packaging alpha bug (LESSONS_LEARNED s3): every hair, brow and lash texture in the package is a 4-channel PNG with real alpha (minimum 0.0). The band was the geometry and the visor colour, not lost alpha.
+
+Nothing else changed. The beat frames and beats.json are unchanged. qa_check: EMPTY 26 (listed exceptions), every other category 0. Both clip scans: 0.
+
+The preview is `../ElectricianPolice_v001/review/preview.mp4` (also saved as `preview_v009b.mp4`), with its pages in `review/preview_v009b_pages/`.
+
+---
+
+# ElectricianPolice_v009: farm package (faces and acting pass, from the v008 motion review)
+
+v009 is v008 with the director's notes on the moving preview fixed. The beat frames are unchanged, `beats.json` is identical, and no VO has been added.
+
+| Note | Fix |
+|---|---|
+| 1. Blank faces | **Eye fix:** the LESSONS_LEARNED s3 fix is applied to all 7 EnhancedEye node groups (cornea: transparent mix instead of refractive transmission). **Key light:** `CamFaceKey`, a 0.7 m soft area light riding with the camera, is keyed on for his face shots (gate 490–540, office 602–1105, final stroll 1450–1560) and at a lower level for the station officers (1252–1408). **Helmets:** both sit 2.4 cm higher, so the brim no longer covers his eyes. **Ending:** a smug nod (1544–1552) with the smirk. |
+| 2. Stiff arms raised at 930–1010 | A fist pump: right elbow bent and down, the fist pumping at shoulder height, the left hand resting on his thigh. A hands-behind-head version clipped his head, so it was dropped. |
+| 3. His back fills the frame at 1011–1061 | The camera is at his right side, 1.4 m away: his profile, gloved hand and the lever are in frame. |
+| 4. Dark police room at 1326–1401, and the paper across the lens | The camera is 2.2–3 m from the sweating officer, so he is mid-frame, and it now stays clear of the fanning paper. The turn to the slumped officer is a 5-frame whip (1401–1406). |
+| 5. Keyboard smear | The baked dirt in the laptop's base colour is washed 80 % toward clean beige. |
+
+The preview is `../ElectricianPolice_v001/review/preview.mp4` (also saved as `preview_v009.mp4`), with its contact pages in `../ElectricianPolice_v001/review/preview_v009_pages/`.
+
+**Checks on this package:**
+- `qa_check.py` (fc62c27): CAMJUMP, BACKHEAD, CLAW, HOVER and FACEPRESS are all 0. EMPTY is 26, all listed exceptions.
+- Both clip scans: 0 bad ranges.
+- Hand audit: 3 hits, the intended brow wipe.
+
+**Noticed, not changed:**
+- The sweating officer's hair fringe reads as a dark band over his eyes.
+- The dusk road in the final close-up looks mottled at preview quality (4 samples).
+
+---
+
+# ElectricianPolice_v008: farm package (motion-preview pass)
+
+v008 is the approved v007 rev 3 (91f7a3d), watched in motion with `pipeline/preview.py` (every 5th frame, 312 frames) and corrected. The beat frames are unchanged, `beats.json` is identical, and no VO has been added.
+
+**Faults found in the v007 motion preview, and their fixes:**
+
+| Frames | Fault | Fix |
+|---|---|---|
+| 316–332, 1005–1021, 1409–1427 | The eased whips (16–18 frames) held empty frames: a street, a wall, the floor, and black at 1419. | The whips are now 6 frames (the director's 60°/frame limit). The turn is eased in yaw and pitch separately, so it stays level and never dips into the floor or a desk. |
+| 486–536 | The camera crossed the substation fence, with mesh and a pole across the lens. | The camera now follows him through the open gate (x = 8, y 24.4). |
+| 541–556 | The flight to the office held on a transformer close-up and an empty yard. | A quick fly (541–549) over the yard, onto the office window with him at the desk inside. |
+| 1041–1057 | His back and arm filled the frame up to beat 8. | The camera is at his front-right: his face, gloved hand and the lever are in frame on the beat. |
+| 1146–1158 | The exit from the office held on a wall and a pylon leg. | A shorter exit (1146–1150) to a position clear by ray cast, then the pedestrian on the street. |
+| 1290–1306 | The pan between the officers held on an empty corner. | A faster 4-frame pan (1295–1299). |
+
+The preview is `../ElectricianPolice_v001/review/preview_v008.mp4` (12 fps, every 5th frame), with its contact pages in `../ElectricianPolice_v001/review/preview_v008_pages/`.
+
+**Also fixed:**
+- **Beat 5 (505):** the camera is ahead of him inside the yard, so his face reads while he walks to the line and looks up at the pylon.
+- **Beat 9 (1165):** the station crew and their props are hidden from 1140 to 1215, while they are far inside the dark station during the street walk. They were the only figures QA could see there, from behind.
+
+**Checks on this package:**
+- `qa_check.py` (fc62c27): CAMJUMP 0, BACKHEAD 0, CLAW 0, HOVER 0, FACEPRESS 0, EMPTY 25. The EMPTY flags are listed in ACTING_notes.md: the fence QA treats as opaque, the 0.1 s whips and the office screen framings.
+- Both clip scans (the stock scan and the patched copy): 0 bad ranges.
+- Hand audit: 3 hits, all the intended brow wipe.
+
+**Still visible in the moving preview, each 0.1 s or less:**
+- the gate post as the camera passes through the gate (496–501)
+- the yard during the whip to the office (543–546)
+- one corner frame mid-pan (1296)
+- the fanning paper crossing the lens (1336)
+- the doorframe on the exit whip (1421)
+
+---
+
+# ElectricianPolice_v007: farm package (hands and framing pass)
+
+v007 is v006 (the acting pass) with the director's v006 review in, plus the 14:40 UTC self-check, the `qa_check.py` gate and the shared hand library. The story-beat frames are unchanged, and `beats.json` is identical to v005 and v006.
+
+**Hands:**
+- Every finger pose comes from the shared library `../pipeline/hand_poses.py` (`apply_pose`: wrap_grip, pinch, hold_flat_object, relaxed, cup_hold or flat_palm). The joint limits come from `add_hand_limits`. There are no hand-set finger angles.
+- **Contact:** a grip solver moves the IK hand so the object runs through the actual fist (bike grips and lever). A touch solver puts the fingertips on the surface (the writing hand on the pad, the brim of the hat). Flat props are placed in the measured thumb-and-index pinch, then snapped to the nearest fingertip: the slip, the board, the papers, the file, the phone and the key ring.
+- **Close-ups:** `../ElectricianPolice_v001/review/v007_hand_closeups.jpg` has 16 shots, each aimed at the centre of the hand with a clear line of sight and a review-only fill light.
+
+**Framing:** every flagged empty or back-of-head frame was re-staged. The full list is in `../ElectricianPolice_v001/review/ACTING_notes.md` (v007).
+
+**QA:** `../ElectricianPolice_v001/review/qa_v007.json`, from `pipeline/qa_check.py` with step 6 and beats.json, run on this package file. The remaining flags are listed as intended, with reasons, in ACTING_notes.md.
+
+**Build:** `../ElectricianPolice_v001/scripts/chain7.sh` runs every step from 03_animate through packaging, and every check including QA.
+
+---
+
+# ElectricianPolice_v006: farm package (acting pass)
+
+v004 is v003 with only the hands pass added (client rule, 23:00 UTC); everything else is unchanged.
+
+**Hands pass:**
+- **Joint limits:** local-space Limit Rotation constraints on every finger, thumb and wrist bone, 480 in all. Fingers bend 0–95° forward and up to 5° back, with ±12° spread. The thumb moves in a cone. The wrist allows ±60° flex and ±35° side. There is no explicit elbow limit; the IK pole keeps elbows bending the natural way.
+- **Default pose:** a relaxed curl (curl 20°, thumb 15°) until each character's first acted hand key.
+- **Audit:** `../ElectricianPolice_v001/scripts/05_hands.py` runs a BVH check every 2 frames on every character in front of the camera within 14 m. It checks hand against hand, hand against its own torso, head and torso clothing, and hand against any other character within 1.5 m. Each hit is re-keyed by pushing the IK hand target 3.5 cm off the surface, over 2 passes, then the audit runs again. 89 hits fell to 22, then 7.
+- **Remaining 7 hits:** all intended contact or a brief pass. One hand holds the hat onto his head (f311–313). The sweating officer wipes his brow (f1265, f1315) and his arm passes his chest going there and back (f1317–1319). The key hand touches the shirt as he turns to the gate (f397). Report: `../ElectricianPolice_v001/review/v006_hand_audit.txt`.
+- **Close-ups:** `../ElectricianPolice_v001/review/v004_hand_closeups.jpg` shows 16 close-ups of hand actions at 270×480. They led to two prop changes: the fan-tapping officer now holds a plain paper, and the desk clipboard is removed, because the clipboard clip carries tiny printed text.
+
+v003 was v002, with every director note in, moved to the client's animated-CG look from 22:45 UTC (`../STYLE_ANIMATED.md`). Nothing in the animation or geometry changed. The look changes are:
+- `pipeline/anim_look.py`: AgX Punchy, a cyan-to-white sky gradient for the camera, saturation ×1.25, bump ×0.35, roughness at least 0.35, f/5.6, motion blur off and volumes halved.
+- `../ElectricianPolice_v001/scripts/04_anim_tune.py`: brighter keyed world, sun and exposure; an evening-blue sky; and a readable blue night in the station from a cool window fill plus a soft front key.
+
+This is the full 26 s film at 1080×1920 and 60 fps, ready for RenderStreet. No render has been submitted.
+
+## Files
+- `ElectricianPolice_v006_60fps.blend`: the self-contained scene. Every texture is packed inside.
+- `beats.json`: the start frame of each of the 11 beats, built to the brief's target times. When the voiceover arrives, run `pipeline/retime_to_vo.py` to warp every key onto its words, then repackage.
+- `SETTINGS.md`: render settings and suggested test frames.
+- `CREDITS.md`: the CC-BY credit block for the video description.
+- `package_check_f1306_lowres.jpg`: a 270×480, 8-sample frame from the packed file opened in factory Blender. It shows the package works; it is not a quality reference.
+
+## Voiceover
+There is no VO mp3 yet. The script is ours (73 words) and is in `../briefs/14_ElectricianPolice.md`.
+
+## Source
+The source is `../ElectricianPolice_v001/scripts`. Build order:
+1. `01_build_humans.py`, once per character.
+2. `02_build_scene.py`.
+3. `03_animate.py`, which runs `03b_fx_camera.py`.
+4. `slim_textures.py`.
+5. `05_hands.py`, then `pipeline/anim_look.py`, then `04_anim_tune.py`. `../ElectricianPolice_v001/scripts/chain6.sh` runs steps 5–6 and every check.
+6. `pipeline/package_for_farm.py`.
+
+`audit.py` is the contact and camera audit. Its latest report is `../ElectricianPolice_v001/review/C_audit.txt`.
+
+## Beats (frame = 1 + 60·t)
+| # | Frame | Line | What happens |
+|---|---|---|---|
+| 1 | 1 | "He was riding his motorcycle without a helmet" | Low chase alongside the bike through a busy market street with saffron and teal walls, marigold strings, vendor carts, rickshaws, cows, 8 pedestrians and dust haze. His hair and shirt ripple in the wind. |
+| 2 | 169 | "and the police gave him a fine" | The officer waves him over. He brakes and puts a foot down. The officer writes the ticket and the slip passes hand to hand. |
+| 3 | 283 | "But he was an electrician" | He pulls the hard hat off the seat and onto his head. A whip-pan lands on him at the substation gate in a hi-vis vest. |
+| 4 | 397 | "with access to the power grid" | He unlocks the gate and walks in. The camera cranes up the pylon as pulses run out along the lines over the town. |
+| 5 | 505 | "So he checked the records" | The camera dives through the office window to his laptop. The record bars load as he types. |
+| 6 | 619 | "...the police station hadn't paid..." | The police row turns red with a badge icon. Three calendar pages flip. He leans in with a slow grin. |
+| 7 | 895 | "And that bill was huge" | The red bar bursts out of the screen across the room. He throws his arms up. |
+| 8 | 1057 | "so he cut off their power" | His gloved hand throws the big lever. There is a clunk, sparks and an arc flash, and the cabinet lamps die. |
+| 9 | 1165 | "the police station sat in the dark" | The camera backs out of the window and flies over the roofs at dusk. The station windows go dark one by one. |
+| 10 | 1231 | "For five hours" | The camera flies through a dark window into the station and passes five officers: one fans himself with a paper, one taps the dead ceiling fan with a file, one holds a phone torch, one fans himself and wipes sweat by the water cooler, and one is slumped with his head back. The fan winds down and the clock spins five hours. |
+| 11 | 1381 | "all because they fined the wrong guy" | The camera backs out through the door. He strolls past the dark station, turns to camera and smirks. |
+
+## Review
+`../ElectricianPolice_v001/review/ACTING_after_v006_0.5s_a.jpg` and `_b.jpg`: one still per second, 270×480, 8 samples.
+
+## Known issues
+- **Animated look:** the whip-pan at 5.3–5.6 s has no motion blur any more (look rule), so it reads as a fast pan. The building boxes keep their scanned plaster textures, only softened. The face framing at about 13 s still drifts to the frame edge between two camera keys.
+- **Hi-vis vest:** the vest is cut from the shirt mesh, so the armholes are a little lumpy, and in close-ups the top edge looks torn.
+- **Hands:**
+  - The hands-in-pockets at the end are approximate: the hands rest at the pocket line rather than inside it.
+  - The fanning paper and the phone are parented to the wrists. Finger grips are curls, not per-finger contact.
+- **Feet:** the walks show 2–4 cm of heel or toe lift on some contact frames (`C_audit.txt`). Planted feet are on the floor.
+- **Characters:** the 5 officers and 8 street extras are re-proportioned clones of 4 MPFB bodies, with tinted clothes. Background clones have no teeth or tongue meshes. The street dog was dropped because it read as a food tray at review size. The rickshaw model's food-brand livery was repainted plain green with a yellow roof.
+- **Penetration (BVH, sampled every 12 frames):** 4 frames: 2 where his legs touch the bike seat while riding, and 2 where the hard hat passes through his hand as he grabs it. There is no lip-sync, because there is no VO yet. The grin and smirk use the lip-corner bones only.
+- **Interior:** the station interior at dusk is dim blue rather than pitch black, so the action reads. The phone torch is a spot light with no visible beam.
+- **Screen and clock:** the laptop UI is emissive 3D planes (icons and bars) with no text. The clock's maker's mark is covered by a dial-coloured disc.
+- **Camera:** from 22.4 to 23.4 s the camera turns across a fairly empty back wall of the station.
