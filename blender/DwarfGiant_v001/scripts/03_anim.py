@@ -547,7 +547,7 @@ for f in list(range(1, 2341, 4)) + [2340]:
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1, 8.0), (180, 8.0), (181, 22.0), (478, 22.0), (479, 8.0), (1262, 8.0), (1292, 1.4), (1335, 1.4), (1365, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
+for f, fs in ((1, 8.0), (160, 8.0), (166, 64.0), (205, 64.0), (215, 22.0), (478, 22.0), (479, 8.0), (1262, 8.0), (1292, 1.4), (1335, 1.4), (1365, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
