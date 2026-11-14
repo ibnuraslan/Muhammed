@@ -547,6 +547,29 @@ def place(h, loc, face_z):
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = loc; bpy.context.view_layer.update()
     w = np.concatenate([_world_verts(o) for o in h.parts if o.type == 'MESH' and "shoes" in o.name or o is h.body])
     h.arm.location.z += loc[2] - w[:, 2].min(); bpy.context.view_layer.update()
+    alive(h)
+
+
+IDLE = __import__("os").environ.get("RS_IDLE", "1") == "1"
+
+
+def alive(h, amount=1.0):
+    """Nobody stands like a statue: breathing in the chest, a slow weight shift through the spine and small,
+    unhurried head turns, all from the frame number (bakes like any pose; each person has their own phase).
+    Upper body only, so feet stay planted and later reach()/aim() calls build on it."""
+    if not IDLE or amount <= 0:
+        return
+    t = bpy.context.scene.frame_current / 24.0
+    ph = (sum(ord(ch) for ch in h.arm.name) % 97) * 0.37
+    th = h.arm.rotation_euler.z; fwd = Vector((math.sin(th), -math.cos(th), 0)); side = fwd.cross(Vector((0, 0, 1)))
+    up = Vector((0, 0, 1)); pb = h.arm.pose.bones
+    br = math.sin(t * 2 * math.pi / 4.2 + ph)                                  # ~14 breaths a minute
+    sway = math.sin(t * 2 * math.pi / 7.5 + ph * 1.3)                           # slow weight shift
+    look = math.sin(t * 2 * math.pi / 9.0 + ph * 0.7) + 0.4 * math.sin(t * 2 * math.pi / 3.7 + ph)
+    for bn, ax, deg in (("spine03", side, 0.9 * br * amount), ("spine01", fwd, 1.2 * sway * amount),
+                        ("neck01", up, 2.5 * look * amount), ("head", side, 0.8 * br * amount)):
+        if bn in pb:
+            h.rot(bn, ax, deg)
 
 
 def face_angle(src, dst):

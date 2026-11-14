@@ -283,7 +283,7 @@ NIGHT_VARIANTS = ("night", "dusk", "yard_dusk")
 # Shots that keep their own light and take the cinematic grade only (per-shot review of the v4 sheet):
 # windowless therapy room and smelter went black, the Ankara office and the ward washed out, the hospital front
 # went to silhouette. ("except", moves) = grade only except those moves.
-GRADE_ONLY = {"therapy": "all", "smelter": "all", "ankara": "all",
+GRADE_ONLY = {"evidence": "all", "therapy": "all", "smelter": "all", "ankara": "all",
               "hospital": ("except", ("ch4_2a", "ch4_2b", "ch2_1a", "ch4_11a", "ch4_11b"))}
 EXTERIOR_RELIGHT = True       # LOOK v5: low sun + blue sky, real colours, mood from shadows only
 SUN_OFFSET = {"hospital": 115.0, "building": -115.0}      # facades face the camera: rake them from the side

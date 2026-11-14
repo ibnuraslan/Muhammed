@@ -26,7 +26,7 @@ def _load():
             sec = max(4.0, words / WPM * 60.0)
             a = b = sec / 2
             if n == 1:
-                a += 2.5 if chap == "intro" else 2.0
+                a += 2.5 if chap == "intro" else 3.0          # person's rule: >= 3.0 s under each chapter title
             _D[f"{chap}_{n}a"] = round(a, 2); _D[f"{chap}_{n}b"] = round(b, 2)
     return _D
 

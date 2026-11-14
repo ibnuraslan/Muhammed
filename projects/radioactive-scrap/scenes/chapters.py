@@ -3,7 +3,7 @@ make_master merges these into its CHAPTERS when this folder is on PYTHONPATH."""
 import os, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SETS = ["scrapyard", "ikitelli", "hospital", "smelter", "therapy", "ankara", "building"]
+SETS = ["scrapyard", "ikitelli", "hospital", "smelter", "therapy", "ankara", "building", "evidence"]
 
 
 def _moves():

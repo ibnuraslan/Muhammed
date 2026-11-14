@@ -229,7 +229,6 @@ SHOTS = {
     "ch2_10b": ("room", c2_10b, C(Vector((1.6, -1.5, 1.3)), Vector((1.35, -1.25, 1.35)), Vector((0.0, 0.0, 1.95)), 32), 4.0),
     "ch2_11a": ("room", c2_11a, C(Vector((3.0, 1.0, 1.7)), Vector((2.6, 0.6, 1.7)), Vector((-2.4, -2.5, 0.9)), 24), 4.0),
     "ch2_11b": ("room", c2_11b, C(Vector((-10.5, -6.0, 1.4)), Vector((-10.2, -5.9, 1.4)), Vector((-3.6, -3.6, 1.3)), 28), 4.0),
-    "ch4_10a": ("room", c4_10a, C(Vector((3.6, 1.6, 1.7)), Vector((3.3, 1.3, 1.7)), Vector((-2.5, -2.0, 1.4)), 24), 4.0),
     "ch4_10b": ("room", c4_10b, C(Vector((STORE.x + 2.6, STORE.y + 2.6, 1.6)), Vector((STORE.x + 2.3, STORE.y + 2.5, 1.6)), Vector((STORE.x, STORE.y + 0.5, 1.3)), 28), 2.8),
 }
 VARIANT_FOR = {k: v[0] for k, v in SHOTS.items()}
