@@ -347,7 +347,7 @@ def _b_tool_black(c, swing=False):
         c["cord"] = cyl("Cord", (0, 0, 1.6), 0.003, 1.2, H.mat("black"), 6)
     else:
         spot((0.03, 0.0, 1.5), (-0.05, 0.0, 0.0), 300, 40, 0.3, radius=0.04)
-        rim = spot((-0.2, 1.4, 0.35), (0.0, 0.0, 0.02), 25, 30, 0.4, col=(0.9, 0.92, 1.0)); rim.data.shadow_soft_size = 0.2
+        # no rim lamp: its pool on the floor read as a glare when the camera arcs round (one light only)
         # no haze here: the side-lit cone flared at the end of the arc; the motes carry the beam
         c["motes"] = motes(70, (0, 0, 0.45), (0.5, 0.5, 0.8))
 
