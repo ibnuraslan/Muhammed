@@ -64,3 +64,17 @@ Strips: `review/CAMCUT_strips.jpg` (F−1 and F at each cut, rendered from the p
 Fixed in v004d: the laptop push (2276–2279) is clamped in front of the screen plane, and the neck pull-back at 518 eases straight back before the swing. CAMJUMP is only the 5 covered cuts. Strip: `review/CAMCUT_strip_v004d.jpg` (516–520 and 2272–2284).
 
 Fixed: f1519, a 161° aim flip with 8 cm of movement during the move around the bed. The 25.45 s key now stays on the front side of the bed, so the look vector never reverses.
+
+## v005 (client VO arrived): moving preview check (`review/preview.mp4`, pages in `review/preview_pages_v005/`)
+I watched every page of the 270×480 preview (every 5th frame) and fixed these faults. Beat frames are unchanged, and no VO has been added.
+
+| t (s) / frames | Fault | Fix |
+|---|---|---|
+| 16.0–20.5 / 961–1231 | The phone went **through the glass**. The wrist limit clamped her pose, so the phone was 6 cm past the glass. | The phone is pinned flat on the fan's side of the glass, 1–10 mm from the glass face, and stays in her hand (influence 16.0→20.5 s). The slap and knock hand targets are pulled back. |
+| 1.9 / 115 | The manager's face filled the frame, blurred. | A wider key at 1.95 s. |
+| 3.3–3.9 / 199–235 | Her beanie filled the POV. | The camera is raised and pulled back. |
+| 17.2–17.8 / 1033–1069 | The camera skimmed the manager's head. | A key at 17.4 s swings wide of his head. |
+| 19.5–19.9 / 1171–1195 | The camera went **through the manager's head** (inside of the ear). | The arc goes back out behind him (19.8 s and 20.2 s keys at y −1.6). |
+| 19.0–19.4 | The camera skimmed his shoulder. | A key at 19.0 s keeps it wide. |
+| 22.8 / 1371 | A tunnel staff face filled the frame. | The staff are spread to y −1.80 and −0.32. |
+| 30–33 | The city walkers collapsed. | They are removed. |
