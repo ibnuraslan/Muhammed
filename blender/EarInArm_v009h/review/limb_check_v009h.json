@@ -1,0 +1,4804 @@
+{
+ "frames": {
+  "1": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "3": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "5": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "7": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "9": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "11": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "13": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "15": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "17": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "19": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "21": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "23": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "25": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "27": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "29": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "31": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "33": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "35": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "37": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "39": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "41": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "43": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "45": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "47": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "49": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "51": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "53": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "55": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "57": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "59": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "61": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "63": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "65": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "67": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "69": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "71": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "73": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "75": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "77": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "79": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (6 pts)"
+   ]
+  ],
+  "81": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (6 pts)"
+   ]
+  ],
+  "83": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "85": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "87": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "89": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "91": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "93": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "95": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "97": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "99": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "101": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "103": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "105": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "107": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "109": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "111": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "113": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "115": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "117": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "119": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "121": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "123": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "127": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "129": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "131": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "135": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (5 pts)"
+   ]
+  ],
+  "137": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "139": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "141": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "143": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "145": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "147": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "149": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "151": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "153": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "155": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "157": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "159": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "161": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "163": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "165": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "167": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "169": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "171": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "173": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "175": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "177": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "179": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "181": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "183": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "185": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "187": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "189": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "191": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "193": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "195": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "197": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "199": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "201": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "203": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "205": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "207": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "209": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "211": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "213": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "215": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "217": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "219": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "221": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "223": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "225": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "227": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "229": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "231": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "233": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "235": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "237": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "239": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "241": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "243": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "245": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "247": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "249": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "251": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "253": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "255": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "257": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "259": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "261": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "263": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "265": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "267": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "269": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "271": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "273": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "275": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "277": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "279": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "281": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "283": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "285": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "287": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "289": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "291": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "293": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "295": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "297": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "299": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "301": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "303": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "305": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "307": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "309": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "311": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "313": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "315": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "317": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "319": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "321": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "323": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "325": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "327": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "329": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "577": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "579": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "581": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "583": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "585": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "587": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "617": [
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "619": [
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "621": [
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "651": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "653": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "655": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "657": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "659": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1211": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1215": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1219": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1223": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1227": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1231": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1235": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1239": [
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1243": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1247": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1251": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1255": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1259": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1263": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1265": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1267": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1269": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1271": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1273": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1275": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1277": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1279": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1281": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1283": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1285": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1287": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1289": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1291": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1293": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1295": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1297": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1299": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1301": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1303": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1305": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1307": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1309": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1311": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1313": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1315": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1317": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1319": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1321": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1323": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1325": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1327": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1329": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (3 pts)"
+   ]
+  ],
+  "1331": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1333": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1335": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1337": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1339": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1341": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (5 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1343": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1345": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1347": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1349": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1351": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1353": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1385": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (40 pts)"
+   ]
+  ],
+  "1387": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (41 pts)"
+   ]
+  ],
+  "1389": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (31 pts)"
+   ]
+  ],
+  "1391": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (25 pts)"
+   ]
+  ],
+  "1393": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (39 pts)"
+   ]
+  ],
+  "1395": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (36 pts)"
+   ]
+  ],
+  "1397": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (41 pts)"
+   ]
+  ],
+  "1399": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (34 pts)"
+   ]
+  ],
+  "1401": [
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (34 pts)"
+   ]
+  ],
+  "1403": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (39 pts)"
+   ]
+  ],
+  "1405": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1407": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1409": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1411": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1413": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1415": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1417": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1419": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ]
+  ],
+  "1421": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (4 pts)"
+   ]
+  ],
+  "1423": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (7 pts)"
+   ]
+  ],
+  "1425": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (10 pts)"
+   ]
+  ],
+  "1427": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1429": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1431": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1433": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1435": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (11 pts)"
+   ]
+  ],
+  "1437": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1439": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1441": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1443": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1445": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1447": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1449": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1451": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1453": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1455": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1457": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1459": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1461": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1463": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1465": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1467": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1469": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1471": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1473": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1475": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1477": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1479": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1481": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1483": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1485": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1487": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1489": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1491": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1493": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1495": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1497": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1499": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1501": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1503": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1505": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1507": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1509": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1511": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1513": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1515": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1517": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1519": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1521": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1523": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1525": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1527": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1529": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1531": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1533": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1535": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1537": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1539": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1541": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1543": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1545": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1547": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1549": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1551": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1553": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1555": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1557": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1559": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1561": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1563": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1565": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1567": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1569": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1571": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1573": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1575": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1577": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1579": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1581": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1583": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1585": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1587": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1589": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1591": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1593": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1595": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1597": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1599": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1601": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1603": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1605": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1607": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1609": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1611": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1613": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1615": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1617": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1619": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1621": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1623": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1625": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1627": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1629": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1631": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1633": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1635": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1637": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1639": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1641": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1643": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Surgeon arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Needle inside Patient's head/face (10 pts)"
+   ]
+  ],
+  "1645": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Needle inside Patient's head/face (144 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "NeedleHolder inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1647": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1649": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1651": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1653": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1655": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1657": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1659": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1661": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (9 pts)"
+   ]
+  ],
+  "1663": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1665": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1667": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (8 pts)"
+   ]
+  ],
+  "1669": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1671": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (7 pts)"
+   ]
+  ],
+  "1673": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1675": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1677": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1679": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1681": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1683": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1685": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1687": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1689": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1691": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1693": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (3 pts)"
+   ]
+  ],
+  "1695": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1697": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1699": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1701": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1703": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (4 pts)"
+   ]
+  ],
+  "1705": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1707": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1709": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (4 pts)"
+   ]
+  ],
+  "1711": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1713": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1715": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1717": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1719": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1721": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1723": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (4 pts)"
+   ]
+  ],
+  "1725": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1727": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1729": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1731": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1733": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (5 pts)"
+   ]
+  ],
+  "1735": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (6 pts)"
+   ]
+  ],
+  "1737": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1739": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1741": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1743": [
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (3 pts)"
+   ]
+  ],
+  "1745": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1747": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1749": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1751": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1753": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1755": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1757": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1759": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1761": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1763": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1765": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (3 pts)"
+   ]
+  ],
+  "1767": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ],
+  "1769": [
+   [
+    "ARMBODY",
+    "Patient arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Patient arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "Ear_New inside Patient's head/face (2 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 805,
+  "PROPHEAD": 172
+ }
+}

@@ -4,6 +4,19 @@
 1. **f793–950, skin filling the frame:** 795 is now a medium shot (`INC + (0.06, -0.28, 0.38)`, lens 44). The close macro holds at 830–840 (about 0.6 s of skin-filling frames, 820–855). From 870 the camera is wide (`INC + (0.08, -0.3, 0.42)`, lens 40), with the forearm, the drape and the surgeon.
 2. **f1441–1651, the blurred cap at the right third:** every head-framing key (1414–1625) is moved 20 cm to camera-left, along the camera's left vector `(-0.94, -0.34, 0)`. The cap is out of frame; the glove and instrument stay in, with the arm leaving the right edge.
 
+- The macro hold keys (830, 840) are equal and about 19 cm off the arm. The first try dipped to 9.6 cm at 833–835 (cam_clear flagged it). Skin fills the frame for about 0.45 s (823–850).
+
+## Checks (v009h, packed)
+- clip_scan: 0.
+- cam_clear: 0.
+- qa: CLAW, HOVER, FACEPRESS, INSIDE, CAMJUMP, ROLL and ATTACH are all 0.
+  - BACKHEAD 2: f1, f127.
+  - EMPTY 3: 625–637.
+  - FILL 5.
+  - PROPMOVE 136.
+- limb_check: ARMBODY 805, PROPHEAD 172 (the shoulder-root residuals).
+- Watched the full preview (every 6th film frame). During the stitching (1441–1651) the cap is out of frame; a sliver of his scrub shoulder shows at the right edge, with his arm going to it.
+
 ---
 
 # EarInArm v009g
