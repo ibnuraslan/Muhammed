@@ -323,7 +323,7 @@ sc["cut_z"] = CUT_Z
 for f in list(range(1976, 2062, 6)) + [2060]:
     c = cutter_pos(f)
     kx = c.x - 0.25
-    FA.pose(f, (kx, FY - 0.78, RH - 0.10), yaw=170, flex=14, sp=(14, 0, 0), head=(15, -10),
+    FA.pose(f, (kx, FY - 0.78, RH - 0.10), yaw=170, flex=6, sp=(4, 0, 0), head=(5, -10),        # upright: helmet clear of the bin
             hands={"L": ("w", c + Vector((-0.10, GRIP_L, 0.09)), (0.3, 1, 0), (0, 0, 1)), "R": ("w", c + Vector((0.0, GRIP_R, 0.0)), (0, 1, 0), (-1, 0, 0))},
             feet={"L": ("g", (kx + 0.12, FY - 0.62), 170), "R": ("g", (kx - 0.18, FY - 1.02), 175)}, curl={"L": 0.85, "R": 0.85})
 PH = sc["chute_z"][0] - 0.15

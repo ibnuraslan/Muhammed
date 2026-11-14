@@ -43,7 +43,7 @@ def front34(f, dists=(0.62, 0.56, 0.50, 0.45, 0.40), angs=(35, -35, 28, -28, 42,
     print("NO34", f); return None
 
 CAMK = json.loads(sc["cam_keys"])
-DROP = {1402, 1404, 1560, 1862, 1868, 950, 1322, 1350, 1384}
+DROP = {1402, 1404, 1560, 1862, 1868, 950, 1322, 1350, 1384, 1418, 1574}
 CAMK = [k for k in CAMK if k[0] not in DROP]
 NEW = []
 # 2. beat 6 and the scream: front three-quarters of her face
@@ -52,7 +52,9 @@ for f in (950, 965):
     if k: NEW.append(k)
 for f in (1322, 1336, 1350, 1366, 1384):
     k = front34(f) or front34(f, dists=(0.50, 0.44, 0.38, 0.32), angs=(35, -35, 45, -45, 55, -55, 65, -65, 25, -25))
-    if k: NEW.append(k)
+    if not k:      # pounding the flap: steady side view, clear of the flap stop bar and counterweight
+        fc, _ = face(f); k = [f, [0.50, -0.22, 1.68], list(fc), 30]
+    NEW.append(k)
 # 1. covered wall pushes (inner and outer faces of the front wall, found by ray cast)
 def hit(o, d): h = ray(o, d); return h[1] if h else None
 X = 0.25
@@ -61,20 +63,24 @@ in_lo = hit((X, 0.05, 0.98), (0, -1, 0)); out_lo = hit((X, -1.6, 0.98), (0, 1, 0
 print("WALL", in_hi, out_hi, in_lo, out_lo)
 Y = Vector((0, 1, 0))
 def push_in(f_app, f_c1, f_c2, w, side):   # side +1: camera on the +y side of the surface looking -y
-    NEW.append([f_app, list(w + Y * side * 0.30), list(w), 22])
+    if f_app: NEW.append([f_app, list(w + Y * side * 0.30), list(w), 22])
     NEW.append([f_c1, list(w + Y * side * 0.03), list(w - Y * side * 0.2), 22])
     NEW.append([f_c2, list(w + Y * side * 0.02), list(w - Y * side * 0.2), 22])
 def push_out(f_c1, f_c2, w, side):
     NEW.append([f_c1, list(w + Y * side * 0.02), list(w - Y * side * 0.2), 22])
     NEW.append([f_c2, list(w + Y * side * 0.03), list(w - Y * side * 0.2), 22])
 # exit after the scream: into the inner wall above the flap, out of the outer wall, pull back to the wide of the bin
-push_in(1396, 1399, 1402, in_hi, +1); push_out(1403, 1405, out_hi, -1)
-NEW.append([1418, [0.30, -1.70, 1.80], [0.0, -0.6, 1.35], 22])
+push_in(None, 1399, 1402, in_hi, +1); push_out(1403, 1405, out_hi, -1)
+NEW.append([1412, [0.30, -1.70, 1.80], [0.0, -0.6, 1.35], 22])
 # back in for the three days: into the outer wall low, out of the inner wall, pan round to her face
-push_in(1546, 1552, 1555, out_lo, -1); push_out(1556, 1559, in_lo, +1)
-fc, _ = face(1574); NEW.append([1574, [0.40, -0.30, 1.05], list(fc), 22])
+push_in(None, 1552, 1555, out_lo, -1); push_out(1556, 1558, in_lo, +1)
+def topcam(f, dx):
+    sc.frame_set(f); ch = WO.matrix_world @ WO.pose.bones["spine03"].head
+    t = ch.lerp(face(f)[0], 0.35); c = t + Vector((dx, -0.42, 1.05))
+    return [f, [max(-0.6, min(0.6, c.x)), max(-0.45, c.y), min(2.15, c.z)], list(t), 20]
+NEW.append(topcam(1570, 0.15))
 # the knock: into the inner wall, out of the outer wall, then the passer-by (key 1880)
-push_in(1862, 1865, 1868, in_lo, +1); push_out(1869, 1871, out_lo, -1)
+push_in(None, 1865, 1868, in_lo, +1); push_out(1869, 1871, out_lo, -1)
 # 4. 35.5 s: her face height as she climbs out
 fc, _ = face(2130); NEW.append([2130, [fc.x + 0.30, fc.y - 0.85, fc.z - 0.02], list(fc), 24])
 CAMK = sorted([k for k in CAMK if not any(abs(k[0] - n[0]) < 1 for n in NEW)] + NEW, key=lambda k: k[0])
@@ -91,7 +97,7 @@ POS = {}
 for f in range(1, sc.frame_end + 1):
     s_ = seg(f); POS[f] = [s_[2](f), s_[3](f), s_[4](f)]
 # covered frames: hold 5 cm off the wall face (near-clip safe), looking straight into it
-COVER = [(1399, 1402, in_hi, +1), (1403, 1405, out_hi, -1), (1552, 1555, out_lo, -1), (1556, 1559, in_lo, +1), (1865, 1868, in_lo, +1), (1869, 1871, out_lo, -1)]
+COVER = [(1399, 1402, in_hi, +1), (1403, 1405, out_hi, -1), (1552, 1555, out_lo, -1), (1556, 1558, in_lo, +1), (1865, 1868, in_lo, +1), (1869, 1871, out_lo, -1)]
 for f0, f1, w, side in COVER:
     for f in range(f0, f1 + 1): POS[f] = [w + Y * side * 0.05, w - Y * side * 0.2, 22.0]
 print("COVERED", [(a, b) for a, b, _, _ in COVER])
@@ -121,10 +127,10 @@ for f in range(1, sc.frame_end + 1):
     if qprev is not None and q.dot(qprev) < 0: q = -q
     QS[f] = q; qprev = q
 # pans next to the pushes: slerp the rotation (smoothstep) so the look-at never swings past the lens
-for a_, b_ in ((1559, 1582), (1845, 1865), (1871, 1886)):
+for a_, b_ in ((1558, 1570), (1845, 1865), (1871, 1886)):
     qa, qb = QS[a_], QS[b_]
     for f in range(a_ + 1, b_):
-        t_ = (f - a_) / (b_ - a_); t_ = t_ * t_ * (3 - 2 * t_); QS[f] = qa.slerp(qb, t_)
+        t_ = (f - a_) / (b_ - a_); QS[f] = qa.slerp(qb, t_)      # linear: constant turn rate
 qprev = None
 for f in range(1, sc.frame_end + 1):
     p, t, ln = POS[f]
@@ -168,6 +174,21 @@ for s, f0, f1 in (("R", 425, 468),):
             apply_pose(WO, s, "relaxed", f)
 for s in "LR":                                         # f628: kneel-to-stand, both hands relaxed (not splayed)
     for f in range(604, 653, 6): apply_pose(WO, s, "relaxed", f)
+# eyes: MPFB EnhancedEye reads as black holes at preview samples: warm iris, smaller pupil, more eye white, stronger coat
+for m in bpy.data.materials:
+    g = m.node_tree.nodes.get("EnhancedEye") if m.use_nodes else None
+    if g:
+        g.inputs["IrisMajorColor"].default_value = (0.42, 0.30, 0.18, 1); g.inputs["IrisMinorColor"].default_value = (0.25, 0.16, 0.08, 1)
+        g.inputs["IrisSection4Color"].default_value = (0.12, 0.08, 0.05, 1); g.inputs["PupilSize"].default_value = 0.16
+        g.inputs["Clearcoat"].default_value = 0.8; g.inputs["IrisToEyeWhiteRelation"].default_value = 0.30
+# helmets: plain glossy black shell (the textured orange model read as pumpkins)
+for o in bpy.data.objects:
+    if o.name.endswith("_Helmet") and o.type == 'MESH':
+        hmm = bpy.data.materials.get("FireHelmetBlack") or bpy.data.materials.new("FireHelmetBlack")
+        hmm.use_nodes = True; bs = hmm.node_tree.nodes["Principled BSDF"]
+        bs.inputs["Base Color"].default_value = (0.02, 0.02, 0.022, 1); bs.inputs["Roughness"].default_value = 0.25
+        for i in range(len(o.data.materials)): o.data.materials[i] = hmm
+        for ms in o.material_slots: ms.link = 'DATA'
 sc["director_fix"] = "v007: one continuous camera (covered wall pushes), front 3/4 on beat 6 and scream, hands flat on clothes"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("V007_DONE", len(CAMK))
