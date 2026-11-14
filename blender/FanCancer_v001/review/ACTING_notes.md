@@ -78,3 +78,14 @@ I watched every page of the 270×480 preview (every 5th frame) and fixed these f
 | 19.0–19.4 | The camera skimmed his shoulder. | A key at 19.0 s keeps it wide. |
 | 22.8 / 1371 | A tunnel staff face filled the frame. | The staff are spread to y −1.80 and −0.32. |
 | 30–33 | The city walkers collapsed. | They are removed. |
+
+## v006 (director review of v005): fixes. The preview `review/preview.mp4` (528 frames) is rendered from the final v006 package, with pages in `review/preview_pages_v006/`
+| Frames | Fault | Fix |
+|---|---|---|
+| f1–60, 661–1001, 2381–2640 | **Black human silhouettes** in the stands. These were the seat backs: the seat glb's custom split normals broke when the build scaled the model, so the seats shaded pure black. | The custom normals are cleared in `02_build_scene.py`, and the seats render blue and grey. |
+| 241–300 | The push into the back of his neck until skin filled the frame. | The shot stops on his head and shoulders with the mole visible, then hard-cuts into the skin at f301. |
+| 2151–2296 | The dive into the laptop screen: a giant blurred face, a pink smear, plain white. | The camera holds on her at the laptop, then cuts straight to a medium rink shot at f2281. |
+| 1901–2150 | 4 s of empty city. | He stays in frame posting on his phone until 34.0 s (f2041). The city and bus pass with phone-holding riders now lasts 1.9 s. |
+| 1381–1700 | The doctor's coat merged into his back. | She stands 12 cm further back with less lean (hand reach adjusted). The camera at 24.3 s is at his left front so she reads beside him, and the overhead pass goes around the front. |
+| 2516–2640 | The ending pulled back until the people were specks. | It ends on a medium shot of her with the cheque and the players. |
+Beat frames are unchanged and there is no VO.
