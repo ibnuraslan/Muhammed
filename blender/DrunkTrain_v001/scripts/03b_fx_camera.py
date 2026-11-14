@@ -585,6 +585,7 @@ CAM = [  # frame, camera, aim, lens
     (548, V(2.85, -3.4, 0.85), lad_p(548), 24),
     (575, V(3.3, -9.5, 1.15), lad_p(575, 0.1), 24),
     (615, V(3.2, y(615) - 3.5, 0.95), lad_p(615), 24),
+    (636, V(0.3, -22.6, 0.42), lad_p(636), 20),      # v006: reaches the track centre in open air AHEAD of the pilot; the loco then passes over it (0.6 m clearance at the centre)
     (660, V(0.25, y(660) - 1.8, 0.3), lad_p(660), 20),      # v005: under the loco, between the rails, head-on to him (the side view is all wheel)
     (700, V(0.3, y(700) - 1.25, 0.34), lad_p(700), 18),
     (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
