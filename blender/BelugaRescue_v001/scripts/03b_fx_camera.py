@@ -170,7 +170,7 @@ def two_shot(f, lens=24, mix=0.45):
         print("TWO_SHOT none at", f); c = Hh + Vector((0, 2.6, 0.8)); best = (0, c, Hh)
     _prev[0] = best[1]; print("TWO_SHOT", f, tuple(round(x, 2) for x in best[1]))
     K(f, best[1], best[2], lens)
-for _f in (885, 925, 965, 1005, 1045, 1085, 1125, 1165, 1213, 1250, 1290):
+for _f in (868, 885, 925, 965, 1005, 1045, 1085, 1125, 1165, 1213, 1250, 1290):
     two_shot(_f)
 bpy.data.objects.remove(_tc)
 K(1350, wh(1350) + V(1.3, 1.2, 0.3), CH(1350), 28)
@@ -582,6 +582,10 @@ for o_md in [m for m in hair.modifiers if m.name.startswith("Drift")]:
 # helpers never render
 for o in bpy.data.objects:
     if o.type == 'EMPTY': o.hide_render = True
+# water surface IOR 1.33 -> 1.05: keeps the wave distortion but no total internal reflection seen from below
+# (her mirror image hanging under the surface, hard white deck panels)
+for _n in bpy.data.objects["Water_Surface"].data.materials[0].node_tree.nodes:
+    if _n.type == "BSDF_PRINCIPLED": _n.inputs["IOR"].default_value = 1.05
 # the water volume has no surface shader (a clear boundary in Cycles); make that explicit with a white Transparent BSDF
 # so ray-based checks treat the boundary as see-through. Render-neutral.
 for _m in bpy.data.objects["Water_Volume"].data.materials:

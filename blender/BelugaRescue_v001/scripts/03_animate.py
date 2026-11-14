@@ -217,7 +217,7 @@ DV.P(523, SIT, yaw=180, pitch=-8, spine=(30, 0, 0), head=(-10, 0, 0), legs=legs(
 for k, f in enumerate(range(535, 610, 15)):
     up = k / 5.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 * up, SIT[2] + 0.75 * up), yaw=180, pitch=-28 * up - 8, spine=(-8, 0, 0), head=(-35, 0, 0),
-         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(l=dict(fwd=165 if k % 2 == 0 else 125, out=22 if k % 2 == 0 else 50, L=DV.ARM * (0.84 if k % 2 == 0 else 0.7)), r=dict(fwd=125 if k % 2 == 0 else 160, out=50 if k % 2 == 0 else 24, L=DV.ARM * (0.7 if k % 2 == 0 else 0.82))), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
+         legs=legs((60 - 30 * up, 6, 4, -74)), arms=arms(l=dict(fwd=165 if k % 2 == 0 else 125, out=36 if k % 2 == 0 else 50, L=DV.ARM * (0.84 if k % 2 == 0 else 0.7)), r=dict(fwd=125 if k % 2 == 0 else 160, out=50 if k % 2 == 0 else 36, L=DV.ARM * (0.7 if k % 2 == 0 else 0.82))), jaw=10, curl={"L": (25, 12), "R": (25, 12)})
 for k, f in enumerate(range(620, 661, 10)):
     dn = (k + 1) / 4.0
     DV.P(f, (SIT[0], SIT[1] - 0.15 + 0.12 * dn, SIT[2] + 0.75 * (1 - dn)), yaw=180, pitch=-36 + 26 * dn, spine=(-5 + 20 * dn, 0, 0), head=(-40 + 20 * dn, 0, 0),
@@ -246,7 +246,7 @@ for k, f in enumerate(range(1380, 2000, 20)):
     drift = Vector((0.12 * math.sin(k * 0.55), 0.08 * math.sin(k * 0.4 + 1.0), 0.04 * math.sin(k * 0.9)))
     DV.P(f, (xy.x + drift.x, xy.y + drift.y, RZF(f) + drift.z), yaw=180 + 16 * math.sin(k * 0.45), pitch=6 + 10 * limp + 5 * math.sin(k * 0.7), roll=10 * math.sin(k * 0.5), spine=(10 * limp - 12 * (1 - limp), 0, 8 * math.sin(k * 0.6)),
          head=(25 * limp - 30 * (1 - limp), 0, 0), legs=legs((62 + 8 * math.sin(k * 0.8), 9, 100 + 10 * math.sin(k * 0.8), -40), (35, 14, 95, -20)),
-         arms=arms(l=dict(fwd=35 + 40 * math.sin(k * 0.9) + 95 * (1 - limp), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=30 + 40 * math.cos(k * 0.9) + 90 * (1 - limp), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
+         arms=arms(l=dict(fwd=28 + 24 * math.sin(k * 0.9) + 95 * (1 - limp), out=30 + 10 * math.sin(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.sin(k * 1.1))), r=dict(fwd=24 + 24 * math.cos(k * 0.9) + 90 * (1 - limp), out=32 + 10 * math.cos(k * 0.7), L=DV.ARM * (0.68 + 0.08 * math.cos(k * 1.1)))), curl={"L": (30, 14), "R": (30, 14)},
          jaw=4 if limp > 0.5 else 22)
 # --- beat 12: gasps, swims to the coping, clings with both hands
 COP_Z = DECK_Z + 0.06; COP_Y = EDGE_Y + 0.0
