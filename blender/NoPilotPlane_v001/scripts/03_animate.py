@@ -451,7 +451,7 @@ for nm, up, lands in (("MUG_L", 0.32, (-0.85, 1.25, 0.05)), ("MUG_R", 0.28, (0.9
     for i, t in enumerate((35.6, 36.6, 37.6, 38.6, 39.4)):
         u = (i + 1) / 5
         tgt_ = Vector((0.06 + rnd.uniform(-0.15, 0.15), 2.06 + rnd.uniform(-0.03, 0.06), 1.12 + rnd.uniform(0, 0.2)))
-        o.location = p0.lerp(tgt_, smooth(u) * 0.85) + Vector((0, 0, 0.05 * math.sin(u * 7)))
+        o.location = p0.lerp(tgt_, smooth(u) * 0.22) + Vector((0, 0, 0.04 * math.sin(u * 7)))
         o.keyframe_insert("location", frame=F(t)); keyrot(o, F(t), (rnd.uniform(-90, 90) * u, rnd.uniform(-90, 90) * u, rnd.uniform(-120, 120) * u))
     o.location = lands; o.keyframe_insert("location", frame=F(40.4)); keyrot(o, F(40.4), (90 if "MUG" in nm else 0, 0, rnd.uniform(0, 300)))
     o.location = lands; o.keyframe_insert("location", frame=F(41.0))
@@ -521,10 +521,10 @@ body(1, SIT, flex=-14, sflex=18, head=(25, 0)); feet(1, FL_, FR_)
 hand("L", 1, (sx_ - 0.13, sy_ + 0.12, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=35)
 hand("R", 1, (sx_ + 0.13, sy_ + 0.12, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=35)
 body(F(0.8), SIT, flex=-10, sflex=10, head=(10, 0))
-hand("L", F(0.8), (sx_ - 0.10, sy_ + 0.12, 1.05), d=(0.4, 0.3, 1), n=(0.3, 1, 0), curl=30)     # hands rise to the face
-hand("R", F(0.8), (sx_ + 0.12, sy_ + 0.14, 1.07), d=(-0.4, 0.3, 1), n=(-0.3, 1, 0), curl=30)
-hand("L", F(1.6), (sx_ - 0.08, sy_ + 0.16, 0.90), d=(0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
-hand("R", F(1.6), (sx_ + 0.12, sy_ + 0.16, 0.88), d=(-0.3, 1, 0.3), n=(0, 0.2, 1), curl=20)
+hand("L", F(0.8), (sx_ - 0.13, sy_ + 0.16, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=45)     # v007e: hands grip own thighs (no floating hands)
+hand("R", F(0.8), (sx_ + 0.13, sy_ + 0.16, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=45)
+hand("L", F(1.6), (sx_ - 0.13, sy_ + 0.18, 0.66), d=(0.2, 1, -0.4), n=(0, 0, 1), curl=45)
+hand("R", F(1.6), (sx_ + 0.13, sy_ + 0.18, 0.66), d=(-0.2, 1, -0.4), n=(0, 0, 1), curl=45)
 body(F(1.6), SIT, flex=-8, sflex=4, head=(0, 0))
 body(F(2.4), SIT, flex=-8, sflex=4, twist=-25, head=(5, -35))
 hand("L", F(2.4), (sx_ - 0.10, sy_ + 0.28, 0.66), d=(0, 1, -0.4), n=(0, 0, 1), curl=45)          # grips own thigh (the shared armrest is the neighbour's)
@@ -702,11 +702,16 @@ feet(F(39.3), *FSEAT)
 def grip(f, s):
     sc.frame_set(f); M = YR.matrix_world
     return M @ Vector(((-0.16 if s == "L" else 0.16), -0.20, 0.79))
+def grip_yoke(f, s, W):
+    """v007e: fingers wrap the vertical horn, palm toward it from outboard-behind, thumb opposing (grip_object)"""
+    grip_object(YOU, s, f, OB["YOKE_R"], W, ((0.5 if s == "L" else -0.5), 0.8, 0.0))
 def hands_on_yoke(f, curl=65, jitter=0.0):
     for s in "LR":
         W = grip(f, s) + Vector((random.uniform(-jitter, jitter), random.uniform(-jitter, jitter), random.uniform(-jitter, jitter)))
         sx = 1 if s == "L" else -1
         hand(s, f, W - Vector((sx * 0.012, 0.022, 0.012)), d=(sx * 0.35, 0.6, 1.0), n=(-sx * 0.2, -1.0, 0.3), pole=W + Vector((sx * 0.4, -0.3, -0.25)), curl=max(curl, 78))
+        grip_yoke(f, s, W)
+hands_on_yoke(F(38.9), 70)          # straight onto the horns, no palm-up hover on the way
 for f in range(F(39.2), F(45.0), 15):
     hands_on_yoke(f, 70, 0.006)
 SEATB = lambda f, flex=-4, sflex=8, twist=0, head=(10, 0), dz=0.0, dy=0.0, dx=0.0: body(f, (CS[0] + dx, CS[1] + dy, CS[2] + dz), flex=flex, sflex=sflex, twist=twist, head=head)
@@ -721,21 +726,21 @@ SEATB(F(53.5), sflex=16, head=(0, 0), dy=0.1); SEATB(F(54.6), sflex=20, head=(5,
 # beat 16: hand to throttle, indecision
 THR = lambda: (OB["THROTTLE_1"].matrix_world @ Vector((0, 0, 0.19)))
 hands_on_yoke(F(56.6), 55)
-hand("R", F(57.2), (0.20, 1.80, 1.02), d=(-1, 0.5, -0.5), n=(0, 0, 1), curl=20)
-hand("R", F(57.7), (0.09, 1.86, 1.0), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=15)
+hand("R", F(57.2), (0.20, 1.80, 1.02), d=(-1, 0.5, -0.5), n=(0, 0, 1), curl=50)
+hand("R", F(57.7), (0.09, 1.86, 1.0), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=50)
 SEATB(F(56.8), sflex=20, twist=28, head=(20, 30), dx=-0.08, dy=0.06); SEATB(F(58.0), sflex=4, head=(0, 0))
-hand("R", F(58.6), (0.11, 1.82, 1.02), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=15)
+hand("R", F(58.6), (0.11, 1.82, 1.02), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=50)
 sc.frame_set(F(59.2)); tw = THR()
-hand("R", F(59.2), tw + Vector((0.0, -0.035, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70)
-hand("R", F(59.8), tw + Vector((0.0, -0.075, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70)
+hand("R", F(59.2), tw + Vector((0.0, -0.035, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70); grip_object(YOU, "R", F(59.2), OB["THROTTLE_1"], tw, (0, 0.3, -1))
+hand("R", F(59.8), tw + Vector((0.0, -0.075, 0.035)), d=(-0.3, 1, -0.9), n=(0, -0.3, 1), curl=70); sc.frame_set(F(59.8)); grip_object(YOU, "R", F(59.8), OB["THROTTLE_1"], THR(), (0, 0.3, -1))
 SEATB(F(59.2), sflex=30, twist=34, head=(20, 30), dx=-0.2, dy=0.14)
-hand("R", F(60.4), grip(F(60.4), "R") - Vector((0, 0.035, 0)), d=(-0.6, 1, 0.5), n=(0.3, 0.2, 1), curl=65)
+hand("R", F(60.4), grip(F(60.4), "R") - Vector((0, 0.035, 0)), d=(-0.6, 1, 0.5), n=(0.3, 0.2, 1), curl=65); grip_yoke(F(60.4), "R", grip(F(60.4), "R"))
 SEATB(F(60.4), sflex=14, head=(25, 0)); SEATB(F(61.5), sflex=2, head=(0, 0)); SEATB(F(62.6), sflex=4, twist=30, head=(0, 45))
-hand("R", F(63.2), (0.12, 1.85, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=20)
+hand("R", F(63.2), (0.12, 1.85, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=50)
 SEATB(F(63.6), sflex=20, twist=28, head=(20, 30), dx=-0.08, dy=0.06)
-hand("R", F(64.2), (0.13, 1.84, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=25)
+hand("R", F(64.2), (0.13, 1.84, 1.03), d=(-0.6, 1, -0.6), n=(0, 0, 1), curl=50)
 for f in range(F(56.6), F(72.6), 60):
-    W = grip(f, "L"); hand("L", f, W - Vector((0, 0.035, 0)), d=(0.6, 1, 0.5), n=(-0.3, 0.2, 1), pole=W + Vector((0.4, -0.3, -0.25)), curl=65)
+    W = grip(f, "L"); hand("L", f, W - Vector((0, 0.035, 0)), d=(0.6, 1, 0.5), n=(-0.3, 0.2, 1), pole=W + Vector((0.4, -0.3, -0.25)), curl=65); grip_yoke(f, "L", W)
 # beat 17: look back over the right shoulder
 hand("R", F(65.0), (0.78, 1.36, 0.78), d=(0, 1, -0.3), n=(0, 0, 1), curl=60)                 # own right armrest                     # braces on the pedestal while turning
 SEATB(F(64.6), sflex=14, twist=45, head=(0, 50), dy=0.12, dx=-0.10); SEATB(F(65.8), sflex=24, twist=70, head=(25, 70), dy=0.18, dx=-0.18)
