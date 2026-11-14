@@ -591,10 +591,11 @@ CAM = [  # frame, camera, aim, lens
     (755, V(-0.25, y(755) - 1.25, 0.32), lad_p(755), 18),
     (815, V(0.3, y(815) - 1.4, 0.36), lad_p(815), 18),
     (842, V(0.35, y(842) - 1.0, 0.36), lad_p(842), 20),      # v005: stays inside the gauge while the wheels still turn (no camera through a wheelset)
-    (866, V(2.7, -43.6, 0.45), V(0.2, -40.0, 0.25), 24),      # v005: crosses the rail ahead of the front wheelset
-    (905, V(2.35, TF(905) + 1.5, 0.7), V(0.72, TF(905) + 4.5, 0.5), 24),
-    (935, V(3.5, -46.0, 2.2), V(0.9, -42.5, 0.9), 23),      # v005: on the train braking, not the empty track
-    (960, V(5.6, -31.0, 2.2), V(1.0, -45.0, 1.0), 22),
+(866, V(0.3, -41.4, 0.32), lad_p(866), 22),      # v006: stays inside the gauge under the train: he lies still as it passes over (no empty train-side frames)
+    (905, V(0.32, -41.5, 0.3), lad_p(905), 22),
+    (950, V(0.3, -41.3, 0.34), lad_p(950) + V(0, 0, 0.1), 22),
+    (966, V(0.9, -40.2, 0.55), lad_p(966) + V(0, 0, 0.1), 24),      # v006: the train has halted with the coupling gap over him
+    (990, V(0.9, -40.2, 5.0), V(2.4, -36.0, 0.5), 22),      # v006: rises straight up through the empty coupling gap, then out to the wide shot
     (1015, V(7.6, -33.5, 6.4), V(2.2, -42.0, 0.6), 22),
     (1045, V(2.0, -40.2, 1.5), V(3.8, -38.9, 1.25), 20),
     (1090, V(1.95, -39.2, 1.45), V(3.9, -39.4, 1.2), 20),
