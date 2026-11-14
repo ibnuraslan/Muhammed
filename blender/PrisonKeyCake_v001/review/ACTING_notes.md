@@ -108,3 +108,17 @@ Checks:
 - Camera audit: 0 bad frames.
 - Camera is at least 0.49 m from every head and torso on every frame.
 - Moving preview watched frame by frame (review/preview_v007e_every5th.mp4).
+
+## v007f: director review of v007e (7 items)
+1. Lean (981-1041): his head is pulled back about 20 cm from v007e (head x ≤ 1.66, wall at 2.0). Face turned to the camera, palm flat on the wall at shoulder height.
+2. Second press (1111-1196): steady side medium, the same framing as the first press. He hunches less (sp_flex 22), so his face reads; one hand presses, the other rests on the table.
+3. Stool (1255-1290): cut to a steady side medium at seated height. He sits upright on the stool, face readable. The overhead pass is gone.
+4. Knife (1310-1362): a 3/4 shot from across the table, showing his face, both hands, the knife and the cake.
+5. Ally at the cake (about 750-790): the camera is held back; no hand near the lens, no hat filling the frame.
+6. Crowd: arms down at their sides, cheering with body and head. Raised arms clipped the armpit region on these bodies (limb_check), so I dropped them.
+7. The camera no longer passes over his back (stool cut at 1255).
+Checks:
+- camera audit 0;
+- camera at least 0.49 m from every head and torso;
+- limb_check: no crowd flags;
+- qa: INSIDE, FILL, HOVER, CLAW and FACEPRESS all 0.

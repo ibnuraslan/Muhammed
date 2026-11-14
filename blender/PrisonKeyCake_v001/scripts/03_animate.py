@@ -117,10 +117,10 @@ P.k(958, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=4, side=-3, h_yaw=-24, h
 P.k(972, root=DOOR_ST + V(-0.08, 0.02, -0.01), sp_twist=-12, side=6, flex=8, h_pitch=34, hL=grip_hand(V(1.948, 1.22, 1.46), V(0, 0.2, 1), V(1, 0, 0)))                  # strain
 P.k(982, hL=grip_hand(V(1.74, 1.26, 1.48), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=6, h_pitch=10, h_yaw=10)  # wind up
 P.k(992, hL=grip_hand(V(1.948, 1.24, 1.50), V(0, 0.2, 1), V(1, 0, 0)), sp_twist=-4, flex=12)            # slap
-P.k(998, root=DOOR_ST + V(-0.10, 0.04, -0.03), flex=12)
-P.k(1006, hL=grip_hand(V(1.948, 1.24, 1.42), V(0, 0.15, 1), V(1, 0, 0)))   # the hand slides down the wall as he sags
-P.k(1018, root=DOOR_ST + V(-0.12, 0.07, -0.05), flex=12, sp_flex=14, h_pitch=30, h_yaw=0, sp_twist=0, side=0, hL=grip_hand(V(1.948, 1.22, 1.42), V(0, 0.2, 1), V(1, 0, 0)), cL=10)   # hand on the wall, head bowed, clear of it to the door
-P.k(1034, root=DOOR_ST + V(-0.12, 0.06, -0.05))
+P.k(998, root=DOOR_ST + V(-0.12, 0.04, -0.03), flex=10)
+P.k(1006, root=DOOR_ST + V(-0.16, 0.05, -0.03), h_yaw=-24, h_pitch=16, hL=grip_hand(V(1.948, 1.30, 1.36), V(0, 0.15, 1), V(1, 0, 0)))   # the hand slides down the wall as he sags
+P.k(1018, root=DOOR_ST + V(-0.20, 0.07, -0.03), flex=8, sp_flex=8, h_pitch=18, h_yaw=-30, sp_twist=0, side=0, hL=grip_hand(V(1.948, 1.32, 1.34), V(0, 0.2, 1), V(1, 0, 0)), cL=8)   # palm flat on the wall at shoulder height, head back, face turned to us to the door
+P.k(1034, root=DOOR_ST + V(-0.20, 0.06, -0.03))
 P.k(1046, root=DOOR_ST, flex=6, sp_flex=10, h_pitch=12, hL=HANG["L"], hR=HANG["R"], cR=20)
 # ---- beat 7: second impression + wait (1057-1302)
 pth, yfn = P.walk(1046, 1100, [(1.5, 0.9), (1.2, 0.95), (0.92, 0.97)], stride=0.6, yaw_override=lambda f: lerp(90, 180, ss(f, 1046, 1094)))
@@ -145,8 +145,8 @@ bake_obj(KM, 1098, 1180, km_b7)
 key_hide(KM, [(1, False), (382, True), (1098, False), (1182, True)])
 P.hand_fn["R"].append((1098, 1180, lambda f: hand_on_key(km_b7(f), press=1112 <= f <= 1158)))
 P.k(1122, hL=LH_TABLE, cL=12)
-P.k(1122, root=STA + V(0, 0.07, -0.08), flex=20, sp_flex=36, h_pitch=45, cR=10, cL=8)
-P.k(1156, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, hL=LH_TABLE)
+P.k(1122, root=STA + V(0, 0.07, -0.06), flex=16, sp_flex=22, h_pitch=34, cR=10, cL=8)
+P.k(1156, root=STA + V(0, 0.07, -0.06), flex=16, sp_flex=22, hL=LH_TABLE)
 P.k(1168, root=STA + V(0, 0.03, -0.03), flex=10, sp_flex=16, h_pitch=35)   # straightens to look at the new mould
 # hands the mould up through the window bars (1182-1215)
 WIN_C = V(0.80, 1.99, 1.665)
@@ -184,11 +184,11 @@ _bb = [STOOL.matrix_world @ Vector(c) for c in STOOL.bound_box]; _c = sum(_bb, V
 STOOL.location = (SIT.x - _c.x - 0.04, SIT.y - _c.y, 0)
 SIT.z = max(c.z for c in _bb) + 0.11
 P.k(1240, root=STA + V(-0.25, -0.05, -0.05), yaw=150, flex=10, sp_flex=14, h_pitch=15)
-P.k(1258, root=SIT, yaw=110, flex=-2, sp_flex=38, h_pitch=35, h_yaw=10,
+P.k(1258, root=SIT, yaw=110, flex=-2, sp_flex=16, h_pitch=20, h_yaw=10,
     hL=B((0.16, -0.3, 0.07), (0.05, -1, -0.25), (0, 0, -1)), hR=B((-0.16, -0.3, 0.07), (-0.05, -1, -0.25), (0, 0, -1)), cL=30, cR=30)
-P.k(1264, sp_flex=30, h_pitch=5, h_yaw=35)            # looks to the candle
-P.k(1274, sp_flex=34, h_pitch=22, h_yaw=-12)          # then to the door, listening
-P.k(1285, root=SIT + V(0, 0, 0.0), sp_flex=26, h_pitch=-12, h_yaw=-25)   # looks up at the window
+P.k(1264, sp_flex=12, h_pitch=5, h_yaw=35)            # looks to the candle
+P.k(1274, sp_flex=14, h_pitch=15, h_yaw=-12)          # then to the door, listening
+P.k(1285, root=SIT + V(0, 0, 0.0), sp_flex=10, h_pitch=-12, h_yaw=-25)   # looks up at the window
 for s, o_ in (("L", 0.13), ("R", -0.13)):
     P.plant(s, 1232 + (s == "R") * 8, 1248 + (s == "R") * 8, P.h.foot_xy(s, V(0.42, 0.72, 0), 110) , 110)
 P.k(1300, root=STA + V(0.2, 0.01, -0.02), yaw=180, flex=12, sp_flex=18, h_pitch=35, hL=LH_TABLE, cL=20, hR=HANG["R"])
@@ -527,13 +527,16 @@ def fk_wave(rig_obj, f0, f1, ph, kind):
             R.key_rot("upperarm01.L", f, [("Y", 44), ("X", 4)]); R.key_rot("lowerarm01.L", f, [("Y", 8), ("X", -10)])
             R.key_rot("spine03", f, [("Z", 4 * math.sin(2 * math.pi * 0.2 * t)), ("X", -3)])
             R.key_rot("head", f, [("Z", 14 * math.sin(2 * math.pi * 0.15 * t)), ("X", -4)])
-        else:                # cheering: both arms pump, bob
+        else:                # cheering: right arm raised and bent at the elbow, waving ("both"), or arms down ("one")
             a = 0.5 + 0.5 * math.sin(2 * math.pi * (1.1 + 0.3 * ((ph % 7) / 7)) * t)
-            up = 120 if kind == "both" else 0
-            R.key_rot("upperarm01.R", f, [("Y", 10 + 8 * a)])   # cheering with the body and head; arms down and clear of the torso
-            R.key_rot("lowerarm01.R", f, [("Y", 8)])
-            R.key_rot("upperarm01.L", f, [("Y", -(10 + 8 * a))])
-            R.key_rot("lowerarm01.L", f, [("Y", -8)])
+            if False:   # raised arms clip the armpit region on these crowd bodies: everyone cheers with arms down
+                R.key_rot("upperarm01.R", f, [("Y", 95), ("X", -15)])
+                R.key_rot("lowerarm01.R", f, [("Y", 25 + 18 * math.sin(2 * math.pi * 1.6 * t))])
+            else:
+                R.key_rot("upperarm01.R", f, [("Y", -48 - 4 * a)])
+                R.key_rot("lowerarm01.R", f, [("Y", -10)])
+            R.key_rot("upperarm01.L", f, [("Y", 48 + 4 * a), ("X", 4)])
+            R.key_rot("lowerarm01.L", f, [("Y", 10), ("X", -10)])
             R.key_rot("spine02", f, [("X", -4 - 3 * a), ("Z", 5 * math.sin(t + ph))])
             R.key_rot("head", f, [("X", -12 - 6 * a), ("Z", 8 * math.sin(0.7 * t + ph))])
 PR = OB["President"]; PR.location = (0.0, GY + 2.55, TOPZ); PR.rotation_euler = (0, 0, 0)
