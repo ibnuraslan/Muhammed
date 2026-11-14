@@ -1,7 +1,7 @@
 """Resumable renderer for the Ch4-5 redo patches. Renders the frames of one patch that are not on disk yet, stops
 before the time budget runs out (default 25 min, chunks stay under 30), and encodes the MP4 when all frames exist.
   python scenes/render_redo.py c4_03 [--budget 1500] [--first 1 --last 288]
-  -> out/ch45_redo_render/c4_03/f_00001.png ...   out/ch45_redo_render/c4_03.mp4  (H.264 CRF 16, yuv420p, 24 fps)
+  -> out/ch45_redo_render/c4_03/f_00001.png ...   out/ch45_redo_render/c4_03_redo.mp4  (H.264 CRF 16, yuv420p, 24 fps)
 Run it again (or in a loop) until it prints DONE. A frame is written to a temp name and renamed when complete,
 so a chunk killed mid-frame never leaves a broken PNG behind."""
 import os, sys, time, subprocess
@@ -11,7 +11,7 @@ arg = lambda k, d: type(d)(sys.argv[sys.argv.index(k) + 1]) if k in sys.argv els
 BUDGET = arg("--budget", 1500.0)
 PATCH = os.path.join(ROOT, "out", "deliver", "ch45_redo", f"{sid}_patch.blend")
 OUT = os.path.join(ROOT, "out", "ch45_redo_render", sid); os.makedirs(OUT, exist_ok=True)
-MP4 = os.path.join(ROOT, "out", "ch45_redo_render", f"{sid}.mp4")
+MP4 = os.path.join(ROOT, "out", "ch45_redo_render", f"{sid}_redo.mp4")
 import bpy
 t0 = time.time()
 bpy.ops.wm.open_mainfile(filepath=PATCH)
@@ -37,5 +37,5 @@ have = len([x for x in os.listdir(OUT) if x.startswith("f_") and x.endswith(".pn
 if have >= n:
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-framerate", "24", "-start_number", str(m.frame_start),
                     "-i", os.path.join(OUT, "f_%05d.png"), "-frames:v", str(n), "-c:v", "libx264", "-crf", "16",
-                    "-pix_fmt", "yuv420p", "-r", "24", "-movflags", "+faststart", MP4], check=True)
+                    "-pix_fmt", "yuv420p", "-r", "24", "-an", "-movflags", "+faststart", MP4], check=True)
     print(f"[render] {sid} DONE {n} frames -> {MP4}", flush=True)

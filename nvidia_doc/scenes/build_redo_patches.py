@@ -91,7 +91,10 @@ if any(role == "right" for _, role in scenes):     # a thin dark divider between
         div = strips.new_effect(name="Divider", type='COLOR', channel=3, frame_start=1, length=r["frames"])
     except TypeError:
         div = strips.new_effect(name="Divider", type='COLOR', channel=3, frame_start=1, frame_end=r["frames"] + 1)
-    div.color = (0.0, 0.0, 0.0); div.crop.min_x = 958; div.crop.max_x = 958; div.blend_type = 'ALPHA_OVER'
+    div.color = (0.0, 0.0, 0.0); div.blend_type = 'ALPHA_OVER'
+    if hasattr(div, "fit_method"):
+        div.fit_method = 'ORIGINAL'
+    div.transform.scale_x = 4 / 1920             # a 4 px dark line down the middle
 m.frame_start, m.frame_end = 1, r["frames"]
 m.render.resolution_x, m.render.resolution_y, m.render.resolution_percentage = 1920, 816, 100
 m.render.fps = 24; m.render.engine = 'CYCLES'
