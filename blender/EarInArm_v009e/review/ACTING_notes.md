@@ -1,3 +1,31 @@
+# EarInArm v009e
+
+## v009e: the director's review of the v009d preview
+1. **Tray (351–443):** the hands start apart, so they never stack. The left hand holds the cartilage in `pinch_light`: the index and thumb pinch, the other fingers lightly curled (`pinch_tuck` read as a ring). The right hand holds the scalpel, then lies flat on the tray.
+2. **The patient's arm:** the arm board was parented to the chair's recline pivot, so it tilted up across the forearm and his hand showed under it. It is now world-placed under the reclined forearm and hand, sloping with the arm, and his hand rests relaxed on it (`relaxed_even`) from 470 to the end of the beat.
+3. **X-ray macro (840–1110):** f/11 or more (at f/5.6 it was soft, with about 2 cm depth of field).
+4. **The ear to the head:** the ear stays in the forceps tips and comes in from the side, close to the head. It no longer rises 14 cm above it. It is lowered onto the head over 1404–1440.
+5. **Surgeon at the head:** he stands right beside the head on the ear side. The camera is in front of him at the front-outer side, so his shoulder and body read, and nothing blocks the ear. His arm axes were tested against Chair_Headrest and Chair_Back over 1300–1700, with 0 hits. His free left hand waits relaxed at his side (reaching the top of the head from there crossed his own body).
+6. **Stray gloves:**
+   - f7: the opening is wider, so the surgeon's whole body is in frame with his hands.
+   - f157: the free hand is flat on the chest from 136, with no hovering.
+   - f277: his carried left hand is at his side.
+   - The new contacts these created are cleared: his hand at the patient's knee (unclip, 268–304), his walk past the patient's hand on the board (route 20 cm wider), and his hand on its way to the ear (a key over and outside the head).
+- **Ending (1655–1685):** the camera swings to the front-left of the patient, so the surgeon stepping back no longer blocks it.
+
+## Checks (v009e, packed)
+- clip_scan: 0.
+- qa: CLAW, HOVER, FACEPRESS, INSIDE, CAMJUMP, ROLL and ATTACH are all 0.
+  - BACKHEAD 1: f1.
+  - EMPTY 3: 625–637, the high shot following the forceps to the arm on the wider route.
+  - FILL 8: the surgeon's cap at the frame edge.
+  - PROPMOVE 124: as before.
+- cam_clear: f123 only (9 cm from the surgeon's hair).
+- limb_scan: the same residuals as v009d (listed below), plus one 1.6 cm fingertip brush on the nurse at f593.
+- Headrest/chair-back check: 0.
+
+---
+
 # EarInArm v009d: fixes for the client's rejection of v010
 
 The client's frame numbers are in the synced v010 timeline (1–1572). I mapped them back to this file's timeline (1–1770) by matching v010's camera keyframes against v009c's. For example: v010 200→229, 240–260→274–297, 420–440→506–534, 1060–1100→1233–1277, 1270–1440→1503–1639. Every frame below is in this file's timeline.

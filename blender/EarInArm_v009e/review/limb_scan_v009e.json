@@ -6245,7 +6245,7 @@
     "bone": "upperarm01",
     "into": "Surgeon",
     "depth_cm": 5.0,
-    "visible": true
+    "visible": false
    }
   },
   "1661": {
