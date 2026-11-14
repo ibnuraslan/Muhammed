@@ -150,7 +150,7 @@ MOVES = {
                  cam=lambda c, t: (TAPE_AT + Vector((0.78, -0.95, 0.42)).lerp(Vector((0.68, -0.82, 0.38)), ease(t)), TAPE_AT + Vector((-0.08, 0.05, -0.1)), 40),     # 3/4: keys, reader and tape
                  focus=lambda c, t: TAPE_AT + Vector((0.05, 0, 0))),
     "pouch": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["pouch"], "pouch"),
-                  cam=lambda c, t: (DESK2 + Vector((-2.0, 1.1, 1.65)).lerp(Vector((-1.8, 1.0, 1.6)), ease(t)), DESK2 + Vector((-0.4, -0.25, 1.1)), 30),
+                  cam=lambda c, t: (DESK2 + Vector((-2.4, 1.4, 1.75)).lerp(Vector((-2.2, 1.25, 1.7)), ease(t)), DESK2 + Vector((-0.4, -0.25, 1.35)), 28),
                   focus=lambda c, t: DESK2 + Vector((-0.45, -0.05, 1.0))),
     "push": dict(kind="anim", dof=2.0, anim=lambda c, t: animate(c, t * DUR["push"], "push"),
                  cam=lambda c, t: (Vector((-2.0, -0.9, 1.25)).lerp(Vector((-1.45, -0.35, 1.18)), ease(t)), Vector((-0.6, 0.8, 1.0)), 35),

@@ -490,7 +490,7 @@ CAMS = {
     "covers": lambda c, t: (V3(-4.8 + 4.0 * ease(t), ROW_Y + 1.5, 1.55), V3(-3.6 + 4.0 * ease(t), ROW_Y, 1.0), 30),
     "lone": lambda c, t: (V3(-2.2, ROW_Y - 2.4, 1.6).lerp(V3(-2.5, ROW_Y - 2.1, 1.55), ease(t)), V3(-4.5, ROW_Y - 0.3, 1.0), 30),
     "coil": lambda c, t: (T.world(c["row"][0], (0.28, -0.21, 0.17)).lerp(T.world(c["row"][0], (0.25, -0.18, 0.15)), ease(t)), T.world(c["row"][0], (0.162, -0.066, 0.036)), 70),
-    "cabinet": lambda c, t: (XC + V3(-2.6, -2.6, 1.6).lerp(V3(-2.3, -2.3, 1.55), ease(t)), XC + V3(-0.1, -0.8, 0.9), 30),
+    "cabinet": lambda c, t: (XC + V3(-3.2, -3.0, 1.75).lerp(V3(-2.9, -2.7, 1.7), ease(t)), XC + V3(-0.2, -0.85, 1.15), 28),
     "film": lambda c, t: (V3(LB.x - 2.0, LB.y + 0.9, 1.65).lerp(V3(LB.x - 1.7, LB.y + 0.75, 1.62), ease(t)), V3(LB.x, LB.y - 0.2, 1.5), 32),
     "debate": lambda c, t: (V3(LB.x - 0.28, LB.y + 2.4, 1.72).lerp(V3(LB.x - 0.4, LB.y + 2.22, 1.7), ease(t)), V3(LB.x - 1.0, LB.y - 0.75, 1.42), 32),
     "memory": lambda c, t: (MEM + V3(-1.5, -0.9, 0.45).lerp(V3(-1.25, -0.75, 0.38), ease(t)), MEM + V3(0, 0, 0.1), 35),

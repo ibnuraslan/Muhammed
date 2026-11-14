@@ -367,7 +367,7 @@ def cam_sign(c, t):
 def cam_folder(c, t):
     e = ease(t); d = OVAL_DESK
     cl = c["case"].location
-    return (cl + Vector((0.1, -0.72, 0.7)).lerp(Vector((0.08, -0.64, 0.64)), e), cl + Vector((0.0, -0.06, 0.08)), 50)
+    return (Vector((-1.75, 0.55, 1.5)).lerp(Vector((-1.6, 0.68, 1.47)), e), Vector((-0.55, 1.85, 1.08)), 35)     # medium: the aide, his arms and the case
 
 
 def cam_talks_wide(c, t):
@@ -384,7 +384,7 @@ MOVES = {
     "talks_wide": dict(kind="anim", dof=None, cam=cam_talks_wide, anim=anim("talks_wide")),
     "talks_read": dict(kind="anim", dof=4.0, cam=cam_talks_read, focus=lambda c, t: c["dele"][0].bone_head("head"), anim=anim("talks_read")),
     "sign": dict(kind="anim", dof=3.0, cam=cam_sign, focus=lambda c, t: OVAL_DESK + Vector((0, 0.5, 1.0)), anim=anim("sign")),
-    "folder": dict(kind="anim", dof=2.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
+    "folder": dict(kind="anim", dof=4.0, cam=cam_folder, focus=lambda c, t: c["folder"].location, anim=anim("folder")),
     "handover": dict(kind="anim", dof=4.0, cam=cam_handover, focus=lambda c, t: Vector((0.3, 1.0, 1.1)), anim=anim("handover")),
     "note": dict(kind="anim", dof=4.0, cam=cam_note, focus=lambda c, t: c["note"].location, anim=anim("note")),
     "pocket": dict(kind="anim", dof=3.0, cam=lambda c, t: (Vector((2.6, -0.5, 1.65)).lerp(Vector((2.4, -0.25, 1.62)), ease(t)), Vector((0.6, 2.4, 1.35)), 28), focus=lambda c, t: c["note"].location, anim=anim("pocket")),
