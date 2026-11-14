@@ -118,6 +118,12 @@ Rhythm: inserts of 2–4 s around each long take. Final cut points come from the
 | Air | dust motes in the beams; snow falls |
 | Cutaway model | trees change, ground and roof snow come and go, room lights go out, the attic hot-plate glow flickers |
 
+## Rule 7 (no hand without its person), reframed
+- intro 2A `curtain`: over the shoulder (head, shoulder and arm parting the lace), neighbour's room closed on the right
+- 1-11A `icebox_open`: wider and lower (her head, shoulders and arm at the icebox)
+- 2-7A `gaunt_bed`: higher and further back (the detective's head and shoulders)
+- 3-9A `dust_sheets`: same camera, wider lens, raised target (the son's head, shoulders and both arms)
+
 ## Deliverables
 
 - `review/storyboard_v2_before_after.jpg`: before/after per changed shot.
@@ -126,7 +132,7 @@ Rhythm: inserts of 2–4 s around each long take. Final cut points come from the
 | Preview | Content |
 |---|---|
 | `evid_tool_black.mp4` | 1-8B, the exhibit (recurring object) |
-| `evid_board.mp4` | 1-9A, Ch1 long take (shortened to 7 s for the preview) |
+| `evid_board.mp4` | 1-9A, Ch1 long take (shortened to 7 s for the preview): static board, push + focus pull |
 | `hint_hatch_measure.mp4` | 2-9B, chalked 8 in / 15 in on the real hatch |
 | `evid_calendar.mp4` | 2-13B, five weeks back |
 | `evid_plan_route.mp4` | 3-6B, the route |
