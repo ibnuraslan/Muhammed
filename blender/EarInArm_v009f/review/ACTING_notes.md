@@ -1,9 +1,13 @@
 # EarInArm v009f
 
 ## v009f: the director's review of the v009e preview
-1. **Tray hand (361–457):** the left hand lies flat on the tray beside the cartilage, with relaxed fingers, the thumb and index either side of the piece, and the wrist in line with the forearm. The old carving keys for that hand are removed, so the placement isn't fighting them. The right hand carves.
-2. **f1290–1350:** a wide shot of the walk from the arm to the head. The ear is carried close to his own chest, his body is in frame, and his arm stays outside the patient. The camera is clear of the nurse.
-3. **End touch:** index and middle fingertips on the ear, the other fingers curled (`ear_touch`).
+1. **Tray hand (361–457), option (a):** the left hand rests on the tray beside the cartilage with relaxed, even fingers (`relaxed_even`), the fingertips at the cartilage's edge, and the wrist in line with the forearm (`place_hand`). The fingers point across at the cartilage, not at the camera: pointing at the camera foreshortened the hand into a fist. The scalpel hand is 3 cm further left for the whole carve, so it never lies over the left hand. Both hands were checked at 540×960 at f373, 397, 421 and 445: two separate hands, no ring, no claw. The old carving keys for that hand are removed, so the placement isn't fighting them.
+2. **f1300–1350 (the hug):** two changes.
+   - The camera now looks at the surgeon from the front, from the patient's foot side (1300 `(0.6, -0.7, 1.85)`, 1330 `(0.62, -0.8, 1.8)`). From the old side-on angle his forearm overlapped her shoulder. It is clear of the nurse, who walks out behind it.
+   - His right hand (with the ear in forceps) is carried in front of his own chest, raised there (1352, 1364), and only then reaches out to the ear along the line from his shoulder (1378, 1390). It never passes over the patient's shoulder or chest.
+   - A commented-out left-hand carry key (from an inline comment) is restored, so his left hand stays at his side through the walk.
+3. **End touch (1741–1770):** index and middle fingertips on the ear, outside it; the other fingers relaxed and curled (`ear_touch`).
+- **Clip-scan false hit at the ear site (1402–1416):** the patient's original ear is a shape-key stub, and its folded back faces faced inward, so a fingertip 7 cm outside the head counted as "inside". The stub is now sunk 2–3 mm under the scalp. It is covered by the dressing early on and by the new ear from 1404.
 
 ---
 

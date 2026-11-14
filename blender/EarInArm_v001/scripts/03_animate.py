@@ -95,7 +95,7 @@ EAR_IDS = [i for i, m in enumerate(mix) if i not in HELP and m.x > 0.068 and 1.5
 for i in EAR_IDS:
     m = mix[i]; k_ = min(1.0, max(0.0, (m.x - 0.068) / 0.008))   # 0 at the scalp, 1 on the ear proper
     c_ = Vector((0.0797, -0.03, 1.665))
-    t = Vector((0.068 + (m.x - 0.068) * 0.1, c_.y + (m.y - c_.y) * (1 - 0.75 * k_), c_.z + (m.z - c_.z) * (1 - 0.75 * k_)))
+    t = Vector((0.068 - 0.003 * k_ + (m.x - 0.068) * 0.03, c_.y + (m.y - c_.y) * (1 - 0.75 * k_), c_.z + (m.z - c_.z) * (1 - 0.75 * k_)))
     eg.data[i].co = kb[0].data[i].co + (t - m)
 eg.value = 1.0
 EAR_C = Vector((0.0797, -0.0457, 1.6741))   # rest armature space centre of the old ear
@@ -328,13 +328,13 @@ for f in range(276, 330, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
 for f in range(572, 652, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
-for f in range(1300, 1360, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
-    carry_key(f, "R", (0.14, 0.17, 0.02));   # v009f: close to his own body (it wrapped across the patient's shoulder) carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
+for f in range(1300, 1344, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
+    carry_key(f, "R", (0.12, 0.2, 0.0)); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))   # v009f: R in front of his own chest (it wrapped across the patient's shoulder)
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(343, 565, 6):
     k = (f - 343) / 37.0
     away = Vector((0, 0.03, 0.14)) * (1 - smoothstep(345, 372, f)) + Vector((0, 0.06, 0.03)) * smoothstep(462, 488, f)
-    apartL = Vector((0.05, 0, 0)) * (1 - smoothstep(345, 380, f)); apartR = Vector((-0.07, 0, 0)) * (1 - smoothstep(345, 380, f))   # v009e: hands never stacked   # hands come in after the camera leaves the block, lift off to reveal the ear
+    apartL = Vector((0.05, 0, 0)) * (1 - smoothstep(345, 380, f)); apartR = Vector((-0.03, 0, 0)) + Vector((-0.04, 0, 0)) * (1 - smoothstep(345, 380, f))   # v009e: hands never stacked   # hands come in after the camera leaves the block, lift off to reveal the ear
     shL = Vector((ST.x + 0.18, ST.y - 0.08, 1.38)); gripL = BLK + Vector((0.028, -0.005, 0.01))
     dL = (gripL - shL).normalized()
     sh(f, "L", gripL - dL * 0.075 + Vector((0, 0, -0.065)) + away + apartL, dL, (0.0, 0.2, 1.0), pole=Vector((ST.x + 0.55, ST.y + 0.35, 0.95)))
@@ -370,8 +370,14 @@ def at_ear(off_out, off_fwd, off_up):
     # surgeon reaches from behind the head (+Y); off_out pushes away from the skull, off_fwd along -Y
     back = Vector((0, 1, 0))
     return EAR_W + side * (off_out * 0.35) + back * (off_out * 0.9) - back * off_fwd + Vector((0, 0, 1)) * off_up
-sh(1380, "R", at_ear(0.32, 0.0, 0.16), (-0.3, -1, -0.4), (0, 0, 1))   # v009e: over and outside the head, never through it
-sh(1390, "R", at_ear(0.16, 0.0, 0.05), (-0.3, -1, -0.4), (0, 0, 1))   # v009e: the ear comes in from the side, close to the head
+def ear_app(f, dist, up):
+    """v009f: ear approach on the line from the patient's ear to the surgeon's own shoulder (never in front of the patient)"""
+    ev_at(f); shp = SUR.wpos("upperarm01.R"); tip = EAR_W + (shp - EAR_W).normalized() * dist + Vector((0, 0, up))
+    d = (tip - shp).normalized(); sh(f, "R", tip - d * 0.15, d, (0, 0, 1))
+carry_key(1352, "R", (0.1, 0.24, 0.06), (0.4, -1, 0.0))   # v009f: raised in front of his own chest first, never over the patient
+carry_key(1364, "R", (0.2, 0.24, 0.15), (0.8, -1, 0.0))
+ear_app(1378, 0.15, -0.02)
+ear_app(1390, 0.11, 0.0)
 sh(1440, "R", at_ear(0.14, 0.0, 0.07) + Vector((0, 0, 0.02)) + side * 0.012, (-0.3, -1, -0.5), (0, 0, 1))
 sh(1470, "R", at_ear(0.26, 0.0, 0.16) + Vector((0, 0, 0.02)), (-0.3, -1, -0.5), (0, 0, 1))   # v009d: lifts off the scalp
 sh(1500, "R", at_ear(0.16, 0.0, 0.1) + Vector((0, 0, 0.02)), (-0.3, -1, -0.4), (0, 0, 1))

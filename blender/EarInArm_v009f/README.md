@@ -36,8 +36,8 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
 | 9 | 1645 | giving you a brand new ear | The chair rises and the camera pulls out and orbits to the front. He touches the new ear and smiles; the nurse smiles. |
 
 ## v009f vs v009e (director review of the v009e preview)
-1. **Tray (361–457):** while he carves, the left hand lies flat on the tray beside the cartilage, with relaxed fingers, the thumb and index either side of the piece, and the wrist in line with the forearm (`place_hand`). The fingertip pinch on such a small piece read as a ring or "OK" sign.
-2. **Arm to the head (1290–1350):** a wide shot of the surgeon walking with the ear held close to his own chest, his whole body in frame. In the tight shot his forearm crossed in front of the patient's shoulder and read as coming out of it.
+1. **Tray (361–457):** the left hand rests on the tray beside the cartilage with relaxed, even fingers, the fingertips at its edge, and the wrist in line with the forearm (`place_hand`). The scalpel hand stays 3 cm clear of it. Checked at 540×960 at f373, 397, 421 and 445.
+2. **Arm to the head (1300–1350):** the camera looks at the surgeon from the front, and his ear hand is carried and raised in front of his own chest before it reaches out to the ear. It no longer passes over the patient's shoulder.
 3. **End touch (1741–1770):** index and middle fingertips rest on the ear (`ear_touch`); the ring and little fingers are curled and the thumb is relaxed.
 
 ## v009e vs v009d (director review of the v009d preview)

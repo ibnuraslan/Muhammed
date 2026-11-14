@@ -95,8 +95,8 @@ def hang(s_, f, side_sign):
     pb.location = pb.location + SUR.data.bones["IK_hand." + s_].matrix_local.to_3x3().inverted() @ d_
     pb.keyframe_insert("location", frame=f, group=pb.name)
 for f in range(796, 1052, 32): hang("R", f, 1.0)   # the forceps hand waits at his side too (it rose into the x-ray camera)
-lock(SUR, "L", 1376); lock(SUR, "L", 1672)
-for f in range(1388, 1664, 24): hang("L", f, -1.0)   # v009e: free hand at his side while he works at the head
+lock(SUR, "L", 1290); lock(SUR, "L", 1672)
+for f in range(1300, 1664, 12): hang("L", f, -1.0)   # v009e: free hand at his side while he works at the head
 for f in range(796, 1052, 32):
     sc.frame_set(f); shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head; shR = SUR.matrix_world @ SUR.pose.bones["upperarm01.R"].head
     right = shR - shL; right.z = 0; right.normalize(); fwd = Vector((0, 0, 1)).cross(right)
@@ -115,8 +115,8 @@ for f in range(343, 471, 6):   # the old carving keys (every 6 f) would fight th
 for f in range(343, 471, 8):
     sc.frame_set(f); blk = EAR_TRAY.matrix_world.translation.copy()
     shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head
-    p, n = surf(TRAY, blk + Vector((0.075, 0.035, 0.0)))
-    fd = blk - shL; fd.z = 0; fd = fd.normalized()
+    p, n = surf(TRAY, blk + Vector((0.125, 0.0, 0.0)))   # v009f: flat beside the cartilage, fingertips on its edge, clear of the scalpel hand
+    fd = blk - shL; fd.z = 0; fd = (fd.normalized() * 0.6 + Vector((-0.8, 0, 0))).normalized()   # fingers point across at the cartilage, not at the camera
     place_hand(SUR, "L", f, p, Vector((0, 0, -1)), fd, skin=0.016)
 wrist_follow("L", 343, 468)
 # ---------------------------------------------------------------- 6. patient's free (right) hand relaxed on the armrest while reclined
@@ -235,7 +235,9 @@ def unclip(rig, s, f, targets, margin=0.01, it=6, cap=0.2):
         pb.location = pb.location + d_; pb.keyframe_insert("location", frame=f, group=pb.name); moved += push.length
     return moved
 def others(rig): return [lambda o=o: bvh(o) for o in (SUR, PAT, NUR) if o is not rig for o in (BODY[o],)]
-JOBS = [(SUR, "L", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),
+JOBS = [(SUR, "L", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1268, 1300, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08),
+        (SUR, "R", range(1336, 1378, 2), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(1340, 1372, 2), lambda: [lambda: self_bvh(SUR)], 0.08),   # v009f: the ear hand stays outside the patient on its way to the head
+        (SUR, "L", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), (SUR, "R", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08),
         (PAT, "L", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08), (PAT, "R", range(120, 200, 4), lambda: [lambda: self_bvh(PAT)], 0.08),
         (SUR, "L", range(268, 340, 3), lambda: [lambda: self_bvh(SUR)], 0.06), (SUR, "R", range(268, 340, 3), lambda: [lambda: self_bvh(SUR)], 0.06),
         (SUR, "L", range(566, 664, 3), lambda: [lambda: self_bvh(SUR)], 0.06), (SUR, "R", range(566, 664, 3), lambda: [lambda: self_bvh(SUR)], 0.06),
@@ -247,6 +249,7 @@ JOBS = [(SUR, "L", range(268, 306, 3), lambda: [lambda: bvh(BODY[PAT])], 0.08), 
         (SUR, "L", range(673, 716, 6), lambda: others(SUR)), (SUR, "R", range(673, 716, 6), lambda: others(SUR)),
         (SUR, "L", range(1357, 1397, 3), lambda: [lambda: self_bvh(SUR)] + others(SUR)), (SUR, "R", range(1357, 1397, 3), lambda: [lambda: self_bvh(SUR)]),
         (SUR, "L", range(1405, 1494, 6), lambda: others(SUR)), (SUR, "R", range(1405, 1494, 3), lambda: others(SUR), 0.035),
+        (SUR, "R", range(1398, 1422, 2), lambda: others(SUR), 0.12),   # v009f: f1406 forceps hand set the ear 2 cm into the scalp
         (SUR, "L", range(139, 284, 6), lambda: others(SUR)), (SUR, "R", range(139, 284, 6), lambda: others(SUR), 0.04),
         (PAT, "L", range(1705, 1771, 6), lambda: [lambda: self_bvh(PAT)])]
 for job in JOBS:
