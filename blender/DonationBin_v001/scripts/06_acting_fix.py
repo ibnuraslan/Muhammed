@@ -151,13 +151,13 @@ def back_lie(f, dz=0.0, sit=0.0, sp=(8, 0, 0), head=(10, 0), hands=None, knee=1.
             sx = 1 if s == "L" else -1
             kn = WOo.matrix_world @ WOo.pose.bones["lowerleg01." + s].head
             WO.key_hand(s, f, kn + Vector((0, 0, 0.11)) + lat(yaw) * (0.05 * sx), LG, PALM_DOWN, pole=kn + lat(yaw) * (0.60 * sx) - LG * 0.30 + Vector((0, 0, 0.25)))   # elbows out, arms clear of her sides
-WO.pose(252, (0.06, 0.22, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
+WO.pose(252, (0.06, 0.10, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
         hands={"L": ("r", (0.10, -0.12, 0.30)), "R": ("r", (-0.10, -0.12, 0.30))},
         feet={"L": ("r", (0, -0.25, 0.40), -10), "R": ("r", (0, -0.20, 0.32), -10)}, curl={"L": 0.2, "R": 0.2})
-WO.pose(266, (0.07, 0.15, 0.62), yaw=138, flex=245, side=5, sp=(30, 0, 0), head=(30, 0),
+WO.pose(266, (0.07, 0.08, 0.62), yaw=138, flex=245, side=5, sp=(30, 0, 0), head=(30, 0),
         hands={"L": ("r", (0.12, -0.10, 0.22)), "R": ("r", (-0.12, -0.10, 0.22))},
         feet={"L": ("r", (0, -0.35, 0.45), -10), "R": ("r", (0, -0.30, 0.38), -10)}, curl={"L": 0.2, "R": 0.2})
-back_lie(280, dz=0.06, knee=0.6, sp=(20, 0, 0), head=(25, 0))
+back_lie(280, dz=0.06, knee=0.9, sp=(20, 0, 0), head=(25, 0))
 back_lie(290, dz=-0.03, sp=(0, 0, 0), head=(5, 0))        # bounce on the clothes
 back_lie(300, dz=0.01, sp=(6, 0, 0), head=(8, 0))
 # --- 295-504: dazed, lifts her head, props up on her elbows, sits up facing the back wall, then looks round at the flap
@@ -183,12 +183,14 @@ WO.pose(650, (KN.x, KN.y - 0.04, PZ(KN.x, KN.y) + 0.48), yaw=15, flex=30, sp=(25
         hands={"L": ("r", (0.02, -0.25, 0.35)), "R": ("r", (-0.02, -0.25, 0.30))},
         feet={"L": ("g", (KN.x + 0.12, KN.y - 0.18), 15, 0.0, 0.0), "R": ("g", (KN.x - 0.12, KN.y + 0.22), 15, 0.0, -50, (KN.x - 0.1, KN.y - 0.6, 0.6))},
         curl={"L": 0.3, "R": 0.3})
-STAND = Vector((0.02, -0.18, 0))
+STAND = Vector((0.02, -0.08, 0))
 WO.pose(676, (STAND.x, STAND.y + 0.02, PZ(STAND.x, STAND.y) + RH - 0.10), yaw=5, flex=10, sp=(8, 0, 0), head=(-20, 0),
         hands={"L": ("r", (0.0, -0.12, 0.25)), "R": ("r", (0.0, -0.12, 0.25))}, feet=stand_feet(STAND.x, STAND.y + 0.08, 0), curl={"L": 0.3, "R": 0.3})
-def flap_in_y(f, x, z):
-    sc.frame_set(f); h = sc.ray_cast(bpy.context.evaluated_depsgraph_get(), Vector((x, 0.0, z)), Vector((0, -1, 0)), distance=1.0)
-    return (h[1].y if h[0] else FY) + 0.045
+FLAPO = bpy.data.objects["Flap"]
+def flap_in_y(f, x, z):          # the flap's own inner face (its own ray cast: her body is not in the way)
+    sc.frame_set(f); inv = FLAPO.matrix_world.inverted()
+    ok, loc, n, i = FLAPO.ray_cast(inv @ Vector((x, 0.0, z)), (inv.to_3x3() @ Vector((0, -1, 0))).normalized())
+    return ((FLAPO.matrix_world @ loc).y if ok else FY) + 0.045
 def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
     z = PZ(STAND.x, STAND.y)
     ph = 1.30 + 0.02 * wob
@@ -198,7 +200,7 @@ def at_flap(f, push, look=(-10, 0), wob=0.0, jaw=0.0):
 at_flap(720, 0.0, look=(-15, 10)); at_flap(780, 0.2); at_flap(805, 1.0, jaw=8); at_flap(818, 0.3); at_flap(835, 1.0, jaw=10); at_flap(850, 0.2)
 at_flap(880, 0.6, look=(-5, -15)); at_flap(930, 0.0, look=(0, 25))
 # --- 961-1320: runs her hands over the left wall (smooth, nothing to hold), looks up, searches the flap edge, jumps at the back wall
-LW = -0.705        # wrists 3.3 cm off the liner: fingers lie on it, not through it
+LW = -0.680        # wrists 3.3 cm off the liner: fingers lie on it, not through it
 def at_wall(f, a, b, look=(0, 0)):
     p = Vector((-0.20, 0.0, 0)); z = PZ(p.x, p.y)
     WO.pose(f, (p.x, p.y, z + RH - 0.04), yaw=-90, flex=4, sp=(2, 0, 0), head=look,
@@ -275,7 +277,7 @@ def pound(f, hit):
 scream(1322, 2); scream(1336, 22, 1.0); pound(1348, 0); pound(1356, 1); pound(1364, 0.2); pound(1372, 1); pound(1380, 0.1)
 scream(1394, 24, 1.0, (-26, -6)); scream(1420, 8, 0.2); scream(1446, 22, 1.0, (-30, 0)); scream(1478, 4, 0.0, (-10, 0))
 # --- 1500-1842: three days. She sinks down and lies curled on her side in the middle of the clothes, head on her arm, face to the flap
-CUR = Vector((-0.12, 0.18, 0)); CY = 52.0   # y +0.15: her feet stay clear of the front wall          # side-lying: head toward the back-right corner, front of her body faces the front wall
+CUR = Vector((-0.12, 0.15, 0)); CY = 52.0   # y +0.15: her feet stay clear of the front wall          # side-lying: head toward the back-right corner, front of her body faces the front wall
 def curled(f, k, weak, head=(20, 0), breathe=0.0, jaw=0.0):
     z = PZ(CUR.x, CUR.y) + 0.17 - 0.02 * weak + 0.006 * breathe
     M = WO.Mb(Vector((CUR.x, CUR.y, z)), CY, 0, 88)
@@ -283,9 +285,9 @@ def curled(f, k, weak, head=(20, 0), breathe=0.0, jaw=0.0):
     WO.pose(f, (CUR.x, CUR.y, z), yaw=CY, flex=0, side=88, sp=(28 + 8 * k + 2 * breathe, 0, 0), head=head,
             hands={"L": ("w", tuple(M @ (WO.root_head + Vector((0.0, -0.20, 0.55)))), tuple((M.to_3x3() @ Vector((0, 0, 1))).normalized()), (0, 0, -1)),
                    "R": ("r", (0.10, -0.30, 0.20), (0, 0, -20))},
-            feet={"L": ("r", (-0.02, -0.30 * k, 0.40 * k), 15), "R": ("r", (0.04, -0.24 * k, 0.34 * k), 15)},
+            feet={"L": ("r", (-0.02, -0.24 * k, 0.44 * k), 15), "R": ("r", (0.04, -0.20 * k, 0.38 * k), 15)},
             jaw=jaw, curl={"L": 0.22, "R": 0.25})
-WO.pose(1500, (0.0, 0.02, PZ(0.0, 0.02) + 0.55), yaw=20, flex=25, sp=(30, 0, 0), head=(20, 0),
+WO.pose(1500, (0.0, 0.12, PZ(0.0, 0.12) + 0.55), yaw=20, flex=20, sp=(30, 0, 0), head=(20, 0),
         hands={"L": ("r", (0, -0.05, 0.05)), "R": ("r", (0, -0.05, 0.05))}, feet=stand_feet(0.0, -0.02, 20))
 WO.pose(1515, (-0.05, 0.0, PZ(-0.05, 0.0) + 0.30), yaw=40, flex=30, side=40, sp=(30, 0, 0), head=(20, 0),
         hands={"L": ("w", (-0.30, 0.02, PZ(-0.30, 0.02) + 0.035), (0.3, -0.6, 0), tuple(PALM_DOWN)), "R": ("r", (0.22, -0.22, 0.05))},
@@ -363,7 +365,7 @@ for bn_, dz_ in (("root", 0.04), ("IK_foot.L", 0.0), ("IK_foot.R", 0.0)):
                   if fc.data_path.startswith('pose.bones["%s"].location' % bn_) for k in fc.keyframe_points if k.co.x <= 182})
     vals_ = {}
     for f in ks_:
-        sc.frame_set(f); M_ = pb_.matrix.copy(); w_ = min(1.0, max(0.0, (200 - f) / 30.0)); M_.translation += WOo.matrix_world.inverted().to_3x3() @ Vector((0, -0.12 * w_, dz_ * w_)); vals_[f] = M_
+        sc.frame_set(f); M_ = pb_.matrix.copy(); w_ = min(1.0, max(0.0, (200 - f) / 30.0)); M_.translation += WOo.matrix_world.inverted().to_3x3() @ Vector((0, -0.12 * w_, 2 * dz_ * w_)); vals_[f] = M_
     for f, M_ in vals_.items():
         sc.frame_set(f); pb_.matrix = M_; pb_.keyframe_insert("location", frame=f, group=bn_)
 # ---------------------------------------------------------------- shover: hands on her upper back (not her hips)
