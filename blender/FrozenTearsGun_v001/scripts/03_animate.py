@@ -174,7 +174,7 @@ def sob(f, rate=3.6):
 OF_FLEX = track([(F(18.7), 14), (F(21), 22), (F(22.4), 24), (F(23.0), 26), (F(25.3), 25), (F(26.0), 14), (F(28.3), 12)])
 OF_HEADP = track([(F(18.7), 12), (F(19.6), 4), (F(20.3), 16), (F(20.95), 18), (F(21.1), -4), (F(21.7), -2), (F(22.2), 14), (F(22.4), 16), (F(23.0), 10), (F(25.3), 10), (F(26.0), -6), (F(28.3), -4)])
 OF_SOB = track([(F(18.7), 0.15), (F(22.4), 0.2), (F(22.8), 1.4), (F(25.3), 1.2), (F(26.0), 0.3), (F(28.3), 0.2)])
-OF_FACE = track([(F(18.7), 0.0), (F(22.4), 0.0), (F(22.8), 1.0), (F(25.5), 1.0), (F(26.2), 0.0)])   # 0 lap, 1 hands on face
+OF_FACE = track([(F(18.7), 0.0), (F(23.5), 0.0), (F(23.95), 1.0), (F(24.75), 1.0), (F(25.2), 0.0)])   # 0 lap, 1 fingertips wipe a tear from her cheek (v008: no hand over the face)
 # workshop C (time-lapse + finale)
 def inv_pose(f):
     t = (f - 1) / FPS
@@ -283,19 +283,17 @@ for f in inv_f:
             Dh = hm @ W.R.rest("head").inverted(); Dh3 = Dh.to_3x3()
             hz = W.R.BN["head"].head_local.z
             # wrist below the cheek, fingers up over the eyes, palm towards the face (rest-body coords mapped by the head delta)
-            wipe = math.sin(math.pi * min(1, max(0, (t - 24.1) / 0.7)))          # knuckles wipe across the eye once
-            palm_eyes = (Dh @ Vector((sx * 0.045, -0.23, hz + 0.035)), Dh3 @ Vector((-sx * 0.6, 0.05, 0.8)), Dh3 @ Vector((0.0, 1.0, 0.05)))
-            # hand turned sideways: the bent index finger's side brushes along under her lower lashes, wrist out by the cheekbone
-            knuckle = (Dh @ Vector((sx * (0.115 - 0.02 * math.sin(math.pi * wipe)), -0.175, hz + 0.0)), Dh3 @ Vector((-sx * 0.9, -0.15, 0.35)), Dh3 @ Vector((0.0, 0.25, 1.0)))
-            fc = lerp_grip(palm_eyes, knuckle, wipe)
-            fc = (fc[0] + Dh3 @ Vector((sx * 0.02, -0.05, 0.0)) * (4 * wipe * (1 - wipe)), fc[1], fc[2])   # arc off the face between the two contacts   # palms on the cheeks, hands apart
-            g = lerp_grip(lap, fc, fs if s == "R" else 0.25 * fs)   # right hand over her eyes, left hand stays near her lap (no hand-on-hand)
-            fw_ = fs if s == "R" else 0.25 * fs
-            g = (g[0] + Dh3 @ Vector((sx * 0.05, -0.15, -0.03)) * math.sin(math.pi * fw_), g[1], g[2])   # arc in front of the chin
+            w = smooth((t - 24.0) / 0.6)                                          # the fingertips slide down and out along the cheek
+            tip = Vector((sx * (0.052 + 0.018 * w), -0.112, hz + 0.065 - 0.035 * w))
+            wr = Vector((sx * 0.085, -0.17, hz - 0.075 - 0.03 * w))
+            d_ = (tip - wr).normalized()
+            fc = (Dh @ wr, Dh3 @ d_, Dh3 @ Vector((-sx * 0.25, 1.0, 0.1)))
+            g = lerp_grip(lap, fc, fs if s == "R" else 0.0)   # right hand only; the left stays on her lap
+            g = (g[0] + Dh3 @ Vector((sx * 0.06, -0.14, -0.04)) * math.sin(math.pi * (fs if s == "R" else 0.0)), g[1], g[2])   # arc in front of the chin on the way up and down
             fist = smooth((t - 26.0) / 0.4)
             W.key_hand(s, f, g[0], g[1], g[2], pole=g[0] + Vector((sx * 0.4, 0.3, -0.3)))
             if s == "R":
-                sh = mix_shape("relaxed", "palm_eyes", fs); sh = mix_shape(sh, "index_wipe", wipe); sh = mix_shape(sh, "fist_loose", fist)
+                sh = mix_shape("relaxed", "point", 0.45 * fs); sh = mix_shape(sh, "fist_loose", fist)
             else:
                 sh = mix_shape("relaxed", "fist_loose", fist)
             key_shape(W, s, f, sh)
@@ -356,7 +354,7 @@ T_MEN_OUT = F(30.9)
 men_f = sorted(set(list(range(1, 2101, 4)) + [T_MEN_OUT, T_MEN_OUT + 1]))
 JAB = track([(F(19.0), 0.0), (F(19.6), 1.0), (F(22.2), 1.0), (F(22.6), 0.3), (F(23.5), 0.0)])
 SLAP = track([(F(20.55), 0.0), (F(20.85), 1.0), (F(21.05), 1.0), (F(21.4), 0.0)])
-PELT = track([(F(26.2), 0.0), (F(26.5), 1.0), (F(28.2), 1.0), (F(28.6), 0.0)])
+PELT = track([(F(26.2), 0.0), (F(26.45), 1.0), (F(27.0), 1.0), (F(27.6), 0.0)])   # v008: a small taken-aback flinch, hands up in front of the chest
 for f in men_f:
     t = (f - 1) / FPS
     if f <= T_MEN_OUT:
@@ -364,9 +362,9 @@ for f in men_f:
         jab = JAB(f); pelt = PELT(f)
         flinch = math.sin(f * 1.7) * pelt
         awk = smooth((t - 22.6) / 0.6) * (1 - smooth((t - 26.0) / 0.4))
-        pos = POS_MO + Vector((0.0, -0.08 * pelt, ROOT_Z_M - 0.005 - 0.03 * pelt))
-        M.key_body(f, pos, 180, flex=10 * jab + 6 + 2 * talk - 14 * pelt + 14 * SLAP(f), head=(-4 + 3 * talk + 8 * awk + 12 * pelt, 18 * pelt * flinch, 4 * awk),
-                   side=6 * flinch, twist=-10 * jab + 25 * pelt, clav=2, jaw=3 + 5 * max(0, talk) + 10 * pelt)
+        pos = POS_MO + Vector((0.0, -0.04 * pelt, ROOT_Z_M - 0.005 - 0.01 * pelt))
+        M.key_body(f, pos, 180, flex=10 * jab + 6 + 2 * talk - 7 * pelt + 14 * SLAP(f), head=(-4 + 3 * talk + 8 * awk + 6 * pelt, 0, 4 * awk),
+                   side=0, twist=-10 * jab + 6 * pelt, clav=2 + 3 * pelt, jaw=3 + 5 * max(0, talk) + 4 * pelt)
         key_face(M, f, sad=0.3 * awk, squint=0.3 + 0.7 * pelt, smile=0.0)
         for s in "LR":
             sx = 1 if s == "L" else -1
@@ -391,29 +389,30 @@ for f in men_f:
         fw = Vector((0, 1, 0))       # he faces world +Y
         desk_y = POS_MO.y + 0.42
         # left hand planted on the desk
-        Wl = Vector((POS_MO.x - 0.28, desk_y, DT + 0.035))
-        M.key_hand("L", f, Wl, Vector((0.2, 1, -0.2)), Vector((0, 0, -1)), pole=Wl + Vector((-0.4, -0.3, 0.3)))
-        key_shape(M, "L", f, mix_shape("flat", "shield", PELT(f)))
+        D3m = D.to_3x3()
+        hangL = (D @ Vector((0.30, -0.20 - 0.14 * SLAP(f), 1.03 + 0.06 * SLAP(f))), D3m @ Vector((-0.15, -0.35, -1.0)), D3m @ Vector((-1.0, 0.0, 0.0)))   # v008: arms relaxed, elbows bent
+        hangR = (D @ Vector((-0.28, -0.20, 1.03)), D3m @ Vector((0.15, -0.35, -1.0)), D3m @ Vector((1.0, 0.0, 0.0)))
+        Wl = hangL[0]
         # right hand: rest on desk -> jabbing finger -> neck rub; pelting: both arms shield the face
-        rest = (Vector((POS_MO.x + 0.25, desk_y, DT + 0.035)), Vector((-0.2, 1, -0.2)), Vector((0, 0, -1)))
-        jabW = D @ Vector((-0.12, -0.55 - 0.06 * talk, 1.36 + 0.04 * talk))
+        rest = hangR
+        jabW = D @ Vector((-0.11, -0.40 - 0.04 * talk, 1.27 + 0.03 * talk))   # elbow bent
         jb = (jabW, Vector((0.05, 1, -0.1)), Vector((-0.3, 0, -1)))
         hm = M.head_M()
         neck = (hm @ (M.R.rest("head").inverted() @ Vector((-0.095, 0.115, M.R.BN["head"].head_local.z - 0.05))), Vector((0.7, 0.2, 0.6)), Vector((0, -1, 0)))
         g = lerp_grip(rest, jb, jab)
         g = lerp_grip(g, neck, awk)
-        D3m = D.to_3x3()   # rest-body directions (he faces rest -Y): palms out towards her, fingers up, arms apart
-        shieldR = (D @ Vector((-0.10, -0.34, 1.50)), D3m @ Vector((0.15, -0.1, 1.0)), D3m @ Vector((0.1, -1, 0)))
-        shieldL = (D @ Vector((0.30, -0.30, 1.42)), D3m @ Vector((0.25, -0.1, 1.0)), D3m @ Vector((-0.1, -1, 0)))
+        # rest-body directions (he faces rest -Y): hands up in front of the chest, palms out, elbows bent
+        shieldR = (D @ Vector((-0.21, -0.30, 1.22)), D3m @ Vector((0.1, -0.25, 1.0)), D3m @ Vector((0.05, -1, 0.2)))
+        shieldL = (D @ Vector((0.21, -0.30, 1.22)), D3m @ Vector((-0.1, -0.25, 1.0)), D3m @ Vector((-0.05, -1, 0.2)))
         slap = (Vector((POS_MO.x + 0.12, desk_y - 0.02, DT + 0.03 + 0.12 * (1 - min(1, SLAP(f) * 1.6)))), Vector((-0.1, 1, -0.1)), Vector((0, 0, -1)))
         g = lerp_grip(g, slap, SLAP(f))
         g = lerp_grip(g, shieldR, pelt)
         M.key_hand("R", f, g[0], g[1], g[2], pole=g[0] + Vector((-0.45, -0.25, -0.2)))
-        if pelt > 0.01:
-            gl = lerp_grip((Wl, Vector((0.2, 1, -0.2)), Vector((0, 0, -1))), shieldL, pelt)
-            M.key_hand("L", f, gl[0], gl[1], gl[2], pole=gl[0] + Vector((0.45, -0.25, -0.2)))
+        gl = lerp_grip(hangL, shieldL, pelt)
+        M.key_hand("L", f, gl[0], gl[1], gl[2], pole=gl[0] + Vector((0.45, -0.25, -0.2)))
+        key_shape(M, "L", f, mix_shape("relaxed", "open_alarm", 0.6 * pelt))
         pointing = jab * (1 - awk) * (1 - pelt)
-        sh = mix_shape("relaxed", "point", pointing); sh = mix_shape(sh, "flat", min(1.0, SLAP(f) * 1.5)); sh = mix_shape(sh, "shield", pelt)
+        sh = mix_shape("relaxed", "point", pointing); sh = mix_shape(sh, "flat", min(1.0, SLAP(f) * 1.5)); sh = mix_shape(sh, "open_alarm", 0.6 * pelt)
         key_shape(M, "R", f, sh)
     else:
         arms = smooth((t - 31.3) / 0.6); hit = math.sin(math.pi * min(1, max(0, (t - 32.9) / 0.45))) if t >= 32.9 else 0.0
@@ -422,15 +421,15 @@ for f in men_f:
         for s in "LR":
             sx = 1 if s == "L" else -1
             # rest-body coordinates (he faces rest -Y); mapped to the posed chest
-            hang = (Vector((sx * 0.24, -0.02, 0.86)), Vector((0, -0.1, -1)), Vector((-sx, 0, 0)))
-            brace = (Vector((sx * 0.50, -0.30, 1.28 + 0.05 * hit)), Vector((sx * 0.75, -0.55, 0.25)), Vector((0, -1, 0.15)))   # elbows bent, palms open towards her
+            hang = (Vector((sx * 0.21, -0.12, 0.98)), Vector((-sx * 0.1, -0.3, -1)), Vector((-sx, 0, 0)))
+            brace = (Vector((sx * 0.20, -0.30, 1.14 + 0.04 * hit)), Vector((sx * 0.15, -0.35, 1.0)), Vector((0, -1, 0.2)))   # v008: braced, elbows bent, hands up in front of the body
             chest = (Vector((sx * 0.07, -0.21 - 0.03 * max(0, pat), 1.27)), Vector((-sx * 0.6, 0, 0.8)), Vector((0, 1, 0)))
             belly = (Vector((-0.02, -0.19, 1.08)), Vector((-sx * 0.8, 0, 0.3)), Vector((0, 1, 0)))
             g = lerp_grip(hang, brace, arms)
             g = lerp_grip(g, chest if s == "R" else belly, laugh)
             Wp = D @ g[0]
             M.key_hand(s, f, Wp, D3 @ g[1], D3 @ g[2], pole=D @ (g[0] + Vector((sx * 0.35, 0.35, -0.25))))
-            key_shape(M, s, f, mix_shape(mix_shape("relaxed", "open_alarm", arms * (1 - laugh)), "cup_hold" if s == "R" else "relaxed", laugh))
+            key_shape(M, s, f, mix_shape(mix_shape("relaxed", "open_alarm", 0.6 * arms * (1 - laugh)), "cup_hold" if s == "R" else "relaxed", laugh))
 
 # ------------------------------------------------------------------ tube points + hero tear path
 anchors = [bpy.data.objects["TubeH%d" % i] for i in range(5)]
@@ -657,7 +656,7 @@ for i, o in enumerate(pelt_drops):
         t = (f - 1) / FPS
         if t < t0: key_obj(o, f, src, 0.0); continue
         u = min(1, (t - t0) / (t1 - t0)); p = src.lerp(tgt, u) + Vector((0, 0, 0.12 * math.sin(math.pi * u)))
-        s = 6.0 if u < 1 else max(0.0, 6.5 - (t - t1) * 50)
+        s = 0.0   # v008: no drops fly in the office (read as floating balls)
         key_obj(o, f, p, (s, s, s * (1.3 if u < 1 else 0.4)))
     o.hide_render = False
     key_hide(o, [(F(t0) - 2, False)])
@@ -672,17 +671,15 @@ for i in range(6):
         o.rotation_euler = (r0.x, r0.y, r0.z + R_(rz)); o.keyframe_insert("rotation_euler", frame=F(t))
 # ------------------------------------------------------------------ thought bubble
 bub = bpy.data.objects["ThoughtBubble"]; bon = node_val("M_Bubble", "BubbleOn")
-for f, v in ((1, 0.0), (F(25.55), 0.0), (F(25.7), 1.0), (F(28.15), 1.0), (F(28.3), 0.0)):
-    key_node(bon, f, v)
+for f, v in ((1, 0.0),):
+    key_node(bon, f, v)   # v008: thought bubble removed
 bc0 = ihead + Vector((0.0, -0.05, 0.42)); bc1 = OF(0.3, 0.45, 1.5)
-for t, c, r in ((25.5, bc0, 0.02), (26.0, bc0, 0.28), (26.35, bc0.lerp(bc1, 0.4), 0.9), (26.7, bc1, 1.6), (28.15, bc1, 1.65), (28.25, bc1, 2.4)):
-    key_obj(bub, F(t), c, r)
-key_obj(bub, 1, Vector((0, 0, -50)), 0.01)
+key_obj(bub, 1, Vector((0, 0, -50)), 0.01); key_hide(bub, [(1, True)])
 for i in range(3):
     o = bpy.data.objects["ThoughtBubbleSmall_%d" % i]
     c = ihead + Vector((0.08 - 0.03 * i, -0.08, 0.16 + 0.09 * i))
     key_obj(o, 1, Vector((0, 0, -50)), 0.0); key_obj(o, F(25.5 + 0.08 * i), c, 0.0)
-    key_obj(o, F(25.7 + 0.08 * i), c, 0.025 + 0.02 * i); key_obj(o, F(28.15), c + Vector((0, 0, 0.03)), 0.03 + 0.02 * i); key_obj(o, F(28.3), c, 0.0)
+    key_hide(o, [(1, True)])
 
 # ------------------------------------------------------------------ time-lapse props + grinder sparks (beat 12)
 tl = {n: bpy.data.objects[n] for n in ("TL_Sketch", "TL_Pencil", "TL_File")}
@@ -775,46 +772,44 @@ f0 = 1
 e0 = EYE(1)
 wp(0.0, e0 + Vector((0.16, -0.40, 0.02)), e0 + Vector((0, 0, -0.01)), 55, 2.8)
 wp(1.0, EYE(F(1)) + Vector((0.08, -0.30, -0.01)), EYE(F(1)) + Vector((0.01, 0, -0.01)), 60, 2.8)
-wp(1.8, P_(F(1.8), hero) + Vector((0.10, -0.28, 0.02)), P_(F(1.8), hero), 50, 11)   # preview fix: mid shot, no skin macro
-for t in (2.4, 2.9, 3.4, 3.9, 4.35):
-    h = P_(F(t), hero); d = (tube_at(F(t), 0.5) - tube_at(F(t), 0.4)).normalized()
-    side = d.cross(Vector((0, -1, 0))).normalized()
-    k = max(0.0, min(1.0, (t - 2.9) / 1.45)) * 0.6          # later in the ride, tilt down so the gun below is in shot too
-    tg = h.lerp(G(F(t), CH), k)
-    wp(t, tg - Vector((0, 0.30 + 0.08 * k, -0.04)) + side * 0.06, tg, 45, 11)   # follow the tear from a mid distance, background readable
-wp(4.8, G(F(4.8), (0.10, -0.36, 0.20)), G(F(4.8), (0, -0.095, 0.085)), 50, 16)
-wp(5.4, G(F(5.4), (0.08, -0.34, 0.26)), G(F(5.4), CH), 50, 16)
-wp(6.2, G(F(6.2), (0.36, -0.30, 0.20)), G(F(6.2), (0.06, -0.09, 0.07)), 42, 11)
-wp(7.0, G(F(7.0), (0.38, -0.06, 0.18)), G(F(7.0), (0.05, -0.09, 0.06)), 45, 11)
-wp(7.8, G(F(7.8), (0.32, -0.34, 0.12)), G(F(7.8), (0.0, -0.13, 0.0)), 45, 16)   # swing round outside the valve hand
-wp(8.7, G(F(8.7), (0.16, -0.36, 0.16)), G(F(8.7), (0.01, -0.095, 0.085)), 50, 16)
-wp(9.5, G(F(9.5), (0.12, -0.36, 0.18)), G(F(9.5), CH), 50, 16)
-wp(10.3, G(F(10.3), (0.04, -0.34, 0.15)), G(F(10.3), (0, -0.095, 0.074)), 50, 16)
-wp(11.2, G(F(11.2), (-0.10, -0.34, 0.16)), G(F(11.2), (0, -0.095, 0.07)), 50, 16)
-wp(12.2, G(F(12.2), (-0.15, -0.30, 0.17)), G(F(12.2), (-0.02, -0.095, 0.085)), 50, 16)
-wp(13.0, G(F(13.0), (-0.22, -0.30, 0.24)), G(F(13.0), CH), 45, 16)   # preview fix: mid shots, no barrel/finger macro
-wp(13.7, G(F(13.7), (-0.32, -0.26, 0.12)), G(F(13.7), (0, -0.06, 0.03)), 45, 16)
-wp(14.4, G(F(14.4), (-0.32, -0.34, 0.09)), G(F(14.4), (0, -0.12, 0.03)), 42, 16)
-wp(15.0, G(F(15.0), (-0.20, -0.42, 0.10)), G(F(15.0), (0, -0.27, 0.04)), 30, 11)
-wp(15.55, G(F(15.55), (-0.17, -0.50, 0.12)), G(F(15.55), (0, -0.40, 0.05)), 32, 8)
-for t in (16.3, 17.1, 17.9, 18.5):
-    ts, te, m0, mid, tgt = pel_paths[0]; u = (t - ts) / (te - ts)
-    p = bez(m0, m0.lerp(mid, 0.66), mid.lerp(tgt, 0.33), tgt, u)
-    dirp = (tgt - m0).normalized()
-    wp(t, p - dirp * 0.75 + Vector((0.22, 0, 0.14)), FRAME_PHOTO, 34, 11)   # preview fix: further back and off to the side, so no pellet crosses the lens   # ride behind the pellets, the photo they fly into stays in frame
-wp(18.85, FRAME_PHOTO + Vector((0, 0.42, 0.02)), FRAME_PHOTO + Vector((0, -1, 0)), 30, 11)
+def MID(t, k=0.5): return HEAD(W, F(t)).lerp(G(F(t), CH), k)          # v008: medium shots hold her face and the gun in her hands
+def MS(t, dx, dy, dz, lens=40, fs=8, k=0.5):
+    m = MID(t, k); wp(t, m + Vector((dx, dy, dz)), m, lens, fs)
+MS(1.8, 0.16, -0.62, 0.04, 45, k=0.35)                 # the eye close-up opens out to her face, the funnel and the tube
+MS(2.6, 0.24, -0.78, 0.03, 42)
+MS(3.5, 0.20, -0.80, 0.0, 40)
+wp(4.35, G(F(4.35), (0.12, -0.42, 0.26)), G(F(4.35), (0, -0.095, 0.10)), 45, 16)   # gun close shot 1: the tears drop into the chamber
+wp(5.0, G(F(5.0), (0.10, -0.36, 0.20)), G(F(5.0), (0, -0.095, 0.085)), 50, 16)
+MS(5.7, 0.38, -0.80, 0.10, 40, k=0.3)
+wp(6.4, G(F(6.4), (0.40, -0.36, 0.20)), G(F(6.4), (0.06, -0.09, 0.07)), 40, 16)   # gun close shot 2: her hand turns the valve
+MS(7.3, 0.36, -0.85, 0.10, 40, k=0.3)
+MS(8.3, 0.18, -0.88, 0.08, 40, k=0.4)
+MS(9.3, 0.0, -0.85, 0.06, 40)
+MS(10.1, 0.08, -0.62, 0.06, 45, k=0.55)              # the tears freeze: closer medium, her face still in frame
+MS(10.9, -0.08, -0.62, 0.06, 45, k=0.55)
+MS(11.8, -0.20, -0.82, 0.05, 40)
+MS(12.8, -0.30, -0.78, 0.08, 40)
+MS(13.7, -0.40, -0.66, 0.05, 38)
+MS(14.4, -0.45, -0.52, 0.04, 36)
+MS(15.0, -0.50, -0.50, 0.05, 34, k=0.6)               # v008: she fires, her face and the gun in one shot
+MS(16.3, -0.62, -0.62, 0.06, 36)                      # v008: she watches the frozen tears fly off (camera clear of their path)
+MS(17.2, -0.70, -0.30, 0.10, 34, k=0.3)
+MS(18.2, -0.75, -0.25, 0.10, 34, k=0.3)               # she watches them go; the camera swings to the photo only for the last half second
+wp(18.6, FRAME_PHOTO + Vector((0.05, 1.35, 0.05)), FRAME_PHOTO, 32, 11)
+wp(18.85, FRAME_PHOTO + Vector((0, 0.6, 0.02)), FRAME_PHOTO + Vector((0, -1, 0)), 30, 11)
 wp(19.05, OF(0.3, -2.4, 1.45), OF(0.3, 0.5, 1.3), 28, 2.0)
 wp(19.4, OF(0.62, -1.15, 1.28), HEAD(M, F(19.4)), 32, 4.0)
 wp(20.4, OF(0.75, -0.05, 0.98), HEAD(M, F(20.4)) + Vector((0, 0, -0.05)), 30, 4.0)
-wp(21.4, OF(1.25, 0.35, 1.5), HEAD(M, F(21.4)), 32, 4.0)
-wp(21.9, OF(1.05, 0.3, 1.35), HEAD(W, F(21.9)) + Vector((0, 0, 0.03)), 30, 5.6)
+wp(21.4, OF(0.75, -0.75, 1.45), HEAD(M, F(21.4)), 32, 5.6)   # v008: over her shoulder
+wp(21.9, OF(0.98, -0.12, 1.35), HEAD(W, F(21.9)), 30, 5.6)   # orbit round her side, no empty pan
 wp(22.3, OF(0.85, 0.75, 1.3), HEAD(W, F(22.3)) + Vector((0, 0, 0.05)), 32, 4.0)
 wp(23.2, OF(0.65, 0.45, 1.0), HEAD(W, F(23.2)) + Vector((0, 0, 0.02)), 35, 4.0)
 wp(24.2, OF(0.3, 0.42, 1.0), HEAD(W, F(24.2)) + Vector((0, 0, 0.02)), 38, 4.0)
 wp(25.1, OF(-0.15, 0.3, 1.15), HEAD(W, F(25.1)) + Vector((0, 0, 0.05)), 35, 4.0)
 wp(25.5, OF(0.4, 0.32, 1.08), HEAD(W, F(25.5)) + Vector((0, 0, 0.06)), 32, 4.0)
-wp(25.9, OF(0.85, -0.45, 1.7), HEAD(W, F(25.9)) + Vector((0, 0, 0.3)), 30, 4.0)
-wp(26.6, OF(0.3, -0.25, 1.85), HEAD(M, F(26.6)), 30, 4.0)
+wp(25.9, OF(0.62, 0.38, 1.22), HEAD(W, F(25.9)), 32, 4.0)   # v008: her face as she clenches her fist
+wp(26.25, OF(0.98, -0.12, 1.35), HEAD(W, F(26.25)), 30, 5.6)   # orbit round her side (no whip pan)
+wp(26.6, OF(0.72, -0.72, 1.45), HEAD(M, F(26.6)), 32, 5.6)   # over her shoulder: he flinches
 wp(27.4, OF(0.35, 0.35, 1.7), HEAD(M, F(27.4)), 30, 4.0)
 wp(28.15, OF(0.65, -0.05, 1.6), HEAD(M, F(28.15)) + Vector((0, 0, -0.05)), 28, 4.0)
 wp(28.45, Vector((0.05, -3.4, 1.45)), Vector((0, 0.2, 1.0)), 28, 2.0)
@@ -827,8 +822,8 @@ wp(32.1, Vector((-0.85, 0.15, 1.30)), Vector((0.0, 0.26, 1.30)), 26, 8.0)   # pr
 wp(32.8, Vector((-0.12, 0.05, 1.32)), HEAD(M, F(32.8)) + Vector((0, 0, -0.35)), 35, 4.0)
 wp(33.5, Vector((0.05, -1.05, 1.42)), HEAD(M, F(33.5)) + Vector((0, 0, -0.25)), 40, 4.0)
 wp(33.95, Vector((1.05, -1.55, 1.55)), HEAD(M, F(33.95)) + Vector((0, 0, -0.2)), 30, 4.0)
-wp(34.5, Vector((0.95, -3.25, 1.75)), Vector((0.15, -1.0, 1.3)), 28, 4.0)
-wp(35.0, Vector((1.05, -3.5, 1.95)), Vector((0.1, -0.8, 1.25)), 26, 4.0)
+wp(34.5, Vector((0.64, -3.42, 1.8)), HEAD(W, F(34.5)), 66, 5.6)   # v008: end on her face over his shoulder
+wp(35.0, Vector((0.62, -3.42, 1.8)), HEAD(W, F(35.0)), 74, 5.6)
 cpos = catmull([(w[0], w[1]) for w in WP]); ctgt = catmull([(w[0], w[2]) for w in WP])
 clen = pchip([(w[0], w[3]) for w in WP]); cfs = pchip([(w[0], w[4]) for w in WP])
 card = bpy.data.objects["ExplainerCard"]; card.parent = cam; card.location = (0, 0, -1); card.rotation_euler = (0, 0, 0)
@@ -886,5 +881,12 @@ vs = sc.view_settings
 for t, e in ((0, 0.0), (18.62, 0.0), (18.92, 5.5), (19.05, 5.5), (19.35, -0.4), (28.05, -0.4), (28.32, 5.5), (28.45, 5.5), (28.8, 0.0)):
     vs.exposure = e; vs.keyframe_insert("exposure", frame=F(t))
 sc.frame_set(1)
+# v008: the office desk lamp and window blinds read as a floating lamp and diagonal stripes in the quick office pans -> removed
+for o in list(bpy.data.objects):
+    if o.name.startswith("OF_Blind_") or o.name == "OF_DeskLamp" or (o.parent and o.parent.name == "OF_DeskLamp"):
+        o.hide_render = True; o.hide_viewport = True
+        for c in o.children_recursive: c.hide_render = True; c.hide_viewport = True
+
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("FILM SAVED", OUT)
+

@@ -1,0 +1,274 @@
+{
+ "frames": {
+  "19": [
+   [
+    "FILL",
+    "hair / top of head 27%"
+   ]
+  ],
+  "823": [
+   [
+    "CLAW",
+    "Inventor.R curl 58"
+   ]
+  ],
+  "829": [
+   [
+    "CLAW",
+    "Inventor.R curl 59"
+   ]
+  ],
+  "835": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "841": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "847": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "853": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "859": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "865": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "871": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "877": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "883": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "889": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "895": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "901": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "907": [
+   [
+    "CLAW",
+    "Inventor.R curl 60"
+   ]
+  ],
+  "913": [
+   [
+    "CLAW",
+    "Inventor.R curl 59"
+   ]
+  ],
+  "1069": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "1075": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 12%"
+   ]
+  ],
+  "1099": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1105": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1111": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1117": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1123": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1129": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 0%"
+   ],
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1153": [
+   [
+    "CLAW",
+    "Mentor.R curl 29"
+   ]
+  ],
+  "1447": [
+   [
+    "FACEPRESS",
+    "Inventor.R hand on face"
+   ]
+  ],
+  "1495": [
+   [
+    "CLAW",
+    "Inventor.R curl 32"
+   ]
+  ],
+  "1699": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1705": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1711": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1717": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1723": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 9%"
+   ],
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1729": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ],
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1735": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1741": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1747": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1753": [
+   [
+    "CLAW",
+    "Inventor.R curl 45"
+   ]
+  ],
+  "1939": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "2047": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ]
+ },
+ "counts": {
+  "FILL": 1,
+  "CLAW": 27,
+  "EMPTY": 17,
+  "FACEPRESS": 1
+ }
+}
