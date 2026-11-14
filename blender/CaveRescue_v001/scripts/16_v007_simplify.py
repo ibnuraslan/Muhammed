@@ -1,4 +1,5 @@
 """v007 simplify (LESSONS 2.15): shots that stayed faulty after one clearance retry are re-staged simpler.
+- Tunnel mouth, 290: the camera crosses the mouth rock from inside the tunnel to outside; covered by a rock wipe.
 - Underwater passage, 1700-1735: the camera ran low along the guide rope (rope filling the lens) and then crossed the rock
   between the tunnel and the passage with no cover. The camera (with its aim) is lifted 25 cm over 1700-1724, eased in
   and out, and the rock crossing gets the same rock-wipe as the other scale moves (J = 1726: at most 4 black frames).
@@ -19,9 +20,9 @@ for o in (cam, aim):
             kp.co.y += LIFT * e; kp.handle_left.y += LIFT * e; kp.handle_right.y += LIFT * e
     fz.update()
 wv = bpy.data.materials["M_RockWipe"].node_tree.nodes["Wipe"].outputs[0]
-J = 1726
-for f, v in ((J - 7, 0.0), (J - 1, 1.0), (J + 2, 1.0), (J + 8, 0.0)):
-    wv.default_value = v; wv.keyframe_insert("default_value", frame=f)
-print("SIMPLIFY lift", F0, F1, "wipe", J)
+for J in (290, 1726):    # 290: the camera leaves the tunnel through the mouth rock (inside the rock at 288-292)
+    for f, v in ((J - 7, 0.0), (J - 1, 1.0), (J + 2, 1.0), (J + 8, 0.0)):
+        wv.default_value = v; wv.keyframe_insert("default_value", frame=f)
+print("SIMPLIFY lift", F0, F1, "wipes 290, 1726")
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 print("SIMPLIFY_OK")
