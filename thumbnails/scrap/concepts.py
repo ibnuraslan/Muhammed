@@ -62,7 +62,7 @@ def cam_cut(c):
 
 def cam_yard(c):
     p = _c1()
-    return (p + Vector((-3.2, -1.6, 1.25)), p + Vector((0.2, 0.3, 0.75)), 32)
+    return (p + Vector((-3.2, -1.6, 1.25)), p + Vector((0.3, 1.25, 0.7)), 32)
 
 
 CONCEPTS = {

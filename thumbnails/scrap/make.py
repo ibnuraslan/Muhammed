@@ -93,14 +93,14 @@ def _at(im, x, y):
 def detector(yard_path, mask_path):
     src = np.asarray(Image.open(yard_path).convert("RGB").resize((W, H), Image.LANCZOS)).astype(np.float32) / 255
     lum = src @ np.array([0.3, 0.59, 0.11], np.float32)
-    lum = np.clip((lum - 0.01) / 0.6, 0, 1) ** 0.75
+    lum = np.clip((lum - 0.12) / 0.75, 0, 1) ** 1.35
     g = np.stack([lum * 0.25, lum * 1.0, lum * 0.42], -1) * 0.9 + np.array([0.0, 0.035, 0.015])  # green night-vision ramp
     m = np.asarray(Image.open(mask_path).split()[-1].resize((W, H), Image.LANCZOS)).astype(np.float32) / 255
     heat = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(90))).astype(np.float32) / 255
     core = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(25))).astype(np.float32) / 255
-    h = np.clip(heat * 1.8 + core * 0.9, 0, 1.4)
+    h = np.clip(heat * 1.25 + core * 0.45, 0, 1.15)
     ramp = lambda t: np.stack([np.clip(t * 2.2, 0, 1), np.clip(t * 1.6 - 0.45, 0, 1), np.clip(t * 2.0 - 1.4, 0, 1)], -1)
-    col = ramp(h) ; a = np.clip(h * 1.1, 0, 0.92)[..., None]
+    col = ramp(h) ; a = np.clip(h * 0.85, 0, 0.78)[..., None]
     img = g * (1 - a) + col * a + (lum[..., None] * a * 0.25)
     # scanlines + a faint vignette
     sl = 1 - 0.06 * (np.arange(H) % 4 < 2)[:, None, None]
