@@ -35,3 +35,21 @@ Remaining flags — all intended:
 | EMPTY "no character" | 853, 925, 931 | Whale-only shots: the beluga is the acting character; QA counts only MPFB rigs. |
 | EMPTY "wall/prop fills" | 1291–1315, 1387, 1435–1477 | The beluga (and its jaw) fills the frame next to the diver at the approach and leg grab; QA counts the whale as a prop. |
 | EMPTY "wall/prop fills" | 265–307 | Low floor-level shot of the cramp: she is lying on the tank floor, the floor around her fills the frame (diver 10–11%). Kept for the story beat; not changed under the deadline. |
+
+# v006 — moving-preview pass (director, Nov 14; `LESSONS_LEARNED.md` section 1)
+Preview of the exact delivered file: `review/preview.mp4` (every 5th frame, frame numbers burned in), all 9 contact pages in
+`review/preview_pages_v006/` — every page watched.
+
+| Film frames | Fault seen in motion | Fix |
+|---|---|---|
+| 1376–1390 | The whale whipped 2.9 m through her chest on its way to the bite. | Free-swim path now ends high on her side; it comes down onto her ankle. |
+| 1436–1975 | Her foot / fin pocket passing through the whale's head (`body_prop_cross.py`). | The roll about her shin ranks no-penetration before tail-down; the jaw is open for the ankle. She is held at the ankle in the mouth corner, foot outside. |
+| 1426–1496 | The whale's head filled the frame; only her legs showed behind it. | Grab framed from her front side: her face, the whale's head and the ankle in its mouth side by side. |
+| 1976–2000 | The release slid the whale through her legs. | The whale backs off along its body and sinks away first, then swims its surface circle. |
+| 161–166 | Hand and hair across the lens during the dive. | The camera stays wide of her (new waypoint at 158). |
+| 341–346 | Blurred leg sweeping across the lens. | The camera goes over her other leg into the calf macro (waypoint at 322). |
+| 826–851 | ~0.5 s of empty ice wall waiting for the whale. | Wider 835 framing plus a 853 waypoint keep her and the arriving whale in shot. |
+
+Checks on the package: clip_scan 0 bad ranges; qa_check INSIDE 41 (camera under water — only Water_Volume/Water_Surface back faces), EMPTY 11
+(925/931 whale-only; 1225 and 1651–1669 whale filling half the frame beside her; 271–301 low floor cramp shot) — all watched in the preview.
+Known: the bright white deck seen through the surface from below (26–31 s) is real geometry; her own reflection under the surface at 1891–1906 (0.25 s).

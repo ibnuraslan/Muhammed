@@ -54,12 +54,6 @@
     "wall/prop fills the frame, character only 11%"
    ]
   ],
-  "853": [
-   [
-    "EMPTY",
-    "no character in view"
-   ]
-  ],
   "925": [
    [
     "EMPTY",
@@ -120,48 +114,6 @@
     "camera inside geometry"
    ]
   ],
-  "1441": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 10%"
-   ]
-  ],
-  "1447": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 10%"
-   ]
-  ],
-  "1453": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 2%"
-   ]
-  ],
-  "1459": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 6%"
-   ]
-  ],
-  "1465": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 11%"
-   ]
-  ],
-  "1471": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 12%"
-   ]
-  ],
-  "1477": [
-   [
-    "EMPTY",
-    "wall/prop fills the frame, character only 9%"
-   ]
-  ],
   "1573": [
    [
     "INSIDE",
@@ -175,6 +127,18 @@
    ]
   ],
   "1585": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1591": [
+   [
+    "INSIDE",
+    "camera inside geometry"
+   ]
+  ],
+  "1597": [
    [
     "INSIDE",
     "camera inside geometry"
@@ -350,7 +314,7 @@
   ]
  },
  "counts": {
-  "INSIDE": 39,
-  "EMPTY": 19
+  "INSIDE": 41,
+  "EMPTY": 11
  }
 }
