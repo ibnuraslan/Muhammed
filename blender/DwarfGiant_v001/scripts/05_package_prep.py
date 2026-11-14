@@ -68,7 +68,8 @@ r.engine = "CYCLES"; cy.device = "CPU"; cy.samples = 48; cy.adaptive_threshold =
 cy.use_denoising = True; cy.denoiser = "OPENIMAGEDENOISE"; cy.texture_limit_render = "OFF"
 r.use_motion_blur = False   # animated look: no motion blur
 cy.max_bounces = 8; cy.diffuse_bounces = 3; cy.glossy_bounces = 3; cy.transmission_bounces = 8; cy.transparent_max_bounces = 16
-cy.caustics_reflective = False; cy.caustics_refractive = False; r.use_persistent_data = True
+cy.caustics_reflective = False; cy.caustics_refractive = False
+r.use_persistent_data = False   # vNEXT: persistent data reused stale geometry on objects unhidden mid-shot (folded leg at f471)
 r.image_settings.file_format = "PNG"; r.image_settings.color_mode = "RGB"; r.image_settings.color_depth = "8"
 # hide every helper from render
 for o in bpy.data.objects:
