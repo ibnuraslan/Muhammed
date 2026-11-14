@@ -353,7 +353,7 @@ for o in XR_OBJS:
     if o.name.startswith("Mus_"):
         wm = o.modifiers.new("Ripple", 'WAVE'); wm.use_normal = True; wm.height = 0.004; wm.width = 0.06; wm.speed = 0.05; wm.time_offset = random.uniform(0, 30)
     o.animation_data_clear()          # drop the 'Lad children' x-ray keys first: one visibility track only
-    vis(o, [(f_x0 - 6, f_r1 - 19)])
+    vis(o, [(f_x0 - 6, f_r0 - 2)])      # v006: muscles leave before the replay (its extreme poses tore the muscle mesh into shards)
 
 # ------------------------------------------------------------------ ghost replay set: ghost rails + ghost loco front + force arrows
 R_HEAD = V(*eval(sc["replay_head"]))
@@ -421,6 +421,11 @@ for f in list(range(R_IMP - 10, f_r1 + 1, 3)) + [f_r1]:
     if f == R_IMP - 10:
         for a, off, ph in ARROWS:
             vis(a, [(R_IMP - 10, f_r1 - 28)])
+
+# v006 (LESSONS rule 13 + watched preview): no see-through train, rails or force arrows in the replay; they read as
+# limbs passing through a glass train and as big blurred blue shapes at the lens. The replay is the glass body alone.
+for o in list(ghost_coll.all_objects):
+    o.animation_data_clear(); o.hide_render = True; o.hide_viewport = True
 
 # ------------------------------------------------------------------ FX: gravel jitter, impact debris + dust, sparks, stop dust
 fx = bpy.data.collections.new("FX"); sc.collection.children.link(fx)
@@ -615,11 +620,11 @@ CAM = [  # frame, camera, aim, lens
     (1500, V(3.1, -41.7, 1.35), V(2.45, -40.1, 1.05), 26),
     (1560, V(3.2, -41.25, 1.2), V(2.45, -40.35, 1.05), 32),
     (1605, V(rp(1605).x + 2.1, rp(1605).y - 2.5, 1.3), rp(1605) + V(0, 0, 0.35), 26),
-    (1625, V(rp(1625).x + 1.5, rp(1625).y - 1.7, 1.0), rp(1625) + V(0, 0, 0.25), 28),
-    (1680, V(rp(1680).x + 1.3, rp(1680).y - 1.5, 0.85), rp(1680), 28),
-    (1750, V(rp(1750).x - 1.1, rp(1750).y - 1.0, 0.8), rp(1750), 30),
-    (1812, V(rp(1812).x + 1.0, rp(1812).y - 1.1, 0.75), rp(1812), 30),
-    (1834, V(rp(1834).x + 1.0, rp(1834).y - 1.0, 0.8), rp(1834), 30),
+    (1625, V(rp(1625).x + 2.3, rp(1625).y - 2.6, 1.35), rp(1625) + V(0, 0, 0.25), 26),      # v006: replay framed wider, the body never fills the frame
+    (1680, V(rp(1680).x + 2.3, rp(1680).y - 2.7, 1.4), rp(1680), 26),
+    (1750, V(rp(1750).x - 1.9, rp(1750).y - 1.8, 1.4), rp(1750), 26),
+    (1812, V(rp(1812).x + 1.8, rp(1812).y - 2.0, 1.3), rp(1812), 26),
+    (1834, V(rp(1834).x + 1.7, rp(1834).y - 1.8, 1.25), rp(1834), 28),
     (1846, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
     (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
     (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
