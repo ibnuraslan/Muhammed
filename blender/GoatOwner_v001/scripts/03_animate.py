@@ -238,7 +238,9 @@ def ow_hit(f, pos, lean, spine, head, jaw, hands="belly", brow=4, lid=3, crouch=
         if hands == "belly":
             clutch(f, s, "belly" if s == "L" else "belly2"); OW.fingers(s, f, 30, 20)
         else:
-            OW.arm(s, f, M, fwd=hands[0], out=hands[1], L=0.48); OW.fingers(s, f, 10, 8)      # relaxed, no claws
+            OW.arm(s, f, M, fwd=hands[0], out=hands[1], L=0.48)
+            if s == "R": OW.fingers(s, f, 70, 40)      # keeps hold of the stick
+            else: OW.fingers(s, f, 10, 8)      # relaxed, no claws
     OW.face(f, jaw=jaw, brow=brow, lid=lid, smile=-3)
 ow_hit(850, OC, -6, -4, 6, 8, hands=(15, 10), brow=-4, lid=-1)
 OW.hand_local("R", 850, OW.M(Vector((OC.x, OC.y, OW.RH.z)), yaw_c, -6), *HP("raised", "R"))
@@ -263,18 +265,14 @@ yaw3 = lambda f: yaw_to(p_ow3(f - 3), p_ow3(f + 3))
 OW.h.walk(p_ow3, yaw3, 1182, 1430, stride=0.55, lean=24, bob=0.035, crouch=0.08, lift=0.12)
 for f in range(1182, 1431, 8):
     p = p_ow3(f); M = OW.M(Vector((p.x, p.y, ground_z(p.x, p.y) + OW.RH.z)), yaw3(f), 12)
-    if 1325 < f < 1370:
-        # left hand grips the stair rail post side
-        OW.arm("L", f, M, fwd=30, out=35, L=0.45)
-    else:
-        OW.arm("L", f, M, fwd=38, out=14, L=0.46)      # left arm hangs forward for balance; right hand clutches the stomach
-    clutch(f, "R", "belly2")
-    OW.fingers("L", f, 10, 8)
+    OW.arm("R", f, M, fwd=22, out=14, L=0.48)          # right hand still grips the stick, arm hanging
+    OW.fingers("R", f, 70, 40)
+    clutch(f, "L", "belly")                             # left palm flat on his stomach
     OW.face(f, jaw=22 + 8 * math.sin(f / 7.0), brow=5, lid=3, smile=-4)
 # beat 8: butted at 1440 off the south edge (y = 3), falls, lands at 1478
 EDGE = Vector((6.2, 3.45))
 OW.stand(1438, Vector((6.2, 3.65)), 10, lean=10, spine=(20, 0, 0), head=(10, 0), crouch=0.06)
-for s in "LR": W, d, n = HP("belly", s); OW.hand_local(s, 1438, OW.M(Vector((6.2, 3.65, PZ + OW.RH.z - 0.06)), 10, 10), W, d, n)
+clutch(1438, "L", "belly"); OW.arm("R", 1438, OW.M(Vector((6.2, 3.65, PZ + OW.RH.z - 0.06)), 10, 10), fwd=22, out=14, L=0.48); OW.fingers("R", 1438, 70, 40)
 fall = [(1450, Vector((6.2, 3.25, PZ + 0.9)), 25, 10, 0), (1462, Vector((6.25, 2.8, 0.85)), 55, 14, 0), (1474, Vector((6.3, 2.35, 0.24)), 82, 8, 0),
         (1480, Vector((6.32, 2.15, 0.25)), 92, 4, 0), (1488, Vector((6.33, 2.1, 0.31)), 88, 2, 0), (1496, Vector((6.33, 2.08, 0.27)), 90, 0, 0)]
 for f, P, lean, roll, yawv in fall:
@@ -321,36 +319,57 @@ cst.inverse_matrix = Matrix.Identity(4)
 Mw = OW.o.matrix_world @ OW.R.PB["wrist.R"].matrix
 stick.matrix_basis = Mw.inverted() @ Sm
 LOCAL = stick.matrix_basis.copy()
-cst.influence = 1.0; cst.keyframe_insert("influence", frame=IMP1 - 1)
-ev(IMP1 - 1); Mdrop = stick.matrix_world.copy()
-cst.influence = 0.0; cst.keyframe_insert("influence", frame=IMP1)
+DROP = 1452                                      # leaves his hand as he goes over the edge
+cst.influence = 1.0; cst.keyframe_insert("influence", frame=DROP - 1)
+ev(DROP - 1); Mdrop = stick.matrix_world.copy()
+cst.influence = 0.0; cst.keyframe_insert("influence", frame=DROP)
 def key_obj(o, f, M):
     loc, q, s_ = M.decompose(); o.rotation_mode = 'QUATERNION'
     o.location = loc; o.rotation_quaternion = q; o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_quaternion", frame=f)
-key_obj(stick, IMP1 - 1, LOCAL); stick.keyframe_insert("location", frame=IMP1 - 2); stick.keyframe_insert("rotation_quaternion", frame=IMP1 - 2)
-key_obj(stick, IMP1, Mdrop)
+key_obj(stick, DROP - 1, LOCAL); stick.keyframe_insert("location", frame=DROP - 2); stick.keyframe_insert("rotation_quaternion", frame=DROP - 2)
+key_obj(stick, DROP, Mdrop)
 # dropped at the hit: a real fall (gravity) while it tips over flat, lands near his feet, a small bounce, then still
 p0, q0, _ = Mdrop.decompose()
-xa_ = Mdrop.to_3x3() @ Vector((1, 0, 0)); xa_.z = 0
-xa_ = xa_.normalized() if xa_.length > 1e-4 else Vector((1, 0, 0))
+xa_ = Vector((0.25, 1.0, 0)).normalized()        # comes to rest parallel to his body, beside him (not under him)
 q_flat = Matrix((xa_, Vector((0, 0, 1)).cross(xa_), Vector((0, 0, 1)))).transposed().to_quaternion()
 if q_flat.dot(q0) < 0: q_flat = -q_flat
 ZREST = 0.035
 V0 = 2.0                                        # flung down by the impact
 H_ = max(0.05, p0.z - ZREST); T = (-V0 + math.sqrt(V0 * V0 + 2 * 9.81 * H_)) / 9.81; NF = max(8, int(round(T * 60)))
-drift = Vector((0.25, -0.2, 0))                 # knocked slightly forward-out by the impact
+drift = Vector((5.88 - p0.x, 2.15 - p0.y, 0))     # lands in the open beside his body, west side, visible
 for i in range(0, NF + 1, 2):
     t = i / NF; tt = t * T
     pos = p0 + drift * t; pos.z = max(ZREST, p0.z - V0 * tt - 4.9 * tt * tt)
     q = q0.slerp(q_flat, t * t)                  # tips over faster as it falls
-    key_obj(stick, IMP1 + i, Matrix.Translation(pos) @ q.to_matrix().to_4x4())
+    key_obj(stick, DROP + i, Matrix.Translation(pos) @ q.to_matrix().to_4x4())
 pL = p0 + drift; pL.z = ZREST
-key_obj(stick, IMP1 + NF, Matrix.Translation(pL) @ q_flat.to_matrix().to_4x4())
-key_obj(stick, IMP1 + NF + 4, Matrix.Translation(pL + Vector((0.03, -0.02, 0.025))) @ (q_flat @ Quaternion((1, 0, 0), R_(4))).to_matrix().to_4x4())
-key_obj(stick, IMP1 + NF + 8, Matrix.Translation(pL + Vector((0.05, -0.03, 0))) @ q_flat.to_matrix().to_4x4())
+key_obj(stick, DROP + NF, Matrix.Translation(pL) @ q_flat.to_matrix().to_4x4())
+key_obj(stick, DROP + NF + 4, Matrix.Translation(pL + Vector((0.03, -0.02, 0.025))) @ (q_flat @ Quaternion((1, 0, 0), R_(4))).to_matrix().to_4x4())
+key_obj(stick, DROP + NF + 8, Matrix.Translation(pL + Vector((0.05, -0.03, 0))) @ q_flat.to_matrix().to_4x4())
 print("STICK fall", NF, "frames from z %.2f" % p0.z)
 # fix: before the impact the stick follows the hand with the constant local offset
 key_obj(stick, 1, LOCAL)
+# through both hits the stick stays in his fist but swings down and back, away from the goat
+# (held in the normal grip it pointed straight ahead, through the goat's body)
+GRIP_L = Vector((-0.3, 0, 0))                    # grip point in the stick's own space
+key_obj(stick, 957, LOCAL)
+qprev = LOCAL.to_quaternion()
+for f in list(range(963, 1186, 3)):
+    ev(f)
+    Mw_f = OW.o.matrix_world @ OW.R.PB["wrist.R"].matrix
+    grip = (Mw_f @ LOCAL) @ GRIP_L
+    gdir = (V(-0.4, 1.8, 0) - V(OC.x, OC.y, 0)).normalized()     # he faces the goat through the hits
+    hz = (-gdir * 0.85 + Vector((gdir.y, -gdir.x, 0)) * 0.5).normalized()   # back and out to his right: off the goat, off his leg
+    dz = max(0.0, min(0.6, (grip.z - 0.12) / 0.78))                  # tip (0.78 m past the grip) stays above the ground
+    x_ = (hz * math.sqrt(1 - dz * dz) + Vector((0, 0, -dz))).normalized()
+    z_ = x_.cross(Vector((0, 0, 1))).normalized(); y_ = z_.cross(x_)
+    Wm = Matrix((x_, y_, z_)).transposed().to_4x4(); Wm.translation = grip + x_ * 0.3
+    L_ = Mw_f.inverted() @ Wm
+    q_ = L_.to_quaternion()
+    if q_.dot(qprev) < 0: q_ = -q_
+    qprev = q_
+    key_obj(stick, f, Matrix.Translation(L_.translation) @ q_.to_matrix().to_4x4())
+key_obj(stick, 1198, LOCAL)
 
 # ================================================================= GOAT
 # beat 1: tense by the post, flinches away from the raised stick (no contact)
@@ -394,21 +413,21 @@ for i, f in enumerate(range(650, 820, 34)):           # FL stamps
         n = "IK_hoof.FL"; o = Matrix.Rotation(R_(h4), 3, 'Z') @ (G.BN[n].head_local - G.rest("torso").translation)
         M = hoof_matrix(G, n, Vector((G4.x + o.x, G4.y + o.y)), R_(h4), lift=lz); G.key_world(n, f + df, M)
 # beat 5: charge in slow motion; contact 960 (horns at his belly), recoil
-CH0 = G4; IMPP = OC + (G4 - OC).normalized() * 0.68
+CH0 = G4; IMPP = OC + (G4 - OC).normalized() * 0.95    # horns reach him without sinking in (he leans into the hit)
 cp = gpath([(816, CH0), (850, CH0 + (IMPP - CH0) * 0.08), (930, CH0 + (IMPP - CH0) * 0.75), (958, IMPP), (975, IMPP + (CH0 - IMPP).normalized() * 0.16),
             (1060, IMPP + (CH0 - IMPP).normalized() * 0.35), (1128, IMPP + (CH0 - IMPP).normalized() * 0.45), (1140, IMPP + (CH0 - IMPP).normalized() * 0.1),
-            (1148, OC3 + (G4 - OC).normalized() * 0.8), (1166, OC3 + (G4 - OC).normalized() * 1.0), (1182, OC3 + (G4 - OC).normalized() * 1.1)])
+            (1148, OC3 + (G4 - OC).normalized() * 1.5), (1166, OC3 + (G4 - OC).normalized() * 1.55), (1182, OC3 + (G4 - OC).normalized() * 1.6)])
 quad_move(G, cp, 816, 1182, stride=0.6, gait="trot", heading_fn=lambda f: R_(h4), lift=0.08)
 for f, n1, tn in ((1000, 20, 25), (1020, 28, -25), (1045, 18, 20), (1070, 30, -15), (1095, 22, 10)):
     gneck(f, n1, 8, 18, tn, -20)
 for f in (950, 956, 962, 968):
     ghold(f, cp(f).to_2d(), h4, dz=0.06, pitch=16)
-for f in (1140, 1146, 1152):
+for f in (1140, 1146):                      # head toss on the second hit (none at 1152: he folds over it)
     ghold(f, cp(f).to_2d(), h4, dz=0.06, pitch=16)
 for f, n1, hd in ((816, 16, 12), (850, 18, 14), (940, 16, 12), (958, -12, -12), (975, -6, -8), (1060, 10, 6), (1128, 16, 12), (1146, -12, -12), (1182, 12, 8)):
     gneck(f, n1, 8, hd, 0, -20)
 # beat 7: follows him to the porch and up the steps
-gp7 = catmull([(1183, V(*(OC3 + (G4 - OC).normalized() * 0.75), 0)), (1260, V(2.1, 2.9, 0)), (1320, V(3.0, 5.2, 0)), (1355, V(3.9, 6.0, 0)),
+gp7 = catmull([(1183, V(*(OC3 + (G4 - OC).normalized() * 1.6), 0)), (1260, V(2.1, 2.9, 0)), (1320, V(3.0, 5.2, 0)), (1355, V(3.9, 6.0, 0)),
                (1395, V(5.2, 6.0, 0)), (1420, V(5.9, 4.9, 0)), (1438, V(6.15, 4.45, 0))])
 quad_move(G, gp7, 1183, 1438, stride=0.7, gait="trot")
 for f in range(1183, 1439, 30): gneck(f, 14, 6, 10, 0, -15)
@@ -529,6 +548,8 @@ for i, f in enumerate(range(1906, 2191, 12)):
 
 # ================================================================= DUST + CLODS
 PUFFS = [bpy.data.objects["DustPuff_%d" % i] for i in range(18)]; CLODS = [bpy.data.objects["Clod_%02d" % i] for i in range(40)]
+for o in PUFFS + CLODS:
+    o.hide_render = True; o.hide_viewport = True; o.keyframe_insert("hide_render", frame=1); o.keyframe_insert("hide_viewport", frame=1)
 _pi = [0]; _ci = [0]
 def dust(f, pos, size=0.5, dur=90, rise=0.3, n_clods=6, slow=1.0):
     o = PUFFS[_pi[0] % 18]; _pi[0] += 1
@@ -540,6 +561,8 @@ def dust(f, pos, size=0.5, dur=90, rise=0.3, n_clods=6, slow=1.0):
     o.scale = (size * 1.7, size * 1.7, size * 1.1); o.location = pos + Vector((0.3, 0.1, rise)); o.keyframe_insert("scale", frame=f + dur); o.keyframe_insert("location", frame=f + dur)
     dens.default_value = 0.0; dens.keyframe_insert("default_value", frame=f + dur)
     o.location = pos + Vector((0, 0, -40)); o.keyframe_insert("location", frame=f + dur + 1)
+    for ff, hid in ((f - 2, True), (f - 1, False), (f + dur + 1, False), (f + dur + 2, True)):     # volumes cost render time even parked underground
+        o.hide_render = hid; o.hide_viewport = hid; o.keyframe_insert("hide_render", frame=ff); o.keyframe_insert("hide_viewport", frame=ff)
     for k in range(n_clods):
         c_ = CLODS[_ci[0] % 40]; _ci[0] += 1
         v = Vector((random.uniform(-1.6, 1.6), random.uniform(-1.6, 1.6), random.uniform(1.5, 3.0)))
@@ -551,6 +574,8 @@ def dust(f, pos, size=0.5, dur=90, rise=0.3, n_clods=6, slow=1.0):
             c_.location = p0 + Vector((v.x * t, v.y * t, v.z * t - 4.9 * t * t)); c_.location.z = max(0.015, c_.location.z)
             c_.keyframe_insert("location", frame=ff)
         c_.location.z = -40; c_.keyframe_insert("location", frame=f + int(T * 60 * slow) + 30)
+        for ff, hid in ((f - 2, True), (f - 1, False), (f + int(T * 60 * slow) + 30, False), (f + int(T * 60 * slow) + 31, True)):
+            c_.hide_render = hid; c_.hide_viewport = hid; c_.keyframe_insert("hide_render", frame=ff); c_.keyframe_insert("hide_viewport", frame=ff)
 dust(IMP1, Vector((OC.x - 0.1, OC.y, 0.9)), 0.45, dur=150, rise=0.2, n_clods=0, slow=5)   # dust off his shirt (slow motion)
 dust(IMP1 + 4, Vector((IMPP.x, IMPP.y, 0.05)), 0.7, dur=160, rise=0.2, n_clods=10, slow=5)
 dust(1146, Vector((OC3.x, OC3.y, 0.9)), 0.4, dur=60, rise=0.3, n_clods=0)
@@ -651,26 +676,30 @@ CAMK = [
  (1,    (0.5, -6.7, 0.95), (0.2, 1.5, 0.85), 40),     # low behind the broken fence rails
  (60,   (0.9, -5.0, 1.0), ("mid", (0, 0, 0.1)), 42),
  (120,  (1.6, -0.5, 1.7), ("gh", (0, 0, 0)), 32),       # over the shoulder, stick high
- (186,  ("gh", (-1.0, -0.7, 0.1), "g"), ("gh",), 34),     # goat's face
- (250,  ("gb", (1.5, 0.2, 0.1), "g"), ("gh",), 38),      # orbit around
+ (186,  (-2.4, -0.6, 1.2), ("gh",), 30),     # goat's face, wide enough that his arm never sweeps the lens
+ (250,  (-3.2, 1.0, 1.0), ("gh",), 32),      # orbit around, whole goat in frame
+ (285,  (-2.6, 3.4, 1.0), ("gb",), 30),      # keeps the goat in frame on the way round
  (320,  (-1.3, 4.2, 1.0), (-0.6, -1.5, 0.55), 26),   # behind the goat, the passer-by beyond the fence    # behind the goat; passer-by beyond the fence
  (390,  (-2.7, 2.7, 0.75), ("gh",), 36),
  (425,  (-1.6, 3.7, 1.15), ("gb",), 28),      # wide on the whole goat on the way round
- (462,  (0.6, 0.4, 0.95), ("gh",), 32),    # tense goat, whole head and neck in frame
+ (445,  (-2.6, 1.0, 1.1), ("gh",), 30),      # round the goat's head, clear of its body
+ (462,  (-1.0, -0.6, 1.1), ("gh",), 32),    # tense goat, whole head and neck in frame
+ (500,  (1.6, 1.6, 1.4), ("gb",), 28),      # round the east side of the goat (the straight path went through it)
  (540,  (0.4, 3.9, 1.3), ("gb",), 26),
- (630,  ("gb", (1.1, -1.3, 0.3), "g"), ("gh",), 32),
+ (630,  ("gb", (1.9, -2.1, 0.5), "g"), ("gb", (0, 0, 0.1)), 30),   # whole goat centred (was cut at the edge)
  (690,  ("gh", (1.0, -0.55, 0.3), "g"), ("gh", (0, 0, 0.05)), 38),    # eye macro
  (740,  ("gh", (0.8, -0.9, 0.15), "g"), ("gh",), 34),    # horns
  (790,  ("gf", (0.9, -0.9, 0.4), "g"), ("gh", (0, 0, -0.25)), 30),   # stamping hoof, head in frame
  (816,  (OC.x - 1.7, OC.y - 1.7, 0.85), ("mid",), 28),
- (880,  (OC.x - 1.0, OC.y - 2.1, 0.55), ("gh",), 28),     # skimming beside the charge
+ (880,  (OC.x - 1.0, OC.y - 2.1, 0.55), ("mid",), 26),    # skimming beside the charge, him and the goat both in frame
  (960,  (OC.x - 0.2, OC.y - 1.7, 0.7), ("ob", (0, 0, -0.15)), 30),   # impact, side-on
  (1000, (OC.x - 0.5, OC.y - 1.7, 1.05), ("fm",), 30),        # orbit around the doubled-over man
  (1040, (OC.x - 1.4, OC.y - 1.3, 1.1), ("fm",), 30),
  (1085, (OC.x - 2.0, OC.y - 0.5, 1.2), ("fm",), 30),
  (1128, (OC.x - 1.6, OC.y + 1.0, 1.15), ("fm",), 30),
  (1150, (OC.x - 0.2, OC.y + 1.8, 1.0), ("fm",), 28),        # whip orbit, "twice"
- (1182, (OC.x + 2.4, OC.y + 0.1, 1.3), ("oc",), 28),
+ (1166, (OC.x + 1.6, OC.y + 2.4, 1.2), ("oc",), 28),      # wide arc, never on top of him
+ (1182, (OC.x + 3.2, OC.y - 0.6, 1.4), ("oc",), 26),
  (1250, ("gb", (0.2, 1.7, 0.7), "g"), ("oc",), 26),      # chase cam behind the goat
  (1310, ("gb", (0.4, 1.9, 1.0), "g"), ("oh",), 26),
  (1365, (3.1, 4.4, 2.3), ("oh",), 24),                     # crane up the steps
@@ -684,7 +713,9 @@ CAMK = [
  (1735, (0.6, 1.0, 4.0), ("gb",), 24),
  (1800, (1.8, 5.6, 1.5), ("gb",), 28),
  (1860, (1.8, 8.0, 1.9), ("gb",), 28),                     # beside the ramp, clear of the officials
- (1905, (0.5, 9.0, 2.6), ("gb",), 24),
+ (1880, (1.8, 8.4, 2.0), ("gb",), 28),                     # hold beside the ramp (the spline dipped back behind the shed)
+ (1895, (1.4, 8.6, 2.6), ("gb",), 26),
+ (1905, (1.4, 8.6, 3.4), ("gb",), 24),                     # rise clear of the truck before the fly-over
  (1916, (2.0, 52.5, 2.4), (2.0, 62.1, 0.6), 28),       # the fly-over arrives on the goat and rescuer
  (1928, (2.2, 56.0, 2.0), (2.0, 62.1, 0.55), 28),           # fast fly-over the tree line onto the goat at the sanctuary
  (1970, (3.2, 58.8, 1.3), (1.9, 62.2, 0.55), 30),

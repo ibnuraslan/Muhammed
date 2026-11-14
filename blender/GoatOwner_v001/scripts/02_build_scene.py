@@ -299,7 +299,7 @@ for j, (y0, y1) in enumerate([(3.06, 5.2), (6.8, 8.94)]):
     board("Rail_%d" % j, (5.06, (y0 + y1) / 2, PORCH["z"] + 0.9), (0.06, y1 - y0, 0.09))
     for k in range(int((y1 - y0) / 0.32)):
         board("Spindle_%d_%d" % (j, k), (5.06, y0 + 0.16 + k * 0.32, PORCH["z"] + 0.45), (0.04, 0.04, 0.88))
-board("Rail_side", (6.1, 3.06, PORCH["z"] + 0.9), (2.1, 0.06, 0.09))   # the side the goat knocks him over (broken: shorter)
+# no side rail on the south edge (he goes over that edge; a rail there read as him falling through it)
 STEPS = []
 for k in range(3):      # three steps going down toward -X, between y 5.2 and 6.8
     zt = PORCH["z"] - 0.25 * (k + 1) + 0.25
