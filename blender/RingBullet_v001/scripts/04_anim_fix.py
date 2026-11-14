@@ -85,6 +85,35 @@ for nm in ("M_Fragment", "M_BulletCopper"):
     if m:
         for n in m.node_tree.nodes:
             if n.bl_idname == 'ShaderNodeBump': n.inputs['Strength'].default_value = 0.0
+# v007b: no black hole in open mouths. A small warm fill light rides inside each human's mouth (bone-parented to the head,
+# invisible to camera), the tongue and gums get a lit red-brown, and the teeth an ivory, so the interior reads in close-ups.
+from mathutils import Vector as _V, Matrix
+for rig in ("Owner", "Robber", "Officer"):
+    A = bpy.data.objects.get(rig)
+    if not A: continue
+    for c in A.children_recursive:
+        if c.type != 'MESH': continue
+        n = c.name.lower()
+        for sl in c.material_slots:
+            mt = sl.material
+            if not mt or not mt.use_nodes: continue
+            pb = next((x for x in mt.node_tree.nodes if x.type == 'BSDF_PRINCIPLED'), None)
+            if pb is None: continue
+            if "tongue" in n:
+                for l in list(pb.inputs['Base Color'].links): mt.node_tree.links.remove(l)
+                pb.inputs['Base Color'].default_value = (0.45, 0.12, 0.10, 1); pb.inputs['Roughness'].default_value = 0.45
+            elif "teeth" in n:
+                for l in list(pb.inputs['Base Color'].links): mt.node_tree.links.remove(l)
+                pb.inputs['Base Color'].default_value = (0.85, 0.80, 0.70, 1); pb.inputs['Roughness'].default_value = 0.35
+    sc.frame_set(1)
+    teeth = next((c for c in A.children_recursive if c.type == 'MESH' and "teeth" in c.name.lower()), None)
+    if teeth is None or "head" not in A.pose.bones: continue
+    dg = bpy.context.evaluated_depsgraph_get(); e = teeth.evaluated_get(dg)
+    ctr = sum((e.matrix_world @ _V(b) for b in e.bound_box), _V()) / 8
+    ld = bpy.data.lights.new("L_Mouth_" + rig, 'POINT'); ld.energy = 0.012; ld.color = (1.0, 0.32, 0.25); ld.shadow_soft_size = 0.01
+    lo = bpy.data.objects.new("L_Mouth_" + rig, ld); sc.collection.objects.link(lo); lo.visible_camera = False
+    lo.parent = A; lo.parent_type = 'BONE'; lo.parent_bone = "head"
+    bpy.context.view_layer.update(); lo.matrix_world = Matrix.Translation(ctr)
 sc["look"] = "animated_v004"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("SAVED", OUT)

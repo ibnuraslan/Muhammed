@@ -261,7 +261,7 @@ k_(F(4.7), (0.34, -0.8, 1.44), handL(F(4.7)), 50)
 r = ringp(F(5.7)); k_(F(5.7), r + Vector((0.12, -0.42, 0.12)), r.lerp(face(F(5.7)), 0.45), 45, face(F(5.7)))
 f = F(6.9); c_ = chase(f, 0.24, 0.07, 0.03, 0.0); k_(f, c_[0], ringp(f).lerp(face(f), 0.35), 45, ringp(f))
 r = ringp(F(8.2)); k_(F(8.2), r + Vector((0.1, -0.3, 0.08)), r.lerp(face(F(8.2)), 0.3), 50, r)
-r = ringp(IMPACT); k_(IMPACT, r + Vector((0.085, -0.06, 0.012)), P_IMP, 60, P_IMP)
+r = ringp(IMPACT); k_(IMPACT, r + Vector((0.13, -0.12, 0.05)), P_IMP, 50, P_IMP)   # v007b: pulled back, ring + bullet + fingertip read (no finger-filled macro)
 r = ringp(F(10.0)); k_(F(10.0), r + Vector((0.17, -0.25, 0.04)), r, 55)
 def fmid(f): return (pa(min(f, LODGE)) + pb_(min(f, GRAZE))) / 2
 r = ringp(F(11.0)); k_(F(11.0), r + Vector((0.14, -0.38, 0.1)), r.lerp(face(F(11.0)), 0.45), 45, r)   # v007: pulled back, face + hand
