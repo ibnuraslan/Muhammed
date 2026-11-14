@@ -422,8 +422,8 @@ CAB = [[
     # beat 1: his face over the shoe and the match
     (1,   V((-0.86, 0.44, 1.32)), (op("Shoe_R", 1, (0, 0, 0.1)) * 0.5 + bp("Bomber", "head", 1) * 0.5), 26),
     (45,  V((-0.86, 0.44, 1.32)), (op("Match_Flame", 45) * 0.5 + bp("Bomber", "head", 45) * 0.5), 26),
-    (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.45 + bp("Bomber", "head", 100) * 0.55), 24),
-    (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) + bp("Bomber", "head", 150)) / 2, 24),
+    (100, V((-0.94, 0.44, 1.18)), (op("Match_Flame", 100) * 0.25 + bp("Bomber", "head", 100) * 0.75), 24),
+    (150, V((-0.98, 0.45, 1.05)), (op("Match_Flame", 150) * 0.25 + bp("Bomber", "head", 150) * 0.75), 24),
     (182, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 182, (0, 0.2, -0.3)), 26),
     (199, V((-0.40, 0.44, 1.50)), bp("Bomber", "head", 199, (0, 0.2, -0.3)), 26),
     # beat 2: travel up the aisle above head height to the attendant walking down it, dolly back ahead of her, push to her eyes
@@ -437,6 +437,7 @@ CAB = [[
     # beat 3: dolly back down the aisle ahead of her, drift over to the seat row as she reaches his row and catches him
     (386, P(-0.052, 1.264, 1.035), bp("Attendant", "head", 386, (0, 0, -0.1)), 34),
     (398, P(-0.089, 0.589, 1.046), bp("Attendant", "head", 398, (0, 0, -0.1)), 28),
+    (408, V((-0.40, 0.72, 1.40)), bp("Attendant", "head", 408, (0, 0, -0.1)), 28),   # v006d: over the seat backs
     (418, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 418, (0, 0, -0.1)), 28),
     (428, P(-0.732, 0.846, 1.116), bp("Attendant", "head", 428, (0, 0, -0.1)), 28),
     (446, P(-0.817, 1.19, 1.077), bp("Attendant", "head", 446, (0, 0, -0.1)), 28),
@@ -455,7 +456,7 @@ CAB = [[
     (606, V((-0.05, 2.65, 1.75)), bp("Bomber", "spine01", 606, (0, 0.3, 0)), 22),
     (625, V((0.05, 2.25, 1.95)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),   # v006c: off vertical (no track-to flip)
     # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
-    (640, V((-0.24, 1.45, 1.35)), bp("Steward", "head", 640), 26),   # v006c: down beside the steward, never over the aim
+    (640, V((-0.30, 1.60, 1.55)), bp("Steward", "head", 640), 26),   # v006c: down beside the steward, never over the aim
     (655, P(-0.143, -0.447, 1.186), bp("Steward", "head", 655), 28),
     # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)
     (680, P(-0.143, -0.447, 1.186), bp("Steward", "head", 680), 28),

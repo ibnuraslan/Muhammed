@@ -255,7 +255,7 @@ for s_, sg in (("L", -1), ("R", 1)):
 KN = V((0.05, BY - 0.62, 0))          # kneeling spot behind his feet, facing +Y
 for f in (874, 880, 940, 1000, 1068):
     att.key_root(f, V((KN.x, KN.y, 0.47 if f < 900 else 0.58)), yaw=FWD, flex=15 if f < 900 else 5)
-    att.key_spine(f, flex=50 if f < 900 else 5, twist=0, head=(20, 0) if f < 900 else (5, 0))
+    att.key_spine(f, flex=35 if f < 900 else 5, twist=0, head=(-20, 0) if f < 900 else (5, 0))   # v006d: face up while her hands work at his feet
     att.key_foot("L", f, V((KN.x - 0.12, KN.y - 0.35)), FWD, 0.02, -65); att.key_foot("R", f, V((KN.x + 0.14, KN.y - 0.33)), FWD, 0.02, -65)
 # grasp the heels (870), pull off (880-900), lift up together (900-960), turn the soles to the light (960-1068)
 ev(876); hl = wpos(bom, "foot.L", 876); hr = wpos(bom, "foot.R", 876)
@@ -407,8 +407,8 @@ TP = AX + V((-1.2, -0.75, 0))
 for f in range(1, 1380, 60):
     stand(trav, f, TP, FWD, spine=(5, 0, 0))
 for f, flex, sp, crouch, hd in ((1393, 0, 10, 0.0, (25, 0)), (1420, 0, 18, 0.03, (35, 5)), (1440, 0, 12, 0.04, (15, 0)), (1455, 5, 18, 0.15, (5, 0)),
-                               (1468, 15, 32, 0.50, (-30, 0)), (1480, 15, 34, 0.52, (-32, 5)), (1500, 5, 20, 0.12, (20, 0))):
-    trav.key_root(f, V((TP.x, TP.y + (-0.22 if 1460 <= f <= 1485 else 0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)   # v006d: hips back in the squat (his face was in the tray)
+                               (1468, 15, 24, 0.50, (-42, 0)), (1480, 15, 26, 0.52, (-44, 5)), (1500, 5, 20, 0.12, (20, 0))):
+    trav.key_root(f, V((TP.x, TP.y + (-0.35 if 1460 <= f <= 1485 else 0.05 if f >= 1455 else 0), trav.root_head.z - 0.02 - crouch)), yaw=FWD, flex=flex)   # v006d: hips back in the squat (his face was in the tray)
     trav.key_spine(f, flex=sp, head=hd)
     trav.key_foot("L", f, trav.foot_xy("L", TP, FWD), FWD)
 # right foot: steps back out of the sneaker (1425-1445; the sneaker stays on the floor), then plants beside it
