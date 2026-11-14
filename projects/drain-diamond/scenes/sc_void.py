@@ -13,7 +13,7 @@ from kit import *
 import dd
 
 EXPOSURE = 0.0
-DUR = {"ring": 3.5, "grid360": 4.5, "suitcase": 3.5, "dna": 3.5}
+DUR = {"ring": 3.5, "grid360": 4.5, "suitcase": 3.5, "dna": 3.5, "cctv": 4.0}
 VARIANT_FOR = {k: k for k in DUR}
 MONO = "/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf"
 
@@ -138,9 +138,34 @@ def build_dna(c):
     lab.parent = b; lab.location = (0.0, -0.075, 0.0085)
 
 
+def build_cctv(c):
+    """Desk insert (ch3 1B): three CCTV stills of the service corridor (a faceless guard by the door, timestamps
+    07:52 / 07:53 / 07:54) slid one by one onto a dark desk under a warm lamp pool."""
+    import os
+    world_flat((0.0, 0.0, 0.0), 0.0)
+    desk = dd.tex_mat("walnut_veneer", 1.2, tint=(0.5, 0.42, 0.34), name="CCTVDesk", sat=0.8, coat=0.3)
+    box("CCTVDesk", (0, 0, -0.02), (2.0, 1.2, 0.04), desk)
+    pl = bpy.data.lights.new("PrintLamp", 'SPOT'); pl.energy = 45; pl.spot_size = math.radians(70); pl.spot_blend = 0.9
+    pl.color = (1.0, 0.82, 0.58); pl.shadow_soft_size = 0.06
+    plo = bpy.data.objects.new("PrintLamp", pl); bpy.context.collection.objects.link(plo); plo.location = (0.35, 0.3, 0.75)
+    point_at(plo, (0.0, 0.0, 0.0))
+    here = os.path.dirname(os.path.abspath(__file__))
+    c["prints"] = []
+    for k, (home, rz) in enumerate((((-0.12, 0.03), 0.07), ((0.11, 0.06), -0.05), ((0.0, -0.08), 0.1))):
+        m = bpy.data.materials.new(f"CCTV{k}"); m.use_nodes = True
+        N = m.node_tree.nodes; L = m.node_tree.links; b = N["Principled BSDF"]; b.inputs['Roughness'].default_value = 0.35
+        im = N.new("ShaderNodeTexImage"); im.image = bpy.data.images.load(os.path.join(here, "..", "assets", f"cctv_{k + 1}.jpg"))
+        L.new(im.outputs['Color'], b.inputs['Base Color'])
+        bpy.ops.mesh.primitive_plane_add(size=1, location=(home[0], home[1], 0.0006 * (k + 1)))
+        pr = bpy.context.active_object; pr.name = f"CCTVPrint{k}"; pr.scale = (0.2, 0.15, 1); pr.data.materials.append(m)
+        c["prints"].append((pr, Vector((home[0], home[1], 0.0006 * (k + 1))), rz))
+    pen = cyl("Pen", (0.27, -0.12, 0.006), 0.005, 0.14, pbr("PenM", (0.02, 0.02, 0.025), 0.3, 0.4), verts=12, rot=(0, math.radians(90), 0.4))
+
+
 def build(variant=None):
     c = {}
-    {"ring": build_ring, "grid360": build_grid360, "suitcase": build_suitcase, "dna": build_dna}[variant or "ring"](c)
+    {"ring": build_ring, "grid360": build_grid360, "suitcase": build_suitcase, "dna": build_dna,
+     "cctv": build_cctv}[variant or "ring"](c)
     return c
 
 
@@ -167,7 +192,18 @@ def anim_dna(c, t):
     c["bag"].rotation_euler = (0, 0, math.radians(-14 * (1 - u) + 4))
 
 
+def anim_cctv(c, t):
+    sec = t * DUR["cctv"]
+    for k, (pr, home, rz) in enumerate(c["prints"]):               # each print slides in from the left, a beat apart
+        u = ease(min(1.0, max(0.0, (sec - 0.2 - 0.85 * k) / 0.75)))
+        pr.location = home + Vector((-0.6 * (1 - u), -0.1 * (1 - u), 0))
+        pr.rotation_euler = (0, 0, rz - 0.45 * (1 - u))
+
+
 MOVES = {
+    "cctv": dict(kind="anim", dof=5.6, anim=anim_cctv,
+                 cam=lambda c, t: (Vector((0.02, -0.18, 0.62)).lerp(Vector((0.0, -0.12, 0.52)), ease(t)), Vector((0.0, 0.0, 0.0)), 35),
+                 focus=lambda c, t: Vector((0, 0, 0))),
     "ring": dict(kind="anim", dof=2.8, anim=anim_ring,
                  cam=lambda c, t: (Vector((0.01, -0.36, 0.12)).lerp(Vector((0.005, -0.29, 0.11)), ease(t)), Vector((0.006, -0.02, 0.076)), 48),
                  focus=lambda c, t: Vector((0, 0, 0.1))),

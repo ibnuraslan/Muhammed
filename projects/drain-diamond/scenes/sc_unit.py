@@ -15,7 +15,7 @@ from sc_invest import office_chair
 from sc_boutique import haussmann
 
 EXPOSURE = -1.1
-DUR = {"pin": 9.0, "read": 9.0, "listen": 9.0}
+DUR = {"pin": 9.0, "read": 9.0, "listen": 9.0, "string": 6.0}
 
 
 def blank_print(name, loc, size, seed):
@@ -184,6 +184,25 @@ def build(variant=None):
         H.cyl((sx * 0.1, 0, -0.01), 0.045, 0.035, hp, verts=24, rot=(0, math.radians(90), 0))
         H.cyl((sx * 0.08, 0, -0.01), 0.04, 0.012, pbr("EarPad", (0.12, 0.12, 0.13), 0.8), verts=24, rot=(0, math.radians(90), 0))
     c["headband"] = H.done((0, 0, -20))
+    # --- the red string (ch3 2B): pins, a typed index card "SALLE DE SPORT" between two prints, and a string that
+    # draws itself from print to card to print as the camera follows it
+    from sc_void import paper_tag
+    card = paper_tag("GymCard", (-1.25, 8.425, 1.62), "SALLE\nDE SPORT", size=(0.16, 0.1), text_size=0.024,
+                     rot=(math.radians(90), 0, 0))
+    pin_m = pbr("PinRed", (0.6, 0.03, 0.02), 0.3)
+    pts = [Vector((-2.2, 8.415, 1.42)), Vector((-1.25, 8.415, 1.66)), Vector((-0.55, 8.415, 1.95))]
+    for k, p_ in enumerate(pts):
+        bpy.ops.mesh.primitive_uv_sphere_add(radius=0.012, location=p_ - Vector((0, 0.01, 0)))
+        bpy.context.active_object.data.materials.append(pin_m)
+    c["string"] = []
+    sm = pbr("StringRed", (0.55, 0.03, 0.03), 0.6)
+    for k in range(2):
+        a_, b_ = pts[k], pts[k + 1]; d_ = b_ - a_
+        S = dd.Builder(f"RedString{k}"); S.box((0.5, 0, 0), (1.0, 0.003, 0.003), sm)
+        o = S.done((a_.x, a_.y - 0.012, a_.z))
+        o.rotation_euler = (0, -math.atan2(d_.z, d_.x), 0); o.scale = (0.0001, 1, 1)
+        c["string"].append((o, d_.length))
+    c["string_pts"] = pts
     # LOOK: grade only (the person's pick): the relight lost her face in the dark; the set keeps its own sun and blinds
     return c
 
@@ -227,7 +246,23 @@ def anim_read(c, t):
     f = c["file"]; f.rotation_euler = (0, 0, 0.03 * math.sin(sec * 0.3))
 
 
+def anim_string(c, t):
+    sec = t * DUR["string"]
+    c["pinner"].arm.location.z = -60
+    for k, (o, L_) in enumerate(c["string"]):                       # the string draws: print -> card, then card -> print
+        u = ease(min(1.0, max(0.0, (sec - 0.6 - 2.4 * k) / 2.0)))
+        o.scale = (max(0.0001, L_ * u), 1, 1)
+
+
+def cam_string(c, t):
+    pts = c["string_pts"]; u = ease(t)
+    p = pts[0].lerp(pts[1], min(1.0, u * 2)) if u < 0.5 else pts[1].lerp(pts[2], (u - 0.5) * 2)
+    return p + Vector((0.35, -1.25, -0.08)), p + Vector((0.05, 0, 0)), 40
+
+
 MOVES = {
+    "string": dict(kind="anim", dof=2.8, anim=anim_string, cam=cam_string,
+                   focus=lambda c, t: cam_string(c, t)[1]),
     "listen": dict(kind="anim", dof=2.0, anim=anim_listen,
                    cam=lambda c, t: (Vector((4.0, 5.7, 1.32)).lerp(Vector((3.95, 5.4, 1.3)), ease(t)), Vector((3.75, 3.6, 1.08)), 35),
                    focus=lambda c, t: Vector((3.6, 3.8, 1.0))),
