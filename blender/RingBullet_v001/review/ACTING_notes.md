@@ -103,3 +103,18 @@ Also fixed, found by the newer director checks:
 
 ### limb_check note
 `limb_check_v007_no_shoulder_joint.json` is the same script with one change: it skips the first two of the five points on `upperarm01` (the joint end that sits inside the shoulder). It reports **0** across the film at step 2. Every ARMBODY flag in `limb_check_v007.json` therefore comes from the shoulder joint. The 3-point flags at f1315–1317 are the officer raising his arm to beckon.
+
+# v007b (director review of v007, 63e021c)
+1. **Black mouth interiors:** fixed. A warm 0.012 W fill light sits inside each human's mouth (bone-parented to the head, invisible to camera), the tongue is a lit red-brown and the teeth ivory. Every open mouth now reads as a red-pink interior with the teeth showing (`v007b_mouth_f300_f1006_540x960.jpg`).
+2. **Impact macro f516–546:** the impact key is pulled back from 10 to 18 cm (60 → 50 mm). The ring, the bullet and the fingertip read together throughout (`v007b_impact_f506_f571.jpg`).
+
+Nothing else changed: the animation stage is not rebuilt.
+
+Checks on v007b:
+- `clip_scan`: 0.
+- `qa_check`: BACKHEAD Robber at f1 only, plus the intended PROPMOVE flags on flying FX.
+- `limb_check`: ARMBODY on the shoulder joint only.
+- Contact audit: 0.
+- Hand audit: unchanged from v007 (same animation), 1 frame at f1271.
+
+I watched the full preview (`v007b_preview/`, p01–p06).
