@@ -17,7 +17,7 @@ OUT, STEP, PROPS = a[0], int(a[1]), [p for p in a[2].split(",") if p]
 sc = bpy.context.scene
 for o in bpy.data.objects:
     for m in getattr(o, "modifiers", []):
-        if m.type in ("SUBSURF", "MULTIRES"):
+        if m.type in ("SUBSURF", "MULTIRES", "MASK"):   # keep evaluated vertex order = original (labels)
             m.show_viewport = False
 RIGS = [bpy.data.objects[n] for n in a[3].split(",")] if len(a) > 3 else \
        [o for o in bpy.data.objects if o.type == 'ARMATURE' and "upperarm01.L" in o.pose.bones]
