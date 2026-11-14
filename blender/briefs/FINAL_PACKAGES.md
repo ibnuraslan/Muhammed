@@ -40,7 +40,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 24 | RooseveltSpeech | `claude/beautiful-ptolemy-c5vrcq` | `blender/RooseveltSpeech_v011/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1307)** |
 | 25 | Tsunami2004 | `claude/connect25-tsunami-2004` | `blender/Tsunami2004_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 26 | DwarfGiant | `claude/connect26-dwarf-giant` | `blender/DwarfGiant_v003b/` **acting fixed, approved, final commit d1c0cfc (VO sync when your voiceover arrives)** |
-| 27 | SwedishCoffee | `claude/connect27-swedish-coffee` | `blender/SwedishCoffee_v008/` **acting fixed, approved, final commit 334d1cc (VO sync when your voiceover arrives)** |
+| 27 | SwedishCoffee | `claude/beautiful-ptolemy-c5vrcq` | `blender/SwedishCoffee_v012/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1995)** |
 | 28 | ToucanBeak | `claude/connect28-toucan-beak` | `blender/ToucanBeak_v004b/` **acting fixed, approved, final commit b38c05b (VO sync when your voiceover arrives)** |
 | 29 | AIAsleep | `claude/connect29-ai-asleep` | `blender/AIAsleep_v004b/` **acting fixed, approved, final commit 7d88b6a (VO sync when your voiceover arrives)** |
 | 30 | FanCancer | `claude/connect30-fan-cancer` | `blender/FanCancer_v004/` **acting fixed, approved, final commit a270af3 (VO sync when your voiceover arrives)** |

@@ -1,0 +1,21 @@
+# SETTINGS: SwedishCoffee
+
+| Setting | Value |
+|---|---|
+| Resolution | 1080 × 1920 (100 %) |
+| Frame rate | 60 fps (fps_base 1.0) |
+| Frames | **1–1995** (33.25 s at 60 fps; synced to the voiceover, `SwedishCoffee_v012_VO.mp3` packed as a sound strip from frame 1) |
+| Engine | Cycles, CPU |
+| Samples | 48, adaptive threshold 0.05, OpenImageDenoise |
+| Bounces | max 6, volume bounces 0, volume step rate 4 |
+| Motion blur | off (STYLE_ANIMATED: no heavy motion blur) |
+| Colour | AgX, look "AgX - Punchy" (bright animated look, `pipeline/anim_look.py` applied) |
+| Output | PNG frames to `//render/SwedishCoffee_v012_####.png` |
+| Camera | exactly one camera ("Camera"); no camera-switch markers. The timeline markers b01–b13 are beat markers only. |
+| Data | everything packed (images, HDRI); no linked libraries. Opens in factory Blender 5.2.2 (`--factory-startup`). |
+
+Depth of field: f-stop ≥ 5.6 everywhere.
+
+Volumes in the film: coffee steam, the skull formed in the steam (b3), the pistol smoke puff (b10), cup and stall steam. They are small, and volume bounces are 0 to keep farm time down.
+
+No particle systems or simulation caches: the coffee beans (b4, released frames 592–712) and the falling snow (b9) are deterministic geometry-node instancers driven by the scene frame, so any frame renders identically in any order on the farm.
