@@ -439,7 +439,7 @@ for f, dx, dz in LIP_KEYS:
         lip_key(f, dx, dz)
 for f in (445, 462, 480):   # v005: no wrist grip; her right hand hangs relaxed at her side while the girl's hand leaves her lap
     ev(f); sh = T.bone_world("upperarm01.R")
-    T.hand("R", f, sh + T_R * 0.14 - UP * 0.45 + T_F * 0.12, -UP + T_F * 0.2, T_R, sh + T_R * 0.3 - T_F * 0.25); apply_pose(T.o, "R", "relaxed", f)
+    T.hand("R", f, sh + T_R * 0.16 - UP * 0.45 - T_F * 0.06, -UP + T_F * 0.1, T_R, sh + T_R * 0.3 - T_F * 0.25); apply_pose(T.o, "R", "relaxed", f)
 for f in (505, 530):   # then rests on the girl's knee
     t_rest(f, "R")
 # teacher's right hand releases after guiding (1110) and rests on the girl's forearm again
@@ -607,7 +607,7 @@ for f in keys_every(1, END, 12):
         ph = (f % 72) / 72.0; up_ = math.sin(math.pi * min(1, ph * 1.6)) if ph < 0.62 else 0.0
         Mo.hand("L", f, LAP - MO_R * 0.14 + V(0, 0, 0.09), MO_F * 1.0 + MO_R * 0.05, UP, LAP - MO_R * 0.45 - MO_F * 0.2 + UP * 0.1); Mo.fingers("L", f, 35, 25)
         Mo.hand("R", f, LAP + MO_R * 0.16 + MO_F * 0.03 + V(0, 0, 0.10 + 0.16 * up_), MO_F * 0.9 - MO_R * 0.1 - UP * 0.25, UP + MO_F * 0.3, LAP + MO_R * 0.45 - MO_F * 0.2)
-        Mo.fingers("R", f, [40, 55, 65, 70], 30)
+        Mo.fingers("R", f, [44, 50, 54, 57], 30)   # v005: even curl (no fan)
     else:
         ev(f); ch = Mo.bone_world("spine02") + MO_F * 0.17 + V(0, 0, 0.05)
         Mo.hand("L", f, ch + MO_R * 0.05, -MO_R + UP * 0.3, MO_F, ch + MO_R * 0.4 - MO_F * 0.2); Mo.fingers("L", f, 30, 20)
@@ -783,7 +783,7 @@ def bake_ik(P, sd, f0, f1, step=3):
     for f in range(f0, f1 + 1, step):
         ev(f); mats.append((f, P.o.pose.bones["IK_hand." + sd].matrix.copy()))
     for f, M in mats: P.r.key_world("IK_hand." + sd, f, M)
-bake_ik(TEACH, "R", 425, 530); bake_ik(TEACH, "R", 440, 470, 1); bake_ik(GIRL, "R", 425, 530); bake_ik(TEACH, "L", 425, 460); bake_ik(GIRL, "L", 425, 470); bake_ik(TEACH, "R", 1600, 1690); bake_ik(GIRL, "R", 1310, 1360, 1); bake_ik(GIRL, "R", 1612, 1630, 1); bake_ik(TEACH, "R", 1890, 1945); bake_ik(TEACH, "L", 1890, 1945); bake_ik(TEACH, "R", 1908, 1922, 1); bake_ik(TEACH, "L", 1908, 1922, 1)
+bake_ik(TEACH, "R", 425, 530); bake_ik(TEACH, "R", 440, 470, 1); bake_ik(GIRL, "R", 425, 530); bake_ik(GIRL, "R", 1075, 1100, 2); bake_ik(TEACH, "L", 425, 460); bake_ik(GIRL, "L", 425, 470); bake_ik(TEACH, "R", 1600, 1690); bake_ik(GIRL, "R", 1310, 1360, 1); bake_ik(GIRL, "R", 1612, 1630, 1); bake_ik(TEACH, "R", 1890, 1945); bake_ik(TEACH, "L", 1890, 1945); bake_ik(TEACH, "R", 1908, 1922, 1); bake_ik(TEACH, "L", 1908, 1922, 1)
 TCL = ["Teacher.body", "Teacher.female_elegantsuit01", "Teacher.long_skirt"]
 GCL = ["Girl.body", "Girl.female_elegantsuit01", "Girl.long_skirt"]
 def _away_from_teacher(f, pts):
@@ -801,7 +801,8 @@ deintersect(TEACH, "R", 425, END, GCL, away=_up, iters=8)
 deintersect(TEACH, "L", 425, END, GCL, away=_up)
 deintersect(GIRL, "L", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
 deintersect(GIRL, "R", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
-deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")), cap=0.1)
+deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")), cap=0.1, iters=10)
+deintersect(GIRL, "R", 470, 530, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("spine03")), cap=0.1, iters=8)   # rising hand clears her own body
 deintersect(GIRL, "R", 1580, 1610, TCL, away=_away_from_teacher, allow=0.004)
 _from_neck = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("neck01"))
 _from_girl = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("spine03"))
