@@ -64,34 +64,15 @@ def build_grid360(c):
     void(top=(0, 0, 2.2), energy=700, size=1.2, floor_gloss=0.5)
     vel = dd.black_velvet()
     box("Board", (0, 0, 0.01), (1.25, 1.15, 0.02), vel)
-    M = dd.jewel_mats()
-    # one band mesh + one stone mesh, linked into 360 pieces (cheap); each piece vanishes at its own frame (driver)
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.012, minor_radius=0.0018, major_segments=24, minor_segments=8)
-    band = bpy.context.active_object; band.data.materials.append(M["gold"]); band_me = band.data
-    bpy.data.objects.remove(band)
-    st = dd.diamond_mesh("GridStone", 0.0045); st.data.materials.append(M["diamond"]); stone_me = st.data
-    bpy.data.objects.remove(st)
+    # the aftermath (rule: nothing moves by itself): 360 empty slots on the velvet board, the camera pushes in
     slot = pbr("Slot", (0.004, 0.004, 0.005), 0.9)
     S = dd.Builder("Slots")
-    rng = np.random.default_rng(360)
     nx, ny = 20, 18; pitch = 0.058
-    fps = 24
     for i in range(nx):
         for j in range(ny):
-            x = (i - (nx - 1) / 2) * pitch; y = (j - (ny - 1) / 2) * pitch
-            S.cyl((x, y, 0.0205), 0.018, 0.002, slot, verts=20)
-            # the sweep: from one corner to the other with a little scatter, between 0.6 s and 3.6 s
-            u = (i + j) / (nx + ny - 2)
-            f_out = int(fps * (0.6 + 3.0 * u + float(rng.uniform(-0.12, 0.12))))
-            for nm, me, dz in (("Band", band_me, 0.023), ("Stone", stone_me, 0.026)):
-                o = bpy.data.objects.new(f"{nm}{i}_{j}", me); bpy.context.collection.objects.link(o)
-                o.location = (x, y, dz)
-                if nm == "Band":
-                    o.rotation_euler = (0, 0, float(rng.uniform(0, math.pi)))
-                for prop in ("hide_render", "hide_viewport"):
-                    d = o.driver_add(prop).driver; d.type = 'SCRIPTED'; d.expression = f"frame > {f_out}"
+            S.cyl(((i - (nx - 1) / 2) * pitch, (j - (ny - 1) / 2) * pitch, 0.0205), 0.018, 0.002, slot, verts=20)
     S.done()
-    paper_tag("Inventory", (0.3, -0.62, 0.0208), "INVENTAIRE\n360 PIECES", size=(0.2, 0.08), text_size=0.022)
+    paper_tag("Inventory", (0.38, 0.47, 0.0208), "INVENTAIRE\n360 PIECES\nMANQUANTES", size=(0.24, 0.11), text_size=0.022, rot_z=-0.06)
 
 
 def build_suitcase(c):
@@ -133,7 +114,7 @@ def build_dna(c):
     film = glass("BagFilm", (0.96, 0.96, 0.95), 0.25)
     bag.box((0, 0, 0.004), (0.2, 0.26, 0.006), film).box((0, 0.118, 0.008), (0.2, 0.02, 0.002), pbr("Tamper", (0.55, 0.04, 0.03), 0.5))
     bag.box((0.02, -0.02, 0.003), (0.03, 0.05, 0.004), pbr("Fibre", (0.25, 0.2, 0.16), 0.9))   # a fibre swatch inside
-    b = bag.done((0, -0.14, 0)); c["bag"] = b
+    b = bag.done((0, -0.14, 0)); c["bag"] = b; b.rotation_euler = (0, 0, math.radians(4))
     lab = paper_tag("BagLabel", (0, 0, 0), "SCELLE N 14\nPRELEVEMENT ADN", size=(0.12, 0.05), text_size=0.0085)
     lab.parent = b; lab.location = (0.0, -0.075, 0.0085)
 
@@ -207,12 +188,12 @@ MOVES = {
     "ring": dict(kind="anim", dof=2.8, anim=anim_ring,
                  cam=lambda c, t: (Vector((0.01, -0.36, 0.12)).lerp(Vector((0.005, -0.29, 0.11)), ease(t)), Vector((0.006, -0.02, 0.076)), 48),
                  focus=lambda c, t: Vector((0, 0, 0.1))),
-    "grid360": dict(kind="anim", dof=None, anim=anim_grid,
+    "grid360": dict(kind="anim", dof=None,
                     cam=lambda c, t: (Vector((0.05, -0.75, 1.55)).lerp(Vector((0.0, -0.6, 1.3)), ease(t)), Vector((0, -0.12, 0)), 32, (0, 1, 0))),
     "suitcase": dict(kind="anim", dof=4.0, anim=anim_suitcase,
                      cam=lambda c, t: (Vector((1.0, -1.8, 0.6)).lerp(Vector((0.75, -1.45, 0.52)), ease(t)), Vector((0.05, -0.1, 0.32)), 60),
                      focus=lambda c, t: Vector((0.05, -0.1, 0.3))),
-    "dna": dict(kind="anim", dof=2.8, anim=anim_dna,
+    "dna": dict(kind="anim", dof=2.8,
                 cam=lambda c, t: (Vector((-0.1, -0.56, 0.44)).lerp(Vector((0.04, -0.52, 0.4)), ease(t)), Vector((0.0, -0.1, 0.02)), 40),
                 focus=lambda c, t: Vector((0.0, -0.08, 0.03))),
 }
