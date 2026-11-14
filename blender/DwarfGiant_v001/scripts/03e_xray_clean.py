@@ -5,8 +5,8 @@ The room comes back at 1232 for the 8-frame fade-out (card 1232->1240, normal he
 import bpy, sys
 out = sys.argv[sys.argv.index("--") + 1]
 OB = bpy.data.objects; sc = bpy.context.scene
-F0, F1 = 1091, 1231
-keep = {"Hero_Xray"} | {o.name for o in OB["Spine"].children_recursive} | {o.name for o in sc.camera.children_recursive}
+RANGES = [(182, 469), (1091, 1231)]   # both x-ray cutaways, while the card is opaque
+keep = {"Hero_Xray", "Brain"} | {o.name for o in OB["Brain"].children_recursive} | {o.name for o in OB["Spine"].children_recursive} | {o.name for o in sc.camera.children_recursive}
 def fcs(o):
     ad = o.animation_data
     if not ad or not ad.action: return []
@@ -14,17 +14,18 @@ def fcs(o):
 n = 0
 for o in OB:
     if o.type in ("EMPTY", "LIGHT", "CAMERA", "ARMATURE", "LIGHT_PROBE") or o.name in keep or o.name.startswith("Hormone"): continue
-    fc = fcs(o)
-    after = bool(fc[0].evaluate(F1 + 1)) if fc else o.hide_render
-    before = bool(fc[0].evaluate(1)) if fc else o.hide_render
-    if fc:
-        for kp in [k for k in fc[0].keyframe_points if F0 <= k.co.x <= F1 + 1]: fc[0].keyframe_points.remove(kp)
-    else:
-        o.hide_render = before; o.keyframe_insert("hide_render", frame=1)
-    o.hide_render = True; o.keyframe_insert("hide_render", frame=F0)
-    o.hide_render = after; o.keyframe_insert("hide_render", frame=F1 + 1)
+    for F0, F1 in RANGES:
+        fc = fcs(o)
+        after = bool(fc[0].evaluate(F1 + 1)) if fc else o.hide_render
+        before = bool(fc[0].evaluate(1)) if fc else o.hide_render
+        if fc:
+            for kp in [k for k in fc[0].keyframe_points if F0 <= k.co.x <= F1 + 1]: fc[0].keyframe_points.remove(kp)
+        else:
+            o.hide_render = before; o.keyframe_insert("hide_render", frame=1)
+        o.hide_render = True; o.keyframe_insert("hide_render", frame=F0)
+        o.hide_render = after; o.keyframe_insert("hide_render", frame=F1 + 1)
     for f in fcs(o):
         for kp in f.keyframe_points: kp.interpolation = "CONSTANT"
     n += 1
-print("XRAYCLEAN hidden", n, "objects for", F0, F1)
+print("XRAYCLEAN hidden", n, "objects for", RANGES)
 bpy.ops.wm.save_as_mainfile(filepath=out)

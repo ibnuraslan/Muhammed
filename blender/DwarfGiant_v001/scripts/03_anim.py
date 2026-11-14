@@ -384,7 +384,7 @@ Yg.key_root(1, PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY)
 Yg.key_foot("L", 1, Yg.foot_xy("L", PY, yY), yY); Yg.key_foot("R", 1, Yg.foot_xy("R", PY, yY), yY)
 for f in range(1, 2341, 40): arms_idle(Yg, f, 0.07, -0.03); Yg.key_spine(f, flex=-2, head=(-10 if f > 2150 else -4, -24 if f > 2150 else -4))
 breathe(Yg, 1, 2340, base=PY + V(0, 0, Yg.root_head.z - 0.01), yaw=yY, ph=2.2)
-for nm, rng in (("Officer1", [(1, 371), (480, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
+for nm, rng in (("Officer1", [(1, 371), (470, 1476)]),   # off during the x-ray beat (he would straddle the cutaway card)
                 ("Officer2", [(1, 1476)]), ("Clerk", [(1, 1476)]), ("Recruit1", [(1, 1476)]), ("Recruit2", [(1, 1476)]),
                 ("Surgeon1", [(1477, 1857)]), ("Surgeon2", [(1477, 1857)]), ("Nurse", [(1477, 1857)]), ("Normal", [(1858, 1999)]), ("Young", [(2000, 2340)])):
     for m_ in meshes_of(RIGS[nm]): vis(m_, rng)
@@ -402,7 +402,7 @@ tr = nt.nodes.new("ShaderNodeBsdfTransparent"); ad_ = nt.nodes.new("ShaderNodeAd
 nt.links.new(tr.outputs[0], ad_.inputs[0]); nt.links.new(em.outputs[0], ad_.inputs[1]); nt.links.new(ad_.outputs[0], o_.inputs[0])
 xr.data.materials.clear(); xr.data.materials.append(xm)
 for md in [m for m in xr.modifiers if m.type == "MASK" and m.name.startswith("Delete")]: xr.modifiers.remove(md)
-XRAY = [(372, 500), (1074, 1240)]   # v003b: x-ray ends with the 8-frame card fade (was a blank fade to 1262)
+XRAY = [(372, 470), (1074, 1240)]   # v003b: x-ray ends with the 8-frame card fade (was a blank fade to 1262)
 vis(xr, XRAY)
 for m_ in hero_meshes:
     hide_ranges(m_, [(181, 470), (1080, 1240), (1658, 1712)])
@@ -413,11 +413,11 @@ BR.location = V(0, -0.148, 0.0); BR.scale = (0.84,) * 3
 BR.rotation_euler = (R_(-90), 0, 0)
 brain_objs = [BR] + list(BR.children_recursive)
 for o in brain_objs:
-    if o.type == "MESH": vis(o, [(181, 500), (1658, 1712)])
+    if o.type == "MESH": vis(o, [(181, 470), (1658, 1712)])
 PIT = OB["Pituitary"]; TUM = OB["Tumour"]
 for o, off in ((PIT, V(0, -0.014, 0.036)), (TUM, V(0, -0.017, 0.033))):
     o.parent = BR; o.location = off; o.rotation_euler = (R_(90), 0, 0)
-    vis(o, [(181, 500), (1658, 1712)])
+    vis(o, [(181, 470), (1658, 1712)])
 tb = TUM.data.materials[0].node_tree.nodes["Principled BSDF"]
 for f, s, e in ((181, 0.25, 0.0), (250, 0.5, 0.5), (300, 0.9, 1.5), (360, 1.3, 3.0), (420, 1.4, 4.0), (500, 1.4, 3.0), (1658, 1.4, 4.0), (1690, 1.4, 2.0)):
     TUM.scale = (s,) * 3; TUM.keyframe_insert("scale", frame=f)
@@ -450,7 +450,7 @@ TUM.location = TUM.location + V(0, 0.0, -0.06); TUM.keyframe_insert("location", 
 SP = OB["Spine"]; SP.parent = HRIG; SP.location = (0, 0.035, 0.6); SP.rotation_euler = (0, 0, 0); SP.scale = (0.95,) * 3
 spm = [o for o in SP.children_recursive if o.type == "MESH"]
 for o in spm:
-    vis(o, [(1074, 1240), (372, 500)])
+    vis(o, [(1074, 1240), (372, 470)])
     md = o.modifiers.new("bend", "SIMPLE_DEFORM"); md.deform_method = "BEND"; md.deform_axis = "Y"; md.origin = SP
     md.angle = 0.0; md.keyframe_insert("angle", frame=1090); md.angle = R_(55); md.keyframe_insert("angle", frame=1220)
 # hormone stream: glowing particles from the pituitary down vessels (in hero armature space)
@@ -473,9 +473,9 @@ def route_pt(rt, u):
 for k in range(110):
     o = bpy.data.objects.new(f"Hormone{k:03d}", pmesh); xr.users_collection[0].objects.link(o); o.parent = HRIG
     rt = ROUTES[k % 4]; t0 = 372 + random.randint(0, 50); dur = random.randint(50, 80); jit = V(random.gauss(0, 0.012), random.gauss(0, 0.01), random.gauss(0, 0.01))
-    for f in range(t0, min(t0 + dur, 500) + 1, 4):
+    for f in range(t0, min(t0 + dur, 470) + 1, 4):
         o.location = route_pt(rt, (f - t0) / dur) + jit; o.keyframe_insert("location", frame=f)
-    vis(o, [(t0, min(t0 + dur, 500))])
+    vis(o, [(t0, min(t0 + dur, 470))])
 
 # ------------------------------------------------------------------ camera
 cam_d = bpy.data.cameras.new("CAM_Film"); cam_d.sensor_fit = "AUTO"; cam_d.clip_start = 0.004; cam_d.clip_end = 200
@@ -547,7 +547,7 @@ for f in list(range(1, 2341, 4)) + [2340]:
     if w > 0:
         cpos = fc_(f); near = cpos + (p_ - cpos).normalized() * 0.25; p_ = p_.lerp(near, w)
     foc.location = p_; foc.keyframe_insert("location", frame=f)
-for f, fs in ((1, 8.0), (180, 8.0), (181, 22.0), (500, 22.0), (501, 8.0), (1262, 8.0), (1292, 1.4), (1335, 1.4), (1365, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
+for f, fs in ((1, 8.0), (180, 8.0), (181, 22.0), (478, 22.0), (479, 8.0), (1262, 8.0), (1292, 1.4), (1335, 1.4), (1365, 8.0), (1657, 8.0), (1658, 22.0), (1712, 22.0), (1713, 8.0)):
     cam_d.dof.aperture_fstop = fs; cam_d.dof.keyframe_insert("aperture_fstop", frame=f)
 
 # camera-attached cutaway card (teal->navy gradient), alpha keyed
@@ -559,13 +559,13 @@ _rp = next(n for n in cm.node_tree.nodes if n.type == "VALTORGB"); _rp.color_ram
 cm.node_tree.nodes["Map Range"].inputs[1].default_value = -0.5; cm.node_tree.nodes["Map Range"].inputs[2].default_value = 0.5
 sep_ = cm.node_tree.nodes["Separate XYZ"]; cm.node_tree.links.new(sep_.outputs[1], cm.node_tree.nodes["Map Range"].inputs[0])
 cc.visible_shadow = False
-CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 1.62), (470, 1.0, 1.62), (500, 0.0, 1.62),
+CARD = [(180, 0.0, 0.6), (181, 1.0, 0.6), (186, 1.0, 0.55), (360, 1.0, 0.5), (380, 1.0, 0.5), (420, 1.0, 1.15), (462, 1.0, 1.62), (470, 1.0, 1.62), (478, 0.0, 1.62),
         (1074, 0.0, 1.85), (1090, 1.0, 1.85), (1232, 1.0, 1.85), (1240, 0.0, 1.85), (1657, 0.0, 0.22), (1658, 1.0, 0.22), (1700, 1.0, 0.24), (1712, 0.0, 0.3)]
 mixn = cm.node_tree.nodes["FADE"]
 for f, al, dist in CARD:
     mixn.inputs[0].default_value = al; mixn.inputs[0].keyframe_insert("default_value", frame=f)
     cc.location = (0, 0, -dist); cc.scale = (dist * 1.3, dist * 2.2, 1); cc.keyframe_insert("location", frame=f); cc.keyframe_insert("scale", frame=f)
-vis(cc, [(181, 500), (1074, 1240), (1658, 1712)])
+vis(cc, [(181, 478), (1074, 1240), (1658, 1712)])
 bpy.data.objects.remove(XB, do_unlink=True)
 for o in [o for o in OB if "stash" in o.name.lower()]: bpy.data.objects.remove(o, do_unlink=True)
 # light for the cutaway (studio key/rim parented to camera)
@@ -574,7 +574,7 @@ for nm, loc, e, colr in (("Cut_Key", (0.4, 0.5, 0.2), 6.0, (1.0, 0.92, 0.85)), (
     lo = bpy.data.objects.new(nm, l); sc.collection.objects.link(lo); lo.parent = cam; lo.location = loc
     tc = lo.constraints.new("TRACK_TO"); tc.target = aim; tc.track_axis = "TRACK_NEGATIVE_Z"; tc.up_axis = "UP_Y"
     l.energy = 0.0; l.keyframe_insert("energy", frame=1)
-    for f0, f1 in ((181, 500), (1074, 1240), (1658, 1712)):
+    for f0, f1 in ((181, 478), (1074, 1240), (1658, 1712)):
         l.energy = 0.0; l.keyframe_insert("energy", frame=f0 - 1); l.energy = e; l.keyframe_insert("energy", frame=f0)
         l.keyframe_insert("energy", frame=f1); l.energy = 0.0; l.keyframe_insert("energy", frame=f1 + 1)
 
