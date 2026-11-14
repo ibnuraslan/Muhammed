@@ -110,15 +110,19 @@ PT = bpy.data.objects["Patient"]; MUG = bpy.data.objects["Mug"]
 plan = {}
 for f in range(601, 776, 3):
     ev(f); up, right, fwd = axes(PT)
-    sp = Wb(PT, "spine03"); thigh = Wb(PT, "upperleg01.L").lerp(Wb(PT, "lowerleg01.L"), 0.72)
-    if f <= 663:
-        L = (Wb(PT, "spine04") + fwd * 0.20 - right * 0.03 - up * 0.04, right, fwd)      # mug in front of the chest
-    elif f <= 684:
-        L = (Wb(PT, "spine04") + fwd * 0.22 - right * 0.20 - up * 0.02, fwd, -right * 0.4 + up * 0.6)   # open, startled
+    sp = Wb(PT, "spine03"); thigh = Wb(PT, "upperleg01.L").lerp(Wb(PT, "lowerleg01.L"), 0.70)
+    if f <= 684:                                                                       # v008f: no mug; arm hangs relaxed
+        c_ = (Wb(PT, "upperarm01.L") + Wb(PT, "upperarm01.R")) / 2          # mirror her hanging right hand onto the left
+        if f <= 643:                                                   # both arms still hang here
+            pr = Wb(PT, "finger3-1.R").lerp(Wb(PT, "wrist.R"), 0.4)
+            pl = pr - right * 2 * (pr - c_).dot(right)
+            HANG = ((pl - c_).dot(right), (pl - c_).dot(up), (pl - c_).dot(fwd))
+        pl = c_ + right * HANG[0] + up * HANG[1] + fwd * HANG[2]              # then it keeps hanging (no raised elbow)
+        L = (pl, right, -up)
     else:
         tax = (Wb(PT, "lowerleg01.L") - Wb(PT, "upperleg01.L")).normalized()
         front = (fwd - tax * fwd.dot(tax)).normalized()                                   # the thigh's own front
-        L = (thigh + front * 0.10, -front, tax)                                          # palm on the thigh above the knee
+        L = (thigh + front * 0.05 - right * 0.085, (right * 0.7 - front * 0.3).normalized(), tax)   # palm on the OUTSIDE of her left thigh
     R = None
     if f >= 662:
         R = (sp + right * 0.15 + fwd * 0.04 + up * 0.04, -right, (fwd * 0.7 - up * 0.3))  # palm pressed on her right side
@@ -126,23 +130,24 @@ for f in range(601, 776, 3):
 ik_clear(PT, "L", 601, 775); ik_clear(PT, "R", 662, 775)
 for f, (L, R) in sorted(plan.items()):
     place_hand(PT, "L", f, L[0], L[1], L[2])
+    ev(f); up_, right_, fwd_ = axes(PT)                      # left elbow points down and slightly out (no raised wing)
+    pn = "Pole_elbow.L"; pbp = PT.pose.bones[pn]; bn_ = PT.data.bones[pn]
+    pole_w = Wb(PT, "upperarm01.L") - up_ * 0.55 - right_ * 0.12 - fwd_ * 0.10
+    pbp.location = bn_.matrix_local.to_3x3().inverted() @ (PT.matrix_world.inverted() @ pole_w - bn_.head_local)
+    pbp.keyframe_insert("location", frame=f, group=pn)
     if R: place_hand(PT, "R", f, R[0], R[1], R[2])
-# the mug rides in the hand until she drops it (663), then its own fall keys
-ad = MUG.animation_data
-for Lr in ad.action.layers:
-    for st in Lr.strips:
-        for cb in st.channelbags:
-            for fcu in cb.fcurves:
-                k = fcu.keyframe_points
-                for i in reversed(range(len(k))):
-                    if 590 <= k[i].co.x <= 672: k.remove(k[i], fast=True)
-                fcu.update()
-for f in range(601, 664, 2):
-    ev(f); up, right, fwd = axes(PT)
-    pc = Wb(PT, "wrist.L").lerp(Wb(PT, "finger3-1.L"), 0.6)
-    MUG.location = pc + right * 0.045 - up * 0.02
-    MUG.rotation_euler = (0, 0, math.atan2(fwd.y, fwd.x) - math.pi / 2)
-    MUG.keyframe_insert("location", frame=f); MUG.keyframe_insert("rotation_euler", frame=f)
+# v008f: the mug is removed (it read as an object at her groin); her left hand is relaxed until it goes to the thigh
+MUG.animation_data_clear(); MUG.hide_render = True; MUG.hide_viewport = True
+for f in range(600, 686, 6):
+    apply_pose(PT, "L", "relaxed", f)
+# 5a2. Surgeon2 after the glove snap: elbows bent, both hands on the drape edge in front of him (no arms spread wide)
+S2_ = bpy.data.objects["Surgeon2"]
+for s_ in "LR":
+    ik_clear(S2_, s_, 1018, 1048)
+for f in (1022, 1030, 1038, 1046):
+    place_hand(S2_, "L", f, Vector((-0.14, 0.27, 1.20)), Vector((0, 0, -1)), Vector((0.1, -1, 0)))
+    place_hand(S2_, "R", f, Vector((-0.46, 0.27, 1.20)), Vector((0, 0, -1)), Vector((-0.1, -1, 0)))
+    apply_pose(S2_, "L", "flat_palm", f); apply_pose(S2_, "R", "flat_palm", f)
 # 5b. the judge: from the pick-up on, the gavel's handle grip point sits in his evaluated palm on every frame (the designed
 #     raise / strike rotation is kept), so it never floats free of his fist
 PA = bpy.data.objects["PanelA"]; GAV = bpy.data.objects["Gavel"]
