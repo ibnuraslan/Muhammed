@@ -106,19 +106,19 @@ for f in range(796, 1052, 32):
     pb.keyframe_insert("location", frame=f, group=pb.name)
 # ---------------------------------------------------------------- v009f: while he carves, the left hand lies flat on the tray beside
 # the cartilage (thumb and index either side of it), wrist in line with the forearm (the pinch read as a ring / "OK" sign)
-lock(SUR, "L", 337); lock(SUR, "L", 476)
+lock(SUR, "L", 337)
 _pbL = SUR.pose.bones["IK_hand.L"]
-for f in range(343, 471, 6):   # the old carving keys (every 6 f) would fight the new placement
+for f in range(343, 535):   # the old carving keys would fight the new placement; the old 476-528 keys laid the hand over the carved ear
     for path in ("location", "rotation_quaternion"):
         try: _pbL.keyframe_delete(path, frame=f)
         except RuntimeError: pass
-for f in range(343, 471, 8):
+for f in list(range(343, 528, 8)) + [528]:   # v009f: stays beside the ear (never over it) until the pinch at 536
     sc.frame_set(f); blk = EAR_TRAY.matrix_world.translation.copy()
     shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head
     p, n = surf(TRAY, blk + Vector((0.125, 0.0, 0.0)))   # v009f: flat beside the cartilage, fingertips on its edge, clear of the scalpel hand
     fd = blk - shL; fd.z = 0; fd = (fd.normalized() * 0.6 + Vector((-0.8, 0, 0))).normalized()   # fingers point across at the cartilage, not at the camera
     place_hand(SUR, "L", f, p, Vector((0, 0, -1)), fd, skin=0.016)
-wrist_follow("L", 343, 468)
+wrist_follow("L", 343, 520)
 # ---------------------------------------------------------------- 6. patient's free (right) hand relaxed on the armrest while reclined
 lock(PAT, "R", 468)
 for f in list(range(480, 1640, 40)) + [1640]:
