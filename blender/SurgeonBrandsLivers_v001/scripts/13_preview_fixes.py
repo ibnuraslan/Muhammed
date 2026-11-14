@@ -116,7 +116,9 @@ for f in range(601, 776, 3):
     elif f <= 684:
         L = (Wb(PT, "spine04") + fwd * 0.22 - right * 0.20 - up * 0.02, fwd, -right * 0.4 + up * 0.6)   # open, startled
     else:
-        L = (thigh + fwd * 0.075, -fwd, (-up * 0.8 + right * 0.2))                       # palm on the thigh above the knee
+        tax = (Wb(PT, "lowerleg01.L") - Wb(PT, "upperleg01.L")).normalized()
+        front = (fwd - tax * fwd.dot(tax)).normalized()                                   # the thigh's own front
+        L = (thigh + front * 0.10, -front, tax)                                          # palm on the thigh above the knee
     R = None
     if f >= 662:
         R = (sp + right * 0.15 + fwd * 0.04 + up * 0.04, -right, (fwd * 0.7 - up * 0.3))  # palm pressed on her right side
