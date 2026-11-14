@@ -45,7 +45,7 @@ for dn in ("DiverA", "DiverB", "DiverC"):
         if o.type == 'MESH' and o.name.endswith("male_worksuit01"):
             o.hide_render = True; o.hide_viewport = True
     for md in body.modifiers:
-        if md.type == 'MASK': md.show_render = False; md.show_viewport = False
+        if md.type == 'MASK' and "worksuit" in md.name: md.show_render = False; md.show_viewport = False   # keep "Hide helpers" (proxy shells) and the shoe mask on
     body.data.materials.append(neo); slot = len(body.data.materials) - 1
     bones = {b.name.lower() for b in rig.data.bones}; gi = {g.index: g.name.lower() for g in body.vertex_groups}
     dom = {}
