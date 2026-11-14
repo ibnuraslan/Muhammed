@@ -97,7 +97,7 @@ def anim(shot):
 def cam_board(c, t):
     e = ease(t)                           # drifts along the string, ends on the empty pins
     x = -0.55 + 1.3 * e
-    return (Vector((x - 0.25, -1.45 + 0.35 * e, 1.5)), Vector((x, 0.0, 1.42)), 40)
+    return (Vector((x * 0.6 - 0.2, -2.6 + 0.4 * e, 1.5)), Vector((x * 0.6, 0.0, 1.42)), 35)
 
 
 MOVES = {"board": dict(kind="anim", dof=3.0, cam=cam_board, focus=lambda c, t: Vector((-0.55 + 1.3 * ease(t), -0.04, 1.42)), anim=anim("board"), dur=DUR["board"])}

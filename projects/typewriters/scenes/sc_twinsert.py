@@ -80,6 +80,8 @@ def build(variant=None):
         for o in (g, ring, handle):
             o.parent = rig
         c["mag"] = rig
+        for o in (g, ring, handle):
+            o.hide_render = True                    # the lens read as a white blur in frame: the macro alone carries it
         spot((0.05, -0.08, 0.5), (0, 0, 0), 60, size=0.3)
         spot((-0.3, 0.25, 0.2), (0, 0, 0), 6, size=0.4, color=(0.8, 0.85, 1.0))
     else:
@@ -111,8 +113,8 @@ def anim(shot):
 
 def cam_copier(c, t):
     e = ease(t)                                  # slides along the stage from the copier to the terminal
-    x = -1.55 + 1.55 * e
-    return (Vector((x + 0.15, -1.9, 1.05)), Vector((x, 0.0, 0.55)), 40)
+    x = -1.4 + 1.3 * e
+    return (Vector((x + 0.35, -3.3, 1.45)), Vector((x, 0.0, 0.55)), 35)
 
 
 def cam_cipher(c, t):
@@ -122,7 +124,7 @@ def cam_cipher(c, t):
 
 def cam_staple(c, t):
     e = ease(t)
-    return (Vector((0.0, -0.085 + 0.012 * e, 0.07 - 0.012 * e)), Vector((0.0, 0.0, 0.006)), 85)
+    return (Vector((0.012, -0.075 + 0.01 * e, 0.06 - 0.01 * e)), Vector((0.0, 0.0, 0.0065)), 90)
 
 
 MOVES = {
