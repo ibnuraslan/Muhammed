@@ -329,7 +329,7 @@ for f in range(276, 330, 4):
 for f in range(572, 652, 4):
     carry_key(f, "R", CARRY_R); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
 for f in range(1300, 1360, 4):   # v009d: ear carried in front of the chest from the arm to the head (ends before he faces the head)
-    carry_key(f, "R", (0.1, 0.26, 0.0)); carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
+    carry_key(f, "R", (0.14, 0.17, 0.02));   # v009f: close to his own body (it wrapped across the patient's shoulder) carry_key(f, "L", CARRY_L, (0.0, -1, -1.5))
 # beat 3: carving at the tray. L holds the block, R draws the scalpel over it in strokes
 for f in range(343, 565, 6):
     k = (f - 343) / 37.0

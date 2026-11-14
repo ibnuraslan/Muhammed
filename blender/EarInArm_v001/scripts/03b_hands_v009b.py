@@ -104,6 +104,21 @@ for f in range(796, 1052, 32):
     pb = SUR.pose.bones["IK_hand.L"]; d_ = SUR.matrix_world.inverted() @ W - (SUR.matrix_world.inverted() @ (SUR.matrix_world @ pb.head))
     pb.location = pb.location + SUR.data.bones["IK_hand.L"].matrix_local.to_3x3().inverted() @ d_
     pb.keyframe_insert("location", frame=f, group=pb.name)
+# ---------------------------------------------------------------- v009f: while he carves, the left hand lies flat on the tray beside
+# the cartilage (thumb and index either side of it), wrist in line with the forearm (the pinch read as a ring / "OK" sign)
+lock(SUR, "L", 337); lock(SUR, "L", 476)
+_pbL = SUR.pose.bones["IK_hand.L"]
+for f in range(343, 471, 6):   # the old carving keys (every 6 f) would fight the new placement
+    for path in ("location", "rotation_quaternion"):
+        try: _pbL.keyframe_delete(path, frame=f)
+        except RuntimeError: pass
+for f in range(343, 471, 8):
+    sc.frame_set(f); blk = EAR_TRAY.matrix_world.translation.copy()
+    shL = SUR.matrix_world @ SUR.pose.bones["upperarm01.L"].head
+    p, n = surf(TRAY, blk + Vector((0.075, 0.035, 0.0)))
+    fd = blk - shL; fd.z = 0; fd = fd.normalized()
+    place_hand(SUR, "L", f, p, Vector((0, 0, -1)), fd, skin=0.016)
+wrist_follow("L", 343, 468)
 # ---------------------------------------------------------------- 6. patient's free (right) hand relaxed on the armrest while reclined
 lock(PAT, "R", 468)
 for f in list(range(480, 1640, 40)) + [1640]:
@@ -138,6 +153,7 @@ def clear_fingers(rig):
 # curl, so the gloved fingers lie together instead of pointing in different directions
 POSES["pinch_tuck"] = dict(curl={2: (40, 45, 25), 3: (45, 55, 30), 4: (52, 62, 36), 5: (58, 68, 40)}, spread=0.0, thumb=("index_tip", 0.004))
 POSES["pinch_light"] = dict(curl={2: (38, 42, 22), 3: (24, 30, 15), 4: (26, 32, 16), 5: (28, 34, 18)}, spread=0.0, thumb=("index_tip", 0.004))   # v009e: holding the cartilage (pinch_tuck read as a ring)
+POSES["ear_touch"] = dict(curl={2: (12, 12, 6), 3: (14, 12, 6), 4: (45, 55, 30), 5: (50, 58, 32)}, spread=0.0, thumb=("beside_index", 0.015))   # v009f: index + middle rest on the ear
 POSES["relaxed_even"] = dict(curl={2: (24, 30, 16), 3: (26, 32, 17), 4: (28, 34, 18), 5: (30, 36, 19)}, spread=0.0, thumb=("beside_index", 0.012))
 # v009c-2: the "starfish" gloves were the GloveThin displace (hand surface pulled in 3.2 mm along its normals): on the subdivided
 # glove it thinned every finger and opened gaps between them. Removed; the bones and skinning were correct.
@@ -146,8 +162,8 @@ for rig in (SUR,):
     if gm: BODY[rig].modifiers.remove(gm)
 SCHED = {(SUR, "R"): [(1, "pinch_tuck"), (339, "pinch_tuck"), (343, "cup_hold"), (464, "cup_hold"), (472, "relaxed_even"), (560, "relaxed_even"), (566, "pinch_tuck"),
                       (1500, "pinch_tuck"), (1502, "pinch_tuck"), (1685, "pinch_tuck"), (1715, "relaxed_even"), (1770, "relaxed_even")],
-         (SUR, "L"): [(1, "relaxed_even"), (128, "relaxed_even"), (136, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "pinch_light"),
-                      (464, "pinch_light"), (476, "relaxed_even"), (1770, "relaxed_even")],
+         (SUR, "L"): [(1, "relaxed_even"), (128, "relaxed_even"), (136, "flat_palm"), (278, "flat_palm"), (290, "relaxed_even"), (337, "relaxed_even"), (343, "relaxed_even"),
+                      (464, "relaxed_even"), (476, "relaxed_even"), (1770, "relaxed_even")],
          (NUR, "L"): [(1, "relaxed_even"), (1770, "relaxed_even")], (NUR, "R"): [(1, "relaxed_even"), (1770, "relaxed_even")]}
 for rig in (SUR, NUR): clear_fingers(rig)
 for (rig, s_), sch in SCHED.items():
@@ -162,7 +178,8 @@ for f in range(1, 46, 4):
     rb.keyframe_insert("location", frame=f, group="root")
 # (the patient's own hand path is unchanged)
 # v009d: the patient's hand on the new ear is relaxed (cup_hold read as a claw)
-for f in (1715, 1745, 1770): apply_pose(PAT, "L", "relaxed_even", f, spread=0)
+apply_pose(PAT, "L", "relaxed_even", 1715, spread=0)
+for f in (1745, 1758, 1770): apply_pose(PAT, "L", "ear_touch", f, spread=0)   # v009f: soft touch (fingers read splayed)
 for f in (470, 800, 1100, 1400, 1640): apply_pose(PAT, "L", "relaxed_even", f, spread=0)   # v009e: relaxed on the arm board (read as a claw)
 lock(PAT, "L", 1); lock(PAT, "L", 42)
 for f, w in ((5, 0.5), (11, 1.0), (18, 1.0), (24, 1.0), (30, 1.0), (36, 0.5)):
