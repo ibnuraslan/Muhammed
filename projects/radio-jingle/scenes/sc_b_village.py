@@ -26,10 +26,9 @@ def build(variant=None):
         x = -2.4 + (B_GATE.x - (-2.4)) * k / 12
         pts.append(Vector((x, -1.6 + 0.05 * math.sin(k * 1.3), 0.03)))
     pts += [Vector((B_GATE.x, 1.6, 0.03)), B_GATE]
-    c["cord"] = F.curve("SurveyCord", pts, pbr("CordRed", (0.62, 0.06, 0.04), 0.6), bevel=0.035, smooth=True)
-    F.draw(c["cord"], 0.0)
+    c["cord"] = None                                        # hub rule: no line drawing itself; the aerial alone shows the distance
     # stakes at both gates, where the cord is tied
-    for nm, p in (("StakeA", A_GATE), ("StakeB", B_GATE)):
+    for nm, p in ():
         cyl(nm, p + Vector((0, 0, 0.3)), 0.03, 0.6, pbr("StakeWood", (0.45, 0.32, 0.18), 0.8), verts=10)
         box(nm + "Cap", p + Vector((0, 0, 0.62)), (0.08, 0.08, 0.04), pbr("StakeRed", (0.65, 0.07, 0.04), 0.5))
     B.preview_cap()
@@ -37,7 +36,7 @@ def build(variant=None):
 
 
 def anim(c, t, move):
-    F.draw(c["cord"], ease(min(1.0, max(0.0, (t - 0.12) / 0.66))))
+    pass
     bpy.context.view_layer.update()
 
 

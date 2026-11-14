@@ -173,7 +173,7 @@ def anim(c, t, move):
         shut = ease(min(1.0, max(0.0, (sec - 1.0) / 1.0)))
         dr.location = Vector((c["drawer_x"], 5.25 - 0.27 + 0.27 * shut - 0.0, 0.17 + 2 * 0.32))
         if c.get("years"):
-            k_ = min(8, int(ease(t) * 9.0)) if move == "tube" else 0     # 1981 .. 1989 across the shot
+            k_ = 8 if move == "tube" else 0                                  # the card reads 1989 (static)
             for j, (cd, tx) in enumerate(c["years"]):
                 cd.hide_render = tx.hide_render = (j != k_)
         if move == "twelve":                              # the tube only flickers and dims in the next shot (3-11B)

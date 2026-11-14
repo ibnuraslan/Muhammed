@@ -164,7 +164,7 @@ def anim(c, t, dur):
     if c.get("variant") == "search":
         u = ease(min(1.0, max(0.0, (sec - 1.4) / 2.2)))
         for k, (fl, ax, sgn) in enumerate(c["flaps"]):
-            uu = ease(min(1.0, max(0.0, (sec - 1.4 - 0.35 * k) / 1.0)))
+            uu = 1.0                                                          # closed: nothing in it (static)
             a = math.radians(160 * (1 - uu))                                  # open (folded back) -> closed flat
             fl.rotation_euler = ((-a * sgn, 0, 0) if ax == 'X' else (0, a * sgn, 0))
         to = c["torch"]; ang = -0.9 + 1.6 * ease(t)                           # the beam passes along the shelves, then on
@@ -175,7 +175,7 @@ def anim(c, t, dur):
         return
     if c.get("variant") == "away":
         # 3-4B v2: the letters keep arriving, one by one, onto the pile
-        n = len(c["letters"]); shown = 8 + int((n - 8) * min(1.0, t * 1.1))
+        n = len(c["letters"]); shown = n                              # the pile as it is (no self-moving letters)
         for k, o in enumerate(c["letters"]):
             if "home" not in o:
                 o["home"] = tuple(o.location); o["rz"] = o.rotation_euler.z

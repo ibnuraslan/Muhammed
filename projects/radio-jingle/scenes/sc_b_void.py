@@ -124,7 +124,7 @@ def anim(c, t, move):
     if v in BUILDERS:
         return anim_v2(c, t, move)
     if v == "tape":
-        c["reveal"].default_value = ease(min(1.0, max(0.0, (sec - 0.6) / 3.2)))
+        c["reveal"].default_value = 1.0                                       # the lifted print, as found
         mo = c["motes"]; sp = mo.data.vertices
         # whole cloud drifts down slowly and settles: simple per-frame offset of the object, plus a slight sway
         mo.location = (0.004 * math.sin(sec * 0.9), 0.003 * math.cos(sec * 0.7), TZ + 0.01 + max(0.0, 0.18 - 0.05 * sec))
@@ -132,7 +132,7 @@ def anim(c, t, move):
         pass
     else:
         k = 0; acc = 0.0; rate = 1.2 + 4.0 * t * t           # cards per second, accelerating
-        pos = sec * (1.2 + 2.0 * t * t)
+        pos = 0.0                                                             # static pair (no self-sliding cards)
         k = int(pos); f = pos - k
         for i, o in enumerate(c["right"]):
             o.location = (5, 0, -5)
@@ -448,27 +448,22 @@ BUILDERS = {"soil": b_soil, "boxmarks": b_boxmarks, "string": b_string, "timelin
 def anim_v2(c, t, move):
     sec = t * DUR[move]; v = c["variant"]
     if v == "soil":
-        u = ease(min(1.0, max(0.0, (sec - 0.6) / 2.2)))
+        u = 1.0
         cut = c["cut"]; depth = 0.62 * u
         cut.location.z = 1.07 - depth / 2; cut.scale.z = max(0.01, depth / 0.01) * 0.01 / 0.01 if False else 1.0
         cut.dimensions = (0.62, 0.5, max(0.005, depth + 0.02))
-        bz = 1.2 - 0.66 * ease(min(1.0, max(0.0, (sec - 3.0) / 1.6)))
-        c["bx"].location.z = bz; c["bx"].hide_render = sec < 2.9
-        F.show(c["rule"], (sec - 1.6) / 0.4); F.show(c["rod"], (sec - 2.2) / 0.4)
+        c["bx"].location.z = 1.2 - 0.66; c["bx"].hide_render = False
     elif v == "boxmarks":
-        for k, o in enumerate(c["tents"]):
-            F.show(o, (sec - 1.2 - 0.6 * k) / 0.35)
+        pass
     elif v == "string":
         a, b = c["a"], c["b"]
         if move == "string":
-            F.string_sag(c["thread"], a, b, 0.03)
-            F.draw(c["thread"], ease(min(1.0, max(0.0, (sec - 0.8) / 2.6))))
-            c["pb"].hide_render = sec < 0.4
+            F.string_sag(c["thread"], a, b, 0.03); F.draw(c["thread"], 1.0)    # pinned, as the lab connected them
         else:
             F.draw(c["thread"], 1.0)
-            sag = 0.03 + 0.5 * ease(min(1.0, max(0.0, (sec - 0.8) / 1.4)))
+            sag = 0.53                                                      # unpinned: the thread lies slack (static)
             sp = c["thread"].data.splines[0]; n = len(sp.points)
-            slide = ease(min(1.0, max(0.0, (sec - 2.6) / 2.0)))
+            slide = 0.55
             c["bag_b"].location = (0.6 + 0.9 * slide, 0.0, TZ)
             bb = Vector((0.6 + 0.9 * slide, 0.1, TZ + 0.05))
             for i in range(n):
@@ -476,9 +471,8 @@ def anim_v2(c, t, move):
                 p.z = max(p.z, TZ + 0.002)                                 # the slack thread lies on the bench
                 sp.points[i].co = (p.x, p.y, p.z, 1)
     elif v == "timeline":
-        u = ease(min(1.0, max(0.0, (sec - 0.8) / 3.6)))
-        c["marker"].location = (0.26, 26 * 0.24 * u, 0)
-        red = ease(min(1.0, max(0.0, (sec - 4.6) / 1.0)))
+        c["marker"].location = (0.26, 26 * 0.24, 0)                       # the marker stands at 2007
+        red = 1.0
         for b, m, yr in c["blocks"]:
             if yr >= 2008:
                 col = Vector((0.42, 0.33, 0.22)).lerp(Vector((0.55, 0.07, 0.05)), red)
@@ -487,15 +481,15 @@ def anim_v2(c, t, move):
         for r, (reel, bars) in enumerate(c["rows"]):
             reel.rotation_euler.y = -sec * 2.5
             for i, (b, hgt) in enumerate(bars):
-                u = (sec - 0.4 - r * 0.5 - i * 0.03) / 0.25
+                u = 1.0
                 e = ease(max(0.0, min(1.0, u)))
                 h = hgt * e
                 if r == 1 and b is c["peak"][0]:
-                    h *= 1 - 0.45 * ease(min(1.0, max(0.0, (sec - 3.4) / 0.6)))
+                    h *= 0.55
                 b.scale.z = max(0.001, e if not (r == 1 and b is c["peak"][0]) else h / hgt)
                 b.location.z = hgt * b.scale.z / 2
                 b.hide_render = e <= 0
-        F.show(c["ring"], (sec - 4.1) / 0.4)
+        c["ring"].hide_render = True                                         # no line rings (hub rule)
     elif v == "lineup":
         for k, (r, sp) in enumerate(c["recs"]):
             if move == "lineup":
@@ -505,7 +499,7 @@ def anim_v2(c, t, move):
                 off = sec > 1.2 + 0.08 * abs(k - 5) and k != 5
                 sp.data.energy = 0.0 if off else 420.0
                 if k == 5 and c.get("pause_key") is not None:
-                    c["pause_key"].location.z = c["pause_z0"] - (0.006 if sec > 3.6 else 0.0)   # the pause key drops
+                    pass
     elif v == "chain":
         B.label(c, "Court reconstruction")
         pts = c["cable_pts"]
@@ -514,20 +508,22 @@ def anim_v2(c, t, move):
         else:
             u = min(1.0, max(0.0, sec / 6.5))
         i = u * (len(pts) - 1); k = min(len(pts) - 2, int(i)); f = i - k
-        c["bead"].location = pts[k].lerp(pts[k + 1], f) + Vector((0, 0, 0.004))
+        c["bead"].hide_render = True; c["bead_l"].energy = 0.0               # no travelling "signal" object (hub rule)
         loss = 1.0 - 0.6 * u                                            # the signal weakens station by station
         c["bead_m"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 30.0 * loss
-        c["bead_l"].energy = 0.6 * loss
+
         c["blamp"].node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 2.0 * (0.75 + 0.25 * (math.sin(sec * 61) > 0.6))   # the booth tube buzzes
         if move == "clicks":
             for j, (fo, fm) in enumerate(c["flashes"]):
                 tj = 1.2 + 1.6 * j; w = max(0.0, 1 - abs(sec - tj) / 0.35)
-                fm.node_tree.nodes["Principled BSDF"].inputs['Emission Strength'].default_value = 40.0 * w
-                fo.hide_render = w <= 0
+                fo.hide_render = True
+                lk = bpy.data.objects.get(f"StaKey{j + 1}")              # light falls on the station named
+                if lk:
+                    lk.data.energy = 170 * (1 + 4 * w)
         else:
             for fo, fm in c["flashes"]:
                 fo.hide_render = True
     elif v == "exhibits":
         for k, o in enumerate(c["items"]):
-            _drop(o, (sec - 0.6 - 1.35 * k) / 0.5, 0.18)
+            _drop(o, 1.0, 0.0)                                              # all on the table (static)
     bpy.context.view_layer.update()

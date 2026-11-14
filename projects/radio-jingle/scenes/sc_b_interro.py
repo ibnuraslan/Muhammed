@@ -196,9 +196,8 @@ def anim(c, t, move):
     if c.get("still") == "strike":
         import b_fx as F
         for k, ln in enumerate(c["strikes"]):
-            F.draw(ln, (sec - 0.5 - 0.28 * k) / 0.3)
-        u = ease(min(1.0, max(0.0, (sec - 4.0) / 1.2)))
-        c["cover"].rotation_euler = (0, math.radians(-178 * (1 - u)), 0)     # the folder closes over the page
+            F.draw(ln, 1.0)                                                 # already struck through
+        c["cover"].rotation_euler = (0, math.radians(-178), 0)              # folder open beside the page
         bpy.context.view_layer.update(); return
     if c.get("still") == "offer":
         bpy.context.view_layer.update(); return

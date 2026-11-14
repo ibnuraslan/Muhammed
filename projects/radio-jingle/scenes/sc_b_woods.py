@@ -143,14 +143,7 @@ def anim(c, t, move):
     sec = t * DUR[move]
     if move == "wire":                                    # v2 long take: the line draws itself, then its markers land
         import b_fx as FX
-        dw = min(1.0, max(0.0, (t - 0.2) / 0.52))
-        FX.draw(c["wire"], dw)
-        for fl, k in c["flags"]:
-            FX.show(fl, (dw - k) / 0.06)
-        for o in c["tag"]:
-            FX.show(o, (t - 0.55) / 0.06)
-        for i, o in enumerate(c["tents"]):
-            FX.show(o, (t - 0.64 - 0.05 * i) / 0.05)
+        pass                                              # hub rule: nothing appears by itself; the traced line is already marked
     if move == "wire":                                    # the crane starts high under the canopy: open it up there
         bpy.context.scene.view_settings.exposure = c["exp0"] + 0.3 + 0.8 * (1.0 - t)
     P_ = c["P"]
@@ -176,9 +169,7 @@ def anim(c, t, move):
             if key == "man":
                 B.nod(h, 8); h.rot("head", (0, 0, 1), 25 * math.sin(sec * 1.1))            # looking around as he walks
         dman = max(0.0, (sec - 0.3) * speed)
-        for k, fl in enumerate(c["spot_flags"]):
-            reach_d = sum(seg[:k + 1])
-            FX_ = __import__("b_fx"); FX_.show(fl, (dman - reach_d - 0.4) / 0.3)
+        pass                                               # the flags already mark the spots he pointed to
         bpy.context.view_layer.update()
         return
     if c["set"] == "wire":
