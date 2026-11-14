@@ -34,7 +34,7 @@ for ch in ("ch3", "ch4", "ch5"):
     index += [f"## {TITLES[ch]}", "", "| # | Shot | Time | VO | Frame |", "|---|---|---|---|---|"]
     for k, ((s, m, lab, v1id), (_, _, _, sec)) in enumerate(zip(S.CHAPTERS[ch], rows)):
         sid = lab.split(" ")[0]; name = lab[len(sid) + 1:]
-        d = os.path.join(st, f"{s}_{m}_{T}")
+        d = os.path.join(st, f"{s}_{m}_{getattr(S, 'FRAME_T', {}).get((s, m), T)}")
         if os.path.exists(os.path.join(d, "plate.exr")):
             meta = json.load(open(os.path.join(d, "plate.json"))); png = os.path.join(tmp, "g.png")
             grade.grade_file(os.path.join(d, "plate.exr"), png, look="cinematic", exposure=meta["exposure"], cine=meta.get("cine") or None)

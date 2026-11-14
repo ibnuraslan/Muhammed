@@ -51,8 +51,8 @@ CHAPTERS_V1 = {
 # ------------------------------------------------------------------ storyboard v2 (review/STORYBOARD_v2.md)
 # Each chapter has one long hero take (LONG) and short inserts around it. (set, move, label[, v1 label it replaces])
 CHAPTERS = {
-    "ch3": [("b_woods", "wire", "3-1 Wire drawn through the woods (long) + title", "3-1A"),
-            ("b_void", "tape", "3-2A Print surfaces on the tape", "3-2A"), ("b_void", "cards", "3-2B Twenty thousand cards", "3-2B"),
+    "ch3": [("b_woods", "wire", "3-1 The wire through the woods (long) + title", "3-1A"),
+            ("b_void", "tape", "3-2A The lifted print", "3-2A"), ("b_void", "cards", "3-2B Twenty thousand cards", "3-2B"),
             ("b_void", "compare", "3-3A No match", "3-3A"), ("b_village", "distance", "3-3B A few hundred meters", None),
             ("b_workshop", "solder", "3-4A TV repair bench", "3-4A"), ("b_workshop", "letters", "3-4B The letters keep coming", "3-4B"),
             ("b_home81", "game", "3-5A Alibi: the evening passes", "3-5A"), ("b_workshop", "nothing", "3-5B Search: nothing", "3-5B"),
@@ -91,6 +91,7 @@ CHAPTERS = {
 }
 CHANGED = {"3-1", "3-2A", "3-2B", "3-3A", "3-3B", "3-4B", "3-5A", "3-5B", "3-7A", "3-7B", "3-8B", "3-9A", "3-10A", "3-11A", "3-11B",
            "4-1A", "4-2A", "4-2B", "4-4", "4-9B", "4-10A", "4-10B", "4-12B", "4-13B", "4-14", "4-16C", "5-1B", "5-2C", "5-5B", "5-11"}
+FRAME_T = {("b_tvstreet", "tvstreet"): "0.85"}   # storyboard still: mid-shot is inside the window frame
 LONG = {("b_woods", "wire"): 26.0, ("b_void", "chain"): 45.0, ("b_hall", "offhook"): 25.0}
 
 
@@ -210,7 +211,7 @@ ACTION = {
     "3-3A": "The tape print and one record card side by side under one lamp; focus pulls from one to the other: no match.",
     "3-3B": "Dusk aerial over the village: the family house and, down the lane, a second house; the camera travels between them.",
     "3-4B": "The workshop counter with the pile of letters as it stood; slow push-in, the lamp falls on the top envelope.",
-    "3-5A": "Alibi time-lapse: the four players at the board (faceless, high three-quarter), the table clock running 19:30→01:00 as they shift and lean.",
+    "3-5A": "Alibi time-lapse over the board: the table clock runs 19:30→01:00 while the players (seated at the edge of frame, faces out of shot) shift and lean; the pieces stay put.",
     "3-5B": "Morning: the empty evidence carton, flaps closed, on the workshop bench; an officer's torch beam passes over it.",
     "3-7A": "The offer as a still life under the lamp: banded notes, a small colour TV, a spade leaning at the table.",
     "3-7B": "Soil cross-section on black: the hole as found, a folding rule and a rod laid in it, the box outline inside (as described).",

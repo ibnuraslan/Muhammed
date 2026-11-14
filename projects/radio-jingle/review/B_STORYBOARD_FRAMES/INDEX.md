@@ -7,8 +7,8 @@ Frames are quick low-sample stills at mid-shot. v2 = reworked after the referenc
 
 | # | Shot | Time | VO | Frame |
 |---|---|---|---|---|
-| 1 | 3-1 Wire drawn through the woods (long) + title (v2) | 00:00.0–00:29.0 | Investigators eventually trace about a hundred and forty meters of green wire through the trees… views in opposite directions… How it was used that evening remains uncertain. | [ch3_01_3-1.jpg](ch3_01_3-1.jpg) |
-| 2 | 3-2A Print surfaces on the tape (v2) | 00:29.0–00:33.2 | Forensic investigators lift a fingerprint from adhesive tape on the box. | [ch3_02_3-2A.jpg](ch3_02_3-2A.jpg) |
+| 1 | 3-1 The wire through the woods (long) + title (v2) | 00:00.0–00:29.0 | Investigators eventually trace about a hundred and forty meters of green wire through the trees… views in opposite directions… How it was used that evening remains uncertain. | [ch3_01_3-1.jpg](ch3_01_3-1.jpg) |
+| 2 | 3-2A The lifted print (v2) | 00:29.0–00:33.2 | Forensic investigators lift a fingerprint from adhesive tape on the box. | [ch3_02_3-2A.jpg](ch3_02_3-2A.jpg) |
 | 3 | 3-2B Twenty thousand cards (v2) | 00:33.2–00:37.5 | As the inquiry expands, they will compare around twenty thousand fingerprints. | [ch3_03_3-2B.jpg](ch3_03_3-2B.jpg) |
 | 4 | 3-3A No match (v2) | 00:37.5–00:41.7 | They find no match for the print on the tape. | [ch3_04_3-3A.jpg](ch3_04_3-3A.jpg) |
 | 5 | 3-3B A few hundred meters (v2) | 00:41.7–00:45.9 | One name comes up within days of the discovery. Werner Mazurek lives a few hundred meters from the Herrmanns. | [ch3_05_3-3B.jpg](ch3_05_3-3B.jpg) |
