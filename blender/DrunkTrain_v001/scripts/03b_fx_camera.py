@@ -65,7 +65,7 @@ for f_, s_ in ((f_r1 - 9, 1.0), (f_r1 - 6, 0.45), (f_r1 - 4, 0.18), (f_r1 - 2, 0
 XRAY = (f_x0, f_r1)
 for o in LADO.children:
     if o.type == 'MESH' and not o.name.endswith(".body"):
-        hide_in(o, [XRAY])
+        hide_in(o, [(f_x0, f_r0 - 1)])      # v006: clothes, hair and eyes back for the replay
 hide_in(bpy.data.objects["Lad.body"], [(f_r1 - 5, f_r1)])      # v006: body gone for 5 frames only (was 18: 0.3 s of empty studio)     # the replay body leaves while the bubble shrinks; he reappears standing inside it
 
 # ------------------------------------------------------------------ helpers: bone attach + bake to a bone
@@ -224,7 +224,7 @@ add = nt.nodes.new('ShaderNodeAddShader'); nt.links.new(xr_tr.outputs[0], add.in
 mixx = nt.nodes.new('ShaderNodeMixShader'); XVAL = nt.nodes.new('ShaderNodeValue'); XVAL.name = "XRAY"; XVAL.label = "XRAY"
 nt.links.new(XVAL.outputs[0], mixx.inputs['Fac']); nt.links.new(srcs, mixx.inputs[1]); nt.links.new(add.outputs[0], mixx.inputs[2])
 nt.links.new(mixx.outputs[0], outn.inputs['Surface'])
-for f, v in ((1, 0.0), (f_x0 - 10, 0.0), (f_x0 + 2, 1.0), (f_r1, 1.0), (f_r1 + 1, 0.0)):
+for f, v in ((1, 0.0), (f_x0 - 10, 0.0), (f_x0 + 2, 1.0), (f_r0 - 1, 1.0), (f_r0, 0.0)):      # v006: solid again for the replay (a glass-only body on white read as an empty frame)
     XVAL.outputs[0].default_value = v; XVAL.outputs[0].keyframe_insert("default_value", frame=f)
 xr_em.inputs['Color'].default_value = (0.3, 0.75, 1.0, 1)
 ad = bm_.node_tree.animation_data
@@ -606,9 +606,9 @@ CAM = [  # frame, camera, aim, lens
     (1090, V(1.95, -39.2, 1.45), V(3.9, -39.4, 1.2), 20),
     (1113, V(1.8, -40.4, 1.45), V(4.0, -38.4, 1.3), 18),
     (1138, V(1.85, -40.1, 0.95), V(2.62, -41.6, 0.8), 24),
-    (1155, V(1.95, -41.9, 0.32), V(0.6, -40.6, 0.5), 22),
-    (1168, V(0.55, -41.6, 0.36), V(0.48, -40.67, 0.6), 22),
-    (1185, V(1.55, -41.75, 0.62), V(1.0, -40.3, 0.55), 22),      # v006: crosses the rail high, so the rail never sweeps the lens      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
+    (1155, V(1.95, -40.95, 0.34), V(0.6, -40.4, 0.5), 22),      # v006: in the open coupling gap (the loco end is at y -41.1 now)
+    (1168, V(0.55, -40.98, 0.36), V(0.48, -40.4, 0.6), 22),
+    (1185, V(1.55, -40.95, 0.62), V(1.0, -40.2, 0.55), 22),      # v006: crosses the rail high, so the rail never sweeps the lens      # v005: low inside the gauge, in front of him: his face reads at the beat 8 start
     (1200, V(2.95, -41.0, 0.5), V(1.3, -40.0, 0.45), 24),
     (1230, V(3.45, -40.95, 0.9), V(2.2, -40.1, 1.05), 26),
     (1250, V(3.95, -40.6, 1.45), V(2.4, -40.1, 1.45), 28),
@@ -625,7 +625,8 @@ CAM = [  # frame, camera, aim, lens
     (1750, V(rp(1750).x - 1.9, rp(1750).y - 1.8, 1.4), rp(1750), 26),
     (1812, V(rp(1812).x + 1.8, rp(1812).y - 2.0, 1.3), rp(1812), 26),
     (1834, V(rp(1834).x + 1.7, rp(1834).y - 1.8, 1.25), rp(1834), 28),
-    (1846, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
+    (1849, V(rp(1849).x + 1.7, rp(1849).y - 1.8, 1.25), rp(1849), 28),      # v006: stays on the replay body until the bubble collapses (no empty studio)
+    (1852, V(3.0, -42.5, 1.55), V(2.45, -40.4, 1.4), 26),      # v005: in front of him, face readable at the beat 12 start
     (1876, V(3.0, -43.2, 1.6), V(2.4, -41.0, 1.5), 28),
     (1920, V(3.2, -44.0, 1.55), V(2.45, -41.8, 1.45), 28),
     (1985, V(2.95, -44.6, 1.45), V(2.45, -42.85, 1.35), 28),

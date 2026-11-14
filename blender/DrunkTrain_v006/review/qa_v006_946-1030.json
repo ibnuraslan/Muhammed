@@ -1,0 +1,50 @@
+{
+ "frames": {
+  "940": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 5%"
+   ]
+  ],
+  "946": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 6%"
+   ]
+  ],
+  "970": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 14%"
+   ]
+  ],
+  "976": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 2%"
+   ]
+  ],
+  "982": [
+   [
+    "EMPTY",
+    "wall/prop fills the frame, character only 1%"
+   ]
+  ],
+  "994": [
+   [
+    "EMPTY",
+    "no character in view"
+   ]
+  ],
+  "1024": [
+   [
+    "BACKHEAD",
+    "WitA"
+   ]
+  ]
+ },
+ "counts": {
+  "EMPTY": 6,
+  "BACKHEAD": 1
+ }
+}
