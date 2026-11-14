@@ -85,10 +85,9 @@ for side, sx in (("L", 1), ("R", -1)):
         sub = o.modifiers.new("ws", 'WEIGHTED_NORMAL') if False else None
     # steel yoke arms (the metal frame) from the band down both sides of the cup
     for k, dy in enumerate((-1, 1)):
-        y = box("HS_Yoke_%s%d" % (side, k), (0.006, 0.008, 0.075), (sx * (XC0 + 0.02), dy * (R_OUT + 0.006), 0.0325), MM, c="Headset")
+        # v007: yoke arms sit on the outer half of the cup (well clear of the ear and hair); no square top bar
+        y = box("HS_Yoke_%s%d" % (side, k), (0.006, 0.008, 0.075), (sx * (XC1 - 0.012), dy * (R_OUT + 0.006), 0.0325), MM, c="Headset", bevel=0.002)
         y.parent = HS_ROOT
-    y = box("HS_YokeTop_" + side, (0.006, 2 * (R_OUT + 0.006) + 0.008, 0.006), (sx * (XC0 + 0.02), 0, R_OUT + 0.02), MM, c="Headset")
-    y.parent = HS_ROOT
     CUPS[side] = parts
 # band: steel strip + padded cover, an arc from cup top to cup top over the hair
 def band(name, r_in, thick, width, m, z_off=0.0):

@@ -1,0 +1,18 @@
+Hand audit every 2 frames
+TOTAL joint over range=13
+FLAGGED FRAMES 13
+JOINT RANGES elbowL=[57,144], elbowR=[28,144], wristXL=[-79,59], wristXR=[-63,63], wristYL=[-119,50], wristYR=[-34,125], wristZL=[-68,54], wristZR=[-60,53]
+
+f0343  jointL wristX -70 wristZ -37 elbow 142
+f0345  jointL wristX -70 wristZ -37 elbow 142
+f0355  jointL wristX -70 wristZ -37 elbow 141
+f0357  jointL wristX -70 wristZ -37 elbow 142
+f1227  jointL wristX -71 wristZ 36 elbow 134
+f1229  jointL wristX -74 wristZ 35 elbow 128
+f1231  jointL wristX -77 wristZ 35 elbow 123
+f1233  jointL wristX -78 wristZ 35 elbow 117
+f1235  jointL wristX -78 wristZ 34 elbow 111
+f1237  jointL wristX -79 wristZ 34 elbow 106
+f1239  jointL wristX -79 wristZ 33 elbow 102
+f1241  jointL wristX -76 wristZ 33 elbow 98
+f1243  jointL wristX -71 wristZ 32 elbow 95

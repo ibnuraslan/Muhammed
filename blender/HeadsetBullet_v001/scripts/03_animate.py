@@ -46,14 +46,14 @@ def key_hand(s, f, W, d, n, pole):
     pb = FR.PB["Pole_elbow." + s]; nm = "Pole_elbow." + s
     pb.location = FR.rest(nm).to_3x3().inverted() @ (pole - FR.BN[nm].head_local)
     pb.keyframe_insert("location", frame=f, group=nm)
-JW = (0.8, 1.1, 0.8)
+JW = (1.0, 0.95, 0.7)    # v007: base joint carries the curl (no claw)
 def key_fingers(s, f, curl, thumb=18, spread=0.0):
     d, a_, n = (REST_HAND[s].col[i].copy() for i in range(3)); sign = 1 if s == "R" else -1
     for k in range(2, 6):
         c = curl[k - 2] if isinstance(curl, (list, tuple)) else curl
         for j in range(1, 4):
             b = "finger%d-%d.%s" % (k, j, s)
-            sp = Matrix.Rotation(R_(spread * (k - 3.5) * sign * (1 if j == 1 else 0)), 3, n)
+            sp = Matrix.Rotation(R_((spread - 6.0) * (k - 3.5) * sign * (1 if j == 1 else 0)), 3, n)   # v007: fingers together (no starfish fan)
             FR.key_q(b, f, FR.local_q(b, sp @ Matrix.Rotation(R_(c * JW[j - 1] * sign), 3, a_)))
     for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
         b = "finger1-%d.%s" % (j, s)
@@ -116,12 +116,12 @@ T_ROOT = track([(1, (0, 0, 0, 14, 0)), (240, (0, 0.01, 0, 16, 0)), (355, (0.01, 
                 (1400, (0, -0.045, 0.0, 5, 0)), (1460, (-0.01, -0.045, 0.0, 4, 2)), (1500, (-0.01, -0.045, 0.0, 4, 2))])
 T_SPINE = track([(1, (10, 0, 0)), (300, (12, 0, -3)), (420, (8, 2, 4)), (571, (12, 0, 0)), (700, (12, 0, 0)), (708, (6, -8, 6)), (730, (2, -3, 2)),
                  (760, (-4, 0, -6)), (900, (-2, 2, -10)), (1060, (-3, 0, -8)), (1090, (-2, 3, 12)), (1165, (-3, 0, 6)), (1222, (0, 0, 0)),
-                 (1262, (-6, 0, 0)), (1315, (8, 0, 0)), (1410, (4, 0, 4)), (1465, (3, 2, 18)), (1500, (3, 2, 19))])
+                 (1262, (-6, 0, 0)), (1315, (8, 0, 0)), (1410, (4, 0, 4)), (1450, (3, 2, 14)), (1500, (6, 0, -2))])
 T_HEAD = track([(1, (-8, 0, 0)), (120, (-6, 4, 0)), (240, (-10, -2, 0)), (300, (-8, 3, 2)), (360, (-9, -2, 0)), (420, (-7, 5, -2)), (480, (-10, 0, 0)),
                 (571, (-9, -3, 0)), (650, (-9, -2, 0)), (700, (-9, -2, 0)), (704, (-6, -12, -12)), (716, (-4, -7, -6)), (740, (-2, 4, 0)),
                 (770, (-4, 18, 3)), (840, (0, 25, 0)), (950, (2, 30, 4)), (1060, (0, 33, 0)), (1085, (0, 48, 2)), (1140, (2, 42, 2)), (1165, (-4, 18, 0)),
                 (1205, (2, 2, 0)), (1222, (6, 0, 0)), (1245, (12, 0, 0)), (1272, (24, 0, 0)), (1315, (18, -6, 3)), (1360, (6, 0, 0)),
-                (1405, (4, 4, 0)), (1432, (2, 30, 1)), (1458, (0, 50, 2)), (1500, (0, 52, 0))])
+                (1405, (4, 4, 0)), (1425, (2, 42, 1)), (1442, (0, 50, 2)), (1462, (10, -18, 0)), (1500, (14, -34, 0))])
 T_JAW = track([(1, 0), (700, 0), (708, 8), (760, 6), (900, 4), (1085, 10), (1165, 5), (1290, 9), (1330, 15), (1388, 14), (1394, 3), (1402, 3), (1412, 12), (1450, 12), (1500, 11)])
 def breathe(f, amp=1.0, per=150):
     return amp * math.sin(2 * math.pi * f / per)
@@ -144,7 +144,7 @@ def blink(f):
         if b0 <= f <= b0 + ln: v = max(v, math.sin(math.pi * (f - b0) / ln))
     return v
 T_EYE = track([(1, (0, 0)), (300, (4, -2)), (420, (-5, -3)), (571, (3, -2)), (700, (0, -2)), (712, (-8, 4)), (780, (14, 0)),
-               (1085, (24, 2)), (1140, (8, 0)), (1240, (0, -14)), (1320, (0, -10)), (1405, (20, 2)), (1455, (12, 2)), (1500, (6, 2))])
+               (1085, (24, 2)), (1140, (8, 0)), (1240, (0, -14)), (1320, (0, -10)), (1405, (20, 2)), (1442, (12, 2)), (1466, (-8, 6)), (1500, (-6, 4))])
 for f in FRAMES:
     sh = T_SHOCK(f); bl = blink(f); ey, ep = T_EYE(f)
     for s in "LR":
@@ -197,7 +197,7 @@ for f in range(1, F_STARTLE0 + 1, 2):
 def hover(s, f, k):
     tr = Vector((0.003 * math.sin(f * 0.9 + k), 0.002 * math.sin(f * 1.3 + 2 * k), 0.003 * math.sin(f * 1.1 + 3 * k)))
     return tr
-L_UP = Vector((-0.17, 3.16, DESK_Z + 0.22)); R_UP = Vector((0.25, 3.16, DESK_Z + 0.21))   # pulled up toward the chest in shock
+L_UP = Vector((-0.22, 3.30, DESK_Z + 0.21)); R_UP = Vector((0.28, 3.30, DESK_Z + 0.20))   # in front of the chest, not in it   # pulled up toward the chest in shock
 for f in range(F_STARTLE0 + 2, 1166, 3):
     u = smooth((f - F_STARTLE0) / (F_STARTLE1 - F_STARTLE0))
     l0 = Vector((-0.16, 3.29, DESK_Z + 0.100)); r0 = MOUSE0 + M_PATH(700) + Vector((-0.01, -0.09, 0.086))
@@ -208,7 +208,7 @@ for f in range(F_STARTLE0 + 2, 1166, 3):
     dL = Vector((0.25, 1.0, -0.25)).lerp(Vector((0.3, 0.8, 0.4)), u); dR = Vector((-0.05, 1.0, -0.3)).lerp(Vector((-0.3, 0.8, 0.4)), u)
     key_hand("L", f, WL, dL, Vector((0, 0, -1)).lerp(Vector((0.5, 0.3, -0.6)), u), WL + Vector((-0.45, -0.25, -0.2)))
     key_hand("R", f, WR, dR, Vector((0, 0, -1)).lerp(Vector((-0.5, 0.3, -0.6)), u), WR + Vector((0.45, -0.25, -0.2)))
-    sp = 10 * u
+    sp = 2 * u
     key_fingers("L", f, [28 - 18 * u] * 4, 14, spread=sp); key_fingers("R", f, [24 - 14 * u] * 4, 12, spread=sp)
 MOUSE.keyframe_insert("location", frame=701); MOUSE.keyframe_insert("rotation_euler", frame=701)
 
@@ -239,7 +239,7 @@ for f in range(F_REACH0, F_GRAB + 1, 2):
         arc = Vector((sx * 0.10, -0.02, 0.03)) * math.sin(math.pi * u)      # swing out around the head, not past the face
         W = W0.lerp(Wg, u) + arc; d = d0.lerp(dg_, u); n = n0.lerp(ng, u)
         key_hand(s, f, W, d, n, W + Vector((sx * 0.45, -0.1, -0.35)))
-        key_fingers(s, f, [10 + 38 * cl] * 4, 12 + 30 * cl, spread=8 * (1 - cl))
+        key_fingers(s, f, [10 + 38 * cl] * 4, 12 + 30 * cl, spread=2 * (1 - cl))
 # carrier: starts exactly on the head transform at F_GRAB, then lifts, comes down in front of him and turns in his hands
 D0 = head_delta(F_GRAB)
 C0 = D0 @ HEAD_C_REST

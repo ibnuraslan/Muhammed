@@ -203,7 +203,12 @@ for f, v in ((1, 8.0), (F_IMPACT, 8.0), (F_IMPACT + 2, 25.0), (F_IMPACT + 5, 0.5
     eL.default_value = v; eL.keyframe_insert("default_value", frame=f)
 CHIPM = mat("ChipPlastic", (0.035, 0.037, 0.042), 0.35)
 DUSTM = mat("PlasticDust", (0.5, 0.5, 0.52), 0.9)
-def debris(name, n, origin_fn, f0, vel_fn, size, m, floor_fn, life=None, c="FX"):
+_CARRY = {}
+def carry(f):   # v007: impact debris inherits the head's jolt back (first 45 frames), so it never hangs in front of his face
+    f = max(F_IMPACT, min(int(f), F_IMPACT + 45))
+    if f not in _CARRY: _CARRY[f] = (head_delta(f) @ HEAD_C_REST) - (head_delta(F_IMPACT) @ HEAD_C_REST)
+    return _CARRY[f]
+def debris(name, n, origin_fn, f0, vel_fn, size, m, floor_fn, life=None, c="FX", carried=False):
     out = []
     for i in range(n):
         s_ = size * random.uniform(0.5, 1.3)
@@ -219,16 +224,18 @@ def debris(name, n, origin_fn, f0, vel_fn, size, m, floor_fn, life=None, c="FX")
                 v = v + Vector((0, 0, -9.81 * dt)); p = p + v * dt; rot = rot + w * dt
                 if p.z < floor_fn(p) + 0.002: p.z = floor_fn(p) + 0.002; landed = True
             if (f - f0) % 3 == 0 or landed:
-                o.location = p; o.rotation_euler = rot
+                o.location = p + (carry(f) if carried else Vector()); o.rotation_euler = rot
                 o.keyframe_insert("location", frame=f); o.keyframe_insert("rotation_euler", frame=f)
             if landed: break
         out.append(o)
     return out
 NRM_W = (Hs_imp.to_3x3().normalized() @ Vector((0.35, 1, 0))).normalized()   # outward-back from the cup rim
+AWAY = (PI - Hs_imp.translation).normalized()           # from the headset centre out through the hit point: chips fly away from his head
 def chip_vel(i):
-    return (NRM_W * random.uniform(1.0, 3.5) + Vector([random.uniform(-1.6, 1.6) for _ in range(3)]) + Vector((0, 0, 0.6)))
-debris("CupChip", 26, lambda f: PI, F_IMPACT + 1, chip_vel, 0.0035, CHIPM, lambda p: FLOOR_Z)
-debris("CupDust", 30, lambda f: PI, F_IMPACT + 1, lambda i: chip_vel(i) * 0.5, 0.0012, DUSTM, lambda p: FLOOR_Z, life=220)
+    v = NRM_W * random.uniform(1.0, 3.0) + AWAY * random.uniform(0.8, 2.0) + Vector([random.uniform(-0.7, 0.7) for _ in range(3)]) + Vector((0, 0, 0.5))
+    return v if v.dot(AWAY) > 0.3 else v + AWAY * 1.5
+debris("CupChip", 26, lambda f: PI, F_IMPACT + 1, chip_vel, 0.0035, CHIPM, lambda p: FLOOR_Z, carried=True)
+debris("CupDust", 30, lambda f: PI, F_IMPACT + 1, lambda i: chip_vel(i) * 0.5, 0.0012, DUSTM, lambda p: FLOOR_Z, life=220, carried=True)
 
 # ------------------------------------------------------------------ cutaway of the left cup (boolean, cutter parented to the headset)
 CUT = box("Cutaway_Cutter", (0.2, 0.2, 0.1), (0, 0, 0), None, c="FX"); CUT.display_type = 'WIRE'; CUT.hide_render = True
@@ -236,7 +243,7 @@ CUT.parent = HS_ROOT
 CZ = lambda dz: Vector((XC1, 0.0, 0.0045 + 0.05 + dz))
 for f, dz in ((1, 0.08), (818, 0.07), (850, 0.0), (948, 0.0), (972, 0.07)):
     CUT.location = CZ(dz); CUT.keyframe_insert("location", frame=f)
-for nm in ("HS_Shell_L", "HS_Face_L", "HS_Foam_L", "HS_Steel_L", "HS_Driver_L", "HS_Cushion_L", "HS_Yoke_L0", "HS_Yoke_L1", "HS_RGB_L", "HS_Trim_L"):
+for nm in ():   # v007: no cutaway (client: read the strike in a medium close-up; nothing may look stuck in his head)
     o = bpy.data.objects[nm]
     md = o.modifiers.new("Cutaway", 'BOOLEAN'); md.object = CUT; md.operation = 'DIFFERENCE'; md.solver = 'EXACT'
     for f, on in ((1, False), (815, True), (975, False)):
@@ -258,7 +265,7 @@ for f, val in ((1, 0.0), (835, 0.0), (900, 1.0), (949, 1.0), (990, 0.35)):
 cyl_d = bpy.data.lights.new("Cutaway_Cyan", 'AREA'); cyl_d.size = 0.25; cyl_d.color = (0.45, 0.85, 1.0)
 cl = bpy.data.objects.new("Cutaway_Cyan", cyl_d); link(cl, "Lights"); cl.parent = HS_ROOT; cl.location = (XC1 + 0.12, 0.10, 0.20)
 cl.rotation_euler = (Vector((XC1, 0, 0)) - Vector(cl.location)).to_track_quat('-Z', 'Y').to_euler(); cl.visible_camera = False
-for f, e in ((1, 0.0), (820, 0.0), (850, 6.0), (945, 6.0), (975, 0.0)):
+for f, e in ((1, 0.0),):
     cyl_d.energy = e; cyl_d.keyframe_insert("energy", frame=f)
 
 # ------------------------------------------------------------------ ricochet sparks + flash
@@ -272,6 +279,23 @@ for i in range(34):
         o.location = P_RIC + d * sp * k + Vector((0, 0, -0.0000012 * k * k)); o.rotation_quaternion = d.to_track_quat('Z', 'Y')
         s_ = max(0.05, 1 - k / life); o.scale = (s_, s_, 0.4 + 1.5 * s_)
         o.keyframe_insert("location", frame=f0 + k); o.keyframe_insert("rotation_quaternion", frame=f0 + k); o.keyframe_insert("scale", frame=f0 + k)
+# v007: the strike reads as sparks + flash on the ear cup at the impact
+for i in range(40):
+    o = box("ImpactSpark", (0.0008, 0.0008, 0.016), (0, 0, 0), SPM, c="FX"); o.rotation_mode = 'QUATERNION'
+    while True:   # v007: sparks fly away from his head (outward from the cup), never back across the face
+        d = (AWAY * random.uniform(0.5, 0.9) + Vector((0, -0.9, 0.35)) + Vector([random.uniform(-0.5, 0.5) for _ in range(3)])).normalized()
+        if d.dot(AWAY) > 0.2 and d.y < -0.35 and d.z > -0.2: break   # backward (he faces +y) and not down across his neck
+    sp = random.uniform(0.0008, 0.0025); life = random.randint(26, 55); f0 = F_IMPACT + random.randint(0, 4)
+    key_vis(o, [(1, False), (f0, True), (f0 + life, False)]); constant_interp(o)
+    p0 = BPOS[F_IMPACT]
+    for k in range(0, life + 1, 3):
+        o.location = p0 + carry(f0 + k) + d * sp * k + Vector((0, 0, -0.0000015 * k * k)); o.rotation_quaternion = d.to_track_quat('Z', 'Y')
+        s_ = max(0.05, 1 - k / life); o.scale = (s_, s_, 0.4 + 1.5 * s_)
+        o.keyframe_insert("location", frame=f0 + k); o.keyframe_insert("rotation_quaternion", frame=f0 + k); o.keyframe_insert("scale", frame=f0 + k)
+ifl = bpy.data.lights.new("Impact_Flash", 'POINT'); ifl.color = (1.0, 0.75, 0.35); ifl.shadow_soft_size = 0.01
+iflo = bpy.data.objects.new("Impact_Flash", ifl); link(iflo, "Lights"); iflo.location = BPOS[F_IMPACT] + NRM_W * 0.03
+for f, e in ((1, 0), (F_IMPACT - 1, 0), (F_IMPACT + 2, 8.0), (F_IMPACT + 25, 2.0), (F_IMPACT + 60, 0)):
+    ifl.energy = e; ifl.keyframe_insert("energy", frame=f)
 fl = bpy.data.lights.new("Ricochet_Flash", 'POINT'); fl.color = (1.0, 0.6, 0.25); fl.shadow_soft_size = 0.01
 flo = bpy.data.objects.new("Ricochet_Flash", fl); link(flo, "Lights"); flo.location = P_RIC + NRM_W * 0.02
 for f, e in ((1, 0), (F_RIC - 1, 0), (F_RIC + 2, 6.0), (F_RIC + 30, 1.5), (F_RIC + 70, 0)):

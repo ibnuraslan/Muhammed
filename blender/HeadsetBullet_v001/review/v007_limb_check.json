@@ -1,0 +1,2562 @@
+{
+ "frames": {
+  "105": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "107": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "111": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "113": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "125": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "127": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "131": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "133": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "159": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "181": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "183": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "185": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "205": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "239": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "243": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "257": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "263": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "265": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "377": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "379": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "381": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "391": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "393": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "395": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "397": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "399": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "415": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "417": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "419": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "425": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "429": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "433": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "437": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "443": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "445": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "447": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "449": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "451": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "453": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "475": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "481": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "491": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "493": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "495": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "497": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "513": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "517": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "519": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "521": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "523": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "525": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "531": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "533": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "535": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "539": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "545": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "547": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "551": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "555": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "557": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "559": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "569": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "573": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "577": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "579": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "581": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "591": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "593": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "595": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "597": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "601": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "605": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "607": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "611": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "623": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "639": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "651": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "661": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "699": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "701": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "715": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "721": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "723": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "725": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "727": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "731": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "737": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "743": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "747": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "749": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "757": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "761": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "763": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "765": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "767": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "769": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "771": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "773": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "775": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "777": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "779": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "781": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "783": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "785": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "787": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "789": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "791": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "793": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "807": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "811": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "813": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "817": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "823": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "825": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "829": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "831": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "833": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "835": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "837": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "839": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "841": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "843": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "845": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "847": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "851": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "855": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "863": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "867": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "871": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "873": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "885": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "901": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "905": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "909": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "911": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "913": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "915": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "927": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "929": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "931": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "937": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "939": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "941": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "943": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "949": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "951": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "959": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "977": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "989": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "995": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "997": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "999": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1001": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (3 pts)"
+   ]
+  ],
+  "1003": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (3 pts)"
+   ]
+  ],
+  "1005": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1007": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1009": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1011": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1013": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1015": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1017": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1019": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1021": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1023": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1025": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1027": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1029": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1031": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1033": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1035": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1037": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1039": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1041": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1043": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1045": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1047": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1049": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1051": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1053": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1055": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1057": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1059": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1061": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1065": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1067": [
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1071": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1073": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1075": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1077": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (14 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (3 pts)"
+   ]
+  ],
+  "1079": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1081": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (16 pts)"
+   ]
+  ],
+  "1083": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1085": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1087": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1089": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (12 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1091": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1093": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (11 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1095": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (12 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1097": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1099": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1101": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1103": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1105": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1107": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1109": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1111": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1113": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1115": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1117": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1119": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1121": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1123": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1125": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1127": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1129": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (11 pts)"
+   ]
+  ],
+  "1131": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1133": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (14 pts)"
+   ]
+  ],
+  "1135": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (13 pts)"
+   ]
+  ],
+  "1137": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (12 pts)"
+   ]
+  ],
+  "1139": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (3 pts)"
+   ]
+  ],
+  "1141": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_RGB_R inside Teen's head/face (11 pts)"
+   ]
+  ],
+  "1143": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1145": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (3 pts)"
+   ]
+  ],
+  "1147": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1149": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1151": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ]
+  ],
+  "1153": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1155": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1161": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1163": [
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1165": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1167": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1169": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1171": [
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1175": [
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1181": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1183": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1205": [
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1209": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1211": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1213": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1215": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1217": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1219": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1221": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (2 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1223": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (5 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (6 pts)"
+   ]
+  ],
+  "1225": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_L inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Cushion_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (7 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_L inside Teen's head/face (5 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_R inside Teen's head/face (5 pts)"
+   ]
+  ],
+  "1227": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_R inside Teen's head/face (2 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Yoke_R1 inside Teen's head/face (6 pts)"
+   ]
+  ],
+  "1229": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Driver_L inside Teen's head/face (3 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Foam_L inside Teen's head/face (5 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Steel_L inside Teen's head/face (6 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Yoke_L1 inside Teen's head/face (4 pts)"
+   ]
+  ],
+  "1231": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ],
+   [
+    "PROPHEAD",
+    "HS_Shell_R inside Teen's head/face (2 pts)"
+   ]
+  ],
+  "1233": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1235": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1237": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1239": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1241": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (6 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (6 pts)"
+   ]
+  ],
+  "1243": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1245": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1247": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (4 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (4 pts)"
+   ]
+  ],
+  "1249": [
+   [
+    "ARMBODY",
+    "Teen arm.L inside own torso (3 pts)"
+   ],
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1251": [
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1253": [
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (3 pts)"
+   ]
+  ],
+  "1255": [
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1257": [
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1259": [
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1261": [
+   [
+    "ARMBODY",
+    "Teen arm.R inside own torso (2 pts)"
+   ]
+  ]
+ },
+ "counts": {
+  "PROPHEAD": 417,
+  "ARMBODY": 89
+ }
+}

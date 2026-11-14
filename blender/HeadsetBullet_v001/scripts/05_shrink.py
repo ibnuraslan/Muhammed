@@ -17,16 +17,13 @@ for im in list(bpy.data.images):
         if im.size[0] > 1024: im.scale(1024, 512)
         p = os.path.join(TMP, base + ".hdr"); fmt = 'HDR'
     else:
-        alpha = im.channels == 4 and any(k in im.name.lower() for k in ("alpha", "leaves", "branch", "eyelash", "brow", "hair", "short02"))
+        alpha = im.channels == 4 and any(k in im.name.lower() for k in ("alpha", "leaves", "branch", "eyelash", "brow", "hair", "short02")) and not any(k in im.name.lower() for k in ("nor", "rough"))   # alpha cards stay PNG; their normal/rough maps go JPEG
         p = os.path.join(TMP, base + (".png" if alpha else ".jpg")); fmt = 'PNG' if alpha else 'JPEG'
-    sc = bpy.context.scene.render.image_settings
-    im.filepath_raw = p; im.file_format = fmt
-    s = bpy.context.scene
-    s.render.image_settings.file_format = fmt
-    if fmt == 'JPEG': s.render.image_settings.quality = 92
-    if fmt == 'PNG': s.render.image_settings.color_depth = '8'; s.render.image_settings.compression = 90
+    # raw pixels, alpha kept: Image.save writes the image's own data (no view transform, no alpha loss).
+    # (v002-v006 used save_render, which dropped alpha -> black hair/brow/lash cards, and baked in the AgX look.)
     cs = im.colorspace_settings.name
-    im.save_render(p, scene=s)
+    im.file_format = fmt
+    im.save(filepath=p, quality=92)
     if im.packed_file: im.unpack(method='REMOVE') if False else None
     im.filepath = p; im.source = 'FILE'; im.reload(); im.colorspace_settings.name = cs
     n += 1
