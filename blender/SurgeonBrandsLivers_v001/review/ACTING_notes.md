@@ -1,31 +1,41 @@
-# SurgeonBrandsLivers v008b: held tools (client reject, Nov 13)
+# SurgeonBrandsLivers v008d: fixes from the director's moving preview of v010 (= v008c synced)
 
-v008b is v008 (32d7716, approved) plus a tool-grip fix only. Beat frames are unchanged (1/301/565/637/781/1045/1231/1501, end 1710). No VO.
+v008d is the approved v008c plus `13_preview_fixes.py` and the camera keys in `04_camera.py`.
+- Beat frames are unchanged (1/301/565/637/781/1045/1231/1501, end 1710). No VO.
+- I mapped the synced times back to my frames by matching the camera path (v010 frame → v008c frame).
 
-## Client notes
-| Note | Fix |
-|---|---|
-| The pen-shaped cautery tool is not held; it balances on open fingertips | `10_tool_grip.py`: the hand drives the tool. The fingers are `hand_poses` pinch (thumb and index close on the barrel, middle under it). The ring and little fingers curl with the middle (`11_pen_fan.py`, no fan). The pen's seat in the hand is measured from the evaluated pose (barrel through the thumb–index pinch, running back over the web). The pen is baked **every frame from the evaluated wrist**, so there's no gap and it never moves on its own. |
-| The back end runs into his face, through the mask | Each frame, the hand is rotated only as far as needed to swing the barrel back over the hand toward his right-shoulder side. The tip stays exactly on its path (0.0 cm off: the incision and the letters). The barrel stays at least **23.2 cm from the head centre**, so more than 10 cm clear of his face and mask. |
-| Limits before the solve | `add_hand_limits` is applied in `07_hands.py`, which runs before `10_tool_grip.py`. The grip is solved with the limits on. |
-| Putting it down | The hand carries the pen to the instrument tray (300–312) and lets go. It lies still there afterwards. |
+| Director note (synced time) | My frames | Fix |
+|---|---|---|
+| ~10.75 s fully BLACK frame | 638–640 | The snapped camera sat inside the calendar's paper, then behind the home picture frame on the other side of the wall. The picture now hangs 0.8 m along the wall, and the camera's near stop is in front of the calendar. Now one wall/calendar wipe frame. |
+| ~17.5–19 s hands with no arms, empty glove | 1040–1200 | Cut to the liver alone: the glove hands are hidden from 311 on and the liver is held still (no prop moving by itself). The SB liver reads alone in the light. |
+| 2.25 s, 3.75 s, 12.5 s, 19 s, 19.75 s blur / empty wall | 145, 240, 1060, 1177, 1234 | The studio dives (in at 133 and 1057, out at 275 and 1175) are now clean cuts, with no membrane or skin fill frames. Macro shots are pulled back. The whip at 1231 passes the anaesthetist before the wall. The home→OR wall pass at 774 is one frame. 12.5 s maps to the home shot (my 745), which reads (person in frame). |
+| ~5.25–5.75 s giant glove | 330–358 | The camera is pulled back and up (z 1.62, 30 mm), so the hands and the stitched incision read. |
+| ~3 s ghost oval with an arc | 192–196 | The translucent smoke puffs (`Smoke_*`) are removed. The arc was the glowing burn trail of the S, now seen clean. |
+| Writing glove with no arm (same fault, studio 100–310) | 100–310 | The writing hand now has its nitrile forearm, entering from the frame edge. The studio macro cameras moved left of the arm so it doesn't cross the lens. |
 
-Held tools checked the same way (strip `v008b_held_tools_540x960.jpg`, every 30 frames per held range):
-- OR pen, Surgeon1.R, 1–312
-- studio pen, GloveHands.R, 1–300 (tip 0.0 cm off its path, barrel ≥ 38 cm from the head)
-- needle driver, Surgeon1.R, 318–458 (pinch on the rings, from v008)
-- mug, 601–661
-- glove cuff, 990–1016
-- gavel, 1480–1710
-- stamp, 1556–1650
+Found while watching the preview, also fixed:
+- 776 black frame: the camera is already in the OR on 776.
+- 1176–1196: Surgeon2 shot low and to the side, so his face reads under his cap.
+- 1446: faster pan (no empty side wall).
+- 1578: a key keeps the judge in frame.
+- 318: no shirt fill.
 
-## Checks (packed file)
-- `clip_scan.py`: 0 bad ranges.
-- `qa_check.py`, newest version (8c76d71):
-  - CLAW 0, FAN 0, FACEPRESS 0, BACKHEAD 0.
-  - HOVER 4: the patient's hand under the drape while the camera is in the hearing room; not visible.
-  - The remaining flags are listed below.
-- CAMJUMP 12: the texture wipes that were already approved: the dive into the window and the studio (138, 278, 1060, 1183, the 6.4 m studio drop), the calendar (639), the home wall (773), the whips (570, 1232), and the dive moves (283, 286, 1057, 1058).
-- PROPMOVE 11: the burn sparks and smoke (effects, not props) and the mug falling after she drops it (673). One more, 577, is from v008 and wasn't checked in this pass.
-- ATTACH 40: the newest version checks whether masks sit on the skin. All five surgical masks sit about 2 cm out, as fitted since v002. This pass didn't change the masks.
-- EMPTY / FILL / INSIDE: unchanged from v008 (the intended wipes and the studio macro, listed in the v008 notes).
+## Checks on the packed file
+- **clip_scan: 0 bad ranges.**
+  - Frame 325 was new on camera: the surgeon's forearm was inside the patient's hidden torso under the drape.
+  - On the OR table she now sits 7 cm lower. Her face mask, neck towel and tube go down with her.
+  - Her head still rests on the table.
+- **limb_check (director 9a0a692):** ARMBODY 874, PROPHEAD 228, ARMBACK 1.
+  - ARMBODY: 721 of the hits are only the first 2–3 points of the upper arm, inside the shoulder/deltoid mass (the shoulder joint, classed as torso).
+  - The rest I checked in side renders: the anaesthetist's hanging arm, the nurse reaching for the drape and pushing the bed, Surgeon1's pen arm across his chest, and Surgeon2's glove snap. The arms hug the torso but read outside it.
+  - PROPHEAD: the anaesthesia mask cone and rim on the patient's face, and the neck towel round her neck. Intended contacts.
+  - ARMBACK 1: one frame of the anaesthetist at 775 (transit).
+- **qa_check (newest):**
+  - CLAW 2 and HOVER 14: the patient's hands under the drape and in the OR while the camera is elsewhere. Not visible.
+  - CAMJUMP 7: the four studio cuts, the calendar wipe, the home wall wipe and the whip.
+  - PROPMOVE 33: the burn sparks (effects) and the mug falling after it's dropped.
+  - ATTACH 39: masks sit about 2 cm off the skin, as fitted.
+  - EMPTY 44 / FILL 2: the liver-alone studio shots (no character in the set by design) and the single-frame wipes.
+
+## Moving preview
+`v008d_preview_every5th_270x480.mp4`: every 5th frame, 270×480, Cycles 4 samples + denoise, 342 frames, 28.5 s at 12 fps. I watched it start to finish (all 342 frames).
