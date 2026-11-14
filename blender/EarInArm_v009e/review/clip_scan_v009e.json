@@ -1,0 +1,50 @@
+{
+ "frames": {
+  "127": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "133": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 17
+   }
+  },
+  "1327": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 1
+   }
+  },
+  "1333": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 7
+   }
+  },
+  "1363": {
+   "Surgeon": {
+    "self": 0,
+    "clothes": 0,
+    "other": 21
+   }
+  },
+  "1399": {
+   "Surgeon": {
+    "self": 2,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}
