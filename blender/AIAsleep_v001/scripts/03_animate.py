@@ -230,7 +230,9 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (120,  V((0.32, -0.42, 1.20)), FACE, 28),
  (180,  V((0.08, -0.72, 1.14)), FACE, 24),
  (234,  V((-0.06, -0.44, 1.27)), FACE, 35),
- (270,  V((-0.28, -0.40, 1.24)), SCR, 22),
+ (243,  V((-0.06, -0.44, 1.27)), FACE, 35),
+ (251,  V((-0.28, -0.40, 1.24)), SCR, 22),
+ (270,  V((-0.29, -0.40, 1.24)), SCR, 22),
  (335,  V((-0.40, -0.40, 1.16)), V((-0.25, -0.62, 0.98)), 22),
  (372,  V((-0.60, -0.32, 1.24)), FACE, 26),
  (414,  V((-0.76, -0.08, 1.24)), V((0, -0.3, 1.0)), 18),
@@ -243,17 +245,22 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (780,  V((-0.26, -0.50, 1.12)), FACE, 26),
  (840,  V((-0.24, -0.45, 1.20)), FACE, 30),
  (930,  V((-0.22, -0.42, 1.35)), EYE, 40),
- (958,  V((-0.26, -0.47, 1.25)), SCR, 30),
+ (937,  V((-0.22, -0.42, 1.35)), EYE, 40),
+ (946,  V((-0.26, -0.47, 1.25)), SCR, 30),
+ (958,  V((-0.265, -0.47, 1.25)), SCR, 30),
  (990,  V((-0.29, -0.49, 1.24)), SCR, 32),
  (1030, V((-0.36, -0.53, 1.24)), SCR, 32),
- (1055, V((-0.44, -0.40, 1.15)), FACE, 34),
+ (1037, V((-0.36, -0.53, 1.24)), SCR, 32),
+ (1048, V((-0.44, -0.40, 1.15)), FACE, 34),
+ (1055, V((-0.44, -0.405, 1.15)), FACE, 34),
  (1080, V((-0.40, -0.46, 1.14)), FACE, 40),
  (1140, V((-0.30, -0.34, 1.19)), FACE, 36),
  (1175, V((-0.40, -0.20, 1.22)), FACE, 32),
  (1220, V((-0.46, -0.30, 1.22)), V((-0.08, -0.40, 1.10)), 22),
  (1302, V((-0.42, -0.18, 1.32)), V((0, -0.3, 0.9)), 20),
  (1318, V((-1.10, -0.15, 1.22)), FACE, 20),
- (1340, V((-1.95, 0.05, 1.32)), CAR, 20),
+ (1340, V((-2.30, 0.00, 1.40)), CAR, 20),
+ (1370, V((-2.80, 3.50, 2.60)), CAR, 22),
  (1400, V((-1.6, 9.5, 4.2)), CAR, 24),
  (1432, V((4.2, 2.5, 3.2)), CAR, 26),
  (1464, V((3.6, -7.8, 1.9)), CAR, 28),
@@ -273,8 +280,8 @@ SHOTS = [  # frame, camera position, aim point, focal length
  (2260, EYE + V((-0.006, -0.080, 0.003)), EYE, 40),
  (2350, EYE + V((-0.002, -0.070, 0.000)), EYE, 40),
  (2448, EYE + V((-0.030, -0.075, 0.006)), EYE + V((0.002, 0, 0)), 35),
- (2470, EYE + V((-0.02, -0.16, 0.01)), EYE, 40),
- (2510, V((-0.12, -0.46, 1.22)), FACE, 35),
+ (2486, EYE + V((-0.030, -0.075, 0.006)), EYE + V((0.002, 0, 0)), 35),
+ (2493, V((-0.12, -0.46, 1.22)), FACE, 35),
  (2535, V((-0.48, -0.42, 1.24)), FACE, 28),
  (2562, V((-0.50, -0.52, 1.22)), FACE, 28),
  (2588, V((-0.40, 0.55, 1.18)), FACE, 24),
@@ -290,7 +297,7 @@ def fcs(idb):
     except AttributeError:
         return [fc for l in ad.action.layers for s in l.strips for cb in s.channelbags for fc in cb.fcurves]
 # face -> screen pans (aim swings ~180 deg): route the aim sideways through the passenger side, never under the camera
-for fx in (252, 944):
+for fx in (247, 941, 1041):
     sc.frame_set(fx); p_ = cam.matrix_world.translation.copy()
     aim.location = p_ + Vector((-0.30, -0.02, -0.08)); aim.keyframe_insert("location", frame=fx)
     cam.location = p_; cam.keyframe_insert("location", frame=fx)
@@ -300,7 +307,7 @@ for idb in (cam, aim, camd):
 for fc in fcs(mover):
     for kp in fc.keyframe_points: kp.interpolation = "LINEAR"
 camd.dof.use_dof = True; camd.dof.focus_object = aim; camd.dof.aperture_fstop = 4.0
-for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 16.0), (1760, 18.0), (2448, 18.0), (2500, 4.0)): K(camd.dof, "aperture_fstop", f, v)
+for f, v in ((1, 4.0), (840, 4.0), (870, 9.0), (960, 9.0), (990, 4.0), (1640, 5.6), (1690, 16.0), (1760, 18.0), (2486, 18.0), (2493, 5.6)): K(camd.dof, "aperture_fstop", f, v)
 sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.5
 # ---------------- look fixes: dark brown irises, black hair, warmer skin
 eg = next(n for n in bpy.data.materials["Driver.high-poly"].node_tree.nodes if n.type == "GROUP")

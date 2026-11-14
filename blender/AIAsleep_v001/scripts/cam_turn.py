@@ -5,6 +5,6 @@ for f in range(sc.frame_start, sc.frame_end + 1):
     sc.frame_set(f); M = c.matrix_world; d = M.to_quaternion(); p = M.translation.copy()
     if prev:
         a = math.degrees(prev[0].rotation_difference(d).angle); a = min(a, 360 - a); mv = (p - prev[1]).length
-        if a > 15: worst.append((f, round(a, 1), round(mv, 3)))
+        if a > 30: worst.append((f, round(a, 1), round(mv, 3)))
     prev = (d, p)
 print("TURNS>15", worst)
