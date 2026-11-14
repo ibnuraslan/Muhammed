@@ -50,5 +50,5 @@ Story-beat frames (beats.json) are unchanged in v005.
 |---|---|---|
 | 150–220 and every later fish shot | Fish hovering 5–9 cm above the sand (shadow apart from the fish) | They rest on the sand (side down); hops 3–7 cm |
 | 660–735, 1066–1086 | Blown-out beige glare from the sun on the wet sand reads as a blur | Wet roughness 0.55, specular 0.3 |
-| 911–934 | Cross-section diorama seen from outside as a tilted box in a grey void | Camera goes in one frame at 15.15 s (frame 910) to the beat-7 beach view and holds until 15.6 s |
-| 936 | Dark frame: camera under the sea floor | Same fix: the camera never passes under the sea floor |
+| 911–934 | Cross-section diorama seen from outside as a tilted box in a grey void | Camera holds the level cross-section view from 15.0 s (frame 901) |
+| 936 | Dark frame: camera under the sea floor | At 15.6 s (frame 937, beat 7) the camera goes to the beach in one frame; the diorama hides and the hero wave appears on that same frame (first v006 build showed the wave popping in 0.4 s after the cut, fixed) |

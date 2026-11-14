@@ -159,9 +159,9 @@ for t in list(np.arange(15.6, 21.06, 0.25)) + [21.05]:
     hero.location = (0, wave_y(t), 0); hero.keyframe_insert("location", frame=F(t))
 for fc in _fcurves(hero.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'LINEAR'
-key_hide(hero, [(1, True), (F(15.62), False), (F(21.06), True)])
+key_hide(hero, [(1, True), (F(15.6), False), (F(21.06), True)])
 for nm_ in ("Wave", "WaveSpray"):
-    key_hide(bpy.data.objects[nm_], [(F(15.62), True), (F(21.06), False)])
+    key_hide(bpy.data.objects[nm_], [(F(15.6), True), (F(21.06), False)])
 hn = bpy.data.materials["M_HeroWave"].node_tree.nodes["HN"].inputs["W"]
 for t, w_ in ((15.6, 0), (21.1, 4)):
     hn.default_value = w_; hn.keyframe_insert("default_value", frame=F(t))
@@ -341,7 +341,7 @@ op_ = bpy.data.objects["D_OceanPlate"]; os_ = bpy.data.objects["D_OceanSed"]
 for o_ in (op_, os_):
     l_ = o_.location.copy(); key_tr(o_, F(14.35), loc=tuple(l_)); key_tr(o_, F(14.55), loc=(l_.x, l_.y + 0.4, l_.z - 0.35)); key_tr(o_, F(15.6), loc=(l_.x, l_.y + 0.45, l_.z - 0.35))
 for nm_ in ("D_PulseSea", "D_PulseShore"):
-    key_hide(bpy.data.objects[nm_], [(1, True), (F(14.55), False), (F(15.56), True)])
+    key_hide(bpy.data.objects[nm_], [(1, True), (F(14.55), False), (F(15.6), True)])
 for t, bu, sa in ((13.0, 0, 0), (14.3, 0, 0), (14.6, 1, 0), (15.0, 0.6, 0.4), (15.6, 0.0, 1.0)):
     kbw["Bulge"].value = bu; kbw["Bulge"].keyframe_insert("value", frame=F(t))
     for k in ("SplitA", "SplitB"):
@@ -410,9 +410,9 @@ dust = bpy.data.objects["DustVolume"]; key_hide(dust, [(1, True), (F(30.4), Fals
 bowl_hide = [o for o in bpy.data.collections["Diorama"].objects]
 for o in bowl_hide:
     if o.name.startswith(("D_Chunk_1", "D_ShockRing", "D_Pulse")):
-        if o.name.startswith("D_Chunk_1"): key_hide(o, [(F(15.56), True)])
+        if o.name.startswith("D_Chunk_1"): key_hide(o, [(F(15.6), True)])
         continue
-    key_hide(o, [(1, True), (F(12.4), False), (F(15.56), True)])
+    key_hide(o, [(1, True), (F(12.4), False), (F(15.6), True)])
 for o in bpy.data.objects:   # clear the camera's path through the beach furniture at 18-20 s
     if o.name.startswith(("Umbrella_", "Lounger_")) and abs(o.location.x - 15) < 2.5:
         bpy.data.objects.remove(o, do_unlink=True)

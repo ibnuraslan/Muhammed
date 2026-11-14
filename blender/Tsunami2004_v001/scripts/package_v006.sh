@@ -13,6 +13,9 @@ rm -f /home/user/Muhammed/blender/Tsunami2004_v006/Tsunami2004_v006_60fps.blend1
 $B -b --factory-startup "$OUT"/Tsunami2004_v006_60fps.blend --python-expr "import bpy;print('UNPACKED',[i.name for i in bpy.data.images if i.source=='FILE' and not i.packed_file]);print('CAMS',[o.name for o in bpy.data.objects if o.type=='CAMERA']);print('FMT',bpy.context.scene.render.image_settings.file_format)" > /tmp/claude-0/vf6.log 2>&1
 $B -b "$OUT"/Tsunami2004_v006_60fps.blend --python ../pipeline/qa_check.py -- $PWD/review/qa_v006.json 6 "$OUT"/beats.json > /tmp/claude-0/qa6.log 2>&1
 echo PACKED
-rm -rf /tmp/claude-0/P6 && mkdir -p /tmp/claude-0/P6 && $B -b "$OUT"/Tsunami2004_v006_60fps.blend --python ../pipeline/preview.py -- /tmp/claude-0/P6 5 > /tmp/claude-0/p6.log 2>&1
-bash ../pipeline/watch_pages.sh /tmp/claude-0/P6 5
-echo V006_DONE
+# preview: frames 1-895 and 961-1061 were rendered from the first v006 build (seeded, identical outside the 15.15-15.6 s change);
+# re-render 896-960 and the rest from this package
+for r in "886 960" "1086 2400"; do set -- $r
+  $B -b "$OUT"/Tsunami2004_v006_60fps.blend --python-expr "import bpy;s=bpy.context.scene;s.frame_start=$1;s.frame_end=$2" --python ../pipeline/preview.py -- /tmp/claude-0/P6 5 >> /tmp/claude-0/p6.log 2>&1
+done
+echo PREVIEWED
