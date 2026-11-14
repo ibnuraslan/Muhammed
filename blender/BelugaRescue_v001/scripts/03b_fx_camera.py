@@ -183,15 +183,15 @@ K(1660, PEL(1660) + V(-1.8, 0.3, -0.6), CH(1660), 26)
 # beat 10 — her face, racing alongside, up into the light
 K(1720, H_(1720) + V(0.5, 0.8, -0.5), H_(1720), 38)
 K(1775, H_(1775) + V(1.3, 1.0, 0.0), H_(1775), 32)
-K(1840, H_(1840) + V(1.4, 0.7, -0.3), H_(1840) + V(0, 0, 0.3), 26)
+K(1840, H_(1775) + V(1.5, 0.9, 0.9), H_(1840) + V(0, 0, 0.1), 26)      # camera holds while she rises past it (no frozen hang)
 # beat 11 — below the surface looking up, burst out, circle the splash
-K(1893, V(X0 + 1.2, -3.1, 5.55), H_(1893) + V(0, 0, 0.3), 24)
-K(1925, V(X0 - 0.8, -2.6, 6.45), H_(1925), 32)
-K(1965, V(X0 - 1.0, -2.0, 6.9), H_(1965), 36)
+K(1893, H_(1893) + V(1.3, 1.4, -0.35), H_(1893) + V(0, 0, 0.2), 24)      # in front of her, below head height (no top of head)
+K(1925, H_(1925) + V(-0.2, 1.5, 1.6), H_(1925) + V(0, 0.6, -0.25), 30)      # top-down like the coping shots: no deck people cut by the frame
+K(1965, H_(1965) + V(-0.2, 1.4, 1.8), H_(1965) + V(0, 0.6, -0.25), 32)
 K(2010, H_(2010) + V(-0.2, 1.35, 1.9), H_(2010) + V(0, 0.6, -0.25), 32)      # steep top-down: no deck people cut by the frame
 # beat 12 — face at the edge, rise and pull back to reveal everything
-K(2075, H_(2075) + V(-0.2, 1.3, 1.8), H_(2075) + V(0, 0.55, -0.2), 32)
-K(2100, H_(2100) + V(1.2, 3.0, 2.5), H_(2100) + V(0, -0.9, 0.7), 26)      # wide and high early: deck people in full, never cut at the waist
+K(2080, H_(2080) + V(-0.2, 1.3, 1.8), H_(2080) + V(0, 0.55, -0.2), 32)
+K(2092, H_(2092) + V(1.2, 3.0, 2.5), H_(2092) + V(0, -0.9, 0.7), 26)      # wide and high early: deck people in full, never cut at the waist
 K(2130, H_(2130) + V(1.4, 3.0, 2.4), H_(2130) + V(0, -0.9, 0.7), 26)
 K(END, H_(END) + V(2.0, 4.3, 2.8), H_(END) + V(-0.4, -1.0, 0.3), 26)
 FR.sort(key=lambda x: x[0])
