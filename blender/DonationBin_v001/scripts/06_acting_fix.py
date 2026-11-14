@@ -110,9 +110,10 @@ FALL = [  # f, pos, yaw, flex, side, spine, feet-delta, hand-delta L, R      (th
     (166, (0.0, -0.98, RH + 0.10), 180, 40, 0, (25, 0, 0), (0, 0.05, 0.10), (-0.05, -0.25, 0.45), (0.05, -0.25, 0.45)),
     (182, (0.0, -0.86, RH + 0.42), 180, 72, 5, (20, 0, 0), (0, 0.10, 0.25), (0.05, -0.35, 0.65), (-0.05, -0.35, 0.65)),
     (200, (0.0, -0.62, 1.34), 180, 92, 6, (8, 0, 0), (0, 0.02, 0.0), (0.10, -0.30, 0.70), (-0.10, -0.30, 0.70)),
-    (212, (0.01, -0.30, 1.32), 178, 100, 6, (4, 0, 0), (0, 0.02, 0.0), (0.12, -0.30, 0.65), (-0.12, -0.30, 0.65)),
-    (224, (0.02, 0.05, 1.22), 172, 110, 8, (0, 0, 0), (0, 0.02, 0.0), (0.15, -0.25, 0.55), (-0.15, -0.25, 0.55)),
-    (236, (0.04, 0.15, 1.05), 165, 145, 10, (-5, 0, 0), (0, 0.0, 0.10), (0.12, -0.20, 0.40), (-0.12, -0.15, 0.40)),
+    (212, (0.01, -0.36, 1.30), 178, 100, 6, (4, 0, 0), (0, 0.04, 0.04), (0.12, -0.30, 0.65), (-0.12, -0.30, 0.65)),
+    (224, (0.02, -0.16, 1.24), 174, 112, 8, (0, 0, 0), (0, 0.10, 0.15), (0.14, -0.28, 0.55), (-0.14, -0.28, 0.55)),
+    (234, (0.03, -0.08, 1.12), 168, 128, 10, (-5, 0, 0), (0, 0.25, 0.40), (0.12, -0.22, 0.45), (-0.12, -0.20, 0.45)),
+    (244, (0.05, 0.02, 0.98), 160, 160, 10, (-5, 0, 0), (0, 0.25, 0.40), (0.10, -0.18, 0.40), (-0.10, -0.16, 0.40)),
 ]
 for f, pos, yaw, fl, sd, spn, fd, hl, hr in FALL:
     WO.pose(f, pos, yaw=yaw, flex=fl, side=sd, sp=spn, head=(-15, 0), hands={"L": ("r", hl), "R": ("r", hr)},
@@ -150,10 +151,10 @@ def back_lie(f, dz=0.0, sit=0.0, sp=(8, 0, 0), head=(10, 0), hands=None, knee=1.
             sx = 1 if s == "L" else -1
             kn = WOo.matrix_world @ WOo.pose.bones["lowerleg01." + s].head
             WO.key_hand(s, f, kn + Vector((0, 0, 0.11)) + lat(yaw) * (0.05 * sx), LG, PALM_DOWN, pole=kn + lat(yaw) * (0.60 * sx) - LG * 0.30 + Vector((0, 0, 0.25)))   # elbows out, arms clear of her sides
-WO.pose(252, (0.06, -0.06, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
+WO.pose(252, (0.06, 0.10, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
         hands={"L": ("r", (0.10, -0.12, 0.30)), "R": ("r", (-0.10, -0.12, 0.30))},
         feet={"L": ("r", (0, -0.25, 0.40), -10), "R": ("r", (0, -0.20, 0.32), -10)}, curl={"L": 0.2, "R": 0.2})
-WO.pose(266, (0.07, 0.0, 0.62), yaw=138, flex=245, side=5, sp=(30, 0, 0), head=(30, 0),
+WO.pose(266, (0.07, 0.08, 0.62), yaw=138, flex=245, side=5, sp=(30, 0, 0), head=(30, 0),
         hands={"L": ("r", (0.12, -0.10, 0.22)), "R": ("r", (-0.12, -0.10, 0.22))},
         feet={"L": ("r", (0, -0.35, 0.45), -10), "R": ("r", (0, -0.30, 0.38), -10)}, curl={"L": 0.2, "R": 0.2})
 back_lie(280, dz=0.06, knee=0.6, sp=(20, 0, 0), head=(25, 0))
@@ -227,7 +228,7 @@ def jump(f, dz, flex, hz, hands_on=True, crouch=0.0, airborne=False, look=(-30, 
     WO.pose(f, (JW.x, JW.y, jz + RH - crouch + dz), yaw=180, flex=flex, sp=(flex * 0.5, 0, 0), head=look, hands=hands, feet=feet, curl={"L": 0.3, "R": 0.3})
 def bang(f, hl, hr, look=(-20, 0), lean=0.0):
     p = Vector((JW.x, JW.y + 0.08, 0)); z = PZ(p.x, p.y)
-    hands = {"L": ("w", (-0.17, 0.556 - hl, 1.52 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.17, 0.556 - hr, 1.56 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
+    hands = {"L": ("w", (-0.17, 0.500 - hl, 1.52 + 0.04 * (1 - hl)), (0, 0, 1), (0, 1, 0)), "R": ("w", (0.17, 0.500 - hr, 1.56 + 0.04 * (1 - hr)), (0, 0, 1), (0, 1, 0))}
     WO.pose(f, (p.x, p.y, z + RH - 0.04), yaw=180, flex=4 + 4 * lean, sp=(3 + 4 * lean, 0, 0), head=look, hands=hands, feet=stand_feet(p.x, p.y - 0.02, 180), curl={"L": 0.1, "R": 0.1})
 for i, f in enumerate(range(1180, 1290, 10)):
     bang(f, 0.07 if i % 2 == 0 else 0.0, 0.0 if i % 2 == 0 else 0.07, look=(-22 + 4 * (i % 3), 0), lean=0.5 * (i % 2))
@@ -356,6 +357,15 @@ for f in list(range(2150, 2491, 10)):
     WO.key_hand("R", f, Mb_ @ Vector((-0.28, 0.0, 0.82)), (R3 @ Vector((0, -0.1, -1))).normalized(), (R3 @ Vector((1, 0, 0))).normalized(),
                 pole=Mb_ @ Vector((-0.30, 0.25, 1.05)))
 
+for bn_, dz_ in (("root", 0.04), ("IK_foot.L", 0.0), ("IK_foot.R", 0.0)):
+    pb_ = WOo.pose.bones[bn_]
+    ks_ = sorted({int(k.co.x) for fc in [c for l in WOo.animation_data.action.layers for st in l.strips for cb in st.channelbags for c in cb.fcurves]
+                  if fc.data_path.startswith('pose.bones["%s"].location' % bn_) for k in fc.keyframe_points if k.co.x <= 182})
+    vals_ = {}
+    for f in ks_:
+        sc.frame_set(f); M_ = pb_.matrix.copy(); w_ = min(1.0, max(0.0, (200 - f) / 30.0)); M_.translation += WOo.matrix_world.inverted().to_3x3() @ Vector((0, -0.12 * w_, dz_ * w_)); vals_[f] = M_
+    for f, M_ in vals_.items():
+        sc.frame_set(f); pb_.matrix = M_; pb_.keyframe_insert("location", frame=f, group=bn_)
 # ---------------------------------------------------------------- shover: hands on her upper back (not her hips)
 clear_keys(SHo, 150, 231)
 def back_point(f):

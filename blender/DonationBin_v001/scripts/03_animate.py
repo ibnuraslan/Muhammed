@@ -21,7 +21,9 @@ def ground_z(x, y):            # override: asphalt at 0, inside the bin the top 
             hit, loc, nrm, idx = o.ray_cast(inv @ Vector((x, y, 3.0)), (inv.to_3x3() @ Vector((0, 0, -1))).normalized())
             if hit: z = max(z, (o.matrix_world @ loc).z)
         return z
+    if PANEL_DOWN and -0.73 < x < 0.73 and -1.56 < y < -0.59: return 0.19      # the cut panel lying on the asphalt: step ON it
     return 0.0
+PANEL_DOWN = False
 PZ = lambda x, y: ground_z(x, y)
 
 class Body(Human):
@@ -117,7 +119,7 @@ def stand_feet(x, y, yaw, lift=0.0, pitch=0.0, spread=1.0):
     return out
 # --- beat 1 (1-150): on tiptoe reaching into the chute, the other hand on the sill
 TIP_PITCH = float(os.environ.get("TIP_PITCH", "40"))
-SILL = Vector((-0.34, FY - 0.05, sc["chute_z"][0] + 0.03))
+SILL = Vector((-0.34, FY - 0.05, sc["chute_z"][0] + 0.045))      # palm rests ON the sill bar, not in it
 def reach(f, depth, tip, wob=0.0):
     y = -1.02 + 0.06 * depth
     WO.pose(f, (0.0, y, RH - 0.02 + 0.07 * tip), yaw=180, flex=18 + 14 * depth, sp=(10 + 10 * depth, 6 * wob, 0), head=(-8, 10 * wob),
@@ -239,8 +241,12 @@ curled(1920, 62, 90, 1.0, 1.0, (30, 0)); curled(1945, 62, 84, 0.9, 0.9, (-5, -25
 curled(2010, 62, 70, 0.7, 0.7, (-10, -30))
 seated(2070, look=(-5, 20), lean=25, dy=0.05); seated(2088, look=(-5, 10), lean=20, dy=0.0)
 # --- beat 11 (2095-2490): crouches out through the cut opening, steps down, walks off wrapped in a blanket
-WO.pose(2110, (0.0, -0.42, PZ(0.0, -0.42) + 0.50), yaw=0, flex=35, sp=(30, 0, 0), head=(-15, 0),
-        hands={"L": ("w", (0.55, FY - 0.005, 0.75), (0, 0, 1), (0, 1, 0)), "R": ("r", (0, -0.25, 0.1))}, feet=stand_feet(0.0, -0.30, 0))
+PANEL_DOWN = True
+WO.pose(2110, (0.0, -0.30, PZ(0.0, -0.30) + 0.30), yaw=0, flex=80, sp=(20, 0, 0), head=(-35, 0),        # crouched low: head under the flap
+        hands={"L": ("r", (0, -0.25, 0.1)), "R": ("r", (0, -0.25, 0.1))}, feet=stand_feet(0.0, -0.20, 0))
+WO.pose(2125, (0.0, -0.66, 0.46), yaw=0, flex=70, sp=(20, 0, 0), head=(-30, 0),                           # head and shoulders out through the opening, low
+        hands={"L": ("r", (0, -0.25, 0.1)), "R": ("r", (0, -0.25, 0.1))},
+        feet={"L": ("g", (0.10, -0.40), 0), "R": ("g", (-0.12, -0.72), 0)})
 WO.pose(2140, (-0.05, -0.85, RH - 0.25), yaw=10, flex=25, sp=(20, 0, 0), head=(-5, 0),
         hands={"L": ("r", (-0.05, -0.15, 0.25)), "R": ("r", (0.05, -0.15, 0.25))},
         feet={"L": ("g", (0.05, -0.95), 10), "R": ("g", (-0.15, -0.70), 10)})
@@ -248,6 +254,7 @@ WO.pose(2165, (-0.12, -1.15, RH - 0.06), yaw=15, flex=12, sp=(12, 0, 0), head=(5
         hands={"L": ("r", (-0.10, -0.25, 0.35)), "R": ("r", (0.10, -0.25, 0.35))}, feet=stand_feet(-0.12, -1.15, 15))
 path_w = catmull([(2166, Vector((-0.12, -1.15, 0))), (2250, Vector((-0.55, -1.75, 0))), (2340, Vector((-0.95, -2.35, 0)))])
 WO.walk(path_w, lambda f: 25.0, 2166, 2340, stride=0.55, lift=0.05, bob=0.012, crouch=0.06, lean=10)
+PANEL_DOWN = False
 for f in range(2166, 2341, 12):
     WO.r.key_rot("head", f, [("X", 8), ("Z", 0)])
 for f in range(2170, 2490, 20):
@@ -341,7 +348,9 @@ for f, th, fy, fl in ((1976, 0, -1.0, 10), (2040, 0, -1.0, 12), (2060, 0, -1.0, 
 FB.pose(2100, (0.95, -1.35, RH - 0.05), yaw=150, flex=8, sp=(8, 0, 0), head=(10, 20), hands={"L": ("r", (-0.2, 0.05, -0.15)), "R": ("r", (0.2, 0.05, -0.15))}, feet=stand_feet(0.95, -1.35, 150))
 # FireB helps her out: hand on her arm, walks beside her
 pFB = catmull([(2120, Vector((0.65, -1.45, 0))), (2200, Vector((0.05, -1.6, 0))), (2340, Vector((-0.45, -2.55, 0)))])
+PANEL_DOWN = True
 FB.walk(pFB, lambda f: 25.0, 2120, 2340, stride=0.6, lift=0.06, bob=0.015)
+PANEL_DOWN = False
 _Mfb = FB.Mb(Vector((pFB(2250).x, pFB(2250).y, RH)), 25.0, 0, 0)
 HS = "L" if (_Mfb.inverted() @ (path_w(2250) + Vector((0, 0, RH)))).x > 0 else "R"      # the hand on her side: no reach across his own body
 walk_arms(FB, pFB, lambda f: 25.0, 2120, 2340, 0.6, sides="LR", swing=0.08)      # walks beside her, arms swinging (no reach across bodies)
@@ -353,7 +362,7 @@ FA.pose(2300, (-1.2, FY - 0.8, RH - 0.05), yaw=170, flex=8, sp=(8, 20, 0), head=
 FL = bpy.data.objects["Flap"]; FL.rotation_mode = 'XYZ'
 def flap(f, deg):
     FL.rotation_euler.x = R_(deg); FL.keyframe_insert("rotation_euler", index=0, frame=f)
-for f, d in ((1, 30), (40, 45), (80, 52), (150, 55), (180, 80), (215, 88), (250, 85), (290, 60), (318, 18), (330, -1.5), (335, 6), (341, -0.8), (347, 2), (353, 0),
+for f, d in ((1, 30), (40, 45), (80, 52), (150, 55), (180, 95), (215, 105), (250, 100), (290, 60), (318, 18), (330, -1.5), (335, 6), (341, -0.8), (347, 2), (353, 0),
              (575, 0), (605, 72), (640, 70), (668, 10), (676, -1.5), (682, 4), (690, 0),
              (790, 0), (805, -1.6), (812, 0.5), (835, -1.6), (842, 0.3), (850, 0),
              (2000, 0), (2400, 0)):
