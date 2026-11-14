@@ -61,6 +61,7 @@ def stand(h, loc, face_z):
         h.rot(f"upperarm01.{sd}", (0, 1, 0), sg * 14)
         h.rot(f"lowerarm01.{sd}", (1, 0, 0), 50)          # forearms hang by the thighs (measured: wrist just ahead of the hip, ~0.9 m)
     fingers_curl(h, 22, thumb=10)                        # relaxed hands, palms toward the thighs
+    idle(h)
     h.arm.rotation_euler = (0, 0, face_z); h.arm.location = loc; ground(h)
 
 
@@ -373,3 +374,37 @@ def neutral_daylight(warm=(1.0, 0.93, 0.84)):
                     r, g, b, a = col.default_value
                     if b > r + 0.04:
                         col.default_value = (*warm, 1)
+
+
+
+# ---------------------------------------------------------------- life: a clock every pose can read
+CLOCK = 0.0          # seconds into the current shot (set by kit.apply_cam below, for stills, previews and bakes)
+
+
+def idle(h, amount=1.0):
+    """Nobody stands like a statue: breathing, a slow weight shift and small head turns, each person on their own
+    phase. Call on an upright (unrotated) rig, as stand() does."""
+    import zlib
+    ph_ = (zlib.crc32(h.arm.name.encode()) % 1000) / 1000.0 * 6.283
+    t = CLOCK
+    breath = math.sin(t * 1.6 + ph_)
+    sway = math.sin(t * 0.55 + ph_ * 1.3)
+    h.rot("spine03", (1, 0, 0), 0.9 * breath * amount)                  # chest rises and settles
+    h.rot("spine01", (0, 1, 0), 1.6 * sway * amount)                    # weight moves from foot to foot
+    h.rot("spine05", (0, 1, 0), -1.2 * sway * amount)
+    h.rot("head", (0, 0, 1), (5.0 * math.sin(t * 0.37 + ph_ * 2.1) + 2.0 * math.sin(t * 1.1 + ph_)) * amount)
+    h.rot("head", (1, 0, 0), 1.5 * math.sin(t * 0.5 + ph_) * amount)
+
+
+import kit as _kit
+_apply_cam_raw = getattr(_kit, "_apply_cam_raw", _kit.apply_cam)
+_kit._apply_cam_raw = _apply_cam_raw
+
+
+def _apply_cam_clocked(cam, ctx, spec, t):
+    global CLOCK
+    CLOCK = t * float(spec.get("dur", 5.0))
+    return _apply_cam_raw(cam, ctx, spec, t)
+
+
+_kit.apply_cam = _apply_cam_clocked

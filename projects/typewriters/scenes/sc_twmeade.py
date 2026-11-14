@@ -34,6 +34,7 @@ EXPOSURE = 0.0
 DUR = {k: 5.0 for k in ("team", "calendar", "clear", "stack", "row", "covers", "lone", "coil", "cabinet", "film", "debate", "memory",
                         "pair", "barlid", "bars", "inspect78", "motorfilm")}
 DUR["team"] = 6.0
+DUR["sixdays"] = 5.0
 VARIANT_FOR = {"lone": "night", "coil": "night", "film": "night"}
 ROW_Y = -0.6                    # the long typewriter bench
 LB = Vector((6.9, 1.2, 1.55))   # lightbox wall centre (on the +X wall)
@@ -307,7 +308,7 @@ def animate(c, sec, shot):
     from human import reach, fingers_curl
     P = c["P"]
     night = c["variant"] == "night"
-    who = {"team": ["TechA", "TechB", "TechC", "TechD", "TechE"], "calendar": ["TechC", "TechB"], "clear": ["TechD"], "stack": ["TechC", "TechA"],
+    who = {"team": ["TechA", "TechB", "TechC", "TechD", "TechE"], "sixdays": ["TechA", "TechB", "TechC", "TechD", "TechE"], "calendar": ["TechC", "TechB"], "clear": ["TechD"], "stack": ["TechC", "TechA"],
            "row": ["TechB", "TechA"], "covers": ["TechB", "TechA", "TechE"], "lone": ["Arneson"], "coil": [], "cabinet": ["Arneson"],
            "film": ["Arneson"], "debate": ["TechA", "TechC", "TechD"], "memory": ["TechA", "TechC", "TechD"], "pair": ["TechE"], "barlid": [],
            "bars": [], "inspect78": ["TechC"], "motorfilm": ["TechC"]}[shot]
@@ -356,6 +357,25 @@ def animate(c, sec, shot):
     c["film_objs"][1].location = (0, -0.008, 0.25 * (1 - film_place))
     # people and their business
     tA, tB, tC, tD, tE, ar = (P[k] for k in ("TechA", "TechB", "TechC", "TechD", "TechE", "Arneson"))
+    if shot == "sixdays":                                   # Ch2 1B time-lapse: six days pass; daylight swells and dies,
+        day = sec * 6.0 / DUR["sixdays"]                   # the technicians jump from bench to bench
+        d = int(day); f = day - d
+        sun = max(0.0, math.sin(math.pi * f)) ** 0.7
+        for o in bpy.data.objects:
+            if o.type == 'LIGHT' and o.get("look_key"):
+                if "e0" not in o:
+                    o["e0"] = o.data.energy
+                o.data.energy = o["e0"] * (0.05 + 0.95 * sun)
+        rng = np.random.default_rng(100 + d)
+        spots = [(-4.6, ROW_Y - 0.6, math.pi, Vector((-4.6, ROW_Y - 0.22, 0.98))), (-2.8, ROW_Y - 0.6, math.pi, Vector((-2.8, ROW_Y - 0.22, 0.98))),
+                 (-1.0, ROW_Y - 0.6, math.pi, Vector((-1.0, ROW_Y - 0.22, 0.98))), (1.4, 1.75, math.pi, Vector((1.4, 2.1, 1.0))),
+                 (2.9, 1.75, math.pi, Vector((2.9, 2.1, 1.0))), (-3.0, 1.75, math.pi, Vector((-3.0, 2.1, 0.98)))]
+        order = rng.permutation(len(spots))
+        for k, nm in enumerate(("TechA", "TechB", "TechC", "TechD", "TechE")):
+            h = P[nm]; x, y, fz, tgt = spots[order[k]]
+            place(h, (x, y, 0), fz)
+            twp.work(h, {"L": tgt + Vector((0.13, -0.05, 0)), "R": tgt + Vector((-0.13, -0.05, 0))}, head=16)
+            twp.hide(twp.person_objs(h), sun < 0.12 or (k == int(rng.integers(0, 5)) and f > 0.5))
     if shot == "team":
         place(tA, (-3.8, ROW_Y - 0.75, 0), math.pi); place(tB, (-1.4, ROW_Y - 0.75, 0), math.pi)
         place(tA, (-3.8, ROW_Y - 0.62, 0), math.pi); place(tB, (-1.4, ROW_Y - 0.62, 0), math.pi)
@@ -462,6 +482,7 @@ def V3(*a):
 
 CAMS = {
     "team": lambda c, t: (V3(5.6, -3.4, 2.3).lerp(V3(5.0, -3.0, 2.2), ease(t)), V3(-1.0, 0.6, 0.9), 24),
+    "sixdays": lambda c, t: (V3(5.3, -3.2, 2.6), V3(-1.0, 0.6, 0.9), 24),                     # locked off: the room is the clock
     "calendar": lambda c, t: (V3(3.3, -0.6, 1.75).lerp(V3(3.0, -0.35, 1.72), ease(t)), V3(-0.6, 3.6, 1.35), 30),
     "clear": lambda c, t: (V3(4.6, 0.2, 1.65).lerp(V3(4.3, 0.4, 1.6), ease(t)), V3(2.4, 2.4, 1.05), 30),
     "stack": lambda c, t: (V3(1.6, -0.6, 1.7).lerp(V3(1.3, -0.8, 1.65), ease(t)), V3(-1.5, -3.5, 0.75), 28),

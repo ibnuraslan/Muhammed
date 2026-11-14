@@ -19,7 +19,7 @@ import twp
 import typewriter as T
 
 EXPOSURE = 0.2
-DUR = {"coil": 4.0, "strike": 6.0, "platen": 5.0, "sink": 6.0, "arms": 5.0, "magnets": 5.0, "xray": 6.0, "space": 4.5}
+DUR = {"journey": 24.0, "buffer": 5.0, "coil": 4.0, "strike": 6.0, "platen": 5.0, "sink": 6.0, "arms": 5.0, "magnets": 5.0, "xray": 6.0, "space": 4.5}
 TEXT = "the quick brown fox jumps over the lazy dog\nnow is the time for all good men to come"
 SPACE_TEXT = "now is the time"
 FPS = 24
@@ -42,8 +42,16 @@ def build(variant=None):
     fill = area_light((0.3, -0.7, 0.3), (0, 0, 0), 0.8, 1.5, (0.85, 0.9, 1.0)); point_at(fill, (0, 0, 0.1)); fill.visible_camera = False
     tw = T.make("Hero", loc=(0, 0, 0), color=(0.17, 0.22, 0.28), bugged=True, text=TEXT, dpi=400, seed=5)
     c["tw"] = tw
+    # Ch3 4A "once it has enough data": eight tiny status lights on the hidden board fill one by one, then flash
+    c["leds"] = []
+    for k in range(8):
+        m = bpy.data.materials.new(f"BufLED{k}"); m.use_nodes = True
+        pb = m.node_tree.nodes["Principled BSDF"]; pb.inputs['Base Color'].default_value = (0.25, 0.04, 0.02, 1)
+        pb.inputs['Emission Color'].default_value = (1.0, 0.25, 0.08, 1); pb.inputs['Emission Strength'].default_value = 0.0
+        o = cyl(f"BufLED{k}", (-0.13 + k * 0.012, T.BAR_Y - 0.005, T.BAR_Z - 0.0008), 0.0016, 0.0016, m, verts=12)
+        o.parent = tw["root"]; o.hide_render = True; c["leds"].append((o, pb))
     # the X-ray fade (only the shots that call for it switch it on via their expression)
-    c["fade_expr"] = {"sink": "1", "coil": "1", "xray": "min(1, max(0, (frame - 24) / 72))", "arms": "0.93", "magnets": "1"}
+    c["fade_expr"] = {"sink": "1", "coil": "1", "buffer": "1", "journey": "min(1, max(0, (frame - 120) / 96))", "xray": "min(1, max(0, (frame - 24) / 72))", "arms": "0.93", "magnets": "1"}
     return c
 
 
@@ -66,6 +74,15 @@ def anim(shot):
         bpy.context.scene.frame_set(int(t * DUR[shot] * FPS) + 1)              # drivers (X-ray fade) follow in stills too
         if shot == "coil":
             clear_view(c, MOVES["coil"]["cam"](c, t)[0])
+        buf = shot in ("buffer", "journey")
+        if shot == "journey":
+            sec = sec - 17.0                                                       # the lights fill at the end of the long take
+        c["tw"]["bar_lid"].hide_render = buf
+        for k, (o, pb) in enumerate(c["leds"]):
+            o.hide_render = not buf
+            on = sec > 0.35 + 0.45 * k                                              # the buffer fills, one light per word
+            burst = sec > 4.1 and int(sec * 10) % 2 == 0                           # full: a short burst, all at once
+            pb.inputs['Emission Strength'].default_value = (6.0 if burst else (2.5 if on else 0.0)) if buf else 0.0
     return f
 
 
@@ -134,6 +151,19 @@ def cam_space(c, t):
     return (W(c, (-0.26, -0.44, 0.11)).lerp(W(c, (-0.22, -0.39, 0.1)), e), W(c, (-0.02, -0.12, 0.06)), 40)       # low, front-left: the long bar and the still ball beyond
 
 
+def cam_journey(c, t):
+    """Ch3 hero long take (~24 s, one continuous move): from the ball striking the page, down past the keys, under the
+    carrier to the arms as the housing fades to X-ray, along the bar to the hidden board, where its lights fill."""
+    pts = [(W(c, (0.24, -0.44, 0.27)), ball(c), 50),
+           (W(c, (0.15, -0.36, 0.15)), W(c, (0.0, -0.12, 0.06)), 45),
+           (W(c, (0.08, -0.25, 0.07)), W(c, (0.0, -0.085, 0.04)), 45),
+           (W(c, (0.02, T.BAR_Y - 0.12, T.BAR_Z + 0.06)), W(c, (-0.03, T.BAR_Y, T.BAR_Z)), 55),
+           (W(c, (-0.07, T.BAR_Y - 0.07, T.BAR_Z + 0.045)), W(c, (-0.09, T.BAR_Y, T.BAR_Z)), 70)]
+    n = len(pts) - 1; x = min(max(t, 0.0), 0.9999) * n; i = int(x); f = ease(x - i)
+    (a0, b0, l0), (a1, b1, l1) = pts[i], pts[i + 1]
+    return (a0.lerp(a1, f), b0.lerp(b1, f), l0 + (l1 - l0) * f)
+
+
 MOVES = {
     "strike": dict(kind="anim", dof=7.1, cam=cam_strike, focus=lambda c, t: ball(c), anim=anim("strike"), title=("CHAPTER 3", "THE SIGNAL", 10, 130)),
     "platen": dict(kind="anim", dof=6.3, cam=cam_platen, focus=lambda c, t: W(c, (T.PAGE_LEFT + T.MARGIN + 0.03, T.PLATEN_Y - T.PLATEN_R, T.PLATEN_Z)), anim=anim("platen")),
@@ -143,5 +173,8 @@ MOVES = {
     "xray": dict(kind="anim", dof=8.0, cam=cam_xray, focus=lambda c, t: W(c, (0.0, -0.06, 0.06)), anim=anim("xray")),
     "coil": dict(kind="anim", dof=None, cam=lambda c, t: (W(c, (0.3, -0.24, 0.2)).lerp(W(c, (0.26, -0.2, 0.17)), ease(t)), W(c, (0.162, -0.066, 0.036)), 60),
                  anim=anim("coil")),                       # Ch2 4B: the open power switch and its extra coil, housing faded away
+    "journey": dict(kind="anim", dof=8.0, cam=lambda c, t: cam_journey(c, t), focus=lambda c, t: cam_journey(c, t)[1], anim=anim("journey"), dur=24.0),
+    "buffer": dict(kind="anim", dof=8.0, cam=lambda c, t: (W(c, (-0.05, T.BAR_Y - 0.09, T.BAR_Z + 0.06)).lerp(W(c, (-0.07, T.BAR_Y - 0.07, T.BAR_Z + 0.045)), ease(t)),
+                   W(c, (-0.09, T.BAR_Y, T.BAR_Z)), 70), focus=lambda c, t: W(c, (-0.09, T.BAR_Y - 0.004, T.BAR_Z)), anim=anim("buffer")),
     "space": dict(kind="anim", dof=8.0, cam=cam_space, focus=lambda c, t: W(c, (0.0, -0.17, 0.05)), anim=anim("space")),
 }
