@@ -62,6 +62,17 @@ for f in (1041, 1710):
     liver.location = L_hold; liver.rotation_euler = R_hold
     liver.keyframe_insert("location", frame=f); liver.keyframe_insert("rotation_euler", frame=f)
 
+# 2b. on the OR table her hidden body (under the drape, masked to the head) sits 7 cm lower so the surgeons' forearms
+# stay above it (clip_scan unmasks it); 0 at home and on the bed
+PTR = bpy.data.objects["Patient"]
+for f, z in ((1, -0.07), (600, -0.07), (601, 0.0), (1060, 0.0), (1061, -0.07), (1710, -0.07)):
+    PTR.delta_location = (0, 0, z); PTR.keyframe_insert("delta_location", index=2, frame=f)
+for L in PTR.animation_data.action.layers:
+    for st in L.strips:
+        for cb in st.channelbags:
+            for fcu in cb.fcurves:
+                if fcu.data_path == "delta_location":
+                    for k in fcu.keyframe_points: k.interpolation = 'CONSTANT'
 # 3. smoke puffs
 for o in bpy.data.objects:
     if o.name.startswith("Smoke_"):
