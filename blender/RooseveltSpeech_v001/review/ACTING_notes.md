@@ -75,3 +75,23 @@
 4. No empty, blurred or black cells, and no back of the head on a beat: **checked**. `qa_check` shows 0 EMPTY, 0 FILL and 0 BACKHEAD.
 5. Close-ups show the hands (and the feet), aimed and lit: **checked**.
 6. `hand_poses.py` used: **checked**.
+
+## v009 motion pass (director, Nov 14): watched moving with `pipeline/preview.py` + `watch_pages.sh`
+I watched the v007 and v008 moving previews page by page. Faults found, then fixed in v009:
+
+| Preview frames | Fault | Fix |
+|---|---|---|
+| 26–46 | A crowd extra's T-shirt print reads like a logo | Plain cloth on that clothing set (casualsuit04 / worksuit01) |
+| 121–126 | The shooter's fist comes close to the lens | The camera at the flash is pulled further back and up |
+| 301–456 | His right arm is locked straight at his side (mannequin arm) | Elbow bent, hand resting forward at his waist |
+| 431–461 | A spectacle temple arm sticks out of the side of his head | Pince-nez rims and bridge only, no temple arms |
+| 445–1190 | X-ray as a see-through ghost body (lesson 13: reads as limbs through walls) | Solid body. One clean elliptical cut over the breast pocket irises open (no fading ring) onto a clean peach cross-section cavity, with the speech, case, ribs and lungs inside. |
+| 751–756 (v008) | Black shards inside the cut (inner body surfaces beyond a spherical cut) | The cut uses the same ellipsoid as the cavity |
+| 851–861 | The paper fills the frame | The framings at 840 and beat 6 are pulled back |
+| 1146–1186 | Full-length view with an open chest cut (reads as a wound) | The cut closes by f1138, while the camera is still close. He then pinches the speech from his closed coat pocket. |
+| 1301–1316 | The camera swings low over the stage and frames only floor and footlights | A high intermediate framing (f1312) keeps him in shot |
+| 746–756 | The camera swings close across the paper (fills ~70 % of the frame) | A pulled-back key at f750 |
+| 851–861 | Still large after the first fix | A pulled-back key at f858 (beat frames unchanged) |
+| 1121–1186 | After the cut closes, the speech pokes out through the front of the closed coat | The speech and the case are hidden from f1110 while the cut closes. The speech reappears only between his fingers at the pinch (f1166). |
+
+Preview: `review/preview.mp4` (every 5th frame at real speed) and `review/preview_page_p01–p06.jpg`, all from the final v009 file.

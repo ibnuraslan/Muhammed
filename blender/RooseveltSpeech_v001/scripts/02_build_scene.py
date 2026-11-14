@@ -549,6 +549,9 @@ for nm, tint in TINTS.items():   # period wool tones instead of modern blue deni
                         bw_ = m.node_tree.nodes.new("ShaderNodeRGBToBW"); mx = m.node_tree.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"
                         mx.inputs["Factor"].default_value = 1.0; mx.inputs["B"].default_value = (*[c * 2.2 for c in tint], 1)
                         m.node_tree.links.new(nd.outputs["Color"], bw_.inputs[0]); m.node_tree.links.new(bw_.outputs[0], mx.inputs["A"]); m.node_tree.links.new(mx.outputs["Result"], lk.to_socket)
+                        if any(k in ch.name for k in ("casualsuit04", "worksuit01")):   # printed T-shirt texture reads as a logo: plain cloth instead
+                            for l_ in list(mx.inputs["A"].links): m.node_tree.links.remove(l_)
+                            mx.inputs["A"].default_value = (0.45, 0.45, 0.45, 1)
 hero = bpy.data.objects["Hero"]
 # overcoat tint (charcoal) on the hero suit, fedora prop made from CrowdA's hat later
 for ch in hero.children:

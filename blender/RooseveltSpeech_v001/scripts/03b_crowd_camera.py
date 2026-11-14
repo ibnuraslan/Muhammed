@@ -202,7 +202,7 @@ K = [  # frame, position, target, lens
  (40,   Vector((0.9, -7.8, 2.9)),   Vector((-0.1, -1.0, 1.0)), 30),
  (75,   Vector((-0.6, -6.6, 1.6)),  Vector((-0.3, -1.0, 1.2)), 32),
  (100,  Vector((-1.9, -5.3, 1.3)), Vector((-0.5, -1.0, 1.2)), 32),   # low between heads, shooter silhouette in the foreground
- (F_FLASH, Vector((-2.15, -5.0, 1.35)), bul(F_FLASH + 6), 32),
+ (F_FLASH, Vector((-2.5, -5.5, 1.55)), bul(F_FLASH + 6), 32),   # clear of the shooter's fist
  (135,  bul(135) + Vector((-0.30, -0.42, 0.22)), HIT + Vector((0, 0, 0.1)), 40),          # riding along the bullet
  (152,  bul(152) + Vector((-0.40, -0.55, 0.22)), HIT + Vector((0, 0, 0.1)), 40),
  (F_IMPACT, HIT + Vector((-0.5, -0.95, 0.15)), HIT + Vector((0, 0, 0.1)), 35),
@@ -217,9 +217,11 @@ K = [  # frame, position, target, lens
  (600, P((0.25, -0.26, 0.19)), P((-0.015, 0.05, -0.02)), 30),
  (660, P((0.05, -0.26, 0.2)), P((-0.015, 0.05, -0.01)), 30),          # over the fold edge
  (B[4], P((-0.371, -0.278, 0.194)), P((-0.005, 0.06, -0.02)), 30),
+ (750, P((0.05, -0.52, 0.14)), P((0.0, 0.05, -0.03)), 32),     # v009: pulled back so the paper never fills the frame
  (780, P((0.47, -0.184, 0.013)), P((0.02, 0.051, -0.03)), 32),     # lateral to the steel case
- (840, P((0.15, -0.22, -0.17)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
- (B[5], P((-0.27, -0.189, 0.031)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
+ (840, P((0.2, -0.32, -0.2)), P((0.035, 0.031, -0.03)), 32),     # low over the hinge
+ (858, P((-0.08, -0.52, -0.06)), P((0.02, 0.01, -0.03)), 34),  # v009: pulled back over the hinge-to-bullet swing
+ (B[5], P((-0.34, -0.28, 0.04)), P((0.01, -0.01, -0.02)), 35),      # alongside the bullet
  (940, P((-0.2, -0.2, 0.06)), P((0.015, 0.025, -0.02)), 35),
  (B[6], P((-0.2, -0.22, -0.03)), P((0.02, 0.05, -0.02)), 35),       # push to the dent
  (1060, P((-0.3, -0.2, -0.05)), P((0.0, 0.08, -0.04)), 30),        # past the ribs: bullet short of the lung
@@ -227,6 +229,7 @@ K = [  # frame, position, target, lens
  (B[7], Vector((-0.55, -1.35, 1.4)), Vector((-0.05, -0.2, 1.35)), 30),  # pull out: podium
  (1245, Vector((0.35, -2.5, 1.55)),  Vector((-0.05, -0.2, 1.55)), 30),
  (B[8], Vector((1.3, -2.7, 1.7)),    Vector((0.0, -0.2, 1.5)), 30),
+ (1312, Vector((2.3, -0.6, 2.4)),    Vector((0.0, -0.4, 1.6)), 28),   # swing round high, keeping him in frame
  (1340, Vector((1.4, 1.5, 2.1)),     Vector((0.0, -3.0, 0.9)), 26),     # behind him, the packed hall
  (1400, Vector((-0.6, 2.2, 3.2)),    Vector((0.0, -5.0, 0.4)), 26),
  (1455, Vector((-1.4, 1.4, 6.0)),    Vector((0.0, -4.5, 0.0)), 24),     # crane up

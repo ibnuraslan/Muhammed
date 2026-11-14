@@ -35,7 +35,8 @@ POSES = {
     "shield":           dict(curl={2: (2, 3, 2), 3: (2, 3, 2), 4: (3, 3, 2), 5: (3, 4, 2)}, spread=0.0, thumb=("beside_index", 0.006)),
     "hold_flat_object": dict(curl={2: (30, 12, 6), 3: (30, 12, 6), 4: (32, 14, 8), 5: (34, 16, 8)}, spread=0.0, thumb=("on_top", 0.022)),
 }
-LIMITS = dict(finger=((0, 90), (-10, 10), (-10, 10)), thumb=((-30, 45), (-30, 30), (-40, 40)), wrist=((-60, 60), (-30, 30), (-25, 25)))
+# wrist: x flex +-60, y twist +-50, z side +-35 (widened 17:35: +-25 side clamped hanging hands so curled fingers sank into the thigh, reported by Connect14)
+LIMITS = dict(finger=((0, 90), (-10, 10), (-10, 10)), thumb=((-30, 45), (-30, 30), (-40, 40)), wrist=((-60, 60), (-50, 50), (-35, 35)))
 
 def _b(k, j, s): return "finger%d-%d.%s" % (k, j, s)
 def _chain(s): return [_b(k, j, s) for k in (1,) + FING for j in (1, 2, 3)]

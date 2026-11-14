@@ -89,7 +89,7 @@ def wave_R(f):   # hat waving arc above the head
 RAIL = Vector((0.26, -0.10, 1.025))            # brass grab rail on the front seat back
 POCKET_REACH = Vector((-0.06, -0.30, 1.24))
 hR_keys = [(1, wave_R(1)), (F_IMPACT, wave_R(F_IMPACT)), (F_IMPACT + 6, Vector((-0.42, -0.18, 1.5))), (195, Vector((-0.40, -0.12, 1.0))),
-           (240, Vector((-0.33, -0.10, 0.92))), (300, Vector((-0.30, -0.08, 0.90))), (1150, Vector((-0.30, -0.08, 0.90))),
+           (240, Vector((-0.34, -0.24, 1.0))), (300, Vector((-0.33, -0.27, 1.02))), (700, Vector((-0.32, -0.28, 1.03))), (1150, Vector((-0.32, -0.27, 1.02))),   # elbow bent, hand forward at the waist
            (1238, Vector((-0.30, -0.42, 1.45))), (1262, Vector((-0.30, -0.30, 1.98))), (1285, Vector((-0.30, -0.30, 2.0))),
            (1310, Vector((-0.26, -0.45, 1.35))), (1360, Vector((-0.22, -0.44, 1.22))), (1420, Vector((-0.30, -0.42, 1.40))), (1500, Vector((-0.24, -0.44, 1.25)))]
 hL_keys = [(1, RAIL), (60, RAIL), (100, RAIL), (F_IMPACT, RAIL),   # steadies himself on the rail while he waves
@@ -166,7 +166,7 @@ for sx in (-1, 1):
     bpy.ops.mesh.primitive_cylinder_add(radius=0.0175, depth=0.0012, location=E(sx * EX, -0.02, 0), rotation=(R_(90), 0, 0), vertices=32)
     t = bpy.context.object; t.name = f"SpecLens{sx}"; t.data.materials.append(lens_m); specs.append(t)
     bpy.ops.mesh.primitive_cylinder_add(radius=0.0009, depth=0.085, location=E(sx * (EX + 0.062), 0.05, 0.006), rotation=(R_(90), 0, 0), vertices=8)
-    t = bpy.context.object; t.name = f"SpecArm{sx}"; t.data.materials.append(wire); specs.append(t)
+    t = bpy.context.object; t.name = f"SpecArm{sx}"; bpy.data.objects.remove(t, do_unlink=True)   # pince-nez: no temple arms
 bpy.ops.mesh.primitive_cylinder_add(radius=0.001, depth=0.03, location=E(0, -0.023, 0.006), rotation=(0, R_(90), 0), vertices=8)
 t = bpy.context.object; t.name = "SpecBridge"; t.data.materials.append(wire); specs.append(t)
 # moustache: sculpted walrus moustache following the upper-lip curve (rest pose), brown hair strands combed down
@@ -309,7 +309,10 @@ wound = bpy.data.objects.new("WoundEmpty", None); C_STUDIO.objects.link(wound)
 wound.location = PL((0.01, 0.0, -0.02)); child_of(wound, H, "spine01", 400)
 # x-ray centre
 xc = bpy.data.objects.new("XRayCenter", None); C_STUDIO.objects.link(xc); xc.location = PL((0, 0.03, 0)); child_of(xc, H, "spine01", 400)
-XRAY = ((1, 0.0), (B[3] + 10, 0.0), (B[3] + 45, 1.0), (1165, 1.0), (1205, 0.0))
+sc.frame_set(400)
+cutf = bpy.data.objects.new("CutFrame", None); C_STUDIO.objects.link(cutf)   # pocket-oriented frame of the cut ellipsoid
+cutf.matrix_world = Matrix.Translation(xc.matrix_world.to_translation()) @ PW.to_3x3().to_4x4(); child_of(cutf, H, "spine01", 400)
+XRAY = ((1, 0.0), (B[3] + 10, 0.0), (B[3] + 45, 1.0), (1105, 1.0), (1138, 0.0))   # the cut closes while the camera is still close
 WOUND = ((1, 0.0), (F_IMPACT, 0.0), (F_IMPACT + 2, 1.0), (END, 1.0))
 done = set()
 for ob in [o for o in H.children if o.type == "MESH"]:
@@ -330,21 +333,49 @@ for ob in [o for o in H.children if o.type == "MESH"]:
             dk = n.new("ShaderNodeBsdfPrincipled"); dk.inputs["Base Color"].default_value = (0.035, 0.012, 0.01, 1); dk.inputs["Roughness"].default_value = 0.9
             mxw = n.new("ShaderNodeMixShader"); l.new(mu.outputs[0], mxw.inputs["Fac"]); l.new(srcs, mxw.inputs[1]); l.new(dk.outputs["BSDF"], mxw.inputs[2])
             srcs = mxw.outputs["Shader"]
-        # x-ray: porthole fully clear around the pocket, glass ghost elsewhere
-        tc = n.new("ShaderNodeTexCoord"); tc.object = xc
-        ln = n.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; l.new(tc.outputs["Object"], ln.inputs[0])
-        mr = n.new("ShaderNodeMapRange"); mr.inputs["From Min"].default_value = 0.045; mr.inputs["From Max"].default_value = 0.11
+        # cutaway (lesson 13: no see-through bodies): the body stays solid; one clean round cut over the pocket
+        tc = n.new("ShaderNodeTexCoord"); tc.object = cutf
+        sq = n.new("ShaderNodeVectorMath"); sq.operation = "MULTIPLY"; sq.inputs[1].default_value = (1.0, 1.0 / 2.3, 1.0); l.new(tc.outputs["Object"], sq.inputs[0])
+        ln = n.new("ShaderNodeVectorMath"); ln.operation = "LENGTH"; l.new(sq.outputs["Vector"], ln.inputs[0])   # same ellipsoid as the cavity
+        val = n.new("ShaderNodeValue"); val.name = "XRayFade"
+        for f_, v_ in XRAY: val.outputs[0].default_value = v_; val.outputs[0].keyframe_insert("default_value", frame=f_)
+        rad = n.new("ShaderNodeMath"); rad.operation = "MULTIPLY"; rad.inputs[1].default_value = 0.13; l.new(val.outputs[0], rad.inputs[0])
+        rlo = n.new("ShaderNodeMath"); rlo.operation = "SUBTRACT"; rlo.inputs[1].default_value = 0.002; l.new(rad.outputs[0], rlo.inputs[0])
+        mr = n.new("ShaderNodeMapRange"); l.new(rlo.outputs[0], mr.inputs["From Min"]); l.new(rad.outputs[0], mr.inputs["From Max"])
         mr.inputs["To Min"].default_value = 1.0; mr.inputs["To Max"].default_value = 0.0; l.new(ln.outputs["Value"], mr.inputs["Value"])
         tr = n.new("ShaderNodeBsdfTransparent")
         fr = n.new("ShaderNodeLayerWeight"); fr.inputs["Blend"].default_value = 0.22
         em = n.new("ShaderNodeEmission"); em.inputs["Color"].default_value = (0.35, 0.75, 1.0, 1); em.inputs["Strength"].default_value = 0.9
         gm = n.new("ShaderNodeMixShader"); l.new(fr.outputs["Facing"], gm.inputs["Fac"]); l.new(tr.outputs["BSDF"], gm.inputs[1]); l.new(em.outputs["Emission"], gm.inputs[2])
-        hole = n.new("ShaderNodeMixShader"); l.new(mr.outputs["Result"], hole.inputs["Fac"]); l.new(gm.outputs["Shader"], hole.inputs[1]); l.new(tr.outputs["BSDF"], hole.inputs[2])
-        val = n.new("ShaderNodeValue"); val.name = "XRayFade"
-        for f_, v_ in XRAY: val.outputs[0].default_value = v_; val.outputs[0].keyframe_insert("default_value", frame=f_)
-        mx = n.new("ShaderNodeMixShader"); l.new(val.outputs[0], mx.inputs["Fac"]); l.new(srcs, mx.inputs[1]); l.new(hole.outputs["Shader"], mx.inputs[2])
-        l.new(mx.outputs["Shader"], o_.inputs["Surface"])
+        hole = n.new("ShaderNodeMixShader"); l.new(mr.outputs["Result"], hole.inputs["Fac"]); l.new(srcs, hole.inputs[1]); l.new(tr.outputs["BSDF"], hole.inputs[2])
+        l.new(hole.outputs["Shader"], o_.inputs["Surface"])   # radius 0 = solid; the cut irises open to 13 cm
 
+# cavity wall: inner surface of the cut (clean flesh, back half only) so the hollow body mesh never shows through the cut
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.13, segments=48, ring_count=24)
+cav = bpy.context.object; cav.name = "CutCavity"
+for c_ in list(cav.users_collection): c_.objects.unlink(cav)
+C_STUDIO.objects.link(cav); bpy.ops.object.shade_smooth()
+sc.frame_set(400); cav.matrix_world = Matrix.Translation(xc.matrix_world.to_translation()) @ PW.to_3x3().to_4x4() @ Matrix.Diagonal((1.0, 2.3, 1.0, 1.0))   # deep enough to show ribs + lungs
+cm = bpy.data.materials.new("CutFlesh"); cm.use_nodes = True; nt = cm.node_tree; n, l = nt.nodes, nt.links; cb_ = n["Principled BSDF"]
+cb_.inputs["Base Color"].default_value = (0.95, 0.66, 0.56, 1)   # clean peach cross-section, not blood red; cb_.inputs["Roughness"].default_value = 0.45
+cb_.inputs["Subsurface Weight"].default_value = 0.3; cb_.inputs["Coat Weight"].default_value = 0.2
+fw_ = n.new("ShaderNodeTexWave"); fw_.inputs["Scale"].default_value = 40; fw_.inputs["Distortion"].default_value = 3
+bpf = n.new("ShaderNodeBump"); bpf.inputs["Strength"].default_value = 0.25; l.new(fw_.outputs["Fac"], bpf.inputs["Height"]); l.new(bpf.outputs["Normal"], cb_.inputs["Normal"])
+geo = n.new("ShaderNodeNewGeometry"); tcc = n.new("ShaderNodeTexCoord"); tcc.object = Pocket; spc = n.new("ShaderNodeSeparateXYZ"); l.new(tcc.outputs["Object"], spc.inputs[0])
+inb = n.new("ShaderNodeMath"); inb.operation = "GREATER_THAN"; inb.inputs[1].default_value = 0.004; l.new(spc.outputs["Y"], inb.inputs[0])   # behind the chest plane only
+show = n.new("ShaderNodeMath"); show.operation = "MULTIPLY"; l.new(geo.outputs["Backfacing"], show.inputs[0]); l.new(inb.outputs[0], show.inputs[1])
+trc = n.new("ShaderNodeBsdfTransparent"); mxc = n.new("ShaderNodeMixShader"); l.new(show.outputs[0], mxc.inputs["Fac"]); l.new(trc.outputs["BSDF"], mxc.inputs[1]); l.new(cb_.outputs["BSDF"], mxc.inputs[2])
+l.new(mxc.outputs["Shader"], n["Material Output"].inputs["Surface"]); cav.data.materials.append(cm)
+child_of(cav, H, "spine01", 400)
+_cs0 = cav.scale.copy()   # the cavity grows and shrinks with the cut, so its rim always sits inside the opening
+for f_, k_ in ((1, 0.02), (B[3] + 10, 0.02), (B[3] + 45, 1.0), (1105, 1.0), (1138, 0.02)):
+    cav.scale = _cs0 * k_; cav.keyframe_insert("scale", frame=f_)
+cav.scale = _cs0
+cb_.inputs["Emission Color"].default_value = (0.95, 0.66, 0.56, 1); cb_.inputs["Emission Strength"].default_value = 0.25
+def _vis_cav(o):
+    for f_, h_ in ((1, True), (B[3] + 15, False), (1139, True)):
+        o.hide_render = h_; o.keyframe_insert("hide_render", frame=f_); o.hide_viewport = h_; o.keyframe_insert("hide_viewport", frame=f_)
+_vis_cav(cav)
 # ------------------------------------------------------------------ cutaway props in the pocket (pocket-local: x right, -y out of the chest, z up)
 MS = bpy.data.objects["Manuscript"]; GC = bpy.data.objects["GlassesCase"]; BL = bpy.data.objects["Bullet"]
 SHEETS = sorted([o for o in MS.children if o.name.startswith("Sheet")], key=lambda o: o.name)
@@ -357,8 +388,8 @@ child_of(GC, H, "spine01", 400)
 def vis(o, keys):
     for f_, h_ in keys:
         o.hide_render = h_; o.keyframe_insert("hide_render", frame=f_); o.hide_viewport = h_; o.keyframe_insert("hide_viewport", frame=f_)
-for o in [GC] + list(GC.children): vis(o, ((1, True), (B[3] + 15, False), (1200, True)))
-for o in [MS] + list(MS.children): vis(o, ((1, True), (B[3] + 15, False)))
+for o in [GC] + list(GC.children): vis(o, ((1, True), (B[3] + 37, False), (1110, True)))
+for o in [MS] + list(MS.children): vis(o, ((1, True), (B[3] + 37, False), (1110, True), (1166, False)))   # shown while the cut is open, hidden in the closed coat until the pinch draws it out
 # manuscript hand-off: pocket (spine01) -> right hand from the grasp at 1216
 c_hand = MS.constraints.new("CHILD_OF"); c_hand.target = H; c_hand.subtarget = "wrist.R"
 sc.frame_set(1216); c_hand.inverse_matrix = (H.matrix_world @ R.PB["wrist.R"].matrix).inverted() @ (H.matrix_world @ R.PB["spine01"].matrix) @ c_sp.inverse_matrix
