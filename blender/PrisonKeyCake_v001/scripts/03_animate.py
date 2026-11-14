@@ -68,11 +68,11 @@ P.k(100, sp_twist=0, h_yaw=0, h_pitch=32, sp_flex=18, flex=12, root=STA + V(0, 0
 P.k(130, hL=LH_TABLE, cL=25)
 P.k(150, cL=8, cR=10)
 P.k(190, root=STA + V(0, 0.07, -0.06), flex=16, sp_flex=22, h_pitch=34, side=2)     # bear down
-P.k(232, root=STA + V(0, 0.07, -0.09), flex=21, sp_flex=38, side=-2)
+P.k(232, root=STA + V(0, 0.07, -0.06), flex=16, sp_flex=24, side=-2)
 P.k(252, hL=LH_TABLE, cL=20)
 P.k(258, cR=30)
-P.k(262, root=STA + V(0, 0.06, -0.06), flex=18, sp_flex=30, h_pitch=50, cR=55)
-P.k(294, root=STA + V(0, 0.05, -0.04), flex=16, sp_flex=26, h_pitch=40)
+P.k(262, root=STA + V(0, 0.06, -0.05), flex=14, sp_flex=20, h_pitch=36, cR=55)
+P.k(294, root=STA + V(0, 0.05, -0.04), flex=12, sp_flex=18, h_pitch=32)
 P.k(300, root=STA + V(0, 0.0, 0.0), flex=6, sp_flex=12, h_pitch=20, h_yaw=10, hL=HANG["L"], cL=15)
 P.k(345, h_yaw=-35, sp_twist=-8, h_pitch=8)                               # checks the door again
 P.k(380, h_yaw=-5, sp_twist=0, h_pitch=15, hR=B((-0.12, -0.2, 0.25), (0, 0, -1), (0, 1, 0)), cR=40)

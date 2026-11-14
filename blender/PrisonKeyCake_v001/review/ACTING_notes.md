@@ -122,3 +122,15 @@ Checks:
 - camera at least 0.49 m from every head and torso;
 - limb_check: no crowd flags;
 - qa: INSIDE, FILL, HOVER, CLAW and FACEPRESS all 0.
+
+## v007g: director review of v007f (6 items)
+1. First press: the same steady side medium as the second press, from the key-in-hand start through the whole press. He hunches less (sp_flex 18-24), so his face and both hands read.
+2. Lean: no wind-up or slap. His palm goes straight to the wall at shoulder height. His head stays at least 32 cm off the wall and his face turns to the camera.
+3. Hand-off (805-852): one static wide shot from the shop's south corner: the ally, the box and the guard arriving. No black back in front of the lens.
+4. Walk back: a static profile as he leaves the door, then a cut at 1067 to a wide shot from beyond the table as he turns and walks toward us. His back shows for about 0.2 s.
+5. Second press: the camera is pulled back with a wider lens.
+6. Door jam: he stands 8 cm further back from the door, so his head is clear of the door edge.
+Checks:
+- camera audit 0;
+- camera at least 0.49 m from every head and torso;
+- qa: INSIDE, FILL, HOVER, CLAW and FACEPRESS all 0.
