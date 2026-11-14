@@ -2,7 +2,7 @@
 - 2386-2401: the medic shuffled toward the mask diver after the injection and his face met DiverB's head. He now holds
   his injection kneel (pose at 2345) until the camera dives (2420); later keys are untouched.
 - 2411-2426: the dive through the water surface into the passage read as 0.25 s of dark blur: covered by a rock wipe (J 2418).
-- 2522-2552: the towing diver's hand and the boy filled the lens: the camera dollies back 0.6 m (aim unchanged), eased.
+- 2522-2552: the towing diver's hand and the boy filled the lens: the camera dollies back 0.3 m (0.6 m reached the passage wall) (aim unchanged), eased.
 blender -b in.blend --python 17_v007_fix2.py -- out.blend"""
 import bpy, sys
 OUT = sys.argv[sys.argv.index("--") + 1]
@@ -26,7 +26,7 @@ J = 2418
 for f, v in ((J - 7, 0.0), (J - 1, 1.0), (J + 2, 1.0), (J + 8, 0.0)):
     wv.default_value = v; wv.keyframe_insert("default_value", frame=f)
 # 3. dolly back
-F0, F1, RAMP, BACK = 2516, 2556, 10, 0.6
+F0, F1, RAMP, BACK = 2516, 2556, 10, 0.3
 cl = sorted(fcs(cam, "location"), key=lambda f: f.array_index); al = sorted(fcs(aim, "location"), key=lambda f: f.array_index)
 for f in range(F0, F1 + 1):
     c = [fc.evaluate(f) for fc in cl]; a = [fc.evaluate(f) for fc in al]
