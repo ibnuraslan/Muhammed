@@ -378,7 +378,7 @@ def nurse_anim():
     arm_swing(nur, path, yaw_fn, F(20.0), F(33.0), 0.6)
     face(NR, F(22), brow=0.2); face(NR, F(28), smile=0.5)
 nurse_anim()
-for _i, (_src, _y, _t0) in enumerate((("Crowd4", -1.45, 21.2), ("Crowd2", -0.65, 21.6))):
+for _i, (_src, _y, _t0) in enumerate((("Crowd4", -1.80, 21.2), ("Crowd2", -0.32, 21.6))):
     _r = dup_rig(_src, f"Staff{_i}", C_CHAR); _a = Actor(_r.name)
     _pts = [(F(_t0), Vector((-24.2, _y, 0))), (F(_t0 + 1.5), Vector((-20.5, _y, 0))), (F(_t0 + 3.0), Vector((-16.8, _y + 0.05, 0))), (F(26.5), Vector((-14.5, _y, 0)))]
     _p = catmull(_pts)

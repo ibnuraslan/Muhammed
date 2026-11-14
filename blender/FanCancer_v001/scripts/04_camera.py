@@ -83,6 +83,7 @@ K = [
     (17.0, V((0.30, -1.35, 2.25)), V((0.1, -0.2, 1.55)), 30, False),     # over the glass to his side
     (17.8, V((0.80, -0.22, 1.72)), manH, 34, False),          # his face as he reads
     (18.6, V((0.95, -1.55, 2.05)), V((-0.05, 0.0, 1.45)), 34, False),  # wide over his shoulder, phone on the glass
+    (19.0, V((-0.85, -1.35, 1.95)), manH, 36, False),   # arc wide around him, never past his head
     (19.4, V((-0.40, -0.20, 1.50)), manH, 40, False),                 # his puzzled face
     (20.2, V((1.10, -1.00, 1.50)), manH + V((0, 0, -0.2)), 30, False),
     (21.0, V((1.20, -1.35, 1.70)), V((-1.0, -0.8, 1.2)), 32, False),
