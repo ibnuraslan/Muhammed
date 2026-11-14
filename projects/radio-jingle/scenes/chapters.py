@@ -1,18 +1,19 @@
-"""Part A running order (Cold Open, Chapter One, Chapter Two): (set, move) per shot, in script order.
+"""Part A running order (storyboard v2: object-on-black evidence, top-down night aerials, one long take per chapter) (Cold Open, Chapter One, Chapter Two): (set, move) per shot, in script order.
 Durations: until the voiceovers arrive, each shot's seconds are its DUR scaled so a chapter fills its estimate
 (184 wpm + lead). Chapter B's lists are added from its branch (CH3..CH5) for the film assembly."""
 COLD = [("house", m) for m in ("co_push", "co_profile", "co_officer", "co_tape", "co_top", "co_meter", "co_brother", "co_brother_side")]
 CH1 = [("house", "p_title"), ("house", "p_page"), ("village", "gate"), ("village", "lane"), ("path", "ride_track"), ("path", "ride_reeds"),
-       ("house", "dial"), ("house", "hangup"), ("path", "bend_push"), ("path", "bend_high"), ("path", "father_walk"), ("path", "uncle_torch"),
-       ("path", "meet_wide"), ("path", "father_call"), ("path", "night_line"), ("path", "night_fire"), ("path", "dog_low"), ("path", "dog_front"),
-       ("path", "brush_find"), ("path", "brush_ring"), ("path", "bro_run"), ("path", "bro_line"), ("house", "bench"), ("house", "pwin"),
+       ("house", "dial"), ("house", "lapse"), ("path", "bend_push"), ("path", "bend_high"), ("path", "father_walk"), ("path", "uncle_torch"),
+       ("aerial", "meet"), ("path", "father_call"), ("path", "night_line"), ("aerial", "search"), ("path", "brush_long"), ("path", "bro_run"), ("path", "bro_line"), ("house", "bench"), ("house", "pwin"),
        ("path", "heli"), ("path", "divers"), ("house", "k_radio"), ("house", "k_window"), ("house", "ring"), ("house", "listen"),
-       ("village", "post_ride"), ("village", "post_box"), ("house", "letter"), ("house", "read"), ("house", "thread"), ("house", "door"),
-       ("house", "call_left"), ("house", "toys"), ("house", "suitcase"), ("house", "latch"), ("village", "fiat_load"), ("village", "fiat_wide"),
+       ("village", "post_ride"), ("village", "post_box"), ("void", "letter"), ("house", "read"), ("house", "thread"), ("house", "door"),
+       ("house", "call_left"), ("house", "toys"), ("void", "money"), ("house", "latch"), ("village", "fiat_load"), ("village", "fiat_wide"),
        ("house", "silent"), ("house", "stairs")]
-CH2 = [("woods", m) for m in ("line", "tape", "rods", "rods_dog", "hit", "converge", "dig", "sweep", "lid", "bolt", "lift", "cap")] + \
-      [("box", m) for m in ("crane", "cable", "shelf", "radio", "pipe", "smoke", "experts", "door")] + \
-      [("house", "co2_back"), ("house", "co2_toy")] + [("woods", m) for m in ("spr_orbit", "spr_low", "torch_far", "dark", "pull")] + [("path", "bend_long")]
+CH2 = [("woods", m) for m in ("line", "tape", "rods", "rods_dog", "hit", "converge", "dig", "sweep", "lid")] + [("void", "bolts")] + \
+      [("woods", m) for m in ("lift", "cap")] + \
+      [("box", m) for m in ("crane", "cable")] + [("void", "items")] + [("box", m) for m in ("radio", "pipe", "smoke")] + \
+      [("void", "span"), ("box", "door")] + \
+      [("house", "co2_back"), ("house", "co2_toy")] + [("woods", m) for m in ("spr_orbit", "spr_low", "night_long", "pull")] + [("path", "bend_long")]
 TARGET = {"cold": 29.3, "ch1": 174.1, "ch2": 123.6}          # narration seconds (184 wpm)
 LEAD = {"cold": 2.5, "ch1": 3.0, "ch2": 3.0}                    # picture before the first word (on the first shot)
 PARTS = {"cold": COLD, "ch1": CH1, "ch2": CH2}

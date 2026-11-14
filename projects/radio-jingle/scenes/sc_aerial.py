@@ -112,6 +112,26 @@ def gz(c, x, y):
     return float((H[j, i] * (1 - fx) + H[j, i + 1] * fx) * (1 - fy) + (H[j + 1, i] * (1 - fx) + H[j + 1, i + 1] * fx) * fy)
 
 
+def path_mat(name, light, dark):
+    """Gravel seen from the air: patchy light and dark (worn, damp, leaf-strewn), fine grain bump."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    n1 = N.new("ShaderNodeTexNoise"); n1.inputs['Scale'].default_value = 0.35; n1.inputs['Detail'].default_value = 8
+    L.new(tc.outputs['Object'], n1.inputs['Vector'])
+    rp = N.new("ShaderNodeValToRGB"); L.new(n1.outputs['Fac'], rp.inputs['Fac'])
+    rp.color_ramp.elements[0].position = 0.35; rp.color_ramp.elements[0].color = (*dark, 1)
+    rp.color_ramp.elements[1].position = 0.65; rp.color_ramp.elements[1].color = (*light, 1)
+    n2 = N.new("ShaderNodeTexNoise"); n2.inputs['Scale'].default_value = 18.0; n2.inputs['Detail'].default_value = 10
+    L.new(tc.outputs['Object'], n2.inputs['Vector'])
+    mx = N.new("ShaderNodeMixRGB"); mx.blend_type = 'OVERLAY'; mx.inputs['Fac'].default_value = 0.5
+    L.new(rp.outputs['Color'], mx.inputs[1]); L.new(n2.outputs['Color'], mx.inputs[2])
+    L.new(mx.outputs[0], p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.9
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6; L.new(n2.outputs['Fac'], bp.inputs['Height'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
 def ground_mat():
     """Fields as a patchwork (meadow, stubble, ploughed earth) with grass texture; dark needle floor under the wood."""
     m = bpy.data.materials.new("AerialGround"); m.use_nodes = True
@@ -152,12 +172,13 @@ def ground_mat():
     return m
 
 
-def strip(name, pts, width, m, zoff=0.05, c=None):
-    """A ribbon draped on the ground along pts."""
+def strip(name, pts, width, m, zoff=0.05, c=None, ragged=0.0):
+    """A ribbon draped on the ground along pts (ragged: relative width wobble along the length)."""
     verts, faces = [], []
     for k, p in enumerate(pts):
         d = (pts[min(k + 1, len(pts) - 1)] - pts[max(k - 1, 0)]); d.z = 0; d.normalize()
-        n = Vector((-d.y, d.x, 0)) * width / 2
+        wob = 1.0 + ragged * (math.sin(k * 0.37) * 0.6 + math.sin(k * 1.13 + 1.0) * 0.4)
+        n = Vector((-d.y, d.x, 0)) * width / 2 * wob
         for q in (p - n, p + n):
             verts.append((q.x, q.y, (gz(c, q.x, q.y) if c else 0) + zoff))
     for k in range(len(pts) - 1):
@@ -315,7 +336,8 @@ def build(variant=None):
     kind = variant or "golden"
     c = dict(variant=kind)
     terrain(c)
-    path = strip("AerialPath", PATH, 2.0, mat("gravel"), 0.08, c)
+    strip("AerialVerge", PATH, 3.6, path_mat("AerialVerge", (0.075, 0.07, 0.04), (0.04, 0.045, 0.025)), 0.05, c, ragged=0.25)
+    path = strip("AerialPath", PATH, 2.0, path_mat("AerialGravel", (0.30, 0.27, 0.22), (0.15, 0.13, 0.10)), 0.09, c, ragged=0.18)
     villages(c, lit=(6.0 if kind == "night" else (2.0 if kind == "bluehour" else 0.0)))
     lake(c, kind)
     light(c, kind)
