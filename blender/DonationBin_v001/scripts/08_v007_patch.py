@@ -189,6 +189,19 @@ for o in bpy.data.objects:
         bs.inputs["Base Color"].default_value = (0.02, 0.02, 0.022, 1); bs.inputs["Roughness"].default_value = 0.25
         for i in range(len(o.data.materials)): o.data.materials[i] = hmm
         for ms in o.material_slots: ms.link = 'DATA'
+# dust motes that drift through a head: removed (limb_check PROPHEAD)
+heads = [o for o in bpy.data.objects if o.type == 'ARMATURE' and "head" in o.pose.bones]
+motes = [o for o in bpy.data.objects if o.name.startswith("Mote")]
+bad = set()
+for f in range(1, sc.frame_end + 1, 4):
+    sc.frame_set(f)
+    hp_ = [r.matrix_world @ r.pose.bones["head"].head for r in heads]
+    for o in motes:
+        if o.name in bad: continue
+        p_ = o.matrix_world.translation
+        if any((p_ - h).length < 0.20 for h in hp_): bad.add(o.name)
+for n in bad: bpy.data.objects.remove(bpy.data.objects[n], do_unlink=True)
+print("MOTES_REMOVED", len(bad), "of", len(motes))
 sc["director_fix"] = "v007: one continuous camera (covered wall pushes), front 3/4 on beat 6 and scream, hands flat on clothes"
 bpy.ops.wm.save_as_mainfile(filepath=OUT, compress=True)
 print("V007_DONE", len(CAMK))

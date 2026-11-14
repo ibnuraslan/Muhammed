@@ -130,18 +130,25 @@ def back_lie(f, dz=0.0, sit=0.0, sp=(8, 0, 0), head=(10, 0), hands=None, knee=1.
         p = LAND + LG * (0.50 + 0.08 * (1 - knee)) + lat(yaw) * (0.11 * sx)
         kp = LAND + LG * 0.35 + lat(yaw) * (0.16 * sx) + Vector((0, 0, PZ(p.x, p.y) + 0.9))
         feet[s] = ("g", (p.x, p.y), yaw, 0.0, 0.0, tuple(kp))
+    auto_hands = hands is None
     if hands is None:
         hands = {}
         for s in "LR":
             sx = 1 if s == "L" else -1
-            if sit < 0.7:      # propped on her hands behind her: hands close in, so the elbows bend
-                hp = LAND + lat(yaw) * (0.22 * sx) + HD * (0.18 + 0.10 * (1 - sit))
+            if sit < 0.7:      # hands on the clothes beside her hips (not behind her), elbows bent as she props up
+                hp = LAND + lat(yaw) * (0.24 * sx) + LG * 0.05
                 hands[s] = ("w", (hp.x, hp.y, PZ(hp.x, hp.y) + 0.035), tuple(LG * 0.3 + lat(yaw) * 0.2 * sx), tuple(PALM_DOWN))
-            else:              # sitting: forearms resting on her knees
-                hp = LAND + LG * 0.30 + lat(yaw) * (0.15 * sx)
-                hands[s] = ("w", (hp.x, hp.y, PZ(hp.x, hp.y) + 0.40), tuple(LG), tuple(PALM_DOWN))
+            else:              # sitting: placeholder, re-keyed onto the posed knees below
+                hp = LAND + LG * 0.30 + lat(yaw) * (0.22 * sx)
+                hands[s] = ("w", (hp.x, hp.y, PZ(hp.x, hp.y) + 0.45), tuple(LG), tuple(PALM_DOWN))
     WO.pose(f, (LAND.x, LAND.y, zp), yaw=yaw, flex=flex, side=side * (1 - sit), sp=sp, head=head, hands=hands, feet=feet, jaw=jaw,
             curl={"L": curl, "R": curl})
+    if sit >= 0.7 and auto_hands:      # hands rest on top of her own (posed) knees: elbows bent, nothing inside the legs
+        sc.frame_set(f)
+        for s in "LR":
+            sx = 1 if s == "L" else -1
+            kn = WOo.matrix_world @ WOo.pose.bones["lowerleg01." + s].head
+            WO.key_hand(s, f, kn + Vector((0, 0, 0.085)) - LG * 0.06, LG, PALM_DOWN, pole=kn + lat(yaw) * (0.40 * sx) + Vector((0, 0, 0.15)))
 WO.pose(252, (0.06, -0.06, 0.90), yaw=150, flex=205, side=8, sp=(30, 0, 0), head=(35, 0),
         hands={"L": ("r", (0.30, 0.05, 0.25)), "R": ("r", (-0.30, 0.05, 0.25))},
         feet={"L": ("r", (0, -0.25, 0.40), -10), "R": ("r", (0, -0.20, 0.32), -10)}, curl={"L": 0.2, "R": 0.2})
@@ -266,7 +273,8 @@ def curled(f, k, weak, head=(20, 0), breathe=0.0, jaw=0.0):
     M = WO.Mb(Vector((CUR.x, CUR.y, z)), CY, 0, 88)
     hp = M @ (WO.root_head + Vector((0.0, -0.10, 0.62)))        # under her head (pillow arm)
     WO.pose(f, (CUR.x, CUR.y, z), yaw=CY, flex=0, side=88, sp=(28 + 8 * k + 2 * breathe, 0, 0), head=head,
-            hands={"L": ("r", (-0.05, -0.26, 0.42), (0, 0, 20)), "R": ("r", (0.10, -0.30, 0.20), (0, 0, -20))},
+            hands={"L": ("w", tuple(M @ (WO.root_head + Vector((0.0, -0.20, 0.55)))), tuple((M.to_3x3() @ Vector((0, 0, 1))).normalized()), (0, 0, -1)),
+                   "R": ("r", (0.10, -0.30, 0.20), (0, 0, -20))},
             feet={"L": ("r", (-0.02, -0.30 * k, 0.40 * k), 15), "R": ("r", (0.04, -0.24 * k, 0.34 * k), 15)},
             jaw=jaw, curl={"L": 0.22, "R": 0.25})
 WO.pose(1500, (0.0, 0.02, PZ(0.0, 0.02) + 0.55), yaw=20, flex=25, sp=(30, 0, 0), head=(20, 0),
@@ -280,7 +288,7 @@ for f, k, weak, hd, br in ((1532, 0.85, 0.0, (15, 10), 0), (1580, 0.9, 0.1, (18,
 # --- 1843-2094: hears the knock, lifts her head, props up on her arm and sits up toward the light
 curled(1910, 1.0, 1.0, (25, 0)); curled(1935, 0.95, 0.9, (0, -20), jaw=8)
 WO.pose(1990, (CUR.x + 0.02, CUR.y, PZ(CUR.x, CUR.y) + 0.24), yaw=CY - 20, flex=20, side=55, sp=(20, 0, 0), head=(-5, -20),
-        hands={"L": ("w", (CUR.x - 0.10, CUR.y + 0.20, PZ(CUR.x - 0.10, CUR.y + 0.20) + 0.035), (0.6, 0.3, 0), tuple(PALM_DOWN)), "R": ("w", (CUR.x + 0.28, CUR.y - 0.18, PZ(CUR.x + 0.28, CUR.y - 0.18) + 0.035), (0.3, -0.6, 0), tuple(PALM_DOWN))},
+        hands={"L": ("w", (CUR.x - 0.10, CUR.y + 0.20, PZ(CUR.x - 0.10, CUR.y + 0.20) + 0.035), (0.6, 0.3, 0), tuple(PALM_DOWN)), "R": ("w", (CUR.x + 0.36, CUR.y - 0.26, PZ(CUR.x + 0.36, CUR.y - 0.26) + 0.035), (0.3, -0.6, 0), tuple(PALM_DOWN))},
         feet={"L": ("r", (-0.02, -0.30, 0.40), 15), "R": ("r", (0.04, -0.24, 0.34), 15)}, jaw=4)
 SEAT = Vector((0.05, 0.12, 0))
 def seated(f, look=(0, 0), lean=15, jaw=0.0, dy=0.0):
@@ -308,6 +316,12 @@ for l in ad_.action.layers:
                 if any(fc.data_path.startswith('pose.bones["%s"]' % n) for n in hb + ["Pole_elbow.L", "Pole_elbow.R"]):
                     for k in [k for k in fc.keyframe_points if 2150 <= k.co.x <= 2490][::-1]: fc.keyframe_points.remove(k, fast=True)
                     fc.update()
+for f in (650, 676):
+    Mb_ = body_M(f); R3 = Mb_.to_3x3()
+    for s_ in "LR":
+        sx = 1 if s_ == "L" else -1
+        WO.key_hand(s_, f, Mb_ @ Vector((0.21 * sx, -0.30, 0.85)), (R3 @ Vector((0, -0.2, -1))).normalized(), (R3 @ Vector((-sx, 0, 0))).normalized(),
+                    pole=Mb_ @ Vector((0.40 * sx, 0.20, 1.05)))
 cp_ = bpy.data.objects.get("CutPanel")
 if cp_:
     sc.frame_set(1990); bb = [cp_.matrix_world @ Vector(v) for v in cp_.bound_box]
@@ -352,7 +366,7 @@ for f, dz, fl, ext in ((154, 0.0, 6, 0.0), (163, -0.02, 10, 0.6), (172, -0.03, 1
     p = Vector((-0.02, -1.50 + 0.12 * ext, RH + dz))
     if 160 <= f <= 200:
         bp, d = back_point(f)
-        hands = {s: ("w", tuple(bp + Vector((0.11 * (1 if s == "L" else -1) * -1, 0, 0)) - d * 0.03), (0, 0.45, 1), tuple(d)) for s in "LR"}
+        hands = {s: ("w", tuple(bp + Vector((0.11 * (1 if s == "L" else -1) * -1, 0, 0)) - d * 0.07), (0, 0.45, 1), tuple(d)) for s in "LR"}
     else:
         hands = {"L": ("r", (0.05, -0.15, 0.25)), "R": ("r", (-0.05, -0.15, 0.25))}
     SH.pose(f, p, yaw=180, flex=fl, sp=(fl * 0.6, 0, 0), head=(5, 0), hands=hands,

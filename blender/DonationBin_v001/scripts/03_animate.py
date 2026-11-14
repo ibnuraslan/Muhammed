@@ -338,10 +338,12 @@ FB.pose(2100, (0.95, -1.35, RH - 0.05), yaw=150, flex=8, sp=(8, 0, 0), head=(10,
 # FireB helps her out: hand on her arm, walks beside her
 pFB = catmull([(2120, Vector((0.65, -1.45, 0))), (2200, Vector((0.05, -1.6, 0))), (2340, Vector((-0.45, -2.55, 0)))])
 FB.walk(pFB, lambda f: 25.0, 2120, 2340, stride=0.6, lift=0.06, bob=0.015)
-walk_arms(FB, pFB, lambda f: 25.0, 2120, 2340, 0.6, sides="L", swing=0.08)
+_Mfb = FB.Mb(Vector((pFB(2250).x, pFB(2250).y, RH)), 25.0, 0, 0)
+HS = "L" if (_Mfb.inverted() @ (path_w(2250) + Vector((0, 0, RH)))).x > 0 else "R"      # the hand on her side: no reach across his own body
+walk_arms(FB, pFB, lambda f: 25.0, 2120, 2340, 0.6, sides=("R" if HS == "L" else "L"), swing=0.08)
 for f in range(2140, 2341, 10):
-    wp = path_w(min(max(f, 2166), 2340)) + Vector((0.27, 0.05, 1.18))
-    FB.key_hand("R", f, wp, Vector((-1, 0.3, 0)), Vector((0, 0, 1)))
+    wp = path_w(min(max(f, 2166), 2340)) + Vector((0.27 if HS == "R" else 0.20, 0.05, 1.18))
+    FB.key_hand(HS, f, wp, Vector((-1 if HS == "R" else 1, 0.3, 0)), Vector((0, 0, 1)))
 FA.pose(2078, (-1.0, FY - 0.75, RH - 0.05), yaw=160, flex=10, sp=(10, 0, 0), head=(5, 15), hands={"L": ("r", (-0.18, 0.0, -0.15)), "R": ("r", (0.18, -0.05, -0.12))}, feet=stand_feet(-1.0, FY - 0.75, 160))
 FA.pose(2140, (-1.1, FY - 0.7, RH - 0.05), yaw=200, flex=10, sp=(10, 0, 0), head=(0, -10), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.1, FY - 0.7, 200))
 FA.pose(2300, (-1.2, FY - 0.8, RH - 0.05), yaw=170, flex=8, sp=(8, 20, 0), head=(5, 25), hands={"L": ("r", (0, 0, 0.0)), "R": ("r", (0, -0.15, 0.2))}, feet=stand_feet(-1.2, FY - 0.8, 170))
