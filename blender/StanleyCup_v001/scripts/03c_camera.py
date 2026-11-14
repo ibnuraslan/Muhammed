@@ -11,9 +11,13 @@ COUPLE = (HER_HEAD + HIS_HEAD) / 2 - Z(0.15)
 HOUSE = Vector((WALL_OUT, HOLE.y, 1.0))
 sc.frame_set(1452); HANDLE_POS = CUP.matrix_world @ Vector((0.0, 0.0, 0.14))
 FL = P(1395)
+TWO = Vector((4.58, -0.52, 1.02))
 sc.frame_set(842); _fr = bpy.data.objects['Fiance_rig']; HIS_HAND_842 = _fr.matrix_world @ _fr.pose.bones['wrist.R'].head
 sc.frame_set(815); HH815 = _fr.matrix_world @ _fr.pose.bones['head'].tail
 sc.frame_set(842); HH842 = _fr.matrix_world @ _fr.pose.bones['head'].tail
+_wr = bpy.data.objects['Woman_rig']
+sc.frame_set(748); HW748 = _wr.matrix_world @ _wr.pose.bones['head'].center
+sc.frame_set(772); HW772 = _wr.matrix_world @ _wr.pose.bones['head'].center
 CAM = [  # frame, camera, aim, lens, fstop
     # beat 1: street at dusk, bullet streaks in past the lens, camera whips in behind it and chases it to the siding
     (1, P(1) - D * 0.13 - SV * 0.035 + Z(0.02), P(1) + D * 4.0, 24, 8),
@@ -45,20 +49,22 @@ CAM = [  # frame, camera, aim, lens, fstop
     (640, P(640) - D * 0.1 + SV * 0.05 + Z(0.02), C3 - DXY * 0.045, 50, 2.8),
     (700, C3 + Vector((-0.14, 0.13, 0.02)), C3 + Vector((-0.03, 0.03, -0.01)), 55, 4),
     (724, Vector((4.36, -0.45, 1.17)), C3 + Vector((0.2, 0.1, 0.2)), 45, 4),
-    (748, Vector((4.50, -0.12, 1.20)), HER_HEAD + Vector((0.0, 0.02, -0.04)), 45, 5.6),
-    (772, Vector((4.52, -0.30, 1.30)), C3 + Z(0.12), 40, 5.6),
-    (795, C3 + Vector((0.08, -0.10, 0.34)), C3 + Z(0.13), 40, 5.6),
-    (815, HH815 + Vector((0.32, 0.55, 0.02)), HH815 + Vector((0.0, 0.0, -0.12)), 30, 5.6),
-    (842, HH842 + Vector((0.36, 0.6, 0.02)), HH842 + Vector((0.06, 0.1, -0.16)), 26, 5.6),
-    (885, Vector((4.15, -0.05, 1.12)), C3 + Vector((0.03, 0.0, 0.03)), 40, 5.6),
+    (748, Vector((4.42, -0.14, 1.15)), HW748 + Vector((0.0, 0.0, -0.03)), 40, 5.6),
+    (772, Vector((4.36, -0.30, 1.26)), HW772 + Vector((0.0, -0.04, -0.10)), 34, 5.6),
+    (783, Vector((4.24, -0.36, 1.24)), Vector((4.70, -0.06, 1.15)), 32, 5.6),     # cup in the foreground, her face behind it
+    (795, C3 + Vector((0.03, 0.07, 0.34)), C3 + Z(0.13), 40, 5.6),
+    (806, Vector((4.12, -0.18, 1.52)), HH815 + Vector((0.0, 0.0, -0.10)), 32, 5.6),  # rises off the lid onto his face
+    (815, HH815 + Vector((-0.28, 0.58, 0.05)), HH815 + Vector((0.02, 0.04, -0.14)), 30, 5.6),
+    (842, HH842 + Vector((-0.30, 0.60, 0.05)), HH842 + Vector((0.04, 0.08, -0.16)), 28, 5.6),
+    (885, Vector((4.92, 0.52, 1.42)), Vector((4.40, -0.45, 1.08)), 32, 5.6),        # over her shoulder: cup, his reach and his face together
     (920, P(920) - D * 0.35 + SV * 0.10 + Z(0.07), C3 + Z(0.03), 40, 4),
     (960, IMP + SV * 0.10 - D * 0.04 + Z(0.015), IMP, 55, 2.8),
     # beat 6: macro impact, orbit through the sparks, dive into the x-ray cup to see the ripples, out again, wider on their reaction
     (990, IMP + SV * 0.075 - D * 0.02 + Z(0.01), IMP, 50, 2.8),
     (1040, IMP - SV * 0.07 - D * 0.12 + Z(0.05), IMP, 38, 2.8),
     (1100, C3 - DXY * 0.07 + Z(0.21), C3 + Vector((0, 0, sc['cup_top'] + 0.21 - IMPACT_Z)), 30, 5.6),
-    (1160, Vector((3.95, -0.05, 1.08)), P(1160) + Vector((0.05, -0.05, 0.08)), 30, 5.6),
-    (1220, Vector((3.85, -0.18, 1.22)), (HER_HEAD + HIS_HEAD) / 2 - Z(0.25), 26, 4),
+    (1160, Vector((3.72, 0.86, 1.40)), Vector((4.58, -0.45, 1.12)), 22, 5.6),      # two-shot from her side wall: both reactions
+    (1220, Vector((3.68, 0.90, 1.42)), Vector((4.56, -0.45, 1.14)), 22, 4),
     (1270, Vector((3.00, -0.45, 1.0)), P(1270), 34, 5.6),
     # beat 7: follow it over the edge and down, floor-level skim on the bounces, settle close-up
     (1285, Vector((3.05, -0.50, 0.92)), P(1285), 36, 5.6),
@@ -66,11 +72,12 @@ CAM = [  # frame, camera, aim, lens, fstop
     (1345, P(1345) + Vector((-0.20, -0.32, 0.12)), P(1345) + Vector((0.20, 0.10, 0.10)), 28, 5.6),
     (1400, FL + Vector((-0.16, -0.24, 0.08)), FL + Vector((0.16, 0.08, 0.07)), 28, 5.6),
     # beat 8: crane up beside the table edge, then over the table end to her, shaken, holding the dented tumbler
-    (1408, Vector((3.30, -0.62, 0.90)), HER_HEAD + Vector((0.0, 0.0, -0.2)), 28, 5.6),
-    (1417, Vector((3.20, -0.25, 1.10)), HER_HEAD + Vector((0.0, 0.0, -0.08)), 32, 5.6),
-    (1450, Vector((3.35, -0.32, 1.12)), HER_HEAD + Vector((0.05, -0.05, -0.15)), 30, 5.6),
-    (1485, Vector((3.55, -0.45, 1.12)), (HER_HEAD + HANDLE_POS) / 2, 30, 4),
-    (1530, Vector((3.7, -0.2, 1.2)), (HER_HEAD + HANDLE_POS) / 2 + Z(0.03), 34, 4)]
+    # two-shot across the table from her side wall: her in three-quarter, him facing camera as he half-rises and takes the cup
+    (1408, Vector((3.02, -0.72, 1.10)), Vector((4.72, -0.08, 1.00)), 22, 5.6),
+    (1417, Vector((3.62, 0.80, 1.45)), TWO + Vector((0.04, 0.0, 0.22)), 20, 5.6),
+    (1450, Vector((3.70, 0.92, 1.45)), TWO + Vector((0.04, 0.0, 0.22)), 21, 5.6),
+    (1485, Vector((3.78, 1.04, 1.45)), TWO + Vector((0.04, 0.0, 0.22)), 22, 5.6),
+    (1530, Vector((3.88, 1.12, 1.46)), TWO + Vector((0.04, 0.0, 0.22)), 22, 5.6)]
 def vpchip(keys):
     """monotone cubic per axis: C1-continuous, never overshoots past a framing (the bullet's speed ramp made Catmull-Rom overshoot)"""
     fx = [pchip([(f, v[i]) for f, v in keys]) for i in range(3)]
