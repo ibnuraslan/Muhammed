@@ -72,10 +72,10 @@ if "screen_mat" in ctx:
 
 def state(o):
     return (tuple(round(v, 6) for v in o.location), tuple(round(v, 6) for v in o.rotation_euler),
-            tuple(round(v, 6) for v in o.rotation_quaternion))
+            tuple(round(v, 6) for v in o.rotation_quaternion), tuple(round(v, 6) for v in o.scale))
 # find what moves: compare three sample times, then key only those objects every frame
 snap = []
-for t in (0.0, 0.5, 1.0):
+for t in [k / 8 for k in range(9)]:      # nine samples: catch motion that happens only mid-shot (doors)
     restore_pose(); kit.apply_cam(cam, ctx, spec, t); bpy.context.view_layer.update()
     snap.append({o.name: state(o) for o in movers})
 movers = [o for o in movers if len({sn[o.name] for sn in snap}) > 1]
@@ -122,6 +122,7 @@ for f in key_frames:
             prev_e[o.name] = o.rotation_euler.copy()
         o.keyframe_insert("location", frame=f)
         o.keyframe_insert("rotation_quaternion" if o.rotation_mode == 'QUATERNION' else "rotation_euler", frame=f)
+        o.keyframe_insert("scale", frame=f)                    # growing strokes / marks animate by scale
     if screen_tex is not None and screen_tex.image is not None and screen_tex.image.filepath:
         shutil.copyfile(bpy.path.abspath(screen_tex.image.filepath), os.path.join(ui_dir, f"f{f:04d}.png"))
     print(f"[bake] {name} frame {f}/{n}", flush=True)
