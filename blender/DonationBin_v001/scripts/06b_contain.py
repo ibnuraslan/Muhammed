@@ -45,7 +45,10 @@ def need(f, v):
         return Vector((0, dy, 0)), True
     if f <= 240:                                                      # the dive: over the sill bar
         bad = (y > BAR_Y - 0.01) & (y < FY + 0.04) & (z < BAR_Z + 0.012) & (np.abs(x) < 0.47) & (z > 0.9)
-        dz = float(np.max(BAR_Z + 0.012 - z[bad])) if bad.any() else 0.0
+        up_ = float(np.max(BAR_Z + 0.012 - z[bad])) if bad.any() else 0.0
+        hi = (y > FY - 0.03) & (y < -0.15) & (z > 1.575) & (np.abs(x) < 0.47)      # under the opening top / the open flap
+        dn_ = float(np.min(1.575 - z[hi])) if hi.any() else 0.0
+        dz = (up_ + dn_) / 2 if (up_ > 0 and dn_ < 0) else (up_ or dn_)
         return Vector((0, 0, dz)), True
     if 2088 <= f <= 2150:                                             # crawling out: under the cut opening's top
         bad = (y > FY - 0.04) & (y < FY + 0.05) & (z > CUT_TOP) & (np.abs(x) < 0.75)
