@@ -58,9 +58,9 @@ if g is not None and not MEASURE:
             if loc is not None: ds.append((d, loc - w))
         ds.sort(key=lambda x: x[0]); med = ds[len(ds) // 2][0]
         print("ATTACH glasses median gap %.3f" % med)
-        if med < 0.010: break
+        if med < 0.0145: break
         mv = sum((x[1] for x in ds[:len(ds) // 2 + 1]), Vector()) / (len(ds) // 2 + 1)
-        mv = mv.normalized() * (med - 0.006)
+        mv = mv.normalized() * (med - 0.0135)   # on the nose, not into the face
         lv = gm.to_3x3().inverted() @ mv
         for v in g.data.vertices: v.co += lv
 print("ATTACH done")

@@ -57,3 +57,28 @@ Not intended and not fixed for the deadline:
 - Crucible: 10 sampled frames, 499–643. The fingers are on the shank but more than 3 cm from its bounding box at those samples.
 - ParcelBox_Lid and Cake1 at 823–847: they ride inside or on the carried box, with the hands on the box, not on them.
 - Key_Master at 145 and 1117: the wax-press phases, where the key is pressed into the wax and not re-keyed.
+
+## v007c: the director's moving-preview review of v009 (2026-11-14)
+Synced times are mapped back to v007 frames through the camera keys of v009.
+1. Eyes looked like black holes: MPFB's procedural EnhancedEye (blended cornea) rendered black. Every character now has an opaque textured eye (MPFB grey_eye.png) with a clear coat (scripts/03f_eyes.py).
+2. Crucible, 575–624: the ally now stands at the far end of the crucible's long handle, holding it with both hands, upright, facing the pot. His head stays at least 0.57 m from the crucible.
+3. Key at the chest, 56–75: the key is held well in front of the shirt (K_HOLD moved forward 12 cm), and the camera frames the hand and the key.
+4. Arm against the wall, about 1025: the left arm hangs during the forehead lean. The lean was eased so his head stops at the wall (it reached x 2.12, through the wall at x 2.0).
+5. Back of a man, empty corridor, top of a head (about 830, 854, 1369–1402):
+   - the hand-off is shot from the side;
+   - the whip leaves through the tunnel and enters through the window gap;
+   - beat 6 and the jam are shot from the door and lock side;
+   - the walk to the door is framed from above and in front.
+6. limb_check (9a0a692), with my fixes:
+   - Crowd arms went through their torsos; they now cheer with the body, arms down.
+   - The ally holds the pour clear of his body and leans less at the mould and the cake.
+   - The visitor holds the mould to his side.
+   - The prisoner's key holds are further out.
+   - The glasses moved to 1.35 cm off the face, no longer inside it.
+   - ARMBACK is 0.
+   - Remaining flags:
+     - ARMBODY with 3 or more points: the ally at 785–853 (box carry), and the prisoner at 1173, 1181, 1213, 1325, 1373, 1377 and 1457, each 3–7 points on single frames.
+     - PROPHEAD at 1205: the mould passing his head.
+   - Flags with 2 points are the shoulder joint itself: the same 2 points flag in the rest pose (tested).
+Moving preview: review/preview_v007c_every5th.mp4 (every 5th frame, 270x480, Cycles 4 samples and denoise), watched frame by frame.
+Still visible in the preview: beat 6 (871) shows him at the door from behind and the right. The whip into the cell passes one dark tunnel frame (856). The crane has one empty-yard frame (1736).
