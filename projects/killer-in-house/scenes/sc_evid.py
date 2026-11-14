@@ -288,17 +288,27 @@ def smooth(a, b, x):
     return ease(min(1.0, max(0.0, (x - a) / (b - a))))
 
 
-def motes(n, center, size, seed=3, r=0.0012):
-    """Dust motes drifting in a light beam (tiny emissive-free specks, they read in the spot)."""
+def motes(n, center, size, seed=3, r=0.0012, cone=None):
+    """Dust motes drifting in a light beam. cone=(apex, radius_at_floor): only inside the light cone, so they never
+    read as stars in the dark; soft, half-translucent specks (with shallow DOF they become fine out-of-focus dust)."""
     rng = np.random.default_rng(seed); src = None; out = []
-    m = pbr("Mote", (0.9, 0.88, 0.82), 0.6)
-    for k in range(n):
+    m = bpy.data.materials.new("Mote"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; pb = N["Principled BSDF"]; pb.inputs['Base Color'].default_value = (0.85, 0.82, 0.76, 1); pb.inputs['Roughness'].default_value = 0.8
+    tr = N.new("ShaderNodeBsdfTransparent"); mx = N.new("ShaderNodeMixShader"); mx.inputs[0].default_value = 0.45
+    L.new(tr.outputs[0], mx.inputs[1]); L.new(pb.outputs[0], mx.inputs[2]); L.new(mx.outputs[0], N["Material Output"].inputs[0])
+    while len(out) < n:
         p0 = Vector(center) + Vector(((rng.random() - 0.5) * size[0], (rng.random() - 0.5) * size[1], (rng.random() - 0.5) * size[2]))
+        if cone:
+            apex, r0 = Vector(cone[0]), cone[1]
+            rad = r0 * (apex.z - p0.z) / apex.z * 0.8
+            if (Vector((p0.x, p0.y)) - Vector((apex.x, apex.y))).length > rad:
+                continue
         if src is None:
             bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=r, location=p0); src = bpy.context.active_object; src.data.materials.append(m); o = src
         else:
             o = instance(src, p0)
         out.append((o, p0, rng.random() * 6.28, 0.3 + rng.random()))
+        k = len(out)
     return out
 
 
@@ -349,7 +359,7 @@ def _b_tool_black(c, swing=False):
         spot((0.03, 0.0, 1.5), (-0.05, 0.0, 0.0), 300, 40, 0.3, radius=0.04)
         # no rim lamp: its pool on the floor read as a glare when the camera arcs round (one light only)
         # no haze here: the side-lit cone flared at the end of the arc; the motes carry the beam
-        c["motes"] = motes(70, (0, 0, 0.45), (0.5, 0.5, 0.8))
+        c["motes"] = motes(45, (0, 0, 0.4), (0.7, 0.7, 0.7), r=0.0007, cone=((0.03, 0.0, 1.5), 0.55))
 
 
 def _b_tool_swing(c):
@@ -514,92 +524,230 @@ MONTHS = [("OCTOBER", 1941), ("NOVEMBER", 1941), ("DECEMBER", 1941), ("JANUARY",
           ("MARCH", 1942), ("APRIL", 1942), ("MAY", 1942), ("JUNE", 1942), ("JULY", 1942)]
 
 
+def _brick_tex_mat(name, c1, c2, mortar, scale, row=0.25, width=0.5, msize=0.015, rough=0.85, bump=0.3, snow=False, plane="xy"):
+    """Procedural brick/board/shingle material at model scale (object coords). snow=True adds a settling-snow mask
+    driven by the material's 'SnowAmount' value node (0 = none, 1 = covered): patchy, thickest on up-facing faces."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    bt = N.new("ShaderNodeTexBrick"); bt.inputs['Scale'].default_value = scale
+    bt.inputs['Color1'].default_value = (*c1, 1); bt.inputs['Color2'].default_value = (*c2, 1); bt.inputs['Mortar'].default_value = (*mortar, 1)
+    bt.inputs['Mortar Size'].default_value = msize; bt.inputs['Brick Width'].default_value = width; bt.inputs['Row Height'].default_value = row
+    if plane == "xy":
+        L.new(tc.outputs['Object'], bt.inputs['Vector'])
+    else:                  # walls: courses run horizontally (tex x = along the wall, tex y = height)
+        sp = N.new("ShaderNodeSeparateXYZ"); cb = N.new("ShaderNodeCombineXYZ"); L.new(tc.outputs['Object'], sp.inputs[0])
+        L.new(sp.outputs['Y' if plane == "yz" else 'X'], cb.inputs[0]); L.new(sp.outputs['Z'], cb.inputs[1]); L.new(sp.outputs['X' if plane == "yz" else 'Y'], cb.inputs[2])
+        L.new(cb.outputs[0], bt.inputs['Vector'])
+    nz = N.new("ShaderNodeTexNoise"); nz.inputs['Scale'].default_value = 300; L.new(tc.outputs['Object'], nz.inputs['Vector'])
+    vary = N.new("ShaderNodeMix"); vary.data_type = 'RGBA'; vary.blend_type = 'MULTIPLY'; vary.inputs['Factor'].default_value = 0.25
+    L.new(bt.outputs['Color'], vary.inputs[6]); L.new(nz.outputs['Color'], vary.inputs[7])
+    col = vary.outputs[2]
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = bump; L.new(bt.outputs['Fac'], bp.inputs['Height'])
+    L.new(bp.outputs['Normal'], p.inputs['Normal']); p.inputs['Roughness'].default_value = rough
+    if snow:
+        col = snow_mix(N, L, tc, col, p)
+    L.new(col, p.inputs['Base Color'])
+    return m
+
+
+def snow_mix(N, L, tc, col, p):
+    """Mix real-looking settled snow over col: a 'SnowAmount' value node sets how much has settled; coverage is
+    patchy (two noise scales) and favours up-facing surfaces; the snow is bright, rough, with a little sparkle bump."""
+    amt = N.new("ShaderNodeValue"); amt.name = "SnowAmount"; amt.outputs[0].default_value = 0.0
+    n1 = N.new("ShaderNodeTexNoise"); n1.inputs['Scale'].default_value = 9; n1.inputs['Detail'].default_value = 12; n1.inputs['Roughness'].default_value = 0.65; L.new(tc.outputs['Object'], n1.inputs['Vector'])
+    geo = N.new("ShaderNodeNewGeometry"); sep = N.new("ShaderNodeSeparateXYZ"); L.new(geo.outputs['Normal'], sep.inputs[0])
+    up = N.new("ShaderNodeMath"); up.operation = 'MULTIPLY_ADD'; up.inputs[1].default_value = 0.5; up.inputs[2].default_value = 0.5
+    L.new(sep.outputs['Z'], up.inputs[0])
+    a = N.new("ShaderNodeMath"); a.operation = 'MULTIPLY'; L.new(n1.outputs['Fac'], a.inputs[0]); L.new(up.outputs[0], a.inputs[1])
+    b = N.new("ShaderNodeMath"); b.operation = 'ADD'; L.new(a.outputs[0], b.inputs[0]); L.new(amt.outputs[0], b.inputs[1])
+    c_ = N.new("ShaderNodeMath"); c_.operation = 'SUBTRACT'; L.new(b.outputs[0], c_.inputs[0]); c_.inputs[1].default_value = 0.95
+    d = N.new("ShaderNodeMath"); d.operation = 'MULTIPLY'; d.use_clamp = True; L.new(c_.outputs[0], d.inputs[0]); d.inputs[1].default_value = 3.5
+    mx = N.new("ShaderNodeMix"); mx.data_type = 'RGBA'; L.new(d.outputs[0], mx.inputs['Factor']); L.new(col, mx.inputs[6])
+    mx.inputs[7].default_value = (0.86, 0.88, 0.9, 1)
+    return mx.outputs[2]
+
+
+def ground_mat():
+    """Model lawn ('flock'): fine fibres of mixed green-brown, autumn leaf litter, settled snow (SnowAmount),
+    the season set by the 'Season' value node: 0 autumn, 1 summer."""
+    m = bpy.data.materials.new("ModelLawn"); m.use_nodes = True
+    N = m.node_tree.nodes; L = m.node_tree.links; p = N["Principled BSDF"]
+    tc = N.new("ShaderNodeTexCoord")
+    fib = N.new("ShaderNodeTexNoise"); fib.inputs['Scale'].default_value = 900; fib.inputs['Detail'].default_value = 10; L.new(tc.outputs['Object'], fib.inputs['Vector'])
+    pat = N.new("ShaderNodeTexNoise"); pat.inputs['Scale'].default_value = 18; L.new(tc.outputs['Object'], pat.inputs['Vector'])
+    sea = N.new("ShaderNodeValue"); sea.name = "Season"; sea.outputs[0].default_value = 0.0
+    aut = N.new("ShaderNodeValToRGB"); aut.color_ramp.elements[0].color = (0.05, 0.04, 0.018, 1); aut.color_ramp.elements[1].color = (0.2, 0.14, 0.06, 1)
+    summ = N.new("ShaderNodeValToRGB"); summ.color_ramp.elements[0].color = (0.03, 0.06, 0.015, 1); summ.color_ramp.elements[1].color = (0.12, 0.2, 0.05, 1)
+    mixf = N.new("ShaderNodeMath"); mixf.operation = 'MULTIPLY_ADD'; L.new(fib.outputs['Fac'], mixf.inputs[0]); mixf.inputs[1].default_value = 0.7
+    L.new(pat.outputs['Fac'], mixf.inputs[2])
+    L.new(mixf.outputs[0], aut.inputs[0]); L.new(mixf.outputs[0], summ.inputs[0])
+    sm = N.new("ShaderNodeMix"); sm.data_type = 'RGBA'; L.new(sea.outputs[0], sm.inputs['Factor']); L.new(aut.outputs[0], sm.inputs[6]); L.new(summ.outputs[0], sm.inputs[7])
+    # leaf litter in autumn: sparse orange-brown flecks
+    lv = N.new("ShaderNodeTexVoronoi"); lv.inputs['Scale'].default_value = 140; L.new(tc.outputs['Object'], lv.inputs['Vector'])
+    lt = N.new("ShaderNodeMath"); lt.operation = 'LESS_THAN'; lt.inputs[1].default_value = 0.12; L.new(lv.outputs['Distance'], lt.inputs[0])
+    inv = N.new("ShaderNodeMath"); inv.operation = 'SUBTRACT'; inv.inputs[0].default_value = 1.0; L.new(sea.outputs[0], inv.inputs[1])
+    lf = N.new("ShaderNodeMath"); lf.operation = 'MULTIPLY'; L.new(lt.outputs[0], lf.inputs[0]); L.new(inv.outputs[0], lf.inputs[1])
+    lm = N.new("ShaderNodeMix"); lm.data_type = 'RGBA'; L.new(lf.outputs[0], lm.inputs['Factor']); L.new(sm.outputs[2], lm.inputs[6])
+    lm.inputs[7].default_value = (0.42, 0.16, 0.04, 1)
+    col = snow_mix(N, L, tc, lm.outputs[2], p)
+    L.new(col, p.inputs['Base Color']); p.inputs['Roughness'].default_value = 0.95
+    bp = N.new("ShaderNodeBump"); bp.inputs['Strength'].default_value = 0.6; L.new(fib.outputs['Fac'], bp.inputs['Height']); L.new(bp.outputs['Normal'], p.inputs['Normal'])
+    return m
+
+
+def model_window(x, y, z, axis, w=0.13, h=0.15):
+    """A sash window at model scale in a side wall (axis 'x' = wall normal along x): cream frame, mullions, dark glass."""
+    fr = pbr("ModelTrim", (0.62, 0.58, 0.5), 0.6); gl = pbr("ModelGlass", (0.015, 0.017, 0.02), 0.08)
+    t = 0.04
+    if axis == 'x':
+        box("MWGlass", (x, y, z), (t, w, h), gl)
+        for dz in (-h / 2, h / 2, 0.0):
+            box("MWRail", (x, y, z + dz), (t + 0.006, w + 0.012, 0.008), fr)
+        for dy in (-w / 2, w / 2, 0.0):
+            box("MWStile", (x, y + dy, z), (t + 0.006, 0.008, h), fr)
+        box("MWSill", (x, y, z - h / 2 - 0.006), (t + 0.02, w + 0.03, 0.01), fr)
+    else:
+        box("MWGlass", (x, y, z), (w, t, h), gl)
+        for dz in (-h / 2, h / 2, 0.0):
+            box("MWRail", (x, y, z + dz), (w + 0.012, t + 0.006, 0.008), fr)
+        for dx in (-w / 2, w / 2, 0.0):
+            box("MWStile", (x + dx, y, z), (0.008, t + 0.006, h), fr)
+        box("MWSill", (x, y, z - h / 2 - 0.006), (w + 0.03, t + 0.02, 0.01), fr)
+
+
 def _b_cutaway(c):
+    """Ch3 hero long take: a forensic architectural model of the house (about 1:10) on a museum plinth in a dark studio.
+    Brick on every outer face, shingle roof, wallpaper, floorboards and detailed miniature furniture inside; the
+    front is cut away. Seasons pass in the model's lawn and settling snow (no falling 'stars'); the rooms below go
+    dark when Helen leaves; only the attic keeps its hot-plate glow."""
     world_flat((0.0, 0.0, 0.0), 0.0)
-    box("Floor", (0, 0, -0.01), (40, 40, 0.02), pbr("StudioFloor", (0.01, 0.01, 0.011), 0.4))
-    plinth = box("Plinth", (0, 0, 0.35), (2.2, 1.6, 0.7), pbr("Plinth", (0.03, 0.03, 0.032), 0.5), bevel=0.01)
-    Z = 0.7
-    c["ground_m"] = pbr("Ground", (0.3, 0.2, 0.08), 0.9)
-    box("Ground", (0, 0, Z + 0.01), (2.18, 1.58, 0.02), c["ground_m"])
-    plas = pbr("ModelPlaster", (0.62, 0.55, 0.42), 0.8); wood_ = H.mat("oak"); roof = pbr("ModelRoof", (0.12, 0.1, 0.09), 0.8)
-    # house 0.9 (x) by 1.0 (y), front (-y) cut away; floors at 0.0, 0.3; eave 0.6; ridge 0.82 (model metres)
-    W, D, F2m, EA, RI = 0.9, 1.0, 0.3, 0.6, 0.84
-    b = Z + 0.02
-    sec_m = pbr("CutFace", (0.75, 0.7, 0.6), 0.9)     # the cut faces read as a clean light section
-    brk = model_brick()
+    # dark studio: a soft-falloff floor and a deep backdrop, lit only by the museum spot
+    box("StudioFloor", (0, 0, -0.01), (40, 40, 0.02), pbr("StudioFloor", (0.03, 0.028, 0.026), 0.6))
+    box("Backdrop", (0, 6.0, 3.0), (20, 0.1, 8), pbr("Backdrop", (0.025, 0.024, 0.023), 0.9))
+    plinth_m = wood("PlinthWood", (0.012, 0.009, 0.007), (0.04, 0.03, 0.022), scale=(0.3, 6, 6), rough=0.45, coat=0.3)
+    box("Plinth", (0, 0, 0.35), (2.2, 1.6, 0.7), plinth_m, bevel=0.01)
+    box("PlinthTrim", (0, 0, 0.705), (2.24, 1.64, 0.012), pbr("Brass", (0.55, 0.4, 0.2), 0.35, 1.0))
+    Z = 0.712
+    c["ground_m"] = ground_mat()
+    box("Lawn", (0, 0, Z + 0.006), (2.16, 1.56, 0.012), c["ground_m"])
+    concrete = pbr("ModelConcrete", (0.36, 0.35, 0.33), 0.9)
+    box("Sidewalk", (0, -0.66, Z + 0.014), (2.16, 0.16, 0.008), concrete)
+    box("Path", (0.18, -0.5, Z + 0.014), (0.12, 0.2, 0.008), concrete)
+    for k in range(3):
+        box("Step", (0.18, -0.41 + 0.02 * k, Z + 0.02 + 0.014 * k), (0.16, 0.04, 0.014), concrete)
+    # picket fence along the sidewalk
+    wht = pbr("FencePaint", (0.55, 0.53, 0.48), 0.7)
+    for k in range(40):
+        x = -1.0 + k * 0.05
+        if abs(x - 0.18) < 0.07:
+            continue
+        box("Picket", (x, -0.575, Z + 0.045), (0.01, 0.006, 0.07), wht)
+    for zz in (0.03, 0.065):
+        box("FenceRail", (-0.45, -0.572, Z + zz), (1.1, 0.004, 0.008), wht); box("FenceRail", (0.66, -0.572, Z + zz), (0.84, 0.004, 0.008), wht)
+    # materials at model scale
+    bk = dict(c1=(0.26, 0.085, 0.05), c2=(0.17, 0.06, 0.035), mortar=(0.5, 0.47, 0.42), scale=20, msize=0.045, bump=0.8)
+    brick_side = _brick_tex_mat("ModelBrickSide", plane="yz", **bk); brick = _brick_tex_mat("ModelBrick", plane="xz", **bk)
+    shingle = _brick_tex_mat("ModelShingle", (0.07, 0.065, 0.06), (0.11, 0.1, 0.09), (0.03, 0.03, 0.03), 22, row=0.35, width=0.6, msize=0.03, bump=0.6, snow=True)
+    boards = _brick_tex_mat("ModelBoards", (0.26, 0.15, 0.07), (0.2, 0.11, 0.05), (0.08, 0.05, 0.03), 40, row=0.12, width=2.5, msize=0.01, rough=0.5, bump=0.2)
+    c["snow_mats"] = [c["ground_m"], shingle]
     wp1 = H.wallpaper("ModelPaper1", (0.62, 0.55, 0.42), (0.55, 0.2, 0.18), (0.3, 0.38, 0.22), seed=2, scale=40.0)
     wp2 = H.wallpaper("ModelPaper2", (0.5, 0.56, 0.5), (0.6, 0.5, 0.3), (0.3, 0.38, 0.22), seed=5, scale=40.0)
-    for (nm, loc, sz) in (("BackWall", (0, D / 2, b + EA / 2), (W, 0.03, EA)), ("SideL", (-W / 2, 0, b + EA / 2), (0.03, D, EA)),
-                          ("SideR", (W / 2, 0, b + EA / 2), (0.03, D, EA))):
-        box(nm, loc, sz, brk)
-        inset = Vector((0, -0.016, 0)) if nm == "BackWall" else Vector((0.016 if nm == "SideL" else -0.016, 0, 0))
+    ceil_m = pbr("ModelCeiling", (0.55, 0.52, 0.46), 0.85); cut = pbr("CutFace", (0.2, 0.18, 0.15), 0.9)
+    W, D, F2m, EA, RI = 0.9, 1.0, 0.3, 0.6, 0.84
+    b = Z + 0.012; T = 0.03
+    # outer walls (brick outside, wallpaper inside), back + both sides; front cut away
+    for (nm, loc, sz) in (("BackWall", (0, D / 2, b + EA / 2), (W, T, EA)), ("SideL", (-W / 2, 0, b + EA / 2), (T, D, EA)), ("SideR", (W / 2, 0, b + EA / 2), (T, D, EA))):
+        box(nm, loc, sz, brick if nm == "BackWall" else brick_side)
+        inset = Vector((0, -T / 2 - 0.001, 0)) if nm == "BackWall" else Vector((T / 2 + 0.001 if nm == "SideL" else -T / 2 - 0.001, 0, 0))
         for k, (z0, hh, m_) in enumerate(((0.02, F2m - 0.02, wp1), (F2m + 0.025, EA - F2m - 0.025, wp2))):
-            box(nm + "Paper%d" % k, Vector((loc[0], loc[1], b + z0 + hh / 2)) + inset, (sz[0] if nm == "BackWall" else 0.002, 0.002 if nm == "BackWall" else sz[1], hh), m_)
-    for (x, z) in ((-0.45, 0.15), (0.45, 0.15), (-0.45, 0.45), (0.45, 0.45)):         # windows in the side walls
-        box("ModelWin", (x, -0.1, b + z), (0.035, 0.16, 0.12), pbr("ModelGlass", (0.02, 0.02, 0.025), 0.1))
-    box("Floor1", (0, 0, b + 0.01), (W, D, 0.02), wood_); box("Floor2", (0, 0, b + F2m), (W, D, 0.025), sec_m)
-    box("Ceil2", (0, 0, b + EA), (W, D, 0.025), sec_m)
-    box("Part1", (0, 0.05, b + F2m / 2), (0.02, D * 0.9, F2m), plas); box("Part2", (-0.12, 0.05, b + F2m + 0.15), (0.02, D * 0.9, F2m), plas)
-    # gable roof (cut at the front) + gable end at the back
-    import bmesh
-    for sg in (-1, 1):
-        ang = math.atan2(RI - EA, W / 2)
-        bx = box("Roof%d" % sg, (sg * W / 4, 0.0, b + (EA + RI) / 2), (W / 2 / math.cos(ang) + 0.06, D + 0.08, 0.025), roof, rot=(0, sg * ang, 0))
+            box(nm + "Paper%d" % k, Vector((loc[0], loc[1], b + z0 + hh / 2)) + inset, (W - 2 * T if nm == "BackWall" else 0.002, 0.002 if nm == "BackWall" else D - 0.02, hh), m_)
+    # brick gable at the back, cut faces of the front edges
     me = bpy.data.meshes.new("Gable"); me.from_pydata([(-W / 2, D / 2, b + EA), (W / 2, D / 2, b + EA), (0, D / 2, b + RI)], [], [(0, 1, 2)])
-    gb = bpy.data.objects.new("Gable", me); bpy.context.collection.objects.link(gb); gb.data.materials.append(plas)
-    gb.modifiers.new("s", 'SOLIDIFY').thickness = 0.03
-    # tiny rooms: beds, table, range, stairs
-    for (n_, loc, sz, m_) in (("Bed", (-0.28, -0.2, b + 0.05), (0.18, 0.3, 0.05), pbr("Spread", (0.5, 0.42, 0.33), 0.9)),
-                              ("Table", (0.25, 0.25, b + 0.08), (0.16, 0.12, 0.01), wood_),
-                              ("Range", (0.36, 0.42, b + 0.05), (0.1, 0.07, 0.08), H.mat("iron")),
-                              ("Bed2", (-0.3, -0.15, b + F2m + 0.05), (0.18, 0.3, 0.05), pbr("Spread2", (0.4, 0.4, 0.45), 0.9))):
-        box(n_, loc, sz, m_)
-    for k in range(9):
-        box("Step", (0.08, -0.25 + k * 0.05, b + 0.02 + k * 0.032), (0.12, 0.05, 0.012), wood_)
-    # the closet and the hatch, the attic boards, the hot plate and the glow
-    box("Closet", (-0.18, 0.05, b + F2m + 0.135), (0.1, 0.12, 0.25), plas)
-    for k in range(6):
-        box("Board", (-0.32 + k * 0.025, 0.05, b + EA + 0.02), (0.022, 0.36, 0.006), H.mat("raw"))
-    c["hotplate"] = box("HotPlate", (-0.25, 0.12, b + EA + 0.03), (0.03, 0.03, 0.01), H.mat("iron"))
-    c["glow"] = H.point((-0.25, 0.1, b + EA + 0.06), 4.0, (1.0, 0.62, 0.3), 0.01)
-    c["coil"] = cyl("Coil", (-0.25, 0.12, b + EA + 0.0365), 0.009, 0.002, emissive("CoilE", (1.0, 0.35, 0.1), 6), 16)
-    # lit rooms below (on while someone lives here)
-    c["room_lights"] = [H.point((0.25, 0.2, b + 0.2), 0.5, (1.0, 0.75, 0.48), 0.02), H.point((-0.25, -0.1, b + 0.2), 0.4, (1.0, 0.75, 0.48), 0.02)]
-    # outside: two model trees, the street lamp; snow motes
-    c["canopies"] = []
-    for (x, y) in ((-0.85, -0.45), (0.8, -0.5)):
-        cyl("Trunk", (x, y, Z + 0.15), 0.012, 0.28, pbr("Bark", (0.12, 0.08, 0.05), 0.9), 8)
-        # foliage as a lumpy cluster (model-railway style clump foliage): several noisy blobs, leaf-scale bump
-        tx = bpy.data.textures.get("FoliageClouds") or bpy.data.textures.new("FoliageClouds", 'CLOUDS')
-        tx.noise_scale = 0.025; tx.noise_depth = 2
-        mt = foliage_mat("Canopy%d" % len(c["canopies"]))
-        rng2 = np.random.default_rng(len(c["canopies"]) + 11); blobs = []
-        for k in range(7):
-            off = Vector(((rng2.random() - 0.5) * 0.16, (rng2.random() - 0.5) * 0.16, (rng2.random() - 0.3) * 0.14))
-            bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=4, radius=0.06 + 0.03 * rng2.random(), location=Vector((x, y, Z + 0.34)) + off)
-            bl = bpy.context.active_object; d_ = bl.modifiers.new("d", 'DISPLACE'); d_.texture = tx; d_.strength = 0.035
-            bpy.ops.object.modifier_apply(modifier="d"); blobs.append(bl)
-        cp = join(blobs, "Canopy"); cp.data.materials.append(mt)
-        bpy.context.scene.cursor.location = (x, y, Z + 0.3); bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
-        c["canopies"].append(cp)
-    rng = np.random.default_rng(4); snow_m = pbr("Snow", (0.9, 0.9, 0.92), 0.7)
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.005, location=(0, 0, -5)); s0 = bpy.context.active_object; s0.data.materials.append(snow_m)
-    c["snow"] = [(instance(s0, (0, 0, -5)), Vector(((rng.random() - 0.5) * 2.1, (rng.random() - 0.5) * 1.5, rng.random()))) for _ in range(220)]
-    c["snow_cap"] = box("SnowCap", (0, 0, Z + 0.021), (2.18, 1.58, 0.004), snow_m)
+    gb = bpy.data.objects.new("Gable", me); bpy.context.collection.objects.link(gb); gb.data.materials.append(brick); gb.modifiers.new("s", 'SOLIDIFY').thickness = T
+    for x in (-W / 2, W / 2):
+        box("CutEdge", (x, -D / 2, b + EA / 2), (T + 0.002, 0.004, EA), cut)
+    # floors: boards on top, ceiling below; floor sections cut cleanly at the front
+    box("Floor1", (0, 0, b + 0.008), (W - 2 * T, D - T, 0.016), boards)
+    box("Floor2", (0, 0, b + F2m), (W - 2 * T, D - T, 0.025), cut)
+    box("Floor2Top", (0, 0, b + F2m + 0.0135), (W - 2 * T, D - T, 0.002), boards)
+    box("Ceil1", (0, 0, b + F2m - 0.0135), (W - 2 * T, D - T, 0.002), ceil_m)
+    box("Ceil2", (0, 0, b + EA), (W - 2 * T, D - T, 0.025), cut)
+    box("Ceil2Under", (0, 0, b + EA - 0.0135), (W - 2 * T, D - T, 0.002), ceil_m)
+    box("Ceil2Top", (0, 0, b + EA + 0.0135), (W - 2 * T, D - T, 0.002), boards)     # crawl-space boards
+    # partitions (wallpapered both sides)
+    box("Part1", (0.02, 0.05, b + F2m / 2), (0.015, D * 0.88, F2m - 0.03), wp1)
+    box("Part2", (-0.12, 0.05, b + F2m + EA / 2 - F2m / 2), (0.015, D * 0.88, EA - F2m - 0.03), wp2)
+    # roof: shingles, with snow that settles in winter
+    ang = math.atan2(RI - EA, W / 2)
     for sg in (-1, 1):
-        ang = math.atan2(RI - EA, W / 2)
-        o = box("RoofSnow%d" % sg, (sg * W / 4, 0.0, b + (EA + RI) / 2 + 0.016), (W / 2 / math.cos(ang) + 0.06, D + 0.08, 0.006), snow_m, rot=(0, sg * ang, 0))
-        c.setdefault("roof_snow", []).append(o)
-    # the museum-style date card at the plinth front (facts written into the set)
-    paper_m = pbr("CardPaper", (0.85, 0.82, 0.74), 0.8)
-    box("DateCard", (0.0, -0.81, 0.45), (0.62, 0.006, 0.2), paper_m)
+        box("Roof%d" % sg, (sg * W / 4, 0.0, b + (EA + RI) / 2 + 0.012), (W / 2 / math.cos(ang) + 0.07, D + 0.08, 0.022), shingle, rot=(0, sg * ang, 0))
+    box("RidgeCap", (0, 0, b + RI + 0.025), (0.03, D + 0.08, 0.015), shingle)
+    box("Chimney", (-0.22, 0.38, b + RI), (0.08, 0.1, 0.32), brick)
+    # windows in the side and back walls
+    for (x, y, z) in ((-W / 2, -0.2, 0.15), (-W / 2, 0.22, 0.15), (-W / 2, -0.2, 0.45), (W / 2, -0.2, 0.15), (W / 2, 0.22, 0.15), (W / 2, -0.2, 0.45), (W / 2, 0.22, 0.45)):
+        model_window(x, y, b + z, 'x')
+    for (x, z) in ((-0.25, 0.15), (0.25, 0.15), (-0.25, 0.45), (0.25, 0.45)):
+        model_window(x, D / 2, b + z, 'y')
+    # ---- miniature furniture (about 1:10) ----
+    oak = wood("MiniOak", (0.06, 0.03, 0.015), (0.16, 0.09, 0.045), scale=(1, 60, 60), rough=0.4, coat=0.3)
+    iron = H.mat("iron"); linen = pbr("MiniLinen", (0.62, 0.6, 0.55), 0.9); quilt = pbr("MiniQuilt", (0.42, 0.14, 0.1), 0.9)
+    rug = pbr("MiniRug", (0.32, 0.12, 0.08), 0.95)
+    def bed(x, y, z0, rot=0.0):
+        parts = [box("BedFrame", (0, 0, 0.022), (0.15, 0.2, 0.012), oak), box("Mattress", (0, 0, 0.036), (0.14, 0.19, 0.016), linen),
+                 box("Quilt", (0, -0.02, 0.046), (0.145, 0.15, 0.006), quilt), box("Pillow", (0, 0.075, 0.048), (0.1, 0.035, 0.012), linen),
+                 box("Headboard", (0, 0.1, 0.05), (0.15, 0.01, 0.07), oak), box("Footboard", (0, -0.1, 0.035), (0.15, 0.01, 0.04), oak)]
+        for sx in (-0.07, 0.07):
+            for sy in (-0.095, 0.095):
+                parts.append(box("BedLeg", (sx, sy, 0.012), (0.01, 0.01, 0.024), oak))
+        o = join(parts, "MiniBed"); o.location = (x, y, z0); o.rotation_euler = (0, 0, rot)
+    def table_set(x, y, z0):
+        parts = [box("Top", (0, 0, 0.075), (0.14, 0.09, 0.006), oak)]
+        for sx in (-0.06, 0.06):
+            for sy in (-0.035, 0.035):
+                parts.append(box("Leg", (sx, sy, 0.036), (0.008, 0.008, 0.072), oak))
+        for (cx, cy, r) in ((0, -0.075, 0), (0, 0.075, math.pi), (-0.095, 0, -math.pi / 2), (0.095, 0, math.pi / 2)):
+            ch = [box("Seat", (0, 0, 0.045), (0.04, 0.04, 0.005), oak), box("Back", (0, -0.018, 0.075), (0.04, 0.005, 0.055), oak)]
+            for sx in (-0.016, 0.016):
+                for sy in (-0.016, 0.016):
+                    ch.append(box("CLeg", (sx, sy, 0.022), (0.005, 0.005, 0.044), oak))
+            co = join(ch, "MiniChair"); co.rotation_euler = (0, 0, r + math.pi); co.location = (cx, cy, 0)
+            parts.append(co)
+        o = join(parts, "MiniTable"); o.location = (x, y, z0)
+    bed(-0.28, -0.12, b + 0.016)                                          # front bedroom (ground floor, left)
+    box("RugBed", (-0.24, -0.25, b + 0.0175), (0.22, 0.14, 0.002), rug)
+    table_set(0.24, 0.2, b + 0.016)                                       # kitchen (back right)
+    stove_ = join([box("Range", (0, 0, 0.045), (0.1, 0.06, 0.09), iron), box("RangeTop", (0, 0, 0.092), (0.11, 0.065, 0.006), iron),
+                   cyl("Pipe", (-0.03, 0.02, 0.2), 0.008, 0.22, iron, 12)], "MiniRange"); stove_.location = (0.36, 0.42, b + 0.016)
+    box("MiniIcebox", (0.08, 0.44, b + 0.016 + 0.06), (0.07, 0.05, 0.12), oak)
+    arm = join([box("ArmSeat", (0, 0, 0.03), (0.07, 0.07, 0.03), pbr("MiniPlush", (0.3, 0.2, 0.12), 0.9)),
+                box("ArmBack", (0, 0.03, 0.06), (0.07, 0.012, 0.06), pbr("MiniPlush2", (0.3, 0.2, 0.12), 0.9))], "MiniArmchair")
+    arm.location = (0.3, -0.25, b + 0.016)
+    # stairs (ground floor up to the landing) and the closet + hatch upstairs
+    for k in range(9):
+        box("Stair", (0.1, -0.02 + k * 0.032, b + 0.016 + k * 0.031), (0.1, 0.034, 0.008), oak)
+    bed(-0.3, -0.12, b + F2m + 0.0145, rot=0.0)
+    box("UpRug", (-0.3, -0.28, b + F2m + 0.0155), (0.18, 0.1, 0.002), rug)
+    box("Closet", (-0.18, 0.12, b + F2m + 0.135), (0.1, 0.1, 0.24), wp2)
+    # the crawl space: blanket, hot plate with a live coil, radio, a jar
+    box("Blanket", (-0.2, 0.0, b + EA + 0.016), (0.08, 0.2, 0.004), pbr("MiniBlanket", (0.25, 0.22, 0.18), 0.95))
+    c["hotplate"] = box("HotPlate", (-0.06, 0.12, b + EA + 0.022), (0.03, 0.03, 0.01), iron)
+    c["coil"] = cyl("Coil", (-0.06, 0.12, b + EA + 0.0275), 0.009, 0.002, emissive("CoilE", (1.0, 0.35, 0.1), 6), 16)
+    box("Radio", (0.05, 0.2, b + EA + 0.035), (0.04, 0.025, 0.035), oak)
+    cyl("Jar", (-0.1, 0.2, b + EA + 0.03), 0.008, 0.02, glass("MiniJar", (0.7, 0.4, 0.3)), 12)
+    c["glow"] = H.point((-0.06, 0.1, b + EA + 0.05), 4.0, (1.0, 0.62, 0.3), 0.01)
+    # rooms below lit while someone lives here
+    c["room_lights"] = [H.point((0.25, 0.2, b + 0.2), 0.6, (1.0, 0.75, 0.48), 0.02), H.point((-0.25, -0.1, b + 0.2), 0.5, (1.0, 0.75, 0.48), 0.02)]
+    # museum label on the plinth (static)
+    box("DateCard", (0.0, -0.805, 0.45), (0.62, 0.006, 0.2), pbr("CardPaper", (0.75, 0.72, 0.64), 0.8))
     ink = pbr("CardInk", (0.03, 0.025, 0.02), 0.6)
-    text_obj("Month", "OCTOBER 1941  -  JULY 1942", (0.0, -0.815, 0.48), 0.05, ink, font_path=SERIFB)
-    text_obj("Days", "286 days in the crawl space", (0.0, -0.815, 0.39), 0.04, pbr("CardRed", (0.5, 0.05, 0.03), 0.6), font_path=SERIF)
-    # light: a key from high front-left whose colour and angle follow the season, + a cool rim behind
-    c["key"] = spot((-2.0, -2.2, 3.0), (0, 0, 1.0), 900, 40, 0.5, radius=0.2)
-    rim = spot((1.5, 2.5, 2.2), (0, 0, 1.0), 300, 40, 0.5, col=(0.8, 0.86, 1.0), radius=0.3)
-    c["sky"] = box("Sky", (0, 3.2, 1.6), (8, 0.05, 4), emissive("SkyCard", (0.2, 0.25, 0.35), 0.15))
+    text_obj("Month", "OCTOBER 1941  -  JULY 1942", (0.0, -0.81, 0.48), 0.05, ink, font_path=SERIFB)
+    text_obj("Days", "286 days in the crawl space", (0.0, -0.81, 0.39), 0.04, pbr("CardRed", (0.45, 0.05, 0.03), 0.6), font_path=SERIF)
+    # museum spot: one soft-edged pool on the model, falling off into the dark studio; a faint fill
+    c["key"] = spot((-1.2, -2.0, 3.6), (0, 0, 0.95), 1600, 34, 0.7, radius=0.15)
+    spot((1.6, 1.8, 2.4), (0, 0, 1.0), 120, 50, 0.6, col=(0.85, 0.88, 0.95), radius=0.4)
+    # a soft low fill from the open front, so the miniature rooms read (hidden from camera)
+    f_ = area_light((0.0, -1.3, 1.0), (math.radians(80), 0, 0), 0.8, 18, (1.0, 0.92, 0.82)); f_.visible_camera = False
 
 
 def foliage_mat(name):
@@ -699,34 +847,19 @@ def anim_plan(c, t):
 def anim_cutaway(c, t):
     sec = t * DUR["cutaway"]
     m, w_win, w_sum = season(t)
-    # ground and trees through the seasons
-    aut, win, sumr = Vector((0.3, 0.19, 0.07)), Vector((0.8, 0.8, 0.82)), Vector((0.12, 0.22, 0.06))
-    g = aut.lerp(win, w_win).lerp(sumr, w_sum)
-    c["ground_m"].node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (*g, 1)
-    leaf = (1 - smooth(0.06, 0.16, t)) + smooth(0.62, 0.74, t)
-    col = Vector((0.5, 0.22, 0.05)).lerp(Vector((0.1, 0.25, 0.05)), w_sum)
-    for cp in c["canopies"]:
-        cp.scale = (max(0.001, leaf),) * 3
-        cp.active_material.node_tree.nodes["Principled BSDF"].inputs['Base Color'].default_value = (*col, 1)
-    c["snow_cap"].scale = (1, 1, max(0.001, w_win)); c["snow_cap"].hide_render = w_win < 0.02
-    for o in c["roof_snow"]:
-        o.hide_render = w_win < 0.3
-    fall = smooth(0.12, 0.16, t) * (1 - smooth(0.5, 0.55, t))
-    for o, p0 in c["snow"]:
-        if fall <= 0:
-            o.location = (0, 0, -5); continue
-        z = (p0.z - sec * 0.08) % 1.0
-        o.location = (p0.x + 0.02 * math.sin(sec + p0.y * 9), p0.y, 0.72 + z * 1.2)
+    # the lawn: autumn (leaf litter) -> summer green; snow settles and melts on lawn and roof (real event, no flakes)
+    snow_amt = 0.75 * w_win
+    for mt in c["snow_mats"]:
+        mt.node_tree.nodes["SnowAmount"].outputs[0].default_value = snow_amt
+    c["ground_m"].node_tree.nodes["Season"].outputs[0].default_value = w_sum
     # who lives here: lights on with Helen (first weeks), then the house is dark; only the attic glows
     on = 1 - smooth(0.08, 0.12, t)
     for k, l in enumerate(c["room_lights"]):
-        l.data.energy = (0.5 - 0.1 * k) * on
+        l.data.energy = (0.6 - 0.1 * k) * on
     c["glow"].data.energy = 4.0 * (1 + 0.15 * math.sin(9 * sec) * math.sin(2.3 * sec))
-    # the key follows the seasons: low warm autumn, pale winter, high summer
-    kc = Vector((1.0, 0.78, 0.55)).lerp(Vector((0.85, 0.9, 1.0)), w_win).lerp(Vector((1.0, 0.93, 0.8)), w_sum)
-    c["key"].data.color = kc; c["key"].data.energy = 900 * (1 - 0.35 * w_win)
-    sk = Vector((0.25, 0.18, 0.12)).lerp(Vector((0.3, 0.33, 0.4)), w_win).lerp(Vector((0.18, 0.3, 0.5)), w_sum)
-    c["sky"].active_material.node_tree.nodes["Principled BSDF"].inputs['Emission Color'].default_value = (*sk, 1)
+    # the museum spot takes the season's colour, subtly: warm autumn, pale winter, clear summer
+    kc = Vector((1.0, 0.82, 0.62)).lerp(Vector((0.9, 0.93, 1.0)), w_win).lerp(Vector((1.0, 0.95, 0.85)), w_sum)
+    c["key"].data.color = kc
 
 
 def anim_clock(c, t):
@@ -784,7 +917,7 @@ def _cam_clock(c, t):
 
 
 MOVES = {
-    "tool_black": dict(kind="anim", dof=2.8, far=10, anim=anim_tool, cam=_cam_tool, focus=lambda c, t: Vector((0.1, 0.0, 0.02))),
+    "tool_black": dict(kind="anim", dof=1.4, far=10, anim=anim_tool, cam=_cam_tool, focus=lambda c, t: Vector((0.1, 0.0, 0.02))),
     "tool_swing": dict(kind="anim", dof=None, far=10, anim=anim_tool_swing, cam=_cam_tool_swing),
     "board": dict(kind="anim", dof=2.0, far=10, anim=anim_board, cam=_cam_board,
                   focus=lambda c, t: Vector((0.0, 0.0, 1.45)).lerp(Vector((0.27, 0.0, 1.07)), smooth(0.45, 0.85, t))),
