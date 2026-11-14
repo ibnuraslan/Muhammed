@@ -1,0 +1,68 @@
+[
+ {
+  "beat": 1,
+  "frame": 1,
+  "t": 0.0,
+  "first_words": "pushed a Lego piece up his nose"
+ },
+ {
+  "beat": 2,
+  "frame": 241,
+  "t": 4.0,
+  "first_words": "pushed a second piece"
+ },
+ {
+  "beat": 3,
+  "frame": 457,
+  "t": 7.6,
+  "first_words": "click together"
+ },
+ {
+  "beat": 4,
+  "frame": 631,
+  "t": 10.5,
+  "first_words": "a clever plan"
+ },
+ {
+  "beat": 5,
+  "frame": 757,
+  "t": 12.6,
+  "first_words": "both pieces got stuck"
+ },
+ {
+  "beat": 6,
+  "frame": 949,
+  "t": 15.8,
+  "first_words": "His mom pulled out the bigger one"
+ },
+ {
+  "beat": 7,
+  "frame": 1087,
+  "t": 18.1,
+  "first_words": "the smaller piece"
+ },
+ {
+  "beat": 8,
+  "frame": 1351,
+  "t": 22.5,
+  "first_words": "For 26 years"
+ },
+ {
+  "beat": 9,
+  "frame": 1477,
+  "t": 24.6,
+  "first_words": "congestion, asthma and sleep apnea"
+ },
+ {
+  "beat": 10,
+  "frame": 1867,
+  "t": 31.1,
+  "first_words": "blowing his nose in the shower"
+ },
+ {
+  "beat": 11,
+  "frame": 2077,
+  "t": 34.6,
+  "first_words": "the tiny Lego piece suddenly shot out"
+ }
+]

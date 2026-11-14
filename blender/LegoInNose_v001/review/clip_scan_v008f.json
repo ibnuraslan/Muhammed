@@ -1,0 +1,36 @@
+{
+ "frames": {
+  "991": {
+   "Mom": {
+    "self": 1,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1015": {
+   "Mom": {
+    "self": 8,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1747": {
+   "Man": {
+    "self": 10,
+    "clothes": 0,
+    "other": 0
+   }
+  },
+  "1789": {
+   "Man": {
+    "self": 4,
+    "clothes": 0,
+    "other": 0
+   }
+  }
+ },
+ "step": 6,
+ "depth_cm": 2.0,
+ "bad_ranges": [],
+ "fps": 60
+}

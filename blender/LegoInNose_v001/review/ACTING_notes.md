@@ -174,3 +174,38 @@ The director's v008d note: at about f140–150 the fist was mashed flat over his
 - **Open:**
   - At f160 the camera has swung back to the front, and the withdrawing hand is still in front of his chin.
   - The 100–119 carry was re-baked after the strip was rendered, a shift of a few mm.
+
+## 9. v008f: the director's moving-preview review of v010
+The director's times are synced v010 seconds. They map to v008e frames through the beat anchors, recovered from the keyframes: 1→1, 241→193, 457→385, 631→511, 757→637, 949→823, 1087→937, 1351→1195, 1477→1297, 1867→1585, 2077→1723.
+
+| Synced time (v008e frames) | Fault | Fix |
+|---|---|---|
+| 5.75–6.25 s (413–447) | The boy's eyes were black holes | MPFB's EnhancedEye cornea used refractive transmission over the iris. With refractive caustics off (the Cycles default), no light reached the iris. The cornea is now a Transparent BSDF mixed in by the same value (`eye_fix.py`). It's a shared node group, so all 4 characters are fixed. |
+| 2.0–2.75 s (151–207) | The porthole ring over his nose | Removed. The skin cut radius is 0 and the x-ray interior never renders (`no_porthole.py`). |
+| 13–14 s (989–997) | Mom's forearm through the boy's head (up to 24.5 cm deep) | Her left hand now follows a path under his chin (`mom_head.py`, `mom_route.py`). Min clearance to his head: 3.1 cm. |
+| 15.75 s (~1093) | A blurred striped sleeve fills the frame | The camera eases from the beat-6 face to 10 cm out of the nostril, then in. The aim holds the nostril, then looks into it, then blends to the dive aim inside the tunnel (`dive2_cam.py`). |
+| 22.25 s (1458–1474) | A bare wall / empty room | The aim holds the man on the rug until 1466, then makes a quick swing as he appears on the bench (`pan_hold.py`). One preview frame (1470) is mid-swing. |
+
+**limb_check (9a0a692), final v008f, step 2:** `{'PROPHEAD': 248, 'ARMBODY': 578}`, with ARMBACK 0.
+- **PROPHEAD 248:** all are "Brick_Big inside Boy's head/face", the red brick lodged in his nostril (5–1043). This is intended; it's the story.
+  - Fixed: the tweezers and brick in Mom's own face (1065–1075) and the shower water streaks through the man's head.
+- **ARMBODY 578:** checked point by point on every flagged frame. All 578 are only the shoulder joint, the first 2 of limb_check's 5 points on `upperarm01`. Those points always sit in the open arm hole of the torso shell.
+  - **No point beyond the shoulder joint is inside any body on any frame** (`arm_fix.py` uses the same test without those 2 points: 0 hits).
+- **ARMBACK:** 0. The man sitting up in bed (1841) is fixed.
+
+**Other checks (final v008f):**
+- **qa_check e7b25f7:** `{'EMPTY': 130, 'FILL': 11, 'INSIDE': 2, 'PROPMOVE': 111}`.
+  - CAMJUMP, ROLL, ATTACH, FACEPRESS, CLAW and HOVER are 0.
+  - The 2 INSIDE flags are the nostril entries (727 and 1099).
+- **clip_scan 3cfc53c:** `[]`, no bad ranges.
+- **Fingertips:** 1 cm or less while held. The exception is the 2 slide-in frames per brick (149–150 and 735–736), where the brick disappears into the nostril.
+
+**Moving preview:** `LegoInNose_v008f_preview_every5_270x480.mp4` (463 frames, every 5th, 270×480, 4 samples plus denoise, 12 fps = real time). I watched it start to finish as frame sheets. Faults I found and fixed:
+- the bedroom, man out of frame (1758–1796);
+- the blank frame around 1850;
+- Mom's arm up behind her head (990).
+
+**Brief moments left (not beats):**
+- One preview frame each at 1325 (the tunnel exit flash) and 1470 (the mid-swing to the bench).
+- 1870–1875: the bed corner, then the door edge, on the move into the shower (about 0.15 s).
+- 346–356 and 681–686: the boy's knee or arm close to the low camera (about 0.2 s each).
