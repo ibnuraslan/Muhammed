@@ -802,6 +802,7 @@ deintersect(TEACH, "L", 425, END, GCL, away=_up)
 deintersect(GIRL, "L", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
 deintersect(GIRL, "R", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
 deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")), cap=0.1, iters=10)
+bake_ik(GIRL, "L", 1060, 1120, 3); deintersect(GIRL, "L", 1060, 1120, ["Girl.body", "Girl.long_skirt"], away=_up, cap=0.1, iters=8)   # lap hand on top of the thigh
 deintersect(GIRL, "R", 470, 530, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("spine03")), cap=0.1, iters=8)   # rising hand clears her own body
 deintersect(GIRL, "R", 1580, 1610, TCL, away=_away_from_teacher, allow=0.004)
 _from_neck = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("neck01"))
