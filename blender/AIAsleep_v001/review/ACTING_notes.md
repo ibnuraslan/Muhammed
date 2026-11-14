@@ -71,3 +71,15 @@ Story-beat frames (`beats.json`) are unchanged.
 | FILL (<12 cm) | 1669–1885, 1933–2023, 2107–2155, 2215–2461 | Beats 8–10: intended eye macros and the cross-section close-ups (the iris detection is the story). |
 | FILL (glass) | 1513, 2593 | One sample each, as the camera passes through the windshield and the rear glass. |
 INSIDE, BACKHEAD, HOVER, CLAW and FACEPRESS are all 0.
+
+## Moving-preview pass (director, Nov 14 20:23 UTC), v004b -> v005
+Watched every page of `work/prev_before` (v004b, every 5th frame). Faults found and fixed:
+| Frames (film) | Fault | Fix |
+|---|---|---|
+| ~236–620 and the macros | Eyes read dark / black-hole in medium shots, and a squiggle at the inner corner (refraction through the MPFB cornea) | LESSONS section 3 eye fix (`scripts/eye_fix.py`, applied in 05): cornea transmission → a Transparent BSDF mix |
+| 361–386 | Blurred sleeve filling the lens after the HUD close-up | 372 framing pulled back onto his face from the passenger side |
+| 656–700 | Back of his head while he sits up | 680 framing moved to a 3/4 front view from the passenger side |
+| 1041–1061 | Blurred arm/chest across the lens | Added 1055; 1080 raised clear of his arm |
+| 1305–1346 | Roof cut away, white sunroof slab | The roof stays solid; the camera leaves through the open passenger window (1318/1340) |
+| 1421–1441 | Camera skimming through the car body on the time-lapse swing | Wide swing key at 1432 |
+Beat frames unchanged. Max camera turn 18.7°/frame. Camera clearance: only the window-frame entry.
