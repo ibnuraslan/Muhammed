@@ -33,7 +33,7 @@ Voiceover: once you have the mp3, run `blender/pipeline/transcribe.py` and `reti
 | 17 | ToddlerWell | `claude/connect17-toddler-well` | `blender/ToddlerWell_v004/` **acting fixed, approved, final commit f3b113a (VO sync when your voiceover arrives)** |
 | 18 | NukedWell | `claude/connect18-nuked-well` | `blender/NukedWell_v004/` **acting fixed, approved, final commit 284559b (VO sync when your voiceover arrives)** |
 | 19 | SpeakWithoutSight | `claude/connect19-speak-without-sight` | `blender/SpeakWithoutSight_v004b/` **acting fixed, approved, final commit 57e65af (VO sync when your voiceover arrives)** |
-| 20 | HeadsetBullet | `claude/connect20-headset-bullet` | `blender/HeadsetBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
+| 20 | HeadsetBullet | `claude/beautiful-ptolemy-c5vrcq` | `blender/HeadsetBullet_v008/` **fixed (watched moving) + synced to your voiceover: READY TO RENDER (frames 1–1203)** |
 | 21 | RingBullet | `claude/connect21-ring-bullet` | `blender/RingBullet_v006/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 22 | BelugaRescue | `claude/connect22-beluga-rescue` | `blender/BelugaRescue_v005/` **acting fixed, approved (VO sync when your voiceover arrives)** |
 | 23 | CaveRescue | `claude/connect23-cave-rescue` | `blender/CaveRescue_v006/` **acting fixed, approved, final commit ee86ff4 (VO sync when your voiceover arrives)** |
