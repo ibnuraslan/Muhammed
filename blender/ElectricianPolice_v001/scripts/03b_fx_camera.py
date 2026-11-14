@@ -698,6 +698,30 @@ for m_ in [bpy.data.materials.get("classic_laptop")]:
         mix = nt_.nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.inputs["Factor"].default_value = 0.8
         mix.inputs["B"].default_value = (0.78, 0.75, 0.68, 1.0)
         nt_.links.new(srcc, mix.inputs["A"]); nt_.links.new(mix.outputs["Result"], bs_.inputs["Base Color"])
+# v009b: the long side-swept fringe (short03) hung over one eye and read as a dark band in the dim station.
+# Lift it: in the rest mesh, fringe vertices in front of the face are compressed upward so the fringe ends above the brow.
+for _nm in ("OfficerC", "OfficerE"):
+    _arm = CH[_nm]
+    _hair = [o for o in bpy.data.objects if o.parent == _arm and o.type == "MESH" and "short03" in o.name]
+    _brow = [o for o in bpy.data.objects if o.parent == _arm and o.type == "MESH" and "eyebrow" in o.name]
+    if not _hair or not _brow: continue
+    _bv = [v.co for v in _brow[0].data.vertices]
+    _btop = max(v.z for v in _bv); _bfront = min(v.y for v in _bv); _cy = sum(v.y for v in _bv) / len(_bv)
+    for _h in _hair:
+        _vs = _h.data.vertices; _ztop = max(v.co.z for v in _vs)
+        _front = [v for v in _vs if v.co.y < _cy + 0.03]
+        _zmin = min((v.co.z for v in _front), default=_ztop)
+        _target = _btop + 0.012
+        if _zmin >= _target: continue
+        k_ = (_ztop - _target) / max(1e-4, _ztop - _zmin)
+        for v in _front:
+            v.co.z = _ztop - (_ztop - v.co.z) * k_
+        print("FRINGE_LIFT", _h.name, "min z %.3f -> %.3f" % (_zmin, _target))
+# the cap visor was a dark navy disc: under the dim station light it read as a band across the face. Dark khaki instead.
+_vm = bpy.data.materials.get("CapVisor")
+if _vm:
+    for n_ in _vm.node_tree.nodes:
+        if n_.type == "BSDF_PRINCIPLED": n_.inputs["Base Color"].default_value = (0.32, 0.27, 0.17, 1.0)
 _dh = bpy.data.objects.get("DustHaze")
 if _dh: _dh.hide_viewport = True     # still renders (hide_render stays False); a volume fog is not an occluder
 sc.frame_set(1)

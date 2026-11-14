@@ -14,7 +14,7 @@ rm -rf $V/build/after $V/build/hc $S/slimtex
   python3 -I pipeline/contact_sheet.py $V/build/hc $V/review/v007_hand_closeups.jpg 8 1; echo HC $(date -u +%H:%M) >> $V/build/fast7.txt ) &
 ( $B -b $V/build/film_v7.blend --python $V/scripts/slim_textures.py -- $S/slimtex $V/build/film_v7_slim.blend > /dev/null 2>&1
   $B -b $V/build/film_v7_slim.blend --python pipeline/package_for_farm.py -- $P 2>&1 | grep -E "PROBLEMS|SAVED" >> $V/build/fast7.txt
-  $B -b $P --python pipeline/qa_check.py -- $V/review/qa_v009.json 6 ElectricianPolice_v007/beats.json 2>&1 | grep QA_COUNTS >> $V/build/fast7.txt
+  $B -b $P --python pipeline/qa_check.py -- $V/review/qa_v009b.json 6 ElectricianPolice_v007/beats.json 2>&1 | grep QA_COUNTS >> $V/build/fast7.txt
   echo QA $(date -u +%H:%M) >> $V/build/fast7.txt ) &
 ( $B -b $V/build/film_v7.blend --python pipeline/clip_scan.py -- $V/review/v007_clip_scan.json 6 2>&1 | grep BAD_RANGES | sed 's/^/STOCK /' >> $V/build/fast7.txt ) &
 ( $B -b $V/build/film_v7.blend --python $V/scripts/clip_scan_ep.py -- $V/review/v007_clip_scan_ep.json 2>&1 | grep BAD_RANGES >> $V/build/fast7.txt; echo SCAN $(date -u +%H:%M) >> $V/build/fast7.txt ) &
