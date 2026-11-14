@@ -225,7 +225,7 @@ ACTION = {
     "4-2B": "Same bench: the thread unpinned and lying slack between the bags; the light on the glass bag dims.",
     "4-4": "Thirty year-blocks on the evidence-room floor 1981→2011; a standing marker at 2007; the last blocks are red; the camera tracks the row.",
     "4-9B": "Three call tapes on black, aluminium bars behind each showing the jingle's envelope; push-in and light falling on the one sunken peak.",
-    "4-10A": "Line-up: eleven recorders before a height-line wall; the overhead lamps are switched on one by one (a hand on the switch bank).",
+    "4-10A": "Line-up: eleven recorders before a height-line wall, each under its own lamp; the camera tracks the row.",
     "4-10B": "All lamps but one off; slow push-in on the seized machine.",
     "4-12B": "Dawn: an empty flea-market table, a clean rectangle in the dust where a machine stood; no seller.",
     "4-13B": "Late light on the upright piano: the bench with room for two, children's sheet music, the metronome ticking.",
