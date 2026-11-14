@@ -1,0 +1,32 @@
+{
+ "frames": {
+  "1777": [
+   [
+    "ARMBODY",
+    "FO arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1783": [
+   [
+    "ARMBODY",
+    "FO arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "1789": [
+   [
+    "ARMBODY",
+    "FO arm.R inside own torso (2 pts)"
+   ]
+  ],
+  "3601": [
+   [
+    "ARMBACK",
+    "YOU arm.R reaches 36 cm behind the body"
+   ]
+  ]
+ },
+ "counts": {
+  "ARMBODY": 3,
+  "ARMBACK": 1
+ }
+}

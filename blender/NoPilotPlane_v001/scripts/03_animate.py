@@ -603,8 +603,8 @@ hand("R", F(15.9), (0.30, 0.95, 1.30), d=(0, 1, 0), n=(0, 0, -1), curl=50)
 POSW = (0.04, 0.88, STAND_Z)
 body(F(16.3), POSW, flex=4, sflex=4, head=(0, 0)); feet(F(16.3), (-0.06, 0.92), (0.16, 0.92))
 # beat 6: look at FO
-body(F(16.8), POSW, flex=4, sflex=8, twist=-25, head=(15, -35))
-body(F(17.8), (0.0, 0.90, STAND_Z - 0.03), flex=10, sflex=14, twist=-30, sside=0, head=(15, -35))
+body(F(16.8), (-0.02, 0.88, STAND_Z), flex=4, sflex=8, twist=-8, head=(15, -35))       # v008b: turn with the head, keep the eye off the FO seat
+body(F(17.8), (-0.04, 0.90, STAND_Z - 0.03), flex=10, sflex=14, twist=-10, sside=0, head=(15, -35))
 hand("R", F(17.8), (0.30, 1.18, 1.22), d=(0, 1, -0.2), n=(0, 0, -1), curl=50)                         # on FO seat back
 body(F(18.8), POSW, flex=8, sflex=14, twist=-10, head=(20, -10))
 # beat 7: grab the radio handset
