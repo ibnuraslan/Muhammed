@@ -235,16 +235,16 @@ def head_torch(n, energy=60.0, f_on=1):
     up = (top - base).normalized(); fwd = V((0, -1, 0))
     body = bpy.data.objects[n + ".body"]
     # find the forehead surface by casting from the front
-    o_ = base.lerp(top, 0.55) + fwd * 0.5
+    o_ = base.lerp(top, 0.72) + fwd * 0.5     # v008: on the forehead above the brow (was 0.55: the lamp covered the eye)
     hit, loc, nrm, idx = body.ray_cast(o_, -fwd, depsgraph=bpy.context.evaluated_depsgraph_get())
-    fh = loc if hit else base.lerp(top, 0.55) + fwd * 0.1
+    fh = loc if hit else base.lerp(top, 0.72) + fwd * 0.1
     bpy.ops.mesh.primitive_cylinder_add(radius=0.022, depth=0.03, location=fh + fwd * 0.024, rotation=(R_(90), 0, 0))
     lamp = bpy.context.active_object; lamp.name = n + "_HeadTorch"; lamp.data.materials.append(m_lamp)
     bpy.ops.mesh.primitive_cylinder_add(radius=0.016, depth=0.004, location=fh + fwd * 0.04, rotation=(R_(90), 0, 0))
     lens = bpy.context.active_object; lens.name = n + "_TorchLens"; lens.data.materials.append(m_lens); lens.parent = lamp
     lens.matrix_parent_inverse = lamp.matrix_world.inverted()
     # band: a thin torus around the head at forehead height
-    hc = base.lerp(top, 0.55)
+    hc = base.lerp(top, 0.72)
     r = (fh - V((hc.x, hc.y, fh.z))).length + 0.006
     bpy.ops.mesh.primitive_torus_add(major_radius=r, minor_radius=0.006, location=(hc.x, hc.y + 0.01, fh.z), rotation=(R_(-8), 0, 0))
     band = bpy.context.active_object; bpy.data.objects.remove(band, do_unlink=True)
@@ -475,19 +475,20 @@ for n, y0, y1, f0, f1, up in (("DiverB", -6.0, -18.0, 1213, 1480, 0.7), ("DiverC
         swim(n, f, P, 0.0, pitch=-6 * sq, roll=10 * sq * (1 if n == "DiverB" else -1), phase=f * 0.25, kick=1.0 - 0.6 * sq, hands=hands)
     TELE[n].add(f0 - 1)
 DC = "DiverC"
-for f in range(1490, 1712, 12):
-    u = (f - 1490) / 220.0; y = -19.5 - 14.0 * u
-    swim(DC, f, pas_mid(y, 0.7), 0.0, pitch=4, phase=f * 0.2, kick=0.9)
+for f in range(1490, 1712, 10):     # v008: he slows, stops kicking and goes still (medium shot), then his light fades
+    u = min(1.0, (f - 1490) / 50.0); e = u * u * (3 - 2 * u)
+    y = -19.5 - 0.8 * e; sink = 0.12 * max(0.0, min(1.0, (f - 1540) / 60.0))
+    swim(DC, f, pas_mid(y, 0.7 - sink), 0.0, pitch=4 + 6 * e, phase=1490 * 0.2 + (f - 1490) * 0.2 * (1 - e), kick=0.9 * (1 - e))
 TELE[DC].add(1711)
 tc_ = TORCH[DC]
-for f, e in ((1, 70), (1500, 70), (1600, 25), (1660, 4), (1700, 0)):
+for f, e in ((1, 70), (1545, 70), (1575, 12), (1600, 0)):
     tc_.data.energy = e; tc_.data.keyframe_insert("energy", frame=f)
 lensC = bpy.data.objects[DC + "_TorchLens"]
 mlc = m_lens.copy(); lensC.data.materials[0] = mlc; es = mlc.node_tree.nodes["Principled BSDF"].inputs['Emission Strength']
-for f, e in ((1, 25), (1500, 25), (1660, 4), (1700, 0)):
+for f, e in ((1, 25), (1545, 25), (1575, 4), (1600, 0)):
     es.default_value = e; es.keyframe_insert("default_value", frame=f)
 silt_v = bpy.data.materials["M_Silt"].node_tree.nodes["SiltAmount"].outputs[0]
-for f, v in ((1, 0.4), (1213, 0.5), (1300, 1.4), (1488, 1.2), (1700, 0.35), (2450, 0.4), (2520, 1.2), (2600, 0.6)):
+for f, v in ((1, 0.4), (1213, 0.5), (1300, 1.4), (1420, 1.0), (1480, 0.45), (1620, 0.45), (1700, 0.35), (2450, 0.4), (2520, 1.2), (2600, 0.6)):
     silt_v.default_value = v; silt_v.keyframe_insert("default_value", frame=f)
 
 # beat 8: Boy3 kneels at the water's edge, staring at the black water (1711-2016)
@@ -607,10 +608,15 @@ for f in (2329, 2345, 2365, 2385, 2406):
     for s in "LR":
         sx = 1 if s == "L" else -1
         key_fingers("DiverB", s, f, "pinch")
-        if f < 2380:
+        rb_ = RIG["DiverB"].o.matrix_world @ RIG["DiverB"].PB["root"].head
+        near_ = ((c_ + side * (0.075 * -sx)) - rb_).length <= ((c_ + side * (0.075 * sx)) - rb_).length
+        if f < 2380 and near_:
             W = c_ + side * (0.11 * -sx) + fwd2 * 0.02 + V((0, 0, -0.02))
             ev(f); cpt = c_ + side * (0.075 * -sx)
-            grip_object(RIG["DiverB"].o, s, f, fm_, cpt, (side * sx).normalized())        # fingers close on the mask rim
+            grip_object(RIG["DiverB"].o, s, f, fm_, cpt, (side * sx).normalized())        # near hand: fingers close on the mask rim
+        elif f < 2380:      # v008: far hand holds the strap at the back of the head (over the crown, never across the face)
+            W = c_ - fwd2 * 0.12 + side * (0.05 * -sx) + V((0, 0, 0.09))
+            HUM["DiverB"].key_hand(s, f, W, (fwd2 * -1 + V((0, 0, -0.4))).normalized(), V((0, 0, 1)), W + fwd2 * 0.5 + V((0, 0, 0.5)))
         else:      # pull the straps behind the head
             W = c_ - fwd2 * 0.13 + side * (0.1 * -sx) + V((0, 0, 0.05))
             HUM["DiverB"].key_hand(s, f, W, (fwd2 * -1 + V((0, 0, 0.3))).normalized(), side * sx, W + fwd2 * 0.6 + side * 0.4 * -sx)
