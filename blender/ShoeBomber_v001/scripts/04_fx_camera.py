@@ -462,14 +462,14 @@ CAB = [[
     (625, V((0.05, 2.25, 1.95)), bp("Bomber", "spine01", 625, (0, 0.2, 0)), 22),   # v006c: off vertical (no track-to flip)
     # beat 5: down to the steward's face as he injects (reached by 655), push to the arm, two-shot on "finally sedated"
     (640, V((-0.55, 1.20, 1.75)), (bp("Steward", "head", 640) + bp("Bomber", "spine01", 640)) / 2, 22),   # v006c: down beside the steward, never over the aim
-    (655, V((0.20, -0.55, 1.55)), bp("Steward", "head", 655), 28),
+    (655, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 655), 28),
     # v006d: a steady shot on the steward's face while he injects (the arm macro filled the frame with sleeves)
-    (680, V((0.20, -0.55, 1.55)), bp("Steward", "head", 680), 28),
-    (722, V((0.20, -0.55, 1.55)), bp("Steward", "head", 722), 28),
-    (736, V((0.02, 0.70, 1.50)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
-    (752, V((-0.02, 0.85, 1.15)), (bp("Steward", "head", 752) + bp("Attendant", "head", 752)) / 2 + V((0, 0, -0.08)), 20),
-    (769, V((0.168, 0.702, 1.45)), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
-    (776, V((0.168, 0.702, 1.45)), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
+    (680, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 680), 28),
+    (722, V((-0.80, 1.25, 1.60)), bp("Steward", "head", 722), 28),
+    (736, V((-0.80, 1.25, 1.60)), (bp("Steward", "head", 736) + bp("Attendant", "head", 736)) / 2 + V((0, 0, -0.05)), 20),
+    (752, V((-0.80, 1.25, 1.60)), (bp("Steward", "head", 752) + bp("Attendant", "head", 752)) / 2 + V((0, 0, -0.08)), 20),
+    (769, V((-0.80, 1.25, 1.60)), bp("Attendant", "head", 769, (0, 0, -0.1)), 28),
+    (776, V((-0.80, 1.25, 1.60)), bp("Attendant", "head", 776, (0, 0, -0.1)), 28),
     # beat 6: rise to his feet -> kneeling level -> with the shoes -> orbit to the soles -> macro fuse 1 -> rack to fuse 2 -> into the sole
     (830, V((0.20, 0.70, 1.45)), bp("PaxB", "head", 830, (0, 0, -0.1)), 24),   # v006d: nobody walks the aisle now; a slow pan to PaxB at his feet
     # v006d: her face while she pulls the shoes off (the old framing looked down on the top of her head)

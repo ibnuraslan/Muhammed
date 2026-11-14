@@ -285,7 +285,7 @@ hand(pa, "R", 525, V((-0.65, BY + 0.30, 1.0)), (1, 0.4, 0), (0, 0, -1), grip=0.8
 hand(pa, "L", 525, V((-0.80, BY + 0.10, 0.9)), (1, 0.2, 0), (0, 0, -1), grip=0.8)
 # kneels in the aisle by the bomber's left side, both hands on his shoulder blades
 for f in (585, 654, 720, 768):
-    dx = 0.0 if f < 640 else -0.23     # v006d: kneels a little to the left after the pin (out of the aisle cameras' line)
+    dx = 0.0 if f < 640 else -0.15     # v006d: kneels a little to the left after the pin (out of the aisle cameras' line)
     pa.key_root(f, V((-0.05 + dx, BY + 0.05, 0.58)), yaw=FWD + 20, flex=10)
     pa.key_spine(f, flex=60 if f < 720 else 45, twist=5, head=(20, 0) if f < 720 else (10, 20))
     pa.key_foot("L", f, V((-0.25 + dx, BY - 0.35)), FWD + 20, 0.02, -65); pa.key_foot("R", f, V((0.12 + dx, BY - 0.40)), FWD + 20, 0.02, -65)
@@ -367,8 +367,10 @@ for f in range(1, 1069, 20):
         sit(pc, f, SX["D"], BY, spine=(3, 0, 0), head=(5 + 3 * math.sin(f * 0.03), 0))
     elif f < 470:
         sit(pc, f, SX["D"], BY, spine=(0, 25, 3), head=(0, 30))            # turns to look across
-    elif f < 770:
+    elif f < 600:
         sit(pc, f, SX["D"], BY, z=0.58, spine=(25, 35, 0), head=(20, 25 + 5 * math.sin(f * 0.1)))   # leans out to watch
+    elif f < 770:
+        sit(pc, f, SX["D"], BY, spine=(4, 20, 0), head=(12, 30 + 5 * math.sin(f * 0.05)))          # v006d: sits back to watch (out of the aisle)
     elif f < 940:
         sit(pc, f, SX["D"], BY, spine=(4, 20, 0), head=(12, 30 + 5 * math.sin(f * 0.05)))          # sits back, still watching
     else:
