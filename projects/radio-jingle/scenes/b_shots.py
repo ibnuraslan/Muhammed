@@ -235,5 +235,5 @@ ACTION = {
     "5-1B": "Exhibit table under one top light, all items in place: struck statement, binoculars, letters, soldering iron, Grundig; the camera tracks item to item as each is named.",
     "5-2C": "Fifty-six hearing-day folders in a row; a slow track to the last.",
     "5-5B": "Night: a glass of water on the piano, its surface trembling without end; Michael soft behind on the bench.",
-    "5-11": "Long take (25 s): from up the dark hall, a slow push to the receiver lying off the hook; the reels slow and stop on 'answered'; hold.",
+    "5-11": "Long take (25 s): the cold open's line from the front door toward the phone table, pushed further: nobody there, the receiver lying off the hook; the reels slow and stop on 'answered'; hold.",
 }

@@ -75,10 +75,11 @@ def anim(c, t, move):
 
 
 def cam_offhook(t):
-    """25 s: from up the dark hall (north of the table) a slow arcing push round to the receiver on the table."""
+    """25 s: the cold open's line (sc_house co_push: from the front door toward the phone table), continued: the same
+    push, now with nobody at the table, ending close on the receiver lying off the hook. Closes the ring."""
     u = ease(min(1.0, t / 0.82))
-    pts = [Vector((T.x - 0.9, T.y + 2.2, 1.62)), Vector((T.x - 1.25, T.y + 0.9, 1.5)), Vector((T.x - 1.2, T.y - 0.1, 1.38)),
-           Vector((T.x - 0.95, T.y - 0.55, 1.28))]
+    pts = [Vector((-0.55, -3.25, 1.55)), Vector((-0.35, -2.55, 1.5)), Vector((-0.12, -2.05, 1.38)),
+           Vector((T.x - 0.62, T.y - 0.55, 1.26))]
     x = u * (len(pts) - 1); k = min(len(pts) - 2, int(x)); f = x - k
     return (pts[k].lerp(pts[k + 1], f), None)
 

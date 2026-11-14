@@ -54,7 +54,7 @@ Motion previews: `review/b_v2_mp4/*.mp4` (480p, low samples).
 | 5-1B | "credit details in Pfaffinger's statement… binoculars… debts, workshop skills… the Grundig" | Clerk carries the binoculars | Exhibit table under one top light, all items in place: struck statement, binoculars, letters, soldering iron, Grundig; the camera tracks item to item as each is named. | Recurring evidence pays off. A list becomes inserts |
 | 5-2C (new) | "after fifty-six days of hearings" | (none) | Fifty-six hearing-day folders in a row; a slow track to the last. | A count as physical units |
 | 5-5B | "tinnitus, a persistent noise… sleeping" | He faces the dark window | Night: a glass of water on the piano, its surface trembling without end; Michael soft behind on the bench. | A sound that never stops, made visible |
-| 5-11 (long) | "Two names… nobody answered" | 8 s push | Long take (25 s): from up the dark hall, a slow push to the receiver lying off the hook; the reels slow and stop on 'answered'; hold. | Chapter 5's hero take and the ring ending |
+| 5-11 (long) | "Two names… nobody answered" | 8 s push | Long take (25 s): the cold open's line from the front door toward the phone table, pushed further: nobody there, the receiver lying off the hook; the reels slow and stop on 'answered'; hold. | Chapter 5's hero take and the ring ending |
 
 ## Kept (already strong, animation improved)
 - 3-4A workshop
