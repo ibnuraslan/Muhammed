@@ -54,6 +54,16 @@ class Person:
             nm = "Pole_elbow." + s; pb = self.r.PB[nm]
             pb.location = self.r.rest(nm).to_3x3().inverted() @ (Vector(pole) - self.r.BN[nm].head_local)
             pb.keyframe_insert("location", frame=f, group=nm)
+    def _together(self, s, k):
+        """signed angle (palm normal) that turns finger k's first phalanx onto the middle finger's line at rest (MPFB rest hands fan ~33 deg)"""
+        key = (s, k); cache = self.__dict__.setdefault("_tog", {})
+        if key not in cache:
+            n = self.rest_hand[s].col[2].normalized()
+            def dirv(kk):
+                v = self.r.BN["finger%d-1.%s" % (kk, s)].matrix_local.to_3x3().col[1]; v = v - n * v.dot(n); return v.normalized()
+            vk, v3 = dirv(k), dirv(3)
+            cache[key] = math.atan2(n.dot(vk.cross(v3)), vk.dot(v3)) if k != 3 else 0.0
+        return cache[key]
     def fingers(self, s, f, curl, thumb=18, spread=0.0):
         Rh = self.rest_hand[s]; d, a = Rh.col[0], Rh.col[1]; sign = 1 if s == "R" else -1
         JW = (0.8, 1.1, 0.8)
@@ -63,7 +73,7 @@ class Person:
             for j in range(1, 4):
                 b = "finger%d-%d.%s" % (k, j, s)
                 q = Matrix.Rotation(R_(c * JW[j - 1] * sign), 3, a)
-                if j == 1: q = Matrix.Rotation(R_(sp * sign), 3, Rh.col[2]) @ q
+                if j == 1: q = Matrix.Rotation(R_(sp * sign) + 0.85 * self._together(s, k), 3, Rh.col[2]) @ q   # v005: fingers together (no starfish)
                 self.r.key_q(b, f, self.r.local_q(b, q))
         for j, fl in ((1, thumb * 0.4), (2, thumb * 0.8), (3, thumb)):
             b = "finger1-%d.%s" % (j, s)
@@ -427,7 +437,10 @@ for f, dx, dz in LIP_KEYS:
         t_rest(f, "R")   # v005: no wrist grip on the way to the lips
     else:
         lip_key(f, dx, dz)
-for f in (445, 462, 480, 500, 516, 530):   # v005: no wrist grip; she rests her hand on the girl's knee
+for f in (445, 462, 480):   # v005: no wrist grip; her right hand hangs relaxed at her side while the girl's hand leaves her lap
+    ev(f); sh = T.bone_world("upperarm01.R")
+    T.hand("R", f, sh + T_R * 0.14 - UP * 0.45 + T_F * 0.12, -UP + T_F * 0.2, T_R, sh + T_R * 0.3 - T_F * 0.25); apply_pose(T.o, "R", "relaxed", f)
+for f in (505, 530):   # then rests on the girl's knee
     t_rest(f, "R")
 # teacher's right hand releases after guiding (1110) and rests on the girl's forearm again
 for f in list(range(1128, 1851, 30)) + [1850]:
@@ -729,7 +742,7 @@ def ik_keyframes(P, sd, f0, f1):
                     if fc.data_path == 'pose.bones["IK_hand.%s"].location' % sd:
                         out |= {int(round(k.co.x)) for k in fc.keyframe_points if f0 <= k.co.x <= f1}
     return sorted(out)
-def deintersect(P, sd, f0, f1, targets, allow=0.008, iters=5, away=None):
+def deintersect(P, sd, f0, f1, targets, allow=0.008, iters=5, away=None, cap=0.04):
     body = bpy.data.objects[P.name + ".body"]; idx = hand_vidx(P, sd); fixed = 0
     tobs = [bpy.data.objects[t] for t in targets if t in bpy.data.objects]
     self_polys = None
@@ -757,7 +770,7 @@ def deintersect(P, sd, f0, f1, targets, allow=0.008, iters=5, away=None):
             if worst[0] <= allow: break
             dirv = away(f, pts) if away else worst[1]            # escape direction known per contact (nearest-normal fails when deep)
             step_ = worst[0] - allow + 0.004
-            if total_.get(f, 0.0) + step_ > 0.04: break           # v005: never shove a hand more than 4 cm (uncapped pushes sent hands overhead)
+            if total_.get(f, 0.0) + step_ > cap: break           # v005: never shove a hand more than 4 cm (uncapped pushes sent hands overhead)
             total_[f] = total_.get(f, 0.0) + step_
             push = dirv.normalized() * step_
             M = P.o.pose.bones["IK_hand." + sd].matrix.copy()
@@ -788,7 +801,7 @@ deintersect(TEACH, "R", 425, END, GCL, away=_up, iters=8)
 deintersect(TEACH, "L", 425, END, GCL, away=_up)
 deintersect(GIRL, "L", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
 deintersect(GIRL, "R", 1, 470, ["Girl.body", "Girl.long_skirt"], away=_up)
-deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")))
+deintersect(GIRL, "R", 1036, 1115, ["Girl.body"], away=lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("head")), cap=0.1)
 deintersect(GIRL, "R", 1580, 1610, TCL, away=_away_from_teacher, allow=0.004)
 _from_neck = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("neck01"))
 _from_girl = lambda f, pts: (sum(pts, Vector()) / len(pts) - G.bone_world("spine03"))
