@@ -28,6 +28,15 @@ for o in OB:
         for kp in f.keyframe_points: kp.interpolation = "CONSTANT"
     n += 1
 print("XRAYCLEAN hidden", n, "objects for", RANGES)
+# vNEXT: MPFB tongue meshes poke out of the mouth when the head turns (hero f836-891). Never needed on screen: off for render.
+for o in [o for o in OB if ".tongue" in o.name]:
+    ad = o.animation_data
+    if ad and ad.action:
+        for l in ad.action.layers:
+            for st in l.strips:
+                for cb in st.channelbags:
+                    for fc in [fc for fc in cb.fcurves if fc.data_path == "hide_render"]: cb.fcurves.remove(fc)
+    o.hide_render = True; print("TONGUE off", o.name)
 # director's eye fix (LESSONS_LEARNED 3): cornea as Transparent mix instead of refraction, so irises are lit
 import os
 if "EnhancedEye" in bpy.data.node_groups:
