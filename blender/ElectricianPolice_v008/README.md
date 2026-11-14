@@ -15,6 +15,22 @@ v008 is the approved v007 rev 3 (91f7a3d), watched in motion with `pipeline/prev
 
 The preview is `../ElectricianPolice_v001/review/preview_v008.mp4` (12 fps, every 5th frame), with its contact pages in `../ElectricianPolice_v001/review/preview_v008_pages/`.
 
+**Also fixed:**
+- **Beat 5 (505):** the camera is ahead of him inside the yard, so his face reads while he walks to the line and looks up at the pylon.
+- **Beat 9 (1165):** the station crew and their props are hidden from 1140 to 1215, while they are far inside the dark station during the street walk. They were the only figures QA could see there, from behind.
+
+**Checks on this package:**
+- `qa_check.py` (fc62c27): CAMJUMP 0, BACKHEAD 0, CLAW 0, HOVER 0, FACEPRESS 0, EMPTY 25. The EMPTY flags are listed in ACTING_notes.md: the fence QA treats as opaque, the 0.1 s whips and the office screen framings.
+- Both clip scans (the stock scan and the patched copy): 0 bad ranges.
+- Hand audit: 3 hits, all the intended brow wipe.
+
+**Still visible in the moving preview, each 0.1 s or less:**
+- the gate post as the camera passes through the gate (496–501)
+- the yard during the whip to the office (543–546)
+- one corner frame mid-pan (1296)
+- the fanning paper crossing the lens (1336)
+- the doorframe on the exit whip (1421)
+
 ---
 
 # ElectricianPolice_v007: farm package (hands and framing pass)
