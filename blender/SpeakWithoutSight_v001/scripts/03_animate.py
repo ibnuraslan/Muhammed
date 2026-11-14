@@ -315,6 +315,9 @@ def g_hand_on(s, f, tip, normal, along, press=0.0, curl=6, pad=0.005, tilt=0.0):
     W = goal - along * (G_HL * 0.95)
     sh = G.bone_world("upperarm01." + s, f)
     pole = sh + (W - sh) * 0.5 + V(0, 0.25, -0.35) + (V(-0.3, 0, 0) if s == "R" else V(0.3, 0, 0))
+    if s == "L" and f >= 1480:   # v005: own lips/throat touches: elbow out to her side and down, so the upper arm stays off her chest
+        ev(f); out_ = (G.bone_world("upperarm01.L") - G.bone_world("upperarm01.R")); out_ = (out_ - UP * out_.dot(UP)).normalized()
+        pole = sh + out_ * 0.45 - UP * 0.35 + (W - sh) * 0.3
     for it in range(3):
         G.hand(s, f, W, along, normal, pole); G.fingers(s, f, curl if isinstance(curl, list) else max(curl, 14), 14, spread=0)
         if it == 2: break
