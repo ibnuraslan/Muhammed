@@ -251,3 +251,86 @@ def machine_and_men(c):
 
 CONCEPTS["tw_leaders"] = dict(scene="twoffice", variant="night", cam=cam_leaders, shift=(0.0, 0.0), focus=lambda c: _w(c, (0, -0.06, 0.08)),
                               fstop=4.0, setup=setup_leaders, exposure=-1.2, mask=machine)
+
+
+# ---------------------------------------------------------------- layout C2: the headline painted on a wall behind the desk
+def headline_image(path, W_=3600, H_=880):
+    """White headline, SOVIETS and AMERICA in Seldom lime, transparent background (Anton)."""
+    from PIL import Image, ImageDraw, ImageFont
+    F = os.path.join(HERE, "..", "..", "assets", "fonts", "Anton-Regular.ttf")
+    im = Image.new("RGBA", (W_, H_), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    f = ImageFont.truetype(F, 420)
+    tl = d.textlength("THE SOVIETS SPIED ON AMERICA", font=f)
+    f = ImageFont.truetype(F, int(420 * min(1.0, (W_ * 0.96) / tl)))
+    WH, LI = (242, 240, 235, 255), (224, 248, 0, 255)
+    def line(parts, y):
+        sp = d.textlength(" ", font=f)
+        ws = [d.textlength(t, font=f) for t, _ in parts]
+        x = (W_ - (sum(ws) + sp * (len(parts) - 1))) / 2
+        for (t, col), w in zip(parts, ws):
+            d.text((x, y), t, font=f, fill=col); x += w + sp
+    line([("THE", WH), ("SOVIETS", LI), ("SPIED", WH), ("ON", WH), ("AMERICA", LI)], 40)
+    line([("USING A", WH)], 40 + int(f.size * 1.3))
+    im.save(path)
+    return path
+
+
+def wall_text(c, at=(-0.26, 1.25, 0.42), size=(1.5, 0.3667)):
+    from kit import pbr
+    img = headline_image(os.path.join(HERE, "plates", "headline.png"))
+    # a dark plaster wall close behind the desk
+    bpy.ops.mesh.primitive_plane_add(size=1, location=_w(c, (0, at[1] + 0.01, 0.6)))
+    wl = bpy.context.active_object; wl.name = "NearWall"; wl.scale = (6, 4, 1)
+    wl.rotation_euler = (math.pi / 2, 0, c["tw"]["root"].rotation_euler.z)
+    src = bpy.data.materials.get("WallPaint")
+    if src:
+        m = src.copy(); m.name = "NearWallPaint"
+        pb = m.node_tree.nodes.get("Principled BSDF")
+        mul = m.node_tree.nodes.new("ShaderNodeMixRGB"); mul.blend_type = 'MULTIPLY'; mul.inputs[0].default_value = 1.0
+        mul.inputs[2].default_value = (0.3, 0.29, 0.27, 1)
+        ln = pb.inputs['Base Color'].links
+        if ln:
+            m.node_tree.links.new(ln[0].from_socket, mul.inputs[1]); m.node_tree.links.new(mul.outputs[0], pb.inputs['Base Color'])
+        else:
+            pb.inputs['Base Color'].default_value = (0.05, 0.048, 0.045, 1)
+    else:
+        m = pbr("NearWallPaint", (0.05, 0.048, 0.045), 0.85)
+    wl.data.materials.append(m)
+    # the painted letters, a hair in front of the wall: paint (lit by the room) + a little glow so they read
+    bpy.ops.mesh.primitive_plane_add(size=1, location=_w(c, at))
+    p = bpy.context.active_object; p.name = "WallHeadline"; p.scale = (size[0], size[1], 1)
+    p.rotation_euler = (math.pi / 2, 0, c["tw"]["root"].rotation_euler.z)
+    tm = bpy.data.materials.new("HeadlinePaint"); tm.use_nodes = True; tm.blend_method = 'HASHED' if hasattr(tm, 'blend_method') else None
+    N = tm.node_tree.nodes; L = tm.node_tree.links
+    pb = N["Principled BSDF"]; out = N["Material Output"]
+    t = N.new("ShaderNodeTexImage"); t.image = bpy.data.images.load(img); t.extension = 'CLIP'
+    L.new(t.outputs['Color'], pb.inputs['Base Color']); pb.inputs['Roughness'].default_value = 0.6
+    L.new(t.outputs['Color'], pb.inputs['Emission Color']); pb.inputs['Emission Strength'].default_value = 0.55
+    L.new(t.outputs['Alpha'], pb.inputs['Alpha'])
+    p.data.materials.append(tm)
+    c["headline"] = p
+    return p
+
+
+def setup_wall(c, text=True):
+    setup(c)
+    wall_text(c)
+    if not text:
+        c["headline"].hide_render = True
+    for o in bpy.data.objects:
+        n = o.name.lower()
+        if o.type == 'MESH' and ("lamp" in n or "cabinet" in n or "clock" in n or "plant" in n):
+            o.hide_render = True
+    # a soft wash across the wall so the paint reads in the dark room
+    h = c["headline"]
+    _spot("WallWash", _w(c, (0.6, 0.2, 1.5)), h.matrix_world.translation, 120, (1.0, 0.92, 0.82), 40, 0.9, 0.3)
+
+
+def cam_wall(c):
+    return (_w(c, (0.30, -1.02, 0.36)), _w(c, (0.0, 0.2, 0.22)), 36)
+
+
+CONCEPTS["tw_wall"] = dict(scene="twoffice", variant="night", cam=cam_wall, shift=(0.0, 0.0), focus=lambda c: _w(c, (0, -0.06, 0.08)),
+                           fstop=4.5, setup=setup_wall, exposure=-1.2, mask=machine)
+
+CONCEPTS["tw_wall_plain"] = dict(CONCEPTS["tw_wall"], setup=lambda c: setup_wall(c, text=False))

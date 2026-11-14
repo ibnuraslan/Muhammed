@@ -12,7 +12,7 @@ from compose import load_plate
 FONTS = os.path.join(HERE, "..", "..", "assets", "fonts")
 P = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "plates")
 OUT = sys.argv[2] if len(sys.argv) > 2 else HERE
-NAME = sys.argv[3] if len(sys.argv) > 3 else "tw_b"
+NAME = sys.argv[3] if len(sys.argv) > 3 else "tw_wall_plain"
 LAY = dict(l1=("THE SOVIETS SPIED ON AMERICA", 124, 110), l2=("USING A", 124, 252, 830),
            arrow=((1035, 352), (1470, 338), (1345, 600)), label=("typewriter", 56, 38, 0.14, 0.80))
 
@@ -42,7 +42,12 @@ def compose(img):
     W, H = img.size
     L = Image.new("RGBA", img.size, (0, 0, 0, 0)); d = ImageDraw.Draw(L)
     fa = lambda s: ImageFont.truetype(os.path.join(FONTS, "Anton-Regular.ttf"), s)
-    t1, s1, y1 = LAY["l1"]; centred(d, t1, fa(s1), W / 2, y1, WHITE + (255,))
+    t1, s1, y1 = LAY["l1"]; f1 = fa(s1)                     # SOVIETS and AMERICA in lime, the rest white
+    parts = [(w_, LIME if w_ in ("SOVIETS", "AMERICA") else WHITE) for w_ in t1.split()]
+    sp = d.textlength(" ", font=f1); tot = sum(d.textlength(w_, font=f1) for w_, _ in parts) + sp * (len(parts) - 1)
+    x = W / 2 - tot / 2
+    for w_, col in parts:
+        d.text((x, y1), w_, font=f1, fill=col + (255,)); x += d.textlength(w_, font=f1) + sp
     t2, s2, y2, cx2 = LAY["l2"]; centred(d, t2, fa(s2), cx2, y2, WHITE + (255,))
     img = shadowed(img, L)
     # the arrow: a marker stroke along a quadratic curve, tapering a little, with an open head
