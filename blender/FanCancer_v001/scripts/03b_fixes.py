@@ -88,7 +88,7 @@ uvbox(bn, 0.08)
 FR.data.pose_position = 'POSE'
 bone_parent(bn, FR, "head", FR.matrix_world @ Matrix.Identity(4))
 bpy.data.objects.remove(old)
-for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(37.9), 0.001), (F(37.9) + 1, 1)):
+for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(38.0) - 1, 0.001), (F(38.0), 1)):
     bn.scale = (_v,) * 3; bn.keyframe_insert("scale", frame=_f)
 # knit material: red wool, vertical ribs + stitch noise
 km = bpy.data.materials.new("BeanieWool"); km.use_nodes = True
@@ -171,7 +171,7 @@ pd = pp.modifiers.new("fluff", 'DISPLACE'); pd.texture = ptx; pd.strength = 0.01
 bpy.ops.object.shade_smooth(); pp.data.materials.append(km)
 FR.data.pose_position = 'REST'; bpy.context.view_layer.update()
 bone_parent(pp, FR, "head", pp.matrix_world.copy())
-for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(37.9), 0.001), (F(37.9) + 1, 1)):
+for _f, _v in ((F(34.0) - 1, 1), (F(34.0), 0.001), (F(38.0) - 1, 0.001), (F(38.0), 1)):
     pp.scale = (_v,) * 3; pp.keyframe_insert("scale", frame=_f)
 # ---- delete MPFB helper geometry (normally hidden by the MASK modifier) from every body mesh
 import bmesh as _bmh

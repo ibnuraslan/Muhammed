@@ -167,14 +167,14 @@ def fan_rink():
     fan.pose(f(14.4), (0.0, 0.63, 0), 0, flex=6, head=(22, 4), hands=phone_hold(0.01))
     fan.pose(f(15.4), (0.0, 0.63, 0), 0, flex=6, head=(21, -3), hands=phone_hold(0.02))
     # beat 6: slap phone on the glass, knock with the left
-    glassR = {"R": ((-0.05, -0.329, 1.40), (0, 0, 1), (0, -1, 0))}   # forearm near vertical: palm flat on the glass within the wrist limits
+    glassR = {"R": ((-0.05, -0.329, 1.12), (0, 0, 1), (0, -1, 0))}   # forearm near vertical: palm flat on the glass within the wrist limits
     fan.pose(f(15.9), (0.0, 0.58, 0), 0, flex=10, head=(4, 0), hands={"R": ((-0.08, -0.38, 1.30), (0, -0.4, 1), (0, -1, 0.3)),
                                                                      "L": ((0.06, -0.29, 1.07), (-0.2, -0.3, 1), (-0.4, 0.5, 0.8))})
     fan.pose(f(16.15), (0.0, 0.42, 0), 0, flex=12, head=(0, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(16.1), brow=0.6, jaw=6, frown=0.3)
-    knock = ((0.28, -0.345, 1.36), (0, -0.2, 1), (0, -1, 0))
+    knock = ((0.28, -0.345, 1.20), (0, -0.2, 1), (0, -1, 0))   # v007: below her face
     for k, t in enumerate((16.5, 16.65, 16.8, 16.95)):
-        L = knock if k % 2 else ((0.28, -0.27, 1.36), (0, -0.2, 1), (1, 0, 0))
+        L = knock if k % 2 else ((0.28, -0.27, 1.20), (0, -0.2, 1), (1, 0, 0))
         fan.pose(f(t), (0.0, 0.42, 0), 0, flex=12, head=(0, 2), hands={**glassR, "L": L})
     fan.pose(f(17.5), (0.0, 0.42, 0), 0, flex=12, head=(4, 0), hands={**glassR, "L": ((0.20, -0.30, 1.2), (0, -0.4, 1), (0, -1, 0))})
     face(FR, f(17.6), brow=0.8, smile=0.2, jaw=4)
@@ -196,7 +196,7 @@ def fan_home():
     mouth = {"R": ((-0.03, -0.29, 1.10), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.10, -0.25, 0.80), (0, -0.2, 1), (-1, 0, 0))}
     sit(fan, f(36.4), p, 0, 0.45, hands=mouth, flex=-6, head=(-6, 0))
     face(FR, f(36.4), brow=1.0, lid=-0.4, jaw=14)
-    both = {"R": ((-0.05, -0.33, 1.02), (0.2, 0.3, 1), (0, 1, 0)), "L": ((0.07, -0.32, 0.97), (-0.2, 0.3, 1), (0, 1, 0))}
+    both = {"R": ((-0.10, -0.17, 0.93), (0.15, 0, 1), (0, 1, 0)), "L": ((0.10, -0.17, 0.93), (-0.15, 0, 1), (0, 1, 0))}   # v007: both palms on her chest, apart
     sit(fan, f(37.2), p, 0, 0.45, hands=both, flex=-8, head=(-4, 6))
     face(FR, f(37.2), brow=1.0, lid=-0.3, jaw=10, smile=0.5)
     sit(fan, f(37.8), p, 0, 0.45, hands=both, flex=-4, head=(0, -4))
@@ -312,7 +312,7 @@ def manb_clinic():
     sit(manb, f(30.4), BEDP, 180, 0.83, hands=ph, flex=8, head=(16, 4), knee=0.30, foot_lift=0.28)
     face(MBR, f(30.6), brow=0.2, smile=0.4)
     tap = {"R": ((-0.06, -0.43, 1.04), (0, -1, 0.15), (0, 0.25, 1)), "L": ((0.16, -0.28, 0.98), (0, -1, -0.4), (0, 0, -1))}
-    for k, t in enumerate((31.0, 31.4, 31.8, 32.2, 32.6, 33.0, 33.4, 33.8)):
+    for k, t in enumerate((31.0, 31.4, 31.8, 32.2, 32.6, 33.0, 33.4, 33.8, 34.2, 34.6, 35.0, 35.4, 35.8)):
         sit(manb, f(t), BEDP, 180, 0.83, hands=tap if k % 2 else ph, flex=8, head=(18, 2), knee=0.30, foot_lift=0.28)
 manb_clinic()
 
@@ -345,7 +345,8 @@ def doc_anim():
     doc.pose(f(24.8), DOCP + Vector((0.08, 0, 0)), 95, flex=17, head=(20, -4), hands=scope)
     face(DR, f(25.2), brow=0.4, frown=1.0, smile=-0.4)                         # serious
     doc.pose(f(25.45), DOCP + Vector((0.04, 0, 0)), 88, flex=12, head=(14, 12), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # scope into her coat pocket
-    doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26))                         # turns to him, explains
+    _pk = {"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0)), "L": ((0.21, -0.03, 0.92), (0, -0.1, -1), (-1, 0, 0))}
+    doc.pose(f(25.6), DOCP, 80, flex=10, head=(4, 26), hands=_pk)                         # turns to him, explains
     face(DR, f(25.8), brow=0.3, frown=0.5, jaw=8); face(DR, f(26.0), jaw=2, frown=0.5)
     doc.pose(f(26.0), DOCP, 85, flex=8, head=(4, 20), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps from the pocket
     cut = {"R": ((-0.12, -0.72, 1.43), (0.1, -0.7, 0.2), (0, -0.5, -0.8)), "L": ((-0.02, -0.72, 1.36), (0, -0.7, 0.2), (0, -0.5, -0.8))}
@@ -355,7 +356,7 @@ def doc_anim():
     _c = dict(cut); _c["L"] = ((0.21, -0.03, 0.92), (0, -0.1, -1), (-1, 0, 0))
     doc.pose(f(27.85), DOCP + Vector((0.06, 0, 0)), 93, flex=17, head=(14, -2), hands=_c)            # left hand fetches the bandage
     doc.pose(f(28.7), DOCP + Vector((0.04, 0, 0)), 90, flex=14, head=(16, 4), hands={"R": ((-0.21, -0.03, 0.92), (0, -0.1, -1), (1, 0, 0))})   # forceps back to the pocket
-    doc.pose(f(29.2), DOCP, 80, flex=4, head=(0, 20))
+    doc.pose(f(29.2), DOCP, 80, flex=4, head=(0, 20), hands=_pk)
     doc.plant = None
     face(DR, f(29.4), brow=0.5, smile=0.9)
     dpts = [(F(29.4), DOCP + Vector((0.0, 0.0, 0))), (F(30.4), DOCP + Vector((0.5, 1.0, 0))), (F(31.6), DOCP + Vector((1.5, 2.6, 0))), (F(32.4), DOCP + Vector((2.2, 3.1, 0)))]
@@ -460,8 +461,23 @@ for i in range(6):
     for f in range(1, 2641, 4):
         t = f / 60.0
         if t > 37.9:      # finale: lined up behind her, sticks up
-            pos = FIN + Vector((-2.6 + i * 1.05, 1.6 + 0.3 * (i % 2), 0))
-            standing_fk(r, f, pos, 0, cheer=0.7 + 0.3 * math.sin(t * 6 + i), sway=math.sin(t * 2 + i))
+            pos = FIN + Vector((-2.3 + i * 0.95 + (0.5 if i >= 3 else 0), 1.0 + 0.35 * (i % 2), 0))
+            kind = i % 3
+            yw = 30 * math.sin(t * 1.4 + i) if kind == 2 else 10 * math.sin(t * 0.8 + i)
+            standing_fk(r, f, pos, yw, cheer=0.0, sway=math.sin(t * 2 + i), head=(-4, 15 * math.sin(t * 1.1 + i)))
+            Rg_ = Rig(r)
+            if kind == 0:      # clapping
+                c_ = abs(math.sin(t * 7 + i))
+                for s_, sg in (("L", -1), ("R", 1)):
+                    Rg_.key_rot("upperarm01." + s_, f, [("Y", sg * (-30 + 14 * c_)), ("X", -55)]); Rg_.key_rot("lowerarm01." + s_, f, [("X", -70)])
+            elif kind == 1:    # one fist pumping up
+                u_ = 0.5 + 0.5 * math.sin(t * 5 + i)
+                Rg_.key_rot("upperarm01.R", f, [("Y", -10), ("X", -120 - 40 * u_)]); Rg_.key_rot("lowerarm01.R", f, [("X", -60 + 45 * u_)])
+                Rg_.key_rot("upperarm01.L", f, [("Y", 15), ("X", -15)]); Rg_.key_rot("lowerarm01.L", f, [("X", -30)])
+            else:              # turning to the crowd, arms up and down
+                u_ = 0.5 + 0.5 * math.sin(t * 3 + i)
+                for s_, sg in (("L", -1), ("R", 1)):
+                    Rg_.key_rot("upperarm01." + s_, f, [("Y", sg * (10 - 25 * u_)), ("X", -40 - 100 * u_)]); Rg_.key_rot("lowerarm01." + s_, f, [("X", -35)])
             continue
         a = t * sp * 2 * math.pi / 3 + ph
         pos = Vector((cx + ax * math.cos(a), cy + ay * math.sin(a), 0))
@@ -560,7 +576,7 @@ for t in (34.0,):
     ph1.keyframe_insert("scale", frame=F(t) - 1); ph1.scale = (0.001,) * 3; ph1.keyframe_insert("scale", frame=F(t))
 # during the slap the phone lies flat ON the glass (screen to the glass), her palm pressed behind it
 _pg = bpy.data.objects.new("PhoneOnGlass", None); C_CHAR.objects.link(_pg)
-_pg.matrix_world = Matrix(((0, -1, 0, -0.05), (1, 0, 0, 0.0135), (0, 0, 1, 1.45), (0, 0, 0, 1)))
+_pg.matrix_world = Matrix(((0, -1, 0, -0.05), (1, 0, 0, 0.0135), (0, 0, 1, 1.17), (0, 0, 0, 1)))   # v007: chest height, her face above it
 _ct = ph1.constraints.new('COPY_TRANSFORMS'); _ct.target = _pg
 for _f, _v in ((F(16.0), 0.0), (F(16.12), 1.0), (F(20.3), 1.0), (F(20.5), 0.0)):
     _ct.influence = _v; _ct.keyframe_insert("influence", frame=_f)

@@ -54,12 +54,12 @@ K = [
     (0.0, V((4.0, -9.0, 3.6)), V((0.0, 2.5, 2.0)), 22, False),
     (1.0, V((2.2, -3.6, 2.6)), V((0.0, 0.6, 1.4)), 28, False),
     (1.7, V((1.2, -1.45, 1.9)), fanH1 + V((0, 0, -0.05)), 38, False),
-    (1.95, V((0.30, -1.65, 2.05)), fanH1, 42, False),
+    (1.95, V((0.30, -1.65, 2.45)), fanH1, 42, False),   # v007: above him as he walks by
     (2.2, V((-0.6, -0.75, 1.62)), fanH1, 45, False),
     (2.55, V((-0.80, -0.95, 2.95)), mole3, 36, False),
     (2.85, V((-0.40, 0.35, 2.80)), mole3, 40, False),                 # rises over the glass
-    (3.3, V((-0.20, 1.05, 1.88)), mole3, 70, False),                 # her POV over her shoulder; rack focus
-    (3.9, V((-0.05, 0.95, 1.82)), mole3, 85, False),
+    (3.3, V((0.05, 1.05, 1.95)), mole3, 70, False),                 # her POV over her shoulder; rack focus
+    (3.9, V((0.15, 0.95, 1.88)), mole3, 85, False),
     (4.5, mole3 + V((0.05, 1.00, 0.30)), mole3 + V((0, 0, 0.08)), 58, False),   # v006: head and shoulders, mole visible
     (5.0, mole3 + V((0.05, 0.90, 0.27)), mole3 + V((0, 0, 0.08)), 62, False),
     (5.0, SK + V((0, 0, 15)), SK, 50, True),                          # through the skin
@@ -100,36 +100,27 @@ K = [
     (25.8, V((-28.15, -2.65, 1.85)), docH, 36, False),                 # doctor's serious face
     (26.6, V((-27.8, -2.75, 2.2)), moleB, 40, False),               # overhead on the hands
     (27.0, V((-27.55, -1.35, 1.90)), moleB, 36, False),   # v006: around the front, not over his head
-    (27.4, V((-29.10, -1.45, 1.75)), moleB, 34, False),
-    (28.3, V((-28.95, -1.40, 1.50)), (moleB + manBH) / 2, 32, False),               # front-left: the bandage pressed on
+    (27.4, V((-29.55, -1.0, 1.85)), moleB, 30, False),   # v007: she is seen whole beside him
+    (28.3, V((-29.50, -1.10, 1.65)), (moleB + manBH) / 2, 30, False),               # front-left: the bandage pressed on
     (29.2, V((-27.9, -1.50, 1.40)), manBH, 40, False),                # relief
-    (30.0, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),
-    (30.8, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
-    (31.45, V((-27.85, -1.30, 1.70)), ph_p + V((0, 0, 0.1)), 40, False),
-    (32.4, V((-27.55, -1.05, 1.50)), manBH + V((0, 0, -0.2)), 35, False),   # v006: he posts his story (a person on a phone)
-    (33.2, V((-28.0, -1.35, 1.35)), ph_p, 40, False),
-    (33.75, V((-27.85, -1.30, 1.70)), ph_p + V((0, 0, 0.1)), 40, False),
-    (34.0, V((-27.4, -1.0, 2.70)), V((-27.4, -1.0, 2.79)), 40, False),   # whip up into the light panel
-    (34.0, WIN + V((0, -0.35, 0)), WIN, 40, True),     # out of the panel glow into a lit window (covered both sides)
-    (34.1, WIN + V((0, -1.2, 0.1)), WIN, 40, False),
-    (34.6, CT + V((-6, -9, 2.6)), CT + V((-6, 13, 8)), 34, False),
-    (35.1, CT + V((-4.0, -12.6, 2.8)), CT + V((-6, -4, 1.8)), 30, False),  # alongside the bus, riders on phones
-    (35.5, CT + V((-1.0, -9.5, 2.8)), CT + V((-1.0, 6.0, 2.5)), 30, False),      # hold the street with the walkers
-    (35.75, WIN + V((0, -6.0, 0.2)), WIN, 36, False),
-    (35.9, WIN + V((0, -1.25, 0)), WIN, 40, False),
-    (35.9, HMv + V((0, -3.0, 1.45)), HMv + V((0, 1.0, 1.0)), 40, True),  # through the curtain into her room
+    (30.0, V((-29.10, -0.62, 1.32)), V((-28.49, -2.0, 0.98)), 30, False),   # v007: head to knees while he posts
+    (31.0, V((-29.15, -0.60, 1.30)), V((-28.49, -2.0, 0.98)), 30, False),
+    (32.2, V((-29.05, -0.62, 1.28)), V((-28.49, -2.0, 0.98)), 30, False),
+    (33.4, V((-28.90, -0.65, 1.26)), V((-28.49, -2.0, 0.98)), 30, False),
+    (34.6, V((-28.95, -0.70, 1.24)), V((-28.49, -2.0, 0.98)), 31, False),
+    (35.88, V((-28.85, -0.80, 1.24)), V((-28.49, -2.0, 0.98)), 32, False),
+    (35.9, HMv + V((0.95, 0.25, 1.2)), fanH12, 35, True),   # straight cut: his phone post -> her at the laptop
     (36.5, HMv + V((0.95, 0.15, 1.15)), fanH12, 35, False),
     (37.2, HMv + V((-0.45, 0.55, 1.05)), fanH12, 50, False),
     (37.5, HMv + V((0.60, 0.70, 1.15)), fanH12, 34, False),   # her face as she stares at the call   # her laptop, the call on screen
     (37.98, HMv + V((0.55, 0.75, 1.15)), fanH12, 34, False),   # v006: hold on her at the laptop
-    (38.0, FIN + V((-0.6, -3.4, 1.45)), FIN + V((0, 0, 1.05)), 30, True),   # straight cut to the rink, medium
-    (38.45, FIN + V((1.2, -3.4, 0.35)), FIN + V((0, 0, 1.0)), 28, False),
-    (39.0, FIN + V((-1.5, -2.4, 0.6)), FIN + V((0, 0, 1.0)), 28, False),
-    (40.0, FIN + V((-2.9, -0.6, 1.2)), FIN + V((0, 0.3, 1.1)), 26, False),
-    (41.0, FIN + V((-1.0, -3.6, 2.5)), FIN + V((0, 0.5, 1.0)), 26, False),
-    (42.0, FIN + V((0.6, -3.5, 1.55)), FIN + V((0, 0, 1.10)), 30, False),   # v006: end medium on her and the players
-    (43.0, FIN + V((0.15, -3.15, 1.50)), FIN + V((0, 0, 1.10)), 32, False),
-    (44.0, FIN + V((-0.05, -3.0, 1.48)), FIN + V((0, 0, 1.10)), 32, False),
+    (38.0, FIN + V((-0.95, -2.3, 1.45)), FIN + V((-0.2, 0, 1.2)), 32, True),   # v007: medium on her with the cheque, the man beside her
+    (39.0, FIN + V((-0.35, -2.1, 1.38)), FIN + V((-0.2, 0, 1.2)), 32, False),
+    (40.0, FIN + V((0.35, -2.2, 1.42)), FIN + V((-0.2, 0, 1.2)), 32, False),
+    (41.0, FIN + V((0.05, -2.0, 1.36)), FIN + V((-0.2, 0, 1.2)), 32, False),
+    (42.0, FIN + V((-0.45, -2.1, 1.40)), FIN + V((-0.2, 0, 1.2)), 32, False),
+    (43.0, FIN + V((-0.25, -1.95, 1.38)), FIN + V((-0.2, 0, 1.2)), 33, False),
+    (44.0, FIN + V((-0.2, -1.9, 1.37)), FIN + V((-0.2, 0, 1.2)), 33, False),
 ]
 cqo = bpy.data.objects["Cheque"]
 for f in range(F(38.0), 2641, 4):
@@ -183,7 +174,7 @@ for idb in (cam, cd):
         for kp in fc.keyframe_points:
             if int(round(kp.co.x)) in JUMPS: kp.interpolation = 'CONSTANT'
 # world per set
-for f, v in ((1, (0, 0, 0)), (F(23.1), (1, 0, 0)), (F(34.0), (1, 1, 0)), (F(35.9), (1, 1, 1)), (F(38.0), (0, 0, 0))):
+for f, v in ((1, (0, 0, 0)), (F(23.1), (1, 0, 0)), (F(35.9), (1, 1, 1)), (F(38.0), (0, 0, 0))):
     wkey(f, *v)
 for fc in _fcurves(sc.world.node_tree.animation_data.action):
     for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
