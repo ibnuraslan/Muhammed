@@ -1,0 +1,16 @@
+"""Banker final B: clean grade + "THE PHONE THAT" / lime "KILLED" behind the handset, plus the download pack."""
+import os, sys
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, "..", "tools"))
+import cine
+cine._grit.__defaults__ = (5, 0.0)
+from cine import cine_grade, title, LIME, WHITE
+from compose import load_plate
+P = os.path.join(HERE, "plates"); D = os.path.join(HERE, "download_b"); os.makedirs(D, exist_ok=True)
+g = cine_grade(load_plate(os.path.join(P, "phone_b.png")), clarity=0.0, grain=0.0, bloom=0.15,
+               shadows=(0.0, 0.0, 0.0), highs=(1.03, 1.0, 0.96), vignette=0.45)
+t = title(g, "THE PHONE THAT", "KILLED", LIME, WHITE, "anton", 380, 110, kicker_size=66, matte=os.path.join(P, "phone_b_mask.png"))
+t.save(os.path.join(HERE, "banker_final_B.jpg"), quality=97, subsampling=0)
+t.save(os.path.join(D, "banker_thumbnail_KILLED.png")); t.save(os.path.join(D, "banker_thumbnail_KILLED_youtube.jpg"), quality=96, subsampling=0)
+g.save(os.path.join(D, "banker_thumbnail_notext.png")); g.save(os.path.join(D, "banker_thumbnail_notext_youtube.jpg"), quality=96, subsampling=0)
+print("done")
