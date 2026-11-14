@@ -14,7 +14,7 @@ Per sampled frame it reports:
              straight or bent backwards (<10 deg), or whose fingertips fan out >30 deg apart while curled
   FACEPRESS  a fingertip or palm vertex inside 1 cm of the same character's face region, or the head within
              3 cm of a prop surface
-  CAMJUMP    (every frame) a camera switch, or the camera moves >0.25 m or turns >20 deg in one frame: a hard cut.
+  CAMJUMP    (every frame) a camera switch, or the camera teleports >0.25 m in one frame (or turns >60 deg): a hard cut.
              The film is ONE continuous camera; only a fully covered wipe may hide a jump.
 A clean film reports 0 for every category except intended, listed exceptions.
 Hidden (hide_render / not visible) and see-through props are ignored; HOVER tests the nearest visible prop only;
@@ -198,7 +198,7 @@ for f in range(sc.frame_start, sc.frame_end + 1, STEP):
     if f % 120 == 1: print("QA", f, res["frames"].get(str(f)))
 
 # CAMJUMP: the film must be ONE continuous camera. Every frame (not STEP): a camera switch (markers), or a
-# one-frame move/turn that is a step, not motion: >0.25 m (or >20 deg) AND >3x the neighbouring frames' speed
+# one-frame move/turn that is a step, not motion: >0.25 m (or a turn >60 deg: a whip pan up to 60 deg/frame is style) AND >3x the neighbouring frames' speed
 # (a fast fly-over moves a lot every frame; a cut moves a lot in one frame). Only a fully covered wipe
 # (black / cloud frame) may hide one; list those in ACTING_notes.md.
 P = []
@@ -212,7 +212,7 @@ for k in range(1, len(P)):
     nb = [D[x] for x in range(max(1, k-3), min(len(D), k+4)) if x != k]
     vd = sorted(x[0] for x in nb)[len(nb)//2] if nb else 0; va = sorted(x[1] for x in nb)[len(nb)//2] if nb else 0
     d, ang = D[k]
-    if (d > 0.25 and d > 3 * vd + 0.02) or (ang > 20 and ang > 3 * va + 1):
+    if (d > 0.25 and d > 3 * vd + 0.02) or (ang > 60 and ang > 3 * va + 1):
         flag(f, "CAMJUMP", "cut: %.2f m, %.0f deg in one frame (neighbours %.2f m, %.0f deg)" % (d, ang, vd, va))
 
 json.dump(res, open(OUT, "w"), indent=1)

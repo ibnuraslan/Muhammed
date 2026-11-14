@@ -570,9 +570,13 @@ CAMK = [
     (397, V(5.9, 23.85, 1.72), V(7.3, 24.35, 1.66), 40),
     (430, V(5.4, 23.6, 1.8), V(8.2, 25.2, 1.9), 24),
     (460, V(6.4, 22.7, 1.9), V(9.2, 25.9, 2.5), 24),
-    (490, V(7.4, 22.5, 1.8), V(10.3, 26.4, 3.0), 22),
-    (515, V(8.3, 22.7, 1.75), V(10.7, 26.8, 3.3), 22),
-    (538, V(9.0, 23.2, 1.9), V(10.5, 26.4, 2.6), 24),
+    (490, V(7.0, 24.35, 1.6), V(10.3, 26.4, 2.8), 22),
+    (504, V(11.6, 25.4, 1.65), V(10.0, 25.3, 1.55), 24),
+    (518, V(11.8, 26.8, 1.6), V(10.2, 25.7, 1.6), 24),
+    (536, V(11.0, 27.4, 1.4), V(10.2, 25.7, 1.8), 24),
+    (541, V(11.2, 27.6, 1.45), V(10.2, 25.7, 1.85), 24),
+    (545, V(11.8, 27.2, 3.3), V(18.0, 33.0, 2.6), 24),
+    (549, V(19.0, 31.8, 3.0), V(21.5, 37.5, 1.6), 24),
     (562, V(21.5, 35.4, 2.2), V(21.5, 42.0, 1.3), 24),
     (578, V(21.55, 38.0, 1.62), V(21.5, 43.0, 1.15), 24),
     (600, V(22.1, 42.5, 1.45), V(21.55, 43.32, 1.13), 26),
@@ -591,12 +595,12 @@ CAMK = [
     (1008, V(24.0, 42.8, 1.18), V(21.65, 42.78, 1.25), 26),
     (1016, V(23.97, 42.6, 1.28), V(24.9, 43.3, 1.45), 28),
     (1025, V(23.95, 42.5, 1.35), V(24.7, 43.3, 1.3), 28),
-    (1050, V(25.25, 42.45, 1.55), V(24.9, 43.28, 1.45), 26),
+    (1050, V(25.6, 42.4, 1.6), V(25.05, 43.3, 1.45), 26),
     (1075, V(24.35, 42.25, 1.45), V(25.0, 43.3, 1.38), 28),
     (1100, V(24.0, 42.0, 1.6), V(25.0, 43.2, 1.35), 28),
     (1128, V(21.5, 39.3, 1.6), V(22.5, 42.5, 1.3), 24),
-    (1142, V(21.5, 37.3, 1.62), V(21.6, 41.0, 1.5), 24),
-    (1156, V(18.0, 34.0, 2.4), V(3.9, 40.6, 1.5), 24),
+    (1146, V(21.5, 37.3, 1.62), V(21.6, 41.0, 1.5), 24),
+    (1150, V(21.0, 36.2, 2.7), V(3.9, 40.6, 1.5), 24),
     (1167, V(12.5, 37.0, 2.6), V(3.8, 41.2, 1.5), 24),
     (1176, V(7.6, 37.6, 2.2), V(3.4, 42.6, 1.5), 24),
     (1196, V(5.2, 39.6, 2.4), V(1.0, 47.5, 1.9), 24),
@@ -605,6 +609,8 @@ CAMK = [
     (1236, V(-0.8, 51.0, 1.9), V(-5.4, 57.6, 1.35), 26),
     (1250, V(-7.3, 53.9, 1.62), V(-11.0, 54.6, 1.3), 30),
     (1290, V(-9.2, 55.2, 1.5), V(-11.4, 53.6, 1.25), 28),
+    (1295, V(-9.4, 55.5, 1.5), V(-11.3, 53.7, 1.25), 28),
+    (1299, V(-9.6, 55.9, 1.48), V(-11.9, 58.0, 1.5), 28),
     (1306, V(-10.0, 56.5, 1.45), V(-12.1, 57.8, 1.95), 28),
     (1324, V(-11.2, 57.1, 1.6), V(-14.3, 56.4, 1.45), 30),
     (1334, V(-11.0, 57.0, 1.7), V(-15.8, 58.3, 1.45), 20),
@@ -628,19 +634,21 @@ CP = {f: fc_(f) for f in range(1, FRAME_END + 1)}; AP = {f: fa_(f) for f in rang
 def _dir(f): return (AP[f] - CP[f]).normalized()
 def _step(f): return math.degrees(_dir(f - 1).angle(_dir(f), 0.0))
 for _it in range(20):
-    bad = [f for f in range(2, FRAME_END + 1) if _step(f) > 15.0]
+    bad = [f for f in range(2, FRAME_END + 1) if _step(f) > 45.0]
     if not bad: break
     k = bad[0]; a_, b_ = k - 3, k + 3
     while True:
         a_ = max(1, a_); b_ = min(FRAME_END, b_)
-        tot = math.degrees(_dir(a_).angle(_dir(b_), 0.0)); need = math.ceil(1.6 * tot / 16.0)
+        tot = math.degrees(_dir(a_).angle(_dir(b_), 0.0)); need = math.ceil(1.6 * tot / 45.0)
         if b_ - a_ >= need and (a_ == 1 or _step(a_) <= 12) and (b_ == FRAME_END or _step(b_ + 1) <= 12): break
         a_ -= 1; b_ += 1
-    da, db = _dir(a_), _dir(b_); q = da.rotation_difference(db)
+    da, db = _dir(a_), _dir(b_)
+    ya, yb = math.atan2(da.y, da.x), math.atan2(db.y, db.x); pa, pb = math.asin(max(-1, min(1, da.z))), math.asin(max(-1, min(1, db.z)))
+    dy = (yb - ya + math.pi) % (2 * math.pi) - math.pi        # level whip: yaw the short way round, pitch eased separately
     la, lb = (AP[a_] - CP[a_]).length, (AP[b_] - CP[b_]).length
     for f in range(a_ + 1, b_):
-        t = smooth((f - a_) / (b_ - a_))
-        AP[f] = CP[f] + (Quaternion().slerp(q, t) @ da) * (la + (lb - la) * t)
+        t = smooth((f - a_) / (b_ - a_)); y_ = ya + dy * t; p_ = pa + (pb - pa) * t
+        AP[f] = CP[f] + Vector((math.cos(p_) * math.cos(y_), math.cos(p_) * math.sin(y_), math.sin(p_))) * (la + (lb - la) * t)
     print("CAM_EASE", k, "window", a_, b_, "turn %.0f deg" % tot)
 for f in range(1, FRAME_END + 1):
     cam.location = CP[f]; cam.keyframe_insert("location", frame=f)
@@ -648,6 +656,17 @@ for f in range(1, FRAME_END + 1):
     if f % 2 == 1 or f == FRAME_END:
         cam_d.lens = fl_(f); cam_d.keyframe_insert("lens", frame=f)
 print("CAM_MAX_STEP %.1f deg" % max(_step(f) for f in range(2, FRAME_END + 1)))
+# the station crew is far inside the dark station during the street walk; keep them out of those frames (and their props)
+for _nm in ("OfficerA", "OfficerB", "OfficerC", "OfficerD", "OfficerE"):
+    for _o in meshes(CH[_nm]) + [cp for n_, cp in CAPS.items() if n_ == _nm]:
+        key_vis(_o, [(1, 1139), (1216, 1560)])
+for _o in (fp, fp2, fp3, phone):
+    key_vis(_o, [(1, 1139), (1216, 1560)])
+for _nm in ("OfficerA", "OfficerB", "OfficerC", "OfficerD", "OfficerE"):
+    for _o in meshes(CH[_nm]) + [cp for n_, cp in CAPS.items() if n_ == _nm] + ([fp, fp2, fp3, phone] if _nm == "OfficerA" else []):
+        for _fc in fcurves(_o):
+            if _fc.data_path == "hide_render":
+                for _k in [k for k in _fc.keyframe_points if 1140 < k.co.x < 1216]: _fc.keyframe_points.remove(_k)
 _dh = bpy.data.objects.get("DustHaze")
 if _dh: _dh.hide_viewport = True     # still renders (hide_render stays False); a volume fog is not an occluder
 sc.frame_set(1)
