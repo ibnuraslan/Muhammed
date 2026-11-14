@@ -1,0 +1,5 @@
+AUDIT feet 0 []
+AUDIT seat 0 []
+AUDIT fingers 8 [(1291, 'Fiance', 8, -0.008), (1294, 'Fiance', 8, -0.008), (1393, 'Fiance', 8, -0.008), (1396, 'Fiance', 12, -0.009), (1399, 'Fiance', 9, -0.009), (1402, 'Fiance', 6, -0.008), (1405, 'Fiance', 4, -0.006), (1453, 'Fiance', 1, -0.004)]
+AUDIT camera 0 []
+AUDIT bullet 0 []

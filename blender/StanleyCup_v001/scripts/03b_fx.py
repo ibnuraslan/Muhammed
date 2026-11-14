@@ -175,7 +175,7 @@ for f in range(F_IMPACT, 1330, 6):
 st.rotation_euler = st0; st.keyframe_insert("rotation_euler", frame=1); st.keyframe_insert("rotation_euler", frame=F_IMPACT - 1)
 # x-ray: the steel turns to a cyan ghost while the camera dives in to see the water ripple
 mx = bpy.data.materials["M_Powdercoat"].node_tree.nodes["XRAY"].inputs[0]
-for f, v in ((1, 0), (1035, 0), (1070, 0.88), (1150, 0.88), (1185, 0)):
+for f, v in ((1, 0), (1185, 0)):          # x-ray dropped (director v007c: read as a glitch)
     mx.default_value = v; mx.keyframe_insert("default_value", frame=f)
 for nm in ("M_LidPlastic", "M_Steel"):
     pass
@@ -183,7 +183,7 @@ for nm in ("M_LidPlastic", "M_Steel"):
 ml = bpy.data.materials["M_LidPlastic"]; nt = ml.node_tree; b = nt.nodes["Principled BSDF"]
 tr = nt.nodes.new("ShaderNodeBsdfTransparent"); ms = nt.nodes.new("ShaderNodeMixShader"); ms.name = "XRAY"
 nt.links.new(b.outputs[0], ms.inputs[1]); nt.links.new(tr.outputs[0], ms.inputs[2]); nt.links.new(ms.outputs[0], nt.nodes["Material Output"].inputs[0])
-for f, v in ((1, 0), (1035, 0), (1070, 0.9), (1150, 0.9), (1185, 0)):
+for f, v in ((1, 0), (1185, 0)):
     ms.inputs[0].default_value = v; ms.inputs[0].keyframe_insert("default_value", frame=f)
 # condensation: a few beads run down during beat 5
 drops = sorted([o for o in bpy.data.objects if o.name.startswith("Drop")], key=lambda o: -o.location.z)[:14]
