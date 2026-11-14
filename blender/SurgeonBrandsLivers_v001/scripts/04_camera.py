@@ -107,7 +107,6 @@ K = [  # frame, camera position, aim point, lens (mm)
     (1228, V(-0.30, 0.05, 1.58), S2H(1225), 52),
     # 7 - whip-pan through the west wall into the hearing room: anatomy wall, orbit to the confessing surgeon
     (1231, V(-0.31, 0.06, 1.62), S2H(1231) + V(-0.04, 0, 0), 48),     # v007b: still on him at the beat, then whip
-    (1235, V(-0.5, -0.25, 1.75), V(-1.3, 0.5, 1.55), 30),       # v008d: the whip passes the anaesthetist, then the wall
     (1238, V(-4.2, -0.2, 1.73), V(-7.5, 0.0, 1.5), 28),         # v008e: clean cut into the hearing room (no wall pass)
     (1254, V(-4.4, -0.6, 1.7), V(-7.5, 0.0, 1.5), 28),
     # v007b: the surgeon stays in frame; swing round in front of him so the anatomy wall reads behind him

@@ -1,41 +1,33 @@
-# SurgeonBrandsLivers v008d: fixes from the director's moving preview of v010 (= v008c synced)
+# SurgeonBrandsLivers v008e: the director's 5 notes on v008d (38e3ea4) and the 4 simplify rules
 
-v008d is the approved v008c plus `13_preview_fixes.py` and the camera keys in `04_camera.py`.
+v008e is the approved v008c plus `13_preview_fixes.py` and the camera keys in `04_camera.py`.
 - Beat frames are unchanged (1/301/565/637/781/1045/1231/1501, end 1710). No VO.
-- I mapped the synced times back to my frames by matching the camera path (v010 frame → v008c frame).
+- Frames below are my film frames (preview index n ≈ (f−1)/5).
 
-| Director note (synced time) | My frames | Fix |
+| # | Note | v008e |
 |---|---|---|
-| ~10.75 s fully BLACK frame | 638–640 | The snapped camera sat inside the calendar's paper, then behind the home picture frame on the other side of the wall. The picture now hangs 0.8 m along the wall, and the camera's near stop is in front of the calendar. Now one wall/calendar wipe frame. |
-| ~17.5–19 s hands with no arms, empty glove | 1040–1200 | Cut to the liver alone: the glove hands are hidden from 311 on and the liver is held still (no prop moving by itself). The SB liver reads alone in the light. |
-| 2.25 s, 3.75 s, 12.5 s, 19 s, 19.75 s blur / empty wall | 145, 240, 1060, 1177, 1234 | The studio dives (in at 133 and 1057, out at 275 and 1175) are now clean cuts, with no membrane or skin fill frames. Macro shots are pulled back. The whip at 1231 passes the anaesthetist before the wall. The home→OR wall pass at 774 is one frame. 12.5 s maps to the home shot (my 745), which reads (person in frame). |
-| ~5.25–5.75 s giant glove | 330–358 | The camera is pulled back and up (z 1.62, 30 mm), so the hands and the stitched incision read. |
-| ~3 s ghost oval with an arc | 192–196 | The translucent smoke puffs (`Smoke_*`) are removed. The arc was the glowing burn trail of the S, now seen clean. |
-| Writing glove with no arm (same fault, studio 100–310) | 100–310 | The writing hand now has its nitrile forearm, entering from the frame edge. The studio macro cameras moved left of the arm so it doesn't cross the lens. |
+| 1 | Studio branding (f 135–275): blob glove, floating open glove, giant glove on the way in | **Re-staged simpler:** no hands and no pen in the studio at all. The liver sits alone in the light and the S, then the B, burn in (sparks + hot trail), like the accepted 1040–1200 shot. No hand appears anywhere without its arm. |
+| 2 | Gavel floats (f 1501–1551) | From the pick-up (1484) to the end, the gavel's grip point sits in the judge's **evaluated palm on every frame**. It keeps its designed raise and strike rotation, and the head comes down on the block at 1538. |
+| 3 | Surgeon2 low shot, arm across his face (f 1176–1186) | The camera no longer goes near his arm. It looks down at his gloved hands working at the incision (both arms entering from the frame top), then rises to his face at 1199. |
+| 4 | Woman at home: "wing" elbow (f 646–656), hand at her groin (f 656–700) | Hands placed with `hand_poses.place_hand`. Mug: held low in front of her (no raised elbow) until she drops it; the mug rides in her hand on every frame. Then one palm on her right side under the ribs (the liver) and the other on her left thigh above the knee. clip_scan is clean at home. |
+| 5 | Clerk: straight, over-long arm; hair over her whole face (f 1650–1686) | Her left hand rests flat on the desk beside the licence, with the elbow down and bent (elbow pole keyed). Head and neck tilt up, so an eye, the nose and the mouth read. |
 
-Found while watching the preview, also fixed:
-- 776 black frame: the camera is already in the OR on 776.
-- 1176–1196: Surgeon2 shot low and to the side, so his face reads under his cap.
-- 1446: faster pan (no empty side wall).
-- 1578: a key keeps the judge in frame.
-- 318: no shirt fill.
+## Director rules 1–4 (Nov 14 17:26), on every preview frame (watched start to finish)
+1. **Risky hand/prop actions simplified:** the studio pen and gloves are gone (liver alone). The gavel is locked to the palm. The mug is in hand or falling after the drop. The clerk's hand is flat on the desk.
+2. **No arm crosses another person's body or face on screen.** The Surgeon2 shot is re-staged.
+3. **No camera move passes through or brushes a body, arm, cap or wall.**
+   - The four studio transitions are clean cuts (133, 275, 1057, 1175).
+   - The three wall passes are now clean cuts too: calendar→home 637, home→OR 776, OR→hearing 1238.
+   - The whip past the anaesthetist's drape is removed; the camera holds on Surgeon2 until the cut.
+4. **No hand without its arm.** The studio has no hands. Surgeon2's hands come with arms from the frame top. Every other hand is on a visible body.
 
 ## Checks on the packed file
-- **clip_scan: 0 bad ranges.**
-  - Frame 325 was new on camera: the surgeon's forearm was inside the patient's hidden torso under the drape.
-  - On the OR table she now sits 7 cm lower. Her face mask, neck towel and tube go down with her.
-  - Her head still rests on the table.
-- **limb_check (director 9a0a692):** ARMBODY 874, PROPHEAD 228, ARMBACK 1.
-  - ARMBODY: 721 of the hits are only the first 2–3 points of the upper arm, inside the shoulder/deltoid mass (the shoulder joint, classed as torso).
-  - The rest I checked in side renders: the anaesthetist's hanging arm, the nurse reaching for the drape and pushing the bed, Surgeon1's pen arm across his chest, and Surgeon2's glove snap. The arms hug the torso but read outside it.
-  - PROPHEAD: the anaesthesia mask cone and rim on the patient's face, and the neck towel round her neck. Intended contacts.
-  - ARMBACK 1: one frame of the anaesthetist at 775 (transit).
-- **qa_check (newest):**
-  - CLAW 2 and HOVER 14: the patient's hands under the drape and in the OR while the camera is elsewhere. Not visible.
-  - CAMJUMP 7: the four studio cuts, the calendar wipe, the home wall wipe and the whip.
-  - PROPMOVE 33: the burn sparks (effects) and the mug falling after it's dropped.
-  - ATTACH 39: masks sit about 2 cm off the skin, as fitted.
-  - EMPTY 44 / FILL 2: the liver-alone studio shots (no character in the set by design) and the single-frame wipes.
-
-## Moving preview
-`v008d_preview_every5th_270x480.mp4`: every 5th frame, 270×480, Cycles 4 samples + denoise, 342 frames, 28.5 s at 12 fps. I watched it start to finish (all 342 frames).
+- clip_scan: **0 bad ranges.**
+- limb_check: ARMBODY 833 (shoulder-joint false positives and torso-hugging arms, checked in renders), PROPHEAD 228 (the anaesthesia mask on her face and the towel round her neck, intended), ARMBACK 1 (transit frame).
+- qa_check:
+  - CLAW 3 and HOVER 14: the patient's hands under the drape, not visible.
+  - CAMJUMP 8: the clean cuts above.
+  - PROPMOVE 42: the burn sparks (effects) and the dropped mug falling.
+  - EMPTY 40: the liver-alone studio shots.
+  - ATTACH 37: masks sit about 2 cm off the skin, as fitted since v002.
+- Preview: `v008e_preview_every5th_270x480.mp4`, every 5th frame, 270×480, Cycles 4 samples + denoise, 342 frames, all watched.
