@@ -153,7 +153,7 @@ def clear_fingers(rig):
 # curl, so the gloved fingers lie together instead of pointing in different directions
 POSES["pinch_tuck"] = dict(curl={2: (40, 45, 25), 3: (45, 55, 30), 4: (52, 62, 36), 5: (58, 68, 40)}, spread=0.0, thumb=("index_tip", 0.004))
 POSES["pinch_light"] = dict(curl={2: (38, 42, 22), 3: (24, 30, 15), 4: (26, 32, 16), 5: (28, 34, 18)}, spread=0.0, thumb=("index_tip", 0.004))   # v009e: holding the cartilage (pinch_tuck read as a ring)
-POSES["ear_touch"] = dict(curl={2: (12, 12, 6), 3: (14, 12, 6), 4: (45, 55, 30), 5: (50, 58, 32)}, spread=0.0, thumb=("beside_index", 0.015))   # v009f: index + middle rest on the ear
+POSES["ear_touch"] = dict(curl={2: (12, 12, 6), 3: (14, 12, 6), 4: (30, 38, 22), 5: (34, 40, 24)}, spread=0.0, thumb=("beside_index", 0.015))   # v009f: index + middle rest on the ear
 POSES["relaxed_even"] = dict(curl={2: (24, 30, 16), 3: (26, 32, 17), 4: (28, 34, 18), 5: (30, 36, 19)}, spread=0.0, thumb=("beside_index", 0.012))
 # v009c-2: the "starfish" gloves were the GloveThin displace (hand surface pulled in 3.2 mm along its normals): on the subdivided
 # glove it thinned every finger and opened gaps between them. Removed; the bones and skinning were correct.
@@ -179,7 +179,16 @@ for f in range(1, 46, 4):
 # (the patient's own hand path is unchanged)
 # v009d: the patient's hand on the new ear is relaxed (cup_hold read as a claw)
 apply_pose(PAT, "L", "relaxed_even", 1715, spread=0)
-for f in (1745, 1758, 1770): apply_pose(PAT, "L", "ear_touch", f, spread=0)   # v009f: soft touch (fingers read splayed)
+# v009f end: no ear touch. Two tries at the touch (world keys swept the hand across his face; ear-placed keys put it at his
+# throat) were not clean, so per the director's simplify rule the risk is removed: his left hand stays relaxed where it is
+# at 1715 (out of the shot) and the beat plays on his smile with the new ear in view.
+_pbP = PAT.pose.bones["IK_hand.L"]
+lock(PAT, "L", 1715)
+for f in range(1716, 1771):
+    for path in ("location", "rotation_quaternion"):
+        try: _pbP.keyframe_delete(path, frame=f)
+        except RuntimeError: pass
+lock(PAT, "L", 1770)
 for f in (470, 800, 1100, 1400, 1640): apply_pose(PAT, "L", "relaxed_even", f, spread=0)   # v009e: relaxed on the arm board (read as a claw)
 lock(PAT, "L", 1); lock(PAT, "L", 42)
 for f, w in ((5, 0.5), (11, 1.0), (18, 1.0), (24, 1.0), (30, 1.0), (36, 0.5)):

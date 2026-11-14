@@ -33,12 +33,12 @@ The source scripts are in `../EarInArm_v001/scripts/`. Build order: `01_build_hu
 | 6 | 1063 | Once it's fully developed… | The x-ray fades. The incision reopens and the pink ear is lifted out with forceps. |
 | 7 | 1309 | The blood vessels are connected… | Fly to the head. The ear is lowered into place, vessels reach in from both sides, and the join glows. |
 | 8 | 1501 | and the skin is carefully stitched… | Macro: the needle holder travels along the front edge, and nine stitches appear in turn. |
-| 9 | 1645 | giving you a brand new ear | The chair rises and the camera pulls out and orbits to the front. He touches the new ear and smiles; the nurse smiles. |
+| 9 | 1645 | giving you a brand new ear | The chair rises and the camera pulls out and orbits to the front. He smiles with the new ear in view; the nurse smiles. |
 
 ## v009f vs v009e (director review of the v009e preview)
 1. **Tray (361–457):** the left hand rests on the tray beside the cartilage with relaxed, even fingers, the fingertips at its edge, and the wrist in line with the forearm (`place_hand`). The scalpel hand stays 3 cm clear of it. Checked at 540×960 at f373, 397, 421 and 445.
 2. **Arm to the head (1300–1350):** the camera looks at the surgeon from the front, and his ear hand is carried and raised in front of his own chest before it reaches out to the ear. It no longer passes over the patient's shoulder.
-3. **End touch (1741–1770):** index and middle fingertips rest on the ear (`ear_touch`); the ring and little fingers are curled and the thumb is relaxed.
+3. **End (1741–1770): no ear touch (director's simplify rule).** I made two attempts at the touch, and neither was clean. The old world-space keys swept his hand across his face at f1749, and keys placed from the ear put it at his throat. So his left hand stays relaxed out of the shot from 1715, and the last beat plays on his smile with the new ear in view. The story beat and its frames are unchanged.
 
 ## v009e vs v009d (director review of the v009d preview)
 1. **Tray (351–443):** the hands start apart (no stacking). The left hand holds the cartilage in a light pinch (`pinch_light`: the index and thumb pinch, the other fingers lightly curled; `pinch_tuck` read as a ring). The right hand holds the scalpel and then lies flat on the tray.

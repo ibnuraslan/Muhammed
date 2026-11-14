@@ -6,7 +6,7 @@
    - The camera now looks at the surgeon from the front, from the patient's foot side (1300 `(0.6, -0.7, 1.85)`, 1330 `(0.62, -0.8, 1.8)`). From the old side-on angle his forearm overlapped her shoulder. It is clear of the nurse, who walks out behind it.
    - His right hand (with the ear in forceps) is carried in front of his own chest, raised there (1352, 1364), and only then reaches out to the ear along the line from his shoulder (1378, 1390). It never passes over the patient's shoulder or chest.
    - A commented-out left-hand carry key (from an inline comment) is restored, so his left hand stays at his side through the walk.
-3. **End touch (1741–1770):** index and middle fingertips on the ear, outside it; the other fingers relaxed and curled (`ear_touch`).
+3. **End (1741–1770): no ear touch (director's simplify rule).** I made two attempts at the touch, and neither was clean. The old world-space keys swept his hand across his face at f1749, and keys placed from the ear put it at his throat. So his left hand stays relaxed out of the shot from 1715, and the last beat plays on his smile with the new ear in view. The story beat and its frames are unchanged.
 - **Clip-scan false hit at the ear site (1402–1416):** the patient's original ear is a shape-key stub, and its folded back faces faced inward, so a fingertip 7 cm outside the head counted as "inside". The stub is now sunk 2–3 mm under the scalp. It is covered by the dressing early on and by the new ear from 1404.
 
 ---
