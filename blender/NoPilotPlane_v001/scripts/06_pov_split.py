@@ -56,6 +56,25 @@ for o in parts:
                 for fc in cb.fcurves:
                     if fc.data_path == "visible_camera":
                         for kp in fc.keyframe_points: kp.interpolation = 'CONSTANT'
+# where the 8 cm near clip cuts into YOU's own limb, the camera would see the dark inside of the mesh (black blobs):
+# make backfaces transparent to camera rays on all of YOU's materials, so a clipped limb shows the cockpit behind it
+done = set()
+for o in bpy.data.objects:
+    if o.type != 'MESH' or not o.name.startswith("YOU."): continue
+    for sl in o.material_slots:
+        m = sl.material
+        if not m or m.name in done or not m.use_nodes: continue
+        done.add(m.name); nt = m.node_tree
+        outn = [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output] or [n for n in nt.nodes if n.type == 'OUTPUT_MATERIAL']
+        if not outn or not outn[0].inputs["Surface"].is_linked: continue
+        outn = outn[0]; src = outn.inputs["Surface"].links[0].from_socket
+        geo = nt.nodes.new("ShaderNodeNewGeometry"); lp = nt.nodes.new("ShaderNodeLightPath")
+        mul = nt.nodes.new("ShaderNodeMath"); mul.operation = 'MULTIPLY'
+        nt.links.new(geo.outputs["Backfacing"], mul.inputs[0]); nt.links.new(lp.outputs["Is Camera Ray"], mul.inputs[1])
+        tr = nt.nodes.new("ShaderNodeBsdfTransparent"); mx = nt.nodes.new("ShaderNodeMixShader")
+        nt.links.new(mul.outputs[0], mx.inputs[0]); nt.links.new(src, mx.inputs[1]); nt.links.new(tr.outputs[0], mx.inputs[2])
+        nt.links.new(mx.outputs[0], outn.inputs["Surface"])
+print("BACKFACE_TRANSPARENT", sorted(done))
 # nothing belongs within 8 cm of an eye: clip YOU's own forearm when it crosses under the lens (29.0 s haul)
 bpy.context.scene.camera.data.clip_start = 0.08
 bpy.context.scene.frame_set(1)
